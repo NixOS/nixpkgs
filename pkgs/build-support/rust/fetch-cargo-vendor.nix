@@ -43,6 +43,7 @@ let
     "version"
     "nativeBuildInputs"
     "hash"
+    "cratesMirrorUrl"
   ];
 
   fetchCargoVendorUtil = writers.writePython3Bin "fetch-cargo-vendor-util" {
@@ -63,6 +64,10 @@ in
   name ? if args ? pname && args ? version then "${args.pname}-${args.version}" else "cargo-deps",
   hash ? (throw "fetchCargoVendor requires a `hash` value to be set for ${name}"),
   nativeBuildInputs ? [ ],
+  # Mirror used to download tarballs. The download URL is constructed as
+  # "${cratesMirrorUrl}/${name}/${version}/download". When null, the default is
+  # used.
+  cratesMirrorUrl ? null,
   ...
 }@args:
 
@@ -106,7 +111,14 @@ let
 
       __structuredAttrs = true;
     }
-    // removeAttrs args removedArgs
+    // removeAttrs args (removedArgs ++ [ "env" ])
+    // {
+      env =
+        lib.optionalAttrs (cratesMirrorUrl != null) {
+          CARGO_VENDOR_CRATES_MIRROR_URL = cratesMirrorUrl;
+        }
+        // (args.env or { });
+    }
   );
 in
 runCommand "${name}-vendor"

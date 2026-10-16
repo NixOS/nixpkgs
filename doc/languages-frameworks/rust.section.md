@@ -465,6 +465,10 @@ also be used:
 * `patches`: patches to apply before vendoring. This is useful when
   the `Cargo.lock`/`Cargo.toml` files need to be patched before
   vendoring.
+* `cratesMirrorUrl`: the mirror used to download crates.io registry
+  tarballs. The download URL is constructed as
+  `${cratesMirrorUrl}/${name}/${version}/download`. When unset (the
+  default), the built-in crates.io mirror is used.
 
 If a `Cargo.lock` file is available, you can alternatively use the
 `importCargoLock` function. In contrast to `fetchCargoVendor`, this
