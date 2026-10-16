@@ -43,6 +43,23 @@
 let
   inherit (lib) optional optionals optionalString;
 
+  # Backport the benchmark __COUNTER__ warning fix to LLVM 20.
+  # This warning is fatal due to -pedantic-errors
+  benchmarkPatches = lib.optionals (lib.versions.major release_version == "20") [
+    (fetchpatch2 {
+      name = "benchmark-counter-warning-precursor.patch";
+      url = "https://github.com/llvm/llvm-project/commit/df1d786c460e0e47c9074f3533f098190ebfbc1b.patch?full_index=1";
+      relative = "third-party/benchmark";
+      hash = "sha256-odaXdeHRb64TO9jODcywKfFlHvwBOcy/dWuqTfWNkRc=";
+    })
+    (fetchpatch2 {
+      name = "benchmark-counter-warning.patch";
+      url = "https://github.com/llvm/llvm-project/commit/7fb92cdf5fa69423b4b99259057eb8de813c1344.patch?full_index=1";
+      relative = "third-party/benchmark";
+      hash = "sha256-iumygTV3eTnrHeKBdBCf8PpcjNEWF7lRdi5/9OS1ias=";
+    })
+  ];
+
   # Is there a better way to do this? Darwin wants to disable tests in the first
   # LLVM rebuild, but overriding doesn’t work when building libc++, libc++abi,
   # and libunwind. It also wants to disable LTO in the first rebuild.
@@ -334,7 +351,10 @@ stdenv.mkDerivation (
     strictDeps = true;
 
     postPatch =
-      optionalString stdenv.hostPlatform.isDarwin (
+      lib.concatMapStrings (patch: ''
+        patch -p1 -d ../third-party/benchmark -i ${patch}
+      '') benchmarkPatches
+      + optionalString stdenv.hostPlatform.isDarwin (
         ''
           substituteInPlace cmake/modules/AddLLVM.cmake \
             --replace-fail 'set(_install_name_dir INSTALL_NAME_DIR "@rpath")' "set(_install_name_dir)"
@@ -684,6 +704,13 @@ stdenv.mkDerivation (
         update = "*";
       };
     };
+  }
+  // lib.optionalAttrs (benchmarkPatches != [ ] && !enableManpages) {
+    # The unpack phase only makes llvm/ writable,
+    # leaving third-party/benchmark/ read-only
+    postUnpack = ''
+      chmod -R u+w "$sourceRoot/../third-party/benchmark"
+    '';
   }
   // lib.optionalAttrs enableManpages {
     pname = "llvm-manpages";
