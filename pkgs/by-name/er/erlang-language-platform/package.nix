@@ -33,7 +33,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "erlang-language-platform";
-  version = "2026-08-10";
+  version = "2026-10-05";
 
   src = fetchurl {
     url = "https://github.com/WhatsApp/erlang-language-platform/releases/download/${version}/${release_name}.tar.gz";
