@@ -73,7 +73,7 @@ buildPythonPackage (finalAttrs: {
       # Trace/BPT trap: 5
       "test_round_trip_3d_histogram_json"
     ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Segfaults: boost_histogram/_internal/hist.py", line 799 in sum
       # Fatal Python error: Segmentation fault
       "test_numpy_conversion_4"

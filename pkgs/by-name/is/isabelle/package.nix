@@ -244,10 +244,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     rm -r heaps
   ''
-  + lib.optionalString (stdenv.hostPlatform.system == "x86_64-darwin") ''
-    substituteInPlace lib/scripts/isabelle-platform \
-      --replace-fail 'ISABELLE_APPLE_PLATFORM64=arm64-darwin' ""
-  ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     arch=${
       if stdenv.hostPlatform.system == "aarch64-linux" then "arm64-linux" else stdenv.hostPlatform.system

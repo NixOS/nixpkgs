@@ -52,9 +52,7 @@
   buildPackages,
   pkgsBuildTarget,
   libxcrypt,
-  disableGdbPlugin ?
-    !enablePlugin
-    || (stdenv.targetPlatform.isAvr && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64),
+  disableGdbPlugin ? !enablePlugin || (stdenv.targetPlatform.isAvr && stdenv.hostPlatform.isDarwin),
   nukeReferences,
   callPackage,
   majorMinorVersion,

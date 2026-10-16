@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
 }:
@@ -16,11 +15,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-3Bfpy8xqSHK5RUwXdFRbjs6/GDWT7c5k7MYbqEiROkM=";
-
-  # fixes `thread 'main' panicked at 'cannot find strip'` on x86_64-darwin
-  env = lib.optionalAttrs (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin) {
-    TARGET_STRIP = "${stdenv.cc.targetPrefix}strip";
-  };
 
   # error: linker `aarch64-linux-gnu-gcc` not found
   postPatch = ''

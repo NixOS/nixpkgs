@@ -66,14 +66,6 @@ buildPythonPackage (finalAttrs: {
     "test_half"
   ];
 
-  disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    # Hang forever
-    "test/examples/test_spectral_mixture_gp_regression.py"
-    "test/kernels/test_spectral_mixture_kernel.py"
-    "test/utils/test_nearest_neighbors.py"
-    "test/variational/test_nearest_neighbor_variational_strategy.py"
-  ];
-
   meta = {
     description = "Highly efficient and modular implementation of Gaussian Processes, with GPU acceleration";
     homepage = "https://gpytorch.ai";

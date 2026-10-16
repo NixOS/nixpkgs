@@ -124,7 +124,7 @@ let
     (fetcher (srcFilename component arch version rels.${component} or "") hashes.${component} or "")
   ) components;
 
-  isDarwinAarch64 = stdenv.hostPlatform.system == "aarch64-darwin";
+  inherit (stdenv.hostPlatform) isDarwin;
 
   pname = "oracle-instantclient";
   extLib = stdenv.hostPlatform.extensions.sharedLibrary;
@@ -140,7 +140,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     makeWrapper
-    (if isDarwinAarch64 then _7zz else unzip)
+    (if isDarwin then _7zz else unzip)
   ]
   ++ optional stdenv.hostPlatform.isLinux autoPatchelfHook
   ++ optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
@@ -151,7 +151,7 @@ stdenv.mkDerivation {
     "lib"
   ];
 
-  unpackCmd = if isDarwinAarch64 then "7zz x $curSrc -aoa -oinstantclient" else "unzip $curSrc";
+  unpackCmd = if isDarwin then "7zz x $curSrc -aoa -oinstantclient" else "unzip $curSrc";
 
   installPhase = ''
     mkdir -p "$out/"{bin,include,lib,"share/java","share/${pname}-${version}/demo/"} $lib/lib

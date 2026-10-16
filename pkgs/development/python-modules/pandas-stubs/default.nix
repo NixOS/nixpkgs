@@ -102,7 +102,7 @@ buildPythonPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "test_clipboard" # FileNotFoundError: [Errno 2] No such file or directory: 'pbcopy'
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Disable tests for types that are not supported on aarch64 in `numpy` < 2.0
     "test_astype_float" # `f16` and `float128`
     "test_astype_complex" # `c32` and `complex256`

@@ -210,9 +210,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "vulkan" vulkanSupport)
     (lib.mesonEnable "print-cups" cupsSupport)
     (lib.mesonBool "x11-backend" x11Support)
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64) [
-    "-Dmedia-gstreamer=disabled" # requires gstreamer-gl
   ];
 
   doCheck = false; # needs X11

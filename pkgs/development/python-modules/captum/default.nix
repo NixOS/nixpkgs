@@ -58,7 +58,7 @@ buildPythonPackage rec {
       # to hardcoded port number used for rendezvous
       "tests/attr/test_data_parallel.py"
     ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Issue reported upstream at https://github.com/pytorch/captum/issues/1447
       "tests/concept/test_tcav.py"
     ];

@@ -7,12 +7,7 @@
   targetLabel ?
     with stdenv.hostPlatform;
     if isDarwin then
-      if isAarch64 then
-        "APPLEM1"
-      else if avx2Support then
-        "APPLEAVX2"
-      else
-        "APPLESSE42"
+      "APPLEM1"
     else if isx86_64 then
       if avx512Support then
         "AVX512"
