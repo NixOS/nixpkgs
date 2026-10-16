@@ -18,6 +18,7 @@
   google-genai,
   griffelib,
   httpx,
+  joserfc,
   jsonref,
   jsonschema-path,
   mcp,
@@ -37,6 +38,7 @@
   python-multipart,
   pyyaml,
   rich,
+  starlette,
   typing-extensions,
   uncalled-for,
   uvicorn,
@@ -90,6 +92,7 @@ buildPythonPackage (finalAttrs: {
     ];
     client = [
       authlib
+      py-key-value-aio
     ]
     ++ finalAttrs.passthru.optional-dependencies.mcp
     ++ py-key-value-aio.optional-dependencies.filetree
@@ -105,12 +108,14 @@ buildPythonPackage (finalAttrs: {
       httpx
       mcp
       opentelemetry-api
+      starlette
     ];
     openai = [ openai ];
     server = [
       authlib
       cyclopts
       griffelib
+      joserfc
       jsonref
       jsonschema-path
       openapi-pydantic
