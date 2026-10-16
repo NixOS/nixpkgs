@@ -2,20 +2,31 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  huggingface-hub,
+
+  # build-system
   setuptools,
+
+  # dependencies
+  huggingface-hub,
+  kernels-data,
+  packaging,
+  pyyaml,
+  tomlkit,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "kernels";
-  version = "0.11.7";
+  version = "0.15.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "kernels";
-    tag = "v${version}";
-    hash = "sha256-OUOCC7ViRWqRZIUpK31ItWsNc0F87dBpAg/Lql1LWp4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-NyFVWaJat5uwT8edzyIQuPfleVP+hg45an+rux6bIfo=";
   };
+
+  sourceRoot = "${finalAttrs.src.name}/kernels";
 
   build-system = [
     setuptools
@@ -23,6 +34,10 @@ buildPythonPackage rec {
 
   dependencies = [
     huggingface-hub
+    kernels-data
+    packaging
+    pyyaml
+    tomlkit
   ];
 
   # Tests require pervasive internet access
@@ -33,8 +48,8 @@ buildPythonPackage rec {
   meta = {
     description = "Load compute kernels from the Huggingface Hub";
     homepage = "https://github.com/huggingface/kernels";
-    changelog = "https://github.com/huggingface/kernels/releases/tag/${src.tag}";
+    changelog = "https://github.com/huggingface/kernels/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ osbm ];
   };
-}
+})
