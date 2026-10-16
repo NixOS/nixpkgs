@@ -42,5 +42,8 @@ buildGoModule (finalAttrs: {
     ];
     mainProgram = "mc";
     license = lib.licenses.asl20;
+    knownVulnerabilities = [
+      "minio-client has been abandoned by upstream and security issues won't be fixed. Users should migrate to alternatives such as awscli2 or rclone."
+    ];
   };
 })
