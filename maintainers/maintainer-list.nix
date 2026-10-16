@@ -30406,6 +30406,12 @@
     githubId = 48321566;
     name = "Mira Chacku Purakal";
   };
+  twstagg = {
+    email = "tristinstagg@gmail.com";
+    github = "twstagg";
+    githubId = 2766946;
+    name = "Tristin Stagg";
+  };
   twz123 = {
     name = "Tom Wieczorek";
     email = "tom@bibbu.net";
