@@ -769,7 +769,6 @@ in
             ExecStopPost = "-${getExe' cfg.package "portmaster-core"} recover-iptables";
             Restart = "on-failure";
             RestartSec = "10";
-            RestartPreventExitStatus = "24";
             User = "root";
             Group = "root";
             LockPersonality = true;
@@ -777,7 +776,6 @@ in
             MemoryLow = "2G";
             NoNewPrivileges = true;
             PrivateTmp = true;
-            PIDFile = "${stateDir}/core-lock.pid";
             WorkingDirectory = stateDir;
             ProtectSystem = true;
             ReadOnlyPaths = [ builtins.storeDir ];
@@ -796,7 +794,6 @@ in
               "AF_INET"
               "AF_INET6"
             ];
-            Environment = [ "LOGLEVEL=info" ];
           };
       };
 
