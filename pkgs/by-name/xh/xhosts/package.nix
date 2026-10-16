@@ -31,5 +31,6 @@ rustPlatform.buildRustPackage {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ matthewcroughan ];
     mainProgram = "nss-xhosts";
+    platforms = lib.platforms.linux;
   };
 }
