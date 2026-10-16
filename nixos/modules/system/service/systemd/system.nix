@@ -10,12 +10,17 @@ let
   inherit (lib)
     concatMapAttrs
     mkOption
+    mkDefault
+    mkIf
+    mkMerge
     types
     concatLists
     mapAttrsToList
     ;
 
   portable-lib = lib.services;
+
+  identity-lib = import ./identity.nix { inherit lib; };
 
   dash =
     before: after:
@@ -60,11 +65,85 @@ let
       subServiceName: subService: makeUnits unitType (dash prefix subServiceName) subService
     ) service.services;
 
+  # Collect the resolved service identities into lists of NixOS users and
+  # groups definitions. Identities are resolved per service by ./identity.nix;
+  # services that inherit the identity of another service resolve to the same
+  # user and their entries are merged by `mkMerge`.
+  makeServiceIdentities =
+    service:
+    let
+      identity = service.identity;
+    in
+    [
+      {
+        users =
+          if identity.user == null || identity.user == "root" then
+            { }
+          else
+            {
+              "${identity.user}" = {
+                description = mkDefault "Modular service user";
+                isSystemUser = mkDefault true;
+                group = mkDefault identity.group;
+                uid = mkIf (identity.uid != null) (mkDefault identity.uid);
+                extraGroups = mkIf (identity.groups != [ ]) (mkDefault identity.groups);
+              };
+            };
+
+        groups =
+          { }
+          # The primary group. Skipped for root, whose group is already
+          # declared by NixOS.
+          // (
+            if identity.user == "root" then
+              { }
+            else if identity.group == null then
+              { }
+            else
+              {
+                "${identity.group}" = {
+                  gid = mkIf (identity.gid != null) (mkDefault identity.gid);
+                };
+              }
+          )
+          # Supplementary groups, with pinned gids where provided. `gids` is
+          # extended with nulls so that a length mismatch is reported by the
+          # `identity.gids` assertion instead of failing evaluation here.
+          // (
+            if identity.groups == null then
+              { }
+            else
+              lib.listToAttrs (
+                lib.imap0 (
+                  i: group:
+                  lib.nameValuePair group {
+                    gid = mkIf (identity.gids != null && identity.gids != [ ]) (
+                      mkDefault (lib.elemAt (identity.gids ++ lib.genList (_: null) (lib.length identity.groups)) i)
+                    );
+                  }
+                ) identity.groups
+              )
+          );
+      }
+    ]
+    ++ concatLists (mapAttrsToList (_: subService: makeServiceIdentities subService) service.services);
+
+  # All service identity entries, one per service, recursively.
+  allServiceIdentities = concatLists (
+    mapAttrsToList (_: service: makeServiceIdentities service) config.system.services
+  );
+
   modularServiceConfiguration = portable-lib.configure {
     serviceManagerPkgs = pkgs;
     extraRootModules = [
       ./service.nix
       ./config-data-path.nix
+      # Resolves each service's identity, and injects the absoluteServicePath
+      # service handles used by `identity.sameUser`.
+      (identity-lib.mkIdentityModule {
+        supported = true;
+        path = [ ];
+      })
     ];
     extraRootSpecialArgs = {
       systemdPackage = config.systemd.package;
@@ -112,5 +191,10 @@ in
     environment.etc = concatMapAttrs (
       serviceName: topLevelService: makeNixosEtcFiles serviceName topLevelService
     ) config.system.services;
+
+    # Service users and groups, collected from the resolved service identities.
+    users.users = mkMerge (map (i: i.users) allServiceIdentities);
+
+    users.groups = mkMerge (map (i: i.groups) allServiceIdentities);
   };
 }

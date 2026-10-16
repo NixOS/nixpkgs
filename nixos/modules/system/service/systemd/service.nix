@@ -217,6 +217,13 @@ in
         ExecStart = [
           config.systemd.mainExecStart
         ];
+        # The resolved service identity; null on platforms without user
+        # support, in which case the directive is omitted.
+        User = lib.mkIf (config.identity.user != null) (lib.mkDefault config.identity.user);
+        Group = lib.mkIf (config.identity.group != null) (lib.mkDefault config.identity.group);
+        SupplementaryGroups = lib.mkIf (config.identity.groups != null && config.identity.groups != [ ]) (
+          lib.mkDefault config.identity.groups
+        );
       };
     };
   };
