@@ -27,16 +27,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "wox";
-  version = "2.4.6";
+  version = "2.4.7";
 
   src = fetchFromGitHub {
     owner = "Wox-launcher";
     repo = "Wox";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VkzC+GsUAcedWFVjhWAM6LD9y3x50SRmdAkw0csWYH4=";
+    hash = "sha256-xERmX59tBZprs0xuVAf+gjRTgy37HWOQSjEHv0HCKtI=";
   };
 
-  vendorHash = "sha256-jRZY147Z7OBWrHrs1Ljh47bdROsUWUIj2O1B0MOumTw=";
+  vendorHash = "sha256-xrolIqDtEWpdBoYATc72Q75XvRHffLNyCNUJEb1mgnc=";
 
   sourceRoot = "${finalAttrs.src.name}/wox.core";
 
@@ -64,6 +64,7 @@ buildGoModule (finalAttrs: {
     # The program will not run if this is missing.
     mkdir -p resource/ai/skills
     cp -R ${finalAttrs.src}/.agents/skills/wox-plugin-creator resource/ai/skills
+    cp -R ${finalAttrs.src}/.agents/skills/wox-theme-creator resource/ai/skills
   '';
 
   proxyVendor = true;

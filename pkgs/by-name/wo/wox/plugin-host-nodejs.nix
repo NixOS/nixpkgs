@@ -38,9 +38,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   preBuild = ''
     # Build the SDK
-    chmod -R +w ../wox.plugin.nodejs
-    (cd ../wox.plugin.nodejs && tsc)
-    chmod -R -w ../wox.plugin.nodejs
+    pushd ../wox.plugin.nodejs
+    chmod -R +w .
+    patch -p2 -i ${./plugin-nodejs-fix-rootDir.patch} && tsc
+    chmod -R -w .
+    popd
 
     # Replace symlink with a real copy so ncc bundles the SDK
     rm -rf node_modules/@wox-launcher/wox-plugin
