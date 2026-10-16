@@ -75,6 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Core X11 protocol client library (aka \"Xlib\")";
     homepage = "https://gitlab.freedesktop.org/xorg/lib/libx11";
