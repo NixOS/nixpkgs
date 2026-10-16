@@ -20,14 +20,14 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "https://www.riverbankcomputing.com/static/Downloads/sip/${version}/sip-${version}.tar.gz";
-    sha256 = "04a23cgsnx150xq86w1z44b6vr2zyazysy9mqax0fy346zlr77dk";
+    hash = "sha256-s52T6TdkeAe6wjV57b/yX+RtFiE/cINwByV0qx8bQhE=";
   };
 
   patches = lib.optionals (pythonAtLeast "3.11") [
     (fetchpatch {
       name = "sip-4-python3-11.patch";
       url = "https://aur.archlinux.org/cgit/aur.git/plain/python3-11.patch?h=sip4&id=67b5907227e68845cdfafcf050fedb89ed653585";
-      sha256 = "sha256-cmuz2y5+T8EM/h03G2oboSnnOwrUjVKt2TUQaC9YAdE=";
+      hash = "sha256-cmuz2y5+T8EM/h03G2oboSnnOwrUjVKt2TUQaC9YAdE=";
     })
   ];
 

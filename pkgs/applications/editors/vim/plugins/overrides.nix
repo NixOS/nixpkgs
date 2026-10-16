@@ -262,11 +262,17 @@ assertNoAdditions {
   };
 
   atlas-nvim = super.atlas-nvim.overrideAttrs {
+    nvimSkipModules = [
+      # Requires Diffview plugin initialization to populate DiffviewGlobal.
+      "atlas.pulls.diff.diffview.keymaps"
+    ];
     runtimeDeps = [
       curl
       gitMinimal
     ];
     checkInputs = with self; [
+      codediff-nvim
+      diffview-nvim
       fzf-lua
       snacks-nvim
     ];
@@ -5117,6 +5123,16 @@ assertNoAdditions {
       license = lib.licenses.vim;
     };
   });
+
+  vim-dadbod-manager-ui = super.vim-dadbod-manager-ui.overrideAttrs {
+    # Only vim-dadbod: the drawer this plugin extends is vendored, and upstream
+    # states that a separate vim-dadbod-ui "must not be installed next to it",
+    # so it is deliberately not listed here.
+    dependencies = [ self.vim-dadbod ];
+
+    doInstallCheck = true;
+    vimCommandCheck = "DBManager";
+  };
 
   vim-dadbod-ui = super.vim-dadbod-ui.overrideAttrs {
     dependencies = [ self.vim-dadbod ];

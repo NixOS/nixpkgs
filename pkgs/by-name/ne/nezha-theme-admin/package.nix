@@ -6,13 +6,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "nezha-theme-admin";
-  version = "2.3.4";
+  version = "2.3.8";
 
   src = fetchFromGitHub {
     owner = "nezhahq";
     repo = "admin-frontend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cjq0dwIUsT4iNcatzwxOaMMJ9dpjNmSShjHBBXW6neA=";
+    hash = "sha256-imwUshw63OiFMEX/03zG7V+7nOxiXortk5LHsQ914Lk=";
   };
 
   # TODO: Remove after upstream fixes resolved missing.
@@ -20,7 +20,7 @@ buildNpmPackage (finalAttrs: {
     cp ${./package-lock.json} package-lock.json
   '';
 
-  npmDepsHash = "sha256-I3CHLDa/EpuM2iUOsBNg4z3yw3VACJvO2W0vBL84pUk=";
+  npmDepsHash = "sha256-YT94AeqTWQSfmIGNPaG0zpy2ZsD7zJ6sFTea+FRbop8=";
   npmPackFlags = [ "--ignore-scripts" ];
   npmBuildScript = "build-ignore-error";
 

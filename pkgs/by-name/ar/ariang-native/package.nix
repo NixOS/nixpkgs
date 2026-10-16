@@ -2,17 +2,17 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  nix-update-script,
   copyDesktopItems,
   icoutils,
   makeWrapper,
   makeDesktopItem,
   electron,
+  nix-update-script,
 }:
 
 buildNpmPackage (finalAttrs: {
   pname = "ariang-native";
-  version = "1.3.14";
+  version = "1.3.15";
   strictDeps = true;
   __structuredAttrs = true;
 
@@ -20,12 +20,12 @@ buildNpmPackage (finalAttrs: {
     owner = "mayswind";
     repo = "AriaNg-Native";
     tag = finalAttrs.version;
-    hash = "sha256-ByQPAZVQEqqjD7th0wq06NdOsAR7YchWpV3LHu4QzTk=";
+    hash = "sha256-A+kBgsEQffiJ6bUQZePx3YRTu+WFs14gFDQixpqABXE=";
   };
 
   dontNpmBuild = true;
   npmDepsFetcherVersion = 2;
-  npmDepsHash = "sha256-mTu/QcsPq7YoUSuKtS34P+y38oIoB3zyuDL9ELQDoBQ=";
+  npmDepsHash = "sha256-gzyBs0XZ6Dhv2lhO8nx8maQ/W9R0s8XMzk+ptW/rYCE=";
   npmFlags = [ "--ignore-scripts" ];
 
   nativeBuildInputs = [

@@ -3,6 +3,7 @@ import path from 'node:path'
 import type * as actionsCore from '@actions/core'
 import type { context as actionsContext } from '@actions/github'
 import type { GitHub } from '@actions/github/lib/utils'
+import { cherryPickedFromSha, shaIsInDevelopmentBranch } from './commits.ts'
 import { getCommitDetailsForPR } from './get-pr-commit-details.ts'
 import { dismissReviews, postReview } from './reviews.ts'
 import { classify } from './supportedBranches.ts'
@@ -63,12 +64,12 @@ export default async function postReminders({
     return
   }
 
-  const baseBranchType = classify(
+  const { type: baseBranchType, stable } = classify(
     pr.base.ref.replace(/^refs\/heads\//, ''),
-  ).type
-  const headBranchType = classify(
+  )
+  const { type: headBranchType } = classify(
     pr.head.ref.replace(/^refs\/heads\//, ''),
-  ).type
+  )
 
   if (
     baseBranchType.includes('development') &&
@@ -85,7 +86,36 @@ export default async function postReminders({
   }
 
   const details = await getCommitDetailsForPR({ core, pr, repoPath })
-  const changedPaths = details.flatMap(({ changedPaths }) => changedPaths)
+  let changedPaths: string[]
+  if (stable && details.length < 250) {
+    const prCommits = await github.paginate(github.rest.pulls.listCommits, {
+      ...context.repo,
+      pull_number,
+    })
+    changedPaths = (
+      await Promise.all(
+        prCommits.map(async ({ files, commit }) => {
+          // Ignore cherry-picks from development branches to stable branches
+          const original_sha = cherryPickedFromSha(commit.message)
+          if (
+            !files ||
+            (original_sha &&
+              (await shaIsInDevelopmentBranch({
+                github,
+                context,
+                sha: original_sha,
+              })))
+          ) {
+            return []
+          } else {
+            return files?.map(({ filename }) => filename)
+          }
+        }),
+      )
+    ).flat(1)
+  } else {
+    changedPaths = details.flatMap(({ changedPaths }) => changedPaths)
+  }
 
   for (const { key, paths } of reminders) {
     if (matchesAny(changedPaths, paths)) {

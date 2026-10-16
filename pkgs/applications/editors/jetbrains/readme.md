@@ -65,12 +65,13 @@ fetchurl {
    - The IDEs have `passthru.updateScript` set up to run `./updater/main.py`.
      The script then uses the `UPDATE_NIX_*` environment variables as documented.
 
-To keep things simple, the update script will search for the following markers and may replace any content between them:
-- `update-script-start: urls` / `update-script-end: urls`: URLs for binary IDEs
-- `update-script-start: version` / `update-script-end: version`: Version and build number for binary IDEs
-- `update-script-start: source-args` / `update-script-end: source-args`: Arguments for `mkJetBrainsSource` for source IDEs.
+To keep things simple, the update script generates files within the package directory:
+- `version.json`: version information for binary packages, and `urls` for the package source.
+- `source_args.json`: arguments to pass to `mkJetBrainsSource` in source packages.
+- `maven_artefacts.json`: maven artefacts used by source packages.
 
-Any comments or other manual changes between these markers will be removed when the script runs.
+Packages are responsible for importing these files, using `lib.importJSON`.
+Other than `maven_artefacts.json`, which is passed directly to `mkJetBrainsSource` as `mvnDeps`.
 
 ## How to add an IDE:
  - Add a new derivation in `/pkgs/by-name/...`

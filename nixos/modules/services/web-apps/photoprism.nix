@@ -16,7 +16,7 @@ let
   }
   // (lib.mapAttrs (_: toString) cfg.settings);
 
-  manage = pkgs.writeShellScript "manage" ''
+  photoprism-manage = pkgs.writeShellScriptBin "photoprism-manage" ''
     set -o allexport # Export the following env vars
     ${lib.toShellVars env}
     eval "$(${config.systemd.package}/bin/systemctl show -pUID,MainPID photoprism.service | ${pkgs.gnused}/bin/sed "s/UID/ServiceUID/")"
@@ -117,6 +117,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    environment.systemPackages = [ photoprism-manage ];
     systemd.services.photoprism = {
       description = "Photoprism server";
 
@@ -170,7 +171,6 @@ in
       environment = env;
 
       preStart = ''
-        ln -sf ${manage} photoprism-manage
         ${lib.optionalString (cfg.passwordFile != null) ''
           export PHOTOPRISM_ADMIN_PASSWORD_FILE=$CREDENTIALS_DIRECTORY/PHOTOPRISM_ADMIN_PASSWORD_FILE
         ''}

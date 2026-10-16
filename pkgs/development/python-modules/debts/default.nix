@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "almet";
     repo = "debts";
     rev = "d887bd8b340172d1c9bbcca6426529b8d1c2a241"; # no tags
-    sha256 = "1d66nka81mv9c07mki78lp5hdajqv4cq6aq2k7bh3mhkc5hwnwlg";
+    hash = "sha256-j3LLYWET1gHXmQIrgxnZWKoGy6XoxFkPYGnXgNS0xrQ=";
   };
 
   propagatedBuildInputs = [ jinja2 ];

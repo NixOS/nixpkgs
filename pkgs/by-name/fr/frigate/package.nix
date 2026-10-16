@@ -63,7 +63,7 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "frigate";
-  version = "0.18.0";
+  version = "0.18.1";
   pyproject = false;
 
   src = fetchFromGitHub {
@@ -71,7 +71,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "blakeblackshear";
     repo = "frigate";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2FJG7tEZCuCQ6VJga9BMiuLTeswmlG8oN1MO6t0eroM=";
+    hash = "sha256-CLl55iXxt/lE0GE/OO2vXXMvNb+g6Hc9lZYyjkV/Bjk=";
   };
 
   patches = [

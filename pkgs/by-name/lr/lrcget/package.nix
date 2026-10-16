@@ -159,8 +159,14 @@ rustPlatform.buildRustPackage rec {
 
   preFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     gappsWrapperArgs+=(
-      # WEBKIT_DISABLE_COMPOSITING_MODE essential in NVIDIA + compositor https://github.com/NixOS/nixpkgs/issues/212064#issuecomment-1400202079
-      --set WEBKIT_DISABLE_COMPOSITING_MODE 1
+      # WEBKIT_DISABLE_COMPOSITING_MODE=1 is commonly exported session-wide on
+      # NVIDIA (see NixOS/nixpkgs#212064). Inherited into WebKit's UI process it
+      # makes AcceleratedBackingStore::create() return null, yet the web process
+      # still enters accelerated compositing mode, so the UI process segfaults
+      # in AcceleratedBackingStore::update(). Force compositing back on and use
+      # the shared-memory transport so no GBM buffers are allocated either.
+      --set WEBKIT_DISABLE_COMPOSITING_MODE 0
+      --set WEBKIT_DMABUF_RENDERER_FORCE_SHM 1
     )
   '';
 

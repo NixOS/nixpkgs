@@ -64,16 +64,22 @@ backendStdenv.mkDerivation (finalAttrs: {
   # NOTE: Depends on the CUDA package set, so use cudaNamePrefix.
   name = "${cudaNamePrefix}-${finalAttrs.pname}-${finalAttrs.version}";
   pname = "libnvshmem";
-  version = "3.6.5-0";
+  version = "3.8.0-0";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nvshmem";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2E3/WGbg6srT/e3ykK0qxTy1ZlJ9JGGLlergG0ITwTY=";
+    hash = "sha256-Md2MGj0MB8O3o5KjDhYQzeeu6XH6R7JowaCQA6gF3rk=";
   };
 
-  outputs = [ "out" ];
+  # The examples and perftest binaries are most of the install, so they get outputs of their own.
+  # nvshmem-info stays in 'out' because NVSHMEMConfig.cmake imports it from 'out/bin'.
+  outputs = [
+    "out"
+    "samples"
+    "test"
+  ];
 
   nativeBuildInputs = [
     # libnvshmem_host dlopens libcuda.so.1 and libnvidia-ml.so.1 by bare soname
@@ -195,6 +201,9 @@ backendStdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     nixLog "moving top-level files in $out to $out/share"
     mv -v "$out"/{changelog,git_commit.txt,License.txt,version.txt} "$out/share/"
+
+    moveToOutput "bin/examples" "$samples"
+    moveToOutput "bin/perftest" "$test"
   '';
 
   # These are all dlopen'd by bare soname, so buildInputs alone never reaches a RUNPATH. The contrast

@@ -52,6 +52,11 @@ python3Packages.buildPythonApplication rec {
   #       systemd 258 or newer and 51-edl.rules only applies to Qualcomm (i.e. not MTK).
   postInstall = ''
     install -Dm444 Setup/Linux/52-mtk.rules -t $out/lib/udev/rules.d
+
+    for size in 32 64 256 512; do
+      install -Dm444 mtkclient/gui/images/logo_$size.png \
+        $out/share/icons/hicolor/''${size}x''${size}/apps/mtkclient.png
+    done
   '';
 
   desktopItems = [
@@ -60,6 +65,7 @@ python3Packages.buildPythonApplication rec {
       desktopName = "MTKClient";
       comment = "Mediatek Flash and Repair Utility";
       exec = "mtk_gui";
+      icon = "mtkclient";
       categories = [
         "Development"
       ];

@@ -20,7 +20,7 @@ build-idris-package {
     owner = "pierrebeaucamp";
     repo = "idris-html";
     rev = "f59ecc560d7008ba26dda83f11319bb24ed6c508";
-    sha256 = "0r2clvkyld3y3r6smkfb7s47qnndikwds3bx9hphidbn41wjnh0i";
+    hash = "sha256-EUAreSB2tQgvTH0N3fiMzVp8iD7LzapNHn406uemTGQ=";
   };
 
   postUnpack = ''

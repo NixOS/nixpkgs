@@ -113,6 +113,15 @@ in
     hash = "sha256-lFT5Vt49G17t/fRm5yppO5p9ui10I9JNJVaGO1GPZFI=";
     patches = fetchpatch: [
       (fetchpatch {
+        name = "CVE-2026-108976.patch";
+        url = "https://cgit.git.savannah.gnu.org/cgit/emacs.git/patch/?id=044b0203267db3b7912325d076d79a79000afe75";
+        hash = "sha256-kHS75QQhYun5tgZQ7FEQHp95URW0E4iY6MDk1wQBxVk=";
+        includes = [
+          "lisp/net/tramp-archive.el"
+          "lisp/net/tramp.el"
+        ];
+      })
+      (fetchpatch {
         name = "CVE-2024-53920.patch";
         url = "https://cgit.git.savannah.gnu.org/cgit/emacs.git/patch/?id=abc802ee2eb0b1663349ddf22a461f8e54a383fb";
         hash = "sha256-ViRD4E27WDs7lLO6YPNroMo3Zq5/ASqMlmNtVI1V/Lo=";
@@ -151,6 +160,15 @@ in
         name = "CVE-2024-53920.patch";
         url = "https://cgit.git.savannah.gnu.org/cgit/emacs.git/patch/?id=abc802ee2eb0b1663349ddf22a461f8e54a383fb";
         hash = "sha256-ViRD4E27WDs7lLO6YPNroMo3Zq5/ASqMlmNtVI1V/Lo=";
+      })
+      (fetchpatch {
+        name = "CVE-2026-108976.patch";
+        url = "https://cgit.git.savannah.gnu.org/cgit/emacs.git/patch/?id=044b0203267db3b7912325d076d79a79000afe75";
+        hash = "sha256-kHS75QQhYun5tgZQ7FEQHp95URW0E4iY6MDk1wQBxVk=";
+        includes = [
+          "lisp/net/tramp-archive.el"
+          "lisp/net/tramp.el"
+        ];
       })
     ];
   });

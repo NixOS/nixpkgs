@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "yuvadm";
     repo = "viewstate";
     tag = "v${version}";
-    sha256 = "sha256-fvqz03rKkA2WVVXU74eo0otnuRseE83cv6pw3rMso34=";
+    hash = "sha256-fvqz03rKkA2WVVXU74eo0otnuRseE83cv6pw3rMso34=";
   };
 
   build-system = [ setuptools ];

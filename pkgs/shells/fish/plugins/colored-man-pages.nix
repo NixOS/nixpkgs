@@ -12,7 +12,7 @@ buildFishPlugin {
     owner = "patrickf1";
     repo = "colored_man_pages.fish";
     rev = "f885c2507128b70d6c41b043070a8f399988bc7a";
-    sha256 = "0ifqdbaw09hd1ai0ykhxl8735fcsm0x2fwfzsk7my2z52ds60bwa";
+    hash = "sha256-ii9gdBPlC1/P1N9xJzqomrkyDqIdTg+iCg0mwNVq2EU=";
   };
 
   meta = {

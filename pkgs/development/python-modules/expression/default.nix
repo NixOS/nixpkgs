@@ -14,7 +14,7 @@ buildPythonPackage (finalAttrs: {
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    sha256 = "sha256-RU9v4Tg0cZSkPH+HjZWO/puEucx3DkYgEMelLhgFgGU=";
+    hash = "sha256-RU9v4Tg0cZSkPH+HjZWO/puEucx3DkYgEMelLhgFgGU=";
   };
 
   build-system = [ poetry-core ];

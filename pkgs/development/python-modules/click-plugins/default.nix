@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "click_plugins";
     inherit version;
-    sha256 = "sha256-1685hKmdJDwTGqGoKDMedjD0qIqXQf0FySeyBLz5ImE=";
+    hash = "sha256-1685hKmdJDwTGqGoKDMedjD0qIqXQf0FySeyBLz5ImE=";
   };
 
   build-system = [ setuptools ];

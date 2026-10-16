@@ -17,23 +17,25 @@
   syrupy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "draccus";
   version = "0.11.6";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "marin-community";
     repo = "draccus";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-L9lvMjd76jm9ZIq5Pl2EOVQP2r4ReWQUOUGOPXDVfEI=";
   };
 
   # Pass non-callable type= (typing.Union, X | Y) through argparse.
   postPatch = ''
     substituteInPlace draccus/wrappers/field_wrapper.py \
-      --replace-fail '_arg_options["type"] = tpe' \
-                     '_arg_options["type"] = tpe if callable(tpe) else str'
+      --replace-fail \
+        '_arg_options["type"] = tpe' \
+        '_arg_options["type"] = tpe if callable(tpe) else str'
   '';
 
   build-system = [ setuptools ];
@@ -55,8 +57,8 @@ buildPythonPackage rec {
   meta = {
     description = "Framework for simple dataclass-based configurations based on Pyrallis";
     homepage = "https://github.com/marin-community/draccus";
-    changelog = "https://github.com/marin-community/draccus/releases/tag/v${version}";
+    changelog = "https://github.com/marin-community/draccus/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

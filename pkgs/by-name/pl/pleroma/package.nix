@@ -26,7 +26,7 @@ beamPackages.mixRelease rec {
     owner = "pleroma";
     repo = "pleroma";
     rev = "v${version}";
-    sha256 = "sha256-5BFzV2alNDjO/bS08+V4idzFaXQLr+4pNlLLXayBqIE=";
+    hash = "sha256-5BFzV2alNDjO/bS08+V4idzFaXQLr+4pNlLLXayBqIE=";
   };
 
   patches = [ ./Revert-Config-Restrict-permissions-of-OTP-config.patch ];
@@ -77,7 +77,7 @@ beamPackages.mixRelease rec {
           owner = "pleroma/elixir-libraries";
           repo = "elixir-captcha";
           rev = "e7b7cc34cc16b383461b966484c297e4ec9aeef6";
-          sha256 = "sha256-gcsZ8BzmKfSeX2QsWDxQd34nKxIM0eJKBAaxxYyFSlg=";
+          hash = "sha256-gcsZ8BzmKfSeX2QsWDxQd34nKxIM0eJKBAaxxYyFSlg=";
         };
         beamDeps = [ ];
       };

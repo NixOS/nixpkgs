@@ -14,6 +14,7 @@
   llvmPackages,
   llvm_libtool,
   ninja,
+  ninja_1_11,
   patchesForVersion,
   perl,
   python3,
@@ -87,6 +88,18 @@ let
     ;
 
   inherit (darwin) sigtool;
+
+  # https://github.com/NixOS/nixpkgs/issues/327836
+  # Fail to build with ninja 1.13 when NIX_BUILD_CORES is low (Hydra or Github Actions).
+  # Can reproduce using `nix --option cores 2 build -f . swift`.
+  # Until we find out the exact cause, pin ninja to version 1.11.1.
+  # Note: While upstream is pinned to a newer version of Ninja now, it still has this problem.
+  # TODO(@reckenrode): Make unconditional on staging after staging-next merge.
+  ninja' =
+    if lib.versions.majorMinor swift_release == "6.3" && stdenv.hostPlatform.isLinux then
+      ninja_1_11
+    else
+      ninja;
 
   doCheck = false; # TODO: Implement tests per https://github.com/swiftlang/swift/blob/main/docs/Testing.md.
 
@@ -310,7 +323,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    ninja
+    ninja'
     perl # For pod2man
     python3
     swift
@@ -549,5 +562,8 @@ stdenv.mkDerivation (finalAttrs: {
     badPlatforms = [ lib.systems.inspect.patterns.is32bit ];
     license = lib.licenses.asl20;
     teams = [ lib.teams.swift ];
+    # TODO(@reckenrode): Drop in the Swift 6.4.0 update, which switches the linker to LLD.
+    # aarch64-linux is failing to link with gold on Hydra: https://hydra.nixos.org/build/349228350
+    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
   };
 })

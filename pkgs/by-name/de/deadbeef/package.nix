@@ -1,6 +1,5 @@
 {
   lib,
-  config,
   clangStdenv,
   fetchFromGitHub,
   autoreconfHook,
@@ -46,7 +45,7 @@
   # output plugins
   alsaSupport ? true,
   alsa-lib,
-  pulseSupport ? config.pulseaudio or true,
+  pulseSupport ? true,
   libpulseaudio,
   pipewireSupport ? true,
   pipewire,
@@ -162,6 +161,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "i686-linux"
+      "riscv64-linux"
     ];
     maintainers = [ ];
   };

@@ -9,6 +9,7 @@
   # runtime dependencies
   nix-prefetch-git,
   nix-prefetch-docker,
+  skopeo,
   git, # for git ls-remote
 }:
 
@@ -16,6 +17,7 @@ let
   runtimePath = lib.makeBinPath [
     nix-prefetch-git
     nix-prefetch-docker
+    skopeo
     git
   ];
 in

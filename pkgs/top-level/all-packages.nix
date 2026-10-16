@@ -1840,7 +1840,7 @@ with pkgs;
 
   cudaPackages_13 = cudaPackages_13_4;
 
-  cudaPackages = recurseIntoAttrs cudaPackages_12;
+  cudaPackages = recurseIntoAttrs cudaPackages_13;
 
   dconf2nix = callPackage ../development/tools/haskell/dconf2nix { };
 
@@ -2255,10 +2255,6 @@ with pkgs;
   matrix-synapse-plugins = recurseIntoAttrs matrix-synapse-unwrapped.plugins;
 
   md2gemini = with python3.pkgs; toPythonApplication md2gemini;
-
-  mdcat = callPackage ../tools/text/mdcat {
-    inherit (python3Packages) ansi2html;
-  };
 
   mhonarc = perlPackages.MHonArc;
 
@@ -2784,6 +2780,8 @@ with pkgs;
     isDesktopVariant = true;
   };
 
+  stirling-pdf-free = stirling-pdf.override { withAdditionalFeatures = false; };
+
   stm32loader = with python3Packages; toPythonApplication stm32loader;
 
   solc-select = with python3Packages; toPythonApplication solc-select;
@@ -2945,10 +2943,6 @@ with pkgs;
 
   xorriso = libisoburn;
 
-  xvfb-run = callPackage ../tools/misc/xvfb-run {
-    inherit (texFunctions) fontsConf;
-  };
-
   yapf = with python3Packages; toPythonApplication yapf;
 
   yarn-berry_4 = yarn-berry.override { berryVersion = 4; };
@@ -3082,7 +3076,7 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
-  inherit (coqPackages_9_2) compcert;
+  inherit (rocqPackages_9_2) compcert;
 
   corretto11 = javaPackages.compiler.corretto11;
   corretto17 = javaPackages.compiler.corretto17;
@@ -3096,6 +3090,8 @@ with pkgs;
     crystal_1_17
     crystal_1_18
     crystal_1_19
+    crystal_1_20
+    crystal_1_21
     crystal
     ;
 
@@ -3346,84 +3342,99 @@ with pkgs;
     }
   );
 
-  gnat14 = wrapCC (
-    gcc14.cc.override {
-      name = "gnat";
-      langC = true;
-      langCC = false;
-      langAda = true;
-      profiledCompiler = false;
-      # As per upstream instructions building a cross compiler
-      # should be done with a (native) compiler of the same version.
-      # If we are cross-compiling GNAT, we may as well do the same.
-      gnat-bootstrap =
-        if stdenv.hostPlatform == stdenv.targetPlatform && stdenv.buildPlatform == stdenv.hostPlatform then
-          buildPackages.gnat-bootstrap14
-        else
-          buildPackages.gnat14;
-      stdenv =
-        if
-          stdenv.hostPlatform == stdenv.targetPlatform
-          && stdenv.buildPlatform == stdenv.hostPlatform
-          && stdenv.buildPlatform.isDarwin
-        then
-          overrideCC gccStdenv gnat-bootstrap14
-        else
-          stdenv;
+  gnat14 = wrapCCWith (
+    {
+      cc = gcc14.cc.override {
+        name = "gnat";
+        langC = true;
+        langCC = false;
+        langAda = true;
+        profiledCompiler = false;
+        # As per upstream instructions building a cross compiler
+        # should be done with a (native) compiler of the same version.
+        # If we are cross-compiling GNAT, we may as well do the same.
+        gnat-bootstrap =
+          if stdenv.hostPlatform == stdenv.targetPlatform && stdenv.buildPlatform == stdenv.hostPlatform then
+            buildPackages.gnat-bootstrap14
+          else
+            buildPackages.gnat14;
+        stdenv =
+          if
+            stdenv.hostPlatform == stdenv.targetPlatform
+            && stdenv.buildPlatform == stdenv.hostPlatform
+            && stdenv.buildPlatform.isDarwin
+          then
+            overrideCC gccStdenv gnat-bootstrap14
+          else
+            stdenv;
+      };
+    }
+    // lib.optionalAttrs stdenv.targetPlatform.isDarwin {
+      apple-sdk = apple-sdk_15;
     }
   );
 
-  gnat15 = wrapCC (
-    gcc15.cc.override {
-      name = "gnat";
-      langC = true;
-      langCC = false;
-      langAda = true;
-      profiledCompiler = false;
-      # As per upstream instructions building a cross compiler
-      # should be done with a (native) compiler of the same version.
-      # If we are cross-compiling GNAT, we may as well do the same.
-      gnat-bootstrap =
-        if stdenv.hostPlatform == stdenv.targetPlatform && stdenv.buildPlatform == stdenv.hostPlatform then
-          buildPackages.gnat-bootstrap15
-        else
-          buildPackages.gnat15;
-      stdenv =
-        if
-          stdenv.hostPlatform == stdenv.targetPlatform
-          && stdenv.buildPlatform == stdenv.hostPlatform
-          && stdenv.buildPlatform.isDarwin
-        then
-          overrideCC gccStdenv gnat-bootstrap15
-        else
-          stdenv;
+  gnat15 = wrapCCWith (
+    {
+      cc = gcc15.cc.override {
+        name = "gnat";
+        langC = true;
+        langCC = false;
+        langAda = true;
+        profiledCompiler = false;
+        # As per upstream instructions building a cross compiler
+        # should be done with a (native) compiler of the same version.
+        # If we are cross-compiling GNAT, we may as well do the same.
+        gnat-bootstrap =
+          if stdenv.hostPlatform == stdenv.targetPlatform && stdenv.buildPlatform == stdenv.hostPlatform then
+            buildPackages.gnat-bootstrap15
+          else
+            buildPackages.gnat15;
+        stdenv =
+          if
+            stdenv.hostPlatform == stdenv.targetPlatform
+            && stdenv.buildPlatform == stdenv.hostPlatform
+            && stdenv.buildPlatform.isDarwin
+          then
+            overrideCC gccStdenv gnat-bootstrap15
+          else
+            stdenv;
+      };
+    }
+    // lib.optionalAttrs stdenv.targetPlatform.isDarwin {
+      apple-sdk = apple-sdk_15;
     }
   );
 
-  gnat16 = wrapCC (
-    gcc16.cc.override {
-      name = "gnat";
-      langC = true;
-      langCC = false;
-      langAda = true;
-      profiledCompiler = false;
-      # As per upstream instructions building a cross compiler
-      # should be done with a (native) compiler of the same version.
-      # If we are cross-compiling GNAT, we may as well do the same.
-      gnat-bootstrap =
-        if stdenv.hostPlatform == stdenv.targetPlatform && stdenv.buildPlatform == stdenv.hostPlatform then
-          buildPackages.gnat-bootstrap16
-        else
-          buildPackages.gnat16;
-      stdenv =
-        if
-          stdenv.hostPlatform == stdenv.targetPlatform
-          && stdenv.buildPlatform == stdenv.hostPlatform
-          && stdenv.buildPlatform.isDarwin
-        then
-          overrideCC gccStdenv gnat-bootstrap16
-        else
-          stdenv;
+  gnat16 = wrapCCWith (
+    {
+      cc = gcc16.cc.override {
+        name = "gnat";
+        langC = true;
+        langCC = false;
+        langAda = true;
+        profiledCompiler = false;
+        # As per upstream instructions building a cross compiler
+        # should be done with a (native) compiler of the same version.
+        # If we are cross-compiling GNAT, we may as well do the same.
+        gnat-bootstrap =
+          if stdenv.hostPlatform == stdenv.targetPlatform && stdenv.buildPlatform == stdenv.hostPlatform then
+            buildPackages.gnat-bootstrap16
+          else
+            buildPackages.gnat16;
+        stdenv =
+          if
+            stdenv.hostPlatform == stdenv.targetPlatform
+            && stdenv.buildPlatform == stdenv.hostPlatform
+            && stdenv.buildPlatform.isDarwin
+          then
+            overrideCC gccStdenv gnat-bootstrap16
+          else
+            stdenv;
+      };
+    }
+    // lib.optionalAttrs stdenv.targetPlatform.isDarwin {
+      apple-sdk = apple-sdk_15;
     }
   );
 
@@ -4390,6 +4401,7 @@ with pkgs;
     php83
     php84
     php85
+    php86
     ;
 
   # PHP Extensions and Packages
@@ -4404,6 +4416,9 @@ with pkgs;
 
   php85Extensions = recurseIntoAttrs php85.extensions;
   php85Packages = recurseIntoAttrs php85.packages;
+
+  php86Extensions = recurseIntoAttrs php86.extensions;
+  php86Packages = recurseIntoAttrs php86.packages;
 
   # Python interpreters. All standard library modules are included except for tkinter, which is
   # available as `pythonPackages.tkinter` and can be used as any other Python package.
@@ -4436,6 +4451,11 @@ with pkgs;
     pythonAttr = "python315FreeThreading";
     enableGIL = false;
   };
+  python316FreeThreading = python315.override {
+    self = python316FreeThreading;
+    pythonAttr = "python316FreeThreading";
+    enableGIL = false;
+  };
 
   pythonInterpreters = callPackage ./../development/interpreters/python { };
   inherit (pythonInterpreters)
@@ -4444,6 +4464,7 @@ with pkgs;
     python313
     python314
     python315
+    python316
     python3Minimal
     pypy27
     pypy310
@@ -4459,6 +4480,7 @@ with pkgs;
   python313Packages = recurseIntoAttrs python313.pkgs;
   python314Packages = recurseIntoAttrs python314.pkgs;
   python315Packages = python315.pkgs;
+  python316Packages = python316.pkgs;
   pypyPackages = pypy.pkgs;
   pypy2Packages = pypy2.pkgs;
   pypy27Packages = pypy27.pkgs;
@@ -7174,12 +7196,6 @@ with pkgs;
 
   inherit
     ({
-      kanidm_1_8 = callPackage ../servers/kanidm/1_8.nix {
-        kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_8;
-      };
-      kanidm_1_9 = callPackage ../servers/kanidm/1_9.nix {
-        kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_9;
-      };
       kanidm_1_10 = callPackage ../servers/kanidm/1_10.nix {
         kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_10;
       };
@@ -7187,17 +7203,11 @@ with pkgs;
         kanidmWithSecretProvisioning = kanidmWithSecretProvisioning_1_11;
       };
 
-      kanidmWithSecretProvisioning_1_8 = kanidm_1_8.override { enableSecretProvisioning = true; };
-      kanidmWithSecretProvisioning_1_9 = kanidm_1_9.override { enableSecretProvisioning = true; };
       kanidmWithSecretProvisioning_1_10 = kanidm_1_10.override { enableSecretProvisioning = true; };
       kanidmWithSecretProvisioning_1_11 = kanidm_1_11.override { enableSecretProvisioning = true; };
     })
-    kanidm_1_8
-    kanidm_1_9
     kanidm_1_10
     kanidm_1_11
-    kanidmWithSecretProvisioning_1_8
-    kanidmWithSecretProvisioning_1_9
     kanidmWithSecretProvisioning_1_10
     kanidmWithSecretProvisioning_1_11
     ;
@@ -7293,6 +7303,8 @@ with pkgs;
   };
 
   nsdiff = perlPackages.nsdiff;
+
+  opencloud-production = callPackage ../by-name/op/opencloud/production.nix { };
 
   openresty = callPackage ../servers/http/openresty {
     zlib-ng = zlib;
@@ -7552,7 +7564,7 @@ with pkgs;
 
   conky = callPackage ../os-specific/linux/conky (
     {
-      lua = lua5_4;
+      lua = lua5_5;
       inherit (linuxPackages.nvidia_x11.settings) libXNVCtrl;
     }
     // config.conky or { }
@@ -8506,22 +8518,6 @@ with pkgs;
     freeoffice
     ;
 
-  gimp2 = callPackage ../applications/graphics/gimp/2.0 {
-    lcms = lcms2;
-    stdenv = if stdenv.cc.isGNU then gcc14Stdenv else stdenv;
-  };
-
-  gimp2-with-plugins = callPackage ../applications/graphics/gimp/wrapper.nix {
-    gimpPlugins = gimp2Plugins;
-    plugins = null; # All packaged plugins enabled, if not explicit plugin list supplied
-  };
-
-  gimp2Plugins = recurseIntoAttrs (
-    callPackage ../applications/graphics/gimp/plugins {
-      gimp = gimp2;
-    }
-  );
-
   gimp = callPackage ../applications/graphics/gimp {
     lcms = lcms2;
   };
@@ -8816,7 +8812,7 @@ with pkgs;
   murmur =
     (callPackages ../applications/networking/mumble {
       avahi = avahi-compat;
-      pulseSupport = config.pulseaudio or false;
+      pulseSupport = false;
       iceSupport = config.murmur.iceSupport or true;
     }).murmur;
 
@@ -9465,7 +9461,7 @@ with pkgs;
           ;
       };
 
-  xpdf = libsForQt5.callPackage ../applications/misc/xpdf { };
+  xpdf = qt6.callPackage ../applications/misc/xpdf { };
 
   xmobar = haskellPackages.xmobar.bin;
 
@@ -9734,9 +9730,7 @@ with pkgs;
 
   openraPackages = recurseIntoAttrs (callPackage ../by-name/op/openra/engines { });
 
-  papermcServers = callPackages ../games/papermc { };
-
-  papermc = papermcServers.papermc;
+  papermcServers = callPackage ../by-name/pa/papermc/versions.nix { };
 
   pokerth-server = pokerth.override { target = "server"; };
 
@@ -10078,20 +10072,6 @@ with pkgs;
     rocqPackages
     rocq-core
     ;
-
-  inherit (rocqPackages) coq;
-
-  # Deprecated aliases
-
-  coqPackages = rocqPackages;
-  coqPackages_9_0 = rocqPackages_9_0;
-  coq_9_0 = rocqPackages_9_0.coq;
-  coqPackages_9_1 = rocqPackages_9_1;
-  coq_9_1 = rocqPackages_9_1.coq;
-  coqPackages_9_2 = rocqPackages_9_2;
-  coq_9_2 = rocqPackages_9_2.coq;
-  coqPackages_9_3 = rocqPackages_9_3;
-  coq_9_3 = rocqPackages_9_3.coq;
 
   inherit
     (callPackage ./coq-packages.nix {

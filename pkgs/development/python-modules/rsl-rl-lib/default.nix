@@ -67,6 +67,8 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Fast and simple implementation of learning algorithms for robotics";
     homepage = "https://github.com/leggedrobotics/rsl_rl";

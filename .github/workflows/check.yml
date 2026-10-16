@@ -154,6 +154,10 @@ jobs:
           sparse-checkout: |
             ci/github-script
 
+      - name: Install dependencies
+        run: npm ci --package-lock-only=false --no-audit bottleneck
+        working-directory: trusted/ci/github-script
+
       - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         if: github.event_name != 'pull_request' && vars.NIXPKGS_CI_CLIENT_ID
         id: app-token

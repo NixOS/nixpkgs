@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "garrettj403";
     repo = "SciencePlots";
     rev = version;
-    sha256 = "sha256-Sj0SdTu0M0wgTiUuC9ad73W8olsnbjzJgkaIsYKPYvo=";
+    hash = "sha256-Sj0SdTu0M0wgTiUuC9ad73W8olsnbjzJgkaIsYKPYvo=";
   };
 
   build-system = [ setuptools-scm ];

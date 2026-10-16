@@ -1,5 +1,6 @@
 {
   lib,
+  php,
   stdenv,
   buildPecl,
   cargo,
@@ -57,6 +58,7 @@ buildPecl rec {
   ];
 
   meta = {
+    broken = lib.versionAtLeast php.version "8.6";
     changelog = "https://github.com/DataDog/dd-trace-php/blob/${src.rev}/CHANGELOG.md";
     description = "Datadog Tracing PHP Client";
     homepage = "https://github.com/DataDog/dd-trace-php";

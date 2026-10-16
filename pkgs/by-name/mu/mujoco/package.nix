@@ -38,8 +38,8 @@ let
     eigen3 = fetchFromGitLab {
       owner = "libeigen";
       repo = "eigen";
-      rev = "087757ad50159b5bd86ab73e4df34e6b4ea74258";
-      hash = "sha256-TkL3tRL+hw7zHO3NUviaKDNUsrZQJJ+LqeQWaFl5TpU=";
+      rev = "b1f8b0c3b8db9c3711349144acf951226700ddb4";
+      hash = "sha256-R8VxOEjJvkBCcQRWpTi9oWI3Mhxp31wrOcQ2IQN3GIw=";
     };
     googletest = fetchFromGitHub {
       owner = "google";
@@ -50,8 +50,8 @@ let
     miniz = fetchFromGitHub {
       owner = "richgel999";
       repo = "miniz";
-      rev = "d10b03cc73475af673df40f06e5cefd1d5f940d9";
-      hash = "sha256-hRB/0TVVQjr4VwjozfRnYKUJfeqO+1PNfdvP/rrOCR4=";
+      rev = "77d0dce8627735138c51770d1799a1ef48f2117d";
+      hash = "sha256-/MAJWZXZ+pbelFduGE75rK/x9qEzxSFEj8RJWe3JUv0=";
     };
     qhull = fetchFromGitHub {
       owner = "qhull";
@@ -90,7 +90,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mujoco";
-  version = "3.15.0";
+  version = "3.16.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "google-deepmind";
     repo = "mujoco";
     tag = finalAttrs.version;
-    hash = "sha256-o3WtBj64YZ3oqqOih5lMtdL8jxLj+1Hwu0GfMbOOYfg=";
+    hash = "sha256-pL4wtmbsRuOWsS1vfThThxvIU8EFtYU9ITaMSrSjA3I=";
   };
 
   patches = [

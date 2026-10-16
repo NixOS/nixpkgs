@@ -23,7 +23,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "speechbrain";
-  version = "1.1.1";
+  version = "1.1.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -31,7 +31,7 @@ buildPythonPackage (finalAttrs: {
     owner = "speechbrain";
     repo = "speechbrain";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PpUnlg9/FQRm5PvVuFjA2xPi4RemKHIIN+E90NOPm1g=";
+    hash = "sha256-/m3wv4Umfgniuw1AVlO9EX2t4+JNJmcX10JPqlxhw1U=";
   };
 
   build-system = [ setuptools ];

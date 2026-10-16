@@ -37,7 +37,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Tiny LRU cache implementation and decorator";
-    homepage = "http://www.repoze.org/";
+    homepage = "https://github.com/repoze/repoze.lru";
     changelog = "https://github.com/repoze/repoze.lru/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.bsd0;
     maintainers = [ ];

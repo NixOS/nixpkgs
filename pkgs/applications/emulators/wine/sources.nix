@@ -151,9 +151,9 @@ rec {
 
   unstable = fetchurl rec {
     # NOTE: Don't forget to change the hash for staging as well.
-    version = "11.18";
+    version = "11.19";
     url = "https://dl.winehq.org/wine/source/11.x/wine-${version}.tar.xz";
-    hash = "sha256-xigvbU2uzxHzq5+aK2xZj2e+fijDY7osroo8RLYR56Q=";
+    hash = "sha256-SCAGbtpo5VPTMCOf/GKBZKNI0cYj5J0FjgEcWnzalfE=";
 
     patches = [
       # Also look for root certificates at $NIX_SSL_CERT_FILE
@@ -163,7 +163,7 @@ rec {
     # see https://gitlab.winehq.org/wine/wine-staging
     staging = fetchFromGitLab {
       inherit version;
-      hash = "sha256-KZCkra0y3XFNrbD2lZ+YUCLyq1POC30Sd4sGCJZuwgQ=";
+      hash = "sha256-Dnb/CjzxWDdMDXfJB/hiWHhQLjU49F6OyM6qqC0g/v0=";
       domain = "gitlab.winehq.org";
       owner = "wine";
       repo = "wine-staging";

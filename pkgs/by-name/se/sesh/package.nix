@@ -8,11 +8,11 @@
 }:
 buildGo127Module (finalAttrs: {
   pname = "sesh";
-  version = "2.32.0";
+  version = "2.33.0";
   __structuredAttrs = true;
 
   nativeBuildInputs = [
-    (go-mockery.override { buildGoModule = buildGo127Module; })
+    go-mockery
     writableTmpDirAsHomeHook
   ];
 
@@ -20,7 +20,7 @@ buildGo127Module (finalAttrs: {
     owner = "joshmedeski";
     repo = "sesh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pHsRKndjE2U+Gl0oKW5d+rRST0jDEp61sXm+tRTiD3w=";
+    hash = "sha256-Q25fdn+1T4NOnFX5ZuIMhhRBFSj7dfjybgCj2bu3lK4=";
   };
 
   # NOTE: prevent crash when getting vendor deps/hash
@@ -32,7 +32,7 @@ buildGo127Module (finalAttrs: {
     mockery
   '';
 
-  vendorHash = "sha256-7wfg53djcty9R8WGo1H4C2VkGDraTu/n1w5c/62/YTc=";
+  vendorHash = "sha256-8CMqOlq3rAXPpzABxd2pp2DhMOvKAN+jHVZ2bLZUN0w=";
 
   ldflags = [
     "-s"

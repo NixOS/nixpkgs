@@ -7,25 +7,29 @@
 
 let
   sources = {
+    "19" = {
+      version = "1.9.0";
+      hash = "sha256-q6pFczgTp98+OiJKV3AVt3DK5lhKLFz3GCILG57K7Rw=";
+    };
     "18" = {
-      version = "1.8.0";
-      hash = "sha256-QsDppGN5TE7CSii3mNmwqT/riNNjyRTJk6d6Xcf0JMw=";
+      version = "1.8.1";
+      hash = "sha256-gUjOxq1LexasLJny2Y74ZmkKbJ7Jzb0dbETtRfnr8zc=";
     };
     "17" = {
-      version = "1.7.1";
-      hash = "sha256-9GKqyrNpi80I4WWIiRN8zeXBm5bkRuzOWrZVfpYOzag=";
+      version = "1.7.2";
+      hash = "sha256-ueC0Ml7d5eop/DbIUeUji9MblKvEtX3DDZ1dUefMMu4=";
     };
     "16" = {
-      version = "1.6.2";
-      hash = "sha256-WMmtnuGOvLwtiEmgHpYURC1k5NmkBiDg+PnQCIZp7Sk=";
+      version = "1.6.3";
+      hash = "sha256-QwQvSoOx0eeZMNIm1GMGUynuWCvwl5myFaY0/IBKWcc=";
     };
     "15" = {
-      version = "1.5.3";
-      hash = "sha256-jkU0zt1waPTdFrBLAxYNvlo+RwdhCtKQq7iqAuxthNA=";
+      version = "1.5.4";
+      hash = "sha256-YYdRc5XzhoEOA2M8bC4+DobDw1QMhLyDv2Li9X31pXY=";
     };
     "14" = {
-      version = "1.4.4";
-      hash = "sha256-8rJ4Ck0Axf9zKhOXaJ4EA/M783YZRLuWx+GMGccadVo=";
+      version = "1.4.5";
+      hash = "sha256-HyFmdI1ozjaqgt6ni+T0+0DA08k/otlyZ0UP/Ex9YZw=";
     };
   };
 

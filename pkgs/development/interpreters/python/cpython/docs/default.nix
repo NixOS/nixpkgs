@@ -8,19 +8,19 @@ let
   pythonDocs = {
     html = {
       recurseForDerivations = true;
-      python314 = import ./3.14-html.nix {
+      python315 = import ./3.15-html.nix {
         inherit stdenv fetchurl lib;
       };
     };
     text = {
       recurseForDerivations = true;
-      python314 = import ./3.14-text.nix {
+      python315 = import ./3.15-text.nix {
         inherit stdenv fetchurl lib;
       };
     };
     texinfo = {
       recurseForDerivations = true;
-      python314 = import ./3.14-texinfo.nix {
+      python315 = import ./3.15-texinfo.nix {
         inherit stdenv fetchurl lib;
       };
     };

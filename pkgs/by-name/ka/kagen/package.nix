@@ -19,6 +19,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "kagen";
   version = "1.2.1";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "KarlsruheGraphGeneration";
     repo = "kagen";
@@ -30,11 +33,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    mpi
     pkg-config
   ];
 
   buildInputs = [
     imagemagick
+    gtest
   ];
 
   propagatedBuildInputs = [

@@ -3,23 +3,13 @@
   fetchFromGitHub,
   buildNpmPackage,
   makeDesktopItem,
+  copyDesktopItems,
   makeWrapper,
 
   nwjs,
 }:
 
-let
-  desktopItem = makeDesktopItem {
-    desktopName = "Piskel";
-    comment = "Easy-to-use sprite editor";
-    name = "piskel";
-    exec = "piskel";
-    icon = "piskel";
-    terminal = false;
-    categories = [ "Graphics" ];
-  };
-in
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "piskel";
   # Newest version is 0.15.0 and is years old already (also doesn't build correctly)
   version = "0.15.2-SNAPSHOT-unstable-2026-04-09";
@@ -36,7 +26,22 @@ buildNpmPackage rec {
     "PUPPETEER_SKIP_DOWNLOAD" = "1";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    copyDesktopItems
+  ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      desktopName = "Piskel";
+      comment = "Easy-to-use sprite editor";
+      name = "piskel";
+      exec = "piskel";
+      icon = "piskel";
+      terminal = false;
+      categories = [ "Graphics" ];
+    })
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -46,10 +51,9 @@ buildNpmPackage rec {
     cp -r dest/prod $out/site/dest/
     cp package.json $out/site/
 
-    install -Dm644 ${desktopItem}/share/applications/piskel.desktop -t $out/share/applications
     install -Dm644 src/logo.png $out/share/icons/hicolor/64x64/apps/piskel.png
 
-    makeWrapper ${nwjs}/bin/nw $out/bin/${pname} \
+    makeWrapper ${nwjs}/bin/nw $out/bin/${finalAttrs.pname} \
       --add-flags $out/site
 
     runHook postInstall
@@ -67,4 +71,4 @@ buildNpmPackage rec {
   };
 
   __structuredAttrs = true;
-}
+})

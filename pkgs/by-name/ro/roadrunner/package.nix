@@ -1,30 +1,30 @@
 {
   lib,
   stdenv,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   installShellFiles,
   versionCheckHook,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "roadrunner";
-  version = "2025.1.15";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "roadrunner-server";
     repo = "roadrunner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-T7JWA/O25s7A/jSrWJJF4oJbQD0hQyCRt6vFiuz8kwE=";
+    hash = "sha256-6x+K591t5zhHKk0ZBvpsdtH2qcuhmq2HCFXMoaodwY8=";
   };
 
-  vendorHash = "sha256-OhfqfLYHCoBU8QyrpaHwKXtGZf5eK8ocfTyjtZxsgSg=";
+  vendorHash = "sha256-LYHjx3ur1Qf0FPsndSKQNa04gursoAPv/Hdbt1+vsUg=";
   env.GOWORK = "off";
 
   subPackages = [ "cmd/rr" ];
 
   # Flags as provided by the build automation of the project:
-  # https://github.com/roadrunner-server/roadrunner/blob/3853ad693522e82d53d62950e5f1315402c910f2/.github/workflows/release.yml#L82
+  # https://github.com/roadrunner-server/roadrunner/blob/c8f9cfd9510b748238b2fc6dd009ad3726f09e36/.github/workflows/release.yml#L82
   ldflags = [
     "-s"
     "-X=github.com/roadrunner-server/roadrunner/v${lib.versions.major finalAttrs.version}/internal/meta.version=${finalAttrs.version}"

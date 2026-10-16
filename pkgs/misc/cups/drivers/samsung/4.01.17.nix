@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://www.bchemnet.com/suldr/driver/UnifiedLinuxDriver-${finalAttrs.version}.tar.gz";
-    sha256 = "1vv3pzvqpg1dq3xjr8161x2yp3v7ca75vil56ranhw5pkjwq66x0";
+    hash = "sha256-oBuDuZy3cGhVNoXGXY5iZ4/rRQ8moCz7wC28i/e/Y+8=";
   };
 
   nativeBuildInputs = [ patchPpdFilesHook ];

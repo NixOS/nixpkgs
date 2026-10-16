@@ -23,6 +23,7 @@ buildPecl {
   buildInputs = [ pcre2 ];
 
   meta = {
+    broken = lib.versionAtLeast php.version "8.6";
     changelog = "https://github.com/php-ds/ext-ds/releases/tag/v${version}";
     description = "Extension providing efficient data structures for PHP";
     license = lib.licenses.mit;

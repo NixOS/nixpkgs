@@ -136,7 +136,7 @@ let
           alsa-lib
           zlib
         ]
-        ++ lib.optional (config.pulseaudio or (!isDarwin)) libpulseaudio
+        ++ lib.optional (!isDarwin) libpulseaudio
         ++ lib.optional withALSA alsa-lib
         ++ lib.optional withSndio sndio
         ++ lib.optional withJACK libjack2

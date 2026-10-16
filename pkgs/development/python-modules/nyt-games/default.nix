@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "nyt-games";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-nyt-games";
     tag = "v${version}";
-    hash = "sha256-u0Sc3q+9X47aM4mjNDO5ALqaL1vUujq8L6HFhv2snA4=";
+    hash = "sha256-rHo33aByZrU3xngUiMTgYXWaCM9wk2olW+K+cIh7VkI=";
   };
 
   build-system = [ hatchling ];

@@ -30,6 +30,7 @@ stdenv.mkDerivation {
     {
       x86_64-linux = "linux64";
       aarch64-linux = "linux64";
+      riscv64-linux = "linux64";
       x86_64-cygwin = "cygwin64";
       aarch64-darwin = "mac64";
     }
@@ -67,6 +68,7 @@ stdenv.mkDerivation {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
+      "riscv64-linux"
       "x86_64-cygwin"
       "aarch64-darwin"
     ];

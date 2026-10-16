@@ -38,6 +38,11 @@ let
     }
   );
 
+  # Flarum 2's cache:clear rebuilds all compiled assets, which needs more
+  # than PHP's default 128M memory limit.
+  memoryLimit = "512M";
+  flarumCli = "php -d memory_limit=${memoryLimit} flarum";
+
   phpFormat = pkgs.formats.php { };
 
   configPhpFile = phpFormat.generate "flarum-config.php" {
@@ -61,7 +66,24 @@ in
   options.services.flarum = {
     enable = mkEnableOption "Flarum discussion platform";
 
-    package = mkPackageOption pkgs "flarum" { };
+    package = mkOption {
+      type = types.package;
+      default = if versionOlder config.system.stateVersion "26.11" then pkgs.flarum_1 else pkgs.flarum_2;
+      defaultText = literalExpression ''
+        if versionOlder config.system.stateVersion "26.11" then pkgs.flarum_1 else pkgs.flarum_2
+      '';
+      relatedPackages = [
+        "flarum_1"
+        "flarum_2"
+      ];
+      description = ''
+        Flarum package to use.
+
+        Upgrading from Flarum 1.x to 2.x migrates the database and can't be
+        undone, so back up the database and make sure all extensions support
+        Flarum 2 before switching.
+      '';
+    };
 
     forumTitle = mkOption {
       type = types.str;
@@ -288,9 +310,11 @@ in
         "pm.min_spare_servers" = mkDefault 1;
         "pm.max_spare_servers" = mkDefault 3;
       };
-      phpOptions = ''
+      # mkBefore so the pool's own phpOptions can override these
+      phpOptions = mkBefore ''
         error_log = syslog
         log_errors = on
+        memory_limit = ${memoryLimit}
       '';
     };
 
@@ -355,7 +379,7 @@ in
       path = [ config.services.phpfpm.phpPackage ];
       script = ''
         mkdir -p ${cfg.stateDir}/{extensions,public/assets/avatars}
-        mkdir -p ${cfg.stateDir}/storage/{cache,formatter,sessions,views}
+        mkdir -p ${cfg.stateDir}/storage/{cache,formatter,logs,sessions,views}
         cd ${cfg.stateDir}
         cp -f ${cfg.package}/share/php/flarum/{extend.php,site.php,flarum} .
         ln -sf ${cfg.package}/share/php/flarum/vendor .
@@ -383,7 +407,7 @@ in
               ${pkgs.replace-secret}/bin/replace-secret '@databasePassword@' \
                 ${escapeShellArg cfg.databasePasswordFile} /tmp/flarum-install.json
             ''}
-            php flarum install --file=/tmp/flarum-install.json
+            ${flarumCli} install --file=/tmp/flarum-install.json
           fi
           touch .flarum-installed
         fi
@@ -398,8 +422,8 @@ in
         fi
 
         if [ -f config.php ]; then
-          php flarum migrate
-          php flarum cache:clear
+          ${flarumCli} migrate
+          ${flarumCli} cache:clear
         fi
       '';
     };

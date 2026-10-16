@@ -20,8 +20,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchPypi {
-    pname = "ClusterShell";
-    inherit version;
+    inherit pname version;
     hash = "sha256-snrwuqnRsQrGonKXALA+WieWyDjLtqrxkCaYImq56oo=";
   };
 

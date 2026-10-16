@@ -118,7 +118,6 @@ lib.extendMkDerivation {
     "doInstallCheck"
     "pyproject"
     "format"
-    "stdenv"
     "dependencies"
     "optional-dependencies"
     "build-system"
@@ -428,12 +427,6 @@ lib.extendMkDerivation {
         disabled = finalAttrs ? meta.problems.unsupportedPython;
 
         updateScript = nix-update-script { };
-        # __stdenvPythonCompat[Pos] attributes are here for overrideStdenvCompat in `python-packages-base.nix` to work.
-        # They are internal and subject to changes.
-        # TODO(@ShamrockLee): Remove when overrideStdenvCompat gets removed.
-        ${if attrs ? stdenv then "__stdenvPythonCompat" else null} = attrs.stdenv;
-        ${if attrs ? stdenv then "__stdenvPythonCompatPos" else null} =
-          builtins.unsafeGetAttrPos "stdenv" attrs;
       }
       // attrs.passthru or { };
 
@@ -444,19 +437,58 @@ lib.extendMkDerivation {
       }
       // meta
       // {
-        problems =
-          let
-            disabled' = meta ? problems.unsupportedPython || disabled;
-          in
-          meta.problems or { }
-          // {
-            ${if disabled' then "unsupportedPython" else null} = meta.problems.unsupportedPython or { } // {
+        problems = meta.problems or { } // {
+          ## Public meta.problems interface for all Python packages
+
+          # Unsupported Python interpreter
+          ${if meta ? problems.unsupportedPython then "unsupportedPython" else null} =
+            meta.problems.unsupportedPython or { }
+            // {
               kind = "broken";
               message =
                 meta.problems.unsupportedPython.message
                   or "${removePrefix namePrefix finalAttrs.name} not supported for interpreter ${python.executable}";
             };
+
+          ## Implementation details, subject to changes (`buildPythonPackage-internal-*`)
+
+          # Deprecated <pkg>.overridePythonPackage argument disabled (internal)
+          # makeOverridablePythonPackage will specify this problem as { } when <pkg>.overridePythonAttrs overrides argument disabled;
+          # fill its content here.
+          ${
+            if meta ? problems.buildPythonPackage-internal-disabled-overridePythonAttrs then
+              "buildPythonPackage-internal-disabled-overridePythonAttrs"
+            else
+              null
+          } =
+            {
+              kind = "broken";
+              message =
+                let
+                  pos = unsafeGetAttrPos "disabled" attrs;
+                  posString = lib.optionalString (pos != null) "At ${pos.file}:${toString pos.line}\n";
+                in
+                ''
+                  buildPythonPackage: ${finalAttrs.name}: Overriding argument `disabled` with `<pkg>.overridePythonAttrs` is deprecated.
+                    Add/remove `meta.problems.unsupportedPython` instead.
+                ''
+                + posString;
+            };
+
+          # Deprecated argument stdenv (internal)
+          ${if attrs ? stdenv then "buildPythonPackage-internal-stdenv" else null} = {
+            kind = "broken";
+            message =
+              let
+                pos = unsafeGetAttrPos "stdenv" attrs;
+                posString = lib.optionalString (pos != null) " at ${pos.file}:${toString pos.line}";
+              in
+              ''
+                `buildPythonPackage`/`buildPythonApplication`: Deprecated argument `stdenv` found${posString}
+                  Override `stdenv` with `buildPythonPackage.override` or `buildPythonApplication.override` instead.
+              '';
           };
+        };
       };
     }
     // optionalAttrs (attrs ? checkPhase) {

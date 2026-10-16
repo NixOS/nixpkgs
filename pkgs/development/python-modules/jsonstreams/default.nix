@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "dcbaker";
     repo = "jsonstreams";
     rev = version;
-    sha256 = "0qw74wz9ngz9wiv89vmilbifsbvgs457yn1bxnzhrh7g4vs2wcav";
+    hash = "sha256-WzEu9CbvwAy/7StYfwrRby/t4qKx7oR25Ok/mz4nh2M=";
   };
 
   propagatedBuildInputs = [ six ];

@@ -30,6 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [ ncurses ];
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-D_DARWIN_C_SOURCE";
+
   postFixup = ''
     wrapProgram $out/bin/csol \
       --add-flags "-c $out/etc/xdg/csol/csolrc"

@@ -1,5 +1,4 @@
 {
-  config,
   lib,
   stdenv,
   fetchFromGitHub,
@@ -11,7 +10,7 @@
   pkg-config,
   portaudio,
   which,
-  pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
+  pulseaudioSupport ? stdenv.hostPlatform.isLinux,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -13,7 +13,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "openspec";
-  version = "1.13.2";
+  version = "1.14.1";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -21,14 +21,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "Fission-AI";
     repo = "OpenSpec";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-n/unizEPcJ4zLsh9T3kCEUR54x06ZKAgKBwL92MIzcQ=";
+    hash = "sha256-676EHtFuukUZT+bipls4n/Zmk7tf1POW15CGXHflFSY=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-ifgjl6/g7wpvcF4Ly/p+rxUbNEKiXF2u69CmpUM0olg=";
+    hash = "sha256-NIMHf7t+FnBgsswDtB1k4E/zX1ks1r3708ggE2ps9E8=";
   };
 
   nativeBuildInputs = [

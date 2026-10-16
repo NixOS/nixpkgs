@@ -35,12 +35,13 @@
   # More information can be found in there README:
   # https://raw.githubusercontent.com/rerun-io/rerun/5a9794990c4903c088ad77174e65eb2573162d97/crates/utils/re_analytics/README.md
   buildWebViewerFeatures ? [
+    "audio"
     "map_view"
   ],
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rerun";
-  version = "0.38.1";
+  version = "0.39.0";
 
   __structuredAttrs = true;
 
@@ -53,7 +54,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "rerun-io";
     repo = "rerun";
     tag = finalAttrs.version;
-    hash = "sha256-PfF6GNNqwR0NOb5KA+8Fi3Cw4cknj9KgAIxf6YpAiVw=";
+    hash = "sha256-P3v+GhCBZfaym/yWnm9WP2y/0LSoW7wLYT6W5G4ZKF4=";
   };
 
   # The path in `build.rs` is wrong for some reason, so we patch it to make the passthru tests work
@@ -62,7 +63,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '"rerun_sdk/rerun_cli/rerun"' '"rerun_sdk/rerun"'
   '';
 
-  cargoHash = "sha256-VlcaeETfNFQc3J+NKIkizUrC4CXsQbTOTHA1cpS2kv8=";
+  cargoHash = "sha256-18fYxWQA68e1LNxtpT0HwsQ3pNykxk5nemHYvne71OQ=";
 
   cargoBuildFlags = [
     "--package"
@@ -93,16 +94,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     if [[ " ''${cargoBuildFeatures[*]} " == *" web_viewer "* ]]; then
       # join the bash array into a comma-separated list for cargo's --features flag
       buildWebViewerFeaturesJoined=$(IFS=,; echo "''${buildWebViewerFeatures[*]}")
-      # Create the features option only if there are features to pass
-      buildWebViewerFeaturesCargoOption=()
-      if [[ -n "$buildWebViewerFeaturesJoined" ]]; then
-        buildWebViewerFeaturesCargoOption=("--features" "$buildWebViewerFeaturesJoined")
-        echo "Features passed to the web viewer build: $buildWebViewerFeaturesJoined"
-      else
-        echo "No features will be passed to the web viewer build"
-      fi
+      echo "Features passed to the web viewer build: '$buildWebViewerFeaturesJoined'"
       echo "Building the wasm web viewer for rerun's web_viewer feature"
-      cargo run -p re_dev_tools -- build-web-viewer --no-default-features "''${buildWebViewerFeaturesCargoOption[@]}" --release -g
+      # `--features` replaces re_viewer's default web features (`analytics,default_web`).
+      # Always pass it (even empty) so that analytics does not get enabled.
+      cargo run -p re_dev_tools -- build-web-viewer --features "$buildWebViewerFeaturesJoined" --release -g
     else
       echo "web_viewer feature not enabled, skipping web viewer build."
     fi
@@ -206,7 +202,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru = {
     updateScript = nix-update-script { };
     tests = {
-      inherit (python3Packages) rerun-sdk;
+      inherit (python3Packages) rerun-sdk rerun-notebook;
     };
   };
 

@@ -1,5 +1,4 @@
 {
-  config,
   lib,
   stdenv,
   fetchurl,
@@ -16,7 +15,7 @@
   gsl,
   libpng,
   sfml_2,
-  pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
+  pulseaudioSupport ? stdenv.hostPlatform.isLinux,
   libpulseaudio,
   useQt ? false,
   libsForQt5,

@@ -9,14 +9,15 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vdo";
   version = "8.3.2.1";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "dm-vdo";
     repo = "vdo";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-y3u9f17jMV9dwhfJrsW/GOqszVNvPLDyETfku1t3Djo=";
   };
 
@@ -35,7 +36,7 @@ stdenv.mkDerivation rec {
     pyyaml
   ];
 
-  pythonPath = propagatedBuildInputs;
+  pythonPath = finalAttrs.propagatedBuildInputs;
 
   makeFlags = [
     "DESTDIR=${placeholder "out"}"
@@ -46,6 +47,11 @@ stdenv.mkDerivation rec {
     "mandir=/share/man"
     "python3_sitelib=${python3.sitePackages}"
   ];
+
+  # riscv64 GCC reports -Wcast-align, which the Makefiles turn into errors with -Werror
+  env = lib.optionalAttrs stdenv.hostPlatform.isRiscV64 {
+    NIX_CFLAGS_COMPILE = "-Wno-error=cast-align";
+  };
 
   enableParallelBuilding = true;
 
@@ -59,15 +65,17 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/dm-vdo/vdo";
     description = "Set of userspace tools for managing pools of deduplicated and/or compressed block storage";
-    # platforms are defined in https://github.com/dm-vdo/vdo/blob/master/utils/uds/atomicDefs.h
+    # platforms need a memory fence in https://github.com/dm-vdo/vdo/blob/master/utils/uds/linux/atomic.h
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
+      "loongarch64-linux"
       "s390-linux"
       "powerpc64-linux"
       "powerpc64le-linux"
+      "riscv64-linux"
     ];
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
   };
-}
+})

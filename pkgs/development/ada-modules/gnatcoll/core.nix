@@ -1,5 +1,5 @@
 {
-  stdenv,
+  stdenvNoCC,
   lib,
   gnat,
   gprbuild,
@@ -18,7 +18,7 @@
 # gnatcoll-projects depends on gnatcoll-core
 assert enableGnatcollProjects -> enableGnatcollCore;
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "gnatcoll-core";
   version = "25.0.0";
 
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     "prefix=${placeholder "out"}"
     "PROCESSORS=$(NIX_BUILD_CORES)"
     # confusingly, for gprbuild --target is autoconf --host
-    "TARGET=${stdenv.hostPlatform.config}"
+    "TARGET=${stdenvNoCC.hostPlatform.config}"
     "GNATCOLL_MINIMAL_ONLY=${lib.boolToYesNo (!enableGnatcollCore)}"
     "GNATCOLL_PROJECTS=${lib.boolToYesNo enableGnatcollProjects}"
   ];

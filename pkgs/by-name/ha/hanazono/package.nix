@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = {
     description = "Japanese Mincho-typeface TrueType font";
-    homepage = "https://fonts.jp/hanazono/";
+    homepage = "https://glyphwiki.org/hanazono/";
     longDescription = ''
       Hanazono Mincho typeface is a Japanese TrueType font that developed with a
       support of Grant-in-Aid for Publication of Scientific Research Results

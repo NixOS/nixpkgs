@@ -589,7 +589,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Ensure that modern platform features are enabled on Darwin in spite of having no version suffix.
     sed -E -i -e 's|Darwin/\[12\]\[0-9\]\.\*|Darwin/*|' configure
   ''
-  + optionalString (pythonAtLeast "3.11") ''
+  + optionalString (pythonAtLeast "3.11" && pythonOlder "3.16") ''
     # Also override the auto-detection in `configure`.
     substituteInPlace configure \
       --replace-fail 'libmpdec_machine=universal' 'libmpdec_machine=${

@@ -5,6 +5,14 @@
   python,
 }:
 
+let
+  inherit (lib)
+    isFunction
+    recursiveUpdate
+    toExtension
+    ;
+in
+
 self:
 
 let
@@ -18,30 +26,52 @@ let
   # Overridings specified through `overridePythonAttrs` will always be applied
   # before those specified by `overrideAttrs`, even if invoked after them.
   makeOverridablePythonPackage =
+    let
+      boilerplateProblems = {
+        # Handle `<pkg>.overridePythonAttrs` taking argument `disabled`
+        meta.problems.buildPythonPackage-internal-disabled-overridePythonAttrs = { };
+      };
+      boilerplateDisabledAttrNames = [ "disabled" ];
+    in
     f:
     lib.mirrorFunctionArgs f (
-      origArgs:
+      origArgs':
       let
+        # Transparently transition `disabled` -> `meta.problems.unsupportedPython`
+        origArgs =
+          if isFunction origArgs' then
+            finalAttrs:
+            let
+              fixedOrigArgs' = origArgs' finalAttrs;
+            in
+            if fixedOrigArgs' ? disabled then handleDisabledArg fixedOrigArgs' else fixedOrigArgs'
+          else if origArgs' ? disabled then
+            handleDisabledArg origArgs'
+          else
+            origArgs';
         result = f origArgs;
         overrideWith =
-          # Preserve the plain arguments whenever possible,
-          # as `overrideStdenvCompat` works more reliably with `args.stdenv`
-          # than `result.__stdenvPythonCompat`.
-          # TODO(@ShamrockLee): After `overrideStdenvCompat` is fully deprecated,
-          # simplify as
-          # ```nix
-          # newArgs: lib.extends (lib.toExtension newArgs) origArgs
-          # ```
-          if lib.isFunction origArgs then
-            newArgs: lib.extends (lib.toExtension newArgs) origArgs
-          else
-            newArgs:
-            if !(lib.isFunction newArgs) then
-              origArgs // newArgs
-            else if !(lib.isFunction (newArgs origArgs)) then
-              origArgs // newArgs origArgs
+          newArgs:
+          # Only build a fixed-point when origArgs or newArgs are functions
+          # or when we need to handle the `disabled` argument taken by `<pkg>.overridePyhtonAttrs`
+          # to reduce allocation/GC.
+          if isFunction origArgs || isFunction newArgs || newArgs ? disabled then
+            # In-lined `lib.extends` with custom filter logic.
+            finalAttrs:
+            let
+              previousArgs = if isFunction origArgs then origArgs finalAttrs else origArgs;
+              updatingArgs = if isFunction newArgs then toExtension newArgs finalAttrs previousArgs else newArgs;
+            in
+            if updatingArgs ? disabled then
+              # Remove disabled from newArgs
+              # and add `meta.problems.buildPythonPackage-internal-disabled-overridePythonAttrs`.
+              recursiveUpdate (
+                previousArgs // removeAttrs updatingArgs boilerplateDisabledAttrNames
+              ) boilerplateProblems
             else
-              finalAttrs: origArgs // newArgs finalAttrs origArgs;
+              previousArgs // updatingArgs
+          else
+            origArgs // newArgs;
       in
       if lib.isAttrs result then
         result
@@ -61,45 +91,32 @@ let
       );
     };
 
-  overrideStdenvCompat =
-    f:
-    lib.fix (
-      f':
-      lib.mirrorFunctionArgs f (
-        args:
-        let
-          result = f args;
-          handleStdenvArg =
-            attrs: attrName:
-            let
-              name = attrs.pname or (lib.getName (attrs.name or "<unnamed>"));
-              pos = attrs.__stdenvPythonCompatPos or (builtins.unsafeGetAttrPos attrName attrs);
-              msg = [
-                "${name}: Passing `stdenv` directly to `buildPythonPackage` or `buildPythonApplication` is deprecated. You should use their `.override` function instead, e.g:"
-                "  buildPythonPackage.override { stdenv = customStdenv; } { }"
-              ]
-              ++ lib.optionals (pos != null) [
-                "`stdenv` argument found at ${pos.file}:${toString pos.line}"
-              ];
-            in
-            lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2511) (lib.concatLines msg) attrs.${attrName};
-        in
-        if lib.isFunction args && result ? __stdenvPythonCompat then
-          # Less reliable, as constructing with the wrong `stdenv` might lead to evaluation errors in the package definition.
-          f'.override { stdenv = handleStdenvArg result "__stdenvPythonCompat"; } (
-            finalAttrs: removeAttrs (args finalAttrs) [ "stdenv" ]
-          )
-        else if (!lib.isFunction args) && (args ? stdenv) then
-          # More reliable, but only works when args is not `(finalAttrs: { })`
-          f'.override { stdenv = handleStdenvArg args "stdenv"; } (removeAttrs args [ "stdenv" ])
-        else
-          result
-      )
+  # When buildPython* is called,
+  # convert { disabled = true; } to meta.problems.unsupportedPython
+  # and remove the disabled argument.
+  # This ensure that <pkg>.overridePythonAttrs can remediate `{ disabled = true; }`
+  # by removing `unsupportedPython` from `meta.problems`.
+  handleDisabledArg =
+    let
+      boilerplateProblems = {
+        unsupportedPython = { };
+      };
+      ignoredNames = [ "disabled" ];
+    in
+    args:
+    if args.disabled == args ? meta.problems.unsupportedPython then
+      removeAttrs args ignoredNames
+    else if args.disabled then
+      removeAttrs args ignoredNames
       // {
-        # Preserve the effect of overrideStdenvCompat when calling `buildPython*.override`.
-        override = lib.mirrorFunctionArgs f.override (newArgs: overrideStdenvCompat (f.override newArgs));
+        meta = args.meta or { } // {
+          problems = args.meta.problems or { } // boilerplateProblems;
+        };
       }
-    );
+    else
+      throw "${
+        args.name or args.pname or "buildPythonPackage"
+      }: { disabled = false; } conflicts with the presence of meta.problems.unsupportedPython";
 
   mkPythonDerivation =
     if python.isPy3k then
@@ -109,23 +126,19 @@ let
       ../../misc/resholve/python2/mk-python-derivation.nix;
 
   buildPythonPackage = makeOverridablePythonPackage (
-    overrideStdenvCompat (
-      callPackage mkPythonDerivation {
-        inherit namePrefix; # We want Python libraries to be named like e.g. "python3.6-${name}"
-        inherit toPythonModule; # Libraries provide modules
-        inherit (python) stdenv;
-      }
-    )
+    callPackage mkPythonDerivation {
+      inherit namePrefix; # We want Python libraries to be named like e.g. "python3.6-${name}"
+      inherit toPythonModule; # Libraries provide modules
+      inherit (python) stdenv;
+    }
   );
 
   buildPythonApplication = makeOverridablePythonPackage (
-    overrideStdenvCompat (
-      callPackage mkPythonDerivation {
-        namePrefix = ""; # Python applications should not have any prefix
-        toPythonModule = x: x; # Application does not provide modules.
-        inherit (python) stdenv;
-      }
-    )
+    callPackage mkPythonDerivation {
+      namePrefix = ""; # Python applications should not have any prefix
+      toPythonModule = x: x; # Application does not provide modules.
+      inherit (python) stdenv;
+    }
   );
 
   # Check whether a derivation provides a Python module.

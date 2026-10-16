@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "trygveaa";
     repo = "python-tunigo";
     rev = "v${version}";
-    sha256 = "07q9girrjjffzkn8xj4l3ynf9m4psi809zf6f81f54jdb330p2fs";
+    hash = "sha256-2okLxlhNkuICcsb9BFDUl9TkrB+UyI7s/M5JmXN8CR8=";
   };
 
   nativeCheckInputs = [

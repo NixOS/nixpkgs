@@ -24,9 +24,6 @@
   pytestCheckHook,
   util-linux,
   pyglet,
-
-  # passthru
-  cuda-bindings,
 }:
 
 let
@@ -87,6 +84,16 @@ buildPythonPackage (finalAttrs: {
     owner = "NVIDIA";
     repo = "cuda-python";
     tag = "v${finalAttrs.version}";
+    # GitHub expands the export-subst'd .git_archival.txt when generating the tarball. Its ref-names line lists every
+    # branch pointing at the tagged commit, so the hash changes when e.g. a release branch moves on, even though the tag
+    # did not. Keep only the tag, which setuptools-scm still resolves to the right version. 13.0 and 13.1 ship no
+    # .git_archival.txt.
+    postFetch = ''
+      if [[ -f "$out/.git_archival.txt" ]]; then
+        sed -i 's/^ref-names: .*$/ref-names: tag: v${finalAttrs.version}/' "$out/.git_archival.txt"
+        grep -qx 'ref-names: tag: v${finalAttrs.version}' "$out/.git_archival.txt"
+      fi
+    '';
     hash = versionSpecificAttrs.sourceHash;
   };
 
@@ -215,9 +222,9 @@ buildPythonPackage (finalAttrs: {
 
   # Tests need access to a GPU
   doCheck = false;
-  passthru.gpuCheck = cuda-bindings.overridePythonAttrs {
+  passthru.gpuCheck = finalAttrs.finalPackage.overrideAttrs {
     requiredSystemFeatures = [ "cuda" ];
-    doCheck = true;
+    doInstallCheck = true;
   };
 
   meta = {

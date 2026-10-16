@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "icalendar-searcher";
-  version = "1.0.6";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-caldav";
     repo = "icalendar-searcher";
     tag = "v${version}";
-    hash = "sha256-HkiKy38B5+i6Lb+0Teu/YqvrE1gqy/x3u1GRUWAHNes=";
+    hash = "sha256-doYeDgOdobCf2z2mPmeb23z8Akzy8bCEd2LgM6NSkYg=";
   };
 
   build-system = [

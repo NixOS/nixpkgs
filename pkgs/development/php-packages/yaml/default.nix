@@ -1,6 +1,7 @@
 {
   buildPecl,
   lib,
+  php,
   libyaml,
 }:
 
@@ -17,6 +18,7 @@ buildPecl {
   ];
 
   meta = {
+    broken = lib.versionAtLeast php.version "8.6";
     description = "YAML-1.1 parser and emitter";
     license = lib.licenses.mit;
     homepage = "https://github.com/php/pecl-file_formats-yaml";

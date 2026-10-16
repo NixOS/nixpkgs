@@ -14,6 +14,7 @@ let
       "AArch64" = "sha256-XTPsoKeI6wTZAF0UwEJPzuHelWOJe//wXg4HYO0dEJo=";
       "AMD64" = "sha256-DCzZduYrix9yOeJoem/Jhz/WDzAss7UWwjZbkXJq6Ms=";
       "x86" = "sha256-DFmSpy4EYoKBSuPQRqtTsUfIUjlg794PnMrEg5stOFY=";
+      "riscv64" = "sha256-BMgaiXD8bnxOTHal4RlmYKItuWUcDIwSrRuPVAnm/BE=";
     }
     .${stage0Arch} or (throw "Unsupported system: ${hostPlatform.system}");
 

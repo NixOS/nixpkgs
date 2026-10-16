@@ -5,6 +5,7 @@
   makeWrapper,
   fetchurl,
   makeDesktopItem,
+  copyDesktopItems,
   lttng-ust_2_12,
   fontconfig,
   openssl,
@@ -27,50 +28,55 @@ let
     zlib
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wasabiwallet";
   version = "2.7.1";
 
   src = fetchurl {
-    url = "https://github.com/WalletWasabi/WalletWasabi/releases/download/v${version}/Wasabi-${version}-linux-x64.tar.gz";
+    url = "https://github.com/WalletWasabi/WalletWasabi/releases/download/v${finalAttrs.version}/Wasabi-${finalAttrs.version}-linux-x64.tar.gz";
     sha256 = "sha256-o2e2NDG2aMrEYc/7x5iFex9oRlrQXeKIINuW80ZwWcI=";
   };
 
   dontBuild = true;
 
-  desktopItem = makeDesktopItem {
-    name = "wasabi";
-    exec = "wasabiwallet-desktop";
-    desktopName = "Wasabi";
-    genericName = "Bitcoin wallet";
-    comment = meta.description;
-    categories = [
-      "Network"
-      "Utility"
-    ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "wasabi";
+      exec = "wasabiwallet-desktop";
+      desktopName = "Wasabi";
+      genericName = "Bitcoin wallet";
+      comment = finalAttrs.meta.description;
+      categories = [
+        "Network"
+        "Utility"
+      ];
+    })
+  ];
 
   nativeBuildInputs = [
     autoPatchelfHook
     makeWrapper
+    copyDesktopItems
   ];
   buildInputs = runtimeLibs ++ [
     lttng-ust_2_12
   ];
 
   installPhase = ''
-    mkdir -p $out/opt/${pname} $out/bin $out/share/applications
+    runHook preInstall
+
+    mkdir -p $out/opt/${finalAttrs.pname} $out/bin
 
     # The weird path is an upstream packaging error and could be fixed in the upcoming release
-    cp -Rv ./runner/work/WalletWasabi/WalletWasabi/build/linux-x64/* $out/opt/${pname}
+    cp -Rv ./runner/work/WalletWasabi/WalletWasabi/build/linux-x64/* $out/opt/${finalAttrs.pname}
 
     for nameMap in "wassabee:desktop" "wassabeed:daemon" "wcoordinator:coordinator" "wbackend:backend"; do
       IFS=":" read -r filename wrappedname <<< "$nameMap"
-      makeWrapper "$out/opt/${pname}/$filename" "$out/bin/${pname}-$wrappedname" \
+      makeWrapper "$out/opt/${finalAttrs.pname}/$filename" "$out/bin/${finalAttrs.pname}-$wrappedname" \
         --suffix "LD_LIBRARY_PATH" : "${lib.makeLibraryPath runtimeLibs}"
     done
 
-    cp -v $desktopItem/share/applications/* $out/share/applications
+    runHook postInstall
   '';
 
   meta = {
@@ -81,4 +87,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ mmahut ];
   };
-}
+})

@@ -286,6 +286,7 @@ def find_file(file: str, nix_flags: Args | None = None) -> Path | None:
 def get_build_image_name(
     build_attr: BuildAttr,
     image_variant: str,
+    specialisation: str | None,
     instantiate_flags: Args | None = None,
 ) -> str:
     path = (
@@ -305,7 +306,7 @@ def get_build_image_name(
               value = import {path};
               set = if builtins.isFunction value then value {{}} else value;
             in
-              set.{build_attr.to_attr("config.system.build.images", image_variant, "passthru", "filePath")}
+              set.{build_attr.to_attr(get_build_image_attr(specialisation), image_variant, "passthru", "filePath")}
             """),
             *dict_to_flags(instantiate_flags),
         ],
@@ -318,6 +319,7 @@ def get_build_image_name(
 def get_build_image_name_flake(
     flake: Flake,
     image_variant: str,
+    specialisation: str | None,
     eval_flags: Args | None = None,
 ) -> str:
     r = run_wrapper(
@@ -327,7 +329,7 @@ def get_build_image_name_flake(
             "eval",
             "--json",
             flake.to_attr(
-                "config.system.build.images", image_variant, "passthru", "filePath"
+                get_build_image_attr(specialisation), image_variant, "passthru", "filePath"
             ),
             *dict_to_flags(eval_flags),
         ],
@@ -339,6 +341,7 @@ def get_build_image_name_flake(
 
 def get_build_image_variants(
     build_attr: BuildAttr,
+    specialisation: str | None,
     instantiate_flags: Args | None = None,
 ) -> ImageVariants:
     path = (
@@ -358,7 +361,7 @@ def get_build_image_variants(
               value = import {path};
               set = if builtins.isFunction value then value {{}} else value;
             in
-              builtins.attrNames set.{build_attr.to_attr("config.system.build.images")}
+              builtins.attrNames set.{build_attr.to_attr(get_build_image_attr(specialisation))}
             """),
             *dict_to_flags(instantiate_flags),
         ],
@@ -370,6 +373,7 @@ def get_build_image_variants(
 
 def get_build_image_variants_flake(
     flake: Flake,
+    specialisation: str | None,
     eval_flags: Args | None = None,
 ) -> ImageVariants:
     r = run_wrapper(
@@ -378,7 +382,7 @@ def get_build_image_variants_flake(
             *FLAKE_FLAGS,
             "eval",
             "--json",
-            flake.to_attr("config.system.build.images"),
+            flake.to_attr(get_build_image_attr(specialisation)),
             "--apply",
             "builtins.attrNames",
             *dict_to_flags(eval_flags),
@@ -388,6 +392,10 @@ def get_build_image_variants_flake(
     j: ImageVariants = json.loads(r.stdout.strip())
     return j
 
+def get_build_image_attr(specialisation: str | None) -> str:
+    if specialisation:
+        return f"config.specialisation.{specialisation}.configuration.system.build.images"
+    return "config.system.build.images"
 
 def get_nixpkgs_rev(nixpkgs_path: Path | None) -> str | None:
     """Get Nixpkgs path as a Git revision.

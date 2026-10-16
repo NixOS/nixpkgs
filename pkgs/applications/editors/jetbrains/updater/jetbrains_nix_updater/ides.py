@@ -1,12 +1,12 @@
-import sys
-
-from subprocess import CalledProcessError
-from typing import Iterable, TypedDict
-
 import dataclasses
+from collections.abc import Iterable
+from functools import cached_property
 from pathlib import Path
+from typing import Self, TypedDict
 
-from jetbrains_nix_updater.util import run_command
+
+class MissingIdeException(Exception):
+    "Raised when an IDE is not found"
 
 
 class UpdateInfo(TypedDict):
@@ -14,41 +14,47 @@ class UpdateInfo(TypedDict):
     urls: dict[str, str]
 
 
-@dataclasses.dataclass(slots=True)
+@dataclasses.dataclass
 class Ide:
     name: str
-    drv_path: Path
-    is_source: bool
+    package_dir: Path
     update_info: UpdateInfo | None
+
+    @cached_property
+    def is_source(self) -> bool:
+        return self.name.endswith("-oss")
+
+    @classmethod
+    def get(
+        cls,
+        update_info: dict[str, UpdateInfo],
+        nixpkgs_root: Path,
+        name: str,
+    ) -> Self:
+        package_dir = by_name_path(name, nixpkgs_root)
+        package_file = package_dir / "package.nix"
+        if not package_file.exists():
+            raise MissingIdeException(f"IDE not found at {package_file}")
+        return cls(
+            name=name,
+            package_dir=package_dir,
+            update_info=update_info.get(name),
+        )
+
+    @classmethod
+    def get_all(
+        cls,
+        update_info: dict[str, UpdateInfo],
+        nixpkgs_root: Path,
+    ) -> Iterable[Self]:
+        for name, info in update_info.items():
+            yield cls(
+                name=name,
+                package_dir=by_name_path(name, nixpkgs_root),
+                update_info=info,
+            )
 
 
 def by_name_path(ide_name: str, nixpkgs_root: Path) -> Path:
     by_name_stem = ide_name[0:2]
     return nixpkgs_root / "pkgs" / "by-name" / by_name_stem / ide_name
-
-
-def is_source_ide(ide_name: str):
-    return ide_name.endswith("-oss")
-
-
-def get_single_ide(update_info: dict[str, UpdateInfo], nixpkgs_root: Path, name: str) -> Ide:
-    drv_path = by_name_path(name, nixpkgs_root) / "package.nix"
-    if not drv_path.exists():
-        raise Exception(f"IDE not found at {drv_path}")
-    return Ide(
-        name=name,
-        drv_path=drv_path,
-        is_source=is_source_ide(name),
-        update_info=update_info.get(name),
-    )
-
-
-def get_all_ides(update_info: dict[str, UpdateInfo], nixpkgs_root: Path) -> Iterable[Ide]:
-    for name, update_info in update_info.items():
-        drv_path = by_name_path(name, nixpkgs_root) / "package.nix"
-        yield Ide(
-            name=name,
-            drv_path=drv_path,
-            is_source=is_source_ide(name),
-            update_info=update_info,
-        )

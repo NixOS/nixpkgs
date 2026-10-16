@@ -3,31 +3,29 @@
   buildPythonPackage,
   fetchFromGitHub,
   jsonschema,
+  setuptools,
   pydantic,
   pytestCheckHook,
-  setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "json-repair";
-  version = "0.63.4";
+  version = "0.63.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mangiucugna";
     repo = "json_repair";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VRRtL8X9egdqdz6Celw1CGGTuWd9YMVbq/uHwHtmv64=";
+    hash = "sha256-hqVSZoTqhMEQhymhX+prUYWOXogEJ0XPK7r5DdPwg44=";
   };
 
   build-system = [ setuptools ];
 
-  optional-dependencies = {
-    schema = [
-      jsonschema
-      pydantic
-    ];
-  };
+  optional-dependencies.schema = [
+    jsonschema
+    pydantic
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

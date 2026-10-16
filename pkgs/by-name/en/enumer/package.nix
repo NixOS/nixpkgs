@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "enumer";
-  version = "1.6.4";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "dmarkham";
     repo = "enumer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GzmACFskZopDT+5argMCecQios/wiNJsK0Q/1a2MSb0=";
+    hash = "sha256-TQr0ifGt4cB1RN0xNNIjlycB27CFU8x2cCvmkCrNaJ0=";
   };
 
   vendorHash = "sha256-JixRpxMSi7pEFrR4NyrRIP84qFr9IAHdGmQblAjUUWs=";

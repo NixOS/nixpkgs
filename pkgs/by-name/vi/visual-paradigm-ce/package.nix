@@ -4,7 +4,7 @@
   fetchurl,
   copyDesktopItems,
   makeDesktopItem,
-  openjdk,
+  openjdk11,
   writeScript,
 }:
 
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     for bin in Visual_Paradigm Visual_Paradigm_Product_Selector Visual_Paradigm_Shape_Editor; do
       substituteInPlace $out/share/visual-paradigm-ce/Application/bin/$bin \
-        --replace-fail '# INSTALL4J_JAVA_HOME_OVERRIDE=' "INSTALL4J_JAVA_HOME_OVERRIDE=${openjdk}" \
+        --replace-fail '# INSTALL4J_JAVA_HOME_OVERRIDE=' "INSTALL4J_JAVA_HOME_OVERRIDE=${openjdk11}" \
         --replace-fail 'app_home=../../' "app_home=${placeholder "out"}/share/visual-paradigm-ce"
       ln -s $out/share/visual-paradigm-ce/Application/bin/$bin $out/bin/
     done

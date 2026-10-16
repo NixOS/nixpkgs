@@ -760,6 +760,7 @@ with lib.maintainers;
     ];
     scope = "Maintain Swift compiler suite for NixOS.";
     shortName = "Swift";
+    enableFeatureFreezePing = true;
   };
 
   systemd = {

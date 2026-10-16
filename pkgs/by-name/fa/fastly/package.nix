@@ -11,13 +11,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "fastly";
-  version = "16.1.0";
+  version = "16.2.0";
 
   src = fetchFromGitHub {
     owner = "fastly";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xGp5Fa4ruHpc2YAAbrva0zurt4wxC6XRdSpMMQGEB7c=";
+    hash = "sha256-UCk12PYpY/dnP8HvO5UB4RH3zmaYu+gc/bz62+9fJ7o=";
     leaveDotGit = true;
     postFetch = ''
       cd "$out"
@@ -28,7 +28,7 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "cmd/fastly" ];
 
-  vendorHash = "sha256-JUYBaiAz91jv8QFrfjpHnY442+qK7T0VZJcC/rCGhD4=";
+  vendorHash = "sha256-LaWk1RIoVoOOaZ6QG2Zw4corUffi91bMOSfsRt0L/ZM=";
 
   nativeBuildInputs = [
     installShellFiles

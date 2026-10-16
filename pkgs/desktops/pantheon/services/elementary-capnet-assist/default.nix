@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = "capnet-assist";
     rev = version;
-    sha256 = "sha256-HowrCYOVSYSOCRpTIXFfw4lLUulXY6j5QcxJOBMo984=";
+    hash = "sha256-HowrCYOVSYSOCRpTIXFfw4lLUulXY6j5QcxJOBMo984=";
   };
 
   nativeBuildInputs = [

@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "magic-vlsi";
-  version = "8.3.681";
+  version = "8.3.685";
 
   src = fetchFromGitHub {
     owner = "RTimothyEdwards";
     repo = "magic";
     tag = finalAttrs.version;
-    hash = "sha256-ImG9NpcHkYOVCIrECOCl+VBZBPTIC4tk+4xoQMFYokk=";
+    hash = "sha256-iDgeDfKdkHVwLmGe1fsHz1O7QbtoCVQRCjfLIF5qLGg=";
     leaveDotGit = true;
   };
 
@@ -99,6 +99,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "VLSI layout tool written in Tcl";
     homepage = "http://opencircuitdesign.com/magic/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ thoughtpolice ];
+    maintainers = with lib.maintainers; [
+      thoughtpolice
+      MrAbhi19
+    ];
   };
 })

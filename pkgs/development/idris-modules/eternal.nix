@@ -14,7 +14,7 @@ build-idris-package {
     owner = "Heather";
     repo = "Control.Eternal.Idris";
     rev = "2f84b0dd49a7a29a2f852ba96cabfe8322e0852b";
-    sha256 = "1x8cwngiqi05f3wll0niznm47jj2byivx4mh5xf4sb47kciwkxvs";
+    hash = "sha256-evfJI5uHLE1cL7CSvqNfQspDqv3RAkr5cAVEHJ/lDPU=";
   };
 
   postUnpack = ''
