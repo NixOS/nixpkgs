@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "https://launchpad.net/libasyncns-python/trunk/${version}/+download/libasyncns-python-${version}.tar.bz2";
-    sha256 = "1q4l71b2h9q756x4pjynp6kczr2d8c1jvbdp982hf7xzv7w5gxqg";
+    hash = "sha256-D/dX+Nm/HwcFSretLQNDTeTPprnWy0u6KQcnKFY4lOA=";
   };
 
   patches = [ ./libasyncns-fix-res-consts.patch ];

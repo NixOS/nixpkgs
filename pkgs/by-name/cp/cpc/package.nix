@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "cpc";
     description = "Text calculator with support for units and conversion";
     homepage = "https://github.com/kasper9n/cpc";
-    license = lib.licenses.mit;
+    license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       s0me1newithhand7s
     ];

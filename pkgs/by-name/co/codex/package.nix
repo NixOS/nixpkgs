@@ -218,6 +218,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # the future once this software stabilizes.
   doCheck = false;
 
+  # codex-voice-host is moved out of bin/ before fixup; strip it too, or its
+  # debug info keeps gcc and glibc.dev in the runtime closure.
+  stripDebugList = [
+    "bin"
+    "codex-resources"
+  ];
+
   # Metadata enables voice package discovery even without a daemon.
   # Patch ps and package rg/bwrap directly: a wrapper fails the daemon's
   # staged-vs-running executable content check.

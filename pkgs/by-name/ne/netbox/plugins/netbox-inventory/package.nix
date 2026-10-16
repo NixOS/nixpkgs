@@ -8,14 +8,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "netbox-inventory";
-  version = "2.6.1";
+  version = "2.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ArnesSI";
     repo = "netbox-inventory";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gPCFEfMD5niCbI/++CvTTEHN+BtoZx7Yihher9yjWuU=";
+    hash = "sha256-jN77SY9HLVc1SJpqHq8g0qGjCIvosOMeyEulYenMRE0=";
   };
 
   build-system = [ setuptools ];

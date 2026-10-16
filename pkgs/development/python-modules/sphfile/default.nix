@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "mirror://pypi/s/sphfile/${pname}-${version}.tar.gz";
-    sha256 = "1596d801facc2b03a40a1bc67a839701f068a41597059feb82fc9378420c52c0";
+    hash = "sha256-FZbYAfrMKwOkChvGeoOXAfBopBWXBZ/rgvyTeEIMUsA=";
   };
 
   propagatedBuildInputs = [ numpy ];

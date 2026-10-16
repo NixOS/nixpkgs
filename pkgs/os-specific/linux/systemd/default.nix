@@ -924,6 +924,8 @@ stdenv.mkDerivation (finalAttrs: {
       # https://github.com/systemd/systemd/issues/20600#issuecomment-912338965
       lib.systems.inspect.platformPatterns.isStatic
     ];
-    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "systemd_project" finalAttrs.version;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "systemd_project" finalAttrs.version // {
+      product = "systemd"; # default is pname, but we do not want a suffix, i.e. not "-libs" or "-minimal"
+    };
   };
 })

@@ -21,7 +21,7 @@ buildPythonPackage rec {
       # https://github.com/errbotio/rocket/pull/1
       name = "errbotio-rocket-pull-1.patch";
       url = "https://github.com/errbotio/rocket/compare/f1a52fe17164f83bccce5e6a1935fc5071c2265f...d69adcd49de5d78bd80f952a2ee31e6a0bac4e3d.patch";
-      sha256 = "1s668yv5b86b78vbqwhcl44k2l16c9bhk3199yy9hayf0vkxnwif";
+      hash = "sha256-LnLb5wbOK5i8TymMCVdiJlAxCaEMcrw2OsugVbZHxug=";
     })
   ];
 

@@ -1,0 +1,16 @@
+diff --git a/settings/config.cpp b/settings/config.cpp
+index 3079300..8cdb50f 100644
+--- a/settings/config.cpp
++++ b/settings/config.cpp
+@@ -103,6 +103,11 @@ void LoadSettings() {
+         CustomUserFolder = toml::find_fs_path_or(launcher, "CustomUserFolder", {});
+     }
+ 
++    if (Common::shadPs4Executable.string().starts_with("@storeDir@/") ||
++        !std::filesystem::exists(Common::shadPs4Executable)) {
++        Common::shadPs4Executable = "@shadps4@";
++    }
++
+     if (std::filesystem::exists(Common::installPath)) {
+         Common::game_serial = Common::GetGameSerial(Common::installPath);
+     } else {
