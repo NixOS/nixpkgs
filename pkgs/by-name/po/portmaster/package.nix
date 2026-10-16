@@ -200,12 +200,13 @@ buildGoModule (finalAttrs: {
     install -m755 $GOPATH/bin/portmaster-core $out/lib/portmaster/
     install -m755 ${portmasterDesktop}/bin/portmaster $out/lib/portmaster/
 
+    # Add the files in a fixed order to make the archives reproducible.
     pushd ${portmasterUI}
-    zip -q -r -9 -X $out/lib/portmaster/portmaster.zip .
+    find . -mindepth 1 -printf '%P\n' | LC_ALL=C sort | zip -q -9 -X -@ $out/lib/portmaster/portmaster.zip
     popd
 
     pushd assets/data
-    zip -q -r -9 -X $out/lib/portmaster/assets.zip .
+    find . -mindepth 1 -printf '%P\n' | LC_ALL=C sort | zip -q -9 -X -@ $out/lib/portmaster/assets.zip
     popd
 
     for size in 128 256 512; do
