@@ -204,6 +204,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       adamcstephens
       Flakebi
+      herbetom
     ];
     knownVulnerabilities = lib.optionals unsupported [
       ''
