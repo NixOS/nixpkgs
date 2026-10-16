@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "rollbar";
-  version = "1.3.0";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UZQC6sObzE+khIIYcva7GEl/t7bIEWcEeGfRdxTTs3k=";
+    hash = "sha256-GUCi4AeQHXAjAUvngqCYKOKCK4QqSw+QNIBs24Hgfww=";
   };
 
   build-system = [ setuptools ];
