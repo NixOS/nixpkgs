@@ -47,6 +47,10 @@ mkMesonExecutable (finalAttrs: {
               export HOME="$PWD/home-dir"
               mkdir -p "$HOME"
             ''
+            # fix in Darwin sandbox
+            + lib.optionalString stdenv.hostPlatform.isDarwin ''
+              export NIX_STATE_DIR="$TMPDIR/var/nix"
+            ''
             + ''
               export _NIX_TEST_UNIT_DATA=${resolvePath ./data}
               ${stdenv.hostPlatform.emulator buildPackages} ${lib.getExe finalAttrs.finalPackage}

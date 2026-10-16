@@ -44,12 +44,20 @@ mkMesonExecutable (finalAttrs: {
             meta.broken = !stdenv.hostPlatform.emulatorAvailable buildPackages;
             buildInputs = [ writableTmpDirAsHomeHook ];
           }
-          ''
-            export _NIX_TEST_UNIT_DATA=${resolvePath ./data}
-            export NIX_CONFIG="extra-experimental-features = flakes"
-            ${stdenv.hostPlatform.emulator buildPackages} ${lib.getExe finalAttrs.finalPackage}
-            touch $out
-          '';
+          (
+            ''
+              export _NIX_TEST_UNIT_DATA=${resolvePath ./data}
+              export NIX_CONFIG="extra-experimental-features = flakes"
+            ''
+            # fix in Darwin sandbox
+            + lib.optionalString stdenv.hostPlatform.isDarwin ''
+              export NIX_STATE_DIR="$TMPDIR/var/nix"
+            ''
+            + ''
+              ${stdenv.hostPlatform.emulator buildPackages} ${lib.getExe finalAttrs.finalPackage}
+              touch $out
+            ''
+          );
     };
   };
 

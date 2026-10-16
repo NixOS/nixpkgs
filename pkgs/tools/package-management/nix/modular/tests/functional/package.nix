@@ -71,6 +71,11 @@ mkMesonDerivation (finalAttrs: {
     ''
       cd $(readlink -e $PWD)
       echo $PWD | grep tests/functional
+    ''
+    # recursive Nix fails in Darwin sandbox
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace recursive.sh \
+        --replace-fail "enableFeatures 'recursive-nix'" "skipTest 'Darwin sandbox denies access to root channels'"
     '';
 
   mesonCheckFlags = [
