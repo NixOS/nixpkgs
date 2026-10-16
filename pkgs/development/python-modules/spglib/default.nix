@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "spglib";
-  version = "2.7.0";
+  version = "2.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "spglib";
     repo = "spglib";
     tag = "v${version}";
-    hash = "sha256-RFvd/j/14YRIcQTpnYPx5edeF3zbHbi90jb32i3ZU/c=";
+    hash = "sha256-lnD/tUY/fXxgOS/aB8tesTyLcqpOBzjZaMO2Kjznf1M=";
   };
 
   build-system = [
