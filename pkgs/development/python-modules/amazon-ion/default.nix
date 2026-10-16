@@ -12,7 +12,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "amazon-ion";
-  version = "0.14.6";
+  version = "0.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -30,7 +30,7 @@ buildPythonPackage (finalAttrs: {
       # Based on https://github.com/NixOS/nixpkgs/blob/183125f9/pkgs/build-support/fetchgit/nix-prefetch-git#L358
       find "$out" -name .git -exec rm -rf '{}' '+'
     '';
-    hash = "sha256-W4QhRhQEHUlRAS8kYe/GxHawyj5tj6v3BHb9mEdMYL8=";
+    hash = "sha256-oAGFD3yKpym+qTehKDlXZAniCoxwIjPvl4QJby7vA6w=";
   };
 
   postPatch = ''
