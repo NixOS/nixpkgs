@@ -9,6 +9,10 @@
   cjson,
   cmocka,
   mbedtls,
+
+  # for passthru.tests
+  ffmpeg-headless,
+  obs-studio,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -58,7 +62,10 @@ stdenv.mkDerivation (finalAttrs: {
   # needs disabledTest support
   doCheck = false;
 
-  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  passthru.tests = {
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    inherit ffmpeg-headless obs-studio;
+  };
 
   meta = {
     description = "Library that can be used to easily add the RIST protocol to your application";
