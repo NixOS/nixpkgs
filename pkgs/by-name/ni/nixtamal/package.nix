@@ -162,7 +162,7 @@ ocamlPackages.buildDunePackage (finalAttrs: {
       "man"
     ];
     homepage = "https://nixtamal.toast.al";
-    changelog = "https://nixtamal.toast.al/changelog/";
+    changelog = "https://nixtamal.toast.al/changelog/#${finalAttrs.version}";
     description = "Fulfilling input pinning for Nix";
     longDescription = ''
       • Automate the manual work of input pinning for dependency management
