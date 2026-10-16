@@ -15,7 +15,7 @@ buildPecl {
   src = fetchFromGitHub {
     repo = "phpredis";
     owner = "phpredis";
-    rev = version;
+    tag = version;
     hash = "sha256-mdphyUG4OUc1PBEA5Ub1X9afFDMJ5+HoXH4WnmeAKpE=";
   };
 
