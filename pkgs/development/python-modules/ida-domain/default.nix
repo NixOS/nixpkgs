@@ -15,7 +15,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ida-domain";
-  version = "0.5.1";
+  version = "0.5.1-dev.2";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -24,7 +24,7 @@ buildPythonPackage (finalAttrs: {
     owner = "HexRaysSA";
     repo = "ida-domain";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vlVJnRaRNMelQ3w1SgCDvtIQJKBuULLOqKKdAvDK2y4=";
+    hash = "sha256-3kZvyrke3YYrXg7h0njnLk+vTpqc896tGi+WisYJSrk=";
   };
 
   build-system = [ hatchling ];
