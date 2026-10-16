@@ -2,24 +2,31 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  cmake,
   buildGoModule,
+  cmake,
   go,
-  qt6,
+  icu,
   mpv-unwrapped,
+  nix-update-script,
+  qt6,
+  versionCheckHook,
   wrapGAppsHook4,
   writableTmpDirAsHomeHook,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rssguard";
   version = "5.2.5";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "martinrotter";
     repo = "rssguard";
     tag = finalAttrs.version;
-    sha256 = "sha256-Q1TRIBvFWrc2+TdlmsRCWkMM916VGbkXIWnQ6QREn/o=";
+    hash = "sha256-Q1TRIBvFWrc2+TdlmsRCWkMM916VGbkXIWnQ6QREn/o=";
     fetchSubmodules = true;
   };
 
@@ -28,27 +35,35 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r ${finalAttrs.passthru.goModules} resources/scripts/standalone/article-extractor/vendor
   '';
 
-  buildInputs = [
-    qt6.qtbase
-    qt6.qtmultimedia
-    qt6.qtwebengine
-    qt6.qttools
-    qt6.qt5compat
-    mpv-unwrapped
-  ];
   nativeBuildInputs = [
     cmake
     go
-    wrapGAppsHook4
     qt6.wrapQtAppsHook
+    wrapGAppsHook4
     writableTmpDirAsHomeHook
   ];
 
-  # This string must have quotes around Release or the package will break!
-  # See https://github.com/NixOS/nixpkgs/issues/563621
-  cmakeBuildType = "\"Release\"";
+  buildInputs = [
+    icu
+    mpv-unwrapped
+    qt6.qt5compat
+    qt6.qtbase
+    qt6.qtimageformats
+    qt6.qtmultimedia
+    qt6.qttools
+    qt6.qtwebengine
+    zlib
+  ];
 
-  cmakeFlags = [ (lib.cmakeBool "ENABLE_MEDIAPLAYER_LIBMPV" stdenv.hostPlatform.isLinux) ];
+  cmakeFlags = [
+    (lib.cmakeBool "IS_DEVBUILD" false)
+    (lib.cmakeBool "ENABLE_ICU" true)
+    (lib.cmakeBool "ENABLE_COMPRESSED_SITEMAP" true)
+    (lib.cmakeBool "ENABLE_MEDIAPLAYER_LIBMPV" stdenv.hostPlatform.isLinux)
+    (lib.cmakeBool "ENABLE_TESTING" true)
+    # Plugins are looked up in <bindir>/../${CMAKE_INSTALL_LIBDIR}/rssguard, so it must be relative
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+  ];
 
   env.GOFLAGS = "-mod=vendor -trimpath";
 
@@ -58,29 +73,40 @@ stdenv.mkDerivation (finalAttrs: {
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  passthru.goModules =
-    (buildGoModule {
-      pname = "rssguard-article-extractor";
-      inherit (finalAttrs) version src;
-      modRoot = "resources/scripts/standalone/article-extractor";
-      vendorHash = "sha256-SUwNdHh9XAgX/2Jm0LK8kNjNZNu/1kRuk7/ew2WI3rg=";
-    }).goModules;
+  doCheck = true;
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckKeepEnvironment = "HOME QT_QPA_PLATFORM";
+  preVersionCheck = ''
+    export QT_QPA_PLATFORM=offscreen
+  '';
+
+  passthru = {
+    goModules =
+      (buildGoModule {
+        pname = "rssguard-article-extractor";
+        inherit (finalAttrs) version src;
+        modRoot = "resources/scripts/standalone/article-extractor";
+        vendorHash = "sha256-SUwNdHh9XAgX/2Jm0LK8kNjNZNu/1kRuk7/ew2WI3rg=";
+      }).goModules;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Simple RSS/Atom feed reader with online synchronization";
-    mainProgram = "rssguard";
     longDescription = ''
       RSS Guard is a simple, light and easy-to-use RSS/ATOM feed aggregator
       developed using Qt framework and with online feed synchronization support
       for ownCloud/Nextcloud.
     '';
     homepage = "https://github.com/martinrotter/rssguard";
-    changelog = "https://github.com/martinrotter/rssguard/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/martinrotter/rssguard/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       jluttine
       tebriel
     ];
+    mainProgram = "rssguard";
+    platforms = lib.platforms.linux;
   };
 })
