@@ -4,32 +4,26 @@
   python3Packages,
   qt6,
   fetchFromGitHub,
-  fetchzip,
   makeBinaryWrapper,
+  writeShellApplication,
   nix-update-script,
 
   makeDesktopItem,
   copyDesktopItems,
-  replaceVars,
 
   todds,
   steam,
 }:
 let
   pname = "rimsort";
-  version = "1.14.1";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "RimSort";
     repo = "RimSort";
     tag = "v${version}";
-    hash = "sha256-zS5RbJRk7tk9/3EI+Q2FfAOMOMuL8fYp/IPjTy882Mk=";
+    hash = "sha256-U+Mm5XFJq71Gl0dIvG44Ojtu4DocQ6E8XayZ6CmdneQ=";
     fetchSubmodules = true;
-  };
-
-  steamworksSrc = fetchzip {
-    url = "https://web.archive.org/web/20250527013243/https://partner.steamgames.com/downloads/steamworks_sdk_162.zip"; # Steam sometimes requires auth to download.
-    hash = "sha256-yDA92nGj3AKTNI4vnoLaa+7mDqupQv0E4YKRRUWqyZw=";
   };
 
   steamfiles = python3Packages.buildPythonPackage {
@@ -48,6 +42,14 @@ let
     (steam.override {
       privateTmp = false;
     }).run;
+
+  # Upstream contract is "<prefix> <exe> <args...>".
+  # Downstream uses nixpkgs-Qt via wrapQtAppsHook (not wheel-Qt),
+  # so plain steam-run suffices here.
+  rimsort-launch = writeShellApplication {
+    name = "rimsort-launch";
+    text = ''exec ${steam-run}/bin/steam-run "$@"'';
+  };
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -62,17 +64,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     cp -r ${finalAttrs.src} source
     chmod -R 755 source
-    cp ${steamworksSrc}/redistributable_bin/linux64/libsteam_api.so source/
 
     runHook postUnpack
   '';
 
   sourceRoot = "source";
-
-  patches = [
-    (replaceVars ./todds-path.patch { inherit todds; })
-    (replaceVars ./steam-run.patch { inherit steam-run; })
-  ];
 
   nativeBuildInputs = [
     makeBinaryWrapper
@@ -143,13 +139,6 @@ stdenv.mkDerivation (finalAttrs: {
     "tests/utils/test_privatebin.py"
   ];
 
-  disabledTests = [
-    # Works with hard-coded executable paths.
-    "test_execute_calls_runner_when_binary_exists"
-    "test_execute_shows_error_when_binary_missing"
-    "test_download_mods_sets_console_log_path"
-  ];
-
   pytestFlags = [ "--doctest-modules" ];
 
   desktopItems = [
@@ -172,6 +161,14 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/bin
 
+    # AppInfo reads the displayed version from version.xml
+    # (the release workflow writes it for the other builds)
+    cat > $out/lib/rimsort/version.xml <<EOF
+    <version>
+      <version>${version}</version>
+    </version>
+    EOF
+
     install -D ./themes/default-icons/AppIcon_a.png $out/share/icons/hicolor/512x512/apps/rimsort.png
 
     runHook postInstall
@@ -185,6 +182,8 @@ stdenv.mkDerivation (finalAttrs: {
       --chdir $out/lib/rimsort \
       --prefix PYTHONPATH : "$PYTHONPATH" \
       --set RIMSORT_DISABLE_UPDATER 1 \
+      --set RIMSORT_LAUNCH_PREFIX ${rimsort-launch}/bin/rimsort-launch \
+      --set RIMSORT_TODDS_PATH ${todds}/bin/todds \
       "''${qtWrapperArgs[@]}"
   '';
 
@@ -201,14 +200,14 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/RimSort/RimSort";
     license = with lib.licenses; [
       gpl3Only
-      # For libsteam_api.so
+      # For vendored libs/libsteam_api.so
       valveSDK
     ];
     maintainers = with lib.maintainers; [
       adda
+      twstagg
     ];
     mainProgram = "rimsort";
-    # steamworksSrc is x86_64-linux only
     platforms = [ "x86_64-linux" ];
   };
 })
