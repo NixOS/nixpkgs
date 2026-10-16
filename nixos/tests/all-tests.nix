@@ -2053,7 +2053,6 @@ in
   wakapi = runTest ./wakapi.nix;
   warpgate = runTest ./warpgate.nix;
   warzone2100 = runTest ./warzone2100.nix;
-  wasabibackend = runTest ./wasabibackend.nix;
   wastebin = runTest ./wastebin.nix;
   watchdogd = runTest ./watchdogd.nix;
   watt = runTest ./watt.nix;
