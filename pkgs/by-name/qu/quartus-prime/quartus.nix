@@ -138,8 +138,20 @@ stdenv.mkDerivation (finalAttrs: {
     mainInstaller = "QuartusLiteSetup-${finalAttrs.version}-linux.run";
     # Make it a bit easier to override the download URL schema.
     baseURL = "https://download.altera.com/akdlm/software/acdsinst";
-    # e.g. "23.1std.1.993" -> "23.1std/993"
-    URLdir = "${lib.versions.majorMinor finalAttrs.version}std/${lib.elemAt (lib.splitVersion finalAttrs.version) 4}/ib_installers";
+    # e.g.
+    # "23.1std.1.993" -> "23.1std.1/993"
+    # "24.1std.0.1077" -> "24.1std/1077"
+    # "26.1.1.130" -> "26.1.1/130"
+    # "26.1.0.110" -> "26.1/110"
+    URLdir =
+      let
+        split = lib.splitString "." finalAttrs.version;
+        patch = builtins.elemAt split 2;
+        shortVer = builtins.concatStringsSep "." (
+          (lib.take 2 split) ++ (lib.optional (patch != "0") patch)
+        );
+      in
+      "${shortVer}/${builtins.elemAt split 3}/ib_installers";
     download =
       name: hash:
       fetchurl {
