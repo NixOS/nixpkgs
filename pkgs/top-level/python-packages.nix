@@ -12115,6 +12115,8 @@ self: super: with self; {
 
   nglview = callPackage ../development/python-modules/nglview { };
 
+  ngs-tools = callPackage ../development/python-modules/ngs-tools { };
+
   nh3 = callPackage ../development/python-modules/nh3 { };
 
   nhc = callPackage ../development/python-modules/nhc { };
@@ -16236,6 +16238,8 @@ self: super: with self; {
   pysensors = callPackage ../development/python-modules/pysensors { };
 
   pysenz = callPackage ../development/python-modules/pysenz { };
+
+  pyseq-align = callPackage ../development/python-modules/pyseq-align { };
 
   pysequoia = callPackage ../development/python-modules/pysequoia { };
 
