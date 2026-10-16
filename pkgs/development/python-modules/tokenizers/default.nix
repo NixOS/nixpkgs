@@ -55,7 +55,7 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "tokenizers";
-  version = "0.23.2";
+  version = "0.23.3";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -63,7 +63,7 @@ buildPythonPackage (finalAttrs: {
     owner = "huggingface";
     repo = "tokenizers";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-liHx1YRFZC/PUNiv1MJyb9oAw7/xHbaRbFsn1n8gtuI=";
+    hash = "sha256-vpEkYbELFqS1Jt3q0AxCAkmMO5uiCwkYS0ugicQz7Bc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -73,7 +73,7 @@ buildPythonPackage (finalAttrs: {
       src
       sourceRoot
       ;
-    hash = "sha256-AVmmOqyH1iX5agDjB58SpzHuk56aV2d1lvopVcR6u4s=";
+    hash = "sha256-LODG+UHDXT5KeJpzytD+tZx5SHydfE8KqzEtwL0iy/o=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/bindings/python";
