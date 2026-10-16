@@ -45,6 +45,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-7HByN/N9XaWt06vhEkwc3JslfMY3as68PJbBfWMEba4=";
 
+  __structuredAttrs = true;
+
   # Bun's lockfile has no npm-compatible lockfile, so vendor node_modules in a
   # fixed-output derivation. Keep per-platform hashes for optional native deps.
   nodeModules = stdenvNoCC.mkDerivation {
@@ -79,11 +81,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = {
-      x86_64-linux = "sha256-iznqcE94oIL7yM8FqX9fO6OHdmR1j8splPOi4fQ3sNI=";
-      aarch64-linux = "sha256-GrQ4QZ0bcrDL4kvapQdfxmMMTCjJvuvC31o7tPBwk/8=";
-    }.${stdenv.hostPlatform.system}
-      or (throw "Unsupported system ${stdenv.hostPlatform.system}");
+    outputHash =
+      {
+        x86_64-linux = "sha256-iznqcE94oIL7yM8FqX9fO6OHdmR1j8splPOi4fQ3sNI=";
+        aarch64-linux = "sha256-GrQ4QZ0bcrDL4kvapQdfxmMMTCjJvuvC31o7tPBwk/8=";
+      }
+      .${stdenv.hostPlatform.system} or (throw "Unsupported system ${stdenv.hostPlatform.system}");
   };
 
   postPatch = ''
@@ -103,12 +106,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     makeWrapper
     nodejs
     pkg-config
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     desktop-file-utils
     wrapGAppsHook4
   ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     glib-networking
     gtk3
     libsoup_3
@@ -117,17 +124,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # OpenAL and GLFW load these libraries dynamically at runtime.
   preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [
-      alsa-lib
-      libpulseaudio
-      pipewire
-      libx11
-      libxcursor
-      libxi
-      libxinerama
-      libxrandr
-      libxxf86vm
-    ]}")
+    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "${
+      lib.makeLibraryPath [
+        alsa-lib
+        libpulseaudio
+        pipewire
+        libx11
+        libxcursor
+        libxi
+        libxinerama
+        libxrandr
+        libxxf86vm
+      ]
+    }")
   '';
 
   # wrapGAppsHook4 creates a C wrapper; put a shell wrapper around it for EGL
@@ -139,7 +148,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
         export __EGL_VENDOR_LIBRARY_FILENAMES="''${__EGL_VENDOR_LIBRARY_FILENAMES:-${mesa}/share/glvnd/egl_vendor.d/50_mesa.json}"
         export LIBGL_DRIVERS_PATH="''${LIBGL_DRIVERS_PATH:-${mesa}/lib/dri}"
         export GBM_BACKENDS_PATH="''${GBM_BACKENDS_PATH:-${mesa}/lib/gbm}"
-        export LD_LIBRARY_PATH="${lib.makeLibraryPath [ libglvnd libgbm wayland mesa ]}''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+        export LD_LIBRARY_PATH="${
+          lib.makeLibraryPath [
+            libglvnd
+            libgbm
+            wayland
+            mesa
+          ]
+        }''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
       elif [ -z "''${CUBICLAUNCHER_WEBKIT_SOFTWARE:-}" ]; then
         if [ "''${XDG_SESSION_TYPE:-}" = "wayland" ] || [ -n "''${WAYLAND_DISPLAY:-}" ]; then
           CUBICLAUNCHER_WEBKIT_SOFTWARE=1
@@ -165,8 +181,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/CubicLauncherDevs/CubicLauncher";
     changelog = "https://github.com/CubicLauncherDevs/CubicLauncher/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ santiagolxx staFF6773 ];
+    maintainers = with lib.maintainers; [
+      santiagolxx
+      staFF6773
+    ];
     mainProgram = "cubiclauncher";
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 })
