@@ -30,6 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
     guile
   ];
 
+  guileImportsCheck = [ "sjson" ];
+
   meta = {
     description = "S-expression based json reader/writer for Guile";
     homepage = "https://gitlab.com/dustyweb/guile-sjson";

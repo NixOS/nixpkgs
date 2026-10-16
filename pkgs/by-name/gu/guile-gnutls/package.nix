@@ -44,6 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-guile-extension-dir=${placeholder "out"}/lib/guile/${guile.effectiveVersion}/extensions"
   ];
 
+  guileImportsCheck = [ "gnutls" ];
+
   meta = {
     homepage = "https://gitlab.com/gnutls/guile/";
     description = "Guile bindings for GnuTLS library";
