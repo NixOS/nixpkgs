@@ -37,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
+  strictDeps = true;
+
   # with trivialautovarinit enabled can produce an empty .pc file
   hardeningDisable = [ "trivialautovarinit" ];
 
