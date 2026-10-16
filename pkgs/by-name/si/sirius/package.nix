@@ -65,6 +65,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-cq4ajtAJXfIH1B866FYhgROMSwd7nsbXf/6kbSwJAso=";
   };
 
+  postPatch = ''
+    # The Python module's CMakeLists.txt forces C++17, but the bundled camp
+    # library in umpire >= 2026.07 uses C++20 concepts. The main library
+    # already uses C++20 (set in the root CMakeLists.txt), so align the
+    # Python module to avoid compilation errors.
+    substituteInPlace python_module/CMakeLists.txt \
+      --replace-fail "set(CMAKE_CXX_STANDARD 17)" "set(CMAKE_CXX_STANDARD 20)"
+  '';
+
   outputs = [
     "out"
     "dev"
