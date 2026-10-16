@@ -921,6 +921,11 @@
     githubId = 5265348;
     name = "Agustin Mista";
   };
+  agustinrojas1 = {
+    github = "agustinrojas1";
+    githubId = 88162822;
+    name = "Agustín Rojas";
+  };
   agvantibo = {
     email = "apicalium@gmail.com";
     github = "agvantibo-again";
