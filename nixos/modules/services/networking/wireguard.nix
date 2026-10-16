@@ -101,7 +101,7 @@ let
         };
 
         preShutdown = mkOption {
-          example = literalExpression ''"''${pkgs.iproute2}/bin/ip netns del foo"'';
+          example = literalExpression ''"''${pkgs.wireguard-tools}/bin/wg show all transfer"'';
           default = "";
           type = with types; coercedTo (listOf str) (concatStringsSep "\n") lines;
           description = ''
@@ -110,7 +110,7 @@ let
         };
 
         postShutdown = mkOption {
-          example = literalExpression ''"''${pkgs.openresolv}/bin/resolvconf -d wg0"'';
+          example = literalExpression ''"''${pkgs.iproute2}/bin/ip netns del foo"'';
           default = "";
           type = with types; coercedTo (listOf str) (concatStringsSep "\n") lines;
           description = "Commands called after shutting down the interface.";
