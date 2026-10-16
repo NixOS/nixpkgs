@@ -102,16 +102,16 @@ let
     stdenv = if withNvenc then cudaPackages.backendStdenv else stdenv;
   };
 in
-effectiveBuildPythonApplication rec {
+effectiveBuildPythonApplication (finalAttrs: {
   pname = "xpra";
-  version = "6.5.4";
+  version = "6.5.5";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Xpra-org";
     repo = "xpra";
-    tag = "v${version}";
-    hash = "sha256-TXqnheJjq3WZZffbEPjS5/u/02OlJkDJ9IqyCabYr1E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/QtrpTcVPCUzcPPTR5YXD9jhcZ2Qg6XZ1K3RGQ2XmVo=";
   };
 
   patches = [
@@ -296,7 +296,7 @@ effectiveBuildPythonApplication rec {
   meta = {
     homepage = "https://github.com/Xpra-org/xpra";
     description = "Persistent remote applications for X";
-    changelog = "https://github.com/Xpra-org/xpra/releases/tag/v${version}";
+    changelog = "https://github.com/Xpra-org/xpra/releases/tag/v${finalAttrs.version}";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
@@ -304,4 +304,4 @@ effectiveBuildPythonApplication rec {
       mvnetbiz
     ];
   };
-}
+})
