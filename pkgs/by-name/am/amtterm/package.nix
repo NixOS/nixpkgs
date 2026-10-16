@@ -51,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Intel AMT® SoL client + tools";
     homepage = "https://github.com/kraxel/amtterm";
     license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ kallisti-dev ];
     platforms = lib.platforms.linux;
   };
 })
