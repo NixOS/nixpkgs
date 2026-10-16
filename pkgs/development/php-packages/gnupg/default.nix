@@ -19,7 +19,7 @@ buildPecl {
   src = fetchFromGitHub {
     owner = "php-gnupg";
     repo = "php-gnupg";
-    rev = "gnupg-${version}";
+    tag = "gnupg-${version}";
     fetchSubmodules = true;
     hash = "sha256-g9w0v9qc/Q5qjB9/ekZyheQ1ClIEqMEoBc32nGWhXYA=";
   };
