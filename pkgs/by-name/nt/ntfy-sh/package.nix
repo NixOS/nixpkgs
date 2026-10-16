@@ -38,13 +38,13 @@ buildGoModule (
   in
   {
     pname = "ntfy-sh";
-    version = "2.30.0";
+    version = "2.31.0";
 
     src = fetchFromGitHub {
       owner = "binwiederhier";
       repo = "ntfy";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-ATAIbr0A0WsDcZjRGk56dnV1/qSh+X0dKs/vIyr2Y1A=";
+      hash = "sha256-U2yjUtwQdnr531oH2rPblEc7IJsc58kqs2TVIkB/v/w=";
     };
 
     vendorHash = "sha256-/F/rRKyg0rZUGNlAzefLjEcO47rCif4ZW51lBbFbjA8=";

@@ -13448,6 +13448,10 @@ self: super: with self; {
 
   peewee-migrate = callPackage ../development/python-modules/peewee-migrate { };
 
+  peewee-migrate_1 = callPackage ../development/python-modules/peewee-migrate/1.nix { };
+
+  peewee_3 = callPackage ../development/python-modules/peewee/3.nix { };
+
   pefile = callPackage ../development/python-modules/pefile { };
 
   peft = callPackage ../development/python-modules/peft { };

@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stakk";
-  version = "3.0.3";
+  version = "3.0.6";
 
   src = fetchFromGitHub {
     owner = "glennib";
     repo = "stakk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DG9OaavOpj69ZElCJ3JQcuvRgknPvbbHTGzFDi0xLzg=";
+    hash = "sha256-Wu7qyGF+FY1j6tx24jCs9wi+MtdmZEHOMioWqUXLPek=";
   };
 
-  cargoHash = "sha256-STjpYoOVQDLHtgnwKAJ/xl+yqYNiYO5J/KRs1OBVkAg=";
+  cargoHash = "sha256-Mxd/DVXFP5YarR3HuV8d6eFW9Dma0qdwC1DlD1vLGO4=";
 
   useNextest = true;
   # The forgejo transport tests build a reqwest client, which needs a CA bundle.
