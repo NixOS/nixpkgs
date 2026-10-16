@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  desktopToDarwinBundle,
   libGL,
   libGLU,
   nix-update-script,
@@ -31,7 +32,30 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+
+  # The terminal font is blitted onto a surface with only 2 palette entries set.
+  # SDL 1.2 left the rest black, but sdl12-compat inherits SDL2's all-white
+  # default, so the glyphs map to an index the screen never gets a color for
+  # and the startup/error screen renders black on black.
+  postPatch = ''
+    substituteInPlace src/Engine/Font.cpp \
+      --replace-fail \
+        'image.surface = new Surface(s->w, s->h);' \
+        'image.surface = new Surface(s->w, s->h); { SDL_Color black[256] = {}; image.surface->setPalette(black, 0, 256); }'
+
+    # The window icon is looked up before the file map is built, so it is never
+    # found; search the data folders directly instead
+    substituteInPlace src/Engine/Game.cpp \
+      --replace-fail 'FileMap::getFilePath("openxcom.png")' 'CrossPlatform::searchDataFile("common/openxcom.png")'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Don't replace the Dock icon with the raw window icon, so macOS keeps
+    # showing the app bundle's icon, styled like other apps
+    substituteInPlace src/Engine/CrossPlatform.cpp \
+      --replace-fail 'SDL_WM_SetIcon(icon, NULL);' ""
+  '';
 
   buildInputs = [
     SDL_gfx
@@ -46,6 +70,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [ (lib.cmakeBool "CREATE_BUNDLE" false) ];
+
+  # desktopToDarwinBundle only scales up the 128x128 PNG, use upstream's icon
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    cp ${finalAttrs.src}/res/mac/AppIcon.icns "$out/Applications/OpenXcom.app/Contents/Resources/openxcom.icns"
+  '';
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
@@ -62,7 +91,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://openxcom.org";
     downloadPage = "https://openxcom.org/download/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ keenanweaver ];
+    maintainers = with lib.maintainers; [
+      keenanweaver
+      iedame
+    ];
     mainProgram = "openxcom";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
