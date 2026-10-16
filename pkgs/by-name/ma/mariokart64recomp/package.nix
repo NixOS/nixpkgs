@@ -17,6 +17,7 @@
   makeDesktopItem,
   n64recomp,
   directx-shader-compiler,
+  fetchpatch,
 }:
 
 let
@@ -57,6 +58,18 @@ llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
   };
 
   strictDeps = true;
+  __structuredAttrs = true;
+
+  patches = [
+    # Fix building with gcc16
+    (fetchpatch {
+      name = "rmlui-cstdint.patch";
+      url = "https://github.com/mikke89/RmlUi/commit/8c27b0a5cb601a3c57ecddc6ce8769ca93a97cb8.patch";
+      stripLen = 1;
+      extraPrefix = "lib/RmlUi/";
+      hash = "sha256-oIyPlnBsLcrGIbylT16i5SLttyXmzF5ZP1js/JDRG3o=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
