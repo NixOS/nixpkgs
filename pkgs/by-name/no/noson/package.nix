@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "noson";
-  version = "5.6.25";
+  version = "5.7.6";
 
   src = fetchFromGitHub {
     owner = "janbar";
     repo = "noson-app";
     tag = finalAttrs.version;
-    hash = "sha256-Y+kyadcrGGpqxY7y1xkYh3BMDItE2LLwT6nJ2YuHp10=";
+    hash = "sha256-rlTh5H0TsgjZ7lrB5giaPJ7NmkxuLH6rbavb46EJ0kg=";
   };
 
   nativeBuildInputs = [
