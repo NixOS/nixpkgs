@@ -43,7 +43,9 @@
   # ssh -o User=root vsock%3 (can also do vsock/3, but % works with scp etc.)
   interactive.sshBackdoor.enable = true;
 
-  testScript = /* python */ ''
+  testScript = /* py */ ''
+    from datetime import timedelta
+
     start_all()
 
     machine.wait_for_x()
@@ -52,6 +54,11 @@
 
     machine.screenshot("Repath-Studio-GUI-Welcome")
     machine.send_key("kp_enter") # OK
+
+    # Wait for the home screen and create a new document
+    machine.sleep(duration=timedelta(seconds=2))
+    machine.execute("su - alice -c \"DISPLAY=:0 xdotool key ctrl+n\"")
+    machine.sleep(duration=timedelta(seconds=2))
 
     # move the mouse to the "Save" icon on the toolbar
     machine.execute("su - alice -c \"DISPLAY=:0 xdotool mousemove --sync 95 65\"")
@@ -62,13 +69,13 @@
         if status == 0:
             break
         machine.execute("su - alice -c \"DISPLAY=:0 xdotool click 1\"")
-        machine.sleep(1)
+        machine.sleep(duration=timedelta(seconds=1))
 
     # wait for the GTK dialog to focus the text input field
-    machine.sleep(3)
+    machine.sleep(duration=timedelta(seconds=3))
     machine.send_chars("saved.rps") # avoid using absolute path here, doesn't work for some reason
     # wait for text to be typed
-    machine.sleep(2)
+    machine.sleep(duration=timedelta(seconds=2))
 
     machine.execute("su - alice -c \"DISPLAY=:0 xdotool key alt+s\"") # save file
     machine.wait_until_succeeds("ls /home/alice/saved.rps")
