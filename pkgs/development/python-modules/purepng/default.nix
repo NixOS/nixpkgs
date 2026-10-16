@@ -24,7 +24,7 @@ buildPythonPackage {
     (fetchpatch {
       name = "fix-py37-stopiteration-in-generators.patch";
       url = "https://github.com/Scondo/purepng/pull/28/commits/62d71dfc2be9ffdc4b3e5f642af0281a8ce8f946.patch";
-      sha256 = "1ag0pji3p012hmj8kadcd0vydv9702188c0isizsi964qcl4va6m";
+      hash = "sha256-1ahNKMPEpKh/1BEwhIIAJ+3mN2isqYlkhSKAO6K84Kk=";
     })
   ];
   patchFlags = [

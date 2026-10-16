@@ -14,7 +14,7 @@ build-idris-package {
     owner = "danilkolikov";
     repo = "setoids";
     rev = "41b4af3b1a537d9471107a639ad77c7abee2de18";
-    sha256 = "0fl1g59s16vnrdnplps5ncv27j7a93nxp9cmqp2iavjxlzlzin1v";
+    hash = "sha256-O9j46addbhXFxZWl2+1I6sgjNrNFX3pty3aboFN5gTo=";
   };
 
   meta = {

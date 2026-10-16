@@ -18,7 +18,7 @@ buildKodiAddon rec {
     owner = "pannal";
     repo = "plex-for-kodi";
     rev = "v${version}";
-    sha256 = "sha256-rNxTz3SKHHBm0WDCoZ/foJN2pBBiyI3a/tOdQdOCuXA=";
+    hash = "sha256-rNxTz3SKHHBm0WDCoZ/foJN2pBBiyI3a/tOdQdOCuXA=";
   };
 
   # Plex for Kodi writes to its own directory by default, needs to be patched to a non-store path.

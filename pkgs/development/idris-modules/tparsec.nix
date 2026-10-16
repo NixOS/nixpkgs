@@ -16,7 +16,7 @@ build-idris-package {
     owner = "gallais";
     repo = "idris-tparsec";
     rev = "943c64dfcb4e1582696f68312fad88145dc3a8e4";
-    sha256 = "0pyhkafhx2pwim91ada6qrgacvahl9bpv5m486y8fph4qzf4z6mx";
+    hash = "sha256-vZpP3McEXoe8QaSWfVeiUG2mXsZGNRVSjfyKDp2a0F8=";
   };
 
   meta = {

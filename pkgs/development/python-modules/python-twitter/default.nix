@@ -31,7 +31,7 @@ buildPythonPackage rec {
     # Fix tests. Remove with the next release
     (fetchpatch {
       url = "https://github.com/bear/python-twitter/commit/f7eb83d9dca3ba0ee93e629ba5322732f99a3a30.patch";
-      sha256 = "008b1bd03wwngs554qb136lsasihql3yi7vlcacmk4s5fmr6klqw";
+      hash = "sha256-HNNpcnVFk1mZYnSf6AfFMGqlqRlhYVKKfpbzAdoKCwE=";
     })
   ];
 

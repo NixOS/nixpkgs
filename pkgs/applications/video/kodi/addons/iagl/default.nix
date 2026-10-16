@@ -20,7 +20,7 @@ buildKodiAddon rec {
     owner = "zach-morris";
     repo = "plugin.program.iagl";
     rev = version;
-    sha256 = "sha256-b8nO3D/xTnj/5UDshGlIJdiHd75VhIlkrGUi0vkZqG4=";
+    hash = "sha256-b8nO3D/xTnj/5UDshGlIJdiHd75VhIlkrGUi0vkZqG4=";
   };
 
   propagatedBuildInputs = [

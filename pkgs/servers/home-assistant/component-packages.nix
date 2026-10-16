@@ -6973,7 +6973,8 @@
       ];
     "sunsynk" =
       ps: with ps; [
-      ]; # missing inputs: sunsynk-api-client
+        sunsynk-api-client
+      ];
     "sunweg" =
       ps: with ps; [
       ];
@@ -9399,6 +9400,7 @@
     "suez_water"
     "sun"
     "sunricher_dali"
+    "sunsynk"
     "sunweg"
     "supla"
     "surepetcare"
