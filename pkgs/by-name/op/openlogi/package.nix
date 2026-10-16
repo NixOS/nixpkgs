@@ -13,6 +13,7 @@
   makeBinaryWrapper,
   nix-update-script,
   pkg-config,
+  re-plistbuddy,
   versionCheckHook,
   vulkan-loader,
   wayland,
@@ -73,6 +74,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cargo-bundle
+    re-plistbuddy
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     makeBinaryWrapper
@@ -168,30 +170,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "$out/bin/openlogi-agent"
 
     # Bundled launch agent, registered through SMAppService.
-    mkdir -p "$app/Contents/Library/LaunchAgents"
-    cat > "$app/Contents/Library/LaunchAgents/org.openlogi.agent.service.plist" <<'EOF'
-    <?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-    <plist version="1.0">
-    <dict>
-      <key>BundleProgram</key>
-      <string>Contents/Library/LoginItems/OpenLogi Agent.app/Contents/MacOS/openlogi-agent</string>
-      <key>KeepAlive</key>
-      <dict>
-        <key>SuccessfulExit</key>
-        <false/>
-      </dict>
-      <key>Label</key>
-      <string>org.openlogi.agent.service</string>
-    </dict>
-    </plist>
-    EOF
+    install -Dm644 ${./org.openlogi.agent.service.plist} \
+      "$app/Contents/Library/LaunchAgents/org.openlogi.agent.service.plist"
 
-    # The webcam preview needs a camera usage description, or macOS terminates
-    # the app on first access.
-    substituteInPlace "$app/Contents/Info.plist" \
-      --replace-fail "<key>CFBundleIdentifier</key>" \
-      "<key>NSCameraUsageDescription</key><string>OpenLogi previews your Logitech webcam locally. Video never leaves your Mac.</string><key>CFBundleIdentifier</key>"
+    # Keys upstream's `xtask macos package` stamps after cargo-bundle: the
+    # camera usage description, without which macOS terminates the app on
+    # first access.
+    PlistBuddy -c "Merge ${./info-plist-keys.plist}" "$app/Contents/Info.plist"
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     install -Dm755 "$release_target/openlogi" "$out/bin/openlogi"
