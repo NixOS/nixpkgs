@@ -50,7 +50,9 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/logisim-evolution --add-flags "-jar $src"
+    makeWrapper ${jre}/bin/java $out/bin/logisim-evolution \
+      --add-flags "-jar $src" \
+      --set _JAVA_AWT_WM_NONREPARENTING 1
     install -Dm444 ${icon} $out/share/icons/hicolor/scalable/apps/logisim-evolution.svg
 
     runHook postInstall

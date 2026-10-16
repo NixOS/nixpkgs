@@ -7274,8 +7274,6 @@ self: super: with self; {
 
   gradient-statsd = callPackage ../development/python-modules/gradient-statsd { };
 
-  gradient-utils = callPackage ../development/python-modules/gradient-utils { };
-
   gradio = callPackage ../development/python-modules/gradio { };
 
   gradio-client = callPackage ../development/python-modules/gradio/client.nix {
@@ -14593,6 +14591,8 @@ self: super: with self; {
   pybase62 = callPackage ../development/python-modules/pybase62 { };
 
   pybase64 = callPackage ../development/python-modules/pybase64 { };
+
+  pybase91 = callPackage ../development/python-modules/pybase91 { };
 
   pybbox = callPackage ../development/python-modules/pybbox { };
 
