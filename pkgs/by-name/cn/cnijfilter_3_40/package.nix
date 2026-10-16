@@ -12,7 +12,41 @@
   gtk2,
   ghostscript,
   patchelf,
+  # Printer models to build and install. Defaults to every model the
+  # source drop supports; select a subset to cut build time and closure
+  # size, e.g. `cnijfilter_3_40.override { models = [ "mp280" ]; }`.
+  models ? [
+    "mp250"
+    "mp280"
+    "mp495"
+    "mg5100"
+    "mg5200"
+    "ip4800"
+    "mg6100"
+    "mg8100"
+  ],
 }:
+
+let
+  # Model name (--program-suffix) -> per-model directory in the source
+  # tree holding its color database and proprietary libraries.
+  modelDirs = {
+    mp250 = "356";
+    mp495 = "369";
+    mp280 = "370";
+    mg5100 = "373";
+    mg5200 = "374";
+    ip4800 = "375";
+    mg6100 = "376";
+    mg8100 = "377";
+  };
+
+  unknownModels = lib.subtractLists (lib.attrNames modelDirs) models;
+in
+
+assert lib.assertMsg (unknownModels == [ ])
+  "cnijfilter_3_40: unknown model(s) ${lib.concatStringsSep ", " unknownModels}; supported: ${lib.concatStringsSep ", " (lib.attrNames modelDirs)}";
+assert lib.assertMsg (models != [ ]) "cnijfilter_3_40: `models` must not be empty";
 
 /*
   Canon's own Linux CUPS driver, built from Canon's official source
@@ -143,7 +177,7 @@ stdenv.mkDerivation {
     # ppd/ and cnijfilter/ are rebuilt once per supported model, selected
     # by --program-suffix (each pass produces a differently-named
     # ppd/binary, e.g. cifmp280 + canonmp280.ppd).
-    for pr in mp250 mp280 mp495 mg5100 mg5200 ip4800 mg6100 mg8100; do
+    for pr in ${lib.escapeShellArgs models}; do
       ( cd ppd
         ./autogen.sh --prefix=$out --program-suffix=$pr
         make clean
@@ -180,10 +214,9 @@ stdenv.mkDerivation {
 
     # Per-model color/paper/quality database and Canon's proprietary
     # color-management shared libraries (prebuilt, no source), one set
-    # per model directory: 356=mp250 369=mp495 370=mp280 373=mg5100
-    # 374=mg5200 375=ip4800 376=mg6100 377=mg8100.
+    # per selected model's directory.
     mkdir -p $out/lib/bjlib
-    for pr_id in 356 369 370 373 374 375 376 377; do
+    for pr_id in ${lib.escapeShellArgs (map (m: modelDirs.${m}) models)}; do
       install -m444 "$pr_id"/database/* $out/lib/bjlib/
       install -m755 "$pr_id"/libs_bin64/*.so.* $out/lib/
     done
