@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "airportsdata";
-  version = "20251008";
+  version = "20260905";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mborsetti";
     repo = "airportsdata";
     tag = "v${version}";
-    hash = "sha256-9Y4W5yhICiB5Py36RoVTe7obVtKUaUf0du2i1AihFdE=";
+    hash = "sha256-UBs9/uC3tASdcnKhSlNPSb7oA8KpyQpaO0jLr59eokI=";
   };
 
   build-system = [ setuptools ];
