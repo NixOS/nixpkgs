@@ -45,7 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     icu
-    mpv-unwrapped
     qt6.qt5compat
     qt6.qtbase
     qt6.qtimageformats
@@ -53,6 +52,9 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qttools
     qt6.qtwebengine
     zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    mpv-unwrapped
   ];
 
   cmakeFlags = [
@@ -60,17 +62,35 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_ICU" true)
     (lib.cmakeBool "ENABLE_COMPRESSED_SITEMAP" true)
     (lib.cmakeBool "ENABLE_MEDIAPLAYER_LIBMPV" stdenv.hostPlatform.isLinux)
+    (lib.cmakeBool "ENABLE_MEDIAPLAYER_QTMULTIMEDIA" stdenv.hostPlatform.isDarwin)
     (lib.cmakeBool "ENABLE_TESTING" true)
+  ]
+  ++
     # Plugins are looked up in <bindir>/../${CMAKE_INSTALL_LIBDIR}/rssguard, so it must be relative
-    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+    lib.optionals stdenv.hostPlatform.isLinux [
+      (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+    ]
+  # On macOS, everything is installed into Contents/MacOS relative to the prefix
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "${placeholder "out"}/Applications/rssguard.app")
+    (lib.cmakeFeature "CMAKE_INSTALL_NAME_DIR" "${placeholder "out"}/Applications/rssguard.app/Contents/MacOS")
   ];
 
   env.GOFLAGS = "-mod=vendor -trimpath";
 
   dontWrapGApps = true;
 
+  # The hook would also wrap the dylibs installed next to the executable in the bundle
+  dontWrapQtApps = stdenv.hostPlatform.isDarwin;
+
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    wrapQtApp $out/Applications/rssguard.app/Contents/MacOS/rssguard
+    mkdir -p $out/bin
+    ln -s $out/Applications/rssguard.app/Contents/MacOS/{rssguard,rssguard-article-extractor} $out/bin/
   '';
 
   doCheck = true;
@@ -107,6 +127,6 @@ stdenv.mkDerivation (finalAttrs: {
       tebriel
     ];
     mainProgram = "rssguard";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
