@@ -848,6 +848,7 @@ in
   healthchecks = runTest ./web-apps/healthchecks.nix;
   hedgedoc = runTest ./hedgedoc.nix;
   herbstluftwm = runTest ./herbstluftwm.nix;
+  hevel = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./hevel.nix;
   # This test happens to work on x86_64-linux but not on other platforms.
   hibernate = handleTestOn [ "x86_64-linux" ] ./hibernate.nix { };
   hickory-dns = runTest ./hickory-dns.nix;
