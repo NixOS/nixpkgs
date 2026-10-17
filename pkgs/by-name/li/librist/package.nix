@@ -20,6 +20,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "librist";
   version = "0.2.20";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "rist";
