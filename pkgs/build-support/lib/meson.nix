@@ -15,6 +15,8 @@ let
       "ppc64"
     else if isPower then
       "ppc"
+    else if isXtensa then
+      "xtensa"
     else
       platform.uname.processor;
 
