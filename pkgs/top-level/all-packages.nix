@@ -1956,8 +1956,6 @@ with pkgs;
 
   host = bind.host;
 
-  hpccm = with python3Packages; toPythonApplication hpccm;
-
   html-proofer = callPackage ../tools/misc/html-proofer { };
 
   httpie = with python3Packages; toPythonApplication httpie;
