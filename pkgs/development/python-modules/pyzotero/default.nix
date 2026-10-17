@@ -22,20 +22,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyzotero";
-  version = "1.13.0";
+  version = "1.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "urschrei";
     repo = "pyzotero";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5Ew5u6+a+8wv0scyQ4IOcZWCimEQLbe9OuKBIKrPoXc=";
+    hash = "sha256-1CnGiE94WvoY73wSmtaDH3G+31dl2QjsV6o6jcpAFKc=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.8.14,<0.9.0" "uv-build"
-  '';
 
   build-system = [
     uv-build
