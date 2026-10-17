@@ -19,6 +19,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-hjwqU5TxV4p2EjGy5haQfQqItVtYMI7i/VIfrKZvqhE=";
   };
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   nativeBuildInputs = [
     cmake
     ninja
@@ -46,7 +49,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Visualization tool for AMD GPU thread traces from rocprofv3 --att";
     homepage = "https://github.com/ROCm/rocprof-compute-viewer";
+    changelog = "https://github.com/ROCm/rocprof-compute-viewer/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
+    teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
     mainProgram = "rocprof-compute-viewer";
   };
