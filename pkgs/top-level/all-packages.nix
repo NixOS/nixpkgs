@@ -10046,8 +10046,6 @@ with pkgs;
     }
   );
 
-  yamale = with python3Packages; toPythonApplication yamale;
-
   myEnvFun = callPackage ../misc/my-env {
     inherit (stdenv) mkDerivation;
   };
