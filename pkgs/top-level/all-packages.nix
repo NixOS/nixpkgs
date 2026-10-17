@@ -10078,8 +10078,6 @@ with pkgs;
 
   torcs-without-data = callPackage ../by-name/to/torcs/without-data.nix { };
 
-  hy = with python3Packages; toPythonApplication hy;
-
   ghc-standalone-archive =
     {
       haskellPackages,
