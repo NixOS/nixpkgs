@@ -7629,6 +7629,8 @@ self: super: with self; {
 
   hdmedians = callPackage ../development/python-modules/hdmedians { };
 
+  headerkit = callPackage ../development/python-modules/headerkit { };
+
   headerparser = callPackage ../development/python-modules/headerparser { };
 
   heapdict = callPackage ../development/python-modules/heapdict { };
@@ -16817,6 +16819,8 @@ self: super: with self; {
   pytest-tornasync = callPackage ../development/python-modules/pytest-tornasync { };
 
   pytest-trio = callPackage ../development/python-modules/pytest-trio { };
+
+  pytest-tripwire = callPackage ../development/python-modules/pytest-tripwire { };
 
   pytest-twisted = callPackage ../development/python-modules/pytest-twisted { };
 
