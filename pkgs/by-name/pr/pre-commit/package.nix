@@ -28,6 +28,7 @@ let
 
   # The source-built SDK patches codesign paths for the Darwin sandbox.
   dotnet-sdk = dotnetCorePackages.sdk_8_0-source;
+  dotnetAvailable = lib.meta.availableOn stdenv.buildPlatform dotnet-sdk;
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pre-commit";
@@ -79,9 +80,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # moved back to the main nativeCheckInputs list, don’t forget to re-enable the
     # coursier-related test that is currently disabled on i686-linux.
     coursier
-    # i686-linux: dotnet-sdk not available
-    dotnet-sdk
-  ];
+  ]
+  ++ lib.optional dotnetAvailable dotnet-sdk;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
@@ -100,7 +100,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     patchShebangs pre_commit/resources/hook-tmpl
   '';
 
-  env = lib.optionalAttrs (!i686Linux) {
+  env = lib.optionalAttrs dotnetAvailable {
     DOTNET_ROOT = "${dotnet-sdk}/share/dotnet";
 
     # NuGet auditing requires network access.
@@ -193,9 +193,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "test_docker_hook"
     "test_docker_image_"
   ]
+  ++ lib.optional (!dotnetAvailable) "test_dotnet_"
   ++ lib.optionals i686Linux [
-    # i686-linux: dotnet-sdk not available
-    "test_dotnet_"
     # From coursier_test.py:
     "test_error_if_no_deps_or_channel"
   ];
