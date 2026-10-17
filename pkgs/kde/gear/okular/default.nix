@@ -1,4 +1,5 @@
 {
+  lib,
   mkKdeDerivation,
   pkg-config,
   qtspeech,
@@ -12,9 +13,13 @@
   ebook_tools,
   fetchpatch,
   discount,
+  kirigami-addons,
+  mobile ? false,
 }:
 mkKdeDerivation {
   pname = "okular";
+
+  extraCmakeFlags = lib.optionals mobile [ "-DOKULAR_UI=mobile" ];
 
   extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [
@@ -30,7 +35,8 @@ mkKdeDerivation {
     djvulibre
     ebook_tools
     discount
-  ];
+  ]
+  ++ lib.optionals mobile [ kirigami-addons ];
 
-  meta.mainProgram = "okular";
+  meta.mainProgram = if mobile then "okularkirigami" else "okular";
 }
