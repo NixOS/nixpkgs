@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libzakalwe";
-  version = "1.0.0-unstable-2024-02-26";
+  version = "1.0.0-unstable-2026-09-20";
 
   src = fetchFromGitLab {
     owner = "hors";
     repo = "libzakalwe";
-    rev = "c7eba014ba14dc6fa145f6e71e75cca2b65bbc8a";
-    hash = "sha256-2a30ztFnemCgGW/I5S6Dz4eC1Y6K2aV9dPvysvQtBxo=";
+    rev = "f40771d472d1a3846969678d893846a48c16b025";
+    hash = "sha256-E1X0mWvLsQuu9jo72IFx2VWTAcrjWtv+2EMhAdbxEv0=";
   };
 
   outputs = [
