@@ -425,9 +425,6 @@ in
 
         rtw88 = callPackage ../os-specific/linux/rtw88 { };
 
-        rtw89 =
-          if lib.versionOlder kernel.version "5.16" then callPackage ../os-specific/linux/rtw89 { } else null;
-
         openafs_1_8 = callPackage ../by-name/op/openafs/module.nix { };
         # Current stable release; don't backport release updates!
         openafs = openafs_1_8;
