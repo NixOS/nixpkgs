@@ -3,11 +3,10 @@
   localSystem,
   config,
   overlays,
+  genericStdenv,
 }:
 
 let
-  genericStdenv = import ../generic { defaultConfig = config; };
-
   inherit (localSystem) system;
 
   shell =
