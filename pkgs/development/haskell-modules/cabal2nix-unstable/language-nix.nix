@@ -14,10 +14,10 @@
 }:
 mkDerivation {
   pname = "language-nix";
-  version = "2.3.0-unstable-2026-03-30";
+  version = "2.3.0-unstable-2026-08-21";
   src = fetchzip {
-    url = "https://github.com/NixOS/cabal2nix/archive/41239bcc0622a0975c6705a03a44dfeffeb56f23.tar.gz";
-    sha256 = "01qj6cvaif0810v83r6izcj1bbfpcqqxw4wybq04qsq92sqybpw2";
+    url = "https://github.com/NixOS/cabal2nix/archive/b9ef7e13a1eebdf9cb56518b5010befa1ca505af.tar.gz";
+    sha256 = "052kdc9rli92pyk45p3ly2xgvhm312ik7d22khxw9rsphpsr4n8d";
   };
   postUnpack = "sourceRoot+=/language-nix; echo source root reset to $sourceRoot";
   libraryHaskellDepends = [
@@ -39,5 +39,5 @@ mkDerivation {
   ];
   homepage = "https://github.com/NixOS/cabal2nix/tree/master/language-nix#readme";
   description = "Data types and functions to represent the Nix language";
-  license = lib.licensesSpdx."BSD-3-Clause";
+  license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
 }
