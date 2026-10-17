@@ -2578,8 +2578,6 @@ with pkgs;
     withPython = true;
   };
 
-  unrpa = with python3Packages; toPythonApplication unrpa;
-
   usort = with python3Packages; toPythonApplication usort;
 
   vimpager = callPackage ../tools/misc/vimpager { };
