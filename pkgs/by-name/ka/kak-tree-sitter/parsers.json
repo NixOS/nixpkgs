@@ -1,0 +1,641 @@
+{
+  "grammar": {
+    "astro": {
+      "url": "https://github.com/virchau13/tree-sitter-astro",
+      "pin": "947e93089e60c66e681eba22283f4037841451e7",
+      "hash": "sha256-q1ni++SPbq5y+47fPb6TryMw86gpULwNcXwi5yjXCWI="
+    },
+    "awk": {
+      "url": "https://github.com/Beaglefoot/tree-sitter-awk",
+      "pin": "a799bc5da7c2a84bc9a06ba5f3540cf1191e4ee3",
+      "hash": "sha256-A/mvLYD9+Ms/nBdAebBF2edVkFUkWyz3TiEIt4G5iWc="
+    },
+    "bash": {
+      "url": "https://github.com/tree-sitter/tree-sitter-bash",
+      "pin": "487734f87fd87118028a65a4599352fa99c9cde8",
+      "hash": "sha256-7N1PLVMJxwN5FzHW9NbXZTzGhvziwLCC8tDO3qdjtOo="
+    },
+    "bibtex": {
+      "url": "https://github.com/latex-lsp/tree-sitter-bibtex",
+      "pin": "ccfd77db0ed799b6c22c214fe9d2937f47bc8b34",
+      "hash": "sha256-wgduSxlpbJy/ITenBLfj5lhziUM1BApX6MjXhWcb7lQ="
+    },
+    "c": {
+      "url": "https://github.com/tree-sitter/tree-sitter-c",
+      "pin": "7175a6dd5fc1cee660dce6fe23f6043d75af424a",
+      "hash": "sha256-G9kVqX8walvpI7gPvPzS8g7X8RVM9y5wJHGOcyjJA/A="
+    },
+    "cmake": {
+      "url": "https://github.com/uyha/tree-sitter-cmake",
+      "pin": "6e51463ef3052dd3b328322c22172eda093727ad",
+      "hash": "sha256-2xJaDgrCJQ2obGYvhsHk2/2p8lFNwuScjbjdxJihh5I="
+    },
+    "comment": {
+      "url": "https://github.com/stsewd/tree-sitter-comment",
+      "pin": "aefcc2813392eb6ffe509aa0fc8b4e9b57413ee1",
+      "hash": "sha256-ihkBqdYVulTlysb9J8yg4c5XVktJw8jIwzhqybBw8Ug="
+    },
+    "cpp": {
+      "url": "https://github.com/tree-sitter/tree-sitter-cpp",
+      "pin": "56455f4245baf4ea4e0881c5169de69d7edd5ae7",
+      "hash": "sha256-yU1bwDhwcqeKrho0bo4qclqDDm1EuZWHENI2PNYnxVs="
+    },
+    "crystal": {
+      "url": "https://github.com/crystal-lang-tools/tree-sitter-crystal",
+      "pin": "76afc1f53518a2b68b51a5abcde01d268a9cb47c",
+      "hash": "sha256-jZiy007NtbIoj7eVryejr1ECjzLErSzT1GXq24A9+xE="
+    },
+    "csharp": {
+      "url": "https://github.com/tree-sitter/tree-sitter-c-sharp",
+      "pin": "5b60f99545fea00a33bbfae5be956f684c4c69e2",
+      "hash": "sha256-4R6+15ZbtC/LtSHpk7DqcMiFYjht+062Av31spK07rc="
+    },
+    "css": {
+      "url": "https://github.com/tree-sitter/tree-sitter-css",
+      "pin": "769203d0f9abe1a9a691ac2b9fe4bb4397a73c51",
+      "hash": "sha256-5Qti/bFac2A1PJxqZEOuSLK3GGKYwPDKAp3OOassBxU="
+    },
+    "devicetree": {
+      "url": "https://github.com/joelspadin/tree-sitter-devicetree",
+      "pin": "877adbfa0174d25894c40fa75ad52d4515a36368",
+      "hash": "sha256-NEuQy+Ad9UQE0JeWkyixKC6K7j5DrSpUJ6X50Im6R7c="
+    },
+    "diff": {
+      "url": "https://github.com/the-mikedavis/tree-sitter-diff",
+      "pin": "fd74c78fa88a20085dbc7bbeaba066f4d1692b63",
+      "hash": "sha256-Lm+3jsje1sCDXMFq2Hw+5M5Q6/zLOW1INtOfYoZsalE="
+    },
+    "elixir": {
+      "url": "https://github.com/elixir-lang/tree-sitter-elixir",
+      "pin": "02a6f7fd4be28dd94ee4dd2ca19cb777053ea74e",
+      "hash": "sha256-OM2RWQNdYMltYwmbU5f4ZK5a8Wx4JxBMYx9R5n2B4jg="
+    },
+    "fish": {
+      "url": "https://github.com/ram02z/tree-sitter-fish",
+      "pin": "a78aef9abc395c600c38a037ac779afc7e3cc9e0",
+      "hash": "sha256-D7s3ZsHQeGf+pYdbXvi5GMFqbkgajBuqTQwvjnjnrVo="
+    },
+    "git-commit": {
+      "url": "https://github.com/the-mikedavis/tree-sitter-git-commit",
+      "pin": "6f193a66e9aa872760823dff020960c6cedc37b3",
+      "hash": "sha256-KEbfZg8/Fn0BFLAf2rsLuScJGBk4K5ErclTvMFWESkc="
+    },
+    "glsl": {
+      "url": "http://github.com/tree-sitter-grammars/tree-sitter-glsl",
+      "pin": "88408ffc5e27abcffced7010fc77396ae3636d7e",
+      "hash": "sha256-jQrBz7dDVn9p4et1Oe034YYBRXzi+hdSkqyi3TsQUv8="
+    },
+    "go": {
+      "url": "https://github.com/tree-sitter/tree-sitter-go",
+      "pin": "64457ea6b73ef5422ed1687178d4545c3e91334a",
+      "hash": "sha256-38pkqR9iEIEf9r3IHJPIYgKfWBlb9aQWi1kij04Vo5k="
+    },
+    "haskell": {
+      "url": "https://github.com/tree-sitter/tree-sitter-haskell",
+      "pin": "d7ac98f49e3ed7e17541256fe3881a967d7ffdd3",
+      "hash": "sha256-XEfZSNnvF2BMOWwTfk6GXSnSpbKVfAYk7I3XbO1tIBg="
+    },
+    "html": {
+      "url": "https://github.com/tree-sitter/tree-sitter-html",
+      "pin": "29f53d8f4f2335e61bf6418ab8958dac3282077a",
+      "hash": "sha256-v84N9erFL+QMoxh1dtfVdAJ5iTCoiFcT3kQ2+yq8TXE="
+    },
+    "hyprlang": {
+      "url": "https://github.com/tree-sitter-grammars/tree-sitter-hyprlang",
+      "pin": "27af9b74acf89fa6bed4fb8cb8631994fcb2e6f3",
+      "hash": "sha256-cVlhrAfL8lVHMicJxPqsBZl7NhbfbJXwH8Ga2TQLMc8="
+    },
+    "ini": {
+      "url": "https://github.com/justinmk/tree-sitter-ini",
+      "pin": "32b31863f222bf22eb43b07d4e9be8017e36fb31",
+      "hash": "sha256-kWCaOIC81GP5EHCqzPZP9EUgYy39CZ6/8TVS6soB6Wo="
+    },
+    "java": {
+      "url": "https://github.com/tree-sitter/tree-sitter-java",
+      "pin": "09d650def6cdf7f479f4b78f595e9ef5b58ce31e",
+      "hash": "sha256-tGBi6gJJIPpp6oOwmAQdqBD6eaJRBRcYbWtm1BHsgBA="
+    },
+    "javascript": {
+      "url": "https://github.com/tree-sitter/tree-sitter-javascript",
+      "pin": "f772967f7b7bc7c28f845be2420a38472b16a8ee",
+      "hash": "sha256-rfOAn5S8E2RunlRyY1aTs7j0r6UGKH+732xdpk/5524="
+    },
+    "json": {
+      "url": "https://github.com/tree-sitter/tree-sitter-json",
+      "pin": "73076754005a460947cafe8e03a8cf5fa4fa2938",
+      "hash": "sha256-wbE7CQ6l1wlhJdAoDVAj1QzyvlYnevbrlVCO0TMU7to="
+    },
+    "julia": {
+      "url": "https://github.com/tree-sitter/tree-sitter-julia",
+      "pin": "e84f10db8eeb8b9807786bfc658808edaa1b4fa2",
+      "hash": "sha256-jrQjVPLb6SfePxEJV1GgFgLslGxgdmdb8bJy6VHOEbs="
+    },
+    "just": {
+      "url": "https://github.com/poliorcetics/tree-sitter-just",
+      "pin": "8d03cfdd7ab89ff76d935827de1b93450fa0ec0a",
+      "hash": "sha256-rTcdpSxCUOhS7oM8tbQsVxageiEgYopjBSbQf+cLdJY="
+    },
+    "kdl": {
+      "url": "https://github.com/amaanq/tree-sitter-kdl",
+      "pin": "3ca569b9f9af43593c24f9e7a21f02f43a13bb88",
+      "hash": "sha256-+oJqfbBDbrNS7E+x/QCX9m6FVf0NLw4qWH9n54joJYA="
+    },
+    "koka": {
+      "url": "https://github.com/mtoohey31/tree-sitter-koka",
+      "pin": "96d070c3700692858035f3524cc0ad944cef2594",
+      "hash": "sha256-s1HA7HTzPBIl6Av+1f98b34oGcaOHMb/bBdbjxh1ta8="
+    },
+    "kotlin": {
+      "url": "https://github.com/fwcd/tree-sitter-kotlin",
+      "pin": "a4f71eb9b8c9b19ded3e0e9470be4b1b77c2b569",
+      "hash": "sha256-aRMqhmZKbKoggtBOgtFIq0xTP+PgeD3Qz6DPJsAFPRQ="
+    },
+    "latex": {
+      "url": "https://github.com/latex-lsp/tree-sitter-latex",
+      "pin": "8c75e93cd08ccb7ce1ccab22c1fbd6360e3bcea6",
+      "hash": "sha256-zkp4De2eBoOsPZRHHT3mIPVWFPYboTvn6AQ4AkwXhFE="
+    },
+    "lean": {
+      "url": "https://github.com/Julian/tree-sitter-lean",
+      "pin": "efe6b87145608d12f5996bd7f0cf6095a0e82261",
+      "hash": "sha256-MF+LRzhDw3V/l/h11ZTyWCUCm3b+g0oyOdaCZMVlJc4="
+    },
+    "llvm": {
+      "url": "https://github.com/benwilliamgraham/tree-sitter-llvm",
+      "pin": "c14cb839003348692158b845db9edda201374548",
+      "hash": "sha256-L3XwPhvwIR/mUbugMbaHS9dXyhO7bApv/gdlxQ+2Bbo="
+    },
+    "lua": {
+      "url": "https://github.com/tree-sitter-grammars/tree-sitter-lua",
+      "pin": "d76023017f7485eae629cb60d406c7a1ca0f40c9",
+      "hash": "sha256-tf71uJ4RpEfUdhdaHhp1MTT96kzN4O1wJ7SzpUfT3+Y="
+    },
+    "make": {
+      "url": "https://github.com/alemuller/tree-sitter-make",
+      "pin": "a4b9187417d6be349ee5fd4b6e77b4172c6827dd",
+      "hash": "sha256-qQqapnKKH5X8rkxbZG5PjnyxvnpyZHpFVi/CLkIn/x0="
+    },
+    "markdown": {
+      "url": "https://github.com/tree-sitter-grammars/tree-sitter-markdown",
+      "pin": "2dfd57f547f06ca5631a80f601e129d73fc8e9f0",
+      "hash": "sha256-IYqh6JT74deu1UU4Nyls9Eg88BvQeYEta2UXZAbuZek="
+    },
+    "markdown.inline": {
+      "url": "https://github.com/tree-sitter-grammars/tree-sitter-markdown",
+      "pin": "2dfd57f547f06ca5631a80f601e129d73fc8e9f0",
+      "hash": "sha256-IYqh6JT74deu1UU4Nyls9Eg88BvQeYEta2UXZAbuZek="
+    },
+    "mermaid": {
+      "url": "https://github.com/monaqa/tree-sitter-mermaid",
+      "pin": "d787c66276e7e95899230539f556e8b83ee16f6d",
+      "hash": "sha256-JwQ3jfwwOvM9eJWP/D3wXUBDysRxpa+mktYFajwA3IA="
+    },
+    "nim": {
+      "url": "https://github.com/alaviss/tree-sitter-nim",
+      "pin": "c5f0ce3b65222f5dbb1a12f9fe894524881ad590",
+      "hash": "sha256-KzAZf5vgrdp33esrgle71i0m52MvRJ3z/sMwzb+CueU="
+    },
+    "nix": {
+      "url": "https://github.com/nix-community/tree-sitter-nix",
+      "pin": "1b69cf1fa92366eefbe6863c184e5d2ece5f187d",
+      "hash": "sha256-JaJRikijCXnKAuKA445IIDaRvPzGhLFM29KudaFsSVM="
+    },
+    "nu": {
+      "url": "https://github.com/nushell/tree-sitter-nu",
+      "pin": "358c4f509eb97f0148bbd25ad36acc729819b9c1",
+      "hash": "sha256-DH0w2QdEqJskvhXlBf0sJeYReuHfiI/mFHUPE9p+Ie8="
+    },
+    "ocaml": {
+      "url": "https://github.com/tree-sitter/tree-sitter-ocaml",
+      "pin": "9965d208337d88bbf1a38ad0b0fe49e5f5ec9677",
+      "hash": "sha256-9Y/eZNsKkz8RKjMn5RIAPITkDQTWdSc/fBXzxMg1ViQ="
+    },
+    "ocaml-interface": {
+      "url": "https://github.com/tree-sitter/tree-sitter-ocaml",
+      "pin": "9965d208337d88bbf1a38ad0b0fe49e5f5ec9677",
+      "hash": "sha256-9Y/eZNsKkz8RKjMn5RIAPITkDQTWdSc/fBXzxMg1ViQ="
+    },
+    "pest": {
+      "url": "https://github.com/pest-parser/tree-sitter-pest",
+      "pin": "c19629a0c50e6ca2485c3b154b1dde841a08d169",
+      "hash": "sha256-S5qg/LLPlMmNtRTTi7vW8y/c+zcId7ADmMqIt0gqJBo="
+    },
+    "purescript": {
+      "url": "https://github.com/postsolar/tree-sitter-purescript/",
+      "pin": "5ef5592674ea42de75fc2792972e4ea0b6e3da6c",
+      "hash": "sha256-V9cuENH/tpXt9mfZqJ2v4dxJvbwEHU8Ri+UxQafWemY="
+    },
+    "python": {
+      "url": "https://github.com/tree-sitter/tree-sitter-python",
+      "pin": "4bfdd9033a2225cc95032ce77066b7aeca9e2efc",
+      "hash": "sha256-hXNxa895SyNOG7PH2vAIkWbcMjZDjWYDsCafBZuvnT0="
+    },
+    "qmljs": {
+      "url": "https://github.com/yuja/tree-sitter-qmljs",
+      "pin": "0889da4632bba3ec6f39ef4102625654890c15c1",
+      "hash": "sha256-Twj2taG7xFTPXTvzDcWeIqxUAkuhsybwZvtwK/HiruE="
+    },
+    "ruby": {
+      "url": "https://github.com/tree-sitter/tree-sitter-ruby",
+      "pin": "206c7077164372c596ffa8eaadb9435c28941364",
+      "hash": "sha256-1kQ3RP2lJ0vwvVmKAQYNyPjltEKZLiZ4iI8iIxcRGd8="
+    },
+    "rust": {
+      "url": "https://github.com/tree-sitter/tree-sitter-rust",
+      "pin": "1f63b33efee17e833e0ea29266dd3d713e27e321",
+      "hash": "sha256-HV7zMwO3ZMaHqX5cV43iwuC+QM7ecApZ2U/hbXuM34c="
+    },
+    "rust-format-args": {
+      "url": "https://github.com/nik-rev/tree-sitter-rustfmt",
+      "pin": "2ca0bdd763d0c9dbb1d0bd14aea7544cbe81309c",
+      "hash": "sha256-DkqyiywDKFzDTPwFnbfBE+H3upbUOXmUgoS5t+tJ0ho="
+    },
+    "scheme": {
+      "url": "https://github.com/6cdh/tree-sitter-scheme",
+      "pin": "af3af6c9356b936f8a515a1e449c32e804c2b1a8",
+      "hash": "sha256-s9AoMNYnKvzr969aujgwUaVn4WoRaZ5snfFEF73KUGA="
+    },
+    "scss": {
+      "url": "https://github.com/serenadeai/tree-sitter-scss",
+      "pin": "c478c6868648eff49eb04a4df90d703dc45b312a",
+      "hash": "sha256-BFtMT6eccBWUyq6b8UXRAbB1R1XD3CrrFf1DM3aUI5c="
+    },
+    "task": {
+      "url": "https://github.com/alexanderbrevig/tree-sitter-task",
+      "pin": "f2cb435c5dbf3ee19493e224485d977cb2d36d8b",
+      "hash": "sha256-zBEAROWfH6+G2sCBIN/F83byfq8dKCecokIqazQ74n0="
+    },
+    "toml": {
+      "url": "https://github.com/ikatyang/tree-sitter-toml",
+      "pin": "7cff70bbcbbc62001b465603ca1ea88edd668704",
+      "hash": "sha256-jcGcbGqBi63YaqxIXswGk3fycXPILEW50mOFLcaXNwA="
+    },
+    "typescript": {
+      "url": "https://github.com/tree-sitter/tree-sitter-typescript",
+      "pin": "b1bf4825d9eaa0f3bdeb1e52f099533328acfbdf",
+      "hash": "sha256-oZKit8kScXcOptmT2ckywL5JlAVe+wuwhuj6ThEI5OQ="
+    },
+    "typst": {
+      "url": "https://github.com/uben0/tree-sitter-typst",
+      "pin": "13863ddcbaa7b68ee6221cea2e3143415e64aea4",
+      "hash": "sha256-n6RTRMJS3h+g+Wawjb7I9NJbz+w/SGi+DQVj1jiyGaU="
+    },
+    "unison": {
+      "url": "https://github.com/kylegoetz/tree-sitter-unison",
+      "pin": "3c97db76d3cdbd002dfba493620c2d5df2fd6fa9",
+      "hash": "sha256-xveOQpCCkYdeiPkRbFlPNfXOpWW0lzCxfQbxXz+eurM="
+    },
+    "verilog": {
+      "url": "https://github.com/tree-sitter/tree-sitter-verilog",
+      "pin": "4457145e795b363f072463e697dfe2f6973c9a52",
+      "hash": "sha256-l4DgThuP9EFU55YQ9lgvVP/8pXojOllQ870gRsBF3FE="
+    },
+    "vue": {
+      "url": "https://github.com/ikatyang/tree-sitter-vue",
+      "pin": "91fe2754796cd8fba5f229505a23fa08f3546c06",
+      "hash": "sha256-NeuNpMsKZUP5mrLCjJEOSLD6tlJpNO4Z/rFUqZLHE1A="
+    },
+    "xml": {
+      "url": "https://github.com/RenjiSann/tree-sitter-xml",
+      "pin": "48a7c2b6fb9d515577e115e6788937e837815651",
+      "hash": "sha256-8c/XtnffylxiqX3Q7VFWlrk/655FG2pwqYrftGpnVxI="
+    },
+    "yaml": {
+      "url": "https://github.com/ikatyang/tree-sitter-yaml",
+      "pin": "0e36bed171768908f331ff7dff9d956bae016efb",
+      "hash": "sha256-bpiT3FraOZhJaoiFWAoVJX1O+plnIi8aXOW2LwyU23M="
+    },
+    "zig": {
+      "url": "https://github.com/tree-sitter-grammars/tree-sitter-zig",
+      "pin": "eb7d58c2dc4fbeea4745019dee8df013034ae66b",
+      "hash": "sha256-iyb79SiMsV94RrWH/1Oi2aKBiX5io0Dp+zZf8qWZHwg="
+    }
+  },
+  "queries": {
+    "astro": {
+      "url": "https://git.sr.ht/~hadronized/kak-tree-sitter",
+      "pin": "3bb01001d93c087c888611bde6ac1254d7338dde",
+      "hash": "sha256-eSa+22fYXZWkxcGBMk16ibbbvo/eDzn9C+2IO0Xzq74="
+    },
+    "awk": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    },
+    "bash": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "d546a799e579b0cf437bbc0695898e60e216fc27",
+      "hash": "sha256-eOImhEfbnES9S1AqAcDZ4qmKLHwrFv7glrCO6OBEPUc="
+    },
+    "bibtex": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    },
+    "c": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    },
+    "cmake": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    },
+    "comment": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    },
+    "cpp": {
+      "url": "https://git.sr.ht/~hadronized/kak-tree-sitter",
+      "pin": "63cd42de7d7612d9b493074c06a2075ea1a2c899",
+      "hash": "sha256-rbfadnZMWk416wlKQ0eK6U6zxAB/WCghGI3l8luUG1I="
+    },
+    "crystal": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "c96642125f87b7f2ca186662c5885d129262133e",
+      "hash": "sha256-NBn7Fjm7d9QDCzx6yqaZleuH8FeHYr4lNyctXoXuUOs="
+    },
+    "csharp": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    },
+    "css": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    },
+    "devicetree": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "b74e2694124b9d269d05f6aace42d4756c3bb724",
+      "hash": "sha256-lpNWO7lV/GzkWwWYuAkAkEpWylsYComA7IntWPScYq0="
+    },
+    "diff": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    },
+    "elixir": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    },
+    "fish": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    },
+    "git-commit": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    },
+    "glsl": {
+      "url": "https://git.sr.ht/~hadronized/kak-tree-sitter",
+      "pin": "3bb01001d93c087c888611bde6ac1254d7338dde",
+      "hash": "sha256-eSa+22fYXZWkxcGBMk16ibbbvo/eDzn9C+2IO0Xzq74="
+    },
+    "go": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    },
+    "haskell": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    },
+    "html": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    },
+    "hyprlang": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    },
+    "ini": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    },
+    "java": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    },
+    "javascript": {
+      "url": "https://git.sr.ht/~hadronized/kak-tree-sitter",
+      "pin": "3bb01001d93c087c888611bde6ac1254d7338dde",
+      "hash": "sha256-eSa+22fYXZWkxcGBMk16ibbbvo/eDzn9C+2IO0Xzq74="
+    },
+    "json": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    },
+    "jsonc": {
+      "url": "https://git.sr.ht/~hadronized/kak-tree-sitter",
+      "pin": "55a8f803c3edc3b07af96199c6158f6e4c77b170",
+      "hash": "sha256-6KoX/gqXgSb22g9JSvfaVM7am9p9IhyGlCdCKFtTVY8="
+    },
+    "jsx": {
+      "url": "https://git.sr.ht/~hadronized/kak-tree-sitter",
+      "pin": "2e5b7841b70b91cfa1c91fe24d2d9db54b80ae10",
+      "hash": "sha256-b0Q33mu/CkdokwR7umr44+h/mx9t4KDY2zo83mNeX1Q="
+    },
+    "julia": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "a3b64b6da2ece01fab8f7590c4252d07993c5e2b",
+      "hash": "sha256-Mgov4qEBHAlEgKfabSqpFlDszznAhokt516AmQ3iTkI="
+    },
+    "just": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "f6878f62f74430cff188e7978d06c5ed143179e9",
+      "hash": "sha256-wYUaAhGSetByNQrwUhppxNwubtP8BK3zfhOIllm5mEE="
+    },
+    "kdl": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "18ca4809cad7a237ac3d42b4d19f493b6751b44f",
+      "hash": "sha256-Taj0v9ncJWWzle7BtQyv97kqNOF9SuYxeCq1K4wRQ4I="
+    },
+    "koka": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    },
+    "kotlin": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    },
+    "latex": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    },
+    "lean": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    },
+    "llvm": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    },
+    "lua": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "f9f5fe6b12a41b859e56d1d7da225a10b76814ea",
+      "hash": "sha256-1zywx/GmLN/8s6eNxK/j4NX/6mgwPCFt9OmB/6c2jZU="
+    },
+    "make": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    },
+    "markdown": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "63eb1b870c411c2760c1ac28b0be704430f21439",
+      "hash": "sha256-qxQhY0JvwZKM9/QfyWQQeCo9F3yk6snmZwc8iEFr4DQ="
+    },
+    "markdown.inline": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "56ccaedffbb8011e36012278e2a4861a8d435a60",
+      "hash": "sha256-qJdU6fyR7bYFesnxqaNCKVLviWUJgI9OcRx2i9L79gw="
+    },
+    "mermaid": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "036729211a94d058b835f5ee212ab15de83bc037",
+      "hash": "sha256-pPktfkA5r1zhza2Gw+u7K4g/s9EfpXXMh7m/IQ3mIbs="
+    },
+    "nim": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    },
+    "nix": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    },
+    "nu": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    },
+    "ocaml": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "a3b64b6da2ece01fab8f7590c4252d07993c5e2b",
+      "hash": "sha256-Mgov4qEBHAlEgKfabSqpFlDszznAhokt516AmQ3iTkI="
+    },
+    "ocaml-interface": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "a3b64b6da2ece01fab8f7590c4252d07993c5e2b",
+      "hash": "sha256-Mgov4qEBHAlEgKfabSqpFlDszznAhokt516AmQ3iTkI="
+    },
+    "pest": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "b40ea7e73e505f9c10cb04421a8de91575f5c68f",
+      "hash": "sha256-kKLDbRTqnqJmz1c9RIrxcmVUUDFSX7plogvKUBvDOi4="
+    },
+    "purescript": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    },
+    "python": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    },
+    "qmljs": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    },
+    "ruby": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    },
+    "rust": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "2baff46b2578d78d817b9e128e8cc00345541f0b",
+      "hash": "sha256-cXzTGHrZsT4wSxlLvw2ZlHPVjC/MA2W0sI/KF1yStbY="
+    },
+    "rust-format-args": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "1023e8f96482f725465bf2bc059e274f6ac0bb26",
+      "hash": "sha256-q9gzQUArKoxKjLdRyABqVKoOEPQvhC068+/bBh7Ogzc="
+    },
+    "scheme": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    },
+    "scss": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    },
+    "task": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    },
+    "toml": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    },
+    "tsx": {
+      "url": "https://git.sr.ht/~hadronized/kak-tree-sitter",
+      "pin": "2e5b7841b70b91cfa1c91fe24d2d9db54b80ae10",
+      "hash": "sha256-b0Q33mu/CkdokwR7umr44+h/mx9t4KDY2zo83mNeX1Q="
+    },
+    "typescript": {
+      "url": "https://git.sr.ht/~hadronized/kak-tree-sitter",
+      "pin": "c4262970488d2c193f961200d153f54feee83ab9",
+      "hash": "sha256-+/j1oDiytzEFPnUzJD8h2FhWGeS+/RPqR0BobSr7cko="
+    },
+    "typst": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    },
+    "unison": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    },
+    "verilog": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    },
+    "vue": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "205e7ece70c52a7d921ea014e1017c41488e37e5",
+      "hash": "sha256-sSep3SEsh53545RLaM7T1Eg+4frPmPScQKE6zmts9Ic="
+    },
+    "xml": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    },
+    "yaml": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    },
+    "zig": {
+      "url": "https://github.com/helix-editor/helix",
+      "pin": "7275b7f85014aad7e15d4987ec4f2249572eecfb",
+      "hash": "sha256-a4zUQTpHagz1Kb3kLxcflsiF05FsHlrzXEuCjbzjAOM="
+    }
+  }
+}

@@ -2,7 +2,6 @@
   lib,
   rustPlatform,
   fetchFromSourcehut,
-  nix-update-script,
   testers,
   kak-tree-sitter-unwrapped,
 }:
@@ -21,7 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-5hCBFQsZpUyPlgO/iUmBXmdcC5ceG1w4IiB27oBxRxQ=";
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = ./update.sh;
     tests.version = testers.testVersion { package = kak-tree-sitter-unwrapped; };
   };
 
