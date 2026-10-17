@@ -9750,8 +9750,6 @@ with pkgs;
 
   hplipWithPlugin = hplip.override { withPlugin = true; };
 
-  hjson = with python3Packages; toPythonApplication hjson;
-
   libjack2 = jack2.override { prefix = "lib"; };
 
   jack_autoconnect = jack-autoconnect;
