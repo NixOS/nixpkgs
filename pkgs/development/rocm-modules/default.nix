@@ -241,15 +241,15 @@ let
           ) { } attrPaths;
       };
 
-      rocm-bandwidth-test = self.callPackage ./rocm-bandwidth-test {
-        rocmPackages = self;
-      };
-
       rocm-tests = self.callPackage ./rocm-tests {
         rocmPackages = self;
       };
     }
     // lib.optionalAttrs config.allowAliases {
+      rocm-bandwidth-test = throw ''
+        'rocm-bandwidth-test' has been removed as it is no longer maintained upstream.
+      ''; # Added 2026-10-14
+
       rpp-opencl = throw ''
         'rpp-opencl' has been removed as it has been broken for a year and has no consuming packages.
         Use 'rpp' or 'rpp-cpu' instead.
