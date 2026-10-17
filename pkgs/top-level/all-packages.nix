@@ -3072,9 +3072,7 @@ with pkgs;
   clangStdenv = if stdenv.cc.isClang then stdenv else lowPrio llvmPackages.stdenv;
   libcxxStdenv = if stdenv.hostPlatform.isDarwin then stdenv else lowPrio llvmPackages.libcxxStdenv;
 
-  comby = callPackage ../development/tools/comby {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_14;
-  };
+  comby = callPackage ../development/tools/comby { };
 
   inherit (rocqPackages_9_2) compcert;
 
