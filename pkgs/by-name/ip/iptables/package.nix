@@ -16,6 +16,8 @@
   bashNonInteractive,
   nftablesCompat ? true,
   gitUpdater,
+  xtablesAddons ? false,
+  xtables-addons,
 
   # For tests
   vmTools,
@@ -77,15 +79,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  postInstall = lib.optionalString nftablesCompat ''
-    rm $out/sbin/{iptables,iptables-restore,iptables-save,ip6tables,ip6tables-restore,ip6tables-save}
-    ln -sv xtables-nft-multi $out/bin/iptables
-    ln -sv xtables-nft-multi $out/bin/iptables-restore
-    ln -sv xtables-nft-multi $out/bin/iptables-save
-    ln -sv xtables-nft-multi $out/bin/ip6tables
-    ln -sv xtables-nft-multi $out/bin/ip6tables-restore
-    ln -sv xtables-nft-multi $out/bin/ip6tables-save
-  '';
+  postInstall =
+    lib.optionalString nftablesCompat ''
+      rm $out/sbin/{iptables,iptables-restore,iptables-save,ip6tables,ip6tables-restore,ip6tables-save}
+      ln -sv xtables-nft-multi $out/bin/iptables
+      ln -sv xtables-nft-multi $out/bin/iptables-restore
+      ln -sv xtables-nft-multi $out/bin/iptables-save
+      ln -sv xtables-nft-multi $out/bin/ip6tables
+      ln -sv xtables-nft-multi $out/bin/ip6tables-restore
+      ln -sv xtables-nft-multi $out/bin/ip6tables-save
+    ''
+    + (lib.optionalString xtablesAddons ''
+      find "${xtables-addons.out}/lib/xtables" \
+        -type f \
+        -name "*.so" \
+        -exec install -pm0755 '{}' "$lib/lib/xtables/" \; ;
+    '');
 
   outputChecks.lib.disallowedRequisites = [
     bash
