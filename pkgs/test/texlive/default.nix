@@ -421,6 +421,26 @@ rec {
         l3build install --full --texmfhome "$out"
       '';
 
+  # verify that minted can highlight code via latexminted
+  minted = mkTeXTest {
+    name = "minted";
+    format = "pdflatex";
+    texLive = texliveSmall.withPackages (ps: [ ps.minted ]);
+    text = ''
+      \documentclass{article}
+      \usepackage{minted}
+      \begin{document}
+      \begin{minted}{python}
+      def fib(n):
+          a, b = 0, 1
+          for _ in range(n):
+              a, b = b, a + b
+          return a
+      \end{minted}
+      \end{document}
+    '';
+  };
+
   # verify that the restricted mode gets enabled when
   # needed (detected by checking if it disallows --gscmd)
   repstopdf =
