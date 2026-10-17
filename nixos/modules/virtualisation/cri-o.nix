@@ -5,7 +5,6 @@
   ...
 }:
 
-with lib;
 let
   cfg = config.virtualisation.cri-o;
 
@@ -21,15 +20,14 @@ let
 in
 {
   meta = {
-    teams = [ teams.podman ];
+    teams = [ lib.teams.podman ];
   };
 
   options.virtualisation.cri-o = {
-    enable = mkEnableOption "Container Runtime Interface for OCI (CRI-O)";
+    enable = lib.mkEnableOption "Container Runtime Interface for OCI (CRI-O)";
 
-    storageDriver = mkOption {
-      type = types.enum [
-        "aufs"
+    storageDriver = lib.mkOption {
+      type = lib.types.enum [
         "btrfs"
         "devmapper"
         "overlay"
@@ -40,8 +38,8 @@ in
       description = "Storage driver to be used";
     };
 
-    logLevel = mkOption {
-      type = types.enum [
+    logLevel = lib.mkOption {
+      type = lib.types.enum [
         "trace"
         "debug"
         "info"
@@ -53,31 +51,31 @@ in
       description = "Log level to be used";
     };
 
-    pauseImage = mkOption {
-      type = types.nullOr types.str;
+    pauseImage = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = "Override the default pause image for pod sandboxes";
-      example = "k8s.gcr.io/pause:3.2";
+      example = "registry.k8s.io/pause:3.10";
     };
 
-    pauseCommand = mkOption {
-      type = types.nullOr types.str;
+    pauseCommand = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = "Override the default pause command";
       example = "/pause";
     };
 
-    runtime = mkOption {
-      type = types.nullOr types.str;
+    runtime = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = "Override the default runtime";
       example = "crun";
     };
 
-    extraPackages = mkOption {
-      type = with types; listOf package;
+    extraPackages = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
       default = [ ];
-      example = literalExpression ''
+      example = lib.literalExpression ''
         [
           pkgs.gvisor
         ]
@@ -87,8 +85,8 @@ in
       '';
     };
 
-    package = mkOption {
-      type = types.package;
+    package = lib.mkOption {
+      type = lib.types.package;
       default = crioPackage;
       internal = true;
       description = ''
@@ -96,14 +94,14 @@ in
       '';
     };
 
-    networkDir = mkOption {
-      type = types.nullOr types.path;
+    networkDir = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = "Override the network_dir option.";
       internal = true;
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       type = format.type;
       default = { };
       description = ''
@@ -113,7 +111,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [
       cfg.package
       pkgs.cri-tools
@@ -125,24 +123,23 @@ in
       storage_driver = cfg.storageDriver;
 
       image = {
-        pause_image = mkIf (cfg.pauseImage != null) cfg.pauseImage;
-        pause_command = mkIf (cfg.pauseCommand != null) cfg.pauseCommand;
+        pause_image = lib.mkIf (cfg.pauseImage != null) cfg.pauseImage;
+        pause_command = lib.mkIf (cfg.pauseCommand != null) cfg.pauseCommand;
       };
 
       network = {
         plugin_dirs = [ "${pkgs.cni-plugins}/bin" ];
-        network_dir = mkIf (cfg.networkDir != null) cfg.networkDir;
+        network_dir = lib.mkIf (cfg.networkDir != null) cfg.networkDir;
       };
 
       runtime = {
         cgroup_manager = "systemd";
         log_level = cfg.logLevel;
-        manage_ns_lifecycle = true;
         pinns_path = "${cfg.package}/bin/pinns";
-        hooks_dir = optional (config.virtualisation.containers.ociSeccompBpfHook.enable) config.boot.kernelPackages.oci-seccomp-bpf-hook;
+        hooks_dir = lib.optional (config.virtualisation.containers.ociSeccompBpfHook.enable) config.boot.kernelPackages.oci-seccomp-bpf-hook;
 
-        default_runtime = mkIf (cfg.runtime != null) cfg.runtime;
-        runtimes = mkIf (cfg.runtime != null) {
+        default_runtime = lib.mkIf (cfg.runtime != null) cfg.runtime;
+        runtimes = lib.mkIf (cfg.runtime != null) {
           "${cfg.runtime}" = { };
         };
       };
