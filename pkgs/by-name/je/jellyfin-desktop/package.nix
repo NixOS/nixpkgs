@@ -88,6 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       jojosch
       paumr
+      irgolic
     ];
     mainProgram = "jellyfin-desktop";
   };
