@@ -290,8 +290,6 @@ with pkgs;
 
   alacritty-graphics = callPackage ../by-name/al/alacritty/package.nix { withGraphics = true; };
 
-  aocd = with python3Packages; toPythonApplication aocd;
-
   cve = with python3Packages; toPythonApplication cvelib;
 
   bloodhound-py = with python3Packages; toPythonApplication bloodhound;
