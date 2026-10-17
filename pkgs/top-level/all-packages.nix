@@ -5876,7 +5876,6 @@ with pkgs;
   openstackclient-full = openstackclient.overridePythonAttrs (oldAttrs: {
     dependencies = oldAttrs.dependencies ++ oldAttrs.optional-dependencies.cli-plugins;
   });
-  heatclient = with python313Packages; toPythonApplication python-heatclient;
   ironicclient = with python313Packages; toPythonApplication python-ironicclient;
   magnumclient = with python313Packages; toPythonApplication python-magnumclient;
   manilaclient = with python313Packages; toPythonApplication python-manilaclient;
