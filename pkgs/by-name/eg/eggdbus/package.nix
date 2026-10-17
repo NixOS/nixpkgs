@@ -28,6 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://hal.freedesktop.org/releases/";
     description = "D-Bus bindings for GObject";
     platforms = lib.platforms.linux;
-    license = lib.licenses.lgpl2;
+    license = lib.licenses.lgpl2Plus;
   };
 })
