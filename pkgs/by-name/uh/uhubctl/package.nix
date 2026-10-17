@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       prusnak
-      carlossless
+      karstx
     ];
     platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "uhubctl";
