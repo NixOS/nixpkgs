@@ -25,6 +25,8 @@ lib.extendMkDerivation {
     {
       pname = "kops";
 
+      __structuredAttrs = true;
+
       src = fetchFromGitHub {
         rev = rev;
         owner = "kubernetes";
