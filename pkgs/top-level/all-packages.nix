@@ -3043,6 +3043,7 @@ with pkgs;
   codon = callPackage ../development/compilers/codon {
     inherit (llvmPackages) lld stdenv;
   };
+  codexia-web = callPackage ../by-name/co/codexia/web-package.nix { };
 
   colmapWithCuda = colmap.override { cudaSupport = true; };
 
