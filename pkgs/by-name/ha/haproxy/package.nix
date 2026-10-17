@@ -13,7 +13,7 @@
   aws-lc,
   libressl,
   openssl,
-  lua5_4,
+  lua5_5,
   pcre2,
 }:
 
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     libxcrypt
   ]
-  ++ lib.optional useLua lua5_4
+  ++ lib.optional useLua lua5_5
   ++ lib.optional usePcre pcre2;
 
   # TODO: make it work on bsd as well
@@ -96,8 +96,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals useLua [
     "USE_LUA=yes"
     "LUA_LIB_NAME=lua"
-    "LUA_LIB=${lua5_4}/lib"
-    "LUA_INC=${lua5_4}/include"
+    "LUA_LIB=${lua5_5}/lib"
+    "LUA_INC=${lua5_5}/include"
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     "USE_GETADDRINFO=1"
