@@ -1498,8 +1498,6 @@ with pkgs;
 
   seaborn-data = callPackage ../tools/misc/seaborn-data { };
 
-  online-judge-tools = with python3.pkgs; toPythonApplication online-judge-tools;
-
   inherit (ocamlPackages) patdiff;
 
   patool = with python3Packages; toPythonApplication patool;
