@@ -1237,6 +1237,8 @@ self: super: with self; {
 
   app-model = callPackage ../development/python-modules/app-model { };
 
+  appconfigpy = callPackage ../development/python-modules/appconfigpy { };
+
   appdirs = callPackage ../development/python-modules/appdirs { };
 
   appimage = callPackage ../development/python-modules/appimage { };
@@ -5611,6 +5613,8 @@ self: super: with self; {
 
   env-canada = callPackage ../development/python-modules/env-canada { };
 
+  envinfopy = callPackage ../development/python-modules/envinfopy { };
+
   environ-config = callPackage ../development/python-modules/environ-config { };
 
   environmental-override = callPackage ../development/python-modules/environmental-override { };
@@ -5764,6 +5768,8 @@ self: super: with self; {
   example-robot-data = callPackage ../development/python-modules/example-robot-data {
     inherit (pkgs) example-robot-data;
   };
+
+  excelrd = callPackage ../development/python-modules/excelrd { };
 
   exceptiongroup = callPackage ../development/python-modules/exceptiongroup { };
 
@@ -11366,6 +11372,8 @@ self: super: with self; {
 
   msg-parser = callPackage ../development/python-modules/msg-parser { };
 
+  msgfy = callPackage ../development/python-modules/msgfy { };
+
   msgpack = callPackage ../development/python-modules/msgpack { };
 
   msgpack-numpy = callPackage ../development/python-modules/msgpack-numpy { };
@@ -16490,6 +16498,8 @@ self: super: with self; {
 
   pytabix = callPackage ../development/python-modules/pytabix { };
 
+  pytablereader = callPackage ../development/python-modules/pytablereader { };
+
   pytablewriter = callPackage ../development/python-modules/pytablewriter { };
 
   pytaglib = callPackage ../development/python-modules/pytaglib { };
@@ -18221,6 +18231,8 @@ self: super: with self; {
   retryhttp = callPackage ../development/python-modules/retryhttp { };
 
   retrying = callPackage ../development/python-modules/retrying { };
+
+  retryrequests = callPackage ../development/python-modules/retryrequests { };
 
   returns = callPackage ../development/python-modules/returns { };
 
