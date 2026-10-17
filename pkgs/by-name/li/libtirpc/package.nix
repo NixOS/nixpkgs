@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libtirpc";
-  version = "1.3.7";
+  version = "1.3.8";
 
   src = fetchurl {
     url = "https://git.linux-nfs.org/?p=steved/libtirpc.git;a=snapshot;h=refs/tags/libtirpc-${
       lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     };sf=tgz";
-    hash = "sha256-VGftEr3xzCp8O3oqCjIZozlq599gxN5IsHBRaG37GP4=";
+    hash = "sha256-tvozBL+wAI59mWnpfp/DrkQ3Em0KUBl9rsKXKpp6gIM=";
     name = "${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
   };
 
