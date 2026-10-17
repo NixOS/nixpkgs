@@ -2651,8 +2651,6 @@ with pkgs;
 
   xorriso = libisoburn;
 
-  yapf = with python3Packages; toPythonApplication yapf;
-
   yarn-berry_4 = yarn-berry.override { berryVersion = 4; };
   yarn-berry_4-fetcher = callPackage ../by-name/ya/yarn-berry/fetcher {
     yarn-berry = yarn-berry_4;
