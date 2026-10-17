@@ -8737,8 +8737,6 @@ with pkgs;
 
   typstPackages = recurseIntoAttrs typst.packages;
 
-  ueberzug = with python3Packages; toPythonApplication ueberzug;
-
   uefitoolPackages = recurseIntoAttrs (callPackage ../tools/system/uefitool/variants.nix { });
   uefitool = uefitoolPackages.new-engine;
 
