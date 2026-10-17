@@ -13760,6 +13760,8 @@ self: super: with self; {
 
   playwrightcapture = callPackage ../development/python-modules/playwrightcapture { };
 
+  pleroma-bot = callPackage ../development/python-modules/pleroma-bot { };
+
   plexapi = callPackage ../development/python-modules/plexapi { };
 
   plexauth = callPackage ../development/python-modules/plexauth { };
