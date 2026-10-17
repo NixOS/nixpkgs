@@ -88,17 +88,6 @@ in
       "--machine=${config.system.name}"
       "--bind-ro=/nix/store:/nix/store"
 
-      # systemd-nspawn does some cleverness to mount a procfs and sysfs in an
-      # unprivileged container, see
-      # <https://github.com/systemd/systemd/blob/v258.2/src/nspawn/nspawn.c#L4341-L4349>.
-      # Unfortunately, this doesn't work in the Nix build sandbox as we do not
-      # have permission to mount filesystems of type `sysfs` nor `procfs`.
-      # Fortunately, the build sandbox does provide a `/proc` and `/sys` that
-      # we can just forward onto the container.
-      "--private-users=no"
-      "--bind=/proc:/run/host/proc"
-      "--bind=/sys:/run/host/sys"
-
       # From `man systemd-nspawn`:
       # > Use --keep-unit and --register=no in combination to disable any
       # > kind of unit allocation or registration with systemd-machined.
