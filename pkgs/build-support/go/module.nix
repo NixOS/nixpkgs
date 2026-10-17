@@ -93,7 +93,7 @@ lib.extendMkDerivation {
               in
               "${prefix}go-modules${suffix}";
 
-            nativeBuildInputs = (finalAttrs.nativeBuildInputs or [ ]) ++ [
+            nativeBuildInputs = args.modNativeBuildInputs or [ ] ++ [
               go
               gitMinimal
               cacert
@@ -109,7 +109,7 @@ lib.extendMkDerivation {
             patches = finalAttrs.patches or [ ];
             patchFlags = finalAttrs.patchFlags or [ ];
             postPatch = finalAttrs.postPatch or "";
-            preBuild = finalAttrs.preBuild or "";
+            preBuild = finalAttrs.modPreBuild or "";
             postBuild = finalAttrs.modPostBuild or "";
             sourceRoot = finalAttrs.sourceRoot or "";
             setSourceRoot = finalAttrs.setSourceRoot or "";
