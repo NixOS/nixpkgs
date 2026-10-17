@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "json-repair";
-  version = "0.63.5";
+  version = "0.64.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mangiucugna";
     repo = "json_repair";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hqVSZoTqhMEQhymhX+prUYWOXogEJ0XPK7r5DdPwg44=";
+    hash = "sha256-LeZy/aFjDeAMp7DMT0KS5XS6cnkTkgu6BpsZcFAptcs=";
   };
 
   build-system = [ setuptools ];
