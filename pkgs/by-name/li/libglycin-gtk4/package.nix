@@ -7,7 +7,6 @@
   glib,
   gobject-introspection,
   gtk4,
-  lcms2,
   libglycin,
   libseccomp,
   meson,
@@ -53,7 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     fontconfig
     glib
     libseccomp
-    lcms2
     gtk4
   ];
 
@@ -63,7 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     # TODO: these should not be required by .pc file
     fontconfig
     libseccomp
-    lcms2
   ];
 
   mesonFlags = [
@@ -79,17 +76,16 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs \
       build-aux/crates-version.py
-    substituteInPlace libglycin/meson.build --replace-fail \
-      "cargo_output = cargo_target_dir / rust_target" \
-      "cargo_output = cargo_target_dir / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target"
+
+    substituteInPlace meson.build --replace-fail \
+      "meson.get_external_property('rust_target')" \
+      "'${stdenv.hostPlatform.rust.cargoShortTarget}'"
   '';
 
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     moveToOutput "share/doc" "$devdoc"
   '';
-
-  env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
 
   strictDeps = true;
 

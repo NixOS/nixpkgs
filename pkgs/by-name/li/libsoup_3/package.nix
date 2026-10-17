@@ -19,8 +19,8 @@
   python3,
   gi-docgen,
   brotli,
-  libnghttp2,
   zstd,
+  libnghttp2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -60,8 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
     libpsl
     glib.out
     brotli
-    libnghttp2
     zstd
+    libnghttp2
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libsysprof-capture
