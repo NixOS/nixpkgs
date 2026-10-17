@@ -30,7 +30,7 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "nnaudio";
-  version = "0.3.4";
+  version = "0.2.6";
   pyproject = true;
   __structuredAttrs = true;
 
