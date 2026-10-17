@@ -2385,8 +2385,6 @@ with pkgs;
 
   pulumiPackages = recurseIntoAttrs pulumi.pkgs;
 
-  py3dtiles = with python3Packages; toPythonApplication py3dtiles;
-
   patch = gnupatch;
 
   pcscliteWithPolkit = pcsclite.override {
