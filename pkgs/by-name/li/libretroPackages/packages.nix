@@ -94,6 +94,8 @@ lib.makeScope newScope (self: {
 
   hatari = self.callPackage ./cores/hatari.nix { };
 
+  irogb = self.callPackage ./cores/irogb.nix { };
+
   jaxe = self.callPackage ./cores/jaxe.nix { };
 
   mame = self.callPackage ./cores/mame.nix { };
