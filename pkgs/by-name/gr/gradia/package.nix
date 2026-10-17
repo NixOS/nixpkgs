@@ -98,5 +98,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ];
     mainProgram = "gradia";
     platforms = lib.platforms.linux;
+    teams = [ lib.teams.gnome-circle ];
   };
 })
