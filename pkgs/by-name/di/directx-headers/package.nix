@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "directx-headers";
-  version = "1.619.1";
+  version = "1.721.2";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "DirectX-Headers";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-j/oPD44hjk8yH2EUX3gFpBOKWQvoRqBiO9ZH0z/lj/8=";
+    hash = "sha256-mZAyjOEeKzikc1HXbkalqJnHAD8/L6PQJDjJzUzAKXA=";
   };
 
   nativeBuildInputs = [
