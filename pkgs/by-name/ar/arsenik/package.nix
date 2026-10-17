@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "arsenik";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "OneDeadKey";
     repo = "arsenik";
     tag = finalAttrs.version;
-    hash = "sha256-qY+SRWvZoy3iwsoZbzN5+TVWNIe3WWXkUGu/9MT20AU=";
+    hash = "sha256-DqLbkK8vmPm62mt6z7pubbGRkolVqKWBkNAS47ffE+M=";
   };
 
   dontConfigure = true;
