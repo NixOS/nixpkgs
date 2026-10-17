@@ -1,4 +1,13 @@
 {
+  "module-programs-tlog": [
+    "index.html#module-programs-tlog"
+  ],
+  "module-programs-tlog-replay": [
+    "index.html#module-programs-tlog-replay"
+  ],
+  "module-programs-tlog-usage": [
+    "index.html#module-programs-tlog-usage"
+  ],
   "module-services-netbird-relay": [
     "index.html#module-services-netbird-relay"
   ],
