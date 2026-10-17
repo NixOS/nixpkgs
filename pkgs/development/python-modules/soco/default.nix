@@ -18,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "soco";
-  version = "0.31.4";
+  version = "0.31.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SoCo";
     repo = "SoCo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-v24UzJ+/TlEBmNYP51UTI96bvi10E5orNFKS5q1bSyE=";
+    hash = "sha256-uXzzhWS0YRWOpUs7o1bqLMHWSv8A+vlliyhdQGw8nRA=";
   };
 
   build-system = [ setuptools ];
