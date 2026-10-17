@@ -21,6 +21,7 @@ lib.extendMkDerivation {
       version,
       src,
       cargoHash,
+      bundleName ? finalAttrs.pname,
       meta,
       env ? { },
       passthru ? { },
