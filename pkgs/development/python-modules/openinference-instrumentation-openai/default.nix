@@ -72,7 +72,11 @@ buildPythonPackage (finalAttrs: {
     "test_tool_calls"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "OpenInference OpenAI SDK Instrumentation";

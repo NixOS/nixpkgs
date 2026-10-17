@@ -47,8 +47,12 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "kiota_http" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "microsoft-kiota-http-v";
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "microsoft-kiota-http-v";
+    };
   };
 
   meta = {

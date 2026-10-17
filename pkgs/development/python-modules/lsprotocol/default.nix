@@ -57,6 +57,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lsprotocol" ];
 
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
+
   meta = {
     description = "Python implementation of the Language Server Protocol";
     homepage = "https://github.com/microsoft/lsprotocol";

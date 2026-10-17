@@ -49,6 +49,11 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
   ];
 
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
+
   meta = {
     description = "one-stop solution for locating CUDA components";
     homepage = "https://github.com/NVIDIA/cuda-python/tree/main/cuda_pathfinder";

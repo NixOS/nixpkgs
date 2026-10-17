@@ -45,6 +45,11 @@ buildPythonPackage rec {
     "tests/test_api.py"
   ];
 
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
+
   meta = {
     description = "Signatures for entire Python programs";
     homepage = "https://github.com/mkdocstrings/griffe";

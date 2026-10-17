@@ -56,11 +56,15 @@ buildPythonPackage (finalAttrs: {
   # No tests
   doCheck = false;
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex=fa4-v(.*)"
-      "--version=unstable"
-    ];
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex=fa4-v(.*)"
+        "--version=unstable"
+      ];
+    };
   };
 
   meta = {

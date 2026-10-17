@@ -73,6 +73,11 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "caldav" ];
 
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
+
   meta = {
     description = "CalDAV (RFC4791) client library";
     homepage = "https://github.com/python-caldav/caldav";
