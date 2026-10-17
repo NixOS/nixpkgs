@@ -169,6 +169,8 @@ let
           else if stdenv.hostPlatform.isLinux then
             if stdenv.hostPlatform.isx86_64 then
               "./Configure linux-x86_64"
+            else if stdenv.hostPlatform.isAarch64 then
+              "./Configure linux-aarch64"
             else if stdenv.hostPlatform.isMicroBlaze then
               "./Configure linux-latomic"
             else if stdenv.hostPlatform.isMips32 then
