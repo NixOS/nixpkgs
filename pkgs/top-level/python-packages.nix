@@ -4795,6 +4795,8 @@ self: super: with self; {
 
   django-oauth-toolkit = callPackage ../development/python-modules/django-oauth-toolkit { };
 
+  django-oauth-toolkit_2 = callPackage ../development/python-modules/django-oauth-toolkit/2.nix { };
+
   django-organizations = callPackage ../development/python-modules/django-organizations { };
 
   django-otp = callPackage ../development/python-modules/django-otp { };
