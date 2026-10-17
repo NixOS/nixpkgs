@@ -2002,8 +2002,6 @@ with pkgs;
     usePulseaudio = true;
   };
 
-  jc = with python3Packages; toPythonApplication jc;
-
   jello = with python3Packages; toPythonApplication jello;
 
   jl = haskellPackages.jl;
