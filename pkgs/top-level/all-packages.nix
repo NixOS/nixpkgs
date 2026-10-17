@@ -8164,7 +8164,6 @@ with pkgs;
         haskell.lib.compose.justStaticExecutables
     )
       haskellPackages.hledger-web;
-  hledger-utils = with python3.pkgs; toPythonApplication hledger-utils;
 
   hpack = haskell.lib.compose.justStaticExecutables haskellPackages.hpack;
 
