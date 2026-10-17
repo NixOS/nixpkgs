@@ -17,6 +17,8 @@ let
 
   # Release tarball contains translations downloaded from crowdin
   releaseTarball = fetchzip {
+    pname = "firefly-iii-release-tarball";
+    inherit version;
     url = "https://github.com/firefly-iii/firefly-iii/releases/download/v${version}/FireflyIII-v${version}.tar.gz";
     stripRoot = false;
     hash = "sha256-ejXSfrsmHfbR5KpVo9VxXEsJWZ2ejS55JPl9P/6QzH8=";
@@ -68,8 +70,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     tests = nixosTests.firefly-iii;
     updateScript = nix-update-script {
       extraArgs = [
-        "--version-regex"
-        "v(\\d+\\.\\d+\\.\\d+)"
+        "--version-regex=v(\\d+\\.\\d+\\.\\d+)"
+        "--subpackage=releaseTarball"
       ];
     };
   };
