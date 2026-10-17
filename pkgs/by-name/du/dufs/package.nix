@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
+  nixosTests,
   stdenv,
   cacert,
 }:
@@ -40,6 +41,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --zsh <($out/bin/dufs --completions zsh)
   '';
 
+  passthru.tests = { inherit (nixosTests) dufs; };
+
   meta = {
     description = "File server that supports static serving, uploading, searching, accessing control, webdav";
     mainProgram = "dufs";
@@ -50,6 +53,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       mit
     ];
     maintainers = with lib.maintainers; [
+      font44
       holymonson
     ];
   };
