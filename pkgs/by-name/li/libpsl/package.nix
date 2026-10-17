@@ -14,6 +14,8 @@
   pkg-config,
   buildPackages,
   publicsuffix-list,
+  useLatestPSL ? false,
+  pslDistFile ? "/etc/publicsuffix/public_suffix_list.dafsa",
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -58,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = lib.optionals useLatestPSL [
     publicsuffix-list
   ];
 
@@ -75,10 +77,16 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     # "--enable-gtk-doc"
     "--enable-man"
-    "--with-psl-distfile=${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat"
+    "PYTHON=${lib.getExe buildPackages.python3}"
+  ]
+  # load the latest PSL at runtime so bumping publicsuffix-list doesn't cause mass rebuilds
+  # path may be changed on non-nixos distros, e.g. "/usr/share/publicsuffix/..."
+  ++ lib.optionals (pslDistFile != null) [
+    "--with-psl-distfile=${pslDistFile}"
+  ]
+  ++ lib.optionals useLatestPSL [
     "--with-psl-file=${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat"
     "--with-psl-testfile=${publicsuffix-list}/share/publicsuffix/test_psl.txt"
-    "PYTHON=${lib.getExe buildPackages.python3}"
   ];
 
   enableParallelBuilding = true;
