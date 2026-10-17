@@ -1724,6 +1724,7 @@
   ./services/web-apps/flame.nix
   ./services/web-apps/flarum.nix
   ./services/web-apps/fluidd.nix
+  ./services/web-apps/fourget.nix
   ./services/web-apps/freescout.nix
   ./services/web-apps/freshrss.nix
   ./services/web-apps/froide-govplan.nix
