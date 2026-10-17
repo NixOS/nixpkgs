@@ -2487,8 +2487,6 @@ with pkgs;
 
   ruby-lsp = rubyPackages.ruby-lsp;
 
-  s3-credentials = with python3Packages; toPythonApplication s3-credentials;
-
   safety-cli = with python3.pkgs; toPythonApplication safety;
 
   segger-jlink-headless = callPackage ../by-name/se/segger-jlink/package.nix { headless = true; };
