@@ -19,7 +19,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cel-python";
-  version = "0.5.0";
+  version = "0.5";
   pyproject = true;
   __structuredAttrs = true;
 
