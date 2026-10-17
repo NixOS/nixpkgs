@@ -340,8 +340,6 @@ One instruction per sentence. Don't pack multiple actions into one sentence.
 2. Run the command.
 3. Check the output.
 
-
-
 Don't bury the negative. Key limitations should be prominent, not a footnote after a positive description.
 
 **Don't:**
