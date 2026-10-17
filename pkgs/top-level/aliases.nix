@@ -326,6 +326,7 @@ mapAliases {
   antigravity-fhsWithPackages = warnAlias "'antigravity-fhsWithPackages' has been renamed to 'antigravity-ide-fhsWithPackages'" antigravity-ide-fhsWithPackages; # Added 2026-05-20
   antlr4_8 = throw "antlr4_8 has been removed. Consider using a more recent version of antlr4"; # Added 2025-10-20
   ao = throw "'ao' has been renamed to/replaced by 'libfive'"; # Converted to throw 2025-10-27
+  aocd = throw "'aocd' has been renamed to 'advent-of-code-data'"; # Added 2026-10-10
   apacheAnt = throw "'apacheAnt' has been renamed to/replaced by 'ant'"; # Converted to throw 2025-10-27
   apacheKafka_3_7 = throw "apacheKafka_2_8 through _4_0 have been removed from nixpkgs as outdated"; # Added 2025-09-27
   apacheKafka_3_8 = throw "apacheKafka_2_8 through _4_0 have been removed from nixpkgs as outdated"; # Added 2025-09-27

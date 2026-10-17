@@ -120,6 +120,8 @@ self: super: with self; {
 
   advantage-air = callPackage ../development/python-modules/advantage-air { };
 
+  advent-of-code-data = callPackage ../development/python-modules/advent-of-code-data { };
+
   aeidon = callPackage ../development/python-modules/aeidon { };
 
   aemet-opendata = callPackage ../development/python-modules/aemet-opendata { };
@@ -1192,8 +1194,6 @@ self: super: with self; {
   anytree = callPackage ../development/python-modules/anytree { inherit (pkgs) graphviz; };
 
   anywidget = callPackage ../development/python-modules/anywidget { };
-
-  aocd = callPackage ../development/python-modules/aocd { };
 
   aocd-example-parser = callPackage ../development/python-modules/aocd-example-parser { };
 
