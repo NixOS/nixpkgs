@@ -17,6 +17,10 @@
   rocmPackages ? { },
   rocmGpuTargets ? rocmPackages.clr.localGpuTargets or rocmPackages.clr.gpuTargets,
 
+  syclSupport ? false,
+  intel-oneapi-toolkit,
+  level-zero,
+
   cpuArchDynamicDispatch ? true,
 
   openclSupport ? false,
@@ -27,6 +31,7 @@
     metalSupport
     openclSupport
     rocmSupport
+    syclSupport
     vulkanSupport
   ],
   blas,
@@ -57,7 +62,14 @@ let
   # It's necessary to consistently use backendStdenv when building with CUDA support,
   # otherwise we get libstdc++ errors downstream.
   # cuda imposes an upper bound on the gcc version
-  effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+  effectiveStdenv =
+    if cudaSupport then
+      cudaPackages.backendStdenv
+    # The SYCL backend needs the oneAPI DPC++ compiler.
+    else if syclSupport then
+      intel-oneapi-toolkit.stdenv
+    else
+      stdenv;
   inherit (lib)
     cmakeBool
     cmakeFeature
@@ -142,9 +154,20 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     optionals cudaSupport cudaBuildInputs
     ++ optionals openclSupport [ clblast ]
     ++ optionals rocmSupport rocmBuildInputs
+    ++ optionals syclSupport [
+      intel-oneapi-toolkit
+      level-zero
+    ]
     ++ optionals blasSupport [ blas ]
     ++ optionals vulkanSupport vulkanBuildInputs
     ++ [ openssl ];
+
+  # Fortify adds __memcpy_chk references to the SYCL device code, which the GPU
+  # driver cannot resolve when it compiles the kernels at runtime.
+  hardeningDisable = optionals syclSupport [
+    "fortify"
+    "fortify3"
+  ];
 
   npmRoot = "tools/ui";
   npmDepsHash = "sha256-a17M+L3nLdRnN6WMB6imPFmwqG2g8uv+gwN0XTAUrf8=";
@@ -178,6 +201,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (cmakeBool "GGML_HIP" rocmSupport)
     (cmakeBool "GGML_METAL" metalSupport)
     (cmakeBool "GGML_RPC" rpcSupport)
+    (cmakeBool "GGML_SYCL" syclSupport)
     (cmakeBool "GGML_VULKAN" vulkanSupport)
     (cmakeFeature "LLAMA_BUILD_NUMBER" buildNumber)
     (cmakeFeature "LLAMA_BUILD_COMMIT" buildCommit)
@@ -215,7 +239,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     installShellCompletion --cmd llama-server --bash <($out/bin/llama-server --completion-bash)
   '';
 
-  doCheck = true;
+  # The SYCL backend exits when it finds no device, and the sandbox has no GPU.
+  doCheck = !syclSupport;
 
   # Use CTest to skip disabled tests.
   dontUseNinjaCheck = true;
@@ -240,7 +265,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     "test-state-restore-fragmented"
   ];
 
-  passthru = lib.optionalAttrs (!cudaSupport && !rocmSupport && !vulkanSupport) {
+  passthru = lib.optionalAttrs (!cudaSupport && !rocmSupport && !syclSupport && !vulkanSupport) {
     updateScript = ./update.sh;
   };
 
@@ -249,6 +274,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       "Inference of Meta's LLaMA model (and others) in pure C/C++"
       + optionalString cudaSupport ", with CUDA support"
       + optionalString rocmSupport ", with ROCm support"
+      + optionalString syclSupport ", with SYCL support"
       + optionalString vulkanSupport ", with Vulkan support";
     homepage = "https://github.com/ggml-org/llama.cpp";
     license = lib.licenses.mit;
