@@ -1979,8 +1979,6 @@ with pkgs;
 
   incus-lts = callPackage ../by-name/in/incus/lts.nix { };
 
-  indexed-bzip2 = with python3Packages; toPythonApplication indexed-bzip2;
-
   internetarchive = with python3Packages; toPythonApplication internetarchive;
 
   iocextract = with python3Packages; toPythonApplication iocextract;
