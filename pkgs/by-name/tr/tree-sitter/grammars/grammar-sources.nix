@@ -416,9 +416,9 @@
   };
 
   cue = {
-    version = "0.1.0";
+    version = "0.2.0";
     url = "github:eonpatapon/tree-sitter-cue";
-    hash = "sha256-ujSBOwOnjsKuFhHtt4zvj90VcQsak8mEcWYJ0e5/mKc=";
+    hash = "sha256-pi4q9j5DLp3Fi+jW10UKK667waoIU60FEZKfgJWtumI=";
     meta = {
       license = lib.licenses.mit;
     };
