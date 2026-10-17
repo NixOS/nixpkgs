@@ -573,5 +573,6 @@ in
     };
   };
 
+  meta.doc = ./cassandra.md;
   meta.maintainers = with lib.maintainers; [ roberth ];
 }
