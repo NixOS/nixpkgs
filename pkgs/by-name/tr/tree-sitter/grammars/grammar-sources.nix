@@ -2116,10 +2116,10 @@
   };
 
   opam = {
-    version = "0-unstable-2026-04-05";
+    version = "0.1.0-unstable-2026-10-11";
     url = "github:tmcgilchrist/tree-sitter-opam";
-    rev = "8869773f9cef795cc02da3b98cfafcaf9febc6b0";
-    hash = "sha256-q/BLM4d3H+dw93CbFLtynCJ1K4I4hJ9XBM4yaG2Z5Rk=";
+    rev = "a6e40689ef50d8861ff59928f0faeb8b846057bf";
+    hash = "sha256-RZF76+P2Bm/moOJ0al03zdD+bhofFkjVEcG390eDGQA=";
     meta = {
       license = lib.licenses.mit;
     };
