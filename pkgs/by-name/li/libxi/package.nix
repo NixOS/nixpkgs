@@ -61,6 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "library for the X Input Extension";
     homepage = "https://gitlab.freedesktop.org/xorg/lib/libxi";
