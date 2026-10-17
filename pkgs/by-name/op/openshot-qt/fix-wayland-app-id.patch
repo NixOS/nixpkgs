@@ -1,0 +1,12 @@
+diff --git a/src/launch.py b/src/launch.py
+--- a/src/launch.py
++++ b/src/launch.py
+@@ -228,7 +228,7 @@ def main():
+     app.setApplicationVersion(info.VERSION)
+     try:
+         # Qt 5.7+ only
+-        app.setDesktopFile("org.openshot.OpenShot")
++        app.setDesktopFileName("org.openshot.OpenShot")
+     except AttributeError:
+         pass
+ 
