@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dtach";
-  version = "0.9-unstable-2025-06-20";
+  version = "0.9-unstable-2025-06-21";
 
   src = fetchFromGitHub {
     owner = "crigler";
