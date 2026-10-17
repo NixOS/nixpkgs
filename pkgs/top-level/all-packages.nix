@@ -2056,8 +2056,6 @@ with pkgs;
 
   matrix-synapse-plugins = recurseIntoAttrs matrix-synapse-unwrapped.plugins;
 
-  md2gemini = with python3.pkgs; toPythonApplication md2gemini;
-
   mhonarc = perlPackages.MHonArc;
 
   nanoemoji = with python3Packages; toPythonApplication nanoemoji;
