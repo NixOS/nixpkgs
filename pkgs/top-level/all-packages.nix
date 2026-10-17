@@ -4827,8 +4827,6 @@ with pkgs;
 
   premake = premake4;
 
-  pycobertura = with python3Packages; toPythonApplication pycobertura;
-
   pycritty = with python3Packages; toPythonApplication pycritty;
 
   radare2 = callPackage ../development/tools/analysis/radare2 (
