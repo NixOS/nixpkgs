@@ -8,7 +8,8 @@
   zlib,
 }:
 let
-  pythonVersionNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
+  interpreter = "cp${lib.replaceString "." "" python.pythonVersion}";
+  abi = builtins.elemAt python.pythonABITags 2;
   inherit (stdenv.hostPlatform) system;
   releases = lib.importJSON ./releases.json;
 in
@@ -17,15 +18,16 @@ buildPythonPackage rec {
   inherit (releases) version;
   format = "wheel";
 
+  disabled = python.implementation != "cpython";
+
   src = fetchPypi {
     pname = "saxonche";
-    inherit version;
+    inherit version abi;
     format = "wheel";
-    python = "cp${pythonVersionNoDot}";
-    abi = "cp${pythonVersionNoDot}";
-    dist = "cp${pythonVersionNoDot}";
-    platform = releases."cp${pythonVersionNoDot}-${system}".platform or (throw "unsupported system");
-    hash = releases."cp${pythonVersionNoDot}-${system}".hash or (throw "unsupported system");
+    python = interpreter;
+    dist = interpreter;
+    platform = releases."${interpreter}-${abi}-${system}".platform or (throw "unsupported system");
+    hash = releases."${interpreter}-${abi}-${system}".hash or (throw "unsupported system");
   };
 
   dontBuild = true;
