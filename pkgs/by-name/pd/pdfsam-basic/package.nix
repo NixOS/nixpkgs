@@ -124,6 +124,11 @@ maven.buildMavenPackage rec {
   mvnParameters = "-Drelease -Dmaven.test.skip";
   mvnHash = "sha256-l8ns++RTK69AV2dq8EFPOzhfzhcgYQlF/OUZ0IZ7QII=";
 
+  # The mac profile declares exec-maven-plugin twice (jpackage and
+  # notarize-dmg executions). Maven >= 3.10 rejects duplicate plugins as a
+  # model validation error, even for inactive profiles.
+  patches = [ ./remove-duplicate-exec-maven-plugin.patch ];
+
   # fix for:
   #
   #   date 1980-01-01T00:00:00Z is not within the valid range 1980-01-01T00:00:02Z to 2099-12-31T23:59:59Z
