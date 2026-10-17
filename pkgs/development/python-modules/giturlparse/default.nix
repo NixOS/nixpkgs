@@ -1,11 +1,12 @@
 {
+  lib,
   buildPythonPackage,
   fetchFromGitHub,
-  lib,
   setuptools,
   unittestCheckHook,
 }:
-buildPythonPackage rec {
+
+buildPythonPackage (finalAttrs: {
   pname = "giturlparse";
   version = "0.16.0";
   pyproject = true;
@@ -13,16 +14,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nephila";
     repo = "giturlparse";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-EzybKpff9u4axubSbFR/knSVYtOoz7Ls9rAjMohWP8k=";
   };
 
-  build-system = [
-    setuptools
-  ];
-  nativeCheckInputs = [
-    unittestCheckHook
-  ];
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [ "giturlparse" ];
 
@@ -32,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ yajo ];
   };
-}
+})
