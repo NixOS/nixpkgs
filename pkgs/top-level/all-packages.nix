@@ -7823,8 +7823,6 @@ with pkgs;
   );
   android-studio-for-platform = androidStudioForPlatformPackages.stable;
 
-  arelle = with python3Packages; toPythonApplication arelle;
-
   audacious = audacious-bare.override { withPlugins = true; };
 
   bambootracker-qt6 = bambootracker.override { withQt6 = true; };
