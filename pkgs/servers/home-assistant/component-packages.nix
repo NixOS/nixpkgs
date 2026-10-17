@@ -3541,11 +3541,12 @@
       ps:
       with ps;
       [
+        kaco-modbus
         modbus-connection
         pymodbus
         tmodbus
       ]
-      ++ modbus-connection.optional-dependencies.tmodbus; # missing inputs: kaco-modbus
+      ++ modbus-connection.optional-dependencies.tmodbus;
     "kaiser_nienhaus" =
       ps: with ps; [
       ];
@@ -8929,6 +8930,7 @@
     "juicenet"
     "justnimbus"
     "jvc_projector"
+    "kaco_modbus"
     "kaleidescape"
     "karakeep"
     "keenetic_ndms2"
