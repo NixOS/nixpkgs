@@ -1,0 +1,13 @@
+diff --git a/src/device/DeviceGate.cpp b/src/device/DeviceGate.cpp
+index 7e9075bbb..afebf5fcf 100644
+--- a/src/device/DeviceGate.cpp
++++ b/src/device/DeviceGate.cpp
+@@ -257,7 +257,7 @@ bool DeviceGate::HTTPImpl::createSession(
+             }
+ 
+             // TODO(themarpe) - Inefficient
+-            httplib::MultipartFormDataItems items = {
++            httplib::UploadFormDataItems items = {
+                 {"file", std::string(package.begin(), package.end()), "depthai-device-kb-fwp.tar.xz", "application/octet-stream"},
+             };
+ 
