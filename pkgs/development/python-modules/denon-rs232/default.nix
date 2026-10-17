@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-timeout,
   pytestCheckHook,
@@ -21,13 +22,14 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-PIYzoMa2FQhdZGLGc955RN5/Gd0Vk7K+UzUoc0Wv/uM=";
   };
 
-  build-system = [ uv-build ];
-
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"' \
       --replace-fail '"uv_build>=0.8.4,<0.9.0"' '"uv_build>=0.8.4"'
   '';
+
+  build-system = [ uv-build ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [ serialx ];
 
