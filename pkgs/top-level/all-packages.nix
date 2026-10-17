@@ -4387,8 +4387,6 @@ with pkgs;
 
   libastyle = astyle.override { asLibrary = true; };
 
-  aws-adfs = with python3Packages; toPythonApplication aws-adfs;
-
   electron-source = callPackage ../development/tools/electron { };
 
   inherit (callPackages ../development/tools/electron/binary { })
