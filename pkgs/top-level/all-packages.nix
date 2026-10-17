@@ -4548,8 +4548,6 @@ with pkgs;
     bintools = bintools-unwrapped;
   };
 
-  black-macchiato = with python3Packages; toPythonApplication black-macchiato;
-
   buildkite-test-collector-rust =
     callPackage ../development/tools/continuous-integration/buildkite-test-collector-rust
       {
