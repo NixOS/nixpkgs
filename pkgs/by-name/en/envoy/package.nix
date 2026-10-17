@@ -11,6 +11,7 @@
   rustc,
   rustPlatform,
   cmake,
+  cctools,
   gn,
   openjdk11_headless,
   ninja,
@@ -23,6 +24,7 @@
   gnugrep,
   envoy,
   git,
+  testers,
 
   # v8 (upstream default), wavm, wamr, wasmtime, disabled
   wasmRuntime ? "wasmtime",
@@ -56,11 +58,14 @@ let
       {
         x86_64-linux = "sha256-EUPWZ8N8wXtnOle8WMLfdxQEdCnTv1JJSbgG39UOoMc=";
         aarch64-linux = "sha256-WltewtSjwvmYfZQwYAslCCoBdLY1MyO9jnMC/bCzVeg=";
+        aarch64-darwin = "sha256-gxfxgRvXZu5boHZUTyCZrDEC80ABTmCWRy2O2/juHTA=";
       }
       .${stdenv.system} or (throw "unsupported system ${stdenv.system}");
 
   python3 = python312;
   jdk = openjdk11_headless;
+  javaToolsPlatform =
+    if stdenv.hostPlatform.isDarwin then "darwin_${stdenv.hostPlatform.darwinArch}" else "linux";
 
 in
 buildBazelPackage rec {
@@ -103,7 +108,12 @@ buildBazelPackage rec {
 
     mkdir -p bazel/nix/
     substitute ${./bazel_nix.BUILD.bazel} bazel/nix/BUILD.bazel \
-      --subst-var-by bash "$(type -p bash)"
+      --subst-var-by bash "$(type -p bash)" \
+      --subst-var-by rust_target_suffix ${
+        if stdenv.hostPlatform.isDarwin then "apple-darwin" else "unknown-linux-gnu"
+      } \
+      --subst-var-by os ${if stdenv.hostPlatform.isDarwin then "macos" else "linux"} \
+      --subst-var-by dylib_ext ${stdenv.hostPlatform.extensions.sharedLibrary}
     ln -sf "${cargo}/bin/cargo" bazel/nix/cargo
     ln -sf "${rustc}/bin/rustc" bazel/nix/rustc
     ln -sf "${rustc}/bin/rustdoc" bazel/nix/rustdoc
@@ -122,6 +132,12 @@ buildBazelPackage rec {
       --subst-var-by bash "$(type -p bash)"
     cat bazel/nix/rules_rust_extra.patch bazel/rules_rust.patch > bazel/nix/rules_rust.patch
     mv bazel/nix/rules_rust.patch bazel/rules_rust.patch
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Upstream's macOS configuration assumes tools installed by Homebrew.
+    substituteInPlace .bazelrc \
+      --replace-fail '--action_env=PATH=/opt/homebrew/bin:/opt/local/bin:/usr/local/bin:/usr/bin:/bin' '--action_env=PATH' \
+      --replace-fail '--host_action_env=PATH=/opt/homebrew/bin:/opt/local/bin:/usr/local/bin:/usr/bin:/bin' '--host_action_env=PATH'
   '';
 
   nativeBuildInputs = [
@@ -130,16 +146,22 @@ buildBazelPackage rec {
     gn
     jdk
     ninja
-    patchelf
     cacert
     git
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux patchelf;
 
-  buildInputs = [ linuxHeaders ];
+  buildInputs = lib.optional stdenv.hostPlatform.isLinux linuxHeaders;
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    LIBTOOL = "${cctools}/bin/libtool";
+  };
 
   fetchAttrs = {
     sha256 = depsHash';
-    env.CARGO_BAZEL_REPIN = true;
+    env = env // {
+      CARGO_BAZEL_REPIN = true;
+    };
     dontUseCmakeConfigure = true;
     dontUseGnConfigure = true;
     postPatch = ''
@@ -159,7 +181,8 @@ buildBazelPackage rec {
       mkdir $NIX_BUILD_TOP/empty
       pushd $NIX_BUILD_TOP/empty
       touch MODULE.bazel WORKSPACE
-      bazel sync --noenable_bzlmod --repository_cache="$bazelOut/external/repository_cache"
+      USER=homeless-shelter bazel --batch --output_user_root="$bazelUserRoot" \
+        sync --noenable_bzlmod --repository_cache="$bazelOut/external/repository_cache"
       popd
 
       # Strip out the path to the build location (by deleting the comment line).
@@ -181,12 +204,12 @@ buildBazelPackage rec {
       rm -r $bazelOut/external/local_jdk
       rm -r $bazelOut/external/bazel_gazelle_go_repository_tools/bin
 
-      # Drop prebuilt JDK toolchains and non-Linux java tool bundles; we force @local_jdk anyway.
+      # Drop prebuilt JDK toolchains and Java tool bundles for other platforms.
       shopt -s nullglob
       rm -rf $bazelOut/external/remotejdk*
       for dir in $bazelOut/external/remote_java_tools*; do
         base=$(basename "$dir")
-        if [[ "$base" != remote_java_tools_linux ]]; then
+        if [[ "$base" != remote_java_tools_${javaToolsPlatform} ]]; then
           rm -rf "$dir"
         fi
       done
@@ -202,6 +225,9 @@ buildBazelPackage rec {
           ;;
         aarch64-linux)
           keep_patterns+=("remotejdk8_linux_aarch64" "remotejdk11_linux_aarch64" "remotejdk17_linux_aarch64" "remotejdk21_linux_aarch64" "remote_java_tools_linux")
+          ;;
+        aarch64-darwin)
+          keep_patterns+=("remote_java_tools_${javaToolsPlatform}")
           ;;
       esac
 
@@ -229,8 +255,18 @@ buildBazelPackage rec {
       # Remove Unix timestamps from go cache.
       rm -rf $bazelOut/external/bazel_gazelle_go_repository_cache/{gocache,pkg/mod/cache,pkg/sumdb}
 
-      # fix tcmalloc failure https://github.com/envoyproxy/envoy/issues/30838
-      sed -i '/TCMALLOC_GCC_FLAGS = \[/a"-Wno-changes-meaning",' $bazelOut/external/com_github_google_tcmalloc/tcmalloc/copts.bzl
+      ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+        # Darwin build directories vary between invocations.
+        sed -i "s,$NIX_BUILD_TOP,NIX_BUILD_TOP,g" \
+          $bazelOut/external/bazel_gazelle_go_repository_cache/go.env \
+          $bazelOut/external/dynamic_modules_rust_sdk_crate_index/paths-to-track \
+          $bazelOut/external/dynamic_modules_rust_sdk_crate_index/splicing_manifest.json
+      ''}
+
+      ${lib.optionalString stdenv.hostPlatform.isLinux ''
+        # fix tcmalloc failure https://github.com/envoyproxy/envoy/issues/30838
+        sed -i '/TCMALLOC_GCC_FLAGS = \[/a"-Wno-changes-meaning",' $bazelOut/external/com_github_google_tcmalloc/tcmalloc/copts.bzl
+      ''}
 
       # Install repinned rules_rust lockfile
       cp source/extensions/dynamic_modules/sdk/rust/Cargo.Bazel.lock $bazelOut/external/Cargo.Bazel.lock
@@ -249,13 +285,26 @@ buildBazelPackage rec {
       echo "common --repository_cache=\"$bazelOut/external/repository_cache\"" >> .bazelrc
       echo "common --repository_disable_download" >> .bazelrc
 
-      # Make executables work, for the most part.
-      find $bazelOut/external -type f -executable | while read execbin; do
-        file "$execbin" | grep -q ': ELF .*, dynamically linked,' || continue
-        patchelf \
-          --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) \
-          "$execbin" || echo "$execbin"
-      done
+      ${lib.optionalString stdenv.hostPlatform.isLinux ''
+        # Make executables work, for the most part.
+        find $bazelOut/external -type f -executable | while read execbin; do
+          file "$execbin" | grep -q ': ELF .*, dynamically linked,' || continue
+          patchelf \
+            --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) \
+            "$execbin" || echo "$execbin"
+        done
+      ''}
+
+      ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+        sed -i "s,NIX_BUILD_TOP,$NIX_BUILD_TOP,g" \
+          $bazelOut/external/bazel_gazelle_go_repository_cache/go.env \
+          $bazelOut/external/dynamic_modules_rust_sdk_crate_index/paths-to-track \
+          $bazelOut/external/dynamic_modules_rust_sdk_crate_index/splicing_manifest.json
+
+        # Bazel's module map omits the Nix Clang ARM intrinsic headers.
+        find "$bazelOut/external/com_google_absl" -name BUILD.bazel \
+          -exec sed -i '/"layering_check",/d' {} +
+      ''}
 
       ln -s ${bazel-gazelle}/bin $bazelOut/external/bazel_gazelle_go_repository_tools/bin
 
@@ -292,8 +341,18 @@ buildBazelPackage rec {
     "--spawn_strategy=standalone"
     "--noexperimental_strict_action_env"
     "--cxxopt=-Wno-error"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     "--linkopt=-Wl,-z,noexecstack"
     "--config=gcc"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "--macos_minimum_os=${stdenv.hostPlatform.darwinMinVersion}"
+    # Bazel resets macos_minimum_os for tools built in the execution configuration.
+    "--host_copt=-mmacosx-version-min=${stdenv.hostPlatform.darwinMinVersion}"
+    "--host_linkopt=-mmacosx-version-min=${stdenv.hostPlatform.darwinMinVersion}"
+  ]
+  ++ [
     "--verbose_failures"
     "--incompatible_enable_cc_toolchain_resolution=true"
 
@@ -305,6 +364,9 @@ buildBazelPackage rec {
     # Force use of system Rust.
     "--extra_toolchains=//bazel/nix:rust_nix_aarch64,//bazel/nix:rust_nix_x86_64"
 
+    "--define=wasm=${wasmRuntime}"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     # undefined reference to 'grpc_core::*Metadata*::*Memento*
     #
     # During linking of the final binary, we see undefined references to grpc_core related symbols.
@@ -312,8 +374,6 @@ buildBazelPackage rec {
     # "ParseMemento" and "MementoToValue" are only implemented for some types
     # and appear unused and unimplemented for the undefined cases reported by the linker.
     "--linkopt=-Wl,--unresolved-symbols=ignore-in-object-files"
-
-    "--define=wasm=${wasmRuntime}"
   ]
   ++ (lib.optionals stdenv.hostPlatform.isAarch64 [
     # external/com_github_google_tcmalloc/tcmalloc/internal/percpu_tcmalloc.h:611:9: error: expected ':' or '::' before '[' token
@@ -336,9 +396,21 @@ buildBazelPackage rec {
   requiredSystemFeatures = [ "big-parallel" ];
 
   passthru.tests = {
-    envoy = nixosTests.envoy;
-    # tested as a core component of Pomerium
-    pomerium = nixosTests.pomerium;
+    version = testers.testVersion { package = envoy; };
+
+    proxy =
+      runCommandLocal "${envoy.name}-proxy-test"
+        {
+          nativeBuildInputs = [
+            envoy
+            python3
+          ];
+          __darwinAllowLocalNetworking = true;
+        }
+        ''
+          python ${./test.py}
+          touch $out
+        '';
 
     deps-store-free =
       runCommandLocal "${envoy.name}-deps-store-free-test"
@@ -371,6 +443,11 @@ buildBazelPackage rec {
               ;;
           esac
         '';
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    envoy = nixosTests.envoy;
+    # tested as a core component of Pomerium
+    pomerium = nixosTests.pomerium;
   };
 
   meta = {
@@ -383,6 +460,7 @@ buildBazelPackage rec {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
+      "aarch64-darwin"
     ];
   };
 }
