@@ -60,6 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
     rev-prefix = "pkgconf-";
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://github.com/pkgconf/pkgconf";
     description = "Package compiler and linker metadata toolkit";
