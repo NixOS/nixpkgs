@@ -50,7 +50,7 @@ flutter341.buildFlutterApplication (finalAttrs: {
   strictDeps = true;
   sourceRoot = "${finalAttrs.src.name}/commet";
 
-  pubspecLockFilePath = "../pubspec.lock";
+  env.pubspecLockFilePath = "../pubspec.lock";
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
   gitHashes = {
