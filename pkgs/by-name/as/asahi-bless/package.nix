@@ -7,14 +7,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "asahi-bless";
-  version = "0.4.3";
+  version = "0.4.4";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-JBd1YPTJ2ZqcGZ+FTGR2hqXWYd+kJ/0snWrn4uEpXWg=";
+    hash = "sha256-JU9NfBrOqZaMqaohUc+WsNWZwQVtvDSXY94d0dSFie4=";
   };
 
-  cargoHash = "sha256-DN5PRUO0M0/ExIkuR+Iwk3SW1jzIaFnzvLOBuFoJ360=";
+  cargoHash = "sha256-jniE+vafrc5k7xCsTHod/9oZQKro5Qm2oPXveie47cc=";
   cargoDepsName = finalAttrs.pname;
 
   passthru = {
