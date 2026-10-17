@@ -1236,8 +1236,6 @@ with pkgs;
 
   fedora-backgrounds = recurseIntoAttrs (callPackage ../data/misc/fedora-backgrounds { });
 
-  coconut = with python312Packages; toPythonApplication coconut;
-
   corsair = with python3Packages; toPythonApplication corsair-scan;
 
   inherit (cue) writeCueValidator;
