@@ -33,8 +33,6 @@ let
     pname = "maple";
     inherit version src meta;
 
-    strictDeps = false;
-
     cargoHash = "sha256-RMDlLpPWDLHCRWLz7NAAQhp6FhKA7aNYqx9MCqR8vYM=";
 
     cargoPatches = [

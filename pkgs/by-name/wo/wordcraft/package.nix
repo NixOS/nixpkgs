@@ -39,8 +39,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wordcraft";
   version = "0.6.1";
 
-  strictDeps = true;
-
   src = fetchFromGitHub {
     owner = "storytold";
     repo = "wordcraft";

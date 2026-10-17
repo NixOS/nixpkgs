@@ -23,8 +23,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoTestFlags = [ "--max-fail=all" ];
 
-  strictDeps = true;
-
   meta = {
     description = "Tool to produce deterministic Linux kernel module signatures and certificates";
     homepage = "https://github.com/emilazy/boot-security-tools/tree/main/kmodigest";
