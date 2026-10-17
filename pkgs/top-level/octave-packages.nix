@@ -96,6 +96,10 @@ makeScope newScope (
 
     econometrics = callPackage ../development/octave-modules/econometrics { };
 
+    femoctave = callPackage ../development/octave-modules/femoctave {
+      inherit (pkgs) triangle;
+    };
+
     financial = callPackage ../development/octave-modules/financial { };
 
     fits = callPackage ../development/octave-modules/fits { };
