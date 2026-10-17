@@ -8395,8 +8395,6 @@ with pkgs;
 
   pleroma-bot = python3Packages.callPackage ../development/python-modules/pleroma-bot { };
 
-  pnglatex = with python3Packages; toPythonApplication pnglatex;
-
   polybarFull = polybar.override {
     alsaSupport = true;
     githubSupport = true;
