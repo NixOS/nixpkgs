@@ -240,9 +240,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     "test-state-restore-fragmented"
   ];
 
-  passthru = lib.optionalAttrs (!cudaSupport && !rocmSupport && !vulkanSupport) {
-    updateScript = ./update.sh;
-  };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description =
