@@ -7031,8 +7031,6 @@ with pkgs;
 
   sambaFull = samba4Full;
 
-  scalene = with python3Packages; toPythonApplication scalene;
-
   shairport-sync-airplay2 = shairport-sync.override {
     enableAirplay2 = true;
   };
