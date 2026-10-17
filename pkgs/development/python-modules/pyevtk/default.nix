@@ -4,6 +4,7 @@
   fetchPypi,
   setuptools,
   numpy,
+  versioneer,
   pytestCheckHook,
   pytest-cov-stub,
 }:
@@ -19,12 +20,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-Ia07GQWwa/KIFmYp8AAtE6nGZOtCvL7WJNIDLXuLz1I=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail 'setup_requires=["pytest-runner"],' 'setup_requires=[],'
-  '';
+  build-system = [
+    setuptools
+    versioneer
+  ];
 
-  build-system = [ setuptools ];
   dependencies = [ numpy ];
 
   nativeCheckInputs = [
@@ -37,7 +37,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Exports data to binary VTK files for visualization/analysis";
     homepage = "https://github.com/pyscience-projects/pyevtk";
-    license = lib.licenses.bsd2;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
 })
