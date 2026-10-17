@@ -414,10 +414,13 @@ let
 
       # Gate for the DINGHAI_PF module
       DINGHAI = whenAtLeast "7.3" yes;
+
+      NET_VENDOR_MEDIATEK = yes;
+      # MT7623 (BPI-R2):  eth/USB3/PCIe clocks live in ethsys/hifsys
+      COMMON_CLK_MT2701_ETHSYS = option yes;
+      COMMON_CLK_MT2701_HIFSYS = option yes;
     }
     // lib.optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
-      # Not enabled by default, hides modules behind it
-      NET_VENDOR_MEDIATEK = yes;
       # Enable SoC interface for MT7915 module, required for MT798X.
       MT7986_WMAC = whenBetween "5.18" "6.6" yes;
       MT798X_WMAC = whenAtLeast "6.6" yes;
