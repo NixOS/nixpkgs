@@ -366,13 +366,28 @@ in
         Restart = "always";
         LogsDirectory = lib.mkIf cfg.logToFile "murmur";
         LogsDirectoryMode = "0750";
-        RuntimeDirectory = "murmur";
+        RuntimeDirectory = [
+          "murmur"
+          "murmur/rootdir"
+          "murmur/files"
+        ];
         RuntimeDirectoryMode = "0700";
         User = cfg.user;
         Group = cfg.group;
 
         # service hardening
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
+        BindPaths = [
+          cfg.stateDir
+          "/run/murmur/files:/run/murmur"
+        ]
+        ++ lib.optional cfg.logToFile "/var/log/murmur";
+        BindReadOnlyPaths = [
+          builtins.storeDir
+          "${config.security.pki.caBundle}:/etc/ssl/certs/ca-certificates.crt"
+          "/etc/resolv.conf"
+        ]
+        ++ lib.optional (cfg.tls.useACMEHost != null) "${acmeHostDir}";
         CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
@@ -380,6 +395,7 @@ in
         NoNewPrivileges = true;
         PrivateDevices = true;
         PrivateMounts = true;
+        PrivatePid = true;
         PrivateTmp = true;
         PrivateUsers = true;
         ProcSubset = "pid";
@@ -402,6 +418,11 @@ in
         RestrictNamespaces = true;
         RestrictSUIDSGID = true;
         RestrictRealtime = true;
+        RootDirectory = "/run/murmur/files";
+        SocketBindAllow = [
+          "${toString cfg.port}"
+        ];
+        SocketBindDeny = "any";
         SystemCallArchitectures = "native";
         SystemCallFilter = "@system-service";
         UMask = 27;
