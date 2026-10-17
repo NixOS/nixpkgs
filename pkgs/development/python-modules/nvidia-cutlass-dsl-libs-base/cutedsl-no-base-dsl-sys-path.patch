@@ -1,0 +1,47 @@
+From d29ad98fca812b8b25f87cc682dde5ea85ef8e2c Mon Sep 17 00:00:00 2001
+From: Connor Baker <ConnorBaker01@gmail.com>
+Date: Tue, 13 Oct 2026 20:11:19 -0700
+Subject: [PATCH] [CuTeDSL] Don't add base_dsl to sys.path
+
+base_dsl/compiler.py appends its own directory to sys.path. This dates from
+v4.0.0, when base_dsl was a top-level directory (python/CuTeDSL/base_dsl);
+since 8825e8b moved it into the cutlass package, every module there is
+imported through the package, and dynamic imports are package-qualified.
+
+The append now only makes base_dsl's modules importable as top-level
+modules too. In particular, without torch installed,
+importlib.util.find_spec("torch") finds base_dsl/torch.py, so packages that
+check for torch that way (e.g. cutlass.operators' is_torch_available()) go
+on to import the DSL's torch.py, which fails.
+
+Remove the append and the now-unused _SCRIPT_PATH.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ python/CuTeDSL/cutlass/base_dsl/compiler.py | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/python/CuTeDSL/cutlass/base_dsl/compiler.py b/python/CuTeDSL/cutlass/base_dsl/compiler.py
+index 62e447d..c65821e 100644
+--- a/python/CuTeDSL/cutlass/base_dsl/compiler.py
++++ b/python/CuTeDSL/cutlass/base_dsl/compiler.py
+@@ -30,7 +30,6 @@ from .common import DSLBaseError, DSLUserCodeError
+ from . import diagnostics as _diagnostics
+ from .utils.logger import log
+ from .env_manager import EnvironmentVarManager
+-_SCRIPT_PATH = os.path.dirname(os.path.abspath(__file__))
+ 
+ 
+ def _split_options(text: str) -> list:
+@@ -99,8 +98,6 @@ def _unbuffer_jit_c_stdout() -> None:
+         log().warning(f"could not unbuffer the JIT's C stdout: {e}")
+ 
+ 
+-sys.path.append(_SCRIPT_PATH)
+-
+ from .._mlir import ir
+ 
+ 
+-- 
+2.43.0
+
