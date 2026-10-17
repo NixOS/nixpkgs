@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sof-tools";
-  version = "2.15";
+  version = "2.15.1";
 
   src = fetchFromGitHub {
     owner = "thesofproject";
     repo = "sof";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RiprZUYwDFjHmnQAItRxqYPqAdt0G91dl2xNLCeKAkQ=";
+    hash = "sha256-hvwuqbeT4kbmBNVAQ+ij6rPmxS1Cp5Xv733h4oXeF20=";
   };
 
   postPatch = ''
