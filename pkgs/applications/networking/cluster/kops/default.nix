@@ -7,12 +7,6 @@ in
 {
   inherit mkKops;
 
-  kops_1_31 = mkKops (finalAttrs: {
-    version = "1.31.0";
-    sha256 = "sha256-q9megrNXXKJ/YqP/fjPHh8Oji4dPK5M3HLHa+ufwRAM=";
-    rev = "v${finalAttrs.version}";
-  });
-
   kops_1_32 = mkKops (finalAttrs: {
     version = "1.32.1";
     sha256 = "sha256-nQKeTDajtUffPBhPrPuaJ+1XWgLDUltwDQDZHkylys4=";
