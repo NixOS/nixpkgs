@@ -87,7 +87,7 @@ lib.extendMkDerivation {
       };
     in
     {
-      inherit npmDeps npmBuildScript;
+      inherit npmDeps npmBuildScript npmPruneFlags;
 
       env = (args.env or { }) // {
         NIX_NPM_FETCHER_VERSION = npmDepsFetcherVersion;
