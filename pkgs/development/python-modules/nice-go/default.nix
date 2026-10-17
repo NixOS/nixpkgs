@@ -10,7 +10,7 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  syrupy,
+  syrupy_5,
   tenacity,
   yarl,
 }:
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
-    syrupy
+    syrupy_5
   ];
 
   meta = {

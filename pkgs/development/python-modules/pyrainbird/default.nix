@@ -18,7 +18,7 @@
   python-dateutil,
   pyyaml,
   setuptools,
-  syrupy_6,
+  syrupy,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -60,7 +60,7 @@ buildPythonPackage (finalAttrs: {
     pytest-golden
     pytest-mock
     pytestCheckHook
-    syrupy_6
+    syrupy
   ];
 
   pythonImportsCheck = [ "pyrainbird" ];

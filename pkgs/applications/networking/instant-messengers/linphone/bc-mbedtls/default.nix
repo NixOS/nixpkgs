@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     group = "BC";
     owner = "public/external";
     repo = "mbedtls";
-    sha256 = "sha256-jQpRn2F21sPKKAiaqsUvaKyuR80AnedG/hAyiNamKjc=";
+    hash = "sha256-jQpRn2F21sPKKAiaqsUvaKyuR80AnedG/hAyiNamKjc=";
     fetchSubmodules = true;
   };
 

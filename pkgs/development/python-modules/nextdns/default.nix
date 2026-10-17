@@ -10,7 +10,7 @@
   pytest-error-for-skips,
   pytestCheckHook,
   setuptools,
-  syrupy_6,
+  syrupy,
   tenacity,
 }:
 
@@ -41,7 +41,7 @@ buildPythonPackage (finalAttrs: {
     pytest-asyncio
     pytest-error-for-skips
     pytestCheckHook
-    syrupy_6
+    syrupy
   ];
 
   disabledTests = [

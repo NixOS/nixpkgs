@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "libvirt";
     repo = "libvirt-ocaml";
     rev = "v${version}";
-    sha256 = "0xpkdmknk74yqxgw8z2w8b7ss8hpx92xnab5fsqg2byyj55gzf2k";
+    hash = "sha256-U7j/SpHeL/GwdmUp20XqFyKtz0JcfMRfx56caWdt83Y=";
   };
 
   propagatedBuildInputs = [ libvirt ];
