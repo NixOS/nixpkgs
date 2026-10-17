@@ -49,6 +49,9 @@ buildGoModule (finalAttrs: {
     homepage = "https://openfga.dev/";
     license = lib.licenses.asl20;
     mainProgram = "openfga";
-    maintainers = with lib.maintainers; [ jlesquembre ];
+    maintainers = with lib.maintainers; [
+      jlesquembre
+      anish
+    ];
   };
 })
