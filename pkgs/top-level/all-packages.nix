@@ -4942,8 +4942,6 @@ with pkgs;
 
   yq = python3.pkgs.toPythonApplication python3.pkgs.yq;
 
-  mypy = with python3Packages; toPythonApplication mypy;
-
   mypy-protobuf = with python3Packages; toPythonApplication mypy-protobuf;
 
   ### DEVELOPMENT / LIBRARIES
