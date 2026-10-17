@@ -328,6 +328,9 @@ in
               # Pass info about the request
               proxy_set_header X-Original-Method $request_method;
               proxy_set_header X-Original-URL $scheme://$http_host$request_uri;
+              # set by the go2rtc stream locations; client headers are not forwarded, so
+              # this cannot be spoofed
+              proxy_set_header X-Go2rtc-Stream-Proxy $go2rtc_stream_proxy;
               proxy_set_header X-Server-Port $server_port;
               proxy_set_header Content-Length "";
 
@@ -464,6 +467,8 @@ in
               nginxAuthRequest
               + nginxProxySettings
               + ''
+                # tells /auth to apply the go2rtc stream checks
+                set $go2rtc_stream_proxy 1;
                 limit_except GET {
                     deny  all;
                 }
@@ -477,6 +482,8 @@ in
               nginxAuthRequest
               + nginxProxySettings
               + ''
+                # tells /auth to apply the go2rtc stream checks
+                set $go2rtc_stream_proxy 1;
                 limit_except GET {
                     deny  all;
                 }
@@ -504,6 +511,8 @@ in
               nginxAuthRequest
               + nginxProxySettings
               + ''
+                # tells /auth to apply the go2rtc stream checks
+                set $go2rtc_stream_proxy 1;
                 limit_except POST {
                     deny  all;
                 }

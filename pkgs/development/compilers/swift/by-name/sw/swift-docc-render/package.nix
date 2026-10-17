@@ -26,7 +26,7 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "swift-docc-render";
-  version = "${swift_release}-unstable-2025-09-16";
+  version = swift_release;
 
   # Note! We don’t use the commit from Swift 6.2.4 but a later one that is compatible with Node.js 22.
   # Otherwise, it would require Node.js 20, which is no longer supported in Nixpkgs.

@@ -21,13 +21,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "qmenumodel";
-  version = "0.10.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "qmenumodel";
     rev = finalAttrs.version;
-    hash = "sha256-f8JUMYzPCiCF5Vnw2xrgwZJNhksO3noQcGp3YFhS5lE=";
+    hash = "sha256-71hop0UVAmh5BVx9kTFrzFwmpFiM0/QqNceBQJuReeY=";
   };
 
   outputs = [

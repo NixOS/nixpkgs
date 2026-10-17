@@ -206,6 +206,8 @@ lib.extendMkDerivation {
 
       doCheck ? true,
 
+      __structuredAttrs ? true,
+
       ...
     }@attrs:
 
@@ -358,7 +360,6 @@ lib.extendMkDerivation {
             && isPythonModule finalAttrs.passthru
             # METADATA is unlikely to be correct if pyproject is false or null.
             && pyproject == true
-            && !lib.hasInfix "unstable-" finalAttrs.version
             && !isBootstrapPackage
           )
           [
@@ -387,7 +388,7 @@ lib.extendMkDerivation {
           python
         ];
 
-      inherit strictDeps;
+      inherit __structuredAttrs strictDeps;
 
       env = {
         LANG = "${if python.stdenv.hostPlatform.isDarwin then "en_US" else "C"}.UTF-8";

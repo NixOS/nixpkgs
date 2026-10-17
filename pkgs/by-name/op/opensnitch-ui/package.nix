@@ -56,7 +56,9 @@ python3Packages.buildPythonApplication {
   '';
 
   dontWrapQtApps = true;
-  makeWrapperArgs = [ "\${qtWrapperArgs[@]}" ];
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  '';
 
   # All tests are sandbox-incompatible and disabled for now
   doCheck = false;

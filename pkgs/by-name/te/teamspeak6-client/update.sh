@@ -4,9 +4,9 @@ set -euo pipefail
 
 latest_version=$(
     curl https://teamspeak.com/en/downloads/#ts6client | \
-    rg -o 'https://files.teamspeak-services.com/pre_releases/client/.*/teamspeak-client.tar.gz' | \
+    rg -o 'https://files.teamspeak-services.com/pre_releases/client/.*/teamspeak-client.tar.xz' | \
     head -n1 | \
-    sed -n 's|.*/client/\(.*\)/teamspeak-client.tar.gz|\1|p'
+    sed -n 's|.*/client/\(.*\)/teamspeak-client.tar.xz|\1|p'
 )
 current_version=$(nix eval --raw .#teamspeak6-client.version)
 

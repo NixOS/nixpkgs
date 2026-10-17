@@ -39,8 +39,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   makeWrapperArgs = [
-    "--set YTDL_SUB_FFMPEG_PATH ${lib.getExe' ffmpeg_7 "ffmpeg"}"
-    "--set YTDL_SUB_FFPROBE_PATH ${lib.getExe' ffmpeg_7 "ffprobe"}"
+    "--set"
+    "YTDL_SUB_FFMPEG_PATH"
+    (lib.getExe' ffmpeg_7 "ffmpeg")
+    "--set"
+    "YTDL_SUB_FFPROBE_PATH"
+    (lib.getExe' ffmpeg_7 "ffprobe")
   ];
 
   nativeCheckInputs = [

@@ -5,6 +5,7 @@
   cmake,
   nasm,
   openjdk,
+  jna,
   enableJava ? false, # whether to build the java wrapper
   enableJpeg7 ? false, # whether to build libjpeg with v7 compatibility
   enableJpeg8 ? false, # whether to build libjpeg with v8 compatibility
@@ -32,13 +33,13 @@ assert !(enableJpeg7 && enableJpeg8); # pick only one or none, not both
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libjpeg-turbo";
-  version = "3.1.4.1";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "libjpeg-turbo";
     repo = "libjpeg-turbo";
     tag = finalAttrs.version;
-    hash = "sha256-jBajigX4/j4jG11prTPeGkTVRrRzheFL/LxgnPufzb4=";
+    hash = "sha256-SPxWCDt9hFQ8uRaaKLkpWp9oPhfcRkDBm5MarTgdmV4=";
   };
 
   patches =
@@ -64,22 +65,18 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DENABLE_STATIC=${if enableStatic then "1" else "0"}"
-    "-DENABLE_SHARED=${if enableShared then "1" else "0"}"
+    (lib.cmakeBool "ENABLE_STATIC" enableStatic)
+    (lib.cmakeBool "ENABLE_SHARED" enableShared)
+    (lib.cmakeBool "WITH_JPEG7" enableJpeg7)
+    (lib.cmakeBool "WITH_JPEG8" enableJpeg8)
   ]
   ++ lib.optionals enableJava [
-    "-DWITH_JAVA=1"
-  ]
-  ++ lib.optionals enableJpeg7 [
-    "-DWITH_JPEG7=1"
-  ]
-  ++ lib.optionals enableJpeg8 [
-    "-DWITH_JPEG8=1"
+    (lib.cmakeFeature "WITH_JNA" "${jna}/share/java/jna.jar")
   ]
   ++ lib.optionals stdenv.hostPlatform.isRiscV [
     # https://github.com/libjpeg-turbo/libjpeg-turbo/issues/428
     # https://github.com/libjpeg-turbo/libjpeg-turbo/commit/88bf1d16786c74f76f2e4f6ec2873d092f577c75
-    "-DFLOATTEST=fp-contract"
+    (lib.cmakeFeature "FLOATTEST" "fp-contract")
   ];
 
   doInstallCheck = true;

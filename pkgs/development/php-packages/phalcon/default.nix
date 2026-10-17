@@ -14,7 +14,7 @@ buildPecl rec {
   src = fetchFromGitHub {
     owner = "phalcon";
     repo = "cphalcon";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-eMb11feNg7BTEBy+FjQGAqDC0sBfdGqOzr6gLe/LWHY=";
   };
 

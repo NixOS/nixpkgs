@@ -9,16 +9,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "platformdirs";
-  version = "4.10.0";
+  version = "4.11.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "platformdirs";
-    tag = version;
-    hash = "sha256-Sx5ln2mF2FkChP3UKu+GmOIIV8DNoJyYgsNiVDkVqQE=";
+    tag = finalAttrs.version;
+    hash = "sha256-T98Ep64tBazYs2JtgsHtmzfVwU+dJC30xzrieVve3DI=";
   };
 
   build-system = [
@@ -41,8 +41,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module for determining appropriate platform-specific directories";
     homepage = "https://platformdirs.readthedocs.io/";
-    changelog = "https://github.com/tox-dev/platformdirs/releases/tag/${src.tag}";
+    changelog = "https://github.com/tox-dev/platformdirs/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

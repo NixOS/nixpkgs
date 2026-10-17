@@ -48,6 +48,9 @@ buildNodejs {
       ./bin-sh-node-run-v22.patch
       ./use-nix-codesign.patch
 
+      # TODO: remove once support for libuv 1.53+ has landed upstream
+      ./fix-libuv-1.53-support.patch
+
       # TODO: remove once https://github.com/nodejs/node/pull/66735 in included in a release
       ./gtest-integration-fix.patch
     ]

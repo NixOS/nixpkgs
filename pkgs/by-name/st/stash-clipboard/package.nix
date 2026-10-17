@@ -7,16 +7,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stash-clipboard";
-  version = "0.5.2";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "NotAShelf";
     repo = "stash";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HnKYO6TSX3RNkC2DDBgb6brX8bFrKw4kg0RBwZXZMDI=";
+    hash = "sha256-bHaOGQrF472K98Styymc3NUTrSgDAdWhL01K0wkhRl0=";
   };
 
-  cargoHash = "sha256-PP/jh6AJPmjg93zSN0E8QLE+bN77edAV/dHxdtPy9+4=";
+  cargoHash = "sha256-8xQ501X4AJrsZN/jnG/mSRZp4JTcaFxSYM3TeWfDhQ8=";
 
   __structuredAttrs = true;
 

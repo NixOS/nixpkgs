@@ -13,6 +13,8 @@
   pkg-config,
   rustPlatform,
   stdenv,
+  writableTmpDirAsHomeHook,
+  writeShellScriptBin,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -58,6 +60,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     bashInteractive
     gitMinimal
     ncurses
+    writableTmpDirAsHomeHook
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -78,9 +81,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=multi_user_test"
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  # The e2e tests start an interactive bash, which sources the host's
+  # /etc/bashrc when the build is not sandboxed (the darwin default).
+  # The nix-darwin config resets PATH, so if the user has atuin installed,
+  # the shell integration runs the system atuin instead of the one currently building
+  # and no output is captured.
+  # The test harness clears the environment before it starts the shell, so
+  # NOSYSBASHRC has to be set by the shell it is given. It must be named bash:
+  # the pty proxy picks the shell integration from the file name.
+  env.ATUIN_E2E_BASH = lib.getExe (
+    writeShellScriptBin "bash" ''
+      NOSYSBASHRC=1 exec ${lib.getExe bashInteractive} "$@"
+    ''
+  );
 
   __darwinAllowLocalNetworking = true;
 

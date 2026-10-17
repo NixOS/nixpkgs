@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "8.1.2-5";
+  version = "8.1.3-1";
 in
 
 (ffmpeg_8-full.override {
@@ -14,7 +14,7 @@ in
     owner = "jellyfin";
     repo = "jellyfin-ffmpeg";
     tag = "v${version}";
-    hash = "sha256-fU/w3Bh0hFidmbcNmA6KCxrmxlzf6Awh4Qlthyks9Aw=";
+    hash = "sha256-sxJyUaB0rqpVzd6OVRC6kPVWyBdgFUzvyqwLCkMKRgM=";
   };
   buildFfplay = false; # requires SDL2 which gets disabled
   buildFfprobe = true; # required by various programs like Immich

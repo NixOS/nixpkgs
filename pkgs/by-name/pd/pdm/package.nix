@@ -69,7 +69,11 @@ python.pkgs.buildPythonApplication rec {
     ]
     ++ httpx.optional-dependencies.socks;
 
-  makeWrapperArgs = [ "--set PDM_CHECK_UPDATE 0" ];
+  makeWrapperArgs = [
+    "--set"
+    "PDM_CHECK_UPDATE"
+    "0"
+  ];
 
   # Silence network warning during pypaInstallPhase
   # by disabling latest version check

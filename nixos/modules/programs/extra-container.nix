@@ -14,9 +14,10 @@ in
       extra-container, a tool for running declarative NixOS containers
       without host system rebuilds
     '';
+    programs.extra-container.package = lib.mkPackageOption pkgs "extra-container" { };
   };
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.extra-container ];
+    environment.systemPackages = [ cfg.package ];
     boot.extraSystemdUnitPaths = [ "/etc/systemd-mutable/system" ];
   };
 }

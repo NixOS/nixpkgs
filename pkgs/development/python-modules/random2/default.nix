@@ -22,7 +22,7 @@ buildPythonPackage rec {
     # Patch test suite for python >= 3.9
     (fetchpatch {
       url = "https://github.com/strichter/random2/pull/3/commits/1bac6355d9c65de847cc445d782c466778b94fbd.patch";
-      sha256 = "064137pg1ilv3f9r10123lqbqz45070jca8pjjyp6gpfd0yk74pi";
+      hash = "sha256-8ZIzPWjuPnO9lBcpJsEBhXy8MB0igJCTG5vG8O4ZgRg=";
     })
   ];
 

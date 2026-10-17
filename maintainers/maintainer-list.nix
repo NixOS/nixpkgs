@@ -11900,6 +11900,13 @@
     githubId = 15371828;
     name = "Hugo Lageneste";
   };
+  hugomartel = {
+    email = "hugo.martel@ik.me";
+    github = "HugoMartel";
+    githubId = 56939649;
+    name = "Hugo Martel";
+    keys = [ { fingerprint = "460D E18E 12B5 5B5F 49AC  213A 12CB 9757 F51C 86A5"; } ];
+  };
   hugoreeves = {
     email = "hugo@hugoreeves.com";
     github = "HugoReeves";
@@ -17976,12 +17983,6 @@
     github = "manipuladordedados";
     githubId = 1189862;
     name = "Valter Nazianzeno";
-  };
-  mannerbund = {
-    email = "apostalimus@gmail.com";
-    github = "mannerbund";
-    githubId = 110305316;
-    name = "mannerbund";
   };
   manojkarthick = {
     email = "smanojkarthick@gmail.com";
@@ -24269,6 +24270,11 @@
     githubId = 52847440;
     name = "Ryan Burns";
   };
+  r-xyz = {
+    github = "r-xyz";
+    githubId = 100710244;
+    name = "r-xyz";
+  };
   r0chd = {
     github = "r0chd";
     githubId = 100892812;
@@ -28221,6 +28227,16 @@
     github = "steveeJ";
     githubId = 1181362;
     name = "Stefan Junker";
+  };
+  stevelr = {
+    email = "stevelr.git@pm.me";
+    github = "stevelr";
+    githubId = 15311467;
+    name = "Steve Schoettler";
+    keys = [
+      { fingerprint = "57C9 E8E1 274D 713E FEF3  1B89 407A A4E4 3349 35ED"; }
+      { fingerprint = "8379 6FAD CB03 18D6 513B  4CBB D39C B4E4 FD6B C844"; }
+    ];
   };
   stevenroose = {
     email = "github@stevenroose.org";

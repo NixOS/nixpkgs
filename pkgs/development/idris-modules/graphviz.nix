@@ -14,7 +14,7 @@ build-idris-package {
     owner = "mgttlinger";
     repo = "idris-graphviz";
     rev = "805da92ac888530134c3b4090fae0d025d86bb05";
-    sha256 = "12kzgjlwq6adflfc5zxpgjnaiszhiab6dcp878ysbz3zr2sihljx";
+    hash = "sha256-XVIYtch//KU9OuiyZpaK8OuorHy3/8IcdU0ZzKl8f4o=";
   };
 
   postUnpack = ''

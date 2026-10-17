@@ -16,7 +16,6 @@
   eigen_5,
   expat,
   ffmpeg,
-  gcc-unwrapped,
   glew,
   glfw,
   glib,
@@ -102,7 +101,6 @@ clangStdenv.mkDerivation (finalAttrs: {
     eigen_5
     expat
     ffmpeg
-    gcc-unwrapped
     glew
     glfw
     glib

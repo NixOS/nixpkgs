@@ -32,12 +32,12 @@
 
 buildPythonPackage rec {
   pname = "tempest";
-  version = "46.2.0";
+  version = "46.3.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-F/K0X4wHZOR4dvicGwQ9JOeh25iyqfKkgjiIZc6qWLY=";
+    hash = "sha256-z/WtY/wqhxaqhudHHy0nA8jbwoSzBJE/5DNxKVp1cRg=";
   };
 
   postPatch = ''
@@ -94,6 +94,7 @@ buildPythonPackage rec {
       tempest.tests.common.test_concurrency.TestConcurrency.test_run_concurrent_tasks_success
       tempest.tests.common.test_concurrency.TestConcurrency.test_run_concurrent_tasks_with_exception
       tempest.tests.lib.cli.test_execute.TestExecute.test_execute_with_prefix
+      tempest.tests.lib.common.test_rest_client.TestRestClientServiceToken.test_log_request_full_omits_service_token
     ")
   '';
 
