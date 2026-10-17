@@ -27,7 +27,7 @@
 
 stdenv.mkDerivation {
   pname = "wlvncc";
-  version = "0-unstable-2026-04-29";
+  version = "with-aml-v0.3.0-unstable-2026-04-29";
 
   src = fetchFromGitHub {
     owner = "any1";
