@@ -24,7 +24,10 @@ in
     };
 
     security = {
-      pam.services.login.oo7.enable = true;
+      pam.services = {
+        login.oo7.enable = true;
+        passwd.oo7.enable = true;
+      };
 
       wrappers.oo7-daemon = {
         owner = "root";
