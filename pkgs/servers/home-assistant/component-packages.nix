@@ -3388,7 +3388,8 @@
       ];
     "ipp" =
       ps: with ps; [
-      ]; # missing inputs: aioipp
+        aioipp
+      ];
     "iqvia" =
       ps: with ps; [
         numpy
@@ -8910,6 +8911,7 @@
     "iotawatt"
     "iotty"
     "ipma"
+    "ipp"
     "iqvia"
     "irm_kmi"
     "iron_os"
