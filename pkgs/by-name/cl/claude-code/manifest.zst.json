@@ -1,62 +1,60 @@
 {
-  "version": "2.1.301",
+  "version": "2.1.302",
   "manifestSignatureEnforcement": "flag",
-  "commit": "12a1baed117fbcc7e0695ab8aa6d2a4c6bd00cbb",
-  "buildDate": "2026-10-15T14:02:29Z",
+  "commit": "2ef144e6f98c1c99d082b735e4b38f50e3391e55",
+  "buildDate": "2026-10-16T16:15:48Z",
   "platforms": {
     "darwin-arm64": {
       "binary": "claude.zst",
-      "checksum": "499703a087a5395ed31e96e5cb19a6d3257cfeffbf812e5dba97347a33c84c5a",
-      "size": 83877124,
+      "checksum": "cd34fe7fa647e175e049207d2175fb0c3e19cc32f64f2a5be91114eca0903d15",
+      "size": 90561795,
       "bundle": {
-        "checksum": "491300b6499480e9240856191ad45b750f2cd90d1c9d00e1d4d37ba15c7d2f41",
-        "size": 83879655
+        "checksum": "20e550b290f73162a9263a07ad463304561df6446ca09bb3aa3d3bcd6ab46f02",
+        "size": 90576888
       }
     },
     "darwin-x64": {
       "binary": "claude.zst",
-      "checksum": "157e1ad1310d96edcbadc7308debdec4cd5a40ea92b7e6e487ba88d056c3e934",
-      "size": 88633774,
+      "checksum": "640a8e2576fa47ad5c702d4f75db945aca9d4a1ee98c8d3f325b185a03afdf25",
+      "size": 95931134,
       "bundle": {
-        "checksum": "5a9d4ca1a59dadb842467cd863ceb8cfe453f28dea02557e7a909d4edf0b8dea",
-        "size": 88642019
+        "checksum": "25980967e507c4cee357ad9a6c3b5cd8e9ceb16068c2be60099b250415f8824b",
+        "size": 95922840
       }
     },
     "linux-arm64": {
       "binary": "claude.zst",
-      "checksum": "b94d6bca4549db066a3ffdbdb3d0f64083aa11d4557f672fd1eb77173b665d0f",
-      "size": 93160808
+      "checksum": "d793e58a7006b552f68bcd28ff3b4dc724a73cd6a4edce552eb53ebd655fd930",
+      "size": 99876758
     },
     "linux-x64": {
       "binary": "claude.zst",
-      "checksum": "7121db492db6a44a756ae9581890613d914f78abba35cd57fa3bb4ed5e873e39",
-      "size": 93994767
+      "checksum": "2fd53245a9669ae0f826f1c4cee2e82e07f62b181b13f63b8f26c4be7cf2a4ec",
+      "size": 100901808
     },
     "linux-arm64-musl": {
       "binary": "claude.zst",
-      "checksum": "d60d859afeb94325c2603934b8e9514227d87c1802eb6021c1d572db7456a908",
-      "size": 91515582
+      "checksum": "1c6f052247dc9b401992c3308e1230fcb30e3e6b7cdbedd9146bd9accb8dbb2c",
+      "size": 98260253
     },
     "linux-x64-musl": {
       "binary": "claude.zst",
-      "checksum": "8b131b3cb1d9dbf753edb003e66d49c91b2e58e0411906803694d8f4b1b9ede2",
-      "size": 92405915
+      "checksum": "f78de5ef1384230c7d42cc1ce07dc784c6b7cc500333ca0d5571def22d4b78f5",
+      "size": 99320997
     },
     "win32-x64": {
       "binary": "claude.exe.zst",
-      "checksum": "825816dcf3b81a989bfb8c931ed02485f3e2014fe954326710607f7af0f10c4d",
-      "size": 96514855
+      "checksum": "4e51cbd729bdf36e0d2223c6a3f7eb2eca85bab1963df2823368463b0ceb35d6",
+      "size": 103917005
     },
     "win32-arm64": {
       "binary": "claude.exe.zst",
-      "checksum": "e85bee152b8e0e2216a97e3494708b66935e0279f05cc00ff32fea04a19cfe4a",
-      "size": 92454500
+      "checksum": "a98db27f35b62186d9093c34465067cdda3b927f46520627b2588684441ece4c",
+      "size": 99164139
     }
   },
   "sdkCompat": {
     "testedWrapperVersions": [
-      "0.3.267",
-      "0.3.268",
       "0.3.269",
       "0.3.270",
       "0.3.271",
@@ -72,7 +70,21 @@
       "0.3.282",
       "0.3.283",
       "0.3.284",
-      "0.3.285"
+      "0.3.285",
+      "0.3.286",
+      "0.3.287",
+      "0.3.288",
+      "0.3.289",
+      "0.3.290",
+      "0.3.291",
+      "0.3.292",
+      "0.3.293",
+      "0.3.294",
+      "0.3.295",
+      "0.3.296",
+      "0.3.299",
+      "0.3.300",
+      "0.3.301"
     ],
     "harnessSchema": 1
   }
