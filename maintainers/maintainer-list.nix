@@ -16284,6 +16284,11 @@
     github = "langsjo";
     githubId = 104687438;
   };
+  laontme = {
+    name = "Stanislav Smirnov";
+    github = "laontme";
+    githubId = 60975415;
+  };
   larry0x = {
     name = "Larry Engineer";
     email = "nixpkgs@larry.engineer";
