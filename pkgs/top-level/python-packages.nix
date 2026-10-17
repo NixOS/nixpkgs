@@ -174,8 +174,6 @@ self: super: with self; {
 
   aigpy = callPackage ../development/python-modules/aigpy { };
 
-  ailment = callPackage ../development/python-modules/ailment { };
-
   aio-geojson-client = callPackage ../development/python-modules/aio-geojson-client { };
 
   aio-geojson-generic-client =
@@ -1102,6 +1100,8 @@ self: super: with self; {
       { };
 
   angr = callPackage ../development/python-modules/angr { };
+
+  angr-data = callPackage ../development/python-modules/angr-data { };
 
   angrcli = callPackage ../development/python-modules/angrcli { inherit (pkgs) coreutils; };
 
@@ -17664,6 +17664,8 @@ self: super: with self; {
   pyxbe = callPackage ../development/python-modules/pyxbe { };
 
   pyxdg = callPackage ../development/python-modules/pyxdg { };
+
+  pyxdia = callPackage ../development/python-modules/pyxdia { };
 
   pyxeoma = callPackage ../development/python-modules/pyxeoma { };
 
