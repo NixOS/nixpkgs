@@ -1742,8 +1742,6 @@ with pkgs;
 
   uutils-coreutils-noprefix = uutils-coreutils.override { prefix = null; };
 
-  xkcdpass = with python3Packages; toPythonApplication xkcdpass;
-
   zonemaster-cli = perlPackages.ZonemasterCLI;
 
   ### DEVELOPMENT / EMSCRIPTEN
