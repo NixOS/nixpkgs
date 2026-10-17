@@ -204,6 +204,10 @@ in
           "lisp/net/tramp.el"
         ];
       })
+      (builtins.path {
+        name = "backport-tramp-get-connection-local-criteria-30.patch";
+        path = ./backport-tramp-get-connection-local-criteria-30.patch;
+      })
     ];
   });
 }
