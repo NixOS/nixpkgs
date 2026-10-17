@@ -12,11 +12,13 @@
     && (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isWindows),
   _experimental-update-script-combinators,
   nix-update-script,
+  _7zz,
   enableUnfree ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "7zip-zstd";
   version = "26.02-v1.5.7-R2";
+  inherit (_7zz) setupHook;
 
   src = fetchFromGitHub {
     owner = "mcmilk";
@@ -141,7 +143,6 @@ stdenv.mkDerivation (finalAttrs: {
       runHook postInstall
     '';
 
-  setupHook = ./setup-hook.sh;
   passthru.updateScript = _experimental-update-script-combinators.sequence [
     (nix-update-script {
       attrPath = "_7zip-zstd";
