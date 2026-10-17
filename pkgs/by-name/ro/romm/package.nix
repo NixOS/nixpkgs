@@ -36,6 +36,13 @@ stdenvNoCC.mkDerivation (
     postPatch = ''
       substituteInPlace backend/__version__.py \
         --replace-fail '<version>' '${finalAttrs.version}'
+
+      # While RomM disables Redis maintenance notifications it still passes this
+      # option. The redis client (8.0.1) in nixpkgs removed this argument so
+      # fails to launch
+      substituteInPlace backend/handler/redis_handler.py \
+        --replace-fail 'from redis.maint_notifications import MaintNotificationsConfig' "" \
+        --replace-fail '    "maint_notifications_config": MaintNotificationsConfig(enabled=False),' ""
     '';
 
     dontConfigure = true;
