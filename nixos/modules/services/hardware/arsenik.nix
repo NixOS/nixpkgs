@@ -10,7 +10,7 @@ in
 {
   options.services.arsenik = {
     enable = lib.mkEnableOption "A 33-key layout that works with all keyboards.";
-    package = lib.mkPackageOption pkgs "arsenik" { };
+    package = lib.mkPackageOption pkgs "kanata-config-aekeynox" { };
     tap_timeout = lib.mkOption {
       default = 200;
       description = "The key must be pressed twice in XX ms to enable repetitions.";
