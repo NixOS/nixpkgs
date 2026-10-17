@@ -1500,8 +1500,6 @@ with pkgs;
 
   inherit (ocamlPackages) patdiff;
 
-  pixcat = with python3Packages; toPythonApplication pixcat;
-
   ropgadget = with python3Packages; toPythonApplication ropgadget;
 
   scour = with python3Packages; toPythonApplication scour;
