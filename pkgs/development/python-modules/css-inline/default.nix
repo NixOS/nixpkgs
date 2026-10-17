@@ -17,18 +17,18 @@
 
 buildPythonPackage rec {
   pname = "css-inline";
-  version = "0.22.1";
+  version = "0.23.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Stranger6667";
     repo = "css-inline";
     rev = "python-v${version}";
-    hash = "sha256-wc1YxUGOR0HPvv5bDJDOhxLepbOZtu4jLHedVUR/DRM=";
+    hash = "sha256-8K3LDhuvT++m+l1sauEdMPZqbJKNquwoyJR1/RukGP4=";
   };
 
   postPatch = ''
-    cd bindings/python
+    cd crates/css-inline-python
     ln -s ${./Cargo.lock} Cargo.lock
 
     # don't rebuild std
@@ -40,10 +40,10 @@ buildPythonPackage rec {
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
     postPatch = ''
-      cd bindings/python
+      cd crates/css-inline-python
       ln -s ${./Cargo.lock} Cargo.lock
     '';
-    hash = "sha256-jtavQ85tTEs8SP0f8JVvinmQHZl4nHRrhg19aSweN1M=";
+    hash = "sha256-FG0oe4YIKWCS5ER0IeSbtTQ7U758SfexHTn8MKp/ZZM=";
   };
 
   nativeBuildInputs = [
