@@ -270,8 +270,11 @@ buildGoModule (finalAttrs: {
 
     tests = { inherit (nixosTests) portmaster; };
 
+    # Upstream tags unreleased builds and re-tags staging pre-releases, so only
+    # follow releases marked stable on GitHub (moved tags break pinned hashes).
     updateScript = nix-update-script {
       extraArgs = [
+        "--use-github-releases"
         "--subpackage"
         "portmasterUI"
         "--subpackage"
