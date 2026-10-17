@@ -323,6 +323,9 @@ This makes reviews and suggestions much easier, since GitHub's review system is 
 It also helps identifying long sentences at a glance.
 This is [semantic line break](https://sembr.org/).
 
+A single line break on source markdown renders output in the same line.
+Two consecutive line breaks will render a line break in the output.
+
 Not everything has been migrated to this format yet.
 Please always use it for new content.
 When changing existing content, update formatting if possible, but avoid excessive diffs.
