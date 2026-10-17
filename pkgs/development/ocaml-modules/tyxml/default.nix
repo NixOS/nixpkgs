@@ -8,11 +8,11 @@
 
 buildDunePackage rec {
   pname = "tyxml";
-  version = "4.6.0";
+  version = "5.0.0";
 
   src = fetchurl {
     url = "https://github.com/ocsigen/tyxml/releases/download/${version}/tyxml-${version}.tbz";
-    hash = "sha256-v+tnPGtOEgpOykxIRIrdR9w/jQLCtA9j/9zMTpHJAt0=";
+    hash = "sha256-xyW7iRj/G2AeeSa3trR5n49Ktw9fup8JcNplfLgsB/I=";
   };
 
   propagatedBuildInputs = [
