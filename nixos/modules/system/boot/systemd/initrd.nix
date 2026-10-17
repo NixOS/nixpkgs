@@ -7,9 +7,29 @@
   ...
 }:
 
-with lib;
-
 let
+  inherit (lib)
+    filter
+    elem
+    filterAttrs
+    concatLists
+    mapAttrsToList
+    getBin
+    concatStringsSep
+    mkEnableOption
+    mkOption
+    types
+    literalExpression
+    mkIf
+    any
+    isBool
+    isString
+    optionalAttrs
+    mapAttrs'
+    nameValuePair
+    listToAttrs
+    ;
+
   inherit (utils) systemdUtils escapeSystemdPath;
   inherit (systemdUtils.unitOptions) unitOption;
   inherit (systemdUtils.lib)
@@ -26,6 +46,12 @@ let
     ;
 
   cfg = config.boot.initrd.systemd;
+
+  withKmod =
+    let
+      kconfig = config.system.build.kernel.config;
+    in
+    kconfig.isSet "MODULES" -> kconfig.isYes "MODULES";
 
   upstreamUnits = [
     "basic.target"
@@ -98,6 +124,16 @@ let
   jobScripts = concatLists (
     mapAttrsToList (_: unit: unit.jobScripts or [ ]) (filterAttrs (_: v: v.enable) cfg.services)
   );
+  unitEnv = pkgs.buildEnv {
+    name = "initrd-unit-env";
+    paths = concatLists (
+      mapAttrsToList (_: unit: unit.path or [ ]) (filterAttrs (_: v: v.enable) cfg.services)
+    );
+    pathsToLink = [
+      "/bin"
+      "/sbin"
+    ];
+  };
 
   stage1Units = generateUnits {
     type = "initrd";
@@ -193,7 +229,7 @@ in
         KExecWatchdogSec = "5min";
       };
       description = ''
-        Options for the global systemd service manager used in initrd. See {manpage}`systemd-system.conf(5)` man page
+        Options for the global systemd service manager used in initrd. See {manpage}`systemd-system.conf(5)`
         for available options.
       '';
     };
@@ -248,7 +284,7 @@ in
       '';
       example = literalExpression ''
         {
-          umount = ''${pkgs.util-linux}/bin/umount;
+          umount = "''${pkgs.util-linux}/bin/umount";
         }
       '';
       type = types.attrsOf types.path;
@@ -265,18 +301,30 @@ in
     };
 
     root = lib.mkOption {
-      type = lib.types.enum [
-        "fstab"
-        "gpt-auto"
-      ];
+      type = lib.types.nullOr (
+        lib.types.enum [
+          "fstab"
+          "gpt-auto"
+        ]
+      );
       default = "fstab";
       example = "gpt-auto";
       description = ''
         Controls how systemd will interpret the root FS in initrd. See
-        {manpage}`kernel-command-line(7)`. NixOS currently does not
-        allow specifying the root file system itself this
-        way. Instead, the `fstab` value is used in order to interpret
-        the root file system specified with the `fileSystems` option.
+        the description of the `root=` argument in {manpage}`kernel-command-line(7)`.
+
+        When set to "gpt-auto", {manpage}`systemd-gpt-auto-generator(8)`
+        automatically discovers and mounts the root, EFI System (ESP),
+        swap, and various other partitions based on their partition
+        type, allowing them to be effectively omitted from
+        {option}`fileSystems.<name>`.
+        Note however that {option}`boot.initrd.supportedFilesystems`
+        will not be inferred for partitions without an explicit
+        {option}`fileSystems.<name>.fsType`, therefore the filesystem
+        names of all partitions mounted through "gpt-auto" must be
+        manually appended to `supportedFilesystems`.
+
+        If root shall be omitted, set this option to `null`.
       '';
     };
 
@@ -489,20 +537,20 @@ in
     ]
     ++ lib.optional cfg.package.withEfi "efivarfs";
 
-    boot.kernelParams = [
-      "root=${config.boot.initrd.systemd.root}"
-    ]
-    ++ lib.optional (config.boot.resumeDevice != "") "resume=${config.boot.resumeDevice}"
-    # `systemd` mounts root in initrd as read-only unless "rw" is on the kernel command line.
-    # For NixOS activation to succeed, we need to have root writable in initrd.
-    ++ lib.optional (config.boot.initrd.systemd.root == "gpt-auto") "rw";
+    boot.kernelParams =
+      lib.optional (config.boot.initrd.systemd.root != null) "root=${config.boot.initrd.systemd.root}"
+
+      ++ lib.optional (config.boot.resumeDevice != "") "resume=${config.boot.resumeDevice}"
+      # `systemd` mounts root in initrd as read-only unless "rw" is on the kernel command line.
+      # For NixOS activation to succeed, we need to have root writable in initrd.
+      ++ lib.optional (config.boot.initrd.systemd.root == "gpt-auto") "rw";
 
     boot.initrd.systemd = {
       initrdBin = [
         pkgs.coreutils
         cfg.package
       ]
-      ++ lib.optional (config.system.build.kernel.config.isYes "MODULES") cfg.package.kmod
+      ++ lib.optional withKmod cfg.package.kmod
       ++ lib.optionals cfg.shell.enable [
         # bashInteractive is easier to use and also required by debug-shell.service
         pkgs.bashInteractive
@@ -552,7 +600,7 @@ in
       // optionalAttrs (config.environment.etc ? "modprobe.d/nixos.conf") {
         "/etc/modprobe.d/nixos.conf".source = config.environment.etc."modprobe.d/nixos.conf".source;
       }
-      // optionalAttrs (with config.system.build.kernel.config; isSet "MODULES" -> isYes "MODULES") {
+      // optionalAttrs withKmod {
         "/lib".source = "${config.system.build.modulesClosure}/lib";
 
         "/etc/modules-load.d/nixos.conf".text = concatStringsSep "\n" config.boot.initrd.kernelModules;
@@ -607,6 +655,7 @@ in
         "${pkgs.bashNonInteractive}/bin"
       ]
       ++ jobScripts
+      ++ [ unitEnv ]
       ++ map (c: removeAttrs c [ "text" ]) (builtins.attrValues cfg.contents)
       ++ lib.optional (pkgs.stdenv.hostPlatform.libc == "glibc") "${pkgs.glibc}/lib/libnss_files.so.2";
 
@@ -636,6 +685,10 @@ in
             nameValuePair "${n}.automount" (automountToUnit v)
           ) cfg.automounts
         );
+
+      services."modprobe@" = lib.mkIf withKmod {
+        serviceConfig.ExecSearchPath = lib.makeBinPath [ cfg.package.kmod ];
+      };
 
       services.initrd-find-nixos-closure = lib.mkIf (!config.system.nixos-init.enable) {
         description = "Find NixOS closure";
@@ -730,12 +783,21 @@ in
           ];
         };
         serviceConfig.Type = "oneshot";
+        serviceConfig.EnvironmentFile = "-/etc/switch-root.conf";
         description = "NixOS Activation";
 
         script = # bash
           ''
             set -uo pipefail
             export PATH="/bin:${cfg.package.util-linux}/bin"
+
+            # A non-NixOS closure (e.g. init=/bin/sh) has no prepare-root;
+            # initrd-find-nixos-closure records this as a non-empty NEW_INIT.
+            # Skip activation and let initrd-switch-root hand over to it directly.
+            if [ -n "''${NEW_INIT:-}" ]; then
+              echo "$NEW_INIT is not a NixOS system - not activating"
+              exit 0
+            fi
 
             closure="$(realpath /nixos-closure)"
 

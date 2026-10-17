@@ -6,7 +6,6 @@
   testers,
 }:
 let
-  inherit (lib) fileset;
 
   runTests = stdenv.mkDerivation {
     name = "tests-activation-lib";

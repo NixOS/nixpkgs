@@ -15,12 +15,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "alpine";
-  version = "2.29.9";
+  version = "2.29.99";
 
   src = fetchgit {
     url = "https://repo.or.cz/alpine.git";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uAPQlF2IQPSZ0QoK9bwh6RBGsb1X0ktP1eVhs3RO44I=";
+    hash = "sha256-h/6HSqEmMZAjVtDJ+9MqM1WYBalthl0mfsC1/f4OmOw=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];

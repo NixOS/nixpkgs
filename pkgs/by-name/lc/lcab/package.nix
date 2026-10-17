@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Create cabinet (.cab) archives";
-    homepage = "http://ohnopub.net/~ohnobinki/lcab";
+    homepage = "https://salsa.debian.org/debian/lcab";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ emilytrau ];
     platforms = lib.platforms.unix;

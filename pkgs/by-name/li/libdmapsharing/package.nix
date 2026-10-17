@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "libdmapsharing";
     rev = "${lib.toUpper pname}_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "oR9lpOFxgGfrtzncFT6dbmhKQfcuH/NvhOR/USHAHQc=";
+    hash = "sha256-oR9lpOFxgGfrtzncFT6dbmhKQfcuH/NvhOR/USHAHQc=";
   };
 
   strictDeps = true;

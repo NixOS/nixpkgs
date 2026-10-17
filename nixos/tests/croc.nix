@@ -12,8 +12,8 @@ in
   meta = with pkgs.lib.maintainers; {
     maintainers = [
       equirosa
-      SuperSandro2000
       ryan4yin
+      kaynetik
     ];
   };
 

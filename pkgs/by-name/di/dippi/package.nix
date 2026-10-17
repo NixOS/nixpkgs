@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  blueprint-compiler,
   meson,
   ninja,
   pkg-config,
@@ -16,16 +17,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dippi";
-  version = "4.2.0";
+  version = "5.0.3";
 
   src = fetchFromGitHub {
     owner = "cassidyjames";
     repo = "dippi";
     rev = finalAttrs.version;
-    hash = "sha256-iA7ymByLVrkOatW4Y79pGV7GhlS8G2gHY6PHpOfMq8g=";
+    hash = "sha256-8xtSTOMIBKi9vkBSjux9jh0ugmo+7UvTZYl1RpBgRDc=";
   };
 
   nativeBuildInputs = [
+    blueprint-compiler
     meson
     ninja
     vala

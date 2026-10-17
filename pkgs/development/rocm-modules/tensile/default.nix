@@ -18,13 +18,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tensile";
-  version = "7.2.1";
+  version = "7.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-libraries";
-    rev = "rocm-${finalAttrs.version}";
+    tag = "rocm-${finalAttrs.version}";
     sparseCheckout = [
       "shared/tensile"
       "shared"
@@ -77,7 +77,10 @@ buildPythonPackage (finalAttrs: {
     clr
   ];
 
-  env.ROCM_PATH = "${clr}";
+  env = {
+    dontCheckPythonMetadata = true;
+    ROCM_PATH = "${clr}";
+  };
 
   pythonImportsCheck = [ "Tensile" ];
 
@@ -86,7 +89,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "GEMMs and tensor contractions";
     homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/shared/tensile";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };

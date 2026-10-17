@@ -17,7 +17,7 @@
   SDL2_sound,
   SDL2_mixer,
   SDL2_image,
-  SDL_compat,
+  sdl12-compat,
   ffmpeg,
   qemu,
 
@@ -30,13 +30,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl2-compat";
-  version = "2.32.64";
+  version = "2.32.74";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "sdl2-compat";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-1K+KW5cK3YgcZtrMqJ7VxKGsYnZR/fJmQtRZbWk2TGM=";
+    hash = "sha256-6P81AUl1KRA3OysI3Ma2uoIqlrHvtQvaVm6VIlRguLI=";
   };
 
   nativeBuildInputs = [
@@ -64,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "SDL2COMPAT_TESTS" finalAttrs.finalPackage.doCheck)
     (lib.cmakeFeature "CMAKE_INSTALL_RPATH" (lib.makeLibraryPath [ sdl3' ]))
+    (lib.cmakeFeature "CMAKE_BUILD_RPATH" (lib.makeLibraryPath [ sdl3' ]))
   ];
 
   # skip timing-based tests as those are flaky
@@ -87,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
       inherit
-        SDL_compat
+        sdl12-compat
         SDL2_ttf
         SDL2_net
         SDL2_gfx

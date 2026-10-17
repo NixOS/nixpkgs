@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "glvnd";
     repo = "libglvnd";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-2U9JtpGyP4lbxtVJeP5GUgh5XthloPvFIw28+nldYx8=";
+    hash = "sha256-2U9JtpGyP4lbxtVJeP5GUgh5XthloPvFIw28+nldYx8=";
   };
 
   patches = [
@@ -112,6 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     # https://gitlab.freedesktop.org/glvnd/libglvnd/-/issues/212
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
-    maintainers = [ ];
+    teams = [ lib.teams.freedesktop ];
   };
 })

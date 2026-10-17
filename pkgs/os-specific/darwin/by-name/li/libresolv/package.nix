@@ -1,19 +1,18 @@
 {
   lib,
-  apple-sdk,
   mkAppleDerivation,
+  sourceRelease,
   stdenvNoCC,
 }:
 
 let
-  configd = apple-sdk.sourceRelease "configd";
-  dyld = apple-sdk.sourceRelease "dyld";
-  Libinfo = apple-sdk.sourceRelease "Libinfo";
-  Libnotify = apple-sdk.sourceRelease "Libnotify";
-  xnu = apple-sdk.sourceRelease "xnu";
+  configd = sourceRelease "configd";
+  dyld = sourceRelease "dyld";
+  Libinfo = sourceRelease "Libinfo";
+  Libnotify = sourceRelease "Libnotify";
 
   # `arpa/nameser_compat.h` is included in the Libc source release instead of libresolv.
-  Libc = apple-sdk.sourceRelease "Libc";
+  Libc = sourceRelease "Libc";
 
   privateHeaders = stdenvNoCC.mkDerivation {
     name = "libresolv-deps-private-headers";
@@ -23,8 +22,12 @@ let
         '${dyld}/include/mach-o/dyld_priv.h'
 
       substituteInPlace "$out/include/mach-o/dyld_priv.h" \
-        --replace-fail ', bridgeos(3.0)' "" \
-        --replace-fail '//@VERSION_DEFS@' 'const dyld_build_version_t dyld_2024_SU_E_os_versions = { 1 /* macOS */, 150400 };'
+        --replace-fail ', bridgeos(3.0)' ""
+
+      cat <<EOF > "$out/include/mach-o/dyld_version_defines.h"
+      #pragma once
+      const dyld_build_version_t dyld_2024_SU_E_os_versions = { 1 /* macOS */, 150400 };
+      EOF
     '';
   };
 in
@@ -45,7 +48,7 @@ mkAppleDerivation {
       --replace-fail '<md5.h>' '<CommonCrypto/CommonDigest.h>'
   '';
 
-  xcodeHash = "sha256-Q5jHee9rxge6HJtf9/sFK15FsS02GQmx7L0BBDiyGIs=";
+  xcodeHash = "sha256-pQ1eFMPnSy8M3pfvv+sPyale9xDlVCMif0EWO8PO7zg=";
 
   env.NIX_CFLAGS_COMPILE = "-I${privateHeaders}/include -I${configd}/dnsinfo -I${Libinfo}/lookup.subproj -I${Libnotify}";
 

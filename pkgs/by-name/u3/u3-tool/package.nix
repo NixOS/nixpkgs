@@ -10,13 +10,16 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "u3-tool";
   version = "1.0";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   enableParallelBuilding = true;
 
   src = fetchFromGitHub {
     # original sourceforge mirror does not provide direct access to tag 1.0
     owner = "marcusrugger";
     repo = "u3-tool";
-    rev = "${finalAttrs.pname}-${finalAttrs.version}";
+    tag = "u3-tool-${finalAttrs.version}";
     hash = "sha256-c3cfWUUT5lwy8OedAtwvhuNEa5hgfwrKGJPY/zAlALw=";
   };
 

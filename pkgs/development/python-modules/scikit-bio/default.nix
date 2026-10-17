@@ -28,14 +28,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "scikit-bio";
-  version = "0.7.2";
+  version = "0.7.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-bio";
     repo = "scikit-bio";
     tag = finalAttrs.version;
-    hash = "sha256-zBOUZukqLhTxKG9BluWB+2zTCx5ALhM1s+YP2itqg9A=";
+    hash = "sha256-7cptpv7x/2KJbyMCZ4X6wVVUMx+CDcZ6nOtbeUoD5a0=";
   };
 
   build-system = [

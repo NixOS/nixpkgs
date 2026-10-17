@@ -23,21 +23,21 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cgit";
-  version = "1.3";
+  version = "1.3.1";
 
   src = fetchurl {
-    url = "https://git.zx2c4.com/cgit/snapshot/cgit-1.3.tar.xz";
-    sha256 = "836b6edbc7f99e11037a8b928d609ce346ed77a55545e17fff8cea59b5b7aa42";
+    url = "https://git.zx2c4.com/cgit/snapshot/cgit-${finalAttrs.version}.tar.xz";
+    sha256 = "c40fd71e120783d5e57d822208f3e17333cde2cd4baf3e7c8c75630b68afe12a";
   };
 
   # cgit is tightly coupled with git and needs a git source tree to build.
   # IMPORTANT: Remember to check which git version cgit needs on every version
   # bump (look for "GIT_VER" in the top-level Makefile).
   gitSrc = fetchurl {
-    url = "mirror://kernel/software/scm/git/git-2.53.0.tar.xz";
-    hash = "sha256-WBi9fYCwYbu9/sikM9YJ3IgYoFmR9zH/xKVh4soYxlM=";
+    url = "mirror://kernel/software/scm/git/git-2.54.0.tar.xz";
+    hash = "sha256-9okWI2TBDeee+Jqo2/SHMesFfjTtu9IKylEM4BVGgaM=";
   };
 
   separateDebugInfo = true;
@@ -125,4 +125,4 @@ stdenv.mkDerivation {
       sternenseemann
     ];
   };
-}
+})

@@ -12,7 +12,7 @@ buildFishPlugin rec {
     owner = "jorgebucaran";
     repo = "fishtape";
     rev = version;
-    sha256 = "0dxcyhs2shhgy5xnwcimqja8vqsyk841x486lgq13i3y1h0kp2kd";
+    hash = "sha256-bYo7AQx+xBHwowaRHgiaXuONlMQ1Mm578Q9CLTT0rDc=";
   };
 
   checkFunctionDirs = [ "./" ]; # fishtape is introspective

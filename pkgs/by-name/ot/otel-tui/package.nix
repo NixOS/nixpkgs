@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "otel-tui";
-  version = "0.7.1";
+  version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "ymtdzzz";
     repo = "otel-tui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+OvbBmFGyS5tpFtgn1DDxWp+LD5BAl9ojSIDGokfcRk=";
+    hash = "sha256-m+3yVFlB4cSJMiuBdbPZ7oEFLw32980bbZ0KUpb5FSY=";
   };
 
-  vendorHash = "sha256-2cH4DYogEfVywynfpZk6XfaiZaNyzbsDiwGSwolREPQ=";
+  vendorHash = "sha256-6MINrP1RMLievsVfkU4vSQ5SV4s9NQoKRp8LdUWkmn0=";
 
   env.GOWORK = "off";
 

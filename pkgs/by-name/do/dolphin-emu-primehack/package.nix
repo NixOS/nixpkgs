@@ -29,7 +29,6 @@
   mbedtls,
   miniupnpc,
   openal,
-  pcre,
   portaudio,
   readline,
   SDL2,
@@ -99,7 +98,6 @@ stdenv.mkDerivation (finalAttrs: {
     mbedtls
     miniupnpc
     openal
-    pcre
     portaudio
     qt6.qtbase
     qt6.qtsvg

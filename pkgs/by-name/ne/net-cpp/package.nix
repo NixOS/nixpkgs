@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   gitUpdater,
   makeFontsConf,
   testers,
@@ -31,28 +30,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "net-cpp";
-  version = "3.2.1";
+  version = "3.2.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lib-cpp/net-cpp";
     tag = finalAttrs.version;
-    hash = "sha256-1rUPdN62u4eYtrXgoVaeSHro4gnAfFAl1brt+tE45oE=";
+    hash = "sha256-6isbPSzoPcnqbv6+ju/Arbcy+PgFxFF376d4CGmQ6wM=";
   };
 
   outputs = [
     "out"
     "dev"
     "doc"
-  ];
-
-  patches = [
-    # Remove when version > 3.2.1
-    (fetchpatch {
-      name = "0001-net-cpp-Look-for-python3-executable-at-configure-time-instead-of-hardcoding-a-path.patch";
-      url = "https://gitlab.com/ubports/development/core/lib-cpp/net-cpp/-/commit/811da28f36f34cc2ea32dc96b2c65932d4f954b0.patch";
-      hash = "sha256-CC7fEuRNuf5TNEfhFJr9VLWFWfTnFtIvSTUoCcwGe68=";
-    })
   ];
 
   strictDeps = true;

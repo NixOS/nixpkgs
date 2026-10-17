@@ -7,13 +7,13 @@
 buildHomeAssistantComponent rec {
   owner = "iprak";
   domain = "sensi";
-  version = "2.1.4";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = domain;
     tag = "v${version}";
-    hash = "sha256-FTyFxQd2upNUKhfSfd5rEr5BLpu6veYHrExHUazTamU=";
+    hash = "sha256-RvSj2a2vjdLUCzCjl2xK4gfn8IqJkPCnmCFaMDd16V8=";
   };
 
   postPatch = ''

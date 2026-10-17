@@ -11,15 +11,16 @@
   preConfigure,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "word-count";
-  version = "0.27.2";
+  # https://github.com/PyO3/pyo3/blob/v0.28.2/examples/word-count/pyproject.toml
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "PyO3";
     repo = "pyo3";
-    rev = "v${version}";
-    hash = "sha256-xuC/7rynufWCHBnMiJny4m1Y1aaogdv/5UsafpmZLAw=";
+    tag = "v0.28.2";
+    hash = "sha256-Jg+eni7I0jVUFViWbgj5F094ksvyuvF4mdgGzh0PMaQ=";
   };
 
   cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
@@ -43,4 +44,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

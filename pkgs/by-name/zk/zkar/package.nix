@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "zkar";
-  version = "1.5.1";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "phith0n";
     repo = "zkar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xnj3GOZoLPE/kyGgi5i2o61P7Snt0L0JRGHLGNQDLRI=";
+    hash = "sha256-7vpcfmUu/dmQILpO/WRtM92UrUMrZHBNWIM9CoH81as=";
   };
 
   vendorHash = "sha256-Eyi22d6RkIsg6S5pHXOqn6kULQ/mLeoaxSxxJJkMgIQ=";

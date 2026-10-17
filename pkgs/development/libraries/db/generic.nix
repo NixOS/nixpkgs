@@ -4,6 +4,7 @@
   fetchpatch,
   fetchurl,
   autoreconfHook,
+  autoconf269,
   cxxSupport ? true,
   compat185 ? true,
   dbmSupport ? false,
@@ -26,9 +27,11 @@ stdenv.mkDerivation (
       sha256 = sha256;
     };
 
-    # The provided configure script features `main` returning implicit `int`, which causes
-    # configure checks to work incorrectly with clang 16.
-    nativeBuildInputs = [ autoreconfHook ];
+    # autoreconfHook: the provided configure script features `main` returning implicit `int`,
+    # which causes configure checks to work incorrectly with clang 16.
+    nativeBuildInputs = lib.optionals stdenv.cc.isClang [ autoconf269 ] ++ [ autoreconfHook ];
+
+    strictDeps = true;
 
     patches = [
       (fetchpatch {
@@ -110,6 +113,8 @@ stdenv.mkDerivation (
     checkPhase = ''
       make examples_c examples_cxx
     '';
+
+    __structuredAttrs = true;
 
     meta = {
       homepage = "https://www.oracle.com/database/technologies/related/berkeleydb.html";

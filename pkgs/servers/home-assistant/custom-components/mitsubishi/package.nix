@@ -11,18 +11,20 @@
 buildHomeAssistantComponent rec {
   owner = "pymitsubishi";
   domain = "mitsubishi";
-  version = "0.5.5";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "pymitsubishi";
     repo = "homeassistant-mitsubishi";
     tag = "v${version}";
-    hash = "sha256-qP2jLkDeiNMdTlHg0G8AryRb2v0ohGnkIoQWIWvbTbs=";
+    hash = "sha256-04QBtgkRDmrXI6Vl3FvzTiy7MqTDnJgCqExLwlzR4pw=";
   };
 
   dependencies = [
     pymitsubishi
   ];
+
+  ignoreVersionRequirement = [ "pymitsubishi" ];
 
   nativeCheckInputs = [
     pytest-cov-stub

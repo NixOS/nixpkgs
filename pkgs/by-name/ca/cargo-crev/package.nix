@@ -6,6 +6,7 @@
   perl,
   pkg-config,
   curl,
+  libgit2,
   libiconv,
   openssl,
   gitMinimal,
@@ -13,16 +14,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-crev";
-  version = "0.26.5";
+  version = "0.27.1";
 
   src = fetchFromGitHub {
     owner = "crev-dev";
     repo = "cargo-crev";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-P6i2RvosI36rrg52kUcdrb5y4Fg0ms/mH5hcOWNgSik=";
+    sha256 = "sha256-ezMpxYrJJ2zqEwCaDu2DFMwd6d/nfPVO6z2Lm4elIYE=";
   };
 
-  cargoHash = "sha256-ZlcKnSVpMxQqstbr/VkR/iT1B0wR5qnh5VLpNpYsTRw=";
+  cargoHash = "sha256-CYvvwgDZ+yAr7kLGEVZLVx7+sZUc5vu85AT5xLJBSbQ=";
+
+  env.LIBGIT2_NO_VENDOR = 1;
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -36,6 +39,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    libgit2
     openssl
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [

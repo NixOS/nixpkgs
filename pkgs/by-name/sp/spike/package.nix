@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   version = "1.1.0-unstable-2024-09-21";
 
   src = fetchFromGitHub {
-    owner = "riscv";
+    owner = "riscv-software-src";
     repo = "riscv-isa-sim";
     rev = "de5094a1a901d77ff44f89b38e00fefa15d4018e";
     sha256 = "sha256-mAgR2VzDgeuIdmPEgrb+MaA89BnWfmNanOVidqn0cgc=";
@@ -45,7 +45,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "RISC-V ISA Simulator";
-    homepage = "https://github.com/riscv/riscv-isa-sim";
+    homepage = "https://github.com/riscv-software-src/riscv-isa-sim";
     license = lib.licenses.bsd3;
     platforms = [
       "x86_64-linux"

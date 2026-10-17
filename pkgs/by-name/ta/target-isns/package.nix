@@ -32,6 +32,12 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/open-iscsi/target-isns/commit/e209821423f936d1cc9b946fb8f7a8979b8e751b.patch?full_index=1";
       hash = "sha256-86nl8wTiI9WSZ+Hhw/a9VtgS8OLqoFwiot5iU5IK0f8=";
     })
+
+    # Fix build w/ glibc-2.44
+    (fetchpatch {
+      url = "https://github.com/open-iscsi/target-isns/commit/d3645f0c357b2b14fb682fa2cd4ba3621efc4cea.patch";
+      hash = "sha256-/ew+B4WDF2s5bjfPLZ7glHW+o/pRTI7zPHLTDh+n4lY=";
+    })
   ];
 
   cmakeFlags = [ "-DSUPPORT_SYSTEMD=ON" ];

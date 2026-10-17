@@ -1,135 +1,170 @@
 {
+  lib,
+  stdenvNoCC,
+  bintools,
   fetchurl,
-  fontconfig,
-  freetype,
+  copyDesktopItems,
+  makeDesktopItem,
+  makeWrapper,
+  unzip,
+  jdk,
   glib,
   gsettings-desktop-schemas,
   gtk3,
-  jdk17,
-  lib,
-  libx11,
-  libxrender,
   libxtst,
-  makeDesktopItem,
-  makeWrapper,
-  shared-mime-info,
-  stdenv,
-  unzip,
   webkitgtk_4_1,
-  zlib,
 }:
 
-let
-  pVersion = "1.15.0.20231206";
-  pVersionTriple = lib.splitVersion pVersion;
-  majorVersion = lib.elemAt pVersionTriple 0;
-  minorVersion = lib.elemAt pVersionTriple 1;
-  patchVersion = lib.elemAt pVersionTriple 2;
-  baseVersion = "${majorVersion}.${minorVersion}.${patchVersion}";
-  jdk = jdk17;
-in
-stdenv.mkDerivation rec {
-  pname = "eclipse-mat";
-  version = pVersion;
+stdenvNoCC.mkDerivation (
+  finalAttrs:
+  let
+    baseVersion = lib.versions.pad 3 finalAttrs.version;
 
-  src = fetchurl {
-    url = "https://ftp.halifax.rwth-aachen.de/eclipse//mat/${baseVersion}/rcp/MemoryAnalyzer-${version}-linux.gtk.x86_64.zip";
-    sha256 = "sha256-icmo5zdK0XaH32kXwZUVaQ0VPSGEgvlLr7v7PtdbmCg=";
-  };
+    sources = {
+      x86_64-linux = {
+        suffix = "linux.gtk.x86_64";
+        hash = "sha256-4eqAp5hNQR5MTX37qwktqSVfe3ctaBolamEEm8yIN2c=";
+      };
+      aarch64-linux = {
+        suffix = "linux.gtk.aarch64";
+        hash = "sha256-MJUome0KjXjmjROTTnDbSTSnDKiUGHt6LAZY1giXmQ0=";
+      };
+      aarch64-darwin = {
+        suffix = "macosx.cocoa.aarch64";
+        hash = "sha256-Of/BJTaxD6x0+aNDKeod1RVWG86XFBmk8qdbU/p73qQ=";
+      };
+    };
 
-  desktopItem = makeDesktopItem {
-    name = "eclipse-mat";
-    exec = "eclipse-mat";
-    icon = "eclipse";
-    comment = "Eclipse Memory Analyzer";
-    desktopName = "Eclipse MAT";
-    genericName = "Java Memory Analyzer";
-    categories = [ "Development" ];
-  };
+    inherit (stdenvNoCC.hostPlatform) system;
+    source = sources.${system} or (throw "Unsupported system: ${system}");
+  in
+  {
+    pname = "eclipse-mat";
+    version = "1.17.0.20260601";
 
-  unpackPhase = ''
-    unzip $src
-  '';
+    strictDeps = true;
+    __structuredAttrs = true;
 
-  buildCommand = ''
-    mkdir -p $out
-    unzip $src
-    mv mat $out
+    src = fetchurl {
+      urls = [
+        "https://ftp.halifax.rwth-aachen.de/eclipse/mat/${baseVersion}/rcp/MemoryAnalyzer-${finalAttrs.version}-${source.suffix}.zip"
+        "https://download.eclipse.org/mat/${baseVersion}/rcp/MemoryAnalyzer-${finalAttrs.version}-${source.suffix}.zip"
+      ];
+      inherit (source) hash;
+    };
 
-    # Patch binaries.
-    interpreter=$(echo ${stdenv.cc.libc}/lib/ld-linux*.so.2)
-    libCairo=$out/eclipse/libcairo-swt.so
-    patchelf --set-interpreter $interpreter $out/mat/MemoryAnalyzer
-    [ -f $libCairo ] && patchelf --set-rpath ${
-      lib.makeLibraryPath [
-        freetype
-        fontconfig
-        libx11
-        libxrender
-        zlib
-      ]
-    } $libCairo
+    sourceRoot = ".";
 
-    # Create wrapper script.  Pass -configuration to store settings in ~/.eclipse-mat/<version>
-    makeWrapper $out/mat/MemoryAnalyzer $out/bin/eclipse-mat \
-      --prefix PATH : ${jdk}/bin \
-      --prefix LD_LIBRARY_PATH : ${
-        lib.makeLibraryPath [
-          glib
-          gtk3
-          libxtst
-          webkitgtk_4_1
-        ]
-      } \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
-      --add-flags "-configuration \$HOME/.eclipse-mat/''${version}/configuration"
+    nativeBuildInputs = [
+      makeWrapper
+      unzip
+    ]
+    ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [
+      copyDesktopItems
+      glib
+    ];
 
-    # Create desktop item.
-    mkdir -p $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications
-    mkdir -p $out/share/pixmaps
-    find $out/mat/plugins -name 'eclipse*.png' -type f -exec cp {} $out/share/pixmaps \;
-    mv $out/share/pixmaps/eclipse64.png $out/share/pixmaps/eclipse.png
-  '';
+    buildInputs = lib.optionals stdenvNoCC.hostPlatform.isLinux [
+      gsettings-desktop-schemas
+      gtk3
+    ];
 
-  nativeBuildInputs = [
-    unzip
-    makeWrapper
-  ];
-  buildInputs = [
-    fontconfig
-    freetype
-    glib
-    gsettings-desktop-schemas
-    gtk3
-    jdk
-    libx11
-    libxrender
-    libxtst
-    zlib
-    shared-mime-info
-    webkitgtk_4_1
-  ];
+    # Keep the .app's notarized upstream signature valid
+    dontPatchShebangs = stdenvNoCC.hostPlatform.isDarwin;
 
-  dontBuild = true;
-  dontConfigure = true;
+    # The bundle ships JNA natives for every OS, so auditTmpdir finds Linux ELF
+    # objects and calls patchelf, which does not exist on Darwin.
+    noAuditTmpdir = stdenvNoCC.hostPlatform.isDarwin;
 
-  meta = {
-    description = "Fast and feature-rich Java heap analyzer";
-    mainProgram = "eclipse-mat";
-    longDescription = ''
-      The Eclipse Memory Analyzer is a tool that helps you find memory
-      leaks and reduce memory consumption. Use the Memory Analyzer to
-      analyze productive heap dumps with hundreds of millions of
-      objects, quickly calculate the retained sizes of objects, see
-      who is preventing the Garbage Collector from collecting objects,
-      run a report to automatically extract leak suspects.
-    '';
-    homepage = "https://www.eclipse.org/mat";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.epl20;
-    maintainers = [ lib.maintainers.ktor ];
-    platforms = [ "x86_64-linux" ];
-  };
+    desktopItems = lib.optionals stdenvNoCC.hostPlatform.isLinux [
+      (makeDesktopItem {
+        name = "eclipse-mat";
+        exec = "eclipse-mat";
+        icon = "eclipse-mat";
+        comment = "Eclipse Memory Analyzer";
+        desktopName = "Eclipse MAT";
+        genericName = "Java Memory Analyzer";
+        categories = [
+          "Development"
+          "Profiling"
+        ];
+      })
+    ];
 
-}
+    installPhase =
+      if stdenvNoCC.hostPlatform.isDarwin then
+        ''
+          runHook preInstall
+
+          mkdir -p $out/Applications
+          cp -R MemoryAnalyzer.app $out/Applications/
+
+          makeWrapper $out/Applications/MemoryAnalyzer.app/Contents/MacOS/MemoryAnalyzer $out/bin/eclipse-mat \
+            --prefix PATH : ${lib.makeBinPath [ jdk ]} \
+            --set JAVA_HOME ${jdk.home} \
+            --add-flags "-configuration \$HOME/.eclipse-mat/${finalAttrs.version}/configuration"
+
+          runHook postInstall
+        ''
+      else
+        ''
+          runHook preInstall
+
+          mkdir -p $out
+          cp -r mat $out/mat
+
+          patchelf --set-interpreter ${bintools.dynamicLinker} $out/mat/MemoryAnalyzer
+
+          # Pass -configuration so that settings are written to ~/.eclipse-mat/<version>
+          # instead of the read-only store path.
+          makeWrapper $out/mat/MemoryAnalyzer $out/bin/eclipse-mat \
+            --prefix PATH : ${lib.makeBinPath [ jdk ]} \
+            --set JAVA_HOME ${jdk.home} \
+            --prefix LD_LIBRARY_PATH : ${
+              lib.makeLibraryPath [
+                glib
+                gtk3
+                libxtst
+                webkitgtk_4_1
+              ]
+            } \
+            --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
+            --add-flags "-configuration \$HOME/.eclipse-mat/${finalAttrs.version}/configuration"
+
+          unzip -j -q mat/plugins/org.eclipse.mat.ui.rcp_*.jar "icons/memory_analyzer_*.png" -d icons
+          for size in 32 48 64 128 256; do
+            install -Dm444 icons/memory_analyzer_$size.png \
+              $out/share/icons/hicolor/''${size}x''${size}/apps/eclipse-mat.png
+          done
+
+          runHook postInstall
+        '';
+
+    passthru.updateScript = ./update.sh;
+
+    meta = {
+      description = "Fast and feature-rich Java heap analyzer";
+      longDescription = ''
+        The Eclipse Memory Analyzer is a tool that helps you find memory
+        leaks and reduce memory consumption. Use the Memory Analyzer to
+        analyze productive heap dumps with hundreds of millions of
+        objects, quickly calculate the retained sizes of objects, see
+        who is preventing the Garbage Collector from collecting objects,
+        run a report to automatically extract leak suspects.
+      '';
+      homepage = "https://eclipse.dev/mat/";
+      changelog = "https://eclipse.dev/mat/${baseVersion}/noteworthy.html";
+      sourceProvenance = with lib.sourceTypes; [
+        binaryBytecode
+        binaryNativeCode
+      ];
+      license = lib.licenses.epl20;
+      mainProgram = "eclipse-mat";
+      maintainers = with lib.maintainers; [
+        ktor
+        dfjay
+      ];
+      platforms = lib.attrNames sources;
+    };
+  }
+)

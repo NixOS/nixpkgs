@@ -73,7 +73,7 @@
   # Debug interactively with:
   # - nix run .#nixosTests.reaction-firewall.driverInteractive -L
   # - run_tests()
-  interactive.sshBackdoor.enable = true; # ssh -o User=root vsock%3
+  interactive.sshBackdoor.enable = true;
   interactive.nodes.machine = _: {
     virtualisation.graphics = false;
   };

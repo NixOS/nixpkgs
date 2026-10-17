@@ -379,7 +379,7 @@ systemctl start acme-example.com.service
 
 ## Ensuring dependencies for services that need to be reloaded when a certificate changes {#module-security-acme-reload-dependencies}
 
-Services that depend on ACME certificates and need to be reloaded can use one of two approaches to reload upon successfull certificate acquisition or renewal:
+Services that depend on ACME certificates and need to be reloaded can use one of two approaches to reload upon successful certificate acquisition or renewal:
 
 1. **Using the `security.acme.certs.<name>.reloadServices` option**: This will cause `systemctl try-reload-or-restart` to be run for the listed services.
 

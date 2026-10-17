@@ -48,6 +48,7 @@ lib.makeScope
         };
 
         bash-static = callPackage ./bash/static.nix {
+          gcc-buildbuild = gcc-latest;
           gcc = gcc-latest;
           gnumake = gnumake-musl;
           gnutar = gnutar-latest;
@@ -60,6 +61,7 @@ lib.makeScope
         };
 
         binutils-static = callPackage ./binutils/static.nix {
+          gcc-buildbuild = gcc-latest;
           gcc = gcc-latest;
           gnumake = gnumake-musl;
           gnutar = gnutar-latest;
@@ -148,16 +150,41 @@ lib.makeScope
           gnutar = gnutar-musl;
         };
 
-        gcc10 = callPackage ./gcc/10.nix {
+        gcc10-unwrapped = callPackage ./gcc/10.nix {
           gcc = gcc46-cxx;
           gnumake = gnumake-musl;
           gnutar = gnutar-latest;
         };
+        gcc10 = callPackage ./gcc/wrapper.nix {
+          gcc-unwrapped = gcc10-unwrapped;
+          bash-build = bash;
+          libc = musl;
+          libgcc = gcc10-unwrapped;
+          libstdcxx = gcc10-unwrapped;
+          targetPlatform = hostPlatform;
+          dynamicLinkerGlob = "${musl}/lib/libc.so";
+          staticLibgcc = true;
+        };
 
-        gcc-latest = callPackage ./gcc/latest.nix {
+        gcc-latest-unwrapped = callPackage ./gcc/ng.nix {
+          binutils-buildbuild = binutils;
+          binutils-buildtarget = binutils;
+          binutils-hosttarget = binutils;
           gcc = gcc10;
+          gcc-buildbuild = gcc10;
           gnumake = gnumake-musl;
           gnutar = gnutar-latest;
+          libc-headers = musl;
+          libc = musl;
+          targetPlatform = hostPlatform;
+        };
+        gcc-latest = callPackage ./gcc/wrapper.nix {
+          bash-build = bash;
+          gcc-unwrapped = gcc-latest-unwrapped;
+          targetPlatform = hostPlatform;
+          libc = musl;
+          dynamicLinkerGlob = "${musl}/lib/libc.so";
+          staticLibgcc = true;
         };
 
         gnugrep = callPackage ./gnugrep {
@@ -184,6 +211,9 @@ lib.makeScope
           tinycc = tinycc-musl;
           gawk = gawk-mes;
           gnumakeBoot = gnumake;
+          # GNU Make's release tarball relies on preserved mtimes for
+          # pregenerated Autotools files.
+          gnutar = gnutar-musl;
         };
 
         gnumake-static = callPackage ./gnumake/static.nix {
@@ -261,6 +291,57 @@ lib.makeScope
 
         heirloom-devtools = callPackage ./heirloom-devtools { tinycc = tinycc-mes; };
 
+        libbacktrace = callPackage ./gcc/libbacktrace.nix {
+          gcc = gcc10;
+          gnumake = gnumake-musl;
+          gnutar = gnutar-latest;
+        };
+
+        libgmp = callPackage ./gcc/gmp.nix {
+          gcc-buildbuild = gcc10;
+          gcc = gcc10;
+          gnumake = gnumake-musl;
+          gnutar = gnutar-latest;
+        };
+
+        libiberty = callPackage ./gcc/libiberty.nix {
+          gcc = gcc10;
+          gnumake = gnumake-musl;
+          gnutar = gnutar-latest;
+        };
+
+        libmpc = callPackage ./gcc/mpc.nix {
+          gcc = gcc10;
+          gnumake = gnumake-musl;
+          gnutar = gnutar-latest;
+        };
+
+        libmpfr = callPackage ./gcc/mpfr.nix {
+          gcc = gcc10;
+          gnumake = gnumake-musl;
+          gnutar = gnutar-latest;
+        };
+
+        libgcc = callPackage ./gcc/libgcc.nix {
+          binutils-buildbuild = binutils;
+          gcc-buildbuild = gcc10;
+          gcc = gcc-latest-unwrapped;
+          gnumake = gnumake-musl;
+          gnutar = gnutar-latest;
+          enableShared = false;
+          libc = musl;
+          libc-headers = musl;
+        };
+
+        libstdcxx = callPackage ./gcc/libstdcxx.nix {
+          gcc = gcc-latest-unwrapped;
+          gnumake = gnumake-musl;
+          gnutar = gnutar-latest;
+          libc = musl;
+          dynamicLinkerGlob = "${musl}/lib/libc.so";
+          staticLibgcc = true;
+        };
+
         linux-headers = callPackage ./linux-headers {
           gcc = gcc-latest;
           gnumake = gnumake-musl;
@@ -290,7 +371,14 @@ lib.makeScope
           gnumake = gnumake-musl;
         };
 
+        musl-headers = callPackage ./musl/headers.nix {
+          gcc = gcc46;
+          gnumake = gnumake-musl;
+          gnutar = gnutar-latest;
+        };
+
         musl-static = callPackage ./musl/static.nix {
+          libgcc = gcc-latest-unwrapped;
           gcc = gcc-latest;
           gnumake = gnumake-musl;
         };
@@ -361,75 +449,125 @@ lib.makeScope
           gnutar = gnutar-latest;
         };
 
-        inherit (callPackage ./utils.nix { }) derivationWithMeta writeTextFile writeText;
-        test = kaem.runCommand "minimal-bootstrap-test" { } (
-          ''
+        inherit (callPackage ./utils.nix { inherit hostPlatform; })
+          derivationWithMeta
+          writeTextFile
+          writeText
+          ;
+
+        tests = {
+          bootstrap-chain = kaem.runCommand "minimal-bootstrap-bootstrap-chain-test" { } ''
             echo ${bash.tests.get-version}
-            echo ${bash-static.tests.get-version}
             echo ${bash_2_05.tests.get-version}
             echo ${binutils.tests.get-version}
-            echo ${binutils-static.tests.get-version}
             echo ${bison.tests.get-version}
             echo ${bzip2.tests.get-version}
-            echo ${bzip2-static.tests.get-version}
             echo ${coreutils-musl.tests.get-version}
-            echo ${coreutils-static.tests.get-version}
             echo ${diffutils.tests.get-version}
-            echo ${diffutils-static.tests.get-version}
             echo ${findutils.tests.get-version}
-            echo ${findutils-static.tests.get-version}
             echo ${gawk.tests.get-version}
             echo ${gawk-mes.tests.get-version}
-            echo ${gawk-static.tests.get-version}
-            echo ${gcc46.tests.get-version}
-            echo ${gcc46-cxx.tests.hello-world}
-            echo ${gcc10.tests.hello-world}
-            echo ${gcc-latest.tests.hello-world}
             echo ${gnugrep.tests.get-version}
-            echo ${gnugrep-static.tests.get-version}
             echo ${gnum4.tests.get-version}
             echo ${gnumake-musl.tests.get-version}
-            echo ${gnumake-static.tests.get-version}
-            echo ${gnupatch-static.tests.get-version}
             echo ${gnused.tests.get-version}
             echo ${gnused-mes.tests.get-version}
-            echo ${gnused-static.tests.get-version}
             echo ${gnutar.tests.get-version}
             echo ${gnutar-latest.tests.get-version}
             echo ${gnutar-musl.tests.get-version}
-            echo ${gnutar-static.tests.get-version}
             echo ${gzip.tests.get-version}
-            echo ${gzip-static.tests.get-version}
             echo ${heirloom.tests.get-version}
             echo ${mes.compiler.tests.get-version}
             echo ${musl.tests.hello-world}
-            echo ${patchelf-static.tests.get-version}
             echo ${python.tests.get-version}
             echo ${tinycc-mes.compiler.tests.chain}
             echo ${tinycc-musl.compiler.tests.hello-world}
             echo ${xz.tests.get-version}
-          ''
-          + (lib.strings.optionalString (hostPlatform.libc == "glibc") ''
-            echo ${gcc-glibc.tests.hello-world}
-            echo ${glibc.tests.hello-world}
-          '')
-          + ''
             mkdir ''${out}
-          ''
-        );
+          '';
+
+          static-tools = kaem.runCommand "minimal-bootstrap-static-tools-test" { } ''
+            echo ${bash-static.tests.get-version}
+            echo ${binutils-static.tests.get-version}
+            echo ${bzip2-static.tests.get-version}
+            echo ${bzip2-static.tests.compress}
+            echo ${coreutils-static.tests.get-version}
+            echo ${diffutils-static.tests.get-version}
+            echo ${findutils-static.tests.get-version}
+            echo ${gawk-static.tests.get-version}
+            echo ${gnugrep-static.tests.get-version}
+            echo ${gnumake-static.tests.get-version}
+            echo ${gnupatch-static.tests.get-version}
+            echo ${gnused-static.tests.get-version}
+            echo ${gnutar-static.tests.get-version}
+            echo ${gzip-static.tests.get-version}
+            echo ${patchelf-static.tests.get-version}
+            echo ${xz-static.tests.get-version}
+            mkdir ''${out}
+          '';
+
+          compiler = kaem.runCommand "minimal-bootstrap-compiler-test" { } (
+            ''
+              echo ${gcc46.tests.get-version}
+              echo ${gcc46-cxx.tests.hello-world}
+              echo ${gcc10.tests.hello-world}
+              echo ${gcc-latest.tests.hello-world}
+            ''
+            + (lib.strings.optionalString (hostPlatform.libc == "glibc") ''
+              echo ${gcc-glibc.tests.hello-world}
+            '')
+            + ''
+              mkdir ''${out}
+            ''
+          );
+
+          full = kaem.runCommand "minimal-bootstrap-test" { } ''
+            echo ${tests.bootstrap-chain}
+            echo ${tests.static-tools}
+            echo ${tests.compiler}
+            mkdir ''${out}
+          '';
+        };
+
+        test = tests.full;
       }
       // (lib.optionalAttrs (hostPlatform.libc == "glibc")) {
-        gcc-glibc = callPackage ./gcc/glibc.nix {
+        gcc-glibc-unwrapped = callPackage ./gcc/ng.nix {
+          binutils-buildbuild = binutils;
+          binutils-buildtarget = binutils;
+          binutils-hosttarget = binutils-static;
           gcc = gcc-latest;
+          gcc-buildbuild = gcc-latest;
           gnumake = gnumake-musl;
           gnutar = gnutar-latest;
+          libc = glibc;
+          libc-headers = glibc;
+          targetPlatform = hostPlatform;
+        };
+
+        gcc-glibc = callPackage ./gcc/wrapper.nix {
+          bash-build = bash;
+          bash = bash-static;
+          binutils = binutils-static;
+          gcc-unwrapped = gcc-glibc-unwrapped;
+          libc = glibc;
+          targetPlatform = hostPlatform;
+          dynamicLinkerGlob = "${glibc}/lib/ld-linux*.so.2";
+          staticLibgcc = true;
         };
 
         glibc = callPackage ./glibc {
-          gcc = gcc-latest;
+          gcc = gcc-latest-unwrapped;
           gnumake = gnumake-musl;
           gnutar = gnutar-latest;
           gnugrep = gnugrep-static;
+        };
+
+        glibc-headers = callPackage ./glibc/headers.nix {
+          gcc = gcc-latest;
+          binutils-build = binutils;
+          gnumake = gnumake-musl;
+          gnutar = gnutar-latest;
         };
       }
     )

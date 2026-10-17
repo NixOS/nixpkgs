@@ -3,28 +3,31 @@
   buildPythonPackage,
   fetchFromGitHub,
   lib,
+  openccu-data,
   pydantic,
   pytest-asyncio,
+  pytest-xdist,
   pytestCheckHook,
   setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "aiohomematic-config";
-  version = "2026.3.5";
+  version = "2026.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sukramj";
     repo = "aiohomematic-config";
     tag = finalAttrs.version;
-    hash = "sha256-OGpGtF+BH+WWIGGfpS6myJ7fPi1wuWYjeSS9y9LhXGY=";
+    hash = "sha256-cZVq5IlVkKOaX+A5zEy1Cf78TmcUgzYIO2BzHDPJ0So=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     aiohomematic
+    openccu-data
     pydantic
   ];
 
@@ -32,6 +35,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-xdist
     pytestCheckHook
   ];
 

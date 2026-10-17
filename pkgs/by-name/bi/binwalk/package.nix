@@ -14,7 +14,7 @@
   lzo,
   lzop,
   lz4,
-  openssl_3,
+  openssl_3_5,
   pkg-config,
   python3,
   rustPlatform,
@@ -61,7 +61,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     dtc
     fontconfig
     lzo
-    openssl_3
+    openssl_3_5
     python3.pkgs.python-lzo
     ucl
     unzip
@@ -104,7 +104,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
           p7zip
           cabextract
           dmg2img
-          dumpifs
           jefferson
           vmlinux-to-elf
           lz4
@@ -119,7 +118,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
           unyaffs
           zstd
         ]
-        ++ lib.optionals enableUnfree [ unrar ]
+        ++ lib.optionals enableUnfree [
+          dumpifs
+          unrar
+        ]
       )
     }
   '';

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  fetchpatch,
   setuptools,
   spark-parser,
   xdis,
@@ -19,6 +20,14 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-eLdk1MhDsEVfs5223rQhpI1dPruEZTe6ZESv4QfE68E=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "support-xdis-6.3-api.patch";
+      url = "https://github.com/rocky/python-uncompyle6/commit/62372825c62044428c29a9ce86b5afa81e93c5ae.patch";
+      hash = "sha256-z11AKF5RC4gibUbH3hI2Rsbn8VDg49SnKfqV4TuVnjc=";
+    })
+  ];
 
   build-system = [ setuptools ];
 

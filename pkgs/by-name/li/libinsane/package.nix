@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     group = "World";
     owner = "OpenPaperwork";
     rev = finalAttrs.version;
-    sha256 = "sha256-2BLg8zB0InPJqK9JypQIMVXIJndo9ZuNB4OeOAo/Hsc=";
+    hash = "sha256-2BLg8zB0InPJqK9JypQIMVXIJndo9ZuNB4OeOAo/Hsc=";
   };
 
   nativeBuildInputs = [

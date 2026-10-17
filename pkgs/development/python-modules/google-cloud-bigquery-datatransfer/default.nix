@@ -13,15 +13,15 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-bigquery-datatransfer";
-  version = "3.21.0";
+  version = "3.24.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_bigquery_datatransfer";
-    inherit version;
-    hash = "sha256-zVgZBASf80Iv4RPHFa9Oy7E8+/UqU+l63UH6nl6+SHA=";
+    inherit (finalAttrs) version;
+    hash = "sha256-5X6HMhRX71XKAa6f94vRIRcN8HKHZWjjYcpsofQ5Z98=";
   };
 
   build-system = [ setuptools ];
@@ -58,8 +58,8 @@ buildPythonPackage rec {
   meta = {
     description = "BigQuery Data Transfer API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-bigquery-datatransfer";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-bigquery-datatransfer-v${version}/packages/google-cloud-bigquery-datatransfer/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-bigquery-datatransfer-v${finalAttrs.version}/packages/google-cloud-bigquery-datatransfer/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

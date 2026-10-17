@@ -2,6 +2,9 @@
   "chap-build-helpers-finalAttrs": [
     "index.html#chap-build-helpers-finalAttrs"
   ],
+  "chap-first-package": [
+    "index.html#chap-first-package"
+  ],
   "chap-release-notes": [
     "release-notes.html#chap-release-notes"
   ],
@@ -19,6 +22,9 @@
   ],
   "cmake-ctest-variables": [
     "index.html#cmake-ctest-variables"
+  ],
+  "compiling-wasm32-wasip1-package": [
+    "index.html#compiling-wasm32-wasip1-package"
   ],
   "coq-withPackages": [
     "index.html#coq-withPackages"
@@ -99,8 +105,20 @@
   "cuda-writing-tests": [
     "index.html#cuda-writing-tests"
   ],
+  "dev-environments": [
+    "index.html#dev-environments"
+  ],
   "ex-build-helpers-extendMkDerivation": [
     "index.html#ex-build-helpers-extendMkDerivation"
+  ],
+  "ex-build-helpers-extendMkDerivation-transformDrv-wrapper": [
+    "index.html#ex-build-helpers-extendMkDerivation-transformDrv-wrapper"
+  ],
+  "ex-first-package-go": [
+    "index.html#ex-first-package-go"
+  ],
+  "ex-modularServiceCompliance-nixos": [
+    "index.html#ex-modularServiceCompliance-nixos"
   ],
   "ex-pkgs-replace-vars": [
     "index.html#ex-pkgs-replace-vars",
@@ -119,8 +137,17 @@
   "ex-testEqualArrayOrMap-test-function-add-cowbell": [
     "index.html#ex-testEqualArrayOrMap-test-function-add-cowbell"
   ],
+  "ex-trivial-builder-finalAttrs": [
+    "index.html#ex-trivial-builder-finalAttrs"
+  ],
   "ex-writeShellApplication": [
     "index.html#ex-writeShellApplication"
+  ],
+  "fetchfromtangled": [
+    "index.html#fetchfromtangled"
+  ],
+  "first-package-go": [
+    "index.html#first-package-go"
   ],
   "friction-graphics": [
     "index.html#friction-graphics"
@@ -128,23 +155,44 @@
   "friction-graphics-wayland": [
     "index.html#friction-graphics-wayland"
   ],
+  "getting-started": [
+    "index.html#getting-started"
+  ],
   "ghc-deprecation-policy": [
     "index.html#ghc-deprecation-policy"
   ],
+  "guileImportsCheckHook": [
+    "index.html#guileImportsCheckHook"
+  ],
+  "how-channels-work": [
+    "index.html#how-channels-work"
+  ],
   "inkscape-plugins": [
     "index.html#inkscape-plugins"
+  ],
+  "installAgentSkills": [
+    "index.html#installAgentSkills"
+  ],
+  "installAgentSkills-installSkill": [
+    "index.html#installAgentSkills-installSkill"
+  ],
+  "installAgentSkills-installSkill-exampleusage": [
+    "index.html#installAgentSkills-installSkill-exampleusage"
+  ],
+  "installfonts": [
+    "index.html#installfonts"
+  ],
+  "installfonts-installfont": [
+    "index.html#installfonts-installfont"
+  ],
+  "installfonts-installfont-exampleusage": [
+    "index.html#installfonts-installfont-exampleusage"
   ],
   "javascript-buildNpmPackage-npmFlags": [
     "index.html#javascript-buildNpmPackage-npmFlags"
   ],
   "javascript-buildNpmPackage-npmWorkspace": [
     "index.html#javascript-buildNpmPackage-npmWorkspace"
-  ],
-  "libcxxhardeningextensive": [
-    "index.html#libcxxhardeningextensive"
-  ],
-  "libcxxhardeningfast": [
-    "index.html#libcxxhardeningfast"
   ],
   "julec-hook": [
     "index.html#julec-hook"
@@ -182,6 +230,27 @@
   "julec-hook-variables": [
     "index.html#julec-hook-variables"
   ],
+  "juce-projucer-hook": [
+    "index.html#juce-projucer-hook"
+  ],
+  "juce-projucer-hook-example": [
+    "index.html#juce-projucer-hook-example"
+  ],
+  "juce-projucer-hook-variables": [
+    "index.html#juce-projucer-hook-variables"
+  ],
+  "juce-dontuseprojucerconfigure": [
+    "index.html#juce-dontuseprojucerconfigure"
+  ],
+  "juce-dontuseprojucerinstall": [
+    "index.html#juce-dontuseprojucerinstall"
+  ],
+  "libcxxhardeningextensive": [
+    "index.html#libcxxhardeningextensive"
+  ],
+  "libcxxhardeningfast": [
+    "index.html#libcxxhardeningfast"
+  ],
   "major-ghc-deprecation": [
     "index.html#major-ghc-deprecation"
   ],
@@ -205,6 +274,9 @@
   ],
   "neovim-luarocks-based-plugins": [
     "index.html#neovim-luarocks-based-plugins"
+  ],
+  "neovim-plugin-treesitter-wasm": [
+    "index.html#neovim-plugin-treesitter-wasm"
   ],
   "nixpkgs-manual": [
     "index.html#nixpkgs-manual"
@@ -335,9 +407,7 @@
     "index.html#pkgs.treefmt.withConfig"
   ],
   "preface": [
-    "index.html#preface"
-  ],
-  "overview-of-nixpkgs": [
+    "index.html#preface",
     "index.html#overview-of-nixpkgs"
   ],
   "part-using": [
@@ -367,14 +437,23 @@
   "sec-build-helper-extendMkDerivation": [
     "index.html#sec-build-helper-extendMkDerivation"
   ],
+  "sec-buildEnv-exceptions": [
+    "index.html#sec-buildEnv-exceptions"
+  ],
   "sec-building-packages-with-llvm": [
     "index.html#sec-building-packages-with-llvm"
   ],
   "sec-building-packages-with-llvm-using-clang-stdenv": [
     "index.html#sec-building-packages-with-llvm-using-clang-stdenv"
   ],
+  "sec-chicken-package-sets": [
+    "index.html#sec-chicken-package-sets"
+  ],
   "sec-darwin-availability-checks": [
     "index.html#sec-darwin-availability-checks"
+  ],
+  "sec-darwin-builder-vz": [
+    "index.html#sec-darwin-builder-vz"
   ],
   "sec-darwin-libcxx-deployment-targets": [
     "index.html#sec-darwin-libcxx-deployment-targets"
@@ -397,6 +476,9 @@
   "sec-meta-identifiers-cpe": [
     "index.html#sec-meta-identifiers-cpe"
   ],
+  "sec-meta-identifiers-purl": [
+    "index.html#sec-meta-identifiers-purl"
+  ],
   "sec-modify-via-packageOverrides": [
     "index.html#sec-modify-via-packageOverrides"
   ],
@@ -418,6 +500,30 @@
   "chap-overlays": [
     "index.html#chap-overlays"
   ],
+  "sec-nixpkgs-release-26.11": [
+    "release-notes.html#sec-nixpkgs-release-26.11"
+  ],
+  "sec-nixpkgs-release-26.11-highlights": [
+    "release-notes.html#sec-nixpkgs-release-26.11-highlights"
+  ],
+  "sec-nixpkgs-release-26.11-incompatibilities": [
+    "release-notes.html#sec-nixpkgs-release-26.11-incompatibilities"
+  ],
+  "sec-nixpkgs-release-26.11-lib": [
+    "release-notes.html#sec-nixpkgs-release-26.11-lib"
+  ],
+  "sec-nixpkgs-release-26.11-lib-breaking": [
+    "release-notes.html#sec-nixpkgs-release-26.11-lib-breaking"
+  ],
+  "sec-nixpkgs-release-26.11-lib-deprecations": [
+    "release-notes.html#sec-nixpkgs-release-26.11-lib-deprecations"
+  ],
+  "sec-nixpkgs-release-26.11-lib-additions-improvements": [
+    "release-notes.html#sec-nixpkgs-release-26.11-lib-additions-improvements"
+  ],
+  "sec-nixpkgs-release-26.11-notable-changes": [
+    "release-notes.html#sec-nixpkgs-release-26.11-notable-changes"
+  ],
   "sec-nixpkgs-release-26.05": [
     "release-notes.html#sec-nixpkgs-release-26.05"
   ],
@@ -433,7 +539,13 @@
     "index.html#overriding-the-generator",
     "index.html#javascript-node2nix",
     "index.html#javascript-node2nix-preparation",
-    "index.html#javascript-node2nix-pitfalls"
+    "index.html#javascript-node2nix-pitfalls",
+    "index.html#javascript-yarn2nix-mkYarnPackage",
+    "index.html#javascript-yarn2nix",
+    "index.html#javascript-yarn2nix-preparation",
+    "index.html#javascript-yarn2nix-mkYarnModules",
+    "index.html#javascript-mkYarnPackage-overriding-dependencies",
+    "index.html#javascript-yarn2nix-pitfalls"
   ],
   "sec-nixpkgs-release-26.05-lib": [
     "release-notes.html#sec-nixpkgs-release-26.05-lib"
@@ -541,6 +653,15 @@
   ],
   "chap-overrides": [
     "index.html#chap-overrides"
+  ],
+  "sec-packer": [
+    "index.html#sec-packer"
+  ],
+  "sec-packer-list-plugins": [
+    "index.html#sec-packer-list-plugins"
+  ],
+  "sec-packer-with-plugins": [
+    "index.html#sec-packer-with-plugins"
   ],
   "sec-pkg-override": [
     "index.html#sec-pkg-override"
@@ -665,6 +786,27 @@
   "sec-functions-library-derivations": [
     "index.html#sec-functions-library-derivations"
   ],
+  "sec-functions-library-types": [
+    "index.html#sec-functions-library-types"
+  ],
+  "ex-submodule-direct": [
+    "index.html#ex-submodule-direct"
+  ],
+  "ex-submodule-reference": [
+    "index.html#ex-submodule-reference"
+  ],
+  "ex-submodule-listof-declaration": [
+    "index.html#ex-submodule-listof-declaration"
+  ],
+  "ex-submodule-listof-definition": [
+    "index.html#ex-submodule-listof-definition"
+  ],
+  "ex-submodule-attrsof-declaration": [
+    "index.html#ex-submodule-attrsof-declaration"
+  ],
+  "ex-submodule-attrsof-definition": [
+    "index.html#ex-submodule-attrsof-definition"
+  ],
   "sec-generators": [
     "index.html#sec-generators"
   ],
@@ -758,6 +900,12 @@
   "sec-treefmt-options-reference": [
     "index.html#sec-treefmt-options-reference"
   ],
+  "ssec-buildEnv-collisions": [
+    "index.html#ssec-buildEnv-collisions"
+  ],
+  "ssec-buildEnv-singleFileOutputs": [
+    "index.html#ssec-buildEnv-singleFileOutputs"
+  ],
   "ssec-cosmic-common-issues": [
     "index.html#ssec-cosmic-common-issues"
   ],
@@ -818,6 +966,18 @@
   "glibcxxassertions": [
     "index.html#glibcxxassertions"
   ],
+  "tester-modularServiceCompliance": [
+    "index.html#tester-modularServiceCompliance"
+  ],
+  "tester-modularServiceCompliance-inputs": [
+    "index.html#tester-modularServiceCompliance-inputs"
+  ],
+  "tester-modularServiceCompliance-manual": [
+    "index.html#tester-modularServiceCompliance-manual"
+  ],
+  "tester-modularServiceCompliance-return": [
+    "index.html#tester-modularServiceCompliance-return"
+  ],
   "tester-shfmt": [
     "index.html#tester-shfmt"
   ],
@@ -848,6 +1008,9 @@
   "treefmt": [
     "index.html#treefmt"
   ],
+  "trivial-builder-finalAttrs": [
+    "index.html#trivial-builder-finalAttrs"
+  ],
   "typst": [
     "index.html#typst",
     "doc/languages-frameworks/typst.section.md#typst"
@@ -866,8 +1029,14 @@
   "typst-package-scope-and-usage": [
     "index.html#typst-package-scope-and-usage"
   ],
+  "using-tclrequirescheck": [
+    "index.html#using-tclrequirescheck"
+  ],
   "var-go-buildTestBinaries": [
     "index.html#var-go-buildTestBinaries"
+  ],
+  "var-meta-donationPage": [
+    "index.html#var-meta-donationPage"
   ],
   "var-meta-identifiers-cpe": [
     "index.html#var-meta-identifiers-cpe"
@@ -877,6 +1046,15 @@
   ],
   "var-meta-identifiers-possibleCPEs": [
     "index.html#var-meta-identifiers-possibleCPEs"
+  ],
+  "var-meta-identifiers-purl": [
+    "index.html#var-meta-identifiers-purl"
+  ],
+  "var-meta-identifiers-purlParts": [
+    "index.html#var-meta-identifiers-purlParts"
+  ],
+  "var-meta-identifiers-purls": [
+    "index.html#var-meta-identifiers-purls"
   ],
   "var-meta-teams": [
     "index.html#var-meta-teams"
@@ -941,6 +1119,9 @@
   "var-stdenv-enableParallelBuilding": [
     "index.html#var-stdenv-enableParallelBuilding"
   ],
+  "var-stdenv-__structuredAttrs": [
+    "index.html#var-stdenv-__structuredAttrs"
+  ],
   "mkderivation-recursive-attributes": [
     "index.html#mkderivation-recursive-attributes"
   ],
@@ -983,8 +1164,14 @@
   "tar-files": [
     "index.html#tar-files"
   ],
+  "writableTmpDirAsHomeHook": [
+    "index.html#writableTmpDirAsHomeHook"
+  ],
   "x86_64-darwin-26.05": [
     "release-notes.html#x86_64-darwin-26.05"
+  ],
+  "x86_64-darwin-26.11": [
+    "release-notes.html#x86_64-darwin-26.11"
   ],
   "zip-files": [
     "index.html#zip-files"
@@ -1518,6 +1705,9 @@
   "var-meta-mainProgram": [
     "index.html#var-meta-mainProgram"
   ],
+  "var-meta-mainDarwinApp": [
+    "index.html#var-meta-mainDarwinApp"
+  ],
   "var-meta-priority": [
     "index.html#var-meta-priority"
   ],
@@ -1725,6 +1915,9 @@
   "ssec-cross-cookbook": [
     "index.html#ssec-cross-cookbook"
   ],
+  "cross-qa-emulation": [
+    "index.html#cross-qa-emulation"
+  ],
   "cross-qa-fails-to-find-binutils": [
     "index.html#cross-qa-fails-to-find-binutils"
   ],
@@ -1784,6 +1977,9 @@
   ],
   "sec-darwin-troubleshooting-xcodebuild-absolute-paths": [
     "index.html#sec-darwin-troubleshooting-xcodebuild-absolute-paths"
+  ],
+  "sec-darwin-missing-macros": [
+    "index.html#sec-darwin-missing-macros"
   ],
   "sec-darwin-troubleshooting-libiconv": [
     "index.html#sec-darwin-troubleshooting-libiconv"
@@ -1910,6 +2106,12 @@
   ],
   "fetchfromgithub": [
     "index.html#fetchfromgithub"
+  ],
+  "fetchfromhuggingface": [
+    "index.html#fetchfromhuggingface"
+  ],
+  "ex-fetchfromhuggingface": [
+    "index.html#ex-fetchfromhuggingface"
   ],
   "fetchfromgitlab": [
     "index.html#fetchfromgitlab"
@@ -2074,6 +2276,12 @@
   "ex-hascmakeconfigmodules": [
     "index.html#ex-hascmakeconfigmodules"
   ],
+  "ex-hascmakeconfigmodules-defaultvalues": [
+    "index.html#ex-hascmakeconfigmodules-defaultvalues"
+  ],
+  "ex-hascmakeconfigmodules-explicitmodules": [
+    "index.html#ex-hascmakeconfigmodules-explicitmodules"
+  ],
   "tester-lycheeLinkCheck": [
     "index.html#tester-lycheeLinkCheck"
   ],
@@ -2166,6 +2374,12 @@
   ],
   "chap-special": [
     "index.html#chap-special"
+  ],
+  "sec-buildEnv": [
+    "index.html#sec-buildEnv"
+  ],
+  "sec-buildEnv-arguments": [
+    "index.html#sec-buildEnv-arguments"
   ],
   "sec-fakeNss": [
     "index.html#sec-fakeNss"
@@ -2274,6 +2488,18 @@
   ],
   "sec-checkpoint-build-example": [
     "index.html#sec-checkpoint-build-example"
+  ],
+  "sec-redisTestHook": [
+    "index.html#sec-redisTestHook"
+  ],
+  "sec-redisTestHook-variables": [
+    "index.html#sec-redisTestHook-variables"
+  ],
+  "sec-memcachedTestHook": [
+    "index.html#sec-memcachedTestHook"
+  ],
+  "sec-memcachedTestHook-variables": [
+    "index.html#sec-memcachedTestHook-variables"
   ],
   "chap-images": [
     "index.html#chap-images"
@@ -2626,9 +2852,6 @@
   "glycin-dont-wrap": [
     "index.html#glycin-dont-wrap"
   ],
-  "ghc": [
-    "index.html#ghc"
-  ],
   "gnome-platform": [
     "index.html#gnome-platform"
   ],
@@ -2761,8 +2984,15 @@
   "meson-honored-variables": [
     "index.html#meson-honored-variables"
   ],
+  "meson-disabled-tests": [
+    "index.html#meson-disabled-tests"
+  ],
   "setup-hook-mpi-check": [
     "index.html#setup-hook-mpi-check"
+  ],
+  "setup-hook-check-phase-thread-limit": [
+    "index.html#setup-hook-check-phase-thread-limit",
+    "index.html#setup-hook-omp-check"
   ],
   "ninja": [
     "index.html#ninja"
@@ -3007,19 +3237,28 @@
   "available-versions-and-deprecations-schedule": [
     "index.html#available-versions-and-deprecations-schedule"
   ],
+  "erlang": [
+    "index.html#erlang"
+  ],
   "elixir": [
     "index.html#elixir"
   ],
   "beam-structure": [
     "index.html#beam-structure"
   ],
-  "build-tools": [
+  "beam-build-tools": [
+    "index.html#beam-build-tools",
     "index.html#build-tools"
   ],
-  "build-tools-rebar3": [
+  "beam-build-tools-rebar3": [
+    "index.html#beam-build-tools-rebar3",
     "index.html#build-tools-rebar3"
   ],
-  "build-tools-other": [
+  "beam-build-tools-erlangmk": [
+    "index.html#beam-build-tools-erlangmk"
+  ],
+  "beam-build-tools-mix": [
+    "index.html#beam-build-tools-mix",
     "index.html#build-tools-other"
   ],
   "how-to-install-beam-packages": [
@@ -3036,6 +3275,9 @@
   ],
   "packaging-erlang-applications": [
     "index.html#packaging-erlang-applications"
+  ],
+  "packaging-elixir-applications": [
+    "index.html#packaging-elixir-applications"
   ],
   "rebar3-packages": [
     "index.html#rebar3-packages"
@@ -3460,7 +3702,8 @@
     "index.html#hareHook-cross-compilation"
   ],
   "haskell": [
-    "index.html#haskell"
+    "index.html#haskell",
+    "index.html#ghc"
   ],
   "haskell-available-packages": [
     "index.html#haskell-available-packages"
@@ -3589,15 +3832,9 @@
     "index.html#language-javascript"
   ],
   "javascript-introduction": [
-    "index.html#javascript-introduction"
-  ],
-  "javascript-finding-examples": [
-    "index.html#javascript-finding-examples"
-  ],
-  "javascript-finding-examples-github": [
-    "index.html#javascript-finding-examples-github"
-  ],
-  "javascript-finding-examples-gitlab": [
+    "index.html#javascript-introduction",
+    "index.html#javascript-finding-examples",
+    "index.html#javascript-finding-examples-github",
     "index.html#javascript-finding-examples-gitlab"
   ],
   "javascript-tools-overview": [
@@ -3652,7 +3889,23 @@
     "index.html#javascript-corepack"
   ],
   "javascript-pnpm": [
-    "index.html#javascript-pnpm"
+    "index.html#javascript-pnpm",
+    "index.html#ex-pnpm-build-hook"
+  ],
+  "javascript-pnpm-pnpmBuildHook": [
+    "index.html#javascript-pnpm-pnpmBuildHook",
+    "index.html#pnpm-build-hook",
+    "index.html#pnpm-build-hook-build-flags",
+    "index.html#pnpm-build-hook-code-snippet",
+    "index.html#pnpm-build-hook-dont",
+    "index.html#pnpm-build-hook-exclusive-variables",
+    "index.html#pnpm-build-hook-flags",
+    "index.html#pnpm-build-hook-script",
+    "index.html#pnpm-build-hook-variables",
+    "index.html#pnpm-build-hook-honored-variables"
+  ],
+  "javascript-pnpm-pnpmConfigHook": [
+    "index.html#javascript-pnpm-pnpmConfigHook"
   ],
   "javascript-pnpm-sourceRoot": [
     "index.html#javascript-pnpm-sourceRoot"
@@ -3678,6 +3931,9 @@
   "javascript-yarn-v3-v4": [
     "index.html#javascript-yarn-v3-v4"
   ],
+  "javascript-fetchyarndeps": [
+    "index.html#javascript-fetchyarndeps"
+  ],
   "javascript-yarnconfighook": [
     "index.html#javascript-yarnconfighook"
   ],
@@ -3686,24 +3942,6 @@
   ],
   "javascript-yarninstallhook": [
     "index.html#javascript-yarninstallhook"
-  ],
-  "javascript-yarn2nix": [
-    "index.html#javascript-yarn2nix"
-  ],
-  "javascript-yarn2nix-preparation": [
-    "index.html#javascript-yarn2nix-preparation"
-  ],
-  "javascript-yarn2nix-mkYarnPackage": [
-    "index.html#javascript-yarn2nix-mkYarnPackage"
-  ],
-  "javascript-yarn2nix-mkYarnModules": [
-    "index.html#javascript-yarn2nix-mkYarnModules"
-  ],
-  "javascript-mkYarnPackage-overriding-dependencies": [
-    "index.html#javascript-mkYarnPackage-overriding-dependencies"
-  ],
-  "javascript-yarn2nix-pitfalls": [
-    "index.html#javascript-yarn2nix-pitfalls"
   ],
   "javascript-yarnBerry-missing-hashes": [
     "index.html#javascript-yarnBerry-missing-hashes"
@@ -3863,6 +4101,9 @@
   ],
   "maven": [
     "index.html#maven"
+  ],
+  "maven-4": [
+    "index.html#maven-4"
   ],
   "maven-buildmavenpackage": [
     "index.html#maven-buildmavenpackage"
@@ -4037,6 +4278,9 @@
   ],
   "buildpythonpackage-parameters": [
     "index.html#buildpythonpackage-parameters"
+  ],
+  "buildpythonpackage-fixed-point-arguments": [
+    "index.html#buildpythonpackage-fixed-point-arguments"
   ],
   "overriding-python-build-helpers": [
     "index.html#overriding-python-build-helpers"
@@ -4374,20 +4618,38 @@
   "ssec-swift-packaging-with-swiftpm": [
     "index.html#ssec-swift-packaging-with-swiftpm"
   ],
+  "ssec-swift-packaging-with-fetch-swiftpm-deps": [
+    "index.html#ssec-swift-packaging-with-fetch-swiftpm-deps"
+  ],
+  "ssec-swift-packaging-with-swiftpm2nix": [
+    "index.html#ssec-swift-packaging-with-swiftpm2nix"
+  ],
+  "ssec-swiftpm-prefetch-dependencies": [
+    "index.html#ssec-swiftpm-prefetch-dependencies"
+  ],
+  "ssec-swiftpm-patching-dependencies": [
+    "index.html#ssec-swiftpm-patching-dependencies"
+  ],
   "ssec-swiftpm-custom-build-flags": [
     "index.html#ssec-swiftpm-custom-build-flags"
   ],
   "ssec-swiftpm-running-tests": [
     "index.html#ssec-swiftpm-running-tests"
   ],
-  "ssec-swiftpm-patching-dependencies": [
-    "index.html#ssec-swiftpm-patching-dependencies"
+  "ssec-swiftpm-install-phase": [
+    "index.html#ssec-swiftpm-install-phase"
+  ],
+  "ssec-swift-hooks": [
+    "index.html#ssec-swift-hooks"
   ],
   "ssec-swift-considerations-for-custom-build-tools": [
     "index.html#ssec-swift-considerations-for-custom-build-tools"
   ],
   "ssec-swift-linking-the-standard-library": [
     "index.html#ssec-swift-linking-the-standard-library"
+  ],
+  "ssec-swift-platform-properties": [
+    "index.html#ssec-swift-platform-properties"
   ],
   "sec-language-tcl": [
     "index.html#sec-language-tcl"
@@ -4401,11 +4663,9 @@
   "sec-language-texlive": [
     "index.html#sec-language-texlive"
   ],
-  "sec-language-texlive-user-guide-experimental": [
-    "index.html#sec-language-texlive-user-guide-experimental"
-  ],
   "sec-language-texlive-user-guide": [
-    "index.html#sec-language-texlive-user-guide"
+    "index.html#sec-language-texlive-user-guide",
+    "index.html#sec-language-texlive-user-guide-experimental"
   ],
   "sec-language-texlive-custom-packages": [
     "index.html#sec-language-texlive-custom-packages"
@@ -4461,6 +4721,9 @@
   "neovim-plugin-required-snippet": [
     "index.html#neovim-plugin-required-snippet",
     "index.html#vim-plugin-required-snippet"
+  ],
+  "neovim-plugin-license-overrides": [
+    "index.html#neovim-plugin-license-overrides"
   ],
   "updating-plugins-in-nixpkgs": [
     "index.html#updating-plugins-in-nixpkgs"

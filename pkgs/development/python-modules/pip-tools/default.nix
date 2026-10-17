@@ -7,6 +7,7 @@
   fetchFromGitHub,
   pip,
   pyproject-hooks,
+  pytest-mock,
   pytest-xdist,
   pytestCheckHook,
   setuptools,
@@ -15,16 +16,16 @@
   wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pip-tools";
-  version = "7.5.3";
+  version = "7.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "pip-tools";
-    tag = "v${version}";
-    hash = "sha256-MkYGD/ropw+MLLrk4gRZZguOv5extzNNXwTy6NQnCu0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gh1oe4Ghz492LofyT2ZLRBuQ9DKn+tYVc2EpkWJ4bfc=";
   };
 
   patches = [
@@ -45,6 +46,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
+    pytest-mock
     pytest-xdist
     pytestCheckHook
     tomli-w
@@ -74,6 +76,7 @@ buildPythonPackage rec {
     "test_iter_dependencies_after_combine_install_requirements"
     "test_iter_dependencies_after_combine_install_requirements_extras"
     "test_name_collision"
+    "test_build_project_metadata_upgrading_raises_error"
     # Assertion error
     "test_compile_recursive_extras"
     "test_compile_build_targets_setuptools_no_wheel_dep"
@@ -97,8 +100,8 @@ buildPythonPackage rec {
   meta = {
     description = "Keeps your pinned dependencies fresh";
     homepage = "https://github.com/jazzband/pip-tools/";
-    changelog = "https://github.com/jazzband/pip-tools/releases/tag/${version}";
+    changelog = "https://github.com/jazzband/pip-tools/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ zimbatm ];
   };
-}
+})

@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "gowall";
-  version = "0.2.3";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "Achno";
     repo = "gowall";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-HZEVH3T4dmBE4OMPjtHj3qdeT4i27+YhZWJgYqbg5ss=";
+    hash = "sha256-mogjHIsm+N3/wtrfayiKuYe6REPVrt8xLZDpgdKkX34=";
   };
 
-  vendorHash = "sha256-zQoXrQnejng1jBKRMaQzQaZYKWxJPXjgdplnuVhazuM=";
+  vendorHash = "sha256-nRmW7jGcURbrXVwg5kxmloet2aV2s8JjhEeO1KybtME=";
 
   nativeBuildInputs = [
     installShellFiles

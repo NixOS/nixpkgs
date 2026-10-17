@@ -35,8 +35,8 @@ body:
         If you are using an older version, please update to the latest stable version and check if the issue persists before continuing this bug report.
       options:
         - "Please select a version."
-        - "- Unstable (26.05)"
-        - "- Stable (25.11)"
+        - "- Unstable (26.11)"
+        - "- Stable (26.05)"
       default: 0
     validations:
       required: true
@@ -54,6 +54,37 @@ body:
       description: "Please include a step-by-step guide for reproducing this issue. Consider writing in concise, numbered bullet points to ensure that Nixpkgs developers can retrace your steps."
     validations:
       required: true
+  - type: "textarea"
+    id: "reproducer"
+    attributes:
+      label: "Minimal reproducer"
+      description: |
+        A reproducer that another person can run is the fastest way to get this fixed.
+
+        Please paste a `flake.nix` that triggers the bug, pinned to the Nixpkgs revision you tested, and say which command triggers it.
+
+        ```nix
+        {
+          inputs.nixpkgs.url = "github:NixOS/nixpkgs/REVISION";
+
+          outputs =
+            { nixpkgs, ... }:
+            let
+              system = "x86_64-linux";
+              pkgs = nixpkgs.legacyPackages.${system};
+            in
+            {
+              packages.${system}.default = pkgs.PACKAGENAME;
+            };
+        }
+        ```
+
+        If the reproducer needs more files than `flake.nix`, link to them in **Steps to reproduce**.
+
+        If this bug cannot be reduced to a flake, leave this empty and make sure **Steps to reproduce** gives a reviewer everything they need to see it themselves.
+      render: "nix"
+    validations:
+      required: false
   - type: "textarea"
     id: "expected-behaviour"
     attributes:
@@ -120,6 +151,8 @@ body:
         - label: "I assert that this is not a [duplicate of an existing issue](https://github.com/NixOS/nixpkgs/issues?q=is%3Aissue+label%3A%220.kind%3A+bug%22+-label%3A%226.topic%3A+darwin%22+-label%3A%226.topic%3A+nixos%22). "
           required: true
         - label: "I assert that I have read the [NixOS Code of Conduct](https://github.com/NixOS/.github/blob/master/CODE_OF_CONDUCT.md) and agree to abide by it."
+          required: true
+        - label: "I assert that I have read the [automation/AI policy](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#automationai-policy) and that this issue report complies with it."
           required: true
   - type: "markdown"
     attributes:

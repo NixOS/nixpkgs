@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "keith";
     repo = "edit-weechat";
     rev = version;
-    sha256 = "1s42r0l0xkhlp6rbc23cm4vlda91il6cg53w33hqfhd2wz91s66w";
+    hash = "sha256-3Bgd0ueiQYfhGHyUxwyNIalGN6lsCLayuRTODijIgug=";
   };
 
   dontBuild = true;
@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
   meta = {
     inherit (weechat.meta) platforms;
     description = "This simple weechat plugin allows you to compose messages in your $EDITOR";
+    homepage = "https://github.com/keith/edit-weechat";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ eraserhd ];
   };

@@ -2,6 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  replaceVars,
+  symlinkJoin,
 
   # build-system
   setuptools,
@@ -37,6 +39,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "deep-gemm";
   version = "2.1.1.post3";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "deepseek-ai";
@@ -47,9 +50,39 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
 
   patches = [
     ./use-system-libraries.patch
+
+    # DeepGEMM does JIT compilation and needs to access the NVIDIA compiler and some libraries at
+    # runtime.
+    # Instead of letting it search for the cuda toolkit on the host, hardcode the path to a custom
+    # closure.
+    (replaceVars ./patch-runtime-cuda-home-path.patch {
+      cuda_home = symlinkJoin {
+        name = "cuda-toolkit";
+        paths = with cudaPackages; [
+          (lib.getBin cuda_nvcc) # bin/nvcc, bin/ptxas, nvvm/, nvcc.profile
+          (lib.getBin cutlass) # include/cute, include/cutlass
+          (lib.getInclude cccl) # include/cuda/std/* (libcu++)
+          (lib.getInclude cuda_cudart) # include/cuda_runtime.h, cuda_bf16.h, cuda_fp8.h
+          (lib.getInclude cuda_cuobjdump) # bin/cuobjdump
+        ];
+      };
+    })
   ];
 
-  env = optionalAttrs cudaSupport {
+  # Upstream hardcodes `__version__ = '2.1.1'` in `deep_gemm/__init__.py`, which does not match the
+  # release tag and fails the metadata check.
+  postPatch = ''
+    substituteInPlace deep_gemm/__init__.py \
+      --replace-fail \
+        "__version__ = '2.1.1'" \
+        "__version__ = '${finalAttrs.version}'"
+  '';
+
+  env = {
+    # Do not append a `+local` revision to the version (no git repository available)
+    DG_USE_LOCAL_VERSION = "0";
+  }
+  // optionalAttrs cudaSupport {
     CUDA_HOME = (getBin cudaPackages.cuda_nvcc).outPath;
 
     LDFLAGS = toString [

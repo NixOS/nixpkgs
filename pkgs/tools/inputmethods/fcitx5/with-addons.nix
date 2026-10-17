@@ -12,6 +12,9 @@
   addons ? [ ],
 }:
 
+let
+  extraLdLibraries = lib.flatten (map (x: x.extraLdLibraries or [ ]) addons);
+in
 symlinkJoin {
   name = "fcitx5-with-addons-${fcitx5.version}";
 
@@ -37,10 +40,11 @@ symlinkJoin {
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
       --prefix FCITX_ADDON_DIRS : "$out/lib/fcitx5" \
       --suffix XDG_DATA_DIRS : "$out/share" \
-      --suffix PATH : "$out/bin" \
-      --suffix LD_LIBRARY_PATH : "${
-        lib.makeLibraryPath (lib.flatten (map (x: x.extraLdLibraries or [ ]) addons))
-      }"
+      --suffix PATH : "$out/bin" ${
+        lib.optionalString (
+          extraLdLibraries != [ ]
+        ) ''--suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath extraLdLibraries}"''
+      }
 
     ${lib.optionalString withConfigtool ''
       # Configtool call libexec/fcitx5-qt5-gui-wrapper for gui addons in FCITX_ADDON_DIRS

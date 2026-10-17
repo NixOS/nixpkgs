@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pavucontrol-qt";
-  version = "2.3.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "pavucontrol-qt";
     rev = version;
-    hash = "sha256-6t7nbuC/13S+Q9mINP1WuyaDqZUKp4s9LObcbSRuJ1c=";
+    hash = "sha256-Ja+9Tb88SxdvsJPiQadeziCgFtOnInTBSHcisNjrSpA=";
   };
 
   nativeBuildInputs = [

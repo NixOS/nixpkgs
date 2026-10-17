@@ -61,6 +61,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
+    # last successful hydra build on darwin was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
     description = "DFA regular expression library & friends";
     homepage = "https://github.com/katef/libfsm";
     license = lib.licenses.bsd2;

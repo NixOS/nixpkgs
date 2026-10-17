@@ -58,9 +58,21 @@ lib.makeOverridable (
       buildInputs = compatIfNeeded;
 
       preBuild =
-        lib.optionalString (stdenv'.hasCC && stdenv'.cc.isClang or false && attrs.clangFixup or true) ''
-          export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -D_VA_LIST -D_VA_LIST_DECLARED -Dva_list=__builtin_va_list -D_SIZE_T_DECLARED -D_SIZE_T -Dsize_t=__SIZE_TYPE__ -D_WCHAR_T"
-        ''
+        # Keep clang's `<stddef.h>` from also defining these types, which
+        # FreeBSD's own headers define. Elsewhere the host's headers rely on
+        # clang's definitions; e.g. on Darwin, `_WCHAR_T` is also the include
+        # guard of the SDK's `<sys/_types/_wchar_t.h>`, which then leaves
+        # `wchar_t` undefined.
+        lib.optionalString
+          (
+            stdenv'.hostPlatform.isFreeBSD
+            && stdenv'.hasCC
+            && stdenv'.cc.isClang or false
+            && attrs.clangFixup or true
+          )
+          ''
+            export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -D_VA_LIST -D_VA_LIST_DECLARED -Dva_list=__builtin_va_list -D_SIZE_T_DECLARED -D_SIZE_T -Dsize_t=__SIZE_TYPE__ -D_WCHAR_T"
+          ''
         + lib.optionalString (versionData.major == 13) ''
           export NIX_LDFLAGS="$NIX_LDFLAGS --undefined-version"
         ''
@@ -113,8 +125,8 @@ lib.makeOverridable (
           rhelmot
           artemist
         ];
-        platforms = lib.platforms.unix;
         license = lib.licenses.bsd2;
+        platforms = lib.platforms.freebsd;
       }
       // attrs.meta or { };
     }
@@ -122,7 +134,10 @@ lib.makeOverridable (
       installPhase = "includesPhase";
       dontBuild = true;
     }
-    // (removeAttrs attrs [ "env" ])
+    // (removeAttrs attrs [
+      "env"
+      "meta"
+    ])
     // {
       patches =
         (lib.optionals (attrs.autoPickPatches or true) (

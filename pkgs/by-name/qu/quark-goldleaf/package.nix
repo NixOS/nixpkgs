@@ -16,13 +16,13 @@ let
 in
 maven.buildMavenPackage rec {
   pname = "quark-goldleaf";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "XorTroll";
     repo = "Goldleaf";
     tag = version;
-    hash = "sha256-ldGNtNmn7ln53JvxRkP1AMPslKH0JtSPhBkyqytSx20=";
+    hash = "sha256-y150HMm3brW/nkETj2RrfQCRQK6kNsLv3nYKHncyzOM=";
   };
 
   sourceRoot = "${src.name}/Quark";

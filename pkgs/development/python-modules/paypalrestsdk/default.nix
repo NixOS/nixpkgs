@@ -35,7 +35,8 @@ buildPythonPackage rec {
     description = "Python APIs to create, process and manage payment";
     homepage = "https://github.com/paypal/PayPal-Python-SDK";
     changelog = "https://github.com/paypal/PayPal-Python-SDK/blob/master/CHANGELOG.md";
-    license = {
+    license = lib.licenses.mkLicense {
+      shortName = "paypalSdk";
       fullName = "PayPal SDK License";
       url = "https://github.com/paypal/PayPal-Python-SDK/blob/master/LICENSE";
     };

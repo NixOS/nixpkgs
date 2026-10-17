@@ -124,7 +124,7 @@ in
       datadog = 76;
       lighttpd = 77;
       lightdm = 78;
-      freenet = 79;
+      # hyphanet = 79; # was freenet; dynamically allocated as of 2026-09-02
       ircd = 80;
       bacula = 81;
       #almir = 82; # removed 2018-03-25, the almir package was removed in 30291227f2411abaca097773eedb49b8f259e297 during 2017-08
@@ -194,7 +194,7 @@ in
       redmine = 147;
       #seeks = 148; # removed 2020-06-21
       prosody = 149;
-      i2pd = 150;
+      # i2pd = 150; # dynamically allocated as of 2026-08-07
       systemd-coredump = 151;
       systemd-network = 152;
       systemd-resolve = 153;
@@ -250,7 +250,7 @@ in
       namecoin = 208;
       #lxd = 210; # unused
       #kibana = 211;# dynamically allocated as of 2021-09-03
-      xtreemfs = 212;
+      # xtreemfs = 212; # dropped in 26.05
       calibre-server = 213;
       #heapster = 214; #dynamically allocated as of 2021-09-17
       bepasty = 215;
@@ -302,7 +302,7 @@ in
       # stanchion = 262; # unused, removed 2020-10-14
       # riak-cs = 263; # unused, removed 2020-10-14
       infinoted = 264;
-      sickbeard = 265;
+      # sickbeard = 265; # unused, removed 2026-09-13
       headphones = 266;
       # couchpotato = 267; # unused, removed 2022-01-01
       # gogs = 268; # unused, removed in 2024-10-12
@@ -466,7 +466,7 @@ in
       datadog = 76;
       lighttpd = 77;
       lightdm = 78;
-      freenet = 79;
+      # hyphanet = 79; # was freenet; dynamically allocated as of 2026-09-02
       ircd = 80;
       bacula = 81;
       #almir = 82; # removed 2018-03-25, the almir package was removed in 30291227f2411abaca097773eedb49b8f259e297 during 2017-08
@@ -534,7 +534,7 @@ in
       redmine = 147;
       #seeks = 148; # removed 2020-06-21
       prosody = 149;
-      i2pd = 150;
+      # i2pd = 150; # dynamically allocated as of 2026-08-07
       systemd-network = 152;
       systemd-resolve = 153;
       systemd-timesync = 154;
@@ -585,7 +585,7 @@ in
       #gateone = 207; #removed 2025-08-21
       namecoin = 208;
       #kibana = 211;
-      xtreemfs = 212;
+      # xtreemfs = 212; # dropped in 26.05
       calibre-server = 213;
       bepasty = 215;
       # pumpio = 216; # unused, removed 2018-02-24
@@ -629,7 +629,7 @@ in
       # stanchion = 262; # unused, removed 2020-10-14
       # riak-cs = 263; # unused, removed 2020-10-14
       infinoted = 264;
-      sickbeard = 265;
+      # sickbeard = 265; # unused, removed 2026-09-13
       headphones = 266;
       # couchpotato = 267; # unused, removed 2022-01-01
       # gogs = 268; # unused, removed in 2024-10-12

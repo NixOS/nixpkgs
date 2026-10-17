@@ -65,7 +65,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
   '';
 
   # util-linux (script program) is required for Docker support
-  makeWrapperArgs = [ "--suffix PATH : ${lib.makeBinPath [ util-linux ]}" ];
+  makeWrapperArgs = [
+    "--suffix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ util-linux ])
+  ];
 
   nativeCheckInputs = with python3Packages; [
     pytest-aiohttp

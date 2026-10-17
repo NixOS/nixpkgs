@@ -33,6 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "gcr";
   version = "4.4.0.1";
 
+  __structuredAttrs = true;
+
   outputs = [
     "out"
     "bin"

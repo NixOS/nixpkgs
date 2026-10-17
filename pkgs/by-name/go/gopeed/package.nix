@@ -9,19 +9,19 @@
 }:
 
 let
-  version = "1.9.0";
+  version = "1.9.3";
 
   src = fetchFromGitHub {
     owner = "GopeedLab";
     repo = "gopeed";
     tag = "v${version}";
-    hash = "sha256-kLWhAQfzqZ9/THYeU/W4YOJYfMnqoTbyobC2P9YYddI=";
+    hash = "sha256-a/q02UKNa2324XK5f0gF6Wh4qmBmPDcYA35VWup54/4=";
   };
 
   metaCommon = {
     description = "Modern download manager";
     homepage = "https://github.com/GopeedLab/gopeed";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
@@ -30,7 +30,7 @@ let
     inherit version src;
     pname = "libgopeed";
 
-    vendorHash = "sha256-XTVFqKn0JeOC/QFns0GhIYqu1FB+eFg6bgIi4G7Lw1o=";
+    vendorHash = "sha256-Vk6/ns7Jk6STBGMKov+iOX4n1GscXDScXB0khfN0Cq0=";
 
     buildPhase = ''
       runHook preBuild

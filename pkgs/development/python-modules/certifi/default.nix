@@ -7,16 +7,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "certifi";
-  version = "2026.01.04";
+  version = "2026.07.22";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "certifi";
     repo = "python-certifi";
-    rev = version;
-    hash = "sha256-JXv12im46xKabIRVZ4FMSZUbpw2k8WCcaZZLX2pFteY=";
+    tag = finalAttrs.version;
+    hash = "sha256-euVWKJiFsx7F8YRMgRrrHswBmDBmrV/guiuvqtSUnSs=";
   };
 
   patches = [
@@ -47,4 +47,4 @@ buildPythonPackage rec {
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ koral ];
   };
-}
+})

@@ -11,16 +11,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "gibo";
-  version = "3.0.20";
+  version = "3.0.22";
 
   src = fetchFromGitHub {
     owner = "simonwhitaker";
     repo = "gibo";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-u2e0YwtK3MnzIYvXNVc2a4zsoxISAcS3U+6WpgBsYUM=";
+    sha256 = "sha256-oI/+bsYI7AgIbJ/FwhMrzAXqq7e45tTO6EueVXI3/+I=";
   };
 
-  vendorHash = "sha256-YVs6S3x0u2dypb5h+pNCUkmfVK+0erzoGZzONipL49o=";
+  vendorHash = "sha256-/geO0XxT53Cw/s2TlvxkLfR/w8c724Z4UMrpTPcEDFM=";
 
   ldflags = [
     "-s"

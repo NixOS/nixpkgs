@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sview";
-  version = "26_02";
+  version = "26.09";
 
   src = fetchFromGitHub {
     owner = "gkv311";
     repo = "sview";
-    tag = version;
-    hash = "sha256-UIA8bDGYVN8Zw23PkKprYrvcMubHzoquaSArLShu+aw=";
+    tag = lib.replaceString "." "_" version;
+    hash = "sha256-q254Yw7uipeYHwaTYoHlK3hBveWbhtn5zguwCgqEjYE=";
   };
 
   droidSansFallback = fetchurl {
@@ -46,7 +46,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DUSE_UPDATER=OFF"
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DCMAKE_INSTALL_LIBDIR=/lib"
     "-DCMAKE_INSTALL_BINDIR=/bin"
     "-DCMAKE_INSTALL_DATAROOTDIR=/share"
@@ -93,11 +92,14 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Viewer for 3D stereoscopic videos and images";
     homepage = "https://www.sview.ru/en/";
-    license = with lib.licenses; [
-      cc-by-40
-      gpl3Only
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      AND [
+        cc-by-40
+        mit
+        gpl3Only
+        asl20
+      ];
     maintainers = with lib.maintainers; [ mx2uller ];
     mainProgram = "sView";
     platforms = lib.platforms.linux;

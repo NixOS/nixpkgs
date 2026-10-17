@@ -3,10 +3,11 @@
   mkKdeDerivation,
   replaceVars,
   openssl,
-  pam,
   pkg-config,
   qtwayland,
   freerdp,
+  libei,
+  pam,
 }:
 mkKdeDerivation {
   pname = "krdp";
@@ -22,6 +23,7 @@ mkKdeDerivation {
     qtwayland
 
     freerdp
+    libei
     pam
   ];
 

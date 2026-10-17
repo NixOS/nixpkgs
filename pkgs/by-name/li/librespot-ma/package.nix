@@ -31,7 +31,6 @@ rustPlatform.buildRustPackage {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       sweenu
-      emilylange
     ];
     mainProgram = "librespot";
     platforms = lib.platforms.linux;

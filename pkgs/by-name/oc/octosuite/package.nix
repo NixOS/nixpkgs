@@ -41,7 +41,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   doCheck = false;
 
   meta = {
-    description = "Advanced Github OSINT framework";
+    description = "Advanced GitHub OSINT framework";
     mainProgram = "octosuite";
     homepage = "https://github.com/bellingcat/octosuite";
     changelog = "https://github.com/bellingcat/octosuite/releases/tag/${finalAttrs.version}";

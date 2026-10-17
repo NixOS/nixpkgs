@@ -10,16 +10,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "affine-gaps";
-  version = "0.2.4";
+  version = "0.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gata-bio";
     repo = "affine-gaps";
-    tag = "v${version}";
-    hash = "sha256-WMH2wUqzA196FSe2TpfslQVW0PGwk7lGMRSKyfCG9rg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Nbm79gKuCMqcCWQCjk8O2bbnzXBvby6FB/YhzqeDIJw=";
   };
 
   build-system = [ hatchling ];
@@ -40,10 +40,10 @@ buildPythonPackage rec {
   enabledTestPaths = [ "test.py" ];
 
   meta = {
-    changelog = "https://github.com/gata-bio/affine-gaps/releases/tag/${src.tag}";
+    changelog = "https://github.com/gata-bio/affine-gaps/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/gata-bio/affine-gaps";
     license = lib.licenses.asl20;
     mainProgram = "affine-gaps";
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

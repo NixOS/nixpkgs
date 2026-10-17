@@ -114,7 +114,7 @@ buildPythonPackage (finalAttrs: {
     description = "Standard data-centric AI package for data quality and machine learning with messy, real-world data and labels";
     homepage = "https://github.com/cleanlab/cleanlab";
     changelog = "https://github.com/cleanlab/cleanlab/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.agpl3Only;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];
   };
 })

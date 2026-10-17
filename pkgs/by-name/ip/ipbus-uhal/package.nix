@@ -70,5 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://ipbus.web.cern.ch/";
     maintainers = [ lib.maintainers.bashsu ];
     mainProgram = "ipbus-uhal";
+    license = lib.licenses.gpl3Plus;
   };
 })

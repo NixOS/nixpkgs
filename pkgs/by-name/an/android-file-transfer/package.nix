@@ -11,16 +11,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "android-file-transfer";
-  version = "4.5";
+  version = "4.6";
 
   src = fetchFromGitHub {
     owner = "whoozle";
     repo = "android-file-transfer-linux";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-G+ErwZ/F8Cl8WLSzC+5LrEWWqNZL3xDMBvx/gjkgAXk=";
+    sha256 = "sha256-Ogq8aTOZvZTfceJuQ1vSjl5Lm5Ww/8jTUZwcXkDDaxI=";
   };
-
-  patches = [ ./darwin-dont-vendor-dependencies.patch ];
 
   nativeBuildInputs = [
     cmake

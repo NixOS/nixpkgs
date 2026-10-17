@@ -14,7 +14,7 @@ with the most recent available "by name" as `tracy`.
 ## Version Retention Guidelines
 
 Older releases of Tracy are provided as a convenience, not a guarantee. Maintainers
-should balance relevance to nixpkgs, maintainance burden, and user need.
+should balance relevance to nixpkgs, maintenance burden, and user need.
 
 - Dependants in nixpkgs use `tracy` rather than a pinned version;
 - No more than three pinned versions of Tracy are maintained, assuming annual release
@@ -126,7 +126,7 @@ CPM `NAME`.
 
 Package is not available in nixpkgs or is incompatible.
 
-### Mechansim
+### Mechanism
 
 Uses the same mechanism as a nixpkg src, except the source is downloaded with a fetcher such as
 `fetchFromGithub`.

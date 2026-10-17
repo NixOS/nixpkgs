@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "pylibjpeg-openjpeg";
-  version = "2.5.0";
+  version = "2.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydicom";
     repo = "pylibjpeg-openjpeg";
     tag = "v${version}";
-    hash = "sha256-siZ/Mm1wmd7dWhGa4rdH9Frxis2jB9av/Kw2dEe5dpI=";
+    hash = "sha256-LLYinJ6cePXPkY+QhCr/xOeD2tWk9OyU8J/6yWgSXoI=";
   };
 
   # don't use vendored openjpeg submodule:
@@ -67,7 +67,7 @@ buildPythonPackage rec {
     description = "J2K and JP2 plugin for pylibjpeg";
     homepage = "https://github.com/pydicom/pylibjpeg-openjpeg";
     changelog = "https://github.com/pydicom/pylibjpeg-openjpeg/releases/tag/${src.tag}";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
     # darwin: numerous test failures, test dependency pydicom is marked as unsupported
     broken = stdenv.hostPlatform.isDarwin;

@@ -12,16 +12,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "stackit-cli";
-  version = "0.59.0";
+  version = "0.75.0";
 
   src = fetchFromGitHub {
     owner = "stackitcloud";
     repo = "stackit-cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-OOvcdkvNur+pLEHsoGROCOuD/oydZqbhMPUDUSDnLes=";
+    hash = "sha256-wqj2KTaUEdKxcls3nnf1f7r9ZmwvV9+TDxntDY05Urg=";
   };
 
-  vendorHash = "sha256-HZ5k1AIuSsAdVIHMzo3awguw+AlctLMicLRzzGgM7xA=";
+  vendorHash = "sha256-hlazwByipI8q0v+8o4HorHVDdCXHw9nFbJMZ9ObluIU=";
 
   subPackages = [ "." ];
 
@@ -29,8 +29,7 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-w"
-    "-X main.version=${finalAttrs.version}"
+    "-X=main.version=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [

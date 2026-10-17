@@ -13,7 +13,7 @@ if [ "$1" ]; then
   new_version=$1
 else
   new_version="$(
-    list-git-tags --url=https://github.com/CollaboraOnline/online \
+    list-git-tags --url=https://github.com/CollaboraOnline/online.mirror \
     | grep --perl-regex --only-matching '^cp-\K[0-9.-]+$' \
     | sort --version-sort \
     | tail -n1

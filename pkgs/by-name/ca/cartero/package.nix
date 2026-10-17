@@ -85,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       aleksana
       amerino
+      _0xErwin1
     ];
     platforms = lib.platforms.linux;
   };

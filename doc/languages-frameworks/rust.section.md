@@ -348,7 +348,7 @@ In some instances, it may be necessary to disable testing altogether (with `doCh
   unnecessary build steps to speed up the build.
 * If tests are highly impure (e.g. due to network usage).
 
-There will obviously be some corner-cases not listed above where it's sensible to disable tests.
+There will be some corner-cases not listed above where it's sensible to disable tests.
 The above are just guidelines, and exceptions may be granted on a case-by-case basis.
 
 However, please check if it's possible to disable a problematic subset of the
@@ -736,6 +736,35 @@ stdenv.mkDerivation (finalAttrs: {
 })
 ```
 
+### Compiling `wasm32-wasip1` package {#compiling-wasm32-wasip1-package}
+
+```nix
+pkgsCross.wasm32-wasip1.callPackage (
+  {
+    fetchFromGitHub,
+    rustPlatform,
+    lld,
+  }:
+  rustPlatform.buildRustPackage (finalAttrs: {
+    pname = "zellij-harpoon";
+    version = "0.3.0";
+
+    src = fetchFromGitHub {
+      owner = "Nacho114";
+      repo = "harpoon";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-JmYcbzxIF6qZs2/RKuspHqNpyDibGp9CVQJj47y/BOQ=";
+    };
+
+    cargoHash = "sha256-lsv5Wssakni18jif++fPo3Z5WyBtvPsGpWwG3abR7jQ=";
+
+    # these two lines are currently required
+    env.RUSTFLAGS = "-C linker=wasm-ld";
+    nativeBuildInputs = [ lld ];
+  })
+) { }
+```
+
 ## `buildRustCrate`: Compiling Rust crates using Nix instead of Cargo {#compiling-rust-crates-using-nix-instead-of-cargo}
 
 ### Simple operation {#simple-operation}
@@ -842,13 +871,21 @@ general. A number of other parameters can be overridden:
   (hello { }).override { extraRustcOpts = "-Z debuginfo=2"; }
   ```
 
+- Extra arguments passed to `rustc` when the crate is a proc-macro,
+  replacing `extraRustcOpts`. Useful to keep instrumentation flags
+  (sanitizers, coverage) off host dylibs. Defaults to `null`, which
+  inherits `extraRustcOpts`:
+
+  ```nix
+  (myProcMacro { }).override { extraRustcOptsForProcMacro = [ ]; }
+  ```
+
 - The lint level cap passed to `rustc`. Defaults to `null`, which
   auto-resolves to `"allow"` (silences all lints) when `lints` is
   empty, or `"forbid"` (no cap) when `lints` is set. Because `rustc`
   only honours the first `--cap-lints` it receives, this cannot be
   changed via `extraRustcOpts`; use this attribute instead. Useful
-  when overriding the `rust` attribute to point at `clippy-driver`,
-  since clippy lints are also capped by this flag:
+  with `useClippy`, since clippy lints are also capped by this flag:
 
   ```nix
   (hello { }).override { capLints = "warn"; }
@@ -871,6 +908,34 @@ general. A number of other parameters can be overridden:
         priority = -1;
       };
     };
+  }
+  ```
+
+- Whether to compile the crate with `clippy-driver` instead of `rustc`.
+  Build scripts (`build.rs`) keep plain `rustc`. The default `capLints`
+  of `"allow"` suppresses all lints including clippy's, so this is
+  usually paired with `capLints` and lint flags via `extraRustcOpts`:
+
+  ```nix
+  (hello { }).override {
+    useClippy = true;
+    capLints = "warn";
+    extraRustcOpts = [
+      "-Dwarnings"
+      "-Wclippy::all"
+    ];
+  }
+  ```
+
+  When using a Rust toolchain that bundles its own `clippy-driver`
+  (rust-overlay, Fenix), pass it via `clippy` so the sysroot matches:
+
+  ```nix
+  (hello { }).override {
+    rust = myToolchain;
+    clippy = myToolchain;
+    useClippy = true;
+    capLints = "warn";
   }
   ```
 
@@ -948,7 +1013,7 @@ There are two community maintained approaches to Rust toolchain management:
 
 Despite their names, both projects provides a similar set of packages and overlays under different APIs.
 
-Oxalica's overlay allows you to select a particular Rust version without you providing a hash or a flake input,
+Oxalica's overlay selects a particular Rust version without you providing a hash or a flake input,
 but comes with a larger git repository than fenix.
 
 Fenix also provides `rust-analyzer` nightly in addition to the Rust toolchains.

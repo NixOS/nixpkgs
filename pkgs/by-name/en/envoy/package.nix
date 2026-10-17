@@ -38,10 +38,15 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.36.5";
-    rev = "41749943780b54b70b510b1b1a4805ae529e174a";
-    hash = "sha256-dT6ehfmW/huuyitqIlYAlEzUE6WrVA39sDKxatkZGaY=";
+    version = "1.36.10";
+    rev = "053a8989382dd91542ecf0cef8f379b9cb761cdd";
+    hash = "sha256-6bGXZfU2JutiriefwBudt46BrJRnwEqQCjYVRjUgyaY=";
   };
+
+  # When GO_VERSION changes upstream, update the four sha256 hex strings in the
+  # _GO_SDKS dict in 0005-nixpkgs-pin-go-sdk-downloads.patch using output from
+  # this command (set the version literal in `select` to match GO_VERSION):
+  #   curl -s 'https://go.dev/dl/?mode=json&include=all' | jq -r '.[] | select(.version == "go1.24.6") | .files[] | select(.kind == "archive" and (.os == "linux" or .os == "darwin") and (.arch == "amd64" or .arch == "arm64")) | "\(.os)_\(.arch): \(.sha256)"'
 
   # these need to be updated for any changes to fetchAttrs
   depsHash' =
@@ -49,8 +54,8 @@ let
       depsHash
     else
       {
-        x86_64-linux = "sha256-dQpkB4jRfJOB14AO5ynoL3VObI1af7nTI3vbMr5N6/g=";
-        aarch64-linux = "sha256-59sY+bpGsKMDthcj+jw00WhN+vsP5MOTXy0m8HJxebM=";
+        x86_64-linux = "sha256-EUPWZ8N8wXtnOle8WMLfdxQEdCnTv1JJSbgG39UOoMc=";
+        aarch64-linux = "sha256-WltewtSjwvmYfZQwYAslCCoBdLY1MyO9jnMC/bCzVeg=";
       }
       .${stdenv.system} or (throw "unsupported system ${stdenv.system}");
 
@@ -80,6 +85,9 @@ buildBazelPackage rec {
 
       # bump rules_rust to support newer Rust
       ./0004-nixpkgs-bump-rules_rust-to-0.60.0.patch
+
+      # pin Go SDK downloads so the deps hash doesn't drift on every Go release
+      ./0005-nixpkgs-pin-go-sdk-downloads.patch
     ];
     postPatch = ''
       chmod -R +w .

@@ -7,9 +7,9 @@
   fetchFromGitHub,
   pythonPackages,
   pkg-config,
-  systemd,
+  systemdLibs,
   hostname,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
   withDocker ? true,
   extraTags ? [ ],
   testers,
@@ -62,7 +62,7 @@ buildGoModule rec {
     pkg-config
     makeWrapper
   ];
-  buildInputs = [ rtloader ] ++ lib.optionals withSystemd [ systemd ];
+  buildInputs = [ rtloader ] ++ lib.optionals withSystemd [ systemdLibs ];
 
   proxyVendor = true;
 
@@ -114,7 +114,7 @@ buildGoModule rec {
       --set PYTHONPATH "$out/${python.sitePackages}"''
   + lib.optionalString withSystemd " --prefix LD_LIBRARY_PATH : ${
      lib.makeLibraryPath [
-       (lib.getLib systemd)
+       (lib.getLib systemdLibs)
        rtloader
      ]
    }";

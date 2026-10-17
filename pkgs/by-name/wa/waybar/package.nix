@@ -22,7 +22,7 @@
   libmpdclient,
   libnl,
   libpulseaudio,
-  libsigcxx,
+  libsigcxx_2_0,
   libxkbcommon,
   meson,
   ncurses,
@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-49ZKgK96a9uFip+svOdnw397xcEjiftXzd9gyv1H3sU=";
   };
 
-  postUnpack = lib.optional cavaSupport ''
+  postUnpack = lib.optionalString cavaSupport ''
     pushd "$sourceRoot"
     cp -R --no-preserve=mode,ownership ${libcava.src} subprojects/cava-${libcava.version}
     patchShebangs .
@@ -123,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk-layer-shell
     gtkmm3
     jsoncpp
-    libsigcxx
+    libsigcxx_2_0
     libxkbcommon
     spdlog
     wayland

@@ -2,18 +2,18 @@
   lib,
   fetchFromGitLab,
   stdenv,
-  luaPackages,
+  lua52Packages,
 }:
 
 stdenv.mkDerivation rec {
   pname = "deps.fnl";
-  version = "0.2.5";
+  version = "0.2.6";
 
   src = fetchFromGitLab {
     owner = "andreyorst";
     repo = "deps.fnl";
     tag = version;
-    hash = "sha256-gUqi0g7myWTbjILN4RQqbeeaSYcg0oVJYNO0Gv9XzNY=";
+    hash = "sha256-FrFeRbfK4sHd3pjiVDMrE8IpDKptZuwkTLMQ9hppVRY=";
   };
 
   dontBuild = true;
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     # deps requires argv0 to be fennel as an executable lua script
     # skipping the luarocks wrapper is fine here
-    fennelLua=$(echo ${luaPackages.fennel}/fennel*/fennel/*/bin/fennel)
+    fennelLua=$(echo ${lua52Packages.fennel}/fennel*/fennel/*/bin/fennel)
     substitute deps $out/bin/deps \
       --replace-fail '#!/usr/bin/env fennel' "#!$fennelLua"
     chmod +x $out/bin/deps

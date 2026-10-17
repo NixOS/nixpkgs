@@ -4,14 +4,14 @@
   fetchPypi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   version = "0.5.0";
   format = "setuptools";
   pname = "poyo";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "1pflivs6j22frz0v3dqxnvc8yb8fb52g11lqr88z0i8cg2m5csg2";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-4mlWqngMRfARypiG8ERZDi2P2LYdt7HBz04IafSO1N0=";
   };
 
   meta = {
@@ -19,4 +19,4 @@ buildPythonPackage rec {
     description = "Lightweight YAML Parser for Python";
     license = lib.licenses.mit;
   };
-}
+})

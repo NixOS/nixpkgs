@@ -1,12 +1,9 @@
 {
-  apple-sdk,
   mkAppleDerivation,
   stdenvNoCC,
 }:
 
 let
-  xnu = apple-sdk.sourceRelease "xnu";
-
   privateHeaders = stdenvNoCC.mkDerivation {
     name = "removefile-deps-private-headers";
 

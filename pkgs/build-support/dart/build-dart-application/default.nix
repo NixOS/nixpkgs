@@ -71,8 +71,7 @@ lib.extendMkDerivation {
         if autoPubspecLock == null then
           throw "The pubspecLock argument is required. If import-from-derivation is allowed (it isn't in Nixpkgs), you can set autoPubspecLock to the path to a pubspec.lock instead."
         else
-          assert lib.assertMsg (builtins.pathExists autoPubspecLock)
-            "The pubspec.lock file could not be found!";
+          assert builtins.pathExists autoPubspecLock || throw "The pubspec.lock file could not be found!";
           lib.importJSON (
             runCommand "${lib.getName args}-pubspec-lock-json" {
               nativeBuildInputs = [ yq ];
@@ -194,9 +193,15 @@ lib.extendMkDerivation {
           # Ensure that we inherit the propagated build inputs from the dependencies.
           builtins.attrValues pubspecLockData.dependencySources;
 
+      preConfigure = args.preConfigure or "" + ''
+        ln -sf "$pubspecLockFilePath" pubspec.lock
+      '';
+
       # When stripping, it seems some ELF information is lost and the dart VM cli
       # runs instead of the expected program. Don't strip if it's an exe output.
       dontStrip = args.dontStrip or (dartOutputType == "exe");
+
+      passAsFile = [ "pubspecLockFile" ];
 
       passthru = {
         pubspecLock = pubspecLockData;

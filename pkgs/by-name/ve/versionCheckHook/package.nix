@@ -13,5 +13,6 @@ makeSetupHook {
   meta = {
     description = "Lookup for $version in the output of --help and --version";
     maintainers = with lib.maintainers; [ doronbehar ];
+    license = lib.licenses.mit;
   };
 } ./hook.sh

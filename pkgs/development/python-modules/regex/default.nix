@@ -6,19 +6,16 @@
   setuptools,
 }:
 
-let
-  version = "2026.2.19";
-in
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "regex";
-  inherit version;
+  version = "2026.8.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mrabarnett";
     repo = "mrab-regex";
-    tag = version;
-    hash = "sha256-/Uqq/Z1fwn6TKQ6UfYfOUJ6t7njSZyxTAb1lEXPg5f8=";
+    tag = finalAttrs.version;
+    hash = "sha256-TOaJBk9W/ZEA+l2i0kzrr6RxlkdFzTIxj+Bu25JBNws=";
   };
 
   build-system = [ setuptools ];
@@ -46,4 +43,4 @@ buildPythonPackage {
     ];
     maintainers = [ lib.maintainers.dwoffinden ];
   };
-}
+})

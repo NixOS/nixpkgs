@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "azure-storage-file-datalake";
-  version = "12.21.0";
+  version = "12.25.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_storage_file_datalake";
     inherit version;
-    hash = "sha256-tJzSFW6jJfb0So9mdNc8WUnprEjWSA+vkBspOYVfzdM=";
+    hash = "sha256-NIE8bz6b8WNomM7GJSndLO0YnNLGdxYOxp74jDty2n8=";
   };
 
   build-system = [ setuptools ];

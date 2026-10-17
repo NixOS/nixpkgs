@@ -35,7 +35,6 @@ buildGoModule (finalAttrs: {
 
   vendorHash = null;
 
-  strictDeps = true;
   nativeBuildInputs = [ makeBinaryWrapper ];
 
   subPackages = [
@@ -80,8 +79,7 @@ buildGoModule (finalAttrs: {
       mit
       asl20
     ];
-    maintainers = with lib.maintainers; [
-      RossSmyth
+    maintainers = [
     ];
   };
 })

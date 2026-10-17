@@ -3,27 +3,26 @@
   buildNpmPackage,
   fetchFromGitHub,
   testers,
-  dotenvx,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "dotenvx";
-  version = "1.59.1";
+  version = "2.33.0";
 
   src = fetchFromGitHub {
     owner = "dotenvx";
     repo = "dotenvx";
-    tag = "v${version}";
-    hash = "sha256-P1k1cd6DfxGom2VKPKkNqhfs0h89QHQW19ZtePlutJk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-78bS6LjSpBdvMzFGvJhN8P6VV3XnJrT1ovO7NZCcXAs=";
   };
 
-  npmDepsHash = "sha256-OUggLKCzvgH158HSavEJBKtVs2EsddHDs/1q7H/5pPY=";
+  npmDepsHash = "sha256-1rDI2GxsyZVMmPZ3zeW+TijpY5G6sta+WNUWhXbLzws=";
 
   dontNpmBuild = true;
 
   passthru.tests = {
     version = testers.testVersion {
-      package = dotenvx;
+      package = finalAttrs.finalPackage;
       # access to the home directory
       command = "HOME=$TMPDIR dotenvx --version";
     };
@@ -32,7 +31,7 @@ buildNpmPackage rec {
   meta = {
     description = "Better dotenv–from the creator of `dotenv`";
     homepage = "https://github.com/dotenvx/dotenvx";
-    changelog = "https://github.com/dotenvx/dotenvx/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/dotenvx/dotenvx/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       natsukium
@@ -40,4 +39,4 @@ buildNpmPackage rec {
     ];
     mainProgram = "dotenvx";
   };
-}
+})

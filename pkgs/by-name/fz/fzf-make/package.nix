@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fzf-make";
-  version = "0.68.0";
+  version = "0.75.0";
 
   src = fetchFromGitHub {
     owner = "kyu08";
     repo = "fzf-make";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6lnu+wIRfd2DwCjPe5nng/6qZx/H9YBj3jItSREY+fI=";
+    hash = "sha256-0/z27cTelsJPUqWWf+UMcplfsPYSoNcNUMlYCrKBCPQ=";
   };
 
-  cargoHash = "sha256-geAaKOD1FbRasb648fBmrkxMMwd1OnNzjg23lgjpY+0=";
+  cargoHash = "sha256-Uv8NB9S5ii0bDuX6sqffQE5e3mXJB6UItiA3ijFdWaM=";
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 

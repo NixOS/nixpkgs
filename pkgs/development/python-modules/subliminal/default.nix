@@ -40,14 +40,14 @@
 
 buildPythonPackage rec {
   pname = "subliminal";
-  version = "2.6.0";
+  version = "2.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Diaoul";
     repo = "subliminal";
     tag = version;
-    hash = "sha256-fNrWdj8jnTH8O7mrltyApgBOd7zMA5wcaMizG6/Z0BU=";
+    hash = "sha256-4pM9XHqz87yFeicB6IK7sNzXCdWGlLvT9Dm00e1fMXo=";
   };
 
   build-system = [
@@ -55,7 +55,7 @@ buildPythonPackage rec {
     hatch-vcs
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     babelfish
     beautifulsoup4
     chardet

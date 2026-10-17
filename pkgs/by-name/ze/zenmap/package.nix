@@ -72,7 +72,7 @@ python3Packages.buildPythonApplication {
   '';
 
   meta = nmap.meta // {
-    description = "Offical nmap Security Scanner GUI";
+    description = "Official nmap Security Scanner GUI";
     homepage = "https://nmap.org/zenmap/";
     maintainers = with lib.maintainers; [
       dvaerum

@@ -1,13 +1,10 @@
-let
-  versions = builtins.fromJSON (builtins.readFile ./versions.json);
-in
-
 {
   lib,
   bootstrapStdenv,
-  fetchFromGitHub,
   meson,
   ninja,
+  runCommand,
+  sourceRelease,
   xcodeProjectCheckHook,
 }:
 
@@ -31,7 +28,7 @@ lib.extendMkDerivation {
     assert args ? releaseName;
     let
       inherit (args) releaseName;
-      info = versions.${releaseName};
+      releaseSrc = sourceRelease releaseName;
       files = lib.filesystem.listFilesRecursive (prependShardPath releaseName);
       mesonFiles = lib.filter (hasBasenamePrefix "meson") files;
     in
@@ -40,14 +37,9 @@ lib.extendMkDerivation {
     assert args ? xcodeHash -> lib.length mesonFiles > 0;
     {
       pname = args.pname or releaseName;
-      inherit (info) version;
+      inherit (releaseSrc) version;
 
-      src = args.src or fetchFromGitHub {
-        owner = "apple-oss-distributions";
-        repo = releaseName;
-        rev = info.rev or "${releaseName}-${info.version}";
-        inherit (info) hash;
-      };
+      src = args.src or releaseSrc;
 
       strictDeps = true;
       __structuredAttrs = true;
@@ -60,25 +52,46 @@ lib.extendMkDerivation {
       }
       // args.meta or { };
     }
-    // lib.optionalAttrs (args ? xcodeHash) {
-      postUnpack =
-        args.postUnpack or ""
-        + lib.concatMapStrings (
-          file:
-          if baseNameOf file == "meson.build.in" then
-            "substitute ${lib.escapeShellArg "${file}"} \"$sourceRoot/meson.build\" --subst-var version\n"
-          else
-            "cp ${lib.escapeShellArg "${file}"} \"$sourceRoot/\"${lib.escapeShellArg (baseNameOf file)}\n"
-        ) mesonFiles;
+    // lib.optionalAttrs (args ? xcodeHash) (
+      let
+        xcodeProject = args.xcodeProject or "${releaseName}.xcodeproj";
+      in
+      {
+        postUnpack =
+          args.postUnpack or ""
+          + lib.concatMapStrings (
+            file:
+            if baseNameOf file == "meson.build.in" then
+              "substitute ${lib.escapeShellArg "${file}"} \"$sourceRoot/meson.build\" --subst-var version\n"
+            else
+              "cp ${lib.escapeShellArg "${file}"} \"$sourceRoot/\"${lib.escapeShellArg (baseNameOf file)}\n"
+          ) mesonFiles;
 
-      xcodeProject = args.xcodeProject or "${releaseName}.xcodeproj";
+        inherit xcodeProject;
 
-      nativeBuildInputs = args.nativeBuildInputs or [ ] ++ [
-        meson
-        ninja
-        xcodeProjectCheckHook
-      ];
+        nativeBuildInputs = args.nativeBuildInputs or [ ] ++ [
+          meson
+          ninja
+          xcodeProjectCheckHook
+        ];
 
-      mesonBuildType = "release";
-    };
+        mesonBuildType = "release";
+
+        # build-platform check so CI catches stale xcodeHashes the Darwin-only postUnpack hook misses
+        passthru = lib.recursiveUpdate (args.passthru or { }) {
+          tests.xcodeProjectHash =
+            runCommand "${finalAttrs.pname}-xcodeproject-hash-check"
+              {
+                sourceRoot = "${finalAttrs.src}";
+                inherit xcodeProject;
+                inherit (args) xcodeHash;
+                nativeBuildInputs = [ xcodeProjectCheckHook ];
+              }
+              ''
+                verifyXcodeProjectHash
+                touch "$out"
+              '';
+        };
+      }
+    );
 }

@@ -56,6 +56,16 @@ in
       default = "/var/log/radicle-ci";
     };
 
+    logLevel = lib.mkOption {
+      type = lib.types.str;
+      default = "info";
+      description = ''
+        Log level for radicle-ci-broker, set via the `RUST_LOG` environment variable. See
+        [RUST_LOG](https://docs.rs/env_logger/latest/env_logger/#enabling-logging)
+        for the format.
+      '';
+    };
+
     enableHardening = lib.mkEnableOption "systemd hardening" // {
       default = true;
       example = false;
@@ -135,7 +145,7 @@ in
       };
       description = ''
         Configuration of radicle-ci-broker.
-        See <https://app.radicle.xyz/nodes/seed.radicle.xyz/rad:zwTxygwuz5LDGBq255RA2CbNGrz8/tree/doc/userguide.md#configuration> for more information.
+        See <https://radicle.network/nodes/seed.radicle.dev/rad:zwTxygwuz5LDGBq255RA2CbNGrz8/tree/doc/userguide.md#configuration> for more information.
       '';
       default = { };
       example = lib.literalExpression ''
@@ -191,7 +201,10 @@ in
       bindsTo = [ "radicle-node.service" ];
       after = [ "radicle-node.service" ];
 
-      environment = { inherit RAD_HOME; };
+      environment = {
+        inherit RAD_HOME;
+        RUST_LOG = cfg.logLevel;
+      };
 
       serviceConfig = lib.mkMerge [
         {
@@ -208,7 +221,7 @@ in
           LoadCredential = config.systemd.services.radicle-node.serviceConfig.LoadCredential or [ ];
 
           BindReadOnlyPaths = config.systemd.services.radicle-node.serviceConfig.BindReadOnlyPaths ++ [
-            "/run/credentials/radicle-ci-broker.service/xyz.radicle.node.secret:/var/lib/radicle/keys/radicle"
+            "/run/credentials/radicle-ci-broker.service/dev.radicle.node.secret:/var/lib/radicle/keys/radicle"
           ];
           ReadWritePaths = [ RAD_HOME ];
 

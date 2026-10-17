@@ -2,39 +2,46 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
+  pytest-cov-stub,
   pytestCheckHook,
-  setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dictdiffer";
-  version = "0.9.0";
-  format = "setuptools";
+  version = "0.10.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "inveniosoftware";
     repo = "dictdiffer";
-    rev = "v${version}";
-    hash = "sha256-lQyPs3lQWtsvNPuvvwJUTDzrFaOX5uwGuRHe3yWUheU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5jYfkqyU3LrYDy+U9+McOYXyutp8gZSeCmx99NsLYgo=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
-
-  nativeCheckInputs = [ pytestCheckHook ];
-
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'pytest-runner>=2.7'," ""
-    substituteInPlace pytest.ini \
-      --replace ' --isort --pydocstyle --pycodestyle --doctest-glob="*.rst" --doctest-modules --cov=dictdiffer --cov-report=term-missing' ""
+    substituteInPlace pyproject.toml \
+      --replace-fail "--isort --pydocstyle" ""
   '';
+
+  nativeBuildInputs = [
+    hatch-vcs
+    hatchling
+  ];
+
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "dictdiffer" ];
 
   meta = {
     description = "Module to diff and patch dictionaries";
     homepage = "https://github.com/inveniosoftware/dictdiffer";
+    changelog = "https://github.com/inveniosoftware/dictdiffer/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

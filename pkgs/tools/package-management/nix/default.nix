@@ -5,30 +5,14 @@
   nixDependencies,
   generateSplicesForMkScope,
   fetchFromGitHub,
-  fetchpatch2,
+  fetchpatch,
   runCommand,
   pkgs,
   pkgsi686Linux,
   pkgsStatic,
   nixosTests,
-
-  storeDir ? "/nix/store",
-  stateDir ? "/nix/var",
-  confDir ? "/etc",
 }:
 let
-  # Called for Nix == 2.28. Transitional until we always use
-  # per-component packages.
-  commonMeson =
-    args:
-    nixDependencies.callPackage (import ./common-meson.nix ({ inherit lib fetchFromGitHub; } // args)) {
-      inherit
-        storeDir
-        stateDir
-        confDir
-        ;
-    };
-
   # Intentionally does not support overrideAttrs etc
   # Use only for tests that are about the package relation to `pkgs` and/or NixOS.
   addTestsShallowly =
@@ -125,112 +109,143 @@ let
     lib.teams.security-review
   ];
 
+  # Comment out functional tests from meson.build file
+  # This is to prevent test list reordering between releases in `tests/functional/**/meson.build`
+  # `tests` is a list of `{ file; test; }`
+  removeFunctionalTests =
+    tests: src:
+    # empty implies noop
+    if tests == [ ] then
+      src
+    else
+      runCommand src.name { inherit src; } ''
+        cp -r "$src" "$out"
+        chmod -R u+w "$out"
+        ${lib.concatMapStringsSep "\n" (
+          { file, test }:
+          ''substituteInPlace "$out/${file}" --replace-fail "'${test}'," "# '${test}',"''
+        ) tests}
+      '';
+
   # Disables tests that have been flaky due to the darwin sandbox and fork safety
   # with missing shebangs.
   # See:
   # - https://github.com/NixOS/nix/pull/14778
   # - https://github.com/NixOS/nixpkgs/issues/476794
   # - https://github.com/NixOS/nix/issues/13106
-  patches_common = lib.optional (
-    stdenv.system == "aarch64-darwin"
-  ) ./patches/skip-flaky-darwin-tests.patch;
+  commonDisabledTests = lib.optionals (stdenv.hostPlatform.system == "aarch64-darwin") [
+    {
+      file = "tests/functional/meson.build";
+      test = "nix-shell.sh";
+    }
+    {
+      file = "tests/functional/meson.build";
+      test = "user-envs.sh";
+    }
+    {
+      file = "tests/functional/ca/meson.build";
+      test = "nix-shell.sh";
+    }
+    {
+      file = "tests/functional/flakes/meson.build";
+      test = "shebang.sh";
+    }
+  ];
 
-  # Lowdown 3.0 compatibility patch for nix 2.31–2.33; fetched from the
-  # upstream backport (same diff on every maintenance branch after
-  # fetchpatch strips metadata).  Nix 2.34.4+ and the git snapshot
-  # already include the fix in their tagged source.
-  lowdown30Patch = pkgs.fetchpatch {
-    name = "nix-lowdown-3.0-support.patch";
-    url = "https://github.com/NixOS/nix/commit/472c35c561bd9e8db1465e0677f1efe2cb88c568.patch";
-    hash = "sha256-ZCQgI/euBN8t9rgdCsGRgrcEWG3T5MUc+bQc4tIcHuI=";
-  };
-
-  # Lowdown 3.0 compatibility patch for nix 2.28 and 2.30, which have a
-  # different markdown.cc layout (no LOWDOWN_TERM_NORELLINK branch) and
-  # never received an upstream backport.
-  lowdown30PatchOld = ./patches/lowdown-3.0-compat-2.28-2.30.patch;
+  # `libutil` calls `NtCreateFile` and `RtlNtStatusToDosError` without linking
+  # `ntdll`, so it only links with a toolchain that adds `-lntdll` implicitly.
+  # Windows only, so that `nix` is not rebuilt for every other platform.
+  #
+  # Temporary: fixed in https://github.com/NixOS/nix/pull/16306 and backported,
+  # but not yet released. Drop this from each version once its next release,
+  # which will include the backport, is packaged:
+  #
+  # - 2.31: https://github.com/NixOS/nix/pull/16604
+  # - 2.34: https://github.com/NixOS/nix/pull/16607
+  # - 2.35: https://github.com/NixOS/nix/pull/16608
+  windowsPatches = lib.optionals stdenv.hostPlatform.isWindows [
+    (fetchpatch {
+      name = "libutil-link-ntdll-on-windows.patch";
+      url = "https://github.com/NixOS/nix/commit/4b247ec7f961686e60da6f012e4e128e30e8c82f.patch";
+      hash = "sha256-WDx0xknyin7ayQUIA5Zafk2tEySVIVqUZ0RdsQKAN8Q=";
+    })
+  ];
 in
 lib.makeExtensible (
   self:
   (
     {
-      nix_2_28 = commonMeson {
-        version = "2.28.6";
-        hash = "sha256-jg2YDTFt8CY4kMg4ha3UK5C+mQY+Zg67nwNy+CmTk5w=";
-        self_attribute_name = "nix_2_28";
-        patches = patches_common ++ [
-          lowdown30PatchOld
-        ];
-      };
-
-      nixComponents_2_30 =
-        (nixDependencies.callPackage ./modular/packages.nix rec {
-          version = "2.30.4";
-          inherit teams;
-          otherSplices = generateSplicesForNixComponents "nixComponents_2_30";
-          src = fetchFromGitHub {
-            owner = "NixOS";
-            repo = "nix";
-            tag = version;
-            hash = "sha256-cJ96IBZCYoX0Tdlo5Q7qDSAKfL6QcUq/4Kr1UplH50E=";
-          };
-        }).appendPatches
-          (patches_common ++ [ lowdown30PatchOld ]);
-
-      nix_2_30 = addTests "nix_2_30" self.nixComponents_2_30.nix-everything;
-
       nixComponents_2_31 =
         (nixDependencies.callPackage ./modular/packages.nix rec {
-          version = "2.31.4";
+          version = "2.31.6";
           inherit teams;
           otherSplices = generateSplicesForNixComponents "nixComponents_2_31";
           src = fetchFromGitHub {
             owner = "NixOS";
             repo = "nix";
             tag = version;
-            hash = "sha256-f/haYfcI+9IiYVH+g6cjhF8cK7QWHAFfcPtF+57ujZ0=";
+            hash = "sha256-yAvNBedw4FB+Z5myhfGsnRT8F1QqeEoXGbm7EmTW/Og=";
           };
         }).appendPatches
-          [ ];
+          windowsPatches;
 
       nix_2_31 = addTests "nix_2_31" self.nixComponents_2_31.nix-everything;
 
       nixComponents_2_34 =
         (nixDependencies.callPackage ./modular/packages.nix rec {
-          version = "2.34.5";
+          version = "2.34.9";
           inherit teams;
           otherSplices = generateSplicesForNixComponents "nixComponents_2_34";
-          src = fetchFromGitHub {
+          src = removeFunctionalTests commonDisabledTests (fetchFromGitHub {
             owner = "NixOS";
             repo = "nix";
             tag = version;
-            hash = "sha256-/S2bnz+TbRFGmNyR31Hfa70uFvJoMM9wYDjpyEw8I+U=";
-          };
+            hash = "sha256-ZJwg/qG4M1Impy774HKMZ3Hsq7vlBJy7sXl1fI9QDXI=";
+          });
         }).appendPatches
-          patches_common;
+          windowsPatches;
 
       nix_2_34 = addTests "nix_2_34" self.nixComponents_2_34.nix-everything;
 
-      nixComponents_git =
+      nixComponents_2_35 =
         (nixDependencies.callPackage ./modular/packages.nix rec {
-          version = "2.35pre20260407_${lib.substring 0 8 src.rev}";
+          version = "2.35.3";
           inherit teams;
-          otherSplices = generateSplicesForNixComponents "nixComponents_git";
+          otherSplices = generateSplicesForNixComponents "nixComponents_2_35";
+          src = removeFunctionalTests commonDisabledTests (fetchFromGitHub {
+            owner = "NixOS";
+            repo = "nix";
+            tag = version;
+            hash = "sha256-qtlx8ywd1qj2ToZTNBunXE7JUajLtw44ja3r7+d47D4=";
+          });
+        }).appendPatches
+          windowsPatches;
+
+      nix_2_35 = addTests "nix_2_35" self.nixComponents_2_35.nix-everything;
+
+      nixComponents_git =
+        let
           src = fetchFromGitHub {
             owner = "NixOS";
             repo = "nix";
-            rev = "a37db9d249afd61a81ae26368696f60e065d6f61";
-            hash = "sha256-RpfExg4DcWZ/SanVuwVbdijqPylsjvtMrHTQHemE+t8=";
+            rev = "a9f38ea0ee89f550616f342386f45e896f4abd18";
+            hash = "sha256-jUzXXzi1x8Ub4kdBCMcrz1LoCuElBq4mFjOw59rFPCE=";
           };
+        in
+        (nixDependencies.callPackage ./modular/packages.nix {
+          version = "2.36pre20261013_${lib.substring 0 8 src.rev}";
+          inherit teams;
+          otherSplices = generateSplicesForNixComponents "nixComponents_git";
+          src = removeFunctionalTests commonDisabledTests src;
         }).appendPatches
-          patches_common;
+          [ ];
 
       git = addTests "git" self.nixComponents_git.nix-everything;
 
-      latest = self.nix_2_34;
+      latest = self.nix_2_35;
 
       # Read ./README.md before bumping a major release
-      stable = addFallbackPathsCheck self.nix_2_31;
+      stable = addFallbackPathsCheck self.nix_2_34;
     }
     // lib.optionalAttrs config.allowAliases (
       lib.listToAttrs (
@@ -245,13 +260,16 @@ lib.makeExtensible (
       // {
         nixComponents_2_27 = throw "nixComponents_2_27 has been removed. use nixComponents_2_31.";
         nixComponents_2_29 = throw "nixComponents_2_29 has been removed. use nixComponents_2_31.";
+        nixComponents_2_30 = throw "nixComponents_2_30 has been removed. use nixComponents_2_31.";
         nixComponents_2_32 = throw "nixComponents_2_32 has been removed. use nixComponents_2_34.";
         nixComponents_2_33 = throw "nixComponents_2_33 has been removed. use nixComponents_2_34.";
         nix_2_24 = throw "nix_2_24 has been removed. use nix_2_31.";
         nix_2_26 = throw "nix_2_26 has been removed. use nix_2_31.";
         nix_2_27 = throw "nix_2_27 has been removed. use nix_2_31.";
         nix_2_25 = throw "nix_2_25 has been removed. use nix_2_31.";
+        nix_2_28 = throw "nix_2_28 has been removed. use nix_2_31.";
         nix_2_29 = throw "nix_2_29 has been removed. use nix_2_31.";
+        nix_2_30 = throw "nix_2_30 has been removed. use nix_2_31.";
         nix_2_32 = throw "nix_2_32 has been removed. use nix_2_34.";
         nix_2_33 = throw "nix_2_33 has been removed. use nix_2_34.";
 

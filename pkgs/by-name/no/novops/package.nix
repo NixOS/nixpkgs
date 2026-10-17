@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     openssl # required for openssl-sys
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ];
 

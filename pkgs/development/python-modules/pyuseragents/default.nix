@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "Animenosekai";
     repo = "useragents";
     rev = "v${version}";
-    sha256 = "D7Qs3vsfkRH2FDkbfakrR+FfWzQFiOCQM7q9AdJavyU=";
+    hash = "sha256-D7Qs3vsfkRH2FDkbfakrR+FfWzQFiOCQM7q9AdJavyU=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   meta = {
     description = "Giving you a random User-Agent Header";
     homepage = "https://github.com/Animenosekai/useragents";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ emilytrau ];
   };
 }

@@ -4,25 +4,32 @@
   fetchFromGitHub,
   nix-update-script,
   nixosTests,
+  ciMode ? true, # Override to false to run time-sensitive tests locally
 }:
 buildGoModule (finalAttrs: {
   pname = "scion";
 
-  version = "0.12.0";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "scionproto";
     repo = "scion";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-J51GIQQhS623wFUU5dI/TwT2rkDH69518lpdCLZ/iM0=";
+    hash = "sha256-UQgCjX9xYClsBviNwCmxHXAJ7MNce7olpzaCM2ybuc0=";
   };
 
-  vendorHash = "sha256-Ew/hQM8uhaM89sCcPKUBbiGukDq3h5x+KID3w/8BDHg=";
+  __structuredAttrs = true;
+
+  # Tests bind to localhost
+  __darwinAllowLocalNetworking = true;
+
+  vendorHash = "sha256-A9K2/bWYUdMA8ypSisxk4NMOavHz51FaHEaxahz+0ek=";
 
   excludedPackages = [
     "acceptance"
     "demo"
     "tools"
+    "private/underlay/ebpf"
     "pkg/private/xtest/graphupdater"
   ];
 
@@ -37,6 +44,11 @@ buildGoModule (finalAttrs: {
   '';
 
   doCheck = true;
+
+  # Upstream disables time-sensitive tests and adjusts timeouts in CI
+  preCheck = lib.optionalString ciMode ''
+    export CI=42
+  '';
 
   tags = [ "sqlite_mattn" ];
 

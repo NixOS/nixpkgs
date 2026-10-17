@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.6.1";
 
   src = fetchFromGitHub {
-    owner = "linuxaudio";
+    owner = "jackaudio";
     repo = "new-session-manager";
     rev = "v${finalAttrs.version}";
     sha256 = "sha256-5G2GlBuKjC/r1SMm78JKia7bMA97YcvUR5l6zBucemw=";
@@ -40,6 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Session manager designed for audio applications";
     maintainers = [ lib.maintainers._6AA4FD ];
     license = lib.licenses.gpl3Plus;
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux;
   };
 })

@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
+  pyprojectVersionPatchHook,
   tuya-device-sharing-sdk,
   pytestCheckHook,
   syrupy,
@@ -10,15 +11,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tuya-device-handlers";
-  version = "0.0.16";
+  version = "0.0.31";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "tuya-device-handlers";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DuMG0nItXwJYl4c3JprA308+qyFzEemt2QS/sJ8kvlU=";
+    hash = "sha256-p9/PVw4QgVvqFKGJw/xQihBSbwxBVvErPaXvVyjm0z4=";
   };
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [ poetry-core ];
 
@@ -27,6 +32,11 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     pytestCheckHook
     syrupy
+  ];
+
+  disabledTests = [
+    # pathlib.Path(path).relative_to(_PROJECT_ROOT) evaluates to a path that is not below the build dir
+    "test_customer_device_with_quirk_as_dict"
   ];
 
   pythonImportsCheck = [ "tuya_device_handlers" ];

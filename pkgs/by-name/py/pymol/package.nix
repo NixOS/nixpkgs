@@ -3,7 +3,9 @@
   lib,
   fetchFromGitHub,
   fetchpatch,
+  fetchpatch2,
   makeDesktopItem,
+  copyDesktopItems,
   cmake,
   python3Packages,
   netcdf,
@@ -16,43 +18,19 @@
   msgpack-cxx,
   qt5,
 }:
-let
-  pname = "pymol";
-  description = "Python-enhanced molecular graphics tool";
 
-  desktopItem = makeDesktopItem {
-    name = pname;
-    exec = pname;
-    desktopName = "PyMol Molecular Graphics System";
-    genericName = "Molecular Modeler";
-    comment = description;
-    icon = pname;
-    mimeTypes = [
-      "chemical/x-pdb"
-      "chemical/x-mdl-molfile"
-      "chemical/x-mol2"
-      "chemical/seq-aa-fasta"
-      "chemical/seq-na-fasta"
-      "chemical/x-xyz"
-      "chemical/x-mdl-sdf"
-    ];
-    categories = [
-      "Graphics"
-      "Education"
-      "Science"
-      "Chemistry"
-    ];
-  };
+let
+  description = "Python-enhanced molecular graphics tool";
 in
-python3Packages.buildPythonApplication rec {
-  inherit pname;
+python3Packages.buildPythonApplication (finalAttrs: {
+  pname = "pymol";
   version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "schrodinger";
     repo = "pymol-open-source";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-2C9kUpNfK9g7ehmk83iUVqqz4gn4wKO3lW5rSduFP6U=";
   };
 
@@ -75,6 +53,11 @@ python3Packages.buildPythonApplication rec {
       url = "https://github.com/schrodinger/pymol-open-source/commit/17c6cbd96d52e9692fd298daec6c9bda273a8aad.patch";
       hash = "sha256-dcYRzUhiaGlR3CjQ0BktA5L+8lFyVdw0+hIz3Li7gDQ=";
     })
+    # Fixes `set` command with int/float arguments, i.e. `set transparency, 0.5`
+    (fetchpatch2 {
+      url = "https://github.com/schrodinger/pymol-open-source/commit/71246845f77ecfa2e14f01887abd180c18ebfb55.patch";
+      hash = "sha256-ES7v38daaDXgbHqtxJ6Pt6Xa3ggKwXcx1txWJWkkLgI=";
+    })
   ];
 
   postPatch = ''
@@ -85,6 +68,32 @@ python3Packages.buildPythonApplication rec {
       --replace-fail '"cmake>=3.13.3",' ""
   '';
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = finalAttrs.pname;
+      exec = finalAttrs.pname;
+      desktopName = "PyMol Molecular Graphics System";
+      genericName = "Molecular Modeler";
+      comment = description;
+      icon = finalAttrs.pname;
+      mimeTypes = [
+        "chemical/x-pdb"
+        "chemical/x-mdl-molfile"
+        "chemical/x-mol2"
+        "chemical/seq-aa-fasta"
+        "chemical/seq-na-fasta"
+        "chemical/x-xyz"
+        "chemical/x-mdl-sdf"
+      ];
+      categories = [
+        "Graphics"
+        "Education"
+        "Science"
+        "Chemistry"
+      ];
+    })
+  ];
+
   env.PREFIX_PATH = lib.optionalString (!stdenv.hostPlatform.isDarwin) "${msgpack-cxx}";
   build-system = [ python3Packages.setuptools ];
   dontUseCmakeConfigure = true;
@@ -92,6 +101,7 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     cmake
     qt5.wrapQtAppsHook
+    copyDesktopItems
   ];
 
   buildInputs = [
@@ -115,23 +125,18 @@ python3Packages.buildPythonApplication rec {
 
   env.NIX_CFLAGS_COMPILE = "-I ${libxml2.dev}/include/libxml2";
 
-  postInstall =
-    with python3Packages;
-    ''
-      wrapProgram $out/bin/pymol \
-        --prefix PYTHONPATH : ${
-          lib.makeSearchPathOutput "lib" python3Packages.python.sitePackages [
-            pyqt5
-            pyqt5.pyqt5-sip
-          ]
-        }
+  postInstall = with python3Packages; ''
+    wrapProgram $out/bin/pymol \
+      --prefix PYTHONPATH : ${
+        lib.makeSearchPathOutput "lib" python3Packages.python.sitePackages [
+          pyqt5
+          pyqt5.pyqt5-sip
+        ]
+      }
 
-      mkdir -p "$out/share/icons/"
-      ln -s $out/${python3Packages.python.sitePackages}/pymol/pymol_path/data/pymol/icons/icon2.svg "$out/share/icons/pymol.svg"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      cp -r "${desktopItem}/share/applications/" "$out/share/"
-    '';
+    mkdir -p "$out/share/icons/"
+    ln -s $out/${python3Packages.python.sitePackages}/pymol/pymol_path/data/pymol/icons/icon2.svg "$out/share/icons/pymol.svg"
+  '';
 
   pythonImportsCheck = [ "pymol" ];
 
@@ -186,4 +191,4 @@ python3Packages.buildPythonApplication rec {
       samlich
     ];
   };
-}
+})

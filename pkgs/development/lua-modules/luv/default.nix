@@ -13,7 +13,7 @@
 
 buildLuarocksPackage rec {
   pname = "luv";
-  version = "1.51.0-2";
+  version = "1.52.1-0";
 
   src = fetchFromGitHub {
     owner = "luvit";
@@ -21,7 +21,7 @@ buildLuarocksPackage rec {
     rev = version;
     # Need deps/lua-compat-5.3 only
     fetchSubmodules = true;
-    hash = "sha256-UJHNXftAvtDuporyKCuJ7+KbtG0lBZ+DtESixS8rabQ=";
+    hash = "sha256-mU+Gvlpvp6iZE5IpXfTr+21QQ34vZk+tYhnr0b891qg=";
   };
 
   # to make sure we dont use bundled deps
@@ -43,30 +43,18 @@ buildLuarocksPackage rec {
   buildInputs = [ libuv ];
   nativeBuildInputs = [ cmake ];
 
-  # Need to specify WITH_SHARED_LIBUV=ON cmake flag, but
-  # Luarocks doesn't take cmake variables from luarocks config.
-  # Need to specify it in rockspec. See https://github.com/luarocks/luarocks/issues/1160.
-  knownRockspec = runCommand "luv-${version}.rockspec" { } ''
-    patch ${src}/luv-scm-0.rockspec -o - > $out <<'EOF'
-    --- a/luv-scm-0.rockspec
-    +++ b/luv-scm-0.rockspec
-    @@ -1,5 +1,5 @@
-     package = "luv"
-    -version = "scm-0"
-    +version = "${version}"
-     source = {
-       url = 'git://github.com/luvit/luv.git'
-     }
-    @@ -24,6 +24,7 @@
-     build =
-       type = 'cmake',
-       variables = {
-    +     WITH_SHARED_LIBUV="ON",
-          CMAKE_C_FLAGS="$(CFLAGS)",
-          CMAKE_MODULE_LINKER_FLAGS="$(LIBFLAG)",
-          LUA_LIBDIR="$(LUA_LIBDIR)",
-    EOF
+  rockspecFilename = "luv-scm-0.rockspec";
+
+  postConfigure = ''
+    mv "$rockspecFilename" "$generatedRockspecFilename"
+    rockspecFilename="$generatedRockspecFilename"
+    substituteInPlace "$rockspecFilename" \
+      --replace-fail 'version = "scm-0"' "version = \"$version\""
   '';
+
+  luarocksConfig.variables = {
+    WITH_SHARED_LIBUV = "ON";
+  };
 
   __darwinAllowLocalNetworking = true;
 
@@ -80,18 +68,23 @@ buildLuarocksPackage rec {
   disabled = luaOlder "5.1";
 
   passthru = {
-    tests.test =
-      runCommand "luv-${version}-test"
-        {
-          nativeBuildInputs = [ (lua.withPackages (ps: [ ps.luv ])) ];
-        }
-        ''
-          lua <<EOF
-          local uv = require("luv")
-          assert(uv.fs_mkdir(assert(uv.os_getenv("out")), 493))
-          print(uv.version_string())
-          EOF
-        '';
+    tests = {
+      test =
+        runCommand "luv-${version}-test"
+          {
+            nativeBuildInputs = [ (lua.withPackages (ps: [ ps.luv ])) ];
+          }
+          ''
+            lua <<EOF
+            local uv = require("luv")
+            assert(uv.fs_mkdir(assert(uv.os_getenv("out")), 493))
+            print(uv.version_string())
+            EOF
+          '';
+
+      # Test libluv too
+      inherit (lua.pkgs) libluv;
+    };
 
     updateScript = nix-update-script { };
   };

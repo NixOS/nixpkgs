@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     owner = "public/external";
     repo = "decaf";
     rev = "e5cc6240690d3ffdfcbdb1e4e851954b789cd5d9";
-    sha256 = "sha256-4oZtpdelyKbd2k4LAhtsLkL5Y84C1Qb02fpVywYorr8=";
+    hash = "sha256-4oZtpdelyKbd2k4LAhtsLkL5Y84C1Qb02fpVywYorr8=";
   };
 
   # Do not build static libraries and do not enable -Werror

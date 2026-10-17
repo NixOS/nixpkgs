@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pretalx-venueless";
-  version = "1.7.0";
+  version = "1.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pretalx";
     repo = "pretalx-venueless";
     rev = "v${version}";
-    hash = "sha256-oV7J5ndhrhrI5UXTDexLMRo7Gud4SyppCKhoUtom54E=";
+    hash = "sha256-E6fnOIeNnhryozoXjZQKDsA7TY+BGVRTNPv9+FP4Tac=";
   };
 
   nativeBuildInputs = [ gettext ];

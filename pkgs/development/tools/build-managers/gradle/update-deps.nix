@@ -37,6 +37,7 @@ lib.makeOverridable (
     ];
     gradleScript = writeShellScript "gradle-commands.sh" ''
       set -eo pipefail
+      if [ -e "''${NIX_ATTRS_SH_FILE:-}" ]; then . "$NIX_ATTRS_SH_FILE"; fi
       export http_proxy="$MITM_CACHE_ADDRESS"
       export https_proxy="$MITM_CACHE_ADDRESS"
       export SSL_CERT_FILE="$MITM_CACHE_CA"
@@ -136,8 +137,8 @@ lib.makeOverridable (
       export MITM_CACHE_CERT_DIR="$PWD"
       export MITM_CACHE_CA="$MITM_CACHE_CERT_DIR/ca.cer"
       popd >/dev/null
-      useBwrap="''${USE_BWRAP:-${toString useBwrap}}"
-      if [ -n "$useBwrap" ]; then
+      useBwrap="''${USE_BWRAP:-${if useBwrap then "1" else "0"}}"
+      if [[ "$useBwrap" -ne 0 ]]; then
         # bwrap isn't necessary, it's only used to prevent messy build scripts from touching ~
         bwrap \
           --unshare-all --share-net --clearenv --chdir / --setenv HOME /homeless-shelter \

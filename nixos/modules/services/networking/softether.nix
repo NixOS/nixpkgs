@@ -95,8 +95,8 @@ in
           wantedBy = [ "network.target" ];
           serviceConfig = {
             Type = "forking";
-            ExecStart = "${package}/bin/vpnserver start";
-            ExecStop = "${package}/bin/vpnserver stop";
+            ExecStart = "${cfg.dataDir}/vpnserver/vpnserver start";
+            ExecStop = "${cfg.dataDir}/vpnserver/vpnserver stop";
           };
           preStart = ''
             rm -rf ${cfg.dataDir}/vpnserver/vpnserver
@@ -116,8 +116,8 @@ in
           wantedBy = [ "network.target" ];
           serviceConfig = {
             Type = "forking";
-            ExecStart = "${package}/bin/vpnbridge start";
-            ExecStop = "${package}/bin/vpnbridge stop";
+            ExecStart = "${cfg.dataDir}/vpnbridge/vpnbridge start";
+            ExecStop = "${cfg.dataDir}/vpnbridge/vpnbridge stop";
           };
           preStart = ''
             rm -rf ${cfg.dataDir}/vpnbridge/vpnbridge
@@ -137,8 +137,8 @@ in
           wantedBy = [ "network.target" ];
           serviceConfig = {
             Type = "forking";
-            ExecStart = "${package}/bin/vpnclient start";
-            ExecStop = "${package}/bin/vpnclient stop";
+            ExecStart = "${cfg.dataDir}/vpnclient/vpnclient start";
+            ExecStop = "${cfg.dataDir}/vpnclient/vpnclient stop";
           };
           preStart = ''
             rm -rf ${cfg.dataDir}/vpnclient/vpnclient

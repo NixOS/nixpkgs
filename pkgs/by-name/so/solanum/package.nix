@@ -12,24 +12,27 @@
 
   # runtime
   lksctp-tools,
-  hyperscan,
+  vectorscan,
   libxcrypt,
   openssl,
   pkg-config,
   sqlite,
   unstableGitUpdater,
   nixosTests,
+
+  # flags
+  withSCTP ? lib.meta.availableOn stdenv.hostPlatform lksctp-tools,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "solanum";
-  version = "0-unstable-2026-03-25";
+  version = "0-unstable-2026-09-22";
 
   src = fetchFromGitHub {
     owner = "solanum-ircd";
     repo = "solanum";
-    rev = "d8d710c7bc052c3e24f76ca7a63da3a6ba6af8ea";
-    hash = "sha256-QnnxRRDou67/PorQ8YzVbQo2E3DF/f+cpR+hVecmyD0=";
+    rev = "03503ff488ea5757a0fdfd62b7509b02b41904ab";
+    hash = "sha256-Z6ujkb4VzgoMdUKnKoUdDpX8DDjxcb06YqrbojNXfFc=";
   };
 
   postPatch = ''
@@ -50,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "mbedtls" false)
     (lib.mesonEnable "openssl" true)
     (lib.mesonEnable "gnutls" false)
+    (lib.mesonEnable "sctp" withSCTP)
   ];
 
   nativeBuildInputs = [
@@ -62,12 +66,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    hyperscan
     libxcrypt
     openssl
     sqlite
+    vectorscan
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
+  ++ lib.optionals withSCTP [
     lksctp-tools
   ];
 
@@ -81,10 +85,12 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    broken = stdenv.hostPlatform.isDarwin;
     description = "IRCd for unified networks";
     homepage = "https://github.com/solanum-ircd/solanum";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ hexa ];
+    mainProgram = "solanum";
     platforms = lib.platforms.unix;
   };
 })

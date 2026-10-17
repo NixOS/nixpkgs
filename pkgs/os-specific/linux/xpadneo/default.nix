@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xpadneo";
-  version = "0.10.1";
+  version = "0.10.4";
 
   src = fetchFromGitHub {
     owner = "atar-axis";
     repo = "xpadneo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rMNgKhve76OXr2ha/Sqpw8sy/FWqxDm/bKF4YPlpVlc=";
+    hash = "sha256-yaCC+/hRoLQAdR6L9ek5aED8+o8iv0OwfiamWxB7ACc=";
   };
 
   setSourceRoot = ''
@@ -36,11 +36,16 @@ stdenv.mkDerivation (finalAttrs: {
   installFlags = [ "INSTALL_MOD_PATH=${placeholder "out"}" ];
   installTargets = [ "modules_install" ];
 
-  passthru.tests = {
-    xpadneo = nixosTests.xpadneo;
+  passthru = {
+    tests.xpadneo = nixosTests.xpadneo;
+    updateScript = nix-update-script {
+      extraArgs = [
+        # Skips pre-releases
+        "--version-regex"
+        "^v([\\d.]+)$"
+      ];
+    };
   };
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Advanced Linux driver for Xbox One wireless controllers";

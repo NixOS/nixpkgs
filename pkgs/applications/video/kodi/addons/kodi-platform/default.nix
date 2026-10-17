@@ -1,4 +1,5 @@
 {
+  lib,
   stdenv,
   fetchFromGitHub,
   cmake,
@@ -14,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "xbmc";
     repo = "kodi-platform";
     rev = "kodiplatform-${version}";
-    sha256 = "sha256-W9V6O+YmH2U7xyEvWgS30sHBlIqGaaIt9jKgJ4ePNbY=";
+    hash = "sha256-W9V6O+YmH2U7xyEvWgS30sHBlIqGaaIt9jKgJ4ePNbY=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -23,4 +24,9 @@ stdenv.mkDerivation rec {
     libcec_platform
     tinyxml
   ];
+
+  meta = {
+    homepage = "https://github.com/xbmc/kodi-platform";
+    license = lib.licenses.gpl2Plus;
+  };
 }

@@ -47,8 +47,6 @@ let
 
       systemd = config.systemd.package;
 
-      bootspecTools = config.boot.bootspec.package;
-
       nix = config.nix.package.out;
 
       timeout = if config.boot.loader.timeout == null then "menu-force" else config.boot.loader.timeout;
@@ -97,6 +95,9 @@ let
           '') cfg.extraEntries
         )}
       '';
+
+      bootCountingTries = cfg.bootCounting.tries;
+      bootCounting = if cfg.bootCounting.enable then "True" else "False";
     };
   };
 
@@ -415,6 +416,26 @@ in
         Only enable this option if `systemd-boot` otherwise fails to install, as the
         scope or implication of the `--graceful` option may change in the future.
       '';
+    };
+
+    bootCounting = {
+      enable = mkEnableOption ''
+        [Automatic Boot Assessment](https://systemd.io/AUTOMATIC_BOOT_ASSESSMENT/).
+
+        New boot entries are written with a boot counter in the file name. On
+        each boot, systemd-boot decrements the counter; once the booted system
+        reaches `boot-complete.target`, `systemd-bless-boot.service` removes the
+        counter and marks the entry as good. An entry whose counter reaches zero
+        is considered bad and will be skipped in favour of an older generation
+      '';
+      tries = mkOption {
+        default = 3;
+        type = types.ints.positive;
+        description = ''
+          Number of boot attempts a freshly written entry is given before it is
+          considered bad.
+        '';
+      };
     };
 
     rebootForBitlocker = mkOption {

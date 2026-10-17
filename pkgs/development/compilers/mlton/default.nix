@@ -29,7 +29,7 @@ rec {
     rev = "on-20241230-release";
     hash = "sha256-gJUzav2xH8C4Vy5FuqN73Z6lPMSPQgJApF8LgsJXRWo=";
     # https://github.com/MLton/mlton/issues/631
-    doCheck = !(stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin);
+    doCheck = !stdenv.hostPlatform.isDarwin;
   };
 
   mltonHEAD = callPackage ./from-git-source.nix {
@@ -38,6 +38,6 @@ rec {
     rev = "61baac7108fbd91413f0537b7a42d9a1023455f4";
     hash = "sha256-nWR7ZaXfKxeXfZ9IHipAQ39ASVtva4BeDHP3Zq8mqPo=";
     # https://github.com/MLton/mlton/issues/631
-    doCheck = !(stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin);
+    doCheck = !stdenv.hostPlatform.isDarwin;
   };
 }

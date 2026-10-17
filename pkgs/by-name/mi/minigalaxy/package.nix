@@ -1,15 +1,16 @@
 {
-  lib,
   fetchFromGitHub,
-  glibcLocales,
   glib-networking,
+  glibcLocales,
   gobject-introspection,
   gtk3,
+  innoextract,
+  lib,
   libnotify,
   nix-update-script,
   python3Packages,
-  steam-run,
   replaceVars,
+  umu-launcher,
   unzip,
   webkitgtk_4_1,
   wrapGAppsHook3,
@@ -18,25 +19,25 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "minigalaxy";
-  version = "1.4.1";
+  version = "1.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sharkwouter";
     repo = "minigalaxy";
     tag = version;
-    hash = "sha256-YZhgVeWdVaNiTj7hvYuHbaVtoKN6EFoOANWdkrlj4dU=";
+    hash = "sha256-qq5XLWmQ0x6/hK8beKxJDxHmbu//EuukuyOG+CpF9ug=";
   };
 
   patches = [
-    (replaceVars ./inject-launcher-steam-run.diff {
-      steamrun = lib.getExe steam-run;
+    (replaceVars ./inject-launcher-umu-run.diff {
+      umurun = lib.getExe umu-launcher;
     })
   ];
 
   nativeBuildInputs = [
-    wrapGAppsHook3
     gobject-introspection
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -72,6 +73,7 @@ python3Packages.buildPythonApplication rec {
       "''${gappsWrapperArgs[@]}"
       --suffix PATH : "${
         lib.makeBinPath [
+          innoextract
           unzip
           xdg-utils
         ]

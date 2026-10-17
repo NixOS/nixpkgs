@@ -62,6 +62,8 @@ let
         "domain"
         "dovecot"
         "ebpf"
+        "elasticsearch"
+        "fail2ban"
         "fastly"
         "flow"
         "fritz"
@@ -80,10 +82,12 @@ let
         "keylight"
         "klipper"
         "knot"
+        "kvrocks"
         "libvirt"
         "lnd"
         "mail"
         "mailman3"
+        "mail-tlsa-check"
         "mikrotik"
         "modemmanager"
         "mongodb"
@@ -112,12 +116,13 @@ let
         "restic"
         "rtl_433"
         "sabnzbd"
-        "scaphandre"
         "script"
         "shelly"
         "smartctl"
         "smokeping"
         "snmp"
+        "snowflake"
+        "speedtest"
         "sql"
         "statsd"
         "storagebox"
@@ -130,6 +135,9 @@ let
         "v2ray"
         "varnish"
         "wireguard"
+        "xray"
+        "yace"
+        "zfs-siebenmann"
         "zfs"
       ]
       (
@@ -348,7 +356,7 @@ let
           after = [ "network.target" ];
           serviceConfig.Restart = mkDefault "always";
           serviceConfig.PrivateTmp = mkDefault true;
-          serviceConfig.WorkingDirectory = mkDefault /tmp;
+          serviceConfig.WorkingDirectory = mkDefault "/tmp";
           serviceConfig.DynamicUser = mkDefault enableDynamicUser;
           serviceConfig.User = mkDefault conf.user;
           serviceConfig.Group = conf.group;
@@ -489,26 +497,6 @@ in
             message = ''
               Please specify either 'services.prometheus.exporters.sql.configuration' or
                 'services.prometheus.exporters.sql.configFile'
-            '';
-          }
-          {
-            assertion = cfg.scaphandre.enable -> (pkgs.stdenv.targetPlatform.isx86_64 == true);
-            message = ''
-              Scaphandre only support x86_64 architectures.
-            '';
-          }
-          {
-            assertion =
-              cfg.scaphandre.enable
-              -> ((lib.kernel.whenHelpers pkgs.linux.version).whenOlder "5.11" true).condition == false;
-            message = ''
-              Scaphandre requires a kernel version newer than '5.11', '${pkgs.linux.version}' given.
-            '';
-          }
-          {
-            assertion = cfg.scaphandre.enable -> (builtins.elem "intel_rapl_common" config.boot.kernelModules);
-            message = ''
-              Scaphandre needs 'intel_rapl_common' kernel module to be enabled. Please add it in 'boot.kernelModules'.
             '';
           }
           {

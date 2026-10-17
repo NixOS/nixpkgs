@@ -23,6 +23,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-rwUDE+5jvBizWy4GTl3OBbJ2qvbRqiuKgs7R/i+AKOk=";
   };
 
+  patches = [
+    # Fix missing size_t definition when building with libc++ 21.
+    # Source: https://github.com/breakfastquay/rubberband/pull/126
+    ./0001-Fix-an-error-with-libcxx-21.patch
+  ];
+
   nativeBuildInputs = [
     pkg-config
     meson

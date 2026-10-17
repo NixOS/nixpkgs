@@ -4,7 +4,7 @@
   autoPatchelfHook,
   backendStdenv,
   cmake,
-  cuda_cccl,
+  cccl,
   cuda_cudart,
   cuda_nvcc,
   cudatoolkit,
@@ -99,7 +99,7 @@ in
         (lib.getDev libcusparse)
         cuda_nvcc
         (lib.getDev cuda_cudart) # <cuda_runtime_api.h>
-        cuda_cccl # <nv/target>
+        cccl # <nv/target>
       ];
 
       postPatch = prevAttrs.postPatch or "" + ''

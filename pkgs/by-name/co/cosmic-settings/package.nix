@@ -15,6 +15,9 @@
   pipewire,
   pulseaudio,
   udev,
+  dav1d,
+  pciutils,
+  desktop-file-utils,
   cosmic-randr,
   xkeyboard_config,
   nix-update-script,
@@ -27,17 +30,20 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-settings";
-  version = "1.0.8";
+  version = "1.10.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-settings";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-bSguS+nrbKkxr8yGGmvRlPI9/b0uctLHKoV+y6Kc1Bw=";
+    hash = "sha256-Zjs3WzqZOeZ+XuG7IoJhGeRUuibIPw3IdEujqsLdsR8=";
   };
 
-  cargoHash = "sha256-fUfj/defu74AYNTG/Wv3lxGbrPmRHZYSwN5ZZ98zwKw=";
+  cargoHash = "sha256-iFC5ZZOYA2fkMjvdRhjKlMYJX/k/CzHjFEFt6iepdwU=";
+
+  separateDebugInfo = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     cmake
@@ -55,6 +61,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pipewire
     pulseaudio
     udev
+    dav1d
+    pciutils
+    desktop-file-utils
   ];
 
   dontUseJustBuild = true;

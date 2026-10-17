@@ -1,7 +1,7 @@
 { lib, pkgs, ... }:
 {
   name = "endlessh-go";
-  meta.maintainers = with lib.maintainers; [ azahi ];
+  meta.maintainers = [ ];
 
   nodes = {
     server =

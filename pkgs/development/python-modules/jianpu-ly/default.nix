@@ -6,20 +6,20 @@
   lilypond,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jianpu-ly";
-  version = "1.866";
+  version = "1.889";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "jianpu_ly";
-    hash = "sha256-nLVLRot4ECZyQ+G6o3mc4fVN9uGP/ZX2RATwaA6pGBI=";
+    hash = "sha256-BrrpRD30Ch0L6kMUPSEkrReB5kafplIb1Bg9Vmp3r9A=";
   };
 
-  dependencies = [ lilypond ];
-
   build-system = [ setuptools ];
+
+  dependencies = [ lilypond ];
 
   pythonImportsCheck = [ "jianpu_ly" ];
 
@@ -27,10 +27,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    homepage = "https://ssb22.user.srcf.net/mwrhome/jianpu-ly.html";
     description = "Assists with printing jianpu";
-    changelog = "https://github.com/ssb22/jianpu-ly/releases/tag/v${version}";
+    homepage = "https://ssb22.user.srcf.net/mwrhome/jianpu-ly.html";
+    changelog = "https://github.com/ssb22/jianpu-ly/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ifurther ];
   };
-}
+})

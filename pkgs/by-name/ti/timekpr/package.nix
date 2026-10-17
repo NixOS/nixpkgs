@@ -13,12 +13,12 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "timekpr";
-  version = "0.5.8";
+  version = "0.5.10";
 
   src = fetchgit {
     url = "https://git.launchpad.net/timekpr-next";
     tag = "v${version}";
-    hash = "sha256-Y0jAKl553HjoP59wJnKBKq4Ogko1cs8uazW2dy7AlBo=";
+    hash = "sha256-0vIMWIGVuyqU/eV9NmUvbBRwmONHgcmoqzPUI0XfCa0=";
   };
 
   buildInputs = [
@@ -70,6 +70,10 @@ python3Packages.buildPythonApplication rec {
 
       substituteInPlace bin/* **/*.py resource/server/systemd/timekpr.service \
         --replace-quiet /usr/lib/python3/dist-packages "$out"/${lib.escapeShellArg python3Packages.python.sitePackages}
+
+      # bin/* are /bin/sh launchers that exec /usr/bin/python3 in their body, which patchShebangs does not rewrite.
+      substituteInPlace bin/* \
+        --replace-fail /usr/bin/python3 ${lib.escapeShellArg python3Packages.python.interpreter}
 
       substituteInPlace **/*.desktop **/*.policy **/*.service \
         --replace-fail /usr/bin/timekpr "$out"/bin/timekpr

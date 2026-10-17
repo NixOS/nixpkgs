@@ -3,6 +3,7 @@
   stdenv,
   buildPackages,
   fetchFromGitHub,
+  fetchpatch,
   libbpf,
   elfutils,
   zlib,
@@ -25,6 +26,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-wLSLDgACl6a6gQLvRiRR9HQFRMrGWYZAa5CcdzECExE=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "musl.patch";
+      url = "https://github.com/xdp-project/xdp-tools/commit/2ff228be7926ba01e13c8d328828a270af2e7e0d.patch";
+      hash = "sha256-jYdcC36nL4P4IadwGfva8nqMerd/2HHw2RYhc+wR9nk=";
+    })
+  ];
 
   outputs = [
     "out"
@@ -74,12 +83,20 @@ stdenv.mkDerivation (finalAttrs: {
     "LIBDIR=$(lib)/lib"
   ];
 
+  enableParallelBuilding = true;
+
   postInstall = ''
     # Note that even the static libxdp would refer to BPF_OBJECT_DIR ?=$(LIBDIR)/bpf
     rm "$lib"/lib/*.a
     # Drop unfortunate references to glibc.dev/include at least from $lib
     nuke-refs "$lib"/lib/bpf/*.o
   '';
+
+  stripDebugList = [
+    "bin"
+    "lib"
+    "share/xdp-tools"
+  ];
 
   meta = {
     homepage = "https://github.com/xdp-project/xdp-tools";

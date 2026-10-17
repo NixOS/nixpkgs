@@ -21,14 +21,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain-text-splitters";
-  version = "1.1.1";
+  version = "1.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-text-splitters==${finalAttrs.version}";
-    hash = "sha256-I5eMc/E7sCxEQG8+jw3E/M4uB7adKU5IMHRsS6pacsA=";
+    hash = "sha256-VLNOWi+qaOfkwXEZqu+M/PX/hr66WC5K1XdIt49giNM=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/text-splitters";
@@ -53,6 +53,7 @@ buildPythonPackage (finalAttrs: {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "langchain-text-splitters==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 

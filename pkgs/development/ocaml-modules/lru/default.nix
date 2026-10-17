@@ -7,14 +7,14 @@
   qcheck-alcotest,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "lru";
   version = "0.3.1";
 
   duneVersion = "3";
 
   src = fetchurl {
-    url = "https://github.com/pqwy/lru/releases/download/v${version}/lru-${version}.tbz";
+    url = "https://github.com/pqwy/lru/releases/download/v${finalAttrs.version}/lru-${finalAttrs.version}.tbz";
     hash = "sha256-bL4j0np9WyRPhpwLiBQNR/cPQTpkYu81wACTJdSyNv0=";
   };
 
@@ -29,4 +29,4 @@ buildDunePackage rec {
     maintainers = [ lib.maintainers.vbgl ];
     license = lib.licenses.isc;
   };
-}
+})

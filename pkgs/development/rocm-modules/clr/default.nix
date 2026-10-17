@@ -17,6 +17,7 @@
   roctracer,
   rocminfo,
   rocm-smi,
+  rocprofiler-register,
   symlinkJoin,
   numactl,
   libffi,
@@ -69,7 +70,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "clr";
-  version = "7.2.1";
+  version = "7.2.4";
 
   outputs = [
     "out"
@@ -82,12 +83,12 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-systems";
-    rev = "rocm-${finalAttrs.version}";
+    tag = "rocm-${finalAttrs.version}";
     sparseCheckout = [
       "projects/clr"
       "shared"
     ];
-    hash = "sha256-8V2WbyaJZbEcKZpF/xvg0p+3oX9f/zy/45rkKZT9R3o=";
+    hash = "sha256-//cQBKlSB9uSP4fBgJpI1FxnqlzyQN913CHVGa2tqv8=";
   };
   sourceRoot = "${finalAttrs.src.name}/projects/clr";
 
@@ -112,6 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     libffi
     zstd
     zlib
+    rocprofiler-register
   ];
 
   propagatedBuildInputs = [
@@ -127,23 +129,22 @@ stdenv.mkDerivation (finalAttrs: {
   separateDebugInfo = true;
 
   cmakeFlags = [
-    "-DCMAKE_POLICY_DEFAULT_CMP0072=NEW" # Prefer newer OpenGL libraries
-    "-DCLR_BUILD_HIP=ON"
-    "-DCLR_BUILD_OCL=ON"
-    "-DHIP_COMMON_DIR=${hip-common}"
-    "-DHIPCC_BIN_DIR=${hipcc}/bin"
-    "-DHIP_PLATFORM=amd"
-    "-DPROF_API_HEADER_PATH=${roctracer.src}/inc/ext"
-    "-DROCM_PATH=${rocminfo}"
-    "-DBUILD_ICD=ON"
-    "-DHIP_ENABLE_ROCPROFILER_REGISTER=OFF" # circular dep - may need -minimal and -full builds?
-    "-DAMD_ICD_LIBRARY_DIR=${khronos-ocl-icd-loader}"
+    (lib.cmakeFeature "CMAKE_POLICY_DEFAULT_CMP0072" "NEW") # Prefer newer OpenGL libraries
+    (lib.cmakeBool "CLR_BUILD_HIP" true)
+    (lib.cmakeBool "CLR_BUILD_OCL" true)
+    (lib.cmakeFeature "HIP_COMMON_DIR" hip-common.outPath)
+    (lib.cmakeFeature "HIPCC_BIN_DIR" "${hipcc}/bin")
+    (lib.cmakeFeature "HIP_PLATFORM" "amd")
+    (lib.cmakeFeature "PROF_API_HEADER_PATH" "${roctracer.src}/inc/ext")
+    (lib.cmakeFeature "ROCM_PATH" rocminfo.outPath)
+    (lib.cmakeBool "BUILD_ICD" true)
+    (lib.cmakeFeature "AMD_ICD_LIBRARY_DIR" khronos-ocl-icd-loader.outPath)
 
     # Temporarily set variables to work around upstream CMakeLists issue
     # Can be removed once https://github.com/ROCm/rocm-cmake/issues/121 is fixed
-    "-DCMAKE_INSTALL_BINDIR=bin"
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
+    (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
+    (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
   ];
 
   env.LLVM_DIR = "";
@@ -161,19 +162,29 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs hipamd/*.sh
     patchShebangs hipamd/src
-
-    # We're not on Windows so these are never installed to hipcc...
+  ''
+  # We're not on Windows so these are never installed to hipcc...
+  + ''
     substituteInPlace hipamd/CMakeLists.txt \
       --replace-fail "install(PROGRAMS \''${HIPCC_BIN_DIR}/hipcc.bat DESTINATION bin)" "" \
       --replace-fail "install(PROGRAMS \''${HIPCC_BIN_DIR}/hipconfig.bat DESTINATION bin)" ""
-
+  ''
+  + ''
     substituteInPlace hipamd/src/hip_embed_pch.sh \
       --replace-fail "\''$LLVM_DIR/bin/clang" "${hipClangPath}/clang" \
       --replace-fail "\''$LLVM_DIR/bin/llvm-mc" "${lib.getExe' llvm.bintools.bintools "llvm-mc"}"
-
+  ''
+  + ''
     substituteInPlace opencl/khronos/icd/loader/icd_platform.h \
       --replace-fail '#define ICD_VENDOR_PATH "/etc/OpenCL/vendors/";' \
                      '#define ICD_VENDOR_PATH "/run/opengl-driver/etc/OpenCL/vendors/";'
+  ''
+  # HIP defines __noinline__ as an empty macro for host compilers, which breaks
+  # [[__gnu__::__noinline__]] in libstdc++ 16's <format>
+  # https://github.com/ROCm/rocm-systems/pull/12596
+  + ''
+    substituteInPlace hipamd/include/hip/amd_detail/host_defines.h \
+      --replace-fail $'#define __noinline__\n' ""
   '';
 
   postInstall = ''
@@ -241,15 +252,17 @@ stdenv.mkDerivation (finalAttrs: {
       # "9-4-generic" - since only 942 is valid for 6.4 target it directly
       # 940/1 - never released publicly, maybe HPE cray specific MI3xx?
       "942" # MI300A/X, MI325X
-      # "950" #  MI350X TODO: Expected in ROCm 7.x
+      "950" # MI350X, MI355X
       # "10-1-generic" # fine for all RDNA1 cards
       "1010"
       # "10-3-generic"
       "1030" # W6800, various Radeon cards
+      # 1100 through 1103 = RDNA3
       # "11-generic" # will handle 7600, hopefully ryzen AI series iGPUs
       "1100"
       "1101"
       "1102"
+      "1103" # RDNA3 iGPU like Radeon 780M
       "1150" # Strix Point
       "1151" # Strix Halo
       # "12-generic"
@@ -324,7 +337,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "AMD Common Language Runtime for hipamd, opencl, and rocclr";
     homepage = "https://github.com/ROCm/rocm-systems/tree/develop/projects/clr";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lovesegfault ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;

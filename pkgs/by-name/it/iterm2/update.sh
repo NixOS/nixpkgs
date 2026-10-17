@@ -4,12 +4,12 @@ set -eu -o pipefail
 
 currentVersion=$(nix-instantiate --eval -E "with import ./. {}; iterm2.version or (lib.getVersion iterm2)" | tr -d '"')
 
-downloadUrl=$(
+downloadUrls=$(
   curl -sL "https://iterm2.com/downloads.html" |
   grep -o -E 'href="[^"]*iTerm2[^"]*\.zip"' |
-  sed 's/href="//;s/"//' |
-  head -1
+  sed 's/href="//;s/"//'
 )
+downloadUrl=$(echo "$downloadUrls" | head -1)
 
 if [[ -z "$downloadUrl" ]]; then
   echo >&2 "Failed to extract download url from iTerm2 downloads page"

@@ -36,6 +36,9 @@ let
   commonPatches = [
     # Do not look in /usr etc. for dependencies.
     ./no-sys-dirs.patch
+
+    ./CVE-2026-15534-1.patch
+    ./CVE-2026-15534-2.patch
   ]
 
   # Fix build on Solaris on x86_64
@@ -79,6 +82,20 @@ let
   # Some more details: https://arsv.github.io/perl-cross/modules.html
   ++ lib.optional crossCompiling ./cross.patch;
 
+  # Inject fixed CPAN releases for bundled dual-life distributions until the
+  # next perl maintenance release includes them.
+  vendoredPerlDistributions = [ ];
+
+  replaceVendoredPerlDistributions = lib.concatMapStringsSep "\n" (d: ''
+    rm -rf ${d.path}
+    mkdir -p ${d.path}
+
+    tar --strip-components=1 -C ${d.path} -xf ${d.src}
+
+    # Remove executable bits to make t/porting/exec-bit.t happy.
+    find ${d.path} -type f -exec chmod a-x {} +
+  '') vendoredPerlDistributions;
+
   libc = if stdenv.cc.libc or null != null then stdenv.cc.libc else "/usr";
   libcInc = lib.getDev libc;
   libcLib = lib.getLib libc;
@@ -116,7 +133,7 @@ stdenv.mkDerivation (
     # Without libxcrypt, Perl will still find FreeBSD's crypt functions.
     propagatedBuildInputs = lib.optional (enableCrypt && !stdenv.hostPlatform.isFreeBSD) libxcrypt;
 
-    disallowedReferences = [ stdenv.cc ];
+    outputChecks.out.disallowedReferences = [ stdenv.cc ];
 
     patches = commonPatches;
 
@@ -136,10 +153,10 @@ stdenv.mkDerivation (
               --replace "/bin/pwd" "$(type -P pwd)"
           ''
       )
-      +
-      # Perl's build system uses the src variable, and its value may end up in
-      # the output in some cases (when cross-compiling)
-      ''
+      + replaceVendoredPerlDistributions
+      + ''
+        # Perl's build system uses the src variable, and its value may end up in
+        # the output in some cases (when cross-compiling).
         unset src
       '';
 
@@ -195,7 +212,10 @@ stdenv.mkDerivation (
       ]
       ++ lib.optional stdenv.hostPlatform.isSunOS "-Dcc=gcc"
       ++ lib.optional enableThreading "-Dusethreads"
-      ++ lib.optional (!enableCrypt) "-A clear:d_crypt_r"
+      ++ lib.optionals (!enableCrypt) [
+        "-A"
+        "clear:d_crypt_r"
+      ]
       ++ lib.optionals (stdenv.hostPlatform.isFreeBSD && crossCompiling && enableCrypt) [
         # https://github.com/Perl/perl5/issues/22295
         # configure cannot figure out that we have crypt automatically, but we really do
@@ -354,6 +374,8 @@ stdenv.mkDerivation (
         "$mini/lib/perl5/cross_perl/${version}:$out/lib/perl5/${version}:$out/lib/perl5/${version}/$runtimeArch"
     ''; # */
 
+    __structuredAttrs = true;
+
     meta = {
       homepage = "https://www.perl.org/";
       description = "Standard implementation of the Perl 5 programming language";
@@ -383,6 +405,8 @@ stdenv.mkDerivation (
       # fixes build failure due to missing d_fdopendir/HAS_FDOPENDIR configure option
       # https://github.com/arsv/perl-cross/pull/159
       ./cross-fdopendir.patch
+
+      ./perl-cross-1.6.4--5.42.3.patch
     ];
 
     depsBuildBuild = [

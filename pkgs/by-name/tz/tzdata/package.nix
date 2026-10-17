@@ -3,21 +3,22 @@
   stdenv,
   fetchurl,
   buildPackages,
+  bashNonInteractive,
   postgresql,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tzdata";
-  version = "2026a";
+  version = "2026e";
 
   srcs = [
     (fetchurl {
       url = "https://data.iana.org/time-zones/releases/tzdata${finalAttrs.version}.tar.gz";
-      hash = "sha256-d7VBclk3u1O9kr1ITAtDvshUXi00Me4B8E748iA7orc=";
+      hash = "sha256-smiCgF8mqsWdWyIpeOZYBIS4NMzcmL6J3y8FptxTplI=";
     })
     (fetchurl {
       url = "https://data.iana.org/time-zones/releases/tzcode${finalAttrs.version}.tar.gz";
-      hash = "sha256-+AoXou3dK1QEH5yY11sKqAOLAW18XecokqFG2ZOHQOE=";
+      hash = "sha256-zD0nyioNg5lQRVG5IJcNgK+Dv7nCFugIKhVJGSGTXVQ=";
     })
   ];
 
@@ -34,6 +35,14 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
   propagatedBuildOutputs = [ ];
+
+  buildInputs =
+    # For `tzselect`'s shebang. Where `bashNonInteractive` is unavailable
+    # (e.g. MinGW), `tzselect` keeps its `#!/bin/bash`, which is fine for now
+    # as we're not going to run it there anyways.
+    lib.optional (lib.meta.availableOn stdenv.hostPlatform bashNonInteractive) bashNonInteractive;
+
+  strictDeps = true;
 
   makeFlags = [
     "TOPDIR=${placeholder "out"}"
@@ -112,6 +121,8 @@ stdenv.mkDerivation (finalAttrs: {
   # Upstream provides patches very quickly, we just need to apply them until the next
   # minor releases.
   passthru.tests = postgresql;
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "http://www.iana.org/time-zones";

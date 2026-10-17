@@ -13,7 +13,7 @@
   systemd,
   mariadb-connector-c,
   libpq,
-  lua,
+  lua5_2_compat,
   openldap,
   geoip,
   curl,
@@ -21,14 +21,17 @@
   lmdb,
   tinycdb,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdns";
-  version = "5.0.3";
+  version = "5.1.4";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/pdns-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-7DEgUBlQp3LHhcYA9Zno9NcR9wOgLL0b7ELtwaBfgcw=";
+    hash = "sha256-+KEO2/YOSdjBYOkxIZidXrza2DjQ4LdH8m736J/SIMA=";
   };
   # redact configure flags from version output to reduce closure size
   patches = [ ./version.patch ];
@@ -101,6 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   meta = {
+    changelog = "https://doc.powerdns.com/authoritative/changelog/${lib.versions.majorMinor finalAttrs.version}.html#change-${finalAttrs.version}";
     description = "Authoritative DNS server";
     homepage = "https://www.powerdns.com";
     platforms = lib.platforms.unix;

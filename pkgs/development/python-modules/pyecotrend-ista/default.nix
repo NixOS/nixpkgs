@@ -45,6 +45,10 @@ buildPythonPackage rec {
     syrupy
   ];
 
+  pytestFlags = [
+    "--snapshot-warn-unused"
+  ];
+
   pythonImportsCheck = [ "pyecotrend_ista" ];
 
   meta = {

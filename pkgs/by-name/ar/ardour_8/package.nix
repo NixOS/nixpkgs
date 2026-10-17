@@ -6,7 +6,7 @@
   alsa-lib,
   aubio,
   boost,
-  cairomm,
+  cairomm_1_0,
   cppunit,
   curl,
   dbus,
@@ -17,7 +17,7 @@
   flac,
   fluidsynth,
   glibc,
-  glibmm,
+  glibmm_2_4,
   graphviz,
   harvid,
   hidapi,
@@ -31,7 +31,7 @@
   libpulseaudio,
   librdf_rasqal,
   libsamplerate,
-  libsigcxx,
+  libsigcxx_2_0,
   libsndfile,
   libusb1,
   libuv,
@@ -43,7 +43,7 @@
   lv2,
   makeWrapper,
   pango,
-  pangomm,
+  pangomm_1_4,
   perl,
   pkg-config,
   python3,
@@ -120,7 +120,7 @@ stdenv.mkDerivation (
       alsa-lib
       aubio
       boost
-      cairomm
+      cairomm_1_0
       cppunit
       curl
       dbus
@@ -129,7 +129,7 @@ stdenv.mkDerivation (
       fftwSinglePrec
       flac
       fluidsynth
-      glibmm
+      glibmm_2_4
       hidapi
       itstool
       kissfft
@@ -141,7 +141,7 @@ stdenv.mkDerivation (
       libpulseaudio
       librdf_rasqal
       libsamplerate
-      libsigcxx
+      libsigcxx_2_0
       libsndfile
       libusb1
       libuv
@@ -152,7 +152,7 @@ stdenv.mkDerivation (
       lrdf
       lv2
       pango
-      pangomm
+      pangomm_1_4
       perl
       python3
       qm-dsp

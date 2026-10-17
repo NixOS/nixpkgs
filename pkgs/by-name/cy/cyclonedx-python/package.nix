@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cyclonedx-python";
-  version = "7.3.0";
+  version = "7.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "cyclonedx-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mBOkSgHGKc77zhcMmdsrlZLXsK2t00VFiGW5eSN2lxc=";
+    hash = "sha256-OF3ALdzTIjha+TmU92BRpKclJ4Iaeg1A3lAUD4Ss8fg=";
   };
 
   build-system = with python3Packages; [ poetry-core ];
@@ -29,6 +29,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
       tomli
     ]
     ++ cyclonedx-python-lib.optional-dependencies.validation;
+
+  pythonRelaxDeps = [
+    "chardet"
+  ];
 
   pythonImportsCheck = [ "cyclonedx" ];
 

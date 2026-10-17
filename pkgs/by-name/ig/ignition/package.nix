@@ -10,7 +10,7 @@
   meson,
   ninja,
   pkg-config,
-  typescript,
+  typescript_7,
   wrapGAppsHook4,
 
   gjs,
@@ -20,14 +20,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ignition";
-  version = "2.3.1";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "flattool";
     repo = "ignition";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-bkH8nxvqzxzYse7HNRWi79FfuMmLxd/CppKJQk2rTbo=";
+    hash = "sha256-egbpFpwYXhezeQbKSj75InFV3blj1GVzRgcku3ZF6Ag=";
   };
 
   patches = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    typescript
+    typescript_7
     wrapGAppsHook4
   ];
 

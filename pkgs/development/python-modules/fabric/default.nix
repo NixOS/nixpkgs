@@ -15,14 +15,15 @@
 
 buildPythonPackage rec {
   pname = "fabric";
-  version = "3.2.2";
+  version = "3.2.3";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "fabric";
     repo = "fabric";
     tag = version;
-    hash = "sha256-7qC2UuI0RP5xlKIYSz1sLyK/nQYegXOou1mlJYFk7M0=";
+    hash = "sha256-GbZQ6rFKQyJZXYfe9b4j6yjKgAB0ct8AD1xYG0yGZl8=";
   };
 
   build-system = [ setuptools ];
@@ -75,5 +76,7 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = [ ];
     mainProgram = "fab";
+    # https://github.com/fabric/fabric/issues/2376
+    broken = lib.versionAtLeast invoke.version "3";
   };
 }

@@ -8,8 +8,6 @@
   findlib,
   pkg-config,
   gtk2,
-  libgnomecanvas,
-  gtksourceview,
   camlp-streams,
 }:
 
@@ -64,12 +62,7 @@ stdenv.mkDerivation {
     ocaml
     findlib
   ];
-  buildInputs = [
-    gtk2
-    libgnomecanvas
-    gtksourceview
-  ]
-  ++ param.buildInputs or [ ];
+  buildInputs = [ gtk2 ] ++ param.buildInputs or [ ];
 
   configureFlags = [ "--with-libdir=$(out)/lib/ocaml/${ocaml.version}/site-lib" ];
   buildFlags = [ "world" ];

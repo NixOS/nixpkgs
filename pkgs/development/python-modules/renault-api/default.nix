@@ -1,35 +1,43 @@
 {
   lib,
   aiohttp,
-  aioresponses,
+  aiointercept,
   buildPythonPackage,
   click,
   cryptography,
   dateparser,
   fetchFromGitHub,
   marshmallow-dataclass,
-  poetry-core,
   pyjwt,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytestCheckHook,
   syrupy,
   tabulate,
   typeguard,
+  uv-build,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "renault-api";
-  version = "0.5.7";
+  version = "0.5.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hacf-fr";
     repo = "renault-api";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-12xeTaGwKRELbMVmzjhlPm0xnkmVTHUJC2zE0Xkne9s=";
+    hash = "sha256-hlnWSNTckmSOEC58dhGjra1wSkKrffJnIAJNZfyCsIs=";
   };
 
-  build-system = [ poetry-core ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.12.21,<0.13" "uv_build"
+  '';
+
+  build-system = [ uv-build ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     aiohttp
@@ -47,7 +55,7 @@ buildPythonPackage (finalAttrs: {
   };
 
   nativeCheckInputs = [
-    aioresponses
+    aiointercept
     pytest-asyncio
     pytestCheckHook
     syrupy

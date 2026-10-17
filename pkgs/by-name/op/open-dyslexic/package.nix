@@ -2,29 +2,26 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
-let
-  version = "0.91.12";
-in
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "open-dyslexic";
-  inherit version;
+  version = "0.91.12";
+
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
   src = fetchFromGitHub {
     owner = "antijingoist";
     repo = "opendyslexic";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-a8hh8NGt5djj9EC7ChO3SnnjuYMOryzbHWTK4gC/vIw=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm644 compiled/*.otf -t $out/share/fonts/opentype
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     homepage = "https://opendyslexic.org/";
@@ -33,4 +30,4 @@ stdenvNoCC.mkDerivation {
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.rycee ];
   };
-}
+})

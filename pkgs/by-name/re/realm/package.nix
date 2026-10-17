@@ -1,4 +1,5 @@
 {
+  cmake,
   lib,
   rustPlatform,
   fetchFromGitHub,
@@ -8,16 +9,21 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "realm";
-  version = "2.8.0";
+  version = "2.9.6";
 
   src = fetchFromGitHub {
     owner = "zhboner";
     repo = "realm";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-7hOy+bqWoVyI2xGJ0eY7GvyIYykr6VP8d3ZYtY/jGPI=";
+    hash = "sha256-P7jyVe6KNe1evan2qRtpA99ZKbgF1Zz7DiRxi1+h7WI=";
   };
 
-  cargoHash = "sha256-yR+ayseoUYpK9lUFRP0OLrp1+LUrtPnxiPRvjDFSNgo=";
+  cargoHash = "sha256-kuoYEGn419LtJRGoWzlvgclkjW0zh94XX6OvCsa5Hfc=";
+
+  nativeBuildInputs = [
+    cmake
+    rustPlatform.bindgenHook
+  ];
 
   env.RUSTC_BOOTSTRAP = 1;
 

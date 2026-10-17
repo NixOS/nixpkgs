@@ -1,6 +1,8 @@
 {
   lib,
   stdenv,
+  gccStdenv,
+  callPackage,
   fetchurl,
   cln,
   pkg-config,
@@ -9,13 +11,13 @@
   python3,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+gccStdenv.mkDerivation (finalAttrs: {
   pname = "ginac";
-  version = "1.8.9";
+  version = "1.8.10";
 
   src = fetchurl {
     url = "https://www.ginac.de/ginac-${finalAttrs.version}.tar.bz2";
-    sha256 = "sha256-bP1Gz043NpDhLRa3cteu0PXEM9qMfs0kd/LnNkg7tDk=";
+    sha256 = "sha256-bKwZc6UyXeC5vLjjkpiK6V+8N6pmwPHx07jmTAjOwbk=";
   };
 
   propagatedBuildInputs = [ cln ];
@@ -34,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   configureFlags = [ "--disable-rpath" ];
+
+  passthru.tests.example = callPackage ./ginac-example-test.nix { ginac = finalAttrs.finalPackage; };
 
   meta = {
     description = "GiNaC C++ library for symbolic manipulations";

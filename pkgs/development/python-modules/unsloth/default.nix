@@ -54,14 +54,14 @@ in
 
 buildPythonPackage (finalAttrs: {
   pname = "unsloth";
-  version = "2026.4.1";
+  version = "2026.8.19";
   pyproject = true;
 
   # Tags on the GitHub repo don't match
   src = fetchPypi {
     pname = "unsloth";
     inherit (finalAttrs) version;
-    hash = "sha256-RGpVxrcFzKbHxV7o0/OYaADo/Pqxx/c+FaxcV05gHGU=";
+    hash = "sha256-MujJf51KIHQM3Ri7DPueE4abFSLMzc+RWRdmnV0CSQM=";
   };
 
   postPatch = ''
@@ -178,7 +178,6 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Finetune Llama 3.3, DeepSeek-R1 & Reasoning LLMs 2x faster with 70% less memory";
     homepage = "https://github.com/unslothai/unsloth";
-    changelog = "https://github.com/unslothai/unsloth/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hoh ];
   };

@@ -1,8 +1,10 @@
 {
   lib,
+  git,
   stdenv,
   fetchurl,
   makeDesktopItem,
+  copyDesktopItems,
   openjdk21,
   gtk3,
   glib,
@@ -16,16 +18,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "smartgit";
-  version = "24.1.5";
+  version = "26.1.055";
 
   src = fetchurl {
-    url = "https://www.syntevo.com/downloads/smartgit/smartgit-linux-${
+    url = "https://download.smartgit.dev/smartgit/smartgit-${
       builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
-    }.tar.gz";
-    hash = "sha256-YqueTbwA9KcXEJG5TeWkPzzNyAnnJQ1+VQYsqZKS2/I=";
+    }-no-git-linux-amd64.tar.gz";
+    hash = "sha256-NuFVvWqtFS/8EYa5+oNwo3IJfPlG+wqI6A4e7l8ZzeI=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    copyDesktopItems
+  ];
 
   buildInputs = [
     jre
@@ -37,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     gappsWrapperArgs+=( \
       --prefix PATH : ${
         lib.makeBinPath [
+          git
           jre
           which
         ]
@@ -64,7 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     cp -av bin/smartgit.sh $out/bin/smartgit
     ln -sfv $out/bin/smartgit $out/bin/smartgithg
 
-    cp -av $desktopItem/share/applications/* $out/share/applications/
     for icon_size in 32 48 64 128 256; do
         path=$icon_size'x'$icon_size
         icon=bin/smartgit-$icon_size.png
@@ -77,25 +82,27 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  desktopItem = makeDesktopItem {
-    name = "smartgit";
-    exec = "smartgit";
-    comment = finalAttrs.meta.description;
-    icon = "smartgit";
-    desktopName = "SmartGit";
-    categories = [
-      "Development"
-      "RevisionControl"
-    ];
-    mimeTypes = [
-      "x-scheme-handler/git"
-      "x-scheme-handler/smartgit"
-      "x-scheme-handler/sourcetree"
-    ];
-    startupNotify = true;
-    startupWMClass = "smartgit";
-    keywords = [ "git" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "smartgit";
+      exec = "smartgit";
+      comment = finalAttrs.meta.description;
+      icon = "smartgit";
+      desktopName = "SmartGit";
+      categories = [
+        "Development"
+        "RevisionControl"
+      ];
+      mimeTypes = [
+        "x-scheme-handler/git"
+        "x-scheme-handler/smartgit"
+        "x-scheme-handler/sourcetree"
+      ];
+      startupNotify = true;
+      startupWMClass = "smartgit";
+      keywords = [ "git" ];
+    })
+  ];
 
   meta = {
     description = "Git GUI client";
@@ -103,11 +110,14 @@ stdenv.mkDerivation (finalAttrs: {
       SmartGit is a multi-platform Git GUI client, free to use for active Open Source developers and users from academic institutions.
       Command line Git is required.
     '';
-    homepage = "https://www.syntevo.com/smartgit/";
-    changelog = "https://www.syntevo.com/smartgit/changelog-${lib.versions.majorMinor finalAttrs.version}.txt";
+    homepage = "https://www.smartgit.dev/";
+    changelog = "https://www.smartgit.dev/changelogs/changelog-${lib.versions.majorMinor finalAttrs.version}.txt";
     license = lib.licenses.unfree;
     mainProgram = "smartgit";
-    platforms = lib.platforms.linux;
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
     maintainers = with lib.maintainers; [
       jraygauthier
       tmssngr

@@ -113,9 +113,37 @@ let
         description = "Web server port";
       };
     };
+    AmuleApi = {
+      Enabled = mkOption {
+        type = types.enum [
+          0
+          1
+        ];
+        default = 0;
+        description = ''
+          Set to 1 to let amuled spawn amuleapi, the REST API and Web UI
+          replacing the deprecated web server.
+        '';
+      };
+      BindAddress = mkOption {
+        type = types.str;
+        default = "127.0.0.1";
+        description = ''
+          Address amuleapi listens on.
+          amuleapi refuses to bind anything other than `127.0.0.1` unless an admin password is set,
+          see {option}`services.amule.AmuleApiAdminPasswordFile`.
+        '';
+      };
+      HttpPort = mkOption {
+        type = types.port;
+        default = 4713;
+        description = "amuleapi HTTP port, serving both the REST API and the Web UI";
+      };
+    };
   };
 
   webServerEnabled = cfg.settings.WebServer.Enabled == 1;
+  amuleApiEnabled = cfg.settings.AmuleApi.Enabled == 1;
 in
 {
   options.services.amule = {
@@ -124,6 +152,8 @@ in
     package = mkPackageOption pkgs "amule-daemon" { };
 
     amuleWebPackage = mkPackageOption pkgs "amule-web" { };
+
+    amuleApiPackage = mkPackageOption pkgs "amule-api" { };
 
     extraArgs = mkOption {
       type = types.listOf types.str;
@@ -155,6 +185,8 @@ in
 
     openWebServerPort = mkEnableOption "open the web server port";
 
+    openAmuleApiPort = mkEnableOption "open the amuleapi (REST API and Web UI) port";
+
     ExternalConnectPasswordFile = mkOption {
       type = types.nullOr types.path;
       default = null;
@@ -173,6 +205,16 @@ in
       '';
     };
 
+    AmuleApiAdminPasswordFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      description = ''
+        File containing the admin password for amuleapi (REST API and Web UI).
+        It is set with `amuleapi --set-admin-pass` before amuled starts,
+        so it is briefly visible in the process list.
+      '';
+    };
+
     settings = mkOption {
       type = types.submodule {
         freeformType = settingsFormat.type;
@@ -188,7 +230,7 @@ in
             IncomingDir = "/mnt/hd/amule/Incoming";
             TempDir = "/mnt/hd/amule/Temp";
           };
-          WebServer.Enabled = 1;
+          AmuleApi.Enabled = 1;
         }
       '';
       default = { };
@@ -207,6 +249,10 @@ in
         assertion = isNull cfg.WebServerPasswordFile -> cfg.settings.WebServer.Password != "";
         message = "Set only one between `ExternalWebServerFile` `settings.WebServer.Password`";
       }
+    ];
+
+    warnings = optionals webServerEnabled [
+      "services.amule: amuleweb (`settings.WebServer.Enabled`) is deprecated upstream, consider switching to amuleapi with `settings.AmuleApi.Enabled = 1`"
     ];
 
     users.users = optionalAttrs (cfg.user == "amule") {
@@ -264,7 +310,26 @@ in
       + optionalString (!isNull cfg.WebServerPasswordFile) ''
         WEB_PASSWORD=$(cat ${cfg.WebServerPasswordFile} | md5sum | cut -d ' ' -f 1)
         crudini --inplace --set "$AMULE_CONF" "WebServer" "Password" "$WEB_PASSWORD"
-      '';
+      ''
+      + optionalString amuleApiEnabled (
+        # amuled spawns amuleapi itself, looking it up by this path
+        ''
+          crudini --inplace --set "$AMULE_CONF" "AmuleApi" "Path" "${getExe cfg.amuleApiPackage}"
+
+          AMULE_API_CONF=${lib.escapeShellArg "${cfg.dataDir}/amuleapi.conf"}
+          if [ ! -e "$AMULE_API_CONF" ]; then
+            install -m 600 /dev/null "$AMULE_API_CONF"
+          fi
+          crudini --inplace --set "$AMULE_API_CONF" "EC" "Port" \
+            "${toString cfg.settings.ExternalConnect.ECPort}"
+        ''
+        + optionalString (!isNull cfg.AmuleApiAdminPasswordFile) ''
+          AMULE_API_PASSWORD=$(cat -- ${lib.escapeShellArg cfg.AmuleApiAdminPasswordFile})
+          ${getExe cfg.amuleApiPackage} \
+            --config-dir=${lib.escapeShellArg cfg.dataDir} --no-log-file \
+            --set-admin-pass="$AMULE_API_PASSWORD"
+        ''
+      );
 
       serviceConfig = {
         User = cfg.user;
@@ -312,6 +377,9 @@ in
       })
       (mkIf cfg.openWebServerPort {
         allowedTCPPorts = [ cfg.settings.WebServer.Port ];
+      })
+      (mkIf cfg.openAmuleApiPort {
+        allowedTCPPorts = [ cfg.settings.AmuleApi.HttpPort ];
       })
     ];
   };

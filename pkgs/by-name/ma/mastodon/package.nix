@@ -30,6 +30,9 @@ in
 stdenv.mkDerivation rec {
   inherit pname version;
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = srcOverride;
 
   mastodonGems = bundlerEnv {
@@ -90,7 +93,6 @@ stdenv.mkDerivation rec {
         -exec brotli --best --keep {} ';'
       find public/packs -type f -regextype posix-extended -iregex '.*\.(css|js|json|svg)' \
         -exec brotli --best --keep {} ';'
-      gzip --best --keep public/packs/sw.js
 
       runHook postBuild
     '';
@@ -191,7 +193,6 @@ stdenv.mkDerivation rec {
       happy-river
       erictapen
       izorkin
-      ghuntley
     ];
   };
 }

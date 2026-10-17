@@ -2,6 +2,7 @@
   lib,
   mkKdeDerivation,
   replaceVars,
+  flatpak,
   fontconfig,
   libxtst,
   libxft,
@@ -15,13 +16,14 @@
   qtlocation,
   qtpositioning,
   qtsvg,
+  qttools,
   qtvirtualkeyboard,
   qtwayland,
+  plasma5support,
+  qqc2-breeze-style,
   libcanberra,
   libqalculate,
   pipewire,
-  qttools,
-  qqc2-breeze-style,
   gpsd,
 }:
 mkKdeDerivation {
@@ -37,9 +39,6 @@ mkKdeDerivation {
       # @QtBinariesDir@ only appears in the *removed* lines of the diff
       QtBinariesDir = null;
     })
-
-    # stop accidentally duplicating fontconfig configs
-    ./fontconfig.patch
   ];
 
   outputs = [
@@ -63,12 +62,14 @@ mkKdeDerivation {
     pkg-config
     spirv-tools
   ];
+
   extraBuildInputs = [
     qtlocation
     qtpositioning
     qtsvg
     qtwayland
 
+    plasma5support
     qqc2-breeze-style
 
     libcanberra
@@ -80,6 +81,7 @@ mkKdeDerivation {
     libxtst
     libxft
 
+    flatpak
     gpsd
   ];
 
@@ -98,8 +100,5 @@ mkKdeDerivation {
     moveToOutput share/wayland-sessions $sessions
   '';
 
-  passthru.providedSessions = [
-    "plasma"
-    "plasmax11"
-  ];
+  passthru.providedSessions = [ "plasma" ];
 }

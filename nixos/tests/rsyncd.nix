@@ -25,6 +25,8 @@
               };
             };
           };
+          # TODO: Remove dependency on nix. (Not needed, and I don't understand /nix/store above)
+          nix.enable = true;
         };
     in
     {

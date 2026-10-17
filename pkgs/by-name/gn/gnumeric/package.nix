@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchpatch,
   pkg-config,
   intltool,
   libxml2,
@@ -18,6 +17,7 @@
   autoreconfHook,
   gtk-doc,
   fetchFromGitLab,
+  fetchpatch,
   gettext,
   yelp-tools,
 }:
@@ -27,22 +27,22 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnumeric";
-  version = "1.12.60";
+  version = "1.12.62";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gnumeric";
     tag = "GNUMERIC_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    hash = "sha256-fv4RlIfJiLY3MbsAsgRgJ010/Ob1X1be29XfoweCMpI=";
+    hash = "sha256-vMXT0KhzQqjyovZAP4Uh27mWsmRz+21p4PAdJJYMhoc=";
   };
 
   patches = [
-    # Replace bool type with gboolean.
-    # See https://gitlab.gnome.org/GNOME/gnumeric/-/merge_requests/39.
+    # This commit should get included in the next release.
     (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnumeric/-/commit/dee6523426b75c10c36b188fafe6e7a27b6631e3.patch";
-      hash = "sha256-a4KgxsrU9m/dZqu2LNC+jWiXvCTcRPzZW/67pg8yLGY=";
+      name = "CVE-2026-97222.patch";
+      url = "https://gitlab.gnome.org/GNOME/gnumeric/-/commit/bc1dee29525933994181fb2307d6ad584de6040d.diff";
+      hash = "sha256-8A56BLNgekDOYZnA6WqQiyoC0iJTPJQ8jEPnoKv0OPM=";
     })
   ];
 
@@ -96,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    changelog = "https://gitlab.gnome.org/GNOME/gnumeric/-/blob/${finalAttrs.src.tag}/NEWS";
     description = "GNOME Office Spreadsheet";
     license = lib.licenses.gpl2Plus;
     homepage = "http://projects.gnome.org/gnumeric/";

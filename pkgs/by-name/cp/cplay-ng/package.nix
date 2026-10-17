@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cplay-ng";
-  version = "5.4.0";
+  version = "5.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xi";
     repo = "cplay-ng";
     tag = finalAttrs.version;
-    hash = "sha256-ob5wX+Q5XKB/fTYG5phLU61imonpk2A/fk5cg/dfr1Y=";
+    hash = "sha256-Pc2cneDGNE8EqRi21h/B25jGUZJteXlGxlRgbzcyVKM=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

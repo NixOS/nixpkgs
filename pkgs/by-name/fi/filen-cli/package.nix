@@ -59,7 +59,6 @@ let
       {
         aarch64-darwin = "sha256-+nTCiCEXsEz7YqRZkHlP3CWL7e7OPdds33BTwfqTL5c=";
         aarch64-linux = "sha256-uvL498mHFXwoZpeCwsup4Iyh4l5buVnqLRBMyGVRIlA=";
-        x86_64-darwin = "sha256-5nEB6JQLmHasxcIReoiLLLRdSiaT1CRAmGFVyqdd+VY=";
         x86_64-linux = "sha256-Ky+ewpdd5nKvRzXwEAUgT7P/OW3v6fdb2r6SGxZ/JEc=";
       }
       .${stdenv.hostPlatform.system}
@@ -143,7 +142,6 @@ stdenv.mkDerivation {
     platforms = [
       "aarch64-darwin"
       "aarch64-linux"
-      "x86_64-darwin"
       "x86_64-linux"
     ];
   };

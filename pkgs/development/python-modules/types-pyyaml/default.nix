@@ -5,15 +5,15 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "types-pyyaml";
-  version = "6.0.12.20250915";
+  version = "6.0.12.20260815";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_pyyaml";
-    inherit version;
-    hash = "sha256-D4tUpSjDA/Dm9xZWh90z+vqByAf8rCP2MrY6piTO0dM=";
+    inherit (finalAttrs) version;
+    hash = "sha256-KHZBEMnPNYRucz2jLY1zTfdHPF3envZ8O3My7A6BmFg=";
   };
 
   build-system = [ setuptools ];
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dnr ];
   };
-}
+})

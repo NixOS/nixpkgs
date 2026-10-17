@@ -14,19 +14,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "re2c";
-  version = "4.4";
+  version = "4.6";
 
   src = fetchFromGitHub {
     owner = "skvadrik";
     repo = "re2c";
     rev = finalAttrs.version;
-    hash = "sha256-/uQOcbK63le1FsGM7RF8NDRGMk4fs2g+u3hBGX2rBv4=";
+    hash = "sha256-Ks6+67MpQOCYn4+GxTHA/7cG2Ayfa4S5cfSLd1U1kac=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
     python3
   ];
+
+  strictDeps = true;
 
   doCheck = true;
   enableParallelBuilding = true;
@@ -47,6 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
       inherit ninja php spamassassin;
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Tool for writing very fast and very flexible scanners";

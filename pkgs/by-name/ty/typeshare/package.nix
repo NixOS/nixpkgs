@@ -4,6 +4,8 @@
   fetchFromGitHub,
   installShellFiles,
   stdenv,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -13,7 +15,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "1password";
     repo = "typeshare";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8Pm+z407FDBLy0Hq2+T1rttFKnRWTNPPYTCn11SHcS8=";
   };
 
@@ -30,6 +32,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --zsh <($out/bin/typeshare completions zsh)
   '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Command Line Tool for generating language files with typeshare";
     mainProgram = "typeshare";
@@ -39,6 +46,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asl20 # or
       mit
     ];
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.progrm_jarvis ];
   };
 })

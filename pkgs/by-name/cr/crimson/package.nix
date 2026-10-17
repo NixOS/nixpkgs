@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -15,13 +16,15 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-Wp9L77q93TRmrAr0P4iH9gm0tqFY0X/xSsuFcd19aAE=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
-    install -m444 -Dt $out/share/fonts/opentype "Desktop Fonts/OTF/"*.otf
-    install -m444 -Dt $out/share/doc/${pname}-${version}    README.md
+  nativeBuildInputs = [ installFonts ];
 
-    runHook postInstall
+  postInstall = ''
+    install -m444 -Dt $out/share/doc/${pname}-${version} README.md
   '';
 
   meta = {

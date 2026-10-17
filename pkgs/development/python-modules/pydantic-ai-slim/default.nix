@@ -2,15 +2,18 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update,
+  writeShellApplication,
 
   # build-system
   hatchling,
   uv-dynamic-versioning,
 
   # dependencies
+  anyio,
   genai-prices,
   griffelib,
-  httpx,
+  httpx2,
   opentelemetry-api,
   pydantic-graph,
   pydantic,
@@ -20,14 +23,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pydantic-ai-slim";
-  version = "1.79.0";
+  version = "2.54.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "pydantic-ai";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-humCEXsoBNoLG33GjHdvagg3QNxjf/1gSQZUrk6ZnHg=";
+    hash = "sha256-fkE2rww4xoJgeGCF/MP4ijZySTcU411NriIVa7w6NXs=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/pydantic_ai_slim";
@@ -38,9 +41,10 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
+    anyio
     genai-prices
     griffelib
-    httpx
+    httpx2
     opentelemetry-api
     pydantic-graph
     pydantic
@@ -53,9 +57,23 @@ buildPythonPackage (finalAttrs: {
 
   doCheck = false;
 
+  passthru.updateScript = lib.getExe (writeShellApplication {
+    name = "pydantic-ai-updater";
+    runtimeInputs = [
+      nix-update
+    ];
+    text = ''
+      nix-update --build --commit python3Packages.genai-prices
+      nix-update --build --commit python3Packages.pydantic-graph
+      nix-update --build --commit python3Packages.pydantic-ai-harness
+      nix-update --build python3Packages.pydantic-ai-slim
+    '';
+  });
+
   meta = {
+    changelog = "https://github.com/pydantic/pydantic-ai/releases/tag/${finalAttrs.src.tag}";
     description = "GenAI Agent Framework, the Pydantic way";
-    homepage = "https://github.com/pydantic/pydantic-ai";
+    homepage = "https://github.com/pydantic/pydantic-ai/tree/main/pydantic_ai_slim";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };

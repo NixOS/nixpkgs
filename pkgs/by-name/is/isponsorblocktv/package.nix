@@ -7,21 +7,21 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "isponsorblocktv";
-  version = "2.6.1";
+  version = "2.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dmunozv04";
     repo = "iSponsorBlockTV";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AGjLehhGYz8FyojSFmSYKLCkHAExtpQiukQnTNt1YoY=";
+    hash = "sha256-VbhkSrF18JluKAKqUsFKkjC0jdYsvjFotYr0aJ4BTKs=";
   };
 
   patches = [
-    # Port iSponsorBlockTV to pyytlounge v3
+    # Fix iSponsorBlockTV with async-cache 2.x - https://github.com/dmunozv04/iSponsorBlockTV/pull/505
     (fetchpatch {
-      url = "https://github.com/ameertaweel/iSponsorBlockTV/commit/1809ca5a0d561bc9326a51e82118f290423ed3e6.patch";
-      hash = "sha256-v5YXfKUPTzpZPIkVSQF2VUe9EvclAH+kJyiiyUEe/HM=";
+      url = "https://github.com/lukegb/iSponsorBlockTV/commit/110ce5de788ccb262a323f743543e37af914f7fa.patch";
+      hash = "sha256-AW9VwFBMDKo3pJCNc/r5b8vrqpcL1bV8jUl/z85x+jE=";
     })
   ];
 
@@ -34,6 +34,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     aiohttp
     appdirs
     async-cache
+    pychromecast
     pyytlounge
     rich-click
     rich
@@ -41,6 +42,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     textual-slider
     textual
     xmltodict
+    zeroconf
   ];
 
   # all dependencies are pinned to exact version numbers

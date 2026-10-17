@@ -4,52 +4,87 @@
   meta = with pkgs.lib.maintainers; {
     maintainers = [
       minijackson
-      raitobezarius
     ];
   };
 
+  # systemd in Nixpkgs is built without GnuTLS, so systemd-journal-remote
+  # cannot terminate TLS itself. We put nginx in front of it with mutual TLS
+  # and have systemd-journal-upload (which uses curl+openssl) talk HTTPS to
+  # nginx. This exercises both the recommended migration path and verifies
+  # that journal-upload's TLS support still works.
   nodes.server =
-    { nodes, ... }:
+    { lib, nodes, ... }:
     {
+
       services.journald.remote = {
         enable = true;
-        listen = "http";
         settings.Remote = {
-          ServerCertificateFile = "/run/secrets/sever.cert.pem";
-          ServerKeyFile = "/run/secrets/sever.key.pem";
-          TrustedCertificateFile = "/run/secrets/ca.cert.pem";
           Seal = true;
         };
       };
 
-      networking.firewall.allowedTCPPorts = [ nodes.server.services.journald.remote.port ];
-    };
+      # Keep journal-remote loopback-only; only nginx is exposed to the network.
+      systemd.sockets.systemd-journal-remote.listenStreams = lib.mkForce [
+        ""
+        "127.0.0.1:${toString nodes.server.services.journald.remote.port}"
+      ];
 
-  nodes.client =
-    { lib, nodes, ... }:
-    {
-      services.journald.upload = {
+      virtualisation.credentials = {
+        "ca.cert.pem".source = "./ca.cert.pem";
+        "server.cert.pem".source = "./server.cert.pem";
+        "server.key.pem".source = "./server.key.pem";
+      };
+      systemd.services.nginx.serviceConfig.ImportCredential = [
+        "server.cert.pem"
+        "server.key.pem"
+        "ca.cert.pem"
+      ];
+      services.nginx = {
         enable = true;
-        settings.Upload = {
-          URL = "http://server:${toString nodes.server.services.journald.remote.port}";
-          ServerCertificateFile = "/run/secrets/client.cert.pem";
-          ServerKeyFile = "/run/secrets/client.key.pem";
-          TrustedCertificateFile = "/run/secrets/ca.cert.pem";
+        virtualHosts."server" = {
+          onlySSL = true;
+          http2 = false;
+          sslCertificate = "/run/credentials/nginx.service/server.cert.pem";
+          sslCertificateKey = "/run/credentials/nginx.service/server.key.pem";
+          extraConfig = ''
+            ssl_client_certificate /run/credentials/nginx.service/ca.cert.pem;
+            ssl_verify_client on;
+          '';
+          locations."/".proxyPass = "http://127.0.0.1:${toString nodes.server.services.journald.remote.port}";
         };
       };
 
-      # Wait for the PEMs to arrive
-      systemd.services.systemd-journal-upload.wantedBy = lib.mkForce [ ];
-      systemd.paths.systemd-journal-upload = {
-        wantedBy = [ "default.target" ];
-        # This file must be copied last
-        pathConfig.PathExists = [ "/run/secrets/ca.cert.pem" ];
+      networking.firewall.allowedTCPPorts = [ 443 ];
+    };
+
+  nodes.client =
+    { lib, ... }:
+    {
+      virtualisation.credentials = {
+        "ca.cert.pem".source = "./ca.cert.pem";
+        "client.cert.pem".source = "./client.cert.pem";
+        "client.key.pem".source = "./client.key.pem";
+      };
+      systemd.services.systemd-journal-upload.serviceConfig.ImportCredential = [
+        "client.cert.pem"
+        "client.key.pem"
+        "ca.cert.pem"
+      ];
+      services.journald.upload = {
+        enable = true;
+        settings.Upload = {
+          URL = "https://server:443";
+          ServerCertificateFile = "/run/credentials/systemd-journal-upload.service/client.cert.pem";
+          ServerKeyFile = "/run/credentials/systemd-journal-upload.service/client.key.pem";
+          TrustedCertificateFile = "/run/credentials/systemd-journal-upload.service/ca.cert.pem";
+        };
       };
     };
 
   testScript = ''
     import subprocess
     import tempfile
+    import shutil
 
     tmpdir_o = tempfile.TemporaryDirectory()
     tmpdir = tmpdir_o.name
@@ -69,33 +104,17 @@
       generate_pems("server")
       generate_pems("client")
 
-    server.wait_for_unit("multi-user.target")
-    client.wait_for_unit("multi-user.target")
-
     def copy_pems(machine: BaseMachine, domain: str):
-      machine.succeed("mkdir /run/secrets")
-      machine.copy_from_host(
-        source=f"{tmpdir}/{domain}/cert.pem",
-        target=f"/run/secrets/{domain}.cert.pem",
-      )
-      machine.copy_from_host(
-        source=f"{tmpdir}/{domain}/key.pem",
-        target=f"/run/secrets/{domain}.key.pem",
-      )
-      # Should be last
-      machine.copy_from_host(
-        source=f"{tmpdir}/ca.cert.pem",
-        target="/run/secrets/ca.cert.pem",
-      )
+      shutil.copy(f"{tmpdir}/{domain}/cert.pem", machine.state_dir / f"{domain}.cert.pem")
+      shutil.copy(f"{tmpdir}/{domain}/key.pem", machine.state_dir / f"{domain}.key.pem")
+      shutil.copy(f"{tmpdir}/ca.cert.pem", machine.state_dir / "ca.cert.pem")
 
     with subtest("Copying keys and certificates"):
       copy_pems(server, "server")
       copy_pems(client, "client")
 
+    server.wait_for_unit("nginx.service")
     client.wait_for_unit("systemd-journal-upload.service")
-    # The journal upload should have started the remote service, triggered by
-    # the .socket unit
-    server.wait_for_unit("systemd-journal-remote.service")
 
     identifier = "nixos-test"
     message = "Hello from NixOS test infrastructure"

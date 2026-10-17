@@ -10,6 +10,8 @@ let
   cfg = config.services.wyoming.faster-whisper;
 
   inherit (lib)
+    any
+    hasInfix
     mapAttrsToList
     mkOption
     mkEnableOption
@@ -39,6 +41,17 @@ in
             options = {
               enable = mkEnableOption "Wyoming faster-whisper server";
 
+              task = mkOption {
+                type = enum [
+                  "transcribe"
+                  "translate"
+                ];
+                default = "transcribe";
+                description = ''
+                  Whisper task to perform.
+                '';
+              };
+
               zeroconf = {
                 enable = mkEnableOption "zeroconf discovery" // {
                   default = true;
@@ -58,6 +71,7 @@ in
                   "auto"
                   "faster-whisper"
                   "onnx-asr"
+                  "qwen3-asr"
                   "sherpa"
                   "transformers"
                 ];
@@ -256,11 +270,13 @@ in
                   they guide the journey.
                 '';
                 description = ''
-                  Optional text to provide as a prompt for the first window. This can be used to provide, or
-                  "prompt-engineer" a context for transcription, e.g. custom vocabularies or proper nouns
-                  to make it more likely to predict those word correctly.
+                  Optional text to provide as a prompt for the first window.
+                  This can be used to provide, or "prompt-engineer" a context
+                  for transcription, e.g. custom vocabularies or proper nouns to
+                  make it more likely to predict those word correctly.
 
-                  Only supported when the {option}`sttLibrary` is `faster-whisper`.
+                  Only supported when the {option}`sttLibrary` is
+                  `faster-whisper`. Not supported with Distill whisper models.
                 '';
               };
 
@@ -300,8 +316,13 @@ in
     in
     mkIf (cfg.servers != { }) {
       assertions = mapAttrsToList (server: options: {
-        assertion = options.sttLibrary != "faster-whisper" -> options.initialPrompt == null;
-        message = "wyoming-faster-whisper/${server}: Initial prompt is only supported when using `faster-whisper` as `sttLibrary`.";
+        assertion =
+          !lib.elem options.sttLibrary [
+            "faster-whisper"
+            "qwen3-asr"
+          ]
+          -> options.initialPrompt == null;
+        message = "wyoming-faster-whisper/${server}: Initial prompt is only supported when `sttLibrary` is `faster-whisper` or `qwen3-asr`.";
       }) cfg.servers;
 
       systemd.services = mapAttrs' (
@@ -310,6 +331,9 @@ in
           finalPackage = cfg.package.overridePythonAttrs (oldAttrs: {
             dependencies =
               oldAttrs.dependencies
+              ++ optionals (any (
+                arg: hasInfix "--hass" arg
+              ) options.extraArgs) oldAttrs.optional-dependencies.hass
               ++ optionals options.zeroconf.enable oldAttrs.optional-dependencies.zeroconf
               ++ optionals (
                 options.sttLibrary == "onnx-asr" || options.sttLibrary == "auto" && options.language == "ru"
@@ -332,9 +356,11 @@ in
           wantedBy = [
             "multi-user.target"
           ];
-          # https://github.com/rhasspy/wyoming-faster-whisper/issues/27
-          # https://github.com/NixOS/nixpkgs/issues/429974
-          environment."HF_HOME" = "/tmp";
+          environment = {
+            # https://github.com/OHF-Voice/wyoming-faster-whisper/blob/v3.8.1/Dockerfile#L42-L44
+            "HF_HOME" = "/tmp/huggingface";
+            "MODELSCOPE_CACHE" = "/tmp/modelscope";
+          };
           serviceConfig = {
             DynamicUser = true;
             User = "wyoming-faster-whisper";
@@ -349,6 +375,8 @@ in
                 options.uri
                 "--device"
                 options.device
+                "--whisper-task"
+                options.task
                 "--stt-library"
                 options.sttLibrary
                 "--model"

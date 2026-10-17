@@ -6,25 +6,28 @@
   nix-update-script,
   uv-build,
   bdffont,
+  freetype-py,
 }:
 
 buildPythonPackage rec {
   pname = "pcffont";
-  version = "0.0.24";
+  version = "0.0.33";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "TakWolf";
     repo = "pcffont";
     tag = version;
-    hash = "sha256-32u4FE5QLLqYmRVDuYYGC/laLCRH9phNGi1B9JC+cps=";
+    hash = "sha256-inK/+oQkWfhIwhUjN3TkKvyk0AAxoliSsUzR84tLt9U=";
   };
 
   build-system = [ uv-build ];
 
-  dependencies = [ bdffont ];
-
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    bdffont
+    freetype-py
+  ];
 
   pythonImportsCheck = [ "pcffont" ];
 

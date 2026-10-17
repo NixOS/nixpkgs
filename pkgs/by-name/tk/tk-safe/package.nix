@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchurl,
-  squashfsTools,
+  squashfs-tools,
   autoPatchelfHook,
   copyDesktopItems,
   alsa-lib,
@@ -21,12 +21,12 @@
 
 stdenv.mkDerivation rec {
   pname = "tk-safe";
-  version = "25.12.3";
-  revision = "25";
+  version = "26.2.6";
+  revision = "29";
 
   src = fetchurl {
     url = "https://api.snapcraft.io/api/v1/snaps/download/rLNeIGEaag0TKFQLO0TxF3ARXg3rcTNx_${revision}.snap";
-    hash = "sha512-RdcScrTOQHVUn5JE59Z7S44+l2naNXBgID5VqMVelni0bPvnBigEDgRp5BID65Q52MXMe79lzzqo7qRmbYkb3Q==";
+    hash = "sha512-XvVXLmzopmzyIavLHcOItIe+wI9ACDTe/YOBYN7z8kAwA8Wlwf3Sz9eFQ2NZ6t25Am022uTI1WP8yi3Lt5fa7g==";
   };
 
   desktopItems = [
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     autoPatchelfHook
     copyDesktopItems
     makeWrapper
-    squashfsTools
+    squashfs-tools
     wrapGAppsHook3
   ];
 
@@ -80,8 +80,8 @@ stdenv.mkDerivation rec {
     mv * $out/opt/tk-safe
     ln -s $out/opt/tk-safe/app/tk-safe $out/bin/tk-safe
 
-    mkdir -p $out/share/icons/hicolor/1024x1024/apps
-    ln -s $out/opt/tk-safe/meta/gui/icon.png $out/share/icons/hicolor/1024x1024/apps/tk-safe.png
+    mkdir -p $out/share/icons
+    ln -s $out/opt/tk-safe/meta/gui/icon.png $out/share/icons/tk-safe.png
 
     runHook postInstall
   '';

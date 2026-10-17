@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -10,37 +11,42 @@
   # dependencies
   gymnasium,
   numpy,
+  typing-extensions,
 
   # optional-dependencies
-  pygame,
+  # atari:
+  pygame-ce,
+  # butterfly:
   pymunk,
+  # classic:
   chess,
   rlcard,
   shimmy,
+  # other:
+  moviepy,
   pillow,
-  pybox2d,
+  # sisl
   scipy,
-  pre-commit,
-  pynput,
-  pytest,
-  pytest-cov-stub,
-  pytest-markdown-docs,
-  pytest-xdist,
+  pybox2d,
+  swig,
 
   # tests
+  pytest-markdown-docs,
+  pytest-xdist,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pettingzoo";
-  version = "1.25.0";
+  version = "1.27.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Farama-Foundation";
     repo = "PettingZoo";
-    tag = version;
-    hash = "sha256-hQe/TMlLG//Bn8aaSo0/FPOUvOEyKfztuTIS7SMsUQ4=";
+    tag = finalAttrs.version;
+    hash = "sha256-fiaHuMmoaL6VweDcXZVLaQcvXHG3B0zcOrePlOajQzo=";
   };
 
   build-system = [
@@ -50,40 +56,38 @@ buildPythonPackage rec {
   dependencies = [
     gymnasium
     numpy
+    typing-extensions
   ];
 
   optional-dependencies = {
-    all = lib.concatAttrValues (lib.removeAttrs optional-dependencies [ "all" ]);
     atari = [
       # multi-agent-ale-py
-      pygame
+      pygame-ce
     ];
     butterfly = [
-      pygame
+      pygame-ce
       pymunk
     ];
     classic = [
       chess
-      pygame
+      pygame-ce
       rlcard
       shimmy
+      # open-spiel (unpackaged)
     ];
-    mpe = [ pygame ];
-    other = [ pillow ];
+    mpe = [ pygame-ce ];
+    other = [
+      moviepy
+      pillow
+    ];
     sisl = [
-      pybox2d
-      pygame
+      pygame-ce
       pymunk
       scipy
-    ];
-    testing = [
-      # autorom
-      pre-commit
-      pynput
-      pytest
-      pytest-cov-stub
-      pytest-markdown-docs
-      pytest-xdist
+      pybox2d
+    ]
+    ++ lib.optionals (pythonAtLeast "3.14") [
+      swig
     ];
   };
 
@@ -91,12 +95,15 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     chess
-    pygame
+    moviepy
+    pybox2d
+    pygame-ce
     pymunk
     pytest-markdown-docs
     pytest-xdist
     pytestCheckHook
     rlcard
+    scipy
   ];
 
   disabledTestPaths = [
@@ -109,6 +116,10 @@ buildPythonPackage rec {
   disabledTests = [
     # ImportError: cannot import name 'pytest_plugins' from 'pettingzoo.classic'
     "test_chess"
+
+    # pygame.error: No available video device
+    "test_kaz_obs_updates"
+    "test_rgb_array_render_does_not_init_audio"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Crashes on darwin: `Fatal Python error: Aborted`
@@ -118,8 +129,8 @@ buildPythonPackage rec {
   meta = {
     description = "API standard for multi-agent reinforcement learning environments, with popular reference environments and related utilities";
     homepage = "https://github.com/Farama-Foundation/PettingZoo";
-    changelog = "https://github.com/Farama-Foundation/PettingZoo/releases/tag/${version}";
+    changelog = "https://github.com/Farama-Foundation/PettingZoo/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

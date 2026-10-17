@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   libsForQt5,
 
@@ -30,7 +31,7 @@
   withKeePassNetworking ? true,
   withKeePassSSHAgent ? true,
   withKeePassX11 ? true,
-  withKeePassYubiKey ? stdenv.hostPlatform.isLinux,
+  withKeePassYubiKey ? true,
 
   nixosTests,
 }:
@@ -62,8 +63,22 @@ stdenv.mkDerivation (finalAttrs: {
     };
 
   patches = [
-    ./darwin.patch
+    ./darwin-remove-macdeployqt.patch
+
+    (fetchpatch2 {
+      name = "CVE-2026-69150.patch";
+      url = "https://github.com/keepassxreboot/keepassxc/commit/6a534f38c61295d60b0e937739a12511e76dbfeb.patch?full_index=1";
+      hash = "sha256-izHjFIqtBcMXK3XMPvSKv1d/1I5It59ClGrrcCz6lL4=";
+    })
   ];
+
+  # Upstream develops against a build of PCSC from Xcode.
+  # The types are incompatible with nixpkgs pcsclite.
+  # https://github.com/NixOS/nixpkgs/issues/520227
+  postPatch = ''
+    substituteInPlace src/keys/drivers/YubiKeyInterfacePCSC.cpp \
+      --replace-fail "typedef uint32_t RETVAL;" "typedef int32_t RETVAL;"
+  '';
 
   cmakeFlags = [
     (lib.cmakeFeature "KEEPASSXC_BUILD_TYPE" "Release")
@@ -138,9 +153,13 @@ stdenv.mkDerivation (finalAttrs: {
     '')
 
     # See https://github.com/keepassxreboot/keepassxc/blob/cd7a53abbbb81e468efb33eb56eefc12739969b8/src/browser/NativeMessageInstaller.cpp#L317
+    # See https://github.com/keepassxreboot/keepassxc/blob/cd7a53abbbb81e468efb33eb56eefc12739969b8/utils/keepassxc-snap-helper.sh#L48-L58
     (lib.optionalString withKeePassBrowser ''
       mkdir -p "$out/lib/mozilla/native-messaging-hosts"
       substituteAll "${./firefox-native-messaging-host.json}" "$out/lib/mozilla/native-messaging-hosts/org.keepassxc.keepassxc_browser.json"
+
+      mkdir -p "$out/etc/chromium/native-messaging-hosts"
+      substituteAll "${./chromium-native-messaging-host.json}" "$out/etc/chromium/native-messaging-hosts/org.keepassxc.keepassxc_browser.json"
     '')
   ];
 
@@ -190,6 +209,7 @@ stdenv.mkDerivation (finalAttrs: {
       using the KeePassXC Browser Extension (https://github.com/keepassxreboot/keepassxc-browser)
     '';
     homepage = "https://keepassxc.org/";
+    donationPage = "https://keepassxc.org/donate/";
     changelog = "https://github.com/keepassxreboot/keepassxc/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl2Plus;
     mainProgram = "keepassxc";

@@ -6,25 +6,25 @@
   pytestCheckHook,
   requests,
   responses,
-  setuptools,
+  setuptools_80,
   urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "tank-utility";
-  version = "1.5.0";
+  version = "1.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "krismolendyke";
     repo = "tank-utility";
     tag = version;
-    hash = "sha256-h9y3X+FSzSFt+bd/chz+x0nocHaKZ8DvreMxAYMs8/E=";
+    hash = "sha256-koLdumixS11J1Ia9aCihQU7XXu0dziNzMkqEQ2LH9o4=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools_80 ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     requests
     urllib3
   ];

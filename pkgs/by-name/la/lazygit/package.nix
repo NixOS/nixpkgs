@@ -8,13 +8,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "lazygit";
-  version = "0.61.0";
+  version = "0.66.2";
 
   src = fetchFromGitHub {
     owner = "jesseduffield";
     repo = "lazygit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-G7JulCK9WUVWbp1V7lYuM3fehCdn1cNAJHYjr3aKDvQ=";
+    hash = "sha256-ZjbaMLHUInTe9heLfQxnU4+rBqZry1ciENJXqpvq9rU=";
   };
 
   vendorHash = null;
@@ -42,6 +42,7 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/jesseduffield/lazygit/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      ddogfoodd
       equirosa
       khaneliman
       starsep

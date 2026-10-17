@@ -4,20 +4,23 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_10,
   nodejs,
   makeBinaryWrapper,
   nix-update-script,
 }:
+let
+  pnpm = pnpm_10;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "svelte-language-server";
-  version = "0.17.25";
+  version = "0.18.5";
 
   src = fetchFromGitHub {
     owner = "sveltejs";
     repo = "language-tools";
     tag = "svelte-language-server@${finalAttrs.version}";
-    hash = "sha256-N20OAIepguiPZ3EqAB/AUgx7VGrmywbLTXv/M6URbJk=";
+    hash = "sha256-AJZj3dDvDG2PvT8YFRS0lEbnXckdZ1XX22j1phSc2Ig=";
   };
 
   pnpmWorkspaces = [ "svelte-language-server..." ];
@@ -29,8 +32,9 @@ stdenv.mkDerivation (finalAttrs: {
       src
       pnpmWorkspaces
       ;
-    fetcherVersion = 2;
-    hash = "sha256-J279yrHRyG6QyUedXmYwv6Kcuz/9pGwvu6dUELIFeu8=";
+    inherit pnpm;
+    fetcherVersion = 3;
+    hash = "sha256-8pamAQjd/UWN3URJNNwOKIm+rMIgSIJgjkQ5mHIEx+s=";
   };
 
   nativeBuildInputs = [
@@ -78,6 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/sveltejs/language-tools";
     license = lib.licenses.mit;
     mainProgram = "svelteserver";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ dfjay ];
   };
 })

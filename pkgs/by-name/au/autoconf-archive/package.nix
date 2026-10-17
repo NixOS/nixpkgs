@@ -28,6 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ xz ];
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Archive of autoconf m4 macros";
     homepage = "https://www.gnu.org/software/autoconf-archive/";

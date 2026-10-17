@@ -2,25 +2,23 @@
   lib,
   AvailabilityVersions,
   apple-sdk,
-  apple-sdk_15,
   libutil,
   mkAppleDerivation,
   ncurses,
   openpam,
   pkg-config,
-  stdenv,
+  sourceRelease,
   stdenvNoCC,
 }:
 
 let
-  libdispatch = apple-sdk.sourceRelease "libdispatch"; # Has to match the version of the SDK
+  Libc = sourceRelease "Libc";
+  libmalloc = sourceRelease "libmalloc";
+  OpenDirectory = sourceRelease "OpenDirectory";
 
-  Libc = apple-sdk.sourceRelease "Libc";
-  libmalloc = apple-sdk.sourceRelease "libmalloc";
-  OpenDirectory = apple-sdk.sourceRelease "OpenDirectory";
+  libplatform = sourceRelease "libplatform";
 
-  libplatform = apple-sdk.sourceRelease "libplatform";
-  xnu = apple-sdk_15.sourceRelease "xnu"; # Needed for `posix_spawn_secflag_options`
+  xnu = sourceRelease "xnu"; # Can’t use xnuHeaders because adv_cmds is a transitive dependency of xnuHeaders.
 
   privateHeaders = stdenvNoCC.mkDerivation {
     name = "system_cmds-deps-private-headers";
@@ -52,11 +50,6 @@ let
         '${xnu}/libsyscall/wrappers/spawn/spawn_private.h'
       touch "$out/include/btm.h"
 
-      cp -r '${libdispatch}/private' "$out/include/dispatch"
-      # Work around availability headers compatibility issue when building with an unprocessed SDK.
-      chmod -R u+w "$out/include/dispatch"
-      find "$out/include/dispatch" -name '*.h' -exec sed -i {} -e 's/, bridgeos([^)]*)//g' \;
-
       install -D -t "$out/include/System/i386" \
         '${xnu}/osfmk/i386/cpu_capabilities.h'
 
@@ -78,10 +71,11 @@ let
       install -D -t "$out/include/sys" \
         '${xnu}/bsd/sys/csr.h' \
         '${xnu}/bsd/sys/event_private.h' \
-        '${xnu}/bsd/sys/pgo.h' \
         '${xnu}/bsd/sys/kdebug_private.h' \
         '${xnu}/bsd/sys/kern_memorystatus.h' \
+        '${xnu}/bsd/sys/pgo.h' \
         '${xnu}/bsd/sys/proc_info_private.h' \
+        '${xnu}/bsd/sys/proc_private.h' \
         '${xnu}/bsd/sys/reason.h' \
         '${xnu}/bsd/sys/resource.h' \
         '${xnu}/bsd/sys/resource_private.h' \
@@ -108,7 +102,7 @@ in
 mkAppleDerivation {
   releaseName = "system_cmds";
 
-  xcodeHash = "sha256-gdtn3zNIneZKy6+X0mQ51CFVLNM6JQYLbd/lotG5/Tw=";
+  xcodeHash = "sha256-/JFbwYJA2sx3F+ihyxemZX/LK3y5HLZSbQFDdvctzmQ=";
 
   patches = [
     # `posix_spawnattr_set_use_sec_transition_shims_np` is only available on macOS 15.2 or newer.
@@ -128,6 +122,10 @@ mkAppleDerivation {
       substituteInPlace $src \
         --replace-fail 'printw(tbuf)' 'printw("%s", tbuf);'
     done
+
+    # The libdispatch APIs it uses aren’t actually private. They’re available in the public headers.
+    substituteInPlace memory_pressure/memory_pressure.c \
+      --replace-fail '<dispatch/private.h>' '<dispatch/dispatch.h>'
   '';
 
   preConfigure = ''

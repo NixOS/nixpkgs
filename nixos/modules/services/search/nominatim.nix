@@ -50,6 +50,10 @@ in
     };
 
     ui = {
+      enable = lib.mkEnableOption "Nominatim UI" // {
+        default = true;
+      };
+
       package = lib.mkPackageOption pkgs "nominatim-ui" { };
 
       config = lib.mkOption {
@@ -277,7 +281,7 @@ in
 
       services.nginx = {
         enable = true;
-        appendHttpConfig = ''
+        appendHttpConfig = lib.mkIf cfg.ui.enable ''
           map $args $format {
               default                  default;
               ~(^|&)format=html(&|$)   html;
@@ -304,19 +308,19 @@ in
             enableACME = lib.mkDefault true;
             locations = {
               "= /" = {
-                extraConfig = ''
+                extraConfig = lib.mkIf cfg.ui.enable ''
                   return 301 $scheme://$http_host/ui/search.html;
                 '';
               };
               "/" = {
                 proxyPass = "http://nominatim";
-                extraConfig = ''
+                extraConfig = lib.mkIf cfg.ui.enable ''
                   if ($forward_to_ui) {
                       rewrite ^(/[^/.]*) /ui$1.html redirect;
                   }
                 '';
               };
-              "/ui/" = {
+              "/ui/" = lib.mkIf cfg.ui.enable {
                 alias = "${uiPackage}/";
               };
             };

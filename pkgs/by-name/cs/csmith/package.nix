@@ -1,23 +1,30 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  cmake,
   m4,
   makeWrapper,
   libbsd,
   perlPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "csmith";
-  version = "2.3.0";
+  version = "2.3.0-unstable-2026-03-01";
 
-  src = fetchurl {
-    url = "https://embed.cs.utah.edu/csmith/${pname}-${version}.tar.gz";
-    sha256 = "1mb5zgixsyf86slggs756k8a5ddmj980md3ic9sa1y75xl5cqizj";
+  src = fetchFromGitHub {
+    owner = "csmith-project";
+    repo = "csmith";
+    rev = "0cdc710315cfee9035e22ef4363ca479270d1934";
+    hash = "sha256-m0xdGtccxGFMHFYRCultkEfMEs9ju8ccx7kZbxNTapE=";
   };
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
+    cmake
     m4
     makeWrapper
   ];
@@ -33,13 +40,13 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace $out/bin/compiler_test.pl \
-      --replace '$CSMITH_HOME/runtime' $out/include/${pname}-${version} \
-      --replace ' ''${CSMITH_HOME}/runtime' " $out/include/${pname}-${version}" \
-      --replace '$CSMITH_HOME/src/csmith' $out/bin/csmith
+      --replace-fail '$CSMITH_HOME/runtime' $out/include/csmith-${finalAttrs.version} \
+      --replace-fail ' ''${CSMITH_HOME}/runtime' " $out/include/csmith-${finalAttrs.version}" \
+      --replace-fail '$CSMITH_HOME/src/csmith' $out/bin/csmith
 
     substituteInPlace $out/bin/launchn.pl \
-      --replace '../compiler_test.pl' $out/bin/compiler_test.pl \
-      --replace '../$CONFIG_FILE' '$CONFIG_FILE'
+      --replace-fail '../compiler_test.pl' $out/bin/compiler_test.pl \
+      --replace-fail '../$CONFIG_FILE' '$CONFIG_FILE'
 
     wrapProgram $out/bin/launchn.pl \
       --prefix PERL5LIB : "$PERL5LIB"
@@ -65,4 +72,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

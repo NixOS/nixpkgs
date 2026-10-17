@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "gtk-mac-integration";
     rev = "gtk-mac-integration-${version}";
-    sha256 = "0sc0m3p8r5xfh5i4d7dg72kfixx9yi4f800y43bszyr88y52jkga";
+    hash = "sha256-6k0pikco+6/XIB4A5Ej0qffopjivnUZiga6XjO6ogGk=";
   };
 
   nativeBuildInputs = [

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchzip,
+  installFonts,
 }:
 
 let
@@ -17,10 +18,11 @@ stdenv.mkDerivation {
     hash = "sha256-6mw72eoRIGzG2IoVnPo1G0i2Z2Ot8Q/WjaJ8tNDQbMk=";
   };
 
+  nativeBuildInputs = [ installFonts ];
+
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 *.ttf -t $out/share/fonts/${font}
     install -Dm644 *.txt -t $out/share/doc/${font}
     install -Dm644 *.pdf -t $out/share/doc/${font}
 
@@ -31,7 +33,7 @@ stdenv.mkDerivation {
     description = "Font containing stroke order diagrams for over 6500 kanji, 180 kana and other characters";
     homepage = "https://www.kanji.uk/";
 
-    license = [ lib.licenses.bsd3 ];
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       ptrhlm
       stephen-huan

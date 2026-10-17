@@ -9,15 +9,13 @@
 
 stdenv.mkDerivation {
   pname = "i2pd-tools";
-  version = "2.56.0";
-
-  #tries to access the network during the tests, which fails
+  version = "2.58.0-unstable-2026-04-29";
 
   src = fetchFromGitHub {
     owner = "PurpleI2P";
     repo = "i2pd-tools";
-    rev = "33fce4b087d92ee90653460bbe7a07cdc0c7b121";
-    hash = "sha256-mmCs8AHHKhx1/rDp/Vc1p2W3pufoTa4FcJyJwD919zw=";
+    rev = "34944bbd5d0bab34694b1f57edba4b5a783f8b7b";
+    hash = "sha256-W0khA1uVHmMBQdUwPMo/q64P9I6t6Eatf/KPaamJg7I=";
     fetchSubmodules = true;
   };
 
@@ -26,13 +24,15 @@ stdenv.mkDerivation {
     openssl
     boost
   ];
+
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/bin
     for bin in \
         routerinfo keygen vain keyinfo regaddr \
-        regaddr_3ld regaddralias x25519 famtool autoconf;
+        regaddr_3ld regaddralias x25519 famtool autoconf_i2pd \
+        verifyhost offlinekeys b33address i2pbase64;
     do
       install -Dm755 $bin -t $out/bin
     done
@@ -44,7 +44,10 @@ stdenv.mkDerivation {
     description = "Toolsuite to work with keys and eepsites";
     homepage = "https://github.com/PurpleI2P/i2pd-tools";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ MulliganSecurity ];
-    mainProgram = "i2pd-tools";
+    maintainers = with lib.maintainers; [
+      MulliganSecurity
+      ryand56
+    ];
+    platforms = lib.platforms.linux;
   };
 }

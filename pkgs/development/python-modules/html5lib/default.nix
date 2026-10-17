@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  setuptools_80,
   six,
   webencodings,
   pytest-expect,
@@ -29,7 +29,7 @@ buildPythonPackage {
     ./pytest9-compat.patch
   ];
 
-  build-system = [ setuptools ];
+  build-system = [ setuptools_80 ];
 
   dependencies = [
     six

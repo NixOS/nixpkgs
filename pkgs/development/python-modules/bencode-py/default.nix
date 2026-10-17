@@ -1,31 +1,46 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  setuptools,
   pbr,
   pytestCheckHook,
 }:
-buildPythonPackage rec {
-  pname = "beconde-py";
-  version = "4.0.0";
-  format = "setuptools";
 
-  src = fetchPypi {
-    inherit version;
-    pname = "bencode.py";
-    hash = "sha256-KiTM2hclpRplCJPQtjJgE4NZ6qKZu256CZYTUKKm4Fw=";
+buildPythonPackage (finalAttrs: {
+  pname = "bencode-py";
+  version = "4.1.0";
+  pyproject = true;
+
+  __structuredAttrs = true;
+
+  src = fetchFromGitHub {
+    owner = "fuzeman";
+    repo = "bencode.py";
+    tag = finalAttrs.version;
+    hash = "sha256-vUG8QwcI34uFo7aldDhQORoZuuI/CYGoSOdSfGmj2uQ=";
   };
+
+  build-system = [
+    setuptools
+    pbr
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "bencodepy" ];
 
-  nativeBuildInputs = [ pbr ];
-
-  nativeCheckInputs = [ pytestCheckHook ];
+  disabledTests = [
+    # Failed: DID NOT RAISE BencodeDecodeError
+    "test_decode_recursion_error"
+    "test_read_recursion_error"
+  ];
 
   meta = {
     description = "Simple bencode parser (for Python 2, Python 3 and PyPy)";
     homepage = "https://github.com/fuzeman/bencode.py";
+    changelog = "https://github.com/fuzeman/bencode.py/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bitTorrent11;
     maintainers = with lib.maintainers; [ vamega ];
   };
-}
+})

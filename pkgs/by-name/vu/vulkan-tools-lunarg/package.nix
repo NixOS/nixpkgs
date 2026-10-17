@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vulkan-tools-lunarg";
-  version = "1.4.341.0";
+  version = "1.4.363.0";
 
   src = fetchFromGitHub {
     owner = "LunarG";
     repo = "VulkanTools";
     rev = "vulkan-sdk-${finalAttrs.version}";
-    hash = "sha256-y/xTeEBjhDBlB0qcWUe159SvsRa5tBLUy6FZSmupQsU=";
+    hash = "sha256-ga/vc1EH5+pfFsNsyey/2wFWqiOv0N8NW3jyhUNX1UM=";
   };
 
   nativeBuildInputs = [
@@ -61,7 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     libxcb-keysyms
     libxcb-wm
     qt6.qtbase
-    qt6.qtwayland
   ];
 
   cmakeFlags = [

@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "distlib";
-  version = "0.4.0";
+  version = "0.4.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/uxAB1vgOgRQGpc9gfYzc1tLafmLBUUFkjEMD0AaTg0=";
+    hash = "sha256-8VIJciSgriS+Wg9rrhuTWa+CEzvOY/mKlfhsrhrt6e0=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "Low-level components of distutils2/packaging";
     homepage = "https://distlib.readthedocs.io";
     license = lib.licenses.psfl;
-    maintainers = with lib.maintainers; [ lnl7 ];
+    maintainers = [ ];
   };
 }

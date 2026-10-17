@@ -2,6 +2,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pillow,
+  pythonAtLeast,
   scipy,
   numpy,
   pytestCheckHook,
@@ -45,6 +46,11 @@ buildPythonPackage rec {
     "test_ellipse_axes"
     "test_normalize"
     "test_haralick3d"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # sys.getrefcount semantics changed in 3.14
+    "test_close_holes_simple"
+    "test_watershed"
   ];
 
   pythonImportsCheck = [ "mahotas" ];

@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "otf2";
-  version = "3.1.1";
+  version = "3.2";
 
   outputs = [
     "out"
@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://perftools.pages.jsc.fz-juelich.de/cicd/otf2/tags/otf2-${finalAttrs.version}/otf2-${finalAttrs.version}.tar.gz";
-    hash = "sha256-Wk4BOlGsTteU/jXFW3AM1yA0b9p/M+yEx2uGpfuICm4=";
+    hash = "sha256-grOoilUMuMPOyP1F7Kgs3Lr5RSCZd0gkcbS15DDWSo0=";
   };
 
   postPatch = ''

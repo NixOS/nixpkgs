@@ -17,6 +17,7 @@
 
   # testing
   pytest-asyncio,
+  pytest-mock,
   pytestCheckHook,
   docker-compose,
 
@@ -26,14 +27,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langgraph-cli";
-  version = "0.4.21";
+  version = "0.4.33";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "cli==${finalAttrs.version}";
-    hash = "sha256-PwVJzg+LQ6gScd/lewBqN66rzADnucMeIA/4gmP4xPw=";
+    hash = "sha256-eYkUJSZ5191Qe+7bKIotSas0PVmzXwGEgw44i/HfI1g=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/cli";
@@ -58,6 +60,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-mock
     pytestCheckHook
     docker-compose
   ]
@@ -90,6 +93,7 @@ buildPythonPackage (finalAttrs: {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "cli==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 

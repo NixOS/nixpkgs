@@ -20,6 +20,8 @@ stdenv.mkDerivation (finalAttrs: {
     ncurses
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-incompatible-pointer-types";
+
   makeFlags = [ "BIN=$(out)/bin" ];
 
   preInstall = ''

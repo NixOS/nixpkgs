@@ -12,20 +12,20 @@
   libxml2,
   openssl,
   pkg-config,
-  systemd,
+  systemdLibs,
   cppunit,
   ipv6 ? true,
   nixosTests,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "squid";
-  version = "7.5";
+  version = "7.6";
 
   src = fetchurl {
     url = "https://github.com/squid-cache/squid/releases/download/SQUID_${
       builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }/squid-${finalAttrs.version}.tar.xz";
-    hash = "sha256-9gWJB9sBUNL10ihIK1qeVniSDPNorgzLzszrL/TDUQY=";
+    hash = "sha256-hSF4/cN8WweGqTT8mQx9L//IKs8ZsihL4gm5ZDHSWZI=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcap
     pam
-    systemd
+    systemdLibs
   ];
 
   enableParallelBuilding = true;

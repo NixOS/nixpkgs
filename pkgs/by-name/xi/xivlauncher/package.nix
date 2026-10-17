@@ -50,8 +50,15 @@ buildDotnetModule rec {
   nugetDeps = ./deps.json; # File generated with `nix-build -A xivlauncher.passthru.fetch-deps`
 
   # please do not unpin these even if they match the defaults, xivlauncher is sensitive to .NET versions
-  dotnet-sdk = dotnetCorePackages.sdk_10_0;
-  dotnet-runtime = dotnetCorePackages.runtime_10_0;
+  dotnet-sdk =
+    with dotnetCorePackages;
+    sdk_10_0
+    // {
+      inherit (sdk_9_0)
+        packages
+        targetPackages
+        ;
+    };
 
   dotnetFlags = [
     "-p:BuildHash=${rev}"

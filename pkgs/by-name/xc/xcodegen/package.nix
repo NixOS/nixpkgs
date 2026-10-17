@@ -1,12 +1,12 @@
 {
   lib,
-  swiftPackages,
   swift,
   swiftpm,
   swiftpm2nix,
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
+  stdenv,
 }:
 
 let
@@ -14,7 +14,7 @@ let
   generated = swiftpm2nix.helpers ./nix;
 in
 
-swiftPackages.stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xcodegen";
   version = "2.44.1";
 
@@ -31,10 +31,6 @@ swiftPackages.stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     swift
     swiftpm
-  ];
-
-  buildInputs = [
-    swiftPackages.XCTest
   ];
 
   # The helper provides a configure snippet that will prepare all dependencies
@@ -64,7 +60,7 @@ swiftPackages.stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Swift command line tool for generating your Xcode project";
     homepage = "https://github.com/yonaskolb/XcodeGen";
-    changelog = "https://github.com/XcodeGen/blob/${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/yonaskolb/XcodeGen/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     platforms = lib.platforms.darwin;
     maintainers = [ lib.maintainers.samasaur ];

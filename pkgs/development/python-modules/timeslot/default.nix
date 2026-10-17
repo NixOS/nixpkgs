@@ -15,7 +15,7 @@ buildPythonPackage {
     owner = "ErikBjare";
     repo = "timeslot";
     rev = "af35445e96cbb2f3fb671a75aac6aa93e4e7e7a6";
-    sha256 = "sha256-GEhg2iMsYMfalT7L9TCd1KHU6oa/wTl5m3mRC0zOH9Q=";
+    hash = "sha256-GEhg2iMsYMfalT7L9TCd1KHU6oa/wTl5m3mRC0zOH9Q=";
   };
 
   pyproject = true;

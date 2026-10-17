@@ -62,6 +62,19 @@ in
       };
     };
 
+    environmentFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      example = "/run/secrets/matrix-tuwunel.env";
+      description = ''
+        Path to a file containing sensitive environment variables as described in {manpage}`systemd.exec(5).
+
+        Refer to
+        <https://matrix-construct.github.io/tuwunel/configuration.html#environment-variables>
+        for specifying options as environment variables.
+      '';
+    };
+
     settings = lib.mkOption {
       type = lib.types.submodule {
         freeformType = format.type;
@@ -81,7 +94,6 @@ in
             description = ''
               Addresses (IPv4 or IPv6) to listen on for connections by the reverse proxy/tls terminator.
               If set to `null`, tuwunel will listen on IPv4 and IPv6 localhost.
-              Must be `null` if `unix_socket_path` is set.
             '';
           };
           global.port = lib.mkOption {
@@ -167,14 +179,6 @@ in
 
   config = lib.mkIf cfg.enable {
     assertions = [
-      {
-        assertion = !(cfg.settings ? global.unix_socket_path) || !(cfg.settings ? global.address);
-        message = ''
-          In `services.matrix-tuwunel.settings.global`, `unix_socket_path` and `address` cannot be set at the
-          same time.
-          Leave one of the two options unset or explicitly set them to `null`.
-        '';
-      }
       {
         assertion = cfg.user != defaultUser -> config ? users.users.${cfg.user};
         message = "If `services.matrix-tuwunel.user` is changed, the configured user must already exist.";
@@ -264,6 +268,7 @@ in
         ExecStart = lib.getExe cfg.package;
         Restart = "on-failure";
         RestartSec = 10;
+        EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
       };
     };
   };

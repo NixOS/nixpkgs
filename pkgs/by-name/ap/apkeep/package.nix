@@ -8,14 +8,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "apkeep";
-  version = "0.18.0";
+  version = "1.1.0";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-Sk8CQaMXtPPJh2nGgGthyzuvkVViQ0jtqPjAqo2dtpg=";
+    hash = "sha256-fc7evdDy6HlAWMS/RIaO4qA2eNsgcW7ol63JIXYllOQ=";
   };
 
-  cargoHash = "sha256-PTuhD73R0AxykkVeFEHaVnXrOTHJoRl0CxBJmeh3WgQ=";
+  cargoHash = "sha256-f18BuiZuhIXizdMKZQmTQJOdv0UvcBYwxbeqewg+sQ8=";
 
   prePatch = ''
     rm .cargo/config.toml

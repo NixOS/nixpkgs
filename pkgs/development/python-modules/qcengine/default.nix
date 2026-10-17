@@ -2,32 +2,26 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonAtLeast,
-  ipykernel,
-  msgpack,
-  networkx,
-  nglview,
-  numpy,
-  psutil,
-  py-cpuinfo,
-  pydantic,
-  pytestCheckHook,
-  pyyaml,
-  qcelemental,
-  scipy,
   setuptools,
   setuptools-scm,
+  pyyaml,
+  py-cpuinfo,
+  psutil,
+  qcelemental,
+  pydantic,
   pydantic-settings,
+  packaging,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "qcengine";
-  version = "0.50.0rc2";
+  version = "0.51.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XIxHFemTXXsqCLAHizzrEt0tVdfp6vY0Pl4CHv+EzDM=";
+    hash = "sha256-I6Ei0TIylYWordjNAj0wXAxMH1Ayv4p6siJz4F18TA0=";
   };
 
   build-system = [
@@ -36,28 +30,16 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    msgpack
-    numpy
-    psutil
-    py-cpuinfo
-    pydantic
     pyyaml
+    py-cpuinfo
+    psutil
     qcelemental
+    pydantic
     pydantic-settings
+    packaging
   ];
 
-  optional-dependencies = {
-    align = [
-      networkx
-      scipy
-    ];
-    viz = [
-      ipykernel
-      nglview
-    ];
-  };
-
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "qcengine" ];
 

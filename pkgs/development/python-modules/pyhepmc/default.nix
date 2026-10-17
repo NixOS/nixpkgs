@@ -5,6 +5,7 @@
   cmake,
   setuptools,
   setuptools-scm,
+  backports-zstd,
   numpy,
   pybind11,
   wheel,
@@ -12,7 +13,7 @@
   graphviz,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyhepmc";
   version = "2.16.1";
   pyproject = true;
@@ -20,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "pyhepmc";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-FMxcebZikZXwgEW3BIlHtDVQPweN8zBku0K8FOmF6vA=";
     fetchSubmodules = true;
   };
@@ -34,7 +35,10 @@ buildPythonPackage rec {
 
   buildInputs = [ pybind11 ];
 
-  propagatedBuildInputs = [ numpy ];
+  dependencies = [
+    backports-zstd
+    numpy
+  ];
 
   dontUseCmakeConfigure = true;
 
@@ -50,8 +54,8 @@ buildPythonPackage rec {
   meta = {
     description = "Easy-to-use Python bindings for HepMC3";
     homepage = "https://github.com/scikit-hep/pyhepmc";
-    changelog = "https://github.com/scikit-hep/pyhepmc/releases/tag/${src.tag}";
+    changelog = "https://github.com/scikit-hep/pyhepmc/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

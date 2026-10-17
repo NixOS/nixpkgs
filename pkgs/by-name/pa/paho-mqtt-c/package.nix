@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.3.16";
 
   src = fetchFromGitHub {
-    owner = "eclipse";
+    owner = "eclipse-paho";
     repo = "paho.mqtt.c";
     tag = "v${finalAttrs.version}";
     hash = "sha256-ETSx3dvGP9Kjf7v8zglnUvMK6nOcgUnryJ5QUVvEgT4=";

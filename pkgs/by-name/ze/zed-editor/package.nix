@@ -3,13 +3,9 @@
   rustPlatform,
   fetchFromGitHub,
   cmake,
-  copyDesktopItems,
-  curl,
-  perl,
   pkg-config,
   protobuf,
   fontconfig,
-  freetype,
   libgit2,
   openssl,
   sqlite,
@@ -19,10 +15,8 @@
   alsa-lib,
   libxkbcommon,
   wayland,
-  libglvnd,
   libxcb,
   stdenv,
-  makeFontsConf,
   vulkan-loader,
   envsubst,
   nix-update-script,
@@ -31,23 +25,19 @@
   buildFHSEnv,
   cargo-bundle,
   git,
-  apple-sdk_15,
-  darwinMinVersionHook,
   makeBinaryWrapper,
   nodejs,
   libGL,
   libx11,
   libxext,
   livekit-libwebrtc,
+  lld,
   testers,
   writableTmpDirAsHomeHook,
+  bubblewrap,
 
-  withGLES ? false,
   buildRemoteServer ? true,
-  zed-editor,
 }:
-
-assert withGLES -> stdenv.hostPlatform.isLinux;
 
 let
   channel = "stable";
@@ -106,12 +96,10 @@ let
         '';
       };
     };
-
-  gpu-lib = if withGLES then libglvnd else vulkan-loader;
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zed-editor";
-  version = "0.231.1";
+  version = "1.24.2";
 
   outputs = [
     "out"
@@ -124,10 +112,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DTJ8+L5JzW0sN7G2ZibeTsPmqOBMw/8IoJ6ZDUU9HWQ=";
+    hash = "sha256-rw3HiLmIRnW0+FXsbzqYDPohTq8yXJroH2Q/6aJoa/E=";
   };
 
   postPatch = ''
+    # Disable upstream's rustflags overrides to avoid linker issues
+    rm .cargo/config.toml
+
     # Dynamically link WebRTC instead of static
     substituteInPlace $cargoDepsCopy/*/webrtc-sys-*/build.rs \
       --replace-fail "cargo:rustc-link-lib=static=webrtc" "cargo:rustc-link-lib=dylib=webrtc"
@@ -144,40 +135,34 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail 'builder.include(&glib_path_config);' 'builder.include("${lib.getLib glib}/lib/glib-2.0/include");'
   '';
 
-  # remove package that has a broken Cargo.toml
-  # see: https://github.com/NixOS/nixpkgs/pull/445924#issuecomment-3334648753
-  depsExtraArgs.postBuild = ''
-    rm -r $out/git/*/candle-book/
-  '';
+  cargoHash = "sha256-RME1H5pDPLUV/qzoNEysolYJho3+jVzonZkjjGmPrfQ=";
 
-  cargoHash = "sha256-vFBkjos+Wa0E1li8t4ZCVnRq7q5XSQQe2fx0QqgaCiM=";
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     cmake
-    copyDesktopItems
-    curl
-    perl
     pkg-config
     protobuf
-    rustPlatform.bindgenHook
     cargo-about
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ makeBinaryWrapper ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ cargo-bundle ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cargo-bundle
+    lld
+    rustPlatform.bindgenHook
+  ];
 
   dontUseCmakeConfigure = true;
 
   buildInputs = [
-    curl
-    fontconfig
-    freetype
     libgit2
-    openssl
     sqlite
     zlib
     zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
+    fontconfig
+    openssl
     glib
     alsa-lib
     libxkbcommon
@@ -189,10 +174,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libxext
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_15
-    # ScreenCaptureKit, required by livekit, is only available on 12.3 and up:
-    # https://developer.apple.com/documentation/screencapturekit
-    (darwinMinVersionHook "12.3")
+    # required by installPhase
+    git
   ];
 
   cargoBuildFlags = [
@@ -215,21 +198,25 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ finalAttrs.buildFeatures;
 
   env = {
+    # Installed binaries are stripped during fixup, so delete.
+    CARGO_PROFILE_RELEASE_DEBUG = "false";
+
     ALLOW_MISSING_LICENSES = true;
+    OPENSSL_NO_VENDOR = true;
+    LIBGIT2_NO_VENDOR = true;
+    LIBSQLITE3_SYS_USE_PKG_CONFIG = true;
     ZSTD_SYS_USE_PKG_CONFIG = true;
-    FONTCONFIG_FILE = makeFontsConf {
-      fontDirectories = [
-        "${finalAttrs.src}/assets/fonts/plex-mono"
-        "${finalAttrs.src}/assets/fonts/plex-sans"
-      ];
-    };
     # Setting this environment variable allows to disable auto-updates
     # https://zed.dev/docs/development/linux#notes-for-packaging-zed
     ZED_UPDATE_EXPLANATION = "Zed has been installed using Nix. Auto-updates have thus been disabled.";
     # Used by `zed --version`
     RELEASE_VERSION = finalAttrs.version;
     LK_CUSTOM_WEBRTC = livekit-libwebrtc;
-    RUSTFLAGS = lib.optionalString withGLES "--cfg gles";
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # Link with lld on Darwin. nixpkgs' classic open-source ld64 fails to insert
+    # ARM64 branch thunks for this binary, producing `b(l) ARM64 branch out of range`.
+    NIX_CFLAGS_LINK = "-fuse-ld=lld";
   };
 
   preBuild = ''
@@ -237,9 +224,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-    patchelf --add-rpath ${gpu-lib}/lib $out/libexec/*
-    patchelf --add-rpath ${wayland}/lib $out/libexec/*
-    wrapProgram $out/libexec/zed-editor --suffix PATH : ${lib.makeBinPath [ nodejs ]}
+    patchelf $out/libexec/zed-editor --add-rpath ${
+      lib.makeLibraryPath [
+        libGL
+        vulkan-loader
+        wayland
+      ]
+    }
+    wrapProgram $out/libexec/zed-editor --suffix PATH : ${
+      lib.makeBinPath [
+        nodejs
+        bubblewrap # required for sandboxing
+      ]
+    }
   '';
 
   nativeCheckInputs = [
@@ -247,6 +244,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   useNextest = true;
+
+  checkFlags = [
+    # GPUI debug selectors are disabled in release builds, so this UI test
+    # cannot look up the footer's bounds.
+    # https://github.com/zed-industries/zed/issues/65611
+    "--skip"
+    "watcher_debug::tests::tabs_separate_rows_and_keep_footer_visible"
+  ];
 
   remoteServerExecutableName = "zed-remote-server-${channel}-${finalAttrs.version}+${channel}";
   installPhase = ''
@@ -259,21 +264,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mv $release_target/zed target/release/zed
 
     pushd crates/zed
-
-    # Note that this is GNU sed, while Zed's bundle-mac uses BSD sed
-    sed -i "s/package.metadata.bundle-stable/package.metadata.bundle/" Cargo.toml
+    # Select the stable bundle and migrate its macOS keys to cargo-bundle 0.12's schema.
+    substituteInPlace Cargo.toml \
+      --replace-fail '[package.metadata.bundle-stable]' '[package.metadata.bundle]' \
+      --replace-fail 'osx_minimum_system_version' 'osx.minimum_system_version' \
+      --replace-fail 'osx_info_plist_exts' 'osx.info_plist_exts' \
+      --replace-fail 'osx_url_schemes' 'osx.url_schemes'
     export CARGO_BUNDLE_SKIP_BUILD=true
-    app_path=$(cargo bundle --release | xargs)
-
-    # We're not using Zed's fork of cargo-bundle, so we must manually append their plist extensions
-    # Remove closing tags from Info.plist (last two lines)
-    head -n -2 $app_path/Contents/Info.plist > Info.plist
-    # Append extensions
-    cat resources/info/*.plist >> Info.plist
-    # Add closing tags
-    printf "</dict>\n</plist>\n" >> Info.plist
-    mv Info.plist $app_path/Contents/Info.plist
-
+    app_path=$(cargo bundle --release --format osx | xargs)
     popd
 
     mkdir -p $out/Applications $out/bin
@@ -290,7 +288,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -Dm755 $release_target/zed $out/libexec/zed-editor
     install -Dm755 $release_target/cli $out/bin/zeditor
 
-    install -Dm644 $src/crates/zed/resources/app-icon@2x.png $out/share/icons/hicolor/1024x1024@2x/apps/zed.png
+    install -Dm644 $src/crates/zed/resources/app-icon@2x.png $out/share/icons/hicolor/512x512@2/apps/zed.png
     install -Dm644 $src/crates/zed/resources/app-icon.png $out/share/icons/hicolor/512x512/apps/zed.png
 
     # extracted from https://github.com/zed-industries/zed/blob/v0.141.2/script/bundle-linux (envsubst)
@@ -342,9 +340,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
         package = finalAttrs.finalPackage.remote_server;
         command = "${finalAttrs.remoteServerExecutableName} version";
       };
-    }
-    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-      withGles = zed-editor.override { withGLES = true; };
     };
   };
 
@@ -356,6 +351,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       GaetanLepage
       niklaskorz
+      mjm
+      schembriaiden
     ];
     mainProgram = "zeditor";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

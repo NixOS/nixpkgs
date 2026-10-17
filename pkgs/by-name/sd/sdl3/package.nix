@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  config,
   alsa-lib,
   cmake,
   dbus,
@@ -40,7 +39,7 @@
   wayland-scanner,
   zenity,
   # for passthru.tests
-  SDL_compat,
+  sdl12-compat,
   sdl2-compat,
   sdl3-image,
   sdl3-ttf,
@@ -54,8 +53,7 @@
   libusbSupport ? stdenv.hostPlatform.isLinux,
   openglSupport ? lib.meta.availableOn stdenv.hostPlatform libGL,
   pipewireSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
-  pulseaudioSupport ?
-    config.pulseaudio or stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
+  pulseaudioSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   sndioSupport ? false,
   traySupport ? true,
   vulkanSupport ? true,
@@ -70,7 +68,7 @@ assert lib.assertMsg (ibusSupport -> dbusSupport) "SDL3 requires dbus support to
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl3";
-  version = "3.4.2";
+  version = "3.4.18";
 
   outputs = [
     "lib"
@@ -83,14 +81,21 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libsdl-org";
     repo = "SDL";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-ev0QiKyj0O6gtk7cK/V0X5Noft0Zo/fMS+oM6emwynE=";
+    hash = "sha256-3dP4FJ5OvZI6UPykJpE3hTH6kdW+Nn7gUSf3yiPCobo=";
   };
 
   postPatch =
-    # Tests timeout on Darwin
     lib.optionalString (finalAttrs.finalPackage.doCheck) ''
+      # Tests timeout on Darwin
       substituteInPlace test/CMakeLists.txt \
         --replace-fail 'set(noninteractive_timeout 10)' 'set(noninteractive_timeout 30)'
+
+      # intermittent test failure
+      # https://github.com/libsdl-org/SDL/issues/15346
+      substituteInPlace test/CMakeLists.txt \
+        --replace-fail \
+        'add_sdl_test_executable(testrwlock SOURCES testrwlock.c NONINTERACTIVE NONINTERACTIVE_TIMEOUT 20)' \
+        'add_sdl_test_executable(testrwlock SOURCES testrwlock.c NONINTERACTIVE NONINTERACTIVE_TIMEOUT 300)'
     ''
     + lib.optionalString waylandSupport ''
       substituteInPlace src/dialog/unix/SDL_zenitymessagebox.c \
@@ -238,11 +243,11 @@ stdenv.mkDerivation (finalAttrs: {
     });
 
     tests =
-      SDL_compat.tests
+      sdl12-compat.tests
       // sdl2-compat.tests
       // {
         inherit
-          SDL_compat
+          sdl12-compat
           sdl2-compat
           sdl3-image
           sdl3-ttf

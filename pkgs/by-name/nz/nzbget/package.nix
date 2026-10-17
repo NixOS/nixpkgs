@@ -9,7 +9,7 @@
   libgcrypt,
   libpar2,
   libcap,
-  libsigcxx,
+  libsigcxx_2_0,
   libxml2,
   ncurses,
   openssl,
@@ -22,23 +22,29 @@ let
   par2TurboSrc = fetchFromGitHub {
     owner = "nzbgetcom";
     repo = "par2cmdline-turbo";
-    rev = "v1.3.0-20250808"; # from cmake/par2-turbo.cmake
-    hash = "sha256-ZP8AI5htmEcxQQtvgShcQ8qNoRL+jBR1BdKS6yyuB/E=";
+    rev = "v1.4.0-20260803"; # from cmake/par2-turbo.cmake
+    hash = "sha256-9fggVR2Zb9NgAuuuW5ayCyEF6kaaD7GIlX1BX6psiK0=";
+  };
+  rapidyencSrc = fetchFromGitHub {
+    owner = "nzbgetcom";
+    repo = "rapidyenc";
+    rev = "v1.1.1-20260821"; # from cmake/rapidyenc.cmake
+    hash = "sha256-17nny4+BlztfMsLX36wzK/5BP6TMniRgnNbLKvDsNcA=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nzbget";
-  version = "26.0";
+  version = "26.3";
 
   src = fetchFromGitHub {
     owner = "nzbgetcom";
     repo = "nzbget";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-IyaTe0bBQKnIuG3wq29KMZjKSiKu3Atd3GsNg8PGhRI=";
+    hash = "sha256-e8uzUjuVH237G/sajpyL2FYpyN0TcXcJQqV2KOjNFTU=";
   };
 
   patches = [
-    # remove git usage for fetching modified+vendored par2cmdline-turbo
+    # remove git usage for fetching modified+vendored par2cmdline-turbo and rapidyenc
     ./remove-git-usage.patch
   ];
 
@@ -53,20 +59,20 @@ stdenv.mkDerivation (finalAttrs: {
     libgcrypt
     libpar2
     libcap
-    libsigcxx
+    libsigcxx_2_0
     libxml2
     ncurses
     openssl
     zlib
   ];
 
-  preConfigure = ''
-    mkdir -p build/par2-turbo/src
-    cp -r ${par2TurboSrc} build/par2-turbo/src/par2-turbo
-    chmod -R u+w build/par2-turbo/src/par2-turbo
-  '';
-
   postPatch = ''
+    substituteInPlace cmake/par2-turbo.cmake \
+      --subst-var-by 'par2_turbo_src' '${par2TurboSrc}' \
+
+    substituteInPlace cmake/rapidyenc.cmake \
+      --subst-var-by 'rapidyenc_src' '${rapidyencSrc}'
+
     substituteInPlace daemon/util/Util.cpp \
       --replace-fail "std::string(\"uname \")" "std::string(\"${lib.getExe deterministic-uname} \")"
   '';

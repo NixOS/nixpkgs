@@ -16,6 +16,7 @@
   fixDarwinDylibNames,
   enableManpages ? false,
   enableClangToolsExtra ? true,
+  extraPatches ? [ ],
   devExtraCmakeFlags ? [ ],
   replaceVars,
   getVersionFile,
@@ -31,12 +32,33 @@ stdenv.mkDerivation (
 
     src =
       if monorepoSrc != null then
-        runCommand "clang-src-${version}" { inherit (monorepoSrc) passthru; } ''
-          mkdir -p "$out"
-          cp -r ${monorepoSrc}/cmake "$out"
-          cp -r ${monorepoSrc}/clang "$out"
-          ${lib.optionalString enableClangToolsExtra "cp -r ${monorepoSrc}/clang-tools-extra \"$out\""}
-        ''
+        runCommand "clang-src-${version}"
+          {
+            inherit (monorepoSrc) passthru;
+            strictDeps = true;
+            __structuredAttrs = true;
+          }
+          (
+            ''
+              mkdir -p "$out"
+              cp -r ${monorepoSrc}/cmake "$out"
+              cp -r ${monorepoSrc}/clang "$out"
+              ${lib.optionalString enableClangToolsExtra "cp -r ${monorepoSrc}/clang-tools-extra \"$out\""}
+            ''
+            + lib.optionalString (lib.versionAtLeast release_version "23" && enableManpages) ''
+              # AddSphinxBuild.cmake sets PYTHONPATH to this roughly $out/clang/../llvm/../utils/docs
+              # The directory has to exist for PYTHONPATH's traversal
+              mkdir -p "$out/llvm"
+
+              # utils/docs contains an internal tooling Python module llvm_sphinx needed for building docs
+              mkdir -p "$out/utils"
+              cp -r ${monorepoSrc}/utils/docs "$out/utils/docs"
+
+              # The docs are referring to a file from mlir/utils/
+              mkdir -p "$out/mlir"
+              cp -r ${monorepoSrc}/mlir/utils "$out/mlir/utils"
+            ''
+          )
       else
         src;
 
@@ -73,7 +95,8 @@ stdenv.mkDerivation (
       ];
       stripLen = 1;
       hash = "sha256-1NKej08R9SPlbDY/5b0OKUsHjX07i9brR84yXiPwi7E=";
-    });
+    })
+    ++ extraPatches;
 
     nativeBuildInputs = [
       cmake
@@ -89,7 +112,10 @@ stdenv.mkDerivation (
     buildInputs = [
       libxml2
       libllvm
+      python3
     ];
+
+    strictDeps = true;
 
     cmakeFlags = [
       (lib.cmakeFeature "CLANG_INSTALL_PACKAGE_DIR" "${placeholder "dev"}/lib/cmake/clang")
@@ -154,13 +180,40 @@ stdenv.mkDerivation (
       moveToOutput "lib/libclang-cpp.*" "$lib"
       mkdir -p $python/bin $python/share/clang/
     ''
-    + ''
-      mv $out/bin/{git-clang-format,scan-view} $python/bin
-      if [ -e $out/bin/set-xcode-analyzer ]; then
-        mv $out/bin/set-xcode-analyzer $python/bin
-      fi
-      mv $out/share/clang/*.py $python/share/clang
-    ''
+    + (
+      # This conditional will be dropped on staging. Doing this to fix ROCm on master without rebuilding Darwin.
+      if lib.hasSuffix "rocm" finalAttrs.version then
+        ''
+          declare -a pythonScripts=(
+            analyze-build
+            git-clang-format
+            hmaptool
+            intercept-build
+            run-clang-tidy
+            scan-build-py
+            scan-view
+            set-xcode-analyzer
+          )
+          for pythonScript in "''${pythonScripts[@]}"; do
+            if [ -e $out/bin/$pythonScript ]; then
+              mv $out/bin/$pythonScript $python/bin
+            fi
+          done
+          mv $out/share/clang/*.py $python/share/clang
+          # Delete the Perl implementation of scan-build. It doesn’t even work when libexec is in a separate output.
+          rm -rf $out/bin/scan-build $lib/libexec
+        ''
+      else
+        ''
+          mv $out/bin/{analyze-build,git-clang-format,hmaptool,intercept-build,run-clang-tidy,scan-build-py,scan-view} $python/bin
+          if [ -e $out/bin/set-xcode-analyzer ]; then
+            mv $out/bin/set-xcode-analyzer $python/bin
+          fi
+          mv $out/share/clang/*.py $python/share/clang
+          # Delete the Perl implementation of scan-build. It doesn’t even work when libexec is in a separate output.
+          rm -rf $out/bin/scan-build $lib/libexec
+        ''
+    )
     + lib.optionalString (lib.versionOlder release_version "22") ''
       rm $out/bin/c-index-test
     ''
@@ -189,6 +242,8 @@ stdenv.mkDerivation (
     passthru = {
       inherit libllvm;
       isClang = true;
+      langC = true;
+      langCC = true;
       hardeningUnsupportedFlagsByTargetPlatform =
         targetPlatform:
         [ "fortify3" ]
@@ -209,6 +264,8 @@ stdenv.mkDerivation (
         enableClangToolsExtra = false;
       };
     };
+
+    __structuredAttrs = true;
 
     requiredSystemFeatures = [ "big-parallel" ];
     meta = llvm_meta // {
@@ -245,6 +302,7 @@ stdenv.mkDerivation (
 
     meta = llvm_meta // {
       description = "man page for Clang ${version}";
+      homepage = "https://github.com/llvm/llvm-project";
     };
   }
 )

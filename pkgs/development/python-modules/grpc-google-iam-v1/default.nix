@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  gitUpdater,
   googleapis-common-protos,
   grpcio,
   pytestCheckHook,
@@ -10,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "grpc-google-iam-v1";
-  version = "3.31.3";
+  version = "0.14.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
-    tag = "google-cloud-build-v${version}";
-    hash = "sha256-qQ+8X6I8lt4OTgbvODsbdab2dYUk0wxWsbaVT2T651U=";
+    tag = "grpc-google-iam-v1-v${version}";
+    hash = "sha256-i2t8qtF2czaP9vgGOUN9AjQ3XhLkk8g05FtXUdk/Vng=";
   };
 
   sourceRoot = "${src.name}/packages/grpc-google-iam-v1";
@@ -41,6 +42,11 @@ buildPythonPackage rec {
   pytestFlags = [
     "-Wignore::DeprecationWarning"
   ];
+
+  passthru = {
+    skipBulkUpdate = true; # chooses tag for a different project
+    updateScript = gitUpdater { rev-prefix = "grpc-google-iam-v1-v"; };
+  };
 
   meta = {
     description = "GRPC library for the google-iam-v1 service";

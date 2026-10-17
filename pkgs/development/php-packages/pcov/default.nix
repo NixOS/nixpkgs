@@ -1,6 +1,7 @@
 {
   buildPecl,
   lib,
+  php,
   pcre2,
   fetchFromGitHub,
   fetchpatch,
@@ -23,6 +24,7 @@ buildPecl {
   buildInputs = [ pcre2 ];
 
   meta = {
+    broken = lib.versionAtLeast php.version "8.6";
     changelog = "https://github.com/krakjoe/pcov/releases/tag/v${version}";
     description = "Self contained php-code-coverage compatible driver for PHP";
     license = lib.licenses.php301;

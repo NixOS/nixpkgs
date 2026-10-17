@@ -16,7 +16,7 @@ buildKodiAddon rec {
     owner = "aanderse";
     repo = namespace;
     rev = "v${version}";
-    sha256 = "sha256-HwPNBqD+zS5sDNXtiGEmoc1RJ1SFCRzVOzUCjunMCnU=";
+    hash = "sha256-HwPNBqD+zS5sDNXtiGEmoc1RJ1SFCRzVOzUCjunMCnU=";
   };
 
   propagatedBuildInputs = [

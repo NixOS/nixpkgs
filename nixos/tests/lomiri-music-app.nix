@@ -135,7 +135,7 @@ in
 
     # Need to wait abit to make sure our test file gets scanned & added to the database.
     # No good feedback on when this is done... Prolly some time after extractor sub-service is started.
-    machine.wait_for_console_text("Successfully activated service 'com.lomiri.MediaScanner2.Extractor'")
+    machine.wait_for_console_text("Started \S*com.lomiri.MediaScanner2.Extractor")
     machine.sleep(10)
 
     with subtest("lomiri music launches"):

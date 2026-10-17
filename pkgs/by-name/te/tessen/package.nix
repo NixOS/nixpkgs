@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "~ayushnix";
     repo = "tessen";
     rev = "v${version}";
-    sha256 = "sha256-mVGsI1JBG7X8J7gqocdfxWuTVSZpxS23QPGHCUofvV8=";
+    hash = "sha256-mVGsI1JBG7X8J7gqocdfxWuTVSZpxS23QPGHCUofvV8=";
   };
 
   nativeBuildInputs = [

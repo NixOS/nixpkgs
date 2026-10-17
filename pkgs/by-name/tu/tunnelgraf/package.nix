@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  fetchPypi,
   python3,
 }:
 
@@ -12,12 +11,18 @@ let
       # Doesn't work with latest paramiko
       paramiko = super.paramiko.overridePythonAttrs (oldAttrs: rec {
         version = "3.4.0";
-        src = fetchPypi {
-          pname = "paramiko";
-          inherit version;
-          hash = "sha256-qsCPJqMdxN/9koIVJ9FoLZnVL572hRloEUqHKPPCdNM=";
+        src = fetchFromGitHub {
+          owner = "paramiko";
+          repo = "paramiko";
+          tag = version;
+          hash = "sha256-V0s9IoRmqXvzYQzzBsWmovYWwXnNC0x1phyiyjbejGA=";
         };
         doCheck = false;
+        meta = oldAttrs.meta // {
+          knownVulnerabilities = [
+            "CVE-2026-44405"
+          ];
+        };
       });
     };
   };

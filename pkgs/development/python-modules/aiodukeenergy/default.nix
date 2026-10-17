@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "aiodukeenergy";
-  version = "1.0.0";
+  version = "1.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hunterjm";
     repo = "aiodukeenergy";
     tag = "v${version}";
-    hash = "sha256-tHtuQFOw9CPqWJ6QzdqcN3W8uzjgZFh5z8DqAc+5jLo=";
+    hash = "sha256-//sxl5eOaO6HIEJzxCSxSQaJu5F0sOItawpF3cNTXm0=";
   };
 
   build-system = [ poetry-core ];

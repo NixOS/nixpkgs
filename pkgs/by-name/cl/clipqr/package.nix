@@ -4,31 +4,37 @@
   fetchFromGitLab,
   lib,
   libGL,
+  libdecor,
+  libgbm,
   libx11,
   libxcursor,
   libxext,
   libxi,
   libxinerama,
+  libxkbcommon,
   libxrandr,
   libxxf86vm,
   makeDesktopItem,
-  libgbm,
+  makeWrapper,
   pkg-config,
-  stdenv,
+  wayland,
+  wl-clipboard,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "clipqr";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitLab {
     owner = "imatt-foss";
     repo = "clipqr";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-iuA6RqclMm1CWaiM1kpOpgfYvKaYGOIwFQkLr/nCL5M=";
+    hash = "sha256-DC6zc1Qe/z7ihuvdawb8bj5MefYGgt7HAV5dWTjeHZc=";
   };
 
-  vendorHash = null;
+  vendorHash = "sha256-MrXMbavff6CEKVbL+Mx8hICYB9sZQcvAhnu2X4sVvVw=";
+
+  tags = [ "wayland" ];
 
   ldflags = [
     "-s"
@@ -37,23 +43,30 @@ buildGoModule (finalAttrs: {
 
   buildInputs = [
     libGL
+    libgbm
     libx11
     libxcursor
     libxext
     libxi
     libxinerama
+    libxkbcommon
     libxrandr
     libxxf86vm
-    libgbm
+    wayland
   ];
 
   nativeBuildInputs = [
     copyDesktopItems
+    makeWrapper
     pkg-config
   ];
 
   postInstall = ''
     install -Dm644 icon.svg $out/share/icons/hicolor/scalable/apps/clipqr.svg
+
+    wrapProgram $out/bin/clipqr \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libdecor ]} \
+      --prefix PATH : ${lib.makeBinPath [ wl-clipboard ]}
   '';
 
   desktopItems = [
@@ -73,7 +86,7 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ MatthieuBarthel ];
     homepage = "https://gitlab.com/imatt-foss/clipqr";
-    broken = stdenv.hostPlatform.isDarwin;
+    platforms = lib.platforms.linux;
     mainProgram = "clipqr";
   };
 })

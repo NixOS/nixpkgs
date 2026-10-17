@@ -1,5 +1,5 @@
 {
-  buildPythonApplication,
+  buildPythonPackage,
   dulwich,
   docutils,
   lib,
@@ -8,14 +8,14 @@
   gnupg,
   pbr,
   pyyaml,
-  setuptools,
+  setuptools_80,
   sphinx,
   stestr,
   testtools,
   testscenarios,
 }:
 
-buildPythonApplication rec {
+buildPythonPackage (finalAttrs: {
   pname = "reno";
   version = "4.1.0";
   pyproject = true;
@@ -23,21 +23,19 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "reno";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-le9JtE0XODlYhTFsrjxFXG/Weshr+FyN4M4S3BMBLUE=";
   };
 
-  env.PBR_VERSION = version;
+  env.PBR_VERSION = finalAttrs.version;
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools_80 ];
 
   dependencies = [
     dulwich
     pbr
     pyyaml
-    setuptools
+    setuptools_80
   ];
 
   nativeCheckInputs = [
@@ -87,4 +85,4 @@ buildPythonApplication rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})

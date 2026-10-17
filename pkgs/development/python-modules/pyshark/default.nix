@@ -1,20 +1,30 @@
 {
   lib,
   stdenv,
-  appdirs,
   buildPythonPackage,
+  pythonAtLeast,
   fetchFromGitHub,
+
+  # patches
   fetchpatch,
+  replaceVars,
+  wireshark-cli,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  appdirs,
   lxml,
   packaging,
-  pytestCheckHook,
-  replaceVars,
-  setuptools,
   termcolor,
-  wireshark-cli,
+
+  # tests
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyshark";
   version = "0.6";
   pyproject = true;
@@ -22,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "KimiNewt";
     repo = "pyshark";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-kzJDzUK6zknUyXPdKc4zMvWim4C5NQCSJSS45HI6hKM=";
   };
 
@@ -44,9 +54,11 @@ buildPythonPackage rec {
     (replaceVars ./hardcode-tshark-path.patch {
       tshark = lib.getExe' wireshark-cli "tshark";
     })
+    # Compat for Python 3.14 asyncio changes
+    ./py314-compat.patch
   ];
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   build-system = [ setuptools ];
 
@@ -59,16 +71,20 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTests = [
     # flaky
     # KeyError: 'Packet of index 0 does not exist in capture'
     "test_getting_packet_summary"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # _pickle.PicklingError: logger cannot be pickled
+    "test_iterate_empty_psml_capture"
+    # configparser.NoSectionError: No section: 'tshark'
+    # Path is mocked, and yet...
+    "test_get_tshark_path"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # fails on darwin
@@ -83,8 +99,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper for tshark, allowing Python packet parsing using Wireshark dissectors";
     homepage = "https://github.com/KimiNewt/pyshark/";
-    changelog = "https://github.com/KimiNewt/pyshark/releases/tag/${version}";
+    changelog = "https://github.com/KimiNewt/pyshark/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

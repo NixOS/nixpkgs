@@ -7,7 +7,6 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 let
@@ -15,25 +14,6 @@ let
   cfg = config.nix;
 
   nixPackage = cfg.package.out;
-
-  makeNixBuildUser = nr: {
-    name = "nixbld${toString nr}";
-    value = {
-      description = "Nix build user ${toString nr}";
-
-      /*
-        For consistency with the setgid(2), setuid(2), and setgroups(2)
-        calls in `libstore/build.cc', don't add any supplementary group
-        here except "nixbld".
-      */
-      uid = builtins.add config.ids.uids.nixbld nr;
-      isSystemUser = true;
-      group = "nixbld";
-      extraGroups = [ "nixbld" ];
-    };
-  };
-
-  nixbldUsers = lib.listToAttrs (map makeNixBuildUser (lib.range 1 cfg.nrBuildUsers));
 
 in
 
@@ -102,9 +82,13 @@ in
         systemd.services.nix-daemon = {
           # Nix assumes it should use `daemon` if it isn't root, so we have to set `NIX_REMOTE` anyway
           environment.NIX_REMOTE = "local?use-roots-daemon=true";
+          # Nix wants a HOME it can access to cache substituter contents, among other things.
+          environment.HOME = "%S/nix-daemon";
           serviceConfig = {
             User = cfg.daemonUser;
             Group = cfg.daemonGroup;
+
+            StateDirectory = "nix-daemon";
 
             # Empty string needed to disable old Exec
             ExecStart = [
@@ -166,21 +150,12 @@ in
 
     nix = {
 
-      enable = lib.mkOption {
+      daemon.enable = lib.mkOption {
         type = lib.types.bool;
-        default = true;
+        default = config.nix.enable;
+        defaultText = lib.literalExpression "config.nix.enable";
         description = ''
-          Whether to enable Nix.
-          Disabling Nix makes the system hard to modify and the Nix programs and configuration will not be made available by NixOS itself.
-        '';
-      };
-
-      package = lib.mkOption {
-        type = lib.types.package;
-        default = pkgs.nix;
-        defaultText = lib.literalExpression "pkgs.nix";
-        description = ''
-          This option specifies the Nix package instance to use throughout the system.
+          Whether to enable the Nix Daemon.
         '';
       };
 
@@ -282,27 +257,20 @@ in
         default = { };
         description = "Environment variables used by Nix.";
       };
-
-      nrBuildUsers = lib.mkOption {
-        type = lib.types.int;
-        description = ''
-          Number of `nixbld` user accounts created to
-          perform secure concurrent builds.  If you receive an error
-          message saying that “all build users are currently in use”,
-          you should increase this value.
-        '';
-      };
     };
   };
 
   ###### implementation
 
-  config = lib.mkIf (cfg.enable && nixPackage.pname != "lix") {
-    environment.systemPackages = [
-      nixPackage
-      pkgs.nix-info
-    ]
-    ++ lib.optional (config.programs.bash.completion.enable) pkgs.nix-bash-completions;
+  config = lib.mkIf (cfg.daemon.enable && nixPackage.pname != "lix") {
+    assertions = [
+      {
+        assertion = cfg.enable;
+        message = ''
+          Enabling the Nix Daemon requires also enabling Nix (config.nix.enable = true).
+        '';
+      }
+    ];
 
     systemd.packages = [ nixPackage ];
 
@@ -371,20 +339,6 @@ in
 
     # Set up the environment variables for running Nix.
     environment.sessionVariables = cfg.envVars;
-
-    nix.nrBuildUsers = lib.mkDefault (
-      if cfg.settings.auto-allocate-uids or false then
-        0
-      else
-        lib.max 32 (if cfg.settings.max-jobs == "auto" then 0 else cfg.settings.max-jobs)
-    );
-
-    users.users = nixbldUsers;
-
-    services.displayManager.hiddenUsers = lib.attrNames nixbldUsers;
-
-    # Legacy configuration conversion.
-    nix.settings.sandbox-fallback = false;
   };
 
 }

@@ -20,13 +20,13 @@
 buildHomeAssistantComponent rec {
   owner = "mampfes";
   domain = "waste_collection_schedule";
-  version = "2.15.0";
+  version = "2.35.0";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "hacs_waste_collection_schedule";
-    tag = version;
-    hash = "sha256-2uOeKB3ivvfsxiwUoGMlT2BFqIdTRKtr84G4QAX0uD0=";
+    tag = "v${version}";
+    hash = "sha256-e3w0RdA7Av1wULMdaxmvaivJfuW/WRTca4/YRqTIh9w=";
   };
 
   dependencies = [
@@ -49,7 +49,7 @@ buildHomeAssistantComponent rec {
   ];
 
   meta = {
-    changelog = "https://github.com/mampfes/hacs_waste_collection_schedule/releases/tag/${version}";
+    changelog = "https://github.com/mampfes/hacs_waste_collection_schedule/releases/tag/${src.tag}";
     description = "Home Assistant integration framework for (garbage collection) schedules";
     homepage = "https://github.com/mampfes/hacs_waste_collection_schedule";
     maintainers = with lib.maintainers; [ jamiemagee ];

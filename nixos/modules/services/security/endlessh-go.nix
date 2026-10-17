@@ -158,5 +158,5 @@ in
     networking.firewall.allowedTCPPorts = with cfg; lib.optionals openFirewall [ port ];
   };
 
-  meta.maintainers = with lib.maintainers; [ azahi ];
+  meta.maintainers = [ ];
 }

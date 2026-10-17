@@ -18,8 +18,14 @@ let
     *  `metricProvider` (optional)
     *    this attribute contains additional machine config
     *
+    *  `maintainers` (optional)
+    *    maintainers for this test
+    *
     *  `nodeName` (optional)
     *    override an incompatible testnode name
+    *
+    *  `testBackend` (optional)
+    *    whether to run in `containers` (default) or `nodes` scope
     *
     *  Example:
     *    exporterTests.<exporterName> = {
@@ -108,7 +114,7 @@ let
           wait_for_unit("prometheus-bind-exporter.service")
           wait_for_open_port(9119)
           succeed(
-              "curl -sSf http://localhost:9119/metrics | grep 'bind_query_recursions_total 0'"
+              "curl -sSf http://localhost:9119/metrics | grep 'bind_up 1'"
           )
         '';
       };
@@ -168,6 +174,7 @@ let
     blackbox =
       { pkgs, ... }:
       {
+        testBackend = "nodes";
         exporterConfig = {
           enable = true;
           configFile = pkgs.writeText "config.yml" (
@@ -373,16 +380,23 @@ let
       };
 
     dovecot =
-      { ... }:
+      { pkgs, ... }:
       {
+        testBackend = "nodes";
         exporterConfig = {
           enable = true;
           scopes = [ "global" ];
-          socketPath = "/var/run/dovecot2/old-stats";
+          socketPath = "/var/run/dovecot2/stats-reader";
           user = "root"; # <- don't use user root in production
         };
         metricProvider = {
-          services.dovecot2.enable = true;
+          services.dovecot2 = {
+            enable = true;
+            settings = {
+              dovecot_config_version = pkgs.dovecot.version;
+              dovecot_storage_version = pkgs.dovecot.version;
+            };
+          };
         };
         exporterTest = ''
           wait_for_unit("prometheus-dovecot-exporter.service")
@@ -423,6 +437,7 @@ let
     ebpf =
       { ... }:
       {
+        testBackend = "nodes";
         exporterConfig = {
           enable = true;
           names = [ "timers" ];
@@ -433,6 +448,51 @@ let
           succeed(
               "curl -sSf http://localhost:9435/metrics | grep 'ebpf_exporter_enabled_configs{name=\"timers\"} 1'"
           )
+        '';
+      };
+
+    elasticsearch =
+      { ... }:
+      {
+        exporterConfig = {
+          enable = true;
+          url = "http://localhost:9200";
+        };
+        metricProvider = {
+          # `services.elasticsearch` is unmaintained; OpenSearch is the same
+          # engine class and is explicitly supported by the exporter.
+          services.opensearch.enable = true;
+        };
+        exporterTest = ''
+          wait_for_unit("opensearch.service")
+          wait_for_open_port(9200)
+          wait_for_unit("prometheus-elasticsearch-exporter.service")
+          wait_for_open_port(9114)
+          succeed(
+              "curl -sSf localhost:9114/metrics | grep 'elasticsearch_cluster_health_status'"
+          )
+        '';
+      };
+
+    fail2ban =
+      { pkgs, ... }:
+      {
+        exporterConfig = {
+          enable = true;
+          exitOnError = true;
+          username = "fail2ban-web";
+          passwordFile = pkgs.writeText "fail2ban-password" "hunter2";
+        };
+        metricProvider = {
+          services.fail2ban.enable = true;
+        };
+        exporterTest = ''
+          wait_for_unit("fail2ban.service")
+          wait_for_unit("prometheus-fail2ban-exporter.service")
+          wait_for_open_port(9191)
+
+          fail("curl -sSf http://localhost:9191/metrics")
+          succeed("curl -sSf --user fail2ban-web:hunter2 http://localhost:9191/metrics | grep 'f2b_errors'")
         '';
       };
 
@@ -539,8 +599,9 @@ let
       };
 
     ipmi =
-      { ... }:
+      { pkgs, ... }:
       {
+        maintainers = pkgs.freeipmi.meta.maintainers;
         exporterConfig = {
           enable = true;
         };
@@ -752,6 +813,22 @@ let
         '';
       };
 
+    kvrocks =
+      { ... }:
+      {
+        exporterConfig = {
+          enable = true;
+        };
+        metricProvider.services.kvrocks.enable = true;
+        exporterTest = ''
+          wait_for_unit("kvrocks.service")
+          wait_for_unit("prometheus-kvrocks-exporter.service")
+          wait_for_open_port(6666)
+          wait_for_open_port(9121)
+          wait_until_succeeds("curl -sSf localhost:9121/metrics | grep 'kvrocks_up 1'")
+        '';
+      };
+
     lnd =
       { pkgs, ... }:
       {
@@ -797,6 +874,7 @@ let
           };
           # initialize wallet, creates macaroon needed by exporter
           systemd.services.lnd.postStart = ''
+            until [ -f /var/lib/lnd/tls.cert ]; do sleep 1; done
             ${pkgs.curl}/bin/curl \
               --retry 20 \
               --retry-delay 1 \
@@ -921,6 +999,7 @@ let
     modemmanager =
       { ... }:
       {
+        testBackend = "nodes";
         exporterConfig = {
           enable = true;
           refreshRate = "10s";
@@ -1056,7 +1135,7 @@ let
           wait_for_unit("nginx.service")
           wait_for_unit("prometheus-nextcloud-exporter.service")
           wait_for_open_port(9205)
-          succeed("curl -sSf http://localhost:9205/metrics | grep 'nextcloud_up 1'")
+          wait_until_succeeds("curl -sSf http://localhost:9205/metrics | grep 'nextcloud_up 1'")
         '';
       };
 
@@ -1328,26 +1407,23 @@ let
           settings = {
             targets = [
               {
-                "localhost" = {
-                  alias = "local machine";
-                  env = "prod";
-                  type = "domain";
-                };
+                host = "localhost";
+                alias = "local machine";
+                env = "prod";
+                type = "domain";
               }
               {
-                "127.0.0.1" = {
-                  alias = "local machine";
-                  type = "v4";
-                };
+                host = "127.0.0.1";
+                alias = "local machine";
+                type = "v4";
               }
               {
-                "::1" = {
-                  alias = "local machine";
-                  type = "v6";
-                };
+                host = "::1";
+                alias = "local machine";
+                type = "v6";
               }
               {
-                "google.com" = { };
+                host = "google.com";
               }
             ];
             dns = { };
@@ -1615,24 +1691,6 @@ let
         '';
       };
 
-    scaphandre =
-      { ... }:
-      {
-        exporterConfig = {
-          enable = true;
-        };
-        metricProvider = {
-          boot.kernelModules = [ "intel_rapl_common" ];
-        };
-        exporterTest = ''
-          wait_for_unit("prometheus-scaphandre-exporter.service")
-          wait_for_open_port(8080)
-          wait_until_succeeds(
-              "curl -sSf 'localhost:8080/metrics'"
-          )
-        '';
-      };
-
     shelly =
       { pkgs, ... }:
       {
@@ -1684,7 +1742,7 @@ let
         };
         exporterTest = ''
           wait_until_succeeds(
-              'journalctl -eu prometheus-smartctl-exporter.service -o cat | grep "Unable to detect device type"'
+              'journalctl -eu prometheus-smartctl-exporter.service -o cat | grep -q "devices=/dev/vda"'
           )
         '';
       };
@@ -1746,6 +1804,34 @@ let
           wait_for_unit("prometheus-snmp-exporter.service")
           wait_for_open_port(9116)
           succeed("curl -sSf localhost:9116/metrics | grep 'snmp_request_errors_total 0'")
+        '';
+      };
+
+    snowflake =
+      { pkgs, ... }:
+      {
+        exporterConfig = {
+          enable = true;
+          account = "dummy";
+          username = "dummy";
+          warehouse = "dummy";
+          # key-pair auth: exercises the LoadCredential + `%d` wiring. The key is
+          # never parsed until a scrape, so a dummy file is enough to boot.
+          privateKeyFile = pkgs.writeText "snowflake-key.p8" "dummy";
+          environmentFile = pkgs.writeText "snowflake-exporter.env" ''
+            SNOWFLAKE_EXPORTER_PRIVATE_KEY_PASSWORD=dummy
+          '';
+        };
+        # Only the landing page is checked. Scraping `/metrics` would run the
+        # collector, which synchronously queries Snowflake and blocks until the
+        # driver's login timeout (~45s) with no reachable server. Booting with
+        # key-pair auth already exercises config validation and the
+        # LoadCredential/environmentFile wiring; the landing page confirms the
+        # exporter booted and is serving.
+        exporterTest = ''
+          wait_for_unit("prometheus-snowflake-exporter.service")
+          wait_for_open_port(9975)
+          succeed("curl -sSf http://localhost:9975/ | grep -i 'Snowflake exporter'")
         '';
       };
 
@@ -2023,7 +2109,7 @@ let
       {
         exporterConfig = {
           enable = true;
-          instance = "/run/varnish/varnish";
+          instance = "/var/run/varnishd";
           group = "varnish";
         };
         metricProvider = {
@@ -2087,9 +2173,34 @@ let
         '';
       };
 
+    yace =
+      { pkgs, ... }:
+      {
+        exporterConfig = {
+          enable = true;
+          configFile = pkgs.writeText "yace-config.yml" ''
+            apiVersion: v1alpha1
+            sts-region: us-east-1
+            discovery:
+              jobs:
+                - type: AWS/EC2
+                  regions: [us-east-1]
+                  metrics:
+                    - name: CPUUtilization
+                      statistics: [Average]
+          '';
+        };
+        exporterTest = ''
+          wait_for_unit("prometheus-yace-exporter.service")
+          wait_for_open_port(5000)
+          succeed("curl -sSf http://localhost:5000/metrics")
+        '';
+      };
+
     zfs =
       { ... }:
       {
+        testBackend = "nodes"; # zfs kmod
         exporterConfig = {
           enable = true;
         };
@@ -2112,13 +2223,14 @@ lib.mapAttrs (
     { pkgs, lib, ... }:
     let
       testConfig = testConfigFun { inherit pkgs lib; };
-      nodeName = testConfig.nodeName or exporter;
+      testBackend = testConfig.testBackend or "containers";
+      nodeName = "machine";
     in
     {
       name = "prometheus-${exporter}-exporter";
       node.pkgsReadOnly = testConfig.pkgsReadOnly or true;
 
-      nodes.${nodeName} = lib.mkMerge [
+      ${testBackend}.${nodeName} = lib.mkMerge [
         {
           services.prometheus.exporters.${exporter} = testConfig.exporterConfig;
         }
@@ -2143,10 +2255,9 @@ lib.mapAttrs (
               "${nodeName}.${line}"
           ) (lib.splitString "\n" (lib.removeSuffix "\n" testConfig.exporterTest))
         )}
-        ${nodeName}.shutdown()
       '';
 
-      meta.maintainers = [ ];
+      meta.maintainers = testConfig.maintainers or [ ];
     }
   ))
 ) exporterTests

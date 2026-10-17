@@ -9,6 +9,7 @@
   gettext,
   help2man,
   pkg-config,
+  python3,
   python3Packages,
   cppunit,
   fmt,
@@ -19,12 +20,14 @@
   libsolv,
   libxml2,
   libyaml,
+  libpkgmanifest,
+  acl,
   pcre2,
   rpm,
   sdbus-cpp_2,
   sphinx,
   sqlite,
-  systemd,
+  systemdLibs,
   versionCheckHook,
   toml11,
   zchunk,
@@ -33,7 +36,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dnf5";
-  version = "5.2.18.0";
+  version = "5.4.6.0";
 
   outputs = [
     "out"
@@ -44,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rpm-software-management";
     repo = "dnf5";
     tag = finalAttrs.version;
-    hash = "sha256-VTuGHHNNdoDfbJ86GOR4a+Fy2s+NSXPH337+AZpLKuo=";
+    hash = "sha256-7TWCPX7WmGWcDZ3wNaVnwIB5IDyeSzyjuPNAN3ecpdM=";
   };
 
   nativeBuildInputs = [
@@ -58,7 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ (with python3Packages; [
     breathe
-    sphinx-autoapi
     sphinx-rtd-theme
   ]);
 
@@ -71,13 +73,15 @@ stdenv.mkDerivation (finalAttrs: {
     librepo
     util-linux
     libsolv
+    libpkgmanifest
+    acl
     libxml2
     libyaml
     pcre2.dev
     rpm
     sdbus-cpp_2
     sqlite
-    systemd
+    systemdLibs
     toml11
     zchunk
   ];
@@ -86,16 +90,19 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = "-Wno-restrict -Wno-maybe-uninitialized";
 
   cmakeFlags = [
-    "-DWITH_PERL5=OFF"
-    "-DWITH_PYTHON3=OFF"
-    "-DWITH_RUBY=OFF"
-    "-DWITH_SYSTEMD=OFF"
-    "-DWITH_PLUGIN_RHSM=OFF" # Red Hat Subscription Manager plugin
+    (lib.cmakeBool "WITH_PERL5" false)
+    (lib.cmakeBool "WITH_PYTHON3" false)
+    (lib.cmakeBool "WITH_RUBY" false)
+    (lib.cmakeBool "WITH_SYSTEMD" false)
+    (lib.cmakeBool "WITH_PLUGIN_RHSM" false) # Red Hat Subscription Manager plugin
+    # doc/atp.py preprocesses manpages, but upstream only runs
+    # find_package(Python3) from targets gated on WITH_PYTHON3.
+    (lib.cmakeFeature "Python3_EXECUTABLE" (lib.getExe python3))
     # the cmake package does not handle absolute CMAKE_INSTALL_INCLUDEDIR correctly
     # (setting it to an absolute path causes include files to go to $out/$out/include,
     #  because the absolute path is interpreted with root at $out).
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
+    (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
   ];
 
   postBuild = ''
@@ -103,6 +110,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   prePatch = ''
+    # autoapi needs the swig-generated python bindings (WITH_PYTHON3),
+    # it is only used for the python API docs, not for the man pages.
+    substituteInPlace doc/conf.py.in \
+      --replace-fail "'autoapi.extension'," ""
     substituteInPlace CMakeLists.txt \
       --replace-fail "/usr/lib/systemd/system" "$out/lib/systemd/system"
     substituteInPlace dnf5daemon-server/dbus/CMakeLists.txt \

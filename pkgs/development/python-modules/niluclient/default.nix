@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "11ymn0cr4lchrcnf2xxlgljw223gwln01gxwr7mcgf95yc4006iq";
+    hash = "sha256-OBoACPMlucfqyby/ACzlbwjBJX20d+Esy5BRkhmw1Yc=";
   };
 
   propagatedBuildInputs = [ requests ];
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python client for getting air pollution data from NILU sensor stations";
     homepage = "https://github.com/hfurubotten/niluclient";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

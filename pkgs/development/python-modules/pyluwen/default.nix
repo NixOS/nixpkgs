@@ -1,30 +1,31 @@
 {
   lib,
   buildPythonPackage,
-  runCommand,
   fetchFromGitHub,
   rustPlatform,
+
   maturin,
   protobuf_30,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyluwen";
-  version = "0.7.11";
+  version = "0.10.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tenstorrent";
     repo = "luwen";
-    tag = "v${version}";
-    hash = "sha256-eQpKEeuy0mVrmu8ssAOWBcXi7zutStu+RbZOEF/IJ98=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-J0SvCBsDi3GMvnwqgqGMUDvrSO+baznDhsfuvF44Ens=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    hash = "sha256-INzF8ORkrmPQMJbGSNm5QkfMOgE+HJ3taU1EZ9i+HJg=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-vEuVxBGIJAyc8POy3EPTzTK5g5SE3QDZcnTnAb3b5k0=";
   };
 
-  sourceRoot = "${src.name}/crates/${pname}";
+  sourceRoot = "${finalAttrs.src.name}/bind/pyluwen";
 
   prePatch = ''
     chmod -R u+w ../../
@@ -34,8 +35,17 @@ buildPythonPackage rec {
   postPatch = ''
     cd ../$sourceRoot
     cp --no-preserve=ownership,mode ../../Cargo.lock .
-    sed -i '0,/version = /{s/version = "*.*.*"/version = "${version}"/g}' Cargo.toml
+    sed -i '0,/version = /{s/version = "*.*.*"/version = "${finalAttrs.version}"/g}' Cargo.toml
   '';
+
+  # pyo3 0.19.2 predates CPython 3.13 the stable ABI avoids a segfault
+  # https://github.com/tenstorrent/luwen/blob/v0.10.0/bind/pyluwen/Cargo.toml#L27
+  maturinBuildFlags = [
+    "--features"
+    "abi3-py311"
+  ];
+
+  env.PYO3_USE_ABI3_FORWARD_COMPATIBILITY = "1";
 
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
@@ -45,10 +55,13 @@ buildPythonPackage rec {
 
   build-system = [ maturin ];
 
+  pythonImportsCheck = [ "pyluwen" ];
+
   meta = {
     description = "Tenstorrent system interface library";
     homepage = "https://github.com/tenstorrent/luwen";
+    changelog = "https://github.com/tenstorrent/luwen/releases/tag/${finalAttrs.src.tag}";
     maintainers = with lib.maintainers; [ RossComputerGuy ];
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
   };
-}
+})

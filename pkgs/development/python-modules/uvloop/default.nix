@@ -3,11 +3,10 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   # build-system
   cython,
-  setuptools,
+  setuptools_80,
 
   # native dependencies
   libuv,
@@ -39,7 +38,7 @@ buildPythonPackage rec {
 
   build-system = [
     cython
-    setuptools
+    setuptools_80
   ];
 
   env.LIBUV_CONFIGURE_HOST = stdenv.hostPlatform.config;
@@ -61,6 +60,9 @@ buildPythonPackage rec {
     # AssertionError: b'' != b'out\n'
     "tests/test_process.py::Test_UV_Process::test_process_streams_redirect"
     "tests/test_process.py::Test_AIO_Process::test_process_streams_redirect"
+    # libuv >= 1.53 spawns via posix_spawn, so preexec_fn never runs in the child
+    "tests/test_process.py::Test_UV_Process::test_process_preexec_fn_1"
+    "tests/test_process.py::Test_UV_Process::test_process_preexec_fn_2"
     # Depends on performance of builder
     "tests/test_base.py::TestBaseUV.test_call_at"
     # Pointless and flaky (at least on darwin, depending on the sandbox perhaps)
@@ -73,11 +75,18 @@ buildPythonPackage rec {
     # https://github.com/MagicStack/uvloop/issues/709
     "tests/test_process.py::TestAsyncio_AIO_Process::test_cancel_post_init"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Segmentation fault
     "tests/test_fs_event.py::Test_UV_FS_EVENT_RENAME::test_fs_event_rename"
     # Broken: https://github.com/NixOS/nixpkgs/issues/160904
     "tests/test_context.py::Test_UV_Context::test_create_ssl_server_manual_connection_lost"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isRiscV64 [
+    # SSL record layer failures & ConnectionResetError
+    "tests/test_tcp.py::Test_AIO_TCPSSL"
+    "tests/test_tcp.py::Test_UV_TCPSSL"
+    "tests/test_unix.py::Test_AIO_UnixSSL"
+    "tests/test_unix.py::Test_UV_UnixSSL"
   ];
 
   preCheck = ''

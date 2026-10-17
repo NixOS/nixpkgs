@@ -79,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Recharge the robot";
+    homepage = "https://github.com/Stabyourself/orthorobot";
     mainProgram = "orthorobot";
     platforms = love.meta.platforms;
     license = lib.licenses.wtfpl;

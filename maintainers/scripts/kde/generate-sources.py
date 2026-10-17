@@ -37,6 +37,7 @@ PROJECTS_WITH_RUST = {
     "akonadi-search",
     "angelfish",
     "kdepim-addons",
+    "kdeplasma-addons",
 }
 
 def to_sri(hash):
@@ -156,15 +157,17 @@ def main(pkgset: str, version: str, nixpkgs: pathlib.Path, sources_url: str | No
         json.dump(results, fd, indent=2)
 
     for project_name in projects_to_update_rust:
-            print(f"Updating cargoDeps hash for {pkgset}/{project_name}...")
-            subprocess.run([
-                "nix-update",
-                f"kdePackages.{project_name}",
-                "--version",
-                "skip",
-                "--override-filename",
-                pkg_file
-            ])
+        print(f"Updating cargoDeps hash for {pkgset}/{project_name}...")
+        pkg_dir = set_dir / project_name
+        pkg_file = pkg_dir / "default.nix"
+        subprocess.run([
+            "nix-update",
+            f"kdePackages.{project_name}",
+            "--version",
+            "skip",
+            "--override-filename",
+            pkg_file
+        ])
 
 
 if __name__ == "__main__":

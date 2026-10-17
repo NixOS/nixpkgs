@@ -14,10 +14,14 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "amiloradovsky";
     repo = "magnify";
     rev = finalAttrs.version;
-    sha256 = "1ngnp5f5zl3v35vhbdyjpymy6mwrs0476fm5nd7dzkba7n841jdh";
+    hash = "sha256-sMlAkD1qzd9Os6U6cwjQmVfjq7/StwV3GXvQX1y59tk=";
   };
 
-  prePatch = "substituteInPlace ./Makefile --replace /usr $out";
+  prePatch = ''
+    substituteInPlace Makefile --replace-fail /usr $out
+    # gcc15
+    substituteInPlace main.c --replace-fail 'handler ()' 'handler (int sig)'
+  '';
 
   buildInputs = [
     libx11

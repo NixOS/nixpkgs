@@ -327,6 +327,8 @@ let
               $rbConfig $out/lib/libruby*
           '';
 
+          # TODO: this check got relaxed on darwin;
+          # see https://github.com/NixOS/nixpkgs/pull/499156#issuecomment-4221517043
           installCheckPhase = ''
             overriden_cc=$(CC=foo $out/bin/ruby -rrbconfig -e 'puts RbConfig::CONFIG["CC"]')
             if [[ "$overriden_cc" != "foo" ]]; then
@@ -335,7 +337,9 @@ let
             fi
 
             fallback_cc=$(unset CC; $out/bin/ruby -rrbconfig -e 'puts RbConfig::CONFIG["CC"]')
-            if [[ "$fallback_cc" != "$CC" ]]; then
+            if [[ ${
+              if stdenv.hostPlatform.isDarwin then ''! "$fallback_cc" =~ "$CC"'' else ''"$fallback_cc" != "$CC"''
+            } ]]; then
                echo "CC='$fallback_cc' should be '$CC' by default" >&2
                false
             fi
@@ -395,20 +399,20 @@ in
   mkRuby = generic;
 
   ruby_3_3 = generic {
-    version = rubyVersion "3" "3" "10" "";
-    hash = "sha256-tVW6pGejBs/I5sbtJNDSeyfpob7R2R2VUJhZ6saw6Sg=";
+    version = rubyVersion "3" "3" "12" "";
+    hash = "sha256-sG1jvq4nGTMDPifwo4m8WCoAnnhFNX1ENlw53lJaBRs=";
     cargoHash = "sha256-xE7Cv+NVmOHOlXa/Mg72CTSaZRb72lOja98JBvxPvSs=";
   };
 
   ruby_3_4 = generic {
-    version = rubyVersion "3" "4" "8" "";
-    hash = "sha256-U8TdrUH7thifH17g21elHVS9H4f4dVs9aGBBVqNbBFs=";
+    version = rubyVersion "3" "4" "11" "";
+    hash = "sha256-XCK+RFJDErPUM9aHObzFMGM7HaXvi6CvoKN2gNoX094=";
     cargoHash = "sha256-5Tp8Kth0yO89/LIcU8K01z6DdZRr8MAA0DPKqDEjIt0=";
   };
 
   ruby_4_0 = generic {
-    version = rubyVersion "4" "0" "2" "";
-    hash = "sha256-UVArJrULaN9JYzNspB42jN6SySj6+RZU3kxMF5H4Kqw=";
+    version = rubyVersion "4" "0" "7" "";
+    hash = "sha256-kRrOIPkNBoyg5N2m0OTw+B5S5S8t1PQATHIeJTQS6C0=";
     cargoHash = "sha256-z7NwWc4TaR042hNx0xgRkh/BQEpEJtE53cfrN0qNiE0=";
   };
 

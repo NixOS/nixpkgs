@@ -19,6 +19,10 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "catdvi";
   version = "0.14";
+
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchurl {
     url = with finalAttrs; "http://downloads.sourceforge.net/catdvi/catdvi-${version}.tar.bz2";
     hash = "sha256-orVQVdQuRXp//OGkA7xRidNi4+J+tkw398LPZ+HX+k8=";
@@ -51,13 +55,9 @@ stdenv.mkDerivation (finalAttrs: {
     '') buildPlatformTools
   );
 
-  nativeBuildInputs = [
-    texlive.bin.core
-    texlive.bin.core.dev
-  ];
-
   buildInputs = [
     tex
+    texlive.bin.core
   ];
 
   makeFlags = [

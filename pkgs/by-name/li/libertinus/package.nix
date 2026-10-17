@@ -2,27 +2,31 @@
   lib,
   stdenvNoCC,
   fetchurl,
+  installFonts,
   zstd,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "libertinus";
   version = "7.051";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchurl {
-    url = "https://github.com/alerque/libertinus/releases/download/v${version}/Libertinus-${version}.tar.zst";
+    url = "https://github.com/alerque/libertinus/releases/download/v${finalAttrs.version}/Libertinus-${finalAttrs.version}.tar.zst";
     hash = "sha256-JQZ3ySnTd1owkTZDWUN5ryZKwu8oAQNaody+MLm+I6Y=";
   };
 
-  nativeBuildInputs = [ zstd ];
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
-  installPhase = ''
-    runHook preInstall
-
-    install -m644 -Dt $out/share/fonts/opentype static/OTF/*.otf
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [
+    installFonts
+    zstd
+  ];
 
   meta = {
     description = "Libertinus font family";
@@ -37,4 +41,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ siddharthist ];
     platforms = lib.platforms.all;
   };
-}
+})

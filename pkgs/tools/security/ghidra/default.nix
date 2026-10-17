@@ -7,37 +7,26 @@
   openjdk21,
   pam,
   makeDesktopItem,
+  copyDesktopItems,
   icoutils,
 }:
 
 let
-
   pkg_path = "$out/lib/ghidra";
-
-  desktopItem = makeDesktopItem {
-    name = "ghidra";
-    exec = "ghidra";
-    icon = "ghidra";
-    desktopName = "Ghidra";
-    genericName = "Ghidra Software Reverse Engineering Suite";
-    categories = [ "Development" ];
-    terminal = false;
-    startupWMClass = "ghidra-Ghidra";
-  };
-
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ghidra";
-  version = "12.0.4";
-  versiondate = "20260303";
+  version = "12.1.4";
+  versiondate = "20260921";
   src = fetchzip {
-    url = "https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_${version}_build/ghidra_${version}_PUBLIC_${versiondate}.zip";
-    hash = "sha256-O+Y1k1fRVTZVJMBA62gyqWw0KZOwrBqqRC3dlhQHbhY=";
+    url = "https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_${finalAttrs.version}_build/ghidra_${finalAttrs.version}_PUBLIC_${finalAttrs.versiondate}.zip";
+    hash = "sha256-ZD4Vs1i7BMvrneAbAiOc7F9iBj64Rbom+PaVO//TzK8=";
   };
 
   nativeBuildInputs = [
     makeWrapper
     icoutils
+    copyDesktopItems
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
@@ -48,11 +37,24 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "ghidra";
+      exec = "ghidra";
+      icon = "ghidra";
+      desktopName = "Ghidra";
+      genericName = "Ghidra Software Reverse Engineering Suite";
+      categories = [ "Development" ];
+      terminal = false;
+      startupWMClass = "ghidra-Ghidra";
+    })
+  ];
+
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "${pkg_path}"
-    mkdir -p "${pkg_path}" "$out/share/applications"
     cp -a * "${pkg_path}"
-    ln -s ${desktopItem}/share/applications/* $out/share/applications
 
     icotool -x "${pkg_path}/support/ghidra.ico"
     rm ghidra_4_40x40x32.png
@@ -61,6 +63,8 @@ stdenv.mkDerivation rec {
       mkdir -pv "$out/share/icons/hicolor/$res/apps"
       mv "$f" "$out/share/icons/hicolor/$res/apps/ghidra.png"
     done;
+
+    runHook postInstall
   '';
 
   postFixup = ''
@@ -79,7 +83,6 @@ stdenv.mkDerivation rec {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
@@ -87,8 +90,9 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       ck3d
       govanify
+      tbaldwin
       mic92
     ];
   };
 
-}
+})

@@ -1,84 +1,113 @@
 {
   lib,
-  python312Packages,
+  stdenv,
+  python3Packages,
   fetchFromGitHub,
 
-  chromaprint,
   gettext,
-  qt5,
+  qt6,
+  wrapGAppsHook3,
 
-  enablePlayback ? true,
   gst_all_1,
+  chromaprint,
+
+  writableTmpDirAsHomeHook,
+  nix-update-script,
 }:
 
-let
-  pythonPackages = python312Packages;
-  pyqt5 = if enablePlayback then pythonPackages.pyqt5-multimedia else pythonPackages.pyqt5;
-in
-pythonPackages.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "picard";
-  # nix-update --commit picard --version-regex 'release-(.*)'
-  version = "2.13.3";
-  format = "setuptools";
+  version = "3.0.2";
+  pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "metabrainz";
     repo = "picard";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-Q0W5Q1+PbN+yneh98jx0/UNHVfD6okX92hxNzCE+Ibc=";
+    hash = "sha256-Br7mBWB16jv6p7VoYipCa2TXTQabx9oV8DaS5gxIxzg=";
   };
 
   nativeBuildInputs = [
     gettext
-    qt5.wrapQtAppsHook
-    pythonPackages.pytestCheckHook
-  ]
-  ++ lib.optionals (pyqt5.multimediaEnabled) [
-    gst_all_1.gst-libav
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-vaapi
-    gst_all_1.gstreamer
+    qt6.wrapQtAppsHook
+    python3Packages.setuptools
+    wrapGAppsHook3
   ];
 
   buildInputs = [
-    qt5.qtbase
-    qt5.qtwayland
+    qt6.qtbase
+    qt6.qtmultimedia
+    gst_all_1.gst-libav
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
   ]
-  ++ lib.optionals (pyqt5.multimediaEnabled) [
-    qt5.qtmultimedia.bin
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform qt6.qtwayland) [
+    qt6.qtwayland
   ];
 
-  propagatedBuildInputs = with pythonPackages; [
-    chromaprint
-    discid
-    fasteners
-    markdown
-    mutagen
-    pyjwt
-    pyqt5
-    python-dateutil
-    pyyaml
+  dependencies = [
+    chromaprint # Not strictly required, but added for fpcalc in the wrapper
+  ]
+  ++ (
+    with python3Packages;
+    [
+      charset-normalizer
+      discid
+      markdown
+      mutagen
+      pyjwt
+      pyqt6
+      pygit2
+      pyyaml
+      tomlkit
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      pyobjc-core
+      pyobjc-framework-Cocoa
+      pyobjc-framework-MediaPlayer
+    ]
+  );
+
+  # Not reporting any of these issues upstream since they are all caused by
+  # the restricted darwin build sandbox (no real $HOME, no access to
+  # /var/empty/Library, no SetFile utility), not by picard itself.
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    "_macos"
+    "TestListenQueue"
   ];
 
-  setupPyGlobalFlags = [
-    "build"
-    "--disable-autoupdate"
-    "--localedir=${placeholder "out"}/share/locale"
+  nativeCheckInputs = [
+    python3Packages.pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
   doCheck = true;
 
+  env = {
+    # pygit2 needs this to initialize its TLS settings, otherwise importing
+    # it fails during the tests; also baked into the wrapper below for
+    # runtime, and for versionCheckHook.
+    inherit (python3Packages.pygit2) SSL_CERT_FILE;
+  };
+
   # In order to spare double wrapping, we use:
+  dontWrapGApps = true;
+  dontWrapQt = true;
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   ''
-  + lib.optionalString (pyqt5.multimediaEnabled) ''
+  + lib.optionalString (lib.meta.availableOn stdenv.hostPlatform qt6.qtwayland) ''
     makeWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "release-(.*)"
+    ];
+  };
 
   meta = {
     homepage = "https://picard.musicbrainz.org";

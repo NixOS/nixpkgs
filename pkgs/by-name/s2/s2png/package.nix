@@ -1,38 +1,32 @@
 {
   lib,
-  stdenv,
+  rustPlatform,
   fetchFromGitHub,
-  diffutils,
-  gd,
-  pkg-config,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "s2png";
-  version = "0.7.2";
+  version = "1.0.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "dbohdan";
     repo = "s2png";
     rev = "v${finalAttrs.version}";
-    sha256 = "0y3crfm0jqprgxamlly713cka2x1bp6z63p1lw9wh4wc37kpira6";
+    sha256 = "sha256-BRVubGy5GpP0zhJ26DXBwlqflfZTnLVfhQk5qFj29x4=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    diffutils
-    gd
-  ];
-  installFlags = [
-    "prefix="
-    "DESTDIR=$(out)"
-  ];
+  cargoHash = "sha256-aka4q3Wh0s1iaIUJkPuL/2FnJH5KdbpOOWLIAWirBFk=";
 
   meta = {
     homepage = "https://github.com/dbohdan/s2png/";
     description = "Store any data in PNG images";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.dbohdan ];
+    maintainers = with lib.maintainers; [
+      dbohdan
+      kybe236
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "s2png";
   };

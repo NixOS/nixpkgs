@@ -5,6 +5,7 @@
   jre,
   pcsclite,
   makeDesktopItem,
+  copyDesktopItems,
   makeWrapper,
 }:
 
@@ -25,7 +26,7 @@ let
     };
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "open-ecard";
   inherit version;
 
@@ -33,35 +34,43 @@ stdenv.mkDerivation rec {
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    copyDesktopItems
+  ];
 
-  desktopItem = makeDesktopItem {
-    name = pname;
-    desktopName = "Open eCard App";
-    genericName = "eCard App";
-    comment = "Client side implementation of the eCard-API-Framework";
-    icon = "oec_logo_bg-transparent.svg";
-    exec = pname;
-    categories = [
-      "Utility"
-      "Security"
-    ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = finalAttrs.pname;
+      desktopName = "Open eCard App";
+      genericName = "eCard App";
+      comment = "Client side implementation of the eCard-API-Framework";
+      icon = "oec_logo_bg-transparent.svg";
+      exec = finalAttrs.pname;
+      categories = [
+        "Utility"
+        "Security"
+      ];
+    })
+  ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/java
     cp ${srcs.richclient} $out/share/java/richclient-${version}.jar
     cp ${srcs.cifs} $out/share/java/cifs-${version}.jar
 
     mkdir -p $out/share/applications $out/share/pixmaps
-    cp $desktopItem/share/applications/* $out/share/applications
     cp ${srcs.logo} $out/share/pixmaps/oec_logo_bg-transparent.svg
 
     mkdir -p $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/${pname} \
+    makeWrapper ${jre}/bin/java $out/bin/${finalAttrs.pname} \
       --add-flags "-cp $out/share/java/cifs-${version}.jar" \
       --add-flags "-jar $out/share/java/richclient-${version}.jar" \
       --suffix LD_LIBRARY_PATH ':' ${lib.getLib pcsclite}/lib
+
+    runHook postInstall
   '';
 
   meta = {
@@ -74,4 +83,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ sephalon ];
     platforms = lib.platforms.linux;
   };
-}
+})

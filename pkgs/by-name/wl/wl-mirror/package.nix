@@ -16,14 +16,12 @@
   installShellFiles,
   pipectl,
   slurp,
-  rofi,
   scdoc,
 }:
 
 let
   wl-present-binpath = lib.makeBinPath [
     pipectl
-    rofi
     slurp
     (placeholder "out")
   ];
@@ -86,10 +84,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
+    mainProgram = "wl-mirror";
     homepage = "https://github.com/Ferdi265/wl-mirror";
     description = "Simple Wayland output mirror client";
     license = lib.licenses.gpl3;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ ninelore ];
     platforms = lib.platforms.linux;
   };
 })

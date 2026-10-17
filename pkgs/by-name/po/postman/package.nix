@@ -8,8 +8,7 @@
 
 let
   pname = "postman";
-  version = "11.89.0";
-
+  version = "12.20.1";
   src =
     let
       selectSystem =
@@ -19,7 +18,6 @@ let
       system = selectSystem {
         aarch64-darwin = "osx_arm64";
         aarch64-linux = "linuxarm64";
-        x86_64-darwin = "osx_64";
         x86_64-linux = "linux64";
       };
     in
@@ -27,10 +25,9 @@ let
       name = "postman-${version}.${if stdenvNoCC.hostPlatform.isLinux then "tar.gz" else "zip"}";
       url = "https://dl.pstmn.io/download/version/${version}/${system}";
       hash = selectSystem {
-        aarch64-darwin = "sha256-NGiQPg4oVr2zin0NT8/2Y5HTrBZeA7Oboue2zYPHJWc=";
-        aarch64-linux = "sha256-dGV1JzNsHo8lKZplBX5sp1BRgGovVY+UM+6BumXLK2E=";
-        x86_64-darwin = "sha256-kpl5x+uCR76dSwG+5xk4aA0lLiKXWOhJTtco2+S5c5g=";
-        x86_64-linux = "sha256-9hRBh1zUIL5JctHhdtAeWgR8/QqftRNqAGghI7BgdsI=";
+        aarch64-darwin = "sha256-OmZDcsLxDzFg6k+6LKKGGL2wKXFw2Ak7ftoGcQ60osA=";
+        aarch64-linux = "sha256-0nLRlduJH4uygVIk98GH6PHY+NO0Hi21ES/6lxQxOsI=";
+        x86_64-linux = "sha256-azqnz3sTdxzDrycYAtpmgLxadEmHD2yrY0GufbcjbL8=";
       };
     };
 
@@ -61,12 +58,10 @@ let
       Crafter
       evanjs
       johnrichardrinehart
-      tricktron
     ];
     platforms = [
       "aarch64-darwin"
       "aarch64-linux"
-      "x86_64-darwin"
       "x86_64-linux"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

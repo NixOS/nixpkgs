@@ -17,6 +17,7 @@ buildPecl {
   configureFlags = [ "--with-libmpdec-path=${mpdecimal}" ];
 
   meta = {
+    broken = lib.versionAtLeast php.version "8.6";
     description = "Arbitrary-precision decimal arithmetic for PHP";
     homepage = "https://php-decimal.github.io";
     changelog = "https://pecl.php.net/package-changelog.php?package=decimal&release=${version}";

@@ -10,19 +10,18 @@
 }:
 let
   pname = "proton-pass";
-  version = "1.35.0";
+  version = "1.42.0";
 
   passthru = {
     sources = {
       "x86_64-linux" = fetchurl {
         url = "https://proton.me/download/pass/linux/x64/proton-pass_${version}_amd64.deb";
-        hash = "sha256-o85PSfZ0wN+QwjzKLb0/RThfTFsa9xY7r4YesLIWlPI=";
+        hash = "sha256-Z8BduD3UzlrHhNZzeXmpvpJUqK9PCfENVkyX9xuVVWQ=";
       };
       "aarch64-darwin" = fetchurl {
         url = "https://proton.me/download/pass/macos/ProtonPass_${version}.dmg";
-        hash = "sha256-zwV1jBbtplM7TdS1KkEi813Z2ex45z3BP2ZA72s6pxE=";
+        hash = "sha256-hd6ETJsj95cRfvdoBDVSRm3apFYYs14tWo4FFnXYjIA=";
       };
-      "x86_64-darwin" = passthru.sources."aarch64-darwin";
     };
     updateScript = writeShellScript "update-proton-pass" ''
       set -o errexit
@@ -51,7 +50,6 @@ let
     maintainers = with lib.maintainers; [
       luftmensch-luftmensch
       massimogengarelli
-      sebtm
       shunueda
     ];
     platforms = builtins.attrNames passthru.sources;

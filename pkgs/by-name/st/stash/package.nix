@@ -110,8 +110,6 @@ buildGoModule (
       GOFLAGS="''${GOFLAGS/-trimpath/}" go generate ./cmd/stash
     '';
 
-    strictDeps = true;
-
     passthru = {
       inherit frontend;
       updateScript = ./update.py;
@@ -133,12 +131,7 @@ buildGoModule (
       maintainers = with lib.maintainers; [
         DrakeTDL
       ];
-      platforms = [
-        "x86_64-linux"
-        "aarch64-linux"
-        "x86_64-darwin"
-        "aarch64-darwin"
-      ];
+      platforms = lib.platforms.linux ++ lib.platforms.darwin;
     };
   }
 )

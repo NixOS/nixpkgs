@@ -2,20 +2,25 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  replaceVars,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kati-unstable";
-  version = "2019-09-23";
+  version = "0-unstable-2026-09-18";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "kati";
-    rev = "9da3296746a0cd55b38ebebf91e7f57105a4c36f";
-    sha256 = "0s5dfhgpcbx12b1fqmm8p0jpvrhgrnl9qywv1ksbwhw3pfp7j866";
+    rev = "55ea1e26f4da6d52a4ddca8f36a130dc26120525";
+    sha256 = "sha256-VStvrYUQIBqv9TTbMOzCJYye8BrlIcRz1pmglVAabl4=";
   };
 
-  patches = [ ./version.patch ];
+  patches = [
+    (replaceVars ./version.patch {
+      version = finalAttrs.src.rev;
+    })
+  ];
 
   installPhase = ''
     install -D ckati $out/bin/ckati
@@ -27,6 +32,9 @@ stdenv.mkDerivation {
     homepage = "https://github.com/google/kati";
     platforms = lib.platforms.all;
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ danielfullmer ];
+    maintainers = with lib.maintainers; [
+      danielfullmer
+      evanwporter
+    ];
   };
-}
+})

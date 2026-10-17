@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "khal";
-  version = "0.14.0";
+  version = "0.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pimutils";
     repo = "khal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ltb2c9p/kD0PtYnLxRIm/SNlg+W+Vca6JSA7BahZ9uQ=";
+    hash = "sha256-d+6D5TuHoIhn/cmp5tHSFlKoaMulkEiqB+sfXcmZ2AE=";
   };
 
   build-system = with python3Packages; [

@@ -6,6 +6,7 @@
   hatchling,
   standard-imghdr,
   pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -28,6 +29,8 @@ buildPythonPackage rec {
     loguru
     standard-imghdr
   ];
+
+  pythonRemoveDeps = lib.optionals (pythonOlder "3.13") [ "standard-imghdr" ];
 
   nativeCheckInputs = [
     pytestCheckHook

@@ -9,29 +9,48 @@
   makeWrapper,
   nodejs,
   yarn-berry,
+  substitute,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "r2modman";
-  version = "3.2.15";
+  version = "3.2.18";
 
   src = fetchFromGitHub {
     owner = "ebkr";
     repo = "r2modmanPlus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AU2fswh2gNJr1JWTHjtxJh/vVwvDqFXjaaF+QaLprFo=";
+    hash = "sha256-6vSc3Gx0VZJoGSXm70T6rsOLhlv/7CnjK4HWkPOZv2s=";
+
+    # Remove when updating since upstream migrated to pnpm
+    # https://github.com/ebkr/r2modmanPlus/commit/db41dfdf4e4b9059ce0d574a7fab0d2d344e633a
+    postFetch = ''
+      cd $out
+      patch -p1 < ${
+        (substitute {
+          src = ./yarn-fix.patch;
+          substitutions = [
+            "--replace-fail"
+            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+            yarn-berry.lockfileVersion
+          ];
+        })
+      }
+    '';
   };
 
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src patches missingHashes;
-    yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-7ty3ESydrDzXrUIdgDC1DqYrkhRX5FsIeOJ0rWP5X0k=";
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-CAtDbWbl9u8tPdPQKxB2qcN7OhDomwO8EqDdRZppgQU=";
   };
 
   patches = [
     # Make it possible to launch Steam games from r2modman.
     ./steam-launch-fix.patch
+
+    # Fix copying of wrapper files to game directory
+    ./wrapper-fix.patch
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -49,6 +68,11 @@ stdenv.mkDerivation (finalAttrs: {
     # Required, as the build process won't have network access. Uses the wrapped electron binary instead.
     ELECTRON_SKIP_BINARY_DOWNLOAD = true;
   };
+
+  postPatch = ''
+    # Hide update banner
+    echo "<template></template>" > src/components/banner/ManagerUpdateBanner.vue
+  '';
 
   buildPhase = ''
     runHook preBuild

@@ -9,9 +9,9 @@
   stdenv,
   fetchpatch,
   fetchzip,
-  dovecot_2_3,
-  dovecot ? dovecot_2_3,
+  dovecot,
   openssl,
+  pkg-config,
   libstemmer,
   perl,
   python3,
@@ -46,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     dovecot
     openssl
+    pkg-config
   ]
   ++ lib.optional (isCurrent && stdenv.hostPlatform.isDarwin) libstemmer
   ++ lib.optionals withLDAP [
@@ -69,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional withLDAP "--with-ldap";
 
-  preBuild = lib.optionalString (!isCurrent && stdenv.isDarwin) ''
+  preBuild = lib.optionalString (!isCurrent && stdenv.hostPlatform.isDarwin) ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -undefined dynamic_lookup"
   '';
 

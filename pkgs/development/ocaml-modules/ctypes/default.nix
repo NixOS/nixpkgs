@@ -14,7 +14,7 @@ buildDunePackage (finalAttrs: {
   version = "0.24.0";
 
   src = fetchFromGitHub {
-    owner = "ocamllabs";
+    owner = "yallop";
     repo = "ocaml-ctypes";
     rev = finalAttrs.version;
     hash = "sha256-Wlpk+/MSWmnIRsJfVQMTCYDRixuqLzDpdFNpkQyscA8=";
@@ -31,7 +31,7 @@ buildDunePackage (finalAttrs: {
   checkInputs = [ ounit2 ];
 
   meta = {
-    homepage = "https://github.com/ocamllabs/ocaml-ctypes";
+    homepage = "https://github.com/yallop/ocaml-ctypes";
     description = "Library for binding to C libraries using pure OCaml";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ericbmerritt ];

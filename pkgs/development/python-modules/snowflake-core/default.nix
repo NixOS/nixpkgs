@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "snowflake-core";
-  version = "1.11.0";
+  version = "1.13.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "snowflake_core";
     inherit version;
-    hash = "sha256-qNwgnEXUE8P+DrGpOb32R6BapNkWwEJBbeljYYhVU5I=";
+    hash = "sha256-nweqQPd/HjAvGIEkh6+v1J9/0rSTkuoD8RW8WrbLABU=";
   };
 
   build-system = [ hatchling ];

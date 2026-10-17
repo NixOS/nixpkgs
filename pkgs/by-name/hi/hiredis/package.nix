@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hiredis";
-  version = "1.2.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "redis";
     repo = "hiredis";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-ZxUITm3OcbERcvaNqGQU46bEfV+jN6safPalG0TVfBg=";
+    hash = "sha256-ZUNUV31zReMA0I+jWXy6yHDLAAdcyfaxVzZmg12sAc4=";
   };
 
   buildInputs = [
@@ -30,5 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Minimalistic C client for Redis >= 1.2";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
+    teams = [ lib.teams.redis ];
   };
 })

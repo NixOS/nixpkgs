@@ -77,6 +77,9 @@ let
       dbd-mysql = super.dbd-mysql.overrideLispAttrs (o: {
         nativeLibs = [ pkgs.mariadb.client ];
       });
+      enchant = super.enchant.overrideLispAttrs (o: {
+        nativeLibs = [ pkgs.enchant_2 ];
+      });
       lla = super.lla.overrideLispAttrs (o: {
         nativeLibs = [ pkgs.openblas ];
       });

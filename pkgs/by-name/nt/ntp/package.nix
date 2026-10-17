@@ -7,6 +7,7 @@
   perl,
   pps-tools,
   libcap,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,6 +18,14 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://archive.ntp.org/ntp4/ntp-${lib.versions.majorMinor finalAttrs.version}/ntp-${finalAttrs.version}.tar.gz";
     hash = "sha256-z4TF8/saKVKElCYk2CP/+mNBROCWz8T5lprJjvX0aOU=";
   };
+
+  patches = [
+    # Fix build w/ glibc-2.44
+    (fetchpatch {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/ntp/-/raw/8513bf75be3c0425318475e30f5725a03d8fb067/ntp-4.2.8.p18-glib-2.43.patch";
+      hash = "sha256-20ztNAnirijKt8rgaMz6FGoHubBOskNL5ynXte3NTvM=";
+    })
+  ];
 
   # fix for gcc-14 compile failure
   postPatch = ''
@@ -52,10 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://www.ntp.org/";
     description = "Implementation of the Network Time Protocol";
-    license = {
-      # very close to isc and bsd2
-      url = "https://www.eecis.udel.edu/~mills/ntp/html/copyright.html";
-    };
+    license = lib.licenses.AND [
+      lib.licenses.ntp
+      lib.licenses.bsd2
+    ];
     maintainers = with lib.maintainers; [ thoughtpolice ];
     platforms = lib.platforms.unix;
   };

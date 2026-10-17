@@ -14,15 +14,15 @@
 let
   pygments = buildPythonPackage (finalAttrs: {
     pname = "pygments";
-    version = "2.19.2";
+    version = "2.21.0";
     pyproject = true;
 
     src = fetchPypi {
       inherit (finalAttrs) pname version;
-      hash = "sha256-Y2yyR3zsf4lSU2lwvFM7xDdDVC9wOSrgJjdGAK3VuIc=";
+      hash = "sha256-YQynUcm8JJKzjrmjin+8k+27stcYLtrzTmauST3uXIw=";
     };
 
-    nativeBuildInputs = [ hatchling ];
+    build-system = [ hatchling ];
 
     # circular dependencies if enabled by default
     doCheck = false;

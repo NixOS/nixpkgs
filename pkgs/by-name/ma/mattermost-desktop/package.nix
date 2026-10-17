@@ -1,8 +1,10 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   buildNpmPackage,
-  electron_40,
+  electron_43,
+  autoPatchelfHook,
   makeWrapper,
   testers,
   mattermost-desktop,
@@ -10,25 +12,35 @@
 }:
 
 let
-  electron = electron_40;
+  electron = electron_43;
 in
 
 buildNpmPackage rec {
   pname = "mattermost-desktop";
-  version = "6.1.1";
+  version = "6.3.1";
 
   src = fetchFromGitHub {
     owner = "mattermost";
     repo = "desktop";
     tag = "v${version}";
-    hash = "sha256-NSTOmrHq1igcO9Wm6PYKHXpVfidLitUaCFou0d6+E2g=";
+    hash = "sha256-CkSV0zKWz60qGrYpdhzyBU5CqjrvQba1B9vQZtyuEAw=";
   };
 
-  npmDepsHash = "sha256-Er3D7wQMhdEXwR7ISk/OUa7Zu9TkAZj1xCQ5jWcRXgc=";
+  npmDepsHash = "sha256-wZTKNb2nIRlMDkIt4lQHCf98lk7MhblKSA0gNjvJDO8=";
   npmBuildScript = "build-prod";
   makeCacheWritable = true;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    # The package uses a pre-built binary Node.js module.
+    autoPatchelfHook
+  ];
+
+  autoPatchelfIgnoreMissingDeps = [ "libc.musl-x86_64.so.1" ];
+
+  buildInputs = [
+    stdenv.cc.cc
+  ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
@@ -37,6 +49,8 @@ buildNpmPackage rec {
       --replace-fail \
         "const VERSION = childProcess.execSync('git rev-parse --short HEAD', {cwd: __dirname}).toString();" \
         "const VERSION = process.env.version;"
+    substituteInPlace src/common/config/buildConfig.ts \
+      --replace-fail 'enableUpdateNotifications: true,' 'enableUpdateNotifications: false,'
   '';
 
   postBuild = ''
@@ -45,7 +59,7 @@ buildNpmPackage rec {
     chmod -R u+w electron-dist
 
     npm exec electron-builder -- \
-        --config electron-builder.json \
+        --config electron-builder.ts \
         --dir \
         -c.electronDist=electron-dist \
         -c.electronVersion=${electron.version}
@@ -98,9 +112,16 @@ buildNpmPackage rec {
     changelog = "https://github.com/mattermost/desktop/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     platforms = electron.meta.platforms;
+    # https://github.com/NixOS/nixpkgs/issues/430763
+    broken = stdenv.hostPlatform.isDarwin;
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryNativeCode
+    ];
     maintainers = with lib.maintainers; [
       joko
       liff
+      yayayayaka
     ];
   };
 }

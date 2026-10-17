@@ -1,9 +1,12 @@
 {
+  _experimental-update-script-combinators,
   alsa-lib,
   boost,
   chromaprint,
   cmake,
+  common-updater-scripts,
   fetchFromGitHub,
+  fetchurl,
   fftw,
   glib-networking,
   gnutls,
@@ -17,9 +20,11 @@
   libmtp,
   libpthread-stubs,
   libpulseaudio,
+  libsecret,
   libselinux,
   libsepol,
   libtasn1,
+  libuchardet,
   ninja,
   nix-update-script,
   p11-kit,
@@ -30,7 +35,6 @@
   taglib,
   util-linux,
   sparsehash,
-  rapidjson,
 
   # tests
   gtest,
@@ -38,17 +42,28 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "strawberry";
-  version = "1.2.18";
+  version = "1.2.31";
 
   src = fetchFromGitHub {
-    owner = "jonaski";
+    owner = "strawberrymusicplayer";
     repo = "strawberry";
     rev = finalAttrs.finalPackage.version;
-    hash = "sha256-5h1psYJDKnFFgIGZY3ecCttgkR+zuUwa3b/A4keLk9o=";
+    hash = "sha256-U9qRaadhhHmzWBPS4QhofKAyVkZ+o7+emfNuRZRKWA0=";
   };
 
-  # the big strawberry shown in the context menu is *very* much in your face, so use the grey version instead
+  # This is for the apicredentials.h file, when updating the package check that
+  # apicredentials.h contains only secrets and not injected code as it is not
+  # checked in to the GitHub Repository.
+  releaseTarball = fetchurl {
+    url = "https://github.com/strawberrymusicplayer/strawberry/releases/download/${finalAttrs.version}/strawberry-${finalAttrs.version}.tar.xz";
+    hash = "sha256-z/wM1FPzEmqTC55n9UflTZ/eDIdU/erYGF0rL1xowDc=";
+  };
+
   postPatch = ''
+    tar -xOf "${finalAttrs.releaseTarball}" "strawberry-${finalAttrs.version}/src/apicredentials.h" > src/apicredentials.h
+
+    # the big strawberry shown in the context menu is *very* much in your face,
+    # so use the grey version instead
     substituteInPlace src/context/contextalbum.cpp \
       --replace-fail pictures/strawberry.png pictures/strawberry-grey.png
   '';
@@ -66,12 +81,13 @@ stdenv.mkDerivation (finalAttrs: {
     libidn2
     libmtp
     libpthread-stubs
+    libsecret
     libtasn1
+    libuchardet
     qt6.qtbase
     sqlite
     taglib
     sparsehash
-    rapidjson
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libpulseaudio
@@ -108,6 +124,12 @@ stdenv.mkDerivation (finalAttrs: {
   preCheck = ''
     # defaults to "xcb" otherwise, which requires a display
     export QT_QPA_PLATFORM=offscreen
+
+    # The waveformloader test calls QStandardPaths::setTestModeEnabled(true) which
+    # expects a writable $HOME
+    # https://doc.qt.io/qt-6/qstandardpaths.html#setTestModeEnabled
+    # https://github.com/strawberrymusicplayer/strawberry/blob/dc831c03bd5863f133dd9f57eba75dafb27e5cf8/tests/src/waveformloader_test.cpp#L67
+    export HOME=$(mktemp -d)
   '';
   doCheck = true;
 
@@ -118,7 +140,17 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (nix-update-script { })
+    {
+      command = [
+        (lib.getExe' common-updater-scripts "update-source-version")
+        "strawberry"
+        "--ignore-same-version"
+        "--source-key=releaseTarball"
+      ];
+    }
+  ];
 
   meta = {
     description = "Music player and music collection organizer";

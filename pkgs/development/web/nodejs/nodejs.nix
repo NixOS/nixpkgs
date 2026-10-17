@@ -5,37 +5,32 @@
   fetchpatch2,
   fetchFromGitHub,
   python,
+  abseil-cpp,
   ada,
   brotli,
   c-ares,
+  gtest,
+  hdrhistogram_c,
+  libffiReal,
+  libhwy,
   libuv,
   lief,
   llhttp,
   merve,
+  nbytes,
   nghttp2,
   nghttp3,
   ngtcp2,
   openssl,
   simdjson,
   simdutf,
-  simdutf_6 ? (
-    simdutf.overrideAttrs {
-      version = "6.5.0";
-
-      src = fetchFromGitHub {
-        owner = "simdutf";
-        repo = "simdutf";
-        rev = "v6.5.0";
-        hash = "sha256-bZ4r62GMz2Dkd3fKTJhelitaA8jUBaDjG6jOysEg8Nk=";
-      };
-    }
-  ),
   sqlite,
+  temporal_capi,
   uvwasi,
   zlib,
   zstd,
   icu,
-  bash,
+  bashNonInteractive,
   ninja,
   pkgconf,
   unixtools,
@@ -124,59 +119,83 @@ let
       null;
   # TODO: also handle MIPS flags (mips_arch, mips_fpu, mips_float_abi).
 
-  useSharedAdaAndSimd = !stdenv.hostPlatform.isStatic && lib.versionAtLeast version "22.2";
-  useSharedLief = !stdenv.hostPlatform.isStatic && lib.versionAtLeast version "25.6";
-  useSharedMerve = !stdenv.hostPlatform.isStatic && lib.versionAtLeast version "25.6.1";
-  useSharedSQLite = !stdenv.hostPlatform.isStatic && lib.versionAtLeast version "22.5";
-  useSharedZstd = !stdenv.hostPlatform.isStatic && lib.versionAtLeast version "22.15";
-
-  sharedLibDeps =
-    (lib.optionalAttrs (!stdenv.hostPlatform.isStatic) {
-      inherit
-        brotli
-        libuv
-        nghttp3
-        ngtcp2
-        openssl
-        uvwasi
-        zlib
-        ;
-      cares = c-ares;
-      http-parser = llhttp;
-      nghttp2 = nghttp2.overrideAttrs {
-        patches = [
-          (fetchpatch2 {
-            url = "https://github.com/nghttp2/nghttp2/commit/7784fa979d0bcf801a35f1afbb25fb048d815cd7.patch?full_index=1";
-            hash = "sha256-RG87Qifjpl7HTP9ac2JwHj2XAbDlFgOpAnpZX3ET6gU=";
-            excludes = [ "lib/includes/nghttp2/nghttp2.h" ];
-            revert = true;
-          })
-        ];
-      };
-    })
-    // (lib.optionalAttrs useSharedAdaAndSimd {
-      inherit
-        ada
-        simdjson
-        ;
-      simdutf = if lib.versionAtLeast version "25" then simdutf else simdutf_6;
-    })
-    // (lib.optionalAttrs useSharedSQLite {
-      inherit sqlite;
-    })
-    // (lib.optionalAttrs useSharedLief {
-      inherit lief;
-    })
-    // (lib.optionalAttrs useSharedMerve {
-      inherit merve;
-    })
-    // (lib.optionalAttrs useSharedZstd {
-      inherit zstd;
-    });
-
-  copyLibHeaders = map (name: "${lib.getDev sharedLibDeps.${name}}/include/*") (
-    builtins.attrNames sharedLibDeps
+  useSharedAbseilAndHighway = lib.versionAtLeast version "26.9";
+  useSharedAdaAndSimdjson = lib.versionAtLeast version "22.2";
+  useSharedSimdutf = lib.versionAtLeast version "26.10";
+  useSharedFFI = lib.versionAtLeast version "26.1";
+  useSharedGtestAndHistogram = lib.versionAtLeast version (
+    if majorVersion == "24" then "24.14.0" else "25.4"
   );
+  useSharedNBytes = lib.versionAtLeast version (if majorVersion == "24" then "24.14.0" else "25.5");
+  useSharedLief = lib.versionAtLeast version "25.6";
+  useSharedMerve = lib.versionAtLeast version (if majorVersion == "24" then "24.14.0" else "25.6.1");
+  useSharedSQLite = lib.versionAtLeast version "22.5";
+  useSharedTemporal = majorVersion == "26";
+  useSharedZstd = lib.versionAtLeast version "22.15";
+
+  sharedLibDeps = {
+    inherit
+      brotli
+      libuv
+      nghttp2
+      nghttp3
+      ngtcp2
+      openssl
+      uvwasi
+      zlib
+      ;
+    cares = c-ares;
+    http-parser = llhttp;
+  }
+  // (lib.optionalAttrs useSharedAbseilAndHighway {
+    abseil = abseil-cpp;
+    highway = libhwy;
+  })
+  // (lib.optionalAttrs useSharedAdaAndSimdjson {
+    inherit
+      ada
+      simdjson
+      ;
+  })
+  // (lib.optionalAttrs useSharedSimdutf {
+    inherit simdutf;
+  })
+  // (lib.optionalAttrs useSharedSQLite {
+    inherit sqlite;
+  })
+  // (lib.optionalAttrs useSharedTemporal {
+    inherit temporal_capi;
+  })
+  // (lib.optionalAttrs useSharedGtestAndHistogram {
+    inherit gtest;
+    hdr-histogram = hdrhistogram_c;
+  })
+  // (lib.optionalAttrs useSharedFFI {
+    ffi = libffiReal;
+  })
+  // (lib.optionalAttrs useSharedLief {
+    inherit lief;
+  })
+  // (lib.optionalAttrs useSharedNBytes {
+    inherit nbytes;
+  })
+  // (lib.optionalAttrs useSharedMerve {
+    # Merve cannot be built with simdutf_6, and upstream also disables simdutf support on the 24.x branch
+    merve = if majorVersion == "24" then (merve.override { simdutf = null; }) else merve;
+  })
+  // (lib.optionalAttrs useSharedZstd {
+    inherit zstd;
+  });
+
+  sharedLibInputs = [ icu ] ++ builtins.attrValues sharedLibDeps;
+
+  # node-gyp expects headers for the following libs (the list is maintained upstream in tools/install.py)
+  # to be at the path given by `process.config.variables.node_prefix`, which is set to $out.
+  libHeadersForGYP = [
+    libuv
+    openssl
+    zlib
+  ];
 
   bundlesCorepack = !lib.versionAtLeast version "25.0.0";
 
@@ -239,6 +258,14 @@ let
         # Note: do not set TERM=dumb environment variable globally, it is used in
         # test-ci-js test suite to skip tests that otherwise run fine.
         NINJA = "TERM=dumb ninja";
+
+        # configure.py queries pkg-config for every --shared-* lib (and needs it
+        # for system-icu and shared abseil), then embeds the resulting -I/-L flags
+        # in config.gypi, i.e. process.config in bin/node, which would keep the
+        # -dev outputs in the runtime closure. The cc wrapper already passes these
+        # paths, so have pkgconf treat them as system paths and omit them.
+        PKG_CONFIG_SYSTEM_INCLUDE_PATH = lib.makeSearchPathOutput "dev" "include" sharedLibInputs;
+        PKG_CONFIG_SYSTEM_LIBRARY_PATH = lib.makeSearchPathOutput "dev" "lib" sharedLibInputs;
       }
       // lib.optionalAttrs (!canExecute && !canEmulate) {
         # these are used in the --cross-compiling case. see comment at postConfigure.
@@ -247,14 +274,8 @@ let
         AR_host = touchScript "${buildPackages.stdenv.cc}/bin/ar";
       };
 
-      # NB: technically, we do not need bash in build inputs since all scripts are
-      # wrappers over the corresponding JS scripts. There are some packages though
-      # that use bash wrappers, e.g. polaris-web.
-      buildInputs = [
-        bash
-        icu
-      ]
-      ++ builtins.attrValues sharedLibDeps;
+      # NB: we need bash for npm (and corepack) outputs
+      buildInputs = [ bashNonInteractive ] ++ sharedLibInputs;
 
       nativeBuildInputs = [
         installShellFiles
@@ -306,27 +327,19 @@ let
         # perspective).
         "--emulator=${emulator}"
       ]
+      ++ lib.optional useSharedTemporal "--v8-enable-temporal-support"
       ++ lib.optionals (lib.versionOlder version "19") [ "--without-dtrace" ]
+      ++ lib.optionals (lib.versionAtLeast version "22") [ "--use-prefix-to-find-headers" ]
       ++ lib.concatMap (name: [
         "--shared-${name}"
         "--shared-${name}-libpath=${lib.getLib sharedLibDeps.${name}}/lib"
-        /**
-          Closure notes: we explicitly avoid specifying --shared-*-includes,
-          as that would put the paths into bin/nodejs.
-          Including pkg-config in build inputs would also have the same effect!
-
-          FIXME: the statement above is outdated, we have to include pkg-config
-          in build inputs for system-icu.
-        */
       ]) (builtins.attrNames sharedLibDeps);
 
       configurePlatforms = [ ];
 
       dontDisableStatic = true;
 
-      configureScript = writeScript "nodejs-configure" ''
-        exec ${python.executable} configure.py "$@"
-      '';
+      configureScript = "${python.pythonOnBuildForHost.interpreter} configure.py";
 
       # In order to support unsupported cross configurations, we copy some intermediate executables
       # from a native build and replace all the build-system tools with a script which simply touches
@@ -383,6 +396,7 @@ let
           "tooltest"
           "cctest"
         ]
+        ++ lib.optional useSharedFFI "build-ffi-tests"
         ++ lib.optionals (!stdenv.buildPlatform.isDarwin || lib.versionAtLeast version "20") [
           # There are some test failures on macOS before v20 that are not worth the
           # time to debug for a version that would be eventually removed in less
@@ -494,11 +508,41 @@ let
               "test-tick-processor-arguments"
               "test-set-raw-mode-reset-signal"
             ]
+            # These network/fetch/inspector tests fail on riscv64
+            ++ lib.optionals (majorVersion == "24" && stdenv.hostPlatform.isRiscV64) [
+              "test-fetch"
+              "test-http2-allow-http1-upgrade-ws"
+              "test-http-proxy-fetch"
+              "test-https-proxy-fetch"
+              "test-http-set-global-proxy-from-env-fetch"
+              "test-http-set-global-proxy-from-env-fetch-default"
+              "test-http-set-global-proxy-from-env-fetch-empty"
+              "test-http-set-global-proxy-from-env-fetch-no-proxy"
+              "test-http-set-global-proxy-from-env-fetch-restore"
+              "test-http-set-global-proxy-from-env-override-fetch"
+              "test-inspector-invalid-protocol"
+              "test-inspector-network-content-type"
+              "test-inspector-network-fetch"
+              "test-inspector-network-websocket"
+              "test-report-exclude-network"
+              "test-tls-set-default-ca-certificates-append-fetch"
+              "test-tls-set-default-ca-certificates-reset-fetch"
+              "test-use-env-proxy-cli-http"
+              "test-wasm-web-api"
+            ]
             # Those are annoyingly flaky, but not enough to be marked as such upstream.
             ++ lib.optional (majorVersion == "22") "test-child-process-stdout-flush-exit"
+            ++ lib.optional (majorVersion == "22" && stdenv.hostPlatform.isRiscV64) "test-worker-messaging"
+            ++ lib.optional (majorVersion == "26" && !stdenv.buildPlatform.isDarwin) "test-net-boundsocket"
             ++ lib.optional (
               majorVersion == "22" && stdenv.buildPlatform.isDarwin
             ) "test/sequential/test-http-server-request-timeouts-mixed.js"
+            # https://github.com/NixOS/nixpkgs/pull/507974#issuecomment-4249433124
+            # OpenSSL reports different errors
+            # https://github.com/nodejs/node/pull/62629
+            # patch does not apply
+            ++ lib.optional (!lib.versionAtLeast version "24") "test-tls-junk-server"
+            ++ lib.optional (majorVersion == "22") "test-tls-alert-handling"
           )
         }"
       ];
@@ -510,6 +554,10 @@ let
             "npm"
           ]
           ++ lib.optional bundlesCorepack "corepack";
+          # See PKG_CONFIG_SYSTEM_INCLUDE_PATH.
+          disallowedRequisites = map (dep: dep.dev) (
+            lib.filter (dep: !(builtins.elem dep libHeadersForGYP) && dep ? dev) sharedLibInputs
+          );
         };
         corepack = {
           disallowedReferences = [
@@ -578,9 +626,9 @@ let
           ln -s $npm/lib/node_modules/npm/lib/utils/completion.sh \
             $npm/share/bash-completion/completions/npm
 
-          # install the missing headers for node-gyp
-          # TODO: use propagatedBuildInputs instead of copying headers.
-          cp -r ${lib.concatStringsSep " " copyLibHeaders} $out/include/node
+          ln -s ${
+            lib.concatStringsSep " " (map (dep: "${lib.getDev dep}/include/*") libHeadersForGYP)
+          } $out/include/node/
 
           # assemble a static v8 library and put it in the 'libv8' output
           mkdir -p $libv8/lib
@@ -626,6 +674,9 @@ let
         done
       '';
 
+      # reduces build time from ~90 to ~15 minutes on hydra
+      requiredSystemFeatures = [ "big-parallel" ];
+
       passthru.tests = {
         version = testers.testVersion {
           package = self;
@@ -665,7 +716,7 @@ let
         broken =
           !canExecute && !canEmulate && (stdenv.buildPlatform.parsed.cpu != stdenv.hostPlatform.parsed.cpu);
         mainProgram = "node";
-        knownVulnerabilities = lib.optional (lib.versionOlder version "18") "This NodeJS release has reached its end of life. See https://nodejs.org/en/about/releases/.";
+        knownVulnerabilities = lib.optional (lib.versionOlder version "22") "This NodeJS release has reached its end of life. See https://nodejs.org/en/about/releases/.";
       };
 
       passthru.python = python; # to ensure nodeEnv uses the same version

@@ -13,14 +13,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "streamdeck-ui";
-  version = "4.1.3";
+  version = "4.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "streamdeck-linux-gui";
     owner = "streamdeck-linux-gui";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-KpsW3EycYRYU5YOg7NNGv5eeZbS9MAikj0Ke2ybPzAU=";
+    hash = "sha256-XRtIkDyLick9Pq55Br7lQb6FoygMs4DZEJoAD2/o+pQ=";
   };
 
   pythonRelaxDeps = [
@@ -49,7 +49,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       pynput
       pyside6
       streamdeck
-      xlib
+      python-xlib
       importlib-metadata
       evdev
     ]
@@ -117,10 +117,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   dontWrapQtApps = true;
   dontWrapGApps = true;
-  makeWrapperArgs = [
-    "\${qtWrapperArgs[@]}"
-    "\${gappsWrapperArgs[@]}"
-  ];
+  preFixup = ''
+    makeWrapperArgs+=(
+      "''${qtWrapperArgs[@]}"
+      "''${gappsWrapperArgs[@]}"
+    )
+  '';
 
   meta = {
     changelog = "https://github.com/streamdeck-linux-gui/streamdeck-linux-gui/releases/tag/v${finalAttrs.version}";

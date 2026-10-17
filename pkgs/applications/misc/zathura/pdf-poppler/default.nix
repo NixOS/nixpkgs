@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zathura-pdf-poppler";
-  version = "2026.02.03";
+  version = "2026.07.18";
 
   src = fetchFromGitHub {
     owner = "pwmt";
     repo = "zathura-pdf-poppler";
     tag = finalAttrs.version;
-    hash = "sha256-ddW2SepBoR9BpqcAIAONmd2P5AjkhmWyIjIDeTnHO4Y=";
+    hash = "sha256-yTNox1MH2wYwVUtIEQ3QoC6jKsTQSfQdltQaB+pkAgY=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.zlib;
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ mithicspirit ];
   };
 })

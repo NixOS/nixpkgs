@@ -1,4 +1,5 @@
 {
+  lib,
   callPackages,
   isDeclaredArray,
   makeSetupHook,
@@ -11,5 +12,8 @@ makeSetupHook {
     patchelf
   ];
   passthru.tests = callPackages ./tests.nix { };
-  meta.description = "Appends runpath entries of a file to an array";
+  meta = {
+    description = "Appends runpath entries of a file to an array";
+    license = lib.licenses.mit;
+  };
 } ./getRunpathEntries.bash

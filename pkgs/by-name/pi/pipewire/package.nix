@@ -4,6 +4,7 @@
   testers,
   buildPackages,
   fetchFromGitLab,
+  fetchpatch,
   python3,
   meson,
   ninja,
@@ -11,8 +12,8 @@
   elogind,
   libinotify-kqueue,
   epoll-shim,
-  systemd,
-  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, # enableSystemd=false maintained by maintainers.qyliss.
+  systemdLibs,
+  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs, # enableSystemd=false maintained by maintainers.highghlow.
   pkg-config,
   docutils,
   doxygen,
@@ -51,7 +52,6 @@
   fdk_aac,
   libopus,
   ldacbt,
-  libldac-dec,
   spandsp,
   modemmanager,
   libpulseaudio,
@@ -88,7 +88,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pipewire";
-  version = "1.6.2";
+  version = "1.6.9";
 
   outputs = [
     "out"
@@ -104,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "pipewire";
     repo = "pipewire";
     tag = finalAttrs.version;
-    hash = "sha256-PG1S70wnyGz9H3TP3gJ2/O+3XnaAyyB4XRM2NFnCWwY=";
+    hash = "sha256-YmICqzAHRuLoGuZ5UwvfLotOr04/usEPsRIKZXF4SLI=";
   };
 
   patches = [
@@ -112,10 +112,17 @@ stdenv.mkDerivation (finalAttrs: {
     ./0060-libjack-path.patch
     # Move installed tests into their own output.
     ./0070-installed-tests-path.patch
+
+    (fetchpatch {
+      name = "musl.patch";
+      url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/49ce385c44f4c2882ef0aeac0312e6ae9bc85f8a.patch";
+      hash = "sha256-u8DLe6smodalVn3GwhI9RaDZTw4qZs8+Ylg9lxunMF0=";
+    })
   ];
 
   strictDeps = true;
   __structuredAttrs = true;
+  separateDebugInfo = true;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
@@ -150,7 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ (
     if enableSystemd then
-      [ systemd ]
+      [ systemdLibs ]
     else if stdenv.hostPlatform.isLinux then
       [
         elogind
@@ -166,10 +173,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional webrtcAudioProcessingSupport webrtc-audio-processing
   ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
-  ++ lib.optionals ldacbtSupport [
-    ldacbt
-    libldac-dec
-  ]
+  ++ lib.optional ldacbtSupport ldacbt
   ++ lib.optional libcameraSupport libcamera
   ++ lib.optional zeroconfSupport avahi
   ++ lib.optional raopSupport openssl
@@ -225,6 +229,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "pipewire-v4l2" stdenv.hostPlatform.isLinux)
     (lib.mesonEnable "libsystemd" enableSystemd)
     (lib.mesonEnable "systemd-system-service" enableSystemd)
+    (lib.mesonEnable "systemd-user-service" enableSystemd)
     (lib.mesonEnable "udev" stdenv.hostPlatform.isLinux)
     (lib.mesonEnable "ffmpeg" true)
     (lib.mesonEnable "pw-cat-ffmpeg" true)
@@ -238,6 +243,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "bluez5-codec-lc3plus" false)
     (lib.mesonEnable "bluez5-codec-lc3" bluezSupport)
     (lib.mesonEnable "bluez5-codec-ldac" (bluezSupport && ldacbtSupport))
+    (lib.mesonEnable "bluez5-codec-ldac-dec" (bluezSupport && ldacbtSupport))
     (lib.mesonEnable "opus" true)
     (lib.mesonOption "sysconfdir" "/etc")
     (lib.mesonEnable "raop" raopSupport)

@@ -49,11 +49,11 @@ let
 
   # Playwright expects different directory names for different architectures:
   # - linux-x64 expects: chrome-linux64
-  # - linux-arm64 expects: chrome-linux
+  # - linux-arm64 expects: chrome-linux-arm64
   chromeDir =
     {
       x86_64-linux = "chrome-linux64";
-      aarch64-linux = "chrome-linux";
+      aarch64-linux = "chrome-linux-arm64";
     }
     .${system} or throwSystem;
 
@@ -63,8 +63,8 @@ let
       inherit (download) url stripRoot;
       hash =
         {
-          x86_64-linux = "sha256-dJSO05xOzlSl/EwOWNQCeuSb+lhUU6NlGBnRu59irnM=";
-          aarch64-linux = "sha256-9DFLCPuc9WZjYLzlRW+Df2pb+mViPK3/IOkkUozELsw=";
+          x86_64-linux = "sha256-ktGPsC2JiQp7cSmZAMU91/cii5vurBLf4CNgfM5BJtE=";
+          aarch64-linux = "sha256-awvDm4aFRud/XzSeAuxONCclwzw8t+BZ8uCOFtWUEQw=";
         }
         .${system} or throwSystem;
     };
@@ -130,8 +130,7 @@ let
     inherit (download) url stripRoot;
     hash =
       {
-        x86_64-darwin = "sha256-vQuBHM0jkk6S/Gco/bBqSPJqXi/CJt/+nkbGtFNpgwk=";
-        aarch64-darwin = "sha256-qXdgHeBS5IFIa4hZVmjq0+31v/uDPXHyc4aH7Wn2E7E=";
+        aarch64-darwin = "sha256-utaf65JcLlAXmXCxChPWi5YxbYQA77IYvgFNgW1ALtQ=";
       }
       .${system} or throwSystem;
   };
@@ -139,7 +138,6 @@ in
 {
   x86_64-linux = chromium-linux;
   aarch64-linux = chromium-linux;
-  x86_64-darwin = chromium-darwin;
   aarch64-darwin = chromium-darwin;
 }
 .${system} or throwSystem

@@ -2,23 +2,31 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   hatchling,
+
   # dependencies
   bleak,
   pycayennelpp,
   pyserial-asyncio-fast,
+  pycryptodome,
+
+  # tests
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "meshcore";
-  version = "2.2.8";
+  version = "2.3.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "meshcore-dev";
     repo = "meshcore_py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-S3hyA2TsgEHwB0gv5xFMTbwnAoGbceq0C5+8MBedD70=";
+    hash = "sha256-/xskGCBSw/AYOOnIKdRD/vpWNGJCzUfVpT1rqIpycs8=";
   };
 
   build-system = [ hatchling ];
@@ -27,6 +35,12 @@ buildPythonPackage (finalAttrs: {
     bleak
     pycayennelpp
     pyserial-asyncio-fast
+    pycryptodome
+  ];
+
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "meshcore" ];

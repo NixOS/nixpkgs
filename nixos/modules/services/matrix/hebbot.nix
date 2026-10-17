@@ -25,7 +25,7 @@ let
     };
 in
 {
-  meta.maintainers = [ lib.maintainers.raitobezarius ];
+  meta.maintainers = [ ];
   options.services.hebbot = {
     enable = mkEnableOption "hebbot";
     package = lib.mkPackageOption pkgs "hebbot" { };

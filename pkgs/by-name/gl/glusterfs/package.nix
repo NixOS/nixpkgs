@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fuse,
+  fuse3,
   bison,
   flex,
   openssl,
@@ -52,7 +52,7 @@ let
   #       can help with finding new Python scripts.
 
   buildInputs = [
-    fuse
+    fuse3
     openssl
     ncurses
     readline
@@ -264,7 +264,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Distributed storage system";
     homepage = "https://www.gluster.org";
-    license = lib.licenses.lgpl3Plus; # dual licese: choice of lgpl3Plus or gpl2
+    license = lib.licenses.lgpl3Plus; # dual license: choice of lgpl3Plus or gpl2
     maintainers = [ lib.maintainers.raskin ];
     platforms = with lib.platforms; linux ++ freebsd;
   };

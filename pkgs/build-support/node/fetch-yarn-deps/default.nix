@@ -9,7 +9,6 @@
   nix-prefetch-git,
   fetchurl,
   jq,
-  nodejs,
   nodejs-slim,
   prefetch-yarn-deps,
   fixup-yarn-lock,
@@ -105,6 +104,7 @@ in
           src ? null,
           hash ? "",
           sha256 ? "",
+          mirrorUrl ? null,
           ...
         }@args:
         let
@@ -137,6 +137,8 @@ in
               cacert
             ];
 
+            impureEnvVars = lib.fetchers.proxyImpureEnvVars;
+
             env = {
               GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
               NODE_EXTRA_CA_CERTS = "${cacert}/etc/ssl/certs/ca-bundle.crt";
@@ -147,7 +149,9 @@ in
 
               yarnLock=''${yarnLock:=$PWD/yarn.lock}
               mkdir -p $out
-              (cd $out; prefetch-yarn-deps --verbose --builder $yarnLock)
+              (cd $out; prefetch-yarn-deps --verbose --builder $yarnLock ${
+                lib.optionalString (mirrorUrl != null) "--mirrorUrl ${lib.escapeShellArg mirrorUrl}"
+              })
 
               runHook postBuild
             '';
@@ -160,6 +164,7 @@ in
               "name"
               "hash"
               "sha256"
+              "mirrorUrl"
             ]
             ++ (lib.optional (src == null) "src")
           ))
@@ -180,6 +185,7 @@ in
     };
     meta = {
       description = "Install nodejs dependencies from an offline yarn cache produced by fetchYarnDeps";
+      license = lib.licenses.mit;
     };
   } ./yarn-config-hook.sh;
 
@@ -187,6 +193,7 @@ in
     name = "yarn-build-hook";
     meta = {
       description = "Run yarn build in buildPhase";
+      license = lib.licenses.mit;
     };
   } ./yarn-build-hook.sh;
 
@@ -202,6 +209,7 @@ in
     };
     meta = {
       description = "Prune yarn dependencies and install files for packages using Yarn 1";
+      license = lib.licenses.mit;
     };
   } ./yarn-install-hook.sh;
 }

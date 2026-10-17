@@ -1,6 +1,7 @@
 {
   buildPecl,
   lib,
+  php,
   rdkafka,
   pcre2,
 }:
@@ -21,6 +22,7 @@ buildPecl {
   '';
 
   meta = {
+    broken = lib.versionAtLeast php.version "8.6";
     description = "Kafka client based on librdkafka";
     license = lib.licenses.mit;
     homepage = "https://github.com/arnaud-lb/php-rdkafka";

@@ -33,7 +33,6 @@ let
   inherit (pkgs)
     mariadb
     stdenv
-    writeShellScript
     ;
   cfg = config.services.drupal;
   eachSite = cfg.sites;
@@ -66,8 +65,8 @@ let
 
       postInstall = ''
         ln -s ${cfg.stateDir}/sites $out/share/php/${cfg.package.pname}${cfg.webRoot}
-        ln -s ${cfg.modulesDir} $out/share/php/${cfg.package.pname}/modules
-        ln -s ${cfg.themesDir} $out/share/php/${cfg.package.pname}/themes
+        ln -s ${cfg.modulesDir} $out/share/php/${cfg.package.pname}${cfg.webRoot}/modules/nixos-modules
+        ln -s ${cfg.themesDir} $out/share/php/${cfg.package.pname}${cfg.webRoot}/themes/nixos-themes
       '';
     });
 

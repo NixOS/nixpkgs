@@ -9,7 +9,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.1.0";
 
   src = fetchFromGitHub {
-    owner = "Thomas-de-Bock";
+    owner = "Thomas-995";
     repo = "construct";
     rev = finalAttrs.version;
     hash = "sha256-ENso0y7yEaXzGXzZOnlZ1L7+j/qayJL+f55/NYLz2ew=";
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Abstraction over x86 NASM Assembly";
     longDescription = "Construct adds features such as while loops, if statements, scoped macros and function-call syntax to NASM Assembly.";
-    homepage = "https://github.com/Thomas-de-Bock/construct";
+    homepage = "https://github.com/Thomas-995/construct";
     maintainers = with lib.maintainers; [ rucadi ];
     platforms = lib.platforms.all;
     license = lib.licenses.mit;

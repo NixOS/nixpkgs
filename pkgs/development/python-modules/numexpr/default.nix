@@ -3,18 +3,24 @@
   buildPythonPackage,
   fetchPypi,
   numpy,
+  pytest-run-parallel,
   pytestCheckHook,
   setuptools,
+  # sets NUMEXPR_NUM_THREADS and OMP_NUM_THREADS for packages
+  # invoking numexpr during checkPhase/installCheckPhase to
+  # avoid overloading builders with excessive parallelism
+  # See also: https://numexpr.readthedocs.io/en/latest/user_guide.html#threadpool-configuration
+  checkPhaseThreadLimitHook,
 }:
 
 buildPythonPackage rec {
   pname = "numexpr";
-  version = "2.14.1";
+  version = "2.14.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-S+ALEIbHt6XDLjFVgSK3uAJD/gmFebFwln2oPzFStIs=";
+    hash = "sha256-5xROg+qeWB8ic+AwTxWDZzbE5HDivS43jOYXZiocong=";
   };
 
   build-system = [
@@ -29,7 +35,17 @@ buildPythonPackage rec {
     ln -s ${numpy.cfg} site.cfg
   '';
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-run-parallel
+    pytestCheckHook
+  ];
+
+  propagatedNativeBuildInputs = [
+    checkPhaseThreadLimitHook
+  ];
+
+  # tests check for OMP_NUM_THREADS application and complete quick enough
+  env.dontLimitCheckPhaseThreads = 1;
 
   preCheck = ''
     pushd $out

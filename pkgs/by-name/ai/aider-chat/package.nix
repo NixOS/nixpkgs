@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  python312Packages,
+  python3Packages,
   fetchFromGitHub,
   fetchpatch,
   replaceVars,
@@ -12,9 +12,6 @@
 }:
 
 let
-  # dont support python 3.13 (Aider-AI/aider#3037)
-  python3Packages = python312Packages;
-
   aider-nltk-data = python3Packages.nltk.dataDir (d: [
     d.punkt-tab
     d.stopwords
@@ -115,6 +112,7 @@ let
       requests
       rich
       rpds-py
+      rsa
       scipy
       shtab
       smmap
@@ -175,6 +173,11 @@ let
         url = "https://github.com/Aider-AI/aider/commit/38716cc5a2621499c50454aa77ee379aa2b0c590.patch";
         hash = "sha256-uDIUHbauAmzCfaqx6aswnkUHcmgJi4X2OdMPyn4NeYU=";
       })
+
+      # litellm >= 1.101.0 exports the new VectorStoreSearchError exception at
+      # top level, which trips the strict audit in LiteLLMExceptions._load()
+      # (same failure mode as the two patches above)
+      ./add-vector-store-search-error.patch
     ];
 
     disabledTestPaths = [

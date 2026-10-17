@@ -20,7 +20,7 @@
   tqdm,
   xxhash,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "datasets";
   version = "4.5.0";
   pyproject = true;
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "datasets";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-K8JqIbYz3ZfT1t1h5dRGCo9kBQp0E+kElqzaw2InaOI=";
   };
 
@@ -75,8 +75,8 @@ buildPythonPackage rec {
     description = "Open-access datasets and evaluation metrics for natural language processing";
     mainProgram = "datasets-cli";
     homepage = "https://github.com/huggingface/datasets";
-    changelog = "https://github.com/huggingface/datasets/releases/tag/${src.tag}";
+    changelog = "https://github.com/huggingface/datasets/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ osbm ];
   };
-}
+})

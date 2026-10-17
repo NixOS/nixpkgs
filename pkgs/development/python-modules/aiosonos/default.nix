@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiosonos";
-  version = "0.1.11";
+  version = "0.1.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "aiosonos";
     tag = finalAttrs.version;
-    hash = "sha256-Vd0m96BdFGYslAW/yHYdA4BUo6X8v1eYt6Z9ABinCJU=";
+    hash = "sha256-fOXeiP5sp9oOZYXAZJJ4JJWD3JQEFKi8pEejrCNrep8=";
   };
 
   postPatch = ''
@@ -48,7 +48,7 @@ buildPythonPackage (finalAttrs: {
     description = "Async python library to communicate with Sonos devices";
     homepage = "https://github.com/music-assistant/aiosonos";
     changelog = "https://github.com/music-assistant/aiosonos/releases/tag/${finalAttrs.src.tag}";
-    license = [ lib.licenses.asl20 ];
+    license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.autrimpo ];
   };
 })

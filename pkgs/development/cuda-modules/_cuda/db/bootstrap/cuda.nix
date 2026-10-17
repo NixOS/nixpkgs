@@ -286,6 +286,24 @@
           minCudaMajorMinorVersion = "12.9";
         };
 
+        # NVIDIA Rubin
+        # https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html
+        # https://docs.nvidia.com/cuda/parallel-thread-execution/#ptx-isa-version-9-4
+        "10.7" = {
+          archName = "Rubin";
+          minCudaMajorMinorVersion = "13.4";
+        };
+
+        "10.7a" = {
+          archName = "Rubin";
+          minCudaMajorMinorVersion = "13.4";
+        };
+
+        "10.7f" = {
+          archName = "Rubin";
+          minCudaMajorMinorVersion = "13.4";
+        };
+
         # NVIDIA Jetson Thor Blackwell, T4000, T5000 (CUDA 13.0+)
         "11.0" = {
           archName = "Blackwell";

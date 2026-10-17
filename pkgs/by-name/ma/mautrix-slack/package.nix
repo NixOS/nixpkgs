@@ -14,20 +14,26 @@
 }:
 buildGoModule rec {
   pname = "mautrix-slack";
-  version = "26.03";
-  tag = "v0.2603.0";
+  version = "26.10";
+  tag = "v0.2610.0";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "slack";
     inherit tag;
-    hash = "sha256-YR8t8UNKkMS8cn5rJa2NaRRkJlzwb45O+dWOyDp8qi8=";
+    hash = "sha256-NYTYamZsPIvVZpqUZ5d8EMMDMsIlEBfpHbXANdDQtgs=";
   };
 
-  vendorHash = "sha256-qkEoG4J+dS9jkgmgF3Ztm5Q68YB2uSUMCPcKYuU5PWc=";
+  vendorHash = "sha256-FtEjVcWBcgX9cFZn6oSFpW4Y7rQaHbivD30aoAhgY0o=";
 
   buildInputs = lib.optional (!withGoolm) olm;
   tags = lib.optional withGoolm "goolm";
+
+  # These tests call slackBlocksToMatrix with a context that has no user login,
+  # but GetMentionedMessageURL unconditionally type-asserts it from the context.
+  # Upstream's CI never runs `go test`, so the test remains broken.
+  # https://github.com/mautrix/slack/blob/v0.2609.1/pkg/msgconv/blocks_test.go#L98
+  checkFlags = [ "-skip=TestSlackBlocksToMatrixMessageMention" ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
@@ -44,7 +50,7 @@ buildGoModule rec {
   meta = {
     description = "Matrix-Slack puppeting bridge";
     homepage = "https://github.com/mautrix/slack";
-    changelog = "https://github.com/mautrix/slack/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/mautrix/slack/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ BonusPlay ];
     mainProgram = "mautrix-slack";

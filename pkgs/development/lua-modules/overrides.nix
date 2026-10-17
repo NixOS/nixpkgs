@@ -1,6 +1,7 @@
 # do not add pkgs, it messes up splicing
 {
   stdenv,
+  config,
   cargo,
   cmake,
 
@@ -44,7 +45,7 @@
   oniguruma,
   openldap,
   openssl,
-  pcre,
+  pcre2,
   pkg-config,
   readline,
   ripgrep,
@@ -73,6 +74,17 @@ let
     lua
     isLuaJIT
     ;
+
+  # Only for modules tested on 5.5; drop once LuaRocks has a rockspec allowing it.
+  allowLua55 = old: {
+    meta = (old.meta or { }) // {
+      broken = false;
+    };
+    postConfigure = (old.postConfigure or "") + ''
+      substituteInPlace "$rockspecFilename" \
+        --replace-fail 'lua >= 5.1, < 5.5' 'lua >= 5.1, <= 5.5'
+    '';
+  };
 in
 {
   # keep-sorted start block=yes case=no newline_separated=yes
@@ -97,6 +109,12 @@ in
 
   cjson = prev.lua-cjson;
 
+  cosmo = prev.cosmo.overrideAttrs (old: {
+    meta = (old.meta or { }) // {
+      homepage = "https://github.com/mascarenhas/cosmo";
+    };
+  });
+
   cqueues = prev.cqueues.overrideAttrs (old: {
     # Parse out a version number without the Lua version inserted
     version =
@@ -110,7 +128,7 @@ in
     __intentionallyOverridingVersion = true;
 
     meta = (old.meta or { }) // {
-      broken = luaOlder "5.1" || luaAtLeast "5.5";
+      broken = luaOlder "5.1";
     };
 
     nativeBuildInputs = old.nativeBuildInputs ++ [
@@ -142,7 +160,7 @@ in
         # 'all' target auto-detects correct Lua version, which is fine for us as
         # we only have the right one available :)
         sed -Ei ''${rockspecFilename} \
-          -e 's|lua == 5.[[:digit:]]|lua >= 5.1, <= 5.4|' \
+          -e 's|lua == 5.[[:digit:]]|lua >= 5.1, <= 5.5|' \
           -e 's|build_target = "[^"]+"|build_target = "all"|' \
           -e 's|version = "[^"]+"|version = "${version}"|'
         specDir=$(dirname ''${rockspecFilename})
@@ -273,6 +291,10 @@ in
       final.bustedCheckHook
       writableTmpDirAsHomeHook
     ];
+
+    preCheck = ''
+      LUA_PATH="${vimPlugins.nvim-dap}/lua/?.lua;${vimPlugins.nvim-dap}/lua/?/init.lua;$LUA_PATH"
+    '';
   };
 
   ldbus = prev.ldbus.overrideAttrs (old: {
@@ -303,12 +325,23 @@ in
         sha256 = "0gfvvbri9kyzhvq3bvdbj2l6mwvlz040dk4mrd5m9gz79f7w109c";
       })
 
-      # https://github.com/lgi-devs/lgi/issues/346
-      # https://gitlab.archlinux.org/archlinux/packaging/packages/lgi/-/issues/1
+      # https://github.com/lgi-devs/lgi/issues/362
+      # https://github.com/lgi-devs/lgi/pull/361
+      # https://github.com/NixOS/nixpkgs/issues/523345
+      ./lgi/glib-2.88.patch
+
+      # Lua 5.4 and 5.5 support, unreleased since 0.9.2; drop with the next release.
+      # https://github.com/lgi-devs/lgi/pull/249
       (fetchpatch {
-        name = "glib-2.86.0.patch";
-        url = "https://gitlab.archlinux.org/archlinux/packaging/packages/lgi/-/raw/05a0c9df75883da235bacd4379b769e7d7713fb9/0001-Use-TypeClass.get-instead-of-.ref.patch";
-        hash = "sha256-Z1rNv0VzVrK41rV73KiPXq9yLaNxbTOFiSd6eLZyrbY=";
+        name = "lgi-lua-5.4-lua_resume.patch";
+        url = "https://github.com/lgi-devs/lgi/commit/5cfd42c386d3adae6d211fbb4011179c3c141b04.patch";
+        hash = "sha256-lpCkRzLy5V540COJkQatjCVR2Y/ThcgswgwxWpmLcyM=";
+      })
+      # https://github.com/lgi-devs/lgi/pull/359
+      (fetchpatch {
+        name = "lgi-lua-5.5-loop-variable.patch";
+        url = "https://github.com/lgi-devs/lgi/commit/1953ef7f9178671c4ef878ecf2482da6eb493251.patch";
+        hash = "sha256-gwcf4sb6mugohcWq2C3sc8L3BDS3QCGmNhLHUkz8+/k=";
       })
     ];
 
@@ -322,12 +355,6 @@ in
     preConfigure = ''
       make rock
     '';
-
-    # Lua 5.4 support is experimental at the moment, see
-    # https://github.com/lgi-devs/lgi/pull/249
-    meta = (old.meta or { }) // {
-      broken = luaOlder "5.1" || luaAtLeast "5.4";
-    };
   });
 
   ljsyscall = prev.ljsyscall.overrideAttrs (old: rec {
@@ -346,6 +373,7 @@ in
     '';
     meta = (old.meta or { }) // {
       broken = luaOlder "5.1" || luaAtLeast "5.3";
+      homepage = "https://github.com/justincormack/ljsyscall";
     };
 
     propagatedBuildInputs = old.propagatedBuildInputs ++ lib.optional (!isLuaJIT) final.luaffi;
@@ -429,11 +457,11 @@ in
     ];
   };
 
-  lrexlib-pcre = prev.lrexlib-pcre.overrideAttrs {
+  lrexlib-pcre2 = prev.lrexlib-pcre2.overrideAttrs {
     externalDeps = [
       {
-        name = "PCRE";
-        dep = pcre;
+        name = "PCRE2";
+        dep = pcre2;
       }
     ];
   };
@@ -562,12 +590,28 @@ in
     buildInputs = old.buildInputs ++ [
       zlib.dev
     ];
-    meta = old.meta // {
-      broken = luaOlder "5.1" || luaAtLeast "5.4";
-    };
   });
 
   luacheck = prev.luacheck.overrideAttrs (old: {
+    patches = [
+      # Lua 5.5 makes for-loop control variables read-only, so 1.2.0 fails at
+      # startup. Fixed on master but unreleased; drop with the next release.
+      # https://github.com/lunarmodules/luacheck/issues/147
+      (fetchpatch {
+        name = "luacheck-lua-5.5-loop-variable.patch";
+        url = "https://github.com/lunarmodules/luacheck/commit/eea104d82fa66f27df2a7d900b3c271a6ca122ac.patch";
+        hash = "sha256-0dVg3su1gvx8bnxFrpWknP38OGCUjoCiKdwAfhFB7hI=";
+      })
+    ];
+
+    nativeInstallCheckInputs = [ versionCheckHook ];
+    doInstallCheck = true;
+    versionCheckProgramArg = "--version";
+    # $version carries the rockspec revision (1.2.0-1).
+    preVersionCheck = ''
+      version="Luacheck: ''${version%-*}"
+    '';
+
     meta = old.meta // {
       mainProgram = "luacheck";
     };
@@ -580,12 +624,14 @@ in
     '';
   });
 
-  luadbi-mysql = prev.luadbi-mysql.overrideAttrs (old: {
+  luadbi = prev.luadbi.overrideAttrs allowLua55;
+
+  luadbi-mysql = (prev.luadbi-mysql.overrideAttrs allowLua55).overrideAttrs (old: {
 
     luarocksConfig = lib.recursiveUpdate old.luarocksConfig {
       variables = {
-        MYSQL_INCDIR = "${lib.getDev libmysqlclient}/include/";
-        MYSQL_LIBDIR = "${lib.getLib libmysqlclient}/lib//mysql/";
+        MYSQL_INCDIR = "${lib.getDev libmysqlclient}/include/mysql";
+        MYSQL_LIBDIR = "${lib.getLib libmysqlclient}/lib/mysql";
       };
     };
     buildInputs = old.buildInputs ++ [
@@ -594,13 +640,13 @@ in
     ];
   });
 
-  luadbi-postgresql = prev.luadbi-postgresql.overrideAttrs (old: {
+  luadbi-postgresql = (prev.luadbi-postgresql.overrideAttrs allowLua55).overrideAttrs (old: {
     buildInputs = old.buildInputs ++ [
       (lib.getDev libpq)
     ];
   });
 
-  luadbi-sqlite3 = prev.luadbi-sqlite3.overrideAttrs {
+  luadbi-sqlite3 = (prev.luadbi-sqlite3.overrideAttrs allowLua55).overrideAttrs {
     externalDeps = [
       {
         name = "SQLITE";
@@ -646,7 +692,18 @@ in
     };
     knownRockspec = with prev.luaffi; "${pname}-${version}.rockspec";
     meta = (old.meta or { }) // {
-      broken = luaOlder "5.1" || luaAtLeast "5.4" || isLuaJIT;
+      broken = luaOlder "5.5" || isLuaJIT;
+      badPlatforms = lib.platforms.aarch64;
+    };
+  });
+
+  luaffi-tkl = prev.luaffi-tkl.overrideAttrs (old: {
+    meta = (old.meta or { }) // {
+      broken = isLuaJIT;
+      license = lib.licenses.AND [
+        lib.licenses.bsd3
+        lib.licenses.mit
+      ];
     };
   });
 
@@ -693,6 +750,11 @@ in
     env = old.env // {
       NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types"; # for gcc15
     };
+
+    meta = (old.meta or { }) // {
+      # https://github.com/wahern/luaossl/pull/221
+      broken = luaAtLeast "5.5";
+    };
   });
 
   luaposix = prev.luaposix.overrideAttrs (old: {
@@ -702,10 +764,8 @@ in
         dep = libxcrypt;
       }
     ];
-    propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [
-      final.bit32
-      final.std-normalize
-    ];
+    propagatedBuildInputs =
+      (old.propagatedBuildInputs or [ ]) ++ lib.optionals (luaOlder "5.2") [ final.bit32 ];
   });
 
   luaprompt = prev.luaprompt.overrideAttrs (old: {
@@ -885,13 +945,25 @@ in
   });
 
   neorg = prev.neorg.overrideAttrs {
+
+    doCheck = true;
+    nativeCheckInputs = [
+      final.nlua
+      final.bustedCheckHook
+      writableTmpDirAsHomeHook
+    ];
+
+    nvimSkipModules = [
+      "neorg.modules.core.dirman.tests"
+      "neorg.modules.core.ui.module"
+      "neorg.modules.core.concealer.module"
+    ];
+
     # Relax dependencies
     postConfigure = ''
       substituteInPlace ''${rockspecFilename} \
         --replace-fail "'nvim-nio ~> 1.7'," "'nvim-nio >= 1.7'," \
-        --replace-fail "'plenary.nvim == 0.1.4'," "'plenary.nvim'," \
-        --replace-fail "'nui.nvim == 0.3.0'," "'nui.nvim'," \
-        --replace-fail ", 'nvim-treesitter-legacy-api == 0.9.2'" ""
+        --replace-fail "'nui.nvim == 0.3.0'," "'nui.nvim',"
     '';
   };
 
@@ -924,8 +996,12 @@ in
 
     # patchShebang removes the nvim in nlua's shebang so we hardcode one
     postFixup = ''
-      sed -i -e "1 s|.*|#\!${coreutils}/bin/env -S ${neovim-unwrapped}/bin/nvim -l|" "$out/bin/nlua"
+      substituteInPlace "$out/bin/nlua" \
+        --replace-fail \
+        "#!/usr/bin/env -S nvim" \
+        "#!${coreutils}/bin/env -S ${neovim-unwrapped}/bin/nvim"
     '';
+
     dontPatchShebangs = true;
   };
 
@@ -979,10 +1055,17 @@ in
       # remove failing tests
       rm tests/plenary/colors/colors_spec.lua # colors depend on neovim version usually
       rm tests/plenary/capture/capture_spec.lua # because clipboard not available
+      # trailing whitespace inconsistencies
+      rm tests/plenary/api/api_spec.lua
+      rm tests/plenary/babel/tangle_spec.lua
+      rm tests/plenary/capture/datetree_spec.lua
+      rm tests/plenary/init_spec.lua
+
+      # UI tests depend on the neovim version
+      rm -r tests/plenary/ui/*
 
       # not sure why yet
-      rm tests/plenary/ui/mappings/date_spec.lua \
-        tests/plenary/capture/templates_spec.lua
+      rm tests/plenary/capture/templates_spec.lua
 
       # bypass upstream launcher that interacts with network
       nvim --headless -i NONE \
@@ -1065,10 +1148,6 @@ in
     # TODO: figure out darwin failure
     doCheck = lua.luaversion == "5.1" && stdenv.hostPlatform.isLinux;
 
-    nvimSkipModules = [
-      "bootstrap" # tries to install luarocks from network
-    ];
-
     bustedFlags = [
       "--run=offline"
     ];
@@ -1144,21 +1223,6 @@ in
   };
 
   teal-language-server = prev.teal-language-server.overrideAttrs (old: {
-    # TODO: Remove this prerelease override once upstream publishes a release
-    # or rockspec that the luarocks updater can consume directly.
-    version = "0.1.2-pre-1";
-    knownRockspec =
-      (fetchurl {
-        url = "https://raw.githubusercontent.com/teal-language/teal-language-server/0.1.2-pre-1/teal-language-server-0.1.2-1.rockspec";
-        sha256 = "1z7nbzhdqh2w7k635hbbfba2s37rxbcphaxq7dfsjfj3sgkj9snf";
-      }).outPath;
-    src = fetchFromGitHub {
-      owner = "teal-language";
-      repo = "teal-language-server";
-      tag = "0.1.2-pre-1";
-      hash = "sha256-1ssgt+/e28TJ+1G1TWAPbZe5DiUYOafsSbc9exttesk=";
-    };
-    strictDeps = false;
     # Relax lockfile-pinned deps (e.g. luafilesystem 1.8.0-1) so nixpkgs
     # packaged versions can satisfy dependencies.
     preConfigure = (old.preConfigure or "") + ''
@@ -1166,23 +1230,10 @@ in
     '';
     postConfigure = (old.postConfigure or "") + ''
       substituteInPlace ''${rockspecFilename} \
-        --replace-fail 'tag = "0.1.2"' 'tag = "0.1.2-pre-1"' \
-        --replace-fail '"ltreesitter == 0.1.0",' '"ltreesitter >= 0.2.0",' \
-        --replace-fail '"luv == 1.51.0",' '"luv >= 1.51.0",' \
-        --replace-fail '"tree-sitter-cli == 0.24.7",' "" \
-        --replace-fail '"tl == 0.24.5",' '"tl >= 0.24.5",' \
-        --replace-fail '"tree-sitter-teal == 0.0.34",' '"tree-sitter-teal >= 0.0.34",'
+        --replace-fail '"ltreesitter == 0.3.0",' '"ltreesitter >= 0.3.0",' \
+        --replace-fail '"luv == 1.52.1",' '"luv >= 1.52.1",' \
+        --replace-fail '"tl == 0.24.8",' '"tl >= 0.24.8",'
     '';
-    propagatedBuildInputs =
-      (lib.filter (
-        drv:
-        !(lib.elem (lib.getName drv) [
-          "ltreesitter-ts"
-        ])
-      ) (old.propagatedBuildInputs or [ ]))
-      ++ [
-        final.ltreesitter
-      ];
   });
 
   tiktoken_core = prev.tiktoken_core.overrideAttrs (old: {
@@ -1228,6 +1279,22 @@ in
     ];
   });
 
+  tomlua = prev.tomlua.overrideAttrs (old: {
+    postConfigure = ''
+      chmod +w "$rockspecFilename"
+      echo "deploy = { wrap_bin_scripts = false, }" >> "$rockspecFilename"
+    '';
+    checkPhase = ''
+      runHook preCheck
+      runHook postCheck
+    '';
+    installCheckPhase = ''
+      runHook preInstallCheck
+      make test
+      runHook postInstallCheck
+    '';
+  });
+
   tree-sitter-cli = prev.tree-sitter-cli.overrideAttrs (_: {
     # Keep this package hermetic: provide the already-packaged tree-sitter
     # binary instead of using the LuaRocks backend that downloads from GitHub.
@@ -1246,10 +1313,24 @@ in
     ];
   });
 
+  tree-sitter-kulala_http = prev.tree-sitter-kulala_http.overrideAttrs (old: {
+    nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
+      tree-sitter
+      writableTmpDirAsHomeHook
+    ];
+  });
+
   tree-sitter-norg = prev.tree-sitter-norg.overrideAttrs (old: {
     meta = (old.meta or { }) // {
       broken = lua.luaversion != "5.1";
     };
+  });
+
+  tree-sitter-norg-meta = prev.tree-sitter-norg-meta.overrideAttrs (old: {
+    nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [
+      writableTmpDirAsHomeHook
+      tree-sitter
+    ];
   });
 
   tree-sitter-orgmode = prev.tree-sitter-orgmode.overrideAttrs (old: {
@@ -1281,6 +1362,20 @@ in
     '';
   };
 
+  vicious = prev.vicious.overrideAttrs (old: {
+    meta = (old.meta or { }) // {
+      homepage = "https://vicious.readthedocs.io/";
+      changelog = "https://github.com/vicious-widgets/vicious/blob/v${old.version}/CHANGELOG.rst";
+      maintainers = with lib.maintainers; [
+        makefu
+        mic92
+        mrcjkb
+        McSinyx
+      ];
+      platforms = lib.platforms.linux;
+    };
+  });
+
   vstruct = prev.vstruct.overrideAttrs (old: {
     meta = (old.meta or { }) // {
       broken = luaOlder "5.1" || luaAtLeast "5.4";
@@ -1301,4 +1396,7 @@ in
   });
 
   # keep-sorted end
+}
+// lib.optionalAttrs config.allowAliases {
+  lrexlib-pcre = throw "lrexlib-pcre was removed as the PCRE library is end-of-life"; # added 2026-08-03
 }

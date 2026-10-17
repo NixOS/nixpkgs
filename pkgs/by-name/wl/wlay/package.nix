@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  extra-cmake-modules,
+  kdePackages,
   glfw3,
   libx11,
   libxau,
@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation {
   pname = "wlay";
-  version = "unstable-2022-01-26";
+  version = "0-unstable-2022-01-26";
 
   src = fetchFromGitHub {
     owner = "atx";
@@ -30,12 +30,13 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     pkg-config
     wayland-scanner
   ];
 
   buildInputs = [
+    kdePackages.extra-cmake-modules
     glfw3
     libx11
     libxau

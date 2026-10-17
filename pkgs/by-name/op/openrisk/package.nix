@@ -2,12 +2,15 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
   versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "openrisk";
   version = "0.0.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
@@ -18,19 +21,18 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-BLowqqlMLDtsthS4uKeycmtG7vASG25CARGpUcuibcw=";
 
-  ldflags = [
-    "-w"
-    "-s"
-  ];
+  ldflags = [ "-s" ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   doInstallCheck = true;
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Tool that generates an AI-based risk score";
     homepage = "https://github.com/projectdiscovery/openrisk";
-    changelog = "https://github.com/projectdiscovery/openrisk/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/projectdiscovery/openrisk/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "openrisk";

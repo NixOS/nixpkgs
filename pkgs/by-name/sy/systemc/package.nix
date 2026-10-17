@@ -16,6 +16,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-v/PcQu0m/7zyx2TtpZrLFbHtknahgVCkzcRi3lgrRGw=";
   };
 
+  # consumers must see the SC_CPLUSPLUS the library was built with, otherwise it follows their own -std and fails to link
+  postPatch = ''
+    substituteInPlace src/sysc/kernel/sc_cmnhdr.h \
+      --replace-fail '#  define SC_CPLUSPLUS SC_CPLUSPLUS_AUTO_' '#  define SC_CPLUSPLUS 201703L'
+  '';
+
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
@@ -31,6 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://systemc.org/";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ atalii ];
   };
 })

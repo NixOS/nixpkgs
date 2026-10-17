@@ -6,13 +6,13 @@
 }:
 buildPythonPackage rec {
   pname = "lazrs";
-  version = "0.8.1";
+  version = "0.8.2";
 
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-K+LUgba6PkgxlQEvenrr7niY6GiKaWRIvzki7wx8L0E=";
+    hash = "sha256-gKMK0XmKn9WOhPI4yiP1ACVVuhZVPir+2vpr3klCKeI=";
   };
 
   nativeBuildInputs = [
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
     inherit pname version;
-    hash = "sha256-bMQl1URU4VnRPyw8WdZkZlBv3qldv+vpwd+ZxqPZ/JI=";
+    hash = "sha256-FmNtH99Ky5ovusbzcvl68MyvtVGUG/pkjBYIVkz0VLc=";
   };
 
   pythonImportsCheck = [ "lazrs" ];

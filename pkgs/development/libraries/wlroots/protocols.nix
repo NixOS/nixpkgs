@@ -7,14 +7,14 @@
 
 stdenv.mkDerivation {
   pname = "wlr-protocols";
-  version = "unstable-2022-09-05";
+  version = "0-unstable-2022-09-05";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "wlroots";
     repo = "wlr-protocols";
     rev = "4264185db3b7e961e7f157e1cc4fd0ab75137568";
-    sha256 = "Ztc07RLg+BZPondP/r6Jo3Fw1QY/z1QsFvdEuOqQshA=";
+    hash = "sha256-Ztc07RLg+BZPondP/r6Jo3Fw1QY/z1QsFvdEuOqQshA=";
   };
 
   strictDeps = true;
@@ -22,8 +22,8 @@ stdenv.mkDerivation {
 
   patchPhase = ''
     substituteInPlace wlr-protocols.pc.in \
-      --replace '=''${pc_sysrootdir}' "=" \
-      --replace '=@prefix@' "=$out"
+      --replace-fail '=''${pc_sysrootdir}' "=" \
+      --replace-fail '=@prefix@' "=$out"
   '';
 
   doCheck = true;

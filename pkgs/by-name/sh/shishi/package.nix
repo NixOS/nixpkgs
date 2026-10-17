@@ -14,6 +14,7 @@
   libidn,
   useGnutls ? lib.meta.availableOn stdenv.hostPlatform gnutls,
   gnutls,
+  pkgsStatic,
 }:
 
 let
@@ -30,16 +31,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   separateDebugInfo = true;
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    libgcrypt
+    pkg-config
+  ];
+
   buildInputs = [
     libgcrypt
     libgpg-error
     libtasn1
-    # TODO use lib.optional instead of setting packages to null
-    (if usePam then pam else null)
-    (if useLibidn then libidn else null)
-    (if useGnutls then gnutls else null)
-  ];
+  ]
+  ++ lib.optionals usePam [ pam ]
+  ++ lib.optionals useLibidn [ libidn ]
+  ++ lib.optionals useGnutls [ gnutls ];
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -57,7 +61,12 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature true "arcfour")
   ];
 
-  env.NIX_CFLAGS_COMPILE = optionalString stdenv.hostPlatform.isDarwin "-DBIND_8_COMPAT";
+  env.NIX_CFLAGS_COMPILE = toString [
+    (optionalString stdenv.hostPlatform.isDarwin "-DBIND_8_COMPAT")
+    # gnulib's crc.c exports a "crc32" symbol (unused by shishi, which only calls crc32_update_no_xor).
+    # On static builds it conflicts with "crc32" from zlib (transitive dependency of gnutls).
+    (optionalString stdenv.hostPlatform.isStatic "-Dcrc32=shishi_gnulib_crc32")
+  ];
 
   doCheck = true;
 
@@ -78,6 +87,14 @@ stdenv.mkDerivation (finalAttrs: {
     -e 's,\(-lgpg-error\),-L${libgpg-error.out}/lib \1,' \
     -e 's,\(-ltasn1\),-L${libtasn1.out}/lib \1,'
   '';
+
+  strictDeps = true;
+
+  passthru = {
+    tests = {
+      static = pkgsStatic.shishi;
+    };
+  };
 
   meta = {
     homepage = "https://www.gnu.org/software/shishi/";

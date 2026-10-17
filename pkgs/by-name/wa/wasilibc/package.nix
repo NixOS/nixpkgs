@@ -1,67 +1,91 @@
 {
   stdenvNoLibc,
+  cmake,
   fetchFromGitHub,
   lib,
+  lld,
+  llvmPackages,
+  ninja,
+  wasm-tools,
+  wit-bindgen,
+  wkg,
   firefox-unwrapped,
   firefox-esr-unwrapped,
-  enablePosixThreads ? false,
 }:
 
+let
+  # This pin basically never gets updated.
+  headers = fetchFromGitHub {
+    owner = "WebAssembly";
+    repo = "WASI";
+    rev = "59cbe140561db52fc505555e859de884e0ee7f00";
+    hash = "sha256-qCZI+aQfzddO7J5OY5SphrcyAuwGecNQveVZycVMfXM=";
+  };
+in
 stdenvNoLibc.mkDerivation (finalAttrs: {
   pname = "wasilibc";
-  version = "27";
+  version = "32";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "wasi-libc";
     tag = "wasi-sdk-${finalAttrs.version}";
-    hash = "sha256-RIjph1XdYc1aGywKks5JApcLajbNFEuWm+Wy/GMHddg=";
-    fetchSubmodules = true;
+    hash = "sha256-7SL/205NkcbJvGsNYX3tjOjwM418y7z0QCUe4WDu4ls=";
+    # We don't use `fetchSubmodules` here to avoid a cycle between `gitMinimal` -> `rustc` -> LLVM -> bintools -> rustc
   };
 
-  # These flags break pkgsCross.wasi32.llvmPackages.libcxx
-  hardeningDisable = [
-    "libcxxhardeningfast"
-    "libcxxhardeningextensive"
+  patches = [
+    ./0000-relax-version-bounds.patch
+  ];
+
+  postPatch = ''
+    ln -s ${headers} tools/wasi-headers
+  '';
+
+  nativeBuildInputs = [
+    cmake
+    lld
+    ninja
+    wasm-tools
+    wit-bindgen
+    wkg
   ];
 
   outputs = [
     "out"
     "dev"
-    "share"
   ];
 
-  # clang-13: error: argument unused during compilation: '-rtlib=compiler-rt' [-Werror,-Wunused-command-line-argument]
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace "-Werror" ""
-    patchShebangs scripts/
-  '';
-
-  preBuild = ''
-    export SYSROOT_LIB=${placeholder "out"}/lib
-    export SYSROOT_INC=${placeholder "dev"}/include
-    export SYSROOT_SHARE=${placeholder "share"}/share
-    mkdir -p "$SYSROOT_LIB" "$SYSROOT_INC" "$SYSROOT_SHARE"
-    makeFlagsArray+=(
-      "SYSROOT_LIB:=$SYSROOT_LIB"
-      "SYSROOT_INC:=$SYSROOT_INC"
-      "SYSROOT_SHARE:=$SYSROOT_SHARE"
-      ${lib.strings.optionalString enablePosixThreads "THREAD_MODEL:=posix"}
-    )
-  '';
+  cmakeFlags = [
+    (lib.cmakeFeature "BUILTINS_LIB" "${llvmPackages.compiler-rt}/lib/${stdenvNoLibc.targetPlatform.parsed.kernel.name}/libclang_rt.builtins-wasm32.a")
+    #https://stackoverflow.com/questions/53633705/cmake-the-c-compiler-is-not-able-to-compile-a-simple-test-program
+    (lib.cmakeFeature "CMAKE_TRY_COMPILE_TARGET_TYPE" "STATIC_LIBRARY")
+    (lib.cmakeFeature "TARGET_TRIPLE" stdenvNoLibc.system)
+    # clang already knows to use wasm-component-ld to link
+    (lib.cmakeFeature "USE_WASM_COMPONENT_LD" "OFF")
+  ];
 
   enableParallelBuilding = true;
 
-  # We just build right into the install paths, per the `preBuild`.
-  dontInstall = true;
+  preFixup =
+    lib.optionalString (stdenvNoLibc.system != stdenvNoLibc.targetPlatform.rust.rustcTargetSpec)
+      ''
+        ln -s $out/lib/${stdenvNoLibc.system} $out/lib/${stdenvNoLibc.targetPlatform.rust.rustcTargetSpec}
+      '';
 
-  preFixup = ''
-    ln -s $share/share/undefined-symbols.txt $out/lib/wasi.imports
-  '';
+  # TODO: run wasilibc tests. Nixpkgs never runs the check phase during cross compiles
+  # (sensibly), but this package is always cross compiled due to its nature, and the tests
+  # expect to be run in a cross-compilation environment. There are instructions on how to run
+  # them but I don't understand enough about Nixpkgs' CMake set-up to work out how to apply them.
 
-  passthru.tests = {
-    inherit firefox-unwrapped firefox-esr-unwrapped;
+  passthru = {
+    incdir = "/include/${stdenvNoLibc.system}";
+    libdir = "/lib/${stdenvNoLibc.system}";
+    tests = {
+      inherit firefox-unwrapped firefox-esr-unwrapped;
+    };
   };
 
   meta = {

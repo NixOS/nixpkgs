@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "pyquery";
-  version = "2.0.1";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AZS7JwaxLQN9sSxRko/p67NrctnnGVZdq6WmxZUyL68=";
+    hash = "sha256-dSODiHUPxuJUt6UvdxAnub6zpiAriASL71KgCwq+rbs=";
   };
 
   build-system = [ setuptools ];

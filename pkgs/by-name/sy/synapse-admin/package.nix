@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  substitute,
   nodejs,
   yarn-berry,
   cacert,
@@ -24,7 +25,23 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Awesome-Technologies";
     repo = "synapse-admin";
     tag = finalAttrs.version;
-    hash = "sha256-rK1Tc1K3wx6/1J8TEw5Lb9g09gbt/1HoZdDrEFzxTQQ=";
+    hash = "sha256-D7MlFaI49KSNQ7DPj0iGKJqaQ4s5Y6EksB2U3Z5sJXY=";
+
+    # Remove after upstream updates to Yarn 4.15
+    # https://github.com/Awesome-Technologies/synapse-admin/blob/master/package.json#L13
+    postFetch = ''
+      cd $out
+      patch -p1 < ${
+        (substitute {
+          src = ./yarn-fix.patch;
+          substitutions = [
+            "--replace-fail"
+            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+            yarn-berry.lockfileVersion
+          ];
+        })
+      }
+    '';
   };
 
   # we cannot use fetchYarnDeps because that doesn't support yarn 2/berry lockfiles
@@ -78,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
       runHook postBuild
     '';
 
-    outputHash = "sha256-IiViodAB1KAYsRRr8+zw3vrCbUYp7Mdtazi0Y6SEFNU=";
+    outputHash = "sha256-n5SkXCWOsqdyZkng5EU0HJDKJ0xorfi6SfNvwnuhFTg=";
     outputHashMode = "recursive";
   };
 
@@ -134,7 +151,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     maintainers = with lib.maintainers; [

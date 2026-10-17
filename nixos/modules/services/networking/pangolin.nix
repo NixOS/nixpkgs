@@ -9,7 +9,7 @@
 let
   cfg = config.services.pangolin;
   format = pkgs.formats.yaml { };
-  finalSettings = lib.attrsets.recursiveUpdate pangolinConf cfg.settings;
+  finalSettings = lib.attrsets.recursiveUpdate options.services.pangolin.settings.default cfg.settings;
   cfgFile = format.generate "config.yml" finalSettings;
   # override the type to allow for optionality
   nullOrOpt = t: lib.types.nullOr t // { _optional = true; };
@@ -33,25 +33,6 @@ let
       fi
     '';
   };
-
-  pangolinConf = {
-    app.dashboard_url = "https://${cfg.dashboardDomain}";
-    domains.domain1 = {
-      base_domain = cfg.baseDomain;
-      prefer_wildcard_cert = false;
-    };
-    server = {
-      external_port = 3000;
-      internal_port = 3001;
-      next_port = 3002;
-      integration_port = 3003;
-      # needs to be set, otherwise this fails silently
-      # see https://github.com/fosrl/newt/issues/37
-      internal_hostname = "localhost";
-    };
-    gerbil.base_endpoint = cfg.dashboardDomain;
-    flags.enable_integration_api = false;
-  };
 in
 {
   options.services = {
@@ -61,7 +42,50 @@ in
 
       settings = lib.mkOption {
         inherit (format) type;
-        default = { };
+        default = {
+          app.dashboard_url = "https://${cfg.dashboardDomain}";
+          domains.domain1 = {
+            base_domain = cfg.baseDomain;
+            prefer_wildcard_cert = false;
+          };
+          server = {
+            external_port = 3000;
+            internal_port = 3001;
+            next_port = 3002;
+            integration_port = 3003;
+            # needs to be set, otherwise this fails silently
+            # see https://github.com/fosrl/newt/issues/37
+            internal_hostname = "localhost";
+          };
+          gerbil.base_endpoint = cfg.dashboardDomain;
+          flags = {
+            disable_signup_without_invite = true;
+            enable_integration_api = false;
+          };
+        };
+        defaultText = lib.literalExpression ''
+          {
+            app.dashboard_url = "https://''${config.services.pangolin.dashboardDomain}";
+            domains.domain1 = {
+              base_domain = cfg.baseDomain;
+              prefer_wildcard_cert = false;
+            };
+            server = {
+              external_port = 3000;
+              internal_port = 3001;
+              next_port = 3002;
+              integration_port = 3003;
+              # needs to be set, otherwise this fails silently
+              # see https://github.com/fosrl/newt/issues/37
+              internal_hostname = "localhost";
+            };
+            gerbil.base_endpoint = config.services.pangolin.dashboardDomain;
+            flags = {
+              disable_signup_without_invite = true;
+              enable_integration_api = false;
+            };
+          }
+        '';
         description = ''
           Additional attributes to be merged with the configuration options and written to Pangolin's {file}`config.yml` file.
         '';
@@ -79,7 +103,7 @@ in
         };
       };
 
-      openFirewall = lib.mkEnableOption "opening TCP ports 80 and 443, and UDP port 51820 in the firewall for the Pangolin service(s)";
+      openFirewall = lib.mkEnableOption "opening TCP ports 80 and 443, and UDP ports 21820 and 51820 in the firewall for the Pangolin service(s)";
 
       baseDomain = lib.mkOption {
         type = with lib.types; nullOr str;
@@ -184,7 +208,10 @@ in
         80
         443
       ];
-      allowedUDPPorts = [ 51820 ];
+      allowedUDPPorts = [
+        21820
+        51820
+      ];
     };
 
     users = {

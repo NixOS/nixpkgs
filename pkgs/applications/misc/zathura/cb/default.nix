@@ -7,6 +7,7 @@
   pkg-config,
   zathura_core,
   girara,
+  gtk4,
   gettext,
   libarchive,
   desktop-file-utils,
@@ -17,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zathura-cb";
-  version = "2026.02.03";
+  version = "2026.07.18";
 
   src = fetchFromGitHub {
     owner = "pwmt";
     repo = "zathura-cb";
     tag = finalAttrs.version;
-    hash = "sha256-k5WbJR0PToiSQo00igH/3uHWp7z4dNxwSXiAos6OgJ8=";
+    hash = "sha256-zZ5iqSSzZqhMI1VfQI9ChV2b6cDMM2UnVXrvxjD55zg=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    gtk4
     libarchive
     zathura_core
     girara
@@ -54,6 +56,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.zlib;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ jlesquembre ];
+    maintainers = with lib.maintainers; [
+      jlesquembre
+      mithicspirit
+    ];
   };
 })

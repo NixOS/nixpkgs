@@ -3,26 +3,39 @@
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
-  testers,
+  pkg-config,
+  portaudio,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "livekit-cli";
-  version = "2.16.0";
+  version = "2.18.8";
+
+  __structuredAttrs = true;
+  __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "livekit";
     repo = "livekit-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qGxRNsVnrDl8N0hAh8WjumDvaL7Zs90HaRmXORvUWZs=";
+    hash = "sha256-IuqgAaaZZblAl8a/rs2xE+zhuY4s3UNND+kmQOq/yPg=";
   };
 
-  vendorHash = "sha256-6posDd3z2seRvGuWLsmPD5wOz4RVF4ulvmfTqWN29hE=";
+  vendorHash = "sha256-B/woYmWYrdtL+qFDQzvBmyXLEo2HarOjRQlEX/GcPNQ=";
+
+  # Use nixpkgs portaudio package + pkg-config rather than relying on a vendored
+  # git submodule, similar to the homebrew solution
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ portaudio ];
+  tags = [ "portaudio_system" ];
 
   subPackages = [ "cmd/lk" ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru.updateScript = nix-update-script { };
-  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = {
     description = "Command line interface to LiveKit";

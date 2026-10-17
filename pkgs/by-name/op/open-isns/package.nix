@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   # The location of /var/lib is not made configurable in the meson.build file
   postPatch = ''
     substituteInPlace meson.build \
-        --replace-fail "/var/lib" "$out/var/lib" \
+        --replace-fail "/var/lib" "$out/var/lib"
   '';
 
   nativeBuildInputs = [

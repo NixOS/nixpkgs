@@ -18,7 +18,7 @@
   icu,
   installShellFiles,
   libpng,
-  lua,
+  lua5_2_compat,
   python3,
   zlib,
   minizip,
@@ -26,7 +26,11 @@
   libsm,
   libice,
   libxext,
+  libx11,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation rec {
   pname = "widelands";
@@ -79,6 +83,7 @@ stdenv.mkDerivation rec {
     asio
     libsm # XXX: these should be propagated by SDL2?
     libice
+    libx11
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux libxext;
 

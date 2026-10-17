@@ -8,13 +8,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "golazo";
-  version = "0.22.0";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = "0xjuanma";
     repo = "golazo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-t8jzZcOVJaeQ4SGb8WO9lqzVgllz2mX8mUwk+JsNWzI=";
+    hash = "sha256-g9JPPP/pZ65Jgq2hXYzRynhZebF7s2ZTNU4Ca1Iu5uc=";
   };
 
   vendorHash = "sha256-M2gfqU5rOfuiVSZnH/Dr8OVmDhyU2jYkgW7RuIUTd+E=";
@@ -26,6 +26,8 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-X github.com/0xjuanma/golazo/cmd.Version=v${finalAttrs.version}"
   ];
+
+  __structuredAttrs = true;
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";

@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gfxreconstruct";
-  version = "1.0.4-unstable-2025-10-30";
+  version = "1.0.4-unstable-2026-04-29";
 
   src = fetchFromGitHub {
     owner = "LunarG";
     repo = "gfxreconstruct";
-    rev = "4f1fa3aa9870b00404e6597283b2032a885303b3";
-    hash = "sha256-HwGmtkVQJirKikb37A/dQeEr3AWmqJMfBj46UKsS5m8=";
+    rev = "41c7f2d964544813df5988d9689189f8520b1e2e";
+    hash = "sha256-xtiNxKU0gJURN4FQBZyEX2VaDqvdiMoyDJZOoMafAgM=";
     fetchSubmodules = true;
   };
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   # The python script searches in subfolders, but we want to search in the same bin directory
   prePatch = ''
     substituteInPlace tools/gfxrecon/gfxrecon.py \
-      --replace "scriptdir, '..', cmd" 'scriptdir'
+      --replace-fail "scriptdir, '..', cmd" 'scriptdir'
   '';
 
   # Fix the paths to load the layer.
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   # does not try to start the wrapper bash scripts with python.
   postInstall = ''
     substituteInPlace $out/share/vulkan/explicit_layer.d/VkLayer_gfxreconstruct.json \
-      --replace 'libVkLayer_gfxreconstruct.so' "$out/lib/libVkLayer_gfxreconstruct.so"
+      --replace-fail 'libVkLayer_gfxreconstruct.so' "$out/lib/libVkLayer_gfxreconstruct.so"
     for f in $out/bin/*.py; do
       mv -- "$f" "''${f%%.py}"
     done
@@ -72,7 +72,6 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Graphics API Capture and Replay Tools";
     homepage = "https://github.com/LunarG/gfxreconstruct/";
-    changelog = "https://github.com/LunarG/gfxreconstruct/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Flakebi ];
     platforms = lib.platforms.linux;

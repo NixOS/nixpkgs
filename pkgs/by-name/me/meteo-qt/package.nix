@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail "lrelease-pro-qt6" "${qt6.qttools}/libexec/lrelease-pro"
+      --replace-fail "lrelease-pro-qt6" "${qt6.qttools}/bin/lrelease-pro"
   '';
 
   nativeBuildInputs = [
@@ -44,7 +44,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonImportsCheck = [ "meteo_qt" ];
 
-  makeWrapperArgs = [ "\${qtWrapperArgs[@]}" ];
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  '';
 
   meta = {
     description = "System tray application for weather status information";

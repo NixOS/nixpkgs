@@ -18,13 +18,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qdmr";
-  version = "0.14.1";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "hmatuschek";
     repo = "qdmr";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-epttTJbqOtkacIu7IfBCAG1aGk02+0Ncalo7wRz+44k=";
+    hash = "sha256-RFGjL31o+aiy7O7UgZWjGSMBqG97b5BtwVr6HQD3Ioo=";
   };
 
   nativeBuildInputs = [
@@ -38,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     libusb1
     libxslt
     kdePackages.qtlocation
+    kdePackages.qtmultimedia
     kdePackages.qtserialport
     kdePackages.qttools
     kdePackages.qtbase

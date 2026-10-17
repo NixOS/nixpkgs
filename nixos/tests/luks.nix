@@ -1,6 +1,6 @@
 # Tests LUKS specifically with scripted stage 1. Remove in 26.11.
 
-{ lib, pkgs, ... }:
+{ lib, ... }:
 {
   name = "luks";
 
@@ -47,41 +47,59 @@
 
   enableOCR = true;
 
-  testScript = ''
-    # Create encrypted volume
-    machine.wait_for_unit("multi-user.target")
-    machine.succeed("echo -n supersecret | cryptsetup luksFormat -q --iter-time=1 /dev/vdb -")
-    machine.succeed("echo -n supersecret | cryptsetup luksOpen -q /dev/vdb cryptroot")
-    machine.succeed("mkfs.ext4 /dev/mapper/cryptroot")
+  testScript =
+    { nodes, ... }:
+    let
+      toplevel = nodes.machine.system.build.toplevel;
+      boot-luks = nodes.machine.specialisation.boot-luks.configuration.system.build.toplevel;
+      boot-luks-custom-keymap =
+        nodes.machine.specialisation.boot-luks-custom-keymap.configuration.system.build.toplevel;
+    in
+    # python
+    ''
+      # Create encrypted volume
+      machine.wait_for_unit("multi-user.target")
+      machine.succeed("echo -n supersecret | cryptsetup luksFormat -q --iter-time=1 /dev/vdb -")
+      machine.succeed("echo -n supersecret | cryptsetup luksOpen -q /dev/vdb cryptroot")
+      machine.succeed("mkfs.ext4 /dev/mapper/cryptroot")
 
-    machine.succeed("echo -n supersecret | cryptsetup luksFormat -q --iter-time=1 /dev/vdc -")
-    machine.succeed("echo -n supersecret | cryptsetup luksOpen -q /dev/vdc cryptroot2")
-    machine.succeed("mkfs.ext4 /dev/mapper/cryptroot2")
+      machine.succeed("echo -n supersecret | cryptsetup luksFormat -q --iter-time=1 /dev/vdc -")
+      machine.succeed("echo -n supersecret | cryptsetup luksOpen -q /dev/vdc cryptroot2")
+      machine.succeed("mkfs.ext4 /dev/mapper/cryptroot2")
 
-    # Boot from the encrypted disk
-    machine.succeed("bootctl set-default nixos-generation-1-specialisation-boot-luks.conf")
-    machine.succeed("sync")
-    machine.crash()
+      # Boot from the encrypted disk
+      machine.succeed("${boot-luks}/bin/switch-to-configuration boot")
+      machine.succeed("sync")
+      machine.crash()
 
-    # Boot and decrypt the disk
-    machine.start()
-    machine.wait_for_text("Passphrase for")
-    machine.send_chars("supersecret\n")
-    machine.wait_for_unit("multi-user.target")
+      # Boot and decrypt the disk
+      machine.start()
+      machine.wait_for_text("Passphrase for")
+      machine.send_chars("supersecret\n")
+      machine.wait_for_unit("multi-user.target")
 
-    assert "/dev/mapper/cryptroot on / type ext4" in machine.succeed("mount")
+      assert "/dev/mapper/cryptroot on / type ext4" in machine.succeed("mount")
 
-    # Boot from the encrypted disk with custom keymap
-    machine.succeed("bootctl set-default nixos-generation-1-specialisation-boot-luks-custom-keymap.conf")
-    machine.succeed("sync")
-    machine.crash()
+      # The new root is empty, so it has no /nix/var/nix/profiles. Without a
+      # system profile, systemd-boot-builder finds zero generations and
+      # bails. So we manually create the one profile link that we need.
+      machine.succeed(
+          "mkdir -p /nix/var/nix/profiles",
+          "ln -sfn ${toplevel} /nix/var/nix/profiles/system-1-link",
+          "ln -sfn system-1-link /nix/var/nix/profiles/system",
+      )
 
-    # Boot and decrypt the disk
-    machine.start()
-    machine.wait_for_text("Passphrase for")
-    machine.send_chars("havfkhfrkfl\n")
-    machine.wait_for_unit("multi-user.target")
+      # Boot from the encrypted disk with custom keymap
+      machine.succeed("${boot-luks-custom-keymap}/bin/switch-to-configuration boot")
+      machine.succeed("sync")
+      machine.crash()
 
-    assert "/dev/mapper/cryptroot on / type ext4" in machine.succeed("mount")
-  '';
+      # Boot and decrypt the disk
+      machine.start()
+      machine.wait_for_text("Passphrase for")
+      machine.send_chars("havfkhfrkfl\n")
+      machine.wait_for_unit("multi-user.target")
+
+      assert "/dev/mapper/cryptroot on / type ext4" in machine.succeed("mount")
+    '';
 }

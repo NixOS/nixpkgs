@@ -21,15 +21,16 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   build-system = with python3.pkgs; [ setuptools-scm ];
 
   dependencies = with python3.pkgs; [
+    kubernetes
     netaddr
     netifaces
-    requests
-    prettytable
-    urllib3
-    ruamel-yaml
     packaging
+    pkg-resources-backport
     pluggy
-    kubernetes
+    prettytable
+    requests
+    ruamel-yaml
+    urllib3
   ];
 
   nativeCheckInputs = with python3.pkgs; [

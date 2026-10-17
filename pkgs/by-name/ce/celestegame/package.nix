@@ -99,7 +99,7 @@ buildFHSEnv {
       util-linux.lib
       libselinux
       nspr
-      systemd
+      systemdLibs
       gtk3
       pango
       harfbuzz

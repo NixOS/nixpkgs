@@ -60,14 +60,14 @@ resholve.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
-    sed -i '2i GOSS_PATH=${goss}/bin/goss' extras/dgoss/dgoss
+    sed -i '2i GOSS_PATH=${lib.getExe goss}' extras/dgoss/dgoss
     install -D extras/dgoss/dgoss $out/bin/dgoss
   '';
 
   solutions = {
     default = {
       scripts = [ "bin/dgoss" ];
-      interpreter = "${bash}/bin/bash";
+      interpreter = lib.getExe bash;
       inputs = [
         coreutils
         gnused
@@ -107,7 +107,7 @@ trivial, so I'll also link to some real-world examples:
     resholve.writeScript "name"
       {
         inputs = [ file ];
-        interpreter = "${bash}/bin/bash";
+        interpreter = lib.getExe bash;
       }
       ''
         echo "Hello"
@@ -117,7 +117,7 @@ trivial, so I'll also link to some real-world examples:
     resholve.writeScriptBin "name"
       {
         inputs = [ file ];
-        interpreter = "${bash}/bin/bash";
+        interpreter = lib.getExe bash;
       }
       ''
         echo "Hello"
@@ -129,11 +129,12 @@ trivial, so I'll also link to some real-world examples:
 
 ## Basic `resholve.phraseSolution` example
 
-This function has a similar API to `writeScript` and `writeScriptBin`, except it does require a `scripts` attr. It is intended to make resholve a little easier to mix into more types of builds. This example is a little
+This function has a similar API to `writeScript` and `writeScriptBin`, except it does require a `scripts` attr. It is intended to make resholve a little easier to mix into more types of build. This example is a little
 trivial for now. If you have a real usage that you find helpful, please PR it.
 
 ```nix
 {
+  lib,
   stdenv,
   resholve,
   module1,
@@ -149,7 +150,7 @@ stdenv.mkDerivation {
     install conjure.sh $out/bin/conjure.sh
     ${resholve.phraseSolution "conjure" {
       scripts = [ "bin/conjure.sh" ];
-      interpreter = "${bash}/bin/bash";
+      interpreter = lib.getExe bash;
       inputs = [ module1 ];
       fake = {
         external = [
@@ -307,26 +308,26 @@ do it piecemeal:
 
 ```nix
 {
-  # --execer 'cannot:${openssl.bin}/bin/openssl can:${openssl.bin}/bin/c_rehash'
+  # --execer 'cannot:${lib.getExe openssl} can:${lib.getExe' openssl "c_rehash"}'
   execer = [
     /*
       This is the same verdict binlore will
       come up with. It's a no-op just to demo
       how to fiddle lore via the Nix API.
     */
-    "cannot:${openssl.bin}/bin/openssl"
+    "cannot:${lib.getExe openssl}"
     # different verdict, but not used
-    "can:${openssl.bin}/bin/c_rehash"
+    "can:${lib.getExe' openssl "c_rehash"}"
   ];
 
-  # --wrapper '${gnugrep}/bin/egrep:${gnugrep}/bin/grep'
+  # --wrapper '${lib.getExe' gnugrep "egrep"}:${lib.getExe gnugrep}'
   wrapper = [
     /*
       This is the same verdict binlore will
       come up with. It's a no-op just to demo
       how to fiddle lore via the Nix API.
     */
-    "${gnugrep}/bin/egrep:${gnugrep}/bin/grep"
+    "${lib.getExe' gnugrep "egrep"}:${lib.getExe gnugrep}"
   ];
 }
 ```

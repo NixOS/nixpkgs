@@ -6,7 +6,7 @@
   ninja,
   pkg-config,
   qt6,
-  systemd,
+  systemdLibs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     qt6.qtbase
-    systemd
+    systemdLibs
   ];
 
   dontWrapQtApps = true;

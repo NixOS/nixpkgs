@@ -3,26 +3,42 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
-  openssl,
+  aws-lc,
+  sqlite,
+  cacert,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustical";
-  version = "0.12.10";
+  version = "0.16.6";
+  __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "lennart-k";
     repo = "rustical";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GWXxpiyqW6K7jM2HEqpWLOuifPJXjDJLk/n+sK6wGBI=";
+    hash = "sha256-dSnjxZE74uJBLlCBj3yq8phKAgoKDhiL84xvX91Vvd0=";
   };
 
-  cargoHash = "sha256-NECpU+ttF7CsX0L2yFGs23HFStm+yiptsctszRXRZ7w=";
+  cargoHash = "sha256-8/PJG5F1yNyme/24rG/N3d3OSldAMOOFTaipTQyfpPo=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ];
 
-  env.OPENSSL_NO_VENDOR = true;
+  buildInputs = [
+    aws-lc
+    sqlite
+  ];
+
+  env = {
+    AWS_LC_SYS_USE_SYSTEM = true;
+    LIBSQLITE3_SYS_USE_PKG_CONFIG = true;
+    SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  };
+
+  passthru.tests = {
+    inherit (nixosTests) rustical;
+  };
 
   meta = {
     description = "Yet another calendar server aiming to be simple, fast and passwordless";

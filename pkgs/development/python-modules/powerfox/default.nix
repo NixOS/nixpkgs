@@ -7,6 +7,7 @@
   mashumaro,
   orjson,
   poetry-core,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
@@ -16,17 +17,21 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "powerfox";
-  version = "2.1.2";
+  version = "2.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-powerfox";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Uki9yIRac2V3v85f+v+Qzle7bAxlmHz2MZOsIntN8Sw=";
+    hash = "sha256-290ZCJZk/aFGlGpSpreSMh+sXBJDw+d37sANvIBhwgg=";
   };
 
   build-system = [ poetry-core ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   dependencies = [
     aiohttp

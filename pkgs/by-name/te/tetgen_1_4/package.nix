@@ -9,7 +9,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.4.3";
 
   src = fetchurl {
-    url = "${finalAttrs.meta.homepage}/files/tetgen${finalAttrs.version}.tar.gz";
+    url = "http://tetgen.org/files/tetgen${finalAttrs.version}.tar.gz";
     sha256 = "0d70vjqdapmy1ghlsxjlvl5z9yp310zw697bapc4zxmp0sxi29wm";
   };
 

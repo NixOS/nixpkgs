@@ -12,23 +12,6 @@ let
     (lib.importJSON ../../../../applications/networking/browsers/chromium/info.json)
     .chromium.chromedriver;
 
-  # See ./source.nix for Linux
-  allSpecs = {
-    x86_64-darwin = {
-      system = "mac-x64";
-      hash = upstream-info.hash_darwin;
-    };
-
-    aarch64-darwin = {
-      system = "mac-arm64";
-      hash = upstream-info.hash_darwin_aarch64;
-    };
-  };
-
-  spec =
-    allSpecs.${stdenv.hostPlatform.system}
-      or (throw "missing chromedriver binary for ${stdenv.hostPlatform.system}");
-
   inherit (upstream-info) version;
 in
 stdenv.mkDerivation {
@@ -36,8 +19,8 @@ stdenv.mkDerivation {
   inherit version;
 
   src = fetchzip {
-    url = "https://storage.googleapis.com/chrome-for-testing-public/${version}/${spec.system}/chromedriver-${spec.system}.zip";
-    inherit (spec) hash;
+    url = "https://storage.googleapis.com/chrome-for-testing-public/${version}/mac-arm64/chromedriver-mac-arm64.zip";
+    hash = upstream-info.hash_darwin_aarch64;
   };
 
   nativeBuildInputs = [ unzip ];

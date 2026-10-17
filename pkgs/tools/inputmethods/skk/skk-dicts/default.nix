@@ -22,13 +22,13 @@ let
       name = lib.toLower (builtins.replaceStrings [ "." ] [ "_" ] name);
       value = stdenvNoCC.mkDerivation {
         pname = "skk-jisyo-" + lib.toLower name;
-        version = "0-unstable-2024-08-28";
+        version = "0-unstable-2026-04-11";
 
         src = fetchFromGitHub {
           owner = "skk-dev";
           repo = "dict";
-          rev = "4eb91a3bbfef70bde940668ec60f3beae291e971";
-          sha256 = "sha256-sWz85Q6Bu2WoKsckSp5SlcuPUQN2mcq+BHMqNXQ/aho=";
+          rev = "0a164e6b990c5eb5b59eb7d8789f08865dc2f644";
+          sha256 = "sha256-xKMtHB54kVSwwwr+v248ewa7dwuavYVmc6KHrZwSdnM=";
         };
 
         nativeBuildInputs = lib.optionals useUtf8 [ nkf ];

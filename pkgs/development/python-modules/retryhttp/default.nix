@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "retryhttp";
-  version = "1.3.1";
-  format = "pyproject";
+  version = "1.4.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "austind";
     repo = "retryhttp";
     tag = "release/v${version}";
-    hash = "sha256-Jz073CTeIfPjcOQUGdb6/Q5OfEXZW5hTiEPKrfAK0Gg=";
+    hash = "sha256-wUz5cC8O//TqlalDoF1KtUCqONnfCShFv3hU4k4fzuM=";
   };
 
   build-system = [
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     description = "Retry potentially transient HTTP errors in Python";
     homepage = "https://github.com/austind/retryhttp";
     changelog = "https://github.com/austind/retryhttp/releases/tag/release%2Fv${version}";
-    license = lib.licenses.apsl20;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ taranarmo ];
   };
 }

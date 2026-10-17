@@ -4,9 +4,10 @@
   buildPythonPackage,
   fetchFromGitHub,
   freezegun,
+  godevccu,
+  openccu-data,
   orjson,
   pydantic,
-  pydevccu,
   pytest-asyncio,
   pytest-socket,
   pytest-xdist,
@@ -16,24 +17,26 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiohomematic";
-  version = "2026.4.0";
+  version = "2026.10.5";
   pyproject = true;
+  __structuredAttrs = true;
 
   disabled = pythonOlder "3.14";
 
   src = fetchFromGitHub {
     owner = "SukramJ";
     repo = "aiohomematic";
-    tag = version;
-    hash = "sha256-rujAMHFYzTccrXZF2//5k2iGL90fEdigL3Ni40Ogmxo=";
+    tag = finalAttrs.version;
+    hash = "sha256-PLEht1xJkhJpGTWViiX9gX4GtGjhzcBYJMZZ7l0CGbY=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
+    openccu-data
     orjson
     pydantic
     python-slugify
@@ -41,11 +44,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
-    pydevccu
+    godevccu
     pytest-asyncio
     pytest-xdist
     pytest-socket
     pytestCheckHook
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  disabledTestPaths = [
+    "tests/benchmarks"
+    "tests/github_scripts"
   ];
 
   pythonImportsCheck = [ "aiohomematic" ];
@@ -53,11 +63,11 @@ buildPythonPackage rec {
   meta = {
     description = "Module to interact with HomeMatic devices";
     homepage = "https://github.com/SukramJ/aiohomematic";
-    changelog = "https://github.com/SukramJ/aiohomematic/blob/${src.tag}/changelog.md";
+    changelog = "https://github.com/SukramJ/aiohomematic/blob/${finalAttrs.src.tag}/changelog.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       dotlambda
       fab
     ];
   };
-}
+})

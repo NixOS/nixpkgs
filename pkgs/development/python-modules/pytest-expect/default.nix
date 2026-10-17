@@ -7,14 +7,14 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-expect";
   version = "1.1.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "36b4462704450798197d090809a05f4e13649d9cba9acdc557ce9517da1fd847";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-NrRGJwRFB5gZfQkICaBfThNknZy6ms3FV86VF9of2Ec=";
   };
 
   buildInputs = [ pytest ];
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/gsnedders/pytest-expect";
     license = lib.licenses.mit;
   };
-}
+})

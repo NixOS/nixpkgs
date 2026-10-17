@@ -5,7 +5,6 @@
   setuptools,
   cryptography,
   python-dateutil,
-  six,
   pbr,
   coverage,
   oslotest,
@@ -14,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "pyghmi";
-  version = "1.6.14";
+  version = "1.6.19";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-p6Rb+ltGeGHZFDhzTqln1MmZVSJzvwDg+liBPtgbVNU=";
+    hash = "sha256-MKCy4UWj5DKcjYaUhjXu47NHnsan7LxMw1B+bfP+WcI=";
   };
 
   build-system = [
@@ -36,8 +35,6 @@ buildPythonPackage rec {
   dependencies = [
     cryptography
     python-dateutil
-    six
-    pbr
   ];
 
   pythonImportsCheck = [ "pyghmi" ];

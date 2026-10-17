@@ -1,20 +1,23 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   hatchling,
   portalocker,
+  pytest-mock,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "concurrent-log-handler";
-  version = "0.9.29";
+  version = "0.9.30";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "concurrent_log_handler";
-    inherit version;
-    hash = "sha256-vDenbT84TL9KmPaT69dwVD7cD0zVxqtrxw6eHX1YImU=";
+  src = fetchFromGitHub {
+    owner = "Preston-Landers";
+    repo = "concurrent-log-handler";
+    tag = finalAttrs.version;
+    hash = "sha256-n/G5+KXVCIio9yjhV/bl9a/mDI+r1YVzC04m3fyC0wQ=";
   };
 
   build-system = [ hatchling ];
@@ -23,12 +26,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "concurrent_log_handler" ];
 
-  doCheck = false; # upstream has no tests
+  nativeCheckInputs = [
+    pytest-mock
+    pytestCheckHook
+  ];
 
   meta = {
+    changelog = "https://github.com/Preston-Landers/concurrent-log-handler/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Python logging handler that allows multiple processes to safely write to the same log file concurrently";
     homepage = "https://github.com/Preston-Landers/concurrent-log-handler";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.bbjubjub ];
   };
-}
+})

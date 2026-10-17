@@ -3,10 +3,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  stdenvNoCC,
   buildNpmPackage,
   python,
-  home-assistant-chip-wheels,
 
   # build
   setuptools,
@@ -39,7 +37,7 @@ let
   version = "8.1.2";
 
   src = fetchFromGitHub {
-    owner = "home-assistant-libs";
+    owner = "matter-js";
     repo = "python-matter-server";
     tag = version;
     hash = "sha256-vnI57h/aesnaDYorq1PzcMCLmV0z0ZBJvMg4Nzh1Dtc=";
@@ -53,7 +51,7 @@ let
   # built, then python-matter-server is built again with the dashboard.
   matterServerDashboard =
     let
-      pythonWithChip = python.withPackages (ps: [
+      pythonWithChip = python.pythonOnBuildForHost.withPackages (ps: [
         ps.home-assistant-chip-clusters
         (ps.python-matter-server.override { withDashboard = false; })
       ]);
@@ -154,11 +152,13 @@ buildPythonPackage rec {
     "tests/server/ota/test_dcl.py"
   ];
 
+  env.dontCheckPythonMetadata = true;
+
   meta = {
-    changelog = "https://github.com/home-assistant-libs/python-matter-server/releases/tag/${src.tag}";
+    changelog = "https://github.com/matter-js/python-matter-server/releases/tag/${src.tag}";
     description = "Python server to interact with Matter";
     mainProgram = "matter-server";
-    homepage = "https://github.com/home-assistant-libs/python-matter-server";
+    homepage = "https://github.com/matter-js/python-matter-server";
     license = lib.licenses.asl20;
     teams = [ lib.teams.home-assistant ];
   };

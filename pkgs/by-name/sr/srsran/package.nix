@@ -24,11 +24,12 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "srsran";
   version = "25_10";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "srsran";
-    repo = "srsran";
-    rev = "release_${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    repo = "srsRAN_4G";
+    tag = "release_${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     sha256 = "sha256-DwQ4u17m8D5RqX3OIYSyeE5+51sLah1qchRcwlX5i0A=";
   };
 
@@ -67,8 +68,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   cmakeFlags = [
-    "-DENABLE_WERROR=OFF"
-    (lib.cmakeBool "ENABLE_LTE_RATES" enableLteRates)
+    (lib.cmakeBool "ENABLE_WERROR" false)
+    # The headers provided by UHD 4.10 use features introduced in C++17, and
+    # srsRAN does not build with higher standard versions such as C++20.
+    (lib.cmakeFeature "CMAKE_CXX_STANDARD" "17")
+    (lib.cmakeBool "USE_LTE_RATES" enableLteRates)
     (lib.cmakeBool "ENABLE_AVX" enableAvx)
     (lib.cmakeBool "ENABLE_AVX2" enableAvx2)
     (lib.cmakeBool "ENABLE_FMA" enableFma)
@@ -81,9 +85,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.srslte.com/";
-    description = "Open-source 4G and 5G software radio suite";
+    changelog = "https://github.com/srsran/srsRAN_4G/releases/tag/${finalAttrs.src.tag}";
+    description = "Open-source 4G software radio suite, including complete LTE UE, eNodeB and EPC applications";
     license = lib.licenses.agpl3Plus;
-    platforms = with lib.platforms; linux;
-    maintainers = with lib.maintainers; [ hexagonal-sun ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      hexagonal-sun
+      felbinger
+    ];
   };
 })

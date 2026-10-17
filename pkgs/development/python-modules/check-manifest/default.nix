@@ -10,7 +10,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "check-manifest";
   version = "0.51";
   pyproject = true;
@@ -18,9 +18,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mgedmin";
     repo = "check-manifest";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-tT6xQZwqJIsyrO9BjWweIeNgYaopziewerVBk0mFVYg=";
   };
+
+  patches = [
+    # upstream fix for setuptools >= 83, unreleased as of 0.51
+    ./setuptools-83-ignorelist.patch
+  ];
 
   build-system = [ setuptools ];
 
@@ -47,9 +52,9 @@ buildPythonPackage rec {
   meta = {
     description = "Check MANIFEST.in in a Python source package for completeness";
     homepage = "https://github.com/mgedmin/check-manifest";
-    changelog = "https://github.com/mgedmin/check-manifest/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/mgedmin/check-manifest/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lewo ];
     mainProgram = "check-manifest";
   };
-}
+})

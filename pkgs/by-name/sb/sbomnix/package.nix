@@ -10,14 +10,14 @@
 }:
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "sbomnix";
-  version = "1.7.4";
+  version = "1.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tiiuae";
     repo = "sbomnix";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-s7mmtbELRcl/7ab5A3fU7f8m4rIm+mBLmXMeYHa7/n4=";
+    hash = "sha256-p4a7fE6fXfk27o9Ekv6zorwLGza6KdKa3yDd+KRvP3c=";
 
     # Remove documentation as it contains references to nix store
     postFetch = ''
@@ -47,11 +47,11 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     dfdiskcache
     graphviz
     filelock
+    license-expression
     numpy
     packageurl-python
     packaging
     pandas
-    pyrate-limiter
     requests
     requests-cache
     requests-ratelimiter

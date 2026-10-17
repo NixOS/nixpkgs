@@ -20,11 +20,12 @@ let
             yq
             check-jsonschema
           ];
+          strictDeps = true;
           value = builtins.toJSON value;
-          passAsFile = [ "value" ];
+          __structuredAttrs = true;
         }
         ''
-          yq --yaml-output . $valuePath > $out
+          printf "%s" "$value" | yq --yaml-output . > $out
           check-jsonschema --schemafile "${cfg.package.passthru.jsonschema}" "$out"
           sed -i $'s|\'!include |!include \'|' $out
         '';
@@ -86,12 +87,6 @@ let
     wants = [
       "network.target"
     ];
-
-    # We wait for the udev events queue to empty in the *hope* that the
-    # devices needed here become available. This is terribly broken and
-    # essentially no better than a random sleep().
-    # FIXME: use .device units dependecies instead.
-    serviceConfig.ExecStartPre = "-${lib.getExe' pkgs.systemd "udevadm"} settle --timeout=180";
 
     unitConfig = {
       # Avoid default dependencies like "basic.target", which prevents ifstate from starting before luks is unlocked.
@@ -193,6 +188,13 @@ in
           ExecStart = "${lib.getExe cfg.package} --config ${
             config.environment.etc."ifstate/ifstate.yaml".source
           } apply";
+
+          # We wait for the udev events queue to empty in the *hope* that the
+          # devices needed here become available. This is terribly broken and
+          # essentially no better than a random sleep(). Same below for initrd.
+          # FIXME: use .device units dependecies instead.
+          ExecStartPre = "-${lib.getExe' config.systemd.package "udevadm"} settle --timeout=180";
+
           # because oneshot services do not have a timeout by default
           TimeoutStartSec = "2min";
         };
@@ -294,6 +296,8 @@ in
               } apply";
               # because oneshot services do not have a timeout by default
               TimeoutStartSec = "2min";
+              # See comment on non-initrd service above
+              ExecStartPre = "-${lib.getExe' config.boot.initrd.systemd.package "udevadm"} settle --timeout=180";
             };
           };
         };

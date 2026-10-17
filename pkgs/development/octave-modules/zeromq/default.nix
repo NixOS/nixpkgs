@@ -10,13 +10,13 @@
 
 buildOctavePackage rec {
   pname = "zeromq";
-  version = "1.5.7";
+  version = "1.5.8";
 
   src = fetchFromGitHub {
     owner = "gnu-octave";
     repo = "octave-zeromq";
     tag = "release-${version}";
-    sha256 = "sha256-2n/Cc4E/qYeN5Ku+Lmg/UCJhiYNbXkFIY8s4/SP2J+Y=";
+    sha256 = "sha256-6mDjOYbh5bFagEM+7otiF1I9iOqPklf0y02+vjCLYIs=";
   };
 
   preAutoreconf = ''

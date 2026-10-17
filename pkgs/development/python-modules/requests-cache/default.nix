@@ -7,6 +7,7 @@
   botocore,
   cattrs,
   fetchFromGitHub,
+  fetchpatch,
   itsdangerous,
   platformdirs,
   psutil,
@@ -30,15 +31,24 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "requests-cache";
-  version = "1.3.1";
+  version = "1.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "requests-cache";
     repo = "requests-cache";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-t9SJ+enZHHYPRXaSrPop2hVOagE4oMnuXExO2DeNttc=";
+    hash = "sha256-iqoP7NalipY3BXMQkh+lrzPtPQehYg3bB/3azgx0iuo=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "url-normalize-3.0.1-compat.patch";
+      url = "https://github.com/requests-cache/requests-cache/commit/2541eb8d8f513a1a70fdaa4daf8a17a8ee37b520.patch";
+      hash = "sha256-l6fsYynNqjG6+V8xyh/5bzkbScbjFOVrzrvyoV8O3PQ=";
+      excludes = [ "uv.lock" ];
+    })
+  ];
 
   build-system = [ hatchling ];
 
@@ -64,7 +74,7 @@ buildPythonPackage (finalAttrs: {
       orjson
       ujson
     ]
-    ++ lib.concatAttrValues (lib.removeAttrs finalAttrs.optional-dependencies [ "all" ]);
+    ++ lib.concatAttrValues (lib.removeAttrs finalAttrs.passthru.optional-dependencies [ "all" ]);
   };
 
   nativeCheckInputs = [
@@ -98,7 +108,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Persistent cache for requests library";
     homepage = "https://github.com/reclosedev/requests-cache";
-    changelog = "https://github.com/requests-cache/requests-cache/blob/$v{finalAttrs.version}/HISTORY.md";
+    changelog = "https://github.com/requests-cache/requests-cache/blob/v${finalAttrs.version}/HISTORY.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };

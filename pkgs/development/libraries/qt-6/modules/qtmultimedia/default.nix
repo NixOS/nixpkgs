@@ -14,7 +14,6 @@
   gst-plugins-base,
   gst-plugins-good,
   gst-libav,
-  gst-vaapi,
   ffmpeg,
   libva,
   libpulseaudio,
@@ -59,7 +58,6 @@ qtModule {
     gst-plugins-base
     gst-plugins-good
     gst-libav
-    gst-vaapi
   ];
 
   patches = lib.optionals stdenv.hostPlatform.isMinGW [
@@ -69,6 +67,8 @@ qtModule {
 
   cmakeFlags = [
     "-DENABLE_DYNAMIC_RESOLVE_VAAPI_SYMBOLS=0"
+    # don't dlopen pipewire
+    "-DFEATURE_pipewire_symbolloader=0"
     "-DQt6ShaderToolsTools_DIR=${pkgsBuildBuild.qt6.qtshadertools}/lib/cmake/Qt6ShaderToolsTools"
   ];
 

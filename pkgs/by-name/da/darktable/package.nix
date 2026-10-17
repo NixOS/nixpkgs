@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  withAi ? false,
 
   # nativeBuildInputs
   cmake,
@@ -34,6 +35,7 @@
   lensfun,
   lerc,
   libaom,
+  libarchive,
   libavif,
   libdatrie,
   libepoxy,
@@ -52,13 +54,16 @@
   libtiff,
   libwebp,
   libxml2,
+  libxslt,
   lua5_4,
+  onnxruntime,
   util-linux,
   openexr,
   openjpeg,
   osm-gps-map,
   pcre2,
   portmidi,
+  potrace,
   pugixml,
   sqlite,
   # Linux only
@@ -81,18 +86,19 @@ let
   pugixml-shared = pugixml.override { shared = true; };
 in
 stdenv.mkDerivation rec {
-  version = "5.4.1";
+  version = "5.6.2";
   pname = "darktable";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    hash = "sha256-r9x8iKM4qM0vrDHIRQ0Hbtv3PpVuQwcmDIPrwZX4ReQ=";
+    hash = "sha256-0tqSxnBAHTULV2Qx8h5YvuQDSOH1B4IBqKG4wnBYWDQ=";
   };
 
   nativeBuildInputs = [
     cmake
     desktop-file-utils
     intltool
+    libxslt # xsltproc, used by tools/generate_styles_string.sh
     llvmPackages.llvm
     ninja
     perl
@@ -144,8 +150,13 @@ stdenv.mkDerivation rec {
     osm-gps-map
     pcre2
     portmidi
+    potrace
     pugixml-shared
     sqlite
+  ]
+  ++ lib.optionals withAi [
+    libarchive
+    onnxruntime
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
@@ -164,7 +175,14 @@ stdenv.mkDerivation rec {
   ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
   cmakeFlags = [
+    # Prevents -march=native.
+    "-DBINARY_PACKAGE_BUILD=1"
     "-DBUILD_USERMANUAL=False"
+    "-DRAWSPEED_MARCH=-mtune=generic"
+  ]
+  ++ lib.optionals withAi [
+    (lib.cmakeBool "USE_AI" true)
+    (lib.cmakeBool "ONNXRUNTIME_OFFLINE" true)
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DUSE_COLORD=OFF"
@@ -179,7 +197,9 @@ stdenv.mkDerivation rec {
     let
       libPathEnvVar = if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
       libPathPrefix =
-        "$out/lib/darktable" + lib.optionalString stdenv.hostPlatform.isLinux ":${ocl-icd}/lib";
+        "$out/lib/darktable"
+        + lib.optionalString (withAi && stdenv.hostPlatform.isLinux) ":${lib.getLib onnxruntime}/lib"
+        + lib.optionalString stdenv.hostPlatform.isLinux ":${ocl-icd}/lib";
     in
     ''
       for f in $out/share/darktable/kernels/*.cl; do
@@ -195,10 +215,12 @@ stdenv.mkDerivation rec {
     patchShebangs ./tools/generate_styles_string.sh
   '';
 
+  # darktable hangs in versionCheckHook on darwin for an unknown reason, use darktable-cli instead
+  # (possibly related to accessing /var/empty/.config/darktable, but writableTmpDirAsHomeHook did not help as of v5.6.2
+  doInstallCheck = !stdenv.hostPlatform.isDarwin;
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  doInstallCheck = true;
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "release-";
@@ -210,12 +232,12 @@ stdenv.mkDerivation rec {
     description = "Virtual lighttable and darkroom for photographers";
     homepage = "https://www.darktable.org";
     changelog = "https://github.com/darktable-org/darktable/releases/tag/release-${version}";
+    mainProgram = "darktable";
     license = lib.licenses.gpl3Plus;
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = with lib.maintainers; [
       flosse
       mrVanDalo
-      paperdigits
       freyacodes
     ];
   };

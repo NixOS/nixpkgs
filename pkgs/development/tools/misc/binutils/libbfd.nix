@@ -20,6 +20,8 @@ stdenv.mkDerivation {
     inherit (binutils-unwrapped-all-targets) src dev plugin-api-header;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Library for manipulating containers of machine code";
     longDescription = ''

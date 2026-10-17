@@ -75,9 +75,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  preFixup = ''
+    # xslt-config will end up in $dev, so we must patch its shebangs for the build host
+    patchShebangs --build $bin/bin/xslt-config
+  '';
+
   postFixup = ''
     moveToOutput bin/xslt-config "$dev"
     moveToOutput lib/xsltConf.sh "$dev"
+
+    substituteInPlace "$dev/lib/cmake/libxslt/libxslt-config.cmake" \
+      --replace-fail '"''${PACKAGE_PREFIX_DIR}/lib"' "\"$out/lib\""
   ''
   + lib.optionalString pythonSupport ''
     mkdir -p $py/nix-support
@@ -93,6 +101,8 @@ stdenv.mkDerivation (finalAttrs: {
       versionPolicy = "none";
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/libxslt";

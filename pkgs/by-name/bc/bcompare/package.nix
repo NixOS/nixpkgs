@@ -2,88 +2,99 @@
   lib,
   autoPatchelfHook,
   bzip2,
-  cairo,
   fetchurl,
-  gdk-pixbuf,
   glibc,
-  pango,
-  gtk2,
-  libsForQt5,
+  gobject-introspection,
+  kdePackages,
+  python3,
   stdenv,
   runtimeShell,
   unzip,
+  wrapGAppsHook3,
 }:
 
 let
   pname = "bcompare";
-  version = "4.4.7.28397";
+  version = "5.2.4.32425";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchurl {
-      url = "https://www.scootersoftware.com/bcompare-${version}_amd64.deb";
-      sha256 = "sha256-4AWTSoYpVhGmBBxcwHXdg1CGd/04+8yL9pu+gHrsj6U";
+      url = "https://www.scootersoftware.com/files/bcompare-${version}_amd64.deb";
+      sha256 = "sha256-gXmz7ZgTLPNzqckzKV7r+B8V0oS10/GQNTM0/0EYs3s=";
     };
 
-    x86_64-darwin = fetchurl {
-      url = "https://www.scootersoftware.com/BCompareOSX-${version}.zip";
-      sha256 = "sha256-qbpM6hJbv+APo+ed45k3GXrl1HnZRxD1uT2lvaN3oM4=";
+    aarch64-darwin = fetchurl {
+      url = "https://www.scootersoftware.com/files/BCompareOSX-${version}.zip";
+      sha256 = "sha256-CzAARAKDBSORI/zCELEdA8VRdWXHq+sMHGPkr3wV+G8=";
     };
-
-    aarch64-darwin = srcs.x86_64-darwin;
   };
 
   src = srcs.${stdenv.hostPlatform.system} or throwSystem;
 
-  linux = stdenv.mkDerivation {
-    inherit
-      pname
-      version
-      src
-      meta
-      ;
-    unpackPhase = ''
-      ar x $src
-      tar xfz data.tar.gz
-    '';
+  linux =
+    let
+      python = python3.withPackages (
+        pp: with pp; [
+          pygobject3
+        ]
+      );
+    in
+    stdenv.mkDerivation {
+      inherit
+        pname
+        version
+        src
+        meta
+        ;
+      unpackPhase = ''
+        ar x $src
+        tar xfz data.tar.gz
+      '';
 
-    installPhase = ''
-      mkdir -p $out/{bin,lib,share}
+      installPhase = ''
+        mkdir -p $out/{bin,lib,share}
 
-      cp -R usr/{bin,lib,share} $out/
+        cp -R usr/{bin,lib,share} $out/
 
-      # Remove library that refuses to be autoPatchelf'ed
-      rm $out/lib/beyondcompare/ext/bcompare_ext_kde.amd64.so
+        # Remove library that refuses to be autoPatchelf'ed
+        #  - bcompare_ext_kde.amd64.so is linked with Qt4
+        #  - bcompare_ext_kde5.amd64.so is linked with Qt5
+        rm $out/lib/beyondcompare/ext/bcompare_ext_kde.amd64.so
+        rm $out/lib/beyondcompare/ext/bcompare_ext_kde5.amd64.so
 
-      substituteInPlace $out/bin/bcompare \
-        --replace "/usr/lib/beyondcompare" "$out/lib/beyondcompare" \
-        --replace "ldd" "${glibc.bin}/bin/ldd" \
-        --replace "/bin/bash" "${runtimeShell}"
+        substituteInPlace $out/bin/bcompare \
+          --replace-fail "/usr/lib/beyondcompare" "$out/lib/beyondcompare" \
+          --replace-fail "ldd" "${glibc.bin}/bin/ldd" \
+          --replace-fail "/bin/bash" "${runtimeShell}"
 
-      # Create symlink bzip2 library
-      ln -s ${bzip2.out}/lib/libbz2.so.1 $out/lib/beyondcompare/libbz2.so.1.0
-    '';
+        substituteInPlace $out/lib/beyondcompare/bcmount.sh \
+          --replace-fail "python3" "${python.interpreter}"
+      '';
 
-    nativeBuildInputs = [ autoPatchelfHook ];
+      nativeBuildInputs = [
+        autoPatchelfHook
+        gobject-introspection
+        wrapGAppsHook3
+      ];
 
-    buildInputs = [
-      (lib.getLib stdenv.cc.cc)
-      gtk2
-      pango
-      cairo
-      libsForQt5.kio
-      libsForQt5.kservice
-      libsForQt5.ki18n
-      libsForQt5.kcoreaddons
-      gdk-pixbuf
-      bzip2
-    ];
+      buildInputs = [
+        (lib.getLib stdenv.cc.cc)
+        kdePackages.kio
+        kdePackages.kservice
+        kdePackages.ki18n
+        kdePackages.kcoreaddons
+        bzip2
+      ];
 
-    dontBuild = true;
-    dontConfigure = true;
-    dontWrapQtApps = true;
-  };
+      dontBuild = true;
+      dontConfigure = true;
+      dontWrapQtApps = true;
+
+      __structuredAttrs = true;
+      strictDeps = true;
+    };
 
   darwin = stdenv.mkDerivation {
     inherit
@@ -98,6 +109,9 @@ let
       mkdir -p $out/Applications/BCompare.app
       cp -R . $out/Applications/BCompare.app
     '';
+
+    __structuredAttrs = true;
+    strictDeps = true;
   };
 
   meta = {
@@ -113,6 +127,7 @@ let
     maintainers = with lib.maintainers; [
       ktor
       arkivm
+      barsikus007
     ];
     platforms = builtins.attrNames srcs;
     mainProgram = "bcompare";

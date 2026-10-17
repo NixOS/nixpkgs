@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "82c06712d69ef945220c8b53c1a0d424c2ff6a1f64aee609030df79ad8383397";
+    hash = "sha256-gsBnEtae+UUiDItTwaDUJML/ah9kruYJAw33mtg4M5c=";
   };
 
   postPatch = ''
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://github.com/ludbb/secp256k1-py";
     description = "Python FFI bindings for secp256k1";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

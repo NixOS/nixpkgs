@@ -9,20 +9,24 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sampo";
-  version = "0.17.2";
+  version = "0.22.0";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "bruits";
     repo = "sampo";
-    tag = "sampo-v${finalAttrs.version}";
-    hash = "sha256-lCF38mDdoBqm9F9enEhYx3fdrTgLG+ItL37Kxzqhqcw=";
+    tag = "cargo-sampo-v${finalAttrs.version}";
+    hash = "sha256-1JIrUUf1XraM6JblZk2OAjKsELboOMZF8Qv3PpMpsl4=";
   };
+
+  cargoHash = "sha256-HEp93V3nz+uFaqRuj8E6GUqIQhtrQ56snS5hSoFwZQU=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ];
 
-  cargoHash = "sha256-roYUqxY+zkRoHZbC52Psk7/T1lRYjgnQ0cAFlUCZPn4=";
+  # Disable self-update
+  buildNoDefaultFeatures = true;
 
   cargoBuildFlags = [
     "-p"
@@ -35,12 +39,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=sampo-v([0-9\\.]*)" ]; };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=cargo-sampo-v([0-9\\.]*)" ];
+  };
 
   meta = {
     description = "Automate changelogs, versioning, and publishing—even for monorepos across multiple package registries";
     homepage = "https://github.com/bruits/sampo";
-    changelog = "https://github.com/bruits/sampo/blob/sampo-v${finalAttrs.version}/crates/sampo/CHANGELOG.md";
+    changelog = "https://github.com/bruits/sampo/blob/${finalAttrs.src.tag}/crates/sampo/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nartsiss ];
     mainProgram = "sampo";

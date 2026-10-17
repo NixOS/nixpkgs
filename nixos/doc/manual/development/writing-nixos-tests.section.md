@@ -92,6 +92,10 @@ cd /my/git/clone/of/nixpkgs
 nix-build -A nixosTests.hostname
 ```
 
+In-tree tests run with a few changes to defaults, notably
+- The `pkgs.*` are read only by default. You can opt out with `node.pkgsReadOnly = false;` at the test level.
+- `nix.enable` defaults to `false` to reduce build closure size; in particular the reverse build closure of `nix` and its dependencies.
+
 ### Testing outside the NixOS project {#sec-call-nixos-test-outside-nixos}
 
 Outside the `nixpkgs` repository, you can use the `runNixOSTest` function from
@@ -103,12 +107,15 @@ let
 
 in
 pkgs.testers.runNixOSTest {
+  name = "test";
   imports = [ ./test.nix ];
   defaults.services.foo.package = mypkg;
 }
 ```
 
 `runNixOSTest` returns a derivation that runs the test.
+
+Out-of-tree tests evaluate with a set of defaults that balances the principle of least surprise in the general case, but has a few differences from in-tree NixOS tests. See [Testing within NixOS](#sec-call-nixos-test-in-nixos).
 
 ## Test machines {#ssec-nixos-test-machines}
 
@@ -146,7 +153,7 @@ Some advantages of virtual machines over containers are:
   (kernel modules, etc.).
 - Virtual machines support testing graphical applications on X11.
 - Virtual machines allow testing NixOS modules that use systemd's namespacing options (such as `ProtectSystem=` or `MountAPIVFS=`).
-- Virtual machines allow testing [`spcialisation`](options.html#opt-specialisation).
+- Virtual machines allow testing [`specialisation`](options.html#opt-specialisation).
   (Switching to a specialisation requires the creation of SUID/SGID wrappers, which is disallowed in `systemd-nspawn` within the Nix sandbox.)
 - Virtual machines allow the execution of `setuid` binaries.
 
@@ -276,12 +283,15 @@ with foo_running:
 
 `polling_condition` takes the following (optional) arguments:
 
-`seconds_interval`
+`interval`
 
-:   specifies how often the condition should be polled:
+:   specifies how often the condition should be polled, as a `datetime.timedelta`:
 
 ```py
-@polling_condition(seconds_interval=10)
+import datetime as dt
+
+
+@polling_condition(interval=dt.timedelta(seconds=10))
 def foo_running():
     machine.succeed("pgrep -x foo")
 ```
@@ -512,19 +522,11 @@ Once you are in the sandbox shell, you can access the VMs (for example, `machine
 with SSH over vsock:
 
 ```
-bash# ssh -F ./ssh_config vsock/3
+bash# ssh -F ./ssh_config -o User=root vsock-mux//tmp/.../machine_host.socket
 ```
 
-For the AF_VSOCK feature to work, `/dev/vhost-vsock` is needed in the sandbox
-which can be done with e.g.
-
-```
-nix-build -A nixosTests.foo --option sandbox-paths /dev/vhost-vsock
-```
-
-As described in [](#sec-nixos-test-ssh-access), the numbers for vsock start at
-`3` instead of `1`. So the first VM in the network (sorted alphabetically) can
-be accessed with `vsock/3`.
+The socket paths are printed at the beginning of the test. See
+[](#sec-nixos-test-ssh-access) for more context.
 
 ### SSH access to test containers {#sec-test-container-ssh-access}
 

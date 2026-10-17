@@ -1,62 +1,79 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromGitLab,
   cmake,
+  pkg-config,
   qt6,
+  shared-mime-info,
+  kdePackages,
   nix-update-script,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "drawy";
-  version = "1.0.0-alpha-unstable-2025-11-17";
+  version = "1.0.2";
 
-  src = fetchFromGitHub {
-    owner = "Prayag2";
+  src = fetchFromGitLab {
+    domain = "invent.kde.org";
+    owner = "graphics";
     repo = "drawy";
-    rev = "ca02b66a9615c45c78f2e29839a40c1e5bf8f71c";
-    hash = "sha256-PzIeyhF/1wKD6JyybNRzruuxzSKJZvIq+L7X0rrcQUY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-lFI4q5/RKA49rcI2iSJuwYfShgOjM+EAfXM+5ZSG8SA=";
   };
 
+  __structuredAttrs = true;
   strictDeps = true;
 
   nativeBuildInputs = [
     cmake
+    pkg-config
     qt6.wrapQtAppsHook
+    shared-mime-info
   ];
 
-  buildInputs = with qt6; [
-    qtbase
-    qttools
-  ];
-
-  postInstall = ''
-    for size in 16 32 256 512; do
-      install -D --mode=644 \
-        "$src"/assets/logo-$size.png \
-        "$out/share/icons/hicolor/''${size}x''${size}/apps/drawy.png"
-    done
-
-    install -D --mode=644 \
-      "$src"/assets/logo.svg \
-      "$out"/share/icons/hicolor/scalable/apps/drawy.svg
-
-    install -D --mode=644 \
-      "$src"/deploy/appimage/AppDir/usr/share/applications/drawy.desktop \
-      --target-directory="$out"/share/applications
-  '';
+  buildInputs =
+    (with qt6; [
+      qtbase
+      qttools
+    ])
+    ++ (with kdePackages; [
+      extra-cmake-modules
+      kconfig
+      kconfigwidgets
+      kcoreaddons
+      kcrash
+      kdoctools
+      ki18n
+      kiconthemes
+      kwidgetsaddons
+      kxmlgui
+      syntax-highlighting
+    ]);
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Handy and infinite brainstorming tool";
-    homepage = "https://github.com/Prayag2/drawy";
-    license = lib.licenses.gpl3Only;
+    homepage = "https://apps.kde.org/drawy/";
+    changelog = "https://invent.kde.org/graphics/drawy/-/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = with lib.licenses; [
+      bsd2
+      bsd3
+      cc-by-sa-40
+      cc0
+      gpl2Plus
+      gpl3Plus
+      lgpl2Plus
+      mit
+      ofl
+    ];
     maintainers = with lib.maintainers; [
-      yiyu
       quarterstar
+      sigmasquadron
+      yiyu
     ];
     mainProgram = "drawy";
     platforms = lib.platforms.all;
   };
-}
+})

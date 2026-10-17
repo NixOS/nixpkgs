@@ -14,16 +14,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "nwg-look";
-  version = "1.0.6";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-look";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-cNVUgtbdzEuttDO7DZyipDugACr/fIU8RKmh5trykPw=";
+    hash = "sha256-g7lc+z6aCJ1yd5B4qG1yoIUp5n9ln+orv9Eo0M6Q18M=";
   };
 
-  vendorHash = "sha256-8ooWJTOC4fmuu+/Dy7JOaGSO5YlsMfKcf2lyv2ojJIw=";
+  vendorHash = "sha256-Ef3WqmdzwyydeN0A98nN57NvKeDOgv0wMs//KA/FODo=";
 
   ldflags = [
     "-s"

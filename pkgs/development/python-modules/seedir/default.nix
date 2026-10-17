@@ -28,7 +28,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "seedir" ];
 
   meta = {
-    description = "Module for for creating, editing, and reading folder tree diagrams";
+    description = "Module for creating, editing, and reading folder tree diagrams";
     homepage = "https://github.com/earnestt1234/seedir";
     changelog = "https://github.com/earnestt1234/seedir/releases/tag/v${version}";
     license = lib.licenses.mit;

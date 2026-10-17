@@ -13,21 +13,21 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dbus-fast";
-  version = "4.0.0";
+  version = "5.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "dbus-fast";
-    tag = "v${version}";
-    hash = "sha256-XLtLRIbiB+4AKKq5ekEeBv92qmBPKEJihh0b3lHMnsg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Evm8YTTcVIcMNknJ7GMNVgE8kHd+PO747OqSlHIFK9k=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "Cython>=3,<3.3.0" Cython
+      --replace-fail "Cython>=3,<3.4" Cython
   '';
 
   # The project can build both an optimized cython version and an unoptimized
@@ -69,8 +69,8 @@ buildPythonPackage rec {
   meta = {
     description = "Faster version of dbus-next";
     homepage = "https://github.com/bluetooth-devices/dbus-fast";
-    changelog = "https://github.com/Bluetooth-Devices/dbus-fast/releases/tag/${src.tag}";
+    changelog = "https://github.com/Bluetooth-Devices/dbus-fast/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

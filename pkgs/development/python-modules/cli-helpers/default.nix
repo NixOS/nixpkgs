@@ -6,21 +6,24 @@
   mock,
   pytestCheckHook,
   pygments,
+  setuptools,
   tabulate,
 }:
 
 buildPythonPackage rec {
   pname = "cli-helpers";
-  version = "2.10.0";
-  format = "setuptools";
+  version = "2.15.1";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "cli_helpers";
     inherit version;
-    hash = "sha256-Dgk2F5t4bADGtzhjtbklKIn3pUUl8UAU7HJ+Qf8iryg=";
+    hash = "sha256-6cCCbdooVXRetjs/2OM7asiIEYjyupHlGlFu2DP8DLg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     configobj
     tabulate
   ]

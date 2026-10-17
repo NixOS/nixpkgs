@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "ec";
-  version = "0.3.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "chojs23";
     repo = "ec";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tnOr0AVPwEm9gONa7gl3TzhPC5/1WEAbW7Ew5/mNn5U=";
+    hash = "sha256-bVUe9UCi+zJH1qx3JFCNxRNX8hgdIGHkRvGpP8ANx38=";
   };
 
-  vendorHash = "sha256-bV5y8zKculYULkFl9J95qebLOzdTT/LuYycqMmHKZ+g=";
+  vendorHash = "sha256-7OjCWmOoTYTbZ1XXevkrHEGx9Q0qdBqUBo10kvBDDPA=";
 
   postPatch = ''
     substituteInPlace cmd/ec/main.go \

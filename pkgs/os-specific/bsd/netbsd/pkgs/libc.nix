@@ -47,5 +47,12 @@ symlinkJoin {
     fixupPhase
   '';
 
+  # NetBSD's threads are POSIX threads — `libpthread` is joined in above.
+  #
+  # See the comment on `threadModel` in
+  # pkgs/development/compilers/gcc/ng/common/libgcc/default.nix for further
+  # details.
+  passthru.threadModel = "posix";
+
   meta.platforms = lib.platforms.netbsd;
 }

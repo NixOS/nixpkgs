@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "FiniteSingularity";
     repo = "obs-retro-effects";
     rev = "${version}";
-    sha256 = "sha256-oQGXBd/KGPGTK+CoomMjjgrnxTqVIefEKqKH11SPHSY=";
+    hash = "sha256-oQGXBd/KGPGTK+CoomMjjgrnxTqVIefEKqKH11SPHSY=";
   };
 
   nativeBuildInputs = [ cmake ];

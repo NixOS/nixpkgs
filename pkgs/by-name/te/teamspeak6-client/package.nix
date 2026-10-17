@@ -36,11 +36,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "teamspeak6-client";
-  version = "6.0.0-beta3.4";
+  version = "6.0.0-beta5";
 
   src = fetchurl {
-    url = "https://files.teamspeak-services.com/pre_releases/client/${finalAttrs.version}/teamspeak-client.tar.gz";
-    hash = "sha256-ubpAigtYFwzjI4T8i7pWgAhA1pS9MQBQy63QkkbUvyc=";
+    url = "https://files.teamspeak-services.com/pre_releases/client/${finalAttrs.version}/teamspeak-client.tar.xz";
+    hash = "sha256-OURyol7pwkGcRKXnGkAcIb/+zy/csn++IXPQ//0YdaQ=";
   };
 
   sourceRoot = ".";
@@ -109,6 +109,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     makeWrapper $out/share/teamspeak6-client/TeamSpeak $out/bin/TeamSpeak \
       --prefix LD_LIBRARY_PATH : "${
         lib.makeLibraryPath [
+          gcc-unwrapped.lib
           udev
           libGL
           libpulseaudio

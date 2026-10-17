@@ -51,6 +51,13 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/ubports/development/core/biometryd/-/commit/8def6dfb18ee56971f0f64e3622af2a5a39ab0f6.patch";
       hash = "sha256-PddZRML4Gc+s4aNeOyZwJJjmPSixMGFVFNcrO9dNDSI=";
     })
+
+    # Remove when version > 0.4.0
+    (fetchpatch {
+      name = "0002-biometryd-Fix-compatibility-with-gtest-1.18.patch";
+      url = "https://gitlab.com/ubports/development/core/biometryd/-/commit/1445ea904b192fbdd9f2aa20c8ee1eeb61f2ad1d.patch";
+      hash = "sha256-yKcbvJ9BTudOuN+R4eWmltH/fnjRV+4H2deIiNlVS8A=";
+    })
   ];
 
   postPatch = ''

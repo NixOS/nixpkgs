@@ -7,14 +7,14 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-psp";
-  version = "0.2.8";
+  version = "0.2.10";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-Jud89nYJq4xZn2HudmSA82hOYwItrrTblhIfeqqIqm8=";
+    hash = "sha256-vc3SAFxEUU7nq+DWFnnjFKSAXSUxIuQ3vp/rhU2qChU=";
   };
 
-  cargoHash = "sha256-oL2KbhpqvPhtN7hpAuR6a383pPKlW1XuXkoew0ZvPUo=";
+  cargoHash = "sha256-h1bb7i4B28sFvomyLk51Jl7sAe6obgG6i2HbSM5ERP4=";
 
   nativeBuildInputs = [
     makeBinaryWrapper

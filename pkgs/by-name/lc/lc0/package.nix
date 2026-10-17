@@ -9,19 +9,27 @@
   zlib,
   gtest,
   eigen,
+  abseil-cpp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lc0";
-  version = "0.31.2";
+  version = "0.32.1";
 
   src = fetchFromGitHub {
     owner = "LeelaChessZero";
     repo = "lc0";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8watDDxSyZ5khYqpXPyjQso2MkOzfI6o2nt0vkuiEUI=";
+    hash = "sha256-Dvq698ZfYumoax7i1nN5GwTQKXgby9+TdTZT6C7/jgc=";
     fetchSubmodules = true;
   };
+
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace-fail "absl = subproject('abseil-cpp', default_options : ['warning_level=0', 'cpp_std=c++20'])" "" \
+      --replace-fail "deps += absl.get_variable('absl_container_dep').as_system()" "deps += [dependency('absl_flat_hash_map'), dependency('absl_cleanup'), dependency('absl_base')]" \
+      --replace-fail "if eigen_dep.found() and cc.has_header('Eigen/Core')" "if eigen_dep.found()"
+  '';
 
   patchPhase = ''
     runHook prePatch
@@ -44,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     eigen
     gtest
     zlib
+    abseil-cpp
   ];
 
   mesonFlags = [
@@ -56,6 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (lib.versionAtLeast finalAttrs.version "0.31") [ "-Dnative_cuda=false" ];
 
   enableParallelBuilding = true;
+
+  doCheck = true;
 
   meta = {
     homepage = "https://lczero.org/";

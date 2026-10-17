@@ -7,13 +7,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "mimir";
-  version = "3.0.5";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     rev = "mimir-${finalAttrs.version}";
     owner = "grafana";
     repo = "mimir";
-    hash = "sha256-C7vfJrcFin4zv/wO9IWIzUPtjiOAoOEWcniCTNm1eRs=";
+    hash = "sha256-Sz6q7Py3iJv8i1Xt9j71uSKztXLR1wwx/MbKXrpQ3AY=";
   };
 
   vendorHash = null;
@@ -67,7 +67,6 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       happysalada
       bryanhonof
-      adamcstephens
     ];
   };
 })

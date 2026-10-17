@@ -2,7 +2,8 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchzip,
+  fetchPypi,
+  fetchpatch,
   pkg-config,
   dbus,
   lndir,
@@ -24,19 +25,15 @@
   withPdf ? true,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyqt6";
-  version = "6.9.0";
+  version = "6.11.0";
   pyproject = true;
 
-  # It looks like a stable release, but is it? Who knows.
-  # It's not on PyPI proper yet, at least, and the current
-  # actually-released version does not build with Qt 6.9,
-  # so we kinda have to use it.
-  # "ffs smdh fam" - K900
-  src = fetchzip {
-    url = "https://web.archive.org/web/20250406083944/https://www.riverbankcomputing.com/pypi/packages/PyQt6/pyqt6-6.9.0.tar.gz";
-    hash = "sha256-UZSbz6MqdNtl2r4N8uvgNjQ+28KCzNFb5yFqPcooT5E=";
+  src = fetchPypi {
+    pname = "pyqt6";
+    inherit (finalAttrs) version;
+    hash = "sha256-Rd1gqmmXbeGRi1zta057aiWr0qkZ7O9f1YJuzHZxiIk=";
   };
 
   patches = [
@@ -45,6 +42,10 @@ buildPythonPackage rec {
     ./pyqt6-fix-dbus-mainloop-support.patch
     # confirm license when installing via pyqt6_sip
     ./pyqt5-confirm-license.patch
+    (fetchpatch {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/pyqt6/-/raw/29d72ada23513ab0ece1b9980059c39f677e5d32/qt-6.12.patch";
+      hash = "sha256-ZOFmSeS1bDUZjsqo3ENPXRvvt/6aI+ePSiZoqh9vnTk=";
+    })
   ];
 
   build-system = [
@@ -66,11 +67,11 @@ buildPythonPackage rec {
     EOF
 
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "${version}"' 'version = "${lib.versions.pad 3 version}"'
+      --replace-fail 'version = "${finalAttrs.version}"' 'version = "${lib.versions.pad 3 finalAttrs.version}"'
   '';
 
   enableParallelBuilding = true;
-  # HACK: paralellize compilation of make calls within pyqt's setup.py
+  # HACK: parallelize compilation of make calls within pyqt's setup.py
   # pkgs/stdenv/generic/setup.sh doesn't set this for us because
   # make gets called by python code and not its build phase
   # format=pyproject means the pip-build-hook hook gets used to build this project
@@ -166,4 +167,4 @@ buildPythonPackage rec {
     inherit (mesa.meta) platforms;
     maintainers = with lib.maintainers; [ LunNova ];
   };
-}
+})

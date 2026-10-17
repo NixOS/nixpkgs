@@ -24,7 +24,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
     requests
   ];
 
-  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ffmpeg-headless ]}" ];
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ ffmpeg-headless ])
+  ];
 
   pythonImportsCheck = [ "twspace_dl" ];
 

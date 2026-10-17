@@ -31,6 +31,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt --replace "VERSION 2.8" "VERSION 3.10"
+    # CMake >= 4.3 treats install(DIRECTORY "" ...) as a no-op instead of
+    # installing the current source directory, so no headers get installed.
+    # https://gitlab.kitware.com/cmake/cmake/-/issues/27568
+    substituteInPlace libff/CMakeLists.txt \
+      --replace-fail 'DIRECTORY "" DESTINATION "include/libff"' 'DIRECTORY "./" DESTINATION "include/libff"'
   ''
   + lib.optionalString (!enableStatic) ''
     substituteInPlace libff/CMakeLists.txt --replace "STATIC" "SHARED"

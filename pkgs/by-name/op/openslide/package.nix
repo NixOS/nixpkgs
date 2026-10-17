@@ -9,7 +9,6 @@
   cairo,
   doxygen,
   glib,
-  gdk-pixbuf,
   libdicom,
   libjpeg,
   libpng,
@@ -23,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openslide";
-  version = "4.0.0";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "openslide";
     repo = "openslide";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9LvQ7FG/0E0WpFyIUyrL4Fvn60iYWejjbgdKHMVOFdI=";
+    hash = "sha256-9OrPdhO6ysDL6xSzCGv6IYWvYErZeMwb/VkU9YZp5Zg=";
   };
 
   depsBuildBuild = [
@@ -43,10 +42,12 @@ stdenv.mkDerivation (finalAttrs: {
     doxygen
   ];
 
+  # The upstream developer test suite creates a virtualenv and downloads dependencies.
+  mesonFlags = [ "-Dtest=disabled" ];
+
   buildInputs = [
     cairo
     glib
-    gdk-pixbuf
     libdicom
     libjpeg
     libpng

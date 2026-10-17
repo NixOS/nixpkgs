@@ -1,8 +1,9 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
+  stdenv,
 
   # build-system
   setuptools,
@@ -12,7 +13,6 @@
   cryptography,
   lxml,
   pyhanko-certvalidator,
-  pyyaml,
   requests,
   tzlocal,
 
@@ -38,14 +38,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyhanko";
-  version = "0.34.1";
+  version = "0.36.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "pyHanko";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZBlkp6nhTKEAWxCPDq9NIoOullwWartpU3eL0QIGFpw=";
+    hash = "sha256-Dv1Pz4ri574vh50ter9TbFSvQ+0Mbbifw8kjjv04qs8=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/pkgs/pyhanko";
@@ -54,20 +54,21 @@ buildPythonPackage (finalAttrs: {
     substituteInPlace src/pyhanko/version/__init__.py \
       --replace-fail "0.0.0.dev1" "${finalAttrs.version}" \
       --replace-fail "(0, 0, 0, 'dev1')" "tuple(\"${finalAttrs.version}\".split(\".\"))"
-    substituteInPlace pyproject.toml \
-      --replace-fail "0.0.0.dev1" "${finalAttrs.version}"
   '';
 
   build-system = [ setuptools ];
 
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
+
   dependencies = [
     asn1crypto
     cryptography
+    lxml
     pyhanko-certvalidator
-    pyyaml
     requests
     tzlocal
-    lxml
   ];
 
   optional-dependencies = {
@@ -150,6 +151,10 @@ buildPythonPackage (finalAttrs: {
 
       build-system = [ setuptools ];
 
+      nativeBuildInputs = [
+        pyprojectVersionPatchHook
+      ];
+
       dependencies = [
         certomancer
         pyhanko-certvalidator
@@ -165,5 +170,7 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/MatthiasValvekens/pyHanko/blob/${finalAttrs.src.tag}/docs/changelog.rst#pyhanko";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.antonmosich ];
+    # OSError: One or more parameters passed to a function were not valid.
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

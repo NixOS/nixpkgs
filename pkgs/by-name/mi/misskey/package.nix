@@ -5,26 +5,30 @@
   fetchFromGitHub,
   nix-update-script,
   nodejs,
-  pnpm_9,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   makeWrapper,
   python3,
+  dart-sass,
+  node-gyp,
   bash,
   jemalloc,
   ffmpeg-headless,
   writeShellScript,
-  xcbuild,
 }:
+let
+  pnpm = pnpm_11;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "misskey";
-  version = "2025.12.2";
+  version = "2026.10.0";
 
   src = fetchFromGitHub {
     owner = "misskey-dev";
     repo = "misskey";
     tag = finalAttrs.version;
-    hash = "sha256-7S6m97wHFeITABLcnQiPVGLg6d1xcPCHCp7/7d/w48E=";
+    hash = "sha256-GRJcqCItqQJToxnJGxlTOnBSiaIq8uxQNAFLEW1KJy0=";
     fetchSubmodules = true;
   };
 
@@ -36,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace packages/backend/src/config.ts \
       --replace-fail \
-        "resolve(_dirname, '../../../built/.config.json')" \
+        "resolve(projectBuiltDir, '.config.json')" \
         "resolve('/run/misskey/default.json')"
     substituteInPlace {.,packages/backend}/package.json \
       --replace-fail "pnpm compile-config && " ""
@@ -45,22 +49,22 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpm_9
+    pnpm
     makeWrapper
     python3
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
+    dart-sass
+    node-gyp # for sharp and re2
+  ];
 
-  # https://nixos.org/manual/nixpkgs/unstable/#javascript-pnpm
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
       ;
-    pnpm = pnpm_9;
-    fetcherVersion = 2;
-    hash = "sha256-GVzU5YQe7GHn2ddpaGPyLLmhOv5Fy33RL+gBLl3Oyis=";
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-l19dCv7vid/6rbNLU0fjMAewMgo12JOdqGfN4IVh5DY=";
   };
 
   buildPhase = ''
@@ -76,12 +80,12 @@ stdenv.mkDerivation (finalAttrs: {
     export npm_config_nodedir=${nodejs}
     (
       cd node_modules/.pnpm/node_modules/re2
-      pnpm run rebuild
+      pnpm run rebuild --nodedir=${nodejs}
     )
-    (
-      cd node_modules/.pnpm/node_modules/sharp
-      pnpm run install
-    )
+
+    # Force sass-embedded npm package to use our dart-sass instead of bundled binaries.
+    substituteInPlace node_modules/.pnpm/sass-embedded@*/node_modules/sass-embedded/dist/lib/src/compiler-path.js \
+      --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${lib.getExe dart-sass}"];'
 
     pnpm build
 
@@ -102,6 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
       runHook preInstall
 
       mkdir -p $out/data
+      sed -i '/"packageManager":/d' package.json
       cp -r . $out/data
 
       # Set up symlink for use at runtime
@@ -110,15 +115,17 @@ stdenv.mkDerivation (finalAttrs: {
       # Otherwise, maybe somehow bindmount a writable directory into <package>/data/files.
       ln -s /var/lib/misskey $out/data/files
 
-      makeWrapper ${pnpm_9}/bin/pnpm $out/bin/misskey \
+      makeWrapper ${pnpm}/bin/pnpm $out/bin/misskey \
         --run "${checkEnvVarScript} || exit" \
         --chdir $out/data \
-        --add-flags run \
+        --add-flag "--config.store-dir=/tmp/pnpm-store" \
+        --add-flag "--config.verify-deps-before-run=false" \
+        --add-flag run \
         --set-default NODE_ENV production \
         --prefix PATH : ${
           lib.makeBinPath [
             nodejs
-            pnpm_9
+            pnpm
             bash
           ]
         } \
@@ -146,6 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Open source, federated social media platform";
     homepage = "https://misskey-hub.net/";
+    changelog = "https://github.com/misskey-dev/misskey/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.feathecutie ];
     teams = [ lib.teams.ngi ];

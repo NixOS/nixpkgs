@@ -3,12 +3,16 @@
   fetchFromGitHub,
   stdenv,
   rustPlatform,
-  pop-gtk-theme,
+  just,
+  makeBinaryWrapper,
   adw-gtk3,
   pkg-config,
   libpulseaudio,
+  pipewire,
   libinput,
   udev,
+  libxkbcommon,
+  wayland,
   openssl,
   nixosTests,
   nix-update-script,
@@ -16,47 +20,64 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-settings-daemon";
-  version = "1.0.8";
+  version = "1.10.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-settings-daemon";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-np1syOfFqL6eZpnlwNb8WOXB0oqSkxIshX0JiyDlN1A=";
+    hash = "sha256-eJhpZNTrZ3jsu+zIIhnw3DrjUYBNED/Q8c/h7ov/7DU=";
   };
 
-  cargoPatches = [
-    # The lockfile references two different revisions of the same internal repository dbus-settings-bindings,
-    # which likely is unintentional and currently causing issues with fetchCargoVendor.
-    # Upstream PR: https://github.com/pop-os/cosmic-settings-daemon/pull/139
-    ./dedup-dbus-settings-bindings.patch
-  ];
-
   postPatch = ''
-    substituteInPlace src/battery.rs \
-      --replace-fail '/usr/share/sounds/Pop/' '${pop-gtk-theme}/share/sounds/Pop/'
     substituteInPlace src/theme.rs \
       --replace-fail '/usr/share/themes/adw-gtk3' '${adw-gtk3}/share/themes/adw-gtk3'
   '';
 
-  cargoHash = "sha256-r9ZL3eNvoCWHFfxzSrETewPXIo+aGebWzBk19ra4AXY=";
+  cargoHash = "sha256-EhdMnV8uDuLUqOm/3F+BEbvr4Itdh+vZQ8FveEXkp80=";
 
-  nativeBuildInputs = [ pkg-config ];
+  separateDebugInfo = true;
+  __structuredAttrs = true;
+
+  nativeBuildInputs = [
+    just
+    pkg-config
+    rustPlatform.bindgenHook
+    makeBinaryWrapper
+  ];
 
   buildInputs = [
     libinput
     libpulseaudio
     openssl
     udev
+    pipewire
+    libxkbcommon
+    wayland
   ];
 
-  makeFlags = [
-    "prefix=$(out)"
-    "CARGO_TARGET_DIR=target/${stdenv.hostPlatform.rust.cargoShortTarget}"
+  dontUseJustBuild = true;
+  dontUseJustCheck = true;
+
+  justFlags = [
+    "--set"
+    "prefix"
+    (placeholder "out")
+    "--set"
+    "cargo-target-dir"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
-  dontCargoInstall = true;
+  postFixup = ''
+    wrapProgram $out/bin/cosmic-settings-daemon \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          wayland
+          libxkbcommon
+        ]
+      }
+  '';
 
   passthru = {
     tests = {

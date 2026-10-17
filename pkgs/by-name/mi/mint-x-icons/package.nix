@@ -3,30 +3,26 @@
   lib,
   stdenvNoCC,
   adwaita-icon-theme,
-  gnome-icon-theme,
   hicolor-icon-theme,
   gtk3,
   humanity-icon-theme,
-  ubuntu-themes,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "mint-x-icons";
-  version = "1.7.5";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "mint-x-icons";
     rev = version;
-    hash = "sha256-UNta7sj5xzZglYJekhxa0N/2RJU4cyqjX2fCFdWqoiY=";
+    hash = "sha256-Euc/SEjKWh24vUFH3kXEXlF621n3G8YsE84hk2myOdo=";
   };
 
   propagatedBuildInputs = [
     adwaita-icon-theme
-    gnome-icon-theme
     hicolor-icon-theme
     humanity-icon-theme
-    ubuntu-themes # provides ubuntu-mono-dark
   ];
 
   nativeBuildInputs = [

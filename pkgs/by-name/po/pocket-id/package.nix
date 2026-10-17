@@ -1,30 +1,31 @@
 {
   lib,
   fetchFromGitHub,
-  buildGo126Module,
+  buildGo127Module,
   stdenvNoCC,
   nodejs,
   pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
+  pnpmBuildHook,
   nixosTests,
   nix-update-script,
   versionCheckHook,
 }:
-buildGo126Module (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "pocket-id";
-  version = "2.5.0";
+  version = "2.18.0";
 
   src = fetchFromGitHub {
     owner = "pocket-id";
     repo = "pocket-id";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5y4XIwBnag+vWoNH3RBYn5QbmpM2S08mkY7GiLFchag=";
+    hash = "sha256-7QdaCb9jcf7orRuJ3SxVVuK4C1J9+lfGAugGjKs52ro=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/backend";
 
-  vendorHash = "sha256-ZrwnM3X8PbR89xQrM2VeYUTRR2/HupoAb5k9sH26vb8=";
+  vendorHash = "sha256-nwvgYWUMlt51dH+uYQd8KeTo0E55kSAyMkBGjObbkb8=";
 
   env.CGO_ENABLED = 0;
   ldflags = [
@@ -37,12 +38,15 @@ buildGo126Module (finalAttrs: {
   '';
 
   checkFlags = [
-    # requires networking
-    "-skip=TestOidcService_downloadAndSaveLogoFromURL"
+    "-tags=unit"
   ];
 
-  # required for TestIsURLPrivate
-  __darwinAllowLocalNetworking = finalAttrs.doCheck;
+  # many tests time out on darwin when waiting for 127.0.0.1 with only `__darwinAllowLocalNetworking = true`
+  # caused by `quic.DialAddr` of `quic-go`, works after loosening the sandbox
+  __darwinAllowLocalNetworking = finalAttrs.finalPackage.doCheck;
+  sandboxProfile = lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+    (allow network* (remote ip "*:*"))
+  '';
 
   preFixup = ''
     mv $out/bin/cmd $out/bin/pocket-id
@@ -59,24 +63,19 @@ buildGo126Module (finalAttrs: {
     nativeBuildInputs = [
       nodejs
       pnpmConfigHook
+      pnpmBuildHook
       pnpm_10
     ];
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
       pnpm = pnpm_10;
-      fetcherVersion = 3;
-      hash = "sha256-4rMVdZnPMAIX/F3CGNJQJtH9OcJ663UlF+arvuwgS80=";
+      fetcherVersion = 4;
+      hash = "sha256-zCwpCnxYVEVQUjC64W3ZZlloNNtQXD8SVlpV+0JgDzQ=";
     };
 
     env.BUILD_OUTPUT_PATH = "dist";
 
-    buildPhase = ''
-      runHook preBuild
-
-      pnpm --filter pocket-id-frontend build
-
-      runHook postBuild
-    '';
+    pnpmWorkspaces = [ "pocket-id-frontend" ];
 
     installPhase = ''
       runHook preInstall
@@ -111,7 +110,12 @@ buildGo126Module (finalAttrs: {
       marcusramberg
       tmarkus
       ymstnt
+      esch
     ];
     platforms = lib.platforms.unix;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "pocket-id" finalAttrs.version // {
+      # Vendor is pocket-id while product is pocket_id, deviating from pname.
+      product = "pocket_id";
+    };
   };
 })

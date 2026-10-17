@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vulkan-extension-layer";
-  version = "1.4.341.0";
+  version = "1.4.363.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-ExtensionLayer";
     rev = "vulkan-sdk-${finalAttrs.version}";
-    hash = "sha256-Qj2sZ9O3WNDb7thv5PzWmONIKBO6hXwz0wQ0PobFgvg=";
+    hash = "sha256-m32p7l+uHsXTHySV4ycBBdWONfceZZHtkcAcjDk4MtA=";
   };
 
   nativeBuildInputs = [

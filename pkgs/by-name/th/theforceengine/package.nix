@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.22.420";
 
   src = fetchFromGitHub {
-    owner = "luciusDXL";
+    owner = "TheForceEngine";
     repo = "TheForceEngine";
     tag = "v${finalAttrs.version}";
     hash = "sha256-8JhaCIJgyaikoDLesshKiIhOO6OFis0xBYDq4vio4F4=";

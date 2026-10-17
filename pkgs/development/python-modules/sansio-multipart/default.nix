@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  isPy27,
   fetchPypi,
 }:
 
@@ -9,14 +8,12 @@ buildPythonPackage rec {
   pname = "sansio-multipart";
   version = "0.3";
 
-  disabled = isPy27;
-
   format = "setuptools";
 
   src = fetchPypi {
     pname = "sansio_multipart";
     inherit version;
-    sha256 = "6e95b2e64039a95d0f2cd8f3360eaf418d6b9018fb2215d82d399d62d6122dc3";
+    hash = "sha256-bpWy5kA5qV0PLNjzNg6vQY1rkBj7IhXYLTmdYtYSLcM=";
   };
 
   # upstream has no tests

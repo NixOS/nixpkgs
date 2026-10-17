@@ -8,6 +8,7 @@
   packaging,
   pathspec,
   pluggy,
+  tomlkit,
   trove-classifiers,
 
   # tests
@@ -17,14 +18,14 @@
   virtualenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hatchling";
-  version = "1.29.0";
+  version = "1.31.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-eTwxgW2VLO5AW4NIjOABxxnzJdnNpp8fxM11BSdkDqY=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-a0itQGikgu1yObOoIVvFW0eq0zRdWN/JTlU8XS1GIRs=";
   };
 
   # listed in backend/pyproject.toml
@@ -33,6 +34,7 @@ buildPythonPackage rec {
     packaging
     pathspec
     pluggy
+    tomlkit
     trove-classifiers
   ];
 
@@ -65,11 +67,11 @@ buildPythonPackage rec {
     description = "Modern, extensible Python build backend";
     mainProgram = "hatchling";
     homepage = "https://hatch.pypa.io/latest/";
-    changelog = "https://github.com/pypa/hatch/releases/tag/hatchling-v${version}";
+    changelog = "https://github.com/pypa/hatch/releases/tag/hatchling-v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       hexa
       ofek
     ];
   };
-}
+})

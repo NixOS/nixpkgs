@@ -1,36 +1,33 @@
 {
   lib,
   buildPythonPackage,
-  ddt,
   fetchFromGitHub,
   gitdb,
-  pkgs,
+  gitMinimal,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gitpython";
-  version = "3.1.46";
+  version = "3.1.62";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gitpython-developers";
     repo = "GitPython";
-    tag = version;
-    hash = "sha256-ymuJlxGEmWwvmVFYiIW23k5Gl2h09ugFLPosnUWg5S0=";
+    tag = finalAttrs.version;
+    hash = "sha256-g7qZSFFWAa7iJSn+HAxCTfNZfrYZsZRJGUIZGYQjoUI=";
   };
 
   postPatch = ''
     substituteInPlace git/cmd.py \
-      --replace 'git_exec_name = "git"' 'git_exec_name = "${pkgs.gitMinimal}/bin/git"'
+      --replace-fail 'git_exec_name = "git"' 'git_exec_name = "${lib.getExe gitMinimal}"'
   '';
 
   build-system = [ setuptools ];
 
   dependencies = [
-    ddt
     gitdb
-    pkgs.gitMinimal
   ];
 
   # Tests require a git repo
@@ -41,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python Git Library";
     homepage = "https://github.com/gitpython-developers/GitPython";
-    changelog = "https://github.com/gitpython-developers/GitPython/blob/${src.tag}/doc/source/changes.rst";
+    changelog = "https://github.com/gitpython-developers/GitPython/blob/${finalAttrs.src.tag}/doc/source/changes.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

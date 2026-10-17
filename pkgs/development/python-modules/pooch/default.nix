@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  isPy27,
   fetchPypi,
   setuptools,
   setuptools-scm,
@@ -17,14 +16,12 @@
 
 buildPythonPackage rec {
   pname = "pooch";
-  version = "1.8.2";
+  version = "1.9.0";
   pyproject = true;
-
-  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dlYfDeaKAdpN9q846ZVcTJ0aXJDac/fkAnalco7IPRA=";
+    hash = "sha256-3kZylXm5hX/9PnQZh6L21eDgMhmJLBZ8ZXjACR+1Ee0=";
   };
 
   nativeBuildInputs = [

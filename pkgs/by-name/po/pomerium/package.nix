@@ -1,11 +1,15 @@
 {
   buildGoModule,
   buildNpmPackage,
+  runCommand,
+  runCommandCC,
   fetchFromGitHub,
   lib,
-  envoy,
   nixosTests,
   pomerium-cli,
+  patchelf,
+  moreutils,
+  jq,
 }:
 
 let
@@ -15,25 +19,101 @@ let
     id
     mapAttrsToList
     ;
-in
-buildGoModule rec {
-  pname = "pomerium";
-  version = "0.32.4";
+
+  version = "0.33.4";
   src = fetchFromGitHub {
     owner = "pomerium";
     repo = "pomerium";
     rev = "v${version}";
-    hash = "sha256-XTj0ZLPRe8I3a5be0oRTxRUuT2wHnbsms7wIvLUg9ms=";
+    hash = "sha256-oXq7ZZt2DsgUEIB8BvxbTMWVUD5kaLgG8KssYYk8yQg=";
+  };
+  vendorHash = "sha256-CZGgCEUfUj2+7G9OpRrhJvZ3exFxAqWYsBmUd59pYPo=";
+
+  # Needed because buildGoModule does not support go workspaces yet.
+  # We use Go's workspace vendor command.
+  overrideModAttrs = _: {
+    buildPhase = ''
+      runHook preBuild
+
+      go work vendor -e -v
+
+      runHook postBuild
+    '';
   };
 
-  vendorHash = "sha256-EYXmeS4jtueI9FwVQdMlsYX3CSRGH9Dft0Syf88nf7o=";
+  getEnvoy = buildGoModule {
+    pname = "pomerium-get-envoy";
+    inherit
+      src
+      version
+      vendorHash
+      overrideModAttrs
+      ;
+
+    subPackages = [
+      "pkg/envoy/get-envoy"
+    ];
+
+    # get-envoy's envoy version is pinned via pkg/envoy/envoyversion, which
+    # relies on a specific version of github.com/pomerium/envoy-custom as a Go module,
+    # and then fetches that version's release binaries from GHCR.
+  };
+in
+buildGoModule (finalAttrs: {
+  pname = "pomerium";
+  inherit
+    src
+    version
+    vendorHash
+    overrideModAttrs
+    ;
+
+  envoyBinariesRaw =
+    runCommand "pomerium-envoy-binaries-raw"
+      {
+        nativeBuildInputs = [ getEnvoy ];
+
+        outputHashAlgo = "sha256";
+        outputHashMode = "recursive";
+        outputHash = "sha256-SX+LpYGwMb33eVRo6TO7rPUfSlMMfD0N4zvZZRnkG2w=";
+
+        meta = {
+          homepage = "https://github.com/pomerium/envoy-custom";
+          sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+        };
+      }
+      ''
+        mkdir $out
+        cd $out
+        get-envoy
+        chmod +x envoy-darwin-arm64 envoy-linux-amd64 envoy-linux-arm64
+      '';
+  envoyBinaries =
+    runCommandCC "pomerium-envoy-binaries"
+      {
+        nativeBuildInputs = [
+          patchelf
+          moreutils
+          jq
+        ];
+      }
+      ''
+        mkdir $out
+        cp ${finalAttrs.envoyBinariesRaw}/* $out
+        chmod -R +w $out
+
+        patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $out/envoy-linux-amd64
+        patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $out/envoy-linux-arm64
+        jq ".digest = \"sha256:$(sha256sum $out/envoy-linux-amd64 | cut -f1 -d' ')\"" $out/envoy-linux-amd64.lock | sponge $out/envoy-linux-amd64.lock
+        jq ".digest = \"sha256:$(sha256sum $out/envoy-linux-arm64 | cut -f1 -d' ')\"" $out/envoy-linux-arm64.lock | sponge $out/envoy-linux-arm64.lock
+      '';
 
   ui = buildNpmPackage {
     pname = "pomerium-ui";
-    inherit version;
-    src = "${src}/ui";
+    inherit (finalAttrs) version;
+    src = "${finalAttrs.src}/ui";
 
-    npmDepsHash = "sha256-2fzINp3LBPHPJlzJnUggPWUZHrjuX9TYPD2XvioonSw=";
+    npmDepsHash = "sha256-Vag3gRsCMCMcf+aPE9MRLweZkiFsY6FjGdlkhgC1CBg=";
 
     installPhase = ''
       runHook preInstall
@@ -46,23 +126,15 @@ buildGoModule rec {
     "cmd/pomerium"
   ];
 
-  # patch pomerium to allow use of external envoy
-  patches = [
-    ./0001-envoy-allow-specification-of-external-binary.patch
-  ];
-
   ldflags =
     let
       # Set a variety of useful meta variables for stamping the build with.
       setVars = {
         "github.com/pomerium/pomerium/internal/version" = {
-          Version = "v${version}";
+          Version = "v${finalAttrs.version}";
           BuildMeta = "nixpkgs";
           ProjectName = "pomerium";
           ProjectURL = "github.com/pomerium/pomerium";
-        };
-        "github.com/pomerium/pomerium/pkg/envoy" = {
-          OverrideEnvoyPath = "${envoy}/bin/envoy";
         };
       };
       concatStringsSpace = list: concatStringsSep " " list;
@@ -79,28 +151,11 @@ buildGoModule rec {
     ];
 
   preBuild = ''
-    # Replace embedded envoy with nothing.
-    # We set OverrideEnvoyPath above, so rawBinary should never get looked at
-    # but we still need to set a checksum/version.
-    rm pkg/envoy/files/files_{darwin,linux}*.go
-    cat <<EOF >pkg/envoy/files/files_external.go
-    package files
-
-    import _ "embed" // embed
-
-    var rawBinary []byte
-
-    //go:embed envoy.sha256
-    var rawChecksum string
-
-    //go:embed envoy.version
-    var rawVersion string
-    EOF
-    sha256sum '${envoy}/bin/envoy' > pkg/envoy/files/envoy.sha256
-    echo '${envoy.version}' > pkg/envoy/files/envoy.version
+    # Insert embedded envoy.
+    cp -r ${finalAttrs.envoyBinaries}/* pkg/envoy/files
 
     # put the built UI files where they will be picked up as part of binary build
-    cp -r ${ui}/* ui/dist
+    cp -r ${finalAttrs.ui}/* ui/dist
   '';
 
   installPhase = ''
@@ -129,4 +184,4 @@ buildGoModule rec {
       "aarch64-linux"
     ];
   };
-}
+})

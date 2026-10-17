@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "World";
     repo = "gcolor3";
     rev = "v${finalAttrs.version}";
-    sha256 = "rHIAjk2m3Lkz11obgNZaapa1Zr2GDH7XzgzuAJmq+MU=";
+    hash = "sha256-rHIAjk2m3Lkz11obgNZaapa1Zr2GDH7XzgzuAJmq+MU=";
   };
 
   nativeBuildInputs = [

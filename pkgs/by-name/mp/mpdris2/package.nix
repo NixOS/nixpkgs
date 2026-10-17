@@ -42,7 +42,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   dependencies = with python3Packages; [
     dbus-python
-    mpd2
+    python-mpd2
     mutagen
     pygobject3
   ];
@@ -52,7 +52,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
   # https://nixos.org/manual/nixpkgs/stable/#ssec-gnome-common-issues-double-wrapped
   dontWrapGApps = true;
 
-  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   patches = [ ./fix-gettext-0.25.patch ];
 
@@ -60,7 +62,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     description = "MPRIS 2 support for mpd";
     homepage = "https://github.com/eonpatapon/mpDris2/";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ acidbong ];
     platforms = lib.platforms.unix;
     mainProgram = "mpDris2";
   };

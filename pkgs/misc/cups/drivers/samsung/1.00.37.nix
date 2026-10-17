@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.00.37";
 
   src = fetchurl {
-    sha256 = "0r66l9zp0p1qgakh4j08hynwsr4lsgq5yrpxyr0x4ldvl0z2b1bb";
+    hash = "sha256-a4UlPqC7UdJB9v1mX/DTlGTNrYcISAKnejhccH+ixmQ=";
     url = "https://www.bchemnet.com/suldr/driver/UnifiedLinuxDriver-${finalAttrs.version}.tar.gz";
   };
 

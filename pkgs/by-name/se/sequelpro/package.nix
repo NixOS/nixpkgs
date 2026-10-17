@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "MySQL database management for macOS";
-    homepage = "http://www.sequelpro.com/";
+    homepage = "https://github.com/sequelpro/sequelpro";
     license = lib.licenses.mit;
     platforms = lib.platforms.darwin;
   };

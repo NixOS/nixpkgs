@@ -1,6 +1,5 @@
 {
   lib,
-  apple-sdk,
   bzip2,
   libmd,
   libresolv,
@@ -10,17 +9,18 @@
   ncurses,
   pkg-config,
   shell_cmds,
+  sourceRelease,
   stdenvNoCC,
   xz,
   zlib,
 }:
 
 let
-  Libc = apple-sdk.sourceRelease "Libc";
+  Libc = sourceRelease "Libc";
 
-  CommonCrypto = apple-sdk.sourceRelease "CommonCrypto";
-  libplatform = apple-sdk.sourceRelease "libplatform";
-  xnu = apple-sdk.sourceRelease "xnu";
+  CommonCrypto = sourceRelease "CommonCrypto";
+  libplatform = sourceRelease "libplatform";
+  xnu = sourceRelease "xnu";
 
   privateHeaders = stdenvNoCC.mkDerivation {
     name = "text_cmds-deps-private-headers";
@@ -45,7 +45,7 @@ mkAppleDerivation {
     "man"
   ];
 
-  xcodeHash = "sha256-4nwDGUBSx5jjeLQ3EGQFdPZE2MfNGcBvlTU/Sye6OIk=";
+  xcodeHash = "sha256-8Z6Goz94xP3HqAaSnFUurhZE8l3G1mK5KviXtxSPQhI=";
 
   postPatch = ''
     # Improve compatiblity with libmd in nixpkgs.

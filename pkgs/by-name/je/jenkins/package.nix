@@ -18,11 +18,14 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "jenkins";
-  version = "2.541.3";
+  version = "2.580.1";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchurl {
     url = "https://get.jenkins.io/war-stable/${finalAttrs.version}/jenkins.war";
-    hash = "sha256-AACt36hyKWMWQTek4OYKvCJ9nWBxDE3rGUgfmnUc9RI=";
+    hash = "sha256-OTvyR2NS3XJlGf0fks5m6sfSPAk25pZ0ILcXBgxMQNA=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

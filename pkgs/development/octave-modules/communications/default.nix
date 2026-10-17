@@ -2,6 +2,8 @@
   buildOctavePackage,
   lib,
   fetchurl,
+  autoreconfHook,
+  pkg-config,
   signal,
   hdf5,
 }:
@@ -15,6 +17,11 @@ buildOctavePackage rec {
     sha256 = "sha256-UXaoV45mdmA7n2cB8J3S+/8Nt7uhokyv2MVBm+FK5lw=";
   };
 
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+  ];
+
   buildInputs = [
     hdf5
   ];
@@ -22,6 +29,17 @@ buildOctavePackage rec {
   requiredOctavePackages = [
     signal
   ];
+
+  # autoreconfHook provides an autoreconfPhase that is run as a
+  # preconfigurePhase, which means it runs AFTER the source is un-tarred, and
+  # before buildOctavePackage's buildPhase re-tars it up into a format for later
+  # consumption by Octave's "pkg build" command.
+  preAutoreconf = ''
+    pushd src
+  '';
+  postAutoreconf = ''
+    popd
+  '';
 
   meta = {
     homepage = "https://gnu-octave.github.io/packages/communications/";

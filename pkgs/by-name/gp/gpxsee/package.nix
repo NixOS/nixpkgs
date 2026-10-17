@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpxsee";
-  version = "16.2";
+  version = "16.16";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "GPXSee";
     tag = finalAttrs.version;
-    hash = "sha256-7zEk8cFYgDNlRpXkgGVBj9XMmvOWDS++C8vCSP4DL1Q=";
+    hash = "sha256-UmGTeZD7JxNNsiaDlTgv/DoH3JFhej/SF+49bEPrgmM=";
   };
 
   buildInputs = [
@@ -24,6 +24,9 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtpositioning
     qt6.qtserialport
     qt6.qtsvg
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    qt6.qt5compat
   ];
 
   nativeBuildInputs = [

@@ -5,17 +5,17 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pylzma";
-  version = "0.6.0";
+  version = "0.6.1";
   pyproject = true;
 
   # This vendors an old LZMA SDK
   # After some discussion, it seemed most reasonable to keep it that way
   # xz, and uefi-firmware-parser also does this
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-OwCniSKNBaBvqZXNK0H/SpZXhKoZSKBthLPKa4cwQfA=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-qxzcUVFHnAZ0BEhn6OznXSUxVSceCpcC98sHa6aQ8p0=";
   };
 
   build-system = [ setuptools ];
@@ -28,4 +28,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ dandellion ];
   };
-}
+})

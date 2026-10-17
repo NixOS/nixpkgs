@@ -8,7 +8,7 @@
   libcap,
   libedit,
   libsodium,
-  lua,
+  lua5_2_compat,
   net-snmp,
   nghttp2,
   nixosTests,
@@ -23,14 +23,17 @@
   xdp-tools,
   zlib,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dnsdist";
-  version = "2.0.3";
+  version = "2.0.10";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/dnsdist-${finalAttrs.version}.tar.xz";
-    hash = "sha256-oiklC4GcQNVRc6+nIC7x7yprco+Fx1Bol6Hxymq1cUk=";
+    hash = "sha256-YKCU155Ci4bl7KGITWi0lb1NA3rw9u/BRI4WvMDTIrw=";
   };
 
   nativeBuildInputs = [
@@ -80,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) cargoRoot src;
-    hash = "sha256-OU24ahqFc4DivCpO451rsHV8rofyHv+LnLgkVsFPMG4=";
+    hash = "sha256-O9FKlT8bqDz+rQBocZ5ZWMimYyRTfPrKBxp+hDs10c4=";
   };
 
   cargoRoot = "dnsdist-rust-lib/rust";
@@ -89,11 +92,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  passthru.tests = {
-    inherit (nixosTests) dnsdist;
-  };
+  passthru.tests = nixosTests.dnsdist;
 
   meta = {
+    changelog = "https://www.dnsdist.org/changelog.html";
     description = "DNS Loadbalancer";
     mainProgram = "dnsdist";
     homepage = "https://dnsdist.org";

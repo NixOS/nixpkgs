@@ -78,6 +78,7 @@ let
           "-D bundled-gsl=OFF"
           "-D bundled-json=OFF"
           "-D warnings-as-errors=OFF" # protobuf 34.x `[[nodiscard]]` workaround https://github.com/mumble-voip/mumble/issues/7102
+          "-D use-timestamps=OFF"
         ]
         ++ (overrides.cmakeFlags or [ ]);
 
@@ -93,6 +94,7 @@ let
           license = lib.licenses.bsd3;
           maintainers = with lib.maintainers; [
             felixsinger
+            hax404
             lilacious
           ];
           platforms = lib.platforms.linux ++ (overrides.platforms or [ ]);
@@ -151,8 +153,8 @@ let
       env.NIX_CFLAGS_COMPILE = lib.optionalString speechdSupport "-I${speechd-minimal}/include/speech-dispatcher";
 
       patches = [
-        ./disable-overlay-build.patch
         ./fix-plugin-copy.patch
+        ./fix-plugin-updater-cxx20.patch
       ];
 
       postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -165,6 +167,7 @@ let
           --source-dir=$NIX_BUILD_TOP/source/ \
           --binary-dir=$out \
           --only-appbundle \
+          --no-overlay \
           --version "${source.version}"
 
         mkdir -p $out/Applications $out/bin
@@ -216,14 +219,14 @@ let
     } source;
 
   source = rec {
-    version = "1.5.857";
+    version = "1.5.939";
 
     # Needs submodules
     src = fetchFromGitHub {
       owner = "mumble-voip";
       repo = "mumble";
       tag = "v${version}";
-      hash = "sha256-4ySak2nzT8p48waMgBc9kLrvFB8716e7p0G4trzuh1k=";
+      hash = "sha256-tQZuyEunxYvl6HHLqI2Yu5Vl/NsW2QsNdMP1yP+MOYs=";
       fetchSubmodules = true;
     };
   };

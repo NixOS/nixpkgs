@@ -3,15 +3,16 @@
   fetchurl,
   mkTclDerivation,
   openssl,
+  tcl,
 }:
 
-mkTclDerivation rec {
+mkTclDerivation (finalAttrs: {
   pname = "tcltls";
   version = "1.7.22";
 
   src = fetchurl {
-    url = "https://core.tcl-lang.org/tcltls/uv/tcltls-${version}.tar.gz";
-    sha256 = "sha256-6E4reideyCxKqp0bH5eG2+Q1jIFekXU5/+f2Z/9Lw7Q=";
+    url = "https://core.tcl-lang.org/tcltls/uv/tcltls-${finalAttrs.version}.tar.gz";
+    hash = "sha256-6E4reideyCxKqp0bH5eG2+Q1jIFekXU5/+f2Z/9Lw7Q=";
   };
 
   buildInputs = [ openssl ];
@@ -20,11 +21,14 @@ mkTclDerivation rec {
     "--with-ssl-dir=${openssl.dev}"
   ];
 
+  tclRequiresCheck = [ "tls" ];
+
   meta = {
     homepage = "https://core.tcl-lang.org/tcltls/index";
     description = "OpenSSL / RSA-bsafe Tcl extension";
     maintainers = [ lib.maintainers.agbrooks ];
     license = lib.licenses.tcltk;
     platforms = lib.platforms.unix;
+    broken = tcl.isTcl9;
   };
-}
+})

@@ -3,14 +3,18 @@
   fetchFromGitHub,
   rustPlatform,
   pkg-config,
+  libz,
   openssl,
   git,
   nix-update-script,
+  stdenv, # for meta.broken
 }:
 
 rustPlatform.buildRustPackage {
   pname = "git-chain";
   version = "0-unstable-2025-03-25";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "dashed";
@@ -21,15 +25,24 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-0Ur80eIKQIsM5vyIt+9YpFufHTk97+T+KXoAkJE90Ag=";
 
+  env = {
+    LIBZ_SYS_STATIC = 0;
+  };
+
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    libz
+    openssl
+  ];
 
   nativeCheckInputs = [ git ];
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
+    # last successful hydra build on darwin was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Tool for rebasing a chain of local git branches";
     homepage = "https://github.com/dashed/git-chain";
     license = lib.licenses.mit;

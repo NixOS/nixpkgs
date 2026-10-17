@@ -15,16 +15,16 @@
   websocket-client,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "praw";
-  version = "7.8.1";
+  version = "7.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "praw-dev";
     repo = "praw";
-    tag = "v${version}";
-    hash = "sha256-jxF7rlMwKIKwyYv35vYWAdtClsVhnIkywoyMQeggGBc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mAXRLo8xBTigtXYRbc6qxjjoRJ0+v0DZeLEwLISh2PE=";
   };
 
   patches = [
@@ -63,8 +63,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python Reddit API wrapper";
     homepage = "https://praw.readthedocs.org/";
-    changelog = "https://github.com/praw-dev/praw/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/praw-dev/praw/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

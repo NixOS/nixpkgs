@@ -4,6 +4,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchurl,
+  nukeReferences,
+  python,
   replaceVars,
 
   # build
@@ -32,14 +34,14 @@
 
 let
   pname = "psycopg";
-  version = "3.3.3";
+  version = "3.3.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "psycopg";
     repo = "psycopg";
     tag = version;
-    hash = "sha256-hWiclfvimp6WldcDQPx7RFLx+XYRR9wPagAe0oZg7Pw=";
+    hash = "sha256-Pv13vV1x4wNQxm+KNdpCMaikCwGb/bAW3ZpT0xlD1uY=";
   };
 
   patches = [
@@ -78,11 +80,16 @@ let
 
     nativeBuildInputs = [
       libpq.pg_config
+      nukeReferences
     ];
 
     buildInputs = [
       libpq
     ];
+
+    postInstall = ''
+      nuke-refs $out/${python.sitePackages}/psycopg_c/{pq.c,_psycopg.c}
+    '';
 
     # tested in psycopg
     doCheck = false;
@@ -107,6 +114,9 @@ let
     build-system = [ setuptools ];
 
     dependencies = [ typing-extensions ];
+
+    # the psycopg-pool version isn't updated in tandem with psycopg
+    dontCheckPythonMetadata = true;
 
     # tested in psycopg
     doCheck = false;

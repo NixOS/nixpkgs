@@ -2,34 +2,49 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  hatchling,
   numpy,
   pillow,
   pytestCheckHook,
+  rustPlatform,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "epaper-dithering";
-  version = "0.6.3";
+  version = "6.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OpenDisplay";
     repo = "epaper-dithering";
-    tag = "python-v${finalAttrs.version}";
-    hash = "sha256-h84AgWJR8zVuwoz02A3U82yTOw4MSK9DjaxkYi0nWkM=";
+    tag = "epaper-dithering-v${finalAttrs.version}";
+    hash = "sha256-rKf8sM9F0qk2sw7HHyUo0A68ttIBlXeXNThts4BFSRo=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/python";
 
-  build-system = [ hatchling ];
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      sourceRoot
+      ;
+    hash = "sha256-KjG9DDx3zngJKkTvfGfeAdSQ6unEBfvy3xdc/Xg2mFs=";
+  };
+
+  nativeBuildInputs = [
+    rustPlatform.cargoSetupHook
+    rustPlatform.maturinBuildHook
+  ];
 
   dependencies = [
-    numpy
     pillow
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    numpy
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "epaper_dithering" ];
 

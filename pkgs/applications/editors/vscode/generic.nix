@@ -3,9 +3,9 @@
   lib,
   coreutils,
   gawk,
+  getconf,
   gnugrep,
   gnused,
-  glibc,
   jq,
   copyDesktopItems,
   makeDesktopItem,
@@ -31,6 +31,7 @@
   fontconfig,
   imagemagick,
   libdbusmenu,
+  libpulseaudio,
   glib,
   wayland,
   libglvnd,
@@ -38,6 +39,10 @@
   webkitgtk_4_1,
   ripgrep,
   which,
+  libxtst,
+  libjpeg8,
+  pipewire,
+  libei,
 
   # needed to fix "Save as Root"
   asar,
@@ -149,6 +154,7 @@ stdenv.mkDerivation (
           extraBwrapArgs = [
             "--bind-try /etc/nixos/ /etc/nixos/"
             "--ro-bind-try /etc/xdg/ /etc/xdg/"
+            "--ro-bind-try /etc/vscode/policy.json /etc/vscode/policy.json"
           ];
 
           # symlink shared assets, including icons and desktop entries
@@ -176,7 +182,6 @@ stdenv.mkDerivation (
       buildFHSEnv customizedArgs;
   in
   {
-
     inherit
       pname
       version
@@ -188,13 +193,22 @@ stdenv.mkDerivation (
     passthru = {
       inherit
         executableName
+        iconName
         longName
         tests
         updateScript
         vscodeVersion
         ;
-      fhs = fhs { };
-      fhsWithPackages = f: fhs { additionalPkgs = f; };
+      fhs = (fhs { }).overrideAttrs (old: {
+        strictDeps = true;
+        __structuredAttrs = true;
+      });
+      fhsWithPackages =
+        f:
+        (fhs { additionalPkgs = f; }).overrideAttrs (old: {
+          strictDeps = true;
+          __structuredAttrs = true;
+        });
     }
     // lib.optionalAttrs (vscodeServer != null) {
       inherit rev vscodeServer;
@@ -215,6 +229,11 @@ stdenv.mkDerivation (
           "TextEditor"
           "Development"
           "IDE"
+        ];
+        mimeTypes = [
+          "application/x-code-workspace"
+          "text/plain"
+          "inode/directory"
         ];
         keywords = [ "vscode" ];
         actions.new-empty-window = {
@@ -243,6 +262,9 @@ stdenv.mkDerivation (
       })
     ];
 
+    strictDeps = true;
+    __structuredAttrs = true;
+
     buildInputs = [
       libsecret
     ]
@@ -255,6 +277,10 @@ stdenv.mkDerivation (
       systemdLibs
       webkitgtk_4_1
       libxkbfile
+      libxtst
+      libjpeg8.out
+      pipewire
+      libei
     ];
 
     runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [
@@ -263,6 +289,9 @@ stdenv.mkDerivation (
       libdbusmenu
       wayland
       libsecret
+      # dlopen()ed by Chromium; without it audio falls back to ALSA and
+      # accessibility signal sounds stay silent on PipeWire/PulseAudio setups
+      libpulseaudio
     ];
 
     nativeBuildInputs = [
@@ -294,11 +323,6 @@ stdenv.mkDerivation (
     dontBuild = true;
     dontConfigure = true;
     noDumpEnvVars = true;
-
-    stripExclude = lib.optional hasVsceSign [
-      # vsce-sign is a single executable application built with Node.js, and it becomes non-functional if stripped
-      "lib/vscode/resources/app/node_modules/@vscode/vsce-sign/bin/vsce-sign"
-    ];
 
     installPhase = ''
       runHook preInstall
@@ -338,8 +362,10 @@ stdenv.mkDerivation (
         # Remove native encryption code, as it derives the key from the executable path which does not work for us.
         # The credentials should be stored in a secure keychain already, so the benefit of this is questionable
         # in the first place.
+        # Also remove prebuilt Copilot binaries that seemingly have been added by accident.
         + ''
           rm -rf $out/lib/${libraryName}/resources/app/node_modules/vscode-encrypt
+          rm -rf $out/lib/${libraryName}/resources/app/node_modules/@github/copilot-linuxmusl*
         ''
     )
     + ''
@@ -354,21 +380,26 @@ stdenv.mkDerivation (
               "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libdbusmenu ]}"
           }
         --prefix PATH : ${
-          lib.makeBinPath [
-            # for moving files to trash
-            glib
+          lib.makeBinPath (
+            [
+              # for moving files to trash
+              glib
 
-            # for launcher and bundled helper scripts
-            gawk
-            glibc.bin
-            gnugrep
-            gnused
-            coreutils
-            which
-          ]
+              # for launcher and bundled helper scripts
+              gawk
+              gnugrep
+              gnused
+              coreutils
+              which
+            ]
+            # provides `getconf` for ps-fallback script that only runs on Linux
+            # https://github.com/microsoft/vscode/blob/97c807618b413805fde466739ba14f77a1f12307/src/vs/base/node/ps.sh#L2
+            # https://github.com/microsoft/vscode/blob/97c807618b413805fde466739ba14f77a1f12307/src/vs/base/node/ps.ts#L203-L217
+            ++ lib.optional stdenv.hostPlatform.isLinux getconf
+          )
         }
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}"
-        --add-flags ${lib.escapeShellArg commandLineArgs}
+        --append-flags ${lib.escapeShellArg commandLineArgs}
       )
     '';
 
@@ -399,17 +430,51 @@ stdenv.mkDerivation (
         + ''
           ln -rs "$unpacked" "$packed"
         ''
+        # Some resources, such as Tree-Sitter WASM, are loaded directly from this directory.
+        # Keep it available without duplicating the extracted files.
+        + ''
+          rm -rf "resources/app/node_modules.asar.unpacked"
+          ln -rs "$unpacked" "resources/app/node_modules.asar.unpacked"
+        ''
       )
       + (
         let
-          vscodeRipgrep =
+          nodeModulesPath =
             if stdenv.hostPlatform.isDarwin then
-              if lib.versionAtLeast vscodeVersion "1.94.0" then
-                "Contents/Resources/app/node_modules/@vscode/ripgrep/bin/rg"
+              # 1.129 moved node_modules back into app.asar, shipping native
+              # binaries in the asar.unpacked directory like before 1.94
+              if lib.versionAtLeast vscodeVersion "1.129.0" then
+                "Contents/Resources/app/node_modules.asar.unpacked"
+              else if lib.versionAtLeast vscodeVersion "1.94.0" then
+                "Contents/Resources/app/node_modules"
               else
-                "Contents/Resources/app/node_modules.asar.unpacked/@vscode/ripgrep/bin/rg"
+                "Contents/Resources/app/node_modules.asar.unpacked"
             else
-              "resources/app/node_modules/@vscode/ripgrep/bin/rg";
+              "resources/app/node_modules";
+
+          # see https://www.npmjs.com/package/@vscode/ripgrep-universal?activeTab=code
+          ripgrepSystem =
+            {
+              aarch64-darwin = "darwin-arm64";
+              armv7l-linux = "linux-arm";
+              aarch64-linux = "linux-arm64";
+              i686-linux = "linux-ia32";
+              loongarch64-linux = "linux-loong64";
+              powerpc64-linux = "linux-ppc64";
+              riscv64-linux = "linux-riscv64";
+              s390x-linux = "linux-s390x";
+              x86_64-linux = "linux-x64";
+            }
+            .${stdenv.hostPlatform.system}
+              or (throw "Unknown system for ripgrep-universal: ${stdenv.hostPlatform.system}");
+
+          ripgrepPath =
+            if lib.versionAtLeast vscodeVersion "1.122.0" then
+              "@vscode/ripgrep-universal/bin/${ripgrepSystem}/rg"
+            else
+              "@vscode/ripgrep/bin/rg";
+
+          vscodeRipgrep = "${nodeModulesPath}/${ripgrepPath}";
         in
         if !useVSCodeRipgrep then
           ''
@@ -430,10 +495,13 @@ stdenv.mkDerivation (
           --add-needed ${libglvnd}/lib/libEGL.so.1 \
           $out/lib/${libraryName}/${executableName}
       ''
+      # restore original vsce-sign, which has integrity checks
       + (lib.optionalString hasVsceSign ''
+        cp -r ./resources/app/node_modules/@vscode/vsce-sign/bin/vsce-sign "$out/lib/vscode/resources/app/node_modules/@vscode/vsce-sign/bin/vsce-sign"
         patchelf \
-          --add-needed ${lib.getLib openssl}/lib/libssl.so \
+          --add-needed ${lib.getLib openssl}/lib/libssl.so.3 \
           $out/lib/vscode/resources/app/node_modules/@vscode/vsce-sign/bin/vsce-sign
+        chmod +x $out/lib/vscode/resources/app/node_modules/@vscode/vsce-sign/bin/vsce-sign
       '')
     );
 

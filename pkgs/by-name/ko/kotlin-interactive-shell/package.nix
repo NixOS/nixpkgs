@@ -6,18 +6,18 @@
   jre,
 }:
 
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   pname = "kotlin-interactive-shell";
   version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "Kotlin";
     repo = "kotlin-interactive-shell";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-3DTyo7rPswpEVzFkcprT6FD+ITGJ+qCXFKXEGoCK+oE=";
   };
 
-  mvnHash = "sha256-UHtvBVw35QBwgCD+nSduR0924ANAOfwrr/a4qPEYsrM=";
+  mvnHash = "sha256-qGxpeb+8hP0ljbI0+aHnuO5efzXvVQWo8VFYMuRzYck=";
   mvnParameters = "compile";
 
   nativeBuildInputs = [ makeWrapper ];
@@ -50,4 +50,4 @@ maven.buildMavenPackage rec {
     platforms = jre.meta.platforms;
     mainProgram = "ki";
   };
-}
+})

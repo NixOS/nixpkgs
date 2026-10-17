@@ -49,7 +49,7 @@ id="$1"
 pids="$(pgrep "sleep $id" || :)"
 if [ -z "$pids" ]; then
   echo "Error: No process found for 'sleep $id'. The build must still be running in order to attach. Also make sure it's not on a remote builder." >&2
-  exit 1s
+  exit 1
 elif [ "$(echo "$pids" | wc -l)" -ne 1 ]; then
   echo "Error: Multiple processes found matching 'sleep $id'" >&2
   exit 1

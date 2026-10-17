@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vpl-gpu-rt";
-  version = "26.1.4";
+  version = "26.3.5";
 
   outputs = [
     "out"
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "intel";
     repo = "vpl-gpu-rt";
     rev = "intel-onevpl-${finalAttrs.version}";
-    hash = "sha256-DqEg7GClyWdy9Clop7nIJSllN5gLTSZujgBwN2WmBds=";
+    hash = "sha256-YNLgCpxz8rARPClzWN/w484LWOdfA+v8KUB3TiCbUxU=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "oneAPI Video Processing Library Intel GPU implementation";
     homepage = "https://github.com/intel/vpl-gpu-rt";
     changelog = "https://github.com/intel/vpl-gpu-rt/releases/tag/${finalAttrs.src.rev}";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [
       evanrichter

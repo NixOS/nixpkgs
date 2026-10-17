@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "adsr";
     repo = "phpspy";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-QphoDdnSFPVRvEro0WDUC/yRsOf4I5p5BpHq32olqJI=";
     fetchSubmodules = true;
   };

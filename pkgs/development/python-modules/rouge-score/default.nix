@@ -19,14 +19,14 @@ let
     hash = "sha256-ojqk6U2caS7Xz4iGUC9aQVHrKb2QNvMlPuQAL/jJat0=";
   };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rouge-score";
   version = "0.1.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "rouge_score";
-    inherit version;
+    inherit (finalAttrs) version;
     extension = "tar.gz";
     hash = "sha256-x9TaJoPmjJq/ATXvkV1jpGZDZm+EjlWKG59+rRf/DwQ=";
   };
@@ -65,4 +65,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nviets ];
   };
-}
+})

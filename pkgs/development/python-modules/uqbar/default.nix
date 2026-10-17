@@ -63,11 +63,11 @@ buildPythonPackage (finalAttrs: {
     # https://github.com/supriya-project/uqbar/issues/107
     "SummarizingRootDocumenter"
   ]
-  ++ lib.optional (pythonAtLeast "3.11") [
+  ++ lib.optionals (pythonAtLeast "3.11") [
     # assert not '\x1b[91m/build/uqbar-0.7.0/tests/fake_package/enums.py:docstring
     "test_sphinx_style"
   ]
-  ++ lib.optional (pythonAtLeast "3.12") [
+  ++ lib.optionals (pythonAtLeast "3.12") [
     # https://github.com/supriya-project/uqbar/issues/93
     "objects.get_vars"
   ]
@@ -84,6 +84,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/supriya-project/uqbar";
     changelog = "https://github.com/supriya-project/uqbar/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ davisrichard437 ];
+    maintainers = [ ];
   };
 })

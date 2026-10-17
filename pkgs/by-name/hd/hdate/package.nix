@@ -11,6 +11,11 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://sourceforge.net/projects/libhdate/files/libhdate/libhdate-${finalAttrs.version}/libhdate-${finalAttrs.version}.tar.bz2";
     sha256 = "3c930a8deb57c01896dc37f0d7804e5a330ee8e88c4ff610b71f9d2b02c17762";
   };
+
+  configureFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "--disable-hcal"
+  ];
+
   meta = {
     description = "Hebrew calendar and solar astronomical times library and utilities";
     homepage = "https://sourceforge.net/projects/libhdate/";

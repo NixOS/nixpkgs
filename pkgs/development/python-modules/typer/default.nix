@@ -9,36 +9,41 @@
 
   # dependencies
   annotated-doc,
-  click,
-
-  # optional-dependencies
   rich,
   shellingham,
 
   # tests
   pytest-xdist,
-  pytestCheckHook,
+  pytest9_0CheckHook,
   writableTmpDirAsHomeHook,
   procps,
 }:
 
 buildPythonPackage rec {
   pname = "typer";
-  version = "0.24.0";
+  version = "0.27.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fastapi";
     repo = "typer";
     tag = version;
-    hash = "sha256-ha/cT2+I9/WUjb7ZXSKqLSocZ3vq0N1fm4RvRpsXIDc=";
+    hash = "sha256-vBHSJoyIQawkqqhbPJGKzPjBPm42OR/Ref/k6XFJTi8=";
   };
 
   postPatch = ''
     for f in $(find tests -type f -print); do
       # replace `sys.executable -m coverage run` with `sys.executable`
       sed -z -i 's/"-m",\n\?\s*"coverage",\n\?\s*"run",//g' "$f"
+      sed -i 's/-m coverage run//g' "$f"
     done
+    # These are already included in the PYTHONPATH.
+    # Overriding PYTHONPATH breaks the tests when executed by Nix
+    # ("No module named 'typer'" error) because it's used to find `typer` too.
+    substituteInPlace tests/test_tutorial/test_subcommands/test_tutorial001.py \
+      --replace-fail 'env["PYTHONPATH"] = ":".join(list(tutorial001_py310.__path__))' ""
+    substituteInPlace tests/test_tutorial/test_subcommands/test_tutorial003.py \
+      --replace-fail 'env["PYTHONPATH"] = ":".join(list(tutorial003_py310.__path__))' ""
   '';
 
   env.TIANGOLO_BUILD_PACKAGE = "typer";
@@ -47,30 +52,23 @@ buildPythonPackage rec {
 
   dependencies = [
     annotated-doc
-    click
     rich
     shellingham
   ];
 
   nativeCheckInputs = [
     pytest-xdist
-    pytestCheckHook
+    pytest9_0CheckHook
     writableTmpDirAsHomeHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     procps
   ];
 
-  disabledTests = [
-    "test_scripts"
-    # Likely related to https://github.com/sarugaku/shellingham/issues/35
-    # fails also on Linux
-    "test_show_completion"
-    "test_install_completion"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-    "test_install_completion"
-  ];
+  preCheck = ''
+    # Fix "No module named 'tests'" error in tests/test_types_file.py::test_binary_stderr
+    export PYTHONPATH="$PWD:$PYTHONPATH"
+  '';
 
   pythonImportsCheck = [ "typer" ];
 

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "django-weasyprint";
-  version = "2.4.0";
+  version = "2.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fdemmer";
     repo = "django-weasyprint";
     tag = "v${version}";
-    hash = "sha256-eSh1p+5MyYb6GIEgSdlFxPzVCenlkwSCTkTzgKjezIg=";
+    hash = "sha256-XTG3PQG9WcoUu25saTy6svCq5uskEGE2QTqrLrydq58=";
   };
 
   build-system = [
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "django_weasyprint" ];
 
   meta = {
-    description = "Django class-based view generating PDF resposes using WeasyPrint";
+    description = "Django class-based view generating PDF responses using WeasyPrint";
     homepage = "https://github.com/fdemmer/django-weasyprint";
     changelog = "https://github.com/fdemmer/django-weasyprint/releases/tag/${src.tag}";
     license = lib.licenses.asl20;

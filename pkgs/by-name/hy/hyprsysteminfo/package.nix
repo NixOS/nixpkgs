@@ -1,6 +1,6 @@
 {
   lib,
-  gcc15Stdenv,
+  gcc16Stdenv,
   fetchFromGitHub,
   fetchpatch,
   cmake,
@@ -13,7 +13,7 @@
 let
   inherit (lib.strings) makeBinPath;
 in
-gcc15Stdenv.mkDerivation (finalAttrs: {
+gcc16Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprsysteminfo";
   version = "0.1.3";
 

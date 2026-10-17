@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "vouch-proxy";
-  version = "0.45.1";
+  version = "0.48.0";
 
   src = fetchFromGitHub {
     owner = "vouch";
     repo = "vouch-proxy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xI9xucRb2D2a1Fvp5DetB4ln3C020qSGEVnuIpy1TMI=";
+    hash = "sha256-QJoZqz3kQCUqEBu9hjTBrGMrNTiNi4LXKyi0EFSZNy8=";
   };
 
-  vendorHash = "sha256-hieN3RJA0eBqlYxJj6hKgpQhq8s3vg/fPzxW0XSrlPA=";
+  vendorHash = "sha256-Ma5/S2PXQ9lByIpIfkkLeiw/9rvmasSMElE1VoGIEHc=";
 
   ldflags = [
     "-s"
@@ -26,6 +26,9 @@ buildGoModule (finalAttrs: {
   preCheck = ''
     export VOUCH_ROOT=$PWD
   '';
+
+  # TestClaimsHMAC requires network access to validate HMAC signatures
+  checkFlags = [ "-skip=TestClaimsHMAC" ];
 
   meta = {
     homepage = "https://github.com/vouch/vouch-proxy";

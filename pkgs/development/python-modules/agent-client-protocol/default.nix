@@ -10,23 +10,28 @@
   pydantic,
 
   # optional-dependencies
+  h2,
+  httpx,
   opentelemetry-sdk,
+  websockets,
 
   # tests
   pytest-asyncio,
   pytestCheckHook,
+  uvicorn,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "agent-client-protocol";
-  version = "0.9.0";
+  version = "0.12.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "agentclientprotocol";
     repo = "python-sdk";
     tag = finalAttrs.version;
-    hash = "sha256-8Xf2S85yNsP/HhpCw9UqdoDdeDHdggvYcnvJbilAVuU=";
+    hash = "sha256-GBMzhDHOiXGQDyHtDEBpGL4SH/I16Zh/QMePhiLHJSE=";
   };
 
   build-system = [
@@ -38,6 +43,11 @@ buildPythonPackage (finalAttrs: {
   ];
 
   optional-dependencies = {
+    http = [
+      h2
+      httpx
+      websockets
+    ];
     logfire = [
       # logfire (unpackaged)
       opentelemetry-sdk
@@ -49,10 +59,12 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
-  ];
+    uvicorn
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.http;
 
   disabledTests = [
-    # Hangs forever
+    # Agent subprocess cannot complete in the sandbox.
     "test_spawn_agent_process_roundtrip"
   ];
 

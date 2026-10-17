@@ -9,32 +9,28 @@
 
 buildGoModule (finalAttrs: {
   pname = "crossplane-cli";
-  version = "2.2.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "crossplane";
-    repo = "crossplane";
+    repo = "cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-SRqZKr/MTdfDwN5/mqWT5AcQAjNiCcbLyuTJCOcruzE=";
+    hash = "sha256-ksym0FzurF2fkpKtIiTJ184Wzj4Xz48uCUPSBUeSgbg=";
   };
 
-  vendorHash = "sha256-vilm41nN7Qhyu9LfVk6Me9hA3YAipLYGjhSU/JZhfEM=";
+  vendorHash = "sha256-FUzdO47z53XVQ3DLUKXe9TF2LogsSzobz13bzEmkH1U=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/crossplane/crossplane/v2/internal/version.version=v${finalAttrs.version}"
+    "-X github.com/crossplane/crossplane-runtime/v2/pkg/version.version=v${finalAttrs.version}"
   ];
 
-  subPackages = [ "cmd/crank" ];
-
-  postInstall = ''
-    mv $out/bin/crank $out/bin/crossplane
-  '';
+  subPackages = [ "cmd/crossplane" ];
 
   passthru.tests.version = testers.testVersion {
     package = crossplane-cli;
-    command = "crossplane version --client || true";
+    command = "crossplane version --client";
     version = "v${finalAttrs.version}";
   };
 
@@ -42,10 +38,13 @@ buildGoModule (finalAttrs: {
 
   meta = {
     homepage = "https://www.crossplane.io/";
-    changelog = "https://github.com/crossplane/crossplane/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/crossplane/cli/releases/tag/v${finalAttrs.version}";
     description = "Utility to make using Crossplane easier";
     mainProgram = "crossplane";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ selfuryon ];
+    maintainers = with lib.maintainers; [
+      selfuryon
+      LorenzBischof
+    ];
   };
 })

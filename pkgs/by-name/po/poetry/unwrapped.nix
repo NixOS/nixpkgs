@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   findpython,
   installShellFiles,
   build,
@@ -35,15 +36,23 @@
 
 buildPythonPackage rec {
   pname = "poetry";
-  version = "2.3.3";
+  version = "2.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-poetry";
     repo = "poetry";
     tag = version;
-    hash = "sha256-+8zVe2JeQbbqmKOydQw1tZM2PYa5H/5ImBcVpoxYC5w=";
+    hash = "sha256-LlE5u6dyiLGQeMREDtZcCGdDtNjqm8hwlTPfx6UeF8U=";
   };
+
+  patches = [
+    # https://github.com/python-poetry/poetry/pull/11133
+    (fetchpatch {
+      url = "https://github.com/python-poetry/poetry/commit/38a86661d2ae58694c76d0bb4e628e1400d6dc6f.patch";
+      hash = "sha256-MkaA78F+vYU3V95BDhpQLpnG1gstrHVOupyN7rmygaU=";
+    })
+  ];
 
   build-system = [
     poetry-core
@@ -82,11 +91,13 @@ buildPythonPackage rec {
   ++ pbs-installer.optional-dependencies.download
   ++ pbs-installer.optional-dependencies.install;
 
+  pythonRelaxDeps = [ "installer" ];
+
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd poetry \
       --bash <($out/bin/poetry completions bash) \
       --fish <($out/bin/poetry completions fish) \
-      --zsh <($out/bin/poetry completions zsh) \
+      --zsh <($out/bin/poetry completions zsh)
   '';
 
   nativeCheckInputs = [
@@ -113,17 +124,15 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
-    "test_builder_should_execute_build_scripts"
     "test_env_system_packages_are_relative_to_lib"
-    "test_install_warning_corrupt_root"
-    "test_no_additional_output_in_verbose_mode"
-    "test_project_plugins_are_installed_in_project_folder"
     "test_application_command_not_found_messages"
     # PermissionError: [Errno 13] Permission denied: '/build/pytest-of-nixbld/pytest-0/popen-gw3/test_find_poetry_managed_pytho1/.local/share/pypoetry/python/pypy@3.10.8/bin/python'
     "test_list_poetry_managed"
     "test_list_poetry_managed"
     "test_find_all_with_poetry_managed"
     "test_find_poetry_managed_pythons"
+    # expects `sys.executable` to be able to import poetry
+    "test_no_slow_imports_when_importing_the_cli_entrypoint"
     # Flaky
     "test_threading_property_types"
     "test_threading_single_thread_safe"
@@ -148,7 +157,10 @@ buildPythonPackage rec {
   # Unset ambient PYTHONPATH in the wrapper, so Poetry only ever runs with its own,
   # isolated set of dependencies. This works because the correct PYTHONPATH is set
   # in the Python script, which runs after the wrapper.
-  makeWrapperArgs = [ "--unset PYTHONPATH" ];
+  makeWrapperArgs = [
+    "--unset"
+    "PYTHONPATH"
+  ];
 
   meta = {
     changelog = "https://github.com/python-poetry/poetry/blob/${src.tag}/CHANGELOG.md";

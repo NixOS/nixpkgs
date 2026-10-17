@@ -8,13 +8,13 @@
 buildHomeAssistantComponent rec {
   owner = "magico13";
   domain = "emporia_vue";
-  version = "0.11.3";
+  version = "0.12.4";
 
   src = fetchFromGitHub {
     owner = "magico13";
     repo = "ha-emporia-vue";
     rev = "v${version}";
-    hash = "sha256-IONV3jmCyVW2lXjenIicNRaJTsAyzRZ5OVmampqFD7A=";
+    hash = "sha256-RukFogeXbTFAVjnnqmR/Mgr9e8vVMRHayW5aelAkbjU=";
   };
 
   dependencies = [
@@ -22,6 +22,7 @@ buildHomeAssistantComponent rec {
   ];
 
   ignoreVersionRequirement = [
+    "boto3"
     "pyemvue"
   ];
 

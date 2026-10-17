@@ -23,8 +23,7 @@
   dbus,
   cups,
   libexif,
-  ffmpeg,
-  systemd,
+  systemdLibs,
   libva,
   libGL,
   freetype,
@@ -47,6 +46,7 @@
   libdrm,
   libgbm,
   vulkan-loader,
+  addDriverRunpath,
   nss,
   nspr,
   patchelf,
@@ -66,7 +66,7 @@
 
 stdenv.mkDerivation rec {
   pname = "vivaldi";
-  version = "7.9.3970.47";
+  version = "8.2.4133.87";
 
   suffix =
     {
@@ -79,8 +79,8 @@ stdenv.mkDerivation rec {
     url = "https://downloads.vivaldi.com/stable/vivaldi-stable_${version}-1_${suffix}.deb";
     hash =
       {
-        aarch64-linux = "sha256-08KlF8JJlZqAZeSFAqaNzMPfHp95GddRScnLnkQ2PF8=";
-        x86_64-linux = "sha256-Dc1VyxB60WsrynOT5r85+Xljx8mU7IKodnIIeGZ/u+M=";
+        aarch64-linux = "sha256-KGs2aJjgVROPy95y5otGowA+AguUmoihmHmNBvftr+M=";
+        x86_64-linux = "sha256-DiWdhnEJzqo9AR33/Jn6XMlITkx32zOnBV5d2UHLJC8=";
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
@@ -130,8 +130,7 @@ stdenv.mkDerivation rec {
     gtk3
     gdk-pixbuf
     libexif
-    ffmpeg
-    systemd
+    systemdLibs
     libva
     qt6.qtbase
     qt6.qtwayland
@@ -162,7 +161,7 @@ stdenv.mkDerivation rec {
     + lib.optionalString (stdenv.hostPlatform.is64bit) (
       ":" + lib.makeSearchPathOutput "lib" "lib64" buildInputs
     )
-    + ":$out/opt/vivaldi/lib";
+    + ":$out/opt/vivaldi";
 
   buildPhase = ''
     runHook preBuild
@@ -172,10 +171,6 @@ stdenv.mkDerivation rec {
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath "${libPath}" \
         opt/vivaldi/$f
-    done
-
-    for f in libGLESv2.so libqt5_shim.so libqt6_shim.so; do
-      patchelf --set-rpath "${libPath}" opt/vivaldi/$f
     done
   ''
   + lib.optionalString proprietaryCodecs ''
@@ -208,9 +203,13 @@ stdenv.mkDerivation rec {
         "$out"/opt/vivaldi/product_logo_''${d}.png \
         "$out"/share/icons/hicolor/''${d}x''${d}/apps/vivaldi.png
     done
+    # replace bundled vulkan-loader with the NixOS-patched one to enable Vulkan ICD discovery
+    rm $out/opt/vivaldi/libvulkan.so.1
+    ln -s "${lib.getLib vulkan-loader}/lib/libvulkan.so.1" $out/opt/vivaldi/libvulkan.so.1
+
     wrapProgram "$out/bin/vivaldi" \
       --add-flags ${lib.escapeShellArg commandLineArgs} \
-      --prefix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/ \
+      --prefix XDG_DATA_DIRS : "${addDriverRunpath.driverLink}/share:${gtk3}/share/gsettings-schemas/${gtk3.name}" \
       --prefix LD_LIBRARY_PATH : ${libPath} \
       --prefix PATH : ${coreutils}/bin \
       ''${qtWrapperArgs[@]}

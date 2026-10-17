@@ -45,14 +45,14 @@ let
 in
 buildPythonPackage rec {
   pname = "pymdown-extensions";
-  version = "10.21.2";
+  version = "11.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "facelessuser";
     repo = "pymdown-extensions";
     tag = version;
-    hash = "sha256-BKnrq8m+xQYZs6V+x+3al7yS8531UvvaC4V+ny+f+Qg=";
+    hash = "sha256-AmKt9KNBvT5yGyKfYmS3BE5XQHZVAP+UJGMBCR3jbLI=";
   };
 
   build-system = [ hatchling ];
@@ -60,11 +60,11 @@ buildPythonPackage rec {
   dependencies = [
     markdown
     pygments
+    pyyaml
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    pyyaml
   ];
 
   pythonImportsCheck = map (ext: "pymdownx.${ext}") extensions;

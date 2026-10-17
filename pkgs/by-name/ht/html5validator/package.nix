@@ -8,7 +8,7 @@
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "html5validator";
   version = "0.4.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "svenkreiss";
@@ -16,6 +16,10 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-yvclqE4+2R9q/UJU9W95U1/xVJeNj+5eKvT6VQel9k8=";
   };
+
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     openjdk

@@ -16,7 +16,7 @@ let
   # We are waiting on some changes to be merged upstream: https://github.com/openSUSE/hwinfo/pulls
   hwinfoOverride = hwinfo.overrideAttrs {
     src = fetchFromGitHub {
-      owner = "numtide";
+      owner = "nix-community";
       repo = "hwinfo";
       rev = "bfeab0b4e38b200c7a62a44d4d01601a86fe1091";
       hash = "sha256-GL3fNCSaU45fNihEksgtPtbuLkc+tVGXtPH05wbrHwI=";
@@ -25,13 +25,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "nixos-facter";
-  version = "0.4.3";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
-    owner = "numtide";
+    owner = "nix-community";
     repo = "nixos-facter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bbF16siqAqokXOHwLmBL61p/C7YiDGqBJhhJiF08pHk=";
+    hash = "sha256-w4tFIouJQLf/JeY7wvvSLbxQv73Bbs11a8EAu6iXwKU=";
   };
 
   vendorHash = "sha256-5duwAxAgbPZIbbgzZE2m574TF/0+jF/TvTKI4YBH6jM=";
@@ -71,7 +71,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Declarative hardware configuration for NixOS";
-    homepage = "https://github.com/numtide/nixos-facter";
+    homepage = "https://github.com/nix-community/nixos-facter";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.brianmcgee ];
     mainProgram = "nixos-facter";

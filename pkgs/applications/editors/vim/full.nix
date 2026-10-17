@@ -4,6 +4,7 @@
   lib,
   stdenv,
   ncurses,
+  pixman,
   pkg-config,
   gettext,
   writeText,
@@ -11,7 +12,7 @@
   glib,
   gtk2-x11,
   gtk3-x11,
-  lua,
+  lua5_5,
   python3,
   perl,
   tcl,
@@ -51,6 +52,8 @@
 }:
 
 let
+  lua = lua5_5;
+
   nixosRuntimepath = writeText "nixos-vimrc" ''
     set nocompatible
     syntax on
@@ -81,7 +84,7 @@ let
     endif
   '';
 
-  common = callPackage ./common.nix { };
+  common = callPackage ./common.nix { inherit stdenv; };
 
 in
 stdenv.mkDerivation {
@@ -174,6 +177,7 @@ stdenv.mkDerivation {
   buildInputs = [
     ncurses
     glib
+    pixman
   ]
   # All X related dependencies
   ++ lib.optionals (guiSupport == "gtk2" || guiSupport == "gtk3") [

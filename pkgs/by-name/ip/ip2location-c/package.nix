@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "8.7.0";
 
   src = fetchFromGitHub {
-    owner = "chrislim2888";
+    owner = "ip2location";
     repo = "IP2Location-C-Library";
     rev = finalAttrs.version;
     sha256 = "sha256-kp0tNZPP9u2xxFOmBAdivsVLtyF66o38H6eRrs2/S/Y=";

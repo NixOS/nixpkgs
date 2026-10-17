@@ -39,7 +39,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       lblasc
       evenbrenden
-      hmenke
     ];
     platforms = with lib.platforms; linux;
     sourceProvenance = with lib.sourceTypes; [ binaryFirmware ];

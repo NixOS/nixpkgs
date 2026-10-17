@@ -29,7 +29,7 @@ mkDerivation rec {
     owner = "lumina-desktop";
     repo = "lumina";
     rev = "v${version}";
-    sha256 = "1llr65gilcf0k88f9mbwzlalqwdnjy4nv2jq7w154z0xmd6iarfq";
+    hash = "sha256-2GUVTasdfFICP1iKbYmXtnFMFf181eQQmsAxGl8xmdI=";
   };
 
   nativeBuildInputs = [

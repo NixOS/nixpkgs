@@ -2,12 +2,12 @@
   lib,
   fetchFromGitHub,
   makeDesktopItem,
+  copyDesktopItems,
   boost186,
   cmake,
   libgcrypt,
   libgpg-error,
   libsodium,
-  miniupnpc,
   monero-cli,
   pkg-config,
   qt5,
@@ -26,20 +26,21 @@
   udev,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "monero-gui";
-  version = "0.18.4.7";
+  version = "0.18.5.2";
 
   src = fetchFromGitHub {
     owner = "monero-project";
     repo = "monero-gui";
-    rev = "v${version}";
-    hash = "sha256-22v4KwtmjIkeQXfMdxCQr6TUdAEih6xwtNPbuzpQDZk=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-2FlenQtrsoHmRTfU+KhWtg3eVPzz9ktQ3dnOlWhOPC8=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    copyDesktopItems
     qt5.wrapQtAppsHook
     (lib.getDev qt5.qttools)
   ];
@@ -49,7 +50,6 @@ stdenv.mkDerivation rec {
     libgcrypt
     libgpg-error
     libsodium
-    miniupnpc
     qt5.qtbase
     qt5.qtdeclarative
     qt5.qtgraphicaleffects
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # set monero-gui version
     substituteInPlace src/version.js.in \
-       --replace '@VERSION_TAG_GUI@' '${version}'
+       --replace '@VERSION_TAG_GUI@' '${finalAttrs.version}'
 
     # use monerod from the monero package
     substituteInPlace src/daemon/DaemonManager.cpp \
@@ -106,27 +106,26 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DARCH=default"
   ]
-  ++ lib.optional trezorSupport [
+  ++ lib.optionals trezorSupport [
     # fix build on recent gcc versions
     "-DCMAKE_CXX_FLAGS=-fpermissive"
   ];
 
-  desktopItem = makeDesktopItem {
-    name = "monero-wallet-gui";
-    exec = "monero-wallet-gui";
-    icon = "monero";
-    desktopName = "Monero";
-    genericName = "Wallet";
-    categories = [
-      "Network"
-      "Utility"
-    ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "monero-wallet-gui";
+      exec = "monero-wallet-gui";
+      icon = "monero";
+      desktopName = "Monero";
+      genericName = "Wallet";
+      categories = [
+        "Network"
+        "Utility"
+      ];
+    })
+  ];
 
   postInstall = ''
-    # install desktop entry
-    install -Dm644 -t $out/share/applications \
-      ${desktopItem}/share/applications/*
 
     # install icons
     for n in 16 24 32 48 64 96 128 256; do
@@ -145,4 +144,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ rnhmjoj ];
     mainProgram = "monero-wallet-gui";
   };
-}
+})

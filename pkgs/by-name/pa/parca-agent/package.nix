@@ -8,18 +8,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "parca-agent";
-  version = "0.46.0";
+  version = "0.49.1";
 
   src = fetchFromGitHub {
     owner = "parca-dev";
     repo = "parca-agent";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WUOHTH5nk5ryv7kE66gfwU25AEbiqyXv6NOj0SA59xQ=";
+    hash = "sha256-pLdGV3zddAyL+/abOzwRTPJk9oC4xfnBd+WKC8+rxuc=";
     fetchSubmodules = true;
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-c1HtY1hlhjtJuhJ1tz2wIzgyLqqpGZCPoLZGSNIxNDo=";
+  vendorHash = "sha256-x/ognRKZ+FsrQoK5Qt64fwdj99Drxen2kn+arsdwkWI=";
 
   buildInputs = [
     stdenv.cc.libc.static

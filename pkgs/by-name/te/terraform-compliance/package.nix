@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "terraform-compliance";
-  version = "1.14.1";
+  version = "1.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "terraform-compliance";
     repo = "cli";
     tag = finalAttrs.version;
-    hash = "sha256-wWwYM1ZCHiBdbjl5kRI9dFSWp7mpYb/2HlV7lbU/Xeg=";
+    hash = "sha256-saDpAek0QJy0YxGUPw8A5hLa0fmH5uX0FezcfEKkikI=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];

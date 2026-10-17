@@ -1,28 +1,27 @@
 {
   lib,
   buildPythonPackage,
-  cffi,
-  fetchPypi,
+  fetchFromGitHub,
   pytestCheckHook,
   setuptools,
   yajl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ijson";
-  version = "3.5.0";
+  version = "3.6.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-lGiHYHIOP1IScxs8uNMCZ/mgRfs4+zhwJU57lQQkbzE=";
+  src = fetchFromGitHub {
+    owner = "ICRAR";
+    repo = "ijson";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jlap3pf17SM8AQOoYZCPuGOnNC/oRLBONBgA5NgJQYQ=";
   };
 
   build-system = [ setuptools ];
 
   buildInputs = [ yajl ];
-
-  dependencies = [ cffi ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -31,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Iterative JSON parser with a standard Python iterator interface";
     homepage = "https://github.com/ICRAR/ijson";
-    changelog = "https://github.com/ICRAR/ijson/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/ICRAR/ijson/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

@@ -1,6 +1,7 @@
 {
   callPackage,
   fetchFromCodeberg,
+  fetchpatch,
   lib,
   libGL,
   libevdev,
@@ -20,25 +21,32 @@
   wlroots_0_20,
   xwayland,
   xwaylandSupport ? true,
-  zig_0_15,
+  zig_0_16,
 }:
-
 let
   wlroots = wlroots_0_20;
-  zig = zig_0_15;
+  zig = zig_0_16;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "river-classic";
-  version = "0.3.15";
+  version = "0.3.17";
 
   outputs = [ "out" ] ++ lib.optionals withManpages [ "man" ];
 
   src = fetchFromCodeberg {
     owner = "river";
     repo = "river-classic";
-    hash = "sha256-zVUbLojSyCOOz3+DR9J9nQpNNuboG5/moCGjQx2ZI8w=";
+    hash = "sha256-+Geq3AetoiHB8xkMGf9nsYq8Mse2fZ5Edg1iOZ30f1A=";
     tag = "v${finalAttrs.version}";
   };
+
+  # this fixes aarch64 build, remove on next update
+  patches = [
+    (fetchpatch {
+      url = "https://codeberg.org/river/river-classic/commit/b1af960e1bea8506c25179775c18f902a5cb8c87.diff";
+      hash = "sha256-7X7/ZNLLGlkxr6y3bw/INIRSCXrn3ach7V319nHLIQ8=";
+    })
+  ];
 
   deps = callPackage ./build.zig.zon.nix { };
 

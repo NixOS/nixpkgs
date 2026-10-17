@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "fastparquet";
-  version = "2026.3.0";
+  version = "2026.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "fastparquet";
     tag = version;
-    hash = "sha256-lf3GBfusZ1dhQ6wdHmfegqSlwG4Gm5Bi4+nof9yCg/o=";
+    hash = "sha256-thvoMXXiGtHGcJ0/IrGujjhVAvSmTMGmrlDHjG8R7PQ=";
   };
 
   build-system = [
@@ -61,6 +61,13 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    # DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated,
+    # and will raise an error in the future. This includes implicit conversion of bare
+    # integers (e.g. `+ 1`).Please use a specific unit instead.
+    "test_import_without_warning"
+  ];
 
   # Workaround https://github.com/NixOS/nixpkgs/issues/123561
   preCheck = ''

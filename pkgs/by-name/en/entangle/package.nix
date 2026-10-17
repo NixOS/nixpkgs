@@ -15,7 +15,7 @@
   dbus,
   elfutils,
   libepoxy,
-  gexiv2,
+  gexiv2_0_10,
   glib,
   gobject-introspection,
   gst_all_1,
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "entangle";
     repo = "entangle";
     tag = "v${finalAttrs.version}";
-    sha256 = "hz2WSDOjriQSavFlDT+35x1X5MeInq80ZrSP1WR/td0=";
+    hash = "sha256-hz2WSDOjriQSavFlDT+35x1X5MeInq80ZrSP1WR/td0=";
   };
 
   patches = [
@@ -87,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     libepoxy
     elfutils
-    gexiv2
+    gexiv2_0_10
     glib
     lerc
     gst_all_1.gst-plugins-base

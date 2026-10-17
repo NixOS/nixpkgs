@@ -9,27 +9,20 @@
 let
   format = "wheel";
   pyShortVersion = "cp" + builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
-  platforms = rec {
+  platforms = {
     aarch64-darwin =
       if pyShortVersion == "cp314" then "macosx_10_15_universal2" else "macosx_10_13_universal2";
     aarch64-linux = "manylinux_2_26_aarch64";
-    x86_64-darwin = aarch64-darwin;
     x86_64-linux = "manylinux2014_x86_64.manylinux_2_17_x86_64";
   };
   platform = platforms.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
-  hashes = rec {
-    cp312-aarch64-darwin = "sha256-hQ9VN5Wl8RQ53ShE5q/LqzgNsZHX27W7b05rGeH95jc=";
-    cp312-aarch64-linux = "sha256-wKQjIAmhM+Smk3XzzlR8ZtwxJpr8hvbV15QTfSMxuE8=";
-    cp312-x86_64-darwin = cp312-aarch64-darwin;
-    cp312-x86_64-linux = "sha256-yISDKQFJYKZAxXE2vyrcanXcc3FvUHKcpshtaLnwtrI=";
-    cp313-aarch64-darwin = "sha256-j8E8zsPr1m4q7p1i4ihUuzPSczbRKuZGWp0C/oNx0Lc=";
-    cp313-aarch64-linux = "sha256-QvHfssbnKwoBmcqqBbOP2wLclJ7xol6054n8XqUtk44=";
-    cp313-x86_64-darwin = cp313-aarch64-darwin;
-    cp313-x86_64-linux = "sha256-wVm6yMfrL0rMgVebo/WGAyb7LKOp139g8U0GhgCbRoc=";
-    cp314-aarch64-darwin = "sha256-QCytKZtPSzdGDKg0LjFbJS/y5whqa8mcotNfecYXPVw=";
-    cp314-aarch64-linux = "sha256-qHAOVJwmZ6ojUDSmFJrxaiE4unwfns0VtVdUcEq2zq8=";
-    cp314-x86_64-darwin = cp314-aarch64-darwin;
-    cp314-x86_64-linux = "sha256-WUSCCjJ4uWTwxIsasIOizEmZ9HuZBoWVV0F3wPiXOCY=";
+  hashes = {
+    cp313-aarch64-darwin = "sha256-Zcp6DNHl7VfIDmE/NVCcCuqsFUTRdwW3P5pXB9QOJYg=";
+    cp313-aarch64-linux = "sha256-OnyM8RjyOB7J+A8ZkNUy6tZ9YfW7wL5Pl3/p6wzW/EE=";
+    cp313-x86_64-linux = "sha256-1U6n9B3/NRgCDBpiQPo++PiuMHcEC04eRF/mmiOemMo=";
+    cp314-aarch64-darwin = "sha256-RtVy4e9eOdrPu6JjqTPL4S/6dWgQWz5D7YE1NH2GYi4=";
+    cp314-aarch64-linux = "sha256-9woHRqVAX3sLO2kYilaWIcIoyQ9t/6JiGeR7gtyPTok=";
+    cp314-x86_64-linux = "sha256-wuh9n7Upf6JgpiZmpn8p2L6TkCeQXNo1PKG2IEchLog=";
   };
   hash =
     hashes."${pyShortVersion}-${stdenv.system}"
@@ -37,7 +30,7 @@ let
 in
 buildPythonPackage rec {
   pname = "gurobipy";
-  version = "13.0.1";
+  version = "13.0.3";
   inherit format;
 
   src = fetchPypi {

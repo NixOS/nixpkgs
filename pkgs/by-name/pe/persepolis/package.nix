@@ -31,17 +31,16 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   # feed args to wrapPythonApp
-  makeWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        ffmpeg
-      ]
-    }"
-    "\${qtWrapperArgs[@]}"
-  ];
+  preFixup = ''
+    makeWrapperArgs+=(
+      "--prefix" "PATH" ":" "${lib.makeBinPath [ ffmpeg ]}"
+      "''${qtWrapperArgs[@]}"
+    )
+  '';
 
-  propagatedBuildInputs = [
-    (with python3.pkgs; [
+  propagatedBuildInputs = (
+    with python3.pkgs;
+    [
       psutil
       pyside6
       pysocks
@@ -51,8 +50,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       setproctitle
       setuptools
       yt-dlp
-    ])
-  ];
+    ]
+  );
 
   meta = {
     description = "Download manager GUI written in Python";

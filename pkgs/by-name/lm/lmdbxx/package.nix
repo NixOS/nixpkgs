@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lmdbxx";
-  version = "1.0.0";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "hoytech";
     repo = "lmdbxx";
     rev = finalAttrs.version;
-    sha256 = "sha256-7CxQZdgHVvmof6wVR9Mzic6tg89XJT3Z1ICGRs7PZYo=";
+    sha256 = "sha256-//9dzddb0unW9fEy7POZZ/6SspHMzkZ/x5r/w10xu0o=";
   };
 
   buildInputs = [ lmdb ];

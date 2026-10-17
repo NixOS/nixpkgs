@@ -105,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "SELinux policy core utilities written in Python";
     license = lib.licenses.gpl2Plus;
-    homepage = "https://selinuxproject.org";
+    homepage = "https://github.com/SELinuxProject/selinux";
     inherit (libsepol.meta) maintainers;
     platforms = lib.platforms.linux;
   };

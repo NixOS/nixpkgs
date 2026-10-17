@@ -7,19 +7,19 @@
 
 buildGoModule (finalAttrs: {
   pname = "go-car";
-  version = "2.16.0";
+  version = "2.17.0";
 
   src = fetchFromGitHub {
     owner = "ipld";
     repo = "go-car";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ams0SK9Dz9McW3GLwyndCrRluvaaJiychbZX1pSW3Nw=";
+    hash = "sha256-votPngF8qpX/6vZcsmDM/I5Vb3wASvuKduBjJi0eQ2w=";
   };
 
   modRoot = "cmd";
   subPackages = [ "car" ];
 
-  vendorHash = "sha256-ZbMhX4H1rHdkdK6YIGDmSzro9q9PmkYvx9UhBaJ/i4M=";
+  vendorHash = "sha256-uzzSw51FoAdHPqqoMY2C/zx1nHbbii6izzTjguYYghs=";
 
   buildInputs = [ libpcap ];
 

@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0y0p2rm22x21mykipiv42fjc79b0969qsbhk3cqkrdnqwh5psbdl";
+    hash = "sha256-tC19C+TYtjwxGxMujZNJYKXDpBNkxxunr0F0IWoWF3g=";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     description = "Python library for interacting with the PCA 301 smart plugs";
     mainProgram = "pypca";
     homepage = "https://github.com/majuss/pypca";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

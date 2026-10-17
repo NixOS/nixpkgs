@@ -11,11 +11,11 @@
   libGLU,
   libGL,
   pkg-config,
-  ttf_bitstream_vera,
+  ttf-bitstream-vera,
   nix-update-script,
 }:
 let
-  version = "0.8.13";
+  version = "0.8.17";
 in
 stdenv.mkDerivation {
   pname = "setbfree";
@@ -25,13 +25,13 @@ stdenv.mkDerivation {
     owner = "pantherb";
     repo = "setBfree";
     rev = "v${version}";
-    hash = "sha256-jtiyJntaFnAVeC1Rvkzi3wNodyJpEQKgnOAP7++36wo=";
+    hash = "sha256-MjbgN0WIZtoFjEtjYa0MkTtaub/oNSxQ0i8EedBbTGA=";
   };
 
   postPatch = ''
     substituteInPlace common.mak \
       --replace /usr/local "$out" \
-      --replace /usr/share/fonts/truetype/ttf-bitstream-vera "${ttf_bitstream_vera}/share/fonts/truetype"
+      --replace /usr/share/fonts/truetype/ttf-bitstream-vera "${ttf-bitstream-vera}/share/fonts/truetype"
   '';
 
   nativeBuildInputs = [ pkg-config ];
@@ -44,7 +44,7 @@ stdenv.mkDerivation {
     lv2
     libGLU
     libGL
-    ttf_bitstream_vera
+    ttf-bitstream-vera
   ];
 
   doInstallCheck = true;

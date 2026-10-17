@@ -15,22 +15,26 @@
 let
   pname = "anki-bin";
   # Update hashes for both Linux and Darwin!
-  version = "25.02.5";
+  version = "26.09.3";
 
   sources = {
-    linux = fetchurl {
-      url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-linux-qt6.tar.zst";
-      hash = "sha256-wYFqT1g+rtoqOR7+Bb5mIJLZ5JdT2M1kcHqJUCuNElA=";
+    linux-aarch64 = fetchurl {
+      url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-linux-aarch64.tar.zst";
+      hash = "sha256-C1hu/bDjWCvuO50IufpX32gfuXqAZtdqZ0PhvD/DMes=";
+    };
+    linux-x86_64 = fetchurl {
+      url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-linux-x86_64.tar.zst";
+      hash = "sha256-1w4Blxp6oZCxiZJ1c+5kPyUl/4QOr67Meo+M3lBWULM=";
     };
 
     # For some reason anki distributes completely separate dmg-files for the aarch64 version and the x86_64 version
     darwin-x86_64 = fetchurl {
-      url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac-intel-qt6.dmg";
-      hash = "sha256-PDlu+oFKWHraPdTuGDCUkO0bhPtkNVibo11B1QkCICw=";
+      url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac-intel.dmg";
+      hash = "sha256-exI+/sqxOV0D/fTl303xbvxyyWKcOLUO+MrWktMQvXc=";
     };
     darwin-aarch64 = fetchurl {
-      url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac-apple-qt6.dmg";
-      hash = "sha256-RqcGHXN29GDGGuFbrQCBmj3cctzoRQZ8svR5hMYPhxs=";
+      url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac-apple.dmg";
+      hash = "sha256-s2/o9sAVpgL+rz7zj1lnwnyJZO4wpcdMolMiJc9gI0U=";
     };
   };
 
@@ -38,7 +42,7 @@ let
     inherit pname version;
 
     nativeBuildInputs = [ zstd ];
-    src = sources.linux;
+    src = if stdenv.hostPlatform.isAarch64 then sources.linux-aarch64 else sources.linux-x86_64;
 
     installPhase = ''
       runHook preInstall
@@ -64,7 +68,7 @@ let
       ;
     platforms = [
       "x86_64-linux"
-      "x86_64-darwin"
+      "aarch64-linux"
       "aarch64-darwin"
     ];
     maintainers = with lib.maintainers; [

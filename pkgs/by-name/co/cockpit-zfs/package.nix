@@ -13,6 +13,7 @@
   makeWrapper,
   mbuffer,
   msmtp,
+  nix-update-script,
   nodejs,
   openssh,
   samba,
@@ -20,7 +21,7 @@
   smartmontools,
   stdenv,
   su,
-  systemd,
+  systemdLibs,
   util-linux,
   yarn-berry,
   zfs,
@@ -28,21 +29,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cockpit-zfs";
-  version = "1.2.12-2";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "45Drives";
     repo = "cockpit-zfs";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-oeXSOxogfAazRsKfngq2+DOyo//wRJQSqm7gaCza4WY=";
+    hash = "sha256-AeHawdStX+A+/8z4IWaf1w5irNZDIWs52y1nsEF+fHg=";
   };
 
   missingHashes = ./missing-hashes.json;
 
+  # Use buildPackages for cross-compilation support
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-YnR1SqBGnxEQaGUGMNTHHEGcOIhuGbWnqMdr4eRGXcA=";
+    hash = "sha256-nm3iHf9Rm5JFKzH0HAvglkQPFIV6Fl1e9WvNdqevTug=";
   };
 
   nativeBuildInputs = [
@@ -52,6 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
     yarn-berry
     yarn-berry.yarnBerryConfigHook
   ];
+
+  disallowedRequisites = [ finalAttrs.offlineCache ];
+
+  passthru.updateScript = nix-update-script { };
 
   passthru.cockpitPath = [
     acl
@@ -69,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     shadow
     smartmontools
     su
-    systemd
+    systemdLibs
     util-linux
     zfs
     cockpit.passthru.python3Packages.pyudev
@@ -82,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
   };
 
-  patchPhase =
+  postPatch =
     let
       # houston-common-lib has @types/electron which pulls in electron.
       # Electron's postinstall downloads binaries, which fails in sandbox.
@@ -91,8 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
       houstonUiDir = "houston-common/houston-common-ui";
     in
     ''
-      runHook prePatch
-
       # Remove electron type dependency
       substituteInPlace ${houstonLibDir}/package.json \
         --replace-fail '"@types/electron": "^1.6.12",' ""
@@ -116,8 +120,6 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail "VueDevTools()," "" \
         --replace-fail "import dts from 'vite-plugin-dts'" ""
       sed -i '/dts({/,/})/d' ${houstonUiDir}/vite.config.ts
-
-      runHook postPatch
     '';
 
   buildPhase = ''

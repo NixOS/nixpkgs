@@ -16,7 +16,7 @@ buildKodiBinaryAddon rec {
     owner = "xbmc";
     repo = namespace;
     rev = "${version}-${rel}";
-    sha256 = "sha256-aD0AEr406urgnGVfB6C9JGaNmZAFL7WghnTZhbMfzA8=";
+    hash = "sha256-aD0AEr406urgnGVfB6C9JGaNmZAFL7WghnTZhbMfzA8=";
   };
 
   extraBuildInputs = [
@@ -27,6 +27,7 @@ buildKodiBinaryAddon rec {
 
   meta = {
     description = "SFTP Virtual Filesystem add-on for Kodi";
+    homepage = "https://github.com/xbmc/vfs.sftp";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
     teams = [ lib.teams.kodi ];

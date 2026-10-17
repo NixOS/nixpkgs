@@ -16,41 +16,29 @@
     passthruFun = import ./passthrufun.nix args;
 
     sources = {
-      python313 = {
+      python314 = {
         sourceVersion = {
           major = "3";
-          minor = "13";
-          patch = "12";
+          minor = "14";
+          patch = "8";
           suffix = "";
         };
-        hash = "sha256-KoTNMd2Njqiq/3XeZvwbSwEn3VeZqlCmSumjE4hbRZM=";
+        hash = "sha256-wiFZBPArF1WW3Ek1FYUQT0vCA0HhxHN4smosJ0NgznM=";
       };
     };
 
   in
   {
 
-    python27 = callPackage ./cpython/2.7 {
-      self = __splicedPackages.python27;
-      sourceVersion = {
-        major = "2";
-        minor = "7";
-        patch = "18";
-        suffix = ".12"; # ActiveState's Python 2 extended support
-      };
-      hash = "sha256-RuEgfpags9wJm9Xe0daotqUx4knABEUc7DvtgnQXEfE=";
-      inherit passthruFun;
-    };
-
     python311 = callPackage ./cpython {
       self = __splicedPackages.python311;
       sourceVersion = {
         major = "3";
         minor = "11";
-        patch = "15";
+        patch = "17";
         suffix = "";
       };
-      hash = "sha256-JyF53dmi5BoPyOQuM9+9ygs3EapavzctPy1RVD0JtiU=";
+      hash = "sha256-v7dK05764nzaUQ8TSrQI4A+ZksVoUc/Asc21ZG2hFZk==";
       inherit passthruFun;
     };
 
@@ -59,32 +47,32 @@
       sourceVersion = {
         major = "3";
         minor = "12";
-        patch = "13";
+        patch = "15";
         suffix = "";
       };
-      hash = "sha256-wIvGWoGXHB3VeDGCgmUDNpRmx+ZzdNFkZRmt8FIHtoQ=";
+      hash = "sha256-wsQyGWH6sPuZnWbgzs9SHCqzmUx5koc+qZ4wbBCU/Vo=";
       inherit passthruFun;
     };
 
-    python313 = callPackage ./cpython (
-      {
-        self = __splicedPackages.python313;
-        inherit passthruFun;
-      }
-      // sources.python313
-    );
-
-    python314 = callPackage ./cpython {
-      self = __splicedPackages.python314;
+    python313 = callPackage ./cpython {
+      self = __splicedPackages.python313;
       sourceVersion = {
         major = "3";
-        minor = "14";
-        patch = "3";
+        minor = "13";
+        patch = "16";
         suffix = "";
       };
-      hash = "sha256-qX1VSemtgf4XFZ7QLGh3StXSZscvjZoLWpw3H+hdkCs=";
+      hash = "sha256-9LG/s8ebW7EbjSKKElBBY7TA2rTWeYKNj18mtstqs10==";
       inherit passthruFun;
     };
+
+    python314 = callPackage ./cpython (
+      {
+        self = __splicedPackages.python314;
+        inherit passthruFun;
+      }
+      // sources.python314
+    );
 
     python315 = callPackage ./cpython {
       self = __splicedPackages.python315;
@@ -92,9 +80,21 @@
         major = "3";
         minor = "15";
         patch = "0";
-        suffix = "a7";
+        suffix = "";
       };
-      hash = "sha256-j1kMQot/DUBt+Si4Vzfno6+ijt3U0UGUEOqAloftHqc=";
+      hash = "sha256-ukvtG6NGuRaJC3bZ4yBFFCCqafZAiZfTPGZILurj1XU=";
+      inherit passthruFun;
+    };
+
+    python316 = callPackage ./cpython {
+      self = __splicedPackages.python315;
+      sourceVersion = {
+        major = "3";
+        minor = "16";
+        patch = "0";
+        suffix = "a1";
+      };
+      hash = "sha256-3KqQKUNrcj4zQSxoyhfwEwvnMFjkejp8BJy4zfYDTuk=";
       inherit passthruFun;
     };
 
@@ -108,7 +108,7 @@
           # strip down that python version as much as possible
           withMinimalDeps = true;
         }
-        // sources.python313
+        // sources.python314
       )).overrideAttrs
         (old: {
           # TODO(@Artturin): Add this to the main cpython expr
@@ -175,7 +175,6 @@
           aarch64-linux = "sha256-/onU/UrxP3bf5zFZdQA1GM8XZSDjzOwVRKiNF09QkQ4=";
           x86_64-linux = "sha256-04RFUIwurxTrs4DZwd7TIcXr6uMcfmaAAXPYPLjd9CM=";
           aarch64-darwin = "sha256-KHgOC5CK1ttLTglvQjcSS+eezJcxlG2EDZyHSetnp1k=";
-          x86_64-darwin = "sha256-a+KNRI2OZP/8WG2bCuTQkGSoPMrrW4BgxlHFzZrgaHg=";
         }
         .${stdenv.system};
       pythonVersion = "2.7";
@@ -195,7 +194,6 @@
           aarch64-linux = "sha256-ryeliRePERmOIkSrZcpRBjC6l8Ex18zEAh61vFjef1c=";
           x86_64-linux = "sha256-xzrCzCOArJIn/Sl0gr8qPheoBhi6Rtt1RNU1UVMh7B4=";
           aarch64-darwin = "sha256-PbigP8SWFkgBZGhE1/OxK6oK2zrZoLfLEkUhvC4WijY=";
-          x86_64-darwin = "sha256-LF5cKjOsiCVR1/KLmNGdSGuJlapQgkpztO3Mau7DXGM=";
         }
         .${stdenv.system};
       pythonVersion = "3.10";
@@ -215,7 +213,6 @@
           aarch64-linux = "sha256-EyB9v4HOJOltp2CxuGNie3e7ILH7TJUZHgKgtyOD33Q=";
           x86_64-linux = "sha256-kXfZ4LuRsF+SHGQssP9xoPNlO10ppC1A1qB4wVt1cg8=";
           aarch64-darwin = "sha256-dwTg1TAuU5INMtz+mv7rEENtTJQjPogwz2A6qVWoYcE=";
-          x86_64-darwin = "sha256-okOfnTDf2ulqXpEBx9xUqKaLVsnXMU6jmbCiXT6H67I=";
         }
         .${stdenv.system};
       pythonVersion = "3.11";

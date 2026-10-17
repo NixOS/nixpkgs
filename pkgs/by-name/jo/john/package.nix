@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  unstableGitUpdater,
   openssl,
   nss,
   nspr,
@@ -17,6 +18,7 @@
   withOpenCL ? true,
   opencl-headers,
   ocl-icd,
+  libxcrypt-legacy,
   # include non-free ClamAV unrar code
   enableUnfree ? false,
   replaceVars,
@@ -25,13 +27,13 @@
 
 stdenv.mkDerivation {
   pname = "john";
-  version = "rolling-2404";
+  version = "1.9.0-Jumbo-1-unstable-2026-09-30";
 
   src = fetchFromGitHub {
     owner = "openwall";
     repo = "john";
-    rev = "f9fedd238b0b1d69181c1fef033b85c787e96e57";
-    hash = "sha256-XMT5Sbp2XrAnfTHxXyJdw0kA/ZtfOiYrX/flCFLHJ6s=";
+    rev = "302f527093210d46b8d0de5c75245765f17d4806";
+    hash = "sha256-oeCEgBOPHqxlBgIOR0SAfW2v7LXiWUNn399/ZyT7h1Y=";
   };
 
   patches = lib.optionals withOpenCL [
@@ -39,9 +41,6 @@ stdenv.mkDerivation {
       ocl_icd = ocl-icd;
     })
   ];
-
-  # Fix build with gcc 15
-  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
   postPatch = ''
     sed -ri -e '
@@ -67,6 +66,8 @@ stdenv.mkDerivation {
   configureFlags = [
     "--disable-native-tests"
     "--with-systemwide"
+    "LDFLAGS=-L${libxcrypt-legacy}/lib"
+    "CPPFLAGS=-I${libxcrypt-legacy}/include"
   ]
   ++ lib.optionals (!enableUnfree) [ "--without-unrar" ];
 
@@ -79,6 +80,7 @@ stdenv.mkDerivation {
     zlib
     libpcap
     re2
+    libxcrypt-legacy
   ]
   ++ lib.optionals withOpenCL [
     opencl-headers
@@ -97,6 +99,10 @@ stdenv.mkDerivation {
       scapy
       lxml
     ])
+    # For office2john.py
+    ++ (with python3Packages; [
+      olefile
+    ])
     ++ (with perlPackages; [
       # For pass_gen.pl
       DigestMD4
@@ -109,9 +115,7 @@ stdenv.mkDerivation {
     ]);
   # TODO: Get dependencies for radius2john.pl and lion2john-alt.pl
 
-  # gcc -DAC_BUILT -Wall vncpcap2john.o memdbg.o -g    -lpcap -fopenmp -o ../run/vncpcap2john
-  # gcc: error: memdbg.o: No such file or directory
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   postInstall = ''
     mkdir -p "$out/bin" "$out/etc/john" "$out/share/john" "$out/share/doc/john" "$out/share/john/rules" "$out/share/john/opencl" "$out/${perlPackages.perl.libPrefix}"
@@ -133,6 +137,10 @@ stdenv.mkDerivation {
     done
   '';
 
+  passthru.updateScript = unstableGitUpdater {
+    tagFormat = "[0-9].*";
+  };
+
   meta = {
     description = "John the Ripper password cracker";
     license = [
@@ -142,6 +150,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/openwall/john/";
     maintainers = with lib.maintainers; [
       cherrykitten
+      therealhammer
     ];
     platforms = lib.platforms.unix;
   };

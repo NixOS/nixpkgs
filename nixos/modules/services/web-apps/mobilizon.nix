@@ -241,6 +241,10 @@ in
           );
         message = "Setting the IP mobilizon listens on is only possible when the nginx config is not used, as it is hardcoded there.";
       }
+      {
+        assertion = lib.versionOlder config.services.postgresql.finalPackage.version "18";
+        message = "Mobilizon currently doesn't support PostgreSQL versions above 18. See https://framagit.org/kaihuri/mobilizon/-/work_items/2070 for the upstream issue.";
+      }
     ];
 
     services.mobilizon.settings = {
@@ -479,7 +483,6 @@ in
   };
 
   meta.maintainers = with lib.maintainers; [
-    minijackson
     erictapen
   ];
 }

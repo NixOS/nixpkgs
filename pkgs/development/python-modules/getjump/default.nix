@@ -3,21 +3,22 @@
   beautifulsoup4,
   buildPythonPackage,
   fetchPypi,
-  pillow,
   hatchling,
+  pathvalidate,
+  pillow,
   requests,
   rich,
   uv-dynamic-versioning,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "getjump";
-  version = "2.10.0";
+  version = "2.10.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-AX8WffzcqBYqo8DzXXbhfqOMd7U5VpWx4MTKhUXLJeQ=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-ui9H4gVpo90UQ/sm2h58um0ZFcXrDPe6kaw4S91rAhw=";
   };
 
   pythonRelaxDeps = [
@@ -32,6 +33,7 @@ buildPythonPackage rec {
 
   dependencies = [
     beautifulsoup4
+    pathvalidate
     pillow
     requests
     rich
@@ -45,9 +47,9 @@ buildPythonPackage rec {
   meta = {
     description = "Get and save images from jump web viewer";
     homepage = "https://github.com/eggplants/getjump";
-    changelog = "https://github.com/eggplants/getjump/releases/tag/v${version}";
+    changelog = "https://github.com/eggplants/getjump/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "jget";
   };
-}
+})

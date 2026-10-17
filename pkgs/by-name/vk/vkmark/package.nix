@@ -8,6 +8,7 @@
   vulkan-headers,
   vulkan-loader,
   libgbm,
+  wayland-scanner,
   wayland-protocols,
   wayland,
   glm,
@@ -28,12 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-Rjpjqe7htwlhDdwELm74MvSzHzXLhRD/P8IES7nz/VY=";
   };
 
-  patches = [
-    # Fix build with vulkan-headers >= 1.4.333
-    # Remove once https://github.com/vkmark/vkmark/pull/80 is included in a release
-    ./fix-build-with-newer-vulkan-headers.patch
-  ];
-
   postPatch = ''
     substituteInPlace src/meson.build \
       --replace-fail "vulkan_dep.get_pkgconfig_variable('prefix')" "'${vulkan-headers}'"
@@ -43,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
+    wayland-scanner
   ];
   buildInputs = [
     vulkan-headers
@@ -61,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Extensible Vulkan benchmarking suite";
     homepage = "https://github.com/vkmark/vkmark";
-    license = with lib.licenses; [ lgpl21Plus ];
+    license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ muscaln ];
     mainProgram = "vkmark";

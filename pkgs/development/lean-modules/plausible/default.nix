@@ -6,13 +6,14 @@
 
 buildLakePackage {
   pname = "lean4-plausible";
-  version = "4.29.0";
+  # nixpkgs-update: no auto update
+  version = "4.34.0-unstable-2026-09-14";
 
   src = fetchFromGitHub {
     owner = "leanprover-community";
     repo = "plausible";
-    tag = "v4.29.0";
-    hash = "sha256-08fNB2GK5AqDJ15n5Ol+HYqaSbsznyp4cerDo32bG50=";
+    rev = "118aa17ee84656b8bd727fef7c458ee8c833385c";
+    hash = "sha256-/ianaKsruF30J5tqK4vtbXsFd3mu4Xt8Ppj4ibHDEvg=";
   };
 
   leanPackageName = "plausible";

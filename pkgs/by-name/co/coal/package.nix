@@ -2,40 +2,36 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  cmake,
-  doxygen,
   boost,
   eigen,
   jrl-cmakemodules,
   assimp,
   octomap,
-  pkg-config,
   qhull,
   zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "coal";
-  version = "3.0.2";
+  version = "3.0.4";
 
   src = fetchFromGitHub {
     owner = "coal-library";
     repo = "coal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7Ww1vAzKaCccBpBQU1hzI7Jk+oXw73zhnH594Xn9gbw=";
+    hash = "sha256-lCTybqJPP7CuqdACjzuiR/kufu6fJxKhpa71/Z3oWXA=";
   };
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    cmake
-    doxygen
-    pkg-config
+  nativeBuildInputs = jrl-cmakemodules.docsNativeBuildInputs;
+
+  buildInputs = [
+    jrl-cmakemodules
   ];
 
   propagatedBuildInputs = [
     assimp
-    jrl-cmakemodules
     octomap
     qhull
     zlib
@@ -43,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     eigen
   ];
 
-  cmakeFlags = [
+  cmakeFlags = jrl-cmakemodules.docsCmakeFlags ++ [
     (lib.cmakeBool "COAL_BACKWARD_COMPATIBILITY_WITH_HPP_FCL" true)
     (lib.cmakeBool "COAL_HAS_QHULL" true)
     (lib.cmakeBool "INSTALL_DOCUMENTATION" true)

@@ -426,7 +426,9 @@ in
 
       preStart =
         lib.optionalString cfg.stateless ''
-          rm -rf /var/cache/cups /var/lib/cups /var/spool/cups
+          shopt -s extglob
+          rm -rf /var/cache/cups /var/spool/cups /var/lib/cups/!(ssl)
+          shopt -u extglob
         ''
         + ''
           (umask 022 && mkdir -p /var/cache /var/lib /var/spool)

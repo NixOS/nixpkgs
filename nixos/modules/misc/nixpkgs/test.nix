@@ -36,7 +36,7 @@ let
     nixpkgs.hostPlatform = "aarch64-linux";
     nixpkgs.buildPlatform = "aarch64-darwin";
     nixpkgs.system = "x86_64-linux";
-    nixpkgs.localSystem.system = "x86_64-darwin";
+    nixpkgs.localSystem.system = "x86_64-freebsd";
     nixpkgs.crossSystem.system = "i686-linux";
     imports = [
       {

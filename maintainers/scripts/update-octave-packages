@@ -30,7 +30,7 @@ INDEX = "https://raw.githubusercontent.com/gnu-octave/packages/main/packages"
 """url of Octave packages' source on GitHub"""
 
 EXTENSIONS = ['tar.gz', 'tar.bz2', 'tar', 'zip']
-"""Permitted file extensions. These are evaluated from left to right and the first occurance is returned."""
+"""Permitted file extensions. These are evaluated from left to right and the first occurrence is returned."""
 
 PRERELEASES = False
 

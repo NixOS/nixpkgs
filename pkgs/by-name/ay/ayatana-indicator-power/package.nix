@@ -13,22 +13,22 @@
   libayatana-common,
   libnotify,
   librda,
-  lomiri,
+  lomiri-qt6,
   pkg-config,
   python3,
-  systemd,
+  systemdLibs,
   wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ayatana-indicator-power";
-  version = "24.5.2";
+  version = "26.6.0";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-indicator-power";
     tag = finalAttrs.version;
-    hash = "sha256-A9Kbs+qH01rkuLt8GINdPI2vCu0bCO+/g4kZhDj8GsY=";
+    hash = "sha256-3Jw3MrKHiyGw511GucAtV790UP43EuAC89Q1TMfytyY=";
   };
 
   postPatch = ''
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Path needed for build-time codegen
     substituteInPlace src/CMakeLists.txt \
-      --replace-fail '/usr/share/accountsservice/interfaces/com.lomiri.touch.AccountsService.Sound.xml' '${lomiri.lomiri-schemas}/share/accountsservice/interfaces/com.lomiri.touch.AccountsService.Sound.xml'
+      --replace-fail '/usr/share/accountsservice/interfaces/com.lomiri.touch.AccountsService.Sound.xml' '${lomiri-qt6.lomiri-schemas}/share/accountsservice/interfaces/com.lomiri.touch.AccountsService.Sound.xml'
   '';
 
   strictDeps = true;
@@ -56,9 +56,9 @@ stdenv.mkDerivation (finalAttrs: {
     libayatana-common
     libnotify
     librda
-    systemd
+    systemdLibs
   ]
-  ++ (with lomiri; [
+  ++ (with lomiri-qt6; [
     cmake-extras
     deviceinfo
     lomiri-schemas

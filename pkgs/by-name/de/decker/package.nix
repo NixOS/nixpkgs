@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "decker";
-  version = "1.60";
+  version = "1.71";
 
   src = fetchFromGitHub {
     owner = "JohnEarnest";
     repo = "Decker";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-A8lsQs3fZm8XREHx2IPRNWZp4tTZ4Jya30+gBT6xME8=";
+    hash = "sha256-DRWKh92ddGMqMeCZGoKfc96VqYFv4WEA2QFfwHYMC9s=";
   };
 
   buildInputs = [

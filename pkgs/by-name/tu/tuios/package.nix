@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "tuios";
-  version = "0.7.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "Gaurav-Gosain";
     repo = "tuios";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XPcgUDlIbwp278Kc9B0aXxxIX2XnsJpFzxHDaop9cLs=";
+    hash = "sha256-dV0iDTm52+5x4EqlwDWXQQG20DVBDCavT4IZcUSsnm0=";
   };
 
-  vendorHash = "sha256-98XZe60gcRWyP0ApUV+qCJ0UoAExx7X0FPtFL0Tr0a4=";
+  vendorHash = "sha256-a9Jy56b5vwFex9MGaXye8KTrrfUlyGqQKFMspnFIsaA=";
 
   ldflags = [
     "-s"
@@ -30,11 +30,26 @@ buildGoModule (finalAttrs: {
     "-X=main.builtBy=nixpkgs"
   ];
 
+  env.GOWORK = "off";
+
+  subPackages = [
+    "cmd/tuios"
+    "cmd/tuios-web"
+  ];
+
   nativeBuildInputs = [ installShellFiles ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
   versionCheckProgramArg = "--version";
+
+  checkFlags =
+    let
+      skippedTests = [
+        "TestCheckTransferShapeRefusesWhatBundleWorktreeCannotSend" # needs a repo
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ${finalAttrs.meta.mainProgram} \
@@ -50,7 +65,10 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/Gaurav-Gosain/tuios";
     changelog = "https://github.com/Gaurav-Gosain/tuios/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kpbaks ];
+    maintainers = with lib.maintainers; [
+      kpbaks
+      adamcstephens
+    ];
     mainProgram = "tuios";
   };
 })

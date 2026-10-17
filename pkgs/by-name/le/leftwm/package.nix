@@ -15,16 +15,16 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "leftwm";
-  version = "0.5.4";
+  version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "leftwm";
     repo = "leftwm";
     tag = finalAttrs.version;
-    hash = "sha256-eH7HuGZnWlXigTaUAc4S00+uOIEVftnBOD8x03KJLaE=";
+    hash = "sha256-Ox4eOE+RmyKfReSjeMGSYZCEC67/HIE+uY830gm4G94=";
   };
 
-  cargoHash = "sha256-nFyhpCp8xsYjRl+2bqPfWzq31pM/yYcDuxkWEjjcqwA=";
+  cargoHash = "sha256-Y/ts0WOhxPDv8B3/kk6+PwS6Tjpf0gjjnjzLDrp3Vk0=";
 
   buildInputs = rpathLibs;
 

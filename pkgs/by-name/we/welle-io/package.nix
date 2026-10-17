@@ -64,7 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-DRTLSDR=true"
     "-DSOAPYSDR=true"
   ]
-  ++ lib.optional withFlac "-DFLAC=true";
+  ++ lib.optional withFlac "-DFLAC=true"
+  ++ lib.optional stdenv.hostPlatform.isDarwin "-DBUNDLE_INSTALL_DIR=${placeholder "out"}/Applications";
 
   meta = {
     description = "DAB/DAB+ Software Radio";

@@ -2,21 +2,35 @@
   lib,
   fetchurl,
   maven,
-  jre,
+  jdk_headless,
+  jre_minimal,
   makeWrapper,
   stripJavaArchivesHook,
 }:
-
-maven.buildMavenPackage rec {
+let
+  jre = jre_minimal.override {
+    modules = [
+      "java.base"
+      "java.desktop"
+      "java.xml"
+      "jdk.crypto.ec"
+      "jdk.xml.dom"
+    ];
+    jdk = jdk_headless;
+  };
+in
+maven.buildMavenPackage (finalAttrs: {
   pname = "fop";
   version = "2.11";
 
   src = fetchurl {
-    url = "https://dlcdn.apache.org/xmlgraphics/fop/source/fop-${version}-src.tar.gz";
+    url = "https://dlcdn.apache.org/xmlgraphics/fop/source/fop-${finalAttrs.version}-src.tar.gz";
     hash = "sha256-uY6cUjmyuenfK3jAWvugsYa5qg8rbnvRZZ6qA/g2fZM=";
   };
 
-  mvnHash = "sha256-EaOIAy0+YPrF+yGsFKKqcA4bt90bq1Z86V57P9rMatE=";
+  patches = [ ./fix-maven-plugin-versions.patch ];
+
+  mvnHash = "sha256-KfIcc1MWGs7vZHPjfNgy3NBCAyTMtyvRTZfcN4LQVv8=";
 
   buildOffline = true;
   doCheck = false;
@@ -73,4 +87,4 @@ maven.buildMavenPackage rec {
       binaryBytecode # source bundles dependencies as jars
     ];
   };
-}
+})

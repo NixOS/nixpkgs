@@ -7,13 +7,13 @@
 }:
 
 let
-  version = "2.7.5";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "influx-cli";
     rev = "v${version}";
-    sha256 = "sha256-0Gyoy9T5pA+40k8kKybWBMtOfpKZxw3Vvp4ZB4ptcJs=";
+    sha256 = "sha256-3DCvWaiGLw9OSs/b9za1jgrPDo2Txw5b5h46ElTMEks=";
   };
 
 in
@@ -24,7 +24,7 @@ buildGoModule {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  vendorHash = "sha256-Ov0TPoMm0qi7kkWUUni677sCP1LwkT9+n3KHcAlQkDA=";
+  vendorHash = "sha256-NsOkQwMH/AANUBReXmGR0fFQAtosA9iSla5JXyhrPYE=";
   subPackages = [ "cmd/influx" ];
 
   ldflags = [

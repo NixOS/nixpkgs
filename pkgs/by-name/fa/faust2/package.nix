@@ -16,7 +16,6 @@
   libtool,
   libxml2,
   p11-kit,
-  vim,
   which,
   ncurses,
   fetchpatch,
@@ -24,13 +23,13 @@
 
 let
 
-  version = "2.85.5";
+  version = "2.85.9";
 
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faust";
     tag = version;
-    hash = "sha256-QKCyOiYGLh67lS0WS+LCCl/edhl/A+zccCWyWRTV1vM=";
+    hash = "sha256-aUIbvMShhzi0QmFwZUOodzl3BY5TGt3TdquSeZ44C2k=";
     fetchSubmodules = true;
   };
 
@@ -61,7 +60,6 @@ let
         pkg-config
         cmake
         libtool
-        vim
         which
       ];
       buildInputs = [

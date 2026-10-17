@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "internetarchive";
-  version = "5.8.0";
+  version = "5.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jjjake";
     repo = "internetarchive";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NiuLnK7OBbM6b1qecOcAmX1k7Z8FBNrJdGr6Vm3r9RU=";
+    hash = "sha256-K7QTpC8DwRYLzGYu6LPNamleUCFv5os/WZ47WKHH4dA=";
   };
 
   build-system = [ setuptools ];
@@ -42,6 +42,7 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Tests require network access
     "test_get_item_with_kwargs"
+    "test_get_item_request_kwargs_timeout"
     "test_upload"
     "test_upload_metadata"
     "test_upload_queue_derive"

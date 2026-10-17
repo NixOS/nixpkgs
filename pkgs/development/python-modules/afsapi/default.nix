@@ -3,47 +3,57 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  lxml,
-  pytest-aiohttp,
+  hatchling,
+  hatch-vcs,
+  defusedxml,
+  pytest-asyncio,
+  pytest-vcr,
   pytestCheckHook,
-  setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "afsapi";
-  version = "0.3.1";
-  format = "setuptools";
+  version = "1.0.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wlcrs";
     repo = "python-afsapi";
-    tag = version;
-    hash = "sha256-WkkRsXRJ4i3lUn3X94YX7ZqfaKE2GgrBycbflnnlC74=";
+    tag = finalAttrs.version;
+    hash = "sha256-ZfP8LboBDrxXULtocOTZJ0Ku/zgear4NW5ckcHUKXc4=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
-
-  propagatedBuildInputs = [
-    aiohttp
-    lxml
+  build-system = [
+    hatchling
+    hatch-vcs
   ];
 
-  doCheck = false; # Failed: async def functions are not natively supported.
+  dependencies = [
+    aiohttp
+    defusedxml
+  ];
 
   nativeCheckInputs = [
-    pytest-aiohttp
+    pytest-asyncio
+    pytest-vcr
     pytestCheckHook
   ];
 
-  enabledTestPaths = [ "async_tests.py" ];
+  disabledTestPaths = [
+    # Failed: async def functions are not natively supported.
+    "async_tests.py"
+    # requires local device
+    "tests/test_device_recordings.py"
+    "tests/test_device_recordings_write.py"
+  ];
 
   pythonImportsCheck = [ "afsapi" ];
 
   meta = {
+    changelog = "https://github.com/wlcrs/python-afsapi/releases/tag/${finalAttrs.version}";
     description = "Python implementation of the Frontier Silicon API";
     homepage = "https://github.com/wlcrs/python-afsapi";
-    changelog = "https://github.com/wlcrs/python-afsapi/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -6,8 +6,8 @@
   pkg-config,
   cmake,
   ninja,
-  clang,
   python3,
+  qtshadertools,
   tdlib,
   tg_owt ? callPackage ./tg_owt.nix { inherit stdenv; },
   qtbase,
@@ -15,11 +15,11 @@
   qtwayland,
   kcoreaddons,
   lz4,
-  xxHash,
-  ffmpeg_6,
+  xxhash,
+  ffmpeg,
   protobuf,
   openal-soft,
-  minizip-ng,
+  minizip-ng-compat,
   range-v3,
   tl-expected,
   hunspell,
@@ -28,10 +28,14 @@
   microsoft-gsl,
   boost,
   ada,
+  pango,
+  tlottie,
+  libfido2,
   libavif,
   libheif,
   libjxl,
   libicns,
+  wallet-engine,
   apple-sdk_15,
   nix-update-script,
 }:
@@ -45,14 +49,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "telegram-desktop-unwrapped";
-  version = "6.7.5";
+  version = "7.3.1";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-HsXNTZY/+Xz7pIT7durOd5T/u7jML0rVBOPb4pnIXow=";
+    hash = "sha256-QoIfRLlNljoINAN28YgyP/6+E65bghNYD+H0U5lPQhs=";
   };
 
   nativeBuildInputs = [
@@ -60,10 +64,9 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     python3
+    qtshadertools
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    # to build bundled libdispatch
-    clang
     gobject-introspection
   ];
 
@@ -71,10 +74,10 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
     qtsvg
     lz4
-    xxHash
-    ffmpeg_6
+    xxhash
+    ffmpeg
     openal-soft
-    minizip-ng
+    minizip-ng-compat
     range-v3
     tl-expected
     rnnoise
@@ -82,13 +85,17 @@ stdenv.mkDerivation (finalAttrs: {
     microsoft-gsl
     boost
     ada
+    libfido2
     (tdlib.override { tde2eOnly = true; })
+    tlottie
+    wallet-engine
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     protobuf
     qtwayland
     kcoreaddons
     hunspell
+    pango
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     apple-sdk_15

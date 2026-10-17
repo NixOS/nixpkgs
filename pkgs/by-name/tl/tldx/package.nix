@@ -8,36 +8,34 @@
 
 buildGoModule (finalAttrs: {
   pname = "tldx";
-  version = "1.3.4";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "brandonyoungdev";
     repo = "tldx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yKC/omwFG4equAlBHz25Wx+X/06N0x4vdNchiWSfZZQ=";
+    hash = "sha256-vQgEfbUsWM+UN7jEMfAy/ufjq9lA9xRiLdeZSWGmF6c=";
   };
 
-  vendorHash = "sha256-FVcTTfOf1eAiR6Iys1uesZWpVrnMTGX7zS1MdeXDoQM=";
+  vendorHash = "sha256-HLajM4Ary2GT+R9Pv7LVGwXKl4mxWvyPdCE4exzg+a4=";
 
   ldflags = [
     "-s"
-    "-w"
-    "-X github.com/brandonyoungdev/tldx/cmd.Version=${finalAttrs.version}"
+    "-X=github.com/brandonyoungdev/tldx/cmd.Version=${finalAttrs.version}"
   ];
 
   passthru.updateScript = nix-update-script { };
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   doInstallCheck = true;
 
   meta = {
-    license = lib.licenses.asl20;
-    mainProgram = "tldx";
     description = "Domain availability research tool";
     homepage = "https://github.com/brandonyoungdev/tldx";
-    changelog = "https://github.com/brandonyoungdev/tldx/blob/main/CHANGELOG.md";
+    changelog = "https://github.com/brandonyoungdev/tldx/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sylonin ];
+    mainProgram = "tldx";
   };
 })

@@ -14,19 +14,19 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  syrupy,
+  syrupy_5,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "python-homewizard-energy";
-  version = "10.0.1";
+  version = "10.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DCSBL";
     repo = "python-homewizard-energy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/bz/KM6kCLciHRcPifd5F1P6Agzzb2ULxEzWP9xbfwo=";
+    hash = "sha256-d81Jjm/ykmqzFR67xaiwFAWuixrNIwm7jNMpA2rg90s=";
   };
 
   postPatch = ''
@@ -53,7 +53,7 @@ buildPythonPackage (finalAttrs: {
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
-    syrupy
+    syrupy_5
   ];
 
   pythonImportsCheck = [ "homewizard_energy" ];

@@ -189,7 +189,7 @@ stdenv.mkDerivation {
 
   # remove forbidden reference to /build which occur when building the Python wrapping
   # (also remove a copy of itkTestDriver with incorrect permissions/RPATH):
-  preFixup = lib.optionals enablePython ''
+  preFixup = lib.optionalString enablePython ''
     rm $out/${python.sitePackages}/itk/itkTestDriver
     find $out/${python.sitePackages}/itk -type f -name '*.so*' -exec \
       patchelf {} --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" \;

@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "amatellanes";
     repo = "fixerio";
     rev = "v${version}";
-    sha256 = "009h1mys175xdyznn5bl980vly40544s4ph1zcgqwg2i2ic93gvb";
+    hash = "sha256-a7+RWBRRPI4f+wFeogkpgHi6AUp0FWu/b72coH0NMAE=";
   };
 
   propagatedBuildInputs = [ requests ];
@@ -47,7 +47,7 @@ buildPythonPackage rec {
       exchange rates published by the European Central Bank.
     '';
     homepage = "https://github.com/amatellanes/fixerio";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

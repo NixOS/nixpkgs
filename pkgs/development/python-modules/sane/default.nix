@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "python-sane";
-    sha256 = "JAmOuDxujhsBEm5q16WwR5wHsBPF0iBQm1VYkv5JJd4=";
+    hash = "sha256-JAmOuDxujhsBEm5q16WwR5wHsBPF0iBQm1VYkv5JJd4=";
   };
 
   buildInputs = [ sane-backends ];

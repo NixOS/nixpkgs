@@ -41,7 +41,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Classic image viewer and editor for X";
     homepage = "http://www.trilon.com/xv/";
-    license = {
+    license = lib.licenses.mkLicense {
+      shortName = "xv";
       fullName = "XV License";
       url = "https://github.com/jasper-software/xv/blob/main/src/README";
       free = false;

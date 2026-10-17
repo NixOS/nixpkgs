@@ -12,6 +12,7 @@
   pkg-config,
   pciutils,
   pulseaudio,
+  qtgraphs,
   qttools,
   replaceVars,
   systemsettings,
@@ -55,12 +56,16 @@ mkKdeDerivation {
   ];
 
   postPatch = ''
-    substituteInPlace kcms/firmware_security/fwupdmgr.sh \
+    substituteInPlace kcms/{firmware_security/fwupdmgr.sh,network/ip.sh} \
       --replace-fail " aha " " ${lib.getExe aha} "
   '';
 
   extraNativeBuildInputs = [ pkg-config ];
-  extraBuildInputs = [ libusb1 ];
+  extraBuildInputs = [
+    qtgraphs
+
+    libusb1
+  ];
 
   qtWrapperArgs = [ "--inherit-argv0" ];
 

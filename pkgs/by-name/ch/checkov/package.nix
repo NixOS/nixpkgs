@@ -35,18 +35,19 @@ let
 in
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "checkov";
-  version = "3.2.513";
+  version = "3.3.26";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = "checkov";
     tag = finalAttrs.version;
-    hash = "sha256-diPsVe8fhWKHMn02qKK91MwPqXNVFpmE8n5e9JJsDCM=";
+    hash = "sha256-q2aZfFoeBvg78uCLQxws4KaWH7yaE9CDm5TIOokscTs=";
   };
 
   pythonRelaxDeps = [
     "aiodns" # breaking change is that it requires pycares >= 5.0.0, which is fine.
+    "aiohttp"
     "asteval"
     "bc-detect-secrets"
     "bc-python-hcl2"
@@ -96,6 +97,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     docker
     dockerfile-parse
     dpath
+    ecdsa
     flake8
     gitpython
     igraph
@@ -106,6 +108,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     networkx
     openai
     packaging
+    platformdirs
     policyuniverse
     prettytable
     pycep-parser
@@ -158,6 +161,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     "test_sast_js_filtered_files_by_ts"
     # Timing sensitive
     "test_non_multiline_pair_time_limit_creating_report"
+    # Tests want to run bash script
+    "test_entrypoint"
   ];
 
   disabledTestPaths = [
@@ -201,9 +206,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     '';
     mainProgram = "checkov";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      anhdle14
-      fab
-    ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 })

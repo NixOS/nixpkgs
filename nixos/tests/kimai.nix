@@ -4,7 +4,7 @@
   name = "kimai";
   meta.maintainers = with lib.maintainers; [ peat-psuwit ];
 
-  nodes.machine =
+  containers.machine =
     { ... }:
     {
       services.kimai.sites."localhost" = {

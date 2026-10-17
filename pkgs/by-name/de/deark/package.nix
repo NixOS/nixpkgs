@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
       #                copyright messages are not removed, and no monies are exchanged"
       #                + waiver of liability)
       unfreeRedistributable
-      # lzhuf.* (no copywrite notice, predates standardized licenses,
+      # lzhuf.* (no copyright notice, predates standardized licenses,
       #          widely distributed & intent appears to be free use)
       # "By necessity, Deark contains knowledge about how to decode various
       # third-party file formats. This knowledge includes data structures,

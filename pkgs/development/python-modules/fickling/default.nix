@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fickling";
-  version = "0.1.10";
+  version = "0.1.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = "fickling";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hpVcYWoIH9sCQDha2aX0kzYHwpNcZ6US+4N/q70tQyA=";
+    hash = "sha256-7wbQdInnKFnI76UNmF1/qwFO+2pFt9BXGPnrzHK8rYI=";
   };
 
   build-system = [
@@ -48,8 +48,10 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
-  # Tests fail upstream in pytorch under python 3.14
-  doCheck = pythonOlder "3.14";
+  disabledTests = [
+    # _pickle.UnpicklingError: pickle exhausted before end of frame
+    "test_insert"
+  ];
 
   pythonImportsCheck = [ "fickling" ];
 

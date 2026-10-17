@@ -9,11 +9,9 @@
   ninja,
   lit,
   z3,
-  sv-lang,
   fmt,
   boost,
   mimalloc,
-  gitUpdater,
   callPackage,
   versionCheckHook,
 
@@ -24,19 +22,22 @@
 let
   pythonEnv = python3.withPackages (ps: [ ps.psutil ]);
   circt-llvm = callPackage ./circt-llvm.nix { };
+  circt-sv-lang = callPackage ./sv-lang.nix { };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "circt";
-  version = "1.140.0";
+  version = "1.160.0";
   src = fetchFromGitHub {
     owner = "llvm";
     repo = "circt";
     tag = "firtool-${finalAttrs.version}";
-    hash = "sha256-oitdYNGsEyraQqouOt9srfbDgVGFOAGZMdcf/rjnx5Q=";
+    hash = "sha256-KWh1z2Pvf+BVyzv6+ruaQRAULrIX9T1WjnIhpuTjzNc=";
     fetchSubmodules = true;
   };
 
   requiredSystemFeatures = [ "big-parallel" ];
+
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     cmake
@@ -53,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     fmt
     mimalloc
-    sv-lang
+    circt-sv-lang
   ];
 
   cmakeFlags = [
@@ -110,18 +111,27 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs tools/circt-test
 
+    # Keep the self-contained TableGen tests compatible with nixpkgs' lit.
+    substituteInPlace test/Tools/circt-tblgen/self-contained/self_contained_td_format.py \
+      --replace-fail \
+        'timeout = test.config.maxIndividualTestTime or None' \
+        'timeout = getattr(test.config, "maxIndividualTestTime", None)'
+
+    # Replace slang references to match the package in nixpkgs
     substituteInPlace \
       lib/Tools/circt-verilog-lsp-server/VerilogServerImpl/CMakeLists.txt \
       lib/Conversion/ImportVerilog/CMakeLists.txt \
+      unittests/Conversion/ImportVerilog/CMakeLists.txt \
       --replace-fail "slang_slang" "slang::slang"
-  '';
 
-  preConfigure = ''
+    # Patch shebang in test mlir files
     find ./test -name '*.mlir' -exec sed -i 's|/usr/bin/env|${coreutils}/bin/env|g' {} \;
+
     # circt uses git to check its version, but when cloned on nix it can't access git.
     # So this hard codes the version.
     substituteInPlace cmake/modules/GenVersionFile.cmake \
       --replace-fail "unknown git version" "${finalAttrs.src.rev}"
+
     # Increase timeout on tests because some were failing on hydra.
     # Using `replace-warn` so it doesn't break when upstream changes the timeout.
     substituteInPlace integration_test/CMakeLists.txt \
@@ -164,10 +174,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = gitUpdater {
-      rev-prefix = "firtool-";
-    };
+    updateScript = ./update.sh;
     llvm = circt-llvm;
+    sv-lang = circt-sv-lang;
   };
 
   meta = {

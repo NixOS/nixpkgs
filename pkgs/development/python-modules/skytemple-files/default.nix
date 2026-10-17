@@ -1,31 +1,38 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # buildInputs
+  armips,
+
+  # dependencies
   appdirs,
   dungeon-eos,
   explorerscript,
   ndspy,
   pillow,
-  setuptools,
-  skytemple-rust,
-  pyyaml,
   pmdsky-debug-py,
+  pyyaml,
   range-typed-integers,
-  # optional dependencies for SpriteCollab
+  skytemple-rust,
+
+  # optional-dependencies
   aiohttp,
-  lru-dict,
-  graphql-core,
   gql,
-  armips,
+  graphql-core,
+  lru-dict,
+
   # tests
-  pytestCheckHook,
   parameterized,
+  pytestCheckHook,
   xmldiff,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "skytemple-files";
   version = "1.8.5";
   pyproject = true;
@@ -33,31 +40,38 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = "skytemple-files";
-    rev = version;
-    hash = "sha256-s7r6wS7H19+is3CFr+dLaTiq0N/gaO/8IFknmr+OAJk=";
+    tag = finalAttrs.version;
     # Most patches are in submodules
     fetchSubmodules = true;
+    hash = "sha256-s7r6wS7H19+is3CFr+dLaTiq0N/gaO/8IFknmr+OAJk=";
   };
 
   postPatch = ''
-    substituteInPlace skytemple_files/patch/arm_patcher.py skytemple_files/data/data_cd/armips_importer.py \
-      --replace-fail "exec_name = os.getenv(\"SKYTEMPLE_ARMIPS_EXEC\", f\"{prefix}armips\")" "exec_name = \"${armips}/bin/armips\""
+    substituteInPlace \
+      skytemple_files/patch/arm_patcher.py \
+      skytemple_files/data/data_cd/armips_importer.py \
+      --replace-fail \
+        "exec_name = os.getenv(\"SKYTEMPLE_ARMIPS_EXEC\", f\"{prefix}armips\")" \
+        "exec_name = \"${armips}/bin/armips\""
   '';
 
   build-system = [ setuptools ];
 
   buildInputs = [ armips ];
 
+  pythonRelaxDeps = [
+    "pmdsky-debug-py"
+  ];
   dependencies = [
     appdirs
     dungeon-eos
     explorerscript
     ndspy
     pillow
-    skytemple-rust
-    pyyaml
     pmdsky-debug-py
+    pyyaml
     range-typed-integers
+    skytemple-rust
   ];
 
   optional-dependencies = {
@@ -71,11 +85,11 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    pytestCheckHook
     parameterized
+    pytestCheckHook
     xmldiff
   ]
-  ++ optional-dependencies.spritecollab;
+  ++ finalAttrs.passthru.optional-dependencies.spritecollab;
 
   preCheck = "pushd test";
   postCheck = "popd";
@@ -88,11 +102,14 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "skytemple_files" ];
 
   meta = {
-    homepage = "https://github.com/SkyTemple/skytemple-files";
     description = "Python library to edit the ROM of Pokémon Mystery Dungeon Explorers of Sky";
+    homepage = "https://github.com/SkyTemple/skytemple-files";
     mainProgram = "skytemple_export_maps";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ marius851000 ];
-    broken = stdenv.hostPlatform.isDarwin; # pyobjc is missing
+    badPlatforms = [
+      # pyobjc is missing
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
-}
+})

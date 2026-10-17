@@ -1,6 +1,6 @@
 {
   lib,
-  apple-sdk,
+  apple-sdk_26,
   bzip2,
   copyfile,
   less,
@@ -8,20 +8,22 @@
   libutil,
   libxo,
   mkAppleDerivation,
+  ncurses,
   pkg-config,
   removefile,
   shell_cmds,
+  sourceRelease,
   stdenvNoCC,
   xz,
   zlib,
 }:
 
 let
-  Libc = apple-sdk.sourceRelease "Libc";
-  Libinfo = apple-sdk.sourceRelease "Libinfo";
-  CommonCrypto = apple-sdk.sourceRelease "CommonCrypto";
-  libplatform = apple-sdk.sourceRelease "libplatform";
-  xnu = apple-sdk.sourceRelease "xnu";
+  Libc = sourceRelease "Libc";
+  Libinfo = sourceRelease "Libinfo";
+  CommonCrypto = sourceRelease "CommonCrypto";
+  libplatform = sourceRelease "libplatform";
+  xnu = sourceRelease "xnu";
 
   privateHeaders = stdenvNoCC.mkDerivation {
     name = "file_cmds-deps-private-headers";
@@ -68,12 +70,6 @@ let
       typedef int32_t user32_time_t;
       typedef int64_t user64_addr_t;
       typedef int64_t user64_time_t;
-      #elif defined(__x86_64__)
-      /* https://github.com/apple-oss-distributions/xnu/blob/94d3b452840153a99b38a3a9659680b2a006908e/bsd/i386/types.h#L128-L142 */
-      typedef int32_t user32_addr_t;
-      typedef int32_t user32_time_t;
-      typedef int64_t user64_addr_t __attribute__((aligned(8)));
-      typedef int64_t user64_time_t __attribute__((aligned(8)));
       #else
       #error "Tried to build file_cmds for an unsupported architecture"
       #endif
@@ -91,13 +87,12 @@ mkAppleDerivation {
     "xattr"
   ];
 
-  xcodeHash = "sha256-KEZYuaDxLdprF+wGiszUdTXPQBfLNj0xP9Y0uarNjSs=";
+  xcodeHash = "sha256-O1eJGFrSVIZbZvBSonKkG4MeYZQ8W6izpYEcHIE+/DM=";
 
   patches = [
-    # Fixes build of ls
-    ./patches/0001-Add-missing-extern-unix2003_compat-to-ls.patch
-    # Add missing conditional to avoid using private APFS APIs that we lack headers for using.
-    ./patches/0002-Add-missing-ifdef-for-private-APFS-APIs.patch
+    # `O_RESOLVE_BENEATH` was added in macOS 26, but our default deployment target is older than that.
+    # Make its usage conditional.
+    ./patches/0001-Conditionalize-O_RESOLVE_BENEATH-usage.patch
   ];
 
   nativeBuildInputs = [ pkg-config ];
@@ -105,11 +100,13 @@ mkAppleDerivation {
   env.NIX_CFLAGS_COMPILE = "-I${privateHeaders}/include";
 
   buildInputs = [
+    apple-sdk_26 # For `O_RESOLVE_BENEATH` and `AT_RESOLVE_BENEATH`
     bzip2
     copyfile
     libmd
     libutil
     libxo
+    ncurses
     removefile
     xz
     zlib

@@ -2,62 +2,81 @@
   lib,
   stdenv,
   rustPlatform,
+  just,
   fetchFromGitHub,
   libcosmicAppHook,
   pkg-config,
-  libdisplay-info_0_2,
+  libdisplay-info_0_3,
   libgbm,
   libinput,
   pixman,
   seatd,
   udev,
-  systemd,
+  systemdLibs,
+  xrdb,
   nix-update-script,
   nixosTests,
 
-  useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  withXWayland ? true,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-comp";
-  version = "1.0.8";
+  version = "1.10.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-comp";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-TGTKUF7rYZ/Koem4rPBFYHatzhhqpWe/1WmAqlY3odg=";
+    hash = "sha256-HkgP/1tVXDMpL47SOZibN1QkDVTRkjrhYmdFcbOc4JY=";
   };
 
-  cargoHash = "sha256-MI8cJzjZd2UeWBESu8xEDYQv0Oa4PRhc4pOCN0zDNO4=";
+  cargoHash = "sha256-WTpJuj3Xz9hHLj+kuhys0Fr8FmosAuXpbtNSK3Y5twU=";
+
+  # Only default feature is systemd
+  buildNoDefaultFeatures = !useSystemd;
 
   separateDebugInfo = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
+    just
     libcosmicAppHook
     pkg-config
   ];
 
   buildInputs = [
-    libdisplay-info_0_2
+    libdisplay-info_0_3
     libgbm
     libinput
     pixman
     seatd
     udev
   ]
-  ++ lib.optional useSystemd systemd;
+  ++ lib.optional useSystemd systemdLibs;
 
-  # Only default feature is systemd
-  buildNoDefaultFeatures = !useSystemd;
+  dontUseJustBuild = true;
+  dontUseJustCheck = true;
 
-  makeFlags = [
-    "prefix=${placeholder "out"}"
-    "CARGO_TARGET_DIR=target/${stdenv.hostPlatform.rust.cargoShortTarget}"
+  justFlags = [
+    "--set"
+    "prefix"
+    (placeholder "out")
+    "--set"
+    "cargo-target-dir"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
-  dontCargoInstall = true;
+  # With Xwayland, cosmic-comp calls out to `xrdb -merge` to set
+  # `Xcursor.size` and `Xcursor.theme` for X11 clients (src/xwayland.rs,
+  # upstream pop-os/cosmic-comp#1976). Without it on PATH it logs
+  # "`xrdb` not found, cannot update Xresources." and X11 clients fall back
+  # to libXcursor's screen-derived default cursor size.
+  preFixup = lib.optionalString withXWayland ''
+    libcosmicAppWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ xrdb ]})
+  '';
 
   passthru = {
     tests = {

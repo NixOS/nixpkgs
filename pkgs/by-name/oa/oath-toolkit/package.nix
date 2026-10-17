@@ -33,5 +33,9 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ schnusch ];
     platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "oathtool";
+    license = with lib.licenses; [
+      lgpl21Plus # Libraries
+      gpl3Plus # Tools
+    ];
   };
 })

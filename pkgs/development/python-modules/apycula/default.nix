@@ -14,13 +14,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "apycula";
-  version = "0.31";
+  version = "0.34";
   pyproject = true;
 
   # The Pypi archive contains necessary files generated with proprietary tools.
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-77pr4HbS2adFeEI3Q3KzcCfJMi4UomOtKnuGAxobxF0=";
+    hash = "sha256-sLFRh1vlKJ66OF1Mb6YtGzvkkobfcPB+B2ra+RZ4siw=";
   };
 
   build-system = [ setuptools-scm ];

@@ -13,26 +13,21 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gaphor";
-  version = "3.2.0";
+  version = "3.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gaphor";
     repo = "gaphor";
     tag = finalAttrs.version;
-    hash = "sha256-0Z0RFQrN2g0beV2konZBfMroeNtbT+sPRsWlRvQFYBk=";
+    hash = "sha256-oSPdWQcdt00SSdvlnAtPrsACBCiA4NlCE9Fwt4G9bjk=";
   };
-
-  patches = [
-    # from https://github.com/gaphor/gaphor/pull/4236
-    # please remove after next update
-    ./fix-dulwich-api.patch
-  ];
 
   pythonRelaxDeps = [
     "pydot"
     "pygobject"
     "dulwich"
+    "jedi"
   ];
 
   nativeBuildInputs = [

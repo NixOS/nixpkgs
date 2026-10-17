@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchpatch2,
   fetchurl,
   ncurses,
   pkg-config,
@@ -24,13 +23,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "procps";
-  version = "4.0.6";
+  version = "4.0.7";
 
   # The project's releases are on SF, but git repo on gitlab.
   src = fetchurl {
     url = "mirror://sourceforge/procps-ng/procps-ng-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Z76m+8OkKlNaAjDJ6JHl3ftNnTlCLUZWWimQ0azhUhY=";
+    hash = "sha256-nSAh9HpFAcZnhiyZQqktGVNpSyHRG80XAug+tZTj1n0=";
   };
+
+  outputs = [
+    "out"
+    "man"
+    "dev"
+  ]
+  ++ lib.optionals (!watchOnly) [
+    "doc"
+  ];
 
   buildInputs = [ ncurses ] ++ lib.optionals withSystemd [ systemdLibs ];
   nativeBuildInputs = [
@@ -41,6 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [ "usrbin_execdir=$(out)/bin" ] ++ lib.optionals watchOnly [ "src/watch" ];
 
   enableParallelBuilding = true;
+  strictDeps = true;
+  __structuredAttrs = true;
 
   # Too red; 8bit support for fixing https://github.com/NixOS/nixpkgs/issues/275220
   configureFlags = [

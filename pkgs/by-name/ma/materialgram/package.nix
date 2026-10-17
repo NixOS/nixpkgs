@@ -11,12 +11,12 @@ telegram-desktop.override {
   unwrapped = telegram-desktop.unwrapped.overrideAttrs (
     finalAttrs: previousAttrs: {
       pname = "materialgram-unwrapped";
-      version = "6.4.0.1";
+      version = "7.0.5.1";
 
       src = fetchFromGitHub {
         owner = "kukuruzka165";
         repo = "materialgram";
-        hash = "sha256-aNgvuuowyhEYUm5ie2vxCsdpaDuuZ/3xZJqWA0bN5Lc=";
+        hash = "sha256-OE7TbxFEYzTM2IB7HMokR3a+tsrg4n4cbHmRXPITykI=";
         tag = "v${finalAttrs.version}";
         fetchSubmodules = true;
       };
@@ -35,6 +35,9 @@ telegram-desktop.override {
           stellessia
         ];
         mainProgram = "materialgram";
+        knownVulnerabilities = [
+          "CVE-2026-107181: Telegram Desktop before 7.2.9 IPC Record Injection File Exfiltration via interpret: Scheme"
+        ];
       };
     }
   );

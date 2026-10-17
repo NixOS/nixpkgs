@@ -2,17 +2,16 @@
   stdenv,
   fetchNpmDeps,
   fetchzip,
-  fetchFromGitHub,
   npmHooks,
 
-  tailwindcss_4,
   nodejs,
+  pdfding,
 }:
 let
-  pdfjsVersion = "5.5.207"; # see update script
-  pdfjsHash = "sha256-HikisEa6L+BqsG6imgWhV+4J46BluU5zqU1nFZAG0eM=";
+  pdfjsVersion = "6.1.200"; # see update script
+  pdfjsHash = "sha256-IylR6X6qmyP7jvT12AerDd2UD0nqqOWljfT8wgKoFsg=";
   pdfjs = fetchzip {
-    url = "https://github.com/mozilla/pdf.js/releases/download/v${pdfjsVersion}/pdfjs-${pdfjsVersion}-dist.zip";
+    url = "https://github.com/mozilla/pdf.js/releases/download/v${pdfjsVersion}/pdfjs-${pdfjsVersion}-legacy-dist.zip";
     hash = pdfjsHash;
     stripRoot = false;
     postFetch = ''
@@ -27,26 +26,21 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdfding-frontend";
-  version = "1.7.1";
-  src = fetchFromGitHub {
-    owner = "mrmn2";
-    repo = "PdfDing";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-T3Y9eWwBVxGPISZ3EZndAR6mwsq4g67RRCPpoZPuh+0=";
-  };
+  inherit (pdfding) src version;
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    name = "pdfding-frontend-${finalAttrs.version}-npm-deps";
-    hash = "sha256-an4KKKx65ehCm1YAlwLWYAW8pQMgB4HdDERqC/hfQi0=";
+    name = "pdfding-${finalAttrs.version}-npm-deps";
+    hash = "sha256-1Yf6jEKB9a1nRAmeHj7hhnDlMPzKCz3ufp0thgGnGtQ=";
   };
 
   nativeBuildInputs = [
     nodejs
     npmHooks.npmConfigHook
-    # it is in package.json and thus node_modules but no cli executable
-    tailwindcss_4
   ];
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   # keeping the file structure same as upstream to minimise confusion
   buildPhase = ''
@@ -55,7 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r --no-preserve=mode pdfding/static $out/pdfding/static
     cp -r --no-preserve=mode ${finalAttrs.passthru.pdfjs} $out/pdfding/static/pdfjs
 
-    tailwindcss -i $out/pdfding/static/css/input.css -o $out/pdfding/static/css/tailwind.css --minify
+    # NOTE: Directly using tailwindcss package from nixpkgs gave a `Trace/BPT trap: 5` error on darwin
+    # Trace/BPT trap: 5 tailwindcss -i $out/pdfding/static/css/input.css -o $out/pdfding/static/css/tailwind.css --minify
+    # It didn't occur when building the package in an interactive ssh session but on nixpkgs-review-gha it failed consistently
+    # https://github.com/NixOS/nixpkgs/pull/540436#issuecomment-4942029413
+
+    node node_modules/@tailwindcss/cli/dist/index.mjs -i pdfding/static/css/input.css -o $out/pdfding/static/css/tailwind.css --minify
     rm $out/pdfding/static/css/input.css
 
     for i in build/pdf.mjs build/pdf.sandbox.mjs build/pdf.worker.mjs web/viewer.mjs;

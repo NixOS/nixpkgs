@@ -9,7 +9,7 @@ in
   name = "victorialogs-remote-write-with-vlagent";
   meta.maintainers = [ lib.maintainers.shawn8901 ];
 
-  nodes.server =
+  containers.server =
     { pkgs, ... }:
     {
       networking.firewall.allowedTCPPorts = [ 9428 ];
@@ -20,7 +20,7 @@ in
       };
     };
 
-  nodes.client =
+  containers.client =
     { pkgs, ... }:
     {
       services.vlagent = {

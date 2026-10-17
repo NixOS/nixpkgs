@@ -18,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "httplib2";
-  version = "0.31.1";
+  version = "0.32.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "httplib2";
     repo = "httplib2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1OO3BNtOGJxV9L34C60CHv95LLH9Ih1lY0zQUD4wrnc=";
+    hash = "sha256-l+E3cADVb81SN3ME8qUqI8dfmT2e7S6p0nWOCu3CQWE=";
   };
 
   build-system = [ setuptools ];

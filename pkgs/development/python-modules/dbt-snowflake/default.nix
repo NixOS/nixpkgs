@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "dbt-snowflake";
-  version = "1.11.1";
+  version = "1.12.0";
   pyproject = true;
 
   # missing tags on GitHub
   src = fetchPypi {
     pname = "dbt_snowflake";
     inherit version;
-    hash = "sha256-C2uS13vwN9AuZ0XgrdRHMsunuzSwoM06HGFmJ45Bs0A=";
+    hash = "sha256-04TC63zLXckfnB6JqAQbkSGrhgX1gKLpD4BubvAT0F4=";
   };
 
   pythonRelaxDeps = [
@@ -36,9 +36,9 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "tests/unit" ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # pyproject.toml specifies -n auto which only pytest-xdist understands
-    "--override-ini addopts=''"
+    "--override-ini=addopts="
   ];
 
   pythonImportsCheck = [ "dbt.adapters.snowflake" ];

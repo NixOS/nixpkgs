@@ -1,0 +1,19 @@
+{
+  "name": "pnpm-fixup-state-db",
+  "version": "0.0.0",
+  "description": "Fixup pnpm v11-store index.db to remove impurities",
+  "license": "MIT",
+  "author": "Sefa Eyeoglu <contact@scrumplex.net>",
+  "type": "module",
+  "main": "index.js",
+  "dependencies": {
+    "@pnpm/store.index": "^1100.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "typescript": "^6.0.3"
+  },
+  "scripts": {
+    "build": "tsc"
+  }
+}

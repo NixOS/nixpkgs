@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.4.1";
 
   src = fetchFromGitHub {
-    owner = "matthewbauer";
+    owner = "nix-community";
     repo = "nix-bundle";
     rev = "v${finalAttrs.version}";
     sha256 = "0js8spwjvw6kjxz1i072scd035fhiyazixvn84ibdnw8dx087gjv";
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    homepage = "https://github.com/matthewbauer/nix-bundle";
+    homepage = "https://github.com/nix-community/nix-bundle";
     description = "Create bundles from Nixpkgs attributes";
     longDescription = ''
       nix-bundle is a way to package Nix attributes into single-file

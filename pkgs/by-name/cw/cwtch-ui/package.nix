@@ -1,7 +1,7 @@
 {
   cwtch,
   fetchgit,
-  flutter329,
+  flutter344,
   lib,
   tor,
   _experimental-update-script-combinators,
@@ -12,15 +12,15 @@
 }:
 
 let
-  version = "1.16.3";
+  version = "1.17.2";
   # This Gitea instance has archive downloads disabled, so: fetchgit
   src = fetchgit {
     url = "https://git.openprivacy.ca/cwtch.im/cwtch-ui";
     tag = "v${version}";
-    hash = "sha256-w1bIT9EIwpmJ4fkOGKo6iI3HdkcYgrGlW0xeecpUn7g=";
+    hash = "sha256-UA3XDAo1kiKnCvB2en4y+L5tgtD18+DsmTnaL8OY5+c=";
   };
 in
-flutter329.buildFlutterApplication {
+flutter344.buildFlutterApplication {
   pname = "cwtch-ui";
   inherit version src;
 

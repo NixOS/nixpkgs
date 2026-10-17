@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "roctracer";
-  version = "7.2.1";
+  version = "7.2.4";
 
   outputs = [
     "out"
@@ -34,12 +34,12 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-systems";
-    rev = "rocm-${finalAttrs.version}";
+    tag = "rocm-${finalAttrs.version}";
     sparseCheckout = [
       "projects/roctracer"
       "shared"
     ];
-    hash = "sha256-KUNLX5ZonE0bW/xOacD3k3hCcg7M3Vk1dM3WQSDYMvM=";
+    hash = "sha256-Ps9b/MMdxXthGV96ZDg0kZGPdmn7Sy5if1a/Fjx2fEE=";
   };
   sourceRoot = "${finalAttrs.src.name}/projects/roctracer";
 
@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Tracer callback/activity library";
     homepage = "https://github.com/ROCm/rocm-systems/tree/develop/projects/roctracer";
-    license = with lib.licenses; [ mit ]; # mitx11
+    license = lib.licenses.mit; # mitx11
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };

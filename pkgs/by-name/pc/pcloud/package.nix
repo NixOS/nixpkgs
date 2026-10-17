@@ -22,6 +22,7 @@
   fetchzip,
   lib,
   stdenv,
+  bashInteractive,
 
   # Runtime dependencies;
   # A few additional ones (e.g. Node) are already shipped together with the
@@ -31,7 +32,7 @@
   fuse,
   gsettings-desktop-schemas,
   gtk3,
-  libdbusmenu-gtk2,
+  libdbusmenu-gtk3,
   libgbm,
   libxdamage,
   nss,
@@ -40,20 +41,20 @@
 
 let
   pname = "pcloud";
-  version = "2.0.4";
-  code = "XZNttt5ZD5h5yXmbVPHHIIr4nEUwduLH837X";
+  version = "2.3.0";
+  code = "XZrYdRJZLS6RF4kf6Jy6GFr4jqkc4S34Rlgy";
 
   # Archive link's codes: https://www.pcloud.com/release-notes/linux.html
   src = fetchzip {
     url = "https://api.pcloud.com/getpubzip?code=${code}&filename=pcloud-${version}.zip";
-    hash = "sha256-VINx6xM8/unPC9xopV2ml64wqU0FdhZdGTnxLUpCiyY=";
+    hash = "sha256-aeZHTtqw7ml8k1GZt013WG3GFVXfIzGhEDdBKMkzpj4=";
   };
 
 in
 stdenv.mkDerivation {
   inherit pname version;
 
-  src = appimageTools.extractType2 {
+  src = appimageTools.extract {
     inherit pname version;
 
     src = "${src}/pCloud.AppImage";
@@ -72,11 +73,12 @@ stdenv.mkDerivation {
     dbus-glib
     fuse
     gtk3
-    libdbusmenu-gtk2
+    libdbusmenu-gtk3
     libgbm
     libxdamage
     nss
     udev
+    bashInteractive
   ];
 
   installPhase = ''
@@ -128,6 +130,7 @@ stdenv.mkDerivation {
     description = "Secure and simple to use cloud storage for your files; pCloud Drive, Electron Edition";
     homepage = "https://www.pcloud.com/";
     changelog = "https://www.pcloud.com/release-notes/linux.html";
+    downloadPage = "https://www.pcloud.com/release-notes/linux.html";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ patryk27 ];

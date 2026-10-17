@@ -8,7 +8,7 @@
 
 # Note for maintainers:
 #
-# These packages are only allowed to be packaged under the the condition that we
+# These packages are only allowed to be packaged under the condition that we
 # - patch source/creator/config.d to not point to upstream's bug tracker
 # - use the "barebones" configuration to remove the mascot and logo from the build
 #
@@ -36,7 +36,7 @@ in
     patches = [
       # Upstream asks that we change the bug tracker URL to not point to the upstream bug tracker
       (replaceVars ./support-url.patch {
-        assignees = "TomaSajt"; # should be a comma separated list of the github usernames of the maintainers
+        assignees = "TomaSajt"; # should be a comma-separated list of the github usernames of the maintainers
       })
       # Change how duplicate locales differentiate themselves (the store paths were too long)
       ./translations.patch

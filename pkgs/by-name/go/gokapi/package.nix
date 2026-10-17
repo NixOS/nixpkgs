@@ -42,6 +42,7 @@ buildGoModule (finalAttrs: {
   '';
 
   subPackages = [
+    "cmd/cli-uploader"
     "cmd/gokapi"
   ];
 
@@ -49,6 +50,10 @@ buildGoModule (finalAttrs: {
     "-s"
     "-w"
   ];
+
+  postInstall = ''
+    mv $out/bin/cli-uploader $out/bin/gokapi-cli
+  '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

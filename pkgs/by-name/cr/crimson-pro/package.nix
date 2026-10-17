@@ -2,15 +2,16 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  installFonts,
 }:
 
 stdenv.mkDerivation {
   pname = "crimson-pro";
-  version = "unstable-2022-08-30";
+  version = "0-unstable-2022-08-30";
 
   outputs = [
     "out"
-    "woff2"
+    "webfont"
   ];
 
   src = fetchFromGitHub {
@@ -20,15 +21,11 @@ stdenv.mkDerivation {
     hash = "sha256-3zFB1AMcC7eNEVA2Mx1OE8rLN9zPzexZ3FtER9wH5ss=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    install -m444 -Dt $out/share/fonts/truetype fonts/ttf/*.ttf
-    install -m444 -Dt $out/share/fonts/opentype fonts/otf/*.otf
-    install -m444 -Dt $woff2/share/fonts/woff2 fonts/webfonts/*.woff2
-
-    runHook postInstall
+  postPatch = ''
+    rm Makefile
   '';
+
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     homepage = "https://github.com/Fonthausen/CrimsonPro";

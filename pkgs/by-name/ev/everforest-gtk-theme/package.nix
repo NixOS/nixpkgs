@@ -2,44 +2,77 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  gnome-themes-extra,
-  gtk-engine-murrine,
+  gtk3,
+  nix-update-script,
+  sassc,
 }:
 
 stdenvNoCC.mkDerivation {
   pname = "everforest-gtk-theme";
-  version = "0-unstable-2025-10-15";
+  version = "0-unstable-2025-10-23";
 
   src = fetchFromGitHub {
     owner = "Fausto-Korpsvart";
     repo = "Everforest-GTK-Theme";
-    rev = "930a5dc57f7a06e8c6538d531544e41c56dbb27a";
-    hash = "sha256-mlJE7gVElWUjJIZnAL5ztchphmaU82llol+YdKqnSxg=";
+    rev = "9b8be4d6648ae9eaae3dd550105081f8c9054825";
+    hash = "sha256-XHO6NoXJwwZ8gBzZV/hJnVq5BvkEKYWvqLBQT00dGdE=";
   };
 
-  propagatedUserEnvPkgs = [
-    gtk-engine-murrine
+  patches = [
+    # remove when merged
+    # https://github.com/Fausto-Korpsvart/Everforest-GTK-Theme/pull/34
+    ./fix-install-script.patch
+    # remove when merged
+    # https://github.com/Fausto-Korpsvart/Everforest-GTK-Theme/pull/35
+    ./gtk3-remove-border-spacing.patch
+    # The GTK2 themes need an engine that is no longer packaged.
+    # Replace with --no-gtk2 once merged:
+    # https://github.com/Fausto-Korpsvart/Everforest-GTK-Theme/pull/36
+    ./remove-gtk2.patch
   ];
 
-  buildInputs = [
-    gnome-themes-extra
+  nativeBuildInputs = [
+    gtk3
+    sassc
   ];
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  dontConfigure = true;
   dontBuild = true;
+  dontFixup = true;
+  dontDropIconThemeCache = true;
+
+  postPatch = ''
+    patchShebangs themes/install.sh
+  '';
 
   installPhase = ''
     runHook preInstall
+
     mkdir -p "$out/share/"{themes,icons}
+
     cp -a icons/* "$out/share/icons/"
-    cp -a themes/* "$out/share/themes/"
+
+    for theme in "$out/share/icons/"*; do
+      gtk-update-icon-cache "$theme"
+    done
+
+    cd themes
+    ./install.sh --name Everforest --theme all --dest "$out/share/themes"
+    cd ..
+
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "Everforest colour palette for GTK";
     homepage = "https://github.com/Fausto-Korpsvart/Everforest-GTK-Theme";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ jn-sena ];
-    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ poz ];
+    platforms = lib.platforms.all;
   };
 }

@@ -4,8 +4,8 @@
   fetchPypi,
 
   # build-system
-  pbr,
-  setuptools,
+  hatch-vcs,
+  hatchling,
 
   # dependencies
   testtools,
@@ -14,31 +14,22 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "testscenarios";
-  version = "0.5.0";
+  version = "0.6.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "c257cb6b90ea7e6f8fef3158121d430543412c9a87df30b5dde6ec8b9b57a2b6";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-q1rozVUOEeqXgVGYHnqOysMpt7IuTexwax5v4hP0Y+c=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "buffer = 1" "" \
-      --replace "catch = 1" ""
-  '';
-
-  nativeBuildInputs = [
-    pbr
-    setuptools
+  build-system = [
+    hatch-vcs
+    hatchling
   ];
 
-  propagatedBuildInputs = [
-    pbr
-    testtools
-  ];
+  dependencies = [ testtools ];
 
   doCheck = false; # tests not compatible with teststools 2.8
 
@@ -53,6 +44,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pyunit extension for dependency injection";
     homepage = "https://github.com/testing-cabal/testscenarios";
+    changelog = "https://github.com/testing-cabal/testscenarios/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
+    maintainers = [ ];
   };
-}
+})

@@ -5,7 +5,7 @@
   fetchNpmDeps,
   buildGoModule,
   buildNpmPackage,
-  systemd,
+  systemdLibs,
   installShellFiles,
   versionCheckHook,
   nixosTests,
@@ -13,20 +13,25 @@
   lld,
   useLLD ? stdenv.hostPlatform.isArmv7,
 }:
+
+let
+  beylaVersion = "v3.9.8";
+in
+
 buildGoModule (finalAttrs: {
   pname = "grafana-alloy";
-  version = "1.14.2";
+  version = "1.17.1";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "alloy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-77WMsnC2WgVnbw1BsCj9ayS6XPsVTghmtIyl9Dk71uY=";
+    hash = "sha256-4HjOerOe+v8GkKgID/oBm5Rt7nQiHjucAQkSYGY5zZs=";
   };
 
   npmDeps = fetchNpmDeps {
     src = "${finalAttrs.src}/internal/web/ui";
-    hash = "sha256-MiHFeyDxLzYF3t9H8OEn/bL10WRbzMcwlENs2FSJ4xo=";
+    hash = "sha256-eGyKXsZzyDovsMY2U1uAOn22nyRTYGJT+kEh61857Ls=";
   };
 
   frontend = buildNpmPackage {
@@ -49,12 +54,18 @@ buildGoModule (finalAttrs: {
 
   patchPhase = ''
     cp -av ${finalAttrs.frontend}/share internal/web/ui/dist
+
+    goSumBeylaVersion="$(grep beyla go.sum | head -1 | cut -d ' ' -f2)"
+    if [[ "$goSumBeylaVersion" != "${beylaVersion}" ]];then
+      echo "beyla version in go.sum ($goSumBeylaVersion) doesn't match the one set in the expression (${beylaVersion}), needs updating."
+      exit 1
+    fi
   '';
 
   modRoot = "collector";
 
   proxyVendor = true;
-  vendorHash = "sha256-i/BV987/ZYnCRYX8m9iFdtPo0vrWsmpn6UDs0q59sMM=";
+  vendorHash = "sha256-C6qVdSfTwmjseCjXKn5f9Q9mn3EBg31CQlLk5QY4YRY=";
 
   subPackages = [ "." ];
 
@@ -66,10 +77,12 @@ buildGoModule (finalAttrs: {
     "-X github.com/grafana/alloy/internal/build.Revision=v${finalAttrs.version}"
     "-X github.com/grafana/alloy/internal/build.BuildUser=nix@nixpkgs"
     "-X github.com/grafana/alloy/internal/build.BuildDate=1970-01-01T00:00:00Z"
+    "-X github.com/grafana/beyla/pkg/buildinfo=${beylaVersion}"
   ];
 
   tags = [
     "embedalloyui"
+    "gore2regex"
     "netgo"
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -83,7 +96,7 @@ buildGoModule (finalAttrs: {
     // lib.optionalAttrs (stdenv.hostPlatform.isLinux) {
       # Uses go-systemd, which uses libsystemd headers.
       # https://github.com/coreos/go-systemd/issues/351
-      NIX_CFLAGS_COMPILE = "-I${lib.getDev systemd}/include";
+      NIX_CFLAGS_COMPILE = "-I${lib.getDev systemdLibs}/include";
     };
 
   nativeBuildInputs = [
@@ -91,14 +104,15 @@ buildGoModule (finalAttrs: {
   ]
   ++ lib.optionals useLLD [ lld ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    mv -v $out/bin/otel_engine $out/bin/alloy
+  postInstall =
+    "mv -v $out/bin/otel_engine $out/bin/alloy"
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
 
-    installShellCompletion --cmd alloy \
-      --bash <($out/bin/alloy completion bash) \
-      --fish <($out/bin/alloy completion fish) \
-      --zsh <($out/bin/alloy completion zsh)
-  '';
+      installShellCompletion --cmd alloy \
+        --bash <($out/bin/alloy completion bash) \
+        --fish <($out/bin/alloy completion fish) \
+        --zsh <($out/bin/alloy completion zsh)
+    '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -109,7 +123,7 @@ buildGoModule (finalAttrs: {
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf \
       --set-rpath "${
-        lib.makeLibraryPath [ (lib.getLib systemd) ]
+        lib.makeLibraryPath [ (lib.getLib systemdLibs) ]
       }:$(patchelf --print-rpath $out/bin/alloy)" \
       $out/bin/alloy
   '';

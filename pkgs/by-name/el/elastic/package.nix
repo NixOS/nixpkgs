@@ -19,14 +19,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "elastic";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "elastic";
     rev = finalAttrs.version;
-    hash = "sha256-zOqOAUbPjyVl/96oVBhsjBrSMGt+NEbraznNGu374dM=";
+    hash = "sha256-NAxztd+Q5TlBAuXCgGPT6aTfj5mVsNdU+5WoNM8Bb84=";
   };
 
   nativeBuildInputs = [

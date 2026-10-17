@@ -13,6 +13,7 @@
   pulseaudio,
   pipewire,
   udev,
+  lsof,
   xkeyboard_config,
   nix-update-script,
   nixosTests,
@@ -20,25 +21,20 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-applets";
-  version = "1.0.8";
+  version = "1.10.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-applets";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-x2FHzgbxxHJEYlCK0bi5j7WdAqAlcocLYW20y2ionBc=";
+    hash = "sha256-7x4B5Sdzm4JpqqBWGkLlxsYBxP4hfCyN6048/e9d7o4=";
   };
 
-  cargoPatches = [
-    # The lockfile references two different revisions of the same internal repository cosmic-settings,
-    # which likely is unintentional and currently causing issues with fetchCargoVendor.
-    # Upstream already resolved this because of a general dependency update, so this can be removed on the
-    # next update.
-    ./dedup-cosmic-settings.patch
-  ];
+  cargoHash = "sha256-qmYCI8wfSspQgueY6nO1lOJgEYJPsEyc+WqOMRYTYUI=";
 
-  cargoHash = "sha256-R9d7slLid3x7NYXkMfcRRa4zY8/RxW+QLMZGsvHdfCw=";
+  separateDebugInfo = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     just
@@ -55,6 +51,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pulseaudio
     pipewire
     udev
+    lsof
   ];
 
   dontUseJustBuild = true;

@@ -1,0 +1,15 @@
+diff --git a/src/pages/Splash.vue b/src/pages/Splash.vue
+index a3d16f16..36d77fb1 100644
+--- a/src/pages/Splash.vue
++++ b/src/pages/Splash.vue
+@@ -188,8 +188,8 @@ async function ensureWrapperInGameFolder(wrapperName: WrapperScript) {
+         if (await FsProvider.instance.exists(path.join(PathResolver.MOD_ROOT, wrapperName))) {
+             await FsProvider.instance.unlink(path.join(PathResolver.MOD_ROOT, wrapperName));
+         }
+-        const wrapperFileResult = await fetch(ProtocolProvider.getPublicAssetUrl(`/${wrapperName}`)).then(res => res.arrayBuffer());
+-        const wrapperFileContent = Buffer.from(wrapperFileResult);
++        const wrapperFilePath = path.join(staticsDirectory, wrapperName);
++        const wrapperFileContent = await FsProvider.instance.readFile(wrapperFilePath);
+         await FsProvider.instance.writeFile(path.join(PathResolver.MOD_ROOT, wrapperName), wrapperFileContent);
+         await FsProvider.instance.writeFile(path.join(PathResolver.MOD_ROOT, wrapperName), wrapperFileContent);
+     }

@@ -1,20 +1,22 @@
 {
   lib,
   rustPlatform,
-  fetchCrate,
+  fetchFromGitHub,
   versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stylance-cli";
-  version = "0.7.4";
+  version = "0.8.4";
 
-  src = fetchCrate {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-lGgKmNqZ0nflVAM3GMDwGgxnXyLCqVz1bTUsvabXmj8=";
+  src = fetchFromGitHub {
+    owner = "basro";
+    repo = "stylance-rs";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-raimzhK0o3ZMMfHpBIOVkDly5MSIpfgpSDDdW2aWbUI=";
   };
 
-  cargoHash = "sha256-HWZQNEKTyNnmA1twN5cfo5RY2tOeCnL6zEp+M4F+Tqg=";
+  cargoHash = "sha256-wqNQUCD7/q41GKIxjLFEGrlNru3SIN9mbUh+nApm1i8=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
@@ -25,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "stylance";
     homepage = "https://github.com/basro/stylance-rs";
     changelog = "https://github.com/basro/stylance-rs/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dav-wolff ];
   };
 })

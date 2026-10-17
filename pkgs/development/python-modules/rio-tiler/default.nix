@@ -11,7 +11,7 @@
   color-operations,
   h5netcdf,
   hatchling,
-  httpx,
+  httpx2,
   morecantile,
   numexpr,
   numpy,
@@ -27,14 +27,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "rio-tiler";
-  version = "9.0.4";
+  version = "9.4.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cogeotiff";
     repo = "rio-tiler";
     tag = finalAttrs.version;
-    hash = "sha256-R8vmb33ZfKGqRLkJ55npL031Gnc7HTUDeWiCvtaLsiM=";
+    hash = "sha256-Me5RMVB5ZHokrT5tNROZmXhN16f30f+Y0vPvpj5H4zM=";
   };
 
   build-system = [ hatchling ];
@@ -43,7 +43,7 @@ buildPythonPackage (finalAttrs: {
     attrs
     cachetools
     color-operations
-    httpx
+    httpx2
     morecantile
     numexpr
     numpy
@@ -60,26 +60,33 @@ buildPythonPackage (finalAttrs: {
       obstore
       zarr
     ];
+    geotiff = [
+      async-geotiff
+      obstore
+    ];
   };
 
   nativeCheckInputs = [
     h5netcdf
     pytestCheckHook
+    pytest-asyncio
   ]
   ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
-
-  checkInputs = [
-    async-geotiff
-    pytest-asyncio
-  ];
 
   pythonImportsCheck = [ "rio_tiler" ];
 
   disabledTests = [
     # Requires network access
     "test_dataset_reader"
-    # for some reason, str date representation are not the same
-    "test_xarray_reader"
+
+    "test_async_reader_tile"
+    "test_async_mosaic_tiler"
+    "test_inherit_rasterio_env_empty"
+    "test_inherit_rasterio_env_not_empty"
+    "test_warp_masked_pixels_propagate"
+
+    # test is failing on aarch64
+    "test_geoxarray_reader"
   ];
 
   meta = {

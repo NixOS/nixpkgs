@@ -11,14 +11,14 @@
   stringext,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "gitlab";
   version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "tmcgilchrist";
     repo = "ocaml-gitlab";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-7pUpH1SoP4eW8ild5j+Tcy+aTXq0+eSkhKUOXJ6Z30k=";
   };
 
@@ -46,7 +46,7 @@ buildDunePackage rec {
     homepage = "https://github.com/tmcgilchrist/ocaml-gitlab";
     description = "Native OCaml bindings to Gitlab REST API v4";
     license = lib.licenses.bsd3;
-    changelog = "https://github.com/tmcgilchrist/ocaml-gitlab/releases/tag/${version}";
+    changelog = "https://github.com/tmcgilchrist/ocaml-gitlab/releases/tag/${finalAttrs.version}";
     maintainers = with lib.maintainers; [ zazedd ];
   };
-}
+})

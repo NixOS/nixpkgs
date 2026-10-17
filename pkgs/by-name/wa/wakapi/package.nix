@@ -6,7 +6,7 @@
   nix-update-script,
 }:
 let
-  version = "2.17.2";
+  version = "2.18.1";
 in
 buildGoLatestModule {
   pname = "wakapi";
@@ -16,10 +16,10 @@ buildGoLatestModule {
     owner = "muety";
     repo = "wakapi";
     tag = version;
-    hash = "sha256-UK6m8d+Yf5JQgDV/TdPpQ9TL2Y4aG4tR/WOP11IFzfg=";
+    hash = "sha256-7smKi+uzexjMwxStpdfvV15aTKM8hkirXsSwAbZecc0=";
   };
 
-  vendorHash = "sha256-oXHTb7DLwWa/qOMSn3EhMTnDeUm1bIVGvuJzcxkiPF0=";
+  vendorHash = "sha256-6sX5TprIiZhHi4nibcAbQoOL/0gq6gWMjUQCKOF1+2k=";
 
   # Not a go module required by the project, contains development utilities
   excludedPackages = [ "scripts" ];
@@ -40,8 +40,14 @@ buildGoLatestModule {
       skippedTests = [
         # Skip tests that require network access
         "TestLoginHandlerTestSuite"
-        "Test_Load_OidcProviders"
+        "TestLoadOidcProviders"
         "TestUser_MinDataAge"
+        "TestPublicNetUrl"
+        "TestConfigTestSuite"
+        "TestWakatimeRelayMiddlewareTestSuite"
+        "TestServeHTTP_SkipNonPost"
+        "TestWakatimeUtils"
+        "TestWakatimeImporterTestSuite/TestCheckUrl"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
@@ -55,7 +61,7 @@ buildGoLatestModule {
     homepage = "https://wakapi.dev/";
     changelog = "https://github.com/muety/wakapi/releases/tag/${version}";
     description = "Minimalist self-hosted WakaTime-compatible backend for coding statistics";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       t4ccer
       isabelroses

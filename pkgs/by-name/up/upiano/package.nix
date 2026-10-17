@@ -39,7 +39,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     description = "Piano in your terminal";
     homepage = "https://github.com/eliasdorneles/upiano";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      sheeeng
+    ];
     mainProgram = "upiano";
   };
 })

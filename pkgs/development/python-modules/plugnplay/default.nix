@@ -3,14 +3,14 @@
   buildPythonPackage,
   fetchPypi,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "plugnplay";
   version = "0.5.4";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "877e2d2500a45aaf31e5175f9f46182088d3e2d64c1c6b9ff6c778ae0ee594c8";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-h34tJQCkWq8x5Rdfn0YYIIjT4tZMHGuf9sd4rg7llMg=";
   };
 
   # no tests
@@ -24,4 +24,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl2Only;
     maintainers = [ ];
   };
-}
+})

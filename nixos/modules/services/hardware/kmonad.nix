@@ -146,11 +146,8 @@ let
           ${lib.getExe cfg.package} ${mkCfg keyboard} \
             ${utils.escapeSystemdExecArgs cfg.extraArgs}
         '';
-        Restart = "always";
-        # Restart at increasing intervals from 2s to 1m
-        RestartSec = 2;
-        RestartSteps = 30;
-        RestartMaxDelaySec = "1min";
+        # Restarts are initiated by the accompanying path unit. See systemd.path(5).
+        Restart = "no";
         Nice = -20;
         DynamicUser = true;
         User = "kmonad";

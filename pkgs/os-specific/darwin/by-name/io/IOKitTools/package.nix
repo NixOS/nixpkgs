@@ -1,15 +1,15 @@
 {
-  lib,
   apple-sdk,
   mkAppleDerivation,
   ncurses,
   pkg-config,
+  sourceRelease,
   stdenvNoCC,
 }:
 
 let
-  iokitUser = apple-sdk.sourceRelease "IOKitUser";
-  xnu = apple-sdk.sourceRelease "xnu";
+  iokitUser = sourceRelease "IOKitUser";
+  xnu = sourceRelease "xnu";
 
   privateHeaders = stdenvNoCC.mkDerivation {
     name = "IOKitTools-deps-private-headers";

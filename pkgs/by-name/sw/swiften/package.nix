@@ -2,7 +2,7 @@
   stdenv,
   lib,
   libidn,
-  lua,
+  lua5_2_compat,
   miniupnpc,
   expat,
   zlib,
@@ -14,6 +14,9 @@
   boost186,
   scons,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "swiften";

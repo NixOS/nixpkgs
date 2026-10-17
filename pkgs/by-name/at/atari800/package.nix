@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
       WinCE, Sega Dreamcast, Android and other systems supported by the SDL
       library.
     '';
-    license = with lib.licenses; [ gpl2Plus ];
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };

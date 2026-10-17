@@ -5,17 +5,20 @@
 ### Overview of Lua {#lua-overview}
 
 Several versions of the Lua interpreter are available: luajit, lua 5.1, 5.2, 5.3.
-The attribute `lua` refers to the default interpreter, it is also possible to refer to specific versions, e.g. `lua5_2` refers to Lua 5.2.
-
+Each interpreter is specified with a versioned identifier, e.g. `lua5_2` refers
+to Lua 5.2.
 Lua libraries are in separate sets, with one set per interpreter version.
 
 The interpreters have several common attributes. One of these attributes is
 `pkgs`, which is a package set of Lua libraries for this specific
-interpreter. E.g., the `busted` package corresponding to the default interpreter
-is `lua.pkgs.busted`, and the lua 5.2 version is `lua5_2.pkgs.busted`.
-The main package set contains aliases to these package sets, e.g.
-`luaPackages` refers to `lua5_1.pkgs` and `lua52Packages` to
-`lua5_2.pkgs`.
+interpreter. E.g., the `busted` package corresponding to Lua 5.2 is
+is `lua5_2.pkgs.busted`, and the Lua 5.5 version is `lua5_5.pkgs.busted`.
+The main package set contains attributes for these package sets, e.g.
+`lua52Packages` refers to `lua5_2.pkgs` and `lua55Packages` to
+`lua5_5.pkgs`.
+
+`lua`, `lua5` and `luaPackages` are convenience aliases for use outside of
+nixpkgs and are currently assigned to `lua5_5` and `lua55Packages`.
 
 Note that nixpkgs patches the non-luajit interpreters to avoid referring to
 `/usr` and have `;;` (a [placeholder](https://www.lua.org/manual/5.1/manual.html#pdf-package.path) replaced with the default LUA_PATH) work correctly.
@@ -162,6 +165,17 @@ the package `luarocks-packages-updater`:
 nix-shell -p luarocks-packages-updater --run luarocks-packages-updater
 ```
 
+To add a new package without updating all packages, run
+
+```sh
+
+nix-shell -p luarocks-packages-updater
+luarocks-packages-updater add [--maintainers "<maintainer>"] <package-name>
+```
+
+The optional `--maintainers` argument accepts a space-separated list of nixpkgs maintainer names.
+When omitted, the package is added without maintainers.
+
 [luarocks2nix](https://github.com/nix-community/luarocks) is a tool capable of generating nix derivations from both rockspec and src.rock (and favors the src.rock).
 The automation only goes so far though and some packages need to be customized.
 These customizations go in [pkgs/development/lua-modules/overrides.nix](https://github.com/NixOS/nixpkgs/tree/master/pkgs/development/lua-modules/overrides.nix).
@@ -199,7 +213,7 @@ The Nix expressions for the interpreters can be found in `pkgs/development/inter
 
 Each interpreter has the following attributes:
 
-- `interpreter`. Alias for `${pkgs.lua}/bin/lua`.
+- `interpreter`. Alias for `${lib.getExe pkgs.lua}`.
 - `buildEnv`. Function to build lua interpreter environments with extra packages bundled together. See section *lua.buildEnv function* for usage and documentation.
 - `withPackages`. Simpler interface to `buildEnv`.
 - `pkgs`. Set of Lua packages for that specific interpreter. The package set can be modified by overriding the interpreter and passing `packageOverrides`.
@@ -232,7 +246,7 @@ The following is an example:
         vyp
         lblasc
       ];
-      license.fullName = "MIT/X11";
+      license = lib.licenses.mit;
     };
   };
 }
@@ -287,3 +301,4 @@ Now, `ps` is set to `lua5_1.pkgs`, matching the version of the interpreter.
 Following rules should be respected:
 
 * Commit names of Lua libraries should reflect that they are Lua libraries, so write for example `luaPackages.luafilesystem: 1.11 -> 1.12`.
+* Packages in Nixpkgs must not depend on the `lua`, `lua5` or `luaPackages` aliases. Depend on an explicit version instead, e.g. `lua5_4` or `lua54Packages`.

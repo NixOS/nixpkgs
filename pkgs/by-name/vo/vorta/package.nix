@@ -6,19 +6,20 @@
   qt6Packages,
   borgbackup,
   versionCheckHook,
+  nix-update-script,
   makeFontsConf,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "vorta";
-  version = "0.11.0";
+  version = "0.11.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "borgbase";
     repo = "vorta";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/60KVJGKNz3aouv5jzubFlz+AxPEbRDSv4ZO9MEi3V0=";
+    hash = "sha256-7vV4jv8Gy+viZhQmWECJ02VjoWGWDKTMnzrYkA60OzE=";
   };
 
   nativeBuildInputs = [
@@ -94,12 +95,17 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "tests/network_manager/test_darwin.py"
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     changelog = "https://github.com/borgbase/vorta/releases/tag/v${finalAttrs.version}";
     description = "Desktop Backup Client for Borg";
     homepage = "https://vorta.borgbase.com/";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ ma27 ];
+    maintainers = with lib.maintainers; [
+      ma27
+      stephsi
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "vorta";
   };

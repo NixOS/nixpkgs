@@ -47,7 +47,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocdbgapi";
-  version = "7.2.1";
+  version = "7.2.4";
 
   outputs = [
     "out"
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "ROCdbgapi";
-    rev = "rocm-${finalAttrs.version}";
+    tag = "rocm-${finalAttrs.version}";
     hash = "sha256-KqvhwfIv8pbr8WbnfAKl71fg5yxbwYcpzZcGU9Htdkc=";
   };
 
@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Debugger support for control of execution and inspection state of AMD's GPU architectures";
     homepage = "https://github.com/ROCm/ROCdbgapi";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };

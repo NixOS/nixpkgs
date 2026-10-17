@@ -7,14 +7,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libmd";
-  version = "1.1.0";
+  version = "1.3.0";
 
   src = fetchurl {
     urls = [
       "https://archive.hadrons.org/software/libmd/libmd-${finalAttrs.version}.tar.xz"
       "https://libbsd.freedesktop.org/releases/libmd-${finalAttrs.version}.tar.xz"
     ];
-    sha256 = "sha256-G9aqQidTE68xQcfPLluWTosf1IgCXK8vlx9DsAd2szI=";
+    hash = "sha256-/A8etrZ2ZHAybywBRpOAkZDmfbqEJ0pvuunUkS0GZwY=";
   };
 
   enableParallelBuilding = true;
@@ -23,11 +23,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+  strictDeps = true;
+
   outputs = [
     "out"
     "dev"
     "man"
   ];
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://www.hadrons.org/software/libmd/";

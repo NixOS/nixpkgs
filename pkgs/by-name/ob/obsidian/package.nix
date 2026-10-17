@@ -6,6 +6,7 @@
   electron,
   makeDesktopItem,
   imagemagick,
+  asar,
   autoPatchelfHook,
   writeScript,
   _7zz,
@@ -13,7 +14,7 @@
 }:
 let
   pname = "obsidian";
-  version = "1.12.7";
+  version = "1.14.4";
   appname = "Obsidian";
   meta = {
     description = "Powerful knowledge base that works on top of a local folder of plain text Markdown files";
@@ -26,26 +27,35 @@ let
       zaninime
       kashw2
       w-lfchen
+      prince213
     ];
 
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };
 
-  filename =
-    if stdenv.hostPlatform.isDarwin then "Obsidian-${version}.dmg" else "obsidian-${version}.tar.gz";
-  src = fetchurl {
-    url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/${filename}";
-    hash =
-      if stdenv.hostPlatform.isDarwin then
-        "sha256-O4XBO0zlVRLobhcKfNKklOLbaVrIiMBgHhU8uFt3iBs="
-      else
-        "sha256-/L4IsRHZwf2wm5wIlSsG4cgpxiFj66JYTEtOyFm+B50=";
+  srcs = {
+    x86_64-linux = fetchurl {
+      url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/obsidian-${version}.tar.gz";
+      hash = "sha256-5wt81jeH5/eYqE/sRT9cRGuRh3vT9hLo+5jpt2zIESA=";
+    };
+
+    aarch64-linux = fetchurl {
+      url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/obsidian-${version}-arm64.tar.gz";
+      hash = "sha256-/CEoBFFXE+2F/l71vEsAmHK8wBhHxL5PzBSXHe7ipC0=";
+    };
+
+    aarch64-darwin = fetchurl {
+      url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/Obsidian-${version}.dmg";
+      hash = "sha256-3PgY3SDuXZ3T54Lu4MDExHzCJTg7BRwvya99V3L1n3A=";
+    };
   };
+
+  src =
+    srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   icon = fetchurl {
     url = "https://obsidian.md/images/obsidian-logo-gradient.svg";
@@ -53,8 +63,9 @@ let
   };
 
   desktopItem = makeDesktopItem {
-    name = "obsidian";
+    name = "md.obsidian.Obsidian";
     desktopName = "Obsidian";
+    startupWMClass = "md.obsidian.Obsidian";
     comment = "Knowledge base";
     icon = "obsidian";
     exec = "obsidian %u";
@@ -75,10 +86,20 @@ let
       autoPatchelfHook
       makeWrapper
       imagemagick
+      asar
     ];
     installPhase = ''
       runHook preInstall
       mkdir -p $out/bin
+
+      # Mark Obsidian's app:// scheme `corsEnabled` to fix the internal PDF
+      # viewer; see https://github.com/NixOS/nixpkgs/pull/525772 for details.
+      # Remove once upstream registers the scheme with `corsEnabled`.
+      asar extract resources/app.asar app-src
+      substituteInPlace app-src/main.js \
+        --replace-fail "supportFetchAPI: true," "supportFetchAPI: true, corsEnabled: true,"
+      asar pack app-src resources/app.asar
+
       makeWrapper ${electron}/bin/electron $out/bin/obsidian \
         --add-flags $out/share/obsidian/app.asar \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-wayland-ime=true --wayland-text-input-version=3}}" \
@@ -95,13 +116,18 @@ let
       runHook postInstall
     '';
 
-    passthru.updateScript = writeScript "updater" ''
-      #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl jq common-updater-scripts
-      set -eu -o pipefail
-      latestVersion="$(curl -sS https://raw.githubusercontent.com/obsidianmd/obsidian-releases/master/desktop-releases.json | jq -r '.latestVersion')"
-      update-source-version obsidian "$latestVersion"
-    '';
+    passthru = {
+      inherit srcs;
+      updateScript = writeScript "updater" ''
+        #!/usr/bin/env nix-shell
+        #!nix-shell -i bash -p curl jq common-updater-scripts
+        set -eu -o pipefail
+        latestVersion="$(curl -sS https://raw.githubusercontent.com/obsidianmd/obsidian-releases/master/desktop-releases.json | jq -r '.latestVersion')"
+        for platform in ${toString meta.platforms}; do
+          update-source-version obsidian "$latestVersion" --ignore-same-version --source-key=passthru.srcs.$platform
+        done
+      '';
+    };
   };
 
   darwin = stdenv.mkDerivation {
@@ -112,15 +138,14 @@ let
       appname
       meta
       ;
-    sourceRoot = "${appname}.app";
     nativeBuildInputs = [
       makeWrapper
       _7zz
     ];
     installPhase = ''
       runHook preInstall
-      mkdir -p $out/{Applications/${appname}.app,bin}
-      cp -R . $out/Applications/${appname}.app
+      mkdir -p $out/{Applications,bin}
+      cp -R ${appname}.app $out/Applications
       makeWrapper $out/Applications/${appname}.app/Contents/MacOS/${appname} $out/bin/obsidian
       makeWrapper $out/Applications/${appname}.app/Contents/MacOS/obsidian-cli $out/bin/obsidian-cli
       runHook postInstall

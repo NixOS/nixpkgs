@@ -9,11 +9,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xrefresh";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchurl {
     url = "mirror://xorg/individual/app/xrefresh-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Ke1ZLV7ONaMCkATYxG8wAvkpcIcKlsEeOLr38RIri18=";
+    hash = "sha256-6UcEgTD2MA6L6GVzr48iW0hohPrBT8/gG9kTtB+nO9M=";
   };
 
   strictDeps = true;

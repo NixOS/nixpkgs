@@ -111,7 +111,8 @@ in
       type = lib.types.lines;
       default = "";
       example = lib.literalExpression ''
-        sed 's/skgid meadow/skgid nogroup/g' -i ruleset.conf
+        # replace users/groups that don't exist in the test
+        sed 's/skgid meadow/skgid root/g' -i ruleset.conf
       '';
       description = ''
         This script gets run before the ruleset is checked. It can be used to
@@ -311,7 +312,7 @@ in
             }
             ${cfg.extraDeletions}
           '';
-          deletionsScriptVar = "/var/lib/nftables/deletions.nft";
+          deletionsScriptVar = "/run/nftables/deletions.nft";
           makeDeletions = "${pkgs.nftables}/bin/nft -f ${deletionsScriptVar}";
           ensureDeletions = pkgs.writeShellScript "nftables-ensure-deletions" ''
             touch ${deletionsScriptVar}
@@ -382,7 +383,8 @@ in
             makeDeletions
             cleanupDeletionsScript
           ];
-          StateDirectory = "nftables";
+          RuntimeDirectory = "nftables";
+          RuntimeDirectoryPreserve = true;
         };
       unitConfig.DefaultDependencies = false;
     };

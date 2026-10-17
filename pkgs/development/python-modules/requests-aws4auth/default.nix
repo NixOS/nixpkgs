@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "requests-aws4auth";
-  version = "1.3.1";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tedder";
     repo = "requests-aws4auth";
     tag = "v${version}";
-    hash = "sha256-tRo38fdWqZmutGhWv8Hks+oFaLv770RlAHYgS3S6xJA=";
+    hash = "sha256-+DUWVtaHyMjL1Zl/7Bfzmi45dc7Vqk1EXfu/sCfMZuE=";
   };
 
   build-system = [ setuptools ];

@@ -13,6 +13,7 @@
 
 {
   name = "${rancherPackage.name}-etcd";
+  interactive.sshBackdoor.enable = true;
 
   nodes = {
 

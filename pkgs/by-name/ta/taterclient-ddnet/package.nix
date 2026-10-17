@@ -15,7 +15,7 @@
   libogg,
   libx11,
   opusfile,
-  pcre,
+  pcre2,
   python3,
   SDL2,
   sqlite,
@@ -33,18 +33,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "taterclient-ddnet";
-  version = "10.8.7";
+  version = "10.9.0";
 
   src = fetchFromGitHub {
     owner = "TaterClient";
     repo = "TClient";
     tag = "V${finalAttrs.version}";
-    hash = "sha256-jGi0eRKeYVGWes4AAzasKjdSqoYrEalxVHR/dYEzSXo=";
+    hash = "sha256-QlLxY1k9S9mvRJ0LL7/jpBfIn638eEEnQQ6tKvT/MJY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname src version;
-    hash = "sha256-VKGc4LQjt2FHbELLBKtV8rKpxjGBrzlA3m9BSdZ/6Z0=";
+    hash = "sha256-n+1SlgmjSe0ul/iuK3kjTGSvyYwdxwcRrCAnZyavZA8=";
   };
 
   nativeBuildInputs = [
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     curl
     libnotify
-    pcre
+    pcre2
     sqlite
     freetype
     libGLU
@@ -99,6 +99,16 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "DISCORD" false)
     (lib.cmakeFeature "CLIENT_EXECUTABLE" clientExecutable)
   ];
+
+  env = {
+    # It is also to avoid to the client being banned on some Teeworlds servers.
+    #
+    # The hash below has been generated with the command line below.
+    # git rev-parse --short=32 HEAD
+    #
+    # In accordance with this script https://github.com/TaterClient/TClient/blob/master/scripts/git_revision.py
+    DDNET_GIT_SHORTREV_HASH = "6b4118bf0ec86822dea43cc3e97b0645";
+  };
 
   # Since we are not building the server executable, the `run_tests` Makefile target
   # will not be generated.

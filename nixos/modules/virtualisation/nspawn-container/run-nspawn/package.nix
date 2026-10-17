@@ -3,10 +3,10 @@
   e2fsprogs,
   iproute2,
   lib,
-  mypy,
   ruff,
   setuptools,
   systemd,
+  ty,
 }:
 
 buildPythonApplication {
@@ -35,13 +35,13 @@ buildPythonApplication {
   doCheck = true;
 
   nativeCheckInputs = [
-    mypy
     ruff
+    ty
   ];
 
   checkPhase = ''
-    echo -e "\x1b[32m## run mypy\x1b[0m"
-    mypy run_nspawn
+    echo -e "\x1b[32m## run ty\x1b[0m"
+    ty check --error-on-warning run_nspawn
     echo -e "\x1b[32m## run ruff check\x1b[0m"
     ruff check .
     echo -e "\x1b[32m## run ruff format\x1b[0m"

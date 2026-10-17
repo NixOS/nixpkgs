@@ -1,6 +1,6 @@
 {
   lib,
-  electron_40,
+  electron_43,
   zip,
   makeWrapper,
   udev,
@@ -16,15 +16,18 @@
   nix-update-script,
 }:
 
+let
+  electron = electron_43;
+in
 buildNpmPackage (finalAttrs: {
   pname = "winboat";
-  version = "0.9.0";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "TibixDev";
     repo = "winboat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DgH6CAZf+XIgBav2xd2FF2MGRgGIyOs/98vqWHA3XYw=";
+    hash = "sha256-B+Pbi3nQsY3sHACGoaL8PhbHrTjlQbEDgVRWabwm8Iw=";
   };
 
   postPatch = ''
@@ -41,10 +44,12 @@ buildNpmPackage (finalAttrs: {
   buildInputs = [ udev ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
-  npmDepsHash = "sha256-DLkI9a030uM2X1et94e4nd/HEyw5ugtK8NEAn/J8p9U=";
+  npmDepsHash = "sha256-38hDI0z3lrdSvMTUZAotIuT7Kt/NZcl8UdrYpum1i1M=";
   makeCacheWritable = true;
 
-  guest-server = pkgsCross.mingwW64.callPackage ./guest-server.nix { };
+  guest-server = pkgsCross.mingwW64.callPackage ./guest-server.nix {
+    winboat = finalAttrs.finalPackage;
+  };
   passthru = {
     guest-server = finalAttrs.guest-server;
     updateScript = nix-update-script {
@@ -59,8 +64,8 @@ buildNpmPackage (finalAttrs: {
     node scripts/build.ts
     npm exec electron-builder --linux -- \
       --dir \
-      -c.electronDist=${electron_40.dist} \
-      -c.electronVersion=${electron_40.version}
+      -c.electronDist=${electron.dist} \
+      -c.electronVersion=${electron.version}
   '';
 
   installPhase = ''
@@ -81,7 +86,7 @@ buildNpmPackage (finalAttrs: {
     ln -sf $out/share/winboat/resources/data $out/share/winboat/data
     ln -sf $out/share/winboat/resources/guest_server $out/share/winboat/guest_server
 
-    makeWrapper ${electron_40}/bin/electron $out/bin/winboat \
+    makeWrapper ${electron}/bin/electron $out/bin/winboat \
       --add-flag "$out/share/winboat/resources/app.asar" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --suffix PATH : ${
@@ -116,7 +121,6 @@ buildNpmPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       rexies
-      ppom
     ];
     platforms = [ "x86_64-linux" ];
   };

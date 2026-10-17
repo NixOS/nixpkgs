@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "brave-search-cli";
-  version = "1.2.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "brave";
     repo = "brave-search-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wcZwgCPqIy+AVxpqcCI8rOyUOWXb7aYSsHJDS2pfpnE=";
+    hash = "sha256-9be8CdS92src2f56sIfYe8UaN3LWxtMGbrTvqzFw08U=";
   };
 
-  cargoHash = "sha256-qIBepW7I5meLX9V3yEq6zoIRaZWD3CVjyrN8zpTAbR0=";
+  cargoHash = "sha256-GA9qKuFh1YOaUPuAQ//VJqScLJaqxHIyLl/TDnOTsdY=";
 
   passthru.updateScript = nix-update-script { };
 

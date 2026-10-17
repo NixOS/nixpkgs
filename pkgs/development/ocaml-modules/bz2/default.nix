@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "irill";
     repo = "camlbz2";
     rev = version;
-    sha256 = "sha256-jBFEkLN2fbC3LxTu7C0iuhvNg64duuckBHWZoBxrV/U=";
+    hash = "sha256-jBFEkLN2fbC3LxTu7C0iuhvNg64duuckBHWZoBxrV/U=";
   };
 
   autoreconfFlags = [
@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "OCaml bindings for the libbz2 (AKA, bzip2) (de)compression library";
+    homepage = "https://gitlab.com/irill/camlbz2";
     downloadPage = "https://gitlab.com/irill/camlbz2";
     license = lib.licenses.lgpl21;
     broken = lib.versionOlder ocaml.version "4.02" || lib.versionAtLeast ocaml.version "5.0";

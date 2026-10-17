@@ -2,21 +2,44 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
+  pytestCheckHook,
+  pytest-timeout,
+  pyvirtualdisplay,
+  imagemagick,
+  inetutils,
+  xvfb,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAtrrs: {
   pname = "easyprocess";
   version = "1.1";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "EasyProcess";
-    inherit version;
+    inherit (finalAtrrs) version;
     hash = "sha256-iFiYMCpXqrlIlz6LXTKkIpOSufstmGqx1P/VkOW6kOw=";
   };
 
-  # No tests
-  doCheck = false;
+  build-system = [
+    setuptools
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-timeout
+    (pyvirtualdisplay.overridePythonAttrs { doCheck = false; }) # avoid reference loop
+    imagemagick
+    inetutils
+    xvfb
+  ];
+
+  disabledTests = [
+    "test_deadlock_pipe" # hangs, https://github.com/ponty/EasyProcess/issues/24
+  ];
 
   meta = {
     description = "Easy to use python subprocess interface";
@@ -24,4 +47,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsdOriginal;
     maintainers = with lib.maintainers; [ layus ];
   };
-}
+})

@@ -3,30 +3,34 @@
   stdenv,
   fetchFromGitHub,
   perl,
+  pkg-config,
   installShellFiles,
   libpcap,
+  yascreen,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dhcpdump";
-  version = "1.10";
+  version = "2.00";
 
   src = fetchFromGitHub {
-    owner = "bbonev";
+    owner = "dhcpdump-org";
     repo = "dhcpdump";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EtCwtRvAvZdfW/6MjHEXJTHoD/OknJeZJ7q0qb+CzeE=";
+    hash = "sha256-yIrB8ALkaewRpZduKCnnrpnr+H7mHSv9wrFAQaeQ8HU=";
   };
 
   strictDeps = true;
 
   nativeBuildInputs = [
     perl # pod2man
+    pkg-config
     installShellFiles
   ];
 
   buildInputs = [
     libpcap
+    yascreen
   ];
 
   installPhase = ''
@@ -40,8 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Tool for visualization of DHCP packets as recorded and output by tcpdump to analyze DHCP server responses";
-    homepage = "https://github.com/bbonev/dhcpdump";
-    changelog = "https://github.com/bbonev/dhcpdump/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/dhcpdump-org/dhcpdump";
+    changelog = "https://github.com/dhcpdump-org/dhcpdump/releases/tag/v${finalAttrs.version}";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ nickcao ];
     license = lib.licenses.bsd2;

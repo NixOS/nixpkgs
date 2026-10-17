@@ -27,7 +27,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Pure-Python Server Side Events (SSE) client";
     homepage = "https://github.com/mpetazzoni/sseclient";
-    changelog = "https://github.com/mpetazzoni/sseclient/releases/tag/sseclient-py-${finalAttrs.src.tag}";
+    changelog = "https://github.com/mpetazzoni/sseclient/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jamiemagee ];
   };

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   nix-update-script,
   autoreconfHook,
   pkg-config,
@@ -23,6 +24,28 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "rel-opendkim-${lib.replaceString "." "-" finalAttrs.version}";
     hash = "sha256-/IqWB0s39t8BeqpRIa8MZn4HgXlIMuU2UbYbpZGNo1s=";
   };
+
+  # TODO: remove when is merge
+  patches = [
+    (fetchpatch {
+      # https://github.com/trusteddomainproject/OpenDKIM/pull/288
+      name = "CVE-2020-35766.patch";
+      url = "https://github.com/trusteddomainproject/OpenDKIM/commit/520338d25af68cf263b97ba63037e3f5856a10da.patch";
+      hash = "sha256-O4a4boa67tj0nqxee6V+u7rd3l3RGaiWE+Mu0ib4DWE=";
+    })
+    (fetchpatch {
+      # https://github.com/trusteddomainproject/OpenDKIM/pull/287
+      name = "CVE-2022-48521.patch";
+      url = "https://github.com/trusteddomainproject/OpenDKIM/commit/e67c33e1a08cca793470e6a6ff44082f73f6d222.patch";
+      hash = "sha256-QtxiRM+/NDlQhfGB8XNX1M1PtQyXXarawoF+8pTTMVo=";
+    })
+    (fetchpatch {
+      # https://github.com/trusteddomainproject/OpenDKIM/pull/261
+      name = "fix-old-style-dkimf_base64_encode_file.patch";
+      url = "https://github.com/trusteddomainproject/OpenDKIM/commit/3f0aa0a31c11b9924f826708535071b68c22b731.patch";
+      hash = "sha256-nQCBGef2kjs9ZyHwPreNPQYW6jBOBTDhVq9RyeGSN/Y=";
+    })
+  ];
 
   configureFlags = [
     "--with-milter=${libmilter}"
@@ -63,11 +86,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     mainProgram = "opendkim";
-    knownVulnerabilities = [
-      "CVE-2020-35766: Privilege escalation in test suite"
-      "CVE-2022-48521: Specially crafted e-mails can bypass DKIM signature validation"
-      "Upstream OpenDKIM hasn't been updated in years, and is assumed to be unmaintained. Consider using an alternative such as rspamd."
-    ];
     maintainers = with lib.maintainers; [ maevii ];
   };
 })

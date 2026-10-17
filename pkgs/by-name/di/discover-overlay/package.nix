@@ -31,11 +31,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   dontWrapGApps = true;
 
-  makeWrapperArgs = [
-    "\${gappsWrapperArgs[@]}"
-    "--set DISPLAY ':0.0'"
-  ];
-
   propagatedBuildInputs = with python3.pkgs; [
     pulsectl-asyncio
     pycairo
@@ -45,12 +40,23 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     requests
     pillow
     setuptools
-    xlib
+    python-xlib
   ];
+
   postPatch = ''
     substituteInPlace discover_overlay/image_getter.py \
       --replace-fail /usr $out
   '';
+
+  preFixup = ''
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
+      "--set"
+      "DISPLAY"
+      ":0.0"
+    )
+  '';
+
   doCheck = false;
 
   meta = {

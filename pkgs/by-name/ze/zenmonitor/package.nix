@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation {
   pname = "zenmonitor";
-  version = "unstable-2025-06-12";
+  version = "1.5.0-unstable-2025-06-12";
 
   src = fetchFromGitHub {
     owner = "detiam";
     repo = "zenmonitor3";
     rev = "1e1ceec7353dc418578fe8ae56536bfee6adeca3";
-    sha256 = "sha256-q5BeLu0A2XJkJL8ptN4hj/iLhQmpb16QEhOuIhNzVaI=";
+    hash = "sha256-q5BeLu0A2XJkJL8ptN4hj/iLhQmpb16QEhOuIhNzVaI=";
   };
 
   buildInputs = [ gtk3 ];

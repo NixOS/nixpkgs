@@ -3,15 +3,15 @@
   stdenv,
   fetchbzr,
   pkg-config,
-  systemd,
+  systemdLibs,
   autoreconfHook,
   glib,
   dbus-glib,
   json-glib,
   gtk3,
-  libindicator-gtk3,
+  libindicator,
   libdbusmenu-gtk3,
-  libappindicator-gtk3,
+  libappindicator,
 }:
 
 stdenv.mkDerivation rec {
@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
     glib
     dbus-glib
     json-glib
-    systemd
+    systemdLibs
     gtk3
-    libindicator-gtk3
+    libindicator
     libdbusmenu-gtk3
-    libappindicator-gtk3
+    libappindicator
   ];
 
   postPatch = ''

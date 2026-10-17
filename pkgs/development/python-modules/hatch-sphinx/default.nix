@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "hatch-sphinx";
-  version = "0.0.4";
+  version = "0.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "llimeht";
     repo = "hatch-sphinx";
     tag = "v${version}";
-    hash = "sha256-8g0UkDMf05CVd2VbnV30pZpQ9chJhCkKfci7zmcIOoQ=";
+    hash = "sha256-8yImNwcuLFXQtXFCe6BMH4P6SH8GVS/U44vqN/XUjRU=";
   };
 
   build-system = [

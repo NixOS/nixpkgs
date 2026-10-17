@@ -9,6 +9,7 @@
   gettext,
   gitMinimal,
   glib,
+  glib-networking,
   gst_all_1,
   gtk4,
   libadwaita,
@@ -63,6 +64,7 @@ stdenv.mkDerivation rec {
     dbus
     gdk-pixbuf
     glib
+    glib-networking
     gtk4
     libadwaita
     libglycin-gtk4

@@ -7,26 +7,32 @@
   nixosTests,
   nix-update-script,
   installShellFiles,
+  mold,
   withQuic ? false, # with QUIC protocol support
+
+  formats,
+  bash,
+  iproute2,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "easytier";
-  version = "2.5.0";
+  version = "2.6.4";
 
   src = fetchFromGitHub {
     owner = "EasyTier";
     repo = "EasyTier";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XnEfxWDKUTQFWYKtqetI7sLbOmGqw2BqpU5by1ajZGA=";
+    hash = "sha256-lwqpOVKFm85AiBb7NWLAkjSrWSe5pzF0AuEmmDo+v0k=";
   };
 
-  cargoHash = "sha256-ueDulcv7DnwvMWYayc3hzBVtldX6gg7fP7YQpdUPq7c=";
+  cargoHash = "sha256-c+rOjokrL0U63s1CMfy6KlGI7VoSmtxuQjBNDAagSdg=";
 
   nativeBuildInputs = [
     protobuf
     rustPlatform.bindgenHook
     installShellFiles
+    mold
   ];
 
   buildNoDefaultFeatures = stdenv.hostPlatform.isMips;
@@ -46,8 +52,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doCheck = false; # tests failed due to heavy rely on network
 
   passthru = {
-    tests = { inherit (nixosTests) easytier; };
+    tests = { inherit (nixosTests) easytier easytier-modular; };
     updateScript = nix-update-script { };
+  };
+
+  passthru.services.default = {
+    imports = [
+      (lib.modules.importApply ./service.nix { inherit formats bash iproute2; })
+    ];
+    easytier.package = finalAttrs.finalPackage;
   };
 
   meta = {

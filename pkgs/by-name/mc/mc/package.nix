@@ -83,21 +83,23 @@ stdenv.mkDerivation (finalAttrs: {
       --replace /bin/rm ${coreutils}/bin/rm
   '';
 
-  postFixup = lib.optionalString ((!stdenv.hostPlatform.isDarwin) && x11Support) ''
-    # libX11.so is loaded dynamically so autopatch doesn't detect it
-    patchelf \
-      --add-needed ${libx11}/lib/libX11.so \
-      $out/bin/mc
-  '';
+  postFixup =
+    lib.optionalString (!stdenv.hostPlatform.isDarwin && x11Support && !stdenv.hostPlatform.isStatic)
+      ''
+        # libX11.so is loaded dynamically so autopatch doesn't detect it
+        patchelf \
+          --add-needed ${libx11}/lib/libX11.so \
+          $out/bin/mc
+      '';
 
   passthru.updateScript = writeScript "update-mc" ''
     #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl pcre common-updater-scripts
+    #!nix-shell -i bash -p curl pcre2 common-updater-scripts
 
     set -eu -o pipefail
 
     # Expect the text in format of "Current version is: 4.8.27; ...".
-    new_version="$(curl -s https://midnight-commander.org/ | pcregrep -o1 'Current version is: (([0-9]+\.?)+);')"
+    new_version="$(curl -s https://midnight-commander.org/ | pcre2grep -o1 'Current version is: (([0-9]+\.?)+);')"
     update-source-version mc "$new_version"
   '';
 

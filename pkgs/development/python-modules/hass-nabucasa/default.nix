@@ -31,7 +31,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "hass-nabucasa";
-  version = "2.2.0";
+  version = "2.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.14";
@@ -40,7 +40,7 @@ buildPythonPackage (finalAttrs: {
     owner = "nabucasa";
     repo = "hass-nabucasa";
     tag = finalAttrs.version;
-    hash = "sha256-+HRyXdl/gw/dhZ+T3peinD5FMm0O/M87Uu/wyLU1eJs=";
+    hash = "sha256-neW9v4o0Au9+AYmfzDoGXHOLMvHzQcloinmaZ7O98HY=";
   };
 
   postPatch = ''
@@ -49,6 +49,10 @@ buildPythonPackage (finalAttrs: {
   '';
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "acme"
+  ];
 
   dependencies = [
     acme
@@ -79,6 +83,11 @@ buildPythonPackage (finalAttrs: {
     xmltodict
   ];
 
+  disabledTests = [
+    # snapshot formatting changed
+    "test_subscribe_and_publish"
+  ];
+
   pythonImportsCheck = [ "hass_nabucasa" ];
 
   meta = {
@@ -88,6 +97,7 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       fab
+      Scriptkiddi
     ];
   };
 })

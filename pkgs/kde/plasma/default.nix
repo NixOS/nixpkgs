@@ -14,7 +14,6 @@
   kde-gtk-config = callPackage ./kde-gtk-config { };
   kdecoration = callPackage ./kdecoration { };
   kdeplasma-addons = callPackage ./kdeplasma-addons { };
-  kgamma = callPackage ./kgamma { };
   kglobalacceld = callPackage ./kglobalacceld { };
   kinfocenter = callPackage ./kinfocenter { };
   kmenuedit = callPackage ./kmenuedit { };
@@ -25,11 +24,11 @@
   kscreenlocker = callPackage ./kscreenlocker { };
   ksshaskpass = callPackage ./ksshaskpass { };
   ksystemstats = callPackage ./ksystemstats { };
+  kup = callPackage ./kup { };
   kwallet-pam = callPackage ./kwallet-pam { };
   kwayland = callPackage ./kwayland { };
   kwayland-integration = callPackage ./kwayland-integration { };
   kwin = callPackage ./kwin { };
-  kwin-x11 = callPackage ./kwin-x11 { };
   kwrited = callPackage ./kwrited { };
   layer-shell-qt = callPackage ./layer-shell-qt { };
   libkscreen = callPackage ./libkscreen { };
@@ -41,6 +40,7 @@
   oxygen-sounds = callPackage ./oxygen-sounds { };
   plasma-activities = callPackage ./plasma-activities { };
   plasma-activities-stats = callPackage ./plasma-activities-stats { };
+  plasma-bigscreen = callPackage ./plasma-bigscreen { };
   plasma-browser-integration = callPackage ./plasma-browser-integration { };
   plasma-desktop = callPackage ./plasma-desktop { };
   plasma-dialer = callPackage ./plasma-dialer { };
@@ -71,6 +71,6 @@
   spacebar = callPackage ./spacebar { };
   spectacle = callPackage ./spectacle { };
   systemsettings = callPackage ./systemsettings { };
-  wacomtablet = callPackage ./wacomtablet { };
+  union = callPackage ./union { };
   xdg-desktop-portal-kde = callPackage ./xdg-desktop-portal-kde { };
 }

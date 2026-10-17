@@ -51,7 +51,12 @@ python3Packages.buildPythonApplication {
     "man"
   ];
 
-  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ffmpeg-full ]}" ];
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ ffmpeg-full ])
+  ];
 
   postInstall = ''
     mkdir -p $man/share/man/man1

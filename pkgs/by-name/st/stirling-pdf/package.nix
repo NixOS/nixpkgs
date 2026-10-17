@@ -4,14 +4,17 @@
   fetchFromGitHub,
   fetchNpmDeps,
   rustPlatform,
+  writeShellScriptBin,
 
   cargo,
   cargo-tauri,
-  gradle_8,
+  go-task,
+  gradle_9,
   makeBinaryWrapper,
   nodejs,
   npmHooks,
   pkg-config,
+  python3,
   wrapGAppsHook3,
 
   glib-networking,
@@ -20,10 +23,11 @@
   openssl,
   webkitgtk_4_1,
 
-  nix-update-script,
   nixosTests,
+  stirling-pdf,
 
   isDesktopVariant ? false,
+  withAdditionalFeatures ? !isDesktopVariant,
   buildWithFrontend ? !isDesktopVariant,
 }:
 
@@ -31,40 +35,106 @@
 assert isDesktopVariant -> !buildWithFrontend;
 
 let
-  gradle = gradle_8;
+  gradle = gradle_9;
+  # The Gradle shell launcher has a 64 MiB client heap. It therefore forks a
+  # daemon for this project's 2 GiB JVM configuration, even with --no-daemon.
+  # Darwin's build sandbox cannot connect to that daemon's loopback socket.
+  # Match the project's JVM arguments and forward the Nix Gradle hook's
+  # temporary trust store so Gradle can run its tasks in the client process.
+  gradleClient = writeShellScriptBin "gradle" ''
+    jvmOpts=()
+    for arg in "$@"; do
+      case "$arg" in
+        -Djavax.net.ssl.trustStore=*|-Djavax.net.ssl.trustStorePassword=*)
+          jvmOpts+=("$arg")
+          ;;
+      esac
+    done
+    exec ${lib.getExe gradle.jdk} \
+      -Xmx2g -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8 \
+      --add-opens=java.prefs/java.util.prefs=ALL-UNNAMED \
+      "''${jvmOpts[@]}" \
+      -javaagent:${gradle.unwrapped}/libexec/gradle/lib/agents/gradle-instrumentation-agent-${gradle.version}.jar \
+      -Dorg.gradle.appname=gradle \
+      -jar ${gradle.unwrapped}/libexec/gradle/lib/gradle-gradle-cli-main-${gradle.version}.jar \
+      "$@"
+  '';
   jre = jdk25;
+  python = python3.withPackages (ps: [ ps.fonttools ]);
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "stirling-pdf" + lib.optionalString isDesktopVariant "-desktop";
-  version = "2.8.0";
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  pname =
+    "stirling-pdf"
+    + lib.optionalString isDesktopVariant "-desktop"
+    + lib.optionalString (!isDesktopVariant && !withAdditionalFeatures) "-free";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "Stirling-Tools";
     repo = "Stirling-PDF";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5MZwwBT8Qi1kO+DAO/3JIm0/yAFtQLBo1UXDRZUjK7s=";
+    hash =
+      if withAdditionalFeatures || isDesktopVariant then
+        "sha256-u6/OpRTym9SHZZVi4I/aKoH9hq8YEGbg4rz0/bxmLuo="
+      else
+        "sha256-GKky6Z/cu7NLuEk/f963zg1U5QwzxbqPEXzSdLmvqhA=";
+    # The public cache must not distribute directories under the upstream
+    # User License when building the MIT-only server.
+    postFetch = lib.optionalString (!withAdditionalFeatures && !isDesktopVariant) ''
+      rm -rf "$out/app/proprietary" "$out/app/saas" "$out/engine"
+      rm -rf "$out/frontend/editor/src/"{proprietary,desktop,saas,cloud,prototypes,portal,portal-saas}
+    '';
   };
 
   patches = [
     # remove timestamp from the header of a generated .properties file
     ./remove-props-file-timestamp.patch
 
-    # Note: only affects the desktop variant
-    # fix path to the stirling-pdf binary
-    # and add support for the stirlingpdf:// protocol
-    ./fix-desktop-file.patch
-  ];
+    # JPDFium declares Linux x64 as a transitive runtime dependency on every host.
+    ./select-host-jpdfium-native.patch
+
+    # tests require network facilities intentionally unavailable in the Nix sandbox
+    ./skip-sandbox-incompatible-tests.patch
+
+    # A busy wait can finish before the timeout callback runs on loaded builders.
+    ./fix-flaky-job-timeout-test.patch
+
+    # Avoid a 280 MiB temporary char array in the oversized-input test.
+    ./avoid-oversize-test-oom.patch
+  ]
+  ++ lib.optionals (withAdditionalFeatures || isDesktopVariant) [
+    ./skip-proprietary-network-test.patch
+    # Upstream corpus tests filter /build from absolute paths, hiding every fixture in Nix builds.
+    ./fix-corpus-tests-in-build-directory.patch
+  ]
+  ++ lib.optionals (!withAdditionalFeatures && !isDesktopVariant) [ ./free-source.patch ];
+
+  postPatch = ''
+    substituteInPlace gradle.properties \
+      --replace-fail 'org.gradle.daemon=true' 'org.gradle.daemon=false' \
+      --replace-fail 'org.gradle.jvmargs=-Xmx2g -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8' \
+        'org.gradle.jvmargs=-Xmx2g -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8 --add-opens=java.prefs/java.util.prefs=ALL-UNNAMED'
+  ''
+  + lib.optionalString isDesktopVariant ''
+    # Nixpkgs does not produce artifacts for Stirling-PDF's upstream updater
+    # and does not have access to upstream's private signing key.
+    substituteInPlace frontend/editor/src-tauri/tauri.conf.json \
+      --replace-fail '"createUpdaterArtifacts": true' '"createUpdaterArtifacts": false'
+  '';
 
   npmRoot = "frontend";
 
   npmDeps = fetchNpmDeps {
-    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
+    name = "stirling-pdf-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src patches;
     postPatch = "cd ${finalAttrs.npmRoot}";
-    hash = "sha256-HyQok7Cd1kfWKCtaeHAhvZgxSvaKCk32bdJoNKj//rA=";
+    hash = "sha256-N3Af1XbFkSnA2xVb+hm08TJiMpas01r+qxFZbMeFmZ8=";
   };
 
-  cargoRoot = "frontend/src-tauri";
+  cargoRoot = "frontend/editor/src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -75,39 +145,45 @@ stdenv.mkDerivation (finalAttrs: {
       patches
       cargoRoot
       ;
-    hash = "sha256-t6TBUsfOadn3KNLxva6iajlhg21dFqxgH962e1bIRLI=";
+    hash = "sha256-HLC1nknDiN4Gzws6cu3lV3zo2vzeoTyqu4qsiq3688c=";
   };
 
   mitmCache = gradle.fetchDeps {
-    inherit (finalAttrs) pname;
+    # The shared lock is generated from the full source so it covers both
+    # server variants without adding the restricted source to the free output.
+    pkg = if withAdditionalFeatures || isDesktopVariant then finalAttrs.finalPackage else stirling-pdf;
     data = ./deps.json;
   };
 
   __darwinAllowLocalNetworking = true;
 
-  # we'll trigger it manually in postBuild
-  dontTauriBuild = true;
-
   env = {
     PUPPETEER_SKIP_DOWNLOAD = "1";
-    # taken from here https://github.com/Stirling-Tools/Stirling-PDF/blob/main/.github/workflows/tauri-build.yml#L346-L348
-    VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY = "sb_publishable_UHz2SVRF5mvdrPHWkRteyA_yNlZTkYb";
-    VITE_SAAS_SERVER_URL = "https://app.stirlingpdf.com";
-    VITE_SAAS_BACKEND_API_URL = "https://api.stirlingpdf.com";
+    DISABLE_ADDITIONAL_FEATURES = if withAdditionalFeatures then "false" else "true";
   };
 
-  # disable spotless because it tries to fetch files not in deps.json
-  # and also because it slows down the build process
   gradleFlags = [
-    "-x"
-    "spotlessApply"
-    "-DDISABLE_ADDITIONAL_FEATURES=true"
+    "-PnoSpotless" # disable spotless because it tries to fetch files not in deps.json and also because it slows down the build process
   ]
   ++ lib.optionals buildWithFrontend [ "-PbuildWithFrontend=true" ];
+
+  gradleUpdateScript = ''
+    runHook preBuild
+    runHook preGradleUpdate
+
+    # The build selects one JPDFium native jar for its host. Cache every
+    # upstream platform and both feature variants in the same lockfile.
+    DISABLE_ADDITIONAL_FEATURES=false gradle nixDownloadDeps -PjpdfiumPlatforms=all
+    DISABLE_ADDITIONAL_FEATURES=true gradle nixDownloadDeps -PjpdfiumPlatforms=all
+
+    runHook postGradleUpdate
+  '';
 
   doCheck = true;
 
   nativeBuildInputs = [
+    go-task
+    gradleClient
     gradle
     jre # one of the tests also require that the `java` command is available on the command line
     makeBinaryWrapper
@@ -133,14 +209,21 @@ stdenv.mkDerivation (finalAttrs: {
     webkitgtk_4_1
   ];
 
-  postBuild = lib.optionalString isDesktopVariant ''
-    install -Dm644 ./app/core/build/libs/stirling-pdf-*.jar -t ./frontend/src-tauri/libs
-    mkdir -p ./frontend/src-tauri/runtime/
-    ln -s ${jre} ./frontend/src-tauri/runtime/jre
+  dontUseGradleBuild = isDesktopVariant; # we'll use the buildPhase from cargo-tauri-hook for the desktop app
 
-    # Unset these, since tauriBuildHook would recursively call them
-    unset preBuild postBuild
-    tauriBuildHook
+  # prepare the resources before building the desktop app
+  preBuild = lib.optionalString isDesktopVariant ''
+    MODE=desktop task frontend:prepare
+
+    # this simulates what the desktop:jlink:jar would do
+    gradle bootJar
+    install -Dm644 ./app/core/build/libs/stirling-pdf-*.jar -t ./frontend/editor/src-tauri/libs
+
+    # creates as minimal jre via jlink
+    task desktop:jlink:runtime
+
+    substituteInPlace frontend/editor/src-tauri/stirling-pdf.desktop \
+      --replace-fail 'MimeType=application/pdf;' 'MimeType=application/pdf;x-scheme-handler/stirlingpdf;'
   '';
 
   # we use the installPhase from cargo-tauri-hook when we're building the desktop variant
@@ -148,43 +231,72 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -Dm644 ./app/core/build/libs/stirling-pdf-*.jar $out/share/stirling-pdf/Stirling-PDF.jar
+    install -Dm644 ./scripts/convert_cff_to_ttf.py $out/share/stirling-pdf/scripts/convert_cff_to_ttf.py
     makeWrapper ${lib.getExe jre} $out/bin/Stirling-PDF \
-      --add-flags "-jar $out/share/stirling-pdf/Stirling-PDF.jar"
+      --add-flags "-jar $out/share/stirling-pdf/Stirling-PDF.jar" \
+      --set-default PDFEDITOR_CFFCONVERTER_PYTHONCOMMAND ${lib.getExe python} \
+      --set-default PDFEDITOR_CFFCONVERTER_PYTHONSCRIPT $out/share/stirling-pdf/scripts/convert_cff_to_ttf.py
 
     runHook postInstall
   '';
 
-  # tauri installs the jre without preserving symlinks
-  # so we just symlink it again into the install location
-  # on darwin, we also create a wrapper for the binary inside the app bundle
-  postInstall = lib.optionalString isDesktopVariant ''
-    res_dir="$out/lib/Stirling-PDF/"
-    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
-      res_dir="$out/Applications/Stirling-PDF.app/Contents/Resources"
-      makeWrapper "$out/Applications/Stirling-PDF.app/Contents/MacOS/stirling-pdf" "$out/bin/stirling-pdf"
-    ''}
-    rm -r "$res_dir/runtime/jre"
-    ln -s ${jre} "$res_dir/runtime/jre"
+  postInstall = ''
+    install -Dm644 LICENSE $out/share/licenses/stirling-pdf/LICENSE
+  ''
+  + lib.optionalString withAdditionalFeatures ''
+    install -Dm644 app/proprietary/LICENSE $out/share/licenses/stirling-pdf/app-proprietary-LICENSE
+    install -Dm644 frontend/editor/src/proprietary/LICENSE $out/share/licenses/stirling-pdf/frontend-proprietary-LICENSE
+  ''
+  + lib.optionalString isDesktopVariant ''
+    install -Dm644 frontend/editor/src/desktop/LICENSE $out/share/licenses/stirling-pdf/frontend-desktop-LICENSE
+    install -Dm644 frontend/editor/src/proprietary/LICENSE $out/share/licenses/stirling-pdf/frontend-proprietary-LICENSE
+  ''
+  + lib.optionalString (isDesktopVariant && stdenv.hostPlatform.isDarwin) ''
+    makeWrapper "$out/Applications/Stirling PDF.app/Contents/MacOS/Stirling-PDF" "$out/bin/stirling-pdf"
   '';
 
   passthru = {
-    updateScript = nix-update-script { };
-    tests = { inherit (nixosTests) stirling-pdf-desktop; };
+    tests = {
+      inherit (nixosTests) stirling-pdf-desktop; # TODO: fix or remove
+    }
+    // lib.optionalAttrs (!isDesktopVariant) {
+      inherit (nixosTests) stirling-pdf;
+    };
+  }
+  // lib.optionalAttrs (!isDesktopVariant && withAdditionalFeatures) {
+    # this being optional makes the auto-update PRs always put stirling-pdf in the title
+    updateScript = ./update.sh;
   };
 
   meta = {
     changelog = "https://github.com/Stirling-Tools/Stirling-PDF/releases/tag/v${finalAttrs.version}";
     description =
-      "Powerful, open-source PDF editing platform "
+      "PDF editing platform "
       + (if isDesktopVariant then "runnable as a desktop app" else "hostable as a web app");
     homepage = "https://github.com/Stirling-Tools/Stirling-PDF";
-    license = lib.licenses.mit;
-    mainProgram = if isDesktopVariant then "stirling-pdf" else "Stirling-PDF";
-    maintainers = with lib.maintainers; [ tomasajt ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license =
+      if withAdditionalFeatures || isDesktopVariant then
+        [
+          lib.licenses.mit
+          lib.licenses.unfree
+        ]
+      else
+        lib.licenses.mit;
+    mainProgram =
+      if isDesktopVariant && stdenv.hostPlatform.isDarwin then "stirling-pdf" else "Stirling-PDF";
+    maintainers = with lib.maintainers; [
+      tomasajt
+      staticdev
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # java deps
+      binaryNativeCode # bundled jpdfium inside jar
     ];
   };
 })

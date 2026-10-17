@@ -12,19 +12,26 @@
   bison,
   flex,
   ctestCheckHook,
+  buildPackages,
   static ? stdenv.hostPlatform.isStatic,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "thrift";
-  version = "0.22.0";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "thrift";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gGAO+D0A/hEoHMm6OvRBc1Mks9y52kfd0q/Sg96pdW4=";
+    hash = "sha256-+o/2exHsunjQBGjXrNQ1pQ5TKV53++qCxIMeVyOh5QY=";
   };
+
+  postPatch = lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+    # Compiling the tests doesn't work for cross builds.
+    substituteInPlace lib/py/CMakeLists.txt \
+      --replace-fail 'COMMAND ''${THRIFT_COMPILER} --gen py test/test_thrift_file/TestServer.thrift' ""
+  '';
 
   # Workaround to make the Python wrapper not drop this package:
   # pythonFull.buildEnv.override { extraLibs = [ thrift ]; }
@@ -35,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     flex
     pkg-config
-    (python3.withPackages (
+    (buildPackages.python3.withPackages (
       ps:
       with ps;
       [
@@ -74,7 +81,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # FIXME: Fails to link in static mode with undefined reference to
     # `boost::unit_test::unit_test_main(bool (*)(), int, char**)'
-    (lib.cmakeBool "BUILD_TESTING" (!static))
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
+    # Building tutorials requires running thrift.
+    (lib.cmakeBool "BUILD_TUTORIALS" (stdenv.buildPlatform.canExecute stdenv.hostPlatform))
   ];
 
   disabledTests = [
@@ -103,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
     "StressTestNonBlocking"
   ];
 
-  doCheck = !static;
+  doCheck = !static && !stdenv.hostPlatform.isDarwin; # FIXME darwin?
 
   enableParallelChecking = false;
 
@@ -111,6 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library for scalable cross-language services";
     mainProgram = "thrift";
     homepage = "https://thrift.apache.org/";
+    downloadPage = "https://github.com/apache/thrift";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ bjornfor ];

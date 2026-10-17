@@ -1,34 +1,37 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
   chardet,
+  fetchPypi,
+  hatchling,
   hypothesis,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "binaryornot";
-  version = "0.4.4";
-  format = "setuptools";
+  version = "0.6.0";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "359501dfc9d40632edc9fac890e19542db1a287bbcfa58175b66658392018061";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-zI1Xz6cddP+MKKdyZzTVOoUdAvrZ46VYH7gH+Yn3AvA=";
   };
 
-  prePatch = ''
-    # TypeError: binary() got an unexpected keyword argument 'average_size'
-    substituteInPlace tests/test_check.py \
-      --replace "average_size=512" ""
-  '';
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [ chardet ];
+  dependencies = [ chardet ];
 
   nativeCheckInputs = [ hypothesis ];
 
+  pythonImportsCheck = [ "binaryornot" ];
+
   meta = {
-    homepage = "https://github.com/audreyr/binaryornot";
     description = "Ultra-lightweight pure Python package to check if a file is binary or text";
+    homepage = "https://github.com/audreyr/binaryornot";
+    changelog = "https://github.com/binaryornot/binaryornot/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
-}
+})
