@@ -2,22 +2,20 @@
   bashly = {
     dependencies = [
       "colsole"
-      "completely"
       "gtx"
-      "listen"
-      "lp"
       "mister_bin"
       "requires"
       "tty-markdown"
+      "watchly"
     ];
     groups = [ "default" ];
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1a5kqfwkknwd2j1dbdbqgyikm196ah22dfx9f34yq5xy15im19cs";
+      sha256 = "0c3l7v27x6bbzhza3bg8bkj156f7d6pifc9plg53b5rifr922y7h";
       type = "gem";
     };
-    version = "1.4.0";
+    version = "2.0.0";
   };
   colsole = {
     groups = [ "default" ];
@@ -28,21 +26,6 @@
       type = "gem";
     };
     version = "1.0.1";
-  };
-  completely = {
-    dependencies = [
-      "colsole"
-      "erb"
-      "mister_bin"
-    ];
-    groups = [ "default" ];
-    platforms = [ ];
-    source = {
-      remotes = [ "https://rubygems.org" ];
-      sha256 = "0pkciknwlfkxjmdbww6nprim7wz5pzn7gwj1ga8lfpw0hifwv4z4";
-      type = "gem";
-    };
-    version = "0.8.0";
   };
   docopt_ng = {
     groups = [ "default" ];
@@ -64,16 +47,6 @@
     };
     version = "6.0.7";
   };
-  ffi = {
-    groups = [ "default" ];
-    platforms = [ ];
-    source = {
-      remotes = [ "https://rubygems.org" ];
-      sha256 = "1kqasqvy8d7r09ri4n6bkdwbk63j7afd9ilsw34nzlgh0qp69ldw";
-      type = "gem";
-    };
-    version = "1.17.4";
-  };
   gtx = {
     dependencies = [ "erb" ];
     groups = [ "default" ];
@@ -90,10 +63,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "026v93kja19bfslnwi9xfq2dj4r89kkwdprim4whjg6h3n4lz9zg";
+      sha256 = "1cgvhm0d4awr8j42b8v1nl1jfgx45ihv8mylargfi3lj697k00x4";
       type = "gem";
     };
-    version = "0.9.2";
+    version = "0.9.4";
   };
   kramdown = {
     dependencies = [ "rexml" ];
@@ -105,41 +78,6 @@
       type = "gem";
     };
     version = "2.5.2";
-  };
-  listen = {
-    dependencies = [
-      "logger"
-      "rb-fsevent"
-      "rb-inotify"
-    ];
-    groups = [ "default" ];
-    platforms = [ ];
-    source = {
-      remotes = [ "https://rubygems.org" ];
-      sha256 = "1ln9c0vx165hkfbn2817qw4m6i77xcxh6q0r5v6fqfhlcbdq5qf6";
-      type = "gem";
-    };
-    version = "3.10.0";
-  };
-  logger = {
-    groups = [ "default" ];
-    platforms = [ ];
-    source = {
-      remotes = [ "https://rubygems.org" ];
-      sha256 = "00q2zznygpbls8asz5knjvvj2brr3ghmqxgr83xnrdj4rk3xwvhr";
-      type = "gem";
-    };
-    version = "1.7.0";
-  };
-  lp = {
-    groups = [ "default" ];
-    platforms = [ ];
-    source = {
-      remotes = [ "https://rubygems.org" ];
-      sha256 = "0ns1aza32n929w7smg1dsn4g6qlfi7k1jrvssyn35cicmwn0gyyr";
-      type = "gem";
-    };
-    version = "0.2.1";
   };
   mister_bin = {
     dependencies = [
@@ -166,27 +104,6 @@
       type = "gem";
     };
     version = "0.8.0";
-  };
-  rb-fsevent = {
-    groups = [ "default" ];
-    platforms = [ ];
-    source = {
-      remotes = [ "https://rubygems.org" ];
-      sha256 = "1zmf31rnpm8553lqwibvv3kkx0v7majm1f341xbxc0bk5sbhp423";
-      type = "gem";
-    };
-    version = "0.11.2";
-  };
-  rb-inotify = {
-    dependencies = [ "ffi" ];
-    groups = [ "default" ];
-    platforms = [ ];
-    source = {
-      remotes = [ "https://rubygems.org" ];
-      sha256 = "0vmy8xgahixcz6hzwy4zdcyn2y6d6ri8dqv5xccgzc1r292019x0";
-      type = "gem";
-    };
-    version = "0.11.1";
   };
   reline = {
     dependencies = [ "io-console" ];
@@ -311,5 +228,15 @@
       type = "gem";
     };
     version = "1.4.0";
+  };
+  watchly = {
+    groups = [ "default" ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "0ryhm2m0waw02k5fg4cc3xs06m5xnl436a9g2qjk6w4api4x97gb";
+      type = "gem";
+    };
+    version = "0.2.0";
   };
 }
