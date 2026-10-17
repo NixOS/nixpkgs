@@ -9028,8 +9028,6 @@ with pkgs;
     xppen_4
     ;
 
-  ydiff = with python3.pkgs; toPythonApplication ydiff;
-
   youtube-dl = with python3Packages; toPythonApplication youtube-dl;
 
   youtube-dl-light = with python3Packages; toPythonApplication youtube-dl-light;
