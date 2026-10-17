@@ -2514,8 +2514,6 @@ with pkgs;
 
   stirling-pdf-free = stirling-pdf.override { withAdditionalFeatures = false; };
 
-  stm32loader = with python3Packages; toPythonApplication stm32loader;
-
   solc-select = with python3Packages; toPythonApplication solc-select;
 
   splot = haskell.lib.compose.justStaticExecutables haskellPackages.splot;
