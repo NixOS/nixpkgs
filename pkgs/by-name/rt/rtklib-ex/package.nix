@@ -7,6 +7,7 @@
   lib,
   fetchFromGitHub,
   qt6,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     lapack
     qt6.wrapQtAppsHook
     qt6.qttools
+    wrapGAppsHook3
   ];
 
   buildInputs = [
