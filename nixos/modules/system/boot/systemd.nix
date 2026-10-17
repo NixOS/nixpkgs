@@ -441,6 +441,17 @@ in
       '';
     };
 
+    defaultPath = mkOption {
+      type = types.listOf types.package;
+      default = [ ];
+      description = ''
+        Packages appended to the {env}`PATH` environment variable of all
+        system and user services.
+
+        Individual services can opt out by setting `enableDefaultPath = false`.
+      '';
+    };
+
     globalEnvironment = mkOption {
       type =
         with types;
@@ -748,6 +759,15 @@ in
       // mapAttrs' (_: withName timerToUnit) cfg.timers
       // listToAttrs (map (withName mountToUnit) cfg.mounts)
       // listToAttrs (map (withName automountToUnit) cfg.automounts);
+
+    # Default path for systemd services. Should be quite minimal.
+    systemd.defaultPath = [
+      pkgs.coreutils
+      pkgs.findutils
+      pkgs.gnugrep
+      pkgs.gnused
+      cfg.package
+    ];
 
     # Environment of PID 1
     systemd.managerEnvironment = {
