@@ -15,6 +15,11 @@ GEM
     asciidoctor-diagram (3.2.1)
       asciidoctor (>= 1.5.7, < 3.x)
       rexml
+    asciidoctor-diagram-batik (1.19)
+    asciidoctor-diagram-ditaamini (1.0.3)
+    asciidoctor-diagram-plantuml (1.2026.2)
+      asciidoctor-diagram (~> 3.2, >= 3.2.1)
+      asciidoctor-diagram-batik (~> 1.17)
     asciidoctor-epub3 (2.3.0)
       asciidoctor (~> 2.0)
       gepub (~> 1.0.0)
@@ -55,7 +60,7 @@ GEM
       citeproc (~> 1.0, >= 1.0.9)
       csl (~> 1.6)
     coderay (1.1.3)
-    concurrent-ruby (1.3.6)
+    concurrent-ruby (1.3.7)
     csl (1.6.0)
       namae (~> 1.0)
       rexml
@@ -70,18 +75,18 @@ GEM
       nokogiri (>= 1.8.2, < 2.0)
       rubyzip (> 1.1.1, < 2.4)
     hashery (2.1.2)
-    json (2.19.5)
+    json (2.21.1)
     latex-decode (0.4.2)
     logger (1.7.0)
     matrix (0.4.3)
     mime-types (3.7.0)
       logger
       mime-types-data (~> 3.2025, >= 3.2025.0507)
-    mime-types-data (3.2026.0414)
+    mime-types-data (3.2026.0701)
     mini_portile2 (2.8.9)
     namae (1.2.0)
       racc (~> 1.7)
-    nokogiri (1.19.3)
+    nokogiri (1.19.4)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     observer (0.1.2)
@@ -121,7 +126,8 @@ GEM
     rb-inotify (0.11.1)
       ffi (~> 1.0)
     rexml (3.4.4)
-    rouge (4.7.0)
+    rouge (5.0.0)
+      strscan (~> 3.1)
     ruby-rc4 (0.1.5)
     rubyzip (2.3.2)
     sass (3.7.4)
@@ -130,9 +136,10 @@ GEM
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
     stringio (3.2.0)
+    strscan (3.1.8)
     text-hyphen (1.5.0)
     thread_safe (0.3.6)
-    tilt (2.7.0)
+    tilt (2.8.0)
     time (0.4.2)
       date
     treetop (1.6.18)
@@ -147,6 +154,8 @@ DEPENDENCIES
   asciidoctor
   asciidoctor-bibtex
   asciidoctor-diagram
+  asciidoctor-diagram-ditaamini
+  asciidoctor-diagram-plantuml
   asciidoctor-epub3
   asciidoctor-html5s
   asciidoctor-multipage
