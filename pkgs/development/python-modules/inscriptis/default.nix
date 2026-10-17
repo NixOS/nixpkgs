@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "inscriptis";
-  version = "2.7.1";
+  version = "2.7.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "weblyzard";
     repo = "inscriptis";
     tag = version;
-    hash = "sha256-hNNPY2/SroVQnf04SJ/2yYorBgQJk6d0X616+w41Y1c=";
+    hash = "sha256-V2q0CH3I6TBTeqJ8qH0onM4XLhLrOMbx50g9lj1HB5g=";
   };
 
   build-system = [ hatchling ];
