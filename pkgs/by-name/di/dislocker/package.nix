@@ -5,7 +5,7 @@
   cmake,
   pkg-config,
   fuse3,
-  mbedtls,
+  openssl,
   nix-update-script,
 }:
 
@@ -27,7 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     fuse3
-    mbedtls
+    openssl
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeFeature "CRYPTO_BACKEND" "openssl")
   ];
 
   doCheck = true; # runs some sanity checks against crypto library bindings
