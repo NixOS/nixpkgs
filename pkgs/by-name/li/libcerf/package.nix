@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcerf";
-  version = "3.3";
+  version = "3.6";
 
   src = fetchFromGitLab {
     domain = "jugit.fz-juelich.de";
     owner = "mlz";
     repo = "libcerf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EPloejabyLzLP+GIPSIsh6dZDk2WodSEU6CPoICRxnM=";
+    hash = "sha256-JLkZmKaB1TMM2nVg640QLY7xmUQU/Fl4MOSM+OLlMLs=";
   };
 
   nativeBuildInputs = [
