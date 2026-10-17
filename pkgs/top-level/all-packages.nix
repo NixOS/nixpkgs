@@ -2660,8 +2660,6 @@ with pkgs;
     yarn-berry = yarn-berry_3;
   };
 
-  yamllint = with python3Packages; toPythonApplication yamllint;
-
   # To expose more packages for Yi, override the extraPackages arg.
   yi = callPackage ../applications/editors/yi/wrapper.nix { };
 
