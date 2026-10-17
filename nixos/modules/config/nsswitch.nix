@@ -60,6 +60,16 @@
         default = [ ];
       };
 
+      gshadow = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        description = ''
+          List of group shadow entries to configure in {file}`/etc/nsswitch.conf`.
+
+          Note that "files" is always prepended.
+        '';
+        default = [ ];
+      };
+
       sudoers = lib.mkOption {
         type = lib.types.listOf lib.types.str;
         description = ''
@@ -132,16 +142,17 @@
       passwd:    ${lib.concatStringsSep " " config.system.nssDatabases.passwd}
       group:     ${lib.concatStringsSep " " config.system.nssDatabases.group}
       shadow:    ${lib.concatStringsSep " " config.system.nssDatabases.shadow}
-      sudoers:   ${lib.concatStringsSep " " config.system.nssDatabases.sudoers}
+      gshadow:   ${lib.concatStringsSep " " config.system.nssDatabases.gshadow}
 
       hosts:     ${lib.concatStringsSep " " config.system.nssDatabases.hosts}
       networks:  files
 
-      ethers:    files
-      services:  ${lib.concatStringsSep " " config.system.nssDatabases.services}
       protocols: files
+      services:  ${lib.concatStringsSep " " config.system.nssDatabases.services}
+      ethers:    files
       rpc:       files
 
+      sudoers:   ${lib.concatStringsSep " " config.system.nssDatabases.sudoers}
       subid:     ${config.system.nssDatabases.subid}
     '';
 
