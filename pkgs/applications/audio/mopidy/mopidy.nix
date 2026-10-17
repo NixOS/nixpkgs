@@ -13,14 +13,14 @@
 
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mopidy";
-  version = "3.4.2";
+  version = "4.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mopidy";
     repo = "mopidy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2OFav2HaQq/RphmZxLyL1n3suwzt1Y/d4h33EdbStjk=";
+    hash = "sha256-EmifQxL6HVZrBU1FXR8eMidllhK7Lt+pvfT0DrSP59U=";
   };
 
   nativeBuildInputs = [ wrapGAppsNoGuiHook ];
@@ -42,24 +42,38 @@ pythonPackages.buildPythonApplication (finalAttrs: {
 
   propagatedBuildInputs = [ gobject-introspection ];
 
-  build-system = [ pythonPackages.setuptools ];
+  build-system = with pythonPackages; [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies =
     with pythonPackages;
     [
+      cyclopts
       gst-python
+      httpx
+      platformdirs
+      pydantic
       pygobject3
       pykka
-      requests
-      # Provides pkg_resources required by Mopidy 3 and affected extensions.
-      # Remove when updating to Mopidy 4.
-      setuptools_80
+      rich
       tornado
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ dbus-python ];
 
-  # There are no tests
-  doCheck = false;
+  nativeCheckInputs = with pythonPackages; [
+    dirty-equals
+    polyfactory
+    pytestCheckHook
+    pytest-httpx
+    pytest-mock
+  ];
+
+  disabledTests = [
+    # GStreamer 1.28 does not report the duration of the WAV fixture.
+    "test_lookup_converts_uri_metadata_to_track"
+  ];
 
   passthru.tests = {
     inherit (nixosTests) mopidy;
