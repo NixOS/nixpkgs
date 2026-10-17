@@ -248,7 +248,7 @@ export default async ({
     ).map((file) => file.filename)
 
     const touched = []
-    if (files.includes('ci/pinned.json')) touched.push('pinned')
+    if (files.includes('ci/flake.lock')) touched.push('pinned')
     core.setOutput('touched', touched)
 
     return

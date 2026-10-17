@@ -66,7 +66,7 @@ jobs:
               'ci/github-script/package-lock.json',
               'ci/github-script/supportedBranches.ts',
               'ci/github-script/supportedSystems.ts',
-              'ci/pinned.json',
+              'ci/flake.lock',
               'pkgs/top-level/release-supported-systems.json',
             ].includes(file))) core.setOutput('merge-group', true)
 
@@ -95,7 +95,7 @@ jobs:
               'ci/github-script/supportedBranches.ts',
               'ci/github-script/supportedSystems.ts',
               'ci/github-script/withRateLimit.ts',
-              'ci/pinned.json',
+              'ci/flake.lock',
               'pkgs/top-level/release-supported-systems.json',
             ].includes(file) || file.startsWith('ci/github-script/reminders/'))) core.setOutput('pr', true)
 
