@@ -1160,8 +1160,6 @@ with pkgs;
     emojiSupport = true;
   };
 
-  twine = with python3Packages; toPythonApplication twine;
-
   inherit (callPackages ../development/tools/ammonite { })
     ammonite_2_12
     ammonite_2_13
