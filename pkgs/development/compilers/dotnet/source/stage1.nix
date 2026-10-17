@@ -8,24 +8,33 @@
   depsFile,
   bootstrapSdk,
   pkgsBuildBuild,
+  pkgsReverseCross,
 }@args:
 
 let
   mkVMR = callPackage ./vmr.nix;
 
-  stage0 = pkgsBuildBuild.dotnetCorePackages.callPackage ./stage0.nix (
-    {
-      inherit (args)
-        releaseManifestFile
-        tarballHash
-        depsFile
-        bootstrapSdk
-        ;
-    }
-    // {
-      baseName = "dotnet-stage0";
-    }
-  );
+  stage0 =
+    (
+      if lib.meta.availableOn stdenv.buildPlatform bootstrapSdk then
+        pkgsBuildBuild
+      else
+        pkgsReverseCross.gnu64
+    ).dotnetCorePackages.callPackage
+      ./stage0.nix
+      (
+        {
+          inherit (args)
+            releaseManifestFile
+            tarballHash
+            depsFile
+            bootstrapSdk
+            ;
+        }
+        // {
+          baseName = "dotnet-stage0";
+        }
+      );
 
 in
 (mkVMR {
