@@ -27,6 +27,8 @@ in
       pkgs.microsoft-identity-broker
       pkgs.intune-portal
     ];
+    systemd.sockets.intune-daemon.wantedBy = [ "sockets.target" ];
+    systemd.user.timers.intune-agent.wantedBy = [ "graphical-session.target" ];
 
     systemd.tmpfiles.packages = [ pkgs.intune-portal ];
     services.dbus.packages = [ pkgs.microsoft-identity-broker ];
