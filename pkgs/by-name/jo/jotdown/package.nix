@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -16,6 +18,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-yuzjyP1iy6pgUJev1dJPjU85A3W5n7G2B+Pa1R47KiQ=";
+  buildFeatures = [ "cli" ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Minimal Djot CLI";
@@ -23,6 +31,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/hellux/jotdown";
     changelog = "https://github.com/hellux/jotdown/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ novalkun ];
   };
 })
