@@ -16,7 +16,7 @@
 # - Update packageAliases.linux_latest to the latest version
 
 let
-  inherit (lib) recurseIntoAttrs dontRecurseIntoAttrs;
+  inherit (lib) recurseIntoAttrs;
   inherit (linuxKernel)
     kernels
     kernelPatches
@@ -364,28 +364,29 @@ in
 
         nvidiabl = callPackage ../os-specific/linux/nvidiabl { };
 
-        nvidiaPackages = dontRecurseIntoAttrs (
-          lib.makeExtensible (_: callPackage ../os-specific/linux/nvidia-x11 { })
+        # The same factory as `pkgs.nvidiaPackages`, instantiated again with a
+        # kernel so that each branch also provides its kernel modules. Only the
+        # kernel is passed in: `callPackage` resolves everything else from
+        # `pkgs` after looking in this scope, where `stdenv` is the kernel's.
+        # `default.nix` builds the userspace libraries from `pkgs.callPackage`
+        # for that reason.
+        #
+        # This stays a full branch set, so `mkDriver` here gives a custom version
+        # together with its modules. It is not `recurseIntoAttrs` on purpose:
+        # that would turn every userspace member into a release job as well, and
+        # those are the same derivations as the ones under `pkgs.nvidiaPackages`.
+        nvidiaPackages = callPackage ../os-specific/linux/nvidia-x11 {
+          inherit kernel kernelModuleMakeFlags;
+        };
+
+        # A path for the release walk to find the kernel modules, which are the
+        # only part of `nvidiaPackages` that exists per kernel. Nothing else
+        # should use this; the branches are the interface.
+        nvidiaModules = recurseIntoAttrs (
+          lib.genAttrs nvidiaPackages.branches (
+            branch: lib.recurseIntoAttrs { inherit (nvidiaPackages.${branch}) mod open; }
+          )
         );
-
-        nvidia_x11 = nvidiaPackages.stable;
-        nvidia_x11_beta = nvidiaPackages.beta;
-        nvidia_x11_latest = nvidiaPackages.latest;
-        nvidia_x11_legacy340 = nvidiaPackages.legacy_340;
-        nvidia_x11_legacy390 = nvidiaPackages.legacy_390;
-        nvidia_x11_legacy470 = nvidiaPackages.legacy_470;
-        nvidia_x11_legacy535 = nvidiaPackages.legacy_535;
-        nvidia_x11_production = nvidiaPackages.production;
-        nvidia_x11_vulkan_beta = nvidiaPackages.vulkan_beta;
-        nvidia_dc = nvidiaPackages.dc;
-
-        # this is not a replacement for nvidia_x11*
-        # only the opensource kernel driver exposed for hydra to build
-        nvidia_x11_beta_open = nvidiaPackages.beta.open;
-        nvidia_x11_latest_open = nvidiaPackages.latest.open;
-        nvidia_x11_production_open = nvidiaPackages.production.open;
-        nvidia_x11_stable_open = nvidiaPackages.stable.open;
-        nvidia_x11_vulkan_beta_open = nvidiaPackages.vulkan_beta.open;
 
         nxp-pn5xx = callPackage ../os-specific/linux/nxp-pn5xx { };
 
@@ -605,6 +606,45 @@ in
         nvidia_dc_535 = throw "nvidiaPackages.dc_535 removed, soon reaches end of life, see https://endoflife.date/nvidia"; # added 2026-03-08
         fwts-efi-runtime = throw "fwts-efi-runtime has been replaced by efi_test starting with kernel version 4.8, see https://bugs.launchpad.net/fwts/+bug/2138473"; # added 2026-05-16
       }
+      // lib.optionalAttrs config.allowAliases (
+        # What the driver and its kernel modules were called while a branch was
+        # the driver derivation itself. `nvidiaPackages` is a scope now, so
+        # these name a member of it.
+        lib.mapAttrs
+          (
+            old: branch:
+            lib.warnOnInstantiate
+              "linuxPackages.${old} has been moved to linuxPackages.nvidiaPackages.${branch}.driver"
+              nvidiaPackages.${branch}.driver
+          )
+          {
+            nvidia_x11 = "stable";
+            nvidia_x11_beta = "beta";
+            nvidia_x11_latest = "latest";
+            nvidia_x11_legacy340 = "legacy_340";
+            nvidia_x11_legacy390 = "legacy_390";
+            nvidia_x11_legacy470 = "legacy_470";
+            nvidia_x11_legacy535 = "legacy_535";
+            nvidia_x11_production = "production";
+            nvidia_x11_vulkan_beta = "vulkan_beta";
+            nvidia_dc = "dc";
+          }
+        //
+          lib.mapAttrs
+            (
+              old: branch:
+              lib.warnOnInstantiate
+                "linuxPackages.${old} has been moved to linuxPackages.nvidiaPackages.${branch}.open"
+                nvidiaPackages.${branch}.open
+            )
+            {
+              nvidia_x11_beta_open = "beta";
+              nvidia_x11_latest_open = "latest";
+              nvidia_x11_production_open = "production";
+              nvidia_x11_stable_open = "stable";
+              nvidia_x11_vulkan_beta_open = "vulkan_beta";
+            }
+      )
     )).extend
       (lib.fixedPoints.composeManyExtensions kernelPackagesExtensions);
 
