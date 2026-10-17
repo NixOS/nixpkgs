@@ -22,6 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   __structuredAttrs = true;
   strictDeps = true;
+  separateDebugInfo = true;
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
