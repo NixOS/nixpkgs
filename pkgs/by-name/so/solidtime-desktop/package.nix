@@ -5,22 +5,22 @@
   fetchFromGitHub,
   copyDesktopItems,
   makeDesktopItem,
-  electron_41,
+  electron_43,
   xcodebuild,
   desktopToDarwinBundle,
 }:
 let
-  electron = electron_41;
+  electron = electron_43;
 in
 buildNpmPackage (finalAttrs: {
   pname = "solidtime-desktop";
-  version = "0.2.7";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "solidtime-io";
     repo = "solidtime-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-92w8vmzyQbIbRaQdXKKpeaLdxhLVpxyCE3RJjtJf0Jk=";
+    hash = "sha256-bAL9zBtzKlYQxMrlfQRZ3X+VkdnoY2SNgTnQkSp7+hY=";
   };
 
   nativeBuildInputs = [
@@ -30,11 +30,8 @@ buildNpmPackage (finalAttrs: {
     xcodebuild
     desktopToDarwinBundle
   ];
-
-  npmDepsHash = "sha256-EwtCA94ezhq36ooVvQWd4ThtxqWSOe7cr28V1thet2o=";
-
-  # fixes missing npm dependency errors
-  patches = [ ./missing-hashes.patch ];
+  npmDepsFetcherVersion = 2;
+  npmDepsHash = "sha256-kCRvRTV5JXheG3tXnT+fiyJ7l9LryQLkJv1fRKqmAjM=";
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
