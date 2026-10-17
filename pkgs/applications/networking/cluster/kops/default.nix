@@ -36,4 +36,10 @@ in
     sha256 = "sha256-PQSjCmuaOZ3lEaThnjZDMSQVRG8bq2iMotnfo34OSFM=";
     rev = "v${finalAttrs.version}";
   });
+
+  kops_1_36 = mkKops (finalAttrs: {
+    version = "1.36.2";
+    sha256 = "sha256-XKehbH0zk07xizLPETctPBrf2NqT+dwURJqKg5568kg=";
+    rev = "v${finalAttrs.version}";
+  });
 }

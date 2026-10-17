@@ -10263,6 +10263,7 @@ with pkgs;
     kops_1_33
     kops_1_34
     kops_1_35
+    kops_1_36
     ;
   kops = kops_1_33;
 
