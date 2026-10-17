@@ -11,7 +11,6 @@
     { pkgs, lib, ... }:
     {
       system.disableInstallerTools = true;
-      environment.defaultPackages = [ ];
     };
 
   testScript = ''
