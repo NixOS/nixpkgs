@@ -4844,8 +4844,6 @@ with pkgs;
 
   inherit (regclient) regbot regctl regsync;
 
-  reno = with python312Packages; toPythonApplication reno;
-
   inherit (callPackage ../development/tools/replay-io { })
     replay-io
     replay-node-cli
