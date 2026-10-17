@@ -3,9 +3,7 @@
   anyio,
   async-timeout,
   buildPythonPackage,
-  curio,
   fetchFromGitHub,
-  flask,
   pytest-asyncio,
   pytest-trio,
   pytestCheckHook,
@@ -20,7 +18,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-socks";
-  version = "3.0.0";
+  version = "3.1.1";
   pyproject = true;
 
   __darwinAllowLocalNetworking = true;
@@ -29,26 +27,19 @@ buildPythonPackage (finalAttrs: {
     owner = "romis2012";
     repo = "python-socks";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Pp5059O2k4Bd/+s5ZrOUR6d/+t5T5xeMTqTQ2f4N3RM=";
+    hash = "sha256-4+3z/n8DTVRK0/f/MNy8gvnRwA69WwPvLSCFEN/dOvk=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    trio
-    curio
-    async-timeout
-  ];
-
   optional-dependencies = {
+    asyncio = [ ];
     trio = [ trio ];
-    curio = [ curio ];
     anyio = [ anyio ];
   };
 
   nativeCheckInputs = [
     anyio
-    flask
     pytest-asyncio
     pytest-trio
     pytestCheckHook
