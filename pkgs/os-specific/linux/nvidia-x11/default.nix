@@ -131,10 +131,14 @@ rec {
     sha256_64bit = "sha256-WXWobuRb/8tib1GuM9EWmxCBhqLqR61lHnLxP6S21vk=";
     persistencedSha256 = "sha256-3Omj160wtWdKAZDzWt/m/cbUTQ9DMJ1rSxMrnIrKXiw=";
     fabricmanagerSha256 = "sha256-xZnTQYZy/uPrTLD6mACflGGWtaYB4luzh0AFxTstNIw=";
+    # 580.178.04 matches the 2025.10.14 nvlsm version
+    nvlsmVersion = "2025.10.14";
+    nvlsmSha256 = "sha256-NDUQyjvawjw1v/ljfcYIiYv9b5e4WkFrzQARb9xO/qg=";
     openSha256 = "sha256-7eXEROG2rQK9+Ag26nG4jFPrnKeveVUQ0ugIAshJZPQ=";
     useSettings = false;
     usePersistenced = true;
     useFabricmanager = true;
+    useNvlsm = true;
   };
 
   dc_570 = generic rec {

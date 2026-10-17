@@ -11,6 +11,8 @@
   persistencedVersion ? null,
   fabricmanagerSha256 ? null,
   fabricmanagerVersion ? null,
+  nvlsmVersion ? null,
+  nvlsmSha256 ? null,
   useGLVND ? true,
   useProfiles ? true,
   preferGtk2 ? false,
@@ -18,6 +20,7 @@
   useSettings ? true,
   usePersistenced ? true,
   useFabricmanager ? false,
+  useNvlsm ? false,
   ibtSupport ? false,
 
   prePatch ? null,
@@ -66,6 +69,7 @@ assert useSettings -> settingsSha256 != null;
 assert usePersistenced -> persistencedSha256 != null;
 assert useFabricmanager -> fabricmanagerSha256 != null;
 assert useFabricmanager -> !useSettings;
+assert useNvlsm -> nvlsmVersion != null && nvlsmSha256 != null;
 
 let
   # Rewrites patches meant for the kernel/* folder structure to kernel-open/*
@@ -300,6 +304,7 @@ stdenv.mkDerivation (finalAttrs: {
           ) fabricmanagerSha256
         else
           { };
+      nvlsm = if useNvlsm then callPackage (import ./nvlsm.nix nvlsmVersion nvlsmSha256) { } else null;
       settingsVersion = if settingsVersion != null then settingsVersion else finalAttrs.version;
       persistencedVersion =
         if persistencedVersion != null then persistencedVersion else finalAttrs.version;
