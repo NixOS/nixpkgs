@@ -11,6 +11,24 @@
   "chap-toolchains": [
     "index.html#chap-toolchains"
   ],
+  "cmake-bash-helpers": [
+    "index.html#cmake-bash-helpers"
+  ],
+  "cmake-bash-helpers-cmakeEntries-getters": [
+    "index.html#cmake-bash-helpers-cmakeEntries-getters"
+  ],
+  "cmake-bash-helpers-cmakeEntries-setters": [
+    "index.html#cmake-bash-helpers-cmakeEntries-setters"
+  ],
+  "cmake-bash-helpers-cmakeFlags-getters": [
+    "index.html#cmake-bash-helpers-cmakeFlags-getters"
+  ],
+  "cmake-bash-helpers-cmakeFlags-setters": [
+    "index.html#cmake-bash-helpers-cmakeFlags-setters"
+  ],
+  "cmake-bash-helpers-conversion": [
+    "index.html#cmake-bash-helpers-conversion"
+  ],
   "cmake-ctest": [
     "index.html#cmake-ctest"
   ],
