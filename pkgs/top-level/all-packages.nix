@@ -2188,8 +2188,6 @@ with pkgs;
 
   miniupnpd-nftables = miniupnpd.override { firewall = "nftables"; };
 
-  mitmproxy = with python3Packages; toPythonApplication mitmproxy;
-
   mjpegtoolsFull = mjpegtools.override {
     withMinimal = false;
   };
