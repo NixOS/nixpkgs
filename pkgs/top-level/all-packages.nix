@@ -2001,6 +2001,7 @@ with pkgs;
   gnupg24 = callPackage ../tools/security/gnupg/24.nix {
     pinentry = if stdenv.hostPlatform.isDarwin then pinentry_mac else pinentry-gnome3;
   };
+
   gnupg = gnupg24;
   gnupgMinimal = gnupg.override {
     enableMinimal = true;
