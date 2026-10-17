@@ -2569,8 +2569,6 @@ with pkgs;
       })
     );
 
-  trezor-agent = with python3Packages; toPythonApplication trezor-agent;
-
   ttp = with python3.pkgs; toPythonApplication ttp;
 
   translatelocally-models = recurseIntoAttrs (callPackages ../misc/translatelocally-models { });
