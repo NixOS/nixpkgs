@@ -6029,8 +6029,6 @@ with pkgs;
 
   readline = callPackage ../development/libraries/readline/8.3.nix { };
 
-  readmdict = with python3Packages; toPythonApplication readmdict;
-
   kissfftFloat = kissfft.override {
     datatype = "float";
   };
