@@ -20,7 +20,7 @@ buildDunePackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "hammerlab";
     repo = "ppx_deriving_cmdliner";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/22KLQnxu3e2ZSca6ZLxTJDfv/rsmgCUkJnZC0RwRi8";
   };
 

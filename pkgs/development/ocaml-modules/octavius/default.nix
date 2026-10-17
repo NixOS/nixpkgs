@@ -11,7 +11,7 @@ buildDunePackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ocaml-doc";
     repo = "octavius";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/S6WpIo1c5J9uM3xgtAM/elhnsl0XimnIFsKy3ootbA=";
   };
 

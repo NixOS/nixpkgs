@@ -11,7 +11,7 @@ buildDunePackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ocaml";
     repo = "camlp-streams";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-kHuFBqu0mjFv53sOtmFZcX2reo5ToaOpItP7P53bfGQ=";
   };
 

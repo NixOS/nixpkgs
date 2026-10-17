@@ -42,7 +42,7 @@ let
       src = fetchFromGitHub {
         owner = "ocaml-community";
         repo = "camomile";
-        rev = "v${version}";
+        tag = "v${version}";
         hash = "sha256-HklX+VPD0Ta3Knv++dBT2rhsDSlDRH90k4Cj1YtWIa8=";
       };
 

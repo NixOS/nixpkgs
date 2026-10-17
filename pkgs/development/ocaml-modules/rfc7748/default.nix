@@ -16,7 +16,7 @@ buildDunePackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "burgerdev";
     repo = "ocaml-rfc7748";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-mgZooyfxrKBVQFn01B8PULmFUW9Zq5HJfgHCSJSkJo4=";
   };
 

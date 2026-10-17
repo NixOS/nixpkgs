@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hammerlab";
     repo = "sosa";
-    rev = "sosa.${version}";
+    tag = "sosa.${version}";
     hash = "sha256-0zcgT4uUqFhJRy1hqT7Cb7s8z/WRSKl2rAQDzs1ucBQ=";
   };
 

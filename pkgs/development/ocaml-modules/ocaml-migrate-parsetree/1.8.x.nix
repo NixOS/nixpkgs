@@ -14,7 +14,7 @@ buildDunePackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ocaml-ppx";
     repo = "ocaml-migrate-parsetree";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2ArV48H0vRWNq71+ubuDw8mdPXb/YmRQyLk/T1jXqJs=";
   };
 

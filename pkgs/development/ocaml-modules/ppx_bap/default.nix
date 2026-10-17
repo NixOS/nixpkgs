@@ -25,7 +25,7 @@ buildDunePackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "BinaryAnalysisPlatform";
     repo = "ppx_bap";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-iAhPmTrYEZF6yrZC5MelfQuaKEtlVcEwj43FhW5j2bA=";
   };
 

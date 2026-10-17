@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "stedolan";
     repo = "ocaml-${pname}";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-MVSFB2/8NaXmdXPbpULLTMpIv8p+v9GsyI5ytoVu3hs=";
   };
 
