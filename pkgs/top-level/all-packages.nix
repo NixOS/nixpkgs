@@ -4694,8 +4694,6 @@ with pkgs;
         binutils = binutils;
       };
 
-  docutils = with python3Packages; toPythonApplication docutils;
-
   doit = with python3Packages; toPythonApplication doit;
 
   dot2tex = with python3.pkgs; toPythonApplication dot2tex;
