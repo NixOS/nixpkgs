@@ -10,6 +10,13 @@
   swift-crypto,
 }:
 
+let
+  swift' = swift.override {
+    enableRepl = false;
+    enableSourceKitLSP = false;
+  };
+in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "swift-certificates";
   version = "1.19.4";
@@ -44,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
-    swift
+    swift'
   ];
 
   buildInputs = [

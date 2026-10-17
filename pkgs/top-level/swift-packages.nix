@@ -35,6 +35,7 @@ let
             swift-foundation = null;
             swift-testing = null;
             enableRepl = false;
+            enableSourceKitLSP = false;
           }
           # Swift Driver is required when building the compiler’s Swift Syntax in the final toolchain.
           # Otherwise, symbols are stripped from it that are needed to build Swift Testing.
@@ -61,8 +62,10 @@ in
   generateSplicesForMkScope,
   llvmPackages,
   makeScopeWithSplicing',
+  makeSetupHook,
   stdenvNoCC,
   swiftPackages,
+  writeShellScript,
   otherSplices ? generateSplicesForMkScope "swiftPackages",
 }:
 
@@ -116,6 +119,68 @@ makeScopeWithSplicing' {
           ln -s ${lib.getExe' llvmPackages.llvm "llvm-libtool-darwin"} "$out/bin/libtool"
         '';
       };
+
+      llvm_readtapi = stdenvNoCC.mkDerivation {
+        pname = "llvm-readtapi";
+        version = lib.getVersion llvmPackages.llvm;
+
+        buildCommand = ''
+          mkdir -p "$out/bin"
+          ln -s ${lib.getExe' llvmPackages.llvm "llvm-readtapi"} "$out/bin/llvm-readtapi"
+        '';
+      };
+
+      createToolchainStubsHook =
+        makeSetupHook
+          {
+            name = "create-toolchain-stubs-hook";
+            substitutions = {
+              swiftPlatform = stdenvNoCC.hostPlatform.swift.platform;
+            };
+          }
+          (
+            # The Swift toolchain expects shared libraries to be found in `lib/swift/<platform>`, but we want them in
+            # just `lib`. Trying to patch them out is difficult, so we create text-based stubs on Darwin and use linker
+            # scripts on Linux to forward to the real sharded libraries.
+            writeShellScript "create-toolchain-stubs-hook" ''
+              function createToolchainStubsHook() {
+                local dylib
+                for dylib in "''${!outputLib}/lib"/*; do
+                  if isMachO "$dylib"; then
+                    echo "generating text-based stubs for $dylib"
+                    ${lib.getExe' llvm_readtapi "llvm-readtapi"} --filetype=tbd-v4 \
+                      "$dylib" -o "''${!outputDev}/lib/swift/@swiftPlatform@/$(basename "$dylib" .dylib).tbd"
+                  elif isELF "$dylib"; then
+                    echo "symlinking $dylib into the standard location"
+                    ln -s "$dylib" "''${!outputDev}/lib/swift/@swiftPlatform@/$(basename "$dylib")"
+                  fi
+                done
+              }
+
+              postInstallHooks+=(createToolchainStubsHook)
+            ''
+          );
+
+      fixUnhelpfulCmakeRpathsHook = makeSetupHook { name = "fix-unhelpful-cmake-rpaths-hook"; } (
+        # Swift disables environmental rpaths and tries to set `$ORIGIN`. The latter is probably fine, but the former
+        # messes with the tooling in Nixpkgs. This hook removes both of them just to be safe.
+        writeShellScript "fix-unhelpful-cmake-rpaths-hook" ''
+          function fixUnhelpfulCmakeRpaths() {
+            local f
+            while IFS= read -d "" f; do
+              if [[ "$(basename "$f")" = CMakeLists.txt || "''${f##*.}" = cmake ]]; then
+                echo "removing unhelpful rpath settings from '$f'"
+                # CMake allows non-zero numbers (including floating point numbers) to be truthy values, but assume that
+                # Swift isn’t doing something odd like using 3.141592653589793 as a truth value.
+                sed -E -i "$f" \
+                  -e 's/(^|\s|CMAKE_)INSTALL_RPATH "[^"]*"/\1INSTALL_RPATH ""/' \
+                  -e 's/(^|\s|CMAKE_)INSTALL_REMOVE_ENVIRONMENT_RPATH (1|ON|TRUE|Y|YES)/\1INSTALL_REMOVE_ENVIRONMENT_RPATH OFF/'
+              fi
+            done < <(grep -rlZ RPATH)
+          }
+          postPatchHooks+=(fixUnhelpfulCmakeRpaths)
+        ''
+      );
 
       /**
         Provides a list of patches for the specified major.minor version.
@@ -174,7 +239,14 @@ makeScopeWithSplicing' {
 
       buildSwiftPackages = bootstrapStage1SwiftPackages;
 
-      inherit llvm_libtool patchesForVersion swift_sources;
+      inherit
+        llvm_libtool
+        patchesForVersion
+        swift_sources
+        # Hooks to make it easier to deal with Swift packaging
+        createToolchainStubsHook
+        fixUnhelpfulCmakeRpathsHook
+        ;
 
       llvmPackages_upstream = llvmPackages;
 
@@ -184,6 +256,7 @@ makeScopeWithSplicing' {
         swift-foundation = null;
         swift-testing = null;
         enableRepl = false;
+        enableSourceKitLSP = false;
       };
     };
   f = lib.extends autoCalledPackages (

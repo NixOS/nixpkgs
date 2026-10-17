@@ -2,6 +2,7 @@
   lib,
   apple-sdk_14,
   apple-sdk_26,
+  apple-sdk_27,
   bootstrapStage,
   buildSwiftPackages,
   cmake,
@@ -13,13 +14,13 @@
   libxml2,
   llvmPackages,
   llvm_libtool,
-  ninja,
   ninja_1_11,
   patchesForVersion,
   perl,
   python3,
   srcOnly,
   stdenv,
+  stdenvNoCC,
   stdlib,
   swift-cmark,
   swift-corelibs-libdispatch,
@@ -61,8 +62,15 @@
 }:
 
 let
+  # Swift 6.2.4 requires different settings and disables LTO to improve build times.
+  isBootstrapToolchain62 = lib.versions.majorMinor swift_release == "6.2";
+
   # SDK versions past 14.x don’t work with the c++-based bootstrap compiler due to unconditionally exposing macros.
-  build-sdk = if bootstrapStage == 2 then apple-sdk_26 else apple-sdk_14;
+  build-sdk =
+    if bootstrapStage == 2 then
+      (if isBootstrapToolchain62 then apple-sdk_26 else apple-sdk_27)
+    else
+      apple-sdk_14;
 
   # `buildSwiftPackages` is always the previous stage. Building the stage 2 compiler requires linking against the
   # separately built stdlib because it does not build its own. Override the stage 1 compiler to use it.
@@ -87,6 +95,24 @@ let
     libllvm
     ;
 
+  lld =
+    if stdenv.hostPlatform.isDarwin then
+      # Darwin can use LLD unwrapped because install names ensure it can find the linked dylibs.
+      # The wrapped version also doesn’t seem to work on Darwin.
+      llvmPackages.lld
+    else
+      stdenvNoCC.mkDerivation {
+        # The linker in `llvmPackages.lld` isn’t wrapped, which causes the build to fail due to missing rpaths.
+        pname = "lld-wrapper";
+        version = lib.getVersion llvmPackages.lld;
+
+        buildCommand = ''
+          mkdir -p "$out/bin"
+          ln -s ${lib.getExe' llvmPackages.bintools "ld"} "$out/bin/ld"
+          ln -s ${lib.getExe' llvmPackages.bintools "ld.lld"} "$out/bin/ld.lld"
+        '';
+      };
+
   inherit (darwin) sigtool;
 
   # https://github.com/NixOS/nixpkgs/issues/327836
@@ -94,12 +120,7 @@ let
   # Can reproduce using `nix --option cores 2 build -f . swift`.
   # Until we find out the exact cause, pin ninja to version 1.11.1.
   # Note: While upstream is pinned to a newer version of Ninja now, it still has this problem.
-  # TODO(@reckenrode): Make unconditional on staging after staging-next merge.
-  ninja' =
-    if lib.versions.majorMinor swift_release == "6.3" && stdenv.hostPlatform.isLinux then
-      ninja_1_11
-    else
-      ninja;
+  ninja = ninja_1_11;
 
   doCheck = false; # TODO: Implement tests per https://github.com/swiftlang/swift/blob/main/docs/Testing.md.
 
@@ -231,6 +252,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "SWIFT_INCLUDE_TESTS" doCheck)
     # Swift Concurrency is needed to build the stage 1 compiler on Linux.
     (lib.cmakeBool "SWIFT_ENABLE_EXPERIMENTAL_CONCURRENCY" true)
+    # Linking with LLD is more compatible. The resulting shared libraries can be linked by either LLD or GNU ld.
+    # The same is not true when linking with GNU ld. It’s also faster.
+    (lib.cmakeFeature "CMAKE_LINKER_TYPE" "LLD")
   ]
   ++ lib.optionals (bootstrapStage == 1) [
     # Work around crashes in ownership verifier in the bootstrap compiler.
@@ -256,10 +280,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (bootstrapStage >= 2) (
     [
-      # Build Swift with LTO for better performance. Only enable it for tools. The stdlib will enable it separately.
-      (lib.cmakeFeature "SWIFT_TOOLS_ENABLE_LTO" "thin")
-      # LTO is slow with ld64. Only use it for targets that benefit from LTO.
-      (lib.cmakeBool "SWIFT_TOOLS_LD64_LTO_CODEGEN_ONLY_FOR_SUPPORTING_TARGETS" stdenv.hostPlatform.isDarwin)
       # Enable the remaining features.
       (lib.cmakeBool "SWIFT_ENABLE_EXPERIMENTAL_CXX_INTEROP" true)
       (lib.cmakeBool "SWIFT_ENABLE_EXPERIMENTAL_DIFFERENTIABLE_PROGRAMMING" true)
@@ -271,16 +291,22 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeBool "SWIFT_ENABLE_RUNTIME_MODULE" true)
       (lib.cmakeBool "SWIFT_STDLIB_ENABLE_STRICT_AVAILABILITY" true)
     ]
-    ++ lib.optionals stdenv.cc.bintools.isGNU [
-      # Use `llvm-ar` and `llvm-ranlib` when LTO is enabled, or builds will fail due missing symbol tables in archives.
-      # e.g., `error: lib/libswiftDemangling.a: no archive symbol table (run ranlib)`.
-      (lib.cmakeFeature "CMAKE_AR" (lib.getExe' llvm "llvm-ar"))
-      (lib.cmakeFeature "CMAKE_RANLIB" (lib.getExe' llvm "llvm-ranlib"))
-      # Make sure Swift is built with a consistent toolchan version. This doesn’t matter for non-LTO builds, but it causes
-      # LTO builds to fail when objects built with a newer Clang are processed by the Swift Clang’s libLTO.
-      (lib.cmakeFeature "CMAKE_C_COMPILER" (lib.getExe' clang "clang"))
-      (lib.cmakeFeature "CMAKE_CXX_COMPILER" (lib.getExe' clang "clang++"))
-    ]
+    ++ lib.optionals (!isBootstrapToolchain62) (
+      [
+        # Build Swift with LTO for better performance. Only enable it for tools. The stdlib will enable it separately.
+        (lib.cmakeFeature "SWIFT_TOOLS_ENABLE_LTO" "thin")
+      ]
+      ++ lib.optionals stdenv.cc.bintools.isGNU [
+        # Use `llvm-ar` and `llvm-ranlib` when LTO is enabled, or builds will fail due missing symbol tables in archives.
+        # e.g., `error: lib/libswiftDemangling.a: no archive symbol table (run ranlib)`.
+        (lib.cmakeFeature "CMAKE_AR" (lib.getExe' llvm "llvm-ar"))
+        (lib.cmakeFeature "CMAKE_RANLIB" (lib.getExe' llvm "llvm-ranlib"))
+        # Make sure Swift is built with a consistent toolchain version. This doesn’t matter for non-LTO builds, but it causes
+        # LTO builds to fail when objects built with a newer Clang are processed by the Swift Clang’s libLTO.
+        (lib.cmakeFeature "CMAKE_C_COMPILER" (lib.getExe' clang "clang"))
+        (lib.cmakeFeature "CMAKE_CXX_COMPILER" (lib.getExe' clang "clang++"))
+      ]
+    )
   );
 
   env = {
@@ -323,7 +349,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    ninja'
+    lld
+    ninja
     perl # For pod2man
     python3
     swift
@@ -478,7 +505,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       swiftBinaryDir=''${!outputBin}
       swiftIncludeDirs=$swiftcIncPath/include\;$stdlibIncPath/lib\;$stdlibIncPath/include\;$static/include
-      swiftLibraryDirs=$swiftcDevPath/lib\;$swiftcLibPath/lib\;$stdlibLibPath/lib\;$stdlibDevPath/lib
+      swiftLibraryDirs=$swiftcDevPath/lib\;$swiftcLibPath/lib\;$stdlibLibPath/lib\;$stdlibDevPath/lib/swift/${swiftPlatform}
 
       swiftArch=${stdenv.hostPlatform.swift.arch}
       swiftPlatform=${stdenv.hostPlatform.swift.platform}
