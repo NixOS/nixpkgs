@@ -4,9 +4,7 @@
   lib,
 }:
 let
-
   shticker-book-unwritten-unwrapped = callPackage ./unwrapped.nix { };
-
 in
 buildFHSEnv {
   pname = "shticker_book_unwritten";
