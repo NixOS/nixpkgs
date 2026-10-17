@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mitm-cache";
   version = "0.1.2";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "chayleaf";
     repo = "mitm-cache";
