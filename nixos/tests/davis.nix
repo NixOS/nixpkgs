@@ -52,6 +52,33 @@
       };
     };
 
+  # Use a deliberately invalid PDO default socket so this test only passes
+  # when Davis supplies the MySQL unix_socket explicitly.
+  nodes.machine3 =
+    { lib, ... }:
+    {
+      virtualisation.memorySize = 512;
+
+      services.davis = {
+        enable = true;
+        hostname = "davis.example.com";
+        database.driver = "mysql";
+        mail = {
+          dsnFile = "${pkgs.writeText "davisMailDns" "smtp://username:password@example.com:25"}";
+          inviteFromAddress = "dav@example.com";
+        };
+        adminLogin = "admin";
+        appSecretFile = "${pkgs.writeText "davisAppSecret" "52882ef142066e09ab99ce816ba72522e789505caba224"}";
+        adminPasswordFile = "${pkgs.writeText "davisAdminPass" "nixos"}";
+      };
+
+      services.phpfpm.pools.davis.phpOptions = lib.mkAfter ''
+        pdo_mysql.default_socket = /run/mysqld/does-not-exist.sock
+      '';
+
+      services.mysql.settings.mysqld.skip-networking = true;
+    };
+
   testScript = ''
     start_all()
 
@@ -90,5 +117,15 @@
       "REQUEST_METHOD=GET",
     );
     page = machine2.succeed(f"{' '.join(env)} ${pkgs.fcgi}/bin/cgi-fcgi -bind -connect ${config.nodes.machine2.services.phpfpm.pools.davis.socket}")
+
+    machine3.wait_for_unit("mysql.service")
+    machine3.wait_for_unit("davis-env-setup.service")
+    machine3.wait_for_unit("davis-db-migrate.service")
+    machine3.wait_for_unit("phpfpm-davis.service")
+
+    with subtest("welcome screen loads over a mysql unix socket connection"):
+        machine3.succeed(
+            "curl -sSfL --resolve davis.example.com:80:127.0.0.1 http://davis.example.com/ | grep '<title>Davis</title>'"
+        )
   '';
 }
