@@ -1,0 +1,26 @@
+The llt-proto repo has an ens.proto file required by libtelio.
+The rust crate for llt-proto incorrectly does not contain that file.
+Use an unmerged PR change which fixes the broken rust crate.
+Note: https://github.com/NordSecurity/llt-proto/pull/2
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -2520,7 +2520,7 @@
+ [[package]]
+ name = "llt-proto"
+ version = "0.1.0"
+-source = "git+https://github.com/NordSecurity/llt-proto.git?tag=v1.0.0#4a9e79beebee837a7873636a164c88cf0971a4df"
++source = "git+https://github.com/NordSecurity/llt-proto.git?rev=2226e2bac38ac6f3343bf551308691f378608cd5#2226e2bac38ac6f3343bf551308691f378608cd5"
+ dependencies = [
+  "anyhow",
+  "prost",
+--- a/crates/telio-proto/Cargo.toml
++++ b/crates/telio-proto/Cargo.toml
+@@ -11,7 +11,7 @@
+
+ [dependencies]
+ http = "1.3.1"
+-llt-proto = { git = "https://github.com/NordSecurity/llt-proto.git", tag = "v1.0.0" }
++llt-proto = { git = "https://github.com/NordSecurity/llt-proto.git", rev = "2226e2bac38ac6f3343bf551308691f378608cd5" }
+ hyper-util.workspace = true
+ prost = "0.14.1"
+ protobuf = "3.7.2"
