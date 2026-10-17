@@ -7,7 +7,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "zhongdou-sans";
-  version = "3.000";
+  version = "3.001";
 
   # New nixpkgs packages use structured derivation attributes for safer builds.
   __structuredAttrs = true;
@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "otakutyrant";
     repo = "Zhongdou-Sans";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jZPcmT5mqG6WAVEaq3QOpawMBQjx5M5H/TWBHgXMxc0=";
+    hash = "sha256-0wk9OLPhlQbtFKPIWU3Pp/ursAyxvI7r5AzABG57LQs=";
   };
 
   strictDeps = true;
