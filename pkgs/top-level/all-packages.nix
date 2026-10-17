@@ -4727,8 +4727,6 @@ with pkgs;
     inochi-session
     ;
 
-  jenkins-job-builder = with python3Packages; toPythonApplication jenkins-job-builder;
-
   kustomize = callPackage ../development/tools/kustomize { };
 
   kustomize_3 = callPackage ../development/tools/kustomize/3.nix { };
