@@ -12,7 +12,7 @@
   pytest-cov-stub,
   pytestCheckHook,
   rich,
-  syrupy_6,
+  syrupy,
   textual,
   textual-plotext,
   typer,
@@ -60,7 +60,7 @@ buildPythonPackage (finalAttrs: {
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
-    syrupy_6
+    syrupy
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 

@@ -13,7 +13,7 @@
   pytestCheckHook,
   python-dateutil,
   setuptools,
-  syrupy_6,
+  syrupy,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -47,7 +47,7 @@ buildPythonPackage (finalAttrs: {
     pytest-aiohttp
     pytest-benchmark
     pytestCheckHook
-    syrupy_6
+    syrupy
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
