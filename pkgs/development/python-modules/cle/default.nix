@@ -1,22 +1,36 @@
 {
   lib,
-  archinfo,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  archinfo,
+  arpy,
   cart,
   cffi,
-  fetchFromGitHub,
+  minidump,
   pefile,
   pyelftools,
-  pytestCheckHook,
   pyvex,
-  setuptools,
+  pyxbe,
+  pyxdia,
   sortedcontainers,
+  uefi-firmware-parser,
+
+  # tests
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
+
+  # passthru
   nix-update-script,
 }:
 
 let
   # The binaries are following the argr projects release cycle
-  version = "9.2.154";
+  version = "9.2.212";
 
   # Binary files from https://github.com/angr/binaries (only used for testing and only here)
   binaries = fetchFromGitHub {
@@ -26,7 +40,7 @@ let
     hash = "sha256-XXJBySIT3ylK1nd3suP2bq4bVSVah/1XhOmkEONbCoY=";
   };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cle";
   inherit version;
   pyproject = true;
@@ -35,27 +49,37 @@ buildPythonPackage rec {
     owner = "angr";
     repo = "cle";
     tag = "v${version}";
-    hash = "sha256-rWbZzm5hWi/C+te8zeQChxqYHO0S795tJ6Znocq9TTs=";
+    hash = "sha256-TorjsiMq5femr5lGoKSOYWesd0RbWEZuA9fMwF4F3kA=";
   };
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [ "arpy" ];
+
   dependencies = [
     archinfo
+    arpy
     cart
     cffi
+    minidump
     pefile
     pyelftools
     pyvex
+    pyxbe
+    pyxdia
     sortedcontainers
+    uefi-firmware-parser
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ];
 
-  # Place test binaries in the right location (location is hard-coded in the tests)
+  # Place test binaries in the right location (location is hard-coded in the tests
+  # as ../../binaries relative to the tests/ directory)
   preCheck = ''
-    export HOME=$TMPDIR
-    cp -r ${binaries} $HOME/binaries
+    cp -r ${binaries} ../binaries
   '';
 
   disabledTests = [
@@ -70,6 +94,19 @@ buildPythonPackage rec {
     "test_x86_64"
     # The required parts is not present on Nix
     "test_remote_file_map"
+    # Missing test binaries
+    "test_f_finale_extern_size_hints"
+    "test_load_binary_larger_than_highest_address"
+    "test_loading_incomplete_pe_file"
+    "test_tls_directory_address_of_callbacks_null"
+    "test_tls_x64"
+  ];
+
+  disabledTestPaths = [
+    # These tests require PE/macOS test binaries not in the binaries repo
+    "tests/test_macho_reloc.py"
+    "tests/test_universal2.py"
+    "tests/test_pe_meta_regions.py"
   ];
 
   pythonImportsCheck = [ "cle" ];
@@ -82,4 +119,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
