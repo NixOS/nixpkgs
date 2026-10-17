@@ -186,6 +186,26 @@ in
     };
   };
 
+  fanspeedslider = buildPlugin rec {
+    pname = "fanspeedslider";
+    version = "0.2.3";
+    format = "setuptools";
+
+    src = fetchFromGitHub {
+      owner = "mival";
+      repo = "OctoPrint-FanSpeedSlider";
+      rev = version;
+      sha256 = "sha256-0Gp9EgaKyCnRQv4A1sNHquTRqjag2Oz/fDGVVo95FfY=";
+    };
+
+    meta = {
+      description = "Add a slider to control the speed of a parts cooling fan";
+      homepage = "https://github.com/ntoff/OctoPrint-FanSpeedSlider";
+      license = lib.licenses.agpl3Only;
+      maintainers = with lib.maintainers; [ Superredstone ];
+    };
+  };
+
   firmwareupdater = buildPlugin rec {
     pname = "firmwareupdater";
     version = "1.14.0";
