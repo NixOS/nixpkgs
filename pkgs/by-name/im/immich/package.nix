@@ -33,6 +33,7 @@
   pango,
   perl,
   pixman,
+  runtimeShellPackage,
   vips_8_17, # thumbnail generation fails with vips 8.18
   buildPackages,
 }:
@@ -117,6 +118,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "immich";
   version = "2.7.5";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "immich-app";
     repo = "immich";
@@ -161,6 +165,8 @@ stdenv.mkDerivation (finalAttrs: {
     pixman
     # Required for sharp
     vips'
+    # Required for some packages in node_modules
+    runtimeShellPackage
   ];
 
   env.SHARP_FORCE_GLOBAL_LIBVIPS = 1;
