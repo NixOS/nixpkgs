@@ -1359,8 +1359,6 @@ with pkgs;
 
   cplex = callPackage ../applications/science/math/cplex (config.cplex or { });
 
-  datasette = with python3Packages; toPythonApplication datasette;
-
   discourse = callPackage ../servers/web-apps/discourse { };
 
   discourseAllPlugins = discourse.override {
