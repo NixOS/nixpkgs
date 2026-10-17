@@ -319,8 +319,8 @@ Every word must earn its place.
 ### One sentence per line
 
 Put each sentence in its own line.
-This makes reviews and suggestions much easier, since GitHub's review system is based on lines.
 This is [semantic line break](https://sembr.org/).
+It makes reviews and suggestions much easier, since GitHub's review system is based on lines.
 
 A single line break on source markdown renders output in the same line.
 Two consecutive line breaks will render a line break in the output.
