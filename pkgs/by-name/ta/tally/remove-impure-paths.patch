@@ -1,0 +1,16 @@
+diff --git a/main.lua b/main.lua
+index 3ccbe76..5c5ba7c 100644
+--- a/main.lua
++++ b/main.lua
+@@ -71,11 +71,6 @@ end
+ 
+ -- SECTION: Imports and app initialization
+ 
+-do -- Update package paths so they only use Flatpak
+-	local vernum = _VERSION:gsub("Lua ", "")
+-	package.cpath = ("/app/lib/lua/%s/?.so"):format(vernum)
+-	package.path = ("/app/share/lua/%s/?.lua;/app/share/lua/%s/?/init.lua"):format(vernum, vernum)
+-end
+ 
+ local LuaGObject = require "LuaGObject"
+ local Adw = LuaGObject.require "Adw"
