@@ -2537,8 +2537,6 @@ with pkgs;
 
   su = shadow.su;
 
-  subzerod = with python3Packages; toPythonApplication subzerod;
-
   tartube-yt-dlp = tartube.override {
     youtube-dl = yt-dlp;
   };
