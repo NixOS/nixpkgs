@@ -23,7 +23,7 @@ systemd removes the private {file}`/tmp` when the service stops.
 
 Diagnostic files go to these places:
 
-- JVM crash logs go to {file}`hs_err_pid<pid>.log` in the private {file}`/tmp`, which systemd removes when the crash stops the unit.
+- JVM crash logs go to {file}`hs_err_pid<pid>.log` in [](#opt-services.cassandra.homeDir).
 
 - To get heap dumps, give the JVM a directory that the `cassandra` user can write, on a file system with space for an {file}`.hprof` file as large as the heap:
   ```nix

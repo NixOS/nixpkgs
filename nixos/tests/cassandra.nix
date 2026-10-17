@@ -164,6 +164,12 @@ in
         cass0.wait_until_succeeds(
             "nodetool status -p ${jmxPortStr} --resolve-ip | egrep '^UN[[:space:]]+cass2'"
         )
+
+    with subtest("JVM crash log"):
+        pid = cass0.succeed("systemctl show --property MainPID --value cassandra.service").strip()
+        cass0.succeed("kill -SEGV " + pid)
+        cass0.wait_until_fails("systemctl is-active cassandra.service")
+        cass0.succeed("test -s /var/lib/cassandra/hs_err_pid" + pid + ".log")
   '';
 
   passthru = {
