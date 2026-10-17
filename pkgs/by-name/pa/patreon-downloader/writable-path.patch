@@ -1,0 +1,40 @@
+Submodule submodules/UniversalDownloaderPlatform contains modified content
+diff --git a/submodules/UniversalDownloaderPlatform/UniversalDownloaderPlatform.Engine/PluginManager.cs b/submodules/UniversalDownloaderPlatform/UniversalDownloaderPlatform.Engine/PluginManager.cs
+index d5c2a37..e079451 100644
+--- a/submodules/UniversalDownloaderPlatform/UniversalDownloaderPlatform.Engine/PluginManager.cs
++++ b/submodules/UniversalDownloaderPlatform/UniversalDownloaderPlatform.Engine/PluginManager.cs
+@@ -17,7 +17,7 @@ namespace UniversalDownloaderPlatform.Engine
+ {
+     internal sealed class PluginManager : IPluginManager
+     {
+-        private static string _pluginsDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "plugins");
++        private static string _pluginsDirectory = "plugins";
+         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+ 
+         private readonly List<IPlugin> _plugins;
+diff --git a/submodules/UniversalDownloaderPlatform/UniversalDownloaderPlatform.Engine/UniversalDownloader.cs b/submodules/UniversalDownloaderPlatform/UniversalDownloaderPlatform.Engine/UniversalDownloader.cs
+index 728a6a4..e764081 100644
+--- a/submodules/UniversalDownloaderPlatform/UniversalDownloaderPlatform.Engine/UniversalDownloader.cs
++++ b/submodules/UniversalDownloaderPlatform/UniversalDownloaderPlatform.Engine/UniversalDownloader.cs
+@@ -192,7 +192,7 @@ namespace UniversalDownloaderPlatform.Engine
+                 {
+                     if (string.IsNullOrWhiteSpace(settings.DownloadDirectory))
+                     {
+-                        settings.DownloadDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "download", crawlTargetInfo.SaveDirectory);
++                        settings.DownloadDirectory = Path.Combine("download", crawlTargetInfo.SaveDirectory);
+                     }
+                     if (!Directory.Exists(settings.DownloadDirectory))
+                     {
+diff --git a/submodules/UniversalDownloaderPlatform/UniversalDownloaderPlatform.MegaDownloader/Plugin.cs b/submodules/UniversalDownloaderPlatform/UniversalDownloaderPlatform.MegaDownloader/Plugin.cs
+index 1d126a0..96f96ed 100644
+--- a/submodules/UniversalDownloaderPlatform/UniversalDownloaderPlatform.MegaDownloader/Plugin.cs
++++ b/submodules/UniversalDownloaderPlatform/UniversalDownloaderPlatform.MegaDownloader/Plugin.cs
+@@ -39,7 +39,7 @@ namespace UniversalDownloaderPlatform.MegaDownloader
+             _newFormatRegex = new Regex(@"/(?<type>(file|folder))/(?<id>[^#/ ]+)(#(?<key>[a-zA-Z0-9_-]+))?");//Regex("(#F|#)![a-zA-Z0-9]{0,8}![a-zA-Z0-9_-]+");
+             _oldFormatRegex = new Regex("#(?<type>F?)!(?<id>[^!]+)(!(?<key>[^$!\\?<'\"\\s]+))?");
+ 
+-            string configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "mega_credentials.json");
++            string configPath = "mega_credentials.json";
+ 
+             IConfiguration configuration = new ConfigurationBuilder()
+                 .AddJsonFile(configPath, true, false)
