@@ -43,6 +43,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "net_util" # /dev/net/tun
     "--exclude"
     "vmm" # /dev/kvm
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isRiscV64 [
+    "--exclude"
+    "test_infra"
+    "--exclude"
+    "performance-metrics"
+    "--exclude"
+    "cloud-hypervisor"
+  ]
+  ++ [
     "--"
     # io_uring syscalls are blocked by the Lix sandbox
     "--skip=formats"
