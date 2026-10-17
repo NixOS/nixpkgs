@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fricas";
-  version = "1.3.13";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "fricas";
     repo = "fricas";
     tag = finalAttrs.version;
-    hash = "sha256-vpClJwB91pCgc6DWy0I2XTfSWkt+7nEAkUK9zz4qh4A=";
+    hash = "sha256-v4/zVgrwQZ4fnuLXDip164UKsLDzN99KfP2R0URumyE=";
   };
 
   buildInputs = [
