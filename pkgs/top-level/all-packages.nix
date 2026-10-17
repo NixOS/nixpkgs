@@ -4881,8 +4881,6 @@ with pkgs;
     flex = flex_2_5_35;
   };
 
-  sqlite-utils = with python3Packages; toPythonApplication sqlite-utils;
-
   sqlmap = with python3Packages; toPythonApplication sqlmap;
 
   teensyduino = arduino-core.override {
