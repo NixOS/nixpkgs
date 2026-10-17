@@ -33,6 +33,7 @@ from test_driver.efi import EfiVariable, EfiVars
 from test_driver.errors import MachineError, RequestedAssertionFailed
 from test_driver.logger import AbstractLogger
 from test_driver.machine.ocr import (
+    iter_ocr_variants_on_screenshot,
     perform_ocr_on_screenshot,
     perform_ocr_variants_on_screenshot,
 )
@@ -1257,6 +1258,9 @@ class QemuMachine(BaseMachine):
         contents of the screen by using optical character recognition (see
         `get_screen_text` and `get_screen_text_variants`).
 
+        If Tesseract's sparse text mode (11) does not match, try mode 12 on
+        the same image variants before taking another screenshot.
+
         ::: {.note}
         This requires [`enableOCR`](#test-opt-enableOCR) to be set to `true`.
         :::
@@ -1264,10 +1268,12 @@ class QemuMachine(BaseMachine):
         _warn_if_numeric_duration(timeout, "wait_for_text")
 
         def screen_matches(last_try: bool) -> bool:
-            variants = self.get_screen_text_variants()
-            for text in variants:
-                if re.search(regex, text) is not None:
-                    return True
+            variants = []
+            with self._managed_screenshot() as screenshot_path:
+                for texts in iter_ocr_variants_on_screenshot(screenshot_path):
+                    variants.extend(texts)
+                    if any(re.search(regex, text) is not None for text in texts):
+                        return True
 
             if last_try:
                 self.log(f"Last OCR attempt failed. Text was: {variants}")

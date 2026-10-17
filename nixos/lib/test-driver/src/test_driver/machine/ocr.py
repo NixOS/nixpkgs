@@ -1,6 +1,7 @@
 import os
 import shutil
 import subprocess
+from collections.abc import Generator
 from concurrent.futures import Future, ThreadPoolExecutor
 from pathlib import Path
 
@@ -12,16 +13,33 @@ def perform_ocr_on_screenshot(screenshot_path: Path) -> str:
     Perform OCR on a screenshot that contains text.
     Returns a string with all words that could be found.
     """
-    return perform_ocr_variants_on_screenshot(screenshot_path, False)[0]
+    # This API returns a single string, so use the default mode 11 result.
+    return next(iter_ocr_variants_on_screenshot(screenshot_path, False))[0]
 
 
 def perform_ocr_variants_on_screenshot(
     screenshot_path: Path, variants: bool = True
 ) -> list[str]:
     """
-    Same as perform_ocr_on_screenshot but will create variants of the images
-    that can lead to more words being detected.
-    Returns a string with words for each variant.
+    Same as perform_ocr_on_screenshot but will try alternative interpretations
+    and optionally create variants of the image that can lead to more words
+    being detected.
+    Returns a string with words for each interpretation of each variant.
+    """
+    return [
+        text
+        for texts in iter_ocr_variants_on_screenshot(screenshot_path, variants)
+        for text in texts
+    ]
+
+
+def iter_ocr_variants_on_screenshot(
+    screenshot_path: Path, variants: bool = True
+) -> Generator[list[str]]:
+    """Yield batches of alternative textual interpretations, reusing the images.
+
+    Additional interpretations are only computed when the caller requests
+    the next batch of results.
     """
     if shutil.which("tesseract") is None:
         raise MachineError("OCR requested but `tesseract` is not available")
@@ -37,18 +55,28 @@ def perform_ocr_variants_on_screenshot(
     with ThreadPoolExecutor(max_workers=workers) as e:
         # The idea here is to let the first tesseract call run on the raw image
         # while the other two are preprocessed + tesseracted in parallel
-        future_results: list[Future] = [e.submit(_run_tesseract, screenshot_path)]
+        def tesseract_image(image: Path) -> tuple[Path, str]:
+            return image, _run_tesseract(image, 11)
+
+        future_results: list[Future[tuple[Path, str]]] = [
+            e.submit(tesseract_image, screenshot_path)
+        ]
         if variants:
 
-            def tesseract_processed(inverted: bool) -> str:
-                return _run_tesseract(_preprocess_screenshot(screenshot_path, inverted))
+            def tesseract_processed(inverted: bool) -> tuple[Path, str]:
+                processed_image = _preprocess_screenshot(screenshot_path, inverted)
+                return tesseract_image(processed_image)
 
             future_results.append(e.submit(tesseract_processed, False))
             future_results.append(e.submit(tesseract_processed, True))
-        return [future.result() for future in future_results]
+        results = [future.result() for future in future_results]
+        yield [text for _, text in results]
+
+        fallback_results = [e.submit(_run_tesseract, image, 12) for image, _ in results]
+        yield [future.result() for future in fallback_results]
 
 
-def _run_tesseract(image: Path) -> str:
+def _run_tesseract(image: Path, page_segmentation_mode: int) -> str:
     # tesseract --help-oem
     # OCR Engine modes (OEM):
     #  0|tesseract_only          Legacy engine only.
@@ -67,7 +95,7 @@ def _run_tesseract(image: Path) -> str:
             "-c",
             "debug_file=/dev/null",
             "--psm",
-            "11",
+            str(page_segmentation_mode),
         ],
         capture_output=True,
     )
