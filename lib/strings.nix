@@ -340,7 +340,7 @@ rec {
     # Inputs
 
     `list`
-    : List of strings. Any element that is not a string will be implicitly converted to a string.
+    : List of strings.
 
     # Type
 
