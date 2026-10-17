@@ -1583,8 +1583,6 @@ with pkgs;
     enableWispr = false;
   };
 
-  unify = with python3Packages; toPythonApplication unify;
-
   inherit (import ../development/libraries/libsbsms pkgs)
     libsbsms
     libsbsms_2_0_2
