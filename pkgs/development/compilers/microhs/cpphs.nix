@@ -35,6 +35,7 @@ stdenv.mkDerivation (
 
       mkdir -p bin generated
       touch cpphssrc/malcolm-wallace-universe/.git targets.conf
+      cp ${microhs}/lib/mcabal/${microhs.haskellCompilerName}/packages/${microhs.haskellCompilerName}/data/mhs.conf mhs.conf
       cp ${microhs}/bin/mhs bin/mhs
     '';
 

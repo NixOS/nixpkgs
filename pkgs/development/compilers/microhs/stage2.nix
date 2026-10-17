@@ -24,9 +24,10 @@ stdenv.mkDerivation (
 
     env = {
       CABALDIR = "${placeholder "out"}/lib/mcabal";
+      MHSDIR = "${microhs-stage1}/lib/mhs";
     };
 
-    dontBuild = true;
+    buildFlags = [ "mhs.conf" ];
 
     installPhase = ''
       runHook preInstall
