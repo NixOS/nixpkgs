@@ -1335,8 +1335,6 @@ with pkgs;
       '';
     });
 
-  clickgen = with python3Packages; toPythonApplication clickgen;
-
   coloredlogs = with python3Packages; toPythonApplication coloredlogs;
 
   czkawka-full = czkawka.wrapper.override {
