@@ -127,5 +127,8 @@ stdenv.mkDerivation rec {
       Crafter
       jonhermansen
     ];
+    knownVulnerabilities = [
+      "Uses Electron 37.6.0, EOL on October 4, 2025, Several CVEs known."
+    ];
   };
 }
