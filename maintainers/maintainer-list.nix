@@ -20023,6 +20023,13 @@
     githubId = 81203001;
     name = "Mark Roboff";
   };
+  MrQubo = {
+    name = "MrQubo";
+    github = "MrQubo";
+    githubId = 16545322;
+    email = "v06d7irhc@mozmail.com";
+    matrix = "@mr-qubo:matrix.org";
+  };
   mrsmoer = {
     email = "mrsmoer@protonmail.com";
     github = "MrSmoer";
