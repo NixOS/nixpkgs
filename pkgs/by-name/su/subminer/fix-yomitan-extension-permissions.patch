@@ -1,0 +1,53 @@
+diff --git a/src/core/services/yomitan-extension-copy.ts b/src/core/services/yomitan-extension-copy.ts
+index aade802..c5cc710 100644
+--- a/src/core/services/yomitan-extension-copy.ts
++++ b/src/core/services/yomitan-extension-copy.ts
+@@ -29,6 +29,32 @@ function readManifestVersion(manifestPath: string): string | null {
+   }
+ }
+ 
++function makeDirectoriesOwnerWritable(rootPath: string): void {
++  const entries = fs.readdirSync(rootPath, { recursive: true, withFileTypes: true });
++  const directories = entries
++    .filter((entry) => entry.isDirectory())
++    .map((entry) => path.join(entry.parentPath, entry.name));
++
++  for (const directory of [rootPath, ...directories]) {
++    const stat = fs.statSync(directory);
++    fs.chmodSync(directory, stat.mode | 0o200);
++  }
++}
++
++async function makeDirectoriesOwnerWritableAsync(rootPath: string): Promise<void> {
++  const entries = await fs.promises.readdir(rootPath, { recursive: true, withFileTypes: true });
++  const directories = entries
++    .filter((entry) => entry.isDirectory())
++    .map((entry) => path.join(entry.parentPath, entry.name));
++
++  await Promise.all(
++    [rootPath, ...directories].map(async (directory) => {
++      const stat = await fs.promises.stat(directory);
++      await fs.promises.chmod(directory, stat.mode | 0o200);
++    }),
++  );
++}
++
+ async function pathExists(filePath: string): Promise<boolean> {
+   try {
+     await fs.promises.access(filePath);
+@@ -167,6 +193,7 @@ export function ensureExtensionCopy(
+     fs.mkdirSync(extensionsRoot, { recursive: true });
+     fs.rmSync(targetDir, { recursive: true, force: true });
+     fs.cpSync(sourceDir, targetDir, { recursive: true });
++    makeDirectoriesOwnerWritable(targetDir);
+   }
+ 
+   return { targetDir, copied: shouldCopy };
+@@ -218,6 +245,7 @@ async function ensureExtensionCopyAsyncInternal(
+     await fs.promises.mkdir(extensionsRoot, { recursive: true });
+     await fs.promises.rm(targetDir, { recursive: true, force: true });
+     await fs.promises.cp(sourceDir, targetDir, { recursive: true });
++    await makeDirectoriesOwnerWritableAsync(targetDir);
+   }
+ 
+   return { targetDir, copied: shouldCopy };
