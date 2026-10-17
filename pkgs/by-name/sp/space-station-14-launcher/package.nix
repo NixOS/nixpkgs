@@ -38,7 +38,7 @@
   soundfont-path ? "${soundfont-fluid}/share/soundfonts/FluidR3_GM2-2.sf2",
 }:
 let
-  version = "0.40.2";
+  version = "0.40.3";
   buildType = "Release";
 in
 buildDotnetModule {
@@ -50,7 +50,7 @@ buildDotnetModule {
     owner = "space-wizards";
     repo = "SS14.Launcher";
     tag = "v${version}";
-    hash = "sha256-EjB38B77nrkNkkj2h/wAvLxvozTxLrsL1VB/pXMZwQI=";
+    hash = "sha256-VFwL4OlEvtWDHvNP8meOlCWheK+J6jKyAwZlryMNRqg=";
     fetchSubmodules = true;
   };
 
