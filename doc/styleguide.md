@@ -327,7 +327,8 @@ Two consecutive line breaks will render a line break in the output.
 
 Not everything has been migrated to this format yet.
 Please always use it for new content.
-When changing existing content, update formatting if possible, but avoid excessive diffs.
+When changing existing content, update formatting if possible, in a separate commit.
+
 
 ### Writing procedures
 
