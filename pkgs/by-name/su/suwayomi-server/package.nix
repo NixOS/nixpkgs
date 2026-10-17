@@ -4,6 +4,9 @@
   fetchurl,
   makeWrapper,
   jdk21_headless,
+  xvfb-run,
+  runCommand,
+  jetbrains,
   nixosTests,
 }:
 
@@ -13,11 +16,11 @@ in
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "suwayomi-server";
-  version = "2.1.1867";
+  version = "2.3.2243";
 
   src = fetchurl {
     url = "https://github.com/Suwayomi/Suwayomi-Server/releases/download/v${finalAttrs.version}/Suwayomi-Server-v${finalAttrs.version}.jar";
-    hash = "sha256-UeMHwlgeThoAKZGrPjp3UDyLB0xCaVmHqYSnOC0Kxa8=";
+    hash = "sha256-ghFBsy4XDUoC08vf7Vd+2PB70iOD/19BMuu1rkDpjdU=";
   };
 
   nativeBuildInputs = [
@@ -29,15 +32,23 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    makeWrapper ${jdk}/bin/java $out/bin/tachidesk-server \
-      --add-flags "-Dsuwayomi.tachidesk.config.server.initialOpenInBrowserEnabled=false -jar $src"
+    makeWrapper ${xvfb-run}/bin/xvfb-run $out/bin/tachidesk-server \
+      --add-flags "-a ${jdk}/bin/java -Dsuwayomi.tachidesk.config.server.initialOpenInBrowserEnabled=false -jar $src"
 
     runHook postBuild
   '';
 
-  passthru.tests = {
-    suwayomi-server-with-auth = nixosTests.suwayomi-server.with-auth;
-    suwayomi-server-without-auth = nixosTests.suwayomi-server.without-auth;
+  passthru = {
+    kcefRuntime = runCommand "suwayomi-server-kcef-runtime" { } ''
+      mkdir -p $out
+      ln -s ${jetbrains.jdk-21}/lib/openjdk/lib/* $out/
+      ln -s ${jetbrains.jdk-21}/lib/openjdk/release $out/release
+    '';
+
+    tests = {
+      suwayomi-server-with-auth = nixosTests.suwayomi-server.with-auth;
+      suwayomi-server-without-auth = nixosTests.suwayomi-server.without-auth;
+    };
   };
 
   meta = {
