@@ -10,8 +10,8 @@ let
     domain = "gitlab.postmarketos.org";
     owner = "postmarketOS";
     repo = "mobile-config-firefox";
-    rev = "5.4.1";
-    hash = "sha256-MyhGl1gIjDtNUMLoHz15l5RaJWDcTeBgZl0Gb8WHcUg=";
+    rev = "5.5.1";
+    hash = "sha256-kIMeVKUI8/MdCJIkBlcYYEUnN7+ciDpKuReAeKkn8VY=";
   };
   mobileConfigDir = runCommand "mobile-config-firefox" { } ''
     mkdir -p $out
