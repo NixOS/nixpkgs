@@ -10157,8 +10157,6 @@ with pkgs;
     nanoizeNewlib = true;
   };
 
-  sieveshell = with python3.pkgs; toPythonApplication managesieve;
-
   duden = python3Packages.toPythonApplication python3Packages.duden;
 
   yaziPlugins = recurseIntoAttrs (callPackage ../by-name/ya/yazi/plugins { });
