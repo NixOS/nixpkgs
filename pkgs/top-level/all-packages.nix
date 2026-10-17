@@ -290,8 +290,6 @@ with pkgs;
 
   alacritty-graphics = callPackage ../by-name/al/alacritty/package.nix { withGraphics = true; };
 
-  bloodhound-py = with python3Packages; toPythonApplication bloodhound;
-
   # Zip file format only allows times after year 1980, which makes e.g. Python
   # wheel building fail with:
   # ValueError: ZIP does not support timestamps before 1980
