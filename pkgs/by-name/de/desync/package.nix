@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "desync";
-  version = "1.1.4";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "folbricht";
     repo = "desync";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ORFIGjQD0S7RPgWJqDwPH2wI6Dnv4LvOZ0tMHpOtvPM=";
+    hash = "sha256-WPhxXHB4d+yGX/94GwEJa3HEYZhIq7ncDEMd+NeY7bQ=";
   };
 
   vendorHash = "sha256-08LGC+N0NjUAjo9b5JhKNr46CuIXMz/erw2RPRU17xo=";
