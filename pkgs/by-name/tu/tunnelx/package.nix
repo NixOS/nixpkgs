@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tunnelx";
-  version = "2023-09-29";
+  version = "2026-07-10";
 
   src = fetchFromGitHub {
     owner = "CaveSurveying";
     repo = "tunnelx";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-4vTtmhVNDXUD7pCiugt+Yl/M3MFsUnzJfpcU9AxnGvA=";
+    hash = "sha256-Dt3kBv81TZ3ZgecMjyWT2ggV/feaCYDABYKkWWEjapc=";
   };
 
   nativeBuildInputs = [
