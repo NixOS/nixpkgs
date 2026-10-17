@@ -476,6 +476,8 @@ self: super: with self; {
 
   aiopnsense = callPackage ../development/python-modules/aiopnsense { };
 
+  aiopowerwall = callPackage ../development/python-modules/aiopowerwall { };
+
   aioprocessing = callPackage ../development/python-modules/aioprocessing { };
 
   aioprometheus = callPackage ../development/python-modules/aioprometheus { };
