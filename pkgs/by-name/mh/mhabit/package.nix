@@ -2,8 +2,6 @@
   lib,
   fetchFromGitHub,
   flutter341,
-  sqlite,
-  libsecret,
   _experimental-update-script-combinators,
   nix-update-script,
   runCommand,
@@ -28,11 +26,6 @@ flutter341.buildFlutterApplication {
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
   gitHashes = lib.importJSON ./git-hashes.json;
-
-  buildInputs = [
-    sqlite
-    libsecret
-  ];
 
   # https://github.com/juliansteenbakker/flutter_secure_storage/issues/965
   env.CXXFLAGS = toString [ "-Wno-deprecated-literal-operator" ];
