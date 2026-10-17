@@ -51,6 +51,17 @@ See the documentation of the settings
 [`cgroups`](https://nix.dev/manual/nix/stable/development/experimental-features#xp-feature-cgroups)
 for more information.
 
+Tests using `systemd-nspawn` containers require the test driver to run as root.
+For sandboxed builds, Nix's `uid-range` feature runs the driver as UID 0 inside
+a user namespace, so invoking `nix-build` does not require root privileges.
+
+When running `nixos-test-driver` directly, use root privileges in both batch
+and [interactive mode](#sec-running-nixos-tests-interactively). For example:
+
+```ShellSession
+$ sudo ./result/bin/nixos-test-driver
+```
+
 If the test uses both `systemd-nspawn` [`containers`](#test-opt-containers) and QEMU virtual machine [`nodes`](#test-opt-nodes)
 and requires them share a common VLAN,
 `/dev/net` must be present in the sandbox.
