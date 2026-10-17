@@ -231,7 +231,7 @@
         rauc('status', 'mark-active', name(slot))
         wait_rauc(slot, '--arg', 'slot', slot, '.boot_primary as $primary | .slots[] | to_entries[] | select(.key == $primary) | .value.bootname')
 
-      machine.start(allow_reboot=True)
+      machine.start_and_allow_reboot()
       machine.wait_for_unit('multi-user.target')
 
       for (a, b, image, update) in (('a', 'b', 'a', ""), ('b', 'a', 'b', 'c'), ('a', 'b', 'c', "")):
