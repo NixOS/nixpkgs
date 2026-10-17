@@ -381,7 +381,7 @@ Available options:
 
 - `pnpmBuildScript`: select which script from `package.json` to run. Defaults to `build`.
 - `pnpmBuildFlags`: array of flags to pass to the build script.
-- `pnpmFlags`: currently the same as `pnpmBuildFlags`, but might be used by other hooks in the future.
+- `pnpmFlags`: array of flags passed to all invocations of pnpm itself.
 - `dontPnpmBuild`: disable this hook from running automatically. The hook can still be invoked manually.
 
 Both [`pnpmRoot`](#javascript-pnpm-sourceRoot) and [`pnpmWorkspaces`](#javascript-pnpm-workspaces) are honored by this hook.
