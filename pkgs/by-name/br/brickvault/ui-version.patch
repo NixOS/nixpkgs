@@ -1,0 +1,13 @@
+diff --git a/Settings/AppSettings.cs b/Settings/AppSettings.cs
+index 6296c85..13a4caf 100644
+--- a/Settings/AppSettings.cs
++++ b/Settings/AppSettings.cs
+@@ -12,7 +12,7 @@ namespace BrickVaultApp.Settings
+     public class AppSettings : INotifyPropertyChanged
+     {
+         public const string AppName = "BrickVault";
+-        public const string Version = "1.2.0";
++        public const string Version = "1.2.1";
+ 
+         public static string AppString => $"{AppName} {Version}";
+ 
