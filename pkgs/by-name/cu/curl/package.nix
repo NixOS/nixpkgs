@@ -9,6 +9,7 @@ curlMinimal.override (
     http3Support = true;
     idnSupport = true;
     pslSupport = true;
+    websocketSupport = true;
     zstdSupport = true;
   }
   // removeAttrs args [ "curlMinimal" ]

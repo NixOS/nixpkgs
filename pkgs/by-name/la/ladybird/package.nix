@@ -12,7 +12,7 @@
   gitMinimal,
   ninja,
   pkg-config,
-  curlFull, # Websocket support
+  curl,
   libavif,
   angle, # libEGL
   brotli,
@@ -164,7 +164,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    curlFull
+    curl
     brotli
     cpptrace
     fast-float
