@@ -19,7 +19,6 @@ buildPythonPackage (finalAttrs: {
   pname = "saiph";
   version = "3.0.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "octopize";

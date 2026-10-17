@@ -70,8 +70,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   inherit version src;
   format = "other";
 
-  __structuredAttrs = true;
-
   dontConfigure = true;
   dontBuild = true;
 

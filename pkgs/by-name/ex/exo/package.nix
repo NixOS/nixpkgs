@@ -77,7 +77,6 @@ in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "exo";
   pyproject = true;
-  __structuredAttrs = true;
 
   inherit version src;
 

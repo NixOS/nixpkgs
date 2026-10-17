@@ -20,7 +20,6 @@ buildPythonPackage (finalAttrs: {
   pname = "amazon-ion";
   version = "0.15.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "amazon-ion";

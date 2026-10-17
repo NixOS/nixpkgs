@@ -21,7 +21,6 @@ buildPythonPackage (finalAttrs: {
   pname = "cairosvg";
   version = "2.9.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Kozea";
