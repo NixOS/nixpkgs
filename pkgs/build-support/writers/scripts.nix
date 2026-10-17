@@ -257,23 +257,20 @@ rec {
       # This is required in order to support wrapping, as wrapped programs consist of at least two files: the executable and the wrapper.
       inner =
         pkgs.runCommandLocal name
-          (
-            {
-              inherit makeWrapperArgs;
-              nativeBuildInputs = [ makeBinaryWrapper ];
-              meta.mainProgram = name;
-            }
-            // (
-              if (types.str.check content) then
-                {
-                  inherit content;
-                  passAsFile = [ "content" ];
-                }
-              else
-                { contentPath = content; }
-            )
-          )
+          {
+            inherit content makeWrapperArgs;
+            nativeBuildInputs = [ makeBinaryWrapper ];
+            strictDeps = true;
+            __structuredAttrs = true;
+            meta.mainProgram = name;
+          }
           ''
+            ${
+              if types.str.check content then
+                ''contentPath="$TMPDIR/content"; printf "%s" "$content" > "$contentPath"''
+              else
+                ''contentPath="$content"''
+            }
             ${compileScript}
             ${lib.optionalString strip "${lib.getBin buildPackages.bintools-unwrapped}/bin/${buildPackages.bintools-unwrapped.targetPrefix}strip -S $out"}
             # Sometimes binaries produced for darwin (e. g. by GHC) won't be valid
@@ -283,8 +280,8 @@ rec {
             mv $out tmp
             mkdir -p $out/$(dirname "${path}")
             mv tmp $out/${path}
-            if [ -n "''${makeWrapperArgs+''${makeWrapperArgs[@]}}" ]; then
-              wrapProgram $out/${path} ''${makeWrapperArgs[@]}
+            if [[ -v makeWrapperArgs ]]; then
+              wrapProgram $out/${path} "''${makeWrapperArgs[@]}"
             fi
           '';
     in
