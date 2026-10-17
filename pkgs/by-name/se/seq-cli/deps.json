@@ -1,8 +1,78 @@
 [
   {
     "pname": "Autofac",
-    "version": "8.1.1",
-    "hash": "sha256-///N/c/OmCa7DUVz9/hIA/rFsaJ4TMltqdrVk7Ycmq8="
+    "version": "8.3.0",
+    "hash": "sha256-QtcCA3coQF75v6+bXbmWEUce2ts6bDEpVtrgGPO0Jdo="
+  },
+  {
+    "pname": "Autofac.Extensions.DependencyInjection",
+    "version": "10.0.0",
+    "hash": "sha256-ACQwFG8a5LMoqGyHI/YpwVyXZQYqM5+wnk0q2BbGVZ4="
+  },
+  {
+    "pname": "Microsoft.Extensions.Configuration.Abstractions",
+    "version": "9.0.0",
+    "hash": "sha256-xtG2USC9Qm0f2Nn6jkcklpyEDT3hcEZOxOwTc0ep7uc="
+  },
+  {
+    "pname": "Microsoft.Extensions.Configuration.Binder",
+    "version": "9.0.0",
+    "hash": "sha256-6ajYWcNOQX2WqftgnoUmVtyvC1kkPOtTCif4AiKEffU="
+  },
+  {
+    "pname": "Microsoft.Extensions.DependencyInjection",
+    "version": "9.0.0",
+    "hash": "sha256-dAH52PPlTLn7X+1aI/7npdrDzMEFPMXRv4isV1a+14k="
+  },
+  {
+    "pname": "Microsoft.Extensions.DependencyInjection.Abstractions",
+    "version": "8.0.1",
+    "hash": "sha256-lzTYLpRDAi3wW9uRrkTNJtMmaYdtGJJHdBLbUKu60PM="
+  },
+  {
+    "pname": "Microsoft.Extensions.DependencyInjection.Abstractions",
+    "version": "9.0.0",
+    "hash": "sha256-CncVwkKZ5CsIG2O0+OM9qXuYXh3p6UGyueTHSLDVL+c="
+  },
+  {
+    "pname": "Microsoft.Extensions.DependencyModel",
+    "version": "9.0.0",
+    "hash": "sha256-xirwlMWM0hBqgTneQOGkZ8l45mHT08XuSSRIbprgq94="
+  },
+  {
+    "pname": "Microsoft.Extensions.Diagnostics.Abstractions",
+    "version": "9.0.0",
+    "hash": "sha256-wG1LcET+MPRjUdz3HIOTHVEnbG/INFJUqzPErCM79eY="
+  },
+  {
+    "pname": "Microsoft.Extensions.FileProviders.Abstractions",
+    "version": "9.0.0",
+    "hash": "sha256-mVfLjZ8VrnOQR/uQjv74P2uEG+rgW72jfiGdSZhIfDc="
+  },
+  {
+    "pname": "Microsoft.Extensions.Hosting.Abstractions",
+    "version": "9.0.0",
+    "hash": "sha256-NhEDqZGnwCDFyK/NKn1dwLQExYE82j1YVFcrhXVczqY="
+  },
+  {
+    "pname": "Microsoft.Extensions.Logging",
+    "version": "9.0.0",
+    "hash": "sha256-kR16c+N8nQrWeYLajqnXPg7RiXjZMSFLnKLEs4VfjcM="
+  },
+  {
+    "pname": "Microsoft.Extensions.Logging.Abstractions",
+    "version": "9.0.0",
+    "hash": "sha256-iBTs9twjWXFeERt4CErkIIcoJZU1jrd1RWCI8V5j7KU="
+  },
+  {
+    "pname": "Microsoft.Extensions.Options",
+    "version": "9.0.0",
+    "hash": "sha256-DT5euAQY/ItB5LPI8WIp6Dnd0lSvBRP35vFkOXC68ck="
+  },
+  {
+    "pname": "Microsoft.Extensions.Primitives",
+    "version": "9.0.0",
+    "hash": "sha256-ZNLusK1CRuq5BZYZMDqaz04PIKScE2Z7sS2tehU7EJs="
   },
   {
     "pname": "Newtonsoft.Json",
@@ -11,8 +81,8 @@
   },
   {
     "pname": "Seq.Api",
-    "version": "2024.3.0",
-    "hash": "sha256-OUBZ9VV7C5p/CzW0hoN3N9m1RAEGg24wNYFZgfJgk4s="
+    "version": "2025.2.2",
+    "hash": "sha256-uIDhFOqoBKmYceaKifykB/y3oNUoQIsIzRWIku2/hmI="
   },
   {
     "pname": "Seq.Apps",
@@ -21,18 +91,33 @@
   },
   {
     "pname": "Seq.Syntax",
-    "version": "1.0.0",
-    "hash": "sha256-FcDdFhRE2EIgQjoTHDjKLq/Pl9mKzezL/B75pGhvk9s="
+    "version": "1.1.0",
+    "hash": "sha256-Ulp0EpFG2KxoGMP/1ek/AwLSNfjLoci0K/Y4qMuaK+Q="
   },
   {
     "pname": "Serilog",
-    "version": "4.0.2",
-    "hash": "sha256-vkd4s/PsKnnVzN1+f9haIP5LoxNWxnhdv3mBQYl/2Hc="
+    "version": "4.3.0",
+    "hash": "sha256-jyIy4BjsyFXge3aO4GRFAdnX4/rz1MHfBkBDIpCDsTw="
+  },
+  {
+    "pname": "Serilog.AspNetCore",
+    "version": "9.0.0",
+    "hash": "sha256-h58CFtXBRvwhTCrhQPHQMKbp98YiK02o+cOyOmktVpQ="
   },
   {
     "pname": "Serilog.Expressions",
     "version": "5.0.0",
     "hash": "sha256-xpAT8U0pzTvRGa/qBd2M3YOQDD1xgAHCMVN9NEz0L4E="
+  },
+  {
+    "pname": "Serilog.Extensions.Hosting",
+    "version": "9.0.0",
+    "hash": "sha256-bidr2foe7Dp4BJOlkc7ko0q6vt9ITG3IZ8b2BKRa0pw="
+  },
+  {
+    "pname": "Serilog.Extensions.Logging",
+    "version": "9.0.0",
+    "hash": "sha256-aGkz1V4HVl0rWC1BkcnLhG1EC7WLBoT3tdLdUUTFXaw="
   },
   {
     "pname": "Serilog.Formatting.Compact",
@@ -45,29 +130,39 @@
     "hash": "sha256-89+SaaXp9Pt8YTkTwVuMV3PzlPMg9mOHiFBKs3oHOUs="
   },
   {
+    "pname": "Serilog.Settings.Configuration",
+    "version": "9.0.0",
+    "hash": "sha256-Q/q5UiSrcxoy5a/orod20E2RfiRtHDhxjjGMe1dW35I="
+  },
+  {
     "pname": "Serilog.Sinks.Console",
     "version": "6.0.0",
     "hash": "sha256-QH8ykDkLssJ99Fgl+ZBFBr+RQRl0wRTkeccQuuGLyro="
   },
   {
+    "pname": "Serilog.Sinks.Debug",
+    "version": "3.0.0",
+    "hash": "sha256-7/LmoRF1rUDFhJ47bTRQQFRgSHnZDO8484r3sCGqYvE="
+  },
+  {
     "pname": "Serilog.Sinks.File",
-    "version": "5.0.0",
-    "hash": "sha256-GKy9hwOdlu2W0Rw8LiPyEwus+sDtSOTl8a5l9uqz+SQ="
+    "version": "6.0.0",
+    "hash": "sha256-KQmlUpG9ovRpNqKhKe6rz3XMLUjkBqjyQhEm2hV5Sow="
   },
   {
     "pname": "Serilog.Sinks.Seq",
-    "version": "8.0.0",
-    "hash": "sha256-1AEtDLODwS9WBkJ2yrmjKl2Rq3q2VPs1H9bQCUhC05s="
+    "version": "9.0.0",
+    "hash": "sha256-NnAkRbxwQGdNXz6DDONRxorNh1nqH2TfAQtokbq5qDw="
   },
   {
     "pname": "SerilogTracing",
-    "version": "2.1.2",
-    "hash": "sha256-fhSiUgk21s7kiz4QYF2fy9YLC1X0YHibi95x2flPqMM="
+    "version": "2.3.1",
+    "hash": "sha256-nqZEBdD0YKXRVyv7+BjCCRTrRSvNHdoon26g3of1YNI="
   },
   {
     "pname": "Superpower",
-    "version": "3.0.0",
-    "hash": "sha256-5MNmhBDYyOs+sTH364Qdn+Ck328BAQaVC1KMQ7yK2Vw="
+    "version": "3.1.0",
+    "hash": "sha256-krsT4LFDHeCjwS0BbkgpBYggpr5Nmc1RXYyOjLqRifQ="
   },
   {
     "pname": "System.Diagnostics.DiagnosticSource",
@@ -75,14 +170,19 @@
     "hash": "sha256-zmwHjcJgKcbkkwepH038QhcnsWMJcHys+PEbFGC0Jgo="
   },
   {
-    "pname": "System.Reactive",
-    "version": "6.0.1",
-    "hash": "sha256-Lo5UMqp8DsbVSUxa2UpClR1GoYzqQQcSxkfyFqB/d4Q="
+    "pname": "System.Diagnostics.EventLog",
+    "version": "9.0.7",
+    "hash": "sha256-bc0v/V0Qs3ENMlK/oGOkvUtP6jj3fMQOiF6Jk2NQUwM="
   },
   {
     "pname": "System.Security.Cryptography.ProtectedData",
-    "version": "8.0.0",
-    "hash": "sha256-fb0pa9sQxN+mr0vnXg1Igbx49CaOqS+GDkTfWNboUvs="
+    "version": "9.0.7",
+    "hash": "sha256-e8mo6zKcAOUfh96LYeH60hm7xO/hOJHgHuQkDmW56Ss="
+  },
+  {
+    "pname": "System.ServiceProcess.ServiceController",
+    "version": "9.0.7",
+    "hash": "sha256-8jAdhGSPsyA7mSppZAK8OVhARzo1ej6FN0HkUIopl0c="
   },
   {
     "pname": "Tavis.UriTemplates",
