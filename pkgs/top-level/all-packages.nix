@@ -8652,8 +8652,6 @@ with pkgs;
         stdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_19.stdenv else stdenv;
       };
 
-  terminaltexteffects = with python3Packages; toPythonApplication terminaltexteffects;
-
   inherit
     (callPackage ../applications/graphics/tesseract {
     })
