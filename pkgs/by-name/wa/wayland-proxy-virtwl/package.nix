@@ -9,13 +9,13 @@
 
 ocamlPackages.buildDunePackage {
   pname = "wayland-proxy-virtwl";
-  version = "0-unstable-2026-09-04";
+  version = "0-unstable-2026-10-08";
 
   src = fetchFromGitHub {
     owner = "talex5";
     repo = "wayland-proxy-virtwl";
-    rev = "aa515e518a9e0de117d3b77b7e9db91aea7dcfbc";
-    sha256 = "sha256-VIm6jr9SfACtCQjrmELy64wECpuTjxQ3WlTQBL64rXI=";
+    rev = "4123710fdbae57f8d5bc0d0ecce836680e8ead53";
+    sha256 = "sha256-3a8DG2GmXXifvngg37UrpQxkUWE0aJucItWwJu+evsQ=";
   };
 
   minimalOCamlVersion = "5.0";
