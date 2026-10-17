@@ -12,13 +12,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "coccinelle";
-  version = "1.3.1";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     repo = "coccinelle";
     tag = finalAttrs.version;
     owner = "coccinelle";
-    hash = "sha256-ZNWuloXhAXWNNoVWLOuDbC3e6KNL7nzM2346tB04qXA=";
+    hash = "sha256-HXrdgqtMRxEmBW+7KW/VCvpNr4bJG0gcdiVPtPX0qps=";
   };
 
   nativeBuildInputs = with ocamlPackages; [
