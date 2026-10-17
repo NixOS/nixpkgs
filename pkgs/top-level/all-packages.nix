@@ -2469,8 +2469,6 @@ with pkgs;
     resholve
     ;
 
-  reuse = with python3.pkgs; toPythonApplication reuse;
-
   rmate = rubyPackages.rmate;
 
   rosecFull = pkgs.rosec.override {
