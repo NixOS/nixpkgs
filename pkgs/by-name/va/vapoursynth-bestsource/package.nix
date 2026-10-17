@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vapoursynth-bestsource";
-  version = "13";
+  version = "16";
 
   outputs = [
     "out"
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "vapoursynth";
     repo = "bestsource";
     tag = "R${finalAttrs.version}";
-    hash = "sha256-c+FMFWICDS8Plj6GE2vvhWPmf56Vk10j41HUK1q20/U=";
+    hash = "sha256-t8dRP53hw68VElVV3og6WkNE75lmKx8llQVsfpg49+0=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace meson.build \
-      --replace-fail "vapoursynth_dep.get_variable(pkgconfig: 'libdir')" "get_option('libdir')"
+      --replace-fail "vapoursynth_dep.get_variable('libdir') / 'vapoursynth'" "get_option('libdir')"
   '';
 
   passthru.updateScript = gitUpdater {
