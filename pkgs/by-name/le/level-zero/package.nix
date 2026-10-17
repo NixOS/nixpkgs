@@ -20,6 +20,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-u8q8VOuJKUCFNJ8aLR/BrVx9lU5vD+hwkHRmy77vFe8=";
   };
 
+  patches = [
+    # The loader checks for drivers in fixed directories before dlopen, ignoring RUNPATH
+    ./search-run-opengl-driver.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     addDriverRunpath
