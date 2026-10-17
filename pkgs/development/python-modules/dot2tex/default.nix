@@ -24,10 +24,6 @@ buildPythonPackage (finalAttrs: {
     (replaceVars ./path.patch {
       inherit graphviz;
     })
-    ./test.patch # https://github.com/kjellmf/dot2tex/issues/5
-
-    # https://github.com/xyz2tex/dot2tex/pull/104 does not merge cleanly
-    ./remove-duplicate-script.patch
   ];
 
   build-system = [ setuptools ];
