@@ -173,8 +173,8 @@ buildPythonPackage (finalAttrs: {
   pythonRelaxDeps = [
     # rich<15.0.0,>=13.3.3 not satisfied by version 15.0.0
     "rich"
-    # trimesh<5.0.0,>=3.21.7 not satisfied by version 5.0.0
-    "trimesh"
+    # websockets<17.0.0,>=13.1 not satisfied by version 17.0.1
+    "websockets"
   ];
 
   __darwinAllowLocalNetworking = true;
