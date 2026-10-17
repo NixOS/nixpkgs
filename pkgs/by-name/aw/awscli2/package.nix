@@ -55,14 +55,14 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.36.31"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.38.1"; # N.B: if you change this, check if overrides are still up-to-date
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     tag = version;
-    hash = "sha256-OTLezXSBAlgyrd7O8MGWsylBSOYxb01ljINbpLhLWDE=";
+    hash = "sha256-GE8QpUdFmd1QqhtDwcVxGVcrGQH6ktXWlP8hVQiy7tc=";
   };
 
   postPatch = ''
@@ -165,6 +165,9 @@ py.pkgs.buildPythonApplication rec {
     # Integration tests require networking
     "tests/integration"
 
+    # Requires localstub
+    "tests/blackbox"
+
     # Disable slow tests (only run unit tests)
     "tests/backends"
     "tests/functional"
@@ -174,6 +177,9 @@ py.pkgs.buildPythonApplication rec {
     # Requires networking (socket binding not possible in sandbox)
     "test_is_socket"
     "test_is_special_file_warning"
+
+    # Requires a system TLS trust store
+    "test_upper_bound_matches_what_awscrt_accepts"
 
     # Disable slow tests
     "test_details_disabled_for_choice_wo_details"
