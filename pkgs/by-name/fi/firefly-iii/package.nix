@@ -13,7 +13,7 @@
 }:
 let
   php = php85;
-  version = "6.7.7";
+  version = "6.7.9";
 
   # Release tarball contains translations downloaded from crowdin
   releaseTarball = fetchzip {
@@ -21,7 +21,7 @@ let
     inherit version;
     url = "https://github.com/firefly-iii/firefly-iii/releases/download/v${version}/FireflyIII-v${version}.tar.gz";
     stripRoot = false;
-    hash = "sha256-ejXSfrsmHfbR5KpVo9VxXEsJWZ2ejS55JPl9P/6QzH8=";
+    hash = "sha256-8RU9THqtQSIkOawWztgS7Bjn48V6EejHLDW1jmO3B7U=";
   };
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -33,7 +33,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "firefly-iii";
     repo = "firefly-iii";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8svaK8jvsR4jCbkSFzWg8Q3jX/zYL10SJzR3hGMBBDY=";
+    hash = "sha256-ZKzYPD8LTGQmvm8gw0lDopVho1JR5AETqx5BeP5nuUo=";
   };
 
   buildInputs = [ php ];
@@ -51,13 +51,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname src version;
     composerStrictValidation = true;
     strictDeps = true;
-    vendorHash = "sha256-WxBC8zg954mYoCuXOJh+UFXFU7fXAZcfpwWPxbUWXao=";
+    vendorHash = "sha256-Tiai4fx7cZyoF5zU7avC+FUVKCXT9XlXdjQuLg/hRrY=";
   };
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
-    hash = "sha256-8OBn/SM9ccJ0viA7edDiSz9HX+r92SmQZY+0gX6UgPc=";
+    hash = "sha256-GcqN16qIfAQYaqc/rzfV0wiZQRgrd2Ch/PkgGa/NCRc=";
   };
 
   preInstall = ''
