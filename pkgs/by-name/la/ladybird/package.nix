@@ -14,6 +14,7 @@
   pkg-config,
   curlFull, # Websocket support
   libavif,
+  libicns,
   angle, # libEGL
   brotli,
   cpptrace,
@@ -77,18 +78,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2026-10-06";
+  version = "0-unstable-2026-10-14";
 
   src = fetchFromGitHub {
     owner = "LadybirdBrowser";
     repo = "ladybird";
-    rev = "37073e789a856bcb542427cd69f3442bb22adcc8";
-    hash = "sha256-oufMcoJn09IWlDWbyjyOXw6oIKcotNkMbSyzRzTx4k8=";
+    rev = "41e923c58147fd7ff64dcbc1ea52456ddf235c3c";
+    hash = "sha256-LQAe+TkqdpWU0ipq3pkuEwx0fhl0RlTPG+xxEBAjTMY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-EvFltK5xHWcAP67iuosI4YqngiMrX+kaocl3wutM2GU=";
+    hash = "sha256-r4HKvfwDqcH3nuS72+PmgP9xmlG5yPvmxtGrwbTodSU=";
   };
 
   patches = [
@@ -160,6 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [ glslang ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     makeWrapper
+    libicns
     rcodesign
   ];
 
@@ -202,6 +204,15 @@ stdenv.mkDerivation (finalAttrs: {
       gnFlags = prev.gnFlags ++ [
         "extra_cflags+=[\"-DSKCMS_DLL\"]"
       ];
+      postInstall =
+        (prev.postInstall or "")
+        + lib.optionalString stdenv.hostPlatform.isDarwin ''
+          # Ladybird's native font loader uses SkTypeface_Mac::MakeFromStream.
+          install -Dm644 ../../src/ports/SkTypeface_mac_ct.h \
+            $out/include/skia/src/ports/SkTypeface_mac_ct.h
+          install -Dm644 ../../src/utils/mac/SkUniqueCFRef.h \
+            $out/include/skia/src/utils/mac/SkUniqueCFRef.h
+        '';
     }))
     (wuffs.overrideAttrs (prev: {
       # Ladybird includes the stable 0.3 single-file library.
@@ -252,8 +263,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_LIBEXECDIR=libexec"
   ];
 
-  # FIXME: Add an option to -DENABLE_QT=ON on macOS to use Qt rather than Cocoa for the GUI
-
   # ld: [...]/OESVertexArrayObject.cpp.o: undefined reference to symbol 'glIsVertexArrayOES'
   # ld: [...]/libGL.so.1: error adding symbols: DSO missing from command line
   # https://github.com/LadybirdBrowser/ladybird/issues/371#issuecomment-2616415434
@@ -262,6 +271,8 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications $out/bin
     mv $out/bundle/Ladybird.app $out/Applications
+    png2icns "$out/Applications/Ladybird.app/Contents/Resources/app_icon.icns" \
+      ${finalAttrs.src}/UI/Icons/macos/app_icon.iconset/icon_{16x16,32x32,128x128,256x256,512x512,512x512@2x}.png
     makeWrapper "$out/Applications/Ladybird.app/Contents/MacOS/Ladybird" "$out/bin/Ladybird"
   '';
 
@@ -301,7 +312,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   meta = {
-    description = "Browser using the SerenityOS LibWeb engine with a Qt or Cocoa GUI";
+    description = "Browser using the SerenityOS LibWeb engine with a Qt GUI";
     homepage = "https://ladybird.org";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
