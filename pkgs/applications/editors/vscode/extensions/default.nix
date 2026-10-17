@@ -2598,8 +2598,8 @@ let
         mktplcRef = {
           publisher = "jellyedwards";
           name = "gitsweep";
-          version = "1.0.0";
-          hash = "sha256-XBD8rN6E/0GjZ3zXgR45MN9v4PYrEXBSzN7+CcLrRsg=";
+          version = "1.0.2";
+          hash = "sha256-UIYtBNNtvJYMw9JoZlRoeso9fjDCT9uYERy7c9bMKyw=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/jellyedwards.gitsweep/changelog";
