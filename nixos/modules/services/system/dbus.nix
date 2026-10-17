@@ -15,10 +15,17 @@ let
     inherit (cfg) apparmor;
     dbus = cfg.dbusPackage;
     suidHelper = "${config.security.wrapperDir}/dbus-daemon-launch-helper";
-    serviceDirectories = cfg.packages;
+    serviceDirectories = map (x: x.pkg) (genericClosure {
+      startSet = map (pkg: {
+        key = "${pkg}";
+        inherit pkg;
+      }) cfg.packages;
+      operator = _: [ ];
+    });
   };
 
   inherit (lib)
+    genericClosure
     mkOption
     mkEnableOption
     mkIf
@@ -91,6 +98,11 @@ in
           {file}`«pkg»/etc/dbus-1/session.d`
           {file}`«pkg»/share/dbus-1/session.d`
           {file}`«pkg»/share/dbus-1/services`
+
+          The system bus only reads system services and policy from these
+          packages. Session services are found through
+          {env}`XDG_DATA_DIRS`, so they also work when installed through
+          {option}`environment.systemPackages` or a user profile.
         '';
       };
 
@@ -120,10 +132,9 @@ in
 
       environment.etc."dbus-1".source = configDir;
 
-      environment.pathsToLink = [
-        "/etc/dbus-1"
-        "/share/dbus-1"
-      ];
+      # The session bus finds services through XDG_DATA_DIRS, so user
+      # profiles keep working and registered packages need to be linked in.
+      environment.pathsToLink = [ "/share/dbus-1" ];
 
       users.users.messagebus = {
         uid = config.ids.uids.messagebus;
@@ -138,6 +149,11 @@ in
       # Install dbus for dbus tools even when using dbus-broker
       environment.systemPackages = [
         cfg.dbusPackage
+        (pkgs.buildEnv {
+          name = "dbus-session-services";
+          paths = cfg.packages;
+          pathsToLink = [ "/share/dbus-1/services" ];
+        })
       ];
 
       # You still need the dbus reference implementation installed to use dbus-broker
@@ -147,7 +163,6 @@ in
 
       services.dbus.packages = [
         cfg.dbusPackage
-        config.system.path
       ];
 
       systemd.user.sockets.dbus.wantedBy = [
