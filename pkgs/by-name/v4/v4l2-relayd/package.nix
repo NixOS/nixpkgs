@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchgit,
+  fetchFromGitLab,
   autoreconfHook,
   glib,
   gst_all_1,
@@ -12,12 +12,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "v4l2-relayd";
-  version = "0.1.5";
+  version = "0.2.0";
 
-  src = fetchgit {
-    url = "https://git.launchpad.net/v4l2-relayd";
+  src = fetchFromGitLab {
+    owner = "vicamo";
+    repo = "v4l2-relayd";
     tag = "upstream/${finalAttrs.version}";
-    hash = "sha256-D+OWkny+TYNJt08X+nl7EYs5tp51vjvig/vuID6lkmg=";
+    hash = "sha256-kgCVuUvgS7yXEh7DRcZUI0gfuHKwLgUS+FDxR8u//U0=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Streaming relay for v4l2loopback using GStreamer";
     mainProgram = "v4l2-relayd";
-    homepage = "https://git.launchpad.net/v4l2-relayd";
+    homepage = "https://gitlab.com/vicamo/v4l2-relayd";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ betaboon ];
     platforms = [ "x86_64-linux" ];
