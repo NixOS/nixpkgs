@@ -1921,8 +1921,6 @@ with pkgs;
     withXorg = false;
   };
 
-  gruut = with python3.pkgs; toPythonApplication gruut;
-
   gruut-ipa = with python3.pkgs; toPythonApplication gruut-ipa;
 
   gvm-tools = with python3.pkgs; toPythonApplication gvm-tools;
