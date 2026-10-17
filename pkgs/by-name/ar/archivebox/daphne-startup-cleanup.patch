@@ -1,0 +1,97 @@
+diff --git a/daphne/testing.py b/daphne/testing.py
+index 40fcedd..617519d 100644
+--- a/daphne/testing.py
++++ b/daphne/testing.py
+@@ -68,11 +68,28 @@ class BaseDaphneTestingInstance:
+             self.port = self.process.port.value
+             return self
+         else:
+-            if self.process.errors.empty():
+-                raise RuntimeError("Daphne did not start up, no error caught")
+-            else:
+-                error, traceback = self.process.errors.get(False)
+-                raise RuntimeError("Daphne did not start up:\n%s" % traceback)
++            try:
++                if self.process.errors.empty():
++                    raise RuntimeError("Daphne did not start up, no error caught")
++                else:
++                    error, traceback = self.process.errors.get(False)
++                    raise RuntimeError("Daphne did not start up:\n%s" % traceback)
++            except BaseException:
++                # __exit__ is not called when __enter__ fails. Reap the server
++                # here so multiprocessing's interpreter shutdown cannot wait
++                # forever for a process that never became ready.
++                try:
++                    self.process.terminate()
++                    self.process.join(timeout=1)
++                    if self.process.is_alive():
++                        self.process.kill()
++                        self.process.join()
++                except BaseException:
++                    # Preserve the startup error; cleanup is best-effort.
++                    logging.exception(
++                        "Failed to clean up Daphne process after startup failure"
++                    )
++                raise
+ 
+     def __exit__(self, exc_type, exc_value, traceback):
+         # Shut down the process
+diff --git a/tests/test_startup_cleanup.py b/tests/test_startup_cleanup.py
+new file mode 100644
+index 0000000..905a7ff
+--- /dev/null
++++ b/tests/test_startup_cleanup.py
+@@ -0,0 +1,53 @@
++from unittest import TestCase
++from unittest.mock import Mock, call, patch
++
++from daphne.testing import BaseDaphneTestingInstance
++
++
++class TestStartupCleanup(TestCase):
++    def make_process(self):
++        process = Mock()
++        process.ready.wait.return_value = False
++        process.errors.empty.return_value = True
++        return process
++
++    def make_instance(self):
++        return BaseDaphneTestingInstance(application=lambda *_: None)
++
++    def test_process_is_terminated_after_startup_timeout(self):
++        process = self.make_process()
++        process.is_alive.return_value = False
++
++        with patch("daphne.testing.DaphneProcess", return_value=process):
++            with self.assertRaisesRegex(
++                RuntimeError, "Daphne did not start up, no error caught"
++            ):
++                self.make_instance().__enter__()
++
++        process.terminate.assert_called_once_with()
++        process.join.assert_called_once_with(timeout=1)
++        process.kill.assert_not_called()
++
++    def test_unresponsive_process_is_killed_after_startup_timeout(self):
++        process = self.make_process()
++        process.is_alive.side_effect = [True, False]
++
++        with patch("daphne.testing.DaphneProcess", return_value=process):
++            with self.assertRaisesRegex(
++                RuntimeError, "Daphne did not start up, no error caught"
++            ):
++                self.make_instance().__enter__()
++
++        process.terminate.assert_called_once_with()
++        self.assertEqual(process.join.call_args_list, [call(timeout=1), call()])
++        process.kill.assert_called_once_with()
++
++    def test_cleanup_error_does_not_replace_startup_error(self):
++        process = self.make_process()
++        process.terminate.side_effect = OSError("cleanup failed")
++
++        with patch("daphne.testing.DaphneProcess", return_value=process):
++            with self.assertRaisesRegex(
++                RuntimeError, "Daphne did not start up, no error caught"
++            ):
++                self.make_instance().__enter__()
