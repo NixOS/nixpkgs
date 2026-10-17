@@ -7,7 +7,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cosmic-wallpapers";
-  version = "1.9.0";
+  version = "1.10.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     tag = "epoch-${finalAttrs.version}";
     forceFetchGit = true;
     fetchLFS = true;
-    hash = "sha256-lCgWRtvaso9jKo7A4VepDFK/zc8pQpR1up8yoWS/qfc=";
+    hash = "sha256-m43hicmlMzIdMV5KjvYRi1Q0Am0V8HnbPk2zpPS4STc=";
   };
 
   __structuredAttrs = true;
