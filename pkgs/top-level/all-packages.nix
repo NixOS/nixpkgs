@@ -2465,8 +2465,6 @@ with pkgs;
 
   recoll-nox = recoll.override { withGui = false; };
 
-  reptor = with python3.pkgs; toPythonApplication reptor;
-
   inherit (callPackage ../development/misc/resholve { })
     resholve
     ;
