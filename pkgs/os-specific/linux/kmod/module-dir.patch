@@ -1,41 +1,12 @@
-diff --git a/Makefile.am b/Makefile.am
-index d4eeb7e..5c9f603 100644
---- a/Makefile.am
-+++ b/Makefile.am
-@@ -19,6 +19,7 @@ AM_CPPFLAGS = \
- 	-include $(top_builddir)/config.h \
- 	-I$(top_srcdir) \
- 	-DSYSCONFDIR=\""$(sysconfdir)"\" \
-+	-DMODULESDIRS=\""$(shell echo $(modulesdirs) | $(SED) 's|:|\\",\\"|g')"\" \
- 	${zlib_CFLAGS}
- 
- AM_CFLAGS = $(OUR_CFLAGS)
-diff --git a/configure.ac b/configure.ac
-index 23510c8..66490cf 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -202,6 +202,12 @@ GTK_DOC_CHECK([1.14],[--flavour no-tmpl-flat])
- ], [
- AM_CONDITIONAL([ENABLE_GTK_DOC], false)])
- 
-+AC_ARG_WITH([modulesdirs],
-+	AS_HELP_STRING([--with-modulesdirs=DIRS], [Kernel modules directories, separated by :]),
-+	[],
-+	[with_modulesdirs=/lib/modules])
-+AC_SUBST([modulesdirs], [$with_modulesdirs])
-+
- 
- #####################################################################
- # Default CFLAGS and LDFLAGS
 diff --git a/libkmod/libkmod.c b/libkmod/libkmod.c
-index 69fe431..d37da32 100644
+index f4510d0..c94ff24 100644
 --- a/libkmod/libkmod.c
 +++ b/libkmod/libkmod.c
-@@ -206,12 +206,15 @@ static int log_priority(const char *priority)
+@@ -162,12 +162,15 @@ static int log_priority(const char *priority)
  	return 0;
  }
  
--static const char *dirname_default_prefix = "/lib/modules";
+-static const char *dirname_default_prefix = MODULE_DIRECTORY;
 +static const char *dirname_default_prefixes[] = {
 +	MODULESDIRS,
 +	NULL
@@ -49,7 +20,7 @@ index 69fe431..d37da32 100644
  
  	if (dirname != NULL)
  		return path_make_absolute_cwd(dirname);
-@@ -219,8 +222,42 @@ static char *get_kernel_release(const char *dirname)
+@@ -175,8 +178,42 @@ static char *get_kernel_release(const char *dirname)
  	if (uname(&u) < 0)
  		return NULL;
  
@@ -94,11 +65,59 @@ index 69fe431..d37da32 100644
  
  	return p;
  }
+diff --git a/meson.build b/meson.build
+index a0cf675..59975c5 100644
+--- a/meson.build
++++ b/meson.build
+@@ -193,6 +193,25 @@ datadir = prefixdir / get_option('datadir')
+ 
+ distconfdir = get_option('distconfdir')
+ moduledir = get_option('moduledir')
++modulesdirs = get_option('modulesdirs')
++
++modulesdirs_list = []
++foreach dir : modulesdirs
++  if not dir.startswith('/')
++    error('User provided modulesdirs, \'@0@\' is not an absolute path.'.format(dir))
++  endif
++  modulesdirs_list += ['/' + dir.strip('/')]
++endforeach
++
++modulesdirs_define = ''
++foreach dir : modulesdirs_list
++  if modulesdirs_define != ''
++    modulesdirs_define += ','
++  endif
++  modulesdirs_define += '"' + dir + '"'
++endforeach
++
++add_project_arguments('-DMODULESDIRS=' + modulesdirs_define, language : 'c')
+ 
+ bashcompletiondir = get_option('bashcompletiondir')
+ fishcompletiondir = get_option('fishcompletiondir')
+diff --git a/meson_options.txt b/meson_options.txt
+index 3d41fae..b58a7d2 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -12,6 +12,13 @@ option(
+   description : 'Directory to look for kernel modules. Default: /lib/modules',
+ )
+ 
++option(
++  'modulesdirs',
++  type : 'array',
++  value : ['/lib/modules'],
++  description : 'Kernel modules directories.',
++)
++
+ option(
+   'bashcompletiondir',
+   type : 'string',
 diff --git a/tools/static-nodes.c b/tools/static-nodes.c
-index 8d2356d..2ed306d 100644
+index 9af30eb..ae6ab07 100644
 --- a/tools/static-nodes.c
 +++ b/tools/static-nodes.c
-@@ -29,10 +29,11 @@
+@@ -17,10 +17,11 @@
  #include <unistd.h>
  #include <sys/stat.h>
  #include <sys/types.h>
@@ -111,17 +130,17 @@ index 8d2356d..2ed306d 100644
  #include "kmod.h"
  
  struct static_nodes_format {
-@@ -154,8 +155,8 @@ static void help(void)
+@@ -143,8 +144,8 @@ static void help(void)
  
  static int do_static_nodes(int argc, char *argv[])
  {
 -	struct utsname kernel;
- 	char modules[PATH_MAX], buf[4096];
+ 	char modules[PATH_MAX], buf[PATH_MAX];
 +	struct kmod_ctx *ctx;
- 	const char *output = "/dev/stdout";
+ 	const char *output = NULL;
  	FILE *in = NULL, *out = NULL;
  	const struct static_nodes_format *format = &static_nodes_format_human;
-@@ -206,22 +207,25 @@ static int do_static_nodes(int argc, char *argv[])
+@@ -193,35 +194,26 @@ static int do_static_nodes(int argc, char *argv[])
  		}
  	}
  
@@ -133,23 +152,33 @@ index 8d2356d..2ed306d 100644
  		ret = EXIT_FAILURE;
  		goto finish;
  	}
--
--	snprintf(modules, sizeof(modules), "/lib/modules/%s/modules.devname", kernel.release);
+ 
+-	r = snprintf(modules, sizeof(modules), MODULE_DIRECTORY "/%s/modules.devname",
+-		     kernel.release);
+-	if (r >= (int)sizeof(modules)) {
+-		fprintf(stderr,
+-			"Error: could not open " MODULE_DIRECTORY
+-			"/%s/modules.devname - path too long\n",
+-			kernel.release);
 +	if (snprintf(modules, sizeof(modules), "%s/modules.devname", kmod_get_dirname(ctx)) < 0) {
 +		fprintf(stderr, "Error: path to modules.devname is too long\n");
-+		ret = EXIT_FAILURE;
-+		goto finish;
-+	}
+ 		ret = EXIT_FAILURE;
+ 		goto finish;
+ 	}
 +	kmod_unref(ctx);
  	in = fopen(modules, "re");
  	if (in == NULL) {
  		if (errno == ENOENT) {
--			fprintf(stderr, "Warning: /lib/modules/%s/modules.devname not found - ignoring\n",
+-			fprintf(stderr,
+-				"Warning: " MODULE_DIRECTORY
+-				"/%s/modules.devname not found - ignoring\n",
 -				kernel.release);
 +			fprintf(stderr, "Warning: %s not found - ignoring\n", modules);
  			ret = EXIT_SUCCESS;
  		} else {
--			fprintf(stderr, "Error: could not open /lib/modules/%s/modules.devname - %m\n",
+-			fprintf(stderr,
+-				"Error: could not open " MODULE_DIRECTORY
+-				"/%s/modules.devname - %m\n",
 -				kernel.release);
 +			fprintf(stderr, "Error: could not open %s - %m\n", modules);
  			ret = EXIT_FAILURE;
