@@ -54,7 +54,7 @@ in
         '';
       };
 
-      javaPackage = lib.mkPackageOption pkgs "jdk" { };
+      javaPackage = lib.mkPackageOption pkgs "jdk25" { };
     };
   };
 
