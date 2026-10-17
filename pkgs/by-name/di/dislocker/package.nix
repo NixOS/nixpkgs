@@ -45,5 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
       yuannan
     ];
     platforms = lib.platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })
