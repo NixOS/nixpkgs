@@ -37,8 +37,38 @@ buildGoModule (finalAttrs: {
       "-X ${buildInfoPkg}.Date=19700101"
     ];
 
-  # Tests depend on docker
-  doCheck = false;
+  # tests that start mysql and postgres containers through docker
+  excludedPackages = [
+    "pkg/storage/mysql"
+    "pkg/storage/postgres"
+  ];
+
+  checkFlags =
+    let
+      skippedTests = [
+        "TestCheckMySQL"
+        "TestCheckPostgres"
+        "TestContainerLifecycle_PullAndExec"
+        "TestExecCommand_Fail"
+        "TestListObjectsMySQL"
+        "TestListObjectsPostgres"
+        "TestListUsersMySQL"
+        "TestListUsersPostgres"
+        "TestMatrixMysql"
+        "TestMatrixPostgres"
+        "TestMigrateCommandRollbacks"
+        "TestPullImage"
+        "TestReleasesConnections"
+        "TestServerMetricsReporting"
+        "TestServerNotReadyDueToDatastoreRevision"
+        "TestServerWithMySQLDatastore"
+        "TestServerWithMySQLDatastoreAndExplicitCredentials"
+        "TestServerWithPostgresDatastore"
+        "TestServerWithPostgresDatastoreAndExplicitCredentials"
+        "TestValidationResult"
+      ];
+    in
+    [ "-skip=^(${lib.concatStringsSep "|" skippedTests})$" ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd openfga \
