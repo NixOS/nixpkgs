@@ -6,6 +6,7 @@
 
 newCatalog {
   name = "json-schema";
+  version = "07"; # Using the latest draft version
   displayName = "JSON Schema Metaschemas";
   groups = {
     "JSON Schema" = {
