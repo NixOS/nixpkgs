@@ -8,11 +8,13 @@
   makeDesktopItem,
   desktopToDarwinBundle,
   unzip,
+  gitUpdater,
 }:
 
 let
+  repourl = "https://github.com/logisim-evolution/logisim-evolution";
   icon = fetchurl {
-    url = "https://github.com/logisim-evolution/logisim-evolution/raw/9e0afa3cd6a8bfa75dab61830822cde83c70bb4b/artwork/logisim-evolution-icon.svg";
+    url = "${repourl}/raw/9e0afa3cd6a8bfa75dab61830822cde83c70bb4b/artwork/logisim-evolution-icon.svg";
     hash = "sha256-DNRimhNFt6jLdjqv7o2cNz38K6XnevxD0rGymym3xBs=";
   };
 in
@@ -21,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "4.1.0";
 
   src = fetchurl {
-    url = "https://github.com/logisim-evolution/logisim-evolution/releases/download/v${finalAttrs.version}/logisim-evolution-${finalAttrs.version}-all.jar";
+    url = "${repourl}/releases/download/v${finalAttrs.version}/logisim-evolution-${finalAttrs.version}-all.jar";
     hash = "sha256-/mOGoyF6WRvMMRpO2knh9Do4m0md09D29A80T8hfJXc=";
   };
   dontUnpack = true;
@@ -57,6 +59,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+    url = repourl;
+  };
 
   meta = {
     changelog = "https://github.com/logisim-evolution/logisim-evolution/releases/tag/v${finalAttrs.version}";
