@@ -2187,6 +2187,7 @@ mapAliases {
   proj_7 = throw "proj_7 has been removed, as it was broken and unused"; # Added 2025-09-16
   prometheus-dmarc-exporter = throw "'prometheus-dmarc-exporter' has been renamed to/replaced by 'dmarc-metrics-exporter'"; # Converted to throw 2025-10-27
   prometheus-dovecot-exporter = throw "'prometheus-dovecot-exporter' has been renamed to/replaced by 'dovecot_exporter'"; # Converted to throw 2025-10-27
+  prometheus-varnish-exporter = throw "'prometheus-varnish-exporter' has been removed from Nixpkgs, as it is unmaintained and depends on the EOL 'varnish' package.";
   promtail = throw "promtail has been removed, as it reached its end of life. Consider migrating to 'grafana-alloy' or 'fluent-bit'"; # Added 2026-03-30
   prosody-filer = throw "'prosody-filer' has been removed because it was discontinued upstream. Use Prosody's built-in 'services.prosody.httpFileShare' support or Rusty Filer instead."; # Added 2026-09-02
   protobuf3_21 = throw "'protobuf3_21' has been renamed to/replaced by 'protobuf_21'"; # Converted to throw 2025-10-27
@@ -2707,7 +2708,10 @@ mapAliases {
   varnish60 = throw "varnish 6.0 has been removed as it used unmaintaned dependencies. Please upgrade to 'varnish80' or 'vinyl-cache_9'."; # Added 2026-05-29
   varnish60Packages = throw "varnish 6.0 has been removed as it used unmaintained dependencies.  Please upgrade to 'varnish80' or 'vinyl-cache_9'."; # Added 2026-05-29
   varnish77 = throw "varnish 7.7 is EOL. Please upgrade to 'varnish80' or 'vinyl-cache_9'."; # Added 2026-05-01
-  varnish77Packages = throw "varnish 7.7 is EOL. Please upgrade to 'varnish80' or 'vinyl-cache_9'."; # Added 2026-05-01
+  varnish80 = throw "varnish 8.0 is EOL. Please upgrade to 'vinyl-cache_9'."; # Added 2026-10-13
+  varnish80Packages = throw "varnish 8.0 is EOL. Please upgrade to 'vinyl-cache_9'."; # Added 2026-10-13
+  varnish = throw "varnish 8.0 is EOL. Please upgrade to 'vinyl-cache_9'."; # Added 2026-10-13
+  varnishPackages = throw "varnish 8.0 is EOL. Please upgrade to 'vinyl-cache_9'."; # Added 2026-10-13
   vaults = throw "'vaults' has been removed as it depends on 'fuse2', which is deprecated and no longer available in Nixpkgs."; # Added 2026-07-12
   vaultwarden-vault = throw "'vaultwarden-vault' has been renamed to/replaced by 'vaultwarden.webvault'"; # Converted to throw 2025-10-27
   vazir-fonts = throw "'vazir-fonts' has been renamed to 'vazirmatn'"; # Added 2026-06-15

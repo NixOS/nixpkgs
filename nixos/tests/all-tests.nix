@@ -2025,10 +2025,6 @@ in
     imports = [ ./redis.nix ];
     _module.args.package = pkgs.valkey;
   };
-  varnish80 = runTest {
-    imports = [ ./varnish.nix ];
-    _module.args.package = pkgsLinux.varnish80;
-  };
   vault = runTest ./vault.nix;
   vault-agent = runTest ./vault-agent.nix;
   vault-dev = runTest ./vault-dev.nix;

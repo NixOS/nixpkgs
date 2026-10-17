@@ -2909,15 +2909,6 @@ with pkgs;
 
   unzipNLS = lowPrio (unzip.override { enableNLS = true; });
 
-  inherit (callPackages ../servers/varnish { })
-    varnish80
-    ;
-  inherit (callPackages ../servers/varnish/packages.nix { })
-    varnish80Packages
-    ;
-  varnishPackages = varnish80Packages;
-  varnish = varnishPackages.varnish;
-
   inherit (callPackages ../servers/vinyl-cache { })
     vinyl-cache_9
     ;
