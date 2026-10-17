@@ -15,7 +15,7 @@ buildDunePackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-gstreamer";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-UUp0qfp+XKasF8ZUSG3tWXqqE3TS2GXSzJA0CnCIHXk=";
   };
 

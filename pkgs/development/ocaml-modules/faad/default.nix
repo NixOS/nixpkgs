@@ -14,7 +14,7 @@ buildDunePackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-faad";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-3ayKZhgJAgsoOqn0InSrM5f3TImRHOQMtWETICo4t3o=";
   };
 

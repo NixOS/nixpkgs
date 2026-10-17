@@ -13,7 +13,7 @@ buildDunePackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "thierry-martinez";
     repo = "ppx_show";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-YwWAdOtb0zg2hqNkGRiigz/Pci8Jy/QD+WyUEohEsns=";
   };
 

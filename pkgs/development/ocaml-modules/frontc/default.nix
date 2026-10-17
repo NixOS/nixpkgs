@@ -13,7 +13,7 @@ buildDunePackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "BinaryAnalysisPlatform";
     repo = "FrontC";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-C1seqbpBzNa4cdd8ileQyICGFWMtcgwOWZbphwncIdY=";
   };
 

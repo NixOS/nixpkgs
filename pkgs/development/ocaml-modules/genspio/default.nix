@@ -15,7 +15,7 @@ buildDunePackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "hammerlab";
     repo = "genspio";
-    rev = "genspio.${finalAttrs.version}";
+    tag = "genspio.${finalAttrs.version}";
     hash = "sha256-TkF95GXkuRulIKqTK+CoiIN5tL/kvQdDLLdFEKxlCJ0=";
   };
 
