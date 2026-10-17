@@ -21,10 +21,10 @@ let
     let
       info =
         libwebrtc-info.${version} or (throw ''
-          Unsupported version of pub package 'flutter_webrtc': ${version}
+            Unsupported version of pub package 'flutter_webrtc': ${version}
 
-          Please add the corresponding libwebrtc version and hashes to:
-            pkgs/development/compilers/dart/package-source-builders/flutter_webrtc/libwebrtc-info.json
+            Please add the corresponding libwebrtc version and hashes to:
+              pkgs/development/compilers/dart/package-source-builders/flutter_webrtc/libwebrtc-info.json
 
           To do it semi-automatically, you can use the adjacent 'fetch-webrtc-version.sh' script.
           You can use like this, to fetch the new version's info and then update the libwebrtc-info file:
