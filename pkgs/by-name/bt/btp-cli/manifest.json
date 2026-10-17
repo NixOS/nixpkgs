@@ -1,0 +1,21 @@
+{
+  "version": "2.116.2",
+  "platforms": {
+    "aarch64-darwin": {
+      "url": "https://tools.hana.ondemand.com/additional/btp-cli-darwin-arm64-2.116.2.tar.gz",
+      "hash": "2a76cc51f6e7e7f9f80e50fd9c914ee46e1475426eae678d93449f50accf11ce"
+    },
+    "aarch64-linux": {
+      "url": "https://tools.hana.ondemand.com/additional/btp-cli-linux-arm64-2.116.2.tar.gz",
+      "hash": "43c9b76badc13b4a01dc01a91f96d5858b31cc356477970d847f22940ffd58f9"
+    },
+    "x86_64-darwin": {
+      "url": "https://tools.hana.ondemand.com/additional/btp-cli-darwin-amd64-2.116.2.tar.gz",
+      "hash": "51fb4de1dc639064c399db0bb8911dd73f075fdc8b66e4fcdace0d8694056f0c"
+    },
+    "x86_64-linux": {
+      "url": "https://tools.hana.ondemand.com/additional/btp-cli-linux-amd64-2.116.2.tar.gz",
+      "hash": "9cd22d6241636d3a57174980e8ccb06c84a320a0bd36d4007f4e68e5203a59fb"
+    }
+  }
+}
