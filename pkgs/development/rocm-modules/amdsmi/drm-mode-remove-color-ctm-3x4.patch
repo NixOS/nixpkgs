@@ -1,0 +1,37 @@
+From: randomizedcoder <dave.seddon.ca@gmail.com>
+Subject: [PATCH] libdrm: drop bundled struct drm_color_ctm_3x4
+
+Recent kernel/libdrm headers define struct drm_color_ctm_3x4, so the copy in
+amdsmi's bundled include/libdrm/drm_mode.h fails with "redefinition of
+'struct drm_color_ctm_3x4'". The struct is unused and not part of the amdsmi
+public interface.
+
+Same fix as https://github.com/ROCm/amdsmi/pull/165, redone for ROCm 10,
+where the bundled header moved from include/amd_smi/impl/amdgpu_drm.h to
+include/libdrm/drm_mode.h.
+---
+ include/libdrm/drm_mode.h | 14 --------------
+ 1 file changed, 14 deletions(-)
+--- a/include/libdrm/drm_mode.h
++++ b/include/libdrm/drm_mode.h
+@@ -825,20 +825,6 @@
+   __u64 matrix[9];
+ };
+ 
+-struct drm_color_ctm_3x4 {
+-  /*
+-   * Conversion matrix with 3x4 dimensions in S31.32 sign-magnitude
+-   * (not two's complement!) format.
+-   *
+-   * out   matrix          in
+-   * |R|   |0  1  2  3 |   | R |
+-   * |G| = |4  5  6  7 | x | G |
+-   * |B|   |8  9  10 11|   | B |
+-   *                       |1.0|
+-   */
+-  __u64 matrix[12];
+-};
+-
+ struct drm_color_lut {
+   /*
+    * Values are mapped linearly to 0.0 - 1.0 range, with 0x0 == 0.0 and

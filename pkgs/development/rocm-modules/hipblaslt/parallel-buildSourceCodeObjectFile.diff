@@ -1,12 +1,13 @@
-diff --git a/tensilelite/Tensile/Toolchain/Source.py b/tensilelite/Tensile/Toolchain/Source.py
-index c9862e6c..dfa5ba40 100644
---- a/tensilelite/Tensile/Toolchain/Source.py
-+++ b/tensilelite/Tensile/Toolchain/Source.py
-@@ -102,6 +102,7 @@ def buildSourceCodeObjectFiles(
-     coPaths= []
+diff --git a/tensilelite/Tensile/Toolchain/Component.py b/tensilelite/Tensile/Toolchain/Component.py
+--- a/tensilelite/Tensile/Toolchain/Component.py
++++ b/tensilelite/Tensile/Toolchain/Component.py
+@@ -219,6 +219,9 @@
+             "-x", "hip", "-O3",
+             "-Xoffload-linker", f"--build-id={build_id_kind}",
+             "-std=c++17",
++            # Parallelise the per-arch device compiles of each invocation.
++            # https://github.com/ROCm/rocm-libraries/issues/1242
++            "-parallel-jobs=8",
+         ]
  
-     objPath = str(tmpObjDir / objFilename)
-+    compiler.default_args += ["-parallel-jobs=8"]
-     compiler(str(includeDir), cmdlineArchs, str(kernelPath), objPath)
- 
-     for target in bundler.targets(objPath):
+         if asan_build:

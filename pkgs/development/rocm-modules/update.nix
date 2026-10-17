@@ -9,9 +9,18 @@
   owner ? finalAttrs.src.owner,
   repo ? finalAttrs.src.repo,
   page ? "releases?per_page=10",
-  # input: array of [ { tag_name: "rocm-6.x.x", }, ... ]. some entries may have bad names like rocm-test-date we want to skip
-  # output: first tag_name/name that's a proper version if any
-  filter ? "map(.tag_name // .name) | map(select(test(\"^rocm-[0-9]+\\\\.[0-9]+(\\\\.[0-9]+)?$\"))) | first | ltrimstr(\"rocm-\")",
+  # Newest major this set accepts; a newer major goes into a new rocmPackages_X.
+  maxMajor ? 10,
+  # input: array of [ { tag_name: "therock-10.1", }, { tag_name: "rocm-7.2.4" }, ... ]. some entries
+  # may have bad names like rocm-test-date we want to skip
+  # output: the highest proper version with major <= maxMajor, if any. Releases are not
+  # ordered by version (a rocm-7.2.x maintenance release can follow therock-10.1).
+  filter ? lib.concatStringsSep " | " [
+    "map(.tag_name // .name)"
+    "map(select(test(\"^(rocm|therock)-[0-9]+\\\\.[0-9]+(\\\\.[0-9]+)?$\")) | sub(\"^(rocm|therock)-\"; \"\"))"
+    "map(select((split(\".\")[0] | tonumber) <= ${toString maxMajor}))"
+    "sort_by(split(\".\") | map(tonumber)) | last // empty"
+  ],
 }:
 
 let
@@ -52,7 +61,7 @@ let
 
     >&2 echo parsed version "$version_arr" from "$version"
 
-    if (( ''${version_arr[0]} > 7 )); then
+    if (( ''${version_arr[0]} > ${toString maxMajor} )); then
       echo "'rocmPackages.${pname}' is already at its maximum allowed version.''\nAny further upgrades should go into 'rocmPackages_X.${pname}'." >&2
       exit 1
     fi

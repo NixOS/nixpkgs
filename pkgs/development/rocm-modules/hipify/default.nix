@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipify";
-  version = "7.2.4";
+  version = "10.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "HIPIFY";
-    tag = "rocm-${finalAttrs.version}";
-    hash = "sha256-LC0lnYetV7RPVw92zew6za6bDH4zmnERXUM4MVaRVtc=";
+    tag = "therock-${finalAttrs.version}";
+    hash = "sha256-Ayw+jfXmeK9XDy1C+cmalTIDStvr6kGY2n78x5b2KYk=";
   };
 
   strictDeps = true;

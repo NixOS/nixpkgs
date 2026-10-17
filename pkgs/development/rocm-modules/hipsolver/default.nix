@@ -12,7 +12,8 @@
   rocsparse,
   suitesparse,
   gtest,
-  lapack-reference,
+  blas,
+  lapack,
   buildTests ? false,
   buildBenchmarks ? false,
   buildSamples ? false,
@@ -21,7 +22,7 @@
 # Can also use cuSOLVER
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipsolver";
-  version = "7.2.4";
+  version = "10.1";
 
   outputs = [
     "out"
@@ -39,12 +40,12 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-libraries";
-    tag = "rocm-${finalAttrs.version}";
+    tag = "therock-${finalAttrs.version}";
     sparseCheckout = [
       "projects/hipsolver"
       "shared"
     ];
-    hash = "sha256-ts5wuXHoBFZ1WMAk8Ir5cucP75G0SMOWmn3FEH04ZEQ=";
+    hash = "sha256-Djncqth/JEH1ko0iVvx3WdvK2UeK/Ywuwca9y4q2Xvg=";
   };
   sourceRoot = "${finalAttrs.src.name}/projects/hipsolver";
 
@@ -60,12 +61,19 @@ stdenv.mkDerivation (finalAttrs: {
     rocsolver
     rocsparse
     suitesparse
+    # hipSOLVER links a CPU-side LAPACK for geev (until rocSOLVER
+    # implements it). Upstream defaults to git-cloning+building a static OpenBLAS
+    # (HIPSOLVER_INTERNAL_LAPACK_BUILD=ON) — a network fetch the Nix sandbox blocks
+    # — so we set it OFF (below) and provide the openblas-backed system BLAS/LAPACK
+    # here instead. NB use the `lapack`/`blas` wrappers (openblas, LP64), NOT
+    # lapack-reference: reference-lapack ships its own libblas.so.3 carrying ILP64
+    # (`_64_`) symbols that collide with numpy's openblas libblas.so.3 in one
+    # process (e.g. `import torch`) → `undefined symbol: cherk_64_`.
+    blas
+    lapack
   ]
   ++ lib.optionals buildTests [
     gtest
-  ]
-  ++ lib.optionals (buildTests || buildBenchmarks) [
-    lapack-reference
   ];
 
   cmakeFlags = [
@@ -76,6 +84,16 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DBUILD_WITH_SPARSE=OFF" # FIXME: broken - can't find suitesparse/cholmod, looks fixed in master
+    # Use system LAPACK for geev instead of the upstream default
+    # (git-clone + build a static OpenBLAS at configure — blocked in the sandbox).
+    "-DHIPSOLVER_INTERNAL_LAPACK_BUILD=OFF"
+    # Discover LAPACK in CMake MODULE mode (standard FindLAPACK) rather than
+    # CONFIG mode (default ON): the openblas-backed `lapack`/`blas` wrappers we
+    # link (see buildInputs) ship no LAPACKConfig.cmake, only liblapack.so, so
+    # CONFIG mode fails with "Could not find a package configuration file". Only
+    # lapack-reference ships that config file, and it is exactly what we are
+    # avoiding (its ILP64 libblas.so.3 collides with numpy's openblas at runtime).
+    "-DHIPSOLVER_FIND_PACKAGE_LAPACK_CONFIG=OFF"
   ]
   ++ lib.optionals buildTests [
     "-DBUILD_CLIENTS_TESTS=ON"

@@ -3,12 +3,12 @@ index de97929c..dbc397e0 100644
 --- a/tensilelite/src/msgpack/MessagePack.cpp
 +++ b/tensilelite/src/msgpack/MessagePack.cpp
 @@ -28,6 +28,8 @@
- 
+
  #include <Tensile/msgpack/Loading.hpp>
- 
+
 +#include <zstd.h>
 +
- #include <fstream>
+ #include <charconv>
  
  namespace Tensile
 @@ -86,6 +88,34 @@ namespace Tensile

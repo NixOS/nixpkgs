@@ -40,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
         "cpu"
     );
 
+  # MIVisionX has no ROCm 10.x tag upstream; rocm-7.2.4 is the newest.
   version = "7.2.4";
 
   src = fetchFromGitHub {

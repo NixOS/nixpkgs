@@ -47,7 +47,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocdbgapi";
-  version = "7.2.4";
+  version = "10.1";
 
   outputs = [
     "out"
@@ -60,10 +60,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "ROCm";
-    repo = "ROCdbgapi";
-    tag = "rocm-${finalAttrs.version}";
-    hash = "sha256-KqvhwfIv8pbr8WbnfAKl71fg5yxbwYcpzZcGU9Htdkc=";
+    # ROCdbgapi lives in the rocm-systems monorepo since ROCm 10
+    repo = "rocm-systems";
+    tag = "therock-${finalAttrs.version}";
+    sparseCheckout = [
+      "projects/rocdbgapi"
+      "shared"
+    ];
+    hash = "sha256-vadmzQL3Sqtbtf7vMKCN6jabBuxnugPHDJd2yDhVDTM=";
   };
+  sourceRoot = "${finalAttrs.src.name}/projects/rocdbgapi";
 
   nativeBuildInputs = [
     cmake

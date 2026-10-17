@@ -42,7 +42,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocmlir${suffix}";
-  version = "7.2.4";
+  version = "10.1";
 
   outputs = [
     "out"
@@ -53,9 +53,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "ROCm";
-    repo = "rocMLIR";
-    tag = "rocm-${finalAttrs.version}";
-    hash = "sha256-1qADqYI5pilXHr/vrS9SvgmTW6KUWXNpG1G+brwD/HI=";
+    # ROCm 10.1's AMDMIGraphX requirements.txt pins
+    # `ROCm/rocmlirTriton@release/rocm-rel-10.1` (-DBUILD_FAT_LIBROCKCOMPILER=On
+    # -DLLVM_INCLUDE_TESTS=Off ...), which replaces the old ROCm/rocMLIR repo. It
+    # has no ROCm 10.x tag, so track that branch's head commit; `version` above
+    # is the ROCm-set version. passthru.updateScript (page = "tags") cannot bump
+    # this until rocmlirTriton publishes a rocm-10.x tag.
+    repo = "rocmlirTriton";
+    rev = "f347064fea12aa0ab325e1244b65766652a2530c";
+    hash = "sha256-w/eGFiXDfmY9Yog+U037mIG7wEQ9nD/m8z/2sErSuE8=";
   };
 
   nativeBuildInputs = [
@@ -64,6 +70,9 @@ stdenv.mkDerivation (finalAttrs: {
     rocm-cmake
     python3Packages.python
     python3Packages.tomli
+    # mlir/lib/Dialect/Rock/utility/Bindings/CMakeLists.txt does find_package(pybind11);
+    # without this the (buildRockCompiler) configure fails.
+    python3Packages.pybind11
   ];
 
   buildInputs = [
@@ -81,9 +90,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeFeature "LLVM_TARGETS_TO_BUILD" "AMDGPU${
-      lib.optionalString (!buildRockCompiler) ";${llvmNativeTarget}"
-    }")
+    # The rock-compiler build must build the native (host) target too, not only
+    # AMDGPU: rocmlirTriton's librockcompiler_deps.cmake bundles the host codegen
+    # members (LLVMX86AsmParser/CodeGen/Desc/Disassembler/Info; Triton does host
+    # JIT) into the librockCompiler fat archive, so with LLVM_TARGETS_TO_BUILD=AMDGPU
+    # only the archive step fails with `No rule to make target '.../LLVMX86AsmParser'`.
+    (lib.cmakeFeature "LLVM_TARGETS_TO_BUILD" "AMDGPU;${llvmNativeTarget}")
     (lib.cmakeFeature "LLVM_USE_LINKER" "lld")
     (lib.cmakeFeature "LLVM_ENABLE_ZSTD" "FORCE_ON")
     (lib.cmakeFeature "LLVM_ENABLE_ZLIB" "FORCE_ON")
@@ -100,6 +112,14 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals buildRockCompiler [
     (lib.cmakeBool "LLVM_INCLUDE_TESTS" false)
+    # mlir/test declares the `check-rocmlir` lit suite with a DEPENDS on
+    # `ci-performance-scripts`, a target only created by mlir/utils/performance,
+    # which is gated behind MLIR_ENABLE_ROCM_RUNNER (= !buildRockCompiler, i.e. OFF
+    # here). With MLIR tests left ON, CMake's Generate step fails with `The
+    # dependency target "ci-performance-scripts" ... does not exist`. The
+    # rock-compiler build only needs librockCompiler, so turn MLIR tests off
+    # (LLVM_INCLUDE_TESTS above governs a different variable).
+    (lib.cmakeBool "MLIR_INCLUDE_TESTS" false)
   ]
   ++ lib.optionals (!buildRockCompiler) [
     (lib.cmakeFeature "ROCM_TEST_CHIPSET" "gfx900")
@@ -107,14 +127,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs mlir
-    patchShebangs external/llvm-project/mlir/lib/Dialect/GPU/AmdDeviceLibsIncGen.py
-
-    # Fixes mlir/lib/Analysis/BufferDependencyAnalysis.cpp:41:19: error: redefinition of 'read'
-    substituteInPlace mlir/lib/Analysis/BufferDependencyAnalysis.cpp \
-      --replace-fail "enum EffectType { read, write, unknown };" "enum class EffectType { read, write, unknown };"
+    patchShebangs external/llvm-project/mlir
 
     substituteInPlace mlir/utils/performance/common/CMakeLists.txt \
       --replace-fail " PATHS /opt/rocm" ""
+  '';
+
+  # The source bundles Triton, whose external/triton/python/build_helpers.py
+  # symlinks the pinned in-tree LLVM into $TRITON_CACHE_PATH (= $HOME/.triton) at
+  # configure time. The sandbox HOME is the read-only /homeless-shelter, so give
+  # the build a writable HOME (and point TRITON_CACHE_PATH at it explicitly).
+  preConfigure = ''
+    export HOME="$(mktemp -d)"
+    export TRITON_CACHE_PATH="$HOME/.triton"
   '';
 
   dontBuild = true;

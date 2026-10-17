@@ -9,6 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hiprt";
+  # GPUOpen HIPRT is versioned independently of ROCm (no rocm-10.x tag).
   version = "3.0.3.a1525e7";
 
   src = fetchFromGitHub {

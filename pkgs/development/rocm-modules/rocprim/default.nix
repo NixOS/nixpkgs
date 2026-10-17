@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocprim";
-  version = "7.2.4";
+  version = "10.1";
 
   outputs = [
     "out"
@@ -30,12 +30,12 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-libraries";
-    tag = "rocm-${finalAttrs.version}";
+    tag = "therock-${finalAttrs.version}";
     sparseCheckout = [
       "projects/rocprim"
       "shared"
     ];
-    hash = "sha256-e0mZ27OXyblcnXQGv2ex/CvWx9smw6nBbHZIijj7lP8=";
+    hash = "sha256-ObSLanTmi2Utv7kWM7hjnVzmNU2e4P23SB3+7Z3qO0o=";
   };
   sourceRoot = "${finalAttrs.src.name}/projects/rocprim";
 

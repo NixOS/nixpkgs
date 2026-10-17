@@ -15,6 +15,7 @@
   libjpeg,
   libpng,
   libwebp,
+  libdrm,
 
   # build-system
   cmake,
@@ -113,7 +114,12 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
       libnpp # nppicc
       libnvjpeg # nvjpeg.h
     ]
-  );
+  )
+  ++ lib.optionals rocmSupport [
+    # find_package(Torch) -> Caffe2 LoadHIP -> find_package(rocm_smi), whose ROCm 10
+    # rocm_smi-config.cmake runs pkg_check_modules(libdrm), so libdrm.pc must be present.
+    libdrm
+  ];
 
   build-system = [
     cmake
