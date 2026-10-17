@@ -8,26 +8,22 @@
   httptools,
   python-dotenv,
   pyyaml,
-  typing-extensions,
   uvloop,
   watchfiles,
   websockets,
   hatchling,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "uvicorn";
-  version = "0.32.1";
-  disabled = pythonOlder "3.8";
-
+  version = "0.51.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = "uvicorn";
     tag = version;
-    hash = "sha256-Kx5OwIMqstiFCkqE2wunKSkttd9C8gM+a2KWJuhBN1c=";
+    hash = "sha256-VX5X2BY8eZc93r3zfJFhtz1vuXHvaqWB5rTj7zddSzU=";
   };
 
   outputs = [
@@ -40,7 +36,7 @@ buildPythonPackage rec {
   dependencies = [
     click
     h11
-  ] ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+  ];
 
   optional-dependencies.standard = [
     httptools
@@ -65,12 +61,12 @@ buildPythonPackage rec {
     pytest = callPackage ./tests.nix { };
   };
 
-  meta = with lib; {
-    homepage = "https://www.uvicorn.org/";
-    changelog = "https://github.com/encode/uvicorn/blob/${src.rev}/CHANGELOG.md";
+  meta = {
+    homepage = "https://uvicorn.dev";
+    changelog = "https://github.com/Kludex/uvicorn/blob/${src.tag}/docs/release-notes.md";
     description = "Lightning-fast ASGI server";
     mainProgram = "uvicorn";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ wd15 ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ wd15 ];
   };
 }

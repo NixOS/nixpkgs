@@ -1,40 +1,36 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
   libgit2,
   openssl,
-  stdenv,
-  darwin,
-  git,
+  coreutils,
+  gitMinimal,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-generate";
-  version = "0.22.1";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "cargo-generate";
     repo = "cargo-generate";
-    rev = "v${version}";
-    sha256 = "sha256-iOZCSd6jF1OF7ScjpsMlvMjsFHyg6QJJ6qk0OxrARho=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-x0UkYgYJ1xe6ensm3yU5SEW+nnxHmnN+CbGCJXth8WQ=";
   };
 
-  cargoHash = "sha256-ZLzJpD3bIuNtGl5kzhvpE07jtfEV+lgnTiPcFM7MHdE=";
+  cargoHash = "sha256-cXPks2uTUVnVyBXP9JT5Xm87pFkCvPHQy86R7vd2/zU=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      libgit2
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = [
+    libgit2
+    openssl
+  ];
 
-  nativeCheckInputs = [ git ];
+  nativeCheckInputs = [ gitMinimal ];
 
   # disable vendored libgit2 and openssl
   buildNoDefaultFeatures = true;
@@ -48,36 +44,37 @@ rustPlatform.buildRustPackage rec {
   # Exclude some tests that don't work in sandbox:
   # - favorites_default_to_git_if_not_defined: requires network access to github.com
   # - should_canonicalize: the test assumes that it will be called from the /Users/<project_dir>/ folder on darwin variant.
-  checkFlags =
-    [
-      "--skip=favorites::favorites_default_to_git_if_not_defined"
-      "--skip=git_instead_of::should_read_the_instead_of_config_and_rewrite_an_git_at_url_to_https"
-      "--skip=git_instead_of::should_read_the_instead_of_config_and_rewrite_an_ssh_url_to_https"
-      "--skip=git_over_ssh::it_should_retrieve_the_private_key_from_ssh_agent"
-      "--skip=git_over_ssh::it_should_support_a_public_repo"
-      "--skip=git_over_ssh::it_should_use_a_ssh_key_provided_by_identity_argument"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "--skip=git::utils::should_canonicalize"
-    ];
+  checkFlags = [
+    "--skip=favorites::favorites_default_to_git_if_not_defined"
+    "--skip=git_instead_of::should_read_the_instead_of_config_and_rewrite_an_git_at_url_to_https"
+    "--skip=git_instead_of::should_read_the_instead_of_config_and_rewrite_an_ssh_url_to_https"
+    "--skip=git_over_ssh::it_should_retrieve_the_private_key_from_ssh_agent"
+    "--skip=git_over_ssh::it_should_support_a_public_repo"
+    "--skip=git_over_ssh::it_should_use_a_ssh_key_provided_by_identity_argument"
+    # stderr doesn't quite match what is expected, slightly malformed test
+    # source
+    "--skip=hooks_and_rhai::it_fails_when_a_system_command_returns_non_zero_exit_code"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "--skip=utils::tests::should_canonicalize"
+  ];
 
   env = {
     LIBGIT2_NO_VENDOR = 1;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to generate a new Rust project by leveraging a pre-existing git repository as a template";
     mainProgram = "cargo-generate";
     homepage = "https://github.com/cargo-generate/cargo-generate";
-    changelog = "https://github.com/cargo-generate/cargo-generate/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    changelog = "https://github.com/cargo-generate/cargo-generate/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [
-      figsoda
+    maintainers = with lib.maintainers; [
       turbomack
       matthiasbeyer
     ];
   };
-}
+})

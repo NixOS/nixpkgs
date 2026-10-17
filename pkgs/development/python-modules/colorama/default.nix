@@ -9,11 +9,11 @@
 buildPythonPackage rec {
   pname = "colorama";
   version = "0.4.6";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44";
+    hash = "sha256-CGlfXLftbgUxogVyaXKXJzxHuMrlpj/8bW7VwgG+bkQ=";
   };
 
   nativeBuildInputs = [ hatchling ];
@@ -22,11 +22,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "colorama" ];
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform colored terminal text";
     homepage = "https://github.com/tartley/colorama";
     changelog = "https://github.com/tartley/colorama/raw/${version}/CHANGELOG.rst";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

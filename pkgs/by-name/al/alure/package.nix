@@ -6,22 +6,28 @@
   openal,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alure";
   version = "1.2";
 
   src = fetchurl {
-    url = "http://kcat.strangesoft.net/alure-releases/alure-${version}.tar.bz2";
-    sha256 = "0w8gsyqki21s1qb2s5ac1kj08i6nc937c0rr08xbw9w9wvd6lpj6";
+    url = "http://deb.debian.org/debian/pool/main/a/alure/alure_${finalAttrs.version}.orig.tar.bz2";
+    hash = "sha256-Rl5q2uaJJ746AjkDdkZi1kQE5AxMFS0WDjqIOLHXD3E=";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ openal ];
 
-  meta = with lib; {
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 2.4)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
+  meta = {
     description = "Utility library to help manage common tasks with OpenAL applications";
     homepage = "https://github.com/kcat/alure";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
-}
+})

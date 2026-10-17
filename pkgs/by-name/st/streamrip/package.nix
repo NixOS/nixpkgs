@@ -2,31 +2,33 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-
   ffmpeg,
+  writableTmpDirAsHomeHook,
+  stdenv,
+  versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "streamrip";
-  version = "2.0.5";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nathom";
     repo = "streamrip";
-    rev = "v${version}";
-    hash = "sha256-KwMt89lOPGt6nX7ywliG/iAJ1WnG0CRPwhAVlPR85q0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-OeU1KBGcmpryOlDmW1aFNAgSP484ZAcc4CVsgfrsKVI=";
   };
 
   patches = [
     ./patches/ensure-the-default-config-file-is-writable.patch
   ];
 
-  nativeBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
     poetry-core
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     aiodns
     aiofiles
     aiohttp
@@ -48,31 +50,27 @@ python3Packages.buildPythonApplication rec {
     tqdm
   ];
 
-  nativeCheckInputs = with python3Packages; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [
+    python3Packages.pytestCheckHook
+    writableTmpDirAsHomeHook
+  ]
+  # versionCheckHook does not work on darwin
+  # the program tries to create its config file located at `~/Library/...`, which for some reason
+  # gets resolved to /var/empty/Library/... despite $HOME being set via writableTmpDirAsHomeHook
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) versionCheckHook;
+
+  pythonRelaxDeps = true;
 
   prePatch = ''
-    sed -i 's#aiofiles = ".*"#aiofiles = "*"#' pyproject.toml
-    sed -i 's#deezer-py = ".*"#deezer-py = "*"#' pyproject.toml
-    sed -i 's#m3u8 = ".*"#m3u8 = "*"#' pyproject.toml
-    sed -i 's#pathvalidate = ".*"#pathvalidate = "*"#' pyproject.toml
-    sed -i 's#Pillow = ".*"#Pillow = "*"#' pyproject.toml
-    sed -i 's#pytest-asyncio = ".*"#pytest-asyncio = "*"#' pyproject.toml
-    sed -i 's#tomlkit = ".*"#tomlkit = "*"#' pyproject.toml
-
-    sed -i 's#"ffmpeg"#"${lib.getBin ffmpeg}/bin/ffmpeg"#g' streamrip/client/downloadable.py
+    substituteInPlace streamrip/client/downloadable.py \
+      --replace-fail '"ffmpeg"' '"${lib.getExe ffmpeg}"'
   '';
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Scriptable music downloader for Qobuz, Tidal, SoundCloud, and Deezer";
     homepage = "https://github.com/nathom/streamrip";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ paveloom ];
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.quantenzitrone ];
     mainProgram = "rip";
   };
-}
+})

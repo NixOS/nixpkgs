@@ -4,34 +4,34 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "jumppad";
-  version = "0.16.0";
+  version = "0.27.1";
 
   src = fetchFromGitHub {
     owner = "jumppad-labs";
     repo = "jumppad";
-    rev = version;
-    hash = "sha256-zJS27lguSHvJge/iRwFhm9GtK0t3VQUt+uFZdjgkaeU=";
+    rev = finalAttrs.version;
+    hash = "sha256-AhSomz4YrDuIMupMTvFwpye8BDGGrU/IlRUtE+RIUC0=";
   };
-  vendorHash = "sha256-kn7rI5XwpqHeK7mA4FT67tLo2edb+dyD+rveVrGIjIo=";
+  vendorHash = "sha256-5eI41EKgi61dVFAvsgxI2Vk1zrxtVinxYKquKlaSOyQ=";
 
   subPackages = [ "." ];
 
   ldflags = [
     "-s"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   # Tests require a large variety of tools and resources to run including
   # Kubernetes, Docker, and GCC.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tool for building modern cloud native development environments";
     homepage = "https://jumppad.dev";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ cpcloud ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ cpcloud ];
     mainProgram = "jumppad";
   };
-}
+})

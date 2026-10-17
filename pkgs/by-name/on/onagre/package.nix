@@ -8,14 +8,17 @@
   freetype,
   expat,
   wayland,
-  xorg,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
   libxkbcommon,
   pop-launcher,
   vulkan-loader,
   libGL,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "onagre";
   version = "1.1.1";
 
@@ -26,7 +29,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-yVkK3B7/ul0sOxPE3z2qkY/CnsZPQYqTpd64Wo/GXZI=";
   };
 
-  cargoHash = "sha256-ZjS4g0lwWTJwwXpdKHxmEXIS/GQ6eo888nPhq0v+y9I=";
+  cargoHash = "sha256-JsTBzkznFYiSOq41aptNa5akXTdkqJj3FwoHuvUlgpE=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -36,10 +39,10 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     expat
     freetype
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXrandr
+    libx11
+    libxcursor
+    libxi
+    libxrandr
   ];
 
   postFixup =
@@ -61,15 +64,15 @@ rustPlatform.buildRustPackage rec {
         }
     '';
 
-  meta = with lib; {
+  meta = {
     description = "General purpose application launcher for X and wayland inspired by rofi/wofi and alfred";
     homepage = "https://github.com/onagre-launcher/onagre";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [
-      maintainers.jfvillablanca
-      maintainers.ilya-epifanov
+      lib.maintainers.jfvillablanca
+      lib.maintainers.ilya-epifanov
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "onagre";
   };
 }

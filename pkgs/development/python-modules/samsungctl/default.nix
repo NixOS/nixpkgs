@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ipz3fd65rqkxlb02sql0awc3vnslrwb2pfrsnpfnf8bfgxpbh9g";
+    hash = "sha256-L8F1+3MLOeuu1dldsXim2u7BuAIUawEW7RPnYpob/0Y=";
   };
 
   optional-dependencies = {
@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "samsungctl" ];
 
-  meta = with lib; {
+  meta = {
     description = "Remote control Samsung televisions via a TCP/IP connection";
     mainProgram = "samsungctl";
     homepage = "https://github.com/Ape/samsungctl";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

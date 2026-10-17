@@ -1,19 +1,20 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "goimports-reviser";
-  version = "3.8.2";
+  version = "3.13.2";
 
   src = fetchFromGitHub {
     owner = "incu6us";
     repo = "goimports-reviser";
-    rev = "v${version}";
-    hash = "sha256-73EU2LaOq5AfMssYJShhQLbZjrK4qbERn9SRomMMsHA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-iM3qyBrNKeWY9HXW9q0V3d+eKgS+p74BlOcBAr85uDk=";
   };
-  vendorHash = "sha256-z+FeAXPXKi653im2X2WOP1R9gRl/x7UBnndoEXoxdwA=";
+  vendorHash = "sha256-aTPzvqIwjZzEq9LHFdebIgbKMwsBOqLbpEWB7rN7cYY=";
 
   env.CGO_ENABLED = 0;
 
@@ -22,7 +23,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.Tag=${src.rev}"
+    "-X=main.Tag=${finalAttrs.src.rev}"
   ];
 
   checkFlags = [
@@ -36,11 +37,11 @@ buildGoModule rec {
     unset CGO_ENABLED
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Right imports sorting & code formatting tool (goimports alternative)";
     mainProgram = "goimports-reviser";
     homepage = "https://github.com/incu6us/goimports-reviser";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jk ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jk ];
   };
-}
+})

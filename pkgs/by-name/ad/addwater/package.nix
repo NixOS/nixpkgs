@@ -13,17 +13,17 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "addwater";
-  version = "1.2.2";
+  version = "1.3";
   # built with meson, not a python format
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "largestgithubuseronearth";
     repo = "addwater";
-    tag = "v${version}";
-    hash = "sha256-BpV4nJbJNMI0Nzzsl1NbsWTNRMFRBSrUF1+Qdd7h6eg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ynfBP3yFw4g8ebnKKyQDdmCB7APYVgvuedcu/x5lO9w=";
   };
 
   buildInputs = [
@@ -56,4 +56,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "addwater";
     platforms = lib.platforms.linux;
   };
-}
+})

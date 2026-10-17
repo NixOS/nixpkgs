@@ -1,9 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  pythonAtLeast,
-  pythonOlder,
-  fetchPypi,
+  fetchFromGitHub,
+  fetchpatch,
   pytest,
   pytest-asyncio,
   pytestCheckHook,
@@ -13,17 +12,25 @@
 
 buildPythonPackage rec {
   pname = "pytest-mock";
-  version = "3.14.0";
+  version = "3.15.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-JxklWh7+zq28BW1r8989HFAVUw+0DPNHwPmvrIhBC9A=";
+  src = fetchFromGitHub {
+    owner = "pytest-dev";
+    repo = "pytest-mock";
+    tag = "v${version}";
+    hash = "sha256-9h5/cssWs4F0LKnFLjWDsEjB2AYczLvnSjiUdsaEcBQ=";
   };
 
-  nativeBuildInputs = [
+  patches = [
+    (fetchpatch {
+      name = "pytest-9.1-compat.patch";
+      url = "https://github.com/pytest-dev/pytest-mock/commit/1d42981a1577207db5919852f30ef08c97208496.patch";
+      hash = "sha256-9/vQi/VvZRrIUSq1e90MvLB0idkc+tT4R6q1Ut4HKnY=";
+    })
+  ];
+
+  build-system = [
     setuptools
     setuptools-scm
   ];
@@ -35,19 +42,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = lib.optionals (pythonAtLeast "3.11") [
-    # Regression in 3.11.7 and 3.12.1; https://github.com/pytest-dev/pytest-mock/issues/401
-    "test_failure_message_with_name"
-    "test_failure_message_with_no_name"
-  ];
-
   pythonImportsCheck = [ "pytest_mock" ];
 
-  meta = with lib; {
+  meta = {
     description = "Thin wrapper around the mock package for easier use with pytest";
     homepage = "https://github.com/pytest-dev/pytest-mock";
-    changelog = "https://github.com/pytest-dev/pytest-mock/blob/v${version}/CHANGELOG.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    changelog = "https://github.com/pytest-dev/pytest-mock/blob/${src.tag}/CHANGELOG.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

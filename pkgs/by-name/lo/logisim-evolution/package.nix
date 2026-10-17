@@ -1,27 +1,30 @@
-{ lib
-, stdenv
-, fetchurl
-, jre
-, makeBinaryWrapper
-, copyDesktopItems
-, makeDesktopItem
-, desktopToDarwinBundle
-, unzip
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  makeBinaryWrapper,
+  copyDesktopItems,
+  makeDesktopItem,
+  desktopToDarwinBundle,
+  unzip,
+  gitUpdater,
 }:
 
 let
+  repourl = "https://github.com/logisim-evolution/logisim-evolution";
   icon = fetchurl {
-    url = "https://github.com/logisim-evolution/logisim-evolution/raw/9e0afa3cd6a8bfa75dab61830822cde83c70bb4b/artwork/logisim-evolution-icon.svg";
+    url = "${repourl}/raw/9e0afa3cd6a8bfa75dab61830822cde83c70bb4b/artwork/logisim-evolution-icon.svg";
     hash = "sha256-DNRimhNFt6jLdjqv7o2cNz38K6XnevxD0rGymym3xBs=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "logisim-evolution";
-  version = "3.9.0";
+  version = "4.1.0";
 
   src = fetchurl {
-    url = "https://github.com/logisim-evolution/logisim-evolution/releases/download/v${finalAttrs.version}/logisim-evolution-${finalAttrs.version}-all.jar";
-    hash = "sha256-QxU1h6LKzWy25wtXgEufPT0KsIsLhrKnq9CRcS4Mlzc=";
+    url = "${repourl}/releases/download/v${finalAttrs.version}/logisim-evolution-${finalAttrs.version}-all.jar";
+    hash = "sha256-/mOGoyF6WRvMMRpO2knh9Do4m0md09D29A80T8hfJXc=";
   };
   dontUnpack = true;
 
@@ -29,7 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
     makeBinaryWrapper
     copyDesktopItems
     unzip
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     desktopToDarwinBundle
   ];
 
@@ -48,11 +52,18 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/logisim-evolution --add-flags "-jar $src"
+    makeWrapper ${jre}/bin/java $out/bin/logisim-evolution \
+      --add-flags "-jar $src" \
+      --set _JAVA_AWT_WM_NONREPARENTING 1
     install -Dm444 ${icon} $out/share/icons/hicolor/scalable/apps/logisim-evolution.svg
 
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+    url = repourl;
+  };
 
   meta = {
     changelog = "https://github.com/logisim-evolution/logisim-evolution/releases/tag/v${finalAttrs.version}";

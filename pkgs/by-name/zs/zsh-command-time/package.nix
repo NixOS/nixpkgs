@@ -30,11 +30,11 @@ stdenv.mkDerivation {
     install -Dm0444 $src/command-time.plugin.zsh --target-directory=$out/share/zsh/plugins/command-time
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Plugin that output time: xx after long commands";
     homepage = "https://github.com/popstas/zsh-command-time";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ lassulus ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ lassulus ];
   };
 }

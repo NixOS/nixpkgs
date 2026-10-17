@@ -9,31 +9,33 @@ let
   cfg = config.services.vmagent;
   settingsFormat = pkgs.formats.yaml { };
 
-  startCLIList =
-    [
-      "${cfg.package}/bin/vmagent"
-    ]
-    ++ lib.optionals (cfg.remoteWrite.url != null) [
-      "-remoteWrite.url=${cfg.remoteWrite.url}"
-      "-remoteWrite.tmpDataPath=%C/vmagent/remote_write_tmp"
-    ]
-    ++ lib.optional (
-      cfg.remoteWrite.basicAuthUsername != null
-    ) "-remoteWrite.basicAuth.username=${cfg.remoteWrite.basicAuthUsername}"
-    ++ lib.optional (
-      cfg.remoteWrite.basicAuthPasswordFile != null
-    ) "-remoteWrite.basicAuth.passwordFile=\${CREDENTIALS_DIRECTORY}/remote_write_basic_auth_password"
-    ++ cfg.extraArgs;
+  startCLIList = [
+    "${cfg.package}/bin/vmagent"
+  ]
+  ++ lib.optionals (cfg.remoteWrite.url != null) [
+    "-remoteWrite.url=${cfg.remoteWrite.url}"
+    "-remoteWrite.tmpDataPath=%C/vmagent/remote_write_tmp"
+  ]
+  ++ lib.optional (
+    cfg.remoteWrite.basicAuthUsername != null
+  ) "-remoteWrite.basicAuth.username=${cfg.remoteWrite.basicAuthUsername}"
+  ++ lib.optional (
+    cfg.remoteWrite.basicAuthPasswordFile != null
+  ) "-remoteWrite.basicAuth.passwordFile=\${CREDENTIALS_DIRECTORY}/remote_write_basic_auth_password"
+  ++ cfg.extraArgs;
   prometheusConfigYml = checkedConfig (
     settingsFormat.generate "prometheusConfig.yaml" cfg.prometheusConfig
   );
 
   checkedConfig =
     file:
-    pkgs.runCommand "checked-config" { nativeBuildInputs = [ cfg.package ]; } ''
-      ln -s ${file} $out
-      ${lib.escapeShellArgs startCLIList} -promscrape.config=${file} -dryRun
-    '';
+    if cfg.checkConfig then
+      pkgs.runCommand "checked-config" { nativeBuildInputs = [ cfg.package ]; } ''
+        ln -s ${file} $out
+        ${lib.escapeShellArgs startCLIList} -promscrape.config=${file} -dryRun
+      ''
+    else
+      file;
 in
 {
   imports = [
@@ -119,6 +121,17 @@ in
         or {command}`vmagent -help` for more information.
       '';
     };
+
+    checkConfig = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = ''
+        Check configuration.
+
+        If you use credentials stored in external files (`environmentFile`, etc),
+        they will not be visible  and it will report errors, despite a correct configuration.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -139,7 +152,7 @@ in
           startCLIList
           ++ lib.optionals (cfg.prometheusConfig != { }) [ "-promscrape.config=${prometheusConfigYml}" ]
         );
-        LoadCredential = lib.optional (cfg.remoteWrite.basicAuthPasswordFile != null) [
+        LoadCredential = lib.optionals (cfg.remoteWrite.basicAuthPasswordFile != null) [
           "remote_write_basic_auth_password:${cfg.remoteWrite.basicAuthPasswordFile}"
         ];
       };

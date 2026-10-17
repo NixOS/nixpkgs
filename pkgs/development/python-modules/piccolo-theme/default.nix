@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   sphinx,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "piccolo-theme";
   version = "0.24.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "piccolo_theme";
@@ -26,14 +23,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "piccolo_theme" ];
 
-  meta = with lib; {
+  meta = {
     description = "Clean and modern Sphinx theme";
     homepage = "https://piccolo-theme.readthedocs.io";
     changelog = "https://github.com/piccolo-orm/piccolo_theme/releases/tag/${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with maintainers; [ loicreynier ];
+    maintainers = with lib.maintainers; [ loicreynier ];
   };
 }

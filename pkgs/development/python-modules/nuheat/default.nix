@@ -5,7 +5,6 @@
   mock,
   parameterized,
   pytestCheckHook,
-  pythonOlder,
   requests,
   responses,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "nuheat";
   version = "1.0.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "broox";
@@ -35,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nuheat" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to interact with NuHeat Signature and Mapei Mapeheat radiant floor thermostats";
     homepage = "https://github.com/broox/python-nuheat";
     changelog = "https://github.com/broox/python-nuheat/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

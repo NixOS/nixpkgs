@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchurl,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -13,15 +14,9 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-OwpydPmqt+jw8ZOMAacOFYF2bVG0lLoUVoPzesVXkY4=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    install -m444 -Dt $out/share/fonts/truetype *.ttf
-
-    runHook postInstall
-  '';
-
-  meta = with lib; {
+  meta = {
     homepage = "https://kldp.net/unfonts/";
     description = "Korean Hangul typeface collection";
     longDescription = ''
@@ -29,8 +24,7 @@ stdenvNoCC.mkDerivation rec {
 
       They were converted to TrueType with the FontForge (PfaEdit) by Won-kyu Park in 2003.
     '';
-    license = licenses.gpl2;
-    platforms = platforms.all;
-    maintainers = [ maintainers.ehmry ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.all;
   };
 }

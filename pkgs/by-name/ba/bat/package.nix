@@ -6,21 +6,27 @@
   less,
   installShellFiles,
   makeWrapper,
+  libgit2,
   zlib,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bat";
-  version = "0.25.0";
+  version = "0.26.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "bat";
-    rev = "v${version}";
-    hash = "sha256-82IhLhw0TdaMh21phBxcUZ5JI5xOXb0DrwnBmPwyfAQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IbTvFT37BFo0tKOiApDL9sT+/nMD33MO3TXuho+lF2c=";
   };
 
-  cargoHash = "sha256-07D3N1xJnrTueI+7SpQPUnCzKOLJTldyyIG2mNfJzME=";
+  cargoHash = "sha256-WRLCs1hrwFT3tya9CzKUuh5g+6fYqKDtv3yvDx8Wws8=";
+
+  env.LIBGIT2_NO_VENDOR = 1;
 
   nativeBuildInputs = [
     pkg-config
@@ -29,6 +35,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [
+    libgit2
     zlib
   ];
 
@@ -62,6 +69,9 @@ rustPlatform.buildRustPackage rec {
     "--skip=file_with_invalid_utf8_filename"
   ];
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
   doInstallCheck = true;
   installCheckPhase = ''
     runHook preInstallCheck
@@ -75,20 +85,20 @@ rustPlatform.buildRustPackage rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cat(1) clone with syntax highlighting and Git integration";
     homepage = "https://github.com/sharkdp/bat";
-    changelog = "https://github.com/sharkdp/bat/raw/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    changelog = "https://github.com/sharkdp/bat/raw/v${finalAttrs.version}/CHANGELOG.md";
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
     mainProgram = "bat";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       dywedir
       zowoq
       SuperSandro2000
       sigmasquadron
     ];
   };
-}
+})

@@ -5,22 +5,22 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "exportarr";
-  version = "2.0.1";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "onedr0p";
     repo = "exportarr";
-    rev = "v${version}";
-    hash = "sha256-A6G1b9hTGp35ZHsDaMAZdH0LkkEyXCWoV6e5Bo3UqI4=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-q1G0auXwmuJI0jecXcNg7PMF/+vZPGT00gLt/Qa86dE=";
   };
 
-  vendorHash = "sha256-8MrS/BMSjyWbBM8jVQYDsvLLaolgbP22Vp2PRX33Kfw=";
+  vendorHash = "sha256-XKIfOKgzJ41gQl/Jd8ZO3oNimZcoIY2d38ZojZAf53c=";
 
   subPackages = [ "cmd/exportarr" ];
 
-  CGO_ENABLE = 0;
+  env.CGO_ENABLE = 0;
 
   ldflags = [
     "-s"
@@ -34,12 +34,12 @@ buildGoModule rec {
     unset subPackages
   '';
 
-  meta = with lib; {
+  meta = {
     description = "AIO Prometheus Exporter for Sonarr, Radarr or Lidarr";
     mainProgram = "exportarr";
     homepage = "https://github.com/onedr0p/exportarr";
-    changelog = "https://github.com/onedr0p/exportarr/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ azahi ];
+    changelog = "https://github.com/onedr0p/exportarr/releases/tag/${finalAttrs.src.rev}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ azahi ];
   };
-}
+})

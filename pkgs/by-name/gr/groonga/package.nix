@@ -4,18 +4,19 @@
   cmake,
   fetchurl,
   kytea,
+  libstemmer,
   msgpack-c,
   mecab,
   pkg-config,
   rapidjson,
   testers,
-  xxHash,
+  xxhash,
   zstd,
+  versionCheckHook,
   postgresqlPackages,
   suggestSupport ? false,
   zeromq,
   libevent,
-  openssl,
   lz4Support ? false,
   lz4,
   zlibSupport ? true,
@@ -24,11 +25,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "groonga";
-  version = "14.0.6";
+  version = "16.1.3";
 
   src = fetchurl {
     url = "https://packages.groonga.org/source/groonga/groonga-${finalAttrs.version}.tar.gz";
-    hash = "sha256-1caTQAycvpG2PgtbxIn58HrxvWjxKgiczRSC72nWzGw=";
+    hash = "sha256-YeHI8WceIte/TNjDUAK5Z00puoKuLL5oNdc9OkWvICs=";
   };
 
   patches = [
@@ -38,48 +39,56 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    mecab # mecab-config
     pkg-config
   ];
 
-  buildInputs =
-    [
-      rapidjson
-      xxHash
-      zstd
-      mecab
-      kytea
-      msgpack-c
-    ]
-    ++ lib.optionals lz4Support [
-      lz4
-    ]
-    ++ lib.optional zlibSupport [
-      zlib
-    ]
-    ++ lib.optionals suggestSupport [
-      zeromq
-      libevent
-    ];
+  buildInputs = [
+    rapidjson
+    xxhash
+    zstd
+    mecab
+    kytea
+    libstemmer
+    msgpack-c
+  ]
+  ++ lib.optionals lz4Support [
+    lz4
+  ]
+  ++ lib.optionals zlibSupport [
+    zlib
+  ]
+  ++ lib.optionals suggestSupport [
+    zeromq
+    libevent
+  ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString zlibSupport "-I${zlib.dev}/include";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru.tests = {
     inherit (postgresqlPackages) pgroonga;
-    version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-    };
     pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
       moduleNames = [ "groonga" ];
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://groonga.org/";
+    changelog = "https://groonga.org/docs/news/${lib.versions.major finalAttrs.version}.html#release-${
+      lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
+    }";
     description = "Open-source fulltext search engine and column store";
-    license = licenses.lgpl21;
-    maintainers = [ maintainers.ericsagnes ];
-    platforms = platforms.all;
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ anish ];
+    platforms = lib.platforms.all;
+    mainProgram = "groonga";
     longDescription = ''
       Groonga is an open-source fulltext search engine and column store.
       It lets you write high-performance applications that requires fulltext search.

@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -13,12 +12,9 @@
   fsspec,
   numpy,
   packaging,
-  typing-extensions,
-  importlib-metadata,
 
-  # checks
+  # tests
   numba,
-  setuptools,
   numexpr,
   pandas,
   pyarrow,
@@ -26,16 +22,17 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "awkward";
-  version = "2.7.2";
+  version = "2.14.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "awkward";
-    tag = "v${version}";
-    hash = "sha256-nOKMwAQ5t8tc64bEKz0j8JxxoVQQu39Iu8Zr9cqSx7A=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JZpOLkf5a/Kcp9+5QjVBexzKZCWtulixGB1VcttQKrc=";
   };
 
   build-system = [
@@ -43,15 +40,12 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  dependencies =
-    [
-      awkward-cpp
-      fsspec
-      numpy
-      packaging
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ]
-    ++ lib.optionals (pythonOlder "3.12") [ importlib-metadata ];
+  dependencies = [
+    awkward-cpp
+    fsspec
+    numpy
+    packaging
+  ];
 
   dontUseCmakeConfigure = true;
 
@@ -60,7 +54,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     fsspec
     numba
-    setuptools
     numexpr
     pandas
     pyarrow
@@ -70,14 +63,14 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # Need to be run on a GPU platform.
-    "tests-cuda"
+    "tests-cuda/*"
   ];
 
   meta = {
     description = "Manipulate JSON-like data with NumPy-like idioms";
     homepage = "https://github.com/scikit-hep/awkward";
-    changelog = "https://github.com/scikit-hep/awkward/releases/tag/v${version}";
+    changelog = "https://github.com/scikit-hep/awkward/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

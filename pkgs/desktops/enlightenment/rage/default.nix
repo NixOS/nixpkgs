@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
   version = "0.4.0";
 
   src = fetchurl {
-    url = "http://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "03yal7ajh57x2jhmygc6msf3gzvqkpmzkqzj6dnam5sim8cq9rbw";
+    url = "https://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
+    hash = "sha256-fOWEGapRl6psM/Lj+eudeP83nK6GPV+hFP0UKNWhyg8=";
   };
 
   nativeBuildInputs = [
@@ -38,18 +38,15 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = directoryListingUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Video and audio player along the lines of mplayer";
     mainProgram = "rage";
     homepage = "https://enlightenment.org/";
-    license = licenses.bsd2;
-    platforms = platforms.linux;
-    maintainers =
-      with maintainers;
-      [
-        matejc
-        ftrvxmtrx
-      ]
-      ++ teams.enlightenment.members;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      matejc
+    ];
+    teams = [ lib.teams.enlightenment ];
   };
 }

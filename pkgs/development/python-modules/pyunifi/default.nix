@@ -12,15 +12,15 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ea7919caee14abe741016d8e37e96bc67a43e22f77c079e55962273f39dbea4e";
+    hash = "sha256-6nkZyu4Uq+dBAW2ON+lrxnpD4i93wHnlWWInPznb6k4=";
   };
 
   propagatedBuildInputs = [ requests ];
 
-  meta = with lib; {
+  meta = {
     description = "API towards Ubiquity Networks UniFi controller";
     homepage = "https://github.com/finish06/unifi-api";
-    license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ peterhoeg ];
   };
 }

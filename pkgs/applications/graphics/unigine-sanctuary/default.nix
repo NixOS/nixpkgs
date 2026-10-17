@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchurl
-, makeWrapper
-, autoPatchelfHook
-, libX11
-, libXext
-, libXrandr
-, libXinerama
-, libglvnd
-, openal
-, glibc
-, makeDesktopItem
-, copyDesktopItems
-, imagemagick
-, liberation_ttf
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  autoPatchelfHook,
+  libx11,
+  libxext,
+  libxrandr,
+  libxinerama,
+  libglvnd,
+  openal,
+  glibc,
+  makeDesktopItem,
+  copyDesktopItems,
+  imagemagick,
+  liberation_ttf,
 }:
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
   pname = "unigine-sanctuary";
   version = "2.3";
 
@@ -79,10 +80,10 @@ stdenv.mkDerivation rec{
 
   buildInputs = [
     stdenv.cc.cc
-    libX11
-    libXext
-    libXrandr
-    libXinerama
+    libx11
+    libxext
+    libxrandr
+    libxinerama
   ];
 
   dontUnpack = true;
@@ -92,8 +93,11 @@ stdenv.mkDerivation rec{
     homepage = "https://benchmark.unigine.com/sanctuary";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    maintainers = [ lib.maintainers.BarinovMaxim ];
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    maintainers = [ ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
     mainProgram = "Sanctuary";
   };
 }

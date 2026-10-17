@@ -1,29 +1,38 @@
-{ lib, stdenv
-, fetchurl
-, cmake
-, boost
-, openssl
-, mysql80
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  boost,
+  openssl,
+  mysql84,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmysqlconnectorcpp";
-  version = "9.1.0";
+  version = "9.7.0";
 
   src = fetchurl {
-    url = "mirror://mysql/Connector-C++/mysql-connector-c++-${version}-src.tar.gz";
-    hash = "sha256-cPtsoorBVKV4QJCz2MxPkWNsIIzwfAAA49IvcrVXvhM=";
+    url = "mirror://mysql/Connector-C++/mysql-connector-c++-${finalAttrs.version}-src.tar.gz";
+    hash = "sha256-mj3U/kQagZH3YRkuzccXwYpYocu245Yj3rtxlsMHWw4=";
   };
+
+  postPatch = ''
+    sed '/^cmake_minimum_required/Is/VERSION [0-9]\.[0-9]/VERSION 3.5/' \
+      -i ./cdk/extra/protobuf/CMakeLists.txt \
+      -i ./cdk/extra/lz4/CMakeLists.txt \
+      -i ./cdk/extra/zstd/CMakeLists.txt
+  '';
 
   nativeBuildInputs = [
     cmake
-    mysql80
+    mysql84.connector-c
   ];
 
   buildInputs = [
     boost
     openssl
-    mysql80
+    mysql84.connector-c
   ];
 
   strictDeps = true;
@@ -41,4 +50,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
   };
-}
+})

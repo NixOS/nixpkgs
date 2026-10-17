@@ -31,7 +31,7 @@
   # Type
 
   ```
-  compressDrv :: Derivation -> { formats :: [ String ]; compressors :: { ${fileExtension} :: String; } } -> Derivation
+  compressDrv :: Derivation -> { formats :: [String]; compressors :: { ${fileExtension} :: String; } } -> Derivation
   ```
 
   # Examples
@@ -64,9 +64,7 @@ let
     let
       matches = (builtins.length (builtins.split "\\{}" prog) - 1) / 2;
     in
-    lib.assertMsg (
-      matches == 1
-    ) "compressor ${ext} needs to have exactly one '{}', found ${builtins.toString matches}";
+    matches == 1 || throw "compressor ${ext} needs to have exactly one '{}', found ${toString matches}";
   mkCmd =
     ext: prog:
     assert validProg ext prog;
@@ -80,6 +78,8 @@ runCommand "${drv.name}-compressed"
   (
     (lib.optionalAttrs (drv ? pname) { inherit (drv) pname; })
     // (lib.optionalAttrs (drv ? version) { inherit (drv) version; })
+    // (lib.optionalAttrs (drv ? passthru) { inherit (drv) passthru; })
+    // (lib.optionalAttrs (drv ? meta) { inherit (drv) meta; })
   )
   ''
     mkdir $out

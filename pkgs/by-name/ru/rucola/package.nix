@@ -4,21 +4,22 @@
   fetchFromGitHub,
   pkg-config,
   oniguruma,
+  openssl,
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rucola";
-  version = "0.4.1";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "Linus-Mussmaecher";
     repo = "rucola";
-    rev = "v${version}";
-    hash = "sha256-FeQPf9sCEqypvB8VrGa1nnXmxlqo6K4fpLkJakbysvI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-dE2XlO+CwC78GblNoyv7oA5d/GezzuiuOwcQjsm7Pns=";
   };
 
-  cargoHash = "sha256-5TvJ8h/kmXG9G7dl5/gIYhVgvmqmm24BmOJzdKVJ+uY=";
+  cargoHash = "sha256-yhBY/6NLn1aIRZLLpHrEsMo/yzSnKzsvrIiJFCRcYMc=";
 
   nativeBuildInputs = [
     pkg-config
@@ -26,6 +27,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     oniguruma
+    openssl
   ];
 
   env = {
@@ -40,10 +42,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Terminal-based markdown note manager";
     homepage = "https://github.com/Linus-Mussmaecher/rucola";
-    changelog = "https://github.com/Linus-Mussmaecher/rucola/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/Linus-Mussmaecher/rucola/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ donovanglover ];
     mainProgram = "rucola";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

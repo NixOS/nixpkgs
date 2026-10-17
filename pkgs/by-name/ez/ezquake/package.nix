@@ -1,51 +1,60 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  curl,
-  expat,
-  jansson,
-  libpng,
-  libjpeg,
-  libGLU,
-  libGL,
-  libsndfile,
-  libXxf86vm,
-  pcre,
-  pkg-config,
   SDL2,
-  vim,
-  speex,
+  cmake,
+  curlMinimal,
+  expat,
+  fetchFromGitHub,
+  jansson,
+  lib,
+  libGL,
+  libx11,
+  libjpeg,
+  libpng,
+  libsndfile,
+  minizip,
+  nix-update-script,
+  pcre2,
+  pkg-config,
+  stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ezquake";
-  version = "3.6.3";
+  version = "3.6.9";
 
   src = fetchFromGitHub {
     owner = "QW-Group";
-    repo = pname + "-source";
-    rev = version;
+    repo = "ezquake-source";
+    tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-ThrsJfj+eP7Lv2ZSNLO6/b98VHrL6/rhwf2p0qMvTF8=";
+    hash = "sha256-AJe7ZvF88gKrW6IsTLpYI7RmzetFGZifntHzX7aNcG4=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    expat
-    curl
-    jansson
-    libpng
-    libjpeg
-    libGLU
-    libGL
-    libsndfile
-    libXxf86vm
-    pcre
-    SDL2
-    vim
-    speex
+  postPatch = ''
+    substituteInPlace src/fs.h \
+      --replace-fail '"unzip.h"' '<minizip/unzip.h>'
+  '';
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
   ];
+
+  buildInputs = [
+    SDL2
+    curlMinimal
+    expat
+    jansson
+    libGL
+    libx11
+    libjpeg
+    libpng
+    libsndfile
+    minizip
+    pcre2
+  ];
+
+  enableParallelBuilding = true;
 
   installPhase =
     let
@@ -53,12 +62,15 @@ stdenv.mkDerivation rec {
       arch = lib.head (lib.splitString "-" stdenv.hostPlatform.system);
     in
     ''
-      mkdir -p $out/bin
-      find .
-      mv ezquake-${sys}-${arch} $out/bin/ezquake
+      runHook preInstall
+
+      install -D \
+        ezquake-${sys}-${arch} $out/bin/${finalAttrs.meta.mainProgram}
+
+      runHook postInstall
     '';
 
-  enableParallelBuilding = true;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://ezquake.com/";
@@ -68,4 +80,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ edwtjo ];
   };
-}
+})

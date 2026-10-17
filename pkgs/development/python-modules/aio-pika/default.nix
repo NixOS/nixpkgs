@@ -1,80 +1,52 @@
 {
   lib,
-  aiomisc-pytest,
   aiormq,
   buildPythonPackage,
-  docker,
-  exceptiongroup,
   fetchFromGitHub,
-  pamqp,
-  poetry-core,
-  pytestCheckHook,
-  pythonOlder,
-  shortuuid,
-  testcontainers,
-  wrapt,
+  pyprojectVersionPatchHook,
+  uv-build,
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aio-pika";
-  version = "9.5.4";
+  version = "10.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "mosquito";
     repo = "aio-pika";
-    tag = version;
-    hash = "sha256-/73bFhhcailC05hn0xW49oFVS6Ezaiohh3ykYOjhQOI=";
+    tag = finalAttrs.version;
+    hash = "sha256-IVFZyYogfwEGyu4oysh5XGxVBEzoMT4lKoJKtphm3kE=";
   };
 
-  build-system = [ poetry-core ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.26,<0.12" uv_build
+  '';
+
+  pythonRelaxDeps = [ "aiormq" ];
+
+  build-system = [ uv-build ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     aiormq
-    exceptiongroup
     yarl
   ];
 
-  nativeCheckInputs = [
-    aiomisc-pytest
-    docker
-    pamqp
-    pytestCheckHook
-    shortuuid
-    testcontainers
-    wrapt
-  ];
-
-  disabledTests = [
-    # Tests attempt to connect to a RabbitMQ server
-    "test_connection_interleave"
-    "test_connection_happy_eyeballs_delay"
-    "test_robust_connection_interleave"
-    "test_robust_connection_happy_eyeballs_delay"
-  ];
-
-  disabledTestPaths = [
-    # Tests attempt to connect to a RabbitMQ server
-    "tests/test_amqp.py"
-    "tests/test_amqp_robust.py"
-    "tests/test_amqp_robust_proxy.py"
-    "tests/test_amqps.py"
-    "tests/test_master.py"
-    "tests/test_memory_leak.py"
-    "tests/test_rpc.py"
-    "tests/test_types.py"
-  ];
+  # Tests require running a RabbitMQ server.
+  # They rely on having AMQP_URL set or running Docker.
+  doCheck = false;
 
   pythonImportsCheck = [ "aio_pika" ];
 
-  meta = with lib; {
+  meta = {
     description = "AMQP 0.9 client designed for asyncio and humans";
     homepage = "https://github.com/mosquito/aio-pika";
-    changelog = "https://github.com/mosquito/aio-pika/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ emilytrau ];
+    changelog = "https://github.com/mosquito/aio-pika/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ emilytrau ];
   };
-}
+})

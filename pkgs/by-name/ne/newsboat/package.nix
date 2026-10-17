@@ -3,6 +3,8 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  cargo,
+  rustc,
   stfl,
   sqlite,
   curl,
@@ -11,104 +13,87 @@
   libxml2,
   json_c,
   ncurses,
-  darwin,
   asciidoctor,
   libiconv,
   makeWrapper,
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "newsboat";
-  version = "2.38";
+  version = "2.45";
 
   src = fetchFromGitHub {
     owner = "newsboat";
     repo = "newsboat";
-    rev = "r${version}";
-    hash = "sha256-RekP88qZ4VaH5JG190BbVrBHnoUr+UVWvFmdPeyY8Yw=";
+    tag = "r${finalAttrs.version}";
+    hash = "sha256-3joEytlm0KPLF7hbIG+9X6X+D6ydeLFTRrWf14j3p+E=";
   };
 
-  cargoHash = "sha256-mripE0oeMLn9svhKH/dcH7VKYHGyZKfrDcoBdL+QcDQ=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-Tp1P/kE21jtM8vxBwy0FmScPU2LTHx9EH6YfhCWn0kE=";
+  };
 
-  # TODO: Check if that's still needed
+  # allow other ncurses versions on Darwin
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # Allow other ncurses versions on Darwin
-    substituteInPlace config.sh \
-      --replace "ncurses5.4" "ncurses"
+    substituteInPlace config.sh --replace-fail "ncurses5.4" "ncurses"
   '';
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      asciidoctor
-      gettext
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      makeWrapper
-      ncurses
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    asciidoctor
+    gettext
+    cargo
+    rustc
+    rustPlatform.cargoSetupHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    makeWrapper
+    ncurses
+  ];
 
-  buildInputs =
-    [
-      stfl
-      sqlite
-      curl
-      libxml2
-      json_c
-      ncurses
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Security
-        Foundation
-        libiconv
-        gettext
-      ]
-    );
+  buildInputs = [
+    stfl
+    sqlite
+    curl
+    libxml2
+    json_c
+    ncurses
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+    gettext
+  ];
 
-  postBuild = ''
-    make -j $NIX_BUILD_CORES prefix="$out"
-  '';
+  env = {
+    # https://github.com/NixOS/nixpkgs/pull/98471#issuecomment-703100014 . We set
+    # these for all platforms, since upstream's gettext crate behavior might
+    # change in the future.
+    GETTEXT_LIB_DIR = "${lib.getLib gettext}/lib";
+    GETTEXT_INCLUDE_DIR = "${lib.getDev gettext}/include";
+    GETTEXT_BIN_DIR = "${lib.getBin gettext}/bin";
+  };
 
-  # https://github.com/NixOS/nixpkgs/pull/98471#issuecomment-703100014 . We set
-  # these for all platforms, since upstream's gettext crate behavior might
-  # change in the future.
-  GETTEXT_LIB_DIR = "${lib.getLib gettext}/lib";
-  GETTEXT_INCLUDE_DIR = "${lib.getDev gettext}/include";
-  GETTEXT_BIN_DIR = "${lib.getBin gettext}/bin";
+  makeFlags = [ "prefix=$(out)" ];
+  enableParallelBuilding = true;
 
   doCheck = true;
+  checkTarget = "test";
 
-  preCheck = ''
-    make -j $NIX_BUILD_CORES test
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    for prog in $out/bin/*; do
+      wrapProgram "$prog" --prefix DYLD_LIBRARY_PATH : "${stfl}/lib"
+    done
   '';
-
-  postInstall =
-    ''
-      make -j $NIX_BUILD_CORES prefix="$out" install
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      for prog in $out/bin/*; do
-        wrapProgram "$prog" --prefix DYLD_LIBRARY_PATH : "${stfl}/lib"
-      done
-    '';
 
   passthru = {
     updateScript = nix-update-script { };
   };
 
-  installPhase = ''
-    runHook preInstall
-    install -Dm755 newsboat $out/bin/newsboat
-    install -Dm755 podboat $out/bin/podboat
-    runHook postInstall
-  '';
-
   meta = {
     homepage = "https://newsboat.org/";
-    changelog = "https://github.com/newsboat/newsboat/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/newsboat/newsboat/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Fork of Newsbeuter, an RSS/Atom feed reader for the text console";
     maintainers = with lib.maintainers; [
       dotlambda
@@ -118,4 +103,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.unix;
     mainProgram = "newsboat";
   };
-}
+})

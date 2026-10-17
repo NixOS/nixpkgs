@@ -4,18 +4,18 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "goose-lang";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "goose-lang";
     repo = "goose";
-    rev = "v${version}";
-    hash = "sha256-P26Q21MWrne1pB3/EvLYp2i8Xw7oG9Waer2hhHyco1A=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-LAuWd/KeVdvPY45wL8g0MBTMrRCHcu/Ti3+IUvtcFUY=";
   };
 
-  vendorHash = "sha256-HCJ8v3TSv4UrkOsRuENWVz5Z7zQ1UsOygx0Mo7MELzY=";
+  vendorHash = "sha256-URRsbRWcupgKajK96NZYudFAjolFYD5nf+QeSkUw28w=";
 
   ldflags = [
     "-s"
@@ -25,9 +25,9 @@ buildGoModule rec {
   meta = {
     description = "Goose converts a small subset of Go to Coq";
     homepage = "https://github.com/goose-lang/goose";
-    changelog = "https://github.com/goose-lang/goose/releases/tag/v${version}";
+    changelog = "https://github.com/goose-lang/goose/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ stepbrobd ];
     mainProgram = "goose";
   };
-}
+})

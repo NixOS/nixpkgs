@@ -5,7 +5,7 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "a52dec";
   version = "0.8.0";
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     domain = "git.adelielinux.org";
     owner = "community";
     repo = "a52dec";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Z4riiwetJkhQYa+AD8qOiwB1+cuLbOyN/g7D8HM8Pkw=";
   };
 
@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
     "--enable-shared"
     # Define inline as __attribute__ ((__always_inline__))
     "ac_cv_c_inline=yes"
+    # C23 (Clang default w/ autoconf 2.73) rejects K&R-style declarations
+    "CFLAGS=-std=gnu17"
   ];
 
   makeFlags = [ "AR=${stdenv.cc.targetPrefix}ar" ];
@@ -33,13 +35,13 @@ stdenv.mkDerivation rec {
   # but it's better to disable tests than loose ASLR on i686
   doCheck = !stdenv.hostPlatform.isi686;
 
-  meta = with lib; {
+  meta = {
     description = "ATSC A/52 stream decoder";
     homepage = "https://liba52.sourceforge.io/";
-    changelog = "https://git.adelielinux.org/community/a52dec/-/blob/v${version}/ChangeLog?ref_type=tags";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ wegank ];
+    changelog = "https://git.adelielinux.org/community/a52dec/-/blob/v${finalAttrs.version}/ChangeLog?ref_type=tags";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ wegank ];
     mainProgram = "a52dec";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

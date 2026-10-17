@@ -1,19 +1,17 @@
 {
   stdenv,
   lib,
-  config,
   fetchFromGitHub,
   testers,
   cmake,
   pkg-config,
   alsaSupport ? stdenv.hostPlatform.isLinux,
   alsa-lib,
-  pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
+  pulseaudioSupport ? stdenv.hostPlatform.isLinux,
   libpulseaudio,
   jackSupport ? true,
   libjack2,
   coreaudioSupport ? stdenv.hostPlatform.isDarwin,
-  darwin,
   validatePkgConfig,
 }:
 
@@ -45,9 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals jackSupport [
       libjack2
-    ]
-    ++ lib.optionals coreaudioSupport [
-      darwin.apple_sdk.frameworks.CoreAudio
     ];
 
   cmakeFlags = [

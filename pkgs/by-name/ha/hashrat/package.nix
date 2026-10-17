@@ -3,25 +3,28 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hashrat";
-  version = "1.22";
+  version = "1.25";
 
   src = fetchFromGitHub {
     owner = "ColumPaget";
     repo = "Hashrat";
-    rev = "v${version}";
-    hash = "sha256-mjjK315OUUFVdUY+zcCvm7yeo7XxourR1sghWbeFT7c=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-nGaOVvy8caySohCGyGdnxXsv2DuqFPRi4JJLlZy+q8o=";
   };
 
   patches = [
-    # fix cross compilation by replacing hardcoded ar with AC_PROG_AR
-    # https://github.com/ColumPaget/Hashrat/pull/27
+    # Upstream fix for gcc-15 build failure:
+    #   https://github.com/ColumPaget/Hashrat/pull/33
     (fetchpatch {
-      url = "https://github.com/ColumPaget/Hashrat/commit/a82615e02021245850a1703e613055da2520c8fd.patch";
-      hash = "sha256-tjyhM2ahZBRoRP8WjyQhrI3l20oaqMtfYmOeAZVEZqU=";
+      name = "gcc-15.patch";
+      url = "https://github.com/ColumPaget/Hashrat/commit/5add4a28f34237bf49f37febcf3366d45d4cea4f.patch";
+      hash = "sha256-+ydRQJfoZx7g6VzDDs2RWKRmWs5kBNgYfFKfzsAaskE=";
     })
   ];
 
@@ -29,16 +32,22 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Command-line hash-generation utility";
     mainProgram = "hashrat";
     longDescription = ''
       Hashing tool supporting md5,sha1,sha256,sha512,whirlpool,jh and hmac versions of these.
       Includes recursive file hashing and other features.
     '';
-    homepage = "http://www.cjpaget.co.uk/Code/Hashrat";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ zendo ];
+    homepage = "https://github.com/ColumPaget/Hashrat";
+    changelog = "https://github.com/ColumPaget/Hashrat/blob/v${finalAttrs.version}/CHANGELOG";
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ zendo ];
   };
-}
+})

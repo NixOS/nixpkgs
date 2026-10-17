@@ -1,18 +1,21 @@
 {
   lib,
   buildGoModule,
+  stdenv,
   fetchFromGitHub,
+  writableTmpDirAsHomeHook,
+  installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pdfcpu";
-  version = "0.9.1";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "pdfcpu";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-PJTEaWU/erqVJakvxfB0aYRsi/tcGxYYZjCdEvThmzM=";
+    repo = "pdfcpu";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-kVSzMa1Jil2moY3BP5cu3O4482OBMxUlMVPiDwJz1zs=";
     # Apparently upstream requires that the compiled executable will know the
     # commit hash and the date of the commit. This information is also presented
     # in the output of `pdfcpu version` which we use as a sanity check in the
@@ -30,43 +33,69 @@ buildGoModule rec {
     postFetch = ''
       cd "$out"
       git rev-parse HEAD > $out/COMMIT
-      git log -1 --pretty=%cd --date=format:'%Y-%m-%dT%H:%M:%SZ' > $out/SOURCE_DATE
+      git log -1 --pretty=%cd --date=format:'%Y-%m-%d %H:%M:%S UTC' > $out/SOURCE_DATE
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
 
-  vendorHash = "sha256-x5EXv2LkJg2LAdml+1I4MzgTvNo6Gl+6e6UHVQ+Z9rU=";
+  vendorHash = "sha256-iSDCCftx3hFZ2M3Cxeeq0Dta8hMXBYcviYRMgdrQfKI=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=v${version}"
+    "-X main.version=v${finalAttrs.version}"
   ];
 
   # ldflags based on metadata from git and source
   preBuild = ''
-    ldflags+=" -X main.commit=$(cat COMMIT)"
-    ldflags+=" -X main.date=$(cat SOURCE_DATE)"
+    ldflags+=(
+      "-X 'main.commit=$(cat COMMIT)'"
+      "-X 'main.date=$(cat SOURCE_DATE)'"
+    )
+  '';
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  postInstall = ''
+    installShellCompletion --cmd pdfcpu \
+      --zsh <($out/bin/pdfcpu completion zsh) \
+      --fish <($out/bin/pdfcpu completion fish) \
+      --bash <($out/bin/pdfcpu completion bash)
   '';
 
   # No tests
   doCheck = false;
   doInstallCheck = true;
+  installCheckInputs = [
+    writableTmpDirAsHomeHook
+  ];
+  # NOTE: Can't use `versionCheckHook` since a writeable $HOME is required and
+  # `versionCheckHook` uses --ignore-environment
   installCheckPhase = ''
-    export HOME=$(mktemp -d)
     echo checking the version print of pdfcpu
-    $out/bin/pdfcpu version | grep ${version}
-    $out/bin/pdfcpu version | grep $(cat COMMIT | cut -c1-8)
-    $out/bin/pdfcpu version | grep $(cat SOURCE_DATE)
+    mkdir -p $HOME/"${
+      if stdenv.hostPlatform.isDarwin then "Library/Application Support" else ".config"
+    }"/pdfcpu
+    versionOutput="$($out/bin/pdfcpu version)"
+    for part in ${finalAttrs.version} "$(cut -c1-8 COMMIT)" "$(cat SOURCE_DATE)"; do
+      if [[ ! "$versionOutput" =~ "$part" ]]; then
+          echo version output did not contain expected part \"$part\" . Output was:
+          echo "$versionOutput"
+          exit 3
+      fi
+    done
   '';
 
   subPackages = [ "cmd/pdfcpu" ];
 
-  meta = with lib; {
+  meta = {
     description = "PDF processor written in Go";
+    changelog = "https://pdfcpu.io/changelog/";
     homepage = "https://pdfcpu.io";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ doronbehar ];
     mainProgram = "pdfcpu";
   };
-}
+})

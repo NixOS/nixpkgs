@@ -5,22 +5,19 @@
   fetchFromGitHub,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyituran";
-  version = "0.1.4";
+  version = "0.1.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "shmuelzon";
     repo = "pyituran";
     tag = version;
-    hash = "sha256-rgPW+z70Z9wRzPbPtWUHb80vCccWJlEs18Y6llIeipo=";
+    hash = "sha256-+3trWl9eijrtGfgBn5m4KfIVhS8u/o8n90bs3a3K9mo=";
   };
 
   postPatch = ''

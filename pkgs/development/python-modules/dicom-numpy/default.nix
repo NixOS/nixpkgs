@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   setuptools,
   numpy,
@@ -12,13 +11,11 @@
 buildPythonPackage rec {
   pname = "dicom-numpy";
   version = "0.6.5";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "innolitics";
-    repo = pname;
+    repo = "dicom-numpy";
     tag = "v${version}";
     hash = "sha256-pgmREQlstr0GY2ThIWt4hbcSWmaNWgkr2gO4PSgGHqE=";
   };
@@ -41,10 +38,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dicom_numpy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Read DICOM files into Numpy arrays";
     homepage = "https://github.com/innolitics/dicom-numpy";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

@@ -13,7 +13,7 @@ buildKodiAddon rec {
 
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/${lib.toLower rel}/${namespace}/${namespace}-${version}.zip";
-    sha256 = "sha256-jSl7lbFqR6hjZhHzxY69hDbs84LY3B5RYKzXnHou0Qg=";
+    hash = "sha256-jSl7lbFqR6hjZhHzxY69hDbs84LY3B5RYKzXnHou0Qg=";
   };
 
   passthru = {
@@ -23,10 +23,10 @@ buildKodiAddon rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tiran/defusedxml";
-    description = "defusing XML bombs and other exploits";
-    license = licenses.psfl;
-    maintainers = teams.kodi.members;
+    description = "Defusing XML bombs and other exploits";
+    license = lib.licenses.psfl;
+    teams = [ lib.teams.kodi ];
   };
 }

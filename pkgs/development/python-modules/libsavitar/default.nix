@@ -2,43 +2,46 @@
   lib,
   buildPythonPackage,
   python,
-  pythonOlder,
   fetchFromGitHub,
   cmake,
   sip4,
+  distutils,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "libsavitar";
   version = "4.12.0";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "libSavitar";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-MAA1WtGED6lvU6N4BE6wwY1aYaFrCq/gkmQFz3VWqNA=";
   };
 
   postPatch = ''
     sed -i 's#''${Python3_SITEARCH}#${placeholder "out"}/${python.sitePackages}#' cmake/SIPMacros.cmake
+
+    substituteInPlace pugixml/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    sip4
+  ];
 
-  propagatedBuildInputs = [ sip4 ];
+  propagatedBuildInputs = [
+    sip4
+    distutils
+  ];
 
-  disabled = pythonOlder "3.4.0";
-
-  meta = with lib; {
+  meta = {
     description = "C++ implementation of 3mf loading with SIP python bindings";
     homepage = "https://github.com/Ultimaker/libSavitar";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
-      abbradar
-      orivej
-      gebner
-    ];
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
-}
+})

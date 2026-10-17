@@ -49,11 +49,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "habitipy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tools and library for Habitica restful API";
     mainProgram = "habitipy";
     homepage = "https://github.com/ASMfreaK/habitipy";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

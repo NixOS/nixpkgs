@@ -2,24 +2,26 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
+  setuptools,
   sphinx,
   mscgen,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinxcontrib-mscgen";
   version = "0.6";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-AXfSWRq3CepT/jNOgHxiYT7vkdKZejPu/LeUqxZ8T5A=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     mscgen
     sphinx
   ];
@@ -31,10 +33,10 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sphinx extension using mscgen to render diagrams";
     homepage = "https://github.com/sphinx-contrib/mscgen";
-    license = licenses.bola11;
-    maintainers = with maintainers; [ drupol ];
+    license = lib.licenses.bola11;
+    maintainers = [ ];
   };
-}
+})

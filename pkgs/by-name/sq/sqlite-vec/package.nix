@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sqlite-vec";
-  version = "0.1.6";
+  version = "0.1.9";
 
   src = fetchFromGitHub {
     owner = "asg017";
     repo = "sqlite-vec";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-CgeSoRoQRMb/V+RzU5NQuIk/3OonYjAfolWD2hqNuXU=";
+    hash = "sha256-bM0IYcI84PSKBVHKlY+j+dK6bnqO9UPHJixgb/1+Cow=";
   };
 
   nativeBuildInputs = [ gettext ];
@@ -35,12 +35,14 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Vector search SQLite extension that runs anywhere";
     homepage = "https://github.com/asg017/sqlite-vec";
     changelog = "https://github.com/asg017/sqlite-vec/releases/tag/${finalAttrs.src.rev}";
-    license = licenses.mit;
-    maintainers = [ maintainers.anmonteiro ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      sarahec
+    ];
+    platforms = lib.platforms.unix;
   };
 })

@@ -2,27 +2,45 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "alterx";
-  version = "0.0.3";
+  version = "0.1.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "alterx";
-    tag = "v${version}";
-    hash = "sha256-A01XROFB2NkArfFtRMv/r9Nu5QoKMTOVzVIUnFoVe78=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aqCsPv+vxO45SwUXwicjQdGNq+Ad4awiF/wwGlPETDU=";
   };
 
-  vendorHash = "sha256-efwU41kFR8QYa2cevvj4pYAXgCisJ4OHaRIhWVnETvc=";
+  vendorHash = "sha256-13ODJNo6xbQkubaGJT3svFbOLbdsHluTCp1Gom+jYeU=";
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
+  ldflags = [ "-s" ];
+
+  doInstallCheck = true;
+
+  versionCheckKeepEnvironment = [ "HOME" ];
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Fast and customizable subdomain wordlist generator using DSL";
-    mainProgram = "alterx";
     homepage = "https://github.com/projectdiscovery/alterx";
-    changelog = "https://github.com/projectdiscovery/alterx/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/projectdiscovery/alterx/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "alterx";
   };
-}
+})

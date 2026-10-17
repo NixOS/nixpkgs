@@ -10,12 +10,12 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "icoutils";
   version = "0.32.3";
 
   src = fetchurl {
-    url = "mirror://savannah/icoutils/icoutils-${version}.tar.bz2";
+    url = "mirror://savannah/icoutils/icoutils-${finalAttrs.version}.tar.bz2";
     sha256 = "1q66cksms4l62y0wizb8vfavhmf7kyfgcfkynil3n99s0hny1aqp";
   };
 
@@ -24,6 +24,12 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://git.savannah.nongnu.org/cgit/icoutils.git/patch/?id=aa3572119bfe34484025f37dbbc4d5070f735908";
       hash = "sha256-4YCI+SYT2bCBNegkpN5jcfi6gOeec65TmCABr98HHB4=";
+    })
+    # Fix build with GCC 15 / C23.
+    # https://savannah.nongnu.org/bugs/index.php?66812
+    (fetchpatch {
+      url = "https://git.savannah.nongnu.org/cgit/icoutils.git/patch/?id=298da402990ebe1279fb82b63ae2dc66ad78fd36";
+      hash = "sha256-XQXhc1GkKhm4RJZPvkV8DYULziuBo0Dpt6hscM2Qcus=";
     })
   ];
 
@@ -55,4 +61,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

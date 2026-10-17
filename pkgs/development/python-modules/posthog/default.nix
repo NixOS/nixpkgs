@@ -1,64 +1,87 @@
 {
   lib,
+  anthropic,
   backoff,
   buildPythonPackage,
+  distro,
+  django,
   fetchFromGitHub,
   freezegun,
+  google-genai,
+  mcp,
   mock,
   monotonic,
+  openai,
+  opentelemetry-exporter-otlp,
+  opentelemetry-sdk,
+  parameterized,
+  pytest-asyncio,
+  pytest-bdd,
   pytestCheckHook,
   python-dateutil,
+  pythonAtLeast,
   requests,
   setuptools,
   six,
+  typing-extensions,
+  zstandard,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "posthog";
-  version = "3.7.5";
+  version = "7.62.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PostHog";
     repo = "posthog-python";
-    tag = "v${version}";
-    hash = "sha256-zdZUlHQbSOSJhAxOY404/w7RsX8h+602A+8qmH9fQIc=";
+    tag = "posthog-v${finalAttrs.version}";
+    hash = "sha256-C7RrufEgplFZjCttg5eFNfCjhGUEWw5XQE4U9I8NPA8=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     backoff
+    distro
     monotonic
     python-dateutil
     requests
     six
+    typing-extensions
   ];
 
   nativeCheckInputs = [
+    anthropic
+    django
     freezegun
+    google-genai
+    mcp
     mock
+    openai
+    opentelemetry-exporter-otlp
+    opentelemetry-sdk
+    parameterized
+    pytest-asyncio
+    pytest-bdd
     pytestCheckHook
+    zstandard
   ];
 
   pythonImportsCheck = [ "posthog" ];
 
   disabledTests = [
-    "test_load_feature_flags_wrong_key"
     # Tests require network access
     "test_excepthook"
     "test_request"
-    "test_trying_to_use_django_integration"
     "test_upload"
-    # AssertionError: 2 != 3
-    "test_flush_interval"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for interacting with PostHog";
     homepage = "https://github.com/PostHog/posthog-python";
-    changelog = "https://github.com/PostHog/posthog-python/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    changelog = "https://github.com/PostHog/posthog-python/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
-}
+})

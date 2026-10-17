@@ -3,13 +3,14 @@
   stdenv,
   jq,
   element-web-unwrapped,
-  conf ? { },
+  config,
+  conf ? config.element-web.conf or { },
 }:
 
 if (conf == { }) then
   element-web-unwrapped
 else
-  stdenv.mkDerivation rec {
+  stdenv.mkDerivation {
     pname = "${element-web-unwrapped.pname}-wrapped";
     inherit (element-web-unwrapped) version meta;
 

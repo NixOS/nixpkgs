@@ -2,41 +2,38 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  testers,
-  jsonfmt,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "jsonfmt";
-  version = "0.5.0";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "caarlos0";
     repo = "jsonfmt";
-    rev = "v${version}";
-    hash = "sha256-rVv7Dv4vQmss4eiiy+KaO9tZ5U58WlRlsOz4QO0gdfM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-CMBqqTGpqoErFPKn4lxMB9XrdlhZcY6qbRZZVUVMQj0=";
   };
 
-  vendorHash = "sha256-xtwN+TemiiyXOxZ2DNys4G6w4KA3BjLSWAmzox+boMY=";
+  vendorHash = "sha256-QcljmDsz5LsXfHaXNVBU7IIVVgkm3Vfnirchx5ZOMSg=";
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
+    "-X=main.version=${finalAttrs.version}"
   ];
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = jsonfmt;
-    };
-  };
+  doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Formatter for JSON files";
     homepage = "https://github.com/caarlos0/jsonfmt";
-    changelog = "https://github.com/caarlos0/jsonfmt/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/caarlos0/jsonfmt/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.matthiasbeyer ];
     mainProgram = "jsonfmt";
   };
-}
+})

@@ -10,21 +10,21 @@
   cmdstan,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cmdstan";
-  version = "2.36.0";
+  version = "2.40.0";
 
   src = fetchFromGitHub {
     owner = "stan-dev";
-    repo = pname;
-    rev = "v${version}";
+    repo = "cmdstan";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-9Dan86C0nxxxkIXaOSKExY0hngAgWTpL4RlI3rTnBZo=";
+    hash = "sha256-sSs1QVTBTVs8rzuqpDPrVdOq7X6k2UwL9FRAwd56bRA=";
   };
 
   postPatch = ''
     substituteInPlace stan/lib/stan_math/make/libraries \
-      --replace "/usr/bin/env bash" "bash"
+      --replace-fail "/usr/bin/env bash" "bash"
   '';
 
   nativeBuildInputs = [
@@ -32,26 +32,24 @@ stdenv.mkDerivation rec {
     stanc
   ];
 
-  preConfigure =
-    ''
-      patchShebangs test-all.sh runCmdStanTests.py stan/
-    ''
-    # Fix inclusion of hardcoded paths in PCH files, by building in the store.
-    + ''
-      mkdir -p $out/opt
-      cp -R . $out/opt/cmdstan
-      cd $out/opt/cmdstan
-      mkdir -p bin
-      ln -s ${buildPackages.stanc}/bin/stanc bin/stanc
-    '';
+  preConfigure = ''
+    patchShebangs test-all.sh runCmdStanTests.py stan/
+  ''
+  # Fix inclusion of hardcoded paths in PCH files, by building in the store.
+  + ''
+    mkdir -p $out/opt
+    cp -R . $out/opt/cmdstan
+    cd $out/opt/cmdstan
+    mkdir -p bin
+    ln -s ${buildPackages.stanc}/bin/stanc bin/stanc
+  '';
 
-  makeFlags =
-    [
-      "build"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "arch=${stdenv.hostPlatform.darwinArch}"
-    ];
+  makeFlags = [
+    "build"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "arch=${stdenv.hostPlatform.darwinArch}"
+  ];
 
   # Disable inclusion of timestamps in PCH files when using Clang.
   env.CXXFLAGS = lib.optionalString stdenv.cc.isClang "-Xclang -fno-pch-timestamp";
@@ -83,7 +81,7 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command-line interface to Stan";
     longDescription = ''
       Stan is a probabilistic programming language implementing full Bayesian
@@ -92,8 +90,8 @@ stdenv.mkDerivation rec {
       likelihood estimation with Optimization (L-BFGS).
     '';
     homepage = "https://mc-stan.org/interfaces/cmdstan.html";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ wegank ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ wegank ];
+    platforms = lib.platforms.unix;
   };
-}
+})

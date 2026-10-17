@@ -2,8 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchpatch2,
-  pythonOlder,
   hatchling,
   opentelemetry-api,
   opentelemetry-instrumentation,
@@ -18,8 +16,6 @@ buildPythonPackage {
   inherit (opentelemetry-instrumentation) version src;
   pname = "opentelemetry-instrumentation-grpc";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   sourceRoot = "${opentelemetry-instrumentation.src.name}/instrumentation/opentelemetry-instrumentation-grpc";
 

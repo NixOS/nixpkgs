@@ -2,66 +2,51 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  pythonOlder,
-  numpy,
-  wheel,
-  werkzeug,
-  protobuf,
+
+  # dependencies
+  absl-py,
   grpcio,
   markdown,
-  absl-py,
-  google-auth-oauthlib,
+  numpy,
+  packaging,
+  pillow,
+  protobuf,
   setuptools,
-  standard-imghdr,
   tensorboard-data-server,
-  tensorboard-plugin-wit,
-  tensorboard-plugin-profile,
+  werkzeug,
+
+  # tests
+  versionCheckHook,
 }:
 
-# tensorflow/tensorboard is built from a downloaded wheel, because
-# https://github.com/tensorflow/tensorboard/issues/719 blocks
-# buildBazelPackage.
-
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tensorboard";
-  version = "2.18.0";
+  version = "2.21.0";
   format = "wheel";
-  disabled = pythonOlder "3.9";
+  __structuredAttrs = true;
 
+  # tensorflow/tensorboard is built from a downloaded wheel, because
+  # https://github.com/tensorflow/tensorboard/issues/719 blocks buildBazelPackage.
   src = fetchPypi {
-    inherit pname version format;
+    inherit (finalAttrs) pname version;
+    format = "wheel";
     dist = "py3";
     python = "py3";
-    hash = "sha256-EHykghdF9z4q76AsUP9wqbaU8595CxHm9oL30yZ0Xqs=";
+    hash = "sha256-cnkxbctr1bw5HWI96oQVMSmc3hiHMQ6BM7w0qZbTIlU=";
   };
 
-  pythonRelaxDeps = [
-    "google-auth-oauthlib"
-    "protobuf"
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     absl-py
     grpcio
-    google-auth-oauthlib
     markdown
     numpy
+    packaging
+    pillow
     protobuf
     setuptools
-    standard-imghdr
     tensorboard-data-server
-    tensorboard-plugin-profile
-    tensorboard-plugin-wit
     werkzeug
-    # not declared in install_requires, but used at runtime
-    # https://github.com/NixOS/nixpkgs/issues/73840
-    wheel
   ];
-
-  # in the absence of a real test suite, run cli and imports
-  checkPhase = ''
-    $out/bin/tensorboard --help > /dev/null
-  '';
 
   pythonImportsCheck = [
     "tensorboard"
@@ -73,12 +58,19 @@ buildPythonPackage rec {
     "tensorboard.util"
   ];
 
-  meta = with lib; {
-    changelog = "https://github.com/tensorflow/tensorboard/blob/${version}/RELEASE.md";
+  nativeCheckInputs = [
+    versionCheckHook
+  ];
+
+  meta = {
     description = "TensorFlow's Visualization Toolkit";
-    homepage = "https://www.tensorflow.org/";
-    license = licenses.asl20;
+    homepage = "https://github.com/tensorflow/tensorboard";
+    changelog = "https://github.com/tensorflow/tensorboard/blob/${finalAttrs.version}/RELEASE.md";
+    license = lib.licenses.asl20;
     mainProgram = "tensorboard";
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+    ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-}
+})

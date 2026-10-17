@@ -4,28 +4,29 @@
   stdenv,
   cmake,
   kdePackages,
-  libsForQt5,
+  qt6,
 }:
 stdenv.mkDerivation {
   pname = "licensedigger";
-  version = "0-unstable-2024-08-28";
+  version = "0-unstable-2025-08-19";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "SDK";
     repo = "licensedigger";
-    rev = "cc4b24d3fb67afa8fb0a9ef61210588958eaf0f5";
-    hash = "sha256-/ZEja+iDx0lVkJaLshPd1tZD4ZUspVeFHY1TNXjr4qg=";
+    rev = "711236617bfdeb4f72fecec3ab29bc25806337e5";
+    hash = "sha256-IuH7K2Hhhdzw01fypiabv8/tClt+0rr4j94JAy8VKN4=";
   };
 
-  nativeBuildInputs = [ cmake ];
-
-  buildInputs = [
+  nativeBuildInputs = [
+    cmake
     kdePackages.extra-cmake-modules
-    libsForQt5.qtbase
+    qt6.wrapQtAppsHook
   ];
 
-  dontWrapQtApps = true;
+  buildInputs = [
+    qt6.qtbase
+  ];
 
   meta = {
     description = "Tools to convert existing license headers to SPDX compliant headers";

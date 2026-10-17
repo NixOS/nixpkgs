@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "pykmtronic";
-  version = "0.3.0";
+  version = "0.4.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8qLyBJp7C93x0PWbgDAtNEDJ5VLNfwZ3DRZfudRCBgo=";
+    hash = "sha256-RRB4NxDzXCfaPSnc8FJF8ikGqnAzfHkS6Nasjr3Y4qk=";
   };
 
   propagatedBuildInputs = [
@@ -25,10 +25,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "pykmtronic" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client to interface with KM-Tronic web relays";
     homepage = "https://github.com/dgomes/pykmtronic";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

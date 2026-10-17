@@ -5,28 +5,30 @@
   jdk8,
   unzrip,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "xmage";
-  version = "1.4.51-dev_2024-01-30_19-35";
+  version = "1.4.60-dev_2026-06-28_13-19";
 
   src = fetchurl {
-    url = "http://xmage.today/files/mage-full_${finalAttrs.version}.zip";
-    sha256 = "sha256-ogi0hd2FoulTnc3gg5cpLwr4Jln71YA0WBBZFOT6apg=";
+    url = "https://xmage.today/files/mage-full_${finalAttrs.version}.zip";
+    sha256 = "sha256-n6g38rE19ZSyipoOp3cnLTsJirLRXeLF1ft7gvx3bVs=";
   };
 
   preferLocalBuild = true;
 
+  nativeBuildInputs = [ unzrip ];
+
+  sourceRoot = "source";
+
   unpackPhase = ''
-    ${unzrip}/bin/unzrip $src
+    runHook preUnpack
+    unzrip $src -d "$sourceRoot"
+    runHook postUnpack
   '';
 
   installPhase =
     let
-      # upstream maintainers forgot to update version, so manual override for now
-      # strVersion = lib.substring 0 6 finalAttrs.version;
-      strVersion = "1.4.50";
-
+      strVersion = lib.substring 0 6 finalAttrs.version;
     in
     ''
       mkdir -p $out/bin
@@ -39,16 +41,15 @@ stdenv.mkDerivation (finalAttrs: {
       chmod +x $out/bin/xmage
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Magic Another Game Engine";
     mainProgram = "xmage";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       matthiasbeyer
       abueide
     ];
     homepage = "http://xmage.de/";
   };
-
 })

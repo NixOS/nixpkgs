@@ -4,6 +4,7 @@
   fetchFromGitHub,
   installShellFiles,
   patsh,
+  coreutils,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -22,10 +23,13 @@ stdenvNoCC.mkDerivation rec {
     patsh
   ];
 
+  # needed for cross
+  buildInputs = [ coreutils ];
+
   installPhase = ''
     runHook preInstall
 
-    patsh -f sd
+    patsh -f sd -s ${builtins.storeDir} --path "$HOST_PATH"
     install -Dt "$out/bin" sd
     installShellCompletion --zsh _sd
 

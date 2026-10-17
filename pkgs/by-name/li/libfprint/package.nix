@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  fetchpatch,
   pkg-config,
   meson,
   python3,
@@ -9,18 +10,19 @@
   gusb,
   pixman,
   glib,
-  nss,
   gobject-introspection,
   cairo,
   libgudev,
+  udevCheckHook,
   gtk-doc,
   docbook-xsl-nons,
   docbook_xml_dtd_43,
+  openssl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libfprint";
-  version = "1.94.8";
+  version = "1.94.100";
   outputs = [
     "out"
     "devdoc"
@@ -31,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libfprint";
     repo = "libfprint";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-PZr4ZeVnuCKYfI8CKvRqBwalxsz9Ka17kSuLflwl7mE=";
+    hash = "sha256-JwD8U6CjVH+huvVFIxRWRrsWbLOEeqOd1lCMdWgPtrA=";
   };
 
   postPatch = ''
@@ -51,15 +53,16 @@ stdenv.mkDerivation (finalAttrs: {
     docbook-xsl-nons
     docbook_xml_dtd_43
     gobject-introspection
+    udevCheckHook
   ];
 
   buildInputs = [
     gusb
     pixman
     glib
-    nss
     cairo
     libgudev
+    openssl
   ];
 
   mesonFlags = [
@@ -92,6 +95,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library designed to make it easy to add support for consumer fingerprint readers";
     license = lib.licenses.lgpl21Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ abbradar ];
+    teams = [ lib.teams.freedesktop ];
   };
 })

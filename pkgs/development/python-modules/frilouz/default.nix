@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "QuantStack";
     repo = "frilouz";
     rev = version;
-    sha256 = "0w2qzi4zb10r9iw64151ay01vf0yzyhh0bsjkx1apxp8fs15cdiw";
+    hash = "sha256-PDZWgnbo9qtCn1IvAKH/HrgdgFehBGJ4TBmE9Un8WHA=";
   };
 
   nativeCheckInputs = [ astunparse ];
@@ -31,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "frilouz" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/QuantStack/frilouz";
     description = "Python AST parser adapter with partial error recovery";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ cpcloud ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ cpcloud ];
   };
 }

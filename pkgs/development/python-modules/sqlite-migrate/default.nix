@@ -1,38 +1,47 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
+  uv-build,
   sqlite-utils,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sqlite-migrate";
-  version = "0.1a2";
+  version = "0.2";
   pyproject = true;
+  __structuredAttrs = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-wztAqe3TW0SQ4JX1XPWeA4KNJci5c3fNih97cmlPwRE=";
+  src = fetchFromGitHub {
+    owner = "simonw";
+    repo = "sqlite-migrate";
+    tag = finalAttrs.version;
+    hash = "sha256-0fU3yOujqc4mZS4XcsM9xH2iK9fFX5MUsmuc/o+I+nY=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.18,<0.12.0" "uv_build"
+  '';
 
-  propagatedBuildInputs = [ sqlite-utils ];
+  build-system = [
+    setuptools
+    uv-build
+  ];
+
+  dependencies = [ sqlite-utils ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "sqlite_migrate" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple database migration system for SQLite, based on sqlite-utils";
     homepage = "https://github.com/simonw/sqlite-migrate";
-    changelog = "https://github.com/simonw/sqlite-migrate/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ aldoborrero ];
+    changelog = "https://github.com/simonw/sqlite-migrate/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ aldoborrero ];
   };
-}
+})

@@ -4,70 +4,43 @@
   fetchFromGitHub,
   coreutils,
   ocaml-ng,
+  dune,
   zlib,
-  pcre,
   pcre2,
   neko,
-  mbedtls_2,
-  Security,
+  mbedtls,
 }:
 let
   ocamlDependencies =
-    version:
-    if lib.versionAtLeast version "4.3" then
-      with ocaml-ng.ocamlPackages_4_14;
-      [
-        ocaml
-        findlib
-        sedlex
-        xml-light
-        ptmap
-        camlp5
-        sha
-        dune_3
-        luv
-        extlib
-      ]
-    else
-      with ocaml-ng.ocamlPackages_4_10;
-      [
-        ocaml
-        findlib
-        sedlex
-        xml-light
-        ptmap
-        camlp5
-        sha
-        dune_3
-        luv
-        extlib-1-7-7
-      ];
-
-  defaultPatch = ''
-    substituteInPlace extra/haxelib_src/src/haxelib/client/Main.hx \
-      --replace '"neko"' '"${neko}/bin/neko"'
-  '';
+    version: with ocaml-ng.ocamlPackages; [
+      ocaml
+      findlib
+      sedlex
+      xml-light
+      ptmap
+      camlp5
+      sha
+      luv
+      extlib
+    ];
 
   generic =
     {
       hash,
       version,
-      prePatch ? defaultPatch,
-      patches ? [ ],
     }:
     stdenv.mkDerivation {
       pname = "haxe";
       inherit version;
 
-      buildInputs =
-        [
-          zlib
-          neko
-        ]
-        ++ (if lib.versionAtLeast version "4.3" then [ pcre2 ] else [ pcre ])
-        ++ lib.optional (lib.versionAtLeast version "4.1") mbedtls_2
-        ++ lib.optional (lib.versionAtLeast version "4.1" && stdenv.hostPlatform.isDarwin) Security
-        ++ ocamlDependencies version;
+      buildInputs = [
+        zlib
+        neko
+        dune
+        pcre2
+        mbedtls
+      ]
+      ++ ocamlDependencies version;
 
       src = fetchFromGitHub {
         owner = "HaxeFoundation";
@@ -77,7 +50,10 @@ let
         inherit hash;
       };
 
-      inherit prePatch patches;
+      prePatch = ''
+        substituteInPlace extra/haxelib_src/src/haxelib/client/Main.hx \
+          --replace-fail '"neko"' '"${neko}/bin/neko"'
+      '';
 
       buildFlags = [
         "all"
@@ -137,35 +113,25 @@ let
         popd > /dev/null
       '';
 
-      meta = with lib; {
+      meta = {
         description = "Programming language targeting JavaScript, Flash, NekoVM, PHP, C++";
         homepage = "https://haxe.org";
-        license = with licenses; [
+        license = with lib.licenses; [
           gpl2Plus
           mit
         ]; # based on upstream opam file
         maintainers = [
-          maintainers.marcweber
-          maintainers.locallycompact
-          maintainers.logo
-          maintainers.bwkam
+          lib.maintainers.locallycompact
+          lib.maintainers.logo
+          lib.maintainers.bwkam
         ];
-        platforms = platforms.linux ++ platforms.darwin;
+        platforms = lib.platforms.linux ++ lib.platforms.darwin;
       };
     };
 in
 {
-  haxe_4_0 = generic {
-    version = "4.0.5";
-    hash = "sha256-Ck/py+tZS7dBu/uikhSLKBRNljpg2h5PARX0Btklozg=";
-  };
-  haxe_4_1 = generic {
-    version = "4.1.5";
-    hash = "sha256-QP5/jwexQXai1A5Iiwiyrm+/vkdAc+9NVGt+jEQz2mY=";
-  };
   haxe_4_3 = generic {
-    version = "4.3.6";
-    hash = "sha256-m/A0xxB3fw+syPmH1GPKKCcj0a2G/HMRKOu+FKrO5jQ=";
-    patches = [ ./extlib-1.8.0.patch ];
+    version = "4.3.7";
+    hash = "sha256-sQb7MCoH2dZOvNmDQ9P0yFYrSXYOMn4FS/jlyjth39Y=";
   };
 }

@@ -5,14 +5,16 @@
   writeText,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "iana-etc";
-  version = "20240318";
+  version = "20251215";
 
   src = fetchzip {
-    url = "https://github.com/Mic92/iana-etc/releases/download/${version}/iana-etc-${version}.tar.gz";
-    sha256 = "sha256-t/VOTFDdAH+EdzofdMyUO9Yvl5qdMjdPl9ebYtBC388=";
+    url = "https://github.com/Mic92/iana-etc/releases/download/${finalAttrs.version}/iana-etc-${finalAttrs.version}.tar.gz";
+    hash = "sha256-BUGhVHvWSdFJdqaoPasLt87lTUFVF2B7X7sfigwrJss=";
   };
+
+  strictDeps = true;
 
   installPhase = ''
     install -D -m0644 -t $out/etc services protocols
@@ -23,10 +25,12 @@ stdenvNoCC.mkDerivation rec {
     export NIX_ETC_SERVICES=@out@/etc/services
   '';
 
-  meta = with lib; {
+  __structuredAttrs = true;
+
+  meta = {
     homepage = "https://github.com/Mic92/iana-etc";
     description = "IANA protocol and port number assignments (/etc/protocols and /etc/services)";
-    platforms = platforms.unix;
-    license = licenses.mit;
+    platforms = lib.platforms.all;
+    license = lib.licenses.mit;
   };
-}
+})

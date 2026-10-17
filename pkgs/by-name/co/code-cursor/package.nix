@@ -1,109 +1,109 @@
 {
   lib,
-  stdenvNoCC,
+  stdenv,
+  buildVscode,
   fetchurl,
   appimageTools,
-  makeWrapper,
-  writeScript,
+  undmg,
+  commandLineArgs ? "",
+  useVSCodeRipgrep ? stdenv.hostPlatform.isDarwin,
 }:
+
 let
-  pname = "cursor";
-  version = "0.44.11";
+  inherit (stdenv) hostPlatform;
 
-  sources = {
-    x86_64-linux = fetchurl {
-      url = "https://download.todesktop.com/230313mzl4w4u92/cursor-0.44.11-build-250103fqxdt5u9z-x86_64.AppImage";
-      hash = "sha256-eOZuofnpED9F6wic0S9m933Tb7Gq7cb/v0kRDltvFVg=";
-    };
-    aarch64-linux = fetchurl {
-      url = "https://download.todesktop.com/230313mzl4w4u92/cursor-0.44.11-build-250103fqxdt5u9z-arm64.AppImage";
-      hash = "sha256-mxq7tQJfDccE0QsZDZbaFUKO0Xc141N00ntX3oEYRcc=";
-    };
-  };
+  sourcesJson = lib.importJSON ./sources.json;
+  sources = lib.mapAttrs (
+    _: info:
+    fetchurl {
+      inherit (info) url hash;
+    }
+  ) sourcesJson.sources;
 
-  supportedPlatforms = [
-    "x86_64-linux"
-    "aarch64-linux"
-  ];
-
-  src = sources.${stdenvNoCC.hostPlatform.system};
-
-  appimageContents = appimageTools.extractType2 {
-    inherit version pname src;
-  };
-
-  wrappedAppImage = appimageTools.wrapType2 { inherit version pname src; };
-
-  appimageInstall = ''
-    runHook preInstall
-
-    mkdir -p $out/
-    cp -r bin $out/bin
-
-    mkdir -p $out/share/cursor
-    cp -a ${appimageContents}/locales $out/share/cursor
-    cp -a ${appimageContents}/resources $out/share/cursor
-    cp -a ${appimageContents}/usr/share/icons $out/share/
-    install -Dm 644 ${appimageContents}/cursor.desktop -t $out/share/applications/
-
-    substituteInPlace $out/share/applications/cursor.desktop --replace-fail "AppRun" "cursor"
-
-    wrapProgram $out/bin/cursor \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}} --no-update"
-
-    runHook postInstall
-  '';
-
+  source = sources.${hostPlatform.system};
 in
-stdenvNoCC.mkDerivation {
-  inherit pname version;
+(buildVscode rec {
+  inherit commandLineArgs useVSCodeRipgrep;
+  inherit (sourcesJson) version;
+  # Cursor reports vscode >= 1.122 but still ships @vscode/ripgrep.
+  # Capping the build-time vscodeVersion avoids modifying the notarized app bundle on Darwin.
+  vscodeVersion =
+    if lib.versionAtLeast sourcesJson.vscodeVersion "1.122.0" then
+      "1.121.0"
+    else
+      sourcesJson.vscodeVersion;
 
-  src = wrappedAppImage;
+  pname = "cursor";
 
-  nativeBuildInputs = [ makeWrapper ];
+  executableName = "cursor";
+  longName = "Cursor";
+  shortName = "cursor";
+  libraryName = "cursor";
+  iconName = "cursor";
 
-  installPhase = appimageInstall;
+  src =
+    if hostPlatform.isLinux then
+      appimageTools.extract {
+        inherit pname version;
+        src = source;
+      }
+    else
+      source;
 
-  passthru = {
-    inherit sources;
-    updateScript = writeScript "update.sh" ''
-      #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl yq coreutils gnused common-updater-scripts
-      set -eu -o pipefail
-      baseUrl="https://download.todesktop.com/230313mzl4w4u92"
-      latestLinux="$(curl -s $baseUrl/latest-linux.yml)"
-      version="$(echo "$latestLinux" | yq -r .version)"
-      filename="$(echo "$latestLinux" | yq -r '.files[] | .url | select(. | endswith(".AppImage"))')"
-      linuxStem="$(echo "$filename" | sed -E s/^\(cursor-.+-build-.*\)-.+$/\\1/)"
+  # for unpacking the DMG
+  extraNativeBuildInputs = lib.optionals hostPlatform.isDarwin [ undmg ];
 
-      currentVersion=$(nix-instantiate --eval -E "with import ./. {}; code-cursor.version or (lib.getVersion code-cursor)" | tr -d '"')
+  sourceRoot =
+    if hostPlatform.isLinux then "${pname}-${version}-extracted/usr/share/cursor" else "Cursor.app";
 
-      if [[ "$version" != "$currentVersion" ]]; then
-        for platform in ${lib.escapeShellArgs supportedPlatforms}; do
-          if [ $platform = "x86_64-linux" ]; then
-            url="$baseUrl/$linuxStem-x86_64.AppImage"
-          elif [ $platform = "aarch64-linux" ]; then
-            url="$baseUrl/$linuxStem-arm64.AppImage"
-          else
-            echo "Unsupported platform: $platform"
-            exit 1
-          fi
+  tests = { };
 
-          hash=$(nix-hash --to-sri --type sha256 "$(nix-prefetch-url "$url")")
-          update-source-version code-cursor $version $hash $url --system=$platform --ignore-same-version --source-key="sources.$platform"
-        done
-      fi
-    '';
-  };
+  updateScript = ./update.sh;
+
+  # Editing the `cursor` binary within the app bundle causes the bundle's signature
+  # to be invalidated, which prevents launching starting with macOS Ventura, because Cursor is notarized.
+  # See https://eclecticlight.co/2022/06/17/app-security-changes-coming-in-ventura/ for more information.
+  dontFixup = stdenv.hostPlatform.isDarwin;
+
+  # Cursor ships a launcher script that resolves its own VSCODE_PATH.
+  patchVSCodePath = false;
 
   meta = {
     description = "AI-powered code editor built on vscode";
     homepage = "https://cursor.com";
     changelog = "https://cursor.com/changelog";
     license = lib.licenses.unfree;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ sarahec ];
-    platforms = lib.platforms.linux;
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    maintainers = with lib.maintainers; [
+      aspauldingcode
+      prince213
+      qweered
+    ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ]
+    ++ lib.platforms.darwin;
     mainProgram = "cursor";
   };
-}
+}).overrideAttrs
+  (oldAttrs: {
+    autoPatchelfIgnoreMissingDeps =
+      (oldAttrs.autoPatchelfIgnoreMissingDeps or [ ])
+      ++ lib.optionals (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl) [
+        "libc.musl-*.so.*" # musl-based node modules are not used on glibc systems
+      ];
+
+    preFixup =
+      (oldAttrs.preFixup or "")
+      + lib.optionalString hostPlatform.isLinux ''
+        sed -i '/^Keywords=/a MimeType=application/x-cursor-workspace;' \
+          $out/share/applications/cursor.desktop
+      '';
+    postInstall =
+      (oldAttrs.postInstall or "")
+      + lib.optionalString hostPlatform.isLinux ''
+        install -Dm644 ../mime/packages/cursor-workspace.xml -t $out/share/mime/packages
+        rm -f $out/lib/cursor/resources/appimageupdatetool.AppImage
+      '';
+  })

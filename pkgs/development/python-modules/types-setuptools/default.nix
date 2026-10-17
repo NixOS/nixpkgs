@@ -7,12 +7,13 @@
 
 buildPythonPackage rec {
   pname = "types-setuptools";
-  version = "75.1.0.20240917";
+  version = "84.0.0.20260812";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-EvEqFl5+04PzHe9wXlwPocJiFd1GawrzS9BC99UzH1U=";
+    pname = "types_setuptools";
+    inherit version;
+    hash = "sha256-Cb7cJI67t6IyyUGd/NyjKXBuYb8qpXQ+lCTQJ/HZVrQ=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -22,10 +23,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "setuptools-stubs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Typing stubs for setuptools";
     homepage = "https://github.com/python/typeshed";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

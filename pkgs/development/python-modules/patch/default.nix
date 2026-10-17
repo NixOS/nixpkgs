@@ -11,17 +11,17 @@ buildPythonPackage rec {
 
   src = fetchzip {
     url = "mirror://pypi/p/${pname}/${pname}-${version}.zip";
-    sha256 = "1nj55hvyvzax4lxq7vkyfbw91pianzr3hp7ka7j12pgjxccac50g";
+    hash = "sha256-DxSmGOvyXRHkUfNcOPK3Kt6Q+HJ+7oM7JV397TcsRdo=";
     stripRoot = false;
   };
 
   # No tests included in archive
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Library to parse and apply unified diffs";
     homepage = "https://github.com/techtonik/python-patch/";
-    license = licenses.mit;
-    maintainers = [ maintainers.igsha ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.igsha ];
   };
 }

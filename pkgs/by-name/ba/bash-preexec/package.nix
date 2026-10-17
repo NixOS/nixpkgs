@@ -3,10 +3,11 @@
   lib,
   fetchFromGitHub,
   bats,
+  git,
 }:
 
 let
-  version = "0.5.0";
+  version = "0.7.0";
 in
 stdenvNoCC.mkDerivation {
   pname = "bash-preexec";
@@ -15,41 +16,57 @@ stdenvNoCC.mkDerivation {
   src = fetchFromGitHub {
     owner = "rcaloras";
     repo = "bash-preexec";
-    rev = version;
-    sha256 = "sha256-+FU5n7EkY78X5nUiW3WN9+6Bf6oiPjsG2MSRCleooFs=";
+    tag = version;
+    hash = "sha256-/3cZkVQQAcsl3bA7WfvxDxw13NwBr5iylUNybENjV80=";
   };
 
-  nativeCheckInputs = [ bats ];
+  nativeCheckInputs = [
+    bats
+    git
+  ];
 
   dontConfigure = true;
   doCheck = true;
   dontBuild = true;
 
   patchPhase = ''
+    runHook prePatch
+
     # Needed since the tests expect that HISTCONTROL is set.
     sed -i '/setup()/a HISTCONTROL=""' test/bash-preexec.bats
 
     # Skip tests failing with Bats 1.5.0.
     # See https://github.com/rcaloras/bash-preexec/issues/121
     sed -i '/^@test.*IFS/,/^}/d' test/bash-preexec.bats
+
+    # release-script.bats executes script/release directly; its
+    # `#!/usr/bin/env bash` shebang fails in the sandbox (no /usr/bin/env).
+    patchShebangs script/release
+
+    runHook postPatch
   '';
 
   checkPhase = ''
+    runHook preCheck
     bats test
+    runHook postCheck
   '';
 
   installPhase = ''
-    install -Dm755 $src/bash-preexec.sh $out/share/bash/bash-preexec.sh
+    runHook preInstall
+    install -Dm755 bash-preexec.sh $out/share/bash/bash-preexec.sh
+    runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "preexec and precmd functions for Bash just like Zsh";
-    license = licenses.mit;
+  meta = {
+    description = "Preexec and precmd functions for Bash just like Zsh";
+    license = lib.licenses.mit;
     homepage = "https://github.com/rcaloras/bash-preexec";
-    maintainers = [
-      maintainers.hawkw
-      maintainers.rycee
+    changelog = "https://github.com/rcaloras/bash-preexec/releases/tag/${version}";
+    maintainers = with lib.maintainers; [
+      hawkw
+      rycee
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

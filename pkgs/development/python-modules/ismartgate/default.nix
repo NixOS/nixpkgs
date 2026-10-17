@@ -10,23 +10,20 @@
   pytest-asyncio,
   pytest-raises,
   pytestCheckHook,
-  pythonOlder,
   respx,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "ismartgate";
-  version = "5.0.1";
+  version = "5.0.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bdraco";
-    repo = pname;
+    repo = "ismartgate";
     tag = "v${version}";
-    hash = "sha256-mfiHoli0ldw/E1SrtOBpDO8ZTC0wTeaoSZ2nPnx5EaQ=";
+    hash = "sha256-8c05zzDav87gTL2CI7Aoi6ALwLw76H9xj+90xH31hdE=";
   };
 
   postPatch = ''
@@ -52,11 +49,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ismartgate" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to work with the ismartgate and gogogate2 API";
     homepage = "https://github.com/bdraco/ismartgate";
     changelog = "https://github.com/bdraco/ismartgate/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

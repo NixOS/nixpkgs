@@ -1,0 +1,25 @@
+diff --git a/gixy/core/sre_parse/sre_parse.py b/gixy/core/sre_parse/sre_parse.py
+index df69044..f90c795 100644
+--- a/gixy/core/sre_parse/sre_parse.py
++++ b/gixy/core/sre_parse/sre_parse.py
+@@ -14,7 +14,7 @@ from __future__ import print_function
+ 
+ """Internal support module for sre"""
+ 
+-from sre_constants import *
++from gixy.core.sre_parse.sre_constants import *
+ 
+ SPECIAL_CHARS = ".\\[{()*+?^$|"
+ REPEAT_CHARS = "*+?{"
+diff --git a/tests/plugins/test_simply.py b/tests/plugins/test_simply.py
+index 1a33c63..7d5a32f 100644
+--- a/tests/plugins/test_simply.py
++++ b/tests/plugins/test_simply.py
+@@ -5,6 +5,7 @@ from os import path
+ import json
+ 
+ from ..utils import *
++from gixy.formatters.base import BaseFormatter
+ from gixy.core.manager import Manager as Gixy
+ from gixy.core.plugins_manager import PluginsManager
+ from gixy.core.config import Config

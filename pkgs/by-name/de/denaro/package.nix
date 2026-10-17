@@ -1,15 +1,16 @@
-{ lib
-, buildDotnetModule
-, fetchFromGitHub
-, dotnetCorePackages
-, gtk4
-, libadwaita
-, pkg-config
-, wrapGAppsHook4
-, glib
-, shared-mime-info
-, gdk-pixbuf
-, blueprint-compiler
+{
+  lib,
+  buildDotnetModule,
+  fetchFromGitHub,
+  dotnetCorePackages,
+  gtk4,
+  libadwaita,
+  pkg-config,
+  wrapGAppsHook4,
+  glib,
+  shared-mime-info,
+  gdk-pixbuf,
+  blueprint-compiler,
 }:
 
 buildDotnetModule rec {
@@ -39,7 +40,10 @@ buildDotnetModule rec {
     blueprint-compiler
   ];
 
-  buildInputs = [ gtk4 libadwaita ]; # Used by blueprint-compiler
+  buildInputs = [
+    gtk4
+    libadwaita
+  ]; # Used by blueprint-compiler
 
   # Denaro switches installation tool frequently (bash -> just -> cake)
   # For maintainability, let's do it ourselves
@@ -59,13 +63,16 @@ buildDotnetModule rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Personal finance manager for GNOME";
     homepage = "https://github.com/nlogozzo/NickvisionMoney";
     mainProgram = "NickvisionMoney.GNOME";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     changelog = "https://github.com/nlogozzo/NickvisionMoney/releases/tag/${version}";
-    maintainers = with maintainers; [ chuangzhu kashw2 ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [
+      chuangzhu
+      kashw2
+    ];
+    platforms = lib.platforms.linux;
   };
 }

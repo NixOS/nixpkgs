@@ -12,7 +12,7 @@ buildKodiAddon rec {
 
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/${lib.toLower rel}/${namespace}/${namespace}-${version}.zip";
-    sha256 = "sha256-bCGPl5fGVyptCenpNXP/Msi7hu+UdtZd2ms7MfzbsbM=";
+    hash = "sha256-bCGPl5fGVyptCenpNXP/Msi7hu+UdtZd2ms7MfzbsbM=";
   };
 
   passthru = {
@@ -22,10 +22,10 @@ buildKodiAddon rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/python/typing/tree/master/typing_extensions";
     description = "Python typing extensions";
-    license = licenses.psfl;
-    maintainers = teams.kodi.members;
+    license = lib.licenses.psfl;
+    teams = [ lib.teams.kodi ];
   };
 }

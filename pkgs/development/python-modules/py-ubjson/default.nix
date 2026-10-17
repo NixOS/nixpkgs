@@ -12,9 +12,9 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "Iotic-Labs";
-    repo = pname;
+    repo = "py-ubjson";
     rev = "v${version}";
-    sha256 = "1frn97xfa88zrfmpnvdk1pc03yihlchhph99bhjayvzlfcrhm5v3";
+    hash = "sha256-Y5cKM3P0b68kXCnBCyGjMPoB2A2zbXuryx8h5fpJNrs=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -24,14 +24,14 @@ buildPythonPackage rec {
     "test_recursion"
   ];
 
-  pytestFlagsArray = [ "test/test.py" ];
+  enabledTestPaths = [ "test/test.py" ];
 
   pythonImportsCheck = [ "ubjson" ];
 
-  meta = with lib; {
+  meta = {
     description = "Universal Binary JSON draft-12 serializer for Python";
     homepage = "https://github.com/Iotic-Labs/py-ubjson";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

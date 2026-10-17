@@ -1,15 +1,14 @@
 {
-  git,
+  gitMinimal,
   pre-commit,
   runCommand,
-  testers,
 }:
 {
   check-meta-hooks =
     runCommand "check-meta-hooks"
       {
         nativeBuildInputs = [
-          git
+          gitMinimal
           pre-commit
         ];
       }
@@ -38,8 +37,4 @@
         pre-commit run --all-files
         touch $out
       '';
-
-  version = testers.testVersion {
-    package = pre-commit;
-  };
 }

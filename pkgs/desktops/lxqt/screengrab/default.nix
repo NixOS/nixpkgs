@@ -6,30 +6,34 @@
   autoPatchelfHook,
   gitUpdater,
   kwindowsystem,
-  libXdmcp,
-  libpthreadstubs,
+  layer-shell-qt,
+  libxdmcp,
+  libpthread-stubs,
   libqtxdg,
+  lxqt-build-tools,
   perl,
   pkg-config,
   qtbase,
   qtsvg,
   qttools,
+  qtwayland,
   wrapQtAppsHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "screengrab";
-  version = "2.9.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
-    rev = version;
-    hash = "sha256-V5ulRkckeSX2EsYmhmA9phVssDtix31M5oZXkOgF660=";
+    repo = "screengrab";
+    tag = finalAttrs.version;
+    hash = "sha256-WgQWFNAu+cws442o1HubuaANsg0Hxg0XLyZ/CeA3abM=";
   };
 
   nativeBuildInputs = [
     cmake
+    lxqt-build-tools
     pkg-config
     perl # needed by LXQtTranslateDesktop.cmake
     qttools
@@ -39,21 +43,23 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     kwindowsystem
-    libXdmcp
-    libpthreadstubs
+    layer-shell-qt
+    libxdmcp
+    libpthread-stubs
     libqtxdg
     qtbase
     qtsvg
+    qtwayland
   ];
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxqt/screengrab";
     description = "Crossplatform tool for fast making screenshots";
     mainProgram = "screengrab";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = teams.lxqt.members;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.lxqt ];
   };
-}
+})

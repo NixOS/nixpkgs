@@ -9,18 +9,18 @@
   fd,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fd";
-  version = "10.2.0";
+  version = "10.5.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "fd";
-    rev = "v${version}";
-    hash = "sha256-B+lOohoPH7UkRxRNTzSVt0SDrqEwh4hIvBF3uWliDEI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-X3yrZUBieMO5bauUu2mskfvicLRdQcjbXouFTpz+0eQ=";
   };
 
-  cargoHash = "sha256-H8xkm1cGJUaSgLUfN/vlxsWg5UMClvFhp9pjM0byQPs=";
+  cargoHash = "sha256-5ijtWSsHn7ii8+1njwyvyj387FQkMQALKbixkr/nSkk=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -34,22 +34,21 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_invalid_utf8"
   ];
 
-  postInstall =
-    ''
-      installManPage doc/fd.1
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd fd \
-        --bash <($out/bin/fd --gen-completions bash) \
-        --fish <($out/bin/fd --gen-completions fish)
-      installShellCompletion --zsh contrib/completion/_fd
-    '';
+  postInstall = ''
+    installManPage doc/fd.1
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd fd \
+      --bash <($out/bin/fd --gen-completions bash) \
+      --fish <($out/bin/fd --gen-completions fish)
+    installShellCompletion --zsh contrib/completion/_fd
+  '';
 
   passthru.tests.version = testers.testVersion {
     package = fd;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple, fast and user-friendly alternative to find";
     longDescription = ''
       `fd` is a simple, fast and user-friendly alternative to `find`.
@@ -58,19 +57,17 @@ rustPlatform.buildRustPackage rec {
       it provides sensible (opinionated) defaults for 80% of the use cases.
     '';
     homepage = "https://github.com/sharkdp/fd";
-    changelog = "https://github.com/sharkdp/fd/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    changelog = "https://github.com/sharkdp/fd/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       dywedir
-      figsoda
-      globin
       ma27
       zowoq
       matthiasbeyer
     ];
     mainProgram = "fd";
   };
-}
+})

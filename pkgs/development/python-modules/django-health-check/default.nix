@@ -1,72 +1,113 @@
 {
   lib,
-  fetchFromGitHub,
+  stdenv,
   buildPythonPackage,
-  sphinx,
-  setuptools-scm,
-  django,
-  redis,
   celery,
-  boto3,
-  django-storages,
+  fetchFromGitHub,
+  flit-core,
+  flit-scm,
+  pytest-cov-stub,
   pytest-django,
   pytestCheckHook,
-  mock,
-  gitMinimal,
+  redis,
+  psutil,
+  dnspython,
+  pytest-asyncio,
+  libredirect,
+  confluent-kafka,
+  aio-pika,
+  httpx,
+  feedparser,
+  fakeredis,
+  testcontainers,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-health-check";
-  version = "3.18.3";
-  format = "setuptools";
+  version = "4.8.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "KristianOellegaard";
-    repo = pname;
-    tag = version;
-    hash = "sha256-+6+YxB/x4JdKUCwxxe+YIc+r1YAzngFUHiS6atupWM8=";
+    owner = "codingjoe";
+    repo = "django-health-check";
+    tag = finalAttrs.version;
+    hash = "sha256-nz6ymaUz9FsNexFfMebVZ7+a1zExXCaDRC52Ly/OgP4=";
   };
 
-  buildInputs = [
-    sphinx
-    django
+  build-system = [
+    flit-core
+    flit-scm
   ];
 
-  nativeBuildInputs = [
-    setuptools-scm
-    gitMinimal
+  dependencies = [
+    dnspython
   ];
+
+  optional-dependencies = {
+    psutil = [ psutil ];
+    celery = [ celery ];
+    kafka = [ confluent-kafka ];
+    rabbitmq = [ aio-pika ];
+    redis = [ redis ];
+    rss = [
+      httpx
+      feedparser
+    ];
+    atlassian = [ httpx ];
+  };
 
   nativeCheckInputs = [
-    boto3
-    django-storages
+    pytest-cov-stub
     pytest-django
     pytestCheckHook
-    mock
-    celery
-    redis
+    psutil
+    pytest-asyncio
+    libredirect.hook
+    fakeredis
+    testcontainers
   ];
 
   disabledTests = [
-    # commandline output mismatch
-    "test_command_with_non_existence_subset"
+    # require online DNS resolution
+    "test_run_check__dns_working"
+    "test_run_check__custom_nameservers"
+    "test_run_check__custom_record_type"
+    "test_run_check__custom_record_type_str"
+    "test_check_status__nonexistent_hostname"
+    "test_check_status__no_answer"
+    # not reproducible
+    "test_run_check__disk_accessible"
+    "test_run_check__custom_path"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # sensors_temperatures is not available on darwin: https://psutil.readthedocs.io/stable/index.html#psutil.sensors_temperatures
+    "TestTemperature"
+    # some metrics aren't available on darwin: https://psutil.readthedocs.io/stable/index.html#psutil.virtual_memory
+    "TestMemory"
+    # live_server not working on darwin
+    "TestHealthCheckCommand"
   ];
-
-  postPatch = ''
-    # We don't want to generate coverage
-    substituteInPlace setup.cfg \
-      --replace "pytest-runner" "" \
-      --replace "--cov=health_check" "" \
-      --replace "--cov-report=term" "" \
-      --replace "--cov-report=xml" ""
-  '';
 
   pythonImportsCheck = [ "health_check" ];
 
-  meta = with lib; {
+  preCheck = ''
+    echo "nameserver 127.0.0.1" > resolv.conf
+    export NIX_REDIRECTS=/etc/resolv.conf=$(realpath resolv.conf)
+  '';
+
+  preInstallCheck = ''
+    export PYTHONPATH=$PWD:$PYTHONPATH
+    export DJANGO_SETTINGS_MODULE=tests.testapp.settings
+  '';
+
+  meta = {
     description = "Pluggable app that runs a full check on the deployment";
-    homepage = "https://github.com/KristianOellegaard/django-health-check";
-    license = licenses.mit;
-    maintainers = with maintainers; [ onny ];
+    homepage = "https://github.com/codingjoe/django-health-check";
+    changelog = "https://github.com/codingjoe/django-health-check/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      onny
+      dav-wolff
+    ];
   };
-}
+})

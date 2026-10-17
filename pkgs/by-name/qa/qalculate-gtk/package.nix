@@ -2,11 +2,11 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  intltool,
   autoreconfHook,
   pkg-config,
   libqalculate,
   gtk3,
+  gtk-mac-integration-gtk3,
   curl,
   wrapGAppsHook3,
   desktopToDarwinBundle,
@@ -14,41 +14,45 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qalculate-gtk";
-  version = "5.5.0";
+  version = "5.13.0";
 
   src = fetchFromGitHub {
     owner = "qalculate";
     repo = "qalculate-gtk";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-9/fj+dwnEpbfcqBDQowhU4ltr/h43NQYTMUQnLL4Ut8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FkJscAMoSI7vU1gu5Yq2gp6QvLbr9pOmI9KCvsrIgic=";
   };
 
   hardeningDisable = [ "format" ];
 
   nativeBuildInputs = [
-    intltool
     pkg-config
     autoreconfHook
     wrapGAppsHook3
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+
   buildInputs = [
     libqalculate
     gtk3
     curl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    gtk-mac-integration-gtk3
   ];
+
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Ultimate desktop calculator";
     homepage = "http://qalculate.github.io";
-    maintainers = with maintainers; [
-      gebner
+    maintainers = with lib.maintainers; [
       doronbehar
-      alyaeanyx
+      pentane
       aleksana
     ];
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "qalculate-gtk";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

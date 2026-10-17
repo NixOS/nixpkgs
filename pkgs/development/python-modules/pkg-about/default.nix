@@ -2,57 +2,59 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
+  build,
   importlib-metadata,
-  importlib-resources,
   setuptools,
   packaging,
-  tomli,
+  typing-extensions,
+  appdirs,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pkg-about";
-  version = "1.1.8";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "2.4.4";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "pkg_about";
     inherit version;
-    extension = "zip";
-    hash = "sha256-GVV3l0rU8gkxedOiMVVAt0bEqCtyO+1LSHxIKjBlbPk=";
+    hash = "sha256-tURSRw79LnIOWij+JzDLLjKNPts9gcXdN4tQ9u/gbuQ=";
   };
 
-  # tox is listed in build requirements but not actually used to build
-  # keeping it as a requirement breaks the build unnecessarily
+  # Unnecessarily requires the newest versions available for these
   postPatch = ''
-    sed -i "/requires/s/, 'tox>=[^']*'//" pyproject.toml
+    sed -i 's/"setuptools>=[^"]*"/"setuptools>=${setuptools.version}"/' pyproject.toml
+    sed -i 's/"packaging>=[^"]*"/"packaging>=${packaging.version}"/' pyproject.toml
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     packaging
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    build
     importlib-metadata
-    importlib-resources
     packaging
-    setuptools
-    tomli
+    typing-extensions
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    appdirs
+    pytestCheckHook
+  ];
+
+  # Tries and fails to install itself via pip
+  disabledTests = [ "test_about_from_setup" ];
 
   pythonImportsCheck = [ "pkg_about" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python metadata sharing at runtime";
     homepage = "https://github.com/karpierz/pkg_about/";
     changelog = "https://github.com/karpierz/pkg_about/blob/${version}/CHANGES.rst";
-    license = licenses.zlib;
-    maintainers = teams.ororatech.members;
+    license = lib.licenses.zlib;
+    maintainers = with lib.maintainers; [ kip93 ];
   };
 }

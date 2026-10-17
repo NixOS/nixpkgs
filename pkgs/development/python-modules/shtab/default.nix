@@ -1,53 +1,61 @@
 {
   lib,
+  stdenvNoCC,
   buildPythonPackage,
   fetchFromGitHub,
-  pytest-timeout,
+  installShellFiles,
   pytestCheckHook,
-  pythonOlder,
+  pytest-cov-stub,
   setuptools,
   setuptools-scm,
+  versionCheckHook,
   bashInteractive,
+  fish,
+  zsh,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "shtab";
-  version = "1.7.1";
+  version = "1.11.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
-    owner = "iterative";
+    owner = "tqdm";
     repo = "shtab";
-    tag = "v${version}";
-    hash = "sha256-8bAwLSdJCzFw5Vf9CKBrH5zOoojeXds7aIRncl+sLBI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mbki7g0BuMfrSa107nXuvySbxp1AVhGfWFJSVQe6sYE=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail " --cov=shtab --cov-report=term-missing --cov-report=xml" ""
-  '';
-
   nativeBuildInputs = [
+    installShellFiles
     setuptools
     setuptools-scm
   ];
 
   nativeCheckInputs = [
     bashInteractive
-    pytest-timeout
+    fish
     pytestCheckHook
+    pytest-cov-stub
+    versionCheckHook
+    zsh
   ];
 
   pythonImportsCheck = [ "shtab" ];
 
-  meta = with lib; {
-    description = "Module for shell tab completion of Python CLI applications";
+  postInstall = lib.optionalString (stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform) ''
+    installShellCompletion --cmd shtab \
+        --bash <("$out/bin/shtab" --print-own-completion bash) \
+        --fish <("$out/bin/shtab" --print-own-completion fish) \
+        --zsh <("$out/bin/shtab" --print-own-completion zsh)
+  '';
+
+  meta = {
+    description = "Automagic shell tab completion for Python CLI applications";
     mainProgram = "shtab";
-    homepage = "https://docs.iterative.ai/shtab/";
-    changelog = "https://github.com/iterative/shtab/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    homepage = "https://tqdm.github.io/shtab/";
+    changelog = "https://github.com/tqdm/shtab/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

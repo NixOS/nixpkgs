@@ -4,9 +4,11 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "go-bindata-assetfs";
-  version = "unstable-2022-04-12";
+  version = "1.0.1-unstable-2022-04-12";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "elazarl";
@@ -22,10 +24,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Serve embedded files from jteeuwen/go-bindata";
+    homepage = "https://github.com/elazarl/go-bindata-assetfs";
     mainProgram = "go-bindata-assetfs";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ avnik ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ avnik ];
   };
 }

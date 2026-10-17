@@ -33,19 +33,8 @@ let
           c.plugins or cfg.plugins;
       plugins = unique plugins';
 
-      hasPython = v: filter (n: n == "python${v}") plugins != [ ];
-      hasPython2 = hasPython "2";
-      hasPython3 = hasPython "3";
-
-      python =
-        if hasPython2 && hasPython3 then
-          throw "`plugins` attribute in uWSGI configuration shouldn't contain both python2 and python3"
-        else if hasPython2 then
-          cfg.package.python2
-        else if hasPython3 then
-          cfg.package.python3
-        else
-          null;
+      hasPython3 = filter (n: n == "python3") plugins != [ ];
+      python = if hasPython3 then cfg.package.python3 else null;
 
       pythonEnv = python.withPackages (c.pythonPackages or (self: [ ]));
 
@@ -200,7 +189,7 @@ in
         '';
         description = ''
           Grant capabilities to the uWSGI instance. See the
-          `capabilities(7)` for available values.
+          {manpage}`capabilities(7)` for available values.
 
           ::: {.note}
           uWSGI runs as an unprivileged user (even as Emperor) with the minimal

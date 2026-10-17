@@ -3,36 +3,37 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
-  six,
+  setuptools-scm,
+  typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nocaselist";
-  version = "2.0.3";
+  version = "2.2.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-VXFNqEM/tIQ855dASXfkOF1ePfnkqgD33emD/YdBD+8=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-ut4OlqEErI3a5JwmGqfCe1ro2UNGYcbNjsFvPNXGd6E=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  dependencies = [ six ];
+  dependencies = [ typing-extensions ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "nocaselist" ];
 
-  meta = with lib; {
+  meta = {
     description = "Case-insensitive list for Python";
     homepage = "https://github.com/pywbem/nocaselist";
-    changelog = "https://github.com/pywbem/nocaselist/blob/${version}/docs/changes.rst";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ freezeboy ];
+    changelog = "https://github.com/pywbem/nocaselist/blob/${finalAttrs.version}/docs/changes.rst";
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ ];
   };
-}
+})

@@ -1,35 +1,59 @@
 {
-  fetchPypi,
   lib,
-  python3,
-  xorg,
+  fetchFromGitHub,
+  python3Packages,
+  xhost,
 }:
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "exegol";
-  version = "4.3.9";
-  format = "setuptools";
+  version = "6.0.1";
+  pyproject = true;
+  __structuredAttrs = true;
 
-  # Project has no unit tests
-  doCheck = false;
-
-  propagatedBuildInputs =
-    with python3.pkgs;
-    [
-      pyyaml
-      gitpython
-      docker
-      requests
-      rich
-      argcomplete
-    ]
-    ++ [ xorg.xhost ];
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-CoPQMEk8eagYU/TfaPAM6ItfSCZbrvzUww8H9ND8VUk=";
+  src = fetchFromGitHub {
+    owner = "ThePorgs";
+    repo = "Exegol";
+    tag = finalAttrs.version;
+    hash = "sha256-gfimS0Vmh8GFkW+ZvWMgdS7SbHbJb9K7ZI1aLNZLlj0=";
   };
 
-  meta = with lib; {
+  build-system = with python3Packages; [ pdm-backend ];
+
+  pythonRelaxDeps = [
+    "argcomplete"
+    "cryptography"
+    "docker"
+    "pydantic"
+    "requests"
+    "rich"
+    "supabase"
+  ];
+
+  dependencies =
+    with python3Packages;
+    [
+      argcomplete
+      cryptography
+      docker
+      gitpython
+      ifaddr
+      pydantic
+      pyjwt
+      pyyaml
+      requests
+      rich
+      supabase
+      tzlocal
+      xhost
+    ]
+    ++ pyjwt.optional-dependencies.crypto;
+
+  pythonImportsCheck = [ "exegol" ];
+
+  # No relevant python tests nor --version flag
+  doCheck = false;
+
+  meta = {
     description = "Fully featured and community-driven hacking environment";
     longDescription = ''
       Exegol is a community-driven hacking environment, powerful and yet
@@ -40,12 +64,23 @@ python3.pkgs.buildPythonApplication rec {
       stylish macOS users and corporate Windows pros to UNIX-like power users.
     '';
     homepage = "https://github.com/ThePorgs/Exegol";
-    changelog = "https://github.com/ThePorgs/Exegol/releases/tag/${version}";
-    license = licenses.gpl3Only;
+    changelog = "https://github.com/ThePorgs/Exegol/releases/tag/${finalAttrs.src.tag}";
+    license = with lib.licenses; [
+      gpl3Only
+      (mkLicense {
+        shortName = "esl10";
+        fullName = "Exegol Software License (ESL) - Version 1.0";
+        url = "https://docs.exegol.com/legal/software-license";
+        # Please use exegol4 if you prefer to avoid the unfree version of Exegol.
+        free = false;
+        redistributable = false;
+      })
+    ];
     mainProgram = "exegol";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       _0b11stan
       charB66
+      macbucheron
     ];
   };
-}
+})

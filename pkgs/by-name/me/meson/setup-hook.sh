@@ -26,6 +26,11 @@ mesonConfigurePhase() {
         "--buildtype=${mesonBuildType:-plain}"
     )
 
+    # --no-undefined is universally a bad idea on freebsd because environ is in the csu
+    if [[ "@hostPlatform@" == *-freebsd ]]; then
+        flagsArray+=("-Db_lundef=false")
+    fi
+
     concatTo flagsArray mesonFlags mesonFlagsArray
 
     echoCmd 'mesonConfigurePhase flags' "${flagsArray[@]}"
@@ -58,8 +63,28 @@ mesonCheckPhase() {
         flagsArray+=("--timeout-multiplier=0")
     fi
 
+    local _disabledTestsArray=()
+    concatTo _disabledTestsArray disabledTests
+    for disabledTest in "${_disabledTestsArray[@]}"; do
+        flagsArray+=("--exclude" "$disabledTest")
+    done
+
+    # Parallel building is enabled by default.
+    local buildCores=1
+    if [ "${enableParallelBuilding-1}" ]; then
+        buildCores="$NIX_BUILD_CORES"
+    fi
+
+    TERM=dumb ninja -j"$buildCores" $ninjaFlags "${ninjaFlagsArray[@]}" meson-test-prereq
+
+    # Parallel checking is enabled by default.
+    local testCores=1
+    if [ "${enableParallelChecking-1}" ]; then
+        testCores="$NIX_BUILD_CORES"
+    fi
+
     echoCmd 'mesonCheckPhase flags' "${flagsArray[@]}"
-    meson test --no-rebuild --print-errorlogs "${flagsArray[@]}"
+    meson test -j"$testCores" --no-rebuild --print-errorlogs --max-lines=1000000 "${flagsArray[@]}"
 
     runHook postCheck
 }

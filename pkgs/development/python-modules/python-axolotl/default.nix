@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1bwdp24fmriffwx91aigs9k162albb51iskp23nc939z893q23py";
+    hash = "sha256-/g6BR0I/jcTsEHfqGMpaVAkTZtIvqpA6dy7m6oi4ja8=";
   };
 
   propagatedBuildInputs = [
@@ -23,10 +23,10 @@ buildPythonPackage rec {
     protobuf
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tgalal/python-axolotl";
     description = "Python port of libaxolotl-android";
-    maintainers = with maintainers; [ abbradar ];
-    license = licenses.gpl3;
+    maintainers = [ ];
+    license = lib.licenses.gpl3;
   };
 }

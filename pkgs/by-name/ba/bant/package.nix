@@ -3,9 +3,10 @@
   stdenv,
   buildBazelPackage,
   fetchFromGitHub,
-  bazel_6,
+  bazel_7,
   jdk,
   nix-update-script,
+  cctools,
 }:
 
 let
@@ -13,19 +14,19 @@ let
   registry = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-central-registry";
-    rev = "40bc9ad53e5a59d596935839e7c072679e706266";
-    hash = "sha256-CL0YMQd1ck6/dlvJCLxt9jYyqDuk+iAWfdBOMj864u8=";
+    rev = "dc643526b97838ffe421b833dd8b9c95e71702e8";
+    hash = "sha256-SLtrNU5uEt8rRJDUdV/IaI37CujsTHLlE31l2zYoRss=";
   };
 in
 buildBazelPackage rec {
   pname = "bant";
-  version = "0.1.11";
+  version = "0.3.6";
 
   src = fetchFromGitHub {
     owner = "hzeller";
     repo = "bant";
     rev = "v${version}";
-    hash = "sha256-vqZGHMIs4t1TP+9r2hvtFXN5B5GXZerC18l8gQA9cmQ=";
+    hash = "sha256-A7PwA9gxT+Jd/Z8nxycA//4db5qoSfuSGfcd2RjYpbs=";
   };
 
   bazelFlags = [
@@ -33,15 +34,24 @@ buildBazelPackage rec {
     "file://${registry}"
   ];
 
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    LIBTOOL = "${cctools}/bin/libtool";
+  };
+
   postPatch = ''
     patchShebangs scripts/create-workspace-status.sh
   '';
 
+  removeRulesCC = false;
+
   fetchAttrs = {
+    preInstall = ''
+      rm -rf $bazelOut/external/rules_shell~~sh_configure~local_config_shell
+    '';
     hash =
       {
-        aarch64-linux = "sha256-M6LMaqPli71YvJS/4iwvowCyVaf+qe8WSICR3CgdU34=";
-        x86_64-linux = "sha256-iBxAzbSriYkkgDDkSjSSSVeWGBygxKAfruh8T5drUFw=";
+        aarch64-linux = "sha256-E70F3D7HGsyV0bPd0zbRTytx1UCHyEuNKObaG2eRy8A=";
+        x86_64-linux = "sha256-E9XAKrt16DOAne3/wY9PwWIM61YX0fWs8x1hqF3YJSU=";
       }
       .${system} or (throw "No hash for system: ${system}");
   };
@@ -49,7 +59,7 @@ buildBazelPackage rec {
   nativeBuildInputs = [
     jdk
   ];
-  bazel = bazel_6;
+  bazel = bazel_7;
 
   bazelBuildFlags = [ "-c opt" ];
   bazelTestTargets = [ "//..." ];
@@ -63,14 +73,16 @@ buildBazelPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   meta = {
     description = "Bazel/Build Analysis and Navigation Tool";
     homepage = "http://bant.build/";
-    license = lib.licenses.gpl2Only;
+    license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
       hzeller
       lromor
     ];
-    platforms = lib.platforms.linux;
   };
 }

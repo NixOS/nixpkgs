@@ -53,7 +53,7 @@ in
       wantedBy = [ "multi-user.target" ];
       environment = {
         IMMICH_URL = cfg.immichUrl;
-        IPP_PORT = builtins.toString cfg.port;
+        IPP_PORT = toString cfg.port;
         IPP_CONFIG = "${format.generate "config.json" cfg.settings}";
       };
       serviceConfig = {
@@ -92,7 +92,6 @@ in
     };
 
     networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
-
-    meta.maintainers = with lib.maintainers; [ jaculabilis ];
   };
+  meta.maintainers = with lib.maintainers; [ jaculabilis ];
 }

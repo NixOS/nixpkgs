@@ -74,7 +74,7 @@ in
             type = with types; either path (listOf attrs);
             description = ''
               The directory in which Garage will store the data blocks of objects. This folder can be placed on an HDD.
-              Since v0.9.0, Garage supports multiple data directories, refer to https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/#data_dir for the exact format.
+              Since v0.9.0, Garage supports multiple data directories, refer to <https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/#data_dir> for the exact format.
             '';
           };
         };
@@ -120,7 +120,8 @@ in
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [
         configFile
-      ] ++ (lib.optional (cfg.environmentFile != null) cfg.environmentFile);
+      ]
+      ++ (lib.optional (cfg.environmentFile != null) cfg.environmentFile);
       serviceConfig =
         let
           paths = lib.flatten (
@@ -132,7 +133,7 @@ in
             # if data_dir is a list, the actual path will in in the `path` attribute of each item
             # see https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/#data_dir
             ++ lib.optional (lib.isList data_dir) (map (item: item.path) data_dir)
-            ++ lib.optional (lib.isString data_dir) [ data_dir ]
+            ++ lib.optionals (lib.isString data_dir) [ data_dir ]
           );
           isDefault = lib.hasPrefix "/var/lib/garage";
           isDefaultStateDirectory = lib.any isDefault paths;
@@ -146,10 +147,13 @@ in
           NoNewPrivileges = true;
           EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
           ReadWritePaths = lib.filter (x: !(isDefault x)) (lib.flatten [ paths ]);
+          # Upstream recommendation https://garagehq.deuxfleurs.fr/documentation/cookbook/systemd/
+          LimitNOFILE = 42000;
         };
       environment = {
         RUST_LOG = lib.mkDefault "garage=${cfg.logLevel}";
-      } // cfg.extraEnvironment;
+      }
+      // cfg.extraEnvironment;
     };
   };
 }

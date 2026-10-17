@@ -23,9 +23,11 @@
 let
   inherit (lib)
     addErrorContext
-    assertMsg
+    any
     attrNames
+    attrValues
     concatLists
+    concatMap
     concatMapStringsSep
     concatStrings
     concatStringsSep
@@ -35,7 +37,7 @@ let
     filter
     flatten
     foldl
-    functionArgs  # Note: not the builtin; considers `__functor` in attrsets.
+    functionArgs # Note: not the builtin; considers `__functor` in attrsets.
     gvariant
     hasInfix
     head
@@ -45,13 +47,14 @@ let
     isBool
     isDerivation
     isFloat
-    isFunction    # Note: not the builtin; considers `__functor` in attrsets.
+    isFunction # Note: not the builtin; considers `__functor` in attrsets.
     isInt
     isList
     isPath
     isString
     last
     length
+    genAttrs
     mapAttrs
     mapAttrsToList
     optionals
@@ -60,7 +63,6 @@ let
     reverseList
     splitString
     tail
-    toList
     ;
 
   inherit (lib.strings)
@@ -74,7 +76,8 @@ let
     ;
 
   ## -- HELPER FUNCTIONS & DEFAULTS --
-in rec {
+in
+rec {
   /**
     Convert a value to a sensible default string representation.
     The builtin `toString` function has some strange defaults,
@@ -88,39 +91,51 @@ in rec {
     `v`
     : 2\. Function argument
   */
-  mkValueStringDefault = {}: v:
-    let err = t: v: abort
-          ("generators.mkValueStringDefault: " +
-           "${t} not supported: ${toPretty {} v}");
-    in   if isInt      v then toString v
+  mkValueStringDefault =
+    let
+      err = t: v: abort ("generators.mkValueStringDefault: " + "${t} not supported: ${toPretty { } v}");
+    in
+    { }:
+    v:
+    if isInt v then
+      toString v
     # convert derivations to store paths
-    else if isDerivation v then toString v
+    else if isDerivation v then
+      toString v
     # we default to not quoting strings
-    else if isString   v then v
+    else if isString v then
+      v
     # isString returns "1", which is not a good default
-    else if true  ==   v then "true"
+    else if true == v then
+      "true"
     # here it returns to "", which is even less of a good default
-    else if false ==   v then "false"
-    else if null  ==   v then "null"
+    else if false == v then
+      "false"
+    else if null == v then
+      "null"
     # if you have lists you probably want to replace this
-    else if isList     v then err "lists" v
+    else if isList v then
+      err "lists" v
     # same as for lists, might want to replace
-    else if isAttrs    v then err "attrsets" v
+    else if isAttrs v then
+      err "attrsets" v
     # functions can’t be printed of course
-    else if isFunction v then err "functions" v
+    else if isFunction v then
+      err "functions" v
     # Floats currently can't be converted to precise strings,
     # condition warning on nix version once this isn't a problem anymore
     # See https://github.com/NixOS/nix/pull/3480
-    else if isFloat    v then floatToString v
-    else err "this value is" (toString v);
-
+    else if isFloat v then
+      floatToString v
+    else
+      err "this value is" (toString v);
 
   /**
-    Generate a line of key k and value v, separated by
-    character sep. If sep appears in k, it is escaped.
-    Helper for synaxes with different separators.
+    Generate a line of key `k` and value `v`, separated by
+    character `sep`. If `sep` appears in `k`, it is escaped.
+    Helper for syntaxes with different separators.
 
-    mkValueString specifies how values should be formatted.
+    `mkValueString` specifies how values should be formatted.
 
     ```nix
     mkKeyValueDefault {} ":" "f:oo" "bar"
@@ -145,14 +160,17 @@ in rec {
 
     : 4\. Function argument
   */
-  mkKeyValueDefault = {
-    mkValueString ? mkValueStringDefault {}
-  }: sep: k: v:
-    "${escape [sep] k}${sep}${mkValueString v}";
-
+  mkKeyValueDefault =
+    {
+      mkValueString ? mkValueStringDefault { },
+    }:
+    sep:
+    let
+      escapeSeparator = escape [ sep ];
+    in
+    k: v: "${escapeSeparator k}${sep}${mkValueString v}";
 
   ## -- FILE FORMAT GENERATORS --
-
 
   /**
     Generate a key-value-style config file from an attrset.
@@ -169,19 +187,22 @@ in rec {
 
     : indent (optional, default: `""`)
       : Initial indentation level
-
   */
-  toKeyValue = {
-    mkKeyValue ? mkKeyValueDefault {} "=",
-    listsAsDuplicateKeys ? false,
-    indent ? ""
-  }:
-  let mkLine = k: v: indent + mkKeyValue k v + "\n";
-      mkLines = if listsAsDuplicateKeys
-        then k: v: map (mkLine k) (if isList v then v else [v])
-        else k: v: [ (mkLine k v) ];
-  in attrs: concatStrings (concatLists (mapAttrsToList mkLines attrs));
-
+  toKeyValue =
+    {
+      mkKeyValue ? mkKeyValueDefault { } "=",
+      listsAsDuplicateKeys ? false,
+      indent ? "",
+    }:
+    let
+      mkLine = k: v: indent + mkKeyValue k v + "\n";
+      mkLines =
+        if listsAsDuplicateKeys then
+          k: v: map (mkLine k) (if isList v then v else [ v ])
+        else
+          k: v: [ (mkLine k v) ];
+    in
+    attrs: concatStrings (concatLists (mapAttrsToList mkLines attrs));
 
   /**
     Generate an INI-style config file from an
@@ -225,22 +246,32 @@ in rec {
 
     :::
   */
-  toINI = {
-    mkSectionName ? (name: escape [ "[" "]" ] name),
-    mkKeyValue    ? mkKeyValueDefault {} "=",
-    listsAsDuplicateKeys ? false
-  }: attrsOfAttrs:
+  toINI =
     let
-        # map function to string for each key val
-        mapAttrsToStringsSep = sep: mapFn: attrs:
-          concatStringsSep sep
-            (mapAttrsToList mapFn attrs);
-        mkSection = sectName: sectValues: ''
-          [${mkSectionName sectName}]
-        '' + toKeyValue { inherit mkKeyValue listsAsDuplicateKeys; } sectValues;
+      # map function to string for each key val
+      mapAttrsToStringsSep =
+        sep: mapFn: attrs:
+        concatStringsSep sep (mapAttrsToList mapFn attrs);
     in
-      # map input to ini sections
-      mapAttrsToStringsSep "\n" mkSection attrsOfAttrs;
+    {
+      mkSectionName ? escape [
+        "["
+        "]"
+      ],
+      mkKeyValue ? mkKeyValueDefault { } "=",
+      listsAsDuplicateKeys ? false,
+    }:
+    let
+      toKeyValue' = toKeyValue { inherit mkKeyValue listsAsDuplicateKeys; };
+      mkSection =
+        sectName: sectValues:
+        ''
+          [${mkSectionName sectName}]
+        ''
+        + toKeyValue' sectValues;
+    in
+    # map input to ini sections
+    mapAttrsToStringsSep "\n" mkSection;
 
   /**
     Generate an INI-style config file from an attrset
@@ -303,16 +334,24 @@ in rec {
     `generators.toINI` directly, which only takes
     the part in `sections`.
   */
-  toINIWithGlobalSection = {
-    mkSectionName ? (name: escape [ "[" "]" ] name),
-    mkKeyValue    ? mkKeyValueDefault {} "=",
-    listsAsDuplicateKeys ? false
-  }: { globalSection, sections ? {} }:
-    ( if globalSection == {}
-      then ""
-      else (toKeyValue { inherit mkKeyValue listsAsDuplicateKeys; } globalSection)
-           + "\n")
-    + (toINI { inherit mkSectionName mkKeyValue listsAsDuplicateKeys; } sections);
+  toINIWithGlobalSection =
+    {
+      mkSectionName ? escape [
+        "["
+        "]"
+      ],
+      mkKeyValue ? mkKeyValueDefault { } "=",
+      listsAsDuplicateKeys ? false,
+    }:
+    let
+      toKeyValue' = toKeyValue { inherit mkKeyValue listsAsDuplicateKeys; };
+      toINI' = toINI { inherit mkSectionName mkKeyValue listsAsDuplicateKeys; };
+    in
+    {
+      globalSection,
+      sections ? { },
+    }:
+    (if globalSection == { } then "" else (toKeyValue' globalSection) + "\n") + (toINI' sections);
 
   /**
     Generate a git-config file from an attrset.
@@ -322,7 +361,7 @@ in rec {
     1. values are indented with tabs
     2. sections can have sub-sections
 
-    Further: https://git-scm.com/docs/git-config#EXAMPLES
+    Further: [git-config examples](https://git-scm.com/docs/git-config#EXAMPLES)
 
     # Examples
     :::{.example}
@@ -348,60 +387,81 @@ in rec {
     `attrs`
 
     : Key-value pairs to be converted to a git-config file.
-      See: https://git-scm.com/docs/git-config#_variables for possible values.
-
+      See the [git-config documentation](https://git-scm.com/docs/git-config#_variables) for possible values.
   */
-  toGitINI = attrs:
+  toGitINI =
     let
-      mkSectionName = name:
+      mkSectionName =
         let
-          containsQuote = hasInfix ''"'' name;
+          containsQuote = hasInfix ''"'';
+        in
+        name:
+        let
           sections = splitString "." name;
-          section = head sections;
-          subsections = tail sections;
-          subsection = concatStringsSep "." subsections;
-        in if containsQuote || subsections == [ ] then
+        in
+        if containsQuote name || length sections == 1 then
           name
         else
-          ''${section} "${subsection}"'';
+          ''${head sections} "${concatStringsSep "." (tail sections)}"'';
 
-      mkValueString = v:
+      mkValueString =
         let
-          escapedV = ''
-            "${
-              replaceStrings [ "\n" "	" ''"'' "\\" ] [ "\\n" "\\t" ''\"'' "\\\\" ] v
-            }"'';
-        in mkValueStringDefault { } (if isString v then escapedV else v);
+          escape = replaceStrings [ "\n" "	" ''"'' "\\" ] [ "\\n" "\\t" ''\"'' "\\\\" ];
+        in
+        v: mkValueStringDefault { } (if isString v then ''"${escape v}"'' else v);
 
       # generation for multiple ini values
-      mkKeyValue = k: v:
-        let mkKeyValue = mkKeyValueDefault { inherit mkValueString; } " = " k;
-        in concatStringsSep "\n" (map (kv: "\t" + mkKeyValue kv) (toList v));
+      mkKeyValue =
+        let
+          mkKeyValue = mkKeyValueDefault { inherit mkValueString; } " = ";
+          attrToString = k: v: "\t" + mkKeyValue k v;
+        in
+        k: v: if isList v then concatStringsSep "\n" (map (attrToString k) v) else attrToString k v;
 
       # converts { a.b.c = 5; } to { "a.b".c = 5; } for toINI
-      gitFlattenAttrs = let
-        recurse = path: value:
-          if isAttrs value && !isDerivation value then
-            mapAttrsToList (name: value: recurse ([ name ] ++ path) value) value
-          else if length path > 1 then {
-            ${concatStringsSep "." (reverseList (tail path))}.${head path} = value;
-          } else {
-            ${head path} = value;
-          };
-      in attrs: foldl recursiveUpdate { } (flatten (recurse [ ] attrs));
+      gitFlattenAttrs =
+        let
+          isNonDrvAttrs = value: isAttrs value && !isDerivation value;
+          recurse =
+            path: value:
+            if isNonDrvAttrs value then
+              concatMap (name: recurse ([ name ] ++ path) value.${name}) (attrNames value)
+            else if length path > 1 then
+              [
+                {
+                  ${concatStringsSep "." (reverseList (tail path))}.${head path} = value;
+                }
+              ]
+            else
+              [
+                {
+                  ${head path} = value;
+                }
+              ];
+        in
+        attrs:
+        let
+          # Filter the names for any that contain nested attrsets. attrs that
+          # don't contain nested attrsets can stay the same =
+          namesToRewrite = filter (
+            name: isAttrs attrs.${name} && any isNonDrvAttrs (attrValues attrs.${name})
+          ) (attrNames attrs);
+          attrsToRewrite = genAttrs namesToRewrite (name: attrs.${name});
+        in
+        removeAttrs attrs namesToRewrite // foldl recursiveUpdate { } (recurse [ ] attrsToRewrite);
 
       toINI_ = toINI { inherit mkKeyValue mkSectionName; };
     in
-      toINI_ (gitFlattenAttrs attrs);
+    attrs: toINI_ (gitFlattenAttrs attrs);
 
   /**
-    mkKeyValueDefault wrapper that handles dconf INI quirks.
+    `mkKeyValueDefault` wrapper that handles dconf INI quirks.
     The main differences of the format is that it requires strings to be quoted.
   */
   mkDconfKeyValue = mkKeyValueDefault { mkValueString = v: toString (gvariant.mkValue v); } "=";
 
   /**
-    Generates INI in dconf keyfile style. See https://help.gnome.org/admin/system-admin-guide/stable/dconf-keyfiles.html.en
+    Generates INI in dconf keyfile style. See the [GNOME documentation](https://help.gnome.org/system-admin-guide/dconf-keyfiles.html)
     for details.
   */
   toDconfINI = toINI { mkKeyValue = mkDconfKeyValue; };
@@ -425,37 +485,43 @@ in rec {
     : The value to be evaluated recursively
   */
   withRecursion =
+    let
+      specialAttrs = [
+        "__functor"
+        "__functionArgs"
+        "__toString"
+        "__pretty"
+      ];
+      stepIntoAttr = evalNext: name: if elem name specialAttrs then id else evalNext;
+    in
     {
       depthLimit,
-      throwOnDepthLimit ? true
+      throwOnDepthLimit ? true,
     }:
-      assert isInt depthLimit;
-      let
-        specialAttrs = [
-          "__functor"
-          "__functionArgs"
-          "__toString"
-          "__pretty"
-        ];
-        stepIntoAttr = evalNext: name:
-          if elem name specialAttrs
-            then id
-            else evalNext;
-        transform = depth:
-          if depthLimit != null && depth > depthLimit then
-            if throwOnDepthLimit
-              then throw "Exceeded maximum eval-depth limit of ${toString depthLimit} while trying to evaluate with `generators.withRecursion'!"
-              else const "<unevaluated>"
-          else id;
-        mapAny = depth: v:
-          let
-            evalNext = x: mapAny (depth + 1) (transform (depth + 1) x);
-          in
-            if isAttrs v then mapAttrs (stepIntoAttr evalNext) v
-            else if isList v then map evalNext v
-            else transform (depth + 1) v;
-      in
-        mapAny 0;
+    assert isInt depthLimit;
+    let
+      transform =
+        depth:
+        if depthLimit != null && depth > depthLimit then
+          if throwOnDepthLimit then
+            throw "Exceeded maximum eval-depth limit of ${toString depthLimit} while trying to evaluate with `generators.withRecursion'!"
+          else
+            const "<unevaluated>"
+        else
+          id;
+      mapAny =
+        depth: v:
+        let
+          evalNext = x: mapAny (depth + 1) (transform (depth + 1) x);
+        in
+        if isAttrs v then
+          mapAttrs (stepIntoAttr evalNext) v
+        else if isList v then
+          map evalNext v
+        else
+          transform (depth + 1) v;
+    in
+    mapAny 0;
 
   /**
     Pretty print a value, akin to `builtins.trace`.
@@ -470,9 +536,9 @@ in rec {
 
     Structured function argument
     : allowPrettyValues
-      : If this option is true, attrsets like { __pretty = fn; val = …; }
-        will use fn to convert val to a pretty printed representation.
-        (This means fn is type Val -> String.)
+      : If this option is true, attrsets like `{ __pretty = fn; val = …; }`
+        will use `fn` to convert `val` to a pretty printed representation.
+        (This means `fn` is type `Val -> String`.)
     : multiline
       : If this option is true, the output is indented with newlines for attribute sets and lists
     : indent
@@ -481,68 +547,98 @@ in rec {
     Value
     : The value to be pretty printed
   */
-  toPretty = {
-    allowPrettyValues ? false,
-    multiline ? true,
-    indent ? ""
-  }:
+  toPretty =
     let
-    go = indent: v:
-    let     introSpace = if multiline then "\n${indent}  " else " ";
-            outroSpace = if multiline then "\n${indent}" else " ";
-    in if   isInt      v then toString v
-    # toString loses precision on floats, so we use toJSON instead. This isn't perfect
-    # as the resulting string may not parse back as a float (e.g. 42, 1e-06), but for
-    # pretty-printing purposes this is acceptable.
-    else if isFloat    v then builtins.toJSON v
-    else if isString   v then
-      let
-        lines = filter (v: ! isList v) (split "\n" v);
-        escapeSingleline = escape [ "\\" "\"" "\${" ];
-        escapeMultiline = replaceStrings [ "\${" "''" ] [ "''\${" "'''" ];
-        singlelineResult = "\"" + concatStringsSep "\\n" (map escapeSingleline lines) + "\"";
-        multilineResult = let
-          escapedLines = map escapeMultiline lines;
-          # The last line gets a special treatment: if it's empty, '' is on its own line at the "outer"
-          # indentation level. Otherwise, '' is appended to the last line.
-          lastLine = last escapedLines;
-        in "''" + introSpace + concatStringsSep introSpace (init escapedLines)
-                + (if lastLine == "" then outroSpace else introSpace + lastLine) + "''";
-      in
-        if multiline && length lines > 1 then multilineResult else singlelineResult
-    else if true  ==   v then "true"
-    else if false ==   v then "false"
-    else if null  ==   v then "null"
-    else if isPath     v then toString v
-    else if isList     v then
-      if v == [] then "[ ]"
-      else "[" + introSpace
-        + concatMapStringsSep introSpace (go (indent + "  ")) v
-        + outroSpace + "]"
-    else if isFunction v then
-      let fna = functionArgs v;
-          showFnas = concatStringsSep ", " (mapAttrsToList
-                       (name: hasDefVal: if hasDefVal then name + "?" else name)
-                       fna);
-      in if fna == {}    then "<function>"
-                         else "<function, args: {${showFnas}}>"
-    else if isAttrs    v then
-      # apply pretty values if allowed
-      if allowPrettyValues && v ? __pretty && v ? val
-         then v.__pretty v.val
-      else if v == {} then "{ }"
-      else if v ? type && v.type == "derivation" then
-        "<derivation ${v.name or "???"}>"
-      else "{" + introSpace
-          + concatStringsSep introSpace (mapAttrsToList
-              (name: value:
+      escapeSingleline = escape [
+        "\\"
+        "\""
+        "\${"
+      ];
+      escapeMultiline = replaceStrings [ "\${" "''" ] [ "''\${" "'''" ];
+    in
+    {
+      allowPrettyValues ? false,
+      multiline ? true,
+      indent ? "",
+    }:
+    let
+      go =
+        indent: v:
+        let
+          introSpace = if multiline then "\n${indent}  " else " ";
+          outroSpace = if multiline then "\n${indent}" else " ";
+        in
+        if isInt v then
+          toString v
+        # toString loses precision on floats, so we use toJSON instead. This isn't perfect
+        # as the resulting string may not parse back as a float (e.g. 42, 1e-06), but for
+        # pretty-printing purposes this is acceptable.
+        else if isFloat v then
+          builtins.toJSON v
+        else if isString v then
+          let
+            lines = filter (v: !isList v) (split "\n" v);
+            singlelineResult = "\"" + concatStringsSep "\\n" (map escapeSingleline lines) + "\"";
+            multilineResult =
+              let
+                escapedLines = map escapeMultiline lines;
+                # The last line gets a special treatment: if it's empty, '' is on its own line at the "outer"
+                # indentation level. Otherwise, '' is appended to the last line.
+                lastLine = last escapedLines;
+              in
+              "''"
+              + introSpace
+              + concatStringsSep introSpace (init escapedLines)
+              + (if lastLine == "" then outroSpace else introSpace + lastLine)
+              + "''";
+          in
+          if multiline && length lines > 1 then multilineResult else singlelineResult
+        else if true == v then
+          "true"
+        else if false == v then
+          "false"
+        else if null == v then
+          "null"
+        else if isPath v then
+          toString v
+        else if isList v then
+          if v == [ ] then
+            "[ ]"
+          else
+            "[" + introSpace + concatMapStringsSep introSpace (go (indent + "  ")) v + outroSpace + "]"
+        else if isFunction v then
+          let
+            fna = functionArgs v;
+            showFnas = concatStringsSep ", " (
+              mapAttrsToList (name: hasDefVal: if hasDefVal then name + "?" else name) fna
+            );
+          in
+          if fna == { } then "<function>" else "<function, args: {${showFnas}}>"
+        else if isAttrs v then
+          # apply pretty values if allowed
+          if allowPrettyValues && v ? __pretty && v ? val then
+            v.__pretty v.val
+          else if v == { } then
+            "{ }"
+          else if v ? type && v.type == "derivation" then
+            "<derivation ${v.name or "???"}>"
+          else
+            "{"
+            + introSpace
+            + concatStringsSep introSpace (
+              mapAttrsToList (
+                name: value:
                 "${escapeNixIdentifier name} = ${
-                  addErrorContext "while evaluating an attribute `${name}`"
-                    (go (indent + "  ") value)
-                };") v)
-        + outroSpace + "}"
-    else abort "generators.toPretty: should never happen (v = ${v})";
-  in go indent;
+                  addErrorContext "while evaluating an attribute `${name}`" (go (indent + "  ") value)
+                };"
+              ) v
+            )
+            + outroSpace
+            + "}"
+        else
+          abort "generators.toPretty: should never happen (v = ${v})";
+    in
+    go indent;
 
   /**
     Translate a simple Nix expression to [Plist notation](https://en.wikipedia.org/wiki/Property_list).
@@ -557,61 +653,90 @@ in rec {
     Value
       : The value to be converted to Plist
   */
-  toPlist = {
-    escape ? false
-  }: v: let
-    expr = ind: x:
-      if x == null  then "" else
-      if isBool x   then bool ind x else
-      if isInt x    then int ind x else
-      if isString x then str ind x else
-      if isList x   then list ind x else
-      if isAttrs x  then attrs ind x else
-      if isPath x   then str ind (toString x) else
-      if isFloat x  then float ind x else
-      abort "generators.toPlist: should never happen (v = ${v})";
+  toPlist =
+    {
+      escape ? false,
+    }:
+    v:
+    let
+      expr =
+        ind: x:
+        if x == null then
+          ""
+        else if isBool x then
+          bool ind x
+        else if isInt x then
+          int ind x
+        else if isString x then
+          str ind x
+        else if isList x then
+          list ind x
+        else if isAttrs x then
+          attrs ind x
+        else if isPath x then
+          str ind (toString x)
+        else if isFloat x then
+          float ind x
+        else
+          abort "generators.toPlist: should never happen (v = ${v})";
 
-    literal = ind: x: ind + x;
+      literal = ind: x: ind + x;
 
-    maybeEscapeXML = if escape then escapeXML else x: x;
+      maybeEscapeXML = if escape then escapeXML else x: x;
 
-    bool = ind: x: literal ind  (if x then "<true/>" else "<false/>");
-    int = ind: x: literal ind "<integer>${toString x}</integer>";
-    str = ind: x: literal ind "<string>${maybeEscapeXML x}</string>";
-    key = ind: x: literal ind "<key>${maybeEscapeXML x}</key>";
-    float = ind: x: literal ind "<real>${toString x}</real>";
+      bool = ind: x: literal ind (if x then "<true/>" else "<false/>");
+      int = ind: x: literal ind "<integer>${toString x}</integer>";
+      str = ind: x: literal ind "<string>${maybeEscapeXML x}</string>";
+      key = ind: x: literal ind "<key>${maybeEscapeXML x}</key>";
+      float = ind: x: literal ind "<real>${toString x}</real>";
 
-    indent = ind: expr "\t${ind}";
+      indent = ind: expr "\t${ind}";
 
-    item = ind: concatMapStringsSep "\n" (indent ind);
+      item = ind: concatMapStringsSep "\n" (indent ind);
 
-    list = ind: x: concatStringsSep "\n" [
-      (literal ind "<array>")
-      (item ind x)
-      (literal ind "</array>")
-    ];
+      list =
+        ind: x:
+        concatStringsSep "\n" [
+          (literal ind "<array>")
+          (item ind x)
+          (literal ind "</array>")
+        ];
 
-    attrs = ind: x: concatStringsSep "\n" [
-      (literal ind "<dict>")
-      (attr ind x)
-      (literal ind "</dict>")
-    ];
+      attrs =
+        ind: x:
+        concatStringsSep "\n" [
+          (literal ind "<dict>")
+          (attr ind x)
+          (literal ind "</dict>")
+        ];
 
-    attr = let attrFilter = name: value: name != "_module" && value != null;
-    in ind: x: concatStringsSep "\n" (flatten (mapAttrsToList
-      (name: value: optionals (attrFilter name value) [
-      (key "\t${ind}" name)
-      (expr "\t${ind}" value)
-    ]) x));
+      attr =
+        let
+          attrFilter = name: value: name != "_module" && value != null;
+        in
+        ind: x:
+        concatStringsSep "\n" (
+          flatten (
+            mapAttrsToList (
+              name: value:
+              optionals (attrFilter name value) [
+                (key "\t${ind}" name)
+                (expr "\t${ind}" value)
+              ]
+            ) x
+          )
+        );
 
-  in
-  # TODO: As discussed in #356502, deprecated functionality should be removed sometime after 25.11.
-  lib.warnIf (!escape && lib.oldestSupportedReleaseIsAtLeast 2505) "Using `lib.generators.toPlist` without `escape = true` is deprecated" ''
-  <?xml version="1.0" encoding="UTF-8"?>
-  <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-  <plist version="1.0">
-  ${expr "" v}
-  </plist>'';
+    in
+    # TODO: As discussed in #356502, deprecated functionality should be removed sometime after 25.11.
+    lib.warnIf (!escape && lib.oldestSupportedReleaseIsAtLeast 2505)
+      "Using `lib.generators.toPlist` without `escape = true` is deprecated"
+      ''
+        <?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+        <plist version="1.0">
+        ${expr "" v}
+        </plist>'';
 
   /**
     Translate a simple Nix expression to Dhall notation.
@@ -629,13 +754,14 @@ in rec {
 
     : The value to be converted to Dhall
   */
-  toDhall = { }@args: v:
-    let concatItems = concatStringsSep ", ";
-    in if isAttrs v then
-      "{ ${
-        concatItems (mapAttrsToList
-          (key: value: "${key} = ${toDhall args value}") v)
-      } }"
+  toDhall =
+    let
+      concatItems = concatStringsSep ", ";
+    in
+    { }@args:
+    v:
+    if isAttrs v then
+      "{ ${concatItems (mapAttrsToList (key: value: "${key} = ${toDhall args value}") v)} }"
     else if isList v then
       "[ ${concatItems (map (toDhall args) v)} ]"
     else if isInt v then
@@ -651,18 +777,17 @@ in rec {
 
   /**
     Translate a simple Nix expression to Lua representation with occasional
-    Lua-inlines that can be constructed by mkLuaInline function.
+    Lua-inlines that can be constructed by `mkLuaInline` function.
 
     Configuration:
 
-    * multiline - by default is true which results in indented block-like view.
-    * indent - initial indent.
-    * asBindings - by default generate single value, but with this use attrset to set global vars.
+    * `multiline` - by default is true which results in indented block-like view.
+    * `indent` - initial indent.
+    * `asBindings` - by default generate single value, but with this use attrset to set global vars.
 
-    Attention:
-
+    ::: {.note}
     Regardless of multiline parameter there is no trailing newline.
-
+    :::
 
     # Inputs
 
@@ -682,7 +807,7 @@ in rec {
     # Type
 
     ```
-    toLua :: AttrSet -> Any -> String
+    toLua :: { multiline :: Bool; indent :: String; asBindings :: Bool; } -> Any -> String
     ```
 
     # Examples
@@ -711,12 +836,15 @@ in rec {
 
     :::
   */
-  toLua = {
-    multiline ? true,
-    indent ? "",
-    asBindings ? false,
-  }@args: v:
+  toLua =
+    {
+      multiline ? true,
+      indent ? "",
+      asBindings ? false,
+    }@args:
+    v:
     let
+      recurse = toLua innerArgs;
       innerIndent = "${indent}  ";
       introSpace = if multiline then "\n${innerIndent}" else " ";
       outroSpace = if multiline then "\n${indent}" else " ";
@@ -725,13 +853,16 @@ in rec {
         asBindings = false;
       };
       concatItems = concatStringsSep ",${introSpace}";
-      isLuaInline = { _type ? null, ... }: _type == "lua-inline";
+      isLuaInline =
+        {
+          _type ? null,
+          ...
+        }:
+        _type == "lua-inline";
 
       generatedBindings =
-          assert assertMsg (badVarNames == []) "Bad Lua var names: ${toPretty {} badVarNames}";
-          concatStrings (
-            mapAttrsToList (key: value: "${indent}${key} = ${toLua innerArgs value}\n") v
-            );
+        assert badVarNames == [ ] || throw "Bad Lua var names: ${toPretty { } badVarNames}";
+        concatStrings (mapAttrsToList (key: value: "${indent}${key} = ${recurse value}\n") v);
 
       # https://en.wikibooks.org/wiki/Lua_Programming/variable#Variable_names
       matchVarName = match "[[:alpha:]_][[:alnum:]_]*(\\.[[:alpha:]_][[:alnum:]_]*)*";
@@ -743,28 +874,26 @@ in rec {
       "nil"
     else if isInt v || isFloat v || isString v || isBool v then
       toJSON v
+    else if isPath v || isDerivation v then
+      toJSON "${v}"
     else if isList v then
-      (if v == [ ] then "{}" else
-      "{${introSpace}${concatItems (map (value: "${toLua innerArgs value}") v)}${outroSpace}}")
+      (if v == [ ] then "{}" else "{${introSpace}${concatItems (map recurse v)}${outroSpace}}")
     else if isAttrs v then
       (
         if isLuaInline v then
           "(${v.expr})"
         else if v == { } then
           "{}"
-        else if isDerivation v then
-          ''"${toString v}"''
         else
-          "{${introSpace}${concatItems (
-            mapAttrsToList (key: value: "[${toJSON key}] = ${toLua innerArgs value}") v
-            )}${outroSpace}}"
+          "{${introSpace}${
+            concatItems (mapAttrsToList (key: value: "[${toJSON key}] = ${recurse value}") v)
+          }${outroSpace}}"
       )
     else
       abort "generators.toLua: type ${typeOf v} is unsupported";
 
   /**
-    Mark string as Lua expression to be inlined when processed by toLua.
-
+    Mark string as Lua expression to be inlined when processed by `toLua`.
 
     # Inputs
 
@@ -775,11 +904,15 @@ in rec {
     # Type
 
     ```
-    mkLuaInline :: String -> AttrSet
+    mkLuaInline :: String -> { _type = "lua-inline"; expr :: String; }
     ```
   */
-  mkLuaInline = expr: { _type = "lua-inline"; inherit expr; };
-} // {
+  mkLuaInline = expr: {
+    _type = "lua-inline";
+    inherit expr;
+  };
+}
+// {
   /**
     Generates JSON from an arbitrary (non-function) value.
     For more information see the documentation of the builtin.
@@ -794,7 +927,7 @@ in rec {
 
     : The value to be converted to JSON
   */
-  toJSON = {}: lib.strings.toJSON;
+  toJSON = { }: lib.strings.toJSON;
 
   /**
     YAML has been a strict superset of JSON since 1.2, so we
@@ -812,5 +945,5 @@ in rec {
 
     : The value to be converted to YAML
   */
-  toYAML = {}: lib.strings.toJSON;
+  toYAML = { }: lib.strings.toJSON;
 }

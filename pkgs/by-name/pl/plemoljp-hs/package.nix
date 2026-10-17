@@ -1,34 +1,25 @@
 {
-  lib,
   stdenvNoCC,
   fetchzip,
+  plemoljp,
+  installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "plemoljp-hs";
-  version = "2.0.3";
+
+  # plemoljp's updateScript also updates this version.
+  # nixpkgs-update: no auto update
+  inherit (plemoljp) version;
 
   src = fetchzip {
-    url = "https://github.com/yuru7/PlemolJP/releases/download/v${version}/PlemolJP_HS_v${version}.zip";
-    hash = "sha256-rKWZMIK6TP6IV6KjFGuZE2S6IiMtjtHZeWM44tULduk=";
+    url = "https://github.com/yuru7/PlemolJP/releases/download/v${finalAttrs.version}/PlemolJP_HS_v${finalAttrs.version}.zip";
+    hash = "sha256-ebBPun8CVHBOxs3c9SNHvT8lP1YqUH4DhBLAZk6NOrE=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    install -Dm444 PlemolJP_HS/*.ttf -t $out/share/fonts/truetype/plemoljp-hs
-    install -Dm444 PlemolJP35_HS/*.ttf -t $out/share/fonts/truetype/plemoljp-hs-35
-    install -Dm444 PlemolJPConsole_HS/*.ttf -t $out/share/fonts/truetype/plemoljp-hs-console
-    install -Dm444 PlemolJP35Console_HS/*.ttf -t $out/share/fonts/truetype/plemoljp-hs-35console
-
-    runHook postInstall
-  '';
-
-  meta = with lib; {
+  meta = plemoljp.meta // {
     description = "Composite font of IBM Plex Mono, IBM Plex Sans JP and hidden full-width space";
-    homepage = "https://github.com/yuru7/PlemolJP";
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ kachick ];
   };
-}
+})

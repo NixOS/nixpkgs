@@ -3,18 +3,18 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cloudflare-utils";
-  version = "1.3.3";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "Cyb3r-Jak3";
     repo = "cloudflare-utils";
-    rev = "v${version}";
-    hash = "sha256-Wa8YCwOY7kwKJmME5hWpEGrC8bxjgVnli1GUwKLyFJg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-/vausJEe5g6Txgq1z7oUUku0w6sd/mmYcZQ8D7dZ03E=";
   };
 
-  vendorHash = "sha256-hoU+GSJHBZtb29jJbeuaFQSn496b1xLzXJtBCbKEcYE=";
+  vendorHash = "sha256-/kbXAljCe07dC/jL4RMeN8tKXhSPMxXY33CqBDySA8w=";
 
   meta = {
     description = "Helpful Cloudflare utility program";
@@ -22,4 +22,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ yelite ];
   };
-}
+})

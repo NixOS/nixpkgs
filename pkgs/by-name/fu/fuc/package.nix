@@ -6,20 +6,20 @@
   rustfmt,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fuc";
-  version = "2.2.0";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "SUPERCILEX";
     repo = "fuc";
-    rev = version;
-    hash = "sha256-ZEiMyX85woPOKaMtw8qqrUXUhY8Ewm71I25inUMH1GQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-jn553QosWi7avgSjT72lL8auVVd/n4+5MDCJAquflgs=";
   };
 
-  cargoHash = "sha256-7xPZFZ+vWi6HbaHeIWEnOfQkHsLIMsHq+RuuDOWwusQ=";
+  cargoHash = "sha256-kxaB3R9V8JG2EdLfGFrP12wt9TZco7QfpfNbLQZDq30=";
 
-  RUSTC_BOOTSTRAP = 1;
+  env.RUSTC_BOOTSTRAP = 1;
 
   cargoBuildFlags = [
     "--workspace"
@@ -32,10 +32,13 @@ rustPlatform.buildRustPackage rec {
     rustfmt
   ];
 
-  meta = with lib; {
+  # error[E0602]: unknown lint: `clippy::unnecessary_debug_formatting`
+  doCheck = false;
+
+  meta = {
     description = "Modern, performance focused unix commands";
     homepage = "https://github.com/SUPERCILEX/fuc";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
-}
+})

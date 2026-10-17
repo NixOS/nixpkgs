@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rapidfuzz-cpp";
-  version = "3.3.1";
+  version = "3.3.4";
 
   src = fetchFromGitHub {
     owner = "rapidfuzz";
     repo = "rapidfuzz-cpp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-m8VSqvKF7oRZeVJHRebPePc9iOreXhdmV2rAtB3frKI=";
+    hash = "sha256-rfW4k6D0vrPwZ/6G9NuDLhZiyhr9s/tMo6a6t//Po04=";
   };
 
   nativeBuildInputs = [
@@ -26,10 +26,13 @@ stdenv.mkDerivation (finalAttrs: {
     "-DRAPIDFUZZ_BUILD_TESTING=ON"
   ];
 
-  CXXFLAGS = lib.optionals stdenv.cc.isClang [
-    # error: no member named 'fill' in namespace 'std'
-    "-include algorithm"
-  ];
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    CXXFLAGS = toString [
+      # error: no member named 'fill' in namespace 'std'
+      "-include"
+      "algorithm"
+    ];
+  };
 
   nativeCheckInputs = [
     catch2_3

@@ -7,25 +7,28 @@
   hatchling,
   orjson,
   pyarrow,
-  pythonOlder,
+  python-dateutil,
   requests,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "elasticsearch";
-  version = "8.15.1";
+  version = "8.19.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QMDTEvit+L3IF5W8FqC1Rt31RMsfkOgpokTkeAxNv9g=";
+    hash = "sha256-6E3WGKIgysJblieQCFBF3SescuAcCl2BvSmi1Hpx8D8=";
   };
 
   build-system = [ hatchling ];
 
-  dependencies = [ elastic-transport ];
+  dependencies = [
+    elastic-transport
+    python-dateutil
+    typing-extensions
+  ];
 
   optional-dependencies = {
     requests = [ requests ];
@@ -40,11 +43,10 @@ buildPythonPackage rec {
   # https://github.com/elasticsearch/elasticsearch-py/tree/master/test_elasticsearch
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Official low-level client for Elasticsearch";
     homepage = "https://github.com/elasticsearch/elasticsearch-py";
     changelog = "https://github.com/elastic/elasticsearch-py/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ desiderius ];
+    license = lib.licenses.asl20;
   };
 }

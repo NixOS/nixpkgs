@@ -1,0 +1,32 @@
+{
+  "dependencies": {
+    "dcd": {
+      "version": "0.16.0-beta.2",
+      "sha256": "0756q02q1jbimrqn814b3j7q042vlxb7vva1rq823jx148r23d4d"
+    },
+    "dsymbol": {
+      "version": "0.13.0",
+      "sha256": "1lpwdri2bv5avs3hr0j1i00kjwdbs9nkc13wzlmjalfzjhqqqvci"
+    },
+    "emsi_containers": {
+      "version": "0.9.0",
+      "sha256": "1viz1fjh6jhfvl0d25bb1q7aclm1hrs0d7hhcx1d9c0gg5k6lcpm"
+    },
+    "inifiled": {
+      "version": "1.3.3",
+      "sha256": "01hw0lb9n6vwmx6vj5nq2awg54l5pvngqhzxfj2kmg99az84dg6d"
+    },
+    "libddoc": {
+      "version": "0.8.0",
+      "sha256": "0vxhkd92rxrkrz0svapdnkzh1bdqhws6wakhjj7szmkvykjgwksc"
+    },
+    "libdparse": {
+      "version": "0.23.2",
+      "sha256": "0bcaasam3iiqisilyx4ysxahjmgifn7i8ny155nwg64bjjibd8dk"
+    },
+    "stdx-allocator": {
+      "version": "2.77.5",
+      "sha256": "1g8382wr49sjyar0jay8j7y2if7h1i87dhapkgxphnizp24d7kaj"
+    }
+  }
+}

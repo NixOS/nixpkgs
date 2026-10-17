@@ -7,39 +7,28 @@
   openjdk21,
   pam,
   makeDesktopItem,
+  copyDesktopItems,
   icoutils,
 }:
 
 let
-
   pkg_path = "$out/lib/ghidra";
-
-  desktopItem = makeDesktopItem {
-    name = "ghidra";
-    exec = "ghidra";
-    icon = "ghidra";
-    desktopName = "Ghidra";
-    genericName = "Ghidra Software Reverse Engineering Suite";
-    categories = [ "Development" ];
-    terminal = false;
-    startupWMClass = "ghidra-Ghidra";
-  };
-
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ghidra";
-  version = "11.2.1";
-  versiondate = "20241105";
-
+  version = "12.1.4";
+  versiondate = "20260921";
   src = fetchzip {
-    url = "https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_${version}_build/ghidra_${version}_PUBLIC_${versiondate}.zip";
-    hash = "sha256-w6FCAjF2ggFWH8eo7X8V6ZTbSptGkwRzoEMj9nGL5/M=";
+    url = "https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_${finalAttrs.version}_build/ghidra_${finalAttrs.version}_PUBLIC_${finalAttrs.versiondate}.zip";
+    hash = "sha256-ZD4Vs1i7BMvrneAbAiOc7F9iBj64Rbom+PaVO//TzK8=";
   };
 
   nativeBuildInputs = [
     makeWrapper
     icoutils
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+    copyDesktopItems
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   buildInputs = [
     (lib.getLib stdenv.cc.cc)
@@ -48,11 +37,24 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "ghidra";
+      exec = "ghidra";
+      icon = "ghidra";
+      desktopName = "Ghidra";
+      genericName = "Ghidra Software Reverse Engineering Suite";
+      categories = [ "Development" ];
+      terminal = false;
+      startupWMClass = "ghidra-Ghidra";
+    })
+  ];
+
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "${pkg_path}"
-    mkdir -p "${pkg_path}" "$out/share/applications"
     cp -a * "${pkg_path}"
-    ln -s ${desktopItem}/share/applications/* $out/share/applications
 
     icotool -x "${pkg_path}/support/ghidra.ico"
     rm ghidra_4_40x40x32.png
@@ -61,6 +63,8 @@ stdenv.mkDerivation rec {
       mkdir -pv "$out/share/icons/hicolor/$res/apps"
       mv "$f" "$out/share/icons/hicolor/$res/apps/ghidra.png"
     done;
+
+    runHook postInstall
   '';
 
   postFixup = ''
@@ -72,23 +76,23 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath [ openjdk21 ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Software reverse engineering (SRE) suite of tools developed by NSA's Research Directorate in support of the Cybersecurity mission";
     mainProgram = "ghidra";
     homepage = "https://github.com/NationalSecurityAgency/ghidra";
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       ck3d
       govanify
+      tbaldwin
       mic92
     ];
   };
 
-}
+})

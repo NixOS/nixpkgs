@@ -4,27 +4,26 @@
   buildPythonPackage,
   fetchFromGitHub,
   paho-mqtt,
-  pythonOlder,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyeconet";
-  version = "0.1.23";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "0.3.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "w1ll1am23";
-    repo = pname;
-    tag = "v${version}";
-    hash = "sha256-zpaKUEg78vzvuTtVauCUUt0U92NXVyNhEfgKVrRzdnM=";
+    repo = "pyeconet";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-J3OkcYiq87MqKhezW2uxg7aY1qAkVgTeeakX7uWFdIY=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [ "paho-mqtt" ];
+
+  dependencies = [
     paho-mqtt
     aiohttp
   ];
@@ -34,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyeconet" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface to the EcoNet API";
     homepage = "https://github.com/w1ll1am23/pyeconet";
-    changelog = "https://github.com/w1ll1am23/pyeconet/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/w1ll1am23/pyeconet/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

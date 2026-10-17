@@ -3,13 +3,16 @@
   mkKdeDerivation,
   replaceVars,
   sshfs,
+  qtbase,
   qtconnectivity,
   qtmultimedia,
-  qtwayland,
   pkg-config,
   wayland,
   wayland-protocols,
+  libei,
+  libevdev,
   libfakekey,
+  fetchpatch,
 }:
 mkKdeDerivation {
   pname = "kdeconnect-kde";
@@ -17,6 +20,16 @@ mkKdeDerivation {
   patches = [
     (replaceVars ./hardcode-sshfs-path.patch {
       sshfs = lib.getExe sshfs;
+    })
+
+    # backport fixes for udev rule install path
+    (fetchpatch {
+      url = "https://invent.kde.org/network/kdeconnect-kde/-/commit/a0d71485a540270421261e05cbe9102a0031ec34.diff";
+      hash = "sha256-Klfz3a4AfUMNGWqk/E8xqRvqg7Wn0PrB9+aYmUHoNGM=";
+    })
+    (fetchpatch {
+      url = "https://invent.kde.org/network/kdeconnect-kde/-/commit/e00d56efce0409a4a7905f7f105d06d5c96031d0.diff";
+      hash = "sha256-nRaQSR/jKHgaiSmrJaYNqSI0Hd2QmtwHWUZY8TeL/2Y=";
     })
   ];
 
@@ -30,13 +43,14 @@ mkKdeDerivation {
   extraBuildInputs = [
     qtconnectivity
     qtmultimedia
-    qtwayland
     wayland
     wayland-protocols
+    libei
+    libevdev
     libfakekey
   ];
 
   extraCmakeFlags = [
-    "-DQtWaylandScanner_EXECUTABLE=${qtwayland}/libexec/qtwaylandscanner"
+    "-DQtWaylandScanner_EXECUTABLE=${qtbase}/libexec/qtwaylandscanner"
   ];
 }

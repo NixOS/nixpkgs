@@ -2,9 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  attrs,
   hypothesis,
-  pytest,
   pytest-arraydiff,
   pytest-astropy-header,
   pytest-cov,
@@ -12,32 +10,31 @@
   pytest-filter-subpackage,
   pytest-mock,
   pytest-remotedata,
-  setuptools,
+  pytest-skip-slow,
+  pytest,
   setuptools-scm,
-  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-astropy";
-  version = "0.11.0";
+  version = "0.12.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Tq6qme2RFj7Y+arBMscKgfJbxMEvPNVNujKfwmxnObU=";
+    pname = "pytest_astropy";
+    inherit version;
+    hash = "sha256-C9/x+menhW7Imcb3gQqGkRJT12IBowgi1+TvFLZxvcA=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
-    attrs
+  dependencies = [
     hypothesis
     pytest-arraydiff
     pytest-astropy-header
@@ -46,15 +43,17 @@ buildPythonPackage rec {
     pytest-filter-subpackage
     pytest-mock
     pytest-remotedata
+    pytest-skip-slow
   ];
 
   # pytest-astropy is a meta package that only propagates requirements
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Meta-package containing dependencies for testing";
-    homepage = "https://astropy.org";
-    license = licenses.bsd3;
+    changelog = "https://github.com/astropy/pytest-astropy/releases/tag/v${version}";
+    homepage = "https://github.com/astropy/pytest-astropy";
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

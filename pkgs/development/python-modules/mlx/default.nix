@@ -1,14 +1,33 @@
 {
   lib,
-  fetchFromGitHub,
+  stdenv,
   buildPythonPackage,
-  pybind11,
+  common-updater-scripts,
+  curl,
+  fetchFromGitHub,
+  nix,
+  nix-update,
+  nanobind_3,
+  perl,
+  writeShellApplication,
+
+  # build-system
   cmake,
-  xcbuild,
-  zsh,
-  blas,
-  lapack,
   setuptools,
+  typing-extensions,
+
+  # buildInputs
+  fmt,
+  nlohmann_json,
+  # linux-only
+  openblasCompat,
+
+  # tests
+  callPackage,
+  numpy,
+  pytestCheckHook,
+  python,
+  sysctl,
 }:
 
 let
@@ -16,76 +35,136 @@ let
   gguf-tools = fetchFromGitHub {
     owner = "antirez";
     repo = "gguf-tools";
-    rev = "af7d88d808a7608a33723fba067036202910acb3";
-    hash = "sha256-LqNvnUbmq0iziD9VP5OTJCSIy+y/hp5lKCUV7RtKTvM=";
+    rev = "8fa6eb65236618e28fd7710a0fba565f7faa1848";
+    hash = "sha256-15FvyPOFqTOr5vdWQoPnZz+mYH919++EtghjozDlnSA=";
   };
-  nlohmann_json = fetchFromGitHub {
-    owner = "nlohmann";
-    repo = "json";
-    rev = "v3.11.3";
-    hash = "sha256-7F0Jon+1oWL7uqet5i1IgHX0fUw/+z0QwEcA3zs5xHg=";
-  };
+
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mlx";
-  version = "0.21.1";
+  version = "0.32.3";
+  pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ml-explore";
     repo = "mlx";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-wxv9bA9e8VyFv/FMh63sUTTNgkXHGQJNQhLuVynczZA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-n0n9yagsqchU5syoxuo1gWFZtoW3f75AQGX3VUT4cuQ=";
   };
 
-  pyproject = true;
-
   patches = [
-    # With Darwin SDK 11 we cannot include vecLib/cblas_new.h, this needs to wait for PR #229210
-    # In the meantime, pretend Accelerate is not available and use blas/lapack instead.
-    ./disable-accelerate.patch
+    # Use nix packages instead of fetching their sources
+    ./dont-fetch-json.patch
   ];
 
   postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace "/usr/bin/xcrun" "${xcbuild}/bin/xcrun" \
+    substituteInPlace mlx/backend/cpu/jit_compiler.cpp \
+      --replace-fail "g++" "${lib.getExe' stdenv.cc "c++"}"
   '';
 
   dontUseCmakeConfigure = true;
 
+  enableParallelBuilding = true;
+
+  # Allows multiple cores to be used in Python builds.
+  postUnpack = ''
+    export MAKEFLAGS+="''${enableParallelBuilding:+-j$NIX_BUILD_CORES}"
+  '';
+
   env = {
-    PYPI_RELEASE = version;
-    # we can't use Metal compilation with Darwin SDK 11
+    PYPI_RELEASE = 1;
     CMAKE_ARGS = toString [
+      # NOTE The `metal` command-line utility used to build the Metal kernels is not open-source.
+      # To build mlx with Metal support in Nix, you'd need to use one of the sandbox escape
+      # hatches which let you interact with a native install of Xcode, such as `composeXcodeWrapper`
+      # or by changing the upstream (e.g., https://github.com/zed-industries/zed/discussions/7016).
       (lib.cmakeBool "MLX_BUILD_METAL" false)
+      (lib.cmakeBool "USE_SYSTEM_FMT" true)
       (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_GGUFLIB" "${gguf-tools}")
-      (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_JSON" "${nlohmann_json}")
+      (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_NANOBIND" "${nanobind_3.src}")
+      (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-I${lib.getDev nlohmann_json}/include/nlohmann")
     ];
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cmake
-    pybind11
-    xcbuild
-    zsh
-    gguf-tools
-    nlohmann_json
     setuptools
+    typing-extensions
   ];
 
   buildInputs = [
-    blas
-    lapack
+    fmt
+    nlohmann_json
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # MLX passes 32-bit integers to LAPACK.
+    openblasCompat
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "mlx" ];
+
+  # Run the mlx Python test suite.
+  nativeCheckInputs = [
+    numpy
+    pytestCheckHook
+    sysctl
+  ];
+
+  enabledTestPaths = [
+    "python/tests/"
+  ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # M1 Accelerate bug, to be fixed in macOS:
+    # https://github.com/ml-explore/mlx/issues/3200
+    # https://github.com/ml-explore/mlx/pull/3563#issuecomment-4784288696
+    "test_gather_qmm_sorted"
+  ];
+
+  # patchelf is only available on Linux and no patching is needed on darwin.
+  # Otherwise mlx/core.cpython-313-x86_64-linux-gnu.so contains a reference to
+  # /build/source/build/temp.linux-x86_64-cpython-313/mlx.core/libmlx.so in its rpath.
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
+    patchelf --replace-needed \
+      libmlx.so \
+      $out/${python.sitePackages}/mlx/lib64/libmlx.so \
+      $out/${python.sitePackages}/mlx/core.cpython-*.so
+  '';
+
+  # Additional testing by executing the example Python scripts supplied with mlx
+  # using the version of the library we've built.
+  passthru = {
+    inherit gguf-tools;
+
+    tests.mlxTest =
+      (callPackage ./tests.nix {
+        mlx = finalAttrs.finalPackage;
+        inherit (finalAttrs) src;
+      }).mlxTest;
+
+    updateScript = lib.getExe (writeShellApplication {
+      name = "mlx-update";
+      runtimeInputs = [
+        common-updater-scripts
+        curl
+        nix
+        nix-update
+        perl
+      ];
+      text = builtins.readFile ./update.sh;
+    });
+  };
+
+  meta = {
     homepage = "https://github.com/ml-explore/mlx";
     description = "Array framework for Apple silicon";
-    changelog = "https://github.com/ml-explore/mlx/releases/tag/v${version}";
-    license = licenses.mit;
-    platforms = [ "aarch64-darwin" ];
-    maintainers = with maintainers; [
+    changelog = "https://github.com/ml-explore/mlx/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      booxter
+      cameronyule
       viraptor
-      Gabriella439
     ];
   };
-}
+})

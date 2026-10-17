@@ -15,16 +15,16 @@ buildKodiBinaryAddon rec {
     owner = "kodi-game";
     repo = "game.libretro";
     rev = "${version}-${rel}";
-    sha256 = "sha256-RwaLGAJt13PLKy45HU64TvQFyY532WWq2YX34Eyu+6o=";
+    hash = "sha256-RwaLGAJt13PLKy45HU64TvQFyY532WWq2YX34Eyu+6o=";
   };
 
   extraBuildInputs = [ tinyxml ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kodi-game/game.libretro";
     description = "Libretro wrapper for Kodi's Game API";
-    platforms = platforms.all;
-    license = licenses.gpl2Only;
-    maintainers = teams.kodi.members;
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl2Only;
+    teams = [ lib.teams.kodi ];
   };
 }

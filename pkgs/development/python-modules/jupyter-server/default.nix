@@ -3,115 +3,130 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
+
+  # build-system
   hatch-jupyter-builder,
   hatchling,
-  pytestCheckHook,
+
+  # dependencies
+  anyio,
+  argon2-cffi,
+  jinja2,
+  jupyter-client,
+  jupyter-core,
+  jupyter-events,
+  jupyter-server-terminals,
+  nbconvert,
+  nbformat,
+  overrides,
+  packaging,
+  prometheus-client,
+  pyzmq,
+  send2trash,
+  terminado,
+  tornado,
+  traitlets,
+  websocket-client,
+
+  # tests
+  addBinToPathHook,
+  flaky,
+  ipykernel,
   pytest-console-scripts,
   pytest-jupyter,
   pytest-timeout,
-  argon2-cffi,
-  jinja2,
-  tornado,
-  pyzmq,
-  ipykernel,
-  traitlets,
-  jupyter-core,
-  jupyter-client,
-  jupyter-events,
-  jupyter-server-terminals,
-  nbformat,
-  nbconvert,
-  packaging,
-  send2trash,
-  terminado,
-  prometheus-client,
-  anyio,
-  websocket-client,
-  overrides,
+  pytestCheckHook,
   requests,
-  flaky,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jupyter-server";
-  version = "2.14.2";
+  version = "2.21.0";
   pyproject = true;
-  disabled = pythonOlder "3.8";
+  __structuredAttrs = true;
 
+  # Using the pypi archive to avoid building the node artifacts from source
   src = fetchPypi {
     pname = "jupyter_server";
-    inherit version;
-    hash = "sha256-ZglQIaqWOM7SdsJIsdgYYuTFDyktV1kgu+lg3hxWsSs=";
+    inherit (finalAttrs) version;
+    hash = "sha256-cNmhiD9X01duoX9M4GHsGnqtfvOI0AQoz7f15PACInE=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-jupyter-builder
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    anyio
     argon2-cffi
     jinja2
-    tornado
-    pyzmq
-    traitlets
-    jupyter-core
     jupyter-client
+    jupyter-core
     jupyter-events
     jupyter-server-terminals
-    nbformat
     nbconvert
+    nbformat
+    overrides
     packaging
+    prometheus-client
+    pyzmq
     send2trash
     terminado
-    prometheus-client
-    anyio
+    tornado
+    traitlets
     websocket-client
-    overrides
   ];
 
   # https://github.com/NixOS/nixpkgs/issues/299427
   stripExclude = lib.optionals stdenv.hostPlatform.isDarwin [ "favicon.ico" ];
 
+  pythonImportsCheck = [ "jupyter_server" ];
+
   nativeCheckInputs = [
+    addBinToPathHook
+    flaky
     ipykernel
-    pytestCheckHook
     pytest-console-scripts
     pytest-jupyter
     pytest-timeout
+    pytestCheckHook
     requests
-    flaky
+    versionCheckHook
+    writableTmpDirAsHomeHook
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    # AssertionError
+    "-Wignore::DeprecationWarning"
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-    export PATH=$out/bin:$PATH
-  '';
-
-  disabledTests =
-    [
-      "test_cull_idle"
-      "test_server_extension_list"
-      "test_subscribe_websocket"
-      # test is presumable broken in sandbox
-      "test_authorized_requests"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # attempts to use trashcan, build env doesn't allow this
-      "test_delete"
-      # Insufficient access privileges for operation
-      "test_regression_is_hidden"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      # Failed: DID NOT RAISE <class 'tornado.web.HTTPError'>
-      "test_copy_big_dir"
-    ];
+  disabledTests = [
+    "test_cull_idle"
+    "test_server_extension_list"
+    "test_subscribe_websocket"
+    # test is presumable broken in sandbox
+    "test_authorized_requests"
+    # Fails under load on Hydra; kernel stays in 'starting' state due to a zmq socket error
+    "test_cull_connected"
+    "test_execution_state"
+    # AssertionError
+    "test_check_version"
+    # Flaky; updated timestamp can be equal to old timestamp
+    "test_created_timestamp"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # attempts to use trashcan, build env doesn't allow this
+    "test_delete"
+    # Insufficient access privileges for operation
+    "test_regression_is_hidden"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # Failed: DID NOT RAISE <class 'tornado.web.HTTPError'>
+    "test_copy_big_dir"
+  ];
 
   disabledTestPaths = [
     "tests/services/kernels/test_api.py"
@@ -119,16 +134,25 @@ buildPythonPackage rec {
     # nbconvert failed: `relax_add_props` kwargs of validate has been
     # deprecated for security reasons, and will be removed soon.
     "tests/nbconvert/test_handlers.py"
+    # timing sensitive
+    "tests/services/contents/test_manager.py::test_created_timestamp"
+    "tests/services/kernels/test_connection.py::test_disconnect_resolves_orphaned_kernel_info_future"
   ];
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
-    changelog = "https://github.com/jupyter-server/jupyter_server/blob/v${version}/CHANGELOG.md";
+  meta = {
     description = "Backend—i.e. core services, APIs, and REST endpoints—to Jupyter web applications";
-    mainProgram = "jupyter-server";
     homepage = "https://github.com/jupyter-server/jupyter_server";
-    license = licenses.bsdOriginal;
-    maintainers = lib.teams.jupyter.members;
+    changelog = "https://github.com/jupyter-server/jupyter_server/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.bsdOriginal;
+    teams = [ lib.teams.jupyter ];
+    mainProgram = "jupyter-server";
+    identifiers.cpeParts = {
+      vendor = "jupyter";
+      product = "jupyter_server";
+      version = finalAttrs.version;
+      update = "*";
+    };
   };
-}
+})

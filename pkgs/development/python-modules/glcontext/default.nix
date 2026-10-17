@@ -1,35 +1,36 @@
 {
+  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
   libGL,
-  libX11,
+  libx11,
 }:
 
 buildPythonPackage rec {
   pname = "glcontext";
-  version = "3.0.0";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "moderngl";
     repo = "glcontext";
     tag = version;
-    hash = "sha256-GC2sb6xQjg99xLcXSynLOOyyqNwCHZwZqrs9RZh99pY=";
+    hash = "sha256-9Tib0srQDm40ERDRGYFuaSEA9+sdUECWILtBWmZccOQ=";
   };
 
   build-system = [ setuptools ];
 
   buildInputs = [
     libGL
-    libX11
+    libx11
   ];
 
-  postPatch = ''
+  postPatch = lib.optionalString (stdenv.hostPlatform.isLinux) ''
     substituteInPlace glcontext/x11.cpp \
       --replace-fail '"libGL.so"' '"${libGL}/lib/libGL.so"' \
-      --replace-fail '"libX11.so"' '"${libX11}/lib/libX11.so"'
+      --replace-fail '"libX11.so"' '"${libx11}/lib/libX11.so"'
     substituteInPlace glcontext/egl.cpp \
       --replace-fail '"libGL.so"' '"${libGL}/lib/libGL.so"' \
       --replace-fail '"libEGL.so"' '"${libGL}/lib/libEGL.so"'
@@ -42,11 +43,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "glcontext" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/moderngl/glcontext";
     description = "OpenGL implementation for ModernGL";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = [ ];
   };
 }

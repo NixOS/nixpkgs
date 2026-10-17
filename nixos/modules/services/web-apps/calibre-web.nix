@@ -1,9 +1,24 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.calibre-web;
+  dataDir = if lib.hasPrefix "/" cfg.dataDir then cfg.dataDir else "/var/lib/${cfg.dataDir}";
 
-  inherit (lib) concatStringsSep mkEnableOption mkIf mkOption optional optionalString types;
+  inherit (lib)
+    concatStringsSep
+    mkEnableOption
+    mkIf
+    mkOption
+    optional
+    optionals
+    optionalString
+    types
+    ;
 in
 {
   options = {
@@ -11,6 +26,8 @@ in
       enable = mkEnableOption "Calibre-Web";
 
       package = lib.mkPackageOption pkgs "calibre-web" { };
+
+      calibrePackage = lib.mkPackageOption pkgs "calibre" { };
 
       listen = {
         ip = mkOption {
@@ -32,9 +49,10 @@ in
 
       dataDir = mkOption {
         type = types.str;
-        default = "/var/lib/calibre-web";
+        default = "calibre-web";
         description = ''
-          The directory where Calibre-Web stores its data.
+          Where Calibre-Web stores its data.
+          Either an absolute path, or the directory name below {file}`/var/lib`.
         '';
       };
 
@@ -67,6 +85,14 @@ in
           '';
         };
 
+        calibreSplitBookDirectory = mkOption {
+          type = types.nullOr types.path;
+          default = null;
+          description = ''
+            Path to directory to store ebook files.
+          '';
+        };
+
         enableBookConversion = mkOption {
           type = types.bool;
           default = false;
@@ -75,7 +101,7 @@ in
           '';
         };
 
-        enableKepubify = mkEnableOption "kebup conversion support";
+        enableKepubify = mkEnableOption "kepub conversion support";
 
         enableBookUploading = mkOption {
           type = types.bool;
@@ -107,32 +133,49 @@ in
   };
 
   config = mkIf cfg.enable {
-    systemd.tmpfiles.settings."10-calibre-web".${cfg.dataDir}.d = {
-      inherit (cfg) user group;
-      mode = "0700";
+    systemd.tmpfiles.settings = lib.optionalAttrs (lib.hasPrefix "/" cfg.dataDir) {
+      "10-calibre-web".${dataDir}.d = {
+        inherit (cfg) user group;
+        mode = "0700";
+      };
     };
 
-    systemd.services.calibre-web = let
-      appDb = "${cfg.dataDir}/app.db";
-      gdriveDb = "${cfg.dataDir}/gdrive.db";
-      calibreWebCmd = "${cfg.package}/bin/calibre-web -p ${appDb} -g ${gdriveDb}";
+    systemd.services.calibre-web =
+      let
+        appDb = "${dataDir}/app.db";
+        gdriveDb = "${dataDir}/gdrive.db";
+        calibreWebCmd = "${cfg.package}/bin/calibre-web -p ${appDb} -g ${gdriveDb}";
 
-      settings = concatStringsSep ", " (
-        [
-          "config_port = ${toString cfg.listen.port}"
-          "config_uploading = ${if cfg.options.enableBookUploading then "1" else "0"}"
-          "config_allow_reverse_proxy_header_login = ${if cfg.options.reverseProxyAuth.enable then "1" else "0"}"
-          "config_reverse_proxy_login_header_name = '${cfg.options.reverseProxyAuth.header}'"
-        ]
-        ++ optional (cfg.options.calibreLibrary != null) "config_calibre_dir = '${cfg.options.calibreLibrary}'"
-        ++ optional cfg.options.enableBookConversion "config_converterpath = '${pkgs.calibre}/bin/ebook-convert'"
-        ++ optional cfg.options.enableKepubify "config_kepubifypath = '${pkgs.kepubify}/bin/kepubify'"
-      );
-    in
+        settings = concatStringsSep ", " (
+          [
+            "config_port = ${toString cfg.listen.port}"
+            "config_uploading = ${if cfg.options.enableBookUploading then "1" else "0"}"
+            "config_allow_reverse_proxy_header_login = ${
+              if cfg.options.reverseProxyAuth.enable then "1" else "0"
+            }"
+            "config_reverse_proxy_login_header_name = '${cfg.options.reverseProxyAuth.header}'"
+          ]
+          ++ optional (
+            cfg.options.calibreLibrary != null
+          ) "config_calibre_dir = '${cfg.options.calibreLibrary}'"
+          ++ optionals (cfg.options.calibreSplitBookDirectory != null) [
+            "config_calibre_split = true"
+            "config_calibre_split_dir = '${cfg.options.calibreSplitBookDirectory}'"
+          ]
+          ++ optionals cfg.options.enableBookConversion [
+            "config_converterpath = '${cfg.calibrePackage}/bin/ebook-convert'"
+            "config_binariesdir = '${cfg.calibrePackage}/bin/'"
+          ]
+          ++ optional cfg.options.enableKepubify "config_kepubifypath = '${pkgs.kepubify}/bin/kepubify'"
+        );
+      in
       {
         description = "Web app for browsing, reading and downloading eBooks stored in a Calibre database";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
+
+        # fix book cover cache directory defaults to a path under /nix/store/
+        environment.CACHE_DIR = "/var/cache/calibre-web";
 
         serviceConfig = {
           Type = "simple";
@@ -144,13 +187,68 @@ in
               __RUN_MIGRATIONS_AND_EXIT=1 ${calibreWebCmd}
 
               ${pkgs.sqlite}/bin/sqlite3 ${appDb} "update settings set ${settings}"
-            '' + optionalString (cfg.options.calibreLibrary != null) ''
+            ''
+            + optionalString (cfg.options.calibreLibrary != null) ''
               test -f "${cfg.options.calibreLibrary}/metadata.db" || { echo "Invalid Calibre library"; exit 1; }
+            ''
+            + optionalString (cfg.options.calibreSplitBookDirectory != null) ''
+              test -d "${cfg.options.calibreSplitBookDirectory}" || { echo "Invalid Calibre split book directory"; exit 1; }
             ''
           );
 
           ExecStart = "${calibreWebCmd} -i ${cfg.listen.ip}";
           Restart = "on-failure";
+
+          CacheDirectory = "calibre-web";
+          CacheDirectoryMode = "0750";
+
+          NoNewPrivileges = true;
+          ProtectSystem = "strict";
+          ReadWritePaths =
+            lib.optional (lib.hasPrefix "/" cfg.dataDir) cfg.dataDir
+            ++ lib.optional (cfg.options.calibreLibrary != null) cfg.options.calibreLibrary
+            ++ lib.optional (
+              cfg.options.calibreSplitBookDirectory != null
+            ) cfg.options.calibreSplitBookDirectory;
+          PrivateTmp = true;
+          PrivateDevices = true;
+          PrivateIPC = true;
+          ProtectHostname = true;
+          ProtectClock = true;
+          ProtectKernelTunables = true;
+          ProtectKernelLogs = true;
+          ProtectControlGroups = true;
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          RestrictSUIDSGID = true;
+          ProtectHome = true;
+          ProtectProc = "invisible";
+          ProcSubset = "pid";
+          RestrictRealtime = true;
+          SystemCallArchitectures = "native";
+          RestrictNamespaces = true;
+          RemoveIPC = true;
+          CapabilityBoundingSet = "";
+          AmbientCapabilities = "";
+          ProtectKernelModules = true;
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+            "AF_UNIX"
+            "AF_NETLINK"
+          ];
+          SystemCallFilter = [
+            "~@obsolete"
+            "~@privileged"
+            "~@raw-io"
+            "~@resources"
+            "~@mount"
+            "~@debug"
+            "~@cpu-emulation"
+          ];
+        }
+        // lib.optionalAttrs (!(lib.hasPrefix "/" cfg.dataDir)) {
+          StateDirectory = cfg.dataDir;
         };
       };
 
@@ -166,9 +264,9 @@ in
     };
 
     users.groups = mkIf (cfg.group == "calibre-web") {
-      calibre-web = {};
+      calibre-web = { };
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ pborzenkov ];
+  meta.maintainers = [ ];
 }

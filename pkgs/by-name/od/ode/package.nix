@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  darwin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -14,27 +13,22 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-yRooxv8mUChHhKeccmo4DWr+yH7PejXDKmvgxbdFE+g=";
   };
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
-    darwin.apple_sdk.frameworks.GLUT
-  ];
-
   env.CXXFLAGS = lib.optionalString stdenv.cc.isClang (toString [
     "-std=c++14"
     "-Wno-error=c++11-narrowing"
   ]);
 
-  meta = with lib; {
+  meta = {
     description = "Open Dynamics Engine";
     mainProgram = "ode-config";
     homepage = "https://www.ode.org";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3
       lgpl21Only
       lgpl3Only
       zlib
     ];
-    maintainers = with maintainers; [ wegank ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ wegank ];
+    platforms = lib.platforms.unix;
   };
 })

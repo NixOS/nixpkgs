@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1q6scs8lp84v0aph6b5c9jhv51rhq2vmzpdd38db92ybkq0g597l";
+    hash = "sha256-9KTyAJ7Li7QaGq3dX7fAMIeyoUysLAOvApugS5Fm2uA=";
   };
 
   pythonImportsCheck = [
@@ -22,11 +22,11 @@ buildPythonPackage rec {
   # requires a growler service to be running
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kfdm/gntp/";
     description = "Python library for working with the Growl Notification Transport Protocol";
     mainProgram = "gntp";
-    license = licenses.mit;
-    maintainers = [ maintainers.jfroche ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.jfroche ];
   };
 }

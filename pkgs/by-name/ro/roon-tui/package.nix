@@ -4,23 +4,18 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "roon-tui";
   version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "TheAppgineer";
     repo = "roon-tui";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ocPSqj9/xJ2metetn6OY+IEFWysbstPmh2N5Jd8NDPM=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "roon-api-0.1.1" = "sha256-aFcS8esfgMxzzhWLeynTRFp1FZj2z6aHIivU/5p+uec=";
-    };
-  };
+  cargoHash = "sha256-+RIKnvMW56mbxLWvPFzT9IenTAFlQDhwrd6I+iFFBwI=";
 
   meta = {
     description = "Roon Remote for the terminal";
@@ -29,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ MichaelCDormann ];
     mainProgram = "roon-tui";
   };
-}
+})

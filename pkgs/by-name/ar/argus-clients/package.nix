@@ -13,12 +13,12 @@
   libnsl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "argus-clients";
   version = "3.0.8.3";
 
   src = fetchurl {
-    url = "http://qosient.com/argus/src/${pname}-${version}.tar.gz";
+    url = "http://qosient.com/argus/src/argus-clients-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-uNTvi6zbrYHAivQMPkhlNCoqRW9GOkgKvCf3mInds80=";
   };
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     libnsl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Clients for ARGUS";
     longDescription = ''
       Clients for Audit Record Generation and
@@ -57,9 +57,8 @@ stdenv.mkDerivation rec {
       know what is going on in your network, right now or historically,
       you will find Argus a useful tool.
     '';
-    homepage = "http://qosient.com/argus";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ leenaars ];
-    platforms = platforms.linux;
+    homepage = "https://openargus.org";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
-}
+})

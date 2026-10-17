@@ -1,34 +1,38 @@
 {
-  lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  testers,
-  tbls,
+  lib,
+  stdenv,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tbls";
-  version = "1.80.0";
+  version = "1.96.1";
 
   src = fetchFromGitHub {
     owner = "k1LoW";
     repo = "tbls";
-    rev = "v${version}";
-    hash = "sha256-3ix0BmPPHbbQReF5XRlrmIqfYGqcHLCbbe4dcXFF3ys=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FOjl35IBnklln9BYpoLUnq/uRYnAXZ9CH0aLnFtdb78=";
   };
 
-  vendorHash = "sha256-8Kj4G/oYKaoANU09kI56nF9kURzg+Y8pB7YO1b6nvuA=";
+  vendorHash = "sha256-4cQYUwxwgj0iDUFfNdT6P2E63Jfsxeg2BZCdo8cJnng=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  excludedPackages = [ "scripts/jsonschema" ];
+
+  nativeBuildInputs = [
+    installShellFiles
+    versionCheckHook
+  ];
 
   ldflags = [
     "-s"
     "-w"
   ];
 
-  CGO_CFLAGS = [ "-Wno-format-security" ];
+  env.CGO_CFLAGS = toString [ "-Wno-format-security" ];
 
   preCheck = ''
     # Remove tests that require additional services.
@@ -44,18 +48,16 @@ buildGoModule rec {
       --zsh <($out/bin/tbls completion zsh)
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = tbls;
-    command = "tbls version";
-    inherit version;
-  };
+  doInstallCheck = true;
 
-  meta = with lib; {
+  versionCheckProgramArg = "version";
+
+  meta = {
     description = "Tool to generate documentation based on a database structure";
     homepage = "https://github.com/k1LoW/tbls";
-    changelog = "https://github.com/k1LoW/tbls/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ azahi ];
+    changelog = "https://github.com/k1LoW/tbls/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ azahi ];
     mainProgram = "tbls";
   };
-}
+})

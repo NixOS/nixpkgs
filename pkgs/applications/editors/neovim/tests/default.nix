@@ -1,24 +1,26 @@
 /*
-run tests with `nix-build -A neovim.tests`
+  run tests with `nix-build -A neovim.tests`
 
-The attrset exposes both the wrapped neovim and the associated test for easier debugging
+  The attrset exposes both the wrapped neovim and the associated test for easier debugging
 
-Here are some common neovim flags used in the tests:
--e runs neovim in `:h Ex-mode` which returns an exit code != 0 when hitting an error
--i NONE  gets rid of shada warnings
-
+  Here are some common neovim flags used in the tests:
+  -e runs neovim in `:h Ex-mode` which returns an exit code != 0 when hitting an error
+  -i NONE  gets rid of shada warnings
 */
-{ vimUtils, writeText, neovim, vimPlugins
-, neovimUtils, wrapNeovimUnstable
-, neovim-unwrapped
-, fetchFromGitLab
-, runCommandLocal
-, testers
-, pkgs
+{
+  vimUtils,
+  neovimUtils,
+  writeText,
+  neovim,
+  vimPlugins,
+  wrapNeovimUnstable,
+  neovim-unwrapped,
+  fetchFromGitLab,
+  runCommandLocal,
+  testers,
+  pkgs,
 }:
 let
-  inherit (neovimUtils) makeNeovimConfig;
-
   plugins = with vimPlugins; [
     {
       plugin = vim-obsession;
@@ -26,12 +28,20 @@ let
         map <Leader>$ <Cmd>Obsession<CR>
       '';
     }
+    {
+      plugin = vim-obsession;
+      type = "lua";
+      config = ''
+        -- this is a comment
+        vim.g.nixpkgs_test_value = 42
+      '';
+    }
   ];
 
   packagesWithSingleLineConfigs = with vimPlugins; [
     {
       plugin = vim-obsession;
-      config = ''map <Leader>$ <Cmd>Obsession<CR>'';
+      config = "map <Leader>$ <Cmd>Obsession<CR>";
     }
     {
       plugin = trouble-nvim;
@@ -39,87 +49,110 @@ let
     }
   ];
 
-  nvimConfSingleLines = makeNeovimConfig {
-    plugins = packagesWithSingleLineConfigs;
-    customRC = ''
-      " just a comment
-    '';
-  };
-
-  nvimConfNix = makeNeovimConfig {
-    inherit plugins;
-    customRC = ''
-      " just a comment
-    '';
-  };
-
-  nvim-with-luasnip = wrapNeovim2 "-with-luasnip" (makeNeovimConfig {
-    plugins = [ {
+  nvim-with-luasnip = wrapNeovim2 "-with-luasnip" {
+    plugins = [
+      {
         plugin = vimPlugins.luasnip;
       }
     ];
-  });
+  };
 
   # build should fail with a wrong
-  nvim-run-failing-check = (wrapNeovimUnstable neovim-unwrapped {
-    luaRcContent = "this is an invalid lua statement to break the build";
-  }).overrideAttrs({
-    doCheck = true;
-  });
+  nvim-run-failing-check =
+    (wrapNeovimUnstable neovim-unwrapped {
+      luaRcContent = "this is an invalid lua statement to break the build";
+    }).overrideAttrs
+      {
+        doCheck = true;
+      };
 
-  nvimAutoDisableWrap = makeNeovimConfig { };
-
-  wrapNeovim2 = suffix: config:
-    wrapNeovimUnstable neovim-unwrapped (config // {
-      extraName = suffix;
-    });
+  wrapNeovim2 =
+    suffix: config:
+    wrapNeovimUnstable neovim-unwrapped (
+      config
+      // {
+        extraName = suffix;
+      }
+    );
 
   nmt = fetchFromGitLab {
     owner = "rycee";
     repo = "nmt";
     rev = "d2cc8c1042b1c2511f68f40e2790a8c0e29eeb42";
-    sha256 = "1ykcvyx82nhdq167kbnpgwkgjib8ii7c92y3427v986n2s5lsskc";
+    hash = "sha256-bGpNixbWoLSPIMOLxE6MaEX5Jn/XrnlMwA1agbrfbPo=";
   };
 
-  /* neovim-drv must be a wrapped neovim
+  /*
+    neovim-drv must be a wrapped neovim
     - exposes lua config in $luarcGeneric
     - exposes vim config in $vimrcGeneric
-
   */
 
-  runTest = neovim-drv: buildCommand:
-    runCommandLocal "test-${neovim-drv.name}" ({
-      nativeBuildInputs = [ ];
-      meta.platforms = neovim-drv.meta.platforms;
-    }) (''
-      source ${nmt}/bash-lib/assertions.sh
-      vimrc="${writeText "test-${neovim-drv.name}-init.vim" neovim-drv.initRc}"
-      luarc="${writeText "test-${neovim-drv.name}-init.lua" neovim-drv.luaRcContent}"
-      luarcGeneric="$out/patched.lua"
-      vimrcGeneric="$out/patched.vim"
-      mkdir $out
-      export HOME=$TMPDIR
-      ${pkgs.perl}/bin/perl -pe "s|\Q$NIX_STORE\E/[a-z0-9]{32}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g" < "$vimrc" > "$vimrcGeneric"
-      ${pkgs.perl}/bin/perl -pe "s|\Q$NIX_STORE\E/[a-z0-9]{32}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g" < "$luarc" > "$luarcGeneric"
-    '' + buildCommand);
+  runTest =
+    neovim-drv: buildCommand:
+    runCommandLocal "test-${neovim-drv.name}"
+      {
+        meta.platforms = neovim-drv.meta.platforms;
+      }
+      (
+        ''
+          export PATH="${neovim-drv}/bin:$PATH"
+          source ${nmt}/bash-lib/assertions.sh
+          vimrc="${writeText "test-${neovim-drv.name}-init.vim" neovim-drv.initRc}"
+          luarc="${writeText "test-${neovim-drv.name}-init.lua" neovim-drv.luaRcContent}"
+          luarcGeneric="$out/patched.lua"
+          vimrcGeneric="$out/patched.vim"
+          mkdir $out
+          export HOME=$TMPDIR
+          ${pkgs.perl}/bin/perl -pe "s|\Q$NIX_STORE\E/[a-z0-9]{32}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g" < "$vimrc" > "$vimrcGeneric"
+          ${pkgs.perl}/bin/perl -pe "s|\Q$NIX_STORE\E/[a-z0-9]{32}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g" < "$luarc" > "$luarcGeneric"
+        ''
+        + buildCommand
+      );
 
+  nvim_with_rocks_nvim = (
+    wrapNeovimUnstable neovim-unwrapped {
+      extraName = "with-rocks-nvim";
+      wrapperArgs = "--set NVIM_APPNAME test-rocks-nvim";
+      plugins = [ vimPlugins.rocks-nvim ];
+    }
+  );
 in
-  pkgs.recurseIntoAttrs (rec {
+pkgs.lib.recurseIntoAttrs rec {
 
   inherit nmt;
 
   failed_check = testers.testBuildFailure nvim-run-failing-check;
 
-  vim_empty_config = vimUtils.vimrcFile { beforePlugins = ""; customRC = ""; };
+  vim_empty_config = vimUtils.vimrcFile {
+    beforePlugins = "";
+    customRC = "";
+  };
 
   ### neovim tests
   ##################
-  nvim_with_plugins = wrapNeovim2 "-with-plugins" nvimConfNix;
-  nvim_singlelines = wrapNeovim2 "-single-lines" nvimConfSingleLines;
+  nvim_with_plugins = wrapNeovim2 "-with-plugins" {
+    inherit plugins;
+    neovimRcContent = ''
+      " just a comment
+    '';
+  };
+
+  nvim_singlelines = wrapNeovim2 "-single-lines" {
+    plugins = packagesWithSingleLineConfigs;
+    neovimRcContent = ''
+      " just a comment
+    '';
+  };
 
   # test that passthru.initRc hasn't changed
   passthruInitRc = runTest nvim_singlelines ''
-    INITRC=${pkgs.writeTextFile { name = "initrc"; text = nvim_singlelines.passthru.initRc; }}
+    INITRC=${
+      pkgs.writeTextFile {
+        name = "initrc";
+        text = nvim_singlelines.passthru.initRc;
+      }
+    }
     assertFileContent \
       $INITRC \
       "${./init-single-lines.vim}"
@@ -127,12 +160,12 @@ in
 
   # test single line concatenation
   singlelinesconfig = runTest nvim_singlelines ''
-      assertFileContains \
-        "$luarcGeneric" \
-        "vim.cmd.source \"/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-init.vim"
-      assertFileContent \
-        "$vimrcGeneric" \
-        "${./init-single-lines.vim}"
+    assertFileContains \
+      "$luarcGeneric" \
+      "vim.cmd.source \"/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-init.vim"
+    assertFileContent \
+      "$vimrcGeneric" \
+      "${./init-single-lines.vim}"
   '';
 
   nvim_via_override = neovim.override {
@@ -156,7 +189,9 @@ in
     extraName = "-with-plug";
     configure.packages.plugins = with pkgs.vimPlugins; {
       start = [
-        (base16-vim.overrideAttrs(old: { pname = old.pname + "-unique-for-tests-please-dont-use"; }))
+        (base16-vim.overrideAttrs (old: {
+          pname = old.pname + "-unique-for-tests-please-dont-use";
+        }))
       ];
     };
     configure.customRC = ''
@@ -169,41 +204,55 @@ in
     ${nvim_with_plug}/bin/nvim -V3log.txt -i NONE -c 'color base16-tomorrow-night'  +quit! -e
   '';
 
-  nvim_with_autoconfigure = pkgs.neovim.overrideAttrs(oa: {
-    plugins = [
-      vimPlugins.unicode-vim
-      vimPlugins.fzf-hoogle-vim
-    ];
+  nvim_with_autoconfigure = pkgs.neovim.override {
+    configure = {
+      packages.myPlugins.start = [
+        vimPlugins.unicode-vim
+        vimPlugins.fzf-hoogle-vim
+      ];
+    };
     autoconfigure = true;
-    # legacy wrapper sets it to false
-    wrapRc = true;
-  });
+  };
 
-  nvim_with_runtimeDeps = pkgs.neovim.overrideAttrs({
-    plugins = [
-      pkgs.vimPlugins.hex-nvim
-    ];
+  nvim_with_runtimeDeps = pkgs.neovim.override {
+    configure = {
+      packages.myPlugins.start = [
+        pkgs.vimPlugins.hex-nvim
+      ];
+    };
     autowrapRuntimeDeps = true;
-    # legacy wrapper sets it to false
-    wrapRc = true;
-  });
+  };
 
-  nvim_with_ftplugin = let
-    # this plugin checks that it's ftplugin/vim.tex is loaded before $VIMRUNTIME/ftplugin/vim.tex
-    # $VIMRUNTIME/ftplugin/vim.tex sources $VIMRUNTIME/ftplugin/initex.vim which sets b:did_ftplugin
-    # we save b:did_ftplugin's value in a `plugin_was_loaded_too_late` file
-    texFtplugin = (pkgs.runCommandLocal "tex-ftplugin" {} ''
-      mkdir -p $out/ftplugin
-      echo 'call system("echo ". exists("b:did_ftplugin") . " > plugin_was_loaded_too_late")' >> $out/ftplugin/tex.vim
-      echo ':q!' >> $out/ftplugin/tex.vim
-    '') // { pname = "test-ftplugin"; };
+  nvim_with_ftplugin =
+    let
+      # this plugin checks that it's ftplugin/vim.tex is loaded before $VIMRUNTIME/ftplugin/vim.tex
+      # $VIMRUNTIME/ftplugin/vim.tex sources $VIMRUNTIME/ftplugin/initex.vim which sets b:did_ftplugin
+      # we save b:did_ftplugin's value in a `plugin_was_loaded_too_late` file
+      texFtplugin =
+        (pkgs.runCommandLocal "tex-ftplugin" { } ''
+          mkdir -p $out/ftplugin
+          echo 'call system("echo ". exists("b:did_ftplugin") . " > plugin_was_loaded_too_late")' >> $out/ftplugin/tex.vim
+          echo ':q!' >> $out/ftplugin/tex.vim
+        '')
+        // {
+          pname = "test-ftplugin";
+        };
     in
 
     neovim.override {
-    extraName = "-with-ftplugin";
+      extraName = "-with-ftplugin";
+      configure.packages.plugins = {
+        start = [
+          texFtplugin
+        ];
+      };
+    };
+
+  nvim_with_no_pname_plugin = neovim.override {
+    extraName = "-with-no-pname-plugin";
     configure.packages.plugins = {
       start = [
-        texFtplugin
+        vimPlugins.corePlugins
       ];
     };
   };
@@ -221,10 +270,28 @@ in
     [ "$result" = 0 ]
   '';
 
+  run_nvim_with_no_pname_plugin = runTest nvim_with_no_pname_plugin ''
+    ${nvim_with_no_pname_plugin}/bin/nvim -i NONE -e --headless +quit
+  '';
+
+  # Generate a neovim wrapper with only a init.lua and no init.vim file
+  nvim_with_only_init_lua = wrapNeovim2 "-only-lua-init-file" {
+    luaRcContent = "-- some text";
+  };
+
+  # check that we do not generate an init.vim file if it is not needed
+  no_init_vim_file = runTest nvim_with_only_init_lua ''
+    ${nvim_with_only_init_lua}/bin/nvim -i NONE -e --headless -c 'if len(getscriptinfo({"name":"init.vim"})) == 0 | quit | else | cquit | fi'
+    # This does now work because the lua file is sourced via loadfile() which
+    # does not add the file name to :scriptnames and getscriptinfo().
+    #${nvim_with_only_init_lua}/bin/nvim -i NONE -e --headless -c 'if len(getscriptinfo({"name":"init.lua"})) == 1 | quit | else | cquit | fi'
+
+    assertFileRegex ${nvim_with_only_init_lua}/bin/nvim 'VIMINIT=.*init.lua'
+  '';
 
   # check that the vim-doc hook correctly generates the tag
   # we know for a fact packer has a doc folder
-  checkForTags = vimPlugins.packer-nvim.overrideAttrs(oldAttrs: {
+  checkForTags = vimPlugins.packer-nvim.overrideAttrs (oldAttrs: {
     doInstallCheck = true;
     installCheckPhase = ''
       [ -f $out/doc/tags ]
@@ -234,7 +301,7 @@ in
   # check that the vim-doc hook correctly generates the tag
   # for neovim packages from luaPackages
   # we know for a fact gitsigns-nvim has a doc folder and comes from luaPackages
-  checkForTagsLuaPackages = vimPlugins.gitsigns-nvim.overrideAttrs(oldAttrs: {
+  checkForTagsLuaPackages = vimPlugins.gitsigns-nvim.overrideAttrs (oldAttrs: {
     doInstallCheck = true;
     installCheckPhase = ''
       [ -f $out/doc/tags ]
@@ -255,38 +322,36 @@ in
   '';
 
   # nixpkgs should detect that no wrapping is necessary
-  nvimShouldntWrap = wrapNeovim2 "-should-not-wrap" nvimAutoDisableWrap;
+  nvimShouldntWrap = wrapNeovim2 "-should-not-wrap" { };
 
   # this will generate a neovimRc content but we disable wrapping
-  nvimDontWrap = wrapNeovim2 "-forced-nowrap" (makeNeovimConfig {
+  nvimDontWrap = wrapNeovim2 "-forced-nowrap" {
     wrapRc = false;
-    customRC = ''
+    neovimRcContent = ''
       " this shouldn't trigger the creation of an init.vim
     '';
-  });
+  };
 
   force-nowrap = runTest nvimDontWrap ''
-      ! grep -F -- ' -u' ${nvimDontWrap}/bin/nvim
+    ! grep -F -- ' -u' ${nvimDontWrap}/bin/nvim
   '';
 
   nvim_via_override-test = runTest nvim_via_override ''
-      assertFileContent \
-        "$vimrcGeneric" \
-        "${./init-override.vim}"
+    assertFileContent \
+      "$vimrcGeneric" \
+      "${./init-override.vim}"
   '';
 
-
   checkAliases = runTest nvim_with_aliases ''
-      folder=${nvim_with_aliases}/bin
-      assertFileIsExecutable "$folder/vi"
-      assertFileIsExecutable "$folder/vim"
+    folder=${nvim_with_aliases}/bin
+    assertFileIsExecutable "$folder/vi"
+    assertFileIsExecutable "$folder/vim"
   '';
 
   # having no RC generated should autodisable init.vim wrapping
   nvim_autowrap = runTest nvim_via_override ''
-      ! grep ${nvimShouldntWrap}/bin/nvim
+    ! grep ${nvimShouldntWrap}/bin/nvim
   '';
-
 
   # system remote plugin manifest should be generated, deoplete should be usable
   # without the user having to do `UpdateRemotePlugins`. To test, launch neovim
@@ -297,12 +362,12 @@ in
     configure.packages.foo.start = with vimPlugins; [ deoplete-nvim ];
   };
 
-  nvimWithLuaPackages = wrapNeovim2 "-with-lua-packages" (makeNeovimConfig {
-    extraLuaPackages = ps: [ps.mpack];
-    customRC = ''
-      lua require("mpack")
+  nvimWithLuaPackages = wrapNeovim2 "-with-lua-packages" {
+    extraLuaPackages = ps: [ ps.mpack ];
+    luaRcContent = ''
+      require("mpack")
     '';
-  });
+  };
 
   nvim_with_lua_packages = runTest nvimWithLuaPackages ''
     ${nvimWithLuaPackages}/bin/nvim -V3log.txt -i NONE --noplugin +quitall! -e
@@ -313,7 +378,9 @@ in
     extraName = "-with-opt-plugin";
     configure.packages.opt-plugins = with pkgs.vimPlugins; {
       opt = [
-        (dashboard-nvim.overrideAttrs(old: { pname = old.pname + "-unique-for-tests-please-dont-use-opt"; }))
+        (dashboard-nvim.overrideAttrs (old: {
+          pname = old.pname + "-unique-for-tests-please-dont-use-opt";
+        }))
       ];
     };
     configure.customRC = ''
@@ -346,26 +413,170 @@ in
     ${nvim_with_opt_plugin}/bin/nvim -i NONE +quit! -e
   '';
 
-
   autoconfigure = runTest nvim_with_autoconfigure ''
-      assertFileContains \
-        "$luarc" \
-        '${vimPlugins.unicode-vim.passthru.initLua}'
+    assertFileContains \
+      "$luarc" \
+      '${vimPlugins.unicode-vim.passthru.initLua}'
   '';
 
   autowrap_runtime_deps = runTest nvim_with_runtimeDeps ''
-      assertFileContains \
-        "${nvim_with_runtimeDeps}/bin/nvim" \
-        '${pkgs.xxd}/bin'
+    assertFileContains \
+      "${nvim_with_runtimeDeps}/bin/nvim" \
+      '${pkgs.xxd}/bin'
   '';
 
   inherit nvim-with-luasnip;
   # check that bringing in one plugin with lua deps makes those deps visible from wrapper
   # for instance luasnip has a dependency on jsregexp
-  can_require_transitive_deps =
-    runTest nvim-with-luasnip ''
-    cat ${nvim-with-luasnip}/nvim
-    ${nvim-with-luasnip}/bin/nvim -i NONE --cmd "lua require'jsregexp'" -e +quitall!
+  can_require_transitive_deps = runTest nvim-with-luasnip ''
+    nvim --headless -i NONE -c "lua require'jsregexp'" -e +quitall!
   '';
 
-})
+  inherit nvim_with_rocks_nvim;
+  rocks_install_plenary = runTest nvim_with_rocks_nvim ''
+    nvim -V3rocks-log.txt -i NONE +'Rocks install plenary.nvim' +quit! -e
+  '';
+
+  can_load_lua_config = runTest nvim_with_plugins ''
+    if ! nvim --headless -V3lua-config-log.txt -i NONE -c 'lua if vim.g.nixpkgs_test_value ~= 42 then os.exit(42) end' +quit! -e; then
+      echo "Failed to find plugin config"
+      exit 1
+    fi
+  '';
+
+  inherit (vimPlugins) corePlugins;
+
+  nvim_require_check_lua_module =
+    let
+      inherit (neovim-unwrapped.lua.pkgs) luaexpat luassert;
+    in
+    vimUtils.buildVimPlugin {
+      pname = "neovim-require-check-lua-module-test";
+      version = "0";
+      src = runCommandLocal "neovim-require-check-lua-module-src" { } ''
+        mkdir -p "$out/lua/require-check-luamods"
+        mkdir -p "$out/plugin"
+        cat > "$out/plugin/require-check-luamods.vim" <<'EOF'
+        let g:require_check_luamods_plugin_loaded = 1
+        EOF
+        cat > "$out/lua/require-check-luamods/init.lua" <<'EOF'
+        if vim.g.require_check_luamods_plugin_loaded ~= 1 then
+          error("plugin script was not sourced")
+        end
+        -- lxp: direct C dependency from luaexpat (package.cpath)
+        require("lxp")
+        -- say: transitive dependency of luassert (package.path closure)
+        require("say")
+        return {}
+        EOF
+      '';
+      requiredLuaModules = [
+        luaexpat
+        luassert
+      ];
+    };
+
+  nvim_require_check_passthru_lua_module =
+    let
+      inherit (neovim-unwrapped.lua.pkgs) luassert;
+    in
+    vimUtils.buildVimPlugin {
+      pname = "neovim-require-check-passthru-lua-module-test";
+      version = "0";
+      src = runCommandLocal "neovim-require-check-passthru-lua-module-src" { } ''
+        mkdir -p "$out/lua/require-check-passthru-luamods"
+        cat > "$out/lua/require-check-passthru-luamods/init.lua" <<'EOF'
+        require("say")
+        return {}
+        EOF
+      '';
+      passthru.requiredLuaModules = [ luassert ];
+    };
+
+  nvim_require_check_neovim_plugin =
+    let
+      luaPkg = neovim-unwrapped.lua.pkgs.buildLuarocksPackage {
+        pname = "neovim-require-check-fails";
+        version = "0.0.1-1";
+        src = runCommandLocal "neovim-require-check-fails-src" { } ''
+          mkdir -p "$out"
+          cat > "$out/neovim-require-check-fails-0.0.1-1.rockspec" <<'EOF'
+          package = "neovim-require-check-fails"
+          version = "0.0.1-1"
+          source = {
+            url = "."
+          }
+          build = {
+            type = "none"
+          }
+          EOF
+        '';
+      };
+    in
+    testers.testBuildFailure (
+      neovimUtils.buildNeovimPlugin {
+        luaAttr = luaPkg;
+        doCheck = true;
+        postInstall = ''
+          mkdir -p "$out/lua"
+          cat > "$out/lua/require_check_fails.lua" <<'EOF'
+          error("neovimRequireCheckHook required installed module")
+          EOF
+        '';
+      }
+    );
+
+  nvim_require_check_ignores_test_modules = vimUtils.buildVimPlugin {
+    pname = "neovim-require-check-ignores-test-modules";
+    version = "0";
+    src = runCommandLocal "neovim-require-check-ignores-test-modules-src" { } ''
+      mkdir -p \
+        "$out/lua/require-check-ignores"/{debug,script,scripts,test,tests,spec,_meta} \
+        "$out/lua/require-check-ignores"
+      cat > "$out/lua/require-check-ignores/init.lua" <<'EOF'
+      return {}
+      EOF
+      for dir in debug script scripts test tests spec _meta; do
+        cat > "$out/lua/require-check-ignores/$dir/failing.lua" <<EOF
+      error("excluded $dir directory was required")
+      EOF
+      done
+      cat > "$out/lua/require-check-ignores/failing_meta.lua" <<'EOF'
+      error("excluded _meta module was required")
+      EOF
+      cat > "$out/lua/require-check-ignores/failing_spec.lua" <<'EOF'
+      error("excluded _spec module was required")
+      EOF
+      cat > "$out/lua/require-check-ignores/failing.spec.lua" <<'EOF'
+      error("excluded .spec module was required")
+      EOF
+      cat > "$out/lua/require-check-ignores/failing.test.lua" <<'EOF'
+      error("excluded .test module was required")
+      EOF
+      cat > "$out/lua/require-check-ignores/meta.lua" <<'EOF'
+      error("excluded meta module was required")
+      EOF
+    '';
+  };
+
+  nvim_require_check_rtp_no_duplicate = vimUtils.buildVimPlugin {
+    pname = "neovim-require-check-rtp-no-duplicate-test";
+    version = "0";
+    src = runCommandLocal "neovim-require-check-rtp-no-duplicate-src" { } ''
+      mkdir -p "$out/lua/require-check-rtp-dedup"
+      cat > "$out/lua/require-check-rtp-dedup/init.lua" <<'EOF'
+      local target = "lua/require-check-rtp-dedup/init.lua"
+      local matches = vim.api.nvim_get_runtime_file(target, true)
+      if #matches ~= 1 then
+        error(
+          ("expected plugin on runtimepath exactly once, found %d:\n%s"):format(
+            #matches,
+            table.concat(matches, "\n")
+          )
+        )
+      end
+      return {}
+      EOF
+    '';
+  };
+}

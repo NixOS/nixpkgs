@@ -16,22 +16,23 @@
   curl,
   libcpr,
   rapidjson,
+  libx11,
+  libGL,
   writeShellScriptBin,
   makeDesktopItem,
   lib,
   copyDesktopItems,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "unnamed-sdvx-clone";
-  version = "0.6.0";
+  version = "0.6.0-unstable-2025-07-31";
 
   src = fetchFromGitHub {
     owner = "Drewol";
     repo = "unnamed-sdvx-clone";
-    tag = "v${finalAttrs.version}";
+    rev = "2472fcc5c8b6b8bc7323dc61ea80b3b1899dd45f";
     fetchSubmodules = true;
-    hash = "sha256-wuf7xZztoxzNQJzlJOfH/Dc25/717NevBx7E0RDybho=";
+    hash = "sha256-Z0eU3xNzVmv2PwUvS2HoRe2TQzQ8seL0R/YAYCQWR28=";
   };
 
   nativeBuildInputs = [
@@ -54,11 +55,12 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     libcpr
     rapidjson
+    libx11
+    libGL
   ];
 
   cmakeFlags = [
     "-DUSE_SYSTEM_CPR=ON"
-    "-DCMAKE_BUILD_TYPE=Release"
   ];
 
   # Wrapper script because the things are hardcoded so we just
@@ -99,7 +101,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A game based on K-Shoot MANIA and Sound Voltex";
+    description = "Game based on K-Shoot MANIA and Sound Voltex";
+    homepage = "https://github.com/Drewol/unnamed-sdvx-clone";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sako ];
     platforms = lib.platforms.linux;

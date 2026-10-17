@@ -8,23 +8,18 @@
   pcsclite,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "age-plugin-yubikey";
-  version = "0.5.0-unstable-2024-11-02";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "str4d";
-    repo = pname;
-    rev = "36290c74ebd2723832aae684d43b927c9104f744";
-    hash = "sha256-vfemYGQnn3IzG7Y6iVKHZlYN+55/+A+N/GMG3TLs1h0=";
+    repo = "age-plugin-yubikey";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RmRc71BhDv1zAyuQ85sK/EXH+Wz6dAA5LqLtgmVWQ4c=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "age-core-0.10.0" = "sha256-Iw1KPYhUwfAvLGpYAGuSRhynrRJhD3EqOIS4UY6qC6c=";
-    };
-  };
+  cargoHash = "sha256-7NAQyDelk8m1bTNi6ZrkL1S2h+/OjXQODkjbHfykF4Y=";
 
   nativeBuildInputs = [
     pkg-config
@@ -32,21 +27,22 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ pcsclite ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ pcsclite ];
 
-  meta = with lib; {
+  meta = {
     description = "YubiKey plugin for age";
     mainProgram = "age-plugin-yubikey";
     homepage = "https://github.com/str4d/age-plugin-yubikey";
-    changelog = "https://github.com/str4d/age-plugin-yubikey/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [
+    changelog = "https://github.com/str4d/age-plugin-yubikey/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       kranzes
       vtuan10
       adamcstephens
     ];
   };
-}
+})

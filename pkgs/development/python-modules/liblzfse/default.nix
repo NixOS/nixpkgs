@@ -7,10 +7,11 @@
 buildPythonPackage rec {
   pname = "pyliblzfse";
   version = "0.4.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bb0b899b3830c02fdf3dbde48ea59611833f366fef836e5c32cf8145134b7d3d";
+    hash = "sha256-uwuJmzgwwC/fPb3kjqWWEYM/Nm/vg25cMs+BRRNLfT0=";
   };
 
   preBuild = ''
@@ -23,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "liblzfse" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for LZFSE";
     homepage = "https://github.com/ydkhatri/pyliblzfse";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

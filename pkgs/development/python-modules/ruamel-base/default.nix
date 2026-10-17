@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "ruamel.base";
     inherit version;
-    sha256 = "1wswxrn4givsm917mfl39rafgadimf1sldpbjdjws00g1wx36hf0";
+    hash = "sha256-wEEzOg8PAM1lk+s2qoOrsannVE6DunpCqnrHR2zuXPM=";
   };
 
   # no tests
@@ -22,10 +22,10 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "ruamel" ];
 
-  meta = with lib; {
+  meta = {
     description = "Common routines for ruamel packages";
     homepage = "https://sourceforge.net/projects/ruamel-base/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

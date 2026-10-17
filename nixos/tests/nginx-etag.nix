@@ -1,4 +1,5 @@
-import ./make-test-python.nix {
+{ ... }:
+{
   name = "nginx-etag";
 
   nodes = {
@@ -52,14 +53,18 @@ import ./make-test-python.nix {
                 }
                 ''
                   import os
+                  import shutil
                   import time
 
                   from selenium.webdriver import Firefox
                   from selenium.webdriver.firefox.options import Options
+                  from selenium.webdriver.firefox.service import Service
+
+                  service = Service(shutil.which("geckodriver"))
 
                   options = Options()
                   options.add_argument('--headless')
-                  driver = Firefox(options=options)
+                  driver = Firefox(options=options, service=service)
 
                   driver.implicitly_wait(20)
                   driver.get('http://server/')
@@ -85,7 +90,7 @@ import ./make-test-python.nix {
   testScript =
     { nodes, ... }:
     let
-      inherit (nodes.server.config.system.build) toplevel;
+      inherit (nodes.server.system.build) toplevel;
       newSystem = "${toplevel}/specialisation/pass-checks";
     in
     ''

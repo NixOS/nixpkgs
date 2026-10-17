@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a646096dd3114ee8a7c6f30363f38c288ec56c4e032c8fc7e681792b604dd122";
+    hash = "sha256-pkYJbdMRTuinxvMDY/OMKI7FbE4DLI/H5oF5K2BN0SI=";
   };
 
   propagatedBuildInputs = [ future ];
@@ -23,10 +23,10 @@ buildPythonPackage rec {
   # Verify import still works.
   pythonImportsCheck = [ "monkeyhex" ];
 
-  meta = with lib; {
+  meta = {
     description = "Small library to assist users of the python shell who work in contexts where printed numbers are more usefully viewed in hexadecimal";
     homepage = "https://github.com/rhelmot/monkeyhex";
-    license = licenses.mit;
-    maintainers = [ maintainers.pamplemousse ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.pamplemousse ];
   };
 }

@@ -3,9 +3,10 @@
   stdenv,
   fetchurl,
   fetchFromGitLab,
-  fetchFromGitHub,
+  fetchpatch,
   runCommand,
   writeText,
+  versionCheckHook,
   # docs deps
   libxslt,
   docbook_xml_dtd_412,
@@ -22,9 +23,8 @@
   glib,
   gnugrep,
   gnused,
+  hostname,
   jq,
-  nettools,
-  procmail,
   procps,
   which,
   xdg-user-dirs,
@@ -144,7 +144,6 @@ let
         "ktraderclient" # KDE 3
         "ktradertest" # KDE 3
         "mimetype" # alternative tool for file, pulls in perl, avoid
-        "qtpaths" # Plasma
         "qtxdg-mat" # LXQT
       ];
       fix."/usr/bin/file" = true;
@@ -168,7 +167,7 @@ let
       scripts = [ "bin/xdg-open" ];
       interpreter = "${bash}/bin/bash";
       inputs = commonDeps ++ [
-        nettools
+        hostname
         glib.bin
         "${placeholder "out"}/bin"
       ];
@@ -207,28 +206,21 @@ let
     {
       scripts = [ "bin/xdg-screensaver" ];
       interpreter = "${bash}/bin/bash";
-      inputs =
-        commonDeps
-        ++ [
-          nettools
-          perl
-          procps
-        ]
-        # procmail's funky build system is currently broken in cross-build.
-        # xdg-screensaver will gracefully degrade if it's not available.
-        ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) procmail;
+      inputs = commonDeps ++ [
+        hostname
+        perl
+        procps
+      ];
       # These are desktop-specific, so we don't want xdg-utils to be able to
       # call them when in a different setup.
-      fake.external =
-        commonFakes
-        ++ [
-          "dcop" # KDE3
-          "mate-screensaver-command" # MATE
-          "xautolock" # Xautolock
-          "xscreensaver-command" # Xscreensaver
-          "xset" # generic-ish X
-        ]
-        ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "lockfile"; # procmail
+      fake.external = commonFakes ++ [
+        "dcop" # KDE3
+        "lockfile"
+        "mate-screensaver-command" # MATE
+        "xautolock" # Xautolock
+        "xscreensaver-command" # Xscreensaver
+        "xset" # generic-ish X
+      ];
       keep = {
         "$MV" = true;
         "$XPROP" = true;
@@ -306,7 +298,7 @@ let
   ];
 in
 
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-utils";
   version = "1.2.1";
 
@@ -314,7 +306,7 @@ stdenv.mkDerivation (self: {
     domain = "gitlab.freedesktop.org";
     owner = "xdg";
     repo = "xdg-utils";
-    rev = "v${self.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-58ElbrVlk+13DUODSEHBPcDDt9H+Kuee8Rz9CIcoy0I=";
   };
 
@@ -324,6 +316,11 @@ stdenv.mkDerivation (self: {
     ./allow-forcing-portal-use.patch
     #  Enable build of xdg-terminal
     ./enable-xdg-terminal.patch
+    # Get rid of qtpaths runtime dependency (can be dropped in next release)
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/xdg/xdg-utils/-/commit/e6a6e4f1fbcb029bac0cb8eecdeb2879694e1ba8.patch";
+      hash = "sha256-toSFzIaw7gCWZH/kvIalWDQYL1xecOsRBAHvpbBlsY8=";
+    })
   ];
 
   # just needed when built from git
@@ -342,14 +339,17 @@ stdenv.mkDerivation (self: {
     map (resholve.phraseSolution "xdg-utils-resholved") solutions
   );
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/xdg-terminal";
+
   passthru.tests.xdg-mime =
     runCommand "xdg-mime-test"
       {
-        nativeBuildInputs = [ self.finalPackage ];
+        nativeBuildInputs = [ finalAttrs.finalPackage ];
         preferLocalBuild = true;
         xenias = lib.mapAttrsToList (hash: urls: fetchurl { inherit hash urls; }) {
           "sha256-SL95tM1AjOi7vDnCyT10s0tvQvc+ZSZBbkNOYXfbOy0=" = [
-            "https://staging.cohostcdn.org/attachment/0f5d9832-0cda-4d07-b35f-832b287feb6c/kernelkisser.png"
             "https://static1.e621.net/data/0e/76/0e7672980d48e48c2d1373eb2505db5a.png"
           ];
           "sha256-Si9AtB7J9o6rK/oftv+saST77CNaeWomWU5ECfbRioM=" = [
@@ -373,11 +373,13 @@ stdenv.mkDerivation (self: {
         touch $out
       '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.freedesktop.org/wiki/Software/xdg-utils/";
+    downloadPage = "https://gitlab.freedesktop.org/xdg/xdg-utils";
+    changelog = "https://gitlab.freedesktop.org/xdg/xdg-utils/-/releases/${finalAttrs.src.tag}";
     description = "Set of command line tools that assist applications with a variety of desktop integration tasks";
-    license = licenses.mit;
-    maintainers = [ ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    teams = [ lib.teams.freedesktop ];
   };
 })

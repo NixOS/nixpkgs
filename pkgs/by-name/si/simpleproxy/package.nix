@@ -2,25 +2,35 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  autoreconfHook,
+  versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "simpleproxy";
-  version = "3.5";
-  rev = "v.${version}";
+  version = "3.6";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    inherit rev;
     owner = "vzaliva";
     repo = "simpleproxy";
-    sha256 = "1my9g4vp19dikx3fsbii4ichid1bs9b9in46bkg05gbljhj340f6";
+    tag = "v.${finalAttrs.version}";
+    hash = "sha256-O4PncEm8LZaJDN28kwsSvCEewr+k0EAyHMu3U+JYyQQ=";
   };
 
-  meta = with lib; {
+  nativeBuildInputs = [ autoreconfHook ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-V";
+  doInstallCheck = true;
+
+  meta = {
     homepage = "https://github.com/vzaliva/simpleproxy";
     description = "Simple TCP proxy";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.montag451 ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.montag451 ];
     mainProgram = "simpleproxy";
   };
-}
+})

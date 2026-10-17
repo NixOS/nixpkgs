@@ -7,7 +7,7 @@
   libvorbis,
   replaceVars,
   lame,
-  opusTools,
+  opus-tools,
 }:
 mkKdeDerivation {
   pname = "audiocd-kio";
@@ -15,7 +15,7 @@ mkKdeDerivation {
   patches = [
     (replaceVars ./encoder-paths.patch {
       lame = lib.getExe lame;
-      opusenc = "${opusTools}/bin/opusenc";
+      opusenc = "${opus-tools}/bin/opusenc";
     })
   ];
 

@@ -12,11 +12,11 @@
   SDL_sound,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gltron";
   version = "0.70";
   src = fetchurl {
-    url = "mirror://sourceforge/gltron/gltron-${version}-source.tar.gz";
+    url = "mirror://sourceforge/gltron/gltron-${finalAttrs.version}-source.tar.gz";
     sha256 = "e0c8ebb41a18a1f8d7302a9c2cb466f5b1dd63e9a9966c769075e6b6bdad8bb0";
   };
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "AR=${stdenv.cc.targetPrefix}ar" ];
 
-  env.SDL_CONFIG = lib.getExe' SDL.dev "sdl-config";
+  env.SDL_CONFIG = lib.getExe' (lib.getDev SDL) "sdl-config";
 
   buildInputs = [
     SDL
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = with lib.platforms; linux;
   };
-}
+})

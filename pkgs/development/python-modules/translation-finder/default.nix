@@ -7,19 +7,23 @@
   ruamel-yaml,
   weblate-language-data,
   pytestCheckHook,
+  hypothesis,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "translation-finder";
-  version = "2.19";
+  version = "3.4.0";
 
   pyproject = true;
+  __structuredAttrs = true;
 
+  # nixpkgs-update: no auto update
+  # Only weblate uses this and we want to follow its version constraints
   src = fetchFromGitHub {
     owner = "WeblateOrg";
     repo = "translation-finder";
-    tag = version;
-    hash = "sha256-Hc1KxmzlFqCLHSAgFF8cgxH0dTdUnBV/2T2ZkfzVvSw=";
+    tag = finalAttrs.version;
+    hash = "sha256-uPX3jKQoQxvtu01TwSmmFOjxMtiZsAwBja9jilaa5+o=";
   };
 
   build-system = [ setuptools ];
@@ -30,16 +34,20 @@ buildPythonPackage rec {
     weblate-language-data
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    hypothesis
+  ];
 
   pythonImportsCheck = [ "translation_finder" ];
 
-  meta = with lib; {
+  meta = {
     description = "Translation file finder for Weblate";
     homepage = "https://github.com/WeblateOrg/translation-finder";
-    changelog = "https://github.com/WeblateOrg/translation-finder/blob/${version}/CHANGES.rst";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ erictapen ];
+    changelog = "https://github.com/WeblateOrg/translation-finder/blob/${finalAttrs.src.tag}/CHANGES.rst";
+    license = lib.licenses.gpl3Only;
+    mainProgram = "weblate-discover";
+    maintainers = with lib.maintainers; [ erictapen ];
   };
 
-}
+})

@@ -1,0 +1,98 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Gaetan Lepage <gaetan.lepage00@gmail.com>
+Date: Sun, 9 Aug 2026 21:46:14 +0000
+Subject: [PATCH] s3select: use std::span in the vendored parquet encryption
+ headers
+
+arrow-cpp 24 dropped the `arrow/util/span.h` header and switched the
+parquet encryption API from `arrow::util::span` to `std::span`.
+
+The vendored copies of the parquet encryption headers that s3select
+carries for arrow >= 20 still target the old API, so building against
+arrow-cpp 24 fails. Include `<span>` and use `std::span` instead.
+---
+ src/s3select/include/encryption_internal_20.h | 28 +++++++++----------
+ .../include/internal_file_decryptor_20.h      |  5 ++--
+ 2 files changed, 17 insertions(+), 16 deletions(-)
+
+diff --git a/src/s3select/include/encryption_internal_20.h b/src/s3select/include/encryption_internal_20.h
+index 062527495..005ed332f 100644
+--- a/src/s3select/include/encryption_internal_20.h
++++ b/src/s3select/include/encryption_internal_20.h
+@@ -18,10 +18,10 @@
+ #pragma once
+ 
+ #include <memory>
++#include <span>
+ #include <string>
+ #include <vector>
+ 
+-#include "arrow/util/span.h"
+ #include "parquet/properties.h"
+ #include "parquet/types.h"
+ 
+@@ -62,17 +62,17 @@ class PARQUET_EXPORT AesEncryptor {
+ 
+   /// Encrypts plaintext with the key and aad. Key length is passed only for validation.
+   /// If different from value in constructor, exception will be thrown.
+-  int32_t Encrypt(::arrow::util::span<const uint8_t> plaintext,
+-                  ::arrow::util::span<const uint8_t> key,
+-                  ::arrow::util::span<const uint8_t> aad,
+-                  ::arrow::util::span<uint8_t> ciphertext);
++  int32_t Encrypt(std::span<const uint8_t> plaintext,
++                  std::span<const uint8_t> key,
++                  std::span<const uint8_t> aad,
++                  std::span<uint8_t> ciphertext);
+ 
+   /// Encrypts plaintext footer, in order to compute footer signature (tag).
+-  int32_t SignedFooterEncrypt(::arrow::util::span<const uint8_t> footer,
+-                              ::arrow::util::span<const uint8_t> key,
+-                              ::arrow::util::span<const uint8_t> aad,
+-                              ::arrow::util::span<const uint8_t> nonce,
+-                              ::arrow::util::span<uint8_t> encrypted_footer);
++  int32_t SignedFooterEncrypt(std::span<const uint8_t> footer,
++                              std::span<const uint8_t> key,
++                              std::span<const uint8_t> aad,
++                              std::span<const uint8_t> nonce,
++                              std::span<uint8_t> encrypted_footer);
+ 
+  private:
+   // PIMPL Idiom
+@@ -107,10 +107,10 @@ class PARQUET_EXPORT AesDecryptor {
+   /// validation. If different from value in constructor, exception will be thrown.
+   /// The caller is responsible for ensuring that the plaintext buffer is at least as
+   /// large as PlaintextLength(ciphertext_len).
+-  int32_t Decrypt(::arrow::util::span<const uint8_t> ciphertext,
+-                  ::arrow::util::span<const uint8_t> key,
+-                  ::arrow::util::span<const uint8_t> aad,
+-                  ::arrow::util::span<uint8_t> plaintext);
++  int32_t Decrypt(std::span<const uint8_t> ciphertext,
++                  std::span<const uint8_t> key,
++                  std::span<const uint8_t> aad,
++                  std::span<uint8_t> plaintext);
+ 
+  private:
+   // PIMPL Idiom
+diff --git a/src/s3select/include/internal_file_decryptor_20.h b/src/s3select/include/internal_file_decryptor_20.h
+index cc0e315e0..2573cb99b 100644
+--- a/src/s3select/include/internal_file_decryptor_20.h
++++ b/src/s3select/include/internal_file_decryptor_20.h
+@@ -19,6 +19,7 @@
+ 
+ #include <memory>
+ #include <mutex>
++#include <span>
+ #include <string>
+ #include <vector>
+ 
+@@ -50,8 +51,8 @@ class PARQUET_EXPORT Decryptor {
+ 
+   [[nodiscard]] int32_t PlaintextLength(int32_t ciphertext_len) const;
+   [[nodiscard]] int32_t CiphertextLength(int32_t plaintext_len) const;
+-  int32_t Decrypt(::arrow::util::span<const uint8_t> ciphertext,
+-                  ::arrow::util::span<uint8_t> plaintext);
++  int32_t Decrypt(std::span<const uint8_t> ciphertext,
++                  std::span<uint8_t> plaintext);
+ 
+  private:
+   std::unique_ptr<encryption::AesDecryptor> aes_decryptor_;

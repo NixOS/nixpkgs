@@ -79,14 +79,14 @@ buildFHSEnv {
       glib
       fontconfig
       freetype
-      xorg.libxcb
-      xorg.libX11
-      xorg.xcbutilwm
-      xorg.xcbutilimage
-      xorg.xcbutilkeysyms
-      xorg.xcbutilrenderutil
-      xorg.libSM
-      xorg.libICE
+      libxcb
+      libx11
+      libxcb-wm
+      libxcb-image
+      libxcb-keysyms
+      libxcb-render-util
+      libsm
+      libice
       libxkbcommon
       dbus
       avahi

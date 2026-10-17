@@ -78,7 +78,7 @@ let
       runHook postInstall
     '';
 
-    # make toggle-able, so that overrided versions can disable this check if
+    # make toggle-able, so that overridden versions can disable this check if
     # they want newer versions of the plugins without having to modify
     # the output logic
     doInstallCheck = true;
@@ -94,11 +94,11 @@ let
       inherit plugins withPlugins;
     };
 
-    meta = with lib; {
+    meta = {
       description = "Autoscaling daemon for Nomad";
       mainProgram = "nomad-autoscaler";
       homepage = "https://github.com/hashicorp/nomad-autoscaler";
-      license = licenses.mpl20;
+      license = lib.licenses.mpl20;
       maintainers = [ ];
     };
   };

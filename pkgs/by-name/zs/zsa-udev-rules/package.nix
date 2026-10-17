@@ -2,9 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  udevCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "zsa-udev-rules";
   version = "unstable-2023-11-30";
 
@@ -14,6 +15,12 @@ stdenv.mkDerivation rec {
     rev = "a6648f6b543b703e3902faf5c08e997e0d58c909";
     hash = "sha256-j9n3VoX+UngX12DF28rtNh+oy80Th1BINPQqk053lvE=";
   };
+
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
 
   # Only copies udevs rules
   dontConfigure = true;
@@ -26,11 +33,11 @@ stdenv.mkDerivation rec {
     cp dist/linux64/50-wally.rules $out/lib/udev/rules.d/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "udev rules for ZSA devices";
-    license = licenses.mit;
-    maintainers = with maintainers; [ davidak ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ davidak ];
+    platforms = lib.platforms.linux;
     homepage = "https://github.com/zsa/wally/wiki/Linux-install#2-create-a-udev-rule-file";
   };
 }

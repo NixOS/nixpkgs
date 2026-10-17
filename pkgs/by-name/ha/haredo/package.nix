@@ -7,11 +7,11 @@
   nix-update-script,
   makeWrapper,
   bash,
-  substituteAll,
+  replaceVars,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "haredo";
-  version = "1.0.5";
+  version = "1.0.6";
 
   outputs = [
     "out"
@@ -22,13 +22,12 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "~autumnull";
     repo = "haredo";
     rev = finalAttrs.version;
-    hash = "sha256-gpui5FVRw3NKyx0AB/4kqdolrl5vkDudPOgjHc/IE4U=";
+    hash = "sha256-wjowPlSIotP8RSV0whiVWne+irtDdoPD+iSC2F9GVfs=";
   };
 
   patches = [
     # Use nix store's bash instead of sh. `@bash@/bin/sh` is used, since haredo expects a posix shell.
-    (substituteAll {
-      src = ./001-use-nix-store-sh.patch;
+    (replaceVars ./001-use-nix-store-sh.patch {
       inherit bash;
     })
   ];
@@ -41,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelChecking = true;
 
-  env.PREFIX = builtins.placeholder "out";
+  env.PREFIX = placeholder "out";
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
@@ -59,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   checkPhase = ''
     runHook preCheck
 
-    ./bin/haredo ''${enableParallelChecking:+-j$NIX_BUILD_CORES} test
+    ./bin/haredo ''${enableParallelChecking:+-j$NIX_BUILD_CORES} test/all
 
     runHook postCheck
   '';

@@ -5,15 +5,15 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcdada";
-  version = "0.6.1";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "msune";
     repo = "libcdada";
-    rev = "v${version}";
-    hash = "sha256-x//22FvgxIGL9H2whMAVCTyI9gAjlMWkEmpOAcoeOgE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-z4Nr0jE+nuBmLirbHnC98GlXV0n9j09ps7uWgOLN9nM=";
   };
 
   nativeBuildInputs = [
@@ -25,14 +25,14 @@ stdenv.mkDerivation rec {
     "--without-examples"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for basic data structures in C";
     longDescription = ''
       Basic data structures in C: list, set, map/hashtable, queue... (libstdc++ wrapper)
     '';
     homepage = "https://github.com/msune/libcdada";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ _0x4A6F ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ _0x4A6F ];
+    platforms = lib.platforms.unix;
   };
-}
+})

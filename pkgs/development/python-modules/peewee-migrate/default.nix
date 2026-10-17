@@ -2,10 +2,9 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
-  poetry-core,
+  uv-build,
 
   # runtime
   click,
@@ -16,27 +15,28 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "peewee-migrate";
-  version = "1.13.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "2.3.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "klen";
     repo = "peewee_migrate";
-    tag = version;
-    hash = "sha256-sC63WH/4EmoQYfvl3HyBHDzT/jMZW/G7mTC138+ZHHU=";
+    tag = finalAttrs.version;
+    hash = "sha256-YWkEXTqzPVJbNK4117spYl8hOhu4kl7QhlXDONtlgSA=";
   };
 
   postPatch = ''
     sed -i '/addopts/d' pyproject.toml
+
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.10.2,<0.11.0" uv_build
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ uv-build ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     peewee
     click
   ];
@@ -48,15 +48,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    #  sqlite3.OperationalError: error in table order after drop column...
-    "test_migrator"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Simple migration engine for Peewee";
     homepage = "https://github.com/klen/peewee_migrate";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ hexa ];
+    changelog = "https://github.com/klen/peewee_migrate/blob/${finalAttrs.src.tag}/Changelog";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

@@ -3,41 +3,55 @@
   fetchFromGitHub,
   buildGoModule,
   git,
+  gnupg,
+  less,
   openssh,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gittuf";
-  version = "0.8.1";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "gittuf";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-0HxjCHwYhJkDfMt+8kzOAfZVhlprXcKpJSpWIQreTK4=";
+    repo = "gittuf";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-DKtw10oer0INHh8JCdIRmrVQuPlCeOnAua6xsw7CEp0=";
   };
 
-  vendorHash = "sha256-fXDbXyMKTiw2PugW3WPzyMupfXCgObm9MkJfix0mKaM=";
+  vendorHash = "sha256-xdpU2wJELRFHhaNOwdPFQa13FxE/g4yimEmMQCdCNmw=";
 
-  ldflags = [ "-X github.com/gittuf/gittuf/internal/version.gitVersion=${version}" ];
+  ldflags = [ "-X github.com/gittuf/gittuf/internal/version.gitVersion=${finalAttrs.version}" ];
+
+  __structuredAttrs = true;
 
   nativeCheckInputs = [
     git
+    gnupg
+    less
     openssh
   ];
-  checkFlags = [
-    "-skip=TestLoadRepository"
-    "-skip=TestSSH"
-  ];
+  checkFlags = [ "-skip=TestLoadRepository|TestSSH" ];
 
-  postInstall = "rm $out/bin/cli"; # remove gendoc cli binary
+  postInstall = "rm $out/bin/cli $out/bin/sandbox"; # remove gendoc helper binaries
 
-  meta = with lib; {
-    changelog = "https://github.com/gittuf/gittuf/blob/v${version}/CHANGELOG.md";
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    changelog = "https://github.com/gittuf/gittuf/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Security layer for Git repositories";
     homepage = "https://gittuf.dev";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "gittuf";
-    maintainers = with maintainers; [ flandweber ];
+    maintainers = with lib.maintainers; [
+      flandweber
+      anish
+    ];
   };
-}
+})

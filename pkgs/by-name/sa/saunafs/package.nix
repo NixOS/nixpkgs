@@ -4,31 +4,36 @@
   nixosTests,
   fetchFromGitHub,
   cmake,
-  asciidoc,
+  asciidoctor,
+  pkg-config,
+  db,
+  curl,
   jemalloc,
-  boost,
+  boost186,
   fmt,
   fuse3,
   spdlog,
   yaml-cpp,
   isa-l,
   judy,
+  prometheus-cpp,
+  libz,
+  gtest,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "saunafs";
-  version = "4.6.0";
+  version = "5.12.0";
 
   src = fetchFromGitHub {
     owner = "leil-io";
-    repo = "saunafs";
+    repo = "leilfs";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-uPHgyCL4/HYjoIm1Ev5p7lXAf1KlpV/OAqLVhu5Ang4=";
+    hash = "sha256-fFKlTn2eSUqiiArRzfpmZ2+cU02WuX0FV0Fn9heL4Rk=";
   };
 
   patches = [
     ./sfstool.patch
-
   ];
 
   outputs = [
@@ -39,17 +44,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    asciidoc
+    asciidoctor
+    pkg-config
   ];
   buildInputs = [
+    db
+    curl
     fmt
     spdlog
     yaml-cpp
     fuse3
-    boost
+    boost186
     jemalloc
     isa-l
     judy
+    prometheus-cpp
+    libz
+    gtest
   ];
 
   cmakeFlags = [
@@ -59,19 +70,21 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_JEMALLOC" true)
   ];
 
-  postInstall = lib.optionalString (!stdenv.hostPlatform.isStatic) ''
-    rm $out/lib/*.a
-
-    ln -s $out/bin/sfsmount $out/bin/mount.saunafs
-  '';
+  postInstall =
+    lib.optionalString (!stdenv.hostPlatform.isStatic) ''
+      rm $out/lib/*.a
+    ''
+    + ''
+      ln -s $out/bin/sfsmount $out/bin/mount.saunafs
+    '';
 
   passthru.tests = nixosTests.saunafs;
 
-  meta = with lib; {
+  meta = {
     description = "Distributed POSIX file system";
     homepage = "https://saunafs.com";
-    platforms = platforms.linux;
-    license = licenses.gpl3Only;
-    maintainers = [ maintainers.markuskowa ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.markuskowa ];
   };
 })

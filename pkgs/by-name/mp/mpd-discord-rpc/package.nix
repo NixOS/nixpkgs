@@ -4,42 +4,35 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
-  stdenv,
-  darwin,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mpd-discord-rpc";
-  version = "1.7.3";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "JakeStanger";
     repo = "mpd-discord-rpc";
-    rev = "v${version}";
-    hash = "sha256-WiHMXazNKyt5N7WmkftZYEHeQi+l9qoU2yr6jRHfjdE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-vP6d5HxlfLSIobWm7h34ttHjzpx+UZKE6Iyj9QfTRl0=";
   };
 
-  cargoHash = "sha256-DnOv9YJpr777p1GVhe8LS5uAUs6Dr/gRLoJarFx5avw=";
+  cargoHash = "sha256-Pw/Y3STSzOtgWYu1OnmdV2Ybxl1WuIwqfGKbmRruR7w=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    openssl
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Rust application which displays your currently playing song / album / artist from MPD in Discord using Rich Presence";
     homepage = "https://github.com/JakeStanger/mpd-discord-rpc/";
-    changelog = "https://github.com/JakeStanger/mpd-discord-rpc/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kranzes ];
+    changelog = "https://github.com/JakeStanger/mpd-discord-rpc/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "mpd-discord-rpc";
   };
-}
+})

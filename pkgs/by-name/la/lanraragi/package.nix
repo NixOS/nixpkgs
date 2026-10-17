@@ -1,77 +1,116 @@
-{ lib
-, stdenv
-, buildNpmPackage
-, fetchFromGitHub
-, makeBinaryWrapper
-, perl
-, ghostscript
-, nixosTests
+{
+  lib,
+  stdenv,
+  buildNpmPackage,
+  fetchFromGitHub,
+  replaceVars,
+  makeBinaryWrapper,
+  perl,
+  ghostscript,
+  vips,
+  nixosTests,
 }:
 
 buildNpmPackage rec {
   pname = "lanraragi";
-  version = "0.9.21";
+  version = "0.9.81";
 
   src = fetchFromGitHub {
     owner = "Difegue";
     repo = "LANraragi";
-    rev = "v.${version}";
-    hash = "sha256-2YdQeBW1MQiUs5nliloISaxG0yhFJ6ulkU/Urx8PN3Y=";
+    tag = "v.${version}";
+    hash = "sha256-oXId9VrNNp/S1ZrNFba/9jMqE3/qZWB63dU3DpLiDDo=";
   };
 
   patches = [
+    # Skip running `npm ci` and unnecessary build-time checks
     ./install.patch
+
+    # Lower the version requirement of Test::MockModule
+    ./lower-version-reqs.patch
+
+    # Don't assume that the cwd is $out/share/lanraragi
+    # Put logs and temp files into the cwd by default, instead of into $out/share/lanraragi
     ./fix-paths.patch
-    ./expose-password-hashing.patch # Used by the NixOS module
+
+    (replaceVars ./vips-lib-path.patch {
+      vips_lib = "${lib.getLib vips}/lib";
+    })
+
+    # Expose the password hashing logic that can be used by the NixOS module
+    # to set the admin password
+    ./expose-password-hashing.patch
   ];
 
-  npmDepsHash = "sha256-RAjZGuK0C6R22fVFq82GPQoD1HpRs3MYMluUAV5ZEc8=";
+  npmDepsHash = "sha256-SkKYRmVpMmvOBp6FkYOcaGQJ8BF0nUuAHpHQxpcqSIc=";
 
-  nativeBuildInputs = [ perl makeBinaryWrapper ];
-
-  buildInputs = with perl.pkgs; [
+  nativeBuildInputs = [
     perl
-    ImageMagick
-    locallib
-    Redis
-    Encode
-    ArchiveLibarchiveExtract
-    ArchiveLibarchivePeek
-    ListMoreUtils
-    NetDNSNative
-    SortNaturally
-    AuthenPassphrase
-    FileReadBackwards
-    URI
-    LogfileRotate
-    Mojolicious
-    MojoliciousPluginTemplateToolkit
-    MojoliciousPluginRenderFile
-    MojoliciousPluginStatus
-    IOSocketSocks
-    IOSocketSSL
-    CpanelJSONXS
-    Minion
-    MinionBackendRedis
-    ProcSimple
-    ParallelLoops
-    SysCpuAffinity
-    FileChangeNotify
-    ModulePluggable
-    TimeLocal
-    YAMLPP
-    StringSimilarity
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ LinuxInotify2 ];
+    perl.pkgs.Appcpanminus
+    makeBinaryWrapper
+  ];
+
+  buildInputs =
+    with perl.pkgs;
+    # deps listed in `tools/cpanfile`:
+    [
+      perl
+      locallib
+      Redis
+      Encode
+      ArchiveLibarchiveExtract
+      ArchiveLibarchivePeek
+      ArchiveZip
+      # Digest::SHA (part of perl)
+      ListMoreUtils
+      SortNaturally
+      AuthenPassphrase
+      FileReadBackwards
+      # URI::Escape (part of URI)
+      URI
+      # IPC::Cmd (part of perl)
+      # Compress::Zlib (part of perl)
+      Mojolicious
+      MojoliciousPluginTemplateToolkit
+      MojoliciousPluginRenderFile
+      MojoliciousPluginOpenAPI
+      IOSocketSocks
+      IOSocketSSL
+      CpanelJSONXS
+      Minion
+      MinionBackendRedis
+      ProcSimple
+      ParallelLoops
+      MCE # (has MCE::Loop)
+      MCEShared
+      SysCpuAffinity
+      FileChangeNotify
+      ModulePluggable
+      TimeLocal
+      YAMLPP
+      StringSimilarity
+      # Locale::Maketext (part of perl)
+      LocaleMaketextLexicon
+      CHI
+      # CHI::Driver::FastMmap (part of CHI)
+      CacheFastMmap
+      FFIPlatypus
+    ]
+    # deps listed in `tools/install.pm`:
+    ++ [
+      ImageMagick
+      NetDNSNative
+      MojoliciousPluginStatus
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      LinuxInotify2
+    ];
 
   buildPhase = ''
     runHook preBuild
 
-    # Check if every perl dependency was installed
-    # explicitly call cpanm with perl because the shebang is broken on darwin
-    perl ${perl.pkgs.Appcpanminus}/bin/cpanm --installdeps ./tools --notest
-
     perl ./tools/install.pl install-full
-    rm -r node_modules public/js/vendor/*.map public/css/vendor/*.map
+    rm public/js/vendor/*.map public/css/vendor/*.map
 
     runHook postBuild
   '';
@@ -79,9 +118,12 @@ buildNpmPackage rec {
   doCheck = true;
 
   nativeCheckInputs = with perl.pkgs; [
+    # App::Prove (part of perl)
+    # Test::Harness (part of perl)
     TestMockObject
     TestTrap
     TestDeep
+    TestMockModule
   ];
 
   checkPhase = ''
@@ -96,18 +138,19 @@ buildNpmPackage rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/lanraragi
+    mkdir -p "$out/share/lanraragi" "$out/share/lanraragi/tools"
     chmod +x script/launcher.pl
-    cp -r lib public script templates package.json lrr.conf $out/share/lanraragi
+    cp -r lib public script locales templates package.json lrr.conf "$out/share/lanraragi"
+    cp tools/openapi.yaml "$out/share/lanraragi/tools/openapi.yaml"
 
-    makeWrapper $out/share/lanraragi/script/launcher.pl $out/bin/lanraragi \
-      --prefix PERL5LIB : $PERL5LIB \
+    makeWrapper "$out/share/lanraragi/script/launcher.pl" "$out/bin/lanraragi" \
+      --prefix PERL5LIB : "$PERL5LIB" \
       --prefix PATH : ${lib.makeBinPath [ ghostscript ]} \
       --run "cp -n --no-preserve=all $out/share/lanraragi/lrr.conf ./lrr.conf 2>/dev/null || true" \
       --add-flags "-f $out/share/lanraragi/script/lanraragi"
 
     makeWrapper ${lib.getExe perl} $out/bin/helpers/lrr-make-password-hash \
-      --prefix PERL5LIB : $out/share/lanraragi/lib:$PERL5LIB \
+      --prefix PERL5LIB : "$out/share/lanraragi/lib:$PERL5LIB" \
       --add-flags "-e 'use LANraragi::Controller::Config; print LANraragi::Controller::Config::make_password_hash(@ARGV[0])' 2>/dev/null"
 
     runHook postInstall
@@ -116,7 +159,7 @@ buildNpmPackage rec {
   passthru.tests.module = nixosTests.lanraragi;
 
   meta = {
-    changelog = "https://github.com/Difegue/LANraragi/releases/tag/${src.rev}";
+    changelog = "https://github.com/Difegue/LANraragi/releases/tag/${src.tag}";
     description = "Web application for archival and reading of manga/doujinshi";
     homepage = "https://github.com/Difegue/LANraragi";
     license = lib.licenses.mit;

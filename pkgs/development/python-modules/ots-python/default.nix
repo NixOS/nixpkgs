@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  substituteAll,
+  replaceVars,
   opentype-sanitizer,
   setuptools-scm,
   pytestCheckHook,
@@ -23,8 +23,7 @@ buildPythonPackage rec {
     # Invoke ots-sanitize from the opentype-sanitizer package instead of
     # downloading precompiled binaries from the internet.
     # (nixpkgs-specific, not upstreamable)
-    (substituteAll {
-      src = ./0001-use-packaged-ots.patch;
+    (replaceVars ./0001-use-packaged-ots.patch {
       ots_sanitize = "${opentype-sanitizer}/bin/ots-sanitize";
     })
   ];
@@ -34,10 +33,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for ots (OpenType Sanitizer)";
     homepage = "https://github.com/googlefonts/ots-python";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ danc86 ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ danc86 ];
   };
 }

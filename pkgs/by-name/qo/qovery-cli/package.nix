@@ -1,45 +1,59 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  qovery-cli,
-  testers,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "qovery-cli";
-  version = "1.2.6";
+  version = "1.171.6";
 
   src = fetchFromGitHub {
     owner = "Qovery";
     repo = "qovery-cli";
-    tag = "v${version}";
-    hash = "sha256-NxrhZmRbkQNj2K4b6Em4cAdssJRdwEKbdGy8EThN4JY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2mswOhkwogvEoW5Q+cqYVIZwysfYjzuNbOS8RL+UMvE=";
   };
 
-  vendorHash = "sha256-GKW89qzyuvwCUvN0i+LgU36Vtr5XuvgXIxwnMlGSTFg=";
+  vendorHash = "sha256-6pgeGvzqYMWW4WkvzsIhRH4SSCzXe7XGFjDJPdlTd0s=";
+
+  env.CGO_ENABLED = 0;
+
+  ldflags = [ "-X github.com/qovery/qovery-cli/utils.Version=v${finalAttrs.version}" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
-    installShellCompletion --cmd ${pname} \
-      --bash <($out/bin/${pname} completion bash) \
-      --fish <($out/bin/${pname} completion fish) \
-      --zsh <($out/bin/${pname} completion zsh)
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd qovery-cli \
+      --bash <($out/bin/qovery-cli completion bash) \
+      --fish <($out/bin/qovery-cli completion fish) \
+      --zsh <($out/bin/qovery-cli completion zsh)
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = qovery-cli;
-    command = "HOME=$(mktemp -d); ${pname} version";
-  };
+  # need network
+  doCheck = false;
 
-  meta = with lib; {
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
+  versionCheckKeepEnvironment = [ "HOME" ];
+
+  versionCheckProgramArg = "version";
+
+  meta = {
     description = "Qovery Command Line Interface";
     homepage = "https://github.com/Qovery/qovery-cli";
-    changelog = "https://github.com/Qovery/qovery-cli/releases/tag/v${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Qovery/qovery-cli/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "qovery-cli";
   };
-}
+})

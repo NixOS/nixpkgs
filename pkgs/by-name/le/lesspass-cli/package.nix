@@ -7,47 +7,53 @@
 let
   inherit (python3.pkgs)
     buildPythonApplication
-    pytest
+    setuptools
+    pytestCheckHook
     mock
     pexpect
     ;
   repo = "lesspass";
 in
-buildPythonApplication rec {
+buildPythonApplication (finalAttrs: {
   pname = "lesspass-cli";
   version = "9.1.9";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = repo;
     repo = repo;
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "126zk248s9r72qk9b8j27yvb8gglw49kazwz0sd69b5kkxvhz2dh";
   };
-  sourceRoot = "${src.name}/cli";
 
-  # some tests are designed to run against code in the source directory - adapt to run against
-  # *installed* code
-  postPatch = ''
-    for f in tests/test_functional.py tests/test_interaction.py ; do
-      substituteInPlace $f --replace "lesspass/core.py" "-m lesspass.core"
-    done
-  '';
+  sourceRoot = "${finalAttrs.src.name}/cli";
+
+  build-system = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
-    pytest
+    pytestCheckHook
     mock
     pexpect
   ];
-  checkPhase = ''
+
+  preCheck = ''
     mv lesspass lesspass.hidden  # ensure we're testing against *installed* package
-    pytest tests
+
+    # some tests are designed to run against code in the source directory - adapt to run against
+    # *installed* code
+    substituteInPlace tests/test_functional.py tests/test_interaction.py \
+      --replace-fail "lesspass/core.py" "-m lesspass.core"
   '';
 
-  meta = with lib; {
+  pythonImportsCheck = [ "lesspass" ];
+
+  meta = {
     description = "Stateless password manager";
     mainProgram = "lesspass";
     homepage = "https://lesspass.com";
-    maintainers = with maintainers; [ jasoncarr ];
-    license = licenses.gpl3;
+    maintainers = with lib.maintainers; [ jasoncarr ];
+    license = lib.licenses.gpl3;
   };
-}
+})

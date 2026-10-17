@@ -12,15 +12,15 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d27160cb35c096f0072df57307233d01b117a451236e136604a8e51be6f106c0";
+    hash = "sha256-0nFgyzXAlvAHLfVzByM9AbEXpFEjbhNmBKjlG+bxBsA=";
   };
 
   propagatedBuildInputs = [ requests ];
 
-  meta = with lib; {
+  meta = {
     description = "Pythonic interface to the RabbitMQ Management HTTP API";
     homepage = "https://github.com/deslum/pyrabbit2";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

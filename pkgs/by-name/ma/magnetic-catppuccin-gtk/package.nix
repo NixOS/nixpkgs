@@ -2,25 +2,37 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gtk-engine-murrine,
   jdupes,
+  nix-update-script,
   sassc,
   accent ? [ "default" ],
   shade ? "dark",
   size ? "standard",
   tweaks ? [ ],
+  radius ? null,
+  shell_radius ? radius,
+  shell_float ? false,
+  shell_opacity ? null,
+  shell_no-border ? false,
 }:
 let
   validAccents = [
     "default"
-    "purple"
+    "blue"
+    "flamingo"
+    "green"
+    "grey"
+    "lavender"
+    "maroon"
+    "mauve"
+    "peach"
     "pink"
     "red"
-    "orange"
-    "yellow"
-    "green"
+    "rosewater"
+    "sapphire"
+    "sky"
     "teal"
-    "grey"
+    "yellow"
     "all"
   ];
   validShades = [
@@ -35,9 +47,9 @@ let
     "frappe"
     "macchiato"
     "black"
-    "float"
-    "outline"
+    "border"
     "macos"
+    "files-legacy"
   ];
 
   single = x: lib.optional (x != null) x;
@@ -57,15 +69,15 @@ lib.checkListOfEnum "${pname} Valid theme accent(s)" validAccents accent lib.che
   tweaks
 
   stdenv.mkDerivation
-  {
+  (finalAttrs: {
     pname = "magnetic-${lib.toLower pname}";
-    version = "0-unstable-2024-11-06";
+    version = "1.0.1";
 
     src = fetchFromGitHub {
       owner = "Fausto-Korpsvart";
       repo = "Catppuccin-GTK-Theme";
-      rev = "be79b8289200aa1a17620f84dde3fe4c3b9c5998";
-      hash = "sha256-QItHmYZpe7BiPC+2CtFwiRXyMTG7+ex0sJTs63xmkAo=";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-wS5Pt/Ao4iFY9Nc5ceDUHTVB5pZLyIoaPUSavja3pHw=";
     };
 
     nativeBuildInputs = [
@@ -73,27 +85,38 @@ lib.checkListOfEnum "${pname} Valid theme accent(s)" validAccents accent lib.che
       sassc
     ];
 
-    propagatedUserEnvPkgs = [ gtk-engine-murrine ];
-
     postPatch = ''
       find -name "*.sh" -print0 | while IFS= read -r -d ''' file; do
         patchShebangs "$file"
       done
+
+      rm -r themes/src/main/gtk-2.0
+      sed -i '/gtk-2/Is/^.*$/:/' themes/lib/installers/gtk.sh themes/lib/gtkrc.sh
+
+      substituteInPlace themes/lib/utils.sh \
+        --replace-fail 'LOG_FILE="''${HOME}/.cache/catppuccin-install.log"' 'LOG_FILE=/dev/null'
     '';
 
     dontBuild = true;
+
+    passthru.updateScript = nix-update-script { };
 
     installPhase = ''
       runHook preInstall
 
       mkdir -p $out/share/themes
 
-      ./themes/install.sh \
+      BATCH_MODE=true ./themes/install.sh \
         --name ${pname} \
         ${toString (map (x: "--theme " + x) accent)} \
         ${lib.optionalString (shade != null) ("--color " + shade)} \
         ${lib.optionalString (size != null) ("--size " + size)} \
         ${toString (map (x: "--tweaks " + x) tweaks)} \
+        ${lib.optionalString (radius != null) "--tweaks radius ${toString radius}"} \
+        ${lib.optionalString (shell_radius != null) "--shell radius ${toString shell_radius}"} \
+        ${lib.optionalString (shell_opacity != null) "--shell opacity ${toString shell_opacity}"} \
+        ${lib.optionalString shell_float "--shell float"} \
+        ${lib.optionalString shell_no-border "--shell no-border"} \
         --dest $out/share/themes
 
       jdupes --quiet --link-soft --recurse $out/share
@@ -101,11 +124,14 @@ lib.checkListOfEnum "${pname} Valid theme accent(s)" validAccents accent lib.che
       runHook postInstall
     '';
 
-    meta = with lib; {
+    meta = {
       description = "GTK Theme with Catppuccin colour scheme";
       homepage = "https://github.com/Fausto-Korpsvart/Catppuccin-GTK-Theme";
-      license = licenses.gpl3Only;
-      maintainers = with maintainers; [ icy-thought ];
-      platforms = platforms.all;
+      license = lib.licenses.gpl3Only;
+      maintainers = with lib.maintainers; [
+        icy-thought
+        Username404-59
+      ];
+      platforms = lib.platforms.all;
     };
-  }
+  })

@@ -1,54 +1,48 @@
 {
   lib,
   openssl,
-  writeText,
   git,
   buildDotnetModule,
   dotnetCorePackages,
   fetchFromGitHub,
   testers,
 }:
-let
-  nuget-config = writeText "nuget.config" ''
-    <configuration>
-      <packageSources>
-        <add key="nuget.org" value="https://api.nuget.org/v3/index.json" />
-      </packageSources>
-    </configuration>
-  '';
-in
 buildDotnetModule (finalAttrs: {
   pname = "recyclarr";
-  version = "7.2.4";
+  version = "8.7.2";
 
   src = fetchFromGitHub {
     owner = "recyclarr";
     repo = "recyclarr";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-FFaGyMOXivorXVqCcYskEibnHnzhJ/AlxR46AtWFkI4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YjUKxmUNIUbxRZlqC/J0DJ56wPHnvQYwF9EfoYg3rR4=";
   };
 
-  projectFile = "Recyclarr.sln";
+  projectFile = "src/Recyclarr.Cli/Recyclarr.Cli.csproj";
   nugetDeps = ./deps.json;
 
-  prePatch = ''
-    substituteInPlace src/Recyclarr.Cli/Program.cs \
-      --replace-fail '$"v{GitVersionInformation.SemVer} ({GitVersionInformation.FullBuildMetaData})"' '"${finalAttrs.version}-nixpkgs"'
+  postPatch = ''
+    cat > src/Recyclarr.Core/GitVersionInformation.g.cs <<'EOF'
+    public static class GitVersionInformation
+    {
+        public static string SemVer => "${finalAttrs.version}";
+        public static string FullBuildMetaData => "nixpkgs";
+        public static string InformationalVersion => "${finalAttrs.version}+nixpkgs";
+        public static int Major => ${lib.versions.major finalAttrs.version};
+    }
+    EOF
 
-    substituteInPlace src/Recyclarr.Cli/Console/Setup/ProgramInformationDisplayTask.cs \
-      --replace-fail 'GitVersionInformation.InformationalVersion' '"${finalAttrs.version}-nixpkgs"'
+    rm .config/dotnet-tools.json
   '';
-  patches = [ ./001-Git-Version.patch ];
-
-  enableParallelBuilding = false;
-
-  dotnetRestoreFlags = [ "--configfile=${nuget-config}" ];
 
   doCheck = false;
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
-  dotnet-test-sdk = dotnetCorePackages.sdk_8_0;
+  dotnetBuildFlags = [
+    "-p:DisableGitVersionTask=true"
+  ];
+
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
   executables = [ "recyclarr" ];
   makeWrapperArgs = [
@@ -62,7 +56,11 @@ buildDotnetModule (finalAttrs: {
 
   passthru = {
     updateScript = ./update.sh;
-    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = ''RECYCLARR_CONFIG_DIR="$TMPDIR/recyclarr" recyclarr --version'';
+      version = "v${finalAttrs.version}";
+    };
   };
 
   meta = {

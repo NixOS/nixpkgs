@@ -2,32 +2,41 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  unstableGitUpdater,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "golink";
-  version = "0-unstable-2024-01-26";
+  version = "1.0.0-unstable-2026-07-03";
 
   src = fetchFromGitHub {
     owner = "tailscale";
     repo = "golink";
-    # https://github.com/tailscale/golink/issues/104
-    rev = "d9de913fb174ec2569a15b6e2dbe5cb6e4a0a853";
-    hash = "sha256-w6jRbajEQkOrBqxDnQreSmSB5DNL9flWjloShiIBM+M=";
+    rev = "30223ca66c2dad29356b6266254e1bf4af921f28";
+    hash = "sha256-hp886p94NHA8u3021horHFf6tGa8x8gWdeNA1XnQZ6E=";
   };
 
-  vendorHash = "sha256-R/o3csZC/M9nm0k5STL7AhbG5J4LtdxqKaVjM/9ggW8=";
+  vendorHash = "sha256-7Ykb2YPrHwwBrWuufFwGTT9mQFzIRkiBiNlLvqpr+wo=";
+
+  overrideModAttrs = old: {
+    # netdb.go allows /etc/protocols and /etc/services to not exist and happily proceeds, but it panic()s if they exist but return permission denied.
+    postBuild = ''
+      patch -p0 < ${./darwin-sandbox-fix.patch}
+    '';
+  };
 
   ldflags = [
     "-s"
     "-w"
   ];
 
-  meta = with lib; {
+  passthru.updateScript = unstableGitUpdater { };
+
+  meta = {
     description = "Private shortlink service for tailnets";
     homepage = "https://github.com/tailscale/golink";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "golink";
   };
 }

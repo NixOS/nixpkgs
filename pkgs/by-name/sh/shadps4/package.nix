@@ -1,134 +1,223 @@
 {
   lib,
-  stdenv,
+  clangStdenv,
   fetchFromGitHub,
+  makeBinaryWrapper,
+
   nixosTests,
   alsa-lib,
   boost,
+  cli11,
   cmake,
   cryptopp,
-  glslang,
   ffmpeg,
   fmt,
+  freetype,
   half,
+  httplib,
   jack2,
   libdecor,
+  libpng,
   libpulseaudio,
   libunwind,
   libusb1,
   magic-enum,
+  minimp3,
+  miniupnpc,
+  miniz,
+  nlohmann_json,
+  python3,
   libgbm,
+  libx11,
+  libxcb,
+  libxcursor,
+  libxext,
+  libxi,
+  libxrandr,
+  libxscrnsaver,
+  libxtst,
+  pipewire,
   pkg-config,
   pugixml,
-  qt6,
   rapidjson,
   renderdoc,
   robin-map,
+  sdl3,
+  sdl3-mixer,
   sndio,
   stb,
+  toml11,
+  util-linux,
   vulkan-headers,
   vulkan-loader,
   vulkan-memory-allocator,
-  xorg,
-  xxHash,
-  zlib-ng,
-  unstableGitUpdater,
+  xbyak,
+  xxhash,
+  zarchive,
+  zstd,
+  zlib,
+  nix-update-script,
+
+  withRpc ? true,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "shadps4";
-  version = "0.5.0-unstable-2025-01-20";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "shadps4-emu";
     repo = "shadPS4";
-    rev = "95a30b2b3e1aa4e20c3db632955cc67bbded0fb1";
-    hash = "sha256-52BhGKSUv+9asACNkppxiNm3Gja7r3LcXOIwhQR5ALs=";
-    fetchSubmodules = true;
+    tag = "v.${finalAttrs.version}";
+    hash = "sha256-idlvgqiM+aBtAKRqcmQ1TnhnU2EPJYO9CPvAnKc6pMM=";
+
+    postCheckout = ''
+      git -C "$out" rev-parse --short=8 HEAD > $out/COMMIT
+      date -u -d "@$(git -C "$out" log -1 --pretty=%ct)" "+%Y-%m-%dT%H:%M:%SZ" > $out/SOURCE_DATE_EPOCH
+
+      git -C "$out/externals" submodule update --init --recursive \
+        abseil-cpp \
+        glslang \
+        zydis \
+        sirit \
+        tracy \
+        libusb \
+        discord-rpc \
+        hwinfo \
+        openal-soft \
+        imgui \
+        LibAtrac9 \
+        aacdec/fdk-aac \
+        spdlog \
+        libressl \
+        ImGuiFileDialog \
+        protobuf
+    '';
   };
 
-  patches = [
-    # Fix controls without a numpad
-    ./laptop-controls.patch
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  postPatch = ''
+    substituteInPlace src/common/scm_rev.cpp.in \
+      --replace-fail @APP_VERSION@ ${finalAttrs.version} \
+      --replace-fail @GIT_REV@ $(cat COMMIT) \
+      --replace-fail @GIT_BRANCH@ ${finalAttrs.version} \
+      --replace-fail @GIT_DESC@ nixpkgs \
+      --replace-fail @BUILD_DATE@ $(cat SOURCE_DATE_EPOCH)
+
+    sed -i '3i #include <fmt/format.h>' src/core/loader/elf.cpp
+
+    sed -i '3i #include <cstring>' src/video_core/amdgpu/regs.cpp
+    sed -i '/#pragma once/a #include <cstring>' src/video_core/amdgpu/resource.h
+  '';
+
+  env = {
+    NIX_CFLAGS_COMPILE = "-Wno-deprecated-declarations";
+
+    # System Zstd is not linked by default
+    NIX_LDFLAGS = "-lzstd";
+  };
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    makeBinaryWrapper
+    python3
   ];
 
   buildInputs = [
     alsa-lib
     boost
+    cli11
     cryptopp
-    glslang
     ffmpeg
     fmt
+    freetype
     half
+    httplib
     jack2
     libdecor
+    libpng
     libpulseaudio
     libunwind
     libusb1
-    xorg.libX11
-    xorg.libXext
+    libx11
+    libxcb
+    libxcursor
+    libxext
+    libxi
+    libxrandr
+    libxscrnsaver
+    libxtst
     magic-enum
+    minimp3
+    miniupnpc
+    miniz
     libgbm
+    nlohmann_json
+    pipewire
     pugixml
-    qt6.qtbase
-    qt6.qtdeclarative
-    qt6.qtmultimedia
-    qt6.qttools
-    qt6.qtwayland
     rapidjson
     renderdoc
     robin-map
+    sdl3
+    sdl3-mixer
     sndio
     stb
+    toml11
+    util-linux
     vulkan-headers
     vulkan-loader
     vulkan-memory-allocator
-    xxHash
-    zlib-ng
-  ];
-
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    qt6.wrapQtAppsHook
+    xbyak
+    xxhash
+    zarchive
+    zstd
+    zlib
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "ENABLE_QT_GUI" true)
+    (lib.cmakeBool "ENABLE_DISCORD_RPC" withRpc)
+    (lib.cmakeBool "ENABLE_TESTS" false)
     (lib.cmakeBool "ENABLE_UPDATER" false)
+    (lib.cmakeBool "ENABLE_SYSTEM_LIBRARIES" true)
   ];
 
   # Still in development, help with debugging
   cmakeBuildType = "RelWithDebugInfo";
   dontStrip = true;
 
-  installPhase = ''
-    runHook preInstall
-
-    install -D -t $out/bin shadps4
-    install -Dm644 $src/.github/shadps4.png $out/share/icons/hicolor/512x512/apps/net.shadps4.shadPS4.png
-    install -Dm644 -t $out/share/applications $src/dist/net.shadps4.shadPS4.desktop
-    install -Dm644 -t $out/share/metainfo $src/dist/net.shadps4.shadPS4.metainfo.xml
-
-    runHook postInstall
+  postInstall = ''
+    wrapProgram $out/bin/shadps4 \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          libpulseaudio
+          pipewire
+        ]
+      }
   '';
 
   runtimeDependencies = [
     vulkan-loader
-    xorg.libXi
+    libxi
   ];
 
   passthru = {
     tests.openorbis-example = nixosTests.shadps4;
-    updateScript = unstableGitUpdater {
-      tagFormat = "v.*";
-      tagPrefix = "v.";
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "v\\.(.*)"
+      ];
     };
   };
 
   meta = {
     description = "Early in development PS4 emulator";
-    homepage = "https://github.com/shadps4-emu/shadPS4";
+    homepage = "https://shadps4.net";
+    downloadPage = "https://shadps4.net/downloads";
+    donationPage = "https://ko-fi.com/shadps4";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       ryand56

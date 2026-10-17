@@ -16,20 +16,16 @@ let
     }:
     attrsOfAttrs:
     let
-      # map function to string for each key val
-      mapAttrsToStringsSep =
-        sep: mapFn: attrs:
-        lib.concatStringsSep sep (lib.mapAttrsToList mapFn attrs);
       mkSection =
         sectName: sectValues:
         ''
           ${sectName} {
         ''
         + lib.generators.toKeyValue { inherit mkKeyValue listsAsDuplicateKeys; } sectValues
-        + ''}'';
+        + "}";
     in
     # map input to ini sections
-    mapAttrsToStringsSep "\n" mkSection attrsOfAttrs;
+    lib.concatMapAttrsStringSep "\n" mkSection attrsOfAttrs;
 
   configFile = pkgs.writeText "manticore.conf" (
     toSphinx {
@@ -94,51 +90,50 @@ in
       services.manticore = {
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
-        serviceConfig =
-          {
-            ExecStart = [
-              ""
-              "${pkgs.manticoresearch}/bin/searchd --config ${configFile}"
-            ];
-            ExecStop = [
-              ""
-              "${pkgs.manticoresearch}/bin/searchd --config ${configFile} --stopwait"
-            ];
-            ExecStartPre = [ "" ];
-            DynamicUser = true;
-            LogsDirectory = "manticore";
-            RuntimeDirectory = "manticore";
-            StateDirectory = "manticore";
-            ReadWritePaths = "";
-            CapabilityBoundingSet = "";
-            RestrictAddressFamilies = [
-              "AF_UNIX"
-              "AF_INET"
-              "AF_INET6"
-            ];
-            RestrictNamespaces = true;
-            PrivateDevices = true;
-            PrivateUsers = true;
-            ProtectClock = true;
-            ProtectControlGroups = true;
-            ProtectHome = true;
-            ProtectKernelLogs = true;
-            ProtectKernelModules = true;
-            ProtectKernelTunables = true;
-            SystemCallArchitectures = "native";
-            SystemCallFilter = [
-              "@system-service"
-              "~@privileged"
-            ];
-            RestrictRealtime = true;
-            LockPersonality = true;
-            MemoryDenyWriteExecute = true;
-            UMask = "0066";
-            ProtectHostname = true;
-          }
-          // lib.optionalAttrs (cfg.settings.searchd.pid_file != null) {
-            PIDFile = cfg.settings.searchd.pid_file;
-          };
+        serviceConfig = {
+          ExecStart = [
+            ""
+            "${pkgs.manticoresearch}/bin/searchd --config ${configFile}"
+          ];
+          ExecStop = [
+            ""
+            "${pkgs.manticoresearch}/bin/searchd --config ${configFile} --stopwait"
+          ];
+          ExecStartPre = [ "" ];
+          DynamicUser = true;
+          LogsDirectory = "manticore";
+          RuntimeDirectory = "manticore";
+          StateDirectory = "manticore";
+          ReadWritePaths = "";
+          CapabilityBoundingSet = "";
+          RestrictAddressFamilies = [
+            "AF_UNIX"
+            "AF_INET"
+            "AF_INET6"
+          ];
+          RestrictNamespaces = true;
+          PrivateDevices = true;
+          PrivateUsers = true;
+          ProtectClock = true;
+          ProtectControlGroups = true;
+          ProtectHome = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [
+            "@system-service"
+            "~@privileged"
+          ];
+          RestrictRealtime = true;
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          UMask = "0066";
+          ProtectHostname = true;
+        }
+        // lib.optionalAttrs (cfg.settings.searchd.pid_file != null) {
+          PIDFile = cfg.settings.searchd.pid_file;
+        };
       };
     };
 

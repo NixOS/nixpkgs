@@ -1,43 +1,56 @@
-{ ffmpeg_7-full
-, fetchFromGitHub
-, fetchpatch
-, lib
+{
+  ffmpeg_8-full,
+  fetchFromGitHub,
+  lib,
 }:
 
 let
-  version = "7.0.2-8";
+  version = "8.1.3-1";
 in
 
-(ffmpeg_7-full.override {
+(ffmpeg_8-full.override {
   inherit version; # Important! This sets the ABI.
   source = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-ffmpeg";
-    rev = "v${version}";
-    hash = "sha256-gpbMVVMV1ywbSb6A3IGFS/vnBk9EXTNzaW1r8Ygo1RY=";
+    tag = "v${version}";
+    hash = "sha256-sxJyUaB0rqpVzd6OVRC6kPVWyBdgFUzvyqwLCkMKRgM=";
   };
-}).overrideAttrs (old: {
-  pname = "jellyfin-ffmpeg";
+  buildFfplay = false; # requires SDL2 which gets disabled
+  buildFfprobe = true; # required by various programs like Immich
 
-  configureFlags = old.configureFlags ++ [
-    "--extra-version=Jellyfin"
-    "--disable-ptx-compression" # https://github.com/jellyfin/jellyfin/issues/7944#issuecomment-1156880067
-  ];
+  # dependencies with big closure sizes that are not enabled by upstream in
+  # https://github.com/jellyfin/jellyfin-ffmpeg/tree/jellyfin/builder/scripts.d
+  withFrei0r = false;
+  withRav1e = false;
+  withSamba = false;
+  withSdl2 = false;
+  withWhisper = false;
+}).overrideAttrs
+  (old: {
+    pname = "jellyfin-ffmpeg";
 
-  postPatch = ''
-    for file in $(cat debian/patches/series); do
-      patch -p1 < debian/patches/$file
-    done
+    configureFlags = old.configureFlags ++ [
+      "--extra-version=Jellyfin"
+    ];
 
-    ${old.postPatch or ""}
-  '';
+    postPatch = ''
+      for file in $(cat debian/patches/series); do
+        patch -p1 < debian/patches/$file
+      done
 
-  meta = {
-    inherit (old.meta) license mainProgram;
-    changelog = "https://github.com/jellyfin/jellyfin-ffmpeg/releases/tag/v${version}";
-    description = "${old.meta.description} (Jellyfin fork)";
-    homepage = "https://github.com/jellyfin/jellyfin-ffmpeg";
-    maintainers = with lib.maintainers; [ justinas ];
-    pkgConfigModules = [ "libavutil" ];
-  };
-})
+      ${old.postPatch or ""}
+    '';
+
+    meta = {
+      inherit (old.meta) license mainProgram;
+      changelog = "https://github.com/jellyfin/jellyfin-ffmpeg/releases/tag/v${version}";
+      description = "${old.meta.description} (Jellyfin fork)";
+      homepage = "https://github.com/jellyfin/jellyfin-ffmpeg";
+      maintainers = with lib.maintainers; [
+        dotlambda
+        justinas
+      ];
+      pkgConfigModules = [ "libavutil" ];
+    };
+  })

@@ -4,32 +4,32 @@
   makeDesktopItem,
   freetype,
   fontconfig,
-  libX11,
-  libXrender,
+  libx11,
+  libxrender,
   zlib,
   jdk,
   glib,
   glib-networking,
   gtk,
-  libXtst,
+  libxtst,
   libsecret,
   gsettings-desktop-schemas,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   makeWrapper,
   perl,
   ...
 }:
 
 {
-  name,
+  pname,
   src ? builtins.getAttr stdenv.hostPlatform.system sources,
   sources ? null,
   description,
-  productVersion,
+  version,
 }:
 
-stdenv.mkDerivation rec {
-  inherit name src;
+stdenv.mkDerivation (finalAttrs: {
+  inherit pname version src;
 
   desktopItem = makeDesktopItem {
     name = "Eclipse";
@@ -52,12 +52,13 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     gtk
     jdk
-    libX11
-    libXrender
-    libXtst
+    libx11
+    libxrender
+    libxtst
     libsecret
     zlib
-  ] ++ lib.optional (webkitgtk_4_0 != null) webkitgtk_4_0;
+  ]
+  ++ lib.optional (webkitgtk_4_1 != null) webkitgtk_4_1;
 
   buildCommand = ''
     # Unpack tarball.
@@ -72,8 +73,8 @@ stdenv.mkDerivation rec {
       lib.makeLibraryPath [
         freetype
         fontconfig
-        libX11
-        libXrender
+        libx11
+        libxrender
         zlib
       ]
     } $libCairo
@@ -90,25 +91,27 @@ stdenv.mkDerivation rec {
           [
             glib
             gtk
-            libXtst
+            libxtst
             libsecret
           ]
-          ++ lib.optional (webkitgtk_4_0 != null) webkitgtk_4_0
+          ++ lib.optional (webkitgtk_4_1 != null) webkitgtk_4_1
         )
       } \
       --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
-      --add-flags "-configuration \$HOME/.eclipse/''${productId}_${productVersion}/configuration"
+      --add-flags "-configuration \$HOME/.eclipse/''${productId}_${version}/configuration"
 
     # Create desktop item.
     mkdir -p $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications
+    cp ${finalAttrs.desktopItem}/share/applications/* $out/share/applications
     mkdir -p $out/share/pixmaps
     ln -s $out/eclipse/icon.xpm $out/share/pixmaps/eclipse.xpm
 
     # ensure eclipse.ini does not try to use a justj jvm, as those aren't compatible with nix
     perl -i -p0e 's|-vm\nplugins/org.eclipse.justj.*/jre/bin.*\n||' $out/eclipse/eclipse.ini
   ''; # */
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     homepage = "https://www.eclipse.org/";
@@ -118,6 +121,6 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
       "aarch64-linux"
     ];
+    maintainers = [ lib.maintainers.jerith666 ];
   };
-
-}
+})

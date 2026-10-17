@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -11,19 +10,17 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hiredis";
-  version = "2.4.0";
+  version = "3.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "redis";
     repo = "hiredis-py";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-PnCSf7ZEPNtweQEnWTHCCVCvg5QGxGeBSAZCFHOziDQ=";
+    hash = "sha256-D6w9c9HQwET26YUQy737GZoKYyuQFc2JXt63wQb17QY=";
   };
 
   build-system = [ setuptools ];
@@ -36,11 +33,11 @@ buildPythonPackage rec {
     rm -rf hiredis
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Wraps protocol parsing code in hiredis, speeds up parsing of multi bulk replies";
     homepage = "https://github.com/redis/hiredis-py";
-    changelog = "https://github.com/redis/hiredis-py/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ mmai ];
+    changelog = "https://github.com/redis/hiredis-py/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.bsd3;
+    teams = [ lib.teams.redis ];
   };
-}
+})

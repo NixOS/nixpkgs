@@ -2,22 +2,24 @@
   lib,
   fetchFromGitHub,
   mkTclDerivation,
+  bashNonInteractive,
   tcl,
   tcllib,
 }:
 
-mkTclDerivation rec {
+mkTclDerivation (finalAttrs: {
   pname = "critcl";
   version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "andreas-kupries";
     repo = "critcl";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-LBTAuwTrvwj42vo/TXVSUK8euxHgvSLai23e1jmhMso=";
   };
 
   buildInputs = [
+    bashNonInteractive
     tcl
     tcllib
   ];
@@ -37,12 +39,12 @@ mkTclDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Easily embed C code in Tcl";
     homepage = "https://andreas-kupries.github.io/critcl/";
-    license = licenses.tcltk;
+    license = lib.licenses.tcltk;
     mainProgram = "critcl";
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.all;
   };
-}
+})

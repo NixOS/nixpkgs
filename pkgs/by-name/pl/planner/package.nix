@@ -6,7 +6,7 @@
   gsettings-desktop-schemas,
   glib,
   gtk3,
-  libgda,
+  libgda5,
   libxml2,
   libxslt,
   makeWrapper,
@@ -16,7 +16,7 @@
   shared-mime-info,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "planner";
   version = "0.14.92";
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "planner";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-2LmNeyZURVtA52Vosyn44wT8zSaJn8tR+8sPM9atAwM=";
   };
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libgda
+    libgda5
     libxml2
     libxslt
     glib
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/planner \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/planner-${version}"
+      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/planner-${finalAttrs.version}"
   '';
 
   meta = {
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     mainProgram = "planner";
     homepage = "https://gitlab.gnome.org/World/planner";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ amiloradovsky ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

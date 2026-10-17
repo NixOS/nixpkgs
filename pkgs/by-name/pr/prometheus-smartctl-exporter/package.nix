@@ -6,18 +6,18 @@
   smartmontools,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "smartctl_exporter";
-  version = "0.13.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "prometheus-community";
-    repo = pname;
-    tag = "v${version}";
-    hash = "sha256-0WppsqDl4nKa6s/dyX9zsUzoqAgStDSBWMM0eolTPdk=";
+    repo = "smartctl_exporter";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-HwyVczHaXjc7e53mKr0TQ5JgGaFKiuRK7b6K+Z1kucw=";
   };
 
-  vendorHash = "sha256-Sy/lm55NAhYDdVLli5yQpoRVieJU8RJDRFzd4Len6eg=";
+  vendorHash = "sha256-Grw8k8nSJYBWQCfSf9HSNjIuyk2UIUaRoFQYtnG8668=";
 
   postPatch = ''
     substituteInPlace main.go README.md \
@@ -25,20 +25,21 @@ buildGoModule rec {
   '';
 
   ldflags = [
-    "-X github.com/prometheus/common/version.Version=${version}"
+    "-X github.com/prometheus/common/version.Version=${finalAttrs.version}"
   ];
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) smartctl; };
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/prometheus-community/smartctl_exporter/releases/tag/${finalAttrs.src.tag}";
     description = "Export smartctl statistics for Prometheus";
     mainProgram = "smartctl_exporter";
     homepage = "https://github.com/prometheus-community/smartctl_exporter";
-    license = licenses.lgpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       hexa
       Frostman
     ];
   };
-}
+})

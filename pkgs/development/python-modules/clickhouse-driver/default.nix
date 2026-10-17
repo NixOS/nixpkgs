@@ -15,25 +15,30 @@
   zstd,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "clickhouse-driver";
-  version = "0.2.7";
-  format = "setuptools";
+  version = "0.2.11";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   # pypi source doesn't contain tests
   src = fetchFromGitHub {
     owner = "mymarilyn";
     repo = "clickhouse-driver";
-    rev = version;
-    hash = "sha256-l0YHWY25PMHgZG/sAZjtGhwmcxWdA8k96zlm9hbKcek=";
+    tag = finalAttrs.version;
+    hash = "sha256-wXWKTmkzK2UDbNPPzO4yQdAGDILtddE/bQGxznqPANI=";
   };
 
-  nativeBuildInputs = [
-    cython
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [
+    cython
+  ];
+
+  dependencies = [
     clickhouse-cityhash
     lz4
     pytz
@@ -50,7 +55,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "lz4<=3.0.1" "lz4<=4"
+      --replace-fail "lz4<=3.0.1" "lz4<=4"
   '';
 
   # remove source to prevent pytest testing source instead of the build artifacts
@@ -68,10 +73,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "clickhouse_driver" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python driver with native interface for ClickHouse";
     homepage = "https://github.com/mymarilyn/clickhouse-driver";
-    license = licenses.mit;
-    maintainers = with maintainers; [ breakds ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ breakds ];
   };
-}
+})

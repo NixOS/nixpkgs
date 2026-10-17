@@ -6,15 +6,15 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rss-bridge";
-  version = "2025-01-02";
+  version = "2026-09-30";
 
   src = fetchFromGitHub {
     owner = "RSS-Bridge";
     repo = "rss-bridge";
-    rev = version;
-    sha256 = "sha256-6Ise+qptY2wLkNveT/mzL0nWrX6OhxAlOJkF2+BmSTE=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-QHIfCe6bP/m+UTC5bZUh94fxM3gAtEvWDkf3MyaGb7I=";
   };
 
   installPhase = ''
@@ -24,19 +24,19 @@ stdenv.mkDerivation rec {
 
   passthru = {
     tests = {
-      basic-functionality = nixosTests.rss-bridge;
+      inherit (nixosTests.rss-bridge) caddy nginx;
     };
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "RSS feed for websites missing it";
     homepage = "https://github.com/RSS-Bridge/rss-bridge";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [
       dawidsowa
       mynacol
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

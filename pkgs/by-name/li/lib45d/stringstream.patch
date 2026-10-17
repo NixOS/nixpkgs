@@ -1,0 +1,21 @@
+From 86ee85cd8723891a30a5ff5c080d5344816bbb99 Mon Sep 17 00:00:00 2001
+From: Jade Wilk <p.wilk@student.reading.ac.uk>
+Date: Mon, 21 Sep 2026 00:59:20 +0100
+Subject: [PATCH] minor: add missing bytes stringstream import
+
+---
+ src/impl/bytes.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/impl/bytes.cpp b/src/impl/bytes.cpp
+index 1dac914..a635fca 100644
+--- a/src/impl/bytes.cpp
++++ b/src/impl/bytes.cpp
+@@ -25,6 +25,7 @@
+ #include <cstdint>
+ #include <iomanip>
+ #include <regex>
++#include <sstream>
+ 
+ ffd::Bytes::Bytes(const std::string &str) {
+ 	set(str);

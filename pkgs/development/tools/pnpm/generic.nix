@@ -1,16 +1,33 @@
 {
   lib,
   stdenvNoCC,
-  callPackages,
+  writeScript,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   fetchurl,
   installShellFiles,
-  nodejs,
+  #FIXME: remove this arg in a future version.
+  nodejs, # Should be null, unless overridden.
+  nodejs-slim,
   testers,
+  buildPackages,
+  bashNonInteractive,
+  tests,
+
   withNode ? true,
   version,
   hash,
+  knownVulnerabilities ? [ ],
 }:
-
+let
+  majorVersion = lib.versions.major version;
+  nodejs-slim' =
+    #FIXME: remove this hack in a future version.
+    if nodejs == null then
+      nodejs-slim
+    else
+      lib.warn "pnpm: Override nodejs-slim instead of nodejs" nodejs;
+in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "pnpm";
   inherit version;
@@ -19,63 +36,117 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     url = "https://registry.npmjs.org/pnpm/-/pnpm-${finalAttrs.version}.tgz";
     inherit hash;
   };
-  # Remove binary files from src, we don't need them, and this way we make sure
-  # our distribution is free of binaryNativeCode
-  preConfigure = ''
-    rm -r dist/reflink.*node dist/vendor
-  '';
-
-  buildInputs = lib.optionals withNode [ nodejs ];
 
   nativeBuildInputs = [
     installShellFiles
-    nodejs
+    nodejs-slim'
   ];
 
-  installPhase = ''
-    runHook preInstall
+  buildInputs = [
+    bashNonInteractive # needed for node-gyp wrapper script
+  ]
+  ++ lib.optionals withNode [ nodejs-slim' ];
 
-    install -d $out/{bin,libexec}
-    cp -R . $out/libexec/pnpm
-    ln -s $out/libexec/pnpm/bin/pnpm.cjs $out/bin/pnpm
-    ln -s $out/libexec/pnpm/bin/pnpx.cjs $out/bin/pnpx
-
-    runHook postInstall
+  # Remove binary files from src, we don't need them, and this way we make sure
+  # our distribution is free of binaryNativeCode
+  postUnpack = ''
+    rm -r package/dist/reflink.*node package/dist/vendor
   '';
 
-  postInstall =
-    if lib.toInt (lib.versions.major version) < 9 then
-      ''
-        export HOME="$PWD"
-        node $out/bin/pnpm install-completion bash
-        node $out/bin/pnpm install-completion fish
-        node $out/bin/pnpm install-completion zsh
-        sed -i '1 i#compdef pnpm' .config/tabtab/zsh/pnpm.zsh
-        installShellCompletion \
-          .config/tabtab/bash/pnpm.bash \
-          .config/tabtab/fish/pnpm.fish \
-          .config/tabtab/zsh/pnpm.zsh
-      ''
-    else
-      ''
-        node $out/bin/pnpm completion bash >pnpm.bash
-        node $out/bin/pnpm completion fish >pnpm.fish
-        node $out/bin/pnpm completion zsh >pnpm.zsh
-        sed -i '1 i#compdef pnpm' pnpm.zsh
-        installShellCompletion pnpm.{bash,fish,zsh}
-      '';
+  installPhase =
+    let
+      # Use ESM pnpm for versions > 11
+      ext = if lib.versionOlder finalAttrs.version "11" then "cjs" else "mjs";
+    in
+    ''
+      runHook preInstall
+
+      install -d $out/{bin,libexec}
+      cp -R . $out/libexec/pnpm
+      ln -s $out/libexec/pnpm/bin/pnpm.${ext} $out/bin/pnpm
+      ln -s $out/libexec/pnpm/bin/pnpx.${ext} $out/bin/pnpx
+      ln -s pnpm $out/bin/pn
+      ln -s pnpx $out/bin/pnx
+
+      runHook postInstall
+    '';
+
+  postInstall = ''
+    node $out/bin/pnpm completion bash >pnpm.bash
+    node $out/bin/pnpm completion fish >pnpm.fish
+    node $out/bin/pnpm completion zsh >pnpm.zsh
+    sed -i '1 i#compdef pnpm' pnpm.zsh
+    installShellCompletion pnpm.{bash,fish,zsh}
+  '';
 
   passthru =
     let
-      fetchDepsAttrs = callPackages ./fetch-deps { pnpm = finalAttrs.finalPackage; };
+      pnpm' = buildPackages."pnpm_${lib.versions.major version}";
     in
     {
-      inherit (fetchDepsAttrs) fetchDeps configHook;
+      fetchDeps =
+        lib.warn
+          "pnpm.fetchDeps: The package attribute is deprecated. Use the top-level fetchPnpmDeps attribute instead"
+          (
+            { ... }@args:
+            fetchPnpmDeps (
+              args
+              // {
+                pnpm = pnpm';
+              }
+            )
+          );
+      configHook =
+        lib.warn
+          "pnpm.configHook: The package attribute is deprecated. Use the top-level pnpmConfigHook attribute instead"
+          (
+            pnpmConfigHook.overrideAttrs (prevAttrs: {
+              propagatedBuildInputs = prevAttrs.propagatedBuildInputs or [ ] ++ [
+                pnpm'
+              ];
+            })
+          );
+      nodejs-slim = nodejs-slim';
+      #FIXME: remove this in a future version.
+      nodejs = lib.warn "pnpm.nodejs: Use pnpm.nodejs-slim instead of pnpm.nodejs" nodejs-slim';
+      inherit majorVersion;
 
-      tests.version = lib.optionalAttrs withNode (
-        testers.testVersion { package = finalAttrs.finalPackage; }
-      );
+      tests = {
+        inherit (tests) pnpm;
+        version = lib.optionalAttrs withNode (testers.testVersion { package = finalAttrs.finalPackage; });
+      };
+      updateScript = writeScript "pnpm-update-script" ''
+        #!/usr/bin/env nix-shell
+        #!nix-shell -i bash -p curl jq common-updater-scripts
+        set -eou pipefail
+
+        curl_github() {
+          curl -L ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} "$@"
+        }
+
+        latestTag=$(
+          curl_github https://api.github.com/repos/pnpm/pnpm/releases?per_page=100 | \
+          jq -r --arg major "v${majorVersion}" \
+            '[.[] | select(.tag_name | startswith($major)) | select(.prerelease == false)][0].tag_name'
+        )
+
+        # Exit if there is no tag with this major version
+        if [ "$latestTag" = "null" ]; then
+          echo "No releases starting with v${majorVersion}"
+          exit 0
+        fi
+
+        latestVersion="''${latestTag#v}"
+
+        update-source-version pnpm_${majorVersion} "$latestVersion" --file=./pkgs/development/tools/pnpm/default.nix
+      '';
     };
+
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  dontBuild = true;
+  dontConfigure = true;
 
   meta = {
     description = "Fast, disk space efficient package manager for JavaScript";
@@ -88,5 +159,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.all;
     mainProgram = "pnpm";
+    inherit knownVulnerabilities;
   };
 })

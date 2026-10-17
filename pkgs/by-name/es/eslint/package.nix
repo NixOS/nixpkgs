@@ -2,43 +2,49 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  stdenv,
-  overrideSDK,
+  nix-update-script,
+  # webpack,
 }:
-let
-  buildNpmPackage' = buildNpmPackage.override {
-    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-  };
-in
-buildNpmPackage' rec {
+buildNpmPackage (finalAttrs: {
   pname = "eslint";
-  version = "9.10.0";
+  version = "10.12.0";
 
   src = fetchFromGitHub {
     owner = "eslint";
     repo = "eslint";
-    tag = "v${version}";
-    hash = "sha256-R5DO4xN3PkwGAIfyMkohs9SvFiLjWf1ddOwkY6wbsjA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-H2oa8Tl1xySDqFeNobY2I/D4HjMRf78UJQ9/pjhNLf8=";
   };
 
   # NOTE: Generating lock-file
-  # arch = [ x64 arm64 ]
-  # platform = [ darwin linux]
-  # npm install --package-lock-only --arch=<arch> --platform=<os>
-  # darwin seems to generate a cross platform compatible lockfile
+  # npm install --package-lock-only
   postPatch = ''
     cp ${./package-lock.json} package-lock.json
   '';
 
-  npmDepsHash = "sha256-Nrcld0ONfjdSh/ItdbDMp6dXVFKoj83aaoGXDgoNE60=";
+  npmDepsHash = "sha256-ppapMvDbmidYU1qZqEaiNru0nfTZA20Vr9snRYkVwRU=";
+  npmInstallFlags = [ "--omit=dev" ];
 
   dontNpmBuild = true;
   dontNpmPrune = true;
 
+  # Delete dangling symlinks
+  preFixup = ''
+    rm $out/lib/node_modules/eslint/node_modules/{eslint-config-eslint,@eslint/js}
+  '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--generate-lockfile" ];
+  };
+
   meta = {
+    changelog = "https://github.com/eslint/eslint/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Find and fix problems in your JavaScript code";
     homepage = "https://eslint.org";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.onny ];
+    maintainers = with lib.maintainers; [
+      mdaniels5757
+      onny
+    ];
   };
-}
+})

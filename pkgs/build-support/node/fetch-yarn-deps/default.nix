@@ -9,15 +9,14 @@
   nix-prefetch-git,
   fetchurl,
   jq,
-  nodejs,
   nodejs-slim,
   prefetch-yarn-deps,
   fixup-yarn-lock,
+  diffutils,
   yarn,
   makeSetupHook,
   cacert,
   callPackage,
-  nix,
 }:
 
 let
@@ -30,7 +29,8 @@ let
 in
 {
   prefetch-yarn-deps = stdenv.mkDerivation {
-    name = "prefetch-yarn-deps";
+    pname = "prefetch-yarn-deps";
+    version = lib.trivial.release;
 
     dontUnpack = true;
     dontBuild = true;
@@ -54,7 +54,6 @@ in
           lib.makeBinPath [
             coreutils
             nix-prefetch-git
-            nix
           ]
         }
 
@@ -67,7 +66,8 @@ in
   };
 
   fixup-yarn-lock = stdenv.mkDerivation {
-    name = "fixup-yarn-lock";
+    pname = "fixup-yarn-lock";
+    version = lib.trivial.release;
 
     dontUnpack = true;
     dontBuild = true;
@@ -104,6 +104,7 @@ in
           src ? null,
           hash ? "",
           sha256 ? "",
+          mirrorUrl ? null,
           ...
         }@args:
         let
@@ -135,15 +136,22 @@ in
               prefetch-yarn-deps
               cacert
             ];
-            GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-            NODE_EXTRA_CA_CERTS = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+
+            impureEnvVars = lib.fetchers.proxyImpureEnvVars;
+
+            env = {
+              GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+              NODE_EXTRA_CA_CERTS = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+            };
 
             buildPhase = ''
               runHook preBuild
 
               yarnLock=''${yarnLock:=$PWD/yarn.lock}
               mkdir -p $out
-              (cd $out; prefetch-yarn-deps --verbose --builder $yarnLock)
+              (cd $out; prefetch-yarn-deps --verbose --builder $yarnLock ${
+                lib.optionalString (mirrorUrl != null) "--mirrorUrl ${lib.escapeShellArg mirrorUrl}"
+              })
 
               runHook postBuild
             '';
@@ -156,6 +164,7 @@ in
               "name"
               "hash"
               "sha256"
+              "mirrorUrl"
             ]
             ++ (lib.optional (src == null) "src")
           ))
@@ -169,8 +178,14 @@ in
       yarn
       fixup-yarn-lock
     ];
+    substitutions = {
+      # Specify `diff` by abspath to ensure that the user's build
+      # inputs do not cause us to find the wrong binaries.
+      diff = "${diffutils}/bin/diff";
+    };
     meta = {
       description = "Install nodejs dependencies from an offline yarn cache produced by fetchYarnDeps";
+      license = lib.licenses.mit;
     };
   } ./yarn-config-hook.sh;
 
@@ -178,6 +193,7 @@ in
     name = "yarn-build-hook";
     meta = {
       description = "Run yarn build in buildPhase";
+      license = lib.licenses.mit;
     };
   } ./yarn-build-hook.sh;
 
@@ -190,6 +206,10 @@ in
     ];
     substitutions = {
       jq = lib.getExe jq;
+    };
+    meta = {
+      description = "Prune yarn dependencies and install files for packages using Yarn 1";
+      license = lib.licenses.mit;
     };
   } ./yarn-install-hook.sh;
 }

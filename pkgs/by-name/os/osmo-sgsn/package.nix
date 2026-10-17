@@ -12,19 +12,19 @@
   c-ares,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "osmo-sgsn";
-  version = "1.12.1";
+  version = "1.13.2";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-sgsn";
-    rev = version;
-    hash = "sha256-tcGnsLsVJohxaSfMbGfkHcBhLpbTZbXM+KWe2j34qeo=";
+    rev = finalAttrs.version;
+    hash = "sha256-59aXtEUaXdicn+uB5N8849BfhZQgYB92hdvWwewTkq8=";
   };
 
   postPatch = ''
-    echo "${version}" > .tarball-version
+    echo "${finalAttrs.version}" > .tarball-version
   '';
 
   nativeBuildInputs = [
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "osmo-sgsn";
   };
-}
+})

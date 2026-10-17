@@ -16,7 +16,11 @@
   cctools,
   SDL2,
   fontconfig,
-  xorg,
+  libxrandr,
+  libxi,
+  libxext,
+  libxcursor,
+  libx11,
   stdenv,
   libglvnd,
   libxkbcommon,
@@ -24,55 +28,56 @@
   wayland,
 }:
 
-rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
+rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } (finalAttrs: {
   pname = "neovide";
-  version = "0.14.0";
+  version = "0.16.2";
 
   src = fetchFromGitHub {
     owner = "neovide";
     repo = "neovide";
-    rev = version;
-    hash = "sha256-4fdC/wChsCICLd69ZjK7IaCH7gDmXvfKllCnRNsdqYI=";
+    tag = finalAttrs.version;
+    hash = "sha256-mzlyw9NIBb35QJ5L7+ZxgJ5IUoHznAUQOLA0SglJ3bw=";
   };
 
-  cargoHash = "sha256-CqnT9FEDzEMSais4dJg7zYVoSPNvIA09hmI0JE2YZIg=";
+  cargoHash = "sha256-WVNmG+KJK93yLrL2/KPc2czAxwt5brKxRkrPB7Bv46M=";
 
-  SKIA_SOURCE_DIR =
-    let
-      repo = fetchFromGitHub {
-        owner = "rust-skia";
-        repo = "skia";
-        # see rust-skia:skia-bindings/Cargo.toml#package.metadata skia
-        rev = "m131-0.79.1";
-        hash = "sha256-XqXfKNYSiECbN96WVWA67Vy4sPuVvg6KqHESjA8gFJM=";
-      };
-      # The externals for skia are taken from skia/DEPS
-      externals = linkFarm "skia-externals" (
-        lib.mapAttrsToList (name: value: {
-          inherit name;
-          path = fetchgit value;
-        }) (lib.importJSON ./skia-externals.json)
-      );
-    in
-    runCommand "source" { } ''
-      cp -R ${repo} $out
-      chmod -R +w $out
-      ln -s ${externals} $out/third_party/externals
-    '';
+  env = {
+    SKIA_SOURCE_DIR =
+      let
+        repo = fetchFromGitHub {
+          owner = "rust-skia";
+          repo = "skia";
+          # see rust-skia:skia-bindings/Cargo.toml#package.metadata skia
+          tag = "m145-0.92.0";
+          hash = "sha256-9N780AwheKBJRcZC4l/uWFNq+oOyoNp4M6dJAVVAFeo=";
+        };
+        # The externals for skia are taken from skia/DEPS
+        externals = linkFarm "skia-externals" (
+          lib.mapAttrsToList (name: value: {
+            inherit name;
+            path = fetchgit value;
+          }) (lib.importJSON ./skia-externals.json)
+        );
+      in
+      runCommand "source" { } ''
+        cp -R ${repo} $out
+        chmod -R +w $out
+        ln -s ${externals} $out/third_party/externals
+      '';
 
-  SKIA_GN_COMMAND = "${gn}/bin/gn";
-  SKIA_NINJA_COMMAND = "${ninja}/bin/ninja";
+    SKIA_GN_COMMAND = "${gn}/bin/gn";
+    SKIA_NINJA_COMMAND = "${ninja}/bin/ninja";
+  };
 
-  nativeBuildInputs =
-    [
-      makeWrapper
-      pkg-config
-      python3 # skia
-      removeReferencesTo
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      cctools.libtool
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+    python3 # skia
+    removeReferencesTo
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools.libtool
+  ];
 
   nativeCheckInputs = [ neovim ];
 
@@ -88,10 +93,11 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
         [
           libglvnd
           libxkbcommon
-          xorg.libXcursor
-          xorg.libXext
-          xorg.libXrandr
-          xorg.libXi
+          libx11
+          libxcursor
+          libxext
+          libxrandr
+          libxi
         ]
         ++ lib.optionals enableWayland [ wayland ]
       );
@@ -100,7 +106,8 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
       # library skia embeds the path to its sources
       remove-references-to -t "$SKIA_SOURCE_DIR" \
         $out/bin/neovide
-
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
       wrapProgram $out/bin/neovide \
         --prefix LD_LIBRARY_PATH : ${libPath}
     '';
@@ -120,15 +127,18 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
       install -m444 -Dt $out/share/applications assets/neovide.desktop
     '';
 
-  disallowedReferences = [ SKIA_SOURCE_DIR ];
+  disallowedReferences = [ finalAttrs.env.SKIA_SOURCE_DIR ];
 
   meta = {
-    description = "Neovide is a simple, no-nonsense, cross-platform graphical user interface for Neovim";
+    description = "Simple, no-nonsense, cross-platform graphical user interface for Neovim";
     mainProgram = "neovide";
     homepage = "https://neovide.dev/";
-    changelog = "https://github.com/neovide/neovide/releases/tag/${version}";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ ck3d ];
+    changelog = "https://github.com/neovide/neovide/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      ck3d
+      caverav
+    ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -12,15 +12,15 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "db3c2a7fab8966d903a63f16c515bff241533e4ef2d746aa7aae4a49bba5e573";
+    hash = "sha256-2zwqf6uJZtkDpj8WxRW/8kFTPk7y10aqeq5KSbul5XM=";
   };
 
   propagatedBuildInputs = [ requests ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ghickman/linode";
     description = "Thin python wrapper around Linode's API";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

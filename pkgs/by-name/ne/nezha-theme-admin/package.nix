@@ -2,29 +2,26 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  nix-update-script,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "nezha-theme-admin";
-  version = "1.6.2";
+  version = "2.3.8";
 
   src = fetchFromGitHub {
     owner = "nezhahq";
     repo = "admin-frontend";
-    tag = "v${version}";
-    hash = "sha256-AM3ZHI6oGsvkGg7YmlzLlNlOAAAZYztsRZ9qT/wR2KY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-imwUshw63OiFMEX/03zG7V+7nOxiXortk5LHsQ914Lk=";
   };
 
-  # TODO: Switch to the bun build function once available in nixpkgs
+  # TODO: Remove after upstream fixes resolved missing.
   postPatch = ''
     cp ${./package-lock.json} package-lock.json
   '';
 
-  npmDepsHash = "sha256-qegPPUDlcStdGWMggn9oHSTieWLoNoIJVK0sCx9zMNA=";
-
+  npmDepsHash = "sha256-YT94AeqTWQSfmIGNPaG0zpy2ZsD7zJ6sFTea+FRbop8=";
   npmPackFlags = [ "--ignore-scripts" ];
-
   npmBuildScript = "build-ignore-error";
 
   dontNpmInstall = true;
@@ -36,13 +33,13 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--generate-lockfile" ]; };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Nezha monitoring admin frontend";
     homepage = "https://github.com/nezhahq/admin-frontend";
-    changelog = "https://github.com/nezhahq/admin-frontend/releases/tag/v${version}";
+    changelog = "https://github.com/nezhahq/admin-frontend/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ moraxyc ];
   };
-}
+})

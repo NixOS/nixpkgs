@@ -4,14 +4,14 @@
   lib,
   nix-update-script,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cf-tool";
   version = "202405140250";
 
   src = fetchFromGitHub {
     owner = "sempr";
     repo = "cf-tool";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-D+mJJw1+ImCrFpsv8HmaAwWqjYvUWouh8mgQ7hJxMrc=";
   };
 
@@ -21,11 +21,11 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Codeforces CLI (Submit, Parse, Test, etc.). Support Contests, Gym, Groups, acmsguru, Windows, macOS, Linux, 7 MB";
     homepage = "https://github.com/sempr/cf-tool";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bot-wxt1221 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bot-wxt1221 ];
     mainProgram = "cf";
   };
-}
+})

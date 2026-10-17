@@ -2,42 +2,45 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
+  poetry-core,
+  filetype,
   mutagen,
   pytestCheckHook,
-  pythonOlder,
-  six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mediafile";
-  version = "0.12.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  version = "0.17.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "beetbox";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-5HHfG1hCIbM/QSXgB61yHNNWJTsuyAh6CQJ7SZhZuvo=";
+    repo = "mediafile";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FujuFkZH0wjZcd3wIpJw8mDvE/2/mew5tfxAyxA2RkI=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    filetype
     mutagen
-    six
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  disabledTestPaths = [
+    # https://github.com/beetbox/mediafile/issues/109
+    "test/test_mediafile.py::OpusTest::test_read_audio_properties"
+  ];
+
   pythonImportsCheck = [ "mediafile" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface to the metadata tags for many audio file formats";
     homepage = "https://github.com/beetbox/mediafile";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lovesegfault ];
+    changelog = "https://github.com/beetbox/mediafile/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lovesegfault ];
   };
-}
+})

@@ -5,35 +5,36 @@
   fetchPypi,
   h11,
   maxminddb,
-  mocket,
+  pytest-httpserver,
   pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
   requests-mock,
   requests,
   setuptools-scm,
-  setuptools,
   urllib3,
+  uv-build,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "geoip2";
-  version = "4.8.0";
+  version = "5.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-3ZzBgLfUFyQkDqSB1dU5FJ5lsjT2QoKyMbkXB5SprDU=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-Zt9lPhbFNfm7RePHzpkvvgCJEdnHw0lUBXTqL+iTHbU=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.11.26,<0.12.0" "uv_build"
+  '';
+
   build-system = [
-    setuptools
+    uv-build
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     maxminddb
     requests
@@ -42,25 +43,20 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     h11
-    mocket
     requests-mock
     pytestCheckHook
+    pytest-httpserver
   ];
 
   pythonImportsCheck = [ "geoip2" ];
 
-  disabledTests =
-    lib.optionals (pythonAtLeast "3.10") [
-      # https://github.com/maxmind/GeoIP2-python/pull/136
-      "TestAsyncClient"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.10") [ "test_request" ];
+  __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "GeoIP2 webservice client and database reader";
     homepage = "https://github.com/maxmind/GeoIP2-python";
-    changelog = "https://github.com/maxmind/GeoIP2-python/blob/v${version}/HISTORY.rst";
-    license = licenses.asl20;
+    changelog = "https://github.com/maxmind/GeoIP2-python/blob/v${finalAttrs.version}/HISTORY.rst";
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

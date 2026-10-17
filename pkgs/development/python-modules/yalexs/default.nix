@@ -2,8 +2,7 @@
   lib,
   aiofiles,
   aiohttp,
-  aioresponses,
-  aiounittest,
+  aiointercept,
   buildPythonPackage,
   ciso8601,
   fetchFromGitHub,
@@ -17,25 +16,27 @@
   pytestCheckHook,
   python-dateutil,
   python-socketio,
-  pythonOlder,
   requests-mock,
   requests,
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "yalexs";
-  version = "8.10.0";
+  version = "9.2.13";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "yalexs";
-    tag = "v${version}";
-    hash = "sha256-0fC12QsCOgFc6GJk5T7kCjVHe9W4Fhwmtv3dwJVh9mM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-KJgXxefAkFI6AmIkd6B2O7Iw017UPd/SV7AxV+JOkwM=";
   };
+
+  patches = [
+    # remove padding from refresh token fixture
+    ./456.patch
+  ];
 
   build-system = [ poetry-core ];
 
@@ -52,11 +53,11 @@ buildPythonPackage rec {
     python-socketio
     requests
     typing-extensions
-  ] ++ python-socketio.optional-dependencies.asyncio_client;
+  ]
+  ++ python-socketio.optional-dependencies.asyncio_client;
 
   nativeCheckInputs = [
-    aioresponses
-    aiounittest
+    aiointercept
     pytest-asyncio
     pytest-cov-stub
     pytest-freezegun
@@ -64,13 +65,19 @@ buildPythonPackage rec {
     requests-mock
   ];
 
+  disabledTests = [
+    # aiohttp api breakage, remove when bumping to 9.2.8 or newer
+    "test__raise_response_exceptions"
+    "test_async_refresh_token"
+  ];
+
   pythonImportsCheck = [ "yalexs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for Yale Access (formerly August) Smart Lock and Doorbell";
     homepage = "https://github.com/bdraco/yalexs";
-    changelog = "https://github.com/bdraco/yalexs/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/bdraco/yalexs/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

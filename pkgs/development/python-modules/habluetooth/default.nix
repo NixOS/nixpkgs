@@ -9,27 +9,25 @@
   buildPythonPackage,
   cython,
   fetchFromGitHub,
+  freezegun,
   poetry-core,
   pytest-asyncio,
   pytest-codspeed,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "habluetooth";
-  version = "3.7.0";
+  version = "7.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "habluetooth";
-    tag = "v${version}";
-    hash = "sha256-wOWQaM1hfWaqLFIzwB7O1yOS/CJPvZ+aGbKzvAE2DAE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Udmc4FzKlVbmsNz/6NoFMuj8tv23fdRoPnOEmLhaO48=";
   };
 
   build-system = [
@@ -48,6 +46,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    freezegun
     pytest-asyncio
     pytest-codspeed
     pytest-cov-stub
@@ -56,11 +55,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "habluetooth" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for high availability Bluetooth";
     homepage = "https://github.com/Bluetooth-Devices/habluetooth";
-    changelog = "https://github.com/Bluetooth-Devices/habluetooth/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Bluetooth-Devices/habluetooth/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

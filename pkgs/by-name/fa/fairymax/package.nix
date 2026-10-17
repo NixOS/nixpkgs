@@ -9,12 +9,12 @@ stdenv.mkDerivation rec {
   version = "4.8";
 
   src = fetchurl {
-    url = "http://home.hccnet.nl/h.g.muller/fmax4_8w.c";
+    url = "https://home.hccnet.nl/h.g.muller/fmax4_8w.c";
     hash = "sha256-ikn+CA5lxtDYSDT+Nsv1tfORhKW6/vlmHcGAT9SFfQc=";
   };
 
   ini = fetchurl {
-    url = "http://home.hccnet.nl/h.g.muller/fmax.ini";
+    url = "https://home.hccnet.nl/h.g.muller/fmax.ini";
     hash = "sha256-lh2ivXx4jNdWn3pT1WKKNEvkVQ31JfdDx+vqNx44nf8=";
   };
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   # errors by default in GCC 14
-  NIX_CFLAGS_COMPILE = "-Wno-error=return-mismatch -Wno-error=implicit-int";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=return-mismatch -Wno-error=implicit-int";
 
   installPhase = ''
     mkdir -p "$out"/{bin,share/fairymax}
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     cp fmax.ini "$out/share/fairymax"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://home.hccnet.nl/h.g.muller/dwnldpage.html";
     description = "Small chess engine supporting fairy pieces";
     mainProgram = "fairymax";
@@ -47,8 +47,8 @@ stdenv.mkDerivation rec {
       fmax.ini, so that arbitrary fairy pieces can be implemented. This version
       (4.8J) supports up to 15 piece types, and board sizes up to 12x8.
     '';
-    license = licenses.free;
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.all;
+    license = lib.licenses.free;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.all;
   };
 }

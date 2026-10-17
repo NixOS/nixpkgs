@@ -5,7 +5,7 @@
   makeWrapper,
   openjdk11_headless,
   openjdk17_headless,
-  systemd,
+  systemdLibs,
   nixosTests,
 }:
 
@@ -31,30 +31,29 @@ stdenv.mkDerivation rec {
     "--set-default"
     "JAVA_HOME"
     "${if (lib.versionAtLeast version "5.0") then openjdk17_headless else openjdk11_headless}"
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ systemd ]}"
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ systemdLibs ]}"
   ];
 
   passthru.tests = { inherit (nixosTests) graylog; };
 
-  installPhase =
-    ''
-      mkdir -p $out
-      cp -r {graylog.jar,bin,plugin} $out
-    ''
-    + lib.optionalString (lib.versionOlder version "4.3") ''
-      cp -r lib $out
-    ''
-    + ''
-      wrapProgram $out/bin/graylogctl $makeWrapperArgs
-    '';
+  installPhase = ''
+    mkdir -p $out
+    cp -r {graylog.jar,bin,plugin} $out
+  ''
+  + lib.optionalString (lib.versionOlder version "4.3") ''
+    cp -r lib $out
+  ''
+  + ''
+    wrapProgram $out/bin/graylogctl $makeWrapperArgs
+  '';
 
-  meta = with lib; {
+  meta = {
     description = "Open source log management solution";
     homepage = "https://www.graylog.org/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     inherit license;
     inherit maintainers;
     mainProgram = "graylogctl";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

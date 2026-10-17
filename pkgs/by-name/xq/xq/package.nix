@@ -4,22 +4,22 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xq";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-Qe+crretlKJRoNPO2+aHxCmMO9MecqGjOuvdhr4a0NU=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-kgOwTQ+t5dhhb+MrilBZ5E7Ge3U6dllUpJ2I1fCX+jc=";
   };
 
-  cargoHash = "sha256-R2ng5l2l/5vWnTJ3kt3cURNWL4Lo55yGbSE+9hjQu20=";
+  cargoHash = "sha256-xQ650Yx+lk+UKIHrad48eWUB/TUHeutL6tSrYwV0Eeg=";
 
-  meta = with lib; {
+  meta = {
     description = "Pure rust implementation of jq";
     homepage = "https://github.com/MiSawa/xq";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthewcroughan ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
     mainProgram = "xq";
   };
-}
+})

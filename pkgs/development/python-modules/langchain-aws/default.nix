@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  hatchling,
 
   # dependencies
   boto3,
@@ -13,34 +13,44 @@
   pydantic,
 
   # tests
+  langchain,
+
+  # optional-dependencies
+  anthropic,
+  langchain-anthropic,
+
+  # tests
+  langchain-openai,
   langchain-tests,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
+
+  # passthru
+  gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain-aws";
-  version = "0.2.11";
+  version = "1.7.8";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-aws";
-    tag = "v${version}";
-    hash = "sha256-tEkwa+rpitGxstci754JH5HCqD7+WX0No6ielJJnbxk=";
+    tag = "langchain-aws==${finalAttrs.version}";
+    hash = "sha256-WIa2LWG21WEV4O58K172FGMOpJLfdHj/8+UWabGBKdw=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "--snapshot-warn-unused" "" \
-      --replace-fail "--cov=langchain_aws" ""
-    substituteInPlace tests/unit_tests/{test_standard.py,chat_models/test_bedrock_converse.py} \
-      --replace-fail "langchain_standard_tests" "langchain_tests"
+      --replace-fail "--snapshot-warn-unused" ""
   '';
 
-  sourceRoot = "${src.name}/libs/aws";
+  sourceRoot = "${finalAttrs.src.name}/libs/aws";
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     boto3
@@ -50,32 +60,58 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
-    # Boto @ 1.35 has outstripped the version requirement
+    # Boto3 spec has outstripped the version requirement
     "boto3"
   ];
 
+  optional-dependencies = {
+    anthropic = anthropic.optional-dependencies.bedrock ++ [
+      langchain-anthropic
+    ];
+  };
+
   nativeCheckInputs = [
+    anthropic
+    langchain
+    langchain-openai
     langchain-tests
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
-  ];
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
+  enabledTestPaths = [ "tests/unit_tests" ];
+
+  disabledTests = [
+    # Fails when langchain-core gets ahead of this package
+    "test_serdes"
+    # Requires aws-bedrock-token-generator (not packaged)
+    "test_bedrock_api_key_provider"
+    "test_installed_provider_mints_token_when_called"
+    # botocore added new content block keys
+    "test__bedrock_content_block_keys_match_botocore"
+  ];
 
   pythonImportsCheck = [ "langchain_aws" ];
 
   passthru = {
-    inherit (langchain-core) updateScript;
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-aws==";
+      ignoredVersions = "a|b|dev|rc";
+    };
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain-aws/releases/tag/v${version}";
+    changelog = "https://github.com/langchain-ai/langchain-aws/releases/tag/${finalAttrs.src.tag}";
     description = "Build LangChain application on AWS";
     homepage = "https://github.com/langchain-ai/langchain-aws/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      drupol
       natsukium
+      sarahec
     ];
   };
-}
+})

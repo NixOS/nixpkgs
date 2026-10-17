@@ -4,51 +4,61 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  hatchling,
 
   # dependencies
   langchain-core,
 
   # tests
+  beautifulsoup4,
   httpx,
   pytest-asyncio,
   pytestCheckHook,
+
+  # passthru
+  gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain-text-splitters";
-  version = "0.3.5";
+  version = "1.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-text-splitters==${version}";
-    hash = "sha256-2IoNUixZ/+o6ONJpqFa3Z5CLpxj6b6z8dh89kxh2rP4=";
+    tag = "langchain-text-splitters==${finalAttrs.version}";
+    hash = "sha256-VLNOWi+qaOfkwXEZqu+M/PX/hr66WC5K1XdIt49giNM=";
   };
 
-  sourceRoot = "${src.name}/libs/text-splitters";
+  sourceRoot = "${finalAttrs.src.name}/libs/text-splitters";
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [ langchain-core ];
 
   pythonImportsCheck = [ "langchain_text_splitters" ];
 
   nativeCheckInputs = [
+    beautifulsoup4
     httpx
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
+  enabledTestPaths = [ "tests/unit_tests" ];
 
   passthru = {
-    inherit (langchain-core) updateScript;
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-text-splitters==";
+      ignoredVersions = "a|b|dev|rc";
+    };
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-text-splitters==${version}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${finalAttrs.src.tag}";
     description = "LangChain utilities for splitting into chunks a wide variety of text documents";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/text-splitters";
     license = lib.licenses.mit;
@@ -57,4 +67,4 @@ buildPythonPackage rec {
       sarahec
     ];
   };
-}
+})

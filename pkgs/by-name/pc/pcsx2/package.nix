@@ -1,34 +1,45 @@
 {
   lib,
-  SDL2,
-  callPackage,
+  fetchFromGitHub,
+  sdl3,
   cmake,
   cubeb,
   curl,
-  extra-cmake-modules,
-  ffmpeg,
-  libXrandr,
+  kdePackages,
+  ffmpeg_8,
+  gtk3,
+  libxrandr,
   libaio,
   libbacktrace,
   libpcap,
   libwebp,
   llvmPackages,
   lz4,
-  makeWrapper,
   pkg-config,
   qt6,
+  rapidyaml,
   shaderc,
   soundtouch,
   strip-nondeterminism,
   vulkan-headers,
   vulkan-loader,
   wayland,
+  wrapGAppsHook3,
   zip,
   zstd,
+  plutovg,
+  plutosvg,
+  kddockwidgets,
 }:
 
 let
-  sources = callPackage ./sources.nix { };
+  pcsx2_patches = fetchFromGitHub {
+    owner = "PCSX2";
+    repo = "pcsx2_patches";
+    rev = "57e7089511430020ad9a8b22c6d27a593057d50a";
+    hash = "sha256-tua44ywpqCsbMMhS8G5K4nJJyQNIUvB35EBkTf7WurI=";
+  };
+
   inherit (qt6)
     qtbase
     qtsvg
@@ -38,79 +49,98 @@ let
     ;
 in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
-  inherit (sources.pcsx2) pname version src;
+  pname = "pcsx2";
+  version = "2.8.2";
+  src = fetchFromGitHub {
+    pname = "pcsx2-source";
+    owner = "PCSX2";
+    repo = "pcsx2";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sXVeOTVkd/c04M6BduPl34inqSUoJwfJoWCvpFdR4VQ=";
+  };
 
   patches = [
-    # Remove PCSX2_GIT_REV
-    ./0000-define-rev.patch
+    ./remove-cubeb-vendor.patch
   ];
+
+  postPatch = ''
+    substituteInPlace cmake/Pcsx2Utils.cmake \
+      --replace-fail 'set(PCSX2_GIT_TAG "")' 'set(PCSX2_GIT_TAG "${finalAttrs.src.tag}")'
+  '';
 
   cmakeFlags = [
     (lib.cmakeBool "PACKAGE_MODE" true)
     (lib.cmakeBool "DISABLE_ADVANCE_SIMD" true)
     (lib.cmakeBool "USE_LINKED_FFMPEG" true)
-    (lib.cmakeFeature "PCSX2_GIT_REV" finalAttrs.src.rev)
   ];
 
   nativeBuildInputs = [
     cmake
+    kdePackages.extra-cmake-modules
     pkg-config
     strip-nondeterminism
+    wrapGAppsHook3
     wrapQtAppsHook
     zip
   ];
 
   buildInputs = [
+    kdePackages.extra-cmake-modules
     curl
-    extra-cmake-modules
-    ffmpeg
+    ffmpeg_8
+    gtk3
     libaio
     libbacktrace
     libpcap
     libwebp
-    libXrandr
+    libxrandr
     lz4
     qtbase
     qtsvg
     qttools
     qtwayland
-    SDL2
+    sdl3
+    plutovg
+    plutosvg
+    kddockwidgets
+    rapidyaml
     shaderc
     soundtouch
     vulkan-headers
     wayland
     zstd
-  ] ++ cubeb.passthru.backendLibs;
+    cubeb
+  ];
 
   strictDeps = true;
 
   postInstall = ''
-    install -Dm644 $src/pcsx2-qt/resources/icons/AppIcon64.png $out/share/pixmaps/PCSX2.png
+    install -Dm644 $src/pcsx2-qt/resources/icons/AppIcon64.png $out/share/icons/hicolor/64x64/apps/PCSX2.png
     install -Dm644 $src/.github/workflows/scripts/linux/pcsx2-qt.desktop $out/share/applications/PCSX2.desktop
 
-    zip -jq $out/share/PCSX2/resources/patches.zip ${sources.pcsx2_patches.src}/patches/*
+    zip -jq $out/share/PCSX2/resources/patches.zip ${pcsx2_patches}/patches/*
     strip-nondeterminism $out/share/PCSX2/resources/patches.zip
   '';
 
   qtWrapperArgs =
     let
-      libs = lib.makeLibraryPath (
-        [
-          vulkan-loader
-          shaderc
-        ]
-        ++ cubeb.passthru.backendLibs
-      );
+      libs = lib.makeLibraryPath [
+        vulkan-loader
+        shaderc
+      ];
     in
     [ "--prefix LD_LIBRARY_PATH : ${libs}" ];
 
-  # https://github.com/PCSX2/pcsx2/pull/10200
-  # Can't avoid the double wrapping, the binary wrapper from qtWrapperArgs doesn't support --run
-  postFixup = ''
-    source "${makeWrapper}/nix-support/setup-hook"
-    wrapProgram $out/bin/pcsx2-qt \
-      --run 'if [[ -z $I_WANT_A_BROKEN_WAYLAND_UI ]]; then export QT_QPA_PLATFORM=xcb; fi'
+  dontWrapGApps = true;
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
+
+  passthru = {
+    inherit pcsx2_patches;
+    updateScript.command = [ ./update.sh ];
+  };
 
   meta = {
     homepage = "https://pcsx2.net";
@@ -130,8 +160,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     ];
     mainProgram = "pcsx2-qt";
     maintainers = with lib.maintainers; [
-      AndersonTorres
-      hrdinka
+      _0david0mp
       govanify
       matteopacini
     ];

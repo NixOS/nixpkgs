@@ -1,29 +1,53 @@
 {
-  buildGo123Module,
-  buildNpmPackage,
-  fetchFromGitHub,
+  stdenv,
   lib,
+  fetchFromGitHub,
+  buildGoModule,
+  stdenvNoCC,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpmBuildHook,
+  nodejs-slim,
+  pnpm_10,
+  installShellFiles,
+  nix-update-script,
+  nixosTests,
 }:
 
 let
-  version = "2.31.0";
+  version = "2.63.23";
 
   src = fetchFromGitHub {
     owner = "filebrowser";
     repo = "filebrowser";
-    rev = "v${version}";
-    hash = "sha256-zLM1fLrucIhzGdTTDu81ZnTIipK+iRnPhgfMiT1P+yg=";
+    tag = "v${version}";
+    hash = "sha256-G0TIQE+Rru4JWBJIi8kdxSaP0CDPo2DyWLmcU2AX7Fs=";
   };
 
-  frontend = buildNpmPackage rec {
+  frontend = stdenvNoCC.mkDerivation (finalAttrs: {
     pname = "filebrowser-frontend";
     inherit version src;
 
     sourceRoot = "${src.name}/frontend";
 
-    npmDepsHash = "sha256-5/yEMWkNPAS8/PkaHlPBGFLiJu7xK2GHYo5dYqHAfCE=";
+    nativeBuildInputs = [
+      nodejs-slim
+      pnpmConfigHook
+      pnpmBuildHook
+      pnpm_10
+    ];
 
-    NODE_OPTIONS = "--openssl-legacy-provider";
+    pnpmDeps = fetchPnpmDeps {
+      inherit (finalAttrs)
+        pname
+        version
+        src
+        sourceRoot
+        ;
+      fetcherVersion = 3;
+      pnpm = pnpm_10;
+      hash = "sha256-XZdHaXnIfjA1wO6KQihj6PwXQ5LEcMrLRe2Md65nQ38=";
+    };
 
     installPhase = ''
       runHook preInstall
@@ -33,13 +57,23 @@ let
 
       runHook postInstall
     '';
-  };
+  });
+
 in
-buildGo123Module {
+buildGoModule {
   pname = "filebrowser";
   inherit version src;
 
-  vendorHash = "sha256-N5aUs8rgTYXeb0qJhPQBCa6lUDkT6lH1bh+1u4bixos=";
+  vendorHash = "sha256-CuYi2PfR0F0lppFiRFzFj0yLms7VFNxzKpzlmEaCWWs=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd filebrowser \
+      --bash <($out/bin/filebrowser completion bash) \
+      --fish <($out/bin/filebrowser completion fish) \
+      --zsh  <($out/bin/filebrowser completion zsh )
+  '';
 
   excludedPackages = [ "tools" ];
 
@@ -47,15 +81,29 @@ buildGo123Module {
     cp -r ${frontend}/dist frontend/
   '';
 
+  ldflags = [
+    "-X github.com/filebrowser/filebrowser/v2/version.Version=v${version}"
+  ];
+
   passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "frontend"
+      ];
+    };
     inherit frontend;
+    tests = {
+      inherit (nixosTests) filebrowser;
+    };
   };
 
-  meta = with lib; {
-    description = "Filebrowser is a web application for managing files and directories";
+  meta = {
+    description = "Web application for managing files and directories";
     homepage = "https://filebrowser.org";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ oakenshield ];
+    changelog = "https://github.com/filebrowser/filebrowser/releases/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ oakenshield ];
     mainProgram = "filebrowser";
   };
 }

@@ -3,6 +3,7 @@
   beautifulsoup4,
   buildPythonPackage,
   cryptography,
+  curl-cffi,
   fetchFromGitHub,
   frozendict,
   html5lib,
@@ -12,27 +13,26 @@
   pandas,
   peewee,
   platformdirs,
-  pythonOlder,
+  protobuf,
   pytz,
   requests-cache,
   requests-ratelimiter,
   requests,
   scipy,
   setuptools,
+  websockets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "yfinance";
-  version = "0.2.51";
+  version = "1.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ranaroussi";
     repo = "yfinance";
-    tag = version;
-    hash = "sha256-H4DrbatteETvxtDjz2kYGTMvGFbmmgbb5wMKWSUkOGc=";
+    tag = finalAttrs.version;
+    hash = "sha256-5ynbdBys7uTcvsKQB44aoe8PmQgqP28wPtOATcv8I7g=";
   };
 
   build-system = [ setuptools ];
@@ -40,6 +40,7 @@ buildPythonPackage rec {
   dependencies = [
     beautifulsoup4
     cryptography
+    curl-cffi
     frozendict
     html5lib
     lxml
@@ -48,18 +49,20 @@ buildPythonPackage rec {
     pandas
     peewee
     platformdirs
+    protobuf
     pytz
     requests
+    websockets
   ];
+
+  pythonRelaxDeps = [ "curl_cffi" ];
 
   optional-dependencies = {
     nospam = [
       requests-cache
       requests-ratelimiter
     ];
-    repair = [
-      scipy
-    ];
+    repair = [ scipy ];
   };
 
   # Tests require internet access
@@ -67,11 +70,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yfinance" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to doiwnload Yahoo! Finance market data";
     homepage = "https://github.com/ranaroussi/yfinance";
-    changelog = "https://github.com/ranaroussi/yfinance/blob/${version}/CHANGELOG.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger ];
+    changelog = "https://github.com/ranaroussi/yfinance/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
-}
+})

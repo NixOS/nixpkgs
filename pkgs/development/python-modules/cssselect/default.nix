@@ -2,25 +2,22 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
-  setuptools,
+  hatchling,
   pytestCheckHook,
   lxml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cssselect";
-  version = "1.2.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "1.5.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "666b19839cfaddb9ce9d36bfe4c969132c647b92fc9088c4e23f786b30f1b3dc";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-PL6C3XrL7pup5XI7X55HSYJpEvH7Mc1/kqq+1f3hWxU=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -29,11 +26,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cssselect" ];
 
-  meta = with lib; {
+  meta = {
     description = "CSS Selectors for Python";
     homepage = "https://cssselect.readthedocs.io/";
-    changelog = "https://github.com/scrapy/cssselect/v${version}//CHANGES";
-    license = licenses.bsd3;
+    changelog = "https://github.com/scrapy/cssselect/blob/v${finalAttrs.version}/CHANGES";
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

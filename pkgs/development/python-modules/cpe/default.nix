@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "cpe";
   version = "1.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "nilp0inter";
@@ -31,7 +28,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/nilp0inter/cpe/releases/tag/v${version}";
     description = "Common platform enumeration for python";
     homepage = "https://github.com/nilp0inter/cpe";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ tochiaha ];
   };
 }

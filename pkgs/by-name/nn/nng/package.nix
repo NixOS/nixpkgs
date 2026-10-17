@@ -8,37 +8,40 @@
   mbedtls,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nng";
-  version = "1.9.0";
+  version = "1.12.4";
 
   src = fetchFromGitHub {
     owner = "nanomsg";
     repo = "nng";
-    rev = "v${version}";
-    hash = "sha256-N1ZMILrFhdkwU4PK/zlSCgGjOm0748fgvZRrk7I9YVg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-mAYqCullaqNh82Lvg603gHzvhPnhhLFC5fDu6Qt1Hz0=";
   };
 
   nativeBuildInputs = [
     cmake
     ninja
-  ] ++ lib.optionals mbedtlsSupport [ mbedtls ];
+  ]
+  ++ lib.optionals mbedtlsSupport [ mbedtls ];
 
   buildInputs = lib.optionals mbedtlsSupport [ mbedtls ];
 
-  cmakeFlags =
-    [ "-G Ninja" ]
-    ++ lib.optionals mbedtlsSupport [
-      "-DMBEDTLS_ROOT_DIR=${mbedtls}"
-      "-DNNG_ENABLE_TLS=ON"
-    ];
+  cmakeFlags = [
+    "-G Ninja"
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+  ]
+  ++ lib.optionals mbedtlsSupport [
+    "-DMBEDTLS_ROOT_DIR=${mbedtls}"
+    "-DNNG_ENABLE_TLS=ON"
+  ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://nng.nanomsg.org/";
     description = "Nanomsg next generation";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "nngcat";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ nviets ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ nviets ];
   };
-}
+})

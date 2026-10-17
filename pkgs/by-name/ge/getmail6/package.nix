@@ -2,26 +2,28 @@
   lib,
   python3,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "getmail6";
-  version = "6.19.05";
+  version = "6.20.01";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getmail6";
     repo = "getmail6";
-    tag = "v${version}";
-    hash = "sha256-GjB53bl2gh3SA+kqC9rrQ9I4rP0z69G/bamInmq8W+I=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-U5/vOpVVuPc1ITn0SCr7bnDFUwSBqFr51dUsyiMbORM=";
   };
 
   build-system = with python3.pkgs; [
     setuptools
   ];
 
-  # needs a Docker setup
-  doCheck = false;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
 
   pythonImportsCheck = [ "getmailcore" ];
 
@@ -32,14 +34,15 @@ python3.pkgs.buildPythonApplication rec {
     sed -e 's,/usr/bin/getmail,$(dirname $0)/getmail,' -i getmails
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Program for retrieving mail";
     homepage = "https://getmail6.org";
-    changelog = "https://github.com/getmail6/getmail6/blob/${src.rev}/docs/CHANGELOG";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/getmail6/getmail6/blob/${finalAttrs.src.tag}/docs/CHANGELOG";
+    license = lib.licenses.gpl2Plus;
+    mainProgram = "getmail";
+    maintainers = with lib.maintainers; [
       abbe
       dotlambda
     ];
   };
-}
+})

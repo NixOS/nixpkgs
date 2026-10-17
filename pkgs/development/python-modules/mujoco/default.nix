@@ -20,24 +20,27 @@
   glfw,
   numpy,
   pyopengl,
+  typing-extensions,
+  websockets,
 
   perl,
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mujoco";
   inherit (mujoco) version;
 
   pyproject = true;
+  __structuredAttrs = true;
 
   # We do not fetch from the repository because the PyPi tarball is
   # impurely build via
   # <https://github.com/google-deepmind/mujoco/blob/main/python/make_sdist.sh>
   # in the project's CI.
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-a0ATRmtFV11J3T2HSNCZhfc0kAOu8yaHIW0rkCrHsTg=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-dqXof4nGjmYWUZkUzYrAbcC2DNkQjvSu+S4+UG9Z3FM=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -57,15 +60,17 @@ buildPythonPackage rec {
     glfw
     numpy
     pyopengl
+    typing-extensions
+    websockets
   ];
 
-  pythonImportsCheck = [ "${pname}" ];
+  pythonImportsCheck = [ "mujoco" ];
 
   env.MUJOCO_PATH = "${mujoco}";
   env.MUJOCO_PLUGIN_PATH = "${mujoco}/lib";
   env.MUJOCO_CMAKE_ARGS = lib.concatStringsSep " " [
-    "-DMUJOCO_SIMULATE_USE_SYSTEM_GLFW=ON"
-    "-DMUJOCO_PYTHON_USE_SYSTEM_PYBIND11=ON"
+    (lib.cmakeBool "MUJOCO_SIMULATE_USE_SYSTEM_GLFW" true)
+    (lib.cmakeBool "MUJOCO_PYTHON_USE_SYSTEM_PYBIND11" true)
   ];
 
   preConfigure =
@@ -82,12 +87,26 @@ buildPythonPackage rec {
         platform = with stdenv.hostPlatform.parsed; "${kernel.name}-${cpu.name}";
       in
       ''
-        ${perl}/bin/perl -0777 -i -pe "s/GIT_REPO\n.*\n.*GIT_TAG\n.*\n//gm" mujoco/CMakeLists.txt
-        ${perl}/bin/perl -0777 -i -pe "s/(FetchContent_Declare\(\n.*lodepng\n.*)(GIT_REPO.*\n.*GIT_TAG.*\n)(.*\))/\1\3/gm" mujoco/simulate/CMakeLists.txt
+        ${lib.getExe perl} -0777 -i -pe "s/GIT_REPO\n.*\n.*GIT_TAG\n.*\n//gm" mujoco/CMakeLists.txt
+      ''
+      # In 3.13.0, lodepng moved from simulate/CMakeLists.txt to
+      # cmake/third_party_deps/lodepng.cmake and uses fetchpackage (same-line args)
+      + ''
+        ${lib.getExe perl} -0777 -i -pe "s/GIT_REPO[^\n]*\n[^\n]*GIT_TAG[^\n]*\n//g" mujoco/cmake/third_party_deps/lodepng.cmake
+      ''
+      # In 3.15.0, FindOrFetch switched to a git-based DOWNLOAD_COMMAND which would wipe the
+      # prefilled sources
+      + ''
+        ${lib.getExe perl} -0777 -i -pe "s/ *find_package\(Git REQUIRED\)\n//; s/ *DOWNLOAD_COMMAND\n(?:[^\n]*\n)*?[^\n]*submodule update[^\n]*\n//" mujoco/cmake/FindOrFetch.cmake
 
-        build="/build/${pname}-${version}/build/temp.${platform}-cpython-${pythonVersionMajorMinor}/"
+        build="build/temp.${platform}-cpython-${pythonVersionMajorMinor}"
         mkdir -p $build/_deps
-        ln -s ${mujoco.pin.lodepng} $build/_deps/lodepng-src
+      ''
+      # lodepng needs a custom CMakeLists.txt copied into its source dir by FindOrFetch, so it must
+      # be writable
+      + ''
+        cp -r ${mujoco.pin.lodepng} $build/_deps/lodepng-src
+        chmod -R +w $build/_deps/lodepng-src
         ln -s ${mujoco.pin.eigen3} $build/_deps/eigen-src
         ln -s ${mujoco.pin.abseil-cpp} $build/_deps/abseil-cpp-src
       ''
@@ -95,12 +114,10 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python bindings for MuJoCo: a general purpose physics simulator";
-    homepage = "https://mujoco.org/";
-    changelog = "https://github.com/google-deepmind/mujoco/releases/tag/${version}";
-    license = lib.licenses.asl20;
+    inherit (mujoco.meta) homepage changelog license;
     maintainers = with lib.maintainers; [
       GaetanLepage
       tmplt
     ];
   };
-}
+})

@@ -1,45 +1,74 @@
 {
   lib,
-  python3Packages,
+  rustPlatform,
   fetchFromGitHub,
   hddtemp,
   hdparm,
+  sdparm,
   smartmontools,
-  nixosTests,
+  makeWrapper,
+  installShellFiles,
 }:
-
-python3Packages.buildPythonPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hddfancontrol";
-  version = "1.5.1";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "desbma";
-    repo = pname;
-    rev = version;
-    sha256 = "0b2grf98qnikayn18xll01dkm5pjpcjxdffgx1nyw9s0gqig8dg0";
+    repo = "hddfancontrol";
+    tag = finalAttrs.version;
+    hash = "sha256-SQXzVUv+l14xUNJ7riXFwEq/T0HnL1Gmo6/bjU33Qz0=";
   };
 
-  propagatedBuildInputs = [
-    python3Packages.python-daemon
-    hddtemp
-    hdparm
-    smartmontools
+  cargoHash = "sha256-MJ9Cm/mzas8mapRF0vmwR6ivWTZevnhkxT5987dypD8=";
+
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
   ];
+
+  postBuild = ''
+    mkdir -p target/man target/shell-completions
+    cargo run --features generate-extras -- gen-man-pages target/man
+    cargo run --features generate-extras -- gen-shell-completions target/shell-completions
+  '';
 
   postInstall = ''
     mkdir -p $out/etc/systemd/system
     substitute systemd/hddfancontrol.service $out/etc/systemd/system/hddfancontrol.service \
-        --replace /usr/bin/hddfancontrol $out/bin/hddfancontrol
+      --replace-fail /usr/bin/hddfancontrol $out/bin/hddfancontrol
     sed -i -e '/EnvironmentFile=.*/d' $out/etc/systemd/system/hddfancontrol.service
+
+    installManPage target/man/*.1
+
+    installShellCompletion --cmd hddfancontrol \
+      --bash target/shell-completions/hddfancontrol.bash \
+      --fish target/shell-completions/hddfancontrol.fish \
+      --zsh target/shell-completions/_hddfancontrol
   '';
 
-  passthru.tests = { inherit (nixosTests) hddfancontrol; };
+  postFixup = ''
+    wrapProgram $out/bin/hddfancontrol \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          hddtemp
+          hdparm
+          sdparm
+          smartmontools
+        ]
+      }
+  '';
 
-  meta = with lib; {
+  meta = {
     description = "Dynamically control fan speed according to hard drive temperature on Linux";
+    changelog = "https://github.com/desbma/hddfancontrol/releases/tag/${finalAttrs.version}";
     homepage = "https://github.com/desbma/hddfancontrol";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ benley ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      benley
+      jadewilk
+    ];
     mainProgram = "hddfancontrol";
+    platforms = lib.platforms.linux;
   };
-}
+})

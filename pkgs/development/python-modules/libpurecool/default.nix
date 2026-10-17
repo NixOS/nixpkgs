@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1kwbinbg0i4fca1bpx6jwa1fiw71vg0xa89jhq4pmnl5cn9c8kqx";
+    hash = "sha256-HU/EkmWF2noJhjIh1cHb4fDoguLS9LuCYo5E8JaNi88=";
   };
 
   # Remove vendorized zeroconf, https://github.com/etheralm/libpurecool/issues/33
@@ -43,10 +43,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "libpurecool" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for Dyson devices";
     homepage = "http://libpurecool.readthedocs.io";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

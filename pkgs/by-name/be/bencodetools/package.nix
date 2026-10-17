@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bencodetools";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitLab {
     owner = "heikkiorsila";
     repo = "bencodetools";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-5Y1r6+aVtK22lYr2N+YUPPdUts9PIF9I/Pq/mI+WqQs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FVDZUneArvKbCzn7X97BNh+7OJH3t86l7k7fv9ar5jk=";
   };
 
   postPatch = ''

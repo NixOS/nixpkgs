@@ -4,16 +4,19 @@
   fetchPypi,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "tockloader";
   version = "1.9.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-7W55jugVtamFUL8N3dD1LFLJP2UDQb74V6o96rd/tEg=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     argcomplete
     colorama
     crcmod
@@ -27,16 +30,18 @@ python3.pkgs.buildPythonApplication rec {
   # Project has no test suite
   checkPhase = ''
     runHook preCheck
-    $out/bin/tockloader --version | grep -q ${version}
+    $out/bin/tockloader --version | grep -q ${finalAttrs.version}
     runHook postCheck
   '';
 
-  meta = with lib; {
+  pythonImportsCheck = [ "tockloader" ];
+
+  meta = {
     description = "Tool for programming Tock onto hardware boards";
     mainProgram = "tockloader";
     homepage = "https://github.com/tock/tockloader";
-    changelog = "https://github.com/tock/tockloader/releases/tag/v${version}";
-    license = licenses.mit;
+    changelog = "https://github.com/tock/tockloader/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -6,96 +6,75 @@
   pkg-config,
   meson,
   ninja,
-  adwaita-icon-theme,
   exiv2,
   libheif,
   libjpeg,
   libtiff,
+  libadwaita,
   gst_all_1,
   libraw,
-  libsoup_2_4,
-  libsecret,
   glib,
-  gtk3,
+  gtk4,
+  libportal-gtk4,
   gsettings-desktop-schemas,
-  libchamplain,
+  libjxl,
   librsvg,
   libwebp,
-  libX11,
-  json-glib,
   lcms2,
-  bison,
-  flex,
-  clutter-gtk,
-  wrapGAppsHook3,
+  colord,
+  wrapGAppsHook4,
   shared-mime-info,
   python3,
   desktop-file-utils,
-  itstool,
-  withWebservices ? true,
-  webkitgtk_4_0,
+  vala,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gthumb";
-  version = "3.12.6";
+  version = "4.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-YIdwxsjnMHOh1AS2W9G3YeGsXcJecBMP8HJIj6kvXDM=";
+    url = "mirror://gnome/sources/gthumb/${lib.versions.majorMinor finalAttrs.version}/gthumb-${finalAttrs.version}.tar.xz";
+    sha256 = "sha256-okqqcrVjf0kJfe3JwUGjNhXadw0CkxXzKF6/IVbPe2E=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
-    bison
     desktop-file-utils
-    flex
-    itstool
     meson
     ninja
     pkg-config
     python3
-    wrapGAppsHook3
+    wrapGAppsHook4
+    vala
   ];
 
   buildInputs = [
-    clutter-gtk
+    colord
     exiv2
     glib
-    adwaita-icon-theme
     gsettings-desktop-schemas
     gst_all_1.gst-plugins-base
     (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
     gst_all_1.gst-libav
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-ugly
-    gtk3
-    json-glib
+    gtk4
     lcms2
-    libchamplain
+    libadwaita
     libheif
     libjpeg
+    libjxl
+    libportal-gtk4
     libraw
     librsvg
-    libsecret
-    libsoup_2_4
     libtiff
     libwebp
-    libX11
-  ] ++ lib.optional withWebservices webkitgtk_4_0;
-
-  mesonFlags = [
-    "-Dlibchamplain=true"
-    (lib.mesonBool "webservices" withWebservices)
   ];
 
   postPatch = ''
-    chmod +x gthumb/make-gthumb-h.py
-
-    patchShebangs data/gschemas/make-enums.py \
-      gthumb/make-gthumb-h.py \
-      po/make-potfiles-in.py \
-      postinstall.py \
-      gthumb/make-authors-tab.py
+    patchShebangs po/make-potfiles-in.py
   '';
 
   preFixup = ''
@@ -104,17 +83,19 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      versionPolicy = "odd-unstable";
+      packageName = "gthumb";
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gthumb";
     description = "Image browser and viewer for GNOME";
     mainProgram = "gthumb";
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.mimame ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
+      bobby285271
+      mimame
+    ];
   };
-}
+})

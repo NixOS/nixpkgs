@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   callPackage,
-  pythonOlder,
   fetchPypi,
   writeText,
 
@@ -12,11 +11,9 @@
 
   # dependencies
   attrs,
-  exceptiongroup,
   iniconfig,
   packaging,
   pluggy,
-  tomli,
 
   # optional-dependencies
   argcomplete,
@@ -29,12 +26,12 @@
 
 buildPythonPackage rec {
   pname = "pytest";
-  version = "8.3.3";
+  version = "9.1.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cLmBB71kgwinlSsG5sqaULxmC+IY1TwlfMH8lP2hAYE=";
+    hash = "sha256-EIj73o8rSdlaVJoZVwevp6dqPOm8rcJrbXHw/9pf4xM=";
   };
 
   outputs = [
@@ -42,21 +39,17 @@ buildPythonPackage rec {
     "testout"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs =
-    [
-      iniconfig
-      packaging
-      pluggy
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [
-      exceptiongroup
-      tomli
-    ];
+  dependencies = [
+    iniconfig
+    packaging
+    pluggy
+    pygments
+  ];
 
   optional-dependencies = {
     testing = [
@@ -64,7 +57,6 @@ buildPythonPackage rec {
       attrs
       hypothesis
       mock
-      pygments
       requests
       setuptools
       xmlschema
@@ -102,16 +94,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest" ];
 
-  meta = with lib; {
+  meta = {
     description = "Framework for writing tests";
     homepage = "https://docs.pytest.org";
     changelog = "https://github.com/pytest-dev/pytest/releases/tag/${version}";
-    maintainers = with maintainers; [
-      domenkozar
-      lovek323
-      madjar
-      lsix
-    ];
-    license = licenses.mit;
+    teams = [ lib.teams.python ];
+    license = lib.licenses.mit;
   };
 }

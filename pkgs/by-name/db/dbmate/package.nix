@@ -1,29 +1,42 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+
+  # testing
+  sqlite,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dbmate";
-  version = "2.25.0";
+  version = "2.36.0";
 
   src = fetchFromGitHub {
     owner = "amacneil";
     repo = "dbmate";
-    tag = "v${version}";
-    hash = "sha256-bXiLg3l9Uj1QdEyF6JfKqHMZP7Zi1Q88SsvrX2CueM4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ctgSULLdKa0yHHroXhfyKVro8iXPnpk47r0N83suuD4=";
   };
 
-  vendorHash = "sha256-PpEWupCSyxzei8faGzJzWyfcrvgF9IiPRyjxasJ2XlM=";
+  vendorHash = "sha256-2JZhYLzkblQH+MlacWSxmTvXYcNBxnvR2juC1NQfkVg=";
 
-  doCheck = false;
+  tags = [ "fts5" ];
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    sqlite
+  ];
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Database migration tool";
     mainProgram = "dbmate";
     homepage = "https://github.com/amacneil/dbmate";
-    changelog = "https://github.com/amacneil/dbmate/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ manveru ];
+    changelog = "https://github.com/amacneil/dbmate/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      sarahec
+    ];
   };
-}
+})

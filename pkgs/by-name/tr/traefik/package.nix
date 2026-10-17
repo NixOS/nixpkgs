@@ -1,48 +1,56 @@
 {
   lib,
   fetchzip,
-  buildGo123Module,
+  buildGo126Module,
   nixosTests,
+  nix-update-script,
 }:
 
-buildGo123Module rec {
+buildGo126Module (finalAttrs: {
   pname = "traefik";
-  version = "3.2.2";
+  version = "3.7.14";
 
   # Archive with static assets for webui
   src = fetchzip {
-    url = "https://github.com/traefik/traefik/releases/download/v${version}/traefik-v${version}.src.tar.gz";
-    hash = "sha256-DTgpoJvk/rxzMAIBgKJPT70WW8W/aBhOEoyw3cK+JrM=";
+    url = "https://github.com/traefik/traefik/releases/download/v${finalAttrs.version}/traefik-v${finalAttrs.version}.src.tar.gz";
+    hash = "sha256-GxM5HcTER2iBhPCfCgMcAMLTWpwY3NuDbLHWMsG2oJU=";
     stripRoot = false;
   };
 
-  vendorHash = "sha256-+sL0GJhWMlFdNEsRdgRJ42aGedOfn76gg70wH6/a+qQ=";
+  vendorHash = "sha256-pyMQCB2YR7ofWpJeyOmC6OnQIpxpYxCJHZvqv+eLKcc=";
+
+  proxyVendor = true;
 
   subPackages = [ "cmd/traefik" ];
 
+  env.CGO_ENABLED = 0;
+
   preBuild = ''
-    GOOS= GOARCH= CGO_ENABLED=0 go generate
+    GOOS= GOARCH= go generate
 
     CODENAME=$(grep -Po "CODENAME \?=\s\K.+$" Makefile)
 
     ldflags="-s"
     ldflags+=" -w"
-    ldflags+=" -X github.com/traefik/traefik/v${lib.versions.major version}/pkg/version.Version=${version}"
-    ldflags+=" -X github.com/traefik/traefik/v${lib.versions.major version}/pkg/version.Codename=$CODENAME"
+    ldflags+=" -X github.com/traefik/traefik/v${lib.versions.major finalAttrs.version}/pkg/version.Version=${finalAttrs.version}"
+    ldflags+=" -X github.com/traefik/traefik/v${lib.versions.major finalAttrs.version}/pkg/version.Codename=$CODENAME"
   '';
-
-  doCheck = false;
 
   passthru.tests = {
     inherit (nixosTests) traefik;
   };
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     homepage = "https://traefik.io";
     description = "Modern reverse proxy";
-    changelog = "https://github.com/traefik/traefik/raw/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vdemeester ];
+    changelog = "https://github.com/traefik/traefik/raw/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      djds
+      vdemeester
+    ];
     mainProgram = "traefik";
   };
-}
+})

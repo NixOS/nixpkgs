@@ -8,11 +8,11 @@
   libGL,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kobodeluxe";
   version = "0.5.1";
   src = fetchurl {
-    url = "https://olofson.net/kobodl/download/KoboDeluxe-${version}.tar.bz2";
+    url = "https://olofson.net/kobodl/download/KoboDeluxe-${finalAttrs.version}.tar.bz2";
     sha256 = "0f7b910a399d985437564af8c5d81d6dcf22b96b26b01488d72baa6a6fdb5c2c";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

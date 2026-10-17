@@ -1,58 +1,28 @@
 {
   lib,
-  stdenv,
+  python3Packages,
   fetchFromGitHub,
-  installShellFiles,
-  makeWrapper,
-  coreutils,
-  openssh,
-  gnupg,
-  perl,
-  procps,
-  gnugrep,
-  gawk,
-  findutils,
-  gnused,
 }:
 
-stdenv.mkDerivation rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "keychain";
-  version = "2.8.5";
+  version = "3.0.4";
+
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "funtoo";
+    owner = "danielrobbins";
     repo = "keychain";
-    rev = version;
-    sha256 = "1bkjlg0a2bbdjhwp37ci1rwikvrl4s3xlbf2jq2z4azc96dr83mj";
+    tag = finalAttrs.version;
+    hash = "sha256-1cIrbMj+Y94PuDapZVk2buVolAKisaQghWdyPD5xCMQ=";
   };
 
-  nativeBuildInputs = [
-    installShellFiles
-    makeWrapper
+  build-system = with python3Packages; [
+    setuptools
   ];
-  buildInputs = [ perl ];
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp keychain $out/bin/keychain
-    installManPage keychain.1
-    wrapProgram $out/bin/keychain \
-      --prefix PATH ":" "${
-        lib.makeBinPath [
-          coreutils
-          findutils
-          gawk
-          gnupg
-          gnugrep
-          gnused
-          openssh
-          procps
-        ]
-      }" \
-  '';
-
-  meta = with lib; {
-    description = "Keychain management tool";
+  meta = {
+    description = "Manage SSH and GPG keys in a convenient and secure manner";
     longDescription = ''
       Keychain helps you to manage SSH and GPG keys in a convenient and secure
       manner. It acts as a frontend to ssh-agent and ssh-add, but allows you
@@ -65,10 +35,10 @@ stdenv.mkDerivation rec {
       for remote cron jobs to securely "hook in" to a long-running ssh-agent
       process, allowing your scripts to take advantage of key-based logins.
     '';
-    homepage = "https://www.funtoo.org/Keychain";
-    license = licenses.gpl2Only;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ sigma ];
+    homepage = "https://kernel-seeds.org/projects/keychain/";
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ sigma ];
     mainProgram = "keychain";
   };
-}
+})

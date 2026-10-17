@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d2ee247a566fc703f29c277d767f6f61f1e12f76d0402faea4bd815f32cbf37f";
+    hash = "sha256-0u4kelZvxwPynCd9dn9vYfHhL3bQQC+upL2BXzLL838=";
   };
 
   propagatedBuildInputs = [
@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   doCheck = false; # pypi version doesn't include tests
 
-  meta = with lib; {
+  meta = {
     description = "Easy to use, intuitive, and cross-language RPC";
     mainProgram = "zerorpc";
     homepage = "https://www.zerorpc.io";
-    license = licenses.mit;
-    maintainers = with maintainers; [ xeji ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ xeji ];
   };
 }

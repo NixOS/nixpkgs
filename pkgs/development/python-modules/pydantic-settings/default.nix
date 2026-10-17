@@ -2,11 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   hatchling,
   pydantic,
   python-dotenv,
-  pytestCheckHook,
+  pytest9_0CheckHook,
   pytest-examples,
   pytest-mock,
 }:
@@ -14,16 +13,14 @@
 let
   self = buildPythonPackage rec {
     pname = "pydantic-settings";
-    version = "2.5.2";
+    version = "2.14.2";
     pyproject = true;
-
-    disabled = pythonOlder "3.8";
 
     src = fetchFromGitHub {
       owner = "pydantic";
       repo = "pydantic-settings";
       tag = "v${version}";
-      hash = "sha256-VkvkF7tJfFknYCXz7tq1578ebW79Ovx1tOFO8o8wK/I=";
+      hash = "sha256-7h0Jr/0qGJmve6fav9hKR1npDz29zD6Cci8h1TmuK4M=";
     };
 
     build-system = [ hatchling ];
@@ -36,14 +33,15 @@ let
     pythonImportsCheck = [ "pydantic_settings" ];
 
     nativeCheckInputs = [
-      pytestCheckHook
+      pytest9_0CheckHook
       pytest-examples
       pytest-mock
     ];
 
-    disabledTests = [
-      # expected to fail
-      "test_docs_examples[docs/index.md:212-246]"
+    disabledTestPaths = [
+      # fail with our version of ruff, can be removed once we have
+      # https://github.com/pydantic/pydantic-settings/pull/924
+      "tests/test_docs.py::test_docs_examples"
     ];
 
     preCheck = ''
@@ -57,10 +55,10 @@ let
       pytest = self.overridePythonAttrs { doCheck = true; };
     };
 
-    meta = with lib; {
+    meta = {
       description = "Settings management using pydantic";
       homepage = "https://github.com/pydantic/pydantic-settings";
-      license = licenses.mit;
+      license = lib.licenses.mit;
       broken = lib.versionOlder pydantic.version "2.0.0";
       maintainers = [ ];
     };

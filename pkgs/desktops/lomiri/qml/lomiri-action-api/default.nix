@@ -13,29 +13,35 @@
   qtdeclarative,
   qttools,
   validatePkgConfig,
+  withDocumentation ? true,
 }:
 
+let
+  withQt6 = lib.strings.versionAtLeast qtbase.version "6";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-action-api";
-  version = "1.1.3";
+  version = "1.2.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-action-api";
-    rev = finalAttrs.version;
-    hash = "sha256-JDcUq7qEp6Z8TjdNspIz4FE/euH+ytGWa4rSxy4voiU=";
+    tag = finalAttrs.version;
+    hash = "sha256-2bI507ey9VMVgnrsly5L6SexLE6OPgmgwfv+ejwk/Mw=";
   };
 
   outputs = [
     "out"
     "dev"
+  ]
+  ++ lib.optionals withDocumentation [
     "doc"
   ];
 
   postPatch = ''
     # Queries QMake for broken Qt variable: '/build/qtbase-<commit>/$(out)/$(qtQmlPrefix)'
     substituteInPlace qml/Lomiri/Action/CMakeLists.txt \
-      --replace-fail 'exec_program(''${QMAKE_EXECUTABLE} ARGS "-query QT_INSTALL_QML" OUTPUT_VARIABLE QT_IMPORTS_DIR)' 'set(QT_IMPORTS_DIR "''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}")'
+      --replace-fail "\''${CMAKE_INSTALL_FULL_LIBDIR}/qt\''${QT_VERSION_MAJOR}/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
 
     # Fix section labels
     substituteInPlace documentation/qml/pages/* \
@@ -46,11 +52,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    doxygen
     pkg-config
     qtdeclarative
-    qttools # qdoc
     validatePkgConfig
+  ]
+  ++ lib.optionals withDocumentation [
+    doxygen
+    qttools # qdoc
   ];
 
   buildInputs = [
@@ -64,8 +72,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
+    (lib.cmakeBool "ENABLE_QT6" withQt6)
     (lib.cmakeBool "ENABLE_TESTING" finalAttrs.finalPackage.doCheck)
-    (lib.cmakeBool "GENERATE_DOCUMENTATION" true)
+    (lib.cmakeBool "GENERATE_DOCUMENTATION" withDocumentation)
     # Use vendored libhud2, TODO package libhud2 separately?
     (lib.cmakeBool "use_libhud2" false)
   ];
@@ -84,13 +93,15 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Allow applications to export actions in various forms to the Lomiri Shell";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-action-api";
     changelog = "https://gitlab.com/ubports/development/core/lomiri-action-api/-/blob/${finalAttrs.version}/ChangeLog";
-    license = licenses.lgpl3Only;
-    maintainers = teams.lomiri.members;
-    platforms = platforms.linux;
-    pkgConfigModules = [ "lomiri-action-qt-1" ];
+    license = lib.licenses.lgpl3Only;
+    teams = [ lib.teams.lomiri ];
+    platforms = lib.platforms.linux;
+    pkgConfigModules = [
+      "lomiri-action-qt${lib.optionalString withQt6 "6"}-1"
+    ];
   };
 })

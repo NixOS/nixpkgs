@@ -5,16 +5,16 @@
   xdg-utils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "anarchism";
-  version = "15.3-1";
+  version = "15.3-4";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "debian";
-    repo = pname;
-    rev = "debian/${version}";
-    sha256 = "04ylk0y5b3jml2awmyz7m1hnymni8y1n83m0k6ychdh0px8frhm5";
+    repo = "anarchism";
+    rev = "debian/${finalAttrs.version}";
+    hash = "sha256-F3Mb/ulZQ4pRicqpilAhGwboDE9uAMdqzj7ziUhE1ik=";
   };
 
   postPatch = ''
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     cp debian/anarchism.desktop $out/share/applications
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.anarchistfaq.org/";
     changelog = "http://anarchism.pageabode.com/afaq/new.html";
     description = "Exhaustive exploration of Anarchist theory and practice";
@@ -41,8 +41,8 @@ stdenv.mkDerivation rec {
       from the basics of Anarchism to very specific discussions of politics,
       social organization, and economics.
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ davidak ];
-    platforms = with platforms; all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ davidak ];
+    platforms = with lib.platforms; all;
   };
-}
+})

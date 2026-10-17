@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   requests,
 }:
 
@@ -11,11 +10,9 @@ buildPythonPackage rec {
   version = "0.1.10";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ykbmdc2v05ly9q358j7g73ma9fsqdlclc8i0k1yd0bn7219icpx";
+    hash = "sha256-/bKYgjh2gebDBBExymjD2iVVx3lHojJw8rSALVira/o=";
   };
 
   propagatedBuildInputs = [ requests ];
@@ -25,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyombi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to retrieve information from Ombi";
     homepage = "https://github.com/larssont/pyombi";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

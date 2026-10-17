@@ -65,7 +65,7 @@ let
   '';
 in
 {
-  meta.maintainers = with lib.maintainers; [ foo-dogsquared ];
+  meta.maintainers = [ ];
 
   options.services.guix = with lib; {
     enable = mkEnableOption "Guix build daemon service";
@@ -283,22 +283,22 @@ in
         # It's similar to Nix daemon so there's no question whether or not this
         # should be sandboxed.
         systemd.services.guix-daemon = {
-          environment = serviceEnv;
-          script = ''
-            exec ${lib.getExe' package "guix-daemon"} \
-              --build-users-group=${cfg.group} \
-              ${
-                lib.optionalString (
-                  cfg.substituters.urls != [ ]
-                ) "--substitute-urls='${lib.concatStringsSep " " cfg.substituters.urls}'"
-              } \
-              ${lib.escapeShellArgs cfg.extraArgs}
-          '';
+          environment = serviceEnv // config.networking.proxy.envVars;
           serviceConfig = {
             OOMPolicy = "continue";
             RemainAfterExit = "yes";
             Restart = "always";
             TasksMax = 8192;
+            ExecStart = ''
+              ${lib.getExe' package "guix-daemon"} \
+                --build-users-group=${cfg.group} \
+                ${
+                  lib.optionalString (
+                    cfg.substituters.urls != [ ]
+                  ) "--substitute-urls='${lib.concatStringsSep " " cfg.substituters.urls}'"
+                } \
+                ${lib.escapeShellArgs cfg.extraArgs}
+            '';
           };
           unitConfig.RequiresMountsFor = [
             cfg.storeDir
@@ -407,15 +407,16 @@ in
                 ${lib.getExe' package "guix"} archive --generate-key;
               }
           '';
-          script = ''
-            exec ${lib.getExe' package "guix"} publish \
-              --user=${cfg.publish.user} --port=${builtins.toString cfg.publish.port} \
-              ${lib.escapeShellArgs cfg.publish.extraArgs}
-          '';
 
           serviceConfig = {
             Restart = "always";
             RestartSec = 10;
+
+            ExecStart = ''
+              ${lib.getExe' package "guix"} publish \
+                --user=${cfg.publish.user} --port=${toString cfg.publish.port} \
+                ${lib.escapeShellArgs cfg.publish.extraArgs}
+            '';
 
             ProtectClock = true;
             ProtectHostname = true;
@@ -463,11 +464,11 @@ in
         systemd.services.guix-gc = {
           description = "Guix garbage collection";
           startAt = cfg.gc.dates;
-          script = ''
-            exec ${lib.getExe' package "guix"} gc ${lib.escapeShellArgs cfg.gc.extraArgs}
-          '';
           serviceConfig = {
             Type = "oneshot";
+
+            ExecStart = "${lib.getExe' package "guix"} gc ${lib.escapeShellArgs cfg.gc.extraArgs}";
+
             PrivateDevices = true;
             PrivateNetwork = true;
             ProtectControlGroups = true;

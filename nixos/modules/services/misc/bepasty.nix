@@ -64,7 +64,7 @@ in
                   description = ''
                     Extra configuration for bepasty server to be appended on the
                     configuration.
-                    see https://bepasty-server.readthedocs.org/en/latest/quickstart.html#configuring-bepasty
+                    see <https://bepasty-server.readthedocs.org/en/latest/quickstart.html#configuring-bepasty>
                     for all options.
                   '';
                   default = "";
@@ -138,7 +138,7 @@ in
     # creates gunicorn systemd service for each configured server
     systemd.services = lib.mapAttrs' (
       name: server:
-      lib.nameValuePair ("bepasty-server-${name}-gunicorn") ({
+      lib.nameValuePair "bepasty-server-${name}-gunicorn" {
         description = "Bepasty Server ${name}";
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
@@ -186,7 +186,7 @@ in
                           -k gevent
           '';
         };
-      })
+      }
     ) cfg.servers;
 
     users.users.${user} = {

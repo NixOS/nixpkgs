@@ -4,7 +4,7 @@
   bzip2,
   cmake,
   fetchFromGitHub,
-  fetchpatch,
+  fetchpatch2,
   ncurses,
   python3,
   readline,
@@ -12,27 +12,25 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spades";
-  version = "4.0.0";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "ablab";
     repo = "spades";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-k2+ddJIgGE41KGZODovU9VdurbWerEtdqNrFDwyuFjo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BlZjfZKtCm1kWNPjdth3pYFN0plU7xfTsFotPefzzMY=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/src";
-
   patches = [
-    # https://github.com/ablab/spades/pull/1314
-    (fetchpatch {
-      name = "copytree.patch";
-      url = "https://github.com/ablab/spades/commit/af1f756a46c5da669897b841d4f753af1eaa9588.patch";
-      hash = "sha256-tkT7hb0TqsbLkcTs9u43nzvV8bVdh3G9VKYqFFLrQv8=";
-      stripLen = 3;
-      extraPrefix = "projects/";
+    # Add missing <cstdint> for uint{8,64}_t to fix build with gcc 15.
+    (fetchpatch2 {
+      url = "https://github.com/ablab/spades/commit/10b6af96ead72fdb19e8e524aa24bdcff9986e76.patch?full_index=1";
+      relative = "src";
+      hash = "sha256-yAQVqE6DwPe+GZ4VR1cGytaO8NmHz6TUG7EdtbxIuTU=";
     })
   ];
+
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   cmakeFlags = [
     "-DZLIB_ENABLE_TESTS=OFF"

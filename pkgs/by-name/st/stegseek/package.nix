@@ -10,14 +10,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stegseek";
   version = "0.6";
 
   src = fetchFromGitHub {
     owner = "RickdeJager";
-    repo = pname;
-    rev = "v${version}";
+    repo = "stegseek";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-B5oJffYOYfsH0YRq/Bq0ciIlCsCONyScFBjP7a1lIzo=";
   };
 
@@ -32,18 +32,18 @@ stdenv.mkDerivation rec {
   ];
 
   # tests get stuck on aarch64-linux
-  doCheck = stdenv.isx86_64 && stdenv.isLinux;
+  doCheck = stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isLinux;
 
-  meta = with lib; {
-    broken = stdenv.isDarwin;
+  meta = {
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Tool to crack steganography";
     longDescription = ''
       Stegseek is a lightning fast steghide cracker that can be
       used to extract hidden data from files.
     '';
     homepage = "https://github.com/RickdeJager/stegseek";
-    license = with licenses; [ gpl2Only ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "stegseek";
   };
-}
+})

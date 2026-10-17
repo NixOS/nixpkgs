@@ -7,20 +7,21 @@
 buildPythonPackage rec {
   pname = "ukpostcodeparser";
   version = "1.1.2";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "UkPostcodeParser";
     inherit version;
-    sha256 = "930264efa293db80af0103a4fe9c161b06365598d24bb6fe5403f3f57c70530e";
+    hash = "sha256-kwJk76KT24CvAQOk/pwWGwY2VZjSS7b+VAPz9XxwUw4=";
   };
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "UK Postcode parser";
     homepage = "https://github.com/hamstah/ukpostcodeparser";
-    license = licenses.publicDomain;
-    maintainers = with maintainers; [ siddharthist ];
-    platforms = platforms.unix;
+    license = lib.licenses.publicDomain;
+    maintainers = with lib.maintainers; [ siddharthist ];
+    platforms = lib.platforms.unix;
   };
 }

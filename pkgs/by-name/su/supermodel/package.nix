@@ -4,25 +4,32 @@
   libGLU,
   SDL2,
   SDL2_net,
+  libx11,
   stdenv,
   zlib,
 }:
 
 stdenv.mkDerivation {
   pname = "supermodel";
-  version = "0-unstable-2024-11-07";
+  version = "0-unstable-2026-03-01";
 
   src = fetchFromGitHub {
     owner = "trzy";
     repo = "supermodel";
-    rev = "4e7356ab2c077aa3bc3d75fb6e164a1c943fe4c1";
-    hash = "sha256-ajRbgs6oMFF+dYHPsKM7FU16vuZcSovaNk2thdsUWtk=";
+    rev = "d6dec3dcf0922459801907950d966e5767c674de";
+    hash = "sha256-3FdLBGxmi4Xj7ao2nvjLleJSTXvKQrhUWvnQr8DK/RY=";
   };
+
+  # Game.h is missing #include <cstdint>, which GCC 15 no longer provides transitively.
+  postPatch = ''
+    sed -i '/^#include <memory>/a #include <cstdint>' Src/Game.h
+  '';
 
   buildInputs = [
     libGLU
     SDL2
     SDL2_net
+    libx11
     zlib
   ];
 

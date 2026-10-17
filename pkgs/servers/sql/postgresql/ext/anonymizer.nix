@@ -1,37 +1,60 @@
 {
-  lib,
-  stdenv,
-  pg-dump-anon,
-  postgresql,
-  runtimeShell,
+  cargo-pgrx_0_19_0,
+  fetchFromGitLab,
   jitSupport,
-  llvm,
-  buildPostgresqlExtension,
+  lib,
   nixosTests,
+  nix-update-script,
+  postgresql,
+  buildPgrxExtension,
+  runtimeShell,
 }:
 
-buildPostgresqlExtension (finalAttrs: {
+buildPgrxExtension (finalAttrs: {
   pname = "postgresql_anonymizer";
+  version = "3.2.3";
 
-  inherit (pg-dump-anon) version src;
+  src = fetchFromGitLab {
+    owner = "dalibo";
+    repo = "postgresql_anonymizer";
+    tag = finalAttrs.version;
+    hash = "sha256-RqDB0gLlQxJBfrMvAXIK62+3+DTWlTFpCaiQTLXt4BM=";
+  };
 
-  nativeBuildInputs = [ postgresql ] ++ lib.optional jitSupport llvm;
+  inherit postgresql;
+  cargo-pgrx = cargo-pgrx_0_19_0;
+  cargoHash = "sha256-xQvBdLfxnPw+lvCM+sepfUyGyGK8WI+6kqk4DVY7+s8=";
 
-  strictDeps = true;
+  # Tries to copy extension into postgresql's store path.
+  doCheck = false;
 
-  # Needs to be after postInstall, where removeNestedNixStore runs
-  preFixup = ''
-    cat >$out/bin/pg_dump_anon.sh <<'EOF'
-    #!${runtimeShell}
-    echo "This script is deprecated by upstream. To use the new script,"
-    echo "please install pkgs.pg-dump-anon."
-    exit 1
-    EOF
+  # the pg_config view is empty in nixpkgs, so anon.init() cannot locate its data
+  postPatch = ''
+    substituteInPlace sql/init.sql \
+      --replace-fail "SELECT setting AS sharedir" "SELECT '$out/share/postgresql' AS sharedir" \
+      --replace-fail "FROM pg_catalog.pg_config" "" \
+      --replace-fail "WHERE name = 'SHAREDIR'" ""
   '';
 
-  passthru.tests = nixosTests.postgresql.anonymizer.passthru.override postgresql;
+  # data loaded by anon.init(), installed by upstream's Makefile
+  postInstall = ''
+    install -Dm644 -t $out/share/postgresql/extension/anon data/*.csv data/en_US/fake/*.csv
+  '';
 
-  meta = lib.getAttrs [ "homepage" "maintainers" "license" ] pg-dump-anon.meta // {
+  passthru = {
+    tests = nixosTests.postgresql.anonymizer.passthru.override postgresql;
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Extension to mask or replace personally identifiable information (PII) or commercially sensitive data from a PostgreSQL database";
+    homepage = "https://postgresql-anonymizer.readthedocs.io/en/stable/";
+    changelog = "https://gitlab.com/dalibo/postgresql_anonymizer/-/blob/${finalAttrs.version}/CHANGELOG.md";
+    maintainers = with lib.maintainers; [
+      leona
+      osnyx
+      anish
+    ];
+    license = lib.licenses.postgresql;
   };
 })

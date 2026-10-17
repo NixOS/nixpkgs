@@ -12,11 +12,11 @@
 buildKodiAddon rec {
   pname = "arteplussept";
   namespace = "plugin.video.arteplussept";
-  version = "1.4.2";
+  version = "2.0.1";
 
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/${lib.toLower rel}/${namespace}/${namespace}-${version}.zip";
-    hash = "sha256-dqxGKaOnEYOI33Aw76zbjma5z7MqOUh367dFsV87olU=";
+    hash = "sha256-gXILzHuenRgEapkVYhcL0TVKkoWup7pTdaICLJikkro=";
   };
 
   propagatedBuildInputs = [
@@ -31,10 +31,10 @@ buildKodiAddon rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/thomas-ernest/plugin.video.arteplussept";
     description = "Watch videos available on Arte+7";
-    license = licenses.mit;
-    maintainers = teams.kodi.members;
+    license = lib.licenses.mit;
+    teams = [ lib.teams.kodi ];
   };
 }

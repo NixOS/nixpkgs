@@ -4,53 +4,45 @@
   fetchFromGitHub,
   poetry-core,
   pysigma,
+  pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   requests,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysigma-backend-elasticsearch";
-  version = "1.1.5";
+  version = "2.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "pySigma-backend-elasticsearch";
-    tag = "v${version}";
-    hash = "sha256-qIP+TP6lzviEAunYge/SIZQ6PI0EFnJo64FVpPmkdLY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-47jvbbgCtsJC8q7rZVLyZNL77/fcwyQzBup9HVUNY8g=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail " --cov=sigma --cov-report term --cov-report xml:cov.xml" ""
-  '';
 
   build-system = [ poetry-core ];
 
   dependencies = [ pysigma ];
 
   nativeCheckInputs = [
+    pytest-cov-stub
     pytestCheckHook
     requests
+    writableTmpDirAsHomeHook
   ];
 
-  pythonImportsCheck = [ "sigma.backends.elasticsearch" ];
+  # Starting with 2.0.0 all tests require network access
+  doCheck = false;
 
-  disabledTests = [
-    # Tests requires network access
-    "test_connect_lucene"
-    # AssertionError
-    "correlation_rule_stats"
-  ];
+  #pythonImportsCheck = [ "sigma.backends.elasticsearch" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to support Elasticsearch for pySigma";
     homepage = "https://github.com/SigmaHQ/pySigma-backend-elasticsearch";
-    changelog = "https://github.com/SigmaHQ/pySigma-backend-elasticsearch/releases/tag/v${version}";
-    license = with licenses; [ lgpl21Only ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/SigmaHQ/pySigma-backend-elasticsearch/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

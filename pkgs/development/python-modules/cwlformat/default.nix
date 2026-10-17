@@ -4,16 +4,14 @@
   fetchFromGitHub,
   fetchpatch,
   pytestCheckHook,
-  pythonOlder,
   ruamel-yaml,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "cwlformat";
   version = "2022.02.18";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rabix";
@@ -31,17 +29,24 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ ruamel-yaml ];
+  build-system = [ setuptools ];
+
+  dependencies = [ ruamel-yaml ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "cwlformat" ];
 
-  meta = with lib; {
+  disabledTests = [
+    # Test compares output
+    "test_formatting_battery"
+  ];
+
+  meta = {
     description = "Code formatter for CWL";
     homepage = "https://github.com/rabix/cwl-format";
     changelog = "https://github.com/rabix/cwl-format/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

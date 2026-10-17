@@ -5,7 +5,6 @@
   graphql-core,
   promise,
   fetchpatch,
-  pythonOlder,
   pytestCheckHook,
 }:
 
@@ -13,19 +12,18 @@ buildPythonPackage rec {
   pname = "graphql-server-core";
   version = "2.0.0";
   format = "setuptools";
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "graphql-python";
-    repo = pname;
+    repo = "graphql-server-core";
     rev = "v${version}";
-    sha256 = "1w3biv2za2m1brwjy0z049c2m94gm1zfwxzgc6lwrsci724jv9fr";
+    hash = "sha256-2aUtiTiR6cypYe937n6oj6QqWCLgAy95XqEK9cWOa/A=";
   };
 
   patches = [
     (fetchpatch {
       url = "https://github.com/graphql-python/graphql-server-core/commit/865ee9d5602f352c958f6f7e15adbe9abe216784.patch";
-      sha256 = "03p44p4j8rys7mgamh2h9ibbnac2cqwvp5f5hrl2avj2hh0l6j46";
+      hash = "sha256-hkhDAYRCbiVohsWVuzlmgim7VkxQwKpePdpnJMkl5A4=";
     })
   ];
 
@@ -39,10 +37,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Core package for using GraphQL in a custom server easily";
     homepage = "https://github.com/graphql-python/graphql-server-core";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kamadorueda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 }

@@ -3,6 +3,12 @@
 let
   sources = (lib.importJSON ./sources.json).hotspot.mac;
   common = opts: callPackage (import ./jdk-darwin-base.nix opts) { };
+  withModernDrvAttrs =
+    drv:
+    drv.overrideAttrs (_: {
+      __structuredAttrs = true;
+      strictDeps = true;
+    });
 
 in
 # EOL = [ "This JDK version has reached End of Life." ];
@@ -19,6 +25,20 @@ in
   jdk-21 = common { sourcePerArch = sources.jdk.openjdk21; };
   jre-21 = common { sourcePerArch = sources.jre.openjdk21; };
 
-  jdk-23 = common { sourcePerArch = sources.jdk.openjdk23; };
-  jre-23 = common { sourcePerArch = sources.jre.openjdk23; };
+  jdk-25 = common { sourcePerArch = sources.jdk.openjdk25; };
+  jre-25 = common { sourcePerArch = sources.jre.openjdk25; };
+
+  jdk-26 = withModernDrvAttrs (common {
+    sourcePerArch = sources.jdk.openjdk26;
+  });
+  jre-26 = withModernDrvAttrs (common {
+    sourcePerArch = sources.jre.openjdk26;
+  });
+
+  jdk-27 = withModernDrvAttrs (common {
+    sourcePerArch = sources.jdk.openjdk27;
+  });
+  jre-27 = withModernDrvAttrs (common {
+    sourcePerArch = sources.jre.openjdk27;
+  });
 }

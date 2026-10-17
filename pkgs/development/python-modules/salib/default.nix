@@ -14,12 +14,12 @@
 let
   finalAttrs = {
     pname = "salib";
-    version = "1.5.1";
+    version = "1.6.0";
     pyproject = true;
 
     src = fetchPypi {
       inherit (finalAttrs) pname version;
-      hash = "sha256-5KnDGbjdAplajcmD9XxFLLflttvUPnt4VskMtqMyu18=";
+      hash = "sha256-Ei0lgWE3pQtelyogbecRiWHiAqb7CSLZ7IdP1J/bv18=";
     };
 
     build-system = [

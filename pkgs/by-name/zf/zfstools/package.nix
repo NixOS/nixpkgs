@@ -1,24 +1,31 @@
 {
   lib,
+  bundlerEnv,
   stdenv,
   fetchFromGitHub,
-  ruby,
   zfs,
+  freebsd,
   makeWrapper,
 }:
+let
+  rubyEnv = bundlerEnv {
+    name = "zfstools-gems";
+    gemdir = ./.;
+  };
+in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zfstools";
   version = "0.3.6";
 
   src = fetchFromGitHub {
-    sha256 = "16lvw3xbmxp2pr8nixqn7lf4504zaaxvbbdnjkv4dggwd4lsdjyg";
-    rev = "v${version}";
-    repo = "zfstools";
     owner = "bdrewery";
+    repo = "zfstools";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-z8umKWn8vUb2lLattbtSn4BCHD0W92hRvuL2uvrgm5o=";
   };
 
-  buildInputs = [ ruby ];
+  buildInputs = [ rubyEnv.wrappedRuby ];
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
@@ -30,19 +37,18 @@ stdenv.mkDerivation rec {
     for f in $out/bin/*; do
       wrapProgram $f \
         --set RUBYLIB $out/lib \
-        --prefix PATH : ${zfs}/bin
+        --prefix PATH : ${if stdenv.hostPlatform.isFreeBSD then freebsd.zfs else zfs}/bin
     done
   '';
 
-  meta = with lib; {
-    inherit version;
-    inherit (src.meta) homepage;
+  meta = {
     description = "OpenSolaris-compatible auto-snapshotting script for ZFS";
+    homepage = "https://github.com/bdrewery/zfstools";
     longDescription = ''
       zfstools is an OpenSolaris-like and compatible auto snapshotting script
       for ZFS, which also supports auto snapshotting mysql databases.
     '';
-    license = licenses.bsd2;
-    platforms = platforms.linux;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };
-}
+})

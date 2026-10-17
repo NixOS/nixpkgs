@@ -1,42 +1,44 @@
 {
   lib,
-  less,
-  ncurses,
   buildGoModule,
   fetchFromGitHub,
-  makeWrapper,
+  installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "circumflex";
-  version = "3.7";
+  version = "5.0";
 
   src = fetchFromGitHub {
     owner = "bensadeh";
     repo = "circumflex";
-    rev = version;
-    hash = "sha256-jjtjOT8lFPsk300Q9EtsX/w8Bck0pwrS/GyouoBsZ+0=";
+    tag = finalAttrs.version;
+    hash = "sha256-JjwtLMMKQ5L99IEqFqq80QsBPt/lfJiE0ck4M+nmgbo=";
   };
 
-  vendorHash = "sha256-Nlv8H5YqHrqACW2kEXg+mkc3bCgXVudrSNfyu+xeFBA=";
+  vendorHash = "sha256-0YsQ//6bPP9I0OAHmTHQSSpCqqvE2A+2hPoUz5SEuQI=";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  excludedPackages = [
+    "gen-completions"
+  ];
 
   postInstall = ''
-    wrapProgram $out/bin/clx \
-      --prefix PATH : ${
-        lib.makeBinPath [
-          less
-          ncurses
-        ]
-      }
+    installManPage share/man/clx.1
+
+    installShellCompletion --bash share/completions/clx.bash
+    installShellCompletion --fish share/completions/clx.fish
+    installShellCompletion --zsh share/completions/_clx
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool for browsing Hacker News in your terminal";
     homepage = "https://github.com/bensadeh/circumflex";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ mktip ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mktip ];
     mainProgram = "clx";
   };
-}
+})

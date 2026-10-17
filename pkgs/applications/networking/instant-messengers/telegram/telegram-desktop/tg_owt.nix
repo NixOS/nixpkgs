@@ -9,18 +9,18 @@
   libjpeg,
   openssl,
   libopus,
-  ffmpeg_6,
+  ffmpeg,
   openh264,
   crc32c,
   libvpx,
-  libX11,
-  libXtst,
-  libXcomposite,
-  libXdamage,
-  libXext,
-  libXrender,
-  libXrandr,
-  libXi,
+  libx11,
+  libxtst,
+  libxcomposite,
+  libxdamage,
+  libxext,
+  libxrender,
+  libxrandr,
+  libxi,
   glib,
   abseil-cpp,
   pipewire,
@@ -33,15 +33,18 @@
 
 stdenv.mkDerivation {
   pname = "tg_owt";
-  version = "0-unstable-2024-10-28";
+  version = "0-unstable-2026-10-07";
 
   src = fetchFromGitHub {
     owner = "desktop-app";
     repo = "tg_owt";
-    rev = "8198c4d8b91e22d68eb5c7327fd408e3b6abcc79";
-    hash = "sha256-3sLa3Px0VWgRYqnnLlwLnx+WWnneqZyhQPrRMBriXQA=";
+    rev = "d1cf250ea73de26c4c1f0a3c8173eb2648efbb04";
+    hash = "sha256-jqa1X5xdkrYhjjztVaouZfmC3CRiRxD8Vk7O7WJJkHM=";
     fetchSubmodules = true;
   };
+
+  patches = [
+  ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace src/modules/desktop_capture/linux/wayland/egl_dmabuf.cc \
@@ -63,35 +66,34 @@ stdenv.mkDerivation {
     python3
   ];
 
-  propagatedBuildInputs =
-    [
-      libjpeg
-      openssl
-      libopus
-      ffmpeg_6
-      openh264
-      crc32c
-      libvpx
-      abseil-cpp
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libX11
-      libXtst
-      libXcomposite
-      libXdamage
-      libXext
-      libXrender
-      libXrandr
-      libXi
-      glib
-      pipewire
-      libgbm
-      libdrm
-      libGL
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_15
-    ];
+  propagatedBuildInputs = [
+    libjpeg
+    openssl
+    libopus
+    ffmpeg
+    openh264
+    crc32c
+    libvpx
+    abseil-cpp
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libx11
+    libxtst
+    libxcomposite
+    libxdamage
+    libxext
+    libxrender
+    libxrandr
+    libxi
+    glib
+    pipewire
+    libgbm
+    libdrm
+    libGL
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_15
+  ];
 
   passthru.updateScript = unstableGitUpdater { };
 

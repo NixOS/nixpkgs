@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = "fonts";
     rev = version;
-    sha256 = "sha256-YiE7yaH0ZrF1/Cp+3bcJYm2cExQjFcat6JLMJPjhops=";
+    hash = "sha256-YiE7yaH0ZrF1/Cp+3bcJYm2cExQjFcat6JLMJPjhops=";
   };
 
   dontBuild = true;
@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Font for concealing text";
     homepage = "https://github.com/elementary/fonts";
-    license = licenses.ofl;
-    maintainers = teams.pantheon.members;
-    platforms = platforms.linux;
+    license = lib.licenses.ofl;
+    teams = [ lib.teams.pantheon ];
+    platforms = lib.platforms.linux;
   };
 }

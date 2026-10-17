@@ -6,19 +6,19 @@
   perl,
 }:
 
-let
-  version = "3.0.0";
-in
-python3Packages.buildPythonApplication {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pius";
   namePrefix = "";
-  inherit version;
+  version = "3.0.0";
+  pyproject = true;
+
+  build-system = with python3Packages; [ setuptools ];
 
   src = fetchFromGitHub {
     owner = "jaymzh";
     repo = "pius";
-    rev = "v${version}";
-    sha256 = "0l87dx7n6iwy8alxnhvval8h1kl4da6a59hsilbi65c6bpj4dh3y";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-fsBG5F2GFRMXjRqmooxqhM4AEVV7Q9upQp5HY09vB1E=";
   };
 
   patchPhase = ''
@@ -44,6 +44,6 @@ python3Packages.buildPythonApplication {
     license = lib.licenses.gpl2Only;
 
     platforms = lib.platforms.gnu ++ lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
-}
+})

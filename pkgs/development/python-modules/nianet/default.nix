@@ -2,36 +2,43 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
   niapy,
   numpy,
-  poetry-core,
-  pytestCheckHook,
-  pythonOlder,
   scikit-learn,
-  toml-adapt,
-  tomli,
   torch,
+
+  # tests
+  pytestCheckHook,
+  pyyaml,
+  tomli,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nianet";
   version = "1.1.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "SasoPavlic";
     repo = "nianet";
-    tag = "version_${version}";
-    sha256 = "sha256-FZipl6Z9AfiL6WH0kvUn8bVxt8JLdDVlmTSqnyxe0nY=";
+    tag = "version_${finalAttrs.version}";
+    hash = "sha256-FZipl6Z9AfiL6WH0kvUn8bVxt8JLdDVlmTSqnyxe0nY=";
   };
 
   build-system = [
     poetry-core
-    toml-adapt
   ];
 
+  pythonRelaxDeps = [
+    "numpy"
+    "torch"
+  ];
   dependencies = [
     niapy
     numpy
@@ -39,28 +46,19 @@ buildPythonPackage rec {
     torch
   ];
 
-  pythonRelaxDeps = [
-    "numpy"
-  ];
-
-  # create niapy and torch dep version consistent
-  preBuild = ''
-    toml-adapt -path pyproject.toml -a change -dep niapy -ver X
-    toml-adapt -path pyproject.toml -a change -dep torch -ver X
-  '';
-
   nativeCheckInputs = [
     pytestCheckHook
+    pyyaml
     tomli
   ];
 
   pythonImportsCheck = [ "nianet" ];
 
-  meta = with lib; {
+  meta = {
     description = "Designing and constructing neural network topologies using nature-inspired algorithms";
     homepage = "https://github.com/SasoPavlic/NiaNet";
-    changelog = "https://github.com/SasoPavlic/NiaNet/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ firefly-cpp ];
+    changelog = "https://github.com/SasoPavlic/NiaNet/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ firefly-cpp ];
   };
-}
+})

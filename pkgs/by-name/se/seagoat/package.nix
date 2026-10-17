@@ -2,50 +2,77 @@
   lib,
   fetchFromGitHub,
   python3Packages,
-  ripgrep,
+
+  # tests
   gitMinimal,
+  ripgrep,
+  writableTmpDirAsHomeHook,
+
+  versionCheckHook,
+  nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "seagoat";
-  version = "0.50.1";
+  version = "1.2.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "kantord";
     repo = "SeaGOAT";
-    tag = "v${version}";
-    hash = "sha256-tf3elcKXUwBqtSStDksOaSN3Q66d72urrG/Vab2M4f0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ps+pwFOpCQWyI2SrOZSysq1kUeo53I2cfW2WC+SwccE=";
   };
 
   build-system = [ python3Packages.poetry-core ];
+
+  pythonRelaxDeps = [
+    "chardet"
+    "chromadb"
+    "deepmerge"
+    "ollama"
+    "psutil"
+    "setuptools"
+    "stop-words"
+  ];
 
   dependencies = with python3Packages; [
     appdirs
     blessed
     chardet
-    flask
-    deepmerge
     chromadb
+    deepmerge
+    flask
     gitpython
+    halo
     jsonschema
-    pygments
-    requests
+    mcp
     nest-asyncio
-    waitress
+    ollama
     psutil
+    pygments
+    python-dotenv
+    requests
     stop-words
+    waitress
   ];
 
-  nativeCheckInputs = with python3Packages; [
-    pytestCheckHook
-    freezegun
-    pytest-asyncio
-    pytest-mock
-    pytest-snapshot
-    gitMinimal
-    ripgrep
-  ];
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      pytestCheckHook
+      freezegun
+      pytest-asyncio
+      pytest-mock
+      pytest-snapshot
+    ]
+    ++ [
+      gitMinimal
+      ripgrep
+      versionCheckHook
+      writableTmpDirAsHomeHook
+    ];
 
   disabledTests = import ./failing_tests.nix;
 
@@ -55,20 +82,26 @@ python3Packages.buildPythonApplication rec {
   ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
     git init
   '';
+
+  __darwinAllowLocalNetworking = true;
 
   postInstall = ''
     wrapProgram $out/bin/seagoat-server \
       --prefix PATH : "${ripgrep}/bin"
   '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     description = "Local-first semantic code search engine";
     homepage = "https://kantord.github.io/SeaGOAT/";
+    changelog = "https://github.com/kantord/SeaGOAT/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lavafroth ];
     mainProgram = "seagoat";
   };
-}
+})

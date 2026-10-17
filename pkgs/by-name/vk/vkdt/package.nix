@@ -30,22 +30,22 @@
 
 stdenv.mkDerivation rec {
   pname = "vkdt";
-  version = "0.9.1";
+  version = "1.0.0";
 
   src = fetchurl {
-    url = "https://github.com/hanatos/${pname}/releases/download/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-+oVPZRI01IxMSPXOjvUXJutYXftQM7GxwVLG8wqoaY4=";
+    url = "https://github.com/hanatos/vkdt/releases/download/${version}/vkdt-${version}.tar.xz";
+    hash = "sha256-oLJ5IlWOJoe2vUBaI9nyAhfjuw/lF63ZCdhMSF5D0pE=";
+  };
+
+  cargoRoot = "src/pipe/modules/i-raw/rawloader-c";
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version;
+    inherit src cargoRoot;
+    hash = "sha256-8+gJVe9A1w9VlQpKjVnO/ZX44GKvh4yXKlGf4HqyW2M=";
   };
 
   strictDeps = true;
-
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "rawler-0.6.3" = "sha256-EJ0uWc3pp7ixRxDIdTIVVaT2ph3P2IvuK+ecBSB5HYw=";
-    };
-  };
-  cargoRoot = "src/pipe/modules/i-raw/rawloader-c";
 
   nativeBuildInputs = [
     cargo
@@ -81,17 +81,19 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "DESTDIR=$(out)"
     "prefix="
+    "VKDT_USE_RAWINPUT=2"
+    "VKDT_USE_MCRAW=false" # TODO: support mcraw
   ];
 
   passthru.tests.version = testers.testVersion {
     package = vkdt;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Vulkan-powered raw image processor";
     homepage = "https://github.com/hanatos/vkdt";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ paperdigits ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ paperdigits ];
+    platforms = lib.platforms.linux;
   };
 }

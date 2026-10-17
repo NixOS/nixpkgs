@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -10,25 +11,18 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "DunwichType";
-    repo = pname;
+    repo = "RhodiumLibre";
     rev = version;
     hash = "sha256-YCQvUdjEAj4G71WCRCM0+NwiqRqwt1Ggeg9jb/oWEsY=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    install -Dm444 -t $out/share/fonts/opentype/ RhodiumLibre-Regular.otf
-    install -Dm444 -t $out/share/fonts/truetype/ RhodiumLibre-Regular.ttf
-
-    runHook postInstall
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "F/OSS/Libre font for Latin and Devanagari";
     homepage = "https://github.com/DunwichType/RhodiumLibre";
-    license = licenses.ofl;
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

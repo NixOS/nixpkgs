@@ -1,72 +1,70 @@
 {
-  stdenv,
+  stdenvNoCC,
   lib,
   protobuf,
   rustPlatform,
   fetchFromGitHub,
-  darwin,
   pkgsBuildHost,
   openssl,
   pkg-config,
+  writableTmpDirAsHomeHook,
   versionCheckHook,
   nix-update-script,
-  gurk-rs,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) Cocoa;
-in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gurk-rs";
-  version = "0.6.1";
+  version = "0.10.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "boxdot";
     repo = "gurk-rs";
-    tag = "v${version}";
-    hash = "sha256-cNKUQlCzhOgyWoitHjRoVdehj8AUEslHBCGxH9nRWF4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-H2pWF5cYpcYJaIRhghkyHspQlil3vxN+T1Bwa0NGMhU=";
   };
 
   postPatch = ''
     rm .cargo/config.toml
   '';
 
-  useFetchCargoVendor = true;
-
-  cargoHash = "sha256-eh7ZD8ZX1oKiJbJcVtk6pczb6HxNM6md93P/22Qn5u0=";
+  cargoHash = "sha256-m1AMNLBHZ1DGLgou3gLKhpkR8tQqUanpwSVAyfLnghQ=";
 
   nativeBuildInputs = [
     protobuf
     pkg-config
   ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
+  buildInputs = [ openssl ];
 
-  NIX_LDFLAGS = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    "-framework"
-    "AppKit"
-  ];
-
-  PROTOC = "${pkgsBuildHost.protobuf}/bin/protoc";
-
-  OPENSSL_NO_VENDOR = true;
+  env = {
+    NIX_LDFLAGS = lib.optionalString (
+      with stdenvNoCC.hostPlatform; (isDarwin && isx86_64)
+    ) "-framework AppKit";
+    OPENSSL_NO_VENDOR = true;
+    PROTOC = "${lib.getExe pkgsBuildHost.protobuf}";
+  };
 
   useNextest = true;
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
-  versionCheckProgramArg = [ "--version" ];
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Signal Messenger client for terminal";
     mainProgram = "gurk";
     homepage = "https://github.com/boxdot/gurk-rs";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ devhell ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
+      devhell
+      mattkang
+      nicknb
+      faukah
+    ];
   };
-}
+})

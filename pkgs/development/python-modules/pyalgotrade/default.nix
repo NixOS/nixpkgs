@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyAlgoTrade";
     inherit version;
-    sha256 = "7927c87af202869155280a93ff6ee934bb5b46cdb1f20b70f7407337f8541cbd";
+    hash = "sha256-eSfIevIChpFVKAqT/27pNLtbRs2x8gtw90BzN/hUHL0=";
   };
 
   propagatedBuildInputs = [
@@ -43,9 +43,9 @@ buildPythonPackage rec {
   # no tests in PyPI tarball
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python Algorithmic Trading";
     homepage = "http://gbeced.github.io/pyalgotrade/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

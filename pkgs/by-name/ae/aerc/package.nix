@@ -2,38 +2,39 @@
   lib,
   buildGoModule,
   fetchFromSourcehut,
-  fetchpatch,
   ncurses,
+  withNotmuch ? true,
   notmuch,
   scdoc,
   python3Packages,
   w3m,
   dante,
   gawk,
+  versionCheckHook,
+  bashNonInteractive,
+  nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "aerc";
-  version = "0.19.0";
+  version = "0.22.0";
 
   src = fetchFromSourcehut {
     owner = "~rjarry";
     repo = "aerc";
-    rev = version;
-    hash = "sha256-YlpR85jB6Il3UW4MTaf8pkilRVjkO0q/D/Yu+OiBX6Y=";
+    rev = finalAttrs.version;
+    hash = "sha256-JeIhZvUPrvWdeTae558jbn0reQuDAxNl29ziGcB+7ts=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-WowRlAzyrfZi27JzskIDberiYt9PQkuS6H3hKqUP9qo=";
+  vendorHash = "sha256-iGVRh4AFR1y6mtv7I89ar26PxGxfnEGdtaiTzI7cSnw=";
 
   nativeBuildInputs = [
     scdoc
     python3Packages.wrapPython
   ];
 
-  patches = [
-    ./runtime-libexec.patch
-  ];
+  patches = [ ./runtime-libexec.patch ];
 
   postPatch = ''
     substituteAllInPlace config/aerc.conf
@@ -47,20 +48,20 @@ buildGoModule rec {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  pythonPath = [
-    python3Packages.vobject
-  ];
+  pythonPath = [ python3Packages.vobject ];
 
   buildInputs = [
     python3Packages.python
-    notmuch
     gawk
-  ];
+    bashNonInteractive
+  ]
+  ++ lib.optional withNotmuch notmuch;
 
   installPhase = ''
     runHook preInstall
 
-    make $makeFlags GOFLAGS="$GOFLAGS -tags=notmuch" install
+    make $makeFlags GOFLAGS="$GOFLAGS${lib.optionalString withNotmuch " -tags=notmuch"}" install
+    wrapPythonProgramsIn "$out/libexec/" "''${pythonPath[*]}"
 
     runHook postInstall
   '';
@@ -75,22 +76,23 @@ buildGoModule rec {
           dante
         ]
       }
-    wrapProgram $out/libexec/aerc/filters/html-unsafe \
-      --prefix PATH : ${
-        lib.makeBinPath [
-          w3m
-          dante
-        ]
-      }
-    patchShebangs $out/libexec/aerc/filters
   '';
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Email client for your terminal";
     homepage = "https://aerc-mail.org/";
-    maintainers = [ ];
+    changelog = "https://git.sr.ht/~rjarry/aerc/tree/${finalAttrs.version}/item/CHANGELOG.md";
+    maintainers = with lib.maintainers; [
+      defelo
+      sikmir
+    ];
     mainProgram = "aerc";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
-}
+})

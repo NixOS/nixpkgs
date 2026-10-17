@@ -15,7 +15,7 @@ buildKodiAddon rec {
     owner = "a4k-openproject";
     repo = "a4kSubtitles";
     rev = "${namespace}/${namespace}-${version}";
-    sha256 = "sha256-t6oclFAOsUC+hFtw6wjRh1zl2vQfc7RKblVJpBPfE9w=";
+    hash = "sha256-t6oclFAOsUC+hFtw6wjRh1zl2vQfc7RKblVJpBPfE9w=";
   };
 
   propagatedBuildInputs = [
@@ -23,10 +23,10 @@ buildKodiAddon rec {
     vfs-libarchive
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://a4k-openproject.github.io/a4kSubtitles/";
     description = "Multi-Source Subtitles Addon";
-    license = licenses.mit;
-    maintainers = teams.kodi.members;
+    license = lib.licenses.mit;
+    teams = [ lib.teams.kodi ];
   };
 }

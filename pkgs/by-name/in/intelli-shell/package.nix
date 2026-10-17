@@ -7,47 +7,46 @@
   openssl,
   sqlite,
   zlib,
-  stdenv,
-  darwin,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "intelli-shell";
-  version = "0.2.7";
+  version = "3.4.6";
 
   src = fetchFromGitHub {
     owner = "lasantosr";
     repo = "intelli-shell";
-    rev = "v${version}";
-    hash = "sha256-D7hB1vKi54L7hU3TqTvzxXIr6XohfYLUTidR6wFJmfo=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-HWoJBgNzbUYlbzX9g9W2FjJRddTJWZ/UZfpD8AGDA24=";
   };
 
-  cargoHash = "sha256-OAQpOxPWg27kIeM37S5SEGFHMwJPvTGREtG9rd6+lDM=";
+  cargoHash = "sha256-5Vfreda635qyG9I9IQsp1cLLzpMJw0cKdgLc7wSV8w4=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs =
-    [
-      libgit2
-      openssl
-      sqlite
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildNoDefaultFeatures = true;
+  buildFeatures = [
+    "extra-features"
+  ];
+
+  buildInputs = [
+    libgit2
+    openssl
+    sqlite
+    zlib
+  ];
 
   env = {
     OPENSSL_NO_VENDOR = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Like IntelliSense, but for shells";
     homepage = "https://github.com/lasantosr/intelli-shell";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ iogamaster ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ lasantosr ];
     mainProgram = "intelli-shell";
   };
-}
+})

@@ -6,13 +6,13 @@
   pyarrow,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "feather-format";
   version = "0.4.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
 
     hash = "sha256-RfZ+N0XTlNTxYMptY2u/1Pi2jQEZncFkm25IfT6HiQM=";
   };
@@ -29,4 +29,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

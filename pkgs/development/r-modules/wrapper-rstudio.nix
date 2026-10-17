@@ -1,9 +1,10 @@
 {
+  lib,
+  stdenv,
   runCommand,
   R,
   rstudio,
-  makeWrapper,
-  wrapQtAppsHook,
+  makeBinaryWrapper,
   recommendedPackages,
   packages,
   fontconfig,
@@ -11,19 +12,19 @@
 
 runCommand (rstudio.name + "-wrapper")
   {
+    inherit (rstudio) pname version;
     preferLocalBuild = true;
     allowSubstitutes = false;
 
-    nativeBuildInputs = [ (if rstudio.server then makeWrapper else wrapQtAppsHook) ];
+    nativeBuildInputs = [ makeBinaryWrapper ];
     dontWrapQtApps = true;
 
-    buildInputs =
-      [
-        R
-        rstudio
-      ]
-      ++ recommendedPackages
-      ++ packages;
+    buildInputs = [
+      R
+      rstudio
+    ]
+    ++ recommendedPackages
+    ++ packages;
 
     # rWrapper points R to a specific set of packages by using a wrapper
     # (as in https://nixos.org/nixpkgs/manual/#r-packages) which sets
@@ -32,7 +33,7 @@ runCommand (rstudio.name + "-wrapper")
     # with the wrapped one, however, RStudio internally overrides
     # R_LIBS_SITE.  The below works around this by turning R_LIBS_SITE
     # into an R file (fixLibsR) which achieves the same effect, then
-    # uses R_PROFILE_USER to load this code at startup in RStudio.
+    # uses R_PROFILE to load this code at startup in RStudio.
     fixLibsR = "fix_libs.R";
   }
   (
@@ -48,16 +49,22 @@ runCommand (rstudio.name + "-wrapper")
       if rstudio.server then
         ''
           makeWrapper ${rstudio}/bin/rsession $out/bin/rsession \
-            --set R_PROFILE_USER $out/$fixLibsR --set FONTCONFIG_FILE ${fontconfig.out}/etc/fonts/fonts.conf
+            --set R_PROFILE $out/$fixLibsR --set FONTCONFIG_FILE ${fontconfig.out}/etc/fonts/fonts.conf
 
           makeWrapper ${rstudio}/bin/rserver $out/bin/rserver \
             --add-flags --rsession-path=$out/bin/rsession
         ''
       else
         ''
-          ln -s ${rstudio}/share $out
-          makeQtWrapper ${rstudio}/bin/rstudio $out/bin/rstudio \
-            --set R_PROFILE_USER $out/$fixLibsR
+          ${lib.optionalString stdenv.hostPlatform.isLinux ''
+            # symlink files from unwrapped rstudio so that the desktop file and the icons
+            # are also installed when using the wrapped version
+            # TODO: figure out how to handle darwin .app structures
+            ln -s ${rstudio}/share $out
+          ''}
+
+          makeWrapper ${rstudio}/bin/rstudio $out/bin/rstudio \
+            --set R_PROFILE $out/$fixLibsR
         ''
     )
   )

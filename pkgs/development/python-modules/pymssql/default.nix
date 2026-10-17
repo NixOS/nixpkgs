@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   freetds,
   krb5-c,
   openssl,
@@ -14,15 +14,22 @@
   tomli,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymssql";
-  version = "2.3.2";
+  version = "2.3.13";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-GAiWQbaHvh69D2Tw0f+XdHijl/+hrzcr3xDb7CnPbS4=";
+  src = fetchFromGitHub {
+    owner = "pymssql";
+    repo = "pymssql";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UOb1gULAg5mNPiOiqcGpZ0Ux3f2Kz204gQ3Xn8fJFfA=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"standard-distutils ; python_version>='"'"'3.12'"'"'"' ""
+  '';
 
   build-system = [
     cython
@@ -45,11 +52,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pymssql" ];
 
-  meta = with lib; {
-    changelog = "https://github.com/pymssql/pymssql/blob/v${version}/ChangeLog.rst";
+  meta = {
+    changelog = "https://github.com/pymssql/pymssql/blob/${finalAttrs.src.tag}/ChangeLog.rst";
     description = "Simple database interface for Python that builds on top of FreeTDS to provide a Python DB-API (PEP-249) interface to Microsoft SQL Server";
     homepage = "https://github.com/pymssql/pymssql";
-    license = licenses.lgpl21Plus;
-    maintainers = [ maintainers.sith-lord-vader ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ lib.maintainers.sith-lord-vader ];
   };
-}
+})

@@ -66,14 +66,14 @@ in
       type = lib.types.bool;
       default = false;
       description = ''
-        Whether to enable knot-resolver domain name server.
+        Whether to enable knot-resolver (version 5) domain name server.
         DNSSEC validation is turned on by default.
-        You can run `sudo nc -U /run/knot-resolver/control/1`
-        and give commands interactively to kresd@1.service.
+        You can run `kresd-cli 1` and give commands interactively to kresd@1.service.
+        If you want to user knot-resolver 6, please use services.knot-resolver.
       '';
     };
-    package = lib.mkPackageOption pkgs "knot-resolver" {
-      example = "knot-resolver.override { extraFeatures = true; }";
+    package = lib.mkPackageOption pkgs "knot-resolver_5" {
+      example = "knot-resolver_5.override { extraFeatures = true; }";
     };
     extraConfig = lib.mkOption {
       type = lib.types.lines;
@@ -135,7 +135,34 @@ in
 
   ###### implementation
   config = lib.mkIf cfg.enable {
-    environment.etc."knot-resolver/kresd.conf".source = configFile; # not required
+    assertions = [
+      {
+        assertion = lib.versionOlder cfg.package.version "6.0.0";
+        message = ''
+          services.kresd only works with knot-resolver 5.
+          Please use services.knot-resolver for knot-resolver 6 and newer.
+        '';
+      }
+    ];
+    environment = {
+      etc."knot-resolver/kresd.conf".source = configFile; # not required
+      systemPackages = [
+        (pkgs.writeShellScriptBin "kresd-cli" ''
+          if [[ ''${1:-} == -h || ''${1:-} == --help ]]; then
+            echo "Usage: $0 [X]"
+            echo
+            echo "  X is number of the control socket and corresponds to the number of the template unit."
+            exit
+          fi
+
+          exec=exec
+          if [[ "$USER" != knot-resolver ]]; then
+            exec='exec /run/wrappers/bin/sudo -u knot-resolver'
+          fi
+          $exec ${lib.getExe pkgs.socat} - /run/knot-resolver/control/''${1:-1}
+        '')
+      ];
+    };
 
     networking.resolvconf.useLocalResolver = lib.mkDefault true;
 
@@ -144,7 +171,7 @@ in
       group = "knot-resolver";
       description = "Knot-resolver daemon user";
     };
-    users.groups.knot-resolver.gid = null;
+    users.groups.knot-resolver = { };
 
     systemd.packages = [ cfg.package ]; # the units are patched inside the package a bit
 
@@ -153,7 +180,8 @@ in
       wantedBy = [ "multi-user.target" ];
       wants = [
         "kres-cache-gc.service"
-      ] ++ map (i: "kresd@${toString i}.service") (lib.range 1 cfg.instances);
+      ]
+      ++ map (i: "kresd@${toString i}.service") (lib.range 1 cfg.instances);
     };
     systemd.services."kresd@".serviceConfig = {
       ExecStart =

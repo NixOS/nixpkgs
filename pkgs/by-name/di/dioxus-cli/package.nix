@@ -1,62 +1,107 @@
 {
   lib,
-  stdenv,
   fetchCrate,
   rustPlatform,
   pkg-config,
-  rustfmt,
   cacert,
+  libgit2,
   openssl,
-  nix-update-script,
+  rustfmt,
+  installShellFiles,
+  makeWrapper,
+  esbuild,
+  wasm-bindgen-cli_0_2_127,
   testers,
   dioxus-cli,
+  withTelemetry ? false,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dioxus-cli";
-  version = "0.6.0";
+  version = "0.7.10";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-0Kg2/+S8EuMYZQaK4Ao+mbS7K48VhVWjPL+LnoVJMSw=";
+    pname = "dioxus-cli";
+    version = finalAttrs.version;
+    hash = "sha256-kPzo5zRSVs46SjiDRKpKxca8kPcWUgqc/LMKQsk0sC8=";
   };
 
-  cargoHash = "sha256-RMo6q/GSAV1bCMWtR+wu9xGKCgz/Ie6t/8oirBly/LQ=";
-  buildFeatures = [ "optimizations" ];
+  cargoHash = "sha256-cvBVIkIqBjXFifYNpL2DqZpQcBaX/59Xw0ZJKUvUcIs=";
+  buildFeatures = [
+    "no-downloads"
+  ]
+  ++ lib.optional (!withTelemetry) "disable-telemetry";
+
+  env = {
+    OPENSSL_NO_VENDOR = 1;
+    LIBGIT2_NO_VENDOR = 1;
+  };
 
   nativeBuildInputs = [
     pkg-config
     cacert
+    installShellFiles
+    makeWrapper
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    libgit2
+    openssl
+  ];
 
-  OPENSSL_NO_VENDOR = 1;
-
-  nativeCheckInputs = [ rustfmt ];
+  nativeCheckInputs = [
+    rustfmt
+  ];
 
   checkFlags = [
     # requires network access
     "--skip=serve::proxy::test"
+    # requires monorepo structure and mobile toolchains
+    "--skip=test_harnesses::run_harness"
   ];
 
   passthru = {
-    updateScript = nix-update-script { };
-    tests.version = testers.testVersion { package = dioxus-cli; };
+    tests = {
+      version = testers.testVersion {
+        package = dioxus-cli;
+      };
+
+      withTelemetry = dioxus-cli.override {
+        withTelemetry = true;
+      };
+    };
   };
 
-  meta = with lib; {
-    homepage = "https://dioxuslabs.com";
-    description = "CLI tool for developing, testing, and publishing Dioxus apps";
+  postInstall = ''
+    installShellCompletion --cmd dx \
+      --bash <($out/bin/dx completions bash) \
+      --fish <($out/bin/dx completions fish) \
+      --zsh <($out/bin/dx completions zsh)
+  '';
+
+  postFixup = ''
+    wrapProgram $out/bin/dx \
+      --suffix PATH : ${
+        lib.makeBinPath [
+          esbuild
+          wasm-bindgen-cli_0_2_127
+        ]
+      }
+  '';
+
+  meta = {
+    description = "CLI for building fullstack web, desktop, and mobile apps with a single codebase.";
+    homepage = "https://dioxus.dev";
     changelog = "https://github.com/DioxusLabs/dioxus/releases";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with maintainers; [
-      xanderio
-      cathalmullan
+    maintainers = with lib.maintainers; [
+      anish
+      hackcraft_
     ];
+    platforms = lib.platforms.all;
     mainProgram = "dx";
   };
-}
+})

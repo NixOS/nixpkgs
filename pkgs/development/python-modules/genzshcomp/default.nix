@@ -5,22 +5,22 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "genzshcomp";
   version = "0.6.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "b582910d36f9ad0992756d7e9ccbe3e5cf811934b1002b51f25b99d3dda9d573";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-tYKRDTb5rQmSdW1+nMvj5c+BGTSxACtR8luZ092p1XM=";
   };
 
   buildInputs = [ setuptools ];
 
-  meta = with lib; {
+  meta = {
     description = "Automatically generated zsh completion function for Python's option parser modules";
     mainProgram = "genzshcomp";
     homepage = "https://bitbucket.org/hhatto/genzshcomp/";
-    license = licenses.bsd0;
+    license = lib.licenses.bsd0;
   };
-}
+})

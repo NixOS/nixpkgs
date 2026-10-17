@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   installShellFiles,
   buildPackages,
@@ -9,24 +9,28 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGo127Module (finalAttrs: {
   pname = "hugo";
-  version = "0.141.0";
+  version = "0.167.0";
 
   src = fetchFromGitHub {
     owner = "gohugoio";
     repo = "hugo";
-    tag = "v${version}";
-    hash = "sha256-NjxHsS1VG/B1+rjmwTdoHOKraMh6z54pQqw8k9Nbuss=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-T6dEgvY1Akt+GUWdNvVTjkmtM/MwW9HX/v4Ra+jmZKY=";
   };
 
-  vendorHash = "sha256-2OZajJZnbD3Ks3xq501Ta5ba+3jDnI1GFiI5u2Y/i3A=";
+  vendorHash = "sha256-67v7yJx2q/YrY5yvlDXmNzH1oFnM+9nN18QgjPhT3tg=";
 
   checkFlags =
     let
       skippedTestPrefixes = [
-        # Workaround for "failed to load modules"
+        # Workaround for integration tests that reach out to the public
+        # internet. Alternative option is to prefetch but it was decided
+        # to continue to use ignores.
+        # ref: https://github.com/NixOS/nixpkgs/pull/501960
         "TestCommands/mod"
+        "TestCommands/hugo__static_issue14507"
         # Server tests are flaky, at least in x86_64-darwin. See #368072
         # We can try testing again after updating the `httpget` helper
         # ref: https://github.com/gohugoio/hugo/blob/v0.140.1/main_test.go#L220-L233
@@ -69,22 +73,21 @@ buildGoModule rec {
     versionCheckHook
   ];
   doInstallCheck = true;
-  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
-  versionCheckProgramArg = [ "version" ];
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
+  versionCheckProgramArg = "version";
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/gohugoio/hugo/releases/tag/v${version}";
+    changelog = "https://github.com/gohugoio/hugo/releases/tag/v${finalAttrs.version}";
     description = "Fast and modern static website engine";
     homepage = "https://gohugo.io";
     license = lib.licenses.asl20;
     mainProgram = "hugo";
     maintainers = with lib.maintainers; [
-      schneefux
-      Br1ght0ne
       Frostman
-      kachick
+      savtrip
+      miniharinn
     ];
   };
-}
+})

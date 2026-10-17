@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
 
   geopandas,
   inequality,
@@ -19,16 +18,20 @@
 
 buildPythonPackage rec {
   pname = "momepy";
-  version = "0.9.1";
+  version = "0.11.0";
   pyproject = true;
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "pysal";
     repo = "momepy";
     tag = "v${version}";
-    hash = "sha256-9bFPxpopmrwNKdCEF+jlPRoNiVFrngW+sMeshq2EDYU=";
+    hash = "sha256-Og7W+35k9HIIEFGcDmsxggb1BT5cwnaMIi3HO3VRAX0=";
   };
+
+  patches = [
+    # see https://github.com/pysal/momepy/pull/733
+    ./fix_test_elements.patch
+  ];
 
   build-system = [ setuptools-scm ];
 
@@ -48,10 +51,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "momepy" ];
 
+  disabledTestPaths = [
+    # this tests depends on neatnet, not packaged in nixpkgs
+    # it's probably not worthy to package it just for this test
+    "momepy/tests/test_continuity.py"
+  ];
+
   meta = {
     description = "Urban Morphology Measuring Toolkit";
     homepage = "https://github.com/pysal/momepy";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.geospatial.members;
+    teams = [ lib.teams.geospatial ];
   };
 }

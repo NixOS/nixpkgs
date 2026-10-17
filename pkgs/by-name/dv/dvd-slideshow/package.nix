@@ -10,7 +10,6 @@
   lame,
   mjpegtools,
   sox,
-  transcode,
   vorbis-tools,
   runtimeShell,
 }:
@@ -24,7 +23,6 @@ let
     lame
     mjpegtools
     sox
-    transcode
     vorbis-tools
   ];
 
@@ -53,12 +51,12 @@ let
   '';
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dvd-slideshow";
   version = "0.8.4-2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/dvd-slideshow/files/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/dvd-slideshow/files/dvd-slideshow-${finalAttrs.version}.tar.gz";
     sha256 = "17c09aqvippiji2sd0pcxjg3nb1mnh9k5nia4gn5lhcvngjcp1q5";
   };
 
@@ -95,4 +93,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.robbinch ];
   };
-}
+})

@@ -3,20 +3,26 @@
   buildNpmPackage,
   fetchFromGitHub,
   nix-update-script,
+  npm-lockfile-fix,
 }:
 
 buildNpmPackage rec {
   pname = "opencommit";
-  version = "3.2.5";
+  version = "3.3.10";
 
   src = fetchFromGitHub {
     owner = "di-sukharev";
     repo = "opencommit";
     rev = "v${version}";
-    hash = "sha256-6bC3irUyIppu7QVT3jGwMe+r/5WuHA0pLLH/gYORDOM=";
+    hash = "sha256-V4xPIQo4XDdrNGBxTwvdT9ZDvWNjSw3Llw4BuE1bxsA=";
+    postFetch = ''
+      cd $out
+      # Fix lockfile issues with bundled dependencies
+      ${lib.getExe npm-lockfile-fix} package-lock.json
+    '';
   };
 
-  npmDepsHash = "sha256-exjK00MuzBsjlW34seaaAj8s0bPrzi7zBdJqQ0SuIWM=";
+  npmDepsHash = "sha256-9oJ4hE633IOVWXNKvRFsXaYh1zNAxbu0la92Gia/MBY=";
 
   passthru.updateScript = nix-update-script { };
 

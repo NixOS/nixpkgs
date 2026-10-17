@@ -2,42 +2,43 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  testers,
-  eks-node-viewer,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "eks-node-viewer";
-  version = "0.6.0";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "awslabs";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-BK84hxbwZSJDO5WoyborJnVBS5pB69jTMU1csgiT0sw=";
+    repo = "eks-node-viewer";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VCRwGxH7adwB6p+UCF1GmAa5f/7GgJlJ7GvRSFOlOto=";
   };
 
-  vendorHash = "sha256-EJAL5jNftA/g5H6WUMBJ98EyRp7QJ1C53EKr6GRz71I=";
+  vendorHash = "sha256-ZBkiiDAcgOkIezDHcDjqJ3w5+k5kXdfw2TCZoTx12hc=";
+
+  excludedPackages = [ "hack" ];
 
   ldflags = [
     "-s"
     "-w"
     "-X=main.builtBy=nixpkgs"
-    "-X=main.commit=${src.rev}"
-    "-X=main.version=${version}"
+    "-X=main.commit=${finalAttrs.src.rev}"
+    "-X=main.version=${finalAttrs.version}"
   ];
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = eks-node-viewer;
-    };
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Tool to visualize dynamic node usage within a cluster";
     homepage = "https://github.com/awslabs/eks-node-viewer";
-    changelog = "https://github.com/awslabs/eks-node-viewer/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = [ maintainers.ivankovnatsky ];
+    changelog = "https://github.com/awslabs/eks-node-viewer/releases/tag/${finalAttrs.src.rev}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ivankovnatsky ];
+    mainProgram = "eks-node-viewer";
   };
-}
+})

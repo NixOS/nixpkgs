@@ -1,64 +1,98 @@
-{ lib
-, stdenv
-, fetchurl
-, buildPackages
-, updateAutotoolsGnuConfigScriptsHook
-, ncurses
-, pkg-config
-, abiVersion ? "6"
-, enableStatic ? stdenv.hostPlatform.isStatic
-, withCxx ? !stdenv.hostPlatform.useAndroidPrebuilt
-, mouseSupport ? false, gpm
-, withTermlib ? false
-, unicodeSupport ? true
-, testers
-, binlore
+{
+  lib,
+  stdenv,
+  fetchurl,
+  buildPackages,
+  updateAutotoolsGnuConfigScriptsHook,
+  ncurses,
+  pkg-config,
+  abiVersion ? "6",
+  enableStatic ? stdenv.hostPlatform.isStatic,
+  # Disabled for static FreeBSD: libc++ headers come after C library headers,
+  # breaking C++ compilation. No current consumers need the C++ bindings.
+  withCxx ?
+    !stdenv.hostPlatform.useAndroidPrebuilt
+    && !(stdenv.hostPlatform.isFreeBSD && stdenv.hostPlatform.isStatic),
+  mouseSupport ? false,
+  gpm,
+  withTermlib ? false,
+  unicodeSupport ? true,
+  testers,
+  binlore,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "6.4.20221231";
+  version = "6.6";
   pname = "ncurses" + lib.optionalString (abiVersion == "5") "-abi5-compat";
 
   src = fetchurl {
     urls = [
-      "https://invisible-island.net/archives/ncurses/ncurses-${lib.versions.majorMinor finalAttrs.version}.tar.gz"
-      "https://ftp.gnu.org/gnu/ncurses/ncurses-${lib.versions.majorMinor finalAttrs.version}.tar.gz"
+      "https://invisible-island.net/archives/ncurses/ncurses-${finalAttrs.version}.tar.gz"
+      # invisible-island.net may be firewall blocked on some networks
+      "https://invisible-mirror.net/archives/ncurses/ncurses-${finalAttrs.version}.tar.gz"
     ];
-    hash = "sha256-aTEoPZrIfFBz8wtikMTHXyFjK7T8NgOsgQCBK+0kgVk=";
+    hash = "sha256-NVtMu+2ICwOBoExGYXt2VuNiWF1S6c+Epn4gCbdJ/xE=";
   };
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
   setOutputFlags = false; # some aren't supported
+  separateDebugInfo = false;
+
+  postPatch = ''
+    sed -i '1i #include <stdbool.h>' include/curses.h.in
+  '';
+
+  # see other isOpenBSD clause below
+  configurePlatforms =
+    if stdenv.hostPlatform.isOpenBSD then
+      [ "build" ]
+    else
+      [
+        "build"
+        "host"
+      ];
 
   configureFlags = [
     (lib.withFeature (!enableStatic) "shared")
-    "--without-debug"
     "--enable-pc-files"
     "--enable-symlinks"
     "--with-manpage-format=normal"
     "--disable-stripping"
     "--with-versioned-syms"
-  ] ++ lib.optional unicodeSupport "--enable-widec"
-    ++ lib.optional (!withCxx) "--without-cxx"
-    ++ lib.optional (abiVersion == "5") "--with-abi-version=5"
-    ++ lib.optional stdenv.hostPlatform.isNetBSD "--enable-rpath"
-    ++ lib.optional withTermlib "--with-termlib"
-    ++ lib.optionals stdenv.hostPlatform.isWindows [
-      "--enable-sp-funcs"
-      "--enable-term-driver"
-  ] ++ lib.optionals (stdenv.hostPlatform.isUnix && enableStatic) [
-      # For static binaries, the point is to have a standalone binary with
-      # minimum dependencies. So here we make sure that binaries using this
-      # package won't depend on a terminfo database located in the Nix store.
-      "--with-terminfo-dirs=${lib.concatStringsSep ":" [
+  ]
+  ++ lib.optional (!finalAttrs.separateDebugInfo) "--without-debug"
+  ++ lib.optional (unicodeSupport && abiVersion == "5") "--enable-widec"
+  ++ lib.optional (!unicodeSupport && abiVersion == "6") "--disable-widec"
+  ++ lib.optional (!withCxx) "--without-cxx"
+  ++ lib.optional (abiVersion == "5") "--with-abi-version=5"
+  ++ lib.optional stdenv.hostPlatform.isNetBSD "--enable-rpath"
+  ++ lib.optional withTermlib "--with-termlib"
+  ++ lib.optionals stdenv.hostPlatform.isWindows [
+    "--enable-sp-funcs"
+    "--enable-term-driver"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isUnix && enableStatic) [
+    # For static binaries, the point is to have a standalone binary with
+    # minimum dependencies. So here we make sure that binaries using this
+    # package won't depend on a terminfo database located in the Nix store.
+    "--with-terminfo-dirs=${
+      lib.concatStringsSep ":" [
         "/etc/terminfo" # Debian, Fedora, Gentoo
         "/lib/terminfo" # Debian
         "/usr/share/terminfo" # upstream default, probably all FHS-based distros
         "/run/current-system/sw/share/terminfo" # NixOS
-      ]}"
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      ]
+    }"
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "--with-build-cc=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc"
-  ] ++ (lib.optionals (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17") [
+  ]
+  ++ (lib.optionals (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17")
+    [
       # lld17+ passes `--no-undefined-version` by default and makes this a hard
       # error; ncurses' `resulting.map` version script references symbols that
       # aren't present.
@@ -67,18 +101,44 @@ stdenv.mkDerivation (finalAttrs: {
       #
       # For now we allow this with `--undefined-version`:
       "LDFLAGS=-Wl,--undefined-version"
-  ]);
+    ]
+  )
+  ++ lib.optionals stdenv.hostPlatform.isOpenBSD [
+    # If you don't specify the version number in the host specification, a branch gets taken in configure
+    # which assumes that your openbsd is from the 90s, leading to a truly awful compiler/linker configuration.
+    # No, autoreconfHook doesn't work.
+    "--host=${stdenv.hostPlatform.config}${stdenv.cc.libc.version}"
+  ]
+  # Without this override, the upstream configure system results in
+  #
+  #     typedef unsigned char NCURSES_BOOL;
+  #     #define bool NCURSES_BOOL;
+  #
+  # Which breaks C++ bindings:
+  #
+  #      > /nix/store/[...]-gcc-15.1.0/include/c++/15.1.0/cstddef:81:21: error: redefinition of 'struct std::__byte_operand<unsigned char>'
+  #      >    81 |   template<> struct __byte_operand<unsigned char> { using __type = byte; };
+  #      >       |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  #      > /nix/store/[...]-gcc-15.1.0/include/c++/15.1.0/cstddef:78:21: note: previous definition of 'struct std::__byte_operand<unsigned char>'
+  #      >    78 |   template<> struct __byte_operand<bool> { using __type = byte; };
+  #
+  ++ [
+    "cf_cv_type_of_bool=bool"
+  ];
 
   # Only the C compiler, and explicitly not C++ compiler needs this flag on solaris:
-  CFLAGS = lib.optionalString stdenv.hostPlatform.isSunOS "-D_XOPEN_SOURCE_EXTENDED";
+  env = lib.optionalAttrs stdenv.hostPlatform.isSunOS {
+    CFLAGS = "-D_XOPEN_SOURCE_EXTENDED";
+  };
 
   strictDeps = true;
 
   nativeBuildInputs = [
     updateAutotoolsGnuConfigScriptsHook
     pkg-config
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-   # for `tic`, build already depends on for build `cc` so it's weird the build doesn't just build `tic`.
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    # for `tic`, build already depends on for build `cc` so it's weird the build doesn't just build `tic`.
     ncurses
   ];
 
@@ -87,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     export PKG_CONFIG_LIBDIR="$dev/lib/pkgconfig"
     mkdir -p "$PKG_CONFIG_LIBDIR"
-    configureFlagsArray+=(
+    configureFlags+=(
       "--libdir=$out/lib"
       "--includedir=$dev/include"
       "--bindir=$dev/bin"
@@ -106,85 +166,87 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false;
 
-  postFixup = let
-    abiVersion-extension = if stdenv.hostPlatform.isDarwin then "${abiVersion}.$dylibtype" else "$dylibtype.${abiVersion}"; in
-  ''
-    # Determine what suffixes our libraries have
-    suffix="$(awk -F': ' 'f{print $3; f=0} /default library suffix/{f=1}' config.log)"
-  ''
-  # When building a wide-character (Unicode) build, create backward
-  # compatibility links from the the "normal" libraries to the
-  # wide-character libraries (e.g. libncurses.so to libncursesw.so).
-  + lib.optionalString unicodeSupport ''
-    libs="$(ls $dev/lib/pkgconfig | tr ' ' '\n' | sed "s,\(.*\)$suffix\.pc,\1,g")"
-    suffixes="$(echo "$suffix" | awk '{for (i=1; i < length($0); i++) {x=substr($0, i+1, length($0)-i); print x}}')"
+  postInstall =
+    let
+      abiVersion-extension =
+        if stdenv.hostPlatform.isDarwin then "${abiVersion}.$dylibtype" else "$dylibtype.${abiVersion}";
+    in
+    lib.optionalString (!stdenv.hostPlatform.isCygwin && !enableStatic) ''
+      rm "$out"/lib/*.a
+    ''
+    + ''
+      # Determine what suffixes our libraries have
+      suffix="$(awk -F': ' 'f{print $3; f=0} /default library suffix/{f=1}' config.log)"
+    ''
+    # When building a wide-character (Unicode) build, create backward
+    # compatibility links from the "normal" libraries to the
+    # wide-character libraries (e.g. libncurses.so to libncursesw.so).
+    + lib.optionalString unicodeSupport ''
+      libs="$(ls $dev/lib/pkgconfig | tr ' ' '\n' | sed "s,\(.*\)$suffix\.pc,\1,g")"
+      suffixes="$(echo "$suffix" | awk '{for (i=1; i < length($0); i++) {x=substr($0, i+1, length($0)-i); print x}}')"
 
-    # Get the path to the config util
-    cfg=$(basename $dev/bin/ncurses*-config)
+      # Get the path to the config util
+      cfg=$(basename $dev/bin/ncurses*-config)
 
-    # symlink the full suffixed include directory
-    ln -svf . $dev/include/ncurses$suffix
+      # symlink the full suffixed include directory
+      ln -svf . $dev/include/ncurses$suffix
 
-    for newsuffix in $suffixes ""; do
-      # Create a non-abi versioned config util links
-      ln -svf $cfg $dev/bin/ncurses$newsuffix-config
+      for newsuffix in $suffixes ""; do
+        # Create a non-abi versioned config util links
+        ln -svf $cfg $dev/bin/ncurses$newsuffix-config
 
-      # Allow for end users who #include <ncurses?w/*.h>
-      ln -svf . $dev/include/ncurses$newsuffix
+        # Allow for end users who #include <ncurses?w/*.h>
+        ln -svf . $dev/include/ncurses$newsuffix
 
-      for library in $libs; do
-        for dylibtype in so dll dylib; do
-          if [ -e "$out/lib/lib''${library}$suffix.$dylibtype" ]; then
-            ln -svf lib''${library}$suffix.$dylibtype $out/lib/lib$library$newsuffix.$dylibtype
-            ln -svf lib''${library}$suffix.${abiVersion-extension} $out/lib/lib$library$newsuffix.${abiVersion-extension}
-            if [ "ncurses" = "$library" ]
-            then
-              # make libtinfo symlinks
-              ln -svf lib''${library}$suffix.$dylibtype $out/lib/libtinfo$newsuffix.$dylibtype
-              ln -svf lib''${library}$suffix.${abiVersion-extension} $out/lib/libtinfo$newsuffix.${abiVersion-extension}
+        for library in $libs; do
+          for dylibtype in so dll dylib; do
+            if [ -e "$out/lib/lib''${library}$suffix.$dylibtype" ]; then
+              ln -svf lib''${library}$suffix.$dylibtype $out/lib/lib$library$newsuffix.$dylibtype
+              ln -svf lib''${library}$suffix.${abiVersion-extension} $out/lib/lib$library$newsuffix.${abiVersion-extension}
+              if [ "ncurses" = "$library" ]
+              then
+                # make libtinfo symlinks
+                ln -svf lib''${library}$suffix.$dylibtype $out/lib/libtinfo$newsuffix.$dylibtype
+                ln -svf lib''${library}$suffix.${abiVersion-extension} $out/lib/libtinfo$newsuffix.${abiVersion-extension}
+              fi
             fi
-          fi
-        done
-        for statictype in a dll.a la; do
-          if [ -e "$out/lib/lib''${library}$suffix.$statictype" ]; then
-            ln -svf lib''${library}$suffix.$statictype $out/lib/lib$library$newsuffix.$statictype
-            if [ "ncurses" = "$library" ]
-            then
-              # make libtinfo symlinks
-              ln -svf lib''${library}$suffix.$statictype $out/lib/libtinfo$newsuffix.$statictype
+          done
+          for statictype in a dll.a la; do
+            if [ -e "$out/lib/lib''${library}$suffix.$statictype" ]; then
+              ln -svf lib''${library}$suffix.$statictype $out/lib/lib$library$newsuffix.$statictype
+              if [ "ncurses" = "$library" ]
+              then
+                # make libtinfo symlinks
+                ln -svf lib''${library}$suffix.$statictype $out/lib/libtinfo$newsuffix.$statictype
+              fi
             fi
-          fi
+          done
+          ln -svf ''${library}$suffix.pc $dev/lib/pkgconfig/$library$newsuffix.pc
         done
-        ln -svf ''${library}$suffix.pc $dev/lib/pkgconfig/$library$newsuffix.pc
       done
-    done
     ''
     # Unconditional patches. Leading newline is to avoid mass rebuilds.
     + ''
 
-    # add pkg-config aliases for libraries that are built-in to libncurses(w)
-    for library in tinfo tic; do
-      for suffix in "" ${lib.optionalString unicodeSupport "w"}; do
-        ln -svf ncurses$suffix.pc $dev/lib/pkgconfig/$library$suffix.pc
+      # add pkg-config aliases for libraries that are built-in to libncurses(w)
+      for library in tinfo tic; do
+        for suffix in "" ${lib.optionalString unicodeSupport "w"}; do
+          ln -svf ncurses$suffix.pc $dev/lib/pkgconfig/$library$suffix.pc
+        done
       done
-    done
 
-    # move some utilities to $bin
-    # these programs are used at runtime and don't really belong in $dev
-    moveToOutput "bin/clear" "$out"
-    moveToOutput "bin/reset" "$out"
-    moveToOutput "bin/tabs" "$out"
-    moveToOutput "bin/tic" "$out"
-    moveToOutput "bin/tput" "$out"
-    moveToOutput "bin/tset" "$out"
-    moveToOutput "bin/captoinfo" "$out"
-    moveToOutput "bin/infotocap" "$out"
-    moveToOutput "bin/infocmp" "$out"
-  '';
-
-  preFixup = lib.optionalString (!stdenv.hostPlatform.isCygwin && !enableStatic) ''
-    rm "$out"/lib/*.a
-  '';
+      # move some utilities to $bin
+      # these programs are used at runtime and don't really belong in $dev
+      moveToOutput "bin/clear" "$out"
+      moveToOutput "bin/reset" "$out"
+      moveToOutput "bin/tabs" "$out"
+      moveToOutput "bin/tic" "$out"
+      moveToOutput "bin/tput" "$out"
+      moveToOutput "bin/tset" "$out"
+      moveToOutput "bin/captoinfo" "$out"
+      moveToOutput "bin/infotocap" "$out"
+      moveToOutput "bin/infocmp" "$out"
+    '';
 
   # I'm not very familiar with ncurses, but it looks like most of the
   # exec here will run hard-coded executables. There's one that is
@@ -197,7 +259,9 @@ stdenv.mkDerivation (finalAttrs: {
     execer cannot bin/{reset,tput,tset}
   '';
 
-  meta = with lib; {
+  __structuredAttrs = true;
+
+  meta = {
     homepage = "https://www.gnu.org/software/ncurses/";
     description = "Free software emulation of curses in SVR4 and more";
     longDescription = ''
@@ -211,16 +275,20 @@ stdenv.mkDerivation (finalAttrs: {
       NetBSD as an external package. It should port easily to any
       ANSI/POSIX-conforming UNIX. It has even been ported to OS/2 Warp!
     '';
-    license = licenses.mit;
-    pkgConfigModules = let
-      base = [
-        "form"
-        "menu"
-        "ncurses"
-        "panel"
-      ] ++ lib.optional withCxx "ncurses++";
-    in base ++ lib.optionals unicodeSupport (map (p: p + "w") base);
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    pkgConfigModules =
+      let
+        base = [
+          "form"
+          "menu"
+          "ncurses"
+          "panel"
+        ]
+        ++ lib.optional withCxx "ncurses++";
+      in
+      base ++ lib.optionals unicodeSupport (map (p: p + "w") base);
+    platforms = lib.platforms.all;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "ncurses_project" finalAttrs.version;
   };
 
   passthru = {

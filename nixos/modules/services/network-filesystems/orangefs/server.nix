@@ -7,7 +7,7 @@
 let
   cfg = config.services.orangefs.server;
 
-  aliases = lib.mapAttrsToList (alias: url: alias) cfg.servers;
+  aliases = lib.attrNames cfg.servers;
 
   # Maximum handle number is 2^63
   maxHandle = 9223372036854775806;
@@ -50,8 +50,8 @@ let
       </DataHandleRanges>
 
       <StorageHints>
-      TroveSyncMeta ${if fs.troveSyncMeta then "yes" else "no"}
-      TroveSyncData ${if fs.troveSyncData then "yes" else "no"}
+      TroveSyncMeta ${lib.boolToYesNo fs.troveSyncMeta}
+      TroveSyncData ${lib.boolToYesNo fs.troveSyncData}
       ${fs.extraStorageHints}
       </StorageHints>
 

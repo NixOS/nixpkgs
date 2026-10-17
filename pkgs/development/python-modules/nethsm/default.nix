@@ -1,50 +1,61 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  flit-core,
   certifi,
   cryptography,
-  python-dateutil,
+  fetchFromGitHub,
+  poetry-core,
+  pycryptodome,
+  pytestCheckHook,
   typing-extensions,
   urllib3,
 }:
 
-let
+buildPythonPackage rec {
   pname = "nethsm";
-  version = "1.2.1";
-in
-
-buildPythonPackage {
-  inherit pname version;
+  version = "3.0.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-EPxGJFCGGl3p3yLlM7NH7xtEVS2woRigKJhL57A0gAE=";
+  src = fetchFromGitHub {
+    owner = "Nitrokey";
+    repo = "nethsm-sdk-py";
+    tag = "v${version}";
+    hash = "sha256-kOZ/kNvYlnKi/ojv4b4ZGmNZqARZPAT0g12xi6gw39E=";
   };
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = true;
+
+  build-system = [ poetry-core ];
+
+  dependencies = [
     certifi
     cryptography
-    python-dateutil
     typing-extensions
     urllib3
   ];
 
-  nativeBuildInputs = [
-    flit-core
+  nativeCheckInputs = [
+    pycryptodome
+    pytestCheckHook
   ];
-
-  pythonRelaxDeps = true;
 
   pythonImportsCheck = [ "nethsm" ];
 
-  meta = with lib; {
+  disabledTestPaths = [
+    # Tests require a running Docker instance
+    "tests/test_nethsm_config.py"
+    "tests/test_nethsm_keys.py"
+    "tests/test_nethsm_namespaces.py"
+    "tests/test_nethsm_other.py"
+    "tests/test_nethsm_system.py"
+    "tests/test_nethsm_users.py"
+  ];
+
+  meta = {
     description = "Client-side Python SDK for NetHSM";
     homepage = "https://github.com/Nitrokey/nethsm-sdk-py";
-    changelog = "https://github.com/Nitrokey/nethsm-sdk-py/releases/tag/v${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ frogamic ];
+    changelog = "https://github.com/Nitrokey/nethsm-sdk-py/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.panicgh ];
   };
 }

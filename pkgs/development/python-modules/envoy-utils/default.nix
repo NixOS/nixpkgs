@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   zeroconf,
 }:
 
@@ -11,12 +10,10 @@ buildPythonPackage rec {
   version = "0.0.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "envoy_utils";
     inherit version;
-    sha256 = "13zn0d6k2a4nls9vp8cs0w07bgg4138vz18cadjadhm8p6r3bi0c";
+    hash = "sha256-DMQ1srmowqZkUwyFv9EI5L11AAeaobuTppYoMU0D9o8=";
   };
 
   propagatedBuildInputs = [ zeroconf ];
@@ -26,10 +23,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "envoy_utils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python utilities for the Enphase Envoy";
     homepage = "https://pypi.org/project/envoy-utils/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

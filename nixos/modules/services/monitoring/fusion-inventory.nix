@@ -1,5 +1,10 @@
 # Fusion Inventory daemon.
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.fusionInventory;
 
@@ -11,7 +16,8 @@ let
     ${cfg.extraConfig}
   '';
 
-in {
+in
+{
 
   ###### interface
 
@@ -38,7 +44,6 @@ in {
     };
   };
 
-
   ###### implementation
 
   config = lib.mkIf cfg.enable {
@@ -53,7 +58,7 @@ in {
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = "${pkgs.fusionInventory}/bin/fusioninventory-agent --conf-file=${configFile} --daemon --no-fork";
+        ExecStart = "${pkgs.fusioninventory-agent}/bin/fusioninventory-agent --conf-file=${configFile} --daemon --no-fork";
       };
     };
   };

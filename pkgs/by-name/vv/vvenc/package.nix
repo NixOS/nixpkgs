@@ -5,11 +5,12 @@
   gitUpdater,
   testers,
   cmake,
+  nlohmann_json,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vvenc";
-  version = "1.13.0";
+  version = "1.14.0";
 
   outputs = [
     "out"
@@ -20,8 +21,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "fraunhoferhhi";
     repo = "vvenc";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-9fWKunafTniBsY9hK09+xYwvB7IgGPhZmgqauPHgB/g=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MZVXxUXpcZ16de3CZDscLOlnqjHkGZ98muhYCDCcgvs=";
   };
 
   patches = [ ./unset-darwin-cmake-flags.patch ];
@@ -33,12 +34,27 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
+  buildInputs = [ nlohmann_json ];
+
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
     (lib.cmakeBool "VVENC_INSTALL_FULLFEATURE_APP" true)
+    (lib.cmakeBool "VVENC_ENABLE_THIRDPARTY_JSON" true)
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
   ];
+
+  postPatch = ''
+    substituteInPlace pkgconfig/libvvenc.pc.in \
+      --replace-fail \
+        'libdir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@' \
+        'libdir=@CMAKE_INSTALL_FULL_LIBDIR@' \
+      --replace-fail \
+        'includedir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_INCLUDEDIR@' \
+        'includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@'
+  '';
+
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   passthru = {
     updateScript = gitUpdater {

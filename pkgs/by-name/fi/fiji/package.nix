@@ -1,23 +1,24 @@
-{ stdenv
-, lib
-, fetchurl
-, makeWrapper
-, autoPatchelfHook
-, jdk11
-, makeDesktopItem
-, copyDesktopItems
-, runtimeShell
-, unzip
-, wrapGAppsHook3
+{
+  stdenv,
+  lib,
+  fetchurl,
+  makeWrapper,
+  autoPatchelfHook,
+  jdk11,
+  makeDesktopItem,
+  copyDesktopItems,
+  runtimeShell,
+  unzip,
+  wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fiji";
-  version = "20241114-1317";
+  version = "20250514-1117";
 
   src = fetchurl {
-    url = "https://downloads.imagej.net/fiji/archive/${version}/fiji-nojre.zip";
-    sha256 = "sha256-dNpscgZiiE2cuuo11YLs+mgoBRZ/MpUXDaAX3x+E/w8=";
+    url = "https://downloads.imagej.net/fiji/archive/${finalAttrs.version}/fiji-nojre.zip";
+    sha256 = "sha256-6rBL0KyrV8BRbvufXbAGhmnPgqXMyIESVHmV7CkH26g=";
   };
 
   dontBuild = true;
@@ -42,7 +43,11 @@ stdenv.mkDerivation rec {
       comment = "Scientific Image Analysis";
       desktopName = "Fiji Is Just ImageJ";
       genericName = "Fiji Is Just ImageJ";
-      categories = [ "Education" "Science" "ImageProcessing" ];
+      categories = [
+        "Education"
+        "Science"
+        "ImageProcessing"
+      ];
       startupNotify = true;
       startupWMClass = "fiji-Main";
     })
@@ -53,7 +58,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,fiji,share/pixmaps}
+    mkdir -p $out/{bin,fiji,share/icons/hicolor/256x256/apps}
 
     cp -R * $out/fiji
     rm -f $out/fiji/jars/imagej-updater-*.jar
@@ -71,21 +76,26 @@ stdenv.mkDerivation rec {
       --set JAVA_HOME ${jdk11.home} \
       ''${gappsWrapperArgs[@]}
 
-    ln $out/fiji/images/icon.png $out/share/pixmaps/fiji.png
+    ln $out/fiji/images/icon.png $out/share/icons/hicolor/256x256/apps/fiji.png
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://imagej.net/software/fiji/";
-    description = "batteries-included distribution of ImageJ2, bundling a lot of plugins which facilitate scientific image analysis";
+    description = "Batteries-included distribution of ImageJ2, bundling a lot of plugins which facilitate scientific image analysis";
     mainProgram = "fiji";
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode
     ];
-    license = with lib.licenses; [ gpl2Plus gpl3Plus bsd2 publicDomain ];
-    maintainers = with maintainers; [ davisrichard437 ];
+    license = with lib.licenses; [
+      gpl2Plus
+      gpl3Plus
+      bsd2
+      publicDomain
+    ];
+    maintainers = [ ];
   };
-}
+})

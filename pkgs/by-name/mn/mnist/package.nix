@@ -23,7 +23,7 @@ let
     };
   };
 in
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "mnist";
   version = "2018-11-16";
   installPhase = ''
@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation rec {
     ln -s "${srcs.test-labels}" "$out/${srcs.test-labels.name}"
   '';
   dontUnpack = true;
-  meta = with lib; {
+  meta = {
     description = "Large database of handwritten digits";
     longDescription = ''
       The MNIST database (Modified National Institute of Standards and
@@ -42,8 +42,8 @@ stdenvNoCC.mkDerivation rec {
       commonly used for training various image processing systems.
     '';
     homepage = "http://yann.lecun.com/exdb/mnist/index.html";
-    license = licenses.cc-by-sa-30;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ cmcdragonkai ];
+    license = lib.licenses.cc-by-sa-30;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ cmcdragonkai ];
   };
 }

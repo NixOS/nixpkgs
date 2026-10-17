@@ -7,20 +7,21 @@
   pkg-config,
   perl,
   openssl,
+  curl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "release-plz";
-  version = "0.3.113";
+  version = "0.3.172";
 
   src = fetchFromGitHub {
-    owner = "MarcoIeni";
+    owner = "release-plz";
     repo = "release-plz";
-    rev = "release-plz-v${version}";
-    hash = "sha256-m33tBLNOU2+vjIICU0ggnNxLvD/fxJVSxT6bRih9e7U=";
+    rev = "release-plz-v${finalAttrs.version}";
+    hash = "sha256-CoEw+kM+wGQM1mQi0a+VLupgY2JuKwX2fhPqHb5o8oQ=";
   };
 
-  cargoHash = "sha256-d7CltWp1RfQ8cJ6eLXF8spaWXBBEtla46FiRrzG5EVg=";
+  cargoHash = "sha256-28UqnjX/VrGJxNuo5B0SMAtuwzpjHHktCe2CZ/k4ECs=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -28,7 +29,7 @@ rustPlatform.buildRustPackage rec {
     perl
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ curl ];
 
   buildAndTestSubdir = "crates/release_plz";
 
@@ -36,22 +37,24 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd ${meta.mainProgram} \
-      --bash <($out/bin/${meta.mainProgram} generate-completions bash) \
-      --fish <($out/bin/${meta.mainProgram} generate-completions fish) \
-      --zsh <($out/bin/${meta.mainProgram} generate-completions zsh)
+    installShellCompletion --cmd ${finalAttrs.meta.mainProgram} \
+      --bash <($out/bin/${finalAttrs.meta.mainProgram} generate-completions bash) \
+      --fish <($out/bin/${finalAttrs.meta.mainProgram} generate-completions fish) \
+      --zsh <($out/bin/${finalAttrs.meta.mainProgram} generate-completions zsh)
   '';
 
   meta = {
     description = "Publish Rust crates from CI with a Release PR";
     homepage = "https://release-plz.ieni.dev";
-    changelog = "https://github.com/MarcoIeni/release-plz/blob/release-plz-v${version}/CHANGELOG.md";
+    changelog = "https://github.com/release-plz/release-plz/blob/release-plz-v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with lib.maintainers; [ dannixon ];
+    maintainers = with lib.maintainers; [
+      dannixon
+      chrjabs
+    ];
     mainProgram = "release-plz";
-    broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

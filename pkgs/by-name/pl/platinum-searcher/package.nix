@@ -5,14 +5,14 @@
   fetchpatch,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "the_platinum_searcher";
   version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "monochromegane";
     repo = "the_platinum_searcher";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-FNHlALFwMbajaHWOehdSFeQmvZSuCZLdqGqLZ7DF+pI=";
   };
 
@@ -31,10 +31,10 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/monochromegane/the_platinum_searcher";
     description = "Code search tool similar to ack and the_silver_searcher(ag)";
     mainProgram = "pt";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
-}
+})

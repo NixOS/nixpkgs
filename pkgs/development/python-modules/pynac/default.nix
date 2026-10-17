@@ -11,12 +11,12 @@ buildPythonPackage {
 
   src = fetchurl {
     url = "mirror://sourceforge/project/pynac/pynac/pynac-0.2/pynac-0.2.tar.gz";
-    sha256 = "0avzqqcxl54karjmla9jbsyid98mva36lxahwmrsx5h40ys2ggxp";
+    hash = "sha256-t78ntAcElq5z5VB1aobaFaUWvV4yKVplVpMU2hnGfys=";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/se-esss-litterbox/Pynac";
     description = "Python wrapper around the Dynac charged particle simulator";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
   };
 }

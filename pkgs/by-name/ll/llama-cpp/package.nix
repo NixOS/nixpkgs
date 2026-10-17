@@ -1,10 +1,12 @@
 {
   lib,
+  buildPackages,
   autoAddDriverRunpath,
   cmake,
-  darwin,
+  ctestCheckHook,
   fetchFromGitHub,
-  nix-update-script,
+  fetchpatch,
+  installShellFiles,
   stdenv,
 
   config,
@@ -13,6 +15,9 @@
 
   rocmSupport ? config.rocmSupport,
   rocmPackages ? { },
+  rocmGpuTargets ? rocmPackages.clr.localGpuTargets or rocmPackages.clr.gpuTargets,
+
+  cpuArchDynamicDispatch ? true,
 
   openclSupport ? false,
   clblast,
@@ -26,21 +31,32 @@
   ],
   blas,
 
+  fetchNpmDeps,
+  nodejs_latest,
+  npmHooks,
+
   pkg-config,
-  metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && !openclSupport,
+  python3,
+  metalSupport ? stdenv.hostPlatform.isDarwin && !openclSupport,
   vulkanSupport ? false,
   rpcSupport ? false,
+  openssl,
   shaderc,
   vulkan-headers,
   vulkan-loader,
+  spirv-headers,
   ninja,
-  git,
 }:
 
 let
+  # Upstream reads these from git, which the release tarball does not ship.
+  # They are purely informational: `llama-server --version`, `/props`, and the web UI.
+  buildNumber = "11429";
+  buildCommit = "d812350";
+
   # It's necessary to consistently use backendStdenv when building with CUDA support,
   # otherwise we get libstdc++ errors downstream.
-  # cuda imposes an upper bound on the gcc version, e.g. the latest gcc compatible with cudaPackages_11 is gcc11
+  # cuda imposes an upper bound on the gcc version
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
   inherit (lib)
     cmakeBool
@@ -49,17 +65,8 @@ let
     optionalString
     ;
 
-  darwinBuildInputs =
-    with darwin.apple_sdk.frameworks;
-    [
-      Accelerate
-      CoreVideo
-      CoreGraphics
-    ]
-    ++ optionals metalSupport [ MetalKit ];
-
   cudaBuildInputs = with cudaPackages; [
-    cuda_cccl # <nv/target>
+    cccl # <nv/target>
 
     # A temporary hack for reducing the closure size, remove once cudaPackages
     # have stopped using lndir: https://github.com/NixOS/nixpkgs/issues/271792
@@ -74,134 +81,187 @@ let
   ];
 
   vulkanBuildInputs = [
-    shaderc
+    spirv-headers
     vulkan-headers
     vulkan-loader
   ];
+
+  buildCc = buildPackages.stdenv.cc;
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "4529";
+  version = "0.6.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
-    owner = "ggerganov";
+    owner = "ggml-org";
     repo = "llama.cpp";
-    tag = "b${finalAttrs.version}";
-    hash = "sha256-YqXL6nxUQrF/RI9GEzlBo6iiaLFYba0cXsVVqM/aGTw=";
-    leaveDotGit = true;
-    postFetch = ''
-      git -C "$out" rev-parse --short HEAD > $out/COMMIT
-      find "$out" -name .git -print0 | xargs -0 rm -rf
-    '';
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-l6l6JIlIVTaVC6xh5M4fRHFtXsweQuugtkNTWHcZZF4=";
   };
 
-  postPatch = ''
-    # Workaround for local-ai package which overrides this package to an older llama-cpp
-    if [ -f ./ggml/src/ggml-metal.m ]; then
-      substituteInPlace ./ggml/src/ggml-metal.m \
-        --replace-fail '[bundle pathForResource:@"ggml-metal" ofType:@"metal"];' "@\"$out/bin/ggml-metal.metal\";"
-    fi
+  patches = [
+    # Initialize dynamically loaded backends before generating test models.
+    # https://github.com/ggml-org/llama.cpp/pull/30034
+    (fetchpatch {
+      url = "https://github.com/ggml-org/llama.cpp/commit/07ccce23cf7fe3c84e13d810accff672b1d966bf.patch";
+      hash = "sha256-KtsPcveFM51fY1hDWntiqCW/KHoWLv05Gmnhd1U/9Zs=";
+    })
+  ];
 
-    if [ -f ./ggml/src/ggml-metal/ggml-metal.m ]; then
-      substituteInPlace ./ggml/src/ggml-metal/ggml-metal.m \
-        --replace-fail '[bundle pathForResource:@"ggml-metal" ofType:@"metal"];' "@\"$out/bin/ggml-metal.metal\";"
-    fi
+  nativeBuildInputs = [
+    cmake
+    installShellFiles
+    ninja
+    nodejs_latest
+    npmHooks.npmConfigHook
+    pkg-config
+  ]
+  ++ optionals cudaSupport [
+    cudaPackages.cuda_nvcc
+    autoAddDriverRunpath
+  ]
+  # `glslc` is used at build time to compile the shaders
+  ++ optionals vulkanSupport [
+    shaderc
+  ];
 
-    substituteInPlace ./scripts/build-info.sh \
-      --replace-fail 'build_number="0"' 'build_number="${finalAttrs.version}"' \
-      --replace-fail 'build_commit="unknown"' "build_commit=\"$(cat COMMIT)\""
-  '';
-
-  nativeBuildInputs =
-    [
-      cmake
-      ninja
-      pkg-config
-      git
-    ]
-    ++ optionals cudaSupport [
-      cudaPackages.cuda_nvcc
-      autoAddDriverRunpath
-    ];
+  depsBuildBuild = optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    # llama-ui-embed under tools/ui needs a host compiler
+    buildCc
+  ];
 
   buildInputs =
-    optionals effectiveStdenv.hostPlatform.isDarwin darwinBuildInputs
-    ++ optionals cudaSupport cudaBuildInputs
+    optionals cudaSupport cudaBuildInputs
     ++ optionals openclSupport [ clblast ]
     ++ optionals rocmSupport rocmBuildInputs
     ++ optionals blasSupport [ blas ]
-    ++ optionals vulkanSupport vulkanBuildInputs;
+    ++ optionals vulkanSupport vulkanBuildInputs
+    ++ [ openssl ];
 
-  cmakeFlags =
-    [
-      # -march=native is non-deterministic; override with platform-specific flags if needed
-      (cmakeBool "GGML_NATIVE" false)
-      (cmakeBool "LLAMA_BUILD_SERVER" true)
-      (cmakeBool "BUILD_SHARED_LIBS" true)
-      (cmakeBool "GGML_BLAS" blasSupport)
-      (cmakeBool "GGML_CLBLAST" openclSupport)
-      (cmakeBool "GGML_CUDA" cudaSupport)
-      (cmakeBool "GGML_HIPBLAS" rocmSupport)
-      (cmakeBool "GGML_METAL" metalSupport)
-      (cmakeBool "GGML_RPC" rpcSupport)
-      (cmakeBool "GGML_VULKAN" vulkanSupport)
-    ]
-    ++ optionals cudaSupport [
-      (cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
-    ]
-    ++ optionals rocmSupport [
-      (cmakeFeature "CMAKE_C_COMPILER" "hipcc")
-      (cmakeFeature "CMAKE_CXX_COMPILER" "hipcc")
-
-      # Build all targets supported by rocBLAS. When updating search for TARGET_LIST_ROCM
-      # in https://github.com/ROCmSoftwarePlatform/rocBLAS/blob/develop/CMakeLists.txt
-      # and select the line that matches the current nixpkgs version of rocBLAS.
-      # Should likely use `rocmPackages.clr.gpuTargets`.
-      "-DAMDGPU_TARGETS=gfx803;gfx900;gfx906:xnack-;gfx908:xnack-;gfx90a:xnack+;gfx90a:xnack-;gfx940;gfx941;gfx942;gfx1010;gfx1012;gfx1030;gfx1100;gfx1101;gfx1102"
-    ]
-    ++ optionals metalSupport [
-      (cmakeFeature "CMAKE_C_FLAGS" "-D__ARM_FEATURE_DOTPROD=1")
-      (cmakeBool "LLAMA_METAL_EMBED_LIBRARY" true)
-    ]
-    ++ optionals rpcSupport [
-      # This is done so we can move rpc-server out of bin because llama.cpp doesn't
-      # install rpc-server in their install target.
-      "-DCMAKE_SKIP_BUILD_RPATH=ON"
-    ];
-
-  # upstream plans on adding targets at the cmakelevel, remove those
-  # additional steps after that
-  postInstall =
-    ''
-      # Match previous binary name for this package
-      ln -sf $out/bin/llama-cli $out/bin/llama
-
-      mkdir -p $out/include
-      cp $src/include/llama.h $out/include/
-    ''
-    + optionalString rpcSupport "cp bin/rpc-server $out/bin/llama-rpc-server";
-
-  passthru.updateScript = nix-update-script {
-    attrPath = "llama-cpp";
-    extraArgs = [
-      "--version-regex"
-      "b(.*)"
-    ];
+  npmRoot = "tools/ui";
+  npmDepsHash = "sha256-a17M+L3nLdRnN6WMB6imPFmwqG2g8uv+gwN0XTAUrf8=";
+  npmDeps = fetchNpmDeps {
+    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
+    inherit (finalAttrs) src patches;
+    preBuild = ''
+      pushd ${finalAttrs.npmRoot}
+    '';
+    hash = finalAttrs.npmDepsHash;
   };
 
-  meta = with lib; {
-    description = "Inference of Meta's LLaMA model (and others) in pure C/C++";
-    homepage = "https://github.com/ggerganov/llama.cpp/";
-    license = licenses.mit;
+  preConfigure = ''
+    pushd ${finalAttrs.npmRoot}
+    LLAMA_BUILD_NUMBER=${buildNumber} npm run build
+    popd
+  '';
+
+  cmakeFlags = [
+    (cmakeBool "GGML_NATIVE" false) # -march=native would make builds non-deterministic
+    (cmakeBool "LLAMA_BUILD_EXAMPLES" false)
+    (cmakeBool "LLAMA_BUILD_SERVER" true)
+    (cmakeBool "LLAMA_BUILD_TESTS" (finalAttrs.finalPackage.doCheck or false))
+    (cmakeBool "LLAMA_TESTS_INSTALL" false)
+    (cmakeBool "LLAMA_BUILD_IS_DEV" false)
+    (cmakeBool "LLAMA_OPENSSL" true)
+    (cmakeBool "BUILD_SHARED_LIBS" true)
+    (cmakeBool "GGML_BLAS" blasSupport)
+    (cmakeBool "GGML_CLBLAST" openclSupport)
+    (cmakeBool "GGML_CUDA" cudaSupport)
+    (cmakeBool "GGML_HIP" rocmSupport)
+    (cmakeBool "GGML_METAL" metalSupport)
+    (cmakeBool "GGML_RPC" rpcSupport)
+    (cmakeBool "GGML_VULKAN" vulkanSupport)
+    (cmakeFeature "LLAMA_BUILD_NUMBER" buildNumber)
+    (cmakeFeature "LLAMA_BUILD_COMMIT" buildCommit)
+  ]
+  ++ optionals cpuArchDynamicDispatch [
+    # Build all CPU backend variants for runtime dynamic dispatch.
+    # This avoids illegal instructions on older CPUs and gives optimal performance
+    # on newer ones without needing separate builds.
+    # Enabling AVX2 can make CPU inference 13x faster compared to NixOS's x86_64 defaults.
+    # Note it is not a bug that the CPU variant .so files are placed in `bin/`
+    # (as opposed to `lib/`) alongside the executables by upstream's `CMakeLists.txt` design:
+    # * https://github.com/ggml-org/llama.cpp/blob/b46812de78f8fbcb6cf0154947e8633ebc78d9ac/ggml/src/CMakeLists.txt#L249-L252
+    # * https://github.com/ggml-org/llama.cpp/blob/b46812de78f8fbcb6cf0154947e8633ebc78d9ac/ggml/src/ggml-backend-reg.cpp#L480-L486
+    (cmakeBool "GGML_CPU_ALL_VARIANTS" true)
+    (cmakeBool "GGML_BACKEND_DL" true)
+    # Let libggml find the backends when it is loaded from another package.
+    (cmakeFeature "GGML_BACKEND_DIR" "${placeholder "out"}/bin")
+  ]
+  ++ optionals cudaSupport [
+    (cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
+  ]
+  ++ optionals rocmSupport [
+    (cmakeFeature "CMAKE_HIP_COMPILER" "${rocmPackages.clr.hipClangPath}/clang++")
+    (cmakeFeature "CMAKE_HIP_ARCHITECTURES" (builtins.concatStringsSep ";" rocmGpuTargets))
+  ]
+  ++ optionals metalSupport [
+    (cmakeFeature "CMAKE_C_FLAGS" "-D__ARM_FEATURE_DOTPROD=1")
+    (cmakeBool "LLAMA_METAL_EMBED_LIBRARY" true)
+  ]
+  ++ optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    (cmakeFeature "HOST_CXX_COMPILER" (lib.getExe' buildCc "${buildCc.targetPrefix}c++"))
+  ];
+
+  postInstall = optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd llama-server --bash <($out/bin/llama-server --completion-bash)
+  '';
+
+  doCheck = true;
+
+  # Use CTest to skip disabled tests.
+  dontUseNinjaCheck = true;
+
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
+    ctestCheckHook
+    (python3.withPackages (ps: [ ps.jinja2 ]))
+  ];
+
+  preCheck = optionalString metalSupport ''
+    export GGML_METAL_DEVICES=0
+  '';
+
+  disabledTests = [
+    # Network needed.
+    "test-tokenizers-ggml-vocabs"
+    "test-download-model"
+    "test-arg-parser"
+    "test-thread-safety"
+    "test-state-restore-fragmented"
+  ];
+
+  passthru = lib.optionalAttrs (!cudaSupport && !rocmSupport && !vulkanSupport) {
+    updateScript = ./update.sh;
+  };
+
+  meta = {
+    description =
+      "Inference of Meta's LLaMA model (and others) in pure C/C++"
+      + optionalString cudaSupport ", with CUDA support"
+      + optionalString rocmSupport ", with ROCm support"
+      + optionalString vulkanSupport ", with Vulkan support";
+    homepage = "https://github.com/ggml-org/llama.cpp";
+    license = lib.licenses.mit;
     mainProgram = "llama";
-    maintainers = with maintainers; [
-      dit7ya
-      elohmeier
+    maintainers = with lib.maintainers; [
+      booxter
       philiptaron
       xddxdd
+      yuannan
     ];
-    platforms = platforms.unix;
+    teams = [ lib.teams.cuda ];
+    platforms = lib.platforms.unix;
     badPlatforms = optionals (cudaSupport || openclSupport) lib.platforms.darwin;
-    broken = (metalSupport && !effectiveStdenv.hostPlatform.isDarwin);
+    broken = metalSupport && !effectiveStdenv.hostPlatform.isDarwin;
   };
 })

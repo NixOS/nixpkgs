@@ -12,15 +12,15 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wl-clipboard";
-  version = "2.2.1";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "bugaevc";
     repo = "wl-clipboard";
-    rev = "v${version}";
-    hash = "sha256-BYRXqVpGt9FrEBYQpi2kHPSZyeMk9o1SXkxjjcduhiY=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-c/EfjrA4H/MiedSVWLN6ZUipxwcsmBueeYJu5b09MGc=";
   };
 
   strictDeps = true;
@@ -46,14 +46,14 @@ stdenv.mkDerivation rec {
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bugaevc/wl-clipboard";
     description = "Command-line copy/paste utilities for Wayland";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       dywedir
       kashw2
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

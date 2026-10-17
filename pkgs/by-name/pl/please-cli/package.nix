@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "please-cli";
-  version = "0.3.0";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "TNG";
     repo = "please-cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-rJIR4eMhXL4K9iO7JxnkgWNsICV3hPQb0aobWNuHAG0=";
+    hash = "sha256-Kpb36Fm49Cxr3PMlSoUfTNEMNmWFktgEoej1904DmEE=";
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];
@@ -40,12 +40,12 @@ stdenv.mkDerivation (finalAttrs: {
     version = "v${finalAttrs.version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "AI helper script to create CLI commands based on GPT prompts";
     homepage = "https://github.com/TNG/please-cli";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ _8-bit-fox ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ _8-bit-fox ];
     mainProgram = "please";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

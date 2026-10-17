@@ -3,30 +3,44 @@
   lib,
   fetchFromGitHub,
   io,
+  datatypes,
+  gnuplot,
+  makeFontsConf,
+  writableTmpDirAsHomeHook,
 }:
 
 buildOctavePackage rec {
   pname = "statistics";
-  version = "1.7.0";
+  version = "1.8.4";
 
   src = fetchFromGitHub {
     owner = "gnu-octave";
     repo = "statistics";
     tag = "release-${version}";
-    hash = "sha256-k1YJtFrm71Th42IceX7roWaFCxU3284Abl8JAKLG9So=";
+    hash = "sha256-aFFGpdcD6ppm/5VYEKd+X2QMRKyU4SkwtJYpK4/L1qI=";
   };
 
   requiredOctavePackages = [
     io
+    datatypes
   ];
 
-  meta = with lib; {
+  nativeOctavePkgTestInputs = [
+    gnuplot
+    writableTmpDirAsHomeHook
+  ];
+
+  octavePkgTestEnv.FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
+
+  __structuredAttrs = true;
+
+  meta = {
     homepage = "https://packages.octave.org/statistics";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       publicDomain
     ];
-    maintainers = with maintainers; [ KarlJoad ];
+    maintainers = with lib.maintainers; [ ravenjoad ];
     description = "Statistics package for GNU Octave";
   };
 }

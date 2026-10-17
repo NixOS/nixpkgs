@@ -1,0 +1,83 @@
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  awesomeversion,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  mashumaro,
+  orjson,
+  poetry-core,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
+  rich,
+  syrupy,
+  textual,
+  textual-plotext,
+  typer,
+  yarl,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "fumis";
+  version = "0.4.1";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "frenck";
+    repo = "python-fumis";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xW7X6SLVFH8nCRUmABp0Rk+UWM15ODknGsCkCtMYOGs=";
+  };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "0.0.0" "${finalAttrs.version}"
+  '';
+
+  build-system = [ poetry-core ];
+
+  dependencies = [
+    aiohttp
+    awesomeversion
+    mashumaro
+    orjson
+    yarl
+  ];
+
+  optional-dependencies = {
+    cli = [
+      rich
+      textual
+      textual-plotext
+      typer
+    ];
+  };
+
+  nativeCheckInputs = [
+    aioresponses
+    click
+    pytest-asyncio
+    pytest-cov-stub
+    pytestCheckHook
+    syrupy
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
+
+  disabledTests = [
+    # https://github.com/frenck/python-fumis/issues/807
+    "test_cli_structure"
+  ];
+
+  pythonImportsCheck = [ "fumis" ];
+
+  meta = {
+    description = "Asynchronous Python client for the Fumis WiRCU API";
+    homepage = "https://github.com/frenck/python-fumis";
+    changelog = "https://github.com/frenck/python-fumis/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.jamiemagee ];
+  };
+})

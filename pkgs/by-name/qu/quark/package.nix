@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "quark";
-  version = "unstable-2021-02-22";
+  version = "0-unstable-2021-02-22";
 
   src = fetchgit {
     url = "git://git.suckless.org/quark";
@@ -21,12 +21,12 @@ stdenv.mkDerivation {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Extremely small and simple HTTP GET/HEAD-only web server for static content";
     mainProgram = "quark";
     homepage = "http://tools.suckless.org/quark";
-    license = licenses.isc;
-    maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.linux;
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ sikmir ];
+    platforms = lib.platforms.linux;
   };
 }

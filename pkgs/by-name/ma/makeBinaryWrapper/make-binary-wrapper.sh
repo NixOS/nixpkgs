@@ -6,6 +6,8 @@ set -euo pipefail
 # assertExecutable FILE
 assertExecutable() {
     local file="$1"
+    [[ -e "$file" ]] || \
+        die "Cannot wrap '$file' because it does not exist"
     [[ -f "$file" && -x "$file" ]] || \
         die "Cannot wrap '$file' because it is not an executable file"
 }
@@ -25,10 +27,12 @@ assertExecutable() {
 #                          the environment
 # --unset        VAR     : remove VAR from the environment
 # --chdir        DIR     : change working directory (use instead of --run "cd DIR")
-# --add-flags    ARGS    : prepend ARGS to the invocation of the executable
+# --add-flag     ARG     : prepend the single argument ARG to the invocation of the executable
 #                          (that is, *before* any arguments passed on the command line)
-# --append-flags ARGS    : append ARGS to the invocation of the executable
+# --append-flag  ARG     : append the single argument ARG to the invocation of the executable
 #                          (that is, *after* any arguments passed on the command line)
+# --add-flags    ARGS    : prepend the whitespace-separated list of arguments ARGS to the invocation of the executable
+# --append-flags ARGS    : append the whitespace-separated list of arguments ARGS to the invocation of the executable
 
 # --prefix          ENV SEP VAL   : suffix/prefix ENV with VAL, separated by SEP
 # --suffix
@@ -86,9 +90,9 @@ makeDocumentedCWrapper() {
 # makeCWrapper EXECUTABLE ARGS
 # ARGS: same as makeWrapper
 makeCWrapper() {
-    local argv0 inherit_argv0 n params cmd main flagsBefore flagsAfter flags executable length
-    local uses_prefix uses_suffix uses_assert uses_assert_success uses_stdio uses_asprintf
-    local resolve_path
+    local argv0 inherit_argv0 n params cmd main flags executable length
+    local uses_sep_surround_check uses_prefix uses_suffix uses_assert uses_assert_success uses_stdio uses_asprintf
+    local flagsBefore=() flagsAfter=()
     executable=$(escapeStringLiteral "$1")
     params=("$@")
     length=${#params[*]}
@@ -120,9 +124,11 @@ makeCWrapper() {
             --prefix)
                 cmd=$(setEnvPrefix "${params[n + 1]}" "${params[n + 2]}" "${params[n + 3]}")
                 main="$main$cmd"$'\n'
+                uses_sep_surround_check=1
                 uses_prefix=1
                 uses_asprintf=1
                 uses_stdio=1
+                uses_string=1
                 uses_assert_success=1
                 uses_assert=1
                 n=$((n + 3))
@@ -131,9 +137,11 @@ makeCWrapper() {
             --suffix)
                 cmd=$(setEnvSuffix "${params[n + 1]}" "${params[n + 2]}" "${params[n + 3]}")
                 main="$main$cmd"$'\n'
+                uses_sep_surround_check=1
                 uses_suffix=1
                 uses_asprintf=1
                 uses_stdio=1
+                uses_string=1
                 uses_assert_success=1
                 uses_assert=1
                 n=$((n + 3))
@@ -147,16 +155,28 @@ makeCWrapper() {
                 n=$((n + 1))
                 [ $n -ge "$length" ] && main="$main#error makeCWrapper: $p takes 1 argument"$'\n'
             ;;
+            --add-flag)
+                flagsBefore+=("${params[n + 1]}")
+                uses_assert=1
+                n=$((n + 1))
+                [ $n -ge "$length" ] && main="$main#error makeCWrapper: $p takes 1 argument"$'\n'
+            ;;
+            --append-flag)
+                flagsAfter+=("${params[n + 1]}")
+                uses_assert=1
+                n=$((n + 1))
+                [ $n -ge "$length" ] && main="$main#error makeCWrapper: $p takes 1 argument"$'\n'
+            ;;
             --add-flags)
-                flags="${params[n + 1]}"
-                flagsBefore="$flagsBefore $flags"
+                read -ra flags <<< "${params[n + 1]}"
+                flagsBefore+=("${flags[@]}")
                 uses_assert=1
                 n=$((n + 1))
                 [ $n -ge "$length" ] && main="$main#error makeCWrapper: $p takes 1 argument"$'\n'
             ;;
             --append-flags)
-                flags="${params[n + 1]}"
-                flagsAfter="$flagsAfter $flags"
+                read -ra flags <<< "${params[n + 1]}"
+                flagsAfter+=("${flags[@]}")
                 uses_assert=1
                 n=$((n + 1))
                 [ $n -ge "$length" ] && main="$main#error makeCWrapper: $p takes 1 argument"$'\n'
@@ -182,7 +202,7 @@ makeCWrapper() {
             ;;
         esac
     done
-    [[ -z "$flagsBefore" && -z "$flagsAfter" ]] || main="$main"${main:+$'\n'}$(addFlags "$flagsBefore" "$flagsAfter")$'\n'$'\n'
+    (( ${#flagsBefore[@]} + ${#flagsAfter[@]} > 0 )) && main="$main"${main:+$'\n'}$(addFlags flagsBefore flagsAfter)$'\n'$'\n'
     [ -z "$inherit_argv0" ] && main="${main}argv[0] = \"${argv0:-${executable}}\";"$'\n'
     [ -z "$resolve_argv0" ] || main="${main}argv[0] = resolve_argv0(argv[0]);"$'\n'
     main="${main}return execv(\"${executable}\", argv);"$'\n'
@@ -194,6 +214,7 @@ makeCWrapper() {
     [ -z "$uses_stdio" ]    || printf '%s\n' "#include <stdio.h>"
     [ -z "$uses_string" ]   || printf '%s\n' "#include <string.h>"
     [ -z "$uses_assert_success" ] || printf '\n%s\n' "#define assert_success(e) do { if ((e) < 0) { perror(#e); abort(); } } while (0)"
+    [ -z "$uses_sep_surround_check" ] || printf '\n%s\n' "$(setSepSurroundCheck)"
     [ -z "$uses_prefix" ] || printf '\n%s\n' "$(setEnvPrefixFn)"
     [ -z "$uses_suffix" ] || printf '\n%s\n' "$(setEnvSuffixFn)"
     [ -z "$resolve_argv0" ] || printf '\n%s\n' "$(resolveArgv0Fn)"
@@ -203,23 +224,10 @@ makeCWrapper() {
 }
 
 addFlags() {
-    local n flag before after var
+    local n flag var
 
-    # Disable file globbing, since bash will otherwise try to find
-    # filenames matching the the value to be prefixed/suffixed if
-    # it contains characters considered wildcards, such as `?` and
-    # `*`. We want the value as is, except we also want to split
-    # it on on the separator; hence we can't quote it.
-    local reenableGlob=0
-    if [[ ! -o noglob ]]; then
-        reenableGlob=1
-    fi
-    set -o noglob
-    # shellcheck disable=SC2086
-    before=($1) after=($2)
-    if (( reenableGlob )); then
-        set +o noglob
-    fi
+    local -n before=$1
+    local -n after=$2
 
     var="argv_tmp"
     printf '%s\n' "char **$var = calloc(${#before[@]} + argc + ${#after[@]} + 1, sizeof(*$var));"
@@ -255,6 +263,7 @@ setEnvPrefix() {
     val=$(escapeStringLiteral "$3")
     printf '%s' "set_env_prefix(\"$env\", \"$sep\", \"$val\");"
     assertValidEnvName "$1"
+    assertNoEmptySegment "--prefix" "$1" "$2" "$3"
 }
 
 # suffix ENV SEP VAL
@@ -265,6 +274,7 @@ setEnvSuffix() {
     val=$(escapeStringLiteral "$3")
     printf '%s' "set_env_suffix(\"$env\", \"$sep\", \"$val\");"
     assertValidEnvName "$1"
+    assertNoEmptySegment "--suffix" "$1" "$2" "$3"
 }
 
 # setEnv KEY VALUE
@@ -317,18 +327,76 @@ assertValidEnvName() {
     esac
 }
 
+assertNoEmptySegment() {
+    local flag="$1" env="$2" sep="$3" val="$4"
+    [ -n "$sep" ] || return 0
+    case "$env" in
+        # In Lua the loader will substitute the default paths or just ignore the empty segment
+        # https://github.com/lua/lua/blob/v5.5.1/loadlib.c#L274
+        # https://github.com/lua/lua/blob/v5.5.1/loadlib.c#L475
+        LUA_PATH|LUA_CPATH|LUA_PATH_*|LUA_CPATH_*) return 0 ;;
+        # In ASDF an empty segment uses the user/system configuration and defaults
+        # https://asdf.common-lisp.dev/asdf.html#Shell_002dfriendly-syntax-for-configuration
+        CL_SOURCE_REGISTRY|ASDF_OUTPUT_TRANSLATIONS) return 0 ;;
+    esac
+    if [[ "$sep$val$sep" == *"$sep$sep"* ]]; then
+        printf '\n%s\n' "#error $flag $env would introduce an empty PATH-like segment (empty, or a leading/trailing/doubled \`$sep\`). This is interpreted as \"search the current directory\" by shells, execvp() and the dynamic linker, see https://github.com/NixOS/nixpkgs/security/advisories/GHSA-p7v3-pr2c-8584. Guard the value with e.g. lib.optionalString (list != [])."
+    fi
+}
+
+setSepSurroundCheck() {
+    printf '%s' "\
+int is_surrounded_by_sep(char *env, char *ptr, unsigned long len, char *sep) {
+  unsigned long sep_len = strlen(sep);
+
+  // Check left side (if not at start)
+  if (env != ptr) {
+    if (ptr - env < sep_len)
+      return 0;
+    if (strncmp(sep, ptr - sep_len, sep_len) != 0) {
+      return 0;
+    }
+  }
+  // Check right side (if not at end)
+  char *end_ptr = ptr + len;
+  if (*end_ptr != '\0') {
+    if (strncmp(sep, ptr + len, sep_len) != 0) {
+      return 0;
+    }
+  }
+
+  return 1;
+}
+"
+}
+
 setEnvPrefixFn() {
     printf '%s' "\
 void set_env_prefix(char *env, char *sep, char *prefix) {
-    char *existing = getenv(env);
-    if (existing) {
-        char *val;
-        assert_success(asprintf(&val, \"%s%s%s\", prefix, sep, existing));
-        assert_success(setenv(env, val, 1));
-        free(val);
+  char *existing_env = getenv(env);
+  if (existing_env) {
+    char *val;
+
+    char *existing_prefix = strstr(existing_env, prefix);
+    unsigned long prefix_len = strlen(prefix);
+    // If the prefix already exists, remove the original
+    if (existing_prefix && is_surrounded_by_sep(existing_env, existing_prefix, prefix_len, sep)) {
+      if (existing_env == existing_prefix) {
+        return;
+      }
+      unsigned long sep_len = strlen(sep);
+      int n_before = existing_prefix - existing_env - sep_len;
+      assert_success(asprintf(&val, \"%s%s%.*s%s\", prefix, sep,
+                              n_before, existing_env,
+                              existing_prefix + prefix_len));
     } else {
-        assert_success(setenv(env, prefix, 1));
+      assert_success(asprintf(&val, \"%s%s%s\", prefix, sep, existing_env));
     }
+    assert_success(setenv(env, val, 1));
+    free(val);
+  } else {
+    assert_success(setenv(env, prefix, 1));
+  }
 }
 "
 }
@@ -336,15 +404,32 @@ void set_env_prefix(char *env, char *sep, char *prefix) {
 setEnvSuffixFn() {
     printf '%s' "\
 void set_env_suffix(char *env, char *sep, char *suffix) {
-    char *existing = getenv(env);
-    if (existing) {
-        char *val;
-        assert_success(asprintf(&val, \"%s%s%s\", existing, sep, suffix));
-        assert_success(setenv(env, val, 1));
-        free(val);
+  char *existing_env = getenv(env);
+  if (existing_env) {
+    char *val;
+
+    char *existing_suffix = strstr(existing_env, suffix);
+    unsigned long suffix_len = strlen(suffix);
+    // If the suffix already exists, remove the original
+    if (existing_suffix && is_surrounded_by_sep(existing_env, existing_suffix, suffix_len, sep)) {
+      char *end_ptr = existing_suffix + suffix_len;
+      if (*end_ptr == '\0') {
+        return;
+      }
+      unsigned long sep_len = strlen(sep);
+      int n_before = existing_suffix - existing_env;
+      assert_success(asprintf(&val, \"%.*s%s%s%s\",
+                              n_before, existing_env,
+                              existing_suffix + suffix_len + sep_len,
+                              sep, suffix));
     } else {
-        assert_success(setenv(env, suffix, 1));
+      assert_success(asprintf(&val, \"%s%s%s\", existing_env, sep, suffix));
     }
+    assert_success(setenv(env, val, 1));
+    free(val);
+  } else {
+    assert_success(setenv(env, suffix, 1));
+  }
 }
 "
 }
@@ -432,6 +517,14 @@ formatArgs() {
                 shift 3
             ;;
             --chdir)
+                formatArgsLine 1 "$@"
+                shift 1
+            ;;
+            --add-flag)
+                formatArgsLine 1 "$@"
+                shift 1
+            ;;
+            --append-flag)
                 formatArgsLine 1 "$@"
                 shift 1
             ;;

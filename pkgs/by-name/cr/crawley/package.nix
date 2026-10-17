@@ -5,20 +5,20 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "crawley";
-  version = "1.7.10";
+  version = "1.7.20";
 
   src = fetchFromGitHub {
     owner = "s0rg";
     repo = "crawley";
-    rev = "v${version}";
-    hash = "sha256-vc3HHkX0BFVSJi1Ll9T8IgYh5P6rzi4FowE7Jdy/tO8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-paKlo/awxxji1TzCC4jEJT2r2svS6AiI6GiwOiBs4Ps=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
-  vendorHash = "sha256-jj8FNZs/bkFQxveOkqmGVO3MNPPv5O9ebodoi7hhzIs=";
+  vendorHash = "sha256-jqJtWLwLO0UsDa6Al2Jb0fc3nwSWMMNc/ikxtMOPpCE=";
 
   ldflags = [
     "-w"
@@ -31,11 +31,11 @@ buildGoModule rec {
       --zsh <(echo "complete -o nospace -C $out/bin/crawley crawley")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Unix-way web crawler";
     homepage = "https://github.com/s0rg/crawley";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ltstf1re ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ltstf1re ];
     mainProgram = "crawley";
   };
-}
+})

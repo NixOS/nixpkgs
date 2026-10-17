@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "aa49bf924516f5de8a479994c7be81e077df5599c9da2a082003d5b388e1d450";
+    hash = "sha256-qkm/kkUW9d6KR5mUx76B4HffVZnJ2ioIIAPVs4jh1FA=";
   };
 
   buildInputs = [
@@ -40,10 +40,10 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sphinx blockdiag extension";
     homepage = "https://github.com/blockdiag/sphinxcontrib-blockdiag";
     maintainers = [ ];
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
   };
 }

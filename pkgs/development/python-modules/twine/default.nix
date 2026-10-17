@@ -1,17 +1,17 @@
 {
   lib,
   buildPythonPackage,
-  fetchpatch2,
   fetchPypi,
-  pythonOlder,
-  importlib-metadata,
+  id,
   keyring,
+  packaging,
   pkginfo,
   readme-renderer,
   requests,
   requests-toolbelt,
   rich,
   rfc3986,
+  setuptools,
   setuptools-scm,
   urllib3,
   build,
@@ -22,37 +22,23 @@
 
 buildPythonPackage rec {
   pname = "twine";
-  version = "5.1.1";
-  format = "pyproject";
-  disabled = pythonOlder "3.7";
+  version = "6.2.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mqCCUTnAKzQ02RNUXHuEeiHINeEVl/UlWELUV9ojIts=";
+    hash = "sha256-5e0NL9cMmVl3Dc5RyPOciUXFdOGBc6e4GALatRtLdc8=";
   };
 
-  patches = [
-    # pkginfo>=1.11 compatibility patches
-    # https://github.com/pypa/twine/pull/1123
-    (fetchpatch2 {
-      name = "pkginfo-1_11-compatibility-test.patch";
-      url = "https://github.com/pypa/twine/commit/a3206073b87a8e939cf699777882ebfaced689a0.patch";
-      hash = "sha256-gLN7gJsVng/LFfsrAHjJlqFZTu0wSdeBfnUN+UnLSFk=";
-    })
-    (fetchpatch2 {
-      name = "pkginfo-1_11-compatibility-source.patch";
-      url = "https://github.com/pypa/twine/commit/03e3795659b44f263f527b0467680b238c8fbacc.patch";
-      hash = "sha256-Ne9+G8hMVbklKtcZLiBw29Skz5VO5x2F7yu/KozKgN8=";
-    })
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
 
-  nativeBuildInputs = [ setuptools-scm ];
-
-  pythonRelaxDeps = [ "pkginfo" ];
-
-  propagatedBuildInputs = [
-    importlib-metadata
+  dependencies = [
+    id
     keyring
+    packaging
     pkginfo
     readme-renderer
     requests
@@ -67,6 +53,11 @@ buildPythonPackage rec {
     pretend
     pytest-socket
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # docutils 0.23 string changes
+    "test_fails_rst_syntax_error"
   ];
 
   pythonImportsCheck = [ "twine" ];

@@ -3,32 +3,39 @@
   rustPlatform,
   fetchFromGitHub,
   cmake,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "crabz";
-  version = "0.10.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "sstadick";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-GJHxo4WD/XMudwxOHdNwY1M+b/DFJMpU0uD3sOvO5YU=";
+    repo = "crabz";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-/zck6MwPPlpd3OxKBoAdOE2gs5XLRU4QErLd0c7enDU=";
   };
 
-  cargoHash = "sha256-T+Sdzts7gzkG2EFcKrkVDUIq2V34PBdW3oyxMUcCWaI=";
+  cargoHash = "sha256-STI0sVFtvKEhkBhtrjk7y2EzzbSQCk/631At2yHEnNM=";
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Cross platform, fast, compression and decompression tool";
     homepage = "https://github.com/sstadick/crabz";
-    changelog = "https://github.com/sstadick/crabz/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    changelog = "https://github.com/sstadick/crabz/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = with lib.licenses; [
       unlicense # or
       mit
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ lib.maintainers.progrm_jarvis ];
     mainProgram = "crabz";
   };
-}
+})

@@ -9,11 +9,11 @@
   keystoneauth1,
   requests,
   warlock,
-  oslo-utils,
+  openstacksdk,
   oslo-i18n,
+  oslo-utils,
   wrapt,
   pyopenssl,
-  pythonOlder,
   stestr,
   testscenarios,
   ddt,
@@ -22,35 +22,24 @@
 }:
 let
   pname = "python-glanceclient";
-  version = "4.7.0";
+  version = "4.13.0";
 
-  # Skip tests which require networking.
   disabledTests = [
-    "test_http_chunked_response"
-    "test_v1_download_has_no_stray_output_to_stdout"
-    "test_v2_requests_valid_cert_verification"
-    "test_download_has_no_stray_output_to_stdout"
-    "test_v1_requests_cert_verification_no_compression"
-    "test_v1_requests_cert_verification"
-    "test_v2_download_has_no_stray_output_to_stdout"
-    "test_v2_requests_bad_ca"
-    "test_v2_requests_bad_cert"
-    "test_v2_requests_cert_verification_no_compression"
-    "test_v2_requests_cert_verification"
-    "test_v2_requests_valid_cert_no_key"
-    "test_v2_requests_valid_cert_verification_no_compression"
-    "test_log_request_id_once"
+    # Skip tests which require networking.
+    "glanceclient.tests.unit.test_http.TestClient.test_http_chunked_response"
+    "glanceclient.tests.unit.test_http.TestClient.test_log_request_id_once"
+    "glanceclient.tests.unit.test_http.TestClient.test_log_request_id_once"
+    ''glanceclient\.tests\.unit\.test_ssl\.TestHTTPSVerifyCert\..*''
   ];
 in
 buildPythonPackage {
   inherit pname version;
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-wZRS7xLaPEhLadIqiIznp0kQvbh4O76RJIxg76U3iBA=";
+    pname = "python_glanceclient";
+    inherit version;
+    hash = "sha256-+jNZvIvZPnrryjctr+yOGQA7TB9kSZ4uuCsncdqPpBw=";
   };
 
   postPatch = ''
@@ -73,10 +62,11 @@ buildPythonPackage {
   ];
 
   nativeCheckInputs = [
+    ddt
+    openstacksdk
+    requests-mock
     stestr
     testscenarios
-    ddt
-    requests-mock
   ];
 
   checkPhase = ''
@@ -87,10 +77,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "glanceclient" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for the OpenStack Images API";
     homepage = "https://github.com/openstack/python-glanceclient/";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

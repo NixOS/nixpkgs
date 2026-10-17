@@ -1,31 +1,33 @@
 {
   lib,
-  fetchurl,
-  pkgs,
   stdenv,
+  fetchurl,
+  gfortran,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fortran-fpm";
 
-  version = "0.10.1";
+  version = "0.13.0";
 
   src = fetchurl {
-    url = "https://github.com/fortran-lang/fpm/releases/download/v${version}/fpm-${version}.F90";
-    sha256 = "sha256-dVPQW2DCp+iJojuhCgeEFVFpugG/x+DKhG986QuE4co=";
+    url = "https://github.com/fortran-lang/fpm/releases/download/v${finalAttrs.version}/fpm-${finalAttrs.version}.F90";
+    hash = "sha256-ABz/bPEUXyFbqgiIuieswGzqMKibedGovpfbP/+8jNI=";
   };
 
   dontUnpack = true;
 
-  nativeBuildInputs = with pkgs; [ gfortran ];
+  nativeBuildInputs = [ gfortran ];
 
   buildPath = "build/bootstrap";
 
   buildPhase = ''
     runHook preBuild
 
-    mkdir -p ${buildPath}
-    gfortran -J ${buildPath} -o ${buildPath}/${pname} $src
+    mkdir -p ${finalAttrs.buildPath}
+    gfortran -J ${finalAttrs.buildPath} -o ${finalAttrs.buildPath}/fortran-fpm $src
 
     runHook postBuild
   '';
@@ -34,17 +36,26 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/bin
-    cp ${buildPath}/${pname} $out/bin
+    cp ${finalAttrs.buildPath}/fortran-fpm $out/bin
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Fortran Package Manager (fpm)";
     homepage = "https://fpm.fortran-lang.org";
-    maintainers = [ maintainers.proofconstruction ];
-    license = licenses.mit;
-    platforms = platforms.all;
+    maintainers = [ lib.maintainers.proofconstruction ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
     mainProgram = "fortran-fpm";
   };
-}
+})

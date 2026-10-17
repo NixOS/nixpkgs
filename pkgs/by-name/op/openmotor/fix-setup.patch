@@ -1,0 +1,32 @@
+diff --git a/setup.py b/setup.py
+index 460c7d7..77e7a7a 100644
+--- a/setup.py
++++ b/setup.py
+@@ -11,11 +11,7 @@ except ImportError:
+     build_ui = None  # user won't have pyqt_distutils when deploying
+     cmdclass = {}
+ 
+-try:
+-    from uilib.fileIO import appVersionStr
+-except ImportError:
+-    print('App version not available, defaulting to 0.0.0')
+-    appVersionStr = '0.0.0'
++appVersionStr = '@version@'
+ 
+ extensions = [
+     Extension(
+@@ -34,9 +30,11 @@ setup(
+             nthreads = multiprocessing.cpu_count(), 
+             compiler_directives={'language_level': 3}
+             ),
++    py_modules=['main', 'app'],
+     packages=find_packages(),
+     url='https://github.com/reilleya/openMotor',
+     description='An open-source internal ballistics simulator for rocket motor experimenters',
+     long_description=open('README.md').read(),
+-    cmdclass=cmdclass
+-)
+\ No newline at end of file
++    cmdclass=cmdclass,
++    entry_points={'console_scripts': ['openMotor=main:main']}
++)

@@ -5,14 +5,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "conway-polynomials";
   version = "0.10";
   pyproject = true;
 
   src = fetchPypi {
     pname = "conway_polynomials";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-T2GfZPgaPrFsTibFooT+7sJ6b0qtZHZD55ryiYAa4PM=";
   };
 
@@ -20,10 +20,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "conway_polynomials" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface to Frank Lübeck's Conway polynomial database";
     homepage = "https://github.com/sagemath/conway-polynomials";
-    maintainers = teams.sage.members;
-    license = licenses.gpl3Plus;
+    teams = [ lib.teams.sage ];
+    license = lib.licenses.gpl3Plus;
   };
-}
+})

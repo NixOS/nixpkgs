@@ -9,21 +9,22 @@
   yarnInstallHook,
   nodejs,
   makeWrapper,
+  nix-update-script,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "google-lighthouse";
-  version = "12.3.0";
+  version = "13.5.0";
 
   src = fetchFromGitHub {
     owner = "GoogleChrome";
     repo = "lighthouse";
-    tag = "v${version}";
-    hash = "sha256-q/5P/b47RpIwaNCLT30NXg7S8W56v9Z/QDOzJMDgQOo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mSh460ZyaQqgVzorryZivig5JTH9DKf8H/N8vk9rGeg=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
-    hash = "sha256-a4LLrxg0TpQ3QNaMg3OVFTukdCmlOCJjTUt3paddaTM=";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
+    hash = "sha256-7rIlDrP8kZB/jnQaaNPunxkEeZsW6Y1usRKM9sM7sC0=";
   };
 
   yarnBuildScript = "build-report";
@@ -50,6 +51,9 @@ stdenv.mkDerivation rec {
   '';
 
   doDist = false;
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Automated auditing, performance metrics, and best practices for the web";
     homepage = "https://developer.chrome.com/docs/lighthouse/overview";
@@ -57,4 +61,4 @@ stdenv.mkDerivation rec {
     mainProgram = "lighthouse";
     maintainers = with lib.maintainers; [ theCapypara ];
   };
-}
+})

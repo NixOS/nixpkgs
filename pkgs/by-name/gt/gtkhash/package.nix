@@ -15,14 +15,14 @@
   libgcrypt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtkhash";
   version = "1.5";
 
   src = fetchFromGitHub {
     repo = "gtkhash";
     owner = "gtkhash";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-XpgTolpTSsW3i0xk19tt4cn9qANoeiq7YnBBR6g8ioU=";
   };
 
@@ -44,12 +44,12 @@ stdenv.mkDerivation rec {
   ];
 
   strictDeps = true;
-  meta = with lib; {
+  meta = {
     description = "Cross-platform desktop utility for computing message digests or checksums";
     homepage = "https://gtkhash.org";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ByteSudoer ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ ByteSudoer ];
     mainProgram = "gtkhash";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

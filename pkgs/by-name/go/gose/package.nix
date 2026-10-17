@@ -3,17 +3,17 @@
   buildNpmPackage,
   nix-update-script,
   versionCheckHook,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   lib,
 }:
 let
-  version = "0.9.0";
+  version = "0.11.10";
 
-  src = fetchFromGitHub {
+  src = fetchFromCodeberg {
     repo = "gose";
     owner = "stv0g";
     tag = "v${version}";
-    hash = "sha256-Vcp9gMJ296KS8OFOIcWvvYrS+LrOVlN3KN20yJxoo5U=";
+    hash = "sha256-IlDPUM+n5B2v0K7vIsWZuoLt+PdAzGM+aV6uLri7NxQ=";
   };
 
   frontend = buildNpmPackage {
@@ -37,7 +37,7 @@ buildGoModule {
   inherit version;
   inherit src;
 
-  vendorHash = "sha256-U/umJ6McCuD0HARVMj1JXHOpVxcph16z7Y7i47Nf3cg=";
+  vendorHash = "sha256-GgkHdeZUIaQH0dyVqgoBZ80qpL4zfg7paivOw/2Uw7Y=";
 
   env.CGO_ENABLED = 0;
 
@@ -70,7 +70,7 @@ buildGoModule {
 
   meta = {
     description = "Modern and scalable file-uploader focusing on scalability and simplicity";
-    homepage = "https://github.com/stv0g/gose";
+    homepage = "https://codeberg.org/stv0g/gose";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ stv0g ];
     mainProgram = "gose";

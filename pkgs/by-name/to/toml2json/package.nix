@@ -4,22 +4,22 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "toml2json";
-  version = "1.3.1";
+  version = "1.4.0";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-9q2HtNzsRO0/5gcmxUfWuQlWsfvw/A21WEXZlifCUjY=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-ZqHXtk6bPYm/20DjFhVmrc9+wYAmSEBLxqNgyzPGO2c=";
   };
 
-  cargoHash = "sha256-laOM7LpmsCpLcm4kPRsJiXHoKR58RCuQxVO5Z78beWI=";
+  cargoHash = "sha256-qdALBNQ2re3JQ6SWYsF/lHDxuCf2yyeXgdT1YQY0z6A=";
 
-  meta = with lib; {
+  meta = {
     description = "Very small CLI for converting TOML to JSON";
     mainProgram = "toml2json";
     homepage = "https://github.com/woodruffw/toml2json";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ rvarago ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rvarago ];
   };
-}
+})

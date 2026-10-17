@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -11,11 +10,9 @@ buildPythonPackage rec {
   version = "1.1.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "malexer";
-    repo = pname;
+    repo = "meteocalc";
     rev = version;
     hash = "sha256-WuIW6hROQkjMfbCLUouECIrp4s6oCd2/N79hsrTbVTk=";
   };
@@ -24,10 +21,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "meteocalc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for calculation of meteorological variables";
     homepage = "https://github.com/malexer/meteocalc";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

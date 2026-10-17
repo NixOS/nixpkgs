@@ -6,12 +6,11 @@
   qmake,
   qtbase,
   qtmultimedia,
-  utmp,
 }:
 
 stdenv.mkDerivation {
   pname = "qmltermwidget";
-  version = "unstable-2022-01-09";
+  version = "0.2.0-unstable-2022-01-09";
 
   src = fetchFromGitHub {
     owner = "Swordfish90";
@@ -27,7 +26,7 @@ stdenv.mkDerivation {
   buildInputs = [
     qtbase
     qtmultimedia
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin utmp;
+  ];
 
   patches = [
     # Changes required to make it compatible with lomiri-terminal-app

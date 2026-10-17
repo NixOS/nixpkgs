@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation {
   pname = "kalibrate-hackrf";
-  version = "unstable-2016-08-27";
+  version = "0-unstable-2016-08-27";
 
   # There are no tags/releases, so use the latest commit from git master.
   # Currently, the latest commit is from 2016-07-03.
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
     mv $out/bin/kal $out/bin/kal-hackrf
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Calculate local oscillator frequency offset in hackrf devices";
     longDescription = ''
       Kalibrate, or kal, can scan for GSM base stations in a given frequency
@@ -47,9 +47,9 @@ stdenv.mkDerivation {
       This package is for hackrf devices.
     '';
     homepage = "https://github.com/scateu/kalibrate-hackrf";
-    license = licenses.bsd2;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.mog ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.mog ];
     mainProgram = "kal-hackrf";
   };
 }

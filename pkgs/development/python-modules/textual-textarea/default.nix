@@ -2,34 +2,45 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+
+  # build-system
+  hatchling,
+
+  # dependencies
   pyperclip,
+  textual,
+  tree-sitter,
+  tree-sitter-python,
+  tree-sitter-sql,
+
+  # tests
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
-  textual,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "textual-textarea";
-  version = "0.15.0";
+  version = "0.18.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "textual-textarea";
-    tag = "v${version}";
-    hash = "sha256-aaeXgD6RMQ3tlK5H/2lk3ueTyA3yYjHrYL51w/1tvSI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Te4CJHRavdaQuSPhmR2KhuLJL1dASC30b2r0MiiCy0g=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     pyperclip
     textual
-  ] ++ textual.optional-dependencies.syntax;
+    tree-sitter
+    tree-sitter-python
+    tree-sitter-sql
+  ]
+  ++ textual.optional-dependencies.syntax;
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -39,10 +50,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "textual_textarea" ];
 
   meta = {
-    description = "A text area (multi-line input) with syntax highlighting for Textual";
+    description = "Text area (multi-line input) with syntax highlighting for Textual";
     homepage = "https://github.com/tconbeer/textual-textarea";
-    changelog = "https://github.com/tconbeer/textual-textarea/releases/tag/v${version}";
+    changelog = "https://github.com/tconbeer/textual-textarea/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pcboy ];
   };
-}
+})

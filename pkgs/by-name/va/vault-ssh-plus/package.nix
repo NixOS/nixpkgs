@@ -7,25 +7,25 @@
   testers,
   vault-ssh-plus,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "vault-ssh-plus";
-  version = "0.7.7";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "isometry";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-l2Gr4AxikPWbSGeZqmkZa1wTRXNZ0l6fTSAcjl+6P8s=";
+    repo = "vault-ssh-plus";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-6XJHtsvQinOr45fuLQeWtH41zK1S9HX35CTUgn1sEHU=";
   };
 
-  vendorHash = "sha256-AYScvuhsK6GUzOhONBl1C89yvu85SntoW7CxCr7wWmo=";
+  vendorHash = "sha256-GBledtKjPSUOFRtriPykTN2Bo2c/DMexMmu73z+dz/Q=";
 
   nativeBuildInputs = [ makeWrapper ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -36,15 +36,15 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion {
     package = vault-ssh-plus;
     command = "vssh --version";
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/isometry/vault-ssh-plus";
-    changelog = "https://github.com/isometry/vault-ssh-plus/releases/tag/v${version}";
+    changelog = "https://github.com/isometry/vault-ssh-plus/releases/tag/v${finalAttrs.version}";
     description = "Automatically use HashiCorp Vault SSH Client Key Signing with ssh(1)";
     mainProgram = "vssh";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lesuisse ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lesuisse ];
   };
-}
+})

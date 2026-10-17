@@ -9,28 +9,23 @@
   openssl,
   pkg-config,
   rustPlatform,
-  systemd,
+  systemdLibs,
   xz,
   zlib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ciel";
-  version = "3.3.0";
+  version = "3.11.0";
 
   src = fetchFromGitHub {
     owner = "AOSC-Dev";
     repo = "ciel-rs";
-    tag = "v${version}";
-    hash = "sha256-vV1qZLVVVc6KFZrpF4blKmbfQjf/Ltn+IhmM5Zqb2zU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Axb41MJr59NTT1WruGpYlTOXnCa0cIgC8i4uhDkv6FI=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "libmount-0.1.15" = "sha256-JObYz6AUWhvz8q+9DdsbMWm7zNQmMW73WAt+LjY5TV0=";
-    };
-  };
+  cargoHash = "sha256-VLTPcPmdUpa/6A/iaL8Oe8/QmeQMMP40j8J4nEEAeTQ=";
 
   nativeBuildInputs = [
     pkg-config
@@ -41,7 +36,7 @@ rustPlatform.buildRustPackage rec {
   # Therefore, bash is required for plugins to work.
   buildInputs = [
     bash
-    systemd
+    systemdLibs
     dbus
     openssl
     libssh2
@@ -63,15 +58,15 @@ rustPlatform.buildRustPackage rec {
       --zsh completions/_ciel
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for controlling AOSC OS packaging environments using multi-layer filesystems and containers";
     homepage = "https://github.com/AOSC-Dev/ciel-rs";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       A1ca7raz
       yisuidenghua
     ];
     mainProgram = "ciel";
   };
-}
+})

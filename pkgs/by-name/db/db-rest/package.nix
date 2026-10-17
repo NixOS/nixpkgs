@@ -2,24 +2,25 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  nodejs_18,
+  nodejs,
   nix-update-script,
   nixosTests,
+  stdenv, # for meta.broken
 }:
 buildNpmPackage rec {
   pname = "db-rest";
-  version = "6.0.5";
+  version = "6.1.0";
 
-  nodejs = nodejs_18;
+  inherit nodejs;
 
   src = fetchFromGitHub {
     owner = "derhuerst";
-    repo = pname;
+    repo = "db-rest";
     rev = version;
-    hash = "sha256-jMHqJ1whGPz2ti7gn8SPz6o7Fm4oMF6hYjB4wsjKAEU=";
+    hash = "sha256-1iJ26l6C6GevNkoDVMztPHiH3YsutJa3xWAsfYvgR9U=";
   };
 
-  npmDepsHash = "sha256-rXBIpar5L6fGpDlphr1PqRNxARSccV7Gi+uTNlCqh7I=";
+  npmDepsHash = "sha256-ELVVsysNjkXuX4i6i5P3irn6twVDu6YiPYqy2hbIlIs=";
 
   preConfigure = ''
     patchShebangs ./build/index.js
@@ -31,6 +32,8 @@ buildNpmPackage rec {
   };
 
   meta = {
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Clean REST API wrapping around the Deutsche Bahn API";
     homepage = "https://v6.db.transport.rest/";
     license = lib.licenses.isc;

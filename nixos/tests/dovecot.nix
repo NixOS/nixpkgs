@@ -1,20 +1,29 @@
-import ./make-test-python.nix {
+{
   name = "dovecot";
 
   nodes.machine =
-    { pkgs, ... }:
+    { config, pkgs, ... }:
+    let
+      dovecot = config.services.dovecot2.package;
+    in
     {
       imports = [ common/user-account.nix ];
       services.postfix.enable = true;
       services.dovecot2 = {
         enable = true;
-        protocols = [
-          "imap"
-          "pop3"
-        ];
-        modules = [ pkgs.dovecot_pigeonhole ];
-        mailUser = "vmail";
-        mailGroup = "vmail";
+        enablePAM = true;
+        settings = {
+          dovecot_config_version = dovecot.version;
+          dovecot_storage_version = dovecot.version;
+          mail_driver = "maildir";
+          mail_path = "${config.services.postfix.settings.main.mail_spool_directory}/%{user}";
+          protocols = [
+            "imap"
+            "pop3"
+          ];
+          mail_uid = "vmail";
+          mail_gid = "vmail";
+        };
       };
       environment.systemPackages =
         let
@@ -32,7 +41,7 @@ import ./make-test-python.nix {
           sendTestMailViaDeliveryAgent = pkgs.writeScriptBin "send-lda" ''
             #!${pkgs.runtimeShell}
 
-            exec ${pkgs.dovecot}/libexec/dovecot/deliver -d bob <<MAIL
+            exec ${dovecot}/libexec/dovecot/deliver -d bob <<MAIL
             From: root@localhost
             To: bob@localhost
             Subject: Something else...
@@ -75,6 +84,7 @@ import ./make-test-python.nix {
 
         in
         [
+          dovecot.passthru.dovecot_pigeonhole
           sendTestMail
           sendTestMailViaDeliveryAgent
           testImap
@@ -84,11 +94,13 @@ import ./make-test-python.nix {
 
   testScript = ''
     machine.wait_for_unit("postfix.service")
-    machine.wait_for_unit("dovecot2.service")
+    machine.wait_for_unit("dovecot.service")
     machine.succeed("send-testmail")
     machine.succeed("send-lda")
     machine.wait_until_fails('[ "$(postqueue -p)" != "Mail queue is empty" ]')
     machine.succeed("test-imap")
     machine.succeed("test-pop")
+
+    machine.log(machine.succeed("systemd-analyze security dovecot.service | grep -v ✓"))
   '';
 }

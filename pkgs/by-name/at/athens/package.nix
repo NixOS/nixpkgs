@@ -2,27 +2,34 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
-  testers,
-  athens,
+  nix-update-script,
+  versionCheckHook,
+  applyPatches,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "athens";
-  version = "0.15.4";
+  version = "0.19.2";
 
-  src = fetchFromGitHub {
-    owner = "gomods";
-    repo = "athens";
-    rev = "v${version}";
-    hash = "sha256-6NBdif8rQ1aj4nTYXhrWyErzRv0q8WpIheRnb2FCnkU=";
+  src = applyPatches {
+    src = fetchFromGitHub {
+      owner = "gomods";
+      repo = "athens";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-e1vV3foK9fiJeTcYcgrNUnXB3Zo6XRq9HwVnY3OuIe0=";
+    };
+    # Trim the patch version, not needed anyway.
+    postPatch = ''
+      sed -i 's/go 1.26.2/go 1.26/' go.mod
+    '';
   };
 
-  vendorHash = "sha256-W65lQYGrRg8LwFERj5MBOPFAn2j+FE7ep4ANuAGmfgM=";
+  vendorHash = "sha256-v1uJXiOeU4OtVHPFUgI7Lhu/AQqRcrSAH1VYo1d6EIQ=";
 
   env.CGO_ENABLED = "0";
   ldflags = [
     "-s"
-    "-X github.com/gomods/athens/pkg/build.version=${version}"
+    "-X github.com/gomods/athens/pkg/build.version=${finalAttrs.version}"
   ];
 
   subPackages = [ "cmd/proxy" ];
@@ -31,20 +38,21 @@ buildGoModule rec {
     mv $out/bin/proxy $out/bin/athens
   '';
 
-  passthru = {
-    tests.version = testers.testVersion { package = athens; };
-  };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Go module datastore and proxy";
     homepage = "https://github.com/gomods/athens";
-    changelog = "https://github.com/gomods/athens/releases/tag/v${version}";
-    license = licenses.mit;
+    changelog = "https://github.com/gomods/athens/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
     mainProgram = "athens";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       katexochen
       malt3
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

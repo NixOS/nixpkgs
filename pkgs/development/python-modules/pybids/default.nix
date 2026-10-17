@@ -4,6 +4,7 @@
   fetchFromGitHub,
   setuptools,
   formulaic,
+  frozendict,
   click,
   num2words,
   numpy,
@@ -17,21 +18,21 @@
   versioneer,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pybids";
-  version = "0.18.1";
+  version = "0.22.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bids-standard";
     repo = "pybids";
-    rev = version;
-    hash = "sha256-nSBc4vhkCdRo7CNBwvJreCiwoxJK6ztyI5gvcpzYZ/Y=";
+    tag = finalAttrs.version;
+    hash = "sha256-hbisFgi8Cs0BnTkytrBDPMIHO5sy2O3oJSB0FvOD9GY=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail 'dynamic = ["version"]' 'version = "${finalAttrs.version}"'
   '';
 
   pythonRelaxDeps = [
@@ -42,12 +43,13 @@ buildPythonPackage rec {
   build-system = [
     setuptools
     versioneer
-  ] ++ versioneer.optional-dependencies.toml;
+  ];
 
   dependencies = [
     bids-validator
     click
     formulaic
+    frozendict
     nibabel
     num2words
     numpy
@@ -70,14 +72,19 @@ buildPythonPackage rec {
     # Regression associated with formulaic >= 0.6.0
     # (see https://github.com/bids-standard/pybids/issues/1000)
     "test_split"
+    #  ValueError: Failed to load BIDS schema...
+    "test_schema_version_parameter"
+    "test_entity_parsing_version_differences"
+    "test_motion_datatype_evolution"
+    "test_schema_version_metadata_differences"
   ];
 
   meta = {
     description = "Python tools for querying and manipulating BIDS datasets";
     homepage = "https://github.com/bids-standard/pybids";
-    changelog = "https://github.com/bids-standard/pybids/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/bids-standard/pybids/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ wegank ];
     mainProgram = "pybids";
   };
-}
+})

@@ -5,7 +5,7 @@
   meson,
   ninja,
   libdrm,
-  libX11,
+  libx11,
   libGL,
   libgbm,
   pkg-config,
@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation {
   pname = "kmscube";
-  version = "unstable-2023-09-25";
+  version = "0-unstable-2023-09-25";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -29,23 +29,22 @@ stdenv.mkDerivation {
     pkg-config
     ninja
   ];
-  buildInputs =
-    [
-      libdrm
-      libX11
-      libGL
-      libgbm
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-    ]);
+  buildInputs = [
+    libdrm
+    libx11
+    libGL
+    libgbm
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+  ]);
 
-  meta = with lib; {
+  meta = {
     description = "Example OpenGL app using KMS/GBM";
     homepage = "https://gitlab.freedesktop.org/mesa/kmscube";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dezgeg ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 }

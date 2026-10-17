@@ -1,77 +1,86 @@
 {
   lib,
   fetchFromGitHub,
+  fetchzip,
   stdenvNoCC,
-  nodejs,
+  nodejs-slim,
   fetchNpmDeps,
   buildPackages,
-  php83,
+  php85,
   nixosTests,
   nix-update-script,
   dataDir ? "/var/lib/firefly-iii",
 }:
+let
+  php = php85;
+  version = "6.7.7";
 
+  # Release tarball contains translations downloaded from crowdin
+  releaseTarball = fetchzip {
+    url = "https://github.com/firefly-iii/firefly-iii/releases/download/v${version}/FireflyIII-v${version}.tar.gz";
+    stripRoot = false;
+    hash = "sha256-ejXSfrsmHfbR5KpVo9VxXEsJWZ2ejS55JPl9P/6QzH8=";
+  };
+in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "firefly-iii";
-  version = "6.1.25";
+  inherit version;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "firefly-iii";
     repo = "firefly-iii";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-6DZwTk67bKvgB+Zf7aPakrWWYCAjkYggrRiaFKgsMkk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8svaK8jvsR4jCbkSFzWg8Q3jX/zYL10SJzR3hGMBBDY=";
   };
 
-  buildInputs = [ php83 ];
+  buildInputs = [ php ];
 
   nativeBuildInputs = [
-    nodejs
-    nodejs.python
+    nodejs-slim
+    nodejs-slim.npm
+    nodejs-slim.python
     buildPackages.npmHooks.npmConfigHook
-    php83.composerHooks.composerInstallHook
-    php83.packages.composer-local-repo-plugin
+    php.packages.composer
+    php.composerHooks2.composerInstallHook
   ];
 
-  composerNoDev = true;
-  composerNoPlugins = true;
-  composerNoScripts = true;
-  composerStrictValidation = true;
-  strictDeps = true;
-
-  vendorHash = "sha256-5uUjb5EPcoEBuFbWGb1EIC/U/VaSUsRp09S9COIx25E=";
+  composerVendor = php.mkComposerVendor {
+    inherit (finalAttrs) pname src version;
+    composerStrictValidation = true;
+    strictDeps = true;
+    vendorHash = "sha256-WxBC8zg954mYoCuXOJh+UFXFU7fXAZcfpwWPxbUWXao=";
+  };
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    name = "${finalAttrs.pname}-npm-deps";
-    hash = "sha256-j49iltvW7xGOCV+FIB4f+ECfQo50U+wTugyaK9JGN3A=";
-  };
-
-  composerRepository = php83.mkComposerRepository {
-    inherit (finalAttrs)
-      pname
-      src
-      vendorHash
-      version
-      ;
-    composerNoDev = true;
-    composerNoPlugins = true;
-    composerNoScripts = true;
-    composerStrictValidation = true;
+    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
+    hash = "sha256-8OBn/SM9ccJ0viA7edDiSz9HX+r92SmQZY+0gX6UgPc=";
   };
 
   preInstall = ''
-    npm run prod --workspace=v1
-    npm run build --workspace=v2
+    npm run build --workspace=v3
   '';
 
   passthru = {
-    phpPackage = php83;
+    inherit releaseTarball;
+    phpPackage = php;
     tests = nixosTests.firefly-iii;
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "v(\\d+\\.\\d+\\.\\d+)"
+      ];
+    };
   };
 
   postInstall = ''
+    chmod -R u+w $out/share
     mv $out/share/php/firefly-iii/* $out/
+
+    # Copy language files from release tarball (contains all translations)
+    cp -r ${finalAttrs.passthru.releaseTarball}/resources/lang/* $out/resources/lang/
+
     rm -R $out/share $out/storage $out/bootstrap/cache $out/node_modules
     ln -s ${dataDir}/storage $out/storage
     ln -s ${dataDir}/cache $out/bootstrap/cache

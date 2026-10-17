@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   setuptools,
   matplotlib,
@@ -17,14 +16,12 @@
 
 buildPythonPackage rec {
   pname = "grad-cam";
-  version = "1.5.4";
+  version = "1.5.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kgu6bM3XWFM/0d5P1ZbNzquPC7E4tnUnHpW2FKHwEUc=";
+    hash = "sha256-9r4G+CZnei6SLDh535vjlEsUppZD2A577Jrfsm9rXkI=";
   };
 
   nativeBuildInputs = [

@@ -7,15 +7,15 @@
   gtk-layer-shell,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nwg-dock";
-  version = "0.4.2";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-9s0kweFBxzNYZOqIGG/hPF1DsECm7N0dhgRlc7DGUOc=";
+    repo = "nwg-dock";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-Ymk4lpX8RAxWot7U+cFtu1eJd6VHP+JS1I2vF0V1T70=";
   };
 
   vendorHash = "sha256-iR+ytThRwmCvFEMcpSELPRwiramN5jPXAjaJtda4pOw=";
@@ -31,12 +31,12 @@ buildGoModule rec {
     gtk-layer-shell
   ];
 
-  meta = with lib; {
+  meta = {
     description = "GTK3-based dock for sway";
     homepage = "https://github.com/nwg-piotr/nwg-dock";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
     mainProgram = "nwg-dock";
   };
-}
+})

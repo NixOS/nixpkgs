@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "six8";
     repo = "pytailer";
     rev = version;
-    sha256 = "1s5p5m3q9k7r1m0wx5wcxf20xzs0rj14qwg1ydwhf6adr17y2w5y";
+    hash = "sha256-vnDhT8hNGQd58+FxTILMQP8OhOuMl85BDfnMhEctt+g=";
   };
 
   checkPhase = ''
@@ -25,11 +25,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tailer" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation implementation of GNU tail and head";
     mainProgram = "pytail";
     homepage = "https://github.com/six8/pytailer";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

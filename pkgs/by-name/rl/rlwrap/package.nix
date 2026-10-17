@@ -4,40 +4,46 @@
   fetchFromGitHub,
   autoreconfHook,
   perl,
+  libptytty,
   readline,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rlwrap";
-  version = "0.46.1";
+  version = "0.48";
 
   src = fetchFromGitHub {
     owner = "hanslub42";
     repo = "rlwrap";
-    rev = version;
-    sha256 = "sha256-yKJXfdxfaCsmPtI0KmTzfFKY+evUuytomVrLsSCYDGo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Szgyjt/KRFEZMu6JX4Ulm2guTMwh9ejzjlfpkITWOI4=";
   };
-
-  postPatch = ''
-    substituteInPlace src/readline.c \
-      --replace "if(*p >= 0 && *p < ' ')" "if(*p >= 0 && (*p >= 0) && (*p < ' '))"
-  '';
 
   nativeBuildInputs = [
     autoreconfHook
     perl
   ];
 
-  buildInputs = [ readline ];
+  buildInputs = [
+    libptytty
+    readline
+  ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-error=implicit-function-declaration";
 
-  meta = with lib; {
+  # no environment to compile completion.c, update its time to avoid recompiling
+  preBuild = ''
+    touch src/completion.rb
+    touch src/completion.c
+  '';
+
+  meta = {
     description = "Readline wrapper for console programs";
     homepage = "https://github.com/hanslub42/rlwrap";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ jlesquembre ];
+    changelog = "https://github.com/hanslub42/rlwrap/raw/${finalAttrs.src.rev}/NEWS";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ jlesquembre ];
     mainProgram = "rlwrap";
   };
-}
+})

@@ -4,7 +4,7 @@
   fetchurl,
   nixosTests,
   pkg-config,
-  systemd,
+  systemdLibs,
   gmp,
   unbound,
   bison,
@@ -23,7 +23,7 @@
   coreutils,
   gnused,
   gawk,
-  nss,
+  nss_latest,
   which,
   python3,
   libselinux,
@@ -44,18 +44,18 @@ let
     coreutils
     gnused
     gawk
-    nss.tools
+    nss_latest.tools
     which
   ];
 in
 
 stdenv.mkDerivation rec {
   pname = "libreswan";
-  version = "5.1";
+  version = "5.4.1";
 
   src = fetchurl {
-    url = "https://download.libreswan.org/${pname}-${version}.tar.gz";
-    hash = "sha256-HO6dQSyJeZ64v3EUUA1cFOAUPpVGBWFj7r45YOf0Y3w=";
+    url = "https://download.libreswan.org/libreswan-${version}.tar.gz";
+    hash = "sha256-ew+Qyag7OtlrQw2FSVB062JlmQJMlzeJwbC2z/Ay7hA=";
   };
 
   strictDeps = true;
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    systemd
+    systemdLibs
     coreutils
     gnused
     gawk
@@ -83,17 +83,26 @@ stdenv.mkDerivation rec {
     libxcrypt
     curl
     nspr
-    nss
+    nss_latest
     ldns
     # needed to patch shebangs
     python3
     bash
-  ] ++ lib.optional stdenv.hostPlatform.isLinux libselinux;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux libselinux;
 
   prePatch = ''
     # Replace wget with curl to save a dependency
     substituteInPlace programs/letsencrypt/letsencrypt.in \
       --replace-fail 'wget -q -P' '${curl}/bin/curl -s --remote-name-all --output-dir'
+
+    # Replace /bin/sh with runtimeShell for purity
+    substituteInPlace programs/pluto/extract.c \
+      --replace-fail '/bin/sh' '${runtimeShell}'
+
+    # Fix pluto running with empty PATH
+    substituteInPlace include/pluto_constants.h \
+      --replace-fail 'ipsec _updown' "$out/bin/ipsec _updown"
   '';
 
   makeFlags = [
@@ -101,8 +110,12 @@ stdenv.mkDerivation rec {
     "INITSYSTEM=systemd"
     "SYSTEMUNITDIR=$(out)/etc/systemd/system/"
     "TMPFILESDIR=$(out)/lib/tmpfiles.d/"
+    "SHELL_BINARY=${runtimeShell}"
     "LINUX_VARIANT=nixos"
     "DEFAULT_DNSSEC_ROOTKEY_FILE=${dns-root-data}/root.key"
+    # Fix invalid XML files with libxml 2.14
+    "XMLTO_FLAGS=--searchpath=$(abs_srcdir)/d.ipsec.conf:$(abs_srcdir)"
+    "XMLTO_FLAGS+=--skip-validation"
   ];
 
   # Hack to make install work
@@ -119,21 +132,25 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # Add a PATH to the main "ipsec" script
     sed -e '0,/^$/{s||export PATH=${binPath}:$PATH|}' \
-        -i $out/bin/ipsec
+        -i "$out/bin/ipsec"
+
+    # Add a PATH to all pluto hooks
+    hooks=$(find "$out/libexec" -type f -exec grep -qI . {} \; -print)
+    sed -e '0,/^$/{s||export PATH=${binPath}:${placeholder "out"}/bin:$PATH|}' \
+        -i $hooks
   '';
 
   passthru.tests = { inherit (nixosTests) libreswan libreswan-nat; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://libreswan.org";
     description = "Free software implementation of the VPN protocol based on IPSec and the Internet Key Exchange";
-    platforms = platforms.linux ++ platforms.freebsd;
-    license = with licenses; [
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
+    license = with lib.licenses; [
       gpl2Plus
       mpl20
     ];
-    maintainers = with maintainers; [
-      afranchuk
+    maintainers = with lib.maintainers; [
       rnhmjoj
     ];
     mainProgram = "ipsec";

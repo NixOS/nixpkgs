@@ -100,7 +100,7 @@ in
         ProtectHostname = true;
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
-        ProtectKernalTunables = true;
+        ProtectKernelTunables = true;
         ProtectProc = "invisible";
         ProcSubset = "pid";
         RemoveIPC = true;
@@ -111,6 +111,7 @@ in
         SystemCallFilter = [
           "@system-service @pkey"
           "~@privileged @resources"
+          "@chown"
         ];
         UMask = "0077";
       };

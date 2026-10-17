@@ -6,15 +6,15 @@
   geos,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "imposm";
-  version = "0.14.0";
+  version = "0.14.2";
 
   src = fetchFromGitHub {
     owner = "omniscale";
     repo = "imposm3";
-    rev = "v${version}";
-    hash = "sha256-4PwJzR/xeVdqAiHXzMAqI2m8qeqFXLZxy9V3o59eKwA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Bl6LSF/aN/c0lH93fxm2HGvxs7Grv4qJc/iN04AlQP0=";
   };
 
   vendorHash = null;
@@ -26,18 +26,18 @@ buildGoModule rec {
 
   ldflags = [
     "-s -w"
-    "-X github.com/omniscale/imposm3.Version=${version}"
+    "-X github.com/omniscale/imposm3.Version=${finalAttrs.version}"
   ];
 
   # requires network access
   doCheck = false;
 
-  meta = with lib; {
-    description = "Imposm imports OpenStreetMap data into PostGIS";
+  meta = {
+    description = "Imports OpenStreetMap data into PostGIS";
     homepage = "https://imposm.org/";
-    changelog = "https://github.com/omniscale/imposm3/releases/tag/${src.rev}";
-    license = licenses.apsl20;
-    maintainers = with maintainers; [ sikmir ];
+    changelog = "https://github.com/omniscale/imposm3/releases/tag/${finalAttrs.src.rev}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ sikmir ];
     mainProgram = "imposm";
   };
-}
+})

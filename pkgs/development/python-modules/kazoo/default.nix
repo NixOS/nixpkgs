@@ -2,50 +2,41 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  six,
+
+  # optional dependencies
   eventlet,
   gevent,
-  mock,
-  coverage,
-  openjdk8_headless,
+  pure-sasl,
 }:
 
 buildPythonPackage rec {
   pname = "kazoo";
-  version = "2.10.0";
+  version = "2.11.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kFeWrk9MEr1OSukubl0BhDnmtWyM+7JIJTYuebIw2rE=";
+    hash = "sha256-V+fm9pKVyPkiURSI7reWgHKeFLuOs4LVytg6oRNFw2w=";
   };
 
-  propagatedBuildInputs = [ six ];
-  buildInputs = [
-    eventlet
-    gevent
-    mock
-    coverage
-    openjdk8_headless
+  optional-dependencies = {
+    eventlet = [ eventlet ];
+    gevent = [ gevent ];
+    sasl = [ pure-sasl ];
+  };
+
+  pythonImportsCheck = [
+    "kazoo"
+    "kazoo.client"
   ];
-
-  # not really needed
-  preBuild = ''
-    sed -i '/flake8/d' setup.py
-  '';
-
-  preCheck = ''
-    sed -i 's/test_unicode_auth/noop/' kazoo/tests/test_client.py
-  '';
 
   # tests take a long time to run and leave threads hanging
   doCheck = false;
-  #ZOOKEEPER_PATH = "${pkgs.zookeeper}";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://kazoo.readthedocs.org";
     description = "Higher Level Zookeeper Client";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

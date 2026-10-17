@@ -3,6 +3,7 @@
   fetchFromGitHub,
   makeWrapper,
   nixosTests,
+  fetchpatch,
 
   stdenv,
   # Build inputs
@@ -14,16 +15,24 @@
   coreutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bees";
-  version = "0.10";
+  version = "0.11";
 
   src = fetchFromGitHub {
     owner = "Zygo";
     repo = "bees";
-    rev = "v${version}";
-    hash = "sha256-f3P3BEd8uO6QOZ1/2hBzdcuOSggYvHxW3g9pGftKO8g=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-qaiRWRd9+ElJ40QGOS3AxT2NvF3phQCyPnVz6RfTt8c=";
   };
+
+  patches = [
+    # fix build w/ glibc-2.44
+    (fetchpatch {
+      url = "https://github.com/Zygo/bees/commit/14c82dce8a7e9714d6f9cd03229e0fb55460aa25.patch";
+      hash = "sha256-bAYacaS3u01XdlM/8+baD+sMuCOyYDtSis4NvTkx8jk=";
+    })
+  ];
 
   buildInputs = [
     btrfs-progs # for btrfs/ioctl.h
@@ -36,7 +45,7 @@ stdenv.mkDerivation rec {
   ];
 
   preBuild = ''
-    git() { if [[ $1 = describe ]]; then echo ${version}; else command git "$@"; fi; }
+    git() { if [[ $1 = describe ]]; then echo ${finalAttrs.version}; else command git "$@"; fi; }
     export -f git
   '';
 
@@ -65,7 +74,7 @@ stdenv.mkDerivation rec {
     "SHELL=bash"
     "PREFIX=$(out)"
     "ETC_PREFIX=$(out)/etc"
-    "BEES_VERSION=${version}"
+    "BEES_VERSION=${finalAttrs.version}"
     "SYSTEMD_SYSTEM_UNIT_DIR=$(out)/etc/systemd/system"
   ];
 
@@ -73,12 +82,12 @@ stdenv.mkDerivation rec {
     smoke-test = nixosTests.bees;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Zygo/bees";
     description = "Block-oriented BTRFS deduplication service";
     longDescription = "Best-Effort Extent-Same: bees finds not just identical files, but also identical extents within files that differ";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ chaduffy ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
-}
+})

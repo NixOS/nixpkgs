@@ -1,24 +1,31 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, installShellFiles
-, bash
-, openssh
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  installShellFiles,
+  bash,
+  openssh,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "k3sup";
-  version = "0.13.8";
+  version = "0.13.13";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "alexellis";
     repo = "k3sup";
-    rev = version;
-    sha256 = "sha256-WmvCmG/wk63VnfJTFk3HhiaLzCe9O6kdUc7GpYNAwP4=";
+    tag = finalAttrs.version;
+    hash = "sha256-6S8PMIRITXbS5fFexCBEekVDZwTvZ4bN9sanjiDY39M=";
   };
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ];
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+  ];
 
   vendorHash = null;
 
@@ -30,9 +37,9 @@ buildGoModule rec {
   env.CGO_ENABLED = 0;
 
   ldflags = [
-    "-s" "-w"
-    "-X github.com/alexellis/k3sup/cmd.GitCommit=ref/tags/${version}"
-    "-X github.com/alexellis/k3sup/cmd.Version=${version}"
+    "-s"
+    "-X github.com/alexellis/k3sup/cmd.GitCommit=ref/tags/${finalAttrs.version}"
+    "-X github.com/alexellis/k3sup/cmd.Version=${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -45,11 +52,18 @@ buildGoModule rec {
       --fish <($out/bin/k3sup completion fish)
   '';
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
+
+  meta = {
     homepage = "https://github.com/alexellis/k3sup";
     description = "Bootstrap Kubernetes with k3s over SSH";
     mainProgram = "k3sup";
-    license = licenses.mit;
-    maintainers = with maintainers; [ welteki qjoly ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      welteki
+      qjoly
+    ];
   };
-}
+})

@@ -128,11 +128,9 @@ in
             lib.mkIf config.confinement.enable {
               serviceConfig = {
                 ReadOnlyPaths = [ "+/" ];
-                RuntimeDirectory = [ "confinement/${mkPathSafeName name}" ];
-                RootDirectory = "/run/confinement/${mkPathSafeName name}";
-                InaccessiblePaths = [
-                  "-+/run/confinement/${mkPathSafeName name}"
-                ];
+                RuntimeDirectory = [ "confinement/%n" ];
+                RootDirectory = "/run/confinement/%n";
+                InaccessiblePaths = [ "-+/run/confinement/%n" ];
                 PrivateMounts = lib.mkDefault true;
 
                 # https://github.com/NixOS/nixpkgs/issues/14645 is a future attempt
@@ -238,7 +236,8 @@ in
 
               # If DynamicUser= is enabled, PrivateTmp=true is implied (and cannot be turned off).
               # so disable them unless PrivateTmp=true is explicitely set.
-              ${lib.optionalString (!cfg.serviceConfig.PrivateTmp) ''
+              # We're explicitely comparing to `false` here, because PrivateTmp can also be "disconnected".
+              ${lib.optionalString (cfg.serviceConfig.PrivateTmp == false) ''
                 echo "InaccessiblePaths=-+/tmp" >> "$serviceFile"
                 echo "InaccessiblePaths=-+/var/tmp" >> "$serviceFile"
               ''}

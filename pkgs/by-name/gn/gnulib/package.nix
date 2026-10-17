@@ -6,7 +6,7 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gnulib";
   version = "20241001";
 
@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ python3 ];
 
+  strictDeps = true;
+
   installPhase = ''
     mkdir -p $out/bin
     cp -r * $out/
@@ -34,23 +36,19 @@ stdenv.mkDerivation rec {
   # do not change headers to not update all vendored build files
   dontFixup = true;
 
-  passthru = {
-    # This patch is used by multiple other packages (currently:
-    # gnused, gettext) which contain vendored copies of gnulib.
-    # Without it, compilation will fail with error messages about
-    # "__LDBL_REDIR1_DECL" or similar on platforms with longdouble
-    # redirects (currently powerpc64).  Once all of those other
-    # packages make a release with a newer gnulib we can drop this
-    # patch.
-    longdouble-redirect-patch = ./gnulib-longdouble-redirect.patch;
+  passthru.patches = {
+    memcpy-fix = ./memcpy-fix.patch;
+    memcpy-fix-backport-250512 = ./memcpy-fix-backport-250512.patch;
   };
 
-  meta = with lib; {
+  __structuredAttrs = true;
+
+  meta = {
     description = "Central location for code to be shared among GNU packages";
     homepage = "https://www.gnu.org/software/gnulib/";
     changelog = "https://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=blob;f=ChangeLog";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "gnulib-tool";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

@@ -8,20 +8,20 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cf-terraforming";
-  version = "0.22.0";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "cf-terraforming";
-    rev = "v${version}";
-    sha256 = "sha256-vWsA/VNtQvnrypcBB/5CJbiHEvnYkjuesdkq4soTMVM=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-jq0xBmn+ZGYF6Yup/82wVYgtuIs9RcPHviGxj9JpTF0=";
   };
 
-  vendorHash = "sha256-eTc9K9EXlWmj1YAcOOEIUwELq6szLsj1zYj44VTvquw=";
+  vendorHash = "sha256-7/VRs7BEFLCx7sqIbOFA7b7tQwlpgzeWYUdgankHNCo=";
   ldflags = [
-    "-X github.com/cloudflare/cf-terraforming/internal/app/cf-terraforming/cmd.versionString=${version}"
+    "-X github.com/cloudflare/cf-terraforming/internal/app/cf-terraforming/cmd.versionString=${finalAttrs.version}"
   ];
 
   # The test suite insists on downloading a binary release of Terraform from
@@ -42,11 +42,11 @@ buildGoModule rec {
       --zsh <($out/bin/cf-terraforming completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line utility to facilitate terraforming your existing Cloudflare resources";
     homepage = "https://github.com/cloudflare/cf-terraforming/";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ benley ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ benley ];
     mainProgram = "cf-terraforming";
   };
-}
+})

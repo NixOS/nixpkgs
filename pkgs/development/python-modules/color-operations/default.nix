@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -17,17 +16,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "color-operations";
-  version = "0.1.6";
+  version = "0.3.0";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "vincentsarago";
     repo = "color-operations";
-    tag = version;
-    hash = "sha256-hHfcScKYemvPg2V5wn1Wsctjg6vgzljk5sAw+I+kS6w=";
+    tag = finalAttrs.version;
+    hash = "sha256-hDxbyhelsl/EvsesD4Rux5CQM86squ4gHevVK/UP8Y8=";
   };
 
   build-system = [
@@ -52,7 +50,8 @@ buildPythonPackage rec {
   meta = {
     description = "Apply basic color-oriented image operations. Fork of rio-color";
     homepage = "https://github.com/vincentsarago/color-operations";
+    changelog = "https://github.com/vincentsarago/color-operations/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = lib.teams.geospatial.members;
+    teams = [ lib.teams.geospatial ];
   };
-}
+})

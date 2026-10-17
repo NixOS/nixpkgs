@@ -23,9 +23,9 @@ let
   structured = {
     formats = import ./formats.nix { inherit pkgs; };
     java-properties = recurseIntoAttrs {
-      jdk8 = pkgs.callPackage ../formats/java-properties/test { jdk = pkgs.jdk8; };
       jdk11 = pkgs.callPackage ../formats/java-properties/test { jdk = pkgs.jdk11_headless; };
       jdk17 = pkgs.callPackage ../formats/java-properties/test { jdk = pkgs.jdk17_headless; };
+      jdk = pkgs.callPackage ../formats/java-properties/test { jdk = pkgs.jdk_headless; };
     };
 
     libconfig = recurseIntoAttrs (import ../formats/libconfig/test { inherit pkgs; });
@@ -51,10 +51,12 @@ let
 in
 
 # It has to be a link farm for inclusion in the hydra unstable jobset.
-pkgs.linkFarm "pkgs-lib-formats-tests" (
-  mapAttrsToList (k: v: {
-    name = k;
-    path = v;
-  }) (flatten "" structured)
-)
+{
+  formats-tests = pkgs.linkFarm "pkgs-lib-formats-tests" (
+    mapAttrsToList (k: v: {
+      name = k;
+      path = v;
+    }) (flatten "" structured)
+  );
+}
 // structured

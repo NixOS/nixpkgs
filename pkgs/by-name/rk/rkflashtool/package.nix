@@ -1,40 +1,60 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  coreutils,
   libusb1,
+  makeWrapper,
+  pkg-config,
+  udevCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rkflashtool";
-  version = "5.1";
+  version = "0-unstable-2025-09-30";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/rkflashtool/rkflashtool-${version}-src.tar.bz2";
-    sha256 = "0dbp1crw7pjav9gffrnskhkf0gxlj4xgp65clqhvfmv32460xb9c";
+  src = fetchFromGitHub {
+    owner = "linux-rockchip";
+    repo = "rkflashtool";
+    rev = "fc2181c577ef3fb1e821818dfd07e0dac0575b74";
+    hash = "sha256-uXjMK07dIa/LUbaokLViJXQHkthGjpdXQLQEYN2v6VE=";
   };
 
-  versionh = fetchurl {
-    url = "mirror://sourceforge/rkflashtool/version.h";
-    sha256 = "1mkcy3yyfaddhzg524hjnhvmwdmdfzbavib8d9p5y38pcqy8xgdp";
-  };
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-fail "pkg-config" "$PKG_CONFIG"
+  '';
+
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+    udevCheckHook
+  ];
 
   buildInputs = [ libusb1 ];
 
-  preBuild = ''
-    cp $versionh version.h
+  makeFlags = [
+    "CROSSPREFIX=${stdenv.cc.targetPrefix}"
+    "PREFIX=${placeholder "out"}"
+  ];
+
+  postInstall = ''
+    echo 'SUBSYSTEM=="usb", ATTR{idVendor}=="2207", MODE="0666"' > 51-rockchip.rules
+    install -Dm444 51-rockchip.rules -t $out/lib/udev/rules.d
+
+    for f in rkunsign rkparametersblock rkmisc rkpad rkparameters; do
+      wrapProgram $out/bin/$f \
+        --prefix PATH : ${lib.makeBinPath [ coreutils ]} \
+        --prefix PATH : $out/bin
+    done
   '';
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp rkunpack rkcrc rkflashtool rkparameters rkparametersblock rkunsign rkmisc $out/bin
-  '';
-
-  meta = with lib; {
-    homepage = "https://sourceforge.net/projects/rkflashtool/";
+  meta = {
     description = "Tools for flashing Rockchip devices";
-    platforms = platforms.linux;
-    maintainers = [ ];
-    license = licenses.bsd2;
+    homepage = "https://github.com/linux-rockchip/rkflashtool";
+    license = lib.licenses.bsd2;
+    mainProgram = "rkflashtool";
+    maintainers = with lib.maintainers; [ dmfrpro ];
+    platforms = lib.platforms.linux;
   };
-}
+})

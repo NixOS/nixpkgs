@@ -29,49 +29,48 @@ stdenv.mkDerivation (finalAttrs: {
 
   setupHooks = ./kyua-check-hook.sh;
 
-  postPatch =
-    ''
-      # Fix a linking error on Darwin. Embedding an archive in an archive isn’t portable.
-      substituteInPlace cli/Makefile.am.inc \
-        --replace-fail 'libcli_a_LIBADD = libutils.a' "" \
-        --replace-fail 'CLI_LIBS = ' 'CLI_LIBS = libutils.a '
-    ''
-    # These tests fail on Darwin or are unreliable.
-    + lib.optionalString (finalAttrs.doInstallCheck && stdenv.hostPlatform.isDarwin) ''
-      sed -i utils/process/Makefile.am.inc -e '/executor_pid_test/d'
-      substituteInPlace utils/process/Kyuafile \
-        --replace-fail 'atf_test_program{name="executor_pid_test"}' ""
-      substituteInPlace engine/atf_test.cpp \
-        --replace-fail 'ATF_ADD_TEST_CASE(tcs, test__body_only__crashes);' ""
-      substituteInPlace engine/scheduler_test.cpp \
-        --replace-fail 'ATF_ADD_TEST_CASE(tcs, integration__stacktrace);' ""
-      substituteInPlace utils/stacktrace_test.cpp \
-        --replace-fail 'ATF_ADD_TEST_CASE(tcs, unlimit_core_size);' ""
-      substituteInPlace utils/process/isolation_test.cpp \
-        --replace-fail 'ATF_ADD_TEST_CASE(tcs, isolate_child__enable_core_dumps);' ""
-      substituteInPlace utils/process/operations_test.cpp \
-        --replace-fail 'ATF_ADD_TEST_CASE(tcs, terminate_self_with__termsig_and_core);' ""
-      substituteInPlace utils/process/status_test.cpp \
-        --replace-fail 'ATF_ADD_TEST_CASE(tcs, integration__coredump);' ""
-      substituteInPlace integration/cmd_test_test.sh \
-        --replace-fail 'atf_add_test_case premature_exit' ""
-    ''
-    # fchflags and UF_NOUNLINK are not supported on Linux. Other tests also fail.
-    + lib.optionalString (finalAttrs.doInstallCheck && stdenv.hostPlatform.isLinux) ''
-      sed -i utils/process/Makefile.am.inc -e '/executor_pid_test/d'
-      substituteInPlace utils/process/Kyuafile \
-        --replace-fail 'atf_test_program{name="executor_pid_test"}' ""
-      substituteInPlace engine/atf_test.cpp \
-        --replace-fail 'ATF_ADD_TEST_CASE(tcs, test__body_only__crashes);' ""
-      substituteInPlace utils/stacktrace_test.cpp \
-        --replace-fail 'ATF_ADD_TEST_CASE(tcs, dump_stacktrace__ok);' "" \
-        --replace-fail 'ATF_ADD_TEST_CASE(tcs, dump_stacktrace_if_available__append);' "" \
-        --replace-fail 'ATF_ADD_TEST_CASE(tcs, find_core__found__long);' "" \
-        --replace-fail 'ATF_ADD_TEST_CASE(tcs, find_core__found__short);' "" \
-        --replace-fail 'ATF_ADD_TEST_CASE(tcs, unlimit_core_size__hard_is_zero);' ""
-      substituteInPlace integration/cmd_test_test.sh \
-        --replace-fail 'atf_add_test_case premature_exit' ""
-    '';
+  postPatch = ''
+    # Fix a linking error on Darwin. Embedding an archive in an archive isn’t portable.
+    substituteInPlace cli/Makefile.am.inc \
+      --replace-fail 'libcli_a_LIBADD = libutils.a' "" \
+      --replace-fail 'CLI_LIBS = ' 'CLI_LIBS = libutils.a '
+  ''
+  # These tests fail on Darwin or are unreliable.
+  + lib.optionalString (finalAttrs.doInstallCheck && stdenv.hostPlatform.isDarwin) ''
+    sed -i utils/process/Makefile.am.inc -e '/executor_pid_test/d'
+    substituteInPlace utils/process/Kyuafile \
+      --replace-fail 'atf_test_program{name="executor_pid_test"}' ""
+    substituteInPlace engine/atf_test.cpp \
+      --replace-fail 'ATF_ADD_TEST_CASE(tcs, test__body_only__crashes);' ""
+    substituteInPlace engine/scheduler_test.cpp \
+      --replace-fail 'ATF_ADD_TEST_CASE(tcs, integration__stacktrace);' ""
+    substituteInPlace utils/stacktrace_test.cpp \
+      --replace-fail 'ATF_ADD_TEST_CASE(tcs, unlimit_core_size);' ""
+    substituteInPlace utils/process/isolation_test.cpp \
+      --replace-fail 'ATF_ADD_TEST_CASE(tcs, isolate_child__enable_core_dumps);' ""
+    substituteInPlace utils/process/operations_test.cpp \
+      --replace-fail 'ATF_ADD_TEST_CASE(tcs, terminate_self_with__termsig_and_core);' ""
+    substituteInPlace utils/process/status_test.cpp \
+      --replace-fail 'ATF_ADD_TEST_CASE(tcs, integration__coredump);' ""
+    substituteInPlace integration/cmd_test_test.sh \
+      --replace-fail 'atf_add_test_case premature_exit' ""
+  ''
+  # fchflags and UF_NOUNLINK are not supported on Linux. Other tests also fail.
+  + lib.optionalString (finalAttrs.doInstallCheck && stdenv.hostPlatform.isLinux) ''
+    sed -i utils/process/Makefile.am.inc -e '/executor_pid_test/d'
+    substituteInPlace utils/process/Kyuafile \
+      --replace-fail 'atf_test_program{name="executor_pid_test"}' ""
+    substituteInPlace engine/atf_test.cpp \
+      --replace-fail 'ATF_ADD_TEST_CASE(tcs, test__body_only__crashes);' ""
+    substituteInPlace utils/stacktrace_test.cpp \
+      --replace-fail 'ATF_ADD_TEST_CASE(tcs, dump_stacktrace__ok);' "" \
+      --replace-fail 'ATF_ADD_TEST_CASE(tcs, dump_stacktrace_if_available__append);' "" \
+      --replace-fail 'ATF_ADD_TEST_CASE(tcs, find_core__found__long);' "" \
+      --replace-fail 'ATF_ADD_TEST_CASE(tcs, find_core__found__short);' "" \
+      --replace-fail 'ATF_ADD_TEST_CASE(tcs, unlimit_core_size__hard_is_zero);' ""
+    substituteInPlace integration/cmd_test_test.sh \
+      --replace-fail 'atf_add_test_case premature_exit' ""
+  '';
 
   strictDeps = true;
 

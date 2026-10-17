@@ -15,7 +15,7 @@ let
   stdenv = gccStdenv;
   s = import ./sources.nix { inherit fetchurl fetchFromGitHub; };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "lambda-lisp-blc";
   version = s.lambdaLispVersion;
   src = s.src;
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lisp interpreter written in untyped lambda calculus";
     homepage = "https://github.com/woodrush/lambdalisp";
     longDescription = ''
@@ -76,8 +76,8 @@ stdenv.mkDerivation rec {
       consists of the beta-reduction of lambda terms, without introducing any
       non-lambda-type object.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ cafkafk ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cafkafk ];
     platforms = [ "x86_64-linux" ];
   };
 }

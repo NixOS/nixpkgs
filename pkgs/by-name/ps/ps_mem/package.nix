@@ -4,16 +4,21 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ps_mem";
   version = "3.14";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pixelb";
-    repo = pname;
-    rev = "v${version}";
+    repo = "ps_mem";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-jCfPtPSky/QFk9Xo/tq3W7609Pie1yLC4iS4dqjCa+E=";
   };
+
+  build-system = with python3Packages; [ setuptools ];
+
+  pythonImportsCheck = [ "ps_mem" ];
 
   meta = {
     description = "Utility to accurately report the in core memory usage for a program";
@@ -23,4 +28,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     mainProgram = "ps_mem";
   };
-}
+})

@@ -38,11 +38,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Macro Expander Saving Our m2-PLANET";
     homepage = "https://github.com/oriansj/M2-Mesoplanet";
-    license = licenses.gpl3Only;
-    maintainers = teams.minimal-bootstrap.members;
+    license = lib.licenses.gpl3Only;
+    teams = [ lib.teams.minimal-bootstrap ];
     inherit (m2libc.meta) platforms;
     mainProgram = "M2-Mesoplanet";
   };

@@ -4,59 +4,50 @@
   fetchFromGitHub,
 
   libGL,
-  libX11,
-  libXcursor,
-  libXinerama,
-  libXi,
-  libXrandr,
-  libXxf86vm,
+  libx11,
+  libxcursor,
+  libxinerama,
+  libxi,
+  libxrandr,
+  libxxf86vm,
   pkg-config,
-  stdenv,
-  darwin,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "fyne";
-  version = "2.5.3";
+  version = "1.7.3";
 
   src = fetchFromGitHub {
     owner = "fyne-io";
-    repo = "fyne";
-    tag = "v${version}";
-    hash = "sha256-DSJZMsvAs1hB1nv5B36yjSSSdw/VaextWw8lchCQ38E=";
+    repo = "tools";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2N59UDuXDIIfxMX3m+MYCmBC/Zr5UmqvZkUAwe7oapU=";
   };
 
-  vendorHash = "sha256-X6K7IV+yjKXw/1A5HikS0T8rtrn7gLZM2d0VoyIdOT4=";
+  vendorHash = "sha256-brLtfcKdsUg/X39ARPwbk/5QJQyOBUL2a7W2mvD9dtw=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      libGL
-      libX11
-      libXcursor
-      libXinerama
-      libXi
-      libXrandr
-      libXxf86vm
-    ]
-    ++ (lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk_11_0.frameworks;
-      [
-        Carbon
-        Cocoa
-        Kernel
-        UserNotifications
-      ]
-    ));
+  buildInputs = [
+    libGL
+    libx11
+    libxcursor
+    libxinerama
+    libxi
+    libxrandr
+    libxxf86vm
+  ];
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://fyne.io";
     description = "Cross platform GUI toolkit in Go";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ greg ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
+      greg
+      graysontinker
+    ];
     mainProgram = "fyne";
   };
-}
+})

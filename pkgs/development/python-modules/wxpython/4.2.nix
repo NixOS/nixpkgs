@@ -4,14 +4,17 @@
   buildPythonPackage,
   setuptools,
   fetchPypi,
-  substituteAll,
+  fetchpatch,
+  replaceVars,
 
   # build
   autoPatchelfHook,
   attrdict,
+  cython,
   doxygen,
   pkg-config,
   python,
+  requests,
   sip,
   which,
   buildPackages,
@@ -22,15 +25,14 @@
   gtk3,
   libGL,
   libGLU,
-  libSM,
-  libXinerama,
-  libXtst,
-  libXxf86vm,
+  libsm,
+  libxinerama,
+  libxtst,
+  libxxf86vm,
   libglvnd,
   libgbm,
   pango,
-  SDL,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   wxGTK,
   xorgproto,
 
@@ -38,25 +40,29 @@
   numpy,
   pillow,
   six,
+
+  # checks
+  py,
+  pytest,
+  pytest-forked,
+  xvfb-run,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wxpython";
-  version = "4.2.2";
-  format = "other";
+  version = "4.2.5";
+  pyproject = false;
 
   src = fetchPypi {
-    pname = "wxPython";
-    inherit version;
-    hash = "sha256-XbywZQ9n/cLFlleVolX/qj17CfsUmqjaLQ2apE444ro=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-ROg20bzNmcOHkLsDS27PcNkGD2c0MgVg98Sw0AYUR5M=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./4.2-ctypes.patch;
-      libgdk = "${gtk3.out}/lib/libgdk-3.so";
-      libpangocairo = "${pango}/lib/libpangocairo-1.0.so";
-      libcairo = "${cairo}/lib/libcairo.so";
+    (replaceVars ./4.2-ctypes.patch {
+      libgdk = "${lib.getLib gtk3}/lib/libgdk-3${stdenv.hostPlatform.extensions.sharedLibrary}";
+      libpangocairo = "${lib.getLib pango}/lib/libpangocairo-1.0${stdenv.hostPlatform.extensions.sharedLibrary}";
+      libcairo = "${lib.getLib cairo}/lib/libcairo${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
     ./0001-add-missing-bool-c.patch # Add missing bool.c from old source
   ];
@@ -65,38 +71,39 @@ buildPythonPackage rec {
   postPatch = ''
     ln -s ${lib.getExe buildPackages.waf} bin/waf
     substituteInPlace build.py \
-      --replace-fail "distutils.dep_util" "setuptools.modified"
+      --replace-fail "distutils.dep_util" "setuptools.modified" \
+      --replace-fail "runcmd(cmd, fatal=False)" "runcmd(cmd, fatal=True)" # fail when pytest reports errors
   '';
 
   nativeBuildInputs = [
     attrdict
+    cython
     pkg-config
+    requests
     setuptools
-    SDL
     sip
     which
     wxGTK
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
-  buildInputs =
-    [
-      wxGTK
-      SDL
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      gst_all_1.gst-plugins-base
-      gst_all_1.gstreamer
-      libGL
-      libGLU
-      libSM
-      libXinerama
-      libXtst
-      libXxf86vm
-      libglvnd
-      libgbm
-      webkitgtk_4_0
-      xorgproto
-    ];
+  buildInputs = [
+    wxGTK
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    gst_all_1.gst-plugins-base
+    gst_all_1.gstreamer
+    libGL
+    libGLU
+    libsm
+    libxinerama
+    libxtst
+    libxxf86vm
+    libglvnd
+    libgbm
+    webkitgtk_4_1
+    xorgproto
+  ];
 
   propagatedBuildInputs = [
     numpy
@@ -104,13 +111,20 @@ buildPythonPackage rec {
     six
   ];
 
+  nativeCheckInputs = [
+    py # py must be ordered before pytest (see https://github.com/pytest-dev/pytest-forked/issues/88)
+    pytest
+    pytest-forked
+    xvfb-run
+  ];
+
+  wafPath = "bin/waf";
+
   buildPhase = ''
     runHook preBuild
 
     export DOXYGEN=${doxygen}/bin/doxygen
     export PATH="${wxGTK}/bin:$PATH"
-    export SDL_CONFIG="${SDL.dev}/bin/sdl-config"
-    export WAF=$PWD/bin/waf
 
     ${python.pythonOnBuildForHost.interpreter} build.py -v --use_syswx dox etg sip --nodoc build_py
 
@@ -126,19 +140,43 @@ buildPythonPackage rec {
     runHook postInstall
   '';
 
-  checkPhase = ''
-    runHook preCheck
+  # The majority of the tests require a graphical environment, but xvfb-run is available only on Linux.
+  # Tests fail randomly on OfBorg and Hydra.
+  doCheck = false;
 
-    ${python.interpreter} build.py -v test
+  checkPhase =
+    let
+      # Some tests appear to be incompatible with xvfb-run.
+      skippedTests = [
+        "dirdlg"
+        "display"
+        "filectrl"
+        "filedlg"
+        "filedlgcustomize"
+        "frame"
+        "glcanvas"
+        "pickers"
+        "windowid"
+      ];
+      testArguments = lib.concatMapStringsSep " " (
+        test: "--ignore unittests/test_${test}.py"
+      ) skippedTests;
+    in
+    ''
+      runHook preCheck
 
-    runHook postCheck
-  '';
+      HOME=$(mktemp -d) xvfb-run ${python.interpreter} build.py -v --extra_pytest='${testArguments}' test
 
-  meta = with lib; {
-    changelog = "https://github.com/wxWidgets/Phoenix/blob/wxPython-${version}/CHANGES.rst";
+      runHook postCheck
+    '';
+
+  meta = {
+    changelog = "https://github.com/wxWidgets/Phoenix/blob/wxPython-${finalAttrs.version}/CHANGES.rst";
     description = "Cross platform GUI toolkit for Python, Phoenix version";
     homepage = "http://wxpython.org/";
-    license = licenses.wxWindows;
-    maintainers = with maintainers; [ hexa ];
+    license = with lib.licenses; [
+      lgpl2Plus
+      wxWindowsException31
+    ];
   };
-}
+})

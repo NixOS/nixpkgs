@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "Ayrx";
     repo = "python-fastpbkdf2";
     rev = "v${version}";
-    sha256 = "1hvvlk3j28i6nswb6gy3mq7278nq0mgfnpxh1rv6jvi7xhd7qmlc";
+    hash = "sha256-jFZ8Guwnbml2DrBf614F2KIjDq7DP7O4tiYiIceke8M=";
   };
 
   buildInputs = [ openssl ];
@@ -29,10 +29,10 @@ buildPythonPackage rec {
   ];
   propagatedNativeBuildInputs = [ cffi ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Ayrx/python-fastpbkdf2";
     description = "Python bindings for fastpbkdf2";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ jqueiroz ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ jqueiroz ];
   };
 }

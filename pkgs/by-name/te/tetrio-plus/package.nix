@@ -13,19 +13,19 @@
 }:
 
 let
-  version = "0.27.5";
-  rev = "electron-v${version}-tetrio-v${tetrio-desktop.version}";
+  version = "0.28.1";
+  tag = "electron-v${version}-tetrio-v${tetrio-desktop.version}";
 
   src = fetchFromGitLab {
     owner = "UniQMG";
     repo = "tetrio-plus";
-    inherit rev;
-    hash = "sha256-hbHofrC2dJOh2kh3VLb/d0dHrcszyqTyID1PAaGApxY=";
+    inherit tag;
+    hash = "sha256-+yOqHH/RtzjVKHVpVsw2RhECMskCyAyWnjBJNslbGaw=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/resources/desktop-ci/yarn.lock";
-    hash = "sha256-LfUC2bkUX+sFq3vMMOC1YVYbpDxUSnLO9GiKdoQBdAw=";
+    hash = "sha256-ZU4ObEpJwnC71V5IemG5XWNbX/xvlWdKsXulus7ec5A=";
   };
 
 in
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preBuild
 
     # tetrio-plus expects the vanilla asar to be extracted into 'out' and
-    # 'out' is the directory contianing the final patched asar's contents
+    # 'out' is the directory containing the final patched asar's contents
     asar extract ${tetrio-desktop.src}/opt/TETR.IO/resources/app.asar out
 
     # Install custom package.json/yarn.lock that describe the additional node
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r $src out/tetrioplus
     chmod -R u+w out/tetrioplus
     # Install tpsecore
-    cp ${tpsecore}/{tpsecore_bg.wasm,tpsecore.js} out/tetrioplus/source/lib/
+    cp ${tpsecore}/{tpsecore.wasm,tpsecore.js} out/tetrioplus/source/lib/
 
     # Disable useless uninstall button in the tetrio-plus popup
     substituteInPlace out/tetrioplus/desktop-manifest.js \
@@ -83,11 +83,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
-    runHook preinstall
+    runHook preInstall
 
     asar pack out $out
 
-    runHook postinstall
+    runHook postInstall
   '';
 
   meta = {
@@ -97,17 +97,14 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://gitlab.com/UniQMG/tetrio-plus";
     downloadPage = "https://gitlab.com/UniQMG/tetrio-plus/-/releases";
-    changelog = "https://gitlab.com/UniQMG/tetrio-plus/-/releases/${rev}";
+    changelog = "https://gitlab.com/UniQMG/tetrio-plus/-/releases/${tag}";
     license = [
       lib.licenses.mit
       # while tetrio-plus is itself mit, the result of this derivation
       # is a modified version of tetrio-desktop, which is unfree.
       lib.licenses.unfree
     ];
-    maintainers = with lib.maintainers; [
-      huantian
-      wackbyte
-    ];
+    maintainers = with lib.maintainers; [ huantian ];
     platforms = lib.platforms.linux;
   };
 })

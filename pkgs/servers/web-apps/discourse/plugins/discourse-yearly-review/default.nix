@@ -9,13 +9,13 @@ mkDiscoursePlugin {
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse-yearly-review";
-    rev = "bb124c211c37873c1d54e96e7063f1868c65d0ad";
-    sha256 = "sha256-xAFpt/uVW8+Y2wwL20u/rMixcFgygwrarsdRsywsbmQ=";
+    rev = "a4e9ee393de923332609d0436e3c1c8757f6cb1c";
+    sha256 = "sha256-WHU7vYTnavX3waJWjHn11kg70TCoFH9cdmdPRSsNZO4=";
   };
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/discourse/discourse-yearly-review";
-    maintainers = with maintainers; [ talyz ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ talyz ];
+    license = lib.licenses.mit;
     description = "Publishes an automated Year in Review topic";
   };
 }

@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gcc15Stdenv,
   fetchFromGitHub,
   cmake,
   libffi,
@@ -8,21 +8,20 @@
   wayland-protocols,
   wayland-scanner,
   wayland,
-  xorg,
-  darwin,
+  libx11,
   nix-update-script,
   alsa-lib,
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+gcc15Stdenv.mkDerivation (finalAttrs: {
   pname = "clipboard-jh";
   version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "Slackadays";
     repo = "clipboard";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-3SloqijgbX3XIwdO2VBOd61or7tnByi7w45dCBKTkm8=";
   };
 
@@ -36,18 +35,16 @@ stdenv.mkDerivation rec {
     wayland-scanner
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libffi
-      wayland-protocols
-      wayland
-      xorg.libX11
-      alsa-lib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals gcc15Stdenv.hostPlatform.isLinux [
+    libffi
+    wayland-protocols
+    wayland
+    libx11
+    alsa-lib
+  ];
 
   cmakeBuildType = "MinSizeRel";
 
@@ -56,18 +53,18 @@ stdenv.mkDerivation rec {
     "-DINSTALL_PREFIX=${placeholder "out"}"
   ];
 
-  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+  postFixup = lib.optionalString gcc15Stdenv.hostPlatform.isLinux ''
     patchelf $out/bin/cb --add-rpath $out/lib
   '';
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Cut, copy, and paste anything, anywhere, all from the terminal";
     homepage = "https://github.com/Slackadays/clipboard";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ dit7ya ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Only;
+    maintainers = [ ];
+    platforms = lib.platforms.all;
     mainProgram = "cb";
   };
-}
+})

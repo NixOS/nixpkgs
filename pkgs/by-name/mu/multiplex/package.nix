@@ -9,18 +9,18 @@
   libadwaita,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "multiplex";
-  version = "0.1.6";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "pojntfx";
     repo = "multiplex";
-    rev = "v${version}";
-    hash = "sha256-zU4Lnc66wY5lFxy82Mg52WSEGRyoEk9LY6E7LmeuKHs=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-+KvFBzoIYmSbuazstJae8lC0xdPtXLhFWawlc+iGGoU=";
   };
 
-  vendorHash = "sha256-fS5wdBe1vuqaUBPcxLzhCMRztW8eq+MGojMVWlOZO+U=";
+  vendorHash = "sha256-a99zmJ89QN+bf1WgAin+Eoqaizb7vyesb4uxt5L8qNY=";
 
   nativeBuildInputs = [
     pkg-config
@@ -69,4 +69,4 @@ buildGoModule rec {
     mainProgram = "multiplex";
     maintainers = with lib.maintainers; [ aleksana ];
   };
-}
+})

@@ -12,12 +12,12 @@
   wafHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aubio";
   version = "0.4.9";
 
   src = fetchurl {
-    url = "https://aubio.org/pub/aubio-${version}.tar.bz2";
+    url = "https://aubio.org/pub/aubio-${finalAttrs.version}.tar.bz2";
     sha256 = "1npks71ljc48w6858l9bq30kaf5nph8z0v61jkfb70xb9np850nl";
   };
 
@@ -27,11 +27,13 @@ stdenv.mkDerivation rec {
     wafHook
   ];
   buildInputs = [
-    alsa-lib
     fftw
     libjack2
     libsamplerate
     libsndfile
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
   ];
 
   strictDeps = true;
@@ -44,14 +46,13 @@ stdenv.mkDerivation rec {
       --replace "'rU'" "'r'"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library for audio labelling";
     homepage = "https://aubio.org/";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [
-      marcweber
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [
       fpletz
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

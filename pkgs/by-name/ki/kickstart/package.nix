@@ -2,23 +2,24 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  versionCheckHook,
   nix-update-script,
-  testers,
-  kickstart,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kickstart";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "Keats";
     repo = "kickstart";
-    rev = "v${version}";
-    hash = "sha256-4POxv6fIrp+wKb9V+6Y2YPx3FXp3hpnkq+62H9TwGII=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WrImCnXkFaPUTMBhNaUgX6PsQS1H9zj6jZ8MbgYCGCM=";
   };
 
-  cargoHash = "sha256-wMy3c4iqHOWmbJNCdy4/2XVgyF6lcAxSs3pAaD53JAg=";
+  cargoHash = "sha256-Km49POZwVS2vYmELG5f7kenKQwaHlMP/bZA5cZ995mE=";
+
+  buildFeatures = [ "cli" ];
 
   checkFlags = [
     # remote access
@@ -26,19 +27,22 @@ rustPlatform.buildRustPackage rec {
     "--skip=generation::tests::can_generate_from_remote_repo"
   ];
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = kickstart;
-    };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Scaffolding tool to get new projects up and running quickly";
     homepage = "https://github.com/Keats/kickstart";
-    changelog = "https://github.com/Keats/kickstart/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gaelreyrol ];
+    changelog = "https://github.com/Keats/kickstart/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "kickstart";
   };
-}
+})

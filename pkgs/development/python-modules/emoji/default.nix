@@ -3,28 +3,22 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  typing-extensions,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "emoji";
-  version = "2.14.0";
+  version = "2.16.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "carpedm20";
     repo = "emoji";
     tag = "v${version}";
-    hash = "sha256-ubZrVw069UiUvtEk9iff5lByGXyNalsKPv3Mj2X3qxc=";
+    hash = "sha256-sDQ4KE9J7/0hlmXxyploRYGkIzj3YIFrxzq7yA5NFp0=";
   };
 
   build-system = [ setuptools ];
-
-  dependencies = [ typing-extensions ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -32,11 +26,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "emoji" ];
 
-  meta = with lib; {
+  meta = {
     description = "Emoji for Python";
     homepage = "https://github.com/carpedm20/emoji/";
-    changelog = "https://github.com/carpedm20/emoji/blob/v${version}/CHANGES.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ joachifm ];
+    changelog = "https://github.com/carpedm20/emoji/blob/${src.tag}/CHANGES.md";
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

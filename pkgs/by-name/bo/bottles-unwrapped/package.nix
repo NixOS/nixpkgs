@@ -9,7 +9,7 @@
   wrapGAppsHook4,
   appstream-glib,
   desktop-file-utils,
-  librsvg,
+  fvs2,
   gtk4,
   gtksourceview5,
   libadwaita,
@@ -20,41 +20,45 @@
   lsb-release,
   pciutils,
   procps,
+  gamemode,
   gamescope,
   mangohud,
   vkbasalt-cli,
+  vulkan-tools,
   vmtouch,
-  libportal,
+  libportal-gtk4,
+  obs-studio-plugins,
+  libxml2,
+  umu-launcher,
   nix-update-script,
-  removeWarningPopup ? false, # Final reminder to report any issues on nixpkgs' bugtracker
+  removeWarningPopup ? false,
+  withObsVkCapture ? false,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "bottles-unwrapped";
-  version = "51.17";
+  version = "67.4";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = "bottles";
-    tag = version;
-    hash = "sha256-m4ATWpAZxIBp1X0cNeyNGmt6aIBo/cHH+DpOMkLia0E=";
+    tag = finalAttrs.version;
+    hash = "sha256-Ohzsg/CTmk6ix+hATCncusmN5DqWHcw8jDP0dg67r4o=";
   };
 
-  patches =
-    [
-      ./vulkan_icd.patch
-      ./redirect-bugtracker.patch
-      ./remove-flatpak-check.patch
-      ./remove-core-tab.patch
-    ]
-    ++ (
-      if removeWarningPopup then
-        [ ./remove-unsupported-warning.patch ]
-      else
-        [
-          ./warn-unsupported.patch
-        ]
-    );
+  patches = [
+    ./vulkan_icd.patch
+    ./redirect-bugtracker.patch
+    ./remove-flatpak-check.patch
+  ]
+  ++ (
+    if removeWarningPopup then
+      [ ./remove-unsupported-warning.patch ]
+    else
+      [
+        ./warn-unsupported.patch
+      ]
+  );
 
   # https://github.com/bottlesdevs/Bottles/wiki/Packaging
   nativeBuildInputs = [
@@ -66,14 +70,14 @@ python3Packages.buildPythonApplication rec {
     gtk4 # gtk4-update-icon-cache
     appstream-glib
     desktop-file-utils
+    libxml2
   ];
 
   buildInputs = [
-    librsvg
     gtk4
     gtksourceview5
     libadwaita
-    libportal
+    libportal-gtk4
   ];
 
   propagatedBuildInputs =
@@ -87,7 +91,6 @@ python3Packages.buildPythonApplication rec {
       icoextract
       patool
       pathvalidate
-      fvs
       orjson
       pycairo
       pygobject3
@@ -96,6 +99,8 @@ python3Packages.buildPythonApplication rec {
       urllib3
       certifi
       pefile
+      yara-python
+      pysocks
     ]
     ++ [
       cabextract
@@ -103,18 +108,23 @@ python3Packages.buildPythonApplication rec {
       xdpyinfo
       imagemagick
       vkbasalt-cli
+      vulkan-tools
 
+      gamemode
       gamescope
       mangohud
       vmtouch
+      fvs2
+      umu-launcher
 
       # Undocumented (subprocess.Popen())
       lsb-release
       pciutils
       procps
-    ];
+    ]
+    ++ lib.optional withObsVkCapture obs-studio-plugins.obs-vkcapture;
 
-  format = "other";
+  pyproject = false;
   dontWrapGApps = true; # prevent double wrapping
 
   preFixup = ''
@@ -130,10 +140,10 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       psydvl
-      shamilton
       Gliczy
+      XBagon
     ];
     platforms = lib.platforms.linux;
     mainProgram = "bottles";
   };
-}
+})

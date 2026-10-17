@@ -11,17 +11,17 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fe249b52e20498e59e0b5c5256aa52ee99fc295b26ec9eaa85776ffdb9fe6374";
+    hash = "sha256-/iSbUuIEmOWeC1xSVqpS7pn8KVsm7J6qhXdv/bn+Y3Q=";
   };
 
   # FAIL: test_checkers_testsuite (testsuite.test_all.Pep8TestCase)
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pep8.readthedocs.org/";
     description = "Python style guide checker";
     mainProgram = "pep8";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

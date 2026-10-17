@@ -13,17 +13,17 @@ buildKodiAddon rec {
     owner = "XBMC-Addons";
     repo = namespace;
     rev = version;
-    sha256 = "sha256-Z+rHz3wncoNvV1pwhRzJFB/X0H6wdfwg88otVh27wg8=";
+    hash = "sha256-Z+rHz3wncoNvV1pwhRzJFB/X0H6wdfwg88otVh27wg8=";
   };
 
   passthru = {
     pythonPath = "lib";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/XBMC-Addons/script.module.xbmcswift2";
     description = "Framework to ease development of Kodi addons";
-    license = licenses.gpl3Only;
-    maintainers = teams.kodi.members;
+    license = lib.licenses.gpl3Only;
+    teams = [ lib.teams.kodi ];
   };
 }

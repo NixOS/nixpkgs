@@ -2,30 +2,31 @@
   buildPythonPackage,
   cirq-core,
   requests,
+  pytest-benchmark,
   pytestCheckHook,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cirq-ionq";
   pyproject = true;
   inherit (cirq-core) version src meta;
 
-  sourceRoot = "${src.name}/${pname}";
-
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace-fail "requests~=2.18" "requests"
-  '';
+  sourceRoot = "${finalAttrs.src.name}/${finalAttrs.pname}";
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [ "requests" ];
 
   dependencies = [
     cirq-core
     requests
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-benchmark
+    pytestCheckHook
+  ];
 
   # cirq's importlib hook doesn't work here
   #pythonImportsCheck = [ "cirq_ionq" ];
@@ -39,4 +40,4 @@ buildPythonPackage rec {
     # DeprecationWarning: decompose_to_device was used but is deprecated.
     "test_decompose_operation_deprecated"
   ];
-}
+})

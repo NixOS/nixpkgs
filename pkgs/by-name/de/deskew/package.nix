@@ -6,15 +6,15 @@
   fpc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "deskew";
   version = "1.30";
 
   src = fetchFromGitHub {
     owner = "galfar";
-    repo = pname;
-    rev = "v${version}";
+    repo = "deskew";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-xghVOEMkQ/mXpOzJqMaT3SII7xneMNoFqRlqjtzmDnA=";
   };
 
@@ -40,16 +40,18 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
+    # last successful hydra build on darwin was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Command line tool for deskewing scanned text documents";
     homepage = "https://galfar.vevb.net/deskew";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       mpl11
     ];
-    maintainers = with maintainers; [ ryantm ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ ryantm ];
+    platforms = lib.platforms.all;
     mainProgram = "deskew";
   };
 
-}
+})

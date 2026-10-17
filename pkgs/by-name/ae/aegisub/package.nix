@@ -3,7 +3,6 @@
   alsa-lib,
   boost,
   meson,
-  config,
   expat,
   fetchFromGitHub,
   ffmpeg,
@@ -18,6 +17,7 @@
   intltool,
   libGL,
   libass,
+  libportal-gtk3,
   libpulseaudio,
   libuchardet,
   luajit,
@@ -28,26 +28,30 @@
   python3,
   stdenv,
   wrapGAppsHook3,
-  wxGTK32,
+  wxwidgets_3_2,
   zlib,
   # Boolean guard flags
   alsaSupport ? stdenv.hostPlatform.isLinux,
   openalSupport ? true,
   portaudioSupport ? true,
-  pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
+  pulseaudioSupport ? stdenv.hostPlatform.isLinux,
   spellcheckSupport ? true,
   useBundledLuaJIT ? false,
 }:
 
+let
+  luajit' = luajit.override { enable52Compat = true; };
+in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "aegisub";
-  version = "3.4.2";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "TypesettingTools";
     repo = "aegisub";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ho+JG570FWbiYZ86CbCKa52j6UNyPIUh8fxpM3vVU/M=";
+    hash = "sha256-Oonk/aDBB6clWeqxNcUtc923dv9eUY5uQyLsWwwVPDw=";
   };
 
   nativeBuildInputs = [
@@ -56,34 +60,34 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     python3
-    wxGTK32
+    wxwidgets_3_2
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      boost
-      expat
-      ffmpeg
-      ffms
-      fftw
-      fontconfig
-      freetype
-      fribidi
-      harfbuzz
-      icu
-      libGL
-      libass
-      libuchardet
-      wxGTK32
-      zlib
-    ]
-    ++ lib.optionals alsaSupport [ alsa-lib ]
-    ++ lib.optionals (openalSupport && !stdenv.hostPlatform.isDarwin) [ openal ]
-    ++ lib.optionals portaudioSupport [ portaudio ]
-    ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
-    ++ lib.optionals spellcheckSupport [ hunspell ]
-    ++ lib.optionals (!useBundledLuaJIT) [ luajit ];
+  buildInputs = [
+    boost
+    expat
+    ffmpeg
+    ffms
+    fftw
+    fontconfig
+    freetype
+    fribidi
+    harfbuzz
+    icu
+    libGL
+    libass
+    libuchardet
+    wxwidgets_3_2
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libportal-gtk3 ]
+  ++ lib.optionals alsaSupport [ alsa-lib ]
+  ++ lib.optionals (openalSupport && !stdenv.hostPlatform.isDarwin) [ openal ]
+  ++ lib.optionals portaudioSupport [ portaudio ]
+  ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
+  ++ lib.optionals spellcheckSupport [ hunspell ]
+  ++ lib.optionals (!useBundledLuaJIT) [ luajit' ];
 
   mesonFlags = [
     (lib.mesonEnable "alsa" alsaSupport)
@@ -108,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   postPatch = ''
-    patchShebangs tools/respack.py
+    patchShebangs tools/combine-config.py tools/respack.py
 
     # TODO: Tests require wrapped GoogleTest; upstream support for
     # system version?
@@ -141,7 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
       built-in real-time video preview.
     '';
     # The Aegisub sources are itself BSD/ISC, but they are linked against GPL'd
-    # softwares - so the resulting program will be GPL
+    # software - so the resulting program will be GPL
     license = with lib.licenses; [
       bsd3
     ];

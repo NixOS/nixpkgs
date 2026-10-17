@@ -4,31 +4,31 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-machete";
-  version = "0.7.0";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "bnjbvr";
     repo = "cargo-machete";
-    rev = "v${version}";
-    hash = "sha256-qOWa2Q7B073b5UssRnUkk24+PkIzl+czWGCcORUc55w=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-vC7Oj42GU7YlNtP+TUp+4LH2gxGk55RZ5cOLRaiEQ3w=";
   };
 
-  cargoHash = "sha256-q5oC2leWjsCFrwJ9ITeEjxtnnvfDrGyyKNR4kAXBQ6Q=";
+  cargoHash = "sha256-cmOMWJOSJxhjXVdwVdDnTORJRSZcQ8kdDUTJaIy8dbk=";
 
   # tests require internet access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Cargo tool that detects unused dependencies in Rust projects";
     mainProgram = "cargo-machete";
     homepage = "https://github.com/bnjbvr/cargo-machete";
-    changelog = "https://github.com/bnjbvr/cargo-machete/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      figsoda
+    changelog = "https://github.com/bnjbvr/cargo-machete/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       matthiasbeyer
+      chrjabs
     ];
   };
-}
+})

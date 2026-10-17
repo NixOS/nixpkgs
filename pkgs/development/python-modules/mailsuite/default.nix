@@ -1,38 +1,43 @@
 {
-  buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
   lib,
-
-  # pythonPackages
-  hatchling,
+  azure-identity,
+  authres,
+  buildPythonPackage,
+  cryptography,
+  dkimpy,
   dnspython,
   expiringdict,
+  fetchFromGitHub,
+  google-api-python-client,
+  google-auth,
+  google-auth-oauthlib,
+  hatchling,
   html2text,
-  mail-parser,
   imapclient,
+  mail-parser,
+  msgraph-sdk,
   publicsuffix2,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mailsuite";
-  version = "1.9.18";
-  format = "pyproject";
+  version = "2.3.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-3rK5PgcAOKVvZbFT7PaZX9lhU8yKpPQozvh2F8mTkfA=";
+  src = fetchFromGitHub {
+    owner = "seanthegeek";
+    repo = "mailsuite";
+    tag = finalAttrs.version;
+    hash = "sha256-idpgHGvUeg7QIrc9J6IHqcxvqLUcNQNLUSiixMovIbQ=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  pythonRelaxDeps = [
-    "mail-parser"
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
+    authres
+    cryptography
+    dkimpy
     dnspython
     expiringdict
     html2text
@@ -41,14 +46,30 @@ buildPythonPackage rec {
     publicsuffix2
   ];
 
+  optional-dependencies = {
+    all = lib.concatAttrValues (lib.removeAttrs finalAttrs.passthru.optional-dependencies [ "all" ]);
+    gmail = [
+      google-api-python-client
+      google-auth
+      google-auth-oauthlib
+    ];
+    msgraph = [
+      azure-identity
+      msgraph-sdk
+    ];
+  };
+
   pythonImportsCheck = [ "mailsuite" ];
 
-  doCheck = false;
+  nativeCheckInputs = finalAttrs.passthru.optional-dependencies.all ++ [
+    pytestCheckHook
+  ];
 
   meta = {
     description = "Python package to simplify receiving, parsing, and sending email";
     homepage = "https://seanthegeek.github.io/mailsuite/";
-    maintainers = with lib.maintainers; [ talyz ];
+    changelog = "https://github.com/seanthegeek/mailsuite/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ talyz ];
   };
-}
+})

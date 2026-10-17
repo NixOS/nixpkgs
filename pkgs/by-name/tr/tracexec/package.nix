@@ -12,21 +12,19 @@
   zlib,
   clang,
 }:
-let
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tracexec";
-  version = "0.8.2";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "kxxt";
     repo = "tracexec";
-    tag = "v${version}";
-    hash = "sha256-qLvox7ef9eU1Vvg4gZGCKkic4+mcOIz9BZWTi/Q2grk=";
+    rev = "c3f95dcf7714dc731f494683ef7f74e399a22515";
+    hash = "sha256-VDmBCloMTDXxRSIOt4Pu0U6GgaOU0vp2s2zLbd4j7Ds=";
   };
 
-  cargoHash = "sha256-yagXxTEWsR7FkLVo9DZHxmlXD/L6R+IoateUUQxn77E=";
+  cargoHash = "sha256-YhSaRVgYnIcH1tHn8wPi/yeNnOzV0MvHyeZXn1s8jGA=";
 
   hardeningDisable = [ "zerocallusedregs" ];
 
@@ -35,6 +33,7 @@ rustPlatform.buildRustPackage {
     pkg-config
     clang
   ];
+
   buildInputs = [
     libbpf
     elfutils
@@ -42,24 +41,21 @@ rustPlatform.buildRustPackage {
     zlib
   ];
 
-  cargoBuildFlags =
-    [
-      "--no-default-features"
-      "--features=recommended"
-    ]
-    # Remove RiscV64 specialisation when this is fixed:
-    # * https://github.com/NixOS/nixpkgs/pull/310158#pullrequestreview-2046944158
-    # * https://github.com/rust-vmm/seccompiler/pull/72
-    ++ lib.optional stdenv.hostPlatform.isRiscV64 "--no-default-features";
+  cargoBuildFlags = [
+    "--no-default-features"
+    "--features=recommended"
+  ];
 
   preBuild = ''
     sed -i '1ino-clearly-defined = true' about.toml  # disable network requests
     cargo about generate --config about.toml -o THIRD_PARTY_LICENSES.HTML about.hbs
   '';
 
-  checkFlags = [
-    "--skip=cli::test::log_mode_without_args_works" # `Permission denied` (needs `CAP_SYS_PTRACE`)
-  ];
+  # tracexec uses $XDG_DATA_HOME/tracexec for storing temporary files and logs.
+  # Set this directory to $TMPDIR because integration tests needs to access it.
+  preCheck = ''
+    export TRACEXEC_DATA="$TMPDIR"
+  '';
 
   postInstall = ''
     # Remove test binaries (e.g. `empty-argv`, `corrupted-envp`) and only retain `tracexec`
@@ -67,20 +63,22 @@ rustPlatform.buildRustPackage {
 
     install -Dm644 LICENSE -t "$out/share/licenses/tracexec/"
     install -Dm644 THIRD_PARTY_LICENSES.HTML -t "$out/share/licenses/tracexec/"
+    install -Dm644 themes/*.toml -t "$out/share/tracexec/themes/"
   '';
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/kxxt/tracexec/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/kxxt/tracexec/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Small utility for tracing execve{,at} and pre-exec behavior";
     homepage = "https://github.com/kxxt/tracexec";
     license = lib.licenses.gpl2Plus;
     mainProgram = "tracexec";
     maintainers = with lib.maintainers; [
       fpletz
+      kxxt
       nh2
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

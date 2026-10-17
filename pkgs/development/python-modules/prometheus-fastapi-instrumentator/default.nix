@@ -1,30 +1,36 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  pytestCheckHook,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
+  prometheus-client,
+  starlette,
+
+  # tests
   devtools,
   fastapi,
-  httpx,
-  poetry-core,
-  prometheus-client,
+  httpx2,
+  pytest-asyncio,
+  pytestCheckHook,
   requests,
-  starlette,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "prometheus-fastapi-instrumentator";
-  version = "7.0.0";
+  version = "8.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "trallnag";
     repo = "prometheus-fastapi-instrumentator";
-    tag = "v${version}";
-    hash = "sha256-yvKdhQdbY0+jEc8TEHNNgtdnqE0abnd4MN/JZFQwQ2E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-oSP0KH5niST0MICTxVyAdZmH08RTx3cgXQrOT83qBsM=";
   };
 
   build-system = [
@@ -39,9 +45,21 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     devtools
     fastapi
-    httpx
+    httpx2
+    pytest-asyncio
     pytestCheckHook
     requests
+  ];
+
+  # numerous test failures on Darwin
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
+  # TODO: Cleanup when https://github.com/NixOS/nixpkgs/pull/538958 reaches
+  # `master`...
+  disabledTests = lib.optionals (lib.versionOlder fastapi.version "0.137") [
+    # Asserts that instrumentation works with fastapi 0.137+,
+    # fails on nixpkgs with fastapi 0.136.
+    "test_mount_inside_included_router_resolves_path"
   ];
 
   pythonImportsCheck = [ "prometheus_fastapi_instrumentator" ];
@@ -49,12 +67,12 @@ buildPythonPackage rec {
   meta = {
     description = "Instrument FastAPI with Prometheus metrics";
     homepage = "https://github.com/trallnag/prometheus-fastapi-instrumentator";
-    changelog = "https://github.com/trallnag/prometheus-fastapi-instrumentator/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/trallnag/prometheus-fastapi-instrumentator/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = with lib.licenses; [
       isc
       bsd3
     ];
     maintainers = with lib.maintainers; [ bcdarwin ];
-    platforms = lib.platforms.linux; # numerous test failures on Darwin
+    platforms = lib.platforms.unix;
   };
-}
+})

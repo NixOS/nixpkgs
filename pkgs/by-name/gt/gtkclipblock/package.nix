@@ -6,7 +6,6 @@
   cmake,
   ninja,
   pkg-config,
-  gtk2,
   gtk3,
   gtk4,
 }:
@@ -40,10 +39,11 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    gtk2
     gtk3
     gtk4
   ];
+
+  mesonFlags = [ (lib.mesonEnable "gtk2" false) ];
 
   postPatch = ''
     substituteInPlace subprojects/funchook-helper/subprojects/funchook/CMakeLists.txt \
@@ -52,10 +52,11 @@ stdenv.mkDerivation {
 
   dontUseCmakeConfigure = true;
 
-  meta = with lib; {
+  meta = {
     description = "LD_PRELOAD hack to prevent GTK programs from interacting with the primary clipboard";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ uartman ];
+    homepage = "https://github.com/notpeelz/gtkclipblock";
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ uartman ];
     platforms = [ "x86_64-linux" ];
   };
 }

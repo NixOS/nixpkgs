@@ -1,19 +1,20 @@
 {
   lib,
   fetchFromGitHub,
+  gitUpdater,
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "jefferson";
-  version = "0.4.5";
-  format = "pyproject";
+  version = "0.4.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "onekey-sec";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-PGtrvZ0cQvdiswn2Bk43c3LbIZqJyvNe5rnTPw/ipUM=";
+    repo = "jefferson";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/YZ3JvXtnjwGipZ3WlJbeUdn4cDhVoHETsrkIHHADM8=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -22,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     click
-    cstruct
+    dissect-cstruct
     lzallright
   ];
 
@@ -33,14 +34,18 @@ python3.pkgs.buildPythonApplication rec {
   # upstream has no tests
   doCheck = false;
 
-  meta = with lib; {
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "v"; };
+  };
+
+  meta = {
     description = "JFFS2 filesystem extraction tool";
     homepage = "https://github.com/onekey-sec/jefferson";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       tnias
       vlaci
     ];
     mainProgram = "jefferson";
   };
-}
+})

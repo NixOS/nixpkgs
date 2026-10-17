@@ -7,15 +7,15 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gcfflasher";
-  version = "4.5.2";
+  version = "4.12.1";
 
   src = fetchFromGitHub {
     owner = "dresden-elektronik";
-    repo = pname;
-    tag = "v${version}";
-    hash = "sha256-jBKYKjsog0vfyrPoixqTifej5Kb+qYS11Tn+il3J0w0=";
+    repo = "gcfflasher";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-L0BelCcwYmPDfWPCjXQQ0Lmk/C1BHuQKk3dLRfo2OMc=";
   };
 
   nativeBuildInputs = [
@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CFFlasher is the tool to program the firmware of dresden elektronik's Zigbee products";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "https://github.com/dresden-elektronik/gcfflasher";
-    maintainers = with maintainers; [ fleaz ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ fleaz ];
+    platforms = lib.platforms.all;
     mainProgram = "GCFFlasher";
   };
-}
+})

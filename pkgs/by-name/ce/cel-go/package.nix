@@ -4,20 +4,20 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cel-go";
-  version = "0.21.0";
+  version = "0.32.0";
 
   src = fetchFromGitHub {
-    owner = "google";
+    owner = "cel-expr";
     repo = "cel-go";
-    rev = "v${version}";
-    hash = "sha256-t451e3Pkkt4pmBvS0DBSHOVg7P8ipJd28XyiQ6P/QIQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sFS6Kei7KpNFdjR5pyicTZdIDYZi5Juxab4YzgB25sM=";
   };
 
   modRoot = "repl";
 
-  vendorHash = "sha256-t/GEbpnqpLQ79ETqS9TAgy+2z9FoifAmkHbfKUxDBZA=";
+  vendorHash = "sha256-kJhpVH+Ak2/yICshXreVgPs5W/Cq63l+FwUMW6G1l8k=";
 
   subPackages = [
     "main"
@@ -32,12 +32,12 @@ buildGoModule rec {
     mv $out/bin/{main,cel-go}
   '';
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/cel-expr/cel-go/releases/tag/${finalAttrs.src.tag}";
     description = "Fast, portable, non-Turing complete expression evaluation with gradual typing";
+    homepage = "https://github.com/cel-expr/cel-go";
+    license = lib.licenses.asl20;
     mainProgram = "cel-go";
-    homepage = "https://github.com/google/cel-go";
-    changelog = "https://github.com/google/cel-go/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with lib.maintainers; [ hythera ];
   };
-}
+})

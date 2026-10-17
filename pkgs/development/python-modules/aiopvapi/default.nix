@@ -3,43 +3,39 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
+  pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiopvapi";
-  version = "3.1.1";
+  version = "3.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sander76";
     repo = "aio-powerview-api";
-    tag = "v${version}";
-    hash = "sha256-WtTqtVr1oL86dpsAIK55pbXWU4X/cajVLlggd6hfM4c=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JXQTxHWMg/biWEQssk4KCIcTJ1JOG+UIRBI8xw4WfJ8=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [ aiohttp ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "aiopvapi" ];
 
-  disabledTests = [
-    # AssertionError
-    "test_remove_shade_from_scene"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Python API for the PowerView API";
     homepage = "https://github.com/sander76/aio-powerview-api";
-    changelog = "https://github.com/sander76/aio-powerview-api/releases/tag/v${version}";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/sander76/aio-powerview-api/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

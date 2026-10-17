@@ -1,48 +1,71 @@
 {
   lib,
   buildGoModule,
+  buildNpmPackage,
   fetchFromGitHub,
   testers,
-  vacuum-go,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "vacuum-go";
-  version = "0.15.3";
+  version = "0.30.6";
 
   src = fetchFromGitHub {
     owner = "daveshanley";
     repo = "vacuum";
-    # using refs/tags because simple version gives: 'the given path has multiple possibilities' error
-    tag = "v${version}";
-    hash = "sha256-SI32ODbd3X4zMhS3LI4vwVn9/gwgabWZ/8Nx+L3KPYE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-27ZGWy9lblCAlvodpmgyhHaS2uHP5gpM8SDh44agdZ8=";
   };
 
-  vendorHash = "sha256-xTqrKkCRO6lUbzXI4/UrBoZsKU9mQW8cMrnZ2X3wzog=";
+  vendorHash = "sha256-0fKjscF77MubYr+AhvWAk8Oh0OQP948vGW8zbwAS1xw=";
 
   env.CGO_ENABLED = 0;
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=v${version}"
+    "-X main.version=v${finalAttrs.version}"
   ];
+
+  tags = [ "html_report_ui" ];
+
+  preBuild = ''
+    mkdir -p html-report/ui/build/static/js
+    cp ${finalAttrs.passthru.htmlReportUI}/static/js/vacuumReport.js html-report/ui/build/static/js/
+    cp ${finalAttrs.passthru.htmlReportUI}/static/js/hydrate.js html-report/ui/build/static/js/
+  '';
 
   subPackages = [ "./vacuum.go" ];
 
   passthru = {
+    # see upstream scripts/build-ui-assets.sh
+    htmlReportUI = buildNpmPackage {
+      pname = "vacuum-html-report-ui";
+      inherit (finalAttrs) version src;
+
+      sourceRoot = "${finalAttrs.src.name}/html-report/ui";
+
+      npmDepsHash = "sha256-DU6kgafGmAi1QTcAbseSl473467YN0E2lXeGYlpUZ68=";
+
+      installPhase = ''
+        runHook preInstall
+        cp -r build "$out"
+        runHook postInstall
+      '';
+    };
+
     tests.version = testers.testVersion {
-      package = vacuum-go;
+      package = finalAttrs.finalPackage;
       command = "vacuum version";
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
     };
   };
 
   meta = {
-    description = "The world's fastest OpenAPI & Swagger linter";
+    description = "World's fastest OpenAPI & Swagger linter";
     homepage = "https://quobix.com/vacuum";
-    changelog = "https://github.com/daveshanley/vacuum/releases/tag/v${version}";
+    changelog = "https://github.com/daveshanley/vacuum/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "vacuum";
     maintainers = with lib.maintainers; [ konradmalik ];
   };
-}
+})

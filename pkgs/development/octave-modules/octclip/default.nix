@@ -12,7 +12,7 @@ buildOctavePackage rec {
     owner = "jgpallero";
     repo = pname;
     rev = "OctCLIP-${version}";
-    sha256 = "sha256-gG2b8Ix6bzO6O7GRACE81JCVxfXW/+ZdfoniigAEq3g=";
+    hash = "sha256-gG2b8Ix6bzO6O7GRACE81JCVxfXW/+ZdfoniigAEq3g=";
   };
 
   # The only compilation problem is that no formatting specifier was provided
@@ -22,11 +22,11 @@ buildOctavePackage rec {
     sed -i s/"error(errorText)"/"error(\"%s\", errorText)"/g src/*.cc
   '';
 
-  meta = with lib; {
+  meta = {
     name = "GNU Octave Clipping Polygons Tool";
-    homepage = "https://octave.sourceforge.io/octclip/index.html";
-    license = with licenses; [ gpl3Plus ]; # modified BSD?
-    maintainers = with maintainers; [ KarlJoad ];
+    homepage = "https://gnu-octave.github.io/packages/octclip/";
+    license = lib.licenses.gpl3Plus; # modified BSD?
+    maintainers = with lib.maintainers; [ ravenjoad ];
     description = "Perform boolean operations with polygons using the Greiner-Hormann algorithm";
   };
 }

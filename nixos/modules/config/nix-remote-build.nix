@@ -15,7 +15,6 @@ let
     filter
     getVersion
     mkIf
-    mkMerge
     mkOption
     optional
     optionalString
@@ -160,12 +159,12 @@ in
                 '';
               };
               speedFactor = mkOption {
-                type = types.int;
+                type = types.numbers.nonnegative;
                 default = 1;
                 description = ''
-                  The relative speed of this builder. This is an arbitrary integer
-                  that indicates the speed of this builder, relative to other
-                  builders. Higher is faster.
+                  The relative speed of this builder. This is an arbitrary
+                  positive number that indicates the speed of this builder,
+                  relative to other builders. Higher is faster.
                 '';
               };
               mandatoryFeatures = mkOption {
@@ -235,14 +234,13 @@ in
       [
         {
           assertion = !(any badMachine cfg.buildMachines);
-          message =
-            ''
-              At least one system type (via <varname>system</varname> or
-                <varname>systems</varname>) must be set for every build machine.
-                Invalid machine specifications:
-            ''
-            + "      "
-            + (concatStringsSep "\n      " (map (m: m.hostName) (filter (badMachine) cfg.buildMachines)));
+          message = ''
+            At least one system type (via <varname>system</varname> or
+              <varname>systems</varname>) must be set for every build machine.
+              Invalid machine specifications:
+          ''
+          + "      "
+          + (concatStringsSep "\n      " (map (m: m.hostName) (filter badMachine cfg.buildMachines)));
         }
       ];
 

@@ -10,15 +10,16 @@
   libxml2,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "git-remote-hg";
-  version = "1.0.3.2";
+  version = "1.0.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mnauw";
     repo = "git-remote-hg";
-    rev = "v${version}";
-    sha256 = "0b5lfbrcrvzpz380817md00lbgy5yl4y76vs3vm0bpm5wmr7c027";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-QlXi5LQAYMNCF7ZjQdJxwcjp3K51dGkHVnNw0pgArzg=";
   };
 
   nativeBuildInputs = [
@@ -29,17 +30,20 @@ python3Packages.buildPythonApplication rec {
     libxslt
     libxml2
   ];
-  propagatedBuildInputs = with python3Packages; [ mercurial ];
+
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [ mercurial ];
 
   postInstall = ''
     make install-doc prefix=$out
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mnauw/git-remote-hg";
     description = "Semi-official Mercurial bridge from Git project";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

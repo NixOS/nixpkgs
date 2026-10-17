@@ -1,16 +1,16 @@
-
 # Qt packages set.
 #
 # Attributes in this file are packages requiring Qt and will be made available
 # for every Qt version. Qt applications are called from `all-packages.nix` via
 # this file.
 
-
-{ lib
-, __splicedPackages
-, makeScopeWithSplicing'
-, generateSplicesForMkScope
-, pkgsHostTarget
+{
+  lib,
+  config,
+  __splicedPackages,
+  makeScopeWithSplicing',
+  generateSplicesForMkScope,
+  pkgsHostTarget,
 }:
 
 let
@@ -23,276 +23,191 @@ in
 
 makeScopeWithSplicing' {
   otherSplices = generateSplicesForMkScope "libsForQt5";
-  f = (self: let
-  libsForQt5 = self;
-  callPackage = self.callPackage;
+  f = (
+    self:
+    let
+      libsForQt5 = self;
+      callPackage = self.callPackage;
 
-  kdeFrameworks = let
-    mkFrameworks = import ../development/libraries/kde-frameworks;
-    attrs = {
-      inherit libsForQt5;
-      inherit (pkgs) lib fetchurl;
-    };
-  in (lib.makeOverridable mkFrameworks attrs);
+      kdeFrameworks =
+        let
+          mkFrameworks = import ../development/libraries/kde-frameworks;
+          attrs = {
+            inherit config;
+            inherit libsForQt5;
+            inherit (pkgs) lib fetchurl kdePackages;
+          };
+        in
+        (lib.makeOverridable mkFrameworks attrs);
 
-  plasma5 = let
-    mkPlasma5 = import ../desktops/plasma-5;
-    attrs = {
-      inherit libsForQt5;
-      inherit (pkgs) config lib fetchurl;
-      inherit (pkgs) gsettings-desktop-schemas;
-    };
-  in (lib.makeOverridable mkPlasma5 attrs);
+      noExtraAttrs =
+        set:
+        lib.attrsets.removeAttrs set [
+          "extend"
+          "override"
+          "overrideScope"
+          "overrideDerivation"
+        ];
 
-  kdeGear = let
-    mkGear = import ../applications/kde;
-    attrs = {
-      inherit libsForQt5;
-      inherit (pkgs) lib fetchurl;
-    };
-  in (lib.makeOverridable mkGear attrs);
+    in
+    (noExtraAttrs (
+      qt5
+      // {
 
-  plasmaMobileGear = let
-    mkPlamoGear = import ../applications/plasma-mobile;
-    attrs = {
-      inherit libsForQt5;
-      inherit (pkgs) lib fetchurl;
-    };
-  in (lib.makeOverridable mkPlamoGear attrs);
+        __internalKF5 = lib.dontRecurseIntoAttrs kdeFrameworks;
 
-  mauiPackages = let
-    mkMaui = import ../applications/maui;
-    attrs = {
-      inherit libsForQt5;
-      inherit (pkgs) lib fetchurl;
-    };
-  in (lib.makeOverridable mkMaui attrs);
+        ### LIBRARIES
 
-  noExtraAttrs = set: lib.attrsets.removeAttrs set [ "extend" "override" "overrideScope" "overrideDerivation" ];
+        accounts-qml-module = callPackage ../development/libraries/accounts-qml-module { };
 
-in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGear // mauiPackages // qt5 // {
+        accounts-qt = callPackage ../development/libraries/accounts-qt { };
 
-  inherit kdeFrameworks plasmaMobileGear plasma5 kdeGear mauiPackages qt5;
+        dxflib = callPackage ../development/libraries/dxflib { };
 
-  # Alias for backwards compatibility. Added 2021-05-07.
-  kdeApplications = kdeGear;
+        drumstick = callPackage ../development/libraries/drumstick { };
 
-  ### LIBRARIES
+        fcitx5-qt = callPackage ../tools/inputmethods/fcitx5/fcitx5-qt.nix { };
 
-  accounts-qml-module = callPackage ../development/libraries/accounts-qml-module { };
+        qgpgme = callPackage ../development/libraries/qgpgme { };
 
-  accounts-qt = callPackage ../development/libraries/accounts-qt { };
+        grantlee = pkgs.grantlee;
 
-  alkimia = callPackage ../development/libraries/alkimia { };
+        herqq = callPackage ../by-name/he/herqq/package.nix { };
 
-  applet-window-appmenu = callPackage ../development/libraries/applet-window-appmenu { };
+        kcolorpicker = callPackage ../development/libraries/kcolorpicker { };
 
-  applet-window-buttons = callPackage ../development/libraries/applet-window-buttons { };
+        kdsoap = callPackage ../development/libraries/kdsoap { };
 
-  appstream-qt = callPackage ../development/libraries/appstream/qt.nix { };
+        kimageannotator = callPackage ../development/libraries/kimageannotator { };
 
-  dxflib = callPackage ../development/libraries/dxflib {};
+        ldutils = callPackage ../development/libraries/ldutils { };
 
-  drumstick = callPackage ../development/libraries/drumstick { };
+        libcommuni = callPackage ../development/libraries/libcommuni { };
 
-  fcitx5-qt = callPackage ../tools/inputmethods/fcitx5/fcitx5-qt.nix { };
+        libiodata = callPackage ../development/libraries/libiodata { };
 
-  fcitx5-chinese-addons = callPackage ../tools/inputmethods/fcitx5/fcitx5-chinese-addons.nix { };
+        liblastfm = callPackage ../development/libraries/liblastfm { };
 
-  fcitx5-configtool = callPackage ../tools/inputmethods/fcitx5/fcitx5-configtool.nix { };
+        libqglviewer = callPackage ../development/libraries/libqglviewer { };
 
-  fcitx5-skk-qt = callPackage ../tools/inputmethods/fcitx5/fcitx5-skk.nix { enableQt = true; };
+        libqofono = callPackage ../development/libraries/libqofono { };
 
-  fcitx5-unikey = callPackage ../tools/inputmethods/fcitx5/fcitx5-unikey.nix { };
+        libqtdbusmock = callPackage ../development/libraries/libqtdbusmock {
+          inherit (pkgs.lomiri) cmake-extras;
+        };
 
-  fcitx5-with-addons = callPackage ../tools/inputmethods/fcitx5/with-addons.nix { };
+        libqtdbustest = callPackage ../development/libraries/libqtdbustest {
+          inherit (pkgs.lomiri) cmake-extras;
+        };
 
-  futuresql = callPackage ../development/libraries/futuresql { };
+        libqtpas = callPackage ../development/compilers/fpc/libqtpas.nix { };
 
-  qgpgme = callPackage ../development/libraries/gpgme { };
+        mapbox-gl-qml = callPackage ../development/libraries/mapbox-gl-qml { };
 
-  grantlee = callPackage ../development/libraries/grantlee/5 { };
+        maplibre-native-qt = callPackage ../development/libraries/maplibre-native-qt { };
 
-  qtcurve = callPackage ../data/themes/qtcurve {};
+        polkit-qt = callPackage ../development/libraries/polkit-qt-1 { };
 
-  herqq = callPackage ../development/libraries/herqq { };
+        poppler = callPackage ../development/libraries/poppler {
+          lcms = pkgs.lcms2;
+          qt5Support = true;
+          suffix = "qt5";
+        };
 
-  kdb = callPackage ../development/libraries/kdb { };
+        pyotherside = callPackage ../development/libraries/pyotherside { };
 
-  kde2-decoration = callPackage ../data/themes/kde2 { };
+        qca = callPackage ../development/libraries/qca { };
+        qca-qt5 = self.qca;
 
-  kcolorpicker = callPackage ../development/libraries/kcolorpicker { };
+        qcoro = callPackage ../development/libraries/qcoro { };
 
-  kdiagram = callPackage ../development/libraries/kdiagram { };
+        qcustomplot = callPackage ../development/libraries/qcustomplot { };
 
-  kdsoap = callPackage ../development/libraries/kdsoap { };
+        qjson = callPackage ../development/libraries/qjson { };
 
-  kf5gpgmepp = callPackage ../development/libraries/kf5gpgmepp { };
+        qmenumodel = callPackage ../development/libraries/qmenumodel {
+          inherit (pkgs.lomiri) cmake-extras;
+        };
 
-  kirigami-addons = libsForQt5.callPackage ../development/libraries/kirigami-addons { };
+        qmltermwidget = callPackage ../development/libraries/qmltermwidget { };
 
-  kimageannotator = callPackage ../development/libraries/kimageannotator { };
+        qoauth = callPackage ../development/libraries/qoauth { };
 
-  kproperty = callPackage ../development/libraries/kproperty { };
+        qt5ct = callPackage ../tools/misc/qt5ct { };
 
-  kpeoplevcard = callPackage ../development/libraries/kpeoplevcard { };
+        qtdbusextended = callPackage ../development/libraries/qtdbusextended { };
 
-  kreport = callPackage ../development/libraries/kreport { };
+        qtfeedback = callPackage ../development/libraries/qtfeedback { };
 
-  kquickimageedit = callPackage ../development/libraries/kquickimageedit { };
+        qtforkawesome = callPackage ../development/libraries/qtforkawesome { };
 
-  kuserfeedback = callPackage ../development/libraries/kuserfeedback { };
+        qtutilities = callPackage ../development/libraries/qtutilities { };
 
-  kweathercore = libsForQt5.callPackage ../development/libraries/kweathercore { };
+        qtinstaller = callPackage ../development/libraries/qtinstaller { };
 
-  ldutils = callPackage ../development/libraries/ldutils { };
+        qtkeychain = callPackage ../development/libraries/qtkeychain { };
 
-  libcommuni = callPackage ../development/libraries/libcommuni { };
+        qtmpris = callPackage ../development/libraries/qtmpris { };
 
-  libdbusmenu = callPackage ../development/libraries/libdbusmenu-qt/qt-5.5.nix { };
+        qtpbfimageplugin = callPackage ../development/libraries/qtpbfimageplugin { };
 
-  liblastfm = callPackage ../development/libraries/liblastfm { };
+        qtstyleplugins = callPackage ../development/libraries/qtstyleplugins { };
 
-  libopenshot = callPackage ../development/libraries/libopenshot {
-    stdenv = if pkgs.stdenv.hostPlatform.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
-    python3 = pkgs.python311;
-  };
+        qtstyleplugin-kvantum = callPackage ../development/libraries/qtstyleplugin-kvantum {
+          qt6Kvantum = pkgs.qt6Packages.qtstyleplugin-kvantum;
+        };
 
-  packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };
+        quazip = callPackage ../development/libraries/quazip { };
 
-  libopenshot-audio = callPackage ../development/libraries/libopenshot-audio {
-    inherit (pkgs.darwin.apple_sdk.frameworks) Accelerate AGL Cocoa Foundation;
-  };
+        quickflux = callPackage ../development/libraries/quickflux { };
 
-  libqglviewer = callPackage ../development/libraries/libqglviewer {
-    inherit (pkgs.darwin.apple_sdk.frameworks) AGL;
-  };
+        qscintilla = callPackage ../development/libraries/qscintilla { };
 
-  libqofono = callPackage ../development/libraries/libqofono { };
+        qwt = callPackage ../development/libraries/qwt/default.nix { };
 
-  libqtpas = callPackage ../development/compilers/fpc/libqtpas.nix { };
+        qwt6_1 = callPackage ../development/libraries/qwt/6_1.nix { };
 
-  libquotient = callPackage ../development/libraries/libquotient { };
+        qxlsx = callPackage ../development/libraries/qxlsx { };
 
-  libqaccessibilityclient = callPackage ../development/libraries/libqaccessibilityclient { };
+        qzxing = callPackage ../development/libraries/qzxing { };
 
-  mapbox-gl-native = libsForQt5.callPackage ../development/libraries/mapbox-gl-native { };
+        rlottie-qml = callPackage ../development/libraries/rlottie-qml { };
 
-  mapbox-gl-qml = libsForQt5.callPackage ../development/libraries/mapbox-gl-qml { };
+        sailfish-access-control-plugin =
+          callPackage ../development/libraries/sailfish-access-control-plugin
+            { };
 
-  maplibre-gl-native = callPackage ../development/libraries/maplibre-gl-native { };
+        telepathy = callPackage ../development/libraries/telepathy/qt { };
 
-  maplibre-native-qt = callPackage ../development/libraries/maplibre-native-qt { };
+        signond = callPackage ../development/libraries/signond { };
 
-  maui-core = libsForQt5.callPackage ../development/libraries/maui-core { };
-
-  mlt = pkgs.mlt.override {
-    qt = qt5;
-  };
-
-  phonon = callPackage ../development/libraries/phonon { };
-
-  phonon-backend-gstreamer = callPackage ../development/libraries/phonon/backends/gstreamer.nix { };
-
-  phonon-backend-vlc = callPackage ../development/libraries/phonon/backends/vlc.nix { };
-
-  plasma-wayland-protocols = callPackage ../development/libraries/plasma-wayland-protocols { };
-
-  polkit-qt = callPackage ../development/libraries/polkit-qt-1 { };
-
-  poppler = callPackage ../development/libraries/poppler {
-    lcms = pkgs.lcms2;
-    qt5Support = true;
-    suffix = "qt5";
-  };
-
-  pulseaudio-qt = callPackage ../development/libraries/pulseaudio-qt { };
-
-  qca = callPackage ../development/libraries/qca {
-    stdenv = if pkgs.stdenv.hostPlatform.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
-    inherit (libsForQt5) qtbase;
-  };
-  qca-qt5 = self.qca;
-
-  qcoro = callPackage ../development/libraries/qcoro { };
-
-  qcsxcad = callPackage ../development/libraries/science/electronics/qcsxcad { };
-
-  qjson = callPackage ../development/libraries/qjson { };
-
-  qmltermwidget = callPackage ../development/libraries/qmltermwidget {
-    inherit (pkgs.darwin.apple_sdk.libs) utmp;
-  };
-
-  qmlbox2d = callPackage ../development/libraries/qmlbox2d { };
-
-  qoauth = callPackage ../development/libraries/qoauth { };
-
-  qt5ct = callPackage ../tools/misc/qt5ct { };
-
-  qtdbusextended = callPackage ../development/libraries/qtdbusextended { };
-
-  qtfeedback = callPackage ../development/libraries/qtfeedback { };
-
-  qtforkawesome = callPackage ../development/libraries/qtforkawesome { };
-
-  qtutilities = callPackage ../development/libraries/qtutilities { };
-
-  qtinstaller = callPackage ../development/libraries/qtinstaller { };
-
-  qtkeychain = callPackage ../development/libraries/qtkeychain {
-    stdenv = if pkgs.stdenv.hostPlatform.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
-    inherit (pkgs.darwin.apple_sdk.frameworks) CoreFoundation Security;
-  };
-
-  qtmpris = callPackage ../development/libraries/qtmpris { };
-
-  qtpbfimageplugin = callPackage ../development/libraries/qtpbfimageplugin { };
-
-  qtstyleplugins = callPackage ../development/libraries/qtstyleplugins { };
-
-  qtstyleplugin-kvantum = callPackage ../development/libraries/qtstyleplugin-kvantum {
-    qt6Kvantum = pkgs.qt6Packages.qtstyleplugin-kvantum;
-  };
-
-  quazip = callPackage ../development/libraries/quazip { };
-
-  quickflux = callPackage ../development/libraries/quickflux { };
-
-  qscintilla = callPackage ../development/libraries/qscintilla { };
-
-  qwt = callPackage ../development/libraries/qwt/default.nix { };
-
-  qwt6_1 = callPackage ../development/libraries/qwt/6_1.nix { };
-
-  qxlsx = callPackage ../development/libraries/qxlsx { };
-
-  qzxing = callPackage ../development/libraries/qzxing { };
-
-  rlottie-qml = callPackage ../development/libraries/rlottie-qml { };
-
-  sierra-breeze-enhanced = callPackage ../data/themes/kwin-decorations/sierra-breeze-enhanced { useQt5 = true; };
-
-  soqt = callPackage ../development/libraries/soqt { };
-
-  telepathy = callPackage ../development/libraries/telepathy/qt { };
-
-  qtwebkit-plugins = callPackage ../development/libraries/qtwebkit-plugins { };
-
-  # Not a library, but we do want it to be built for every qt version there
-  # is, to allow users to choose the right build if needed.
-  sddm = callPackage ../applications/display-managers/sddm { };
-
-  signond = callPackage ../development/libraries/signond {};
-
-  soundkonverter = callPackage ../applications/audio/soundkonverter {};
-
-  xp-pen-deco-01-v2-driver = callPackage ../os-specific/linux/xp-pen-drivers/deco-01-v2 { };
-
-  xp-pen-g430-driver = callPackage ../os-specific/linux/xp-pen-drivers/g430 { };
-
-  xwaylandvideobridge = callPackage ../tools/wayland/xwaylandvideobridge { };
-
-  yuview = callPackage ../applications/video/yuview { };
-})));
+        timed = callPackage ../applications/system/timed { };
+      }
+      // lib.optionalAttrs config.allowAliases {
+        qt5 = throw "'libsForQt5.qt5.*' attributes were removed in favor of top-level 'qt5.*' attributes"; # Added 2026-06-05
+        mlt = throw "'libsForQt5.mlt' was removed due to lack of upstream support since v7.36.0, use 'qt6Packages.mlt'."; # Added 2026-06-05
+        futuresql = throw "libsForQt5.futuresql has been removed"; # Added 2026-05-01
+        kdb = throw "libsForQt5.kdb has been removed"; # Added 2026-05-01
+        kdiagram = throw "libsForQt5.kdiagram has been removed"; # Added 2026-05-01
+        kf5gpgmepp = throw ''
+          'libsForQt5.kf5gpgmepp' has been removed because it has been unmaintained upstream since 2017.
+          Consider switching to the gpgmepp included in gpgme (gpgme <2), or to the GnuPG fork of gpgmepp (gpgme 2+), instead.
+        ''; # Added 2025-10-25
+        kirigami-addons = throw "libsForQt5.kirigami-addons has been removed"; # Added 2026-05-01
+        kproperty = throw "libsForQt5.kproperty has been removed"; # Added 2026-05-01
+        kquickimageedit = throw "libsForQt5.kquickimageedit has been removed"; # Added 2026-05-01
+        ktextaddons = throw "libsForQt5.ktextaddons has been removed"; # Added 2026-05-01
+        kuserfeedback = throw "libsForQt5.kuserfeedback has been removed"; # Added 2026-05-01
+        libqaccessibilityclient = throw "libsForQt5.libqaccessibilityclient has been removed"; # Added 2026-05-01
+        mapbox-gl-native = throw "libsForQt5.mapbox-gl-native has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
+        maplibre-gl-native = throw "libsForQt5.maplibre-gl-native has been removed due to being broken and superseded by maplibre-native-qt"; # Added 2026-04-11
+        maui-core = throw "libsForQt5.maui-core has been removed"; # Added 2026-05-01
+        phonon = throw "libsForQt5.phonon has been removed"; # Added 2026-05-01
+        phonon-backend-gstreamer = throw "libsForQt5.phonon-backend-gstreamer has been removed"; # Added 2026-05-01
+        phonon-backend-vlc = throw "libsForQt5.phonon-backend-vlc has been removed"; # Added 2026-05-01
+        plasma-wayland-protocols = throw "libsForQt5.plasma-wayland-protocols has been removed"; # Added 2026-05-01
+        pulseaudio-qt = throw "libsForQt5.pulseaudio-qt has been removed";
+      }
+    ))
+  );
 }

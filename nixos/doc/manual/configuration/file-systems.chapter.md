@@ -7,10 +7,10 @@ point `/data`:
 
 ```nix
 {
-  fileSystems."/data" =
-    { device = "/dev/disk/by-label/data";
-      fsType = "ext4";
-    };
+  fileSystems."/data" = {
+    device = "/dev/disk/by-label/data";
+    fsType = "ext4";
+  };
 }
 ```
 
@@ -37,9 +37,3 @@ System startup will fail if any of the filesystems fails to mount,
 dropping you to the emergency shell. You can make a mount asynchronous
 and non-critical by adding `options = [ "nofail" ];`.
 :::
-
-```{=include=} sections
-luks-file-systems.section.md
-sshfs-file-systems.section.md
-overlayfs.section.md
-```

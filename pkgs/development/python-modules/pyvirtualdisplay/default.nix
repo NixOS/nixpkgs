@@ -3,8 +3,12 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
-  substituteAll,
-  xorg,
+  replaceVars,
+  xorg-server,
+  xvfb,
+  xmessage,
+  xdpyinfo,
+  xauth,
 
   # build-system
   setuptools,
@@ -17,7 +21,7 @@
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
-  vncdo,
+  vncdotool,
 }:
 
 buildPythonPackage rec {
@@ -32,10 +36,9 @@ buildPythonPackage rec {
   };
 
   patches = lib.optionals stdenv.hostPlatform.isLinux [
-    (substituteAll {
-      src = ./paths.patch;
-      xauth = lib.getExe xorg.xauth;
-      xdpyinfo = lib.getExe xorg.xdpyinfo;
+    (replaceVars ./paths.patch {
+      xauth = lib.getExe xauth;
+      xdpyinfo = lib.getExe xdpyinfo;
     })
   ];
 
@@ -50,18 +53,18 @@ buildPythonPackage rec {
     psutil
     pytest-timeout
     pytestCheckHook
-    (vncdo.overridePythonAttrs { doCheck = false; })
-    xorg.xorgserver
-    xorg.xmessage
-    xorg.xvfb
+    (vncdotool.overridePythonAttrs { doCheck = false; })
+    xorg-server
+    xmessage
+    xvfb
   ];
 
-  pytestFlagsArray = [ "-v" ];
+  pytestFlags = [ "-v" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for Xvfb, Xephyr and Xvnc";
     homepage = "https://github.com/ponty/pyvirtualdisplay";
-    license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ layus ];
+    license = lib.licenses.bsdOriginal;
+    maintainers = with lib.maintainers; [ layus ];
   };
 }

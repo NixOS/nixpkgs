@@ -13,6 +13,8 @@ in
     services.webdav = {
       enable = lib.mkEnableOption "WebDAV server";
 
+      package = lib.mkPackageOption pkgs "webdav" { };
+
       user = lib.mkOption {
         type = lib.types.str;
         default = "webdav";
@@ -43,9 +45,8 @@ in
           {
               address = "0.0.0.0";
               port = 8080;
-              scope = "/srv/public";
-              modify = true;
-              auth = true;
+              directory = "/srv/public";
+              permissions = "R";
               users = [
                 {
                   username = "{env}ENV_USERNAME";
@@ -95,7 +96,7 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${pkgs.webdav}/bin/webdav -c ${cfg.configFile}";
+        ExecStart = "${lib.getExe cfg.package} -c ${cfg.configFile}";
         Restart = "on-failure";
         User = cfg.user;
         Group = cfg.group;

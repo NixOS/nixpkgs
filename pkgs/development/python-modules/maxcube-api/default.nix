@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   pytestCheckHook,
 }:
@@ -10,13 +9,12 @@ buildPythonPackage rec {
   pname = "maxcube-api";
   version = "0.4.3";
   format = "setuptools";
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "hackercowboy";
     repo = "python-${pname}";
     rev = "V${version}";
-    sha256 = "10k61gfpnqljf3p3qxr97xq7j67a9cr4ivd9v72hdni0znrbx6ym";
+    hash = "sha256-1Zu+sv0g2gbF2antSDJL6hh5cD8pdzzucJJie90LZoI=";
   };
 
   postPatch = ''
@@ -35,10 +33,10 @@ buildPythonPackage rec {
     "maxcube.cube"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "eQ-3/ELV MAX! Cube Python API";
     homepage = "https://github.com/hackercowboy/python-maxcube-api";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

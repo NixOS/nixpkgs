@@ -3,18 +3,25 @@
   stdenvNoCC,
   fetchFromGitLab,
   nix-update-script,
+  udevCheckHook,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "xr-hardware";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "monado/utilities";
     repo = "xr-hardware";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-w35/LoozCJz0ytHEHWsEdCaYYwyGU6sE13iMckVdOzY=";
+    tag = finalAttrs.version;
+    hash = "sha256-stJjjencaO7cDOyVak2BaDnPQsjsX63+9dwY0Q//7To=";
   };
+
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
 
   dontConfigure = true;
   dontBuild = true;
@@ -24,11 +31,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Hardware description for XR devices";
     homepage = "https://gitlab.freedesktop.org/monado/utilities/xr-hardware";
-    license = licenses.boost;
-    maintainers = with maintainers; [ Scrumplex ];
-    platforms = platforms.linux;
+    license = lib.licenses.boost;
+    maintainers = with lib.maintainers; [ Scrumplex ];
+    platforms = lib.platforms.linux;
   };
 })

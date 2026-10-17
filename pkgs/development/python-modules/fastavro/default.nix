@@ -2,32 +2,29 @@
   buildPythonPackage,
   cython,
   fetchFromGitHub,
-  isPy38,
   lib,
   lz4,
   numpy,
   pandas,
   pytestCheckHook,
   python-dateutil,
-  cramjam,
   pythonOlder,
+  backports-zstd,
+  cramjam,
   setuptools,
   zlib-ng,
-  zstandard,
 }:
 
 buildPythonPackage rec {
   pname = "fastavro";
-  version = "1.10.0";
+  version = "1.12.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "fastavro";
+    repo = "fastavro";
     tag = version;
-    hash = "sha256-/YZFrEs7abm+oPn9yyLMV1X/G5VZ/s+ThpvzoQtYQu0=";
+    hash = "sha256-UeOfYM03Htqrh+lpBKWiAPgZTv63jpO/FZZRMSgW5Ug=";
   };
 
   preBuild = ''
@@ -43,10 +40,12 @@ buildPythonPackage rec {
     codecs = [
       cramjam
       lz4
-      zstandard
+    ]
+    ++ lib.optionals (pythonOlder "3.14") [
+      backports-zstd
     ];
     snappy = [ cramjam ];
-    zstandard = [ zstandard ];
+    zstandard = lib.optionals (pythonOlder "3.,14") [ backports-zstd ];
     lz4 = [ lz4 ];
   };
 
@@ -56,23 +55,21 @@ buildPythonPackage rec {
     pytestCheckHook
     python-dateutil
     zlib-ng
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   # Fails with "AttributeError: module 'fastavro._read_py' has no attribute
   # 'CYTHON_MODULE'." Doesn't appear to be serious. See https://github.com/fastavro/fastavro/issues/112#issuecomment-387638676.
   disabledTests = [ "test_cython_python" ];
 
-  # CLI tests are broken on Python 3.8. See https://github.com/fastavro/fastavro/issues/558.
-  disabledTestPaths = lib.optionals isPy38 [ "tests/test_main_cli.py" ];
-
   pythonImportsCheck = [ "fastavro" ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast read/write of AVRO files";
     mainProgram = "fastavro";
     homepage = "https://github.com/fastavro/fastavro";
-    changelog = "https://github.com/fastavro/fastavro/blob/${version}/ChangeLog";
-    license = licenses.mit;
-    maintainers = with maintainers; [ samuela ];
+    changelog = "https://github.com/fastavro/fastavro/blob/${src.tag}/ChangeLog";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ samuela ];
   };
 }

@@ -1,21 +1,19 @@
 {
   lib,
+  audioop-lts,
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
-  ffmpeg-full,
+  ffmpeg,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
-  substituteAll,
+  replaceVars,
 }:
 
 buildPythonPackage rec {
   pname = "pydub";
   version = "0.25.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jiaaro";
@@ -32,15 +30,16 @@ buildPythonPackage rec {
       hash = "sha256-3OIzvTgGK3r4/s5y7izHvouB4uJEmjO6cgKvegtTf7A=";
     })
     # Fix paths to ffmpeg, ffplay and ffprobe
-    (substituteAll {
-      src = ./ffmpeg-fix-path.patch;
-      ffmpeg = lib.getExe ffmpeg-full;
-      ffplay = lib.getExe' ffmpeg-full "ffplay";
-      ffprobe = lib.getExe' ffmpeg-full "ffprobe";
+    (replaceVars ./ffmpeg-fix-path.patch {
+      ffmpeg = lib.getExe ffmpeg;
+      ffplay = lib.getExe' ffmpeg "ffplay";
+      ffprobe = lib.getExe' ffmpeg "ffprobe";
     })
   ];
 
   nativeBuildInputs = [ setuptools ];
+
+  dependencies = [ audioop-lts ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -52,13 +51,13 @@ buildPythonPackage rec {
     "pydub.playback"
   ];
 
-  pytestFlagsArray = [ "test/test.py" ];
+  enabledTestPaths = [ "test/test.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Manipulate audio with a simple and easy high level interface";
     homepage = "http://pydub.com";
     changelog = "https://github.com/jiaaro/pydub/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

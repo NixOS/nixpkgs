@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "webcat";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "rumpelsepp";
     repo = "webcat";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-JyZHH8JgS3uoNVicx1wj0SAzlrXyTrpwIBZuok6buRw=";
   };
 
@@ -29,11 +29,11 @@ buildGoModule rec {
     installManPage man/webcat.1
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://rumpelsepp.org/blog/ssh-through-websocket/";
     description = "Lightweight swiss army knife for websockets";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ montag451 ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ montag451 ];
     mainProgram = "webcat";
   };
-}
+})

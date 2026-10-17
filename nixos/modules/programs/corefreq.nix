@@ -12,7 +12,7 @@ in
 {
   options = {
     programs.corefreq = {
-      enable = lib.mkEnableOption "Whether to enable the corefreq daemon and kernel module";
+      enable = lib.mkEnableOption "the corefreq daemon and kernel module";
 
       package = lib.mkOption {
         type = lib.types.package;

@@ -1,92 +1,125 @@
 {
   lib,
+  stdenv,
+  config,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
   cmake,
   ninja,
-  pybind11,
-  setuptools,
-  wheel,
+  nanobind,
+  scikit-build-core,
+  # linux-only
+  jax,
 
   # buildInputs
   SDL2,
+  opencv,
   zlib,
 
-  # dependencies
-  importlib-resources,
-  numpy,
-  typing-extensions,
-  importlib-metadata,
+  # nativeBuildInputs
+  cudaPackages,
 
-  # checks
+  # dependencies
+  numpy,
+
+  # tests
+  chex,
   gymnasium,
   pytestCheckHook,
-
-  stdenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ale-py";
-  version = "0.10.1";
+  version = "0.12.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Farama-Foundation";
     repo = "Arcade-Learning-Environment";
-    tag = "v${version}";
-    hash = "sha256-MDMCYnyLZYbQXwyr5VuPeVEop825nD++yQ7hhsW4BX8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1oIF45+GZFWuRzXR5Hqh60yc1DZYAlXpsGgf3WiouQE=";
   };
+
+  # disable lto on darwin, cmake cannot find llvm-ar
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/ale/CMakeLists.txt \
+      --replace-fail \
+        'set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)' \
+        'set(CMAKE_INTERPROCEDURAL_OPTIMIZATION FALSE)'
+  '';
 
   build-system = [
     cmake
     ninja
-    pybind11
-    setuptools
-    wheel
+    scikit-build-core
+    nanobind
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    jax
   ];
+
+  nativeBuildInputs = lib.optionals config.cudaSupport [
+    # Required by opencv's cmake
+    cudaPackages.cuda_nvcc
+  ];
+
+  dontUseCmakeConfigure = true;
 
   buildInputs = [
     SDL2
     zlib
+    opencv
   ];
 
   dependencies = [
-    importlib-resources
     numpy
-    typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
-
-  postPatch =
-    # Relax the pybind11 version
-    ''
-      substituteInPlace src/ale/python/CMakeLists.txt \
-        --replace-fail 'find_package(pybind11 ''${PYBIND11_VER} QUIET)' 'find_package(pybind11 QUIET)'
-    '';
-
-  dontUseCmakeConfigure = true;
+  ];
 
   pythonImportsCheck = [ "ale_py" ];
 
   nativeCheckInputs = [
+    chex
     gymnasium
     pytestCheckHook
   ];
 
-  # test_atari_env.py::test_check_env fails on the majority of the environments because the ROM are missing.
-  # The user is expected to manually download the roms:
-  # https://github.com/Farama-Foundation/Arcade-Learning-Environment/blob/v0.9.0/docs/faq.md#i-downloaded-ale-and-i-installed-it-successfully-but-i-cannot-find-any-rom-file-at-roms-do-i-have-to-get-them-somewhere-else
-  disabledTests = [ "test_check_env" ];
+  disabledTests = [
+    # Fatal Python error: Aborted
+    # line 414 in test_display_screen
+    "test_display_screen"
+
+    # Most Atari tests fail because the ROM are missing.
+    # The user is expected to manually download the roms:
+    # https://github.com/Farama-Foundation/Arcade-Learning-Environment/blob/v0.9.0/docs/faq.md#i-downloaded-ale-and-i-installed-it-successfully-but-i-cannot-find-any-rom-file-at-roms-do-i-have-to-get-them-somewhere-else
+    "TestVectorEnv"
+    "test_check_env"
+    "test_clone_pickle_restore_new_env"
+    "test_clone_restore"
+    "test_continuous_actions"
+    "test_determinism"
+    "test_gym_keys_to_action"
+    "test_jit"
+    "test_obs_params"
+    "test_reset_step_shapes"
+    "test_rollout_consistency"
+    "test_seeding"
+    "test_sound_obs"
+    "test_state_serialize_roundtrip"
+  ];
+
+  disabledTestPaths = [
+    "tests/python/test_atari_vector_xla.py"
+  ];
 
   meta = {
     description = "Simple framework that allows researchers and hobbyists to develop AI agents for Atari 2600 games";
     mainProgram = "ale-import-roms";
     homepage = "https://github.com/mgbellemare/Arcade-Learning-Environment";
-    changelog = "https://github.com/Farama-Foundation/Arcade-Learning-Environment/releases/tag/v${version}";
+    changelog = "https://github.com/Farama-Foundation/Arcade-Learning-Environment/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ billhuang ];
-    broken = stdenv.hostPlatform.isDarwin; # fails to link with missing library
   };
-}
+})

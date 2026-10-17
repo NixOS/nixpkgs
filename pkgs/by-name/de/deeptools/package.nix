@@ -1,45 +1,47 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
+
+  # tests
+  addBinToPathHook,
+  versionCheckHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "deeptools";
-  version = "3.5.5";
+  version = "3.5.6";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "deeptools";
     repo = "deepTools";
-    tag = version;
-    hash = "sha256-2kSlL7Y5f/FjVtStnmz+GlTw2oymrtxOCaXlqgbQ7FU=";
+    tag = finalAttrs.version;
+    hash = "sha256-dxXlOvOjF4KSc5YO+1A5hlp95sfeyPSbmp93tihm7Vo=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3Packages; [
     setuptools
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3Packages; [
+    deeptoolsintervals
+    matplotlib
     numpy
     numpydoc
-    scipy
+    plotly
     py2bit
     pybigwig
     pysam
-    matplotlib
-    plotly
-    deeptoolsintervals
-    importlib-metadata
+    scipy
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
+  nativeCheckInputs = [
+    addBinToPathHook
+    python3Packages.pytestCheckHook
+    versionCheckHook
   ];
-
-  preCheck = ''
-    export PATH="$out/bin:$PATH"
-  '';
 
   disabledTestPaths = [
     # tests trip on `len(sys.argv) == 1`
@@ -49,7 +51,13 @@ python3.pkgs.buildPythonApplication rec {
     "deeptools/test/test_multiBamSummary.py"
   ];
 
-  meta = with lib; {
+  disabledTests = [
+    # Numerical error:
+    #   AssertionError: Error: Image files did not match
+    "test_plotCoverage_default"
+  ];
+
+  meta = {
     homepage = "https://deeptools.readthedocs.io/en/develop";
     description = "Tools for exploring deep DNA sequencing data";
     longDescription = ''
@@ -60,10 +68,10 @@ python3.pkgs.buildPythonApplication rec {
       publication-ready visualizations to identify enrichments and for functional
       annotations of the genome.
     '';
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       bsd3
     ];
-    maintainers = with maintainers; [ scalavision ];
+    mainProgram = "deeptools";
   };
-}
+})

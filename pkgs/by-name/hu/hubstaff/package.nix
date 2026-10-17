@@ -1,17 +1,62 @@
-{ lib, stdenv, fetchurl, unzip, makeWrapper, libX11, zlib, libSM, libICE
-, libXext , freetype, libXrender, fontconfig, libXft, libXinerama
-, libXfixes, libXScrnSaver, libnotify, glib , gtk3, libappindicator-gtk3
-, curl, writeShellScript, common-updater-scripts, xmlstarlet }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  makeWrapper,
+  libx11,
+  zlib,
+  libsm,
+  libice,
+  libxext,
+  freetype,
+  libxrender,
+  fontconfig,
+  libxft,
+  libxinerama,
+  libxcursor,
+  cairo,
+  libxfixes,
+  libxscrnsaver,
+  libnotify,
+  glib,
+  gtk3,
+  libappindicator,
+  curl,
+  writeShellScript,
+  common-updater-scripts,
+  xmlstarlet,
+  makeDesktopItem,
+  copyDesktopItems,
+}:
 
 let
-  url = "https://app.hubstaff.com/download/8792-standard-linux-1-6-29-release/sh";
-  version = "1.6.29-7f771670";
-  sha256 = "sha256:09vdpsmaj26bmnbsyxp76g3677lzi8p86gz66qbdvxly6a4x1hq9";
+  url = "https://app.hubstaff.com/download/11100-standard-linux-1-7-8-release/sh";
+  version = "1.7.8-c835b2c2";
+  sha256 = "sha256:0cv6b5rx1bjizwa22xlzmljwgcvm1mqyng79qqrdzmd0xy7c02pi";
 
-  rpath = lib.makeLibraryPath
-    [ libX11 zlib libSM libICE libXext freetype libXrender fontconfig libXft
-      libXinerama stdenv.cc.cc libnotify glib gtk3 libappindicator-gtk3
-      curl libXfixes libXScrnSaver ];
+  rpath = lib.makeLibraryPath [
+    libx11
+    zlib
+    libsm
+    libice
+    libxext
+    freetype
+    libxrender
+    fontconfig
+    libxft
+    libxinerama
+    stdenv.cc.cc
+    libnotify
+    glib
+    gtk3
+    libappindicator
+    curl
+    libxfixes
+    libxscrnsaver
+    libxcursor
+    cairo
+  ];
 
 in
 
@@ -21,7 +66,11 @@ stdenv.mkDerivation {
 
   src = fetchurl { inherit sha256 url; };
 
-  nativeBuildInputs = [ unzip makeWrapper ];
+  nativeBuildInputs = [
+    unzip
+    makeWrapper
+    copyDesktopItems
+  ];
 
   unpackCmd = ''
     # MojoSetups have a ZIP file at the end. ZIP’s magic string is
@@ -35,7 +84,23 @@ stdenv.mkDerivation {
 
   dontBuild = true;
 
+  # Upstream doesn't seem to have a desktop item out of the box
+  desktopItems = [
+    (makeDesktopItem {
+      name = "netsoft-com.netsoft.hubstaff";
+      desktopName = "Hubstaff";
+      exec = "HubstaffClient";
+      icon = "hubstaff-color";
+      comment = "Time tracking software";
+      categories = [
+        "Office"
+        "ProjectManagement"
+      ];
+    })
+  ];
+
   installPhase = ''
+    runHook preInstall
     # remove files for 32-bit arch to skip building for this arch
     # but add -f flag to not fail if files were not found (new versions dont provide 32-bit arch)
     rm -rf x86 x86_64/lib64
@@ -54,6 +119,14 @@ stdenv.mkDerivation {
 
     # Why is this needed? SEGV otherwise.
     ln -s $opt/data/resources $opt/x86_64/resources
+
+    # Link icons to the standard directory
+    for dir in $opt/data/resources/hicolor/[0-9]*x[0-9]*; do
+      size=$(basename "$dir")
+      mkdir -p $out/share/icons/hicolor/$size/apps
+      ln -s $dir/apps/hubstaff-color.png $out/share/icons/hicolor/$size/apps/hubstaff-color.png
+    done
+    runHook postInstall
   '';
 
   # to test run:
@@ -77,12 +150,14 @@ stdenv.mkDerivation {
     ${common-updater-scripts}/bin/update-source-version hubstaff "$version" "sha256:$sha256" "$installation_script_url"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Time tracking software";
     homepage = "https://hubstaff.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ michalrus srghma ];
+    maintainers = with lib.maintainers; [
+      michalrus
+    ];
   };
 }

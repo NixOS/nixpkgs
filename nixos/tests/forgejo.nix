@@ -1,12 +1,7 @@
 {
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
-  forgejoPackage ? pkgs.forgejo,
+  runTest,
+  forgejoPackage,
 }:
-
-with import ../lib/testing-python.nix { inherit system pkgs; };
-with pkgs.lib;
 
 let
   ## gpg --faked-system-time='20230301T010000!' --quick-generate-key snakeoil ed25519 sign
@@ -24,40 +19,19 @@ let
   '';
   signingPrivateKeyId = "4D642DE8B678C79D";
 
-  actionsWorkflowYaml = ''
-    run-name: dummy workflow
-    on:
-      push:
-    jobs:
-      cat:
-        runs-on: native
-        steps:
-          - uses: http://localhost:3000/test/checkout@main
-          - run: cat testfile
-  '';
-  # https://github.com/actions/checkout/releases
-  checkoutActionSource = pkgs.fetchFromGitHub {
-    owner = "actions";
-    repo = "checkout";
-    rev = "v4.1.1";
-    hash = "sha256-h2/UIp8IjPo3eE4Gzx52Fb7pcgG/Ww7u31w5fdKVMos=";
-  };
-
   metricSecret = "fakesecret";
 
-  supportedDbTypes = [
-    "mysql"
-    "postgres"
-    "sqlite3"
-  ];
-  makeForgejoTest =
-    type:
-    nameValuePair type (makeTest {
-      name = "forgejo-${type}";
-      meta.maintainers = with maintainers; [
-        bendlas
-        emilylange
-      ];
+  base =
+    {
+      lib,
+      pkgs,
+      type,
+      ...
+    }:
+
+    {
+      name = "forgejo-${forgejoPackage.version}-${type}";
+      meta.maintainers = lib.teams.forgejo.members;
 
       nodes = {
         server =
@@ -83,25 +57,47 @@ let
               pkgs.gnupg
               pkgs.jq
               pkgs.file
-              pkgs.htmlq
             ];
             services.openssh.enable = true;
 
-            specialisation.runner = {
+            specialisation.forgejo-runner = {
               inheritParentConfig = true;
-              configuration.services.gitea-actions-runner = {
-                package = pkgs.forgejo-runner;
-                instances."test" = {
-                  enable = true;
-                  name = "ci";
-                  url = "http://localhost:3000";
-                  labels = [
-                    # type ":host" does not depend on docker/podman/lxc
-                    "native:host"
-                  ];
-                  tokenFile = "/var/lib/forgejo/runner_token";
-                };
-              };
+              configuration = (
+                { config, ... }:
+
+                {
+                  services.forgejo-runner = {
+                    instances."test" = {
+                      enable = true;
+                      settings = {
+                        runner.labels = [
+                          # type ":host" does not depend on docker/podman/lxc
+                          "native:host"
+                        ];
+                        server.connections.default = {
+                          url = "http://localhost:3000";
+                          uuid = "@UUID@";
+                        };
+                      };
+                      secrets.server.connections.default.token_url = "/forgejo-runner_token";
+                    };
+                  };
+
+                  # FIXME: Remove once upstream supports uuid_url just like token_url
+                  systemd.services.forgejo-runner-test = {
+                    preStart = ''
+                      cp -v ${config.services.forgejo-runner.instances."test".configFile} ./config.yaml
+                      chmod u+w ./config.yaml
+                      ${lib.getExe pkgs.replace-secret} "@UUID@" "$CREDENTIALS_DIRECTORY/UUID" ./config.yaml
+                      chmod u-w ./config.yaml
+                    '';
+                    serviceConfig = {
+                      ExecStart = lib.mkForce "${lib.getExe config.services.forgejo-runner.package} daemon --config ./config.yaml";
+                      LoadCredential = [ "UUID:/forgejo-runner_uuid" ];
+                    };
+                  };
+                }
+              );
             };
             specialisation.dump = {
               inheritParentConfig = true;
@@ -141,6 +137,25 @@ let
             "${backupDir}/${file}";
           remoteUri = "forgejo@server:test/repo";
           remoteUriCheckoutAction = "forgejo@server:test/checkout";
+
+          actionsWorkflowYaml = ''
+            run-name: dummy workflow
+            on:
+              push:
+            jobs:
+              cat:
+                runs-on: native
+                steps:
+                  - uses: http://localhost:3000/test/checkout@main
+                  - run: cat testfile
+          '';
+          # https://github.com/actions/checkout/releases
+          checkoutActionSource = pkgs.fetchFromGitHub {
+            owner = "actions";
+            repo = "checkout";
+            rev = "v4.1.1";
+            hash = "sha256-h2/UIp8IjPo3eE4Gzx52Fb7pcgG/Ww7u31w5fdKVMos=";
+          };
         in
         ''
           import json
@@ -180,7 +195,7 @@ let
               + "Please contact your site administrator.'"
           )
           server.succeed(
-              "su -l forgejo -c 'GITEA_WORK_DIR=/var/lib/forgejo gitea admin user create "
+              "su -l forgejo -c 'GITEA_WORK_DIR=/var/lib/forgejo forgejo admin user create --admin "
               + "--username test --password totallysafe --email test@localhost --must-change-password=false'"
           )
 
@@ -225,22 +240,22 @@ let
               server.fail("curl --fail http://localhost:3000/metrics")
               server.succeed('curl --fail http://localhost:3000/metrics -H "Authorization: Bearer ${metricSecret}"')
 
-          with subtest("Testing runner registration and action workflow"):
-              server.succeed(
-                  "su -l forgejo -c 'GITEA_WORK_DIR=/var/lib/forgejo gitea actions generate-runner-token' | sed 's/^/TOKEN=/' | tee /var/lib/forgejo/runner_token"
-              )
-              server.succeed("${serverSystem}/specialisation/runner/bin/switch-to-configuration test")
-              server.wait_for_unit("gitea-runner-test.service")
-              server.succeed("journalctl -o cat -u gitea-runner-test.service | grep -q 'Runner registered successfully'")
+          def poll_workflow_action_status(id: int) -> bool:
+              try:
+                  response = server.succeed("curl --fail http://localhost:3000/api/v1/repos/test/repo/actions/tasks")
+                  status = json.loads(response).get("workflow_runs")[id].get("status")
 
-              # enable actions feature for this repository, defaults to disabled
-              server.succeed(
-                  "curl --fail -X PATCH http://localhost:3000/api/v1/repos/test/repo "
-                  + "-H 'Accept: application/json' -H 'Content-Type: application/json' "
-                  + f"-H 'Authorization: token {api_token}'"
-                  + ' -d \'{"has_actions":true}\'''
-              )
+              except IndexError:
+                  status = "???"
 
+              server.log(f"Workflow status: {status}")
+
+              if status == "failure":
+                  raise Exception("Workflow failed")
+
+              return status == "success"
+
+          with subtest("Testing forgejo-runner registration and action workflow"):
               # mirror "actions/checkout" action
               client.succeed("cp -R ${checkoutActionSource}/ /tmp/checkout")
               client.succeed("git -C /tmp/checkout init")
@@ -256,36 +271,53 @@ let
               client.succeed("git -C /tmp/repo commit -m 'Add dummy workflow'")
               client.succeed("git -C /tmp/repo push origin main")
 
-              def poll_workflow_action_status(_) -> bool:
-                  output = server.succeed(
-                      "curl --fail http://localhost:3000/test/repo/actions | "
-                      + 'htmlq ".flex-item-leading span" --attribute "data-tooltip-content"'
-                  ).strip()
+              # enable actions feature for this repository, defaults to disabled
+              server.succeed(
+                  "curl --fail -X PATCH http://localhost:3000/api/v1/repos/test/repo "
+                  + "-H 'Accept: application/json' -H 'Content-Type: application/json' "
+                  + f"-H 'Authorization: token {api_token}'"
+                  + ' -d \'{"has_actions":true}\'''
+              )
 
-                  # values taken from https://codeberg.org/forgejo/forgejo/src/commit/af47c583b4fb3190fa4c4c414500f9941cc02389/options/locale/locale_en-US.ini#L3649-L3661
-                  if output in [ "Failure", "Canceled", "Skipped", "Blocked" ]:
-                      raise Exception(f"Workflow status is '{output}', which we consider failed.")
-                      server.log(f"Command returned '{output}', which we consider failed.")
+              runner_registration_response = server.succeed(
+                  "curl --fail http://localhost:3000/api/v1/admin/actions/runners "
+                  + f"-H 'Authorization: token {api_token}' "
+                  + '--json \'{"name":"NixOS", "ephemeral":false}\'''
+              )
 
-                  elif output in [ "Unknown", "Waiting", "Running", "" ]:
-                      server.log(f"Workflow status is '{output}'. Waiting some more...")
-                      return False
+              runner_registration = json.loads(runner_registration_response)
+              server.succeed(f"echo {runner_registration.get("token")} > /forgejo-runner_token")
+              server.succeed(f"echo {runner_registration.get("uuid")} > /forgejo-runner_uuid")
 
-                  elif output in [ "Success" ]:
-                      return True
+              server.succeed("${serverSystem}/specialisation/forgejo-runner/bin/switch-to-configuration test")
+              server.wait_for_unit("forgejo-runner-test.service")
+              server.succeed("journalctl -o cat -u forgejo-runner-test.service | grep -q 'declared successfully'")
 
-                  raise Exception(f"Workflow status is '{output}', which we don't know. Value mappings likely need updating.")
+              client.succeed("git -C /tmp/repo commit --allow-empty -m 'Retrigger dummy workflow'")
+              client.succeed("git -C /tmp/repo push origin main")
 
               with server.nested("Waiting for the workflow run to be successful"):
-                  retry(poll_workflow_action_status)
+                  retry(lambda _: poll_workflow_action_status(1), 180)
 
           with subtest("Testing backup service"):
               server.succeed("${serverSystem}/specialisation/dump/bin/switch-to-configuration test")
               server.systemctl("start forgejo-dump")
               assert "Zstandard compressed data" in server.succeed("file ${dumpFile}")
-              server.copy_from_vm("${dumpFile}")
+              server.copy_from_machine("${dumpFile}")
         '';
-    });
+    };
 in
-
-listToAttrs (map makeForgejoTest supportedDbTypes)
+{
+  mysql = runTest {
+    imports = [ base ];
+    _module.args.type = "mysql";
+  };
+  sqlite3 = runTest {
+    imports = [ base ];
+    _module.args.type = "sqlite3";
+  };
+  postgres = runTest {
+    imports = [ base ];
+    _module.args.type = "postgres";
+  };
+}

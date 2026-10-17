@@ -1,17 +1,16 @@
 {
   lib,
-  writeText,
-  flutter,
+  flutter335,
   fetchFromGitHub,
 }:
 
-flutter.buildFlutterApplication rec {
+flutter335.buildFlutterApplication rec {
   pname = "firmware-updater";
-  version = "0-unstable-2024-20-11";
+  version = "0-unstable-2025-09-09";
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  sourceRoot = "./source/apps/firmware_updater";
+  sourceRoot = "${src.name}/apps/firmware_updater";
 
   gitHashes = {
     fwupd = "sha256-l/+HrrJk1mE2Mrau+NmoQ7bu9qhHU6wX68+m++9Hjd4=";
@@ -20,16 +19,16 @@ flutter.buildFlutterApplication rec {
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "firmware-updater";
-    rev = "ab5d44d594d68d106aafb511252a94a24e94d601";
-    hash = "sha256-4a0OojgNvOpvM4+8uSslxxKb6uwKDfDkvHo29rMXynQ=";
+    rev = "402e97254b9d63c8d962c46724995e377ff922c8";
+    hash = "sha256-nQn5mlgNj157h++67+mhez/F1ALz4yY+bxiGsi0/xX8=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Firmware Updater for Linux";
     mainProgram = "firmware-updater";
     homepage = "https://github.com/canonical/firmware-updater";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ mkg20001 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ mkg20001 ];
+    platforms = lib.platforms.linux;
   };
 }

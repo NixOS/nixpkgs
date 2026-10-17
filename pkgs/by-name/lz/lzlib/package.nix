@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lzlib";
-  version = "1.15";
+  version = "1.16";
   outputs = [
     "out"
     "info"
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://savannah/lzip/lzlib/lzlib-${finalAttrs.version}.tar.lz";
-    hash = "sha256-nUVIDnyBccZPodW+7iy9guaf6+kQ8M5ii4dqj+IUFTQ=";
+    hash = "sha256-zSqW+8aF9+PcMrnw5eNARqd+PBD8/r5i+ZUeMX0KjPQ=";
     # hash from release email
   };
 
@@ -42,6 +42,5 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Data compression library providing in-memory LZMA compression and decompression functions, including integrity checking of the decompressed data";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ ehmry ];
   };
 })

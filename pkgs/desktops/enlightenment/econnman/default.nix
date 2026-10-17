@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/apps/econnman/${pname}-${version}.tar.xz";
-    sha256 = "sha256-DM6HaB+ufKcPHmPP4K5l/fF7wzRycFQxfiXjiXYZ7YU=";
+    hash = "sha256-DM6HaB+ufKcPHmPP4K5l/fF7wzRycFQxfiXjiXYZ7YU=";
   };
 
   nativeBuildInputs = [
@@ -42,18 +42,15 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = directoryListingUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "User interface for the connman network connection manager";
     mainProgram = "econnman-bin";
     homepage = "https://enlightenment.org/";
-    license = licenses.lgpl3;
-    platforms = platforms.linux;
-    maintainers =
-      with lib.maintainers;
-      [
-        matejc
-        ftrvxmtrx
-      ]
-      ++ teams.enlightenment.members;
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      matejc
+    ];
+    teams = [ lib.teams.enlightenment ];
   };
 }

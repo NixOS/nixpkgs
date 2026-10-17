@@ -7,25 +7,28 @@
 
 python3Packages.buildPythonApplication {
   pname = "git-bars";
-  version = "unstable-2023-08-08";
+  version = "0-unstable-2023-08-20";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "knadh";
     repo = "git-bars";
-    rev = "f15fbc15345d9ef021e5a9b278e352bb532dcee8";
-    hash = "sha256-jHP6LqhUQv6hh97tSXAdOruWdtp2FXM6ANlpWoA+fHQ=";
+    rev = "8c935c75844512553ae50e396181c422504516d7";
+    hash = "sha256-aGvioTurv0OPwpBib5O+Nytt6WZqwylhTZHYk5qmCEo=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ python3Packages.setuptools ];
+
+  dependencies = [
     git
     python3Packages.setuptools
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/knadh/git-bars";
     description = "Utility for visualising git commit activity as bars on the terminal";
-    license = licenses.mit;
-    maintainers = [ maintainers.matthiasbeyer ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.matthiasbeyer ];
     mainProgram = "git-bars";
   };
 }

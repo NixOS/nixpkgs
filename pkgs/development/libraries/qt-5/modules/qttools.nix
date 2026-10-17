@@ -4,7 +4,7 @@
   lib,
   qtbase,
   qtdeclarative,
-  substituteAll,
+  replaceVars,
   llvmPackages,
 }:
 
@@ -29,13 +29,11 @@ qtModule {
 
   patches = [
     # fixQtBuiltinPaths overwrites builtin paths we should keep
-    (substituteAll {
-      src = ./qttools-QT_HOST_DATA-refs.patch;
+    (replaceVars ./qttools-QT_HOST_DATA-refs.patch {
       qtbaseDev = lib.getDev qtbase;
     })
 
-    (substituteAll {
-      src = ./qttools-libclang-main-header.patch;
+    (replaceVars ./qttools-libclang-main-header.patch {
       libclangDev = lib.getDev llvmPackages.libclang;
     })
   ];
@@ -59,7 +57,8 @@ qtModule {
     "bin/qthelpconverter"
     "bin/lprodump"
     "bin/qdistancefieldgenerator"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "bin/macdeployqt" ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "bin/macdeployqt" ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString (
     stdenv.hostPlatform.isDarwin && qtdeclarative != null

@@ -1,12 +1,11 @@
 {
   lib,
   buildPythonPackage,
+  fetchpatch,
   fetchPypi,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   packaging,
-  tomli,
 
   # tests
   poppler-qt5,
@@ -14,14 +13,14 @@
   qgis-ltr,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sip";
-  version = "6.9.1";
+  version = "6.16.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-eQS+UZDXh5lSVjt4o68OWPon2VJa9/U/k+rHqDtDPns=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-CnOcnNKSneTgiERW2Mrzz7IsEFNHV8d5e9jca9ntabw=";
   };
 
   build-system = [
@@ -32,7 +31,17 @@ buildPythonPackage rec {
   dependencies = [
     packaging
     setuptools
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
+
+  patches = [
+    # Backports pyqt5 compile failure fix from upstream
+    # https://github.com/Python-SIP/sip/issues/114
+    (fetchpatch {
+      name = "legacy-api-binding-fix.patch";
+      url = "https://github.com/Python-SIP/sip/commit/09598895c607f3e41f0249ade217ace0a4da6437.patch";
+      hash = "sha256-v0YeHyg0ymB0v32gpVRbMBIUk9U2etjs93VuOGPGg2M=";
+    })
+  ];
 
   # There aren't tests
   doCheck = false;
@@ -44,10 +53,10 @@ buildPythonPackage rec {
     inherit poppler-qt5 qgis qgis-ltr;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Creates C++ bindings for Python modules";
     homepage = "https://riverbankcomputing.com/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nrdxp ];
+    license = lib.licenses.gpl3Only;
+    maintainers = [ ];
   };
-}
+})

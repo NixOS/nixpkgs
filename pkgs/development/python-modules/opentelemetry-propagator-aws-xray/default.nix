@@ -1,18 +1,16 @@
 {
-  lib,
   buildPythonPackage,
   hatchling,
   opentelemetry-api,
   opentelemetry-instrumentation,
-  opentelemetry-semantic-conventions,
-  opentelemetry-instrumentation-botocore,
   opentelemetry-test-utils,
+  pyprojectVersionPatchHook,
   pytestCheckHook,
   requests,
   pytest-benchmark,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   inherit (opentelemetry-instrumentation) version src;
   pname = "opentelemetry-propagator-aws-xray";
   pyproject = true;
@@ -23,15 +21,16 @@ buildPythonPackage rec {
 
   dependencies = [ opentelemetry-api ];
 
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
+
   nativeCheckInputs = [
     opentelemetry-test-utils
     pytestCheckHook
-  ];
-
-  checkInputs = [
     pytest-benchmark
     requests
   ];
+
+  pytestFlags = [ "--benchmark-disable" ];
 
   pythonImportsCheck = [ "opentelemetry.propagators.aws" ];
 

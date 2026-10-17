@@ -1,18 +1,19 @@
 {
   lib,
-  stdenv,
+  zellij,
+  ncurses,
+  hexdump,
   fetchFromGitHub,
   installShellFiles,
   nix-update-script,
   runtimeShell,
   rustPlatform,
-  skim,
-  testers,
+  versionCheckHook,
 }:
-
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "skim";
-  version = "0.15.7";
+  version = "5.7.3";
+  __structuredAttrs = true;
 
   outputs = [
     "out"
@@ -23,17 +24,23 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "skim-rs";
     repo = "skim";
-    tag = "v${version}";
-    hash = "sha256-vUKHyrvCGtRKziUqgIbgVP7YdH+UW3PFBECV/mo5RxY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sG7nfBfsJWQFo/uS6nJ5VPBG7q3YBF4+5T8E9UmurME=";
   };
 
   postPatch = ''
-    sed -i -e "s|expand('<sfile>:h:h')|'$out'|" plugin/skim.vim
+    substituteInPlace plugin/skim.vim \
+      --replace-fail "expand('<sfile>:h:h')" "'$out'"
   '';
 
-  cargoHash = "sha256-/tfbhNlpx96jlzUYwbucXi+pk1IE2jqxgWYjNU+4mHg=";
+  cargoHash = "sha256-QyqAAJhEqJnajwras4/ipsf93B04NXq98j+9T5LTibY=";
 
   nativeBuildInputs = [ installShellFiles ];
+  nativeCheckInputs = [
+    zellij
+    ncurses
+    hexdump
+  ];
 
   postBuild = ''
     cat <<SCRIPT > sk-share
@@ -51,26 +58,40 @@ rustPlatform.buildRustPackage rec {
 
     installBin sk-share
     installManPage $(find man -type f)
+    installShellCompletion \
+      --cmd sk \
+      --bash shell/completion.bash \
+      --fish shell/completion.fish \
+      --zsh shell/completion.zsh
   '';
 
-  # Doc tests are broken on aarch64
-  # https://github.com/lotabout/skim/issues/440
-  cargoTestFlags = lib.optional stdenv.hostPlatform.isAarch64 "--all-targets";
+  useNextest = true;
+
+  checkPhase = ''
+    cargo nextest run --release --offline --lib --bins --examples --tests --profile ci
+  '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  __darwinAllowLocalNetworking = true;
 
   passthru = {
-    tests.version = testers.testVersion { package = skim; };
     updateScript = nix-update-script { };
   };
 
   meta = {
     description = "Command-line fuzzy finder written in Rust";
     homepage = "https://github.com/skim-rs/skim";
-    changelog = "https://github.com/skim-rs/skim/releases/tag/v${version}";
+    changelog = "https://github.com/skim-rs/skim/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       dywedir
       getchoo
+      krovuxdev
     ];
     mainProgram = "sk";
   };
-}
+})

@@ -23,24 +23,25 @@
   curl,
   tpm2-tools,
   coreutils,
+  udevCheckHook,
   clevisSupport ? false,
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stratisd";
-  version = "3.7.3";
+  version = "3.9.3";
 
   src = fetchFromGitHub {
     owner = "stratis-storage";
-    repo = pname;
-    tag = "stratisd-v${version}";
-    hash = "sha256-W8ssLTFU36t6iLrt9S9V8qcN7EP4IsL7VbhNPLpftio=";
+    repo = "stratisd";
+    tag = "stratisd-v${finalAttrs.version}";
+    hash = "sha256-8PZiJgecssQYTSBnCj2mumUqdTZPouRRB0sW4pVrQAU=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    hash = "sha256-Qv2qknWNx2OQeucUFwL1veu3MSF+fd19jFfHCCVGprM=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-tkHxokc289mgczrJWlKIQVdkNeqhGV2d68t9uJZG2oI=";
   };
 
   postPatch = ''
@@ -65,6 +66,7 @@ stdenv.mkDerivation rec {
     pkg-config
     asciidoc
     ncurses # tput
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -87,12 +89,12 @@ stdenv.mkDerivation rec {
     [
       xfsprogs
       thin-provisioning-tools
+      cryptsetup
     ]
     ++ lib.optionals clevisSupport [
       clevis
       jose
       jq
-      cryptsetup
       curl
       tpm2-tools
       coreutils
@@ -108,12 +110,14 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkTarget = "test";
 
+  doInstallCheck = true;
+
   # remove files for supporting dracut
   postInstall = ''
     mkdir -p "$initrd/bin"
-    cp "$out/lib/dracut/modules.d/90stratis/stratis-rootfs-setup" "$initrd/bin"
+    cp "$out/lib/dracut/modules.d/50stratis/stratis-rootfs-setup" "$initrd/bin"
     mkdir -p "$initrd/lib/systemd/system"
-    substitute "$out/lib/dracut/modules.d/90stratis/stratisd-min.service" \
+    substitute "$out/lib/dracut/modules.d/50stratis/stratisd-min.service" \
       "$initrd/lib/systemd/system/stratisd-min.service" \
       --replace-fail mkdir "${coreutils}/bin/mkdir"
     mkdir -p "$initrd/lib/udev/rules.d"
@@ -126,11 +130,11 @@ stdenv.mkDerivation rec {
     inherit (nixosTests.installer-systemd-stage-1) stratisRoot;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Easy to use local storage management for Linux";
     homepage = "https://stratis-storage.github.io";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ nickcao ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

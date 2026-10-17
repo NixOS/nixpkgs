@@ -2,24 +2,26 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  darwin,
   rustPlatform,
   pkg-config,
   openssl,
   runCommand,
   patchelf,
   zlib,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-bisect-rustc";
-  version = "0.6.8";
+  version = "0.6.12";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rust-lang";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-7HiM1oRuLSfRaum66duag/w8ncFdxRLF0yeSGlIey0Y=";
+    repo = "cargo-bisect-rustc";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-egNp51aBzFvfGGugvUkrtAtFZY+uuX2ICweLRw9xwbM=";
   };
 
   patches =
@@ -43,27 +45,29 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [ openssl ];
 
-  cargoHash = "sha256-CgEs0cejquFRY3VN6CgbE23Gipg+LEuWp/jSIkITrjw=";
+  cargoHash = "sha256-kJ/mLHBrp67U5RkVZrkCyFjWLLwHvuLTCSxDmG1n9l0=";
 
   checkFlags = [
-    "--skip test_github" # requires internet
+    "--skip=test_github" # requires internet
+    "--skip=cli_tests" # trycmd does not seem to work in nix's sandbox
   ];
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Bisects rustc, either nightlies or CI artifacts";
     mainProgram = "cargo-bisect-rustc";
     homepage = "https://github.com/rust-lang/cargo-bisect-rustc";
-    license = with licenses; [
-      asl20
-      mit
-    ];
-    maintainers = with maintainers; [ davidtwco ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
+    maintainers = with lib.maintainers; [ sandarukasa ];
   };
-}
+})

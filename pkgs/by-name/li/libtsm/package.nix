@@ -4,39 +4,45 @@
   fetchFromGitHub,
   libxkbcommon,
   pkg-config,
-  cmake,
+  meson,
+  ninja,
+  check,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libtsm";
-  version = "4.0.2";
+  version = "4.8.0";
 
   src = fetchFromGitHub {
-    owner = "Aetf";
+    owner = "kmscon";
     repo = "libtsm";
-    rev = "v${version}";
-    sha256 = "sha256-BYMRPjGRVSnYzkdbxypkuE0YkeVLPJ32iGZ1b0R6wto=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-CA80Tsc6rr2NCOVnH6+vGB2fuO6jZpuoCaiz4MuJ9xM=";
   };
 
-  buildInputs = [ libxkbcommon ];
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  buildInputs = [
+    libxkbcommon
+    check
+  ];
 
   nativeBuildInputs = [
-    cmake
+    meson
+    ninja
     pkg-config
   ];
 
-  # https://github.com/Aetf/libtsm/issues/20
-  postPatch = ''
-    substituteInPlace etc/libtsm.pc.in \
-      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
-      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
-  '';
+  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
 
-  meta = with lib; {
+  meta = {
     description = "Terminal-emulator State Machine";
     homepage = "https://www.freedesktop.org/wiki/Software/kmscon/libtsm/";
-    license = licenses.mit;
-    maintainers = [ ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/kmscon/libtsm/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ccicnce113424 ];
+    platforms = lib.platforms.linux;
   };
-}
+})

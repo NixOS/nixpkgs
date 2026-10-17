@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
@@ -13,20 +12,19 @@
 
 buildPythonPackage rec {
   pname = "glean-sdk";
-  version = "60.4.0";
+  version = "64.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "glean";
     rev = "v${version}";
-    hash = "sha256-C3wQdxPNBPQN6eUK6Vq0bA6Wpqb28e9BTBf7c/hTQxU=";
+    hash = "sha256-6UAZkVBxFJ1CWRn9enCLBBidIugAtxP7stbYlhh1ArA=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-XqOCHnvM64kZNifU5Wt/bFAvyRVy28ozWSwlvm/sMk8=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-Ppc+6ex3yLC4xuhbZGZDKLqxDjSdGpgrLDpbbbqMgPY=";
   };
 
   build-system = [
@@ -45,7 +43,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "glean-core/python/tests" ];
+  enabledTestPaths = [ "glean-core/python/tests" ];
 
   disabledTests = [
     # RuntimeError: No ping received.
@@ -58,10 +56,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "glean" ];
 
   meta = {
-    broken = stdenv.hostPlatform.isDarwin;
+    broken = true; # fails to build since 2025-12
     description = "Telemetry client libraries and are a part of the Glean project";
     homepage = "https://mozilla.github.io/glean/book/index.html";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ melling ];
   };
 }

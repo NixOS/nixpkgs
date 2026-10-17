@@ -1,23 +1,31 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  setuptools,
 }:
 
-buildPythonPackage rec {
-  version = "1.18.1"; # note: `conan` package may require a hardcoded one
-  format = "setuptools";
+buildPythonPackage (finalAttrs: {
   pname = "patch-ng";
+  version = "1.19.1"; # note: `conan` package may require a hardcoded one
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-Uv1G7kb2yGZ2kmgsH9cTTtxlotLQhOvsHSlaYIf8ApE=";
+  src = fetchFromGitHub {
+    owner = "conan-io";
+    repo = "python-patch-ng";
+    tag = finalAttrs.version;
+    hash = "sha256-X/OujL/zEZ5KkijFY6vgfUs/L1pslIfAl6TcAaTjA6U=";
   };
 
-  meta = with lib; {
+  build-system = [ setuptools ];
+
+  pythonImportsCheck = [ "patch_ng" ];
+
+  meta = {
     description = "Library to parse and apply unified diffs";
-    homepage = "https://github.com/conan-io/python-patch";
-    license = licenses.mit;
-    maintainers = with maintainers; [ HaoZeke ];
+    homepage = "https://github.com/conan-io/python-patch-ng";
+    changelog = "https://github.com/conan-io/python-patch-ng/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
-}
+})

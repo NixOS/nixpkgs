@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "couchbase-shell";
-  version = "1.0.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "couchbaselabs";
     repo = "couchbase-shell";
     rev = "v${version}";
-    hash = "sha256-ksAyi7yMz56de1lA2LYVNdsn02GNrcJVoRLcK1zFppE=";
+    hash = "sha256-eJWkqtDwLZsU3PlVud+PuXpg5kxLWe2IpbOXTzT40kA=";
   };
 
-  cargoHash = "sha256-efy1M4Q9dBfEq0YYUKn4y1Rz/dPbBYLapcPXJLI9X+Q=";
+  cargoHash = "sha256-dcvbSndgMMVP6PO7CxlEUYNfx60dcKFBZ3U+/963LTk=";
 
   nativeBuildInputs = [
     pkg-config

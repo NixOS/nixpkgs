@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   protobuf,
+  cython,
   grpcio,
   setuptools,
 }:
@@ -12,14 +13,19 @@
 # nixpkgs-update: no auto update
 buildPythonPackage rec {
   pname = "grpcio-tools";
-  version = "1.68.1";
+  version = "1.84.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "grpcio_tools";
     inherit version;
-    hash = "sha256-JBOhetFsnIIbNuSmf8ZMN7nkY2qxw6B3eAGIATeHObo=";
+    hash = "sha256-IQrFrJgDVpSQ7DNXS36ZW8CHgVsA2bd34BNMq17Zo3k=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "Cython==3.1.1" Cython
+  '';
 
   outputs = [
     "out"
@@ -28,7 +34,10 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  build-system = [ setuptools ];
+  build-system = [
+    cython
+    setuptools
+  ];
 
   pythonRelaxDeps = [
     "protobuf"
@@ -46,9 +55,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "grpc_tools" ];
 
-  meta = with lib; {
+  meta = {
     description = "Protobuf code generator for gRPC";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://grpc.io/grpc/python/";
     maintainers = [ ];
   };

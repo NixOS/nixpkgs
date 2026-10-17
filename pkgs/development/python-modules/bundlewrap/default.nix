@@ -2,61 +2,65 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
+  bcrypt,
   cryptography,
   jinja2,
+  librouteros,
   mako,
-  passlib,
+  packaging,
   pyyaml,
   requests,
-  rtoml,
   setuptools,
   tomlkit,
-  librouteros,
   pytestCheckHook,
+  versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bundlewrap";
-  version = "4.21.0";
+  version = "5.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bundlewrap";
     repo = "bundlewrap";
-    tag = version;
-    hash = "sha256-e9gpWLOiTUZYIybLIfcR5x/NzhJSBFsU0I8LzY9sI5k=";
+    tag = finalAttrs.version;
+    hash = "sha256-cmOHStfJ5Pn6QnI9VuoQQ/GMr2wd9Pbp86guQLibnA0=";
   };
 
   build-system = [ setuptools ];
+
   dependencies = [
-    setuptools
+    bcrypt
     cryptography
     jinja2
     mako
-    passlib
+    packaging
     pyyaml
     requests
     tomlkit
     librouteros
-  ] ++ lib.optionals (pythonOlder "3.11") [ rtoml ];
+  ];
 
   pythonImportsCheck = [ "bundlewrap" ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/bw";
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     # only unit tests as integration tests need a OpenSSH client/server setup
     "tests/unit"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://bundlewrap.org/";
     description = "Easy, Concise and Decentralized Config management with Python";
+    changelog = "https://github.com/bundlewrap/bundlewrap/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     mainProgram = "bw";
-    license = [ licenses.gpl3 ];
-    maintainers = with maintainers; [ wamserma ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ wamserma ];
   };
-}
+})

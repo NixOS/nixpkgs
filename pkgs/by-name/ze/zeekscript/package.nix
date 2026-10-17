@@ -1,46 +1,48 @@
 {
   lib,
   python3,
-  fetchPypi,
+  fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "zeekscript";
-  version = "1.2.8";
+  version = "1.3.6";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-v0PJY0Ahxa4k011AwtWSIAWBXvt3Aybrd382j1SIT6M=";
+  src = fetchFromGitHub {
+    owner = "zeek";
+    repo = "zeekscript";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-yky9w1G4e/dfzOGHXqKGxRgD8Uw9X8oJDjT4avJ9wKM=";
   };
 
-  postPatch = ''
-    sed -i '/name = "zeekscript"/a version = "${version}"' pyproject.toml
-  '';
+  pythonRelaxDeps = [ "tree-sitter-zeek" ];
 
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools
-    wheel
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
+    argcomplete
     tree-sitter
+    tree-sitter-zeek
   ];
 
-  pythonImportsCheck = [
-    "zeekscript"
+  nativeCheckInputs = with python3.pkgs; [
+    pytest-cov-stub
+    pytestCheckHook
+    syrupy
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "zeekscript" ];
+
+  meta = {
     description = "Zeek script formatter and analyzer";
     homepage = "https://github.com/zeek/zeekscript";
-    changelog = "https://github.com/zeek/zeekscript/blob/v${version}/CHANGES";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/zeek/zeekscript/blob/${finalAttrs.src.rev}/CHANGES";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       fab
       tobim
+      mdaniels5757
     ];
-    # Incompatible with tree-sitter > 0.21.
-    broken = true;
   };
-}
+})

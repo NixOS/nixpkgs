@@ -5,14 +5,14 @@
   gitUpdater,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "smap";
   version = "0.1.12";
 
   src = fetchFromGitHub {
     owner = "s0md3v";
     repo = "Smap";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-GLw0zgjWnEwtwRV4vTHqGUS6TqcFhhZ1zeThKe6S0CY=";
   };
 
@@ -30,9 +30,9 @@ buildGoModule rec {
   meta = {
     description = "Drop-in replacement for Nmap powered by shodan.io";
     homepage = "https://github.com/s0md3v/Smap";
-    changelog = "https://github.com/s0md3v/Smap/releases/tag/${version}";
+    changelog = "https://github.com/s0md3v/Smap/releases/tag/${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ yechielw ];
     mainProgram = "smap";
   };
-}
+})

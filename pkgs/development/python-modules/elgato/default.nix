@@ -1,61 +1,70 @@
 {
   lib,
   aiohttp,
-  aresponses,
+  aioresponses,
   buildPythonPackage,
+  cryptography,
   fetchFromGitHub,
   mashumaro,
   orjson,
   poetry-core,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
+  rich,
+  syrupy,
+  typer,
   yarl,
+  zeroconf,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "elgato";
-  version = "5.1.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.11";
+  version = "6.1.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-elgato";
-    tag = "v${version}";
-    hash = "sha256-NAU4tr0oaAPPrOUZYl9WoGOM68MlrBqGewHBIiIv2XY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Dnbz3ssvxX2nR17W0UP2zW6rebbinr5JeI2tfwjl6o4=";
   };
 
-  postPatch = ''
-    # Upstream doesn't set a version for the pyproject.toml
-    substituteInPlace pyproject.toml \
-      --replace "0.0.0" "${version}" \
-      --replace "--cov" ""
-  '';
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
+    cryptography
     mashumaro
     orjson
     yarl
   ];
 
-  nativeCheckInputs = [
-    aresponses
-    pytest-asyncio
-    pytestCheckHook
+  optional-dependencies.cli = [
+    rich
+    typer
+    zeroconf
   ];
+
+  nativeCheckInputs = [
+    aioresponses
+    pytest-asyncio
+    pytest-cov-stub
+    pytestCheckHook
+    syrupy
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.cli;
 
   pythonImportsCheck = [ "elgato" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for Elgato Key Lights";
     homepage = "https://github.com/frenck/python-elgato";
-    changelog = "https://github.com/frenck/python-elgato/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/frenck/python-elgato/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

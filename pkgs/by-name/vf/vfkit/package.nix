@@ -1,9 +1,10 @@
 {
   lib,
-  apple-sdk_14,
+  apple-sdk_15,
   buildGoModule,
   darwin,
   fetchFromGitHub,
+  fetchpatch2,
   nix-update-script,
   testers,
   vfkit,
@@ -11,16 +12,16 @@
 
 buildGoModule rec {
   pname = "vfkit";
-  version = "0.6.0";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "crc-org";
     repo = "vfkit";
     rev = "v${version}";
-    hash = "sha256-uBFL3iZLpGcVUSgZSoq8FI87CDAr3NI8uu+u5UsrZCc=";
+    hash = "sha256-AHmCmDrddbPM8agM4jyKGKJ5aJSZ0hijM2suHJmRS3A=";
   };
 
-  vendorHash = "sha256-+5QZcoI+/98hyd87NV6uX/VZqd5z38fk7K7RibX/9vw=";
+  vendorHash = "sha256-tXpjEMF4wwuP4w8asZPpeA8C5g+k4MjNRtbCBFFql2A=";
 
   subPackages = [ "cmd/vfkit" ];
 
@@ -35,7 +36,7 @@ buildGoModule rec {
   ];
 
   buildInputs = [
-    apple-sdk_14
+    apple-sdk_15
   ];
 
   postFixup = ''

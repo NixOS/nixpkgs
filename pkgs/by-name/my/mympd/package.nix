@@ -6,7 +6,7 @@
   pkg-config,
   libmpdclient,
   openssl,
-  lua5_3,
+  lua5_5,
   libid3tag,
   flac,
   pcre2,
@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mympd";
-  version = "19.0.3";
+  version = "26.1.0";
 
   src = fetchFromGitHub {
     owner = "jcorporation";
     repo = "myMPD";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-aNb/zM/KF46XDV0GjQfm2XvkbToJZf6ZdwK1E1ShA+o=";
+    sha256 = "sha256-r1TFf5dvuiFbItx+TXc070PnXHi78/fIx9CNC/mheTc=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     gzip
     perl
     jq
+    lua5_5 # luac is needed for cross builds
   ];
   preConfigure = ''
     env MYMPD_BUILDDIR=$PWD/build ./build.sh createassets
@@ -40,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libmpdclient
     openssl
-    lua5_3
+    lua5_5
     libid3tag
     flac
     pcre2
@@ -58,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   # 5 tests out of 23 fail, probably due to the sandbox...
   doCheck = false;
+
+  strictDeps = true;
 
   passthru.tests = { inherit (nixosTests) mympd; };
 

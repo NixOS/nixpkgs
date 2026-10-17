@@ -14,21 +14,23 @@
   gst_all_1,
 }:
 
-stdenv.mkDerivation (finalAttrs: rec {
-  version = "1.0.15";
+stdenv.mkDerivation (finalAttrs: {
+  version = "1.1.2";
   pname = "libde265";
 
   src = fetchFromGitHub {
     owner = "strukturag";
     repo = "libde265";
-    tag = "v${version}";
-    hash = "sha256-guiLM4RNe5O0qpeCoQUbs1Z7j0wp8iK9za2+6NIB8yY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-dXUkSGviRfQkWacxMpH2vyLiSMvsetFw6ncrTW1SZaQ=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
+
+  strictDeps = true;
 
   enableParallelBuilding = true;
 
@@ -41,12 +43,15 @@ stdenv.mkDerivation (finalAttrs: rec {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://github.com/strukturag/libde265";
+    changelog = "https://github.com/strukturag/libde265/releases/tag/${finalAttrs.src.tag}";
     description = "Open h.265 video codec implementation";
     mainProgram = "dec265";
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ gebner ];
+    maintainers = [ ];
   };
 })

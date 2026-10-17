@@ -2,43 +2,57 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   cffi,
+  isPyPy,
+  # overridden as pkgs.brotli
   brotli,
+  setuptools,
+  pycparser,
+  pytestCheckHook,
+  hypothesis,
 }:
 
 buildPythonPackage rec {
   pname = "brotlicffi";
-  version = "1.1.0.0";
-  format = "setuptools";
-  disabled = pythonOlder "3.7";
+  version = "1.2.0.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-hyper";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-oW4y1WBJ7+4XwNwwSSR0qUqN03cZYXUYQ6EAwce9dzI=";
+    repo = "brotlicffi";
+    tag = "v${version}";
+    hash = "sha256-NRPjTtAlsDohdn5PQ6TOYCrm2xlU9mpfMIplNv4zVMk=";
   };
+
+  build-system = [ setuptools ];
 
   buildInputs = [ brotli ];
 
   propagatedNativeBuildInputs = [ cffi ];
 
-  propagatedBuildInputs = [ cffi ];
+  dependencies = [ cffi ] ++ lib.optional isPyPy pycparser;
 
   preBuild = ''
     export USE_SHARED_BROTLI=1
   '';
 
-  # Test data is not available, only when using libbrotli git checkout
+  nativeCheckInputs = [
+    pytestCheckHook
+    hypothesis
+  ];
+
+  # Test data is only available from libbrotli git checkout, not brotli.src
   doCheck = false;
+
+  enabledTestPaths = [ "test/" ];
 
   pythonImportsCheck = [ "brotlicffi" ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/python-hyper/brotlicffi/blob/${src.tag}/HISTORY.rst";
     description = "Python CFFI bindings to the Brotli library";
     homepage = "https://github.com/python-hyper/brotlicffi";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

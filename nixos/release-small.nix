@@ -32,7 +32,7 @@ let
     nixpkgs = nixpkgsSrc;
   };
 
-  nixpkgs' = builtins.removeAttrs (import ../pkgs/top-level/release.nix {
+  nixpkgs' = removeAttrs (import ../pkgs/top-level/release.nix {
     inherit supportedSystems;
     nixpkgs = nixpkgsSrc;
   }) [ "unstable" ];
@@ -48,8 +48,13 @@ rec {
       dummy
       ;
     tests = {
+      acme = {
+        inherit (nixos'.tests.acme)
+          http01-builtin
+          dns01
+          ;
+      };
       inherit (nixos'.tests)
-        acme
         containers-imperative
         containers-ip
         firewall
@@ -62,7 +67,8 @@ rec {
         php
         predictable-interface-names
         proxy
-        simple
+        simple-container
+        simple-vm
         ;
       latestKernel = {
         inherit (nixos'.tests.latestKernel)
@@ -98,15 +104,19 @@ rec {
       opensshTest
       php
       postgresql
-      python
+      python3
       release-checks
       rsyslog
       stdenv
       subversion
       tarball
       vim
-      tests-stdenv-gcc-stageCompare
       ;
+    tests.stdenv = {
+      inherit (nixpkgs'.tests.stdenv)
+        tests-stdenv-gcc-stageCompare
+        ;
+    };
   };
 
   tested =
@@ -135,7 +145,8 @@ rec {
         (map onSupported [
           "nixos.dummy"
           "nixos.manual"
-          "nixos.tests.acme"
+          "nixos.tests.acme.http01-builtin"
+          "nixos.tests.acme.dns01"
           "nixos.tests.containers-imperative"
           "nixos.tests.containers-ip"
           "nixos.tests.firewall"
@@ -155,9 +166,10 @@ rec {
           "nixos.tests.predictable-interface-names.unpredictable"
           "nixos.tests.predictable-interface-names.unpredictableNetworkd"
           "nixos.tests.proxy"
-          "nixos.tests.simple"
+          "nixos.tests.simple-container"
+          "nixos.tests.simple-vm"
           "nixpkgs.jdk"
-          "nixpkgs.tests-stdenv-gcc-stageCompare"
+          "nixpkgs.tests.stdenv.tests-stdenv-gcc-stageCompare"
           "nixpkgs.opensshTest"
         ])
       ];

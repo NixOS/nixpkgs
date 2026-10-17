@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  substituteAll,
+  replaceVars,
   openssl,
   setuptools,
   six,
@@ -19,8 +19,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./openssl-path.patch;
+    (replaceVars ./openssl-path.patch {
       openssl = lib.getExe openssl;
     })
   ];
@@ -33,10 +32,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wallet" ];
 
-  meta = with lib; {
+  meta = {
     description = "Passbook file generator";
     homepage = "https://pypi.org/project/wallet-py3k";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

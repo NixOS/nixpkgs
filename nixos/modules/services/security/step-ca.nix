@@ -15,12 +15,7 @@ in
     services.step-ca = {
       enable = lib.mkEnableOption "the smallstep certificate authority server";
       openFirewall = lib.mkEnableOption "opening the certificate authority server port";
-      package = lib.mkOption {
-        type = lib.types.package;
-        default = pkgs.step-ca;
-        defaultText = lib.literalExpression "pkgs.step-ca";
-        description = "Which step-ca package to use.";
-      };
+      package = lib.mkPackageOption pkgs "step-ca" { };
       address = lib.mkOption {
         type = lib.types.str;
         example = "127.0.0.1";
@@ -59,8 +54,18 @@ in
           :::
         '';
       };
+      extraArgs = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        example = [
+          "--resolver=10.1.2.3:53"
+          "--quiet"
+        ];
+        description = "Ad-hoc command-line arguments passed to the service at startup.";
+      };
       intermediatePasswordFile = lib.mkOption {
-        type = lib.types.path;
+        type = lib.types.nullOr lib.types.externalPath;
+        default = null;
         example = "/run/keys/smallstep-password";
         description = ''
           Path to the file containing the password for the intermediate
@@ -86,17 +91,6 @@ in
       );
     in
     {
-      assertions = [
-        {
-          assertion = !lib.isStorePath cfg.intermediatePasswordFile;
-          message = ''
-            <option>services.step-ca.intermediatePasswordFile</option> points to
-            a file in the Nix store. You should use a quoted absolute path to
-            prevent this.
-          '';
-        }
-      ];
-
       systemd.packages = [ cfg.package ];
 
       # configuration file indirection is needed to support reloading
@@ -109,6 +103,7 @@ in
           ConditionFileNotEmpty = ""; # override upstream
         };
         serviceConfig = {
+          Type = "notify";
           User = "step-ca";
           Group = "step-ca";
           UMask = "0077";
@@ -117,11 +112,19 @@ in
           ReadWritePaths = ""; # override upstream
 
           # LocalCredential handles file permission problems arising from the use of DynamicUser.
-          LoadCredential = "intermediate_password:${cfg.intermediatePasswordFile}";
+          LoadCredential = lib.mkIf (
+            cfg.intermediatePasswordFile != null
+          ) "intermediate_password:${cfg.intermediatePasswordFile}";
 
           ExecStart = [
             "" # override upstream
-            "${cfg.package}/bin/step-ca /etc/smallstep/ca.json --password-file \${CREDENTIALS_DIRECTORY}/intermediate_password"
+            (
+              "${cfg.package}/bin/step-ca /etc/smallstep/ca.json"
+              + lib.optionalString (
+                cfg.intermediatePasswordFile != null
+              ) " --password-file \${CREDENTIALS_DIRECTORY}/intermediate_password"
+              + lib.optionalString (cfg.extraArgs != [ ]) " ${lib.escapeShellArgs cfg.extraArgs}"
+            )
           ];
 
           # ProtectProc = "invisible"; # not supported by upstream yet

@@ -1,45 +1,40 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch,
   ghostscript,
   imagemagick,
-  poppler_utils,
+  poppler-utils,
   python3,
   tesseract5,
+  versionCheckHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "invoice2data";
-  version = "0.4.4";
-  format = "setuptools";
+  version = "1.0.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "invoice-x";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-pAvkp8xkHYi/7ymbxaT7/Jhu44j2P8emm8GyXC6IBnI=";
+    repo = "invoice2data";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-tbPl23r8j+LdlzOvP37D9SBAdeFVTx1+rAflSo+XqRM=";
   };
 
-  patches = [
-    # https://github.com/invoice-x/invoice2data/pull/522
-    (fetchpatch {
-      name = "clean-up-build-dependencies.patch";
-      url = "https://github.com/invoice-x/invoice2data/commit/ccea3857c7c8295ca51dc24de6cde78774ea7e64.patch";
-      hash = "sha256-BhqPW4hWG/EaR3qBv5a68dcvIMrCCT74GdDHr0Mss5Q=";
-    })
-  ];
-
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools-git
-  ];
-
-  propagatedBuildInputs = with python3.pkgs; [
-    dateparser
-    pdfminer-six
-    pillow
-    pyyaml
+  build-system = with python3.pkgs; [
     setuptools
+    mypy
+    ast-serialize
+    click
+    pyyaml
+    regex
+  ];
+
+  dependencies = with python3.pkgs; [
+    click
+    python-dateutil
+    pyyaml
+    regex
   ];
 
   makeWrapperArgs = [
@@ -50,22 +45,22 @@ python3.pkgs.buildPythonApplication rec {
       ghostscript
       imagemagick
       tesseract5
-      poppler_utils
+      poppler-utils
     ])
   ];
 
-  # Tests fails even when ran manually on my ubuntu machine !!
-  doCheck = false;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   pythonImportsCheck = [
     "invoice2data"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Data extractor for PDF invoices";
     mainProgram = "invoice2data";
     homepage = "https://github.com/invoice-x/invoice2data";
-    license = licenses.mit;
-    maintainers = with maintainers; [ psyanticy ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ psyanticy ];
   };
-}
+})

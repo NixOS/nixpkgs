@@ -1,37 +1,39 @@
 {
   buildPecl,
-  fetchpatch,
   lib,
+  fetchpatch,
   imagemagick,
   pkg-config,
   pcre2,
-  php,
 }:
 
 buildPecl {
   pname = "imagick";
 
-  version = "3.7.0";
-  sha256 = "sha256-WjZDVBCQKdIkvLsuguFbJIvptkEif0XmNCXAZTF5LT4=";
+  version = "3.8.1";
+  hash = "sha256-OjWHwKUkwX0NrZZzoWC5DNd26DaDhHThc7VJ7YZDUu4=";
 
-  configureFlags = [ "--with-imagick=${imagemagick.dev}" ];
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ pcre2 ];
-
-  patches = lib.optionals (lib.versionAtLeast php.version "8.4") [
-    # PHP 8.4 compatibility patch based on https://github.com/Imagick/imagick/pull/690
-    # These is also an alternative https://github.com/Imagick/imagick/pull/704
-    # Which includes more changes but doesn't apply cleanly.
+  patches = [
+    # Support PHP 8.6, backported from upstream master
     (fetchpatch {
-      url = "https://github.com/Imagick/imagick/commit/65e27f2bc02e7e8f1bf64e26e359e42a1331fca1.patch";
-      hash = "sha256-I0FwdqtQ/Y/QVkCl+nWPBIxsdQY6qcjdwiA/BaLNl7g=";
+      name = "php86-offsetof.patch";
+      url = "https://github.com/Imagick/imagick/commit/b580a705e2c879924bfaee2e1ed3a93c9cb3fcfb.patch";
+      hash = "sha256-DOW/HuYJmXrkwHolvIPk3M1ikrCHKhHMeP9gJqanv+s=";
     })
   ];
 
-  meta = with lib; {
+  configureFlags = [ "--with-imagick=${imagemagick.dev}" ];
+
+  depsBuildBuild = [ pkg-config ];
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ pcre2 ];
+
+  meta = {
     description = "Imagick is a native php extension to create and modify images using the ImageMagick API";
-    license = licenses.php301;
+    license = lib.licenses.php301;
     homepage = "https://pecl.php.net/package/imagick";
-    maintainers = teams.php.members;
+    teams = [ lib.teams.php ];
   };
 }

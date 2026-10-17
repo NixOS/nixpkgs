@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "danhper";
     repo = "python-i18n";
     rev = "v${version}";
-    sha256 = "6FahoHZqaOWYGaT9RqLARCm2kLfUIlYuauB6+0eX7jA=";
+    hash = "sha256-6FahoHZqaOWYGaT9RqLARCm2kLfUIlYuauB6+0eX7jA=";
   };
 
   # Replace use of deprecated assertRaisesRegexp
@@ -28,13 +28,13 @@ buildPythonPackage rec {
     pytestCheckHook
     pyyaml
   ];
-  pytestFlagsArray = [ "i18n/tests/run_tests.py" ];
+  enabledTestPaths = [ "i18n/tests/run_tests.py" ];
   pythonImportsCheck = [ "i18n" ];
 
-  meta = with lib; {
+  meta = {
     description = "Easy to use i18n library";
     homepage = "https://github.com/danhper/python-i18n";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ emilytrau ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ emilytrau ];
   };
 }

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   psutil,
-  pythonOlder,
   typing-extensions,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "pynisher";
   version = "1.0.10";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -29,11 +26,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pynisher" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module intended to limit a functions resources";
     homepage = "https://github.com/automl/pynisher";
     changelog = "https://github.com/automl/pynisher/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ psyanticy ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ psyanticy ];
   };
 }

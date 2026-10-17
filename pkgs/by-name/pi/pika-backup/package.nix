@@ -18,25 +18,25 @@
   gtk4,
   libadwaita,
   libsecret,
+  openssl,
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pika-backup";
-  version = "0.7.4";
+  version = "0.8.4";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "pika-backup";
-    rev = "v${version}";
-    hash = "sha256-DtLGD7+Ydj2fvEHU+bDQDMC/E/9VgrlVNMCG6OlPmfg=";
+    tag = finalAttrs.version;
+    hash = "sha256-7Nr/KmjI7zcocfsPxVsYRC+Tye9Qu7pa+14f6nAPgRk=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-8nFkc77FiLxMA1hMm8k5VB84l+pQeL0JSzYDytXrNUE=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-tQz+2+6Yeqenis7QDRlmMTQIaLRE1uOC4tTRUrEeyXw=";
   };
 
   patches = [
@@ -67,18 +67,20 @@ stdenv.mkDerivation rec {
     gtk4
     libadwaita
     libsecret
+    openssl
   ];
 
   passthru = {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple backups based on borg";
     homepage = "https://apps.gnome.org/app/org.gnome.World.PikaBackup";
-    changelog = "https://gitlab.gnome.org/World/pika-backup/-/blob/v${version}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda ] ++ lib.teams.gnome-circle.members;
-    platforms = platforms.linux;
+    changelog = "https://gitlab.gnome.org/World/pika-backup/-/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ dotlambda ];
+    teams = [ lib.teams.gnome-circle ];
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.1";
 
   src = fetchzip {
-    url = "http://www.alighieri.org/tools/bluesnarfer.tar.gz";
+    url = "https://www.alighieri.org/tools/bluesnarfer.tar.gz";
     stripRoot = false;
     hash = "sha256-HGdrJZohKIsOkLETBdHz80w6vxmG25aMEWXrQlpMgRw=";
   };
@@ -20,6 +20,11 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ bluez ];
 
   strictDeps = true;
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-incompatible-pointer-types"
+    "-Wno-implicit-function-declaration"
+  ];
 
   installPhase = ''
     runHook preInstall

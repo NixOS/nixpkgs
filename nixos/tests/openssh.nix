@@ -1,8 +1,14 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+{ pkgs, ... }:
 
-let inherit (import ./ssh-keys.nix pkgs)
-      snakeOilPrivateKey snakeOilPublicKey snakeOilEd25519PrivateKey snakeOilEd25519PublicKey;
-in {
+let
+  inherit (import ./ssh-keys.nix pkgs)
+    snakeOilPrivateKey
+    snakeOilPublicKey
+    snakeOilEd25519PrivateKey
+    snakeOilEd25519PublicKey
+    ;
+in
+{
   name = "openssh";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ aszlig ];
@@ -15,8 +21,14 @@ in {
 
       {
         services.openssh.enable = true;
-        security.pam.services.sshd.limits =
-          [ { domain = "*"; item = "memlock"; type = "-"; value = 1024; } ];
+        security.pam.services.sshd.limits = [
+          {
+            domain = "*";
+            item = "memlock";
+            type = "-";
+            value = 1024;
+          }
+        ];
         users.users.root.openssh.authorizedKeys.keys = [
           snakeOilPublicKey
         ];
@@ -26,12 +38,34 @@ in {
       { ... }:
 
       {
-        services.openssh = { enable = true; settings.AllowUsers = [ "alice" "bob" ]; };
-        users.groups = { alice = { }; bob = { }; carol = { }; };
+        services.openssh = {
+          enable = true;
+          settings.AllowUsers = [
+            "alice"
+            "bob"
+          ];
+        };
+        users.groups = {
+          alice = { };
+          bob = { };
+          carol = { };
+        };
         users.users = {
-          alice = { isNormalUser = true; group = "alice"; openssh.authorizedKeys.keys = [ snakeOilPublicKey ]; };
-          bob = { isNormalUser = true; group = "bob"; openssh.authorizedKeys.keys = [ snakeOilPublicKey ]; };
-          carol = { isNormalUser = true; group = "carol"; openssh.authorizedKeys.keys = [ snakeOilPublicKey ]; };
+          alice = {
+            isNormalUser = true;
+            group = "alice";
+            openssh.authorizedKeys.keys = [ snakeOilPublicKey ];
+          };
+          bob = {
+            isNormalUser = true;
+            group = "bob";
+            openssh.authorizedKeys.keys = [ snakeOilPublicKey ];
+          };
+          carol = {
+            isNormalUser = true;
+            group = "carol";
+            openssh.authorizedKeys.keys = [ snakeOilPublicKey ];
+          };
         };
       };
 
@@ -39,16 +73,30 @@ in {
       { ... }:
 
       {
-        services.openssh = { enable = true; startWhenNeeded = true; };
-        security.pam.services.sshd.limits =
-          [ { domain = "*"; item = "memlock"; type = "-"; value = 1024; } ];
+        services.openssh = {
+          enable = true;
+          startWhenNeeded = true;
+        };
+        security.pam.services.sshd.limits = [
+          {
+            domain = "*";
+            item = "memlock";
+            type = "-";
+            value = 1024;
+          }
+        ];
         users.users.root.openssh.authorizedKeys.keys = [
           snakeOilPublicKey
         ];
       };
 
-    server-lazy-socket = {
-      virtualisation.vlans = [ 1 2 ];
+    # IP addresses are allocated according to the alphabetical order of the machine name, and since tests rely on the IP address of this machine, let's name it so it's order (and thus address) is predictable.
+    aaa-server-lazy-socket = {
+      virtualisation.vlans = [
+        1
+        # Allocate another VLAN so we can exercise listening on a non-standard address.
+        2
+      ];
       services.openssh = {
         enable = true;
         startWhenNeeded = true;
@@ -65,7 +113,13 @@ in {
 
       {
         services.openssh = {
-          enable = true; listenAddresses = [ { addr = "127.0.0.1"; port = 22; } ];
+          enable = true;
+          listenAddresses = [
+            {
+              addr = "127.0.0.1";
+              port = 22;
+            }
+          ];
         };
       };
 
@@ -74,7 +128,14 @@ in {
 
       {
         services.openssh = {
-          enable = true; startWhenNeeded = true; listenAddresses = [ { addr = "127.0.0.1"; port = 22; } ];
+          enable = true;
+          startWhenNeeded = true;
+          listenAddresses = [
+            {
+              addr = "127.0.0.1";
+              port = 22;
+            }
+          ];
         };
       };
 
@@ -83,7 +144,17 @@ in {
 
       {
         services.openssh = {
-          enable = true; listenAddresses = [ { addr = "127.0.0.1"; port = 22; } { addr = "[::]"; port = 22; } ];
+          enable = true;
+          listenAddresses = [
+            {
+              addr = "127.0.0.1";
+              port = 22;
+            }
+            {
+              addr = "[::]";
+              port = 22;
+            }
+          ];
           extraConfig = ''
             # Combined test for two (predictable) Match criterias
             Match LocalAddress 127.0.0.1 LocalPort 22
@@ -117,14 +188,37 @@ in {
             linkOpenssl = false;
           };
           hostKeys = [
-            { type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; }
+            {
+              type = "ed25519";
+              path = "/etc/ssh/ssh_host_ed25519_key";
+            }
           ];
+          # The NixOS-curated algorithms require OpenSSL, and so since this test is against an OpenSSH-without-OpenSSL, we have to use the default algorithms, which adapt to not having OpenSSL.
+          enableRecommendedAlgorithms = false;
+        };
+        users.users.root.openssh.authorizedKeys.keys = [
+          snakeOilEd25519PublicKey
+        ];
+      };
+
+    server-default-algorithms =
+      { ... }:
+      {
+        services.openssh = {
+          enable = true;
+          enableRecommendedAlgorithms = false;
+        };
+        users.users.root.openssh.authorizedKeys.keys = [
+          snakeOilEd25519PublicKey
+        ];
+      };
+
+    server-null-algorithms =
+      { ... }:
+      {
+        services.openssh = {
+          enable = true;
           settings = {
-            # Since this test is against an OpenSSH-without-OpenSSL,
-            # we have to override NixOS's defaults ciphers (which require OpenSSL)
-            # and instead set these to null, which will mean OpenSSH uses its defaults.
-            # Expectedly, OpenSSH's defaults don't require OpenSSL when it's compiled
-            # without OpenSSL.
             Ciphers = null;
             KexAlgorithms = null;
             Macs = null;
@@ -152,9 +246,65 @@ in {
         ];
       };
 
+    server-null-pam =
+      { pkgs, ... }:
+      {
+        services.openssh = {
+          enable = true;
+          package = pkgs.opensshPackages.openssh.override {
+            withPAM = false;
+          };
+          settings = {
+            UsePAM = null;
+          };
+        };
+        users.users.root.openssh.authorizedKeys.keys = [
+          snakeOilPublicKey
+        ];
+      };
+
+    server-sftp =
+      { pkgs, ... }:
+      {
+        services.openssh = {
+          enable = true;
+          extraConfig = ''
+            Match Group sftponly
+              ChrootDirectory /srv/sftp
+              ForceCommand internal-sftp
+          '';
+        };
+
+        users.groups = {
+          sftponly = { };
+        };
+        users.users = {
+          alice = {
+            isNormalUser = true;
+            createHome = false;
+            group = "sftponly";
+            shell = "/run/current-system/sw/bin/nologin";
+            openssh.authorizedKeys.keys = [ snakeOilPublicKey ];
+          };
+        };
+      };
+
+    server-no-sshd-with-key =
+      { pkgs, ... }:
+      {
+        services.openssh.generateHostKeys = true;
+        users.users.root.openssh.authorizedKeys.keys = [
+          snakeOilPublicKey
+        ];
+      };
+
     client =
-      { ... }: {
-        virtualisation.vlans = [ 1 2 ];
+      { ... }:
+      {
+        virtualisation.vlans = [
+          1
+          2
+        ];
       };
 
   };
@@ -162,19 +312,27 @@ in {
   testScript = ''
     start_all()
 
-    server.wait_for_unit("sshd", timeout=30)
-    server_allowed_users.wait_for_unit("sshd", timeout=30)
-    server_localhost_only.wait_for_unit("sshd", timeout=30)
-    server_match_rule.wait_for_unit("sshd", timeout=30)
-    server_no_openssl.wait_for_unit("sshd", timeout=30)
-    server_no_pam.wait_for_unit("sshd", timeout=30)
+    server.wait_for_unit("sshd", timeout=60)
+    server_allowed_users.wait_for_unit("sshd", timeout=60)
+    server_default_algorithms.wait_for_unit("sshd", timeout=60)
+    server_localhost_only.wait_for_unit("sshd", timeout=60)
+    server_match_rule.wait_for_unit("sshd", timeout=60)
+    server_no_openssl.wait_for_unit("sshd", timeout=60)
+    server_no_pam.wait_for_unit("sshd", timeout=60)
+    server_null_algorithms.wait_for_unit("sshd", timeout=60)
+    server_null_pam.wait_for_unit("sshd", timeout=60)
+    server_null_pam.fail("journalctl -u sshd.service | grep 'Unsupported option UsePAM'")
+    server_sftp.wait_for_unit("sshd", timeout=60)
 
-    server_lazy.wait_for_unit("sshd.socket", timeout=30)
-    server_localhost_only_lazy.wait_for_unit("sshd.socket", timeout=30)
-    server_lazy_socket.wait_for_unit("sshd.socket", timeout=30)
+    server_lazy.wait_for_unit("sshd.socket", timeout=60)
+    server_localhost_only_lazy.wait_for_unit("sshd.socket", timeout=60)
+    aaa_server_lazy_socket.wait_for_unit("sshd.socket", timeout=60)
+
+    # sshd-keygen is a oneshot unit, so just wait for multi-user.target, which
+    # pulls it in.
+    server_no_sshd_with_key.wait_for_unit("multi-user.target", timeout=60)
 
     with subtest("manual-authkey"):
-        client.succeed("mkdir -m 700 /root/.ssh")
         client.succeed(
             '${pkgs.openssh}/bin/ssh-keygen -t ed25519 -f /root/.ssh/id_ed25519 -N ""'
         )
@@ -184,9 +342,7 @@ in {
         public_key = public_key.strip()
         client.succeed("chmod 600 /root/.ssh/id_ed25519")
 
-        server.succeed("mkdir -m 700 /root/.ssh")
         server.succeed("echo '{}' > /root/.ssh/authorized_keys".format(public_key))
-        server_lazy.succeed("mkdir -m 700 /root/.ssh")
         server_lazy.succeed("echo '{}' > /root/.ssh/authorized_keys".format(public_key))
 
         client.wait_for_unit("network.target")
@@ -208,14 +364,14 @@ in {
             timeout=30
         )
 
-    with subtest("socket activation on a non-standard port"):
+    with subtest("socket activation on a non-standard address and port"):
         client.succeed(
             "cat ${snakeOilPrivateKey} > privkey.snakeoil"
         )
         client.succeed("chmod 600 privkey.snakeoil")
         # The final segment in this IP is allocated according to the alphabetical order of machines in this test.
         client.succeed(
-            "ssh -p 2222 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil root@192.168.2.5 true",
+            "ssh -p 2222 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil root@192.168.2.1 true",
             timeout=30
         )
 
@@ -268,6 +424,26 @@ in {
             timeout=30
         )
 
+    with subtest("null-algorithms"):
+        client.succeed(
+            "cat ${snakeOilEd25519PrivateKey} > privkey.snakeoil"
+        )
+        client.succeed("chmod 600 privkey.snakeoil")
+        client.succeed(
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server-null-algorithms true",
+            timeout=30
+        )
+
+    with subtest("no-openssl"):
+        client.succeed(
+            "cat ${snakeOilEd25519PrivateKey} > privkey.snakeoil"
+        )
+        client.succeed("chmod 600 privkey.snakeoil")
+        client.succeed(
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server-default-algorithms true",
+            timeout=30
+        )
+
     with subtest("no-pam"):
         client.succeed(
             "cat ${snakeOilPrivateKey} > privkey.snakeoil"
@@ -277,5 +453,61 @@ in {
             "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server-no-pam true",
             timeout=30
         )
+
+    with subtest("null-pam"):
+        client.succeed(
+            "cat ${snakeOilPrivateKey} > privkey.snakeoil"
+        )
+        client.succeed("chmod 600 privkey.snakeoil")
+        client.succeed(
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server-null-pam true",
+            timeout=30
+        )
+
+    with subtest("sftp"):
+        server_sftp.succeed(
+          "mkdir -p /srv/sftp/uploads"
+        )
+        server_sftp.succeed(
+          "chown alice:sftponly /srv/sftp/uploads"
+        )
+        server_sftp.succeed(
+          "chmod 0755 /srv/sftp/uploads"
+        )
+
+        client.succeed(
+            "cat ${snakeOilPrivateKey} > privkey.snakeoil"
+        )
+        client.succeed("chmod 600 privkey.snakeoil")
+
+        client.succeed(
+            "echo 'hello-sftp-world' > test-file"
+        )
+        client.succeed(
+            "echo 'put test-file uploads/' > put-batch-file"
+        )
+
+        client.succeed(
+            "sftp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil -b put-batch-file alice@server-sftp",
+            timeout=30
+        )
+
+        server_sftp.wait_for_file("/srv/sftp/uploads/test-file")
+
+    with subtest("keygen without sshd"):
+        client.fail(
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil root@server-no-sshd-with-key true",
+            timeout=30
+        )
+        server_no_sshd_with_key.succeed("test -e /etc/ssh/ssh_host_ed25519_key")
+        server_no_sshd_with_key.succeed("test -e /etc/ssh/ssh_host_ed25519_key.pub")
+        server_no_sshd_with_key.fail("pgrep sshd")
+
+        # Validate the above check for sshd using pgrep does pass on a server
+        # that should have sshd running, just to prove it's a useful test.
+        server.succeed("pgrep sshd")
+
+    # None of the per-connection units should have failed.
+    server_lazy.fail("systemctl is-failed 'sshd@*.service'")
   '';
-})
+}

@@ -1,104 +1,103 @@
 {
   lib,
-  gcc14Stdenv,
+  gcc16Stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   cmake,
+  hyprwayland-scanner,
+  hyprwire,
+  pkg-config,
+  wayland-scanner,
+  aquamarine,
   cairo,
   expat,
   file,
   fribidi,
+  hyprgraphics,
   hyprlang,
-  libdatrie,
+  hyprutils,
+  hyprtoolkit,
   libGL,
+  libdatrie,
+  libdrm,
   libjpeg,
   libjxl,
   libselinux,
   libsepol,
   libthai,
   libwebp,
-  libXdmcp,
+  libxdmcp,
   pango,
-  pcre,
   pcre2,
-  pkg-config,
-  util-linux,
   wayland,
   wayland-protocols,
-  wayland-scanner,
-  hyprwayland-scanner,
-  hyprutils,
-  hyprgraphics,
+  util-linux,
+  versionCheckHook,
 }:
 
-gcc14Stdenv.mkDerivation (finalAttrs: {
+gcc16Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpaper";
-  version = "0.7.3";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprpaper";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-IRZ5NrKFwBVueYrZYUQfpTwp2rZHgAkPwgvdnfVBF8E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/4eWbt5XtOHzw3C9U0XPtoy8io03GxrEBd9znWMacbY=";
   };
 
-  patches = [
-    # FIXME: remove in next release
-    (fetchpatch2 {
-      name = "fix-hypr-wayland-scanner-0.4.4-build.patch";
-      url = "https://github.com/hyprwm/hyprpaper/commit/505e447b6c48e6b49f3aecf5da276f3cc5780054.patch?full_index=1";
-      hash = "sha256-Vk2P2O4XQiCYqV0KbK/ADe8KPmaTs3Mg7JRJ3cGW9lM=";
-    })
-  ];
+  prePatch = ''
+    substituteInPlace src/main.cpp \
+      --replace-fail GIT_COMMIT_HASH '"${finalAttrs.src.tag}"'
+  '';
 
   nativeBuildInputs = [
     cmake
-    pkg-config
     hyprwayland-scanner
+    hyprwire
+    pkg-config
     wayland-scanner
   ];
 
   buildInputs = [
+    aquamarine
     cairo
     expat
     file
     fribidi
+    hyprgraphics
     hyprlang
-    libdatrie
+    hyprutils
+    hyprtoolkit
     libGL
+    libdatrie
+    libdrm
     libjpeg
     libjxl
     libselinux
     libsepol
     libthai
     libwebp
-    libXdmcp
+    libxdmcp
     pango
-    pcre
     pcre2
-    util-linux
     wayland
     wayland-protocols
-    hyprutils
-    hyprgraphics
+    util-linux
   ];
 
-  prePatch = ''
-    substituteInPlace src/main.cpp \
-      --replace-fail GIT_COMMIT_HASH '"${finalAttrs.src.rev}"'
-  '';
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
-  meta = with lib; {
+  cmakeBuildType = "RelWithDebInfo";
+  separateDebugInfo = true;
+
+  meta = {
     inherit (finalAttrs.src.meta) homepage;
     description = "Blazing fast wayland wallpaper utility";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
-      fufexan
-      khaneliman
-      wozeparrot
-    ];
+    license = lib.licenses.bsd3;
+    teams = [ lib.teams.hyprland ];
     inherit (wayland.meta) platforms;
-    broken = gcc14Stdenv.hostPlatform.isDarwin;
+    broken = gcc16Stdenv.hostPlatform.isDarwin;
     mainProgram = "hyprpaper";
   };
 })

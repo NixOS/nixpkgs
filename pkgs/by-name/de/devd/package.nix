@@ -5,9 +5,9 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "devd";
-  version = "unstable-2020-04-27";
+  version = "0.9-unstable-2020-04-27";
 
   src = fetchFromGitHub {
     owner = "cortesi";
@@ -33,11 +33,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Local webserver for developers";
     mainProgram = "devd";
     homepage = "https://github.com/cortesi/devd";
-    license = licenses.mit;
-    maintainers = with maintainers; [ brianhicks ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ brianhicks ];
   };
 }

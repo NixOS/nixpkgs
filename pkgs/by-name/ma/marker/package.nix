@@ -8,23 +8,28 @@
   pkg-config,
   wrapGAppsHook3,
   gtk3,
-  gtksourceview,
+  gtksourceview3,
   gtkspell3,
   webkitgtk_4_1,
   pandoc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "marker";
   version = "2023.05.02";
 
   src = fetchFromGitHub {
     owner = "fabiocolacio";
     repo = "Marker";
-    rev = version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-HhDhigQ6Aqo8R57Yrf1i69sM0feABB9El5R5OpzOyB0=";
   };
+
+  patches = [
+    # https://github.com/fabiocolacio/Marker/pull/427
+    ./fix_incompatible_pointer_in_marker_window_init.patch
+  ];
 
   nativeBuildInputs = [
     itstool
@@ -36,26 +41,25 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3
-    gtksourceview
+    gtksourceview3
     gtkspell3
     webkitgtk_4_1
     pandoc
   ];
 
   postPatch = ''
-    meson rewrite kwargs set project / version '${version}'
+    meson rewrite kwargs set project / version '${finalAttrs.version}'
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://fabiocolacio.github.io/Marker/";
     description = "Markdown editor for the Linux desktop made with GTK3";
-    maintainers = with maintainers; [
-      trepetti
+    maintainers = with lib.maintainers; [
       aleksana
     ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    changelog = "https://github.com/fabiocolacio/Marker/releases/tag/${version}";
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    changelog = "https://github.com/fabiocolacio/Marker/releases/tag/${finalAttrs.version}";
     mainProgram = "marker";
   };
-}
+})

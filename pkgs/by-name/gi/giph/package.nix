@@ -2,7 +2,7 @@
   stdenvNoCC,
   lib,
   fetchFromGitHub,
-  ffmpeg,
+  ffmpeg-full,
   xdotool,
   slop,
   libnotify,
@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "phisch";
-    repo = pname;
+    repo = "giph";
     rev = version;
     sha256 = "19l46m1f32b3bagzrhaqsfnl5n3wbrmg3sdy6fdss4y1yf6nqayk";
   };
@@ -33,7 +33,7 @@ stdenvNoCC.mkDerivation rec {
     wrapProgram $out/bin/giph \
       --prefix PATH : ${
         lib.makeBinPath [
-          ffmpeg
+          ffmpeg-full
           xdotool
           libnotify
           slop
@@ -42,12 +42,12 @@ stdenvNoCC.mkDerivation rec {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/phisch/giph";
     description = "Simple gif recorder";
-    license = licenses.mit;
-    maintainers = [ maintainers.lom ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
     mainProgram = "giph";
   };
 }

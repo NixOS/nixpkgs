@@ -4,18 +4,19 @@
   fetchFromGitHub,
   fish,
   runtimeShell,
-  substituteAll,
+  replaceVars,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "oh-my-fish";
-  version = "unstable-2022-03-27";
+  version = "8";
 
   src = fetchFromGitHub {
     owner = "oh-my-fish";
     repo = "oh-my-fish";
-    rev = "d428b723c8c18fef3b2a00b8b8b731177f483ad8";
-    hash = "sha256-msItKEPe7uSUpDAfCfdYZjt5NyfM3KtOrLUTO9NGqlg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2IDXRQUMuPHKHYsB+2kNWBc2WxgA6732oJbrPDjRdp0=";
   };
 
   patches = [
@@ -38,19 +39,23 @@ stdenv.mkDerivation (finalAttrs: {
     cp -vr * $out/share/oh-my-fish
 
     cp -v ${
-      substituteAll {
-        name = "omf-install";
-        src = ./omf-install;
-        omf = placeholder "out";
+      replaceVars ./omf-install {
         inherit fish runtimeShell;
+        # replaced below
+        omf = null;
       }
     } $out/bin/omf-install
+
+    substituteInPlace $out/bin/omf-install \
+      --replace-fail '@omf@' "$out"
 
     chmod +x $out/bin/omf-install
     cat $out/bin/omf-install
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/oh-my-fish/oh-my-fish";

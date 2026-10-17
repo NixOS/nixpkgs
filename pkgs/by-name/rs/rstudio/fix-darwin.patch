@@ -1,0 +1,208 @@
+diff --git a/cmake/globals.cmake b/cmake/globals.cmake
+index 9c0a29a7b0..ef90865461 100644
+--- a/cmake/globals.cmake
++++ b/cmake/globals.cmake
+@@ -504,6 +504,7 @@ if (APPLE)
+       set(RSTUDIO_INSTALL_SUPPORTING RStudio.app/Contents/Resources/app)
+       # handles Quarto share when not stored alongside bin
+       set(RSTUDIO_INSTALL_RESOURCES RStudio.app/Contents/Resources)
++      set(RSTUDIO_INSTALL_ELECTRON .)
+    else()
+       set(RSTUDIO_INSTALL_BIN        RStudio.app/Contents/MacOS)
+       set(RSTUDIO_INSTALL_SUPPORTING RStudio.app/Contents/Resources)
+@@ -634,44 +635,6 @@ macro(add_stripped_executable _target)
+    define_source_file_names("${_target}")
+ endmacro(add_stripped_executable)
+ 
+-if(APPLE)
+-
+-   # set Homebrew prefix directory
+-   if(NOT DEFINED HOMEBREW_PREFIX)
+-
+-      if(UNAME_M STREQUAL arm64)
+-         set(HOMEBREW_PREFIX_FALLBACK /opt/homebrew)
+-      else()
+-         set(HOMEBREW_PREFIX_FALLBACK /usr/local)
+-      endif()
+-      
+-      find_path(HOMEBREW_PREFIX
+-         NAMES bin/brew
+-         HINTS
+-            "${HOMEBREW_PREFIX_FALLBACK}")
+-
+-      message(STATUS "Using Homebrew: ${HOMEBREW_PREFIX}")
+-
+-   endif()
+-
+-   # help Boost find icu4c
+-   if(RSTUDIO_USE_SYSTEM_BOOST)
+-      link_directories(${HOMEBREW_PREFIX}/opt/icu4c/lib)
+-   endif()
+-
+-   # set OPENSSL_ROOT_DIR if unset
+-   if(NOT DEFINED OPENSSL_ROOT_DIR)
+-
+-      file(GLOB OPENSSL_ROOT_CANDIDATE "${HOMEBREW_PREFIX}/Cellar/openssl/*")
+-      if(EXISTS "${OPENSSL_ROOT_CANDIDATE}")
+-         set(OPENSSL_ROOT_DIR "${OPENSSL_ROOT_CANDIDATE}" CACHE INTERNAL "")
+-      elseif(EXISTS "${HOMEBREW_PREFIX}/opt/openssl")
+-         set(OPENSSL_ROOT_DIR "${HOMEBREW_PREFIX}/opt/openssl" CACHE INTERNAL "")
+-      endif()
+-
+-   endif()
+-
+-endif()
+ 
+ # If enabled, use caching for the build.
+ # Accept both -DSCCACHE_ENABLED=1 (CMake variable) and the SCCACHE_ENABLED
+diff --git a/src/cpp/CMakeLists.txt b/src/cpp/CMakeLists.txt
+index 3f8eb50dd8..754f58a6aa 100644
+--- a/src/cpp/CMakeLists.txt
++++ b/src/cpp/CMakeLists.txt
+@@ -173,7 +173,7 @@ endif()
+ # determine whether we should statically link boost. we always do this
+ # unless we are building a non-packaged build on linux (in which case
+ # boost dynamic libraries are presumed to be installed on the system ldpath)
+-if(APPLE OR WIN32 OR RSTUDIO_PACKAGE_BUILD)
++if(WIN32 OR RSTUDIO_PACKAGE_BUILD)
+    set(Boost_USE_STATIC_LIBS ON)
+ endif()
+ 
+@@ -326,7 +326,7 @@ endif()
+ 
+ # find SOCI libraries
+ if(UNIX)
+-   if(NOT APPLE AND RSTUDIO_USE_SYSTEM_SOCI)
++   if(RSTUDIO_USE_SYSTEM_SOCI)
+       find_library(SOCI_CORE_LIB NAMES "libsoci_core.a" "soci_core" REQUIRED)
+       find_library(SOCI_SQLITE_LIB NAMES "libsoci_sqlite3.a" "soci_sqlite3" REQUIRED)
+       if(RSTUDIO_PRO_BUILD)
+diff --git a/src/cpp/session/postback/CMakeLists.txt b/src/cpp/session/postback/CMakeLists.txt
+index 276020929c..dc441d95b8 100644
+--- a/src/cpp/session/postback/CMakeLists.txt
++++ b/src/cpp/session/postback/CMakeLists.txt
+@@ -52,6 +52,7 @@ add_stripped_executable(rpostback ${POSTBACK_SOURCE_FILES} ${POSTBACK_HEADER_FIL
+ # set link dependencies
+ target_link_libraries(rpostback
+    rstudio-core
++   ${FOUNDATION_LIBRARY}
+ )
+ 
+ if (RSTUDIO_SERVER)
+diff --git a/src/node/CMakeNodeTools.txt b/src/node/CMakeNodeTools.txt
+index 54b39d454b..09d27b3024 100644
+--- a/src/node/CMakeNodeTools.txt
++++ b/src/node/CMakeNodeTools.txt
+@@ -35,23 +35,7 @@ if(RSTUDIO_GIT_MAIN_WORKTREE)
+    set(RSTUDIO_WORKTREE_NODE_DIR "${RSTUDIO_GIT_MAIN_WORKTREE}/dependencies/common/node/${RSTUDIO_NODE_VERSION}")
+ endif()
+ 
+-if(APPLE AND UNAME_M STREQUAL arm64)
+-
+-   # make sure we're using arm64 binaries of node / npm for arm64 builds; search
+-   # this checkout first, then the primary worktree. Use find_program (like the
+-   # else branch) so a missing path leaves the var empty and trips the clear
+-   # "not found" error below rather than passing a bogus path on to first use.
+-   set(RSTUDIO_NODE_ARM64_PATHS
+-      "${CMAKE_CURRENT_LIST_DIR}/../../dependencies/common/node/${RSTUDIO_NODE_VERSION}-arm64")
+-   if(RSTUDIO_WORKTREE_NODE_DIR)
+-      list(APPEND RSTUDIO_NODE_ARM64_PATHS "${RSTUDIO_WORKTREE_NODE_DIR}-arm64")
+-   endif()
+-
+-   find_program(NODEJS NAMES node NO_DEFAULT_PATH PATH_SUFFIXES "bin" PATHS ${RSTUDIO_NODE_ARM64_PATHS})
+-   find_program(NPM    NAMES npm  NO_DEFAULT_PATH PATH_SUFFIXES "bin" PATHS ${RSTUDIO_NODE_ARM64_PATHS})
+-   find_program(NPX    NAMES npx  NO_DEFAULT_PATH PATH_SUFFIXES "bin" PATHS ${RSTUDIO_NODE_ARM64_PATHS})
+-
+-else()
++if(true)
+ 
+    # Detect node.js, npm, and npx; use versions supplied by the dependency scripts
+    find_program(NODEJS
+diff --git a/src/node/desktop/CMakeLists.txt b/src/node/desktop/CMakeLists.txt
+index 7917f0b59e..4a7388af9c 100644
+--- a/src/node/desktop/CMakeLists.txt
++++ b/src/node/desktop/CMakeLists.txt
+@@ -320,16 +320,21 @@ if(WIN32)
+    install(FILES ${VCRUNTIME_X86_FILES} DESTINATION "${RSTUDIO_INSTALL_BIN}/x86")
+    install(FILES ${VCRUNTIME_X64_FILES} DESTINATION "${RSTUDIO_INSTALL_BIN}")
+ 
+-elseif(LINUX)
++elseif(LINUX OR APPLE)
+ 
+-   if(UNAME_M STREQUAL aarch64)
++   if(UNAME_M STREQUAL aarch64 OR UNAME_M STREQUAL arm64)
+       set(ELECTRON_ARCH arm64)
+    else()
+       set(ELECTRON_ARCH x64)
+    endif()
++   if(APPLE)
++      set(ELECTRON_PLATFORM darwin)
++   else()
++      set(ELECTRON_PLATFORM linux)
++   endif()
+ 
+    install(
+-      DIRECTORY "${ELECTRON_BINARY_DIR}/out/RStudio-linux-${ELECTRON_ARCH}/"
++      DIRECTORY "${ELECTRON_BINARY_DIR}/out/RStudio-${ELECTRON_PLATFORM}-${ELECTRON_ARCH}/"
+       DIRECTORY_PERMISSIONS
+       OWNER_READ OWNER_WRITE OWNER_EXECUTE
+       GROUP_READ GROUP_EXECUTE
+diff --git a/src/node/desktop/src/main/session-launcher.ts b/src/node/desktop/src/main/session-launcher.ts
+index 2555f39bb6..d4c1b9dd2c 100644
+--- a/src/node/desktop/src/main/session-launcher.ts
++++ b/src/node/desktop/src/main/session-launcher.ts
+@@ -96,29 +96,9 @@ function launchProcess(absPath: FilePath, argList: string[]): ChildProcess {
+     // DYLD_INSERT_LIBRARIES to inject the library we wish to use
+     const rHome = new FilePath(getenv('R_HOME'));
+     const rLib = rHome.completePath('lib/libR.dylib');
+-    const dyldArgs = [
+-      '-e',
+-      `DYLD_INSERT_LIBRARIES=${rLib.getAbsolutePath()}`,
+-      '-e',
+-      `DYLD_FALLBACK_LIBRARY_PATH=${dyldFallbackLibraryPath}`,
+-    ];
+-
+-    // launch via /usr/bin/arch, so we can control whether the OS requests
+-    // x86 or arm64 versions of the libraries in the launched rsession
+-    const path = absPath.getAbsolutePath();
+-    if (process.arch === 'arm64') {
+-      const fileInfo = execSync(`/usr/bin/file "${rLib}"`, { encoding: 'utf-8' });
+-      if (fileInfo.indexOf('arm64') === -1 && fileInfo.indexOf('x86_64') !== -1) {
+-        argList = ['-x86_64', ...dyldArgs, path, ...argList];
+-        absPath = new FilePath('/usr/bin/arch');
+-      } else {
+-        argList = ['-arm64', ...dyldArgs, path, ...argList];
+-        absPath = new FilePath('/usr/bin/arch');
+-      }
+-    } else {
+-      argList = ['-x86_64', ...dyldArgs, path, ...argList];
+-      absPath = new FilePath('/usr/bin/arch');
+-    }
++
++    env['DYLD_INSERT_LIBRARIES'] = rLib.getAbsolutePath();
++    env['DYLD_FALLBACK_LIBRARY_PATH'] = dyldFallbackLibraryPath;
+   }
+ 
+   const rsessionOptions = new LogOptions('rsession');
+@@ -664,21 +644,6 @@ export class SessionLauncher {
+       }
+     }
+ 
+-    // on macOS, we need to look at R and figure out if we should be trying to run
+-    // with the arm64 session binary (rsession-arm64) or with the x64 session binary (rsession)
+-    if (app.isPackaged && process.platform === 'darwin' && process.arch === 'arm64') {
+-      const rHome = getenv('R_HOME');
+-      const rLibPath = `${rHome}/lib/libR.dylib`;
+-      logger().logDebug(`$ /usr/bin/file "${rLibPath}"`);
+-      const fileInfo = execSync(`/usr/bin/file "${rLibPath}"`, { encoding: 'utf-8' });
+-      logger().logDebug(fileInfo);
+-      if (fileInfo.indexOf('arm64') !== -1) {
+-        this.sessionPath = this.sessionPath.getParent().completeChildPath('rsession-arm64');
+-        logger().logDebug(`R is arm64; using ${this.sessionPath}`);
+-      } else {
+-        logger().logDebug(`R is x86_64; using ${this.sessionPath}`);
+-      }
+-    }
+ 
+     // if we're an automation agent, forward that to the R session
+     if (isAutomated()) {

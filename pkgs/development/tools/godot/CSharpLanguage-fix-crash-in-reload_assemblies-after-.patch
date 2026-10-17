@@ -1,0 +1,30 @@
+From 42f89dd50dde0896d6c55282c82db9af41cd12d8 Mon Sep 17 00:00:00 2001
+From: David McFarland <corngood@gmail.com>
+Date: Wed, 26 Mar 2025 09:52:17 -0300
+Subject: [PATCH] CSharpLanguage: fix crash in reload_assemblies after editor
+ shutdown
+
+---
+ modules/mono/csharp_script.cpp | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/modules/mono/csharp_script.cpp b/modules/mono/csharp_script.cpp
+index 36c8a40ed9..2b161fb69b 100644
+--- a/modules/mono/csharp_script.cpp
++++ b/modules/mono/csharp_script.cpp
+@@ -1001,8 +1001,10 @@ void CSharpLanguage::reload_assemblies(bool p_soft_reload) {
+ #ifdef TOOLS_ENABLED
+ 	// FIXME: Hack to refresh editor in order to display new properties and signals. See if there is a better alternative.
+ 	if (Engine::get_singleton()->is_editor_hint()) {
+-		InspectorDock::get_inspector_singleton()->update_tree();
+-		NodeDock::get_singleton()->update_lists();
++		if (InspectorDock::get_singleton())
++			InspectorDock::get_inspector_singleton()->update_tree();
++		if (NodeDock::get_singleton())
++			NodeDock::get_singleton()->update_lists();
+ 	}
+ #endif
+ }
+-- 
+2.48.1
+

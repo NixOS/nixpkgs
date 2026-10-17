@@ -12,15 +12,15 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rsgain";
-  version = "3.5.3";
+  version = "3.8";
 
   src = fetchFromGitHub {
     owner = "complexlogic";
     repo = "rsgain";
-    rev = "v${version}";
-    hash = "sha256-4LEvcuP2Eyco3iQvT6rZhbfY02Y70rW2n5PaS+rGDkQ=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-BhjsTGSxemFX0MYSDUgKqX9W8ScLyq8Y6OhagMO6m70=";
   };
 
   nativeBuildInputs = [
@@ -36,13 +36,13 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple, but powerful ReplayGain 2.0 tagging utility";
     mainProgram = "rsgain";
     homepage = "https://github.com/complexlogic/rsgain";
-    changelog = "https://github.com/complexlogic/rsgain/blob/v${version}/CHANGELOG";
-    license = licenses.bsd2;
-    platforms = platforms.all;
-    maintainers = [ maintainers.felipeqq2 ];
+    changelog = "https://github.com/complexlogic/rsgain/blob/v${finalAttrs.version}/CHANGELOG";
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.felipeqq2 ];
   };
-}
+})

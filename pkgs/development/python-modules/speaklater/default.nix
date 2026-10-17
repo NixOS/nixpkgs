@@ -11,13 +11,13 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ab5dbfzzgz6cnz4xlwx79gz83id4bhiw67k1cgqrlzfs0va7zjr";
+    hash = "sha256-Wf6jNtDu04wfC/MYHuEiLQ70Xzqd006+Zea//91qZak=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Implements a lazy string for python useful for use with gettext";
     homepage = "https://github.com/mitsuhiko/speaklater";
-    license = licenses.bsd0;
-    maintainers = with maintainers; [ matejc ];
+    license = lib.licenses.bsd0;
+    maintainers = with lib.maintainers; [ matejc ];
   };
 }

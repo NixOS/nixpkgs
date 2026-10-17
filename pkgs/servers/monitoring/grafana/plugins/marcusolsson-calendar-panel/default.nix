@@ -1,13 +1,13 @@
 { grafanaPlugin, lib }:
 
-grafanaPlugin rec {
+grafanaPlugin {
   pname = "marcusolsson-calendar-panel";
-  version = "3.7.0";
-  zipHash = "sha256-O8EvkS+lWq2qaIj1HJzPagRGhrEENvY1YDBusvUejM0=";
-  meta = with lib; {
-    description = "Calendar Panel is a Grafana plugin that displays events from various data sources.";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ nagisa ];
-    platforms = platforms.unix;
+  version = "4.2.4";
+  zipHash = "sha256-pqPz/wFzx3ffyMYYCoo34bof5UQ/Qz67V/E9c4QSizg=";
+  meta = {
+    description = "Calendar Panel is a Grafana plugin that displays events from various data sources";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ nagisa ];
+    platforms = lib.platforms.unix;
   };
 }

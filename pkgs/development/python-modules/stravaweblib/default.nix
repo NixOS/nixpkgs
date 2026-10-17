@@ -13,15 +13,18 @@
   beautifulsoup4,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "stravaweblib";
-  version = "0.0.8";
+  version = "0.0.10";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pR0Ps";
     repo = "stravaweblib";
-    tag = "v${version}";
-    hash = "sha256-v54UeRjhoH0GN2AVFKRjqKJ6BYUXVATe2qoDk9P48oU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-hsXrU7Rad3LzF58GwlgET98911XjTKztFFNqiUSw278=";
   };
 
   build-system = [
@@ -34,6 +37,10 @@ buildPythonPackage rec {
     beautifulsoup4
   ];
 
+  pythonRelaxDeps = [
+    "stravalib"
+  ];
+
   pythonImportsCheck = [ "stravaweblib" ];
 
   passthru.updateScript = nix-update-script { };
@@ -44,4 +51,4 @@ buildPythonPackage rec {
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ stv0g ];
   };
-}
+})

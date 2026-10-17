@@ -7,28 +7,25 @@
   qtvirtualkeyboard,
   qtwayland,
   libinput,
-  xorg,
+  libxcvt,
   xwayland,
   libcanberra,
+  libcap,
   libdisplay-info,
   libei,
+  libevdev,
   libgbm,
   lcms2,
   pipewire,
-  krunner,
   python3,
 }:
 mkKdeDerivation {
   pname = "kwin";
 
   patches = [
-    # Follow symlinks when searching for aurorae configs
-    # FIXME(later): upstream?
-    ./0001-follow-symlinks.patch
-    # The rest are NixOS-specific hacks
     ./0003-plugins-qpa-allow-using-nixos-wrapper.patch
     ./0001-NixOS-Unwrap-executable-name-for-.desktop-search.patch
-    ./0001-Lower-CAP_SYS_NICE-from-the-ambient-set.patch
+    ./plasma-setup-xwayland-path.patch
   ];
 
   postPatch = ''
@@ -44,6 +41,9 @@ mkKdeDerivation {
   extraNativeBuildInputs = [
     pkg-config
     python3
+
+    # we can't actually have capabilities in the store but it gets mad
+    libcap
   ];
   extraBuildInputs = [
     qtquick3d
@@ -52,18 +52,23 @@ mkKdeDerivation {
     qtvirtualkeyboard
     qtwayland
 
-    krunner
-
     libgbm
     lcms2
     libcanberra
     libdisplay-info
     libei
+    libevdev
     libinput
     pipewire
 
-    xorg.libxcvt
+    libxcvt
     # we need to provide this so it knows our xwayland supports new features
     xwayland
+
+    # and it needs to be in both because cmake is stupid
+    libcap
   ];
+
+  # plugin QML relies on non-global imports
+  dontQmlLint = true;
 }

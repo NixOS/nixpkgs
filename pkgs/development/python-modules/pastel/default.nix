@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e6581ac04e973cac858828c6202c1e1e81fee1dc7de7683f3e1ffe0bfd8a573d";
+    hash = "sha256-5lgawE6XPKyFiCjGICweHoH+4dx952g/Ph/+C/2KVz0=";
   };
 
   nativeCheckInputs = [ pytest ];
@@ -20,10 +20,10 @@ buildPythonPackage rec {
     pytest
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sdispater/pastel";
     description = "Bring colors to your terminal";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jakewaksbaum ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jakewaksbaum ];
   };
 }

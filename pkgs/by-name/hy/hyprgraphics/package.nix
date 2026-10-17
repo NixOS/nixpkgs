@@ -1,27 +1,34 @@
 {
   lib,
-  gcc14Stdenv,
+  gcc16Stdenv,
   fetchFromGitHub,
+  nix-update-script,
   cmake,
   pkg-config,
   cairo,
   file,
   hyprutils,
+  lcms2,
+  libGL,
+  libdrm,
   libjpeg,
   libjxl,
+  librsvg,
+  libspng,
   libwebp,
+  pango,
   pixman,
 }:
 
-gcc14Stdenv.mkDerivation (finalAttrs: {
+gcc16Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprgraphics";
-  version = "0.1.1";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprgraphics";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-FFLJzFTyNhS7tBEEECx0B8Ye/bpmxhFVEKlECgMLc6c=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-48DubZbx8PDfuJkksNgi5aWFnX/Rq1OUaLsUvsdf2Bo=";
   };
 
   nativeBuildInputs = [
@@ -33,9 +40,15 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     cairo
     file
     hyprutils
+    lcms2
+    libGL
+    libdrm
     libjpeg
     libjxl
+    librsvg
+    libspng
     libwebp
+    pango
     pixman
   ];
 
@@ -46,14 +59,19 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  cmakeBuildType = "RelWithDebInfo";
+  separateDebugInfo = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
-    homepage = "https://github.com/hyprwm/hyprlang";
-    description = "Official implementation library for the hypr config language";
-    license = lib.licenses.lgpl3Only;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [
-      fufexan
-      khaneliman
-    ];
+    homepage = "https://github.com/hyprwm/hyprgraphics";
+    changelog = "https://github.com/hyprwm/hyprgraphics/releases/tag/${finalAttrs.src.tag}";
+    description = "Cpp graphics library for Hypr* ecosystem";
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
+    teams = [ lib.teams.hyprland ];
   };
 })

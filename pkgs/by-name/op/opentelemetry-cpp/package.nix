@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   gtest,
   protobuf,
@@ -10,40 +11,59 @@
   prometheus-cpp,
   nlohmann_json,
   nix-update-script,
+  cxxStandard ? null,
+  enableHttp ? false,
+  enableGrpc ? false,
+  enablePrometheus ? false,
+  enableElasticSearch ? false,
+  enableZipkin ? false,
+  # for passthru.tests
+  opentelemetry-cpp,
 }:
-
 let
   opentelemetry-proto = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-proto";
-    rev = "v1.3.2";
-    hash = "sha256-bkVqPSVhyMHrmFvlI9DTAloZzDozj3sefIEwfW7OVrI=";
+    rev = "v1.11.0";
+    hash = "sha256-1s94AS5+bPD0/UKbI/Ox+nSZe4PGLkinUcItITVgEiQ=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "opentelemetry-cpp";
-  version = "1.16.1";
+  version = "1.29.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-cpp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-31zwIZ4oehhfn+oCyg8VQTurPOmdgp72plH1Pf/9UKQ=";
+    hash = "sha256-md4JwlqxMM7zAz0/v9/S3hSj1S0cwXXn4sWT8UWK0Dw=";
   };
 
   patches = [
     ./0001-Disable-tests-requiring-network-access.patch
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin ./0002-Disable-segfaulting-test-on-Darwin.patch;
+    (fetchpatch2 {
+      # Add missing cstdint include to predicate_factory.h
+      url = "https://github.com/open-telemetry/opentelemetry-cpp/commit/e62f627ccb220e9c72eaebf32b246ec0bf98d60f.patch?full_index=1";
+      hash = "sha256-YCg0kHP8QW9FFivNWYqJvwKLVUvY+grTsev5nJY6xjY=";
+    })
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin ./0002-Disable-segfaulting-test-on-Darwin.patch;
 
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     curl
-    grpc
     nlohmann_json
-    prometheus-cpp
-    protobuf
   ];
+
+  propagatedBuildInputs =
+    lib.optionals (enableGrpc || enableHttp) [ protobuf ]
+    ++ lib.optionals enableGrpc [
+      grpc
+    ]
+    ++ lib.optionals enablePrometheus [
+      prometheus-cpp
+    ];
 
   doCheck = true;
 
@@ -54,15 +74,18 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-    "-DWITH_OTLP_HTTP=ON"
-    "-DWITH_OTLP_GRPC=ON"
-    "-DWITH_ABSEIL=ON"
-    "-DWITH_PROMETHEUS=ON"
-    "-DWITH_ELASTICSEARCH=ON"
-    "-DWITH_ZIPKIN=ON"
-    "-DWITH_BENCHMARK=OFF"
-    "-DOTELCPP_PROTO_PATH=${opentelemetry-proto}"
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "OTELCPP_WITH_BENCHMARK" false)
+    (lib.cmakeBool "OTELCPP_WITH_OTLP_HTTP" enableHttp)
+    (lib.cmakeBool "OTELCPP_WITH_OTLP_GRPC" enableGrpc)
+    (lib.cmakeBool "OTELCPP_WITH_PROMETHEUS" enablePrometheus)
+    (lib.cmakeBool "OTELCPP_WITH_ELASTICSEARCH" enableElasticSearch)
+    (lib.cmakeBool "OTELCPP_WITH_ZIPKIN" enableZipkin)
+    (lib.cmakeFeature "OTELCPP_PROTO_PATH" "${opentelemetry-proto}")
+  ]
+  ++ lib.optionals (cxxStandard != null) [
+    (lib.cmakeFeature "CMAKE_CXX_STANDARD" cxxStandard)
+    (lib.cmakeFeature "WITH_STL" "CXX${cxxStandard}")
   ];
 
   outputs = [
@@ -70,19 +93,44 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
+  # "--replace-fail" would normally be preferred, since it is better at
+  # highlighting obsolete/uneeded substitutions, but in this case
+  # "--replace-quiet" must be used.
+  # substituteInPlace with "--replace-fail" already fails if there is no
+  # substitution in at least one of the specified files. Below is applied to
+  # multiple files where some but not all of them match the substitution
+  # strings.
   postInstall = ''
-    substituteInPlace $out/lib/cmake/opentelemetry-cpp/opentelemetry-cpp-target.cmake \
-      --replace-fail "\''${_IMPORT_PREFIX}/include" "$dev/include"
+    substituteInPlace $out/lib/cmake/opentelemetry-cpp/opentelemetry-cpp*-target.cmake \
+      --replace-quiet "\''${_IMPORT_PREFIX}/include" "$dev/include"
   '';
 
   passthru.updateScript = nix-update-script { };
 
+  # For dependents that compile the protos themselves.
+  passthru.opentelemetry-proto = opentelemetry-proto;
+
+  passthru.tests = {
+    # Unfortunately there is no such thing as finalAttrs.finalPackage.override,
+    # so we have to resort to this.
+    full = opentelemetry-cpp.override {
+      enableHttp = true;
+      enableGrpc = true;
+      enablePrometheus = true;
+      enableElasticSearch = true;
+      enableZipkin = true;
+    };
+  };
+
   meta = {
     description = "OpenTelemetry C++ Client Library";
     homepage = "https://github.com/open-telemetry/opentelemetry-cpp";
-    license = [ lib.licenses.asl20 ];
-    maintainers = with lib.maintainers; [ jfroche ];
-    platforms = lib.platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      jfroche
+      panicgh
+    ];
+    platforms = lib.platforms.all;
     # https://github.com/protocolbuffers/protobuf/issues/14492
     broken = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
   };

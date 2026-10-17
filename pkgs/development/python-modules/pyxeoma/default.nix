@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c6a3ed855025662df9b35ae2d1cac3fa41775a7612655804bde7276a8cab8d1c";
+    hash = "sha256-xqPthVAlZi35s1ri0crD+kF3WnYSZVgEvecnaoyrjRw=";
   };
 
   propagatedBuildInputs = [ aiohttp ];
@@ -21,10 +21,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "pyxeoma" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for Xeoma web server API";
     homepage = "https://github.com/jeradM/pyxeoma";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

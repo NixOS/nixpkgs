@@ -2,29 +2,34 @@
   lib,
   fetchFromGitHub,
   buildHomeAssistantComponent,
-  websockets,
+  python-socketio,
 }:
 buildHomeAssistantComponent rec {
   owner = "iprak";
   domain = "sensi";
-  version = "1.3.14";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = domain;
     tag = "v${version}";
-    hash = "sha256-kskffpfxpUjNUgsGc/sSkCbGdjt47KfPpH6KBFDLsHw=";
+    hash = "sha256-RvSj2a2vjdLUCzCjl2xK4gfn8IqJkPCnmCFaMDd16V8=";
   };
 
+  postPatch = ''
+    substituteInPlace custom_components/sensi/manifest.json \
+      --replace-fail "==" ">="
+  '';
+
   dependencies = [
-    websockets
+    python-socketio
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/iprak/sensi/releases/tag/v${version}";
     description = "HomeAssistant integration for Sensi thermostat";
     homepage = "https://github.com/iprak/sensi";
-    maintainers = with maintainers; [ ivan ];
-    license = licenses.mit;
+    maintainers = [ ];
+    license = lib.licenses.mit;
   };
 }

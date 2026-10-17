@@ -10,12 +10,12 @@
 
 stdenv.mkDerivation {
   pname = "uqmi";
-  version = "unstable-2024-01-16";
+  version = "unstable-2025-07-30";
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/uqmi.git";
-    rev = "c3488b831ce6285c8107704156b9b8ed7d59deb3";
-    hash = "sha256-O5CeLk0WYuBs3l5xBUk9kXDRMzFvYSRoqP28KJ5Ztos=";
+    rev = "7914da43cddaaf6cfba116260c81e6e9adffd5ab";
+    hash = "sha256-Ny5Jd/6N1nTcv2GGP1YLFe+ljn15sUQJVAEVPvYtz3M=";
   };
 
   postPatch = ''
@@ -33,22 +33,18 @@ stdenv.mkDerivation {
   ];
 
   env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
-      # Needed with GCC 12 but breaks on darwin (with clang) or older gcc
-      "-Wno-error=dangling-pointer"
-      "-Wno-error=maybe-uninitialized"
-    ]
-    ++ lib.optionals stdenv.cc.isClang [
-      "-Wno-error=sometimes-uninitialized"
+    lib.optionals stdenv.cc.isClang [
+      # error: unknown warning option '-Wno-dangling-pointer' [-Werror,-Wunknown-warning-option]
+      "-Wno-error=unknown-warning-option"
     ]
   );
 
-  meta = with lib; {
+  meta = {
     description = "Tiny QMI command line utility";
     homepage = "https://git.openwrt.org/?p=project/uqmi.git;a=summary";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       fpletz
       mkg20001
     ];

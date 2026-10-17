@@ -27,12 +27,12 @@ buildNpmPackage rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Emmet support based on LSP";
     homepage = "https://github.com/aca/emmet-ls";
     changelog = "https://github.com/aca/emmet-ls/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "emmet-ls";
   };
 }

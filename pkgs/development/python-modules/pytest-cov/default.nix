@@ -4,23 +4,31 @@
   fetchPypi,
   pytest,
   coverage,
+  hatchling,
+  hatch-fancy-pypi-readme,
   toml,
   tomli,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-cov";
-  version = "5.0.0";
-  format = "setuptools";
+  version = "7.1.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-WDe1jp9uvTNbD4Bg7szmm2YkFbFtxQOIOgL0Xf6xSFc=";
+    pname = "pytest_cov";
+    inherit version;
+    hash = "sha256-MGdPK19jUaoJcCqcjDZPagHCeq4ME2augBYWDR78VrI=";
   };
+
+  build-system = [
+    hatchling
+    hatch-fancy-pypi-readme
+  ];
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     coverage
     toml
     tomli
@@ -37,9 +45,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_cov" ];
 
-  meta = with lib; {
+  meta = {
     description = "Plugin for coverage reporting with support for both centralised and distributed testing, including subprocesses and multiprocessing";
     homepage = "https://github.com/pytest-dev/pytest-cov";
-    license = licenses.mit;
+    changelog = "https://github.com/pytest-dev/pytest-cov/blob/v${version}/CHANGELOG.rst";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

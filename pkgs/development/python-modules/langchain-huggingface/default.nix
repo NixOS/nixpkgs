@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  hatchling,
 
   # dependencies
   huggingface-hub,
@@ -26,23 +26,27 @@
   responses,
   syrupy,
   toml,
+
+  # passthru
+  gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain-huggingface";
-  version = "0.1.2";
+  version = "1.2.3";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-huggingface==${version}";
-    hash = "sha256-ACR+JzKcnYXROGOQe6DlZeqcYd40KlesgXSUOybOT20=";
+    tag = "langchain-huggingface==${finalAttrs.version}";
+    hash = "sha256-muibdSyBybUR1YTVsWr00mg0uSgUm2zwKRM3KU9Ju38=";
   };
 
-  sourceRoot = "${src.name}/libs/partners/huggingface";
+  sourceRoot = "${finalAttrs.src.name}/libs/partners/huggingface";
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     huggingface-hub
@@ -67,17 +71,29 @@ buildPythonPackage rec {
     toml
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
+  enabledTestPaths = [ "tests/unit_tests" ];
+
+  disabledTests = [
+    # Requires a circular dependency on langchain
+    "test_init_chat_model_huggingface"
+    # AssertionError: Expected 'bind' to have been called once. Called 0 times.
+    "test_bind_tools"
+  ];
 
   pythonImportsCheck = [ "langchain_huggingface" ];
 
   passthru = {
-    inherit (langchain-core) updateScript;
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-huggingface==";
+      ignoredVersions = "a|b|dev|rc";
+    };
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-huggingface==${version}";
-    description = "An integration package connecting Huggingface related classes and LangChain";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${finalAttrs.src.tag}";
+    description = "Integration package connecting Huggingface related classes and LangChain";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/huggingface";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
@@ -85,4 +101,4 @@ buildPythonPackage rec {
       sarahec
     ];
   };
-}
+})

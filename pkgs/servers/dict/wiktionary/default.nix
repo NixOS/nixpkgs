@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://dumps.wikimedia.org/enwiktionary/${version}/enwiktionary-${version}-pages-articles.xml.bz2";
-    sha256 = "f37e899a9091a1b01137c7b0f3d58813edf3039e9e94ae656694c88859bbe756";
+    hash = "sha256-836JmpCRobARN8ew89WIE+3zA56elK5lZpTIiFm751Y=";
   };
 
   nativeBuildInputs = [
@@ -38,12 +38,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "DICT version of English Wiktionary";
     homepage = "https://en.wiktionary.org/";
-    maintainers = with maintainers; [ qyliss ];
-    platforms = platforms.all;
-    license = with licenses; [
+    maintainers = with lib.maintainers; [ qyliss ];
+    platforms = lib.platforms.all;
+    license = with lib.licenses; [
       cc-by-sa-30
       fdl11Plus
     ];

@@ -4,21 +4,21 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "parse-cli-bin";
   version = "3.0.5";
 
   src = fetchurl {
-    url = "https://github.com/ParsePlatform/parse-cli/releases/download/release_${version}/parse_linux";
+    url = "https://github.com/ParsePlatform/parse-cli/releases/download/release_${finalAttrs.version}/parse_linux";
     sha256 = "1iyfizbbxmr87wjgqiwqds51irgw6l3vm9wn89pc3zpj2zkyvf5h";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Parse Command Line Interface";
     mainProgram = "parse";
     homepage = "https://parse.com";
-    platforms = platforms.linux;
-    license = licenses.bsd3;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd3;
   };
 
   dontUnpack = true;
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     cp "$src" "$out/bin/parse"
     chmod +x "$out/bin/parse"
   '';
-}
+})

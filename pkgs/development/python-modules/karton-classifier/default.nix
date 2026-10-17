@@ -7,21 +7,19 @@
   karton-core,
   pytestCheckHook,
   python-magic,
-  pythonOlder,
+  yara-python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "karton-classifier";
-  version = "2.0.0";
+  version = "2.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = "karton-classifier";
-    tag = "v${version}";
-    hash = "sha256-DH8I4Lbbs2TVMvYlvh/P2I/7O4+VechP2JDDVHNsTSg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ew7IZEo471keFOX7Ksi8nCmggI3EzG4hmaIBbdDW4XE=";
   };
 
   pythonRelaxDeps = [
@@ -35,6 +33,7 @@ buildPythonPackage rec {
     chardet
     karton-core
     python-magic
+    yara-python
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -43,17 +42,21 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Tests expecting results from a different version of libmagic
-    "test_process_archive_ace"
-    "test_process_runnable_win32_lnk"
+    "test_process_archive"
     "test_process_misc_csv"
+    "test_process_runnable_win32_jar"
+    "test_process_runnable_win32_lnk"
+    # Assertion error
+    "test_process_runnable_win32_msi"
+    "test_process_misc_webp"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "File type classifier for the Karton framework";
-    mainProgram = "karton-classifier";
     homepage = "https://github.com/CERT-Polska/karton-classifier";
-    changelog = "https://github.com/CERT-Polska/karton-classifier/releases/tag/v${version}";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/CERT-Polska/karton-classifier/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "karton-classifier";
   };
-}
+})

@@ -19,17 +19,18 @@
 
 buildPythonPackage rec {
   pname = "drf-yasg";
-  version = "1.21.8";
+  version = "1.21.15";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-y7f4HD0UDyIHOStLxd3mU4TutY4bfuoabWQd7C9zUqk=";
+    inherit version;
+    pname = "drf_yasg";
+    hash = "sha256-74aDjE7xDc06wevyvmAcvgKXi5mWccqkNmf3yduWFGg=";
   };
 
   postPatch = ''
-    # https://github.com/axnsan12/drf-yasg/pull/710
-    sed -i "/packaging/d" requirements/base.txt
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools-scm ~= 7.0" "setuptools-scm >= 7.0"
   '';
 
   build-system = [
@@ -65,10 +66,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "drf_yasg" ];
 
-  meta = with lib; {
+  meta = {
     description = "Generation of Swagger/OpenAPI schemas for Django REST Framework";
     homepage = "https://github.com/axnsan12/drf-yasg";
     maintainers = [ ];
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

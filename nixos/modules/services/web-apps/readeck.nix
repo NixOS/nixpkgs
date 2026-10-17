@@ -57,7 +57,8 @@ in
   config = mkIf cfg.enable {
     systemd.services.readeck = {
       description = "Readeck";
-      after = [ "network.target" ];
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "simple";
@@ -65,7 +66,9 @@ in
         WorkingDirectory = "/var/lib/readeck";
         EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
         DynamicUser = true;
-        ExecStart = "${lib.getExe cfg.package} serve -config ${configFile}";
+        # readeck opens config.toml as writable in case it needs to add a secret key...
+        ExecStartPre = "${lib.getExe' pkgs.coreutils "cp"} --no-preserve=all ${configFile} config.toml";
+        ExecStart = "${lib.getExe cfg.package} serve -config config.toml";
         ProtectSystem = "full";
         SystemCallArchitectures = "native";
         MemoryDenyWriteExecute = true;
@@ -89,7 +92,6 @@ in
         ProtectKernelTunables = true;
         LockPersonality = true;
         Restart = "on-failure";
-
       };
     };
   };

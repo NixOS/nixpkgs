@@ -1,92 +1,113 @@
 {
   buildFHSEnv,
-  electron_24,
   fetchFromGitHub,
-  fetchYarnDeps,
-  fetchurl,
-  fixup-yarn-lock,
+  electron,
   git,
   lib,
   makeDesktopItem,
-  nodejs_18,
+  nodejs,
   stdenvNoCC,
   util-linux,
-  yarn,
+  yarn-berry_4,
+  substitute,
   zip,
 }:
 
 let
   pname = "electron-fiddle";
-  version = "0.32.6";
-  electron = electron_24;
-  nodejs = nodejs_18;
+  version = "0.40.1";
+  yarn-berry = yarn-berry_4;
 
   src = fetchFromGitHub {
     owner = "electron";
     repo = "fiddle";
-    rev = "v${version}";
-    hash = "sha256-Iuss2xwts1aWy2rKYG7J2EvFdH8Bbedn/uZG2bi9UHw=";
+    tag = "v${version}";
+    hash = "sha256-5Pw889lHRwWoTUVbLmToPF8/bDz382qFMO9mL/EKLo0=";
+
+    # Remove after upstream updates to Yarn 4.15
+    # https://github.com/electron/fiddle/blob/main/package.json#L163
+    postFetch = ''
+      cd $out
+      patch -p1 < ${
+        (substitute {
+          src = ./yarn-fix.patch;
+          substitutions = [
+            "--replace-fail"
+            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+            yarn-berry.lockfileVersion
+          ];
+        })
+      }
+    '';
   };
 
-  # As of https://github.com/electron/fiddle/pull/1316 this is fetched
-  # from the network and has no stable hash.  Grab an old version from
-  # the repository.
-  releasesJson = fetchurl {
-    url = "https://raw.githubusercontent.com/electron/fiddle/v0.32.4~18/static/releases.json";
-    hash = "sha256-1sxd3eJ6/WjXS6XQbrgKUTNUmrhuc1dAvy+VAivGErg=";
-  };
+  patches = [
+    ./dont-use-initial-releases-json.patch
+    ./dont-fetch-contributors.patch
 
-  offlineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
-    hash = "sha256-dwhwUWwv6RYKEMdhRBvKVXvM8n1r+Qo0D3/uFsWIOpw=";
-  };
+    # zip extraction fails on newer nodejs versions without this fix
+    ./bump-yauzl.patch
+  ];
 
-  electronDummyMirror = "https://electron.invalid/";
-  electronDummyDir = "nix";
-  electronDummyFilename = builtins.baseNameOf (builtins.head (electron.src.urls));
-  electronDummyHash = builtins.hashString "sha256" "${electronDummyMirror}${electronDummyDir}";
+  missingHashes = ./missing-hashes.json;
 
   unwrapped = stdenvNoCC.mkDerivation {
     pname = "${pname}-unwrapped";
-    inherit version src;
+    inherit
+      version
+      src
+      patches
+      missingHashes
+      ;
+
+    offlineCache = yarn-berry.fetchYarnBerryDeps {
+      inherit src patches missingHashes;
+      hash = "sha256-O9zaCL0W8JPYQz8EBWOz0qGjW57Js3oMosUbz72YBc4=";
+    };
 
     nativeBuildInputs = [
-      fixup-yarn-lock
       git
       nodejs
       util-linux
-      yarn
+      yarn-berry
+      yarn-berry.yarnBerryConfigHook
       zip
     ];
 
-    configurePhase = ''
-      export HOME=$TMPDIR
-      fixup-yarn-lock yarn.lock
-      yarn config --offline set yarn-offline-mirror ${offlineCache}
-      yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
-      patchShebangs node_modules
-
-      mkdir -p ~/.cache/electron/${electronDummyHash}
-      cp -ra '${electron.dist}' "$TMPDIR/electron"
-      chmod -R u+w "$TMPDIR/electron"
-      (cd "$TMPDIR/electron" && zip -0Xr ~/.cache/electron/${electronDummyHash}/${electronDummyFilename} .)
-
-      ln -s ${releasesJson} static/releases.json
-    '';
-
     buildPhase = ''
-      ELECTRON_CUSTOM_VERSION='${electron.version}' \
-        ELECTRON_MIRROR='${electronDummyMirror}' \
-        ELECTRON_CUSTOM_DIR='${electronDummyDir}' \
-        ELECTRON_CUSTOM_FILENAME='${electronDummyFilename}' \
-        yarn --offline run package
+      runHook preBuild
+
+      # electron files need to be writable on Darwin
+      cp -r ${electron.dist} electron-dist
+      chmod -R u+w electron-dist
+
+      pushd electron-dist
+      zip -0Xqr ../electron.zip .
+      popd
+
+      rm -r electron-dist
+
+      # force @electron/packager to use our electron instead of downloading it, even if it is a different version
+      substituteInPlace node_modules/@electron/packager/dist/packager.js \
+        --replace-fail 'await this.getElectronZipPath(downloadOpts)' '"electron.zip"'
+
+      node --run package
+
+      runHook postBuild
     '';
+
+    # electron-forge's console output is squeezed into one narrow column if unset
+    env.CI = "1";
 
     installPhase = ''
+      runHook preInstall
+
       mkdir -p "$out/lib/electron-fiddle/resources"
       cp "out/Electron Fiddle-"*/resources/app.asar "$out/lib/electron-fiddle/resources/"
       mkdir -p "$out/share/icons/hicolor/scalable/apps"
       cp assets/icons/fiddle.svg "$out/share/icons/hicolor/scalable/apps/electron-fiddle.svg"
+
+      runHook postInstall
     '';
   };
 
@@ -109,7 +130,9 @@ let
 in
 buildFHSEnv {
   inherit pname version;
-  runScript = "${electron}/bin/electron ${unwrapped}/lib/electron-fiddle/resources/app.asar";
+  runScript = "${lib.getExe electron} ${unwrapped}/lib/electron-fiddle/resources/app.asar";
+
+  passthru = { inherit unwrapped; };
 
   extraInstallCommands = ''
     mkdir -p "$out/share/icons/hicolor/scalable/apps"
@@ -135,34 +158,35 @@ buildFHSEnv {
       glib
       gtk3
       libdrm
+      libglvnd
       libnotify
       libxkbcommon
       libgbm
       nspr
       nss
       pango
-      xorg.libX11
-      xorg.libXcomposite
-      xorg.libXdamage
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXrandr
-      xorg.libxcb
+      libx11
+      libxcomposite
+      libxdamage
+      libxext
+      libxfixes
+      libxrandr
+      libxcb
 
       # for running Electron before 18.3.5/19.0.5/20.0.0 inside
       gdk-pixbuf
 
       # for running Electron before 16.0.0 inside
-      xorg.libxshmfence
+      libxshmfence
 
       # for running Electron before 11.0.0 inside
-      xorg.libXcursor
-      xorg.libXi
-      xorg.libXrender
-      xorg.libXtst
+      libxcursor
+      libxi
+      libxrender
+      libxtst
 
       # for running Electron before 10.0.0 inside
-      xorg.libXScrnSaver
+      libxscrnsaver
 
       # for running Electron before 8.0.0 inside
       libuuid
@@ -170,18 +194,19 @@ buildFHSEnv {
       # for running Electron before 4.0.0 inside
       fontconfig
 
-      # for running Electron before 3.0.0 inside
-      gnome2.GConf
-
-      # Electron 2.0.8 is the earliest working version, due to
-      # https://github.com/electron/electron/issues/13972
+      # Electron 3.0.0 is the earliest working version, since GConf was removed
+      # from Nixpkgs
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Easiest way to get started with Electron";
     homepage = "https://www.electronjs.org/fiddle";
-    license = licenses.mit;
-    maintainers = with maintainers; [ andersk ];
+    license = lib.licenses.mit;
+    mainProgram = "electron-fiddle";
+    maintainers = with lib.maintainers; [
+      andersk
+      tomasajt
+    ];
     platforms = electron.meta.platforms;
   };
 }

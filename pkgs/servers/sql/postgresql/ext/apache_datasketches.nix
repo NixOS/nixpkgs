@@ -1,11 +1,11 @@
 {
-  stdenv,
-  lib,
+  boost186,
   fetchFromGitHub,
+  fetchpatch,
+  lib,
   postgresql,
-  boost,
+  postgresqlBuildExtension,
   postgresqlTestExtension,
-  buildPostgresqlExtension,
 }:
 
 let
@@ -15,7 +15,7 @@ let
     name = "datasketches-postgresql";
     owner = "apache";
     repo = "datasketches-postgresql";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-W41uAs3W4V7c9O/wBw3rut65bcmY8EdQS1/tPszMGqA=";
   };
 
@@ -23,12 +23,12 @@ let
     name = "datasketches-cpp";
     owner = "apache";
     repo = "datasketches-cpp";
-    rev = "refs/tags/5.0.2";
-    hash = "sha256-yGk1OckYipAgLTQK6w6p6EdHMxBIQSjPV/MMND3cDks=";
+    tag = "5.2.0";
+    hash = "sha256-h4+cln01jqLV0EpIqScpCyw8jxZgoVtdfBEjdvyUuVk=";
   };
 in
 
-buildPostgresqlExtension (finalAttrs: {
+postgresqlBuildExtension (finalAttrs: {
   pname = "apache_datasketches";
   inherit version;
 
@@ -39,12 +39,21 @@ buildPostgresqlExtension (finalAttrs: {
 
   sourceRoot = main_src.name;
 
-  buildInputs = [ boost ];
+  # fails to build with boost 1.87
+  buildInputs = [ boost186 ];
 
-  patchPhase = ''
-    runHook prePatch
-    cp -r ../${cpp_src.name} .
-    runHook postPatch
+  patches = [
+    # https://github.com/apache/datasketches-cpp/pull/500
+    (fetchpatch {
+      url = "https://github.com/apache/datasketches-cpp/commit/639134f6e88483bd1bfca451cf09d243ade9bdd4.patch";
+      hash = "sha256-6SYKy3NycYABnUCuLUXQz+mTx4VaeWMlHnJ6aM+sNt4=";
+      stripLen = 1;
+      extraPrefix = "datasketches-cpp/";
+    })
+  ];
+
+  prePatch = ''
+    cp --no-preserve=mode -r ../${cpp_src.name} .
   '';
 
   enableUpdateScript = false;

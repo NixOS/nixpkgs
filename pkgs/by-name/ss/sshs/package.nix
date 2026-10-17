@@ -6,18 +6,18 @@
   sshs,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sshs";
-  version = "4.5.1";
+  version = "4.8.0";
 
   src = fetchFromGitHub {
     owner = "quantumsheep";
     repo = "sshs";
-    rev = version;
-    hash = "sha256-8tIIpGEQBXfLQ/Bok4KrpDGwoYhIQz/ylg6fUc6mBdc=";
+    rev = finalAttrs.version;
+    hash = "sha256-pC1UmnE0ePs5I+qUwWJO/heX781JueirXwtef1m6CTQ=";
   };
 
-  cargoHash = "sha256-w+KYaYO3LXUEk4If6LSncS5KZJyNl8JMLGa+NtF3hf0=";
+  cargoHash = "sha256-SpiJ0WUDmxoqoVbuRh/Kzu3urvhdsm/UZdJdrJ3pP/g=";
 
   passthru.tests.version = testers.testVersion { package = sshs; };
 
@@ -28,4 +28,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ not-my-segfault ];
     mainProgram = "sshs";
   };
-}
+})

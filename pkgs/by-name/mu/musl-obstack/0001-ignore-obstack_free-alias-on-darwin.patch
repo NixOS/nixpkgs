@@ -1,0 +1,27 @@
+From 44679bc1a03302aa6b1eb19220d9723e9e0e4d3f Mon Sep 17 00:00:00 2001
+From: usertam <code@usertam.dev>
+Date: Fri, 16 May 2025 23:29:41 +0800
+Subject: [PATCH] ignore obstack_free alias on darwin
+
+clang will complain "error: aliases are not supported on darwin".
+---
+ obstack.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/obstack.c b/obstack.c
+index 1f2f4c7..b9be9dd 100644
+--- a/obstack.c
++++ b/obstack.c
+@@ -294,7 +294,9 @@ _obstack_free (struct obstack *h, void *obj)
+     abort ();
+ }
+ 
++#ifndef __APPLE__
+ extern __typeof(_obstack_free) obstack_free __attribute__((alias("_obstack_free")));
++#endif
+ 
+ _OBSTACK_SIZE_T
+ _obstack_memory_used (struct obstack *h)
+-- 
+2.48.1
+

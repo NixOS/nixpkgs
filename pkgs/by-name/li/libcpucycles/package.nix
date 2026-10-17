@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcpucycles";
-  version = "20240318";
+  version = "20260105";
 
   src = fetchzip {
     url = "https://cpucycles.cr.yp.to/libcpucycles-${finalAttrs.version}.tar.gz";
-    hash = "sha256-Fb73EOHGgEehZJwTCtCG12xwyiqtDXFs9eFDsHBQiDo=";
+    hash = "sha256-hWmMLBadM/E/kF8D/cTjU+G0f2HTkZQlKoIWsgzAFj0=";
   };
 
   patches = [ ./environment-variable-tools.patch ];
@@ -37,14 +37,15 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://cpucycles.cr.yp.to/";
     description = "Microlibrary for counting CPU cycles";
     changelog = "https://cpucycles.cr.yp.to/download.html";
-    license = with lib.licenses; [
-      # Upstream specifies the public domain licenses with the terms here https://cr.yp.to/spdx.html
-      publicDomain
-      cc0
-      bsd0
-      mit
-      mit0
-    ];
+    license =
+      # Upstream specifies the public domain licenses with the terms here https://cpucycles.cr.yp.to/license.html
+      lib.licenses.OR [
+        lib.licenses.publicDomain
+        lib.licenses.cc0
+        lib.licenses.bsd0
+        lib.licenses.mit
+        lib.licenses.mit0
+      ];
     maintainers = with lib.maintainers; [
       kiike
       imadnyc

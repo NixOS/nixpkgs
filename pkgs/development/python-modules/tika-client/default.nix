@@ -2,42 +2,48 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+  anyio,
   hatchling,
   httpx,
+  niquests,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "tika-client";
-  version = "0.8.1";
+  version = "1.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "stumpylog";
     repo = "tika-client";
     tag = version;
-    hash = "sha256-UXd6GnwwFVUbBXhskBXDQaYlURQyrhgvMsncOwaLT1o=";
+    hash = "sha256-ZXtNHjdbAzur6lRZIom+wDMhXgpqQxvHPQMxjXJDwlw=";
   };
 
   build-system = [ hatchling ];
 
-  dependencies = [ httpx ];
+  dependencies = [
+    anyio
+    httpx
+  ];
+
+  optional-dependencies = {
+    httpx = [ httpx ];
+    niquests = [ niquests ];
+    requests = [ requests ];
+  };
 
   pythonImportsCheck = [ "tika_client" ];
 
-  # Almost all of the tests (all except one in 0.1.0) fail since there
-  # is no tika http API endpoint reachable. Since tika is not yet
-  # packaged for nixpkgs, it seems like an unreasonable amount of effort
-  # fixing these tests.
+  # The tests expect the tika-server to run in a docker container
   doChecks = false;
 
-  meta = with lib; {
+  meta = {
     description = "Modern Python REST client for Apache Tika server";
     homepage = "https://github.com/stumpylog/tika-client";
-    changelog = "https://github.com/stumpylog/tika-client/blob/${version}/CHANGELOG.md";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ e1mo ];
+    changelog = "https://github.com/stumpylog/tika-client/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ e1mo ];
   };
 }

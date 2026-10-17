@@ -1,182 +1,236 @@
 {
+  lib,
   rPackages,
   fetchFromGitHub,
   jasp-src,
   jasp-version,
 }:
 
-with rPackages;
 let
-  jaspColumnEncoder-src = fetchFromGitHub {
-    owner = "jasp-stats";
-    repo = "jaspColumnEncoder";
-    rev = "c54987bb25de8963866ae69ad3a6ae5a9a9f1240";
-    hash = "sha256-aWfRG7DXO1MYFvmMLkX/xtHvGeIhFRcRDrVBrhkvYuI=";
-  };
+  inherit (rPackages) buildRPackage;
+  customRPackages =
+    rPackages
+    // jaspModules
+    // {
+      jaspGraphs = buildRPackage rec {
+        pname = "jaspGraphs";
+        version = "0.96.0";
 
-  jaspGraphs = buildRPackage {
-    name = "jaspGraphs-${jasp-version}";
-    version = jasp-version;
+        src = fetchFromGitHub {
+          owner = "jasp-stats";
+          repo = "jaspGraphs";
+          tag = "v${version}";
+          hash = "sha256-aTemaJA3ZitDeYob3QbE4qtjyd5JN0i65OtrpoaopNg=";
+        };
 
-    src = jasp-src;
-    sourceRoot = "${jasp-src.name}/Engine/jaspGraphs";
+        propagatedBuildInputs = with customRPackages; [
+          ggplot2
+          gridExtra
+          gtable
+          htmlwidgets
+          lifecycle
+          jsonlite
+          plotly
+          R6
+          RColorBrewer
+          rlang
+          scales
+          viridisLite
+        ];
+      };
 
-    propagatedBuildInputs = [
-      ggplot2
-      gridExtra
-      gtable
-      lifecycle
-      jsonlite
-      R6
-      RColorBrewer
-      rlang
-      scales
-      viridisLite
-    ];
-  };
+      jaspBase = buildRPackage {
+        pname = "jaspBase";
+        version = jasp-version;
 
-  jaspBase = buildRPackage {
-    name = "jaspBase-${jasp-version}";
-    version = jasp-version;
+        src = jasp-src;
+        sourceRoot = "${jasp-src.name}/Engine/jaspBase";
 
-    src = jasp-src;
-    sourceRoot = "${jasp-src.name}/Engine/jaspBase";
+        preConfigure = ''
+          mkdir -p ./inst/include/
+          cp -r --no-preserve=all ../../Common ./inst/include/Common
+          export INCLUDE_DIR=$(pwd)/inst/include/Common/
+        '';
 
-    env.INCLUDE_DIR = "../inst/include/jaspColumnEncoder";
+        propagatedBuildInputs = with customRPackages; [
+          cli
+          codetools
+          ggplot2
+          gridExtra
+          gridGraphics
+          jaspGraphs
+          jsonlite
+          lifecycle
+          modules
+          officer
+          pkgbuild
+          plyr
+          qgraph
+          ragg
+          R6
+          Rcpp
+          renv
+          remotes
+          rjson
+          rvg
+          svglite
+          systemfonts
+          withr
+        ];
+      };
 
-    # necessary for R 4.4.0
-    hardeningDisable = [ "format" ];
+      stanova = buildRPackage {
+        pname = "stanova";
+        version = "0.3-unstable-2021-06-06";
 
-    postPatch = ''
-      mkdir -p inst/include
-      cp -r --no-preserve=all ${jaspColumnEncoder-src} inst/include/jaspColumnEncoder
-    '';
+        src = fetchFromGitHub {
+          owner = "bayesstuff";
+          repo = "stanova";
+          rev = "988ad8e07cda1674b881570a85502be7795fbd4e";
+          hash = "sha256-tAeHqTHao2KVRNFBDWmuF++H31aNN6O1ss1Io500QBY=";
+        };
 
-    propagatedBuildInputs = [
-      cli
-      codetools
-      ggplot2
-      gridExtra
-      gridGraphics
-      jaspGraphs
-      jsonlite
-      lifecycle
-      modules
-      officer
-      pkgbuild
-      plyr
-      qgraph
-      ragg
-      R6
-      Rcpp
-      renv
-      remotes
-      rjson
-      rvg
-      svglite
-      systemfonts
-      withr
-    ];
-  };
+        propagatedBuildInputs = with customRPackages; [
+          emmeans
+          lme4
+          coda
+          rstan
+          MASS
+        ];
+      };
 
-  stanova = buildRPackage {
-    name = "stanova";
-    src = fetchFromGitHub {
-      owner = "bayesstuff";
-      repo = "stanova";
-      rev = "988ad8e07cda1674b881570a85502be7795fbd4e";
-      hash = "sha256-tAeHqTHao2KVRNFBDWmuF++H31aNN6O1ss1Io500QBY=";
+      bstats = buildRPackage {
+        pname = "bstats";
+        version = "0.0.0.9004-unstable-2023-09-08";
+
+        src = fetchFromGitHub {
+          owner = "AlexanderLyNL";
+          repo = "bstats";
+          rev = "42d34c18df08d233825bae34fdc0dfa0cd70ce8c";
+          hash = "sha256-N2KmbTPbyvzsZTWBRE2x7bteccnzokUWDOB4mOWUdJk=";
+        };
+
+        propagatedBuildInputs = with customRPackages; [
+          hypergeo
+          purrr
+          SuppDists
+        ];
+      };
+
+      flexplot = buildRPackage {
+        pname = "flexplot";
+        version = "0.26.3";
+
+        src = fetchFromGitHub {
+          owner = "dustinfife";
+          repo = "flexplot";
+          rev = "cae36ba45502ce1794ad35cfeaf0155275db3056";
+          hash = "sha256-aOCYy21EQ/lGDWQvkGAspTSZiJif8mlS2lCwS180dUA=";
+        };
+
+        propagatedBuildInputs = with customRPackages; [
+          cowplot
+          MASS
+          tibble
+          withr
+          dplyr
+          magrittr
+          forcats
+          purrr
+          plyr
+          R6
+          ggplot2
+          patchwork
+          ggsci
+          lme4
+          party
+          mgcv
+          rlang
+        ];
+      };
+
+      # conting has been removed from CRAN
+      conting = buildRPackage {
+        pname = "conting";
+        version = "1.7.9999";
+
+        src = fetchFromGitHub {
+          owner = "vandenman";
+          repo = "conting";
+          rev = "03a4eb9a687e015d602022a01d4e638324c110c8";
+          hash = "sha256-Sp09YZz1WGyefn31Zy1qGufoKjtuEEZHO+wJvoLArf0=";
+        };
+
+        propagatedBuildInputs = with customRPackages; [
+          mvtnorm
+          gtools
+          tseries
+          coda
+        ];
+      };
+
+      DistributionS7 = buildRPackage {
+        pname = "DistributionS7";
+        version = "0.1.1";
+
+        src = fetchFromGitHub {
+          owner = "Kucharssim";
+          repo = "DistributionS7";
+          rev = "8c5a709c120abc0f26697c6009769e4c2d889b9b";
+          hash = "sha256-9kxo38CpbEMRmeXbrngSZrQ8M9iL9SzV+WDYQitXDvU=";
+        };
+
+        postPatch = ''
+          rm -f .Rprofile
+        '';
+
+        propagatedBuildInputs = with customRPackages; [
+          S7
+          assertthat
+          rlang
+          goftest
+          nortest
+          ggplot2
+          ggrepel
+          jaspGraphs
+          patchwork
+          sn
+          gnorm
+          sgt
+          generics
+        ];
+
+      };
     };
-    propagatedBuildInputs = [
-      emmeans
-      lme4
-      coda
-      rstan
-      MASS
-    ];
-  };
 
-  bstats = buildRPackage {
-    name = "bstats";
-    src = fetchFromGitHub {
-      owner = "AlexanderLyNL";
-      repo = "bstats";
-      rev = "42d34c18df08d233825bae34fdc0dfa0cd70ce8c";
-      hash = "sha256-N2KmbTPbyvzsZTWBRE2x7bteccnzokUWDOB4mOWUdJk=";
-    };
-    propagatedBuildInputs = [
-      hypergeo
-      purrr
-      SuppDists
-    ];
-  };
+  moduleInfo = lib.importJSON ./module-info.json;
 
-  flexplot = buildRPackage {
-    name = "flexplot";
-    src = fetchFromGitHub {
-      owner = "dustinfife";
-      repo = "flexplot";
-      rev = "303a03968f677e71c99a5e22f6352c0811b7b2fb";
-      hash = "sha256-iT5CdtNk0Oi8gga76L6YtyWGACAwpN8A/yTBy7JJERc=";
-    };
-    propagatedBuildInputs = [
-      cowplot
-      MASS
-      tibble
-      withr
-      dplyr
-      magrittr
-      forcats
-      purrr
-      plyr
-      R6
-      ggplot2
-      patchwork
-      ggsci
-      lme4
-      party
-      mgcv
-      rlang
-    ];
-  };
-
-  # conting has been removed from CRAN
-  conting' = buildRPackage {
-    name = "conting";
-    src = fetchFromGitHub {
-      owner = "vandenman";
-      repo = "conting";
-      rev = "03a4eb9a687e015d602022a01d4e638324c110c8";
-      hash = "sha256-Sp09YZz1WGyefn31Zy1qGufoKjtuEEZHO+wJvoLArf0=";
-    };
-    propagatedBuildInputs = [
-      mvtnorm
-      gtools
-      tseries
-      coda
-    ];
-  };
-
-  buildJaspModule =
-    name: deps:
+  jaspModules = lib.mapAttrs (
+    name: info:
     buildRPackage {
-      name = "${name}-${jasp-version}";
-      version = jasp-version;
-      src = jasp-src;
-      sourceRoot = "${jasp-src.name}/Modules/${name}";
-      propagatedBuildInputs = deps;
-    };
-in
-{
-  engine = {
-    inherit jaspBase jaspGraphs;
-  };
+      inherit (info) pname version;
+      src = fetchFromGitHub {
+        name = "${info.pname}-${info.version}-source";
+        owner = "jasp-stats-modules";
+        repo = info.pname;
+        tag = info.tag;
+        hash = info.hash;
+      };
+      propagatedBuildInputs = moduleDeps.${info.pname};
 
-  modules = rec {
-    jaspAcceptanceSampling = buildJaspModule "jaspAcceptanceSampling" [
+      # some packages have a .Rprofile that tries to activate renv
+      # we disable this by removing .Rprofile
+      postPatch = ''
+        rm -f .Rprofile
+      '';
+    }
+  ) moduleInfo;
+
+  moduleDeps = with customRPackages; {
+    jaspAcceptanceSampling = [
       abtest
       BayesFactor
-      conting'
+      conting
       ggplot2
       jaspBase
       jaspGraphs
@@ -186,7 +240,7 @@ in
       vcdExtra
       AcceptanceSampling
     ];
-    jaspAnova = buildJaspModule "jaspAnova" [
+    jaspAnova = [
       afex
       BayesFactor
       boot
@@ -210,7 +264,7 @@ in
       stringr
       restriktor
     ];
-    jaspAudit = buildJaspModule "jaspAudit" [
+    jaspAudit = [
       bstats
       extraDistr
       ggplot2
@@ -219,7 +273,7 @@ in
       jaspGraphs
       jfa
     ];
-    jaspBain = buildJaspModule "jaspBain" [
+    jaspBain = [
       bain
       lavaan
       ggplot2
@@ -229,7 +283,21 @@ in
       jaspGraphs
       jaspSem
     ];
-    jaspBsts = buildJaspModule "jaspBsts" [
+    jaspBFF = [
+      BFF
+      jaspBase
+      jaspGraphs
+    ];
+    jaspBfpack = [
+      BFpack
+      bain
+      ggplot2
+      stringr
+      coda
+      jaspBase
+      jaspGraphs
+    ];
+    jaspBsts = [
       Boom
       bsts
       ggplot2
@@ -238,19 +306,19 @@ in
       matrixStats
       reshape2
     ];
-    jaspCircular = buildJaspModule "jaspCircular" [
+    jaspCircular = [
       jaspBase
       jaspGraphs
       circular
       ggplot2
     ];
-    jaspCochrane = buildJaspModule "jaspCochrane" [
+    jaspCochrane = [
       jaspBase
       jaspGraphs
       jaspDescriptives
       jaspMetaAnalysis
     ];
-    jaspDescriptives = buildJaspModule "jaspDescriptives" [
+    jaspDescriptives = [
       ggplot2
       ggrepel
       jaspBase
@@ -259,11 +327,16 @@ in
       forecast
       flexplot
       ggrain
+      ggh4x
       ggpp
       ggtext
       dplyr
+      tidyplots
+      ggpubr
+      forcats
+      patchwork
     ];
-    jaspDistributions = buildJaspModule "jaspDistributions" [
+    jaspDistributions = [
       car
       fitdistrplus
       ggplot2
@@ -272,10 +345,12 @@ in
       jaspBase
       jaspGraphs
       MASS
+      nortest
       sgt
       sn
+      DistributionS7
     ];
-    jaspEquivalenceTTests = buildJaspModule "jaspEquivalenceTTests" [
+    jaspEquivalenceTTests = [
       BayesFactor
       ggplot2
       jaspBase
@@ -284,7 +359,15 @@ in
       TOSTER
       jaspTTests
     ];
-    jaspFactor = buildJaspModule "jaspFactor" [
+    jaspEsci = [
+      jaspBase
+      jaspGraphs
+      esci
+      glue
+      vdiffr
+      legendry
+    ];
+    jaspFactor = [
       ggplot2
       jaspBase
       jaspGraphs
@@ -298,13 +381,14 @@ in
       Rcsdp
       semTools
     ];
-    jaspFrequencies = buildJaspModule "jaspFrequencies" [
+    jaspFrequencies = [
       abtest
       BayesFactor
       bridgesampling
-      conting'
+      conting
       multibridge
       ggplot2
+      interp
       jaspBase
       jaspGraphs
       plyr
@@ -312,7 +396,7 @@ in
       vcd
       vcdExtra
     ];
-    jaspJags = buildJaspModule "jaspJags" [
+    jaspJags = [
       coda
       ggplot2
       ggtext
@@ -324,7 +408,7 @@ in
       scales
       stringr
     ];
-    jaspLearnBayes = buildJaspModule "jaspLearnBayes" [
+    jaspLearnBayes = [
       extraDistr
       ggplot2
       HDInterval
@@ -342,7 +426,7 @@ in
       png
       posterior
     ];
-    jaspLearnStats = buildJaspModule "jaspLearnStats" [
+    jaspLearnStats = [
       extraDistr
       ggplot2
       jaspBase
@@ -353,8 +437,10 @@ in
       ggforce
       tidyr
       igraph
+      HDInterval
+      metafor
     ];
-    jaspMachineLearning = buildJaspModule "jaspMachineLearning" [
+    jaspMachineLearning = [
       kknn
       AUC
       cluster
@@ -375,6 +461,7 @@ in
       jaspBase
       jaspGraphs
       MASS
+      mclust
       mvnormalTest
       neuralnet
       network
@@ -385,15 +472,18 @@ in
       ROCR
       Rtsne
       signal
+      VGAM
     ];
-    jaspMetaAnalysis = buildJaspModule "jaspMetaAnalysis" [
+    jaspMetaAnalysis = [
       dplyr
       ggplot2
       jaspBase
       jaspGraphs
+      jaspSem
       MASS
       metaBMA
       metafor
+      metaSEM
       psych
       purrr
       rstan
@@ -406,12 +496,17 @@ in
       metamisc
       ggmcmc
       pema
+      clubSandwich
+      CompQuadForm
+      sp
+      dfoptim
+      nleqslv
+      patchwork
     ];
-    jaspMixedModels = buildJaspModule "jaspMixedModels" [
+    jaspMixedModels = [
       afex
       emmeans
       ggplot2
-      ggpol
       jaspBase
       jaspGraphs
       lme4
@@ -422,9 +517,9 @@ in
       stanova
       withr
     ];
-    jaspNetwork = buildJaspModule "jaspNetwork" [
+    jaspNetwork = [
       bootnet
-      BDgraph
+      easybgm
       corpcor
       dplyr
       foreach
@@ -441,12 +536,13 @@ in
       snow
       stringr
     ];
-    jaspPower = buildJaspModule "jaspPower" [
+    jaspPower = [
       pwr
       jaspBase
       jaspGraphs
+      viridis
     ];
-    jaspPredictiveAnalytics = buildJaspModule "jaspPredictiveAnalytics" [
+    jaspPredictiveAnalytics = [
       jaspBase
       jaspGraphs
       bsts
@@ -459,8 +555,10 @@ in
       BART
       EBMAforecast
       imputeTS
+      scoringRules
+      scoringutils
     ];
-    jaspProcess = buildJaspModule "jaspProcess" [
+    jaspProcess = [
       blavaan
       dagitty
       ggplot2
@@ -470,7 +568,7 @@ in
       jaspJags
       runjags
     ];
-    jaspProphet = buildJaspModule "jaspProphet" [
+    jaspProphet = [
       rstan
       ggplot2
       jaspBase
@@ -478,7 +576,7 @@ in
       prophet
       scales
     ];
-    jaspQualityControl = buildJaspModule "jaspQualityControl" [
+    jaspQualityControl = [
       car
       cowplot
       daewr
@@ -505,8 +603,9 @@ in
       tibble
       vipor
       weibullness
+      flexsurv
     ];
-    jaspRegression = buildJaspModule "jaspRegression" [
+    jaspRegression = [
       BAS
       boot
       bstats
@@ -514,7 +613,6 @@ in
       emmeans
       ggplot2
       ggrepel
-      hmeasure
       jaspAnova
       jaspBase
       jaspDescriptives
@@ -531,7 +629,7 @@ in
       statmod
       VGAM
     ];
-    jaspReliability = buildJaspModule "jaspReliability" [
+    jaspReliability = [
       Bayesrel
       coda
       ggplot2
@@ -543,28 +641,32 @@ in
       lme4
       MASS
       psych
+      mirt
     ];
-    jaspRobustTTests = buildJaspModule "jaspRobustTTests" [
+    jaspRobustTTests = [
       RoBTT
       ggplot2
       jaspBase
       jaspGraphs
     ];
-    jaspSem = buildJaspModule "jaspSem" [
+    jaspSem = [
       forcats
       ggplot2
-      jaspBase
-      jaspGraphs
       lavaan
       cSEM
       reshape2
+      jaspBase
+      jaspGraphs
       semPlot
       semTools
       stringr
       tibble
       tidyr
+      SEMsens
+      mxsem
+      OpenMx
     ];
-    jaspSummaryStatistics = buildJaspModule "jaspSummaryStatistics" [
+    jaspSummaryStatistics = [
       BayesFactor
       bstats
       jaspBase
@@ -577,13 +679,14 @@ in
       SuppDists
       bayesplay
     ];
-    jaspSurvival = buildJaspModule "jaspSurvival" [
+    jaspSurvival = [
       survival
-      survminer
+      ggsurvfit
+      flexsurv
       jaspBase
       jaspGraphs
     ];
-    jaspTTests = buildJaspModule "jaspTTests" [
+    jaspTTests = [
       BayesFactor
       car
       ggplot2
@@ -593,17 +696,30 @@ in
       plotrix
       plyr
     ];
-    jaspTimeSeries = buildJaspModule "jaspTimeSeries" [
+    jaspTestModule = [
+      jaspBase
+      jaspGraphs
+      svglite
+      stringi
+    ];
+    jaspTimeSeries = [
       jaspBase
       jaspGraphs
       jaspDescriptives
       forecast
     ];
-    jaspVisualModeling = buildJaspModule "jaspVisualModeling" [
+    jaspVisualModeling = [
       flexplot
       jaspBase
       jaspGraphs
       jaspDescriptives
     ];
   };
+in
+assert (
+  lib.sort lib.lessThan (lib.attrNames jaspModules)
+  == lib.sort lib.lessThan (lib.attrNames moduleInfo)
+);
+{
+  inherit customRPackages jaspModules;
 }

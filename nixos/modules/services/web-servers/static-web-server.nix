@@ -13,12 +13,12 @@ in
 {
   options = {
     services.static-web-server = {
-      enable = lib.mkEnableOption ''Static Web Server'';
+      enable = lib.mkEnableOption "Static Web Server";
       listen = lib.mkOption {
         default = "[::]:8787";
         type = lib.types.str;
         description = ''
-          The "ListenStream" used in static-web-server.socket.
+          The {manpage}`systemd.socket(5)` "ListenStream" used in static-web-server.socket.
           This is equivalent to SWS's "host" and "port" options.
           See here for specific syntax: <https://www.freedesktop.org/software/systemd/man/systemd.socket.html#ListenStream=>
         '';

@@ -2,25 +2,28 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   argparse-addons,
   humanfriendly,
   pyelftools,
-  pythonOlder,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bincopy";
-  version = "20.0.0";
-  format = "setuptools";
+  version = "20.1.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-FM+0z5cie/Kx9bhWI99MdnrSGa/cn+BzLdLP3/RGr98=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-6UpJi5pKvnZwPDdyqtRm8VY7T8mAnaeWXxG8dwlAk7k=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     argparse-addons
     humanfriendly
     pyelftools
@@ -28,14 +31,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bincopy" ];
 
-  meta = with lib; {
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  meta = {
     description = "Mangling of various file formats that conveys binary information (Motorola S-Record, Intel HEX, TI-TXT, ELF and binary files)";
     mainProgram = "bincopy";
     homepage = "https://github.com/eerimoq/bincopy";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      frogamic
-      sbruder
+    license = lib.licenses.mit;
+    maintainers = [
     ];
   };
-}
+})

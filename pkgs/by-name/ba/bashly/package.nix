@@ -17,7 +17,7 @@ bundlerApp {
     homepage = "https://github.com/DannyBen/bashly";
     license = lib.licenses.mit;
     mainProgram = "bashly";
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 }

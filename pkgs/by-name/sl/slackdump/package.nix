@@ -7,15 +7,15 @@
   darwin,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "slackdump";
-  version = "3.0.3";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "rusq";
     repo = "slackdump";
-    tag = "v${version}";
-    hash = "sha256-fHWKKzUsvL3ine4ub4qnrp8fmc+PNwG32phCz68FC6s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-yRxaBbqVFZbDN6H8v8OPh/alE3+L8d6r4rO6ZHLxroM=";
   };
 
   nativeCheckInputs = lib.optional stdenv.hostPlatform.isDarwin darwin.IOKitTools;
@@ -26,13 +26,16 @@ buildGoModule rec {
         "TestSession_saveUserCache"
         "TestSession_GetUsers"
         "Test_exportV3" # This was skipped on upstream's CI. It is seemed that some file are missed
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        "TestWithRetry" # flaky timing-sensitive test on darwin
       ];
     in
     [
       "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$"
     ];
 
-  vendorHash = "sha256-c3Z4p/u7+fMV9kydh7fqRxSEERJI3cw1XoIPcMp0mL4=";
+  vendorHash = "sha256-XMFt4YimRYgjHG1yhVIsRPkvVhRZ8QMTIPVdk884hkk=";
 
   __darwinAllowLocalNetworking = true;
 
@@ -40,10 +43,10 @@ buildGoModule rec {
 
   meta = {
     homepage = "https://github.com/rusq/slackdump";
-    changelog = "https://github.com/rusq/slackdump/releases/tag/v${version}";
+    changelog = "https://github.com/rusq/slackdump/releases/tag/v${finalAttrs.version}";
     description = "Tools for saving Slack's data without admin privileges";
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
     mainProgram = "slackdump";
     license = lib.licenses.gpl3Plus;
   };
-}
+})

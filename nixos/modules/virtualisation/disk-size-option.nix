@@ -18,7 +18,7 @@ in
       default = if config.virtualisation.diskSizeAutoSupported then "auto" else 1024;
       defaultText = lib.literalExpression "if virtualisation.diskSizeAutoSupported then \"auto\" else 1024";
       description = ''
-        The disk size in megabytes of the virtual machine.
+        The disk size in MiB (1024×1024 bytes) of the virtual machine.
       '';
     };
   };

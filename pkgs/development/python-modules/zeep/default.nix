@@ -11,12 +11,12 @@
   isodate,
   lxml,
   mock,
+  packaging,
   platformdirs,
   pretend,
   pytest-asyncio,
   pytest-httpx,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   requests,
   requests-toolbelt,
@@ -28,16 +28,14 @@
 
 buildPythonPackage rec {
   pname = "zeep";
-  version = "4.3.1";
+  version = "4.3.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "mvantellingen";
     repo = "python-zeep";
     tag = version;
-    hash = "sha256-Bt0QqzJMKPXV91hZYETy9DKoQAELUWlYIh8w/IFTE8E=";
+    hash = "sha256-0Mzvb86f1r07PCJqTy9CGUq9Zk2PtAsFfd3SmFlOayk=";
   };
 
   build-system = [ setuptools ];
@@ -47,6 +45,7 @@ buildPythonPackage rec {
     defusedxml
     isodate
     lxml
+    packaging
     platformdirs
     pytz
     requests
@@ -55,8 +54,8 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    async_require = [ httpx ];
-    xmlsec_require = [ xmlsec ];
+    async = [ httpx ];
+    xmlsec = [ xmlsec ];
   };
 
   pythonImportsCheck = [ "zeep" ];
@@ -71,7 +70,8 @@ buildPythonPackage rec {
     pytest-httpx
     pytestCheckHook
     requests-mock
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # Failed: External connections not allowed during tests.
@@ -86,10 +86,10 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  meta = with lib; {
-    changelog = "https://github.com/mvantellingen/python-zeep/releases/tag/${version}";
+  meta = {
+    changelog = "https://github.com/mvantellingen/python-zeep/releases/tag/${src.tag}";
     description = "Python SOAP client";
     homepage = "http://docs.python-zeep.org";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

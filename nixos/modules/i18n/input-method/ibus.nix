@@ -1,12 +1,17 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   imcfg = config.i18n.inputMethod;
   cfg = imcfg.ibus;
   ibusPackage = pkgs.ibus-with-plugins.override { plugins = cfg.engines; };
   ibusEngine = lib.types.mkOptionType {
-    name  = "ibus-engine";
+    name = "ibus-engine";
     inherit (lib.types.package) descriptionClass merge;
-    check = x: (lib.types.package.check x) && (lib.attrByPath ["meta" "isIbusEngine"] false x);
+    check = x: (lib.types.package.check x) && (lib.attrByPath [ "meta" "isIbusEngine" ] false x);
   };
 
   impanel = lib.optionalString (cfg.panel != null) "--panel=${cfg.panel}";
@@ -20,33 +25,47 @@ let
       Type=Application
       Exec=${ibusPackage}/bin/ibus-daemon --daemonize --xim ${impanel}
       # GNOME will launch ibus using systemd
-      NotShowIn=GNOME;
+      # ibus complains loudly when launched from this autoStart file under KDE
+      # KDE will launch ibus from kwin if enabled in keyboard -> virtual keyboard
+      NotShowIn=GNOME;KDE;
     '';
   };
 in
 {
   imports = [
-    (lib.mkRenamedOptionModule [ "programs" "ibus" "plugins" ] [ "i18n" "inputMethod" "ibus" "engines" ])
+    (lib.mkRenamedOptionModule
+      [ "programs" "ibus" "plugins" ]
+      [ "i18n" "inputMethod" "ibus" "engines" ]
+    )
   ];
 
   options = {
     i18n.inputMethod.ibus = {
       engines = lib.mkOption {
-        type    = with lib.types; listOf ibusEngine;
-        default = [];
+        type = with lib.types; listOf ibusEngine;
+        default = [ ];
         example = lib.literalExpression "with pkgs.ibus-engines; [ mozc hangul ]";
         description =
           let
             enginesDrv = lib.filterAttrs (lib.const lib.isDerivation) pkgs.ibus-engines;
-            engines = lib.concatStringsSep ", "
-              (map (name: "`${name}`") (lib.attrNames enginesDrv));
-          in "Enabled IBus engines. Available engines are: ${engines}.";
+            engines = lib.concatStringsSep ", " (map (name: "`${name}`") (lib.attrNames enginesDrv));
+          in
+          "Enabled IBus engines. Available engines are: ${engines}.";
       };
       panel = lib.mkOption {
         type = with lib.types; nullOr path;
         default = null;
-        example = lib.literalExpression ''"''${pkgs.plasma5Packages.plasma-desktop}/libexec/kimpanel-ibus-panel"'';
+        example = lib.literalExpression ''"''${pkgs.kdePackages.plasma-desktop}/libexec/kimpanel-ibus-panel"'';
         description = "Replace the IBus panel with another panel.";
+      };
+      waylandFrontend = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Use the Wayland input method frontend.
+          This doesn't set `GTK_IM_MODULE` and `QT_IM_MODULE` environment variables.
+          See [Using Fcitx 5 on Wayland](https://fcitx-im.org/wiki/Using_Fcitx_5_on_Wayland#GTK_IM_MODULE).
+        '';
       };
     };
   };
@@ -68,9 +87,11 @@ in
     ];
 
     environment.variables = {
+      XMODIFIERS = "@im=ibus";
+    }
+    // lib.optionalAttrs (!cfg.waylandFrontend) {
       GTK_IM_MODULE = "ibus";
       QT_IM_MODULE = "ibus";
-      XMODIFIERS = "@im=ibus";
     };
 
     xdg.portal.extraPortals = lib.mkIf config.xdg.portal.enable [

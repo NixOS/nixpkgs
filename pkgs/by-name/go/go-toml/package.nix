@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 let
-  version = "2.2.3";
+  version = "2.3.1";
 in
 buildGoModule {
   pname = "go-toml";
@@ -14,20 +14,16 @@ buildGoModule {
     owner = "pelletier";
     repo = "go-toml";
     rev = "v${version}";
-    sha256 = "sha256-+l89SvJ/4SxVItys1ROLOv2hZ5euU1MF21Yn0siQHUM=";
+    sha256 = "sha256-12PFm89E8GI2toBpEZWp+VaAlywI6yBoPjz421GhMu4=";
   };
 
-  vendorHash = "sha256-YkOcpzn5AKFMDWUYbKY8DzGMiIMSyaDfexFmXv5HNQI=";
+  vendorHash = null;
 
   excludedPackages = [
     "cmd/gotoml-test-decoder"
     "cmd/gotoml-test-encoder"
     "cmd/tomltestgen"
   ];
-
-  # allowGoReference adds the flag `-trimpath` which is also denoted by, go-toml's goreleaser config
-  #  <https://github.com/pelletier/go-toml/blob/a3d5a0bb530b5206c728eed9cb57323061922bcb/.goreleaser.yaml#L13>
-  allowGoReference = true;
 
   ldflags = [
     "-s"

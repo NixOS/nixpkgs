@@ -2,10 +2,11 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   autoreconfHook,
-  wxGTK32,
-  boost,
-  lua,
+  wxwidgets_3_2,
+  boost186,
+  lua5_5,
   zlib,
   bzip2,
   xylib,
@@ -13,17 +14,30 @@
   gnuplot,
   swig,
 }:
+let
+  lua = lua5_5;
+in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fityk";
   version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "wojdyr";
     repo = "fityk";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-m2RaZMYT6JGwa3sOUVsBIzCdZetTbiygaInQWoJ4m1o=";
   };
+
+  patches = [
+    # Accept Lua 5.5 in configure (https://github.com/wojdyr/fityk/pull/64).
+    # Can be dropped at the next release.
+    (fetchpatch2 {
+      name = "fityk-detect-lua-5.5.patch";
+      url = "https://github.com/wojdyr/fityk/commit/48456231ca58211d7bcde0d2d8ac0c29cae2ab16.patch?full_index=1";
+      hash = "sha256-QkhNnGRuSP0bGqK7GtHfx2OpkEZoz8YI7M2m4f5N1Pw=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -31,8 +45,8 @@ stdenv.mkDerivation rec {
     swig
   ];
   buildInputs = [
-    wxGTK32
-    boost
+    wxwidgets_3_2
+    boost186
     lua
     zlib
     bzip2
@@ -42,7 +56,7 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--with-wx-config=${lib.getExe' (lib.getDev wxGTK32) "wx-config"}"
+    "--with-wx-config=${lib.getExe' (lib.getDev wxwidgets_3_2) "wx-config"}"
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
@@ -55,4 +69,4 @@ stdenv.mkDerivation rec {
     homepage = "https://fityk.nieto.pl/";
     platforms = lib.platforms.linux;
   };
-}
+})

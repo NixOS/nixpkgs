@@ -1,16 +1,22 @@
-{ buildPecl, lib }:
+{
+  buildPecl,
+  lib,
+  php,
+}:
 
 buildPecl rec {
-  version = "2.2.0";
+  version = "3.0.0";
   pname = "msgpack";
 
-  sha256 = "sha256-gqoeQExf9U7EHSogEwXNZZTtFKdSnpEZ+nykV+S70So=";
+  sha256 = "sha256-VTBqhHl9OZxrJpGB7EhGNPGL6hMwu9nXQFBDxZfeac0=";
 
   meta = {
+    broken = lib.versionAtLeast php.version "8.6";
     changelog = "https://pecl.php.net/package-info.php?package=msgpack&version=${version}";
     description = "PHP extension for interfacing with MessagePack";
     homepage = "https://github.com/msgpack/msgpack-php";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.php.members ++ [ lib.maintainers.ostrolucky ];
+    maintainers = [ lib.maintainers.ostrolucky ];
+    teams = [ lib.teams.php ];
   };
 }

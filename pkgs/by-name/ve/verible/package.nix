@@ -3,11 +3,12 @@
   stdenv,
   buildBazelPackage,
   fetchFromGitHub,
-  bazel_6,
+  bazel_7,
   jdk,
   bison,
   flex,
   python3,
+  cctools,
 }:
 
 let
@@ -15,18 +16,26 @@ let
   registry = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-central-registry";
-    rev = "6ca6e91cb9fa2d224f61b8a4a2a7fd6b1211e388";
-    hash = "sha256-LRD8sGbISp2LXjpg4cpbUHG2a1JbKLA7z3vSvqqXMGo=";
+    rev = "6d7a78e3bb927a52e3e2a5087729f9136d35c084";
+    hash = "sha256-qH4MYS12oKni1JMtZEm7KEpK68CSr3/45aWGmxaydEE=";
   };
+  GIT_DATE = "2026-08-16";
+  GIT_VERSION = "v0.0-4148-g1ea007ec";
 in
-buildBazelPackage rec {
+buildBazelPackage {
   pname = "verible";
 
-  # These environment variables are read in bazel/build-version.py to create
-  # a build string shown in the tools --version output.
-  # If env variables not set, it would attempt to extract it from .git/.
-  GIT_DATE = "2025-01-02";
-  GIT_VERSION = "v0.0-3894-g0a842c85";
+  env = {
+    # These environment variables are read in bazel/build-version.py to create
+    # a build string shown in the tools --version output.
+    # If env variables not set, it would attempt to extract it from .git/.
+    inherit GIT_DATE GIT_VERSION;
+    ${if stdenv.hostPlatform.isDarwin then "NIX_CFLAGS_COMPILE" else null} =
+      "-mmacos-version-min=10.15";
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    LIBTOOL = "${cctools}/bin/libtool";
+  };
 
   # Derive nix package version from GIT_VERSION: "v1.2-345-abcde" -> "1.2.345"
   version = builtins.concatStringsSep "." (
@@ -36,11 +45,11 @@ buildBazelPackage rec {
   src = fetchFromGitHub {
     owner = "chipsalliance";
     repo = "verible";
-    rev = "${GIT_VERSION}";
-    hash = "sha256-FWeEIWvrjE8ESGFUWDPtd9gLkhMDtgkw6WbXViDxQQA=";
+    tag = GIT_VERSION;
+    hash = "sha256-6mKnmIIGu7PX6dOelPW6/9dacpqFOtPEC/0wCraoEAQ=";
   };
 
-  bazel = bazel_6;
+  bazel = bazel_7;
   bazelFlags = [
     "--//bazel:use_local_flex_bison"
     "--registry"
@@ -48,10 +57,17 @@ buildBazelPackage rec {
   ];
 
   fetchAttrs = {
+    preInstall = ''
+      rm -rf $bazelOut/external/rules_shell~~sh_configure~local_config_shell
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      find $bazelOut/external/abseil-cpp~ -type f -name BUILD.bazel -exec sed -i -e 's/"layering_check",//g' {} \;
+    '';
     hash =
       {
-        aarch64-linux = "sha256-HPpRxYhS6CIhinhHNvnPij4+cJxqf073nGpNG1ItPmo=";
-        x86_64-linux = "sha256-gM4hsuHMF4V1PgykjQ0yO652luoRJvNdB2xF6P8uxRc=";
+        aarch64-linux = "sha256-1jEiJJycHZ2LybV13AUCXjUbUTY1ZhH09aG9oVzOEto=";
+        x86_64-linux = "sha256-RXji3oV9ccUfje8+i73w7dox9e4wZH3KADJ+YecFgL4=";
+        aarch64-darwin = "sha256-mQM82RlRIyLRZeo5vQh+Bm7W+1eCmwj9yEYRe9blJFg=";
       }
       .${system} or (throw "No hash for system: ${system}");
   };
@@ -91,15 +107,13 @@ buildBazelPackage rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Suite of SystemVerilog developer tools. Including a style-linter, indexer, formatter, and language server";
     homepage = "https://github.com/chipsalliance/verible";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       hzeller
       newam
     ];
-    # Platforms linux only currently; some LIBTOOL issue on Darwin w/ bazel
-    platforms = platforms.linux;
   };
 }

@@ -4,31 +4,25 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pdfrip";
-  version = "2.0.1";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "mufeedvh";
     repo = "pdfrip";
-    tag = "v${version}";
-    hash = "sha256-9KDWd71MJ2W9Xp3uqp0iZMmkBwIay+L4gnPUt7hylS0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VytsSVcKx1/A9BSlmRdkD61txDvFOaSfG411565q9eY=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoHash = "sha256-JKZ29fW/B4rJe6g6VKkgZdxlA2eaaAgjztFQ/5kDF1o=";
 
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "PDF password cracking utility";
     homepage = "https://github.com/mufeedvh/pdfrip";
-    changelog = "https://github.com/mufeedvh/pdfrip/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/mufeedvh/pdfrip/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pdfrip";
   };
-}
+})

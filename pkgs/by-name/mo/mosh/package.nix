@@ -9,26 +9,29 @@
   makeWrapper,
   perl,
   openssl,
+  autoconf-archive,
   autoreconfHook,
   openssh,
   bash-completion,
-  fetchpatch,
-  withUtempter ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl,
+  withUtempter ? stdenv.hostPlatform.isLinux,
   libutempter,
+  # build server binary only when set to false (useful for perlless systems)
+  withClient ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mosh";
   version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "mobile-shell";
-    repo = pname;
-    rev = "mosh-${version}";
+    repo = "mosh";
+    rev = "mosh-${finalAttrs.version}";
     hash = "sha256-tlSsHu7JnXO+sorVuWWubNUNdb9X0/pCaiGG5Y0X/g8=";
   };
 
   nativeBuildInputs = [
+    autoconf-archive
     autoreconfHook
     pkg-config
     makeWrapper
@@ -41,8 +44,11 @@ stdenv.mkDerivation rec {
     zlib
     openssl
     bash-completion
+  ]
+  ++ lib.optionals withClient [
     perl
-  ] ++ lib.optional withUtempter libutempter;
+  ]
+  ++ lib.optional withUtempter libutempter;
 
   strictDeps = true;
 
@@ -53,15 +59,15 @@ stdenv.mkDerivation rec {
     ./mosh-client_path.patch
     # Fix build with bash-completion 2.10
     ./bash_completion_datadir.patch
-
-    # Fixes build with protobuf3 23.x
-    (fetchpatch {
-      url = "https://github.com/mobile-shell/mosh/commit/eee1a8cf413051c2a9104e8158e699028ff56b26.patch";
-      hash = "sha256-CouLHWSsyfcgK3k7CvTK3FP/xjdb1pfsSXYYQj3NmCQ=";
-    })
   ];
 
+  # remove the m4 directory, as it contains only ancient versions of macros
+  # from autoconf-archive or pkg-config. instead, we fetch up-to-date versions
+  # from the packages which provide them. this allows selecting modern C++
+  # standard versions, which is important with e.g. GCC 16.
   postPatch = ''
+    rm -rf m4
+
     substituteInPlace scripts/mosh.pl \
       --subst-var-by ssh "${openssh}/bin/ssh" \
       --subst-var-by mosh-client "$out/bin/mosh-client"
@@ -69,11 +75,19 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-completion" ] ++ lib.optional withUtempter "--with-utempter";
 
-  postInstall = ''
-    wrapProgram $out/bin/mosh --prefix PERL5LIB : $PERL5LIB
-  '';
+  postInstall =
+    if withClient then
+      ''
+        wrapProgram $out/bin/mosh --prefix PERL5LIB : $PERL5LIB
+      ''
+    else
+      ''
+        rm $out/bin/mosh
+        rm $out/bin/mosh-client
+        rm -r $out/share/{man,bash-completion}
+      '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://mosh.org/";
     description = "Mobile shell (ssh replacement)";
     longDescription = ''
@@ -84,8 +98,8 @@ stdenv.mkDerivation rec {
       Mosh is a replacement for SSH. It's more robust and responsive,
       especially over Wi-Fi, cellular, and long-distance links.
     '';
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ skeuchel ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

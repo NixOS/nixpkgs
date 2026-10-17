@@ -2,92 +2,98 @@
   lib,
   stdenv,
   fetchgit,
+  fetchpatch2,
   ant,
-  jdk11,
-  git,
+  jdk17,
   xmlstarlet,
   stripJavaArchivesHook,
-  xcbuild,
   udev,
-  xorg,
+  libxxf86vm,
+  libxt,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
   libgbm,
   coreutils,
 }:
 
-let
-  version = "2.4.0";
-
-  gluegen-src = fetchgit {
-    url = "git://jogamp.org/srv/scm/gluegen.git";
-    rev = "v${version}";
-    hash = "sha256-qQzq7v2vMFeia6gXaNHS3AbOp9HhDRgISp7P++CKErA=";
-    fetchSubmodules = true;
-  };
-  jogl-src = fetchgit {
-    url = "git://jogamp.org/srv/scm/jogl.git";
-    rev = "v${version}";
-    hash = "sha256-PHDq7uFEQfJ2P0eXPUi0DGFR1ob/n5a68otgzpFnfzQ=";
-    fetchSubmodules = true;
-  };
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jogl";
-  inherit version;
+  version = "2.6.0";
 
   srcs = [
-    gluegen-src
-    jogl-src
+    (fetchgit {
+      url = "git://jogamp.org/srv/scm/gluegen.git";
+      rev = "v${finalAttrs.version}";
+      hash = "sha256-Bvl2vZ8EjnGdG0ZVbI1YB0nfhT8ZedhRDdrjRFVMm34=";
+      fetchSubmodules = true;
+    })
+    (fetchgit {
+      url = "git://jogamp.org/srv/scm/jogl.git";
+      rev = "v${finalAttrs.version}";
+      hash = "sha256-0g8rvDLJkVIEJ7Oc4F7Aot+t3/dIme6RGEamdte8qt8=";
+      fetchSubmodules = true;
+    })
   ];
   sourceRoot = ".";
 
   unpackCmd = "cp -r $curSrc \${curSrc##*-}";
 
-  postPatch =
-    ''
-      substituteInPlace gluegen/src/java/com/jogamp/common/util/IOUtil.java \
-        --replace-fail '#!/bin/true' '#!${coreutils}/bin/true'
-    ''
-    # prevent looking for native libraries in /usr/lib
-    + ''
-      substituteInPlace jogl/make/build-*.xml \
-        --replace-warn 'dir="''${TARGET_PLATFORM_USRLIBS}"' ""
-    ''
-    # force way to do disfunctional "ant -Dsetup.addNativeBroadcom=false" and disable dependency on raspberrypi drivers
-    # if arm/aarch64 support will be added, this block might be commented out on those platforms
-    # on x86 compiling with default "setup.addNativeBroadcom=true" leads to unsatisfied import "vc_dispmanx_resource_delete" in libnewt.so
-    + ''
-      xmlstarlet ed --inplace \
-        --delete '//*[@if="setup.addNativeBroadcom"]' \
-        jogl/make/build-newt.xml
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      sed -i '/if="use.macos/d' gluegen/make/gluegen-cpptasks-base.xml
-      rm -r jogl/oculusvr-sdk
-    '';
+  patches = [
+    (fetchpatch2 {
+      name = "fix-gcc-issue.patch";
+      url = "https://jogamp.org/cgit/jogl.git/patch/?id=d901bd308cc82e189344200cee28a79a808683c9";
+      hash = "sha256-pVvCY1AA75zXQ2/xxp3jyRTAbvnppV6MsJVmdZbLNJE=";
+      stripLen = 1;
+      extraPrefix = "jogl/";
+    })
+    ./zero-width-space-fix.patch
+  ];
 
-  nativeBuildInputs =
-    [
-      ant
-      jdk11
-      git
-      xmlstarlet
-      stripJavaArchivesHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      xcbuild
-    ];
+  postPatch = ''
+    substituteInPlace gluegen/src/java/com/jogamp/common/util/IOUtil.java \
+      --replace-fail 'getExeTestShellCodeUnix("/usr/bin/true")' 'getExeTestShellCodeUnix("${coreutils}/bin/true")'
+  ''
+  # prevent looking for native libraries in /usr/lib
+  + ''
+    substituteInPlace jogl/make/build-*.xml \
+      --replace-warn 'dir="''${TARGET_PLATFORM_USRLIBS}"' ""
+  ''
+  # force way to do dysfunctional "ant -Dsetup.addNativeBroadcom=false" and disable dependency on raspberrypi drivers
+  # if arm/aarch64 support will be added, this block might be commented out on those platforms
+  # on x86 compiling with default "setup.addNativeBroadcom=true" leads to unsatisfied import "vc_dispmanx_resource_delete" in libnewt.so
+  + ''
+    xmlstarlet ed --inplace \
+      --delete '//*[@if="setup.addNativeBroadcom"]' \
+      jogl/make/build-newt.xml
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    sed -i '/if="use.macos/d' gluegen/make/gluegen-cpptasks-base.xml
+    rm -r jogl/oculusvr-sdk
+  '';
+
+  nativeBuildInputs = [
+    ant
+    jdk17
+    xmlstarlet
+    stripJavaArchivesHook
+  ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     udev
-    xorg.libX11
-    xorg.libXrandr
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXt
-    xorg.libXxf86vm
-    xorg.libXrender
+    libx11
+    libxrandr
+    libxcursor
+    libxi
+    libxt
+    libxxf86vm
+    libxrender
     libgbm
   ];
+
+  strictDeps = true;
 
   env = {
     SOURCE_LEVEL = "1.8";
@@ -120,11 +126,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Java libraries for 3D Graphics, Multimedia and Processing";
     homepage = "https://jogamp.org/";
     changelog = "https://jogamp.org/deployment/jogamp-current/archive/ChangeLogs/";
-    license = licenses.bsd3;
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
   };
-}
+})

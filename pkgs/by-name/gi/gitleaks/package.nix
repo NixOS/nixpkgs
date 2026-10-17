@@ -6,25 +6,30 @@
   installShellFiles,
   nix-update-script,
   versionCheckHook,
+  git,
 }:
 
 buildGoModule rec {
   pname = "gitleaks";
-  version = "8.23.1";
+  version = "8.30.1";
 
   src = fetchFromGitHub {
-    owner = "zricethezav";
+    owner = "gitleaks";
     repo = "gitleaks";
     tag = "v${version}";
-    hash = "sha256-gz/2DwkvSY6vOKW1ttJcLjjtii0jWIdQC1/xzU5vCRA=";
+    hash = "sha256-PpMquYyXNN6KFwN/efY5+gr+4IhSKPoAy2M/rcqfW5k=";
   };
 
-  vendorHash = "sha256-hq3v//fhCUOvKPBZ/+YrLIc4nDLxR9Yc+MeIXY7TArA=";
+  vendorHash = "sha256-whJtl34dNltH/dk9qWSThcCYXC0x9PzbAUOO97Int+k=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/zricethezav/gitleaks/v${lib.versions.major version}/cmd.Version=${version}"
+    "-X=github.com/zricethezav/gitleaks/v${lib.versions.major version}/version.Version=${version}"
+  ];
+
+  subPackages = [
+    "."
   ];
 
   nativeBuildInputs = [
@@ -32,10 +37,12 @@ buildGoModule rec {
     versionCheckHook
   ];
 
-  # With v8 the config tests are blocking
-  doCheck = false;
+  nativeCheckInputs = [ git ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
+    install -Dm444 config/gitleaks.toml $out/etc/gitleaks.toml
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ${pname} \
       --bash <($out/bin/${pname} completion bash) \
       --fish <($out/bin/${pname} completion fish) \
@@ -46,16 +53,19 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Scan git repos (or files) for secrets";
     longDescription = ''
       Gitleaks is a SAST tool for detecting hardcoded secrets like passwords,
       API keys and tokens in git repos.
     '';
-    homepage = "https://github.com/zricethezav/gitleaks";
-    changelog = "https://github.com/zricethezav/gitleaks/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    homepage = "https://github.com/gitleaks/gitleaks";
+    changelog = "https://github.com/gitleaks/gitleaks/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      fab
+      friedow
+    ];
     mainProgram = "gitleaks";
   };
 }

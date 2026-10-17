@@ -1,29 +1,30 @@
 {
   lib,
   bleak,
+  bleak-retry-connector,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aioacaia";
-  version = "0.1.13";
+  version = "0.2.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "zweckj";
     repo = "aioacaia";
     tag = "v${version}";
-    hash = "sha256-c+xtVUSyH9dBz97eI+8YYG/yW08kZFLNXnHudxYchCE=";
+    hash = "sha256-asD/ZmlKVn0wwElpNS8EsfHDR80waf8+2FaIxf2WWbI=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [ bleak ];
+  dependencies = [
+    bleak
+    bleak-retry-connector
+  ];
 
   # Module only has a homebrew tests
   doCheck = false;
@@ -33,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Async implementation of pyacaia";
     homepage = "https://github.com/zweckj/aioacaia";
-    changelog = "https://github.com/zweckj/aioacaia/releases/tag/v${version}";
-    license = lib.licenses.gpl3Only;
+    changelog = "https://github.com/zweckj/aioacaia/releases/tag/${src.tag}";
+    license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

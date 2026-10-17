@@ -2,33 +2,44 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+
+  # build-system
+  hatchling,
+
+  # dependencies
   latexcodec,
   pyyaml,
-  setuptools,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  version = "0.24.0";
-  format = "setuptools";
   pname = "pybtex";
-
-  doCheck = false;
-  pythonImportsCheck = [ "pybtex" ];
-
-  propagatedBuildInputs = [
-    latexcodec
-    pyyaml
-    setuptools
-  ];
+  version = "0.26.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "818eae35b61733e5c007c3fcd2cfb75ed1bc8b4173c1f70b56cc4c0802d34755";
+    hash = "sha256-LlVDvqQk5g6eQu73C/9Ze+SGSdj2i6Bhp6CSskd9VGQ=";
   };
 
-  meta = with lib; {
-    homepage = "https://pybtex.org/";
+  build-system = [ hatchling ];
+
+  dependencies = [
+    latexcodec
+    pyyaml
+  ];
+
+  pythonImportsCheck = [ "pybtex" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  meta = {
     description = "BibTeX-compatible bibliography processor written in Python";
-    license = licenses.mit;
+    homepage = "https://pybtex.org/";
+    changelog = "https://bitbucket.org/pybtex-devs/pybtex/src/master/CHANGES";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

@@ -10,6 +10,14 @@
   protect,
   mount,
   fsck,
+  logger,
+  devmatch,
+  sort,
+  kldload,
+  kldstat,
+  devctl,
+  sed,
+  gnugrep,
 }:
 let
   rcDepsPath = lib.makeBinPath [
@@ -22,6 +30,14 @@ let
     mount
     protect
     fsck
+    logger
+    devmatch
+    sort
+    kldload
+    kldstat
+    devctl
+    sed
+    gnugrep
   ];
 in
 mkDerivation {
@@ -33,49 +49,62 @@ mkDerivation {
     "services"
   ];
 
-  postPatch =
+  postPatch = ''
+    substituteInPlace "$BSDSRCDIR/libexec/rc/Makefile" \
+      --replace-fail /etc $out/etc \
+      --replace-fail /libexec $out/libexec
+    substituteInPlace "$BSDSRCDIR/libexec/rc/rc.d/Makefile" \
+      --replace-fail /etc $services/etc \
+      --replace-fail /var $services/var
+  ''
+  + (
+    let
+      bins = {
+        "/sbin/sysctl" = sysctl;
+        "/usr/bin/protect" = protect;
+        "/usr/bin/id" = id;
+        "/bin/ps" = bin;
+        "/bin/cpuset" = bin;
+        "/usr/bin/stat" = stat;
+        "/bin/rm" = bin;
+        "/bin/chmod" = bin;
+        "/bin/cat" = bin;
+        "/bin/sync" = bin;
+        "/bin/sleep" = bin;
+        "/bin/date" = bin;
+        "/usr/bin/logger" = logger;
+        "logger" = logger;
+        "kenv" = bin;
+      };
+      scripts = [
+        "rc"
+        "rc.initdiskless"
+        "rc.shutdown"
+        "rc.subr"
+        "rc.suspend"
+        "rc.resume"
+        "rc.conf"
+      ];
+      scriptPaths = "$BSDSRCDIR/libexec/rc/{${lib.concatStringsSep "," scripts}}";
+    in
+    # set PATH correctly in scripts
     ''
-      substituteInPlace "$BSDSRCDIR/libexec/rc/Makefile" --replace-fail /etc $out/etc
-      substituteInPlace "$BSDSRCDIR/libexec/rc/rc.d/Makefile" \
-        --replace-fail /etc $services/etc \
-        --replace-fail /var $services/var
+      sed -E -i -e "s|PATH=.*|PATH=${rcDepsPath}|g" ${scriptPaths}
+      sed -E -i -e "/etc\/rc.subr/i export PATH=${rcDepsPath}" $BSDSRCDIR/libexec/rc/rc.d/*
     ''
-    + (
-      let
-        bins = [
-          "/sbin/sysctl"
-          "/usr/bin/protect"
-          "/usr/bin/id"
-          "/bin/ps"
-          "/bin/cpuset"
-          "/usr/bin/stat"
-          "/bin/rm"
-          "/bin/chmod"
-          "/bin/cat"
-          "/bin/sync"
-          "/bin/sleep"
-          "/bin/date"
-        ];
-        scripts = [
-          "rc"
-          "rc.initdiskless"
-          "rc.shutdown"
-          "rc.subr"
-          "rc.suspend"
-          "rc.resume"
-        ];
-        scriptPaths = "$BSDSRCDIR/libexec/rc/{${lib.concatStringsSep "," scripts}}";
-      in
-      # set PATH correctly in scripts
+    # replace executable references with nix store filepaths
+    + lib.concatMapStringsSep "\n" (
+      {
+        fname ? name,
+        name,
+        value,
+      }:
       ''
-        sed -E -i -e "s|PATH=.*|PATH=${rcDepsPath}|g" ${scriptPaths}
-      ''
-      # replace executable absolute filepaths with PATH lookups
-      + lib.concatMapStringsSep "\n" (fname: ''
-        sed -E -i -e "s|${fname}|${lib.last (lib.splitString "/" fname)}|g" \
-          ${scriptPaths}'') bins
-      + "\n"
-    );
+        sed -E -i -e "s|${fname}|${lib.getBin value}/bin/${lib.last (lib.splitString "/" fname)}|g" \
+          ${scriptPaths}''
+    ) (lib.attrsToList bins)
+    + "\n"
+  );
 
   skipIncludesPhase = true;
 

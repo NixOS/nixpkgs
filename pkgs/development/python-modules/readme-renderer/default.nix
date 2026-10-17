@@ -7,21 +7,18 @@
   nh3,
   pygments,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "readme-renderer";
-  version = "44.0";
+  version = "45.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "readme_renderer";
-    inherit version;
-    hash = "sha256-hxIDTqu/poBcrPFAK07rKnMCj3LRFm1vXLf5wEfF0eE=";
+    inherit (finalAttrs) version;
+    hash = "sha256-AwqPrHSQT4+6Ea0btpZOP3boltx+XnHxavGQyQVmltE=";
   };
 
   build-system = [ setuptools ];
@@ -32,9 +29,14 @@ buildPythonPackage rec {
     pygments
   ];
 
-  optional-dependencies.md = [ cmarkgfm ];
+  optional-dependencies = {
+    md = [ cmarkgfm ];
+  };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.md;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   disabledTests = [
     "test_rst_fixtures"
@@ -43,11 +45,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "readme_renderer" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for rendering readme descriptions";
     homepage = "https://github.com/pypa/readme_renderer";
-    changelog = "https://github.com/pypa/readme_renderer/releases/tag/${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/pypa/readme_renderer/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

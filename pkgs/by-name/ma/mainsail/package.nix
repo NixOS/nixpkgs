@@ -2,23 +2,26 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  nodejs_22,
 }:
 
 buildNpmPackage rec {
   pname = "mainsail";
-  version = "2.13.2";
+  version = "2.18.2";
 
   src = fetchFromGitHub {
     owner = "mainsail-crew";
     repo = "mainsail";
     rev = "v${version}";
-    hash = "sha256-rXavUkoFRw5fWCisdz/eD+wL1Sc+vExyjskVEIN4QNQ=";
+    hash = "sha256-Djw5wwVflhU9G99GLUNO0a6wDZTB4y/yBqRruUJZQis=";
   };
 
-  npmDepsHash = "sha256-MzPXDy9sX7Y5dUm3qp3OORdEz8QyL5j4M4eXl0gtopo=";
+  npmDepsHash = "sha256-fQnAVwBME4oJ15sOmZAr4qwxSpA5qqr8zJxEsVVGwSg=";
+
+  nodejs = nodejs_22;
 
   # Prevent Cypress binary download.
-  CYPRESS_INSTALL_BINARY = 0;
+  env.CYPRESS_INSTALL_BINARY = 0;
 
   preConfigure = ''
     # Make the build.zip target do nothing, since we will just copy these files later.
@@ -34,14 +37,13 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Web interface for managing and controlling 3D printers with Klipper";
     homepage = "https://docs.mainsail.xyz";
     changelog = "https://github.com/mainsail-crew/mainsail/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
-      shhht
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       lovesegfault
       wulfsta
     ];

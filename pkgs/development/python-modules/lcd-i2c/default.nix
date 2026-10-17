@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   poetry-core,
-  pythonOlder,
   smbus2,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "lcd-i2c";
   version = "0.2.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
@@ -31,11 +28,11 @@ buildPythonPackage rec {
   # Needs /dev/i2c-1
   # pythonImportsCheck = [ "lcd_i2c" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for interacting with an I2C LCD screen through Python";
     homepage = "https://pypi.org/project/lcd-i2c/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ oliver-koss ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ oliver-koss ];
     mainProgram = "lcd-i2c";
   };
 }

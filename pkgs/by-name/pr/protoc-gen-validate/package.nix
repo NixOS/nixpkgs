@@ -4,25 +4,25 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "protoc-gen-validate";
-  version = "1.1.0";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "bufbuild";
     repo = "protoc-gen-validate";
-    rev = "v${version}";
-    sha256 = "sha256-QY7MqggMNYq6x1VkkWVGN07VZgkexe7mGj/+6QvJiHs=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-YujY2XNNtrVw7+kUxSwF9gbD2AzPV6zKV0zSun89VEY=";
   };
 
-  vendorHash = "sha256-DqM+Am7Pi0UTz7NxYOCMN9W3H6WipX4oRRa8ceMsYZ0=";
+  vendorHash = "sha256-r4oT4Jd21hQccvGEqOXpEKqUy6lvMKN+vF8e2KxY6oQ=";
 
   excludedPackages = [ "tests" ];
 
-  meta = with lib; {
+  meta = {
     description = "Protobuf plugin for generating polyglot message validators";
     homepage = "https://github.com/envoyproxy/protoc-gen-validate";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ matthewpi ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ matthewpi ];
   };
-}
+})

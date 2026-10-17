@@ -2,15 +2,16 @@
   lib,
   appimageTools,
   fetchurl,
+  nix-update-script,
 }:
 
 let
-  version = "2.0.13";
+  version = "2.1.29";
   pname = "lunatask";
 
   src = fetchurl {
-    url = "https://lunatask.app/download/Lunatask-${version}.AppImage";
-    hash = "sha256-/OIIyl43oItg0XEbhEnB+rPBcY3XuQlurL5Ad+0T3aM=";
+    url = "https://github.com/lunatask/lunatask/releases/download/v${version}/Lunatask-${version}.AppImage";
+    hash = "sha256-Ds1aOejeFA4Gl9ysnp1NOgsoJSz5OA/k4gOBRCj5KZo=";
   };
 
   appimageContents = appimageTools.extract {
@@ -28,7 +29,7 @@ appimageTools.wrapType2 {
       --replace-fail 'Exec=AppRun' 'Exec=lunatask'
   '';
 
-  passthru.updateScript = ./update.py;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "All-in-one encrypted todo list, notebook, habit and mood tracker, pomodoro timer, and journaling app";
@@ -40,7 +41,10 @@ appimageTools.wrapType2 {
     changelog = "https://lunatask.app/releases/${version}";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ zi3m5f ];
+    maintainers = with lib.maintainers; [
+      MrSom3body
+      zi3m5f
+    ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "lunatask";
   };

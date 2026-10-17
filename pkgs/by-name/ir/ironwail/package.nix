@@ -10,6 +10,7 @@
   libopus,
   opusfile,
   libogg,
+  libGL,
   curl,
   libxmp,
   mpg123,
@@ -22,11 +23,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ironwail";
-  version = "0.8.0";
+  version = "0.8.2";
 
   src = fetchurl {
     url = "https://github.com/andrei-drexler/ironwail/archive/refs/tags/v${finalAttrs.version}.tar.gz";
-    hash = "sha256-IcODVQ0FgfTi74cvJnM6cPh/Der1bbltdTTo5hITUeI=";
+    hash = "sha256-rt+u0oY2W7UzsIUs5Tvd3IcBXsM2Z0UEfXNVLejc06U=";
   };
 
   sourceRoot = "${finalAttrs.pname}-${finalAttrs.version}/Quake";
@@ -36,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     vulkan-headers
     gzip
+    libGL
     libvorbis
     libmad
     flac

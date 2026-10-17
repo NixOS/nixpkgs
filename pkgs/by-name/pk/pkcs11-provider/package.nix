@@ -6,6 +6,8 @@
   nss,
   p11-kit,
   opensc,
+  softhsm,
+  kryoptic,
   gnutls,
   expect,
   which,
@@ -14,22 +16,23 @@
   pkg-config,
   valgrind,
   python3,
+  xxd,
   nix-update-script,
 }:
 
 let
   pkcs11ProviderPython3 = python3.withPackages (pythonPkgs: with pythonPkgs; [ six ]);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pkcs11-provider";
-  version = "0.6";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
-    owner = "latchset";
+    owner = "openssl-projects";
     repo = "pkcs11-provider";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-wYqmxxAzraaVR2+mbsRfgyvD/tapn8UOO0UzBX2ZJH4=";
+    hash = "sha256-//sVGWSXCRc7zimD78ykoyJ0gQk/LFrdf+A6yKJkxGs=";
   };
 
   buildInputs = [
@@ -44,20 +47,37 @@ stdenv.mkDerivation rec {
     which
   ];
 
-  # don't add SoftHSM to here: https://github.com/openssl/openssl/issues/22508
   nativeCheckInputs = [
     p11-kit.bin
     opensc
+    kryoptic
     nss.tools
     gnutls
     openssl.bin
     expect
-    valgrind
+    xxd
     pkcs11ProviderPython3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    valgrind
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+    # softokn and kryoptic are OK; softhsm is pretty flaky.
+    # This fails with a `pkcs11-provider:softhsm / tls - FAIL - exit status 1`.
+    # Considering that kryoptic is the Rust replacement, we can rely on it instead:
+    # https://github.com/softhsm/SoftHSMv2/issues/803
+    softhsm
   ];
 
+  env = {
+    KRYOPTIC = "${lib.getLib kryoptic}/lib";
+  };
+
+  # Need to search $KRYOPTIC for the path to the actual Kryoptic library.
   postPatch = ''
     patchShebangs --build .
+    substituteInPlace tests/kryoptic-init.sh \
+      --replace-fail /usr/local/lib/kryoptic "\\''${KRYOPTIC}"
   '';
 
   preInstall = ''
@@ -75,20 +95,23 @@ stdenv.mkDerivation rec {
   # Frequently fails due to a race condition.
   enableParallelInstalling = false;
 
+  # Tests bind to localhost.
+  __darwinAllowLocalNetworking = true;
+
   doCheck = true;
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex"
-      "v(\\d\\.\\d)"
+      "v(\\d+\\.\\d+\\.\\d+)"
     ];
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/latchset/pkcs11-provider";
     description = "OpenSSL 3.x provider to access hardware or software tokens using the PKCS#11 Cryptographic Token Interface";
-    maintainers = with maintainers; [ numinit ];
-    license = licenses.asl20;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ numinit ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
   };
-}
+})

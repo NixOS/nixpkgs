@@ -10,41 +10,40 @@
   gnutar,
   hivex,
   makeWrapper,
+  nix-update-script,
   nixosTests,
   pkg-config,
-  squashfsTools,
+  squashfs-tools,
   stdenv,
   wimlib,
 }:
 
 let
-  bins =
-    [
-      coreutils
-      debootstrap
-      gnupg
-      gnutar
-      squashfsTools
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isx86_64 [
-      # repack-windows deps
-      cdrkit
-      hivex
-      wimlib
-    ];
+  bins = [
+    coreutils
+    debootstrap
+    gnupg
+    gnutar
+    squashfs-tools
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+    # repack-windows deps
+    cdrkit
+    hivex
+    wimlib
+  ];
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "distrobuilder";
-  version = "3.1";
+  version = "3.4.0";
 
-  vendorHash = "sha256-3oHLvOdHbOdaL2FTo+a5HmayNi/i3zoAsU/du9h1N30=";
+  vendorHash = "sha256-ipKwCeUNVgtkQTPOB5lze2SFaktClUr+4+c0uLX5J/w=";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "distrobuilder";
-    rev = "refs/tags/distrobuilder-${version}";
-    sha256 = "sha256-cIzIoLQmg1kgI1QRAmFh/ca88PJBW2yIY92BKHKwTMk=";
-    fetchSubmodules = false;
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-dcRUUHpaqNCq4eld+anVrGKywJNpZLJYu3WtERlP3Ps=";
   };
 
   buildInputs = bins;
@@ -55,7 +54,14 @@ buildGoModule rec {
   nativeBuildInputs = [
     pkg-config
     makeWrapper
-  ] ++ bins;
+  ]
+  ++ bins;
+
+  # upstream only supports make targets due to GOFLAGS, but none of the targets work for us
+  # this could be fragile, but the alternative is copying them here
+  preBuild = ''
+    export GOFLAGS="$(grep 'export GOFLAGS' Makefile | sed 's/export GOFLAGS=//') -trimpath"
+  '';
 
   postInstall = ''
     wrapProgram $out/bin/distrobuilder --prefix PATH ":" ${lib.makeBinPath bins}
@@ -66,15 +72,18 @@ buildGoModule rec {
       incus-lts = nixosTests.incus-lts.container;
     };
 
-    generator = callPackage ./generator.nix { inherit src version; };
+    generator = callPackage ./generator.nix { inherit (finalAttrs) src version; };
+
+    updateScript = nix-update-script { };
   };
 
   meta = {
     description = "System container image builder for LXC and LXD";
     homepage = "https://github.com/lxc/distrobuilder";
+    changelog = "https://github.com/lxc/distrobuilder/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = lib.teams.lxc.members;
+    teams = [ lib.teams.lxc ];
     platforms = lib.platforms.linux;
     mainProgram = "distrobuilder";
   };
-}
+})

@@ -12,6 +12,7 @@
   gnupg,
   gpgme,
   libkrb5,
+  zlib,
   headerCache ? true,
   sslSupport ? true,
   saslSupport ? true,
@@ -30,7 +31,7 @@ assert gpgmeSupport -> sslSupport;
 
 stdenv.mkDerivation rec {
   pname = "mutt";
-  version = "2.2.13";
+  version = "2.4.3";
   outputs = [
     "out"
     "doc"
@@ -39,19 +40,19 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://ftp.mutt.org/pub/mutt/${pname}-${version}.tar.gz";
-    hash = "sha256-6yP63cHMl9hnaT86Sp8wlJrZN2WtW2/a4nl6QAHFjvs=";
+    hash = "sha256-zpFU46/t5iLZi5CiLIfQbzIFHJMKmvsrfvQWVsTbyUg=";
   };
 
-  patches =
-    [
-      # Avoid build-only references embedding into 'mutt -v' output.
-      ./no-build-only-refs.patch
-    ]
-    ++ lib.optional smimeSupport (fetchpatch {
-      url = "https://salsa.debian.org/mutt-team/mutt/raw/debian/1.10.1-2/debian/patches/misc/smime.rc.patch";
-      sha256 = "0b4i00chvx6zj9pcb06x2jysmrcb2znn831lcy32cgfds6gr3nsi";
-    });
+  patches = [
+    # Avoid build-only references embedding into 'mutt -v' output.
+    ./no-build-only-refs.patch
+  ]
+  ++ lib.optional smimeSupport (fetchpatch {
+    url = "https://salsa.debian.org/mutt-team/mutt/raw/debian/1.10.1-2/debian/patches/misc/smime.rc.patch";
+    sha256 = "0b4i00chvx6zj9pcb06x2jysmrcb2znn831lcy32cgfds6gr3nsi";
+  });
 
+  enableParallelBuilding = true;
   strictDeps = true;
 
   nativeBuildInputs = [
@@ -59,38 +60,39 @@ stdenv.mkDerivation rec {
     which
   ];
 
-  buildInputs =
-    [ ncurses ]
-    ++ lib.optional headerCache gdbm
-    ++ lib.optional sslSupport openssl
-    ++ lib.optional gssSupport libkrb5
-    ++ lib.optional saslSupport cyrus_sasl;
+  buildInputs = [
+    ncurses
+    zlib
+  ]
+  ++ lib.optional headerCache gdbm
+  ++ lib.optional sslSupport openssl
+  ++ lib.optional gssSupport libkrb5
+  ++ lib.optional saslSupport cyrus_sasl;
 
-  configureFlags =
-    [
-      (lib.enableFeature headerCache "hcache")
-      (lib.enableFeature gpgmeSupport "gpgme")
-      (lib.enableFeature imapSupport "imap")
-      (lib.enableFeature smtpSupport "smtp")
-      (lib.enableFeature pop3Support "pop")
-      (lib.enableFeature withSidebar "sidebar")
-      "--with-mailpath="
+  configureFlags = [
+    (lib.enableFeature headerCache "hcache")
+    (lib.enableFeature gpgmeSupport "gpgme")
+    (lib.enableFeature imapSupport "imap")
+    (lib.enableFeature smtpSupport "smtp")
+    (lib.enableFeature pop3Support "pop")
+    (lib.enableFeature withSidebar "sidebar")
+    "--with-mailpath="
 
-      # Look in $PATH at runtime, instead of hardcoding /usr/bin/sendmail
-      "ac_cv_path_SENDMAIL=sendmail"
+    # Look in $PATH at runtime, instead of hardcoding /usr/bin/sendmail
+    "ac_cv_path_SENDMAIL=sendmail"
 
-      # This allows calls with "-d N", that output debug info into ~/.muttdebug*
-      "--enable-debug"
+    # This allows calls with "-d N", that output debug info into ~/.muttdebug*
+    "--enable-debug"
 
-      # The next allows building mutt without having anything setgid
-      # set by the installer, and removing the need for the group 'mail'
-      # I set the value 'mailbox' because it is a default in the configure script
-      "--with-homespool=mailbox"
-    ]
-    ++ lib.optional sslSupport "--with-ssl"
-    ++ lib.optional gssSupport "--with-gss"
-    ++ lib.optional saslSupport "--with-sasl"
-    ++ lib.optional gpgmeSupport "--with-gpgme-prefix=${lib.getDev gpgme}";
+    # The next allows building mutt without having anything setgid
+    # set by the installer, and removing the need for the group 'mail'
+    # I set the value 'mailbox' because it is a default in the configure script
+    "--with-homespool=mailbox"
+  ]
+  ++ lib.optional sslSupport "--with-ssl"
+  ++ lib.optional gssSupport "--with-gss"
+  ++ lib.optional saslSupport "--with-sasl"
+  ++ lib.optional gpgmeSupport "--with-gpgme-prefix=${lib.getDev gpgme}";
 
   postPatch = lib.optionalString (smimeSupport || gpgmeSupport) ''
     sed -i 's#/usr/bin/openssl#${openssl}/bin/openssl#' smime_keys.pl
@@ -113,23 +115,23 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = writeScript "update-mutt" ''
       #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl pcre common-updater-scripts
+      #!nix-shell -i bash -p curl pcre2 common-updater-scripts
 
       set -euo pipefail
 
       # Expect the text in format of "The current stable public release version is 2.2.6."
       new_version="$(curl -s http://www.mutt.org/download.html |
-          pcregrep -o1 'The current stable public release version is ([0-9.]+).')"
+          pcre2grep -o1 'The current stable public release version is ([0-9.]+).')"
       update-source-version ${pname} "$new_version"
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Small but very powerful text-based mail client";
     homepage = "http://www.mutt.org";
     mainProgram = "mutt";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ rnhmjoj ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ rnhmjoj ];
   };
 }

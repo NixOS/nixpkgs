@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "cni";
-  version = "1.2.3";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "containernetworking";
-    repo = pname;
+    repo = "cni";
     rev = "v${version}";
-    hash = "sha256-ocSc1fhbBB8YRxVVOvYMombOOkLMdfv9V4GYbf8kwIE=";
+    hash = "sha256-FOUoW15aRzdwOnEfNf73tlpssJOoR+/DLOuzCTDGgpY=";
   };
 
-  vendorHash = "sha256-/aPx8NgGkJ1irU0LGzmYTlsiX2U5or24Vl1PGHWuDyE=";
+  vendorHash = "sha256-nJafpp2U7Mld6d2mRUF2I/Ns9rZ+FWONj7BGfAqmEv8=";
 
   subPackages = [
     "./cnitool"
@@ -26,13 +26,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Container Network Interface - networking for Linux containers";
     mainProgram = "cnitool";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://github.com/containernetworking/cni";
-    maintainers = with maintainers; [
-      offline
+    maintainers = with lib.maintainers; [
       vdemeester
     ];
     platforms = [

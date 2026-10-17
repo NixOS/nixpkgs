@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f8bfa8b99b69c4506d6f5bd3b0aabf77f98cdb17f3c9fc3f5ca820033336fba4";
+    hash = "sha256-+L+ouZtpxFBtb1vTsKq/d/mM2xfzyfw/XKggAzM2+6Q=";
   };
 
   nativeBuildInputs = [ pbr ];
@@ -35,9 +35,9 @@ buildPythonPackage rec {
     pytest
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Easy to use retry decorator";
     homepage = "https://github.com/invl/retry";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

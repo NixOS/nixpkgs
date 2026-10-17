@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "mini-graph-card";
-  version = "0.12.1";
+  version = "0.14.0-dev.3";
 
   src = fetchFromGitHub {
     owner = "kalkih";
     repo = "mini-graph-card";
     tag = "v${version}";
-    hash = "sha256-cDgfAfS4U3ihN808KPcG+jEQR+S2Q1M5SPqOkkYwYkI=";
+    hash = "sha256-1ZSnFkVJ7m6c4rLBJG+hNpfRWo5Jr9SP6GuQOBAoVc8=";
   };
 
-  npmDepsHash = "sha256-v+DqUAMNtDruR8E0sy7uAu3jndZUHkOw2xKtpY163R8=";
+  npmDepsHash = "sha256-xzhyYYZLl8pyfK3+MRn35Ffdw/c78v8PjwLlAuQO92g=";
 
   installPhase = ''
     runHook preInstall
@@ -28,11 +28,11 @@ buildNpmPackage rec {
 
   passthru.entrypoint = "mini-graph-card-bundle.js";
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/kalkih/mini-graph-card/releases/tag/v${version}";
     description = "Minimalistic graph card for Home Assistant Lovelace UI";
     homepage = "https://github.com/kalkih/mini-graph-card";
-    maintainers = with maintainers; [ hexa ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
+    license = lib.licenses.mit;
   };
 }

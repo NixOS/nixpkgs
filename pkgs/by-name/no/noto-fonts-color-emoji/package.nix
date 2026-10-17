@@ -3,32 +3,28 @@
   stdenvNoCC,
   fetchFromGitHub,
   buildPackages,
+  python3Packages,
   pkg-config,
   cairo,
   imagemagick,
   zopfli,
+  nototools,
   pngquant,
   which,
 }:
 
-let
-  emojiPythonEnv = buildPackages.python3.withPackages (
-    p: with p; [
-      fonttools
-      nototools
-    ]
-  );
-in
 stdenvNoCC.mkDerivation rec {
   pname = "noto-fonts-color-emoji";
-  version = "2.047";
+  version = "2.051";
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "noto-emoji";
     rev = "v${version}";
-    hash = "sha256-v1vLXs8peNF6S7iBLViAWQSW042lwIDqAjB270pRPF0=";
+    hash = "sha256-qngf8t5fLYAOtO2GMhbMv7I34RO/eYfNawW+Th/uaYQ=";
   };
+
+  strictDeps = true;
 
   depsBuildBuild = [
     buildPackages.stdenv.cc
@@ -39,9 +35,10 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [
     imagemagick
     zopfli
+    nototools
     pngquant
     which
-    emojiPythonEnv
+    python3Packages.fonttools
   ];
 
   postPatch = ''

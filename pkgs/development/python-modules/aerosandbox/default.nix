@@ -14,18 +14,19 @@
   casadi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aerosandbox";
-  version = "4.2.6";
+  version = "4.2.10";
   format = "wheel";
 
   src = fetchPypi {
     pname = "AeroSandbox";
-    inherit version format;
+    inherit (finalAttrs) version;
+    format = "wheel";
 
     python = "py3";
     dist = "py3";
-    hash = "sha256-jS1Eh/+2WXZkQC4pt1Rwvw7plJC1NFFC08gqzEyGir4=";
+    hash = "sha256-usUf1Fdz0h0rdoSLj8Nm984KLZ88Eo+RoTBA7ppJkyM=";
   };
 
   build-system = [ setuptools ];
@@ -43,10 +44,18 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aerosandbox" ];
 
+  pythonRemoveDeps = [
+    # infinite recursion
+    "neuralfoil"
+    # not pypa-installed, so no metadata
+    # good candidate for https://github.com/NixOS/nixpkgs/pull/518530
+    "casadi"
+  ];
+
   meta = {
     description = "Aircraft design optimization made fast through modern automatic differentiation";
     homepage = "https://peterdsharpe.github.io/AeroSandbox";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

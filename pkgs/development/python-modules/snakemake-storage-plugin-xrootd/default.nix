@@ -1,45 +1,93 @@
 {
   lib,
+  stdenv,
+  pkgs,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
-  snakemake,
-  snakemake-interface-storage-plugins,
+
+  # build-system
+  hatch-vcs,
+  hatchling,
+
+  # dependencies
+  reretry,
   snakemake-interface-common,
+  snakemake-interface-storage-plugins,
   xrootd,
+
+  # tests
+  pytestCheckHook,
+  snakemake,
 }:
 
-buildPythonPackage rec {
+# xrootd only exports "/tmp" by default, but pytest's tmp_path is under
+# $TMPDIR, so stat and directory-listing requests on test files would be
+# rejected with "[3010] ... is disallowed" unless we export more.
+let
+  serverConfig = pkgs.writers.writeText "xrootd-test-server.cfg" ''
+    all.export /
+  '';
+in
+buildPythonPackage (finalAttrs: {
   pname = "snakemake-storage-plugin-xrootd";
-  version = "0.1.4";
+  version = "1.2.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";
-    repo = pname;
-    tag = "v${version}";
-    hash = "sha256-1plBss9jRzIIGQE7rXDEnAomFxNzSUKsw0VyhYA2mIc=";
+    repo = "snakemake-storage-plugin-xrootd";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-r4FCGSMJD/PijfExaV1Ps4NaxWMsvlqyBYCt73ENiJQ=";
   };
 
-  # xrootd<6.0.0,>=5.6.4 not satisfied by version 5.7rc20240303
-  pythonRelaxDeps = [ "xrootd" ];
+  postPatch = ''
+    substituteInPlace tests/tests.py \
+      --replace-fail \
+        'subprocess.Popen(["xrootd",' \
+        'subprocess.Popen(["${lib.getExe pkgs.xrootd}", "-c", "${serverConfig}",'
+  '';
 
-  build-system = [ poetry-core ];
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
 
   dependencies = [
     snakemake-interface-storage-plugins
     snakemake-interface-common
+    reretry
     xrootd
   ];
 
-  nativeCheckInputs = [ snakemake ];
+  # When doCheck is disabled, nnativeCheckInputs are not available and the package fails to import:
+  #   ModuleNotFoundError: No module named 'snakemake'
+  pythonImportsCheck = lib.optionals finalAttrs.finalPackage.doCheck [
+    "snakemake_storage_plugin_xrootd"
+  ];
 
-  pythonImportsCheck = [ "snakemake_storage_plugin_xrootd" ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    snakemake
+  ];
 
-  meta = with lib; {
+  enabledTestPaths = [ "tests/tests.py" ];
+
+  # Tests fail on darwin even with:
+  # - __darwinAllowLocalNetworking = true;
+  # - sandbox = false
+  # - writableTmpDirAsHomeHook
+  #
+  # Failed: XRootD server terminated unexpectedly.
+  # 260604 22:16:56 259 XrdConfig: Unable to set permission for admin path /tmp/.xrd/; operation not permitted
+  # ------ xrootd anon@91-224-148-58.tetaneutral.net:32293 initialization failed.
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
+  meta = {
     description = "Snakemake storage plugin for handling input and output via XRootD";
     homepage = "https://github.com/snakemake/snakemake-storage-plugin-xrootd";
-    license = licenses.mit;
-    maintainers = with maintainers; [ veprbl ];
+    changelog = "https://github.com/snakemake/snakemake-storage-plugin-xrootd/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

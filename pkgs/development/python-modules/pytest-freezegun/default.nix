@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "ktosiek";
     repo = "pytest-freezegun";
     rev = version;
-    sha256 = "10c4pbh03b4s1q8cjd75lr0fvyf9id0zmdk29566qqsmaz28npas";
+    hash = "sha256-Wl2LxFdVY2xMSWK2+kGLyfntQKblNMkQDpqsAeC6hIE=";
   };
 
   patches = [
@@ -35,10 +35,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Wrap tests with fixtures in freeze_time";
     homepage = "https://github.com/ktosiek/pytest-freezegun";
-    license = licenses.mit;
-    maintainers = [ maintainers.mic92 ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.mic92 ];
   };
 }

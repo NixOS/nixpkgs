@@ -4,31 +4,30 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-llvm-lines";
-  version = "0.4.42";
+  version = "0.4.48";
 
   src = fetchFromGitHub {
     owner = "dtolnay";
-    repo = pname;
-    rev = version;
-    hash = "sha256-qKdxnISussiyp1ylahS7qOdMfOGwJnlbWrgEHf/L2y0=";
+    repo = "cargo-llvm-lines";
+    tag = finalAttrs.version;
+    hash = "sha256-Cd0qjad+aQieaEdKByUU80zdL8JmCg+sSkLLInSu6Cw=";
   };
 
-  cargoHash = "sha256-IDFCzTAlC/ZYGwUSmmxyRmZy5belxvyfeWpTCPzJQ6o=";
+  cargoHash = "sha256-RwmYWcuIx4uKtCczJkSE0Mj5TTi22V8ll9aAVcXKmcE=";
 
-  meta = with lib; {
+  meta = {
     description = "Count the number of lines of LLVM IR across all instantiations of a generic function";
     mainProgram = "cargo-llvm-lines";
     homepage = "https://github.com/dtolnay/cargo-llvm-lines";
-    changelog = "https://github.com/dtolnay/cargo-llvm-lines/releases/tag/${src.rev}";
-    license = with licenses; [
+    changelog = "https://github.com/dtolnay/cargo-llvm-lines/releases/tag/${finalAttrs.src.rev}";
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [
-      figsoda
+    maintainers = with lib.maintainers; [
       matthiasbeyer
     ];
   };
-}
+})

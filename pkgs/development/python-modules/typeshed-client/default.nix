@@ -2,31 +2,26 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  importlib-resources,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "typeshed-client";
-  version = "2.7.0";
+  version = "2.13.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "JelleZijlstra";
     repo = "typeshed_client";
     tag = "v${version}";
-    hash = "sha256-dEfKZ930Jxa84HUqKpsL2JWQLeeWx6gIMtFHTbiw3Es=";
+    hash = "sha256-n7iWe4zh2TqJD0Sv5L5BSHqxOcAmsZ8VLNfSOiPte4A=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
-    importlib-resources
     typing-extensions
   ];
 
@@ -34,13 +29,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "typeshed_client" ];
 
-  pytestFlagsArray = [ "tests/test.py" ];
+  enabledTestPaths = [ "tests/test.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Retrieve information from typeshed and other typing stubs";
     homepage = "https://github.com/JelleZijlstra/typeshed_client";
-    changelog = "https://github.com/JelleZijlstra/typeshed_client/releases/tag/v${version}";
-    license = licenses.mit;
+    changelog = "https://github.com/JelleZijlstra/typeshed_client/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

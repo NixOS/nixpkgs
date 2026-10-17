@@ -10,15 +10,15 @@
   tk,
 }:
 
-mkTclDerivation rec {
+mkTclDerivation (finalAttrs: {
   pname = "tclreadline";
-  version = "2.4.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "flightaware";
     repo = "tclreadline";
-    rev = "v${version}";
-    sha256 = "sha256-rB2bR0yu/ZFf/WOgo1LeLmciaQA42/LulnqSczmzea8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7b+d1fBENfTCdyeHSGAnPPAKf2DMiQbxDLXDvhGYQm4=";
   };
 
   nativeBuildInputs = [
@@ -58,11 +58,13 @@ mkTclDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  tclRequiresCheck = [ "tclreadline" ];
+
+  meta = {
     description = "GNU readline for interactive tcl shells";
     homepage = "https://github.com/flightaware/tclreadline";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.all;
   };
-}
+})

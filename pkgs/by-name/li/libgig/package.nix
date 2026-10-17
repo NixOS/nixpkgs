@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libgig";
-  version = "4.4.1";
+  version = "4.6.0";
 
   src = fetchurl {
     url = "https://download.linuxsampler.org/packages/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-/cie+rH5BhKObFRymWdXfo0EYgFwGLwSVRJX313+OqQ=";
+    sha256 = "sha256-/DMSAiEJGeMXLE02qyQjHeo2Z9hyIUHwx5OcpUURnQE=";
   };
 
   nativeBuildInputs = [
@@ -35,11 +35,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.linuxsampler.org";
     description = "Gigasampler file access library";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

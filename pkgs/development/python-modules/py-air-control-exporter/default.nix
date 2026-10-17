@@ -4,7 +4,6 @@
   click,
   fetchPypi,
   flask,
-  isPy27,
   nixosTests,
   prometheus-client,
   py-air-control,
@@ -15,11 +14,10 @@ buildPythonPackage rec {
   pname = "py-air-control-exporter";
   version = "0.3.1";
   format = "setuptools";
-  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0cwhcyyjzc6wlj7jp5h7fcj1hl03wzrz1if3sg205kh2hfrzzlqq";
+    hash = "sha256-GNP/s4MCzgLE08PF8PPnA1AYJHMHliuPpNywL71nkDM=";
   };
 
   propagatedBuildInputs = [
@@ -37,11 +35,11 @@ buildPythonPackage rec {
     inherit (nixosTests.prometheus-exporters) py-air-control;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Exports Air Quality Metrics to Prometheus";
     mainProgram = "py-air-control-exporter";
     homepage = "https://github.com/urbas/py-air-control-exporter";
-    license = licenses.mit;
-    maintainers = with maintainers; [ urbas ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ urbas ];
   };
 }

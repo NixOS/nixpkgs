@@ -8,13 +8,14 @@
 buildPythonPackage rec {
   pname = "cx-oracle";
   version = "8.3.0";
+  format = "setuptools";
 
   buildInputs = [ odpic ];
 
   src = fetchPypi {
     pname = "cx_Oracle";
     inherit version;
-    sha256 = "3b2d215af4441463c97ea469b9cc307460739f89fdfa8ea222ea3518f1a424d9";
+    hash = "sha256-Oy0hWvREFGPJfqRpucwwdGBzn4n9+o6iIuo1GPGkJNk=";
   };
 
   preConfigure = ''
@@ -25,10 +26,9 @@ buildPythonPackage rec {
   # Check need an Oracle database to run
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python interface to Oracle";
     homepage = "https://oracle.github.io/python-cx_Oracle";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ y0no ];
+    license = lib.licenses.bsd3;
   };
 }

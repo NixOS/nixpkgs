@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
     cp ./libmisc/.libs/libmisc.a $out/lib/libreiser4misc.a.la
   '';
 
-  meta = with lib; {
+  meta = {
     inherit version;
     homepage = "https://sourceforge.net/projects/reiser4/";
     description = "Reiser4 utilities";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
 
     # error: initialization of
     # 'int (*)(uint64_t *, uint64_t,  uint32_t,  int,  int)' {aka 'int (*)(long unsigned int *, long unsigned int,  unsigned int,  int,  int)'}

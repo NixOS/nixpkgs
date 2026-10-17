@@ -2,25 +2,28 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   click,
   six,
   pytestCheckHook,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "click-configfile";
   version = "0.2.3";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "click-configfile";
+    inherit (finalAttrs) version;
     hash = "sha256-lb7sE77pUOmPQ8gdzavvT2RAkVWepmKY+drfWTUdkNE=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     click
     six
   ];
@@ -29,7 +32,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "install_requires=install_requires," 'install_requires=["click >= 6.6", "six >= 1.10"],'
+      --replace-fail "install_requires=install_requires," 'install_requires=["click >= 6.6", "six >= 1.10"],'
   '';
 
   pythonImportsCheck = [ "click_configfile" ];
@@ -39,10 +42,10 @@ buildPythonPackage rec {
     "test_matches_section__with_bad_arg"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Add support for commands that use configuration files to Click";
     homepage = "https://github.com/click-contrib/click-configfile";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

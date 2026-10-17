@@ -1,30 +1,46 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   buildNpmPackage,
-  electron,
+  electron_43,
+  autoPatchelfHook,
   makeWrapper,
   testers,
   mattermost-desktop,
   nix-update-script,
 }:
 
+let
+  electron = electron_43;
+in
+
 buildNpmPackage rec {
   pname = "mattermost-desktop";
-  version = "5.10.2";
+  version = "6.3.0";
 
   src = fetchFromGitHub {
     owner = "mattermost";
     repo = "desktop";
     tag = "v${version}";
-    hash = "sha256-LHjVmrsOdk8vfsqvNEWkzpusm6jbz3SOb3bEaIb7rb4=";
+    hash = "sha256-aDYmnFb0CJDF/M1ca/6YkKTBcTC56+zpe9iqtRR0cpU=";
   };
 
-  npmDepsHash = "sha256-LAbqsMdMmmHGgvg2ilz6neQxMOK3jtCKt8K0M8BWifs=";
+  npmDepsHash = "sha256-nNKfzPKA0kjki169u/qe5r6rrVbVi3+0nkVj6niS+/c=";
   npmBuildScript = "build-prod";
   makeCacheWritable = true;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    # The package uses a pre-built binary Node.js module.
+    autoPatchelfHook
+  ];
+
+  autoPatchelfIgnoreMissingDeps = [ "libc.musl-x86_64.so.1" ];
+
+  buildInputs = [
+    stdenv.cc.cc
+  ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
@@ -33,6 +49,8 @@ buildNpmPackage rec {
       --replace-fail \
         "const VERSION = childProcess.execSync('git rev-parse --short HEAD', {cwd: __dirname}).toString();" \
         "const VERSION = process.env.version;"
+    substituteInPlace src/common/config/buildConfig.ts \
+      --replace-fail 'enableUpdateNotifications: true,' 'enableUpdateNotifications: false,'
   '';
 
   postBuild = ''
@@ -41,7 +59,7 @@ buildNpmPackage rec {
     chmod -R u+w electron-dist
 
     npm exec electron-builder -- \
-        --config electron-builder.json \
+        --config electron-builder.ts \
         --dir \
         -c.electronDist=electron-dist \
         -c.electronVersion=${electron.version}
@@ -55,7 +73,7 @@ buildNpmPackage rec {
       $out/share/applications \
       $out/share/icons/hicolor/512x512/apps
 
-    readonly dist=release/linux-unpacked
+    readonly dist=release/*-unpacked
 
     cp -a $dist/resources $out/share/${pname}
 
@@ -82,7 +100,9 @@ buildNpmPackage rec {
       # Invoking with `--version` insists on being able to write to a log file.
       command = "env HOME=/tmp ${meta.mainProgram} --version";
     };
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex=^v(\\d+\\.\\d+\\.\\d+)$" ];
+    };
   };
 
   meta = {
@@ -92,9 +112,16 @@ buildNpmPackage rec {
     changelog = "https://github.com/mattermost/desktop/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     platforms = electron.meta.platforms;
+    # https://github.com/NixOS/nixpkgs/issues/430763
+    broken = stdenv.hostPlatform.isDarwin;
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryNativeCode
+    ];
     maintainers = with lib.maintainers; [
       joko
       liff
+      yayayayaka
     ];
   };
 }

@@ -2,26 +2,26 @@
   lib,
   stdenv,
   fetchurl,
-  libSM,
-  libX11,
-  libXt,
+  libsm,
+  libx11,
+  libxt,
   libffi,
   ncurses,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "yabasic";
-  version = "2.90.5";
+  version = "2.92.1";
 
   src = fetchurl {
-    url = "http://www.yabasic.de/download/yabasic-${finalAttrs.version}.tar.gz";
-    hash = "sha256-w2a831Sm6sTWe7lfD6kirDzSvQX1Qpnw1aG+3ql8ww4=";
+    url = "https://www.yabasic.de/download/yabasic-${finalAttrs.version}.tar.gz";
+    hash = "sha256-VeQcDGGxQ3Xpfz6pYbwLcnUfRZjkDgsCCsVtqXm2Rqk=";
   };
 
   buildInputs = [
-    libSM
-    libX11
-    libXt
+    libsm
+    libx11
+    libxt
     libffi
     ncurses
   ];
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://2484.de/yabasic/whatsnew.html";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

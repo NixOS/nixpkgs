@@ -1,42 +1,49 @@
 {
   lib,
   buildPythonPackage,
+  fetchFromGitHub,
+
   cython,
   numpy,
-  pytestCheckHook,
   scipy,
   scikit-learn,
-  fetchPypi,
   joblib,
   six,
+
+  # test
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "hdbscan";
-  version = "0.8.38.post1";
+  version = "0.8.41";
   format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-X726L/tamai1L6KRVljO1r7Vn00NX0CxxnNkbJKKrAs=";
+  src = fetchFromGitHub {
+    owner = "scikit-learn-contrib";
+    repo = "hdbscan";
+    tag = "release-${version}";
+    hash = "sha256-4uwWoNkrdLB2KzDAksPupdgkIFBgTahzravOtu1WYws=";
   };
 
   pythonRemoveDeps = [ "cython" ];
+
   nativeBuildInputs = [
     cython
-  ];
-  propagatedBuildInputs = [
-    numpy
-    scipy
-    scikit-learn
     joblib
+    numpy
+    scikit-learn
+    scipy
     six
   ];
+
   preCheck = ''
     cd hdbscan/tests
     rm __init__.py
   '';
+
   nativeCheckInputs = [ pytestCheckHook ];
+
   disabledTests = [
     # known flaky tests: https://github.com/scikit-learn-contrib/hdbscan/issues/420
     "test_mem_vec_diff_clusters"
@@ -47,13 +54,22 @@ buildPythonPackage rec {
     # more flaky tests https://github.com/scikit-learn-contrib/hdbscan/issues/570
     "test_hdbscan_boruvka_balltree"
     "test_hdbscan_best_balltree_metric"
+    # "got an unexpected keyword argument"
+    "test_hdbscan_badargs"
+  ];
+
+  disabledTestPaths = [
+    # joblib.externals.loky.process_executor.BrokenProcessPool:
+    "test_branches.py"
   ];
 
   pythonImportsCheck = [ "hdbscan" ];
 
-  meta = with lib; {
+  meta = {
     description = "Hierarchical Density-Based Spatial Clustering of Applications with Noise, a clustering algorithm with a scikit-learn compatible API";
     homepage = "https://github.com/scikit-learn-contrib/hdbscan";
-    license = licenses.bsd3;
+    changelog = "https://github.com/scikit-learn-contrib/hdbscan/releases/tag/release-${version}";
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

@@ -1,54 +1,52 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  autoreconfHook,
+  gtk-doc,
   glib,
   intltool,
   menu-cache,
   pango,
   pkg-config,
   vala,
-  extraOnly ? false,
-  withGtk3 ? false,
-  gtk2,
   gtk3,
+  extraOnly ? false,
 }:
 
 let
-  gtk = if withGtk3 then gtk3 else gtk2;
   inherit (lib) optional optionalString;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = if extraOnly then "libfm-extra" else "libfm";
-  version = "1.3.2";
+  version = "1.4.1";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/pcmanfm/libfm-${version}.tar.xz";
-    sha256 = "sha256-pQQmMDBM+OXYz/nVZca9VG8ii0jJYBU+02ajTofK0eU=";
+  src = fetchFromGitHub {
+    owner = "lxde";
+    repo = "libfm";
+    tag = finalAttrs.version;
+    hash = "sha256-HOx3L5IYPD/3Ez5Sb3nshfisIt1cIZJmdfGE6+q5gWE=";
   };
 
-  patches = [
-    ./0001-fm-load-all-actions.patch
-    ./0002-exo-icon-view-key-press-event.patch
-    ./0003-ask-action-on-drop.patch
-    ./0004-create-icon-view.patch
-  ];
-
   nativeBuildInputs = [
+    autoreconfHook
     vala
     pkg-config
     intltool
+    gtk-doc
   ];
   buildInputs = [
     glib
-    gtk
+    gtk3
     pango
-  ] ++ optional (!extraOnly) menu-cache;
+  ]
+  ++ optional (!extraOnly) menu-cache;
 
-  configureFlags =
-    [ "--sysconfdir=/etc" ]
-    ++ optional extraOnly "--with-extra-only"
-    ++ optional withGtk3 "--with-gtk=3";
+  configureFlags = [
+    "--sysconfdir=/etc"
+    "--with-gtk=3"
+  ]
+  ++ optional extraOnly "--with-extra-only";
 
   installFlags = [ "sysconfdir=${placeholder "out"}/etc" ];
 
@@ -59,12 +57,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
-    homepage = "https://blog.lxde.org/category/pcmanfm/";
-    license = licenses.lgpl21Plus;
+    homepage = "https://github.com/lxde/libfm";
+    license = lib.licenses.lgpl21Plus;
     description = "Glib-based library for file management";
-    maintainers = [ maintainers.ttuegel ];
-    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = [ ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

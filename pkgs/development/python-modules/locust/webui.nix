@@ -1,30 +1,34 @@
 {
   stdenv,
-  fetchYarnDeps,
-  yarnConfigHook,
-  yarnBuildHook,
+  yarn-berry,
   nodejs,
   version,
   src,
+  lib,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "locust-ui";
   inherit version src;
 
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-ek02mjB8DsBUOR28WSuqj6oVvxTq8EKTNXWFFI3OhuU=";
+  missingHashes = ./missing-hashes.json;
+  yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-fjvgnXKenRxML1JkpxYIOnVuNZ7BpU9L/XgblcQV0vA=";
   };
 
   nativeBuildInputs = [
-    yarnConfigHook
-    yarnBuildHook
+    yarn-berry
+    yarn-berry.yarnBerryConfigHook
     nodejs
   ];
 
+  buildPhase = ''
+    runHook preBuild
+    yarn build
+    runHook postBuild
+  '';
+
   dontNpmPrune = true;
-  yarnBuildScript = "build";
   postInstall = ''
     mkdir -p $out/dist
     cp -r dist/** $out/dist

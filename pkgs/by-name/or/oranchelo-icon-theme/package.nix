@@ -3,7 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   gtk3,
-  plasma5Packages,
+  kdePackages,
   hicolor-icon-theme,
 }:
 
@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "OrancheloTeam";
-    repo = pname;
+    repo = "oranchelo-icon-theme";
     rev = "v${version}";
     sha256 = "sha256-IDsZj/X9rFSdDpa3bL6IPEPCRe5GustPteDxSbfz+SA=";
   };
@@ -23,11 +23,12 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    plasma5Packages.breeze-icons
+    kdePackages.breeze-icons
     hicolor-icon-theme
   ];
 
   dontDropIconThemeCache = true;
+  dontWrapQtApps = true;
 
   makeFlags = [
     "DESTDIR=$(out)"
@@ -42,12 +43,13 @@ stdenvNoCC.mkDerivation rec {
       gtk-update-icon-cache "$theme"
     done
   '';
+  dontCheckForBrokenSymlinks = true;
 
-  meta = with lib; {
+  meta = {
     description = "Oranchelo icon theme";
     homepage = "https://github.com/OrancheloTeam/oranchelo-icon-theme";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ _414owen ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ _414owen ];
   };
 }

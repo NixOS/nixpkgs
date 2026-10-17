@@ -64,13 +64,15 @@ builders = ssh-ng://builder@linux-builder ${ARCH}-linux /etc/nix/builder_ed25519
 builders-use-substitutes = true
 ```
 
-To allow Nix to connect to a remote builder not running on port 22, you will also need to create a new file at `/etc/ssh/ssh_config.d/100-linux-builder.conf`:
+To allow Nix to connect to the default remote builder, which does not run on port 22, you will also need to create a new file at `/etc/ssh/ssh_config.d/100-linux-builder.conf`:
 
 ```
 Host linux-builder
   Hostname localhost
   HostKeyAlias linux-builder
   Port 31022
+  User builder
+  IdentityFile /etc/nix/builder_ed25519
 ```
 
 … and then restart your Nix daemon to apply the change:
@@ -79,68 +81,135 @@ Host linux-builder
 $ sudo launchctl kickstart -k system/org.nixos.nix-daemon
 ```
 
+Note that if the builder is running and you have created the above ssh conf file, you can ssh into the builder with `sudo ssh builder@linux-builder`.
+
+## Using the Virtualization.framework backend {#sec-darwin-builder-vz}
+
+`darwin.linux-builder-vz` is a variant of `darwin.linux-builder` that runs the same
+NixOS guest on Apple's Virtualization.framework (via `pkgs.vzvm`) instead of QEMU.
+Instead of emulating x86_64, it exposes Rosetta to the guest, so `x86_64-linux`
+builds are translated rather than emulated, which is substantially faster. It
+requires an Apple silicon host (`aarch64-darwin`) running macOS 13 or newer, with
+Rosetta installed:
+
+```ShellSession
+$ softwareupdate --install-rosetta --agree-to-license
+```
+
+The builder refuses to start when Rosetta is missing, rather than silently dropping
+`x86_64-linux` support; set `virtualisation.vz.rosetta.enable = false` to run
+without it.
+
+It is a drop-in replacement: it listens on the same host port (31022) and presents
+the same host key as the QEMU builder, so the `nix.conf` and SSH configuration
+described above apply unchanged; only the transport behind the port changes, from
+TCP forwarding to vsock. Since a single builder VM handles both architectures
+through Rosetta, list both systems in your `builders` entry
+(`aarch64-linux,x86_64-linux`), or with nix-darwin:
+
+```nix
+{
+  nix.linux-builder = {
+    enable = true;
+    package = pkgs.darwin.linux-builder-vz;
+    systems = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
+  };
+}
+```
+
+When switching an existing QEMU builder over, delete its data disk first (e.g.
+`sudo rm /var/lib/linux-builder/nixos.qcow2`): the vz builder reuses the file name
+but writes a raw image, and refuses to misread a genuine qcow2 left behind.
+
+The guest console goes to the macOS unified log by default; read it with:
+
+```ShellSession
+$ /usr/bin/log show --last 5m --predicate 'subsystem == "systems.applicative.vzvm"'
+```
+
+The `virtualisation.vz.*` NixOS options configure the backend further, e.g.
+`virtualisation.vz.nestedVirtualization` gives the guest a working `/dev/kvm` for
+running NixOS integration tests on the builder (macOS 15+, M3 or newer).
+
 ## Example flake usage {#sec-darwin-builder-example-flake}
 
 ```nix
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-22.11-darwin";
-    darwin.url = "github:lnl7/nix-darwin/master";
+    nixpkgs.url = "https://channels.nixos.org/nixpkgs-26.05-darwin/nixexprs.tar.zst";
+    darwin.url = "github:nix-darwin/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, darwin, nixpkgs, ... }@inputs:
-  let
+  outputs =
+    {
+      self,
+      darwin,
+      nixpkgs,
+      ...
+    }@inputs:
+    let
 
-    inherit (darwin.lib) darwinSystem;
-    system = "aarch64-darwin";
-    pkgs = nixpkgs.legacyPackages."${system}";
-    linuxSystem = builtins.replaceStrings [ "darwin" ] [ "linux" ] system;
+      inherit (darwin.lib) darwinSystem;
+      system = "aarch64-darwin";
+      pkgs = nixpkgs.legacyPackages."${system}";
+      linuxSystem = builtins.replaceStrings [ "darwin" ] [ "linux" ] system;
 
-    darwin-builder = nixpkgs.lib.nixosSystem {
-      system = linuxSystem;
-      modules = [
-        "${nixpkgs}/nixos/modules/profiles/nix-builder-vm.nix"
-        { virtualisation = {
-            host.pkgs = pkgs;
-            darwin-builder.workingDirectory = "/var/lib/darwin-builder";
-            darwin-builder.hostPort = 22;
-          };
-        }
-      ];
-    };
-  in {
-
-    darwinConfigurations = {
-      machine1 = darwinSystem {
-        inherit system;
+      darwin-builder = nixpkgs.lib.nixosSystem {
+        system = linuxSystem;
         modules = [
+          "${nixpkgs}/nixos/modules/profiles/nix-builder-vm.nix"
           {
-            nix.distributedBuilds = true;
-            nix.buildMachines = [{
-              hostName = "localhost";
-              sshUser = "builder";
-              sshKey = "/etc/nix/builder_ed25519";
-              system = linuxSystem;
-              maxJobs = 4;
-              supportedFeatures = [ "kvm" "benchmark" "big-parallel" ];
-            }];
-
-            launchd.daemons.darwin-builder = {
-              command = "${darwin-builder.config.system.build.macos-builder-installer}/bin/create-builder";
-              serviceConfig = {
-                KeepAlive = true;
-                RunAtLoad = true;
-                StandardOutPath = "/var/log/darwin-builder.log";
-                StandardErrorPath = "/var/log/darwin-builder.log";
-              };
+            virtualisation = {
+              host.pkgs = pkgs;
+              darwin-builder.workingDirectory = "/var/lib/darwin-builder";
+              darwin-builder.hostPort = 22;
             };
           }
         ];
       };
-    };
+    in
+    {
 
-  };
+      darwinConfigurations = {
+        machine1 = darwinSystem {
+          inherit system;
+          modules = [
+            {
+              nix.distributedBuilds = true;
+              nix.buildMachines = [
+                {
+                  hostName = "localhost";
+                  sshUser = "builder";
+                  sshKey = "/etc/nix/builder_ed25519";
+                  system = linuxSystem;
+                  maxJobs = 4;
+                  supportedFeatures = [
+                    "kvm"
+                    "benchmark"
+                    "big-parallel"
+                  ];
+                }
+              ];
+
+              launchd.daemons.darwin-builder = {
+                command = nixpkgs.lib.getExe darwin-builder.config.system.build.macos-builder-installer;
+                serviceConfig = {
+                  KeepAlive = true;
+                  RunAtLoad = true;
+                  StandardOutPath = "/var/log/darwin-builder.log";
+                  StandardErrorPath = "/var/log/darwin-builder.log";
+                };
+              };
+            }
+          ];
+        };
+      };
+
+    };
 }
 ```
 
@@ -154,21 +223,21 @@ To do this, you just need to set the `virtualisation.darwin-builder.*` parameter
 in the example below and rebuild.
 
 ```nix
-  {
-    darwin-builder = nixpkgs.lib.nixosSystem {
-      system = linuxSystem;
-      modules = [
-        "${nixpkgs}/nixos/modules/profiles/nix-builder-vm.nix"
-        {
-          virtualisation.host.pkgs = pkgs;
-          virtualisation.darwin-builder.diskSize = 5120;
-          virtualisation.darwin-builder.memorySize = 1024;
-          virtualisation.darwin-builder.hostPort = 33022;
-          virtualisation.darwin-builder.workingDirectory = "/var/lib/darwin-builder";
-        }
-      ];
-    };
-  }
+{
+  darwin-builder = nixpkgs.lib.nixosSystem {
+    system = linuxSystem;
+    modules = [
+      "${nixpkgs}/nixos/modules/profiles/nix-builder-vm.nix"
+      {
+        virtualisation.host.pkgs = pkgs;
+        virtualisation.darwin-builder.diskSize = 5120;
+        virtualisation.darwin-builder.memorySize = 1024;
+        virtualisation.darwin-builder.hostPort = 33022;
+        virtualisation.darwin-builder.workingDirectory = "/var/lib/darwin-builder";
+      }
+    ];
+  };
+}
 ```
 
 You may make any other changes to your VM in this attribute set. For example,

@@ -2,36 +2,31 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
-  setuptools-scm,
-  six,
   pytestCheckHook,
+  uv-build,
 }:
 
 buildPythonPackage rec {
-  version = "0.4.1";
-  format = "setuptools";
   pname = "pyvcd";
-  disabled = pythonOlder "3.6";
+  version = "0.5.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3GJ16Vp5SbgjYIarLm0Dr+3nNEEkPsUQnJ6okHfz1pY=";
+    hash = "sha256-luPHuUCeY/WOtLXCKwF/nzQS3b38c0zsLh361cKag98=";
   };
 
-  buildInputs = [ setuptools-scm ];
-
-  propagatedBuildInputs = [ six ];
+  build-system = [ uv-build ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "vcd" ];
+
+  meta = {
     description = "Python package for writing Value Change Dump (VCD) files";
     homepage = "https://github.com/SanDisk-Open-Source/pyvcd";
     changelog = "https://github.com/SanDisk-Open-Source/pyvcd/blob/${version}/CHANGELOG.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      sb0
-    ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sb0 ];
   };
 }

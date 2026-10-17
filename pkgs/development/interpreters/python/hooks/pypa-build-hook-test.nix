@@ -17,7 +17,7 @@
         touch $out/src/my_project/__init__.py
       '';
     in
-    # this build must never triger conflicts
+    # this build must never trigger conflicts
     pythonOnBuildForHost.pkgs.buildPythonPackage {
       pname = "dont-propagate-conflicting-deps";
       version = "0.0.0";

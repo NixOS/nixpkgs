@@ -11,24 +11,36 @@
 # The derivation for the SD image will be placed in
 # config.system.build.sdImage
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
-  rootfsImage = pkgs.callPackage ../../../lib/make-ext4-fs.nix ({
-    inherit (config.sdImage) storePaths;
-    compressImage = config.sdImage.compressImage;
-    populateImageCommands = config.sdImage.populateRootCommands;
-    volumeLabel = "NIXOS_SD";
-  } // optionalAttrs (config.sdImage.rootPartitionUUID != null) {
-    uuid = config.sdImage.rootPartitionUUID;
-  });
+  rootfsImage = pkgs.callPackage config.sdImage.rootFilesystemCreator (
+    {
+      inherit (config.sdImage) storePaths;
+      compressImage = config.sdImage.compressImage;
+      populateImageCommands = config.sdImage.populateRootCommands;
+      volumeLabel = config.sdImage.rootVolumeLabel;
+    }
+    // optionalAttrs (config.sdImage.rootPartitionUUID != null) {
+      uuid = config.sdImage.rootPartitionUUID;
+    }
+  );
 in
 {
   imports = [
-    (mkRemovedOptionModule [ "sdImage" "bootPartitionID" ] "The FAT partition for SD image now only holds the Raspberry Pi firmware files. Use firmwarePartitionID to configure that partition's ID.")
-    (mkRemovedOptionModule [ "sdImage" "bootSize" ] "The boot files for SD image have been moved to the main ext4 partition. The FAT partition now only holds the Raspberry Pi firmware files. Changing its size may not be required.")
+    (mkRemovedOptionModule [ "sdImage" "bootPartitionID" ]
+      "The FAT partition for SD image now only holds the Raspberry Pi firmware files. Use firmwarePartitionID to configure that partition's ID."
+    )
+    (mkRemovedOptionModule [ "sdImage" "bootSize" ]
+      "The boot files for SD image have been moved to the main ext4 partition. The FAT partition now only holds the Raspberry Pi firmware files. Changing its size may not be required."
+    )
     (lib.mkRenamedOptionModuleWith {
       sinceRelease = 2505;
       from = [
@@ -68,8 +80,7 @@ in
       type = types.int;
       default = 8;
       description = ''
-        Gap in front of the /boot/firmware partition, in mebibytes (1024×1024
-        bytes).
+        Gap in front of the /boot/firmware partition, in MiB (1024×1024 bytes).
         Can be increased to make more space for boards requiring to dd u-boot
         SPL before actual partitions.
 
@@ -106,6 +117,40 @@ in
       '';
     };
 
+    rootVolumeLabel = mkOption {
+      type = types.str;
+      default = "NIXOS_SD";
+      example = "NIXOS_PENDRIVE";
+      description = ''
+        Label for the NixOS root volume.
+        Usually used when creating a recovery NixOS media installation
+        that avoids conflicting with previous instalation label.
+      '';
+    };
+
+    rootFilesystemCreator = mkOption {
+      type = types.oneOf [
+        types.package
+        types.path
+      ];
+      default = ../../../lib/make-ext4-fs.nix;
+      example = ''
+        nixpkgs/nixos/lib/make-btrfs-fs.nix
+      '';
+      description = ''
+        The filesystem creator used for the root partition.
+      '';
+    };
+
+    rootFilesystemImage = mkOption {
+      type = types.package;
+      default = rootfsImage;
+      description = ''
+        The finished root partition image with all custom fileystem modifications.
+        Used to override the filesystem creator itself.
+      '';
+    };
+
     firmwareSize = mkOption {
       type = types.int;
       # As of 2019-08-18 the Raspberry pi firmware + u-boot takes ~18MiB
@@ -134,12 +179,44 @@ in
       '';
     };
 
+    preBuildCommands = mkOption {
+      type = types.lines;
+      example = literalExpression ''
+        '''
+          if [ ! -w "$root_fs" ]; then
+            cp --no-preserve=mode "$root_fs" ./root-fs.img
+            root_fs=./root-fs.img
+          fi
+          resize2fs $root_fs 15G
+        '''
+      '';
+      default = "";
+      description = ''
+        Shell commands to run after the root filesystem image has been
+        prepared, but before the final SD image is assembled.
+
+        The path to the root filesystem image is available in the
+        {var}`root_fs` shell variable. This hook can be used to modify
+        the rootfs, for example to resize it or inject additional files.
+
+        Note that when {option}`sdImage.compressImage` is disabled,
+        {var}`root_fs` points to a read-only store path. To modify it,
+        first copy it to a writable location and update {var}`root_fs`
+        to point to the copy.
+      '';
+    };
+
     postBuildCommands = mkOption {
+      type = types.lines;
       example = literalExpression "'' dd if=\${pkgs.myBootLoader}/SPL of=$img bs=1024 seek=1 conv=notrunc ''";
       default = "";
       description = ''
-        Shell commands to run after the image is built.
-        Can be used for boards requiring to dd u-boot SPL before actual partitions.
+        Shell commands to run after the SD image has been assembled.
+
+        The path to the image is available in the {var}`img` shell
+        variable. This hook is typically used for boards that require
+        writing a bootloader (such as u-boot SPL) to a fixed offset
+        before the first partition.
       '';
     };
 
@@ -180,10 +257,13 @@ in
         # Alternatively, this could be removed from the configuration.
         # The filesystem is not needed at runtime, it could be treated
         # as an opaque blob instead of a discrete FAT32 filesystem.
-        options = [ "nofail" "noauto" ];
+        options = [
+          "nofail"
+          "noauto"
+        ];
       };
       "/" = {
-        device = "/dev/disk/by-label/NIXOS_SD";
+        device = "/dev/disk/by-label/${config.sdImage.rootVolumeLabel}";
         fsType = "ext4";
       };
     };
@@ -191,125 +271,178 @@ in
     sdImage.storePaths = [ config.system.build.toplevel ];
 
     image.extension = if config.sdImage.compressImage then "img.zst" else "img";
-    image.filePath = "sd-card/${config.image.fileName}";
+    image.filePath = "sd-image/${config.image.fileName}";
     system.nixos.tags = [ "sd-card" ];
     system.build.image = config.system.build.sdImage;
-    system.build.sdImage = pkgs.callPackage ({ stdenv, dosfstools, e2fsprogs,
-    mtools, libfaketime, util-linux, zstd }: stdenv.mkDerivation {
-      name = config.image.fileName;
+    system.build.sdImage = pkgs.callPackage (
+      {
+        stdenv,
+        dosfstools,
+        e2fsprogs,
+        mtools,
+        libfaketime,
+        util-linux,
+        zstd,
+      }:
+      stdenv.mkDerivation {
+        name = config.image.fileName;
 
-      nativeBuildInputs = [ dosfstools e2fsprogs libfaketime mtools util-linux ]
-      ++ lib.optional config.sdImage.compressImage zstd;
+        nativeBuildInputs = [
+          dosfstools
+          e2fsprogs
+          libfaketime
+          mtools
+          util-linux
+        ]
+        ++ lib.optional config.sdImage.compressImage zstd;
 
-      inherit (config.sdImage) compressImage;
+        inherit (config.sdImage) compressImage;
 
-      buildCommand = ''
-        mkdir -p $out/nix-support $out/sd-image
-        export img=$out/sd-image/${config.image.baseName}.img
+        buildCommand = ''
+          mkdir -p $out/nix-support $out/sd-image
+          export img=$out/sd-image/${config.image.baseName}.img
 
-        echo "${pkgs.stdenv.buildPlatform.system}" > $out/nix-support/system
-        if test -n "$compressImage"; then
-          echo "file sd-image $img.zst" >> $out/nix-support/hydra-build-products
-        else
-          echo "file sd-image $img" >> $out/nix-support/hydra-build-products
-        fi
+          echo "${pkgs.stdenv.buildPlatform.system}" > $out/nix-support/system
+          if test -n "$compressImage"; then
+            echo "file sd-image $img.zst" >> $out/nix-support/hydra-build-products
+          else
+            echo "file sd-image $img" >> $out/nix-support/hydra-build-products
+          fi
 
-        root_fs=${rootfsImage}
-        ${lib.optionalString config.sdImage.compressImage ''
-        root_fs=./root-fs.img
-        echo "Decompressing rootfs image"
-        zstd -d --no-progress "${rootfsImage}" -o $root_fs
-        ''}
+          root_fs=${config.sdImage.rootFilesystemImage}
+          ${lib.optionalString config.sdImage.compressImage ''
+            root_fs=./root-fs.img
+            echo "Decompressing rootfs image"
+            zstd -d --no-progress "${config.sdImage.rootFilesystemImage}" -o $root_fs
+          ''}
 
-        # Gap in front of the first partition, in MiB
-        gap=${toString config.sdImage.firmwarePartitionOffset}
+          ${config.sdImage.preBuildCommands}
 
-        # Create the image file sized to fit /boot/firmware and /, plus slack for the gap.
-        rootSizeBlocks=$(du -B 512 --apparent-size $root_fs | awk '{ print $1 }')
-        firmwareSizeBlocks=$((${toString config.sdImage.firmwareSize} * 1024 * 1024 / 512))
-        imageSize=$((rootSizeBlocks * 512 + firmwareSizeBlocks * 512 + gap * 1024 * 1024))
-        truncate -s $imageSize $img
+          # Gap in front of the first partition, in MiB
+          gap=${toString config.sdImage.firmwarePartitionOffset}
 
-        # type=b is 'W95 FAT32', type=83 is 'Linux'.
-        # The "bootable" partition is where u-boot will look file for the bootloader
-        # information (dtbs, extlinux.conf file).
-        sfdisk --no-reread --no-tell-kernel $img <<EOF
-            label: dos
-            label-id: ${config.sdImage.firmwarePartitionID}
+          # Create the image file sized to fit /boot/firmware and /, plus slack for the gap.
+          rootSizeBlocks=$(du -B 512 --apparent-size $root_fs | awk '{ print $1 }')
+          firmwareSizeBlocks=$((${toString config.sdImage.firmwareSize} * 1024 * 1024 / 512))
+          imageSize=$((rootSizeBlocks * 512 + firmwareSizeBlocks * 512 + gap * 1024 * 1024))
+          truncate -s $imageSize $img
 
-            start=''${gap}M, size=$firmwareSizeBlocks, type=b
-            start=$((gap + ${toString config.sdImage.firmwareSize}))M, type=83, bootable
-        EOF
+          # type=b is 'W95 FAT32', type=83 is 'Linux'.
+          # The "bootable" partition is where u-boot will look file for the bootloader
+          # information (dtbs, extlinux.conf file).
+          sfdisk --no-reread --no-tell-kernel $img <<EOF
+              label: dos
+              label-id: ${config.sdImage.firmwarePartitionID}
 
-        # Copy the rootfs into the SD image
-        eval $(partx $img -o START,SECTORS --nr 2 --pairs)
-        dd conv=notrunc if=$root_fs of=$img seek=$START count=$SECTORS
+              start=''${gap}M, size=$firmwareSizeBlocks, type=b
+              start=$((gap + ${toString config.sdImage.firmwareSize}))M, type=83, bootable
+          EOF
 
-        # Create a FAT32 /boot/firmware partition of suitable size into firmware_part.img
-        eval $(partx $img -o START,SECTORS --nr 1 --pairs)
-        truncate -s $((SECTORS * 512)) firmware_part.img
+          # Copy the rootfs into the SD image
+          eval $(partx $img -o START,SECTORS --nr 2 --pairs)
+          dd conv=notrunc if=$root_fs of=$img seek=$START count=$SECTORS
 
-        mkfs.vfat --invariant -i ${config.sdImage.firmwarePartitionID} -n ${config.sdImage.firmwarePartitionName} firmware_part.img
+          # Create a FAT32 /boot/firmware partition of suitable size into firmware_part.img
+          eval $(partx $img -o START,SECTORS --nr 1 --pairs)
+          truncate -s $((SECTORS * 512)) firmware_part.img
 
-        # Populate the files intended for /boot/firmware
-        mkdir firmware
-        ${config.sdImage.populateFirmwareCommands}
+          mkfs.vfat --invariant -i ${config.sdImage.firmwarePartitionID} -n ${config.sdImage.firmwarePartitionName} firmware_part.img
 
-        find firmware -exec touch --date=2000-01-01 {} +
-        # Copy the populated /boot/firmware into the SD image
-        cd firmware
-        # Force a fixed order in mcopy for better determinism, and avoid file globbing
-        for d in $(find . -type d -mindepth 1 | sort); do
-          faketime "2000-01-01 00:00:00" mmd -i ../firmware_part.img "::/$d"
-        done
-        for f in $(find . -type f | sort); do
-          mcopy -pvm -i ../firmware_part.img "$f" "::/$f"
-        done
-        cd ..
+          # Populate the files intended for /boot/firmware
+          mkdir firmware
+          ${config.sdImage.populateFirmwareCommands}
 
-        # Verify the FAT partition before copying it.
-        fsck.vfat -vn firmware_part.img
-        dd conv=notrunc if=firmware_part.img of=$img seek=$START count=$SECTORS
+          find firmware -exec touch --date=2000-01-01 {} +
+          # Copy the populated /boot/firmware into the SD image
+          cd firmware
+          # Force a fixed order in mcopy for better determinism, and avoid file globbing
+          for d in $(find . -type d -mindepth 1 | sort); do
+            faketime "2000-01-01 00:00:00" mmd -i ../firmware_part.img "::/$d"
+          done
+          for f in $(find . -type f | sort); do
+            mcopy -pvm -i ../firmware_part.img "$f" "::/$f"
+          done
+          cd ..
 
-        ${config.sdImage.postBuildCommands}
+          # Verify the FAT partition before copying it.
+          fsck.vfat -vn firmware_part.img
+          dd conv=notrunc if=firmware_part.img of=$img seek=$START count=$SECTORS
 
-        if test -n "$compressImage"; then
-            zstd -T$NIX_BUILD_CORES --rm $img
-        fi
-      '';
-    }) {};
+          ${config.sdImage.postBuildCommands}
 
-    boot.postBootCommands = let
-      expandOnBoot = lib.optionalString config.sdImage.expandOnBoot ''
+          if test -n "$compressImage"; then
+              zstd -T$NIX_BUILD_CORES --rm $img
+          fi
+        '';
+      }
+    ) { };
+
+    systemd.services.expand-root-partition = lib.mkIf config.sdImage.expandOnBoot {
+      description = "Grow the root partition and filesystem to fill the SD card";
+      unitConfig = {
+        DefaultDependencies = false;
+        ConditionPathExists = config.sdImage.nixPathRegistrationFile;
+      };
+      wantedBy = [ "sysinit.target" ];
+      before = [
+        "sysinit.target"
+        "shutdown.target"
+        "register-nix-paths.service"
+      ];
+      after = [ "local-fs.target" ];
+      conflicts = [ "shutdown.target" ];
+      restartIfChanged = false;
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+      script = ''
         # Figure out device names for the boot device and root filesystem.
-        rootPart=$(${pkgs.util-linux}/bin/findmnt -n -o SOURCE /)
-        bootDevice=$(lsblk -npo PKNAME $rootPart)
-        partNum=$(lsblk -npo MAJ:MIN $rootPart | ${pkgs.gawk}/bin/awk -F: '{print $2}')
+        rootPart=$(${lib.getExe' pkgs.util-linux "findmnt"} -n -o SOURCE /)
+        bootDevice=$(${lib.getExe' pkgs.util-linux "lsblk"} -npo PKNAME $rootPart)
+        partNum=$(${lib.getExe' pkgs.util-linux "lsblk"} -npo MAJ:MIN $rootPart | ${lib.getExe pkgs.gawk} -F: '{print $2}')
 
         # Resize the root partition and the filesystem to fit the disk
-        echo ",+," | sfdisk -N$partNum --no-reread $bootDevice
-        ${pkgs.parted}/bin/partprobe
-        ${pkgs.e2fsprogs}/bin/resize2fs $rootPart
+        echo ",+," | ${lib.getExe' pkgs.util-linux "sfdisk"} -N$partNum --no-reread $bootDevice
+        ${lib.getExe' pkgs.parted "partprobe"}
+        ${lib.getExe' pkgs.e2fsprogs "resize2fs"} $rootPart
       '';
-      nixPathRegistrationFile = config.sdImage.nixPathRegistrationFile;
-    in ''
-      # On the first boot do some maintenance tasks
-      if [ -f ${nixPathRegistrationFile} ]; then
-        set -euo pipefail
-        set -x
+    };
 
-        ${expandOnBoot}
+    systemd.services.register-nix-paths =
+      let
+        inherit (config.sdImage) nixPathRegistrationFile;
+      in
+      {
+        description = "Register Nix Store Paths";
+        unitConfig = {
+          DefaultDependencies = false;
+          ConditionPathExists = nixPathRegistrationFile;
+        };
+        wantedBy = [ "sysinit.target" ];
+        before = [
+          "sysinit.target"
+          "shutdown.target"
+          "nix-daemon.socket"
+          "nix-daemon.service"
+        ];
+        after = [ "local-fs.target" ];
+        conflicts = [ "shutdown.target" ];
+        restartIfChanged = false;
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+        };
+        script = ''
+          ${lib.getExe' config.nix.package.out "nix-store"} --load-db < ${nixPathRegistrationFile}
 
-        # Register the contents of the initial Nix store
-        ${config.nix.package.out}/bin/nix-store --load-db < ${nixPathRegistrationFile}
+          # nixos-rebuild also requires a "system" profile and an /etc/NIXOS tag.
+          touch /etc/NIXOS
+          ${lib.getExe' config.nix.package.out "nix-env"} -p /nix/var/nix/profiles/system --set /run/current-system
 
-        # nixos-rebuild also requires a "system" profile and an /etc/NIXOS tag.
-        touch /etc/NIXOS
-        ${config.nix.package.out}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
-
-        # Prevents this from running on later boots.
-        rm -f ${nixPathRegistrationFile}
-      fi
-    '';
+          # Prevents this from running on later boots.
+          rm -f ${nixPathRegistrationFile}
+        '';
+      };
   };
 }

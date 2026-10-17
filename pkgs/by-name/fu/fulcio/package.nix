@@ -3,7 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
 
-  # required for completion and cross-complilation
+  # required for completion and cross-compilation
   installShellFiles,
   buildPackages,
   stdenv,
@@ -13,15 +13,15 @@
   fulcio,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "fulcio";
-  version = "1.6.5";
+  version = "1.8.8";
 
   src = fetchFromGitHub {
     owner = "sigstore";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-TCWZrTqNXTcTsLqTnwnJPXN+kMYVVwLm2J3Y6gd2CV8=";
+    repo = "fulcio";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MKXJAk4N6Q/VM7/8Ri08rfrxHRw5FvOoreFrMp2SoE0=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -33,7 +33,7 @@ buildGoModule rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorHash = "sha256-3E2Y0UlJMjTiM4ILEiaNqVmt4fWMvCRAqzm//CvRIl4=";
+  vendorHash = "sha256-Bpu6PR3i+Sq5tZhCPLYi4rECwZ/QiN3Wls7U+8f6fBU=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -42,7 +42,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X sigs.k8s.io/release-utils/version.gitVersion=v${version}"
+    "-X sigs.k8s.io/release-utils/version.gitVersion=v${finalAttrs.version}"
     "-X sigs.k8s.io/release-utils/version.gitTreeState=clean"
   ];
 
@@ -79,12 +79,12 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion {
     package = fulcio;
     command = "fulcio version";
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sigstore/fulcio";
-    changelog = "https://github.com/sigstore/fulcio/releases/tag/v${version}";
+    changelog = "https://github.com/sigstore/fulcio/releases/tag/v${finalAttrs.version}";
     description = "Root-CA for code signing certs - issuing certificates based on an OIDC email address";
     mainProgram = "fulcio";
     longDescription = ''
@@ -97,10 +97,10 @@ buildGoModule rec {
       different delegation models, and to deploy and run Fulcio as a
       disconnected instance.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       lesuisse
       jk
     ];
   };
-}
+})

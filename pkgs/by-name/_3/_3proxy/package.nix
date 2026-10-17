@@ -5,23 +5,23 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "3proxy";
-  version = "0.9.4";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "3proxy";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-4bLlQ/ULvpjs6fr19yBBln5mRRc+yj+zVLiTs1e/Ypc=";
+    repo = "3proxy";
+    tag = finalAttrs.version;
+    sha256 = "sha256-hLxafFU6nJ3I3NT3R24LPD7PBmQ1IZEbrVqvfmMZHIM=";
   };
 
   # They use 'install -s', that calls the native strip instead of the cross.
   # Don't strip binary on install, we strip it on fixup phase anyway.
   postPatch = ''
     substituteInPlace Makefile.Linux \
-      --replace "(INSTALL_BIN) -s" "(INSTALL_BIN)" \
-      --replace "/usr" ""
+      --replace-fail "(INSTALL_BIN) -s" "(INSTALL_BIN)" \
+      --replace-fail "/usr" ""
   '';
 
   makeFlags = [
@@ -42,11 +42,12 @@ stdenv.mkDerivation rec {
     smoke-test = nixosTests._3proxy;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tiny free proxy server";
     homepage = "https://github.com/3proxy/3proxy";
-    license = licenses.bsd2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ misuzu ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ misuzu ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "3proxy" finalAttrs.version;
   };
-}
+})

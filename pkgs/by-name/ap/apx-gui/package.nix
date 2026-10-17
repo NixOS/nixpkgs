@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "apx-gui";
-  version = "1.0.4";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "Vanilla-OS";
     repo = "apx-gui";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-nZMbVXeWEgfBsVgX2iESRzDgu0tjiqC1dTCaTlW0iWA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FE/QoDzpTMez0nQWsIe8HTkwtXBGiQvZKyjfui6sqhY=";
   };
 
   strictDeps = true;
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     (python3.withPackages (ps: [
       ps.pygobject3
       ps.pyyaml
-      ps.requests
+      ps.podman
     ]))
     wrapGAppsHook4
   ];
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Vanilla-OS/apx-gui";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ chewblacka ];
+    maintainers = [ ];
     mainProgram = "apx-gui";
   };
 })

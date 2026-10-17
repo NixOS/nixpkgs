@@ -21,7 +21,7 @@
       owner = "libfprint";
       repo = "fprintd";
       rev = "v${finalAttrs.version}";
-      sha256 = "sha256-rOTVThHOY/Q2IIu2RGiv26UE2V/JFfWWnfKZQfKl5Mg=";
+      hash = "sha256-rOTVThHOY/Q2IIu2RGiv26UE2V/JFfWWnfKZQfKl5Mg=";
     };
 
     nativeBuildInputs = previousAttrs.nativeBuildInputs or [ ] ++ [
@@ -60,13 +60,11 @@
       })
     ];
 
-    postPatch =
-      previousAttrs.postPatch or ""
-      + ''
-        # part of "remove-pointless-copying-of-files-into-build-directory" but git-apply doesn't handle renaming
-        mv src/device.xml src/net.reactivated.Fprint.Device.xml
-        mv src/manager.xml src/net.reactivated.Fprint.Manager.xml
-      '';
+    postPatch = previousAttrs.postPatch or "" + ''
+      # part of "remove-pointless-copying-of-files-into-build-directory" but git-apply doesn't handle renaming
+      mv src/device.xml src/net.reactivated.Fprint.Device.xml
+      mv src/manager.xml src/net.reactivated.Fprint.Manager.xml
+    '';
 
     meta = {
       homepage = "https://fprint.freedesktop.org/";

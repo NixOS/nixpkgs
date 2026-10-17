@@ -16,7 +16,7 @@ buildKodiAddon rec {
 
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/${lib.toLower rel}/${namespace}/${namespace}-${version}.zip";
-    sha256 = "sha256-ciLtqT++6bn7la4xRVvlRwzbbUUUPN5WU35rJpR4l+w=";
+    hash = "sha256-ciLtqT++6bn7la4xRVvlRwzbbUUUPN5WU35rJpR4l+w=";
   };
 
   propagatedBuildInputs = [
@@ -31,10 +31,10 @@ buildKodiAddon rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.github.com/nixxo/plugin.video.skyvideoitalia";
     description = "Show video content from the website of Sky Italia (video.sky.it). News, sport, entertainment and much more";
-    license = licenses.gpl3Plus;
-    maintainers = teams.kodi.members;
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.kodi ];
   };
 }

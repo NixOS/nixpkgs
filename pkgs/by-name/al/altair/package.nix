@@ -7,11 +7,11 @@
 
 let
   pname = "altair";
-  version = "8.1.3";
+  version = "8.5.11";
 
   src = fetchurl {
-    url = "https://github.com/imolorhe/altair/releases/download/v${version}/altair_${version}_x86_64_linux.AppImage";
-    sha256 = "sha256-1NNm4HUWb6Imz9dV23fmoR77rBiJD8zI83Pm4CCvfe4=";
+    url = "https://github.com/altair-graphql/altair/releases/download/v${version}/altair_${version}_x86_64_linux.AppImage";
+    sha256 = "sha256-WRAlsrDcw/xNwbFvEVvR/ErZa4aynfj8dBRMEVNrI78=";
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };
@@ -22,21 +22,21 @@ appimageTools.wrapType2 {
   nativeBuildInputs = [ makeWrapper ];
 
   extraInstallCommands = ''
-    wrapProgram $out/bin/${pname} \
+    wrapProgram $out/bin/altair \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
-    install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
-    substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
+    install -m 444 -D ${appimageContents}/altair.desktop -t $out/share/applications
+    substituteInPlace $out/share/applications/altair.desktop \
+      --replace-fail 'Exec=AppRun' 'Exec=altair'
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Feature-rich GraphQL Client IDE";
     mainProgram = "altair";
-    homepage = "https://github.com/imolorhe/altair";
-    license = licenses.mit;
-    maintainers = with maintainers; [ evalexpr ];
+    homepage = "https://github.com/altair-graphql/altair";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ evalexpr ];
     platforms = [ "x86_64-linux" ];
   };
 }

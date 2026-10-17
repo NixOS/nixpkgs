@@ -19,18 +19,18 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "irust";
-  version = "1.71.30";
+  version = "1.77.1";
 
   src = fetchFromGitHub {
     owner = "sigmaSd";
     repo = "IRust";
-    rev = "irust@${version}";
-    hash = "sha256-moYHi+hkL2I3jm3eBfaXuK4Zz84Pq2X50V5lKyIMecM=";
+    rev = "irust@${finalAttrs.version}";
+    hash = "sha256-wALgAmwpk3jFOyFsieyoeradh0Pyovq7YVh9DqQpyqo=";
   };
 
-  cargoHash = "sha256-Ecz4JulISoDMrRloqbOP1T+mwoWDV+COwJR/+0fPNXc=";
+  cargoHash = "sha256-JGuHCKdo2ZbdQipu8UdgJVikE1wQysLtSpX8yFYwMyU=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -46,11 +46,11 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Cross Platform Rust Repl";
     homepage = "https://github.com/sigmaSd/IRust";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lelgenio ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lelgenio ];
     mainProgram = "irust";
   };
-}
+})

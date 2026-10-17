@@ -1,7 +1,7 @@
 {
   lib,
   autoreconfHook,
-  bash,
+  bashNonInteractive,
   libtool,
   fetchFromGitHub,
   nix-update-script,
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     autoreconfHook
     # For patchShebangs in postInstall
-    bash
+    bashNonInteractive
     perl
   ];
 
@@ -63,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Library to generate text, XML, JSON, and HTML";
+    homepage = "https://github.com/Juniper/libxo";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.reckenrode ];
     platforms = lib.platforms.unix;

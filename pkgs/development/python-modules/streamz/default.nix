@@ -1,57 +1,54 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
+  fetchFromGitHub,
+
+  # build-system
   setuptools,
-  confluent-kafka,
-  dask,
-  dask-expr,
-  distributed,
-  flaky,
-  graphviz,
-  networkx,
-  pytest-asyncio,
-  pytestCheckHook,
-  requests,
-  six,
+
+  # dependencies
   toolz,
   tornado,
   zict,
+
+  # tests
+  dask,
+  distributed,
+  flaky,
+  pandas,
+  pyarrow,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "streamz";
-  version = "0.6.4";
+  version = "0.6.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-VXfWkEwuxInBQVQJV3IQXgGVRkiBmYfUZCBMbjyWNPM=";
+  src = fetchFromGitHub {
+    owner = "python-streamz";
+    repo = "streamz";
+    tag = finalAttrs.version;
+    hash = "sha256-m+kBRz3K5W5yuLRcamWCZ6j6A3MBT3HyjuCLzIzUqak=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
-    networkx
-    six
     toolz
     tornado
     zict
   ];
 
   nativeCheckInputs = [
-    confluent-kafka
     dask
-    dask-expr
     distributed
     flaky
-    graphviz
+    pandas
+    pyarrow
     pytest-asyncio
     pytestCheckHook
-    requests
   ];
 
   pythonImportsCheck = [ "streamz" ];
@@ -63,24 +60,18 @@ buildPythonPackage rec {
     "test_partition_then_scatter_sync"
     "test_sync"
     "test_sync_2"
-    # Test fail in the sandbox
-    "test_tcp_async"
-    "test_tcp"
-    "test_partition_timeout"
+
     # Tests are flaky
-    "test_from_iterable"
     "test_buffer"
+    "test_partition_timeout_cancel"
   ];
 
-  disabledTestPaths = [
-    # Disable kafka tests
-    "streamz/tests/test_kafka.py"
-  ];
+  __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Pipelines to manage continuous streams of data";
     homepage = "https://github.com/python-streamz/streamz";
-    license = licenses.bsd3;
-    maintainers = [ ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

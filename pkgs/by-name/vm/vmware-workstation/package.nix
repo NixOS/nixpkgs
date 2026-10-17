@@ -1,56 +1,88 @@
-{ stdenv
-, buildFHSEnv
-, fetchurl
-, fetchzip
-, lib
-, zlib
-, gdbm
-, libxslt
-, libxml2
-, libuuid
-, readline
-, readline70
-, xz
-, cups
-, libaio
-, vulkan-loader
-, alsa-lib
-, libpulseaudio
-, libxcrypt-legacy
-, libGL
-, numactl
-, xorg
-, kmod
-, python3
-, autoPatchelfHook
-, makeWrapper
-, symlinkJoin
-, enableInstaller ? false, bzip2, sqlite
-, enableMacOSGuests ? false, fetchFromGitHub, unzip
+{
+  stdenv,
+  buildFHSEnv,
+  fetchurl,
+  lib,
+  zlib,
+  gdbm,
+  libxslt,
+  libxml2,
+  libuuid,
+  readline,
+  readline70,
+  xz,
+  cups,
+  libaio,
+  vulkan-loader,
+  alsa-lib,
+  libpulseaudio,
+  libxcrypt-legacy,
+  libGL,
+  numactl,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxft,
+  libxfixes,
+  libxext,
+  libxdmcp,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libxau,
+  libx11,
+  kmod,
+  python3,
+  autoPatchelfHook,
+  makeWrapper,
+  symlinkJoin,
+  enableInstaller ? false,
+  bzip2,
+  sqlite,
+  enableMacOSGuests ? false,
+  fetchFromGitHub,
+  unzip,
 }:
 
-let
-  # base - versions
-  version = "17.6.1";
-  build = "24319023";
-  baseUrl = "https://softwareupdate.vmware.com/cds/vmw-desktop/ws/${version}/${build}/linux";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "vmware-workstation";
+  version = "25H2u1";
+  build = "25219725";
 
-  # macOS - versions
-  unlockerVersion = "3.0.5";
-
-  # macOS - Unlocker
-  unlockerSrc = fetchFromGitHub {
-    owner = "paolo-projects";
-    repo = "unlocker";
-    rev = "${unlockerVersion}";
-    sha256 = "sha256-JSEW1gqQuLGRkathlwZU/TnG6dL/xWKW4//SfE+kO0A=";
+  src = fetchurl {
+    url = "https://archive.org/download/VMware-Workstation-Full-${finalAttrs.version}-${finalAttrs.build}.x86_64/VMware-Workstation-Full-${finalAttrs.version}-${finalAttrs.build}.x86_64.bundle";
+    hash = "sha256-chqpPE68qlGsbbde2Xx6TbEKqIEQRGiQ2x5Av6/HVmo=";
   };
 
-  vmware-unpack-env = buildFHSEnv rec {
+  vmware-unpack-env = buildFHSEnv {
     pname = "vmware-unpack-env";
-    inherit version;
+    inherit (finalAttrs) version;
     targetPkgs = pkgs: [ zlib ];
   };
+
+  unpackPhase = ''
+    ${finalAttrs.vmware-unpack-env}/bin/vmware-unpack-env -c "sh ${finalAttrs.src} --extract unpacked"
+  '';
+
+  macOSUnlockerSrc = fetchFromGitHub {
+    owner = "paolo-projects";
+    repo = "unlocker";
+    tag = "3.0.5";
+    hash = "sha256-JSEW1gqQuLGRkathlwZU/TnG6dL/xWKW4//SfE+kO0A=";
+  };
+
+  postPatch = lib.optionalString enableMacOSGuests ''
+    cp -R "${finalAttrs.macOSUnlockerSrc}" unlocker/
+
+    substituteInPlace unlocker/unlocker.py --replace \
+      "/usr/lib/vmware/bin/" "$out/lib/vmware/bin"
+
+    substituteInPlace unlocker/unlocker.py --replace \
+      "/usr/lib/vmware/lib/libvmwarebase.so/libvmwarebase.so" "$out/lib/vmware/lib/libvmwarebase.so/libvmwarebase.so"
+  '';
 
   readline70_compat63 = symlinkJoin {
     name = "readline70_compat63";
@@ -59,10 +91,19 @@ let
       ln -s $out/lib/libreadline.so $out/lib/libreadline.so.6
     '';
   };
-in
-stdenv.mkDerivation rec {
-  pname = "vmware-workstation";
-  inherit version build;
+
+  nativeBuildInputs = [
+    python3
+    finalAttrs.vmware-unpack-env
+    autoPatchelfHook
+    makeWrapper
+  ]
+  ++ lib.optionals enableInstaller [
+    bzip2
+    sqlite
+    finalAttrs.readline70_compat63
+  ]
+  ++ lib.optionals enableMacOSGuests [ unzip ];
 
   buildInputs = [
     libxslt
@@ -79,47 +120,22 @@ stdenv.mkDerivation rec {
     libxcrypt-legacy
     libGL
     numactl
-    xorg.libX11
-    xorg.libXau
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXdmcp
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXft
-    xorg.libXinerama
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXScrnSaver
-    xorg.libXtst
+    libx11
+    libxau
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxdmcp
+    libxext
+    libxfixes
+    libxft
+    libxinerama
+    libxi
+    libxrandr
+    libxrender
+    libxscrnsaver
+    libxtst
   ];
-
-  nativeBuildInputs = [ python3 vmware-unpack-env autoPatchelfHook makeWrapper ]
-    ++ lib.optionals enableInstaller [ bzip2 sqlite readline70_compat63 ]
-    ++ lib.optionals enableMacOSGuests [ unzip ];
-
-  src = fetchzip {
-    url = "${baseUrl}/core/VMware-Workstation-${version}-${build}.x86_64.bundle.tar";
-    sha256 = "sha256-VzfiIawBDz0f1w3eynivW41Pn4SqvYf/8o9q14hln4s=";
-    stripRoot = false;
-  } + "/VMware-Workstation-${version}-${build}.x86_64.bundle";
-
-  unpackPhase =
-  ''
-    ${vmware-unpack-env}/bin/vmware-unpack-env -c "sh ${src} --extract unpacked"
-  '';
-
-  postPatch = lib.optionalString enableMacOSGuests ''
-    cp -R "${unlockerSrc}" unlocker/
-
-    substituteInPlace unlocker/unlocker.py --replace \
-      "/usr/lib/vmware/bin/" "$out/lib/vmware/bin"
-
-    substituteInPlace unlocker/unlocker.py --replace \
-      "/usr/lib/vmware/lib/libvmwarebase.so/libvmwarebase.so" "$out/lib/vmware/lib/libvmwarebase.so/libvmwarebase.so"
-  '';
 
   installPhase = ''
     runHook preInstall
@@ -155,7 +171,7 @@ stdenv.mkDerivation rec {
       cp ${./vmware-installer-bootstrap} $out/etc/vmware-installer/bootstrap
       sed -i -e "s,@@INSTALLERDIR@@,$dest," $out/etc/vmware-installer/bootstrap
       sed -i -e "s,@@IVERSION@@,$vmware_installer_version," $out/etc/vmware-installer/bootstrap
-      sed -i -e "s,@@BUILD@@,${build}," $out/etc/vmware-installer/bootstrap
+      sed -i -e "s,@@BUILD@@,${finalAttrs.build}," $out/etc/vmware-installer/bootstrap
 
       # create database of vmware guest tools (avoids vmware fetching them later)
       mkdir -p $out/etc/vmware-installer/components
@@ -169,7 +185,7 @@ stdenv.mkDerivation rec {
         component_version=$(cat unpacked/$component/manifest.xml | grep -oPm1 "(?<=<version>)[^<]+")
         component_core_id=$([ "$component" == "vmware-installer" ] && echo "-1" || echo "1")
         type=$([ "$component" == "vmware-workstation" ] && echo "0" || echo "1")
-        sqlite3 "$database_filename" "INSERT INTO components(name,version,buildNumber,component_core_id,longName,description,type) VALUES('$component','$component_version',${build},$component_core_id,'$component','$component',$type);"
+        sqlite3 "$database_filename" "INSERT INTO components(name,version,buildNumber,component_core_id,longName,description,type) VALUES('$component','$component_version',${finalAttrs.build},$component_core_id,'$component','$component',$type);"
         mkdir -p $out/etc/vmware-installer/components/$component
         cp -r $folder/* $out/etc/vmware-installer/components/$component
       done
@@ -183,8 +199,8 @@ stdenv.mkDerivation rec {
     ## VMware Config
     echo "Installing VMware Config"
     cp ${./vmware-config} $out/etc/vmware/config
-    sed -i -e "s,@@VERSION@@,${version}," $out/etc/vmware/config
-    sed -i -e "s,@@BUILD@@,${build}," $out/etc/vmware/config
+    sed -i -e "s,@@VERSION@@,${finalAttrs.version}," $out/etc/vmware/config
+    sed -i -e "s,@@BUILD@@,${finalAttrs.build}," $out/etc/vmware/config
     sed -i -e "s,@@PREFIXDIR@@,$out," $out/etc/vmware/config
 
     ## VMware VMX
@@ -207,7 +223,6 @@ stdenv.mkDerivation rec {
     cp -r $unpacked/lib/modules $out/lib/vmware/
     cp -r $unpacked/lib/include $out/lib/vmware/
 
-    cp -r $unpacked/extra/checkvm $out/bin/
     cp -r $unpacked/extra/modules.xml $out/lib/vmware/modules/
 
     ln -s $out/lib/vmware/bin/appLoader $out/lib/vmware/bin/vmware-vmblock-fuse
@@ -227,8 +242,8 @@ stdenv.mkDerivation rec {
         --add-needed ${libpulseaudio}/lib/libpulse.so.0 \
         --add-needed ${libGL}/lib/libEGL.so.1 \
         --add-needed ${numactl}/lib/libnuma.so.1 \
-        --add-needed ${xorg.libX11}/lib/libX11.so.6 \
-        --add-needed ${xorg.libXi}/lib/libXi.so.6 \
+        --add-needed ${libx11}/lib/libX11.so.6 \
+        --add-needed ${libxi}/lib/libXi.so.6 \
         --add-needed ${libGL}/lib/libGL.so.1 \
         $out/lib/vmware/bin/$binary
     done
@@ -363,15 +378,25 @@ stdenv.mkDerivation rec {
       fi
     done
 
+    # VMware upgraded their shipped libxml2 without recompiling these libraries against it?
+    for lib in $out/lib/vmware/lib/{libcroco-0.6.so.3/libcroco-0.6.so.3,librsvg-2.so.2/librsvg-2.so.2} $out/lib/vmware/libconf/lib/gtk-3.0/3.0.0/loaders/libpixbufloader-svg.so; do
+      patchelf $lib --replace-needed libxml2.so.2 libxml2.so.16
+    done
+
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Industry standard desktop hypervisor for x86-64 architecture";
-    homepage = "https://www.vmware.com/products/workstation-pro.html";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    homepage = "https://www.vmware.com/products/desktop-hypervisor/workstation-and-fusion";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ cawilliamson deinferno vifino ];
+    mainProgram = "vmware";
+    maintainers = with lib.maintainers; [
+      cawilliamson
+      deinferno
+      vifino
+    ];
   };
-}
+})

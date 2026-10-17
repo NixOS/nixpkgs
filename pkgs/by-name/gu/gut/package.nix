@@ -5,23 +5,23 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gut";
-  version = "0.3.1";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "julien040";
     repo = "gut";
-    rev = version;
-    hash = "sha256-pjjeA0Nwc5M3LwxZLpBPnFqXJX0b6KDaj4YCPuGoUuU=";
+    rev = finalAttrs.version;
+    hash = "sha256-h2lrmFfWENPD8i5kyDDtmN3hwliLPvVePhFdMfq46z8=";
   };
 
-  vendorHash = "sha256-G9oDMHLmdv/vQfofTqKAf21xaGp+lvW+sedLmaj+A5A=";
+  vendorHash = "sha256-yO1+lNKVsPipyTBVKItmOKClMBdHphReSVP8KnQITJM=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/julien040/gut/src/telemetry.gutVersion=${version}"
+    "-X github.com/julien040/gut/src/telemetry.gutVersion=${finalAttrs.version}"
   ];
 
   # Depends on `/home` existing
@@ -29,11 +29,11 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Alternative git CLI";
     homepage = "https://gut-cli.dev";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "gut";
   };
-}
+})

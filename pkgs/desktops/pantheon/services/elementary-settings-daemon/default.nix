@@ -13,26 +13,27 @@
   fwupd,
   gdk-pixbuf,
   geoclue2,
-  gexiv2,
+  gexiv2_0_10,
   glib,
+  gnome-settings-daemon,
   gobject-introspection,
   gtk3,
   granite,
   libgee,
   packagekit,
-  systemd,
+  systemdLibs,
   wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-settings-daemon";
-  version = "8.1.1";
+  version = "8.5.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "settings-daemon";
-    rev = version;
-    sha256 = "sha256-HOmV3RBVn8xah/Bzt7OOXVE145uwn1SEFzvcVSLMHtE=";
+    tag = version;
+    hash = "sha256-npHSj+Zq0fqWVjr5kl/C96gfziLMNOeXxCUgxFGht/s=";
   };
 
   nativeBuildInputs = [
@@ -51,25 +52,26 @@ stdenv.mkDerivation rec {
     fwupd
     gdk-pixbuf
     geoclue2
-    gexiv2
+    gexiv2_0_10
     glib
+    gnome-settings-daemon # org.gnome.settings-daemon.* gschema
     gtk3
     granite
     libgee
     packagekit
-    systemd
+    systemdLibs
   ];
 
   passthru = {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Settings daemon for Pantheon";
     homepage = "https://github.com/elementary/settings-daemon";
-    license = licenses.gpl3Plus;
-    maintainers = teams.pantheon.members;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.pantheon ];
+    platforms = lib.platforms.linux;
     mainProgram = "io.elementary.settings-daemon";
   };
 }

@@ -8,7 +8,7 @@
   ppx_sexp_conv,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "ipaddr";
 
   inherit (macaddr) version src;
@@ -31,7 +31,6 @@ buildDunePackage rec {
   meta = macaddr.meta // {
     description = "Library for manipulation of IP (and MAC) address representations";
     maintainers = with lib.maintainers; [
-      alexfmpe
       ericbmerritt
     ];
   };

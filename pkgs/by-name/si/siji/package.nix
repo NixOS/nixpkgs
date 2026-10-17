@@ -3,10 +3,11 @@
   stdenv,
   fetchFromGitHub,
   libfaketime,
-  xorg,
+  mkfontscale,
+  fonttosfnt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "siji";
   version = "2016-05-13";
 
@@ -19,8 +20,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     libfaketime
-    xorg.fonttosfnt
-    xorg.mkfontscale
+    fonttosfnt
+    mkfontscale
   ];
 
   buildPhase = ''
@@ -47,11 +48,11 @@ stdenv.mkDerivation rec {
     "bdf"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/stark/siji";
     description = "Iconic bitmap font based on Stlarch with additional glyphs";
-    license = licenses.gpl2;
-    platforms = platforms.all;
-    maintainers = [ maintainers.asymmetric ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.asymmetric ];
   };
 }

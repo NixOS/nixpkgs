@@ -1,64 +1,85 @@
 # This module allows the test driver to connect to the virtual machine
-# via a root shell attached to port 514.
+# via a root shell attached to a virtio console.
 
-{ options, config, lib, pkgs, ... }:
+{
+  options,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.testing;
 
-  qemu-common = import ../../lib/qemu-common.nix { inherit lib pkgs; };
+  qemu-common = import ../../lib/qemu-common.nix { inherit (pkgs) lib stdenv; };
 
   backdoorService = {
-    requires = [ "dev-hvc0.device" "dev-${qemu-common.qemuSerialDevice}.device" ];
-    after = [ "dev-hvc0.device" "dev-${qemu-common.qemuSerialDevice}.device" ];
-    script =
-      ''
-        export USER=root
-        export HOME=/root
-        export DISPLAY=:0.0
+    requires = [
+      "dev-hvc0.device"
+      "dev-${qemu-common.qemuSerialDevice}.device"
+    ];
+    after = [
+      "dev-hvc0.device"
+      "dev-${qemu-common.qemuSerialDevice}.device"
+    ];
+    script = ''
+      export USER=root
+      export HOME=/root
+      export DISPLAY=:0.0
 
-        # Determine if this script is ran with nounset
-        strict="false"
-        if set -o | grep --quiet --perl-regexp "nounset\s+on"; then
-            strict="true"
-        fi
+      # Determine if this script is ran with nounset
+      strict="false"
+      if set -o | grep --quiet --perl-regexp "nounset\s+on"; then
+          strict="true"
+      fi
 
-        if [[ -e /etc/profile ]]; then
-            # TODO: Currently shell profiles are not checked at build time,
-            # so we need to unset stricter options to source them
-            set +o nounset
-            # shellcheck disable=SC1091
-            source /etc/profile
-            [ "$strict" = "true" ] && set -o nounset
-        fi
+      if [[ -e /etc/profile ]]; then
+          # TODO: Currently shell profiles are not checked at build time,
+          # so we need to unset stricter options to source them
+          set +o nounset
+          # shellcheck disable=SC1091
+          source /etc/profile
+          [ "$strict" = "true" ] && set -o nounset
+      fi
 
-        # Don't use a pager when executing backdoor
-        # actions. Because we use a tty, commands like systemctl
-        # or nix-store get confused into thinking they're running
-        # interactively.
-        export PAGER=
+      # Don't use a pager when executing backdoor
+      # actions. Because we use a tty, commands like systemctl
+      # or nix-store get confused into thinking they're running
+      # interactively.
+      export PAGER=
 
-        cd /tmp
-        exec < /dev/hvc0 > /dev/hvc0
-        while ! exec 2> /dev/${qemu-common.qemuSerialDevice}; do sleep 0.1; done
-        echo "connecting to host..." >&2
-        stty -F /dev/hvc0 raw -echo # prevent nl -> cr/nl conversion
-        # The following line is essential since it signals to
-        # the test driver that the shell is ready.
-        # See: the connect method in the Machine class.
-        echo "Spawning backdoor root shell..."
-        # Passing the terminal device makes bash run non-interactively.
-        # Otherwise we get errors on the terminal because bash tries to
-        # setup things like job control.
-        # Note: calling bash explicitly here instead of sh makes sure that
-        # we can also run non-NixOS guests during tests. This, however, is
-        # mostly futureproofing as the test instrumentation is still very
-        # tightly coupled to NixOS.
-        PS1="" exec ${pkgs.coreutils}/bin/env bash --norc /dev/hvc0
-      '';
-      serviceConfig.KillSignal = "SIGHUP";
+      cd /tmp
+      exec < /dev/hvc0 > /dev/hvc0
+      while ! exec 2> /dev/${qemu-common.qemuSerialDevice}; do sleep 0.1; done
+      echo "connecting to host..." >&2
+      stty -F /dev/hvc0 raw -echo # prevent nl -> cr/nl conversion
+      # The following line is essential since it signals to
+      # the test driver that the shell is ready.
+      # See: the connect method in the Machine class.
+      echo "Spawning backdoor root shell..."
+      # Passing the terminal device makes bash run non-interactively.
+      # Otherwise we get errors on the terminal because bash tries to
+      # setup things like job control.
+      # Note: calling bash explicitly here instead of sh makes sure that
+      # we can also run non-NixOS guests during tests. This, however, is
+      # mostly futureproofing as the test instrumentation is still very
+      # tightly coupled to NixOS.
+      PS1="" exec ${pkgs.bashNonInteractive}/bin/bash --norc /dev/hvc0
+    '';
+    serviceConfig.KillSignal = "SIGHUP";
+  };
+
+  managerSettings = {
+    # Don't clobber the console with duplicate systemd messages.
+    ShowStatus = false;
+    # Allow very slow start
+    DefaultTimeoutStartSec = 300;
+    DefaultDeviceTimeoutSec = 300;
+    # Don't enforce a minimum uptime before shutting down.
+    MinimumUptimeSec = 0;
   };
 
 in
@@ -66,6 +87,10 @@ in
 {
 
   options.testing = {
+    backdoor = lib.mkEnableOption "backdoor service in stage 2" // {
+      # See assertion below for why the backdoor doesn't work with containers.
+      default = !config.boot.isContainer;
+    };
 
     initrdBackdoor = lib.mkEnableOption ''
       backdoor.service in initrd. Requires
@@ -75,7 +100,6 @@ in
       enables commands to be sent to test and debug stage 1. Use
       machine.switch_root() to leave stage 1 and proceed to stage 2
     '';
-
   };
 
   config = {
@@ -84,17 +108,32 @@ in
       {
         assertion = cfg.initrdBackdoor -> config.boot.initrd.systemd.enable;
         message = ''
-          testing.initrdBackdoor requires boot.initrd.systemd.enable to be enabled.
+          `testing.initrdBackdoor` requires `boot.initrd.systemd.enable` to be enabled.
+        '';
+      }
+      {
+        assertion = config.boot.isContainer -> !cfg.backdoor;
+        message = ''
+          `testing.backdoor` uses virtio console, which does not work with
+          containers (we use `nsenter` instead).
+        '';
+      }
+      {
+        assertion = config.boot.isContainer -> !cfg.initrdBackdoor;
+        message = ''
+          `testing.initrdBackdoor` does not work with containers as there is no initrd.
         '';
       }
     ];
 
-    systemd.services.backdoor = lib.mkMerge [
-      backdoorService
-      {
-        wantedBy = [ "multi-user.target" ];
-      }
-    ];
+    systemd.services.backdoor = lib.mkIf cfg.backdoor (
+      lib.mkMerge [
+        backdoorService
+        {
+          wantedBy = [ "multi-user.target" ];
+        }
+      ]
+    );
 
     boot.initrd.systemd = lib.mkMerge [
       {
@@ -105,7 +144,7 @@ in
           MaxLevelConsole=debug
         '';
 
-        extraConfig = config.systemd.extraConfig;
+        settings.Manager = managerSettings;
       }
 
       (lib.mkIf cfg.initrdBackdoor {
@@ -130,8 +169,14 @@ in
             # backdoor to start even earlier.
             wantedBy = [ "sysinit.target" ];
             unitConfig.DefaultDependencies = false;
-            conflicts = [ "shutdown.target" "initrd-switch-root.target" ];
-            before = [ "shutdown.target" "initrd-switch-root.target" ];
+            conflicts = [
+              "shutdown.target"
+              "initrd-switch-root.target"
+            ];
+            before = [
+              "shutdown.target"
+              "initrd-switch-root.target"
+            ];
           }
         ];
 
@@ -151,16 +196,13 @@ in
     # that do not specify any nodes, or an empty attr set as nodes) will not
     # have the QEMU module loaded and thuse these options can't and should not
     # be set.
-    virtualisation = lib.optionalAttrs (options ? virtualisation.qemu) {
+    virtualisation = lib.optionalAttrs (options ? virtualisation.qemu.package) {
       qemu = {
-        # Only use a serial console, no TTY.
         # NOTE: optionalAttrs
         #       test-instrumentation.nix appears to be used without qemu-vm.nix, so
-        #       we avoid defining consoles if not possible.
+        #       we avoid defining attributes if not possible.
         # TODO: refactor such that test-instrumentation can import qemu-vm
-        #       or declare virtualisation.qemu.console option in a module that's always imported
-        consoles = [ qemu-common.qemuSerialDevice ];
-        package  = lib.mkDefault pkgs.qemu_test;
+        package = lib.mkDefault pkgs.qemu_test;
       };
     };
 
@@ -177,7 +219,8 @@ in
       "console=tty0"
       # Panic if an error occurs in stage 1 (rather than waiting for
       # user intervention).
-      "panic=1" "boot.panic_on_fail"
+      "panic=1"
+      "boot.panic_on_fail"
       # Using acpi_pm as a clock source causes the guest clock to
       # slow down under high host load.  This is usually a bad
       # thing, but for VM tests it should provide a bit more
@@ -187,28 +230,21 @@ in
     ];
 
     # `xwininfo' is used by the test driver to query open windows.
-    environment.systemPackages = [ pkgs.xorg.xwininfo ];
+    environment.systemPackages = [ pkgs.xwininfo ];
 
     # Log everything to the serial console.
-    services.journald.extraConfig =
-      ''
-        ForwardToConsole=yes
-        TTYPath=/dev/${qemu-common.qemuSerialDevice}
-        MaxLevelConsole=debug
-      '';
+    services.journald.settings.Journal = {
+      ForwardToConsole = true;
+      TTYPath = "/dev/${qemu-common.qemuSerialDevice}";
+      MaxLevelConsole = "debug";
+    };
 
-    systemd.extraConfig = ''
-      # Don't clobber the console with duplicate systemd messages.
-      ShowStatus=no
+    systemd.settings.Manager = managerSettings;
+    systemd.user.settings.Manager = {
       # Allow very slow start
-      DefaultTimeoutStartSec=300
-      DefaultDeviceTimeoutSec=300
-    '';
-    systemd.user.extraConfig = ''
-      # Allow very slow start
-      DefaultTimeoutStartSec=300
-      DefaultDeviceTimeoutSec=300
-    '';
+      DefaultTimeoutStartSec = 300;
+      DefaultDeviceTimeoutSec = 300;
+    };
 
     boot.consoleLogLevel = 7;
 
@@ -239,7 +275,7 @@ in
     services.qemuGuest.package = pkgs.qemu_test.ga;
 
     # Squelch warning about unset system.stateVersion
-    system.stateVersion = lib.mkDefault lib.trivial.release;
+    system.stateVersion = (lib.mkOverride 1200) lib.trivial.release;
   };
 
 }

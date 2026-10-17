@@ -2,39 +2,36 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
   openssl,
   pkg-config,
-  darwin,
+  cacert,
 }:
-
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prr";
-  version = "0.17.0";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "danobi";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-siQZ3rDKv2lnn1bmisRsexWwfvmMhK+z4GZGPsrfPgc=";
+    repo = "prr";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-G8/T3Jyr0ZtY302AvYxhaC+8Ld03cVL5Cuflz62e0mw=";
   };
 
-  cargoHash = "sha256-vCZjgmBYO+I6MZLCOMp50bWEeHwLbZsxSz5gRmBykvI=";
+  cargoHash = "sha256-R3gycEs9k0VSNd0tD8Fzgbu2ibhGvXgw8H1mnSlQMug=";
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [ openssl ];
 
   nativeBuildInputs = [ pkg-config ];
 
-  meta = with lib; {
-    description = "Tool that brings mailing list style code reviews to Github PRs";
+  env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+
+  checkInputs = [ cacert ];
+
+  meta = {
+    description = "Tool that brings mailing list style code reviews to GitHub PRs";
     homepage = "https://github.com/danobi/prr";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     mainProgram = "prr";
-    maintainers = with maintainers; [ evalexpr ];
+    maintainers = with lib.maintainers; [ evalexpr ];
   };
-}
+})

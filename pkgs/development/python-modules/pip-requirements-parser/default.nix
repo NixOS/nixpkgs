@@ -5,29 +5,39 @@
   packaging,
   pyparsing,
   pytestCheckHook,
-  pythonOlder,
+  setuptools,
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pip-requirements-parser";
   version = "32.0.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nexB";
-    repo = pname;
-    tag = "v${version}";
+    repo = "pip-requirements-parser";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-UMrwDXxk+sD3P2jk7s95y4OX6DRBjWWZZ8IhkR6tnZ4=";
   };
 
+  patches = [
+    # packaging 26.0 changed the string representation of requirements with
+    # URLs to contain an extra space before the `@`.
+    # https://github.com/pypa/packaging/pull/953
+    # https://github.com/aboutcode-org/pip-requirements-parser/issues/27
+    # https://github.com/aboutcode-org/pip-requirements-parser/pull/28
+    ./packaging-26.patch
+  ];
+
   dontConfigure = true;
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     packaging
     pyparsing
   ];
@@ -42,11 +52,11 @@ buildPythonPackage rec {
     "test_legacy_version_is_deprecated"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to parse pip requirements";
     homepage = "https://github.com/nexB/pip-requirements-parser";
-    changelog = "https://github.com/nexB/pip-requirements-parser/blob/v${version}/CHANGELOG.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/nexB/pip-requirements-parser/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

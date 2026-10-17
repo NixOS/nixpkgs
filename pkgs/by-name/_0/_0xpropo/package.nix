@@ -3,16 +3,16 @@
   stdenvNoCC,
   fetchzip,
 }:
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "0xpropo";
   version = "1.100";
 
   src =
     let
-      underscoreVersion = builtins.replaceStrings [ "." ] [ "_" ] version;
+      underscoreVersion = builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version;
     in
     fetchzip {
-      url = "https://github.com/0xType/0xPropo/releases/download/${version}/0xPropo_${underscoreVersion}.zip";
+      url = "https://github.com/0xType/0xPropo/releases/download/${finalAttrs.version}/0xPropo_${underscoreVersion}.zip";
       hash = "sha256-ZlZNvn9xiOxS+dfGI1rGbh6XlXo3/puAm2vhKh63sK4=";
     };
 
@@ -23,12 +23,12 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Proportional version of the 0xProto font";
     homepage = "https://github.com/0xType/0xPropo";
-    changelog = "https://github.com/0xType/0xPropo/releases/tag/${version}";
-    license = licenses.ofl;
-    maintainers = with maintainers; [ vinnymeller ];
-    platforms = platforms.all;
+    changelog = "https://github.com/0xType/0xPropo/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.ofl;
+    maintainers = with lib.maintainers; [ vinnymeller ];
+    platforms = lib.platforms.all;
   };
-}
+})

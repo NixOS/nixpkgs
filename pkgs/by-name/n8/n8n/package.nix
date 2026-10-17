@@ -4,51 +4,75 @@
   nixosTests,
   fetchFromGitHub,
   nodejs,
-  pnpm_9,
+  pnpm_11,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   python3,
   node-gyp,
+  cctools,
   xcbuild,
   libkrb5,
   libmongocrypt,
-  postgresql,
+  libpq,
+  sqlite,
+  dart-sass,
   makeWrapper,
 }:
-
+let
+  python = python3.withPackages (
+    ps: with ps; [
+      websockets
+    ]
+  );
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "n8n";
-  version = "1.73.1";
+  version = "2.39.6";
 
   src = fetchFromGitHub {
     owner = "n8n-io";
     repo = "n8n";
     tag = "n8n@${finalAttrs.version}";
-    hash = "sha256-gPdJKVOZlizdS0o+2nBgCImnIhtHzRjE2xk0zJA52go=";
+    hash = "sha256-fmo0xL6IF6J+D5ZamkoBXyZ4Q8s3l5MeBWaXc39OsTU=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-Am9R2rfQiw1IPd22/UraqzEqvVeB5XuSrrLSYXWsWfU=";
+    pnpm = pnpm_11;
+    fetcherVersion = 4;
+    hash = "sha256-yL95w+Jd5I5R6r/qNihvAJ4MX2LMyS9ICZzJnLxHR4s=";
   };
 
   nativeBuildInputs = [
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_11
     python3 # required to build sqlite3 bindings
     node-gyp # required to build sqlite3 bindings
     makeWrapper
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin [ xcbuild ];
+    dart-sass
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools
+    xcbuild
+  ];
 
   buildInputs = [
     nodejs
     libkrb5
     libmongocrypt
-    postgresql
+    libpq
+    sqlite
   ];
 
   buildPhase = ''
     runHook preBuild
 
-    pushd node_modules/sqlite3
-    node-gyp rebuild
+    # Force sass-embedded npm package to use our dart-sass instead of bundled binaries
+    substituteInPlace packages/frontend/editor-ui/node_modules/sass-embedded/dist/lib/src/compiler-path.js \
+      --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${lib.getExe dart-sass}"];'
+
+    pushd packages/cli/node_modules/sqlite3
+    npm_config_sqlite=${lib.getDev sqlite} node-gyp rebuild
     popd
 
     # TODO: use deploy after resolved https://github.com/pnpm/pnpm/issues/5315
@@ -64,9 +88,12 @@ stdenv.mkDerivation (finalAttrs: {
     rm node_modules/.modules.yaml
     rm packages/nodes-base/dist/types/nodes.json
 
-    pnpm --ignore-scripts prune --prod
+    CI=true pnpm --ignore-scripts prune --prod -w
     find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
     rm -rf node_modules/.pnpm/{typescript*,prettier*}
+    shopt -s globstar
+    # https://github.com/pnpm/pnpm/issues/3645
+    find node_modules packages/**/node_modules -xtype l -delete
 
     echo "Removed non-deterministic and unnecessary files"
   '';
@@ -75,10 +102,25 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/{bin,lib/n8n}
-    mv {packages,node_modules} $out/lib/n8n
+    cp -r {packages,node_modules} $out/lib/n8n
 
+    # node must be on PATH: in internal runner mode the CLI spawns the
+    # JS task runner via `spawn('node', ...)`, and since 2.33 a failed
+    # spawn crashes n8n instead of being silently ignored
     makeWrapper $out/lib/n8n/packages/cli/bin/n8n $out/bin/n8n \
-      --set N8N_RELEASE_TYPE "stable"
+      --set N8N_RELEASE_TYPE "stable" \
+      --prefix PATH : ${lib.makeBinPath [ nodejs ]}
+
+    # JavaScript runner
+    makeWrapper ${nodejs}/bin/node $out/bin/n8n-task-runner \
+      --add-flags "$out/lib/n8n/packages/@n8n/task-runner/dist/start.js"
+
+    # Python runner
+    mkdir -p $out/lib/n8n-task-runner-python
+    cp -r packages/@n8n/task-runner-python/* $out/lib/n8n-task-runner-python/
+    makeWrapper ${python}/bin/python $out/bin/n8n-task-runner-python \
+      --add-flags "$out/lib/n8n-task-runner-python/src/main.py" \
+      --prefix PYTHONPATH : "$out/lib/n8n-task-runner-python"
 
     runHook postInstall
   '';
@@ -103,6 +145,9 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/n8n-io/n8n/releases/tag/n8n@${finalAttrs.version}";
     maintainers = with lib.maintainers; [
       gepbird
+      AdrienLemaire
+      sweenu
+      wrbbz
     ];
     license = lib.licenses.sustainableUse;
     mainProgram = "n8n";

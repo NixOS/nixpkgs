@@ -2,59 +2,87 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  git,
+  setuptools,
   importlib-metadata,
   importlib-resources,
   jinja2,
   mkdocs,
-  pythonOlder,
+  pyparsing,
   pyyaml,
-  unittestCheckHook,
+  pyyaml-env-tag,
   verspec,
+  versionCheckHook,
+  pytestCheckHook,
+  git,
+  shtab,
+  stdenv,
+  fetchpatch,
 }:
 
 buildPythonPackage rec {
   pname = "mike";
-  version = "unstable-2023-05-06";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "2.2.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jimporter";
-    repo = pname;
-    rev = "300593c338b18f61f604d18457c351e166318020";
-    hash = "sha256-Sjj2275IJDtLjG6uO9h4FbgxXTMgqD8c/rJj6iOxfuI=";
+    repo = "mike";
+    tag = "v${version}";
+    hash = "sha256-+QFtInHma433XI4EcMTpFKZVdk+x2JREo73qM35G0pQ=";
   };
 
-  propagatedBuildInputs = [
+  patches = [
+    (fetchpatch {
+      name = "fix-shtab-unit-tests.patch";
+      url = "https://github.com/jimporter/mike/commit/22ccb5f6d6e53285845d38a9559afab7248b5c9b.patch";
+      hash = "sha256-hzTNkdq283+ybw0Fn5vIEMtgH7F1gt84ZzwL3Ru+5MY=";
+    })
+  ];
+
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     importlib-metadata
     importlib-resources
     jinja2
     mkdocs
+    pyparsing
     pyyaml
+    pyyaml-env-tag
     verspec
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
+    pytestCheckHook
     git
-    unittestCheckHook
+    mkdocs
+    shtab
   ];
 
   preCheck = ''
     export PATH=$out/bin:$PATH
+  ''
+  # "stat" on darwin results in "not permitted" instead of "does not exists"
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace test/unit/test_git_utils.py \
+      --replace-fail "/home/nonexist" "$(mktemp -d)"
   '';
-
-  # Difficult to setup
-  doCheck = false;
 
   pythonImportsCheck = [ "mike" ];
 
-  meta = with lib; {
-    description = "Manage multiple versions of your MkDocs-powered documentation";
-    mainProgram = "mike";
+  meta = {
+    description = "Manage multiple versions of your MkDocs-powered documentation via Git";
     homepage = "https://github.com/jimporter/mike";
-    license = licenses.bsd3;
-    maintainers = [ ];
+    changelog = "https://github.com/jimporter/mike/blob/v${version}/CHANGES.md";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ marcel ];
+    mainProgram = "mike";
   };
 }

@@ -6,20 +6,20 @@
   cmake,
   pkg-config,
   libuv,
-  libX11,
-  libXi,
+  libx11,
+  libxi,
   libyaml,
   luajit,
   udev,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "keyleds";
-  version = "unstable-2021-04-08";
+  version = "1.1.1-unstable-2021-03-27";
 
   src = fetchFromGitHub {
     owner = "keyleds";
-    repo = pname;
+    repo = "keyleds";
     rev = "171361654a64b570d747c2d196acb2da4b8dc293";
     sha256 = "sha256-mojgHMT0gni0Po0hiZqQ8eMzqfwUipXue1uqpionihw=";
   };
@@ -35,6 +35,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace {,{keyledsd/plugins,keyledsd,keyledsctl,libkeyleds}/}CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 3.0)" "cmake_minimum_required (VERSION 3.10)"
+  '';
+
   strictDeps = true;
 
   nativeBuildInputs = [
@@ -44,8 +49,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libuv
-    libX11
-    libXi
+    libx11
+    libxi
     libyaml
     luajit
     udev

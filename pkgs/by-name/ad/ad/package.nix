@@ -6,18 +6,18 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ad";
-  version = "0.2.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "sminez";
     repo = "ad";
-    tag = version;
-    hash = "sha256-c2oSQ81qCZbwUl4TqovDWm8TUqI6RdrQPvoP/FaTI/A=";
+    tag = finalAttrs.version;
+    hash = "sha256-t9zhNAmUkjjVabaBlP/dGMHY11lxC3qqg0N0HK4nz2I=";
   };
 
-  cargoHash = "sha256-VgzaAQy0z1JReMeRcX7LbbgKqrwTmnVecuLd1kyekHA=";
+  cargoHash = "sha256-T1y7Xnyhet3a/Obb4RJ+iJE4wWpmQf0fnhxfTzM6dm0=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -25,10 +25,12 @@ rustPlatform.buildRustPackage rec {
     # both assume `/usr/bin/sh` exists
     "--skip=buffer::tests::try_expand_known_works::file_that_exists_abs_path"
     "--skip=buffer::tests::try_expand_known_works::file_that_exists_abs_path_with_addr"
+    # integration tests require filesystem and Unix socket access
+    "--skip=editor_scenarios::"
   ];
 
   postInstall = ''
-    installManPage doc/man/ad.1
+    installManPage docs/man/ad.1
   '';
 
   nativeInstallCheckInputs = [
@@ -58,4 +60,4 @@ rustPlatform.buildRustPackage rec {
     # https://github.com/sminez/ad/issues/28
     platforms = lib.platforms.unix;
   };
-}
+})

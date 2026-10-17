@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   setuptools,
   pytestCheckHook,
@@ -12,11 +11,9 @@ buildPythonPackage rec {
   version = "0.1.7";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     inherit version pname;
-    sha256 = "01gpcnksnqv6np28i4x8s3wkngawzgs99zvjfia57spa42ykkrg6";
+    hash = "sha256-5uU5vSDq6lNUdHL/lPT7XD07+dCok4jEtWZjq6dl9wU=";
   };
 
   build-system = [ setuptools ];

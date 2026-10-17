@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "${src.name}/relay-rust";
 
-  cargoHash = "sha256-3oVWFMFzYsuCec1wxZiHXW6O45qbdL1npqYrg/m4SPc=";
+  cargoHash = "sha256-xfRTGGlL1/Bq04aGWJSGgkoTGKYiiUAdkHu4zJS3x/U=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage rec {
     --set ADB ${androidenv.androidPkgs.platform-tools}/bin/adb
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Reverse tethering over adb for Android";
     mainProgram = "gnirehtet";
     longDescription = ''
@@ -57,12 +57,12 @@ rustPlatform.buildRustPackage rec {
       This relies on adb, make sure you have the required permissions/udev rules.
     '';
     homepage = "https://github.com/Genymobile/gnirehtet";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # gnirehtet.apk
     ];
-    license = licenses.asl20;
-    maintainers = with maintainers; [ symphorien ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ symphorien ];
+    platforms = lib.platforms.unix;
   };
 }

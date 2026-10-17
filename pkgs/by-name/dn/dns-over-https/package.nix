@@ -4,18 +4,18 @@
   buildGoModule,
   nix-update-script,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dns-over-https";
-  version = "2.3.7";
+  version = "2.3.10";
 
   src = fetchFromGitHub {
     owner = "m13253";
     repo = "dns-over-https";
-    tag = "v${version}";
-    hash = "sha256-3mg4kDlIqv+psQU/FxA9TksGVAYaOymEDpAhMBZuqKI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WQ6OyZfQMtW9nZcvlBjHk0R96NQr0Lc2mGB5taC0d6k=";
   };
 
-  vendorHash = "sha256-Dun1HWjV44PTpnijWBpGXqmKxtUw+Qu8rqsyMhEpkb4=";
+  vendorHash = "sha256-46BrN50G5IhdMwMVMU9Wdj/RFzUzIPoTRucCedMGu4g=";
 
   ldflags = [
     "-w"
@@ -31,10 +31,10 @@ buildGoModule rec {
 
   meta = {
     homepage = "https://github.com/m13253/dns-over-https";
-    changelog = "https://github.com/m13253/dns-over-https/releases/tag/v${version}";
+    changelog = "https://github.com/m13253/dns-over-https/releases/tag/v${finalAttrs.version}";
     description = "High performance DNS over HTTPS client & server";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ cryo ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

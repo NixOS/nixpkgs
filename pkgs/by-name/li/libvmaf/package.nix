@@ -1,5 +1,6 @@
 {
   lib,
+  buildPackages,
   stdenv,
   fetchFromGitHub,
   ffmpeg-full,
@@ -8,7 +9,6 @@
   nasm,
   ninja,
   testers,
-  xxd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,8 +28,16 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     nasm
-    xxd
+    (buildPackages.callPackage ./xxd.nix { })
   ];
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isFreeBSD ''
+    substituteInPlace meson.build --replace-fail '_XOPEN_SOURCE=600' '_XOPEN_SOURCE=700'
+  '';
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isFreeBSD {
+    NIX_CFLAGS_COMPILE = "-D__BSD_VISIBLE=1";
+  };
 
   mesonFlags = [ "-Denable_avx512=true" ];
 
@@ -50,13 +58,13 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Perceptual video quality assessment based on multi-method fusion (VMAF)";
     homepage = "https://github.com/Netflix/vmaf";
     changelog = "https://github.com/Netflix/vmaf/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = licenses.bsd2Patent;
-    maintainers = [ maintainers.cfsmp3 ];
+    license = lib.licenses.bsd2Patent;
+    maintainers = [ lib.maintainers.cfsmp3 ];
     mainProgram = "vmaf";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

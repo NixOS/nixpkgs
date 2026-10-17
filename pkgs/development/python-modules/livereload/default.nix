@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "lepture";
     repo = "python-livereload";
     tag = "v${version}";
-    sha256 = "sha256-WFpPCUjvyGT826EkIuqAB4jcJOEqoohJY9Xw/EJrk6c=";
+    hash = "sha256-WFpPCUjvyGT826EkIuqAB4jcJOEqoohJY9Xw/EJrk6c=";
   };
 
   buildInputs = [ django ];
@@ -36,6 +36,6 @@ buildPythonPackage rec {
     mainProgram = "livereload";
     homepage = "https://github.com/lepture/python-livereload";
     license = lib.licenses.bsd3;
-    maintainers = with lib; [ ];
+    maintainers = [ ];
   };
 }

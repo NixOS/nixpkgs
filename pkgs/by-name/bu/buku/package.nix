@@ -8,9 +8,11 @@
 let
   serverRequire = with python3.pkgs; [
     requests
+    flasgger
     flask
     flask-admin
     flask-api
+    flask-babel
     flask-bootstrap
     flask-paginate
     flask-wtf
@@ -22,16 +24,16 @@ let
   ];
 in
 with python3.pkgs;
-buildPythonApplication rec {
-  version = "4.8";
+buildPythonApplication (finalAttrs: {
+  version = "5.1.1";
   pname = "buku";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "buku";
-    rev = "v${version}";
-    sha256 = "sha256-kPVlfTYUusf5CZnKB53WZcCHo3MEnA2bLUHTRPGPn+8=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-7dxe1GUdBDP/mNfYKkJzKNTgzXLfVQxp4REEkFIh4Bs=";
   };
 
   nativeBuildInputs = [
@@ -40,15 +42,19 @@ buildPythonApplication rec {
 
   nativeCheckInputs = [
     hypothesis
-    pytest
+    pytestCheckHook
     pytest-recording
     pyyaml
     mypy-extensions
     click
     pylint
     flake8
-    pytest-cov
+    pytest-cov-stub
     pyyaml
+  ]
+  ++ lib.optionals withServer [
+    lxml
+    pytest-timeout
   ];
 
   propagatedBuildInputs = [
@@ -57,41 +63,31 @@ buildPythonApplication rec {
     certifi
     urllib3
     html5lib
-  ] ++ lib.optionals withServer serverRequire;
+  ]
+  ++ lib.optionals withServer serverRequire;
 
-  preCheck =
-    ''
-      # Disables a test which requires internet
-      substituteInPlace tests/test_bukuDb.py \
-        --replace "@pytest.mark.slowtest" "@unittest.skip('skipping')" \
-        --replace "self.assertEqual(shorturl, \"http://tny.im/yt\")" "" \
-        --replace "self.assertEqual(url, \"https://www.google.com\")" ""
-      substituteInPlace setup.py \
-        --replace mypy-extensions==0.4.1 mypy-extensions>=0.4.1
-    ''
-    + lib.optionalString (!withServer) ''
-      rm tests/test_{server,views}.py
-    '';
+  preCheck = lib.optionalString (!withServer) ''
+    rm tests/test_{server,views}.py
+  '';
 
-  postInstall =
-    ''
-      make install PREFIX=$out
+  postInstall = ''
+    make install PREFIX=$out
 
-      mkdir -p $out/share/zsh/site-functions $out/share/bash-completion/completions $out/share/fish/vendor_completions.d
-      cp auto-completion/zsh/* $out/share/zsh/site-functions
-      cp auto-completion/bash/* $out/share/bash-completion/completions
-      cp auto-completion/fish/* $out/share/fish/vendor_completions.d
-    ''
-    + lib.optionalString (!withServer) ''
-      rm $out/bin/bukuserver
-    '';
+    mkdir -p $out/share/zsh/site-functions $out/share/bash-completion/completions $out/share/fish/vendor_completions.d
+    cp auto-completion/zsh/* $out/share/zsh/site-functions
+    cp auto-completion/bash/* $out/share/bash-completion/completions
+    cp auto-completion/fish/* $out/share/fish/vendor_completions.d
+  ''
+  + lib.optionalString (!withServer) ''
+    rm $out/bin/bukuserver
+  '';
 
-  meta = with lib; {
+  meta = {
     description = "Private cmdline bookmark manager";
     mainProgram = "buku";
     homepage = "https://github.com/jarun/Buku";
-    license = licenses.gpl3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
-}
+})

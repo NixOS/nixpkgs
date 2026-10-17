@@ -3,6 +3,8 @@
   buildPythonPackage,
   decorator,
   fetchPypi,
+  setuptools,
+  setuptools-scm,
   formencode,
   httpretty,
   libxml2,
@@ -12,8 +14,7 @@
   nocaselist,
   pbr,
   ply,
-  pytest,
-  pythonOlder,
+  pytestCheckHook,
   pytz,
   pyyaml,
   requests,
@@ -25,15 +26,23 @@
 
 buildPythonPackage rec {
   pname = "pywbem";
-  version = "1.7.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "1.9.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3Dt4WEABf1/LY4HFZoJZjOu/yEUYUXaPheIxioTga2g=";
+    hash = "sha256-tTfr6DfE/W8ifHXdGWF14QW5X66a3PGfeQRXujV1M0M=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools-scm>=9.2.0" "setuptools-scm"
+  '';
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     mock
@@ -42,6 +51,7 @@ buildPythonPackage rec {
     pbr
     ply
     pyyaml
+    requests
     six
     yamlloader
   ];
@@ -52,20 +62,24 @@ buildPythonPackage rec {
     httpretty
     libxml2
     lxml
-    pytest
+    pytestCheckHook
     pytz
-    requests
     requests-mock
     testfixtures
   ];
 
   pythonImportsCheck = [ "pywbem" ];
 
-  meta = with lib; {
+  disabledTestPaths = [
+    "tests/leaktest" # requires 'yagot'
+    "tests/end2endtest" # requires 'pytest_easy_server'
+  ];
+
+  meta = {
     description = "Support for the WBEM standard for systems management";
     homepage = "https://pywbem.github.io";
     changelog = "https://github.com/pywbem/pywbem/blob/${version}/docs/changes.rst";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
   };
 }

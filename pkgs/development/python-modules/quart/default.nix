@@ -2,10 +2,9 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
-  poetry-core,
+  flit-core,
 
   # propagates
   aiofiles,
@@ -13,13 +12,11 @@
   click,
   flask,
   hypercorn,
-  importlib-metadata,
   itsdangerous,
   jinja2,
   markupsafe,
   pydata-sphinx-theme,
   python-dotenv,
-  typing-extensions,
   werkzeug,
 
   # tests
@@ -33,36 +30,31 @@
 
 buildPythonPackage rec {
   pname = "quart";
-  version = "0.19.9";
+  version = "0.22.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pallets";
     repo = "quart";
     tag = version;
-    hash = "sha256-jekbrHpB+7d3IagVUtDYA1VFlWtnE7kPqIm19NB2scA=";
+    hash = "sha256-1rwkrxxk79EB8gkeXNvT2hR37it4H6RqewPxYny/VIs=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ flit-core ];
 
-  dependencies =
-    [
-      aiofiles
-      blinker
-      click
-      flask
-      hypercorn
-      itsdangerous
-      jinja2
-      markupsafe
-      pydata-sphinx-theme
-      python-dotenv
-      werkzeug
-    ]
-    ++ lib.optionals (pythonOlder "3.10") [
-      importlib-metadata
-      typing-extensions
-    ];
+  dependencies = [
+    aiofiles
+    blinker
+    click
+    flask
+    hypercorn
+    itsdangerous
+    jinja2
+    markupsafe
+    pydata-sphinx-theme
+    python-dotenv
+    werkzeug
+  ];
 
   pythonImportsCheck = [ "quart" ];
 
@@ -75,12 +67,17 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  disabledTests = [
+    # AssertionError
+    "test_cli_blueprints[cli_group2-args2]"
+  ];
+
+  meta = {
     description = "Async Python micro framework for building web applications";
-    mainProgram = "quart";
     homepage = "https://github.com/pallets/quart/";
-    changelog = "https://github.com/pallets/quart/blob/${src.rev}/CHANGES.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    changelog = "https://github.com/pallets/quart/blob/${src.tag}/CHANGES.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
+    mainProgram = "quart";
   };
 }

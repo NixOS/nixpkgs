@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1d055dd64f6eb335580a485271511ba2f4e3b5e315f48f827f58da3cace4b4ae";
+    hash = "sha256-HQVd1k9uszVYCkhScVEbovTjteMV9I+Cf1jaPKzktK4=";
   };
 
   propagatedBuildInputs = [ pygments ];
@@ -22,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "insegel" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/autophagy/insegel";
     description = "Monochrome 2 column Sphinx theme";
-    license = licenses.mit;
-    maintainers = with maintainers; [ autophagy ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ autophagy ];
   };
 }

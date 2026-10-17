@@ -3,51 +3,66 @@
   buildPythonPackage,
   cloudpickle,
   fetchPypi,
-  future,
+  hatch-vcs,
+  hatchling,
+  lightgbm,
   networkx,
   numpy,
   py4j,
   pymongo,
   pyspark,
+  scikit-learn,
   scipy,
-  six,
   tqdm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hyperopt";
-  version = "0.2.7";
-  format = "setuptools";
+  version = "0.3.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "1bf89ae58050bbd32c7307199046117feee245c2fd9ab6255c7308522b7ca149";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-15p3Ui/v7BOiWLl6DMvfQIMrMnDeTbCCeLsHubk065o=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
+
+  dependencies = [
     cloudpickle
-    future
     networkx
     numpy
-    py4j
-    pymongo
-    pyspark
     scipy
-    six
     tqdm
   ];
+
+  optional-dependencies = {
+    SparkTrials = [
+      pyspark
+      py4j
+    ];
+    MongoTrials = [ pymongo ];
+    ATPE = [
+      lightgbm
+      scikit-learn
+    ];
+  };
 
   # tries to use /homeless-shelter to mimic container usage, etc
   doCheck = false;
 
   pythonImportsCheck = [ "hyperopt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Distributed Asynchronous Hyperparameter Optimization";
-    mainProgram = "hyperopt-mongo-worker";
     homepage = "http://hyperopt.github.io/hyperopt/";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ freezeboy ];
+    changelog = "https://github.com/hyperopt/hyperopt/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
+    mainProgram = "hyperopt-mongo-worker";
   };
-}
+})

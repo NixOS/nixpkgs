@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs man/manhelper.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "App to send/receive SMS, make USSD requests, control mobile data usage and more";
     longDescription = ''
       A simple GTK based GUI compatible with Modem manager, Wader and oFono
@@ -79,13 +79,13 @@ stdenv.mkDerivation (finalAttrs: {
       functions. You can check balance of your SIM card, send or receive SMS
       messages, control mobile traffic consumption and more.
     '';
-    homepage = "https://linuxonly.ru/page/modem-manager-gui";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    homepage = "https://salsa.debian.org/debian/modem-manager-gui";
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       ahuzik
       galagora
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "modem-manager-gui";
   };
 })

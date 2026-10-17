@@ -1,6 +1,5 @@
 {
   cmake,
-  darwin,
   fetchFromGitHub,
   SDL2,
   ffmpeg_6,
@@ -10,42 +9,45 @@
   libGL,
   libxkbcommon,
   makeDesktopItem,
+  copyDesktopItems,
   openssl,
   pkg-config,
   rustPlatform,
   stdenv,
   wayland,
   wayland-scanner,
-  xorg,
+  nix-update-script,
+  libx11,
+  libxcb,
+  libxcursor,
+  libxi,
+  libxrandr,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gossip";
-  version = "0.12.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "mikedilger";
     repo = "gossip";
-    tag = "v${version}";
-    hash = "sha256-mPM5HYPEUQ+cGrJ3G/0pmSN4ZQ9SvSNACJRTkgqTAeY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-nv/NMLAka62u0WzvHMEW9XBVXpg9T8bNJiUegS/oj48=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "egui-video-0.1.0" = "sha256-mks5wYl9s8AjaEtYx3hjOPoV7g+SbK2sC/cnqsc6sM4=";
-      "nostr-types-0.8.0-unstable" = "sha256-ewwOmJaGGRZ25xIM+8fGtB3m46MDQ2WpP0fGF6F5yR4=";
-      "ecolor-0.28.1" = "sha256-X0cUCNBCsWpeoiqbEp8o9QVl29DzIVe9jjNEq9SQ7kM=";
-      "ffmpeg-next-7.0.4" = "sha256-ED7zY944YLVR9dgRvXuCC2n7szKkPMH8DJX4jVBNRIQ=";
-      "watcher-0.1.0" = "sha256-SdwmbP8JrhkBbHEzSFALf0dF2T2xHigORizRRoPVblA=";
-      "lightning-0.0.123-beta" = "sha256-gngH0mOC9USzwUGP4bjb1foZAvg6QHuzODv7LG49MsA=";
-      "musig2-0.1.0" = "sha256-++1x7uHHR7KEhl8LF3VywooULiTzKeDu3e+0/c/8p9Y=";
-      "nip44-0.1.0" = "sha256-u2ALoHQrPVNoX0wjJmQ+BYRzIKsi0G5xPbYjgsNZZ7A=";
-    };
-  };
+  cargoHash = "sha256-rE7SErOhl2fcmvLairq+mvdnbDIk1aPo3eYqwRx5kkA=";
+
+  postPatch = ''
+    substituteInPlace $cargoDepsCopy/*/sdl2-sys-0.37.0/SDL/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.0.0)" "cmake_minimum_required(VERSION 3.0.0...3.5)" \
+      --replace-fail "cmake_minimum_required(VERSION 3.4)" "cmake_minimum_required(VERSION 3.4...3.5)"
+  '';
 
   # See https://github.com/mikedilger/gossip/blob/0.9/README.md.
-  RUSTFLAGS = "--cfg tokio_unstable";
+  env.RUSTFLAGS = "--cfg tokio_unstable";
+
+  # Vendored SDL2 uses `bool` / `false` as identifiers, rejected by gcc 15's C23 default.
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
   # Some users might want to add "rustls-tls(-native)" for Rust TLS instead of OpenSSL.
   buildFeatures = [
@@ -53,41 +55,33 @@ rustPlatform.buildRustPackage rec {
     "lang-cjk"
   ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      git
-      pkg-config
-      rustPlatform.bindgenHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wayland-scanner
-    ];
+  nativeBuildInputs = [
+    cmake
+    git
+    pkg-config
+    rustPlatform.bindgenHook
+    copyDesktopItems
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wayland-scanner
+  ];
 
-  buildInputs =
-    [
-      SDL2
-      ffmpeg_6
-      fontconfig
-      libGL
-      libxkbcommon
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-      darwin.apple_sdk.frameworks.Cocoa
-      darwin.apple_sdk.frameworks.CoreGraphics
-      darwin.apple_sdk.frameworks.Foundation
-      darwin.apple_sdk.frameworks.ForceFeedback
-      darwin.apple_sdk.frameworks.AVFoundation
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wayland
-      xorg.libX11
-      xorg.libXcursor
-      xorg.libXi
-      xorg.libXrandr
-    ];
+  buildInputs = [
+    SDL2
+    ffmpeg_6
+    fontconfig
+    libGL
+    libxkbcommon
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wayland
+    libx11
+    libxcb
+    libxcursor
+    libxi
+    libxrandr
+  ];
 
   # Tests rely on local files, so disable them. (I'm too lazy to patch it.)
   doCheck = false;
@@ -119,7 +113,7 @@ rustPlatform.buildRustPackage rec {
       name = "Gossip";
       exec = "gossip";
       icon = "gossip";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       desktopName = "Gossip";
       categories = [
         "Chat"
@@ -127,16 +121,21 @@ rustPlatform.buildRustPackage rec {
         "InstantMessaging"
       ];
       startupWMClass = "gossip";
+      mimeTypes = [ "x-scheme-handler/nostr" ];
     })
   ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Desktop client for nostr, an open social media protocol";
-    downloadPage = "https://github.com/mikedilger/gossip/releases/tag/${version}";
+    downloadPage = "https://github.com/mikedilger/gossip/releases/tag/${finalAttrs.version}";
     homepage = "https://github.com/mikedilger/gossip";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "gossip";
-    maintainers = with maintainers; [ msanft ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ msanft ];
+    platforms = lib.platforms.unix;
   };
-}
+})

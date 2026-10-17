@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1e6bba42a5f66c245adf38a5a4006a99dcc06a0703786ea636098667d42903b8";
+    hash = "sha256-Hmu6QqX2bCRa3zilpABqmdzAagcDeG6mNgmGZ9QpA7g=";
   };
 
   propagatedBuildInputs = [
@@ -24,9 +24,9 @@ buildPythonPackage rec {
   # Tests require an old version of hypothesis
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Macaroon library for Python";
     homepage = "https://github.com/ecordell/pymacaroons";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

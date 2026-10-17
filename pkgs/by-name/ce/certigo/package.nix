@@ -4,24 +4,25 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "certigo";
-  version = "1.16.0";
+  version = "1.18.1";
 
   src = fetchFromGitHub {
     owner = "square";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-+j1NeQJPDwQxXVYnHNmL49Li2IMH+9ehS0HSM3kqyxU=";
+    repo = "certigo";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Y2m+uO/jxwWdutry859Y6IdNJpXjjkrlJ+LJrjS616Y=";
   };
 
-  vendorHash = "sha256-G9YpMF4qyL8eJPnai81ihVTDK9E4meKxdpk+rjISnIM=";
+  vendorHash = "sha256-u10YSa2xFswJk/2iC7eyfQ51oTaa30/6JA5aLk5021k=";
 
-  meta = with lib; {
+  meta = {
     description = "Utility to examine and validate certificates in a variety of formats";
     homepage = "https://github.com/square/certigo";
-    license = licenses.asl20;
+    changelog = "https://github.com/square/certigo/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "certigo";
   };
-}
+})

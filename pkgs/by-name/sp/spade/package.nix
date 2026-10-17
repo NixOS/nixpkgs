@@ -1,36 +1,33 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitLab,
+  fetchFromCodeberg,
   stdenv,
   _experimental-update-script-combinators,
   nix-update-script,
   nix-update,
   writeScript,
   git,
-  python312,
+  pkg-config,
+  openssl,
+  python314,
   swim,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "spade";
-  version = "0.12.0";
+  version = "0.20.0";
 
-  src = fetchFromGitLab {
+  src = fetchFromCodeberg {
     owner = "spade-lang";
     repo = "spade";
     rev = "v${version}";
-    hash = "sha256-AarFH0D0ApZ+i6qtKy7zM2iwg/QeYoLwOHbg+d6Q78k=";
+    hash = "sha256-POMt+uTSaP+XADFbAwWLxzm6FZiyoMIrDFfTtBMPIgs=";
     # only needed for vatch, which contains test data
     fetchSubmodules = true;
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "codespan-0.12.0" = "sha256-3F2006BR3hyhxcUTaQiOjzTEuRECKJKjIDyXonS/lrE=";
-    };
-  };
+  cargoHash = "sha256-j/h9UzcsojELd/bYX6/w54PwuqMViEAOKE9tsmQOhXY=";
 
   # TODO: somehow respect https://nixos.org/manual/nixpkgs/stable/#var-passthru-updateScript-commit
   passthru.updateScript = _experimental-update-script-combinators.sequence [
@@ -51,24 +48,42 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ python312 ];
-  env.NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isDarwin "-L${python312}/lib/python3.12/config-3.12-darwin -lpython3.12";
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    python314
+  ];
+  env.NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isDarwin "-L${python314}/lib/python3.14/config-3.14-darwin -lpython3.14";
+
+  cargoBuildFlags = [
+    "--workspace"
+    # TODO: --exclude the excluded crates listed in release.sh?
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # "Undefined symbols for architecture arm:" ...
+    "--exclude=spade-surfer-plugin"
+  ];
 
   passthru.tests = {
     inherit swim;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Better hardware description language";
-    homepage = "https://gitlab.com/spade-lang/spade";
-    changelog = "https://gitlab.com/spade-lang/spade/-/blob/${src.rev}/CHANGELOG.md";
+    homepage = "https://codeberg/spade-lang/spade";
+    changelog = "https://codeberg.org/spade-lang/spade/src/branch/main/CHANGELOG.md";
     # compiler is eupl12, spade-lang stdlib is both asl20 and mit
-    license = with licenses; [
+    license = with lib.licenses; [
       eupl12
       asl20
       mit
     ];
-    maintainers = with maintainers; [ pbsds ];
+    maintainers = with lib.maintainers; [ pbsds ];
     mainProgram = "spade";
   };
 }

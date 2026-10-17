@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   poetry-core,
@@ -10,7 +9,6 @@
   # dependencies
   markdown-it-py,
   pygments,
-  typing-extensions,
 
   # optional-dependencies
   ipywidgets,
@@ -27,26 +25,27 @@
   textual,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rich";
-  version = "13.9.4";
+  version = "15.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "rich";
-    tag = "v${version}";
-    hash = "sha256-Zaop9zR+Sz9lMQjQP1ddJSid5jEmf0tQYuTeLuWNGA8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Uk3r6aYhrjYJ8GrMKfdlv3/muK/uUynd4pd1yWCwSOM=";
   };
+
+  # https://github.com/Textualize/rich/issues/4209
+  patches = [ ./Update-to-pygments-2.21.0.patch ];
 
   build-system = [ poetry-core ];
 
   dependencies = [
     markdown-it-py
     pygments
-  ] ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+  ];
 
   optional-dependencies = {
     jupyter = [ ipywidgets ];
@@ -69,11 +68,11 @@ buildPythonPackage rec {
       ;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Render rich text, tables, progress bars, syntax highlighting, markdown and more to the terminal";
     homepage = "https://github.com/Textualize/rich";
-    changelog = "https://github.com/Textualize/rich/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ris ];
+    changelog = "https://github.com/Textualize/rich/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ris ];
   };
-}
+})

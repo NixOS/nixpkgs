@@ -13,16 +13,22 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libofx";
   version = "0.10.9";
 
   src = fetchFromGitHub {
     owner = "LibOFX";
-    repo = pname;
-    rev = version;
+    repo = "libofx";
+    rev = finalAttrs.version;
     sha256 = "sha256-KOQrEAt1jHrOpPQ7QbGUADe0i7sQXNH2fblPRzT0EIg=";
   };
+
+  # C++20 changes the signature of std::allocator::allocate. Vendored patch
+  # from the approved PR to fix this.
+  # https://github.com/libofx/libofx/issues/105
+  # https://github.com/libofx/libofx/pull/106
+  patches = [ ./c++20-allocate.patch ];
 
   preConfigure = "./autogen.sh";
   configureFlags = [ "--with-opensp-includes=${opensp}/include/OpenSP" ];
@@ -37,13 +43,14 @@ stdenv.mkDerivation rec {
     opensp
     libxml2
     curl
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   meta = {
     description = "Opensource implementation of the Open Financial eXchange specification";
     homepage = "https://libofx.sourceforge.net/";
-    license = "LGPL";
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

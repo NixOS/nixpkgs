@@ -10,17 +10,20 @@
   ounit2,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "gapi-ocaml";
-  version = "0.4.5";
-
-  minimalOCamlVersion = "4.08";
+  version = if lib.versionAtLeast cryptokit.version "1.21" then "0.4.9" else "0.4.7";
 
   src = fetchFromGitHub {
     owner = "astrada";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-qlQEE8l/H22bb1VcK9YehR+9L5XepMu8JY7OLw1OIXg=";
+    repo = "gapi-ocaml";
+    tag = "v${finalAttrs.version}";
+    hash =
+      {
+        "0.4.7" = "sha256-uQJfrgF0oafURlamHslt9hX9MP4vFeVqDhuX7T/kjiY=";
+        "0.4.9" = "sha256-UWoWWpCAKCNEwEFO4UBXrTO49QyxLXrulDHX6dGr0z4=";
+      }
+      ."${finalAttrs.version}";
   };
 
   nativeBuildInputs = [ cppo ];
@@ -39,6 +42,7 @@ buildDunePackage rec {
     description = "OCaml client for google services";
     homepage = "https://github.com/astrada/gapi-ocaml";
     license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ bennofs ];
   };
-}
+})

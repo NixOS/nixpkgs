@@ -1,32 +1,35 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
-  setuptools-scm,
+  hatchling,
+  hatch-vcs,
   aiohttp,
+  pydantic,
   pytz,
   voluptuous,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pygti";
-  version = "0.9.4";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6";
+  version = "1.1.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vigonotion";
     repo = "pygti";
-    tag = "v${version}";
-    hash = "sha256-2T4Yw4XEOkv+IWyB4Xa2dPu929VH0tLeUjQ5S8EVXz0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-B+jz91xoN7GiU4PnJTG5Kt1eA4ST63d+ZEgRrr9Xio8=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
+    pydantic
     pytz
     voluptuous
   ];
@@ -40,10 +43,11 @@ buildPythonPackage rec {
     "pygti.gti"
   ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/vigonotion/pygti/releases/tag/${finalAttrs.src.tag}";
     description = "Access public transport information in Hamburg, Germany";
     homepage = "https://github.com/vigonotion/pygti";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

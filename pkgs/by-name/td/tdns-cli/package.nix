@@ -4,24 +4,24 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "tdns-cli";
-  version = "unstable-2021-02-19";
+  version = "0.0.5-unstable-2026-02-23";
 
   src = fetchFromGitHub {
     owner = "rotty";
-    repo = pname;
-    rev = "9a5455fe8a52f3f14dc55ef81511b479c8cd70ea";
-    hash = "sha256-BGxkqlKg81izq4eOBEZFJ/MPb3UCSOo8ZTYTjtjierk=";
+    repo = "tdns-cli";
+    rev = "404ba636e031ff6101da633d3a572b1b075c0f37";
+    hash = "sha256-e1JEQQI8226Ey5b3Z02xEAfy22eLPC10ANQVHAM7hDs=";
   };
 
-  cargoHash = "sha256-uRny+l/LaQPjF5AnbxgKFLdjuAxcez1BqsL4g54KAwU=";
+  cargoHash = "sha256-G6YVZf2TxtIvEEeUtHWDITQfUayhEjS2QtXNSsvwg2M=";
 
-  meta = with lib; {
+  meta = {
     description = "DNS tool that aims to replace dig and nsupdate";
     homepage = "https://github.com/rotty/tdns-cli";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ astro ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ astro ];
     mainProgram = "tdns";
   };
 }

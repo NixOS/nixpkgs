@@ -10,14 +10,14 @@
   libjack2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qmidiarp";
   version = "0.7.1";
 
   src = fetchgit {
     url = "https://git.code.sf.net/p/qmidiarp/code";
     sha256 = "sha256-xTDI1QtgOOMexzFKvYWhlfpXv8uXaoD4o+G6XF8/Cw8=";
-    rev = "qmidiarp-${version}";
+    rev = "qmidiarp-${finalAttrs.version}";
   };
 
   nativeBuildInputs = [
@@ -26,17 +26,16 @@ stdenv.mkDerivation rec {
     qt5.wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      alsa-lib
-      lv2
-      libjack2
-    ]
-    ++ (with qt5; [
-      qttools
-    ]);
+  buildInputs = [
+    alsa-lib
+    lv2
+    libjack2
+  ]
+  ++ (with qt5; [
+    qttools
+  ]);
 
-  meta = with lib; {
+  meta = {
     description = "Advanced MIDI arpeggiator";
     mainProgram = "qmidiarp";
     longDescription = ''
@@ -46,8 +45,8 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://qmidiarp.sourceforge.net";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ sjfloat ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ sjfloat ];
   };
-}
+})

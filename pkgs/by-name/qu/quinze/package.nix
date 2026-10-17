@@ -2,10 +2,11 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
-  name = "quinze";
+  pname = "quinze";
   version = "2018-09-22";
 
   src = fetchzip {
@@ -14,19 +15,13 @@ stdenvNoCC.mkDerivation {
     stripRoot = false;
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    install -m444 -Dt $out/share/fonts/truetype *.ttf
-
-    runHook postInstall
-  '';
-
-  meta = with lib; {
-    description = "narrow monospaced font, designed to fit a fifteen pixel bitmap";
+  meta = {
+    description = "Narrow monospaced font, designed to fit a fifteen pixel bitmap";
     homepage = "https://fontlibrary.org/en/font/quinze";
-    license = licenses.ofl;
-    maintainers = with maintainers; [ phunehehe ];
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    maintainers = with lib.maintainers; [ phunehehe ];
+    platforms = lib.platforms.all;
   };
 }

@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitLab,
   rustPlatform,
+  blueprint-compiler,
   cargo,
   desktop-file-utils,
   appstream-glib,
@@ -21,22 +22,21 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "amberol";
-  version = "2024.2";
+  version = "2026.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "amberol";
-    rev = version;
-    hash = "sha256-FK0TJFjknEFraY8T+PQ/ABiid36kEYIEhekgyx0y3aI=";
+    tag = finalAttrs.version;
+    hash = "sha256-d4lhfWqg6EZeXGL1kHGS7oWrqI3c9bpDCKUdGp31OpI=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "amberol-${version}";
-    hash = "sha256-9YRd1iOh+l+Jy8eSwJP6pxonEofBkMpFqb+JAAFDbCA=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-OFZd9nKRqXJMHSIIP8tlSNtFAQzk/f/6SBeEvbdPVK0=";
   };
 
   postPatch = ''
@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     appstream-glib
+    blueprint-compiler
     cargo
     desktop-file-utils
     m4
@@ -57,21 +58,20 @@ stdenv.mkDerivation rec {
     wrapGAppsHook4
   ];
 
-  buildInputs =
-    [
-      dbus
-      glib
-      gtk4
-      libadwaita
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-      gst-plugins-ugly
-      gst-libav
-    ]);
+  buildInputs = [
+    dbus
+    glib
+    gtk4
+    libadwaita
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+    gst-libav
+  ]);
 
   passthru = {
     updateScript = nix-update-script { };
@@ -80,9 +80,10 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://gitlab.gnome.org/World/amberol";
     description = "Small and simple sound and music player";
-    maintainers = with lib.maintainers; [ linsui ] ++ lib.teams.gnome-circle.members;
+    maintainers = with lib.maintainers; [ linsui ];
+    teams = [ lib.teams.gnome-circle ];
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     mainProgram = "amberol";
   };
-}
+})

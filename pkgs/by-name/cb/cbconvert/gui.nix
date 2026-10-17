@@ -7,7 +7,7 @@
   wrapGAppsHook3,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cbconvert-gui";
 
   inherit (cbconvert)
@@ -23,13 +23,16 @@ buildGoModule rec {
   ];
   buildInputs = cbconvert.buildInputs ++ [ gtk3 ];
 
-  vendorHash = "sha256-oMW5zfAw2VQSVaB+Z1pE51OtNIFr+PnRMM+oBYNLWxk=";
+  env.GOWORK = "off";
+
+  proxyVendor = true;
+  vendorHash = "sha256-jG8pQdY01MMCumNLBiHdgZ1pvp653WWaUCXD/gEuSpk=";
   modRoot = "cmd/cbconvert-gui";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.appVersion=${version}"
+    "-X main.appVersion=${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -46,4 +49,4 @@ buildGoModule rec {
   meta = cbconvert.meta // {
     mainProgram = "cbconvert-gui";
   };
-}
+})

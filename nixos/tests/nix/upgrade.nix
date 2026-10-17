@@ -1,10 +1,15 @@
-{ pkgs, nixVersions, ... }:
+{
+  pkgs,
+  nixVersions,
+  system,
+  ...
+}:
 let
   lib = pkgs.lib;
 
   fallback-paths-external = pkgs.writeTextDir "fallback-paths.nix" ''
     {
-      ${pkgs.system} = "${nixVersions.latest}";
+      ${system} = "${nixVersions.latest}";
     }'';
 
   nixos-module = builtins.toFile "nixos-module.nix" ''
@@ -40,6 +45,8 @@ pkgs.testers.nixosTest {
     imports = [ nixos-module ];
 
     nix.package = nixVersions.stable;
+    nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
+
     system.extraDependencies = [
       fallback-paths-external
     ];
@@ -71,7 +78,7 @@ pkgs.testers.nixosTest {
         if not match: raise Exception("Couldn't find new version in output: " + result)
 
     with subtest("nix-build-with-mismatch-daemon"):
-        machine.succeed("runuser -u alice -- nix build --expr 'derivation {name =\"test\"; system = \"${pkgs.system}\";builder = \"/bin/sh\"; args = [\"-c\" \"echo test > $out\"];}' --print-out-paths")
+        machine.succeed("runuser -u alice -- nix build --expr 'derivation {name =\"test\"; system = \"${system}\";builder = \"/bin/sh\"; args = [\"-c\" \"echo test > $out\"];}' --print-out-paths")
 
 
     with subtest("remove-new-nix"):
@@ -94,7 +101,7 @@ pkgs.testers.nixosTest {
         if not match: raise Exception("Couldn't find new version in output: " + result)
 
     with subtest("nix-build-with-new-daemon"):
-        machine.succeed("runuser -u alice -- nix build --expr 'derivation {name =\"test-new\"; system = \"${pkgs.system}\";builder = \"/bin/sh\"; args = [\"-c\" \"echo test > $out\"];}' --print-out-paths")
+        machine.succeed("runuser -u alice -- nix build --expr 'derivation {name =\"test-new\"; system = \"${system}\";builder = \"/bin/sh\"; args = [\"-c\" \"echo test > $out\"];}' --print-out-paths")
 
     with subtest("nix-collect-garbage-with-old-nix"):
         machine.succeed("${nixVersions.stable}/bin/nix-collect-garbage")

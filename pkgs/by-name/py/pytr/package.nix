@@ -2,34 +2,37 @@
   fetchFromGitHub,
   installShellFiles,
   lib,
+  stdenv,
   python3Packages,
   versionCheckHook,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "pytr";
-  version = "0.3.1";
+  version = "0.4.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytr-org";
     repo = "pytr";
     tag = "v${version}";
-    hash = "sha256-OFONjJXKkfb6+bQx5fhsadjm9WG62FISznnWL9IEY7I=";
+    hash = "sha256-xo/J0POH21mLm//+gpfhuxIGdKGHJpFbpL82TIDufrM=";
   };
 
   build-system = with python3Packages; [
-    babel
-    setuptools
+    hatchling
+    hatch-babel
   ];
 
   dependencies = with python3Packages; [
     babel
     certifi
     coloredlogs
-    ecdsa
+    cryptography
+    curl-cffi
     packaging
     pathvalidate
+    playwright
     pygments
     requests-futures
     shtab
@@ -38,18 +41,21 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd pytr \
       --bash <($out/bin/pytr completion bash) \
       --zsh <($out/bin/pytr completion zsh)
   '';
 
-  nativeCheckInputs = [ versionCheckHook ];
+  nativeCheckInputs = [
+    versionCheckHook
+    python3Packages.pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "pytr" ];
 
   meta = {
-    changelog = "https://github.com/pytr-org/pytr/releases/tag/v${version}";
+    changelog = "https://github.com/pytr-org/pytr/releases/tag/${src.tag}";
     description = "Use TradeRepublic in terminal and mass download all documents";
     homepage = "https://github.com/pytr-org/pytr";
     license = lib.licenses.mit;

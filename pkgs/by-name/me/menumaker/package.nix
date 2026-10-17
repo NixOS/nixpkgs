@@ -2,25 +2,29 @@
   lib,
   fetchurl,
   python3Packages,
+  versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "menumaker";
-  version = "0.99.13";
+  version = "0.99.14";
 
   src = fetchurl {
-    url = "mirror://sourceforge/menumaker/${pname}-${version}.tar.gz";
-    sha256 = "sha256-JBXs5hnt1snbnB1hi7q7HBI7rNp0OoalLeIM0uJCdkE=";
+    url = "mirror://sourceforge/menumaker/menumaker-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-EeldDnajuFD1ffgbxVYCIr1gFBxXUbbpvQXDzVVg1lo=";
   };
 
-  format = "other";
+  pyproject = false;
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  meta = {
     description = "Heuristics-driven menu generator for several window managers";
     mainProgram = "mmaker";
     homepage = "https://menumaker.sourceforge.net";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.romildo ];
   };
-}
+})

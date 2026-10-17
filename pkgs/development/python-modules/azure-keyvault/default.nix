@@ -1,27 +1,29 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
+  setuptools,
   azure-keyvault-certificates,
   azure-keyvault-keys,
   azure-keyvault-secrets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "azure-keyvault";
   version = "4.2.0";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     extension = "zip";
     hash = "sha256-cxrdEIo+KatP1QGjxHclbChsNNCZazg/tqOUVGKTN2E=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     azure-keyvault-certificates
     azure-keyvault-keys
     azure-keyvault-secrets
@@ -36,10 +38,10 @@ buildPythonPackage rec {
     "azure.keyvault.secrets"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "This is the Microsoft Azure Key Vault Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

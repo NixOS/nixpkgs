@@ -2,11 +2,9 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  nix-update-script,
 
   # build dependencies
-  poetry-core,
+  hatchling,
 
   # dependencies
   babelfish,
@@ -18,21 +16,19 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "trakit";
-  version = "0.2.2";
+  version = "0.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ratoaq2";
     repo = "trakit";
-    rev = version;
-    hash = "sha256-VV+pdsQ5WEALYZgu4AmvNce1rCTLSYPZtTMjh+aExsU=";
+    tag = finalAttrs.version;
+    hash = "sha256-71Y9VLMgIhonJtX4vtj6eXj+2HW0J6fWCAcJZK75GQs=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     babelfish
@@ -52,13 +48,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "trakit" ];
 
-  passthru.updateScript = nix-update-script { };
-
   meta = {
     description = "Guess additional information from track titles";
     homepage = "https://github.com/ratoaq2/trakit";
-    changelog = "https://github.com/ratoaq2/trakit/releases/tag/${version}";
+    changelog = "https://github.com/ratoaq2/trakit/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ eljamm ];
   };
-}
+})

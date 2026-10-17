@@ -1,13 +1,13 @@
 {
   lib,
-  flutter324,
+  flutter338,
   fetchFromGitHub,
-  webkitgtk_4_0,
-  sqlite,
   libayatana-appindicator,
+  libsodium,
   makeDesktopItem,
   copyDesktopItems,
   makeWrapper,
+  jdk17_headless,
 }:
 let
   # fetch simple-icons directly to avoid cloning with submodules,
@@ -15,39 +15,39 @@ let
   simple-icons = fetchFromGitHub (lib.importJSON ./simple-icons.json);
   desktopId = "io.ente.auth";
 in
-flutter324.buildFlutterApplication rec {
+flutter338.buildFlutterApplication rec {
   pname = "ente-auth";
-  version = "4.2.8";
+  version = "4.4.25";
 
   src = fetchFromGitHub {
-    owner = "ente-io";
+    owner = "ente";
     repo = "ente";
-    sparseCheckout = [ "auth" ];
+    sparseCheckout = [ "mobile" ];
     tag = "auth-v${version}";
-    hash = "sha256-1vIM2MrQF0DO+5SEzIAUeZxOks6PKs3kkTdc09aCk2A=";
+    hash = "sha256-zOZg4RW7T3v/QS075KWEEdmT2+2xcMa1BlSM4In75uM=";
   };
 
-  sourceRoot = "${src.name}/auth";
+  sourceRoot = "${src.name}/mobile";
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
-
-  patches = [
-    # Disable update notifications and auto-update functionality
-    ./0001-disable-updates.patch
-  ];
+  gitHashes = lib.importJSON ./git-hashes.json;
 
   postPatch = ''
-    rmdir assets/simple-icons
-    ln -s ${simple-icons} assets/simple-icons
+    rmdir apps/auth/assets/simple-icons
+    ln -s ${simple-icons} apps/auth/assets/simple-icons
   '';
 
-  gitHashes = {
-    desktop_webview_window = "sha256-jdNMpzFBgw53asWlGzWUS+hoPdzcL6kcJt2KzjxXf2E=";
-    ente_crypto_dart = "sha256-XBzQ268E0cYljJH6gDS5O0Pmie/GwuhMDlQPfopSqJM=";
-    flutter_local_authentication = "sha256-r50jr+81ho+7q2PWHLf4VnvNJmhiARZ3s4HUpThCgc0=";
-    flutter_secure_storage_linux = "sha256-x45jrJ7pvVyhZlpqRSy3CbwT4Lna6yi/b2IyAilWckg=";
-    sqflite = "sha256-+XTVtkFJ94VifwnutvUuAqqiyWwrcEiZ3Uz0H4D9zWA=";
-  };
+  preBuild = ''
+    (cd packages/strings && flutter gen-l10n)
+
+    # Flutter needs this reference to find the workspace package config generated
+    # by the Dart hook. Otherwise it runs pub get and tries to download dependencies,
+    # which fails because the build sandbox has no network access.
+    mkdir -p apps/auth/.dart_tool/pub
+    echo '{"workspaceRoot":"../../../../.dart_tool/package_config.json"}' \
+      > apps/auth/.dart_tool/pub/workspace_ref.json
+    pushd apps/auth
+  '';
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -55,13 +55,32 @@ flutter324.buildFlutterApplication rec {
   ];
 
   buildInputs = [
-    webkitgtk_4_0
-    sqlite
     libayatana-appindicator
+    libsodium
+    # The networking client used by ente-auth (native_dio_adapter)
+    # introduces a transitive dependency on Java, which technically
+    # is only needed for the Android implementation.
+    # Unfortunately, attempts to remove it from the build entirely were
+    # unsuccessful.
+    jdk17_headless # JDK version used by upstream CI
   ];
 
-  # Based on https://github.com/ente-io/ente/blob/main/auth/linux/packaging/rpm/make_config.yaml
-  # and https://github.com/ente-io/ente/blob/main/auth/linux/packaging/enteauth.appdata.xml
+  env = {
+    # https://github.com/juliansteenbakker/flutter_secure_storage/issues/965
+    CXXFLAGS = toString [ "-Wno-deprecated-literal-operator" ];
+    # Use the system library instead of sodium_libs' build-time download.
+    LIBSODIUM_USE_PKGCONFIG = "1";
+  };
+
+  runtimeDependencies = [ libsodium ];
+
+  flutterBuildFlags = [
+    # Disable update notifications and auto-update functionality
+    "--dart-define=app.flavor=independent"
+  ];
+
+  # Based on https://github.com/ente/ente/blob/main/mobile/apps/auth/linux/packaging/rpm/make_config.yaml
+  # and https://github.com/ente/ente/blob/main/mobile/apps/auth/linux/packaging/enteauth.appdata.xml
   desktopItems = [
     (makeDesktopItem {
       name = desktopId;
@@ -91,6 +110,12 @@ flutter324.buildFlutterApplication rec {
 
     # For backwards compatibility
     ln -s $out/bin/enteauth $out/bin/ente_auth
+
+    # Not required at runtime as it's only used on Android
+    rm $out/app/ente-auth/lib/libdartjni.so
+
+    # Return to the workspace root so the Dart cache hook can find .dart_tool.
+    popd
   '';
 
   passthru.updateScript = ./update.sh;
@@ -101,7 +126,7 @@ flutter324.buildFlutterApplication rec {
       Ente's 2FA app. An end-to-end encrypted, cross platform and free app for storing your 2FA codes with cloud backups. Works offline. You can even use it without signing up for an account if you don't want the cloud backups or multi-device sync.
     '';
     homepage = "https://ente.io/auth/";
-    changelog = "https://github.com/ente-io/ente/releases/tag/auth-v${version}";
+    changelog = "https://github.com/ente/ente/releases/tag/auth-v${version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       niklaskorz

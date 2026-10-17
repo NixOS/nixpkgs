@@ -2,14 +2,14 @@
 
 {
   name = "fastnetmon-advanced";
-  meta.maintainers = lib.teams.wdz.members;
+  meta.maintainers = with lib.maintainers; [ yureka-wdz ];
 
   nodes = {
     bird =
       { ... }:
       {
         networking.firewall.allowedTCPPorts = [ 179 ];
-        services.bird2 = {
+        services.bird = {
           enable = true;
           config = ''
             router id 192.168.1.1;
@@ -59,10 +59,10 @@
     ''
       start_all()
       fnm.wait_for_unit("fastnetmon.service")
-      bird.wait_for_unit("bird2.service")
+      bird.wait_for_unit("bird.service")
 
       fnm.wait_until_succeeds('journalctl -eu fastnetmon.service | grep "BGP daemon restarted correctly"')
-      fnm.wait_until_succeeds("journalctl -eu gobgp.service | grep BGP_FSM_OPENCONFIRM")
+      fnm.wait_until_succeeds('journalctl -eu gobgp.service | grep "Peer Up"')
       bird.wait_until_succeeds("birdc show protocol fnm | grep Estab")
       fnm.wait_until_succeeds('journalctl -eu fastnetmon.service | grep "API server listening"')
       fnm.succeed("fcli set blackhole 172.23.42.123")

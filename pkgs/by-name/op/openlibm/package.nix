@@ -2,18 +2,23 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fixDarwinDylibNames,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openlibm";
-  version = "0.8.4";
+  version = "0.8.8";
 
   src = fetchFromGitHub {
-    owner = "JuliaLang";
+    owner = "JuliaMath";
     repo = "openlibm";
-    rev = "v${version}";
-    sha256 = "sha256-JhyF93XU2Yd6Ia+JtYvF7Dr+d90r6xMZj/fWDwCNeWY=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-vBy7VhYPmmaIbDN6SAXkbbM2xDh1XiIqEnYpnzop+Zg=";
   };
+
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
+  ];
 
   makeFlags = [
     "prefix=$(out)"
@@ -24,7 +29,7 @@ stdenv.mkDerivation rec {
     description = "High quality system independent, portable, open source libm implementation";
     homepage = "https://openlibm.org/";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.ttuegel ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -6,6 +6,7 @@
   lib,
   runCommand,
   testers,
+  writeText,
 }:
 let
   inherit (testers) testEqualContents testBuildFailure;
@@ -22,7 +23,7 @@ let
         };
 
         expected = mkExpectation (
-          builtins.toFile "source.txt" ''
+          writeText "source.txt" ''
             All human beings are born free and are the same in dignity and rights.
             They are endowed with reason and conscience and should act towards
             one another in a spirit of shared humanity.
@@ -53,7 +54,7 @@ let
           {
             failed =
               let
-                src = builtins.toFile "source.txt" ''
+                src = writeText "source.txt" ''
                   Header.
                   before @whatIsThis@ middle @It'sOdd2Me@ after.
                   @cannot detect due to space@
@@ -86,7 +87,7 @@ let
         };
 
         expected = mkExpectation (
-          builtins.toFile "source.txt" ''
+          writeText "source.txt" ''
             All human beings are born free and are the same in dignity and rights.
             They are endowed with reason and conscience and should act towards
             one another in a spirit of @brotherhood@.
@@ -101,7 +102,7 @@ let
           {
             failed =
               let
-                src = builtins.toFile "source.txt" ''
+                src = writeText "source.txt" ''
                   @a@
                   @b@
                   @c@
@@ -118,6 +119,30 @@ let
             grep -e "unsubstituted Nix identifiers.*source.txt" $failed/testBuildFailure.log
             grep -F "@c@" $failed/testBuildFailure.log
             ! grep -F "@b@" $failed/testBuildFailure.log
+
+            touch $out
+          '';
+
+      fails-in-check-phase-with-bad-exemption =
+        runCommand "replaceVars-fails"
+          {
+            failed =
+              let
+                src = writeText "source.txt" ''
+                  @a@
+                  @b@
+                '';
+              in
+              testBuildFailure (
+                callReplaceVars src {
+                  a = "a";
+                  b = null;
+                  c = null;
+                }
+              );
+          }
+          ''
+            grep -e "ERROR: pattern @c@ doesn't match anything in file.*source.txt" $failed/testBuildFailure.log
 
             touch $out
           '';

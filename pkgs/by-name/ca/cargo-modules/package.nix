@@ -4,18 +4,18 @@
   fetchFromGitHub,
   versionCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-modules";
-  version = "0.21.1";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "regexident";
     repo = "cargo-modules";
-    tag = "v${version}";
-    hash = "sha256-QVG/N+t6fify6I9uvLAqWLagmEnhd5i5Iz9HWdysmzk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wwGuf6ev2H19XauDN60T9NS/onY6ZKr99S6nGhK/V98=";
   };
 
-  cargoHash = "sha256-9SzM9jkAcnRctNedImoH+32hVAtPAkXLzxgmOo3Dcxc=";
+  cargoHash = "sha256-cESCXoETQzy+3Lb/z2jdbPmnyYNEoNUckFsPZWfDF8o=";
 
   checkFlags = [
     "--skip=cfg_test::with_tests::smoke"
@@ -44,18 +44,16 @@ rustPlatform.buildRustPackage rec {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  versionCheckProgramArg = [ "--version" ];
 
   meta = {
     description = "Cargo plugin for showing a tree-like overview of a crate's modules";
     homepage = "https://github.com/regexident/cargo-modules";
-    changelog = "https://github.com/regexident/cargo-modules/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/regexident/cargo-modules/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
-      figsoda
       rvarago
       matthiasbeyer
     ];
     mainProgram = "cargo-modules";
   };
-}
+})

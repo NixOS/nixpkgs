@@ -2,51 +2,42 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pkgs,
-  pythonOlder,
   redis,
+  redisTestHook,
   setuptools,
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "walrus";
-  version = "0.9.4";
+  version = "0.9.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "coleifer";
     repo = "walrus";
-    tag = version;
-    hash = "sha256-cvoRiaGGTpZWfSE6DDT6GwDmc/TC/Z/E76Qy9Zzkpsw=";
+    tag = finalAttrs.version;
+    hash = "sha256-AgaqDZHjUX/oLjzisWjZcrGL9QXQf73WW+hfK2WMQJ8=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [ redis ];
 
-  nativeCheckInputs = [ unittestCheckHook ];
-
-  preCheck = ''
-    ${pkgs.redis}/bin/redis-server &
-    REDIS_PID=$!
-  '';
-
-  postCheck = ''
-    kill $REDIS_PID
-  '';
+  nativeCheckInputs = [
+    unittestCheckHook
+    redisTestHook
+  ];
 
   pythonImportsCheck = [ "walrus" ];
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight Python utilities for working with Redis";
     homepage = "https://github.com/coleifer/walrus";
-    changelog = "https://github.com/coleifer/walrus/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mbalatsko ];
+    changelog = "https://github.com/coleifer/walrus/blob/${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
-}
+})

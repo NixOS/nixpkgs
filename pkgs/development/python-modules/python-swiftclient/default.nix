@@ -1,65 +1,87 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  installShellFiles,
-  mock,
-  openstacksdk,
+  fetchFromGitHub,
   pbr,
+  setuptools,
+  installShellFiles,
+
+  # direct
   python-keystoneclient,
-  pythonOlder,
+
+  # tests
+  stestrCheckHook,
+  versionCheckHook,
+  hacking,
+  keystoneauth1,
   stestr,
+  openstacksdk,
+
+  # docs
+  sphinxHook,
+  openstackdocstheme,
+  sphinxcontrib-apidoc,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-swiftclient";
-  version = "4.6.0";
-  format = "setuptools";
+  version = "4.10.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  build-system = [
+    pbr
+    setuptools
+  ];
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-1NGFQEE4k/wWrYd5HXQPgj92NDXoIS5o61PWDaJjgjM=";
+  env.PBR_VERSION = finalAttrs.version;
+
+  src = fetchFromGitHub {
+    owner = "openstack";
+    repo = "python-swiftclient";
+    tag = finalAttrs.version;
+    hash = "sha256-G3o9R3+hDQgvSnmle0paZo/KV56OMU38tIXqUJGmUaQ=";
   };
 
-  # remove duplicate script that will be created by setuptools from the
-  # entry_points section of setup.cfg
-  postPatch = ''
-    sed -i '/^scripts =/d' setup.cfg
-    sed -i '/bin\/swift/d' setup.cfg
-  '';
+  nativeBuildInputs = [
+    openstackdocstheme
+    sphinxcontrib-apidoc
+    sphinxHook
+    installShellFiles
+  ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  sphinxBuilders = [ "man" ];
 
-  propagatedBuildInputs = [
-    pbr
+  dependencies = [
     python-keystoneclient
   ];
 
   nativeCheckInputs = [
-    mock
+    stestrCheckHook
     openstacksdk
+    hacking
+    keystoneauth1
     stestr
+    openstacksdk
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   postInstall = ''
-    installShellCompletion --cmd swift \
-      --bash tools/swift.bash_completion
+    installShellCompletion --cmd swift --bash tools/swift.bash_completion
     installManPage doc/manpages/*
   '';
 
-  checkPhase = ''
-    stestr run
-  '';
+  pythonImportsCheck = [
+    "swiftclient"
+  ];
 
-  pythonImportsCheck = [ "swiftclient" ];
-
-  meta = with lib; {
-    homepage = "https://github.com/openstack/python-swiftclient";
-    description = "Python bindings to the OpenStack Object Storage API";
+  meta = {
+    description = "Client library for OpenStack Swift API";
     mainProgram = "swift";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    homepage = "https://docs.openstack.org/python-swiftclient/latest/";
+    downloadPage = "https://github.com/openstack/python-swiftclient/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
-}
+})

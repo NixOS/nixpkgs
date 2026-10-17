@@ -2,36 +2,33 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  setuptools,
+  hatchling,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sybil";
-  version = "6.0.3";
+  version = "10.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "simplistix";
-    repo = pname;
-    tag = version;
-    hash = "sha256-SqAP+hj+pivsuGxx9/TvmfVrfrLSWQRYIjKh0ui0AVc=";
+    repo = "sybil";
+    tag = finalAttrs.version;
+    hash = "sha256-wRJ43CzatyP5VuCZSF+6Eh1kGmdNhbzDPoBHbV/96oo=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   # Circular dependency with testfixtures
   doCheck = false;
 
   pythonImportsCheck = [ "sybil" ];
 
-  meta = with lib; {
+  meta = {
     description = "Automated testing for the examples in your documentation";
     homepage = "https://github.com/cjw296/sybil";
-    changelog = "https://github.com/simplistix/sybil/blob/${version}/CHANGELOG.rst";
-    license = licenses.mit;
+    changelog = "https://github.com/simplistix/sybil/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

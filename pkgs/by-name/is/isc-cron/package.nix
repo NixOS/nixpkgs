@@ -1,8 +1,9 @@
 {
   lib,
+  fetchpatch,
   fetchurl,
   stdenv,
-  substituteAll,
+  replaceVars,
   vim,
   sendmailPath ? "/usr/sbin/sendmail",
 }:
@@ -17,8 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    (substituteAll {
-      src = ./0000-nixpkgs-specific.diff;
+    (replaceVars ./0000-nixpkgs-specific.diff {
       inherit sendmailPath;
       viPath = lib.getExe' vim "vim";
       defPath = lib.concatStringsSep ":" [
@@ -29,14 +29,17 @@ stdenv.mkDerivation (finalAttrs: {
         "/bin"
       ];
     })
+    # Fix build with gcc 15
+    (fetchpatch {
+      url = "https://github.com/vixie/cron/commit/3ce0c3acdf086a82638818635961c70cba2b6ba7.patch";
+      hash = "sha256-d1vN3TGAAOMlWpMZKnHU/RlZ5pBOl3+IXjZ4UALVqLI=";
+    })
   ];
 
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
     "DESTROOT=$(out)"
   ];
-
-  hardeningEnable = [ "pie" ];
 
   unpackCmd = ''
     mkdir cron
@@ -65,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Daemon for running commands at specific times";
     license = lib.licenses.bsd0;
     mainProgram = "cron";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

@@ -16,15 +16,16 @@
   lib,
   cdrkit,
   e2fsprogs,
+  useFsync ? stdenv.hostPlatform.isDarwin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nbdkit";
-  version = "1.40.4";
+  version = "1.48.0";
 
   src = fetchurl {
     url = "https://download.libguestfs.org/nbdkit/${lib.versions.majorMinor finalAttrs.version}-stable/nbdkit-${finalAttrs.version}.tar.gz";
-    hash = "sha256-hGoc34F7eAvHjdQHxcquNJhpwpL5CLfv2DBZKVmpcpw=";
+    hash = "sha256-W5DtgnfFFIieVOK3A8z4UIYBXXF0u/EN0W4W9eNdnO8=";
   };
 
   prePatch = ''
@@ -72,6 +73,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--without-libguestfs"
     "--disable-example4"
   ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString useFsync "-Dfdatasync=fsync";
 
   installFlags = [ "bashcompdir=$(out)/share/bash-completion/completions" ];
 

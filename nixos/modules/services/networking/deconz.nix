@@ -21,12 +21,7 @@ in
 
     enable = lib.mkEnableOption "deCONZ, a Zigbee gateway for use with ConBee/RaspBee hardware (https://phoscon.de/)";
 
-    package = lib.mkOption {
-      type = lib.types.package;
-      default = pkgs.deconz;
-      defaultText = lib.literalExpression "pkgs.deconz";
-      description = "Which deCONZ package to use.";
-    };
+    package = lib.mkPackageOption pkgs "deconz" { };
 
     device = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
@@ -76,7 +71,7 @@ in
       ];
       description = ''
         Extra command line arguments for deCONZ, see
-        https://github.com/dresden-elektronik/deconz-rest-plugin/wiki/deCONZ-command-line-parameters.
+        <https://github.com/dresden-elektronik/deconz-rest-plugin/wiki/deCONZ-command-line-parameters>.
       '';
     };
   };

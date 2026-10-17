@@ -3,54 +3,27 @@
   fetchurl,
   fetchFromGitHub,
   buildNpmPackage,
+  copyDesktopItems,
   makeDesktopItem,
   makeWrapper,
+  unstableGitUpdater,
 
   nwjs,
   python3,
 }:
 
-let
-  # Use unstable because it has improvements for finding python
-  version = "0-unstable-2024-11-18";
+buildNpmPackage (finalAttrs: {
+  pname = "icestudio";
+  version = "1.0.0.PRw-20260821-unstable-2026-08-20";
 
   src = fetchFromGitHub {
     owner = "FPGAwars";
     repo = "icestudio";
-    rev = "87d057adb1e795352a7dd67666a69ada4269b2e8";
-    hash = "sha256-VZuc5Wa6o5PMUE+P4EMDl/pI/zmcff9OEhqeCfS4bzE=";
+    rev = "989c552b687993f54a5928f693e3502de02e29f8";
+    hash = "sha256-GTsLt3IgqXCkGJZGmvWslHL8gqm/0tnRJWlceV64asA=";
   };
 
-  collection = fetchurl {
-    url = "https://github.com/FPGAwars/collection-default/archive/v0.4.1.zip";
-    hash = "sha256-F2cAqkTPC7xfGnPQiS8lTrD4y34EkHFUEDPVaYzVVg8=";
-  };
-
-  app = buildNpmPackage {
-    pname = "icestudio-app";
-    inherit version src;
-    npmDepsHash = "sha256-CbrnhnhCG8AdAqySO6fB5hZ128lHyC3WH/vZcFtv6Ko=";
-    sourceRoot = "${src.name}/app";
-    dontNpmBuild = true;
-    installPhase = ''
-      cp -r . $out
-    '';
-  };
-
-  desktopItem = makeDesktopItem {
-    desktopName = "Icestudio";
-    comment = "Visual editor for open FPGA boards";
-    name = "icestudio";
-    exec = "icestudio";
-    icon = "icestudio";
-    terminal = false;
-    categories = [ "Development" ];
-  };
-in
-buildNpmPackage rec {
-  pname = "icestudio";
-  inherit version src;
-  npmDepsHash = "sha256-y1lo5+qJ6JBxjt7wtUmTHuJHMH9Mztf6xmmadI8zBgA=";
+  npmDepsHash = "sha256-4B5dpU7LV/2ga7gbu/TdwOYZL/HDm4fi9TXNcZEyeOI=";
   npmFlags = [
     # Use the legacy dependency resolution, with less strict version
     # requirements for transative dependencies
@@ -61,20 +34,26 @@ buildNpmPackage rec {
     "--ignore-scripts"
   ];
 
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+  ];
+
+  buildInputs = [
+    python3
+  ];
+
   buildPhase = ''
     runHook preBuild
 
     # Copy the `app` derivation into the folder expected for grunt
-    cp -r ${app}/* app
+    cp -r ${finalAttrs.passthru.app}/* app
 
     # Copy the cached `collection` derivation into the cache location so that
     # grunt avoids downloading it
-    install -m444 -D ${collection} cache/collection/collection-default.zip
-
-    ./node_modules/.bin/grunt getcollection
+    install -m444 -D ${finalAttrs.passthru.collection} cache/collection/collection-default.zip
 
     # Use grunt to distribute package
-    # TODO: support aarch64
     ./node_modules/.bin/grunt dist \
         --platform=none    `# skip platform-specific steps` \
         --dont-build-nwjs  `# use the nwjs package shipped by Nix` \
@@ -93,33 +72,59 @@ buildNpmPackage rec {
         $out/share/icons/hicolor/"$size"x"$size"/apps/icestudio.png
     done
 
-    install -Dm644 ${desktopItem}/share/applications/icestudio.desktop -t $out/share/applications
-
-    makeWrapper ${nwjs}/bin/nw $out/bin/${pname} \
+    makeWrapper ${nwjs}/bin/nw $out/bin/icestudio \
         --add-flags $out \
         --prefix PATH : "${python3}/bin"
 
     runHook postInstall
   '';
 
-  nativeBuildInputs = [ makeWrapper ];
+  desktopItems = [
+    (makeDesktopItem {
+      desktopName = "Icestudio";
+      comment = "Visual editor for open FPGA boards";
+      name = "icestudio";
+      exec = "icestudio";
+      icon = "icestudio";
+      terminal = false;
+      categories = [ "Development" ];
+    })
+  ];
 
-  buildInputs = [ python3 ];
+  passthru = {
+    updateScript = unstableGitUpdater {
+      tagPrefix = "v";
+    };
+
+    collection = fetchurl {
+      url = "https://github.com/FPGAwars/collection-default/archive/v0.4.1.zip";
+      hash = "sha256-F2cAqkTPC7xfGnPQiS8lTrD4y34EkHFUEDPVaYzVVg8=";
+    };
+
+    app = buildNpmPackage {
+      pname = "icestudio-app";
+      inherit (finalAttrs) version src;
+      npmDepsHash = "sha256-twDndqYV+aXtkcBC/jnZCJ0p9L24AgRORz4yDTledH0=";
+      sourceRoot = "${finalAttrs.src.name}/app";
+      dontNpmBuild = true;
+      installPhase = ''
+        cp -r . $out
+      '';
+    };
+  };
 
   meta = {
     description = "Visual editor for open FPGA boards";
     homepage = "https://github.com/FPGAwars/icestudio/";
     license = lib.licenses.gpl2Only;
-    maintainers =
-      with lib.maintainers;
-      [
-        kiike
-        jleightcap
-        rcoeurjoly
-        amerino
-      ]
-      ++ [ lib.teams.ngi ];
+    maintainers = with lib.maintainers; [
+      kiike
+      jleightcap
+      rcoeurjoly
+      amerino
+    ];
+    teams = [ lib.teams.ngi ];
     mainProgram = "icestudio";
     platforms = lib.platforms.linux;
   };
-}
+})

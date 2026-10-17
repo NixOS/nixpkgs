@@ -12,15 +12,15 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "safeIO";
     inherit version;
-    sha256 = "d480a6dab01a390ebc24c12d6b774ad00cef3db5348ad07d8bd11d272a808cd3";
+    hash = "sha256-1ICm2rAaOQ68JMEta3dK0AzvPbU0itB9i9EdJyqAjNM=";
   };
 
   pythonImportsCheck = [ "safeIO" ];
 
-  meta = with lib; {
+  meta = {
     description = "Safely make I/O operations to files in Python even from multiple threads";
     homepage = "https://github.com/Animenosekai/safeIO";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

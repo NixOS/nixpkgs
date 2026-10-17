@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pgmpy,
   torch,
 }:
@@ -14,11 +13,9 @@ buildPythonPackage {
   inherit pname version;
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "HazyResearch";
-    repo = pname;
+    repo = "flyingsquid";
     rev = "28a713a9ac501b7597c2489468ae189943d00685";
     hash = "sha256-DPHTSxDD4EW3nrNk2fk0pKJI/8+pQ7Awywd8nxhBruo=";
   };
@@ -33,10 +30,10 @@ buildPythonPackage {
   # no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "More interactive weak supervision with FlyingSquid";
     homepage = "https://github.com/HazyResearch/flyingsquid";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

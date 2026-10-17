@@ -9,7 +9,7 @@
   nix,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "nix-kernel";
   version = "unstable-2020-04-26";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "GTrunSec";
     repo = "nix-kernel";
     rev = "dfa42d0812d508ded99f690ee1a83281d900a3ec";
-    sha256 = "1lf4rbbxjmq9h6g3wrdzx3v3dn1bndfmiybxiy0sjavgb6lzc8kq";
+    hash = "sha256-eCL2qVlvK6mBj335WF2zK9g29ui/ZT6egQlX2dfKxNE=";
   };
 
   postPatch = ''
@@ -44,10 +44,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nix-kernel" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple jupyter kernel for nix-repl";
     homepage = "https://github.com/GTrunSec/nix-kernel";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -10,26 +10,29 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  syrupy,
+  syrupy_5,
   tenacity,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "nice-go";
-  version = "1.0.0";
+  version = "1.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "IceBotYT";
     repo = "nice-go";
     tag = version;
-    hash = "sha256-u4AhFYhRYwcAGUrXhUgP+SgR0aoric864qSyWhc7Gmo=";
+    hash = "sha256-KrsAs5aMkrhxv6PtFTm+8e0h2hAD/bc4ADam2jT2oAc=";
   };
 
   build-system = [ poetry-core ];
 
-  pythonRelaxDeps = [ "tenacity" ];
+  pythonRelaxDeps = [
+    "aiobotocore"
+    "tenacity"
+  ];
 
   dependencies = [
     aiobotocore
@@ -46,7 +49,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
-    syrupy
+    syrupy_5
   ];
 
   meta = {

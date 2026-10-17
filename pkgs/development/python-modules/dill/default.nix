@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   python,
-  pythonOlder,
   setuptools,
 
   # passthru tests
@@ -11,21 +10,19 @@
   datasets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dill";
-  version = "0.3.9";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "0.4.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "uqfoundation";
-    repo = pname;
-    tag = version;
-    hash = "sha256-p+W0ppNMfSgplKsQjaTnTrMvQ5poF/E/xSzsiLf9h58=";
+    repo = "dill";
+    tag = finalAttrs.version;
+    hash = "sha256-Yh9WvescLgV7DmxGBTGKsb29+eRzF9qjZMg0DQQyLyY=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   checkPhase = ''
     runHook preCheck
@@ -39,11 +36,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dill" ];
 
-  meta = with lib; {
+  meta = {
     description = "Serialize all of python (almost)";
     homepage = "https://github.com/uqfoundation/dill/";
-    changelog = "https://github.com/uqfoundation/dill/releases/tag/dill-${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ tjni ];
+    changelog = "https://github.com/uqfoundation/dill/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.bsd3;
   };
-}
+})

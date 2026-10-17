@@ -2,46 +2,39 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
-  darwin,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustypaste";
-  version = "0.16.0";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "orhun";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-Kv6hmqqGY9SssiT/MYmYCZ71N8CHFTT7K4q7eMdQTQU=";
+    repo = "rustypaste";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-K8hFpIPk53N4yrA7Q5HvRmEtUw03Z7syhtmJ17epaQM=";
   };
 
-  cargoHash = "sha256-podM44J7RGpLdPo+yS7clwX6vvvQRllkqPu7UpC/LzI=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
-  ];
+  cargoHash = "sha256-PsjQ6or7ID74U60E56g+wOLWy04e28lXiS1Q/mbaSZM=";
 
   dontUseCargoParallelTests = true;
 
   checkFlags = [
-    # requires internet access
+    # Tests require internet access
     "--skip=paste::tests::test_paste_data"
     "--skip=server::tests::test_upload_remote_file"
+    "--skip=test_validate_remote_url_valid_http"
+    "--skip=test_validate_remote_url_valid_https"
   ];
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Minimal file upload/pastebin service";
     homepage = "https://github.com/orhun/rustypaste";
-    changelog = "https://github.com/orhun/rustypaste/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      figsoda
-      seqizz
-    ];
+    changelog = "https://github.com/orhun/rustypaste/blob/v${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ seqizz ];
     mainProgram = "rustypaste";
   };
-}
+})

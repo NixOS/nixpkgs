@@ -9,13 +9,13 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "maildrop";
-  version = "3.1.8";
+  version = "4.0.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/courier/maildrop/${version}/maildrop-${version}.tar.bz2";
-    sha256 = "sha256-foJsAxkXRE8berccH82QODWVZEhG4rOyYONSsc4D6VA=";
+    url = "mirror://sourceforge/courier/maildrop/${finalAttrs.version}/maildrop-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-YfNjWVcSTiTfqrhAlWpQlG3LL25m2CE6ECBJu60a2GE=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -30,10 +30,10 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails with "setlocale: LC_ALL: cannot change locale (en_US.UTF-8)"
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.courier-mta.org/maildrop/";
     description = "Mail filter/mail delivery agent that is used by the Courier Mail Server";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
   };
-}
+})

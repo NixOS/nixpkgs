@@ -10,7 +10,7 @@
   python3,
   versionCheckHook,
   z3Support ? true,
-  z3_4_11 ? null,
+  z3 ? null,
   cvc4Support ? gccStdenv.hostPlatform.isLinux,
   cvc4 ? null,
   cln ? null,
@@ -19,24 +19,19 @@
 
 # compiling source/libsmtutil/CVC4Interface.cpp breaks on clang on Darwin,
 # general commandline tests fail at abiencoderv2_no_warning/ on clang on NixOS
-let
-  z3 = z3_4_11;
-in
-
 assert z3Support -> z3 != null && lib.versionAtLeast z3.version "4.11.0";
 assert cvc4Support -> cvc4 != null && cln != null && gmp != null;
 
 let
   pname = "solc";
 
-  version = "0.8.28";
-  linuxHash = "sha256-kosJ10stylGK5NUtsnMM7I+OfhR40TXPQDvnggOFLLc=";
-  darwinHash = "sha256-gVFbDlPeqiZtVJVFzKrApalubU6CAcd/ZzsscQl22eo=";
+  version = "0.8.33";
+  linuxHash = "sha256-sWCV0GOUW5GPNX1flk+UOrdwoHZHnx4MsZMGDDBxx6M=";
+  darwinHash = "sha256-gyQoBZHOOY1+JyKEa8EOzxd5sToyjvl7aHySzZxwgBo=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
 
   meta = {
@@ -59,7 +54,6 @@ let
           pname
           version
           nativeInstallCheckInputs
-          versionCheckProgramArg
           doInstallCheck
           meta
           ;
@@ -70,43 +64,34 @@ let
           hash = linuxHash;
         };
 
-        # Fix build with GCC 14
-        # Submitted upstream: https://github.com/ethereum/solidity/pull/15685
-        postPatch = ''
-          substituteInPlace test/yulPhaser/Chromosome.cpp \
-            --replace-fail \
-              "BOOST_TEST(abs" \
-              "BOOST_TEST(fabs"
-        '';
+        cmakeFlags = [
+          "-DBoost_USE_STATIC_LIBS=OFF"
 
-        cmakeFlags =
-          [
-            "-DBoost_USE_STATIC_LIBS=OFF"
-
-          ]
-          ++ (
-            if z3Support then
-              [
-                "-DSTRICT_Z3_VERSION=OFF"
-              ]
-            else
-              [
-                "-DUSE_Z3=OFF"
-              ]
-          )
-          ++ lib.optionals (!cvc4Support) [
-            "-DUSE_CVC4=OFF"
-          ];
+        ]
+        ++ (
+          if z3Support then
+            [
+              "-DSTRICT_Z3_VERSION=OFF"
+            ]
+          else
+            [
+              "-DUSE_Z3=OFF"
+            ]
+        )
+        ++ lib.optionals (!cvc4Support) [
+          "-DUSE_CVC4=OFF"
+        ];
 
         nativeBuildInputs = [ cmake ];
-        buildInputs =
-          [ boost ]
-          ++ lib.optionals z3Support [ z3 ]
-          ++ lib.optionals cvc4Support [
-            cvc4
-            cln
-            gmp
-          ];
+        buildInputs = [
+          boost
+        ]
+        ++ lib.optionals z3Support [ z3 ]
+        ++ lib.optionals cvc4Support [
+          cvc4
+          cln
+          gmp
+        ];
         nativeCheckInputs = [
           jq
           ncurses
@@ -124,6 +109,8 @@ let
             ]
           ))
         ]; # contextlib2 glob2 textwrap3 traceback2 urllib3
+
+        enableParallelBuilding = true;
 
         # tests take 60+ minutes to complete, only run as part of passthru tests
         doCheck = false;
@@ -160,7 +147,6 @@ let
           pname
           version
           nativeInstallCheckInputs
-          versionCheckProgramArg
           doInstallCheck
           meta
           ;

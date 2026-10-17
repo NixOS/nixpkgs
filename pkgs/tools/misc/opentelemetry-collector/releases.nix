@@ -4,9 +4,7 @@
   fetchFromGitHub,
   installShellFiles,
   testers,
-  nixosTests,
   opentelemetry-collector-builder,
-  pkgs,
   go,
   git,
   cacert,
@@ -17,16 +15,14 @@ let
   builder = "${opentelemetry-collector-builder}/bin/ocb";
 
   # Keep the version in sync with the builder.
-  rev = opentelemetry-collector-builder.src.rev;
-
-  version = lib.removePrefix "cmd/builder/v" rev;
+  version = "0.155.0";
 
   # This is a weird meta-repo where all the open-telemetry collectors are.
-  src = fetchFromGitHub {
+  releasesSrc = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-collector-releases";
     rev = "v${version}";
-    hash = "sha256-wHi3/rby/AA37x3BCbTXlLgRaN4DpATLSXpQb31Jr/o=";
+    hash = "sha256-w4J5Q7cztSQyjqHH5L0blDUiFO6+fK4/dLoQT+ftUSE=";
   };
 
   # Then from this src, we use the tool to generate some go code, including
@@ -39,7 +35,10 @@ let
       hash,
     }:
     stdenv.mkDerivation {
-      inherit name;
+      # Inherit the version from the builder, so that updates there trigger
+      # a rebuild here.
+      inherit version;
+      pname = "${name}-src";
 
       nativeBuildInputs = [
         cacert
@@ -47,7 +46,7 @@ let
         go
       ];
 
-      inherit src;
+      src = releasesSrc;
 
       outputHash = hash;
       outputHashMode = "recursive";
@@ -117,14 +116,19 @@ let
             --zsh <($out/bin/${name} completion zsh)
         '';
 
-        passthru.tests = {
-          version = testers.testVersion {
-            inherit package version;
-            command = "${name} -v";
+        passthru = {
+          tests = {
+            version = testers.testVersion {
+              inherit package version;
+              command = "${name} -v";
+            };
           };
+          # The updatescript for the builder updates the releases
+          updateScript = null;
+          inherit releasesSrc;
         };
 
-        meta = with lib; {
+        meta = {
           homepage = "https://github.com/open-telemetry/opentelemetry-collector-releases";
           description = "OpenTelemetry Collector Official Releases";
           longDescription = ''
@@ -134,9 +138,8 @@ let
             support open-source telemetry data formats (e.g. Jaeger, Prometheus, etc.)
             sending to multiple open-source or commercial back-ends.
           '';
-          license = licenses.asl20;
-          maintainers = with maintainers; [
-            uri-canva
+          license = lib.licenses.asl20;
+          maintainers = with lib.maintainers; [
             jk
             zimbatm
           ];
@@ -149,26 +152,26 @@ in
 lib.recurseIntoAttrs {
   otelcol = mkDistribution {
     name = "otelcol";
-    sourceHash = "sha256-EGO5ns2Xi0g8PvPGdzMVxMJcPXvxaZDDi4YaJnIUAFc=";
-    vendorHash = "sha256-dCSOGT0n0I5Oxw30uNeg184Me7hwZUfDuvl1IOdVBeo=";
+    sourceHash = "sha256-JY/jg5SeZ90lVLo+t6MuxZAMZ5IpNwEQEz9kC2uYc+8=";
+    vendorHash = "sha256-tEA2wCtk2Pm7YJem5jOB/1Iz7K1jKKl/N9VKSumC+WA=";
   };
 
   otelcol-contrib = mkDistribution {
     name = "otelcol-contrib";
-    sourceHash = "sha256-1TIzfR9F6iwSwoDc08SdOWYH378Y3qjwOcQ4IDbHTWE=";
-    vendorHash = "sha256-AmSn2M+HkOpZ0ev6Gjb+gaeE+h70W/RtXKMqaModJPs=";
+    sourceHash = "sha256-ANIyUa0bibTYRWC1RZbvYFitaEkmLOiubQxFfmzj4kQ=";
+    vendorHash = "sha256-dPaDmhO4XASQ1y3NyetxnJuTr+pIDwF/rwrN5QkBBCA=";
     proxyVendor = true; # hash mismatch between linux and darwin
   };
 
   otelcol-k8s = mkDistribution {
     name = "otelcol-k8s";
-    sourceHash = "sha256-WffBw41dZ/e5/d22ny6611pFReUVeO5lmtqqfaSdGLs=";
-    vendorHash = "sha256-3EVJxma9U7FTzt1jIxotavMespFpCpU/oAAKMC0ya2E=";
+    sourceHash = "sha256-cZ+ok52ceYkQE9bG+FFTFYONUQfsC8kbJk5SLZ8IIYU=";
+    vendorHash = "sha256-qwlZr0LoXZWf72flpORf19PAkHdITY8bxJGkacG2j+A=";
   };
 
   otelcol-otlp = mkDistribution {
     name = "otelcol-otlp";
-    sourceHash = "sha256-YQ9dIY9MdX0WtuOnFCZapDDWSl02S/dlTNce6RV48MM=";
-    vendorHash = "sha256-4wiIgYa9eHvGxDgLbqWPTus9zBznYJ4lpsIUvRjRYUQ=";
+    sourceHash = "sha256-W1QHjHMn6xWVN08FpJi2YcKzkpxTPbq9MYIbdQxVHHY=";
+    vendorHash = "sha256-gX1D+RPCwcp9UMpzAzEYHDsBrn2KdfN/4RxcgKHViYQ=";
   };
 }

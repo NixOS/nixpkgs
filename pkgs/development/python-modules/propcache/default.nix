@@ -8,23 +8,25 @@
   pytest-cov-stub,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "propcache";
-  version = "0.2.1";
+  version = "0.5.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "propcache";
     tag = "v${version}";
-    hash = "sha256-j2PjSaOx0IKijoMjhtYVNrpqEwRjVFsON5OU/Fv5idc=";
+    hash = "sha256-vn6FSdWEMk6c8Cu1mHyhZyH8ZlFK0kgYK8T7GKLHHwc=";
   };
+
+  postPatch = ''
+    substituteInPlace packaging/pep517_backend/_backend.py \
+      --replace "Cython ~=" "Cython >="
+  '';
 
   build-system = [
     cython
@@ -44,7 +46,7 @@ buildPythonPackage rec {
   meta = {
     description = "Fast property caching";
     homepage = "https://github.com/aio-libs/propcache";
-    changelog = "https://github.com/aio-libs/propcache/blob/${src.rev}/CHANGES.rst";
+    changelog = "https://github.com/aio-libs/propcache/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };

@@ -5,40 +5,41 @@
   nixosTests,
   nix-update-script,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mimir";
-  version = "2.15.0";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
-    rev = "${pname}-${version}";
+    rev = "mimir-${finalAttrs.version}";
     owner = "grafana";
-    repo = pname;
-    hash = "sha256-mFCeetwMaqdxFt001QUEtoiPupRAtFBkTvIABszPQbc=";
+    repo = "mimir";
+    hash = "sha256-Sz6q7Py3iJv8i1Xt9j71uSKztXLR1wwx/MbKXrpQ3AY=";
   };
 
   vendorHash = null;
 
-  subPackages =
-    [
-      "cmd/mimir"
-      "cmd/mimirtool"
-    ]
-    ++ (map (pathName: "tools/${pathName}") [
-      "compaction-planner"
-      "copyblocks"
-      "copyprefix"
-      "delete-objects"
-      "list-deduplicated-blocks"
-      "listblocks"
-      "markblocks"
-      "undelete-blocks"
-    ]);
+  subPackages = [
+    "cmd/mimir"
+    "cmd/mimirtool"
+  ]
+  ++ (map (pathName: "tools/${pathName}") [
+    "compaction-planner"
+    "copyblocks"
+    "copyprefix"
+    "delete-objects"
+    "list-deduplicated-blocks"
+    "listblocks"
+    "mark-blocks"
+    "splitblocks"
+    "tenant-injector"
+    "undelete-blocks"
+  ]);
 
   passthru = {
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
-        "mimir-([0-9.]+)"
+        "mimir-(3\\.[0-9.]+)"
       ];
     };
     tests = {
@@ -51,22 +52,21 @@ buildGoModule rec {
       t = "github.com/grafana/mimir/pkg/util/version";
     in
     [
-      ''-extldflags "-static"''
       "-s"
       "-w"
-      "-X ${t}.Version=${version}"
+      "-X ${t}.Version=${finalAttrs.version}"
       "-X ${t}.Revision=unknown"
       "-X ${t}.Branch=unknown"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Grafana Mimir provides horizontally scalable, highly available, multi-tenant, long-term storage for Prometheus. ";
     homepage = "https://github.com/grafana/mimir";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/grafana/mimir/releases/tag/mimir-${finalAttrs.version}";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       happysalada
       bryanhonof
-      adamcstephens
     ];
   };
-}
+})

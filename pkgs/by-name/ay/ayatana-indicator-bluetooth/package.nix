@@ -12,7 +12,7 @@
   libayatana-common,
   lomiri,
   pkg-config,
-  systemd,
+  systemdLibs,
   vala,
   wrapGAppsHook3,
 }:
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     lomiri.cmake-extras
     glib
     libayatana-common
-    systemd
+    systemdLibs
   ];
 
   cmakeFlags = [
@@ -65,8 +65,11 @@ stdenv.mkDerivation (finalAttrs: {
         "lomiri"
       ];
     };
+    tests = {
+      startup = nixosTests.ayatana-indicators;
+      lomiri = nixosTests.lomiri.desktop-ayatana-indicator-bluetooth;
+    };
     updateScript = gitUpdater { };
-    tests.vm = nixosTests.ayatana-indicators;
   };
 
   meta = {

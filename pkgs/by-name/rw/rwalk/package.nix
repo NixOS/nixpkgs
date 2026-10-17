@@ -8,18 +8,18 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rwalk";
   version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "cestef";
     repo = "rwalk";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-W42b3fUezMpOPaNmTogUbgn67nCiKteCkkYUAux9Ng4=";
   };
 
-  cargoHash = "sha256-R5L19GMOjbXMVfjCuergxVZvAHCTLVkf3rmdvYJCMLU=";
+  cargoHash = "sha256-9zZLHjDpnxL3aR8zX4eNU1mpMDzMqzMC+Wr+DWVimUo=";
 
   nativeBuildInputs = [
     pkg-config
@@ -37,7 +37,6 @@ rustPlatform.buildRustPackage rec {
     versionCheckHook
   ];
 
-  versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
 
   passthru = {
@@ -47,9 +46,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Blazingly fast web directory scanner written in Rust";
     homepage = "https://github.com/cestef/rwalk";
-    changelog = "https://github.com/cestef/rwalk/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/cestef/rwalk/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pwnwriter ];
     mainProgram = "rwalk";
   };
-}
+})

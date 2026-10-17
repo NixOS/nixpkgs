@@ -5,22 +5,20 @@
   attrs,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  setuptools_80,
   jre_minimal,
   pydevd,
   pytest-mock,
-  pytestCheckHook,
-  pythonOlder,
+  pytest7CheckHook,
+  pythonAtLeast,
   pyyaml,
-  substituteAll,
+  replaceVars,
 }:
 
 buildPythonPackage rec {
   pname = "omegaconf";
   version = "2.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "omry";
@@ -30,8 +28,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./antlr4.patch;
+    (replaceVars ./antlr4.patch {
       antlr_jar = "${antlr4.out}/share/java/antlr-${antlr4.version}-complete.jar";
     })
 
@@ -47,7 +44,7 @@ buildPythonPackage rec {
     sed -i 's/antlr4-python3-runtime==.*/antlr4-python3-runtime/' requirements/base.txt
   '';
 
-  build-system = [ setuptools ];
+  build-system = [ setuptools_80 ];
 
   nativeBuildInputs = [ jre_minimal ];
 
@@ -60,23 +57,32 @@ buildPythonPackage rec {
     attrs
     pydevd
     pytest-mock
-    pytestCheckHook
+    pytest7CheckHook
   ];
 
   pythonImportsCheck = [ "omegaconf" ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
+    "-Wignore::UserWarning"
   ];
 
-  disabledTests = [ "test_eq" ];
+  disabledTests = [
+    # assert (1560791320562868035 == 1560791320562868035) == False
+    "test_eq"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    # pathlib._local.Path != pathlib.Path type check mismatch
+    "test_errors"
+    "test_to_yaml"
+    "test_type_str"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Framework for configuring complex applications";
     homepage = "https://github.com/omry/omegaconf";
     changelog = "https://github.com/omry/omegaconf/blob/v${version}/NEWS.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

@@ -5,40 +5,32 @@
   fetchFromGitHub,
   installShellFiles,
   pkg-config,
-  libgit2,
-  openssl,
-  zlib,
   buildPackages,
   versionCheckHook,
   nix-update-script,
   vscode-extensions,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tinymist";
   # Please update the corresponding vscode extension when updating
   # this derivation.
-  version = "0.12.18";
+  version = "0.15.8";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Myriad-Dreamin";
     repo = "tinymist";
-    tag = "v${version}";
-    hash = "sha256-/QalLr4kerOe+KooKY+Vq6FaGJyzGvaUHhUSu+LTphA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Y9HyVlHXtdVM26YZ3hqRnL0TDtZ0mkBulk5IQrxZig0=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-D4UWFg22lnkqozsWAQydNSnOpDlw5AUhGCHHfuyihfU=";
+  cargoHash = "sha256-7A8bF9ZH/6fTIwO7PH6wkMCon1CofiyK9rtbj/lcEIg=";
 
   nativeBuildInputs = [
     installShellFiles
     pkg-config
-  ];
-
-  buildInputs = [
-    libgit2
-    openssl
-    zlib
   ];
 
   checkFlags = [
@@ -46,6 +38,7 @@ rustPlatform.buildRustPackage rec {
 
     # Require internet access
     "--skip=docs::package::tests::cetz"
+    "--skip=docs::package::tests::fletcher"
     "--skip=docs::package::tests::tidy"
     "--skip=docs::package::tests::touying"
 
@@ -63,9 +56,19 @@ rustPlatform.buildRustPackage rec {
     "--skip=references::tests::test"
     "--skip=rename::tests::test"
     "--skip=semantic_tokens_full::tests::test"
+
+    # Return "No compatible device found" when testing preview
+    "--skip=doc::tests::diff_v1_preview_frame_paints_generated_page"
+    "--skip=doc::tests::full_current_preview_frame_paints_generated_page_after_reset"
+    "--skip=doc::tests::page_canvas_exposes_synthetic_accesskit_link_nodes"
+    "--skip=doc::tests::page_canvas_exposes_synthetic_accesskit_text_runs"
+    "--skip=doc::tests::page_canvas_paints_selection_overlay_above_scene"
+    "--skip=doc::tests::page_canvas_paints_supplied_white_background"
+    "--skip=doc::tests::page_canvas_selects_and_copies_text"
+    "--skip=doc::tests::page_canvas_uses_pointer_cursor_over_links"
   ];
 
-  postInstall =
+  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
     let
       emulator = stdenv.hostPlatform.emulator buildPackages;
     in
@@ -74,12 +77,13 @@ rustPlatform.buildRustPackage rec {
         --bash <(${emulator} $out/bin/tinymist completion bash) \
         --fish <(${emulator} $out/bin/tinymist completion fish) \
         --zsh <(${emulator} $out/bin/tinymist completion zsh)
-    '';
+    ''
+  );
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "-V" ];
+  versionCheckProgramArg = "-V";
   doInstallCheck = true;
 
   passthru = {
@@ -90,9 +94,9 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/Myriad-Dreamin/tinymist/blob/v${version}/CHANGELOG.md";
-    description = "Tinymist is an integrated language service for Typst";
+    description = "Integrated language service for Typst";
     homepage = "https://github.com/Myriad-Dreamin/tinymist";
+    changelog = "https://github.com/Myriad-Dreamin/tinymist/blob/v${finalAttrs.version}/editors/vscode/CHANGELOG.md";
     license = lib.licenses.asl20;
     mainProgram = "tinymist";
     maintainers = with lib.maintainers; [
@@ -100,4 +104,4 @@ rustPlatform.buildRustPackage rec {
       lampros
     ];
   };
-}
+})

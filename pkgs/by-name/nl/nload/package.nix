@@ -7,12 +7,12 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.7.4";
   pname = "nload";
 
   src = fetchurl {
-    url = "http://www.roland-riegel.de/nload/${pname}-${version}.tar.gz";
+    url = "https://www.roland-riegel.de/nload/nload-${finalAttrs.version}.tar.gz";
     sha256 = "1rb9skch2kgqzigf19x8bzk211jdfjfdkrcvaqyj89jy2pkm3h61";
   };
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
       nload is a console application which monitors network traffic and
       bandwidth usage in real time. It visualizes the in- and outgoing traffic
       using two graphs and provides additional info like total amount of
-      transfered data and min/max network usage.
+      transferred data and min/max network usage.
     '';
     homepage = "https://www.roland-riegel.de/nload/index.html";
     license = lib.licenses.gpl2;
@@ -60,4 +60,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.devhell ];
     mainProgram = "nload";
   };
-}
+})

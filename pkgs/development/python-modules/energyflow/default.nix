@@ -1,32 +1,38 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  h5py,
+
+  # build-system
   hatch-vcs,
   hatchling,
-  igraph,
+
+  # dependencies
+  h5py,
   numpy,
-  pot,
-  pytestCheckHook,
-  pythonOlder,
+  wasserstein,
+
+  # optional-dependencies
+  igraph,
   scikit-learn,
   tensorflow,
+
+  # tests
+  pot,
+  pytestCheckHook,
   tf-keras,
-  wasserstein,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "energyflow";
   version = "1.4.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "pkomiske";
     repo = "EnergyFlow";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-4RzhpeOOty8IaVGByHD+PyeaeWgR7ZF98mSCJYoM9wY=";
   };
 
@@ -58,7 +64,8 @@ buildPythonPackage rec {
     pot
     pytestCheckHook
     tf-keras
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   disabledTests = [
     # Issues with array
@@ -66,15 +73,26 @@ buildPythonPackage rec {
     "test_gdim"
     "test_n_jobs"
     "test_periodic_phi"
+
+    # NameError: name '_distance_wrap' is not defined
+    "test_emd_byhand_1_1"
+    "test_emd_return_flow"
+    "test_emde"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # RuntimeError: EMDStatus - Infeasible
+    "test_emd_byhand_1_1"
+    "test_emd_return_flow"
+    "test_emde"
   ];
 
   pythonImportsCheck = [ "energyflow" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package for the EnergyFlow suite of tools";
     homepage = "https://energyflow.network/";
-    changelog = "https://github.com/thaler-lab/EnergyFlow/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ veprbl ];
+    changelog = "https://github.com/thaler-lab/EnergyFlow/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

@@ -18,14 +18,14 @@
   polkit,
   nss,
   pam,
-  systemd,
+  systemdLibs,
   libfprint,
   python3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fprintd";
-  version = "1.94.4";
+  version = "1.94.5";
   outputs = [
     "out"
     "devdoc"
@@ -35,8 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.freedesktop.org";
     owner = "libfprint";
     repo = "fprintd";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-B2g2d29jSER30OUqCkdk3+Hv5T3DA4SUKoyiqHb8FeU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aGIz50S0zfE3rV6QJp8iQz3uUVn8WAL68KU70j8GyOU=";
   };
 
   nativeBuildInputs = [
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     polkit
     nss
     pam
-    systemd
+    systemdLibs
     libfprint
   ];
 
@@ -80,12 +80,14 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dsystemd_system_unit_dir=${placeholder "out"}/lib/systemd/system"
   ];
 
-  PKG_CONFIG_DBUS_1_INTERFACES_DIR = "${placeholder "out"}/share/dbus-1/interfaces";
-  PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
-  PKG_CONFIG_DBUS_1_DATADIR = "${placeholder "out"}/share";
+  env = {
+    PKG_CONFIG_DBUS_1_INTERFACES_DIR = "${placeholder "out"}/share/dbus-1/interfaces";
+    PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
+    PKG_CONFIG_DBUS_1_DATADIR = "${placeholder "out"}/share";
 
-  # FIXME: Ugly hack for tests to find libpam_wrapper.so
-  LIBRARY_PATH = lib.makeLibraryPath [ python3.pkgs.pypamtest ];
+    # FIXME: Ugly hack for tests to find libpam_wrapper.so
+    LIBRARY_PATH = lib.makeLibraryPath [ python3.pkgs.pypamtest ];
+  };
 
   mesonCheckFlags = [
     # PAM related checks are timing out
@@ -117,6 +119,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "D-Bus daemon that offers libfprint functionality over the D-Bus interprocess communication bus";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ abbradar ];
+    teams = [ lib.teams.freedesktop ];
   };
 })

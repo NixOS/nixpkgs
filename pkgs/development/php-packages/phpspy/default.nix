@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "adsr";
     repo = "phpspy";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-QphoDdnSFPVRvEro0WDUC/yRsOf4I5p5BpHq32olqJI=";
     fetchSubmodules = true;
   };
@@ -62,12 +62,12 @@ stdenv.mkDerivation (finalAttrs: {
     command = "phpspy -v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Low-overhead sampling profiler for PHP";
     homepage = "https://github.com/adsr/phpspy";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "phpspy";
-    maintainers = with maintainers; [ gaelreyrol ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 })

@@ -6,12 +6,12 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rinutils";
   version = "0.10.3";
 
   src = fetchurl {
-    url = "https://github.com/shlomif/${pname}/releases/download/${version}/${pname}-${version}.tar.xz";
+    url = "https://github.com/shlomif/rinutils/releases/download/${finalAttrs.version}/rinutils-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-+eUn03psyMe4hwraY8qiTzKrDSn9ERbfPrtoZYMDCVU=";
   };
 
@@ -27,12 +27,12 @@ stdenv.mkDerivation rec {
       --replace '$'{exec_prefix}/@RINUTILS_INSTALL_MYLIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C11 / gnu11 utilities C library by Shlomi Fish / Rindolf";
     homepage = "https://github.com/shlomif/rinutils";
-    changelog = "https://github.com/shlomif/rinutils/raw/${version}/NEWS.asciidoc";
-    license = licenses.mit;
+    changelog = "https://github.com/shlomif/rinutils/raw/${finalAttrs.version}/NEWS.asciidoc";
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

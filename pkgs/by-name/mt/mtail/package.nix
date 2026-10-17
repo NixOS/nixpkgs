@@ -3,35 +3,51 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
+  gotools,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mtail";
-  version = "3.0.9";
+  version = "3.4.15";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "google";
+    owner = "jaqx0r";
     repo = "mtail";
-    rev = "v${version}";
-    hash = "sha256-ZyQpTxWBCU+pmulEXi/Y2PimbNMsUlbEFj8r+gTOTA0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Wct6MPTCSDt4KnvLk08I4dET1e7bhYJ8GC8EYrwdxXs=";
   };
 
-  vendorHash = "sha256-96r2UWM5HUF69BOGW6buV6juJEDYoiBPmR5iGNmI5WA=";
+  proxyVendor = true;
+  vendorHash = "sha256-vCKTQLRAClhpVvcxZtkjTvV/NgOitn96kIKXB4o2yvE=";
+
+  nativeBuildInputs = [
+    gotools # goyacc
+  ];
 
   ldflags = [
     "-X=main.Branch=main"
-    "-X=main.Version=${version}"
-    "-X=main.Revision=${src.rev}"
+    "-X=main.Version=${finalAttrs.version}"
+    "-X=main.Revision=${finalAttrs.src.rev}"
   ];
 
   # fails on darwin with: write unixgram -> <tmpdir>/rsyncd.log: write: message too long
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  checkFlags = [
+    # can only be executed under bazel
+    "-skip=TestExecMtail"
+  ];
+
+  preBuild = ''
+    GOOS= GOARCH= go generate ./...
+  '';
+
+  meta = {
     description = "Tool for extracting metrics from application logs";
-    homepage = "https://github.com/google/mtail";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ nickcao ];
+    homepage = "https://github.com/jaqx0r/mtail";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = "mtail";
   };
-}
+})

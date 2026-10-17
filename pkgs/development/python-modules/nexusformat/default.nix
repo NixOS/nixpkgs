@@ -2,11 +2,12 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  colored,
   h5py,
   hdf5plugin,
   numpy,
   pytestCheckHook,
-  pythonOlder,
+  python-dateutil,
   scipy,
   setuptools-scm,
   setuptools,
@@ -14,14 +15,12 @@
 
 buildPythonPackage rec {
   pname = "nexusformat";
-  version = "1.0.7";
+  version = "2.0.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-SSS6LTOdqLTHNGpBRO7UELF9qJb/sG8EwrE/azxk7wM=";
+    hash = "sha256-FeAM5iwTfC/EcVl/L/1l7NTuZcVnZISQppTKaRqWldA=";
   };
 
   build-system = [
@@ -30,9 +29,11 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    colored
     h5py
     hdf5plugin
     numpy
+    python-dateutil
     scipy
   ];
 
@@ -40,11 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nexusformat.nexus" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API to open, create, and manipulate NeXus data written in the HDF5 format";
     homepage = "https://github.com/nexpy/nexusformat";
     changelog = "https://github.com/nexpy/nexusformat/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ oberth-effect ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ oberth-effect ];
   };
 }

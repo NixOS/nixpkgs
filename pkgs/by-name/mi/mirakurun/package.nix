@@ -7,7 +7,7 @@
   installShellFiles,
   makeWrapper,
   nodejs,
-  substituteAll,
+  replaceVars,
   v4l-utils,
   which,
 }:
@@ -37,7 +37,7 @@ buildNpmPackage rec {
   ];
 
   # workaround for https://github.com/webpack/webpack/issues/14532
-  NODE_OPTIONS = "--openssl-legacy-provider";
+  env.NODE_OPTIONS = "--openssl-legacy-provider";
 
   postInstall =
     let
@@ -45,9 +45,9 @@ buildNpmPackage rec {
         bash
         nodejs
         which
-      ] ++ lib.optionals stdenv.hostPlatform.isLinux [ v4l-utils ];
-      crc32Patch = substituteAll {
-        src = ./fix-musl-detection.patch;
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [ v4l-utils ];
+      crc32Patch = replaceVars ./fix-musl-detection.patch {
         isMusl = if stdenv.hostPlatform.isMusl then "true" else "false";
       };
     in
@@ -71,9 +71,10 @@ buildNpmPackage rec {
       popd
     '';
 
-  meta = with lib; {
-    description = "Resource manager for TV tuners.";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ midchildan ];
+  meta = {
+    description = "Resource manager for TV tuners";
+    homepage = "https://github.com/Chinachu/Mirakurun";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ midchildan ];
   };
 }

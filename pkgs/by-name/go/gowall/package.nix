@@ -4,22 +4,28 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  nix-update-script,
+  writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gowall";
-  version = "0.1.9";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "Achno";
     repo = "gowall";
-    rev = "v${version}";
-    hash = "sha256-BBalJADhQ7D7p5PeafddkqQmHGhLsq1DlF1FUoazJGg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-mogjHIsm+N3/wtrfayiKuYe6REPVrt8xLZDpgdKkX34=";
   };
 
-  vendorHash = "sha256-H2Io1K2LEFmEPJYVcEaVAK2ieBrkV6u+uX82XOvNXj4=";
+  vendorHash = "sha256-nRmW7jGcURbrXVwg5kxmloet2aV2s8JjhEeO1KybtME=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    # using writableTmpDirAsHomeHook to prevent issues when creating config dir for shell completions
+    writableTmpDirAsHomeHook
+  ];
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd gowall \
       --bash <($out/bin/gowall completion bash) \
@@ -27,8 +33,10 @@ buildGoModule rec {
       --zsh <($out/bin/gowall completion zsh)
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
-    changelog = "https://github.com/Achno/gowall/releases/tag/v${version}";
+    changelog = "https://github.com/Achno/gowall/releases/tag/v${finalAttrs.version}";
     description = "Tool to convert a Wallpaper's color scheme / palette";
     homepage = "https://github.com/Achno/gowall";
     license = lib.licenses.mit;
@@ -36,6 +44,7 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [
       crem
       emilytrau
+      FKouhai
     ];
   };
-}
+})

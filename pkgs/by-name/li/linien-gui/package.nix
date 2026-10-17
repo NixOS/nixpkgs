@@ -1,25 +1,23 @@
 {
   lib,
-  python3,
+  python3Packages,
   qt5,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "linien-gui";
   pyproject = true;
 
-  inherit (python3.pkgs.linien-common) src version;
+  inherit (python3Packages.linien-common) src version;
 
   sourceRoot = "${src.name}/linien-gui";
 
-  nativeBuildInputs =
-    with python3.pkgs;
-    [
-      setuptools
-    ]
-    ++ [
-      qt5.wrapQtAppsHook
-    ];
+  build-system = with python3Packages; [
+    setuptools
+  ];
+  nativeBuildInputs = [
+    qt5.wrapQtAppsHook
+  ];
 
   # Makes qt-wayland appear in the qt paths injected by the wrapper - helps users
   # with `QT_QPA_PLATFORM=wayland` in their environment.
@@ -27,7 +25,7 @@ python3.pkgs.buildPythonApplication rec {
     qt5.qtwayland
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3Packages; [
     appdirs
     click
     pyqtgraph
@@ -43,13 +41,13 @@ python3.pkgs.buildPythonApplication rec {
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Graphical user interface of the Linien spectroscopy lock application";
     mainProgram = "linien";
     homepage = "https://github.com/linien-org/linien/tree/develop/linien-gui";
     changelog = "https://github.com/linien-org/linien/blob/v${version}/CHANGELOG.md";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       fsagbuya
       doronbehar
     ];

@@ -7,17 +7,18 @@
   zlib,
   openssl,
   libarchive,
+  fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xbps";
-  version = "0.59.2";
+  version = "0.60.7";
 
   src = fetchFromGitHub {
     owner = "void-linux";
     repo = "xbps";
-    rev = version;
-    hash = "sha256-3+LzFLDZ1zfRPBETMlpEn66zsfHRHQLlgeZPdMtmA14=";
+    tag = finalAttrs.version;
+    hash = "sha256-noi+OAyBmLCBnmLDWEuNXEOPyqt9Qr1v4CNm7GjKXHA=";
   };
 
   nativeBuildInputs = [
@@ -33,33 +34,40 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./cert-paths.patch
+    # fix build w/ glibc-2.44
+    (fetchpatch {
+      url = "https://github.com/void-linux/xbps/commit/7d02b79d3d7e0bf644adf8b412e76dba1b1fdce1.patch";
+      hash = "sha256-iUNBmkkfR02/EFDkax/ZpE7oM+5IVDMmD0FYz7p0dQ4=";
+    })
+    (fetchpatch {
+      url = "https://github.com/void-linux/xbps/commit/9a8002c5688c3cdda700b022bf432b4426d64042.patch";
+      hash = "sha256-/94HKeyv9LaQv6QHE0CqmM1ajBOSNt9Sfh0XKV0RLMQ=";
+    })
+    (fetchpatch {
+      url = "https://github.com/void-linux/xbps/commit/7f2f10300f235639c5880bea1e4b14245fd5fbda.patch";
+      hash = "sha256-iZXiNYrSFaP55qyzefc3hqJ+SoIOsFILqnra6u5iGpM=";
+    })
+    (fetchpatch {
+      url = "https://github.com/void-linux/xbps/commit/84f6a1be26348c265afedebe9cea958424b0aabf.patch";
+      hash = "sha256-WDsGkI+3JnJskM+UKjI/UZP6ypMCd5+3rYtlQgQEr40=";
+    })
   ];
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-result -Wno-error=deprecated-declarations";
 
+  # Don't try to install keys to /var/db/xbps, put in $out/share for now
   postPatch = ''
-    # _BSD_SOURCE causes cpp warning
-    # https://github.com/void-linux/xbps/issues/576
-    substituteInPlace bin/xbps-fbulk/main.c lib/util.c lib/external/dewey.c lib/external/fexec.c \
-      --replace 'define _BSD_SOURCE' 'define _DEFAULT_SOURCE' \
-      --replace '# define _BSD_SOURCE' '#define _DEFAULT_SOURCE'
-
-    # fix unprefixed ranlib (needed on cross)
-    substituteInPlace lib/Makefile \
-      --replace 'SILENT}ranlib ' 'SILENT}$(RANLIB) '
-
-    # Don't try to install keys to /var/db/xbps, put in $out/share for now
     substituteInPlace data/Makefile \
-      --replace '$(DESTDIR)/$(DBDIR)' '$(DESTDIR)/$(SHAREDIR)'
+      --replace-fail '$(DESTDIR)/$(DBDIR)' '$(DESTDIR)/$(SHAREDIR)'
   '';
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/void-linux/xbps";
     description = "X Binary Package System";
-    platforms = platforms.linux; # known to not work on Darwin, at least
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ dtzWill ];
+    platforms = lib.platforms.linux; # known to not work on Darwin, at least
+    license = lib.licenses.bsd2;
+    maintainers = [ ];
   };
-}
+})

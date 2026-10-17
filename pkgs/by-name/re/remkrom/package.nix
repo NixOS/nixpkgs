@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage {
   pname = "remkrom";
-  version = "unstable-2020-10-17";
+  version = "0-unstable-2020-10-17";
 
   src = fetchFromGitHub {
     owner = "siraben";
@@ -15,13 +15,13 @@ rustPlatform.buildRustPackage {
     sha256 = "sha256-DhfNfV9bd0p5dLXKgrVLyugQHK+RHsepeg0tGq5J6cI=";
   };
 
-  cargoHash = "sha256-JUyIbg1SxQ7pdqypGv7Kz2MM0ZwL3M9YJekO9oSftLM=";
+  cargoHash = "sha256-H+SZ+aUQReFJiN2MQHxaI0/bM1sXaSFVlIhedCKBQ0M=";
 
-  meta = with lib; {
+  meta = {
     description = "Reimplementation of mkrom in Rust";
     homepage = "https://github.com/siraben/remkrom";
-    license = licenses.mit;
-    maintainers = with maintainers; [ siraben ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ siraben ];
     mainProgram = "remkrom";
   };
 }

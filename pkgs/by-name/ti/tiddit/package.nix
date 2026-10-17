@@ -6,16 +6,16 @@
   fetchFromGitHub,
   python3Packages,
 }:
-python3Packages.buildPythonApplication rec {
-  name = "tiddit";
-  version = "3.6.1";
+python3Packages.buildPythonApplication (finalAttrs: {
+  pname = "tiddit";
+  version = "3.9.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SciLifeLab";
     repo = "TIDDIT";
-    tag = "TIDDIT-${version}";
-    hash = "sha256-OeqVQJDw0fmSDWIGab2qtTJCzZxqLY2XzRqaTRuPIdI=";
+    tag = "TIDDIT-${finalAttrs.version}";
+    hash = "sha256-B3vUxLEnOdX733iGOfMmueVaSEqMmlp6fN4M8oElNNQ=";
   };
 
   build-system = with python3Packages; [
@@ -31,13 +31,17 @@ python3Packages.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        bwa
-        fermi2
-        ropebwt2
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      bwa
+      fermi2
+      ropebwt2
+    ])
+    "--set"
+    "PYTHONPATH"
+    "$PYTHONPATH"
   ];
 
   meta = {
@@ -48,4 +52,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ apraga ];
     platforms = lib.platforms.unix;
   };
-}
+})

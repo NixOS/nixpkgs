@@ -3,13 +3,14 @@
   lib,
   python3,
 }:
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "seventeenlands";
-  version = "0.1.42";
+  version = "0.1.44";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-P/imV4vvyd6wgjqXzgfIAURFtFhLwX1eS8eiPl79oZk=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-yz+HGovKIuu3Ou1jo+aNJPiNiERVZvsTtiy9tVhySwI=";
   };
 
   # No tests
@@ -17,17 +18,19 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "seventeenlands" ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ hatchling ];
+
+  dependencies = with python3.pkgs; [
     python-dateutil
     requests
     tkinter
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Client for passing relevant events from MTG Arena logs to the 17Lands REST endpoint, also known as mtga-log-client";
     homepage = "https://www.17lands.com/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ sephi ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ sephi ];
     mainProgram = "seventeenlands";
   };
-}
+})

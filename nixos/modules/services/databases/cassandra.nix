@@ -9,7 +9,6 @@ let
   inherit (lib)
     concatStringsSep
     flip
-    literalMD
     literalExpression
     optionalAttrs
     optionals
@@ -19,14 +18,9 @@ let
     mkIf
     mkOption
     types
-    versionAtLeast
     ;
 
   cfg = config.services.cassandra;
-
-  atLeast3 = versionAtLeast cfg.package.version "3";
-  atLeast3_11 = versionAtLeast cfg.package.version "3.11";
-  atLeast4 = versionAtLeast cfg.package.version "4";
 
   defaultUser = "cassandra";
 
@@ -41,6 +35,7 @@ let
       data_file_directories = [ "${cfg.homeDir}/data" ];
       commitlog_directory = "${cfg.homeDir}/commitlog";
       saved_caches_directory = "${cfg.homeDir}/saved_caches";
+      hints_directory = "${cfg.homeDir}/hints";
     }
     // optionalAttrs (cfg.seedAddresses != [ ]) {
       seed_provider = [
@@ -49,9 +44,6 @@ let
           parameters = [ { seeds = concatStringsSep "," cfg.seedAddresses; } ];
         }
       ];
-    }
-    // optionalAttrs atLeast3 {
-      hints_directory = "${cfg.homeDir}/hints";
     }
   );
 
@@ -77,7 +69,8 @@ let
     cassandraEnvPkg = "${cfg.package}/conf/cassandra-env.sh";
     cassandraLogbackConfig = pkgs.writeText "logback.xml" cfg.logbackConfig;
 
-    passAsFile = [ "extraEnvSh" ];
+    strictDeps = true;
+    __structuredAttrs = true;
     inherit (cfg) extraEnvSh package;
 
     buildCommand = ''
@@ -88,7 +81,7 @@ let
 
       ( cat "$cassandraEnvPkg"
         echo "# lines from services.cassandra.extraEnvSh: "
-        cat "$extraEnvShPath"
+        printf "%s" "$extraEnvSh"
       ) > "$out/cassandra-env.sh"
 
       # Delete default JMX Port, otherwise we can't set it using env variable
@@ -97,9 +90,7 @@ let
       # Delete default password file
       sed -i '/-Dcom.sun.management.jmxremote.password.file=\/etc\/cassandra\/jmxremote.password/d' "$out/cassandra-env.sh"
 
-      ${lib.optionalString atLeast4 ''
-        cp $package/conf/jvm*.options $out/
-      ''}
+      cp $package/conf/jvm*.options $out/
     '';
   };
 
@@ -109,17 +100,17 @@ let
 
   fullJvmOptions =
     cfg.jvmOpts
+    ++ [
+      # Historically, we don't use a log dir, whereas the upstream scripts do
+      # expect this. We override those by providing our own -Xlog:gc flag.
+      "-Xlog:gc=warning,heap*=warning,age*=warning,safepoint=warning,promotion*=warning"
+    ]
     ++ optionals (cfg.jmxRoles != [ ]) [
       "-Dcom.sun.management.jmxremote.authenticate=true"
       "-Dcom.sun.management.jmxremote.password.file=${cfg.jmxRolesFile}"
     ]
     ++ optionals cfg.remoteJmx [
       "-Djava.rmi.server.hostname=${cfg.rpcAddress}"
-    ]
-    ++ optionals atLeast4 [
-      # Historically, we don't use a log dir, whereas the upstream scripts do
-      # expect this. We override those by providing our own -Xlog:gc flag.
-      "-Xlog:gc=warning,heap*=warning,age*=warning,safepoint=warning,promotion*=warning"
     ];
 
   commonEnv = {
@@ -169,7 +160,7 @@ in
     };
 
     package = mkPackageOption pkgs "cassandra" {
-      example = "cassandra_3_11";
+      example = "cassandra_4";
     };
 
     jvmOpts = mkOption {
@@ -423,7 +414,7 @@ in
     };
 
     jmxPort = mkOption {
-      type = types.int;
+      type = types.port;
       default = 7199;
       description = ''
         Specifies the default port over which Cassandra will be available for
@@ -462,14 +453,11 @@ in
 
     jmxRolesFile = mkOption {
       type = types.nullOr types.path;
-      default = if atLeast3_11 then pkgs.writeText "jmx-roles-file" defaultJmxRolesFile else null;
-      defaultText = literalMD ''generated configuration file if version is at least 3.11, otherwise `null`'';
+      default = pkgs.writeText "jmx-roles-file" defaultJmxRolesFile;
+      defaultText = "generated configuration file";
       example = "/var/lib/cassandra/jmx.password";
       description = ''
         Specify your own jmx roles file.
-
-        Make sure the permissions forbid "others" from reading the file if
-        you're using Cassandra below version 3.11.
       '';
     };
   };
@@ -492,8 +480,7 @@ in
         assertion = cfg.remoteJmx -> cfg.jmxRolesFile != null;
         message = ''
           If you want JMX available remotely you need to set a password using
-          <literal>jmxRoles</literal> or <literal>jmxRolesFile</literal> if
-          using Cassandra older than v3.11.
+          <literal>jmxRoles</literal>.
         '';
       }
     ];
@@ -516,7 +503,7 @@ in
         MAX_HEAP_SIZE = toString cfg.maxHeapSize;
         HEAP_NEWSIZE = toString cfg.heapNewSize;
         MALLOC_ARENA_MAX = toString cfg.mallocArenaMax;
-        LOCAL_JMX = if cfg.remoteJmx then "no" else "yes";
+        LOCAL_JMX = lib.boolToYesNo (!cfg.remoteJmx);
         JMX_PORT = toString cfg.jmxPort;
       };
       wantedBy = [ "multi-user.target" ];

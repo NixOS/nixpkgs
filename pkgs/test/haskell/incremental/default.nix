@@ -33,7 +33,11 @@ let
   }) temporary;
 in
 temporary-incremental-build.overrideAttrs (old: {
-  meta = {
-    maintainers = lib.teams.mercury.members;
+  meta = old.meta // {
+    maintainers = old.meta.maintainers or [ ] ++ [
+      lib.maintainers._9999years
+      lib.maintainers.Gabriella439
+      lib.maintainers.lf-
+    ];
   };
 })

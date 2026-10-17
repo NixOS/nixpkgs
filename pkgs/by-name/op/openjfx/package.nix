@@ -1,14 +1,11 @@
 {
-  featureVersion ? "17",
+  featureVersion ? "21",
 
   lib,
   stdenv,
   pkgs,
 
-  fetchpatch2,
-
   gradle_8,
-  gradle_7,
   perl,
   pkg-config,
   cmake,
@@ -16,15 +13,15 @@
   python3,
   ruby,
 
-  gtk2,
   gtk3,
-  libXtst,
-  libXxf86vm,
+  libxtst,
+  libxxf86vm,
   glib,
   alsa-lib,
-  ffmpeg,
-  ffmpeg-headless,
+  ffmpeg_7,
+  ffmpeg_7-headless,
 
+  fetchpatch2,
   writeText,
 
   _experimental-update-script-combinators,
@@ -37,12 +34,12 @@
 
   jdk17_headless,
   jdk21_headless,
-  jdk23_headless,
+  jdk25_headless,
   jdk-bootstrap ?
     {
       "17" = jdk17_headless;
       "21" = jdk21_headless;
-      "23" = jdk23_headless;
+      "25" = jdk25_headless;
     }
     .${featureVersion},
 }:
@@ -56,8 +53,6 @@ let
 
   atLeast21 = lib.versionAtLeast featureVersion "21";
   atLeast23 = lib.versionAtLeast featureVersion "23";
-
-  gradle_openjfx = if atLeast23 then gradle_8 else gradle_7;
 in
 
 assert lib.assertMsg (lib.pathExists sourceFile)
@@ -69,20 +64,67 @@ stdenv.mkDerivation {
 
   inherit (source) src;
 
-  patches = lib.optionals (!atLeast23) (
-    if atLeast21 then
-      [
-        ./21/patches/backport-ffmpeg-7-support-jfx21.patch
-      ]
-    else
-      [
-        ./17/patches/backport-ffmpeg-6-support-jfx11.patch
-        ./17/patches/backport-ffmpeg-7-support-jfx11.patch
-      ]
-  );
+  patches =
+    lib.optionals (!atLeast23) (
+      if atLeast21 then
+        [
+          ./21/patches/backport-ffmpeg-7-support-jfx21.patch
+        ]
+      else
+        [
+          ./17/patches/backport-ffmpeg-6-support-jfx11.patch
+          ./17/patches/backport-ffmpeg-7-support-jfx11.patch
+
+          # Build with Gradle 8
+          (fetchpatch2 {
+            # Yes, this patch taken from the jfx21u repo is intended to be
+            # applied to jfx17.
+            url = "https://github.com/openjdk/jfx21u/commit/7f704c24c2238f9d7bb744a20667a8c1337decc6.patch?full_index=1";
+            excludes = [
+              # The patch fails to apply to these files, but with the exception
+              # of build.properties (which is patched in postPatch), none of them
+              # matter.
+              "build.properties"
+              "gradle/legal/gradle.md"
+              "gradle/wrapper/gradle-wrapper.properties"
+              "gradlew"
+            ];
+            hash = "sha256-WuJtzPy0IV4xvn+i5xeDqekWO0VR2GIfsYKkEmh8KKU=";
+          })
+          # Drop GTK2 support
+          (fetchpatch2 {
+            url = "https://github.com/openjdk/jfx/commit/63635ee8160ba6507d625c44320b58e2f9bfb87a.patch?full_index=1";
+            includes = [
+              "buildSrc/linux.gradle"
+            ];
+            hash = "sha256-p2vRy8jA/JJBGCC5irV3gGbcJqChFNi+ViMeQ1wjtU0=";
+          })
+        ]
+    )
+    ++ lib.optionals withWebKit [
+      # Building WebKit using CMake >= 4.4.0 requires patching a malformed CMake expression.
+      # https://bugs.webkit.org/show_bug.cgi?id=319196
+      # https://gitlab.kitware.com/cmake/cmake/-/work_items/26424
+      (fetchpatch2 {
+        name = "cmake4.4-linked-into-quoting.patch";
+        url = "https://aur.archlinux.org/cgit/aur.git/plain/cmake4-linked-into-quoting.patch?h=webkit2gtk&id=bcf95cb5382e16354be70b0a3c88436917588c8a";
+        stripLen = 1;
+        extraPrefix = "modules/javafx.web/src/main/native/";
+        hash = "sha256-W/sYyzrE12kEA993bfru6igiBdkyRtMiKBRjJqXN97g=";
+      })
+    ]
+    ++ lib.optionals withMedia [
+      # This disables functionality that attempts to dlopen a bunch of
+      # different versions of libavcodec.so, in order to detect which version
+      # is available. Under Nix, this is both unnecessary (because the correct
+      # version is already linked by store path) and broken (because in the
+      # general case, none of the versions are found, which effectively
+      # disables media playing in javafx.media).
+      ./disable-dynamic-avcodec-version-detection.patch
+    ];
 
   nativeBuildInputs = [
-    gradle_openjfx
+    gradle_8
     perl
     pkg-config
     cmake
@@ -92,16 +134,15 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    gtk2
     gtk3
-    libXtst
-    libXxf86vm
+    libxtst
+    libxxf86vm
     glib
     alsa-lib
-    (if atLeast21 then ffmpeg else ffmpeg-headless)
+    (if atLeast21 then ffmpeg_7 else ffmpeg_7-headless)
   ];
 
-  mitmCache = gradle_openjfx.fetchDeps {
+  mitmCache = gradle_8.fetchDeps {
     attrPath = "openjfx${featureVersion}";
     pkg = pkgs."openjfx${featureVersion}".override { withWebKit = true; };
     data = ./. + "/${featureVersion}/deps.json";
@@ -134,6 +175,10 @@ stdenv.mkDerivation {
            modules/javafx.web/src/main/native/Source/bmalloc/bmalloc/IsoSharedPageInlines.h
 
     ''
+    + lib.optionalString (!atLeast21) ''
+      substituteInPlace build.properties \
+        --replace-fail jfx.gradle.version=7.3 jfx.gradle.version=8.4
+    ''
     + ''
       ln -s $config gradle.properties
     '';
@@ -158,7 +203,7 @@ stdenv.mkDerivation {
 
   disallowedReferences = [
     jdk-bootstrap
-    gradle_openjfx.jdk
+    gradle_8.jdk
   ];
 
   passthru.updateScript = _experimental-update-script-combinators.sequence [
@@ -190,8 +235,11 @@ stdenv.mkDerivation {
   meta = {
     description = "Next-generation Java client toolkit";
     homepage = "https://openjdk.org/projects/openjfx/";
-    license = lib.licenses.gpl2Classpath;
-    maintainers = with lib.maintainers; [ abbradar ];
+    license = with lib.licenses; [
+      gpl2
+      classpathException20
+    ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 }

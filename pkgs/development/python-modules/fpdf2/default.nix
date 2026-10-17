@@ -1,52 +1,48 @@
 {
   lib,
+  brotli,
   buildPythonPackage,
-  fetchFromGitHub,
-
-  setuptools,
-
+  camelot,
   defusedxml,
-  pillow,
+  fetchFromGitHub,
   fonttools,
-
+  lxml,
+  pillow,
+  pytest-cov-stub,
   pytestCheckHook,
   qrcode,
-  camelot,
+  setuptools,
   uharfbuzz,
-  lxml,
 }:
 
 buildPythonPackage rec {
   pname = "fpdf2";
-  version = "2.8.2";
+  version = "2.8.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "py-pdf";
     repo = "fpdf2";
     tag = version;
-    hash = "sha256-NfHMmyFT+ZpqfRc41DetbFXs/twr12XagOkk3nGhrYk=";
+    hash = "sha256-bMVi0ZNV9Al9dxH8t801y4zkJpNmQUVTeMoOh+DDzFA=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace-fail "--cov=fpdf --cov-report=xml" ""
-  '';
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [ setuptools ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     defusedxml
-    pillow
     fonttools
+    pillow
   ];
 
   nativeCheckInputs = [
+    brotli
+    camelot
+    lxml
+    pytest-cov-stub
     pytestCheckHook
     qrcode
-    camelot
     uharfbuzz
-    lxml
   ];
 
   disabledTestPaths = [
@@ -57,16 +53,14 @@ buildPythonPackage rec {
   disabledTests = [
     "test_png_url" # tries to download file
     "test_page_background" # tries to download file
-    "test_share_images_cache" # uses timing functions
-    "test_bidi_character" # tries to download file
-    "test_bidi_conformance" # tries to download file
-    "test_insert_jpg_jpxdecode" # JPEG2000 is broken
+    "test_twitter_emoji_shaping" # hash mismatch
+    "test_twitter_emoji_text" # hash mismatch
   ];
 
   meta = {
     homepage = "https://github.com/py-pdf/fpdf2";
     description = "Simple PDF generation for Python";
-    changelog = "https://github.com/py-pdf/fpdf2/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/py-pdf/fpdf2/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ jfvillablanca ];
   };

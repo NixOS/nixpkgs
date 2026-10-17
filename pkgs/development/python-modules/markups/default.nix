@@ -2,13 +2,11 @@
   lib,
   buildPythonPackage,
   docutils,
-  fetchPypi,
-  importlib-metadata,
+  fetchFromGitHub,
   markdown,
   pygments,
   pytestCheckHook,
   python-markdown-math,
-  pythonOlder,
   pyyaml,
   setuptools,
   textile,
@@ -16,27 +14,26 @@
 
 buildPythonPackage rec {
   pname = "markups";
-  version = "4.0.0";
-  format = "pyproject";
+  version = "4.1.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    pname = "Markups";
-    inherit version;
-    hash = "sha256-Pdua+xxV0M/4EuM5LKM/RoSYwHB6T6iy4F0LoNMsAZ4=";
+  src = fetchFromGitHub {
+    owner = "retext-project";
+    repo = "pymarkups";
+    tag = version;
+    hash = "sha256-kQ1L8l/ONT4qOA/xfx85WyA7pDveaKoXWGZbljYxO/4=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     docutils
     markdown
     pygments
     python-markdown-math
     pyyaml
     textile
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -47,10 +44,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "markups" ];
 
-  meta = with lib; {
+  meta = {
     description = "Wrapper around various text markup languages";
     homepage = "https://github.com/retext-project/pymarkups";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ klntsky ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ klntsky ];
   };
 }

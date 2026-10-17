@@ -4,26 +4,26 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "hcl2json";
-  version = "0.6.5";
+  version = "0.6.9";
 
   src = fetchFromGitHub {
     owner = "tmccombs";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-LU74vm36NuA1ApJWtEf/ub3los6yVR8yiQTfM0Wnvyo=";
+    repo = "hcl2json";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-CiF5xbRov28xWWygSI9JIG1t/irUyuUxM2vzGnbazGg=";
   };
 
-  vendorHash = "sha256-nm+KvpcOUTR9Nm0eQtqCWxMiFTvL5xKLhsPaJlsVpkQ=";
+  vendorHash = "sha256-bQFm3BmYxvSe5NRbh1+tG6wWP5C3DSr3g+E36oqk5oY=";
 
   subPackages = [ "." ];
 
-  meta = with lib; {
+  meta = {
     description = "Convert hcl2 to json";
     homepage = "https://github.com/tmccombs/hcl2json";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "hcl2json";
   };
-}
+})

@@ -8,47 +8,48 @@
   lib,
   libGL,
   xkeyboard_config,
-  xorg,
+  libxrender,
+  libxi,
+  libxext,
+  libx11,
+  libsm,
+  libice,
+  libxcb,
   zlib,
 }:
 
-let
+buildFHSEnv (finalAttrs: {
   pname = "kingstvis";
-  version = "3.6.1";
+  version = "3.6.6";
+
   src = fetchzip {
-    url = "http://res.kingst.site/kfs/KingstVIS_v${version}.tar.gz";
-    hash = "sha256-eZJ3RZWdmNx/El3Hh5kUf44pIwdvwOEkRysYBgUkS18=";
+    url = "http://res.kingst.site/kfs/KingstVIS_v${finalAttrs.version}.tar.gz";
+    hash = "sha256-41tIOUaPOkyLAowf0M+hnZC6b5wVKVAD/DTjnE7nbOQ=";
   };
-in
 
-buildFHSEnv {
-  inherit pname version;
-
-  targetPkgs =
-    pkgs:
-    (with pkgs; [
-      dbus
-      fontconfig
-      freetype
-      glib
-      libGL
-      xkeyboard_config
-      xorg.libICE
-      xorg.libSM
-      xorg.libX11
-      xorg.libXext
-      xorg.libXi
-      xorg.libXrender
-      xorg.libxcb
-      zlib
-    ]);
+  targetPkgs = pkgs: [
+    dbus
+    fontconfig
+    freetype
+    glib
+    libGL
+    xkeyboard_config
+    libice
+    libsm
+    libx11
+    libxext
+    libxi
+    libxrender
+    libxcb
+    zlib
+  ];
 
   extraInstallCommands = ''
-    install -Dvm644 ${src}/Driver/99-Kingst.rules \
+    install -Dvm644 ${finalAttrs.src}/Driver/99-Kingst.rules \
       $out/lib/udev/rules.d/99-Kingst.rules
   '';
 
-  runScript = "${src}/KingstVIS";
+  runScript = "${finalAttrs.src}/KingstVIS";
 
   meta = {
     description = "Kingst Virtual Instruments Studio, software for logic analyzers";
@@ -58,4 +59,4 @@ buildFHSEnv {
     maintainers = [ lib.maintainers.luisdaranda ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

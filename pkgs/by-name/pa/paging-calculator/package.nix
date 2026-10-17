@@ -4,16 +4,16 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "paging-calculator";
   version = "0.4.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-mTHBARrcq8cJxzh80v/fGr5vACAMyy/DhN8zpQTV0jM=";
   };
 
-  cargoHash = "sha256-oQQA+AGsuMKaFhoZRuv3BASCLJwfgbrdK+2noxBLm7k=";
+  cargoHash = "sha256-v4dlZYlmKhCBPp9Yll/5nuLtJd54EAh+jTw4BVuYRB0=";
 
   meta = {
     description = "CLI utility that helps calculating page table indices from a virtual address";
@@ -26,8 +26,8 @@ rustPlatform.buildRustPackage rec {
       which level of the page table.
     '';
     homepage = "https://github.com/phip1611/paging-calculator";
-    changelog = "https://github.com/phip1611/paging-calculator/blob/v${version}/CHANGELOG.md";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://github.com/phip1611/paging-calculator/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ phip1611 ];
   };
-}
+})

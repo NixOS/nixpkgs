@@ -19,9 +19,7 @@ let
 in
 
 {
-
   options = {
-
     networking.firewall = {
       extraInputRules = lib.mkOption {
         type = lib.types.lines;
@@ -59,11 +57,9 @@ in
         '';
       };
     };
-
   };
 
-  config = lib.mkIf (cfg.enable && config.networking.nftables.enable) {
-
+  config = lib.mkIf (cfg.enable && cfg.backend == "nftables") {
     assertions = [
       {
         assertion = cfg.extraCommands == "";
@@ -82,6 +78,8 @@ in
         message = "networking.nftables.rulesetFile conflicts with the firewall";
       }
     ];
+
+    environment.systemPackages = [ pkgs.nixos-firewall-tool ];
 
     networking.nftables.tables."nixos-fw".family = "inet";
     networking.nftables.tables."nixos-fw".content = ''
@@ -118,6 +116,10 @@ in
         ${lib.optionalString (
           ifaceSet != ""
         ) ''iifname { ${ifaceSet} } accept comment "trusted interfaces"''}
+
+        # Multicast ICMPv6 echo replies get marked as invalid by conntrack.
+        # Accept them before conntrack to avoid dropped replies.
+        icmpv6 type echo-reply accept
 
         # Some ICMPv6 types like NDP is untracked
         ct state vmap {
@@ -203,7 +205,5 @@ in
         }
       ''}
     '';
-
   };
-
 }

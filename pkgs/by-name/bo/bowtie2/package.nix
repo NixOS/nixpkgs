@@ -5,7 +5,7 @@
   cmake,
   perl,
   python3,
-  tbb,
+  onetbb,
   zlib,
   runCommand,
   bowtie2,
@@ -28,19 +28,21 @@ stdenv.mkDerivation (finalAttrs: {
   # TODO: check with other distros and report upstream
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "-m64" ""
+      --replace-fail "-m64" "" \
+      --replace-fail 'cmake_minimum_required(VERSION 3.1 FATAL_ERROR)' \
+        'cmake_minimum_required(VERSION 3.5 FATAL_ERROR)'
   '';
 
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    tbb
+    onetbb
     zlib
     python3
     perl
   ];
 
-  cmakeFlags = lib.optional (!stdenv.hostPlatform.isx86) [
+  cmakeFlags = lib.optionals (!stdenv.hostPlatform.isx86) [
     "-DCMAKE_CXX_FLAGS=-I${finalAttrs.src}/third_party"
   ];
 
@@ -58,13 +60,13 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Ultrafast and memory-efficient tool for aligning sequencing reads to long reference sequences";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     homepage = "http://bowtie-bio.sf.net/bowtie2";
     changelog = "https://github.com/BenLangmead/bowtie2/releases/tag/v${finalAttrs.version}";
-    maintainers = with maintainers; [ rybern ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ rybern ];
+    platforms = lib.platforms.all;
     mainProgram = "bowtie2";
   };
 })

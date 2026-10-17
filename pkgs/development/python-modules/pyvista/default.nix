@@ -1,12 +1,15 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  cyclopts,
   matplotlib,
   numpy,
   pillow,
   pooch,
-  pythonOlder,
+  pyobjc-framework-Cocoa,
+  pyvista-validation,
   scooby,
   setuptools,
   typing-extensions,
@@ -15,28 +18,31 @@
 
 buildPythonPackage rec {
   pname = "pyvista";
-  version = "0.44.2";
+  version = "0.49.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pyvista";
     repo = "pyvista";
     tag = "v${version}";
-    hash = "sha256-ZQfI0lmh/cwE224yk6a2G3gLUCsBjCQqPI1y4zYj0FI=";
+    hash = "sha256-Qq6oJ/0Er2acaYMHYCLSSO49aZRPUvIKkkWRXsQ1RoA=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
+    cyclopts
     matplotlib
     numpy
     pillow
     pooch
+    pyvista-validation
     scooby
     typing-extensions
     vtk
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    pyobjc-framework-Cocoa
   ];
 
   # Fatal Python error: Aborted
@@ -44,11 +50,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyvista" ];
 
-  meta = with lib; {
+  meta = {
     description = "Easier Pythonic interface to VTK";
     homepage = "https://pyvista.org";
-    changelog = "https://github.com/pyvista/pyvista/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ wegank ];
+    changelog = "https://github.com/pyvista/pyvista/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ wegank ];
   };
 }

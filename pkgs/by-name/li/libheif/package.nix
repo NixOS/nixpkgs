@@ -1,37 +1,44 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, dav1d
-, rav1e
-, libde265
-, x265
-, libpng
-, libjpeg
-, libaom
-, gdk-pixbuf
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  dav1d,
+  rav1e,
+  libde265,
+  x265,
+  libpng,
+  libjpeg,
+  libaom,
+  gdk-pixbuf,
 
-# for passthru.tests
-, gimp
-, imagemagick
-, imlib2Full
-, imv
-, python3Packages
-, vips
+  # for passthru.tests
+  gimp,
+  imagemagick,
+  imlib2Full,
+  imv,
+  python3Packages,
+  vips,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libheif";
-  version = "1.18.2";
+  version = "1.23.6";
 
-  outputs = [ "bin" "out" "dev" "man" ];
+  outputs = [
+    "bin"
+    "out"
+    "dev"
+    "man"
+    "lib"
+  ];
 
   src = fetchFromGitHub {
     owner = "strukturag";
     repo = "libheif";
-    rev = "v${version}";
-    hash = "sha256-Z21E2b4E9jGtwR1RpFMAbGsWFw6jXn++WexlzdoyZzE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-pZuVZWnk/gIvjZQ8G7k5HMMC3E4vGuLNID96KT7Qo7c=";
   };
 
   nativeBuildInputs = [
@@ -51,7 +58,13 @@ stdenv.mkDerivation rec {
   ];
 
   # Fix installation path for gdk-pixbuf module
-  PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${placeholder "out"}/${gdk-pixbuf.moduleDir}";
+  env.PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${placeholder "lib"}/${gdk-pixbuf.moduleDir}";
+
+  postInstall = ''
+    substituteInPlace $out/share/thumbnailers/heif.thumbnailer \
+      --replace-fail "TryExec=heif-thumbnailer" "TryExec=$bin/bin/heif-thumbnailer" \
+      --replace-fail "Exec=heif-thumbnailer" "Exec=$bin/bin/heif-thumbnailer"
+  '';
 
   # Wrong include path in .cmake.  It's a bit difficult to patch because of special characters.
   postFixup = ''
@@ -60,7 +73,13 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    inherit gimp imagemagick imlib2Full imv vips;
+    inherit
+      gimp
+      imagemagick
+      imlib2Full
+      imv
+      vips
+      ;
     inherit (python3Packages) pillow-heif;
   };
 
@@ -69,6 +88,6 @@ stdenv.mkDerivation rec {
     description = "ISO/IEC 23008-12:2017 HEIF image file format decoder and encoder";
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ gebner ];
+    maintainers = with lib.maintainers; [ kuflierl ];
   };
-}
+})

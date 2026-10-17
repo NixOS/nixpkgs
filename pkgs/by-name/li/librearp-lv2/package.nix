@@ -6,12 +6,12 @@
   pkg-config,
   cairo,
   libxkbcommon,
-  xcbutilcursor,
-  xcbutilkeysyms,
-  xcbutil,
-  libXrandr,
-  libXinerama,
-  libXcursor,
+  libxcb-cursor,
+  libxcb-keysyms,
+  libxcb-util,
+  libxrandr,
+  libxinerama,
+  libxcursor,
   alsa-lib,
   libjack2,
   lv2,
@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "librearp-lv2";
-  version = "2.4";
+  version = "2.5";
 
   src = fetchFromGitLab {
     owner = "LibreArp";
     repo = "LibreArp";
     rev = "${finalAttrs.version}-lv2";
-    hash = "sha256-x+ZPiU/ZFzrXb8szMS9Ts4JEEyXYpM8CLZHT4lNJWY8=";
+    hash = "sha256-RKYRHghNVP4Sg4yCO38CIz1Brr1r6gY2K/hDCngEE68=";
     fetchSubmodules = true;
   };
 
@@ -38,12 +38,12 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     cairo
     libxkbcommon
-    xcbutilcursor
-    xcbutilkeysyms
-    xcbutil
-    libXrandr
-    libXinerama
-    libXcursor
+    libxcb-cursor
+    libxcb-keysyms
+    libxcb-util
+    libxrandr
+    libxinerama
+    libxcursor
     alsa-lib
     libjack2
     lv2
@@ -62,11 +62,11 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r LV2/LibreArp.lv2 $out/lib/lv2
   '';
 
-  meta = with lib; {
-    description = "A pattern-based arpeggio generator plugin.";
+  meta = {
+    description = "Pattern-based arpeggio generator plugin";
     homepage = "https://librearp.gitlab.io/";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ magnetophon ];
+    maintainers = with lib.maintainers; [ magnetophon ];
   };
 })

@@ -13,7 +13,7 @@ buildKodiAddon rec {
 
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/${lib.toLower rel}/${namespace}/${namespace}-${version}.zip";
-    sha256 = "sha256-NQbjx+k9fnQMYLLMR5+N5NSuDcXEzZjlhGPA3qSmjfI=";
+    hash = "sha256-NQbjx+k9fnQMYLLMR5+N5NSuDcXEzZjlhGPA3qSmjfI=";
   };
 
   patches = [
@@ -38,10 +38,10 @@ buildKodiAddon rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://certifi.io";
     description = "Python package for providing Mozilla's CA Bundle";
-    license = licenses.mpl20;
-    maintainers = teams.kodi.members;
+    license = lib.licenses.mpl20;
+    teams = [ lib.teams.kodi ];
   };
 }

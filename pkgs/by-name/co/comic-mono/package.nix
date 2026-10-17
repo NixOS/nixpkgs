@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -15,11 +16,10 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-q8NxrluWuH23FfRlntIS0MDdl3TkkGE7umcU2plS6eU=";
   };
 
+  nativeBuildInputs = [ installFonts ];
+
   installPhase = ''
     runHook preInstall
-
-    mkdir -p $out/share/fonts
-    cp *.ttf $out/share/fonts
 
     mkdir -p $out/etc/fonts/conf.d
     ln -s ${./comic-mono-weight.conf} $out/etc/fonts/conf.d/30-comic-mono.conf
@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Legible monospace font that looks like Comic Sans";
     longDescription = ''
       A legible monospace font... the very typeface you’ve been trained to
@@ -36,11 +36,11 @@ stdenvNoCC.mkDerivation {
     '';
     homepage = "https://dtinth.github.io/comic-mono-font/";
 
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       an-empty-string
       totoroot
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

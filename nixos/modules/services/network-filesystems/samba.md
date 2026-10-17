@@ -7,9 +7,7 @@
 A minimal configuration looks like this:
 
 ```nix
-{
-  services.samba.enable = true;
-}
+{ services.samba.enable = true; }
 ```
 
 This configuration automatically enables `smbd`, `nmbd` and `winbindd` services by default.
@@ -31,7 +29,7 @@ which is read-only and accessible without authentication:
       "public" = {
         "path" = "/public";
         "read only" = "yes";
-        "browseable" = "yes";
+        "browsable" = "yes";
         "guest ok" = "yes";
         "comment" = "Public samba share.";
       };

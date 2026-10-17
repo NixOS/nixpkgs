@@ -1,61 +1,61 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  flit-core,
+  fetchFromGitHub,
+  docker,
+  hatchling,
   mock,
-  pbr,
+  pyprojectVersionPatchHook,
   pytest-mock,
+  pytest-xdist,
   pytestCheckHook,
   pytz,
   requests,
-  setuptools,
-  six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jenkinsapi";
-  version = "0.3.13";
-  format = "pyproject";
+  version = "0.3.23";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-JGqYpj5h9UoV0WEFyxVIjFZwc030HobHrw1dnAryQLk=";
+  src = fetchFromGitHub {
+    owner = "pycontribs";
+    repo = "jenkinsapi";
+    tag = finalAttrs.version;
+    hash = "sha256-NtILbbXu4dtYda28WaFiGkICf0bOmVMKOOnnrHptxsg=";
   };
 
-  patches = [ ./pytest-warn-none.patch ];
+  build-system = [ hatchling ];
 
-  nativeBuildInputs = [
-    flit-core
-    pbr
-  ];
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pytz
     requests
-    setuptools
-    six
   ];
 
   nativeCheckInputs = [
+    docker
     mock
     pytest-mock
+    pytest-xdist
     pytestCheckHook
   ];
 
   # don't run tests that try to spin up jenkins
   disabledTests = [ "systests" ];
 
-  pythonImportsCheck = [
-    "jenkinsapi"
-    "jenkinsapi.utils"
-    "jenkinsapi.utils.jenkins_launcher"
-  ];
+  pythonImportsCheck = [ "jenkinsapi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for accessing resources on a Jenkins continuous-integration server";
-    homepage = "https://github.com/salimfadhley/jenkinsapi";
-    maintainers = with maintainers; [ drets ] ++ teams.deshaw.members;
-    license = licenses.mit;
+    homepage = "https://github.com/pycontribs/jenkinsapi";
+    changelog = "https://github.com/pycontribs/jenkinsapi/releases/tag/${finalAttrs.version}";
+    maintainers = with lib.maintainers; [
+      de11n
+      despsyched
+      drets
+    ];
+    license = lib.licenses.mit;
   };
-}
+})

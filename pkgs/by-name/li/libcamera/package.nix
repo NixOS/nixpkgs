@@ -1,6 +1,8 @@
 {
   stdenv,
-  fetchgit,
+  fetchFromGitLab,
+  testers,
+  nix-update-script,
   lib,
   meson,
   ninja,
@@ -10,28 +12,38 @@
   libdrm,
   libevent,
   libyaml,
+  libyuv,
   gst_all_1,
   gtest,
-  graphviz,
-  doxygen,
   python3,
   python3Packages,
-  systemd, # for libudev
+  udev,
+  libpisp,
+  libglvnd,
+  enableDocumentation ? false,
+  graphviz,
+  doxygen,
   withTracing ? lib.meta.availableOn stdenv.hostPlatform lttng-ust,
   lttng-ust, # withTracing
-  withQcam ? false,
-  qt6, # withQcam
-  libtiff, # withQcam
+  withSoftispGPU ? true, # software ISP GPU acceleration
+  withQcam ? false, # cannot be enabled per default as it causes infinite recursion
+  # withQcam
+  qt6,
+  libjpeg,
+  libtiff,
+  SDL2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcamera";
-  version = "0.4.0";
+  version = "0.7.2";
 
-  src = fetchgit {
-    url = "https://git.libcamera.org/libcamera/libcamera.git";
-    rev = "v${version}";
-    hash = "sha256-m55SojGt5v5AEatBZiVqQA3xP9eeRWqHa+C3JsTiErQ=";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "camera";
+    repo = "libcamera";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vhFkeT1j2KKm+CVvGrtH5BEYJSEdaX7N7DRdA0a9EWk=";
   };
 
   outputs = [
@@ -56,41 +68,46 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    ../src/ipa/ipa-sign-install.sh src/ipa-priv-key.pem $out/lib/libcamera/ipa_*.so
+    ../src/ipa/ipa-sign-install.sh src/ipa-priv-key.pem $out/lib/libcamera/ipa/ipa_*.so
   '';
 
   strictDeps = true;
 
-  buildInputs =
-    [
-      # IPA and signing
-      openssl
+  buildInputs = [
+    # IPA and signing
+    openssl
 
-      # gstreamer integration
-      gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base
+    # gstreamer integration
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
 
-      # cam integration
-      libevent
-      libdrm
+    # cam integration
+    libevent
+    libdrm
 
-      # hotplugging
-      systemd
+    # hotplugging
+    udev
 
-      # pycamera
-      python3Packages.pybind11
+    # pycamera
+    python3Packages.pybind11
 
-      # yamlparser
-      libyaml
+    libyuv
 
-      gtest
-    ]
-    ++ lib.optionals withTracing [ lttng-ust ]
-    ++ lib.optionals withQcam [
-      libtiff
-      qt6.qtbase
-      qt6.qttools
-    ];
+    # yamlparser
+    libyaml
+
+    gtest
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch [ libpisp ]
+  ++ lib.optionals withTracing [ lttng-ust ]
+  ++ lib.optionals withSoftispGPU [ libglvnd ]
+  ++ lib.optionals withQcam [
+    libjpeg
+    libtiff
+    qt6.qtbase
+    qt6.qttools
+    SDL2
+  ];
 
   nativeBuildInputs = [
     meson
@@ -100,41 +117,76 @@ stdenv.mkDerivation rec {
     python3Packages.jinja2
     python3Packages.pyyaml
     python3Packages.ply
+    openssl
+  ]
+  ++ lib.optionals enableDocumentation [
     python3Packages.sphinx
     graphviz
     doxygen
-    openssl
-  ] ++ lib.optional withQcam qt6.wrapQtAppsHook;
+  ]
+  ++ lib.optional withQcam qt6.wrapQtAppsHook;
 
-  mesonFlags = [
-    "-Dv4l2=true"
-    (lib.mesonEnable "tracing" withTracing)
-    (lib.mesonEnable "qcam" withQcam)
-    "-Dlc-compliance=disabled" # tries unconditionally to download gtest when enabled
-    # Avoid blanket -Werror to evade build failures on less
-    # tested compilers.
-    "-Dwerror=false"
-    # Documentation breaks binary compatibility.
-    # Given that upstream also provides public documentation,
-    # we can disable it here.
-    "-Ddocumentation=disabled"
-  ];
+  mesonFlags =
+    lib.mapAttrsToList lib.mesonEnable {
+      v4l2 = true;
+      tracing = true;
+      pycamera = true;
+      qcam = withQcam;
+      apps-output-dng = withQcam;
+      cam-output-sdl2 = withQcam;
+      cam-jpeg = withQcam;
+      softisp-gpu = withSoftispGPU;
+      libunwind = false;
+      libdw = false;
+      lc-compliance = true;
 
-  # Fixes error on a deprecated declaration
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+      # Documentation breaks binary compatibility.
+      # Given that upstream also provides public documentation,
+      # we can disable it here.
+      documentation = enableDocumentation;
 
-  # Silence fontconfig warnings about missing config
-  FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
+      rpi-awb-nn = false;
+    }
+    ++ [
+      (lib.mesonBool "test" finalAttrs.finalPackage.doCheck)
 
-  meta = with lib; {
+      # Avoid blanket -Werror to evade build failures on less
+      # tested compilers.
+      (lib.mesonBool "werror" false)
+    ];
+
+  env = {
+    # Fixes error on a deprecated declaration
+    NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+
+    # Silence fontconfig warnings about missing config
+    FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
+  };
+
+  passthru = {
+    updateScript = nix-update-script { };
+
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  };
+
+  meta = {
     description = "Open source camera stack and framework for Linux, Android, and ChromeOS";
     homepage = "https://libcamera.org";
-    changelog = "https://git.libcamera.org/libcamera/libcamera.git/tag/?h=${src.rev}";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ citadelcore ];
+    downloadPage = "https://gitlab.freedesktop.org/camera/libcamera";
+    changelog = "https://gitlab.freedesktop.org/camera/libcamera/-/releases/${finalAttrs.src.tag}";
+    license = lib.licenses.lgpl2Plus;
+    pkgConfigModules = [
+      "libcamera"
+      "libcamera-base"
+    ];
+    maintainers = with lib.maintainers; [
+      citadelcore
+      tmarkus
+    ];
+    platforms = lib.platforms.linux;
     badPlatforms = [
       # Mandatory shared libraries.
       lib.systems.inspect.platformPatterns.isStatic
     ];
   };
-}
+})

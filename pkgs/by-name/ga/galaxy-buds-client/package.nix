@@ -1,45 +1,57 @@
-{ lib
-, stdenv
-, buildDotnetModule
-, fetchFromGitHub
-, dotnetCorePackages
-, fontconfig
-, glib
-, libglvnd
-, xorg
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
+{
+  lib,
+  stdenv,
+  buildDotnetModule,
+  fetchFromGitHub,
+  dotnetCorePackages,
+  fontconfig,
+  glib,
+  libglvnd,
+  libxinerama,
+  libxkbcommon,
+  libxt,
+  libxtst,
+  makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
+  nix-update-script,
 }:
 
 buildDotnetModule rec {
   pname = "galaxy-buds-client";
-  version = "5.1.1";
+  version = "5.2.1";
 
   src = fetchFromGitHub {
-    owner = "ThePBone";
+    owner = "timschneeb";
     repo = "GalaxyBudsClient";
-    rev = version;
-    hash = "sha256-Cie8dInNzqMS6k2XP2P3fwMxSc6AabZHiIc6vcA7VhM=";
+    tag = version;
+    hash = "sha256-jPVrSkf6Bybwc5glkxId5VeWkwLBoTjOzM3CCgO6h9I=";
   };
 
   projectFile = [ "GalaxyBudsClient/GalaxyBudsClient.csproj" ];
   nugetDeps = ./deps.json;
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0_1xx;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
   dotnetFlags =
     lib.optionals stdenv.hostPlatform.isx86_64 [ "-p:Runtimeidentifier=linux-x64" ]
     ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "-p:Runtimeidentifier=linux-arm64" ];
 
-  nativeBuildInputs = [ makeWrapper copyDesktopItems ];
+  nativeBuildInputs = [
+    makeWrapper
+    copyDesktopItems
+  ];
 
-  buildInputs = [ (lib.getLib stdenv.cc.cc) fontconfig ];
+  buildInputs = [
+    (lib.getLib stdenv.cc.cc)
+    fontconfig
+  ];
 
   runtimeDeps = [
     libglvnd
-    xorg.libSM
-    xorg.libICE
-    xorg.libX11
+    libxinerama
+    libxkbcommon
+    libxt
+    libxtst
   ];
 
   postFixup = ''
@@ -48,6 +60,9 @@ buildDotnetModule rec {
 
     mkdir -p $out/share/icons/hicolor/256x256/apps/
     cp -r $src/GalaxyBudsClient/Resources/icon.png $out/share/icons/hicolor/256x256/apps/${meta.mainProgram}.png
+
+    # remove wrongly created wrapper for shared objects
+    rm $out/bin/*.so
   '';
 
   desktopItems = [
@@ -64,12 +79,16 @@ buildDotnetModule rec {
     })
   ];
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
+    description = "Unofficial Galaxy Buds Manager";
+    homepage = "https://github.com/timschneeb/GalaxyBudsClient";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ icy-thought ];
+    platforms = lib.platforms.linux;
     mainProgram = "GalaxyBudsClient";
-    description = "Unofficial Galaxy Buds Manager for Windows and Linux";
-    homepage = "https://github.com/ThePBone/GalaxyBudsClient";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.icy-thought ];
-    platforms = platforms.linux;
   };
 }

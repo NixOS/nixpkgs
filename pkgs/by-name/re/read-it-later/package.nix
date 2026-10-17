@@ -16,24 +16,24 @@
   libsoup_3,
   webkitgtk_6_0,
   sqlite,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "read-it-later";
-  version = "0.5.0";
+  version = "0.6.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "read-it-later";
-    rev = version;
-    hash = "sha256-A8u1fecJAsVlordgZmUJt/KZWxx6EWMhfdayKWHTTFY=";
+    tag = version;
+    hash = "sha256-m4s5oW8JlRogPVriJ+WHhEmf1asmZoC8f5zgPW0Crpc=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-wK7cegcjiu8i1Grey6ELoqAn2BrvElDXlCwafTLuFv0=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-hAdWDzEs1Xs5Ywa7uxCvB8E9NqKVWbMtJSjoCeXHklM=";
   };
 
   nativeBuildInputs = [
@@ -56,13 +56,15 @@ stdenv.mkDerivation rec {
     sqlite
   ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Simple Wallabag client with basic features to manage articles";
     homepage = "https://gitlab.gnome.org/World/read-it-later";
-    changelog = "https://gitlab.gnome.org/World/read-it-later/-/releases/${src.rev}";
-    license = licenses.gpl3Plus;
+    changelog = "https://gitlab.gnome.org/World/read-it-later/-/releases/${src.tag}";
+    license = lib.licenses.gpl3Plus;
     mainProgram = "read-it-later";
-    maintainers = with maintainers; [ aleksana ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ aleksana ];
+    platforms = lib.platforms.unix;
   };
 }

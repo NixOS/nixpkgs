@@ -6,20 +6,20 @@
   pkg-config,
   python3,
   boost,
-  fuse,
+  fuse3,
   libtorrent-rasterbar,
   curl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "btfs";
-  version = "2.24";
+  version = "3.3";
 
   src = fetchFromGitHub {
     owner = "johang";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-fkS0U/MqFRQNi+n7NE4e1cnNICvfST2IQ9FMoJUyj6w=";
+    repo = "btfs";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-kl58bz+iozviWMmqjUNAcccxKcB3bg6iDAcWNezmN6g=";
   };
 
   nativeBuildInputs = [
@@ -28,17 +28,17 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     boost
-    fuse
+    fuse3
     libtorrent-rasterbar
     curl
     python3
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Bittorrent filesystem based on FUSE";
     homepage = "https://github.com/johang/btfs";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ rnhmjoj ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ rnhmjoj ];
+    platforms = lib.platforms.unix;
   };
-}
+})

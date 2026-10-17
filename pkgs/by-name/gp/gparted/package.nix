@@ -5,7 +5,6 @@
   gettext,
   coreutils,
   gnused,
-  gnome,
   adwaita-icon-theme,
   gnugrep,
   parted,
@@ -17,30 +16,44 @@
   gpart,
   hdparm,
   procps,
-  util-linux,
   polkit,
   wrapGAppsHook3,
-  substituteAll,
+  replaceVars,
   mtools,
-  dosfstools,
   xhost,
+  dosfstools,
+  e2fsprogs,
+  util-linuxMinimal,
+  withAllTools ? false,
+  bcachefs-tools,
+  btrfs-progs,
+  exfatprogs,
+  f2fs-tools,
+  hfsprogs,
+  jfsutils,
+  cryptsetup,
+  lvm2,
+  nilfs-utils,
+  ntfs3g,
+  udftools,
+  xfsprogs,
+  xfsdump,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gparted";
-  version = "1.6.0";
+  version = "1.8.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gparted/gparted-${version}.tar.gz";
-    sha256 = "sha256-m59Rs85JTdy1mlXhrmZ5wJQ2YE4zHb9aU21g3tbG6ls=";
+    url = "mirror://sourceforge/gparted/gparted-${finalAttrs.version}.tar.gz";
+    hash = "sha256-ZziKxAX5/pKkBjbLA7Dh4LtkA62JzMF0sv8ZDvbzI0k=";
   };
 
   # Tries to run `pkexec --version` to get version.
   # however the binary won't be suid so it returns
   # an error preventing the program from detection
   patches = [
-    (substituteAll {
-      src = ./polkit.patch;
+    (replaceVars ./polkit.patch {
       polkit_version = polkit.version;
     })
   ];
@@ -67,6 +80,27 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
+  runtimeDeps = [
+    dosfstools
+    e2fsprogs
+    util-linuxMinimal
+  ]
+  ++ lib.optionals withAllTools [
+    bcachefs-tools
+    btrfs-progs
+    exfatprogs
+    f2fs-tools
+    hfsprogs
+    jfsutils
+    cryptsetup
+    lvm2
+    nilfs-utils
+    ntfs3g
+    udftools
+    xfsprogs
+    xfsdump
+  ];
+
   preConfigure = ''
     # For ITS rules
     addToSearchPath "XDG_DATA_DIRS" "${polkit.out}/share"
@@ -75,29 +109,30 @@ stdenv.mkDerivation rec {
   preFixup = ''
     gappsWrapperArgs+=(
        --prefix PATH : "${
-         lib.makeBinPath [
-           gpart
-           hdparm
-           util-linux
-           procps
-           coreutils
-           gnused
-           gnugrep
-           mtools
-           dosfstools
-           xhost
-         ]
+         lib.makeBinPath (
+           [
+             gpart
+             hdparm
+             procps
+             coreutils
+             gnused
+             gnugrep
+             mtools
+             xhost
+           ]
+           ++ finalAttrs.runtimeDeps
+         )
        }"
     )
   '';
 
-  # Doesn't get installed automaticallly if PREFIX != /usr
+  # Doesn't get installed automatically if PREFIX != /usr
   postInstall = ''
     install -D -m0644 org.gnome.gparted.policy \
       $out/share/polkit-1/actions/org.gnome.gparted.policy
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Graphical disk partitioning tool";
     longDescription = ''
       GNOME Partition Editor for creating, reorganizing, and deleting disk
@@ -105,8 +140,8 @@ stdenv.mkDerivation rec {
       while preserving the partition contents.
     '';
     homepage = "https://gparted.org";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "gparted";
   };
-}
+})

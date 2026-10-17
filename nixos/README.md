@@ -1,12 +1,12 @@
 # NixOS
 
-NixOS is a Linux distribution based on the purely functional package
-management system Nix.  More information can be found at
-https://nixos.org/nixos and in the manual in doc/manual.
+NixOS is a Linux distribution based on the purely functional package management system Nix.
+More information can be found at https://nixos.org/nixos and in the manual in doc/manual.
 
 ## Testing changes
 
-You can add new module to your NixOS configuration file (usually it’s `/etc/nixos/configuration.nix`). And do `sudo nixos-rebuild test -I nixpkgs=<path to your local nixpkgs folder> --fast`.
+You can add new module to your NixOS configuration file (usually it’s `/etc/nixos/configuration.nix`).
+And do `sudo nixos-rebuild test -I nixpkgs=<path to your local nixpkgs folder> --fast`.
 
 ## Commit conventions
 
@@ -31,11 +31,14 @@ You can add new module to your NixOS configuration file (usually it’s `/etc/ni
 
 ## Reviewing contributions
 
-When changing the bootloader installation process, extra care must be taken. Grub installations cannot be rolled back, hence changes may break people’s installations forever. For any non-trivial change to the bootloader please file a PR asking for review, especially from \@edolstra.
+When changing the bootloader installation process, extra care must be taken.
+Grub installations cannot be rolled back, hence changes may break people’s installations forever.
+For any non-trivial change to the bootloader please file a PR asking for review, especially from \@edolstra.
 
 ### Module updates
 
-Module updates are submissions changing modules in some ways. These often contains changes to the options or introduce new options.
+Module updates are submissions changing modules in some ways.
+These often contains changes to the options or introduce new options.
 
 Reviewing process:
 
@@ -113,3 +116,5 @@ Sample template for a new module review is provided below.
 
 ##### Comments
 ```
+
+See also [./README-modular-services.md](./README-modular-services.md).

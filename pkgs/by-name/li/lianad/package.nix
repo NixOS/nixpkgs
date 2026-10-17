@@ -6,19 +6,18 @@
   udev,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lianad";
-  version = "9.0"; # keep in sync with liana
+  version = "15.0"; # keep in sync with liana
 
   src = fetchFromGitHub {
     owner = "wizardsardine";
     repo = "liana";
-    rev = "v${version}";
-    hash = "sha256-RFlICvoePwSglpheqMb+820My//LElnSeMDPFmXyHz0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-mRBhpf4Risuq4TQ1y/5lWTOxN2RMHcZ2SC2BpbsOdhA=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-nj7L4glbjevVd1ef6RUGPm4hpzeNdnsCLC01BOJj6kI=";
+  cargoHash = "sha256-Mr6YOK7d6pfFliaiw2Mjj5wJvPk+6yH892uS7ksd4YU=";
 
   buildInputs = [ udev ];
 
@@ -43,4 +42,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     broken = stdenv.hostPlatform.isAarch64;
   };
-}
+})

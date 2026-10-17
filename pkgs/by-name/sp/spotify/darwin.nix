@@ -4,25 +4,22 @@
   meta,
   fetchurl,
   undmg,
+  updateScript,
   lib,
 }:
 
 stdenv.mkDerivation {
   inherit pname;
 
-  version = "1.2.40.599.g606b7f29";
+  version = "1.2.98.301";
 
-  src =
-    if stdenv.hostPlatform.isAarch64 then
-      (fetchurl {
-        url = "https://web.archive.org/web/20240622065234/https://download.scdn.co/SpotifyARM64.dmg";
-        hash = "sha256-mmjxKYmsX0rFlIU19JOfPbNgOhlcZs5slLUhDhlON1c=";
-      })
-    else
-      (fetchurl {
-        url = "https://web.archive.org/web/20240622065548/https://download.scdn.co/Spotify.dmg";
-        hash = "sha256-hvS0xnmJQoQfNJRFsLBQk8AJjDOzDy+OGwNOq5Ms/O0=";
-      });
+  # WARNING: This Wayback Machine URL redirects to the closest timestamp.
+  # Future maintainers must manually check the timestamp exists and exactly matches at:
+  # https://web.archive.org/web/*/https://download.scdn.co/SpotifyARM64.dmg
+  src = fetchurl {
+    url = "https://web.archive.org/web/20260829115632/https://download.scdn.co/SpotifyARM64.dmg";
+    hash = "sha256-iFLqFQXKPkeCHfzB6hshbZDWjumKN2u4Bj7lvl8waUY=";
+  };
 
   nativeBuildInputs = [ undmg ];
 
@@ -37,7 +34,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  passthru = { inherit updateScript; };
+
   meta = meta // {
-    maintainers = with lib.maintainers; [ matteopacini ];
+    maintainers = with lib.maintainers; [
+      matteopacini
+      Enzime
+    ];
   };
 }

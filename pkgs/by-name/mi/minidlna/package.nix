@@ -17,16 +17,13 @@
   zlib,
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "minidlna";
   version = "1.3.3";
-in
-stdenv.mkDerivation {
-  inherit pname version;
 
   src = fetchgit {
-    url = "https://git.code.sf.net/p/${pname}/git";
-    rev = "v${builtins.replaceStrings [ "." ] [ "_" ] version}";
+    url = "https://git.code.sf.net/p/minidlna/git";
+    rev = "v${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     hash = "sha256-InsSguoGi1Gp8R/bd4/c16xqRuk0bRsgw7wvcbokgKo=";
   };
 
@@ -64,15 +61,15 @@ stdenv.mkDerivation {
 
   passthru.tests = { inherit (nixosTests) minidlna; };
 
-  meta = with lib; {
+  meta = {
     description = "Media server software";
     longDescription = ''
       MiniDLNA (aka ReadyDLNA) is server software with the aim of being fully
       compliant with DLNA/UPnP-AV clients.
     '';
     homepage = "https://sourceforge.net/projects/minidlna/";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
     mainProgram = "minidlnad";
   };
-}
+})

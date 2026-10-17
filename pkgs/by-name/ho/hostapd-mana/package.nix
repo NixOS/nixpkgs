@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "sensepost";
-    repo = pname;
+    repo = "hostapd-mana";
     rev = version;
     hash = "sha256-co5LMJAUYSdcvhLv1gfjDvdVqdSXgjtFoiQ7+KxR07M=";
   };
@@ -81,11 +81,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sensepost/hostapd-mana";
     description = "Featureful rogue wifi access point tool";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ bbjubjub ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ bbjubjub ];
+    platforms = lib.platforms.linux;
   };
 }

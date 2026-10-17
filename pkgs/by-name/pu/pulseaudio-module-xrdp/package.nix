@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pulseaudio-module-xrdp";
-  version = "0.7";
+  version = "0.8";
 
   src = fetchFromGitHub {
     owner = "neutrinolabs";
-    repo = pname;
+    repo = "pulseaudio-module-xrdp";
     rev = "v${version}";
-    hash = "sha256-GT0kBfq6KvuiX30B9JzCiUxgSm9E6IhdJuQKKKprDCE=";
+    hash = "sha256-R1ZPifEjlueTJma6a0UiGdiNwTSa5+HnW4w9qGrauxE=";
   };
 
   preConfigure = ''
@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/lib/pulseaudio/modules $out/libexec/pulsaudio-xrdp-module $out/etc/xdg/autostart
+    mkdir -p $out/lib/pulseaudio/modules $out/libexec/pulseaudio-xrdp-module $out/etc/xdg/autostart
     install -m 755 src/.libs/*${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/pulseaudio/modules
 
-    install -m 755 instfiles/load_pa_modules.sh $out/libexec/pulsaudio-xrdp-module/pulseaudio_xrdp_init
-    substituteInPlace $out/libexec/pulsaudio-xrdp-module/pulseaudio_xrdp_init \
+    install -m 755 instfiles/load_pa_modules.sh $out/libexec/pulseaudio-xrdp-module/pulseaudio_xrdp_init
+    substituteInPlace $out/libexec/pulseaudio-xrdp-module/pulseaudio_xrdp_init \
       --replace pactl ${pulseaudio}/bin/pactl
 
     runHook postInstall
@@ -54,12 +54,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "xrdp sink/source pulseaudio modules";
     homepage = "https://github.com/neutrinolabs/pulseaudio-module-xrdp";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ lucasew ];
-    platforms = platforms.linux;
-    sourceProvenance = [ sourceTypes.fromSource ];
+    license = lib.licenses.lgpl21;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
   };
 }

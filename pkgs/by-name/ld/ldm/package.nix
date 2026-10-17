@@ -12,7 +12,7 @@ assert mountPath != "";
 let
   version = "0.5";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ldm";
   inherit version;
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   # contains important fixes for LVM setups.
   src = fetchgit {
     url = "https://github.com/LemonBoy/ldm";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "0lxfypnbamfx6p9ar5k9wra20gvwn665l4pp2j4vsx4yi5q7rw2n";
   };
 
@@ -44,8 +44,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Lightweight device mounter, with libudev as only dependency";
+    homepage = "https://github.com/LemonBoy/ldm";
     mainProgram = "ldm";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
   };
-}
+})

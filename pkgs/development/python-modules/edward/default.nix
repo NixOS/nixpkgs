@@ -2,8 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  isPy27,
-  pythonAtLeast,
   keras,
   numpy,
   scipy,
@@ -16,11 +14,9 @@ buildPythonPackage rec {
   version = "1.3.5";
   format = "setuptools";
 
-  disabled = !(isPy27 || pythonAtLeast "3.4");
-
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3818b39e77c26fc1a37767a74fdd5e7d02877d75ed901ead2f40bd03baaa109f";
+    hash = "sha256-OBiznnfCb8Gjd2enT91efQKHfXXtkB6tL0C9A7qqEJ8=";
   };
 
   # disabled for now due to Tensorflow trying to create files in $HOME:
@@ -34,10 +30,10 @@ buildPythonPackage rec {
     tensorflow
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Probabilistic programming language using Tensorflow";
     homepage = "https://github.com/blei-lab/edward";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

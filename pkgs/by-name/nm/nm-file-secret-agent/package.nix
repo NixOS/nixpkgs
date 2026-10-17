@@ -1,23 +1,24 @@
 {
   lib,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   rustPlatform,
   dbus,
   networkmanager,
   pkg-config,
   nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
-  name = "nm-file-secret-agent";
-  version = "1.0.0";
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "nm-file-secret-agent";
+  version = "1.2.0";
 
-  src = fetchFromGitHub {
-    owner = "lilioid";
+  src = fetchFromCodeberg {
+    owner = "lilly";
     repo = "nm-file-secret-agent";
-    rev = "v${version}";
-    hash = "sha256-5L4bhf6nsINZD+oINC1f71P2cebPG7bzDYtlsU8UMMk=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-exU+9fN2Wt2+0lQoZS4TFPhCcoDPWEIZldRO9LKux3U=";
   };
-  cargoHash = "sha256-SlYz55hc9HEueN7AYVpqadxQjI0hERcdQSJ7rEPnbVE=";
+
+  cargoHash = "sha256-jxeEubl1uXmnapvP2OV4jCQWoavAVPbSPL1C3fFtJlE=";
   buildInputs = [ dbus ];
   nativeBuildInputs = [ pkg-config ];
 
@@ -26,9 +27,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "NetworkManager secret agent that responds with the content of preconfigured files";
     mainProgram = "nm-file-secret-agent";
-    homepage = "https://github.com/lilioid/nm-file-secret-agent/";
+    homepage = "https://codeberg.org/lilly/nm-file-secret-agent";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lilioid ];
     platforms = lib.lists.intersectLists dbus.meta.platforms networkmanager.meta.platforms;
   };
-}
+})

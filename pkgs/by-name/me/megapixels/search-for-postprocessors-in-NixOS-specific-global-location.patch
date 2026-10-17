@@ -1,27 +1,29 @@
+diff --git a/src/process_pipeline.c b/src/process_pipeline.c
+index 4b37afb..81e5252 100644
 --- a/src/process_pipeline.c
 +++ b/src/process_pipeline.c
-@@ -179,10 +179,10 @@ mp_process_find_all_processors(GtkListStore *store)
+@@ -91,10 +91,10 @@ mp_process_find_all_processors(GtkListStore *store)
                          store, &iter, 0, buffer, 1, "(built-in) postprocess.sh", -1);
          }
  
 -        // Find extra packaged postprocessor scripts
 -        // These should be packaged in
 -        // /usr/share/megapixels/postprocessor.d/executable
--        sprintf(buffer, "%s/megapixels/postprocessor.d", DATADIR);
+-        snprintf(buffer, sizeof(buffer), "%s/megapixels/postprocessor.d", DATADIR);
 +        // Find extra system postprocessor scripts
 +        // These should be accessible in
 +        // /run/current-system/sw/share/megapixels/postprocessor.d/executable
-+        sprintf(buffer, "/run/current-system/sw/share/megapixels/postprocessor.d");
++        snprintf(buffer, sizeof(buffer), "/run/current-system/sw/share/megapixels/postprocessor.d");
          DIR *d;
          struct dirent *dir;
          d = opendir(buffer);
-@@ -192,8 +192,7 @@ mp_process_find_all_processors(GtkListStore *store)
-                                 continue;
+@@ -105,8 +105,7 @@ mp_process_find_all_processors(GtkListStore *store)
                          }
-                         sprintf(buffer,
--                                "%s/megapixels/postprocessor.d/%s",
--                                DATADIR,
-+                                "/run/current-system/sw/share/megapixels/postprocessor.d/%s",
-                                 dir->d_name);
+                         snprintf(buffer,
+ 				 sizeof(buffer),
+-                                 "%s/megapixels/postprocessor.d/%s",
+-                                 DATADIR,
++                                 "/run/current-system/sw/share/megapixels/postprocessor.d/%s",
+                                  dir->d_name);
                          gtk_list_store_insert(store, &iter, -1);
                          gtk_list_store_set(

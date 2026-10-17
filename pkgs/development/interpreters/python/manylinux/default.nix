@@ -54,11 +54,11 @@ let
       "libutil.so.1" = glibc;
       "libpthread.so.0" = glibc;
       "libresolv.so.2" = glibc;
-      "libX11.so.6" = xorg.libX11;
-      "libXext.so.6" = xorg.libXext;
-      "libXrender.so.1" = xorg.libXrender;
-      "libICE.so.6" = xorg.libICE;
-      "libSM.so.6" = xorg.libSM;
+      "libX11.so.6" = libx11;
+      "libXext.so.6" = libxext;
+      "libXrender.so.1" = libxrender;
+      "libICE.so.6" = libice;
+      "libSM.so.6" = libsm;
       "libGL.so.1" = libGL;
       "libgobject-2.0.so.0" = glib;
       "libgthread-2.0.so.0" = glib;

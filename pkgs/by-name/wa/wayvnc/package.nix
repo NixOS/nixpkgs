@@ -1,30 +1,32 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, scdoc
-, wayland-scanner
-, aml
-, jansson
-, libxkbcommon
-, libgbm
-, neatvnc
-, pam
-, pixman
-, wayland
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  scdoc,
+  wayland-scanner,
+  aml,
+  jansson,
+  libdrm,
+  libxkbcommon,
+  libgbm,
+  neatvnc,
+  pam,
+  pixman,
+  wayland,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wayvnc";
-  version = "0.9.1";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "any1";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-LINzkC18gitj1a8Giqlt/6LyydOdV+8YXRJmuxT/Nq8=";
+    repo = "wayvnc";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-mx5PjNsRfgF2jm+VEHcJsHl2h1UzXtcucO8o/OnROMk=";
   };
 
   strictDeps = true;
@@ -44,6 +46,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     aml
     jansson
+    libdrm
     libxkbcommon
     libgbm
     neatvnc
@@ -53,12 +56,14 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    (lib.mesonBool "tests" true)
+    (lib.mesonBool "tests" finalAttrs.finalPackage.doCheck)
   ];
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
-  meta = with lib; {
+  __structuredAttrs = true;
+
+  meta = {
     description = "VNC server for wlroots based Wayland compositors";
     longDescription = ''
       This is a VNC server for wlroots based Wayland compositors. It attaches
@@ -67,11 +72,11 @@ stdenv.mkDerivation rec {
       headless one, so it is also possible to run wayvnc without a physical
       display attached.
     '';
+    homepage = "https://github.com/any1/wayvnc";
+    changelog = "https://github.com/any1/wayvnc/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.isc;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = "wayvnc";
-    inherit (src.meta) homepage;
-    changelog = "https://github.com/any1/wayvnc/releases/tag/v${version}";
-    license = licenses.isc;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ nickcao ];
   };
-}
+})

@@ -19,14 +19,12 @@
   paramiko,
   pbr,
   prettytable,
-  pynacl,
   python,
-  pythonOlder,
   pyyaml,
   setuptools,
   stestr,
   stevedore,
-  subunit,
+  python-subunit,
   testscenarios,
   testtools,
   urllib3,
@@ -34,15 +32,18 @@
 
 buildPythonPackage rec {
   pname = "tempest";
-  version = "42.0.0";
+  version = "46.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-nW6cSOhC56YkyUQiXcJTqaojRseIf9q8YGSe4skhTA4=";
+    hash = "sha256-z/WtY/wqhxaqhudHHy0nA8jbwoSzBJE/5DNxKVp1cRg=";
   };
+
+  postPatch = ''
+    substituteInPlace tempest/lib/common/http.py \
+      --replace-fail 'getheaders()' 'headers'
+  '';
 
   pythonRelaxDeps = [ "defusedxml" ];
 
@@ -66,7 +67,7 @@ buildPythonPackage rec {
     pyyaml
     stestr
     stevedore
-    subunit
+    python-subunit
     testscenarios
     testtools
     urllib3
@@ -75,7 +76,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     hacking
     oslotest
-    pynacl
     stestr
   ];
 
@@ -88,17 +88,23 @@ buildPythonPackage rec {
     chmod +x bin/*
 
     stestr --test-path tempest/tests run -e <(echo "
+      tempest.tests.common.test_concurrency.TestConcurrency.test_run_concurrent_tasks_dict_return_values
+      tempest.tests.common.test_concurrency.TestConcurrency.test_run_concurrent_tasks_multiple_workers
+      tempest.tests.common.test_concurrency.TestConcurrency.test_run_concurrent_tasks_single_process
+      tempest.tests.common.test_concurrency.TestConcurrency.test_run_concurrent_tasks_success
+      tempest.tests.common.test_concurrency.TestConcurrency.test_run_concurrent_tasks_with_exception
       tempest.tests.lib.cli.test_execute.TestExecute.test_execute_with_prefix
+      tempest.tests.lib.common.test_rest_client.TestRestClientServiceToken.test_log_request_full_omits_service_token
     ")
   '';
 
   pythonImportsCheck = [ "tempest" ];
 
-  meta = with lib; {
+  meta = {
     description = "OpenStack integration test suite that runs against live OpenStack cluster and validates an OpenStack deployment";
     homepage = "https://github.com/openstack/tempest";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "tempest";
-    maintainers = teams.openstack.members;
+    teams = [ lib.teams.openstack ];
   };
 }

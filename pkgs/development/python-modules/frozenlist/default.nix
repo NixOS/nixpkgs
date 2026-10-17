@@ -6,23 +6,20 @@
   fetchFromGitHub,
   pep517,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   wheel,
 }:
 
 buildPythonPackage rec {
   pname = "frozenlist";
-  version = "1.4.1";
+  version = "1.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "frozenlist";
     tag = "v${version}";
-    hash = "sha256-ICPJKN6P9ezTiDVoEVBQvJlXqF7aHE6aXFx0jzntdEA=";
+    hash = "sha256-vkZ60qI0yQ82QSLQkBDzLnikTBQhUUuAzV+YsorrM2Q=";
   };
 
   postPatch = ''
@@ -45,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "frozenlist" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for list-like structure";
     homepage = "https://github.com/aio-libs/frozenlist";
-    changelog = "https://github.com/aio-libs/frozenlist/blob/v${version}/CHANGES.rst";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/aio-libs/frozenlist/blob/${src.tag}/CHANGES.rst";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

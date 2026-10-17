@@ -1,7 +1,8 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   wrapGAppsHook3,
   readline,
@@ -24,6 +25,7 @@
   libtiff,
   libgeotiff,
   libjpeg,
+  qhull,
   # eccodes is broken on darwin
   enableGRIB ? stdenv.hostPlatform.isLinux,
   eccodes,
@@ -32,7 +34,6 @@
   # We enable it in hdf4 and use libtirpc as a dependency here from the passthru
   # of hdf4
   enableLibtirpc ? stdenv.hostPlatform.isLinux,
-  libtirpc,
   python3,
   enableMPI ? (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
   # Choose MPICH over OpenMPI because it currently builds on AArch and Darwin
@@ -40,13 +41,14 @@
   # Unfree optional dependency for hdf4 and hdf5
   enableSzip ? false,
   szip,
+  libaec,
   enableHDF4 ? true,
   hdf4,
   hdf4-forced ? null,
   enableHDF5 ? true,
   # HDF5 format version (API version) 1.10 and 1.12 is not fully compatible
   # Specify if the API version should default to 1.10
-  # netcdf currently depends on hdf5 with `usev110Api=true`
+  # netcdf currently depends on hdf5 with `apiVersion = "v110"`
   # If you wish to use HDF5 API version 1.12 (`useHdf5v110Api=false`),
   # you will need to turn NetCDF off.
   useHdf5v110Api ? true,
@@ -59,8 +61,7 @@
   # wxWidgets is preferred over X11 for this project but we only have it on Linux
   # and Darwin.
   enableWX ? (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
-  wxGTK32,
-  Cocoa,
+  wxwidgets_3_2,
   # X11: OFF by default for platform consistency. Use X where WX is not available
   enableXWin ? (!stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isDarwin),
 }:
@@ -81,14 +82,16 @@ let
     else
       hdf5.override (
         {
-          usev110Api = useHdf5v110Api;
           mpiSupport = enableMPI;
           inherit mpi;
           szipSupport = enableSzip;
-          inherit szip;
+          inherit libaec;
         }
         // lib.optionalAttrs enableMPI {
           cppSupport = false;
+        }
+        // lib.optionalAttrs useHdf5v110Api {
+          apiVersion = "v110";
         }
       );
   netcdf-custom =
@@ -110,60 +113,74 @@ let
           ;
       };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnudatalanguage";
-  version = "1.0.1";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
-    owner = pname;
+    owner = "gnudatalanguage";
     repo = "gdl";
-    rev = "v${version}";
-    sha256 = "sha256-IrCLL8MQp0SkWj7sbfZlma5FrnMbgdl4E/1nPGy0Y60=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-fLsa/R8+7QZcxjqJLnHZivRF6dD4a6J6KuCqYvazaCU=";
+    fetchSubmodules = true;
   };
 
-  buildInputs =
-    [
-      readline
-      ncurses
-      zlib
-      gsl
-      openmp
-      graphicsmagick
-      fftw
-      fftwFloat
-      fftwLongDouble
-      proj
-      shapelib
-      expat
-      mpi
-      udunits
-      eigen
-      pslib
-      libpng
-      libtiff
-      libgeotiff
-      libjpeg
-      hdf4-custom
-      hdf5-custom
-      netcdf-custom
-      plplot-with-drivers
-    ]
-    ++ lib.optional enableXWin plplot-with-drivers.libX11
-    ++ lib.optional enableGRIB eccodes
-    ++ lib.optional enableGLPK glpk
-    ++ lib.optional enableWX wxGTK32
-    ++ lib.optional (enableWX && stdenv.hostPlatform.isDarwin) Cocoa
-    ++ lib.optional enableMPI mpi
-    ++ lib.optional enableLibtirpc hdf4-custom.libtirpc
-    ++ lib.optional enableSzip szip;
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/gnudatalanguage/gdl/commit/b648a63c5070f38e90167f858a79ba6f01dad1d3.patch?full_index=1";
+      includes = [ "CMakeLists.txt" ];
+      hash = "sha256-lYtAstI21Up4RArf6pXnjiTwJ3Omoisw43Ih1H2Wc0s=";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'FATAL_ERROR "The src' 'WARNING "The src' \
+      --replace-fail "find_package(Git REQUIRED)" "" \
+      --replace-fail "-D GIT_EXECUTABLE=''${GIT_EXECUTABLE}" ""
+    echo -e 'set(VERSION "${finalAttrs.version}")\n\nconfigure_file(''${SRC} ''${DST})' > CMakeModules/GenerateVersionHeader.cmake
+  '';
+
+  nativeBuildInputs = [ cmake ] ++ lib.optional enableWX wrapGAppsHook3;
+
+  buildInputs = [
+    qhull
+    readline
+    ncurses
+    zlib
+    gsl
+    openmp
+    graphicsmagick
+    fftw
+    fftwFloat
+    fftwLongDouble
+    proj
+    shapelib
+    expat
+    mpi
+    udunits
+    eigen
+    pslib
+    libpng
+    libtiff
+    libgeotiff
+    libjpeg
+    hdf4-custom
+    hdf5-custom
+    netcdf-custom
+    plplot-with-drivers
+  ]
+  ++ lib.optional enableXWin plplot-with-drivers.libx11
+  ++ lib.optional enableGRIB eccodes
+  ++ lib.optional enableGLPK glpk
+  ++ lib.optional enableWX wxwidgets_3_2
+  ++ lib.optional enableMPI mpi
+  ++ lib.optional enableLibtirpc hdf4-custom.libtirpc
+  ++ lib.optional enableSzip szip;
 
   propagatedBuildInputs = [
     (python3.withPackages (ps: with ps; [ numpy ]))
   ];
-
-  nativeBuildInputs = [
-    cmake
-  ] ++ lib.optional enableWX wrapGAppsHook3;
 
   cmakeFlags =
     lib.optional (!enableHDF4) "-DHDF=OFF"
@@ -176,7 +193,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableSzip "-DSZIPDIR=${szip}"
     ++ lib.optionals enableXWin [
       "-DX11=ON"
-      "-DX11DIR=${plplot-with-drivers.libX11}"
+      "-DX11DIR=${plplot-with-drivers.libx11}"
     ]
     ++ lib.optionals enableMPI [
       "-DMPI=ON"
@@ -199,6 +216,8 @@ stdenv.mkDerivation rec {
         "test_call_external"
         "test_tic_toc"
         "test_timestamp"
+        "test_bugs_poly2d"
+        "test_formats"
       ]
     }'")
   '';
@@ -219,7 +238,7 @@ stdenv.mkDerivation rec {
       ;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Free incremental compiler of IDL";
     longDescription = ''
       GDL (GNU Data Language) is a free/libre/open source incremental compiler
@@ -227,9 +246,9 @@ stdenv.mkDerivation rec {
       GDL is aimed as a drop-in replacement for IDL.
     '';
     homepage = "https://github.com/gnudatalanguage/gdl";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ ShamrockLee ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ ShamrockLee ];
+    platforms = lib.platforms.all;
     mainProgram = "gdl";
   };
-}
+})

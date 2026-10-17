@@ -34,6 +34,7 @@ in
           thin_repair = "${pkgs."thin-provisioning-tools"}/bin/thin_repair";
           thin_metadata_size = "${pkgs."thin-provisioning-tools"}/bin/thin_metadata_size";
           stratis-min = "${pkgs.stratisd}/bin/stratis-min";
+          cryptsetup = "${pkgs.cryptsetup}/bin/cryptsetup";
         };
         services = lib.attrsets.mapAttrs' (mountPoint: fileSystem: {
           name = "stratis-setup-${fileSystem.stratis.poolUuid}";
@@ -70,26 +71,24 @@ in
           };
         }) requiredStratisFilesystems;
       };
-      availableKernelModules =
-        [
-          "dm-thin-pool"
-          "dm-crypt"
-        ]
-        ++ [
-          "aes"
-          "aes_generic"
-          "blowfish"
-          "twofish"
-          "serpent"
-          "cbc"
-          "xts"
-          "lrw"
-          "sha1"
-          "sha256"
-          "sha512"
-          "af_alg"
-          "algif_skcipher"
-        ];
+      availableKernelModules = [
+        "dm-thin-pool"
+        "dm-crypt"
+      ]
+      ++ [
+        "aes"
+        "blowfish"
+        "twofish"
+        "serpent"
+        "cbc"
+        "xts"
+        "lrw"
+        "sha1"
+        "sha256"
+        "sha512"
+        "af_alg"
+        "algif_skcipher"
+      ];
       services.udev.packages = [
         pkgs.stratisd.initrd
         pkgs.lvm2

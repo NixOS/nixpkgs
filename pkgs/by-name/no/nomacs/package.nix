@@ -4,76 +4,68 @@
   exiv2,
   fetchFromGitHub,
   libraw,
-  libsForQt5,
   kdePackages,
+  qt6,
   libtiff,
   opencv4,
   pkg-config,
   stdenv,
-  qtVersion ? 5,
+  rsync,
 }:
-let
-  myQt = if qtVersion == 5 then libsForQt5 else kdePackages;
-  inherit (myQt) wrapQtAppsHook;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nomacs";
-  version = "3.19.1";
-  hash = "sha256-NRwZ/ShJaLCMFv7QdfRoJY5zQFo18cAVWGRpS3ap3Rw=";
+  version = "3.23.3";
+  hash = "sha256-Liv09fgwQs6c0mA/35I+fAQV32SrG4gnFTewftfn/h8=";
 
   src = fetchFromGitHub {
     owner = "nomacs";
     repo = "nomacs";
     rev = finalAttrs.version;
-    fetchSubmodules = false; # We'll use our own
+    fetchSubmodules = false; # upstream no longer uses submodules
     inherit (finalAttrs) hash;
   };
 
-  plugins = fetchFromGitHub {
-    owner = "novomesk";
-    repo = "nomacs-plugins";
-    rev = "40d0f7089b7f108077dac5dede52e8a303b243b3";
-    hash = "sha256-7+JMmHaTvWjVTkLwXGtQHnoaC/3vK7haCzNvVIZ9F/g=";
-  };
-
-  outputs =
-    [ "out" ]
-    # man pages are not installed on Darwin, see cmake/{Mac,Unix}BuildTarget.cmake
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ "man" ];
+  outputs = [
+    "out"
+  ]
+  # man pages are not installed on Darwin, see cmake/{Mac,Unix}BuildTarget.cmake
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ "man" ];
 
   sourceRoot = "${finalAttrs.src.name}/ImageLounge";
 
-  postUnpack = ''
-    rm -rf $sourceRoot/plugins
-    mkdir $sourceRoot/plugins
-    cp -r ${finalAttrs.plugins}/* $sourceRoot/plugins/
-    chmod -R +w $sourceRoot/plugins
-  '';
-
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
     pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    rsync
   ];
 
-  buildInputs =
-    [
-      exiv2
-      libraw
-      libtiff
-      # Once python stops relying on `propagatedBuildInputs` (https://github.com/NixOS/nixpkgs/issues/272178), deprecate `cxxdev` and switch to `dev`;
-      # note `dev` is selected by `mkDerivation` automatically, so one should omit `getOutput "dev"`;
-      # see: https://github.com/NixOS/nixpkgs/pull/314186#issuecomment-2129974277
-      (lib.getOutput "cxxdev" opencv4)
-    ]
-    ++ (with myQt; [
-      kimageformats
-      qtbase
-      qtimageformats
-      qtsvg
-      qttools
-      quazip
-    ]);
+  buildInputs = [
+    exiv2
+    libraw
+    libtiff
+    # Once python stops relying on `propagatedBuildInputs` (https://github.com/NixOS/nixpkgs/issues/272178), deprecate `cxxdev` and switch to `dev`;
+    # note `dev` is selected by `mkDerivation` automatically, so one should omit `getOutput "dev"`;
+    # see: https://github.com/NixOS/nixpkgs/pull/314186#issuecomment-2129974277
+    (lib.getOutput "cxxdev" opencv4)
+
+    qt6.qtbase
+    qt6.qtimageformats
+    qt6.qtsvg
+    qt6.qttools
+    kdePackages.quazip
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # currently unsupported on darwin, and possibly unneeded?
+    kdePackages.kimageformats
+  ];
+
+  prePatch = ''
+    substituteInPlace cmake/MacBuildTarget.cmake \
+      --replace-fail '/Applications' '${placeholder "out"}/Applications'
+  '';
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_OPENCV" true)
@@ -85,15 +77,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir -p $out/{Applications,lib}
-    mv $out/nomacs.app $out/Applications/nomacs.app
-    mv $out/libnomacsCore.dylib $out/lib/libnomacsCore.dylib
+    # prevent wrapping dylibs
+    find $out/Applications -type f -name "*.dylib" -exec chmod -x {} \;
   '';
+
   # FIXME:
   # why can't we have nomacs look in the "standard" plugin directory???
   # None of the wrap stuff worked...
   # Let's just instead move the plugin dir brute force
-  postFixup = ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     mv $out/lib/nomacs-plugins $out/bin/plugins
   '';
 
@@ -117,12 +109,12 @@ stdenv.mkDerivation (finalAttrs: {
       between images.
     '';
     changelog = "https://github.com/nomacs/nomacs/releases/tag/${finalAttrs.src.rev}";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     mainProgram = "nomacs";
     maintainers = with lib.maintainers; [
       mindavi
       ppenguin
     ];
-    inherit (myQt.qtbase.meta) platforms;
+    inherit (qt6.qtbase.meta) platforms;
   };
 })

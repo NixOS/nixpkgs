@@ -8,7 +8,6 @@
   git-binary,
   angstrom,
   astring,
-  cstruct,
   decompress,
   digestif,
   encore,
@@ -38,15 +37,15 @@
   cmdliner,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "git";
-  version = "3.17.0";
+  version = "3.18.0";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ocaml-git/releases/download/${version}/git-${version}.tbz";
-    hash = "sha256-7yANBBLtGlOFJdBQEpiJDguJPgIFKAlNajrhI1n9AmU=";
+    url = "https://github.com/mirage/ocaml-git/releases/download/${finalAttrs.version}/git-${finalAttrs.version}.tbz";
+    hash = "sha256-kleVYn5tquC0vRaqUGh53xHLIB5l/v446BN48Y1RfUs=";
   };
 
   buildInputs = [
@@ -56,7 +55,6 @@ buildDunePackage rec {
     angstrom
     astring
     checkseum
-    cstruct
     decompress
     digestif
     encore
@@ -101,4 +99,4 @@ buildDunePackage rec {
     ];
     homepage = "https://github.com/mirage/ocaml-git";
   };
-}
+})

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -11,13 +10,11 @@ buildPythonPackage rec {
   version = "0.6.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "alexferl";
-    repo = pname;
+    repo = "justbackoff";
     rev = "v${version}";
-    sha256 = "097j6jxgl4b3z46x9y9z10643vnr9v831vhagrxzrq6nviil2z6l";
+    hash = "sha256-1HxBY9zW4Px7fgruMNBO2e5BDAg/+dQN+WMR+ro08iQ=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -29,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "justbackoff" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple backoff algorithm in Python";
     homepage = "https://github.com/alexferl/justbackoff";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

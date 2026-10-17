@@ -37,24 +37,7 @@ in
     };
 
     scheduler = lib.mkOption {
-      type = lib.types.enum [
-        "scx_bpfland"
-        "scx_central"
-        "scx_flash"
-        "scx_flatcg"
-        "scx_lavd"
-        "scx_layered"
-        "scx_mitosis"
-        "scx_nest"
-        "scx_pair"
-        "scx_qmap"
-        "scx_rlfifo"
-        "scx_rustland"
-        "scx_rusty"
-        "scx_sdt"
-        "scx_simple"
-        "scx_userland"
-      ];
+      type = lib.types.enum cfg.package.schedulers;
       default = "scx_rustland";
       example = "scx_bpfland";
       description = ''
@@ -64,11 +47,11 @@ in
     };
 
     extraArgs = lib.mkOption {
-      type = lib.types.listOf lib.types.singleLineStr;
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       example = [
-        "--slice-us 5000"
         "--verbose"
+        "--slice-us 5000"
       ];
       description = ''
         Parameters passed to the chosen scheduler at runtime.
@@ -95,13 +78,15 @@ in
 
       serviceConfig = {
         Type = "simple";
-        ExecStart = utils.escapeSystemdExecArgs (
-          [
-            (lib.getExe' cfg.package cfg.scheduler)
-          ]
-          ++ cfg.extraArgs
-        );
+        ExecStart = ''
+          ${pkgs.runtimeShell} -c 'exec ${cfg.package}/bin/''${SCX_SCHEDULER_OVERRIDE:-$SCX_SCHEDULER} ''${SCX_FLAGS_OVERRIDE:-$SCX_FLAGS}'
+        '';
         Restart = "on-failure";
+      };
+
+      environment = {
+        SCX_SCHEDULER = cfg.scheduler;
+        SCX_FLAGS = lib.concatStringsSep " " cfg.extraArgs;
       };
 
       wantedBy = [ "multi-user.target" ];
@@ -115,5 +100,8 @@ in
     ];
   };
 
-  meta.maintainers = with lib.maintainers; [ johnrtitor ];
+  meta = {
+    inherit (pkgs.scx.full.meta) maintainers;
+    buildDocsInSandbox = false;
+  };
 }

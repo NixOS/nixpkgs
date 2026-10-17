@@ -1,33 +1,34 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
   setuptools-scm,
-  wheel,
   pytestCheckHook,
   pytest-asyncio,
   pytest-timeout,
+  dask,
   numpy,
   pandas,
   rich,
   tkinter,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tqdm";
-  version = "4.66.5";
-  format = "pyproject";
+  version = "4.70.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-4QIK7y5QlnAtigJax9FrFXcnnJ1j+DdbYwg+ml8Py60=";
+  src = fetchFromGitHub {
+    owner = "tqdm";
+    repo = "tqdm";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2p4FcTmc+CfUNRm8Ox53dTHbKelmOCfut4XKCtze+Bo=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
-    wheel
   ];
 
   nativeCheckInputs = [
@@ -35,32 +36,25 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-timeout
     # tests of optional features
+    dask
     numpy
     rich
     tkinter
     pandas
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::FutureWarning"
-    "-W"
-    "ignore::DeprecationWarning"
-  ];
-
   # Remove performance testing.
   # Too sensitive for on Hydra.
   disabledTests = [ "perf" ];
 
-  LC_ALL = "en_US.UTF-8";
-
   pythonImportsCheck = [ "tqdm" ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast, Extensible Progress Meter";
     mainProgram = "tqdm";
     homepage = "https://github.com/tqdm/tqdm";
     changelog = "https://tqdm.github.io/releases/";
-    license = with licenses; [ mit ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ miniharinn ];
   };
-}
+})

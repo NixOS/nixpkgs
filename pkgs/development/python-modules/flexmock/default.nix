@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   poetry-core,
   teamcity-messages,
   testtools,
@@ -11,14 +10,12 @@
 
 buildPythonPackage rec {
   pname = "flexmock";
-  version = "0.12.1";
+  version = "0.13.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ILaQr6T/jG8xVI2JbW1BzKH8kFCkz2KLll6kNOxUjuM=";
+    hash = "sha256-aCnXoNf3Rtswh9qP2mL5JOUt9+zkBRwvWa1YbPWteXc=";
   };
 
   build-system = [ poetry-core ];
@@ -31,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flexmock" ];
 
-  meta = with lib; {
+  meta = {
     description = "Testing library that makes it easy to create mocks,stubs and fakes";
     homepage = "https://flexmock.readthedocs.org";
-    license = licenses.bsdOriginal;
+    license = lib.licenses.bsdOriginal;
     maintainers = [ ];
   };
 }

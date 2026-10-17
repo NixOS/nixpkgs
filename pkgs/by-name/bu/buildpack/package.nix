@@ -1,37 +1,35 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
 }:
 
-let
+buildGoModule (finalAttrs: {
   pname = "pack";
-  version = "0.36.2";
-in
-buildGoModule {
-  inherit pname version;
+  version = "0.40.9";
 
   src = fetchFromGitHub {
     owner = "buildpacks";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-pITQAGt0aMhEfoauPWxAqnr8JxGi4DcqcmgqtooLkd4=";
+    repo = "pack";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RBDkPqlck64ChnXGFa1sa0WmC2T66ZBN6nQbstymSHU=";
   };
 
-  vendorHash = "sha256-51Qqq2Jpd1XxUoMN+6j4/VZ4fLCm4I9JwBeTcdSHgQw=";
+  vendorHash = "sha256-iJTEdnWJb1YyZ0mkamlKkCq/dJsMP6s0h+S8Bh3CnVM=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  subPackages = [ "cmd/pack" ];
+  subPackages = [ "." ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/buildpacks/pack.Version=${version}"
+    "-X github.com/buildpacks/pack.Version=${finalAttrs.version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd pack \
       --zsh $(PACK_HOME=$PWD $out/bin/pack completion --shell zsh) \
       --bash $(PACK_HOME=$PWD $out/bin/pack completion --shell bash) \
@@ -40,10 +38,10 @@ buildGoModule {
 
   meta = {
     homepage = "https://buildpacks.io/";
-    changelog = "https://github.com/buildpacks/pack/releases/tag/v${version}";
+    changelog = "https://github.com/buildpacks/pack/releases/tag/v${finalAttrs.version}";
     description = "CLI for building apps using Cloud Native Buildpacks";
     mainProgram = "pack";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ momeemt ];
+    maintainers = [ ];
   };
-}
+})

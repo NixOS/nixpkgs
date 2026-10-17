@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "colorcet";
-  version = "3.1.0";
+  version = "3.2.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KSGzzYGiKIqvLWPbwM48JtzYgujDicxQXWiGv3qppOs=";
+    hash = "sha256-SNmmfm5Z3FwKllqhtG/l1Zzclcw2qVlJ8pMT+VCsWfc=";
   };
 
   build-system = [
@@ -46,11 +46,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "colorcet" ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of perceptually uniform colormaps";
     mainProgram = "colorcet";
     homepage = "https://colorcet.pyviz.org";
-    license = licenses.cc-by-40;
+    license = lib.licenses.cc-by-40;
     maintainers = [ ];
   };
 }

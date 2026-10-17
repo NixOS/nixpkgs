@@ -1,40 +1,84 @@
 {
-  lib,
-  stdenv,
   fetchFromGitHub,
+  groonga,
+  lib,
+  meson,
+  msgpack-c,
+  ninja,
   pkg-config,
   postgresql,
-  msgpack-c,
-  groonga,
-  buildPostgresqlExtension,
-  xxHash,
+  postgresqlBuildExtension,
+  ruby,
+  stdenvNoCC,
+  xxhash,
 }:
 
-buildPostgresqlExtension rec {
+postgresqlBuildExtension (finalAttrs: {
   pname = "pgroonga";
-  version = "3.2.5";
+  version = "4.0.9";
 
   src = fetchFromGitHub {
     owner = "pgroonga";
     repo = "pgroonga";
-    rev = "${version}";
-    hash = "sha256-mWpgBoKj7wm7Tb+raL+sjAQqTdzF23SH/wQRYn5bLhw=";
+    tag = finalAttrs.version;
+    hash = "sha256-ADHrHCUrpu5aCAU84QyLkmDDJ6QwICLsL6M8o/OMWxU=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
   buildInputs = [
     msgpack-c
     groonga
-    xxHash
+    xxhash
   ];
 
-  makeFlags = [
-    "HAVE_XXHASH=1"
-    "HAVE_MSGPACK=1"
-    "MSGPACK_PACKAGE_NAME=msgpack-c"
+  mesonFlags = [
+    (lib.mesonEnable "message_pack" true)
+    # tests need pgroonga installed on a running server, run in passthru.tests.regression
+    (lib.mesonBool "test" false)
   ];
 
-  meta = with lib; {
+  # postgresqlBuildExtension moves files out of DESTDIR in postInstall
+  mesonInstallFlags = [ "--destdir=${placeholder "out"}" ];
+
+  passthru.tests.regression = stdenvNoCC.mkDerivation {
+    pname = "${finalAttrs.pname}-regression";
+    inherit (finalAttrs) version src;
+
+    nativeBuildInputs = [ ruby ];
+
+    dontConfigure = true;
+
+    buildPhase = ''
+      runHook preBuild
+
+      patchShebangs test/short-pgappname
+      ruby test/prepare.rb schedule
+      # the expected parallel plan depends on the planner's index size estimate
+      sed -i '/declarative-partitioning\/builtin/d' schedule
+      # fails intermittently
+      sed -i '/function\/wal-apply\/delete$/d' schedule
+
+      ${lib.getDev postgresql}/lib/pgxs/src/test/regress/pg_regress \
+        --bindir=${postgresql.withPackages (_: [ finalAttrs.finalPackage ])}/bin \
+        --inputdir=. \
+        --outputdir=. \
+        --temp-instance=./tmp_check \
+        --encoding=UTF8 \
+        --launcher=test/short-pgappname \
+        --load-extension=pgroonga \
+        --schedule=schedule
+
+      runHook postBuild
+    '';
+
+    installPhase = "touch $out";
+  };
+
+  meta = {
     description = "PostgreSQL extension to use Groonga as the index";
     longDescription = ''
       PGroonga is a PostgreSQL extension to use Groonga as the index.
@@ -43,9 +87,12 @@ buildPostgresqlExtension rec {
       You can use super fast full text search feature against all languages by installing PGroonga into your PostgreSQL.
     '';
     homepage = "https://pgroonga.github.io/";
-    changelog = "https://github.com/pgroonga/pgroonga/releases/tag/${version}";
-    license = licenses.postgresql;
+    changelog = "https://github.com/pgroonga/pgroonga/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.postgresql;
     platforms = postgresql.meta.platforms;
-    maintainers = with maintainers; [ DerTim1 ];
+    maintainers = with lib.maintainers; [
+      DerTim1
+      anish
+    ];
   };
-}
+})

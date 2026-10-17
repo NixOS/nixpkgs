@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchpatch2,
   appstream-glib,
   cargo,
   desktop-file-utils,
@@ -17,21 +16,22 @@
   glib,
   gtk4,
   libadwaita,
-  zbar,
+  libcamera,
+  pipewire,
   gst_all_1,
   nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "warp";
-  version = "0.8.1";
+  version = "1.0.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "warp";
-    rev = "v${version}";
-    hash = "sha256-RmihaFv+U11CAa5ax53WzpwYJ2PFOrhYt4w2iboW4m8=";
+    tag = "v${version}";
+    hash = "sha256-cFMIMNAVrP3rF7UQeKgSdaRZmJT8XcERR4BSLYqxSoI=";
   };
 
   postPatch = ''
@@ -39,9 +39,8 @@ stdenv.mkDerivation rec {
   '';
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-w3gQhyRpma+aJY7IC9Vb3FdIECHZBJoSjiPmKpJ2nM8=";
+    inherit pname version src;
+    hash = "sha256-CFe6Hg1cSz59agZ/eCL7PfnMe/N0vJvAs3gzfjZCwlY=";
   };
 
   nativeBuildInputs = [
@@ -58,18 +57,27 @@ stdenv.mkDerivation rec {
     rustc
   ];
 
-  buildInputs =
-    [
-      glib
-      gtk4
-      libadwaita
-      zbar
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-bad
-    ]);
+  buildInputs = [
+    glib
+    gtk4
+    libadwaita
+    libcamera
+    pipewire
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-bad
+    gst-plugins-good # multifilesink
+    gst-plugins-rs # gst-plugin-gtk4
+  ]);
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # vp8enc preset
+      --prefix GST_PRESET_PATH : ${gst_all_1.gst-plugins-good}/share/gstreamer-1.0/presets
+    )
+  '';
 
   passthru = {
     updateScript = nix-update-script { };
@@ -79,13 +87,10 @@ stdenv.mkDerivation rec {
     description = "Fast and secure file transfer";
     homepage = "https://apps.gnome.org/Warp/";
     license = lib.licenses.gpl3Only;
-    maintainers =
-      with lib.maintainers;
-      [
-        dotlambda
-        foo-dogsquared
-      ]
-      ++ lib.teams.gnome-circle.members;
+    maintainers = with lib.maintainers; [
+      dotlambda
+    ];
+    teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.all;
     mainProgram = "warp";
     broken = stdenv.hostPlatform.isDarwin;

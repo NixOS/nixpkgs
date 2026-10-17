@@ -1,6 +1,7 @@
 {
   lib,
-  buildGoModule,
+  stdenv,
+  buildGo127Module,
   fetchFromGitHub,
   pkg-config,
   wrapGAppsHook4,
@@ -8,33 +9,37 @@
   gtk4,
   gobject-introspection,
   libadwaita,
+  desktopToDarwinBundle,
 }:
 
-buildGoModule rec {
+buildGo127Module (finalAttrs: {
   pname = "trayscale";
-  version = "0.14.1";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "DeedleFake";
     repo = "trayscale";
-    rev = "v${version}";
-    hash = "sha256-LPONM7RxKlUp2LltoQaU0BLpFkYlH9EIqb6HQjVAtm8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-I/HBbw/sRU8nL0Yp2ZA0QVo/0rvLwhdPeTigWfsusZE=";
   };
 
-  vendorHash = "sha256-bG9ATj9fYBBReMyEUABtIS6zEh04raov0pSfMmZNfd8=";
+  vendorHash = "sha256-sSYyEWSHKhmERmXJFUIRnTxvtwthyUnTl/SUqW0q52w=";
 
   subPackages = [ "cmd/trayscale" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X=deedles.dev/trayscale/internal/version.version=${version}"
+    "-X=deedles.dev/trayscale/internal/metadata.version=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [
     pkg-config
     gobject-introspection
     wrapGAppsHook4
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    desktopToDarwinBundle
   ];
   buildInputs = [
     gtk4
@@ -54,12 +59,12 @@ buildGoModule rec {
   '';
 
   meta = {
-    changelog = "https://github.com/DeedleFake/trayscale/releases/tag/${src.rev}";
+    changelog = "https://github.com/DeedleFake/trayscale/releases/tag/${finalAttrs.src.rev}";
     description = "Unofficial GUI wrapper around the Tailscale CLI client";
     homepage = "https://github.com/DeedleFake/trayscale";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sikmir ];
     mainProgram = "trayscale";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
-}
+})

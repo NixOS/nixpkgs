@@ -6,7 +6,10 @@
 
 stdenvNoCC.mkDerivation {
   pname = "mro-unicode";
-  version = "unstable-2013-05-25";
+  version = "0-unstable-2013-05-31";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchurl {
     url = "https://github.com/phjamr/MroUnicode/raw/f297de070f7eba721a47c850e08efc119d3bfbe8/MroUnicode-Regular.ttf";
@@ -23,11 +26,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/phjamr/MroUnicode";
     description = "Unicode-compliant Mro font";
-    maintainers = with maintainers; [ mathnerd314 ];
-    license = licenses.ofl;
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ mathnerd314 ];
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
   };
 }

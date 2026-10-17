@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://velvetyne.fr/fonts/hyper-scrypt/";
     description = "Modern stencil typeface inspired by stained glass technique";
     longDescription = ''
@@ -37,11 +37,10 @@ stdenvNoCC.mkDerivation rec {
       the sacred lead of stained glass, the lead of print characters
       and the heavy metal. Despite its organic look inherited for the
       molted metal, Hyper Scrypt is based upon a rigorous grid,
-      allowing some neat alignements between shapes in multi lines
+      allowing some neat alignments between shapes in multi lines
       layouts.
     '';
-    license = licenses.ofl;
-    maintainers = with maintainers; [ leenaars ];
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
   };
 }

@@ -1,38 +1,51 @@
 {
   lib,
+  aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
+  mashumaro,
+  pytest-asyncio,
+  pytestCheckHook,
   setuptools,
-  requests,
 }:
 
 buildPythonPackage rec {
   pname = "py-opensonic";
-  version = "5.2.1";
+  version = "10.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "khers";
     repo = "py-opensonic";
     tag = "v${version}";
-    hash = "sha256-lVErs5f2LoCrMNr+f8Bm2Q6xQRNuisloqyRHchYTukk=";
+    hash = "sha256-sC6dP6SBdgvDVAOlM0c91n8RYfV1kp5IHk8xGqL7kCQ=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [ requests ];
+  dependencies = [
+    aiohttp
+    mashumaro
+  ];
 
-  doCheck = false; # no tests
+  pythonRelaxDeps = [
+    "mashumaro"
+  ];
+
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "libopensonic"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to wrap the Open Subsonic REST API";
     homepage = "https://github.com/khers/py-opensonic";
     changelog = "https://github.com/khers/py-opensonic/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

@@ -7,22 +7,22 @@
 
 buildPecl rec {
   pname = "uv";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "amphp";
     repo = "ext-uv";
-    rev = "v${version}";
-    hash = "sha256-RYb7rszHbdTLfBi66o9hVkFwX+7RlcxH5PAw5frjpFg=";
+    tag = "v${version}";
+    hash = "sha256-CM81dStUgQpLIb7s6jlWkP3v4WyyxjZ+3EX80tdSPc0=";
   };
 
   buildInputs = [ libuv ];
 
-  meta = with lib; {
+  meta = {
     description = "Interface to libuv for php";
-    license = licenses.php301;
+    license = lib.licenses.php301;
     homepage = "https://github.com/amphp/ext-uv";
-    maintainers = teams.php.members;
-    platforms = platforms.linux;
+    teams = [ lib.teams.php ];
+    platforms = lib.platforms.linux;
   };
 }

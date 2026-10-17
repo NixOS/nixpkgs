@@ -1,104 +1,131 @@
-{ lib, stdenv
-, targetPackages
+{
+  lib,
+  stdenv,
+  targetPackages,
 
-, withoutTargetLibc, libcCross
-, threadsCross
-, version
+  withoutTargetLibc,
+  libcCross,
+  threadsCross,
+  version,
 
-, apple-sdk, binutils, gmp, mpfr, libmpc, isl
+  is13,
+  apple-sdk_14,
+  apple-sdk_15,
+  binutils,
+  gmp,
+  mpfr,
+  libmpc,
+  isl,
 
-, enableLTO
-, enableMultilib
-, enablePlugin
-, disableGdbPlugin ? !enablePlugin
-, enableShared
+  enableLTO,
+  enableMultilib,
+  enablePlugin,
+  disableGdbPlugin ? !enablePlugin,
+  enableShared,
+  enableDefaultPie,
+  targetPrefix,
 
-, langC
-, langCC
-, langD ? false
-, langFortran
-, langAda ? false
-, langGo
-, langObjC
-, langObjCpp
-, langJit
-, langRust ? false
-, disableBootstrap ? stdenv.targetPlatform != stdenv.hostPlatform
+  langC,
+  langCC,
+  langFortran,
+  langAda ? false,
+  langGo,
+  langObjC,
+  langObjCpp,
+  langJit,
+  langRust ? false,
+  hostIsTarget,
+  disableBootstrap ? (!hostIsTarget),
 }:
 
 assert !enablePlugin -> disableGdbPlugin;
 
-# Note [Windows Exception Handling]
-# sjlj (short jump long jump) exception handling makes no sense on x86_64,
-# it's forcably slowing programs down as it produces a constant overhead.
-# On x86_64 we have SEH (Structured Exception Handling) and we should use
-# that. On i686, we do not have SEH, and have to use sjlj with dwarf2.
-# Hence it's now conditional on x86_32 (i686 is 32bit).
-#
-# ref: https://stackoverflow.com/questions/15670169/what-is-difference-between-sjlj-vs-dwarf-vs-seh
-
-
 let
   inherit (stdenv)
-    buildPlatform hostPlatform targetPlatform;
+    hostPlatform
+    targetPlatform
+    ;
+
+  appleSdk = if langAda && !is13 then apple-sdk_15 else apple-sdk_14;
 
   # See https://github.com/NixOS/nixpkgs/pull/209870#issuecomment-1500550903
   disableBootstrap' = disableBootstrap && !langFortran && !langGo;
 
-  crossMingw = targetPlatform != hostPlatform && targetPlatform.isMinGW;
-  crossDarwin = targetPlatform != hostPlatform && targetPlatform.libc == "libSystem";
-
-  targetPrefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
-                  "${stdenv.targetPlatform.config}-";
+  crossMingw = !hostIsTarget && targetPlatform.isMinGW;
+  crossDarwin = !hostIsTarget && targetPlatform.libc == "libSystem";
 
   crossConfigureFlags =
     # Ensure that -print-prog-name is able to find the correct programs.
     [
-      "--with-as=${if targetPackages.stdenv.cc.bintools.isLLVM then binutils else targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-as"
-      "--with-ld=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-ld"
+      "--with-as=${
+        if targetPackages.stdenv.cc.bintools.isLLVM then binutils else targetPackages.stdenv.cc.bintools
+      }/bin/${targetPlatform.config}-as"
     ]
-    ++ (if withoutTargetLibc then [
-      "--disable-libssp"
-      "--disable-nls"
-      "--without-headers"
-      "--disable-threads"
-      "--disable-libgomp"
-      "--disable-libquadmath"
-      (lib.enableFeature enableShared "shared")
-      "--disable-libatomic" # requires libc
-      "--disable-decimal-float" # requires libc
-      "--disable-libmpx" # requires libc
-    ] ++ lib.optionals crossMingw [
-      "--with-headers=${lib.getDev libcCross}/include"
-      "--with-gcc"
-      "--with-gnu-as"
-      "--with-gnu-ld"
-      "--disable-debug"
-      "--disable-win32-registry"
-      "--enable-hash-synchronization"
-      "--enable-libssp"
-      "--disable-nls"
-      # To keep ABI compatibility with upstream mingw-w64
-      "--enable-fully-dynamic-string"
-    ] ++ lib.optionals (crossMingw && targetPlatform.isx86_32) [
-      # See Note [Windows Exception Handling]
-      "--enable-sjlj-exceptions"
+    ++ lib.optionals (crossMingw && targetPlatform.isx86_32) [
+      "--disable-sjlj-exceptions"
       "--with-dwarf2"
-    ] else [
-      (if crossDarwin then "--with-sysroot=${lib.getLib libcCross}/share/sysroot"
-       else                "--with-headers=${lib.getDev libcCross}${libcCross.incdir or "/include"}")
-      "--enable-__cxa_atexit"
-      "--enable-long-long"
-      "--enable-threads=${if targetPlatform.isUnix then "posix"
-                          else if targetPlatform.isWindows then (threadsCross.model or "win32")
-                          else "single"}"
-      "--enable-nls"
-    ] ++ lib.optionals (targetPlatform.libc == "uclibc" || targetPlatform.libc == "musl") [
-      # libsanitizer requires netrom/netrom.h which is not
-      # available in uclibc.
-      "--disable-libsanitizer"
-    ] ++ lib.optional (targetPlatform.libc == "newlib" || targetPlatform.libc == "newlib-nano") "--with-newlib"
-      ++ lib.optional (targetPlatform.libc == "avrlibc") "--with-avrlibc"
+    ]
+    ++ (
+      if withoutTargetLibc then
+        [
+          "--disable-libssp"
+          "--disable-nls"
+          "--without-headers"
+          "--disable-threads"
+          "--disable-libgomp"
+          "--disable-libquadmath"
+          (lib.enableFeature enableShared "shared")
+          "--disable-libatomic" # requires libc
+          "--disable-decimal-float" # requires libc
+          "--disable-libmpx" # requires libc
+          "--disable-hosted-libstdcxx" # requires libc
+          "--disable-libstdcxx-backtrace"
+          "--disable-linux-futex"
+          "--disable-libvtv"
+          "--disable-libitm"
+        ]
+        ++ lib.optionals crossMingw [
+          "--with-headers=${lib.getDev libcCross}/include"
+          "--with-gcc"
+          "--with-gnu-as"
+          "--with-gnu-ld"
+          "--disable-debug"
+          "--disable-win32-registry"
+          "--enable-hash-synchronization"
+          "--enable-libssp"
+          "--disable-nls"
+          # To keep ABI compatibility with upstream mingw-w64
+          "--enable-fully-dynamic-string"
+        ]
+      else
+        [
+          (
+            if crossDarwin then
+              "--with-sysroot=${lib.getLib libcCross}/share/sysroot"
+            else
+              "--with-headers=${lib.getDev libcCross}${libcCross.incdir or "/include"}"
+          )
+          "--enable-__cxa_atexit"
+          "--enable-long-long"
+          "--enable-threads=${
+            if targetPlatform.isUnix then
+              "posix"
+            else if targetPlatform.isWindows then
+              (threadsCross.model or "win32")
+            else
+              "single"
+          }"
+          "--enable-nls"
+        ]
+        ++ lib.optionals (targetPlatform.libc == "uclibc" || targetPlatform.libc == "musl") [
+          # libsanitizer requires netrom/netrom.h which is not
+          # available in uclibc.
+          "--disable-libsanitizer"
+        ]
+        ++ lib.optional (
+          targetPlatform.libc == "newlib" || targetPlatform.libc == "newlib-nano"
+        ) "--with-newlib"
+        ++ lib.optional (targetPlatform.libc == "avrlibc") "--with-avrlibc"
     );
 
   configureFlags =
@@ -111,22 +138,26 @@ let
       "--with-mpc=${libmpc}"
     ]
     ++ lib.optionals (!withoutTargetLibc) [
-      (if libcCross == null
-       then (
-        # GCC will search for the headers relative to SDKROOT on Darwin, so it will find them in the store.
-        if targetPlatform.isDarwin then "--with-native-system-header-dir=/usr/include"
-        else "--with-native-system-header-dir=${lib.getDev stdenv.cc.libc}/include"
-       )
-       else "--with-native-system-header-dir=${lib.getDev libcCross}${libcCross.incdir or "/include"}")
+      (
+        if libcCross == null then
+          (
+            # GCC will search for the headers relative to SDKROOT on Darwin, so it will find them in the store.
+            if targetPlatform.isDarwin then
+              "--with-native-system-header-dir=/usr/include"
+            else
+              "--with-native-system-header-dir=${lib.getDev stdenv.cc.libc}/include"
+          )
+        else
+          "--with-native-system-header-dir=${lib.getDev libcCross}${libcCross.incdir or "/include"}"
+      )
       # gcc builds for cross-compilers (build != host) or cross-built
       # gcc (host != target) always apply the offset prefix to disentangle
       # target headers from build or host headers:
-      #     ${with_build_sysroot}${native_system_header_dir}
-      #  or ${test_exec_prefix}/${target_noncanonical}/sys-include
-      #  or ${with_sysroot}${native_system_header_dir}
+      #        ${with_sysroot}${native_system_header_dir}
+      #    and ${with_build_sysroot}${native_system_header_dir}
       # While native build (build == host == target) uses passed headers
       # path as is:
-      #    ${with_build_sysroot}${native_system_header_dir}
+      #    ${with_sysroot}${native_system_header_dir}
       #
       # Nixpkgs uses flat directory structure for both native and cross
       # cases. As a result libc headers don't get found for cross case
@@ -137,9 +168,13 @@ let
       # We pick "/" path to effectively avoid sysroot offset and make it work
       # as a native case.
       # Darwin requires using the SDK as the sysroot for `SDKROOT` to work correctly.
-      "--with-build-sysroot=${if targetPlatform.isDarwin then apple-sdk.sdkroot else "/"}"
+      "--with-build-sysroot=${if targetPlatform.isDarwin then appleSdk.sdkroot else "/"}"
       # Same with the stdlibc++ headers embedded in the gcc output
       "--with-gxx-include-dir=${placeholder "out"}/include/c++/${version}/"
+    ]
+    ++ lib.optionals (!withoutTargetLibc && targetPlatform.isDarwin && !crossDarwin) [
+      # Building on Darwin often requires --with-sysroot.
+      "--with-sysroot=${appleSdk.sdkroot}"
     ]
 
     # Basic configuration
@@ -162,86 +197,97 @@ let
       "--with-system-zlib"
       "--enable-static"
       "--enable-languages=${
-        lib.concatStringsSep ","
-          (  lib.optional langC        "c"
-          ++ lib.optional langCC       "c++"
-          ++ lib.optional langD        "d"
-          ++ lib.optional langFortran  "fortran"
-          ++ lib.optional langAda      "ada"
-          ++ lib.optional langGo       "go"
-          ++ lib.optional langObjC     "objc"
-          ++ lib.optional langObjCpp   "obj-c++"
-          ++ lib.optionals crossDarwin [ "objc" "obj-c++" ]
-          ++ lib.optional langJit      "jit"
-          ++ lib.optional langRust     "rust"
-          )
+        lib.concatStringsSep "," (
+          lib.optional langC "c"
+          ++ lib.optional langCC "c++"
+          ++ lib.optional langFortran "fortran"
+          ++ lib.optional langAda "ada"
+          ++ lib.optional langGo "go"
+          ++ lib.optional langObjC "objc"
+          ++ lib.optional langObjCpp "obj-c++"
+          ++ lib.optionals crossDarwin [
+            "objc"
+            "obj-c++"
+          ]
+          ++ lib.optional langJit "jit"
+          ++ lib.optional langRust "rust"
+        )
       }"
     ]
 
-    ++ (if (enableMultilib || targetPlatform.isAvr)
-      then ["--enable-multilib" "--disable-libquadmath"]
-      else ["--disable-multilib"])
+    ++ (
+      if (enableMultilib || targetPlatform.isAvr) then
+        [
+          "--enable-multilib"
+          "--disable-libquadmath"
+        ]
+      else
+        [ "--disable-multilib" ]
+        # SH targets need m4 and m4-nofpu variants (the kernel uses -m4-nofpu).
+        # An empty list disables -m4-nofpu entirely.
+        ++ lib.optional targetPlatform.isSh4 "--with-multilib-list=m4,m4-nofpu"
+    )
     ++ lib.optional (!enableShared) "--disable-shared"
     ++ lib.singleton (lib.enableFeature enablePlugin "plugin")
     # Libcc1 is the GCC cc1 plugin for the GDB debugger which is only used by gdb
     ++ lib.optional disableGdbPlugin "--disable-libcc1"
 
     # Support -m32 on powerpc64le/be
-    ++ lib.optional (targetPlatform.system == "powerpc64le-linux")
-      "--enable-targets=powerpcle-linux"
-    ++ lib.optional (targetPlatform.system == "powerpc64-linux")
-      "--enable-targets=powerpc-linux"
+    ++ lib.optional (targetPlatform.system == "powerpc64le-linux") "--enable-targets=powerpcle-linux"
+    ++ lib.optional (targetPlatform.system == "powerpc64-linux") "--enable-targets=powerpc-linux"
 
     # Fix "unknown long double size, cannot define BFP_FMT"
-    ++ lib.optional (targetPlatform.isPower && targetPlatform.isMusl)
-      "--disable-decimal-float"
+    ++ lib.optional (targetPlatform.isPower && targetPlatform.isMusl) "--disable-decimal-float"
 
     # Optional features
     ++ lib.optional (isl != null) "--with-isl=${isl}"
 
     # Ada options, gcc can't build the runtime library for a cross compiler
-    ++ lib.optional langAda
-      (if hostPlatform == targetPlatform
-       then "--enable-libada"
-       else "--disable-libada")
+    ++ lib.optional langAda (if hostIsTarget then "--enable-libada" else "--disable-libada")
 
-    ++ import ../common/platform-flags.nix { inherit (stdenv)  targetPlatform; inherit lib; }
-    ++ lib.optionals (targetPlatform != hostPlatform) crossConfigureFlags
+    ++ import ../common/platform-flags.nix {
+      inherit (stdenv) targetPlatform;
+      inherit lib;
+    }
+    ++ lib.optionals (!hostIsTarget) crossConfigureFlags
     ++ lib.optional disableBootstrap' "--disable-bootstrap"
 
     # Platform-specific flags
-    ++ lib.optional (targetPlatform == hostPlatform && targetPlatform.isx86_32) "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}"
-    ++ lib.optional targetPlatform.isNetBSD "--disable-libssp" # Provided by libc.
+    ++ lib.optional (
+      hostIsTarget && targetPlatform.isx86_32
+    ) "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}"
+    ++ lib.optional (targetPlatform.isNetBSD || targetPlatform.isCygwin) "--disable-libssp" # Provided by libc.
     ++ lib.optionals hostPlatform.isSunOS [
-      "--enable-long-long" "--enable-libssp" "--enable-threads=posix" "--disable-nls" "--enable-__cxa_atexit"
+      "--enable-long-long"
+      "--enable-libssp"
+      "--enable-threads=posix"
+      "--disable-nls"
+      "--enable-__cxa_atexit"
       # On Illumos/Solaris GNU as is preferred
-      "--with-gnu-as" "--without-gnu-ld"
+      "--with-gnu-as"
+      "--without-gnu-ld"
     ]
-    ++ lib.optional (targetPlatform.libc == "musl")
-      # musl at least, disable: https://git.buildroot.net/buildroot/commit/?id=873d4019f7fb00f6a80592224236b3ba7d657865
-      "--disable-libmpx"
-    ++ lib.optionals (targetPlatform == hostPlatform && targetPlatform.libc == "musl") [
+    ++
+      lib.optional (targetPlatform.libc == "musl")
+        # musl at least, disable: https://git.buildroot.net/buildroot/commit/?id=873d4019f7fb00f6a80592224236b3ba7d657865
+        "--disable-libmpx"
+    ++ lib.optionals (hostIsTarget && targetPlatform.libc == "musl") [
       "--disable-libsanitizer"
       "--disable-symvers"
       "libat_cv_have_ifunc=no"
       "--disable-gnu-indirect-function"
     ]
+    ++ lib.optionals enableDefaultPie [
+      "--enable-default-pie"
+    ]
     ++ lib.optionals langJit [
       "--enable-host-shared"
-    ]
-    ++ lib.optionals (langD) [
-      "--with-target-system-zlib=yes"
-    ]
-    # On mips64-unknown-linux-gnu libsanitizer defines collide with
-    # glibc's definitions and fail the build. It was fixed in gcc-13+.
-    ++ lib.optionals (targetPlatform.isMips && targetPlatform.parsed.abi.name == "gnu" && lib.versions.major version == "12") [
-      "--disable-libsanitizer"
     ]
     ++ lib.optionals targetPlatform.isAlpha [
       # Workaround build failures like:
       #   cc1: error: fp software completion requires '-mtrap-precision=i' [-Werror]
       "--disable-werror"
-    ]
-  ;
+    ];
 
-in configureFlags
+in
+configureFlags

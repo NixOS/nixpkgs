@@ -5,14 +5,14 @@
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
-  name = "raygui";
-  version = "4.0";
+  pname = "raygui";
+  version = "5.0";
 
   src = fetchFromGitHub {
     owner = "raysan5";
     repo = "raygui";
     tag = finalAttrs.version;
-    hash = "sha256-1qnChZYsb0e5LnPhvs6a/R5Ammgj2HWFNe9625sBRo8=";
+    hash = "sha256-jcSfKCKgmDA26cMHXUjI9+SCG+Ui+B8z4C8UUd6paWs=";
   };
 
   dontBuild = true;
@@ -28,17 +28,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     includedir=$out/include
 
     Name: raygui
-    Description: ${finalAttrs.meta.description}
-    URL: ${finalAttrs.meta.homepage}
+    Description: Simple and easy-to-use immediate-mode gui library
+    URL: https://github.com/raysan5/raygui
     Version: ${finalAttrs.version}
-    Cflags: -I"{includedir}"
+    Cflags: -I$out/include
     EOF
 
     runHook postInstall
   '';
 
   meta = {
-    description = "A simple and easy-to-use immediate-mode gui library";
+    description = "Simple and easy-to-use immediate-mode gui library";
     homepage = "https://github.com/raysan5/raygui";
     license = lib.licenses.zlib;
     maintainers = with lib.maintainers; [ sigmanificient ];

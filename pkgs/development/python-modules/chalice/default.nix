@@ -1,68 +1,57 @@
 {
   lib,
-  attrs,
-  botocore,
   buildPythonPackage,
-  click,
   fetchFromGitHub,
-  hypothesis,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  botocore,
+  click,
   inquirer,
   jmespath,
-  mock,
-  mypy-extensions,
   pip,
-  pytest7CheckHook,
-  pythonOlder,
   pyyaml,
-  requests,
-  setuptools,
   six,
-  typing-extensions,
-  watchdog,
+
+  # tests
+  hypothesis,
+  pytestCheckHook,
+  requests,
   websocket-client,
-  wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "chalice";
-  version = "1.28.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "1.33.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
-    repo = pname;
-    tag = version;
-    hash = "sha256-m3pSD4fahBW6Yt/w07Co4fTZD7k6as5cPwoK5QSry6M=";
+    repo = "chalice";
+    tag = finalAttrs.version;
+    hash = "sha256-c5xzgrxRFRlvgMnf/L8rhG7rYJLtuMvDZHYsPaHkdRs=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "inquirer>=2.7.0,<3.0.0" "inquirer" \
-      --replace "pip>=9,<23.1" "pip" \
-  '';
+  pythonRelaxDeps = [ "pip" ];
 
-  propagatedBuildInputs = [
-    attrs
+  build-system = [ setuptools ];
+
+  dependencies = [
     botocore
     click
     inquirer
     jmespath
-    mypy-extensions
     pip
     pyyaml
-    setuptools
+    # setuptools
     six
-    typing-extensions
-    wheel
-    watchdog
   ];
 
   nativeCheckInputs = [
     hypothesis
-    mock
-    pytest7CheckHook
+    pytestCheckHook
     requests
     websocket-client
   ];
@@ -86,25 +75,41 @@ buildPythonPackage rec {
     "test_can_import_env_vars"
     "test_stack_trace_printed_on_error"
     # Don't build
-    "test_can_generate_pipeline_for_all"
     "test_build_wheel"
-    # https://github.com/aws/chalice/issues/1850
-    "test_resolve_endpoint"
-    "test_endpoint_from_arn"
     # Tests require dist
     "test_setup_tar_gz_hyphens_in_name"
     "test_both_tar_gz"
     "test_both_tar_bz2"
+    # AssertionError
+    "test_no_error_message_printed_on_empty_reqs_file"
+    # botocore.exceptions.ParamValidationError:
+    "test_can_create_kinesis_event_source"
+    "test_can_create_kinesis_event_source_batching_window"
+    "test_can_create_sqs_event_source"
+    "test_can_retry_create_sqs_event_source"
+    "test_can_delete_sqs_event_source"
+    "test_can_retry_delete_event_source"
+    "test_only_retry_settling_errors "
+    "test_can_retry_update_event_source"
+    "test_can_retry_update_event_source_batching_window "
+    "test_verify_event_source_current[queue-name-sqs-True]"
+    "test_verify_event_source_current[queue-name-not-sqs-False]"
+    "test_verify_event_source_current[not-queue-name-sqs-False]"
+    "test_verify_event_source_current[not-queue-name-not-sqs-False]"
+    "test_verify_event_source_arn_current"
+    "test_event_source_uuid_does_not_exist"
+    "test_event_source_does_not_exist"
+    "test_can_update_lambda_event_source"
   ];
 
   pythonImportsCheck = [ "chalice" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Serverless Microframework for AWS";
-    mainProgram = "chalice";
     homepage = "https://github.com/aws/chalice";
-    changelog = "https://github.com/aws/chalice/blob/${version}/CHANGELOG.rst";
-    license = licenses.asl20;
+    changelog = "https://github.com/aws/chalice/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
     maintainers = [ ];
+    mainProgram = "chalice";
   };
-}
+})

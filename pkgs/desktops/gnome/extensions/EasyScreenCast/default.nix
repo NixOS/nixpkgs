@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
   replaceVars,
   glib,
@@ -8,17 +8,18 @@
   gettext,
   jq,
   intltool,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gnome-shell-extension-EasyScreenCast";
-  version = "1.10.0";
+  version = "1.13.2";
 
   src = fetchFromGitHub {
     owner = "EasyScreenCast";
     repo = "EasyScreenCast";
     rev = finalAttrs.version;
-    hash = "sha256-5PJB+lm4NKeNpS2vg9xaVl5aUR0Rofmt6sEKXfuGG6c=";
+    hash = "sha256-VYf5RHZHe6QIzQRW/oZ2tEHIo184xPqqx+hKAcCwOMg=";
   };
 
   patches = [
@@ -36,13 +37,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "INSTALLBASE=$(out)/share/gnome-shell/extensions" ];
 
-  passthru.extensionUuid = "EasyScreenCast@iacopodeenosee.gmail.com";
+  passthru = {
+    extensionUuid = "EasyScreenCast@iacopodeenosee.gmail.com";
+    updateScript = nix-update-script { };
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Simplifies the use of the video recording function integrated in gnome shell";
     homepage = "https://github.com/EasyScreenCast/EasyScreenCast";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ doronbehar ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 })

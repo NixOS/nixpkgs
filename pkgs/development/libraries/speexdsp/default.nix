@@ -36,10 +36,10 @@ stdenv.mkDerivation rec {
     lib.optionals withFftw3 [ "--with-fft=gpl-fftw3" ]
     ++ lib.optional stdenv.hostPlatform.isAarch64 "--disable-neon";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.speex.org/";
     description = "Open Source/Free Software patent-free audio compression format designed for speech";
-    license = licenses.bsd3;
-    platforms = platforms.unix ++ platforms.windows;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 }

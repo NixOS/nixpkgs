@@ -2,22 +2,27 @@
   lib,
   stdenv,
   cmake,
-  darwin,
   fetchFromGitHub,
-  withBlas ? true,
+  withBlas ? false,
   blas,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cminpack";
-  version = "1.3.8";
+  version = "1.3.11";
 
   src = fetchFromGitHub {
     owner = "devernay";
     repo = "cminpack";
-    rev = "v${version}";
-    hash = "sha256-eFJ43cHbSbWld+gPpMaNiBy1X5TIcN9aVxjh8PxvVDU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-GF9HiITX/XV8hXrp5lJw2XM0Zyb/CBkMZkRFBbQj03A=";
   };
+
+  postPatch = ''
+    substituteInPlace cmake/cminpack.pc.in \
+      --replace-fail ''\'''${prefix}/' ""
+  '';
 
   strictDeps = true;
 
@@ -25,27 +30,25 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
-  buildInputs =
-    lib.optionals withBlas [
-      blas
-    ]
-    ++ lib.optionals (withBlas && stdenv.hostPlatform.isDarwin) [
-      darwin.apple_sdk.frameworks.Accelerate
-      darwin.apple_sdk.frameworks.CoreGraphics
-      darwin.apple_sdk.frameworks.CoreVideo
-    ];
+  buildInputs = lib.optionals withBlas [
+    blas
+  ];
 
   cmakeFlags = [
     "-DUSE_BLAS=${if withBlas then "ON" else "OFF"}"
     "-DBUILD_SHARED_LIBS=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}"
   ];
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     description = "Software for solving nonlinear equations and nonlinear least squares problems";
     homepage = "http://devernay.free.fr/hacks/cminpack/";
-    changelog = "https://github.com/devernay/cminpack/blob/v${version}/README.md#history";
+    changelog = "https://github.com/devernay/cminpack/blob/v${finalAttrs.version}/README.md#history";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "00170afff27019fad08e421da1ae49c681831fb2759786f07c826e89ac94cf21";
+    hash = "sha256-ABcK//JwGfrQjkIdoa5JxoGDH7J1l4bwfIJuiayUzyE=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -22,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinx_comments" ];
 
-  meta = with lib; {
+  meta = {
     description = "Add comments and annotation to your documentation";
     homepage = "https://github.com/executablebooks/sphinx-comments";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

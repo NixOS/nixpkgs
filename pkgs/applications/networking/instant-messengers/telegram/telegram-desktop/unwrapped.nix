@@ -6,33 +6,36 @@
   pkg-config,
   cmake,
   ninja,
-  clang,
   python3,
+  qtshadertools,
+  tdlib,
   tg_owt ? callPackage ./tg_owt.nix { inherit stdenv; },
   qtbase,
-  qtimageformats,
   qtsvg,
   qtwayland,
   kcoreaddons,
   lz4,
-  xxHash,
-  ffmpeg_6,
+  xxhash,
+  ffmpeg,
   protobuf,
-  openalSoft,
-  minizip,
-  libopus,
-  alsa-lib,
-  libpulseaudio,
+  openal-soft,
+  minizip-ng-compat,
   range-v3,
   tl-expected,
   hunspell,
   gobject-introspection,
-  jemalloc,
   rnnoise,
   microsoft-gsl,
   boost,
   ada,
+  pango,
+  tlottie,
+  libfido2,
+  libavif,
+  libheif,
+  libjxl,
   libicns,
+  wallet-engine,
   apple-sdk_15,
   nix-update-script,
 }:
@@ -46,70 +49,61 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "telegram-desktop-unwrapped";
-  version = "5.10.3";
+  version = "7.3.1";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-AsxCDh/pneRHVuGtlqFYD6c9pezmKo/wrMU4RPtWlXA=";
+    hash = "sha256-QoIfRLlNljoINAN28YgyP/6+E65bghNYD+H0U5lPQhs=";
   };
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioInputALSA.cpp \
-      --replace-fail '"libasound.so.2"' '"${lib.getLib alsa-lib}/lib/libasound.so.2"'
-    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioOutputALSA.cpp \
-      --replace-fail '"libasound.so.2"' '"${lib.getLib alsa-lib}/lib/libasound.so.2"'
-    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioPulse.cpp \
-      --replace-fail '"libpulse.so.0"' '"${lib.getLib libpulseaudio}/lib/libpulse.so.0"'
-  '';
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    ninja
+    python3
+    qtshadertools
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    gobject-introspection
+  ];
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      cmake
-      ninja
-      python3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      # to build bundled libdispatch
-      clang
-      gobject-introspection
-    ];
-
-  buildInputs =
-    [
-      qtbase
-      qtimageformats
-      qtsvg
-      lz4
-      xxHash
-      ffmpeg_6
-      openalSoft
-      minizip
-      libopus
-      range-v3
-      tl-expected
-      rnnoise
-      tg_owt
-      microsoft-gsl
-      boost
-      ada
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      protobuf
-      qtwayland
-      kcoreaddons
-      alsa-lib
-      libpulseaudio
-      hunspell
-      jemalloc
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_15
-      libicns
-    ];
+  buildInputs = [
+    qtbase
+    qtsvg
+    lz4
+    xxhash
+    ffmpeg
+    openal-soft
+    minizip-ng-compat
+    range-v3
+    tl-expected
+    rnnoise
+    tg_owt
+    microsoft-gsl
+    boost
+    ada
+    libfido2
+    (tdlib.override { tde2eOnly = true; })
+    tlottie
+    wallet-engine
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    protobuf
+    qtwayland
+    kcoreaddons
+    hunspell
+    pango
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_15
+    libicns
+    libavif
+    libheif
+    libjxl
+  ];
 
   dontWrapQtApps = true;
 
@@ -117,6 +111,8 @@ stdenv.mkDerivation (finalAttrs: {
     # We're allowed to used the API ID of the Snap package:
     (lib.cmakeFeature "TDESKTOP_API_ID" "611335")
     (lib.cmakeFeature "TDESKTOP_API_HASH" "d524b414d21f4d37f08684c1df41ac9c")
+    # swift 6 is not available in nixpkgs
+    (lib.cmakeBool "DESKTOP_APP_DISABLE_SWIFT6" true)
   ];
 
   installPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -145,6 +141,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://desktop.telegram.org/";
     changelog = "https://github.com/telegramdesktop/tdesktop/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ nickcao ];
-    mainProgram = if stdenv.hostPlatform.isLinux then "telegram-desktop" else "Telegram";
+    mainProgram = "Telegram";
   };
 })

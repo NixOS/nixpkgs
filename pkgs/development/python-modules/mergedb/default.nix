@@ -5,7 +5,6 @@
   fetchPypi,
   jinja2,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   setuptools,
   setuptools-scm,
@@ -16,11 +15,9 @@ buildPythonPackage rec {
   version = "0.1.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2034c18dca23456c5b166b63d94300bcd8ec9f386e6cd639c2f66e141c0313f9";
+    hash = "sha256-IDTBjcojRWxbFmtj2UMAvNjsnzhubNY5wvZuFBwDE/k=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -36,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mergedb" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool/library for deep merging YAML files";
     mainProgram = "mergedb";
     homepage = "https://github.com/graysonhead/mergedb";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ graysonhead ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ graysonhead ];
   };
 }

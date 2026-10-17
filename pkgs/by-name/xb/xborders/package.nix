@@ -13,6 +13,7 @@
 python3Packages.buildPythonPackage rec {
   pname = "xborders";
   version = "3.4"; # in version.txt
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deter0";
@@ -32,7 +33,9 @@ python3Packages.buildPythonPackage rec {
     gobject-introspection
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     pycairo
     requests
     pygobject3
@@ -49,12 +52,12 @@ python3Packages.buildPythonPackage rec {
       ln -s ${setup} setup.py
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Active window border replacement for window managers";
     homepage = "https://github.com/deter0/xborder";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ elnudev ];
-    platforms = platforms.linux;
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [ elnudev ];
+    platforms = lib.platforms.linux;
     mainProgram = "xborders";
   };
 }

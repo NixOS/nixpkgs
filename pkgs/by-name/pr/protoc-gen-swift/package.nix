@@ -1,42 +1,28 @@
 {
   lib,
   fetchFromGitHub,
-  swiftPackages,
   swift,
   swiftpm,
   nix-update-script,
+  stdenv,
 }:
-let
-  stdenv = swiftPackages.stdenv;
-in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "protoc-gen-swift";
-  version = "1.28.2";
+  version = "1.39.0";
 
   src = fetchFromGitHub {
     owner = "apple";
     repo = "swift-protobuf";
     rev = "${finalAttrs.version}";
-    hash = "sha256-YOEr73xDjNrc4TTkIBY8AdAUX2MBtF9ED1UF2IjTu44=";
+    hash = "sha256-BINU2Lu0aUyXDCfXEuI5+iJ9Fo1ReOVNzyJ+SU3vzbw=";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     swift
     swiftpm
   ];
-
-  # Not needed for darwin, as `apple-sdk` is implicit and part of the stdenv
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    swiftPackages.Foundation
-    swiftPackages.Dispatch
-  ];
-
-  # swiftpm fails to found libdispatch.so on Linux
-  LD_LIBRARY_PATH = lib.optionalString stdenv.hostPlatform.isLinux (
-    lib.makeLibraryPath [
-      swiftPackages.Dispatch
-    ]
-  );
 
   installPhase = ''
     runHook preInstall

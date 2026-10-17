@@ -5,16 +5,18 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "smem";
   version = "1.5";
 
   src = fetchurl {
-    url = "https://selenic.com/repo/smem/archive/${version}.tar.bz2";
+    url = "https://selenic.com/repo/smem/archive/${finalAttrs.version}.tar.bz2";
     sha256 = "19ibv1byxf2b68186ysrgrhy5shkc5mc69abark1h18yigp3j34m";
   };
 
-  buildInputs = [ python3 ];
+  buildInputs = [
+    (python3.withPackages (pp: [ pp.matplotlib ]))
+  ];
 
   makeFlags = [ "smemcap" ];
 
@@ -30,4 +32,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     license = lib.licenses.gpl2Plus;
   };
-}
+})

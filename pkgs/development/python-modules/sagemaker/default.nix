@@ -13,6 +13,7 @@
   docker,
   fastapi,
   google-pasta,
+  graphene,
   importlib-metadata,
   jsonschema,
   numpy,
@@ -40,14 +41,14 @@
 
 buildPythonPackage rec {
   pname = "sagemaker";
-  version = "2.237.3";
+  version = "2.256.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "sagemaker-python-sdk";
     tag = "v${version}";
-    hash = "sha256-eQ+5WFEobJUHdIK317A94/ro2H1xU738j3b7Z6iddlk=";
+    hash = "sha256-Q5JeXWehj2TxP4SolNvn6B6lI8yxvUYzbardJvVfgaU=";
   };
 
   build-system = [
@@ -61,6 +62,7 @@ buildPythonPackage rec {
     "importlib-metadata"
     "numpy"
     "omegaconf"
+    "packaging"
     "protobuf"
   ];
 
@@ -71,6 +73,7 @@ buildPythonPackage rec {
     docker
     fastapi
     google-pasta
+    graphene
     importlib-metadata
     jsonschema
     numpy
@@ -113,8 +116,7 @@ buildPythonPackage rec {
   meta = {
     description = "Library for training and deploying machine learning models on Amazon SageMaker";
     homepage = "https://github.com/aws/sagemaker-python-sdk/";
-    changelog = "https://github.com/aws/sagemaker-python-sdk/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/aws/sagemaker-python-sdk/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ nequissimus ];
   };
 }

@@ -1,5 +1,5 @@
 import ./generic.nix {
-  version = "2.109.1";
-  dmdHash = "sha256-3nCDPZnb4eQZmhYYxcH6qOmsP8or0KYuzAa5g/C9xdU=";
-  phobosHash = "sha256-73I0k7tCBwe5tl4K6uMs3/nT2JTZ2SppFYzmokS4W5Y=";
+  version = "2.112.1";
+  dmdHash = "sha256-UqNNUGoGmOV0lGNCGaFk8HbOE01qD55WuJ8NyQzqLJs=";
+  phobosHash = "sha256-CNvDSlerOXh6Qn060MNaSF1IIcbrcZzljyIxkm+TQQ0=";
 }

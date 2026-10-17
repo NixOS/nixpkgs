@@ -1,17 +1,18 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "scripthaus";
   version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "scripthaus-dev";
     repo = "scripthaus";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ZWOSLkqjauONa+fKkagpUgWB4k+l1mzEEiC0RAMUmo0=";
   };
 
@@ -19,21 +20,27 @@ buildGoModule rec {
 
   env.CGO_ENABLED = 1;
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   postInstall = ''
     mv $out/bin/cmd $out/bin/scripthaus
   '';
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version-regex" "^(v[0-9.]+)$" ];
+    extraArgs = [
+      "--version-regex"
+      "^(v[0-9.]+)$"
+    ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Run bash, Python, and JS snippets from your Markdown files directly from the command-line";
     homepage = "https://github.com/scripthaus-dev/scripthaus";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ raspher ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ raspher ];
     mainProgram = "scripthaus";
   };
-}
+})

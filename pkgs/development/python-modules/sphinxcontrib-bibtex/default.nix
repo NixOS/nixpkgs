@@ -2,10 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   docutils,
-  importlib-metadata,
   oset,
   pybtex,
   pybtex-docutils,
@@ -14,33 +12,28 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sphinxcontrib-bibtex";
-  version = "2.6.3";
+  version = "2.7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mcmtroffaes";
     repo = "sphinxcontrib-bibtex";
-    tag = version;
-    hash = "sha256-cqz5Jamtlflo5rFhWPCPlYoymApUtXPG4oTRjfDI+WY=";
+    tag = finalAttrs.version;
+    hash = "sha256-8VmLTr9l+JTUb9oVXGI/j5Yz7Fe+ybEA8t2VUeRGBqI=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies =
-    [
-      docutils
-      oset
-      pybtex
-      pybtex-docutils
-      sphinx
-    ]
-    ++ lib.optionals (pythonOlder "3.10") [
-      importlib-metadata
-    ];
+  buildInputs = [ sphinx ];
+
+  dependencies = [
+    docutils
+    oset
+    pybtex
+    pybtex-docutils
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -51,10 +44,11 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sphinx extension for BibTeX style citations";
     homepage = "https://github.com/mcmtroffaes/sphinxcontrib-bibtex";
-    license = licenses.bsd2;
+    changelog = "https://github.com/mcmtroffaes/sphinxcontrib-bibtex/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
-}
+})

@@ -17,7 +17,7 @@ let
   kyodialog_version_long = "9.0";
   date = "20221003";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cups-kyocera-3500-4500";
   version = "${kyodialog_version_long}-${date}";
 
@@ -102,12 +102,12 @@ stdenv.mkDerivation rec {
     install -Dm444 usr/share/doc/kyodialog/copyright $out/share/doc/cups-kyocera-3500-4500/copyright
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CUPS drivers for Kyocera ECOSYS MA3500cix, MA3500cifx, MA4000cix, MA4000cifx, PA3500cx, PA4000cx and PA4500cx, for Kyocera CS MA4500ci and PA4500ci, and for Kyocera TASKalfa MA3500ci, MA4500ci and PI4500ci printers";
     homepage = "https://www.kyoceradocumentsolutions.com";
-    sourceProvenance = [ sourceTypes.binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = [ maintainers.me-and ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.me-and ];
     platforms = [
       "i686-linux"
       "x86_64-linux"

@@ -2,68 +2,69 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  boost,
   cmake,
   pkg-config,
   curl,
-  boost,
-  liboauth,
+  html-tidy,
   jsoncpp,
-  htmlcxx,
+  ninja,
+  nix-update-script,
   rhash,
   tinyxml-2,
-  help2man,
-  html-tidy,
-  libsForQt5,
-  testers,
-
-  enableGui ? true,
+  versionCheckHook,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lgogdownloader";
-  version = "3.16";
+  version = "3.19";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "Sude-";
     repo = "lgogdownloader";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-coPUPercfpB8LilBn5Uww9rEM+X9QAgzDECtQ1Ui/hg=";
+    hash = "sha256-4JHV2m5zSekWYpO0j3weH5hiG/kmciDF4Jby46ykxCI=";
   };
 
   nativeBuildInputs = [
     cmake
+    ninja
     pkg-config
-    help2man
+  ];
+
+  buildInputs = [
+    boost
+    curl
     html-tidy
-  ] ++ lib.optional enableGui libsForQt5.wrapQtAppsHook;
+    jsoncpp
+    rhash
+    tinyxml-2
+    zlib
+  ];
 
-  buildInputs =
-    [
-      boost
-      curl
-      htmlcxx
-      jsoncpp
-      liboauth
-      rhash
-      tinyxml-2
-    ]
-    ++ lib.optionals enableGui [
-      libsForQt5.qtbase
-      libsForQt5.qtwebengine
-    ];
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  preVersionCheck = ''
+    export HOME=$TMPDIR
+  '';
+  versionCheckKeepEnvironment = [ "HOME" ];
 
-  cmakeFlags = lib.optional enableGui "-DUSE_QT_GUI=ON";
-
-  passthru.tests = {
-    version = testers.testVersion { package = finalAttrs.finalPackage; };
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Unofficial downloader to GOG.com for Linux users. It uses the same API as the official GOGDownloader";
-    mainProgram = "lgogdownloader";
-    homepage = "https://github.com/Sude-/lgogdownloader";
+    description = "Unofficial GOG.com downloader";
+    homepage = "https://sites.google.com/site/gogdownloader/";
+    changelog = "https://github.com/Sude-/lgogdownloader/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.wtfpl;
-    maintainers = with lib.maintainers; [ _0x4A6F ];
-    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      _0x4A6F
+      keenanweaver
+    ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    mainProgram = "lgogdownloader";
   };
 })

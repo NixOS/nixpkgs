@@ -13,13 +13,13 @@ let
       mkValueString =
         v:
         if v == true then
-          ''true''
+          "true"
         else if v == false then
-          ''false''
+          "false"
         else if builtins.isInt v then
-          ''${builtins.toString v}''
+          "${toString v}"
         else if builtins.isPath v then
-          ''"${builtins.toString v}"''
+          ''"${toString v}"''
         else if builtins.isString v then
           ''"${v}"''
         else
@@ -52,7 +52,7 @@ in
     group = lib.mkOption {
       type = lib.types.str;
       default = if cfg.enableNginx then "nginx" else defaultGroup;
-      defaultText = "If `services.privatebin.enableNginx` is true then `nginx` else ${defaultGroup}";
+      defaultText = lib.literalExpression "if config.services.privatebin.enableNginx then \"nginx\" else \"${defaultGroup}\"";
       description = ''
         Group under which privatebin runs. It is best to set this to the group
         of whatever webserver is being used as the frontend.
@@ -139,7 +139,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-
     services.privatebin.settings = {
       main = lib.mkDefault { };
       model.class = lib.mkDefault "Filesystem";
@@ -168,7 +167,7 @@ in
         "pm.max_spare_servers" = lib.mkDefault 4;
         "pm.max_requests" = lib.mkDefault 500;
       };
-      phpEnv.CONFIG_PATH = lib.strings.removeSuffix "/conf.php" (builtins.toString privatebinSettings);
+      phpEnv.CONFIG_PATH = lib.strings.removeSuffix "/conf.php" (toString privatebinSettings);
     };
 
     services.nginx = lib.mkIf cfg.enableNginx {

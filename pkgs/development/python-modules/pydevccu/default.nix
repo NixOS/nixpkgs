@@ -1,42 +1,49 @@
 {
   lib,
+  aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
+  orjson,
+  pytest-asyncio,
+  pytestCheckHook,
   pythonOlder,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pydevccu";
-  version = "0.1.9";
+  version = "0.2.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.12";
+  disabled = pythonOlder "3.13";
 
   src = fetchFromGitHub {
     owner = "SukramJ";
     repo = "pydevccu";
-    tag = version;
-    hash = "sha256-s1u9+w0sPpXuqAET4k5VPWP+VoPqB08dZa9oY4UFXc8=";
+    tag = finalAttrs.version;
+    hash = "sha256-1cQcDXLRL5S57cM+JCUNy82E3KVq6hMTE27AIIWfsC8=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==75.6.0" setuptools
-  '';
 
   build-system = [ setuptools ];
 
-  # Module has no tests
-  doCheck = false;
+  dependencies = [ aiohttp ];
+
+  optional-dependencies = {
+    fast = [ orjson ];
+  };
+
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "pydevccu" ];
 
   meta = {
     description = "HomeMatic CCU XML-RPC Server with fake devices";
     homepage = "https://github.com/SukramJ/pydevccu";
-    changelog = "https://github.com/SukramJ/pydevccu/releases/tag/${src.tag}";
+    changelog = "https://github.com/SukramJ/pydevccu/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

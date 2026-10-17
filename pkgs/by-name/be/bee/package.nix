@@ -1,27 +1,28 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "bee";
-  version = "2.3.2";
+  version = "2.8.3";
 
   src = fetchFromGitHub {
     owner = "ethersphere";
     repo = "bee";
-    rev = "v${version}";
-    hash = "sha256-/fyonUp8LxZrnvIk06DnacHlKgSLjIjirGr7MEVU9nc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YVXBXF4iXMn8vkrNVXmpfH2OWHqa4UnCUXeEbQQyiD4=";
   };
 
-  vendorHash = "sha256-kxfdreEGRY9NHxpGwgvdeYBg0m+itEhy7ih1JSD2E44=";
+  vendorHash = "sha256-8tTZxn7c5qjdCdJESbpCVHPCKepe4xqb3rtQMYAokjM=";
 
   subPackages = [ "cmd/bee" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/ethersphere/bee/v2.version=${version}"
+    "-X github.com/ethersphere/bee/v2.version=${finalAttrs.version}"
     "-X github.com/ethersphere/bee/v2/pkg/api.Version=5.2.0"
     "-X github.com/ethersphere/bee/v2/pkg/api.DebugVersion=4.1.1"
     "-X github.com/ethersphere/bee/v2/pkg/p2p/libp2p.reachabilityOverridePublic=false"
@@ -38,7 +39,7 @@ buildGoModule rec {
     patchShebangs $out/bin/
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ethersphere/bee";
     description = "Ethereum Swarm Bee";
     longDescription = ''
@@ -50,7 +51,7 @@ buildGoModule rec {
 
       Bee is a Swarm node implementation, written in Go.
     '';
-    license = with licenses; [ bsd3 ];
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

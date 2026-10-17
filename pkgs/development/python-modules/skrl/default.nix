@@ -2,69 +2,120 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+  fetchpatch,
+
+  # build-system
   setuptools,
+
+  # dependencies
   gym,
   gymnasium,
-  torch,
+  packaging,
   tensorboard,
+  torch,
   tqdm,
   wandb,
-  packaging,
+
+  # tests
+  flax,
+  hypothesis,
+  jax,
+  mujoco,
+  optax,
+  pettingzoo,
+  pygame,
+  pymunk,
+  pytest-xdist,
   pytestCheckHook,
+  warp-lang,
+  warp-nn,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "skrl";
-  version = "1.4.0";
+  version = "2.1.0";
   pyproject = true;
-  disabled = pythonOlder "3.6";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Toni-SM";
-    repo = pname;
-    tag = version;
-    hash = "sha256-e08hhO7CTH6V+8ZUhte36GD0fL7XvuW/CgIuARU3c6E=";
+    repo = "skrl";
+    tag = finalAttrs.version;
+    hash = "sha256-pntQ/7kefi7LLLG1DTKY9Zjlzb0UXiduQCzlX5PkZds=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  patches = [
+    # Fix compatibility with warp-nn 0.4.0 (`training` became a read-only property)
+    # https://github.com/Toni-SM/skrl/pull/462
+    (fetchpatch {
+      name = "fix-warp-implementation-bugs.patch";
+      url = "https://github.com/Toni-SM/skrl/commit/2ec6ee1620b51b997bbf5273899223c6d9626d58.patch";
+      includes = [
+        "pyproject.toml"
+        "skrl/*"
+      ];
+      hash = "sha256-LzCrz7rSwyx62WlIzgDO0tKrzb3Dc1UpRCyf1NQh9g4=";
+    })
+  ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     gym
     gymnasium
-    torch
+    packaging
     tensorboard
+    torch
     tqdm
     wandb
-    packaging
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-  doCheck = torch.cudaSupport;
+  pythonImportsCheck = [ "skrl" ];
 
-  pythonImportsCheck = [
-    "skrl"
-    "skrl.agents"
-    "skrl.agents.torch"
-    "skrl.envs"
-    "skrl.envs.torch"
-    "skrl.models"
-    "skrl.models.torch"
-    "skrl.resources"
-    "skrl.resources.noises"
-    "skrl.resources.noises.torch"
-    "skrl.resources.schedulers"
-    "skrl.resources.schedulers.torch"
-    "skrl.trainers"
-    "skrl.trainers.torch"
-    "skrl.utils"
-    "skrl.utils.model_instantiators"
+  nativeCheckInputs = [
+    flax
+    hypothesis
+    jax
+    mujoco
+    optax
+    pettingzoo
+    pygame
+    pymunk
+    pytest-xdist
+    pytestCheckHook
+    warp-lang
+    warp-nn
+    writableTmpDirAsHomeHook
   ];
 
-  meta = with lib; {
+  disabledTests = [
+    # Flaky when using pytest-xdist
+    "test_agent"
+
+    # TypeError: The array passed to from_dlpack must have __dlpack__ and __dlpack_device__ methods
+    "test_env"
+    "test_multi_agent_env"
+
+    # OverflowError
+    "test_key"
+
+    # Require GPU access
+    "test_device[cuda]"
+    "test_parse_device[cuda]"
+  ];
+
+  disabledTestPaths = [
+    # TypeError: Can't instantiate abstract class Memory without an implementation for abstract method 'sample'
+    "tests/memories/torch/test_base.py"
+  ];
+
+  meta = {
     description = "Reinforcement learning library using PyTorch focusing on readability and simplicity";
     homepage = "https://skrl.readthedocs.io";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bcdarwin ];
+    downloadPage = "https://github.com/Toni-SM/skrl";
+    changelog = "https://github.com/Toni-SM/skrl/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

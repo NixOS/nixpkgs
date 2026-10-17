@@ -1,27 +1,25 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
+  fetchFromGitHub,
   pytestCheckHook,
   nix-update-script,
-  hatchling,
+  uv-build,
 }:
 
 buildPythonPackage rec {
   pname = "character-encoding-utils";
-  version = "0.0.8";
+  version = "0.0.12";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
-  src = fetchPypi {
-    pname = "character_encoding_utils";
-    inherit version;
-    hash = "sha256-UXX4L/x7fP37ZEFDCPc0KRNyx47xvwY0Jz+lfxzUulg=";
+  src = fetchFromGitHub {
+    owner = "TakWolf";
+    repo = "character-encoding-utils";
+    tag = version;
+    hash = "sha256-4WaVvr6/d/oePtmwpGJ/D6tv10V/ok9iN4BrqGk97f0=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [ uv-build ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

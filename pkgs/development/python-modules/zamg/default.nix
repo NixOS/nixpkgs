@@ -2,32 +2,35 @@
   lib,
   aiohttp,
   aresponses,
+  async-timeout,
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "zamg";
-  version = "0.3.6";
+  version = "0.4.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "killer0071234";
     repo = "python-zamg";
     tag = "v${version}";
-    hash = "sha256-j864+3c0GDDftdLqLDD0hizT54c0IgTjT77jOneXlq0=";
+    hash = "sha256-H5YG4Qg72c/wLFErWdC6xpPNnOIuye+4CimOItSFVZU=";
   };
+
+  pythonRelaxDeps = [ "async-timeout" ];
 
   build-system = [ poetry-core ];
 
-  dependencies = [ aiohttp ];
+  dependencies = [
+    aiohttp
+    async-timeout
+  ];
 
   nativeCheckInputs = [
     aresponses
@@ -44,11 +47,11 @@ buildPythonPackage rec {
     "test_properties_fail_2"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to read weather data from ZAMG Austria";
     homepage = "https://github.com/killer0071234/python-zamg";
     changelog = "https://github.com/killer0071234/python-zamg/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

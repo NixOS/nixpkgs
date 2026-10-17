@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchurl,
+  buildPackages,
   cimg,
   cmake,
   common-updater-scripts,
@@ -14,8 +15,8 @@
   gnused,
   graphicsmagick,
   jq,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   libjpeg,
   libpng,
   libtiff,
@@ -30,7 +31,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gmic";
-  version = "3.4.3";
+  version = "3.7.6";
 
   outputs = [
     "out"
@@ -42,8 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "GreycLab";
     repo = "gmic";
-    rev = "v.${finalAttrs.version}";
-    hash = "sha256-dYHADdt9PboUgIRU6wu5uCs2KQ88z5/FZPXvvyYct00=";
+    tag = "v.${finalAttrs.version}";
+    hash = "sha256-hewDoraw6DCmj1EryZrODFDqzbKI2RhgRuXAop+pg7c=";
   };
 
   # TODO: build this from source
@@ -53,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://gmic.eu/gmic_stdlib_community${
       lib.replaceStrings [ "." ] [ "" ] finalAttrs.version
     }.h";
-    hash = "sha256-M/AL1w9KGi+dIGVQ+vdWY8PSCHi+s/aZef08AxeQMJE=";
+    hash = "sha256-ek8w9uCp4ey5zT8Y1+yM9gXtzigNINOQ0XW6kT6Zj5Q=";
   };
 
   nativeBuildInputs = [
@@ -62,23 +63,22 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      cimg
-      fftw
-      graphicsmagick
-      libX11
-      libXext
-      libjpeg
-      libpng
-      libtiff
-      opencv
-      openexr
-      zlib
-    ]
-    ++ lib.optionals stdenv.cc.isClang [
-      llvmPackages.openmp
-    ];
+  buildInputs = [
+    cimg
+    fftw
+    graphicsmagick
+    libx11
+    libxext
+    libjpeg
+    libpng
+    libtiff
+    opencv
+    openexr
+    zlib
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_LIB_STATIC" false)
@@ -89,14 +89,18 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_SYSTEM_CIMG" true)
   ];
 
-  postPatch =
-    ''
-      cp -r ${finalAttrs.gmic_stdlib} src/gmic_stdlib_community.h
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace CMakeLists.txt \
-        --replace "LD_LIBRARY_PATH" "DYLD_LIBRARY_PATH"
-    '';
+  postPatch = ''
+    cp -r ${finalAttrs.gmic_stdlib} src/gmic_stdlib_community.h
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace CMakeLists.txt \
+      --replace "LD_LIBRARY_PATH" "DYLD_LIBRARY_PATH"
+  ''
+  + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'LD_LIBRARY_PATH=''${GMIC_BINARIES_PATH} ''${GMIC_BINARIES_PATH}/gmic' \
+      '${lib.getExe buildPackages.gmic}'
+  '';
 
   passthru = {
     tests = {
@@ -138,9 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Open and full-featured framework for image processing";
     mainProgram = "gmic";
     license = lib.licenses.cecill21;
-    maintainers = [
-      lib.maintainers.AndersonTorres
-    ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

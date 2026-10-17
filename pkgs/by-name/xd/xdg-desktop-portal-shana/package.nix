@@ -1,25 +1,36 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   meson,
+  rustc,
+  cargo,
   ninja,
   xdg-desktop-portal,
 }:
 
-rustPlatform.buildRustPackage rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal-shana";
-  version = "0.3.13";
+  version = "0.3.16";
 
   src = fetchFromGitHub {
     owner = "Decodetalkers";
     repo = "xdg-desktop-portal-shana";
-    rev = "v${version}";
-    hash = "sha256-myEqJnXHCByc9CMX8vMDaQQkL84pfW/7fKPZpiNQHJA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-NFeXM2ujv9F9vPyRm1mFbLuThwTki5Uu2DEEwPpHK30=";
+  };
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-2cPUNxZhrqJ9ODAi6MshlJIdLZGssA85ZFmbrqEE1p4=";
   };
 
   nativeBuildInputs = [
     meson
+    rustc
+    rustPlatform.cargoSetupHook
+    cargo
     ninja
   ];
 
@@ -27,19 +38,15 @@ rustPlatform.buildRustPackage rec {
     xdg-desktop-portal
   ];
 
-  # Needed for letting meson run. rustPackage will overwrite it otherwise.
-  configurePhase = "";
-
-  mesonBuildType = "release";
-
-  cargoHash = "sha256-/iJAYG0OjTaRrDtNjypvmSUad8PS0lRfykSxp0fJZ98=";
-
-  meta = with lib; {
+  meta = {
     description = "Filechooser portal backend for any desktop environment";
     homepage = "https://github.com/Decodetalkers/xdg-desktop-portal-shana";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.samuelefacenda ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      samuelefacenda
+      Rishik-Y
+      Gliczy
+    ];
   };
-
-}
+})

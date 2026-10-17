@@ -5,16 +5,16 @@
   nix-update-script,
   versionCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clang-tidy-sarif";
-  version = "0.6.6";
+  version = "0.8.0";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-rZnGueaqK7h8tWwwWacvFBvJwE1li2wN9iB4DJRHJ8U=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-ALwEsF1n6WYqITfYTn8mIyn3sxTbDux17FxKIorKkFc=";
   };
 
-  cargoHash = "sha256-mELx6UGHV+qtL1G3+xvYUaUzZbfMy0dKgai6IqdbT+A=";
+  cargoHash = "sha256-cTBXStAA+oCRze2Bh/trultdqtBNOOpXQltJ6R34nF8=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
@@ -24,10 +24,10 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    description = "A CLI tool to convert clang-tidy diagnostics into SARIF";
+    description = "CLI tool to convert clang-tidy diagnostics into SARIF";
     homepage = "https://psastras.github.io/sarif-rs";
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "clang-tidy-sarif";
     license = lib.licenses.mit;
   };
-}
+})

@@ -7,23 +7,21 @@
   napalm,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
+  rpds-py,
   toml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "netutils";
-  version = "1.12.0";
+  version = "1.19.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "networktocode";
     repo = "netutils";
-    tag = "v${version}";
-    hash = "sha256-LslE/ROfr/2gU5VPiLKgaTxd4miM+Bvrh9OdY06zkr0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9M2lG5/U/6gTec0zXDP1UVeVmS/dBmCz007W1jeGwrU=";
   };
 
   build-system = [ poetry-core ];
@@ -31,16 +29,18 @@ buildPythonPackage rec {
   dependencies = [ jsonschema ];
 
   optional-dependencies.optionals = [
+    jinja2
     jsonschema
     napalm
+    rpds-py
   ];
 
   nativeCheckInputs = [
-    jinja2
     pytestCheckHook
     pyyaml
     toml
-  ];
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "netutils" ];
 
@@ -59,11 +59,11 @@ buildPythonPackage rec {
     "test_encrypt_cisco_type5"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library that is a collection of objects for common network automation tasks";
     homepage = "https://github.com/networktocode/netutils";
-    changelog = "https://github.com/networktocode/netutils/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/networktocode/netutils/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

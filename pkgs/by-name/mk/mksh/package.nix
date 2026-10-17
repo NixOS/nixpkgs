@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "http://www.mirbsd.org/mksh.htm";
-    changelog = "https://www.mirbsd.org/mksh.htm#clog";
+    changelog = "http://www.mirbsd.org/mksh.htm#clog";
     description = "MirBSD Korn Shell";
     mainProgram = "mksh";
     longDescription = ''
@@ -60,12 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
       isc
       unicode-dfs-2016
     ];
-    maintainers = with lib.maintainers; [
-      AndersonTorres
-      joachifm
-    ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })
-# TODO [ AndersonTorres ]: lksh
-# TODO [ AndersonTorres ]: a more accurate licensing info

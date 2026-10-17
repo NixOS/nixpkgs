@@ -1,43 +1,53 @@
 {
   lib,
   aiohttp,
-  async-timeout,
   asyncio-dgram,
   buildPythonPackage,
   certifi,
-  docutils,
   fetchFromGitHub,
+  frozenlist,
   poetry-core,
   pytest-aiohttp,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   voluptuous,
+  typing-extensions,
+  yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aioguardian";
-  version = "2023.12.0";
+  version = "2026.01.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = "aioguardian";
-    tag = version;
-    hash = "sha256-7fY8+aAxlDtOBLu8SadY5qiH6+RvxnFpOw1RXTonP2o=";
+    tag = finalAttrs.version;
+    hash = "sha256-55jMGJ4pRMjvSAYsXIclzzMcz+PqS/334Fd7hoY8YTk=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail poetry-core==2.0.1 poetry-core
+  '';
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "asyncio_dgram"
+    "frozenlist"
+    "typing-extensions"
+  ];
+
+  build-system = [ poetry-core ];
+
+  dependencies = [
     aiohttp
-    async-timeout
     asyncio-dgram
     certifi
-    docutils
+    frozenlist
     voluptuous
+    typing-extensions
+    yarl
   ];
 
   nativeCheckInputs = [
@@ -51,15 +61,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioguardian" ];
 
-  meta = with lib; {
-    description = " Python library to interact with Elexa Guardian devices";
+  meta = {
+    description = "Python library to interact with Elexa Guardian devices";
     longDescription = ''
       aioguardian is an asyncio-focused library for interacting with the
       Guardian line of water valves and sensors from Elexa.
     '';
     homepage = "https://github.com/bachya/aioguardian";
-    changelog = "https://github.com/bachya/aioguardian/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/bachya/aioguardian/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

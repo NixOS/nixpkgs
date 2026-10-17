@@ -3,7 +3,7 @@
 
 
 # executing this script without arguments will
-# - find the newest stable plex-desktop version avaiable on snapcraft (https://snapcraft.io/plex-desktop)
+# - find the newest stable plex-desktop version available on snapcraft (https://snapcraft.io/plex-desktop)
 # - read the current plex-desktop version from the current nix expression
 # - update the nix expression if the versions differ
 # - try to build the updated version, exit if that fails
@@ -20,7 +20,7 @@ plex_nix="$nixpkgs/pkgs/by-name/pl/plex-desktop/package.nix"
 
 
 #
-# find the newest stable plex-desktop version avaiable on snapcraft
+# find the newest stable plex-desktop version available on snapcraft
 #
 
 # create bash array from snap info
@@ -69,16 +69,3 @@ sed --regexp-extended \
   -e 's/version\s*=\s*".*"\s*;/version = "'"${upstream_version}"'";/' \
   -i "$plex_nix"
 
-#
-# try to build the updated version
-#
-
-export NIXPKGS_ALLOW_UNFREE=1
-if ! nix-build -A plex-desktop "$nixpkgs"; then
-  echo "The updated plex-desktop failed to build."
-  exit 1
-fi
-
-# Commit changes
-git add "$plex_nix"
-git commit -m "plex-desktop: ${current_version} -> ${upstream_version}"

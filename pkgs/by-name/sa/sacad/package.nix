@@ -1,45 +1,30 @@
 {
   lib,
-  python3Packages,
-  fetchPypi,
-  jpegoptim,
-  optipng,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sacad";
-  version = "2.8.0";
+  version = "3.0.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-/NyRnQSqDZv+LJ1bPO35T9icQ2PN9Oa+nSmrLkQimnQ=";
+  src = fetchFromGitHub {
+    owner = "desbma";
+    repo = "sacad";
+    tag = finalAttrs.version;
+    hash = "sha256-ViiIDkew1C2leADGbGldtKfAenafABP2UUlMzaj4ixA=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
-    aiohttp
-    appdirs
-    bitarray
-    cssselect
-    fake-useragent
-    lxml
-    mutagen
-    pillow
-    tqdm
-    unidecode
-    web-cache
-    jpegoptim
-    optipng
-  ];
+  cargoHash = "sha256-39xtrZbTZPsNQ7rvgftaH6kSPF/qjQMzwuAmbj47j08=";
 
-  # tests require internet connection
+  # Tests require internet connection.
   doCheck = false;
 
-  pythonImportsCheck = [ "sacad" ];
-
-  meta = with lib; {
+  meta = {
     description = "Smart Automatic Cover Art Downloader";
     homepage = "https://github.com/desbma/sacad";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ moni ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ moni ];
+    mainProgram = "sacad";
   };
-}
+})

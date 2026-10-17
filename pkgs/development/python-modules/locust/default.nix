@@ -4,8 +4,9 @@
   python,
   callPackage,
   fetchFromGitHub,
-  poetry-core,
-  poetry-dynamic-versioning,
+  substitute,
+  hatchling,
+  hatch-vcs,
   pytestCheckHook,
   configargparse,
   cryptography,
@@ -15,31 +16,47 @@
   gevent,
   geventhttpclient,
   msgpack,
+  locust-cloud,
   psutil,
   pyquery,
+  pytest,
   pyzmq,
   requests,
   retry,
   tomli,
   werkzeug,
+  yarn-berry,
 }:
 
 buildPythonPackage rec {
   pname = "locust";
-  version = "2.31.2";
+  version = "2.46.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "locustio";
     repo = "locust";
     tag = version;
-    hash = "sha256-xDquVQjkWVER9h0a6DHWRZH6KtRf0jsThycSojDEdh4=";
+    hash = "sha256-IFKphE/RuGXsCmddXNppnHzayTSETaFLrOm26+6tyBI=";
+
+    # Remove after upstream updates to Yarn 4.15
+    # https://github.com/locustio/locust/blob/master/locust/webui/package.json#L89
+    postFetch = ''
+      cd $out/locust/webui
+      patch -p1 < ${
+        (substitute {
+          src = ./yarn-fix.patch;
+          substitutions = [
+            "--replace-fail"
+            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+            yarn-berry.lockfileVersion
+          ];
+        })
+      }
+    '';
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'script = "pre_build.py"' ""
-
     substituteInPlace locust/test/test_main.py \
       --replace-fail '"locust"' '"${placeholder "out"}/bin/locust"'
 
@@ -48,23 +65,26 @@ buildPythonPackage rec {
   '';
 
   webui = callPackage ./webui.nix {
-    inherit version;
+    inherit version yarn-berry;
     src = "${src}/locust/webui";
   };
 
   preBuild = ''
-    mkdir -p $out/${python.sitePackages}/${pname}
-    ln -sf ${webui} $out/${python.sitePackages}/${pname}/webui
+    mkdir -p $out/${python.sitePackages}/locust/webui/dist
+    ln -sf ${webui}/dist/* $out/${python.sitePackages}/locust/webui/dist
   '';
 
   build-system = [
-    poetry-core
-    poetry-dynamic-versioning
+    hatchling
+    hatch-vcs
   ];
 
   pythonRelaxDeps = [
     # version 0.7.0.dev0 is not considered to be >= 0.6.3
     "flask-login"
+    # version 6.0.1 is listed as 0.0.1 in the dependency check and 0.0.1 is not >= 3.0.10
+    "flask-cors"
+    "requests"
   ];
 
   dependencies = [
@@ -75,11 +95,13 @@ buildPythonPackage rec {
     gevent
     geventhttpclient
     msgpack
+    locust-cloud
     psutil
     pyzmq
     requests
     tomli
     werkzeug
+    pytest
   ];
 
   pythonImportsCheck = [ "locust" ];
@@ -98,7 +120,7 @@ buildPythonPackage rec {
   meta = {
     description = "Developer-friendly load testing framework";
     homepage = "https://docs.locust.io/";
-    changelog = "https://github.com/locustio/locust/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/locustio/locust/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jokatzke ];
   };

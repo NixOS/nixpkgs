@@ -2,41 +2,57 @@
   lib,
   attrs,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   mock,
+  pytestCheckHook,
   repeated-test,
   setuptools-scm,
   sphinx,
-  unittestCheckHook,
 }:
-
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sigtools";
   version = "4.0.1";
-  format = "pyproject";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-S44TWpzU0uoA2mcMCTNy105nK6OruH9MmNjnPepURFw=";
+  src = fetchFromGitHub {
+    owner = "epsy";
+    repo = "sigtools";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-q5Bzc6fgDJCqt0SA/C/mg2fbUFyXLcsRU+tSl8FdZdI=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ attrs ];
+  dependencies = [ attrs ];
 
   nativeCheckInputs = [
     mock
+    pytestCheckHook
     repeated-test
     sphinx
-    unittestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # Tests are out-dated
+    "sigtools/tests/test_forwards.py"
+    "sigtools/tests/test_mask.py"
+    "sigtools/tests/test_merge.py"
+    "sigtools/tests/test_autoforwards_pep563.py"
+    "sigtools/tests/test_embed.py"
+  ];
+
+  disabledTests = [
+    # NameError: name 'o' is not defined
+    "test_locals"
   ];
 
   pythonImportsCheck = [ "sigtools" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utilities for working with inspect.Signature objects";
     homepage = "https://sigtools.readthedocs.io/";
-    license = licenses.mit;
+    changelog = "https://github.com/epsy/sigtools/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

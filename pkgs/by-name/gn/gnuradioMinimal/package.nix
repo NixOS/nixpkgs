@@ -2,11 +2,14 @@
   gnuradio,
   volk,
   uhdMinimal,
+  packageOverrides ? (self: super: { }),
+  unwrappedFeaturesOverride ? { },
 }:
-# A build without gui components and other utilites not needed for end user
+# A build without gui components and other utilities not needed for end user
 # libraries
 gnuradio.override {
   doWrap = false;
+  inherit packageOverrides;
   unwrapped = gnuradio.unwrapped.override {
     volk = volk.override {
       # So it will not reference python
@@ -24,8 +27,9 @@ gnuradio.override {
       sphinx = false;
       doxygen = false;
       # Doesn't make it reference python eventually, but makes reverse
-      # depdendencies require python to use cmake files of GR.
+      # dependencies require python to use cmake files of GR.
       gr-ctrlport = false;
-    };
+    }
+    // unwrappedFeaturesOverride;
   };
 }

@@ -24,30 +24,36 @@
   python3,
   sphinxHook,
   tcpdump,
+  unbound,
   util-linux,
   which,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = if withDPDK then "openvswitch-dpdk" else "openvswitch";
-  version = "3.4.1";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "openvswitch";
     repo = "ovs";
-    tag = "v${version}";
-    hash = "sha256-EudcANZ0aUImQ/HWSX1PRklvhP2D5L3ugXaC0GKyF0Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+WjpNJkM3AztBY1gPO6RdujGi86GDTjskJyDK16/9Dc=";
   };
 
   outputs = [
     "out"
+    "dev"
+    "lib"
     "man"
+    "tools"
   ];
 
   patches = [
     # 8: vsctl-bashcomp - argument completion FAILED (completion.at:664)
     ./patches/disable-bash-arg-completion-test.patch
   ];
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     autoconf
@@ -63,21 +69,21 @@ stdenv.mkDerivation rec {
 
   sphinxRoot = "./Documentation";
 
-  buildInputs =
-    [
-      libcap_ng
-      openssl
-      perl
-      procps
-      python3
-      util-linux
-      which
-    ]
-    ++ (lib.optionals withDPDK [
-      dpdk
-      numactl
-      libpcap
-    ]);
+  buildInputs = [
+    libcap_ng
+    openssl
+    perl
+    procps
+    python3
+    unbound
+    util-linux
+    which
+  ]
+  ++ (lib.optionals withDPDK [
+    dpdk
+    numactl
+    libpcap
+  ]);
 
   preConfigure = "./boot.sh";
 
@@ -85,7 +91,8 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--sharedstatedir=/var"
     "--sbindir=$(out)/bin"
-  ] ++ (lib.optionals withDPDK [ "--with-dpdk=shared" ]);
+  ]
+  ++ (lib.optionals withDPDK [ "--with-dpdk=shared" ]);
 
   # Leave /var out of this!
   installFlags = [
@@ -97,13 +104,17 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postInstall = ''
-    installShellCompletion --bash utilities/ovs-appctl-bashcomp.bash
-    installShellCompletion --bash utilities/ovs-vsctl-bashcomp.bash
+    # Install bash completions in correct location
+    rm -f $out/etc/bash_completion.d/ovs-*.bash
+    installShellCompletion utilities/ovs-appctl-bashcomp.bash
+    installShellCompletion utilities/ovs-vsctl-bashcomp.bash
 
-    wrapProgram $out/bin/ovs-l3ping \
-      --prefix PYTHONPATH : $out/share/openvswitch/python
+    mkdir -p $tools/{bin,share/openvswitch/scripts}
+    mv $out/share/openvswitch/scripts/ovs-{check-dead-ifs,monitor-ipsec,vtep} $tools/share/openvswitch/scripts
+    mv $out/share/openvswitch/scripts/usdt $tools/share/openvswitch/scripts
+    mv $out/bin/ovs-{dpctl-top,pcap,tcpdump,tcpundump} $tools/bin
 
-    wrapProgram $out/bin/ovs-tcpdump \
+    wrapProgram $tools/bin/ovs-tcpdump \
       --prefix PATH : ${lib.makeBinPath [ tcpdump ]} \
       --prefix PYTHONPATH : $out/share/openvswitch/python
   '';
@@ -113,17 +124,37 @@ stdenv.mkDerivation rec {
     export TESTSUITEFLAGS="-j$NIX_BUILD_CORES"
     export RECHECK=yes
 
+    # Nix sandbox has no /etc/resolv.conf
+    export OVS_RESOLV_CONF=/dev/null
+
     patchShebangs tests/
   '';
 
-  nativeCheckInputs =
-    [ iproute2 ]
-    ++ (with python3.pkgs; [
-      netaddr
-      pyparsing
-      pytest
-      setuptools
-    ]);
+  checkPhase = ''
+    runHook preCheck
+
+    if ! make check; then
+      echo "Some tests failed. Collecting logs for analysis..."
+      find tests/testsuite.dir -type f -exec echo "==== Contents of {} ====" \; -exec cat {} \;
+      exit 1
+    fi
+
+    runHook postCheck
+  '';
+
+  nativeCheckInputs = [
+    iproute2
+    openssl
+  ]
+  ++ (with python3.pkgs; [
+    netaddr
+    pyparsing
+    pytest
+    setuptools
+    tftpy
+  ])
+  # pyftpdlib depends on pysendfile extension, which cannot be static
+  ++ lib.optionals (!stdenv.hostPlatform.isStatic) [ python3.pkgs.pyftpdlib ];
 
   passthru = {
     tests = {
@@ -134,8 +165,8 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
-    changelog = "https://www.openvswitch.org/releases/NEWS-${version}.txt";
+  meta = {
+    changelog = "https://www.openvswitch.org/releases/NEWS-${finalAttrs.version}.txt";
     description = "Multilayer virtual switch";
     longDescription = ''
       Open vSwitch is a production quality, multilayer virtual switch
@@ -148,13 +179,16 @@ stdenv.mkDerivation rec {
       to VMware's vNetwork distributed vswitch or Cisco's Nexus 1000V.
     '';
     homepage = "https://www.openvswitch.org/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = with lib.licenses; [
+      asl20
+      lgpl21Plus # ovs-bugtool
+      sissl11 # lib/sflow
+    ];
+    maintainers = with lib.maintainers; [
       adamcstephens
-      kmcopper
-      netixx
+      booxter
       xddxdd
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

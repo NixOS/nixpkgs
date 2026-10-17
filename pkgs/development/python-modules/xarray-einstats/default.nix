@@ -7,23 +7,20 @@
   numba,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   scipy,
   xarray,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "xarray-einstats";
-  version = "0.8.0";
+  version = "0.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "arviz-devs";
     repo = "xarray-einstats";
-    tag = "v${version}";
-    hash = "sha256-XvxsyH8cwsA9B36uhM1Pr5XaNd0d0/nEamA4axdJe24=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mGRalZ9OSh3CtfhLy2E6LOQVBDoq8c777Q9WnyMtjpU=";
   };
 
   build-system = [ flit-core ];
@@ -39,7 +36,10 @@ buildPythonPackage rec {
     numba = [ numba ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "xarray_einstats" ];
 
@@ -48,10 +48,11 @@ buildPythonPackage rec {
     "test_pinv"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Stats, linear algebra and einops for xarray";
     homepage = "https://github.com/arviz-devs/xarray-einstats";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/arviz-devs/xarray-einstats/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

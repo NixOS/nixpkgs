@@ -2,50 +2,55 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "atmos";
-  version = "1.95.0";
+  version = "1.231.0";
 
   src = fetchFromGitHub {
     owner = "cloudposse";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-shhkaPYU1N3Q7eu8CyZXYrR11kxb+r9II4lpfRWTOas=";
+    repo = "atmos";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8jTwgmqoz4/W61JvCnoIq+l0eFTmU+Y5aaYqUivfDXo=";
   };
 
-  vendorHash = "sha256-4pUx8qzptzuGeIrT7m67iidMSUNbDSGV8p+KkHqX3lo=";
+  vendorHash = "sha256-509+T+GmHreCI6h+EoLkBlAIMIoJ+m4wx/2Dca7Wvdw=";
+
+  proxyVendor = true;
+
+  env.CGO_ENABLED = 0; # Compiles a pure statically linked Go binary.
+
+  subPackages = [ "." ]; # Speeds up the build.
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/cloudposse/atmos/cmd.Version=v${version}"
+    "-X github.com/cloudposse/atmos/pkg/version.Version=v${finalAttrs.version}"
   ];
+
+  nativeCheckInputs = [ versionCheckHook ];
 
   preCheck = ''
     # Remove tests that depend on a network connection.
     rm -f \
-      pkg/vender/component_vendor_test.go \
+      main_hooks_and_keychain_store_integration_test.go \
+      main_hooks_and_store_integration_test.go \
+      main_plan_diff_integration_test.go \
       pkg/atlantis/atlantis_generate_repo_config_test.go \
-      pkg/describe/describe_affected_test.go
+      pkg/describe/describe_affected_test.go \
+      pkg/vender/component_vendor_test.go
   '';
-
-  doCheck = true;
 
   doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-    $out/bin/atmos version | grep "v${version}"
-    runHook postInstallCheck
-  '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://atmos.tools";
-    changelog = "https://github.com/cloudposse/atmos/releases/tag/v${version}";
+    changelog = "https://github.com/cloudposse/atmos/releases/tag/v${finalAttrs.version}";
     description = "Universal Tool for DevOps and Cloud Automation (works with terraform, helm, helmfile, etc)";
     mainProgram = "atmos";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ] ++ teams.cloudposse.members;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ nevivurn ];
   };
-}
+})

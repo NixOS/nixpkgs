@@ -16,7 +16,10 @@ def error(msg: str, ret: bool = False) -> bool:
 
 
 def check_derivation_name(manifest: Dict) -> bool:
-    derivation_domain = os.environ.get("domain")
+    with open(os.environ["NIX_ATTRS_JSON_FILE"]) as attrs_fd:
+        attrs = json.load(attrs_fd)
+
+    derivation_domain = attrs.get("domain")
     manifest_domain = manifest["domain"]
     if derivation_domain != manifest_domain:
         return error(
@@ -68,7 +71,7 @@ def main(args):
     # At least one manifest should match the component name
     ok &= any(check_derivation_name(manifest) for manifest in manifests)
 
-    # All requirements need to match, use `ignoreRequirementVersion` to ignore too strict version constraints
+    # All requirements need to match, use `ignoreVersionRequirement` to ignore too strict version constraints
     ok &= all(
         check_requirements(manifest, args.ignore_version_requirement)
         for manifest in manifests

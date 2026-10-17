@@ -14,7 +14,7 @@ buildKodiAddon rec {
 
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/${lib.toLower rel}/script.module.arrow/script.module.arrow-${version}.zip";
-    sha256 = "sha256-Et+9FJT1dRE1dFOrAQ70HJJcfylyLsiyay9wPJcSOXs=";
+    hash = "sha256-Et+9FJT1dRE1dFOrAQ70HJJcfylyLsiyay9wPJcSOXs=";
   };
 
   propagatedBuildInputs = [
@@ -29,10 +29,10 @@ buildKodiAddon rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/razzeee/script.module.arrow";
     description = "Better dates & times for Python";
-    license = licenses.asl20;
-    maintainers = teams.kodi.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.kodi ];
   };
 }

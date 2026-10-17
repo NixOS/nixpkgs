@@ -8,7 +8,6 @@
   zlib,
   ffmpeg,
   glew,
-  pcre,
   rtmpdump,
   cairo,
   boost,
@@ -18,18 +17,18 @@
   xz,
   nasm,
   llvm,
-  glibmm,
+  glibmm_2_4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lightspark";
-  version = "0.8.7";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "lightspark";
     repo = "lightspark";
-    rev = version;
-    hash = "sha256-qX/ft9slWTbvuSyi2jB6YC7D7QTtCybL/dTo1dJp3pQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-2+Kmwj2keCMR7UbKbY6UvrkX4CnW61elres8ltiZuUg=";
   };
 
   postPatch = ''
@@ -46,7 +45,6 @@ stdenv.mkDerivation rec {
     zlib
     ffmpeg
     glew
-    pcre
     rtmpdump
     cairo
     boost
@@ -56,15 +54,15 @@ stdenv.mkDerivation rec {
     xz
     nasm
     llvm
-    glibmm
+    glibmm_2_4
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Open source Flash Player implementation";
     homepage = "https://lightspark.github.io/";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ jchw ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ jchw ];
+    platforms = lib.platforms.linux;
     mainProgram = "lightspark";
   };
-}
+})

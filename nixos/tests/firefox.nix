@@ -1,4 +1,9 @@
-import ./make-test-python.nix ({ lib, pkgs, firefoxPackage, ... }:
+{
+  lib,
+  pkgs,
+  firefoxPackage,
+  ...
+}:
 {
   name = firefoxPackage.pname;
 
@@ -9,7 +14,8 @@ import ./make-test-python.nix ({ lib, pkgs, firefoxPackage, ... }:
   nodes.machine =
     { pkgs, ... }:
 
-    { imports = [ ./common/x11.nix ];
+    {
+      imports = [ ./common/x11.nix ];
       environment.systemPackages = [ pkgs.xdotool ];
 
       programs.firefox = {
@@ -31,14 +37,16 @@ import ./make-test-python.nix ({ lib, pkgs, firefoxPackage, ... }:
 
     };
 
-  testScript = let
-    exe = lib.getExe firefoxPackage;
-  in ''
+  testScript =
+    let
+      exe = lib.getExe firefoxPackage;
+    in
+    ''
       from contextlib import contextmanager
 
 
       @contextmanager
-      def record_audio(machine: Machine):
+      def record_audio(machine: BaseMachine):
           """
           Perform actions while recording the
           machine audio output.
@@ -48,7 +56,7 @@ import ./make-test-python.nix ({ lib, pkgs, firefoxPackage, ... }:
           machine.systemctl("stop audio-recorder")
 
 
-      def wait_for_sound(machine: Machine):
+      def wait_for_sound(machine: BaseMachine):
           """
           Wait until any sound has been emitted.
           """
@@ -83,7 +91,7 @@ import ./make-test-python.nix ({ lib, pkgs, firefoxPackage, ... }:
                   "${exe} file://${pkgs.sound-theme-freedesktop}/share/sounds/freedesktop/stereo/phone-incoming-call.oga >&2 &"
               )
               wait_for_sound(machine)
-          machine.copy_from_vm("/tmp/record.wav")
+          machine.copy_from_machine("/tmp/record.wav")
 
       with subtest("Close sound test tab"):
           machine.execute("xdotool key ctrl+w")
@@ -97,4 +105,4 @@ import ./make-test-python.nix ({ lib, pkgs, firefoxPackage, ... }:
           machine.screenshot("screen")
     '';
 
-})
+}

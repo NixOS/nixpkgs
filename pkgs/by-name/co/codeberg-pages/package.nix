@@ -1,23 +1,22 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   buildGoModule,
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "codeberg-pages";
-  version = "6.2";
+  version = "6.4";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "Codeberg";
     repo = "pages-server";
-    rev = "v${version}";
-    hash = "sha256-VZIrg6Hzn9yP9zdOPGx6HOK64XHeX5xc52hZXwmuMKA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-xNsob0fW6SaqVKBIgRFj0YZUymHKWWfWZ5UqGkHWOmA=";
   };
 
-  vendorHash = "sha256-pBCVkuCuyUxla6+uZM3SWXApBpMv0rFORP4tffXkuF4=";
+  vendorHash = "sha256-nSFUBIO3ssnwVHcjHRgUWjIK+swZP9PEJOTwM7esIgo=";
 
   postPatch = ''
     # disable httptest
@@ -28,7 +27,7 @@ buildGoModule rec {
     "-s"
     "-w"
     "-X"
-    "codeberg.org/codeberg/pages/server/version.Version=${version}"
+    "codeberg.org/codeberg/pages/server/version.Version=${finalAttrs.version}"
   ];
 
   tags = [
@@ -39,15 +38,14 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     mainProgram = "pages";
-    maintainers = with maintainers; [
-      laurent-f1z1
+    maintainers = with lib.maintainers; [
       christoph-heiss
     ];
-    license = licenses.eupl12;
+    license = lib.licenses.eupl12;
     homepage = "https://codeberg.org/Codeberg/pages-server";
     description = "Static websites hosting from Gitea repositories";
-    changelog = "https://codeberg.org/Codeberg/pages-server/releases/tag/v${version}";
+    changelog = "https://codeberg.org/Codeberg/pages-server/releases/tag/v${finalAttrs.version}";
   };
-}
+})

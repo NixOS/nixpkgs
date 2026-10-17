@@ -1,76 +1,155 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   hatchling,
+
+  # dependencies
+  azure-ai-documentintelligence,
+  azure-identity,
   beautifulsoup4,
-  ffmpeg-headless,
+  charset-normalizer,
+  defusedxml,
+  lxml,
+  magika,
   mammoth,
   markdownify,
-  numpy,
-  openai,
+  olefile,
   openpyxl,
   pandas,
-  pathvalidate,
   pdfminer-six,
-  puremagic,
+  pdfplumber,
   pydub,
   python-pptx,
   requests,
   speechrecognition,
+  xlrd,
   youtube-transcript-api,
+
+  # tests
   pytestCheckHook,
+
+  # passthru
   gitUpdater,
 }:
 
-buildPythonPackage {
+let
+  isNotAarch64Linux = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
+in
+buildPythonPackage (finalAttrs: {
   pname = "markitdown";
-  version = "unstable-2024-12-18";
+  version = "0.1.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "markitdown";
-    rev = "3ce21a47abed0e4db162de1088d661887ae076ff";
-    hash = "sha256-5YafFL8OHNcGgB/qH6CmX0rTith1ZSRNIa+ktl4Ffvg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-nOzhvIqyq5iV2pKeHqStKELFLRnTRF7+pbxHaV0XZ4s=";
   };
+
+  sourceRoot = "${finalAttrs.src.name}/packages/markitdown";
 
   build-system = [ hatchling ];
 
-  dependencies = [
-    beautifulsoup4
-    ffmpeg-headless
-    mammoth
-    markdownify
-    numpy
-    openai
-    openpyxl
-    pandas
-    pathvalidate
-    pdfminer-six
-    puremagic
-    pydub
-    python-pptx
-    requests
-    speechrecognition
-    youtube-transcript-api
+  pythonRelaxDeps = [
+    "magika"
+    "mammoth"
+    "youtube-transcript-api"
   ];
 
-  pythonImportsCheck = [ "markitdown" ];
+  optional-dependencies = {
+    all = [
+      python-pptx
+      mammoth
+      pandas
+      openpyxl
+      xlrd
+      lxml
+      pdfminer-six
+      pdfplumber
+      olefile
+      pydub
+      speechrecognition
+      youtube-transcript-api
+      azure-ai-documentintelligence
+      azure-identity
+    ];
+    pptx = [ python-pptx ];
+    docx = [
+      mammoth
+      lxml
+    ];
+    xlsx = [
+      pandas
+      openpyxl
+    ];
+    xls = [
+      pandas
+      xlrd
+    ];
+    pdf = [
+      pdfminer-six
+      pdfplumber
+    ];
+    outlook = [ olefile ];
+    audio-transcription = [
+      pydub
+      speechrecognition
+    ];
+    youtube-transcription = [ youtube-transcript-api ];
+    az-doc-intel = [
+      azure-ai-documentintelligence
+      azure-identity
+    ];
+  };
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  dependencies = [
+    beautifulsoup4
+    requests
+    markdownify
+    magika
+    charset-normalizer
+    defusedxml
+  ];
+
+  # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox:
+  # terminate called after throwing an instance of 'onnxruntime::OnnxRuntimeException'
+  #
+  # -> Skip all tests that require importing markitdown
+  pythonImportsCheck = lib.optionals isNotAarch64Linux [ "markitdown" ];
+  doCheck = isNotAarch64Linux;
+
+  nativeCheckInputs = [ pytestCheckHook ] ++ finalAttrs.passthru.optional-dependencies.all;
 
   disabledTests = [
     # Require network access
     "test_markitdown_remote"
+    "test_module_vectors"
+    "test_cli_vectors"
+    "test_module_misc"
+
+    # Require optional azure-ai-contentunderstanding, unavailable in nixpkgs.
+    # The fallback stubs hit `UserAgentPolicy() takes no arguments`.
+    "test_nonexistent_analyzer_raises_value_error"
+    "test_cu_registered_before_docintel"
   ];
 
-  passthru.updateScripts = gitUpdater { };
+  passthru.updateScript = gitUpdater {
+    # Drop the "v" tag prefix before version comparison.
+    rev-prefix = "v";
+    # Skip PEP 440 pre-release tags.
+    ignoredVersions = "(a|b|rc)[0-9]+$";
+  };
 
   meta = {
     description = "Python tool for converting files and office documents to Markdown";
     homepage = "https://github.com/microsoft/markitdown";
+    changelog = "https://github.com/microsoft/markitdown/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [ malik ];
   };
-}
+})

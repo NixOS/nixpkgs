@@ -9,18 +9,22 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "handlr-regex";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "Anomalocaridid";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-xjrETTBHqekdPn2NwpGVoRoU8mf0F4jZN2yt0k8ypRA=";
+    repo = "handlr-regex";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-7psjlu0qyoZYTVwq2JYJJkB76ejlmMtmstDw+liMcj8=";
   };
 
-  cargoHash = "sha256-V/daNs2vk2N6N5eUq1haxxuNyGMBLLBSmBx0JozaN5A=";
+  patches = [
+    ./shared-mime-info-2.5.patch
+  ];
+
+  cargoHash = "sha256-a91WaIFBS9Rh4T/dwpLQJMoE604Tj0mVN38RKmNcZU0=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -44,11 +48,13 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
+    # last successful hydra build on darwin was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Fork of handlr with support for regex";
     homepage = "https://github.com/Anomalocaridid/handlr-regex";
-    license = licenses.mit;
-    maintainers = with maintainers; [ anomalocaris ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ anomalocaris ];
     mainProgram = "handlr";
   };
-}
+})

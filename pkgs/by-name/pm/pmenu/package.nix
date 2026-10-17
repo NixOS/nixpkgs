@@ -5,11 +5,11 @@
   writeText,
   fontconfig,
   imlib2,
-  libX11,
-  libXext,
-  libXft,
-  libXinerama,
-  libXrender,
+  libx11,
+  libxext,
+  libxft,
+  libxinerama,
+  libxrender,
   conf ? null,
 }:
 
@@ -27,11 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     fontconfig
     imlib2
-    libX11
-    libXext
-    libXft
-    libXinerama
-    libXrender
+    libx11
+    libxext
+    libxft
+    libxinerama
+    libxrender
   ];
 
   postPatch =
@@ -56,8 +56,10 @@ stdenv.mkDerivation (finalAttrs: {
       stdin, shows a menu for the user to select one of the options, and outputs
       the option selected to stdout.
     '';
-    maintainers = [ lib.maintainers.azahi ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "pmenu";
+    # The last successful Darwin Hydra build was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

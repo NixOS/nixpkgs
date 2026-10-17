@@ -9,19 +9,26 @@
   # tests
   pytestCheckHook,
   pyyaml,
+
+  # passthru.tests
+  remarshal,
+  tomlkit,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tomlkit";
-  version = "0.13.2";
+  version = "0.15.1";
   pyproject = true;
 
+  # github fetcher causes infinite recursion via gtk-doc
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-//X+WahylbJ4q9Mb7JLBXZvEoGiFqxK86lLHERk5Lnk=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-4lu/OIQwBSRiEKEpgndvJ/mcub5nFg4UQ00MDSHuHpc=";
   };
 
   build-system = [ poetry-core ];
+
+  doCheck = false; # infinite recursion via pytest
 
   nativeCheckInputs = [
     pyyaml
@@ -30,11 +37,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tomlkit" ];
 
-  meta = with lib; {
-    homepage = "https://github.com/sdispater/tomlkit";
-    changelog = "https://github.com/sdispater/tomlkit/blob/${version}/CHANGELOG.md";
-    description = "Style-preserving TOML library for Python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jakewaksbaum ];
+  passthru.tests = {
+    inherit remarshal;
+    pytest = tomlkit.overrideAttrs { doCheck = true; };
   };
-}
+
+  meta = {
+    homepage = "https://github.com/python-poetry/tomlkit";
+    changelog = "https://github.com/python-poetry/tomlkit/blob/${finalAttrs.version}/CHANGELOG.md";
+    description = "Style-preserving TOML library for Python";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      dotlambda
+      jakewaksbaum
+    ];
+  };
+})

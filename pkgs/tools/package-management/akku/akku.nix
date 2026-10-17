@@ -1,22 +1,35 @@
 {
   lib,
   stdenv,
+  fetchurl,
   fetchFromGitLab,
   autoreconfHook,
   pkg-config,
   git,
-  guile,
+  guile_3_0,
   curl,
+  nix-update-script,
 }:
+let
+  # Akku currently breaks starting with Guile 3.0.11.
+  # So we pin Guile 3.0.10 for now.
+  # https://hydra.nixos.org/build/319214800/nixlog/1/tail
+  guile_3_0_10 = guile_3_0.overrideAttrs {
+    src = fetchurl {
+      url = "mirror://gnu/guile/guile-3.0.10.tar.xz";
+      sha256 = "sha256-vXFoUX/VJjM0RtT3q4FlJ5JWNAlPvTcyLhfiuNjnY4g=";
+    };
+  };
+in
 stdenv.mkDerivation rec {
   pname = "akku";
-  version = "1.1.0-unstable-2024-03-03";
+  version = "1.1.0-unstable-2026-09-13";
 
   src = fetchFromGitLab {
     owner = "akkuscm";
     repo = "akku";
-    rev = "cb996572fe0dbe74a42d2abeafadffaea2bf8ae3";
-    sha256 = "sha256-6xqASnFxzz0yE5oJnh15SOB74PVrVkMVwS3PwKAmgks=";
+    rev = "c37e3e9e320cf9ab363eaf557771c95a4dbb55b6";
+    hash = "sha256-AhdbhAO1etkyyFyHevnq5dBX8q/3mHy7lF0Keo84x2U=";
   };
 
   nativeBuildInputs = [
@@ -26,25 +39,29 @@ stdenv.mkDerivation rec {
 
   # akku calls curl commands
   buildInputs = [
-    guile
+    guile_3_0_10
     curl
     git
   ];
 
-  # Use a dummy package index to boostrap Akku
+  # Use a dummy package index to bootstrap Akku
   preBuild = ''
     touch bootstrap.db
   '';
 
   makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
+
+  meta = {
     homepage = "https://akkuscm.org/";
     description = "Language package manager for Scheme";
     changelog = "https://gitlab.com/akkuscm/akku/-/raw/v${version}/NEWS.md";
-    platforms = platforms.all;
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       nagy
       konst-aa
     ];

@@ -2,44 +2,53 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   setuptools,
+
+  # dependencies
+  amazon-ion,
+  python-dateutil,
   requests,
+
+  # tests
+  pytest-mock,
   pytestCheckHook,
   requests-mock,
+  stdenv, # for meta.broken
 }:
-buildPythonPackage rec {
+
+buildPythonPackage (finalAttrs: {
   pname = "kestra";
-  version = "0.20.0";
+  version = "2.0.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "kestra-io";
     repo = "libs";
-    rev = "v${version}";
-    hash = "sha256-Ck0eM3YZRRoORN77e46J9CG5Uj6Y7fNdVWAErT7LbpA=";
+    # No tags for 2.0.0. This is the commit corresponding to 2.0.0 on PyPI
+    rev = "b21cb7bde0ab77755d617cccc46dab4db631fdcf";
+    hash = "sha256-TdlztAih/SZdl3UWa/+SLwFGJ9lbQYcHC7moiUIcaOU=";
   };
 
-  sourceRoot = "${src.name}/python";
+  sourceRoot = "${finalAttrs.src.name}/python";
 
-  build-system = [
-    setuptools
-  ];
+  # setup.py reads the version from the environment (defaults to 0.0.0)
+  env.VERSION = finalAttrs.version;
 
-  preBuild = ''
-    # Required for building the library (https://github.com/kestra-io/libs/blob/v0.20.0/python/setup.py#L20)
-    # The path resolve to CWD, so README.md isn't picked in the parent folder
-    ln -s ../README.md README.md
-  '';
+  build-system = [ setuptools ];
 
   dependencies = [
+    amazon-ion
+    python-dateutil
     requests
   ];
 
-  pythonImportsCheck = [
-    "kestra"
-  ];
+  pythonImportsCheck = [ "kestra" ];
 
   nativeCheckInputs = [
+    pytest-mock
     pytestCheckHook
     requests-mock
   ];
@@ -47,7 +56,9 @@ buildPythonPackage rec {
   meta = {
     description = "Infinitely scalable orchestration and scheduling platform, creating, running, scheduling, and monitoring millions of complex pipelines";
     homepage = "https://github.com/kestra-io/libs";
-    license = lib.licenses.apsl20;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ DataHearth ];
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

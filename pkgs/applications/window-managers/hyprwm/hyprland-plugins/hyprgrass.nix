@@ -1,7 +1,6 @@
 {
   lib,
   mkHyprlandPlugin,
-  hyprland,
   fetchFromGitHub,
   cmake,
   doctest,
@@ -11,15 +10,15 @@
   nix-update-script,
 }:
 
-mkHyprlandPlugin hyprland {
+mkHyprlandPlugin {
   pluginName = "hyprgrass";
-  version = "0.8.2-unstable-2024-12-13";
+  version = "0.8.2-unstable-2026-06-10";
 
   src = fetchFromGitHub {
     owner = "horriblename";
     repo = "hyprgrass";
-    rev = "dc19ccb209147312a4f60d76193b995c2634e756";
-    hash = "sha256-3ALmrImk37KT+UHt1EMi6PAHyj8WhL9Xw/Ar/ys4rtk=";
+    rev = "d094a3e62f6ecaeb41515982d3e13edefaf8a4e7";
+    hash = "sha256-tCt7FNc1RBHou/ym7B0XzoOqqNq8Df+dizEDkAgJ4U0=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +34,7 @@ mkHyprlandPlugin hyprland {
 
   doCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "Hyprland plugin for touch gestures";

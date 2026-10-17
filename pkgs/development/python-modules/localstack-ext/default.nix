@@ -4,30 +4,35 @@
   fetchPypi,
   setuptools,
   setuptools-scm,
+  click,
   dill,
   dnslib,
   dnspython,
   plux,
   pyaes,
+  pyjwt,
   pyotp,
-  python-jose,
-  requests,
   python-dateutil,
+  python-jose,
+  pyyaml,
+  requests,
+  rich,
   tabulate,
+  semver,
 
-  # Sensitive downstream dependencies
-  localstack,
+  # use for testing promoted localstack
+  pkgs,
 }:
 
 buildPythonPackage rec {
   pname = "localstack-ext";
-  version = "3.7.2";
+  version = "4.14.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "localstack_ext";
     inherit version;
-    hash = "sha256-gd+HyZnezgtKrSKJOYtxUZHTPMrrpKWQHGvaIs9FyVs=";
+    hash = "sha256-JTHK4YavQyp78tYloZvZ5er6w6U4wGGHDfgL345nNiY=";
   };
 
   build-system = [
@@ -42,17 +47,23 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    click
     dill
     dnslib
     dnspython
     plux
     pyaes
+    pyjwt
     pyotp
-    python-jose
-    requests
-    tabulate
     python-dateutil
-  ] ++ python-jose.optional-dependencies.cryptography;
+    python-jose
+    pyyaml
+    requests
+    rich
+    tabulate
+    semver
+  ]
+  ++ python-jose.optional-dependencies.cryptography;
 
   pythonImportsCheck = [ "localstack" ];
 
@@ -60,7 +71,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   passthru.tests = {
-    inherit localstack;
+    inherit (pkgs) localstack;
   };
 
   meta = {

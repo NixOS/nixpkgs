@@ -1,31 +1,43 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  testers,
+  nix-update-script,
+  fetchFromGitLab,
   meson,
   ninja,
-  file,
-  docbook_xsl,
-  gtk-doc ? null,
-  buildDevDoc ? gtk-doc != null,
+  hotdoc,
+  buildDevDoc ?
+    lib.meta.availableOn stdenv.hostPlatform hotdoc
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  buildPackages,
+  mesonEmulatorHook,
 
   # for passthru.tests
   gnuradio,
   gst_all_1,
   qt6,
   vips,
-
 }:
-let
-  inherit (lib) optional optionals;
-in
-stdenv.mkDerivation rec {
-  pname = "orc";
-  version = "0.4.40";
 
-  src = fetchurl {
-    url = "https://gstreamer.freedesktop.org/src/orc/${pname}-${version}.tar.xz";
-    hash = "sha256-P8K+5437fEH9lgUGH8aRONt98Afq4vZpofVui6zvdKs=";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "orc";
+  version = "0.4.44";
+
+  outputs = [
+    "out"
+    "dev"
+  ]
+  ++ lib.optional buildDevDoc "devdoc";
+  outputBin = "dev"; # compilation tools
+  outputDoc = lib.optionalString buildDevDoc "devdoc";
+
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "gstreamer";
+    repo = "orc";
+    tag = finalAttrs.version;
+    hash = "sha256-/fWXR9LuINXwVMXCAGVm4H6I+Lut1u43rz+xmV+5cVs=";
   };
 
   postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
@@ -33,24 +45,24 @@ stdenv.mkDerivation rec {
     sed -i '/memcpy_speed/d' testsuite/meson.build
   '';
 
-  outputs = [
-    "out"
-    "dev"
-  ] ++ optional buildDevDoc "devdoc";
-  outputBin = "dev"; # compilation tools
+  mesonFlags = lib.mapAttrsToList lib.mesonEnable {
+    examples = false;
+    benchmarks = false;
+    tests = finalAttrs.finalPackage.doCheck;
+    hotdoc = buildDevDoc;
+    tools = true;
+  };
 
-  mesonFlags = optionals (!buildDevDoc) [ "-Dgtk_doc=disabled" ];
-
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-    ]
-    ++ optionals buildDevDoc [
-      gtk-doc
-      file
-      docbook_xsl
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+  ]
+  ++ lib.optionals buildDevDoc [
+    hotdoc
+  ]
+  ++ lib.optionals (buildDevDoc && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
   # https://gitlab.freedesktop.org/gstreamer/orc/-/issues/41
   doCheck =
@@ -61,23 +73,33 @@ stdenv.mkDerivation rec {
       && lib.versionAtLeast stdenv.cc.version "12"
     );
 
-  passthru.tests = {
-    inherit (gst_all_1) gst-plugins-good gst-plugins-bad gst-plugins-ugly;
-    inherit gnuradio vips;
-    qt6-qtmultimedia = qt6.qtmultimedia;
+  passthru = {
+    tests = {
+      inherit (gst_all_1) gst-plugins-good gst-plugins-bad gst-plugins-ugly;
+      inherit gnuradio vips;
+      qt6-qtmultimedia = qt6.qtmultimedia;
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    };
+
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Oil Runtime Compiler";
     homepage = "https://gstreamer.freedesktop.org/projects/orc.html";
-    changelog = "https://cgit.freedesktop.org/gstreamer/orc/plain/RELEASE?h=${version}";
+    changelog = "https://gitlab.freedesktop.org/gstreamer/orc/-/blob/${finalAttrs.version}/RELEASE";
+    pkgConfigModules = map (name: "${name}-${lib.versions.majorMinor finalAttrs.version}") [
+      "orc"
+      "orc-test"
+    ];
     # The source code implementing the Marsenne Twister algorithm is licensed
     # under the 3-clause BSD license. The rest is 2-clause BSD license.
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3
       bsd2
     ];
-    platforms = platforms.unix;
-    maintainers = [ ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gstreamer" finalAttrs.version;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ tmarkus ];
   };
-}
+})

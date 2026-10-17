@@ -24,19 +24,20 @@ let
           (
             cfg.extensions
             // {
-              "org.nixos.bootspec.v1" =
-                {
-                  system = config.boot.kernelPackages.stdenv.hostPlatform.system;
-                  kernel = "${config.boot.kernelPackages.kernel}/${config.system.boot.loader.kernelFile}";
-                  kernelParams = config.boot.kernelParams;
-                  label = "${config.system.nixos.distroName} ${config.system.nixos.codeName} ${config.system.nixos.label} (Linux ${config.boot.kernelPackages.kernel.modDirVersion})";
-                }
-                // lib.optionalAttrs config.boot.initrd.enable {
-                  initrd = "${config.system.build.initialRamdisk}/${config.system.boot.loader.initrdFile}";
-                }
-                // lib.optionalAttrs hasAtLeastOneInitrdSecret {
-                  initrdSecrets = "${config.system.build.initialRamdiskSecretAppender}/bin/append-initrd-secrets";
-                };
+              "org.nixos.bootspec.v1" = {
+                system = config.boot.kernelPackages.stdenv.hostPlatform.system;
+                label = "${config.system.nixos.distroName} ${config.system.nixos.codeName} ${config.system.nixos.label} (Linux ${config.boot.kernelPackages.kernel.modDirVersion})";
+              }
+              // lib.optionalAttrs config.boot.kernel.enable {
+                kernel = "${config.boot.kernelPackages.kernel}/${config.system.boot.loader.kernelFile}";
+                kernelParams = config.boot.kernelParams;
+              }
+              // lib.optionalAttrs config.boot.initrd.enable {
+                initrd = "${config.system.build.initialRamdisk}/${config.system.boot.loader.initrdFile}";
+              }
+              // lib.optionalAttrs hasAtLeastOneInitrdSecret {
+                initrdSecrets = "${config.system.build.initialRamdiskSecretAppender}/bin/append-initrd-secrets";
+              };
             }
           )
       );
@@ -98,18 +99,20 @@ let
   };
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [ "boot" "bootspec" "enable" ] ''
+      Bootspec is now always generated and can no longer be disabled.
+    '')
+  ];
+
   options.boot.bootspec = {
-    enable =
-      lib.mkEnableOption "the generation of RFC-0125 bootspec in $system/boot.json, e.g. /run/current-system/boot.json"
-      // {
-        default = true;
-        internal = true;
-      };
     enableValidation = lib.mkEnableOption ''
       the validation of bootspec documents for each build.
             This will introduce Go in the build-time closure as we are relying on [Cuelang](https://cuelang.org/) for schema validation.
             Enable this option if you want to ascertain that your documents are correct
     '';
+
+    package = lib.mkPackageOption pkgs "bootspec" { };
 
     extensions = lib.mkOption {
       # NOTE(RaitoBezarius): this is not enough to validate: extensions."osRelease" = drv; those are picked up by cue validation.

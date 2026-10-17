@@ -5,33 +5,32 @@
   cmake,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hck";
-  version = "0.11.1";
+  version = "0.11.6";
 
   src = fetchFromGitHub {
     owner = "sstadick";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-QodwSirWCMQqimzUEcpH7lnCc2k4WIZiqww+kqI1zoU=";
+    repo = "hck";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-W5y9NQjRkbb+ifOFMbqDECsm58rk6pozDprMnzC0euk=";
   };
 
-  cargoHash = "sha256-AUOaWtchrjFw/gpU9C3H0nu0NLmldV4xzwM/EcY+CWk=";
+  cargoHash = "sha256-coaRVmI++074P8PhZ/Zmok0lwtEz+/38nkF2h0JraAo=";
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  meta = {
     description = "Close to drop in replacement for cut that can use a regex delimiter instead of a fixed string";
     homepage = "https://github.com/sstadick/hck";
-    changelog = "https://github.com/sstadick/hck/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    changelog = "https://github.com/sstadick/hck/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = with lib.licenses; [
       mit # or
       unlicense
     ];
-    maintainers = with maintainers; [
-      figsoda
+    maintainers = with lib.maintainers; [
       gepbird
     ];
     mainProgram = "hck";
   };
-}
+})

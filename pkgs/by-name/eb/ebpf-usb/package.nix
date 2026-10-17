@@ -5,9 +5,9 @@
   bcc,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "ebpf-usb";
-  version = "unstable-2022-04-03";
+  version = "0-unstable-2022-04-03";
   pyproject = false;
 
   src = fetchFromGitHub {
@@ -21,11 +21,12 @@ python3Packages.buildPythonApplication rec {
     "--set PYTHONUNBUFFERED 1"
   ];
 
-  pythonPath =
-    [ bcc ]
-    ++ (with python3Packages; [
-      hexdump
-    ]);
+  pythonPath = [
+    bcc
+  ]
+  ++ (with python3Packages; [
+    hexdump
+  ]);
 
   postPatch = ''
     substituteInPlace ebpf-usb.py \
@@ -41,11 +42,11 @@ python3Packages.buildPythonApplication rec {
   # no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python script for USB monitoring using eBPF";
     homepage = "https://github.com/francisrstokes/ebpf-usb";
     license = lib.licenses.unfree;
-    maintainers = with maintainers; [ mevatron ];
+    maintainers = with lib.maintainers; [ mevatron ];
     mainProgram = "ebpf-usb";
   };
 }

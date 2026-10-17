@@ -4,7 +4,7 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "funnelweb";
   version = "3.20";
 
@@ -12,6 +12,11 @@ stdenv.mkDerivation rec {
     url = "http://www.ross.net/funnelweb/download/funnelweb_v320/funnelweb_v320_source.tar.gz";
     sha256 = "0zqhys0j9gabrd12mnk8ibblpc8dal4kbl8vnhxmdlplsdpwn4wg";
   };
+
+  postPatch = ''
+    substituteInPlace source/style.h \
+      --replace-fail "typedef unsigned        bool   ; /* Unsigned, [0,1].                          */" ""
+  '';
 
   buildPhase = ''
     cd source
@@ -23,14 +28,14 @@ stdenv.mkDerivation rec {
     install fw $out/bin/fw
   '';
 
-  meta = with lib; {
+  meta = {
     version = "3.20";
     description = "Simple, reliable literate-programming macro preprocessor";
     mainProgram = "fw";
     homepage = "http://www.ross.net/funnelweb/";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.AndersonTorres ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
 }
 #TODO: implement it for other platforms

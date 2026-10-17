@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchzip,
   fetchFromGitHub,
+  butler,
   electron,
   steam-run,
   makeWrapper,
@@ -11,17 +12,12 @@
 }:
 
 let
-  version = "26.1.9";
-  butler = fetchzip {
-    url = "https://broth.itch.zone/butler/linux-amd64/15.21.0/butler.zip";
-    stripRoot = false;
-    hash = "sha256-jHni/5qf7xST6RRonP2EW8fJ6647jobzrnHe8VMx4IA=";
-  };
+  version = "26.13.0";
 
   itch-setup = fetchzip {
-    url = "https://broth.itch.ovh/itch-setup/linux-amd64/1.26.0/itch-setup.zip";
+    url = "https://broth.itch.zone/itch-setup/linux-amd64/1.29.0/archive.zip";
     stripRoot = false;
-    hash = "sha256-5MP6X33Jfu97o5R1n6Og64Bv4ZMxVM0A8lXeQug+bNA=";
+    hash = "sha256-T4xvso3jJ9XsiG7QTpYdcvcClg2ejbGS4R/+goaHl18=";
   };
 
   sparseCheckout = "/release/images/itch-icons";
@@ -30,7 +26,7 @@ let
       owner = "itchio";
       repo = "itch";
       rev = "v${version}";
-      hash = "sha256-jugg+hdP0y0OkFhdQuEI9neWDuNf2p3+DQuwxe09Zck=";
+      hash = "sha256-v/2y9F+uigGaVsEy4gaa7WGTByW1wqYosti6AEOsaQQ=";
       sparseCheckout = [ sparseCheckout ];
     }
     + sparseCheckout;
@@ -40,9 +36,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   inherit version;
 
   src = fetchzip {
-    url = "https://broth.itch.ovh/itch/linux-amd64/${finalAttrs.version}/archive/default#.zip";
+    url = "https://github.com/itchio/itch/releases/download/v${finalAttrs.version}/itch-v${finalAttrs.version}-linux-amd64.tar.gz";
     stripRoot = false;
-    hash = "sha256-4k6afBgOKGs7rzXAtIBpmuQeeT/Va8/0bZgNYjuJhgI=";
+    hash = "sha256-//QA4aW9uwZ/yhKf1xJRthj36YqfXuu/6yU1yGXQeFo=";
   };
 
   nativeBuildInputs = [
@@ -91,17 +87,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     makeWrapper ${steam-run}/bin/steam-run $out/bin/itch \
       --add-flags ${electron}/bin/electron \
       --add-flags $out/share/itch/resources/app \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set BROTH_USE_LOCAL butler,itch-setup \
-      --prefix PATH : ${butler}:${itch-setup}
+      --prefix PATH : ${butler}/bin/:${itch-setup}
   '';
 
   meta = {
     description = "Best way to play itch.io games";
     homepage = "https://github.com/itchio/itch";
-    changelog = "https://github.com/itchio/itch/releases/tag/v${version}-canary";
+    changelog = "https://github.com/itchio/itch/releases/tag/v${version}";
     license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    platforms = [ "x86_64-linux" ];
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
     maintainers = with lib.maintainers; [ pasqui23 ];
     mainProgram = "itch";

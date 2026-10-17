@@ -11,11 +11,12 @@
 buildPythonPackage rec {
   pname = "jsonpath-rw";
   version = "1.4.0";
+  format = "setuptools";
   disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05c471281c45ae113f6103d1268ec7a4831a2e96aa80de45edc89b11fac4fbec";
+    hash = "sha256-BcRxKBxFrhE/YQPRJo7HpIMaLpaqgN5F7cibEfrE++w=";
   };
 
   propagatedBuildInputs = [
@@ -27,10 +28,10 @@ buildPythonPackage rec {
   # ImportError: No module named tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kennknowles/python-jsonpath-rw";
     description = "Robust and significantly extended implementation of JSONPath for Python, with a clear AST for metaprogramming";
     mainProgram = "jsonpath.py";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

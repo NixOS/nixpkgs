@@ -1,38 +1,42 @@
 {
   lib,
-  stdenv,
   buildDotnetModule,
   fetchFromGitHub,
   dotnetCorePackages,
-  mono,
 }:
 
 buildDotnetModule rec {
   pname = "bicep";
-  version = "0.32.4";
+  version = "0.47.16";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "bicep";
     rev = "v${version}";
-    hash = "sha256-SONzxKT+kVQTvkc4mKZcSGborXR4L9wadgss7j5PgmA=";
+    hash = "sha256-V8YpTc7GqP42a+Z/cKW/R4WrwbCyPY0+kYuotA4ec4E=";
   };
 
   postPatch = ''
     substituteInPlace src/Directory.Build.props --replace-fail "<TreatWarningsAsErrors>true</TreatWarningsAsErrors>" ""
   '';
 
-  projectFile = "src/Bicep.Cli/Bicep.Cli.csproj";
+  projectFile = [
+    "src/Bicep.Cli/Bicep.Cli.csproj"
+    "src/Bicep.LangServer/Bicep.LangServer.csproj"
+  ];
 
   nugetDeps = ./deps.json;
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0_4xx-bin;
 
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
-  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64); # mono is not available on aarch64-darwin
+  # Compression in single-file bundles requires self-contained builds.
+  dotnetInstallFlags = [ "-p:EnableCompressionInSingleFile=false" ];
 
-  nativeCheckInputs = [ mono ];
+  doCheck = true;
+
+  dotnetTestFlags = "-p:UseAppHost=false";
 
   testProjectFile = "src/Bicep.Cli.UnitTests/Bicep.Cli.UnitTests.csproj";
 
@@ -43,7 +47,7 @@ buildDotnetModule rec {
     homepage = "https://github.com/Azure/bicep/";
     changelog = "https://github.com/Azure/bicep/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ khaneliman ] ++ lib.teams.stridtech.members;
+    maintainers = [ ];
     mainProgram = "bicep";
   };
 }

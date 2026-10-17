@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0e33670e83f6a33ebb0822e43a609c3247178d4a375ff50a4689e266d853eb66";
+    hash = "sha256-DjNnDoP2oz67CCLkOmCcMkcXjUo3X/UKRoniZthT62Y=";
   };
 
   patches = [
@@ -29,9 +29,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Pidfile featuring stale detection and file-locking";
     homepage = "https://github.com/trbs/pid/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

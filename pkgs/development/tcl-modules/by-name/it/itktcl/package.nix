@@ -7,13 +7,13 @@
   incrtcl,
 }:
 
-mkTclDerivation rec {
+mkTclDerivation (finalAttrs: {
   pname = "itk-tcl";
   version = "4.1.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/incrtcl/%5BIncr%20Tcl_Tk%5D-source/3.4/itk${version}.tar.gz";
-    sha256 = "1iy964jfgsfnc1agk1w6bbm44x18ily8d4wmr7cc9z9f4acn2r6s";
+    url = "mirror://sourceforge/incrtcl/%5BIncr%20Tcl_Tk%5D-source/3.4/itk${finalAttrs.version}.tar.gz";
+    hash = "sha256-2mRhmSIu/cTYyZWThjyNKHRC6lqGh/lUYNbp5yQxycc=";
   };
 
   buildInputs = [
@@ -30,10 +30,10 @@ mkTclDerivation rec {
 
   postInstall = ''
     rmdir $out/bin
-    mv $out/lib/itk${version}/* $out/lib
-    ln -s libitk${version}${stdenv.hostPlatform.extensions.sharedLibrary} \
-      $out/lib/libitk${lib.versions.major version}${stdenv.hostPlatform.extensions.sharedLibrary}
-    rmdir $out/lib/itk${version}
+    mv $out/lib/itk${finalAttrs.version}/* $out/lib
+    ln -s libitk${finalAttrs.version}${stdenv.hostPlatform.extensions.sharedLibrary} \
+      $out/lib/libitk${lib.versions.major finalAttrs.version}${stdenv.hostPlatform.extensions.sharedLibrary}
+    rmdir $out/lib/itk${finalAttrs.version}
   '';
 
   outputs = [
@@ -42,11 +42,11 @@ mkTclDerivation rec {
     "man"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://incrtcl.sourceforge.net/";
     description = "Mega-widget toolkit for incr Tk";
-    license = licenses.tcltk;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice ];
+    license = lib.licenses.tcltk;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
-}
+})

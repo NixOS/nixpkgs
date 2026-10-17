@@ -3,31 +3,37 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  xorg,
+  libx11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "maiko";
-  version = "2021-04-14";
+  version = "260319-9259716e";
+
   src = fetchFromGitHub {
     owner = "Interlisp";
     repo = "maiko";
-    rev = "91fe7d51f9d607bcedde0e78e435ee188a8c84c0";
-    hash = "sha256-Y+ngep/xHw6RCU8XVRYSWH6S+9hJ74z50pGpIqS2CjM=";
+    tag = "maiko-${finalAttrs.version}";
+    hash = "sha256-IqXDw5JuABs1IEKpvq3xjjl4NgZVojdxQYRV6TLhqOk=";
   };
+
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ xorg.libX11 ];
+
+  buildInputs = [ libx11 ];
+
   installPhase = ''
     runHook preInstall
     find . -maxdepth 1 -executable -type f -exec install -Dt $out/bin '{}' \;
     runHook postInstall
   '';
-  meta = with lib; {
+
+  meta = {
     description = "Medley Interlisp virtual machine";
     homepage = "https://interlisp.org/";
     changelog = "https://github.com/Interlisp/maiko/releases";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ehmry ];
-    inherit (xorg.libX11.meta) platforms;
+    license = lib.licenses.mit;
+    inherit (libx11.meta) platforms;
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

@@ -1,72 +1,99 @@
 {
   lib,
-  fetchPypi,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
   setuptools-scm,
+
+  # dependencies
   lxml,
-  wcwidth,
-  pytestCheckHook,
-  iniparse,
+  unicode-segmentation-rs,
+
+  # optional-dependencies
+  charset-normalizer,
+  fluent-syntax,
   vobject,
+  iniparse,
+  rapidfuzz,
   mistletoe,
   phply,
   pyparsing,
-  ruamel-yaml,
-  cheroot,
-  fluent-syntax,
+  pyenchant,
   aeidon,
-  charset-normalizer,
-  syrupy,
+  tomlkit,
+  ruamel-yaml,
+
+  # tests
+  pytestCheckHook,
+  addBinToPathHook,
+  pytest-xdist,
   gettext,
+  syrupy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "translate-toolkit";
-  version = "3.14.1";
-
+  version = "3.19.19";
   pyproject = true;
-  build-system = [ setuptools-scm ];
+  __structuredAttrs = true;
 
-  src = fetchPypi {
-    pname = "translate_toolkit";
-    inherit version;
-    hash = "sha256-IUjEN8Up1Or4nFo71WkDduq+6Xw8ObfUgkABp88zPoY=";
+  # nixpkgs-update: no auto update
+  # Only weblate uses this and we want to follow its version constraints
+  src = fetchFromGitHub {
+    owner = "translate";
+    repo = "translate";
+    tag = finalAttrs.version;
+    hash = "sha256-TWEVrZHtMgXn4oG3Wfx3LMbAoX1S770PCdRoq/qKzZE=";
   };
+
+  build-system = [ setuptools-scm ];
 
   dependencies = [
     lxml
-    wcwidth
+    unicode-segmentation-rs
   ];
+
+  pythonRelaxDeps = [ "lxml" ];
+
+  optional-dependencies = {
+    chardet = [ charset-normalizer ];
+    fluent = [ fluent-syntax ];
+    ical = [ vobject ];
+    ini = [ iniparse ];
+    levenshtein = [ rapidfuzz ];
+    markdown = [ mistletoe ];
+    php = [ phply ];
+    rc = [ pyparsing ];
+    spellcheck = [ pyenchant ];
+    subtitles = [ aeidon ];
+    toml = [ tomlkit ];
+    yaml = [ ruamel-yaml ];
+  };
 
   nativeCheckInputs = [
     pytestCheckHook
-    iniparse
-    vobject
-    mistletoe
-    phply
-    pyparsing
-    ruamel-yaml
-    cheroot
-    fluent-syntax
-    aeidon
-    charset-normalizer
+    addBinToPathHook
+    pytest-xdist
     syrupy
     gettext
-  ];
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   disabledTests = [
     # Probably breaks because of nix sandbox
     "test_timezones"
-    # Requires network
-    "test_xliff_conformance"
   ];
 
   pythonImportsCheck = [ "translate" ];
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "Useful localization tools for building localization & translation systems";
     homepage = "https://toolkit.translatehouse.org/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ erictapen ];
+    changelog = "https://docs.translatehouse.org/projects/translate-toolkit/en/latest/releases/${finalAttrs.src.tag}.html";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ erictapen ];
   };
-}
+})

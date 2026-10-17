@@ -1,29 +1,37 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  flit-core,
   pytest,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "scripttest";
-  version = "1.3";
-  format = "setuptools";
+  version = "3.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "951cfc25219b0cd003493a565f2e621fd791beaae9f9a3bdd7024d8626419c38";
+  src = fetchFromGitHub {
+    owner = "pypa";
+    repo = "scripttest";
+    tag = finalAttrs.version;
+    hash = "sha256-2mM+d7ZudiqxRjqbOKR4mUiv1hdS+hm26sxu05yMY48=";
   };
+
+  build-system = [ flit-core ];
 
   buildInputs = [ pytest ];
 
-  # Tests are not included. See https://github.com/pypa/scripttest/issues/11
-  doCheck = false;
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "scripttest" ];
+
+  meta = {
     description = "Library for testing interactive command-line applications";
-    homepage = "https://pypi.org/project/scripttest/";
+    homepage = "https://github.com/pypa/scripttest/";
+    changelog = "https://github.com/pypa/scripttest/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
     maintainers = [ ];
-    license = licenses.mit;
   };
-}
+})

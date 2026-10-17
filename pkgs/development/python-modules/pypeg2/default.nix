@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0v8ziaam2r637v94ra4dbjw6jzxz99gs5x4i585kgag1v204yb9b";
+    hash = "sha256-Ky1PgNjhqTcLKpH0ol9Kv39puFyNqEzSPsNkUZWKH20=";
   };
 
   checkPhase = ''
@@ -23,9 +23,9 @@ buildPythonPackage rec {
   #https://bitbucket.org/fdik/pypeg/issues/36/test-failures-on-py35
   doCheck = !isPy3k;
 
-  meta = with lib; {
+  meta = {
     description = "PEG parser interpreter in Python";
     homepage = "http://fdik.org/pyPEG";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
   };
 }

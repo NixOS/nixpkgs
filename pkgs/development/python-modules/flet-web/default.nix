@@ -38,13 +38,12 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    description = "Flet web client in Flutter.";
+    description = "Flet web client in Flutter";
     homepage = "https://flet.dev/";
     changelog = "https://github.com/flet-dev/flet/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       heyimnova
-      lucasew
     ];
   };
 }

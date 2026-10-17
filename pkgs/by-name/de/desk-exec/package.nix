@@ -6,18 +6,18 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "desk-exec";
   version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "AxerTheAxe";
     repo = "desk-exec";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-bJLdd07IAf+ba++vtS0iSmeQSGygwSVNry2bHTDAgjE=";
   };
 
-  cargoHash = "sha256-pK1WDtGkpPZgFwEm59TqoH7EkKPQivNuvsiOG0dbum4=";
+  cargoHash = "sha256-lwc+zth4qCynErG3ldUnu/lX4NfZfxn+XDzJA/kp7S4=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -37,4 +37,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "desk-exec";
     platforms = lib.platforms.linux;
   };
-}
+})

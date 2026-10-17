@@ -3,39 +3,36 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  icu,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pe-parse";
-  version = "2.1.1";
+  version = "2.1.1-unstable-2026-01-12";
 
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = "pe-parse";
-    rev = "v${version}";
-    hash = "sha256-XegSZWRoQg6NEWuTSFI1RMvN3GbpLDrZrloPU2XdK2M=";
+    rev = "b0dabd3fdcccd8f53bab500a45e92f37c6fec936";
+    hash = "sha256-j1QJ12hEy1c7SRIJSiFwQwJhhDKGbUrquFXDZbNNEDk=";
   };
 
   nativeBuildInputs = [ cmake ];
-
-  env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals stdenv.cc.isClang [
-      "-Wno-error=deprecated-declarations"
-    ]
-  );
+  buildInputs = [ icu ];
 
   doInstallCheck = true;
   installCheckPhase = ''
     $out/bin/dump-pe ../tests/assets/example.exe
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Principled, lightweight parser for Windows portable executable files";
     homepage = "https://github.com/trailofbits/pe-parse";
-    changelog = "https://github.com/trailofbits/pe-parse/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ arturcygan ];
+    ${if lib.hasInfix "unstable" finalAttrs.version then null else "changelog"} =
+      "https://github.com/trailofbits/pe-parse/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ arturcygan ];
     mainProgram = "dump-pe";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

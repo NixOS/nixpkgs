@@ -1,34 +1,50 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitLab,
+  fetchPypi,
 
   # build-system
   setuptools,
+
+  # nativeBuildInputs
+  pkg-config,
+
+  # buildInputs
+  eigen,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mathutils";
-  version = "3.3.0";
+  version = "5.1.0";
   pyproject = true;
 
-  src = fetchFromGitLab {
-    owner = "ideasman42";
-    repo = "blender-mathutils";
-    rev = "d63d623a9e580a567eb6acb7dbed7cad0e4f8c28";
-    hash = "sha256-c28kt2ADw4wHNLN0CBPcJU/kqm6g679QRaICk4WwaBc=";
+  # No tags on GitLab
+  src = fetchPypi {
+    inherit (finalAttrs) pname version;
+    hash = "sha256-sXGvnWtUoSE4yd6tT1kwo/qvkjh8xf+qgvGPvuFVQWg=";
   };
 
   build-system = [
     setuptools
   ];
 
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    eigen
+  ];
+
   pythonImportsCheck = [ "mathutils" ];
 
-  meta = with lib; {
-    description = "A general math utilities library providing Matrix, Vector, Quaternion, Euler and Color classes, written in C for speed";
+  # no tests
+  doCheck = false;
+
+  meta = {
+    description = "General math utilities library providing Matrix, Vector, Quaternion, Euler and Color classes, written in C for speed";
     homepage = "https://gitlab.com/ideasman42/blender-mathutils";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ autra ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ autra ];
   };
-}
+})

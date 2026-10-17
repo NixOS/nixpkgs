@@ -4,28 +4,29 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "hclfmt";
-  version = "2.23.0";
+  version = "2.25.0";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "hcl";
-    rev = "v${version}";
-    hash = "sha256-0RRvkOBPVrdbZo9zbVgZletKNXPBsN7pa7fsyfI9hXg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WV97PYO91jpJiSmHqc9/IB4fM0tKBNZlWBntDm6CTeo=";
   };
 
-  vendorHash = "sha256-F2i7ph9GL9Xo43da6jHPn9P9FdWC6eSgqCyHPBxdFJY=";
+  vendorHash = "sha256-cGadewSXa5fP2cOl1FUT94Gh+f+Wxnbz8j0QQs0FLBI=";
 
   # The code repository includes other tools which are not useful. Only build
   # hclfmt.
   subPackages = [ "cmd/hclfmt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Code formatter for the Hashicorp Configuration Language (HCL) format";
     homepage = "https://github.com/hashicorp/hcl/tree/main/cmd/hclfmt";
-    license = licenses.mpl20;
+    changelog = "https://github.com/hashicorp/hcl/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mpl20;
     mainProgram = "hclfmt";
-    maintainers = with maintainers; [ zimbatm ];
+    maintainers = with lib.maintainers; [ zimbatm ];
   };
-}
+})

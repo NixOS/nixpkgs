@@ -7,21 +7,18 @@
   setuptools,
   setuptools-scm,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-ntfs";
-  version = "3.13";
+  version = "3.16";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.ntfs";
     tag = version;
-    hash = "sha256-DOxyPlHBv4PEbHeGC/pj2QzbGhKFjw6QOAJmhq6Fc3k=";
+    hash = "sha256-5B27K6HPxSgdYLp0rJ1ld37xS3JXGqGlS/nlx4HBsVY=";
   };
 
   build-system = [
@@ -43,11 +40,19 @@ buildPythonPackage rec {
     "tests/test_index.py"
   ];
 
-  meta = with lib; {
+  disabledTests = [
+    # Issue with archive
+    "test_mft"
+    "test_ntfs"
+    "test_secure"
+    "test_fragmented_mft"
+  ];
+
+  meta = {
     description = "Dissect module implementing a parser for the NTFS file system";
     homepage = "https://github.com/fox-it/dissect.ntfs";
-    changelog = "https://github.com/fox-it/dissect.ntfs/releases/tag/${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/fox-it/dissect.ntfs/releases/tag/${src.tag}";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,34 +1,35 @@
 {
   stdenv,
   lib,
-  fetchzip,
-  nix-update-script,
+  fetchurl,
   autoPatchelfHook,
   libxcrypt-legacy,
+  zlib,
+  testers,
+  nav,
 }:
 
-let
-  system = stdenv.hostPlatform.parsed.cpu.name;
-  platform = "${system}-unknown-linux-gnu";
-in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nav";
-  version = "1.2.1";
+  version = "1.5.2";
 
-  src = fetchzip {
-    url = "https://github.com/Jojo4GH/nav/releases/download/v${version}/nav-${platform}.tar.gz";
+  src = fetchurl {
+    url = "https://github.com/Jojo4GH/nav/releases/download/v${finalAttrs.version}/nav-${stdenv.hostPlatform.parsed.cpu.name}-unknown-linux-gnu.tar.gz";
     sha256 =
       {
-        x86_64-linux = "sha256-ihn5wlagmujHlSfJpgojQNqa4NjLF1wk2pt8wHi60DY=";
-        aarch64-linux = "sha256-l3rKu3OU/TUUjmx3p06k9V5eN3ZDNcxbxObLqVQ2B7U=";
+        x86_64-linux = "sha256-/A6IZRX8v8yKfcxYxo0gxbsZri2dgTs8YH7H2LauaBE=";
+        aarch64-linux = "sha256-YNS/P6TU7qLPn39X6GyUtjBw7GXOi2btd3AV+etpUhQ=";
       }
       .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
   };
+
+  sourceRoot = ".";
 
   nativeBuildInputs = [ autoPatchelfHook ];
   buildInputs = [
     stdenv.cc.cc.lib
     libxcrypt-legacy
+    zlib
   ];
 
   installPhase = ''
@@ -40,7 +41,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.tests = {
+    version = testers.testVersion {
+      package = nav;
+    };
+  };
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Interactive and stylish replacement for ls & cd";
@@ -59,4 +66,4 @@ stdenv.mkDerivation rec {
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     mainProgram = "nav";
   };
-}
+})

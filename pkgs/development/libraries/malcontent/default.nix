@@ -1,34 +1,44 @@
-{ lib, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, gobject-introspection
-, wrapGAppsNoGuiHook
-, glib
-, coreutils
-, accountsservice
-, dbus
-, pam
-, polkit
-, glib-testing
-, python3
-, nixosTests
-, malcontent-ui
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  gobject-introspection,
+  wrapGAppsNoGuiHook,
+  glib,
+  coreutils,
+  accountsservice,
+  dbus,
+  pam,
+  polkit,
+  glib-testing,
+  python3,
+  nixosTests,
+  malcontent-ui,
 }:
 
 stdenv.mkDerivation rec {
   pname = "malcontent";
-  version = "0.13.0";
+  version = "0.13.1";
 
-  outputs = [ "bin" "out" "lib" "pam" "dev" "man" "installedTests" ];
+  outputs = [
+    "bin"
+    "out"
+    "lib"
+    "pam"
+    "dev"
+    "man"
+    "installedTests"
+  ];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "pwithnall";
     repo = "malcontent";
     rev = version;
-    hash = "sha256-DVoTJrpXk5AoRMz+TxEP3NIAA/OOGRzZurLyGp0UBUo=";
+    hash = "sha256-ekRi4yXu8u8t1AjyS3bD6tdqqnqtKyI6yZs+28LnfRY=";
   };
 
   patches = [
@@ -53,9 +63,11 @@ stdenv.mkDerivation rec {
     pam
     polkit
     glib-testing
-    (python3.withPackages (pp: with pp; [
-      pygobject3
-    ]))
+    (python3.withPackages (
+      pp: with pp; [
+        pygobject3
+      ]
+    ))
   ];
 
   propagatedBuildInputs = [
@@ -91,16 +103,20 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     # We need to install Polkit & AccountsService data files in `out`
     # but `buildEnv` only uses `bin` when both `bin` and `out` are present.
-    outputsToInstall = [ "bin" "out" "man" ];
+    outputsToInstall = [
+      "bin"
+      "out"
+      "man"
+    ];
 
     description = "Parental controls library";
     mainProgram = "malcontent-client";
     homepage = "https://gitlab.freedesktop.org/pwithnall/malcontent";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ jtojnar ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ jtojnar ];
+    inherit (polkit.meta) platforms badPlatforms;
   };
 }

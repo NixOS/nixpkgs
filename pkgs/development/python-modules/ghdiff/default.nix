@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "17mdhi2sq9017nq8rkjhhc87djpi5z99xiil0xz17dyplr7nmkqk";
+    hash = "sha256-E89qT6bXtxN+BzTGntIv8cp2EINQzoywPQEkrEWErZ4=";
   };
 
   nativeCheckInputs = [ zope-testrunner ];
@@ -23,11 +23,11 @@ buildPythonPackage rec {
     chardet
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kilink/ghdiff";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     description = "Generate Github-style HTML for unified diffs";
     mainProgram = "ghdiff";
-    maintainers = [ maintainers.mic92 ];
+    maintainers = [ lib.maintainers.mic92 ];
   };
 }

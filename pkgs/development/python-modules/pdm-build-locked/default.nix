@@ -2,9 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pdm-backend,
-  tomli,
   build,
   hatchling,
   pkginfo,
@@ -13,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pdm-build-locked";
-  version = "0.3.4";
+  version = "0.3.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pdm-project";
     repo = "pdm-build-locked";
     tag = version;
-    hash = "sha256-22p9QQZOiDp4IlMK7tn4eSws3lKcThcHvIQpIX/cYrU=";
+    hash = "sha256-zRgo62TrDM0mch4z4hDnufKhe4cLmqWMxNMheY5uL/8=";
   };
 
   postPatch = ''
@@ -30,8 +28,6 @@ buildPythonPackage rec {
   '';
 
   build-system = [ pdm-backend ];
-
-  dependencies = lib.optionals (pythonOlder "3.11") [ tomli ];
 
   pythonImportsCheck = [ "pdm_build_locked" ];
 
@@ -50,7 +46,7 @@ buildPythonPackage rec {
   meta = {
     description = "Pdm-build-locked is a pdm plugin to publish locked dependencies as optional-dependencies";
     homepage = "https://github.com/pdm-project/pdm-build-locked";
-    changelog = "https://github.com/pdm-project/pdm-build-locked/releases/tag/${version}";
+    changelog = "https://github.com/pdm-project/pdm-build-locked/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };

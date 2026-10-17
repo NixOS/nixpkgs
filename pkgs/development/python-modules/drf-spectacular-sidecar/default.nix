@@ -3,31 +3,34 @@
   buildPythonPackage,
   fetchFromGitHub,
   django,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "drf-spectacular-sidecar";
-  version = "2023.9.1";
-  format = "setuptools";
+  version = "2026.9.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tfranzel";
     repo = "drf-spectacular-sidecar";
-    rev = version;
-    hash = "sha256-EoQKbxzXEuKC50/W1/tBB2wASJZmNNwg9r1qhIB4Ws8=";
+    tag = finalAttrs.version;
+    hash = "sha256-fjrXNUR2IyMrK2ZmaxbSkjCSfoIr82x6y83OxZQFD4k=";
   };
 
-  propagatedBuildInputs = [ django ];
+  build-system = [ setuptools ];
+
+  dependencies = [ django ];
 
   # no tests
   doCheck = false;
 
   pythonImportsCheck = [ "drf_spectacular_sidecar" ];
 
-  meta = with lib; {
+  meta = {
     description = "Serve self-contained distribution builds of Swagger UI and Redoc with Django";
     homepage = "https://github.com/tfranzel/drf-spectacular-sidecar";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

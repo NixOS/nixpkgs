@@ -7,18 +7,18 @@
   go-critic,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go-critic";
-  version = "0.11.5";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "go-critic";
     repo = "go-critic";
-    rev = "v${version}";
-    hash = "sha256-KH7jawMd73qdl1S+YQlQGW/2Vj8XjMLJ15Hz0cdwDO4=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-fR5wWZyBJ0pnKsWkgvFUOqzZ5L+8AgdcGNMbpj+nhyQ=";
   };
 
-  vendorHash = "sha256-vBGCFnKKpMcM7RWmT05oPwCItR4QMHhTAZ8x2ejJpcI=";
+  vendorHash = "sha256-o7je2efcEr6nQV+u/zlzVLS1+Pozx2sPCbCZIT5NIIM=";
 
   subPackages = [
     "cmd/gocritic"
@@ -27,7 +27,7 @@ buildGoModule rec {
   allowGoReference = true;
 
   ldflags = [
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
   ];
 
   passthru = {
@@ -41,9 +41,9 @@ buildGoModule rec {
   meta = {
     description = "Most opinionated Go source code linter for code audit";
     homepage = "https://go-critic.com/";
-    changelog = "https://github.com/go-critic/go-critic/releases/tag/${src.rev}";
+    changelog = "https://github.com/go-critic/go-critic/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     mainProgram = "gocritic";
-    maintainers = with lib.maintainers; [ katexochen ];
+    maintainers = [ ];
   };
-}
+})

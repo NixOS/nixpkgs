@@ -21,8 +21,6 @@ let
       (listOf settingType)
     ];
 
-  genAttrs' = names: f: lib.listToAttrs (map f names);
-
   regexEscape =
     let
       # taken from https://github.com/python/cpython/blob/05cb728d68a278d11466f9a6c8258d914135c96c/Lib/re.py#L251-L266
@@ -146,7 +144,7 @@ in
               };
 
               repos = lib.mkOption {
-                description = "cgit repository settings, see cgitrc(5)";
+                description = "cgit repository settings, see {manpage}`cgitrc(5)`";
                 type = with lib.types; attrsOf (attrsOf settingType);
                 default = { };
                 example = {
@@ -165,7 +163,7 @@ in
               };
 
               settings = lib.mkOption {
-                description = "cgit configuration, see cgitrc(5)";
+                description = "cgit configuration, see {manpage}`cgitrc(5)`";
                 type = lib.types.attrsOf repeatedSettingType;
                 default = { };
                 example = lib.literalExpression ''
@@ -193,6 +191,32 @@ in
                 type = lib.types.str;
                 default = "cgit";
               };
+
+              gitHttpBackend.enable = lib.mkOption {
+                description = ''
+                  Whether to bypass cgit and use git-http-backend for HTTP clones.
+                  While this enables HTTP clones to use the more efficient smart protocol,
+                  it does not support access control via cgit's settings (e.g. the `ignore` repository setting).
+
+                  If you want to disallow access to some repositories with this backend,
+                  enable `checkExportOkFiles` and set `strict-export = "git-daemon-export-ok"` in `settings`.
+                '';
+                type = lib.types.bool;
+                default = true;
+              };
+
+              gitHttpBackend.checkExportOkFiles = lib.mkOption {
+                description = ''
+                  Whether git-http-backend should only export repositories that contain a `git-daemon-export-ok` file.
+
+                  When the backend is enabled and the check is disabled all repositories can be cloned
+                  irrespective of cgit's settings (e.g. the `ignore` repository setting).
+
+                  When enabled you must also configure `strict-export = "git-daemon-export-ok"`
+                  in `settings` to make cgit check for the same files.
+                '';
+                type = lib.types.bool;
+              };
             };
           }
         )
@@ -201,10 +225,31 @@ in
   };
 
   config = lib.mkIf (lib.any (cfg: cfg.enable) (lib.attrValues cfgs)) {
-    assertions = lib.mapAttrsToList (vhost: cfg: {
-      assertion = !cfg.enable || (cfg.scanPath == null) != (cfg.repos == { });
-      message = "Exactly one of services.cgit.${vhost}.scanPath or services.cgit.${vhost}.repos must be set.";
-    }) cfgs;
+    assertions = lib.flatten (
+      lib.mapAttrsToList (vhost: cfg: [
+        {
+          assertion = !cfg.enable || (cfg.scanPath == null) != (cfg.repos == { });
+          message = "Misconfigured services.cgit.${vhost}: Exactly one of scanPath or repos must be set.";
+        }
+        {
+          assertion =
+            cfg.enable
+            -> cfg.gitHttpBackend.enable
+            -> cfg.gitHttpBackend.checkExportOkFiles
+            -> (cfg.settings ? strict-export && cfg.settings.strict-export == "git-daemon-export-ok");
+          message = "Misconfigured services.cgit.${vhost}: When gitHttpBackend.checkExportOkFiles is true then settings.strict-export must be \"git-daemon-export-ok\".";
+        }
+        {
+          assertion =
+            cfg.enable
+            -> cfg.gitHttpBackend.enable
+            -> !cfg.gitHttpBackend.checkExportOkFiles
+            -> cfg.settings ? strict-export
+            -> cfg.settings.strict-export == null;
+          message = "Misconfigured services.cgit.${vhost}: settings.strict-export is set but the gitHttpBackend is enabled and checkExportOkFiles is false.";
+        }
+      ]) cfgs
+    );
 
     users = lib.mkMerge (
       lib.flip lib.mapAttrsToList cfgs (
@@ -253,24 +298,26 @@ in
       lib.mapAttrsToList (name: cfg: {
         ${cfg.nginx.virtualHost} = {
           locations =
-            (genAttrs' [ "cgit.css" "cgit.png" "favicon.ico" "robots.txt" ] (
+            (lib.genAttrs' [ "cgit.css" "cgit.js" "cgit.png" "favicon.ico" "robots.txt" ] (
               fileName:
               lib.nameValuePair "= ${stripLocation cfg}/${fileName}" {
-                extraConfig = ''
-                  alias ${cfg.package}/cgit/${fileName};
-                '';
+                alias = lib.mkDefault "${cfg.package}/cgit/${fileName}";
               }
             ))
-            // {
+            // lib.optionalAttrs cfg.gitHttpBackend.enable {
               "~ ${regexLocation cfg}/.+/(info/refs|git-upload-pack)" = {
                 fastcgiParams = rec {
                   SCRIPT_FILENAME = "${pkgs.git}/libexec/git-core/git-http-backend";
-                  GIT_HTTP_EXPORT_ALL = "1";
                   GIT_PROJECT_ROOT = gitProjectRoot name cfg;
                   HOME = GIT_PROJECT_ROOT;
+                }
+                // lib.optionalAttrs (!cfg.gitHttpBackend.checkExportOkFiles) {
+                  GIT_HTTP_EXPORT_ALL = "1";
                 };
                 extraConfig = mkFastcgiPass name cfg;
               };
+            }
+            // {
               "${stripLocation cfg}/" = {
                 fastcgiParams = {
                   SCRIPT_FILENAME = "${cfg.package}/cgit/cgit.cgi";

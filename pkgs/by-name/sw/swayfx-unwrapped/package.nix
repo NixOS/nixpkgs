@@ -2,9 +2,9 @@
   lib,
   fetchFromGitHub,
   stdenv,
-  systemd,
+  systemdLibs,
   meson,
-  substituteAll,
+  replaceVars,
   swaybg,
   ninja,
   pkg-config,
@@ -24,14 +24,14 @@
   scdoc,
   scenefx,
   wayland-scanner,
-  xcbutilwm,
-  wlroots_0_17,
+  libxcb-wm,
+  wlroots_0_20,
   testers,
   nixosTests,
   # Used by the NixOS module:
   isNixOS ? false,
   enableXWayland ? true,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
   trayEnabled ? systemdSupport,
 }:
 
@@ -44,34 +44,34 @@ stdenv.mkDerivation (finalAttrs: {
     ;
 
   pname = "swayfx-unwrapped";
-  version = "0.4";
+  version = "0.6";
 
   src = fetchFromGitHub {
-    owner = "WillPower3309";
+    owner = "wlrfx";
     repo = "swayfx";
     tag = finalAttrs.version;
-    hash = "sha256-VT+JjQPqCIdtaLeSnRiZ3rES0KgDJR7j5Byxr+d6oRg=";
+    hash = "sha256-yvVqwgKEZt/JbT4cxyRA95oK1t/KcZ2AvI5/o7gYa0M=";
   };
 
-  patches =
-    [
-      ./load-configuration-from-etc.patch
+  separateDebugInfo = true;
 
-      (substituteAll {
-        src = ./fix-paths.patch;
-        inherit swaybg;
-      })
-    ]
-    ++ lib.optionals (!finalAttrs.isNixOS) [
-      # References to /nix/store/... will get GC'ed which causes problems when
-      # copying the default configuration:
-      ./sway-config-no-nix-store-references.patch
-    ]
-    ++ lib.optionals finalAttrs.isNixOS [
-      # Use /run/current-system/sw/share and /etc instead of /nix/store
-      # references:
-      ./sway-config-nixos-paths.patch
-    ];
+  patches = [
+    ./load-configuration-from-etc.patch
+
+    (replaceVars ./fix-paths.patch {
+      inherit swaybg;
+    })
+  ]
+  ++ lib.optionals (!finalAttrs.isNixOS) [
+    # References to /nix/store/... will get GC'ed which causes problems when
+    # copying the default configuration:
+    ./sway-config-no-nix-store-references.patch
+  ]
+  ++ lib.optionals finalAttrs.isNixOS [
+    # Use /run/current-system/sw/share and /etc instead of /nix/store
+    # references:
+    ./sway-config-nixos-paths.patch
+  ];
 
   strictDeps = true;
   depsBuildBuild = [ pkg-config ];
@@ -99,8 +99,9 @@ stdenv.mkDerivation (finalAttrs: {
     scenefx
     wayland
     wayland-protocols
-    (wlroots_0_17.override { inherit (finalAttrs) enableXWayland; })
-  ] ++ lib.optionals finalAttrs.enableXWayland [ xcbutilwm ];
+    (wlroots_0_20.override { inherit (finalAttrs) enableXWayland; })
+  ]
+  ++ lib.optionals finalAttrs.enableXWayland [ libxcb-wm ];
 
   mesonFlags =
     let
@@ -116,7 +117,6 @@ stdenv.mkDerivation (finalAttrs: {
     in
     [
       (mesonOption "sd-bus-provider" sd-bus-provider)
-      (mesonEnable "xwayland" finalAttrs.enableXWayland)
       (mesonEnable "tray" finalAttrs.trayEnabled)
     ];
 
@@ -132,9 +132,9 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Sway, but with eye candy!";
-    homepage = "https://github.com/WillPower3309/swayfx";
-    changelog = "https://github.com/WillPower3309/swayfx/releases/tag/${finalAttrs.version}";
+    description = "Sway, but with eye candy";
+    homepage = finalAttrs.src.meta.homepage;
+    changelog = "${finalAttrs.src.meta.homepage}/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       ricarch97

@@ -8,7 +8,7 @@
   ounit,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "io-page";
   version = "3.0.0";
 
@@ -16,7 +16,7 @@ buildDunePackage rec {
   duneVersion = "3";
 
   src = fetchurl {
-    url = "https://github.com/mirage/${pname}/releases/download/v${version}/${pname}-${version}.tbz";
+    url = "https://github.com/mirage/io-page/releases/download/v${finalAttrs.version}/io-page-${finalAttrs.version}.tbz";
     hash = "sha256-DjbKdNkFa6YQgJDLmLsuvyrweb4/TNvqAiggcj/3hu4=";
   };
 
@@ -34,4 +34,4 @@ buildDunePackage rec {
     description = "IO memory page library for Mirage backends";
     maintainers = with lib.maintainers; [ vbgl ];
   };
-}
+})

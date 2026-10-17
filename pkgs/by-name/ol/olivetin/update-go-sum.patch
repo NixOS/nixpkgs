@@ -1,0 +1,24 @@
+From 782cb39078967f1ad33dac1518c5a5b0e9f200c9 Mon Sep 17 00:00:00 2001
+From: Defelo <mail@defelo.de>
+Date: Tue, 25 Nov 2025 17:42:18 +0100
+Subject: [PATCH 1/1] update go.sum
+
+---
+ service/go.sum | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/service/go.sum b/service/go.sum
+index ef8dc72..89b4c1f 100644
+--- a/service/go.sum
++++ b/service/go.sum
+@@ -349,6 +349,7 @@ github.com/stretchr/testify v1.8.0/go.mod h1:yNjHg4UonilssWZ8iaSj1OCr/vHnekPRkoO
+ github.com/stretchr/testify v1.8.1/go.mod h1:w2LPCIKwWwSfY2zedu0+kehJoqGctiVI29o6fzry7u4=
+ github.com/stretchr/testify v1.10.0 h1:Xv5erBjTwe/5IxqUQTdXv5kgmIvbHo3QQyRwhJsOfJA=
+ github.com/stretchr/testify v1.10.0/go.mod h1:r2ic/lqez/lEtzL7wO/rwa5dbSLXVDPFyf8C91i36aY=
++github.com/stretchr/testify v1.11.1 h1:7s2iGBzp5EwR7/aIZr8ao5+dra3wiQyKjjFuvgVKu7U=
+ github.com/stretchr/testify v1.11.1/go.mod h1:wZwfW3scLgRK+23gO65QZefKpKQRnfz6sD981Nm4B6U=
+ github.com/subosito/gotenv v1.6.0 h1:9NlTDc1FTs4qu0DDq7AEtTPNw6SVm7uBMsUCUjABIf8=
+ github.com/subosito/gotenv v1.6.0/go.mod h1:Dk4QP5c2W3ibzajGcXpNraDfq2IrhjMIvMSWPKKo0FU=
+-- 
+2.51.2
+

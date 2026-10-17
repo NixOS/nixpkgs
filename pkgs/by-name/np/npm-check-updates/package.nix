@@ -1,20 +1,21 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
 }:
 
 buildNpmPackage rec {
   pname = "npm-check-updates";
-  version = "17.1.11";
+  version = "23.1.0";
 
   src = fetchFromGitHub {
     owner = "raineorshine";
     repo = "npm-check-updates";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-l23+Gmv6395QSWdGOVgHH2mvQND02/PQyBvwvEeawCI=";
+    tag = "v${version}";
+    hash = "sha256-YLATcN4n/QOpUk4w6cl9GJkugUrX82LRuvLBbPHTClA=";
   };
 
-  npmDepsHash = "sha256-/J38+j4f5G54ejfzZIqQ9JL7BCD8UTa5dkwYgIu2Xo0=";
+  npmDepsHash = "sha256-Wmipt2xYmlt64Rc8rQOyUU6jZz/B7Zs31YO4c099Tmw=";
 
   postPatch = ''
     sed -i '/"prepare"/d' package.json

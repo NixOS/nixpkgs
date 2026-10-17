@@ -1,33 +1,34 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "popeye";
-  version = "0.21.6";
+  version = "0.22.1";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     owner = "derailed";
     repo = "popeye";
-    sha256 = "sha256-CX30/AzHFtHhctvLIgRNDBvrXuNUXfz2xLoBY5zIWPo=";
+    sha256 = "sha256-CbVYQIE7kjUah+SDEjs5Qz+n4+f3HriQNxYPqDcdr/I=";
   };
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/derailed/popeye/cmd.version=${version}"
-    "-X github.com/derailed/popeye/cmd.commit=${version}"
+    "-X github.com/derailed/popeye/cmd.version=${finalAttrs.version}"
+    "-X github.com/derailed/popeye/cmd.commit=${finalAttrs.version}"
   ];
 
-  vendorHash = "sha256-YvIINp81XPMbSLCDhK9i+I4hfVXPWH19EeVXYhEXbs8=";
+  vendorHash = "sha256-Xhn1iOqzCY8fW2lODXwqY4XQZTAPWXaZ0XM5j02bnCs=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd popeye \
       --bash <($out/bin/popeye completion bash) \
       --fish <($out/bin/popeye completion fish) \
@@ -36,15 +37,15 @@ buildGoModule rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
-    $out/bin/popeye version | grep ${version} > /dev/null
+    $out/bin/popeye version | grep ${finalAttrs.version} > /dev/null
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Kubernetes cluster resource sanitizer";
     mainProgram = "popeye";
     homepage = "https://github.com/derailed/popeye";
-    changelog = "https://github.com/derailed/popeye/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = [ maintainers.bryanasdev000 ];
+    changelog = "https://github.com/derailed/popeye/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
-}
+})

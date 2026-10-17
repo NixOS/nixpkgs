@@ -7,20 +7,20 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tcpdump";
-  version = "4.99.5";
+  version = "4.99.7";
 
   src = fetchurl {
-    url = "https://www.tcpdump.org/release/tcpdump-${version}.tar.gz";
-    hash = "sha256-jHWFbgCt3urfcNrWfJ/z3TaFNrK4Vjq/aFTXx2TNOts=";
+    url = "https://www.tcpdump.org/release/tcpdump-${finalAttrs.version}.tar.gz";
+    hash = "sha256-i+Nk4o07dF7xRZs4XNL0vA4eutel0uvfcAcdbJtbmlQ=";
   };
 
   postPatch = ''
     patchShebangs tests
   '';
 
-  nativeBuildInputs = lib.optional (stdenv.hostPlatform.isStatic) [ pkg-config ];
+  nativeBuildInputs = [ pkg-config ];
 
   nativeCheckInputs = [ perl ];
 
@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "ac_cv_linux_vers=2";
 
-  meta = with lib; {
+  meta = {
     description = "Network sniffer";
     homepage = "https://www.tcpdump.org/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ globin ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ globin ];
+    platforms = lib.platforms.unix;
     mainProgram = "tcpdump";
   };
-}
+})

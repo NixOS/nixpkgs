@@ -1,28 +1,61 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  pkgs,
+  fetchFromGitHub,
+  gitUpdater,
+  hypothesis,
+  openssl,
+  pytestCheckHook,
+  setuptools,
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ecdsa";
-  version = "0.19.0";
-  format = "setuptools";
+  version = "0.19.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-YOqtEZllmQDdCvUh7UYreTu9+GdDKzlI6HQWrkyva/g=";
+  src = fetchFromGitHub {
+    owner = "tlsfuzzer";
+    repo = "python-ecdsa";
+    tag = "python-ecdsa-${finalAttrs.version}";
+    hash = "sha256-u+EwAF/EnF33l/gy5y8eoA7aVeI/0cq9DDL9UUwgPFw=";
   };
 
-  propagatedBuildInputs = [ six ];
-  # Only needed for tests
-  nativeCheckInputs = [ pkgs.openssl ];
+  build-system = [ setuptools ];
 
-  meta = with lib; {
+  dependencies = [ six ];
+
+  pythonImportsCheck = [ "ecdsa" ];
+
+  nativeCheckInputs = [
+    hypothesis
+    openssl # Only needed for tests
+    pytestCheckHook
+  ];
+
+  patches = [
+    # Python update caused one of the tests to fail. A patch that fixes this
+    # has been submitted upstream, yet to be applied.
+    # https://github.com/tlsfuzzer/python-ecdsa/pull/371
+    ./pr-371-fix-test-2026-05-23.patch
+  ];
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "python-ecdsa-";
+  };
+
+  meta = {
+    changelog = "https://github.com/tlsfuzzer/python-ecdsa/blob/${finalAttrs.src.tag}/NEWS";
     description = "ECDSA cryptographic signature library";
     homepage = "https://github.com/warner/python-ecdsa";
-    license = licenses.mit;
+    license = lib.licenses.mit;
+    knownVulnerabilities = [
+      # "I don't want people to use this library in production environments.
+      # It's a teaching tool, it's a testing tool, it's absolutely not an
+      # production grade implementation."
+      # https://github.com/tlsfuzzer/python-ecdsa/issues/330
+      "CVE-2024-23342"
+    ];
   };
-}
+})

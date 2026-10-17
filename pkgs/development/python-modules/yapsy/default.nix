@@ -4,11 +4,12 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
+  unstableGitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "yapsy";
-  version = "1.12.2-unstable-2023-03-29";
+  version = "1.12.2-unstable-2023-03-28";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-QKZlUAhYMCCsT/jbEHb39ESZ2+2FZYnhJnc1PgsozBA=";
   };
 
-  sourceRoot = "${src.name}/package";
+  sourceRoot = "${finalAttrs.src.name}/package";
 
   build-system = [ setuptools ];
 
@@ -26,9 +27,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yapsy" ];
 
-  meta = with lib; {
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "release_Yapsy-";
+  };
+
+  meta = {
     homepage = "https://yapsy.sourceforge.net/";
     description = "Yet another plugin system";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
   };
-}
+})

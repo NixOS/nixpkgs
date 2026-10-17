@@ -4,15 +4,15 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "miller";
-  version = "6.13.0";
+  version = "6.22.0";
 
   src = fetchFromGitHub {
     owner = "johnkerl";
     repo = "miller";
-    rev = "v${version}";
-    sha256 = "sha256-eHiYIw/sQMXLow2Vy4zFTGeON28LmG0pK2Uca4ooInU=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-VIdX7yO45jjaYApNCays4knwLIjRG8GNkWeNGXKIs6M=";
   };
 
   outputs = [
@@ -20,7 +20,7 @@ buildGoModule rec {
     "man"
   ];
 
-  vendorHash = "sha256-oc6Lp4rQ+MLmQDVcuNJ3CqYH277Vuuwu4zSSO2ICXsw=";
+  vendorHash = "sha256-9ioeIPtEWmC3vY3rIPdRl3+0a2cKpH7VhmLVi7ioQK8=";
 
   postInstall = ''
     mkdir -p $man/share/man/man1
@@ -29,12 +29,12 @@ buildGoModule rec {
 
   subPackages = [ "cmd/mlr" ];
 
-  meta = with lib; {
+  meta = {
     description = "Like awk, sed, cut, join, and sort for data formats such as CSV, TSV, JSON, JSON Lines, and positionally-indexed";
     homepage = "https://github.com/johnkerl/miller";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ mstarzyk ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ mstarzyk ];
     mainProgram = "mlr";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

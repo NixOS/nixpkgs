@@ -50,16 +50,15 @@ mkDerivation {
     ++ [
       libnetbsd
     ];
-  makeFlags =
-    [
-      "STRIP=-s" # flag to install, not command
-      "MK_WERROR=no"
-      "TESTSDIR=${builtins.placeholder "test"}"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
-      "BOOTSTRAPPING=1"
-      "INSTALL=boot-install"
-    ];
+  makeFlags = [
+    "STRIP=-s" # flag to install, not command
+    "MK_WERROR=no"
+    "TESTSDIR=${placeholder "test"}"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+    "BOOTSTRAPPING=1"
+    "INSTALL=boot-install"
+  ];
   postInstall = ''
     install -C -m 0550 ${binstall} $out/bin/binstall
     substituteInPlace $out/bin/binstall --subst-var out
@@ -71,4 +70,6 @@ mkDerivation {
     "man"
     "test"
   ];
+
+  meta.platforms = lib.platforms.unix;
 }

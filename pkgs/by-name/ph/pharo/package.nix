@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pharo";
-  version = "10.3.1-6cdb1e5";
+  version = "10.3.4+3.884643b";
 
   src = fetchzip {
     # It is necessary to download from there instead of from the repository because that archive
     # also contains artifacts necessary for the bootstrapping.
-    url = "https://files.pharo.org/vm/pharo-spur64-headless/Linux-x86_64/source/PharoVM-${finalAttrs.version}-Linux-x86_64-c-src.zip";
-    hash = "sha256-Oskbo0ZMh2Wr8uY9BjA54AhFVDEuzs4AN8cpO02gdfY=";
+    url = "https://files.pharo.org/vm/pharo-spur64-headless/Linux-x86_64/source/PharoVM-v${finalAttrs.version}-Linux-x86_64-c-src.zip";
+    hash = "sha256-JBN0gPVMIUFzrdLqrCnCvf4cbZMfpluO2/jCxk3U+M8=";
   };
 
   strictDeps = true;
@@ -58,6 +58,12 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-incompatible-pointer-types"
   ];
+
+  # Fix missing version.info
+  preBuild = ''
+    mkdir -p /build/source/build/
+    echo "${finalAttrs.version}" > /build/source/build/version.info
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -98,7 +104,6 @@ stdenv.mkDerivation (finalAttrs: {
       system, excellent dev tools, and maintained releases, Pharo is an
       attractive platform to build and deploy mission critical applications.
     '';
-    maintainers = with lib.maintainers; [ ehmry ];
     mainProgram = "pharo";
     platforms = lib.platforms.linux;
   };

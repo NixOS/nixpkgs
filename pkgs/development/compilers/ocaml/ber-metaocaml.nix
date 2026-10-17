@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   ncurses,
-  libX11,
+  libx11,
   xorgproto,
   buildEnv,
   useX11 ? stdenv.hostPlatform.isx86,
@@ -11,14 +11,14 @@
 
 let
   x11deps = [
-    libX11
+    libx11
     xorgproto
   ];
   inherit (lib) optionals;
 
-  baseOcamlBranch = "4.14";
-  baseOcamlVersion = "${baseOcamlBranch}.1";
-  metaocamlPatch = "114";
+  baseOcamlBranch = "5.3";
+  baseOcamlVersion = "${baseOcamlBranch}.0";
+  metaocamlPatch = "153";
 in
 
 stdenv.mkDerivation rec {
@@ -27,12 +27,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://caml.inria.fr/pub/distrib/ocaml-${baseOcamlBranch}/ocaml-${baseOcamlVersion}.tar.gz";
-    sha256 = "sha256-GDl53JwJyw9YCiMraFMaCbAlqmKLjY1ydEnxRv1vX+4=";
+    sha256 = "sha256-IsHdneIb9Dti0ZCQQftfrWSJBSJ79pVQpqa+8x5lTzg=";
   };
 
   metaocaml = fetchurl {
-    url = "http://okmij.org/ftp/ML/ber-metaocaml-${metaocamlPatch}.tar.gz";
-    sha256 = "sha256-vvq3xI4jSAsrXcDk97TPbFDYgO9NcQeN/yBcUbcb/y0=";
+    url = "https://okmij.org/ftp/ML/ber-metaocaml-${metaocamlPatch}.tar.gz";
+    sha256 = "sha256-zN4C+ZKpPyT87U9wba8D475K6NWOotSYdd67D+1LSlI=";
   };
 
   x11env = buildEnv {
@@ -85,18 +85,18 @@ stdenv.mkDerivation rec {
     nativeCompilers = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Multi-Stage Programming extension for OCaml";
     homepage = "https://okmij.org/ftp/ML/MetaOCaml.html";
-    license = with licenses; [
+    license = with lib.licenses; [
       # compiler
       qpl # library
       lgpl2
     ];
-    maintainers = with maintainers; [ thoughtpolice ];
+    maintainers = with lib.maintainers; [ thoughtpolice ];
 
     branch = baseOcamlBranch;
-    platforms = with platforms; linux ++ darwin;
+    platforms = with lib.platforms; linux ++ darwin;
     broken = stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isMips;
 
     longDescription = ''

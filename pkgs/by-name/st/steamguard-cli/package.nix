@@ -6,37 +6,44 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "steamguard-cli";
-  version = "0.15.0";
+  version = "0.18.4";
 
   src = fetchFromGitHub {
     owner = "dyc3";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-Cxl6FczWr5kAYt+q1m3HLEKCBeQz3TcW/aaOxsBcuwc=";
+    repo = "steamguard-cli";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-zjkFVsc0ANXUYNH0tqFewz0xJSCm9Gyo5Ruy+sJJKrg=";
   };
 
-  cargoHash = "sha256-YKlTEKk2pbwLIFZjK/sBIIYwu0DYarVeJsIB9FSR9XM=";
+  cargoHash = "sha256-wEnUCmFX+VGdkwE1ivoCI+BtOr7BI1qY9sQH4IVSiSY=";
+
+  # disable update check
+  buildNoDefaultFeatures = true;
+  buildFeatures = [
+    "keyring"
+    "qr"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd steamguard \
       --bash <($out/bin/steamguard completion --shell bash) \
       --fish <($out/bin/steamguard completion --shell fish) \
-      --zsh <($out/bin/steamguard completion --shell zsh) \
+      --zsh <($out/bin/steamguard completion --shell zsh)
   '';
 
-  meta = with lib; {
-    changelog = "https://github.com/dyc3/steamguard-cli/releases/tag/v${version}";
+  meta = {
+    changelog = "https://github.com/dyc3/steamguard-cli/releases/tag/v${finalAttrs.version}";
     description = "Linux utility for generating 2FA codes for Steam and managing Steam trade confirmations";
     homepage = "https://github.com/dyc3/steamguard-cli";
-    license = with licenses; [ gpl3Only ];
+    license = lib.licenses.gpl3Only;
     mainProgram = "steamguard";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       surfaceflinger
       sigmasquadron
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

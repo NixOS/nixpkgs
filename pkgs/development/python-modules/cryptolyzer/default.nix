@@ -7,37 +7,37 @@
   colorama,
   cryptoparser,
   dnspython,
-  fetchPypi,
+  fetchFromGitLab,
   pathlib2,
   pyfakefs,
   python-dateutil,
-  pythonOlder,
+  pycryptodome,
   requests,
   setuptools,
+  setuptools-scm,
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cryptolyzer";
-  version = "0.12.5";
+  version = "1.5.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Qc1L4F2U/nk37s/mIa2YgJZqC2dkPsB/Si84SEl576Q=";
+  src = fetchFromGitLab {
+    owner = "coroner";
+    repo = "cryptolyzer";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2U+7y88m+r1LzOiDp4QydnlQCjBfN6p56Yh9mZMjnyE=";
   };
 
-  postPatch = ''
-    substituteInPlace requirements.txt  \
-      --replace-warn "attrs>=20.3.0,<22.0.1" "attrs>=20.3.0" \
-      --replace-warn "bs4" "beautifulsoup4"
-  '';
+  pythonRemoveDeps = [ "bs4" ];
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     beautifulsoup4
     certvalidator
@@ -47,6 +47,7 @@ buildPythonPackage rec {
     pathlib2
     pyfakefs
     python-dateutil
+    pycryptodome
     requests
     urllib3
   ];
@@ -54,13 +55,24 @@ buildPythonPackage rec {
   # Tests require networking
   doCheck = false;
 
+  postInstall = ''
+    find $out -name "__pycache__" -type d | xargs rm -rv
+
+    # Prevent creating more binary byte code later (e.g. during
+    # pythonImportsCheck)
+    export PYTHONDONTWRITEBYTECODE=1
+  '';
+
   pythonImportsCheck = [ "cryptolyzer" ];
 
-  meta = with lib; {
+  passthru.updateScript = ../cryptodatahub/update.sh;
+
+  meta = {
     description = "Cryptographic protocol analyzer";
     homepage = "https://gitlab.com/coroner/cryptolyzer";
-    changelog = "https://gitlab.com/coroner/cryptolyzer/-/blob/v${version}/CHANGELOG.md";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ kranzes ];
+    changelog = "https://gitlab.com/coroner/cryptolyzer/-/blob/v${finalAttrs.version}/CHANGELOG.rst";
+    license = lib.licenses.mpl20;
+    mainProgram = "cryptolyze";
+    teams = with lib.teams; [ ngi ];
   };
-}
+})

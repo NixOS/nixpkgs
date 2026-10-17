@@ -8,35 +8,32 @@
   cargo,
   rustc,
 
-  # dependencies
-  pyarrow,
-  pythonOlder,
-  typing-extensions,
-
   # optional-dependencies
   pandas,
   polars,
+  pyarrow,
 
   # tests
   pytest-mock,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fastexcel";
-  version = "0.12.1";
+  version = "0.21.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ToucanToco";
     repo = "fastexcel";
-    tag = "v${version}";
-    hash = "sha256-1BcArjhdbsYZ8VIz1FJYOLKSKQXOjLUXFonIXB+TfiY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-//zEMGJvFlujnIReA/f2YLk1xfinq9EymsfP7GdkPb8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-JGDNqRF264hNAjQ9bwJnBsQgAcqJjreEbgRZAA58JnY=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-SmuGW3iNZlX4Ldfv8Mqxleu7ucAFIUECBvUOuqcEcf0=";
   };
 
   nativeBuildInputs = [
@@ -46,17 +43,13 @@ buildPythonPackage rec {
     rustc
   ];
 
-  dependencies =
-    [
-      pyarrow
-    ]
-    ++ lib.optionals (pythonOlder "3.9") [
-      typing-extensions
-    ];
-
   optional-dependencies = {
+    pyarrow = [
+      pyarrow
+    ];
     pandas = [
       pandas
+      pyarrow
     ];
     polars = [
       polars
@@ -65,11 +58,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "fastexcel"
+    "fastexcel._fastexcel"
   ];
+
+  preCheck = ''
+    rm -rf python/fastexcel
+  '';
 
   nativeCheckInputs = [
     pandas
     polars
+    pyarrow
     pytest-mock
     pytestCheckHook
   ];
@@ -77,8 +76,8 @@ buildPythonPackage rec {
   meta = {
     description = "Fast excel file reader for Python, written in Rust";
     homepage = "https://github.com/ToucanToco/fastexcel/";
-    changelog = "https://github.com/ToucanToco/fastexcel/releases/tag/v${version}";
+    changelog = "https://github.com/ToucanToco/fastexcel/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

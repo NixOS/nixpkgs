@@ -1,68 +1,61 @@
 {
   lib,
-  stdenv,
-  Accelerate,
-  blis,
   buildPythonPackage,
-  catalogue,
-  confection,
-  CoreFoundation,
-  CoreGraphics,
-  CoreVideo,
+  fetchFromGitHub,
+
+  # build-system
+  blis,
   cymem,
-  cython_0,
-  fetchPypi,
-  hypothesis,
-  mock,
+  cython,
   murmurhash,
   numpy,
   preshed,
-  pydantic,
-  pytestCheckHook,
-  pythonOlder,
   setuptools,
+
+  # buildInputs
+  blas,
+
+  # dependencies
+  catalogue,
+  confection,
+  pydantic,
   srsly,
-  typing-extensions,
   wasabi,
+
+  # tests
+  hypothesis,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "thinc";
-  version = "8.3.0";
+  version = "8.3.12";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-6zvtVPXADsmt2qogjFHM+gWUg9cxQM1RWqMzc3Fcblk=";
+  src = fetchFromGitHub {
+    owner = "explosion";
+    repo = "thinc";
+    tag = "release-v${finalAttrs.version}";
+    hash = "sha256-8nf+AWAD7Fy50XRJDINmyk42F7KMDhGgATwqbln3r04=";
   };
 
   postPatch = ''
-    # As per https://github.com/explosion/thinc/releases/tag/release-v8.3.0 no
-    # code changes were required for NumPy 2.0. Thus Thinc should be compatible
-    # with NumPy 1.0 and 2.0.
-    substituteInPlace pyproject.toml setup.cfg \
-      --replace-fail "numpy>=2.0.0,<2.1.0" numpy
-    substituteInPlace setup.cfg \
-      --replace-fail "numpy>=2.0.1,<2.1.0" numpy
+    substituteInPlace pyproject.toml \
+      --replace-fail coverage.exceptions.CoverageWarning ""
   '';
 
   build-system = [
     blis
     cymem
-    cython_0
+    cython
     murmurhash
     numpy
     preshed
     setuptools
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    Accelerate
-    CoreFoundation
-    CoreGraphics
-    CoreVideo
+  buildInputs = [
+    blas
   ];
 
   dependencies = [
@@ -76,27 +69,41 @@ buildPythonPackage rec {
     pydantic
     srsly
     wasabi
-  ] ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+  ];
+
+  pythonImportsCheck = [ "thinc" ];
 
   nativeCheckInputs = [
     hypothesis
-    mock
     pytestCheckHook
   ];
 
+  # avoid local paths, relative imports wont resolve correctly
   preCheck = ''
-    # avoid local paths, relative imports wont resolve correctly
     mv thinc/tests tests
     rm -r thinc
   '';
 
-  pythonImportsCheck = [ "thinc" ];
+  pytestFlags = [
+    # UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+    "-Wignore::UserWarning"
+  ];
 
-  meta = with lib; {
+  disabledTestPaths = [
+    # pydantic.v1.error_wrappers.ValidationError: 1 validation error for DefaultsSchema
+    "tests/test_config.py"
+  ];
+
+  disabledTests = [
+    # RecursionError: Stack overflow (used 8148 kB)
+    "test_pickle_with_flatten"
+  ];
+
+  meta = {
     description = "Library for NLP machine learning";
     homepage = "https://github.com/explosion/thinc";
-    changelog = "https://github.com/explosion/thinc/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ aborsu ];
+    changelog = "https://github.com/explosion/thinc/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
-}
+})

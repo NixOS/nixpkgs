@@ -1,62 +1,66 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
-  buildNpmPackage,
+  fetchNpmDeps,
+  npmHooks,
   rustPlatform,
   pkg-config,
   openssl,
-  darwin,
+  nodejs,
+  nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cook-cli";
-  version = "0.7.1";
+  version = "0.38.1";
 
   src = fetchFromGitHub {
     owner = "cooklang";
     repo = "cookcli";
-    rev = "v${version}";
-    hash = "sha256-3gLVsk6GCxOG24Md7E9fk28Vnc4kVDdwyZUD/GtSwFE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-XvEUpPrkgWxtBoInx6jM0gHF3igZcyf5ykR9Z3wQScc=";
   };
 
-  cargoHash = "sha256-6lnURuE1cgNAniHl5ozXo1W3cLYYje7er+ZhvZDKdVg=";
+  cargoHash = "sha256-gbJo6qzj2c3tzZuEjP8/XxJQjbZrYbjZAWIkqfpwhiM=";
+
+  # Build without the self-updating feature
+  buildNoDefaultFeatures = true;
 
   nativeBuildInputs = [
     pkg-config
     openssl
+    nodejs
+    npmHooks.npmConfigHook
   ];
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
+  ];
 
-  postPatch = ''
-    rm -rf "ui/public"
-    ln -s ${passthru.ui} "ui/public"
+  env.OPENSSL_NO_VENDOR = 1;
+
+  npmDeps = fetchNpmDeps {
+    inherit (finalAttrs) src;
+    hash = "sha256-zAtFsSpJFdthb0E8FLVRGWzGcReDsZxZF+NvHZ+wcY4=";
+  };
+
+  preBuild = ''
+    npm run build-css
+    npm run build-js
   '';
 
-  OPENSSL_NO_VENDOR = 1;
+  passthru.updateScript = nix-update-script { };
 
-  passthru.ui = buildNpmPackage {
-    name = "ui";
-    src = "${src}/ui";
-    npmDepsHash = "sha256-uMyOAYLVHhY4ytvEFvVzdoQ7ExzQ4sH+ZtDrEacu5bk=";
-    makeCacheWritable = true;
-    npmFlags = [ "--legacy-peer-deps" ];
-    installPhase = ''
-      runHook preInstall
-      mv public/ $out
-      runHook postInstall
-    '';
-  };
-
-  meta = with lib; {
-    changelog = "https://github.com/cooklang/cookcli/releases/tag/v${version}";
+  meta = {
+    changelog = "https://github.com/cooklang/cookcli/releases/tag/v${finalAttrs.version}";
     description = "Suite of tools to create shopping lists and maintain recipes";
     homepage = "https://cooklang.org/";
-    license = [ licenses.mit ];
+    license = lib.licenses.mit;
     mainProgram = "cook";
-    maintainers = [ maintainers.emilioziniades ];
-    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = [
+      lib.maintainers.emilioziniades
+      lib.maintainers.ginkogruen
+      lib.maintainers.pinage404
+    ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

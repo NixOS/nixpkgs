@@ -4,7 +4,7 @@
   genFinalPackage =
     pkg: args:
     let
-      expectedArgs = with lib; lib.naturalSort (lib.attrNames args);
+      expectedArgs = lib.naturalSort (lib.attrNames args);
       existingArgs =
         with lib;
         naturalSort (intersectLists expectedArgs (attrNames (functionArgs pkg.override)));

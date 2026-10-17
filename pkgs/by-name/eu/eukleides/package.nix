@@ -1,23 +1,28 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
+  fetchpatch2,
   bison,
   flex,
   makeWrapper,
-  texinfo4,
   getopt,
   readline,
-  texlive,
+  texinfo,
+  versionCheckHook,
 }:
 
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "eukleides";
   version = "1.5.4";
 
-  src = fetchurl {
-    url = "http://www.eukleides.org/files/${pname}-${version}.tar.bz2";
-    sha256 = "0s8cyh75hdj89v6kpm3z24i48yzpkr8qf0cwxbs9ijxj1i38ki0q";
+  src = fetchFromGitLab {
+    # official upstream www.eukleides.org is down
+    domain = "salsa.debian.org";
+    owner = "georgesk";
+    repo = "eukleides";
+    rev = "upstream/${finalAttrs.version}";
+    hash = "sha256-keX7k14X/97zHh87A/7vUsfGc/S6fByd+rewW+LkJeM=";
   };
 
   patches = [
@@ -25,12 +30,18 @@ stdenv.mkDerivation (finalAttrs: rec {
     ./use-CC.patch
     # allow PostScript transparency in epstopdf call
     ./gs-allowpstransparency.patch
+    # fix curly brace escaping in eukleides.texi for newer texinfo compatibility
+    ./texinfo-escape.patch
+    (fetchpatch2 {
+      url = "https://salsa.debian.org/georgesk/eukleides/-/raw/debian/1.5.4-6/debian/patches/fixes-for-gcc15.patch";
+      hash = "sha256-MVC2bkMGkkDqF/kg8MPvOYacUOXshaG2RZ0a9UVXLSI=";
+    })
   ];
 
   nativeBuildInputs = [
     bison
     flex
-    texinfo4
+    texinfo
     makeWrapper
   ];
 
@@ -41,14 +52,14 @@ stdenv.mkDerivation (finalAttrs: rec {
 
   preConfigure = ''
     substituteInPlace Makefile \
-      --replace mktexlsr true
+      --replace-fail mktexlsr true
 
     substituteInPlace doc/Makefile \
-      --replace ginstall-info install-info
+      --replace-fail ginstall-info install-info
 
     substituteInPlace Config \
-      --replace '/usr/local' "$out" \
-      --replace '$(SHARE_DIR)/texmf' "$tex"
+      --replace-fail '/usr/local' "$out" \
+      --replace-fail '$(SHARE_DIR)/texmf' "$tex"
   '';
 
   # Workaround build failure on -fno-common toolchains like upstream
@@ -56,6 +67,13 @@ stdenv.mkDerivation (finalAttrs: rec {
   #   ld: eukleides_build/triangle.o:(.bss+0x28): multiple definition of `A';
   #     eukleides_build/quadrilateral.o:(.bss+0x18): first defined here
   env.NIX_CFLAGS_COMPILE = "-fcommon";
+
+  preBuild = ''
+    mkdir build/eukleides_build
+    mkdir build/euktopst_build
+  '';
+
+  enableParallelBuilding = true;
 
   preInstall = ''
     mkdir -p $out/bin
@@ -72,17 +90,16 @@ stdenv.mkDerivation (finalAttrs: rec {
     "tex"
   ];
 
-  passthru = {
-    tlType = "run";
-    # packages needed by euktoeps, euktopdf and eukleides.sty
-    tlDeps = with texlive; [
-      collection-pstricks
-      epstopdf
-      iftex
-      moreverb
-    ];
-    pkgs = [ finalAttrs.finalPackage.tex ];
-  };
+  # packages needed by euktoeps, euktopdf and eukleides.sty
+  passthru.tlDeps = ps: [
+    ps.collection-pstricks
+    ps.epstopdf
+    ps.iftex
+    ps.moreverb
+  ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
     description = "Geometry Drawing Language";

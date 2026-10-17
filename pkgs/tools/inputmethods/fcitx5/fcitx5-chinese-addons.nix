@@ -4,7 +4,8 @@
   fetchurl,
   fetchFromGitHub,
   cmake,
-  extra-cmake-modules,
+  pkg-config,
+  kdePackages,
   boost,
   gettext,
   libime,
@@ -17,13 +18,14 @@
   fmt,
   qtbase,
   luaSupport ? true,
+  nlohmann_json,
 }:
 
 let
-  pyStrokeVer = "20121124";
+  pyStrokeVer = "20250329";
   pyStroke = fetchurl {
     url = "http://download.fcitx-im.org/data/py_stroke-${pyStrokeVer}.tar.gz";
-    hash = "sha256-jrEoqb+kOVLmfPL87h/RNMb0z9MXvC9sOKYV9etk4kg=";
+    hash = "sha256-wafKciXTYUq4M1P8gnUDAGqYBEd2IBj1N2BCXXtTA6Y=";
   };
   pyTableVer = "20121124";
   pyTable = fetchurl {
@@ -34,18 +36,19 @@ in
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-chinese-addons";
-  version = "5.1.7";
+  version = "5.1.14";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-vtIzm8ia5hC0JdsGNopIHdAd8RDVgrbtVvj1Jh+gE94=";
+    hash = "sha256-EtAoUoZQqxb049oD7r/UgdpJdS/kenMn3t1SHv+YIkg=";
   };
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    pkg-config
+    kdePackages.extra-cmake-modules
     gettext
     fcitx5-lua
   ];
@@ -64,23 +67,24 @@ stdenv.mkDerivation rec {
     opencc
     qtwebengine
     fmt
-  ] ++ lib.optional luaSupport fcitx5-lua;
-
-  cmakeFlags = [
-    (lib.cmakeBool "USE_QT6" (lib.versions.major qtbase.version == "6"))
-  ];
+    qtbase
+    nlohmann_json
+  ]
+  ++ lib.optional luaSupport fcitx5-lua;
 
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     description = "Addons related to Chinese, including IME previous bundled inside fcitx4";
     mainProgram = "scel2org5";
     homepage = "https://github.com/fcitx/fcitx5-chinese-addons";
-    license = with licenses; [
-      gpl2Plus
-      lgpl21Plus
-    ];
-    maintainers = with maintainers; [ poscat ];
-    platforms = platforms.linux;
+    license =
+      with lib.licenses;
+      AND [
+        lgpl21Plus
+        unicode-dfs-2016
+      ];
+    maintainers = with lib.maintainers; [ poscat ];
+    platforms = lib.platforms.linux;
   };
 }

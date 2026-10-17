@@ -1,22 +1,23 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ctlptl";
-  version = "0.8.38";
+  version = "0.9.6";
 
   src = fetchFromGitHub {
     owner = "tilt-dev";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-2WxtuFrEeYErkUQaT7laPzSjEYAszbb4zHRH7/hWXD0=";
+    repo = "ctlptl";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-ryUcVaVJFpSjCIKJlByMHFm4KXGkNjXVLS+jMI28bLA=";
   };
 
-  vendorHash = "sha256-qft+39m583ifp/seEErSGprh9JGpFFvm/EyzCVUmIwQ=";
+  vendorHash = "sha256-yG3ydgCe7M0W1MXEF7W+ke/bLNW3L0Vq1/gW8WWcclY=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -25,20 +26,20 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ctlptl \
       --bash <($out/bin/ctlptl completion bash) \
       --fish <($out/bin/ctlptl completion fish) \
       --zsh <($out/bin/ctlptl completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CLI for declaratively setting up local Kubernetes clusters";
     homepage = "https://github.com/tilt-dev/ctlptl";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ svrana ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ svrana ];
   };
-}
+})

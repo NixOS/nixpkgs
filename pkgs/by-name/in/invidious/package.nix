@@ -3,7 +3,6 @@
   callPackage,
   crystal,
   fetchFromGitHub,
-  fetchpatch,
   librsvg,
   pkg-config,
   libxml2,
@@ -21,6 +20,8 @@
   #     but nix's sandboxing does not allow that)
   #   * if shard.lock changed
   #     * recreate shards.nix by running crystal2nix
+  # Broken versions:
+  #   * 20250517 (`Missing hash key: "videoDetails" (KeyError)`)
   versions ? lib.importJSON ./versions.json,
 }:
 let
@@ -30,6 +31,7 @@ in
 crystal.buildCrystalPackage rec {
   pname = "invidious";
   inherit (versions.invidious) version;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "iv-org";
@@ -49,32 +51,46 @@ crystal.buildCrystalPackage rec {
       # This always uses the latest commit which invalidates the cache even if
       # the assets were not changed
       assetCommitTemplate = ''{{ "#{`git rev-list HEAD --max-count=1 --abbrev-commit -- assets`.strip}" }}'';
+      tagTemplate = ''{{ "#{`git tag --points-at HEAD`.strip}" }}'';
 
       inherit (versions.invidious) commit date;
     in
     ''
       for d in ${videojs}/*; do ln -s "$d" assets/videojs; done
-
-      # Use the version metadata from the derivation instead of using git at
-      # build-time
+    ''
+    # Use the version metadata from the derivation instead of using git at
+    # build-time
+    + ''
       substituteInPlace src/invidious.cr \
-          --replace-fail ${lib.escapeShellArg branchTemplate} '"master"' \
-          --replace-fail ${lib.escapeShellArg commitTemplate} '"${commit}"' \
-          --replace-fail ${lib.escapeShellArg versionTemplate} '"${date}"' \
-          --replace-fail ${lib.escapeShellArg assetCommitTemplate} '"${commit}"'
-
-      # Patch the assets and locales paths to be absolute
+        --replace-fail ${lib.escapeShellArg branchTemplate} '"master"' \
+        --replace-fail ${lib.escapeShellArg commitTemplate} '"${commit}"' \
+        --replace-fail ${lib.escapeShellArg versionTemplate} '"${date}"' \
+        --replace-fail ${lib.escapeShellArg assetCommitTemplate} '"${commit}"' \
+        --replace-fail ${lib.escapeShellArg tagTemplate} '"v${version}"'
+    ''
+    # Patch the assets and locales paths to be absolute
+    + ''
       substituteInPlace src/invidious.cr \
-          --replace-fail 'public_folder "assets"' 'public_folder "${placeholder "out"}/share/invidious/assets"'
+        --replace-fail \
+          'StaticAssetsHandler.new("assets"' \
+          'StaticAssetsHandler.new("${placeholder "out"}/share/invidious/assets"'
+
       substituteInPlace src/invidious/helpers/i18n.cr \
-          --replace-fail 'File.read("locales/' 'File.read("${placeholder "out"}/share/invidious/locales/'
-
-      # Reference sql initialisation/migration scripts by absolute path
+        --replace-fail \
+          'File.read("locales/' \
+          'File.read("${placeholder "out"}/share/invidious/locales/'
+    ''
+    # Reference sql initialisation/migration scripts by absolute path
+    + ''
       substituteInPlace src/invidious/database/base.cr \
-            --replace-fail 'config/sql' '${placeholder "out"}/share/invidious/config/sql'
+        --replace-fail \
+          'config/sql' \
+          '${placeholder "out"}/share/invidious/config/sql'
 
       substituteInPlace src/invidious/user/captcha.cr \
-          --replace-fail 'Process.run(%(rsvg-convert' 'Process.run(%(${lib.getBin librsvg}/bin/rsvg-convert'
+        --replace-fail \
+          'Process.run(%(rsvg-convert' \
+          'Process.run(%(${lib.getBin librsvg}/bin/rsvg-convert'
     '';
 
   nativeBuildInputs = [
@@ -85,15 +101,6 @@ crystal.buildCrystalPackage rec {
     libxml2
     openssl
     sqlite
-  ];
-
-  patches = [
-    # Fix proxied video streaming: https://github.com/iv-org/invidious/pull/4992
-    (fetchpatch {
-      name = "invidious-fix-video-proxy.patch";
-      url = "https://github.com/iv-org/invidious/compare/aa33d9b7ec5a41867c256542653ad8465fe22e7f~1...3ac8978e96069e58a02e91fc29bf52b8fc651d5c.patch";
-      hash = "sha256-xENsVRfEE9ACLiniOgGMDfdC0ZtJge1e1Lak2orLJro=";
-    })
   ];
 
   format = "crystal";
@@ -142,12 +149,14 @@ crystal.buildCrystalPackage rec {
     description = "Open source alternative front-end to YouTube";
     mainProgram = "invidious";
     homepage = "https://invidious.io/";
+    downloadPage = "https://github.com/iv-org/invidious";
+    changelog = "https://github.com/iv-org/invidious/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
       _999eagle
       GaetanLepage
-      sbruder
-      pbsds
+      Fijxu
     ];
+    platforms = lib.platforms.linux;
   };
 }

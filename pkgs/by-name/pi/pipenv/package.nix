@@ -6,6 +6,8 @@
   installShellFiles,
   pipenv,
   runCommand,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 with python3.pkgs;
@@ -31,22 +33,24 @@ let
 in
 buildPythonApplication rec {
   pname = "pipenv";
-  version = "2024.2.0";
-  format = "pyproject";
+  version = "2026.5.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "pipenv";
     tag = "v${version}";
-    hash = "sha256-5gq1kXVNAMH/AeovpUStcZffXN4GfXj3wJ7lW4qebRM=";
+    hash = "sha256-+8xUbpGIEuFboeK+JVVAt46gNcw1tfkmnTYt/IrISik=";
   };
 
   env.LC_ALL = "en_US.UTF-8";
 
+  build-system = [
+    setuptools
+  ];
+
   nativeBuildInputs = [
     installShellFiles
-    setuptools
-    wheel
   ];
 
   postPatch = ''
@@ -60,16 +64,15 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = runtimeDeps python3.pkgs;
 
-  preCheck = ''
-    export HOME="$TMPDIR"
-  '';
-
   nativeCheckInputs = [
     mock
     pytestCheckHook
     pytest-xdist
+    pytest-cov-stub
     pytz
     requests
+    versionCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   disabledTests = [
@@ -96,17 +99,18 @@ buildPythonApplication rec {
     '';
   };
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd pipenv \
       --bash <(_PIPENV_COMPLETE=bash_source $out/bin/pipenv) \
       --zsh <(_PIPENV_COMPLETE=zsh_source $out/bin/pipenv) \
       --fish <(_PIPENV_COMPLETE=fish_source $out/bin/pipenv)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python Development Workflow for Humans";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ berdario ];
+    homepage = "https://github.com/pypa/pipenv";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    mainProgram = "pipenv";
   };
 }

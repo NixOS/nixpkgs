@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pebble";
   version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "letsencrypt";
-    repo = pname;
-    rev = "v${version}";
+    repo = "pebble";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-YPU/bl7h6rOWg+5ut0Thn2UupeKpJ7u4KXc2svIeZEM=";
   };
 
@@ -21,19 +21,20 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   passthru.tests = {
-    smoke-test = nixosTests.acme;
+    smoke-test-http = nixosTests.acme.http01-builtin;
+    smoke-test-dns = nixosTests.acme.dns01;
   };
 
   meta = {
     homepage = "https://github.com/letsencrypt/pebble";
     description = "Small RFC 8555 ACME test server";
     longDescription = "Miniature version of Boulder, Pebble is a small RFC 8555 ACME test server not suited for a production CA";
-    license = [ lib.licenses.mpl20 ];
+    license = lib.licenses.mpl20;
     mainProgram = "pebble";
-    maintainers = lib.teams.acme.members;
+    teams = [ lib.teams.acme ];
   };
-}
+})

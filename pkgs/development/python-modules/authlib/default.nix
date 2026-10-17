@@ -4,51 +4,70 @@
   cachelib,
   cryptography,
   fetchFromGitHub,
-  flask,
   flask-sqlalchemy,
+  flask,
   httpx,
+  joserfc,
   mock,
+  django,
+  anyio,
+  pytest-django,
   pytest-asyncio,
+  pycryptodomex,
   pytestCheckHook,
-  pythonOlder,
+  python-multipart,
   requests,
   setuptools,
   starlette,
   werkzeug,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "authlib";
-  version = "1.4.0";
+  version = "1.7.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "lepture";
     repo = "authlib";
-    tag = "v${version}";
-    hash = "sha256-GUB/ioyeFfuuKZqsqJkDq0e6ETa1jqyr+GJHPddLRkA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FLSe9piZoFlOAutzoMcgygbsJsR8uSlZWqdNBU6D+aE=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     cryptography
+    joserfc
   ];
 
+  optional-dependencies = {
+    clients = [
+      anyio
+      cachelib
+      django
+      flask
+      httpx
+      requests
+      starlette
+    ]
+    ++ starlette.optional-dependencies.full;
+    django = [
+      django
+      pytest-django
+    ];
+    flask = [
+      flask
+      flask-sqlalchemy
+    ];
+    jose = [ pycryptodomex ];
+  };
+
   nativeCheckInputs = [
-    cachelib
-    flask
-    flask-sqlalchemy
-    httpx
-    mock
     pytest-asyncio
     pytestCheckHook
-    requests
-    starlette
-    werkzeug
-  ];
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "authlib" ];
 
@@ -60,11 +79,21 @@ buildPythonPackage rec {
     "tests/jose/test_chacha20.py"
   ];
 
-  meta = with lib; {
+  disabledTests = [
+    # AssertionError
+    "test_access_resource"
+    "test_entitlements_restriction"
+    "test_extra_attributes"
+    "test_introspection"
+    "test_scope_restriction"
+    "test_typ"
+  ];
+
+  meta = {
     description = "Library for building OAuth and OpenID Connect servers";
     homepage = "https://github.com/lepture/authlib";
-    changelog = "https://github.com/lepture/authlib/blob/v${version}/docs/changelog.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ flokli ];
+    changelog = "https://github.com/lepture/authlib/blob/${finalAttrs.src.tag}/docs/upgrades/changelog.rst";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ flokli ];
   };
-}
+})

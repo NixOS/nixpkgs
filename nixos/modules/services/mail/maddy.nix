@@ -143,6 +143,8 @@ in
 
       enable = lib.mkEnableOption "Maddy, a free an open source mail server";
 
+      package = lib.mkPackageOption pkgs "maddy" { };
+
       user = lib.mkOption {
         default = "maddy";
         type = with lib.types; uniq str;
@@ -174,7 +176,7 @@ in
       hostname = lib.mkOption {
         default = "localhost";
         type = with lib.types; uniq str;
-        example = ''example.com'';
+        example = "example.com";
         description = ''
           Hostname to use. It should be FQDN.
         '';
@@ -183,7 +185,7 @@ in
       primaryDomain = lib.mkOption {
         default = "localhost";
         type = with lib.types; uniq str;
-        example = ''mail.example.com'';
+        example = "mail.example.com";
         description = ''
           Primary MX domain to use. It should be FQDN.
         '';
@@ -327,8 +329,8 @@ in
           This option does not delete accounts which are not (anymore) listed.
         '';
         example = {
-          "user1@localhost".passwordFile = /secrets/user1-localhost;
-          "user2@localhost".passwordFile = /secrets/user2-localhost;
+          "user1@localhost".passwordFile = "/secrets/user1-localhost";
+          "user2@localhost".passwordFile = "/secrets/user2-localhost";
         };
         type = lib.types.attrsOf (
           lib.types.submodule {
@@ -348,11 +350,13 @@ in
       };
 
       secrets = lib.mkOption {
-        type = with lib.types; listOf path;
+        type = with lib.types; listOf (either str path);
         description = ''
           A list of files containing the various secrets. Should be in the format
           expected by systemd's `EnvironmentFile` directory. Secrets can be
           referenced in the format `{env:VAR}`.
+
+          Paths can be prefixed with `-` to ignore errors if the file does not exist.
         '';
         default = [ ];
       };
@@ -386,7 +390,7 @@ in
 
     systemd = {
 
-      packages = [ pkgs.maddy ];
+      packages = [ cfg.package ];
       services = {
         maddy = {
           serviceConfig = {
@@ -402,16 +406,16 @@ in
           script = ''
             ${lib.optionalString (cfg.ensureAccounts != [ ]) ''
               ${lib.concatMapStrings (account: ''
-                if ! ${pkgs.maddy}/bin/maddyctl imap-acct list | grep "${account}"; then
-                  ${pkgs.maddy}/bin/maddyctl imap-acct create ${account}
+                if ! ${cfg.package}/bin/maddyctl imap-acct list | grep "${account}"; then
+                  ${cfg.package}/bin/maddyctl imap-acct create ${account}
                 fi
               '') cfg.ensureAccounts}
             ''}
             ${lib.optionalString (cfg.ensureCredentials != { }) ''
               ${lib.concatStringsSep "\n" (
-                lib.mapAttrsToList (name: cfg: ''
-                  if ! ${pkgs.maddy}/bin/maddyctl creds list | grep "${name}"; then
-                    ${pkgs.maddy}/bin/maddyctl creds create --password $(cat ${lib.escapeShellArg cfg.passwordFile}) ${name}
+                lib.mapAttrsToList (name: credentials: ''
+                  if ! ${cfg.package}/bin/maddyctl creds list | grep "${name}"; then
+                    ${cfg.package}/bin/maddyctl creds create --password $(cat ${lib.escapeShellArg credentials.passwordFile}) ${name}
                   fi
                 '') cfg.ensureCredentials
               )}
@@ -486,7 +490,7 @@ in
     };
 
     environment.systemPackages = [
-      pkgs.maddy
+      cfg.package
     ];
   };
 }

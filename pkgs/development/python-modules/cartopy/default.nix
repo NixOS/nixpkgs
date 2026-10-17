@@ -1,43 +1,57 @@
 {
   lib,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
   cython,
-  fetchpatch,
-  fetchPypi,
-  fontconfig,
-  gdal,
+  setuptools-scm,
+
+  # nativeBuildInputs
   geos,
+  proj,
+
+  # dependencies
   matplotlib,
   numpy,
-  owslib,
-  pillow,
-  proj,
   pyproj,
   pyshp,
+  shapely,
+
+  # optional-dependencies
+  # ows
+  owslib,
+  pillow,
+  # plotting
+  gdal,
+  scipy,
+
+  # tests
+  fontconfig,
   pytest-mpl,
   pytestCheckHook,
-  pythonOlder,
-  scipy,
-  setuptools-scm,
-  shapely,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cartopy";
-  version = "0.24.1";
+  version = "0.26.0";
   pyproject = true;
+  __structuredAttrs = true;
 
-  disabled = pythonOlder "3.10";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-AckQ1WNMaafv3sRuChfUc9Iyh2fwAdTcC1xLSOWFyL0=";
+  src = fetchFromGitHub {
+    owner = "SciTools";
+    repo = "cartopy";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-oOLcCMBKJNfOCqIdjGG0vB/7rJf3mw+t4HZ60RuiXk8=";
   };
 
-  build-system = [ setuptools-scm ];
+  build-system = [
+    cython
+    setuptools-scm
+  ];
 
   nativeBuildInputs = [
-    cython
     geos # for geos-config
     proj
   ];
@@ -70,31 +84,31 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-mpl
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   preCheck = ''
     export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf
-    export HOME=$TMPDIR
   '';
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--pyargs"
     "cartopy"
-    "-m"
-    "'not network and not natural_earth'"
   ];
 
-  disabledTests = [
-    "test_gridliner_constrained_adjust_datalim"
-    "test_gridliner_labels_bbox_style"
+  disabledTestMarks = [
+    "network"
+    "natural_earth"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Process geospatial data to create maps and perform analyses";
     homepage = "https://scitools.org.uk/cartopy/docs/latest/";
-    changelog = "https://github.com/SciTools/cartopy/releases/tag/v${version}";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/SciTools/cartopy/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.lgpl3Plus;
+    maintainers = [ ];
+    teams = [ lib.teams.geospatial ];
     mainProgram = "feature_download";
   };
-}
+})

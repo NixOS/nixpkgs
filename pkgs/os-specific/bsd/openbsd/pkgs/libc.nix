@@ -8,12 +8,12 @@
   librpcsvc,
   libutil,
   libexecinfo,
+  libkvm,
   rtld,
   version,
 }:
 
-symlinkJoin rec {
-  name = "${pname}-${version}";
+symlinkJoin {
   pname = "libc-openbsd";
   inherit version;
 
@@ -38,6 +38,7 @@ symlinkJoin rec {
           librpcsvc
           libutil
           libexecinfo
+          libkvm
         ]
         ++ (lib.optional (!stdenvNoLibc.hostPlatform.isStatic) rtld)
       );

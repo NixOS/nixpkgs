@@ -2,33 +2,40 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rust-script";
-  version = "0.35.0";
+  version = "0.36.0";
 
   src = fetchFromGitHub {
     owner = "fornwall";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-uKmQgrbsFIY0XwrO16Urz3L76Gm2SxHW/CpHeCIUinM=";
+    repo = "rust-script";
+    rev = finalAttrs.version;
+    sha256 = "sha256-Bb8ULD2MmZiSW/Tx5vAAHv95OMJ0EdWgR+NFhBkTlDU=";
   };
 
-  cargoHash = "sha256-WekXZ1bn2bGZu80SsEHtTY8wLwBhJsnJLu/r5GPdGzM=";
+  cargoHash = "sha256-kxnylNZ8FsaR2S1o/p7qtlaXsBLDNv2PsFye0rcf/+A=";
 
   # tests require network access
   doCheck = false;
 
-  meta = with lib; {
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Run Rust files and expressions as scripts without any setup or compilation step";
     mainProgram = "rust-script";
     homepage = "https://rust-script.org";
-    changelog = "https://github.com/fornwall/rust-script/releases/tag/${version}";
-    license = with licenses; [
+    changelog = "https://github.com/fornwall/rust-script/releases/tag/${finalAttrs.version}";
+    license = with lib.licenses; [
       mit # or
       asl20
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ lib.maintainers.progrm_jarvis ];
   };
-}
+})

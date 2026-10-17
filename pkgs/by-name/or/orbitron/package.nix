@@ -2,11 +2,17 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
   pname = "orbitron";
   version = "2011-05-25";
+
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
   src = fetchFromGitHub {
     owner = "theleagueof";
@@ -15,16 +21,9 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-zjNPVrDUxcQbrsg1/8fFa6Wenu1yuG/XDfKA7NVZ0rA=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    install -D -m444 -t $out/share/fonts/truetype $src/*.ttf
-    install -D -m444 -t $out/share/fonts/opentype $src/*.otf
-
-    runHook postInstall
-  '';
-
-  meta = with lib; {
+  meta = {
     homepage = "https://www.theleagueofmoveabletype.com/orbitron";
     downloadPage = "https://www.theleagueofmoveabletype.com/orbitron/download";
     description = "Geometric sans-serif for display purposes by Matt McInerney";
@@ -45,10 +44,9 @@ stdenvNoCC.mkDerivation {
       course Orbitron could also be used on the posters for the movies
       portraying this inevitable future.
     '';
-    license = licenses.ofl;
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
-      leenaars
       minijackson
     ];
   };

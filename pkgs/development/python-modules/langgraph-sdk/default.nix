@@ -4,37 +4,48 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  hatchling,
 
   # dependencies
   httpx,
   httpx-sse,
+  langchain-core,
+  langchain-protocol,
   orjson,
+  typing-extensions,
+  websockets,
 
   # passthru
-  writeScript,
+  gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langgraph-sdk";
-  version = "0.1.43";
+  version = "0.4.4";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    tag = "sdk==${version}";
-    hash = "sha256-mG04V36Aa5Df5pUgr+xWej8i2XYx+O/N61sSzxwN9Go=";
+    tag = "sdk==${finalAttrs.version}";
+    hash = "sha256-kKIk0vt+2HXpSqW0RVt3cqpdmdf5NOWtXlkSkrogNWs=";
   };
 
-  sourceRoot = "${src.name}/libs/sdk-py";
+  sourceRoot = "${finalAttrs.src.name}/libs/sdk-py";
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
+
+  pythonRelaxDeps = [ "websockets" ];
 
   dependencies = [
     httpx
     httpx-sse
+    langchain-core
+    langchain-protocol
     orjson
+    typing-extensions
+    websockets
   ];
 
   disabledTests = [ "test_aevaluate_results" ]; # Compares execution time to magic number
@@ -42,25 +53,19 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "langgraph_sdk" ];
 
   passthru = {
-    updateScript = writeScript "update.sh" ''
-      #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p nix-update
-
-      set -eu -o pipefail +e
-      nix-update --commit --version-regex '(.*)' python3Packages.langgraph
-      nix-update --commit --version-regex 'sdk==(.*)' python3Packages.langgraph-sdk
-      nix-update --commit --version-regex 'checkpoint==(.*)' python3Packages.langgraph-checkpoint
-      nix-update --commit --version-regex 'checkpointduckdb==(.*)' python3Packages.langgraph-checkpoint-duckdb
-      nix-update --commit --version-regex 'checkpointpostgres==(.*)' python3Packages.langgraph-checkpoint-postgres
-      nix-update --commit --version-regex 'checkpointsqlite==(.*)' python3Packages.langgraph-checkpoint-sqlite
-    '';
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "sdk==";
+      ignoredVersions = "a|b|dev|rc";
+    };
   };
 
   meta = {
     description = "SDK for interacting with the LangGraph Cloud REST API";
-    homepage = "https://github.com/langchain-ai/langgraphtree/main/libs/sdk-py";
-    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/sdk==${version}";
+    homepage = "https://github.com/langchain-ai/langgraph/tree/main/libs/sdk-py";
+    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sarahec ];
   };
-}
+})

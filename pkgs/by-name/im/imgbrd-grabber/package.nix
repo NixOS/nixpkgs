@@ -9,18 +9,18 @@
   libpulseaudio,
   openssl,
   rsync,
-  typescript,
+  typescript_5,
   qt6,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "imgbrd-grabber";
-  version = "7.12.2";
+  version = "7.14.0";
 
   src = fetchFromGitHub {
     owner = "Bionus";
     repo = "imgbrd-grabber";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6XfIaASfbvdPovtdDEJtsk4pEL4Dhmyq8ml4X7KZ4DE=";
+    hash = "sha256-HvbbUZTyrT+3aZLSNk8I34gg7p4crfauHE3qC065+AI=";
     fetchSubmodules = true;
   };
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ [
       openssl
       libpulseaudio
-      typescript
+      typescript_5
       nodejs
     ];
 
@@ -57,8 +57,12 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs ../scripts/package.sh
   '';
 
-  postPatch = ''
+  patches = [
+    ./fix-for-qt6.patch
+    ./cmake4-compat.patch
+  ];
 
+  postPatch = ''
     # ensure the script uses the rsync package from nixpkgs
     substituteInPlace ../scripts/package.sh --replace-fail "rsync" "${lib.getExe rsync}"
 

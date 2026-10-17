@@ -1,31 +1,80 @@
 {
   lib,
-  buildNpmPackage,
-  fetchurl,
+  stdenv,
+  fetchFromGitHub,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpm_10,
+  nodejs,
+  makeBinaryWrapper,
+  nix-update-script,
 }:
 let
-  version = "0.17.8";
+  pnpm = pnpm_10;
 in
-buildNpmPackage {
+stdenv.mkDerivation (finalAttrs: {
   pname = "svelte-language-server";
-  inherit version;
+  version = "0.18.5";
 
-  src = fetchurl {
-    url = "https://registry.npmjs.org/svelte-language-server/-/svelte-language-server-${version}.tgz";
-    hash = "sha256-IbLjoXLN8sdnGy5SmoEeJUl1BzCulptMFtbJc+IRH70=";
+  src = fetchFromGitHub {
+    owner = "sveltejs";
+    repo = "language-tools";
+    tag = "svelte-language-server@${finalAttrs.version}";
+    hash = "sha256-AJZj3dDvDG2PvT8YFRS0lEbnXckdZ1XX22j1phSc2Ig=";
   };
 
-  npmDepsHash = "sha256-2rCgzEkwht03jxusPCdemA8EOabwRsHeDxiV4Uf4K8g=";
+  pnpmWorkspaces = [ "svelte-language-server..." ];
 
-  postPatch = ''
-    ln -s ${./package-lock.json} package-lock.json
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      pnpmWorkspaces
+      ;
+    inherit pnpm;
+    fetcherVersion = 3;
+    hash = "sha256-8pamAQjd/UWN3URJNNwOKIm+rMIgSIJgjkQ5mHIEx+s=";
+  };
+
+  nativeBuildInputs = [
+    nodejs
+    pnpmConfigHook
+    pnpm
+    makeBinaryWrapper
+  ];
+
+  buildPhase = ''
+    runHook preBuild
+
+    pnpm run --filter=svelte-language-server... build
+
+    runHook postBuild
   '';
 
-  dontNpmBuild = true;
+  installPhase = ''
+    runHook preInstall
 
-  npmFlags = [ "--legacy-peer-deps" ];
+    pnpm install --filter=svelte-language-server... --prod --frozen-lockfile --offline --force --ignore-scripts
+    mkdir -p $out/lib/node_modules/svelte-language-server/
+    mkdir -p $out/bin
 
-  passthru.updateScript = ./update.sh;
+    mv {packages,node_modules} $out/lib/node_modules/svelte-language-server/
+
+    makeWrapper ${lib.getExe nodejs} $out/bin/svelteserver \
+      --add-flags "$out/lib/node_modules/svelte-language-server/packages/language-server/bin/server.js" \
+      --set NODE_PATH "$out/lib/node_modules/svelte-language-server/packages/language-server/node_modules/"
+
+    runHook postInstall
+  '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--use-github-releases"
+      "--version-regex"
+      "svelte-language-server@(.*)"
+    ];
+  };
 
   meta = {
     description = "Language server (implementing the language server protocol) for Svelte";
@@ -33,6 +82,6 @@ buildNpmPackage {
     homepage = "https://github.com/sveltejs/language-tools";
     license = lib.licenses.mit;
     mainProgram = "svelteserver";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ dfjay ];
   };
-}
+})

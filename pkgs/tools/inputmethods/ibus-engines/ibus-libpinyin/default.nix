@@ -2,8 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   autoreconfHook,
   gettext,
+  gobject-introspection,
   pkg-config,
   wrapGAppsHook3,
   sqlite,
@@ -13,26 +15,40 @@
   glib,
   gtk3,
   python3,
-  lua,
+  lua5_2_compat,
   opencc,
   libsoup_3,
   json-glib,
+  libnotify,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation rec {
   pname = "ibus-libpinyin";
-  version = "1.15.8";
+  version = "1.16.5";
 
   src = fetchFromGitHub {
     owner = "libpinyin";
     repo = "ibus-libpinyin";
-    rev = version;
-    hash = "sha256-u21avBSSu/78tLoyFI9XGocC7rT/64L5HqQQj3Zg1Mc=";
+    tag = version;
+    hash = "sha256-3QZHovjzGifWLFVudCnJOwMn/M3Nzfn8CZ1HpQwzUVw=";
   };
+
+  patches = [
+    # Drop -std=c++0x, fix build with opencc >= 1.4.0 header files, which require C++17
+    (fetchpatch2 {
+      name = "fix-build-with-opencc-1.4.patch";
+      url = "https://github.com/libpinyin/ibus-libpinyin/commit/42ad7d20b803c10ce6d8921ccff5c6282bb4818c.patch?full_index=1";
+      hash = "sha256-ndAJd+EEyluvjZL1gXM8HbfgEtwQETw0Lu1WAwcou4M=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
     gettext
+    gobject-introspection.setupHook
     pkg-config
     wrapGAppsHook3
   ];
@@ -59,16 +75,17 @@ stdenv.mkDerivation rec {
     opencc
     libsoup_3
     json-glib
+    libnotify
   ];
 
-  meta = with lib; {
+  meta = {
     isIbusEngine = true;
     description = "IBus interface to the libpinyin input method";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    homepage = "https://github.com/libpinyin/ibus-libpinyin";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       linsui
-      ericsagnes
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

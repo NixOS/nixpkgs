@@ -11,23 +11,23 @@
   systemdMinimal,
   glib,
   pulseaudio,
-  libXext,
-  libX11,
-  libXrandr,
+  libxext,
+  libx11,
+  libxrandr,
   glibc,
   cairo,
   libva,
   libdrm,
   coreutils,
-  libXi,
+  libxi,
   libGL,
   bash,
-  libXcomposite,
-  libXdamage,
-  libXfixes,
-  libXtst,
+  libxcomposite,
+  libxdamage,
+  libxfixes,
+  libxtst,
   nss,
-  libXxf86vm,
+  libxxf86vm,
   gtk3,
   gdk-pixbuf,
   pango,
@@ -41,12 +41,8 @@ let
     pname = "todesk-unwrapped";
     version = version;
     src = fetchurl {
-      url = "https://newdl.todesk.com/linux/todesk-v${finalAttrs.version}-amd64.deb";
+      url = "https://web.archive.org/web/20250302114501if_/https://newdl.todesk.com/linux/todesk-v4.7.2.0-amd64.deb";
       hash = "sha256-v7VpXXFVaKI99RpzUWfAc6eE7NHGJeFrNeUTbVuX+yg=";
-      curlOptsList = [
-        "--user-agent"
-        "Mozilla/5.0"
-      ];
     };
     nativeBuildInputs = [ dpkg ];
 
@@ -82,32 +78,33 @@ buildFHSEnv {
     pulseaudio
     nspr
     kmod
-    libXi
+    libxi
     systemdMinimal
     glib
     libz
     bash
     coreutils
-    libX11
-    libXext
-    libXrandr
+    libx11
+    libxext
+    libxrandr
     glibc
     libdrm
     libGL
     procps
     cairo
-    libXcomposite
-    libXdamage
-    libXfixes
-    libXtst
+    libxcomposite
+    libxdamage
+    libxfixes
+    libxtst
     nss
-    libXxf86vm
+    libxxf86vm
     gtk3
     gdk-pixbuf
     pango
     libva
   ];
   extraBwrapArgs = [
+    "--tmpfs /opt/todesk"
     "--bind /var/lib/todesk /opt/todesk/config" # create the folder before bind to avoid permission denided.
     "--bind ${todesk-unwrapped}/bin /opt/todesk/bin"
     "--bind /var/lib/todesk /etc/todesk" # service write uuid here. Such a pain!

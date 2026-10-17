@@ -48,7 +48,7 @@ in
         name = "vswitch.db";
         dontUnpack = true;
         buildPhase = "true";
-        buildInputs = with pkgs; [
+        buildInputs = [
           cfg.package
         ];
         installPhase = "mkdir -p $out";
@@ -64,10 +64,23 @@ in
 
       boot.extraModulePackages = [ cfg.package ];
 
+      systemd.sockets.ovsdb = {
+        description = "Open_vSwitch Database Socket";
+        wantedBy = [ "sockets.target" ];
+        before = [ "ovsdb.service" ];
+        socketConfig = {
+          ListenStream = "${runDir}/db.sock";
+          Service = "ovsdb.service";
+          SocketMode = "0770";
+        };
+      };
+
       systemd.services.ovsdb = {
         description = "Open_vSwitch Database Server";
         wantedBy = [ "multi-user.target" ];
-        after = [ "systemd-udev-settle.service" ];
+        requires = [ "ovsdb.socket" ];
+        after = [ "ovsdb.socket" ];
+        wants = [ "ovs-delete-transient-ports.service" ];
         path = [ cfg.package ];
         restartTriggers = [
           db
@@ -96,7 +109,7 @@ in
         serviceConfig = {
           ExecStart = ''
             ${cfg.package}/bin/ovsdb-server \
-              --remote=punix:${runDir}/db.sock \
+              --remote=pfd:3 \
               --private-key=db:Open_vSwitch,SSL,private_key \
               --certificate=db:Open_vSwitch,SSL,certificate \
               --bootstrap-ca-cert=db:Open_vSwitch,SSL,ca_cert \
@@ -106,6 +119,7 @@ in
               /var/db/openvswitch/conf.db
           '';
           Restart = "always";
+          RestartMode = "direct";
           RestartSec = 3;
           PIDFile = "/run/openvswitch/ovsdb.pid";
           # Use service type 'forking' to correctly determine when ovsdb-server is ready.
@@ -116,11 +130,24 @@ in
         '';
       };
 
+      systemd.services.ovs-delete-transient-ports = {
+        description = "Open vSwitch Delete Transient Ports";
+        after = [ "ovsdb.service" ];
+        before = [ "ovs-vswitchd.service" ];
+        path = [ cfg.package ];
+        unitConfig.AssertPathExists = "${runDir}/db.sock";
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          ExecStart = "${cfg.package}/share/openvswitch/scripts/ovs-ctl delete-transient-ports";
+        };
+      };
+
       systemd.services.ovs-vswitchd = {
         description = "Open_vSwitch Daemon";
         wantedBy = [ "multi-user.target" ];
-        bindsTo = [ "ovsdb.service" ];
-        after = [ "ovsdb.service" ];
+        requires = [ "ovsdb.socket" ];
+        after = [ "ovsdb.socket" ];
         path = [ cfg.package ];
         serviceConfig = {
           ExecStart = ''
@@ -132,6 +159,7 @@ in
           # Use service type 'forking' to correctly determine when vswitchd is ready.
           Type = "forking";
           Restart = "always";
+          RestartMode = "direct";
           RestartSec = 3;
         };
       };

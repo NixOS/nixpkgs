@@ -5,10 +5,13 @@
   makeWrapper,
   fetchurl,
   makeDesktopItem,
+  copyDesktopItems,
   lttng-ust_2_12,
   fontconfig,
   openssl,
-  xorg,
+  libx11,
+  libsm,
+  libice,
   zlib,
 }:
 
@@ -19,62 +22,69 @@ let
     fontconfig.lib
     openssl
     (lib.getLib stdenv.cc.cc)
-    xorg.libX11
-    xorg.libICE
-    xorg.libSM
+    libx11
+    libice
+    libsm
     zlib
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wasabiwallet";
-  version = "2.0.8.1";
+  version = "2.7.1";
 
   src = fetchurl {
-    url = "https://github.com/zkSNACKs/WalletWasabi/releases/download/v${version}/Wasabi-${version}.tar.gz";
-    sha256 = "sha256-9q93C8Q4MKrpvAs6cb4sgo3PDVhk9ZExeHIZ9Qm8P2w=";
+    url = "https://github.com/WalletWasabi/WalletWasabi/releases/download/v${finalAttrs.version}/Wasabi-${finalAttrs.version}-linux-x64.tar.gz";
+    sha256 = "sha256-o2e2NDG2aMrEYc/7x5iFex9oRlrQXeKIINuW80ZwWcI=";
   };
 
   dontBuild = true;
 
-  desktopItem = makeDesktopItem {
-    name = "wasabi";
-    exec = "wasabiwallet";
-    desktopName = "Wasabi";
-    genericName = "Bitcoin wallet";
-    comment = meta.description;
-    categories = [
-      "Network"
-      "Utility"
-    ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "wasabi";
+      exec = "wasabiwallet-desktop";
+      desktopName = "Wasabi";
+      genericName = "Bitcoin wallet";
+      comment = finalAttrs.meta.description;
+      categories = [
+        "Network"
+        "Utility"
+      ];
+    })
+  ];
 
   nativeBuildInputs = [
     autoPatchelfHook
     makeWrapper
+    copyDesktopItems
   ];
   buildInputs = runtimeLibs ++ [
     lttng-ust_2_12
   ];
 
   installPhase = ''
-    mkdir -p $out/opt/${pname} $out/bin $out/share/applications
-    cp -Rv . $out/opt/${pname}
+    runHook preInstall
 
-    makeWrapper "$out/opt/${pname}/wassabee" "$out/bin/${pname}" \
-      --suffix "LD_LIBRARY_PATH" : "${lib.makeLibraryPath runtimeLibs}"
+    mkdir -p $out/opt/${finalAttrs.pname} $out/bin
 
-    makeWrapper "$out/opt/${pname}/wassabeed" "$out/bin/${pname}d" \
-      --suffix "LD_LIBRARY_PATH" : "${lib.makeLibraryPath runtimeLibs}"
+    # The weird path is an upstream packaging error and could be fixed in the upcoming release
+    cp -Rv ./runner/work/WalletWasabi/WalletWasabi/build/linux-x64/* $out/opt/${finalAttrs.pname}
 
-    cp -v $desktopItem/share/applications/* $out/share/applications
+    for nameMap in "wassabee:desktop" "wassabeed:daemon" "wcoordinator:coordinator" "wbackend:backend"; do
+      IFS=":" read -r filename wrappedname <<< "$nameMap"
+      makeWrapper "$out/opt/${finalAttrs.pname}/$filename" "$out/bin/${finalAttrs.pname}-$wrappedname" \
+        --suffix "LD_LIBRARY_PATH" : "${lib.makeLibraryPath runtimeLibs}"
+    done
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Privacy focused Bitcoin wallet";
     homepage = "https://wasabiwallet.io/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.mit;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.mit;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ mmahut ];
+    maintainers = with lib.maintainers; [ mmahut ];
   };
-}
+})

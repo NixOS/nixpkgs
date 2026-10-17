@@ -1,51 +1,75 @@
 {
   lib,
+  aiosqlite,
   anyio,
   asgi-lifespan,
+  async-timeout,
   buildPythonPackage,
+  daphne,
   fastapi,
   fetchFromGitHub,
+  granian,
   httpx,
-  pdm-backend,
+  portend,
   psutil,
+  pydantic,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
-  requests,
+  setuptools,
+  sqlalchemy,
   starlette,
+  tenacity,
+  testcontainers,
   uvicorn,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sse-starlette";
-  version = "2.1.3";
+  version = "3.4.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "sysid";
     repo = "sse-starlette";
-    tag = "v${version}";
-    hash = "sha256-cnUx3wYawyqt/m/FB6abxknMbc64k09a1kAJoA4yN6w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-b0iNu9CN4Tca2hGU0Rpr/v0Q4KWNPQNCp9BY5YnzjzA=";
   };
 
-  build-system = [ pdm-backend ];
+  build-system = [ setuptools ];
 
   dependencies = [
     anyio
     starlette
-    uvicorn
   ];
+
+  optional-dependencies = {
+    daphne = [ daphne ];
+    examples = [
+      fastapi
+      pydantic
+      uvicorn
+    ];
+    examples_db = [
+      aiosqlite
+      sqlalchemy
+    ]
+    ++ sqlalchemy.optional-dependencies.asyncio;
+    granian = [ granian ];
+    uvicorn = [ uvicorn ];
+  };
 
   nativeCheckInputs = [
     asgi-lifespan
+    async-timeout
     fastapi
     httpx
+    portend
     psutil
     pytest-asyncio
     pytestCheckHook
-    requests
+    tenacity
+    testcontainers
+    uvicorn
   ];
 
   pythonImportsCheck = [ "sse_starlette" ];
@@ -53,14 +77,17 @@ buildPythonPackage rec {
   disabledTests = [
     # AssertionError
     "test_stop_server_with_many_consumers"
-    "test_stop_server_conditional"
+    # require docker
+    "test_sse_server_termination"
   ];
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "Server Sent Events for Starlette and FastAPI";
     homepage = "https://github.com/sysid/sse-starlette";
-    changelog = "https://github.com/sysid/sse-starlette/blob/${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/sysid/sse-starlette/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

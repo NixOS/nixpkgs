@@ -1,27 +1,32 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, aml
-, ffmpeg
-, gnutls
-, libjpeg_turbo
-, libgbm
-, pixman
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  aml,
+  ffmpeg,
+  gnutls,
+  libdrm,
+  libjpeg_turbo,
+  libgbm,
+  nettle,
+  pixman,
+  zlib,
+  python3,
+  openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "neatvnc";
-  version = "0.9.2";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "any1";
     repo = "neatvnc";
-    rev = "v${version}";
-    hash = "sha256-9rqlSssf0rH0SkbUGYvK3dTMxISHPsbOY1c9SdnShso=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-yL15sr/Oi0CgXDQl4qPUL7vya3HWL+chRiwHsIQ2ADI=";
   };
 
   strictDeps = true;
@@ -36,19 +41,28 @@ stdenv.mkDerivation rec {
     aml
     ffmpeg
     gnutls
+    libdrm
     libjpeg_turbo
     libgbm
+    nettle
     pixman
     zlib
   ];
 
-  mesonFlags = [
-    (lib.mesonBool "tests" true)
+  nativeCheckInputs = [
+    python3
+    openssl
   ];
 
-  doCheck = true;
+  mesonFlags = [
+    (lib.mesonBool "tests" finalAttrs.finalPackage.doCheck)
+  ];
 
-  meta = with lib; {
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  __structuredAttrs = true;
+
+  meta = {
     description = "VNC server library";
     longDescription = ''
       This is a liberally licensed VNC server library that's intended to be
@@ -58,9 +72,9 @@ stdenv.mkDerivation rec {
       - Interoperability with the Freedesktop.org ecosystem
     '';
     homepage = "https://github.com/any1/neatvnc";
-    changelog = "https://github.com/any1/neatvnc/releases/tag/v${version}";
-    license = licenses.isc;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ nickcao ];
+    changelog = "https://github.com/any1/neatvnc/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.isc;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
-}
+})

@@ -1,38 +1,28 @@
 {
   lib,
   SDL,
-  fetchpatch,
-  fetchurl,
+  fetchFromGitHub,
   giflib,
-  libXpm,
+  libxpm,
   libjpeg,
   libpng,
   libtiff,
   libwebp,
   pkg-config,
   stdenv,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL_image";
-  version = "1.2.12";
+  version = "1.2.12-unstable-2026-07-05";
 
-  src = fetchurl {
-    url = "https://www.libsdl.org/projects/SDL_image/release/SDL_image-${finalAttrs.version}.tar.gz";
-    hash = "sha256-C5ByKYRWEATehIR3RNVmgJ27na9zKp5QO5GhtahOVpk=";
+  src = fetchFromGitHub {
+    owner = "libsdl-org";
+    repo = "SDL_image";
+    rev = "2ffb2e3e1eba037897164e3ac6c67570d8bccd79";
+    hash = "sha256-fGwSb3GYfzcrWn7F70xhNxBXygYdD2uuzFQudS1lCqU=";
   };
-
-  patches = [
-    # Fixed security vulnerability in XCF image loader
-    (fetchpatch {
-      name = "CVE-2017-2887";
-      url = "https://github.com/libsdl-org/SDL_image/commit/e7723676825cd2b2ffef3316ec1879d7726618f2.patch";
-      includes = [ "IMG_xcf.c" ];
-      hash = "sha256-Z0nyEtE1LNGsGsN9SFG8ZyPDdunmvg81tUnEkrJQk5w=";
-    })
-    # Fixes incompatible function pointer type errors with clang 16
-    ./clang16-webp-errors.patch
-  ];
 
   configureFlags = [
     # Disable dynamic loading or else dlopen will fail because of no proper
@@ -52,16 +42,12 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     SDL
     giflib
-    libXpm
+    libxpm
     libjpeg
     libpng
     libtiff
     libwebp
   ];
-
-  env = lib.optionalAttrs stdenv.cc.isGNU {
-    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
-  };
 
   outputs = [
     "out"
@@ -70,11 +56,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  passthru.updateScript = unstableGitUpdater {
+    tagFormat = "release-1.*";
+    tagPrefix = "release-";
+    branch = "SDL-1.2";
+  };
+
   meta = {
     homepage = "http://www.libsdl.org/projects/SDL_image/";
     description = "SDL image library";
     license = lib.licenses.zlib;
-    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ ]);
+    teams = [ lib.teams.sdl ];
     inherit (SDL.meta) platforms;
   };
 })

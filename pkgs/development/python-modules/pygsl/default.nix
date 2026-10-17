@@ -2,42 +2,50 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
+  pkg-config,
   gsl,
   swig,
+  meson-python,
   numpy,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pygsl";
-  version = "2.5.0";
-  format = "setuptools";
+  version = "2.6.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pygsl";
     repo = "pygsl";
     tag = "v${version}";
-    hash = "sha256-ym7wCCaqY1y4Q7LDaNfGoao//DcG+H/6Fmg0YZUThOU=";
+    hash = "sha256-o1bJUebv9nP7oMI/UscLe7Bya82wwl3NPr8WerZ1K9I=";
   };
 
-  # error: no member named 'n' in 'gsl_bspline_workspace'
-  postPatch = lib.optionalString (lib.versionAtLeast gsl.version "2.8") ''
-    substituteInPlace src/bspline/bspline.ic \
-      --replace-fail "self->w->n" "self->w->ncontrol"
-    substituteInPlace swig_src/bspline_wrap.c \
-      --replace-fail "self->w->n;" "self->w->ncontrol;"
-  '';
-
   nativeBuildInputs = [
-    gsl.dev
+    pkg-config
     swig
   ];
-  buildInputs = [ gsl ];
-  dependencies = [ numpy ];
+  buildInputs = [
+    gsl
+  ];
 
-  preBuild = ''
-    python setup.py build_ext --inplace
-  '';
+  patches = [
+    # Fix gcc 15 -Wincompatible-pointer-types errors in arraycopy.c.
+    (fetchpatch2 {
+      url = "https://src.fedoraproject.org/rpms/pygsl/raw/c35177ef7f8f5104a2b96a87d909248140ee6009/f/pygsl-incompatible-pointer.patch";
+      hash = "sha256-o7hZScnRqD7rxRn2EOxoys2F1U4GVOS9BmcxjTsh/vc=";
+    })
+  ];
+
+  build-system = [
+    meson-python
+    numpy
+  ];
+  dependencies = [
+    numpy
+  ];
 
   preCheck = ''
     cd tests
@@ -47,8 +55,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python interface for GNU Scientific Library";
     homepage = "https://github.com/pygsl/pygsl";
-    changelog = "https://github.com/pygsl/pygsl/blob/v${version}/ChangeLog";
+    changelog = "https://github.com/pygsl/pygsl/blob/${src.tag}/ChangeLog";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ amesgen ];
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
 }

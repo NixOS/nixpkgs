@@ -9,12 +9,13 @@
   lzo,
   openssl,
   pam,
-  useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
   update-systemd-resolved,
   pkcs11Support ? false,
   pkcs11helper,
   nixosTests,
+  unixtools,
 }:
 
 let
@@ -22,28 +23,33 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvpn";
-  version = "2.6.13";
+  version = "2.6.23";
 
   src = fetchurl {
     url = "https://swupdate.openvpn.net/community/releases/openvpn-${finalAttrs.version}.tar.gz";
-    hash = "sha256-GvELhpIr18mYJ8wPFR3+loQze45evbOXU5FyhBrCSmo=";
+    hash = "sha256-QEHHCRYr7BMlq/WqjPJ6JVzEd8Y0sV7jEEEccB/ECpY=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    unixtools.route
+    unixtools.ifconfig
+  ];
 
-  buildInputs =
-    [
-      lz4
-      lzo
-      openssl
-    ]
-    ++ optionals stdenv.hostPlatform.isLinux [
-      libcap_ng
-      libnl
-      pam
-    ]
-    ++ optional useSystemd systemd
-    ++ optional pkcs11Support pkcs11helper;
+  buildInputs = [
+    lz4
+    lzo
+    openssl
+  ]
+  ++ optionals stdenv.hostPlatform.isLinux [
+    libcap_ng
+    libnl
+    pam
+  ]
+  ++ optional useSystemd systemdLibs
+  ++ optional pkcs11Support pkcs11helper;
 
   configureFlags =
     optional useSystemd "--enable-systemd"
@@ -54,14 +60,13 @@ stdenv.mkDerivation (finalAttrs: {
   # but a separate package was made, that uses libexec/openvpn. Copy it
   # into libexec in case any consumers expect it to be there even though
   # they should use the update-systemd-resolved package instead.
-  postInstall =
-    ''
-      mkdir -p $out/share/doc/openvpn/examples
-      cp -r sample/sample-{config-files,keys,scripts}/ $out/share/doc/openvpn/examples
-    ''
-    + optionalString useSystemd ''
-      install -Dm555 -t $out/libexec ${update-systemd-resolved}/libexec/openvpn/*
-    '';
+  postInstall = ''
+    mkdir -p $out/share/doc/openvpn/examples
+    cp -r sample/sample-{config-files,keys,scripts}/ $out/share/doc/openvpn/examples
+  ''
+  + optionalString useSystemd ''
+    install -Dm555 -t $out/libexec ${update-systemd-resolved}/libexec/openvpn/*
+  '';
 
   enableParallelBuilding = true;
 
@@ -69,13 +74,13 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (nixosTests) initrd-network-openvpn systemd-initrd-networkd-openvpn;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Robust and highly flexible tunneling application";
     downloadPage = "https://openvpn.net/community-downloads/";
     homepage = "https://openvpn.net/";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.unix;
     mainProgram = "openvpn";
   };
 })

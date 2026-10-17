@@ -7,13 +7,23 @@
 let
   cfg = config.services.odoo;
   format = pkgs.formats.ini { };
+
+  inherit (config.system) stateVersion;
 in
 {
   options = {
     services.odoo = {
       enable = lib.mkEnableOption "odoo, an open source ERP and CRM system";
 
-      package = lib.mkPackageOption pkgs "odoo" { };
+      package = lib.mkOption {
+        type = lib.types.package;
+        description = "Which package to use for the Odoo instance.";
+        relatedPackages = [
+          "odoo17"
+          "odoo18"
+          "odoo19"
+        ];
+      };
 
       addons = lib.mkOption {
         type = with lib.types; listOf package;
@@ -36,7 +46,24 @@ in
       };
 
       settings = lib.mkOption {
-        type = format.type;
+        type = lib.types.submodule {
+          options = {
+            options = {
+              workers = lib.mkOption {
+                type = lib.types.ints.unsigned;
+                default = 0;
+                description = "Values above 0 will enable the multi-processing HTTP server, this should be set for production setups. This needs to be set to >0 for real-time connections in the discuss app. For configuration recommendations see <https://www.odoo.com/documentation/19.0/administration/on_premise/deploy.html#builtin-server>";
+              };
+              proxy_mode = lib.mkOption {
+                type = lib.types.bool;
+                default = cfg.domain != null;
+                defaultText = "services.odoo.domain != null";
+                description = "Enables the use of X-Forwarded-* headers through Werkzeug’s proxy support. Must be enabled if reverse proxy is used.";
+              };
+            };
+          };
+          freeformType = format.type;
+        };
         default = { };
         description = ''
           Odoo configuration settings. For more details see <https://www.odoo.com/documentation/15.0/administration/install/deploy.html>
@@ -86,7 +113,7 @@ in
           '';
 
           locations = {
-            "/longpolling" = {
+            "/websocket" = {
               proxyPass = "http://odoochat";
             };
 
@@ -100,14 +127,31 @@ in
         };
       };
 
-      services.odoo.settings.options =
-        {
+      services.odoo = {
+        package = lib.mkDefault (
+          if pkgs ? odoo then
+            throw ''
+              The `pkgs.odoo`-attribute has been removed. If it's supposed to be the default
+              odoo defined in an overlay, please set `services.odoo.package` to
+              `pkgs.odoo`.
+            ''
+          else if lib.versionOlder stateVersion "25.05" then
+            pkgs.odoo18
+          else if lib.versionOlder stateVersion "25.11" then
+            pkgs.odoo18
+          else
+            pkgs.odoo19
+        );
+        settings.options = {
           data_dir = "/var/lib/private/odoo/data";
-          proxy_mode = cfg.domain != null;
+          # Disable the database manager by default
+          # https://www.odoo.com/documentation/master/administration/on_premise/deploy.html#database-manager-security
+          list_db = lib.mkDefault false;
         }
         // (lib.optionalAttrs (cfg.addons != [ ]) {
           addons_path = lib.concatMapStringsSep "," lib.escapeShellArg cfg.addons;
         });
+      };
 
       users.users.odoo = {
         isSystemUser = true;
@@ -119,13 +163,13 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [
           "network.target"
-          "postgresql.service"
+          "postgresql.target"
         ];
 
         # pg_dump
         path = [ config.services.postgresql.package ];
 
-        requires = [ "postgresql.service" ];
+        requires = [ "postgresql.target" ];
 
         serviceConfig = {
           ExecStart = "${cfg.package}/bin/odoo";

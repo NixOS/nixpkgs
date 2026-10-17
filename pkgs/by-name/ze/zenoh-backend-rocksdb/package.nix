@@ -5,21 +5,21 @@
   pkg-config,
   bzip2,
   zstd,
-  rocksdb_8_11,
+  rocksdb,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zenoh-backend-rocksdb";
-  version = "1.1.1";
+  version = "1.10.1"; # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "eclipse-zenoh";
     repo = "zenoh-backend-rocksdb";
-    tag = version;
-    hash = "sha256-+dA/4VA1oHhTiMcSXful2Z1B+IYykPMC/2p0mjEbako=";
+    tag = finalAttrs.version;
+    hash = "sha256-silgAD3oDMLqLljYs3X2YXTf2xIP/5S5ZQJkddp0+Ew=";
   };
 
-  cargoHash = "sha256-bQQWewhKibUKmJ9sJGcgvsNJhdCu67qOwFTNsCkjlO0=";
+  cargoHash = "sha256-ovqYK1sWwVf9zMqTEO0JvOeGePpghIgaYulZTC63zKI=";
 
   nativeBuildInputs = [
     pkg-config
@@ -32,8 +32,8 @@ rustPlatform.buildRustPackage rec {
   ];
 
   env = {
-    ROCKSDB_INCLUDE_DIR = "${rocksdb_8_11}/include";
-    ROCKSDB_LIB_DIR = "${rocksdb_8_11}/lib";
+    ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
+    ROCKSDB_LIB_DIR = "${rocksdb}/lib";
     ZSTD_SYS_USE_PKG_CONFIG = true;
   };
 
@@ -45,6 +45,6 @@ rustPlatform.buildRustPackage rec {
       asl20
     ];
     maintainers = with lib.maintainers; [ markuskowa ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

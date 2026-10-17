@@ -7,8 +7,8 @@
   mypy-extensions,
   numpy,
   pydantic,
+  pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   toolz,
   typing-extensions,
   wrapt,
@@ -17,24 +17,22 @@
 
 buildPythonPackage rec {
   pname = "psygnal";
-  version = "0.11.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "0.15.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyapp-kit";
-    repo = pname;
+    repo = "psygnal";
     tag = "v${version}";
-    hash = "sha256-eGJWtmw2Ps3jII4T8E6s3djzxfqcSdyPemvejal0cn4=";
+    hash = "sha256-7d9ejzdafoH14fKvYJd3OwYS0RGwDmMeLlj74qvsvjE=";
   };
 
-  buildInputs = [
+  build-system = [
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     mypy-extensions
     typing-extensions
   ];
@@ -42,19 +40,24 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     numpy
     pydantic
+    pytest-asyncio
     pytestCheckHook
     toolz
     wrapt
     attrs
   ];
 
+  pytestFlags = [
+    "-Wignore::pydantic.warnings.PydanticDeprecatedSince211"
+  ];
+
   pythonImportsCheck = [ "psygnal" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of Qt Signals";
     homepage = "https://github.com/pyapp-kit/psygnal";
-    changelog = "https://github.com/pyapp-kit/psygnal/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ SomeoneSerge ];
+    changelog = "https://github.com/pyapp-kit/psygnal/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ SomeoneSerge ];
   };
 }

@@ -1,71 +1,66 @@
 {
   lib,
   stdenv,
+
   buildNpmPackage,
   fetchFromGitHub,
-  copyDesktopItems,
   makeDesktopItem,
+
+  copyDesktopItems,
   makeWrapper,
+  xcbuild,
+
   libpng,
-  libX11,
-  libXi,
-  libXtst,
+  libx11,
+  libxi,
+  libxtst,
   zlib,
-  darwin,
-  electron,
+
+  electron_41,
+  nix-update-script,
 }:
 
 let
-  inherit (darwin.apple_sdk.frameworks)
-    Carbon
-    CoreFoundation
-    ApplicationServices
-    OpenGL
-    ;
+  electron = electron_41;
 in
 buildNpmPackage rec {
   pname = "jitsi-meet-electron";
-  version = "2025.1.0";
+  version = "2026.7.0";
 
   src = fetchFromGitHub {
     owner = "jitsi";
     repo = "jitsi-meet-electron";
     rev = "v${version}";
-    hash = "sha256-o65UPPyGgmFe8+HANmnyVgPITk8gY7uvIzx7QZUluBU=";
+    hash = "sha256-l0vnnIJpG5Ttt9lgWx9tsS8Vne53sGW/50CsnwPFhUQ=";
   };
 
-  nativeBuildInputs =
-    [
-      makeWrapper
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      copyDesktopItems
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    copyDesktopItems
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild
+  ];
 
   # robotjs node-gyp dependencies
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      libpng
-      libX11
-      libXi
-      libXtst
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Carbon
-      CoreFoundation
-      ApplicationServices
-      OpenGL
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    libpng
+    libx11
+    libxi
+    libxtst
+    zlib
+  ];
 
-  npmDepsHash = "sha256-16yWCI408tkkzvrx2fBPSNSUa9dRej9LrnNpqobwfl8=";
+  npmDepsHash = "sha256-m2+knAWSSraNGNGjMFoMC9+MlOhs+XyXs90GcMx9ulw=";
 
   makeCacheWritable = true;
 
-  env.ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
-
-  # disable code signing on Darwin
-  env.CSC_IDENTITY_AUTO_DISCOVERY = "false";
+  env = {
+    ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
+    NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
+  };
 
   preBuild = ''
     # remove some prebuilt binaries
@@ -81,6 +76,8 @@ buildNpmPackage rec {
     cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
 
+    export npm_config_nodedir=${electron.headers}
+
     # npmRebuild is needed because robotjs won't be built on darwin otherwise
     # asarUnpack makes sure to unwrap binaries so that nix can see the RPATH
     npm exec electron-builder -- \
@@ -88,10 +85,9 @@ buildNpmPackage rec {
         -c.npmRebuild=true \
         -c.asarUnpack="**/*.node" \
         -c.electronDist=electron-dist \
-        -c.electronVersion=${electron.version}
+        -c.electronVersion=${electron.version} \
+        -c.mac.identity=null
   '';
-
-  NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
 
   installPhase = ''
     runHook preInstall
@@ -137,13 +133,16 @@ buildNpmPackage rec {
     })
   ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     changelog = "https://github.com/jitsi/jitsi-meet-electron/releases/tag/${src.rev}";
     description = "Jitsi Meet desktop application powered by Electron";
     homepage = "https://github.com/jitsi/jitsi-meet-electron";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "jitsi-meet-electron";
-    maintainers = teams.jitsi.members ++ [ maintainers.tomasajt ];
+    maintainers = [ lib.maintainers.tomasajt ];
+    teams = [ lib.teams.jitsi ];
     inherit (electron.meta) platforms;
   };
 }

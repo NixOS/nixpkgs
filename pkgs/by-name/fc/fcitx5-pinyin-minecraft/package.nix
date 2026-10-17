@@ -6,11 +6,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "fcitx5-pinyin-minecraft";
-  version = "0.1.20240629";
+  version = "0.1.20260507";
 
   src = fetchurl {
     url = "https://github.com/oldherl/fcitx5-pinyin-minecraft/releases/download/${finalAttrs.version}/minecraft-cn.dict";
-    hash = "sha256-uD/ADL+JGdSYiNz6XIqJB0Y0IU6Jf56q5g7xG2o3a+E=";
+    hash = "sha256-5/bYexDb3lHuPZ4VpxruR0Aw9eKytfpk+S8mSGYiYEs=";
   };
 
   dontUnpack = true;

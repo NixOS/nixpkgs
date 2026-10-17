@@ -1,34 +1,33 @@
 {
   lib,
-  stdenv,
-  darwin,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
   cargo,
   rustc,
   clippy,
+  gcc,
   makeWrapper,
 }:
-let
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustlings";
-  version = "6.4.0";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
+  version = "6.5.0";
+
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rustlings";
-    rev = "v${version}";
-    hash = "sha256-VdIIcpyoCuid3MECVc9aKeIOUlxGlxcG7znqbqo9pjc=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-dUQIzNPxmKbhew9VjFIW7bY0D1IkuJ5+hRY2/CwmYhY=";
   };
 
-  cargoHash = "sha256-AU6OUGSWuxKmdoQLk+UiFzA7NRviDAgXrBDMdkjxOpA=";
+  cargoHash = "sha256-AvwulWEqZMywaG7lEmT8nn9s2hda+bbIV1rnVXnKH8o=";
 
   # Disabled test that does not work well in an isolated environment
   checkFlags = [
     "--skip=run_compilation_success"
     "--skip=run_test_success"
+    "--skip=init"
   ];
 
   nativeBuildInputs = [
@@ -36,16 +35,13 @@ rustPlatform.buildRustPackage {
     makeWrapper
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks; [ CoreServices ]
-  );
-
   postFixup = ''
     wrapProgram $out/bin/rustlings --suffix PATH : ${
       lib.makeBinPath [
         cargo
         rustc
         clippy
+        gcc
       ]
     }
   '';
@@ -58,4 +54,4 @@ rustPlatform.buildRustPackage {
     maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
     mainProgram = "rustlings";
   };
-}
+})

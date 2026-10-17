@@ -1,43 +1,55 @@
 {
   fetchFromGitLab,
   lib,
-  stdenv,
-  autoreconfHook,
-  pkg-config,
   libusb1,
+  meson,
+  ninja,
+  nix-update-script,
+  pkg-config,
+  stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libjaylink";
-  version = "0.3.1";
+  version = "0.5.0";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitLab {
     domain = "gitlab.zapb.de";
     owner = "libjaylink";
     repo = "libjaylink";
-    rev = version;
-    hash = "sha256-odJDE1A0WZ9vBXPxaUdthjTgmbmbdHjbyY1PkaM4+vI=";
+    tag = finalAttrs.version;
+    hash = "sha256-bwFmJuezMURM7JEInG/q5TP7g+QloyQ4V1rsUZVcmvE=";
   };
 
   nativeBuildInputs = [
-    autoreconfHook
+    meson
+    ninja
     pkg-config
   ];
+
   buildInputs = [ libusb1 ];
 
+  doInstallCheck = true;
+
   postPatch = ''
-    patchShebangs autogen.sh
+    substituteInPlace contrib/60-libjaylink.rules \
+      --replace-fail 'GROUP="plugdev"' 'GROUP="jlink"'
   '';
 
   postInstall = ''
-    install -Dm644 contrib/99-libjaylink.rules $out/lib/udev/rules.d/libjaylink.rules
+    install -Dm644 ../contrib/60-libjaylink.rules $out/lib/udev/rules.d/60-libjaylink.rules
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     homepage = "https://gitlab.zapb.de/libjaylink/libjaylink";
-    description = "libjaylink is a shared library written in C to access SEGGER J-Link and compatible devices";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ felixsinger ];
-    platforms = platforms.unix;
+    description = "Shared library written in C to access SEGGER J-Link and compatible devices";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ felixsinger ];
+    platforms = lib.platforms.unix;
   };
-}
+})

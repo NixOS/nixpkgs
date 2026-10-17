@@ -13,18 +13,18 @@
   cargo-gra,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "karlender";
   version = "0.10.11";
 
   src = fetchFromGitLab {
     owner = "floers";
-    repo = pname;
-    rev = "v${version}";
+    repo = "karlender";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-PwXSJq4uBtgIA2aQ5AZawEMmHoVS2Z9haVHyJ2oyXUs=";
   };
 
-  cargoHash = "sha256-R/oQvyZCcTImOA8FB5bECTj5VGFElImoQwIRX75PtOs=";
+  cargoHash = "sha256-senSpsmScj1IFXLfvmsllmRNB6FzrALGnQeG7IHw9es=";
 
   nativeBuildInputs = [
     pkg-config
@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   checkFlags = [
-    "--skip domain::time::tests::test_get_correct_offset_for_dst" # Need time
+    "--skip=domain::time::tests::test_get_correct_offset_for_dst" # Need time
   ];
 
   preBuild = ''
@@ -78,4 +78,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

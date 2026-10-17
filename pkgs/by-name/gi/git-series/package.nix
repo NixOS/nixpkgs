@@ -23,19 +23,21 @@ rustPlatform.buildRustPackage {
     hash = "sha256-DtOR7+vX7efNzYMRJwJTj5cXlFHQwzcS0Gp2feVdea4=";
   };
 
-  cargoHash = "sha256-D83mfaH4iKagGjdX+YhCzva99+dCneHeWPNnkzZB/k0=";
+  cargoHash = "sha256-hFiNK0MQmCPciflMwwR4gzU0Z+Q1WkPJrd4Hs33W8kw=";
 
   nativeBuildInputs = [
     pkg-config
     installShellFiles
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ curl ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ curl ];
 
   buildInputs = [
     libgit2
     libssh2
     openssl
     zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ curl ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ curl ];
 
   env = {
     LIBGIT2_SYS_USE_PKG_CONFIG = true;
@@ -46,7 +48,7 @@ rustPlatform.buildRustPackage {
     installManPage ./git-series.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to help with formatting git patches for review on mailing lists";
     longDescription = ''
       git series tracks changes to a patch series over time. git
@@ -54,8 +56,8 @@ rustPlatform.buildRustPackage {
       formats the series for email, and prepares pull requests.
     '';
     homepage = "https://github.com/git-series/git-series";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       edef
       vmandela
       aleksana

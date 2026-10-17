@@ -38,9 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Minilanguage designed to represent the entire contents of a PNG file in an editable form";
     license = lib.licenses.zlib;
     mainProgram = "sng";
-    maintainers = with lib.maintainers; [
-      dezgeg
-      AndersonTorres
+    maintainers = [
     ];
     platforms = lib.platforms.unix;
   };

@@ -14,11 +14,11 @@
   h5netcdf,
   h5py,
   ipykernel,
-  ipython,
   ipywidgets,
   jsonschema,
   libcst,
   matplotlib,
+  networkx,
   numpy,
   opentelemetry-api,
   packaging,
@@ -32,12 +32,10 @@
   typing-extensions,
   uncertainties,
   websockets,
-  wrapt,
   xarray,
 
   # optional-dependencies
   furo,
-  jinja2,
   nbsphinx,
   pyvisa-sim,
   scipy,
@@ -45,29 +43,41 @@
   sphinx-issues,
   towncrier,
 
-  # checks
+  # tests
   deepdiff,
   hypothesis,
   lxml,
   pip,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-mock,
   pytest-rerunfailures,
   pytest-xdist,
   pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "qcodes";
-  version = "0.50.1";
+  version = "0.56.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "Qcodes";
-    tag = "v${version}";
-    hash = "sha256-oNJVOz2FMMhUkYIajeWwRmHzLcXu5qTSQzjk0gciOnE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7J1vKMG1/d/8O+j+RmUtVpjFdZB4w0BVoGrIONbr/e4=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail \
+        'default-version = "0.54.0dev+Unknown"' \
+        'default-version = "${finalAttrs.version}"' \
+      --replace-fail \
+        "'ignore:Model_336 is deprecated:qcodes.utils.deprecate.QCoDeSDeprecationWarning'," \
+        ""
+  '';
 
   build-system = [
     setuptools
@@ -81,10 +91,10 @@ buildPythonPackage rec {
     h5netcdf
     h5py
     ipykernel
-    ipython
     ipywidgets
     jsonschema
     matplotlib
+    networkx
     numpy
     opentelemetry-api
     packaging
@@ -98,7 +108,6 @@ buildPythonPackage rec {
     typing-extensions
     uncertainties
     websockets
-    wrapt
     xarray
   ];
 
@@ -106,7 +115,6 @@ buildPythonPackage rec {
     docs = [
       # autodocsumm
       furo
-      jinja2
       nbsphinx
       pyvisa-sim
       # qcodes-loop
@@ -136,22 +144,32 @@ buildPythonPackage rec {
     lxml
     pip
     pytest-asyncio
+    pytest-cov-stub
     pytest-mock
     pytest-rerunfailures
     pytest-xdist
     pytestCheckHook
     pyvisa-sim
     sphinx
+    writableTmpDirAsHomeHook
   ];
 
   __darwinAllowLocalNetworking = true;
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "-v"
-    # Follow upstream with settings
-    "-m 'not serial'"
     "--hypothesis-profile ci"
+    # Follow upstream with settings
     "--durations=20"
+
+    # ERROR tests/test_interactive_widget.py - DeprecationWarning: Jupyter is migrating its paths to use standard platformdirs
+    # given by the platformdirs library.  To remove this warning and
+    # see the appropriate new directories, set the environment variable
+    # `JUPYTER_PLATFORM_DIRS=1` and then run `jupyter --paths`.
+    # The use of platformdirs will be the default in `jupyter_core` v6
+    "-Wignore::DeprecationWarning"
+    # impending matplotlib deprecation, does not block distribution
+    "-Wignore::PendingDeprecationWarning"
   ];
 
   disabledTestPaths = [
@@ -159,12 +177,20 @@ buildPythonPackage rec {
     "tests/dataset/measurement/test_load_legacy_data.py"
     # TypeError
     "tests/dataset/test_dataset_basic.py"
+    # qcodes.utils.deprecate.QCoDeSDeprecationWarning: Model_336 is deprecated
+    "tests/drivers/test_lakeshore_336_legacy.py"
+  ];
+
+  disabledTestMarks = [
+    "serial"
   ];
 
   disabledTests = [
     # Tests are time-sensitive and power-consuming
     # Those tests fails repeatably and are flaky
+    "test_access_channels_by_name"
     "test_access_channels_by_slice"
+    "test_access_channels_by_tuple"
     "test_aggregator"
     "test_datasaver"
     "test_do1d_additional_setpoints_shape"
@@ -172,7 +198,9 @@ buildPythonPackage rec {
     "test_field_limits"
     "test_get_array_in_scalar_param_data"
     "test_get_parameter_data"
+    "test_measured"
     "test_ramp_safely"
+    "test_ramp_scaled"
 
     # more flaky tests
     # https://github.com/microsoft/Qcodes/issues/5551
@@ -182,25 +210,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qcodes" ];
 
-  # Remove the `asyncio_default_fixture_loop_scope` option as it has been introduced in newer `pytest-asyncio` v0.24
-  # which is not in nixpkgs yet:
-  # pytest.PytestConfigWarning: Unknown config option: asyncio_default_fixture_loop_scope
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'default-version = "0.0"' 'default-version = "${version}"' \
-      --replace-fail 'asyncio_default_fixture_loop_scope = "function"' ""
-  '';
-
-  postInstall = ''
-    export HOME="$TMPDIR"
-  '';
-
   meta = {
     description = "Python-based data acquisition framework";
-    changelog = "https://github.com/QCoDeS/Qcodes/releases/tag/v${version}";
+    changelog = "https://github.com/QCoDeS/Qcodes/releases/tag/${finalAttrs.src.tag}";
     downloadPage = "https://github.com/QCoDeS/Qcodes";
     homepage = "https://qcodes.github.io/Qcodes/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ evilmav ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+    ];
   };
-}
+})

@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   makeDesktopItem,
+  copyDesktopItems,
   makeWrapper,
   patchelf,
   fontconfig,
@@ -11,25 +12,29 @@
   gcc-unwrapped,
   iputils,
   psmisc,
-  xorg,
+  libxtst,
+  libxrender,
+  libxi,
+  libxext,
+  libx11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "IPMIView";
   version = "2.21.0";
   buildVersion = "221118";
 
   src = fetchurl {
-    url = "https://www.supermicro.com/wftp/utility/IPMIView/Linux/IPMIView_${version}_build.${buildVersion}_bundleJRE_Linux_x64.tar.gz";
+    url = "https://www.supermicro.com/wftp/utility/IPMIView/Linux/IPMIView_${finalAttrs.version}_build.${finalAttrs.buildVersion}_bundleJRE_Linux_x64.tar.gz";
     hash = "sha256-ZN0vadGbjGj9U2wPqvHLjS9fsk3DNCbXoNvzUfnn8IM=";
   };
 
   nativeBuildInputs = [
     patchelf
     makeWrapper
+    copyDesktopItems
   ];
   buildPhase =
-    with xorg;
     let
       stunnelBinary =
         if stdenv.hostPlatform.system == "x86_64-linux" then
@@ -44,11 +49,11 @@ stdenv.mkDerivation rec {
 
       patchelf --set-rpath "${
         lib.makeLibraryPath [
-          libX11
-          libXext
-          libXrender
-          libXtst
-          libXi
+          libx11
+          libxext
+          libxrender
+          libxtst
+          libxi
         ]
       }" ./jre/lib/libawt_xawt.so
       patchelf --set-rpath "${lib.makeLibraryPath [ freetype ]}" ./jre/lib/libfontmanager.so
@@ -58,21 +63,21 @@ stdenv.mkDerivation rec {
       runHook postBuild
     '';
 
-  desktopItem = makeDesktopItem rec {
-    name = "IPMIView";
-    exec = "IPMIView";
-    desktopName = name;
-    genericName = "Supermicro BMC manager";
-    categories = [ "Network" ];
-  };
+  desktopItems = [
+    (makeDesktopItem rec {
+      name = "IPMIView";
+      exec = "IPMIView";
+      desktopName = name;
+      genericName = "Supermicro BMC manager";
+      categories = [ "Network" ];
+    })
+  ];
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/bin
     cp -R . $out/
-
-    ln -s ${desktopItem}/share $out/share
 
     # LD_LIBRARY_PATH: fontconfig is used from java code
     # PATH: iputils is used for ping, and psmisc is for killall
@@ -95,17 +100,17 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    sourceProvenance = with sourceTypes; [
+  meta = {
+    sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode
     ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ vlaci ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ vlaci ];
     platforms = [
       "x86_64-linux"
       "i686-linux"
     ];
     mainProgram = "IPMIView";
   };
-}
+})

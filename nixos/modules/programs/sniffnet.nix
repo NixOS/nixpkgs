@@ -17,6 +17,8 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    environment.systemPackages = [ pkgs.sniffnet ];
+
     security.wrappers.sniffnet = {
       owner = "root";
       group = "root";
@@ -25,5 +27,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ figsoda ];
+  meta.maintainers = [ ];
 }

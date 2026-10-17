@@ -11,17 +11,17 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ml8r8z3f0mnn381qs1snbffa920i9ycp6mm2am1d3aqczkdz4j0";
+    hash = "sha256-QJLf5mdYjRaqErWay3yKQCTl3LI6aBzQsLYCNz7KiNY=";
   };
 
   checkPhase = ''
     python ipaddr_test.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "IP address manipulation library";
     homepage = "https://github.com/google/ipaddr-py";
-    license = licenses.asl20;
-    maintainers = [ maintainers.astro ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.astro ];
   };
 }

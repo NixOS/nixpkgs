@@ -1,0 +1,33 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    ffi (1.17.1)
+    ffi (1.17.1-x86_64-linux-gnu)
+    google-protobuf (3.25.5)
+    google-protobuf (3.25.5-x86_64-linux)
+    libusb (0.7.2)
+      ffi (~> 1.0)
+      mini_portile2 (~> 2.1)
+    mini_portile2 (2.8.9)
+    nokogiri (1.19.4)
+      mini_portile2 (~> 2.8.2)
+      racc (~> 1.4)
+    nokogiri (1.19.4-x86_64-linux-gnu)
+      racc (~> 1.4)
+    racc (1.8.1)
+    rake (13.3.1)
+    serialport (1.4.0)
+
+PLATFORMS
+  ruby
+  x86_64-linux
+
+DEPENDENCIES
+  google-protobuf (< 4)
+  libusb
+  nokogiri
+  rake
+  serialport
+
+BUNDLED WITH
+   2.7.2

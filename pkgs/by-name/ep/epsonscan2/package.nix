@@ -2,7 +2,7 @@
   lib,
   stdenv,
   autoPatchelfHook,
-  boost,
+  boost186,
   cmake,
   copyDesktopItems,
   imagemagick,
@@ -15,8 +15,7 @@
   libtool,
   libusb1,
   makeDesktopItem,
-  qtbase,
-  wrapQtAppsHook,
+  qt5,
 
   withGui ? true,
   withNonFreePlugins ? false,
@@ -25,20 +24,24 @@
 let
   pname = "epsonscan2";
   description = "Epson Scan 2 scanner driver for many modern Epson scanners and multifunction printers";
-  version = "6.7.70.0";
+  # Epson updates projects without changing their version numbers.
+  # There can be multiple different packages identified by the same
+  #version, so we also tag them with the month and year shown in
+  # the Epson download page.
+  version = "6.7.90.0-2026-01";
 
   system = stdenv.hostPlatform.system;
 
   src = fetchzip {
-    url = "https://download3.ebz.epson.net/dsc/f/03/00/16/14/37/7577ee65efdad48ee2d2f38d9eda75418e490552/epsonscan2-6.7.70.0-1.src.tar.gz";
-    hash = "sha256-y7XGxrOpVou/ZSfUffV3qv+SsFFpTiU7pWvtfsiLZWc=";
+    url = "https://download3.ebz.epson.net/dsc/f/03/00/17/08/06/1babf9876ebb16956420a601b92ee28b57cd7db7/epsonscan2-6.7.80.0-1.src.tar.gz";
+    hash = "sha256-SHNpnVyoFTwLu3drlL8MFKj/NCKy5U0UDqP08f7u1R4=";
   };
   bundle =
     {
       "x86_64-linux" = fetchzip {
         name = "${pname}-bundle";
-        url = "https://download3.ebz.epson.net/dsc/f/03/00/16/14/38/7b1780ace96e2c6033bbb667c7f3ed281e4e9f38/epsonscan2-bundle-6.7.70.0.x86_64.deb.tar.gz";
-        hash = "sha256-fPNNFgW/VU/YG+jjmSvPZ0WsHibsXY1TNp164GxLHKw=";
+        url = "https://download3.ebz.epson.net/dsc/f/03/00/17/08/12/9f3fec0ae80aa5c36f5170377ebcc38c93251e23/epsonscan2-bundle-6.7.80.0.x86_64.deb.tar.gz";
+        hash = "sha256-Smjp2PRcsNN9nP3W++HmKOw85zZj20zEIFEEVSO8lDo=";
       };
     }
     ."${system}" or (throw "Unsupported system: ${system}");
@@ -49,93 +52,91 @@ stdenv.mkDerivation {
 
   patches = [
     ./build.patch
-    ./gcc14.patch
+    ./gcc15.patch
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/flathub/net.epson.epsonscan2/a489ac2f8cbd03afeda86673930cc17663c31a53/patches/0002-Fix-crash.patch";
-      hash = "sha256-rNsFnHq//CJcIZl0M6RLRkIY3YhnJZbikO8SeeC2ktg=";
+      url = "https://github.com/flathub/net.epson.epsonscan2/raw/f9eb99109e63dbed907f46e36f435e46d7c01aad/patches/0002-Fix-crash.patch";
+      hash = "sha256-Al5DkVnCBNoMtex4G3Zm7uZwTvnWGAjOk5xh/U9WyNU=";
     })
+    # At the time of writing, some flathub patches are not updated to work with 6.7.90.0-1 (2026/01/01)
+    ./xdg-open.patch # Rebase of https://github.com/flathub/net.epson.epsonscan2/blob/master/patches/0003-Use-XDG-open-to-open-the-directory.patch
+    ./fix-oob-container-access.patch # Rebase of https://github.com/flathub/net.epson.epsonscan2/blob/master/patches/0004-Fix-a-crash-on-an-OOB-container-access.patch
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/flathub/net.epson.epsonscan2/a489ac2f8cbd03afeda86673930cc17663c31a53/patches/0004-Fix-a-crash-on-an-OOB-container-access.patch";
-      hash = "sha256-WmA8pmPSJ1xUdeBbE8Jzi6w9p96aIOm0erF3T4EQ6VA=";
-    })
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/flathub/net.epson.epsonscan2/a489ac2f8cbd03afeda86673930cc17663c31a53/patches/0003-Use-XDG-open-to-open-the-directory.patch";
-      hash = "sha256-H3lle1SXkkpbBkozYEwiX0z9oTUubTpB+l91utxH03M=";
+      url = "https://github.com/flathub/net.epson.epsonscan2/raw/f9eb99109e63dbed907f46e36f435e46d7c01aad/patches/0005-Added-missing-headers.patch";
+      hash = "sha256-YJjCI8UNzLciSq9IfcHxiF4isFGM9A5Hn7Kxao/+lpQ=";
     })
   ];
 
   postPatch = ''
-    rm CMakeCache.txt
-
     substituteInPlace src/Controller/Src/Scanner/Engine.cpp \
-      --replace-fail '@KILLALL@' ${killall}/bin/killall
+      --replace-fail '@KILLALL@' ${lib.getExe killall}
 
     substituteInPlace src/Controller/Src/Filter/GetOrientation.cpp \
       --replace-fail '@OCR_ENGINE_GETROTATE@' $out/libexec/epsonscan2-ocr/ocr-engine-getrotate
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-    ]
-    ++ lib.optionals withGui [
-      imagemagick # to make icons
-      wrapQtAppsHook
-    ]
-    ++ lib.optionals withNonFreePlugins [
-      autoPatchelfHook
-    ];
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals withGui [
+    imagemagick # to make icons
+    qt5.wrapQtAppsHook
+  ]
+  ++ lib.optionals withNonFreePlugins [
+    autoPatchelfHook
+  ];
 
-  buildInputs =
-    [
-      boost
-      libjpeg
-      libpng
-      libtiff
-      libusb1
-    ]
-    ++ lib.optionals withGui [
-      copyDesktopItems
-      qtbase
-    ]
-    ++ lib.optionals withNonFreePlugins [
-      libtool.lib
-    ];
+  buildInputs = [
+    boost186 # uses Boost.Optional but epsonscan2 is pre-C++11.
+    libjpeg
+    libpng
+    libtiff
+    libusb1
+  ]
+  ++ lib.optionals withGui [
+    copyDesktopItems
+    qt5.qtbase
+  ]
+  ++ lib.optionals withNonFreePlugins [
+    libtool.lib
+  ];
 
-  cmakeFlags =
-    [
-      # The non-free (Debian) packages uses this directory structure so do the same when compiling
-      # from source so we can easily merge them.
-      "-DCMAKE_INSTALL_LIBDIR=lib/${system}-gnu"
-    ]
-    ++ lib.optionals (!withGui) [
-      "-DNO_GUI=ON"
-    ];
+  cmakeFlags = [
+    # The non-free (Debian) packages uses this directory structure so do the same when compiling
+    # from source so we can easily merge them.
+    "-DCMAKE_INSTALL_LIBDIR=lib/${system}-gnu"
+    # There are many CMakeLists.txt files with various minimum versions. It's much easier to set this
+    # here, instead of substituting those everywhere
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
+  ]
+  ++ lib.optionals (!withGui) [
+    "-DNO_GUI=ON"
+  ];
 
-  postInstall =
-    ''
-      # But when we put all the libraries in lib/${system}-gnu, then SANE can't find the
-      # required libraries so create a symlink to where it expects them to be.
-      mkdir -p $out/lib/sane
-      for file in $out/lib/${system}-gnu/sane/*.so.*; do
-        ln -s $file $out/lib/sane/
-      done
-    ''
-    + lib.optionalString withGui ''
-      # The icon file extension is .ico but it's actually a png!
-      mkdir -p $out/share/icons/hicolor/{48x48,128x128}/apps
-      magick $src/Resources/Icons/escan2_app.ico -resize 48x48 -delete 1,2,3 $out/share/icons/hicolor/48x48/apps/epsonscan2.png
-      magick $src/Resources/Icons/escan2_app.ico -resize 128x128 -delete 1,2,3 $out/share/icons/hicolor/128x128/apps/epsonscan2.png
-    ''
-    + lib.optionalString withNonFreePlugins ''
-      ar xf ${bundle}/plugins/epsonscan2-non-free-plugin_*.deb
-      tar Jxf data.tar.xz
-      cp -r usr/* $out
-    '';
+  doInstallCheck = true;
+
+  postInstall = ''
+    # But when we put all the libraries in lib/${system}-gnu, then SANE can't find the
+    # required libraries so create a symlink to where it expects them to be.
+    mkdir -p $out/lib/sane
+    for file in $out/lib/${system}-gnu/sane/*.so.*; do
+      ln -s $file $out/lib/sane/
+    done
+  ''
+  + lib.optionalString withGui ''
+    # The icon file extension is .ico but it's actually a png!
+    mkdir -p $out/share/icons/hicolor/{48x48,128x128}/apps
+    magick $src/Resources/Icons/escan2_app.ico -resize 48x48 -delete 1,2,3 $out/share/icons/hicolor/48x48/apps/epsonscan2.png
+    magick $src/Resources/Icons/escan2_app.ico -resize 128x128 -delete 1,2,3 $out/share/icons/hicolor/128x128/apps/epsonscan2.png
+  ''
+  + lib.optionalString withNonFreePlugins ''
+    ar xf ${bundle}/plugins/epsonscan2-non-free-plugin_*.deb
+    tar Jxf data.tar.xz
+    cp -r usr/* $out
+  '';
 
   desktopItems = lib.optionals withGui [
     (makeDesktopItem {
-      name = pname;
+      name = "epsonscan2";
       exec = "epsonscan2";
       icon = "epsonscan2";
       desktopName = "Epson Scan 2";
@@ -152,22 +153,27 @@ stdenv.mkDerivation {
     inherit description;
     mainProgram = "epsonscan2";
     longDescription = ''
-      Epson Scan 2 scanner driver including optional non-free plugins such as OCR and network
-      scanning.
+      The Epson Scan 2 scanner driver, including optional non-free plugins such
+      as OCR and network scanning.
 
       To use the SANE backend:
-      <literal>
-      hardware.sane.extraBackends = [ pkgs.epsonscan2 ];
-      </literal>
+      ```nix
+      {
+        hardware.sane.extraBackends = [ pkgs.epsonscan2 ];
+      }
+      ```
 
-      Overrides can be used to customise this package. For example, to enable non-free plugins and
-      disable the Epson GUI:
-      <literal>
-      pkgs.epsonscan2.override { withNonFreePlugins = true; withGui = false; }
-      </literal>
+      Overrides can be used to customise this package. For example, to enable
+      non-free plugins and disable the Epson GUI:
+      ```nix
+      pkgs.epsonscan2.override {
+        withNonFreePlugins = true;
+        withGui = false;
+      }
+      ```
     '';
     homepage = "https://support.epson.net/linux/en/epsonscan2.php";
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.systems.inspect.patternLogicalAnd lib.systems.inspect.patterns.isLinux lib.systems.inspect.patterns.isx86_64;
     sourceProvenance =
       with lib.sourceTypes;
       [ fromSource ] ++ lib.optionals withNonFreePlugins [ binaryNativeCode ];

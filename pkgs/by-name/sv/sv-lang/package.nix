@@ -1,24 +1,27 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, boost
-, catch2_3
-, cmake
-, ninja
-, fmt_11
-, mimalloc
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost,
+  catch2_3,
+  cmake,
+  ninja,
+  fmt,
+  llvmPackages,
+  mimalloc,
+  python3,
+  tomlplusplus,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sv-lang";
-  version = "7.0";
+  version = "12.0";
 
   src = fetchFromGitHub {
     owner = "MikePopoloski";
     repo = "slang";
-    rev = "v${version}";
-    sha256 = "sha256-msSc6jw2xbEZfOwtqwFEDIKcwf5SDKp+j15lVbNO98g=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-s52DzaOdVdXLahJ5fn92V5VhTgzdd3xYuIlWByq58+0=";
   };
 
   cmakeFlags = [
@@ -26,34 +29,47 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_LIBDIR=lib"
 
-    "-DSLANG_INCLUDE_TESTS=${if doCheck then "ON" else "OFF"}"
+    (lib.cmakeBool "SLANG_USE_SYSTEM_FMT" true)
+    (lib.cmakeBool "SLANG_USE_SYSTEM_BOOST" true)
+    (lib.cmakeBool "SLANG_USE_SYSTEM_TOMLPLUSPLUS" true)
+
+    "-DSLANG_INCLUDE_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
   ];
+
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     cmake
     python3
     ninja
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # needs the wrapped clang-scan-deps to find the C++20 module headers
+    llvmPackages.clang-tools
   ];
+
+  strictDeps = true;
 
   buildInputs = [
     boost
-    fmt_11
+    fmt
     mimalloc
+    tomlplusplus
     # though only used in tests, cmake will complain its absence when configuring
     catch2_3
   ];
 
-  # TODO: a mysterious linker error occurs when building the unittests on darwin.
-  # The error occurs when using catch2_3 in nixpkgs, not when fetching catch2_3 using CMake
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "SystemVerilog compiler and language services";
     homepage = "https://github.com/MikePopoloski/slang";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sharzy ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      sharzy
+      carlossless
+    ];
     mainProgram = "slang";
-    platforms = platforms.all;
-    broken = stdenv.hostPlatform.isDarwin;
+    platforms = lib.platforms.all;
   };
-}
+})

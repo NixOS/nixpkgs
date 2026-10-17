@@ -32,15 +32,15 @@ let
   });
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "janus-gateway";
-  version = "1.3.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "meetecho";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-11UdQ4FYB8bjkD0U1C/5Ukd9F9oGl065gAvGo6L4Xpc=";
+    repo = "janus-gateway";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-/201zFwahtN9cH+iHqeAi5FCTXUE3Z6J1G5Xh0xzc3Q=";
   };
 
   nativeBuildInputs = [
@@ -98,12 +98,12 @@ stdenv.mkDerivation rec {
     moveToOutput etc "$doc"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "General purpose WebRTC server";
     homepage = "https://janus.conf.meetecho.com/";
-    changelog = "https://github.com/meetecho/janus-gateway/blob/v${version}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ fpletz ];
+    changelog = "https://github.com/meetecho/janus-gateway/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ fpletz ];
   };
-}
+})

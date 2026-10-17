@@ -1,25 +1,25 @@
 {
   lib,
   python3,
-  fetchFromGitea,
+  fetchFromCodeberg,
   gobject-introspection,
   libadwaita,
   modemmanager,
   wrapGAppsHook4,
+  nix-update-script,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "satellite";
-  version = "0.9.0";
+  version = "0.9.2";
 
   pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "tpikonen";
     repo = "satellite";
-    tag = version;
-    hash = "sha256-w0ZpH1joFoV7W7PH74//LGLUJQLCpAGcC6GlyTbdsTE=";
+    tag = finalAttrs.version;
+    hash = "sha256-DubLxsqJsvCbfFD9jNkKHGd2Ur/bT7Ea5bHLijciwtI=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +40,9 @@ python3.pkgs.buildPythonApplication rec {
     pynmea2
   ];
 
-  strictDeps = true;
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Program for showing navigation satellite data";
@@ -54,4 +56,4 @@ python3.pkgs.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ Luflosi ];
   };
-}
+})

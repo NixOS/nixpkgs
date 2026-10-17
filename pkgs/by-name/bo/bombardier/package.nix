@@ -4,20 +4,22 @@
   fetchFromGitHub,
   testers,
   bombardier,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "bombardier";
-  version = "1.2.6";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "codesenberg";
     repo = "bombardier";
-    rev = "v${version}";
-    hash = "sha256-sJ5+nxfyWSN6dFlA4INaqa3UHTY7huYkZhaTidMJFAs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FoaiUky0WcipkGN8KIpSd+iizinlqtHC5lskvNCnx/Y=";
   };
 
-  vendorHash = "sha256-SxW/87l1w86H5cxEhiF/Fj8SxJ/uAfhtc7I1DVvIilk=";
+  vendorHash = "sha256-SezGoDM4xzOj1y/qmvlngYKOVdJnxBD4l9LPVErevUI=";
 
   subPackages = [
     "."
@@ -26,23 +28,28 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
+    "-X=main.version=${finalAttrs.version}"
   ];
 
   __darwinAllowLocalNetworking = true;
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+
   passthru.tests = {
+    updateScript = nix-update-script { };
     version = testers.testVersion {
       package = bombardier;
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fast cross-platform HTTP benchmarking tool written in Go";
     homepage = "https://github.com/codesenberg/bombardier";
-    changelog = "https://github.com/codesenberg/bombardier/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/codesenberg/bombardier/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.progrm_jarvis ];
     mainProgram = "bombardier";
   };
-}
+})

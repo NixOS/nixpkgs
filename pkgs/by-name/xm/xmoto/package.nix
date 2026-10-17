@@ -10,7 +10,7 @@
   libjpeg,
   libxml2,
   xz,
-  lua,
+  lua5_2_compat,
   ode,
   libGL,
   libGLU,
@@ -24,22 +24,26 @@
   libxdg_basedir,
   zlib,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation rec {
   pname = "xmoto";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "xmoto";
+    repo = "xmoto";
     rev = "v${version}";
-    hash = "sha256-n58GB5HA50ybSq0ssvJMq+p3I3JThHUGLZ5sHy/245M=";
+    hash = "sha256-DNljUd7FSH0fTgQx8LMqItZ54aLZtwMUPzqR8Z820SM=";
   };
 
   nativeBuildInputs = [
     cmake
     gettext
     makeWrapper
+    pkg-config
   ];
 
   buildInputs = [
@@ -72,7 +76,7 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "$out/share/"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Challenging 2D motocross platform game, where physics play an important role";
     mainProgram = "xmoto";
     longDescription = ''
@@ -80,11 +84,11 @@ stdenv.mkDerivation rec {
       You need to control your bike to its limits, if you want to have a chance to finish the most difficult challenges.
     '';
     homepage = "https://xmoto.tuxfamily.org";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       raskin
       pSub
     ];
-    platforms = platforms.all;
-    license = licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl2Plus;
   };
 }

@@ -136,7 +136,7 @@ let
       default = null;
       example = "1 6 3 4 5 0 7";
       description = ''
-        Sets the logical button mapping for this device, see XSetPointerMapping(3). The string  must
+        Sets the logical button mapping for this device, see {manpage}`XSetPointerMapping(3)`. The string  must
         be  a  space-separated  list  of  button mappings in the order of the logical buttons on the
         device, starting with button 1.  The default mapping is "1 2 3 ... 32". A mapping of 0 deac‐
         tivates the button. Multiple buttons can have the same mapping.  Invalid mapping strings are
@@ -370,12 +370,12 @@ in
       (
         option:
         lib.mkRenamedOptionModule
-          ([
+          [
             "services"
             "xserver"
             "libinput"
             option
-          ])
+          ]
           [
             "services"
             "libinput"
@@ -431,39 +431,42 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkMerge [
+    (lib.mkIf cfg.enable {
+      services.udev.packages = [ pkgs.libinput.out ];
+    })
 
-    services.xserver.modules = [ pkgs.xorg.xf86inputlibinput ];
+    (lib.mkIf (cfg.enable && config.services.xserver.enable) {
+      services.xserver.modules = [ pkgs.xf86-input-libinput ];
 
-    environment.systemPackages = [ pkgs.xorg.xf86inputlibinput ];
+      # for man pages
+      environment.systemPackages = [ pkgs.xf86-input-libinput ];
 
-    environment.etc =
-      let
-        cfgPath = "X11/xorg.conf.d/40-libinput.conf";
-      in
-      {
-        ${cfgPath} = {
-          source = pkgs.xorg.xf86inputlibinput.out + "/share/" + cfgPath;
-        };
-      };
-
-    services.udev.packages = [ pkgs.libinput.out ];
-
-    services.xserver.inputClassSections = [
-      (mkX11ConfigForDevice "mouse" "Pointer")
-      (mkX11ConfigForDevice "touchpad" "Touchpad")
-    ];
-
-    assertions = [
-      # already present in synaptics.nix
-      /*
+      environment.etc =
+        let
+          cfgPath = "X11/xorg.conf.d/40-libinput.conf";
+        in
         {
-          assertion = !config.services.xserver.synaptics.enable;
-          message = "Synaptics and libinput are incompatible, you cannot enable both (in services.xserver).";
-        }
-      */
-    ];
+          ${cfgPath} = {
+            source = pkgs.xf86-input-libinput.out + "/share/" + cfgPath;
+          };
+        };
 
-  };
+      services.xserver.inputClassSections = [
+        (mkX11ConfigForDevice "mouse" "Pointer")
+        (mkX11ConfigForDevice "touchpad" "Touchpad")
+      ];
+
+      assertions = [
+        # already present in synaptics.nix
+        /*
+          {
+            assertion = !config.services.xserver.synaptics.enable;
+            message = "Synaptics and libinput are incompatible, you cannot enable both (in services.xserver).";
+          }
+        */
+      ];
+    })
+  ];
 
 }

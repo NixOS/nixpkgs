@@ -1,37 +1,39 @@
-{ buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, lib
-, stdenv
-, testers
-, kubevela
-, nix-update-script
+{
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  writableTmpDirAsHomeHook,
+  lib,
+  stdenv,
+  testers,
+  kubevela,
+  nix-update-script,
 }:
-
-buildGoModule rec {
+let
+  canGenerateShellCompletions = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+in
+buildGoModule (finalAttrs: {
   pname = "kubevela";
-  version = "1.9.13";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "kubevela";
     repo = "kubevela";
-    rev = "v${version}";
-    hash = "sha256-b9N7vEY6AjJmOWySyssW7nrlZ+iFhOzVFmVQGfk/ilw=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-IyCXAD+GSd5epFRTZrrrNwATDFKndyfuGRCCOxUBAhc=";
   };
 
-  vendorHash = "sha256-WE5jE58pCXUvIKo+NAQUNrNzxLkUDIuJp2yBqE+8Ors=";
+  vendorHash = "sha256-XRRef5M918GqVYavUcd2zxyXZ7Z+ZRopYL3aJkIhPUk=";
 
   ldflags = [
-    "-s" "-w"
-    "-X github.com/oam-dev/kubevela/version.VelaVersion=${version}"
+    "-s"
+    "-w"
+    "-X github.com/oam-dev/kubevela/version.VelaVersion=${finalAttrs.version}"
   ];
 
   subPackages = [ "references/cmd/cli" ];
 
   env.CGO_ENABLED = 0;
-
-  # Workaround for permission issue in shell completion
-  HOME = "$TMPDIR";
 
   installPhase = ''
     runHook preInstall
@@ -39,8 +41,14 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  nativeBuildInputs = [ installShellFiles ];
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  nativeBuildInputs = [
+    installShellFiles
+  ]
+  ++ lib.optionals canGenerateShellCompletions [
+    writableTmpDirAsHomeHook # Workaround for permission issue in shell completion
+  ];
+
+  postInstall = lib.optionalString canGenerateShellCompletions ''
     installShellCompletion --cmd vela \
       --bash <($out/bin/vela completion bash) \
       --zsh <($out/bin/vela completion zsh)
@@ -61,4 +69,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "vela";
   };
-}
+})

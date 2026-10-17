@@ -5,12 +5,11 @@
   libiconv,
   libiconvReal,
   updateAutotoolsGnuConfigScriptsHook,
-  darwin,
 }@args:
 
 let
   # https://lists.gnu.org/archive/html/bug-gnulib/2024-05/msg00375.html
-  # macoOS libiconv 14 & 15 do not work with libunistring and a configure test
+  # macOS libiconv 14 & 15 do not work with libunistring and a configure test
   # added in 1.3 rejects even building with it so use gnu libiconv on darwin
   libiconv = if stdenv.hostPlatform.isDarwin then libiconvReal else args.libiconv;
 in
@@ -22,11 +21,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libunistring";
-  version = "1.3";
+  version = "1.4.2";
+
+  __structuredAttrs = true;
 
   src = fetchurl {
     url = "mirror://gnu/libunistring/libunistring-${finalAttrs.version}.tar.gz";
-    hash = "sha256-jqjM+GwJ3YAcjKwZh46ATlT3B89piENxEw0gveaDhrc=";
+    hash = "sha256-6CZksXAGTmIzGWISayWdRS1Tsie7SpOrIAQNhG/sAdg=";
   };
 
   outputs = [

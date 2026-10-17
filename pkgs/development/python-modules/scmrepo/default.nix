@@ -1,10 +1,9 @@
 {
   lib,
+  aiohttp-retry,
   asyncssh,
   buildPythonPackage,
   dulwich,
-  dvc-http,
-  dvc-objects,
   fetchFromGitHub,
   fsspec,
   funcy,
@@ -12,24 +11,21 @@
   pathspec,
   pygit2,
   pygtrie,
-  pythonOlder,
   setuptools,
   setuptools-scm,
-  shortuuid,
+  tqdm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "scmrepo";
-  version = "3.3.9";
+  version = "3.6.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "scmrepo";
-    tag = version;
-    hash = "sha256-HrJraiETYC7U2IB9ykjGUOg3khA4lBIH18r7btvXRH8=";
+    tag = finalAttrs.version;
+    hash = "sha256-E7BHdLDS57r/UbSA62lfr3z+5sqFTPRzwfFLIITeSs0=";
   };
 
   build-system = [
@@ -38,17 +34,16 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    aiohttp-retry
     asyncssh
     dulwich
-    dvc-http
-    dvc-objects
     fsspec
     funcy
     gitpython
     pathspec
     pygit2
     pygtrie
-    shortuuid
+    tqdm
   ];
 
   # Requires a running Docker instance
@@ -56,11 +51,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "scmrepo" ];
 
-  meta = with lib; {
+  meta = {
     description = "SCM wrapper and fsspec filesystem";
     homepage = "https://github.com/iterative/scmrepo";
-    changelog = "https://github.com/iterative/scmrepo/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/iterative/scmrepo/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

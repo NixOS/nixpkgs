@@ -5,7 +5,7 @@
   buildGoModule,
   libpcap,
   nixosTests,
-  systemd,
+  systemdLibs,
   config,
 }:
 
@@ -13,45 +13,53 @@ let
   beat =
     package: extraArgs:
     buildGoModule (
-      lib.attrsets.recursiveUpdate (rec {
+      finalAttrs:
+      {
         pname = package;
         version = elk7Version;
 
         src = fetchFromGitHub {
           owner = "elastic";
           repo = "beats";
-          rev = "v${version}";
-          hash = "sha256-0qwWHRIDLlnaPOCRmiiFGg+/jdanWuQtggM2QSaMR1o=";
+          tag = "v${finalAttrs.version}";
+          hash = "sha256-TzcKB1hIHe1LNZ59GcvR527yvYqPKNXPIhpWH2vyMTY=";
         };
 
-        vendorHash = "sha256-rwCCpptppkpvwQWUtqTjBUumP8GSpPHBTCaj0nYVQv8=";
+        vendorHash = "sha256-JOCcceYYutC5MI+/lXBqcqiET+mcrG1e3kWySo3+NIk=";
 
         subPackages = [ package ];
 
-        meta = with lib; {
+        meta = {
           homepage = "https://www.elastic.co/products/beats";
-          license = licenses.asl20;
-          maintainers = with maintainers; [
-            fadenb
+          license = lib.licenses.asl20;
+          maintainers = with lib.maintainers; [
             basvandijk
             dfithian
           ];
-          platforms = platforms.linux;
-        };
-      }) extraArgs
+          platforms = lib.platforms.linux;
+        }
+        // (extraArgs.meta or { });
+      }
+      // removeAttrs extraArgs [
+        "meta"
+      ]
     );
 in
 rec {
-  auditbeat7 = beat "auditbeat" { meta.description = "Lightweight shipper for audit data"; };
+  auditbeat7 = beat "auditbeat" {
+    meta.description = "Lightweight shipper for audit data";
+  };
   filebeat7 = beat "filebeat" {
     meta.description = "Lightweight shipper for logfiles";
-    buildInputs = [ systemd ];
+    buildInputs = [ systemdLibs ];
     tags = [ "withjournald" ];
     postFixup = ''
-      patchelf --set-rpath ${lib.makeLibraryPath [ (lib.getLib systemd) ]} "$out/bin/filebeat"
+      patchelf --set-rpath ${lib.makeLibraryPath [ (lib.getLib systemdLibs) ]} "$out/bin/filebeat"
     '';
   };
-  heartbeat7 = beat "heartbeat" { meta.description = "Lightweight shipper for uptime monitoring"; };
+  heartbeat7 = beat "heartbeat" {
+    meta.description = "Lightweight shipper for uptime monitoring";
+  };
   metricbeat7 = beat "metricbeat" {
     meta.description = "Lightweight shipper for metrics";
     passthru.tests = lib.optionalAttrs config.allowUnfree (

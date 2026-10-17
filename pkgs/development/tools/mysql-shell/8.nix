@@ -29,6 +29,7 @@
   cyrus_sasl,
   openldap,
   antlr,
+  fetchpatch,
 }:
 
 let
@@ -38,8 +39,8 @@ let
     pyyaml
   ];
 
-  mysqlShellVersion = "8.4.3";
-  mysqlServerVersion = "8.4.3";
+  mysqlShellVersion = "8.4.10";
+  mysqlServerVersion = "8.4.10";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql-shell";
@@ -48,11 +49,11 @@ stdenv.mkDerivation (finalAttrs: {
   srcs = [
     (fetchurl {
       url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor mysqlServerVersion}/mysql-${mysqlServerVersion}.tar.gz";
-      hash = "sha256-eslWTEeAIvcwBf+Ju7QPZ7OB/AbVUYQWvf/sdeYluBg=";
+      hash = "sha256-1XpnMLrvFK4Rj39KbgKEW1tQkzdY32H7BuEE8nzMj5Y=";
     })
     (fetchurl {
       url = "https://dev.mysql.com/get/Downloads/MySQL-Shell/mysql-shell-${finalAttrs.version}-src.tar.gz";
-      hash = "sha256-rO+cAfQzUobMrTLGHRbaXsG+vMcjVTtDoZwmyok+dS4=";
+      hash = "sha256-2pOMjkr8y1lCuh5EC34kI9V8vcQpAotJPHWHkMbgET4=";
     })
   ];
 
@@ -66,6 +67,12 @@ stdenv.mkDerivation (finalAttrs: {
     # No openssl bundling on macOS. It's not working.
     # See https://github.com/mysql/mysql-shell/blob/5b84e0be59fc0e027ef3f4920df15f7be97624c1/cmake/ssl.cmake#L53
     ./no-openssl-bundling.patch
+
+    # fix build w/ glibc-2.44
+    (fetchpatch {
+      url = "https://github.com/mysql/mysql-shell/commit/4ce8746d8a7eecf9ae66d4d500c84d57cc4fbdbb.patch";
+      hash = "sha256-LUGC7gnNQ3zhmWUm2xogsOAmx8QSngQBHVJMWHFtWz0=";
+    })
   ];
 
   postPatch = ''
@@ -75,44 +82,50 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace cmake/libutils.cmake --replace-fail /usr/bin/libtool libtool
   '';
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      cmake
-      git
-      bison
-      makeWrapper
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      cctools
-      darwin.DarwinTools
-    ];
+  env =
+    lib.optionalAttrs stdenv.cc.isClang {
+      NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-literal-operator -Wno-error=nonnull";
+    }
+    // lib.optionalAttrs stdenv.cc.isGNU {
+      NIX_CFLAGS_COMPILE = "-Wno-error=array-bounds";
+    };
 
-  buildInputs =
-    [
-      curl
-      libedit
-      libssh
-      lz4
-      openssl
-      protobuf
-      readline
-      zlib
-      zstd
-      libevent
-      icu
-      re2
-      ncurses
-      libfido2
-      cyrus_sasl
-      openldap
-      python3
-      antlr.runtime.cpp
-    ]
-    ++ pythonDeps
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ libtirpc ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.libutil ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    git
+    bison
+    makeWrapper
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools
+    darwin.DarwinTools
+  ];
+
+  buildInputs = [
+    curl
+    libedit
+    libssh
+    lz4
+    openssl
+    protobuf
+    readline
+    zlib
+    zstd
+    libevent
+    icu
+    re2
+    ncurses
+    libfido2
+    cyrus_sasl
+    openldap
+    python3
+    antlr.runtime.cpp
+  ]
+  ++ pythonDeps
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libtirpc ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.libutil ];
 
   preConfigure = ''
     # Build MySQL

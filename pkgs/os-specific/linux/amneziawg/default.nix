@@ -2,20 +2,20 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  srcOnly,
   kernel,
+  kernelModuleMakeFlags,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "amneziawg";
-  version = "1.0.20240711";
+  version = "3.1.20260828";
 
   src = fetchFromGitHub {
     owner = "amnezia-vpn";
     repo = "amneziawg-linux-kernel-module";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WOcBTxetVz2Sr62c+2aGNyohG2ydi+R+az+4qHbKprI=";
+    hash = "sha256-eYZDt8TEdWywnK6Ue6y9PfRavwOH1kTLKYY/mD8AcQI=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
@@ -23,14 +23,12 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   buildFlags = [
-    "apply-patches"
     "module"
   ];
 
-  makeFlags =
-    kernel.moduleMakeFlags
-    ++ [ "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ]
-    ++ lib.optional (lib.versionAtLeast kernel.version "5.6") "KERNEL_SOURCE_DIR=${srcOnly kernel}";
+  makeFlags = kernelModuleMakeFlags ++ [
+    "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+  ];
 
   enableParallelBuilding = true;
 

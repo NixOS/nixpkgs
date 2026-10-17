@@ -25,6 +25,7 @@ in
       ProtectHome = lib.mkForce false;
       ExecStart = ''
         ${pkgs.prometheus-borgmatic-exporter}/bin/borgmatic-exporter run \
+          --host ${cfg.listenAddress} \
           --port ${toString cfg.port} \
           --config ${toString cfg.configFile} \
           ${lib.concatMapStringsSep " " (f: lib.escapeShellArg f) cfg.extraFlags}

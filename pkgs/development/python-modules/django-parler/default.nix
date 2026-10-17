@@ -3,7 +3,6 @@
   buildPythonPackage,
   django,
   fetchFromGitHub,
-  pythonOlder,
   python,
   setuptools,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "django-parler";
   version = "2.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "django-parler";

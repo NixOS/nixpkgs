@@ -3,43 +3,54 @@
   lib,
   linux-pam,
   rustPlatform,
-  testers,
-  lemurs,
+  versionCheckHook,
+  nixosTests,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lemurs";
-  version = "0.3.2";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "coastalwhite";
     repo = "lemurs";
-    rev = "v${version}";
-    hash = "sha256-YDopY+wdWlVL2X+/wc1tLSSqFclAkt++JXMK3VodD4s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-dtAmgzsUhn3AfafWbCaaog0S1teIy+8eYtaHBhvLfLI=";
   };
 
-  patches = [
-    # part of https://github.com/coastalwhite/lemurs/commit/09003a830400250ec7745939399fc942c505e6c6, but including the rest of the commit may be breaking
-    ./0001-fix-static-lifetime-string.patch
-  ];
-
-  cargoHash = "sha256-uuHPJe+1VsnLRGbHtgTMrib6Tk359cwTDVfvtHnDToo=";
+  cargoHash = "sha256-XoGtIHYCGXNuwnpDTU7NbZAs6rCO+69CAG89VCv9aAc=";
 
   buildInputs = [
     linux-pam
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = lemurs;
+  postInstall = ''
+    install -Dm0755 extra/xsetup.sh "$out/etc/xsetup.sh"
+  '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.tests = {
+    inherit (nixosTests)
+      lemurs
+      lemurs-wayland
+      lemurs-wayland-script
+      lemurs-xorg
+      lemurs-xorg-script
+      ;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Customizable TUI display/login manager written in Rust";
     homepage = "https://github.com/coastalwhite/lemurs";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ jeremiahs ];
+    maintainers = with lib.maintainers; [
+      jeremiahs
+      nullcube
+    ];
     mainProgram = "lemurs";
   };
-}
+})

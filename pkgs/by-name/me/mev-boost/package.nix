@@ -4,24 +4,24 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mev-boost";
-  version = "1.8";
+  version = "1.12";
   src = fetchFromGitHub {
     owner = "flashbots";
     repo = "mev-boost";
-    rev = "v${version}";
-    hash = "sha256-EFPVBSSIef3cTrYp3X1xCEOtYcGpuW/GZXHXX+0wGd8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-ZGeY3iNsOdAso7aMv0XMm1x2EhR8lz27joGIsz40Ibc=";
   };
 
-  vendorHash = "sha256-xkncfaqNfgPt5LEQ3JyYXHHq6slOUchomzqwkZCgCOM=";
+  vendorHash = "sha256-dIc0ZHTx+7P621FvfDKlItc/FazUpwxRmDQF2SNVIwA=";
 
-  meta = with lib; {
+  meta = {
     description = "Ethereum block-building middleware";
     homepage = "https://github.com/flashbots/mev-boost";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "mev-boost";
-    maintainers = with maintainers; [ ekimber ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ ekimber ];
+    platforms = lib.platforms.unix;
   };
-}
+})

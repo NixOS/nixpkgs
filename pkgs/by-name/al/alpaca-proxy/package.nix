@@ -3,23 +3,23 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "alpaca-proxy";
-  version = "2.0.9";
+  version = "2.0.13";
 
   src = fetchFromGitHub {
     owner = "samuong";
     repo = "alpaca";
-    rev = "v${version}";
-    hash = "sha256-Rf8//4FeruVZZ//uba80z20XGUxycwF91Aa09fosRXI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-dzTWruf/1eU34UeLzZkTSxbAqhCfxRuXMPYuKPGImUc=";
   };
 
-  vendorHash = "sha256-JEiHgyPJvWmtPf8R4aX/qlevfZRdKajre324UsgRm5Y=";
+  vendorHash = "sha256-pxCMomMmHqPWdjLi7C4LfcjbgdjMzJVvyhOd1YmHWTU=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X=main.BuildVersion=v${version}"
+    "-X=main.BuildVersion=v${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -27,13 +27,13 @@ buildGoModule rec {
     mv $out/bin/alpaca $out/bin/alpaca-proxy
   '';
 
-  meta = with lib; {
+  meta = {
     description = "HTTP forward proxy with PAC and NTLM authentication support";
     homepage = "https://github.com/samuong/alpaca";
-    changelog = "https://github.com/samuong/alpaca/releases/tag/v${src.rev}";
-    license = licenses.asl20;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ _1nv0k32 ];
+    changelog = "https://github.com/samuong/alpaca/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ _1nv0k32 ];
     mainProgram = "alpaca-proxy";
   };
-}
+})

@@ -1,33 +1,39 @@
 {
   lib,
   buildGoModule,
-  fetchFromGitHub,
+  fetchFromCodeberg,
+  nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go-errorlint";
-  version = "1.5.1";
+  version = "1.9.0";
 
-  src = fetchFromGitHub {
+  src = fetchFromCodeberg {
     owner = "polyfloyd";
     repo = "go-errorlint";
-    rev = "v${version}";
-    hash = "sha256-xO9AC1z3JNTRVEpM/FF8x+AMfmspU64kUywvpMb2yxM=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-79hbXvLnlry2j1mmeHoEx1PRIRd0iRbzN6BDnUyFV+4=";
   };
 
-  vendorHash = "sha256-pSajd2wyefHgxMvhDKs+qwre4BMRBv97v/tZOjiT3LE=";
+  vendorHash = "sha256-U/19X5iY7IHOHkbTADT4ueCJBPh/ryI4PCfg8ZbMLzU=";
 
   ldflags = [
     "-s"
     "-w"
   ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Source code linter that can be used to find code that will cause problems with Go's error wrapping scheme";
-    homepage = "https://github.com/polyfloyd/go-errorlint";
-    changelog = "https://github.com/polyfloyd/go-errorlint/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ meain ];
+    homepage = "https://codeberg.org/polyfloyd/go-errorlint";
+    changelog = "https://codeberg.org/polyfloyd/go-errorlint/src/tag/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      meain
+      polyfloyd
+    ];
     mainProgram = "go-errorlint";
   };
-}
+})

@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation {
   pname = "ldapvi";
-  version = "unstable-2012-04-28";
+  version = "1.7-unstable-2010-12-14";
 
   # use latest git, it includes some important patches since 2007 release
   src = fetchgit {
@@ -53,14 +53,14 @@ stdenv.mkDerivation {
     ./autogen.sh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Interactive LDAP client for Unix terminals";
     longDescription = ''
       ldapvi is an interactive LDAP client for Unix terminals. Using it, you
       can update LDAP entries with a text editor.
     '';
     homepage = "http://www.lichteblau.com/ldapvi/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "ldapvi";

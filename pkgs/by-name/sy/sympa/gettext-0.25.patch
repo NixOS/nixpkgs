@@ -1,0 +1,21 @@
+diff --git a/configure.ac b/configure.ac
+index 2182b31..6292827 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -23,12 +23,14 @@
+ # You should have received a copy of the GNU General Public License
+ # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ 
++AC_CONFIG_MACRO_DIRS([m4])
++
+ AC_PREREQ(2.60)
+ AC_INIT(sympa, 6.2.76, devel@sympa.community)
+ AM_INIT_AUTOMAKE([foreign -Wall -Werror 1.9 tar-pax])
+ m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+-AM_PO_SUBDIRS
+-GETTEXT_MACRO_VERSION=0.19
++AM_GNU_GETTEXT([external])
++AM_GNU_GETTEXT_VERSION([0.25])
+ 
+ AC_PREFIX_DEFAULT(/home/sympa)
+ 

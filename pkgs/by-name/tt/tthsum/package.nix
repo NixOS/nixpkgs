@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tthsum";
   version = "1.3.2";
 
   src = fetchurl {
-    url = "http://tthsum.devs.nu/pkg/tthsum-${version}.tar.bz2";
+    url = "http://tthsum.devs.nu/pkg/tthsum-${finalAttrs.version}.tar.bz2";
     sha256 = "0z6jq8lbg9rasv98kxfs56936dgpgzsg3yc9k52878qfw1l2bp59";
   };
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Md5sum-alike program that works with Tiger/THEX hashes";
     longDescription = ''
@@ -39,9 +39,8 @@ stdenv.mkDerivation rec {
       http://adc.sourceforge.net/draft-jchapweske-thex-02.html
     '';
     homepage = "http://tthsum.devs.nu/";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.ebzzry ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
     mainProgram = "tthsum";
   };
-}
+})

@@ -6,35 +6,42 @@
   roundcube,
   roundcubePlugins,
   nixosTests,
+  runCommand,
 }:
 
 stdenv.mkDerivation rec {
   pname = "roundcube";
-  version = "1.6.9";
+  version = "1.7.4";
 
   src = fetchurl {
     url = "https://github.com/roundcube/roundcubemail/releases/download/${version}/roundcubemail-${version}-complete.tar.gz";
-    sha256 = "sha256-thpfXCL4kMKZ6TWqz88IcGdpkNiuv/DWzf8HW/F8708=";
+    sha256 = "sha256-LGyHjwCT8b9/tghngdLdkmnWUsAWuGk5wVfF8XKROaI=";
   };
 
   patches = [ ./0001-Don-t-resolve-symlinks-when-trying-to-find-INSTALL_P.patch ];
 
   dontBuild = true;
 
+  # FIXME: this should be removed after upstream releases the update forcing the use of public_html.
+  dontCheckForBrokenSymlinks = true;
+
   installPhase = ''
     mkdir $out
     cp -r * $out/
     ln -sf /etc/roundcube/config.inc.php $out/config/config.inc.php
     rm -rf $out/installer
-    # shut up updater
-    rm $out/composer.json-dist
   '';
 
   passthru.withPlugins =
     f:
     buildEnv {
       name = "${roundcube.name}-with-plugins";
-      paths = (f roundcubePlugins) ++ [ roundcube ];
+      paths = (f roundcubePlugins) ++ [
+        roundcube
+        (runCommand "dummy" { } ''
+          mkdir -p $out/public_html/
+        '')
+      ];
     };
 
   passthru.tests = { inherit (nixosTests) roundcube; };
@@ -43,7 +50,6 @@ stdenv.mkDerivation rec {
     description = "Open Source Webmail Software";
     maintainers = with lib.maintainers; [
       vskilet
-      globin
       ma27
     ];
     license = lib.licenses.gpl3;

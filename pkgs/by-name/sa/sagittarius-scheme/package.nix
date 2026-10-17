@@ -21,19 +21,25 @@ let
     else
       throw "unsupported platform";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sagittarius-scheme";
-  version = "0.9.12";
+  version = "0.9.14";
   src = fetchurl {
-    url = "https://bitbucket.org/ktakashi/${pname}/downloads/sagittarius-${version}.tar.gz";
-    hash = "sha256-w6aQkC7/vKO8exvDpsSsLyLXrm4FSKh8XYGJgseEII0=";
+    url = "https://github.com/ktakashi/sagittarius-scheme/releases/download/v${finalAttrs.version}/sagittarius-${finalAttrs.version}.tar.gz";
+    hash = "sha256-L0ZKCiSbneWe1+czj83x+bCHPZw1uuYSdJwKHp4qTnk=";
   };
+
+  patches = [
+    ./fix-roundeven-declaration.patch
+  ];
+
   preBuild = ''
     # since we lack rpath during build, need to explicitly add build path
     # to LD_LIBRARY_PATH so we can load libsagittarius.so as required to
     # build extensions
     export ${platformLdLibraryPath}="$(pwd)/build"
   '';
+
   nativeBuildInputs = [
     pkg-config
     cmake
@@ -44,7 +50,8 @@ stdenv.mkDerivation rec {
     boehmgc
     openssl
     zlib
-  ] ++ lib.optional odbcSupport libiodbc;
+  ]
+  ++ lib.optional odbcSupport libiodbc;
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals stdenv.hostPlatform.isDarwin [
@@ -56,7 +63,7 @@ stdenv.mkDerivation rec {
     ]
   );
 
-  meta = with lib; {
+  meta = {
     description = "R6RS/R7RS Scheme system";
     longDescription = ''
       Sagittarius Scheme is a free Scheme implementation supporting
@@ -75,9 +82,10 @@ stdenv.mkDerivation rec {
       -  mostly works O(n)
       -  Replaceable reader
     '';
-    homepage = "https://bitbucket.org/ktakashi/sagittarius-scheme";
-    license = licenses.bsd2;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ abbe ];
+    homepage = "https://github.com/ktakashi/sagittarius-scheme";
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ abbe ];
+    broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

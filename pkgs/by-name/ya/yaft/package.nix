@@ -5,7 +5,7 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.2.9";
   pname = "yaft";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "uobikiemukot";
     repo = "yaft";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0l1ig8wm545kpn4l7186rymny83jkahnjim290wsl7hsszfq1ckd";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.matthiasbeyer ];
     platforms = with lib.platforms; linux;
   };
-}
+})

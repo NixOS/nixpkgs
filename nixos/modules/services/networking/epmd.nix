@@ -5,6 +5,8 @@
   ...
 }:
 let
+  inherit (lib.types) listOf oneOf str;
+
   cfg = config.services.epmd;
 in
 {
@@ -19,13 +21,16 @@ in
         Erlang computations.
       '';
     };
-    package = lib.mkPackageOption pkgs "erlang" { };
+    package = lib.mkPackageOption pkgs [ "beamPackages" "erlang" ] { };
     listenStream = lib.mkOption {
-      type = lib.types.str;
+      type = oneOf [
+        str
+        (listOf str)
+      ];
       default = "[::]:4369";
       description = ''
         the listenStream used by the systemd socket.
-        see https://www.freedesktop.org/software/systemd/man/systemd.socket.html#ListenStream= for more information.
+        see <https://www.freedesktop.org/software/systemd/man/systemd.socket.html#ListenStream=> for more information.
         use this to change the port epmd will run on.
         if not defined, epmd will use "[::]:4369"
       '';
@@ -63,5 +68,5 @@ in
     };
   };
 
-  meta.maintainers = lib.teams.beam.members;
+  meta.teams = [ lib.teams.beam ];
 }

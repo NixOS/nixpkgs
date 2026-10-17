@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6f9c0a37d971e5b8a60c54982bd580cff84bf94fedc08c097e603a8e5609c33f";
+    hash = "sha256-b5wKN9lx5bimDFSYK9WAz/hL+U/twIwJfmA6jlYJwz8=";
   };
 
   propagatedBuildInputs = [ smbus-cffi ];
@@ -26,11 +26,11 @@ buildPythonPackage rec {
     "i2csense.htu21d"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to handle i2c sensors with the Raspberry Pi";
     mainProgram = "i2csense";
     homepage = "https://github.com/azogue/i2csense";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

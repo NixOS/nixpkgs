@@ -1,54 +1,44 @@
-{ lib, elixir, fetchFromGitHub, fetchMixDeps, mixRelease }:
-# Based on ../elixir-ls/default.nix
+{
+  lib,
+  fetchFromGitHub,
+  fetchMixDeps,
+  mixRelease,
+  nix-update-script,
+}:
 
-let
+mixRelease (finalAttrs: {
   pname = "ex_doc";
-  version = "0.34.1";
+  version = "0.40.4";
   src = fetchFromGitHub {
     owner = "elixir-lang";
-    repo = "${pname}";
-    rev = "v${version}";
-    hash = "sha256-OXIRippEDYAKD222XzNJkkZdXbUkDUauv5amr4oAU7c=";
+    repo = "${finalAttrs.pname}";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-wDdBjq62TX8m50LeszMx4f8nlUeMgElpKZ3imHNq7Hs=";
   };
-in
-mixRelease {
-  inherit pname version src elixir;
+
+  escriptBinName = "ex_doc";
 
   stripDebug = true;
 
   mixFodDeps = fetchMixDeps {
-    pname = "mix-deps-${pname}";
-    inherit src version elixir;
-    hash = "sha256-fYINsATbw3M3r+IVoYS14aVEsg9OBuH6mNUqzQJuDQo=";
+    pname = "mix-deps-${finalAttrs.pname}";
+    inherit (finalAttrs) src version;
+    hash = "sha256-gjvvNG8LUFG5YouwFygbXeWUzlxpESAPZWzqXyS6vBw=";
   };
 
-  configurePhase = ''
-    runHook preConfigure
-    mix deps.compile --no-deps-check
-    runHook postConfigure
-  '';
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
-  buildPhase = ''
-    runHook preBuild
-    mix do escript.build
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin
-    cp -v ex_doc $out/bin
-    runHook postInstall
-  '';
-
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/elixir-lang/ex_doc";
+    changelog = "https://github.com/elixir-lang/ex_doc/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = ''
       ExDoc produces HTML and EPUB documentation for Elixir projects
     '';
-    license = licenses.asl20;
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
     mainProgram = "ex_doc";
-    maintainers = with maintainers; [chiroptical];
+    maintainers = with lib.maintainers; [ chiroptical ];
   };
-}
+})

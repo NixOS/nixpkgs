@@ -5,8 +5,8 @@
   fetchFromGitHub,
   modbus-tk,
   poetry-core,
+  pyprojectVersionPatchHook,
   pyserial,
-  pythonOlder,
   setuptools,
 }:
 
@@ -14,8 +14,6 @@ buildPythonPackage rec {
   pname = "riden";
   version = "1.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "geeksville";
@@ -29,6 +27,10 @@ buildPythonPackage rec {
     setuptools
   ];
 
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
+
   dependencies = [
     click
     modbus-tk
@@ -40,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "riden" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for Riden RD power supplies";
     homepage = "https://github.com/geeksville/riden";
     changelog = "https://github.com/geeksville/Riden/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

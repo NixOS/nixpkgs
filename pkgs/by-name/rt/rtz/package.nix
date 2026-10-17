@@ -2,56 +2,43 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  fetchurl,
   pkg-config,
   bzip2,
   openssl,
   zstd,
-  stdenv,
-  darwin,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rtz";
-  version = "0.7.1";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "twitchax";
     repo = "rtz";
-    rev = "v${version}";
-    hash = "sha256-V7N9NFIc/WWxLaahkjdS47Qj8sc3HRdKSkrBqi1ngA8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-g72M7Iohq8S8m8kx7P+GER+QUOi7u2aFDi1H7JT4mZ8=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "bincode-2.0.0-rc.3" = "sha256-YCoTnIKqRObeyfTanjptTYeD9U2b2c+d4CJFWIiGckI=";
-    };
-  };
+  cargoHash = "sha256-rBXPS2y3XZFoxs9fvBKoJgFsSKRNQ8NJu+hvuc8axug=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs =
-    [
-      bzip2
-      openssl
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    bzip2
+    openssl
+    zstd
+  ];
 
   buildFeatures = [ "web" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to easily work with timezone lookups via a binary, a library, or a server";
     homepage = "https://github.com/twitchax/rtz";
-    changelog = "https://github.com/twitchax/rtz/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/twitchax/rtz/releases/tag/${finalAttrs.src.rev}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "rtz";
   };
-}
+})

@@ -58,19 +58,24 @@ let
           else
             setupHook;
 
-        buildInputs = buildInputs ++ [
+        nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ [
           erlang
           perl
           which
           gitMinimal
           wget
         ];
+        inherit buildInputs;
         propagatedBuildInputs = beamDeps;
 
-        buildFlags =
-          [ "SKIP_DEPS=1" ]
-          ++ lib.optional (enableDebugInfo || erlang.debugInfo) ''ERL_OPTS="$ERL_OPTS +debug_info"''
-          ++ buildFlags;
+        __structuredAttrs = true;
+        strictDeps = true;
+
+        buildFlags = [
+          "SKIP_DEPS=1"
+        ]
+        ++ lib.optional (enableDebugInfo || erlang.debugInfo) ''ERL_OPTS="$ERL_OPTS +debug_info"''
+        ++ buildFlags;
 
         configurePhase =
           if configurePhase == null then
@@ -91,7 +96,10 @@ let
             ''
               runHook preBuild
 
-              make $buildFlags "''${buildFlagsArray[@]}"
+              flagsArray=()
+              concatTo flagsArray buildFlags buildFlagsArray
+
+              make "''${flagsArray[@]}"
 
               runHook postBuild
             ''

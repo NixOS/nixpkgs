@@ -1,0 +1,40 @@
+diff --git a/src/marsyas/MagFFT.cpp b/src/marsyas/MagFFT.cpp
+index 056f998..525ffa8 100644
+--- a/src/marsyas/MagFFT.cpp
++++ b/src/marsyas/MagFFT.cpp
+@@ -37,10 +37,10 @@ typedef struct { float re ; float im ; } complex ;
+ 
+ #define CABS(x) hypot( (x).re, (x).im )
+ 
+-complex cadd(), csub(), cmult(), smult(), cdiv(), conjg(), csqrt() ;
++::complex cadd(), csub(), cmult(), smult(), cdiv(), conjg(), csqrt() ;
+ 
+-extern complex zero ;
+-extern complex one ;
++extern ::complex zero ;
++extern ::complex one ;
+ extern float synt ;
+ 
+ 
+diff --git a/src/sndpeek/sndpeek.cpp b/src/sndpeek/sndpeek.cpp
+index 77fca13..a95275f 100644
+--- a/src/sndpeek/sndpeek.cpp
++++ b/src/sndpeek/sndpeek.cpp
+@@ -1583,7 +1583,7 @@ void displayFunc( )
+         // take forward FFT; result in buffer as FFT_SIZE/2 complex values
+         rfft( (float *)buffer, g_fft_size/2, FFT_FORWARD );
+         // cast to complex
+-        complex * cbuf = (complex *)buffer;
++        ::complex * cbuf = (::complex *)buffer;
+ 
+         // reset drawing offsets
+         x = -1.8f;
+@@ -1910,7 +1910,7 @@ void extract_buffer( )
+     // take the forward fft, leaving fftsize/2 complex values
+     rfft( (float *)buffer, g_buffer_size/2, FFT_FORWARD );
+     // cast to complex
+-    complex * cbuf = (complex *)buffer;
++    ::complex * cbuf = (::complex *)buffer;
+ 
+     // get magnitude spectrum
+     for( i = 0; i < g_buffer_size/2; i++ )

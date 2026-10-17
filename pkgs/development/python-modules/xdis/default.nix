@@ -5,46 +5,34 @@
   fetchFromGitHub,
   fetchpatch,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   six,
 }:
 
 buildPythonPackage rec {
   pname = "xdis";
-  version = "6.1.1";
+  version = "6.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "rocky";
     repo = "python-xdis";
     tag = version;
-    hash = "sha256-Fn1cyUPMrn1SEXl4sdQwJiNHaY+BbxBDz3nKZY965/0=";
+    hash = "sha256-k1SawlgbItbWe8J2pAxYOku/4CHyzWH3UR1j3kBZy1Q=";
   };
 
-  # Backport magics for newer newer python versions
   patches = [
     (fetchpatch {
-      url = "https://github.com/rocky/python-xdis/commit/fcba74a7f64c5e2879ca0779ff10f38f9229e7da.patch";
-      hash = "sha256-D7eJ97g4G6pmYL/guq0Ndf8yKTVBD2gAuUCAKwvlYbE=";
+      name = "python-3.13.13.patch";
+      url = "https://github.com/rocky/python-xdis/commit/f2c46c8c89898157c2345c0a026a2d31f14e7ea9.patch";
+      includes = [ "xdis/magics.py" ];
+      hash = "sha256-+k3mbiAmM69Pl7k0Wogx+qpib5+p3Gn/pSpnDn5e6pE=";
     })
     (fetchpatch {
-      url = "https://github.com/rocky/python-xdis/commit/b66976ff53a2c6e17a73fb7652ddd6c8054df8db.patch";
-      hash = "sha256-KO1y0nDTPmEZ+0/3Pjh+CvTdpr/p4AYZ8XdH5J+XzXo=";
-    })
-    (fetchpatch {
-      url = "https://github.com/rocky/python-xdis/commit/a9f50c0ba77cdbf4693388404c13a02796a4221a.patch";
-      hash = "sha256-gwMagKBY7d/+ohESTSl6M2IEjzABxfrddpdr58VJAk8=";
-    })
-    (fetchpatch {
-      url = "https://github.com/rocky/python-xdis/commit/d9e15acae76a413667912a10fbf8259711ed9c65.patch";
-      hash = "sha256-hpmKg+K1RiLSnmUIS8KtZRVBfvTO9bWbpsNhBFUM38o=";
-    })
-    (fetchpatch {
-      url = "https://github.com/rocky/python-xdis/commit/b412c878d0bc1b516bd01612d46d8830c36a14ad.patch";
-      hash = "sha256-W1JuIXYLO6iyjWiSnzCoXzFsedZjesq31gEPgrtjxas=";
+      name = "python-3.14.4.patch";
+      url = "https://github.com/rocky/python-xdis/commit/36a1a2442c224e3bfca776f727a5e262968855a4.patch";
+      includes = [ "xdis/magics.py" ];
+      hash = "sha256-q+MX737Xn+iUObuV5IirnT71/0W6JH0TgtmS1cqR0x4=";
     })
   ];
 
@@ -86,7 +74,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python cross-version byte-code disassembler and marshal routines";
     homepage = "https://github.com/rocky/python-xdis";
-    changelog = "https://github.com/rocky/python-xdis/releases/tag/${version}";
+    changelog = "https://github.com/rocky/python-xdis/releases/tag/${src.tag}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       onny

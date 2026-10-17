@@ -11,5 +11,6 @@ runCommand "${kaleido.pname}-tests" {
     python
     plotly
     pandas
+    kaleido
   ];
 } "python3 ${./tests.py}"

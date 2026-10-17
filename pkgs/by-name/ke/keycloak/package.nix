@@ -1,11 +1,12 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchzip,
-  makeWrapper,
-  jre,
+  makeBinaryWrapper,
+  jre_headless,
   nixosTests,
   callPackage,
+  bash,
   confFile ? null,
   plugins ? [ ],
   extraFeatures ? [ ],
@@ -22,18 +23,22 @@ let
     ) "--features-disabled=${lib.concatStringsSep "," disabledFeatures}"}
   '';
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "keycloak";
-  version = "26.1.0";
+  version = "26.8.1";
 
   src = fetchzip {
-    url = "https://github.com/keycloak/keycloak/releases/download/${version}/keycloak-${version}.zip";
-    hash = "sha256-5Us/cBH10SnO6wiggmwg6V7u4FKoLd1V0x8Z4GNDaXc=";
+    url = "https://github.com/keycloak/keycloak/releases/download/${finalAttrs.version}/keycloak-${finalAttrs.version}.zip";
+    hash = "sha256-OR/BHY56y0htVDiFYk6RcPqYu2RdH26ShC7+20G0Jo0=";
   };
 
   nativeBuildInputs = [
-    makeWrapper
-    jre
+    makeBinaryWrapper
+    jre_headless
+  ];
+
+  buildInputs = [
+    bash
   ];
 
   patches = [
@@ -42,31 +47,29 @@ stdenv.mkDerivation rec {
     ./config_vars.patch
   ];
 
-  buildPhase =
-    ''
-      runHook preBuild
-    ''
-    + lib.optionalString (confFile != null) ''
-      install -m 0600 ${confFile} conf/keycloak.conf
-    ''
-    + ''
-      install_plugin() {
-        if [ -d "$1" ]; then
-          find "$1" -type f \( -iname \*.ear -o -iname \*.jar \) -exec install -m 0500 "{}" "providers/" \;
-        else
-          install -m 0500 "$1" "providers/"
-        fi
-      }
-      ${lib.concatMapStringsSep "\n" (pl: "install_plugin ${lib.escapeShellArg pl}") plugins}
-    ''
-    + ''
-      patchShebangs bin/kc.sh
-      export KC_HOME_DIR=$(pwd)
-      export KC_CONF_DIR=$(pwd)/conf
-      bin/kc.sh build ${featuresSubcommand}
+  buildPhase = ''
+    runHook preBuild
+  ''
+  + lib.optionalString (confFile != null) ''
+    install -m 0600 ${confFile} conf/keycloak.conf
+  ''
+  + ''
+    install_plugin() {
+      if [ -d "$1" ]; then
+        find "$1" -type f \( -iname \*.ear -o -iname \*.jar \) -exec install -p -m 0500 "{}" "providers/" \;
+      else
+        install -p -m 0500 "$1" "providers/"
+      fi
+    }
+    ${lib.concatMapStringsSep "\n" (pl: "install_plugin ${lib.escapeShellArg pl}") plugins}
+  ''
+  + ''
+    export KC_HOME_DIR=$(pwd)
+    export KC_CONF_DIR=$(pwd)/conf
+    bash bin/kc.sh build ${featuresSubcommand}
 
-      runHook postBuild
-    '';
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -81,7 +84,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     for script in $(find $out/bin -type f -executable); do
-      wrapProgram "$script" --set JAVA_HOME ${jre} --prefix PATH : ${jre}/bin
+      wrapProgram "$script" --set JAVA_HOME ${jre_headless} --prefix PATH : ${jre_headless}/bin
     done
   '';
 
@@ -91,17 +94,20 @@ stdenv.mkDerivation rec {
     enabledPlugins = plugins;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.keycloak.org/";
     description = "Identity and access management for modern applications and services";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.asl20;
-    platforms = jre.meta.platforms;
-    maintainers = with maintainers; [
+    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
+    license = lib.licenses.asl20;
+    platforms = jre_headless.meta.platforms;
+    maintainers = with lib.maintainers; [
       ngerstle
       talyz
       nickcao
+      leona
+      anish
+      krit
+      jefferyoo
     ];
   };
-
-}
+})

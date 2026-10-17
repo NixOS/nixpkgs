@@ -2,43 +2,39 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  testers,
-  bearer,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "bearer";
-  version = "1.48.0";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "bearer";
     repo = "bearer";
-    tag = "v${version}";
-    hash = "sha256-M9Usz+qQH4QNA/0TgtvjuqwnaCpyxr9OMIc8pJ/FjDE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BhO7/63AdyJnZBjalWpCpgaXqUfSsqv20Im1zbzFJL0=";
   };
 
-  vendorHash = "sha256-A0zy5O2+afhn6jAfLd/k7wvL3z1PVI0e6bO39cnYrhM=";
+  vendorHash = "sha256-MZnUlrVYg9vfMfrwNkR6CJra6aEVGdNXDbzfYr8YAFw=";
 
   subPackages = [ "cmd/bearer" ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   ldflags = [
     "-s"
-    "-w"
-    "-X=github.com/bearer/bearer/cmd/bearer/build.Version=${version}"
+    "-X=github.com/bearer/bearer/cmd/bearer/build.Version=${finalAttrs.version}"
   ];
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = bearer;
-      command = "bearer version";
-    };
-  };
+  doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Code security scanning tool (SAST) to discover, filter and prioritize security and privacy risks";
     homepage = "https://github.com/bearer/bearer";
-    changelog = "https://github.com/Bearer/bearer/releases/tag/v${version}";
-    license = with licenses; [ elastic20 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Bearer/bearer/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.elastic20;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "bearer";
   };
-}
+})

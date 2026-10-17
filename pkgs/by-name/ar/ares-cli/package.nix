@@ -3,29 +3,29 @@
   buildNpmPackage,
   fetchFromGitHub,
   nix-update-script,
+  nodejs_22,
 }:
+
 buildNpmPackage rec {
   pname = "ares-cli";
-  version = "3.1.3";
+  version = "3.2.6";
   src = fetchFromGitHub {
     owner = "webos-tools";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-V/YMDmed2VlJibeWmtiY6ftSiZMZhBcppwGXXjtLc5M=";
+    hash = "sha256-ziOZb+kzsAge6OxB/Vsaj04duZfeuezZFet2HdXPA58=";
   };
 
-  postPatch = ''
-    ln -s npm-shrinkwrap.json package-lock.json
-  '';
+  nodejs = nodejs_22;
 
   dontNpmBuild = true;
-  npmDepsHash = "sha256-Vf38Hw0rXMfP3MWBrDo9oDzF1KyHMOjxrmL/VMpL3mU=";
+  npmDepsHash = "sha256-k8PRP1liSbJze2SHkmvUBqcGuAusnudwgj6ANMu32A8=";
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://webostv.developer.lge.com/develop/tools/cli-introduction";
-    description = "A collection of commands used for creating, packaging, installing, and launching web apps for LG webOS TV.";
+    description = "Collection of commands used for creating, packaging, installing, and launching web apps for LG webOS TV";
     longDescription = ''
       webOS CLI (Command Line Interface) provides a collection of commands used for creating, packaging, installing,
       and launching web apps in the command line environment. The CLI allows you to develop and test your app without using

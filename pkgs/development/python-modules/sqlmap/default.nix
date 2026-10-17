@@ -4,20 +4,17 @@
   buildPythonPackage,
   fetchPypi,
   file,
-  pythonOlder,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sqlmap";
-  version = "1.9";
+  version = "1.10.10";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-buuA+r1R42SMhrmszEGhFW9HPeaJVg1KihAlWT42JTs=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-nezo6xXkEO4QEU2I0gD1Sjg/VJtWXAFHtkcIGrgF45k=";
   };
 
   postPatch = ''
@@ -36,12 +33,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sqlmap" ];
 
-  meta = with lib; {
+  meta = {
     description = "Automatic SQL injection and database takeover tool";
     homepage = "https://sqlmap.org";
-    changelog = "https://github.com/sqlmapproject/sqlmap/releases/tag/${version}";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ bennofs ];
+    changelog = "https://github.com/sqlmapproject/sqlmap/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ bennofs ];
     mainProgram = "sqlmap";
   };
-}
+})

@@ -4,43 +4,52 @@
   fetchPypi,
   setuptools,
   pytestCheckHook,
-  pythonOlder,
+  fetchpatch2,
 }:
 
 buildPythonPackage rec {
   pname = "diceware";
-  version = "0.10";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "1.0.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-srTMm1n1aNLvUb/fn34a+UHSX7j1wl8XAZHburzpZWk=";
+    hash = "sha256-VLaQgJ8MVqswhaGOFaDDgE1KDRJ/OK7wtc9fhZ0PZjk=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'pytest_runner'," ""
-  '';
+  patches = [
+    (fetchpatch2 {
+      # Set prog in ArgumentParser explicitly to fix test failure with Python 3.14
+      # https://github.com/ulif/diceware/issues/122
+      url = "https://github.com/ulif/diceware/commit/77d98606748df7755f36ebbb3bd838b1cdd80c61.patch";
+      includes = [ "diceware/__init__.py" ];
+      hunks = [
+        2
+        3
+      ];
+      hash = "sha256-yXGotV/tq7/vCYhY+1OZgCW3r6/SXTTvsHIU/jywbHc=";
+    })
+  ];
 
-  propagatedBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
+
+  dependencies = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
+  disabledTestMarks = [
     # see https://github.com/ulif/diceware/commit/a7d844df76cd4b95a717f21ef5aa6167477b6733
-    "-m 'not packaging'"
+    "packaging"
   ];
 
   pythonImportsCheck = [ "diceware" ];
 
-  meta = with lib; {
+  meta = {
     description = "Generates passphrases by concatenating words randomly picked from wordlists";
     mainProgram = "diceware";
     homepage = "https://github.com/ulif/diceware";
     changelog = "https://github.com/ulif/diceware/blob/v${version}/CHANGES.rst";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ asymmetric ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ asymmetric ];
   };
 }

@@ -17,7 +17,6 @@
   meson,
   ninja,
   pkg-config,
-  poppler,
   python3,
   rustPlatform,
   rustc,
@@ -25,23 +24,20 @@
   wrapGAppsHook4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rnote";
-  version = "0.11.0";
+  version = "0.14.2";
 
   src = fetchFromGitHub {
     owner = "flxzt";
     repo = "rnote";
-    rev = "v${version}";
-    hash = "sha256-RbuEgmly6Mjmx58zOV+tg6Mv5ghCNy/dE5FXYrEXtdg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uuLoc1nWlb3Xm/WSrvjCit1G8kUZA3+HIW8akFXPGi4=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "ink-stroke-modeler-rs-0.1.0" = "sha256-B6lT6qSOIHxqBpKTE4nO2+Xs9KF7JLVRUHOkYp8Sl+M=";
-      "piet-0.6.2" = "sha256-3juXzuKwoLuxia6MoVwbcBJ3jXBQ9QRNVoxo3yFp2Iw=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-eDKyA8LaH+nvDcCG74ucWYSJc8qLmps1xz3WPHoOJ0w=";
   };
 
   nativeBuildInputs = [
@@ -67,39 +63,43 @@ stdenv.mkDerivation rec {
     (lib.mesonBool "cli" true)
   ];
 
-  buildInputs =
-    [
-      appstream
-      glib
-      gst_all_1.gstreamer
-      gtk4
-      libadwaita
-      libxml2
-      poppler
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-    ];
+  buildInputs = [
+    appstream
+    glib
+    gst_all_1.gstreamer
+    gtk4
+    libadwaita
+    libxml2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+  ];
 
   postPatch = ''
     chmod +x build-aux/*.py
     patchShebangs build-aux
   '';
 
+  postInstall = ''
+    substituteInPlace $out/share/thumbnailers/rnote.thumbnailer \
+      --replace-fail "TryExec=rnote-cli" "TryExec=$out/bin/rnote-cli" \
+      --replace-fail "Exec=rnote-cli" "Exec=$out/bin/rnote-cli"
+  '';
+
   env = lib.optionalAttrs stdenv.cc.isClang {
     NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-function-pointer-types";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/flxzt/rnote";
-    changelog = "https://github.com/flxzt/rnote/releases/tag/${src.rev}";
+    changelog = "https://github.com/flxzt/rnote/releases/tag/${finalAttrs.src.tag}";
     description = "Simple drawing application to create handwritten notes";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       dotlambda
       gepbird
       yrd
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

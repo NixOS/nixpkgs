@@ -12,7 +12,7 @@ buildKodiAddon rec {
 
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/${lib.toLower rel}/${namespace}/${namespace}-${version}.zip";
-    sha256 = "sha256-cIQIX6LVAoGf1sBRKWonXJd3XYqGOa5WIUttabV0HeU=";
+    hash = "sha256-cIQIX6LVAoGf1sBRKWonXJd3XYqGOa5WIUttabV0HeU=";
   };
 
   passthru = {
@@ -22,10 +22,10 @@ buildKodiAddon rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Freso/script.module.chardet";
     description = "Universal encoding detector";
-    license = licenses.lgpl2Only;
-    maintainers = teams.kodi.members;
+    license = lib.licenses.lgpl2Only;
+    teams = [ lib.teams.kodi ];
   };
 }

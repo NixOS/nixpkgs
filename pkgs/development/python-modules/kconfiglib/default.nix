@@ -11,16 +11,21 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0g690bk789hsry34y4ahvly5c8w8imca90ss4njfqf7m2qicrlmy";
+    hash = "sha256-vtLMIhb1OOykJVqDpFiNiCNWPN1QEU+GzxomdOYCyTw=";
   };
+
+  patches = [
+    # see https://github.com/ulfalizer/Kconfiglib/pull/119
+    ./0001-Add-rudimentary-support-for-modules-property.patch
+  ];
 
   # doesnt work out of the box but might be possible
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Flexible Python 2/3 Kconfig implementation and library";
     homepage = "https://github.com/ulfalizer/Kconfiglib";
-    license = licenses.isc;
-    maintainers = with maintainers; [ teto ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ teto ];
   };
 }

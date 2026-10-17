@@ -5,29 +5,36 @@
   fetchFromGitHub,
   buildFHSEnv,
   installShellFiles,
+  makeWrapper,
+  writableTmpDirAsHomeHook,
   go-task,
+  python3,
 }:
 
 let
 
-  pkg = buildGoModule rec {
+  pkg = buildGoModule (finalAttrs: {
     pname = "arduino-cli";
-    version = "1.1.1";
+    version = "1.5.1";
 
     src = fetchFromGitHub {
       owner = "arduino";
       repo = "arduino-cli";
-      rev = "refs/tags/v${version}";
-      hash = "sha256-eHDU1aoLBs3vDfFyM23R5wKNbbCmXrUgavP/JcdNCuM=";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-MZX6ERZwmfiJMqx6mQ0qAfv1dbXunTYHRbdzyoinOJY=";
     };
 
-    nativeBuildInputs = [ installShellFiles ];
+    nativeBuildInputs = [
+      installShellFiles
+      makeWrapper
+      writableTmpDirAsHomeHook
+    ];
 
     nativeCheckInputs = [ go-task ];
 
     subPackages = [ "." ];
 
-    vendorHash = "sha256-3NG5+2qgCtmMxOmYS0RROoxajNiZorYL8+qXcDu4e+w=";
+    vendorHash = "sha256-j5SpZnBWcC8K8lHgc5HOCbGD3DdHr9tVtEhXWTCCogk=";
 
     postPatch =
       let
@@ -40,6 +47,10 @@ let
           "TestParseReferenceCores"
           "TestPlatformSearch"
           "TestPlatformSearchSorting"
+        ]
+        # This test fails with "platform is not available for your OS"
+        ++ lib.optionals (!stdenv.hostPlatform.isx86 && !stdenv.hostPlatform.isAarch) [
+          "TestFindPlatformReleaseDependencies"
         ];
       in
       ''
@@ -58,35 +69,37 @@ let
     ldflags = [
       "-s"
       "-w"
-      "-X github.com/arduino/arduino-cli/version.versionString=${version}"
-      "-X github.com/arduino/arduino-cli/version.commit=unknown"
-    ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "-extldflags '-static'" ];
+      "-X github.com/arduino/arduino-cli/internal/version.versionString=${finalAttrs.version}"
+      "-X github.com/arduino/arduino-cli/internal/version.commit=unknown"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ "-extldflags '-static'" ];
 
-    postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      export HOME="$(mktemp -d)"
+    postInstall = ''
+      wrapProgram $out/bin/arduino-cli --prefix PATH : ${lib.makeBinPath [ python3 ]}
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       installShellCompletion --cmd arduino-cli \
         --bash <($out/bin/arduino-cli completion bash) \
         --zsh <($out/bin/arduino-cli completion zsh) \
         --fish <($out/bin/arduino-cli completion fish)
-      unset HOME
     '';
 
-    meta = with lib; {
-      inherit (src.meta) homepage;
+    meta = {
+      inherit (finalAttrs.src.meta) homepage;
       description = "Arduino from the command line";
       mainProgram = "arduino-cli";
-      changelog = "https://github.com/arduino/arduino-cli/releases/tag/${version}";
-      license = [
-        licenses.gpl3Only
-        licenses.asl20
+      changelog = "https://github.com/arduino/arduino-cli/releases/tag/${finalAttrs.src.tag}";
+      license = with lib.licenses; [
+        gpl3Only
+        asl20
       ];
-      maintainers = with maintainers; [
+      maintainers = with lib.maintainers; [
         ryantm
         sfrijters
       ];
     };
 
-  };
+  });
 
 in
 if stdenv.hostPlatform.isLinux then

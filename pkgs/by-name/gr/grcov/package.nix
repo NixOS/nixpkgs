@@ -4,22 +4,18 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "grcov";
-  version = "0.8.19";
+  version = "0.10.8";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "grcov";
-    tag = "v${version}";
-    sha256 = "sha256-1t+hzB9sSApLScCkjBnLk9i2dsoEwZmWCFukEOvHhZI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-P9JOd2Dw3MDQ6Kr9m85JiqQScYdJzEVPtIfTOAc21rs=";
   };
 
-  cargoPatches = [
-    ./0001-update-time-rs.patch
-  ];
-
-  cargoHash = "sha256-zbraeXyuXgif46tRFQpEZVZ6bInrgKbrqRArmjFIgU8=";
+  cargoHash = "sha256-HZXH4sirjaZmHUiVr9A3ZnyqPoMaDTJnMD54/iUYQtg=";
 
   # tests do not find grcov path correctly
   checkFlags =
@@ -33,10 +29,13 @@ rustPlatform.buildRustPackage rec {
         "test_integration_guess_single_file"
         "test_integration_zip_dir"
         "test_integration_zip_zip"
+        "test_llvm_aggregate_profraws"
+        "test_profdatas_to_lcov"
+        "test_profraws_to_lcov"
+        "test_wrong_binary_file"
       ];
-      skipFlag = test: "--skip " + test;
     in
-    builtins.concatStringsSep " " (builtins.map skipFlag skipList);
+    builtins.map (x: "--skip=" + x) skipList;
 
   meta = {
     description = "Rust tool to collect and aggregate code coverage data for multiple source files";
@@ -45,4 +44,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ DieracDelta ];
   };
-}
+})

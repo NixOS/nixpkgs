@@ -5,13 +5,13 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "git-backdate";
   version = "2023-07-19";
 
   src = fetchFromGitHub {
     owner = "rixx";
-    repo = pname;
+    repo = "git-backdate";
     rev = "8ba5a0eba04e5559be2e4b1b6e02e62b64ca4dd8";
     sha256 = "sha256-91cEGQ0FtoiHEZHQ93jPFHF2vLoeQuBidykePFHtrsY=";
   };
@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Backdate a commit or range of commit to a date or range of dates";
     homepage = "https://github.com/rixx/git-backdate";
-    license = licenses.wtfpl;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    license = lib.licenses.wtfpl;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
     mainProgram = "git-backdate";
   };
 }

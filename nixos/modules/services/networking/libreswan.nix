@@ -153,20 +153,12 @@ in
       '';
       "ipsec.conf".source = "${pkgs.libreswan}/etc/ipsec.conf";
       "ipsec.d/01-nixos.conf".source = configFile;
-    } // policyFiles;
+    }
+    // policyFiles;
 
     systemd.services.ipsec = {
-      description = "Internet Key Exchange (IKE) Protocol Daemon for IPsec";
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ configFile ] ++ lib.mapAttrsToList (n: v: v.source) policyFiles;
-      path = with pkgs; [
-        libreswan
-        iproute2
-        procps
-        nssTools
-        iptables
-        nettools
-      ];
       preStart = lib.optionalString cfg.disableRedirects ''
         # Disable send/receive redirects
         echo 0 | tee /proc/sys/net/ipv4/conf/*/send_redirects

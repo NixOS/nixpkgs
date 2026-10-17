@@ -1,59 +1,116 @@
 {
   lib,
   stdenv,
+  bashNonInteractive,
+  buildPackages,
   fetchurl,
-  xorg,
-  libfaketime,
+  perl,
+  bdftopcf,
+  bdf2psf,
+  imagemagick,
 }:
 
-stdenv.mkDerivation rec {
+let
+  perlenv = perl.withPackages (ps: [ ps.GD ]);
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "unifont";
-  version = "16.0.02";
+  version = "18.0.01";
 
-  otf = fetchurl {
-    url = "mirror://gnu/unifont/${pname}-${version}/${pname}-${version}.otf";
-    hash = "sha256-3oI6EOZeIkOt56mK+CuC68a71c89CqPjjtTMzTa8qzM=";
+  strictDeps = true;
+
+  src = fetchurl {
+    url = "mirror://gnu/unifont/unifont-${finalAttrs.version}/unifont-${finalAttrs.version}.tar.gz";
+    hash = "sha256-6rYIR6rDTIdodlzsx4Ifr1DeJjYYe0Urm1+lChKwC8M=";
   };
 
-  pcf = fetchurl {
-    url = "mirror://gnu/unifont/${pname}-${version}/${pname}-${version}.pcf.gz";
-    hash = "sha256-AqP+EZlNPNrx1L1dK2tglzXmgj4BdkroO3BOAuwvZA0=";
-  };
+  postPatch = ''
+    rm -r font/precompiled
+    patchShebangs ./src
+    ${lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      substituteInPlace Makefile --replace-fail \
+        'bin/unigenwidth ' \
+        '$(BINDIR)/unigenwidth '
+      substituteInPlace font/Makefile --replace-fail \
+        '"BINDIR:../../../$(BINDIR)/"' \
+        '"BINDIR:$(BINDIR)/"'
+    ''}
+  '';
 
   nativeBuildInputs = [
-    libfaketime
-    xorg.fonttosfnt
-    xorg.mkfontscale
+    perlenv
+    bdftopcf
+    bdf2psf
+    imagemagick
   ];
 
-  dontUnpack = true;
+  buildInputs = [
+    bashNonInteractive
+    perlenv
+  ];
 
-  buildPhase = ''
-    # convert pcf font to otb
-    faketime -f "1970-01-01 00:00:01" \
-    fonttosfnt -g 2 -m 2 -v -o "unifont.otb" "${pcf}"
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    "BINDIR=${buildPackages.unifont.bin}/bin"
+  ];
+
+  buildFlags = [ "BUILDFONT=1" ];
+
+  # The `sample` variants are not intended for general use.
+  #
+  # From the 2013 changelog:
+  #
+  # > These "Unifont Sample" fonts contain combining circles, and four-digit
+  # > hexadecimal glyphs for unassigned code points and Private Use Area glyphs.
+  # > Because of the inclusion of combining cirlces, "Unifont Sample" font
+  # > versions are only intended for illustrating individual glyphs, not for
+  # > general-purpose writing.
+  postInstall = ''
+    moveToOutput bin "$bin"
+    moveToOutput share/unifont "$doc"
+
+    # Move `sample` into its own output.
+    mkdir -vp "$sample/share/fonts/X11/misc/"
+    mkdir -vp "$sample/share/fonts/opentype/unifont/"
+    mv -vt "$sample/share/fonts/X11/misc/" \
+      "$out"/share/fonts/X11/misc/*_sample.*
+    mv -vt "$sample/share/fonts/opentype/unifont/" \
+      "$out"/share/fonts/opentype/unifont/*_sample.*
   '';
 
-  installPhase = ''
-    # install otb fonts
-    install -m 644 -D unifont.otb "$out/share/fonts/unifont.otb"
-    mkfontdir "$out/share/fonts"
-
-    # install pcf and otf fonts
-    install -m 644 -D ${pcf} $out/share/fonts/unifont.pcf.gz
-    install -m 644 -D ${otf} $out/share/fonts/opentype/unifont.otf
-    cd "$out/share/fonts"
-    mkfontdir
-    mkfontscale
+  postFixup = ''
+    patchShebangs --host --update "$bin"
   '';
 
-  meta = with lib; {
+  outputs = [
+    "out"
+    "bin"
+    "doc"
+    "man"
+    "info"
+    "sample"
+  ];
+
+  # Don't bloat the font output with tools
+  propagatedBuildOutputs = [ ];
+
+  passthru.updateScript = ./update.sh;
+
+  meta = {
     description = "Unicode font for Base Multilingual Plane";
     homepage = "https://unifoundry.com/unifont/";
 
     # Basically GPL2+ with font exception.
-    license = "https://unifoundry.com/LICENSE.txt";
-    maintainers = [ maintainers.rycee ];
-    platforms = platforms.all;
+    license = with lib.licenses; [
+      gpl2Plus
+      fontException
+    ];
+    maintainers = with lib.maintainers; [
+      rycee
+      qweered
+    ];
+    platforms = lib.platforms.all;
   };
-}
+})

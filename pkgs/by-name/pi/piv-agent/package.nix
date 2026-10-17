@@ -2,44 +2,42 @@
   lib,
   stdenv,
   buildGoModule,
-  darwin,
   fetchFromGitHub,
   pcsclite,
   pkg-config,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "piv-agent";
-  version = "0.22.0";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "smlx";
     repo = "piv-agent";
-    rev = "v${version}";
-    hash = "sha256-bfJIrWDFQIg0n1RDadARPHhQwE6i7mAMxE5GPYo4WU8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-fFnUWV+q9M0QS84N59DKMVQ+uTG8adZaUi1fPipwF/U=";
   };
 
-  vendorHash = "sha256-HIB+p0yh7EWudLp1YGoClYbK3hkYEJZ+o+9BbOHE4+0=";
+  vendorHash = "sha256-j8Sq8j99APyOmfgpqkaVTgawJ0ahToHQt71TMBoafm0=";
 
   subPackages = [ "cmd/piv-agent" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
-    "-X main.shortCommit=${src.rev}"
+    "-X main.version=${finalAttrs.version}"
+    "-X main.shortCommit=${finalAttrs.src.rev}"
   ];
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
-  buildInputs =
-    if stdenv.hostPlatform.isDarwin then [ darwin.apple_sdk.frameworks.PCSC ] else [ pcsclite ];
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ pcsclite ];
 
-  meta = with lib; {
+  meta = {
     description = "SSH and GPG agent which you can use with your PIV hardware security device (e.g. a Yubikey)";
     homepage = "https://github.com/smlx/piv-agent";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "piv-agent";
   };
-}
+})

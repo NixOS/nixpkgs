@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gomodifytags";
   version = "1.17.0";
 
   src = fetchFromGitHub {
     owner = "fatih";
     repo = "gomodifytags";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-XVjSRW7FzXbGmGT+xH4tNg9PVXvgmhQXTIrYYZ346/M=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ vdemeester ];
     license = lib.licenses.bsd3;
   };
-}
+})

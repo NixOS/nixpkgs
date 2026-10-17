@@ -6,7 +6,7 @@
   libuuid,
   openssl,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "hfsprogs";
   version = "627.40.1-linux";
 
@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "HFS/HFS+ user space utils";
+    homepage = "https://github.com/glaubitz/hfs";
     license = lib.licenses.apple-psl20;
     platforms = lib.platforms.linux;
   };

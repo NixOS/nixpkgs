@@ -34,7 +34,7 @@ let
   '';
 
 in
-pypkgs.buildPythonApplication rec {
+pypkgs.buildPythonApplication (finalAttrs: {
   pname = "pykms";
   version = "0-unstable-2024-07-06";
 
@@ -45,10 +45,10 @@ pypkgs.buildPythonApplication rec {
     hash = "sha256-/XbMbcBcZPO7joHyaprJ29Cq4gNpuuzTzj2x1XDIyj8=";
   };
 
-  sourceRoot = "${src.name}/py-kms";
+  sourceRoot = "${finalAttrs.src.name}/py-kms";
 
   propagatedBuildInputs = with pypkgs; [
-    systemd
+    systemd-python
     pytz
     tzlocal
     dnspython
@@ -61,7 +61,7 @@ pypkgs.buildPythonApplication rec {
       --replace "'KmsDataBase.xml'" "'$siteDir/KmsDataBase.xml'"
   '';
 
-  format = "other";
+  pyproject = false;
 
   # there are no tests
   doCheck = false;
@@ -92,13 +92,13 @@ pypkgs.buildPythonApplication rec {
 
   passthru.tests = { inherit (nixosTests) pykms; };
 
-  meta = with lib; {
+  meta = {
     description = "Windows KMS (Key Management Service) server written in Python";
     homepage = "https://github.com/Py-KMS-Organization/py-kms";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [
       peterhoeg
       zopieux
     ];
   };
-}
+})

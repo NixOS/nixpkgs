@@ -12,23 +12,26 @@
   openssl,
   systemd,
   mariadb-connector-c,
-  postgresql,
-  lua,
+  libpq,
+  lua5_2_compat,
   openldap,
   geoip,
   curl,
-  unixODBC,
+  unixodbc,
   lmdb,
   tinycdb,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdns";
-  version = "4.9.3";
+  version = "5.1.4";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/pdns-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-suZwRqe5WCXDXdyRGe1uLoU1N6V20MTukIC7XwrT6NU=";
+    hash = "sha256-+KEO2/YOSdjBYOkxIZidXrza2DjQ4LdH8m736J/SIMA=";
   };
   # redact configure flags from version output to reduce closure size
   patches = [ ./version.patch ];
@@ -37,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     boost
     mariadb-connector-c
-    postgresql
+    libpq
     lua
     openldap
     sqlite
@@ -46,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     yaml-cpp
     libsodium
     curl
-    unixODBC
+    unixodbc
     openssl
     systemd
     lmdb
@@ -57,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature stdenv.hostPlatform.is32bit "experimental-64bit-time_t-support-on-glibc")
     (lib.enableFeature false "silent-rules")
     (lib.enableFeature true "dns-over-tls")
-    (lib.enableFeature true "unit-tests")
+    (lib.enableFeature finalAttrs.finalPackage.doCheck "unit-tests")
     (lib.enableFeature true "reproducible")
     (lib.enableFeature true "tools")
     (lib.enableFeature true "ixfrdist")
@@ -82,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
         "tinydns"
       ]
     ))
+    "--with-boost=${boost.dev}"
     "sysconfdir=/etc/pdns"
   ];
 
@@ -99,15 +103,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   __structuredAttrs = true;
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://doc.powerdns.com/authoritative/changelog/${lib.versions.majorMinor finalAttrs.version}.html#change-${finalAttrs.version}";
     description = "Authoritative DNS server";
     homepage = "https://www.powerdns.com";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       mic92
-      disassembler
       nickcao
     ];
   };

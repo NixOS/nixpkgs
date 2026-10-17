@@ -8,6 +8,7 @@
   matplotlib,
   pytestCheckHook,
   isPy3k,
+  stdenv, # for meta.broken
 }:
 
 buildPythonPackage {
@@ -24,6 +25,13 @@ buildPythonPackage {
     hash = "sha256-KuuVu0tqrmQuNKYmDmdy+TU6BnnhDxh4G8n9BGzjGag=";
   };
 
+  patches = [
+    ./numpy-2.4-compat.patch
+
+    # https://github.com/rlabbe/filterpy/pull/331
+    ./scipy-1.12-deprecation.patch
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [
@@ -39,10 +47,12 @@ buildPythonPackage {
     "test_multivariate_gaussian"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/rlabbe/filterpy";
     description = "Kalman filtering and optimal estimation library";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

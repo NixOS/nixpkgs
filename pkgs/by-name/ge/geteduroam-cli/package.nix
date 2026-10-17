@@ -5,18 +5,18 @@
   versionCheckHook,
   nix-update-script,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "geteduroam-cli";
-  version = "0.4";
+  version = "0.15";
 
   src = fetchFromGitHub {
     owner = "geteduroam";
     repo = "linux-app";
-    tag = version;
-    hash = "sha256-9+IjrHg536/6ulj94CBhYWY0S3aNA7Ne4JQynMmsLxE=";
+    tag = finalAttrs.version;
+    hash = "sha256-j9sLlVglQbrGuFAh0gkxS2/4HR2YpBNxCsVWBQpPNag=";
   };
 
-  vendorHash = "sha256-9SNjOC59wcEkxJqBXsgYClHKGH7OFWk3t/wMPLANAy0=";
+  vendorHash = "sha256-HYJ71pk1a8EaPycmbHmMnQeb42dt7M9NvK/1GYhZE0c=";
 
   subPackages = [
     "cmd/geteduroam-cli"
@@ -26,7 +26,6 @@ buildGoModule rec {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/geteduroam-cli";
-  versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
 
   passthru = {
@@ -40,6 +39,6 @@ buildGoModule rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ viperML ];
     platforms = lib.platforms.linux;
-    changelog = "https://github.com/geteduroam/linux-app/releases/tag/${version}";
+    changelog = "https://github.com/geteduroam/linux-app/releases/tag/${finalAttrs.version}";
   };
-}
+})

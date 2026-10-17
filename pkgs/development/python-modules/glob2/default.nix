@@ -5,14 +5,14 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "glob2";
   version = "0.7";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "135bj8gm6vn45vv0phrvhyir36kfm17y7kmasxinv8lagk8dphw5";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-hcPb0HyKom1j16rO40+obpqRo4c7wwv2LsRuUx+Sq4w=";
   };
 
   checkPhase = ''
@@ -25,4 +25,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

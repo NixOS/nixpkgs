@@ -13,21 +13,21 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "crytic";
-    repo = pname;
+    repo = "pyevmasm";
     rev = version;
-    sha256 = "134q0z0dqzxzr0jw5jr98kp90kx2dl0qw9smykwxdgq555q1l6qa";
+    hash = "sha256-ChsacCkFv9b59FUnjgFtok+Q7kQpy8IlyL9/3MAHmIw=";
   };
 
   propagatedBuildInputs = [ future ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Ethereum Virtual Machine (EVM) assembler and disassembler";
     mainProgram = "evmasm";
     homepage = "https://github.com/crytic/pyevmasm";
     changelog = "https://github.com/crytic/pyevmasm/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ arturcygan ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ arturcygan ];
   };
 }

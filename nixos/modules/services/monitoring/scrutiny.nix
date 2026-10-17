@@ -1,10 +1,28 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 let
-  inherit (lib) maintainers;
   inherit (lib.meta) getExe;
   inherit (lib.modules) mkIf mkMerge;
-  inherit (lib.options) literalExpression mkEnableOption mkOption mkPackageOption;
-  inherit (lib.types) bool enum nullOr port str submodule;
+  inherit (lib.options)
+    literalExpression
+    mkEnableOption
+    mkOption
+    mkPackageOption
+    ;
+  inherit (lib.types)
+    bool
+    enum
+    nullOr
+    port
+    str
+    submodule
+    ;
+  inherit (utils) genJqSecretsReplacementSnippet;
 
   cfg = config.services.scrutiny;
   # Define the settings format used for this program
@@ -35,7 +53,12 @@ in
         description = ''
           Scrutiny settings to be rendered into the configuration file.
 
-          See https://github.com/AnalogJ/scrutiny/blob/master/example.scrutiny.yaml.
+          See <https://github.com/AnalogJ/scrutiny/blob/master/example.scrutiny.yaml>.
+
+          Options containing secret data should be set to an attribute set
+          containing the attribute `_secret`. This attribute should be a string
+          or structured JSON with `quote = false;`, pointing to a file that
+          contains the value the option should be set to.
         '';
         default = { };
         type = submodule {
@@ -64,7 +87,10 @@ in
           };
 
           options.log.level = mkOption {
-            type = enum [ "INFO" "DEBUG" ];
+            type = enum [
+              "INFO"
+              "DEBUG"
+            ];
             default = "INFO";
             description = "Log level for Scrutiny.";
           };
@@ -87,7 +113,8 @@ in
             description = "The port of the InfluxDB instance.";
           };
 
-          options.web.influxdb.tls.insecure_skip_verify = mkEnableOption "skipping TLS verification when connecting to InfluxDB";
+          options.web.influxdb.tls.insecure_skip_verify =
+            mkEnableOption "skipping TLS verification when connecting to InfluxDB";
 
           options.web.influxdb.token = mkOption {
             type = nullOr str;
@@ -119,7 +146,7 @@ in
 
         schedule = mkOption {
           type = str;
-          default = "*:0/15";
+          default = "daily";
           description = ''
             How often to run the collector in systemd calendar format.
           '';
@@ -129,7 +156,12 @@ in
           description = ''
             Collector settings to be rendered into the collector configuration file.
 
-            See https://github.com/AnalogJ/scrutiny/blob/master/example.collector.yaml.
+            See <https://github.com/AnalogJ/scrutiny/blob/master/example.collector.yaml>.
+
+            Options containing secret data should be set to an attribute set
+            containing the attribute `_secret`. This attribute should be a string
+            or structured JSON with `quote = false;`, pointing to a file that
+            contains the value the option should be set to.
           '';
           default = { };
           type = submodule {
@@ -143,13 +175,16 @@ in
 
             options.api.endpoint = mkOption {
               type = str;
-              default = "http://${cfg.settings.web.listen.host}:${toString cfg.settings.web.listen.port}";
-              defaultText = literalExpression ''"http://''${config.services.scrutiny.settings.web.listen.host}:''${config.services.scrutiny.settings.web.listen.port}"'';
+              default = "http://${cfg.settings.web.listen.host}:${toString cfg.settings.web.listen.port}${cfg.settings.web.listen.basepath}";
+              defaultText = literalExpression ''"http://''${config.services.scrutiny.settings.web.listen.host}:''${config.services.scrutiny.settings.web.listen.port}''${config.services.scrutiny.settings.web.listen.basepath}"'';
               description = "Scrutiny app API endpoint for sending metrics to.";
             };
 
             options.log.level = mkOption {
-              type = enum [ "INFO" "DEBUG" ];
+              type = enum [
+                "INFO"
+                "DEBUG"
+              ];
               default = "INFO";
               description = "Log level for Scrutiny collector.";
             };
@@ -169,6 +204,7 @@ in
 
       systemd.services.scrutiny = {
         description = "Hard Drive S.M.A.R.T Monitoring, Historical Trends & Real World Failure Thresholds";
+        enableStrictShellChecks = true;
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ] ++ lib.optional cfg.influxdb.enable "influxdb2.service";
         wants = lib.optional cfg.influxdb.enable "influxdb2.service";
@@ -177,8 +213,11 @@ in
           SCRUTINY_WEB_DATABASE_LOCATION = "/var/lib/scrutiny/scrutiny.db";
           SCRUTINY_WEB_SRC_FRONTEND_PATH = "${cfg.package}/share/scrutiny";
         };
+        preStart = ''
+          ${genJqSecretsReplacementSnippet cfg.settings "/run/scrutiny/config.yaml"}
+        '';
         postStart = ''
-          for i in $(seq 300); do
+          for _ in $(seq 300); do
               if "${lib.getExe pkgs.curl}" --fail --silent --head "http://${cfg.settings.web.listen.host}:${toString cfg.settings.web.listen.port}" >/dev/null; then
                   echo "Scrutiny is ready (port is open)"
                   exit 0
@@ -191,10 +230,50 @@ in
         '';
         serviceConfig = {
           DynamicUser = true;
-          ExecStart = "${getExe cfg.package} start --config ${settingsFormat.generate "scrutiny.yaml" cfg.settings}";
+          ExecStart = "${getExe cfg.package} start --config /run/scrutiny/config.yaml";
           Restart = "always";
+          RuntimeDirectory = "scrutiny";
+          RuntimeDirectoryMode = "0700";
           StateDirectory = "scrutiny";
           StateDirectoryMode = "0750";
+
+          RemoveIPC = true;
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          MemoryDenyWriteExecute = true;
+          SystemCallFilter = [
+            "@system-service"
+            "~@privileged"
+            "~@resources"
+          ];
+          SystemCallArchitectures = "native";
+          LockPersonality = true;
+          CapabilityBoundingSet = "";
+          NoNewPrivileges = true;
+          PrivateTmp = true;
+          PrivateMounts = true;
+          PrivateDevices = true;
+          ProtectClock = true;
+          ProtectControlGroups = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectSystem = "strict";
+          ProtectProc = "invisible";
+          ProcSubset = "pid";
+          RestrictAddressFamilies = [
+            "AF_NETLINK"
+            "AF_INET"
+            "AF_INET6"
+            "AF_UNIX"
+          ];
+          SocketBindDeny = "any";
+          SocketBindAllow = [
+            "tcp:${toString cfg.settings.web.listen.port}"
+          ];
         };
       };
     })
@@ -210,15 +289,21 @@ in
       systemd = {
         services.scrutiny-collector = {
           description = "Scrutiny Collector Service";
+          enableStrictShellChecks = true;
           after = lib.optional cfg.enable "scrutiny.service";
           wants = lib.optional cfg.enable "scrutiny.service";
           environment = {
             COLLECTOR_VERSION = "1";
             COLLECTOR_API_ENDPOINT = cfg.collector.settings.api.endpoint;
           };
+          preStart = ''
+            ${genJqSecretsReplacementSnippet cfg.collector.settings "/run/scrutiny-collector/config.yaml"}
+          '';
           serviceConfig = {
             Type = "oneshot";
-            ExecStart = "${getExe cfg.collector.package} run --config ${settingsFormat.generate "scrutiny-collector.yaml" cfg.collector.settings}";
+            ExecStart = "${getExe cfg.collector.package} run --config /run/scrutiny-collector/config.yaml";
+            RuntimeDirectory = "scrutiny-collector";
+            RuntimeDirectoryMode = "0700";
           };
           startAt = cfg.collector.schedule;
         };
@@ -228,5 +313,5 @@ in
     })
   ];
 
-  meta.maintainers = [ maintainers.jnsgruk ];
+  meta.maintainers = [ ];
 }

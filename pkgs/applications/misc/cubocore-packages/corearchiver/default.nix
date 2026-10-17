@@ -1,8 +1,8 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchFromGitLab,
-  qtbase,
+  qt6,
   libarchive,
   libarchive-qt,
   cmake,
@@ -11,36 +11,37 @@
   libcsys,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "corearchiver";
-  version = "4.5.0";
+  version = "5.0.1";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-TKBr/CFY4ixQnJuaN+wJB88s6g4lvQz4rwq9YsccRYk=";
+    repo = "corearchiver";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-r2iXvc9KtRsB5IHvJxs/DxQIf7IiNWoM4h2wDgsXvZE=";
   };
 
   nativeBuildInputs = [
     cmake
     ninja
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
+    qt6.qtbase
     libarchive-qt
     libarchive
     libcprime
     libcsys
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Archiver from the C Suite to create and extract archives";
     mainProgram = "corearchiver";
     homepage = "https://gitlab.com/cubocore/coreapps/corearchiver";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dan4ik605743 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
-}
+})

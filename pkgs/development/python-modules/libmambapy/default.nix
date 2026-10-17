@@ -1,25 +1,23 @@
 {
-  lib,
-  fetchFromGitHub,
-  pythonPackages,
-  buildPythonPackage,
+  bzip2,
   cmake,
-  ninja,
-  libmamba,
-  pybind11,
-  setuptools,
-  scikit-build,
+  curl,
+  buildPythonPackage,
   fmt,
+  lib,
+  libmamba,
+  libsolv,
+  msgpack-c,
+  ninja,
+  nlohmann_json,
+  pybind11,
+  python,
+  reproc,
+  scikit-build-core,
   spdlog,
   tl-expected,
-  nlohmann_json,
   yaml-cpp,
-  reproc,
-  libsolv,
-  curl,
   zstd,
-  bzip2,
-  wheel,
 }:
 
 buildPythonPackage rec {
@@ -28,60 +26,31 @@ buildPythonPackage rec {
 
   inherit (libmamba) version src;
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-  ];
-
-  env = {
-    NIX_CFLAGS_COMPILE = toString [
-      "-Wno-error=deprecated-declarations"
-    ];
-  };
-
-  buildInputs = [
-    (libmamba.override { python3Packages = pythonPackages; })
-    curl
-    zstd
-    bzip2
-    spdlog
-    fmt
-    tl-expected
-    nlohmann_json
-    yaml-cpp
-    reproc
-    libsolv
-  ];
-
-  dependencies = [
-    scikit-build
-    pybind11
-  ];
+  sourceRoot = "${src.name}/libmambapy";
 
   build-system = [
-    setuptools
-    wheel
+    cmake
+    ninja
+    pybind11
+    scikit-build-core
   ];
 
-  # patch needed to fix setuptools errors
-  # see these for reference
-  # https://stackoverflow.com/questions/72294299/multiple-top-level-packages-discovered-in-a-flat-layout
-  # https://github.com/pypa/setuptools/issues/3197#issuecomment-1078770109
-  postPatch = ''
-    substituteInPlace libmambapy/setup.py --replace-warn  "setuptools.setup()" "setuptools.setup(py_modules=[])"
-  '';
+  dontUseCmakeConfigure = true;
 
-  cmakeFlags = [
-    "-GNinja"
-    (lib.cmakeBool "BUILD_LIBMAMBAPY" true)
+  buildInputs = [
+    (libmamba.override { python3 = python; })
+    bzip2
+    curl
+    fmt
+    libsolv
+    msgpack-c
+    nlohmann_json
+    reproc
+    spdlog
+    tl-expected
+    yaml-cpp
+    zstd
   ];
-
-  buildPhase = ''
-    ninjaBuildPhase
-    cp -r libmambapy ../libmambapy
-    cd ../libmambapy
-    pypaBuildPhase
-  '';
 
   pythonImportsCheck = [
     "libmambapy"
@@ -89,6 +58,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
+    changelog = "https://github.com/mamba-org/mamba/blob/${src.tag}/libmambapy/CHANGELOG.md";
     description = "Python library for the fast Cross-Platform Package Manager";
     homepage = "https://github.com/mamba-org/mamba";
     license = lib.licenses.bsd3;

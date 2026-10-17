@@ -1,7 +1,6 @@
 {
   asciidoctor,
-  darwin,
-  fetchgit,
+  fetchFromRadicle,
   git,
   installShellFiles,
   lib,
@@ -10,22 +9,30 @@
   rustPlatform,
   stdenv,
   xdg-utils,
+  versionCheckHook,
+  nixosTests,
 }:
-rustPlatform.buildRustPackage rec {
-  pname = "radicle-httpd";
-  version = "0.18.0";
-  env.RADICLE_VERSION = version;
 
-  # You must update the radicle-explorer source hash when changing this.
-  src = fetchgit {
-    url = "https://seed.radicle.xyz/z4V1sjrXqjvFdnCUbxPFqd5p4DtH5.git";
-    rev = "refs/namespaces/z6MkkfM3tPXNPrPevKr3uSiQtHPuwnNhu2yUVjgd2jXVsVz5/refs/tags/v${version}";
-    hash = "sha256-VHfiL0BSJsYS8QgMf+LEa6HvYoc+dxawTcwB4d6sTg8=";
-    sparseCheckout = [ "radicle-httpd" ];
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "radicle-httpd";
+  version = "0.28.0";
+
+  env.RADICLE_VERSION = finalAttrs.version;
+
+  src = fetchFromRadicle {
+    seed = "seed.radicle.dev";
+    repo = "z4V1sjrXqjvFdnCUbxPFqd5p4DtH5";
+    tag = "releases/${finalAttrs.version}";
+    nonConeMode = true;
+    sparseCheckout = [
+      "/crates"
+      "/Cargo.toml"
+      "/Cargo.lock"
+    ];
+    hash = "sha256-D15u6aU6lKch/bEa1J6PBntb42NMHWYChIgprbJM+4M=";
   };
 
-  sourceRoot = "${src.name}/radicle-httpd";
-  cargoHash = "sha256-LmUZCu10RsuA8Lu3FjWcV8MzjX5FxBCV6+4zG0GEN2c=";
+  cargoHash = "sha256-z/ddTzoitMOsfndleM8Wu2sOn156ZTg8w/3/AJYw8wE=";
 
   nativeBuildInputs = [
     asciidoctor
@@ -33,7 +40,6 @@ rustPlatform.buildRustPackage rec {
     makeWrapper
   ];
   nativeCheckInputs = [ git ];
-  buildInputs = lib.optionals stdenv.buildPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   doCheck = stdenv.hostPlatform.isLinux;
 
@@ -58,13 +64,23 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru = {
+    tests = { inherit (nixosTests) radicle; };
+    updateScript = ./update.sh;
+  };
+
   meta = {
     description = "Radicle JSON HTTP API Daemon";
     longDescription = ''
       A Radicle HTTP daemon exposing a JSON HTTP API that allows someone to browse local
       repositories on a Radicle node via their web browser.
     '';
-    homepage = "https://radicle.xyz";
+    homepage = "https://radicle.dev";
+    changelog = "https://radicle.network/nodes/seed.radicle.dev/rad:z4V1sjrXqjvFdnCUbxPFqd5p4DtH5/tree/CHANGELOG.md";
     # cargo.toml says MIT and asl20, LICENSE file says GPL3
     license = with lib.licenses; [
       gpl3Only
@@ -72,10 +88,8 @@ rustPlatform.buildRustPackage rec {
       asl20
     ];
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
-      gador
-      lorenzleutgeb
-    ];
+    teams = [ lib.teams.radicle ];
+    maintainers = with lib.maintainers; [ gador ];
     mainProgram = "radicle-httpd";
   };
-}
+})

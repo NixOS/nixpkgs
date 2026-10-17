@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "044e173f24d5934899bdbf3596bfbec917e8083e507eed583ab217abebbe084d";
+    hash = "sha256-BE4XPyTVk0iZvb81lr++yRfoCD5Qfu1YOrIXq+u+CE0=";
   };
 
   build-system = [ setuptools ];
@@ -29,10 +29,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "imagecorruptions" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bethgelab/imagecorruptions";
     description = "This package provides a set of image corruptions";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ rakesh4g ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ rakesh4g ];
   };
 }

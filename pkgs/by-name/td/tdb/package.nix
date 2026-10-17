@@ -1,23 +1,38 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, wafHook
-, buildPackages
-, python3
-, readline
-, libxslt
-, libxcrypt
-, docbook-xsl-nons
-, docbook_xml_dtd_45
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  wafHook,
+  buildPackages,
+  python3,
+  readline,
+  libxslt,
+  libxcrypt,
+  docbook-xsl-nons,
+  docbook_xml_dtd_45,
 }:
 
-stdenv.mkDerivation rec {
+let
+  needsAnswers =
+    stdenv.hostPlatform != stdenv.buildPlatform
+    && !(stdenv.hostPlatform.emulatorAvailable buildPackages);
+  answers =
+    {
+      # PYTHONHASHSEED=1 python3.9 ./buildtools/bin/waf configure --bundled-libraries=NONE --builtin-libraries=replace --cross-compile --cross-execute=' ' --cross-answers=answers
+      x86_64-freebsd = ./answers-x86_64-freebsd;
+    }
+    .${stdenv.hostPlatform.system}
+      or (throw "Need pre-generated answers file to compile for ${stdenv.hostPlatform.system}");
+in
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "tdb";
-  version = "1.4.12";
+  version = "1.4.15";
 
   src = fetchurl {
-    url = "mirror://samba/tdb/${pname}-${version}.tar.gz";
-    hash = "sha256-bOSydJiBLQkjfs5loNbfrAlBYQ5wmEjsuCKqJBCEzXo=";
+    url = "mirror://samba/tdb/tdb-${finalAttrs.version}.tar.gz";
+    hash = "sha256-+6CdjfHxuQcq6ujniyvUPFr+8gsvbe76YzqhSjd6jdI=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +55,10 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     export PKGCONFIG="$PKG_CONFIG"
     export PYTHONHASHSEED=1
+  ''
+  + lib.optionalString needsAnswers ''
+    cp ${answers} answers
+    chmod +w answers
   '';
 
   wafPath = "buildtools/bin/waf";
@@ -47,21 +66,37 @@ stdenv.mkDerivation rec {
   wafConfigureFlags = [
     "--bundled-libraries=NONE"
     "--builtin-libraries=replace"
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "--cross-compile"
-    "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
+    (
+      if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
+        "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
+      else
+        "--cross-answers=answers"
+    )
   ];
 
-  postFixup = if stdenv.hostPlatform.isDarwin
-    then ''install_name_tool -id $out/lib/libtdb.dylib $out/lib/libtdb.dylib''
-    else null;
+  postFixup =
+    if stdenv.hostPlatform.isDarwin then
+      "install_name_tool -id $out/lib/libtdb.dylib $out/lib/libtdb.dylib"
+    else
+      null;
 
-  # python-config from build Python gives incorrect values when cross-compiling.
-  # If python-config is not found, the build falls back to using the sysconfig
-  # module, which works correctly in all cases.
-  PYTHON_CONFIG = "/invalid";
+  env = {
+    # python-config from build Python gives incorrect values when cross-compiling.
+    # If python-config is not found, the build falls back to using the sysconfig
+    # module, which works correctly in all cases.
+    PYTHON_CONFIG = "/invalid";
+  }
+  //
+    lib.optionalAttrs (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17")
+      {
+        # https://reviews.llvm.org/D135402
+        NIX_LDFLAGS = "--undefined-version";
+      };
 
-  meta = with lib; {
+  meta = {
     description = "Trivial database";
     longDescription = ''
       TDB is a Trivial Database. In concept, it is very much like GDBM,
@@ -70,7 +105,7 @@ stdenv.mkDerivation rec {
       other. TDB is also extremely small.
     '';
     homepage = "https://tdb.samba.org/";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.all;
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.all;
   };
-}
+})

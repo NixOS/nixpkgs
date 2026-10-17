@@ -7,12 +7,12 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "liboauth";
   version = "1.0.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/liboauth/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/liboauth/liboauth-${finalAttrs.version}.tar.gz";
     sha256 = "07w1aq8y8wld43wmbk2q8134p3bfkp2vma78mmsfgw2jn1bh3xhd";
   };
 
@@ -35,11 +35,11 @@ stdenv.mkDerivation rec {
       --replace "-lnss3" "-L${nss.out}/lib -lnss3"
   '';
 
-  meta = with lib; {
-    platforms = platforms.all;
+  meta = {
+    platforms = lib.platforms.all;
     description = "C library implementing the OAuth secure authentication protocol";
     homepage = "http://liboauth.sourceforge.net/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 
-}
+})

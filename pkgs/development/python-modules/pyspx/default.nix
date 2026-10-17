@@ -4,17 +4,13 @@
   cffi,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
-  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "pyspx";
   version = "0.5.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sphincs";
@@ -24,21 +20,25 @@ buildPythonPackage rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail 'version="0.5.0"' 'version="${version}"'
+  '';
+
+  build-system = [
     cffi
     setuptools
-    wheel
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pyspx" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for SPHINCS";
     homepage = "https://github.com/sphincs/pyspx";
     changelog = "https://github.com/sphincs/pyspx/releases/tag/v${version}";
-    license = licenses.cc0;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.cc0;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -15,9 +15,9 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "amatellanes";
-    repo = pname;
+    repo = "fixerio";
     rev = "v${version}";
-    sha256 = "009h1mys175xdyznn5bl980vly40544s4ph1zcgqwg2i2ic93gvb";
+    hash = "sha256-a7+RWBRRPI4f+wFeogkpgHi6AUp0FWu/b72coH0NMAE=";
   };
 
   propagatedBuildInputs = [ requests ];
@@ -40,14 +40,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fixerio" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for Fixer.io";
     longDescription = ''
       Fixer.io is a free JSON API for current and historical foreign
       exchange rates published by the European Central Bank.
     '';
     homepage = "https://github.com/amatellanes/fixerio";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

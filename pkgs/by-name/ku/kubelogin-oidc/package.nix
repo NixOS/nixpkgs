@@ -2,27 +2,29 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubelogin";
-  version = "1.31.1";
+  version = "1.36.4";
 
   src = fetchFromGitHub {
     owner = "int128";
     repo = "kubelogin";
-    rev = "v${version}";
-    hash = "sha256-LfMxfXM3L4r0S8eDQVgFO1jTf/BcYpxxQSMl4zRh/yA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-z0tHU+ZBxaE6VkACvYeQwkQ5CC2C4w+A41Xl24HLE8E=";
   };
 
   subPackages = [ "." ];
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=v${version}"
+    "-X main.version=v${finalAttrs.version}"
   ];
 
-  vendorHash = "sha256-o+74+PnwhMe2oMfFLMD95R4m3gMjQS2d4pAvCEjh05U=";
+  vendorHash = "sha256-LDAzmzcTcxCANgMLqQaDeJiGy+U93xhCIBiEs0mJ9aQ=";
 
   # test all packages
   preCheck = ''
@@ -35,14 +37,19 @@ buildGoModule rec {
     mv $out/bin/kubelogin $out/bin/kubectl-oidc_login
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Kubernetes credential plugin implementing OpenID Connect (OIDC) authentication";
     mainProgram = "kubectl-oidc_login";
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       benley
+      malteneuss
       nevivurn
     ];
   };
-}
+})

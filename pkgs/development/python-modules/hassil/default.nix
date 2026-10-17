@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -17,17 +16,17 @@
 
 let
   pname = "hassil";
-  version = "2.1.0";
+  version = "3.12.1";
 in
-buildPythonPackage {
+buildPythonPackage rec {
   inherit pname version;
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "home-assistant";
+    owner = "OHF-Voice";
     repo = "hassil";
     tag = "v${version}";
-    hash = "sha256-CGobMgaDHcruvOzVBIc6xS0tuaMT410t62KD3Hg30EY=";
+    hash = "sha256-jbodtdsEBDL4nB8kBkPjxFsMOMvsGPDpfMokMRF4xIA=";
   };
 
   build-system = [ setuptools ];
@@ -39,12 +38,12 @@ buildPythonPackage {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
-    changelog = "https://github.com/home-assistant/hassil/blob/${version}/CHANGELOG.md";
+  meta = {
+    changelog = "https://github.com/OHF-Voice/hassil/blob/${src.tag}/CHANGELOG.md";
     description = "Intent parsing for Home Assistant";
     mainProgram = "hassil";
-    homepage = "https://github.com/home-assistant/hassil";
-    license = licenses.asl20;
-    maintainers = teams.home-assistant.members;
+    homepage = "https://github.com/OHF-Voice/hassil";
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.home-assistant ];
   };
 }

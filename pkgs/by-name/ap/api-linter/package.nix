@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "api-linter";
-  version = "1.68.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "api-linter";
-    rev = "v${version}";
-    hash = "sha256-pYzdI7bcAPP47K4EKjsAV7UY2RLGX9m3tksYRZeGdTQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-r1OTgsLaEZPQd7P3E7BY0YYIr93Cmeo6gH4Z24LXP3Q=";
   };
 
-  vendorHash = "sha256-vdoEMMlFwS+BBd0EsrahVL3ZZE4PHQJP4CNwsqIo5Y8=";
+  vendorHash = "sha256-L1R0XvEn1pGy/EC/ivoUOGsyGrT5bRUkMLrGpI4VNyY=";
 
   subPackages = [ "cmd/api-linter" ];
 
@@ -24,12 +24,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Linter for APIs defined in protocol buffers";
     homepage = "https://github.com/googleapis/api-linter/";
-    changelog = "https://github.com/googleapis/api-linter/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ xrelkd ];
+    changelog = "https://github.com/googleapis/api-linter/releases/tag/${finalAttrs.src.rev}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ xrelkd ];
     mainProgram = "api-linter";
   };
-}
+})

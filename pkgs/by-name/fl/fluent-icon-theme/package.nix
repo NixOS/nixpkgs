@@ -30,13 +30,13 @@ lib.checkListOfEnum "${pname}: available color variants"
   stdenvNoCC.mkDerivation
   rec {
     inherit pname;
-    version = "2024-02-25";
+    version = "2025-08-21";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
-      repo = pname;
-      rev = version;
-      hash = "sha256-Cadp2+4kBZ74kdD5x0O85FszxvN6/sg6yccxughyX1Q";
+      repo = "Fluent-icon-theme";
+      tag = version;
+      hash = "sha256-qAKNAbmSfVuzUGDJGVU0QF3LMc5tRzAy+l0ZwEXaJ28=";
     };
 
     nativeBuildInputs = [
@@ -60,7 +60,7 @@ lib.checkListOfEnum "${pname}: available color variants"
 
       ./install.sh --dest $out/share/icons \
         --name Fluent \
-        ${builtins.toString colorVariants} \
+        ${toString colorVariants} \
         ${lib.optionalString allColorVariants "--all"} \
         ${lib.optionalString roundedIcons "--round"} \
         ${lib.optionalString blackPanelIcons "--black"}
@@ -70,11 +70,11 @@ lib.checkListOfEnum "${pname}: available color variants"
       runHook postInstall
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Fluent icon theme for linux desktops";
       homepage = "https://github.com/vinceliuice/Fluent-icon-theme";
-      license = licenses.gpl3Plus;
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ icy-thought ];
+      license = lib.licenses.gpl3Plus;
+      platforms = lib.platforms.linux;
+      maintainers = with lib.maintainers; [ icy-thought ];
     };
   }

@@ -5,20 +5,18 @@
   requests,
   pytest,
   flask,
-  isPy27,
 }:
 
 buildPythonPackage rec {
   version = "4.1";
   format = "setuptools";
   pname = "roku";
-  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "jcarbaugh";
     repo = "python-roku";
     rev = "v${version}";
-    sha256 = "09mq59kjll7gj1srw4qc921ncsm7cld95sbz5v3p2bwmgckpqza7";
+    hash = "sha256-R318J3uVL3HHLn/pkhplp2pmg0gME551kO9QKmcquCY=";
   };
 
   propagatedBuildInputs = [ requests ];
@@ -29,9 +27,9 @@ buildPythonPackage rec {
   ];
   pythonImportsCheck = [ "roku" ];
 
-  meta = with lib; {
+  meta = {
     description = "Screw remotes. Control your Roku with Python";
     homepage = "https://github.com/jcarbaugh/python-roku";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

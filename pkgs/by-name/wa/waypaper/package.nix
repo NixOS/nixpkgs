@@ -1,22 +1,23 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
   gobject-introspection,
   wrapGAppsHook3,
   killall,
+  socat,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "waypaper";
-  version = "2.3";
+  version = "2.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anufrievroman";
     repo = "waypaper";
-    tag = version;
-    hash = "sha256-ty3KiKkIyv6aqTua3YUB2smYJv7dXGPP5k3lXoxDzI0=";
+    rev = "17f60be4c6abc5ab9c5d4837d930015661ccdd3d";
+    hash = "sha256-HkWsffcK/FjXeyzp948xhvMbrdrBcGwkuTI9O16OWbo=";
   };
 
   nativeBuildInputs = [
@@ -24,16 +25,21 @@ python3.pkgs.buildPythonApplication rec {
     wrapGAppsHook3
   ];
 
-  build-system = [ python3.pkgs.setuptools ];
+  build-system = with python3Packages; [ setuptools ];
 
-  dependencies = [
-    python3.pkgs.pygobject3
-    python3.pkgs.platformdirs
-    python3.pkgs.importlib-metadata
-    python3.pkgs.pillow
+  dependencies = with python3Packages; [
+    imageio
+    imageio-ffmpeg
+    pillow
+    platformdirs
+    pygobject3
+    screeninfo
   ];
 
-  propagatedBuildInputs = [ killall ];
+  propagatedBuildInputs = [
+    killall
+    socat
+  ];
 
   # has no tests
   doCheck = false;
@@ -44,8 +50,8 @@ python3.pkgs.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
-    changelog = "https://github.com/anufrievroman/waypaper/releases/tag/${version}";
+  meta = {
+    changelog = "https://github.com/anufrievroman/waypaper/releases/tag/${finalAttrs.version}";
     description = "GUI wallpaper setter for Wayland-based window managers";
     mainProgram = "waypaper";
     longDescription = ''
@@ -54,8 +60,11 @@ python3.pkgs.buildPythonApplication rec {
       If wallpaper does not change, make sure that swaybg or swww is installed.
     '';
     homepage = "https://github.com/anufrievroman/waypaper";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ totalchaos ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      prince213
+      totalchaos
+    ];
+    platforms = lib.platforms.linux;
   };
-}
+})

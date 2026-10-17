@@ -23,7 +23,7 @@ let
     };
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "11.0.1002";
   pname = "passmark-performancetest";
 
@@ -64,12 +64,12 @@ stdenv.mkDerivation rec {
         }
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Software tool that allows everybody to quickly assess the performance of their computer and compare it to a number of standard 'baseline' computer systems";
     homepage = "https://www.passmark.com";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ neverbehave ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ neverbehave ];
     platforms = builtins.attrNames sources;
     mainProgram = "performancetest";
   };

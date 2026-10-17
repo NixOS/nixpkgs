@@ -1,6 +1,7 @@
 {
   lib,
   srcOnly,
+  stdenv,
   makeSetupHook,
   makeWrapper,
   nodejs,
@@ -18,6 +19,8 @@
     substitutions = {
       nodeSrc = srcOnly nodejs;
       nodeGyp = "${nodejs}/lib/node_modules/npm/node_modules/node-gyp/bin/node-gyp.js";
+      npmArch = stdenv.targetPlatform.node.arch;
+      npmPlatform = stdenv.targetPlatform.node.platform;
 
       # Specify `diff`, `jq`, and `prefetch-npm-deps` by abspath to ensure that the user's build
       # inputs do not cause us to find the wrong binaries.
@@ -28,10 +31,12 @@
       nodeVersion = nodejs.version;
       nodeVersionMajor = lib.versions.major nodejs.version;
     };
+    meta.license = lib.licenses.mit;
   } ./npm-config-hook.sh;
 
   npmBuildHook = makeSetupHook {
     name = "npm-build-hook";
+    meta.license = lib.licenses.mit;
   } ./npm-build-hook.sh;
 
   npmInstallHook = makeSetupHook {
@@ -47,5 +52,6 @@
     substitutions = {
       jq = "${jq}/bin/jq";
     };
+    meta.license = lib.licenses.mit;
   } ./npm-install-hook.sh;
 }

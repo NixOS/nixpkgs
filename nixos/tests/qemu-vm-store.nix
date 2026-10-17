@@ -5,6 +5,10 @@
 
   meta.maintainers = with lib.maintainers; [ nikstur ];
 
+  defaults = {
+    nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
+  };
+
   nodes = {
     sharedWritable = {
       virtualisation.writableStore = true;
@@ -51,17 +55,16 @@
       sharedReadOnly.fail(build_derivation)
       imageReadOnly.fail(build_derivation)
 
-    # Checking whether the fs type is 9P is just a proxy to test whether the
-    # Nix Store is shared. If we switch to a different technology (e.g.
-    # virtiofs) for sharing, we need to adjust these tests.
+    # Checking whether the fs type is virtiofs is just a proxy to test whether the
+    # Nix Store is shared.
 
-    with subtest("Nix store is shared from the host via 9P"):
-      sharedWritable.succeed("findmnt --kernel --type 9P /nix/.ro-store")
-      sharedReadOnly.succeed("findmnt --kernel --type 9P /nix/.ro-store")
+    with subtest("Nix store is shared from the host via virtiofs"):
+      sharedWritable.succeed("findmnt --kernel --type virtiofs /nix/.ro-store")
+      sharedReadOnly.succeed("findmnt --kernel --type virtiofs /nix/.ro-store")
 
-    with subtest("Nix store is not shared via 9P"):
-      imageWritable.fail("findmnt --kernel --type 9P /nix/.ro-store")
-      imageReadOnly.fail("findmnt --kernel --type 9P /nix/.ro-store")
+    with subtest("Nix store is not shared via virtiofs"):
+      imageWritable.fail("findmnt --kernel --type virtiofs /nix/.ro-store")
+      imageReadOnly.fail("findmnt --kernel --type virtiofs /nix/.ro-store")
 
     with subtest("Nix store is not mounted separately"):
       rootDevice = fullDisk.succeed("stat -c %d /")

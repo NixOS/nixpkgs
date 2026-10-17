@@ -6,13 +6,13 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "liblscp";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchurl {
-    url = "https://download.linuxsampler.org/packages/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ZaPfB3Veg1YCBHieoK9fFqL0tB4PiNsY81oJmn2rd/I=";
+    url = "https://download.linuxsampler.org/packages/liblscp-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-21SjPA5emMRKEQIukhg7r3uXfnByEpNkGhCepNu09sc=";
   };
 
   postPatch = ''
@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.linuxsampler.org";
     description = "LinuxSampler Control Protocol (LSCP) wrapper library";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

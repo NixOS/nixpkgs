@@ -4,10 +4,9 @@
   fetchFromGitHub,
 
   # build-system
-  setuptools,
-  setuptools-scm,
+  uv-build,
 
-  # non-propagates
+  # dependencies
   django,
 
   # tests
@@ -17,22 +16,24 @@
 
 buildPythonPackage rec {
   pname = "django-bootstrap3";
-  version = "24.3";
-  format = "pyproject";
+  version = "26.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zostera";
     repo = "django-bootstrap3";
     tag = "v${version}";
-    hash = "sha256-7aHGTa98NaHg6C+fxuQsrPk/8XjHB3awp+gAWysOhAw=";
+    hash = "sha256-8w8Wf+Iroow58AZN0/07VhFLRViXQ6sfOwM9G9lSSUA=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.6,<0.13.0" uv_build
+  '';
 
-  buildInputs = [ django ];
+  build-system = [ uv-build ];
+
+  dependencies = [ django ];
 
   pythonImportsCheck = [ "bootstrap3" ];
 
@@ -43,11 +44,11 @@ buildPythonPackage rec {
 
   env.DJANGO_SETTINGS_MODULE = "tests.app.settings";
 
-  meta = with lib; {
+  meta = {
     description = "Bootstrap 3 integration for Django";
     homepage = "https://github.com/zostera/django-bootstrap3";
-    changelog = "https://github.com/zostera/django-bootstrap3/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ hexa ];
+    changelog = "https://github.com/zostera/django-bootstrap3/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

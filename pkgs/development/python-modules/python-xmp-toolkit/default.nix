@@ -22,7 +22,7 @@ buildPythonPackage {
     owner = "python-xmp-toolkit";
     repo = "python-xmp-toolkit";
     rev = "5692bdf8dac3581a0d5fb3c5aeb29be0ab6a54fc";
-    sha256 = "16bylcm183ilzp7mrpdzw0pzp6csv9v5v247914qsv2abg0hgl5y";
+    hash = "sha256-vtAHwVtKbI1JSIeIXXbampn7L+C/3VzP/TQOFCqjfpk=";
   };
 
   buildInputs = [ exempi ];
@@ -41,10 +41,10 @@ buildPythonPackage {
     rm test/{test_exempi,test_files}.py
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/python-xmp-toolkit/python-xmp-toolkit";
     description = "Python XMP Toolkit for working with metadata";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

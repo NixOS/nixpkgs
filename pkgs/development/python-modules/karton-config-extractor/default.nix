@@ -4,21 +4,18 @@
   fetchFromGitHub,
   karton-core,
   malduck,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "karton-config-extractor";
-  version = "2.2.0";
+  version = "2.3.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
-    repo = pname;
+    repo = "karton-config-extractor";
     tag = "v${version}";
-    hash = "sha256-X2g/wgWLIY2ZIwH1l83EApyoeYQU5/MWq5S0qmYz+CA=";
+    hash = "sha256-JtR4Vwm0Qd6SNf2h872+fPTB4cegpuh1QH0wYSVGRgY=";
   };
 
   propagatedBuildInputs = [
@@ -26,22 +23,19 @@ buildPythonPackage rec {
     malduck
   ];
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "malduck==4.1.0" "malduck"
-  '';
+  pythonRelaxDeps = [ "malduck" ];
 
   # Project has no tests
   doCheck = false;
 
   pythonImportsCheck = [ "karton.config_extractor" ];
 
-  meta = with lib; {
+  meta = {
     description = "Static configuration extractor for the Karton framework";
     mainProgram = "karton-config-extractor";
     homepage = "https://github.com/CERT-Polska/karton-config-extractor";
-    changelog = "https://github.com/CERT-Polska/karton-config-extractor/releases/tag/v${version}";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/CERT-Polska/karton-config-extractor/releases/tag/${src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

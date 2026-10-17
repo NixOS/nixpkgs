@@ -2,10 +2,10 @@
   lib,
   stdenv,
   fetchFromBitbucket,
-  xcbutil,
-  xcbutilkeysyms,
-  xcbutilwm,
-  xcb-util-cursor,
+  libxcb-util,
+  libxcb-keysyms,
+  libxcb-wm,
+  libxcb-cursor,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,10 +20,10 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
-    xcbutil
-    xcbutilkeysyms
-    xcbutilwm
-    xcb-util-cursor
+    libxcb-util
+    libxcb-keysyms
+    libxcb-wm
+    libxcb-cursor
   ];
 
   postPatch = ''

@@ -2,13 +2,12 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   pytestCheckHook,
   beancount-black,
   beancount-parser,
   beanhub-extract,
+  hatchling,
   jinja2,
-  poetry-core,
   pydantic,
   pytz,
   pyyaml,
@@ -16,19 +15,22 @@
 
 buildPythonPackage rec {
   pname = "beanhub-import";
-  version = "1.0.3";
+  version = "1.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "LaunchPlatform";
     repo = "beanhub-import";
     tag = version;
-    hash = "sha256-6Y1gYAi8A6H0a0vj2avWxGS7hvjrvLBUS+LsgvY4sZo=";
+    hash = "sha256-0Or83zod1RIx7Dm+3+EuyV8gP4Ip3ziOuS2if0ThzAQ=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
+
+  pythonRelaxDeps = [
+    # pytz>=2023.1,<2025, but we have 2025.1
+    "pytz"
+  ];
 
   dependencies = [
     beancount-black
@@ -47,8 +49,8 @@ buildPythonPackage rec {
   meta = {
     description = "Declarative idempotent rule-based Beancount transaction import engine in Python";
     homepage = "https://github.com/LaunchPlatform/beanhub-import/";
-    changelog = "https://github.com/LaunchPlatform/beanhub-import/releases/tag/${version}";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://github.com/LaunchPlatform/beanhub-import/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fangpen ];
   };
 }

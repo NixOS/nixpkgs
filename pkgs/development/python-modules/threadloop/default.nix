@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8b180aac31013de13c2ad5c834819771992d350267bddb854613ae77ef571944";
+    hash = "sha256-ixgKrDEBPeE8KtXINIGXcZktNQJnvduFRhOud+9XGUQ=";
   };
 
   propagatedBuildInputs = [ tornado ];
@@ -21,10 +21,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "threadloop" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to run tornado coroutines from synchronous Python";
     homepage = "https://github.com/GoodPete/threadloop";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -6,18 +6,18 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "intermodal";
-  version = "0.1.14";
+  version = "0.1.16";
 
   src = fetchFromGitHub {
     owner = "casey";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-N3TumAwHcHDuVyY4t6FPNOO28D7xX5jheCTodfn71/Q=";
+    repo = "intermodal";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Ny/BOgLe2fWC9LQp2g2DvYAArdEujl6Rf1bvrAkSt2A=";
   };
 
-  cargoHash = "sha256-k34psGOs6G+B/msmLSDHLNxnjO1yyE4OY6aQU8bt+is=";
+  cargoHash = "sha256-WfiN0b6F4TcOHOu/deh86jIClnNKi+xhytjapqLwpaU=";
 
   # include_hidden test tries to use `chflags` on darwin
   checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -33,15 +33,14 @@ rustPlatform.buildRustPackage rec {
       --zsh  <($out/bin/imdl completions zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "User-friendly and featureful command-line BitTorrent metainfo utility";
     homepage = "https://github.com/casey/intermodal";
-    changelog = "https://github.com/casey/intermodal/releases/tag/v${version}";
-    license = licenses.cc0;
-    maintainers = with maintainers; [
-      Br1ght0ne
+    changelog = "https://github.com/casey/intermodal/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.cc0;
+    maintainers = with lib.maintainers; [
       xrelkd
     ];
     mainProgram = "imdl";
   };
-}
+})

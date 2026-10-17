@@ -2,11 +2,10 @@
   lib,
   asn1crypto,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   hatchling,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   versioningit,
 }:
 
@@ -15,9 +14,7 @@ buildPythonPackage rec {
   version = "1.4.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchFromGitHub {
+  src = fetchFromCodeberg {
     owner = "tlocke";
     repo = "scramp";
     rev = version;
@@ -47,10 +44,10 @@ buildPythonPackage rec {
 
   disabledTests = [ "test_readme" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the SCRAM authentication protocol";
     homepage = "https://github.com/tlocke/scramp";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

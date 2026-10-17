@@ -2,21 +2,25 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  substituteAll,
+  fetchpatch,
+  replaceVars,
   nix-update-script,
+  callPackage,
   pkg-config,
   autoAddDriverRunpath,
   alsa-lib,
+  android-tools,
   brotli,
   bzip2,
   celt,
-  ffmpeg,
+  ffmpeg-alvr ? callPackage ./ffmpeg.nix { },
+  gmp,
   jack2,
   lame,
-  libX11,
-  libXi,
-  libXrandr,
-  libXcursor,
+  libx11,
+  libxi,
+  libxrandr,
+  libxcursor,
   libdrm,
   libglvnd,
   libogg,
@@ -26,6 +30,7 @@
   libva,
   libvdpau,
   libxkbcommon,
+  openapv,
   openssl,
   openvr,
   pipewire,
@@ -37,27 +42,29 @@
   x264,
   xvidcore,
 }:
-
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "alvr";
-  version = "20.12.1";
+
+  version = "20.14.1";
 
   src = fetchFromGitHub {
     owner = "alvr-org";
     repo = "ALVR";
-    tag = "v${version}";
-    fetchSubmodules = true; #TODO devendor openvr
-    hash = "sha256-T7KyGZwnJ9t4Bh8KFy190IV3igWCG+yn+OW9a6mgmYI=";
+    tag = "v${finalAttrs.version}";
+    fetchSubmodules = true; # TODO devendor openvr
+    hash = "sha256-9fckUhUPAbcmbqOdUO8RlwuK8/nf1fc7XQBrAu5YaR4=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-DE88nMC6qpbPJsBpdyITv6igMgwy4g40VCgFQQuRRTA=";
+  cargoHash = "sha256-OTCMWrlwnfpUhm6ssOE133e/3DaQFnOU+NunN2c1N+g=";
 
   patches = [
-    (substituteAll {
-      src = ./fix-finding-libs.patch;
-      ffmpeg = lib.getDev ffmpeg;
+    (replaceVars ./fix-finding-libs.patch {
+      ffmpeg = lib.getDev ffmpeg-alvr;
       x264 = lib.getDev x264;
+    })
+    (fetchpatch {
+      url = "https://github.com/alvr-org/ALVR/commit/12a238b9ac9d63438163ff82cbd689733558a1e4.patch";
+      hash = "sha256-yvIGjopXIwGXajs5/RlAo+eqfVNnXlomKy/VO/dL+gc=";
     })
   ];
 
@@ -69,14 +76,20 @@ rustPlatform.buildRustPackage rec {
       "-lpng"
       "-lssl"
     ];
+    RUSTFLAGS = toString (
+      map (a: "-C link-arg=${a}") [
+        "-Wl,--push-state,--no-as-needed"
+        "-lEGL"
+        "-lwayland-client"
+        "-lxkbcommon"
+        "-Wl,--pop-state"
+      ]
+    );
   };
 
-  RUSTFLAGS = map (a: "-C link-arg=${a}") [
-    "-Wl,--push-state,--no-as-needed"
-    "-lEGL"
-    "-lwayland-client"
-    "-lxkbcommon"
-    "-Wl,--pop-state"
+  cargoBuildFlags = [
+    "--exclude=alvr_xtask"
+    "--workspace"
   ];
 
   nativeBuildInputs = [
@@ -88,16 +101,18 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     alsa-lib
+    android-tools
     brotli
     bzip2
     celt
-    ffmpeg
+    ffmpeg-alvr
+    gmp
     jack2
     lame
-    libX11
-    libXcursor
-    libXi
-    libXrandr
+    libx11
+    libxcursor
+    libxi
+    libxrandr
     libdrm
     libglvnd
     libogg
@@ -107,6 +122,7 @@ rustPlatform.buildRustPackage rec {
     libva
     libvdpau
     libxkbcommon
+    openapv
     openssl
     openvr
     pipewire
@@ -124,8 +140,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postInstall = ''
-    install -Dm755 ${src}/alvr/xtask/resources/alvr.desktop $out/share/applications/alvr.desktop
-    install -Dm644 ${src}/resources/ALVR-Icon.svg $out/share/icons/hicolor/scalable/apps/alvr.svg
+    install -Dm755 ${finalAttrs.src}/alvr/xtask/resources/alvr.desktop $out/share/applications/alvr.desktop
+    install -Dm644 ${finalAttrs.src}/resources/ALVR-Icon.svg $out/share/icons/hicolor/scalable/apps/alvr.svg
 
     # Install SteamVR driver
     mkdir -p $out/{libexec,lib/alvr,share}
@@ -135,15 +151,22 @@ rustPlatform.buildRustPackage rec {
     ln -s $out/lib $out/lib64
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    inherit ffmpeg-alvr;
+    updateScript = nix-update-script { };
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Stream VR games from your PC to your headset via Wi-Fi";
     homepage = "https://github.com/alvr-org/ALVR/";
-    changelog = "https://github.com/alvr-org/ALVR/releases/tag/v${version}";
-    license = licenses.mit;
+    changelog = "https://github.com/alvr-org/ALVR/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
     mainProgram = "alvr_dashboard";
-    maintainers = with maintainers; [ passivelemon ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [
+      luNeder
+      jopejoe1
+      eyjhb
+    ];
+    platforms = lib.platforms.linux;
   };
-}
+})

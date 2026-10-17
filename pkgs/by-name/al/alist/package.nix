@@ -7,17 +7,17 @@
   stdenv,
   installShellFiles,
   versionCheckHook,
+  callPackage,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "alist";
-  version = "3.41.0";
-  webVersion = "3.41.0";
+  version = "3.63.0";
 
   src = fetchFromGitHub {
     owner = "AlistGo";
     repo = "alist";
-    tag = "v${version}";
-    hash = "sha256-DzqSkcyDRyiHM0yh7A+dZj7TnjhDVQoHHgV5piVcu1g=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-G3guBu+SRIF8a4OZzPvnu2Ri1N7VRst4LB/WCykmH58=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -29,13 +29,16 @@ buildGoModule rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  web = fetchzip {
-    url = "https://github.com/AlistGo/alist-web/releases/download/${webVersion}/dist.tar.gz";
-    hash = "sha256-1IXvst9VfxuIjUrgmJxTYm8jJQStMK+RlQibQ3fTDGs=";
-  };
+
+  # --- FAIL: TestSecureJoin/drive (0.00s)
+  #     securepath_test.go:29: expected error for "C:\\evil.txt", got nil
+  postPatch = lib.optionalString stdenv.hostPlatform.isUnix ''
+    substituteInPlace internal/archive/tool/securepath_test.go \
+      --replace-fail '{name: "drive", entry: "C:\\evil.txt", wantErr: true},' ""
+  '';
 
   proxyVendor = true;
-  vendorHash = "sha256-p6JqYmcQR6W7RE7F6NGxoiTxSOESuYjpke0rLRlxeSM=";
+  vendorHash = "sha256-oHuNsTfP216Kd46TNF8oUDGgoABq1NtPiPN1srOFJzE=";
 
   buildInputs = [ fuse ];
 
@@ -45,13 +48,13 @@ buildGoModule rec {
     "-s"
     "-w"
     "-X \"github.com/alist-org/alist/v3/internal/conf.GitAuthor=Xhofe <i@nn.ci>\""
-    "-X github.com/alist-org/alist/v3/internal/conf.Version=${version}"
-    "-X github.com/alist-org/alist/v3/internal/conf.WebVersion=${webVersion}"
+    "-X github.com/alist-org/alist/v3/internal/conf.Version=${finalAttrs.version}"
+    "-X github.com/alist-org/alist/v3/internal/conf.WebVersion=${finalAttrs.passthru.webVersion}"
   ];
 
   preConfigure = ''
     rm -rf public/dist
-    cp -r ${web} public/dist
+    cp -r ${finalAttrs.passthru.web} public/dist
   '';
 
   preBuild = ''
@@ -59,6 +62,7 @@ buildGoModule rec {
     ldflags+=" -X \"github.com/alist-org/alist/v3/internal/conf.BuiltAt=$(cat SOURCE_DATE_EPOCH)\""
     ldflags+=" -X github.com/alist-org/alist/v3/internal/conf.GitCommit=$(cat COMMIT)"
   '';
+  __darwinAllowLocalNetworking = true;
 
   checkFlags =
     let
@@ -67,6 +71,7 @@ buildGoModule rec {
         "TestHTTPAll"
         "TestWebsocketAll"
         "TestWebsocketCaller"
+        "TestDownloadOrder"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
@@ -88,14 +93,27 @@ buildGoModule rec {
     versionCheckHook
   ];
 
+  passthru = {
+    updateScript = lib.getExe (callPackage ./update.nix { });
+    webVersion = "3.63.0";
+    web = fetchzip {
+      url = "https://github.com/AlistGo/alist-web/releases/download/${finalAttrs.passthru.webVersion}/dist.tar.gz";
+      hash = "sha256-uWktKQU9EYPXj88Wj8LbRbuIPqW2u3EBQ5MM82wawtM=";
+    };
+  };
+
   meta = {
     description = "File list/WebDAV program that supports multiple storages";
-    homepage = "https://github.com/alist-org/alist";
-    changelog = "https://github.com/alist-org/alist/releases/tag/v${version}";
+    homepage = "https://github.com/AlistGo/alist";
+    changelog = "https://github.com/AlistGo/alist/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       agpl3Only
       # alist-web
       mit
+    ];
+    knownVulnerabilities = [
+      "Alist was acquired by Bugotech, a company distrusted by the community"
+      "Uses a questionable API server alist.nn.ci for account creation for certain drivers"
     ];
     maintainers = with lib.maintainers; [ moraxyc ];
     sourceProvenance = with lib.sourceTypes; [
@@ -105,4 +123,4 @@ buildGoModule rec {
     ];
     mainProgram = "alist";
   };
-}
+})

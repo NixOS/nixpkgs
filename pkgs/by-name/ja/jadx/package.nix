@@ -5,8 +5,9 @@
   gradle_8,
   jdk,
   quark-engine,
+  coreutils,
   makeBinaryWrapper,
-  imagemagick,
+  librsvg,
   makeDesktopItem,
   copyDesktopItems,
   desktopToDarwinBundle,
@@ -17,27 +18,28 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "jadx";
-  version = "1.5.0";
+  version = "1.5.6";
 
   src = fetchFromGitHub {
     owner = "skylot";
     repo = "jadx";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-+F+PHAd1+FmdAlQkjYDBsUYCUzKXG19ZUEorfvBUEg0=";
+    hash = "sha256-qwGFMj18xJOrBudthAIeKc/PT0uUzjmTgBYovF4A/94=";
   };
 
   patches = [
-    # Remove use of launch4j - contains platform binaries not able to be cached by mitmCache
-    ./no-native-deps.diff
+    # Remove launch4j (uncacheable Windows binaries) and OpenRewrite (build failures)
+    ./nix-build.patch
   ];
 
   nativeBuildInputs = [
     gradle
     jdk
-    imagemagick
+    librsvg
     makeBinaryWrapper
     copyDesktopItems
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   # Otherwise, Gradle fails with `java.net.SocketException: Operation not permitted`
   __darwinAllowLocalNetworking = true;
@@ -60,7 +62,12 @@ stdenv.mkDerivation (finalAttrs: {
       cp build/jadx/bin/$prog $out/bin
       wrapProgram $out/bin/$prog \
         --set JAVA_HOME ${jdk.home} \
-        --prefix PATH : "${lib.makeBinPath [ quark-engine ]}"
+        --prefix PATH : "${
+          lib.makeBinPath [
+            quark-engine
+            coreutils
+          ]
+        }"
     done
 
     for size in 16 32 48; do
@@ -70,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     done
     for size in 64 128 256; do
       mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
-      convert -resize "$size"x"$size" jadx-gui/src/main/resources/logos/jadx-logo.png $out/share/icons/hicolor/"$size"x"$size"/apps/jadx.png
+      rsvg-convert --width "$size" jadx-gui/src/main/resources/logos/jadx-logo.svg > $out/share/icons/hicolor/"$size"x"$size"/apps/jadx.png
     done
 
     runHook postInstall
@@ -90,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/skylot/jadx/releases/tag/v${finalAttrs.version}";
     description = "Dex to Java decompiler";
     homepage = "https://github.com/skylot/jadx";
@@ -98,13 +105,16 @@ stdenv.mkDerivation (finalAttrs: {
       Command line and GUI tools for produce Java source code from Android Dex
       and Apk files.
     '';
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # deps
     ];
-    license = licenses.asl20;
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
     mainProgram = "jadx-gui";
-    maintainers = with maintainers; [ emilytrau ];
+    maintainers = with lib.maintainers; [
+      emilytrau
+      Misaka13514
+    ];
   };
 })

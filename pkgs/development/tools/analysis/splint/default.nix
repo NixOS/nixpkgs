@@ -18,9 +18,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ flex ];
 
+  buildFlags = [
+    "CFLAGS=-std=gnu99"
+  ];
+
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.splint.org/";
     description = "Annotation-assisted lightweight static analyzer for C";
     mainProgram = "splint";
@@ -33,7 +37,7 @@ stdenv.mkDerivation rec {
       checking than can be done by any standard lint.
     '';
 
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
 }

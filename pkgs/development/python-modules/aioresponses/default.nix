@@ -2,8 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  fetchpatch2,
-  pythonOlder,
 
   # build-system
   pbr,
@@ -14,34 +12,40 @@
 
   # tests
   ddt,
+  pytest-asyncio,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aioresponses";
-  version = "0.7.7";
+  version = "0.7.9";
   pyproject = true;
 
-  disabled = pythonOlder "3.5";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ZikvHVyUo8uYTzM22AZEYEKtsXNH0wifLTli3W5bpVo=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-Hc+iiTj8AG8Eapg4OnwHrBgL56SSwe1Vf1zXsIBTV9M=";
   };
 
-  nativeBuildInputs = [
+  patches = [
+    # https://github.com/pnuckowski/aioresponses/issues/289
+    # https://github.com/pnuckowski/aioresponses/pull/292
+    ./aiohttp-3.14-compat.patch
+  ];
+
+  build-system = [
     pbr
     setuptools
   ];
 
-  propagatedBuildInputs = [ aiohttp ];
-
-  pythonImportsCheck = [ "aioresponses" ];
+  dependencies = [ aiohttp ];
 
   nativeCheckInputs = [
     ddt
+    pytest-asyncio
     pytestCheckHook
   ];
+
+  pythonImportsCheck = [ "aioresponses" ];
 
   disabledTests = [
     # Skip tests which make requests to httpbin.org
@@ -53,6 +57,8 @@ buildPythonPackage rec {
   meta = {
     description = "Helper to mock/fake web requests in python aiohttp package";
     homepage = "https://github.com/pnuckowski/aioresponses";
+    changelog = "https://github.com/pnuckowski/aioresponses/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
+    maintainers = [ ];
   };
-}
+})

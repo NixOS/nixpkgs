@@ -2,29 +2,29 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  libX11,
-  libXinerama,
+  libx11,
+  libxinerama,
 }:
 
 let
   rpathLibs = [
-    libXinerama
-    libX11
+    libxinerama
+    libx11
   ];
 in
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "leftwm";
-  version = "0.5.3";
+  version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "leftwm";
     repo = "leftwm";
-    tag = version;
-    hash = "sha256-3voGKM6MKisc+ZVdZ5sCrs3XVfeRayozIk4SXNjw820=";
+    tag = finalAttrs.version;
+    hash = "sha256-Ox4eOE+RmyKfReSjeMGSYZCEC67/HIE+uY830gm4G94=";
   };
 
-  cargoHash = "sha256-w8qgNXxd6tZ1eMpQQqDoax76zYxTVHgVAlchQaRnMCc=";
+  cargoHash = "sha256-Y/ts0WOhxPDv8B3/kk6+PwS6Tjpf0gjjnjzLDrp3Vk0=";
 
   buildInputs = rpathLibs;
 
@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
       vuimuich
       yanganto
     ];
-    changelog = "https://github.com/leftwm/leftwm/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/leftwm/leftwm/blob/${finalAttrs.version}/CHANGELOG.md";
     mainProgram = "leftwm";
   };
-}
+})

@@ -5,19 +5,24 @@
   file,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmodplug";
   version = "0.8.9.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/modplug-xmms/libmodplug/${version}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/project/modplug-xmms/libmodplug/${finalAttrs.version}/libmodplug-${finalAttrs.version}.tar.gz";
     sha256 = "1pnri98a603xk47smnxr551svbmgbzcw018mq1k6srbrq6kaaz25";
   };
 
-  # Unfortunately, upstream appears inactive and the patches from the fork don’t apply cleanly.
-  # Modify `src/fastmix.cpp` to remove usage of the register storage class, which is
-  # not allowed in C++17 and is an error in clang 16.
-  prePatch = "substituteInPlace src/fastmix.cpp --replace 'register ' ''";
+  postPatch = ''
+    # Unfortunately, upstream appears inactive and the patches from the fork don’t apply cleanly.
+    # Modify `src/fastmix.cpp` to remove usage of the register storage class, which is
+    # not allowed in C++17 and is an error in clang 16.
+    substituteInPlace src/fastmix.cpp --replace-fail 'register ' ""
+
+    substituteInPlace libmodplug.pc.in \
+      --replace-fail 'includedir=''${prefix}/include' 'includedir=@includedir@'
+  '';
 
   outputs = [
     "out"
@@ -30,11 +35,11 @@ stdenv.mkDerivation rec {
        --replace /usr/bin/file ${file}/bin/file
   '';
 
-  meta = with lib; {
+  meta = {
     description = "MOD playing library";
     homepage = "https://modplug-xmms.sourceforge.net/";
-    license = licenses.publicDomain;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ raskin ];
+    license = lib.licenses.publicDomain;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ raskin ];
   };
-}
+})

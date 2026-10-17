@@ -13,7 +13,7 @@ buildKodiAddon rec {
 
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/${lib.toLower rel}/${namespace}/${namespace}-${version}.zip";
-    sha256 = "sha256-5QcMNmWOEw2C26OXlvAvxqDxTpjIMBhwmaIFwVgHuIU=";
+    hash = "sha256-5QcMNmWOEw2C26OXlvAvxqDxTpjIMBhwmaIFwVgHuIU=";
   };
 
   passthru = {
@@ -23,10 +23,10 @@ buildKodiAddon rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/anxdpanic/script.common.plugin.cache";
     description = "Common plugin cache";
-    license = licenses.gpl3Only;
-    maintainers = teams.kodi.members;
+    license = lib.licenses.gpl3Only;
+    teams = [ lib.teams.kodi ];
   };
 }

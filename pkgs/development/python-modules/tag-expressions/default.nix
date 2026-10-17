@@ -3,29 +3,35 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "tag-expressions";
-  version = "2.0.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "2.0.1";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-/6Ym72jlgVdpel4V2W2aCKNtISDT9y5qz7+gTllUuPg=";
+    pname = "tag_expressions";
+    inherit version;
+    hash = "sha256-EbSwfAH+sL3JGW+COfDA2f7cLGyKmQMsbyyDGy13Lkg=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail 'version=read_version()' 'version="${version}"'
+  '';
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "tagexpressions" ];
 
-  meta = with lib; {
+  meta = {
     description = "Package to parse logical tag expressions";
     homepage = "https://github.com/timofurrer/tag-expressions";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ kalbasit ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ kalbasit ];
   };
 }

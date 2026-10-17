@@ -11,11 +11,12 @@
   glib,
   liburing,
   gnome,
+  python3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libdex";
-  version = "0.8.1";
+  version = "1.1.0";
 
   outputs = [
     "out"
@@ -25,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/libdex/${lib.versions.majorMinor finalAttrs.version}/libdex-${finalAttrs.version}.tar.xz";
-    hash = "sha256-lVR1rT5Dqr1vb3BDUmS17ne9JlvZVUUhH+4CawjTeKA=";
+    hash = "sha256-qeBMir7gHJp88RSMW3qma6N37+avbYOAHU/RqlUhmqo=";
   };
 
   nativeBuildInputs = [
@@ -35,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     vala
+    python3
   ];
 
   buildInputs = [
@@ -48,6 +50,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  # test-dbus tries to access /etc/machine-id
+  postPatch = ''
+    substituteInPlace "testsuite/meson.build" --replace-fail \
+      "'test-dbus': {'extra-sources': dbus_foo, 'disable': not have_gdbus_codegen}," \
+      "'test-dbus': {'extra-sources': dbus_foo, 'disable': true},"
+  '';
+
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     moveToOutput "share/doc" "$devdoc"
@@ -58,11 +67,11 @@ stdenv.mkDerivation (finalAttrs: {
     versionPolicy = "odd-unstable";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library supporting deferred execution for GNOME and GTK";
     homepage = "https://gitlab.gnome.org/GNOME/libdex";
-    maintainers = teams.gnome.members;
-    platforms = platforms.linux ++ platforms.darwin;
-    license = licenses.lgpl21Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = lib.licenses.lgpl21Plus;
   };
 })

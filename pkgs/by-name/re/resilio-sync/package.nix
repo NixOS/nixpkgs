@@ -3,28 +3,24 @@
   stdenv,
   fetchurl,
   autoPatchelfHook,
+  installShellFiles,
   libxcrypt-legacy,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "resilio-sync";
-  version = "2.8.1.1390";
+  version = "3.1.1.1075";
 
   src =
     {
       x86_64-linux = fetchurl {
-        url = "https://download-cdn.resilio.com/${version}/linux/x64/0/resilio-sync_x64.tar.gz";
-        sha256 = "sha256-XrfE2frDxOS32MzO7gpJEsMd0WY+b7TS0h/H94M7Py4=";
-      };
-
-      i686-linux = fetchurl {
-        url = "https://download-cdn.resilio.com/${version}/linux/i386/0/resilio-sync_i386.tar.gz";
-        sha256 = "sha256-tWwb9DHLlXeyimzyo/yxVKqlkP3jlAxT2Yzs6h2bIgs=";
+        url = "https://download-cdn.resilio.com/${finalAttrs.version}/linux/x64/0/resilio-sync_x64.tar.gz";
+        hash = "sha256-FgRMK5dOxkbaXyi0BPYQZK0tR/ZZuuUGAciwThqICBk=";
       };
 
       aarch64-linux = fetchurl {
-        url = "https://download-cdn.resilio.com/${version}/linux/arm64/0/resilio-sync_arm64.tar.gz";
-        sha256 = "sha256-b859DqxTfnBMMeiwXlGKTQ+Mpmr2Rpg24l/GNkxSWbA=";
+        url = "https://download-cdn.resilio.com/${finalAttrs.version}/linux/arm64/0/resilio-sync_arm64.tar.gz";
+        hash = "sha256-P3gUwj3Vr9qn9S6iqlgGfZpK7x5u4U96b886JCE3CYY=";
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -34,6 +30,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoPatchelfHook
+    installShellFiles
   ];
 
   buildInputs = [
@@ -42,20 +39,23 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
-    install -D rslsync "$out/bin/rslsync"
+    runHook preInstall
+
+    installBin rslsync
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Automatically sync files via secure, distributed technology";
     homepage = "https://www.resilio.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfreeRedistributable;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
-      domenkozar
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfreeRedistributable;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       thoughtpolice
       cwoac
     ];
     mainProgram = "rslsync";
   };
-}
+})

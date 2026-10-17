@@ -12,35 +12,41 @@
   farama-notifications,
   numpy,
   typing-extensions,
-  pythonOlder,
-  importlib-metadata,
 
-  # tests
-  dill,
+  # optional-dependencies
+  ale-py,
+  array-api-compat,
   flax,
+  imageio,
   jax,
   jaxlib,
   matplotlib,
-  mujoco,
   moviepy,
+  mujoco,
   opencv4,
+  packaging,
   pybox2d,
-  pygame,
+  pygame-ce,
+  seaborn,
+  torch,
+
+  # tests
+  dill,
   pytestCheckHook,
   scipy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gymnasium";
-  version = "1.0.0";
-
+  version = "1.4.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Farama-Foundation";
     repo = "gymnasium";
-    tag = "v${version}";
-    hash = "sha256-Qchuz08yJ0giVrtKLC9vBgr28JrHQyAOCuoS239ivVw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RrAGkHogVizEnkbKG2rVXRIBJEOPd9U2n/XG2qZ5HR4=";
   };
 
   build-system = [ setuptools ];
@@ -50,24 +56,52 @@ buildPythonPackage rec {
     farama-notifications
     numpy
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ];
+
+  optional-dependencies = {
+    atari = [ ale-py ];
+    box2d = [
+      pybox2d
+      pygame-ce
+    ];
+    classic-control = [ pygame-ce ];
+    mujoco = [
+      imageio
+      mujoco
+      packaging
+    ];
+    toy-text = [ pygame-ce ];
+    jax = [
+      array-api-compat
+      flax
+      jax
+      jaxlib
+    ];
+    torch = [
+      array-api-compat
+      torch
+    ];
+    array-api = [
+      array-api-compat
+      packaging
+    ];
+    other = [
+      matplotlib
+      moviepy
+      opencv4
+      seaborn
+    ];
+  };
 
   pythonImportsCheck = [ "gymnasium" ];
 
   nativeCheckInputs = [
     dill
-    flax
-    jax
-    jaxlib
-    matplotlib
-    moviepy
-    mujoco
-    opencv4
-    pybox2d
-    pygame
     pytestCheckHook
     scipy
-  ];
+  ]
+  # ale-py depends on gymnasium (infinite recursion)
+  ++ lib.concatAttrValues (removeAttrs finalAttrs.passthru.optional-dependencies [ "atari" ]);
 
   # if `doCheck = true` on Darwin, `jaxlib` is evaluated, which is both
   # marked as broken and throws an error during evaluation if the package is evaluated anyway.
@@ -89,6 +123,10 @@ buildPythonPackage rec {
     "tests/wrappers/test_record_video.py"
   ];
 
+  preCheck = ''
+    export SDL_VIDEODRIVER=dummy
+  '';
+
   disabledTests = [
     # Succeeds for most environments but `test_render_modes[Reacher-v4]` fails because it requires
     # OpenGL access which is not possible inside the sandbox.
@@ -98,8 +136,8 @@ buildPythonPackage rec {
   meta = {
     description = "Standard API for reinforcement learning and a diverse set of reference environments (formerly Gym)";
     homepage = "https://github.com/Farama-Foundation/Gymnasium";
-    changelog = "https://github.com/Farama-Foundation/Gymnasium/releases/tag/v${version}";
+    changelog = "https://github.com/Farama-Foundation/Gymnasium/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

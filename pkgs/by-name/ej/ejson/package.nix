@@ -4,29 +4,28 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ejson";
-  version = "1.5.3";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "Shopify";
     repo = "ejson";
-    rev = "v${version}";
-    sha256 = "sha256-WazcVmZq9uQPXbslWFW0r0SFF4xNKECgxcBoD+RS17k=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-Tkr/o2hjbUiaoTBPesQ+ZIPeJteS/rsqGJBo2dvfqEc=";
   };
 
-  vendorHash = "sha256-N2vcj3STkaZO2eRr8VztZTWOBUTI+wOri0HYDJ1KiN8=";
+  vendorHash = "sha256-vT9A4d+e+iOie5TNbu5EyPi5OZJ/m8Not3tCQc7Xwn8=";
 
   ldflags = [
     "-s"
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Small library to manage encrypted secrets using asymmetric encryption";
     mainProgram = "ejson";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/Shopify/ejson";
-    maintainers = [ maintainers.manveru ];
   };
-}
+})

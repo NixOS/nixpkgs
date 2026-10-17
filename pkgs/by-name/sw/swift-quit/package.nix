@@ -26,8 +26,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Automatic quitting of macOS apps when closing their windows.";
-    homepage = "https://swiftquit.com/";
+    description = "Automatic quitting of macOS apps when closing their windows";
+    homepage = "https://github.com/onebadidea/swiftquit";
     license = lib.licenses.gpl3;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ Enzime ];

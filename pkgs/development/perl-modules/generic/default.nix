@@ -12,7 +12,6 @@
     "out"
     "devdoc"
   ],
-  src ? null,
 
   # enabling or disabling does nothing for perl packages so set it explicitly
   # to false to not change hashes when enableParallelBuildingByDefault is enabled
@@ -34,6 +33,8 @@
   PERL_USE_UNSAFE_INC ? "1",
 
   env ? { },
+
+  postPatch ? "patchShebangs .",
 
   ...
 }@attrs:
@@ -62,15 +63,16 @@ lib.throwIf (attrs ? name)
 
           inherit
             outputs
-            src
             doCheck
             checkTarget
             enableParallelBuilding
+            postPatch
             ;
           env = {
             inherit PERL_AUTOINSTALL AUTOMATED_TESTING PERL_USE_UNSAFE_INC;
             fullperl = perl.__spliced.buildHost or perl;
-          } // env;
+          }
+          // env;
 
           meta = defaultMeta // (attrs.meta or { });
         }

@@ -1,0 +1,13 @@
+diff --git a/pyrefly/lib/test/lsp/lsp_interaction/configuration.rs b/pyrefly/lib/test/lsp/lsp_interaction/configuration.rs
+index edc2db09f..ce33a2774 100644
+--- a/pyrefly/lib/test/lsp/lsp_interaction/configuration.rs
++++ b/pyrefly/lib/test/lsp/lsp_interaction/configuration.rs
+@@ -56,7 +56,7 @@ fn setup_dummy_interpreter(custom_interpreter_path: &Path) -> PathBuf {
+     // Create a mock Python interpreter script that returns the environment info
+     // This simulates what a real Python interpreter would return when queried with the env script
+     let python_script = format!(
+-        r#"#!/usr/bin/env bash
++        r#"#!@bash@
+ if [[ "$1" == "-c" && "$2" == *"import json, sys"* ]]; then
+     cat << 'EOF'
+ {{"python_platform": "linux", "python_version": "3.12.0", "site_package_path": ["{site_packages}"]}}

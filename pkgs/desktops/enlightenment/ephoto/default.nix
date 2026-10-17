@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   version = "1.6.0";
 
   src = fetchurl {
-    url = "http://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1lvhcs4ba8h3z78nyycbww8mj4cscb8k200dcc3cdy8vrvrp7g1n";
+    url = "https://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
+    hash = "sha256-Nrxz884b+cYGYw0AMdFimhFZEeeLeW/R+QMitYhmcNM=";
   };
 
   nativeBuildInputs = [
@@ -30,12 +30,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = directoryListingUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Image viewer and editor written using the Enlightenment Foundation Libraries";
     mainProgram = "ephoto";
-    homepage = "https://www.smhouston.us/ephoto/";
-    license = licenses.bsd2;
-    platforms = platforms.linux;
-    maintainers = teams.enlightenment.members;
+    homepage = "https://www.enlightenment.org/about-ephoto";
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.enlightenment ];
   };
 }

@@ -7,16 +7,16 @@
   pkg-config,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "citron";
   version = "0.15.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-6wJ4UfiwpV9zFuBR8SYj6eBiRqQitFs7wRe5R51Z3SA=";
   };
 
-  cargoHash = "sha256-xTmhgE4iHydhZBMrHWqQUcS9KDlZAzW2CmPGpJr40Fw=";
+  cargoHash = "sha256-HEDkNzNCXKmBsI5fL8+UK4SHrU9eLde6Vfh4XhSrK+A=";
 
   buildInputs = [ dbus ];
 
@@ -37,4 +37,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "citron";
   };
-}
+})

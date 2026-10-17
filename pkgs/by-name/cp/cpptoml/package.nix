@@ -6,7 +6,7 @@
   libcxxCmakeModule ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cpptoml";
   version = "0.4.0";
 
@@ -34,11 +34,24 @@ stdenv.mkDerivation rec {
     "-DCPPTOML_BUILD_EXAMPLES=OFF"
   ];
 
-  meta = with lib; {
+  # Fix the build with CMake 4.
+  #
+  # See:
+  #
+  # * <https://github.com/skystrife/cpptoml/pull/132>
+  # * <https://github.com/facebook/watchman/issues/1286>
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'cmake_minimum_required(VERSION 3.1.0)' \
+        'cmake_minimum_required(VERSION 3.10)'
+  '';
+
+  meta = {
     description = "C++ TOML configuration library";
     homepage = "https://github.com/skystrife/cpptoml";
-    license = licenses.mit;
-    maintainers = with maintainers; [ photex ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ photex ];
+    platforms = lib.platforms.all;
   };
 }

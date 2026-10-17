@@ -25,15 +25,15 @@
   wrapGAppsHook4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tangram";
-  version = "3.1";
+  version = "3.5";
 
   src = fetchFromGitHub {
     owner = "sonnyp";
     repo = "Tangram";
-    rev = "v${version}";
-    hash = "sha256-vN9zRc8Ac9SI0lIcuf01A2WLqLGtV3DUiNzCSmc2ri4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aK/oavYQJJYQaQ+PjxSDjSSvEaYz3G8aGXLdumOEXgk=";
     fetchSubmodules = true;
   };
 
@@ -51,24 +51,23 @@ stdenv.mkDerivation rec {
     wrapGAppsHook4
   ];
 
-  buildInputs =
-    [
-      gdk-pixbuf
-      gjs
-      glib
-      glib-networking
-      gsettings-desktop-schemas
-      gtk4
-      libadwaita
-      webkitgtk_6_0
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-libav
-      gst-plugins-base
-      (gst-plugins-good.override { gtkSupport = true; })
-      gst-plugins-bad
-    ]);
+  buildInputs = [
+    gdk-pixbuf
+    gjs
+    glib
+    glib-networking
+    gsettings-desktop-schemas
+    gtk4
+    libadwaita
+    webkitgtk_6_0
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-libav
+    gst-plugins-base
+    (gst-plugins-good.override { gtkSupport = true; })
+    gst-plugins-bad
+  ]);
 
   dontPatchShebangs = true;
 
@@ -88,18 +87,16 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Run web apps on your desktop";
     mainProgram = "re.sonny.Tangram";
     homepage = "https://github.com/sonnyp/Tangram";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers =
-      with maintainers;
-      [
-        austinbutler
-        chuangzhu
-      ]
-      ++ lib.teams.gnome-circle.members;
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      austinbutler
+      chuangzhu
+    ];
+    teams = [ lib.teams.gnome-circle ];
   };
-}
+})

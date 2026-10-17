@@ -1,22 +1,47 @@
-{ lib, rustPlatform, fetchFromGitHub, pkg-config
-, cairo, gdk-pixbuf, glib, libinput, libxml2, pango, udev
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  cairo,
+  gdk-pixbuf,
+  glib,
+  libinput,
+  librsvg,
+  libxml2,
+  pango,
+  udev,
+  udevCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tiny-dfr";
-  version = "0.3.2";
+  version = "0.3.7";
 
   src = fetchFromGitHub {
-    owner = "WhatAmISupposedToPutHere";
+    owner = "AsahiLinux";
     repo = "tiny-dfr";
-    rev = "v${version}";
-    hash = "sha256-5u5jyoDEt7aMs8/8QrhrUrUzFJJCNayqbN2WrMhUCV4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-NwZ/uhVyI3NeI5CUsM42HUu6SpG0Lh8Mj66RY+ZuqBM=";
   };
 
-  cargoHash = "sha256-repPyeIVM2ufG5NhJHGbZUaxOItiTZTxiCZ21Fpt0wM=";
+  cargoHash = "sha256-k9mXEKn+LqFJraLm2ahGGAbVUNeNPnEwt1wGEOXeSrc=";
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ cairo gdk-pixbuf glib libinput libxml2 pango udev ];
+  nativeBuildInputs = [
+    pkg-config
+    udevCheckHook
+  ];
+  buildInputs = [
+    cairo
+    gdk-pixbuf
+    glib
+    libinput
+    librsvg
+    libxml2
+    pango
+    udev
+  ];
 
   postConfigure = ''
     substituteInPlace etc/systemd/system/tiny-dfr.service \
@@ -29,12 +54,21 @@ rustPlatform.buildRustPackage rec {
     cp -R share $out
   '';
 
-  meta = with lib; {
-    homepage = "https://github.com/WhatAmISupposedToPutHere/tiny-dfr";
-    description = "Most basic dynamic function row daemon possible";
-    license = [ licenses.asl20 licenses.mit ];
-    mainProgram = "tiny-dfr";
-    maintainers = [ maintainers.qyliss ];
-    platforms = platforms.linux;
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
   };
-}
+
+  meta = {
+    homepage = "https://github.com/AsahiLinux/tiny-dfr";
+    description = "Most basic dynamic function row daemon possible";
+    license = [
+      lib.licenses.asl20
+      lib.licenses.mit
+    ];
+    mainProgram = "tiny-dfr";
+    maintainers = [ lib.maintainers.qyliss ];
+    platforms = lib.platforms.linux;
+  };
+})

@@ -10,19 +10,18 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ivyterm";
-  version = "1.0.4";
+  version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "Tomiyou";
     repo = "ivyterm";
-    tag = "v${version}";
-    hash = "sha256-zp0crxn8dF/6Bxru08qmfjs12VOqKaxDxU3xlD6Gosk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Xr4oXg+kZPDImY7BlKUHwgi5AtCArH1vf3+s117luTQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Vm6EP/t6y6Ijb6RnHebdf1qMIAwoMjh0RJ77xyYV1ZM=";
+  cargoHash = "sha256-aBo+IAM+tAzUazw9XE80EACWyQtDIQjm33Q20p49L5s=";
 
   nativeBuildInputs = [
     pkg-config
@@ -47,9 +46,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Terminal emulator implemented in gtk4-rs and VTE4";
     homepage = "https://github.com/Tomiyou/ivyterm";
-    changelog = "https://github.com/Tomiyou/ivyterm/releases/tag/${src.tag}";
+    changelog = "https://github.com/Tomiyou/ivyterm/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ genga898 ];
     mainProgram = "ivyterm";
   };
-}
+})

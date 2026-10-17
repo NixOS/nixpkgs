@@ -113,10 +113,13 @@ in
                 path
                 str
               ]);
+
+              includeType = addCheck attrs (x: (x._type or null) == "include");
             in
             (oneOf [
               atomType
-              (listOf atomType)
+              (addCheck (listOf atomType) (lib.all atomType.check))
+              (addCheck (listOf includeType) (lib.all includeType.check))
               (attrsOf type')
             ])
             // {
@@ -137,20 +140,19 @@ in
               hocon-validator,
               writeText,
             }:
-            stdenvNoCC.mkDerivation rec {
+            stdenvNoCC.mkDerivation (finalAttrs: {
               inherit name;
 
               dontUnpack = true;
               preferLocalBuild = true;
 
               json = builtins.toJSON value;
-              passAsFile = [ "json" ];
 
               strictDeps = true;
               nativeBuildInputs = [ hocon-generator ];
               buildPhase = ''
                 runHook preBuild
-                hocon-generator < $jsonPath > output.conf
+                printf "%s" "$json" | hocon-generator > output.conf
                 runHook postBuild
               '';
 
@@ -168,8 +170,10 @@ in
                 runHook postInstall
               '';
 
-              passthru.json = writeText "${name}.json" json;
-            }
+              __structuredAttrs = true;
+
+              passthru.json = writeText "${finalAttrs.name}.json" finalAttrs.json;
+            })
           )
           {
             hocon-generator = generator;

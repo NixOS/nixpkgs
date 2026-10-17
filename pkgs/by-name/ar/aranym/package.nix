@@ -4,6 +4,7 @@
   autoreconfHook,
   fetchFromGitHub,
   libGLU,
+  libx11,
   pkg-config,
   stdenv,
 }:
@@ -26,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libGLU
+    libx11
     SDL2
   ];
 
@@ -50,9 +52,11 @@ stdenv.mkDerivation (finalAttrs: {
       and direct access to various host resources including sound, disk drives,
       optical storage devices (CD/DVD-ROMs), parallel port and more.
     '';
-    license = with lib.licenses; [ gpl2Plus ];
+    license = lib.licenses.gpl2Plus;
     mainProgram = "aranym";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
+    # never successfully built on Hydra for darwin or aarch64 linux
+    broken = stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAarch64;
   };
 })

@@ -10,20 +10,24 @@
   nix-update-script,
   testers,
   menulibre,
+  writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "menulibre";
   version = "2.4.0";
+  pyproject = true;
+
+  build-system = with python3Packages; [ setuptools ];
 
   src = fetchFromGitHub {
     owner = "bluesabre";
     repo = "menulibre";
-    rev = "menulibre-${version}";
+    tag = "menulibre-${finalAttrs.version}";
     hash = "sha256-IfsuOYP/H3r1GDWMVVSBfYvQS+01VJaAlZu+c05geWg=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     pygobject3
     gnome-menus
     psutil
@@ -35,16 +39,13 @@ python3Packages.buildPythonApplication rec {
     intltool
     gobject-introspection
     wrapGAppsHook3
+    writableTmpDirAsHomeHook
   ];
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace-fail 'data_dir =' "data_dir = '$out/share/menulibre' #" \
       --replace-fail 'update_desktop_file(desktop_file, script_path)' ""
-  '';
-
-  preBuild = ''
-    export HOME=$TMPDIR
   '';
 
   passthru = {
@@ -55,12 +56,12 @@ python3Packages.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Advanced menu editor with an easy-to-use interface";
     homepage = "https://bluesabre.org/projects/menulibre";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ lelgenio ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ lelgenio ];
     mainProgram = "menulibre";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

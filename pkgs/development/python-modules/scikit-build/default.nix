@@ -1,9 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
-  fetchpatch2,
+  fetchpatch,
   hatch-fancy-pypi-readme,
   hatch-vcs,
   hatchling,
@@ -11,7 +10,6 @@
   packaging,
   setuptools,
   wheel,
-  tomli,
   # Test Inputs
   cmake,
   cython,
@@ -24,22 +22,23 @@
 
 buildPythonPackage rec {
   pname = "scikit-build";
-  version = "0.18.1";
+  version = "0.19.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "scikit_build";
     inherit version;
-    hash = "sha256-pBUqxaCE1JnCineXvgYo2DZsM24vsOGgY+sy5V78uOc=";
+    hash = "sha256-uajQf8otXRDZMiC8V6aFFh1yrx/HYoXVXFZN2qhi5YQ=";
   };
 
   patches = [
-    (fetchpatch2 {
-      name = "setuptools-75.0-compat.patch";
-      url = "https://github.com/scikit-build/scikit-build/commit/3992485c67331097553ec8f54233c4c295943f70.patch";
-      hash = "sha256-U34UY+m6RE3c3UN/jGHuR+sRUqTGmG7dT52NWCY7nIE=";
+    # Recent CMake versions normalize paths, changing some /./foo.txt to
+    # /foo.txt in some tests.
+    # https://github.com/scikit-build/scikit-build/pull/1205
+    (fetchpatch {
+      name = "test-cmake4-install-path-normalization.patch";
+      url = "https://github.com/scikit-build/scikit-build/commit/c73be45c664349554fcbc5ab3919b74b33c3bc1e.patch";
+      hash = "sha256-ekuOVj6dfPYkNRCFnvLJqW1WL7KnbCVBBmq0+zlH7YY=";
     })
   ];
 
@@ -60,7 +59,7 @@ buildPythonPackage rec {
     packaging
     setuptools
     wheel
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   nativeCheckInputs = [
     cmake
@@ -94,14 +93,14 @@ buildPythonPackage rec {
     "test_sdist_with_symlinks"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/scikit-build/scikit-build/blob/${version}/CHANGES.rst";
     description = "Improved build system generator for CPython C/C++/Fortran/Cython extensions";
     homepage = "https://github.com/scikit-build/scikit-build";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       bsd2
     ]; # BSD due to reuses of PyNE code
-    maintainers = with maintainers; [ FlorianFranzen ];
+    maintainers = with lib.maintainers; [ FlorianFranzen ];
   };
 }

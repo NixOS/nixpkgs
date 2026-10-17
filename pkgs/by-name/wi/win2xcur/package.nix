@@ -4,27 +4,38 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "win2xcur";
-  version = "0.1.2";
+  version = "0.2.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "quantum5";
     repo = "win2xcur";
-    rev = "v${version}";
-    hash = "sha256-OjLj+QYg8YOJzDq3Y6/uyEXlNWbPm8VA/b1yP9jT6Jo=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-zr3zLbjbQAY7McoF89W2Dqgj49mpHDZZBS9zzhqTAm8=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     numpy
     wand
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [
+    "win2xcur.main.inspectcur"
+    "win2xcur.main.win2xcur"
+    "win2xcur.main.win2xcurtheme"
+    "win2xcur.main.x2wincur"
+    "win2xcur.main.x2wincurtheme"
+  ];
+
+  meta = {
     description = "Tools that convert cursors between the Windows (*.cur, *.ani) and Xcursor format";
     homepage = "https://github.com/quantum5/win2xcur";
-    changelog = "https://github.com/quantum5/win2xcur/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ teatwig ];
+    changelog = "https://github.com/quantum5/win2xcur/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ teatwig ];
   };
-}
+})

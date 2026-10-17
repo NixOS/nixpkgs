@@ -42,7 +42,7 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    # Note: LIRC executables raises a warning, if lirc_options.conf do not exists
+    # Note: LIRC executables raises a warning, if lirc_options.conf does not exist
     environment.etc."lirc/lirc_options.conf".text = cfg.options;
 
     passthru.lirc.socket = "/run/lirc/lircd";

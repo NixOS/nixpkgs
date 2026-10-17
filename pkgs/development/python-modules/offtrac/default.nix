@@ -11,14 +11,14 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "06vd010pa1z7lyfj1na30iqzffr4kzj2k2sba09spik7drlvvl56";
+    hash = "sha256-ptC9aW5nxqsTUEuLKeSfJDv3cQRD2SCdp+cHdUEAbRs=";
   };
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://fedorahosted.org/offtrac";
     description = "Trac xmlrpc library";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
   };
 }

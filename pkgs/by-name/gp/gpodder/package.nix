@@ -2,26 +2,25 @@
   lib,
   fetchFromGitHub,
   gitUpdater,
-  glibcLocales,
   adwaita-icon-theme,
   gobject-introspection,
   gtk3,
   intltool,
-  python311Packages,
+  python3Packages,
   wrapGAppsHook3,
   xdg-utils,
 }:
 
-python311Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gpodder";
-  version = "3.11.4";
-  format = "other";
+  version = "3.11.5";
+  pyproject = false;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = version;
-    sha256 = "kEhyV1o8VSQW9qMx6m5avj6LnJuVTONDd6msRuc8t/4=";
+    owner = "gpodder";
+    repo = "gpodder";
+    rev = finalAttrs.version;
+    hash = "sha256-Hhk9JeHMg+FrekiNXP6Q8loCtst+FHT4EJTnh64VOhc=";
   };
 
   patches = [
@@ -32,11 +31,18 @@ python311Packages.buildPythonApplication rec {
     sed -i -re 's,^( *gpodder_dir *= *).*,\1"'"$out"'",' bin/gpodder
   '';
 
+  build-system = with python3Packages; [
+    setuptools
+    build
+    installer
+    wheel
+  ];
+
   nativeBuildInputs = [
     intltool
     wrapGAppsHook3
-    glibcLocales
     gobject-introspection
+    python3Packages.distutils
   ];
 
   buildInputs = [
@@ -44,7 +50,7 @@ python311Packages.buildPythonApplication rec {
     adwaita-icon-theme
   ];
 
-  nativeCheckInputs = with python311Packages; [
+  nativeCheckInputs = with python3Packages; [
     minimock
     pytest
     pytest-httpserver
@@ -53,7 +59,7 @@ python311Packages.buildPythonApplication rec {
 
   doCheck = true;
 
-  propagatedBuildInputs = with python311Packages; [
+  propagatedBuildInputs = with python3Packages; [
     feedparser
     dbus-python
     mygpoclient
@@ -73,28 +79,29 @@ python311Packages.buildPythonApplication rec {
     "share/dbus-1/services/org.gpodder.service"
   ];
 
-  preBuild = ''
-    export LC_ALL="en_US.UTF-8"
-  '';
-
   installCheckPhase = ''
     LC_ALL=C PYTHONPATH=src/:$PYTHONPATH pytest --ignore=tests --ignore=src/gpodder/utilwin32ctypes.py --doctest-modules src/gpodder/util.py src/gpodder/jsonconfig.py
     LC_ALL=C PYTHONPATH=src/:$PYTHONPATH pytest tests --ignore=src/gpodder/utilwin32ctypes.py --ignore=src/mygpoclient --cov=gpodder
   '';
 
-  makeWrapperArgs = [ "--suffix PATH : ${lib.makeBinPath [ xdg-utils ]}" ];
+  makeWrapperArgs = [
+    "--suffix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ xdg-utils ])
+  ];
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Podcatcher written in python";
     longDescription = ''
       gPodder downloads and manages free audio and video content (podcasts)
       for you. Listen directly on your computer or on your mobile devices.
     '';
     homepage = "http://gpodder.org/";
-    license = licenses.gpl3;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ mic92 ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ mic92 ];
   };
-}
+})

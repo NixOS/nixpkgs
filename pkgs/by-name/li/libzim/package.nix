@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
+  nix-update-script,
   icu,
   meson,
   ninja,
@@ -12,15 +14,15 @@
   zstd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libzim";
-  version = "9.2.3";
+  version = "9.8.2";
 
   src = fetchFromGitHub {
     owner = "openzim";
     repo = "libzim";
-    tag = version;
-    hash = "sha256-z22+cDlFQtLMLFh5+7Nt9LsGFyBPi3HeZhYb0LK86Oc=";
+    tag = finalAttrs.version;
+    hash = "sha256-62pOuWI6l11PMoyumQzAZVd3f5vag1jtm8TSBsRi4sE=";
   };
 
   nativeBuildInputs = [
@@ -50,11 +52,16 @@ stdenv.mkDerivation rec {
     "-Dtest_data_dir=none"
   ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Reference implementation of the ZIM specification";
     homepage = "https://github.com/openzim/libzim";
-    changelog = "https://github.com/openzim/libzim/releases/tag/${version}";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/openzim/libzim/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
+      fab
+      greg
+    ];
   };
-}
+})

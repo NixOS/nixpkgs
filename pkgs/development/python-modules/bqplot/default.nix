@@ -1,44 +1,71 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
+  fetchFromGitHub,
+
+  # nativeBuildInputs
+  nodejs,
+  yarn-berry_3,
+
+  # build-system
   jupyter-packaging,
   jupyterlab,
+  setuptools,
+
+  # dependencies
   bqscales,
   ipywidgets,
   numpy,
   pandas,
   traitlets,
   traittypes,
+
+  # tests
+  nbval,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bqplot";
-  version = "0.12.43";
+  version = "0.13.1";
+  pyproject = true;
+  __structuredAttrs = true;
 
-  format = "pyproject";
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-8rRp0fA99PUYc8sEBqJLVs30qDX8WqlWB3b8Y2uLNEk=";
+  src = fetchFromGitHub {
+    owner = "bqplot";
+    repo = "bqplot";
+    tag = finalAttrs.version;
+    hash = "sha256-mYeQzmUa7WFDL8o6xsRD2bZ+3E9y4K/KyGE0zr0V4BA=";
   };
 
-  # upstream seems in flux for 0.13 release. they seem to want to migrate from
-  # jupyter_packaging to hatch, so let's patch instead of fixing upstream
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "jupyter_packaging~=" "jupyter_packaging>=" \
-      --replace "jupyterlab~=" "jupyterlab>="
-  '';
+  yarnOfflineCache = yarn-berry_3.fetchYarnBerryDeps {
+    src = "${finalAttrs.src}/js";
+    hash = "sha256-/QSZoanK92pV8g3n92g2pK17XjNgyerSe4UCV1/stXY=";
+  };
 
   nativeBuildInputs = [
-    jupyter-packaging
-    jupyterlab
+    nodejs
+    yarn-berry_3
+    yarn-berry_3.yarnBerryConfigHook
   ];
 
-  propagatedBuildInputs = [
+  # The yarn workspace lives in `js/`, so the offline install has to run from there.
+  dontYarnBerryInstallDeps = true;
+
+  preBuild = ''
+    pushd js
+    yarnBerryConfigHook
+    npm run build
+    popd
+  '';
+
+  build-system = [
+    jupyter-packaging
+    jupyterlab
+    setuptools
+  ];
+
+  dependencies = [
     bqscales
     ipywidgets
     numpy
@@ -47,8 +74,12 @@ buildPythonPackage rec {
     traittypes
   ];
 
-  # no tests in PyPI dist, and not obvious to me how to build the js files from GitHub
-  doCheck = false;
+  nativeCheckInputs = [
+    nbval
+    pytestCheckHook
+  ];
+
+  enabledTestPaths = [ "tests/" ];
 
   pythonImportsCheck = [
     "bqplot"
@@ -58,7 +89,9 @@ buildPythonPackage rec {
   meta = {
     description = "2D plotting library for Jupyter based on Grammar of Graphics";
     homepage = "https://bqplot.github.io/bqplot";
+    downloadPage = "https://github.com/bqplot/bqplot";
+    changelog = "https://github.com/bqplot/bqplot/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

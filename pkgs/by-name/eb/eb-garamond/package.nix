@@ -2,23 +2,30 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
   python3,
-  ttfautohint,
+  ttfautohint-nox,
 }:
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "eb-garamond";
   version = "0.016";
 
   src = fetchFromGitHub {
     owner = "georgd";
     repo = "EB-Garamond";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ajieKhTeH6yv2qiE2xqnHFoMS65//4ZKiccAlC2PXGQ=";
   };
 
+  outputs = [
+    "out"
+    "webfont"
+  ];
+
   nativeBuildInputs = [
+    installFonts
     (python3.withPackages (p: [ p.fontforge ]))
-    ttfautohint
+    ttfautohint-nox
   ];
 
   postPatch = ''
@@ -32,25 +39,22 @@ stdenvNoCC.mkDerivation rec {
     runHook postBuild
   '';
 
+  # installFonts adds a hook to `postInstall` that installs fonts
+  # into the correct directories
   installPhase = ''
     runHook preInstall
-
-    install -Dm644 build/*.ttf  -t $out/share/fonts/truetype
-    install -Dm644 build/*.otf  -t $out/share/fonts/opentype
-    install -Dm644 build/*.woff -t $out/share/fonts/woff
-
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.georgduffner.at/ebgaramond/";
     description = "Digitization of the Garamond shown on the Egenolff-Berner specimen";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       bengsparks
       relrod
       rycee
     ];
-    license = licenses.ofl;
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
   };
-}
+})

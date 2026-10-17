@@ -1,20 +1,20 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
   testers,
-  ytt,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ytt";
-  version = "0.51.1";
+  version = "0.55.3";
 
   src = fetchFromGitHub {
     owner = "carvel-dev";
     repo = "ytt";
-    rev = "v${version}";
-    sha256 = "sha256-MVkgZDHFkjtOuBDm/VjUU2QXMR7HdcNJwqD4mMBHt48=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gpp0TH89jN7UZ75nL2qUaeJL0twR+GsUWS1cilyvX88=";
   };
 
   vendorHash = null;
@@ -24,10 +24,10 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X carvel.dev/ytt/pkg/version.Version=${version}"
+    "-X carvel.dev/ytt/pkg/version.Version=${finalAttrs.version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ytt \
       --bash <($out/bin/ytt completion bash) \
       --fish <($out/bin/ytt completion fish) \
@@ -41,20 +41,20 @@ buildGoModule rec {
   doCheck = false;
 
   passthru.tests.version = testers.testVersion {
-    package = ytt;
-    command = "ytt --version";
-    inherit version;
+    package = finalAttrs.finalPackage;
+    command = "${finalAttrs.meta.mainProgram} --version";
+    inherit (finalAttrs) version;
   };
 
-  meta = with lib; {
+  meta = {
     description = "YAML templating tool that allows configuration of complex software via reusable templates with user-provided values";
     mainProgram = "ytt";
     homepage = "https://get-ytt.io";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       brodes
       techknowlogick
       gabyx
     ];
   };
-}
+})

@@ -13,7 +13,7 @@ buildKodiAddon rec {
 
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/${lib.toLower rel}/plugin.audio.somafm/plugin.audio.somafm-${version}.zip";
-    sha256 = "sha256-auPLm7QFabU4tXJPjTl17KpE+lqWM2Edbd2HrXPRx40=";
+    hash = "sha256-auPLm7QFabU4tXJPjTl17KpE+lqWM2Edbd2HrXPRx40=";
   };
 
   passthru = {
@@ -23,10 +23,10 @@ buildKodiAddon rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Soma-FM-Kodi-Add-On/plugin.audio.somafm";
     description = "SomaFM addon for Kodi";
-    license = licenses.gpl3Plus;
-    maintainers = teams.kodi.members;
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.kodi ];
   };
 }

@@ -3,44 +3,38 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  pkg-config,
   cmark,
-  extra-cmake-modules,
   gamemode,
-  ghc_filesystem,
   jdk17,
   kdePackages,
+  libarchive,
   ninja,
   nix-update-script,
+  qrencode,
   stripJavaArchivesHook,
   tomlplusplus,
+  vulkan-headers,
   zlib,
-
   msaClientID ? null,
-  gamemodeSupport ? stdenv.hostPlatform.isLinux,
 }:
-
 let
   libnbtplusplus = fetchFromGitHub {
     owner = "PrismLauncher";
     repo = "libnbtplusplus";
-    rev = "23b955121b8217c1c348a9ed2483167a6f3ff4ad";
-    hash = "sha256-yy0q+bky80LtK1GWzz7qpM+aAGrOqLuewbid8WT1ilk=";
+    rev = "3538933614059f0f44388a2b16f3db25ce42285b";
+    hash = "sha256-6/8clF2yNhfonV16cfIkxVIzuB9i9ThxoLMxAo/fDuY=";
   };
 in
-
-assert lib.assertMsg (
-  gamemodeSupport -> stdenv.hostPlatform.isLinux
-) "gamemodeSupport is only available on Linux.";
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "prismlauncher-unwrapped";
-  version = "9.2";
+  version = "11.1.1";
 
   src = fetchFromGitHub {
     owner = "PrismLauncher";
     repo = "PrismLauncher";
     tag = finalAttrs.version;
-    hash = "sha256-0KDhX8mfh11pyYQS/lB6qlUvRSOcYEbQKgsdQVA+Q3U=";
+    hash = "sha256-vSCiCDatoRnA1vpqLDuelC/2cBCKp+fXGT/O0DYjHuk=";
   };
 
   postUnpack = ''
@@ -48,44 +42,47 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${libnbtplusplus} source/libraries/libnbtplusplus
   '';
 
+  # Ensure that instance shortucts point to our final wrapper, rather than this unwrapped version
+  postPatch = ''
+    substituteInPlace launcher/minecraft/ShortcutUtils.cpp \
+      --replace-fail 'QApplication::applicationFilePath()' 'QProcessEnvironment::systemEnvironment().value("NIX_LAUNCHER_WRAPPER", "${placeholder "out"}/bin/prismlauncher")'
+  '';
+
   nativeBuildInputs = [
     cmake
+    pkg-config
     ninja
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     jdk17
     stripJavaArchivesHook
   ];
 
   buildInputs = [
     cmark
-    ghc_filesystem
     kdePackages.qtbase
     kdePackages.qtnetworkauth
-    kdePackages.quazip
+    libarchive
+    qrencode
     tomlplusplus
+    vulkan-headers
     zlib
-  ] ++ lib.optional gamemodeSupport gamemode;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux gamemode;
 
-  hardeningEnable = lib.optionals stdenv.hostPlatform.isLinux [ "pie" ];
-
-  cmakeFlags =
-    [
-      # downstream branding
-      (lib.cmakeFeature "Launcher_BUILD_PLATFORM" "nixpkgs")
-    ]
-    ++ lib.optionals (msaClientID != null) [
-      (lib.cmakeFeature "Launcher_MSA_CLIENT_ID" (toString msaClientID))
-    ]
-    ++ lib.optionals (lib.versionOlder kdePackages.qtbase.version "6") [
-      (lib.cmakeFeature "Launcher_QT_VERSION_MAJOR" "5")
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # we wrap our binary manually
-      (lib.cmakeFeature "INSTALL_BUNDLE" "nodeps")
-      # disable built-in updater
-      (lib.cmakeFeature "MACOSX_SPARKLE_UPDATE_FEED_URL" "''")
-      (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "${placeholder "out"}/Applications/")
-    ];
+  cmakeFlags = [
+    # downstream branding
+    (lib.cmakeFeature "Launcher_BUILD_PLATFORM" "nixpkgs")
+  ]
+  ++ lib.optionals (msaClientID != null) [
+    (lib.cmakeFeature "Launcher_MSA_CLIENT_ID" (toString msaClientID))
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # we wrap our binary manually
+    (lib.cmakeFeature "INSTALL_BUNDLE" "nodeps")
+    # disable built-in updater
+    (lib.cmakeFeature "MACOSX_SPARKLE_UPDATE_FEED_URL" "''")
+    (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "${placeholder "out"}/Applications/")
+  ];
 
   doCheck = true;
 
@@ -112,5 +109,8 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     mainProgram = "prismlauncher";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "prismlauncher" finalAttrs.version // {
+      product = "prism_launcher";
+    };
   };
 })

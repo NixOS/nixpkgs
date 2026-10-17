@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -14,20 +15,20 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-lvkMfaQvLMZ8F0Q5JnpmMsIAkR+XfihoHIoS4z5QEvA=";
   };
 
+  nativeBuildInputs = [ installFonts ];
+
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/etc/fonts/conf.d
     mkdir -p $out/share/doc/${pname}-${version}
-    mkdir -p $out/share/fonts/truetype
     cp -v ${./comic-sans-ms-alias.conf}     $out/etc/fonts/conf.d/30-comic-sans-ms.conf
-    cp *.ttf      -d $out/share/fonts/truetype
     cp FONTLOG.txt -d $out/share/doc/${pname}-${version}
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://fontlibrary.org/en/font/comic-relief";
     description = "Font metric-compatible with Microsoft Comic Sans";
     longDescription = ''
@@ -37,9 +38,9 @@ stdenvNoCC.mkDerivation rec {
       part of the copy. It contains all glyphs and characters
       available in Comic Sans MS.
     '';
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = [ maintainers.rycee ];
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.rycee ];
 
     # Reduce the priority of this package. The intent is that if you
     # also install the `corefonts` package, then you probably will not

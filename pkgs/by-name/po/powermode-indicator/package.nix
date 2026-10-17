@@ -5,7 +5,7 @@
   cmake,
   pkg-config,
   gtkmm3,
-  glibmm,
+  glibmm_2_4,
   libappindicator,
 }:
 stdenv.mkDerivation {
@@ -26,15 +26,15 @@ stdenv.mkDerivation {
   buildInputs = [
     libappindicator
     gtkmm3
-    glibmm
+    glibmm_2_4
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/PiyushXCoder/powermode-indicator";
     description = "Tray tool for power profiles management";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.aacebedo ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.aacebedo ];
     mainProgram = "powermode-indicator";
   };
 }

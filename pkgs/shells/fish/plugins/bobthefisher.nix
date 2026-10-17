@@ -11,13 +11,13 @@ buildFishPlugin {
     owner = "Scrumplex";
     repo = "bobthefisher";
     rev = "f4179a14b087c7fbfc2e892da429adad40a39e44";
-    sha256 = "sha256-l1DHSZa40BX2/4GCjm5E53UOeFEnMioWbZtCW14WX6k=";
+    hash = "sha256-l1DHSZa40BX2/4GCjm5E53UOeFEnMioWbZtCW14WX6k=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Powerline-style, Git-aware fish theme optimized for awesome (fork of bobthefish)";
     homepage = "https://github.com/Scrumplex/bobthefisher";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Scrumplex ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Scrumplex ];
   };
 }

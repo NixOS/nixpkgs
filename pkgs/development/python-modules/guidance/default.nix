@@ -2,35 +2,42 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
+
+  # build-system
   pybind11,
   setuptools,
-  diskcache,
-  fastapi,
-  huggingface-hub,
-  jsonschema,
+
+  # dependencies
+  guidance-stitch,
+  jinja2,
+  llguidance,
   numpy,
-  openai,
-  ordered-set,
-  platformdirs,
-  protobuf,
+  psutil,
   pydantic,
   requests,
-  tiktoken,
+
+  # optional-dependencies
+  openai,
+
+  # tests
+  huggingface-hub,
+  jsonschema,
+  pytestCheckHook,
+  tokenizers,
   torch,
-  uvicorn,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "guidance";
-  version = "0.1.16";
+  version = "0.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "guidance-ai";
     repo = "guidance";
-    tag = version;
-    hash = "sha256-dPakdT97cuLv4OwdaUFncopD5X6uXGyUjwzqn9fxnhU=";
+    tag = finalAttrs.version;
+    hash = "sha256-g0Vb5qcEvGY4S/LzhQvYtLiN1gIDBhPIgdzenSYX7zQ=";
   };
 
   build-system = [
@@ -38,63 +45,58 @@ buildPythonPackage rec {
     setuptools
   ];
 
+  pythonRelaxDeps = [
+    "llguidance"
+  ];
+
   dependencies = [
-    diskcache
+    guidance-stitch
+    jinja2
+    llguidance
     numpy
-    ordered-set
-    platformdirs
-    protobuf
+    psutil
     pydantic
     requests
-    tiktoken
   ];
 
   optional-dependencies = {
-    azureai = [ openai ];
-    openai = [ openai ];
-    schemas = [ jsonschema ];
-    server = [
-      fastapi
-      uvicorn
+    azureai = [
+      # azure-ai-inference
+      openai
     ];
+    openai = [ openai ];
   };
 
   nativeCheckInputs = [
     huggingface-hub
+    jsonschema
     pytestCheckHook
+    tokenizers
     torch
-  ] ++ optional-dependencies.schemas;
+    writableTmpDirAsHomeHook
+  ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   disabledTests = [
     # require network access
-    "test_select_simple"
-    "test_commit_point"
-    "test_token_healing"
-    "test_fstring"
-    "test_fstring_custom"
-    "test_token_count"
-    "test_gpt2"
-    "test_recursion_error"
-    "test_openai_class_detection"
-    "test_openai_chat_without_roles"
-    "test_local_image"
-    "test_remote_image"
-    "test_image_from_bytes"
-    "test_remote_image_not_found"
+    "test_ll_backtrack_stop"
+    "test_ll_dolphin"
+    "test_ll_fighter"
+    "test_ll_max_tokens"
+    "test_ll_nice_man"
+    "test_ll_nullable_bug"
+    "test_ll_nullable_lexeme"
+    "test_ll_pop_tokens"
+    "test_ll_stop_quote_comma"
+    "test_llparser"
+    "test_str_method_smoke"
 
     # flaky tests
     "test_remote_mock_gen" # frequently fails when building packages in parallel
   ];
 
-  disabledTestPaths = [
-    # require network access
-    "tests/unit/test_tokenizers.py"
-  ];
-
   preCheck = ''
-    export HOME=$TMPDIR
     rm tests/conftest.py
   '';
 
@@ -105,8 +107,8 @@ buildPythonPackage rec {
   meta = {
     description = "Guidance language for controlling large language models";
     homepage = "https://github.com/guidance-ai/guidance";
-    changelog = "https://github.com/guidance-ai/guidance/releases/tag/${src.tag}";
+    changelog = "https://github.com/guidance-ai/guidance/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };
-}
+})

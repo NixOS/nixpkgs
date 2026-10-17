@@ -1,25 +1,26 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, nix-update-script
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "yggdrasil-jumper";
-  version = "0.3.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "one-d-wide";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Op3KBJ911AjB7BIJuV4xR8KHMxBtQj7hf++tC1g7SlM=";
+    repo = "yggdrasil-jumper";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-dElC+q76dE3SlVY4+aauNmeqcNdfj0mMjg51WRuywJI=";
   };
 
-  cargoHash = "sha256-i4w+cUCTzbXMC76HuVUdKh54ww8T9nPqQkL64YAneos=";
+  cargoHash = "sha256-hCKw+kmcnNF8U3KyBjPjBeeA8abZf/oYtimtUFo7t7w=";
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Reduce latency of a connection over Yggdrasil Network";
     longDescription = ''
       An independent project that aims to transparently reduce latency
@@ -30,7 +31,7 @@ rustPlatform.buildRustPackage rec {
       configuration or port mapping.
     '';
     homepage = "https://github.com/one-d-wide/yggdrasil-jumper";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ one-d-wide ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ one-d-wide ];
   };
-}
+})

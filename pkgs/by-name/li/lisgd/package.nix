@@ -4,20 +4,20 @@
   fetchFromSourcehut,
   writeText,
   libinput,
-  libX11,
+  libx11,
   wayland,
   conf ? null,
   patches ? [ ],
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lisgd";
   version = "0.4.0";
 
   src = fetchFromSourcehut {
     owner = "~mil";
     repo = "lisgd";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ljRZpBo4lW2cYZYxKKMrXanE0YaHSFwcdyECK0czdWY=";
   };
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libinput
-    libX11
+    libx11
     wayland
   ];
 
@@ -42,12 +42,12 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Bind gestures via libinput touch events";
     mainProgram = "lisgd";
     homepage = "https://git.sr.ht/~mil/lisgd";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

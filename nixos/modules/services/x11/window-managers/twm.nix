@@ -28,12 +28,12 @@ in
     services.xserver.windowManager.session = singleton {
       name = "twm";
       start = ''
-        ${pkgs.xorg.twm}/bin/twm &
+        ${pkgs.tab-window-manager}/bin/twm &
         waitPID=$!
       '';
     };
 
-    environment.systemPackages = [ pkgs.xorg.twm ];
+    environment.systemPackages = [ pkgs.tab-window-manager ];
 
   };
 

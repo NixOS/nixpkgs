@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     owner = "monado";
     repo = "utilities/vulkan-layers";
     rev = "ae43cdcbd25c56e3481bbc8a0ce2bfcebba9f7c2";
-    sha256 = "sha256-QabYVKcenW+LQ+QSjUoQOLOQAVHdjE0YXd+1WsdzNPc=";
+    hash = "sha256-QabYVKcenW+LQ+QSjUoQOLOQAVHdjE0YXd+1WsdzNPc=";
   };
 
   nativeBuildInputs = [
@@ -31,12 +31,12 @@ stdenv.mkDerivation {
     ./absolute-layer-path.patch
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Vulkan Layers for Monado";
     homepage = "https://gitlab.freedesktop.org/monado/utilities/vulkan-layers";
-    platforms = platforms.linux;
-    license = licenses.boost;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    license = lib.licenses.boost;
+    maintainers = with lib.maintainers; [
       Scrumplex
       passivelemon
     ];

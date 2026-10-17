@@ -5,38 +5,38 @@
   buildPythonPackage,
   fetchPypi,
   isodate,
-  pythonOlder,
-  typing-extensions,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-iothub";
-  version = "3.0.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "4.0.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-2vIfyYxoo1PsYWMYwOYr4EyNaJmWC+jCy/mRZzrItyI=";
+    pname = "azure_mgmt_iothub";
+    inherit version;
+    hash = "sha256-B/Jb1vZzdLqxfMEZL5+SGzUONWAlHxkGnmZlg1Qe1Ng=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     azure-common
     azure-mgmt-core
     isodate
-  ] ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+  ];
 
   # Module has no tests
   doCheck = false;
 
   pythonImportsCheck = [ "azure.mgmt.iothub" ];
 
-  meta = with lib; {
+  meta = {
     description = "This is the Microsoft Azure IoTHub Management Client Library";
-    homepage = "https://github.com/Azure/azure-sdk-for-python";
+    homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/iothub/azure-mgmt-iothub";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-iothub_${version}/sdk/iothub/azure-mgmt-iothub/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ maxwilson ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ maxwilson ];
   };
 }

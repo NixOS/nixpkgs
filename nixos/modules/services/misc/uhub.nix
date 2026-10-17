@@ -46,7 +46,7 @@ in
               inherit (settingsFormat) type;
               description = ''
                 Configuration of uhub.
-                See https://www.uhub.org/doc/config.php for a list of options.
+                See <https://www.uhub.org/doc/config.php> for a list of options.
               '';
               default = { };
               example = {

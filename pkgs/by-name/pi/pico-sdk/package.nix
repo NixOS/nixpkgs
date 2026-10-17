@@ -3,6 +3,9 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  versionCheckHook,
+  nix-update-script,
+  pico-sdk,
 
   # Options
 
@@ -14,19 +17,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pico-sdk";
-  version = "2.0.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "pico-sdk";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     fetchSubmodules = withSubmodules;
     hash =
-      if (withSubmodules) then
-        "sha256-fVSpBVmjeP5pwkSPhhSCfBaEr/FEtA82mQOe/cHFh0A="
+      if withSubmodules then
+        "sha256-ZWGJNQwbkGlgZnEoOoMishX4ANZAqqkMeck8uZlewVk="
       else
-        "sha256-d6mEjuG8S5jvJS4g8e90gFII3sEqUVlT2fgd9M9LUkA=";
+        "sha256-UWWrZT7Mg2yei/LlDxgei3yXWaP9ETMlgiVOFFAEMZ8=";
   };
+
+  cmakeFlags = [
+    (lib.cmakeFeature "PIOASM_VERSION_STRING" finalAttrs.version)
+  ];
 
   nativeBuildInputs = [ cmake ];
 
@@ -42,11 +49,27 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    homepage = "https://github.com/raspberrypi/pico-sdk";
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "tests.withSubmodules"
+      ];
+    };
+    tests = {
+      withSubmodules = pico-sdk.override { withSubmodules = true; };
+    };
+  };
+
+  meta = {
     description = "SDK provides the headers, libraries and build system necessary to write programs for the RP2040-based devices";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ muscaln ];
-    platforms = platforms.unix;
+    homepage = "https://github.com/raspberrypi/pico-sdk";
+    changelog = "https://github.com/raspberrypi/pico-sdk/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
+      muscaln
+      nulleric
+    ];
+    platforms = lib.platforms.unix;
   };
 })

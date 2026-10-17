@@ -2,48 +2,101 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpm_10,
   nodejs,
-  electron_32,
+  electron_43,
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
+  autoPatchelfHook,
+  pipewire,
+  libpulseaudio,
+  jq,
   nix-update-script,
 }:
-stdenv.mkDerivation rec {
+let
+  electron = electron_43;
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "legcord";
-  version = "1.0.6";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "Legcord";
     repo = "Legcord";
-    rev = "v${version}";
-    hash = "sha256-0dVuSqViMqhWBMEY36ZcXM1FYnMcDH5brp5gsMWg3Rc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Mjub2OFb5RN4yBwdUk8v6uo/dUeYZ5nELmpPzEFmx2c=";
   };
 
   nativeBuildInputs = [
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_10
     nodejs
+    # we use a script wrapper here for environment variable expansion at runtime
+    # https://github.com/NixOS/nixpkgs/issues/172583
     makeWrapper
     copyDesktopItems
+    # legcord uses venmic, which is a shipped as a prebuilt node module
+    # and needs to be patched
+    autoPatchelfHook
+    jq
   ];
 
-  pnpmDeps = pnpm_9.fetchDeps {
-    inherit pname version src;
-    hash = "sha256-QTePf/QE85OzXIcnwLJsCJJyRxwoV+FNef2Z9nAt35E=";
+  buildInputs = [
+    libpulseaudio
+    pipewire
+    (lib.getLib stdenv.cc.cc)
+  ];
+
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
+    hash = "sha256-xBW7D/3Nz/h7VqLqTiVL9dTjXLdNOqfdIlj66iYwuhM=";
   };
 
-  ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+  preBuild = ''
+    # Validate electron version matches upstream package.json
+    expectedMajor="$(jq -r '.devDependencies.electron | ltrimstr("^") | split(".") | .[0]' < package.json)"
+    actualMajor="${lib.versions.major electron.version}"
+    if [ "$actualMajor" != "$expectedMajor" ] 2>/dev/null; then
+      echo "ERROR: electron version mismatch between package.json (major $expectedMajor) and nixpkgs (major $actualMajor)"
+      exit 1
+    fi
+
+    # electron builds must be writable
+    cp -r ${electron.dist} electron-dist
+    chmod -R u+w electron-dist
+  '';
 
   buildPhase = ''
     runHook preBuild
 
     pnpm build
 
-    npm exec electron-builder -- \
+    # Replicating the build step to copy venmic from the vendored node module manually,
+    # since the install script does not do this for whatever reason
+    cp ./node_modules/@vencord/venmic/prebuilds/venmic-addon-linux-x64/node-napi-v7.node ./dist/venmic-x64.node
+    cp ./node_modules/@vencord/venmic/prebuilds/venmic-addon-linux-arm64/node-napi-v7.node ./dist/venmic-arm64.node
+
+    # Remove unnecessary koffi prebuilds, otherwise unsupported platforms
+    # (OpenBSD, FreeBSD, Linux musl builds) will cause autoPatchelf to not
+    # be able to find the required libraries and fail.
+    find ./node_modules/koffi/build/koffi -mindepth 1 -maxdepth 1 \
+      ! -name linux_x64 \
+      ! -name linux_arm64 \
+      -type d -exec rm -rf {} +
+
+    # Patch venmic before putting it into the ASAR archive
+    autoPatchelf ./dist
+
+    pnpm exec electron-builder \
       --dir \
-      -c.electronDist="${electron_32.dist}" \
-      -c.electronVersion="${electron_32.version}"
+      -c.asarUnpack="**/*.node" \
+      -c.electronDist=electron-dist \
+      -c.electronVersion="${electron.version}"
 
     runHook postBuild
   '';
@@ -56,39 +109,60 @@ stdenv.mkDerivation rec {
 
     install -Dm644 "build/icon.png" "$out/share/icons/hicolor/256x256/apps/legcord.png"
 
-    makeShellWrapper "${lib.getExe electron_32}" "$out/bin/legcord" \
+    # use makeShellWrapper (instead of the makeBinaryWrapper provided by wrapGAppsHook3) for proper shell variable expansion
+    # see https://github.com/NixOS/nixpkgs/issues/172583
+    makeShellWrapper "${lib.getExe electron}" "$out/bin/legcord" \
       --add-flags "$out/share/lib/legcord/resources/app.asar" \
       "''${gappsWrapperArgs[@]}" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=UseOzonePlatform,WaylandWindowDecorations,WebRTCPipeWireCapturer --enable-wayland-ime=true}}" \
       --set-default ELECTRON_IS_DEV 0 \
       --inherit-argv0
 
     runHook postInstall
   '';
 
+  env = {
+    ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
+  };
+
   desktopItems = [
     (makeDesktopItem {
       name = "legcord";
+      genericName = "Internet Messenger";
       desktopName = "Legcord";
       exec = "legcord %U";
       icon = "legcord";
-      comment = meta.description;
-      categories = [ "Network" ];
+      comment = finalAttrs.meta.description;
+      keywords = [
+        "discord"
+        "vencord"
+        "electron"
+        "chat"
+      ];
+      categories = [
+        "Network"
+        "InstantMessaging"
+        "Chat"
+      ];
       startupWMClass = "Legcord";
       terminal = false;
     })
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    inherit (finalAttrs) pnpmDeps;
+    updateScript = nix-update-script { };
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight, alternative desktop client for Discord";
     homepage = "https://legcord.app";
     downloadPage = "https://github.com/Legcord/Legcord";
-    license = licenses.osl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.osl3;
+    maintainers = with lib.maintainers; [
       wrmilling
       water-sucks
+      nyabinary
     ];
     platforms = [
       "x86_64-linux"
@@ -96,4 +170,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "legcord";
   };
-}
+})

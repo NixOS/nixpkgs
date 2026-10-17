@@ -13,15 +13,15 @@
   soapysdr-with-plugins,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "abracadabra";
-  version = "2.9.1";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "KejPi";
     repo = "AbracaDABra";
-    rev = "v${version}";
-    hash = "sha256-T2l5wjE62xBb55IzKzInf/K4VPOuZ68vp5VxS0vIn+I=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wc2DuBUnD5AWjDUez2ZlgnJ4Kh2kizoJyW0evV3Iics=";
   };
 
   nativeBuildInputs = [
@@ -49,12 +49,12 @@ stdenv.mkDerivation rec {
     "-DSOAPYSDR=ON"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "DAB/DAB+ radio application";
     homepage = "https://github.com/KejPi/AbracaDABra";
-    platforms = platforms.linux;
-    license = licenses.mit;
-    maintainers = [ maintainers.markuskowa ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ markuskowa ];
     mainProgram = "AbracaDABra";
   };
-}
+})

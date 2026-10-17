@@ -1,21 +1,22 @@
 {
   lib,
-  stdenv,
+  gcc15Stdenv,
   fetchFromGitHub,
   fetchpatch,
   libusb1,
   systemd,
+  udevCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+gcc15Stdenv.mkDerivation (finalAttrs: {
   pname = "dmrconfig";
   version = "1.1";
 
   src = fetchFromGitHub {
-    owner = "sergev";
+    owner = "OpenRTX";
     repo = "dmrconfig";
-    rev = version;
-    sha256 = "1qwix75z749628w583fwp7m7kxbj0k3g159sxb7vgqxbadqqz1ab";
+    tag = finalAttrs.version;
+    hash = "sha256-S4WPcVOr47fP6jqV8MYEcvV56rncDVQ4EiaR88vpkeM=";
   };
 
   patches = [
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "fno-common.patch";
       url = "https://github.com/OpenRTX/dmrconfig/commit/1a6901488db26262a6b69f80b0e795864e9e8d0a.patch";
-      sha256 = "03px1y95a8aspd251i1jj8ggqfjvkqby4lhn5pb7l5c1lzh6h762";
+      hash = "sha256-whxo4KeBFXrWLRZS4heeWzr8HpIyxFBEu1ohVZIP/Q4=";
     })
   ];
 
@@ -32,31 +33,38 @@ stdenv.mkDerivation rec {
     systemd
   ];
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ udevCheckHook ];
+
   preConfigure = ''
     substituteInPlace Makefile \
       --replace /usr/local/bin/dmrconfig $out/bin/dmrconfig
   '';
 
   makeFlags = [
-    "VERSION=${version}"
+    "VERSION=${finalAttrs.version}"
     "GITCOUNT=0"
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/lib/udev/rules.d
     make install
     install 99-dmr.rules $out/lib/udev/rules.d/99-dmr.rules
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Configuration utility for DMR radios";
     longDescription = ''
       DMRconfig is a utility for programming digital radios via USB programming cable.
     '';
-    homepage = "https://github.com/sergev/dmrconfig";
-    license = licenses.asl20;
+    homepage = "https://github.com/OpenRTX/dmrconfig";
+    license = lib.licenses.asl20;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "dmrconfig";
   };
-}
+})

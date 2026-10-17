@@ -3,7 +3,6 @@
   symlinkJoin,
   makeWrapper,
   gimpPlugins,
-  gnome-themes-extra,
   plugins ? null,
 }:
 
@@ -14,29 +13,43 @@ let
   );
   selectedPlugins = lib.filter (pkg: pkg != gimp) (if plugins == null then allPlugins else plugins);
   extraArgs = map (x: x.wrapArgs or "") selectedPlugins;
-  versionBranch = lib.versions.majorMinor gimp.version;
+  majorVersion = lib.versions.major gimp.version;
 
 in
 symlinkJoin {
-  name = "gimp-with-plugins-${gimp.version}";
+  pname = "gimp-with-plugins";
+  inherit (gimp) version;
+
+  outputs = [
+    "out"
+    "man"
+  ];
 
   paths = [ gimp ] ++ selectedPlugins;
 
   nativeBuildInputs = [ makeWrapper ];
 
   postBuild = ''
-    for each in gimp-${versionBranch} gimp-console-${versionBranch}; do
+    for each in gimp-${gimp.appVersion} gimp-console-${gimp.appVersion}; do
       wrapProgram $out/bin/$each \
-        --set GIMP2_PLUGINDIR "$out/lib/gimp/2.0" \
-        --set GIMP2_DATADIR "$out/share/gimp/2.0" \
-        --prefix GTK_PATH : "${gnome-themes-extra}/lib/gtk-2.0" \
+        --set GIMP${majorVersion}_PLUGINDIR "$out/${gimp.targetLibDir}" \
+        --set GIMP${majorVersion}_DATADIR "$out/${gimp.targetDataDir}" \
         ${toString extraArgs}
     done
     set +x
     for each in gimp gimp-console; do
-      ln -sf "$each-${versionBranch}" $out/bin/$each
+      ln -sf "$each-${gimp.appVersion}" $out/bin/$each
     done
+
+    ln -s ${gimp.man} $man
   '';
 
-  inherit (gimp) meta;
+  meta = gimp.meta // {
+    description = "${gimp.meta.description} with plugins";
+    longDescription = ''
+      Plugins:
+
+      ${lib.concatMapStringsSep "\n" (p: "- ${p.pname}") selectedPlugins}
+    '';
+  };
 }

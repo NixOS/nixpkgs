@@ -2,26 +2,32 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   nmap,
   python,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "netmap";
   version = "0.7.0.2";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "python-nmap";
-    rev = version;
-    sha256 = "1a44zz9zsxy48ahlpjjrddpyfi7cnfknicfcp35hi588qm430mag";
+    tag = finalAttrs.version;
+    hash = "sha256-T1UwSMUIlQjLuMyxaKez7ETnb2tZykuhQsR3/dP/hKg=";
   };
 
+  build-system = [
+    setuptools
+  ];
+
   patches = [
-    (substituteAll {
-      src = ./nmap-path.patch;
+    (replaceVars ./nmap-path.patch {
       nmap = "${lib.getBin nmap}/bin/nmap";
     })
   ];
@@ -36,10 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nmap" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python class to use nmap and access scan results from python3";
     homepage = "https://github.com/home-assistant-libs/python-nmap";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    changelog = "https://github.com/home-assistant-libs/python-nmap/blob/${finalAttrs.version}/CHANGELOG";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

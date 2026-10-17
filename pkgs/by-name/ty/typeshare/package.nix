@@ -1,22 +1,25 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, stdenv
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  stdenv,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "typeshare";
-  version = "1.13.2";
+  version = "1.13.4";
 
   src = fetchFromGitHub {
     owner = "1password";
     repo = "typeshare";
-    rev = "v${version}";
-    hash = "sha256-ZoCl/dWGtoHUtNsNhHQvMjyUnoVdkGBuiBkWPwaQeIQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8Pm+z407FDBLy0Hq2+T1rttFKnRWTNPPYTCn11SHcS8=";
   };
 
-  cargoHash = "sha256-TfYWzBK4ZVp65GmamYOL9b/+uuP0NVxxviHE9A7vTC8=";
+  cargoHash = "sha256-t5OJ4chxVhCRczfRPTZe2mkIDevSp7+1aVdplvJFCfg=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -29,12 +32,20 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/typeshare completions zsh)
   '';
 
-  meta = with lib; {
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Command Line Tool for generating language files with typeshare";
     mainProgram = "typeshare";
     homepage = "https://github.com/1password/typeshare";
-    changelog = "https://github.com/1password/typeshare/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/1password/typeshare/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = with lib.licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = [ lib.maintainers.progrm_jarvis ];
   };
-}
+})

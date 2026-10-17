@@ -3,10 +3,10 @@
   stdenv,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
   libdrm,
   python3,
 }:
-
 let
   python3WithLibs = python3.withPackages (
     ps: with ps; [
@@ -16,20 +16,30 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "evdi";
-  version = "1.14.8";
+  version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "DisplayLink";
     repo = "evdi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-57DP8kKsPEK1C5A6QfoZZDmm76pn4SaUKEKu9cicyKI=";
+    hash = "sha256-3g6OETXJSf6AScJ2K9F67mPlh3Wpi20Yq+f+xe78p9Y=";
   };
 
-  env.NIX_CFLAGS_COMPILE = toString [
+  patches = [
+    # Fix feature probes on kernels with allocation profiling enabled.
+    # Upstream: https://github.com/DisplayLink/evdi/pull/592
+    ./fix-conftest-probes.patch
+  ];
+
+  env.CFLAGS = toString [
     "-Wno-error"
-    "-Wno-error=discarded-qualifiers" # for Linux 4.19 compatibility
     "-Wno-error=sign-compare"
   ];
+
+  postBuild = ''
+    # Don't use makeFlags for userspace stuff
+    make library pyevdi
+  '';
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
@@ -39,9 +49,10 @@ stdenv.mkDerivation (finalAttrs: {
     python3WithLibs
   ];
 
-  makeFlags = kernel.moduleMakeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KVER=${kernel.modDirVersion}"
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "module"
   ];
 
   hardeningDisable = [
@@ -65,10 +76,11 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Extensible Virtual Display Interface";
     homepage = "https://www.displaylink.com/";
     license = with lib.licenses; [
-      lgpl21Only
+      mit
+      lgpl21Plus
       gpl2Only
     ];
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

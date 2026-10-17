@@ -10,11 +10,11 @@
   glib,
   intltool,
   dbus-glib,
-  libX11,
-  libXScrnSaver,
-  libXxf86vm,
-  libXext,
-  systemd,
+  libx11,
+  libxscrnsaver,
+  libxxf86vm,
+  libxext,
+  systemdLibs,
   pantheon,
   wrapGAppsHook3,
 }:
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "the-cavalry";
-    repo = pname;
+    repo = "light-locker";
     rev = "v${version}";
     sha256 = "1z5lcd02gqax65qc14hj5khifg7gr53zy3s5i6apba50lbdlfk46";
   };
@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
     dbus-glib
     glib
     gtk3
-    libX11
-    libXScrnSaver
-    libXext
-    libXxf86vm
-    systemd
+    libx11
+    libxscrnsaver
+    libxext
+    libxxf86vm
+    systemdLibs
   ];
 
   mesonFlags = [
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/the-cavalry/light-locker";
     description = "Simple session-locker for LightDM";
     longDescription = ''
@@ -86,8 +86,9 @@ stdenv.mkDerivation rec {
       It relies on LightDM for locking and unlocking your session via
       ConsoleKit/UPower or logind/systemd.
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ obadz ] ++ teams.pantheon.members;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ obadz ];
+    teams = [ lib.teams.pantheon ];
+    platforms = lib.platforms.linux;
   };
 }

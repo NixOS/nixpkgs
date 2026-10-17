@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   ipython,
   matplotlib,
@@ -12,14 +11,12 @@
 
 buildPythonPackage rec {
   pname = "summarytools";
-  version = "0.3.0";
+  version = "0.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-m29ug+JZC4HgMIVopovA/dyR40Z1IcADOiDWKg9mzdc=";
+    hash = "sha256-q5A2jayv9Mb3KKRNXRMydZbokLWdzC4JmsMijqp/0J0=";
   };
 
   build-system = [ setuptools ];
@@ -33,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "summarytools" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python port of the R summarytools package for summarizing dataframes";
     homepage = "https://github.com/6chaoran/jupyter-summarytools";
     changelog = "https://github.com/6chaoran/jupyter-summarytools/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

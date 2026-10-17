@@ -2,40 +2,39 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
   rustPlatform,
-  stdenv,
-  libiconv,
+
+  # tests
   hypothesis,
   numpy,
   pytest-xdist,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cramjam";
-  version = "2.8.3";
+  version = "2.13.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "milesgranger";
-    repo = "pyrus-cramjam";
-    tag = "v${version}";
-    hash = "sha256-1KD5/oZjfdXav1ZByQoyyiDSzbmY4VJsSJg/FtUFdDE=";
+    repo = "cramjam";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sdmIcRSy2nJcqV9NGzBYt0J6R9Qs7zkVfXFG9CqoMs4=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    hash = "sha256-Bp7EtyuLdLUfU3yvouNVE42klfqYt9QOwt+iGe521yI=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname src version;
+    hash = "sha256-L+OsrsAlA0B42wgAPAPFHI8ebGx6SYZlEkMLWQQFGxA=";
   };
 
-  buildAndTestSubdir = "cramjam-python";
-
-  nativeBuildInputs = with rustPlatform; [
-    cargoSetupHook
-    maturinBuildHook
+  nativeBuildInputs = [
+    rustPlatform.cargoSetupHook
+    rustPlatform.maturinBuildHook
+    pyprojectVersionPatchHook
   ];
-
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   nativeCheckInputs = [
     hypothesis
@@ -44,22 +43,29 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "cramjam-python/tests" ];
+  env = {
+    # Makes tests less flaky by relaxing performance constraints
+    # https://github.com/HypothesisWorks/hypothesis/issues/3713
+    CI = true;
+  };
+
+  disabledTests = [
+    # I (@GaetanLepage) cannot reproduce the failure, but it fails consistently on Ofborg with:
+    # SyntaxError: could not convert string to float: 'V' - Consider hexadecimal for huge integer literals to avoid decimal conversion limits.
+    "test_variants_decompress_into"
+  ];
 
   disabledTestPaths = [
-    "cramjam-python/benchmarks/test_bench.py"
-    # test_variants.py appears to be flaky
-    #
-    # https://github.com/NixOS/nixpkgs/pull/311584#issuecomment-2117656380
-    "cramjam-python/tests/test_variants.py"
+    "benchmarks/test_bench.py"
   ];
 
   pythonImportsCheck = [ "cramjam" ];
 
-  meta = with lib; {
+  meta = {
     description = "Thin Python bindings to de/compression algorithms in Rust";
     homepage = "https://github.com/milesgranger/pyrus-cramjam";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ veprbl ];
+    changelog = "https://github.com/milesgranger/cramjam/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

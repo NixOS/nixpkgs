@@ -4,25 +4,25 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "swayr";
-  version = "0.27.4";
+  version = "0.28.2";
 
   src = fetchFromSourcehut {
     owner = "~tsdh";
     repo = "swayr";
-    rev = "swayr-${version}";
-    sha256 = "sha256-dliRPKtCJ6mbBl87QoDsHJ2+iaI9nVsWWWwWAkQ1RqE=";
+    rev = "swayr-${finalAttrs.version}";
+    hash = "sha256-uT8MYgH9kANQ0t+7jqjOOvQIZf5ImdQruZLLlCejwcc=";
   };
 
-  cargoHash = "sha256-6e4eJIGCrkOdoOTtbYvTLjNVA9FQBQUhgOyM/064/Sw=";
+  cargoHash = "sha256-Aj4U2xyfNhf3HDSEd1SQ5TyO2MXn2/hrfnG0ZayzMtU=";
 
   patches = [
     ./icon-paths.patch
   ];
 
   # don't build swayrbar
-  buildAndTestSubdir = pname;
+  buildAndTestSubdir = finalAttrs.pname;
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -36,4 +36,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ artturin ];
     platforms = lib.platforms.linux;
   };
-}
+})

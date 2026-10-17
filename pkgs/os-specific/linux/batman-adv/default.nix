@@ -3,6 +3,8 @@
   stdenv,
   fetchurl,
   kernel,
+  kernelModuleMakeFlags,
+  nixosTests,
 }:
 
 let
@@ -14,12 +16,12 @@ stdenv.mkDerivation rec {
   version = "${cfg.version}-${kernel.version}";
 
   src = fetchurl {
-    url = "http://downloads.open-mesh.org/batman/releases/${pname}-${cfg.version}/${pname}-${cfg.version}.tar.gz";
+    url = "https://downloads.open-mesh.org/batman/releases/${pname}-${cfg.version}/${pname}-${cfg.version}.tar.gz";
     sha256 = cfg.sha256.${pname};
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
-  makeFlags = kernel.moduleMakeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KERNELPATH=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
@@ -30,14 +32,20 @@ stdenv.mkDerivation rec {
       -e /depmod/d Makefile
   '';
 
+  passthru.tests = {
+    systemd-networkd-batadv = nixosTests.systemd-networkd-batadv;
+  };
+
   meta = {
     homepage = "https://www.open-mesh.org/projects/batman-adv/wiki/Wiki";
     description = "B.A.T.M.A.N. routing protocol in a linux kernel module for layer 2";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       fpletz
+      herbetom
       philiptaron
     ];
     platforms = with lib.platforms; linux;
+    broken = lib.versionOlder kernel.version cfg.minKernelVersion;
   };
 }

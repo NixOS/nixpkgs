@@ -4,13 +4,15 @@
   fetchFromGitLab,
   autoreconfHook,
   pkg-config,
-  xorg,
-  gtk2,
+  libxcb-util,
+  util-macros,
+  libxcb,
+  gtk3,
   spice,
   spice-protocol,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "x11spice";
   version = "2019-08-20";
 
@@ -19,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "spice";
     repo = "x11spice";
     rev = "51d2a8ba3813469264959bb3ba2fc6fe08097be6";
-    sha256 = "0va5ix14vnqch59gq8wvrhw6q0w0n27sy70xx5kvfj2cl0h1xpg8";
+    hash = "sha256-6N0eIKBMSLdn6R0cr4+wgANsOMybI/xSgQzbTUKPRW0=";
   };
 
   nativeBuildInputs = [
@@ -28,21 +30,21 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    xorg.libxcb
-    xorg.xcbutil
-    xorg.utilmacros
-    gtk2
+    libxcb
+    libxcb-util
+    util-macros
+    gtk3
     spice
     spice-protocol
   ];
 
-  NIX_LDFLAGS = "-lpthread";
+  env.NIX_LDFLAGS = "-lpthread";
 
-  meta = with lib; {
+  meta = {
     description = "Enable a running X11 desktop to be available via a Spice server";
     homepage = "https://gitlab.freedesktop.org/spice/x11spice";
-    platforms = platforms.linux;
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ rnhmjoj ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ rnhmjoj ];
   };
 }

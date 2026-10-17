@@ -5,14 +5,17 @@
   flex,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wcslib";
-  version = "8.4";
+  version = "8.10";
 
   src = fetchurl {
-    url = "ftp://ftp.atnf.csiro.au/pub/software/wcslib/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-lguERCbRSotTze7XgliqkojN7ZmncywGZ8ZPpqUBJtw=";
+    url = "ftp://ftp.atnf.csiro.au/pub/software/wcslib/wcslib-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-s5TTMG2ppSQQ8FYTaRFJblmbXEjxz/LyIVY2lwd7vY0=";
   };
+
+  # error: call to undeclared library function 'snprintf'
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-include stdio.h";
 
   nativeBuildInputs = [ flex ];
 
@@ -23,7 +26,16 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
-  meta = with lib; {
+  # DOCDIR is set to the path $out/share/doc/wcslib, and DOCLINK points
+  # to the same location.
+  # `$(LN_S) $(notdir $(DOCDIR)) $(DOCLINK)` effectively running:
+  # `ln -s wcslib $out/share/doc/wcslib`
+  # This produces a broken link because the target location already exists
+  postInstall = ''
+    rm $out/share/doc/wcslib/wcslib
+  '';
+
+  meta = {
     homepage = "https://www.atnf.csiro.au/people/mcalabre/WCS/";
     description = "World Coordinate System library for astronomy";
     longDescription = ''
@@ -31,8 +43,10 @@ stdenv.mkDerivation rec {
       and their conversion to image coordinate systems. This is the
       standard library for this purpose in astronomy.
     '';
-    maintainers = with maintainers; [ hjones2199 ];
-    license = licenses.lgpl3Plus;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [
+      returntoreality
+    ];
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.unix;
   };
-}
+})

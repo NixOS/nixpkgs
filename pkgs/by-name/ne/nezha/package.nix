@@ -2,25 +2,80 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  go-swag,
   versionCheckHook,
   dbip-country-lite,
+  formats,
   nix-update-script,
+  nixosTests,
+  nezha-theme-admin,
+  nezha-theme-user,
+  withThemes ? [ ],
 }:
 
-buildGoModule rec {
+let
+  frontendName = lib.removePrefix "nezha-theme-";
+
+  frontend-templates =
+    let
+      mkTemplate =
+        theme: extra:
+        {
+          path = "${frontendName theme.pname}-dist";
+          name = frontendName theme.pname;
+          repository = theme.meta.homepage or "";
+          author = theme.src.owner or "";
+          version = theme.version;
+          is_official = false;
+          is_admin = false;
+        }
+        // extra;
+
+      officialThemes = [
+        (mkTemplate nezha-theme-admin {
+          name = "OfficialAdmin";
+          is_admin = true;
+          is_official = true;
+        })
+        (mkTemplate nezha-theme-user {
+          name = "Official";
+          is_official = true;
+        })
+      ];
+
+      communityThemes = map (t: mkTemplate t { }) withThemes;
+    in
+    (formats.yaml { }).generate "frontend-templates.yaml" (officialThemes ++ communityThemes);
+in
+buildGoModule (finalAttrs: {
   pname = "nezha";
-  version = "0.20.13";
+  version = "2.3.18";
 
   src = fetchFromGitHub {
-    owner = "naiba";
+    owner = "nezhahq";
     repo = "nezha";
-    tag = "v${version}";
-    hash = "sha256-fJvL2cESQoiW93aj2RHPyZXvP8246Mf8hIRiP/DSRRY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-tv9JDy6dI23tGZF9hEnA6tbXz0/SQlHUFKpQ6VEhtXk=";
   };
 
-  postPatch = ''
-    cp ${dbip-country-lite.mmdb} pkg/geoip/geoip.db
-  '';
+  proxyVendor = true;
+
+  prePatch =
+    let
+      allThemes = [
+        nezha-theme-admin
+        nezha-theme-user
+      ]
+      ++ withThemes;
+
+      installThemeCmd = theme: "cp -r ${theme} cmd/dashboard/${frontendName theme.pname}-dist";
+    in
+    ''
+      rm -rf cmd/dashboard/*-dist
+
+      cp ${frontend-templates} service/singleton/frontend-templates.yaml
+      ${lib.concatMapStringsSep "\n" installThemeCmd allThemes}
+    '';
 
   patches = [
     # Nezha originally used ipinfo.mmdb to provide geoip query feature.
@@ -29,34 +84,48 @@ buildGoModule rec {
     ./dbip.patch
   ];
 
-  vendorHash = "sha256-SYefkgc0CsAEdkL7rxu9fpz7dpBnx1LwabIadUeOKco=";
+  postPatch = ''
+    cp ${dbip-country-lite.mmdb} pkg/geoip/geoip.db
+  '';
+
+  nativeBuildInputs = [ go-swag ];
+
+  # Generate code for Swagger documentation endpoints (see cmd/dashboard/docs).
+  postConfigure = ''
+    GOROOT=''${GOROOT-$(go env GOROOT)} swag init --pd -d cmd/dashboard -g main.go -o cmd/dashboard/docs
+  '';
+
+  vendorHash = "sha256-NpGdVymENUkxW1N3BQGdVPGbp/snMOf22khQ6xEsNuk=";
 
   ldflags = [
     "-s"
-    "-w"
-    "-X github.com/naiba/nezha/service/singleton.Version=${version}"
+    "-X github.com/nezhahq/nezha/service/singleton.Version=${finalAttrs.version}"
   ];
 
+  __darwinAllowLocalNetworking = true; # TestOptionalAuth_PATWithoutScopeIsDenied
   checkFlags = "-skip=^TestSplitDomainSOA$";
 
   postInstall = ''
     mv $out/bin/dashboard $out/bin/nezha
   '';
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  versionCheckProgramArg = [ "--version" ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-v";
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      inherit (nixosTests) nezha;
+    };
+  };
 
   meta = {
     description = "Self-hosted, lightweight server and website monitoring and O&M tool";
-    homepage = "https://github.com/naiba/nezha";
-    changelog = "https://github.com/naiba/nezha/releases/tag/v${version}";
+    homepage = "https://github.com/nezhahq/nezha";
+    changelog = "https://github.com/nezhahq/nezha/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ moraxyc ];
     mainProgram = "nezha";
   };
-}
+})

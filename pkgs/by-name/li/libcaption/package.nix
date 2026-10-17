@@ -8,24 +8,29 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcaption";
-  version = "0.7";
+  version = "0.8";
 
   src = fetchFromGitHub {
     owner = "szatmary";
     repo = "libcaption";
-    rev = finalAttrs.version;
-    hash = "sha256-OBtxoFJF0cxC+kfSK8TIKIdLkmCh5WOJlI0fejnisJo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9tszEKR30GHoGQ3DE9ejU3yOdtDiZwSZHiIJUPLgOdU=";
     fetchSubmodules = true;
   };
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+  '';
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ re2c ];
 
-  meta = with lib; {
+  meta = {
     description = "Free open-source CEA608 / CEA708 closed-caption encoder/decoder";
     homepage = "https://github.com/szatmary/libcaption";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ pschmitt ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ pschmitt ];
   };
 })

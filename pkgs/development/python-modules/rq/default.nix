@@ -1,73 +1,94 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
+  pythonAtLeast,
 
   # build-system
   hatchling,
 
   # dependencies
   click,
+  croniter,
   redis,
 
   # tests
+  addBinToPathHook,
   psutil,
   pytestCheckHook,
-  redis-server,
-  sentry-sdk,
+  redisTestHook,
+  versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rq";
-  version = "1.16.2";
+  version = "2.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rq";
     repo = "rq";
-    tag = "v${version}";
-    hash = "sha256-8uhCV4aJNbY273jOa9D5OlgEG1w3hXVncClKQTO9Pyk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EGgOeATfuRONPxfbgBqrgK8tk4Ehg9El7bTGOVX4cLY=";
   };
 
   build-system = [ hatchling ];
 
   dependencies = [
     click
+    croniter
     redis
   ];
 
   nativeCheckInputs = [
+    addBinToPathHook
     psutil
     pytestCheckHook
-    sentry-sdk
+    redisTestHook
+    versionCheckHook
   ];
 
   preCheck = ''
-    PATH=$out/bin:$PATH
-    ${redis-server}/bin/redis-server &
-  '';
-
-  postCheck = ''
-    kill %%
+    redisTestPort=6379
   '';
 
   __darwinAllowLocalNetworking = true;
 
-  disabledTests = [
-    # https://github.com/rq/rq/commit/fd261d5d8fc0fe604fa396ee6b9c9b7a7bb4142f
-    "test_clean_large_registry"
-  ];
+  # redisTestHook does not work on darwin-x86_64
+  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
+
+  disabledTests =
+    lib.optionals
+      ((pythonAtLeast "3.14") && stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64)
+      [
+        # AssertionError
+        "test_create_job_with_ttl_should_expire"
+        "test_execution_order_with_dual_dependency"
+        "test_execution_order_with_sole_dependency"
+        "test_sigint_handling"
+        "test_successful_job_repeat"
+        "test_suspend_worker_execution"
+        "test_work"
+      ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # PermissionError: [Errno 13] Permission denied: '/tmp/rq-tests.txt'
+      "test_deleted_jobs_arent_executed"
+      "test_suspend_worker_execution"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      # no delay between reaping worker and checking; racy
+      "test_reap_workers"
+    ];
 
   pythonImportsCheck = [ "rq" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for creating background jobs and processing them";
     homepage = "https://github.com/nvie/rq/";
-    changelog = "https://github.com/rq/rq/releases/tag/v${version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ mrmebelman ];
+    changelog = "https://github.com/rq/rq/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ mrmebelman ];
   };
-}
+})

@@ -15,6 +15,7 @@ let
     mkPackageOption
     types
     getExe
+    getExe'
     optional
     converge
     filterAttrsRecursive
@@ -28,26 +29,40 @@ let
   # Remove null values, so we can document optional/forbidden values that don't end up in the generated TOML file.
   filterConfig = converge (filterAttrsRecursive (_: v: v != null));
 
-  finalPackage = cfg.package.overridePythonAttrs (old: {
-    dependencies =
-      old.dependencies
-      ++ old.optional-dependencies.front
-      ++ old.optional-dependencies.oidc
-      ++ old.optional-dependencies.ldap
-      ++ old.optional-dependencies.sentry
-      ++ old.optional-dependencies.postgresql;
-    makeWrapperArgs = (old.makeWrapperArgs or [ ]) ++ [
-      "--set CONFIG /etc/canaille/config.toml"
-      "--set SECRETS_DIR \"${secretsDir}\""
-    ];
-  });
-  inherit (finalPackage) python;
-  pythonEnv = python.buildEnv.override {
-    extraLibs = with python.pkgs; [
-      (toPythonModule finalPackage)
-      celery
-    ];
+  python = cfg.package.python.override {
+    self = python;
+    packageOverrides = _final: prev: {
+      gunicorn = prev.gunicorn.overridePythonAttrs (old: {
+        # Allows Gunicorn to set a meaningful process name
+        dependencies = (old.dependencies or [ ]) ++ old.optional-dependencies.setproctitle;
+      });
+      canaille = prev.toPythonModule (
+        (cfg.package.override { python3 = python; }).overridePythonAttrs (old: {
+          dependencies =
+            old.dependencies
+            ++ old.optional-dependencies.front
+            ++ old.optional-dependencies.oidc
+            ++ old.optional-dependencies.scim
+            ++ old.optional-dependencies.ldap
+            ++ old.optional-dependencies.sentry
+            ++ old.optional-dependencies.postgresql
+            ++ old.optional-dependencies.otp
+            ++ old.optional-dependencies.sms;
+          makeWrapperArgs = (old.makeWrapperArgs or [ ]) ++ [
+            "--set CANAILLE_CONFIG /etc/canaille/config.toml"
+            "--set SECRETS_DIR \"${secretsDir}\""
+          ];
+        })
+      );
+    };
   };
+  pythonEnv = python.withPackages (
+    ps: with ps; [
+      canaille
+      gunicorn
+      celery
+    ]
+  );
 
   commonServiceConfig = {
     WorkingDirectory = dataDir;
@@ -261,29 +276,28 @@ in
     #
     # See this for how Pydantic maps file names/env vars to config settings:
     # https://docs.pydantic.dev/latest/concepts/pydantic_settings/#parsing-environment-variable-values
-    systemd.tmpfiles.rules =
-      [
-        "Z  ${secretsDir} 700 canaille canaille - -"
-        "L+ ${secretsDir}/SECRET_KEY - - - - ${cfg.secretKeyFile}"
-      ]
-      ++ optional (
-        cfg.smtpPasswordFile != null
-      ) "L+ ${secretsDir}/CANAILLE_SMTP__PASSWORD - - - - ${cfg.smtpPasswordFile}"
-      ++ optional (
-        cfg.jwtPrivateKeyFile != null
-      ) "L+ ${secretsDir}/CANAILLE_OIDC__JWT__PRIVATE_KEY - - - - ${cfg.jwtPrivateKeyFile}"
-      ++ optional (
-        cfg.ldapBindPasswordFile != null
-      ) "L+ ${secretsDir}/CANAILLE_LDAP__BIND_PW - - - - ${cfg.ldapBindPasswordFile}";
+    systemd.tmpfiles.rules = [
+      "Z  ${secretsDir} 700 canaille canaille - -"
+      "L+ ${secretsDir}/SECRET_KEY - - - - ${cfg.secretKeyFile}"
+    ]
+    ++ optional (
+      cfg.smtpPasswordFile != null
+    ) "L+ ${secretsDir}/CANAILLE_SMTP__PASSWORD - - - - ${cfg.smtpPasswordFile}"
+    ++ optional (
+      cfg.jwtPrivateKeyFile != null
+    ) "L+ ${secretsDir}/CANAILLE_OIDC__JWT__PRIVATE_KEY - - - - ${cfg.jwtPrivateKeyFile}"
+    ++ optional (
+      cfg.ldapBindPasswordFile != null
+    ) "L+ ${secretsDir}/CANAILLE_LDAP__BIND_PW - - - - ${cfg.ldapBindPasswordFile}";
 
     # This is not a migration, just an initial setup of schemas
     systemd.services.canaille-install = {
       # We want this on boot, not on socket activation
       wantedBy = [ "multi-user.target" ];
-      after = optional createLocalPostgresqlDb "postgresql.service";
+      after = optional createLocalPostgresqlDb "postgresql.target";
       serviceConfig = commonServiceConfig // {
         Type = "oneshot";
-        ExecStart = "${getExe finalPackage} install";
+        ExecStart = "${getExe python.pkgs.canaille} install";
       };
     };
 
@@ -293,33 +307,29 @@ in
       after = [
         "network.target"
         "canaille-install.service"
-      ] ++ optional createLocalPostgresqlDb "postgresql.service";
+      ]
+      ++ optional createLocalPostgresqlDb "postgresql.target";
       requires = [
         "canaille-install.service"
         "canaille.socket"
       ];
       environment = {
         PYTHONPATH = "${pythonEnv}/${python.sitePackages}/";
-        CONFIG = "/etc/canaille/config.toml";
+        CANAILLE_CONFIG = "/etc/canaille/config.toml";
         SECRETS_DIR = secretsDir;
       };
       serviceConfig = commonServiceConfig // {
         Restart = "on-failure";
-        ExecStart =
-          let
-            gunicorn = python.pkgs.gunicorn.overridePythonAttrs (old: {
-              # Allows Gunicorn to set a meaningful process name
-              dependencies = (old.dependencies or [ ]) ++ old.optional-dependencies.setproctitle;
-            });
-          in
-          ''
-            ${getExe gunicorn} \
-              --name=canaille \
-              --bind='unix:///run/canaille.socket' \
-              'canaille:create_app()'
-          '';
+        ExecStart = ''
+          ${getExe' pythonEnv "gunicorn"} \
+            --name=canaille \
+            --bind='unix:///run/canaille.socket' \
+            'canaille:create_app()'
+        '';
       };
-      restartTriggers = [ "/etc/canaille/config.toml" ];
+      restartTriggers = [
+        config.environment.etc."canaille/config.toml".source
+      ];
     };
 
     systemd.sockets.canaille = {
@@ -346,17 +356,16 @@ in
 
         add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
         add_header X-Frame-Options                      "SAMEORIGIN"    always;
-        add_header X-XSS-Protection                     "1; mode=block" always;
         add_header X-Content-Type-Options               "nosniff"       always;
         add_header Referrer-Policy                      "same-origin"   always;
       '';
       locations = {
         "/".proxyPass = "http://unix:///run/canaille.socket";
         "/static" = {
-          root = "${finalPackage}/${python.sitePackages}/canaille";
+          root = "${python.pkgs.canaille}/${python.sitePackages}/canaille";
         };
         "~* ^/static/.+\\.(?:css|cur|js|jpe?g|gif|htc|ico|png|html|xml|otf|ttf|eot|woff|woff2|svg)$" = {
-          root = "${finalPackage}/${python.sitePackages}/canaille";
+          root = "${python.pkgs.canaille}/${python.sitePackages}/canaille";
           extraConfig = ''
             access_log off;
             expires 30d;
@@ -380,7 +389,7 @@ in
     users.users.canaille = {
       isSystemUser = true;
       group = "canaille";
-      packages = [ finalPackage ];
+      packages = [ python.pkgs.canaille ];
     };
 
     users.groups.canaille.members = [ config.services.nginx.user ];

@@ -7,24 +7,21 @@
   gettext,
 }:
 
-stdenv.mkDerivation rec {
-  version = "1.4.4";
+stdenv.mkDerivation (finalAttrs: {
+  version = "1.4.6";
   pname = "rhash";
 
   src = fetchFromGitHub {
     owner = "rhash";
     repo = "RHash";
-    rev = "v${version}";
-    sha256 = "sha256-3CW41ULdXoID4cOgrcG2j85tgIJ/sz5hU7A83qpuxf4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9/kFI38PG3AKsdDqEV/wEzSel9IlQQ/pvOyhU/N/aV0=";
   };
-
-  patches = [
-    ./dont-fail-ln.patch
-    ./do-link-so.patch
-  ];
 
   nativeBuildInputs = [ which ];
   buildInputs = lib.optionals stdenv.hostPlatform.isFreeBSD [ gettext ];
+
+  strictDeps = true;
 
   # configure script is not autotools-based, doesn't support these options
   dontAddStaticConfigureFlags = true;
@@ -34,6 +31,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--ar=${stdenv.cc.targetPrefix}ar"
     "--target=${stdenv.hostPlatform.config}"
+    "--disable-shani"
     (lib.enableFeature enableStatic "static")
     (lib.enableFeature enableStatic "lib-static")
   ];
@@ -42,20 +40,21 @@ stdenv.mkDerivation rec {
 
   checkTarget = "test-full";
 
-  installTargets =
-    [
-      "install"
-      "install-lib-headers"
-    ]
-    ++ lib.optionals (!enableStatic) [
-      "install-lib-so-link"
-    ];
+  installTargets = [
+    "install"
+    "install-lib-headers"
+  ]
+  ++ lib.optionals (!enableStatic && !stdenv.hostPlatform.isWindows) [
+    "install-lib-so-link"
+  ];
 
-  meta = with lib; {
+  __structuredAttrs = true;
+
+  meta = {
     homepage = "https://rhash.sourceforge.net/";
     description = "Console utility and library for computing and verifying hash sums of files";
-    license = licenses.bsd0;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ andrewrk ];
+    license = lib.licenses.bsd0;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ graysontinker ];
   };
-}
+})

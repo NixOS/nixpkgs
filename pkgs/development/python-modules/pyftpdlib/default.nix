@@ -4,27 +4,30 @@
   fetchPypi,
   mock,
   psutil,
+  pyasyncore,
+  pyasynchat,
   pyopenssl,
   pysendfile,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyftpdlib";
-  version = "1.5.10";
+  version = "2.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jb3rEhW8ui+3SNrjH/2xqwCFQMKNE7NwThePNooIcSg=";
+    hash = "sha256-S6BkIHh5LfY907LpyPg48qPs9CjHUY1ZIcBTDVNRKs8=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [ pysendfile ];
+  dependencies = [
+    pyasyncore
+    pyasynchat
+    pysendfile
+  ];
 
   optional-dependencies = {
     ssl = [ pyopenssl ];
@@ -41,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyftpdlib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous FTP server library";
     homepage = "https://github.com/giampaolo/pyftpdlib/";
     changelog = "https://github.com/giampaolo/pyftpdlib/blob/release-${version}/HISTORY.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "ftpbench";
   };

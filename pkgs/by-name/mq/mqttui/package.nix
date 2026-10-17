@@ -1,44 +1,31 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  darwin,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mqttui";
-  version = "0.21.1";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "EdJoPaTo";
     repo = "mqttui";
-    tag = "v${version}";
-    hash = "sha256-JxaXiQj/dGSUhqyDtNij3JKT5NtEkyMta6rLGHmcLrU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-NpWQGjIbm9HOyutcaojzwqta28pUIBlE0a/2ziun2pY=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "ratatui-binary-data-widget-0.1.0" = "sha256-IQ6BbFW1huv8QrNjqBMVKVMN7gfic/NyTBQNf+wCwAo=";
-    };
-  };
+  cargoHash = "sha256-wRkErkRm7cA/LWFhjQE4bwd4+mWANxZrZjj2CSfwshc=";
 
-  postPatch = ''
-    ln -sf ${./Cargo.lock} Cargo.lock
-  '';
-
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Security;
-
-  meta = with lib; {
+  meta = {
     description = "Terminal client for MQTT";
     homepage = "https://github.com/EdJoPaTo/mqttui";
-    changelog = "https://github.com/EdJoPaTo/mqttui/blob/v${version}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/EdJoPaTo/mqttui/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       fab
       sikmir
     ];
     mainProgram = "mqttui";
   };
-}
+})

@@ -2,29 +2,37 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "turtle-build";
-  version = "0.4.8";
+  version = "0.5.15";
 
   src = fetchFromGitHub {
     owner = "raviqqe";
     repo = "turtle-build";
-    rev = "v${version}";
-    hash = "sha256-PDpiLPMyBZzj2nBy76cSC4ab/kyaoZC/Gd2HSaRVHUM=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-9zCAZHG7GtVvOb+7Sva76VoRLg2ZzlJy77Xa17Mjclw=";
   };
 
-  cargoHash = "sha256-Z9PCnFrUgvF9anfShfU9U7iYISDpzAuJudLq/wN4ONU=";
+  cargoHash = "sha256-+blVNeolxnrf5hHk7ob6dXccfq28+Z1N/caPLILMlhU=";
 
-  meta = with lib; {
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Ninja-compatible build system for high-level programming languages written in Rust";
     homepage = "https://github.com/raviqqe/turtle-build";
-    license = with licenses; [
+    changelog = "https://github.com/raviqqe/turtle-build/releases/tag/v${finalAttrs.version}";
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ lib.maintainers.progrm_jarvis ];
     mainProgram = "turtle";
   };
-}
+})

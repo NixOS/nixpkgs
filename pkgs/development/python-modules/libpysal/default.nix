@@ -3,12 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
 
   beautifulsoup4,
   fiona,
   geodatasets,
   geopandas,
+  jinja2,
   numpy,
   packaging,
   pandas,
@@ -22,23 +22,23 @@
 
 buildPythonPackage rec {
   pname = "libpysal";
-  version = "4.12.1";
+  version = "4.15.0";
   pyproject = true;
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "pysal";
     repo = "libpysal";
     tag = "v${version}";
-    hash = "sha256-snhCEKeGKKj/bTDYi6ZVv5F4b/2rz/JHIFG2IoINQ+Q=";
+    hash = "sha256-ltDrTbx4Z0ZVZHg+v45ETgMGHLDeEX71Qpbe2NykxKw=";
   };
 
   build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     beautifulsoup4
     fiona
     geopandas
+    jinja2
     numpy
     packaging
     pandas
@@ -81,7 +81,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library of spatial analysis functions";
     homepage = "https://pysal.org/libpysal/";
+    changelog = "https://github.com/pysal/libpysal/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.geospatial.members;
+    teams = [ lib.teams.geospatial ];
   };
 }

@@ -1,0 +1,19 @@
+--- a/gui/utils/dark.py
++++ b/gui/utils/dark.py
+@@ -45,12 +45,12 @@
+         return False
+ 
+     theme = ThemeSettings.getInstance().get('theme')
+-    appearance = {
+-        ThemeSettings.SYSTEM: wx.App.Appearance.System,
+-        ThemeSettings.DARK: wx.App.Appearance.Dark,
+-    }.get(theme, wx.App.Appearance.Light)
+ 
+     try:
++        appearance = {
++            ThemeSettings.SYSTEM: wx.App.Appearance.System,
++            ThemeSettings.DARK: wx.App.Appearance.Dark,
++        }.get(theme, wx.App.Appearance.Light)
+         if 'wxMSW' in wx.PlatformInfo and theme != ThemeSettings.BRIGHT:
+             flags = wx.App.DarkMode_Always if theme == ThemeSettings.DARK else wx.App.DarkMode_Auto
+             if not app.MSWEnableDarkMode(flags):

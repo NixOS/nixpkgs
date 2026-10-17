@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   hidapi,
+  udevCheckHook,
   profile ? "/etc/g810-led/profile",
 }:
 
@@ -30,6 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
     hidapi
   ];
 
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
+
   installPhase = ''
     runHook preInstall
 
@@ -45,11 +52,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux LED controller for some Logitech G Keyboards";
     homepage = "https://github.com/MatMoul/g810-led";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
+    platforms = lib.platforms.linux;
   };
 })

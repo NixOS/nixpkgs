@@ -1,83 +1,76 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, makeBinaryWrapper
-, curlMinimal
-, mandoc
-, ncurses
-, nim
-, pandoc
-, pkg-config
-, zlib
-, unstableGitUpdater
-, libseccomp
-, replaceVars
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  makeBinaryWrapper,
+  openssl,
+  libssh2,
+  nim,
+  pkg-config,
+  brotli,
+  gitUpdater,
+  versionCheckHook,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "chawan";
-  version = "0-unstable-2024-12-27";
+  version = "0.4.4";
 
   src = fetchFromSourcehut {
     owner = "~bptato";
     repo = "chawan";
-    rev = "93033c2c382aaff01b1aba6f5db7652c35708bf3";
-    hash = "sha256-MEOIu1CI/VTvd2cixa57Tv1xtBMXiMdD37ZYjAlg5S4=";
-    fetchSubmodules = true;
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4MrJoBNQ4Sbx02/Cl/JdTux5UUu8ioSwRNvDxCH6gcY=";
   };
-
-  patches = [
-    # Include chawan's man pages in mancha's search path
-    (replaceVars ./mancha-augment-path.diff {
-      out = placeholder "out";
-    })
-  ];
-
-  env.NIX_CFLAGS_COMPILE = toString (
-    lib.optional stdenv.cc.isClang "-Wno-error=implicit-function-declaration"
-  );
 
   nativeBuildInputs = [
     makeBinaryWrapper
     nim
-    pandoc
     pkg-config
+    brotli
   ];
 
   buildInputs = [
-    curlMinimal
-    libseccomp
-    ncurses
-    zlib
+    openssl
+    libssh2
   ];
 
-  buildFlags = [ "all" "manpage" ];
+  preBuild = ''
+    export HOME=$TMPDIR
+  '';
+
+  buildFlags = [
+    "all"
+  ];
   installFlags = [
     "DESTDIR=$(out)"
     "PREFIX=/"
   ];
 
   postInstall =
-  let
-    makeWrapperArgs = ''
-      --set MANCHA_CHA $out/bin/cha \
-      --set MANCHA_MAN ${mandoc}/bin/man
+    let
+      makeWrapperArgs = ''
+        --set MANCHA_CHA $out/bin/cha
+      '';
+    in
+    ''
+      wrapProgram $out/bin/mancha ${makeWrapperArgs}
     '';
-  in
-  ''
-    wrapProgram $out/bin/cha ${makeWrapperArgs}
-    wrapProgram $out/bin/mancha ${makeWrapperArgs}
-  '';
 
-  passthru.updateScript = unstableGitUpdater { };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
     description = "Lightweight and featureful terminal web browser";
     homepage = "https://sr.ht/~bptato/chawan/";
-    license = lib.licenses.publicDomain;
+    changelog = "https://git.sr.ht/~bptato/chawan/refs/v${finalAttrs.version}";
+    license = lib.licenses.unlicense;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ jtbx ];
+    maintainers = [ ];
     mainProgram = "cha";
-    broken = stdenv.hostPlatform.isDarwin; # pending PR #292043
   };
-}
+})

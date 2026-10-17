@@ -2,38 +2,37 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  substituteAll,
+  fetchpatch,
+  replaceVars,
 
   # build
   pkg-config,
-  glibc,
   python,
-
-  # runtime
+  setuptools,
   bluez,
   boost,
   glib,
-
 }:
 
-let
+buildPythonPackage rec {
   pname = "gattlib";
-  version = "unstable-2021-06-16";
-in
-buildPythonPackage {
-  inherit pname version;
-  format = "setuptools";
+  version = "0.20210616";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "oscaracena";
     repo = "pygattlib";
-    rev = "7bdb229124fe7d9f4a2cc090277b0fdef82e2a56";
-    hash = "sha256-PS5DIH1JuH2HweyebLLM+UNFGY/XsjKIrsD9x7g7yMI=";
+    tag = "v.${lib.removePrefix "0." version}";
+    hash = "sha256-n3D9CWKvgw4FYmbvsfhaHN963HARBG0p4CcZBC8Gkb0=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./setup.patch;
+    # Fix build for Python 3.13
+    (fetchpatch {
+      url = "https://github.com/oscaracena/pygattlib/commit/73a73b71cfc139e1e0a08816fb976ff330c77ea5.patch";
+      hash = "sha256-/Y/CZNdN/jcxWroqRfdCH2rPUxZUbug668MIAow0scs=";
+    })
+    (replaceVars ./setup.patch {
       boost_version =
         let
           pythonVersion = with lib.versions; "${major python.version}${minor python.version}";
@@ -42,9 +41,10 @@ buildPythonPackage {
     })
   ];
 
+  build-system = [ setuptools ];
+
   nativeBuildInputs = [
     pkg-config
-    glibc
   ];
 
   buildInputs = [
@@ -58,10 +58,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "gattlib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to use the GATT Protocol for Bluetooth LE devices";
     homepage = "https://github.com/oscaracena/pygattlib";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

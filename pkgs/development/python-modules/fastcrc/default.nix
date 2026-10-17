@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   rustPlatform,
   pytestCheckHook,
@@ -10,30 +9,27 @@
 }:
 let
   pname = "fastcrc";
-  version = "0.3.2";
+  version = "0.3.6";
 
   src = fetchFromGitHub {
     owner = "overcat";
     repo = "fastcrc";
     tag = "v${version}";
-    hash = "sha256-yLrv/zqsjgygJAIJtztwxlm4s9o9EBVsCyx1jUXd7hA=";
+    hash = "sha256-13z56Ei+++UzlXs1Kmrm0qOWbr88oPMmX7mi9fK4Gbk=";
   };
 in
 buildPythonPackage {
   inherit pname version src;
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
     maturinBuildHook
   ];
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-wSE7548L+ymNjN9TfygAGY1BrssXOPGXlmE83wV7zb4=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-Z4pMDuW0gR/by3v4/dPsanhgl09tTGe6FMJr41p9/fk=";
   };
 
   pythonImportsCheck = [ "fastcrc" ];
@@ -42,6 +38,8 @@ buildPythonPackage {
     pytestCheckHook
     pytest-benchmark
   ];
+
+  pytestFlags = [ "--benchmark-disable" ];
 
   # Python source files interfere with testing
   preCheck = ''

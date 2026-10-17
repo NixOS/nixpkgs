@@ -2,123 +2,150 @@
   lib,
   stdenv,
   fetchFromGitHub,
+
+  # nativeBuildInputs
   cmake,
+  doxygen,
   ninja,
   pkg-config,
-  tomlplusplus,
-  cli11,
+  qt6,
+
+  # nativeCheckInputs
+  writableTmpDirAsHomeHook,
+
+  # buildInputs (Linux and Darwin)
   gtest,
-  libei,
-  libportal,
-  libX11,
-  libxkbfile,
-  libXtst,
-  libXinerama,
-  libXi,
-  libXrandr,
-  libxkbcommon,
+  openssl,
   pugixml,
   python3,
+
+  # buildInputs (Linux-specific)
   gdk-pixbuf,
-  libnotify,
-  qt6,
-  xkeyboard_config,
-  openssl,
-  wayland-protocols,
-  wayland,
-  libsysprof-capture,
   lerc,
-  doxygen,
+  libei,
+  libnotify,
+  libportal,
+  libsysprof-capture,
+  libx11,
+  libxi,
+  libxinerama,
+  libxkbcommon,
+  libxkbfile,
+  libxrandr,
+  libxtst,
+  wayland,
+  wayland-protocols,
+
+  # Update script for `passthru`.
+  nix-update-script,
 }:
-stdenv.mkDerivation rec {
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "deskflow";
-  version = "1.18.0";
+  version = "1.27.0";
 
   src = fetchFromGitHub {
     owner = "deskflow";
     repo = "deskflow";
-    tag = "v${version}";
-    hash = "sha256-FdpDaJ+pphy2+8prlKst0DjmdbcZOmNp+lKN5xdnvC8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-CgmK/2MbxUJD16q/WdJHz4ppWsMvxIxuwZ8nIgWoH/4=";
   };
-
-  postPatch = ''
-    substituteInPlace src/lib/deskflow/unix/AppUtilUnix.cpp \
-      --replace-fail "/usr/share/X11/xkb/rules/evdev.xml" "${xkeyboard_config}/share/X11/xkb/rules/evdev.xml"
-    substituteInPlace src/lib/gui/tls/TlsCertificate.cpp \
-      --replace-fail '"openssl"' '"${lib.getBin openssl}/bin/openssl"'
-    substituteInPlace deploy/linux/deploy.cmake \
-      --replace-fail 'message(FATAL_ERROR "Unable to read file /etc/os-release")' 'set(RELEASE_FILE_CONTENTS "")'
-  '';
 
   nativeBuildInputs = [
     cmake
+    doxygen
     ninja
     pkg-config
     qt6.wrapQtAppsHook
-    doxygen # docs
   ];
+
+  buildInputs = [
+    gtest
+    openssl
+    pugixml
+    python3
+    qt6.qtbase
+    qt6.qttools
+    qt6.qttranslations
+  ]
+  ++ (lib.optionals stdenv.hostPlatform.isLinux [
+    gdk-pixbuf
+    lerc
+    libei
+    libnotify
+    libportal
+    libsysprof-capture
+    libx11
+    libxi
+    libxinerama
+    libxkbcommon
+    libxkbfile
+    libxrandr
+    libxtst
+    qt6.qtdeclarative
+    qt6.qtwayland
+    wayland
+    wayland-protocols
+  ]);
+
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export PATH="${qt6.qtbase}/bin:$PATH"
+  '';
+
+  postPatch = ''
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
+      substituteInPlace deploy/linux/deploy.cmake \
+        --replace-fail 'message(FATAL_ERROR "Unable to read file /etc/os-release")' 'set(RELEASE_FILE_CONTENTS "")'
+    ''}
+    substituteInPlace translations/CMakeLists.txt \
+      --replace-fail 'PATHS ''${QT_ROOT_DIR} PATH_SUFFIXES "translations" "share/qt/translations"' 'PATHS "${qt6.qttranslations}/translations"'
+    substituteInPlace src/lib/net/CMakeLists.txt \
+      --replace-fail "set(OPENSSL_USE_STATIC_LIBS TRUE)" ""
+  '';
 
   cmakeFlags = [
     "-DCMAKE_SKIP_RPATH=ON" # Avoid generating incorrect RPATH
+    "-DSKIP_BUILD_TESTS=ON" # Perform unit tests in `checkPhase` manually, with one job at a time.
   ];
+
+  qtWrapperArgs = lib.optional stdenv.hostPlatform.isLinux "--set QT_QPA_PLATFORM_PLUGIN_PATH ${qt6.qtwayland}/${qt6.qtbase.qtPluginPrefix}/platforms";
 
   strictDeps = true;
 
-  buildInputs = [
-    tomlplusplus
-    cli11
-    gtest
-    libei
-    libportal
-    libX11
-    libxkbfile
-    libXinerama
-    libXi
-    libXrandr
-    libXtst
-    libxkbcommon
-    pugixml
-    gdk-pixbuf
-    libnotify
-    python3
-    qt6.qtbase
-    wayland-protocols
-    qt6.qtwayland
-    wayland
-    libsysprof-capture
-    lerc
-  ];
-
-  qtWrapperArgs = [
-    "--set QT_QPA_PLATFORM_PLUGIN_PATH ${qt6.qtwayland}/${qt6.qtbase.qtPluginPrefix}/platforms"
-  ];
-
   doCheck = true;
+
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   checkPhase = ''
     runHook preCheck
 
     export QT_QPA_PLATFORM=offscreen
-    export HOME=$(mktemp -d)
-    ./bin/unittests
-    ./bin/integtests
+    ctest --test-dir  "src/unittests" --output-on-failure \
+      --exclude-regex "OSX(KeyState|Clipboard)Tests"
 
     runHook postCheck
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^v([0-9.]+)$"
+    ];
+  };
 
   meta = {
     homepage = "https://github.com/deskflow/deskflow";
     description = "Share one mouse and keyboard between multiple computers on Windows, macOS and Linux";
     mainProgram = "deskflow";
-    maintainers = with lib.maintainers; [ aucub ];
-    license = with lib; [
-      licenses.gpl2Plus
-      licenses.openssl
+    maintainers = with lib.maintainers; [
+      flacks
+      shymega
     ];
-    platforms = lib.platforms.linux;
-    knownVulnerabilities = [
-      "CVE-2021-42072"
-      "CVE-2021-42073"
+    license = with lib.licenses; [
+      gpl2Plus
+      lib.licenses.openssl # We have to be explicit here, as `openssl` is a buildInput.
+      mit # share/applications/org.deskflow.deskflow.desktop
     ];
+    platforms = lib.platforms.unix;
   };
-}
+})

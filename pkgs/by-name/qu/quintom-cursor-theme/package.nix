@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation {
     owner = "Burning_Cube";
     repo = "quintom-cursor-theme";
     rev = "d23e57333e816033cf20481bdb47bb1245ed5d4d";
-    hash = "sha256-Sec2DSnWYal6wzYzP9W+DDuTKHsFHWdRYyMzliMU5bU=A";
+    hash = "sha256-Sec2DSnWYal6wzYzP9W+DDuTKHsFHWdRYyMzliMU5bU=";
   };
 
   installPhase = ''
@@ -22,14 +22,14 @@ stdenvNoCC.mkDerivation {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cursor theme designed to look decent";
     homepage = "https://gitlab.com/Burning_Cube/quintom-cursor-theme";
-    platforms = platforms.unix;
-    license = with licenses; [
+    platforms = lib.platforms.unix;
+    license = with lib.licenses; [
       cc-by-sa-40
       gpl3Only
     ];
-    maintainers = with maintainers; [ frogamic ];
+    maintainers = [ ];
   };
 }

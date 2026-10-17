@@ -9,9 +9,11 @@
   git,
   criterion,
   gtk3,
+  gtksourceview4,
   libconfig,
   gnuplot,
   opencv,
+  python3,
   json-glib,
   fftwFloat,
   cfitsio,
@@ -23,22 +25,28 @@
   libraw,
   libtiff,
   libpng,
+  libgit2,
   libjpeg,
+  libjxl,
   libheif,
+  libxisf,
   ffms,
   wrapGAppsHook3,
   curl,
+  yyjson,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "siril";
-  version = "1.2.4";
+  version = "1.4.4";
 
   src = fetchFromGitLab {
     owner = "free-astro";
     repo = "siril";
-    rev = version;
-    hash = "sha256-orNu9qo7sutMUPeIPPhxKETEKbCm4D6nAuo4Hc/8Bdo=";
+    tag = finalAttrs.version;
+    hash = "sha256-UgG/efOMVeQJ1r219YOPkgkPqEdaXJquqXyWZW0oWgI=";
   };
 
   nativeBuildInputs = [
@@ -57,6 +65,7 @@ stdenv.mkDerivation rec {
     gsl
     exiv2
     gnuplot
+    gtksourceview4
     opencv
     fftwFloat
     librtprocess
@@ -65,33 +74,45 @@ stdenv.mkDerivation rec {
     libraw
     libtiff
     libpng
+    libgit2
     libjpeg
+    libjxl
     libheif
+    libxisf
     ffms
     ffmpeg
     json-glib
     curl
+    yyjson
   ];
 
+  propagatedBuildInputs = [ python3 ];
+
   # Necessary because project uses default build dir for flatpaks/snaps
-  dontUseMesonConfigure = true;
-  dontUseCmakeConfigure = true;
+  mesonBuildDir = "nixbld";
 
-  # Meson fails to find libcurl unless the option is specifically enabled
-  configureScript = ''
-    ${meson}/bin/meson setup -Denable-libcurl=yes --buildtype release nixbld .
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ python3 ]})
   '';
 
-  postConfigure = ''
-    cd nixbld
-  '';
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     homepage = "https://www.siril.org/";
     description = "Astrophotographic image processing tool";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     changelog = "https://gitlab.com/free-astro/siril/-/blob/HEAD/ChangeLog";
-    maintainers = with maintainers; [ hjones2199 ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [
+      returntoreality
+    ];
+    platforms = lib.platforms.linux;
+    mainProgram = "siril";
   };
-}
+})

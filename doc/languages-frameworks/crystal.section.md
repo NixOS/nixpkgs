@@ -18,7 +18,7 @@ This should have generated a `shards.nix` file.
 Next create a Nix file for your derivation and use `pkgs.crystal.buildCrystalPackage` as follows:
 
 ```nix
-with import <nixpkgs> {};
+with import <nixpkgs> { };
 crystal.buildCrystalPackage rec {
   pname = "mint";
   version = "0.5.0";
@@ -26,7 +26,7 @@ crystal.buildCrystalPackage rec {
   src = fetchFromGitHub {
     owner = "mint-lang";
     repo = "mint";
-    rev = version;
+    tag = version;
     hash = "sha256-dFN9l5fgrM/TtOPqlQvUYgixE4KPr629aBmkwdDoq28=";
   };
 
@@ -51,21 +51,24 @@ Additionally you can override the default `crystal build` options (which are cur
 
 ```nix
 {
-  crystalBinaries.mint.options = [ "--release" "--verbose" ];
+  crystalBinaries.mint.options = [
+    "--release"
+    "--verbose"
+  ];
 }
 ```
 
 Depending on the project, you might need additional steps to get it to compile successfully. In Mint's case, we need to link against openssl, so in the end the Nix file looks as follows:
 
 ```nix
-with import <nixpkgs> {};
+with import <nixpkgs> { };
 crystal.buildCrystalPackage rec {
   version = "0.5.0";
   pname = "mint";
   src = fetchFromGitHub {
     owner = "mint-lang";
     repo = "mint";
-    rev = version;
+    tag = version;
     hash = "sha256-dFN9l5fgrM/TtOPqlQvUYgixE4KPr629aBmkwdDoq28=";
   };
 

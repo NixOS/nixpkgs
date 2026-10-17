@@ -2,24 +2,40 @@
   lib,
   stdenv,
   fetchurl,
+  autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sg3_utils";
-  version = "1.48";
+  version = "1.49";
 
   src = fetchurl {
-    url = "https://sg.danny.cz/sg/p/sg3_utils-${version}.tgz";
-    sha256 = "sha256-1itsPPIDkPpzVwRDkAhBZtJfHZMqETXEULaf5cKD13M=";
+    url = "https://sg.danny.cz/sg/p/sg3_utils-${finalAttrs.version}.tgz";
+    sha256 = "sha256-hLpQlRCN2Xz7VU17OHIfKqK0P8H5PPgqvW7+TJ2iIKc=";
   };
 
-  meta = with lib; {
+  postPatch = ''
+    substituteInPlace scripts/rescan-scsi-bus.sh \
+      --replace-fail '/usr/bin/sg_' "$out/bin/sg_"
+  '';
+
+  nativeBuildInputs = [ autoreconfHook ];
+
+  outputs = [
+    "out"
+    "man"
+    "dev"
+    "lib"
+  ];
+
+  meta = {
     homepage = "https://sg.danny.cz/sg/";
+    changelog = "https://sg.danny.cz/sg/p/sg3_utils.ChangeLog";
     description = "Utilities that send SCSI commands to devices";
-    platforms = platforms.linux;
-    license = with licenses; [
+    platforms = lib.platforms.linux;
+    license = with lib.licenses; [
       bsd2
       gpl2Plus
     ];
   };
-}
+})

@@ -12,14 +12,14 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0nv5amfs337m0gbxpjb0585s20rndqfc3mfrzq1iwgnds5gxcrlw";
+    hash = "sha256-nGbWX9HNPh4D/tnVwRxuNgOhCypgydvXA/WMoV1VZVs=";
   };
 
   propagatedBuildInputs = [ pymongo ];
 
-  meta = with lib; {
+  meta = {
     description = "MongoDB-backed Python dict-like interface";
     homepage = "https://github.com/turicas/mongodict/";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
   };
 }

@@ -11,17 +11,17 @@
   wrapGAppsHook4,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "adwsteamgtk";
-  version = "0.7.2";
+  version = "0.8.0";
   # built with meson, not a python format
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Foldex";
     repo = "AdwSteamGtk";
-    tag = "v${version}";
-    hash = "sha256-DI5WK8CtoyH8hSogQx5/oDCrGoLxE06cy63ubU+e3bQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-n+BNqa+SHB1V1INHooc0VpeqZ2Dy1Byt7mrbJc2MXts=";
   };
 
   buildInputs = [
@@ -46,8 +46,8 @@ python3Packages.buildPythonApplication rec {
     description = "Simple Gtk wrapper for Adwaita-for-Steam";
     homepage = "https://github.com/Foldex/AdwSteamGtk";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.reedrw ];
+    maintainers = with lib.maintainers; [ reedrw ];
     mainProgram = "adwaita-steam-gtk";
     platforms = lib.platforms.linux;
   };
-}
+})

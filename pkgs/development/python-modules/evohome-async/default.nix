@@ -1,46 +1,74 @@
 {
   lib,
+  aiofiles,
   aiohttp,
+  aioresponses,
+  aiozoneinfo,
+  asyncclick,
   buildPythonPackage,
-  click,
+  debugpy,
   fetchFromGitHub,
   hatchling,
-  pythonOlder,
+  hatch-vcs,
+  keyring,
+  pytest-asyncio,
+  pytest-freezer,
+  pytestCheckHook,
+  pyyaml,
+  syrupy,
   voluptuous,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "evohome-async";
-  version = "0.4.21";
+  version = "2.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "zxdavb";
     repo = "evohome-async";
-    tag = version;
-    hash = "sha256-+tBqyg7E9wRC6oHq6Fv2vzIGtrHqZp8w/3x/xbacqWI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1wWUYhDj8lO8q8YF251z9uQDQTozTf5kIUjrNLrNdQA=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
-    click
+    aiozoneinfo
     voluptuous
   ];
 
-  # Project has no tests
-  doCheck = false;
+  optional-dependencies = {
+    cli = [
+      aiofiles
+      asyncclick
+      debugpy
+      keyring
+    ];
+  };
+
+  nativeCheckInputs = [
+    aioresponses
+    pytest-asyncio
+    pytest-freezer
+    pytestCheckHook
+    pyyaml
+    syrupy
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.cli;
 
   pythonImportsCheck = [ "evohomeasync2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for connecting to Honeywell's TCC RESTful API";
     homepage = "https://github.com/zxdavb/evohome-async";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/zxdavb/evohome-async/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "evo-client";
   };
-}
+})

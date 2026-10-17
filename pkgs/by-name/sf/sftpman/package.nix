@@ -1,30 +1,34 @@
 {
   lib,
-  python3Packages,
   fetchFromGitHub,
+  rustPlatform,
+  nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sftpman";
-  version = "1.2.2";
+  version = "2.1.2";
+
+  passthru.updateScript = nix-update-script { };
 
   src = fetchFromGitHub {
     owner = "spantaleev";
-    repo = pname;
-    rev = version;
-    hash = "sha256-YxqN4+u0nYUWehbyRhjddIo2sythH3E0fiPSyrUlWhM=";
+    repo = "sftpman-rs";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-kFh47UmKumEq6bL+bKaYjNHkW3EWPLeFgpqvPglDpEU=";
   };
 
-  checkPhase = ''
-    $out/bin/sftpman help
-  '';
+  cargoHash = "sha256-0BSkHVe/sO/ucShv/oKK1ibO1bZ16nbZR/2kNA0Q9aQ=";
 
-  meta = with lib; {
-    homepage = "https://github.com/spantaleev/sftpman";
+  meta = {
+    homepage = "https://github.com/spantaleev/sftpman-rs";
     description = "Application that handles sshfs/sftp file systems mounting";
-    license = licenses.gpl3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ contrun ];
+    license = lib.licenses.agpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      contrun
+      fugi
+    ];
     mainProgram = "sftpman";
   };
-}
+})

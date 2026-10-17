@@ -2,70 +2,45 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  stdenv,
   makeWrapper,
-  python3,
   nix,
-  unstableGitUpdater,
+  nix-update-script,
 }:
-
-let
-  version = "unstable-2024-03-25";
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "nixpkgs-hammering";
+  version = "0-unstable-2026-10-04";
 
   src = fetchFromGitHub {
     owner = "jtojnar";
     repo = "nixpkgs-hammering";
-    rev = "6851ecea8c6da45870b7c06d6495cba3fb2d7c7c";
-    hash = "sha256-kr3zMr7aWt4W/+Jcol5Ctiq0KjXSxViPhGtyqvX9dqE=";
+    rev = "04d6db9304fb08ffaf3d5780a8bb3da908f5ca69";
+    hash = "sha256-o0j00H8IQYmhKknJZdMhWEU5PRTOCXyOIyB3tz43Tz8=";
   };
 
-  meta = with lib; {
-    description = "Set of nit-picky rules that aim to point out and explain common mistakes in nixpkgs package pull requests";
-    homepage = "https://github.com/jtojnar/nixpkgs-hammering";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
-  };
-
-  rust-checks = rustPlatform.buildRustPackage {
-    pname = "nixpkgs-hammering-rust-checks";
-    inherit version src meta;
-    sourceRoot = "${src.name}/rust-checks";
-    cargoHash = "sha256-QrtAalZClNc0ZN6iNqN9rFRQ7w68lEZPV5e25uXYToA=";
-  };
-in
-
-stdenv.mkDerivation {
-  pname = "nixpkgs-hammering";
-
-  inherit version src;
+  cargoHash = "sha256-IiZzJt7t5PlErciIU6r6fSKsWEJMZfqnPAqiX3G3BqU=";
 
   nativeBuildInputs = [ makeWrapper ];
+  postInstall = ''
+    datadir="$out/share/nixpkgs-hammering"
+    mkdir -p "$datadir"
 
-  buildInputs = [ python3 ];
-
-  installPhase = ''
-    runHook preInstall
-
-    AST_CHECK_NAMES=$(find ${rust-checks}/bin -maxdepth 1 -type f -printf "%f:")
-
-    install -Dt $out/bin tools/nixpkgs-hammer
-    wrapProgram $out/bin/nixpkgs-hammer \
-      --prefix PATH : ${
-        lib.makeBinPath [
-          nix
-          rust-checks
-        ]
-      } \
-      --set AST_CHECK_NAMES ''${AST_CHECK_NAMES%:}
-
-    cp -r lib overlays $out
-
-    runHook postInstall
+    wrapProgram "$out/bin/nixpkgs-hammer" \
+        --prefix PATH ":" ${lib.makeBinPath [ nix ]} \
+        --set OVERLAYS_DIR "$datadir/overlays"
+    cp -r ./overlays "$datadir/overlays"
+    cp -r ./lib "$datadir/lib"
   '';
 
-  passthru.updateScript = unstableGitUpdater { };
+  # running checks requires to run nix inside of the builder which fails due to permission errors
+  doCheck = false;
 
-  meta = meta // {
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+
+  meta = {
+    description = "Set of nit-picky rules that aim to point out and explain common mistakes in nixpkgs package pull requests";
+    homepage = "https://github.com/jtojnar/nixpkgs-hammering";
+    license = lib.licenses.mit;
     mainProgram = "nixpkgs-hammer";
+    maintainers = with lib.maintainers; [ iamanaws ];
   };
-}
+})

@@ -1,25 +1,19 @@
 {
-  darwin,
   fetchCrate,
   lib,
   rustPlatform,
-  stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ttfb";
-  version = "1.14.0";
+  version = "2.0.0";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-TElRWWPTwigyLikda7FdDh0tSC67XdPDg/Gu5aVQlAw=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-9iuDGnUB0Oi2yZQ8zDjLSXGUbLfRP+glkJLxrDgPnpQ=";
   };
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
-
-  cargoHash = "sha256-lB1AgigYsPwaIvD0HmgOnKK28pIpn1iIDKsvCpKvlfM=";
+  cargoHash = "sha256-8CIXk7OvSRmtWP/P5teJLSW9tBPHIyhW2A/NjCC6lTo=";
 
   # The bin feature activates all dependencies of the binary. Otherwise,
   # only the library is build.
@@ -34,8 +28,8 @@ rustPlatform.buildRustPackage rec {
       connect, and TLS handshake.
     '';
     homepage = "https://github.com/phip1611/ttfb";
-    changelog = "https://github.com/phip1611/ttfb/blob/v${version}/CHANGELOG.md";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://github.com/phip1611/ttfb/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ phip1611 ];
   };
-}
+})

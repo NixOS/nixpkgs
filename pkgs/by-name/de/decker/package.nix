@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL2
-, SDL2_image
-, unixtools
-, multimarkdown
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  SDL2_image,
+  unixtools,
+  multimarkdown,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "decker";
-  version = "1.53";
+  version = "1.71";
 
   src = fetchFromGitHub {
     owner = "JohnEarnest";
     repo = "Decker";
-    rev = "v${version}";
-    hash = "sha256-TsEGErzekSmAEJLKao74FxdfMq3yTuFrru6HncEvQ38=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-DRWKh92ddGMqMeCZGoKfc96VqYFv4WEA2QFfwHYMC9s=";
   };
 
   buildInputs = [
@@ -39,9 +40,11 @@ stdenv.mkDerivation rec {
     runHook postBuild
   '';
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [
-    "-Wno-error=implicit-const-int-float-conversion"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.cc.isClang [
+      "-Wno-error=implicit-const-int-float-conversion"
+    ]
+  );
 
   installPhase = ''
     runHook preInstall
@@ -72,12 +75,12 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://beyondloom.com/decker";
     description = "Multimedia platform for creating and sharing interactive documents";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "decker";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ foo-dogsquared ];
+    platforms = lib.platforms.all;
+    maintainers = [ ];
   };
-}
+})

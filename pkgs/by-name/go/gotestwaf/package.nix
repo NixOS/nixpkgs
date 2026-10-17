@@ -5,25 +5,25 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gotestwaf";
-  version = "0.5.6";
+  version = "0.5.10";
 
   src = fetchFromGitHub {
     owner = "wallarm";
     repo = "gotestwaf";
-    tag = "v${version}";
-    hash = "sha256-bZ8cNREPUgIO7lJg0WBtc9qvkDUnfqtFNi612Ctcxo8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-KF9fg60iPkIIrk6WI1jdxcebUc0SO2vBWkAY8nGX6rs=";
   };
 
-  vendorHash = "sha256-mPqCphweDF9RQibdjTaXXfXdO8NENHVMdIPxrJEw2g4=";
+  vendorHash = "sha256-tGpgQ1c5mdstq5LX5egmm/ntmjuq2R6eWphsxV5q2b8=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   ldflags = [
     "-w"
     "-s"
-    "-X=github.com/wallarm/gotestwaf/internal/version.Version=v${version}"
+    "-X=github.com/wallarm/gotestwaf/internal/version.Version=v${finalAttrs.version}"
   ];
 
   # Tests require network access
@@ -31,14 +31,12 @@ buildGoModule rec {
 
   doInstallCheck = true;
 
-  versionCheckProgramArg = [ "--version" ];
-
-  meta = with lib; {
+  meta = {
     description = "Tool for API and OWASP attack simulation";
     homepage = "https://github.com/wallarm/gotestwaf";
-    changelog = "https://github.com/wallarm/gotestwaf/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/wallarm/gotestwaf/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "gotestwaf";
   };
-}
+})

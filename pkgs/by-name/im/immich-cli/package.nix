@@ -1,29 +1,59 @@
 {
   lib,
   immich,
-  buildNpmPackage,
+  jq,
   nodejs,
   makeWrapper,
+  runtimeShellPackage,
+  stdenv,
+  versionCheckHook,
+  pnpmConfigHook,
 }:
-buildNpmPackage {
+stdenv.mkDerivation (finalAttrs: {
   pname = "immich-cli";
-  src = "${immich.src}/cli";
-  inherit (immich.sources.components.cli) version npmDepsHash;
+  inherit (immich) version src pnpmDeps;
 
-  nativeBuildInputs = [ makeWrapper ];
+  __structuredAttrs = true;
+  strictDeps = true;
 
-  inherit (immich.web) preBuild;
+  nativeBuildInputs = [
+    jq
+    makeWrapper
+    nodejs
+    pnpmConfigHook
+    immich.pnpm
+  ];
+
+  buildInputs = [
+    runtimeShellPackage
+  ];
+
+  buildPhase = ''
+    runHook preBuild
+
+    pnpm --filter @immich/cli... build
+
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out
-    mv package.json package-lock.json node_modules dist $out/
+    local -r packageOut="$out/lib/node_modules/@immich/cli"
 
-    makeWrapper ${lib.getExe nodejs} $out/bin/immich --add-flags $out/dist/index.js
+    pnpm --filter @immich/cli deploy --prod --no-optional "$packageOut"
+
+    makeWrapper '${lib.getExe nodejs}' "$out/bin/immich" \
+      --add-flags "$packageOut/dist/index.js"
 
     runHook postInstall
   '';
+
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
 
   meta = {
     description = "Self-hosted photo and video backup solution (command line interface)";
@@ -33,4 +63,4 @@ buildNpmPackage {
     inherit (nodejs.meta) platforms;
     mainProgram = "immich";
   };
-}
+})

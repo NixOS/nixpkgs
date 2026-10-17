@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   spidev,
 }:
@@ -11,11 +10,9 @@ buildPythonPackage rec {
   version = "0.2.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     inherit pname version;
-    sha256 = "51682acefda6f29eaaf9f37815edbfdd48ef0e9f1509419eceafe7b440eddc6e";
+    hash = "sha256-UWgqzv2m8p6q+fN4Fe2/3UjvDp8VCUGezq/ntEDt3G4=";
   };
 
   propagatedBuildInputs = [ spidev ];
@@ -23,11 +20,11 @@ buildPythonPackage rec {
   # no tests implemented
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Library for BME280 sensor through spidev";
     mainProgram = "bme280spi";
     homepage = "https://github.com/Kuzj/bme280spi";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

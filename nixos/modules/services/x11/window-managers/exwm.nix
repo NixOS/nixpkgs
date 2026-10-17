@@ -13,7 +13,7 @@ let
     ${cfg.loadScript}
   '';
   packages = epkgs: cfg.extraPackages epkgs ++ [ epkgs.exwm ];
-  exwm-emacs = pkgs.emacs.pkgs.withPackages packages;
+  exwm-emacs = cfg.package.pkgs.withPackages packages;
 in
 {
 
@@ -38,6 +38,10 @@ in
           file.
         '';
       };
+      package = mkPackageOption pkgs "Emacs" {
+        default = "emacs";
+        example = [ "emacs-gtk" ];
+      };
       extraPackages = mkOption {
         type = types.functionTo (types.listOf types.package);
         default = epkgs: [ ];
@@ -46,7 +50,7 @@ in
           epkgs: [
             epkgs.emms
             epkgs.magit
-            epkgs.proofgeneral
+            epkgs.proof-general
           ]
         '';
         description = ''

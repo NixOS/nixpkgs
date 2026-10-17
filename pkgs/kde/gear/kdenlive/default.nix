@@ -1,39 +1,59 @@
 {
   mkKdeDerivation,
   replaceVars,
+  mlt,
+  glaxnimate,
+  ffmpeg-full,
+  ffmpegthumbs,
+  pkg-config,
+  shared-mime-info,
   qtsvg,
   qtmultimedia,
   qtnetworkauth,
+  kddockwidgets,
   qqc2-desktop-style,
-  ffmpeg-full,
-  mediainfo,
-  mlt,
-  shared-mime-info,
   libv4l,
+  kio-extras,
+  opentimelineio,
   frei0r,
-  glaxnimate,
+  qtimageformats,
 }:
 mkKdeDerivation {
   pname = "kdenlive";
 
   patches = [
     (replaceVars ./dependency-paths.patch {
-      inherit mediainfo mlt glaxnimate;
+      inherit mlt glaxnimate;
       ffmpeg = ffmpeg-full;
     })
   ];
 
-  extraNativeBuildInputs = [ shared-mime-info ];
+  extraCmakeFlags = [
+    "-DFETCH_OTIO=0"
+    # breaks because our QML import paths are not set up at build time
+    "-DBUILD_RUN_QMLLINT=0"
+  ];
+
+  extraNativeBuildInputs = [
+    pkg-config
+    shared-mime-info
+  ];
 
   extraBuildInputs = [
     qtsvg
     qtmultimedia
     qtnetworkauth
+    qtimageformats # UI uses webp images
 
+    kddockwidgets
     qqc2-desktop-style
+    kio-extras
 
-    mlt
+    ffmpeg-full
+    ffmpegthumbs
     libv4l
+    mlt
+    opentimelineio
   ];
 
   qtWrapperArgs = [

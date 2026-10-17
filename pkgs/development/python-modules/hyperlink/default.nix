@@ -2,9 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  isPy27,
   idna,
-  typing ? null,
 }:
 
 buildPythonPackage rec {
@@ -14,16 +12,16 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0sx50lkivsfjxx9zr4yh7l9gll2l9kvl0v0w8w4wk2x5v9bzjyj2";
+    hash = "sha256-Qnr5V9qli8kJRxxsQPdMVFD6Ej3Qk/xT79LpHScFpWs=";
   };
 
-  propagatedBuildInputs = [ idna ] ++ lib.optionals isPy27 [ typing ];
+  propagatedBuildInputs = [ idna ];
 
-  meta = with lib; {
+  meta = {
     description = "Featureful, correct URL for Python";
     homepage = "https://github.com/python-hyper/hyperlink";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ apeschar ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = [ ];
   };
 }

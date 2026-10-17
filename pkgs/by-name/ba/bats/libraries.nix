@@ -6,12 +6,12 @@
 {
   bats-assert = stdenv.mkDerivation (finalAttrs: {
     pname = "bats-assert";
-    version = "2.1.0";
+    version = "2.2.4";
     src = fetchFromGitHub {
       owner = "bats-core";
       repo = "bats-assert";
       rev = "v${finalAttrs.version}";
-      hash = "sha256-opgyrkqTwtnn/lUjMebbLfS/3sbI2axSusWd5i/5wm4=";
+      hash = "sha256-TmLCSYT9JyC09XxyfTa7Ls2aEFuwDkCiddwZxkg/8vc=";
     };
     dontBuild = true;
     installPhase = ''
@@ -58,12 +58,12 @@
 
   bats-detik = stdenv.mkDerivation (finalAttrs: {
     pname = "bats-detik";
-    version = "1.3.2";
+    version = "1.3.3";
     src = fetchFromGitHub {
       owner = "bats-core";
       repo = "bats-detik";
       rev = "v${finalAttrs.version}";
-      hash = "sha256-f8PN+VsUdUXrR9JiQgVuYDy2QgOtaxE8tkkxOUF0uC4=";
+      hash = "sha256-NM8/WDiTOJORC6+pAa6tYJC7wnuMH9OP5LBaatXyaYw=";
     };
     dontBuild = true;
     installPhase = ''

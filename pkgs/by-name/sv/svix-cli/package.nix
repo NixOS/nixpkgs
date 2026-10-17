@@ -12,7 +12,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "svix";
-    repo = pname;
+    repo = "svix-cli";
     rev = revision;
     hash = "sha256-bHcxhJs4Nu/hdiftQFZMx4M5iqFtpOzrsvXOgo9NlDc=";
   };
@@ -38,10 +38,10 @@ buildGoModule rec {
     "-X github.com/svix/svix-cli/version.Version=v${version}"
   ];
 
-  meta = with lib; {
-    description = "A CLI for interacting with the Svix API";
+  meta = {
+    description = "CLI for interacting with the Svix API";
     homepage = "https://github.com/svix/svix-cli/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ techknowlogick ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ techknowlogick ];
   };
 }

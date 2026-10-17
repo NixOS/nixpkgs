@@ -1,43 +1,61 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
+  installShellFiles,
   rustPlatform,
-  pkg-config,
-  openssl,
-  curl,
+  versionCheckHook,
+  withRuntimeRules ? true,
+  withRequestAi ? true,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pay-respects";
-  version = "0.6.11";
+  version = "0.8.8";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "iff";
     repo = "pay-respects";
-    rev = "v${version}";
-    hash = "sha256-4m8/sp6r2Xb2SsNcatMv0+mWHBx+XKD0LEzrEwuWIEA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-z7GQst70KGNTWAd3sb5eoDnMR2RAmw9RNw3qPeoLWSQ=";
   };
 
-  cargoHash = "sha256-obuMixkXqWUuZFqs3mJyMpHx4RY70ZpE3H9GzqFmt6k=";
+  cargoHash = "sha256-d3RCjCxJXb5YLai1ZqWKifbb2nLG5j1psuvAorNgFGg=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  env = {
+    _DEF_PR_AI_API_KEY = "";
+    _DEF_PR_AI_URL = "";
+    _DEF_PR_AI_MODEL = "";
+  };
 
-  buildInputs = [
-    openssl
-    curl
-  ];
+  cargoBuildFlags = [
+    "-p pay-respects"
+  ]
+  ++ lib.optional withRuntimeRules "-p pay-respects-module-runtime-rules"
+  ++ lib.optional withRequestAi "-p pay-respects-module-request-ai";
+  cargoTestFlags = [
+    "-p pay-respects"
+  ]
+  ++ lib.optional withRuntimeRules "-p pay-respects-module-runtime-rules"
+  ++ lib.optional withRequestAi "-p pay-respects-module-request-ai";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installManPage man/*
+  '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
-    description = "Terminal command correction, alternative to `thefuck`, written in Rust";
+    description = "Terminal command correction, alternative to thefuck, written in Rust";
     homepage = "https://codeberg.org/iff/pay-respects";
+    changelog = "https://codeberg.org/iff/pay-respects/src/tag/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
       sigmasquadron
-      bloxx12
+      faukah
       ALameLlama
     ];
     mainProgram = "pay-respects";
   };
-}
+})

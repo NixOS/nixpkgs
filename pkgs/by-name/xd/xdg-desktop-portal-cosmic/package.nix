@@ -1,72 +1,99 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
-  gst_all_1,
-  libgbm,
+  glib,
+  just,
+  libcosmicAppHook,
   pkg-config,
-  libglvnd,
-  libxkbcommon,
+  util-linux,
+  libgbm,
   pipewire,
-  wayland,
+  gst_all_1,
+  cosmic-wallpapers,
+  nix-update-script,
+  nixosTests,
+  enableHardwareAcceleration ? false,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xdg-desktop-portal-cosmic";
-  version = "1.0.0-alpha.5.1";
+  version = "1.10.0";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "xdg-desktop-portal-cosmic";
-    rev = "epoch-${version}";
-    hash = "sha256-wff805IIXrXC/kn5l4HrYenxNRTGDYHPmT7qTTtBi/c=";
+    tag = "epoch-${finalAttrs.version}";
+    hash = "sha256-GuaSy/N0DsH+J636DwJj6hyjUi58oJzNz1UvYSWAVf4=";
   };
 
-  env.VERGEN_GIT_COMMIT_DATE = "2025-01-14";
-  env.VERGEN_GIT_SHA = src.rev;
-
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Dwlow5nUl7qHLfu4Acic2CRCJViylpPLyLBVtBgWd9A=";
+  cargoHash = "sha256-BjQbC8nEouu8MI4pf+4LNQ/JR3BsHpt4WppkOkE6BrI=";
 
   separateDebugInfo = true;
 
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
+    just
+    libcosmicAppHook
     rustPlatform.bindgenHook
     pkg-config
+    util-linux
   ];
+
   buildInputs = [
-    libglvnd
-    libxkbcommon
+    glib
     libgbm
     pipewire
-    wayland
   ];
+
   checkInputs = [ gst_all_1.gstreamer ];
 
-  # Force linking to libEGL, which is always dlopen()ed, and to
-  # libwayland-client, which is always dlopen()ed except by the
-  # obscure winit backend.
-  RUSTFLAGS = map (a: "-C link-arg=${a}") [
-    "-Wl,--push-state,--no-as-needed"
-    "-lEGL"
-    "-lwayland-client"
-    "-Wl,--pop-state"
-  ];
-
-  postInstall = ''
-    mkdir -p $out/share/{dbus-1/services,icons,xdg-desktop-portal/portals}
-    cp -r data/icons $out/share/icons/hicolor
-    cp data/*.service $out/share/dbus-1/services/
-    cp data/cosmic-portals.conf $out/share/xdg-desktop-portal/
-    cp data/cosmic.portal $out/share/xdg-desktop-portal/portals/
+  postPatch = ''
+    substituteInPlace src/screenshot.rs src/widget/screenshot.rs \
+      --replace-fail '/usr/share/backgrounds' '${cosmic-wallpapers}/share/backgrounds'
   '';
 
-  meta = with lib; {
+  dontUseJustBuild = true;
+  dontUseJustCheck = true;
+
+  justFlags = [
+    "--set"
+    "prefix"
+    (placeholder "out")
+    "--set"
+    "cargo-target-dir"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
+  ];
+
+  buildFeatures = lib.optional enableHardwareAcceleration "wgpu";
+
+  passthru = {
+    tests = {
+      inherit (nixosTests)
+        cosmic
+        cosmic-autologin
+        cosmic-noxwayland
+        cosmic-autologin-noxwayland
+        ;
+    };
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "epoch-(.*)"
+      ];
+    };
+  };
+
+  meta = {
     homepage = "https://github.com/pop-os/xdg-desktop-portal-cosmic";
     description = "XDG Desktop Portal for the COSMIC Desktop Environment";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nyabinary ];
+    license = lib.licenses.gpl3Only;
+    teams = [ lib.teams.cosmic ];
     mainProgram = "xdg-desktop-portal-cosmic";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

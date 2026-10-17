@@ -3,11 +3,13 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  gitMinimal,
   fetchFromGitLab,
   glfw,
+  libGL,
   glm,
   spdlog,
-  cereal_1_3_2,
+  cereal,
   python3Packages,
 }:
 
@@ -18,14 +20,14 @@ let
     abseil-cpp = fetchFromGitHub {
       owner = "abseil";
       repo = "abseil-cpp";
-      rev = "4447c7562e3bc702ade25105912dce503f0c4010";
-      hash = "sha256-51jpDhdZ0n+KLmxh8KVaTz53pZAB0dHjmILFX+OLud4=";
+      rev = "2065f4ded0558c6f89fee67c8e5228feb4eb960e";
+      hash = "sha256-CEtLO4il9/jk+bFDDV0rXeX1OkirA0u6nxrSiWq0NPM=";
     };
     benchmark = fetchFromGitHub {
       owner = "google";
       repo = "benchmark";
-      rev = "24e0bd827a8bec8121b128b0634cb34402fb3259";
-      hash = "sha256-h3QllJC/tiUzl5UlGCTIoDuDcKG6J538MCY2Pqe2IOE=";
+      rev = "834a61fc65e8b7885fcf177f1230ae4b897118fa";
+      hash = "sha256-V5pVCG5QdFlgBIVKMv4jyTTB22BWfTHD3HolVPDFpgQ=";
     };
     ccd = fetchFromGitHub {
       owner = "danfis";
@@ -36,38 +38,38 @@ let
     eigen3 = fetchFromGitLab {
       owner = "libeigen";
       repo = "eigen";
-      rev = "7f2377859377da6f22152015c28b12c04752af77";
-      hash = "sha256-SmyvY/WlU9jryD9ZpSw73dQEc9jI4ySQPRnplg/BC4w=";
+      rev = "b1f8b0c3b8db9c3711349144acf951226700ddb4";
+      hash = "sha256-R8VxOEjJvkBCcQRWpTi9oWI3Mhxp31wrOcQ2IQN3GIw=";
     };
     googletest = fetchFromGitHub {
       owner = "google";
       repo = "googletest";
-      rev = "b514bdc898e2951020cbdca1304b75f5950d1f59";
-      hash = "sha256-1OJ2SeSscRBNr7zZ/a8bJGIqAnhkg45re0j3DtPfcXM=";
+      rev = "063de7e9578f82b369302001269680b4b1553359";
+      hash = "sha256-rXsn2L0xeWvfxTjMAoWEu0UFZ7xOSfYmhbKgRF5J9co=";
     };
-    lodepng = fetchFromGitHub {
-      owner = "lvandeve";
-      repo = "lodepng";
-      rev = "b4ed2cd7ecf61d29076169b49199371456d4f90b";
-      hash = "sha256-5cCkdj/izP4e99BKfs/Mnwu9aatYXjlyxzzYiMD/y1M=";
+    miniz = fetchFromGitHub {
+      owner = "richgel999";
+      repo = "miniz";
+      rev = "77d0dce8627735138c51770d1799a1ef48f2117d";
+      hash = "sha256-/MAJWZXZ+pbelFduGE75rK/x9qEzxSFEj8RJWe3JUv0=";
     };
     qhull = fetchFromGitHub {
       owner = "qhull";
       repo = "qhull";
-      rev = "0c8fc90d2037588024d9964515c1e684f6007ecc";
-      hash = "sha256-Ptzxad3ewmKJbbcmrBT+os4b4SR976zlCG9F0nq0x94=";
+      rev = "d1c2fc0caa5f644f3a0f220290d4a868c68ed4f6";
+      hash = "sha256-enwzl4td3lgYwQ4PXfcONKQrxChnJcvf8ehnJ6vf0yg=";
     };
     tinyobjloader = fetchFromGitHub {
       owner = "tinyobjloader";
       repo = "tinyobjloader";
-      rev = "1421a10d6ed9742f5b2c1766d22faa6cfbc56248";
-      hash = "sha256-9z2Ne/WPCiXkQpT8Cun/pSGUwgClYH+kQ6Dx1JvW6w0=";
+      rev = "2945a967c5303b2c8c14174117c45f3302591150";
+      hash = "sha256-eEgy43IzhovTjEgLz3qNsRnOkp0bcvQdWve7jOidHX4=";
     };
     tinyxml2 = fetchFromGitHub {
       owner = "leethomason";
       repo = "tinyxml2";
-      rev = "9a89766acc42ddfa9e7133c7d81a5bda108a0ade";
-      hash = "sha256-YGAe4+Ttv/xeou+9FoJjmQCKgzupTYdDhd+gzvtz/88=";
+      rev = "e6caeae85799003f4ca74ff26ee16a789bc2af48";
+      hash = "sha256-GpFFWl7/1XF1vTOxUrEo27T4Kc6oaUMvhGp9xLQfmWg=";
     };
     marchingcubecpp = fetchFromGitHub {
       owner = "aparis69";
@@ -76,103 +78,108 @@ let
       hash = "sha256-90ei0lpJA8XuVGI0rGb3md0Qtq8/bdkU7dUCHpp88Bw=";
     };
 
-    tmd = stdenv.mkDerivation rec {
-      name = "TriangleMeshDistance";
-
-      src = fetchFromGitHub {
-        owner = "InteractiveComputerGraphics";
-        repo = name;
-        rev = "e55a15c20551f36242fd6368df099a99de71d43a";
-        hash = "sha256-vj6TMMT8mp7ciLa5nzVAhMWPcAHXq+ZwHlWsRA3uCmg=";
-      };
-
-      installPhase = ''
-        mkdir -p $out/include/tmd
-        cp ${name}/include/tmd/${name}.h $out/include/tmd/
-      '';
+    # cmake/third_party_deps/lodepng.cmake
+    lodepng = fetchFromGitHub {
+      owner = "lvandeve";
+      repo = "lodepng";
+      rev = "22561883dd63fd1850f18e1f6adac321e4f609b0";
+      hash = "sha256-JscUapUNVs2n0Ky08dksFCigBv83DcbxWHcaktqYP7Y=";
     };
-
-    sdflib = stdenv.mkDerivation rec {
-      name = "SdfLib";
-
-      src = fetchFromGitHub {
-        owner = "UPC-ViRVIG";
-        repo = name;
-        rev = "1927bee6bb8225258a39c8cbf14e18a4d50409ae";
-        hash = "sha256-+SFUOdZ6pGZvnQa0mT+yfbTMHWe2CTOlroXcuVBHdOE=";
-      };
-
-      patches = [ ./sdflib-system-deps.patch ];
-
-      cmakeFlags = [
-        "-DSDFLIB_USE_ASSIMP=OFF"
-        "-DSDFLIB_USE_OPENMP=OFF"
-        "-DSDFLIB_USE_ENOKI=OFF"
-        "-DSDFLIB_USE_SYSTEM_GLM=ON"
-        "-DSDFLIB_USE_SYSTEM_SPDLOG=ON"
-        "-DSDFLIB_USE_SYSTEM_CEREAL=ON"
-        "-DSDFLIB_USE_SYSTEM_TRIANGLEMESHDISTANCE=ON"
-      ];
-
-      nativeBuildInputs = [ cmake ];
-      buildInputs = [
-        pin.tmd
-
-        # Mainline. The otherwise pinned glm realease from 2018 does
-        # not build due to test failures and missing files.
-        glm
-
-        spdlog
-        cereal_1_3_2
-      ];
-    };
-
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mujoco";
-  version = "3.2.7";
+  version = "3.16.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   # Bumping version? Make sure to look though the MuJoCo's commit
   # history for bumped dependency pins!
   src = fetchFromGitHub {
     owner = "google-deepmind";
     repo = "mujoco";
-    tag = version;
-    hash = "sha256-TAhgu3h7tCflIMscVS+jYuUfMmIYcCcI3JFxUlj8g9E=";
+    tag = finalAttrs.version;
+    hash = "sha256-pL4wtmbsRuOWsS1vfThThxvIU8EFtYU9ITaMSrSjA3I=";
   };
 
-  patches = [ ./mujoco-system-deps-dont-fetch.patch ];
+  patches = [
+    ./mujoco-system-deps-dont-fetch.patch
+  ];
 
-  nativeBuildInputs = [ cmake ];
+  # Install plugins to expose them in python to fix mujoco-warp tests
+  # ref. https://github.com/google-deepmind/mujoco/pull/3602
+  postPatch = ''
+    for plugin in actuator elasticity sensor; do
+      echo "install(TARGETS $plugin)" >> plugin/$plugin/CMakeLists.txt
+    done
+
+    for plugin in sdf usd_decoder; do
+      echo "install(TARGETS $plugin""_plugin)" >> plugin/$plugin/CMakeLists.txt
+    done
+  '';
+
+  nativeBuildInputs = [
+    cmake
+    # git is needed to apply patches to ccd-src and qhull-src (see below)
+    gitMinimal
+  ];
 
   buildInputs = [
-    pin.sdflib
     glm
 
     # non-numerical
     spdlog
-    cereal_1_3_2
+    cereal
     glfw
   ];
 
+  propagatedBuildInputs = [
+    # consuming MuJoCo through cmake find_package requires libGL
+    libGL
+  ];
+
   cmakeFlags = [
-    "-DMUJOCO_USE_SYSTEM_sdflib=ON"
-    "-DMUJOCO_SIMULATE_USE_SYSTEM_GLFW=ON"
-    "-DMUJOCO_SAMPLES_USE_SYSTEM_GLFW=ON"
+    (lib.cmakeBool "MUJOCO_SIMULATE_USE_SYSTEM_GLFW" true)
+    (lib.cmakeBool "MUJOCO_SAMPLES_USE_SYSTEM_GLFW" true)
   ];
 
   # Move things into place so that cmake doesn't try downloading dependencies.
   preConfigure = ''
     mkdir -p build/_deps
-    ln -s ${pin.abseil-cpp} build/_deps/abseil-cpp-src
     ln -s ${pin.benchmark} build/_deps/benchmark-src
-    ln -s ${pin.ccd} build/_deps/ccd-src
+  ''
+  # mujoco applies a patch on top of abseil-cpp's sources
+  # https://github.com/google-deepmind/mujoco/blob/3.10.0/cmake/MujocoDependencies.cmake#L299-L300
+  + ''
+    cp -r ${pin.abseil-cpp} build/_deps/abseil-cpp-src
+    chmod -R +w build/_deps/abseil-cpp-src
+  ''
+  # cccd is patched by mujoco's cmake and thus needs to be writable
+  # https://github.com/google-deepmind/mujoco/blob/3.4.0/cmake/MujocoDependencies.cmake#L232-L235
+  + ''
+    cp -r ${pin.ccd} build/_deps/ccd-src
+    chmod -R +w build/_deps/ccd-src
+  ''
+  + ''
     ln -s ${pin.eigen3} build/_deps/eigen3-src
     ln -s ${pin.googletest} build/_deps/googletest-src
-    ln -s ${pin.lodepng} build/_deps/lodepng-src
-    ln -s ${pin.qhull} build/_deps/qhull-src
+    ln -s ${pin.miniz} build/_deps/miniz-src
+  ''
+  # qhull is patched by mujoco's cmake and thus needs to be writable
+  # https://github.com/google-deepmind/mujoco/blob/3.4.0/cmake/MujocoDependencies.cmake#L132-L135
+  + ''
+    cp -r ${pin.qhull} build/_deps/qhull-src
+    chmod -R +w build/_deps/qhull-src
+  ''
+  # lodepng needs a custom CMakeLists.txt copied into its source dir
+  # by FindOrFetch, so it must be writable
+  + ''
+    cp -r ${pin.lodepng} build/_deps/lodepng-src
+    chmod -R +w build/_deps/lodepng-src
+  ''
+  + ''
     ln -s ${pin.tinyobjloader} build/_deps/tinyobjloader-src
     ln -s ${pin.tinyxml2} build/_deps/tinyxml2-src
     ln -s ${pin.marchingcubecpp} build/_deps/marchingcubecpp-src
@@ -184,13 +191,14 @@ stdenv.mkDerivation rec {
     };
     tests = {
       pythonMujoco = python3Packages.mujoco;
+      pythonMujocoMjx = python3Packages.mujoco-mjx;
     };
   };
 
   meta = {
     description = "Multi-Joint dynamics with Contact. A general purpose physics simulator";
     homepage = "https://mujoco.org/";
-    changelog = "https://github.com/google-deepmind/mujoco/releases/tag/${version}";
+    changelog = "https://mujoco.readthedocs.io/en/${finalAttrs.version}/changelog.html";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       GaetanLepage
@@ -199,4 +207,4 @@ stdenv.mkDerivation rec {
     ];
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

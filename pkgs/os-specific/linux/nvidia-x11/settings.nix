@@ -12,10 +12,10 @@ nvidia_x11: sha256:
   dbus,
   vulkan-headers,
   gtk3,
-  libXv,
-  libXrandr,
-  libXext,
-  libXxf86vm,
+  libxv,
+  libxrandr,
+  libxext,
+  libxxf86vm,
   libvdpau,
   librsvg,
   libglvnd,
@@ -33,13 +33,9 @@ let
     inherit sha256;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.nvidia.com/object/unix.html";
     platforms = nvidia_x11.meta.platforms;
-    maintainers = with maintainers; [
-      abbradar
-      aidalgol
-    ];
   };
 
   libXNVCtrl = stdenv.mkDerivation {
@@ -48,8 +44,8 @@ let
     inherit src;
 
     buildInputs = [
-      libXrandr
-      libXext
+      libxrandr
+      libxext
     ];
 
     preBuild = ''
@@ -91,8 +87,8 @@ let
 
   runtimeDependencies = [
     libglvnd
-    libXrandr
-    libXv
+    libxrandr
+    libxv
   ];
 
   runtimeLibraryPath = lib.makeLibraryPath runtimeDependencies;
@@ -111,16 +107,17 @@ stdenv.mkDerivation {
       url = "https://github.com/NVIDIA/nvidia-settings/commit/a7c1f5fce6303a643fadff7d85d59934bd0cf6b6.patch";
       hash = "sha256-ZwF3dRTYt/hO8ELg9weoz1U/XcU93qiJL2d1aq1Jlak=";
     })
-    ++ lib.optional
-      (
-        (lib.versionAtLeast nvidia_x11.settingsVersion "515.43.04")
-        && (lib.versionOlder nvidia_x11.settingsVersion "545.29")
-      )
-      (fetchpatch {
-        # fix wayland support for compositors that use wl_output version 4
-        url = "https://github.com/NVIDIA/nvidia-settings/pull/99/commits/2e0575197e2b3247deafd2a48f45afc038939a06.patch";
-        hash = "sha256-wKuO5CUTUuwYvsP46Pz+6fI0yxLNpZv8qlbL0TFkEFE=";
-      });
+    ++
+      lib.optional
+        (
+          (lib.versionAtLeast nvidia_x11.settingsVersion "515.43.04")
+          && (lib.versionOlder nvidia_x11.settingsVersion "545.29")
+        )
+        (fetchpatch {
+          # fix wayland support for compositors that use wl_output version 4
+          url = "https://github.com/NVIDIA/nvidia-settings/pull/99/commits/2e0575197e2b3247deafd2a48f45afc038939a06.patch";
+          hash = "sha256-wKuO5CUTUuwYvsP46Pz+6fI0yxLNpZv8qlbL0TFkEFE=";
+        });
 
   postPatch = lib.optionalString nvidia_x11.useProfiles ''
     sed -i 's,/usr/share/nvidia/,${nvidia_x11.bin}/share/nvidia/,g' src/gtk+-2.x/ctkappprofile.c
@@ -141,25 +138,25 @@ stdenv.mkDerivation {
     pkg-config
     m4
     addDriverRunpath
-  ] ++ lib.optionals withGtk3 [ wrapGAppsHook3 ];
+  ]
+  ++ lib.optionals withGtk3 [ wrapGAppsHook3 ];
 
-  buildInputs =
-    [
-      jansson
-      libXv
-      libXrandr
-      libXext
-      libXxf86vm
-      libvdpau
-      nvidia_x11
-      dbus
-      vulkan-headers
-    ]
-    ++ lib.optionals (withGtk2 || lib.versionOlder nvidia_x11.settingsVersion "525.53") [ gtk2 ]
-    ++ lib.optionals withGtk3 [
-      gtk3
-      librsvg
-    ];
+  buildInputs = [
+    jansson
+    libxv
+    libxrandr
+    libxext
+    libxxf86vm
+    libvdpau
+    nvidia_x11
+    dbus
+    vulkan-headers
+  ]
+  ++ lib.optionals (withGtk2 || lib.versionOlder nvidia_x11.settingsVersion "525.53") [ gtk2 ]
+  ++ lib.optionals withGtk3 [
+    gtk3
+    librsvg
+  ];
 
   installFlags = [ "PREFIX=$(out)" ];
 

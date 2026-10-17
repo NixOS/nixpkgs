@@ -2,36 +2,35 @@
   lib,
   stdenvNoCC,
   fetchurl,
+  installFonts,
   unzip,
 }:
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "lilex";
-  version = "2.600";
+  version = "2.700";
 
   src = fetchurl {
-    url = "https://github.com/mishamyrt/Lilex/releases/download/${version}/Lilex.zip";
-    hash = "sha256-G8zm35aSiXrnGgYePSwLMBzwSnd9mfCinHZSG1qBH0w=";
+    url = "https://github.com/mishamyrt/Lilex/releases/download/${finalAttrs.version}/Lilex.zip";
+    hash = "sha256-NDEO20unSfdy1CuI4+7EpjGFJ+dc7qqWz8VW7jU2b7w=";
   };
 
-  nativeBuildInputs = [ unzip ];
+  sourceRoot = ".";
 
-  unpackPhase = ''
-    runHook preUnpack
-    unzip $src
-    runHook postUnpack
-  '';
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
-  installPhase = ''
-    runHook preInstall
-    find . -name '*.ttf' -exec install -m444 -Dt $out/share/fonts/truetype {} +
-    runHook postInstall
-  '';
+  nativeBuildInputs = [
+    installFonts
+    unzip
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Open source programming font";
     homepage = "https://github.com/mishamyrt/Lilex";
-    license = licenses.ofl;
-    maintainers = with maintainers; [ redyf ];
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    maintainers = with lib.maintainers; [ redyf ];
+    platforms = lib.platforms.all;
   };
-}
+})

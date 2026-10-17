@@ -1,25 +1,28 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "auth0-cli";
-  version = "1.8.0";
+  version = "1.32.0";
 
   src = fetchFromGitHub {
     owner = "auth0";
     repo = "auth0-cli";
-    tag = "v${version}";
-    hash = "sha256-D982lmu44JFrxGcn0G1BssGkE3juUoB6qbCHWCTg9kw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-tRr0bCzijVG3+2n67jo7SNe4Oxxci0sRXhQct2645cI=";
   };
 
-  vendorHash = "sha256-OEHJTMcoaB4BZ06GjXIFPbCyoMGeumjTzWWFmgqLML8=";
+  vendorHash = "sha256-ZwGIYjaCQikHMoy3bSnvNEk+REnKO6JdCiiSh8L0SDg=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/auth0/auth0-cli/internal/buildinfo.Version=v${version}"
+    "-X=github.com/auth0/auth0-cli/internal/buildinfo.Version=v${finalAttrs.version}"
     "-X=github.com/auth0/auth0-cli/internal/buildinfo.Revision=0000000"
   ];
 
@@ -33,14 +36,25 @@ buildGoModule rec {
       --replace-fail "TestFetchUniversalLoginBrandingData" "SkipFetchUniversalLoginBrandingData"
   '';
 
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd auth0 \
+      --bash <($out/bin/auth0 completion bash) \
+      --fish <($out/bin/auth0 completion fish) \
+      --zsh <($out/bin/auth0 completion zsh)
+  '';
+
   subPackages = [ "cmd/auth0" ];
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "Supercharge your developer workflow";
     homepage = "https://auth0.github.io/auth0-cli";
-    changelog = "https://github.com/auth0/auth0-cli/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthewcroughan ];
+    changelog = "https://github.com/auth0/auth0-cli/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
     mainProgram = "auth0";
   };
-}
+})

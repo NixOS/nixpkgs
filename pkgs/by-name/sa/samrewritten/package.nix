@@ -1,53 +1,73 @@
 {
   lib,
-  stdenv,
+  rustPlatform,
   fetchFromGitHub,
-  unstableGitUpdater,
-  curl,
-  gtkmm3,
-  glibmm,
-  gnutls,
-  yajl,
+  nix-update-script,
+  # Deps
+  gdk-pixbuf,
+  glib,
+  graphene,
+  gtk4,
+  openssl,
+  pango,
   pkg-config,
+  wrapGAppsHook4,
 }:
-stdenv.mkDerivation (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "samrewritten";
-  version = "202008-unstable-2025-01-09";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "PaulCombal";
     repo = "SamRewritten";
-    # The latest release is too old, use latest commit instead
-    rev = "b18a009c20eb90e2edffb6ee6d5290c86c860e03";
-    hash = "sha256-qwasSxNc4hJDadGTUOxzumJ4lZcHQ4Aa8W8jIJAvTt4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-LSKbBH40TZTD3XYCb81zUYk2rqZg8tmcb/lDrKj5ans=";
   };
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  cargoHash = "sha256-YZ2xNLUEuoUOmrL8yP0ug/1wk8N7VG91cdyLqADrfVg=";
 
-  nativeBuildInputs = [ pkg-config ];
+  # Tests require network access and a running Steam client. Skipping.
+  doCheck = false;
+
+  nativeBuildInputs = [
+    glib
+    pkg-config
+    wrapGAppsHook4
+  ];
 
   buildInputs = [
-    curl
-    gtkmm3
-    glibmm
-    gnutls
-    yajl
+    gdk-pixbuf
+    glib
+    graphene
+    gtk4
+    openssl
+    pango
   ];
 
   postInstall = ''
-    substituteInPlace $out/share/applications/samrewritten.desktop \
-      --replace-fail "Exec=/usr/bin/samrewritten" "Exec=samrewritten"
+    install -Dm644 assets/org.samrewritten.SamRewritten.gschema.xml \
+      $out/share/glib-2.0/schemas/org.samrewritten.SamRewritten.gschema.xml
+    glib-compile-schemas $out/share/glib-2.0/schemas
+    substituteInPlace package/samrewritten.desktop \
+      --replace-fail "/usr/bin/samrewritten" "samrewritten"
+    install -Dm644 package/samrewritten.desktop \
+      $out/share/applications/samrewritten.desktop
   '';
 
-  passthru.updateScript = unstableGitUpdater { };
+  env.PKG_CONFIG_PATH = "${openssl.dev}/lib/pkgconfig";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Steam Achievement Manager For Linux. Rewritten in C++";
+    description = "Modern Steam achievements manager for Windows and Linux";
     mainProgram = "samrewritten";
     homepage = "https://github.com/PaulCombal/SamRewritten";
     changelog = "https://github.com/PaulCombal/SamRewritten/releases";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ludovicopiero ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      ludovicopiero
+      keksnino
+    ];
     platforms = [ "x86_64-linux" ];
   };
 })

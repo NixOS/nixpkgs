@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "lokalise2-cli";
-  version = "3.0.2";
+  version = "3.1.7";
 
   src = fetchFromGitHub {
     owner = "lokalise";
     repo = "lokalise-cli-2-go";
-    rev = "v${version}";
-    sha256 = "sha256-1pc3XBsBQr9xBFIVOWZnA4YlgFYwJJJyV05W67hXG8k=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-VkfXJhgz/Ki0+jx0Q+Hqr4RHY5BnqbzWU6LBs+YGvdo=";
   };
 
-  vendorHash = "sha256-cN7YJDw5lOOngXJBeXa7V0Y/CjEydBMk3hvyfd0VL5I=";
+  vendorHash = "sha256-NS4nKoZSJ8M/n18Y2vQb5MuKBBjS6SGRoKJi5B2J68g=";
 
   doCheck = false;
 
@@ -23,11 +23,11 @@ buildGoModule rec {
     mv $out/bin/lokalise-cli-2-go $out/bin/lokalise2
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Translation platform for developers. Upload language files, translate, integrate via API";
     homepage = "https://lokalise.com";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ timstott ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ timstott ];
     mainProgram = "lokalise2";
   };
-}
+})

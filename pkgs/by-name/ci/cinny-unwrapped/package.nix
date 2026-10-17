@@ -2,44 +2,27 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  giflib,
-  python3,
-  pkg-config,
-  pixman,
-  cairo,
-  pango,
-  stdenv,
-  olm,
-  nodejs_20,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "cinny-unwrapped";
-  version = "4.2.3";
+  # Remember to update cinny-desktop when bumping this version.
+  version = "4.12.7";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "cinnyapp";
     repo = "cinny";
-    rev = "v${version}";
-    hash = "sha256-BoUQURCfEu5kocMm8T25cVl8hgZGxcxrMzQZOl2fAbY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-H4a7HgadpuINie5NGQcHtLHW/MHc9Cc01GO4VPPMDr4=";
   };
 
-  # canvas, a transitive dependency of cinny, fails to build with Node 22
-  # https://github.com/Automattic/node-canvas/issues/2448
-  nodejs = nodejs_20;
+  npmDepsHash = "sha256-L4QlQE6lzNSbRWgYyVV4Xy85KfSv6jDSnkiTQrxzIaQ=";
 
-  npmDepsHash = "sha256-fDoia6evCmXZgeIKL0coRo3yunX1dfud31ROgmop2Sc=";
-
-  nativeBuildInputs = [
-    python3
-    pkg-config
+  # Skip rebuilding native modules since they're not needed for the web app
+  npmRebuildFlags = [
+    "--ignore-scripts"
   ];
-
-  buildInputs = [
-    pixman
-    cairo
-    pango
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ giflib ];
 
   installPhase = ''
     runHook preInstall
@@ -52,9 +35,12 @@ buildNpmPackage rec {
   meta = {
     description = "Yet another Matrix client for the web";
     homepage = "https://cinny.in/";
-    maintainers = with lib.maintainers; [ abbe ];
+    maintainers = with lib.maintainers; [
+      abbe
+      rebmit
+      ryand56
+    ];
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.all;
-    inherit (olm.meta) knownVulnerabilities;
   };
-}
+})

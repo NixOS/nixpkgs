@@ -77,8 +77,8 @@ in
         description = ''
           Automatically restart the server after
           {option}`services.mchprs.maxRuntime`.
-          The time span format is described here:
-          https://www.freedesktop.org/software/systemd/man/systemd.time.html#Parsing%20Time%20Spans.
+          The {manpage}`systemd.time(7)` time span format is described here:
+          <https://www.freedesktop.org/software/systemd/man/systemd.time.html#Parsing%20Time%20Spans>.
           If `null`, then the server is not restarted automatically.
         '';
       };
@@ -200,8 +200,8 @@ in
         default = { };
 
         description = ''
-          Configuration for MCHPRS via `Config.toml`.
-          See https://github.com/MCHPR/MCHPRS/blob/master/README.md for documentation.
+          Configuration for MCHPRS via {file}`Config.toml`.
+          See <https://github.com/MCHPR/MCHPRS/blob/master/README.md> for documentation.
         '';
       };
 
@@ -210,7 +210,7 @@ in
           type = lib.types.bool;
           default = false;
           description = ''
-            Whether or not the whitelist (in `whitelist.json`) shoud be enabled.
+            Whether or not the whitelist (in {file}`whitelist.json`) shoud be enabled.
             Only has effect when {option}`services.mchprs.declarativeSettings` is `true`.
           '';
         };

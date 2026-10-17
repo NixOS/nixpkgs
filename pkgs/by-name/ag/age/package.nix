@@ -2,27 +2,37 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  fetchpatch,
   installShellFiles,
+  age-plugin-fido2-hmac,
+  age-plugin-ledger,
+  age-plugin-se,
+  age-plugin-sss,
+  age-plugin-tpm,
+  age-plugin-yubikey,
+  age-plugin-1p,
+  makeWrapper,
+  runCommand,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "age";
-  version = "1.2.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "FiloSottile";
     repo = "age";
-    rev = "v${version}";
-    hash = "sha256-9ZJdrmqBj43zSvStt0r25wjSfnvitdx3GYtM3urHcaA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-A1VUzovKWxwelSc9/xofBwTfbRil9t75fRavb5p2JlA=";
   };
 
-  vendorHash = "sha256-ilRLEV7qOBZbqzg2XQi4kt0JAb/1ftT4JmahYT0zSRU=";
+  vendorHash = "sha256-cNh9U7OjoxewskX/+Ezln+U7p44g2h+Zx1dVKAaK6Ww=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
+    "-X main.Version=v${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -31,15 +41,9 @@ buildGoModule rec {
     installManPage doc/*.1
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
-  installCheckPhase = ''
-    if [[ "$("$out/bin/${pname}" --version)" == "${version}" ]]; then
-      echo '${pname} smoke check passed'
-    else
-      echo '${pname} smoke check failed'
-      return 1
-    fi
-  '';
 
   # plugin test is flaky, see https://github.com/FiloSottile/age/issues/517
   checkFlags = [
@@ -47,12 +51,35 @@ buildGoModule rec {
     "TestScript/plugin"
   ];
 
-  meta = with lib; {
-    changelog = "https://github.com/FiloSottile/age/releases/tag/v${version}";
+  # group age plugins together
+  passthru.plugins = {
+    inherit
+      age-plugin-fido2-hmac
+      age-plugin-ledger
+      age-plugin-se
+      age-plugin-sss
+      age-plugin-tpm
+      age-plugin-yubikey
+      age-plugin-1p
+      ;
+  };
+
+  # convenience function for wrapping sops with plugins
+  passthru.withPlugins =
+    filter:
+    runCommand "age-${finalAttrs.version}-with-plugins" { nativeBuildInputs = [ makeWrapper ]; } ''
+      makeWrapper ${lib.getBin finalAttrs.finalPackage}/bin/age $out/bin/age \
+        --prefix PATH : "${lib.makeBinPath (filter finalAttrs.passthru.plugins)}"
+    '';
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    changelog = "https://github.com/FiloSottile/age/releases/tag/v${finalAttrs.version}";
     homepage = "https://age-encryption.org/";
     description = "Modern encryption tool with small explicit keys";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     mainProgram = "age";
-    maintainers = with maintainers; [ tazjin ];
+    maintainers = with lib.maintainers; [ tazjin ];
   };
-}
+})

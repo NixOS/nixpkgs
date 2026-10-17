@@ -10,7 +10,7 @@
   cplex,
   fatrop,
   fetchFromGitHub,
-  fetchpatch,
+  fetchpatch2,
   gurobi,
   highs,
   hpipm,
@@ -38,118 +38,109 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "casadi";
-  version = "3.6.7";
+  version = "3.8.1";
 
   src = fetchFromGitHub {
     owner = "casadi";
     repo = "casadi";
-    rev = finalAttrs.version;
-    hash = "sha256-Mft0qhjdAbU82RgjYuKue5p7EqbTbt3ii5yXSsCFHrQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-GY7Dyt53QE3+/aPB5oDRfZzpRLqKTGrxrmvihq4YJ2o=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "fix-FindMUMPS.cmake.patch";
-      url = "https://github.com/casadi/casadi/pull/3899/commits/274f4b23f73e60c5302bec0479fe1e92682b63d2.patch";
-      hash = "sha256-3GWEWlN8dKLD6htpnOQLChldcT3hE09JWLeuCfAhY+4=";
+  # fix python build
+  # ref. https://github.com/casadi/casadi/pull/4418 merged upstream
+  patches = lib.optionals pythonSupport [
+    (fetchpatch2 {
+      name = "add-missing-stub-guards.patch";
+      url = "https://github.com/casadi/casadi/commit/fc4b71177089c2fabbfc3a41dca8a6e40a0a81f4.patch?full_index=1";
+      hash = "sha256-/T9Fof36l/wEeKusI1teCcrax3Zg+fhpteBwnVjWr0o=";
     })
-    # update include file path and link with clangAPINotes
-    # https://github.com/casadi/casadi/issues/3969
-    ./clang-19.diff
   ];
 
-  postPatch =
-    ''
-      # fix case of hpipmConfig.cmake
-      substituteInPlace CMakeLists.txt --replace-fail \
-        "FATROP HPIPM" \
-        "FATROP hpipm"
+  postPatch = ''
+    # fix case of hpipmConfig.cmake
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "FATROP HPIPM" \
+      "FATROP hpipm"
 
-      # nix provide lib/clang headers in libclang, not in llvm.
-      substituteInPlace casadi/interfaces/clang/CMakeLists.txt --replace-fail \
-        '$'{CLANG_LLVM_LIB_DIR} \
-        ${lib.getLib llvmPackages.libclang}/lib
+    # help casadi find its own libs
+    substituteInPlace casadi/core/casadi_os.cpp --replace-fail \
+      "std::vector<std::string> search_paths;" \
+      "std::vector<std::string> search_paths;
+       search_paths.push_back(\"$out/lib\");"
+  ''
+  + lib.optionalString pythonSupport ''
+    # fix including Python.h issue
+    substituteInPlace swig/python/CMakeLists.txt --replace-fail \
+      "add_library(_casadi MODULE \''${PYTHON_FILE})" \
+      "add_library(_casadi MODULE \''${PYTHON_FILE})
+       target_include_directories(_casadi SYSTEM PRIVATE
+         ${python3Packages.python}/include/python3.${python3Packages.python.sourceVersion.minor})"
 
-      # help casadi find its own libs
-      substituteInPlace casadi/core/casadi_os.cpp --replace-fail \
-        "std::vector<std::string> search_paths;" \
-        "std::vector<std::string> search_paths;
-         search_paths.push_back(\"$out/lib\");"
-    ''
-    + lib.optionalString pythonSupport ''
-      # fix including Python.h issue
-      substituteInPlace swig/python/CMakeLists.txt --replace-fail \
-        "add_library(_casadi MODULE \''${PYTHON_FILE})" \
-        "add_library(_casadi MODULE \''${PYTHON_FILE})
-         target_include_directories(_casadi SYSTEM PRIVATE
-           ${python3Packages.python}/include/python3.${python3Packages.python.sourceVersion.minor})"
-
-      # I have no clue. without this, it tries to install a non existent file.
-      # maybe a run without SWIG_IMPORT is required before a run with SWIG_IMPORT.
-      # but we need SWIG_IMPORT at some point for something else TODO
-      substituteInPlace swig/python/CMakeLists.txt --replace-fail \
-        "if (SWIG_IMPORT)" \
-        "if (NOT SWIG_IMPORT)"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # this is only printing stuff, and is not defined on all CPU
-      substituteInPlace casadi/interfaces/hpipm/hpipm_runtime.hpp --replace-fail \
-        "d_print_exp_tran_mat" \
-        "//d_print_exp_tran_mat"
-
-      # fix missing symbols
-      substituteInPlace cmake/FindCLANG.cmake --replace-fail \
-        "clangBasic)" \
-        "clangBasic clangASTMatchers clangSupport)"
-    '';
+    # I have no clue. without this, it tries to install a non existent file.
+    # maybe a run without SWIG_IMPORT is required before a run with SWIG_IMPORT.
+    # but we need SWIG_IMPORT at some point for something else TODO
+    substituteInPlace swig/python/CMakeLists.txt --replace-fail \
+      "if (SWIG_IMPORT)" \
+      "if (NOT SWIG_IMPORT)"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # this is only printing stuff, and is not defined on all CPU
+    substituteInPlace casadi/interfaces/hpipm/hpipm_runtime.hpp --replace-fail \
+      "d_print_exp_tran_mat" \
+      "//d_print_exp_tran_mat"
+  '';
 
   nativeBuildInputs = [
     cmake
     ninja
     pkg-config
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.python
+    swig
   ];
 
-  buildInputs =
-    [
-      #alpaqa
-      blas
-      blasfeo
-      bzip2
-      bonmin
-      cbc
-      clp
-      fatrop
-      highs
-      hpipm
-      ipopt
-      lapack
-      llvmPackages.clang
-      llvmPackages.libclang
-      llvmPackages.llvm
-      mumps
-      osqp
-      proxsuite
-      sleqp
-      suitesparse
-      #sundials
-      superscs
-      spral
-      swig
-      tinyxml-2
-    ]
-    ++ lib.optionals withUnfree [
-      cplex
-      gurobi
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.numpy
-      python3Packages.python
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ];
+  buildInputs = [
+    #alpaqa
+    blas
+    blasfeo
+    bzip2
+    bonmin
+    cbc
+    clp
+    fatrop
+    highs
+    hpipm
+    ipopt
+    lapack
+    llvmPackages.clang
+    llvmPackages.libclang
+    llvmPackages.llvm
+    mumps
+    osqp
+    proxsuite
+    sleqp
+    suitesparse
+    #sundials
+    superscs
+    spral
+    swig
+    tinyxml-2
+  ]
+  ++ lib.optionals withUnfree [
+    cplex
+    gurobi
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.numpy
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    llvmPackages.openmp
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "WITH_PYTHON" pythonSupport)
-    (lib.cmakeBool "WITH_PYTHON3" pythonSupport)
     # We don't mind always setting this cmake variable, it will be read only if
     # pythonSupport is enabled.
     "-DPYTHON_PREFIX=${placeholder "out"}/${python3Packages.python.sitePackages}"
@@ -178,7 +169,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_TINYXML" true)
     (lib.cmakeBool "WITH_BUILD_DSDP" true) # not sure where this come from
     (lib.cmakeBool "WITH_DSDP" true)
-    (lib.cmakeBool "WITH_CLANG" true)
+    # "clang_compiler.cpp has basically been abandonded for several years", ref.
+    # https://github.com/casadi/casadi/issues/4225#issuecomment-3352552113
+    (lib.cmakeBool "WITH_CLANG" false)
     (lib.cmakeBool "WITH_LAPACK" true)
     (lib.cmakeBool "WITH_QPOASES" true)
     (lib.cmakeBool "WITH_BLOCKSQP" true)
@@ -201,9 +194,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   meta = {
-    description = "CasADi is a symbolic framework for numeric optimization implementing automatic differentiation in forward and reverse modes on sparse matrix-valued computational graphs. It supports self-contained C-code generation and interfaces state-of-the-art codes such as SUNDIALS, IPOPT etc. It can be used from C++, Python or Matlab/Octave";
+    description = "Symbolic framework for numeric optimization";
+    longDescription = ''
+      CasADi is a symbolic framework for numeric optimization
+      implementing automatic differentiation in forward and reverse
+      modes on sparse matrix-valued computational graphs. It supports
+      self-contained C-code generation and interfaces state-of-the-art
+      codes such as SUNDIALS, IPOPT etc. It can be used from C++,
+      Python or Matlab/Octave
+    '';
     homepage = "https://github.com/casadi/casadi";
+    changelog = "https://github.com/casadi/casadi/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ nim65s ];
     platforms = lib.platforms.all;

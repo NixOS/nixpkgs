@@ -13,12 +13,12 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "thepeg";
   version = "2.3.0";
 
   src = fetchurl {
-    url = "https://www.hepforge.org/archive/thepeg/ThePEG-${version}.tar.bz2";
+    url = "https://www.hepforge.org/archive/thepeg/ThePEG-${finalAttrs.version}.tar.bz2";
     hash = "sha256-rDWXmuicKWCMqSwVakn/aKrOeloSoMkvCgGoM9LTRXI=";
   };
 
@@ -51,11 +51,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Toolkit for High Energy Physics Event Generation";
     homepage = "https://herwig.hepforge.org/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ veprbl ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ veprbl ];
+    platforms = lib.platforms.unix;
+    badPlatforms = [
+      # ../include/ThePEG/Config/std.h:101:12: error: no member named 'mem_fun' in namespace 'std'; did you mean 'mem_fn'?
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
-}
+})

@@ -6,26 +6,22 @@
   openssl,
   ncurses,
   libidn,
-  pcre,
+  pcre2,
   libssh,
   libmysqlclient,
-  postgresql,
+  libpq,
   samba,
-  withGUI ? false,
-  makeWrapper,
-  pkg-config,
-  gtk2,
 }:
 
 stdenv.mkDerivation rec {
   pname = "thc-hydra";
-  version = "9.5";
+  version = "9.7";
 
   src = fetchFromGitHub {
     owner = "vanhauser-thc";
     repo = "thc-hydra";
     rev = "v${version}";
-    sha256 = "sha256-gdMxdFrBGVHA1ZBNFW89PBXwACnXTGJ/e/Z5+xVV5F0=";
+    sha256 = "sha256-6YNHy9k/NJkZYj0TjciPMOXMq/McGQnmj7HWk6KbgI4=";
   };
 
   postPatch =
@@ -43,40 +39,28 @@ stdenv.mkDerivation rec {
         --replace-fail "-lcurses" "-lncurses"
     '';
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-undef-prefix";
-
-  nativeBuildInputs = lib.optionals withGUI [
-    pkg-config
-    makeWrapper
-  ];
-
   buildInputs = [
     zlib
     openssl
     ncurses
     libidn
-    pcre
+    pcre2
     libssh
     libmysqlclient
-    postgresql
+    libpq
     samba
-  ] ++ lib.optional withGUI gtk2;
+  ];
 
   enableParallelBuilding = true;
 
-  DATADIR = "/share/${pname}";
+  env.DATADIR = "/share/${pname}";
 
-  postInstall = lib.optionalString withGUI ''
-    wrapProgram $out/bin/xhydra \
-      --add-flags --hydra-path --add-flags "$out/bin/hydra"
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Very fast network logon cracker which support many different services";
     homepage = "https://github.com/vanhauser-thc/thc-hydra"; # https://www.thc.org/
     changelog = "https://github.com/vanhauser-thc/thc-hydra/raw/v${version}/CHANGES";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ offline ];
-    platforms = platforms.unix;
+    license = lib.licenses.agpl3Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
 }

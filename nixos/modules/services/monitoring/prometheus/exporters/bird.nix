@@ -12,7 +12,6 @@ let
     mkOption
     types
     concatStringsSep
-    singleton
     ;
 in
 {
@@ -45,7 +44,7 @@ in
   };
   serviceOpts = {
     serviceConfig = {
-      SupplementaryGroups = singleton (if cfg.birdVersion == 1 then "bird" else "bird2");
+      SupplementaryGroups = "bird";
       ExecStart = ''
         ${pkgs.prometheus-bird-exporter}/bin/bird_exporter \
           -web.listen-address ${cfg.listenAddress}:${toString cfg.port} \

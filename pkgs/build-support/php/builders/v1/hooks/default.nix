@@ -3,7 +3,6 @@
   makeSetupHook,
   jq,
   writeShellApplication,
-  moreutils,
   cacert,
   buildPackages,
 }:
@@ -18,21 +17,24 @@ in
 {
   composerRepositoryHook = makeSetupHook {
     name = "composer-repository-hook.sh";
-    propagatedBuildInputs = [
+    propagatedNativeBuildInputs = [
       jq
-      moreutils
+    ];
+    propagatedBuildInputs = [
       cacert
     ];
     substitutions = {
       phpScriptUtils = lib.getExe php-script-utils;
     };
+    meta.license = lib.licenses.mit;
   } ./composer-repository-hook.sh;
 
   composerInstallHook = makeSetupHook {
     name = "composer-install-hook.sh";
-    propagatedBuildInputs = [
+    propagatedNativeBuildInputs = [
       jq
-      moreutils
+    ];
+    propagatedBuildInputs = [
       cacert
     ];
     substitutions = {
@@ -41,13 +43,15 @@ in
       cmp = "${lib.getBin buildPackages.diffutils}/bin/cmp";
       phpScriptUtils = lib.getExe php-script-utils;
     };
+    meta.license = lib.licenses.mit;
   } ./composer-install-hook.sh;
 
   composerWithPluginVendorHook = makeSetupHook {
     name = "composer-with-plugin-vendor-hook.sh";
-    propagatedBuildInputs = [
+    propagatedNativeBuildInputs = [
       jq
-      moreutils
+    ];
+    propagatedBuildInputs = [
       cacert
     ];
     substitutions = {
@@ -56,5 +60,6 @@ in
       cmp = "${lib.getBin buildPackages.diffutils}/bin/cmp";
       phpScriptUtils = lib.getExe php-script-utils;
     };
+    meta.license = lib.licenses.mit;
   } ./composer-with-plugin-vendor-hook.sh;
 }

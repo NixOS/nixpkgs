@@ -15,15 +15,15 @@
   coreutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lxcfs";
-  version = "6.0.3";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "lxcfs";
-    rev = "v${version}";
-    hash = "sha256-+Xlx1E6ggB/Vx3yOJGgh4UfEvaVyT7uOttaxelDA7Iw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xONV9Ss71id2Bwb2BFNqaaP+8vK6540sThs1MCw4gok=";
   };
 
   patches = [
@@ -32,9 +32,6 @@ stdenv.mkDerivation rec {
 
     # skip installing systemd files
     ./skip-init.patch
-
-    # fix pidfd checks and include
-    ./pidfd.patch
   ];
 
   nativeBuildInputs = [
@@ -59,6 +56,13 @@ stdenv.mkDerivation rec {
         util-linux
       ]
     }
+
+    # requires access to sleep
+    wrapProgram "$out/share/lxcfs/lxc.reboot.hook" --prefix PATH : ${
+      lib.makeBinPath [
+        coreutils
+      ]
+    }
   '';
 
   postFixup = ''
@@ -78,9 +82,9 @@ stdenv.mkDerivation rec {
     description = "FUSE filesystem for LXC";
     mainProgram = "lxcfs";
     homepage = "https://linuxcontainers.org/lxcfs";
-    changelog = "https://linuxcontainers.org/lxcfs/news/";
+    changelog = "https://github.com/lxc/lxcfs/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
-    maintainers = lib.teams.lxc.members;
+    teams = [ lib.teams.lxc ];
   };
-}
+})

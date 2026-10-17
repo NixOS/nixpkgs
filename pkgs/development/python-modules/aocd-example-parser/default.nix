@@ -3,34 +3,28 @@
   buildPythonPackage,
   fetchFromGitHub,
   flit-core,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "aocd-example-parser";
-  version = "2023.12.20";
+  version = "2025.12.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "wimglenn";
     repo = "aocd-example-parser";
-    rev = "07330183f3e43401444fe17b08d72eb6168504e1";
-    hash = "sha256-iOxqzZj29aY/xyigir1KOU6GcBBvnlxEOBLHChEQjf4=";
+    rev = "6331ed538dcb25c6d9fd2ef679ccd361ea4ea0af";
+    hash = "sha256-RgTs17TxLhmexkWjPTWMcERVrmPkhMZfVL195JVToU0=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
   # Circular dependency with aocd
-  # pythonImportsCheck = [
-  #   "aocd_example_parser"
-  # ];
 
-  meta = with lib; {
+  meta = {
     description = "Default implementation of an example parser plugin for advent-of-code-data";
     homepage = "https://github.com/wimglenn/aocd-example-parser";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -6,8 +6,7 @@
   qtdeclarative,
   pkg-config,
   alsa-lib,
-  gstreamer,
-  gst-plugins-base,
+  gst_all_1,
   libpulseaudio,
   wayland,
 }:
@@ -20,6 +19,7 @@ qtModule {
   ];
   nativeBuildInputs = [ pkg-config ];
   buildInputs =
+    with gst_all_1;
     [
       gstreamer
       gst-plugins-base
@@ -36,5 +36,7 @@ qtModule {
     "out"
   ];
   qmakeFlags = [ "GST_VERSION=1.0" ];
-  NIX_LDFLAGS = lib.optionalString (stdenv.hostPlatform.isDarwin) "-lobjc";
+  env = lib.optionalAttrs (stdenv.hostPlatform.isDarwin) {
+    NIX_LDFLAGS = "-lobjc";
+  };
 }

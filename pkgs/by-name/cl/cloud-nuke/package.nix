@@ -5,18 +5,18 @@
   makeBinaryWrapper,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cloud-nuke";
-  version = "0.38.0";
+  version = "0.52.0";
 
   src = fetchFromGitHub {
     owner = "gruntwork-io";
-    repo = pname;
-    tag = "v${version}";
-    hash = "sha256-bQPfKIpOh3eq+7cGU7pB+y2a9wsOXNBdmqYbZ0kC6k8=";
+    repo = "cloud-nuke";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UW6n1TFKkricWX71/zHGwLY+0fLtZRkAUU8bQQc5Lwg=";
   };
 
-  vendorHash = "sha256-8PXmTI6xthWvAOkyOsxqr+ea0cscDMg3yp4DELDQvZA=";
+  vendorHash = "sha256-ztaQ4PnBk5lr5PXK6O0MYt+dUNKIxB+/gpGZ4izaqWs=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
@@ -25,7 +25,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.VERSION=${version}"
+    "-X=main.VERSION=${finalAttrs.version}"
   ];
 
   doCheck = false;
@@ -34,12 +34,12 @@ buildGoModule rec {
     wrapProgram $out/bin/cloud-nuke --set-default DISABLE_TELEMETRY true
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/gruntwork-io/cloud-nuke";
     description = "Tool for cleaning up your cloud accounts by nuking (deleting) all resources within it";
     mainProgram = "cloud-nuke";
-    changelog = "https://github.com/gruntwork-io/cloud-nuke/releases/tag/v${version}";
-    license = licenses.mit;
+    changelog = "https://github.com/gruntwork-io/cloud-nuke/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

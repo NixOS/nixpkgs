@@ -11,13 +11,14 @@
 
 stdenv.mkDerivation {
   pname = "telegram-bot-api";
-  version = "8.2";
+  version = "10.3";
 
   src = fetchFromGitHub {
     owner = "tdlib";
     repo = "telegram-bot-api";
-    rev = "fa6706fc8f6e22b3c25b512ede6474613f32b32b";
-    hash = "sha256-0ra1sL121ksUIhpV738tL3y1gu1csMf0rK95G8ElMuo=";
+    # https://github.com/tdlib/telegram-bot-api/issues/783
+    rev = "e3e9dd8e5b3d7ab8537cd5a10dc31d5ffa8f82d1";
+    hash = "sha256-I3pCoAUgB2ilDLm4jRgIq32lyvAfvsfyhcEKEx7+6iQ";
     fetchSubmodules = true;
   };
 
@@ -34,7 +35,6 @@ stdenv.mkDerivation {
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   doInstallCheck = true;
-  versionCheckProgramArg = [ "--version" ];
 
   meta = {
     description = "Telegram Bot API server";

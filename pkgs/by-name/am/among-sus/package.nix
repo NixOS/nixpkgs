@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "~martijnbraam";
     repo = "among-sus";
     rev = "554e60bf52e3fa931661b9414189a92bb8f69d78";
-    sha256 = "0j1158nczhvy5i1ykvzvhlv4ndhibgng0dq1lw2bmi8q6k1q1s0w";
+    hash = "sha256-HOiAwzQYxboEpwE38OxbETZLNoX77+lDLH7DzywqIUg=";
   };
 
   patchPhase = ''
@@ -25,12 +25,12 @@ stdenv.mkDerivation {
     install -Dm755 among-sus $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://git.sr.ht/~martijnbraam/among-sus";
     description = "Among us, but it's a text adventure";
     mainProgram = "among-sus";
-    license = licenses.agpl3Plus;
-    maintainers = [ maintainers.eyjhb ];
-    platforms = platforms.unix;
+    license = lib.licenses.agpl3Plus;
+    maintainers = [ lib.maintainers.eyjhb ];
+    platforms = lib.platforms.unix;
   };
 }

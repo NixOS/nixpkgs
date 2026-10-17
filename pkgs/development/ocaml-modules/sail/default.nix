@@ -1,10 +1,14 @@
 {
   lib,
-  fetchFromGitHub,
+  stdenv,
+  darwin,
+  fetchurl,
+  fetchpatch,
   buildDunePackage,
   base64,
   omd,
   menhir,
+  menhirLib,
   ott,
   linenoise,
   dune-site,
@@ -13,26 +17,34 @@
   lem,
   linksem,
   yojson,
+  version ? "0.20.1",
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "sail";
-  version = "0.16";
+  inherit version;
 
-  src = fetchFromGitHub {
-    owner = "rems-project";
-    repo = "sail";
-    rev = version;
-    hash = "sha256-HY/rgWi0S7ZiAWZF0fVIRK6fpoJ7Xp5EQcxoPRCPJ5Y=";
+  src = fetchurl {
+    url = "https://github.com/rems-project/sail/releases/download/${version}/sail-${version}.tbz";
+    hash = "sha256-uoG416pXBeBAZAE6sgwAa4DG20T5UiWsT79gQil+UOs=";
   };
 
-  minimalOCamlVersion = "4.08";
+  patches = [
+    # Compatibility with menhir ≥ 20220203
+    (fetchpatch {
+      url = "https://github.com/rems-project/sail/commit/446fb477c508853595ccc937ed60765aa685ae31.patch";
+      hash = "sha256-+j0USd0Ish11aYEzYLRiqkydhUPQoD9RPNjRhQcyX9c=";
+    })
+  ];
 
   nativeBuildInputs = [
     makeWrapper
     ott
     menhir
     lem
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    darwin.sigtool
   ];
 
   propagatedBuildInputs = [
@@ -40,6 +52,7 @@ buildDunePackage rec {
     omd
     dune-site
     linenoise
+    menhirLib
     pprint
     linksem
     yojson
@@ -70,10 +83,10 @@ buildDunePackage rec {
     wrapProgram $out/bin/sail --set SAIL_DIR $out/share/sail
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/rems-project/sail";
     description = "Language for describing the instruction-set architecture (ISA) semantics of processors";
-    maintainers = with maintainers; [ genericnerdyusername ];
-    license = licenses.bsd2;
+    maintainers = [ ];
+    license = lib.licenses.bsd2;
   };
 }

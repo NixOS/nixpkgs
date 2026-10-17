@@ -12,12 +12,12 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bison";
-  version = "3.8.2";
+  version = "3.8.2"; # Check the note above doInstallCheck before updating.
 
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/bison/bison-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-BsnhO99+sk1M62tZIFpPZ8LH5yExGWREMP6C+9FKCrs=";
   };
 
@@ -28,22 +28,33 @@ stdenv.mkDerivation rec {
     "host"
   ];
 
-  # there's a /bin/sh shebang in bin/yacc which when no strictDeps is patched with the build stdenv shell
-  # however when cross-compiling it would still be patched with the build stdenv shell which would be wrong
-  # cannot add bash to buildInputs due to infinite recursion
-  strictDeps = stdenv.hostPlatform != stdenv.buildPlatform;
+  strictDeps = true;
 
   nativeBuildInputs = [
     m4
     perl
-  ] ++ lib.optional stdenv.hostPlatform.isSunOS help2man;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isSunOS help2man;
   propagatedBuildInputs = [ m4 ];
 
+  # there's a /bin/sh shebang in bin/yacc which when no strictDeps is patched with the build stdenv shell
+  # however when cross-compiling it would still be patched with the build stdenv shell which would be wrong
+  # cannot add bash to buildInputs due to infinite recursion
+  postFixup = lib.optionalString (lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) ''
+    patchShebangs --build $out/bin/yacc
+  '';
+
   enableParallelBuilding = true;
+  # tests are flaky / timing sensitive on FreeBSD
+  enableParallelChecking = !stdenv.hostPlatform.isFreeBSD;
 
   # Normal check and install check largely execute the same test suite
   doCheck = false;
-  doInstallCheck = true;
+  # Tests were disabled on LLVM/Darwin due to https://github.com/NixOS/nixpkgs/issues/463659
+  # TODO: enable doInstallCheck unconditionally when fixed upstream.
+  doInstallCheck = !stdenv.cc.isClang;
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://www.gnu.org/software/bison/";
@@ -66,8 +77,4 @@ stdenv.mkDerivation rec {
 
     platforms = lib.platforms.unix;
   };
-
-  passthru = {
-    glrSupport = true;
-  };
-}
+})

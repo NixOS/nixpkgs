@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoconf,
   automake,
   cargo,
@@ -29,8 +30,8 @@
   rustPlatform,
   rustc,
   openssl,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
   zlib,
   rsync,
   withCockpit ? true,
@@ -40,20 +41,25 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "389-ds-base";
-  version = "3.0.5";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "389ds";
     repo = "389-ds-base";
     rev = "389-ds-base-${finalAttrs.version}";
-    hash = "sha256-OPtyeF1D46X6DslP3NewbjVgqPXngWUz943UsTqgWRo=";
+    hash = "sha256-N/+fTTgkqs25ToR/OH9BaBHxheVDZWR4RANFtC71rBg=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit (finalAttrs) src;
-    sourceRoot = "${finalAttrs.src.name}/src";
+  patches = [
+    ./0001-remove-hard-coded-vendor-paths.patch
+  ];
+
+  cargoRoot = "src";
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) src cargoRoot;
     name = "389-ds-base-${finalAttrs.version}";
-    hash = "sha256-xI0T+Riw+6gjBGVYg5SI3GWH7MyAzt5At54fI7PH010=";
+    hash = "sha256-1qCH2Onb69Jcqqs3JfDJslavzMrHO6//OtYtDq2iCgY=";
   };
 
   nativeBuildInputs = [
@@ -64,29 +70,30 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     cargo
     rustc
-  ] ++ lib.optional withCockpit rsync;
+    rustPlatform.cargoSetupHook
+  ]
+  ++ lib.optional withCockpit rsync;
 
-  buildInputs =
-    [
-      cracklib
-      lmdb
-      json_c
-      linux-pam
-      libevent
-      libxcrypt
-      nspr
-      nss
-      cyrus_sasl
-      icu
-      krb5
-      pcre2
-      openssl
-      zlib
-    ]
-    ++ lib.optional withSystemd systemd
-    ++ lib.optional withOpenldap openldap
-    ++ lib.optional withBdb db
-    ++ lib.optional withNetSnmp net-snmp;
+  buildInputs = [
+    cracklib
+    lmdb
+    json_c
+    linux-pam
+    libevent
+    libxcrypt
+    nspr
+    nss
+    cyrus_sasl
+    icu
+    krb5
+    pcre2
+    openssl
+    zlib
+  ]
+  ++ lib.optional withSystemd systemdLibs
+  ++ lib.optional withOpenldap openldap
+  ++ lib.optional withBdb db
+  ++ lib.optional withNetSnmp net-snmp;
 
   postPatch = ''
     patchShebangs ./buildnum.py ./ldap/servers/slapd/mkDBErrStrs.py
@@ -96,38 +103,32 @@ stdenv.mkDerivation (finalAttrs: {
     ./autogen.sh --prefix="$out"
   '';
 
-  preBuild = ''
-    mkdir -p ./vendor
-    tar -xzf ${finalAttrs.cargoDeps} -C ./vendor --strip-components=1
-  '';
-
-  configureFlags =
-    [
-      "--enable-rust-offline"
-      "--enable-autobind"
-    ]
-    ++ lib.optionals withSystemd [
-      "--with-systemd"
-      "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
-    ]
-    ++ lib.optionals withOpenldap [
-      "--with-openldap"
-    ]
-    ++ lib.optionals withBdb [
-      "--with-db-inc=${lib.getDev db}/include"
-      "--with-db-lib=${lib.getLib db}/lib"
-    ]
-    ++ lib.optionals withNetSnmp [
-      "--with-netsnmp-inc=${lib.getDev net-snmp}/include"
-      "--with-netsnmp-lib=${lib.getLib net-snmp}/lib"
-    ]
-    ++ lib.optionals (!withCockpit) [
-      "--disable-cockpit"
-    ]
-    ++ lib.optionals withAsan [
-      "--enable-asan"
-      "--enable-debug"
-    ];
+  configureFlags = [
+    "--enable-rust-offline"
+    "--enable-autobind"
+  ]
+  ++ lib.optionals withSystemd [
+    "--with-systemd"
+    "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
+  ]
+  ++ lib.optionals withOpenldap [
+    "--with-openldap"
+  ]
+  ++ lib.optionals withBdb [
+    "--with-db-inc=${lib.getDev db}/include"
+    "--with-db-lib=${lib.getLib db}/lib"
+  ]
+  ++ lib.optionals withNetSnmp [
+    "--with-netsnmp-inc=${lib.getDev net-snmp}/include"
+    "--with-netsnmp-lib=${lib.getLib net-snmp}/lib"
+  ]
+  ++ lib.optionals (!withCockpit) [
+    "--disable-cockpit"
+  ]
+  ++ lib.optionals withAsan [
+    "--enable-asan"
+    "--enable-debug"
+  ];
 
   enableParallelBuilding = true;
   # Disable parallel builds as those lack some dependencies:

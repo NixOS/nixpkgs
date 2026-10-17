@@ -2,32 +2,27 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
-  darwin,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "adguardian";
-  version = "1.6.0";
+  version = "1.8.0";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Lissy93";
     repo = "AdGuardian-Term";
-    rev = version;
-    hash = "sha256-WxrSmCwLnXXs5g/hN3xWE66P5n0RD/L9MJpf5N2iNtY=";
+    tag = finalAttrs.version;
+    hash = "sha256-S4HtlRq1tB0cAPiAGuXMOdzjzXG0u0pnPHzghps5E5A=";
   };
 
-  cargoHash = "sha256-IPkKiXuFN0KFlcrrSjLmML+O5zCrVRKEqdyV2xBsCsg=";
+  cargoHash = "sha256-uch2JKnskO5W8EPK877qL0aQQ+iInHJoCrrhZbmoVRs=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Terminal-based, real-time traffic monitoring and statistics for your AdGuard Home instance";
     mainProgram = "adguardian";
     homepage = "https://github.com/Lissy93/AdGuardian-Term";
-    license = licenses.mit;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

@@ -18,7 +18,6 @@
   patsy,
   plotnine,
   pytestCheckHook,
-  pythonOlder,
   rlax,
   scikit-image,
   scipy,
@@ -31,14 +30,12 @@
 let
   bsuite = buildPythonPackage rec {
     pname = "bsuite";
-    version = "0.3.5";
+    version = "0.3.6";
     pyproject = true;
-
-    disabled = pythonOlder "3.7";
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-ak9McvXl7Nz5toUaPaRaJek9lurxiQiIW209GnZEjX0=";
+      hash = "sha256-GPHmxJ/0CSKItlfk+YPHeUaTMA+4U81l1Z4Cfe+hikA=";
     };
 
     patches = [
@@ -114,12 +111,12 @@ let
       });
     };
 
-    meta = with lib; {
+    meta = {
       description = "Collection of experiments that investigate core capabilities of a reinforcement learning (RL) agent";
       homepage = "https://github.com/deepmind/bsuite";
       changelog = "https://github.com/google-deepmind/bsuite/releases/tag/${version}";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ onny ];
+      license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [ onny ];
     };
   };
 in

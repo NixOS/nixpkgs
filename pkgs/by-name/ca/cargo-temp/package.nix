@@ -1,24 +1,33 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-temp";
-  version = "0.3.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "yozhgoor";
     repo = "cargo-temp";
-    rev = "v${version}";
-    hash = "sha256-fy4bG+UoN/51hiveYecl3ciJPV1g8/fC2dTFnUJZqAY=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-ILkv6axwyOneJAD/gvO24vh1J1F8XtwZzmsx6WU7DJQ=";
   };
 
-  cargoHash = "sha256-st8BLru9hp1qi784Zm4yVB8AJQfowF36201Yw8uQQ2k=";
+  cargoHash = "sha256-ziHwGU2+qENsm/UuT9ZxzPVonwn8ldG8o+iWDaZIfw0=";
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool that allow you to create a temporary new Rust project using cargo with already installed dependencies";
     mainProgram = "cargo-temp";
     homepage = "https://github.com/yozhgoor/cargo-temp";
-    changelog = "https://github.com/yozhgoor/cargo-temp/releases/tag/${src.rev}";
-    license = with licenses; [ mit /* or */ asl20 ];
-    maintainers = with maintainers; [ figsoda matthiasbeyer ];
+    changelog = "https://github.com/yozhgoor/cargo-temp/releases/tag/${finalAttrs.src.rev}";
+    license = with lib.licenses; [
+      mit # or
+      asl20
+    ];
+    maintainers = with lib.maintainers; [
+      matthiasbeyer
+    ];
   };
-}
+})

@@ -1,29 +1,27 @@
-{ lib
-, stdenv
-, fetchzip
-, makeWrapper
-, dotnetCorePackages
+{
+  lib,
+  stdenv,
+  fetchzip,
+  makeWrapper,
+  dotnetCorePackages,
 }:
 
 let
-  pname = "bililiverecorder";
-
-  dotnet = with dotnetCorePackages; combinePackages [
-    runtime_6_0
-    aspnetcore_6_0
-  ];
-
-  version = "2.13.0";
-  hash = "sha256-4OQ2gut/eLk4CXRN5E3Z8XobXsT3bSmtmJEcHzHcz/0=";
-
+  dotnet =
+    with dotnetCorePackages;
+    combinePackages [
+      runtime_8_0-bin
+      aspnetcore_8_0-bin
+    ];
 in
-stdenv.mkDerivation {
-  inherit pname version;
+stdenv.mkDerivation (finalAttrs: {
+  pname = "bililiverecorder";
+  version = "2.20.0";
 
   src = fetchzip {
-    url = "https://github.com/BililiveRecorder/BililiveRecorder/releases/download/v${version}/BililiveRecorder-CLI-any.zip";
+    url = "https://github.com/BililiveRecorder/BililiveRecorder/releases/download/v${finalAttrs.version}/BililiveRecorder-CLI-any.zip";
+    hash = "sha256-nlXjPUvsi/mn3nHfTCXh1Irjjs5qFezjPS8iELCcSUc=";
     stripRoot = false;
-    inherit hash;
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -31,22 +29,21 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,share/${pname}-${version}}
-    cp -r * $out/share/${pname}-${version}/.
-
-    makeWrapper "${dotnet}/bin/dotnet" $out/bin/BililiveRecorder \
-      --add-flags "$out/share/${pname}-${version}/BililiveRecorder.Cli.dll"
+    mkdir -p $out/{bin,lib}
+    cp -r . $out/lib/bililiverecorder
+    makeWrapper ${dotnet}/bin/dotnet $out/bin/BililiveRecorder \
+      --add-flags $out/lib/bililiverecorder/BililiveRecorder.Cli.dll
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Convenient free open source bilibili live recording tool";
     homepage = "https://rec.danmuji.org/";
-    changelog = "https://github.com/BililiveRecorder/BililiveRecorder/releases/tag/${version}";
+    changelog = "https://github.com/BililiveRecorder/BililiveRecorder/releases/tag/v${finalAttrs.version}";
     mainProgram = "BililiveRecorder";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ zaldnoay ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ zaldnoay ];
+    platforms = lib.platforms.unix;
   };
-}
+})

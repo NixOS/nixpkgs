@@ -8,7 +8,7 @@
   alcotest,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
 
   pname = "irmin-chunk";
   inherit (irmin) version src;

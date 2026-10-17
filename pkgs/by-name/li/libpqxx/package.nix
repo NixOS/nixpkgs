@@ -1,20 +1,26 @@
 {
   lib,
   stdenv,
+  gcc14Stdenv,
   fetchFromGitHub,
-  postgresql,
+  libpq,
   python3,
+  postgresql,
+  postgresqlTestHook,
+  autoreconfHook,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+# Work around issue reported in https://github.com/NixOS/nixpkgs/issues/476278.
+# Should be solved when libpqxx 8.x is released.
+(if stdenv.cc.isGNU then gcc14Stdenv else stdenv).mkDerivation (finalAttrs: {
   pname = "libpqxx";
-  version = "7.9.2";
+  version = "7.10.7";
 
   src = fetchFromGitHub {
     owner = "jtv";
     repo = "libpqxx";
     rev = finalAttrs.version;
-    hash = "sha256-I5e0iqXlZqDOMa1PlnrxpcKt1c2mbnSbVQrpi1Gh25o=";
+    hash = "sha256-A33Z6xSIReYHHS3KerBSDTuo59tixduxXVEMfa/2I7A=";
   };
 
   outputs = [
@@ -23,22 +29,40 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    postgresql.dev
+    # Needed because Makefile.am is patched to disable the tools/lint test.
+    autoreconfHook
     python3
   ];
 
   buildInputs = [
-    postgresql.lib
+    libpq
+  ];
+
+  nativeCheckInputs = [
+    postgresql
+    postgresqlTestHook
   ];
 
   postPatch = ''
+    # Disable linting step for tests, it tries to install packages with pip.
+    substituteInPlace Makefile.am \
+      --replace-fail "TESTS = tools/lint" ""
+
     patchShebangs ./tools/splitconfig.py
+    # Needed for autoreconfHook
+    patchShebangs tools/*.py
   '';
 
   configureFlags = [
     "--disable-documentation"
     "--enable-shared"
   ];
+
+  doCheck = lib.meta.availableOn stdenv.hostPlatform postgresqlTestHook;
+
+  enableParallelBuilding = true;
+
+  __structuredAttrs = true;
 
   strictDeps = true;
 

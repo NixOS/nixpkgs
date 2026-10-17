@@ -1,9 +1,10 @@
 {
   lib,
   buildPythonPackage,
-  deprecation,
+  cyclopts,
   fetchFromGitHub,
-  ghostscript,
+  fpdf2,
+  ghostscript_headless,
   hatch-vcs,
   hatchling,
   hypothesis,
@@ -16,43 +17,44 @@
   pillow,
   pluggy,
   pngquant,
+  pydantic,
+  pypdfium2,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
+  python-dotenv,
   rich,
   reportlab,
-  substituteAll,
+  replaceVars,
+  streamlit,
   tesseract,
+  uharfbuzz,
   unpaper,
+  watchfiles,
+  xpdf,
   installShellFiles,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ocrmypdf";
-  version = "16.7.0";
-
-  disabled = pythonOlder "3.10";
-
+  version = "17.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ocrmypdf";
     repo = "OCRmyPDF";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     # The content of .git_archival.txt is substituted upon tarball creation,
     # which creates indeterminism if master no longer points to the tag.
     # See https://github.com/ocrmypdf/OCRmyPDF/issues/841
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-81maXJjdGlzWy3TaQ8cabjJl6ZE5tbfc8m/+Px7ONhs=";
+    hash = "sha256-4gjA33EEY9v+dmXh2yMthnE9x8lJ+wU1ZVBN5fnoqdA=";
   };
 
   patches = [
-    ./use-pillow-heif.patch
-    (substituteAll {
-      src = ./paths.patch;
-      gs = lib.getExe ghostscript;
+    (replaceVars ./paths.patch {
+      gs = lib.getExe ghostscript_headless;
       jbig2 = lib.getExe jbig2enc;
       pngquant = lib.getExe pngquant;
       tesseract = lib.getExe tesseract;
@@ -68,22 +70,42 @@ buildPythonPackage rec {
   nativeBuildInputs = [ installShellFiles ];
 
   dependencies = [
-    deprecation
+    fpdf2
     img2pdf
     packaging
     pdfminer-six
-    pillow-heif
     pikepdf
     pillow
     pluggy
+    pydantic
+    pypdfium2
     rich
-  ];
+    uharfbuzz
+  ]
+  ++ pikepdf.optional-dependencies.pdfa;
+
+  optional-dependencies = {
+    heic = [ pillow-heif ];
+    watcher = [
+      cyclopts
+      python-dotenv
+      watchfiles
+    ];
+    webservice = [ streamlit ];
+  };
 
   nativeCheckInputs = [
     hypothesis
     pytest-xdist
     pytestCheckHook
     reportlab
+    (xpdf.override { enableGUI = false; }) # for pdftotext
+  ];
+
+  disabledTests = [
+    # tests set TZ=America/Los_Angeles but that doesn't seem to have an effect
+    "test_unzoned_creation_date_assumes_local_zone"
+    "test_assume_local_time_zone"
   ];
 
   pythonImportsCheck = [ "ocrmypdf" ];
@@ -94,17 +116,17 @@ buildPythonPackage rec {
       --fish misc/completion/ocrmypdf.fish
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ocrmypdf/OCRmyPDF";
     description = "Adds an OCR text layer to scanned PDF files, allowing them to be searched";
-    license = with licenses; [
+    license = with lib.licenses; [
       mpl20
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       dotlambda
     ];
-    changelog = "https://github.com/ocrmypdf/OCRmyPDF/blob/${src.rev}/docs/release_notes.rst";
+    changelog = "https://github.com/ocrmypdf/OCRmyPDF/blob/${finalAttrs.src.tag}/docs/releasenotes/version17.md";
     mainProgram = "ocrmypdf";
   };
-}
+})

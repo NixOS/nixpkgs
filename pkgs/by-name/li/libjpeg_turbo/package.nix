@@ -5,6 +5,7 @@
   cmake,
   nasm,
   openjdk,
+  jna,
   enableJava ? false, # whether to build the java wrapper
   enableJpeg7 ? false, # whether to build libjpeg with v7 compatibility
   enableJpeg8 ? false, # whether to build libjpeg with v8 compatibility
@@ -14,7 +15,6 @@
   # for passthru.tests
   dvgrab,
   epeg,
-  freeimage,
   gd,
   graphicsmagick,
   imagemagick,
@@ -26,30 +26,24 @@
   python3,
   vips,
   testers,
+  nix-update-script,
 }:
 
 assert !(enableJpeg7 && enableJpeg8); # pick only one or none, not both
 
 stdenv.mkDerivation (finalAttrs: {
-
   pname = "libjpeg-turbo";
-  version = "3.0.4";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "libjpeg-turbo";
     repo = "libjpeg-turbo";
-    rev = finalAttrs.version;
-    hash = "sha256-ZNqhOfZtWcMv10VWIUxn7MSy4KhW/jBrgC1tUFKczqs=";
+    tag = finalAttrs.version;
+    hash = "sha256-SPxWCDt9hFQ8uRaaKLkpWp9oPhfcRkDBm5MarTgdmV4=";
   };
 
   patches =
-    [
-      # This is needed by freeimage
-      ./0001-Compile-transupp.c-as-part-of-the-library.patch
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isMinGW) [
-      ./0002-Make-exported-symbols-in-transupp.c-weak.patch
-    ]
+    [ ]
     ++ lib.optionals stdenv.hostPlatform.isMinGW [
       ./mingw-boolean.patch
     ];
@@ -57,78 +51,72 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "bin"
     "dev"
-    "dev_private"
     "out"
     "man"
     "doc"
   ];
 
-  postFixup = ''
-    moveToOutput include/transupp.h $dev_private
-  '';
+  nativeBuildInputs = [
+    cmake
+    nasm
+  ]
+  ++ lib.optionals enableJava [
+    openjdk
+  ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      nasm
-    ]
-    ++ lib.optionals enableJava [
-      openjdk
-    ];
-
-  cmakeFlags =
-    [
-      "-DENABLE_STATIC=${if enableStatic then "1" else "0"}"
-      "-DENABLE_SHARED=${if enableShared then "1" else "0"}"
-    ]
-    ++ lib.optionals enableJava [
-      "-DWITH_JAVA=1"
-    ]
-    ++ lib.optionals enableJpeg7 [
-      "-DWITH_JPEG7=1"
-    ]
-    ++ lib.optionals enableJpeg8 [
-      "-DWITH_JPEG8=1"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isRiscV [
-      # https://github.com/libjpeg-turbo/libjpeg-turbo/issues/428
-      # https://github.com/libjpeg-turbo/libjpeg-turbo/commit/88bf1d16786c74f76f2e4f6ec2873d092f577c75
-      "-DFLOATTEST=fp-contract"
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_STATIC" enableStatic)
+    (lib.cmakeBool "ENABLE_SHARED" enableShared)
+    (lib.cmakeBool "WITH_JPEG7" enableJpeg7)
+    (lib.cmakeBool "WITH_JPEG8" enableJpeg8)
+  ]
+  ++ lib.optionals enableJava [
+    (lib.cmakeFeature "WITH_JNA" "${jna}/share/java/jna.jar")
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isRiscV [
+    # https://github.com/libjpeg-turbo/libjpeg-turbo/issues/428
+    # https://github.com/libjpeg-turbo/libjpeg-turbo/commit/88bf1d16786c74f76f2e4f6ec2873d092f577c75
+    (lib.cmakeFeature "FLOATTEST" "fp-contract")
+  ];
 
   doInstallCheck = true;
   installCheckTarget = "test";
 
-  passthru.tests = {
-    inherit
-      dvgrab
-      epeg
-      gd
-      graphicsmagick
-      imagemagick
-      imlib2
-      jhead
-      libjxl
-      mjpegtools
-      opencv
-      vips
-      ;
-    inherit (python3.pkgs) pillow imread pyturbojpeg;
-    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  passthru = {
+    updateScript = nix-update-script { };
+    dev_private = throw "not supported anymore";
+    tests = {
+      inherit
+        dvgrab
+        epeg
+        gd
+        graphicsmagick
+        imagemagick
+        imlib2
+        jhead
+        libjxl
+        mjpegtools
+        opencv
+        vips
+        ;
+      inherit (python3.pkgs) pillow imread pyturbojpeg;
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://libjpeg-turbo.org/";
     description = "Faster (using SIMD) libjpeg implementation";
-    license = licenses.ijg; # and some parts under other BSD-style licenses
+    license = lib.licenses.ijg; # and some parts under other BSD-style licenses
+    changelog = "https://github.com/libjpeg-turbo/libjpeg-turbo/releases/tag/${finalAttrs.version}";
     pkgConfigModules = [
       "libjpeg"
       "libturbojpeg"
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       vcunat
       kamadorueda
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

@@ -20,19 +20,23 @@ let
       meta.maintainers = [ lib.maintainers.aanderse ];
 
       nodes.machine = {
-        services.mysql = {
-          inherit package;
-          enable = true;
-          initialDatabases = [
-            {
-              name = "testdb";
-              schema = ./testdb.sql;
-            }
-          ];
-        };
+        services = {
+          mysql = {
+            inherit package;
+            enable = true;
+            initialDatabases = [
+              {
+                name = "testdb";
+                schema = ./testdb.sql;
+              }
+            ];
+          };
 
-        services.automysqlbackup.enable = true;
-        automysqlbackup.settings.mysql_dump_port = "";
+          automysqlbackup = {
+            enable = true;
+            settings.mysql_dump_port = "";
+          };
+        };
       };
 
       testScript = ''
@@ -48,7 +52,7 @@ let
 
         with subtest("Do a backup and wait for it to start"):
             machine.start_job("automysqlbackup.service")
-            machine.wait_for_job("automysqlbackup.service")
+            machine.wait_for_unit("automysqlbackup.service")
 
         with subtest("wait for backup file and check that data appears in backup"):
             machine.wait_for_file("/var/backup/mysql/daily/testdb")

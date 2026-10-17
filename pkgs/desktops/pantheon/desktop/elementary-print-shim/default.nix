@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = "print";
     rev = version;
-    sha256 = "sha256-l2IUu9Mj22lZ5yajPcsGrJcJDakNu4srCV0Qea5ybPA=";
+    hash = "sha256-l2IUu9Mj22lZ5yajPcsGrJcJDakNu4srCV0Qea5ybPA=";
   };
 
   nativeBuildInputs = [
@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple shim for printing support via Contractor";
     homepage = "https://github.com/elementary/print";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
     mainProgram = "io.elementary.print";
   };
 }

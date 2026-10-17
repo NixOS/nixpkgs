@@ -11,16 +11,23 @@
 
 buildNpmPackage rec {
   pname = "netlify-cli";
-  version = "18.0.0";
+  version = "23.15.0";
 
   src = fetchFromGitHub {
     owner = "netlify";
     repo = "cli";
     tag = "v${version}";
-    hash = "sha256-LGnFVg7c+CMgjxkVdy/rdoo6uU5HaOwGKRDHRe5Hz3Y=";
+    hash = "sha256-y81VmYt5NDXNcipPY4DIWDICF3a0eETJVQRFRATi1Dk=";
   };
 
-  npmDepsHash = "sha256-ONLkCbmmY45/sRwaGUWhA187YVtCcdPVnD7ZMFoQ2Y0=";
+  # Prevent postinstall script from running before package is built
+  # See https://github.com/netlify/cli/blob/v23.9.2/scripts/postinstall.js#L70
+  # This currently breaks completions: https://github.com/NixOS/nixpkgs/issues/455005
+  postPatch = ''
+    touch .git
+  '';
+
+  npmDepsHash = "sha256-yKDLaNIofYLsoWvxaZUfY+LyVd/s4NGD+LEmd9Y7CAA=";
 
   inherit nodejs;
 

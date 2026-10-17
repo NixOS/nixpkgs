@@ -10,7 +10,7 @@
   readline,
   which,
   musl-fts,
-  pcre,
+  pcre2,
   gnused,
   # options
   conf ? null,
@@ -28,13 +28,13 @@ assert withEmojis -> (!withIcons && !withNerdIcons);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nnn";
-  version = "5.0";
+  version = "5.3";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "nnn";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-HShHSjqD0zeE1/St1Y2dUeHfac6HQnPFfjmFvSuEXUA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-l6/q3eFX/M4hvxOuKm31Xh+UBV+McvH09Sa7yK2/+W4=";
   };
 
   patches = [
@@ -52,24 +52,26 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     pkg-config
   ];
-  buildInputs =
-    [
-      readline
-      ncurses
-    ]
-    ++ lib.optional stdenv.hostPlatform.isMusl musl-fts
-    ++ lib.optional withPcre pcre;
+  buildInputs = [
+    readline
+    ncurses
+  ]
+  ++ lib.optional stdenv.hostPlatform.isMusl musl-fts
+  ++ lib.optional withPcre pcre2;
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isMusl "-I${musl-fts}/include";
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isMusl "-lfts";
+  env = lib.optionalAttrs stdenv.hostPlatform.isMusl {
+    NIX_CFLAGS_COMPILE = "-I${musl-fts}/include";
+    NIX_LDFLAGS = "-lfts";
+  };
 
-  makeFlags =
-    [ "PREFIX=$(out)" ]
-    ++ lib.optionals withIcons [ "O_ICONS=1" ]
-    ++ lib.optionals withNerdIcons [ "O_NERD=1" ]
-    ++ lib.optionals withEmojis [ "O_EMOJI=1" ]
-    ++ lib.optionals withPcre [ "O_PCRE=1" ]
-    ++ extraMakeFlags;
+  makeFlags = [
+    "PREFIX=$(out)"
+  ]
+  ++ lib.optionals withIcons [ "O_ICONS=1" ]
+  ++ lib.optionals withNerdIcons [ "O_NERD=1" ]
+  ++ lib.optionals withEmojis [ "O_EMOJI=1" ]
+  ++ lib.optionals withPcre [ "O_PCRE2=1" ]
+  ++ extraMakeFlags;
 
   binPath = lib.makeBinPath [
     file
@@ -93,13 +95,13 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/nnn --prefix PATH : "$binPath"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Small ncurses-based file browser forked from noice";
     homepage = "https://github.com/jarun/nnn";
     changelog = "https://github.com/jarun/nnn/blob/v${finalAttrs.version}/CHANGELOG";
-    license = licenses.bsd2;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ Br1ght0ne ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ sikmir ];
     mainProgram = "nnn";
   };
 })

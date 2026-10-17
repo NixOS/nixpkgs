@@ -6,18 +6,18 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hyprnome";
   version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "donovanglover";
     repo = "hyprnome";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-GZn7qS1J6QSanWdy17sMBbwJ77iMij2jKRgPdrjt6tM=";
   };
 
-  cargoHash = "sha256-oxIZTp5ZJRUjXLpMw2nOnPHYHhHN03HWFRhBZ82Ac10=";
+  cargoHash = "sha256-qCexb8D0iN3BWOz5L45mR5n9x0nqAh8MHHTp9QTHSOg=";
 
   # Upstream has 'missing_docs = "deny"', which trips up test builds for 0.3.1 release.
   # Let's just treat lints as warnings.
@@ -36,12 +36,12 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "GNOME-like workspace switching in Hyprland";
     homepage = "https://github.com/donovanglover/hyprnome";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ donovanglover ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ donovanglover ];
     mainProgram = "hyprnome";
   };
-}
+})

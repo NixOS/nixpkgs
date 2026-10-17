@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1805svvb7xjm4sf1j7b6nc3409x37pd1xmabfwwjf1ldkzwgxhfb";
+    hash = "sha256-y8H++J+NBic5d0vVHto9oydABrNmHRmcJlX2s/bWBaA=";
   };
 
   propagatedBuildInputs = [ six ];
@@ -22,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langdetect" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python port of Google's language-detection library";
     homepage = "https://github.com/Mimino666/langdetect";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ erikarvstedt ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ erikarvstedt ];
   };
 }

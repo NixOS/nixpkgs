@@ -4,16 +4,19 @@
   fetchurl,
   fetchpatch,
   bzip2,
+  autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rzip";
   version = "2.1";
 
   src = fetchurl {
-    url = "mirror://samba/rzip/rzip-${version}.tar.gz";
+    url = "mirror://samba/rzip/rzip-${finalAttrs.version}.tar.gz";
     sha256 = "4bb96f4d58ccf16749ed3f836957ce97dbcff3e3ee5fd50266229a48f89815b7";
   };
+
+  nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ bzip2 ];
 
   patches = [
@@ -24,14 +27,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=implicit-int";
-
-  meta = with lib; {
+  meta = {
     homepage = "https://rzip.samba.org/";
     description = "Compression program";
     maintainers = [ ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     mainProgram = "rzip";
   };
-}
+})

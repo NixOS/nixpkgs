@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   pytest,
@@ -11,20 +10,19 @@
   pytest-rerunfailures,
   pytest-asyncio,
   anyio,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-subprocess";
-  version = "1.5.2";
+  version = "1.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "aklajnert";
     repo = "pytest-subprocess";
     tag = version;
-    hash = "sha256-wEPIRWEwAiHSpcu9FMtkpAxqz64csT9AO27NDax3zNY=";
+    hash = "sha256-zPKExIrCt8ZwhKGU0l3tyTcDhRIGPSiM8OWy5cpmsuE=";
   };
 
   build-system = [ setuptools ];
@@ -38,15 +36,14 @@ buildPythonPackage rec {
     pytest-rerunfailures
     pytest-asyncio
     anyio
+    typing-extensions
   ];
 
-  pytestFlagsArray = [ "-W ignore::DeprecationWarning" ];
-
-  meta = with lib; {
+  meta = {
     description = "Plugin to fake subprocess for pytest";
     homepage = "https://github.com/aklajnert/pytest-subprocess";
-    changelog = "https://github.com/aklajnert/pytest-subprocess/blob/${version}/HISTORY.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    changelog = "https://github.com/aklajnert/pytest-subprocess/blob/${src.tag}/HISTORY.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

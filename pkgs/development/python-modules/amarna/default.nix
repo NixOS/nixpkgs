@@ -5,24 +5,24 @@
   lark,
   pydot,
   pytestCheckHook,
-  pythonOlder,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "amarna";
   version = "0.1.5";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "crytic";
     repo = "amarna";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tyvHWBhanR7YH87MDWdXUsDEzZG6MgnbshezAbxWO+I=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     lark
     pydot
   ];
@@ -31,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "amarna" ];
 
-  meta = with lib; {
+  meta = {
     description = "Static-analyzer and linter for the Cairo programming language";
     mainProgram = "amarna";
     homepage = "https://github.com/crytic/amarna";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ raitobezarius ];
+    license = lib.licenses.agpl3Only;
+    maintainers = [ ];
   };
-}
+})

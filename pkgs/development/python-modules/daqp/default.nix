@@ -3,29 +3,31 @@
   fetchFromGitHub,
   buildPythonPackage,
   unittestCheckHook,
-  cython_0,
+  cython,
   setuptools,
-  wheel,
   numpy,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "daqp";
-  version = "0.6.0";
-  format = "pyproject";
+  version = "0.8.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "darnstrom";
     repo = "daqp";
-    tag = "v${version}";
-    hash = "sha256-9sPYyd8J78HKDxbwkogu8tW38rgYIctEWqrriqJKy0M=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UakuHHsz4LXDfI7+VT5TO+jg90gpgu3lTJL8RGhtODQ=";
   };
 
-  sourceRoot = "${src.name}/interfaces/daqp-python";
-
+  # Don't try to `rmtree` to "Cleanup C-source"
+  # TODO: to update on next release, master already has `if daqp_src_exists:`
   postPatch = ''
-    sed -i 's|../../../daqp|../..|' setup.py
-    sed -i 's|if src_path and os.path.exists(src_path):|if False:|' setup.py
+    substituteInPlace setup.py --replace-fail \
+      "if src_path.exists():" \
+      "if False:"
   '';
+
+  sourceRoot = "${finalAttrs.src.name}/interfaces/daqp-python";
 
   nativeCheckInputs = [ unittestCheckHook ];
 
@@ -37,20 +39,19 @@ buildPythonPackage rec {
     "-v"
   ];
 
-  nativeBuildInputs = [
-    cython_0
+  build-system = [
+    cython
     setuptools
-    wheel
   ];
 
-  propagatedBuildInputs = [ numpy ];
+  dependencies = [ numpy ];
 
   pythonImportsCheck = [ "daqp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Dual active-set algorithm for convex quadratic programming";
     homepage = "https://github.com/darnstrom/daqp";
-    license = licenses.mit;
-    maintainers = with maintainers; [ renesat ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ renesat ];
   };
-}
+})

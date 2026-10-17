@@ -4,25 +4,25 @@
   brotlipy,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   yarl,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "garminconnect-aio";
   version = "0.1.4";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cyberjunky";
     repo = "python-garminconnect-aio";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-GWY2kTG2D+wOJqM/22pNV5rLvWjAd4jxVGlHBou/T2g=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     brotlipy
     yarl
@@ -33,10 +33,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "garminconnect_aio" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to interact with Garmin Connect";
     homepage = "https://github.com/cyberjunky/python-garminconnect-aio";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

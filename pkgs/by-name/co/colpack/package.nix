@@ -5,22 +5,22 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "ColPack";
   version = "1.0.10";
 
   src = fetchFromGitHub {
     owner = "CSCsw";
-    repo = pname;
-    rev = "v" + version;
+    repo = "ColPack";
+    rev = "v" + finalAttrs.version;
     sha256 = "1p05vry940mrjp6236c0z83yizmw9pk6ly2lb7d8rpb7j9h03glr";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
 
   configureFlags = [
-    "--enable-openmp=${if stdenv.hostPlatform.isLinux then "yes" else "no"}"
+    "--enable-openmp=${lib.boolToYesNo stdenv.hostPlatform.isLinux}"
     "--enable-examples=no"
   ];
 
@@ -37,12 +37,12 @@ stdenv.mkDerivation rec {
     cp -r SampleDrivers/Matrix* $out/share/ColPack/examples
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Package comprising of implementations of algorithms for
     vertex coloring and derivative computation";
     homepage = "https://cscapes.cs.purdue.edu/coloringpage/software.htm#functionalities";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ edwtjo ];
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ edwtjo ];
   };
-}
+})

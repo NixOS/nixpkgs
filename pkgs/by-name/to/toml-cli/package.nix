@@ -6,17 +6,17 @@
   toml-cli,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "toml-cli";
   version = "0.2.3";
 
   src = fetchCrate {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "toml-cli";
     hash = "sha256-V/yMk/Zt3yvEx10nzRhY/7GYnQninGg9h63NSaQChSA=";
   };
 
-  cargoHash = "sha256-v+GBn9mmiWcWnxmpH6JRPVz1fOSrsjWoY+l+bdzKtT4=";
+  cargoHash = "sha256-PoqVMTCRmSTt7UhCpMF3ixmAfVtpkaOfaTTmDNhrpLA=";
 
   cargoTestFlags = [
     "--bin=toml"
@@ -36,4 +36,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ phlip9 ];
     mainProgram = "toml";
   };
-}
+})

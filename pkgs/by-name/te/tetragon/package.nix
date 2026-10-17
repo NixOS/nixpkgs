@@ -4,71 +4,103 @@
   fetchFromGitHub,
   pkg-config,
   go,
-  llvm_16,
-  clang_16,
+  llvm,
+  clang_20,
   bash,
+  writableTmpDirAsHomeHook,
+  gitMinimal,
+  installShellFiles,
+  nix-update-script,
 }:
-
+let
+  # https://github.com/cilium/tetragon/issues/5389
+  clang = clang_20;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "tetragon";
-  version = "1.2.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "cilium";
     repo = "tetragon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KOR5MMRnhrlcMPqRjzjSJXvitiZQ8/tlxEnBiQG2x/Q=";
+    hash = "sha256-ls+nEx5pGCpirhXve6taKW/5A1fiLGLMT7KjYPEiWHE=";
   };
 
-  buildInputs = [
-    clang_16
-    go
-    llvm_16
+  nativeBuildInputs = [
     pkg-config
+    writableTmpDirAsHomeHook
+    gitMinimal
+    installShellFiles
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-fno-stack-protector -Qunused-arguments";
+  buildInputs = [
+    clang
+    go
+    llvm
+  ];
+
+  env = {
+    LOCAL_CLANG = 1;
+    LOCAL_CLANG_FORMAT = 1;
+    NIX_CFLAGS_COMPILE = "-fno-stack-protector -Qunused-arguments -Wno-default-const-init-var-unsafe";
+  };
 
   buildPhase = ''
     runHook preBuild
-    export HOME=$TMP
-    export LOCAL_CLANG=1
-    export LOCAL_CLANG_FORMAT=1
+
     make tetragon
     make tetragon-operator
     make tetra
     make tetragon-bpf
+
     runHook postBuild
   '';
 
   # For BPF compilation
-  hardeningDisable = [
-    "zerocallusedregs"
-  ];
+  hardeningDisable = [ "zerocallusedregs" ];
 
   postPatch = ''
-    substituteInPlace bpf/Makefile --replace '/bin/bash' '${lib.getExe bash}'
-    substituteInPlace pkg/defaults/defaults.go --replace '/var/lib/tetragon/' $out/lib/tetragon/bpf/
+    substituteInPlace bpf/Makefile.defs --replace-fail '/bin/bash' '${lib.getExe bash}'
+    substituteInPlace pkg/defaults/defaults.go --replace-fail '/var/lib/tetragon/' $out/lib/tetragon/bpf/
   '';
 
   installPhase = ''
     runHook preInstall
+
     mkdir -p $out/lib/tetragon $out/lib/tetragon/tetragon.tp.d/
     sed -i "s+/usr/local/+$out/+g" install/linux-tarball/usr/local/lib/tetragon/tetragon.conf.d/bpf-lib
     cp -n -r install/linux-tarball/usr/local/lib/tetragon/tetragon.conf.d/ $out/lib/tetragon/
     cp -n -r ./bpf/objs $out/lib/tetragon/bpf
     install -m755 -D ./tetra $out/bin/tetra
     install -m755 -D ./tetragon $out/bin/tetragon
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd tetra \
+      --bash <($out/bin/tetra completion bash) \
+      --fish <($out/bin/tetra completion fish) \
+      --zsh <($out/bin/tetra completion zsh)
+    installShellCompletion --cmd tetragon \
+      --bash <($out/bin/tetragon completion bash) \
+      --fish <($out/bin/tetragon completion fish) \
+      --zsh <($out/bin/tetragon completion zsh)
+  ''
+  + ''
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
+
+  meta = {
     description = "Real-time, eBPF-based Security Observability and Runtime Enforcement tool";
     homepage = "https://github.com/cilium/tetragon";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "tetragon";
-    maintainers = with maintainers; [ gangaram ];
-    platforms = platforms.linux;
-    sourceProvenance = with sourceTypes; [ fromSource ];
+    maintainers = with lib.maintainers; [
+      gangaram
+      RoGreat
+    ];
+    platforms = lib.platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
   };
 })

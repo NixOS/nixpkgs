@@ -6,18 +6,18 @@
   libxcb,
   installShellFiles,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "magic-wormhole-rs";
-  version = "0.7.5";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "magic-wormhole";
     repo = "magic-wormhole.rs";
-    rev = version;
-    sha256 = "sha256-wah3Mkw3oFUx4rD6OkLvYyHsz6Z8pFFPhKlc0D7gIQA=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-23NXmXkuFGMocicw2UxsXroCZ4N0PYkrOropuQYe0d8=";
   };
 
-  cargoHash = "sha256-iAwlaEfegM2uo728kUhh7GhfponqmZ48ri6iUyRVRUI=";
+  cargoHash = "sha256-LqsYyyJyMxJ97c4JOsjyL28idKLyV6GOQMccuyDRlYs=";
 
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ libxcb ];
 
@@ -30,15 +30,15 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/wormhole-rs completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Rust implementation of Magic Wormhole, with new features and enhancements";
     homepage = "https://github.com/magic-wormhole/magic-wormhole.rs";
-    changelog = "https://github.com/magic-wormhole/magic-wormhole.rs/raw/${version}/changelog.md";
-    license = licenses.eupl12;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/magic-wormhole/magic-wormhole.rs/raw/${finalAttrs.version}/changelog.md";
+    license = lib.licenses.eupl12;
+    maintainers = with lib.maintainers; [
       zeri
       piegames
     ];
     mainProgram = "wormhole-rs";
   };
-}
+})

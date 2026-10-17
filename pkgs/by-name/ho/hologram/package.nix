@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "hologram";
-  version = "1.3";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "AdRoll";
     repo = "hologram";
-    rev = version;
-    hash = "sha256-b65mplfDuwk8lEfJLKBY7BF0yGRksxHjwbEW6A7moo4=";
+    rev = finalAttrs.version;
+    hash = "sha256-YnGOlLL6+W0AmaPgu2l5ghGqQ2ow/9hbWRAhpxFkeNk=";
   };
 
   postPatch = ''
@@ -28,10 +28,10 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/AdRoll/hologram/";
     description = "Easy, painless AWS credentials on developer laptops";
     maintainers = [ ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
-}
+})

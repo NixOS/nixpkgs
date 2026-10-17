@@ -8,6 +8,7 @@
   pyyaml,
   openssh,
   unittestCheckHook,
+  installShellFiles,
   bc,
   hostname,
   bash,
@@ -15,13 +16,12 @@
 
 buildPythonPackage rec {
   pname = "clustershell";
-  version = "1.9.2";
+  version = "1.10.1";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "ClusterShell";
-    inherit version;
-    hash = "sha256-rsF/HG4GNBC+N49b+sDO2AyUI1G44wJNBUwQNPzShD0=";
+    inherit pname version;
+    hash = "sha256-snrwuqnRsQrGonKXALA+WieWyDjLtqrxkCaYImq56oo=";
   };
 
   build-system = [
@@ -50,6 +50,8 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [ pyyaml ];
+
+  nativeBuildInputs = [ installShellFiles ];
 
   nativeCheckInputs = [
     bc
@@ -80,11 +82,15 @@ buildPythonPackage rec {
     rm tests/TreeGatewayTest.py
   '';
 
-  meta = with lib; {
+  postInstall = ''
+    installShellCompletion --bash bash_completion.d/*
+  '';
+
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Scalable Python framework for cluster administration";
     homepage = "https://cea-hpc.github.io/clustershell";
-    license = licenses.lgpl21;
-    maintainers = [ maintainers.alexvorobiev ];
+    license = lib.licenses.lgpl21;
+    maintainers = [ lib.maintainers.alexvorobiev ];
   };
 }

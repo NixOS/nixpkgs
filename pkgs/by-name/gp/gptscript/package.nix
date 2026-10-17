@@ -2,39 +2,35 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  darwin,
-  stdenv,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gptscript";
-  version = "0.9.5";
+  version = "0.9.9";
 
   src = fetchFromGitHub {
     owner = "gptscript-ai";
-    repo = pname;
-    tag = "v${version}";
-    hash = "sha256-9wyDcvY5JCjtvx6XtvHwOsZLCiN1fRn0wBGaIaw2iRQ=";
+    repo = "gptscript";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gwSi+84SmLBxeRyZZS6qlSdiA8gZUj4h2LnU6oXmfdI=";
   };
 
-  vendorHash = "sha256-ajglXWGJhSJtcrbSBmxmriXFTT+Vb4xYq0Ec9SYRlQk=";
-
-  propagatedBuildInputs = with darwin; lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+  vendorHash = "sha256-C9dksQ7Js3omL8RWdQt6cEEGbGHnkXdgpYou2oKNm0Y=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/gptscript-ai/gptscript/pkg/version.Tag=v${version}"
+    "-X github.com/gptscript-ai/gptscript/pkg/version.Tag=v${finalAttrs.version}"
   ];
 
   # Requires network access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/gptscript-ai/gptscript";
-    changelog = "https://github.com/gptscript-ai/gptscript/releases/tag/v${version}";
+    changelog = "https://github.com/gptscript-ai/gptscript/releases/tag/v${finalAttrs.version}";
     description = "Build AI assistants that interact with your systems";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ jamiemagee ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jamiemagee ];
     mainProgram = "gptscript";
   };
-}
+})

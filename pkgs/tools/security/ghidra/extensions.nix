@@ -13,9 +13,13 @@ lib.makeScope newScope (self: {
 
   findcrypt = self.callPackage ./extensions/findcrypt { };
 
+  ghidralib = self.callPackage ./extensions/ghidralib { };
+
   ghidra-delinker-extension = self.callPackage ./extensions/ghidra-delinker-extension {
     inherit ghidra;
   };
+
+  ghidra-firmware-utils = self.callPackage ./extensions/ghidra-firmware-utils { };
 
   ghidra-golanganalyzerextension = self.callPackage ./extensions/ghidra-golanganalyzerextension { };
 
@@ -23,11 +27,15 @@ lib.makeScope newScope (self: {
 
   gnudisassembler = self.callPackage ./extensions/gnudisassembler { inherit ghidra; };
 
+  kaiju = self.callPackage ./extensions/kaiju { };
+
   lightkeeper = self.callPackage ./extensions/lightkeeper { };
 
   machinelearning = self.callPackage ./extensions/machinelearning { inherit ghidra; };
 
   ret-sync = self.callPackage ./extensions/ret-sync { };
+
+  reva = self.callPackage ./extensions/reva { };
 
   sleighdevtools = self.callPackage ./extensions/sleighdevtools { inherit ghidra; };
 

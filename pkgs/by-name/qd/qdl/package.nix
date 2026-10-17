@@ -2,48 +2,76 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  meson,
   pkg-config,
   libxml2,
-  systemd,
   libusb1,
-  unstableGitUpdater,
+  libzip,
+  nbdkit,
+  zip,
+  cmocka,
+  ninja,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qdl";
-  version = "unstable-2024-06-10";
+  version = "2.8";
+
+  __structuredAttrs = true;
+
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "linux-msm";
     repo = "qdl";
-    rev = "cbd46184d33af597664e08aff2b9181ae2f87aa6";
-    sha256 = "sha256-0PeOunYXY0nEEfGFGdguf5+GNN950GhPfMaD8h1ez/8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ysL9tO1GKvzphxezMspGMW8kkUNGHHspA1YU+v5HA/A=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    meson
+    pkg-config
+    ninja
+  ];
   buildInputs = [
-    systemd
     libxml2
     libusb1
+    libzip
+    nbdkit
+  ];
+  checkInputs = [
+    cmocka
+  ];
+  nativeCheckInputs = [
+    zip
   ];
 
-  installPhase = ''
-    runHook preInstall
-    install -Dm755 ./qdl -t $out/bin
-    runHook postInstall
-  '';
+  mesonFlags = [
+    "--prefix=${placeholder "out"}"
+    "-DVERSION=${finalAttrs.version}"
+  ];
 
-  meta = with lib; {
+  enableParallelBuilding = true;
+
+  doCheck = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     homepage = "https://github.com/linux-msm/qdl";
     description = "Tool for flashing images to Qualcomm devices";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       muscaln
       anas
+      numinit
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "qdl";
   };
-
-  passthru.updateScript = unstableGitUpdater { };
-}
+})

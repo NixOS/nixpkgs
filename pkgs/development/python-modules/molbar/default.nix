@@ -21,12 +21,12 @@
 
 buildPythonPackage rec {
   pname = "MolBar";
-  version = "1.1.1";
+  version = "1.1.3";
 
   src = fetchgit {
     url = "https://git.rwth-aachen.de/bannwarthlab/molbar";
     rev = "release_v${version}";
-    hash = "sha256-AFp2x8gil6nbZbgTZmuv+QAMImUMryyCc1by9U/ukYE=";
+    hash = "sha256-wHvsj1/BJpfbSKEB7Fk8PkH6laN/VMKoluZo+4bprlo=";
   };
 
   pyproject = true;
@@ -62,10 +62,10 @@ buildPythonPackage rec {
 
   doCheck = false; # Doesn't find the fortran libs before installation
 
-  meta = with lib; {
+  meta = {
     description = "Unique molecular identifiers for molecular barcoding";
     homepage = "https://git.rwth-aachen.de/bannwarthlab/molbar";
-    license = licenses.mit;
-    maintainers = [ maintainers.sheepforce ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
 }

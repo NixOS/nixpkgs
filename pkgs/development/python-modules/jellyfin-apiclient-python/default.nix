@@ -3,7 +3,6 @@
   buildPythonPackage,
   certifi,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   requests,
   urllib3,
@@ -11,18 +10,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jellyfin-apiclient-python";
-  version = "1.10.0";
+  version = "1.20.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-apiclient-python";
-    tag = "v${version}";
-    hash = "sha256-H1FqypNuVIZ17cFdNDEmmKICswxJkUGq2LhlingbCVk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-eP5GTiR/3eK+KTQdUDo5kgHWf2G/emsFnATXQHsPNks=";
   };
 
   build-system = [ setuptools ];
@@ -38,10 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jellyfin_apiclient_python" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API client for Jellyfin";
     homepage = "https://github.com/jellyfin/jellyfin-apiclient-python";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ jojosch ];
+    changelog = "https://github.com/jellyfin/jellyfin-apiclient-python/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ jojosch ];
   };
-}
+})

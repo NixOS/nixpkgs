@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   gitUpdater,
   testers,
   cmake,
@@ -20,7 +19,7 @@
   pkg-config,
   properties-cpp,
   python3,
-  systemd,
+  systemdLibs,
   ubports-click,
   validatePkgConfig,
   zeitgeist,
@@ -32,39 +31,24 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-app-launch";
-  version = "0.1.9";
+  version = "0.2.0";
 
-  outputs =
-    [
-      "out"
-      "dev"
-    ]
-    ++ lib.optionals withDocumentation [
-      "doc"
-    ];
+  outputs = [
+    "out"
+    "dev"
+  ]
+  ++ lib.optionals withDocumentation [
+    "doc"
+  ];
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-app-launch";
-    rev = finalAttrs.version;
-    hash = "sha256-vuu6tZ5eDJN2rraOpmrDddSl1cIFFBSrILKMJqcUDVc=";
+    tag = finalAttrs.version;
+    hash = "sha256-MPBgqui3RIOdiK/lmslhg23RlMqDAjYaTQAJ53+93sU=";
   };
 
   patches = [
-    # Remove when version > 0.1.9
-    (fetchpatch {
-      name = "0001-lomiri-app-launch-Fix-typelib-gir-dependency.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-app-launch/-/commit/8466e77914e73801499df224fcd4a53c4a0eab25.patch";
-      hash = "sha256-11pEhFi39Cvqb9Hg47kT8+5hq+bz6WmySqaIdwt1MVk=";
-    })
-
-    # Remove when version > 0.1.9
-    (fetchpatch {
-      name = "0002-lomiri-app-launch-Fix-parallel-access-to-_iconFinders.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-app-launch/-/commit/74da7db2d59e91d95129dcaa5f6d8960fbc32eca.patch";
-      hash = "sha256-3r12eS9uLJIoBqSiKE2xnkfrJ7uPhyvYxXsxXs0cykg=";
-    })
-
     # Use /run/current-system/sw/bin fallback for desktop file Exec= lookups, propagate to launched applications
     ./2001-Inject-current-system-PATH.patch
   ];
@@ -82,20 +66,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      dpkg # for setting LOMIRI_APP_LAUNCH_ARCH
-      gobject-introspection
-      lttng-ust
-      pkg-config
-      validatePkgConfig
-    ]
-    ++ lib.optionals withDocumentation [
-      doxygen
-      python3Packages.breathe
-      sphinx
-    ];
+  nativeBuildInputs = [
+    cmake
+    dpkg # for setting LOMIRI_APP_LAUNCH_ARCH
+    gobject-introspection
+    lttng-ust
+    pkg-config
+    validatePkgConfig
+  ]
+  ++ lib.optionals withDocumentation [
+    doxygen
+    python3Packages.breathe
+    sphinx
+  ];
 
   buildInputs = [
     cmake-extras
@@ -106,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     lomiri-api
     lttng-ust
     properties-cpp
-    systemd
+    systemdLibs
     ubports-click
     zeitgeist
   ];
@@ -164,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.com/ubports/development/core/lomiri-app-launch";
     changelog = "https://gitlab.com/ubports/development/core/lomiri-app-launch/-/blob/${finalAttrs.version}/ChangeLog";
     license = lib.licenses.gpl3Only;
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
       "lomiri-app-launch-0"

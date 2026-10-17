@@ -1,24 +1,25 @@
 {
   lib,
-  stdenv,
-  fetchFromGitHub,
   cmake,
-  pkg-config,
+  fetchFromGitHub,
   intel-gmmlib,
   intel-graphics-compiler,
   level-zero,
   libva,
+  nix-update-script,
+  pkg-config,
+  stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "intel-compute-runtime";
-  version = "24.52.32224.5";
+  version = "26.31.39395.13";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "compute-runtime";
-    rev = version;
-    hash = "sha256-Unoh33bZFsMCqJ2hWEYVEdMF2V/aSIDynThz1pUyM7Q=";
+    tag = finalAttrs.version;
+    hash = "sha256-/rZvPEI5EFhkeW2h7ebhtZnrU48N54mCAfkRgM3b1L4=";
   };
 
   nativeBuildInputs = [
@@ -34,16 +35,16 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DSKIP_UNIT_TESTS=1"
-    "-DIGC_DIR=${intel-graphics-compiler}"
-    "-DOCL_ICD_VENDORDIR=${placeholder "out"}/etc/OpenCL/vendors"
+    (lib.cmakeBool "SKIP_UNIT_TESTS" true)
+    (lib.cmakeFeature "IGC_DIR" (toString intel-graphics-compiler))
+    (lib.cmakeFeature "OCL_ICD_VENDORDIR" "${placeholder "out"}/etc/OpenCL/vendors")
     # The install script assumes this path is relative to CMAKE_INSTALL_PREFIX
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-  ];
-
-  outputs = [
-    "out"
-    "drivers"
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+    # disable spectre mitigations (already mitigated in the kernel)
+    # https://bugs.launchpad.net/ubuntu/+source/intel-compute-runtime/+bug/2110131
+    (lib.cmakeBool "NEO_DISABLE_MITIGATIONS" true)
+    # install ocloc without a version suffix
+    (lib.cmakeBool "NEO_BUILD_UNVERSIONED_OCLOC" true)
   ];
 
   # causes redefinition of _FORTIFY_SOURCE
@@ -52,9 +53,6 @@ stdenv.mkDerivation rec {
   postInstall = ''
     # Avoid clash with intel-ocl
     mv $out/etc/OpenCL/vendors/intel.icd $out/etc/OpenCL/vendors/intel-neo.icd
-
-    mkdir -p $drivers/lib
-    mv -t $drivers/lib $out/lib/libze_intel*
   '';
 
   postFixup = ''
@@ -69,16 +67,20 @@ stdenv.mkDerivation rec {
       $out/lib/intel-opencl/libigdrcl.so
   '';
 
-  meta = with lib; {
-    description = "Intel Graphics Compute Runtime for OpenCL. Replaces Beignet for Gen8 (Broadwell) and beyond";
+  passthru = {
+    updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
+  };
+
+  meta = {
+    description = "Intel Graphics Compute Runtime oneAPI Level Zero and OpenCL, supporting 12th Gen and newer";
     mainProgram = "ocloc";
     homepage = "https://github.com/intel/compute-runtime";
-    changelog = "https://github.com/intel/compute-runtime/releases/tag/${version}";
-    license = licenses.mit;
+    changelog = "https://github.com/intel/compute-runtime/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.mit;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
-}
+})

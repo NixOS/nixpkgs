@@ -25,24 +25,19 @@ if [[ ${NIX_DEBUG:-0} -ge 6 ]]; then
     set -x
 fi
 
-if [ -f .attrs.sh ] || [[ -n "${NIX_ATTRS_JSON_FILE:-}" ]]; then
+if [[ -n "${NIX_ATTRS_JSON_FILE:-}" ]]; then
     __structuredAttrs=1
     echo "structuredAttrs is enabled"
 
-    for outputName in "${!outputs[@]}"; do
-        # ex: out=/nix/store/...
-        export "$outputName=${outputs[$outputName]}"
-    done
+    _exportOutputsByName() {
+        local outputName
+        for outputName in "${!outputs[@]}"; do
+            # ex: out=/nix/store/...
+            export "$outputName=${outputs[$outputName]}"
+        done
+    }
 
-    # $NIX_ATTRS_JSON_FILE pointed to the wrong location in sandbox
-    # https://github.com/NixOS/nix/issues/6736; please keep around until the
-    # fix reaches *every patch version* that's >= lib/minver.nix
-    if ! [[ -e "${NIX_ATTRS_JSON_FILE:-}" ]]; then
-        export NIX_ATTRS_JSON_FILE="$NIX_BUILD_TOP/.attrs.json"
-    fi
-    if ! [[ -e "${NIX_ATTRS_SH_FILE:-}" ]]; then
-        export NIX_ATTRS_SH_FILE="$NIX_BUILD_TOP/.attrs.sh"
-    fi
+    _exportOutputsByName
 else
     __structuredAttrs=
     : "${outputs:=out}"
@@ -56,60 +51,102 @@ getAllOutputNames() {
     fi
 }
 
+# All provided arguments are joined with a space, then prefixed by the name of the function which invoked `nixLog` (or
+# the hook name if the caller was an implicit hook), then directed to $NIX_LOG_FD, if it's set.
+nixLog() {
+  # Return a value explicitly instead of the implicit return of the last command (result of the test).
+  # NOTE: By requiring NIX_LOG_FD be set, we avoid dumping logging inside of nix-shell.
+  [[ -z ${NIX_LOG_FD-} ]] && return 0
+
+  # Use the function name of the caller, unless it is _callImplicitHook, in which case use the name of the hook.
+  local callerName="${FUNCNAME[1]}"
+  if [[ $callerName == "_callImplicitHook" ]]; then
+    callerName="${hookName:?}"
+  fi
+  printf "%s: %s\n" "$callerName" "$*" >&"$NIX_LOG_FD"
+}
+
+# Identical to nixLog, but additionally prefixed by the logLevel.
+# NOTE: This function is only every meant to be called from the nix*Log family of functions.
+_nixLogWithLevel() {
+  # Return a value explicitly instead of the implicit return of the last command (result of the test).
+  # NOTE: By requiring NIX_LOG_FD be set, we avoid dumping logging inside of nix-shell.
+  [[ -z ${NIX_LOG_FD-} || ${NIX_DEBUG:-0} -lt ${1:?} ]] && return 0
+
+  local logLevel
+  case "${1:?}" in
+  0) logLevel=ERROR ;;
+  1) logLevel=WARN ;;
+  2) logLevel=NOTICE ;;
+  3) logLevel=INFO ;;
+  4) logLevel=TALKATIVE ;;
+  5) logLevel=CHATTY ;;
+  6) logLevel=DEBUG ;;
+  7) logLevel=VOMIT ;;
+  *)
+    echo "_nixLogWithLevel: called with invalid log level: ${1:?}" >&"$NIX_LOG_FD"
+    return 1
+    ;;
+  esac
+
+  # Use the function name of the caller, unless it is _callImplicitHook, in which case use the name of the hook.
+  # NOTE: Our index into FUNCNAME is 2, not 1, because we are only ever to be called from the nix*Log family of
+  # functions, never directly.
+  local callerName="${FUNCNAME[2]}"
+  if [[ $callerName == "_callImplicitHook" ]]; then
+    callerName="${hookName:?}"
+  fi
+
+  # Use the function name of the caller's caller, since we should only every be invoked by nix*Log functions.
+  printf "%s: %s: %s\n" "$logLevel" "$callerName" "${2:?}" >&"$NIX_LOG_FD"
+}
+
 # All provided arguments are joined with a space then directed to $NIX_LOG_FD, if it's set.
 # Corresponds to `Verbosity::lvlError` in the Nix source.
 nixErrorLog() {
-    if [[ -z ${NIX_LOG_FD-} ]] || [[ ${NIX_DEBUG:-0} -lt 0 ]]; then return; fi
-    printf "%s\n" "$*" >&"$NIX_LOG_FD"
+  _nixLogWithLevel 0 "$*"
 }
 
 # All provided arguments are joined with a space then directed to $NIX_LOG_FD, if it's set.
 # Corresponds to `Verbosity::lvlWarn` in the Nix source.
 nixWarnLog() {
-    if [[ -z ${NIX_LOG_FD-} ]] || [[ ${NIX_DEBUG:-0} -lt 1 ]]; then return; fi
-    printf "%s\n" "$*" >&"$NIX_LOG_FD"
+  _nixLogWithLevel 1 "$*"
 }
 
 # All provided arguments are joined with a space then directed to $NIX_LOG_FD, if it's set.
 # Corresponds to `Verbosity::lvlNotice` in the Nix source.
 nixNoticeLog() {
-    if [[ -z ${NIX_LOG_FD-} ]] || [[ ${NIX_DEBUG:-0} -lt 2 ]]; then return; fi
-    printf "%s\n" "$*" >&"$NIX_LOG_FD"
+  _nixLogWithLevel 2 "$*"
 }
 
 # All provided arguments are joined with a space then directed to $NIX_LOG_FD, if it's set.
 # Corresponds to `Verbosity::lvlInfo` in the Nix source.
 nixInfoLog() {
-    if [[ -z ${NIX_LOG_FD-} ]] || [[ ${NIX_DEBUG:-0} -lt 3 ]]; then return; fi
-    printf "%s\n" "$*" >&"$NIX_LOG_FD"
+  _nixLogWithLevel 3 "$*"
 }
 
 # All provided arguments are joined with a space then directed to $NIX_LOG_FD, if it's set.
 # Corresponds to `Verbosity::lvlTalkative` in the Nix source.
 nixTalkativeLog() {
-    if [[ -z ${NIX_LOG_FD-} ]] || [[ ${NIX_DEBUG:-0} -lt 4 ]]; then return; fi
-    printf "%s\n" "$*" >&"$NIX_LOG_FD"
+  _nixLogWithLevel 4 "$*"
 }
 
 # All provided arguments are joined with a space then directed to $NIX_LOG_FD, if it's set.
 # Corresponds to `Verbosity::lvlChatty` in the Nix source.
 nixChattyLog() {
-    if [[ -z ${NIX_LOG_FD-} ]] || [[ ${NIX_DEBUG:-0} -lt 5 ]]; then return; fi
-    printf "%s\n" "$*" >&"$NIX_LOG_FD"
+  _nixLogWithLevel 5 "$*"
 }
 
 # All provided arguments are joined with a space then directed to $NIX_LOG_FD, if it's set.
 # Corresponds to `Verbosity::lvlDebug` in the Nix source.
 nixDebugLog() {
-    if [[ -z ${NIX_LOG_FD-} ]] || [[ ${NIX_DEBUG:-0} -lt 6 ]]; then return; fi
-    printf "%s\n" "$*" >&"$NIX_LOG_FD"
+  _nixLogWithLevel 6 "$*"
 }
 
 # All provided arguments are joined with a space then directed to $NIX_LOG_FD, if it's set.
 # Corresponds to `Verbosity::lvlVomit` in the Nix source.
 nixVomitLog() {
-    if [[ -z ${NIX_LOG_FD-} ]] || [[ ${NIX_DEBUG:-0} -lt 7 ]]; then return; fi
-    printf "%s\n" "$*" >&"$NIX_LOG_FD"
+  _nixLogWithLevel 7 "$*"
 }
 
 # Log a hook, to be run before the hook is actually called.
@@ -477,7 +514,7 @@ isELF() {
     local fd
     local magic
     exec {fd}< "$fn"
-    read -r -n 4 -u "$fd" magic
+    LANG=C read -r -n 4 -u "$fd" magic
     exec {fd}<&-
     if [ "$magic" = $'\177ELF' ]; then return 0; else return 1; fi
 }
@@ -488,7 +525,7 @@ isMachO() {
     local fd
     local magic
     exec {fd}< "$fn"
-    read -r -n 4 -u "$fd" magic
+    LANG=C read -r -n 4 -u "$fd" magic
     exec {fd}<&-
 
     # nix uses 'declare -F' in get-env.sh to retrieve the loaded functions.
@@ -517,7 +554,7 @@ isScript() {
     local fd
     local magic
     exec {fd}< "$fn"
-    read -r -n 2 -u "$fd" magic
+    LANG=C read -r -n 2 -u "$fd" magic
     exec {fd}<&-
     if [[ "$magic" =~ \#! ]]; then return 0; else return 1; fi
 }
@@ -1000,19 +1037,15 @@ substituteStream() {
                 pattern="$2"
                 replacement="$3"
                 shift 3
-                local savedvar
-                savedvar="${!var}"
-                eval "$var"'=${'"$var"'//"$pattern"/"$replacement"}'
-                if [ "$pattern" != "$replacement" ]; then
-                    if [ "${!var}" == "$savedvar" ]; then
-                        if [ "$replace_mode" == --replace-warn ]; then
-                            printf "substituteStream() in derivation $name: WARNING: pattern %q doesn't match anything in %s\n" "$pattern" "$description" >&2
-                        elif [ "$replace_mode" == --replace-fail ]; then
-                            printf "substituteStream() in derivation $name: ERROR: pattern %q doesn't match anything in %s\n" "$pattern" "$description" >&2
-                            return 1
-                        fi
+                if ! [[ "${!var}" == *"$pattern"* ]]; then
+                    if [ "$replace_mode" == --replace-warn ]; then
+                        printf "substituteStream() in derivation $name: WARNING: pattern %q doesn't match anything in %s\n" "$pattern" "$description" >&2
+                    elif [ "$replace_mode" == --replace-fail ]; then
+                        printf "substituteStream() in derivation $name: ERROR: pattern %q doesn't match anything in %s\n" "$pattern" "$description" >&2
+                        return 1
                     fi
                 fi
+                eval "$var"'=${'"$var"'//"$pattern"/"$replacement"}'
                 ;;
 
             --subst-var)
@@ -1136,20 +1169,23 @@ substituteAllInPlace() {
 # What follows is the generic builder.
 
 
-# This function is useful for debugging broken Nix builds.  It dumps
-# all environment variables to a file `env-vars' in the build
-# directory.  If the build fails and the `-K' option is used, you can
-# then go to the build directory and source in `env-vars' to reproduce
-# the environment used for building.
+# This function is useful for debugging broken Nix builds. It dumps all environment variables to a
+# file `env-vars' in the Nix build directory. If the build fails and the `-K' option is used,
+# you can then go to the build directory and source the `env-vars' file to reproduce the environment
+# used for building. Set `noDumpEnvVars` in the derivation to avoid this, and if for whatever reason
+# `$NIX_BUILD_TOP` is not a directory, this function also does nothing.
 dumpVars() {
-    if [ "${noDumpEnvVars:-0}" != 1 ]; then
-        # On darwin, install(1) cannot be called with /dev/stdin or fd from process substitution
-        # so first we create the file and then write to it
-        # See https://github.com/NixOS/nixpkgs/issues/335016
-        {
-            install -m 0600 /dev/null "$NIX_BUILD_TOP/env-vars" &&
-            export 2>/dev/null >| "$NIX_BUILD_TOP/env-vars"
-        } || true
+    if [[ "${noDumpEnvVars:-0}" != 1 && -d "$NIX_BUILD_TOP" ]]; then
+        # Set umask to create env-vars file with 0600 permissions (owner read/write only)
+        local old_umask
+        old_umask=$(umask)
+        umask 0077
+
+        # Dump all environment variables to the env-vars file
+        export 2>/dev/null > "$NIX_BUILD_TOP/env-vars"
+
+        # Restore original umask
+        umask "$old_umask"
     fi
 }
 
@@ -1222,7 +1258,7 @@ _defaultUnpack() {
         # We can't preserve hardlinks because they may have been
         # introduced by store optimization, which might break things
         # in the build.
-        cp -r --preserve=mode,timestamps --reflink=auto -- "$fn" "$destination"
+        cp -r --preserve=timestamps --reflink=auto -- "$fn" "$destination"
 
     else
 
@@ -1282,10 +1318,11 @@ unpackPhase() {
     # source archives, we record the contents of the current
     # directory, then look below which directory got added.  Yeah,
     # it's rather hacky.
-    local dirsBefore=""
+    local -a dirsBefore=()
+    local dirBefore
     for i in *; do
         if [ -d "$i" ]; then
-            dirsBefore="$dirsBefore $i "
+            dirsBefore+=("$i")
         fi
     done
 
@@ -1304,17 +1341,17 @@ unpackPhase() {
     elif [ -z "$sourceRoot" ]; then
         for i in *; do
             if [ -d "$i" ]; then
-                case $dirsBefore in
-                    *\ $i\ *)
-                        ;;
-                    *)
-                        if [ -n "$sourceRoot" ]; then
-                            echo "unpacker produced multiple directories"
-                            exit 1
-                        fi
-                        sourceRoot="$i"
-                        ;;
-                esac
+                for dirBefore in "${dirsBefore[@]}"; do
+                    if [ "$i" = "$dirBefore" ]; then
+                        continue 2
+                    fi
+                done
+
+                if [ -n "$sourceRoot" ]; then
+                    echo "unpacker produced multiple directories"
+                    exit 1
+                fi
+                sourceRoot="$i"
             fi
         done
     fi
@@ -1343,6 +1380,9 @@ patchPhase() {
     local -a patchesArray
     concatTo patchesArray patches
 
+    local -a flagsArray
+    concatTo flagsArray patchFlags=-p1
+
     for i in "${patchesArray[@]}"; do
         echo "applying patch $i"
         local uncompress=cat
@@ -1361,8 +1401,6 @@ patchPhase() {
                 ;;
         esac
 
-        local -a flagsArray
-        concatTo flagsArray patchFlags=-p1
         # "2>&1" is a hack to make patch fail if the decompressor fails (nonexistent patch, etc.)
         # shellcheck disable=SC2086
         $uncompress < "$i" 2>&1 | patch "${flagsArray[@]}"
@@ -1423,7 +1461,16 @@ configurePhase() {
     fi
 
     if [[ -z "${dontAddPrefix:-}" && -n "$prefix" ]]; then
-        prependToVar configureFlags "${prefixKey:---prefix=}$prefix"
+        # For __structuredAttrs: if prefixKey ends in a space,
+        # we need to add the prefixKey and the prefix as separate entries,
+        # and since we prepend, we do it in reverse order.
+        local -r prefixKeyOrDefault="${prefixKey:---prefix=}"
+        if [ "${prefixKeyOrDefault: -1}" = " " ]; then
+            prependToVar configureFlags "$prefix"
+            prependToVar configureFlags "${prefixKeyOrDefault::-1}"
+        else
+            prependToVar configureFlags "$prefixKeyOrDefault$prefix"
+        fi
     fi
 
     if [[ -f "$configureScript" ]]; then
@@ -1604,10 +1651,9 @@ fixupPhase() {
 
     # Propagate user-env packages into the output with binaries, TODO?
 
-    if [ -n "${propagatedUserEnvPkgs:-}" ]; then
+    if [ -n "${propagatedUserEnvPkgs[*]:-}" ]; then
         mkdir -p "${!outputBin}/nix-support"
-        # shellcheck disable=SC2086
-        printWords $propagatedUserEnvPkgs > "${!outputBin}/nix-support/propagated-user-env-packages"
+        printWords "${propagatedUserEnvPkgs[@]}" > "${!outputBin}/nix-support/propagated-user-env-packages"
     fi
 
     runHook postFixup
@@ -1729,6 +1775,25 @@ runPhase() {
     fi
 }
 
+definePhases() {
+    # only defines phases if it is not already defined
+    if [ -z "${phases[*]:-}" ]; then
+        phases="${prePhases[*]:-} unpackPhase patchPhase ${preConfigurePhases[*]:-} \
+            configurePhase ${preBuildPhases[*]:-} buildPhase checkPhase \
+            ${preInstallPhases[*]:-} installPhase ${preFixupPhases[*]:-} fixupPhase installCheckPhase \
+            ${preDistPhases[*]:-} distPhase ${postPhases[*]:-}"
+    fi
+}
+
+printPhases() {
+    definePhases
+    # one phase per line, to make it easy to consume with tools like xargs
+    # explicitly uses the same splitting as genericBuild
+    local phase
+    for phase in ${phases[*]}; do
+        printf '%s\n' "$phase"
+    done
+}
 
 genericBuild() {
     # variable used by our gzip wrapper to add -n.
@@ -1744,12 +1809,7 @@ genericBuild() {
         return
     fi
 
-    if [ -z "${phases[*]:-}" ]; then
-        phases="${prePhases[*]:-} unpackPhase patchPhase ${preConfigurePhases[*]:-} \
-            configurePhase ${preBuildPhases[*]:-} buildPhase checkPhase \
-            ${preInstallPhases[*]:-} installPhase ${preFixupPhases[*]:-} fixupPhase installCheckPhase \
-            ${preDistPhases[*]:-} distPhase ${postPhases[*]:-}";
-    fi
+    definePhases
 
     # The use of ${phases[*]} gives the correct behavior both with and
     # without structured attrs.  This relies on the fact that each

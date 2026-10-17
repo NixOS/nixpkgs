@@ -1,23 +1,26 @@
 {
   lib,
-  buildGoModule,
+  stdenv,
+  buildGo127Module,
   fetchFromGitHub,
   stdenvNoCC,
   nix-update-script,
+  nixosTests,
   nodejs,
-  pnpm_9,
-  typescript,
+  pnpm_11,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   versionCheckHook,
 }:
 
 let
   pname = "autobrr";
-  version = "1.57.0";
+  version = "1.88.0";
   src = fetchFromGitHub {
     owner = "autobrr";
     repo = "autobrr";
     tag = "v${version}";
-    hash = "sha256-RVkeSrL3ZfEz+oCICi8JFJ6AaOBBumi5mnnQYE5Gjt8=";
+    hash = "sha256-ossNvYwx4DSmcBlmyQBa8R9PMwFpy7+ywL6DupNfBVs=";
   };
 
   autobrr-web = stdenvNoCC.mkDerivation {
@@ -26,20 +29,22 @@ let
 
     nativeBuildInputs = [
       nodejs
-      pnpm_9.configHook
-      typescript
+      pnpmConfigHook
+      pnpm_11
     ];
 
     sourceRoot = "${src.name}/web";
 
-    pnpmDeps = pnpm_9.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (autobrr-web)
         pname
         version
         src
         sourceRoot
         ;
-      hash = "sha256-mABHRuZfjq9qNanfGGv+xDhs3bSufaWRecJypic8SWo=";
+      pnpm = pnpm_11;
+      fetcherVersion = 4;
+      hash = "sha256-J3lhCK/YtXAiP/MqWXeBzDjYK8Gl211aCuIpfswtrEM=";
     };
 
     postBuild = ''
@@ -51,46 +56,52 @@ let
     '';
   };
 in
-buildGoModule rec {
+buildGo127Module (finalAttrs: {
   inherit
-    autobrr-web
     pname
     version
     src
     ;
 
-  vendorHash = "sha256-rCtUE2/IwR6AnXQNgeH0TQ0BL7g6vi9L128xP0PwOXc=";
+  vendorHash = "sha256-I0ps78txRogoBxQzaSnuAlGf/UliDukKBbaayd5Ee0c=";
 
   preBuild = ''
-    cp -r ${autobrr-web}/* web/dist
+    cp -r ${finalAttrs.passthru.autobrr-web}/* web/dist
   '';
 
   ldflags = [
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
     "-X main.commit=${src.tag}"
   ];
 
-  doInstallCheck = true;
+  # In darwin, tests try to access /etc/protocols, which is not permitted.
+  doCheck = !stdenv.hostPlatform.isDarwin;
+  doInstallCheck = !stdenv.hostPlatform.isDarwin;
+
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/autobrrctl";
   versionCheckProgramArg = "version";
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--subpackage"
-      "autobrr-web"
-    ];
+  passthru = {
+    inherit autobrr-web;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "autobrr-web"
+      ];
+    };
+    tests.testService = nixosTests.autobrr;
   };
 
   meta = {
     description = "Modern, easy to use download automation for torrents and usenet";
     license = lib.licenses.gpl2Plus;
     homepage = "https://autobrr.com/";
-    changelog = "https://autobrr.com/release-notes/v${version}";
+    changelog = "https://autobrr.com/release-notes/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ av-gal ];
     mainProgram = "autobrr";
     platforms = with lib.platforms; darwin ++ freebsd ++ linux;
   };
-}
+})

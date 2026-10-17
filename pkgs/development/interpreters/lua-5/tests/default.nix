@@ -10,10 +10,10 @@ let
     lua:
     { name, command }:
     pkgs.runCommandLocal "test-${lua.name}-${name}"
-      ({
+      {
         nativeBuildInputs = [ lua ];
         meta.platforms = lua.meta.platforms;
-      })
+      }
       (
         ''
           source ${./assert.sh}
@@ -22,7 +22,7 @@ let
         + "touch $out"
       );
 
-  wrappedHello = hello.overrideAttrs (oa: {
+  wrappedHello = hello.overrideAttrs {
     propagatedBuildInputs = [
       wrapLua
       lua.pkgs.cjson
@@ -30,7 +30,7 @@ let
     postFixup = ''
       wrapLuaPrograms
     '';
-  });
+  };
 
   luaWithModule = lua.withPackages (ps: [
     ps.lua-cjson
@@ -47,9 +47,11 @@ let
       ";${lua}/share/lua/5.2/?.lua;${lua}/share/lua/5.2/?/init.lua;${lua}/lib/lua/5.2/?.lua;${lua}/lib/lua/5.2/?/init.lua;./?.lua;";
     "5.3" =
       ";${lua}/share/lua/5.3/?.lua;${lua}/share/lua/5.3/?/init.lua;${lua}/lib/lua/5.3/?.lua;${lua}/lib/lua/5.3/?/init.lua;./?.lua;./?/init.lua;";
-    # lua5.4 seems to be smarter about it and dont add the lua separators when nothing left or right
+    # lua > 5.4 seems to be smarter about it and dont add the lua separators when nothing left or right
     "5.4" =
       "${lua}/share/lua/5.4/?.lua;${lua}/share/lua/5.4/?/init.lua;${lua}/lib/lua/5.4/?.lua;${lua}/lib/lua/5.4/?/init.lua;./?.lua;./?/init.lua";
+    "5.5" =
+      "${lua}/share/lua/5.5/?.lua;${lua}/share/lua/5.5/?/init.lua;${lua}/lib/lua/5.5/?.lua;${lua}/lib/lua/5.5/?/init.lua;./?.lua;./?/init.lua";
 
     # luajit versions
     "2.0" =
@@ -58,9 +60,9 @@ let
       ";./?.lua;${lua}/share/luajit-2.1/?.lua;/usr/local/share/lua/5.1/?.lua;/usr/local/share/lua/5.1/?/init.lua;${lua}/share/lua/5.1/?.lua;${lua}/share/lua/5.1/?/init.lua;";
   };
 in
-pkgs.recurseIntoAttrs ({
+lib.recurseIntoAttrs {
 
-  checkInterpreterPatch =
+  checkInterpreterPath =
     let
       golden_LUA_PATH = golden_LUA_PATHS.${lib.versions.majorMinor lua.version};
     in
@@ -73,62 +75,54 @@ pkgs.recurseIntoAttrs ({
       '';
     };
 
-  checkWrapping =
-    pkgs.runCommandLocal "test-${lua.name}-wrapping"
-      ({
-      })
-      (''
-        grep -- 'LUA_PATH=' ${wrappedHello}/bin/hello
-        touch $out
-      '');
+  checkWrapping = pkgs.runCommandLocal "test-${lua.name}-wrapping" { } ''
+    grep -- 'LUA_PATH=' ${wrappedHello}/bin/hello
+    touch $out
+  '';
 
   # checks that lua's setup-hook adds dependencies to LUA_PATH
   # Prevents the following regressions
-  # $ env NIX_PATH=nixpkgs=. nix-shell --pure -Q -p luajitPackages.lua luajitPackages.http
+  # $ env NIX_PATH=nixpkgs=. nix-shell --pure -Q -p luajitPackages.lua luajitPackages.alt-getopt
   # nix-shell$ luajit
-  # > require('http.request')
-  # stdin:1: module 'http.request' not found:
+  # > require('alt-getopt')
+  # stdin:1: module 'alt-getopt' not found:
   checkSetupHook =
     pkgs.runCommandLocal "test-${lua.name}-setup-hook"
-      ({
+      {
         nativeBuildInputs = [ lua ];
-        buildInputs = [ lua.pkgs.http ];
+        buildInputs = [ lua.pkgs.alt-getopt ];
         meta.platforms = lua.meta.platforms;
-      })
-      (''
-        ${lua}/bin/lua -e "require'http.request'"
+      }
+      ''
+        ${lua}/bin/lua -e "require'alt_getopt'"
         touch $out
-      '');
+      '';
 
-  checkRelativeImports =
-    pkgs.runCommandLocal "test-${lua.name}-relative-imports"
-      ({
-      })
-      (''
-        source ${./assert.sh}
+  checkRelativeImports = pkgs.runCommandLocal "test-${lua.name}-relative-imports" { } ''
+    source ${./assert.sh}
 
-        lua_vanilla_package_path="$(${lua}/bin/lua -e "print(package.path)")"
-        lua_with_module_package_path="$(${luaWithModule}/bin/lua -e "print(package.path)")"
+    lua_vanilla_package_path="$(${lua}/bin/lua -e "print(package.path)")"
+    lua_with_module_package_path="$(${luaWithModule}/bin/lua -e "print(package.path)")"
 
-        assertStringContains "$lua_vanilla_package_path" "./?.lua"
-        assertStringContains "$lua_vanilla_package_path" "./?/init.lua"
+    assertStringContains "$lua_vanilla_package_path" "./?.lua"
+    assertStringContains "$lua_vanilla_package_path" "./?/init.lua"
 
-        assertStringContains "$lua_with_module_package_path" "./?.lua"
-        assertStringContains "$lua_with_module_package_path" "./?/init.lua"
+    assertStringContains "$lua_with_module_package_path" "./?.lua"
+    assertStringContains "$lua_with_module_package_path" "./?/init.lua"
 
-        touch $out
-      '');
+    touch $out
+  '';
 
   # Check that a lua package's propagatedBuildInputs end up in LUA_PATH
   checkPropagatedBuildInputs =
     pkgs.runCommandLocal "test-${lua.name}-setup-hook"
-      ({
-        # lua-curl is a propagatedBuildInput of rest-nvim has
-        buildInputs = [ lua.pkgs.rest-nvim ];
-      })
-      (''
-        ${lua}/bin/lua -e "require'cURL'"
+      {
+        buildInputs = [ lua.pkgs.luacov ];
+      }
+      # `datafile` is a propagatedBuildInput of luacov
+      ''
+        ${lua}/bin/lua -e "require'datafile'"
         touch $out
-      '');
+      '';
 
-})
+}

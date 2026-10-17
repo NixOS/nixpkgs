@@ -7,14 +7,14 @@
   stdenvNoCC,
 }:
 
-stdenvNoCC.mkDerivation (self: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "open-english-wordnet";
   version = "2022";
 
   src = fetchFromGitHub {
     owner = "globalwordnet";
     repo = "english-wordnet";
-    rev = "${self.version}-edition";
+    rev = "${finalAttrs.version}-edition";
     hash = "sha256-a1fWIp39uuJZL1aFX/r+ttLB1+kwh/XPHwphgENTQ5M=";
   };
 
@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation (self: {
         }
       )
       {
-        # Upstream commit bumping the version number, accidentally ommited from the tagged release
+        # Upstream commit bumping the version number, accidentally omitted from the tagged release
         "bc07902f8995b62c70f01a282b23f40f30630540" = "sha256-1e4MG/k86g3OFUhiShCCbNXnvDKrYFr1KlGVsGl++KI=";
         # PR #982, “merge.py: Make result independent of filesystem order”
         "6da46a48dd76a48ad9ff563e6c807b8271fc83cd" = "sha256-QkkJH7NVGy/IbeSWkotU80IGF4esz0b8mIL9soHdQtQ=";
@@ -49,18 +49,18 @@ stdenvNoCC.mkDerivation (self: {
     python scripts/merge.py
 
     echo Compressing
-    gzip --best --no-name --stdout ./wn.xml > 'oewn:${self.version}.xml.gz'
+    gzip --best --no-name --stdout ./wn.xml > 'oewn:${finalAttrs.version}.xml.gz'
 
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-    install -Dt $out/share/wordnet 'oewn:${self.version}.xml.gz'
+    install -Dt $out/share/wordnet 'oewn:${finalAttrs.version}.xml.gz'
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lexical network of the English language";
     longDescription = ''
       Open English WordNet is a lexical network of the English language grouping
@@ -73,8 +73,8 @@ stdenvNoCC.mkDerivation (self: {
       open source methodology.
     '';
     homepage = "https://en-word.net/";
-    license = licenses.cc-by-40;
-    maintainers = with maintainers; [ nicoo ];
-    platforms = platforms.all;
+    license = lib.licenses.cc-by-40;
+    maintainers = with lib.maintainers; [ nicoo ];
+    platforms = lib.platforms.all;
   };
 })

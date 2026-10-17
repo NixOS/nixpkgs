@@ -2,37 +2,42 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  libx11,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tgpt";
-  version = "2.7.4";
+  version = "2.15.0";
 
   src = fetchFromGitHub {
     owner = "aandrew-me";
     repo = "tgpt";
-    tag = "v${version}";
-    hash = "sha256-Nk+iLsTXnw6RAc1VztW8ZqeUVsywFjMCOBY2yuWbUXQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-i0zQEBXAMgF3AnahJhwVZHqTqHgTtuy4kxdYxBDcER0=";
   };
 
-  vendorHash = "sha256-docq/r6yyMPsuUyFbtCMaYfEVL0gLmyTy4PbrAemR00=";
+  vendorHash = "sha256-oh1qKEmWoWK9fXgSfbHFgM8TWD14xNNRFw+YgqnXt00=";
 
-  ldflags = [
-    "-s"
-    "-w"
-  ];
+  buildInputs = [ libx11 ];
 
-  preCheck = ''
-    # Remove test which need network access
-    rm providers/koboldai/koboldai_test.go
-  '';
+  ldflags = [ "-s" ];
 
-  meta = with lib; {
+  checkFlags =
+    let
+      skippedTests = [
+        "TestDetectPackageManager/Scoop_on_Windows"
+        "TestDetectPackageManager/Chocolatey_on_Windows"
+        "TestRequest"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+
+  meta = {
     description = "ChatGPT in terminal without needing API keys";
     homepage = "https://github.com/aandrew-me/tgpt";
-    changelog = "https://github.com/aandrew-me/tgpt/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/aandrew-me/tgpt/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "tgpt";
   };
-}
+})

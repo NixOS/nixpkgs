@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  recurseIntoAttrs,
   fetchgit,
   pkg-config,
   autoreconfHook,
@@ -20,7 +19,7 @@
   glibcLocales,
   mpfr,
   more,
-  postgresql,
+  libpq,
   hiredis,
   expat,
   tre,
@@ -53,11 +52,10 @@ let
 
       inherit patches;
 
-      postPatch =
-        ''
-          cd ${name}
-        ''
-        + extraPostPatch;
+      postPatch = ''
+        cd ${name}
+      ''
+      + extraPostPatch;
 
       nativeBuildInputs = [
         autoconf
@@ -95,7 +93,8 @@ let
         license = lib.licenses.gpl3Plus;
         platforms = lib.platforms.unix;
         maintainers = with lib.maintainers; [ tomberek ];
-      } // lib.optionalAttrs (broken != null) { inherit broken; };
+      }
+      // lib.optionalAttrs (broken != null) { inherit broken; };
     }
   );
   gawkextlib = buildExtension {
@@ -182,7 +181,7 @@ let
     pgsql = buildExtension {
       inherit gawkextlib;
       name = "pgsql";
-      extraBuildInputs = [ postgresql ];
+      extraBuildInputs = [ libpq ];
     };
     redis = buildExtension {
       inherit gawkextlib;
@@ -212,7 +211,7 @@ let
     };
   };
 in
-recurseIntoAttrs (
+lib.recurseIntoAttrs (
   libs
   // {
     inherit gawkextlib buildExtension;

@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "001wqh7gx2dv3sf7a5xsbppz9r88f5qwrp05jzjsjcm6cbcvmsz0";
+    hash = "sha256-4Ou62WKmMqnllwXczHFxCOX07126F3WcHruJ/g7EPAA=";
   };
 
   propagatedBuildInputs = [
@@ -42,10 +42,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fiblary3" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/graham33/fiblary";
     description = "Fibaro Home Center API Python Library";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ graham33 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ graham33 ];
   };
 }

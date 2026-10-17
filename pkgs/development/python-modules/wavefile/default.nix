@@ -7,19 +7,19 @@
   pyaudio,
   numpy,
   libsndfile,
-  substituteAll,
+  replaceVars,
 }:
 
 buildPythonPackage rec {
   pname = "wavefile";
-  version = "1.6.2";
+  version = "1.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vokimon";
     repo = "python-wavefile";
     tag = "python-wavefile-${version}";
-    hash = "sha256-TLSWhLARY+3sHkl2p3d3LDGzLu6DggjTJWFpyrwRXSI=";
+    hash = "sha256-7pJcdp2abNurTl/pwAEW4QAalK7okMOCwlRPmKLWad4=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -40,8 +40,7 @@ buildPythonPackage rec {
   patches = [
     # Fix check error
     # OSError: libsndfile.so.1: cannot open shared object file: No such file or directory
-    (substituteAll {
-      src = ./libsndfile.py.patch;
+    (replaceVars ./libsndfile.py.patch {
       libsndfile = "${lib.getLib libsndfile}/lib/libsndfile${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];
@@ -50,11 +49,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wavefile" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pythonic libsndfile wrapper to read and write audio files";
     homepage = "https://github.com/vokimon/python-wavefile";
     changelog = "https://github.com/vokimon/python-wavefile#version-history";
-    maintainers = with maintainers; [ yuu ];
-    license = licenses.gpl3Plus;
+    maintainers = [ ];
+    license = lib.licenses.gpl3Plus;
   };
 }

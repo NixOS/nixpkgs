@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "ubuntu-sans-mono";
-  version = "1.006";
+  version = "1.100";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "Ubuntu-Sans-Mono-fonts";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-EFZZnMZTQHo2Tr9/rtb7C5gAlQ/0uYT+MQ1gKkqQ5hE=";
+    hash = "sha256-3vHf1e1bHaFCPTYMDldoUPYQvMAW6//MiNiqlCjd7HQ=";
   };
 
   installPhase = ''
@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta = with lib; {
+  meta = {
     description = "Ubuntu Font Family (Mono)";
     longDescription = "The Ubuntu Font Family are a set of matching libre/open fonts.
     The fonts were originally developed in 2010–2011,
@@ -36,8 +36,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     and expanded again in 2022–2023 when variable fonts were added.";
     homepage = "https://design.ubuntu.com/font";
     changelog = "https://github.com/canonical/Ubuntu-Sans-Mono-fonts/blob/${finalAttrs.src.rev}/FONTLOG.txt";
-    license = licenses.ufl;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ jopejoe1 ];
+    license = lib.licenses.ufl;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ jopejoe1 ];
   };
 })

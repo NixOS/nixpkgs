@@ -4,9 +4,11 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  openssl,
+  unixtools,
 }:
 let
-  version = "0.28.2";
+  version = "0.31.0";
 in
 buildGoModule {
   pname = "step-cli";
@@ -16,7 +18,7 @@ buildGoModule {
     owner = "smallstep";
     repo = "cli";
     tag = "v${version}";
-    hash = "sha256-noANDVupzaoWfnESsu3ucd3ZvD3K/56YvYonyp2n0ho=";
+    hash = "sha256-v8insc/+vnc4JVNeHeF3UU+rYdNtMeQkdWxVc+vq7ms=";
     # this file change depending on git branch status (via .gitattributes)
     # https://github.com/NixOS/nixpkgs/issues/84312
     postFetch = ''
@@ -33,11 +35,17 @@ buildGoModule {
   preCheck = ''
     # Tries to connect to smallstep.com
     rm command/certificate/remote_test.go
+
+    patchShebangs integration/openssl-jwt.sh
   '';
 
-  vendorHash = "sha256-rxUzvT5vEzZ5G+YGFEw4L25ZlwEn0wTZJgjsdfloFx8=";
+  vendorHash = "sha256-UNrUy0aWl7w5SmlsxLpmx6WxI2AElHE6llAMLRLi0r0=";
 
   nativeBuildInputs = [ installShellFiles ];
+  nativeCheckInputs = [
+    openssl
+    unixtools.xxd
+  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd step \

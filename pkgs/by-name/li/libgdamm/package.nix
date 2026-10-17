@@ -3,8 +3,8 @@
   stdenv,
   fetchurl,
   pkg-config,
-  glibmm,
-  libgda,
+  glibmm_2_4,
+  libgda5,
   libxml2,
   gnome,
   mysqlSupport ? false,
@@ -12,7 +12,7 @@
 }:
 
 let
-  gda = libgda.override {
+  gda = libgda5.override {
     inherit mysqlSupport postgresSupport;
   };
 in
@@ -26,13 +26,13 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/libgdamm/${lib.versions.majorMinor version}/libgdamm-${version}.tar.xz";
     sha256 = "1fyh15b3f8hmwbswalxk1g4l04yvvybksn5nm7gznn5jl5q010p9";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    glibmm
+    glibmm_2_4
     libxml2
   ];
   propagatedBuildInputs = [ gda ];
@@ -46,11 +46,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "C++ bindings for libgda";
     homepage = "https://www.gnome-db.org/";
-    license = licenses.lgpl21Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ lib.maintainers.bot-wxt1221 ];
+    platforms = lib.platforms.linux;
   };
 }

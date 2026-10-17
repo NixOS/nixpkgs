@@ -1,30 +1,44 @@
 {
   lib,
+  gccMultiStdenv,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   bash,
   capnproto,
   cmake,
   gdb,
   libpfm,
   makeWrapper,
+  nix-update-script,
   pkg-config,
   procps,
   python3,
   which,
   zlib,
+  zstd,
 }:
-
-stdenv.mkDerivation (finalAttrs: {
-  version = "5.8.0";
+let
+  stdenv' = if stdenv.hostPlatform.isx86_64 then gccMultiStdenv else stdenv;
+in
+stdenv'.mkDerivation (finalAttrs: {
+  version = "5.9.0";
   pname = "rr";
 
   src = fetchFromGitHub {
-    owner = "mozilla";
+    owner = "rr-debugger";
     repo = "rr";
     rev = finalAttrs.version;
-    hash = "sha256-FudAAkWIe6gv4NYFoe9E0hlgTM70lymBE5Fw/vbehps=";
+    hash = "sha256-o+HXrgGXdsvjlNh70qsXRtp2yXOiZIT30ejfs1KEaqE=";
   };
+
+  patches = [
+    # fix build w/ glibc-2.42
+    (fetchpatch {
+      url = "https://github.com/rr-debugger/rr/commit/6251648873b9e1ed23536beebbaa5d6fead3d5be.patch";
+      hash = "sha256-k+jeGUJyybYq3GF2zIhpDF8NT66Buq6nztUbh28qVD8=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace src/Command.cc --replace '_BSD_SOURCE' '_DEFAULT_SOURCE'
@@ -62,10 +76,11 @@ stdenv.mkDerivation (finalAttrs: {
     procps
     python3
     zlib
+    zstd
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "disable32bit" true)
+    (lib.cmakeBool "disable32bit" (!stdenv.hostPlatform.isx86_64))
     (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
@@ -85,6 +100,8 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH ":" "${lib.makeBinPath [ gdb ]}";
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     homepage = "https://rr-project.org/";
     description = "Records nondeterministic executions and debugs them deterministically";
@@ -102,6 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       pierron
       thoughtpolice
+      lf-
     ];
     platforms = [
       "aarch64-linux"

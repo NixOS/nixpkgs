@@ -7,27 +7,27 @@
   mashumaro,
   orjson,
   poetry-core,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   syrupy,
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "airgradient";
-  version = "0.9.1";
+  version = "0.10.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "airgradienthq";
     repo = "python-airgradient";
-    tag = "v${version}";
-    hash = "sha256-al0DLsub3xLU1BWLNn0cMI87O0mcQJ0Y4Boj2Xwk1r0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-OlCCImVvoDqOA/LiSShCXwQACHw5Hmwc10BXaMz1DD8=";
   };
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   build-system = [ poetry-core ];
 
@@ -48,11 +48,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "airgradient" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for AirGradient";
     homepage = "https://github.com/airgradienthq/python-airgradient";
-    changelog = "https://github.com/airgradienthq/python-airgradient/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/airgradienthq/python-airgradient/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

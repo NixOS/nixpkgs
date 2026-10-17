@@ -10,31 +10,33 @@
   ffmpeg,
   alsa-lib,
   SDL2,
+  sdl3,
   lttng-ust,
   numactl,
   libglvnd,
-  xorg,
+  libxi,
   udev,
   vulkan-loader,
+  nix-update-script,
   nativeWayland ? false,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "osu-lazer";
-  version = "2025.118.2";
+  version = "2026.1005.0";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
-    tag = version;
-    hash = "sha256-pQEMd+y+uS+Xl8lBuk7KwX7AcPs0MCXwkY5oPBPWmEE=";
+    tag = "${finalAttrs.version}-lazer";
+    hash = "sha256-CjD7urrR0+9p0UWxl28AsmbSZVLTCMHvyrTohRzpvPU=";
   };
 
   projectFile = "osu.Desktop/osu.Desktop.csproj";
   nugetDeps = ./deps.json;
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -45,6 +47,7 @@ buildDotnetModule rec {
     ffmpeg
     alsa-lib
     SDL2
+    sdl3
     lttng-ust
     numactl
 
@@ -53,7 +56,7 @@ buildDotnetModule rec {
     libglvnd
 
     # needed for the window to actually appear
-    xorg.libXi
+    libxi
 
     # needed to avoid in runtime.log:
     # [verbose]: SDL error log [debug]: Failed loading udev_device_get_action: /nix/store/*-osu-lazer-*/lib/osu-lazer/runtimes/linux-x64/native/libSDL2.so: undefined symbol: _udev_device_get_action
@@ -77,8 +80,8 @@ buildDotnetModule rec {
       install -D ./assets/lazer.png $out/share/icons/hicolor/''${i}x$i/apps/osu.png
     done
 
-    ln -sft $out/lib/${pname} ${SDL2}/lib/libSDL2${stdenvNoCC.hostPlatform.extensions.sharedLibrary}
-    cp -f ${./osu.runtimeconfig.json} "$out/lib/${pname}/osu!.runtimeconfig.json"
+    ln -sft $out/lib/${finalAttrs.pname} ${SDL2}/lib/libSDL2${stdenvNoCC.hostPlatform.extensions.sharedLibrary}
+    ln -sft $out/lib/${finalAttrs.pname} ${sdl3}/lib/libSDL3${stdenvNoCC.hostPlatform.extensions.sharedLibrary}
 
     runHook postFixup
   '';
@@ -95,11 +98,16 @@ buildDotnetModule rec {
     })
   ];
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex=(.*)-lazer"
+    ];
+  };
 
   meta = {
     description = "Rhythm is just a *click* away (no score submission or multiplayer, see osu-lazer-bin)";
     homepage = "https://osu.ppy.sh";
+    changelog = "https://osu.ppy.sh/home/changelog/lazer/${finalAttrs.version}";
     license = with lib.licenses; [
       mit
       cc-by-nc-40
@@ -110,7 +118,10 @@ buildDotnetModule rec {
       thiagokokada
       Guanran928
     ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
     mainProgram = "osu!";
   };
-}
+})

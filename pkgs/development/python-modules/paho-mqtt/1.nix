@@ -1,42 +1,62 @@
 {
-  lib,
-  stdenv,
   buildPythonPackage,
+  esphome,
   fetchFromGitHub,
-  isPy3k,
+  lib,
   pytestCheckHook,
-  mock,
-  six,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+let
+  testing = fetchFromGitHub {
+    owner = "eclipse";
+    repo = "paho.mqtt.testing";
+    rev = "a4dc694010217b291ee78ee13a6d1db812f9babd";
+    hash = "sha256-SQoNdkWMjnasPjpXQF2yV97MUra8gb27pc3rNoA8Rjw=";
+  };
+in
+buildPythonPackage (finalAttrs: {
   pname = "paho-mqtt";
   version = "1.6.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = "paho.mqtt.python";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-9nH6xROVpmI+iTKXfwv2Ar1PAmWbEunI3HO0pZyK6Rg=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    six
-  ] ++ lib.optionals (!isPy3k) [ mock ];
-
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "paho.mqtt" ];
 
-  meta = with lib; {
-    description = "MQTT version 3.1.1 client class";
+  doCheck = false;
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    ln -s ${testing} paho.mqtt.testing
+
+    # paho.mqtt not in top-level dir to get caught by this
+    export PYTHONPATH=".:$PYTHONPATH"
+  '';
+
+  disabledTests = [
+    # Fails during teardown
+    # RuntimeError: Client 01-zero-length-clientid.py exited with code None, expected 0
+    "test_01_zero_length_clientid"
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
+    changelog = "https://github.com/eclipse/paho.mqtt.python/blob/${finalAttrs.src.tag}/ChangeLog.txt";
+    description = "MQTT version 5.0/3.1.1 client class";
     homepage = "https://eclipse.org/paho";
-    license = licenses.epl10;
-    maintainers = with maintainers; [
-      mog
-      dotlambda
-    ];
+    license = lib.licenses.epl20;
+    inherit (esphome.meta) maintainers;
   };
-}
+})

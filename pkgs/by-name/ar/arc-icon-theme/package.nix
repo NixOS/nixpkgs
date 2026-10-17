@@ -6,18 +6,17 @@
   gtk3,
   adwaita-icon-theme,
   moka-icon-theme,
-  gnome-icon-theme,
   hicolor-icon-theme,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "arc-icon-theme";
   version = "20161122";
 
   src = fetchFromGitHub {
     owner = "horst3180";
     repo = "arc-icon-theme";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-TfYtzwo69AC5hHbzEqB4r5Muqvn/eghCGSlmjMCFA7I=";
   };
 
@@ -29,7 +28,6 @@ stdenvNoCC.mkDerivation rec {
   propagatedBuildInputs = [
     moka-icon-theme
     adwaita-icon-theme
-    gnome-icon-theme
     hicolor-icon-theme
   ];
 
@@ -37,12 +35,12 @@ stdenvNoCC.mkDerivation rec {
 
   postFixup = "gtk-update-icon-cache $out/share/icons/Arc";
 
-  meta = with lib; {
+  meta = {
     description = "Arc icon theme";
     homepage = "https://github.com/horst3180/arc-icon-theme";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     # moka-icon-theme dependency is restricted to linux
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ romildo ];
   };
-}
+})

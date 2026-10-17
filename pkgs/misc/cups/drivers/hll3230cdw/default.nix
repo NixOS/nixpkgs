@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   version = "1.0.2";
   src = fetchurl {
     url = "https://download.brother.com/welcome/dlf103925/hll3230cdwpdrv-${version}-0.i386.deb";
-    sha256 = "9d49abc584bf22bc381510618a34107ead6ab14562b51831fefd6009947aa5a9";
+    hash = "sha256-nUmrxYS/Irw4FRBhijQQfq1qsUVitRgx/v1gCZR6pak=";
   };
 
   nativeBuildInputs = [
@@ -82,11 +82,11 @@ stdenv.mkDerivation rec {
       --replace \"\$"@"\" \"\$"@\" | LD_PRELOAD= ${gnused}/bin/sed -E '/^(function list :|resource file :).*/{s#/opt#$out/opt#}'"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Brother HL-L3230CDW printer driver";
-    license = licenses.unfree;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ aplund ];
+    license = lib.licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [ aplund ];
     platforms = [
       "x86_64-linux"
       "i686-linux"

@@ -2,66 +2,67 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   installShellFiles,
   python3,
 }:
 
-let
-  py = python3.override {
-    self = py;
-    packageOverrides = self: super: {
-      paramiko = super.paramiko.overridePythonAttrs (oldAttrs: rec {
-        version = "3.4.1";
-        src = oldAttrs.src.override {
-          inherit version;
-          hash = "sha256-ixUwKHCvf2ZS8uA4l1wdKXPwYEbLXX1lNVZos+y+zgw=";
-        };
-        dependencies = oldAttrs.dependencies ++ [ python3.pkgs.icecream ];
-      });
-    };
-  };
-in
-with py.pkgs;
-
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "ssh-mitm";
-  version = "5.0.0";
+  version = "6.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ssh-mitm";
     repo = "ssh-mitm";
-    tag = version;
-    hash = "sha256-jRheKLAXbbMyxdtDSJ4QSN4PoUM2YoK7nmU5xqPq7DY=";
+    tag = finalAttrs.version;
+    hash = "sha256-ABzAXnyG77oCW6gzw67OJ/Amw7EHWM82Tsk+D6fFtpU=";
   };
 
-  build-system = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "hatchling==1.32.0" "hatchling"
+  '';
+
+  pythonRelaxDeps = [ "paramiko" ];
+
+  build-system = with python3.pkgs; [
     hatchling
     hatch-requirements-txt
   ];
 
-  dependencies = [
-    appimage
-    argcomplete
-    colored
-    packaging
-    paramiko
-    pytz
-    pyyaml
-    python-json-logger
-    rich
-    tkinter
-    setuptools
-    sshpubkeys
-    wrapt
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ setuptools ];
-  # fix for darwin users
-
   nativeBuildInputs = [ installShellFiles ];
+
+  dependencies =
+    with python3.pkgs;
+    [
+      aiohttp
+      appimage
+      argcomplete
+      colored
+      lxml
+      markdown
+      packaging
+      paramiko
+      protobuf
+      psrpcore
+      pyte
+      python-json-logger
+      pytz
+      pyyaml
+      requests
+      rich
+      setuptools
+      sshpubkeys
+      textual
+      tkinter
+      wrapt
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ setuptools ];
+  # fix for darwin users
 
   # Module has no tests
   doCheck = false;
+
   # Install man page
   postInstall = ''
     installManPage man1/*
@@ -69,11 +70,11 @@ buildPythonApplication rec {
 
   pythonImportsCheck = [ "sshmitm" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for SSH security audits";
     homepage = "https://github.com/ssh-mitm/ssh-mitm";
-    changelog = "https://github.com/ssh-mitm/ssh-mitm/blob/${version}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/ssh-mitm/ssh-mitm/blob/${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

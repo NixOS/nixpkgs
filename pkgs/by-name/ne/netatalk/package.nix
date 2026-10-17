@@ -5,6 +5,7 @@
   acl,
   autoreconfHook,
   avahi,
+  bstring,
   db,
   libevent,
   libgcrypt,
@@ -13,62 +14,122 @@
   pam,
   perl,
   pkg-config,
-  python3,
+  meson,
+  ninja,
+  file,
+  cracklib,
+  cups,
+  libtirpc,
+  openldap,
+  glib,
+  dbus,
+  iniparser,
+  pandoc,
+  sqlite,
+  talloc,
+  xapian,
+  flex,
+  bison,
+  dconf,
+  localsearch,
+  tinysparql,
+  xapianSupport ? false,
+  localsearchSupport ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "netatalk";
-  version = "3.1.19";
+  version = "4.6.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/netatalk/netatalk/netatalk-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-p0pzHwnjNNWPsWRBflgaZB+ijMP5bF99TEdLs4mVKsI=";
+    url = "mirror://sourceforge/netatalk/netatalk/netatalk-${finalAttrs.version}.tar.xz";
+    hash = "sha256-yXQS9/S7u/qSJmT1K51qX3UoK5mlL+BGMTS7R3/qcV4=";
   };
 
-  patches = [
-    ./000-no-suid.patch
-    ./001-omit-localstatedir-creation.patch
-  ];
-
   nativeBuildInputs = [
-    autoreconfHook
     pkg-config
-    perl
-    python3
-    python3.pkgs.wrapPython
+    meson
+    ninja
+    file
+  ]
+  ++ lib.optionals localsearchSupport [
+    flex
+    bison
   ];
 
   buildInputs = [
     acl
     avahi
+    bstring
     db
     libevent
     libgcrypt
     libiconv
     openssl
     pam
+    cracklib
+    cups
+    libtirpc
+    openldap
+    glib
+    perl
+    dbus
+    iniparser
+    pandoc
+    sqlite
+    talloc
+  ]
+  ++ lib.optionals xapianSupport [
+    xapian
+    file
+  ]
+  ++ lib.optionals localsearchSupport [
+    tinysparql
+    dconf
+    localsearch
   ];
 
-  configureFlags = [
-    "--with-bdb=${db.dev}"
-    "--with-ssl-dir=${openssl.dev}"
-    "--with-lockfile=/run/lock/netatalk"
-    "--localstatedir=/var/lib"
+  mesonFlags = [
+    "-Dwith-appletalk=true"
+    "-Dwith-statedir-path=/var/lib"
+    "-Dwith-bdb-path=${db.out}"
+    "-Dwith-bdb-include-path=${db.dev}/include"
+    "-Dwith-install-hooks=false"
+    "-Dwith-init-hooks=false"
+    "-Dwith-lockfile-path=/run/lock"
+    "-Dwith-cracklib=true"
+    "-Dwith-cracklib-path=${cracklib.out}"
+    "-Dwith-statedir-creation=false"
+    "-Dwith-spotlight-backends=${
+      lib.concatStringsSep "," (
+        [ "cnid" ] ++ lib.optional xapianSupport "xapian" ++ lib.optional localsearchSupport "localsearch"
+      )
+    }"
   ];
 
-  postInstall = ''
-    sed -i -e "s%/usr/bin/env python%${python3}/bin/python3%" $out/bin/afpstats
-    buildPythonPath ${python3.pkgs.dbus-python}
-    patchPythonScript $out/bin/afpstats
+  # TODO: drop once upstream makes this path configurable.
+  postPatch = lib.optionalString localsearchSupport ''
+    substituteInPlace meson.build \
+      --replace-fail "install_emptydir('/etc/dconf/db')" "install_emptydir('etc/dconf/db')"
+    substituteInPlace config/dconf/meson.build \
+      --replace-fail "install_dir: '/etc/dconf/profile'" "install_dir: 'etc/dconf/profile'"
+  '';
+
+  # netatalk probes for the LocalSearch schema at configure time.
+  preConfigure = lib.optionalString localsearchSupport ''
+    export XDG_DATA_DIRS="''${XDG_DATA_DIRS:+$XDG_DATA_DIRS:}${localsearch}/share/gsettings-schemas/localsearch-${localsearch.version}"
   '';
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Apple Filing Protocol Server";
-    homepage = "http://netatalk.sourceforge.net/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ jcumming ];
+    homepage = "https://netatalk.io/";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      jcumming
+      nulleric
+    ];
   };
 })

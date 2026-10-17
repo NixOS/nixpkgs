@@ -1,22 +1,20 @@
 {
-  stdenv,
   lib,
-  fetchsvn,
+  fetchzip,
   tcl,
   tcllib,
   tk,
-  xorg,
-  darwin,
+  libx11,
+  zlib,
 }:
 
-tcl.mkTclDerivation rec {
+tcl.mkTclDerivation (finalAttrs: {
   pname = "tkimg";
-  version = "623";
+  version = "2.1.1";
 
-  src = fetchsvn {
-    url = "svn://svn.code.sf.net/p/tkimg/code/trunk";
-    rev = version;
-    sha256 = "sha256-6GlkqYxXmMGjiJTZS2fQNVSimcKc1BZ/lvzvtkhty+o=";
+  src = fetchzip {
+    url = "mirror://sourceforge/tkimg/tkimg/Img-${finalAttrs.version}.tar.gz";
+    hash = "sha256-TRtE2/BVrYgkdKtbF06UjLvokokgLGQ/EKDLxhz2Ckw=";
   };
 
   configureFlags = [
@@ -25,17 +23,15 @@ tcl.mkTclDerivation rec {
     "--with-tkinclude=${tk.dev}/include"
   ];
 
-  buildInputs =
-    [
-      xorg.libX11
-      tcllib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Cocoa
-      ]
-    );
+  nativeBuildInputs = [
+    tcllib # for dtplite
+  ];
+
+  buildInputs = [
+    libx11
+    tcllib
+    zlib
+  ];
 
   meta = {
     homepage = "https://sourceforge.net/projects/tkimg/";
@@ -43,5 +39,6 @@ tcl.mkTclDerivation rec {
     maintainers = with lib.maintainers; [ matthewcroughan ];
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+    badPlatforms = lib.platforms.darwin;
   };
-}
+})

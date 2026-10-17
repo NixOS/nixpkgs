@@ -1,0 +1,30 @@
+From 9653a2b9a9e3a756b287b0a59204860511e4abce Mon Sep 17 00:00:00 2001
+From: sterni <sternenseemann@systemli.org>
+Date: Wed, 28 Jan 2026 00:09:54 +0100
+Subject: [PATCH] users_guide: fix runtime error during build with Sphinx 9.1.0
+
+Appears that pathto is stricter about what it accepts now.
+Tested Sphinx 8.2.3 and 9.1.0 on the ghc-9.10 branch.
+
+Resolves #26810.
+
+Co-authored-by: Martin Weinelt <hexa@darmstadt.ccc.de>
+---
+ docs/users_guide/rtd-theme/layout.html | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/docs/users_guide/rtd-theme/layout.html b/docs/users_guide/rtd-theme/layout.html
+index 94a40cc1c3..f2441378a8 100644
+--- a/docs/users_guide/rtd-theme/layout.html
++++ b/docs/users_guide/rtd-theme/layout.html
+@@ -32,7 +32,7 @@
+     {%- if css|attr("rel") %}
+       <link rel="{{ css.rel }}" href="{{ pathto(css.filename, 1) }}" type="text/css"{% if css.title is not none %} title="{{ css.title }}"{% endif %} />
+     {%- else %}
+-      <link rel="stylesheet" href="{{ pathto(css, 1) }}" type="text/css" />
++      <link rel="stylesheet" href="{{ pathto(css.filename, 1) }}" type="text/css" />
+     {%- endif %}
+   {%- endfor %}
+ 
+-- 
+2.52.0

@@ -22,6 +22,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  # https://docs.python.org/3/whatsnew/3.13.html#unittest
+  preCheck = ''
+    substituteInPlace test/test_pySmartDL.py \
+      --replace-fail 'unittest.makeSuite(' 'unittest.TestLoader().loadTestsFromTestCase('
+  '';
   disabledTests = [
     # touch the network
     "test_basic_auth"
@@ -38,11 +43,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pySmartDL" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/iTaybb/pySmartDL";
     description = "Smart Download Manager for Python";
     changelog = "https://github.com/iTaybb/pySmartDL/blob/${src.rev}/ChangeLog.txt";
-    license = licenses.unlicense;
+    license = lib.licenses.unlicense;
     maintainers = [ ];
   };
 }

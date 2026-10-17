@@ -2,8 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
-  pythonOlder,
 
   # build-system
   flit-core,
@@ -13,12 +11,12 @@
   sphinx-rtd-theme,
   myst-parser,
 
-  # propagates
-  typing-extensions,
-
   # optionals
+  arabic-reshaper,
   cryptography,
+  fonttools,
   pillow,
+  python-bidi,
 
   # tests
   fpdf2,
@@ -26,20 +24,18 @@
   pytest-timeout,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pypdf";
-  version = "5.1.0";
+  version = "6.20.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "py-pdf";
     repo = "pypdf";
-    tag = version;
+    tag = finalAttrs.version;
     # fetch sample files used in tests
     fetchSubmodules = true;
-    hash = "sha256-ziJTYl7MQUCE8US0yeiq6BPDVbBsxWhti0NyiDnKtfE=";
+    hash = "sha256-zpJlzjl6nnwR8vQmEfLKqM2l3++FfsMRCPHNClaYxEs=";
   };
 
   outputs = [
@@ -60,12 +56,15 @@ buildPythonPackage rec {
     myst-parser
   ];
 
-  dependencies = lib.optionals (pythonOlder "3.11") [ typing-extensions ];
-
   optional-dependencies = rec {
-    full = crypto ++ image;
+    full = crypto ++ fonts ++ image ++ rtl_text;
     crypto = [ cryptography ];
+    fonts = [ fonttools ];
     image = [ pillow ];
+    rtl_text = [
+      arabic-reshaper
+      python-bidi
+    ];
   };
 
   pythonImportsCheck = [ "pypdf" ];
@@ -74,19 +73,26 @@ buildPythonPackage rec {
     (fpdf2.overridePythonAttrs { doCheck = false; }) # avoid reference loop
     pytestCheckHook
     pytest-timeout
-  ] ++ optional-dependencies.full;
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.full;
 
-  pytestFlagsArray = [
+  disabledTestMarks = [
     # don't access the network
-    "-m"
-    "'not enable_socket'"
+    "enable_socket"
   ];
 
-  meta = with lib; {
+  disabledTests = [
+    # timing sensitive, these allocate hundreds of megabytes and assert on a
+    # five second pytest-timeout, which slower builders cannot meet
+    "test_dictionary_object__read_from_stream__missing_length__limit"
+    "test_flatedecode__decode_png_prediction__speed"
+  ];
+
+  meta = {
     description = "Pure-python PDF library capable of splitting, merging, cropping, and transforming the pages of PDF files";
     homepage = "https://github.com/py-pdf/pypdf";
-    changelog = "https://github.com/py-pdf/pypdf/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ javaes ];
+    changelog = "https://github.com/py-pdf/pypdf/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ javaes ];
   };
-}
+})

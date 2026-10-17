@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-clock-app";
-  version = "4.1.0";
+  version = "4.1.1";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/apps/lomiri-clock-app";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-bYnAdlpY2Ka08hrJOyqW8+VbCTOi0NNrW+8MHLF7+2E=";
+    hash = "sha256-5o+Y+10oM6k20I9fH1MB/9nzI143u0RJ/wHNIsrvaL0=";
   };
 
   postPatch = ''
@@ -132,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.com/ubports/development/apps/lomiri-clock-app";
     changelog = "https://gitlab.com/ubports/development/apps/lomiri-clock-app/-/blob/v${finalAttrs.version}/ChangeLog";
     license = lib.licenses.gpl3Only;
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     mainProgram = "lomiri-clock-app";
     platforms = lib.platforms.linux;
   };

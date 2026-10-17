@@ -4,28 +4,31 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "badger";
-  version = "4.5.1";
+  version = "4.9.6";
 
   src = fetchFromGitHub {
     owner = "dgraph-io";
     repo = "badger";
-    rev = "v${version}";
-    hash = "sha256-95D67Q63AZTFRN9uj7HyF5QEjluYCYiDFGBJwgfK+mo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-LAW6WCtyzMFlycbTkdqt7FVbamkCpi0E/qgfNq4o8iM=";
   };
 
-  vendorHash = "sha256-8mfB8sKA5a6jV0/OA947mp+TPhdymsVzB2i9MIdg1WQ=";
+  vendorHash = "sha256-NSjJDpLf6Ooi+6bwViAP5M7XNy95RLtVVcDAj0jkbyM=";
 
   subPackages = [ "badger" ];
 
   doCheck = false;
 
-  meta = with lib; {
+  __structuredAttrs = true;
+
+  meta = {
+    changelog = "https://github.com/dgraph-io/badger/releases/tag/${finalAttrs.src.tag}";
     description = "Fast key-value DB in Go";
-    homepage = "https://github.com/dgraph-io/badger";
-    license = licenses.asl20;
+    homepage = "https://dgraph-io.github.io/badger";
+    license = lib.licenses.asl20;
     mainProgram = "badger";
-    maintainers = with maintainers; [ farcaller ];
+    maintainers = with lib.maintainers; [ hythera ];
   };
-}
+})

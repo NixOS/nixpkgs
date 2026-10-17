@@ -3,38 +3,39 @@
   buildPythonPackage,
   cryptography,
   fetchFromGitHub,
+  pynacl,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "securetar";
-  version = "2024.11.0";
+  version = "2026.4.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
-    owner = "pvizeli";
+    owner = "home-assistant-libs";
     repo = "securetar";
     tag = version;
-    hash = "sha256-h0GubDuwINDNfDxBVJv74yu/OnzMasq5f0lPoIrNNCA=";
+    hash = "sha256-y2Ow272094Qrn52LGYkuRcjaR6d0C6bF12g7W6AwSMI=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [ cryptography ];
+  dependencies = [
+    cryptography
+    pynacl
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "securetar" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to handle tarfile backups";
-    homepage = "https://github.com/pvizeli/securetar";
-    changelog = "https://github.com/pvizeli/securetar/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    homepage = "https://github.com/home-assistant-libs/securetar";
+    changelog = "https://github.com/home-assistant-libs/securetar/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -3,36 +3,40 @@
   stdenv,
   fetchFromGitHub,
   jdk,
-  gradle_8,
+  gradle_9,
   jre,
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
-  testers,
-  git,
-  key,
+  z3,
+  cvc5,
+  versionCheckHook,
 }:
 
 let
-  gradle = gradle_8;
+  gradle = gradle_9;
 
 in
 stdenv.mkDerivation rec {
   pname = "key";
-  version = "2.12.2";
+  version = "3.0.0";
   src = fetchFromGitHub {
     owner = "KeYProject";
     repo = "key";
     tag = "KeY-${version}";
-    hash = "sha256-veqaWyWEiTot2cAjvyPG+Ra8/pqS4i6w6iR+qhozIM4=";
+    hash = "sha256-aEkQtTLSdZPXu0g9QHa40Oye4IyCl2BFpxmm5dqjKCk=";
   };
+
+  patches = [
+    # Remove linting framework, causes issues with the update script.
+    ./remove-eisop-checker.patch
+  ];
 
   nativeBuildInputs = [
     jdk
     gradle
     makeWrapper
     copyDesktopItems
-    git
   ];
 
   desktopItems = [
@@ -54,10 +58,11 @@ stdenv.mkDerivation rec {
 
   __darwinAllowLocalNetworking = true;
 
-  # tests are broken on darwin
-  # TODO: on update to 2.12.3+, restore to !stdenv.hostPlatform.isDarwin;
-  # (currently some tests are failing)
-  doCheck = false;
+  doCheck = stdenv.hostPlatform.isLinux;
+
+  nativeCheckInputs = [
+    z3
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -68,15 +73,22 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/icons/hicolor/256x256/apps
     cp key.ui/src/main/resources/de/uka/ilkd/key/gui/images/key-color-icon-square.png $out/share/icons/hicolor/256x256/apps/key.png
     makeWrapper ${lib.getExe jre} $out/bin/KeY \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          z3
+          cvc5
+        ]
+      } \
       --add-flags "-cp $out/share/java/KeY.jar de.uka.ilkd.key.core.Main"
 
     runHook postInstall
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = key;
-    command = "KeY --help";
-  };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--show-properties";
 
   meta = {
     description = "Java formal verification tool";

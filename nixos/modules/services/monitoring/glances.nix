@@ -57,7 +57,7 @@ in
       description = ''
         Extra command-line arguments to pass to glances.
 
-        See https://glances.readthedocs.io/en/latest/cmds.html for all available options.
+        See <https://glances.readthedocs.io/en/latest/cmds.html> for all available options.
       '';
     };
   };
@@ -68,6 +68,7 @@ in
 
     systemd.services."glances" = {
       description = "Glances";
+      documentation = [ "man:glances(1)" ];
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 

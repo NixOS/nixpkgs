@@ -1,16 +1,16 @@
 {
   lib,
-  fetchFromGitHub,
-  python3Packages,
   appstream,
   blueprint-compiler,
   desktop-file-utils,
-  glib,
+  fetchFromGitHub,
   gdm,
+  glib,
   libadwaita,
   meson,
   ninja,
   pkg-config,
+  python3Packages,
   wrapGAppsHook4,
   # gdm-settings needs to know where to look for themes
   # This should work for most systems, but can be overridden if not
@@ -21,16 +21,16 @@
   ],
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gdm-settings";
-  version = "4.4";
+  version = "5.0";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "gdm-settings";
     repo = "gdm-settings";
-    tag = "v${version}";
-    hash = "sha256-3Te8bhv2TkpJFz4llm1itRhzg9v64M7Drtrm4s9EyiQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-x7w6m0+uwkm95onR+ioQAoLlaPoUmLc0+NgawQIIa/Y=";
   };
 
   nativeBuildInputs = [
@@ -49,20 +49,24 @@ python3Packages.buildPythonApplication rec {
   dependencies = [ python3Packages.pygobject3 ];
 
   dontWrapGApps = true;
-  makeWrapperArgs = [
-    "\${gappsWrapperArgs[@]}"
-    "--set-default HOST_DATA_DIRS ${dataDirs}"
-  ];
+  preFixup = ''
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
+      "--set-default"
+      "HOST_DATA_DIRS"
+      "${dataDirs}"
+    )
+  '';
 
   pythonImportsCheck = [ "gdms" ];
 
   meta = {
     description = "Settings app for GNOME's Login Manager";
     homepage = "https://gdm-settings.github.io/";
-    changelog = "https://github.com/gdm-settings/gdm-settings/releases/tag/v${version}";
+    changelog = "https://github.com/gdm-settings/gdm-settings/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "gdm-settings";
     inherit (gdm.meta) platforms;
   };
-}
+})

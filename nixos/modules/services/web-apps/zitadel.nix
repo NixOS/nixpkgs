@@ -136,7 +136,7 @@ in
         '';
         description = ''
           Contents of the runtime configuration file. See
-          https://zitadel.com/docs/self-hosting/manage/configure for more
+          <https://zitadel.com/docs/self-hosting/manage/configure> for more
           details.
         '';
       };
@@ -168,7 +168,7 @@ in
         '';
         description = ''
           Contents of the database initialization config file. See
-          https://zitadel.com/docs/self-hosting/manage/configure for more
+          <https://zitadel.com/docs/self-hosting/manage/configure> for more
           details.
         '';
       };
@@ -202,34 +202,30 @@ in
 
     networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.settings.Port ];
 
-    systemd.services.zitadel =
-      let
-        configFile = settingsFormat.generate "config.yaml" cfg.settings;
-        stepsFile = settingsFormat.generate "steps.yaml" cfg.steps;
+    systemd.services.zitadel = {
+      description = "ZITADEL identity access management";
+      wantedBy = [ "multi-user.target" ];
 
-        args = lib.cli.toGNUCommandLineShell { } {
-          config = cfg.extraSettingsPaths ++ [ configFile ];
-          steps = cfg.extraStepsPaths ++ [ stepsFile ];
-          masterkeyFile = cfg.masterKeyFile;
-          inherit (cfg) tlsMode;
-        };
-      in
-      {
-        description = "ZITADEL identity access management";
-        path = [ cfg.package ];
-        wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        Type = "simple";
+        ExecStart =
+          let
+            configFile = settingsFormat.generate "config.yaml" cfg.settings;
+            stepsFile = settingsFormat.generate "steps.yaml" cfg.steps;
 
-        script = ''
-          zitadel start-from-init ${args}
-        '';
-
-        serviceConfig = {
-          Type = "simple";
-          User = cfg.user;
-          Group = cfg.group;
-          Restart = "on-failure";
-        };
+            args = lib.cli.toCommandLineShellGNU { } {
+              config = cfg.extraSettingsPaths ++ [ configFile ];
+              steps = cfg.extraStepsPaths ++ [ stepsFile ];
+              masterkeyFile = cfg.masterKeyFile;
+              inherit (cfg) tlsMode;
+            };
+          in
+          "${lib.getExe cfg.package} start-from-init ${args}";
+        User = cfg.user;
+        Group = cfg.group;
+        Restart = "on-failure";
       };
+    };
 
     users.users.zitadel = lib.mkIf (cfg.user == "zitadel") {
       isSystemUser = true;

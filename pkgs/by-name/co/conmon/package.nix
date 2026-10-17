@@ -6,38 +6,52 @@
   glib,
   glibc,
   libseccomp,
-  systemd,
+  systemdMinimal,
   nixosTests,
+  versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+let
+  withSystemd = lib.meta.availableOn stdenv.hostPlatform systemdMinimal;
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "conmon";
-  version = "2.1.12";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "containers";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-iSC1Q7fdf+4YH4vLFPOscRWxNv/xygYx872u8msmMmc=";
+    repo = "conmon";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YkPgpT+0cE7FCP/dcqnTy6oonPbXKiutFCGX5Lj1JB8=";
+    leaveDotGit = true;
+    postFetch = ''
+      cd $out
+      git rev-parse HEAD > COMMIT
+      rm -rf .git
+    '';
   };
 
+  preConfigure = ''
+    substituteInPlace Makefile \
+      --replace-fail "(GIT_COMMIT)" "(shell cat COMMIT)"
+  '';
+
   nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [
-      glib
-      libseccomp
-      systemd
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isMusl) [
-      glibc
-      glibc.static
-    ];
+  buildInputs = [
+    glib
+    libseccomp
+  ]
+  ++ lib.optional withSystemd systemdMinimal
+  ++ lib.optionals (!stdenv.hostPlatform.isMusl) [
+    glibc
+    glibc.static
+  ];
 
   # manpage requires building the vendored go-md2man
   makeFlags = [
     "bin/conmon"
-    "VERSION=${version}"
-  ];
+  ]
+  ++ lib.optional (!withSystemd) "DISABLE_SYSTEMD=1";
 
   installPhase = ''
     runHook preInstall
@@ -50,13 +64,17 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) cri-o podman; };
 
-  meta = with lib; {
-    changelog = "https://github.com/containers/conmon/releases/tag/${src.rev}";
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+
+  meta = {
+    changelog = "https://github.com/containers/conmon/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/containers/conmon";
     description = "OCI container runtime monitor";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ] ++ teams.podman.members;
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.podman ];
+    platforms = lib.platforms.linux;
     mainProgram = "conmon";
   };
-}
+})

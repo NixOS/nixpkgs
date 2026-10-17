@@ -20,17 +20,17 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "eartag";
-  version = "0.6.4";
-  format = "other";
+  version = "1.0.3";
+  pyproject = false;
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
-    repo = pname;
-    rev = version;
-    hash = "sha256-K93sj84MdDCQgIMghkjpGIieSrlnlQiw85JSgggRlf4=";
+    repo = "eartag";
+    tag = finalAttrs.version;
+    hash = "sha256-XyVKqkeaxy8bhrN6AhbnJpUSYETbY4DGHU7s2O71Wpc=";
   };
 
   postPatch = ''
@@ -52,14 +52,17 @@ python3Packages.buildPythonApplication rec {
     gobject-introspection
     wrapGAppsHook4
     blueprint-compiler
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin gtk4; # for gtk4-update-icon-cache
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin gtk4; # for gtk4-update-icon-cache
 
   buildInputs = [
     librsvg
     libadwaita
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
+    aiofiles
+    aiohttp
     pygobject3
     eyed3
     pillow
@@ -67,6 +70,7 @@ python3Packages.buildPythonApplication rec {
     pytaglib
     python-magic
     pyacoustid
+    xxhash
   ];
 
   dontWrapGApps = true;
@@ -78,14 +82,12 @@ python3Packages.buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/World/eartag";
     description = "Simple music tag editor";
-    # This seems to be using ICU license but we're flagging it to MIT license
-    # since ICU license is a modified version of MIT and to prevent it from
-    # being incorrectly identified as unfree software.
-    license = licenses.mit;
+    changelog = "https://gitlab.gnome.org/World/eartag/-/releases/${finalAttrs.version}";
+    license = lib.licenses.mit;
     mainProgram = "eartag";
-    maintainers = with maintainers; [ foo-dogsquared ] ++ lib.teams.gnome-circle.members;
+    teams = [ lib.teams.gnome-circle ];
   };
-}
+})

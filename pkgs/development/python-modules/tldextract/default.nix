@@ -6,35 +6,33 @@
   idna,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-file,
   responses,
   setuptools,
   setuptools-scm,
+  sybil,
   syrupy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tldextract";
-  version = "5.1.3";
+  version = "5.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "john-kurkowski";
     repo = "tldextract";
-    tag = version;
-    hash = "sha256-gcgQGZS/dsTTC4Szpjreb2fAsVZxxOCE1erVvU1q4xM=";
+    tag = finalAttrs.version;
+    hash = "sha256-gNunyZgj9KghNOSDgvdo+zNmhHEdXdeBJ7Z0j2bExcM=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     filelock
     idna
     requests
@@ -45,21 +43,22 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
     responses
+    sybil
     syrupy
   ];
 
   pythonImportsCheck = [ "tldextract" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to accurately separate the TLD from the domain of an URL";
     longDescription = ''
       tldextract accurately separates the gTLD or ccTLD (generic or country code top-level domain)
       from the registered domain and subdomains of a URL.
     '';
     homepage = "https://github.com/john-kurkowski/tldextract";
-    changelog = "https://github.com/john-kurkowski/tldextract/blob/${version}/CHANGELOG.md";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/john-kurkowski/tldextract/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "tldextract";
   };
-}
+})

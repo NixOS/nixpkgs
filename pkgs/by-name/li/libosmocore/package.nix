@@ -14,19 +14,19 @@
   talloc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libosmocore";
-  version = "1.10.1";
+  version = "1.14.2";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "libosmocore";
-    rev = version;
-    hash = "sha256-CIbmCZJA/F86L1v3J1mpB15kHVDFUbhFUxaYFys8xCQ=";
+    rev = finalAttrs.version;
+    hash = "sha256-MPv1Jv3h+Bv6wFV6iTqIfQIuu6eeU/7vRCgLFEOJSvg=";
   };
 
   postPatch = ''
-    echo "${version}" > .tarball-version
+    echo "${finalAttrs.version}" > .tarball-version
   '';
 
   propagatedBuildInputs = [
@@ -50,13 +50,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Set of Osmocom core libraries";
     homepage = "https://github.com/osmocom/libosmocore";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       mog
     ];
   };
-}
+})

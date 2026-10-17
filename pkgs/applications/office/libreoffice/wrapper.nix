@@ -4,7 +4,7 @@
   # The unwrapped libreoffice derivation
   unwrapped,
   makeWrapper,
-  xorg, # for lndir
+  lndir,
   runCommand,
   # For Emulating wrapGAppsHook3
   gsettings-desktop-schemas,
@@ -12,13 +12,14 @@
   dconf,
   librsvg,
   gdk-pixbuf,
-  # some scripts need these when used in conjuction with firejail
+  # some scripts need these when used in conjunction with firejail
   coreutils,
   gnugrep,
   # Configuration options for the wrapper
   extraMakeWrapperArgs ? [ ],
   dbusVerify ? stdenv.hostPlatform.isLinux,
   dbus,
+  unixodbc,
 }:
 
 let
@@ -28,6 +29,10 @@ let
 
   makeWrapperArgs = builtins.concatStringsSep " " (
     [
+      "--prefix"
+      "LD_LIBRARY_PATH"
+      ":"
+      "${lib.getLib unixodbc}/lib"
       "--set"
       "GDK_PIXBUF_MODULE_FILE"
       "${librsvg}/${gdk-pixbuf.moduleDir}.cache"
@@ -54,7 +59,7 @@ let
       "--prefix"
       "GST_PLUGIN_SYSTEM_PATH_1_0"
       ":"
-      "${lib.makeSearchPath "lib/girepository-1.0" unwrapped.gst_packages}"
+      "${lib.makeSearchPath "lib/gstreamer-1.0" unwrapped.gst_packages}"
       "--suffix"
       "PATH"
       ":"
@@ -67,13 +72,11 @@ let
       "--prefix"
       "QT_PLUGIN_PATH"
       ":"
-      "${lib.makeSearchPath unwrapped.qtbase.qtPluginPrefix (
-        builtins.map lib.getBin unwrapped.qtPackages
-      )}"
+      "${lib.makeSearchPath unwrapped.qtbase.qtPluginPrefix (map lib.getBin unwrapped.qtPackages)}"
       "--prefix"
       "QML2_IMPORT_PATH"
       ":"
-      "${lib.makeSearchPath unwrapped.qtbase.qtQmlPrefix (builtins.map lib.getBin unwrapped.qmlPackages)}"
+      "${lib.makeSearchPath unwrapped.qtbase.qtQmlPrefix (map lib.getBin unwrapped.qmlPackages)}"
     ]
     ++ [
       # Add dictionaries from all NIX_PROFILES
@@ -97,7 +100,12 @@ let
       (lib.escapeShellArg ''
         if ! ( test -n "$DBUS_SESSION_BUS_ADDRESS" ); then
             dbus_tmp_dir="/run/user/$(id -u)/libreoffice-dbus"
-            if ! test -d "$dbus_tmp_dir" && test -d "/run"; then
+            # Sometimes /run exists but is not writeable, (like when running in
+            # a linux builder on darwin) giving
+            # `mkdir: cannot create directory '/run/user': Permission denied`
+            # instead of going to the next fallback.  Ensure we test with `-w`
+            # and not `-d`.
+            if ! test -d "$dbus_tmp_dir" && test -w "/run"; then
                     mkdir -p "$dbus_tmp_dir"
             fi
             if ! test -d "$dbus_tmp_dir"; then
@@ -115,6 +123,11 @@ let
         fi
       '')
     ]
+    ++ lib.optionals unwrapped.withJava [
+      "--set"
+      "JAVA_HOME"
+      "${unwrapped.jdk.home}"
+    ]
     ++ [
       "--inherit-argv0"
     ]
@@ -123,11 +136,16 @@ let
 in
 runCommand "${unwrapped.name}-wrapped"
   {
-    inherit (unwrapped) meta;
+
+    # Not sure if meaningful for runCommand, but nixpkgs-vet demands this anyway
+    __structuredAttrs = true;
+    strictDeps = true;
+
+    inherit (unwrapped) meta pname version;
     paths = [ unwrapped ];
     nativeBuildInputs = [
       makeWrapper
-      xorg.lndir
+      lndir
     ];
     passthru = {
       inherit unwrapped;

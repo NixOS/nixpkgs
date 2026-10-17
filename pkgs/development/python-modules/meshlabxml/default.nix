@@ -7,11 +7,12 @@
 buildPythonPackage rec {
   pname = "meshlabxml";
   version = "2018.3";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "MeshLabXML";
     inherit version;
-    sha256 = "1villmg46hqby5jjkkpxr5bxydr72y5b3cbfngwpyxxdljn091w8";
+    hash = "sha256-iIcErKStd3/5s26xsYoXJzffV8n9zill8QtDQ16lNO4=";
   };
 
   propagatedBuildInputs = [ ];
@@ -20,10 +21,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "meshlabxml" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/3DLIRIOUS/MeshLabXML";
     description = "Create and run MeshLab XML scripts with Python";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ nh2 ];
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ nh2 ];
   };
 }

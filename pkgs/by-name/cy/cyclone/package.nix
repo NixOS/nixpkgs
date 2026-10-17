@@ -5,15 +5,15 @@
   puredata,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cyclone";
-  version = "unstable-2023-09-12";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "porres";
     repo = "pd-cyclone";
-    rev = "7c470fb03db66057a2198843b635ac3f1abde84d";
-    hash = "sha256-ixfnmeoRzV0qEOOIxCV1361t3d59fwxjHWhz9uXQ2ps=";
+    tag = "cyclone_${finalAttrs.version}";
+    hash = "sha256-nAnokWcy3Rd1nFctAb6F3DBwryQvB39zkFRos8sB0Ao=";
   };
 
   buildInputs = [ puredata ];
@@ -23,19 +23,21 @@ stdenv.mkDerivation rec {
     "prefix=$(out)"
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
   postInstall = ''
     mv "$out/lib/pd-externals/cyclone" "$out/"
     rm -rf $out/lib
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library of PureData classes, bringing some level of compatibility between Max/MSP and Pd environments";
     homepage = "http://puredata.info/downloads/cyclone";
-    license = licenses.tcltk;
-    maintainers = with maintainers; [
+    license = lib.licenses.tcltk;
+    maintainers = with lib.maintainers; [
       magnetophon
       carlthome
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -2,9 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
-  pythonAtLeast,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -13,33 +10,22 @@
   # tests
   asttokens,
   littleutils,
-  rich,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "executing";
-  version = "2.1.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "2.2.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alexmojaki";
-    repo = pname;
+    repo = "executing";
     rev = "v${version}";
-    hash = "sha256-epgKMPOvPdkpRp0n5A22gZ5DeXLyI60bqzLTx5JFlLk=";
+    hash = "sha256-UlXuXBW9TmJ0xG/0yMdx8EDQDSzVgtsgFJIj/O7pmio=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "python-3.12.6.patch";
-      url = "https://github.com/alexmojaki/executing/commit/3f11fdcd7a017fbdca8a3a9de23dab18d3ba2100.patch";
-      hash = "sha256-ZnTO9lT+bj4nekPx4D0DxjhJOCkZn6lDm5xdLrziB+4=";
-    })
-  ];
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
@@ -48,7 +34,7 @@ buildPythonPackage rec {
     asttokens
     littleutils
     pytestCheckHook
-  ] ++ lib.optionals (pythonAtLeast "3.11") [ rich ];
+  ];
 
   disabledTests = [
     # requires ipython, which causes a circular dependency
@@ -62,10 +48,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "executing" ];
 
-  meta = with lib; {
+  meta = {
     description = "Get information about what a frame is currently doing, particularly the AST node being executed";
     homepage = "https://github.com/alexmojaki/executing";
-    license = licenses.mit;
-    maintainers = with maintainers; [ renatoGarcia ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ renatoGarcia ];
   };
 }

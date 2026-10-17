@@ -2,27 +2,31 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "types-psutil";
-  version = "5.9.5.20240516";
-  format = "setuptools";
+  version = "7.2.2.20260518";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-uylvWfxWRYiR0P6xmUcX5UihvPiZNqKHffh5K4IrRpY=";
+    pname = "types_psutil";
+    inherit (finalAttrs) version;
+    hash = "sha256-n4JfYxRjpbTSbxn2OuvJ7CXwEUDWVQJvOtimeEH5szE=";
   };
+
+  build-system = [ setuptools ];
 
   # Module doesn't have tests
   doCheck = false;
 
   pythonImportsCheck = [ "psutil-stubs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Typing stubs for psutil";
     homepage = "https://github.com/python/typeshed";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

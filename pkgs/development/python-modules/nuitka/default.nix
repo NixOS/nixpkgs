@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   isPyPy,
@@ -12,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "nuitka";
-  version = "2.2.3";
+  version = "4.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Nuitka";
     repo = "Nuitka";
-    rev = version;
-    hash = "sha256-nKdCMgA92v9VsSgfktXDbSh3DyKsGlcTjpn0Y7u4rxU=";
+    tag = version;
+    hash = "sha256-7xiu5QRvk9UTqcYXvibD9AvfvxmkxzTN1F9vQWJaL7U=";
   };
 
   build-system = [
@@ -45,9 +46,11 @@ buildPythonPackage rec {
   # Requires CPython
   disabled = isPyPy;
 
-  meta = with lib; {
+  meta = {
     description = "Python compiler with full language support and CPython compatibility";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://nuitka.net/";
+    # never built on darwin since first introduction in nixpkgs
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

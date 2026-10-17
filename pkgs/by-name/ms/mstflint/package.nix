@@ -1,37 +1,39 @@
-{ lib
-, stdenv
-, fetchurl
-, rdma-core
-, openssl
-, zlib
-, xz
-, expat
-, boost
-, curl
-, pkg-config
-, libxml2
-, pciutils
-, busybox
-, python3
-, automake
-, autoconf
-, libtool
-, git
-# use this to shrink the package's footprint if necessary (e.g. for hardened appliances)
-, onlyFirmwareUpdater ? false
-# contains binary-only libraries
-, enableDPA ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rdma-core,
+  openssl,
+  zlib,
+  xz,
+  expat,
+  bashNonInteractive,
+  boost,
+  curl,
+  pkg-config,
+  libxml2,
+  pciutils,
+  busybox,
+  python3,
+  automake,
+  autoconf,
+  libtool,
+  git,
+  # use this to shrink the package's footprint if necessary (e.g. for hardened appliances)
+  onlyFirmwareUpdater ? false,
+  # contains binary-only libraries
+  enableDPA ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mstflint";
+  version = "4.37.0-1";
 
-  # if you update the version of this package, also update the input hash in mstflint_access!
-  version = "4.30.0-1";
-
-  src = fetchurl {
-    url = "https://github.com/Mellanox/mstflint/releases/download/v${version}/mstflint-${version}.tar.gz";
-    hash = "sha256-8v0aeVy1ZGbzNdL71V1qm6sgEy0e3eb2F1DP8L3m2ns=";
+  src = fetchFromGitHub {
+    owner = "Mellanox";
+    repo = finalAttrs.pname;
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-E6Z/MkDdWH9jQFB/fFPsEz4kxU6DCGnO/4DU6RPu7dM=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +50,9 @@ stdenv.mkDerivation rec {
     zlib
     libxml2
     openssl
-  ] ++ lib.optionals (!onlyFirmwareUpdater) [
+  ]
+  ++ lib.optionals (!onlyFirmwareUpdater) [
+    bashNonInteractive
     boost
     curl
     expat
@@ -72,8 +76,7 @@ stdenv.mkDerivation rec {
   #
   # Remove patch for regex check, after https://github.com/Mellanox/mstflint/pull/871
   # got merged.
-  prePatch = [
-  ''
+  prePatch = ''
     patchShebangs eval_git_sha.sh
     substituteInPlace configure.ac \
         --replace "build_cpu" "host_cpu"
@@ -82,25 +85,32 @@ stdenv.mkDerivation rec {
     substituteInPlace configure.ac \
         --replace 'Whether to use GNU C regex])' 'Whether to use GNU C regex])],[AC_MSG_RESULT([yes])'
   ''
-  (lib.optionals (!onlyFirmwareUpdater) ''
+  + lib.optionalString (!onlyFirmwareUpdater) ''
     substituteInPlace common/python_wrapper.sh \
       --replace \
       'exec $PYTHON_EXEC $SCRIPT_PATH "$@"' \
-      'export PATH=$PATH:${lib.makeBinPath [ (placeholder "out") pciutils busybox]}; exec ${python3}/bin/python3 $SCRIPT_PATH "$@"'
-  '')
-  ];
+      'export PATH=$PATH:${
+        lib.makeBinPath [
+          (placeholder "out")
+          pciutils
+          busybox
+        ]
+      }; exec ${python3}/bin/python3 $SCRIPT_PATH "$@"'
+  '';
 
   configureFlags = [
     "--enable-xml2"
     "--datarootdir=${placeholder "out"}/share"
-  ] ++ lib.optionals (!onlyFirmwareUpdater) [
+  ]
+  ++ lib.optionals (!onlyFirmwareUpdater) [
     "--enable-adb-generic-tools"
     "--enable-cs"
     "--enable-dc"
     "--enable-fw-mgr"
     "--enable-inband"
     "--enable-rdmem"
-  ] ++ lib.optionals enableDPA [
+  ]
+  ++ lib.optionals enableDPA [
     "--enable-dpa"
   ];
 
@@ -108,13 +118,16 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  dontDisableStatic = true;  # the build fails without this. should probably be reported upstream
+  dontDisableStatic = true; # the build fails without this. should probably be reported upstream
 
-  meta = with lib; {
+  meta = {
     description = "Open source version of Mellanox Firmware Tools (MFT)";
     homepage = "https://github.com/Mellanox/mstflint";
-    license = with licenses; [ gpl2Only bsd2 ];
-    maintainers = with maintainers; [ thillux ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [
+      gpl2Only
+      bsd2
+    ];
+    maintainers = with lib.maintainers; [ thillux ];
+    platforms = lib.platforms.linux;
   };
-}
+})

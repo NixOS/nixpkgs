@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cdd046142a4e0060f96a00eb13d82a5d9ebc0f2d7934393ed559bac773460a2c";
+    hash = "sha256-zdBGFCpOAGD5agDrE9gqXZ68Dy15NDk+1Vm6x3NGCiw=";
   };
 
   nativeBuildInputs = [ libkrb5 ];
@@ -20,10 +20,10 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Kerberos high-level interface";
     homepage = "https://pypi.org/project/kerberos/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     knownVulnerabilities = [ "CVE-2015-3206" ];
   };
 }

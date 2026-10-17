@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1bhzrxpzglfw4qbqfzyxr7dmmavzq4pq0h90jh0aa8vdw7iy7g7v";
+    hash = "sha256-+7zj4+FtI6UAlCBBgC/Bf6ta28ndf4cXJtzR92/PH64=";
   };
 
   propagatedBuildInputs = [
@@ -25,10 +25,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "sleepyq" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for SleepIQ API";
     homepage = "https://github.com/technicalpickles/sleepyq";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

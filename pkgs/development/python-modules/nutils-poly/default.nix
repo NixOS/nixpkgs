@@ -7,27 +7,23 @@
   libiconv,
   numpy,
   unittestCheckHook,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nutils-poly";
   version = "1.0.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "nutils";
     repo = "poly-py";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dxFv4Az3uz6Du5dk5KZJ+unVbt3aZjxXliAQZhmBWDM=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    name = "${pname}-${version}";
-    inherit src;
-    hash = "sha256-+fnKvlSwM197rsyusFH7rs1W6livxel45UGbi1sB05k=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-3UBQJfMPVo37V7mJnN9loF1+vKh3JxFJWgynwsOnAg4=";
   };
 
   nativeBuildInputs = [ rustPlatform.cargoSetupHook ];
@@ -48,4 +44,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tomasajt ];
   };
-}
+})

@@ -5,10 +5,10 @@
   stdenv,
 
   boost,
-  cairomm,
+  cairomm_1_16,
   cgal,
   expat,
-  gmp,
+  fontconfig,
   gobject-introspection,
   gtk3,
   llvmPackages,
@@ -20,7 +20,10 @@
   pygobject3,
   python,
   scipy,
-  sparsehash,
+  zstandard,
+
+  writableTmpDirAsHomeHook,
+
   gitUpdater,
 }:
 
@@ -30,52 +33,84 @@ let
     inherit python;
   };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "graph-tool";
-  version = "2.85";
-  format = "other";
+  version = "3.9";
+  pyproject = false;
+
+  __structuredAttrs = true;
 
   src = fetchurl {
-    url = "https://downloads.skewed.de/graph-tool/graph-tool-${version}.tar.bz2";
-    hash = "sha256-GX0JUz5G7gtLemwlY1prQvCxIxpuyclo+1LN68j2H9o=";
+    url = "https://downloads.skewed.de/graph-tool/graph-tool-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-gSqzV1yuE91vqtluTZMnl6enGoRICh6su4dPLrr8fGk=";
   };
 
-  postPatch = ''
+  postPatch =
     # remove error messages about tput during build process without adding ncurses
-    substituteInPlace configure \
-      --replace-fail 'tput setaf $1' : \
-      --replace-fail 'tput sgr0' :
-  '';
+    ''
+      substituteInPlace configure \
+        --replace-fail 'tput setaf $1' : \
+        --replace-fail 'tput sgr0' :
+    '';
 
-  configureFlags = [
-    "--with-python-module-path=$(out)/${python.sitePackages}"
-    "--with-boost-libdir=${boost'}/lib"
-    "--with-cgal=${cgal}"
-  ];
+  configureFlags =
+    lib.mapAttrsToList (lib.withFeatureAs true) {
+      boost-libdir = "${lib.getLib boost'}/lib";
+      cgal = lib.getDev cgal;
+      python-module-path = "$(out)/${python.sitePackages}";
+    }
+    ++ [
+      # CXXFLAGS defaults to "-g -O2", if unset.
+      # "-g" produces debugging information, which significantly increases
+      # resource requirements during compilation, but is not necessary as we
+      # subsequently strip the binaries.
+      # "-ftemplate-backtrace-limit=1" reduces the number of template
+      # instantiation notes per warning in order to reduce the log file size.
+      # "-O3" is also used by upstream.
+      "CXXFLAGS=-ftemplate-backtrace-limit=1 -O3"
+    ]
+    ++
+      lib.optionals stdenv.cc.isGNU
+        # enable GCC's link-time optimizer in order to reduce compilation time and memory usage during compilation
+        # https://graph-tool.skewed.de/installation.html#memory-requirements-for-compilation
+        # https://git.skewed.de/count0/graph-tool/-/issues/798#note_5626
+        [ "MOD_CXXFLAGS=-flto" ];
 
   enableParallelBuilding = true;
 
-  build-system = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config ];
 
   # https://graph-tool.skewed.de/installation.html#manual-compilation
-  dependencies = [
+  buildInputs = [
     boost'
-    cairomm
+    cairomm_1_16
     cgal
     expat
-    gmp
-    gobject-introspection
+    mpfr
+  ]
+  ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
+
+  dependencies = [
     gtk3
     matplotlib
-    mpfr
     numpy
     pycairo
     pygobject3
     scipy
-    sparsehash
-  ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
+    zstandard
+  ];
 
-  pythonImportsCheck = [ "graph_tool" ];
+  propagatedNativeBuildInputs = [ gobject-introspection ];
+
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+
+  preInstallCheck =
+    # avoid warnings about Matplotlib and Fontconfig configuration issues
+    ''
+      export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf
+    '';
+
+  pythonImportsCheck = [ "graph_tool.all" ];
 
   passthru.updateScript = gitUpdater {
     url = "https://git.skewed.de/count0/graph-tool";
@@ -85,8 +120,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python module for manipulation and statistical analysis of graphs";
     homepage = "https://graph-tool.skewed.de";
-    changelog = "https://git.skewed.de/count0/graph-tool/commits/release-${version}";
+    changelog = "https://git.skewed.de/count0/graph-tool/commits/release-${finalAttrs.version}";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ lib.maintainers.mjoerg ];
+    broken = stdenv.cc.isClang && lib.versionOlder stdenv.cc.version "22";
   };
-}
+})

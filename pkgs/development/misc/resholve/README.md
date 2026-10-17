@@ -32,7 +32,7 @@ Each "solution" (k=v pair) in this attrset describes one resholve invocation.
 >   solutions to resolve the scripts separately, but produce a single package.
 
 `resholve.writeScript` and `resholve.writeScriptBin` support a _single_
-`solution` attrset. This is basically the same as any single solution in `resholve.mkDerivation`, except that it doesn't need a `scripts` attr (it is automatically added). `resholve.phraseSolution` also only accepts a single solution--but it _does_ still require the `scripts` attr.
+`solution` attrset. This is basically the same as any single solution in `resholve.mkDerivation`, except that it doesn't need a `scripts` attr (it is automatically added). `resholve.phraseSolution` also only accepts a single solution, but it _does_ still require the `scripts` attr.
 
 ## Basic `resholve.mkDerivation` Example
 
@@ -41,52 +41,54 @@ Here's a simple example of how `resholve.mkDerivation` is already used in nixpkg
 <!-- TODO: figure out how to pull this externally? -->
 
 ```nix
-{ lib
-, fetchFromGitHub
-, resholve
-, bash
-, coreutils
-, goss
-, which
+{
+  bash,
+  coreutils,
+  gnused,
+  goss,
+  lib,
+  resholve,
+  which,
 }:
 
 resholve.mkDerivation rec {
   pname = "dgoss";
-  version = "0.4.2";
-
-  src = fetchFromGitHub {
-    owner = "goss-org";
-    repo = "goss";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-FDn1OETkYIpMenk8QAAHvfNZcSzqGl5xrD0fAZPVmRM=";
-  };
+  version = goss.version;
+  src = goss.src;
 
   dontConfigure = true;
   dontBuild = true;
 
   installPhase = ''
-    sed -i '2i GOSS_PATH=${goss}/bin/goss' extras/dgoss/dgoss
+    sed -i '2i GOSS_PATH=${lib.getExe goss}' extras/dgoss/dgoss
     install -D extras/dgoss/dgoss $out/bin/dgoss
   '';
 
   solutions = {
     default = {
       scripts = [ "bin/dgoss" ];
-      interpreter = "${bash}/bin/bash";
-      inputs = [ coreutils which ];
+      interpreter = lib.getExe bash;
+      inputs = [
+        coreutils
+        gnused
+        which
+      ];
       keep = {
         "$CONTAINER_RUNTIME" = true;
       };
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/goss-org/goss/blob/v${version}/extras/dgoss/README.md";
     changelog = "https://github.com/goss-org/goss/releases/tag/v${version}";
     description = "Convenience wrapper around goss that aims to bring the simplicity of goss to docker containers";
-    license = licenses.asl20;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ hyzual anthonyroussel ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      hyzual
+      anthonyroussel
+    ];
     mainProgram = "dgoss";
   };
 }
@@ -101,20 +103,26 @@ trivial, so I'll also link to some real-world examples:
 
 ```nix
 {
-  resholvedScript = resholve.writeScript "name" {
-    inputs = [ file ];
-    interpreter = "${bash}/bin/bash";
-  } ''
-    echo "Hello"
-    file .
-  '';
-  resholvedScriptBin = resholve.writeScriptBin "name" {
-    inputs = [ file ];
-    interpreter = "${bash}/bin/bash";
-  } ''
-    echo "Hello"
-    file .
-  '';
+  resholvedScript =
+    resholve.writeScript "name"
+      {
+        inputs = [ file ];
+        interpreter = lib.getExe bash;
+      }
+      ''
+        echo "Hello"
+        file .
+      '';
+  resholvedScriptBin =
+    resholve.writeScriptBin "name"
+      {
+        inputs = [ file ];
+        interpreter = lib.getExe bash;
+      }
+      ''
+        echo "Hello"
+        file .
+      '';
 }
 ```
 
@@ -125,7 +133,12 @@ This function has a similar API to `writeScript` and `writeScriptBin`, except it
 trivial for now. If you have a real usage that you find helpful, please PR it.
 
 ```nix
-{ stdenv, resholve, module1 }:
+{
+  lib,
+  stdenv,
+  resholve,
+  module1,
+}:
 
 stdenv.mkDerivation {
   # pname = "testmod3";
@@ -137,10 +150,13 @@ stdenv.mkDerivation {
     install conjure.sh $out/bin/conjure.sh
     ${resholve.phraseSolution "conjure" {
       scripts = [ "bin/conjure.sh" ];
-      interpreter = "${bash}/bin/bash";
+      interpreter = lib.getExe bash;
       inputs = [ module1 ];
       fake = {
-        external = [ "jq" "openssl" ];
+        external = [
+          "jq"
+          "openssl"
+        ];
       };
     }}
   '';
@@ -195,7 +211,7 @@ handle any potential problems it encounters with directives. There are currently
    - dynamic (variable) arguments to commands known to accept/run other commands
 
 > NOTE: resholve has a (growing) number of directives detailed in `man resholve`
-> via `nixpkgs.resholve` (though protections against run-time use of python2 in nixpkgs mean you'll have to set `NIXPKGS_ALLOW_INSECURE=1` to pull resholve into nix-shell).
+> via `nixpkgs.resholve` (though protections against run-time use of Python 2 in Nixpkgs mean you'll have to set `NIXPKGS_ALLOW_INSECURE=1` to pull resholve into `nix-shell`).
 
 Each of these 3 types is represented by its own attrset, where you can think
 of the key as a scope. The value should be:
@@ -220,7 +236,10 @@ from the manpage, and the Nix equivalents:
   fake = {
     # fake accepts the initial of valid identifier types as a CLI convenience.
     # Use full names in the Nix API.
-    function = [ "setUp" "tearDown" ];
+    function = [
+      "setUp"
+      "tearDown"
+    ];
     builtin = [ "setopt" ];
     source = [ "/etc/bashrc" ];
   };
@@ -289,26 +308,26 @@ do it piecemeal:
 
 ```nix
 {
-  # --execer 'cannot:${openssl.bin}/bin/openssl can:${openssl.bin}/bin/c_rehash'
+  # --execer 'cannot:${lib.getExe openssl} can:${lib.getExe' openssl "c_rehash"}'
   execer = [
     /*
       This is the same verdict binlore will
       come up with. It's a no-op just to demo
       how to fiddle lore via the Nix API.
     */
-    "cannot:${openssl.bin}/bin/openssl"
+    "cannot:${lib.getExe openssl}"
     # different verdict, but not used
-    "can:${openssl.bin}/bin/c_rehash"
+    "can:${lib.getExe' openssl "c_rehash"}"
   ];
 
-  # --wrapper '${gnugrep}/bin/egrep:${gnugrep}/bin/grep'
+  # --wrapper '${lib.getExe' gnugrep "egrep"}:${lib.getExe gnugrep}'
   wrapper = [
     /*
       This is the same verdict binlore will
       come up with. It's a no-op just to demo
       how to fiddle lore via the Nix API.
     */
-    "${gnugrep}/bin/egrep:${gnugrep}/bin/grep"
+    "${lib.getExe' gnugrep "egrep"}:${lib.getExe gnugrep}"
   ];
 }
 ```

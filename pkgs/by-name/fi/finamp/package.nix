@@ -1,25 +1,35 @@
 {
   lib,
-  flutter327,
+  stdenv,
+  flutter347,
   mpv-unwrapped,
   patchelf,
   fetchFromGitHub,
   copyDesktopItems,
   makeDesktopItem,
+  runCommand,
+  yq,
+  finamp,
+  _experimental-update-script-combinators,
+  nix-update-script,
+  dart,
 }:
 let
-  version = "0.9.12-beta";
+  version = "1.0.1-beta";
 in
-flutter327.buildFlutterApplication {
+flutter347.buildFlutterApplication {
   inherit version;
   pname = "finamp";
   src = fetchFromGitHub {
-    owner = "jmshrv";
+    owner = "finamp-app";
     repo = "finamp";
     rev = version;
-    hash = "sha256-hY+1BMQEACrpjKZnVwPqWY5M4m4U/Ys/bcqhGMeCE6U=";
+    hash = "sha256-6SQHc1Dgnay4KAHbZI5wSAQ6NRNDqd1VSdV3IxTQ1xw=";
   };
+
   pubspecLock = lib.importJSON ./pubspec.lock.json;
+
+  gitHashes = lib.importJSON ./git-hashes.json;
 
   nativeBuildInputs = [
     patchelf
@@ -27,27 +37,20 @@ flutter327.buildFlutterApplication {
   ];
   buildInputs = [ mpv-unwrapped ];
 
-  gitHashes = {
-    balanced_text = "sha256-lSDR5dDjZ4garRbBPI+wSxC5iScg8wVSD5kymmLbYbk=";
-    isar_generator = "sha256-lWnHmZmYx7qDG6mzyDqYt+Xude2xVOH1VW+BoDCas60=";
-    media_kit_libs_windows_audio = "sha256-p3hRq79whLFJLNUgL9atXyTGvOIqCbTRKVk1ie0Euqs=";
-    palette_generator = "sha256-mnRJf3asu1mm9HYU8U0di+qRk3SpNFwN3S5QxChpIA0=";
-    split_view = "sha256-unTJQDXUUPVDudlk0ReOPNYrsyEpbd/UMg1tHZsmg+k=";
-  };
-
   postFixup = ''
-    patchelf $out/app/$pname/finamp --add-needed libisar.so --add-needed libmpv.so --add-rpath ${
+    patchelf $out/app/$pname/finamp --add-needed libisar.so --add-needed libmpv.so --add-needed libflutter_discord_rpc.so --add-rpath ${
       lib.makeLibraryPath [ mpv-unwrapped ]
     }
   '';
 
   postInstall = ''
-    install -Dm644 $src/assets/icon/icon_foreground.svg $out/share/icons/hicolor/scalable/apps/finamp.svg
+    install -Dm444 assets/icon/icon_foreground.svg $out/share/icons/hicolor/scalable/apps/finamp.svg
+    install -Dm444 assets/com.unicornsonlsd.finamp.metainfo.xml -t $out/share/metainfo
   '';
 
   desktopItems = [
     (makeDesktopItem {
-      name = "Finamp";
+      name = "com.unicornsonlsd.finamp";
       desktopName = "Finamp";
       genericName = "Music Player";
       exec = "finamp";
@@ -63,9 +66,42 @@ flutter327.buildFlutterApplication {
     })
   ];
 
+  passthru = {
+    pubspecSource =
+      runCommand "pubspec.lock.json"
+        {
+          nativeBuildInputs = [ yq ];
+          inherit (finamp) src;
+        }
+        ''
+          cat $src/pubspec.lock | yq > $out
+        '';
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script { extraArgs = [ "--version=unstable" ]; })
+      (
+        (_experimental-update-script-combinators.copyAttrOutputToFile "finamp.pubspecSource" ./pubspec.lock.json)
+        // {
+          supportedFeatures = [ ];
+        }
+      )
+      {
+        command = [
+          dart.fetchGitHashesScript
+          "--input"
+          ./pubspec.lock.json
+          "--output"
+          ./git-hashes.json
+        ];
+        supportedFeatures = [ ];
+      }
+    ];
+  };
+
   meta = {
+    # Finamp depends on `ìsar`, which for Linux is only compiled for x86_64. https://github.com/finamp-app/finamp/issues/766
+    broken = stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isx86_64;
     description = "Open source Jellyfin music player";
-    homepage = "https://github.com/jmshrv/finamp";
+    homepage = "https://github.com/finamp-app/finamp";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ dseelp ];
     mainProgram = "finamp";

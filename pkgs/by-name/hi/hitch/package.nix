@@ -8,12 +8,12 @@
   pkg-config,
   nixosTests,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.8.0";
   pname = "hitch";
 
   src = fetchurl {
-    url = "https://hitch-tls.org/source/${pname}-${version}.tar.gz";
+    url = "https://hitch-tls.org/source/hitch-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-38mUhLx//qJ6MWnoTWwheYjtpHsgirLlUk3Cpd0Vj04=";
   };
 
@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
 
   passthru.tests.hitch = nixosTests.hitch;
 
-  meta = with lib; {
+  meta = {
     description = "Libev-based high performance SSL/TLS proxy by Varnish Software";
     homepage = "https://hitch-tls.org/";
-    license = licenses.bsd2;
-    maintainers = [ maintainers.jflanglois ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd2;
+    maintainers = [ lib.maintainers.jflanglois ];
+    platforms = lib.platforms.linux;
     mainProgram = "hitch";
   };
-}
+})

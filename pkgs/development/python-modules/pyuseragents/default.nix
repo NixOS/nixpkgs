@@ -14,17 +14,17 @@ buildPythonPackage rec {
     owner = "Animenosekai";
     repo = "useragents";
     rev = "v${version}";
-    sha256 = "D7Qs3vsfkRH2FDkbfakrR+FfWzQFiOCQM7q9AdJavyU=";
+    hash = "sha256-D7Qs3vsfkRH2FDkbfakrR+FfWzQFiOCQM7q9AdJavyU=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
-  pytestFlagsArray = [ "test.py" ];
+  enabledTestPaths = [ "test.py" ];
   pythonImportsCheck = [ "pyuseragents" ];
 
-  meta = with lib; {
+  meta = {
     description = "Giving you a random User-Agent Header";
     homepage = "https://github.com/Animenosekai/useragents";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ emilytrau ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ emilytrau ];
   };
 }

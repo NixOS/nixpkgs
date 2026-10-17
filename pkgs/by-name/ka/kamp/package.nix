@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kamp";
-  version = "0.2.2";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "vbauerster";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-JZe8z6OYJ+I0+dcq+sCoQPzlz6eB4z98jWj8MDXdODY=";
+    repo = "kamp";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-coBKVqSqYBpf0PdWKIODnbfQxbOyp5Di45+O66ZGK1Q=";
   };
 
-  cargoHash = "sha256-+NiDSg7FJrtcNm/V0kn2kNQMJqOamE7Yl0sK/FSUYgA=";
+  cargoHash = "sha256-+Jc3+3sN+muUk7yGZ0sDWR0xAwffZN14X0mcyF4EY20=";
 
   postInstall = ''
     install scripts/* -Dt $out/bin
@@ -29,4 +29,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "kamp";
     platforms = lib.platforms.linux;
   };
-}
+})

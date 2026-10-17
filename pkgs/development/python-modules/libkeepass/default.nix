@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0pwg7n9xqcjia1qmz6g48h5s31slh3mxmcqag73gq4zhl4xb6bai";
+    hash = "sha256-US2zOqHwE/zGeQqz2uuAVIehC0TkmV9xUFEy3JM9j18=";
   };
 
   propagatedBuildInputs = [
@@ -26,10 +26,10 @@ buildPythonPackage rec {
   # No tests on PyPI
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/libkeepass/libkeepass";
     description = "Library to access KeePass 1.x/KeePassX (v3) and KeePass 2.x (v4) files";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ jqueiroz ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ jqueiroz ];
   };
 }

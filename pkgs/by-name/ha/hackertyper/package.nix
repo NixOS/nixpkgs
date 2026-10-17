@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   version = "2.1";
 
   src = fetchFromGitHub {
-    owner = "Hurricane996";
+    owner = "hyasynthesized";
     repo = "Hackertyper";
     rev = "8d08e3200c65817bd8c5bd0baa5032919315853b";
     sha256 = "0shri0srihw9fk027k61qkxr9ikwkn28aaamrhps6lg0vpbqpx2w";
@@ -24,11 +24,11 @@ stdenv.mkDerivation {
     $out/bin/hackertyper -v
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C rewrite of hackertyper.net";
-    homepage = "https://github.com/Hurricane996/Hackertyper";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.marius851000 ];
+    homepage = "https://github.com/hyasynthesized/Hackertyper";
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.marius851000 ];
     mainProgram = "hackertyper";
   };
 }

@@ -21,10 +21,10 @@ buildKodiAddon rec {
     myconnpy
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mediathekview/plugin.video.mediathekview";
     description = "Access media libraries of German speaking broadcasting stations";
-    license = licenses.mit;
-    maintainers = teams.kodi.members;
+    license = lib.licenses.mit;
+    teams = [ lib.teams.kodi ];
   };
 }

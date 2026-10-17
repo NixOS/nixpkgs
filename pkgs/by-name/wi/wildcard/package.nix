@@ -16,22 +16,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wildcard";
-  version = "0.3.3";
+  version = "0.3.5";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Wildcard";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-jOv0l1vnfDePWF7SAbsBFipPAONliPdc47xj79BJ+rc=";
+    hash = "sha256-8e3UWJ6PGhwvo/AB89VgkBfgsaNVa4g6hT9vBTmKlZQ=";
   };
 
   strictDeps = true;
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit (finalAttrs) src;
-    hash = "sha256-8jNNCcZRoLyOHdaWmYTOGD7Nf7NkmJ1MIxBXLJGrm5Y=";
-    name = "wildcard-${finalAttrs.version}";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-hoJsXoPmp0A6oIV1Rm7eXI2U2OIGrStmKzDdPQtI41A=";
   };
 
   nativeBuildInputs = [

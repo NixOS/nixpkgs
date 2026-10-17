@@ -1,11 +1,11 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
   # build-system
   cython,
-  poetry-core,
   setuptools,
 
   # dependencies
@@ -15,24 +15,31 @@
   mmh3,
   pydantic,
   pyparsing,
-  ray,
+  pyroaring,
   requests,
   rich,
-  sortedcontainers,
   strictyaml,
   tenacity,
   zstandard,
 
   # optional-dependencies
   adlfs,
-  # getdaft,
+  google-cloud-bigquery,
+  datafusion,
   duckdb,
   pyarrow,
   boto3,
+  azure-identity,
+  google-auth,
   gcsfs,
-  mypy-boto3-glue,
+  geoarrow-pyarrow,
+  huggingface-hub,
   thrift,
+  kerberos,
   pandas,
+  polars,
+  pyiceberg-core,
+  ray,
   s3fs,
   python-snappy,
   psycopg2-binary,
@@ -45,36 +52,27 @@
   moto,
   pyspark,
   pytestCheckHook,
-  pytest-lazy-fixture,
+  pytest-lazy-fixtures,
   pytest-mock,
   pytest-timeout,
   requests-mock,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
-  pname = "iceberg-python";
-  version = "0.8.1";
+buildPythonPackage (finalAttrs: {
+  pname = "pyiceberg";
+  version = "0.12.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "iceberg-python";
-    tag = "pyiceberg-${version}";
-    hash = "sha256-L3YlOtzJv9R4TLeJGzfMQ+0nYtQEsqmgNZpW9B6vVAI=";
+    tag = "pyiceberg-${finalAttrs.version}";
+    hash = "sha256-rH+lURcsMqU+Dz4AdofngxLVhJzZIp4LMru1yyvyItI=";
   };
-
-  patches = [
-    # Build script fails to build the cython extension on python 3.11 (no issues with python 3.12):
-    # distutils.errors.DistutilsSetupError: each element of 'ext_modules' option must be an Extension instance or 2-tuple
-    # This error vanishes if Cython and setuptools imports are swapped
-    # https://stackoverflow.com/a/53356077/11196710
-    ./reorder-imports-in-build-script.patch
-  ];
 
   build-system = [
     cython
-    poetry-core
     setuptools
   ];
 
@@ -88,10 +86,9 @@ buildPythonPackage rec {
     mmh3
     pydantic
     pyparsing
-    ray
+    pyroaring
     requests
     rich
-    sortedcontainers
     strictyaml
     tenacity
     zstandard
@@ -101,8 +98,17 @@ buildPythonPackage rec {
     adlfs = [
       adlfs
     ];
+    bigquery = [
+      google-cloud-bigquery
+    ];
+    bodo = [
+      # bodo
+    ];
     daft = [
-      # getdaft
+      # daft
+    ];
+    datafusion = [
+      datafusion
     ];
     duckdb = [
       duckdb
@@ -111,27 +117,52 @@ buildPythonPackage rec {
     dynamodb = [
       boto3
     ];
+    entra-auth = [
+      azure-identity
+    ];
+    gcp-auth = [
+      google-auth
+    ];
     gcsfs = [
       gcsfs
     ];
+    geoarrow = [
+      geoarrow-pyarrow
+    ];
     glue = [
       boto3
-      mypy-boto3-glue
+    ];
+    hf = [
+      huggingface-hub
     ];
     hive = [
       thrift
+    ];
+    hive-kerberos = [
+      kerberos
+      thrift
+      # thrift-sasl
     ];
     pandas = [
       pandas
       pyarrow
     ];
+    polars = [
+      polars
+    ];
     pyarrow = [
       pyarrow
+    ];
+    pyiceberg-core = [
+      pyiceberg-core
     ];
     ray = [
       pandas
       pyarrow
       ray
+    ];
+    rest-sigv4 = [
+      boto3
     ];
     s3fs = [
       s3fs
@@ -146,9 +177,6 @@ buildPythonPackage rec {
     sql-sqlite = [
       sqlalchemy
     ];
-    zstandard = [
-      zstandard
-    ];
   };
 
   pythonImportsCheck = [
@@ -161,21 +189,31 @@ buildPythonPackage rec {
     azure-core
     azure-storage-blob
     boto3
+    datafusion
     fastavro
     moto
-    mypy-boto3-glue
-    pandas
-    pyarrow
     pyspark
-    pytest-lazy-fixture
+    pytest-lazy-fixtures
     pytest-mock
     pytest-timeout
     pytestCheckHook
     requests-mock
-    s3fs
-    sqlalchemy
-    thrift
-  ] ++ moto.optional-dependencies.server;
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.adlfs
+  ++ finalAttrs.passthru.optional-dependencies.bigquery
+  ++ finalAttrs.passthru.optional-dependencies.entra-auth
+  ++ finalAttrs.passthru.optional-dependencies.geoarrow
+  ++ finalAttrs.passthru.optional-dependencies.hive
+  ++ finalAttrs.passthru.optional-dependencies.pandas
+  ++ finalAttrs.passthru.optional-dependencies.pyarrow
+  ++ finalAttrs.passthru.optional-dependencies.pyiceberg-core
+  ++ finalAttrs.passthru.optional-dependencies.s3fs
+  ++ finalAttrs.passthru.optional-dependencies.sql-sqlite
+  ++ moto.optional-dependencies.server;
+
+  preCheck = ''
+    rm -rf pyiceberg
+  '';
 
   disabledTestPaths = [
     # Several errors:
@@ -183,9 +221,32 @@ buildPythonPackage rec {
     # - requests.exceptions.ConnectionError: HTTPConnectionPool(host='localhost', port=8181): Max retries exceeded with url: /v1/config
     # - thrift.transport.TTransport.TTransportException: Could not connect to any of [('127.0.0.1', 9083)]
     "tests/integration"
+
+    # ModuleNotFoundError: No module named 'nbformat'
+    "tests/notebooks"
+
+    # Segfaults: `pyiceberg-core` bundles `datafusion-ffi` 53.x, whose ABI is
+    # incompatible with the packaged `datafusion` 54.x
+    # https://github.com/apache/datafusion/issues/17374
+    "tests/table/test_datafusion.py"
   ];
 
   disabledTests = [
+    # AssertionError: assert 'grant_type=c...scope=catalog' == 'grant_type=c...scope=catalog'
+    "test_auth_header"
+
+    # KeyError: 'authorization'
+    "test_token_200"
+    "test_token_200_without_optional_fields"
+    "test_token_with_default_scope"
+    "test_token_with_optional_oauth_params"
+    "test_token_with_custom_scope"
+
+    # ModuleNotFoundError: No module named 'puresasl'
+    "test_create_hive_client_with_kerberos"
+    "test_create_hive_client_with_kerberos_using_context_manager"
+    "test_kerberized_client_uses_fresh_transport_on_reuse"
+
     # botocore.exceptions.EndpointConnectionError: Could not connect to the endpoint URL
     "test_checking_if_a_file_exists"
     "test_closing_a_file"
@@ -204,48 +265,60 @@ buildPythonPackage rec {
     "test_fsspec_pickle_roundtrip_gcs"
 
     # Timeout (network access)
+    "test_config_200"
     "test_fsspec_converting_an_outputfile_to_an_inputfile_adls"
     "test_fsspec_new_abfss_output_file_adls"
     "test_fsspec_new_input_file_adls"
     "test_fsspec_pickle_round_trip_aldfs"
+    "test_partitioned_write"
+    "test_token_200_w_oauth2_server_uri"
 
-    # TypeError: pyarrow.lib.large_list() takes no keyword argument
-    # From tests/io/test_pyarrow_stats.py:
-    "test_bounds"
-    "test_column_metrics_mode"
-    "test_column_sizes"
-    "test_metrics_mode_counts"
-    "test_metrics_mode_full"
-    "test_metrics_mode_non_default_trunc"
-    "test_metrics_mode_none"
-    "test_null_and_nan_counts"
-    "test_offsets"
-    "test_read_missing_statistics"
-    "test_record_count"
-    "test_value_counts"
-    "test_write_and_read_stats_schema"
-    # From tests/io/test_pyarrow.py:
-    "test_list_type_to_pyarrow"
-    "test_projection_add_column"
-    "test_projection_list_of_structs"
-    "test_read_list"
-    "test_schema_compatible_missing_nullable_field_nested"
-    "test_schema_compatible_nested"
-    "test_schema_mismatch_missing_required_field_nested"
-    "test_schema_to_pyarrow_schema_exclude_field_ids"
-    "test_schema_to_pyarrow_schema_include_field_ids"
-    # From tests/io/test_pyarrow_visitor.py
-    "test_round_schema_conversion_nested"
+    # azure.core.exceptions.ServiceRequestError (network access)
+    "test_converting_an_outputfile_to_an_inputfile_adls"
+    "test_file_tell_adls"
+    "test_getting_length_of_file_adls"
+    "test_new_input_file_adls"
+    "test_new_output_file_adls"
+    "test_raise_on_opening_file_not_found_adls"
+    "test_read_specified_bytes_for_file_adls"
+    "test_write_and_read_file_adls"
 
     # Hangs forever (from tests/io/test_pyarrow.py)
     "test_getting_length_of_file_gcs"
+
+    # Timing sensitive
+    #   AssertionError: assert 8 == 5
+    "test_hive_wait_for_lock"
+
+    # Memory usage sensitive
+    #   AssertionError: Peak memory ratio (5.7x) exceeds 3.0x
+    "test_add_files_dup_check_memory_growth"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # ImportError: The pyarrow installation is not built with support for 'GcsFileSystem'
+    "test_converting_an_outputfile_to_an_inputfile_gcs"
+    "test_create_table_with_database_location"
+    "test_drop_table_with_database_location"
+    "test_new_input_file_gcs"
+    "test_new_output_file_gc"
+
+    # PermissionError: [Errno 13] Failed to open local file
+    # '/tmp/iceberg/warehouse/default.db/test_projection_partitions/metadata/00000-6c1c61a1-495f-45d3-903d-a2643431be91.metadata.json'
+    "test_identity_transform_column_projection"
+    "test_identity_transform_columns_projection"
+    "test_in_memory_catalog_context_manager"
+    "test_inspect_partition_for_nested_field"
+    "test_inspect_partitions_respects_partition_evolution"
+    "test_partition_column_projection_with_schema_evolution"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Python library for programmatic access to Apache Iceberg";
     homepage = "https://github.com/apache/iceberg-python";
-    changelog = "https://github.com/apache/iceberg-python/releases/tag/pyiceberg-${version}";
+    changelog = "https://github.com/apache/iceberg-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

@@ -1,6 +1,5 @@
 {
   lib,
-  fetchFromGitHub,
   immich,
   python3,
   nixosTests,
@@ -11,40 +10,43 @@ let
     self = python;
   };
 in
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "immich-machine-learning";
   inherit (immich) version;
   src = "${immich.src}/machine-learning";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   pythonRelaxDeps = [
-    "pillow"
-    "pydantic-settings"
+    "onnx"
   ];
 
   build-system = with python.pkgs; [
-    poetry-core
-    cython
+    hatchling
   ];
 
   dependencies =
     with python.pkgs;
     [
-      insightface
-      opencv-python-headless
-      pillow
-      fastapi
-      uvicorn
-      pydantic
-      pydantic-settings
       aiocache
-      rich
-      ftfy
-      python-multipart
-      orjson
+      fastapi
       gunicorn
       huggingface-hub
+      numpy
+      onnx
+      opencv-python-headless
+      orjson
+      pillow
+      pydantic
+      pydantic-settings
+      python-multipart
+      rich
       tokenizers
+      uvicorn
+      rapidocr
+
+      finalAttrs.passthru.immich-model
     ]
     ++ uvicorn.optional-dependencies.standard;
 
@@ -61,26 +63,29 @@ python.pkgs.buildPythonApplication rec {
 
   postInstall = ''
     mkdir -p $out/share/immich
-    cp log_conf.json $out/share/immich
+    cp immich_ml/log_conf.json $out/share/immich
 
     cp -r ann $out/${python.sitePackages}/
 
     makeWrapper ${lib.getExe python.pkgs.gunicorn} "''${!outputBin}"/bin/machine-learning \
-      --prefix PYTHONPATH : "$out/${python.sitePackages}:${python.pkgs.makePythonPath dependencies}" \
+      --prefix PYTHONPATH : "$out/${python.sitePackages}:${python.pkgs.makePythonPath finalAttrs.passthru.dependencies}" \
       --set-default MACHINE_LEARNING_WORKERS 1 \
       --set-default MACHINE_LEARNING_WORKER_TIMEOUT 120 \
       --set-default MACHINE_LEARNING_CACHE_FOLDER /var/cache/immich \
       --set-default IMMICH_HOST "[::]" \
       --set-default IMMICH_PORT 3003 \
-      --add-flags "app.main:app -k app.config.CustomUvicornWorker \
+      --add-flags "immich_ml.main:app -k immich_ml.config.CustomUvicornWorker \
         -w \"\$MACHINE_LEARNING_WORKERS\" \
         -b \"\$IMMICH_HOST:\$IMMICH_PORT\" \
         -t \"\$MACHINE_LEARNING_WORKER_TIMEOUT\"
         --log-config-json $out/share/immich/log_conf.json"
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) immich;
+  passthru = {
+    tests = {
+      inherit (nixosTests) immich;
+    };
+    immich-model = python.pkgs.callPackage ./immich-model.nix { };
   };
 
   meta = {
@@ -89,4 +94,4 @@ python.pkgs.buildPythonApplication rec {
     mainProgram = "machine-learning";
     inherit (immich.meta) license maintainers platforms;
   };
-}
+})

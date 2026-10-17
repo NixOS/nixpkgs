@@ -1,6 +1,5 @@
 {
   bzip2,
-  Cocoa,
   copyDesktopItems,
   curl,
   fetchFromGitHub,
@@ -8,31 +7,35 @@
   jsoncpp,
   lib,
   libpng,
-  lua,
+  libx11,
+  lua5_2,
   luajit,
   meson,
   ninja,
   pkg-config,
+  python3,
   SDL2,
   stdenv,
   zlib,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "the-powder-toy";
-  version = "98.2.365";
+  version = "100.1.400";
 
   src = fetchFromGitHub {
     owner = "The-Powder-Toy";
     repo = "The-Powder-Toy";
-    tag = "v${version}";
-    hash = "sha256-S2aUa25EnUfX6ShW6D+wHrsTLxTcCFcZ/uLE9EWGu4Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1yyOA6prID4ARi3yLGSXuauRRtwDv4MuZAlWiqRmDMw=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-  ] ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems;
+    python3
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems;
 
   buildInputs = [
     bzip2
@@ -40,13 +43,14 @@ stdenv.mkDerivation rec {
     fftwFloat
     jsoncpp
     libpng
-    lua
+    libx11
+    lua5_2
     luajit
     SDL2
     zlib
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin Cocoa;
+  ];
 
-  mesonFlags = [ "-Dworkaround_elusive_bzip2=false" ];
+  mesonFlags = [ "-Dworkaround_elusive_bzip2=none" ];
 
   installPhase = ''
     runHook preInstall
@@ -61,15 +65,14 @@ stdenv.mkDerivation rec {
 
   desktopItems = [ "resources/powder.desktop" ];
 
-  meta = with lib; {
+  meta = {
     description = "Free 2D physics sandbox game";
     homepage = "https://powdertoy.co.uk/";
-    platforms = platforms.unix;
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
-      abbradar
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       siraben
     ];
     mainProgram = "powder";
   };
-}
+})

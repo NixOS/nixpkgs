@@ -41,75 +41,72 @@ let
     name:
     lib.types.submodule {
       freeformType = lib.types.attrsOf settingsFormat.type;
-      options =
-        {
-          type = lib.mkOption {
-            type = lib.types.enum [
-              "hwmon"
-              "atasmart"
-              "tpacpi"
-              "nvml"
-            ];
-            description = ''
-              The ${name} type, can be
-              `hwmon` for standard ${name}s,
+      options = {
+        type = lib.mkOption {
+          type = lib.types.enum [
+            "hwmon"
+            "atasmart"
+            "tpacpi"
+            "nvml"
+          ];
+          description = ''
+            The ${name} type, can be
+            `hwmon` for standard ${name}s,
 
-              `atasmart` to read the temperature via
-              S.M.A.R.T (requires smartSupport to be enabled),
+            `atasmart` to read the temperature via
+            S.M.A.R.T (requires smartSupport to be enabled),
 
-              `tpacpi` for the legacy thinkpac_acpi driver, or
+            `tpacpi` for the legacy thinkpac_acpi driver, or
 
-              `nvml` for the (proprietary) nVidia driver.
-            '';
-          };
-          query = lib.mkOption {
-            type = lib.types.str;
-            description = ''
-              The query string used to match one or more ${name}s: can be
-              a fullpath to the temperature file (single ${name}) or a fullpath
-              to a driver directory (multiple ${name}s).
-
-              ::: {.note}
-              When multiple ${name}s match, the query can be restricted using the
-              {option}`name` or {option}`indices` options.
-              :::
-            '';
-          };
-          indices = lib.mkOption {
-            type = with lib.types; nullOr (listOf ints.unsigned);
-            default = null;
-            description = ''
-              A list of ${name}s to pick in case multiple ${name}s match the query.
-
-              ::: {.note}
-              Indices start from 0.
-              :::
-            '';
-          };
-        }
-        // lib.optionalAttrs (name == "sensor") {
-          correction = lib.mkOption {
-            type = with lib.types; nullOr (listOf int);
-            default = null;
-            description = ''
-              A list of values to be added to the temperature of each sensor,
-              can be used to equalize small discrepancies in temperature ratings.
-            '';
-          };
+            `nvml` for the (proprietary) nVidia driver.
+          '';
         };
+        query = lib.mkOption {
+          type = lib.types.str;
+          description = ''
+            The query string used to match one or more ${name}s: can be
+            a fullpath to the temperature file (single ${name}) or a fullpath
+            to a driver directory (multiple ${name}s).
+
+            ::: {.note}
+            When multiple ${name}s match, the query can be restricted using the
+            {option}`name` or {option}`indices` options.
+            :::
+          '';
+        };
+        indices = lib.mkOption {
+          type = with lib.types; nullOr (listOf ints.unsigned);
+          default = null;
+          description = ''
+            A list of ${name}s to pick in case multiple ${name}s match the query.
+
+            ::: {.note}
+            Indices start from 0.
+            :::
+          '';
+        };
+      }
+      // lib.optionalAttrs (name == "sensor") {
+        correction = lib.mkOption {
+          type = with lib.types; nullOr (listOf int);
+          default = null;
+          description = ''
+            A list of values to be added to the temperature of each sensor,
+            can be used to equalize small discrepancies in temperature ratings.
+          '';
+        };
+      };
     };
 
   # removes NixOS special and unused attributes
   sensorToConf =
     { type, query, ... }@args:
-    (lib.filterAttrs (
-      k: v:
-      v != null
-      && !(lib.elem k [
+    (lib.filterAttrs (k: v: v != null) (
+      lib.removeAttrs args [
         "type"
         "query"
-      ])
-    ) args)
+      ]
+    ))
     // {
       "${type}" = query;
     };
@@ -249,7 +246,7 @@ in
         ];
         description = ''
           A list of extra command line arguments to pass to thinkfan.
-          Check the thinkfan(1) manpage for available arguments.
+          Check the {manpage}`thinkfan(1)` manpage for available arguments.
         '';
       };
 
@@ -259,7 +256,7 @@ in
         description = ''
           Thinkfan settings. Use this option to configure thinkfan
           settings not exposed in a NixOS option or to bypass one.
-          Before changing this, read the `thinkfan.conf(5)`
+          Before changing this, read the {manpage}`thinkfan.conf(5)`
           manpage and take a look at the example config file at
           <https://github.com/vmatare/thinkfan/blob/master/examples/thinkfan.yaml>
         '';

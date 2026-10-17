@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   version = "0.93";
 
   src = fetchFromGitHub {
-    owner = "cernekee";
+    owner = "stoken-dev";
     repo = "stoken";
     rev = "v${version}";
     hash = "sha256-8N7TXdBu37eXWIKCBdaXVW0pvN094oRWrdlcy9raddI=";
@@ -28,20 +28,19 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      libxml2
-      nettle
-    ]
-    ++ lib.optionals withGTK3 [
-      gtk3
-    ];
+  buildInputs = [
+    libxml2
+    nettle
+  ]
+  ++ lib.optionals withGTK3 [
+    gtk3
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Software Token for Linux/UNIX";
-    homepage = "https://github.com/cernekee/stoken";
-    license = licenses.lgpl21Plus;
+    homepage = "https://github.com/stoken-dev/stoken";
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

@@ -8,7 +8,7 @@ args:
   darwin,
   ncurses,
   libiconv,
-  libX11,
+  libx11,
   zlib,
   lz4,
 }:
@@ -16,7 +16,7 @@ args:
 stdenv.mkDerivation (
   args
   // {
-    version = "unstable-2021-12-11";
+    version = "8.3-unstable-2021-12-11";
 
     src = fetchFromGitHub {
       owner = "racket";
@@ -35,13 +35,13 @@ stdenv.mkDerivation (
       export LZ4="$(find ${lz4.lib}/lib -type f | sort | head -n1)"
     '';
 
-    nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin ([
+    nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
       cctools
       darwin.autoSignDarwinBinariesHook
-    ]);
+    ];
     buildInputs = [
       libiconv
-      libX11
+      libx11
       lz4
       ncurses
       zlib
@@ -55,8 +55,10 @@ stdenv.mkDerivation (
       description = "Fork of Chez Scheme for Racket";
       homepage = "https://github.com/racket/ChezScheme";
       license = lib.licenses.asl20;
-      maintainers = with lib.maintainers; [ l-as ];
-      platforms = lib.platforms.unix;
+      maintainers = [ ];
+      platforms = lib.intersectLists lib.platforms.unix (
+        lib.platforms.x86 ++ lib.platforms.aarch64 ++ lib.platforms.arm ++ lib.platforms.power
+      );
     };
   }
 )

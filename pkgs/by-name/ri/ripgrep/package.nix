@@ -8,31 +8,38 @@
   pkg-config,
   withPCRE2 ? true,
   pcre2,
+  writableTmpDirAsHomeHook,
 }:
 
 let
   canRunRg = stdenv.hostPlatform.emulatorAvailable buildPackages;
-  rg = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/rg";
+  rg = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/rg${stdenv.hostPlatform.extensions.executable}";
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ripgrep";
-  version = "14.1.1";
+  version = "15.2.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
-    repo = pname;
-    rev = version;
-    hash = "sha256-gyWnahj1A+iXUQlQ1O1H1u7K5euYQOld9qWm99Vjaeg=";
+    repo = "ripgrep";
+    tag = finalAttrs.version;
+    hash = "sha256-BsSIbZwB6s8i3dDTRYJ1EdVbJmiO0oxcLu6qiYlPkOI=";
   };
 
-  cargoHash = "sha256-b+iA8iTYWlczBpNq9eyHrWG8LMU4WPBzaU6pQRht+yE=";
+  cargoHash = "sha256-AqizStE9ICd6mNDZWdeXg6dHuTiY+B0TNauQQYWUa84=";
 
-  nativeBuildInputs = [ installShellFiles ] ++ lib.optional withPCRE2 pkg-config;
+  nativeBuildInputs = [
+    installShellFiles
+    writableTmpDirAsHomeHook # required for wine when cross-compiling to Windows
+  ]
+  ++ lib.optional withPCRE2 pkg-config;
   buildInputs = lib.optional withPCRE2 pcre2;
 
   buildFeatures = lib.optional withPCRE2 "pcre2";
 
-  preFixup = lib.optionalString canRunRg ''
+  postFixup = lib.optionalString canRunRg ''
     ${rg} --generate man > rg.1
     installManPage rg.1
 
@@ -43,7 +50,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   doInstallCheck = true;
-  installCheckPhase =
+  installCheckPhase = lib.optionalString canRunRg (
     ''
       file="$(mktemp)"
       echo "abc\nbcd\ncde" > "$file"
@@ -52,21 +59,23 @@ rustPlatform.buildRustPackage rec {
     ''
     + lib.optionalString withPCRE2 ''
       echo '(a(aa)aa)' | ${rg} -P '\((a*|(?R))*\)'
-    '';
+    ''
+  );
 
-  meta = with lib; {
+  meta = {
     description = "Utility that combines the usability of The Silver Searcher with the raw speed of grep";
     homepage = "https://github.com/BurntSushi/ripgrep";
-    changelog = "https://github.com/BurntSushi/ripgrep/releases/tag/${version}";
-    license = with licenses; [
+    changelog = "https://github.com/BurntSushi/ripgrep/releases/tag/${finalAttrs.version}";
+    license = with lib.licenses; [
       unlicense # or
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       globin
       ma27
       zowoq
     ];
     mainProgram = "rg";
+    platforms = lib.platforms.all;
   };
-}
+})

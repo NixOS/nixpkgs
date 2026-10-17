@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation {
   pname = "xtf";
-  version = "0-unstable-2024-11-01";
+  version = "0-unstable-2025-10-02";
 
   outputs = [
     "out" # xtf-runner and test suite.
@@ -20,8 +20,8 @@ stdenv.mkDerivation {
 
   src = fetchgit {
     url = "https://xenbits.xenproject.org/git-http/xtf.git";
-    rev = "294532089d5251170abfd65a6620c8247cea729d";
-    hash = "sha256-CQK7300nepZ3bNiHEJ5jrS9wkipr5JUbvtL5DNrULGI=";
+    rev = "453490df6f65fb503a39b1bddf0093441eece9ae";
+    hash = "sha256-YHECFZCl5VgpSv9+OoT5BXpC/tzSVFylrPKK1PrYAOo=";
   };
 
   nativeBuildInputs =
@@ -60,7 +60,7 @@ stdenv.mkDerivation {
     # This is necessary because the real xtf-runner should
     # be in the same directory as the tests/ directory.
     + ''
-      wrapPythonProgramsIn "''${!outputBin}/share/xtf" "''${!outputBin} $pythonPath"
+      wrapPythonProgramsIn "''${!outputBin}/share/xtf" "''${!outputBin} ''${pythonPath[*]}"
       mkdir -p ''${!outputBin}/bin
       ln -s ''${!outputBin}/share/xtf/xtf-runner ''${!outputBin}/bin/xtf-runner
     '';
@@ -71,7 +71,7 @@ stdenv.mkDerivation {
     description = "Xen Test Framework and Suite for creating microkernel-based tests";
     homepage = "https://xenbits.xenproject.org/docs/xtf/index.html";
     license = lib.licenses.bsd2;
-    maintainers = lib.teams.xen.members;
+    teams = [ lib.teams.xen ];
     mainProgram = "xtf-runner";
     platforms = lib.lists.intersectLists lib.platforms.linux lib.platforms.x86_64;
   };

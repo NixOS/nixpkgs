@@ -5,23 +5,24 @@
   stdenv,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "flexget";
-  version = "3.13.6";
+  version = "3.22.2";
   pyproject = true;
 
-  # Fetch from GitHub in order to use `requirements.in`
   src = fetchFromGitHub {
     owner = "Flexget";
     repo = "Flexget";
-    tag = "v${version}";
-    hash = "sha256-I6AQtoGk/YUDM5DzegvLi8QmVvoma16zJGZ8BMUUN3c=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GZFMW7dNM3Ia2wHFQnlQuv4fJWOwZ9rgyAVbRypuDzE=";
   };
 
-  # relax dep constrains, keep environment constraints
   pythonRelaxDeps = true;
 
-  build-system = with python3Packages; [ setuptools ];
+  build-system = with python3Packages; [
+    hatchling
+    hatch-requirements-txt
+  ];
 
   dependencies = with python3Packages; [
     # See https://github.com/Flexget/Flexget/blob/master/pyproject.toml
@@ -29,12 +30,14 @@ python3Packages.buildPythonApplication rec {
     apscheduler
     beautifulsoup4
     colorama
+    curl-cffi
     feedparser
     guessit
     html5lib
     jinja2
     jsonschema
     loguru
+    pyscrypt
     psutil
     pydantic
     pynzb
@@ -48,6 +51,7 @@ python3Packages.buildPythonApplication rec {
     rpyc
     sqlalchemy
     zstandard
+    pillow
 
     # WebUI requirements
     cherrypy
@@ -66,9 +70,10 @@ python3Packages.buildPythonApplication rec {
     transmission-rpc
     qbittorrent-api
     deluge-client
-    cloudscraper
     python-telegram-bot
     boto3
+    matrix-nio
+    subliminal
   ];
 
   pythonImportsCheck = [
@@ -99,10 +104,11 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = [
     python3Packages.pytestCheckHook
     python3Packages.pytest-vcr
+    python3Packages.pytest-xdist
     python3Packages.paramiko
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   disabledTests = [
     # reach the Internet
@@ -152,13 +158,21 @@ python3Packages.buildPythonApplication rec {
     # others
     "TestRegexp"
     "TestYamlLists"
+    "test_ambiguous[guessit]"
+    "test_date_id[guessit]"
+  ];
+
+  disabledTestPaths = [
+    # FIXME package pytest-ftpserver
+    "tests/ftp/test_ftp_download.py"
+    "tests/ftp/test_ftp_list.py"
   ];
 
   meta = {
     homepage = "https://flexget.com/";
-    changelog = "https://github.com/Flexget/Flexget/releases/tag/v${version}";
+    changelog = "https://github.com/Flexget/Flexget/releases/tag/${finalAttrs.src.tag}";
     description = "Multipurpose automation tool for all of your media";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pbsds ];
   };
-}
+})

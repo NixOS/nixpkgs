@@ -1,23 +1,26 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vttest";
-  version = "20241204";
+  version = "20251205";
 
   src = fetchurl {
     urls = [
-      "https://invisible-mirror.net/archives/vttest/vttest-${version}.tgz"
-      "ftp://ftp.invisible-island.net/vttest/vttest-${version}.tgz"
+      "https://invisible-mirror.net/archives/vttest/vttest-${finalAttrs.version}.tgz"
+      "https://invisible-island.net/archives/vttest/vttest-${finalAttrs.version}.tgz"
     ];
-    sha256 = "sha256-cBDDK2Qllo7NfuxD2J8sbGdElPc7Isjnxm2t8hwjG/8=";
+    sha256 = "sha256-zWiG+a7+aj9sVm+mEnGlVxCQGnGEnGML9TdqqYS/d8w=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tests the compatibility of so-called 'VT100-compatible' terminals";
     homepage = "https://invisible-island.net/vttest/";
-    license = licenses.mit;
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
     mainProgram = "vttest";
   };
-}
-
+})

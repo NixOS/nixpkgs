@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
   useVariableFont ? true,
 }:
 
@@ -16,17 +17,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   # only extract the variable font because everything else is a duplicate
-  installPhase = ''
-    runHook preInstall
+  preInstall = "cd ${lib.optionalString useVariableFont "variable_"}ttf";
 
-    install -Dm644 -t $out/share/fonts/truetype ${
-      if useVariableFont then "variable_ttf/*-VF.ttf" else "ttf/*.ttf"
-    }
+  nativeBuildInputs = [ installFonts ];
 
-    runHook postInstall
-  '';
-
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tonsky/FiraCode";
     description = "Monospace font with programming ligatures";
     longDescription = ''
@@ -34,8 +29,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       a set of ligatures for common programming multi-character
       combinations.
     '';
-    license = licenses.ofl;
-    maintainers = [ maintainers.rycee ];
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    maintainers = [ lib.maintainers.rycee ];
+    platforms = lib.platforms.all;
   };
 })

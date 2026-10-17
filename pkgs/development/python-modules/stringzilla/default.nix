@@ -8,16 +8,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "stringzilla";
-  version = "3.11.3";
+  version = "5.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ashvardanian";
     repo = "stringzilla";
-    tag = "v${version}";
-    hash = "sha256-2qmcjRNjCyErzwto2DqdDU9NX4+hqeibhDM85c81TgU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RENsISsEfDJaoQK9v9i6vM3OId7FREw5hixpEUETfEw=";
   };
 
   build-system = [
@@ -32,13 +32,22 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "scripts/test.py" ];
+  disabledTestPaths = [
+    # ignored in .github/workflows/prerelease.yml
+    "test/stringzillas.py"
+    "test/similarities.py"
+    "test/fingerprints.py"
+    "test/szs_helpers.py"
+  ];
 
   meta = {
-    changelog = "https://github.com/ashvardanian/StringZilla/releases/tag/v${version}";
+    changelog = "https://github.com/ashvardanian/StringZilla/releases/tag/${finalAttrs.src.tag}";
     description = "SIMD-accelerated string search, sort, hashes, fingerprints, & edit distances";
     homepage = "https://github.com/ashvardanian/stringzilla";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [
+      aciceri
+      dotlambda
+    ];
   };
-}
+})

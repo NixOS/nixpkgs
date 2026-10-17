@@ -132,15 +132,15 @@ stdenv.mkDerivation (finalAttrs: {
     '') needsBin
   );
 
-  meta = with lib; {
+  meta = {
     description = "Really Awesome New Cisco confIg Differ";
     longDescription = ''
       RANCID monitors a device's configuration, including software and hardware
       and uses a VCS to maintain history of changes.
     '';
     homepage = "https://shrubbery.net/rancid/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.linux;
   };
 })

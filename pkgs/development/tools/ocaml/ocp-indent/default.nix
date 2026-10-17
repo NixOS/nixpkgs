@@ -6,29 +6,27 @@
   findlib,
 }:
 
-buildDunePackage rec {
-  version = "1.8.2";
+buildDunePackage (finalAttrs: {
+  version = "1.10.0";
   pname = "ocp-indent";
-
-  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "OCamlPro";
     repo = "ocp-indent";
-    rev = version;
-    sha256 = "sha256-IyvURw/6R0eKrnahV1fqLV0iIeypykrmxDbliECgbLc=";
+    tag = finalAttrs.version;
+    hash = "sha256-BJBweeWcOuiu82rp+QoLZ0QvGHAXXOJ5wkycfaxVXJQ=";
   };
 
-  minimalOCamlVersion = "4.03";
+  minimalOCamlVersion = "4.11";
 
   buildInputs = [ cmdliner ];
   propagatedBuildInputs = [ findlib ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.typerex.org/ocp-indent.html";
     description = "Customizable tool to indent OCaml code";
     mainProgram = "ocp-indent";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.jirkamarsik ];
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.jirkamarsik ];
   };
-}
+})

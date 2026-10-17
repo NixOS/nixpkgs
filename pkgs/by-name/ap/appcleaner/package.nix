@@ -3,14 +3,15 @@
   stdenvNoCC,
   fetchurl,
   unzip,
+  nix-update-script,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "appcleaner";
-  version = "3.6.8";
+  version = "3.7";
 
   src = fetchurl {
     url = "https://freemacsoft.net/downloads/AppCleaner_${finalAttrs.version}.zip";
-    hash = "sha256-4BL3KUQkc8IOfM4zSwAYJSHktmcupoGzSTGxgP6z1r4=";
+    hash = "sha256-PX+mFG+1falV3KQIWH/GWKwUrrhu2nkHdjrmY5fJ5l4=";
   };
   dontUnpack = true;
 
@@ -25,12 +26,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Uninstall unwanted apps";
     homepage = "https://freemacsoft.net/appcleaner";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ emilytrau ];
-    platforms = platforms.darwin;
+    maintainers = with lib.maintainers; [ emilytrau ];
+    platforms = lib.platforms.darwin;
   };
 })

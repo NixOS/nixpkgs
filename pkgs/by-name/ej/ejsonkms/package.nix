@@ -6,21 +6,21 @@
   ejsonkms,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ejsonkms";
-  version = "0.2.4";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "envato";
     repo = "ejsonkms";
-    rev = "v${version}";
-    hash = "sha256-kk/+EOZ1g6SiIajcKXf6lVnll/NRWgwbFO2j07HERBI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-uvTIyc3z8rpculfmiV8ojQ5K70R5cwP7IQPrM5teSQQ=";
   };
 
-  vendorHash = "sha256-ZSoxG532eicpR1pS2oLYnJxtJrsHZZRbjncxU4uyT3c=";
+  vendorHash = "sha256-RXzZ+5CqVBcGAYB/IiPG8Mu4fUAgE0xr1UUVMqWTwEw=";
 
   ldflags = [
-    "-X main.version=v${version}"
+    "-X main.version=v${finalAttrs.version}"
     "-s"
     "-w"
   ];
@@ -30,14 +30,14 @@ buildGoModule rec {
   passthru.tests = {
     version = testers.testVersion {
       package = ejsonkms;
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Integrates EJSON with AWS KMS";
     homepage = "https://github.com/envato/ejsonkms";
-    license = licenses.mit;
-    maintainers = with maintainers; [ viraptor ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ viraptor ];
   };
-}
+})

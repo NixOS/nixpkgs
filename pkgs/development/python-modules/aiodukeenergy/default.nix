@@ -5,6 +5,7 @@
   fetchFromGitHub,
   lib,
   poetry-core,
+  pyjwt,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
@@ -13,20 +14,21 @@
 
 buildPythonPackage rec {
   pname = "aiodukeenergy";
-  version = "0.2.2";
+  version = "1.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hunterjm";
     repo = "aiodukeenergy";
     tag = "v${version}";
-    hash = "sha256-aDBleEp3ZlY1IfFCbsUEU+wzYgjNaJeip8crHlh5qHE=";
+    hash = "sha256-//sxl5eOaO6HIEJzxCSxSQaJu5F0sOItawpF3cNTXm0=";
   };
 
   build-system = [ poetry-core ];
 
   dependencies = [
     aiohttp
+    pyjwt
     yarl
   ];
 
@@ -40,7 +42,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/hunterjm/aiodukeenergy/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/hunterjm/aiodukeenergy/blob/${src.tag}/CHANGELOG.md";
     description = "Asyncio Duke Energy";
     homepage = "https://github.com/hunterjm/aiodukeenergy";
     license = lib.licenses.mit;

@@ -2,18 +2,27 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   cctools,
   disablePosixThreads ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmcrypt";
   version = "2.5.8";
 
   src = fetchurl {
-    url = "mirror://sourceforge/mcrypt/Libmcrypt/${version}/libmcrypt-${version}.tar.gz";
-    sha256 = "0gipgb939vy9m66d3k8il98rvvwczyaw2ixr8yn6icds9c3nrsz4";
+    url = "mirror://sourceforge/mcrypt/Libmcrypt/${finalAttrs.version}/libmcrypt-${finalAttrs.version}.tar.gz";
+    hash = "sha256-5OtsB0u6sWisR7lHwZX/jO+dUaIRzdGMqcnvNNJ6Nz4=";
   };
+
+  patches = [
+    # Fix build with GCC 15
+    (fetchpatch {
+      url = "https://gitlab.alpinelinux.org/alpine/aports/-/raw/v20251224/community/libmcrypt/c23.patch";
+      hash = "sha256-yTBCi5f0s8SiM5aq8X135E2Wwl7S2sO1tsVDthCdAMg=";
+    })
+  ];
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin cctools;
 
@@ -34,7 +43,7 @@ stdenv.mkDerivation rec {
     description = "Replacement for the old crypt() package and crypt(1) command, with extensions";
     mainProgram = "libmcrypt-config";
     homepage = "https://mcrypt.sourceforge.net";
-    license = "GPL";
+    license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.all;
   };
-}
+})

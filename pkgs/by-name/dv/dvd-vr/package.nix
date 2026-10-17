@@ -11,14 +11,19 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://www.pixelbeat.org/programs/dvd-vr/dvd-vr-${finalAttrs.version}.tar.gz";
     sha256 = "13wkdia3c0ryda40b2nzpb9vddimasgc4w95hvl0k555k9k8bl0r";
   };
-  makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  makeFlags = [
+    "PREFIX=$(out)"
+    # Fix build with GCC 14
+    "CFLAGS=-Wno-error=incompatible-pointer-types"
+  ];
+
+  meta = {
     homepage = "https://www.pixelbeat.org/programs/dvd-vr/";
     downloadPage = "https://www.pixelbeat.org/programs/dvd-vr/";
     description = "Utility to identify and optionally copy recordings from a DVD-VR format disc";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ fgaz ];
     mainProgram = "dvd-vr";
   };
 })

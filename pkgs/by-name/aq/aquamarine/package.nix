@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gcc16Stdenv,
   cmake,
   fetchFromGitHub,
   hwdata,
@@ -21,15 +21,15 @@
   wayland-protocols,
   wayland-scanner,
 }:
-stdenv.mkDerivation (finalAttrs: {
+gcc16Stdenv.mkDerivation (finalAttrs: {
   pname = "aquamarine";
-  version = "0.5.1";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "aquamarine";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-Gxv1kTz5jEvIzmkF6XgsdKglL2jmjJOQdZ+hO9uVnlQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jiUl3+k9K+BASO4hvKFhlCMUpHPPoy2q5uZMl3pzOF0=";
   };
 
   nativeBuildInputs = [
@@ -63,18 +63,16 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeBuildType = "RelWithDebInfo";
+  separateDebugInfo = true;
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/hyprwm/aquamarine/releases/tag/v${finalAttrs.version}";
-    description = "A very light linux rendering backend library";
+    description = "Very light linux rendering backend library";
     homepage = "https://github.com/hyprwm/aquamarine";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
-      fufexan
-      johnrtitor
-    ];
+    teams = [ lib.teams.hyprland ];
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };
 })

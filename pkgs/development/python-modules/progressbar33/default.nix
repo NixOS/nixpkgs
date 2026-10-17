@@ -11,16 +11,16 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1zvf6zs5hzrc03p9nfs4p16vhilqikycvv1yk0pxn8s07fdhvzji";
+    hash = "sha256-Uf4NmztAI9svmD7szfyMmEa4TbhEO5vuACx/WPQ3bv8=";
   };
 
   # no tests implemented
   doCheck = false;
 
-  meta = with lib; {
-    homepage = "https://pypi.python.org/pypi/progressbar33";
+  meta = {
+    homepage = "https://pypi.org/project/progressbar33/";
     description = "Text progressbar library for python";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ twey ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ twey ];
   };
 }

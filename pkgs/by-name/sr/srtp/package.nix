@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libsrtp";
-  version = "2.6.0";
+  version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "cisco";
     repo = "libsrtp";
     rev = "v${version}";
-    sha256 = "sha256-vWL5bksKT5NUoNkIRiJ2FeGODQthD8SgXjCaA7SeTe4=";
+    sha256 = "sha256-kLuz3gPVDhm1fzcrXL4xky+hrTprJbcxgQCyb4nVThQ=";
   };
 
   outputs = [
@@ -51,11 +51,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/cisco/libsrtp";
     description = "Secure RTP (SRTP) Reference Implementation";
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ r-burns ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ r-burns ];
   };
 }

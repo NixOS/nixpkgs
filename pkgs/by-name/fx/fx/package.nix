@@ -1,38 +1,56 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "fx";
-  version = "35.0.0";
+  version = "40.0.0";
 
   src = fetchFromGitHub {
     owner = "antonmedv";
-    repo = pname;
-    rev = version;
-    hash = "sha256-EirlA/gcW77UP9I4pVCjjG3pSYnCPw+idX9YS1izEpY=";
+    repo = "fx";
+    tag = finalAttrs.version;
+    hash = "sha256-cMnRjjg/O5zemzXygIvhGn5Jx4oD3WK1+uH6NVuNUI4=";
   };
+
+  vendorHash = "sha256-YDx+g45AkZ149sBM610F4u7pJaFnUJnrdLU85gMp474=";
+
+  ldflags = [ "-s" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
-  vendorHash = "sha256-h9BUL7b8rNmhVxmXL3CBF39WSkX+8eS2M9NDJhbPI0o=";
-
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd fx \
       --bash <($out/bin/fx --comp bash) \
       --fish <($out/bin/fx --comp fish) \
       --zsh <($out/bin/fx --comp zsh)
   '';
 
-  meta = with lib; {
+  checkFlags = lib.optionals (stdenv.hostPlatform.system == "x86_64-darwin") [
+    # flaky only on x86_64 darwin, https://hydra.nixos.org/build/319903711
+    "-skip=^TestSearchCaching"
+  ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
+  doInstallCheck = true;
+  versionCheckKeepEnvironment = [ "HOME" ];
+
+  meta = {
+    changelog = "https://github.com/antonmedv/fx/releases/tag/${finalAttrs.src.tag}";
     description = "Terminal JSON viewer";
-    mainProgram = "fx";
     homepage = "https://github.com/antonmedv/fx";
-    changelog = "https://github.com/antonmedv/fx/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    mainProgram = "fx";
+    maintainers = with lib.maintainers; [ phanirithvij ];
   };
-}
+})

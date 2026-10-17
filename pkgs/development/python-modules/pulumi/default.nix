@@ -1,71 +1,115 @@
 {
   lib,
+  pkgs,
+  pulumiPackages,
   buildPythonPackage,
+  hatchling,
   protobuf,
-  dill,
   grpcio,
-  pulumi,
-  isPy27,
-  semver,
-  pip,
-  pytestCheckHook,
-  pyyaml,
+  dill,
   six,
+  semver,
+  pyyaml,
+  debugpy,
+  pip,
+  opentelemetry-api,
+  opentelemetry-sdk,
+  opentelemetry-instrumentation-grpc,
+  opentelemetry-exporter-otlp-proto-grpc,
+  pytest,
+  pytest-asyncio,
+  pytest-timeout,
+  python,
 }:
-buildPythonPackage rec {
-  inherit (pulumi) version src;
+let
+  inherit (pkgs.pulumi) pname version src;
+  inherit (pulumiPackages) pulumi-python;
+  sourceRoot = "${src.name}/sdk/python";
+in
+buildPythonPackage {
+  inherit
+    pname
+    version
+    src
+    sourceRoot
+    ;
 
-  pname = "pulumi";
-  format = "setuptools";
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  disabled = isPy27;
+  pyproject = true;
 
-  propagatedBuildInputs = [
-    semver
+  build-system = [ hatchling ];
+
+  dependencies = [
     protobuf
-    dill
     grpcio
-    pyyaml
+    dill
     six
+    semver
+    pyyaml
+    debugpy
+    pip
+    opentelemetry-api
+    opentelemetry-sdk
+    opentelemetry-instrumentation-grpc
+    opentelemetry-exporter-otlp-proto-grpc
+  ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+    "grpcio"
+    "pip"
+    "semver"
+    "opentelemetry-api"
+    "opentelemetry-sdk"
+    "opentelemetry-instrumentation-grpc"
+    "opentelemetry-exporter-otlp-proto-grpc"
   ];
 
   nativeCheckInputs = [
-    pip
-    pulumi.pkgs.pulumi-language-python
-    pytestCheckHook
+    pytest
+    pytest-asyncio
+    pytest-timeout
+    pulumi-python
   ];
 
-  pytestFlagsArray = [ "test/" ];
-
-  sourceRoot = "${src.name}/sdk/python/lib";
-
-  # we apply the modifications done in the pulumi/sdk/python/Makefile
-  # but without the venv code
-  postPatch = ''
-    cp ../../README.md .
-    substituteInPlace setup.py \
-      --replace "3.0.0" "${version}" \
-      --replace "grpcio==1.56.2" "grpcio" \
-      --replace "semver~=2.13" "semver"
+  # CheckPhase script based on:
+  # https://github.com/pulumi/pulumi/blob/0acaf8060640fdd892abccf1ce7435cd6aae69fe/sdk/python/scripts/test_fast.sh#L10-L11
+  # https://github.com/pulumi/pulumi/blob/0acaf8060640fdd892abccf1ce7435cd6aae69fe/sdk/python/scripts/test_fast.sh#L16
+  # Script updated in https://github.com/pulumi/pulumi/pull/21365
+  #
+  # Ignore lib/test/langhost because tests require `uv` / virtualenv which is not supported in the Nix sandbox.
+  installCheckPhase = ''
+    runHook preInstallCheck
+    declare -a _disabledTestPathsArray
+    concatTo _disabledTestPathsArray disabledTestPaths
+    ${python.executable} -m pytest --junit-xml= \
+      --ignore=lib/test/automation \
+      --ignore=lib/test/langhost \
+      lib/test \
+      "''${_disabledTestPathsArray[@]/#/--deselect=}"
+    pushd lib/test_with_mocks
+    ${python.executable} -m pytest --junit-xml=
+    popd
+    runHook postInstallCheck
   '';
 
   # Allow local networking in tests on Darwin
   __darwinAllowLocalNetworking = true;
 
-  # Verify that the version substitution works
-  preCheck = ''
-    pip show "${pname}" | grep "Version: ${version}" > /dev/null \
-      || (echo "ERROR: Version substitution seems to be broken"; exit 1)
-  '';
-
   pythonImportsCheck = [ "pulumi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Modern Infrastructure as Code. Any cloud, any language";
-    homepage = "https://github.com/pulumi/pulumi";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ teto ];
-    # https://github.com/pulumi/pulumi/issues/16828
-    broken = versionAtLeast protobuf.version "5";
+    homepage = "https://www.pulumi.com";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      nicoo
+      tie
+      untio11
+    ];
   };
 }

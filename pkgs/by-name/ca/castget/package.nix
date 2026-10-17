@@ -1,23 +1,32 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+
+  # native
+  autoreconfHook,
+  glibcLocales,
   pkg-config,
-  glib,
-  ronn,
+
+  # host
   curl,
+  glib,
   id3lib,
   libxml2,
-  glibcLocales,
+  taglib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "castget";
-  version = "2.0.1";
+  # Using unstable version since it doesn't require `ronn`, see:
+  # https://github.com/mlj/castget/commit/218734296e2efc53071e0dbd3c4d59930b571aae
+  version = "2.0.1-unstable-2026-02-04";
 
-  src = fetchurl {
-    url = "http://savannah.nongnu.org/download/castget/castget-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-Q4tffsfjGkXtN1ZjD+RH9CAVrNpT7AkgL0hihya16HU=";
+  src = fetchFromGitHub {
+    owner = "mlj";
+    repo = "castget";
+    rev = "218734296e2efc53071e0dbd3c4d59930b571aae";
+    hash = "sha256-GEfsGOTBkorPWLGP3eNbuiGFwDUgb4Gu6ykyS3/RNOg=";
   };
 
   # without this, the build fails because of an encoding issue with the manual page.
@@ -29,19 +38,20 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   buildInputs = [
-    glib
     curl
+    glib
     id3lib
     libxml2
+    taglib
   ];
   nativeBuildInputs = [
-    ronn
+    autoreconfHook
     # See comment on locale above
     glibcLocales
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple, command-line based RSS enclosure downloader";
     mainProgram = "castget";
     longDescription = ''
@@ -49,8 +59,9 @@ stdenv.mkDerivation (finalAttrs: {
       primarily intended for automatic, unattended downloading of podcasts.
     '';
     homepage = "https://castget.johndal.com/";
-    maintainers = with maintainers; [ doronbehar ];
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    changelog = "https://github.com/mlj/castget/blob/${finalAttrs.src.rev}/CHANGES.md";
+    maintainers = with lib.maintainers; [ doronbehar ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 })

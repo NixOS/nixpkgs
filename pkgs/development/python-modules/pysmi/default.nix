@@ -2,35 +2,37 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  flit-core,
   jinja2,
-  ply,
-  poetry-core,
+  lark,
+  pyprojectVersionPatchHook,
   pysmi,
   pysnmp,
   pytestCheckHook,
-  pythonOlder,
   requests,
 }:
 
-buildPythonPackage rec {
-  version = "1.5.9";
+buildPythonPackage (finalAttrs: {
   pname = "pysmi";
+  version = "2.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "lextudio";
     repo = "pysmi";
-    tag = "v${version}";
-    hash = "sha256-cAeLoDwAf56aWWKKUjOB0fpy7C3gBJchJJtQ6986thc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ft8R73eUgb+pnr35ZVc2Br3BGHhUDHEcQ9k/K6tjYBk=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ flit-core ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   dependencies = [
-    ply
     jinja2
+    lark
     requests
   ];
 
@@ -46,11 +48,11 @@ buildPythonPackage rec {
 
   passthru.tests.pytest = pysmi.overridePythonAttrs { doCheck = true; };
 
-  meta = with lib; {
+  meta = {
     description = "SNMP MIB parser";
     homepage = "https://github.com/lextudio/pysmi";
-    changelog = "https://github.com/lextudio/pysmi/blob/v${version}/CHANGES.rst";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/lextudio/pysmi/blob/${finalAttrs.src.tag}/CHANGES.rst";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

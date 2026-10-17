@@ -1,4 +1,5 @@
-{ lib,
+{
+  lib,
   buildGoModule,
   fetchFromGitHub,
   testers,
@@ -7,26 +8,26 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "myks";
-  version = "4.3.0";
+  version = "5.14.0";
 
   src = fetchFromGitHub {
     owner = "mykso";
     repo = "myks";
-    tag = "v${version}";
-    hash = "sha256-r8OT5cbHicJVAVIJ9cfDHPLcJrZGPVYdZ42Sbvu8Jvc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mUcA6yQIQe9tkJRBcyzkfVpGFGJcZvsmHhVApY4+cKc=";
   };
 
-  vendorHash = "sha256-LmWuztR6X3x0aOYCqRv3aLiFEZQkaSnh3LT7IOu2Xa0=";
+  vendorHash = "sha256-2AHOnku2WPvJwotrp1fpA/g/YTH64cgxglsXBGStx28=";
 
   subPackages = ".";
 
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
-    "-X=main.commit=nixpkg-${version}"
+    "-X=main.version=${finalAttrs.version}"
+    "-X=main.commit=nixpkg-${finalAttrs.version}"
     "-X=main.date=1970-01-01"
   ];
 
@@ -36,23 +37,22 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion { package = myks; };
 
-  postInstall =
-    lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd myks \
-        --bash <($out/bin/myks completion bash) \
-        --zsh <($out/bin/myks completion zsh) \
-        --fish <($out/bin/myks completion fish)
-    '';
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd myks \
+      --bash <($out/bin/myks completion bash) \
+      --zsh <($out/bin/myks completion zsh) \
+      --fish <($out/bin/myks completion fish)
+  '';
 
-  meta = with lib; {
-    changelog = "https://github.com/mykso/myks/blob/v${version}/CHANGELOG.md";
+  meta = {
+    changelog = "https://github.com/mykso/myks/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Configuration framework for Kubernetes applications";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/mykso/myks";
     maintainers = [
-      maintainers.kbudde
-      maintainers.zebradil
+      lib.maintainers.kbudde
+      lib.maintainers.zebradil
     ];
     mainProgram = "myks";
   };
-}
+})

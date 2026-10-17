@@ -3,43 +3,41 @@
   buildPythonPackage,
   construct,
   fetchFromGitHub,
+  hatchling,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
-  six,
+  rich,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "procmon-parser";
-  version = "0.3.13";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "0.4.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eronnen";
     repo = "procmon-parser";
-    tag = "v${version}";
-    hash = "sha256-XkMf3MQK4WFRLl60XHDG/j2gRHAiz7XL9MmC6SRg9RE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-hM+/sdW/H8QVt5kckAP1M96nn6mJmV8oWVl9RsjDf88=";
   };
 
-  propagatedBuildInputs = [
-    construct
-    six
-  ];
+  build-system = [ hatchling ];
+
+  dependencies = [ construct ];
 
   nativeCheckInputs = [
     pytestCheckHook
     python-dateutil
+    rich
   ];
 
   pythonImportsCheck = [ "procmon_parser" ];
 
-  meta = with lib; {
+  meta = {
     description = "Parser to process monitor file formats";
     homepage = "https://github.com/eronnen/procmon-parser/";
-    changelog = "https://github.com/eronnen/procmon-parser/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/eronnen/procmon-parser/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

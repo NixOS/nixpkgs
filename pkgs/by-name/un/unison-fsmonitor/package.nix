@@ -6,15 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "unison-fsmonitor";
-  version = "0.3.8";
+  version = "0.3.9";
 
   src = fetchFromGitHub {
     owner = "autozimu";
     repo = "unison-fsmonitor";
     rev = "v${version}";
-    hash = "sha256-1W05b9s0Pg2LzNu0mFo/JKpPw0QORqZkXhbbSuCZIUo=";
+    hash = "sha256-hMrfEKW4klzHF89UGI4NUwXE6/Yk/wsUXUxe7ZPy/b8=";
   };
-  cargoHash = "sha256-i5FRTdilY1T25KefZjVS2aVQjfH6KrvO0c4Wwes6zYQ=";
+
+  cargoHash = "sha256-N3l18MM5DqgDKzl6qAXUibaHgQKvAQFvZuuzgb3eAPE=";
 
   checkFlags = [
     # accesses /usr/bin/env

@@ -7,7 +7,7 @@
   nixosTests,
 }:
 
-bundlerApp rec {
+bundlerApp {
   pname = "gollum";
   exes = [ "gollum" ];
 
@@ -19,18 +19,18 @@ bundlerApp rec {
   passthru.updateScript = bundlerUpdateScript "gollum";
   passthru.tests.gollum = nixosTests.gollum;
 
-  meta = with lib; {
+  meta = {
     description = "Simple, Git-powered wiki with a sweet API and local frontend";
     homepage = "https://github.com/gollum/gollum";
     changelog = "https://github.com/gollum/gollum/blob/HEAD/HISTORY.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       erictapen
       jgillich
       nicknovitski
       bbenno
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "gollum";
   };
 }

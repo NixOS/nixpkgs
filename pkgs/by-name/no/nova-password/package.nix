@@ -4,18 +4,18 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nova-password";
-  version = "0.5.8";
+  version = "0.5.11";
 
   src = fetchFromGitHub {
     owner = "sapcc";
     repo = "nova-password";
-    tag = "v${version}";
-    hash = "sha256-+qFbBjjbp1Nazpo21oOytvEPzn6Nmc4Cr8du045Ab/E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qWpZChgND4M4x1L0/38DSeJyJ0jKkDttzfWzAukROgo=";
   };
 
-  vendorHash = "sha256-tRBWniPM/IPR/JKi7R46tnx9rgyCb5hOkOR1oy7iVcc=";
+  vendorHash = "sha256-s0Abw8lCL3hzil+m/K6CZqVNycnP669Uhv4l4nkMSfc=";
 
   meta = {
     description = "Decrypt the admin password generated for the VM in OpenStack";
@@ -25,4 +25,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ vinetos ];
     platforms = lib.platforms.all;
   };
-}
+})

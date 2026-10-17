@@ -4,10 +4,10 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "protocol";
-  version = "unstable-2019-03-28";
-  format = "setuptools";
+  version = "0-unstable-2019-03-28";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "luismartingarcia";
@@ -18,14 +18,16 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "scripts=['protocol', 'constants.py', 'specs.py']" "scripts=['protocol'], py_modules=['constants', 'specs']"
+      --replace-fail "scripts=['protocol', 'constants.py', 'specs.py']" "scripts=['protocol'], py_modules=['constants', 'specs']"
   '';
 
-  meta = with lib; {
+  build-system = with python3.pkgs; [ setuptools ];
+
+  meta = {
     description = "ASCII Header Generator for Network Protocols";
     homepage = "https://github.com/luismartingarcia/protocol";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ teto ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ teto ];
     mainProgram = "protocol";
   };
 }

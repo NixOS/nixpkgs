@@ -1,9 +1,10 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  autoreconfHook,
+  fetchFromGitHub,
   makeWrapper,
-  gtk2,
+  gtk3,
   libcddb,
   intltool,
   pkg-config,
@@ -15,54 +16,60 @@
   flacSupport ? true,
   flac,
   opusSupport ? false,
-  opusTools,
+  opus-tools,
   wavpackSupport ? false,
   wavpack,
   #, musepackSupport ? false, TODO: mpcenc
   monkeysAudioSupport ? false,
-  monkeysAudio,
-#, aacSupport ? false, TODO: neroAacEnc
+  monkeys-audio,
+  #, aacSupport ? false, TODO: neroAacEnc
 }:
 
-stdenv.mkDerivation rec {
-  version = "3.0.1";
+let
+  runtimeDeps =
+    lib.optional mp3Support lame
+    ++ lib.optional oggSupport vorbis-tools
+    ++ lib.optional flacSupport flac
+    ++ lib.optional opusSupport opus-tools
+    ++ lib.optional wavpackSupport wavpack
+    ++ lib.optional monkeysAudioSupport monkeys-audio
+    ++ [ cdparanoia ];
+in
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "asunder";
-  src = fetchurl {
-    url = "http://littlesvr.ca/asunder/releases/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-iGji4bl7ZofIAOf2EiYqMWu4V+3TmIN2jOYottJTN2s=";
+  version = "3.1.0-unstable-2025-03-24";
+
+  src = fetchFromGitHub {
+    owner = "rizalmart";
+    repo = "asunder-gtk3";
+    rev = "e3676704f7c7912e61ad7d78fe19015c102a27e1";
+    hash = "sha256-bJVrSbjOUkmrF76e6euM5VPwbvvRrA5ZLPzZGjEep98=";
   };
 
   nativeBuildInputs = [
+    autoreconfHook
     intltool
     makeWrapper
     pkg-config
   ];
   buildInputs = [
-    gtk2
+    gtk3
     libcddb
   ];
-
-  runtimeDeps =
-    lib.optional mp3Support lame
-    ++ lib.optional oggSupport vorbis-tools
-    ++ lib.optional flacSupport flac
-    ++ lib.optional opusSupport opusTools
-    ++ lib.optional wavpackSupport wavpack
-    ++ lib.optional monkeysAudioSupport monkeysAudio
-    ++ [ cdparanoia ];
 
   postInstall = ''
     wrapProgram "$out/bin/asunder" \
       --prefix PATH : "${lib.makeBinPath runtimeDeps}"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Graphical Audio CD ripper and encoder for Linux";
     mainProgram = "asunder";
-    homepage = "http://littlesvr.ca/asunder/index.php";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ mudri ];
-    platforms = platforms.linux;
+    homepage = "https://github.com/rizalmart/asunder-gtk3";
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ mudri ];
+    platforms = lib.platforms.linux;
 
     longDescription = ''
       Asunder is a graphical Audio CD ripper and encoder for Linux. You can use
@@ -70,4 +77,4 @@ stdenv.mkDerivation rec {
       WavPack, Musepack, AAC, and Monkey's Audio files.
     '';
   };
-}
+})

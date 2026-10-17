@@ -5,24 +5,20 @@
   autoreconfHook,
   pkg-config,
   libmediainfo,
-  wxGTK32,
+  wxwidgets_3_2,
   desktop-file-utils,
-  libSM,
+  libsm,
   imagemagick,
-  darwin,
   wrapGAppsHook3,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) Cocoa;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mediainfo-gui";
-  version = "24.06";
+  version = "26.05";
 
   src = fetchurl {
     url = "https://mediaarea.net/download/source/mediainfo/${finalAttrs.version}/mediainfo_${finalAttrs.version}.tar.xz";
-    hash = "sha256-MvSoKjHjhuF3/fbkwjcFPkdbUBCJJpqyxylFKgkxNSA=";
+    hash = "sha256-+FIJP5BQAi1plgbuq7OLJNpVI9AhL6tk3E5NPka1beE=";
   };
 
   nativeBuildInputs = [
@@ -33,11 +29,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libmediainfo
-    wxGTK32
+    wxwidgets_3_2
     desktop-file-utils
-    libSM
+    libsm
     imagemagick
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
+  ];
 
   sourceRoot = "MediaInfo/Project/GNU/GUI";
 

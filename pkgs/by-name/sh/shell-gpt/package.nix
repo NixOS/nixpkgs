@@ -4,33 +4,33 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "shell-gpt";
-  version = "1.4.4";
+  version = "1.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "TheR1D";
     repo = "shell_gpt";
-    tag = version;
-    hash = "sha256-4/5CLzIq+RXVTJk4chrd65GeazRp8VFKdOMt3fT+mbI=";
+    tag = finalAttrs.version;
+    hash = "sha256-ZfccaWu/MEY+U+Q8W5N/jcpx7Mv9gRytxjX5qGkMWWk=";
   };
 
   pythonRelaxDeps = [
-    "requests"
     "rich"
     "distro"
     "typer"
-    "instructor"
+    "openai"
+    "prompt-toolkit"
   ];
 
   build-system = with python3.pkgs; [ hatchling ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    click
+  dependencies = with python3.pkgs; [
     distro
-    instructor
+    litellm
     openai
+    prompt-toolkit
     rich
     typer
   ];
@@ -38,12 +38,15 @@ python3.pkgs.buildPythonApplication rec {
   # Tests want to read the OpenAI API key from stdin
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Access ChatGPT from your terminal";
     homepage = "https://github.com/TheR1D/shell_gpt";
-    changelog = "https://github.com/TheR1D/shell_gpt/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mglolenstine ];
+    changelog = "https://github.com/TheR1D/shell_gpt/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      SohamG
+      mio
+    ];
     mainProgram = "sgpt";
   };
-}
+})

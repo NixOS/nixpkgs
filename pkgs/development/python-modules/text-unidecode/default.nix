@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bad6603bb14d279193107714b288be206cac565dfa49aa5b105294dd5c4aab93";
+    hash = "sha256-utZgO7FNJ5GTEHcUsoi+IGysVl36SapbEFKU3VxKq5M=";
   };
 
   nativeCheckInputs = [ pytest ];
@@ -21,9 +21,9 @@ buildPythonPackage rec {
     py.test
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Most basic Text::Unidecode port";
     homepage = "https://github.com/kmike/text-unidecode";
-    license = licenses.artistic1;
+    license = lib.licenses.artistic1;
   };
 }

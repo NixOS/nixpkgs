@@ -13,9 +13,9 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "jankatins";
-    repo = pname;
+    repo = "pytest-error-for-skips";
     rev = version;
-    sha256 = "04i4jd3bg4lgn2jfh0a0dzg3ml9b2bjv2ndia6b64w96r3r4p3qr";
+    hash = "sha256-GY9L8sgmcWKWUbFZseUSK9E63m9AAeiksI+St0aTJBI=";
   };
 
   buildInputs = [ pytest ];
@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_error_for_skips" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin to treat skipped tests a test failures";
     homepage = "https://github.com/jankatins/pytest-error-for-skips";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

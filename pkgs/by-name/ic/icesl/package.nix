@@ -3,16 +3,16 @@
   lib,
   fetchzip,
   libglut,
-  libXmu,
-  libXi,
-  libX11,
-  libICE,
+  libxmu,
+  libxi,
+  libx11,
+  libice,
   libGLU,
   libGL,
-  libSM,
-  libXext,
+  libsm,
+  libxext,
   glibc,
-  lua,
+  lua5_2_compat,
   luabind,
   glfw,
   libgccjit,
@@ -20,16 +20,17 @@
   makeWrapper,
 }:
 let
+  lua = lua5_2_compat;
   lpath = lib.makeLibraryPath [
-    libXmu
-    libXi
-    libX11
+    libxmu
+    libxi
+    libx11
     libglut
-    libICE
+    libice
     libGLU
     libGL
-    libSM
-    libXext
+    libsm
+    libxext
     glibc
     lua
     glfw
@@ -73,15 +74,15 @@ stdenv.mkDerivation rec {
     makeWrapper $out/oldbin/IceSL-slicer $out/bin/icesl --prefix PATH : ${dialog}/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GPU-accelerated procedural modeler and slicer for 3D printing";
     homepage = "https://icesl.loria.fr/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.inria-icesl;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.inria-icesl;
     platforms = [
       "i686-linux"
       "x86_64-linux"
     ];
-    maintainers = with maintainers; [ mgttlinger ];
+    maintainers = with lib.maintainers; [ mgttlinger ];
   };
 }

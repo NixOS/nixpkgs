@@ -9,41 +9,46 @@
   cargo,
   rustc,
 
-  # buildInputs
-  libiconv,
-
   # dependencies
+  arro3-core,
   arviz,
+  obstore,
   pandas,
+  platformdirs,
   pyarrow,
   xarray,
+  zarr,
 
   # tests
   # bridgestan, (not packaged)
+  equinox,
+  flowjax,
   jax,
   jaxlib,
   numba,
+  pytest-timeout,
   pymc,
   pytestCheckHook,
   setuptools,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nutpie";
-  version = "0.13.2";
+  version = "0.16.11";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "nutpie";
-    tag = "v${version}";
-    hash = "sha256-XyUMCnHm5V7oFaf3W+nGpcHfq1ZFppeGMIMCU5OB87s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ZakNyVW06QONdBSZFonOc585ZPLHsIjbFlBnX+Kg2kc=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-9lM1S42Bmnlb0opstZN2aOKYhBnP87Frq+fQxk0ez+c=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-n61ZrJtJFQ0G/7X59pKI8QNnOZPvDWiPmGC3tW3NQkk=";
   };
 
   build-system = [
@@ -54,45 +59,48 @@ buildPythonPackage rec {
     rustc
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-  ];
-
   dependencies = [
+    arro3-core
     arviz
+    obstore
     pandas
     pyarrow
     xarray
+    zarr
   ];
 
   pythonImportsCheck = [ "nutpie" ];
 
   nativeCheckInputs = [
     # bridgestan
+    equinox
+    flowjax
     numba
     jax
     jaxlib
+    platformdirs
     pymc
+    pytest-timeout
     pytestCheckHook
     setuptools
+    writableTmpDirAsHomeHook
+  ];
+
+  disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # flaky (assert np.float64(0.0017554642626285276) > 0.01)
+    "test_normalizing_flow"
   ];
 
   disabledTestPaths = [
     # Require unpackaged bridgestan
     "tests/test_stan.py"
-
-    # KeyError: "duplicate registration for <class 'numba.core.types.misc.SliceType'>"
-    "tests/test_pymc.py"
   ];
-
-  # Currently, no test are working...
-  doCheck = false;
 
   meta = {
     description = "Python wrapper for nuts-rs";
     homepage = "https://github.com/pymc-devs/nutpie";
-    changelog = "https://github.com/pymc-devs/nutpie/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/pymc-devs/nutpie/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

@@ -5,28 +5,31 @@
   git,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "git-delete-merged-branches";
-  version = "7.4.2";
+  version = "7.6.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hartwork";
-    repo = pname;
-    tag = version;
-    sha256 = "sha256-l+R4gINZJ8bJdhcK+U9jOuIoAm2/bd5P+w9AbwPZMrk=";
+    repo = "git-delete-merged-branches";
+    tag = finalAttrs.version;
+    sha256 = "sha256-j2m1Xk/PacXlFRt5ELdEUCR8aHtqqMWFhbxHVIwYZo0=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     colorama
     prompt-toolkit
   ];
 
   nativeCheckInputs = [ git ] ++ (with python3Packages; [ parameterized ]);
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool to delete merged Git branches";
-    homepage = "https://pypi.org/project/git-delete-merged-branches/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    homepage = "https://github.com/hartwork/git-delete-merged-branches/";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
-}
+})

@@ -1,5 +1,6 @@
 {
   qtModule,
+  fetchzip,
   qtdeclarative,
   qtwebchannel,
   qtpositioning,
@@ -8,26 +9,31 @@
   bison,
   coreutils,
   flex,
-  git,
   gperf,
   ninja,
   pkg-config,
   python3,
   which,
   nodejs,
-  xorg,
-  libXcursor,
-  libXScrnSaver,
-  libXrandr,
-  libXtst,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  xrandr,
+  libxkbfile,
+  libpciaccess,
+  libxcursor,
+  libxscrnsaver,
+  libxrandr,
+  libxtst,
   libxshmfence,
-  libXi,
+  libxi,
   cups,
   fontconfig,
   freetype,
   harfbuzz,
   icu,
   dbus,
+  expat,
   libdrm,
   zlib,
   minizip,
@@ -38,7 +44,6 @@
   libopus,
   jsoncpp,
   protobuf,
-  libvpx,
   srtp,
   snappy,
   nss,
@@ -48,7 +53,6 @@
   pulseaudio,
   libcap,
   pciutils,
-  systemd,
   pipewire,
   gn,
   ffmpeg,
@@ -60,35 +64,40 @@
   lcms2,
   libkrb5,
   libgbm,
+  libva,
   enableProprietaryCodecs ? true,
   # darwin
   bootstrap_cmds,
   cctools,
   xcbuild,
-  fetchpatch,
 }:
 
 qtModule {
   pname = "qtwebengine";
-  nativeBuildInputs =
-    [
-      bison
-      coreutils
-      flex
-      git
-      gperf
-      ninja
-      pkg-config
-      (python3.withPackages (ps: with ps; [ html5lib ]))
-      which
-      gn
-      nodejs
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      bootstrap_cmds
-      cctools
-      xcbuild
-    ];
+
+  version = "6.140.0-rc";
+  src = fetchzip {
+    url = "https://download.qt.io/development_releases/qtwebengine/6.140.0-rc/qtwebengine-everywhere-src-6.140.0-rc.tar.xz";
+    hash = "sha256-ij7oWNkbzf98FwKjhub3lyvDb32G4qFtUiYJvdlw01Y=";
+  };
+
+  nativeBuildInputs = [
+    bison
+    coreutils
+    flex
+    gperf
+    ninja
+    pkg-config
+    (python3.withPackages (ps: with ps; [ html5lib ]))
+    which
+    gn
+    nodejs
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    bootstrap_cmds
+    cctools
+    xcbuild
+  ];
   doCheck = true;
   outputs = [
     "out"
@@ -112,184 +121,166 @@ qtModule {
     # Override locales install path so they go to QtWebEngine's $out
     ./locales-path.patch
 
-    # Fix build of vendored xnnpack on aarch64/gcc14
-    # FIXME: remove when upstream updates
-    (fetchpatch {
-      url = "https://github.com/google/XNNPACK/commit/1b11a8b0620afe8c047304273674c4c57c289755.patch";
-      stripLen = 1;
-      extraPrefix = "src/3rdparty/chromium/third_party/xnnpack/src/";
-      hash = "sha256-GUESVNR88I1K2V5xr0e09ec4j2eselMhNN06+PCcINM=";
-    })
+    # Reproducibility QTBUG-136068
+    ./gn-object-sorted.patch
+  ]
+  # Remove once merged with upstream
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    ./clang-base-path-from-cmake-compiler.patch
 
-    # The latest version of Clang changed what macros it predefines on Apple
-    # targets, causing errors about predefined macros in zlib.
-    (fetchpatch {
-      url = "https://github.com/chromium/chromium/commit/2f39ac8d0a414dd65c0e1d5aae38c8f97aa06ae9.patch";
-      stripLen = 1;
-      extraPrefix = "src/3rdparty/chromium/";
-      hash = "sha256-07hWANY9JGFmqvjdOD6SFmVI6sQRRyvW+7wxGZF5GVo=";
-    })
-
-    # The latest version of Clang changed what macros it predefines on Apple
-    # targets, causing errors about predefined macros in libpng.
-    (fetchpatch {
-      url = "https://github.com/chromium/chromium/commit/66defc14abe47c0494da9faebebfa0a5b6efcf38.patch";
-      stripLen = 1;
-      extraPrefix = "src/3rdparty/chromium/";
-      hash = "sha256-FWIi1VsBZFqOoPIkPxPkcfexPkx1458rB5ldtA7T2uE=";
-    })
+    ./lflags-remove-strip-darwin-isysroot.patch
   ];
 
-  postPatch =
-    ''
-      # Patch Chromium build tools
-      (
-        cd src/3rdparty/chromium;
+  postPatch = ''
+    # Patch Chromium build tools
+    (
+      cd src/3rdparty/chromium;
 
-        # Manually fix unsupported shebangs
-        substituteInPlace third_party/harfbuzz-ng/src/src/update-unicode-tables.make \
-          --replace "/usr/bin/env -S make -f" "/usr/bin/make -f" || true
-        substituteInPlace third_party/webgpu-cts/src/tools/run_deno \
-          --replace "/usr/bin/env -S deno" "/usr/bin/deno" || true
-        patchShebangs .
-      )
+      # Manually fix unsupported shebangs
+      substituteInPlace third_party/harfbuzz-ng/src/src/update-unicode-tables.make \
+        --replace "/usr/bin/env -S make -f" "/usr/bin/make -f" || true
+      substituteInPlace third_party/webgpu-cts/src/tools/run_deno \
+        --replace "/usr/bin/env -S deno" "/usr/bin/deno" || true
+      patchShebangs .
+    )
 
-      substituteInPlace cmake/Functions.cmake \
-        --replace "/bin/bash" "${buildPackages.bash}/bin/bash"
+    substituteInPlace cmake/Functions.cmake \
+      --replace "/bin/bash" "${buildPackages.bash}/bin/bash"
 
-      # Patch library paths in sources
-      substituteInPlace src/core/web_engine_library_info.cpp \
-        --replace "QLibraryInfo::path(QLibraryInfo::DataPath)" "\"$out\"" \
-        --replace "QLibraryInfo::path(QLibraryInfo::TranslationsPath)" "\"$out/translations\"" \
-        --replace "QLibraryInfo::path(QLibraryInfo::LibraryExecutablesPath)" "\"$out/libexec\""
+    # Patch library paths in sources
+    substituteInPlace src/core/web_engine_library_info.cpp \
+      --replace "QLibraryInfo::path(QLibraryInfo::DataPath)" "\"$out\"" \
+      --replace "QLibraryInfo::path(QLibraryInfo::TranslationsPath)" "\"$out/translations\"" \
+      --replace "QLibraryInfo::path(QLibraryInfo::LibraryExecutablesPath)" "\"$out/libexec\""
 
-      substituteInPlace configure.cmake src/gn/CMakeLists.txt \
-        --replace "AppleClang" "Clang"
+    substituteInPlace configure.cmake src/gn/CMakeLists.txt \
+      --replace "AppleClang" "Clang"
 
-      # Disable metal shader compilation, Xcode only
-      substituteInPlace src/3rdparty/chromium/third_party/angle/src/libANGLE/renderer/metal/metal_backend.gni \
-        --replace-fail 'angle_has_build && !is_ios && target_os == host_os' "false"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${lib.getLib systemd}/lib/\1!' \
-        src/3rdparty/chromium/device/udev_linux/udev?_loader.cc
+    # Disable metal shader compilation, Xcode only
+    substituteInPlace src/3rdparty/chromium/third_party/angle/src/libANGLE/renderer/metal/metal_backend.gni \
+      --replace-fail 'angle_has_build && !is_ios && target_os == host_os' "false"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace cmake/QtToolchainHelpers.cmake \
+      --replace-fail "/usr/bin/xcrun" "${xcbuild}/bin/xcrun"
 
-      sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
-        src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace cmake/Functions.cmake \
-        --replace "/usr/bin/xcrun" "${xcbuild}/bin/xcrun"
-    '';
+    # xcbuild's xcrun doesn't implement the real (proprietary) Metal shader
+    # compiler, so this check always fails. The one build step that actually
+    # invokes it (ANGLE's internal shader precompilation) is already disabled
+    # below, so it's safe to report the toolchain as present.
+    substituteInPlace cmake/QtConfigureHelpers.cmake \
+      --replace-fail 'message(STATUS "Checking for Metal Toolchain")' 'message(STATUS "Checking for Metal Toolchain")
+    set(TEST_metal_toolchain TRUE PARENT_SCOPE)
+    return()'
+  '';
 
-  cmakeFlags =
-    [
-      "-DQT_FEATURE_qtpdf_build=ON"
-      "-DQT_FEATURE_qtpdf_widgets_build=ON"
-      "-DQT_FEATURE_qtpdf_quick_build=ON"
-      "-DQT_FEATURE_pdf_v8=ON"
-      "-DQT_FEATURE_pdf_xfa=ON"
-      "-DQT_FEATURE_pdf_xfa_bmp=ON"
-      "-DQT_FEATURE_pdf_xfa_gif=ON"
-      "-DQT_FEATURE_pdf_xfa_png=ON"
-      "-DQT_FEATURE_pdf_xfa_tiff=ON"
-      "-DQT_FEATURE_webengine_system_libevent=ON"
-      "-DQT_FEATURE_webengine_system_ffmpeg=ON"
-      # android only. https://bugreports.qt.io/browse/QTBUG-100293
-      # "-DQT_FEATURE_webengine_native_spellchecker=ON"
-      "-DQT_FEATURE_webengine_sanitizer=ON"
-      "-DQT_FEATURE_webengine_kerberos=ON"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "-DQT_FEATURE_webengine_system_libxml=ON"
-      "-DQT_FEATURE_webengine_webrtc_pipewire=ON"
+  cmakeFlags = [
+    "-DQT_FEATURE_qtpdf_build=ON"
+    "-DQT_FEATURE_qtpdf_widgets_build=ON"
+    "-DQT_FEATURE_qtpdf_quick_build=ON"
+    "-DQT_FEATURE_pdf_v8=ON"
+    "-DQT_FEATURE_pdf_xfa=ON"
+    "-DQT_FEATURE_pdf_xfa_bmp=ON"
+    "-DQT_FEATURE_pdf_xfa_gif=ON"
+    "-DQT_FEATURE_pdf_xfa_png=ON"
+    "-DQT_FEATURE_pdf_xfa_tiff=ON"
+    "-DQT_FEATURE_webengine_system_libevent=ON"
+    "-DQT_FEATURE_webengine_system_ffmpeg=ON"
+    # android only. https://bugreports.qt.io/browse/QTBUG-100293
+    # "-DQT_FEATURE_webengine_native_spellchecker=ON"
+    "-DQT_FEATURE_webengine_kerberos=ON"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "-DQT_FEATURE_webengine_system_libxml=ON"
+    "-DQT_FEATURE_webengine_webrtc_pipewire=ON"
 
-      # Appears not to work on some platforms
-      # https://github.com/Homebrew/homebrew-core/issues/104008
-      "-DQT_FEATURE_webengine_system_icu=ON"
-    ]
-    ++ lib.optionals enableProprietaryCodecs [
-      "-DQT_FEATURE_webengine_proprietary_codecs=ON"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-DCMAKE_OSX_DEPLOYMENT_TARGET=11.0" # Per Qt 6’s deployment target (why doesn’t the hook work?)
-    ];
+    # Appears not to work on some platforms
+    # https://github.com/Homebrew/homebrew-core/issues/104008
+    "-DQT_FEATURE_webengine_system_icu=ON"
+  ]
+  ++ lib.optionals enableProprietaryCodecs [
+    "-DQT_FEATURE_webengine_proprietary_codecs=ON"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-DCMAKE_OSX_DEPLOYMENT_TARGET=12.0" # Per Qt 6’s deployment target (why doesn’t the hook work?)
+    "-DCMAKE_CXX_COMPILER=${lib.getExe' stdenv.cc "clang++"}"
+  ];
 
-  propagatedBuildInputs =
-    [
-      qtdeclarative
-      qtwebchannel
-      qtwebsockets
-      qtpositioning
+  propagatedBuildInputs = [
+    qtdeclarative
+    qtwebchannel
+    qtwebsockets
+    qtpositioning
 
-      # Image formats
-      libjpeg
-      libpng
-      libtiff
-      libwebp
+    # Image formats
+    libjpeg
+    libpng
+    libtiff
+    libwebp
 
-      # Video formats
-      srtp
-      libvpx
+    # Video formats
+    srtp
 
-      # Audio formats
-      libopus
+    # Audio formats
+    libopus
 
-      # Text rendering
-      harfbuzz
+    # Text rendering
+    harfbuzz
 
-      openssl
-      glib
-      libxslt
-      lcms2
+    openssl
+    glib
+    libxslt
+    lcms2
 
-      libevent
-      ffmpeg
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      dbus
-      zlib
-      minizip
-      snappy
-      nss
-      protobuf
-      jsoncpp
+    libevent
+    ffmpeg
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    dbus
+    expat
+    zlib
+    minizip
+    snappy
+    nss
+    protobuf
+    jsoncpp
 
-      icu
-      libxml2
+    icu
+    libxml2
 
-      # Audio formats
-      alsa-lib
-      pulseaudio
+    # Audio formats
+    alsa-lib
+    pulseaudio
 
-      # Text rendering
-      fontconfig
-      freetype
+    # Text rendering
+    fontconfig
+    freetype
 
-      libcap
-      pciutils
+    libcap
+    pciutils
 
-      # X11 libs
-      xorg.xrandr
-      libXScrnSaver
-      libXcursor
-      libXrandr
-      xorg.libpciaccess
-      libXtst
-      xorg.libXcomposite
-      xorg.libXdamage
-      libdrm
-      xorg.libxkbfile
-      libxshmfence
-      libXi
-      xorg.libXext
+    # X11 libs
+    xrandr
+    libxscrnsaver
+    libxcursor
+    libxrandr
+    libpciaccess
+    libxtst
+    libxcomposite
+    libxdamage
+    libdrm
+    libxkbfile
+    libxshmfence
+    libxi
+    libxext
 
-      # Pipewire
-      pipewire
+    # Pipewire
+    pipewire
 
-      libkrb5
-      libgbm
-    ];
+    libkrb5
+    libgbm
+    libva
+  ];
 
   buildInputs = [
     cups
@@ -304,10 +295,19 @@ qtModule {
   # Debug info is too big to link with LTO.
   separateDebugInfo = false;
 
-  meta = with lib; {
+  # Add dlopen-only dependencies after shrink-rpath, which would remove them.
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    patchelf --add-rpath "${
+      lib.makeLibraryPath [
+        pipewire
+        pciutils
+      ]
+    }" "$out/lib/libQt6WebEngineCore.so"
+  '';
+
+  meta = {
     description = "Web engine based on the Chromium web browser";
     platforms = [
-      "x86_64-darwin"
       "aarch64-darwin"
       "aarch64-linux"
       "armv7a-linux"

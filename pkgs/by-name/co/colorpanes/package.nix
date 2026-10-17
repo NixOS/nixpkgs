@@ -1,31 +1,30 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "colorpanes";
   version = "3.0.1";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "annaaurora";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "qaOH+LXNDq+utwyI1yzHWNt25AvdAXCTAziGV9ElroU=";
+    repo = "colorpanes";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-qaOH+LXNDq+utwyI1yzHWNt25AvdAXCTAziGV9ElroU=";
   };
 
-  cargoHash = "sha256-eJne4OmV4xHxntTb8HE+2ghX1hZLE3WQ3QqsjVm9E4M=";
+  cargoHash = "sha256-+ltcTuLksNwe7KIt8apYNZkMoA2w4EObG5dhJliRb6Y=";
 
   postInstall = ''
     ln -s $out/bin/colp $out/bin/colorpanes
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Panes in the 8 bright terminal colors with shadows of the respective darker color";
     homepage = "https://codeberg.org/annaaurora/colorpanes";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ annaaurora ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ annaaurora ];
   };
-}
+})

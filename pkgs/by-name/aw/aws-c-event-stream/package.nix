@@ -12,16 +12,16 @@
   libexecinfo,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aws-c-event-stream";
   # nixpkgs-update: no auto update
-  version = "0.5.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "awslabs";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-lg1qS/u5Fi8nt/tv2ekd8dgQ7rlrF3DrRxqidAoEywY=";
+    repo = "aws-c-event-stream";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-J8bcDIK6rEM2AyhTiRvPA2ikbv8gfDxEY8izuKLBNac=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -32,7 +32,8 @@ stdenv.mkDerivation rec {
     aws-c-io
     aws-checksums
     s2n-tls
-  ] ++ lib.optional stdenv.hostPlatform.isMusl libexecinfo;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isMusl libexecinfo;
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS:BOOL=ON"
@@ -42,11 +43,11 @@ stdenv.mkDerivation rec {
     inherit nix;
   };
 
-  meta = with lib; {
+  meta = {
     description = "C99 implementation of the vnd.amazon.eventstream content-type";
     homepage = "https://github.com/awslabs/aws-c-event-stream";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ orivej ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
-}
+})

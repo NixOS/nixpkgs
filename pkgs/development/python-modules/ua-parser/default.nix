@@ -6,14 +6,13 @@
   pyyaml,
   pytestCheckHook,
   setuptools,
-  setuptools-scm,
   ua-parser-builtins,
   ua-parser-rs,
 }:
 
 buildPythonPackage rec {
   pname = "ua-parser";
-  version = "1.0.0";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -21,13 +20,12 @@ buildPythonPackage rec {
     repo = "uap-python";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-byKtxmuYIsEYyuUmfnbLhfe7EKj0k7QGkK5HewiTiy4=";
+    hash = "sha256-KKQlM1AonRqanhWlWIqPMoD+AzDCdwAzBsAbhqpZ4cs=";
   };
 
   build-system = [
     pyyaml
     setuptools
-    setuptools-scm
   ];
 
   dependencies = [

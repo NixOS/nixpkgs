@@ -9,14 +9,14 @@
   pygobject3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pygtkspellcheck";
-  version = "5.0.3";
-  format = "pyproject";
+  version = "5.0.4";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-NzaxRXU3BTIcRO9nowEak+Vk+XYw8nBCsTl//e/qg6w=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-ppPe/t4Eg2C2th596E9PydagQhttkIkirQUTz9YoDOM=";
   };
 
   nativeBuildInputs = [
@@ -34,10 +34,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gtkspellcheck" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/koehlma/pygtkspellcheck";
     description = "Python spell-checking library for GtkTextViews based on Enchant";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
-}
+})

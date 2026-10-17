@@ -7,15 +7,17 @@
 
 let
   pname = "wootility";
-  version = "4.7.3";
+  version = "5.4.2";
   src = fetchurl {
-    url = "https://s3.eu-west-2.amazonaws.com/wooting-update/wootility-lekker-linux-latest/wootility-lekker-${version}.AppImage";
-    sha256 = "sha256-5S4Yz2VymKfT1uBXYufb6MWx1aMbGn4ufT8RITJtuPc=";
+    url = "https://wootility-updates.ams3.cdn.digitaloceanspaces.com/wootility-linux/Wootility-${version}.AppImage";
+    hash = "sha512-3n73cnXW81w+7ta6+nnPymEriU9CpfKwX8DFNuxuNMMEBCyL6YgpQmxa0qKY6hr9WiiHQyuqvrSe+bXURwv31w==";
   };
 in
 
 appimageTools.wrapType2 {
   inherit pname version src;
+
+  passthru.updateScript = ./update.sh;
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -27,11 +29,10 @@ appimageTools.wrapType2 {
       wrapProgram $out/bin/wootility \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
-      install -Dm444 ${contents}/wootility-lekker.desktop -t $out/share/applications
-      install -Dm444 ${contents}/wootility-lekker.png -t $out/share/pixmaps
-      substituteInPlace $out/share/applications/wootility-lekker.desktop \
-        --replace-fail 'Exec=AppRun' 'Exec=wootility' \
-        --replace-warn 'Name=wootility-lekker' 'Name=Wootility'
+      install -Dm444 ${contents}/wootility.desktop -t $out/share/applications
+      install -Dm444 ${contents}/wootility.png -t $out/share/icons
+      substituteInPlace $out/share/applications/wootility.desktop \
+        --replace-fail 'Exec=AppRun --no-sandbox' 'Exec=wootility'
     '';
 
   profile = ''
@@ -39,9 +40,9 @@ appimageTools.wrapType2 {
   '';
 
   extraPkgs =
-    pkgs: with pkgs; ([
-      xorg.libxkbfile
-    ]);
+    pkgs: with pkgs; [
+      libxkbfile
+    ];
 
   meta = {
     homepage = "https://wooting.io/wootility";
@@ -49,9 +50,9 @@ appimageTools.wrapType2 {
     platforms = lib.platforms.linux;
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
-      davidtwco
       sodiboo
       returntoreality
+      FlorianFranzen
     ];
     mainProgram = "wootility";
   };

@@ -1,25 +1,31 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, unstableGitUpdater
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  installAgentSkills,
+  unstableGitUpdater,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "nu_scripts";
-  version = "0-unstable-2025-01-06";
+  version = "0-unstable-2026-10-02";
 
   src = fetchFromGitHub {
     owner = "nushell";
-    repo = pname;
-    rev = "a9b829115ff3c77981616ae777379fc0bd4dc998";
-    hash = "sha256-fIayTOyJCqOkFUkmghBQJfCp8s8oNrdUi+/BuOjcbTU=";
+    repo = "nu_scripts";
+    rev = "3ffc5aa43194bb4d5295dec9fbf0a18b3a2dddfc";
+    hash = "sha256-/6nbTNfpkNRUJcXnQKw9yrm3UAvgfUoyKbNRUkQAfPY=";
   };
+
+  nativeBuildInputs = [ installAgentSkills ];
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/share/nu_scripts
     mv ./* $out/share/nu_scripts
+    rm -r $out/share/nu_scripts/themes/screenshots
+    rm -r $out/share/nu_scripts/skills/ # installAgentSkills installs these in the correct directory
 
     runHook postInstall
   '';
@@ -29,7 +35,7 @@ stdenvNoCC.mkDerivation rec {
   meta = {
     description = "Place to share Nushell scripts with each other";
     homepage = "https://github.com/nushell/nu_scripts";
-    license = lib.licenses.free;
+    license = lib.licenses.mit;
 
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.CardboardTurkey ];

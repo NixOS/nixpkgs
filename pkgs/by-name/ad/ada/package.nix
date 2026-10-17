@@ -3,26 +3,64 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  gbenchmark,
+  gtest,
+  simdjson,
+  simdutf,
+  testers,
+  validatePkgConfig,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ada";
-  version = "2.9.2";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "ada-url";
     repo = "ada";
-    rev = "v${version}";
-    hash = "sha256-VWFxupmgc+fq9aj/02uMEsiwhP+9PWMSleoIoyKVe3c=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TvjoLUKO2+YgS1mlyglLb+rBLTO/SWSBVA2S34Z6kMI=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  outputs = [
+    "out"
+    "dev"
+  ];
+
+  strictDeps = true;
+  nativeBuildInputs = [
+    cmake
+    validatePkgConfig
+  ];
+  buildInputs = [ simdutf ];
+
+  doCheck = true;
+  checkInputs = [
+    simdjson
+    gtest
+    gbenchmark
+  ];
 
   cmakeFlags = [
     # uses CPM that requires network access
     (lib.cmakeBool "ADA_TOOLS" false)
-    (lib.cmakeBool "ADA_TESTING" false)
+    (lib.cmakeBool "ADA_TESTING" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "ADA_USE_SIMDUTF" true)
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
+    (lib.cmakeBool "CPM_USE_LOCAL_PACKAGES" true)
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+  };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "WHATWG-compliant and fast URL parser written in modern C";
@@ -33,5 +71,6 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with lib.maintainers; [ nickcao ];
     platforms = lib.platforms.all;
+    pkgConfigModules = [ "ada" ];
   };
-}
+})

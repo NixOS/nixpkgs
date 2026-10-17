@@ -5,44 +5,41 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
-  pythonOlder,
+  unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "enturclient";
-  version = "0.2.4";
-  disabled = pythonOlder "3.8";
-
-  format = "pyproject";
+  version = "0.3.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hfurubotten";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-Y2sBPikCAxumylP1LUy8XgjBRCWaNryn5XHSrRjJIIo=";
+    repo = "enturclient";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-83ui1BYqiRr+IwaJeXNppMnOTQCF9uJD5Kus93CDsUA=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  pythonRelaxDeps = [ "async_timeout" ];
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     aiohttp
     async-timeout
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'async_timeout = "^3.0.1"' 'async_timeout = ">=3.0.1"'
-  '';
-
-  # Project has no tests
-  doCheck = false;
-
   pythonImportsCheck = [ "enturclient" ];
 
-  meta = with lib; {
+  nativeCheckInputs = [ unittestCheckHook ];
+
+  unittestFlagsArray = [ "tests/dto/" ];
+
+  meta = {
     description = "Python library for interacting with the Entur.org API";
     homepage = "https://github.com/hfurubotten/enturclient";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/hfurubotten/enturclient/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -6,18 +6,18 @@
   sqlite,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-docset";
   version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "Robzz";
-    repo = pname;
-    rev = "v${version}";
+    repo = "cargo-docset";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-o2CSQiU9fEoS3eRmwphtYGZTwn3mstRm2Tlvval83+U=";
   };
 
-  cargoHash = "sha256-YHrSvfHfQ7kbVeCOgggYf3E7gHq+RhVKZrzP8LqX5I0=";
+  cargoHash = "sha256-MHSvrZXh9RLuiLEc4IHPvtIKjdRjFhtmumPs4EuJtz0=";
 
   buildInputs = [ sqlite ];
 
@@ -25,15 +25,15 @@ rustPlatform.buildRustPackage rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Cargo subcommand to generate a Dash/Zeal docset for your Rust packages";
     mainProgram = "cargo-docset";
     homepage = "https://github.com/Robzz/cargo-docset";
-    changelog = "https://github.com/Robzz/cargo-docset/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/Robzz/cargo-docset/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       colinsane
       matthiasbeyer
     ];
   };
-}
+})

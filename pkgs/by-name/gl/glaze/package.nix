@@ -3,27 +3,43 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  enableAvx2 ? false,
+  openssl,
+  enableSIMD ? stdenv.hostPlatform.avx2Support,
+  enableSSL ? true,
+  enableInterop ? true,
 }:
 
-stdenv.mkDerivation (final: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "glaze";
-  version = "4.3.0";
+  version = "8.4.0";
 
   src = fetchFromGitHub {
     owner = "stephenberry";
     repo = "glaze";
-    rev = "v${final.version}";
-    hash = "sha256-iFFc2FjcvlQqvjXvFZ+J3RTEIritSM6AZXQlLE5YF9A=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-AFq2ctnmFyvkepGSuzYUEqyXhSnykhkkBPao+xVQVL4=";
   };
 
   nativeBuildInputs = [ cmake ];
-  cmakeFlags = [ (lib.cmakeBool "glaze_ENABLE_AVX2" enableAvx2) ];
+  propagatedBuildInputs = lib.optionals enableSSL [ openssl ];
 
-  meta = with lib; {
+  # https://github.com/stephenberry/glaze/blob/main/CMakeLists.txt
+  cmakeFlags = [
+    (lib.cmakeBool "glaze_DISABLE_SIMD_WHEN_SUPPORTED" (!enableSIMD))
+    (lib.cmakeBool "glaze_ENABLE_SSL" enableSSL)
+    (lib.cmakeBool "glaze_BUILD_INTEROP" enableInterop)
+    (lib.cmakeBool "glaze_ENABLE_FUZZING" (!stdenv.hostPlatform.isMusl))
+  ];
+
+  meta = {
+    homepage = "https://stephenberry.github.io/glaze/";
+    changelog = "https://github.com/stephenberry/glaze/releases/tag/v${finalAttrs.version}";
     description = "Extremely fast, in memory, JSON and interface library for modern C++";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ moni ];
-    license = licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
+      moni
+      miniharinn
+    ];
+    license = lib.licenses.mit;
   };
 })

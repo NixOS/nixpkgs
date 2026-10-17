@@ -3,21 +3,18 @@
   buildPythonPackage,
   distutils,
   fetchPypi,
-  pythonOlder,
   setuptools,
   six,
 }:
 
 buildPythonPackage rec {
   pname = "thrift";
-  version = "0.21.0";
+  version = "0.24.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Xm98UPk26/oj6SQimvyV6yGfjI5agyAt1KORJEgD5AI=";
+    hash = "sha256-nvYBxJ6YhHX/DnQdjhtF/uwjtIUU5SQ0HvwnQZHxeJw=";
   };
 
   build-system = [
@@ -32,10 +29,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "thrift" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for the Apache Thrift RPC system";
     homepage = "https://thrift.apache.org/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hbunke ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hbunke ];
   };
 }

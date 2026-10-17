@@ -1,29 +1,21 @@
 {
   buildPythonPackage,
-  docutils,
   sphinx,
-  stestr,
+  stestrCheckHook,
   stevedore,
 }:
 
 buildPythonPackage {
   pname = "stevedore-tests";
   inherit (stevedore) version src;
-  format = "other";
+  pyproject = false;
 
   dontBuild = true;
   dontInstall = true;
 
   nativeCheckInputs = [
-    docutils
     sphinx
-    stestr
+    stestrCheckHook
     stevedore
   ];
-
-  checkPhase = ''
-    runHook preCheck
-    stestr run
-    runHook postCheck
-  '';
 }

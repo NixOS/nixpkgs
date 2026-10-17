@@ -24,19 +24,18 @@ buildPythonPackage rec {
     owner = "umlaeute";
     repo = "pyftgl";
     tag = version;
-    sha256 = "sha256-mbzXpIPMNe6wfwaAAw/Ri8xaW6Z6kuNUhFFyzsiW7Is=";
+    hash = "sha256-mbzXpIPMNe6wfwaAAw/Ri8xaW6Z6kuNUhFFyzsiW7Is=";
   };
 
   build-system = [ setuptools ];
 
-  postPatch =
-    ''
-      substituteInPlace setup.py \
-        --replace-fail boost_python boost_python${pythonVersion}
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      export NIX_CFLAGS_COMPILE+=" -L$SDKROOT/System/Library/Frameworks/OpenGL.framework/Versions/Current/Libraries"
-    '';
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail boost_python boost_python${pythonVersion}
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export NIX_CFLAGS_COMPILE+=" -L$SDKROOT/System/Library/Frameworks/OpenGL.framework/Versions/Current/Libraries"
+  '';
 
   buildInputs = [
     boost
@@ -48,6 +47,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python bindings for FTGL (FreeType for OpenGL)";
+    homepage = "https://github.com/umlaeute/pyftgl";
     license = lib.licenses.gpl2Plus;
   };
 }

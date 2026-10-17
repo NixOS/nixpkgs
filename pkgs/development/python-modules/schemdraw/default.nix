@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   pyparsing,
@@ -11,20 +10,19 @@
   ziamath,
   pytestCheckHook,
   nbval,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "schemdraw";
-  version = "0.19";
+  version = "0.23";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "cdelker";
-    repo = pname;
-    rev = version;
-    hash = "sha256-vqEHcazE5DNHr0FceOWLqq+RZmMK5ovHDVjy/2wbTJU=";
+    repo = "schemdraw";
+    tag = version;
+    hash = "sha256-NAvJDrJKf4CYs9W4zdNAU8WnuXlCK6FU44+5flWzyAk=";
   };
 
   build-system = [ setuptools ];
@@ -47,6 +45,7 @@ buildPythonPackage rec {
     latex2mathml
     ziafont
     ziamath
+    writableTmpDirAsHomeHook
   ];
 
   # Strip out references to unfree fonts from the test suite
@@ -56,15 +55,15 @@ buildPythonPackage rec {
 
   preCheck = "rm test/test_pictorial.ipynb"; # Tries to download files
 
-  pytestFlagsArray = [ "--nbval-lax" ];
+  pytestFlags = [ "--nbval-lax" ];
 
   pythonImportsCheck = [ "schemdraw" ];
 
-  meta = with lib; {
+  meta = {
     description = "Package for producing high-quality electrical circuit schematic diagrams";
     homepage = "https://schemdraw.readthedocs.io/en/latest/";
     changelog = "https://schemdraw.readthedocs.io/en/latest/changes.html";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sfrijters ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sfrijters ];
   };
 }

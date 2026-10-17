@@ -7,7 +7,8 @@
 }:
 
 stdenv.mkDerivation {
-  name = "rpmextract";
+  pname = "rpmextract";
+  inherit (rpm) version;
 
   buildCommand = ''
     install -Dm755 $script $out/bin/rpmextract
@@ -22,11 +23,11 @@ stdenv.mkDerivation {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Script to extract RPM archives";
-    platforms = platforms.all;
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ abbradar ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl2Only;
+    maintainers = [ ];
     mainProgram = "rpmextract";
   };
 }

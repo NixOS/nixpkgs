@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch,
   buildDunePackage,
   base,
   stdio,
@@ -8,17 +9,17 @@
   secp256k1,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "secp256k1";
-  version = "0.4.4";
+  version = "0.5.0";
 
-  minimalOCamlVersion = "4.07";
+  minimalOCamlVersion = "4.12";
 
   src = fetchFromGitHub {
     owner = "dakk";
     repo = "secp256k1-ml";
-    rev = version;
-    hash = "sha256-22+dZb3MC1W5Qvsz3+IHV1/XiGCRmJHTH+6IW2QX2hU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-PD+4+OE0ttQsyG+i5Ez9kdo1A2DPNxvUjRQHXXSxaKo=";
   };
 
   buildInputs = [
@@ -28,10 +29,10 @@ buildDunePackage rec {
     secp256k1
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/dakk/secp256k1-ml";
     description = "Elliptic curve library secp256k1 wrapper for Ocaml";
-    license = licenses.mit;
-    maintainers = [ maintainers.vyorkin ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.vyorkin ];
   };
-}
+})

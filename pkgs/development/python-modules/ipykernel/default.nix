@@ -5,14 +5,13 @@
   callPackage,
   fetchPypi,
   hatchling,
-  pythonOlder,
   appnope,
   comm,
   ipython,
   jupyter-client,
   jupyter-core,
   matplotlib-inline,
-  nest-asyncio,
+  nest-asyncio2,
   packaging,
   psutil,
   pyzmq,
@@ -23,36 +22,36 @@
   sage,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ipykernel";
-  version = "6.29.5";
+  version = "7.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-8JOiLEpA+IKPjjMKnCl8uT3KsTvZZ43tbejlz4HFYhU=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-msqq+X0WNVFm5Aha/p0iW/vfK371IPnfO+jyskgnXgk=";
   };
 
   # debugpy is optional, see https://github.com/ipython/ipykernel/pull/767
   pythonRemoveDeps = [ "debugpy" ];
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     comm
     ipython
     jupyter-client
     jupyter-core
     matplotlib-inline
-    nest-asyncio
+    nest-asyncio2
     packaging
     psutil
     pyzmq
     tornado
     traitlets
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ appnope ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ appnope ];
 
   # check in passthru.tests.pytest to escape infinite recursion with ipyparallel
   doCheck = false;
@@ -65,8 +64,8 @@ buildPythonPackage rec {
   meta = {
     description = "IPython Kernel for Jupyter";
     homepage = "https://ipython.org/";
-    changelog = "https://github.com/ipython/ipykernel/releases/tag/v${version}";
+    changelog = "https://github.com/ipython/ipykernel/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.jupyter.members;
+    teams = [ lib.teams.jupyter ];
   };
-}
+})

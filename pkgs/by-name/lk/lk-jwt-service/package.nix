@@ -1,31 +1,41 @@
 {
   lib,
-  buildGoModule,
+  rustPlatform,
   fetchFromGitHub,
+  nixosTests,
+  cacert,
 }:
 
-buildGoModule rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lk-jwt-service";
-  version = "0-unstable-2024-04-27";
+  version = "0.9.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "lk-jwt-service";
-    rev = "4a295044a4d0bd2af4474bf6a8a14fd0596ecf9e";
-    hash = "sha256-dN4iJ8P0u5dbZ93mp/FumcvByP7EpQhOvR+Oe4COWXQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4e8mPfpP1JRSvzYSEQQZ15y9vxzviVTskR/MDMczoPA=";
   };
 
-  vendorHash = "sha256-9qOApmmOW+N1L/9hj9tVy0hLIUI36WL2TGWUcM3ajeM=";
+  cargoHash = "sha256-fWaeKuE9nr+yKT8ZInR79LDwwg1VsA2jdN/wdhtgln8=";
 
-  postInstall = ''
-    mv $out/bin/ec-lms $out/bin/lk-jwt-service
-  '';
+  # Tests spawn a local webserver
+  __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
-    description = "Minimal service to provide LiveKit JWTs using Matrix OpenID Connect";
+  checkInputs = [
+    cacert
+  ];
+
+  passthru.tests = nixosTests.lk-jwt-service;
+
+  meta = {
+    changelog = "https://github.com/element-hq/lk-jwt-service/releases/tag/${finalAttrs.src.tag}";
+    description = "Minimal service to issue LiveKit JWTs for MatrixRTC";
     homepage = "https://github.com/element-hq/lk-jwt-service";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ kilimnik ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ kilimnik ];
     mainProgram = "lk-jwt-service";
   };
-}
+})

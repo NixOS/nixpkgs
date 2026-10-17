@@ -2,7 +2,6 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  pythonOlder,
   routerFeatures,
   setuptools,
   janus,
@@ -36,16 +35,15 @@ in
 
 buildPythonPackage rec {
   pname = "entrance";
-  version = "1.1.20";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PvsP6HXCllW102h3o7abz9uC2AZTwvg5qIqP+rdkk6Y=";
+    hash = "sha256-fr7ixTFA4N2nYFE2mmaAkmIAxFGfuF/Pou/DQYd1WyY=";
   };
 
   # The versions of `sanic` and `websockets` in nixpkgs only support 3.6 or later
-  disabled = pythonOlder "3.6";
 
   # No useful tests
   doCheck = false;
@@ -55,14 +53,15 @@ buildPythonPackage rec {
   dependencies = [
     pyyaml
     sanic
-  ] ++ opts.extraBuildInputs;
+  ]
+  ++ opts.extraBuildInputs;
 
   prePatch = opts.prePatch;
 
-  meta = with lib; {
+  meta = {
     description = "Server framework for web apps with an Elm frontend";
     homepage = "https://github.com/ensoft/entrance";
-    license = licenses.mit;
-    maintainers = with maintainers; [ simonchatts ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ simonchatts ];
   };
 }

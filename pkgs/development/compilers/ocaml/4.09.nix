@@ -7,6 +7,9 @@ import ./generic.nix {
   # Breaks build with Clang
   hardeningDisable = [ "strictoverflow" ];
 
+  # Tests do not seem to run on this old version
+  doCheck = false;
+
   patches = [
     ./4.09.1-Werror.patch
     # Compatibility with Glibc 2.34

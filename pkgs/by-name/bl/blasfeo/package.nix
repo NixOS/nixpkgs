@@ -8,18 +8,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "blasfeo";
-  version = "0.1.4.1";
+  version = "0.1.4.3";
 
   src = fetchFromGitHub {
     owner = "giaf";
     repo = "blasfeo";
-    rev = finalAttrs.version;
-    hash = "sha256-peopXTJejgqS/DL4h52h1vVJe6jjWPQb6x/9SPvFl6k=";
+    tag = finalAttrs.version;
+    hash = "sha256-+hdS/HGw49pSKOOL4jzAhScVGIFTsEqYwXSpQi3GBm0=";
   };
 
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [ "-DTARGET=${withTarget}" ];
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   meta = {
     description = "Basic linear algebra subroutines for embedded optimization";

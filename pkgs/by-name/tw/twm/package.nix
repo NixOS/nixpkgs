@@ -1,6 +1,5 @@
 {
   lib,
-  darwin,
   fetchFromGitHub,
   stdenv,
   rustPlatform,
@@ -10,18 +9,18 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "twm";
-  version = "0.11.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "vinnymeller";
     repo = "twm";
-    tag = "v${version}";
-    hash = "sha256-SiwLqUq/gC8Tr31jjblLc9YP4yBi9HL38W83kgh7eJI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GJTy0uIYALp3tp/ZO+zEQoQk8fF/5R8jbWBy92ID7aU=";
   };
 
-  cargoHash = "sha256-BjQ7dDXHzX+O/V328TTwl9wGtpOq+NjOMRiZwb9O7ZU=";
+  cargoHash = "sha256-ctpYZCVGGrnS7eHeia0NnK1uc0rLi8GpmmBhAIz5WzY=";
 
   nativeBuildInputs = [
     pkg-config
@@ -29,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   ];
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd twm \
@@ -46,9 +45,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Customizable workspace manager for tmux";
     homepage = "https://github.com/vinnymeller/twm";
-    changelog = "https://github.com/vinnymeller/twm/releases/tag/v${version}";
+    changelog = "https://github.com/vinnymeller/twm/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vinnymeller ];
     mainProgram = "twm";
   };
-}
+})

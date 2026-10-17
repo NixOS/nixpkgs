@@ -3,64 +3,68 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
-  runCommand,
   xcodebuild,
   protobuf,
   boringssl,
-  darwin,
+
+  withShared ? !stdenv.hostPlatform.isStatic,
 }:
-let
-  # boring-sys expects the static libraries in build/ instead of lib/
-  boringssl-wrapper = runCommand "boringssl-wrapper" { } ''
-    mkdir $out
-    cd $out
-    ln -s ${boringssl.out}/lib build
-    ln -s ${boringssl.dev}/include include
-  '';
-in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "libsignal-ffi";
   # must match the version used in mautrix-signal
   # see https://github.com/mautrix/signal/issues/401
-  version = "0.64.1";
+  version = "0.102.2";
 
   src = fetchFromGitHub {
     fetchSubmodules = true;
     owner = "signalapp";
     repo = "libsignal";
-    rev = "v${version}";
-    hash = "sha256-36z8Tgf3w0ZDLOS7hMTeVbZLiq/M/es6+sL8rEWtps4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-p9qdH56xV6mNECf0SwseQKU87BC4VYTwx3mKf7JnBio=";
   };
 
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  postPatch =
+    lib.optionalString withShared ''
+      substituteInPlace rust/bridge/ffi/Cargo.toml \
+        --replace-fail 'crate-type = ["staticlib"]' 'crate-type = ["cdylib"]'
+    ''
+    + lib.optionalString boringssl.passthru.isShared ''
+      substituteInPlace $cargoDepsCopy/*/boring-sys-*/build/main.rs \
+        --replace-fail "cargo:rustc-link-lib=static=crypto" "cargo:rustc-link-lib=dylib=crypto" \
+        --replace-fail "cargo:rustc-link-lib=static=ssl" "cargo:rustc-link-lib=dylib=ssl"
+    '';
 
   nativeBuildInputs = [
     protobuf
     rustPlatform.bindgenHook
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcodebuild ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcodebuild ];
 
-  env.BORING_BSSL_PATH = "${boringssl-wrapper}";
-  env.NIX_LDFLAGS = "-lstdc++";
-
-  # The Cargo.lock contains git dependencies
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "boring-4.13.0" = "sha256-+0LeCN4YtHe84GzkMZog8gCTvrzVNoAYXv04jQXZaUo=";
-      "intmap-2.0.0" = "sha256-PGlkaZl+DYS4QkpJFfUf+2unVKwd9vLNF0N+/YFg8qE=";
-      "curve25519-dalek-4.1.3" = "sha256-bPh7eEgcZnq9C3wmSnnYv0C4aAP+7pnwk9Io29GrI4A=";
-    };
+  env = {
+    BORING_BSSL_INCLUDE_PATH = boringssl.dev + "/include";
+    BORING_BSSL_PATH = boringssl;
+    NIX_LDFLAGS = if stdenv.hostPlatform.isDarwin then "-lc++" else "-lstdc++";
   };
+
+  cargoHash = "sha256-LVreSerqA0ztg4os7qZzprw97HFl4Uydsmz6k2rO0fc=";
 
   cargoBuildFlags = [
     "-p"
     "libsignal-ffi"
   ];
 
-  meta = with lib; {
+  postFixup = lib.optionalString (withShared && stdenv.hostPlatform.isDarwin) ''
+    dylib="$out/lib/libsignal_ffi.dylib"
+    install_name_tool -id "$dylib" "$dylib"
+  '';
+
+  meta = {
     description = "C ABI library which exposes Signal protocol logic";
     homepage = "https://github.com/signalapp/libsignal";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ niklaskorz ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
+      pentane
+      SchweGELBin
+    ];
   };
-}
+})

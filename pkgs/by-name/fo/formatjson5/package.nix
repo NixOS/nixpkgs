@@ -2,13 +2,11 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
-  darwin,
   nix-update-script,
   fetchpatch,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "formatjson5";
   version = "0.2.6";
 
@@ -22,14 +20,23 @@ rustPlatform.buildRustPackage rec {
 
   patches = [
     (fetchpatch {
+      # bugfix: fix missing_docs error
+      # Needed to build with Rust 1.83+.
+      name = "0001-bugfix-fix-missing-docs-error";
       url = "https://github.com/google/json5format/commit/32914546e7088b3d9173ae9a2f307effa87917bf.patch";
       hash = "sha256-kAbRUL/FuhnxkC9Xo4J2bXt9nkMOLeJvgMmOoKnSxKc=";
     })
+    (fetchpatch {
+      # Skip rewriting unchanged files with --replace
+      # Unmerged upstream patch, ensures json5format is compatible with treefmt(-nix),
+      # which is quite popular in the Nix ecosystem.
+      name = "0002-skip-rewriting-unchanged-files";
+      url = "https://github.com/google/json5format/commit/7bb67ff03529f6f0350d72b7a36839f20fe9d190.patch";
+      hash = "sha256-ZY7Ck51/vHcRDQ5GEwOuMIF+QiYNGay3wbIvesmEl9k=";
+    })
   ];
 
-  cargoHash = "sha256-zPgaZPDyNVPmBXz6QwOYnmh/sbJ8aPST8znLMfIWejk=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  cargoHash = "sha256-1CSt9dPVHdOqfQXio7/eXiDLWt+iOe6Qj+VtWblwSDE=";
 
   cargoBuildFlags = [ "--example formatjson5" ];
 

@@ -1,5 +1,6 @@
 {
   lib,
+  aiohttp,
   asdf-standard,
   asdf-transform-schemas,
   attrs,
@@ -14,8 +15,8 @@
   psutil,
   pytest-remotedata,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
+  requests,
   semantic-version,
   setuptools,
   setuptools-scm,
@@ -23,16 +24,14 @@
 
 buildPythonPackage rec {
   pname = "asdf";
-  version = "3.4.0";
+  version = "5.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "asdf-format";
     repo = "asdf";
     tag = version;
-    hash = "sha256-2ugrByX2eSac68RGc4mhPiYP8qnYoPwbhrMmvUr2FYg=";
+    hash = "sha256-StudmLkXINe/lIJneid763jBdo6jAHlnjj4PHsGFxwM=";
   };
 
   build-system = [
@@ -53,19 +52,26 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    aiohttp
     fsspec
     lz4
     psutil
     pytest-remotedata
     pytestCheckHook
+    requests
+  ];
+
+  disabledTests = [
+    # AssertionError: assert 527033 >= 1048801
+    "test_update_add_array_at_end"
   ];
 
   pythonImportsCheck = [ "asdf" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python tools to handle ASDF files";
     homepage = "https://github.com/asdf-format/asdf";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

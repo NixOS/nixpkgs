@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   makeWrapper,
   bison,
   flex,
@@ -16,27 +17,33 @@
   liburcu,
   ncurses,
   pkg-config,
-  gnumake42,
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "netsniff-ng";
-  version = "0.6.8";
+  version = "0.6.9";
 
   src = fetchFromGitHub {
-    repo = pname;
-    owner = pname;
-    rev = "v${version}";
-    sha256 = "10ih8amaqspy0zwg7hqvypa1v7ixpjl0n608cyfgyfzffp73lbqf";
+    repo = "netsniff-ng";
+    owner = "netsniff-ng";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-P1xZqhZ/HJV3fAvh4xhhApZ0+FLDFqvYrZlbvb+FV7I=";
   };
+
+  patches = [
+    # GCC 15 compatibility
+    (fetchpatch {
+      url = "https://github.com/netsniff-ng/netsniff-ng/commit/1af7ae33e3e8178ab5c649c3a52838d4375c4228.patch";
+      sha256 = "sha256-aNV1Srnr396HsyAKVQoCeGBo/oduxLrUidlZLuI5Rlk=";
+    })
+  ];
 
   nativeBuildInputs = [
     bison
     flex
     makeWrapper
     pkg-config
-    gnumake42 # fails with make 4.4
   ];
 
   buildInputs = [
@@ -55,9 +62,13 @@ stdenv.mkDerivation rec {
 
   # ./configure is not autoGNU but some home-brewn magic
   configurePhase = ''
+    runHook preConfigure
+
     patchShebangs configure
     substituteInPlace configure --replace "which" "command -v"
     NACL_INC_DIR=${libsodium.dev}/include/sodium NACL_LIB=sodium ./configure
+
+    runHook postConfigure
   '';
 
   enableParallelBuilding = true;
@@ -82,7 +93,7 @@ stdenv.mkDerivation rec {
     rm -v $out/etc/netsniff-ng/geoip.conf # updating databases after installation is impossible
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Swiss army knife for daily Linux network plumbing";
     longDescription = ''
       netsniff-ng is a free Linux networking toolkit. Its gain of performance
@@ -92,7 +103,7 @@ stdenv.mkDerivation rec {
       development and analysis, debugging, auditing or network reconnaissance.
     '';
     homepage = "http://netsniff-ng.org/";
-    license = with licenses; [ gpl2Only ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
   };
-}
+})

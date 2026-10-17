@@ -121,7 +121,7 @@ in
         type = lib.types.lines;
         default = "";
         description = ''
-          Additional options that will be copied verbatim in `gnunet.conf`.
+          Additional options that will be copied verbatim in {file}`gnunet.conf`.
           See {manpage}`gnunet.conf(5)` for details.
         '';
       };
@@ -149,6 +149,7 @@ in
 
     systemd.services.gnunet = {
       description = "GNUnet";
+      documentation = [ "info:gnunet" ];
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ config.environment.etc."gnunet.conf".source ];

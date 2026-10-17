@@ -22,17 +22,24 @@
   scikit-image,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rawpy";
-  version = "0.24.0";
+  version = "0.27.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "letmaik";
     repo = "rawpy";
-    tag = "v${version}";
-    hash = "sha256-u/KWbviyhbMts40Gc/9shXSESwihWZQQaf3Z44gMgvs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wEs9IUyG4oQP0OhVPi7+YRR6LmcHHALQOKdoF1d9YNM=";
   };
+
+  # cmake is only needed to build libraw when `RAWPY_USE_SYSTEM_LIBRAW` is disabled
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"cmake",' ""
+  '';
 
   build-system = [
     cython
@@ -74,6 +81,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     # rawpy._rawpy.LibRawFileUnsupportedError: b'Unsupported file format or not RAW file'
+    "testCropSizeSigma"
     "testFoveonFileOpenAndPostProcess"
     "testThumbExtractBitmap"
   ];
@@ -81,10 +89,11 @@ buildPythonPackage rec {
   meta = {
     description = "RAW image processing for Python, a wrapper for libraw";
     homepage = "https://github.com/letmaik/rawpy";
+    changelog = "https://github.com/letmaik/rawpy/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [
       lgpl21Only
       mit
     ];
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

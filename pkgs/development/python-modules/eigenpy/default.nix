@@ -1,26 +1,32 @@
 {
   lib,
+
   buildPythonPackage,
   fetchFromGitHub,
-  cmake,
-  doxygen,
-  boost,
-  eigen,
-  jrl-cmakemodules,
-  numpy,
+  fontconfig,
+
+  # nativeBuildInputs
   scipy,
+
+  # buildInputs
+  boost,
+  jrl-cmakemodules,
+
+  # propagatedBuildInputs
+  eigen,
+  numpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "eigenpy";
-  version = "3.10.1";
+  version = "3.13.0";
   pyproject = false; # Built with cmake
 
   src = fetchFromGitHub {
     owner = "stack-of-tasks";
     repo = "eigenpy";
-    tag = "v${version}";
-    hash = "sha256-9hKYCCKgPn1IJDezX/ARJHr5+0ridmGd1b3k/ZaVRG0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-05G0U1RjVwggfnABxZH+9kxDIo7M9rgxHCcTvNgTZCQ=";
   };
 
   outputs = [
@@ -29,38 +35,44 @@ buildPythonPackage rec {
     "out"
   ];
 
-  cmakeFlags = [
+  cmakeFlags = jrl-cmakemodules.docsCmakeFlags ++ [
     "-DINSTALL_DOCUMENTATION=ON"
+    "-DBUILD_TESTING=ON"
     "-DBUILD_TESTING_SCIPY=ON"
   ];
 
-  strictDeps = true;
+  # Fontconfig error: Cannot load default config file: No such file: (null)
+  env.FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
 
-  nativeBuildInputs = [
-    cmake
-    doxygen
+  nativeBuildInputs = jrl-cmakemodules.docsNativeBuildInputs ++ [
     scipy
   ];
 
-  buildInputs = [ boost ];
+  buildInputs = [
+    boost
+    jrl-cmakemodules
+  ];
 
   propagatedBuildInputs = [
     eigen
-    jrl-cmakemodules
     numpy
   ];
 
+  preInstallCheck = ''
+    make test
+  '';
+
   pythonImportsCheck = [ "eigenpy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bindings between Numpy and Eigen using Boost.Python";
     homepage = "https://github.com/stack-of-tasks/eigenpy";
-    changelog = "https://github.com/stack-of-tasks/eigenpy/releases/tag/v${version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/stack-of-tasks/eigenpy/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
       nim65s
       wegank
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

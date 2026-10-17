@@ -3,27 +3,38 @@
   stdenv,
   fetchurl,
   perl,
-  fuse,
+  fuse3,
+  pkg-config,
 }:
 
-stdenv.mkDerivation rec {
-  version = "0.7";
+stdenv.mkDerivation (finalAttrs: {
   pname = "chunkfs";
+  version = "0.8";
+
+  patches = [
+    ./fuse3.diff
+  ];
 
   src = fetchurl {
-    url = "https://chunkfs.florz.de/chunkfs_${version}.tar.gz";
-    sha256 = "4c168fc2b265a6ba34afc565707ea738f34375325763c0596f2cfa1c9b8d40f1";
+    url = "https://chunkfs.florz.de/chunkfs_${finalAttrs.version}.tar.xz";
+    hash = "sha256-HFv51ta2eNW9Qt9CUp2oTTlC8Lpwc1XKR/uYzMDfd88=";
   };
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
   buildInputs = [
     perl
-    fuse
+    fuse3
   ];
 
   makeFlags = [
     "DESTDIR=$(out)"
     "PREFIX="
   ];
+
+  enableParallelBuilding = true;
 
   preInstall = ''
     mkdir -p $out/bin
@@ -32,8 +43,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "FUSE filesystems for viewing chunksync-style directory trees as a block device and vice versa";
-    homepage = "http://chunkfs.florz.de/";
+    homepage = "http://chunkfs.florz.de";
     license = lib.licenses.gpl2Plus;
-    platforms = with lib.platforms; linux;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ yayayayaka ];
   };
-}
+})

@@ -4,7 +4,6 @@
   fetchPypi,
   openstackdocstheme,
   pbr,
-  six,
   setuptools,
   sphinxHook,
   wrapt,
@@ -13,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "debtcollector";
-  version = "3.0.0";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KokX0lsOHx0NNl08HG7Px6UiselxbooaSpFRJvfM6m8=";
+    hash = "sha256-J4pFYIzxbnnArhCFHYaRhca3j4ZhDfjyekUaGMH+xzI=";
   };
 
   build-system = [
@@ -31,7 +30,6 @@ buildPythonPackage rec {
   sphinxBuilders = [ "man" ];
 
   dependencies = [
-    six
     wrapt
   ];
 
@@ -44,10 +42,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "debtcollector" ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of Python deprecation patterns and strategies that help you collect your technical debt in a non-destructive manner";
     homepage = "https://github.com/openstack/debtcollector";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

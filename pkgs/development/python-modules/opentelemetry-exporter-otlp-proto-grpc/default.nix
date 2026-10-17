@@ -1,6 +1,5 @@
 {
   buildPythonPackage,
-  pythonOlder,
   deprecated,
   googleapis-common-protos,
   grpcio,
@@ -16,8 +15,6 @@ buildPythonPackage {
   inherit (opentelemetry-api) version src;
   pname = "opentelemetry-exporter-otlp-proto-grpc";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   sourceRoot = "${opentelemetry-api.src.name}/exporter/opentelemetry-exporter-otlp-proto-grpc";
 
@@ -37,7 +34,13 @@ buildPythonPackage {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
+
+  disabledTests = [
+    # Timing-sensitive
+    "test_retry_info_is_respected"
+    "test_timeout_set_correctly"
+  ];
 
   pythonImportsCheck = [ "opentelemetry.exporter.otlp.proto.grpc" ];
 

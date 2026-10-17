@@ -3,10 +3,13 @@
   lib,
   stdenv,
   makeWrapper,
+  gtk3,
   openssl,
   perl,
   perlPackages,
   pkg-config,
+  vte,
+  withGamt ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,7 +21,12 @@ stdenv.mkDerivation (finalAttrs: {
       perl
       SOAPLite
     ])
-    ++ [ openssl ];
+    ++ [ openssl ]
+
+    ++ lib.optionals withGamt [
+      gtk3
+      vte
+    ];
   nativeBuildInputs = [
     makeWrapper
     pkg-config
@@ -41,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Intel AMT® SoL client + tools";
-    homepage = "https://www.kraxel.org/cgit/amtterm/";
+    homepage = "https://github.com/kraxel/amtterm";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };

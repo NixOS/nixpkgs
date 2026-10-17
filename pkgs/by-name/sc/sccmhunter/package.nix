@@ -3,16 +3,16 @@
   fetchFromGitHub,
   python3Packages,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "sccmhunter";
-  version = "1.0.6-unstable-2024-11-07";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "garrettfoster13";
     repo = "sccmhunter";
-    rev = "33c23f0d71e48127a0b03b06a019148df71049ef";
-    hash = "sha256-mU3GKgX8gcuJ+YT3xL0/dDds34uhFD+Rc3m15W7zoKc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aWZx5KfsuhyT08OmYFHKVO8Sr9g5WHXpKLpijo2TAPI=";
   };
 
   build-system = with python3Packages; [
@@ -41,9 +41,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Post exploitation tool to identify and attack SCCM related assets in an Active Directory domain";
     homepage = "https://github.com/garrettfoster13/sccmhunter";
-    changelog = "https://github.com/garrettfoster13/sccmhunter/blob/${src.rev}/changelog.md";
-    license = lib.licenses.mit;
+    changelog = "https://github.com/garrettfoster13/sccmhunter/blob/${finalAttrs.src.tag}/changelog.md";
+    license = lib.licenses.gpl3Plus;
     mainProgram = "sccmhunter.py";
     maintainers = with lib.maintainers; [ purpole ];
   };
-}
+})

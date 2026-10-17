@@ -22,11 +22,11 @@
   pyqtgraph,
   pyserial,
   pytestCheckHook,
-  pythonOlder,
   qdarkstyle,
   qimage2ndarray,
   scikit-image,
   scipy,
+  setuptools,
   tables,
 }:
 
@@ -34,11 +34,10 @@ buildPythonPackage rec {
   pname = "stytra";
   version = "0.8.34";
   pyproject = true;
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "aab9d07575ef599a9c0ae505656e3c03ec753462df3c15742f1f768f2b578f0a";
+    hash = "sha256-qrnQdXXvWZqcCuUFZW48A+x1NGLfPBV0Lx92jytXjwo=";
   };
 
   patches = [
@@ -46,7 +45,9 @@ buildPythonPackage rec {
     ./0000-workaround-pyqtgraph.patch
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     opencv4
     pyqt5
     pyqtgraph
@@ -82,10 +83,10 @@ buildPythonPackage rec {
     "stytra/tests/test_z_experiments.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Modular package to control stimulation and track behaviour";
     homepage = "https://github.com/portugueslab/stytra";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ tbenst ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
   };
 }

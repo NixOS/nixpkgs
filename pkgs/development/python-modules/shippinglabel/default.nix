@@ -2,24 +2,28 @@
   buildPythonPackage,
   fetchPypi,
   lib,
-  setuptools,
   dist-meta,
   dom-toml,
   domdf-python-tools,
+  hatchling,
+  hatch-requirements-txt,
   packaging,
   typing-extensions,
 }:
 buildPythonPackage rec {
   pname = "shippinglabel";
-  version = "2.1.0";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XwE/b7TQ7i+2hMSdZJhyVjl2lieweZLbA6PXcSJTnFE=";
+    hash = "sha256-JcDDGUwBHANV3/j1bMCzFoj2k7IJ9YSdRJkdii7JHy8=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    hatchling
+    hatch-requirements-txt
+  ];
 
   dependencies = [
     dist-meta
@@ -29,13 +33,8 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail '"setuptools!=61.*,<=67.1.0,>=40.6.0"' '"setuptools"'
-  '';
-
   meta = {
-    description = "Utilities for handling packages.";
+    description = "Utilities for handling packages";
     homepage = "https://github.com/domdfcoding/shippinglabel";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tyberius-prime ];

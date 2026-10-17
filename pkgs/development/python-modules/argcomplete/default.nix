@@ -2,28 +2,25 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-  setuptools-scm,
+  hatchling,
+  hatch-vcs,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "argcomplete";
-  version = "3.5.2";
+  version = "3.7.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "kislyuk";
     repo = "argcomplete";
-    tag = "v${version}";
-    hash = "sha256-Tihb61LGTZ8tKrKKlxZ8scII2+pgzDHUkwVn54zlrug=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WKIhWlftH9xgdklljAOmW4XYMbclGrCFTtsxws2FRzg=";
   };
 
   build-system = [
-    setuptools
-    setuptools-scm
+    hatchling
+    hatch-vcs
   ];
 
   # Tries to build and install test packages which fails
@@ -31,12 +28,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "argcomplete" ];
 
-  meta = with lib; {
+  meta = {
     description = "Bash tab completion for argparse";
     homepage = "https://kislyuk.github.io/argcomplete/";
-    changelog = "https://github.com/kislyuk/argcomplete/blob/v${version}/Changes.rst";
+    changelog = "https://github.com/kislyuk/argcomplete/blob/${finalAttrs.src.tag}/Changes.rst";
     downloadPage = "https://github.com/kislyuk/argcomplete";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ womfoo ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ womfoo ];
   };
-}
+})

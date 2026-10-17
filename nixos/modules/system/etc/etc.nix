@@ -41,8 +41,6 @@ let
               if [ "$(readlink "$out/etc/$target")" != "$src" ]; then
                 echo "mismatched duplicate entry $(readlink "$out/etc/$target") <-> $src"
                 ret=1
-
-                continue
               fi
             fi
 
@@ -70,6 +68,22 @@ let
       '';
 
   etcHardlinks = lib.filter (f: f.mode != "symlink" && f.mode != "direct-symlink") etc';
+
+  # Regular files at or below this size are inlined into the erofs metadata
+  # image (see build-composefs-dump.py) and therefore do not need to be
+  # shipped in the basedir data-only lower layer. Keep this in sync with
+  # INLINE_CONTENT_MAX in build-composefs-dump.py.
+  etcInlineContentMax = 4096;
+
+  # Entries whose content we can prove at eval time will be served directly
+  # from the metadata image (inlined, or empty). Excluding them here keeps
+  # their source paths out of the basedir build script, so changing a small
+  # text-backed /etc file does not rebuild etc-lowerdir. Entries backed by
+  # `source` (size unknown at eval time) are kept and filtered at build time
+  # below.
+  isInlinedAtEvalTime = f: f.text != null && lib.stringLength f.text <= etcInlineContentMax;
+
+  etcBasedirEntries = lib.filter (f: !isInlinedAtEvalTime f) etcHardlinks;
 
 in
 
@@ -136,8 +150,8 @@ in
                   type = lib.types.bool;
                   default = true;
                   description = ''
-                    Whether this /etc file should be generated.  This
-                    option allows specific /etc files to be disabled.
+                    Whether this `/etc` file should be generated.  This
+                    option allows specific `/etc` files to be disabled.
                   '';
                 };
 
@@ -153,7 +167,7 @@ in
                 text = lib.mkOption {
                   default = null;
                   type = lib.types.nullOr lib.types.lines;
-                  description = "Text of the file.";
+                  description = "Text content of the file.";
                 };
 
                 source = lib.mkOption {
@@ -166,7 +180,7 @@ in
                   default = "symlink";
                   example = "0600";
                   description = ''
-                    If set to something else than `symlink`,
+                    If set to something other than `symlink`,
                     the file is copied instead of symlinked, with the given
                     file mode.
                   '';
@@ -186,7 +200,7 @@ in
                   type = lib.types.int;
                   description = ''
                     GID of created file. Only takes effect when the file is
-                    copied (that is, the mode is not 'symlink').
+                    copied (that is, the mode is not `symlink`).
                   '';
                 };
 
@@ -194,9 +208,12 @@ in
                   default = "+${toString config.uid}";
                   type = lib.types.str;
                   description = ''
-                    User name of created file.
-                    Only takes effect when the file is copied (that is, the mode is not 'symlink').
-                    Changing this option takes precedence over `uid`.
+                    User name of file owner. Only takes effect when the file is copied (that is, the
+                    mode is not `symlink`).
+
+                    When `services.userborn.enable`, this option has no effect.
+                    You have to assign a `uid` instead. Otherwise this option
+                    takes precedence over `uid`.
                   '';
                 };
 
@@ -204,9 +221,14 @@ in
                   default = "+${toString config.gid}";
                   type = lib.types.str;
                   description = ''
-                    Group name of created file.
-                    Only takes effect when the file is copied (that is, the mode is not 'symlink').
-                    Changing this option takes precedence over `gid`.
+                    Group name of file owner.
+
+                    Only takes effect when the file is copied (that is, the
+                    mode is not `symlink`).
+
+                    When `services.userborn.enable`, this option has no effect.
+                    You have to assign a `gid` instead. Otherwise this option
+                    takes precedence over `gid`.
                   '';
                 };
 
@@ -275,23 +297,30 @@ in
             ''}
 
             tmpMetadataMount=$(TMPDIR="/run" mktemp --directory -t nixos-etc-metadata.XXXXXXXXXX)
-            mount --type erofs -o ro ${config.system.build.etcMetadataImage} $tmpMetadataMount
+            mount --type erofs --options ro,nodev,nosuid ${config.system.build.etcMetadataImage} "$tmpMetadataMount"
+
+            ${lib.optionalString config.system.etc.overlay.mutable ''
+              # Clear stale opaque markers from the upperdir so that lowerdir
+              # entries added by the new generation are not hidden.
+              # See https://github.com/NixOS/nixpkgs/issues/505475
+              ${config.system.nixos-init.package}/bin/clear-etc-opaque "$tmpMetadataMount" /.rw-etc/upper
+            ''}
 
             # There was no previous /etc mounted. This happens when we're called
             # directly without an initrd, like with nixos-enter.
             if ! mountpoint -q /etc; then
-              mount --type overlay overlay \
-                --options lowerdir=$tmpMetadataMount::${config.system.build.etcBasedir},${etcOverlayOptions} \
-                /etc
+              mount --type overlay \
+                --options nodev,nosuid,lowerdir="$tmpMetadataMount"::${config.system.build.etcBasedir},${etcOverlayOptions} \
+                overlay /etc
             else
               # Mount the new /etc overlay to a temporary private mount.
               # This needs the indirection via a private bind mount because you
               # cannot move shared mounts.
               tmpEtcMount=$(TMPDIR="/run" mktemp --directory -t nixos-etc.XXXXXXXXXX)
-              mount --bind --make-private $tmpEtcMount $tmpEtcMount
-              mount --type overlay overlay \
-                --options lowerdir=$tmpMetadataMount::${config.system.build.etcBasedir},${etcOverlayOptions} \
-                $tmpEtcMount
+              mount --bind --make-private "$tmpEtcMount" "$tmpEtcMount"
+              mount --type overlay \
+                --options nodev,nosuid,lowerdir="$tmpMetadataMount"::${config.system.build.etcBasedir},${etcOverlayOptions} \
+                overlay "$tmpEtcMount"
 
               # Before moving the new /etc overlay under the old /etc, we have to
               # move mounts on top of /etc to the new /etc mountpoint.
@@ -322,11 +351,7 @@ in
               done
 
               # Move the new temporary /etc mount underneath the current /etc mount.
-              #
-              # This should eventually use util-linux to perform this move beneath,
-              # however, this functionality is not yet in util-linux. See this
-              # tracking issue: https://github.com/util-linux/util-linux/issues/2604
-              ${pkgs.move-mount-beneath}/bin/move-mount --move --beneath $tmpEtcMount /etc
+              mount --move --beneath "$tmpEtcMount" /etc
 
               # Unmount the top /etc mount to atomically reveal the new mount.
               umount --lazy --recursive /etc
@@ -337,9 +362,6 @@ in
             fi
 
             # Unmount old metadata mounts
-            # For some reason, `findmnt /tmp --submounts` does not show the nested
-            # mounts. So we'll just find all mounts of type erofs and filter on the
-            # name of the mountpoint.
             findmnt --type erofs --list --kernel --output TARGET | while read -r mountPoint; do
               if [[ ("$mountPoint" =~ ^/run/nixos-etc-metadata\..{10}$ || "$mountPoint" =~ ^/run/nixos-etc-metadata$ ) &&
                     "$mountPoint" != "$tmpMetadataMount" ]]; then
@@ -363,6 +385,18 @@ in
         src="$1"
         target="$2"
 
+        if [[ -f "$src" ]]; then
+          # Small regular files are inlined into the erofs metadata image by
+          # build-composefs-dump.py and served directly from there, so we do
+          # not need a copy in the basedir data layer. Keep the size check in
+          # sync with INLINE_CONTENT_MAX in build-composefs-dump.py. Empty
+          # files need no backing copy either.
+          size=$(stat --dereference --format=%s "$src")
+          if (( size <= ${toString etcInlineContentMax} )); then
+            return
+          fi
+        fi
+
         mkdir -p "$out/$(dirname "$target")"
         cp "$src" "$out/$target"
       }
@@ -376,17 +410,17 @@ in
           "${etcEntry.source}"
           etcEntry.target
         ]
-      ) etcHardlinks}
+      ) etcBasedirEntries}
     '';
 
     system.build.etcMetadataImage =
       let
         etcJson = pkgs.writeText "etc-json" (builtins.toJSON etc');
-        etcDump = pkgs.runCommand "etc-dump" { } ''
+        etcDump = pkgs.runCommandLocal "etc-dump" { } ''
           ${lib.getExe pkgs.buildPackages.python3} ${./build-composefs-dump.py} ${etcJson} > $out
         '';
       in
-      pkgs.runCommand "etc-metadata.erofs"
+      pkgs.runCommandLocal "etc-metadata.erofs"
         {
           nativeBuildInputs = with pkgs.buildPackages; [
             composefs

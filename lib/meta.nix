@@ -6,13 +6,22 @@
 { lib }:
 
 let
-  inherit (lib) matchAttrs any all isDerivation getBin assertMsg;
+  inherit (lib)
+    matchAttrs
+    any
+    all
+    isDerivation
+    getBin
+    ;
   inherit (lib.attrsets) mapAttrs' filterAttrs;
-  inherit (builtins) isString match typeOf;
+  inherit (builtins)
+    isString
+    match
+    typeOf
+    ;
 
 in
 rec {
-
 
   /**
     Add to or override the meta attributes of the given
@@ -28,6 +37,11 @@ rec {
 
     : 2\. Function argument
 
+    # Type
+
+    ```
+    addMetaAttrs :: AttrSet -> Derivation -> Derivation
+    ```
 
     # Examples
     :::{.example}
@@ -39,9 +53,14 @@ rec {
 
     :::
   */
-  addMetaAttrs = newAttrs: drv:
-    drv // { meta = (drv.meta or {}) // newAttrs; };
-
+  addMetaAttrs =
+    newAttrs: drv:
+    if drv ? overrideAttrs then
+      drv.overrideAttrs (old: {
+        meta = (old.meta or { }) // newAttrs;
+      })
+    else
+      drv // { meta = (drv.meta or { }) // newAttrs; };
 
   /**
     Disable Hydra builds of given derivation.
@@ -51,9 +70,14 @@ rec {
     `drv`
 
     : 1\. Function argument
-  */
-  dontDistribute = drv: addMetaAttrs { hydraPlatforms = []; } drv;
 
+    # Type
+
+    ```
+    dontDistribute :: Derivation -> Derivation
+    ```
+  */
+  dontDistribute = drv: addMetaAttrs { hydraPlatforms = [ ]; } drv;
 
   /**
     Change the [symbolic name of a derivation](https://nixos.org/manual/nix/stable/language/derivations.html#attr-name).
@@ -71,9 +95,14 @@ rec {
     `drv`
 
     : 2\. Function argument
-  */
-  setName = name: drv: drv // {inherit name;};
 
+    # Type
+
+    ```
+    setName :: String -> Derivation -> Derivation
+    ```
+  */
+  setName = name: drv: drv // { inherit name; };
 
   /**
     Like `setName`, but takes the previous name as an argument.
@@ -88,6 +117,11 @@ rec {
 
     : 2\. Function argument
 
+    # Type
+
+    ```
+    updateName :: (String -> String) -> Derivation -> Derivation
+    ```
 
     # Examples
     :::{.example}
@@ -99,8 +133,7 @@ rec {
 
     :::
   */
-  updateName = updater: drv: drv // {name = updater (drv.name);};
-
+  updateName = updater: drv: drv // { name = updater (drv.name); };
 
   /**
     Append a suffix to the name of a package (before the version
@@ -111,14 +144,25 @@ rec {
     `suffix`
 
     : 1\. Function argument
-  */
-  appendToName = suffix: updateName (name:
-    let x = builtins.parseDrvName name; in "${x.name}-${suffix}-${x.version}");
 
+    # Type
+
+    ```
+    appendToName :: String -> Derivation -> Derivation
+    ```
+  */
+  appendToName =
+    suffix:
+    updateName (
+      name:
+      let
+        x = builtins.parseDrvName name;
+      in
+      "${x.name}-${suffix}-${x.version}"
+    );
 
   /**
     Apply a function to each derivation and only to derivations in an attrset.
-
 
     # Inputs
 
@@ -129,12 +173,19 @@ rec {
     `set`
 
     : 2\. Function argument
+
+    # Type
+
+    ```
+    mapDerivationAttrset :: (Derivation -> a) -> AttrSet -> AttrSet
+    ```
   */
-  mapDerivationAttrset = f: set: lib.mapAttrs (name: pkg: if lib.isDerivation pkg then (f pkg) else pkg) set;
+  mapDerivationAttrset =
+    f: set: lib.mapAttrs (name: pkg: if lib.isDerivation pkg then (f pkg) else pkg) set;
 
   /**
     The default priority of packages in Nix. See `defaultPriority` in [`src/nix/profile.cc`](https://github.com/NixOS/nix/blob/master/src/nix/profile.cc#L47).
-   */
+  */
   defaultPriority = 5;
 
   /**
@@ -147,6 +198,12 @@ rec {
 
     `drv`
     : 2\. Function argument
+
+    # Type
+
+    ```
+    setPrio :: Int -> Derivation -> Derivation
+    ```
   */
   setPrio = priority: addMetaAttrs { inherit priority; };
 
@@ -160,20 +217,30 @@ rec {
 
     : 1\. Function argument
 
+    # Type
+
+    ```
+    lowPrio :: Derivation -> Derivation
+    ```
   */
   lowPrio = setPrio 10;
 
   /**
-    Apply lowPrio to an attrset with derivations.
+    Apply `lowPrio` to an attrset with derivations.
 
     # Inputs
 
     `set`
 
     : 1\. Function argument
+
+    # Type
+
+    ```
+    lowPrioSet :: { [String] :: Derivation } -> { [String] :: Derivation }
+    ```
   */
   lowPrioSet = set: mapDerivationAttrset lowPrio set;
-
 
   /**
     Increase the nix-env priority of the package, i.e., this
@@ -184,20 +251,31 @@ rec {
     `drv`
 
     : 1\. Function argument
+
+    # Type
+
+    ```
+    hiPrio :: Derivation -> Derivation
+    ```
   */
   hiPrio = setPrio (-10);
 
   /**
-    Apply hiPrio to an attrset with derivations.
+    Apply `hiPrio` to an attrset with derivations.
 
     # Inputs
 
     `set`
 
     : 1\. Function argument
+
+    # Type
+
+    ```
+    hiPrioSet :: { [String] :: Derivation } -> { [String] :: Derivation }
+    ```
   */
   hiPrioSet = set: mapDerivationAttrset hiPrio set;
-
 
   /**
     Check to see if a platform is matched by the given `meta.platforms`
@@ -214,7 +292,6 @@ rec {
     We can inject these into a pattern for the whole of a structured platform,
     and then match that.
 
-
     # Inputs
 
     `platform`
@@ -224,7 +301,6 @@ rec {
     `elem`
 
     : 2\. Function argument
-
 
     # Examples
     :::{.example}
@@ -237,21 +313,24 @@ rec {
 
     :::
   */
-  platformMatch = platform: elem: (
-    # Check with simple string comparison if elem was a string.
-    #
-    # The majority of comparisons done with this function will be against meta.platforms
-    # which contains a simple platform string.
-    #
-    # Avoiding an attrset allocation results in significant  performance gains (~2-30) across the board in OfBorg
-    # because this is a hot path for nixpkgs.
-    if isString elem then platform ? system && elem == platform.system
-    else matchAttrs (
-      # Normalize platform attrset.
-      if elem ? parsed then elem
-      else { parsed = elem; }
-    ) platform
-  );
+  platformMatch =
+    platform: elem:
+    (
+      # Check with simple string comparison if elem was a string.
+      #
+      # The majority of comparisons done with this function will be against meta.platforms
+      # which contains a simple platform string.
+      #
+      # Avoiding an attrset allocation results in significant  performance gains (~2-30) across the board in OfBorg
+      # because this is a hot path for nixpkgs.
+      if isString elem then
+        platform ? system && elem == platform.system
+      else
+        matchAttrs (
+          # Normalize platform attrset.
+          if elem ? parsed then elem else { parsed = elem; }
+        ) platform
+    );
 
   /**
     Check if a package is available on a given platform.
@@ -263,7 +342,6 @@ rec {
 
     2. None of `meta.badPlatforms` pattern matches the given platform.
 
-
     # Inputs
 
     `platform`
@@ -273,7 +351,6 @@ rec {
     `pkg`
 
     : 2\. Function argument
-
 
     # Examples
     :::{.example}
@@ -286,9 +363,10 @@ rec {
 
     :::
   */
-  availableOn = platform: pkg:
-    ((!pkg?meta.platforms) || any (platformMatch platform) pkg.meta.platforms) &&
-    all (elem: !platformMatch platform elem) (pkg.meta.badPlatforms or []);
+  availableOn =
+    platform: pkg:
+    ((!pkg ? meta.platforms) || any (platformMatch platform) pkg.meta.platforms)
+    && ((!pkg ? meta.badPlatforms) || !(any (platformMatch platform) pkg.meta.badPlatforms));
 
   /**
     Mapping of SPDX ID to the attributes in lib.licenses.
@@ -309,13 +387,10 @@ rec {
 
     :::
   */
-  licensesSpdx =
-    mapAttrs'
-    (_key: license: {
-      name = license.spdxId;
-      value = license;
-    })
-    (filterAttrs (_key: license: license ? spdxId) lib.licenses);
+  licensesSpdx = mapAttrs' (_key: license: {
+    name = license.spdxId;
+    value = license;
+  }) (filterAttrs (_key: license: license ? spdxId) lib.licenses);
 
   /**
     Get the corresponding attribute in lib.licenses from the SPDX ID
@@ -327,7 +402,15 @@ rec {
     # Type
 
     ```
-    getLicenseFromSpdxId :: str -> AttrSet
+    getLicenseFromSpdxId :: String -> {
+      deprecated :: Bool;
+      free :: Bool;
+      fullName :: String;
+      redistributable :: Bool;
+      shortName :: String;
+      spdxId :: String;
+      url :: String;
+    }
     ```
 
     # Examples
@@ -348,10 +431,12 @@ rec {
   */
   getLicenseFromSpdxId =
     licstr:
-      getLicenseFromSpdxIdOr licstr (
-        lib.warn "getLicenseFromSpdxId: No license matches the given SPDX ID: ${licstr}"
-        { shortName = licstr; }
-      );
+    getLicenseFromSpdxIdOr licstr (
+      lib.warn "getLicenseFromSpdxId: No license with the given SPDX ID found: ${licstr}" {
+        shortName = licstr;
+        spdxId = licstr;
+      }
+    );
 
   /**
     Get the corresponding attribute in lib.licenses from the SPDX ID
@@ -371,7 +456,15 @@ rec {
     # Type
 
     ```
-    getLicenseFromSpdxIdOr :: str -> Any -> Any
+    getLicenseFromSpdxIdOr :: String -> a -> ({
+      deprecated :: Bool;
+      free :: Bool;
+      fullName :: String;
+      redistributable :: Bool;
+      shortName :: String;
+      spdxId :: String;
+      url :: String;
+    } | a)
     ```
 
     # Examples
@@ -387,7 +480,7 @@ rec {
     => true
     lib.getLicenseFromSpdxIdOr "MY LICENSE" null
     => null
-    lib.getLicenseFromSpdxIdOr "MY LICENSE" (builtins.throw "No SPDX ID matches MY LICENSE")
+    lib.getLicenseFromSpdxIdOr "MY LICENSE" (throw "No SPDX ID matches MY LICENSE")
     => error: No SPDX ID matches MY LICENSE
     ```
     :::
@@ -398,12 +491,11 @@ rec {
         name = lib.toLower name;
         inherit value;
       }) licensesSpdx;
-    in licstr: default:
-      lowercaseLicenses.${ lib.toLower licstr } or default;
+    in
+    licstr: default: lowercaseLicenses.${lib.toLower licstr} or default;
 
   /**
-    Get the path to the main program of a package based on meta.mainProgram
-
+    Get the path to the main program of a package based on `meta.mainProgram`
 
     # Inputs
 
@@ -414,7 +506,7 @@ rec {
     # Type
 
     ```
-    getExe :: package -> string
+    getExe :: Derivation -> StorePath
     ```
 
     # Examples
@@ -430,16 +522,22 @@ rec {
 
     :::
   */
-  getExe = x: getExe' x (x.meta.mainProgram or (
-    # This could be turned into an error when 23.05 is at end of life
-    lib.warn "getExe: Package ${lib.strings.escapeNixIdentifier x.meta.name or x.pname or x.name} does not have the meta.mainProgram attribute. We'll assume that the main program has the same name for now, but this behavior is deprecated, because it leads to surprising errors when the assumption does not hold. If the package has a main program, please set `meta.mainProgram` in its definition to make this warning go away. Otherwise, if the package does not have a main program, or if you don't control its definition, use getExe' to specify the name to the program, such as lib.getExe' foo \"bar\"."
-    lib.getName
-    x
-  ));
+  getExe =
+    x:
+    getExe' x (
+      x.meta.mainProgram or (
+        # This could be turned into an error when 23.05 is at end of life
+        lib.warn
+          "getExe: Package ${
+            lib.strings.escapeNixIdentifier x.meta.name or x.pname or x.name
+          } does not have the meta.mainProgram attribute. We'll assume that the main program has the same name for now, but this behavior is deprecated, because it leads to surprising errors when the assumption does not hold. If the package has a main program, please set `meta.mainProgram` in its definition to make this warning go away. Otherwise, if the package does not have a main program, or if you don't control its definition, use getExe' to specify the name to the program, such as lib.getExe' foo \"bar\"."
+          lib.getName
+          x
+      )
+    );
 
   /**
     Get the path of a program of a derivation.
-
 
     # Inputs
 
@@ -454,7 +552,7 @@ rec {
     # Type
 
     ```
-    getExe' :: derivation -> string -> string
+    getExe' :: Derivation -> String -> StorePath
     ```
 
     # Examples
@@ -470,12 +568,154 @@ rec {
 
     :::
   */
-  getExe' = x: y:
-    assert assertMsg (isDerivation x)
-      "lib.meta.getExe': The first argument is of type ${typeOf x}, but it should be a derivation instead.";
-    assert assertMsg (isString y)
-      "lib.meta.getExe': The second argument is of type ${typeOf y}, but it should be a string instead.";
-    assert assertMsg (match ".*/.*" y == null)
-      "lib.meta.getExe': The second argument \"${y}\" is a nested path with a \"/\" character, but it should just be the name of the executable instead.";
+  getExe' =
+    x: y:
+    assert
+      isDerivation x
+      || throw "lib.meta.getExe': The first argument is of type ${typeOf x}, but it should be a derivation instead.";
+    assert
+      isString y
+      || throw "lib.meta.getExe': The second argument is of type ${typeOf y}, but it should be a string instead.";
+    assert
+      match ".*/.*" y == null
+      || throw "lib.meta.getExe': The second argument \"${y}\" is a nested path with a \"/\" character, but it should just be the name of the executable instead.";
     "${getBin x}/bin/${y}";
+
+  /**
+    Get the path to the main darwin app of a package based on `meta.mainDarwinApp`
+
+    # Inputs
+
+    `x`
+
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    getDarwinApp :: Derivation -> StorePath
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.meta.getDarwinApp` usage example
+
+    ```nix
+    getDarwinApp pkgs.vscodium
+    => "/nix/store/0y95mgmlrs8cayv2cnj23xjfljwhlib0-vscodium-1.121.03429/Applications/VSCodium.app"
+    getDarwinApp pkgs.slack
+    => "/nix/store/g52cl8dblki8dr5bkr0vajpkralkmhi0-slack-4.49.89/Applications/Slack.app"
+    ```
+
+    :::
+  */
+  getDarwinApp =
+    x:
+    getDarwinApp' x (
+      x.meta.mainDarwinApp or (builtins.throw "getDarwinApp: Package ${
+        lib.strings.escapeNixIdentifier x.meta.name or x.pname or x.name
+      } does not have the meta.mainDarwinApp attribute. If the package has a main darwin app, please set `meta.mainDarwinApp` in its definition to make this error go away. Otherwise, if the package does not have a main darwin app, or if you don't control its definition, use getDarwinApp' to specify the name to the program, such as lib.getDarwinApp' vscodium \"VSCodium.app\".")
+    );
+
+  /**
+    Get the path of an darwin app for a derivation.
+
+    # Inputs
+
+    `x`
+
+    : 1\. Function argument
+
+    `y`
+
+    : 2\. Function argument
+
+    # Type
+
+    ```
+    getDarwinApp' :: Derivation -> String -> StorePath
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.meta.getDarwinApp'` usage example
+
+    ```nix
+    getDarwinApp' pkgs.linear "Linear.app"
+    => "/nix/store/z4vh6ldb2vpspv307q7mk6wazfmh5dic-linear-1.30.2/Applications/Linear.app"
+    getDarwinApp' pkgs.vscodium "VSCodium.app"
+    => "/nix/store/0y95mgmlrs8cayv2cnj23xjfljwhlib0-vscodium-1.121.03429/Applications/VSCodium.app"
+    ```
+
+    :::
+  */
+  getDarwinApp' =
+    x: y:
+    assert
+      isDerivation x
+      || throw "lib.meta.getDarwinApp': The first argument is of type ${typeOf x}, but it should be a derivation instead.";
+    assert
+      isString y
+      || throw "lib.meta.getDarwinApp': The second argument is of type ${typeOf y}, but it should be a string instead.";
+    assert
+      lib.hasInfix "/" y == false
+      || throw "lib.meta.getDarwinApp': The second argument \"${y}\" is a nested path with a \"/\" character, but it should just be the name of the app instead.";
+    assert
+      lib.hasSuffix ".app" y
+      || throw "lib.meta.getDarwinApp': The second argument \"${y}\" must end in `.app`";
+    "${lib.getOutput "out" x}/Applications/${y}";
+
+  /**
+    Generate [CPE parts](#var-meta-identifiers-cpeParts) from inputs. Copies `vendor` and `version` to the output, and sets `update` to `*`.
+
+    # Inputs
+
+    `vendor`
+
+    : package's vendor
+
+    `version`
+
+    : package's version
+
+    # Type
+
+    ```
+    cpeFullVersionWithVendor :: String -> String -> { update :: String; vendor :: String; version :: String; }
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.meta.cpeFullVersionWithVendor` usage example
+
+    ```nix
+    lib.meta.cpeFullVersionWithVendor "gnu" "1.2.3"
+    => {
+      vendor = "gnu";
+      version = "1.2.3";
+      update = "*";
+    }
+    ```
+
+    :::
+    :::{.example}
+    ## `lib.meta.cpeFullVersionWithVendor` usage in derivations
+
+    ```nix
+    mkDerivation rec {
+      version = "1.2.3";
+      # ...
+      meta = {
+        # ...
+        identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnu" version;
+      };
+    }
+    ```
+    :::
+  */
+  cpeFullVersionWithVendor = vendor: version: {
+    inherit vendor version;
+    update = "*";
+  };
+
 }

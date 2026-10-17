@@ -7,23 +7,23 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubecolor";
-  version = "0.5.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "kubecolor";
     repo = "kubecolor";
-    rev = "v${version}";
-    sha256 = "sha256-Q3Bl1ejuSpiMpQgiqKa2x/g02hNx326GM2MIDoi7q7o=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-ePjiWDvNWZ3RnB5Lz3K7BhWCnlsz458Nj1KauYze55I=";
   };
 
-  vendorHash = "sha256-SWJbJ/zr9ygZYUuH8QNvgmUXdxb/3OViai48CFmWmXw=";
+  vendorHash = "sha256-z3I5XP/ZebZeSSM/+dzJvPG1OK7fFW2vVYPHLhhG1xo=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
   ];
 
   subPackages = [
@@ -50,16 +50,16 @@ buildGoModule rec {
     echo 'compdef kubecolor=kubectl' >> $out/share/zsh/site-functions/_kubecolor
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Colorizes kubectl output";
     mainProgram = "kubecolor";
     homepage = "https://github.com/kubecolor/kubecolor";
-    changelog = "https://github.com/kubecolor/kubecolor/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/kubecolor/kubecolor/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       ivankovnatsky
       SuperSandro2000
       applejag
     ];
   };
-}
+})

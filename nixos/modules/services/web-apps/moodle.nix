@@ -17,9 +17,7 @@ let
     types
     ;
   inherit (lib)
-    concatStringsSep
     literalExpression
-    mapAttrsToList
     optional
     optionalString
     ;
@@ -317,7 +315,8 @@ in
       settings = {
         "listen.owner" = config.services.httpd.user;
         "listen.group" = config.services.httpd.group;
-      } // cfg.poolConfig;
+      }
+      // cfg.poolConfig;
     };
 
     services.httpd = {
@@ -351,7 +350,7 @@ in
     systemd.services.moodle-init = {
       wantedBy = [ "multi-user.target" ];
       before = [ "phpfpm-moodle.service" ];
-      after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
+      after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.target";
       environment.MOODLE_CONFIG = moodleConfig;
       script = ''
         ${phpExt}/bin/php ${cfg.package}/share/moodle/admin/cli/check_database_schema.php && rc=$? || rc=$?
@@ -393,8 +392,7 @@ in
     };
 
     systemd.services.httpd.after =
-      optional mysqlLocal "mysql.service"
-      ++ optional pgsqlLocal "postgresql.service";
+      optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.target";
 
     users.users.${user} = {
       group = group;

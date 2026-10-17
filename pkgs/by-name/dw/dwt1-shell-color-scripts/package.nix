@@ -7,7 +7,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "dwt1-shell-color-scripts";
-  version = "unstable-2023-03-27";
+  version = "1.1-unstable-2023-03-27";
 
   src = fetchFromGitLab {
     owner = "dwt1";
@@ -49,7 +49,7 @@ stdenvNoCC.mkDerivation {
   meta = {
     homepage = "https://gitlab.com/dwt1/shell-color-scripts";
     description = "Collection of shell color scripts collected by dt (Derek Taylor)";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.all;
     mainProgram = "colorscript";

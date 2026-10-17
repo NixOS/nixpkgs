@@ -4,15 +4,12 @@
   fetchPypi,
   setuptools,
   psutil,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "portpicker";
   version = "1.6.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -25,11 +22,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "portpicker" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to choose unique available network ports";
     mainProgram = "portserver.py";
     homepage = "https://github.com/google/python_portpicker";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

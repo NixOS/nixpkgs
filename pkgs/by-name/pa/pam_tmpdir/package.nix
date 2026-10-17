@@ -6,21 +6,21 @@
   pam,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pam_tmpdir";
-  version = "0.09";
+  version = "0.11";
 
   src = fetchurl {
-    url = "http://deb.debian.org/debian/pool/main/p/pam-tmpdir/pam-tmpdir_${version}.tar.gz";
-    hash = "sha256-MXa1CY6alD83E/Q+MJmsv8NaImWd0pPJKZd/7nbe4J8=";
+    url = "https://deb.debian.org/debian/pool/main/p/pam-tmpdir/pam-tmpdir_${finalAttrs.version}.tar.gz";
+    hash = "sha256-SuMOKSsQ68zJBhhFi+5hgt3nkus73mh8jMPZhmMkzfM=";
   };
 
   postPatch = ''
     substituteInPlace pam_tmpdir.c \
-      --replace /sbin/pam-tmpdir-helper $out/sbin/pam-tmpdir-helper
+      --replace-fail '/usr/libexec/pam-tmpdir/pam-tmpdir-helper' "$out/libexec/pam-tmpdir/pam-tmpdir-helper"
 
     # chmod/chown fails on files in /nix/store
-    sed -i -E -e '/^\s*(chmod|chown)/d' Makefile.{am,in}
+    sed -i -E -e '/^\s*(chmod|chown)/d' Makefile.am
 
     # the symlinks in m4 assume FHS
     rm -rf m4
@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://tracker.debian.org/pkg/pam-tmpdir";
     description = "PAM module for creating safe per-user temporary directories";
     mainProgram = "pam-tmpdir-helper";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.linux;
   };
-}
+})

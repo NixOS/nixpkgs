@@ -1,35 +1,38 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
+
+  # build-system
   hatch-jupyter-builder,
   hatchling,
   jupyterlab,
-  nbformat,
+
+  # dependencies
   colorama,
-  pygments,
-  tornado,
-  requests,
   gitpython,
-  jupyter-server,
-  jupyter-server-mathjax,
   jinja2,
-  git,
-  pytest-tornado,
+  jupyter-server,
+  nbformat,
+  pygments,
+  requests,
+  tornado,
+
+  # tests
+  gitMinimal,
   pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "nbdime";
-  version = "4.0.2";
+  version = "4.0.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2Cefj0sjbAslOyDWDEgxu2eEPtjb1uCfI06wEdNvG/I=";
+    hash = "sha256-jNJez+61EF1WMjfX9k60dIBY+6m7qas4kqH/YeF3zhY=";
   };
 
   build-system = [
@@ -39,32 +42,41 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    nbformat
     colorama
-    pygments
-    tornado
-    requests
     gitpython
-    jupyter-server
-    jupyter-server-mathjax
     jinja2
+    jupyter-server
+    nbformat
+    pygments
+    requests
+    tornado
   ];
 
   nativeCheckInputs = [
-    git
-    pytest-tornado
+    gitMinimal
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   disabledTests = [
+    # subprocess.CalledProcessError: Command '['git', 'diff', 'base', 'diff.ipynb']' returned non-zero exit status 128.
+    # git-nbdiffdriver diff: line 1: git-nbdiffdriver: command not found
+    # fatal: external diff died, stopping at diff.ipynb
     "test_git_diffdriver"
-    "test_git_difftool"
+
+    # subprocess.CalledProcessError: Command '['git', 'merge', 'remote-no-conflict']' returned non-zero exit status 1.
     "test_git_mergedriver"
+
+    # Require network access
+    "test_git_difftool"
     "test_git_mergetool"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # OSError: Could not find system gitattributes location!
+    "test_locate_gitattributes_syste"
   ];
 
   preCheck = ''
-    export HOME="$TEMP"
     git config --global user.email "janedoe@example.com"
     git config --global user.name "Jane Doe"
   '';
@@ -73,11 +85,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nbdime" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jupyter/nbdime";
-    changelog = "https://github.com/jupyter/nbdime/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/jupyter/nbdime/blob/v${version}/CHANGELOG.md";
     description = "Tools for diffing and merging of Jupyter notebooks";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ tbenst ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

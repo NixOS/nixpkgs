@@ -1,8 +1,9 @@
 {
   lib,
-  branca,
   buildPythonPackage,
+  branca,
   fetchFromGitHub,
+  fetchpatch2,
   geodatasets,
   geopandas,
   jinja2,
@@ -10,37 +11,42 @@
   numpy,
   pandas,
   pillow,
+  pixelmatch,
   pytestCheckHook,
-  pythonOlder,
   requests,
   selenium,
   setuptools,
   setuptools-scm,
-  wheel,
   xyzservices,
 }:
 
 buildPythonPackage rec {
   pname = "folium";
-  version = "0.19.4";
+  version = "0.20.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "python-visualization";
     repo = "folium";
     tag = "v${version}";
-    hash = "sha256-qTTJK12nHIhcMkPu4rb2IYWm96EjRafftacrlfeGqZg=";
+    hash = "sha256-yLF4TdrMVEtWvGXZGbwa3OxCkdXMsN4m45rPrGDHlCU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
-    wheel
+  patches = [
+    # https://github.com/python-visualization/folium/pull/2223
+    (fetchpatch2 {
+      name = "folium-fix-tests-proj-9.8.1";
+      url = "https://github.com/python-visualization/folium/commit/b4ea8aa12d0808536c4f50b63eddd006e68680cb.patch?full_index=1";
+      hash = "sha256-e6PFvK/qAfVTPs8LF2XgojwFJ/s2PDrIuwEkxRUzSkE=";
+    })
   ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
     branca
     jinja2
     numpy
@@ -54,21 +60,26 @@ buildPythonPackage rec {
     nbconvert
     pandas
     pillow
+    pixelmatch
     pytestCheckHook
     selenium
   ];
 
   disabledTests = [
     # Tests require internet connection
-    "test__repr_png_is_bytes"
-    "test_geojson"
-    "test_heat_map_with_weights"
     "test_json_request"
-    "test_notebook"
+    # no selenium driver
+    "test__repr_png_is_bytes"
     "test_valid_png_size"
     "test_valid_png"
     # pooch tries to write somewhere it can, and geodatasets does not give us an env var to customize this.
     "test_timedynamic_geo_json"
+  ];
+
+  disabledTestPaths = [
+    # Selenium cannot find chrome driver, even with chromedriver package
+    "tests/snapshots/test_snapshots.py"
+    "tests/selenium"
   ];
 
   pythonImportsCheck = [ "folium" ];
@@ -77,7 +88,7 @@ buildPythonPackage rec {
     description = "Make beautiful maps with Leaflet.js & Python";
     homepage = "https://github.com/python-visualization/folium";
     changelog = "https://github.com/python-visualization/folium/releases/tag/${src.tag}";
-    license = with lib.licenses; [ mit ];
-    maintainers = lib.teams.geospatial.members;
+    license = lib.licenses.mit;
+    teams = [ lib.teams.geospatial ];
   };
 }

@@ -1,39 +1,46 @@
 {
   lib,
   buildPythonPackage,
-  crc,
   fetchPypi,
-  pythonOlder,
+
+  # build-system
   setuptools-scm,
+
+  # dependencies
+  fastcrc,
+  msgspec,
+  numpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "apycula";
-  version = "0.15";
+  version = "0.34";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
+  # The Pypi archive contains necessary files generated with proprietary tools.
   src = fetchPypi {
-    inherit version;
-    pname = "Apycula";
-    hash = "sha256-Bg5nHvUaW+cHZEzmZ08YuXwecVx6R8tys8ZBuqUEhTg=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-sLFRh1vlKJ66OF1Mb6YtGzvkkobfcPB+B2ra+RZ4siw=";
   };
 
   build-system = [ setuptools-scm ];
 
-  dependencies = [ crc ];
+  dependencies = [
+    fastcrc
+    msgspec
+    numpy
+  ];
 
   # Tests require a physical FPGA
   doCheck = false;
 
   pythonImportsCheck = [ "apycula" ];
 
-  meta = with lib; {
+  meta = {
     description = "Open Source tools for Gowin FPGAs";
     homepage = "https://github.com/YosysHQ/apicula";
-    changelog = "https://github.com/YosysHQ/apicula/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ newam ];
+    changelog = "https://github.com/YosysHQ/apicula/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ newam ];
   };
-}
+})

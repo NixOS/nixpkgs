@@ -13,6 +13,7 @@ let
   configFile = pkgs.writeText "cgitrc" ''
     # default paths to static assets
     css=${pathPrefix}/cgit.css
+    js=${pathPrefix}/cgit.js
     logo=${pathPrefix}/cgit.png
     favicon=${pathPrefix}/favicon.ico
 
@@ -57,7 +58,7 @@ in
       description = ''
         Verbatim contents of the cgit runtime configuration file. Documentation
         (with cgitrc example file) is available in "man cgitrc". Or online:
-        http://git.zx2c4.com/cgit/tree/cgitrc.5.txt
+        <http://git.zx2c4.com/cgit/tree/cgitrc.5.txt>
       '';
     };
 
@@ -82,6 +83,7 @@ in
           )
           alias.url = (
               "${pathPrefix}/cgit.css" => "${pkgs.cgit}/cgit/cgit.css",
+              "${pathPrefix}/cgit.js" => "${pkgs.cgit}/cgit/cgit.js",
               "${pathPrefix}/cgit.png" => "${pkgs.cgit}/cgit/cgit.png",
               "${pathPrefix}"          => "${pkgs.cgit}/cgit/cgit.cgi"
           )
@@ -91,11 +93,7 @@ in
       }
     '';
 
-    systemd.services.lighttpd.preStart = ''
-      mkdir -p /var/cache/cgit
-      chown lighttpd:lighttpd /var/cache/cgit
-    '';
-
+    systemd.services.lighttpd.serviceConfig.CacheDirectory = "cgit";
   };
 
 }

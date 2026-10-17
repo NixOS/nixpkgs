@@ -9,11 +9,12 @@
 buildPythonPackage rec {
   pname = "pyprind";
   version = "2.11.3";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "PyPrind";
     inherit version;
-    sha256 = "e37dcab6e1a9c8e0a7f0fce65fde7a79e2deda1c75aa015910a49e2137b54cbf";
+    hash = "sha256-433KtuGpyOCn8PzmX956eeLe2hx1qgFZEKSeITe1TL8=";
   };
 
   buildInputs = [ psutil ];
@@ -24,10 +25,10 @@ buildPythonPackage rec {
     py.test tests
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python Progress Bar and Percent Indicator Utility";
     homepage = "https://github.com/rasbt/pyprind";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

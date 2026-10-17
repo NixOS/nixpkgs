@@ -15,38 +15,44 @@
   pkg-config,
   readline,
   sbc,
+  python3,
+  systemdSupport ? true,
+  systemdLibs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bluez-alsa";
-  version = "4.1.1";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "Arkq";
     repo = "bluez-alsa";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-oGaYiSkOhqfjUl+mHTs3gqFcxli3cgkRtT6tbjy3ht0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Vebxyku7xl/ReU025iThEbvfHsi4kCbvFqlBGDWrHxc=";
   };
+
+  postPatch = ''
+    patchShebangs src/dbus-codegen.py
+  '';
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-  ];
+    python3
+  ]
+  ++ lib.optional systemdSupport systemdLibs;
 
-  buildInputs =
-    [
-      alsa-lib
-      bluez
-      glib
-      sbc
-      dbus
-      readline
-      libbsd
-      ncurses
-    ]
-    ++ lib.optionals aacSupport [
-      fdk_aac
-    ];
+  buildInputs = [
+    alsa-lib
+    bluez
+    glib
+    sbc
+    dbus
+    readline
+    libbsd
+    ncurses
+  ]
+  ++ lib.optional aacSupport fdk_aac;
 
   configureFlags = [
     (lib.enableFeature aacSupport "aac")
@@ -54,6 +60,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature true "rfcomm")
     (lib.withFeatureAs true "alsaplugindir" "${placeholder "out"}/lib/alsa-lib")
     (lib.withFeatureAs true "dbusconfdir" "${placeholder "out"}/share/dbus-1/system.d")
+    (lib.enableFeature systemdSupport "systemd")
+    (lib.withFeatureAs systemdSupport "systemdsystemunitdir" "${placeholder "out"}/lib/systemd/system")
+    (lib.withFeatureAs systemdSupport "bluealsauser" "bluealsa")
+    (lib.withFeatureAs systemdSupport "bluealsaaplayuser" "bluealsa")
   ];
 
   passthru.updateScript = gitUpdater { };
@@ -68,9 +78,9 @@ stdenv.mkDerivation (finalAttrs: {
       playback and capture.
 
       Some backstory: Bluez 5 removed built-in support for ALSA in favor of a
-      generic interface for 3rd party appliations. Thereafter, PulseAudio
+      generic interface for 3rd party applications. Thereafter, PulseAudio
       implemented a backend for that interface and became the only way to get
-      Bluetooth audio with Bluez 5. Users prefering ALSA stayed on Bluez 4.
+      Bluetooth audio with Bluez 5. Users preferring ALSA stayed on Bluez 4.
       However, Bluez 4 eventually became deprecated.
 
       This package is a rebirth of a direct interface between ALSA and Bluez 5,
@@ -80,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
       BluezALSA if you disable `bluetooth-discover` and `bluez5-discover`
       modules in PA and configure it to play/capture sound over `bluealsa` PCM.
     '';
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     mainProgram = "bluealsa";
     maintainers = with lib.maintainers; [ oxij ];
     platforms = lib.platforms.linux;

@@ -10,15 +10,15 @@
 
 buildDunePackage rec {
   pname = "tezt";
-  version = "4.1.0";
+  version = "4.3.0";
 
-  minimalOCamlVersion = "4.12";
+  minimalOCamlVersion = "4.13";
 
   src = fetchFromGitLab {
     owner = "nomadic-labs";
-    repo = pname;
-    rev = version;
-    hash = "sha256-1Cl/GOB+MDPJIl/6600PLTSL+vCYcAZGjedd6hr7rJw=";
+    repo = "tezt";
+    tag = version;
+    hash = "sha256-BF+hNqTm9r2S3jGjmjrw+/SHrr87WSe4YUjkc9WRgNo=";
   };
 
   propagatedBuildInputs = [
@@ -30,6 +30,8 @@ buildDunePackage rec {
 
   meta = {
     description = "Test framework for unit tests, integration tests, and regression tests";
+    homepage = "https://gitlab.com/nomadic-labs/tezt";
     license = lib.licenses.mit;
+    broken = lib.versionAtLeast lwt.version "6.0.0";
   };
 }

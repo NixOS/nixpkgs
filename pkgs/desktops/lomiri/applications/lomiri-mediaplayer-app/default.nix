@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   gitUpdater,
   nixosTests,
   cmake,
@@ -11,6 +10,7 @@
   lomiri-action-api,
   lomiri-content-hub,
   lomiri-ui-toolkit,
+  mesa,
   pkg-config,
   qtbase,
   qtdeclarative,
@@ -23,49 +23,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-mediaplayer-app";
-  version = "1.1.0";
+  version = "1.1.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-mediaplayer-app";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-Pq1TA7eoHDRRzr6zT2cmIye91uz/0YsmQ8Qp79244wg=";
+    tag = finalAttrs.version;
+    hash = "sha256-1RamS4cOIxi1vGy0tldMYtgbtJ86r2K54DTOJqKMLuE=";
   };
-
-  patches = [
-    # Remove when https://gitlab.com/ubports/development/core/lomiri-mediaplayer-app/-/merge_requests/35 merged & in release
-    (fetchpatch {
-      name = "0001-lomiri-mediaplayer-app-Fix-GNUInstallDirs-usage.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-mediaplayer-app/-/commit/baaa0ea7cba2a9f8bc7f223246857eba1cd5d8e4.patch";
-      hash = "sha256-RChPRi4zrAWJEl4Urznh5FRYuTnxCFzG+gZurrF7Ym0=";
-    })
-
-    # Remove when https://gitlab.com/ubports/development/core/lomiri-mediaplayer-app/-/merge_requests/36 merged & in release
-    (fetchpatch {
-      name = "0002-lomiri-mediaplayer-app-Drop-NO_DEFAULT_PATH-for-qmltestrunner.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-mediaplayer-app/-/commit/3bf4ebae7eb59176af984d07ad72b67ee0bd1b8f.patch";
-      hash = "sha256-dJCW0dKe7Tq1Mg9CSdVQHamObVrPS7COXsdv41SWnHg=";
-    })
-
-    # Remove when https://gitlab.com/ubports/development/core/lomiri-mediaplayer-app/-/merge_requests/37 merged & in release
-    (fetchpatch {
-      name = "0003-lomiri-mediaplayer-app-BUILD_TESTING.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-mediaplayer-app/-/commit/df1aadb82d73177133bc096307ec1ef1e2b0c2ed.patch";
-      hash = "sha256-dvkGjG0ptCmLDIAWzDjOzu+Q/5bgVdb/+RmE6v8fV0Q=";
-    })
-
-    # Remove when https://gitlab.com/ubports/development/core/lomiri-mediaplayer-app/-/merge_requests/38 merged & in release
-    (fetchpatch {
-      name = "0004-lomiri-mediaplayer-app-bindtextdomain.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-mediaplayer-app/-/commit/bd927e823205214f9ea01dfb1f93171a8952ecf9.patch";
-      hash = "sha256-/lg0elv9weNnRGq1oD94/sE511EZ0TmXZsURcauQobI=";
-    })
-    (fetchpatch {
-      name = "0005-lomiri-mediaplayer-app-Fix-title-localisation.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-mediaplayer-app/-/commit/c4cba819dd55e7e85c4ea496626bed9aa78470a5.patch";
-      hash = "sha256-EiUxaCa5ANnRSciB8IodQOGnmG4rE/g/M+K4XcyqTI8=";
-    })
-  ];
 
   postPatch = ''
     # We don't want absolute paths in desktop files
@@ -85,26 +50,26 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      qtbase
-      qtmultimedia
+  buildInputs = [
+    qtbase
+    qtmultimedia
 
-      # QML
-      lomiri-action-api
-      lomiri-content-hub
-      lomiri-ui-toolkit
-      qtxmlpatterns
-    ]
-    # QtMultimedia playback support
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-    ]);
+    # QML
+    lomiri-action-api
+    lomiri-content-hub
+    lomiri-ui-toolkit
+    qtxmlpatterns
+  ]
+  # QtMultimedia playback support
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+  ]);
 
   nativeCheckInputs = [
+    mesa.llvmpipeHook # ShapeMaterial needs an OpenGL context: https://gitlab.com/ubports/development/core/lomiri-ui-toolkit/-/issues/35
     qtdeclarative # qmltestrunner
     xvfb-run
   ];
@@ -115,8 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [ (lib.cmakeBool "ENABLE_AUTOPILOT" false) ];
 
-  # Only test segfaults in Nix sandbox, see LSS for details
-  doCheck = false;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   preCheck =
     let
@@ -124,7 +88,12 @@ stdenv.mkDerivation (finalAttrs: {
         list: suffix: lib.strings.concatMapStringsSep ":" (drv: "${lib.getBin drv}/${suffix}") list;
     in
     ''
-      export QT_PLUGIN_PATH=${listToQtVar [ qtbase ] qtbase.qtPluginPrefix}
+      export QT_PLUGIN_PATH=${
+        listToQtVar [
+          qtbase
+          qtmultimedia
+        ] qtbase.qtPluginPrefix
+      }
       export QML2_IMPORT_PATH=${
         listToQtVar [
           lomiri-ui-toolkit
@@ -153,14 +122,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Media Player application for Ubuntu Touch devices";
-    homepage = "https://gitlab.com/ubports/development/apps/lomiri-mediaplayer-app";
-    changelog = "https://gitlab.com/ubports/development/apps/lomiri-mediaplayer-app/-/blob/${finalAttrs.version}/ChangeLog";
+    homepage = "https://gitlab.com/ubports/development/core/lomiri-mediaplayer-app";
+    changelog = "https://gitlab.com/ubports/development/core/lomiri-mediaplayer-app/-/blob/${
+      if (!isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+    }/ChangeLog";
     license = with lib.licenses; [
       gpl3Only
       cc-by-sa-30
     ];
     mainProgram = "lomiri-mediaplayer-app";
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
   };
 })

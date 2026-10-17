@@ -2,25 +2,31 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nixosTests,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "elasticsearch_exporter";
-  version = "1.8.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "prometheus-community";
     repo = "elasticsearch_exporter";
-    rev = "v${version}";
-    hash = "sha256-8WPDBlp6ftBmY/lu0wuuvs3A9KAzEM/A6RqSvYYLm7w=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-xVDqyYYwzxfFxZ3K2SMFfPoJw47SXS6czsWLC++LOOk=";
   };
 
-  vendorHash = "sha256-jbPFxwrXWwxPamMnbBxFvGBrt38YG7N5fTweAYULEYQ=";
+  vendorHash = "sha256-8y0M1b34eJpuHOuXPemhB5kKwBSgU7cMFxOaIZFS/bo=";
 
-  meta = with lib; {
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) elasticsearch; };
+
+  meta = {
     description = "Elasticsearch stats exporter for Prometheus";
     mainProgram = "elasticsearch_exporter";
     homepage = "https://github.com/prometheus-community/elasticsearch_exporter";
-    license = licenses.asl20;
-    maintainers = teams.deshaw.members;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      de11n
+      despsyched
+    ];
   };
-}
+})

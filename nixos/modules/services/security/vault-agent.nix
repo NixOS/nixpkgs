@@ -58,23 +58,6 @@ let
                           Path to use for the pid file.
                         '';
                       };
-
-                      template = lib.mkOption {
-                        default = null;
-                        type = with types; nullOr (listOf (attrsOf anything));
-                        description =
-                          let
-                            upstreamDocs =
-                              if flavour == "vault-agent" then
-                                "https://developer.hashicorp.com/vault/docs/agent/template"
-                              else
-                                "https://github.com/hashicorp/consul-template/blob/main/docs/configuration.md#templates";
-                          in
-                          ''
-                            Template section of ${flavour}.
-                            Refer to <${upstreamDocs}> for supported values.
-                          '';
-                      };
                     };
                   };
 
@@ -85,11 +68,13 @@ let
                       upstreamDocs =
                         if flavour == "vault-agent" then
                           "https://developer.hashicorp.com/vault/docs/agent#configuration-file-options"
+                        else if flavour == "openbao-agent" then
+                          "https://openbao.org/docs/agent-and-proxy/agent/"
                         else
                           "https://github.com/hashicorp/consul-template/blob/main/docs/configuration.md#configuration-file";
                     in
                     ''
-                      Free-form settings written directly to the `config.json` file.
+                      Free-form settings written directly to the {file}`config.json` file.
                       Refer to <${upstreamDocs}> for supported values.
 
                       ::: {.note}
@@ -109,6 +94,7 @@ let
       instance,
       name,
       flavour,
+      subcommand ? null,
     }:
     let
       configFile = format.generate "${name}.json" instance.settings;
@@ -124,8 +110,8 @@ let
         User = instance.user;
         Group = instance.group;
         RuntimeDirectory = flavour;
-        ExecStart = "${lib.getExe instance.package} ${
-          lib.optionalString ((lib.getName instance.package) == "vault") "agent"
+        ExecStart = "${lib.getExe instance.package}${
+          lib.optionalString (subcommand != null) " ${subcommand}"
         } -config ${configFile}";
         ExecReload = "${pkgs.coreutils}/bin/kill -SIGHUP $MAINPID";
         KillSignal = "SIGINT";
@@ -141,12 +127,19 @@ in
       pkgName = "vault";
       flavour = "vault-agent";
     };
+    services.openbao-agent.instances = commonOptions {
+      pkgName = "openbao";
+      flavour = "openbao-agent";
+    };
   };
 
   config = lib.mkMerge (
     map
       (
-        flavour:
+        {
+          flavour,
+          subcommand ? null,
+        }:
         let
           cfg = config.services.${flavour};
         in
@@ -154,19 +147,32 @@ in
           systemd.services = lib.mapAttrs' (
             name: instance:
             lib.nameValuePair "${flavour}-${name}" (createAgentInstance {
-              inherit name instance flavour;
+              inherit
+                name
+                instance
+                flavour
+                subcommand
+                ;
             })
           ) cfg.instances;
         }
       )
       [
-        "consul-template"
-        "vault-agent"
+        { flavour = "consul-template"; }
+        {
+          flavour = "vault-agent";
+          subcommand = "agent";
+        }
+        {
+          flavour = "openbao-agent";
+          subcommand = "agent";
+        }
       ]
   );
 
   meta.maintainers = with lib.maintainers; [
     emilylange
+    kiara
     tcheronneau
   ];
 }

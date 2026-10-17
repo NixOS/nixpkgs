@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pytestCheckHook,
   libarchive,
-  pythonOlder,
   setuptools,
   # unrar is non-free software
   useUnrar ? false,
@@ -14,35 +13,32 @@
 assert useUnrar -> unrar != null;
 assert !useUnrar -> libarchive != null;
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rarfile";
-  version = "4.2";
+  version = "4.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "markokr";
     repo = "rarfile";
-    tag = "v${version}";
-    hash = "sha256-ZiwD2LG25fMd4Z+QWsh/x3ceG5QRBH4s/TZDwMnfpNI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-QhNzpNKOuBF/QEQ9XBXwKudcq4VqJyN/0chT+9uCcKg=";
   };
 
-  prePatch =
-    ''
-      substituteInPlace rarfile.py \
-    ''
-    + (
-      if useUnrar then
-        ''
-          --replace 'UNRAR_TOOL = "unrar"' "UNRAR_TOOL = \"${unrar}/bin/unrar\""
-        ''
-      else
-        ''
-          --replace 'ALT_TOOL = "bsdtar"' "ALT_TOOL = \"${libarchive}/bin/bsdtar\""
-        ''
-    )
-    + "";
+  prePatch = ''
+    substituteInPlace rarfile.py \
+  ''
+  + (
+    if useUnrar then
+      ''
+        --replace-fail 'UNRAR_TOOL = "unrar"' "UNRAR_TOOL = \"${unrar}/bin/unrar\""
+      ''
+    else
+      ''
+        --replace-fail 'BSDTAR_TOOL = "bsdtar"' "BSDTAR_TOOL = \"${libarchive}/bin/bsdtar\""
+      ''
+  )
+  + "";
 
   build-system = [ setuptools ];
 
@@ -53,11 +49,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rarfile" ];
 
-  meta = with lib; {
+  meta = {
     description = "RAR archive reader for Python";
     homepage = "https://github.com/markokr/rarfile";
-    changelog = "https://github.com/markokr/rarfile/releases/tag/v${version}";
-    license = licenses.isc;
+    changelog = "https://github.com/markokr/rarfile/releases/tag/v${finalAttrs.src.tag}";
+    license = lib.licenses.isc;
     maintainers = [ ];
   };
-}
+})

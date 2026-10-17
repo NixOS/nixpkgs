@@ -38,7 +38,8 @@ let
 
 in
 symlinkJoin {
-  name = "wordlists";
+  pname = "wordlists";
+  version = lib.trivial.release;
 
   paths = [
     wordlistsCollection
@@ -46,7 +47,7 @@ symlinkJoin {
     wordlistsPathBin
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of wordlists useful for security testing";
     longDescription = ''
       The `wordlists` package provides two scripts. One is called {command}`wordlists`,
@@ -57,7 +58,7 @@ symlinkJoin {
       [rockyou](https://en.wikipedia.org/wiki/RockYou#Data_breach)
       wordlist. If you want to modify the available wordlists you can override
       the `lists` attribute`. In your nixos configuration this would look
-      similiar to this:
+      similar to this:
 
       ```nix
       environment.systemPackages = [
@@ -70,7 +71,7 @@ symlinkJoin {
       If you want to add a new package that provides wordlist/s the convention
       is to copy it to {file}`$out/share/wordlists/myNewWordlist`.
     '';
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       pamplemousse
       h7x4
     ];

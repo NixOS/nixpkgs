@@ -2,28 +2,32 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  isPy27,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "py-sonic";
-  version = "1.0.1";
-  format = "setuptools";
-  disabled = isPy27;
+  version = "1.1.2";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-DU1T86T0jQ6ptkWdjuV70VC8MFx/rK5aQFYjbK6F2Hk=";
+    pname = "py_sonic";
+    inherit (finalAttrs) version;
+    hash = "sha256-WzygTPYcqqifF2K21DfMw4bjALVglGS3MOijYXwb0dk=";
   };
+
+  build-system = [ setuptools ];
 
   # package has no tests
   doCheck = false;
+
   pythonImportsCheck = [ "libsonic" ];
 
-  meta = with lib; {
-    homepage = "https://github.com/crustymonkey/py-sonic";
+  meta = {
     description = "Python wrapper library for the Subsonic REST API";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ wenngle ];
+    homepage = "https://github.com/crustymonkey/py-sonic";
+    changelog = "https://github.com/crustymonkey/py-sonic/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ wenngle ];
   };
-}
+})

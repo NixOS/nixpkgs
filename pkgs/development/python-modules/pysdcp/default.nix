@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -10,12 +9,10 @@ buildPythonPackage rec {
   version = "1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchPypi {
     pname = "pySDCP";
     inherit version;
-    sha256 = "07396lsn610izaravqc6j5f6m0wjrzgc0d1r9dwqzj15g5zfc7wm";
+    hash = "sha256-lR/mfnklyI95Szk0wN7PkoNqXJGG4a2y+hEEYzU1aRw=";
   };
 
   # Project has no tests
@@ -23,10 +20,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysdcp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to control SONY projectors";
     homepage = "https://github.com/Galala7/pySDCP";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,44 +1,86 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  pkg-config,
-  libxkbcommon,
+  libcosmicAppHook,
+  just,
   pulseaudio,
+  pipewire,
+  libinput,
   udev,
-  wayland,
+  nix-update-script,
+  nixosTests,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-osd";
-  version = "1.0.0-alpha.2";
+  version = "1.10.0";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-osd";
-    rev = "epoch-${version}";
-    hash = "sha256-JDdVFNTJI9O88lLKB1esJE4sk7ZZnTMilQRZSAgnTqs=";
+    tag = "epoch-${finalAttrs.version}";
+    hash = "sha256-er5zPfJzlU+it8tkVJP9FPfNiS/UXzP/+DMvDgAsYLo=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Db1a1FusUdO7rQb0jfznaFNaJjdS9XSDGCMuzV1D79A=";
+  cargoHash = "sha256-bA9XNfYGC5tqNGSrhQMks+Khjeaao76AYIThsY40Bs8=";
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    libxkbcommon
-    pulseaudio
-    wayland
-    udev
-  ];
+  separateDebugInfo = true;
+  __structuredAttrs = true;
 
   env.POLKIT_AGENT_HELPER_1 = "/run/wrappers/bin/polkit-agent-helper-1";
 
-  meta = with lib; {
+  nativeBuildInputs = [
+    just
+    libcosmicAppHook
+    rustPlatform.bindgenHook
+  ];
+
+  buildInputs = [
+    pulseaudio
+    udev
+    libinput
+    pipewire
+  ];
+
+  dontUseJustBuild = true;
+  dontUseJustCheck = true;
+
+  justFlags = [
+    "--set"
+    "prefix"
+    (placeholder "out")
+    "--set"
+    "cargo-target-dir"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
+  ];
+
+  passthru = {
+    tests = {
+      inherit (nixosTests)
+        cosmic
+        cosmic-autologin
+        cosmic-noxwayland
+        cosmic-autologin-noxwayland
+        ;
+    };
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "epoch-(.*)"
+      ];
+    };
+  };
+
+  meta = {
     homepage = "https://github.com/pop-os/cosmic-osd";
     description = "OSD for the COSMIC Desktop Environment";
     mainProgram = "cosmic-osd";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nyabinary ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    teams = [ lib.teams.cosmic ];
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -34,7 +34,7 @@
     config = {
       allowAliases = false;
       allowUnfree = true;
-      cudaSupport = true;
+      cudaSupport = false;
       inHydra = true;
     };
 
@@ -69,11 +69,7 @@ let
               value.meta.hydraPlatforms
                 or (lib.subtractLists (value.meta.badPlatforms or [ ]) (value.meta.platforms or [ "x86_64-linux" ]))
             )
-          else if
-            value.recurseForDerivations or false
-            || value.recurseForRelease or false
-            || value.__recurseIntoDerivationForReleaseJobs or false
-          then
+          else if value.recurseForDerivations or false || value.recurseForRelease or false then
             # Recurse
             packagesWith attrPath cond value
           else
@@ -97,7 +93,7 @@ let
     attrPath: !(lib.hasPrefix "linuxKernel" attrPath || lib.hasPrefix "linuxPackages" attrPath);
 
   # This is handled by release-cuda.nix
-  isNotCudaPackage = attrPath: !(lib.hasPrefix "cuda" attrPath);
+  isNotCudaPackage = attrPath: !(lib.hasInfix "cuda" attrPath || lib.hasInfix "nvidia" attrPath);
 
   canSubstituteSrc =
     pkg:

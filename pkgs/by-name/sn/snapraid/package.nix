@@ -7,18 +7,18 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "snapraid";
-  version = "12.3";
+  version = "14.10";
 
   src = fetchFromGitHub {
     owner = "amadvance";
     repo = "snapraid";
-    rev = "v${version}";
-    hash = "sha256-pkLooA3JZV/rPlE5+JeJN1QW2xAdNu7c/iFFtT4M4vc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vM1qPNrMbMaiMTRtpIJr2WdpIDXH5EydmgPeiZ4FrwQ=";
   };
 
-  VERSION = version;
+  env.VERSION = finalAttrs.version;
 
   doCheck = true;
 
@@ -35,10 +35,12 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://www.snapraid.it/";
+    downloadPage = "https://github.com/amadvance/snapraid/releases";
+    changelog = "https://github.com/amadvance/snapraid/blob/v${finalAttrs.version}/HISTORY";
     description = "Backup program for disk arrays";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.makefu ];
     platforms = lib.platforms.unix;
     mainProgram = "snapraid";
   };
-}
+})

@@ -2,27 +2,24 @@
   lib,
   stdenv,
   qt6,
-  libsForQt5,
+  qt6Packages,
   fetchFromGitHub,
   gst_all_1,
   cmake,
   libglvnd,
-  tbb,
+  onetbb,
   ninja,
   pkg-config,
 }:
-let
-  inherit (libsForQt5) qcoro;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "brickstore";
-  version = "2024.5.2";
+  version = "2026.3.2";
 
   src = fetchFromGitHub {
     owner = "rgriebl";
     repo = "brickstore";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-Bu9oNbZm3lx/CfYAReHyWe/kW+kaefDWeBtWLHOCORU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UIVzvzsterKkL8/JPx5S0wly6mLxflAqX0gMFX3rOes=";
     fetchSubmodules = true;
   };
 
@@ -31,7 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
     libglvnd
     ninja
     pkg-config
-    qcoro
     qt6.qtdoc
     qt6.qtdeclarative
     qt6.qtimageformats
@@ -42,22 +38,15 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qttools
     qt6.qtwayland
     qt6.wrapQtAppsHook
-    tbb
+    qt6Packages.qcoro
+    onetbb
   ];
 
-  preConfigure = ''
-    sed -i '/^)$/d' cmake/BuildQCoro.cmake
-
-    substituteInPlace cmake/BuildQCoro.cmake \
-      --replace-fail 'FetchContent_Declare(' ' ' \
-      --replace-fail '    qcoro' ' ' \
-      --replace-fail '    GIT_REPOSITORY https://github.com/danvratil/qcoro.git' ' ' \
-      --replace-fail '    GIT_TAG        v''${QCORO_VERSION}' ' ' \
-      --replace-fail 'FetchContent_GetProperties(qcoro)' ' ' \
-      --replace-fail 'FetchContent_Populate(qcoro)' ' ' \
-      --replace-fail \
-        'add_subdirectory(''${qcoro_SOURCE_DIR} ''${qcoro_BINARY_DIR} EXCLUDE_FROM_ALL)' \
-        'add_subdirectory(${qcoro.src} ${qcoro}bin/qcoro)'
+  # Use nix-provided qcoro instead of fetching from GitHub
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'include(BuildQCoro)' \
+        'find_package(QCoro6 CONFIG REQUIRED COMPONENTS Core Network Qml)'
   '';
 
   qtWrapperArgs = [

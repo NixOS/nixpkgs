@@ -8,7 +8,7 @@
 }:
 {
 
-  options = with lib; {
+  options = {
     environment.enableAllTerminfo = lib.mkOption {
       default = false;
       type = lib.types.bool;
@@ -50,7 +50,6 @@
           rxvt-unicode-unwrapped
           rxvt-unicode-unwrapped-emoji
           st
-          termite
           tmux
           wezterm
           yaft
@@ -66,6 +65,17 @@
       source = "${config.system.path}/share/terminfo";
     };
 
+    boot.initrd.systemd.contents = lib.listToAttrs (
+      lib.map
+        (ti: lib.nameValuePair "/etc/terminfo/${ti}" { source = "${pkgs.ncurses}/share/terminfo/${ti}"; })
+        [
+          "l/linux"
+          "v/vt100"
+          "v/vt102"
+          "v/vt220"
+        ]
+    );
+
     environment.profileRelativeSessionVariables = {
       TERMINFO_DIRS = [ "/share/terminfo" ];
     };
@@ -76,12 +86,18 @@
       export TERM=$TERM
     '';
 
-    security.sudo.extraConfig = lib.mkIf config.security.sudo.keepTerminfo ''
+    security =
+      let
+        extraConfig = ''
 
-      # Keep terminfo database for root and %wheel.
-      Defaults:root,%wheel env_keep+=TERMINFO_DIRS
-      Defaults:root,%wheel env_keep+=TERMINFO
-    '';
-
+          # Keep terminfo database for root and %wheel.
+          Defaults:root,%wheel env_keep+=TERMINFO_DIRS
+          Defaults:root,%wheel env_keep+=TERMINFO
+        '';
+      in
+      lib.mkIf config.security.sudo.keepTerminfo {
+        sudo = { inherit extraConfig; };
+        sudo-rs = { inherit extraConfig; };
+      };
   };
 }

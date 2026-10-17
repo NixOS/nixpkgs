@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "powerstat";
-  version = "0.04.03";
+  version = "0.04.06";
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
-    repo = pname;
-    rev = "V${version}";
-    hash = "sha256-Y9djoy2RaEe4j+1g+9Q2MxEpVzPMA8oyJ92hlQm3Lqg=";
+    repo = "powerstat";
+    rev = "V${finalAttrs.version}";
+    hash = "sha256-naCaCwteDYwIGqvffRGc5AoYMOXHP2OlKMx4zaEztmE=";
   };
 
   installFlags = [
@@ -21,12 +21,12 @@ stdenv.mkDerivation rec {
     "BASHDIR=${placeholder "out"}/share/bash-completion/completions"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Laptop power measuring tool";
     mainProgram = "powerstat";
     homepage = "https://github.com/ColinIanKing/powerstat";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ womfoo ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ womfoo ];
   };
-}
+})

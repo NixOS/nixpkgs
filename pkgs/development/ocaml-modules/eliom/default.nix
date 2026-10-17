@@ -1,29 +1,30 @@
-{ buildDunePackage
-, lib
-, fetchFromGitHub
-, which
-, ocsigen_server
-, lwt_react
-, ppx_deriving
-, ppx_optcomp
-, js_of_ocaml-ocamlbuild
-, js_of_ocaml-ppx
-, js_of_ocaml-ppx_deriving_json
-, js_of_ocaml-lwt
-, js_of_ocaml-tyxml
-, lwt_ppx
-, ocsipersist
+{
+  buildDunePackage,
+  lib,
+  fetchFromGitHub,
+  which,
+  ocsigen_server,
+  lwt_react,
+  ppx_deriving,
+  ppx_optcomp,
+  js_of_ocaml-ocamlbuild,
+  js_of_ocaml-ppx,
+  js_of_ocaml-ppx_deriving_json,
+  js_of_ocaml-lwt,
+  js_of_ocaml-tyxml,
+  lwt_ppx,
+  ocsipersist,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "eliom";
-  version = "11.1.0";
+  version = "12.1.0";
 
   src = fetchFromGitHub {
     owner = "ocsigen";
     repo = "eliom";
-    rev = version;
-    hash = "sha256-q8XLkyE5GE7NmU+v5221mkMrm2pK0Loh+RsS++PZp+Q=";
+    tag = finalAttrs.version;
+    hash = "sha256-VJHt64XheW+JPZ3pynlOvpTgXf5nE9HCB4K1bWUXmAs=";
   };
 
   nativeBuildInputs = [
@@ -67,7 +68,6 @@ buildDunePackage rec {
     '';
 
     license = lib.licenses.lgpl21;
-
     maintainers = [ lib.maintainers.gal_bolle ];
   };
-}
+})

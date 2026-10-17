@@ -1,38 +1,52 @@
 {
   lib,
   stdenvNoCC,
-  fetchzip,
+  fetchFromGitHub,
+  gftools,
+  installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "jetbrains-mono";
   version = "2.304";
 
-  src = fetchzip {
-    url = "https://github.com/JetBrains/JetBrainsMono/releases/download/v${version}/JetBrainsMono-${version}.zip";
-    sha256 = "sha256-rv5A3F1zdcUJkmw09st1YxmEIkIoYJaMYGyZjic8jfc=";
-    stripRoot = false;
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  src = fetchFromGitHub {
+    owner = "jetbrains";
+    repo = "jetbrainsmono";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-SW9d5yVud2BWUJpDOlqYn1E1cqicIHdSZjbXjqOAQGw=";
   };
 
-  dontPatch = true;
-  dontConfigure = true;
-  dontBuild = true;
-  doCheck = false;
-  dontFixup = true;
+  env."PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION" = "python";
 
-  installPhase = ''
-    runHook preInstall
-    install -Dm644 -t $out/share/fonts/truetype/ fonts/ttf/*.ttf
-    install -Dm644 -t $out/share/fonts/truetype/ fonts/variable/*.ttf
-    runHook postInstall
+  nativeBuildInputs = [
+    gftools
+    installFonts
+  ];
+
+  buildPhase = ''
+    runHook preBuild
+    gftools builder sources/config.yaml
+    runHook postBuild
   '';
 
-  meta = with lib; {
+  # gftools pulls in ninja which we don't need here.
+  dontUseNinjaInstall = true;
+
+  outputs = [
+    "out"
+    "webfont"
+  ];
+
+  meta = {
     description = "Typeface made for developers";
     homepage = "https://jetbrains.com/mono/";
-    changelog = "https://github.com/JetBrains/JetBrainsMono/blob/v${version}/Changelog.md";
-    license = licenses.ofl;
-    maintainers = with maintainers; [ vinnymeller ];
-    platforms = platforms.all;
+    changelog = "https://github.com/JetBrains/JetBrainsMono/blob/v${finalAttrs.src.tag}/Changelog.md";
+    license = lib.licenses.ofl;
+    maintainers = with lib.maintainers; [ vinnymeller ];
+    platforms = lib.platforms.all;
   };
-}
+})

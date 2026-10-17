@@ -4,15 +4,21 @@
   fetchurl,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "csv2odf";
   version = "2.09";
+  pyproject = true;
+
   src = fetchurl {
-    url = "mirror://sourceforge/project/${pname}/${pname}-${version}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/project/csv2odf/csv2odf-${finalAttrs.version}/csv2odf-${finalAttrs.version}.tar.gz";
     sha256 = "09l0yfay89grjdzap2h11f0hcyn49np5zizg2yyp2aqgjs8ki57p";
   };
 
-  meta = with lib; {
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  meta = {
     homepage = "https://sourceforge.net/p/csv2odf/wiki/Main_Page/";
     description = "Convert csv files to OpenDocument Format";
     mainProgram = "csv2odf";
@@ -27,7 +33,6 @@ python3.pkgs.buildPythonApplication rec {
       The output format (fonts, number formatting, etc.) is controlled by a
       template file that you can design in your office application of choice.
     '';
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ leenaars ];
+    license = lib.licenses.gpl3;
   };
-}
+})

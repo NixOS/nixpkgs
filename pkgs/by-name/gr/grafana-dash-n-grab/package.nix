@@ -4,36 +4,39 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "grafana-dash-n-grab";
-  version = "0.7.1";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     owner = "esnet";
     repo = "gdg";
-    sha256 = "sha256-oJ0wXBfanpYS95ET+7lpKzLdQG5g/uKFs5+Qd+hPjHo=";
+    sha256 = "sha256-K8/NhTFfYk9oL2wpRxFLobEx3aW6fx7PzLxf5wFNbFY=";
   };
 
-  vendorHash = "sha256-jnPnWcow5SiFHGfoAxBR8ncGHLyS7sFKNJT8YuUTg88=";
+  vendorHash = "sha256-8ZIu9U6OFRD4pu8K/AUBesX/SRyMkOKi8cdScHBdKnk=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
-    "-X github.com/esnet/gdg/version.GitCommit=${src.rev}"
+    "-X main.Version=${finalAttrs.version}"
+    "-X github.com/esnet/gdg/version.GitCommit=${finalAttrs.src.rev}"
   ];
 
   # The test suite tries to communicate with a running version of grafana locally. This fails if
   # you don't have grafana running.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Grafana Dash-n-Grab (gdg) -- backup and restore Grafana dashboards, datasources, and other entities";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "https://github.com/esnet/gdg";
-    maintainers = with maintainers; teams.bitnomial.members;
+    maintainers = with lib.maintainers; [
+      cdepillabout
+      wraithm
+    ];
     mainProgram = "gdg";
-    changelog = "https://github.com/esnet/gdg/releases/tag/v${version}";
+    changelog = "https://github.com/esnet/gdg/releases/tag/v${finalAttrs.version}";
   };
-}
+})

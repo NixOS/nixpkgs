@@ -5,13 +5,13 @@
   coreutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "entr";
-  version = "5.6";
+  version = "5.9";
 
   src = fetchurl {
-    url = "https://eradman.com/entrproject/code/entr-${version}.tar.gz";
-    hash = "sha256-AiK435KNO1o7UZTWPn3gmFM+BBkNnZoVS5JsbB+d0U4=";
+    url = "https://eradman.com/entrproject/code/entr-${finalAttrs.version}.tar.gz";
+    hash = "sha256-DvLOfbcoFnhEqRkElEzQfHzMb9MEG4ScrYYSJNEGqEU=";
   };
 
   postPatch = ''
@@ -23,18 +23,17 @@ stdenv.mkDerivation rec {
   checkTarget = "test";
   installFlags = [ "PREFIX=$(out)" ];
 
-  TARGET_OS = stdenv.hostPlatform.uname.system;
+  env.TARGET_OS = stdenv.hostPlatform.uname.system;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://eradman.com/entrproject/";
     description = "Run arbitrary commands when files change";
-    changelog = "https://github.com/eradman/entr/raw/${version}/NEWS";
-    license = licenses.isc;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/eradman/entr/raw/${finalAttrs.version}/NEWS";
+    license = lib.licenses.isc;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       pSub
-      synthetica
     ];
     mainProgram = "entr";
   };
-}
+})

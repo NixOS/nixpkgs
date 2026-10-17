@@ -1,28 +1,28 @@
 {
+  cmake,
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
-  darwin,
   nix-update-script,
   nixosTests,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "realm";
-  version = "2.7.0";
+  version = "2.9.6";
 
   src = fetchFromGitHub {
     owner = "zhboner";
     repo = "realm";
-    rev = "v${version}";
-    hash = "sha256-vkLGfSDRYqvoqyVM/CWGJjpvXXPisEZxUSjLZGjNzno=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-P7jyVe6KNe1evan2qRtpA99ZKbgF1Zz7DiRxi1+h7WI=";
   };
 
-  cargoHash = "sha256-SrTymeGERDO42/S3m5ErwtB15KslPzdmcn3KlrVNVIc=";
+  cargoHash = "sha256-kuoYEGn419LtJRGoWzlvgclkjW0zh94XX6OvCsa5Hfc=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
+  nativeBuildInputs = [
+    cmake
+    rustPlatform.bindgenHook
   ];
 
   env.RUSTC_BOOTSTRAP = 1;
@@ -32,11 +32,11 @@ rustPlatform.buildRustPackage rec {
     tests = { inherit (nixosTests) realm; };
   };
 
-  meta = with lib; {
-    description = "A simple, high performance relay server written in rust";
+  meta = {
+    description = "Simple, high performance relay server written in rust";
     homepage = "https://github.com/zhboner/realm";
     mainProgram = "realm";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ocfox ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ocfox ];
   };
-}
+})

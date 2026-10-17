@@ -1,7 +1,7 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
+  cargo,
   fastimport,
   fetchFromGitHub,
   gevent,
@@ -9,43 +9,61 @@
   git,
   glibcLocales,
   gnupg,
-  gpgme,
+  gpg,
+  merge3,
+  nix-update-script,
+  openssh,
   paramiko,
   pytestCheckHook,
-  pythonOlder,
-  setuptools,
+  rich,
+  rustc,
+  rustPlatform,
   setuptools-rust,
+  setuptools,
   urllib3,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dulwich";
-  version = "0.22.6";
+  version = "1.2.15";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = "dulwich";
-    tag = "v${version}";
-    hash = "sha256-sE5du5Nv2AOyiBpQ2hDJss1dVSVBzWypnGWk3/hI8UI=";
+    tag = "dulwich-${finalAttrs.version}";
+    hash = "sha256-ZLTgVeY9seeElnRc0G7M+0bFx8b/9i5dMj4/61A/maY=";
   };
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-X8sKVLTPQVjAcW+h1X/AsHW7UgwSOUbAa4VRZfhepM0=";
+  };
+
+  nativeBuildInputs = [
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
 
   build-system = [
     setuptools
     setuptools-rust
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     urllib3
   ];
 
   optional-dependencies = {
+    colordiff = [ rich ];
     fastimport = [ fastimport ];
     https = [ urllib3 ];
+    merge = [ merge3 ];
     pgp = [
-      gpgme
+      gpg
       gnupg
     ];
     paramiko = [ paramiko ];
@@ -56,37 +74,50 @@ buildPythonPackage rec {
     geventhttpclient
     git
     glibcLocales
+    openssh # for ssh-keygen
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   disabledTests = [
-    # AssertionError: 'C:\\\\foo.bar\\\\baz' != 'C:\\foo.bar\\baz'
-    "test_file_win"
+    # Depends on setuid which is not available in sandboxed environments
+    "SharedRepositoryTests"
   ];
 
   disabledTestPaths = [
-    # requires swift config file
-    "tests/contrib/test_swift_smoke.py"
+    # AssertionError: GPGMEError not raised
+    "tests/test_signature.py::GPGSignatureVendorTests::test_verify_invalid_signature"
   ];
 
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "dulwich" ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^dulwich-([1-9][0-9.]+)$"
+    ];
+  };
+
+  meta = {
     description = "Implementation of the Git file formats and protocols";
     longDescription = ''
       Dulwich is a Python implementation of the Git file formats and protocols, which
       does not depend on Git itself. All functionality is available in pure Python.
     '';
     homepage = "https://www.dulwich.io/";
-    changelog = "https://github.com/jelmer/dulwich/blob/dulwich-${version}/NEWS";
-    license = with licenses; [
+    changelog = "https://github.com/jelmer/dulwich/blob/dulwich-${finalAttrs.src.tag}/NEWS";
+    license = with lib.licenses; [
       asl20
       gpl2Plus
     ];
-    maintainers = with maintainers; [ koral ];
+    maintainers = with lib.maintainers; [
+      koral
+      sarahec
+    ];
   };
-}
+})

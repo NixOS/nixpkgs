@@ -16,11 +16,13 @@
   numpy,
   onnxruntime,
   optree,
+  orbax-checkpoint,
   packaging,
   pythonAtLeast,
   rich,
   scikit-learn,
   tensorflow,
+  tf2onnx,
 
   # tests
   dm-tree,
@@ -30,18 +32,20 @@
   pytestCheckHook,
   tf-keras,
   torch,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "keras";
-  version = "3.8.0";
+  version = "3.15.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "keras-team";
     repo = "keras";
-    tag = "v${version}";
-    hash = "sha256-sbAGiI1Ai0MPiQ8AMpa5qX6hYt/plsIqhn9xYLBb120=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Q4hs2pejoDambRp+HBqceO10XAqs+CTGO23QC1+kPBA=";
   };
 
   build-system = [
@@ -56,11 +60,14 @@ buildPythonPackage rec {
     numpy
     onnxruntime
     optree
+    orbax-checkpoint
     packaging
     rich
     scikit-learn
     tensorflow
-  ] ++ lib.optionals (pythonAtLeast "3.12") [ distutils ];
+    tf2onnx
+  ]
+  ++ lib.optionals (pythonAtLeast "3.12") [ distutils ];
 
   pythonImportsCheck = [
     "keras"
@@ -75,40 +82,86 @@ buildPythonPackage rec {
     pytestCheckHook
     tf-keras
     torch
+    writableTmpDirAsHomeHook
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  disabledTests = [
+    # Require unpackaged `grain`
+    "test_basics_grain"
+    "test_fit_with_data_adapter_grain_dataloader"
+    "test_fit_with_data_adapter_grain_dataset"
+    "test_fit_with_data_adapter_grain_dataset_with_len"
+    "test_image_dataset_from_directory_binary_grain"
+    "test_image_dataset_from_directory_color_modes_grain"
+    "test_image_dataset_from_directory_crop_to_aspect_ratio_grain"
+    "test_image_dataset_from_directory_follow_links_grain"
+    "test_image_dataset_from_directory_manual_labels_grain"
+    "test_image_dataset_from_directory_multiclass_grain"
+    "test_image_dataset_from_directory_no_labels_grain"
+    "test_image_dataset_from_directory_not_batched_grain"
+    "test_image_dataset_from_directory_pad_to_aspect_ratio_grain"
+    "test_image_dataset_from_directory_shuffle_grain"
+    "test_image_dataset_from_directory_validation_split_grain"
+    "test_no_targets_grain"
+    "test_not_batched_grain"
+    "test_sample_count_grain"
+    "test_sampling_rate_grain"
+    "test_sequence_stride_grain"
+    "test_shuffle_grain"
+    "test_start_and_end_index_grain"
+    "test_text_dataset_from_directory_binary_grain"
+    "test_text_dataset_from_directory_follow_links_grain"
+    "test_text_dataset_from_directory_manual_labels_grain"
+    "test_text_dataset_from_directory_multiclass_grain"
+    "test_text_dataset_from_directory_not_batched_grain"
+    "test_text_dataset_from_directory_standalone_grain"
+    "test_text_dataset_from_directory_validation_split_grain"
+    "test_timeseries_regression_grain"
 
-  disabledTests =
-    [
-      # Requires onnx which is currently broken
-      "test_export_onnx"
+    # Tries to install the package in the sandbox
+    "test_keras_imports"
 
-      # Tries to install the package in the sandbox
-      "test_keras_imports"
+    # TypeError: this __dict__ descriptor does not support '_DictWrapper' objects
+    "test_reloading_default_saved_model"
 
-      # TypeError: this __dict__ descriptor does not support '_DictWrapper' objects
-      "test_reloading_default_saved_model"
-
-      # ValueError: The truth value of an empty array is ambiguous.
-      # Use `array.size > 0` to check that an array is not empty.
-      "test_min_max_norm"
-    ]
-    ++ lib.optionals stdenv.isDarwin [
-      # TypeError: Cannot convert a MPS Tensor to float64 dtype as the MPS framework doesn't support float64. Please use float32 instead.
-      "test_dynamic_backend_torch"
-      # AttributeError: module 'numpy' has no attribute 'float128'. Did you mean: 'float16'?
-      "test_spectrogram_error"
-    ];
+    # jax >= 0.11.2 serializes StableHLO portable artifacts targeting v1.18.0, which use
+    # `vhlo.custom_call_v2`. tensorflow's `XlaCallModule` (StableHLO v1.13.7) cannot
+    # deserialize them, breaking `JaxLayer`/`FlaxLayer` native serialization.
+    "test_jax_layer_native_serialization"
+    "test_jax_layer_stateless"
+    "test_jax_layer_training_independent"
+    "test_jax_layer_training_state"
+    "test_jax_layer_training_state_dtype_policy"
+    "test_with_polymorphic_shape_more_than_26_dimension_names"
+    "test_with_structures_as_inputs_and_outputs"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # Hangs forever
+    "test_fit_with_data_adapter"
+  ];
 
   disabledTestPaths = [
-    # Require onnx which is currently broken
+    # np.cross is deprecated for 2d arrays starting from numpy 2.5.0
+    # ValueError: Both input arrays must be (arrays of) 3-dimensional vectors, but they are 3 and 2 dimensional instead
+    "keras/src/ops/numpy_test.py::NumpyTwoInputOpsCorrectnessTest::test_cross"
+
+    # Require unpackaged `grain`
+    "keras/src/layers/preprocessing/data_layer_test.py"
+    "keras/src/layers/preprocessing/discretization_test.py"
+    "keras/src/layers/preprocessing/image_preprocessing/resizing_test.py"
+    "keras/src/layers/preprocessing/rescaling_test.py"
+    "keras/src/layers/preprocessing/string_lookup_test.py"
+    "keras/src/layers/preprocessing/text_vectorization_test.py"
+    "keras/src/trainers/data_adapters/grain_dataset_adapter_test.py"
+
+    # These tests succeed when run individually, but crash within the full test suite:
+    # ImportError: /nix/store/4bw0x7j3wfbh6i8x3plmzknrdwdzwfla-abseil-cpp-20240722.1/lib/libabsl_cord_internal.so.2407.0.0:
+    # undefined symbol: _ZN4absl12lts_2024072216strings_internal13StringifySink6AppendESt17basic_string_viewIcSt11char_traitsIcEE
     "keras/src/export/onnx_test.py"
 
-    # Datasets are downloaded from the internet
+    # Require internet access
     "integration_tests/dataset_tests"
+    "keras/src/applications/applications_test.py"
 
     # TypeError: test_custom_fit.<locals>.CustomModel.train_step() missing 1 required positional argument: 'data'
     "integration_tests/jax_custom_fit_test.py"
@@ -124,21 +177,15 @@ buildPythonPackage rec {
     # AssertionError: 0 != 2
     "integration_tests/torch_workflow_test.py"
 
-    # Most tests require internet access
-    "keras/src/applications/applications_test.py"
-
     # TypeError: this __dict__ descriptor does not support '_DictWrapper' objects
     "keras/src/backend/tensorflow/saved_model_test.py"
-
-    # KeyError: 'Unable to synchronously open object (bad object header version number)'
-    "keras/src/saving/file_editor_test.py"
   ];
 
   meta = {
     description = "Multi-backend implementation of the Keras API, with support for TensorFlow, JAX, and PyTorch";
     homepage = "https://keras.io";
-    changelog = "https://github.com/keras-team/keras/releases/tag/v${version}";
+    changelog = "https://github.com/keras-team/keras/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

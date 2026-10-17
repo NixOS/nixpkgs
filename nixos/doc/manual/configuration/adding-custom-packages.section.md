@@ -23,9 +23,7 @@ Then you write and test the package as described in the Nixpkgs manual.
 Finally, you add it to [](#opt-environment.systemPackages), e.g.
 
 ```nix
-{
-  environment.systemPackages = [ pkgs.my-package ];
-}
+{ environment.systemPackages = [ pkgs.my-package ]; }
 ```
 
 and you run `nixos-rebuild`, specifying your own Nixpkgs tree:
@@ -43,13 +41,14 @@ tree. For instance, here is how you specify a build of the
 {
   environment.systemPackages =
     let
-      my-hello = with pkgs; stdenv.mkDerivation rec {
-        name = "hello-2.8";
-        src = fetchurl {
-          url = "mirror://gnu/hello/${name}.tar.gz";
+      my-hello = pkgs.stdenv.mkDerivation (finalAttrs: {
+        pname = "hello";
+        version = "2.8";
+        src = pkgs.fetchurl {
+          url = "mirror://gnu/hello/hello-${finalAttrs.version}.tar.gz";
           hash = "sha256-5rd/gffPfa761Kn1tl3myunD8TuM+66oy1O7XqVGDXM=";
         };
-      };
+      });
     in
     [ my-hello ];
 }
@@ -59,29 +58,28 @@ Of course, you can also move the definition of `my-hello` into a
 separate Nix expression, e.g.
 
 ```nix
-{
-  environment.systemPackages = [ (import ./my-hello.nix) ];
-}
+{ environment.systemPackages = [ (pkgs.callPackage ./my-hello.nix { }) ]; }
 ```
 
 where `my-hello.nix` contains:
 
 ```nix
-with import <nixpkgs> {}; # bring all of Nixpkgs into scope
+{ stdenv, fetchurl }: # declare dependencies as arguments
 
-stdenv.mkDerivation rec {
-  name = "hello-2.8";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "hello";
+  version = "2.8";
   src = fetchurl {
-    url = "mirror://gnu/hello/${name}.tar.gz";
+    url = "mirror://gnu/hello/hello-${finalAttrs.version}.tar.gz";
     hash = "sha256-5rd/gffPfa761Kn1tl3myunD8TuM+66oy1O7XqVGDXM=";
   };
-}
+})
 ```
 
-This allows testing the package easily:
+This allows testing the package without building a whole system configuration:
 
 ```ShellSession
-$ nix-build my-hello.nix
+$ nix-build -E 'with import <nixpkgs> { }; callPackage ./my-hello.nix { }'
 $ ./result/bin/hello
 Hello, world!
 ```
@@ -111,7 +109,7 @@ If there are shared libraries missing add them with
     extraPkgs = pkgs: [
       # missing libraries here, e.g.: `pkgs.libepoxy`
     ];
-  }
+  };
 }
 ```
 

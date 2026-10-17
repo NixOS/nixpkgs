@@ -13,11 +13,15 @@ let
   mkPlugin =
     name:
     stdenv.mkDerivation {
-      name = "vdr-${name}-${vdr.version}";
-      inherit (vdr) src;
+      pname = name;
+      inherit (vdr) src version;
+
       buildInputs = [ vdr ];
       preConfigure = "cd PLUGINS/src/${name}";
       installFlags = [ "DESTDIR=$(out)" ];
+      meta = {
+        homepage = "https://git.tvdr.de/?p=vdr.git";
+      };
     };
 in
 {
@@ -38,48 +42,9 @@ in
     buildInputs = oldAttr.buildInputs ++ [ ncurses ];
   });
 
-  inherit
-    (lib.genAttrs [
-      "epgtableid0"
-      "hello"
-      "osddemo"
-      "pictures"
-      "servicedemo"
-      "status"
-      "svdrpdemo"
-    ] mkPlugin)
-    ;
-
-  femon = stdenv.mkDerivation rec {
-    pname = "vdr-femon";
-    version = "2.4.0";
-
-    buildInputs = [ vdr ];
-
-    src = fetchFromGitHub {
-      repo = "vdr-plugin-femon";
-      owner = "rofafor";
-      sha256 = "sha256-0qBMYgNKk7N9Bj8fAoOokUo+G9gfj16N5e7dhoKRBqs=";
-      rev = "v${version}";
-    };
-
-    postPatch = "substituteInPlace Makefile --replace /bin/true true";
-
-    makeFlags = [ "DESTDIR=$(out)" ];
-
-    meta = with lib; {
-      inherit (src.meta) homepage;
-      description = "DVB Frontend Status Monitor plugin for VDR";
-      maintainers = [ maintainers.ck3d ];
-      license = licenses.gpl2;
-      inherit (vdr.meta) platforms;
-    };
-
-  };
-
   vnsiserver = stdenv.mkDerivation rec {
     pname = "vdr-vnsiserver";
-    version = "1.8.3";
+    version = "1.8.4";
 
     buildInputs = [ vdr ];
 
@@ -89,14 +54,14 @@ in
       repo = "vdr-plugin-vnsiserver";
       owner = "vdr-projects";
       rev = version;
-      sha256 = "sha256-ivHdzX90ozMXSvIc5OrKC5qHeK5W3TK8zyrN8mY3IhE=";
+      sha256 = "sha256-EFPY1Pt79reL05Tdu14HYE9E+CnT9mdUYifGzTsNpMA=";
     };
 
-    meta = with lib; {
+    meta = {
       inherit (src.meta) homepage;
       description = "VDR plugin to handle KODI clients";
-      maintainers = [ maintainers.ck3d ];
-      license = licenses.gpl2;
+      maintainers = [ lib.maintainers.ck3d ];
+      license = lib.licenses.gpl2;
       inherit (vdr.meta) platforms;
     };
 
@@ -132,24 +97,24 @@ in
 
     dontInstall = true;
 
-    meta = with lib; {
+    meta = {
       inherit (src.meta) homepage;
       description = "VDR Text2Skin Plugin";
-      maintainers = [ maintainers.ck3d ];
-      license = licenses.gpl2;
+      maintainers = [ lib.maintainers.ck3d ];
+      license = lib.licenses.gpl2;
       inherit (vdr.meta) platforms;
     };
   };
 
   fritzbox = stdenv.mkDerivation rec {
     pname = "vdr-fritzbox";
-    version = "1.5.4";
+    version = "1.5.8";
 
     src = fetchFromGitHub {
       owner = "jowi24";
       repo = "vdr-fritz";
       rev = version;
-      hash = "sha256-DGD73i+ZHFgtCo+pMj5JaMovvb5vS1x20hmc5t29//o=";
+      hash = "sha256-o+wJJCAOTg6pPScZ0iIiEWZyT2/++pLtuOppNeaXzmQ=";
       fetchSubmodules = true;
     };
 
@@ -161,12 +126,21 @@ in
 
     installFlags = [ "DESTDIR=$(out)" ];
 
-    meta = with lib; {
+    meta = {
       inherit (src.meta) homepage;
       description = "Plugin for VDR to access AVMs Fritz Box routers";
-      maintainers = [ maintainers.ck3d ];
-      license = licenses.gpl2;
+      maintainers = [ lib.maintainers.ck3d ];
+      license = lib.licenses.gpl2;
       inherit (vdr.meta) platforms;
     };
   };
 }
+// (lib.genAttrs [
+  "epgtableid0"
+  "hello"
+  "osddemo"
+  "pictures"
+  "servicedemo"
+  "status"
+  "svdrpdemo"
+] mkPlugin)

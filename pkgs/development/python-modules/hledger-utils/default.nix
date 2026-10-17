@@ -20,12 +20,12 @@ buildPythonPackage rec {
   pname = "hledger-utils";
   version = "1.14.0";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitLab {
     owner = "nobodyinperson";
     repo = "hledger-utils";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Qu4nUcAGTACmLhwc7fkLxITOyFnUHv85qMhtViFumVs=";
   };
 
@@ -55,15 +55,15 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Utilities extending hledger";
     homepage = "https://gitlab.com/nobodyinperson/hledger-utils";
-    license = with licenses; [
+    license = with lib.licenses; [
       cc0
       cc-by-40
       gpl3
     ];
-    maintainers = with maintainers; [ nobbz ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ nobbz ];
+    platforms = lib.platforms.all;
   };
 }

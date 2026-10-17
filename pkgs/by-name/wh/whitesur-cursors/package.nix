@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "whitesur-cursors";
-  version = "0-unstable-2022-06-17";
+  version = "0-unstable-2025-01-13";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = "WhiteSur-cursors";
-    rev = "5c94e8c22de067282f4cf6d782afd7b75cdd08c8";
-    hash = "sha256-CFse0XZzJu+PWDcqmvIXvue+3cKX47oavZU9HYRDAg0=";
+    rev = "c8759f13de18612051e7c1250946f54e49128b61";
+    hash = "sha256-xzqX/Xa+SEJ6t5T6LMe4m0RBcwioX2B/DHUa6kigzm4=";
   };
 
   installPhase = ''

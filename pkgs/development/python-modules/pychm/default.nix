@@ -12,17 +12,17 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0wpn9ijlsmrpyiwg3drmgz4dms1i1i347adgqw37bkrh3vn6yq16";
+    hash = "sha256-JmBv7B4wz3UGx6+pQ0YMMejayH81t/F49DdXTWVM9nI=";
   };
 
   buildInputs = [ chmlib ];
 
   pythonImportsCheck = [ "chm" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to manipulate Microsoft HTML Help (CHM) files";
     homepage = "https://github.com/dottedmag/pychm";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ alexshpilkin ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ alexshpilkin ];
   };
 }

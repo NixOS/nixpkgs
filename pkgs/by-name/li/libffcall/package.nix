@@ -1,17 +1,26 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libffcall";
   version = "2.5";
 
   src = fetchurl {
-    url = "mirror://gnu/libffcall/libffcall-${version}.tar.gz";
+    url = "mirror://gnu/libffcall/libffcall-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-f0IglrQEmLE4kJOVWCXxQbtn7WAUJJ2IQAlGPceEaHk=";
   };
 
   enableParallelBuilding = false;
 
-  outputs = [ "dev" "out" "doc" "man" ];
+  outputs = [
+    "dev"
+    "out"
+    "doc"
+    "man"
+  ];
 
   postInstall = ''
     mkdir -p $doc/share/doc/libffcall
@@ -19,10 +28,10 @@ stdenv.mkDerivation rec {
     rm -rf $out/share
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Foreign function call library";
     homepage = "https://www.gnu.org/software/libffcall/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
-}
+})

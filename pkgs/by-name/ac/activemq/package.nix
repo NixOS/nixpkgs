@@ -4,16 +4,13 @@
   fetchurl,
 }:
 
-let
-  version = "6.1.4";
-in
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "activemq";
-  inherit version;
+  version = "6.2.4";
 
   src = fetchurl {
-    url = "https://archive.apache.org/dist/activemq/${version}/apache-activemq-${version}-bin.tar.gz";
-    hash = "sha256-8b0no0XUNOw3U2ULWtNW9R7DAWXtAajvh0nGuTkVNfM=";
+    url = "mirror://apache/activemq/${finalAttrs.version}/apache-activemq-${finalAttrs.version}-bin.tar.gz";
+    hash = "sha256-/jvyO8cDQ666i8J53SXPS5WyBmN5GZwK6TVaDxXxJhM=";
   };
 
   installPhase = ''
@@ -37,5 +34,6 @@ stdenvNoCC.mkDerivation {
     mainProgram = "activemq";
     maintainers = [ lib.maintainers.anthonyroussel ];
     platforms = lib.platforms.unix;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "apache" finalAttrs.version;
   };
-}
+})

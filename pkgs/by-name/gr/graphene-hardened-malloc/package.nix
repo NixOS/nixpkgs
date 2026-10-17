@@ -1,7 +1,9 @@
 {
   fetchFromGitHub,
+  fetchpatch,
   lib,
   makeWrapper,
+  nix-update-script,
   python3,
   runCommand,
   stdenv,
@@ -10,14 +12,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "graphene-hardened-malloc";
-  version = "2024123000";
+  version = "14";
 
   src = fetchFromGitHub {
     owner = "GrapheneOS";
     repo = "hardened_malloc";
-    rev = finalAttrs.version;
-    hash = "sha256-zsP/ym/MXomqq+t/ckiAzHVR4AuFg+mEwXlICbBbODA=";
+    tag = finalAttrs.version;
+    hash = "sha256-QUGDJyTnD5MuBUMlc4PZOZSAfevVUB6QbncVyXIAgb8=";
   };
+
+  patches = [
+    # GCC 16 moved `std::__throw_bad_alloc` to `<bits/new_throw.h>`
+    (fetchpatch {
+      url = "https://github.com/GrapheneOS/hardened_malloc/commit/04a25bd141efcd2c0d29ef7d868b205a844b3ad2.patch";
+      hash = "sha256-+FBjnGnjs1nyN/zu0Gf0bIv7RHEDscevDsFkvb1/A20=";
+    })
+  ];
 
   nativeCheckInputs = [ python3 ];
   # these tests cover use as a build-time-linked library
@@ -48,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   separateDebugInfo = true;
 
   passthru = {
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
     ld-preload-tests = stdenv.mkDerivation {
       name = "${finalAttrs.pname}-ld-preload-tests";
       inherit (finalAttrs) src;
@@ -94,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/GrapheneOS/hardened_malloc";
     description = "Hardened allocator designed for modern systems";
     mainProgram = "preload-hardened-malloc";
@@ -103,8 +113,11 @@ stdenv.mkDerivation (finalAttrs: {
       along with various extensions. It provides substantial hardening against heap
       corruption vulnerabilities yet aims to provide decent overall performance.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ ris ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      ris
+      baksa
+    ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

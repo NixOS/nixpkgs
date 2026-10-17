@@ -7,22 +7,19 @@
   jsonschema,
   lark,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "ldfparser";
-  version = "0.25.0";
+  version = "0.26.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "c4deszes";
     repo = "ldfparser";
     tag = "v${version}";
-    hash = "sha256-SZ9mWV5PjkQ2OiScPSMrunkKQWmuYW2lB2JvpTGNbY4=";
+    hash = "sha256-SVl/O0/2k1Y4lta+3BFkddyBZfYO2vqh4Xx1ZXNwXN4=";
   };
 
   build-system = [ setuptools ];
@@ -45,12 +42,12 @@ buildPythonPackage rec {
     "tests/test_performance.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "LIN Description File parser written in Python";
     homepage = "https://github.com/c4deszes/ldfparser";
     changelog = "https://github.com/c4deszes/ldfparser/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "ldfparser";
   };
 }

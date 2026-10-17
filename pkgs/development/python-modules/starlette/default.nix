@@ -8,7 +8,6 @@
 
   # dependencies
   anyio,
-  typing-extensions,
 
   # optional dependencies
   itsdangerous,
@@ -16,10 +15,12 @@
   python-multipart,
   pyyaml,
   httpx,
+  httpx2,
 
   # tests
+  blockbuster,
+  opentelemetry-sdk,
   pytestCheckHook,
-  pythonOlder,
   trio,
 
   # reverse dependencies
@@ -28,21 +29,19 @@
 
 buildPythonPackage rec {
   pname = "starlette";
-  version = "0.41.2";
+  version = "1.7.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
-    owner = "encode";
+    owner = "Kludex";
     repo = "starlette";
     tag = version;
-    hash = "sha256-ZNB4OxzJHlsOie3URbUnZywJbqOZIvzxS/aq7YImdQ0=";
+    hash = "sha256-5/gQtC0JbQM7eSQeu2aVJtD63v4LjnbSSC0jF96e958=";
   };
 
   build-system = [ hatchling ];
 
-  dependencies = [ anyio ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
+  dependencies = [ anyio ];
 
   optional-dependencies.full = [
     itsdangerous
@@ -50,22 +49,16 @@ buildPythonPackage rec {
     python-multipart
     pyyaml
     httpx
+    httpx2
   ];
 
   nativeCheckInputs = [
+    blockbuster
+    opentelemetry-sdk
     pytestCheckHook
     trio
-    typing-extensions
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
-
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
-    "-W"
-    "ignore::trio.TrioDeprecationWarning"
-    "-W"
-    "ignore::ResourceWarning" # FIXME remove once test suite is fully compatible with anyio 4.4.0
-  ];
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "starlette" ];
 
@@ -73,12 +66,12 @@ buildPythonPackage rec {
     inherit fastapi;
   };
 
-  meta = with lib; {
-    changelog = "https://www.starlette.io/release-notes/#${lib.replaceStrings [ "." ] [ "" ] version}";
-    downloadPage = "https://github.com/encode/starlette";
-    homepage = "https://www.starlette.io/";
+  meta = {
+    changelog = "https://github.com/Kludex/starlette/blob/${src.tag}/docs/release-notes.md";
+    downloadPage = "https://github.com/Kludex/starlette";
+    homepage = "https://starlette.dev";
     description = "Little ASGI framework that shines";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ wd15 ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ wd15 ];
   };
 }

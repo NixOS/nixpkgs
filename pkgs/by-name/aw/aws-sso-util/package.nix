@@ -4,14 +4,14 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "aws-sso-util";
   version = "4.33.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "aws_sso_util";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-5I1/WRFENFDSjhrBYT+BuaoVursbIFW0Ux34fbQ6Cd8=";
   };
 
@@ -38,6 +38,6 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ cterence ];
     mainProgram = "aws-sso-util";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

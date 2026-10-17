@@ -2,36 +2,48 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
+  fetchpatch2,
   meson,
   libtsm,
-  systemd,
+  systemdLibs,
   libxkbcommon,
   libdrm,
   libGLU,
   libGL,
+  freetype,
+  fontconfig,
+  zlib,
   pango,
-  pixman,
   pkg-config,
   docbook_xsl,
+  docbook_xml_dtd_42,
+  python3,
+  ncurses,
   libxslt,
   libgbm,
+  seatd,
+  dbus,
   ninja,
+  check,
+  bash,
+  inotify-tools,
   buildPackages,
+  nix-update-script,
+  nixosTests,
 }:
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kmscon";
-  version = "9.0.0";
+  version = "10.0.4";
 
   src = fetchFromGitHub {
-    owner = "Aetf";
+    owner = "kmscon";
     repo = "kmscon";
-    rev = "v${version}";
-    sha256 = "sha256-8owyyzCrZVbWXcCR+RA+m0MOrdzW+efI+rIMWEVEZ1o=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-F4XI924K4YxREEjqP0XLeFcvaW/9v5Iyuy9n75c9Osc=";
   };
 
   strictDeps = true;
+  __structuredAttrs = true;
 
   depsBuildBuild = [
     buildPackages.stdenv.cc
@@ -43,10 +55,17 @@ stdenv.mkDerivation rec {
     libdrm
     libtsm
     libxkbcommon
+    freetype
+    fontconfig
+    zlib
     pango
-    pixman
-    systemd
+    systemdLibs
     libgbm
+    seatd
+    dbus
+    check
+    # Needed for autoPatchShebangs when strictDeps = true
+    bash
   ];
 
   nativeBuildInputs = [
@@ -55,35 +74,57 @@ stdenv.mkDerivation rec {
     docbook_xsl
     pkg-config
     libxslt # xsltproc
+    docbook_xml_dtd_42
+    python3
+    ncurses
+    zlib
   ];
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
+  # remove when next release is out
   patches = [
-    (fetchpatch {
-      name = "0001-tests-fix-warnings.patch";
-      url = "https://github.com/Aetf/kmscon/commit/b65f4269b03de580923ab390bde795e7956b633f.patch";
-      sha256 = "sha256-ngflPwmNMM/2JzhV+hHiH3efQyoSULfqEywzWox9iAQ=";
+    (fetchpatch2 {
+      url = "https://github.com/kmscon/kmscon/commit/153db63d679df719a99dd36505f9c2f55d9c59f6.patch?full_index=1";
+      hash = "sha256-aAH+drUZnj1wrKcdsphqacmqRRnZAKEwCNLwA2vSTmg=";
     })
   ];
 
-  # _FORTIFY_SOURCE requires compiling with optimization (-O)
-  env.NIX_CFLAGS_COMPILE =
-    lib.optionalString stdenv.cc.isGNU "-O" + " -Wno-error=maybe-uninitialized"; # https://github.com/Aetf/kmscon/issues/49
+  mesonFlags = [ (lib.mesonEnable "libseat" true) ];
 
-  configureFlags = [
-    "--enable-multi-seat"
-    "--disable-debug"
-    "--enable-optimizations"
-    "--with-renderers=bbulk,gltex,pixman"
-  ];
+  env = {
+    PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
+    DESTDIR = "/";
+  };
 
-  enableParallelBuilding = true;
+  postPatch = ''
+    patchShebangs scripts/terminfo
+  '';
 
-  meta = with lib; {
+  postFixup = ''
+    substituteInPlace $out/bin/kmscon-launch-gui \
+      --replace-fail "inotifywait" "${lib.getExe' inotify-tools "inotifywait"}"
+  '';
+
+  passthru = {
+    tests.kmscon = nixosTests.kmscon;
+    updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
+  };
+
+  meta = {
     description = "KMS/DRM based System Console";
     mainProgram = "kmscon";
     homepage = "https://www.freedesktop.org/wiki/Software/kmscon/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ omasanori ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/kmscon/kmscon/releases/tag/v${finalAttrs.version}";
+    license = with lib.licenses; [
+      mit
+      lgpl21Plus
+      ofl
+    ];
+    maintainers = with lib.maintainers; [ ccicnce113424 ];
+    platforms = lib.platforms.linux;
   };
-}
+})

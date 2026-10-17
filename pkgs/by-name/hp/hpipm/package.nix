@@ -9,14 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hpipm";
-  #version = "0.1.3";  not building, use master instead
-  version = "0-unstable-2024-07-30";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "giaf";
     repo = "hpipm";
-    rev = "3ab7d6059d9d7da31ec9ff6a8ca84fd8ec5ab5e2";
-    hash = "sha256-TRNHjW2/YDfGJHTG9sy2nmHyk6+HlBGIabPm87TETE8=";
+    tag = finalAttrs.version;
+    hash = "sha256-URsO+QZwD+f5DgwWvknBNQGjDrhP0hUYJwynPQrg/BE=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -28,7 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DHPIPM_FIND_BLASFEO=ON"
     "-DBUILD_SHARED_LIBS=ON"
-  ] ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [ "-DTARGET=GENERIC" ];
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [ "-DTARGET=GENERIC" ];
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   meta = {
     description = "High-performance interior-point-method QP and QCQP solvers";

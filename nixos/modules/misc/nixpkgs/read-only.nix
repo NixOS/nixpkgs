@@ -24,7 +24,7 @@ in
     nixpkgs = {
       pkgs = mkOption {
         type = lib.types.pkgs;
-        description = ''The pkgs module argument.'';
+        description = "The pkgs module argument.";
       };
       config = mkOption {
         internal = true;

@@ -1,65 +1,68 @@
 {
   lib,
   stdenv,
-  fetchPypi,
-  fetchpatch2,
+  fetchFromGitLab,
   buildPythonPackage,
-  isPy27,
   pythonAtLeast,
+
+  # build-system
   setuptools,
-  numpy,
-  scipy,
-  matplotlib,
+
+  # dependencies
   flask,
+  matplotlib,
+  numpy,
   pillow,
   psycopg2,
+  scipy,
   tkinter,
+  typing-extensions,
+
+  # tests
+  addBinToPathHook,
   pytestCheckHook,
   pytest-mock,
   pytest-xdist,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "ase";
-  version = "3.23.0";
+  version = "3.29.0";
   pyproject = true;
 
-  disabled = isPy27;
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-kaKqMdib2QsO/f5KfoQmTzKCiyq/yfOOZeBBrXb+yK4=";
+  src = fetchFromGitLab {
+    owner = "ase";
+    repo = "ase";
+    tag = version;
+    hash = "sha256-hMeGeQFoC+eWfHkJize21IdxLKAR7Oc0Txwg2BQIvWg=";
   };
-
-  patches = [
-    # https://gitlab.com/ase/ase/-/merge_requests/3400
-    (fetchpatch2 {
-      name = "numpy_2-compatibility.patch";
-      url = "https://gitlab.com/ase/ase/-/commit/5434193ad9dd2cb20a76b3d503fa2b50d7a8ed34.patch";
-      excludes = [ "pyproject.toml" ];
-      hash = "sha256-3hsyzYnFCrlZDT/jqJKKvj2UXjnjLU0U6PJqgOpA7CU=";
-    })
-  ];
 
   build-system = [ setuptools ];
 
-  dependencies =
-    [
-      numpy
-      scipy
-      matplotlib
-      flask
-      pillow
-      psycopg2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      tkinter
-    ];
+  dependencies = [
+    flask
+    matplotlib
+    numpy
+    pillow
+    psycopg2
+    scipy
+    typing-extensions
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    tkinter
+  ];
 
   nativeCheckInputs = [
+    addBinToPathHook
     pytestCheckHook
     pytest-mock
     pytest-xdist
+    writableTmpDirAsHomeHook
+  ];
+
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTests = [
@@ -72,18 +75,17 @@ buildPythonPackage rec {
     "test_jmol_roundtrip" # missing attribute
     "test_pw_input_write_nested_flat" # Did not raise DeprecationWarning
     "test_fix_scaled" # Did not raise UserWarning
-  ] ++ lib.optionals (pythonAtLeast "3.12") [ "test_info_calculators" ];
-
-  preCheck = ''
-    export PATH="$out/bin:$PATH"
-  '';
+    "test_ipi_protocol" # flaky
+  ]
+  ++ lib.optionals (pythonAtLeast "3.12") [ "test_info_calculators" ];
 
   pythonImportsCheck = [ "ase" ];
 
-  meta = with lib; {
+  meta = {
     description = "Atomic Simulation Environment";
-    homepage = "https://wiki.fysik.dtu.dk/ase/";
-    license = licenses.lgpl21Plus;
+    homepage = "https://ase-lib.org/";
+    changelog = "https://ase-lib.org/releasenotes.html";
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
   };
 }

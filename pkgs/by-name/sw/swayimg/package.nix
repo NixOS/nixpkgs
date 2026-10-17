@@ -10,8 +10,10 @@
   wayland-protocols,
   json_c,
   libxkbcommon,
+  exiv2,
   fontconfig,
   giflib,
+  ffmpeg,
   libheif,
   libjpeg,
   libwebp,
@@ -19,22 +21,27 @@
   librsvg,
   libpng,
   libjxl,
-  libexif,
   libavif,
-  openexr_3,
+  libsixel,
+  libraw,
+  libdrm,
+  luajit,
+  openexr,
+  openjpeg,
   bash-completion,
   testers,
   nix-update-script,
 }:
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "swayimg";
-  version = "3.6";
+  version = "5.6";
 
   src = fetchFromGitHub {
     owner = "artemsen";
     repo = "swayimg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DboalwPhQYcqptdQvLHN+zrrdU3Swzb6z3vO+GJY2JY=";
+    hash = "sha256-R+tdrKnQXLMu+nrcZRiH9SoiMYoV2LTFHS+jYXLJb7g=";
   };
 
   strictDeps = true;
@@ -60,8 +67,10 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
     json_c
     libxkbcommon
+    exiv2
     fontconfig
     giflib
+    ffmpeg
     libheif
     libjpeg
     libwebp
@@ -69,9 +78,13 @@ stdenv.mkDerivation (finalAttrs: {
     librsvg
     libpng
     libjxl
-    libexif
     libavif
-    openexr_3
+    libsixel
+    libraw
+    libdrm
+    luajit
+    openexr
+    openjpeg
   ];
 
   passthru = {

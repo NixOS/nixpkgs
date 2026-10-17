@@ -23,7 +23,7 @@ list of previous plugins via `pkgs.krita.binaryPlugins`:
 
 ```nix
 (pkgs.krita.override (old: {
-    binaryPlugins = old.binaryPlugins ++ [ your-plugin ];
+  binaryPlugins = old.binaryPlugins ++ [ your-plugin ];
 }))
 ```
 

@@ -1,33 +1,39 @@
 {
   lib,
   stdenvNoCC,
-  fetchzip,
+  fetchurl,
+  unzip,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "soundfont-arachno";
   version = "1.0";
 
-  src = fetchzip {
+  # Many of the files in this archive have non-UTF-8 characters in their names,
+  # which causes it to fail to unpack correctly on e.g. macOS/APFS when using
+  # fetchzip. So instead, use fetchurl and extract the correct file directly.
+  src = fetchurl {
     # Linked on http://www.arachnosoft.com/main/download.php?id=soundfont-sf2:
     url = "https://www.dropbox.com/s/2rnpya9ecb9m4jh/arachno-soundfont-${
       builtins.replaceStrings [ "." ] [ "" ] version
     }-sf2.zip";
-    hash = "sha256-Z5ETe0AKPCi4KlM2xOlNcyQn1xvCuor3S/tcrF+AwNQ=";
-    stripRoot = false;
+    hash = "sha256-XAxXOr5sXho8zOul1SpCKdskKDYgyaPrH0AwGOKqIt8=";
   };
+  dontUnpack = true;
+  nativeBuildInputs = [ unzip ];
 
   installPhase = ''
     runHook preInstall
-    install -Dm444 Arachno*.sf2 $out/share/soundfonts/arachno.sf2
+    mkdir -p $out/share/soundfonts
+    unzip -p $src 'Arachno*.sf2' > $out/share/soundfonts/arachno.sf2
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "General MIDI-compliant bank, aimed at enhancing the realism of your MIDI files and arrangements";
     homepage = "http://www.arachnosoft.com/main/soundfont.php";
-    license = licenses.unfree;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ mrtnvgr ];
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ mrtnvgr ];
   };
 }

@@ -2,6 +2,7 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  fetchpatch2,
   djvulibre,
   docbook-xsl-ns,
   glibcLocales,
@@ -17,33 +18,39 @@
   withOcrad ? false,
   ocrad,
 }:
-
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ocrodjvu";
-  version = "0.13.2";
+  version = "0.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "FriedrichFroebel";
     repo = "ocrodjvu";
-    rev = version;
-    hash = "sha256-EiMCrRFUAJbu9QLgKpFIKqigCZ77lpTDD6AvZuMbyhA=";
+    tag = finalAttrs.version;
+    hash = "sha256-/TPo8YCE8JKKKBBeV12ilgTNDmuklwfy0TPI/7dBiOs=";
   };
+
+  patches = [
+    # Fix build for python 3.14, picked from the upstream development branch
+    (fetchpatch2 {
+      url = "https://github.com/FriedrichFroebel/ocrodjvu/commit/7be01651d688a10db8dd437149f3c5382199ed3a.patch?full_index=1";
+      hash = "sha256-mt0/L6QuX1nFHkk+aISwH8R2EkEAur55Xstr/Mbobqc=";
+    })
+  ];
 
   build-system = with python3Packages; [
     setuptools
   ];
 
-  propagatedBuildInputs =
-    [
-    ]
-    ++ lib.optional withCuneiform cuneiform
-    ++ lib.optional withGocr gocr
-    ++ lib.optional withOcrad ocrad;
+  propagatedBuildInputs = [
+  ]
+  ++ lib.optional withCuneiform cuneiform
+  ++ lib.optional withGocr gocr
+  ++ lib.optional withOcrad ocrad;
 
   dependencies = with python3Packages; [
     lxml
-    python-djvulibre
+    djvulibre-python
     pyicu
     html5lib
   ];
@@ -63,13 +70,13 @@ python3Packages.buildPythonApplication rec {
     "-v"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Wrapper for OCR systems that allows you to perform OCR on DjVu files";
     homepage = "https://github.com/FriedrichFroebel/ocrodjvu";
-    changelog = "https://github.com/FriedrichFroebel/ocrodjvu/blob/${version}/doc/changelog";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ dansbandit ];
+    changelog = "https://github.com/FriedrichFroebel/ocrodjvu/blob/${finalAttrs.version}/doc/changelog";
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ dansbandit ];
     mainProgram = "ocrodjvu";
   };
-}
+})

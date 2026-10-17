@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   requests,
   beautifulsoup4,
   pyuseragents,
@@ -10,19 +11,23 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "translatepy";
   version = "2.3";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Animenosekai";
     repo = "translate";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-cx5OeBrB8il8KrcyOmQbQ7VCXoaA5RP++oTTxCs/PcM=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     requests
     beautifulsoup4
     pyuseragents
@@ -38,11 +43,11 @@ buildPythonPackage rec {
   ];
   pythonImportsCheck = [ "translatepy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module grouping multiple translation APIs";
     mainProgram = "translatepy";
     homepage = "https://github.com/Animenosekai/translate";
-    license = with licenses; [ agpl3Only ];
-    maintainers = with maintainers; [ emilytrau ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ emilytrau ];
   };
-}
+})

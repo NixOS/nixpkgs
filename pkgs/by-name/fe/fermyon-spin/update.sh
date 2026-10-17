@@ -1,31 +1,24 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p jq
-#shellcheck shell=bash
+#!nix-shell -i bash -p curl jq gnused nix-update
 
-CURRENT_HASH=""
+set -euo pipefail
 
-print_hash() {
-    OS="$1"
-    ARCH="$2"
-    VERSION="$3"
+PACKAGE_DIR="pkgs/by-name/fe/fermyon-spin"
+PACKAGE_FILE="$PACKAGE_DIR/package.nix"
 
-    URL="https://github.com/fermyon/spin/releases/download/v${VERSION}/spin-v${VERSION}-${OS}-${ARCH}.tar.gz"
-    echo
-    CURRENT_HASH=$(nix store prefetch-file "$URL" --json | jq -r '.hash')
+# 1. Fetch latest release tag and commit metadata from GitHub
+LATEST_TAG=$(curl -s "https://api.github.com/repos/spinframework/spin/releases/latest" | jq -r .tag_name)
+LATEST_VERSION="${LATEST_TAG#v}"
 
-    echo "${ARCH}-${OS}: $CURRENT_HASH"
-}
+COMMIT_DATA=$(curl -s "https://api.github.com/repos/spinframework/spin/commits/$LATEST_TAG")
+GIT_SHA=$(echo "$COMMIT_DATA" | jq -r '.sha[0:8]')
+GIT_DATE=$(echo "$COMMIT_DATA" | jq -r '.commit.committer.date[0:10]')
+GIT_TIMESTAMP=$(echo "$COMMIT_DATA" | jq -r '.commit.committer.date')
 
-if [[ -z "$VER" && -n "$1" ]]; then
-    VER="$1"
-fi
+# 2. Run nix-update to bump version, src hash, and cargoHash
+nix-update --version "$LATEST_VERSION" fermyon-spin
 
-if [[ -z "$VER" ]]; then
-    echo "No 'VER' environment variable provided, skipping"
-else
-    print_hash "linux"  "amd64"   "$VER"
-    print_hash "linux"  "aarch64" "$VER"
-    print_hash "macos" "amd64"   "$VER"
-    print_hash "macos" "aarch64" "$VER"
-fi
-
+# 3. Update the VERGEN environment variables in package.nix
+sed -i -E "s/VERGEN_GIT_SHA = \"[^\"]+\";/VERGEN_GIT_SHA = \"$GIT_SHA\";/" "$PACKAGE_FILE"
+sed -i -E "s/VERGEN_GIT_COMMIT_DATE = \"[^\"]+\";/VERGEN_GIT_COMMIT_DATE = \"$GIT_DATE\";/" "$PACKAGE_FILE"
+sed -i -E "s/VERGEN_GIT_COMMIT_TIMESTAMP = \"[^\"]+\";/VERGEN_GIT_COMMIT_TIMESTAMP = \"$GIT_TIMESTAMP\";/" "$PACKAGE_FILE"

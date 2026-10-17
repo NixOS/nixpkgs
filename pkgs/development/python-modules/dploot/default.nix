@@ -7,19 +7,16 @@
   lxml,
   poetry-core,
   pyasn1,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dploot";
-  version = "3.1.0";
+  version = "3.2.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-DlMaEkgbDHQb5BV0mI8qjTBGpmRX7bP67MZO4g+I1uI=";
+    hash = "sha256-P2rPkBE60Ha+m1nqQULQ3k2RDUro+Zp0TUfPAQNS06g=";
   };
 
   pythonRelaxDeps = [
@@ -27,7 +24,6 @@ buildPythonPackage rec {
     "lxml"
     "pyasn1"
   ];
-
 
   build-system = [ poetry-core ];
 
@@ -43,12 +39,12 @@ buildPythonPackage rec {
   # No tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "DPAPI looting remotely in Python";
     homepage = "https://github.com/zblurx/dploot";
     changelog = "https://github.com/zblurx/dploot/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vncsb ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vncsb ];
     mainProgram = "dploot";
   };
 }

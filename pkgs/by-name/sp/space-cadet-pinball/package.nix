@@ -6,15 +6,14 @@
   cmake,
   SDL2,
   SDL2_mixer,
-  unrar,
+  unar,
 }:
 
 let
   assets = fetchzip {
     url = "https://archive.org/download/SpaceCadet_Plus95/Space_Cadet.rar";
     hash = "sha256-fC+zsR8BY6vXpUkVd6i1jF0IZZxVKVvNi6VWCKT+pA4=";
-    stripRoot = false;
-    nativeBuildInputs = [ unrar ];
+    nativeBuildInputs = [ unar ];
   };
   darwinApp = "$out/Applications/SpaceCadetPinball.app/Contents";
   assetsDest =
@@ -27,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "k4zmu2a";
     repo = "SpaceCadetPinball";
-    rev = "Release_${version}";
+    tag = "Release_${version}";
     hash = "sha256-W2P7Txv3RtmKhQ5c0+b4ghf+OMsN+ydUZt+6tB+LClM=";
   };
 
@@ -68,6 +67,10 @@ stdenv.mkDerivation rec {
       ${assets}/Sounds/*.WAV -t ${assetsDest}
   '';
 
+  passthru = {
+    inherit assets;
+  };
+
   meta = {
     description = "Reverse engineering of 3D Pinball for Windows – Space Cadet, a game bundled with Windows";
     homepage = "https://github.com/k4zmu2a/SpaceCadetPinball";
@@ -76,10 +79,7 @@ stdenv.mkDerivation rec {
       unfree
       mit
     ];
-    maintainers = with lib.maintainers; [
-      hqurve
-      nadiaholmquist
-    ];
+    maintainers = with lib.maintainers; [ nadiaholmquist ];
     platforms = lib.platforms.all;
     mainProgram = "SpaceCadetPinball";
   };

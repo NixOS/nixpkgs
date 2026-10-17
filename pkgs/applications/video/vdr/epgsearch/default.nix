@@ -6,16 +6,16 @@
   util-linux,
   groff,
   perl,
-  pcre,
+  pcre2,
 }:
 stdenv.mkDerivation rec {
   pname = "vdr-epgsearch";
-  version = "2.4.3";
+  version = "2.4.6";
 
   src = fetchFromGitHub {
     repo = "vdr-plugin-epgsearch";
     owner = "vdr-projects";
-    sha256 = "sha256-hOMISobeEt/jB4/18t5ZeN+EcPHhm8Jz8Kar72KYS3E=";
+    sha256 = "sha256-+csxlLBSIKiYIjgEPj0IUP8wZX9zuOM26cgA99uZ3EA=";
     rev = "v${version}";
   };
 
@@ -33,12 +33,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     vdr
-    pcre
+    pcre2
   ];
 
   buildFlags = [
     "SENDMAIL="
-    "REGEXLIB=pcre"
   ];
 
   installFlags = [

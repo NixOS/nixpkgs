@@ -9,26 +9,28 @@
   pytest-sugar,
   pymysql,
   psycopg2,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sqlalchemy-jsonfield";
-  version = "1.0.2";
-  format = "setuptools";
+  version = "1.0.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "penguinolog";
     repo = "sqlalchemy_jsonfield";
-    tag = version;
-    hash = "sha256-4zLXB3UQh6pgQ80KrxkLeC5yiv1R8t2+JmSukmGXr7I=";
+    tag = finalAttrs.version;
+    hash = "sha256-htzWMItAQ1MdOcWHe9le5UofXi5plNpBqOAkgbPxCYI=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     sqlalchemy
     setuptools
   ];
@@ -42,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sqlalchemy_jsonfield" ];
 
-  meta = with lib; {
+  meta = {
     description = "SQLALchemy JSONField implementation for storing dicts at SQL independently from JSON type support";
     homepage = "https://github.com/penguinolog/sqlalchemy_jsonfield";
-    changelog = "https://github.com/penguinolog/sqlalchemy_jsonfield/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ivan-tkatchev ];
+    changelog = "https://github.com/penguinolog/sqlalchemy_jsonfield/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
-}
+})

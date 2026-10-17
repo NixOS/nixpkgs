@@ -7,7 +7,7 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "lv";
   version = "4.51-unstable-2020-08-03";
 
@@ -22,6 +22,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ ncurses ];
+
+  # Upstream needs quite a bit of porting to c23:
+  #   https://github.com/ttdoda/lv/issues/3
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
   preAutoreconf = "cd src";
   postAutoreconf = "cd ..";
@@ -40,11 +44,11 @@ stdenv.mkDerivation rec {
     tagPrefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Powerful multi-lingual file viewer / grep";
     homepage = "https://github.com/ttdoda/lv";
-    license = licenses.gpl2Plus;
-    platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ kayhide ];
+    license = lib.licenses.gpl2Plus;
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [ kayhide ];
   };
 }

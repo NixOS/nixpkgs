@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "trino-cli";
-  version = "439";
+  version = "476";
 
   jarfilename = "${pname}-${version}-executable.jar";
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://maven/io/trino/${pname}/${version}/${jarfilename}";
-    sha256 = "sha256-ANrv3+hpRn00zFAu6FHltk6seQ4lP2esDIhsJrctfY0=";
+    sha256 = "sha256-/k6cf7VpzWdnOvoWIpRfYwjh5ZvbglQZNSuAiHZhdXs=";
   };
 
   dontUnpack = true;
@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Trino CLI provides a terminal-based, interactive shell for running queries";
     mainProgram = "trino";
     homepage = "https://github.com/trinodb/trino";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       regadas
       cpcloud
     ];

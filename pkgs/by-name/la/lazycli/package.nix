@@ -4,29 +4,24 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lazycli";
-  version = "0.1.15";
+  version = "0.1.15-unstable-2022-11-15";
 
   src = fetchFromGitHub {
     owner = "jesseduffield";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "1qq167hc7pp9l0m40ysphfljakmm8hjjnhpldvb0kbc825h0z8z5";
+    repo = "lazycli";
+    rev = "40c32e74b406152404375e58dbef4036d3ab3197";
+    hash = "sha256-k/iPcxVuLZhveVkFaeMMLASHCB+Ccrxr8mwPNqfknvQ=";
   };
 
-  cargoHash = "sha256-1BIUXepR7ppEkTLDOCZz9RBv+RazNMXnCnH1rvzVFgs=";
+  cargoHash = "sha256-DSff1jJ+0W7+Ul+3D2DVe0XTKObyuJ0APU5UbrfHSFA=";
 
-  checkFlags = [
-    # currently broken: https://github.com/jesseduffield/lazycli/pull/20
-    "--skip=command::test_run_command_fail"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Tool to static turn CLI commands into TUIs";
     homepage = "https://github.com/jesseduffield/lazycli";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ tomasrivera ];
     mainProgram = "lazycli";
   };
-}
+})

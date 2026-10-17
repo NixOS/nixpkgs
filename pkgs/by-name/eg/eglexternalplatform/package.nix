@@ -4,17 +4,20 @@
   fetchFromGitHub,
   meson,
   ninja,
+  buildPackages,
+  replaceVars,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "eglexternalplatform";
-  version = "1.2";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
-    owner = "Nvidia";
+    owner = "NVIDIA";
     repo = "eglexternalplatform";
-    rev = version;
-    hash = "sha256-t0dka5aUv5hB4G8PbSGiIY74XIFAsmo5a7dfWb2QCLM=";
+    tag = finalAttrs.version;
+    hash = "sha256-tDKh1oSnOSG/XztHHYCwg1tDB7M6olOtJ8te+uan9ko=";
   };
 
   nativeBuildInputs = [
@@ -22,11 +25,21 @@ stdenv.mkDerivation rec {
     ninja
   ];
 
-  meta = with lib; {
+  setupHook = replaceVars ./setup-hook.sh {
+    jq = lib.getExe buildPackages.jq;
+    sponge = lib.getExe' buildPackages.moreutils "sponge";
+  };
+
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
+
+  meta = {
     description = "EGL External Platform interface";
     homepage = "https://github.com/NVIDIA/eglexternalplatform";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ hedning ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
+    maintainers = with lib.maintainers; [ ccicnce113424 ];
   };
-}
+})

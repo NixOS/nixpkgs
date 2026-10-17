@@ -1,18 +1,19 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  pythonOlder,
 
   # build-system
-  scikit-build-core,
   cmake,
-  pathspec,
+  scikit-build-core,
+  numpy,
   ninja,
-  pyproject-metadata,
+  pybind11,
   setuptools-scm,
 
   # dependencies
-  numpy,
+  typing-extensions,
 
   # tests
   pytestCheckHook,
@@ -21,32 +22,33 @@
 
 buildPythonPackage rec {
   pname = "spglib";
-  version = "2.5.0";
-  format = "pyproject";
+  version = "2.7.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-+LtjiJe+kbnb1MCF2f3h9pBI9ZSeIPODLLlDjldBjUs=";
+  src = fetchFromGitHub {
+    owner = "spglib";
+    repo = "spglib";
+    tag = "v${version}";
+    hash = "sha256-RFvd/j/14YRIcQTpnYPx5edeF3zbHbi90jb32i3ZU/c=";
   };
 
-  nativeBuildInputs = [
-    scikit-build-core
+  build-system = [
     cmake
-    pathspec
+    scikit-build-core
+    numpy
+    pybind11
     ninja
-    pyproject-metadata
     setuptools-scm
   ];
 
   dontUseCmakeConfigure = true;
 
-  postPatch = ''
-    # relax v2 constrain in [build-system] intended for binary backward compat
-    substituteInPlace pyproject.toml \
-      --replace-fail "numpy~=2.0" "numpy"
-  '';
-
-  propagatedBuildInputs = [ numpy ];
+  dependencies = [
+    numpy
+  ]
+  ++ lib.optionals (pythonOlder "3.13") [
+    typing-extensions
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -55,11 +57,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "spglib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for C library for finding and handling crystal symmetries";
     homepage = "https://spglib.github.io/spglib/";
-    changelog = "https://github.com/spglib/spglib/raw/v${version}/ChangeLog";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ psyanticy ];
+    changelog = "https://github.com/spglib/spglib/raw/${src.tag}/ChangeLog";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ psyanticy ];
   };
 }

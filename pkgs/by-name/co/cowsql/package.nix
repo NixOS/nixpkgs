@@ -9,18 +9,27 @@
   sqlite,
   incus,
   nix-update-script,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cowsql";
-  version = "1.15.6";
+  version = "1.15.9";
 
   src = fetchFromGitHub {
     owner = "cowsql";
     repo = "cowsql";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cr6AT/n2/6DuGK53JvGLwCkMi4+fS128qxj3X9SJYuw=";
+    hash = "sha256-7djVcozWklI/0KhDC20df+H3YQbodUZaXBnQT4Ug8oI=";
   };
+
+  patches = [
+    # fix build w/ glibc-2.44
+    (fetchpatch {
+      url = "https://github.com/cowsql/cowsql/commit/7c4d73151969ead4f81077ae243d81396ce67988.patch";
+      hash = "sha256-aJkf3egKbF23KNC0feDkxh8gIEupsyDBY3PTKuT6lcQ=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -48,12 +57,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
-    changelog = "https://github.com/cowsql/cowsql/releases/tag/${finalAttrs.version}";
+  meta = {
+    changelog = "https://github.com/cowsql/cowsql/releases/tag/v${finalAttrs.version}";
     description = "Embeddable, replicated and fault tolerant SQL engine";
     homepage = "https://github.com/cowsql/cowsql";
-    license = licenses.lgpl3Only;
-    maintainers = teams.lxc.members;
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl3Only;
+    teams = with lib.teams; [ lxc ];
+    platforms = lib.platforms.unix;
   };
 })

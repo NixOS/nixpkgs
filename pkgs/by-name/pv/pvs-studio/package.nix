@@ -3,6 +3,7 @@
   stdenv,
   fetchzip,
 
+  installShellFiles,
   makeWrapper,
   perl,
   strace,
@@ -14,7 +15,7 @@
 # nixpkgs-update: no auto update
 stdenv.mkDerivation rec {
   pname = "pvs-studio";
-  version = "7.33.85330.89";
+  version = "7.40.101088.713";
 
   src =
     let
@@ -23,27 +24,34 @@ stdenv.mkDerivation rec {
     in
     fetchzip {
       url = selectSystem {
-        x86_64-darwin = "https://web.archive.org/web/20241115155106/https://cdn.pvs-studio.com/pvs-studio-7.33.85330.89-macos.tgz";
-        x86_64-linux = "https://web.archive.org/web/20241115155538/https://cdn.pvs-studio.com/pvs-studio-7.33.85330.89-x86_64.tgz";
+        aarch64-darwin = "https://web.archive.org/web/20260131193428/https://files.pvs-studio.com/pvs-studio-${version}-macos-arm64.zip";
+        x86_64-linux = "https://web.archive.org/web/20260131192910/https://files.pvs-studio.com/pvs-studio-${version}-x86_64.tgz";
       };
       hash = selectSystem {
-        x86_64-darwin = "sha256-jhfW+uBexzYzzf3JVqRYqtDjE5+OoT3RcuRPJEOEs18=";
-        x86_64-linux = "sha256-rJQc8B2B7J0bcEI00auwIO/4PH2YMkuzSK/OyAnhdBA=";
+        aarch64-darwin = "sha256-ExJldpqwD9dqGtY/QQ2i3qiNXSyR6exhYKIrwgdQrtQ=";
+        x86_64-linux = "sha256-c7+Zvo+cHtGtdaHi+3w7Vjluo7uQ2CfptCO8RkVm7wU=";
       };
     };
 
-  nativeBuildInputs = [ makeWrapper ];
-
-  nativeRuntimeInputs = lib.makeBinPath [
-    perl
-    strace
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
   ];
+
+  nativeRuntimeInputs = lib.makeBinPath (
+    [
+      perl
+    ]
+    ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform strace) [
+      strace
+    ]
+  );
 
   installPhase = ''
     runHook preInstall
 
     install -D -m 0755 bin/* -t $out/bin
-    install -D -m 0644 etc/bash_completion.d/* -t $out/etc/bash_completion.d
+    installShellCompletion --bash etc/bash_completion.d/*
 
     runHook postInstall
   '';
@@ -62,10 +70,10 @@ stdenv.mkDerivation rec {
     homepage = "https://pvs-studio.com/en/pvs-studio";
     license = lib.licenses.unfreeRedistributable;
     platforms = [
-      "x86_64-darwin"
+      "aarch64-darwin"
       "x86_64-linux"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ paveloom ];
+    maintainers = with lib.maintainers; [ sikmir ];
   };
 }

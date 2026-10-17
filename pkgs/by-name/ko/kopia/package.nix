@@ -1,26 +1,43 @@
-{ lib, buildGoModule, fetchFromGitHub, gitUpdater, installShellFiles, stdenv, testers, kopia }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+  installShellFiles,
+  stdenv,
+  testers,
+  kopia,
+}:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kopia";
-  version = "0.18.2";
+  version = "0.23.1";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-7gQlBLmHvqsXXmSYllfsDJRx9VjW0AH7bXf6cG6lGOI=";
+    owner = "kopia";
+    repo = "kopia";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-yjeLV7N/U88oVdP4iJYgSM/QJLAMREaB/2jBcbTDWkA=";
   };
 
-  vendorHash = "sha256-lCUEL7rtnv8/86ZTHM4HsYplDnWj1xsFh83JKW6qRrk=";
+  __structuredAttrs = true;
+
+  vendorHash = "sha256-5p/MUNkqNb+iAFxXXYRR2NB1WiGVIcNrTADsd/VjapU=";
 
   subPackages = [ "." ];
 
   ldflags = [
-    "-X github.com/kopia/kopia/repo.BuildVersion=${version}"
-    "-X github.com/kopia/kopia/repo.BuildInfo=${src.rev}"
+    "-X github.com/kopia/kopia/repo.BuildVersion=${finalAttrs.version}"
+    "-X github.com/kopia/kopia/repo.BuildInfo=${finalAttrs.src.rev}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
+
+  postPatch = ''
+    substituteInPlace internal/mount/mount_posix_webdav_helper_linux.go \
+      --replace-fail "/usr/bin/mount" "mount" \
+      --replace-fail "/usr/bin/umount" "umount"
+  '';
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd kopia \
@@ -29,7 +46,7 @@ buildGoModule rec {
   '';
 
   passthru = {
-    updateScript = gitUpdater { rev-prefix = "v"; };
+    updateScript = nix-update-script { };
     tests = {
       kopia-version = testers.testVersion {
         package = kopia;
@@ -37,11 +54,16 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://kopia.io";
+    changelog = "https://github.com/kopia/kopia/releases/tag/v${finalAttrs.version}";
     description = "Cross-platform backup tool with fast, incremental backups, client-side end-to-end encryption, compression and data deduplication";
     mainProgram = "kopia";
-    license = licenses.asl20;
-    maintainers = [ maintainers.bbigras ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      bbigras
+      kilyanni
+      nadir-ishiguro
+    ];
   };
-}
+})

@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
+  addBinToPathHook,
   pytestCheckHook,
   setuptools,
   setuptools-scm,
@@ -23,21 +24,19 @@
 
 buildPythonPackage rec {
   pname = "nanoemoji";
-  version = "0.15.1";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "nanoemoji";
     tag = "v${version}";
-    hash = "sha256-P/lT0PnjTdYzyttICzszu4OL5kj+X8GHZ8doL3tpXQM=";
+    hash = "sha256-FysyKC01XBnRiur5RR9fcsTxQqE8x0JJHSoe3q6JtKc=";
   };
 
   patches = [
     # this is necessary because the tests clear PATH/PYTHONPATH otherwise
     ./test-pythonpath.patch
-    # minor difference in the test output, most likely due to different dependency versions
-    ./fix-test.patch
   ];
 
   build-system = [
@@ -72,30 +71,27 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    addBinToPathHook
     pytestCheckHook
     ninja
     picosvg
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        pngquant
-        resvg
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      pngquant
+      resvg
+    ])
   ];
 
-  preCheck = ''
-    # make sure the built binaries (nanoemoji/maximum_color) can be found by the test
-    export PATH="$out/bin:$PATH"
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Wee tool to build color fonts";
     homepage = "https://github.com/googlefonts/nanoemoji";
-    changelog = "https://github.com/googlefonts/nanoemoji/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ _999eagle ];
+    changelog = "https://github.com/googlefonts/nanoemoji/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ _999eagle ];
   };
 }

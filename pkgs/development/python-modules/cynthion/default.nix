@@ -2,7 +2,14 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
+  callPackage,
+  python,
+
+  # gateware (FPGA toolchain)
+  nextpnr,
+  trellis,
+  which,
+  yosys,
 
   # build-system
   setuptools,
@@ -10,7 +17,6 @@
   # dependencies
   amaranth,
   apollo-fpga,
-  future,
   libusb1,
   luna-soc,
   luna-usb,
@@ -25,19 +31,25 @@
 
   # tests
   pytestCheckHook,
+  udevCheckHook,
 }:
-buildPythonPackage rec {
-  pname = "cynthion";
-  version = "0.1.8";
-  pyproject = true;
-  disabled = pythonOlder "3.8";
+let
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
     repo = "cynthion";
     tag = version;
-    hash = "sha256-twkCv47Goob2cO7FeHegvab3asf8fqbY9qg97Vw4ZCo=";
+    hash = "sha256-Ju01eqBVZ7CD0pw4nIFML4LcCPXzC78dLpQru3a+5bU=";
   };
+
+  # Moondancer SoC firmware, required for `cynthion flash facedancer`.
+  moondancer = callPackage ./moondancer.nix { inherit src version; };
+in
+buildPythonPackage {
+  pname = "cynthion";
+  inherit version src;
+  pyproject = true;
 
   sourceRoot = "${src.name}/cynthion/python";
 
@@ -47,14 +59,24 @@ buildPythonPackage rec {
       --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
-  build-system = [
-    setuptools
+  nativeBuildInputs = [
+    udevCheckHook
+
+    # Used by the gateware build in postInstall.
+    nextpnr
+    trellis
+    which
+    yosys
   ];
+
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = [ "pygreat" ];
+  pythonRemoveDeps = [ "future" ];
 
   dependencies = [
     amaranth
     apollo-fpga
-    future
     libusb1
     luna-soc
     luna-usb
@@ -68,18 +90,40 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  # Build the per-revision FPGA bitstreams in parallel (see build_gateware.py).
+  enableParallelBuilding = true;
 
   pythonImportsCheck = [ "cynthion" ];
 
+  postInstall =
+    let
+      assets = "$out/${python.sitePackages}/cynthion/assets";
+    in
+    ''
+      # Build a bitstream set per hardware revision into assets/, where
+      # `cynthion flash` looks for them.
+      export BUILD_GATEWARE_MAX_WORKERS="''${NIX_BUILD_CORES:-1}"
+      PYTHONPATH="$out/${python.sitePackages}''${PYTHONPATH:+:$PYTHONPATH}" \
+        python ${./build_gateware.py} "${assets}"
+
+      # Install the moondancer SoC firmware for `cynthion flash facedancer`.
+      install -Dm444 ${moondancer}/bin/moondancer.bin "${assets}/moondancer.bin"
+
+      # Make udev rules available for NixOS option services.udev.packages
+      install -Dm444 \
+        -t $out/lib/udev/rules.d \
+        build/lib/cynthion/assets/54-cynthion.rules
+    '';
+
+  passthru = { inherit moondancer; };
+
   meta = {
-    changelog = "https://github.com/greatscottgadgets/cynthion/releases/tag/${version}";
     description = "Python package and utilities for the Great Scott Gadgets Cynthion USB Test Instrument";
     homepage = "https://github.com/greatscottgadgets/cynthion";
+    changelog = "https://github.com/greatscottgadgets/cynthion/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ carlossless ];
-    broken = lib.versionAtLeast amaranth.version "0.5";
   };
 }

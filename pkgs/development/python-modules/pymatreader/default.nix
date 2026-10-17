@@ -2,27 +2,34 @@
   lib,
   buildPythonPackage,
   fetchFromGitLab,
-  setuptools,
+  hatchling,
   h5py,
   numpy,
   scipy,
   xmltodict,
   pytestCheckHook,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "pymatreader";
-  version = "0.0.31";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "obob";
     repo = "pymatreader";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-pYObmvqA49sHjpZcwXkN828R/N5CSpmr0OyyxzDiodQ=";
+    tag = "v${version}";
+    hash = "sha256-UQI8bktmS+GycjbY1OHtS4OHT+Q3JyP8xvTbYIJJzC0=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'source = "regex_commit"' "" \
+      --replace-fail '"hatch-regex-commit"' ""
+  '';
+
+  build-system = [ hatchling ];
 
   propagatedBuildInputs = [
     h5py
@@ -35,11 +42,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pymatreader" ];
 
-  meta = with lib; {
+  # avoid autoupdates for *.dev* tags
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^([\\d.]+)$" ];
+  };
+
+  meta = {
     description = "Python package to read all kinds and all versions of Matlab mat files";
     homepage = "https://gitlab.com/obob/pymatreader/";
-    changelog = "https://gitlab.com/obob/pymatreader/-/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ mbalatsko ];
+    changelog = "https://gitlab.com/obob/pymatreader/-/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.bsd2;
+    maintainers = [ ];
   };
 }

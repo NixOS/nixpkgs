@@ -2,32 +2,56 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  hatchling,
+  pyprojectVersionPatchHook,
+  pytest,
+  pytest-fixture-classes,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-lazy-fixtures";
-  version = "1.1.1";
+  version = "1.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dev-petrov";
     repo = "pytest-lazy-fixtures";
     tag = version;
-    hash = "sha256-2gaGIv4vfMdhLXQeYMbbx9B6tIsCGw4rytaO8bfRuEI=";
+    hash = "sha256-z4j9mITPUkug2/YaKwij5nlJYIoMpkDUPUmW/peNUXQ=";
   };
 
-  build-system = [ poetry-core ];
+  postPatch = ''
+    # Prevent double registration here and in the pyproject.toml entrypoint
+    # ValueError: Plugin already registered under a different name:
+    substituteInPlace tests/conftest.py \
+      --replace-fail '"pytest_lazy_fixtures.plugin",' ""
+  '';
 
-  dependencies = [ pytestCheckHook ];
+  build-system = [ hatchling ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
+
+  dependencies = [ pytest ];
+
+  nativeCheckInputs = [
+    pytest-fixture-classes
+    pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # missing pytest-deadfixtures
+    "tests/test_deadfixtures_support.py"
+  ];
 
   pythonImportsCheck = [ "pytest_lazy_fixtures" ];
 
-  meta = with lib; {
+  meta = {
     description = "Allows you to use fixtures in @pytest.mark.parametrize";
     homepage = "https://github.com/dev-petrov/pytest-lazy-fixtures";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

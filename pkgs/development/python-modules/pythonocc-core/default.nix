@@ -4,36 +4,30 @@
   python,
   fetchFromGitHub,
   cmake,
-  Cocoa,
   fontconfig,
   freetype,
   libGL,
   libGLU,
-  libX11,
-  libXext,
-  libXi,
-  libXmu,
+  libx11,
+  libxext,
+  libxi,
+  libxmu,
   opencascade-occt,
+  numpy,
   rapidjson,
   swig,
 }:
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pythonocc-core";
-  version = "7.6.2";
+  # To avoid overriding opencascade-occt from 7.9.3 to 7.9.0. Go back to regular release next version.
+  version = "7.9.0-unstable-2025-12-31";
 
   src = fetchFromGitHub {
     owner = "tpaviot";
     repo = "pythonocc-core";
-    tag = version;
-    hash = "sha256-45pqPQ07KYlpFwJSAYVHbzuqDQTbAvPpxReal52DCzU=";
+    rev = "2f8f1a7d99312e8b3e81d0bb2adab9b1e717d37b";
+    hash = "sha256-fni6crPs58e8MUr2SfVHVD5nPFIEQcOfuAMLXJlWg88=";
   };
-
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-    --replace "/usr/X11R6/lib/libGL.dylib" "${libGL}/lib/libGL.dylib" \
-    --replace "/usr/X11R6/lib/libGLU.dylib" "${libGLU}/lib/libGLU.dylib"
-  '';
 
   nativeBuildInputs = [
     cmake
@@ -45,17 +39,19 @@ stdenv.mkDerivation rec {
     freetype
     libGL
     libGLU
-    libX11
-    libXext
-    libXmu
-    libXi
+    libx11
+    libxext
+    libxmu
+    libxi
     fontconfig
+    numpy
     rapidjson
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
+  ];
 
   cmakeFlags = [
     "-Wno-dev"
     "-DPYTHONOCC_INSTALL_DIRECTORY=${placeholder "out"}/${python.sitePackages}/OCC"
+    "-DPYTHONOCC_MESHDS_NUMPY=on"
   ];
 
   passthru = {
@@ -64,12 +60,12 @@ stdenv.mkDerivation rec {
     skipBulkUpdate = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for the OpenCASCADE 3D modeling kernel";
     homepage = "https://github.com/tpaviot/pythonocc-core";
-    changelog = "https://github.com/tpaviot/pythonocc-core/releases/tag/${version}";
-    license = licenses.lgpl3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ gebner ];
+    changelog = "https://github.com/tpaviot/pythonocc-core/blob/${finalAttrs.src.rev}/NEWS";
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
-}
+})

@@ -1,17 +1,29 @@
-{ lib, stdenv, fetchFromGitHub
-, attr, judy, keyutils, libaio, libapparmor, libbsd, libcap, libgcrypt, lksctp-tools, zlib
-, libglvnd, libgbm
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  attr,
+  judy,
+  keyutils,
+  libaio,
+  libapparmor,
+  libbsd,
+  libcap,
+  lksctp-tools,
+  zlib,
+  libglvnd,
+  libgbm,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stress-ng";
-  version = "0.18.07";
+  version = "0.22.01";
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
-    repo = pname;
-    rev = "V${version}";
-    hash = "sha256-yfAqI2bhZtPM+8rkQXjYKJJewIJZ4kizhi3qZtp1k9k=";
+    repo = "stress-ng";
+    tag = "V${finalAttrs.version}";
+    hash = "sha256-PzHHc7ku4B1b+ksFj/A4nJwzf9LLcglFnXwUS3jOSi4=";
   };
 
   postPatch = ''
@@ -19,10 +31,21 @@ stdenv.mkDerivation rec {
   ''; # needed because of Darwin patch on libbsd
 
   # All platforms inputs then Linux-only ones
-  buildInputs = [ judy libbsd libgcrypt zlib ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      attr keyutils libaio libapparmor libcap lksctp-tools libglvnd libgbm
-    ];
+  buildInputs = [
+    judy
+    libbsd
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    attr
+    keyutils
+    libaio
+    libapparmor
+    libcap
+    lksctp-tools
+    libglvnd
+    libgbm
+  ];
 
   makeFlags = [
     "BINDIR=${placeholder "out"}/bin"
@@ -39,7 +62,7 @@ stdenv.mkDerivation rec {
   # mystery, though. :-(
   enableParallelBuilding = (!stdenv.hostPlatform.isi686);
 
-  meta = with lib; {
+  meta = {
     description = "Stress test a computer system";
     longDescription = ''
       stress-ng will stress test a computer system in various selectable ways. It
@@ -67,10 +90,12 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/ColinIanKing/stress-ng";
     downloadPage = "https://github.com/ColinIanKing/stress-ng/tags";
-    changelog = "https://github.com/ColinIanKing/stress-ng/raw/V${version}/debian/changelog";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ c0bw3b ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/ColinIanKing/stress-ng/raw/V${finalAttrs.version}/debian/changelog";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
+      dbeley
+    ];
+    platforms = lib.platforms.unix;
     mainProgram = "stress-ng";
   };
-}
+})

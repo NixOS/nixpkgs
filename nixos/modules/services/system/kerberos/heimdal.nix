@@ -2,11 +2,14 @@
   pkgs,
   config,
   lib,
+  utils,
   ...
 }:
 
 let
   inherit (lib) mapAttrs;
+  inherit (utils) escapeSystemdExecArgs;
+
   cfg = config.services.kerberos_server;
   package = config.security.krb5.package;
 
@@ -21,7 +24,10 @@ let
           target,
           ...
         }:
-        "${principal}\t${lib.concatStringsSep "," (lib.toList access)}\t${target}"
+        if target != "*" && target != "" then
+          "${principal}\t${lib.concatStringsSep "," (lib.toList access)}\t${target}"
+        else
+          "${principal}\t${lib.concatStringsSep "," (lib.toList access)}"
       ) acl
     ))
     (lib.mapAttrsToList (
@@ -70,6 +76,10 @@ in
       description = "Kerberos Administration Daemon";
       partOf = [ "kerberos-server.target" ];
       wantedBy = [ "kerberos-server.target" ];
+      documentation = [
+        "man:kadmind(8)"
+        "info:heimdal"
+      ];
       serviceConfig = {
         ExecStart = "${package}/libexec/kadmind --config-file=/etc/heimdal-kdc/kdc.conf";
         Slice = "system-kerberos-server.slice";
@@ -82,8 +92,18 @@ in
       description = "Key Distribution Center daemon";
       partOf = [ "kerberos-server.target" ];
       wantedBy = [ "kerberos-server.target" ];
+      documentation = [
+        "man:kdc(8)"
+        "info:heimdal"
+      ];
       serviceConfig = {
-        ExecStart = "${package}/libexec/kdc --config-file=/etc/heimdal-kdc/kdc.conf";
+        ExecStart = escapeSystemdExecArgs (
+          [
+            "${package}/libexec/kdc"
+            "--config-file=/etc/heimdal-kdc/kdc.conf"
+          ]
+          ++ cfg.extraKDCArgs
+        );
         Slice = "system-kerberos-server.slice";
         StateDirectory = "heimdal";
       };
@@ -94,6 +114,10 @@ in
       description = "Kerberos Password Changing daemon";
       partOf = [ "kerberos-server.target" ];
       wantedBy = [ "kerberos-server.target" ];
+      documentation = [
+        "man:kpasswdd(8)"
+        "info:heimdal"
+      ];
       serviceConfig = {
         ExecStart = "${package}/libexec/kpasswdd";
         Slice = "system-kerberos-server.slice";

@@ -1,11 +1,11 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
+  fetchFromGitHub,
 
   # build-system
-  setuptools-scm,
+  hatch-vcs,
+  hatchling,
 
   # dependencies
   bokeh,
@@ -25,20 +25,22 @@
   plotly,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hvplot";
-  version = "0.11.2";
+  version = "0.12.2";
   pyproject = true;
+  __structuredAttrs = true;
 
-  disabled = pythonOlder "3.9";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-t60fLxxwXkfiayLInBFxGoT3d0+qq6t1a0Xo0eAKYBA=";
+  src = fetchFromGitHub {
+    owner = "holoviz";
+    repo = "hvplot";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-hJ9lgpM3AVyDeFxobUKDNYO39NKEejSDywOgnHPEm2c=";
   };
 
   build-system = [
-    setuptools-scm
+    hatch-vcs
+    hatchling
   ];
 
   dependencies = [
@@ -60,7 +62,20 @@ buildPythonPackage rec {
     plotly
   ];
 
+  disabledTests = [
+    # Legacy dask-expr implementation is deprecated
+    # NotImplementedError: The legacy implementation is no longer supported
+    "test_dask_dataframe_patched"
+    "test_dask_series_patched"
+  ];
+
   disabledTestPaths = [
+    # Legacy dask-expr implementation is deprecated
+    # NotImplementedError: The legacy implementation is no longer supported
+    "hvplot/tests/plotting/testcore.py"
+    "hvplot/tests/testcharts.py"
+    "hvplot/tests/testgeowithoutgv.py"
+
     # All of the following below require xarray.tutorial files that require
     # downloading files from the internet (not possible in the sandbox).
     "hvplot/tests/testgeo.py"
@@ -80,8 +95,8 @@ buildPythonPackage rec {
   meta = {
     description = "High-level plotting API for the PyData ecosystem built on HoloViews";
     homepage = "https://hvplot.pyviz.org";
-    changelog = "https://github.com/holoviz/hvplot/releases/tag/v${version}";
+    changelog = "https://github.com/holoviz/hvplot/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ locnide ];
   };
-}
+})

@@ -2,38 +2,59 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
   flac,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  standard-aifc,
+  typing-extensions,
+
+  # optional-dependencies
+  # assemblyai
+  requests,
+  # audio
+  pyaudio,
+  # cohere
+  cohere,
+  # faster-whisper
+  faster-whisper,
+  # google-cloud
+  google-cloud-speech,
+  # grok
   groq,
   httpx,
-  openai-whisper,
+  # openai
   openai,
+  # pocketsphinx
   pocketsphinx,
-  pyaudio,
-  pytestCheckHook,
-  pythonOlder,
-  requests,
-  respx,
-  setuptools,
+  # whisper-local
+  openai-whisper,
   soundfile,
-  typing-extensions,
+
+  # tests
+  pytest-httpserver,
+  pytestCheckHook,
+  respx,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "speechrecognition";
-  version = "3.12.0";
+  version = "3.17.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Uberi";
     repo = "speech_recognition";
-    tag = version;
-    hash = "sha256-2yc5hztPBOysHxUQcS76ioCXmqNqjid6QUF4qPlIt24=";
+    tag = finalAttrs.version;
+    hash = "sha256-rzCBOQ0dIfreMRDHMSgMYspJ5KyOSxN18B3mf+n9v2w=";
   };
 
+  # Remove Bundled binaries
   postPatch = ''
-    # Remove Bundled binaries
     rm speech_recognition/flac-*
     rm -r third-party
 
@@ -43,11 +64,17 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [ typing-extensions ];
+  dependencies = [
+    standard-aifc
+    typing-extensions
+  ];
 
   optional-dependencies = {
     assemblyai = [ requests ];
     audio = [ pyaudio ];
+    cohere = [ cohere ];
+    faster-whisper = [ faster-whisper ];
+    google-cloud = [ google-cloud-speech ];
     groq = [
       groq
       httpx
@@ -61,14 +88,17 @@ buildPythonPackage rec {
       openai-whisper
       soundfile
     ];
+    # vosk = [ vosk ];
   };
 
   nativeCheckInputs = [
     groq
-    pytestCheckHook
     pocketsphinx
+    pytest-httpserver
+    pytestCheckHook
     respx
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "speech_recognition" ];
 
@@ -77,14 +107,21 @@ buildPythonPackage rec {
     "test_sphinx_keywords"
   ];
 
-  meta = with lib; {
+  disabledTestPaths = [
+    # vosk is not available in nixpkgs
+    "tests/recognizers/test_vosk.py"
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "Speech recognition module for Python, supporting several engines and APIs, online and offline";
     homepage = "https://github.com/Uberi/speech_recognition";
-    changelog = "https://github.com/Uberi/speech_recognition/releases/tag/${version}";
-    license = with licenses; [
+    changelog = "https://github.com/Uberi/speech_recognition/releases/tag/${finalAttrs.src.tag}";
+    license = with lib.licenses; [
       gpl2Only
       bsd3
     ];
-    maintainers = with maintainers; [ fab ];
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

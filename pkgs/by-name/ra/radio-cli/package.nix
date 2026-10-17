@@ -7,18 +7,18 @@
   openssl,
   mpv,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radio-cli";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "margual56";
     repo = "radio-cli";
-    rev = "v${version}";
-    hash = "sha256-XN0IzU7+V0zUUXfOygWrZXQX09IEpVo2Rhwfv+Lny/E=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-De/3tkvHf8dp04A0hug+aCbiXUc+XUYeHWYOiJ/bac0=";
   };
 
-  cargoHash = "sha256-XCzDNUZpyfu4gJr1lUx1/VbLkEv3OnJvYku0eEJbK5s=";
+  cargoHash = "sha256-mxSlyQpMzLbiIbcVQUILHDyLsCf/9fanX9/yf0hyXHA=";
 
   buildInputs = [ openssl ];
 
@@ -35,10 +35,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Simple radio CLI written in rust";
     homepage = "https://github.com/margual56/radio-cli";
-    changelog = "https://github.com/margual56/radio-cli/releases/tag/v${version}";
+    changelog = "https://github.com/margual56/radio-cli/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
     mainProgram = "radio-cli";
     platforms = lib.platforms.unix;
   };
-}
+})

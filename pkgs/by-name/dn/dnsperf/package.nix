@@ -2,7 +2,7 @@
   lib,
   stdenv,
   autoreconfHook,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   fetchpatch,
   ldns,
   libck,
@@ -11,15 +11,15 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dnsperf";
-  version = "2.14.0";
+  version = "2.16.0";
 
-  src = fetchFromGitHub {
+  src = fetchFromCodeberg {
     owner = "DNS-OARC";
     repo = "dnsperf";
-    rev = "v${version}";
-    hash = "sha256-eDDVNFMjj+0wEBe1qO6r4Bai554Sp+EmP86reJ/VXGk=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-4DSIdEj7fqDLaT7ZrLg/bgK/QeCE4puMdWr18h9Tr0A=";
   };
 
   nativeBuildInputs = [
@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
+  strictDeps = true;
+
   patches = lib.optionals stdenv.hostPlatform.isMusl [
     # dnsperf doesn't have support for musl (https://github.com/DNS-OARC/dnsperf/issues/265)
     # and strerror_r returns int on non-glibc: https://github.com/NixOS/nixpkgs/issues/370498
@@ -46,16 +48,16 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Tools for DNS benchmaring";
     homepage = "https://www.dns-oarc.net/tools/dnsperf";
-    changelog = "https://github.com/DNS-OARC/dnsperf/releases/tag/v${version}";
-    license = licenses.isc;
-    platforms = platforms.unix;
+    changelog = "https://github.com/DNS-OARC/dnsperf/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.isc;
+    platforms = lib.platforms.unix;
     mainProgram = "dnsperf";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       vcunat
       mfrw
     ];
   };
-}
+})

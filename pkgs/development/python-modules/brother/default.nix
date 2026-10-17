@@ -4,6 +4,7 @@
   fetchFromGitHub,
   freezegun,
   dacite,
+  pyprojectVersionPatchHook,
   pysnmp,
   pytest-asyncio,
   pytest-error-for-skips,
@@ -15,17 +16,21 @@
 
 buildPythonPackage rec {
   pname = "brother";
-  version = "4.3.1";
+  version = "6.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = "brother";
     tag = version;
-    hash = "sha256-fWa5FNBGV8tnJ3CozMicXLGsDvnTjNzU8PdV266MeeQ=";
+    hash = "sha256-VMdKcm8XUqNL3W02G9fclBUYkNKHQQb1bq1ZhpiRYs8=";
   };
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [ setuptools ];
 
@@ -44,11 +49,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "brother" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for getting data from Brother laser and inkjet printers via SNMP";
     homepage = "https://github.com/bieniu/brother";
-    changelog = "https://github.com/bieniu/brother/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    changelog = "https://github.com/bieniu/brother/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

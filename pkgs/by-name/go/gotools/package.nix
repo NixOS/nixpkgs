@@ -2,29 +2,34 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  makeWrapper,
+  go,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gotools";
-  version = "0.25.0";
+  version = "0.44.0";
 
-  # using GitHub instead of https://go.googlesource.com/tools because Gitiles UI is to basic to browse
+  # using GitHub instead of https://go.googlesource.com/tools because Gitiles UI is too basic to browse
   src = fetchFromGitHub {
     owner = "golang";
     repo = "tools";
-    rev = "v${version}";
-    hash = "sha256-iM6mGIQF+TOo1iV8hH9/4iOPdNiS9ymPmhslhDVnIIs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-F9DyZAZdrKCrCIB6FZP0KrOwPNRLk0ZQoNMHGMHd0UY=";
   };
+
+  allowGoReference = true;
+  doCheck = false;
+
+  vendorHash = "sha256-HpWkPsRJ0vCqJi9LoZcVbzeoPQ2B9ftZwuS1r47W7Sc=";
+
+  nativeBuildInputs = [ makeWrapper ];
 
   postPatch = ''
     # The gopls folder contains a Go submodule which causes a build failure
     # and lives in its own package named gopls.
     rm -r gopls
   '';
-
-  vendorHash = "sha256-9NSgtranuyRqtBq1oEnHCPIDFOIUJdVh5W/JufqN2Ko=";
-
-  doCheck = false;
 
   # Set GOTOOLDIR for derivations adding this to buildInputs
   postInstall = ''
@@ -33,16 +38,21 @@ buildGoModule rec {
       --subst-var-by bin $out
   '';
 
-  meta = with lib; {
+  postFixup = ''
+    wrapProgram $out/bin/goimports \
+      --suffix PATH : ${lib.makeBinPath [ go ]}
+  '';
+
+  meta = {
     description = "Additional tools for Go development";
     longDescription = ''
       This package contains tools like: godoc, goimports, callgraph, digraph, stringer or toolstash.
     '';
     homepage = "https://go.googlesource.com/tools";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       SuperSandro2000
       techknowlogick
     ];
   };
-}
+})

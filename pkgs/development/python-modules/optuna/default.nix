@@ -1,58 +1,67 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
+  fetchpatch,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   alembic,
-  boto3,
-  botorch,
-  catboost,
-  cma,
-  cmaes,
   colorlog,
-  distributed,
-  fakeredis,
-  google-cloud-storage,
-  lightgbm,
-  matplotlib,
-  mlflow,
-  moto,
   numpy,
   packaging,
+  sqlalchemy,
+  tqdm,
+  pyyaml,
+
+  # optional-dependencies
+  boto3,
+  cmaes,
+  fvcore,
+  google-cloud-storage,
+  grpcio,
+  matplotlib,
   pandas,
   plotly,
-  pytest-xdist,
-  pytorch-lightning,
-  pyyaml,
+  protobuf,
   redis,
   scikit-learn,
   scipy,
-  setuptools,
-  shap,
-  sqlalchemy,
-  tensorflow,
+
+  # tests
+  addBinToPathHook,
+  fakeredis,
+  kaleido,
+  moto,
+  pytest-xdist,
+  pytestCheckHook,
   torch,
-  torchaudio,
-  torchvision,
-  tqdm,
-  wandb,
-  xgboost,
+  versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "optuna";
-  version = "4.1.0";
+  version = "4.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "optuna";
     repo = "optuna";
-    tag = "v${version}";
-    hash = "sha256-wIgYExxJEWFxEadBuCsxEIcW2/J6EVybW1jp83gIMjY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BoRy5LSzMl9w5KS9BW1uHUTcEj1ZyYp4nWykPgq6ckI=";
   };
+
+  patches = [
+    # Fix test for pytest logger behavior changes
+    (fetchpatch {
+      url = "https://github.com/optuna/optuna/commit/ba57cff4a1990f3943cf250edc32d34e6ddd436d.patch";
+      hash = "sha256-SGsZcl+F62JN7LEAfmyanswl/tUZfZv4doh3lS5JSkQ=";
+    })
+  ];
 
   build-system = [
     setuptools
@@ -69,70 +78,100 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    integration = [
-      botorch
-      catboost
-      cma
-      distributed
-      lightgbm
-      mlflow
-      pandas
-      # pytorch-ignite
-      pytorch-lightning
-      scikit-learn
-      shap
-      tensorflow
-      torch
-      torchaudio
-      torchvision
-      wandb
-      xgboost
-    ];
     optional = [
       boto3
-      botorch
       cmaes
+      fvcore
       google-cloud-storage
+      grpcio
       matplotlib
       pandas
       plotly
+      protobuf
       redis
       scikit-learn
+      scipy
     ];
   };
 
-  preCheck = ''
-    export PATH=$out/bin:$PATH
-  '';
+  preCheck =
+    # grpc tests are racy
+    ''
+      sed -i '/"grpc",/d' optuna/testing/storages.py
+    ''
+    # Prevents 'Fatal Python error: Aborted' on darwin during checkPhase
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      export MPLBACKEND="Agg"
+    '';
 
-  nativeCheckInputs =
-    [
-      fakeredis
-      moto
-      pytest-xdist
-      pytestCheckHook
-      scipy
-    ]
-    ++ fakeredis.optional-dependencies.lua
-    ++ optional-dependencies.optional;
+  nativeCheckInputs = [
+    addBinToPathHook
+    fakeredis
+    kaleido
+    moto
+    pytest-xdist
+    pytestCheckHook
+    torch
+    versionCheckHook
+  ]
+  ++ fakeredis.optional-dependencies.lua
+  ++ finalAttrs.passthru.optional-dependencies.optional;
 
-  pytestFlagsArray = [ "-m 'not integration'" ];
+  disabledTests = [
+    # ValueError: Transform failed with error code 525: error creating static canvas/context for image server
+    "test_get_pareto_front_plot"
+    # too narrow time limit
+    "test_get_timeline_plot_with_killed_running_trials"
+    # times out under load
+    "test_optimize_with_progbar_timeout"
 
-  disabledTestPaths = [
-    # require unpackaged kaleido and building it is a bit difficult
-    "tests/visualization_tests"
-    # ImportError: cannot import name 'mock_s3' from 'moto'
-    "tests/artifacts_tests/test_boto3.py"
+    # pytest >= 9 leaves its logging handlers (including duplicate LogCaptureHandlers) attached to
+    # the `optuna` logger, breaking these assertions on handler state
+    "test_default_handler"
+    "test_filter_inf_trials_message"
+    "test_propagation"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # ValueError: Failed to start Kaleido subprocess. Error stream
+    # kaleido/executable/kaleido: line 5:  5956 Illegal instruction: 4  ./bin/kaleido $@
+    "test_edf_plot_no_trials"
+    "test_edf_plot_no_trials_studies"
+    "test_get_optimization_history_plot"
+    "test_get_timeline_plot"
+    "test_plot_contour"
+    "test_plot_edf_with_multiple_studies"
+    "test_plot_edf_with_target"
+    "test_plot_edf_with_target_name"
+    "test_plot_intermediate_values"
+    "test_plot_parallel_coordinate"
+    "test_plot_param_importances"
+    "test_plot_rank"
+    "test_plot_slice"
+    "test_plot_terminator_improvement"
   ];
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # PermissionError: [Errno 13] Permission denied: '/tmp/optuna_find_free_port.lock'
+    "tests/storages_tests/journal_tests/test_combination_with_grpc.py"
+    "tests/storages_tests/test_grpc.py"
+    "tests/storages_tests/test_storages.py"
+    "tests/study_tests/test_dataframe.py"
+    "tests/study_tests/test_optimize.py"
+    "tests/study_tests/test_study.py"
+    "tests/trial_tests/test_frozen.py"
+    "tests/trial_tests/test_trial.py"
+  ];
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "optuna" ];
 
-  meta = with lib; {
+  meta = {
     description = "Hyperparameter optimization framework";
     homepage = "https://optuna.org/";
-    changelog = "https://github.com/optuna/optuna/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    changelog = "https://github.com/optuna/optuna/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ natsukium ];
     mainProgram = "optuna";
   };
-}
+})

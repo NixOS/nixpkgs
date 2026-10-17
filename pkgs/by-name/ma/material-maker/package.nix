@@ -2,52 +2,58 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  godot3-headless,
-  libglvnd,
-  libX11,
-  libXcursor,
-  libXext,
-  libXfixes,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libXrender,
+  godot_4_7,
+  vulkan-headers,
+  vulkan-loader,
+  libx11,
+  libxcursor,
+  libxext,
+  libxfixes,
+  libxi,
+  libxinerama,
+  libxrandr,
+  libxrender,
   nix-update-script,
 }:
-
+let
+  godot = godot_4_7;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "material-maker";
-  version = "1.3";
+  version = "1.7";
 
   src = fetchFromGitHub {
     owner = "RodZill4";
     repo = "material-maker";
     rev = finalAttrs.version;
-    hash = "sha256-vyagu7xL4ITt+xyoYyCcF8qq6L9sR6Ltdl6NwfrbZdA=";
+    hash = "sha256-/oBAbdYNfIeNKnv1NGP05Nk5G8gov1yqRsG0jnFMW/Y=";
   };
 
-  nativeBuildInputs = [ godot3-headless ];
+  nativeBuildInputs = [ godot ];
 
   buildInputs = [
-    libglvnd
+    vulkan-headers
+    vulkan-loader
 
-    libXinerama
-    libXcursor
-    libXext
-    libXrandr
-    libXrender
-    libX11
-    libXi
-    libXfixes
+    libxinerama
+    libxcursor
+    libxext
+    libxrandr
+    libxrender
+    libx11
+    libxi
+    libxfixes
   ];
 
   buildPhase = ''
     runHook preBuild
 
     export HOME=$TMPDIR
+    mkdir -p "$HOME/.local/share/godot"
+    ln -s "${godot.export-templates-bin}/share/godot/export_templates" "$HOME/.local/share/godot/export_templates"
 
     mkdir -vp build
-    godot3-headless -v --export 'Linux/X11' build/material-maker
+    godot4 -v --headless --export-release 'Linux/X11' build/material-maker
 
     runHook postBuild
   '';
@@ -68,6 +74,15 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -vp $out/bin
     ln -vs $out/share/material-maker/material-maker $out/bin/material-maker
+
+    mkdir -vp $out/share/applications
+    cp -v material_maker/misc/linux/io.github.RodZill4.Material-Maker.desktop $out/share/applications
+
+    mkdir -vp $out/share/metainfo
+    cp -v material_maker/misc/linux/io.github.RodZill4.Material-Maker.appdata.xml $out/share/metainfo
+
+    mkdir -vp $out/share/icons/hicolor/256x256/apps
+    cp -v icon.png $out/share/icons/hicolor/256x256/apps/material-maker.png
 
     runHook postInstall
   '';

@@ -1,37 +1,61 @@
-{ lib, stdenv, fetchurl, xorg, ncurses, freetype, fontconfig
-, pkg-config, makeWrapper, nixosTests, gitUpdater
-, enableDecLocator ? true }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libxt,
+  libxft,
+  libxext,
+  libxaw,
+  libx11,
+  libsm,
+  libice,
+  xorgproto,
+  luit,
+  ncurses,
+  freetype,
+  fontconfig,
+  pkg-config,
+  makeWrapper,
+  nixosTests,
+  pkgsCross,
+  gitUpdater,
+  enableDecLocator ? true,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xterm";
-  version = "396";
+  version = "411";
 
   src = fetchurl {
     urls = [
-      "ftp://ftp.invisible-island.net/xterm/${pname}-${version}.tgz"
-      "https://invisible-mirror.net/archives/xterm/${pname}-${version}.tgz"
+      "https://invisible-island.net/archives/xterm/xterm-${finalAttrs.version}.tgz"
+      "https://invisible-mirror.net/archives/xterm/xterm-${finalAttrs.version}.tgz"
     ];
-    hash = "sha256-Q/lLbQ7stCGamfRjUudG8qtVWOQNki1BGs/5bMd4pqU=";
+    hash = "sha256-lpvig2cN6t1mk0hlxN5sWrBF46P6zCsijez5GiDYw2w=";
   };
 
   patches = [ ./sixel-256.support.patch ];
 
   strictDeps = true;
 
-  nativeBuildInputs = [ makeWrapper pkg-config fontconfig ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+    fontconfig
+  ];
 
   buildInputs = [
-    xorg.libXaw
-    xorg.xorgproto
-    xorg.libXt
-    xorg.libXext
-    xorg.libX11
-    xorg.libSM
-    xorg.libICE
+    libxaw
+    xorgproto
+    libxt
+    libxext
+    libx11
+    libsm
+    libice
     ncurses
     freetype
-    xorg.libXft
-    xorg.luit
+    libxft
+    luit
   ];
 
   configureFlags = [
@@ -46,12 +70,14 @@ stdenv.mkDerivation rec {
     "--enable-mini-luit"
     "--with-tty-group=tty"
     "--with-app-defaults=$(out)/lib/X11/app-defaults"
-  ] ++ lib.optional enableDecLocator "--enable-dec-locator";
+  ]
+  ++ lib.optional enableDecLocator "--enable-dec-locator";
 
   env = {
     # Work around broken "plink.sh".
     NIX_LDFLAGS = "-lXmu -lXt -lICE -lX11 -lfontconfig";
-  } // lib.optionalAttrs stdenv.hostPlatform.isMusl {
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isMusl {
     # Various symbols missing without this define: TAB3, NLDLY, CRDLY, BSDLY, FFDLY, CBAUD
     NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
   };
@@ -64,6 +90,8 @@ stdenv.mkDerivation rec {
   postConfigure = ''
     echo '#define USE_UTMP_SETGID 1'
   '';
+
+  enableParallelBuilding = true;
 
   postInstall = ''
     for bin in $out/bin/*; do
@@ -78,6 +106,7 @@ stdenv.mkDerivation rec {
     tests = {
       customTest = nixosTests.xterm;
       standardTest = nixosTests.terminal-emulators.xterm;
+      musl = pkgsCross.musl64.xterm;
     };
 
     updateScript = gitUpdater {
@@ -90,10 +119,21 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
+    description = "Terminal emulator for the X Window System";
+    longDescription = ''
+      The xterm program is a terminal emulator for the X Window System. It
+      provides DEC VT102/VT220 and selected features from higher-level
+      terminals such as VT320/VT420/VT520 (VTxxx). It also provides Tektronix
+      4014 emulation for programs that cannot use the window system directly.
+      If the underlying operating system supports terminal resizing
+      capabilities (for example, the SIGWINCH signal in systems derived from
+      4.3bsd), xterm will use the facilities to notify programs running in the
+      window whenever it is resized.
+    '';
     homepage = "https://invisible-island.net/xterm";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ nequissimus ];
+    license = lib.licenses.mit;
     platforms = with lib.platforms; linux ++ darwin;
-    changelog = "https://invisible-island.net/xterm/xterm.log.html";
+    changelog = "https://invisible-island.net/xterm/xterm.log.html#xterm_${finalAttrs.version}";
+    mainProgram = "xterm";
   };
-}
+})

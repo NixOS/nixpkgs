@@ -15,25 +15,31 @@
   nixosTests,
   xz,
   zstd,
+  buildPackages,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libxmlb";
-  version = "0.3.21";
+  version = "0.3.27";
 
   outputs = [
     "out"
     "lib"
     "dev"
-    "devdoc"
     "installedTests"
+  ]
+  ++ lib.optionals withIntrospection [
+    "devdoc"
   ];
 
   src = fetchFromGitHub {
     owner = "hughsie";
     repo = "libxmlb";
-    rev = version;
-    hash = "sha256-+gs1GqDVnt0uf/0vjUj+c9CRnUtaYfngBsjSs4ZwVXs=";
+    rev = finalAttrs.version;
+    hash = "sha256-5RP794gBA67DcrjzqvguDYu/Sf+1X5kfRi9yvLx9b+c=";
   };
 
   patches = [
@@ -43,13 +49,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     docbook_xml_dtd_43
     docbook-xsl-nons
-    gobject-introspection
-    gtk-doc
     meson
     ninja
     pkg-config
     python3
     shared-mime-info
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+    gtk-doc
   ];
 
   buildInputs = [
@@ -60,7 +68,8 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "--libexecdir=${placeholder "out"}/libexec"
-    "-Dgtkdoc=true"
+    (lib.mesonBool "gtkdoc" withIntrospection)
+    (lib.mesonBool "introspection" withIntrospection)
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
   ];
 
@@ -76,12 +85,14 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  __structuredAttrs = true;
+
+  meta = {
     description = "Library to help create and query binary XML blobs";
     mainProgram = "xb-tool";
     homepage = "https://github.com/hughsie/libxmlb";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

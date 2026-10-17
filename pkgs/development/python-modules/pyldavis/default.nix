@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "bmabey";
     repo = "pyLDAvis";
     rev = version;
-    sha256 = "sha256-WIQytds3PeU85l6ix2UUIwypjpM5rMZvQxiHx9BY91Y=";
+    hash = "sha256-WIQytds3PeU85l6ix2UUIwypjpM5rMZvQxiHx9BY91Y=";
   };
 
   propagatedBuildInputs = [
@@ -40,12 +40,11 @@ buildPythonPackage rec {
     "pyLDAvis.gensim_models"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bmabey/pyLDAvis";
     description = "Python library for interactive topic model visualization";
-    maintainers = with lib.maintainers; [ gm6k ];
-    license = licenses.bsd3;
-    sourceProvenance = with sourceTypes; [ fromSource ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    platforms = lib.platforms.all;
   };
 }

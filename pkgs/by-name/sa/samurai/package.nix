@@ -2,18 +2,18 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "samurai";
-  version = "1.2";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "michaelforney";
-    repo = pname;
-    rev = version;
-    hash = "sha256-RPY3MFlnSDBZ5LOkdWnMiR/CZIBdqIFo9uLU+SAKPBI=";
+    repo = "samurai";
+    rev = finalAttrs.version;
+    hash = "sha256-0AKbuoOG1PfH9li57X3FqGVRHlXtcmfweP5zSBks5y8=";
   };
 
   makeFlags = [
@@ -21,25 +21,10 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
   ];
 
-  patches = [
-    # NULL pointer dereference in writefile() in util.c; remove this at the next
-    # release
-    (fetchpatch {
-      name = "CVE-2021-30218.patch";
-      url = "https://github.com/michaelforney/samurai/commit/e84b6d99c85043fa1ba54851ee500540ec206918.patch";
-      sha256 = "sha256-hyndwj6st4rwOJ35Iu0qL12dR5E6CBvsulvR27PYKMw=";
-    })
-    # NULL pointer dereference in printstatus() in build.c; remove this at the
-    # next release
-    (fetchpatch {
-      name = "CVE-2021-30219.patch";
-      url = "https://github.com/michaelforney/samurai/commit/d2af3bc375e2a77139c3a28d6128c60cd8d08655.patch";
-      sha256 = "sha256-rcdwKjHeq5Oaga9wezdHSg/7ljkynfbnkBc2ciMW5so=";
-    })
-  ];
+  passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
-    description = "ninja-compatible build tool written in C";
+  meta = {
+    description = "Ninja-compatible build tool written in C";
     longDescription = ''
       samurai is a ninja-compatible build tool with a focus on simplicity,
       speed, and portability.
@@ -54,12 +39,12 @@ stdenv.mkDerivation rec {
       respectively.
     '';
     homepage = "https://github.com/michaelforney/samurai";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
     ]; # see LICENSE
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = [ ];
     mainProgram = "samu";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

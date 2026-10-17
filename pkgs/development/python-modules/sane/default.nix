@@ -13,15 +13,15 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "python-sane";
-    sha256 = "JAmOuDxujhsBEm5q16WwR5wHsBPF0iBQm1VYkv5JJd4=";
+    hash = "sha256-JAmOuDxujhsBEm5q16WwR5wHsBPF0iBQm1VYkv5JJd4=";
   };
 
   buildInputs = [ sane-backends ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/python-pillow/Sane";
     description = "Python interface to the SANE scanner and frame grabber";
-    license = licenses.mit;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

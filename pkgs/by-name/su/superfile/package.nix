@@ -1,39 +1,66 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
+  writableTmpDirAsHomeHook,
+  exiftool,
+  zoxide,
 }:
-let
-  version = "1.1.7.1";
-  tag = "v${version}";
-in
-buildGoModule {
+
+buildGoModule (finalAttrs: {
   pname = "superfile";
-  inherit version;
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "yorukot";
     repo = "superfile";
-    inherit tag;
-    hash = "sha256-v7EfMgOsc6FSGIjYkF+44t0wl34WFmokOtzNOAOneBc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JETdQ42vGPnpviCAR29BSdBTG+huWRr5syN5NysnAlo=";
   };
 
-  vendorHash = "sha256-MdOdQQZhiuOJtnj5n1uVbJV6KIs0aa1HLZpFmvxxsWY=";
+  vendorHash = "sha256-d2Yo8fWJ2fj7RJrnktljY6TkEPq6Tnbdh2BM4DIAr0E=";
 
   ldflags = [
     "-s"
     "-w"
   ];
 
+  # TestLayout test does not support parallel testing
+  enableParallelBuilding = false;
+
+  __structuredAttrs = true;
+
+  nativeBuildInputs = [
+    exiftool
+    zoxide
+  ];
+
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+
+  preCheck = ''
+    mkdir -p $HOME/.local/share/superfile
+
+    # TestLayout expects at least one entry
+    touch "$HOME/test-file"
+
+    # TestFileDelete/Move_to_trash needs .Trash available
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p "$HOME/.Trash"
+    ''}
+  '';
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Pretty fancy and modern terminal file manager";
     homepage = "https://github.com/yorukot/superfile";
-    changelog = "https://github.com/yorukot/superfile/blob/${tag}/changelog.md";
+    changelog = "https://github.com/yorukot/superfile/blob/${finalAttrs.src.tag}/changelog.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      momeemt
       redyf
     ];
     mainProgram = "superfile";
   };
-}
+})

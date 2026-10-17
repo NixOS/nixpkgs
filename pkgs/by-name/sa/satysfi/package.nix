@@ -4,18 +4,21 @@
   ocaml-ng,
   ipaexfont,
   junicode,
+  libpng,
   lmodern,
   lmmath,
+  which,
 }:
 let
-  camlpdf = ocamlPackages.camlpdf.overrideAttrs {
+  camlpdf = ocamlPackages.camlpdf.overrideAttrs (o: {
     src = fetchFromGitHub {
       owner = "gfngfn";
       repo = "camlpdf";
       rev = "v2.3.1+satysfi";
       sha256 = "1s8wcqdkl1alvfcj67lhn3qdz8ikvd1v64f4q6bi4c0qj9lmp30k";
     };
-  };
+    nativeBuildInputs = [ which ] ++ o.nativeBuildInputs;
+  });
   yojson-with-position = ocamlPackages.buildDunePackage {
     pname = "yojson-with-position";
     version = "1.4.2";
@@ -45,7 +48,7 @@ ocamlPackages.buildDunePackage {
   };
 
   preConfigure = ''
-    substituteInPlace src/frontend/main.ml --replace \
+    substituteInPlace src/frontend/main.ml --replace-fail \
     '/usr/local/share/satysfi"; "/usr/share/satysfi' \
     $out/share/satysfi
   '';
@@ -55,28 +58,28 @@ ocamlPackages.buildDunePackage {
     cppo
   ];
 
-  buildInputs =
-    [
-      camlpdf
-      yojson-with-position
-    ]
-    ++ (with ocamlPackages; [
-      menhirLib
-      batteries
-      camlimages
-      core_kernel
-      ppx_deriving
-      uutf
-      omd
-      re
-      otfed
-    ]);
+  buildInputs = [
+    camlpdf
+    libpng
+    yojson-with-position
+  ]
+  ++ (with ocamlPackages; [
+    menhirLib
+    batteries
+    camlimages
+    core_kernel
+    ppx_deriving
+    uutf
+    omd
+    re
+    otfed
+  ]);
 
   postInstall = ''
     mkdir -p $out/share/satysfi/dist/fonts
     cp -r lib-satysfi/dist/ $out/share/satysfi/
     cp -r \
-      ${ipaexfont}/share/fonts/opentype/* \
+      ${ipaexfont}/share/fonts/truetype/* \
       ${lmodern}/share/fonts/opentype/public/lm/* \
       ${lmmath}/share/fonts/opentype/latinmodern-math.otf \
       ${junicode}/share/fonts/truetype/Junicode-{Bold,BoldItalic,Italic}.ttf \
@@ -92,7 +95,6 @@ ocamlPackages.buildDunePackage {
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [
       mt-caret
-      momeemt
     ];
     platforms = lib.platforms.all;
     mainProgram = "satysfi";

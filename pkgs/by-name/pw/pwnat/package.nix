@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pwnat";
   # Latest release has an annoying segmentation fault bug, see:
   # https://github.com/samyk/pwnat/pull/25 . Merging only #25 is impossible due
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "samyk";
-    repo = pname;
+    repo = "pwnat";
     rev = "8ec62cdae53a2d573c9f9c906133ca45bbd3360a";
     sha256 = "sha256-QodNw3ab8/TurKamg6AgMfQ08aalp4j6q663B+sWmRM=";
   };
@@ -31,12 +31,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://samy.pl/pwnat/";
     description = "ICMP NAT to NAT client-server communication";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = with platforms; linux;
+    platforms = with lib.platforms; linux;
     mainProgram = "pwnat";
   };
 }

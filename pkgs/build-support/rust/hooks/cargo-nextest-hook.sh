@@ -10,8 +10,9 @@ cargoNextestHook() {
     fi
 
     local flagsArray=(
-        "--target" "@rustHostPlatformSpec@"
+        "--target" "@rustcTargetSpec@"
         "--offline"
+        "--show-progress=none"
     )
 
     if [[ -z ${dontUseCargoParallelTests-} ]]; then

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   requests,
   setuptools,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "nanoleaf";
   version = "0.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -34,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nanoleaf" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for interacting with Nanoleaf Aurora lighting";
     homepage = "https://github.com/software-2/nanoleaf";
     changelog = "https://github.com/software-2/nanoleaf/releases/tag/${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

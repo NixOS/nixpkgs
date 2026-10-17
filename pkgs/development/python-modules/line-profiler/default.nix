@@ -1,28 +1,28 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   cython,
   isPyPy,
   ipython,
   scikit-build,
   cmake,
-  pythonOlder,
   pytestCheckHook,
   ubelt,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "line-profiler";
-  version = "4.2.0";
+  version = "5.0.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8" || isPyPy;
+  disabled = isPyPy;
 
-  src = fetchPypi {
-    pname = "line_profiler";
-    inherit version;
-    hash = "sha256-CeEPJfh2UUOAs/rubek/sMIoq7qFgguhpZHds+tFGpY=";
+  src = fetchFromGitHub {
+    owner = "pyutils";
+    repo = "line_profiler";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GWByg1TxFWmLm6hDjaMk2kJE6VgX1kxoVT4OH3XA0GI=";
   };
 
   nativeBuildInputs = [
@@ -31,16 +31,19 @@ buildPythonPackage rec {
     scikit-build
   ];
 
-  optional-dependencies = {
-    ipython = [ ipython ];
-  };
-
   nativeCheckInputs = [
     pytestCheckHook
     ubelt
-  ] ++ optional-dependencies.ipython;
+    ipython
+  ];
 
   dontUseCmakeConfigure = true;
+
+  # Remove, as it breaks some tests
+  postPatch = ''
+    substituteInPlace tests/test_explicit_profile.py \
+      --replace-fail "env['PYTHONPATH'] = os.getcwd()" ""
+  '';
 
   preBuild = ''
     rm -f _line_profiler.c
@@ -51,13 +54,19 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
+  # Disabled because files are not shipped via pypi and it tries installing a subpackage via pip
+  disabledTests = [
+    "test_recover_cython_source"
+    "test_profile_cython_source"
+  ];
+
   pythonImportsCheck = [ "line_profiler" ];
 
-  meta = with lib; {
+  meta = {
     description = "Line-by-line profiler";
     mainProgram = "kernprof";
     homepage = "https://github.com/pyutils/line_profiler";
-    changelog = "https://github.com/pyutils/line_profiler/blob/v${version}/CHANGELOG.rst";
-    license = licenses.bsd3;
+    changelog = "https://github.com/pyutils/line_profiler/blob/v${finalAttrs.version}/CHANGELOG.rst";
+    license = lib.licenses.bsd3;
   };
-}
+})

@@ -11,15 +11,15 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/gdata-python-client/${pname}-${version}.tar.gz";
-    sha256 = "1dpxl5hwyyqd71avpm5vkvw8fhlvf9liizmhrq9jphhrx0nx5rsn";
+    hash = "sha256-VufSLegZwisTzrD+GGlym0KH+J671LtVOA17z2Gh/bY=";
   };
 
   # Fails with "error: invalid command 'test'"
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/google/gdata-python-client";
     description = "Python client library for Google data APIs";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

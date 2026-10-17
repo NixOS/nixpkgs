@@ -2,7 +2,6 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  isPy27,
   lib,
   setuptools,
   setuptools-declarative-requirements,
@@ -13,11 +12,10 @@ buildPythonPackage rec {
   pname = "pytest-helpers-namespace";
   version = "2021.12.29";
   format = "setuptools";
-  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "792038247e0021beb966a7ea6e3a70ff5fcfba77eb72c6ec8fd6287af871c35b";
+    hash = "sha256-eSA4JH4AIb65Zqfqbjpw/1/Punfrcsbsj9Yoevhxw1s=";
   };
 
   nativeBuildInputs = [
@@ -30,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_helpers_namespace" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/saltstack/pytest-helpers-namespace";
     description = "PyTest Helpers Namespace";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

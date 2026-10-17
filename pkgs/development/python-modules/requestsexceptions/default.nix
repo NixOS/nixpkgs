@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b095cbc77618f066d459a02b137b020c37da9f46d9b057704019c9f77dba3065";
+    hash = "sha256-sJXLx3YY8GbUWaArE3sCDDfan0bZsFdwQBnJ9326MGU=";
   };
 
   propagatedBuildInputs = [ pbr ];
@@ -22,11 +22,11 @@ buildPythonPackage rec {
     sed -i '/^hacking/d' test-requirements.txt
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Import exceptions from potentially bundled packages in requests";
-    homepage = "https://pypi.python.org/pypi/requestsexceptions";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ makefu ];
-    platforms = platforms.all;
+    homepage = "https://pypi.org/project/requestsexceptions/";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ makefu ];
+    platforms = lib.platforms.all;
   };
 }

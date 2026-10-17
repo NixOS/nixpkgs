@@ -1,82 +1,151 @@
 {
   lib,
-  python3,
   fetchFromGitHub,
+  kingfisher,
+  nix-update-script,
+  python3Packages,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "prowler";
-  version = "5.1.0";
+  version = "5.45.0";
   pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "prowler-cloud";
     repo = "prowler";
-    tag = version;
-    hash = "sha256-+wMoHzys4iceiQvRvwsl2aSvTYZxeZlKHy7D4xx33aU=";
+    tag = finalAttrs.version;
+    hash = "sha256-zD+dTtbadYXIHINWVMnjwKzG0l6cl1BOP9rBGIbQPy0=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "hatchling==1.32.0" "hatchling"
+  '';
 
   pythonRelaxDeps = true;
 
-  build-system = with python3.pkgs; [ poetry-core ];
+  pythonRemoveDeps = [ "kingfisher-bin" ];
 
-  dependencies = with python3.pkgs; [
+  build-system = with python3Packages; [ hatchling ];
+
+  dependencies = with python3Packages; [
+    alibabacloud-actiontrail20200706
+    alibabacloud-credentials
+    alibabacloud-cs20151215
+    alibabacloud-ecs20140526
+    alibabacloud-oss20190517
+    alibabacloud-ram20150501
+    alibabacloud-sas20181203
+    alibabacloud-sts20150401
+    alibabacloud-tea-openapi
+    alibabacloud-vpc20160428
+    alibabacloud-gateway-oss-util
+    alibabacloud-rds20140815
+    alibabacloud-sls20201230
     alive-progress
-    awsipranges
     azure-identity
     azure-keyvault-keys
+    azure-mgmt-apimanagement
     azure-mgmt-applicationinsights
     azure-mgmt-authorization
+    azure-mgmt-cognitiveservices
     azure-mgmt-compute
     azure-mgmt-containerregistry
     azure-mgmt-containerservice
     azure-mgmt-cosmosdb
+    azure-mgmt-databricks
     azure-mgmt-keyvault
+    azure-mgmt-loganalytics
     azure-mgmt-monitor
     azure-mgmt-network
+    azure-mgmt-postgresqlflexibleservers
     azure-mgmt-rdbms
+    azure-mgmt-recoveryservices
+    azure-mgmt-recoveryservicesbackup
     azure-mgmt-resource
-    azure-mgmt-security
     azure-mgmt-search
+    azure-mgmt-security
     azure-mgmt-sql
     azure-mgmt-storage
     azure-mgmt-subscription
     azure-mgmt-web
+    azure-monitor-query
     azure-storage-blob
     boto3
     botocore
+    cloudflare
     colorama
     cryptography
     dash
     dash-bootstrap-components
+    defusedxml
     detect-secrets
+    dulwich
     google-api-python-client
     google-auth-httplib2
+    h2
+    huaweicloudsdkcore
+    huaweicloudsdkcts
+    huaweicloudsdkecs
+    huaweicloudsdkelb
+    huaweicloudsdkevs
+    huaweicloudsdkiam
+    huaweicloudsdkkms
+    huaweicloudsdkobs
+    huaweicloudsdkrds
+    huaweicloudsdksmn
+    huaweicloudsdkvpc
+    huaweicloudsdkwaf
     jsonschema
     kubernetes
+    linode-api4
+    markdown
     microsoft-kiota-abstractions
     msgraph-sdk
     numpy
+    oci
+    okta
+    openstacksdk
     pandas
+    py-iam-expand
     py-ocsf-models
     pydantic
+    pygithub
     python-dateutil
     pytz
+    scaleway
     schema
     shodan
     slack-sdk
+    stackit-core
+    stackit-iaas
+    stackit-objectstorage
+    stackit-resourcemanager
+    stackit-ske
     tabulate
+    truststore
     tzlocal
+    uuid6
+    zstandard
   ];
+
+  postFixup = ''
+    wrapProgram $out/bin/prowler --prefix PATH : "${lib.makeBinPath [ kingfisher ]}"
+  '';
 
   pythonImportsCheck = [ "prowler" ];
 
-  meta = with lib; {
-    description = "Security tool for AWS, Azure and GCP to perform Cloud Security best practices assessments";
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "Security tool to perform Cloud Security best practices assessments";
     homepage = "https://github.com/prowler-cloud/prowler";
-    changelog = "https://github.com/prowler-cloud/prowler/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/prowler-cloud/prowler/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "prowler";
   };
-}
+})

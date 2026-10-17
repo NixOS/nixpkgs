@@ -5,13 +5,12 @@
   cmake,
   doxygen,
   fetchurl,
-  fetchpatch,
-  fuse,
+  fuse3,
   libevent,
   xz,
   openssl,
   pkg-config,
-  systemd,
+  systemdLibs,
   tcp_wrappers,
   zlib,
   c-ares,
@@ -26,6 +25,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-LkiH1ocDljNJkqzNMx4Sy6ht/vhXUy9hC7BjWo4ykA0=";
   };
 
+  postPatch = ''
+    sed -i '1i #include <cstdint>' src/aclogger.h src/ahttpurl.h
+  '';
+
   nativeBuildInputs = [
     cmake
     doxygen
@@ -33,11 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     bzip2
-    fuse
+    fuse3
     libevent
     xz
     openssl
-    systemd
+    systemdLibs
     tcp_wrappers
     zlib
     c-ares

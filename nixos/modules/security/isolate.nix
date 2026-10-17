@@ -79,7 +79,7 @@ in
     };
 
     firstUid = mkOption {
-      type = types.numbers.between 1000 65533;
+      type = types.ints.between 1000 65533;
       default = 60000;
       description = ''
         Start of block of UIDs reserved for sandboxes.
@@ -87,7 +87,7 @@ in
     };
 
     firstGid = mkOption {
-      type = types.numbers.between 1000 65533;
+      type = types.ints.between 1000 65533;
       default = 60000;
       description = ''
         Start of block of GIDs reserved for sandboxes.
@@ -95,7 +95,7 @@ in
     };
 
     numBoxes = mkOption {
-      type = types.numbers.between 1000 65533;
+      type = types.ints.between 1000 65533;
       default = 1000;
       description = ''
         Number of UIDs and GIDs to reserve, starting from
@@ -128,6 +128,7 @@ in
     systemd.services.isolate = {
       description = "Isolate control group hierarchy daemon";
       wantedBy = [ "multi-user.target" ];
+      documentation = [ "man:isolate(1)" ];
       serviceConfig = {
         Type = "notify";
         ExecStart = "${isolate}/bin/isolate-cg-keeper";
@@ -139,7 +140,7 @@ in
     systemd.slices.isolate = {
       description = "Isolate Sandbox Slice";
     };
-
-    meta.maintainers = with maintainers; [ virchau13 ];
   };
+
+  meta.maintainers = with maintainers; [ virchau13 ];
 }

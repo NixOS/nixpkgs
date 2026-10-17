@@ -1,27 +1,37 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, nixosTests
-, pnpm_9
-, nix-update-script
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  nixosTests,
+  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  nix-update-script,
 }:
-
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "flood";
-  version = "4.8.5";
+  version = "4.15.0";
 
   src = fetchFromGitHub {
     owner = "jesec";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-lm+vPo7V99OSUAVEvdiTNMlD/+iHGPIyPLc1WzO1aTU=";
+    repo = "flood";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wd+9owJi9W9pf6c1JuO0X/6JWxLq8XIypj6r4rQUemM=";
   };
 
-  npmConfigHook = pnpm_9.configHook;
-  npmDeps = pnpmDeps;
-  pnpmDeps = pnpm_9.fetchDeps {
-    inherit pname version src;
-    hash = "sha256-NuU9O3bEboxmuEuk1WSUeZRNgVK5cwFiUAN3+7vACGw=";
+  nativeBuildInputs = [ pnpm_10 ];
+  npmConfigHook = pnpmConfigHook;
+  npmDeps = finalAttrs.pnpmDeps;
+  dontNpmPrune = true;
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      ;
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
+    hash = "sha256-a1PoQ5pXw1SgyGFRa3+7AOr6vpyGyHxkMU7KQEFlZ04=";
   };
 
   passthru = {
@@ -31,11 +41,17 @@ buildNpmPackage rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Modern web UI for various torrent clients with a Node.js backend and React frontend";
     homepage = "https://flood.js.org";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ thiagokokada winter ners ];
+    changelog = "https://github.com/jesec/flood/releases/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      azahi
+      thiagokokada
+      winter
+      ners
+    ];
     mainProgram = "flood";
   };
-}
+})

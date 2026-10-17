@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1xd2jm3yn31bnk1kqzggils2rxj26ylxsfz3ap7bhr3ilhnbg3rx";
+    hash = "sha256-PY+3LKRxZLjOVeM73ak3QvYsNI3vfTzDtCsM60eVovU=";
   };
 
   propagatedBuildInputs = [ six ];
@@ -20,9 +20,9 @@ buildPythonPackage rec {
   # no tests in archive
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Library for detecting if a HTTP User Agent header is likely to be a bot";
     homepage = "https://github.com/rory/robot-detection";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
   };
 }

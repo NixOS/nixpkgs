@@ -6,17 +6,20 @@
   libxml2,
   wrapGAppsHook3,
   gtk3-x11,
-  xorg,
+  libxt,
+  libxtst,
+  libxpm,
+  libx11,
   libxkbcommon,
   gsl,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xsnow";
-  version = "3.7.9";
+  version = "3.9.7";
 
   src = fetchurl {
-    url = "https://ratrabbit.nl/downloads/xsnow/xsnow-${version}.tar.gz";
-    sha256 = "sha256-DEzQblUfm2kd0I21sUwO3EVUm/WHnOk7T6iMgo3+EAY=";
+    url = "https://ratrabbit.nl/downloads/xsnow/xsnow-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-cGp/yelojhLwECPk0WRl+yPUeH6KMD4EhuEH/3pEjOw=";
   };
 
   nativeBuildInputs = [
@@ -28,28 +31,30 @@ stdenv.mkDerivation rec {
     libxkbcommon
     libxml2
     gsl
-  ] ++ (with xorg; [
-    libX11
-    libXpm
-    libXt
-    libXtst
-  ]);
+    libx11
+    libxpm
+    libxt
+    libxtst
+  ];
 
   makeFlags = [ "gamesdir=$(out)/bin" ];
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
+    # last successful hydra build on darwin and aarch64-linux were in 2024
+    broken =
+      stdenv.hostPlatform.isDarwin || (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "X-windows application that will let it snow on the root, in between and on windows";
     mainProgram = "xsnow";
     homepage = "https://ratrabbit.nl/ratrabbit/xsnow/";
     changelog = "https://ratrabbit.nl/ratrabbit/xsnow/changelog/index.html";
     downloadPage = "https://ratrabbit.nl/ratrabbit/xsnow/downloads/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       robberer
       griffi-gh
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

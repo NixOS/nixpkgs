@@ -5,7 +5,6 @@
   fetchFromGitHub,
   requests,
   requests-oauthlib,
-  pythonOlder,
   setuptools,
 }:
 
@@ -14,13 +13,11 @@ buildPythonPackage rec {
   version = "0.10.12";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "molobrakos";
     repo = "tellduslive";
     tag = "v${version}";
-    sha256 = "sha256-fWL+VSvoT+dT0jzD8DZEMxzTlqj4TYGCJPLpeui5q64=";
+    hash = "sha256-fWL+VSvoT+dT0jzD8DZEMxzTlqj4TYGCJPLpeui5q64=";
   };
 
   build-system = [ setuptools ];
@@ -36,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tellduslive" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to communicate with Telldus Live";
     homepage = "https://github.com/molobrakos/tellduslive";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "tellduslive";
   };
 }

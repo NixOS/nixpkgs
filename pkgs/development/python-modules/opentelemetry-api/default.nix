@@ -1,11 +1,11 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   deprecated,
   hatchling,
   importlib-metadata,
+  typing-extensions,
   opentelemetry-test-utils,
   pytestCheckHook,
   writeScript,
@@ -14,17 +14,15 @@
 let
   self = buildPythonPackage rec {
     pname = "opentelemetry-api";
-    version = "1.27.0";
+    version = "1.43.0";
     pyproject = true;
-
-    disabled = pythonOlder "3.8";
 
     # to avoid breakage, every package in opentelemetry-python must inherit this version, src, and meta
     src = fetchFromGitHub {
       owner = "open-telemetry";
       repo = "opentelemetry-python";
       tag = "v${version}";
-      hash = "sha256-5m6VGdt90Aw6ODUWG7A7b0kV8FsDtg+oPkNUKRbzDX4=";
+      hash = "sha256-NnRx0sMVlht2CVXeKjP7mZlzhyOqU/YyveDMWRbmAD8=";
     };
 
     sourceRoot = "${src.name}/opentelemetry-api";
@@ -34,6 +32,7 @@ let
     dependencies = [
       deprecated
       importlib-metadata
+      typing-extensions
     ];
 
     pythonRelaxDeps = [ "importlib-metadata" ];
@@ -60,12 +59,12 @@ let
       tests.${self.pname} = self.overridePythonAttrs { doCheck = true; };
     };
 
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/open-telemetry/opentelemetry-python/tree/main/opentelemetry-api";
       description = "OpenTelemetry Python API";
-      changelog = "https://github.com/open-telemetry/opentelemetry-python/releases/tag/v${version}";
-      license = licenses.asl20;
-      maintainers = teams.deshaw.members ++ [ maintainers.natsukium ];
+      changelog = "https://github.com/open-telemetry/opentelemetry-python/releases/tag/${src.tag}";
+      license = lib.licenses.asl20;
+      maintainers = [ lib.maintainers.natsukium ];
     };
   };
 in

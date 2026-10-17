@@ -8,21 +8,21 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "godns";
-  version = "3.2.1";
+  version = "3.3.6";
 
   src = fetchFromGitHub {
     owner = "TimothyYe";
     repo = "godns";
-    tag = "v${version}";
-    hash = "sha256-E5xJiODTOaBGojFd7W+id59tKLPpHpkAFHiETOYqCSg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YdIXMVtagF7uA9By6EHVdG2o5UwUi82XkYK26W5Fssg=";
   };
 
-  vendorHash = "sha256-cR+hlIGRPffP21lqDZmqBF4unS6ZyEvEvRlTrswg+js=";
+  vendorHash = "sha256-wGaRJFxuhwwwP7CBZ7eY5uR95EMdpWiJuU43eWXtHNo=";
   npmDeps = fetchNpmDeps {
-    src = "${src}/web";
-    hash = "sha256-lchAfi97a97TPs22ML3sMrlSZdvWMMC+wBrGbvke5rg=";
+    src = "${finalAttrs.src}/web";
+    hash = "sha256-OsYBmDawDUCt/+s5kyOPawMA9BWQwJhd7TQNc55rPlc=";
   };
 
   npmRoot = "web";
@@ -49,17 +49,17 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
   ];
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Dynamic DNS client tool supports AliDNS, Cloudflare, Google Domains, DNSPod, HE.net & DuckDNS & DreamHost, etc";
     homepage = "https://github.com/TimothyYe/godns";
-    changelog = "https://github.com/TimothyYe/godns/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ yinfeng ];
+    changelog = "https://github.com/TimothyYe/godns/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ yinfeng ];
     mainProgram = "godns";
   };
-}
+})

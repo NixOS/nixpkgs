@@ -2,27 +2,31 @@
   lib,
   stdenv,
   fetchurl,
-  fltk13,
+  fltk_1_3,
   libjpeg,
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.3.6";
   pname = "flwrap";
 
   src = fetchurl {
-    url = "mirror://sourceforge/fldigi/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/fldigi/flwrap-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-g1V7bOcgVHpD+Ndn02Nj4I3rGItuQ2qLGlrZZshfGP8=";
   };
 
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
   buildInputs = [
-    fltk13
+    fltk_1_3
     libjpeg
   ];
 
-  nativeBuildInputs = [
-    pkg-config
+  configureFlags = [
+    "FLTK_CONFIG=${lib.getExe' (lib.getDev fltk_1_3) "fltk-config"}"
   ];
 
   meta = {
@@ -33,4 +37,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "flwrap";
   };
-}
+})

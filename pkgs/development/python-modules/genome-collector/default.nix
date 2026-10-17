@@ -5,18 +5,29 @@
   biopython,
   fetchPypi,
   proglog,
+  setuptools,
 }:
 
 buildPythonPackage rec {
-  pname = "genome_collector";
+  pname = "genome-collector";
   version = "0.1.6";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "0023ihrz0waxbhq28xh1ymvk51ih882y9psg4glm6s9d1zmqvdph";
+    pname = "genome_collector";
+    inherit version;
+    hash = "sha256-8LaN6w8taVPpI0/f5AVCMIYyd/UBdiQwXF1x8DOMQwA=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "import ez_setup" "" \
+      --replace-fail "ez_setup.use_setuptools()" ""
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     appdirs
     biopython
     proglog
@@ -26,10 +37,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "genome_collector" ];
 
-  meta = with lib; {
+  meta = {
     description = "Genomes and build BLAST/Bowtie indexes in Python";
     homepage = "https://github.com/Edinburgh-Genome-Foundry/genome_collector";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

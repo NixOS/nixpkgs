@@ -1,43 +1,53 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
+  fetchFromGitHub,
+
+  # build-system
   hatchling,
+
+  # dependencies
   babel,
-  importlib-metadata,
   jinja2,
   json5,
   jsonschema,
   jupyter-server,
   packaging,
   requests,
+
+  # optional-dependencies
   openapi-core,
+  ruamel-yaml,
+
+  # tests
   pytest-jupyter,
+  pytest-timeout,
   pytestCheckHook,
   requests-mock,
-  ruamel-yaml,
   strict-rfc3339,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jupyterlab-server";
-  version = "2.27.3";
+  version = "2.28.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    pname = "jupyterlab_server";
-    inherit version;
-    hash = "sha256-6zbKylnnRHGYjwriXHeUVhC4h/d3JVqiH4Bl3vnlHtQ=";
+  src = fetchFromGitHub {
+    owner = "jupyterlab";
+    repo = "jupyterlab_server";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/h25HBKt6maaxuZRK+VMVA0AqTZhQkDnGVDgBisQcCw=";
   };
 
-  postPatch = ''
-    sed -i "/timeout/d" pyproject.toml
-  '';
+  patches = [
+    # oopenapi-core changed their API, which breaks jupyterlab-server
+    ./fix-openapi-core-compat.patch
+  ];
 
-  build-system = [ hatchling ];
+  build-system = [
+    hatchling
+  ];
 
   dependencies = [
     babel
@@ -47,7 +57,7 @@ buildPythonPackage rec {
     jupyter-server
     packaging
     requests
-  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ];
 
   optional-dependencies = {
     openapi = [
@@ -56,29 +66,21 @@ buildPythonPackage rec {
     ];
   };
 
+  pythonImportsCheck = [ "jupyterlab_server" ];
+
   nativeCheckInputs = [
     pytest-jupyter
+    pytest-timeout
     pytestCheckHook
     requests-mock
     strict-rfc3339
-  ] ++ optional-dependencies.openapi;
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
-  ];
+    writableTmpDirAsHomeHook
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.openapi;
 
   disabledTestPaths = [
     # require optional language pack packages for tests
     "tests/test_translation_api.py"
-  ];
-
-  pythonImportsCheck = [
-    "jupyterlab_server"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -86,8 +88,8 @@ buildPythonPackage rec {
   meta = {
     description = "Set of server components for JupyterLab and JupyterLab like applications";
     homepage = "https://github.com/jupyterlab/jupyterlab_server";
-    changelog = "https://github.com/jupyterlab/jupyterlab_server/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/jupyterlab/jupyterlab_server/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.jupyter.members;
+    teams = [ lib.teams.jupyter ];
   };
-}
+})

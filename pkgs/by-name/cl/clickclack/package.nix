@@ -5,14 +5,14 @@
   SDL2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clickclack";
   version = "0.2.3";
 
   src = fetchFromSourcehut {
     owner = "~proycon";
     repo = "clickclack";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-YmlbGEmZgT/30c+mWQzdz4rKc69d75zhoNUA5FdxdMc=";
   };
 
@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Vibration/audio feedback tool to be used with virtual keyboards";
     homepage = "https://git.sr.ht/~proycon/clickclack";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ dotlambda ];
     mainProgram = "clickclack";
   };
-}
+})

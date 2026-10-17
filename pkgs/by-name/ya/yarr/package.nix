@@ -1,53 +1,76 @@
 {
   lib,
+  stdenv,
   buildGoModule,
+  buildNpmPackage,
   fetchFromGitHub,
-  testers,
-  yarr,
+  versionCheckHook,
+  nix-update-script,
+  nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "yarr";
-  version = "2.4";
+  version = "2.9";
 
   src = fetchFromGitHub {
     owner = "nkanaev";
     repo = "yarr";
-    rev = "v${version}";
-    hash = "sha256-ZMQ+IX8dZuxyxQhD/eWAe4bGGCVcaCeVgF+Wqs79G+k=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-NvYcl+i3JW18zjYUT1C+ksMJgUJQGP+90UhTQkZRhD4=";
   };
 
-  vendorHash = null;
+  assets = buildNpmPackage {
+    pname = "${finalAttrs.pname}-assets";
+    inherit (finalAttrs) version src;
+    npmDepsHash = "sha256-T0KGV5fkroPp9K5cRp5CEnDku1nNzwTW9lUxXQFAQZc=";
+    installPhase = ''
+      runHook preInstall
+      cp -r src/assets/static "$out"
+      runHook postInstall
+    '';
+  };
 
-  subPackages = [ "src" ];
+  postPatch = ''
+    cp ${finalAttrs.assets}/bundle.{css,js} src/assets/static
+  '';
+
+  vendorHash = null;
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
     "-X main.GitHash=none"
   ];
 
   tags = [
     "sqlite_foreign_keys"
-    "release"
+    "sqlite_json"
+    "sqlite_fts5"
   ];
 
-  postInstall = ''
-    mv $out/bin/{src,yarr}
-  '';
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
-  passthru.tests.version = testers.testVersion {
-    package = yarr;
-    version = "v${version}";
+  checkFlags = [ "-short" ]; # skip docker tests
+
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux nixosTests.yarr;
   };
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "Yet another rss reader";
     mainProgram = "yarr";
     homepage = "https://github.com/nkanaev/yarr";
-    changelog = "https://github.com/nkanaev/yarr/blob/v${version}/doc/changelog.txt";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sikmir ];
+    changelog = "https://github.com/nkanaev/yarr/blob/v${finalAttrs.version}/doc/changelog.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      sikmir
+      christoph-heiss
+    ];
   };
-}
+})

@@ -1,26 +1,27 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, nixos-artwork
-, glib
-, pkg-config
-, dbus
-, polkit
-, accountsservice
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  nixos-artwork,
+  glib,
+  pkg-config,
+  dbus,
+  polkit,
+  accountsservice,
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-default-settings";
-  version = "8.0.2";
+  version = "8.1.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "default-settings";
-    rev = version;
-    sha256 = "sha256-vytjRlSXnC+cSIAn6v6wpoig4zjJZObGZ6MCLfsIwIA=";
+    tag = version;
+    hash = "sha256-eH8bnfncyBMD7qPkdBy3zSBb79s1ALDLM58wae9hzPg=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +40,9 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "--sysconfdir=${placeholder "out"}/etc"
     "-Ddefault-wallpaper=${nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}"
+    # Do not ship elementary OS specific config files.
+    "-Dapparmor-profiles=false"
+    "-Dgeoclue=false"
   ];
 
   postFixup = ''
@@ -51,11 +55,11 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Default settings and configuration files for elementary";
     homepage = "https://github.com/elementary/default-settings";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
   };
 }

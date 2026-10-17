@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pcre2,
   sqlite,
-  ncurses,
   readline,
   zlib,
   bzip2,
@@ -19,62 +18,76 @@
   cargo,
   rustPlatform,
   rustc,
+  libunistring,
+  prqlSupport ? stdenv.hostPlatform == stdenv.buildPlatform,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lnav";
-  version = "0.12.3";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "tstack";
     repo = "lnav";
-    rev = "v${version}";
-    sha256 = "sha256-m0r7LAo9pYFpS+oimVCNCipojxPzMMsLLjhjkitEwow=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JVoLTzuA/ulLbBZFtI8ALmttaqrSbajryIu1j8THt3s=";
   };
 
   enableParallelBuilding = true;
+
   separateDebugInfo = true;
 
   strictDeps = true;
+
   depsBuildBuild = [ buildPackages.stdenv.cc ];
+
   nativeBuildInputs = [
     autoconf
     automake
     zlib
     curl.dev
     re2c
+  ]
+  ++ lib.optionals prqlSupport [
     cargo
     rustPlatform.cargoSetupHook
     rustc
   ];
-  buildInputs =
-    [
-      bzip2
-      ncurses
-      pcre2
-      readline
-      sqlite
-      curl
-      libarchive
-    ]
-    ++ lib.optionals (!stdenv.isDarwin) [
-      gpm
-    ];
+
+  buildInputs = [
+    bzip2
+    pcre2
+    readline
+    sqlite
+    curl
+    libarchive
+    libunistring
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    gpm
+  ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    src = "${src}/src/third-party/prqlc-c";
-    hash = "sha256-jfmr6EuNW2mEHTEVHn6YnBDMzKxKI097vEFHXC4NT2Y=";
+    src = "${finalAttrs.src}/src/third-party/lnav-rs-ext";
+    hash = "sha256-Dy+V45X27dy2TN3JRic6nLmmG11I1Pw7m+vYKYJMnQs=";
   };
 
-  cargoRoot = "src/third-party/prqlc-c";
+  cargoRoot = "src/third-party/lnav-rs-ext";
 
   preConfigure = ''
     ./autogen.sh
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^v(\\d+(?:\\.\\d+)*)$" ];
+  };
 
-  meta = with lib; {
+  outputs = [
+    "out"
+    "man"
+  ];
+
+  meta = {
     homepage = "https://github.com/tstack/lnav";
     description = "Logfile Navigator";
     longDescription = ''
@@ -87,14 +100,13 @@ stdenv.mkDerivation rec {
       will allow the user to quickly and efficiently zero in on problems.
     '';
     downloadPage = "https://github.com/tstack/lnav/releases";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
       dochang
       symphorien
       pcasaretto
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "lnav";
   };
-
-}
+})

@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "38b9e61735a3161f9211a5773c5f5ea698f36af4ff7f77fa03e8d1ff0caa117f";
+    hash = "sha256-OLnmFzWjFh+SEaV3PF9eppjzavT/f3f6A+jR/wyqEX8=";
   };
 
   nativeCheckInputs = [ which ];
@@ -25,11 +25,11 @@ buildPythonPackage rec {
     sed -i 's|^\([ ]*\)self.bin_path.*$|\1self.bin_path = "${pkgs.terminal-notifier}/bin/terminal-notifier"|' build/lib/pync/TerminalNotifier.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python Wrapper for Mac OS 10.8 Notification Center";
-    homepage = "https://pypi.python.org/pypi/pync";
-    license = licenses.mit;
-    platforms = platforms.darwin;
-    maintainers = with maintainers; [ lovek323 ];
+    homepage = "https://pypi.org/project/pync/";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.darwin;
+    maintainers = [ ];
   };
 }

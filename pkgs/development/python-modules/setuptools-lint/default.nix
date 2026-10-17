@@ -2,25 +2,33 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   pylint,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "setuptools-lint";
   version = "0.6.0";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "16a1ac5n7k7sx15cnk03gw3fmslab3a7m74dc45rgpldgiff3577";
+    pname = "setuptools-lint";
+    inherit (finalAttrs) version;
+    hash = "sha256-55ThXHyN3pcLYY2cetRYiurqBn8DTMtK6PrMYwtTQZk=";
   };
 
-  propagatedBuildInputs = [ pylint ];
+  build-system = [ setuptools ];
 
-  meta = with lib; {
+  dependencies = [ pylint ];
+
+  pythonImportsCheck = [ "setuptools_lint" ];
+
+  meta = {
     description = "Package to expose pylint as a lint command into setup.py";
     homepage = "https://github.com/johnnoone/setuptools-pylint";
-    license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ nickhu ];
+    license = lib.licenses.bsdOriginal;
+    maintainers = with lib.maintainers; [ nickhu ];
   };
-}
+})

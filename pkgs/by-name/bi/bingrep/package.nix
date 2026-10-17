@@ -4,24 +4,24 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bingrep";
-  version = "0.11.0";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "m4b";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-bHu3/f25U1QtRZv1z5OQSDMayOpLU6tbNaV00K55ZY8=";
+    repo = "bingrep";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-1GSAYhxFg5nXR8+vWBN10JLV7qUIxT1hYNXdnpE5Uag=";
   };
 
-  cargoHash = "sha256-n49VmAJcD98LdkrUCW6ouihSXmSCsdBDvCe9l96G0ec=";
+  cargoHash = "sha256-llyItFYNnvWjPYoTrY8oS4z8tU9IuKYCfvHSURDKNDk=";
 
-  meta = with lib; {
+  meta = {
     description = "Greps through binaries from various OSs and architectures, and colors them";
     mainProgram = "bingrep";
     homepage = "https://github.com/m4b/bingrep";
-    license = licenses.mit;
-    maintainers = with maintainers; [ minijackson ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ minijackson ];
   };
-}
+})

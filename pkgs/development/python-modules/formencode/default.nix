@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   setuptools-scm,
   six,
@@ -13,15 +12,12 @@
 
 buildPythonPackage rec {
   pname = "formencode";
-  version = "2.1.0";
+  version = "2.1.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
-    pname = "FormEncode";
-    inherit version;
-    hash = "sha256-63TSIweKKM8BX6iJZsbjTy0Y11EnMY1lwUS+2a/EJj8=";
+    inherit pname version;
+    hash = "sha256-4X8WGZ0jLlT2eRIATzrTM827uBoaGhAjis8JurmfkZk=";
   };
 
   postPatch = ''
@@ -49,7 +45,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "FormEncode validates and converts nested structures";
-    homepage = "http://formencode.org";
+    homepage = "https://www.formencode.org";
     license = lib.licenses.mit;
     maintainers = [ ];
   };

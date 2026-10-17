@@ -1,0 +1,58 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flit-core,
+  django,
+  djangorestframework,
+  drf-spectacular,
+  inflection,
+  pytestCheckHook,
+  pytest-django,
+  django-filter,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "drf-standardized-errors";
+  version = "0.16.0";
+  pyproject = true;
+  __structuredAttrs = true;
+
+  src = fetchFromGitHub {
+    owner = "ghazi-git";
+    repo = "drf-standardized-errors";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-M1wJIsrs4cimtG3bJloIycHnogEPFpvDRD+3u7Th9uQ=";
+  };
+
+  build-system = [ flit-core ];
+
+  dependencies = [
+    django
+    djangorestframework
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-django
+    django-filter
+    drf-spectacular
+  ];
+
+  env.DJANGO_SETTINGS_MODULE = "tests.settings";
+
+  pythonImportsCheck = [ "drf_standardized_errors" ];
+
+  optional-dependencies.openapi = [
+    drf-spectacular
+    inflection
+  ];
+
+  meta = {
+    description = "Standardize your DRF API error responses";
+    homepage = "https://github.com/ghazi-git/drf-standardized-errors";
+    changelog = "https://github.com/ghazi-git/drf-standardized-errors/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ erictapen ];
+  };
+})

@@ -5,15 +5,15 @@
   python3,
 }:
 
-buildFishPlugin rec {
+buildFishPlugin {
   pname = "bass";
-  version = "1.0-unstable-2021-02-18";
+  version = "1.0-unstable-2023-12-17";
 
   src = fetchFromGitHub {
     owner = "edc";
-    repo = pname;
-    rev = "2fd3d2157d5271ca3575b13daec975ca4c10577a";
-    sha256 = "0mb01y1d0g8ilsr5m8a71j6xmqlyhf8w4xjf00wkk8k41cz3ypky";
+    repo = "bass";
+    rev = "79b62958ecf4e87334f24d6743e5766475bcf4d0";
+    hash = "sha256-3d/qL+hovNA4VMWZ0n1L+dSM1lcz7P5CQJyy+/8exTc=";
   };
 
   #buildFishplugin will only move the .fish files, but bass also relies on python
@@ -26,10 +26,9 @@ buildFishPlugin rec {
     make test
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fish function making it easy to use utilities written for Bash in Fish shell";
     homepage = "https://github.com/edc/bass";
-    license = licenses.mit;
-    maintainers = with maintainers; [ beezow ];
+    license = lib.licenses.mit;
   };
 }

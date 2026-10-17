@@ -4,43 +4,43 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
-  stdenv,
-  darwin,
+  versionCheckHook,
+  nix-update-script,
+  withTls ? true,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "simple-http-server";
-  version = "0.6.10";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "TheWaWaR";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-r8Ush6cdGNxcRB3RSRJLtjseII5SQt9+oMqOTBmVfaY=";
+    repo = "simple-http-server";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-JG9dqc8E8rUjSG3pBypamjNqFpM87r7cK+zP+PSyMCQ=";
   };
 
-  cargoHash = "sha256-RdHcMnUctHYdQRsF6T9w8FoD56Bv4Xm0Jlu4Rls0C+M=";
+  cargoHash = "sha256-3DelxN2oTFZzoSke7uLbSKYJnF2Bq4MWDvfnKTIsbGk=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = lib.optional withTls openssl;
+  buildFeatures = lib.optional withTls "tls";
 
-  # Currently no tests are implemented, so we avoid building the package twice
-  doCheck = false;
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Simple HTTP server in Rust";
     homepage = "https://github.com/TheWaWaR/simple-http-server";
-    changelog = "https://github.com/TheWaWaR/simple-http-server/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      figsoda
+    changelog = "https://github.com/TheWaWaR/simple-http-server/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       mephistophiles
+      progrm_jarvis
     ];
     mainProgram = "simple-http-server";
   };
-}
+})

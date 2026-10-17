@@ -86,7 +86,7 @@ in
 
       user = lib.mkOption {
         description = ''
-          The group under which attic runs.
+          The user under which attic runs.
         '';
         type = types.str;
         default = "atticd";
@@ -94,7 +94,7 @@ in
 
       group = lib.mkOption {
         description = ''
-          The user under which attic runs.
+          The group under which attic runs.
         '';
         type = types.str;
         default = "atticd";
@@ -103,7 +103,7 @@ in
       settings = lib.mkOption {
         description = ''
           Structured configurations of atticd.
-          See https://github.com/zhaofengli/attic/blob/main/server/src/config-template.toml
+          See <https://github.com/zhaofengli/attic/blob/main/server/src/config-template.toml>
         '';
         type = format.type;
         default = { };
@@ -169,8 +169,8 @@ in
 
     systemd.services.atticd = {
       wantedBy = [ "multi-user.target" ];
-      after = [ "network-online.target" ] ++ lib.optionals hasLocalPostgresDB [ "postgresql.service" ];
-      requires = lib.optionals hasLocalPostgresDB [ "postgresql.service" ];
+      after = [ "network-online.target" ] ++ lib.optionals hasLocalPostgresDB [ "postgresql.target" ];
+      requires = lib.optionals hasLocalPostgresDB [ "postgresql.target" ];
       wants = [ "network-online.target" ];
 
       serviceConfig = {

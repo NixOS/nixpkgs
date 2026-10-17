@@ -5,25 +5,29 @@
   linuxPackages,
   git,
   kernel ? linuxPackages.kernel,
+  kernelModuleMakeFlags,
 }:
 stdenv.mkDerivation {
   pname = "msi-ec-kmods";
-  version = "0-unstable-2024-11-04";
+  version = "0-unstable-2026-08-02";
 
   src = fetchFromGitHub {
     owner = "BeardOverflow";
     repo = "msi-ec";
-    rev = "be6f7156cd15f6ecf9d48dfcc30cbd1f693916b8";
-    hash = "sha256-gImiP4OaBt80n+qgVnbhd0aS/zW+05o3DzGCw0jq+0g=";
+    rev = "050d4394a6747ebd106ae2f8ddb3a4eebe7c700f";
+    hash = "sha256-b7wwZstjeLPEsxIjmZentDwkQTxdBYbpJfdOR24Ofww=";
   };
 
   dontMakeSourcesWritable = false;
 
-  patches = [ ./patches/makefile.patch ];
+  patches = [
+    ./patches/makefile.patch
+    ./patches/kernel-string-choices.patch
+  ];
 
   hardeningDisable = [ "pic" ];
 
-  makeFlags = kernel.moduleMakeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "INSTALL_MOD_PATH=$(out)"
   ];
@@ -40,6 +44,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.m1dugh ];
     platforms = lib.platforms.linux;
-    broken = kernel.kernelOlder "5.5";
+    broken = kernel.kernelOlder "6.5";
   };
 }

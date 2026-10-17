@@ -1,35 +1,56 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
   installShellFiles,
   nix-update-script,
+  nodejs,
+  bashInteractive,
   usage,
   testers,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "usage";
-  version = "2.0.3";
+  version = "7.0.1";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "usage";
-    rev = "v${version}";
-    hash = "sha256-bS8wMtmD7UPctP+8yDm8KylLIPzPuk6dt9ilWQzFvY0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-E8RKAyZ/1cr7FE3iGnTPFGBfoHKCs+kCrqNvCl7cogw=";
   };
 
-  cargoHash = "sha256-z/McKMlLvr/YBzXSCLFZk9PSIBnrweU7tIPjTwTeiuQ=";
+  cargoHash = "sha256-KX9jNLDq4N0EyWRSxF12LF3PJraAAjRldpRdFQJBChQ=";
+
+  # Upstream's releases ship only the `usage` binary.
+  cargoBuildFlags = [
+    "-p"
+    "usage-cli"
+  ];
+  cargoTestFlags = [
+    "-p"
+    "usage-cli"
+  ];
 
   postPatch = ''
-    substituteInPlace ./examples/mounted.sh \
+    substituteInPlace ./examples/*.sh \
       --replace-fail '/usr/bin/env -S usage' "$(pwd)/target/${stdenv.targetPlatform.rust.rustcTargetSpec}/release/usage"
   '';
 
   nativeBuildInputs = [ installShellFiles ];
 
+  nativeCheckInputs = [
+    # for some tests
+    nodejs
+    bashInteractive
+  ];
+
   postInstall = ''
+    installManPage ./cli/assets/usage.1
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd usage \
       --bash <($out/bin/usage --completions bash) \
       --fish <($out/bin/usage --completions fish) \
@@ -44,9 +65,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     homepage = "https://usage.jdx.dev";
     description = "Specification for CLIs";
-    changelog = "https://github.com/jdx/usage/releases/tag/v${version}";
+    changelog = "https://github.com/jdx/usage/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ konradmalik ];
     mainProgram = "usage";
   };
-}
+})

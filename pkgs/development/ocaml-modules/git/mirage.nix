@@ -7,8 +7,6 @@
   git-paf,
   awa,
   awa-mirage,
-  dns,
-  dns-client,
   tls,
   tls-mirage,
   uri,
@@ -24,9 +22,9 @@
   fmt,
   ipaddr,
   lwt,
-  mirage-clock,
   mirage-flow,
-  mirage-time,
+  mirage-ptime,
+  mirage-sleep,
   alcotest,
   alcotest-lwt,
   bigstringaf,
@@ -39,11 +37,10 @@ buildDunePackage {
 
   inherit (git) version src;
 
-  minimalOCamlVersion = "4.08";
+  # host key authenticator is mandatory in awa 0.7.0
+  patches = [ ./mirage-awa-0.7.0.patch ];
 
   buildInputs = [
-    dns
-    dns-client
     happy-eyeballs-mirage
     ipaddr
   ];
@@ -69,9 +66,9 @@ buildDunePackage {
     domain-name
     fmt
     lwt
-    mirage-clock
+    mirage-ptime
     mirage-flow
-    mirage-time
+    mirage-sleep
   ];
 
   checkInputs = [

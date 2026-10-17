@@ -3,7 +3,6 @@
   stdenv,
 
   fetchFromGitHub,
-  fetchpatch,
 
   cmake,
   ninja,
@@ -12,7 +11,6 @@
   cargo,
   rustPlatform,
   ensureNewerSourcesForZipFilesHook,
-  removeReferencesTo,
 
   pcre2,
   openssl,
@@ -28,26 +26,18 @@
   cpptoml,
 
   gtest,
-
-  nix-update-script,
-
-  stateDir ? "",
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "watchman";
-  version = "2025.01.06.00";
+  version = "2026.07.27.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "watchman";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-W37+xs+Fj2yL9KzR9CugfgbFl+g3f+2Dx+xL9MpQEQ4=";
+    hash = "sha256-cfx0hRsWDq6NTr8QvnLt/LsZ4Ja8d3lejUSgzsockp4=";
   };
-
-  patches = [
-    ./glog-0.7.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -57,7 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     cargo
     rustPlatform.cargoSetupHook
     ensureNewerSourcesForZipFilesHook
-    removeReferencesTo
   ];
 
   buildInputs = [
@@ -81,8 +70,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "CMAKE_INSTALL_RPATH_USE_LINK_PATH" true)
+    # If we want to have one watchman per system, we need to have the state in
+    # $HOME for reliability in face of differing TMPDIR values.
+    # https://github.com/facebook/watchman/issues/1092
+    (lib.cmakeBool "WATCHMAN_USE_XDG_STATE_HOME" true)
 
-    (lib.cmakeFeature "WATCHMAN_STATE_DIR" stateDir)
     (lib.cmakeFeature "WATCHMAN_VERSION_OVERRIDE" finalAttrs.version)
   ];
 
@@ -94,17 +86,27 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  # fmt v12.2.0 changed the definition of its fmt/core.h header to no longer
+  # include fmt/format.h, so we must pull that one in instead. vendored from
+  # https://github.com/facebook/watchman/pull/1348 with a small modification to
+  # the surrounding context in watchman/watcher/eden.cpp to avoid the changes
+  # in 542ccb794647fe7bdeb59db8f54cd434db42bd30.
+  patches = [ ./fmt-12.2.0-format-header.patch ];
+
   postPatch = ''
     patchShebangs .
+
     cp ${./Cargo.lock} ${finalAttrs.cargoRoot}/Cargo.lock
+
+    # The build system looks for `/usr/bin/python3`. It falls back
+    # gracefully if it’s not found, but let’s dodge the potential
+    # reproducibility risk for unsandboxed Darwin.
+    substituteInPlace CMakeLists.txt \
+      --replace-fail /usr/bin /var/empty
+
   '';
 
-  postFixup = ''
-    # TODO: Do this in `fmt` rather than downstream.
-    remove-references-to -t ${folly.fmt.dev} $out/bin/*
-  '';
-
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Watches files and takes action when they change";
@@ -113,7 +115,9 @@ stdenv.mkDerivation (finalAttrs: {
       kylesferrazza
       emily
       techknowlogick
+      lf-
     ];
+    mainProgram = "watchman";
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
   };

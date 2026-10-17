@@ -3,31 +3,35 @@
   stdenv,
   fetchFromGitHub,
   nodejs,
-  pnpm_9,
+  pnpm_11,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nix-update-script,
   fetchurl,
   runCommand,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "synchrony";
-  version = "2.4.5";
+  version = "2.4.6";
 
   src = fetchFromGitHub {
     owner = "relative";
     repo = "synchrony";
     rev = finalAttrs.version;
-    hash = "sha256-nJ6H1SZAQCG6U3BPEPmm+BGQa8Af+Vb1E+Lv8lIqDBE=";
+    hash = "sha256-D+XibmfMd3jZUEnHqStOuvcrEhDvodey0GXQ57RvJ38=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_11
   ];
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-+hS4UK7sncCxv6o5Yl72AeY+LSGLnUTnKosAYB6QsP0=";
+    pnpm = pnpm_11;
+    fetcherVersion = 3;
+    hash = "sha256-geA40z7KH4kluCgz1EmmYqeGkBjEXgmrUDsUewpD7Xc=";
   };
 
   buildPhase = ''
@@ -78,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Simple deobfuscator for mangled or obfuscated JavaScript files";
     homepage = "https://deobfuscate.relative.im/";
-    license = with lib.licenses; [ gpl3Only ];
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ pluiedev ];
     inherit (nodejs.meta) platforms;
     mainProgram = "synchrony";

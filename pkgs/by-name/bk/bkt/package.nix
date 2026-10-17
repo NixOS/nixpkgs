@@ -3,19 +3,19 @@
   fetchFromGitHub,
   lib,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
 
   pname = "bkt";
   version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "dimo414";
-    repo = pname;
-    rev = version;
+    repo = "bkt";
+    tag = finalAttrs.version;
     sha256 = "sha256-XQK7oZfutqCvFoGzMH5G5zoGvqB8YaXSdrwjS/SVTNU=";
   };
 
-  cargoHash = "sha256-Pl+a+ZpxaguRloH8R7x4FmYpTwTUwFrYy7AS/5K3L+8=";
+  cargoHash = "sha256-4CY2A6mPTfGhqUh+nNg6eaTIVwA9ZtgH5jHQDGHnK4c=";
 
   meta = {
     description = "Subprocess caching utility";
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.mangoiv ];
     mainProgram = "bkt";
   };
-}
+})

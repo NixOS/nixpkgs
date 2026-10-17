@@ -17,12 +17,12 @@
 
 buildPythonPackage rec {
   pname = "pplpy";
-  version = "0.8.10";
+  version = "0.9.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1CohbIKRTc9NfAAN68mLsza4+D4Ca6XZUszNn4B07/0=";
+    hash = "sha256-gonFDWgM4/nqysZmy0zbvYpxGVnnzHzwb3/bQDXQzF0=";
   };
 
   buildInputs = [
@@ -65,10 +65,10 @@ buildPythonPackage rec {
     inherit sage;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for ppl";
     homepage = "https://gitlab.com/videlec/pplpy";
-    maintainers = teams.sage.members;
-    license = licenses.gpl3;
+    teams = [ lib.teams.sage ];
+    license = lib.licenses.gpl3;
   };
 }

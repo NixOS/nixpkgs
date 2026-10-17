@@ -8,33 +8,35 @@
   lxml,
   oauthlib,
   pyjwt,
+  pytest-cov-stub,
+  pytest-xdist,
   pytestCheckHook,
   python-jose,
   python3-openid,
   python3-saml,
-  pythonOlder,
   requests,
   requests-oauthlib,
+  responses,
   setuptools,
+  typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "social-auth-core";
-  version = "4.5.4";
+  version = "5.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "python-social-auth";
     repo = "social-core";
-    tag = version;
-    hash = "sha256-tFaRvNoO5K7ytqMhL//Ntasc7jb4PYXB1yyjFvFqQH8=";
+    tag = finalAttrs.version;
+    hash = "sha256-4Z08ZHTSPSNG9x9XZWwGuvKYk3UnogLm5pO/MHWN0CE=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cryptography
     defusedxml
     oauthlib
@@ -54,27 +56,34 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    pytest-cov-stub
+    pytest-xdist
     pytestCheckHook
     httpretty
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+    responses
+    typing-extensions
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
-  # Disable checking the code coverage
-  prePatch = ''
-    substituteInPlace social_core/tests/requirements.txt \
-      --replace "coverage>=3.6" "" \
-      --replace "pytest-cov>=2.7.1" ""
+  disabledTestPaths = [
+    # missing google-auth-stubs
+    "social_core/tests/backends/test_google.py"
 
-    substituteInPlace tox.ini \
-      --replace "{posargs:-v --cov=social_core}" "{posargs:-v}"
-  '';
+    # network access
+    "social_core/tests/backends/test_steam.py::SteamOpenIdMissingSteamIdTest::test_login"
+    "social_core/tests/backends/test_steam.py::SteamOpenIdMissingSteamIdTest::test_partial_pipeline"
+
+    # shopify is not packaged
+    "social_core/tests/backends/test_shopify.py"
+  ];
 
   pythonImportsCheck = [ "social_core" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for social authentication/registration mechanisms";
     homepage = "https://github.com/python-social-auth/social-core";
-    changelog = "https://github.com/python-social-auth/social-core/blob/${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/python-social-auth/social-core/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
-}
+})

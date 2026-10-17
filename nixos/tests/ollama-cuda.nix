@@ -1,13 +1,13 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 {
   name = "ollama-cuda";
-  meta.maintainers = with lib.maintainers; [ abysssol ];
+  meta.maintainers = [ ];
 
   nodes.cuda =
     { ... }:
     {
       services.ollama.enable = true;
-      services.ollama.acceleration = "cuda";
+      services.ollama.package = pkgs.ollama-cuda;
     };
 
   testScript = ''

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchurl,
+  fetchPypi,
   addDriverRunpath,
   autoPatchelfHook,
   pypaInstallHook,
@@ -13,42 +13,51 @@
 }:
 let
   inherit (jaxlib) version;
-  inherit (cudaPackages) cudaVersion;
+
+  platforms = {
+    x86_64-linux = {
+      name = "manylinux_2_27_x86_64";
+      hash = "sha256-ITOzr8YzB8AWrkmA8Ways94Zl1k2Pq1099VQ6q6VNGM=";
+    };
+    aarch64-linux = {
+      name = "manylinux_2_27_aarch64";
+      hash = "sha256-82JH1AlzsgrPPGnax8nHINqqQJaoCbPo/XApK+YXzes=";
+    };
+  };
+  currentPlatform = platforms.${stdenv.hostPlatform.system};
 
   cudaLibPath = lib.makeLibraryPath (
     with cudaPackages;
     [
+      (lib.getLib libcublas) # libcublas.so
+      (lib.getLib cuda_cupti) # libcupti.so
       (lib.getLib cuda_cudart) # libcudart.so
       (lib.getLib cudnn) # libcudnn.so
-      (lib.getLib libcublas) # libcublas.so
-      addDriverRunpath.driverLink # libcuda.so
+      (lib.getLib libcufft) # libcufft.so
+      (lib.getLib libcusolver) # libcusolver.so
+      (lib.getLib libcusparse) # libcusparse.so
+      (lib.getLib nccl) # libnccl.so
+      (lib.getLib libnvjitlink) # libnvJitLink.so
+      (lib.getLib addDriverRunpath.driverLink) # libcuda.so
     ]
   );
 
-  # Find new releases at https://storage.googleapis.com/jax-releases
-  # When upgrading, you can get these hashes from jaxlib/prefetch.sh. See
-  # https://github.com/google/jax/issues/12879 as to why this specific URL is the correct index.
-
-  # upstream does not distribute jax-cuda12-pjrt 0.4.38 binaries for aarch64-linux
-  srcs = {
-    "x86_64-linux" = fetchurl {
-      url = "https://storage.googleapis.com/jax-releases/cuda12_plugin/jax_cuda12_pjrt-${version}-py3-none-manylinux2014_x86_64.whl";
-      hash = "sha256-g75MWfvPMAd6YAhdmOfVncc4sckeDWKOSsF3n94VrCs=";
-    };
-    "aarch64-linux" = fetchurl {
-      url = "https://storage.googleapis.com/jax-releases/cuda12_plugin/jax_cuda12_pjrt-${version}-py3-none-manylinux2014_aarch64.whl";
-      hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
-    };
-  };
 in
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "jax-cuda12-pjrt";
   inherit version;
   pyproject = false;
+  __structuredAttrs = true;
 
-  src =
-    srcs.${stdenv.hostPlatform.system}
-      or (throw "jax-cuda12-pjrt: No src for ${stdenv.hostPlatform.system}");
+  src = fetchPypi {
+    pname = "jax_cuda12_pjrt";
+    inherit version;
+    format = "wheel";
+    python = "py3";
+    dist = "py3";
+    platform = currentPlatform.name;
+    inherit (currentPlatform) hash;
+  };
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -62,10 +71,12 @@ buildPythonPackage {
   # * https://github.com/NixOS/nixpkgs/pull/288829#discussion_r1493852211
   # for more info.
   postInstall = ''
-    mkdir -p $out/${python.sitePackages}/jax_plugins/nvidia/cuda_nvcc/bin
-    ln -s ${lib.getExe' cudaPackages.cuda_nvcc "ptxas"} $out/${python.sitePackages}/jax_plugins/nvidia/cuda_nvcc/bin/ptxas
-    ln -s ${lib.getExe' cudaPackages.cuda_nvcc "nvlink"} $out/${python.sitePackages}/jax_plugins/nvidia/cuda_nvcc/bin/nvlink
-    ln -s ${cudaPackages.cuda_nvcc}/nvvm $out/${python.sitePackages}/jax_plugins/nvidia/cuda_nvcc/nvvm
+    export OUTPATH="$out/${python.sitePackages}/jax_plugins/nvidia/cuda_nvcc"
+    export BINPATH="$OUTPATH/bin"
+    mkdir -p $BINPATH
+    ln -s ${lib.getExe' cudaPackages.cuda_nvcc "ptxas"} $BINPATH/ptxas
+    ln -s ${lib.getExe' cudaPackages.cuda_nvcc "nvlink"} $BINPATH/nvlink
+    ln -s ${cudaPackages.cuda_nvcc}/nvvm $OUTPATH/nvvm
   '';
 
   # jax-cuda12-pjrt contains shared libraries that open other shared libraries via dlopen
@@ -83,16 +94,42 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "jax_plugins" ];
 
+  passthru = {
+    inherit cudaLibPath;
+  };
+
   meta = {
     description = "JAX XLA PJRT Plugin for NVIDIA GPUs";
     homepage = "https://github.com/jax-ml/jax/tree/main/jax_plugins/cuda";
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ natsukium ];
-    platforms = lib.attrNames srcs;
-    # see CUDA compatibility matrix
-    # https://jax.readthedocs.io/en/latest/installation.html#pip-installation-nvidia-gpu-cuda-installed-locally-harder
-    broken =
-      !(lib.versionAtLeast cudaVersion "12.1") || !(lib.versionAtLeast cudaPackages.cudnn.version "9.1");
+    teams = [ lib.teams.cuda ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      natsukium
+    ];
+    platforms = lib.attrNames platforms;
+    problems =
+      lib.optionalAttrs (cudaPackages.cudaMajorVersion != "12") {
+        unsupported-cuda-version = {
+          message = ''
+            Incompatible cudaPackages version.
+              - Expected: 12
+              - Got: ${cudaPackages.cudaMajorVersion}
+          '';
+          kind = "broken";
+        };
+      }
+      // lib.optionalAttrs (lib.versionAtLeast cudaPackages.cudnn.version "10.0") {
+        unsupported-cudnn-version = {
+          message = ''
+            cudaPackages.cudnn is too new (${cudaPackages.cudnn.version}).
+
+            See CUDA compatibility matrix
+            https://docs.jax.dev/en/latest/installation.html#pip-installation-nvidia-gpu-cuda-installed-locally-harder
+          '';
+          kind = "broken";
+        };
+      };
   };
-}
+})

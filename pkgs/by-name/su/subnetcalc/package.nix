@@ -4,27 +4,36 @@
   fetchFromGitHub,
   cmake,
   ninja,
+  gettext,
+  libidn2,
+  libmaxminddb,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "subnetcalc";
-  version = "2.5.1";
+  version = "2.7.5";
 
   src = fetchFromGitHub {
     owner = "dreibh";
     repo = "subnetcalc";
-    rev = "subnetcalc-${finalAttrs.version}";
-    hash = "sha256-uP2T7c5aBvOsuJK648WNWO9WmRN4WCRlAIBFYTYyUkw=";
+    tag = "subnetcalc-${finalAttrs.version}";
+    hash = "sha256-xMWEd8F6tQuKVL4aybdwsidBbmPItuNd6iCZUfzjVLA=";
   };
 
   nativeBuildInputs = [
     cmake
     ninja
+    gettext
+  ];
+
+  buildInputs = [
+    libidn2
+    libmaxminddb
   ];
 
   meta = {
-    description = "SubNetCalc is an IPv4/IPv6 subnet address calculator";
-    homepage = "https://www.uni-due.de/~be0001/subnetcalc/";
+    description = "IPv4/IPv6 subnet address calculator";
+    homepage = "https://www.nntb.no/~dreibh/subnetcalc/";
     license = lib.licenses.gpl3Plus;
     longDescription = ''
       SubNetCalc is an IPv4/IPv6 subnet address calculator. For given IPv4 or
@@ -35,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
       type, scope, interface ID, etc.).
     '';
     mainProgram = "subnetcalc";
-    maintainers = with lib.maintainers; [ atila ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

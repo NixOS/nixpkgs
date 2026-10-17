@@ -5,7 +5,7 @@
   groff,
   inetutils,
   libxcrypt,
-  lua,
+  lua5_2_compat,
   openssl,
   stdenv,
   wget,
@@ -19,6 +19,9 @@
   luaSupport ? !minimal,
   htpasswdSupport ? !minimal,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bozohttpd";
@@ -34,7 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libxcrypt
     openssl
-  ] ++ lib.optionals (luaSupport) [ lua ];
+  ]
+  ++ lib.optionals luaSupport [ lua ];
 
   nativeBuildInputs = [
     bmake
@@ -59,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
         # unpackaged dependency: https://man.netbsd.org/blocklist.3
         "-DNO_BLOCKLIST_SUPPORT"
       ]
-      ++ lib.optionals (htpasswdSupport) [ "-DDO_HTPASSWD" ]
+      ++ lib.optionals htpasswdSupport [ "-DDO_HTPASSWD" ]
       ++ lib.optionals (!cgiSupport) [ "-DNO_CGIBIN_SUPPORT" ]
       ++ lib.optionals (!dirIndexSupport) [ "-DNO_DIRINDEX_SUPPORT" ]
       ++ lib.optionals (!dynamicContentSupport) [ "-DNO_DYNAMIC_CONTENT" ]
@@ -71,8 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
     _LDADD = lib.concatStringsSep " " (
       [ "-lm" ]
       ++ lib.optionals (stdenv.hostPlatform.libc != "libSystem") [ "-lcrypt" ]
-      ++ lib.optionals (luaSupport) [ "-llua" ]
-      ++ lib.optionals (sslSupport) [
+      ++ lib.optionals luaSupport [ "-llua" ]
+      ++ lib.optionals sslSupport [
         "-lcrypto"
         "-lssl"
       ]

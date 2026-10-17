@@ -2,24 +2,47 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pytestCheckHook,
+  rustPlatform,
 }:
 
 buildPythonPackage rec {
   pname = "imgsize";
-  version = "2.1";
-  format = "setuptools";
+  version = "4.0.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ojii";
-    repo = pname;
-    rev = version;
-    sha256 = "0k24qj4i996fz7lpjrs36il6lp51rh13b0j2wip87cy5v9109m2d";
+    repo = "imgsize";
+    tag = version;
+    hash = "sha256-pHLYDC3UjrCKOdfgo2OreE5hGyIyWVSIsQR6piJZe6k=";
   };
 
-  meta = with lib; {
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-AXBd6cCpBVEYnU/uqynnO8wsVypV34r023kwzwSsbe4=";
+  };
+
+  nativeBuildInputs = [
+    rustPlatform.cargoSetupHook
+    rustPlatform.maturinBuildHook
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  # remove useless dev setup in conftest.py
+  preCheck = ''
+    substituteInPlace python-tests/conftest.py \
+      --replace-fail 'assert sys.prefix != sys.base_prefix, "must be in virtualenv"' "" \
+      --replace-fail 'check_call(' "# "
+  '';
+
+  meta = {
     description = "Pure Python image size library";
     homepage = "https://github.com/ojii/imgsize";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ twey ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ twey ];
   };
 }

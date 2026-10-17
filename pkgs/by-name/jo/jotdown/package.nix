@@ -2,27 +2,35 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jotdown";
-  version = "0.7.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "hellux";
     repo = "jotdown";
-    rev = version;
-    hash = "sha256-1s0J6TF/iDSqKUF4/sgq2irSPENjinftPFZnMgE8Dn8=";
+    rev = finalAttrs.version;
+    hash = "sha256-GUETWMWNAPfTcuu7LBgexgd1CWFbSyBwBZtFjMQ67Hk=";
   };
 
-  cargoHash = "sha256-gsrwC7X1pnr9ZQDqq0SnNxYHFdRI9VRuIQtA1s7Yz7A=";
+  cargoHash = "sha256-yuzjyP1iy6pgUJev1dJPjU85A3W5n7G2B+Pa1R47KiQ=";
+  buildFeatures = [ "cli" ];
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Minimal Djot CLI";
     mainProgram = "jotdown";
     homepage = "https://github.com/hellux/jotdown";
-    changelog = "https://github.com/hellux/jotdown/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/hellux/jotdown/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ novalkun ];
   };
-}
+})

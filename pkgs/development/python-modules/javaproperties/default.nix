@@ -2,27 +2,24 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
-  six,
+  hatchling,
   pytestCheckHook,
   python-dateutil,
 }:
 
 buildPythonPackage rec {
-  version = "0.8.1";
+  version = "0.8.2";
   pname = "javaproperties";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jwodder";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "16rcdw5gd4a21v2xb1j166lc9z2dqcv68gqvk5mvpnm0x6nwadgp";
+    repo = "javaproperties";
+    tag = "v${version}";
+    hash = "sha256-8Deo6icInp7QpTqa+Ou6l36/23skxKOYRef2GbumDqo=";
   };
 
-  nativeBuildInputs = [ setuptools ];
-
-  propagatedBuildInputs = [ six ];
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [
     python-dateutil
@@ -33,10 +30,10 @@ buildPythonPackage rec {
 
   disabledTestPaths = [ "test/test_propclass.py" ];
 
-  meta = with lib; {
-    description = "Microsoft Azure API Management Client Library for Python";
-    homepage = "https://github.com/Azure/azure-sdk-for-python";
-    license = licenses.mit;
+  meta = {
+    description = "Python library for reading and writing Java .properties files";
+    homepage = "https://github.com/jwodder/javaproperties";
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

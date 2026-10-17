@@ -1,35 +1,40 @@
-{ lib
-, gitUpdater
-, fetchFromGitHub
-, qt6Packages
-, stdenv
-, cmake
-, extra-cmake-modules
-, inotify-tools
-, kdePackages
-, libcloudproviders
-, librsvg
-, libsecret
-, openssl
-, pcre
-, pkg-config
-, sphinx
-, sqlite
-, xdg-utils
-, libsysprof-capture
+{
+  lib,
+  gitUpdater,
+  fetchFromGitHub,
+  qt6Packages,
+  stdenv,
+  cmake,
+  inotify-tools,
+  kdePackages,
+  kdsingleapplication,
+  libcloudproviders,
+  libp11,
+  librsvg,
+  libsecret,
+  openssl,
+  pcre2,
+  pkg-config,
+  sphinx,
+  sqlite,
+  xdg-utils,
+  libsysprof-capture,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nextcloud-client";
-  version = "3.15.3";
+  version = "34.0.4";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "nextcloud-releases";
     repo = "desktop";
-    tag = "v${version}";
-    hash = "sha256-48iqLd1S84ZElibdgwEXl3LZeYruo9r34LPn7BzYpdk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5qHhhMpgmdfNCO88ZtEtE+HcqeTOgxPUXYb8cgC6YiA=";
   };
 
   patches = [
@@ -37,6 +42,9 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail '"''${SYSTEMD_USER_UNIT_DIR}"' "\"$out/lib/systemd/user\""
+
     for file in src/libsync/vfs/*/CMakeLists.txt; do
       substituteInPlace $file \
         --replace-fail "PLUGINDIR" "KDE_INSTALL_PLUGINDIR"
@@ -46,7 +54,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     librsvg
     sphinx
     qt6Packages.wrapQtAppsHook
@@ -55,16 +63,17 @@ stdenv.mkDerivation rec {
   buildInputs = [
     inotify-tools
     kdePackages.kio
+    kdsingleapplication
     libcloudproviders
+    libp11
     libsecret
     openssl
-    pcre
+    pcre2
     qt6Packages.qt5compat
     qt6Packages.qtbase
     qt6Packages.qtkeychain
     qt6Packages.qtsvg
     qt6Packages.qttools
-    qt6Packages.qtwebengine
     qt6Packages.qtwebsockets
     qt6Packages.qtwayland
     sqlite
@@ -73,7 +82,7 @@ stdenv.mkDerivation rec {
 
   qtWrapperArgs = [
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libsecret ]}"
-    # make xdg-open overrideable at runtime
+    # make xdg-open overridable at runtime
     "--suffix PATH : ${lib.makeBinPath [ xdg-utils ]}"
   ];
 
@@ -83,19 +92,17 @@ stdenv.mkDerivation rec {
     "-DMIRALL_VERSION_SUFFIX=" # remove git suffix from version
   ];
 
-  postBuild = ''
-    make doc-man
-  '';
-
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
-    changelog = "https://github.com/nextcloud/desktop/releases/tag/v${version}";
+    changelog = "https://github.com/nextcloud/desktop/releases/tag/v${finalAttrs.version}";
     description = "Desktop sync client for Nextcloud";
     homepage = "https://nextcloud.com";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ kranzes SuperSandro2000 ];
+    maintainers = with lib.maintainers; [
+      SuperSandro2000
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "nextcloud";
   };
-}
+})

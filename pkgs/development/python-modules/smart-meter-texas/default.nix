@@ -1,10 +1,10 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   aiohttp,
   asn1,
+  certifi,
   python-dateutil,
   setuptools,
   tenacity,
@@ -12,16 +12,14 @@
 
 buildPythonPackage rec {
   pname = "smart-meter-texas";
-  version = "0.5.5";
+  version = "0.5.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "grahamwetzler";
     repo = "smart-meter-texas";
     tag = "v${version}";
-    hash = "sha256-dHWcYrBtmKdEIU45rMy4KvoPX88hnRpd4KBlbJaNvgI=";
+    hash = "sha256-Jk3kWfiidflzLgkp2BGgTfkaYrLwyQx+IimnkzBVwRw=";
   };
 
   postPatch = ''
@@ -34,6 +32,7 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     asn1
+    certifi
     python-dateutil
     tenacity
   ];
@@ -41,10 +40,10 @@ buildPythonPackage rec {
   # no tests implemented
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Connect to and retrieve data from the unofficial Smart Meter Texas API";
     homepage = "https://github.com/grahamwetzler/smart-meter-texas";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

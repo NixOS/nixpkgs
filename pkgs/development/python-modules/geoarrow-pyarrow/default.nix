@@ -2,35 +2,62 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  pytestCheckHook,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
   geoarrow-c,
+  geoarrow-types,
   pyarrow,
   pyarrow-hotfix,
+
+  # tests
+  geopandas,
   numpy,
   pandas,
-  geopandas,
   pyogrio,
   pyproj,
-  setuptools-scm,
+  pytestCheckHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "geoarrow-pyarrow";
-  version = "0.1.2";
+  version = "0.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     repo = "geoarrow-python";
     owner = "geoarrow";
-    tag = "geoarrow-pyarrow-${version}";
-    hash = "sha256-Ni+GKTRhRDRHip1us3OZPuUhHQCNU7Nap865T/+CU8Y=";
+    tag = "geoarrow-types-${finalAttrs.version}";
+    hash = "sha256-ciElwh94ukFyFdOBuQWyOUVpn4jBM1RKfxiBCcM+nmE=";
   };
 
-  sourceRoot = "${src.name}/geoarrow-pyarrow";
+  sourceRoot = "${finalAttrs.src.name}/geoarrow-pyarrow";
 
-  build-system = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
+    geoarrow-c
+    geoarrow-types
+    pyarrow
+    pyarrow-hotfix
+  ];
+
+  pythonImportsCheck = [ "geoarrow.pyarrow" ];
+
+  nativeCheckInputs = [
+    geopandas
+    numpy
+    pandas
+    pyogrio
+    pyproj
+    pytestCheckHook
+  ];
 
   disabledTests = [
     # these tests are incompatible with arrow 17
@@ -47,31 +74,13 @@ buildPythonPackage rec {
     "test_geometry_type_basic"
   ];
 
-  dependencies = [
-    geoarrow-c
-    pyarrow
-    pyarrow-hotfix
-  ];
-
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
-  nativeCheckInputs = [
-    pytestCheckHook
-    numpy
-    pandas
-    geopandas
-    pyogrio
-    pyproj
-  ];
-
-  pythonImportsCheck = [ "geoarrow.pyarrow" ];
-
-  meta = with lib; {
+  meta = {
     description = "PyArrow implementation of geospatial data types";
     homepage = "https://github.com/geoarrow/geoarrow-python";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       cpcloud
     ];
+    teams = [ lib.teams.geospatial ];
   };
-}
+})

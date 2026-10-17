@@ -6,22 +6,18 @@
   nix-update-script,
   cosmic-comp,
 }:
-let
-  version = "1.1.0";
-in
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-ext-ctl";
-  inherit version;
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "cosmic-utils";
     repo = "cosmic-ctl";
-    tag = "v${version}";
-    hash = "sha256-dcUzrJcwJpzbYPuqdHgm43NYbaowsFmFP4sS0cfzNAg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-v3lNcXvSbTtCCosPD0z5ubksrBF9b0ATWfmLfF6MzvI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-EReo2hkBaIO1YOBx4D9rQSXlx+3NK5VQtj59jfZZI/0=";
+  cargoHash = "sha256-lRBkcn4Vy7XGRpymT3KCeHWwR3hXK5LxTDZB+Kiuk7E=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -31,11 +27,11 @@ rustPlatform.buildRustPackage {
 
   meta = {
     description = "CLI for COSMIC Desktop configuration management";
-    changelog = "https://github.com/cosmic-utils/cosmic-ctl/releases/tag/v${version}";
+    changelog = "https://github.com/cosmic-utils/cosmic-ctl/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/cosmic-utils/cosmic-ctl";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ HeitorAugustoLN ];
     mainProgram = "cosmic-ctl";
     inherit (cosmic-comp.meta) platforms;
   };
-}
+})

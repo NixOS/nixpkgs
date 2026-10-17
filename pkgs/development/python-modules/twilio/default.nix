@@ -2,7 +2,6 @@
   lib,
   aiohttp-retry,
   aiohttp,
-  aiounittest,
   buildPythonPackage,
   cryptography,
   django,
@@ -12,26 +11,25 @@
   pyjwt,
   pyngrok,
   pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
   pytz,
   requests,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "twilio";
-  version = "9.4.3";
+  version = "9.11.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "twilio";
     repo = "twilio-python";
-    tag = version;
-    hash = "sha256-HgV6GEhtwk2smtzdOypucZBX+kj9lfqsY2sZ9Yl7fbM=";
+    tag = finalAttrs.version;
+    hash = "sha256-RbamHPCGYGZgkipYf8Wz0D7cOB7AsGhxPRJC/BXR1qE=";
   };
+
+  # https://github.com/twilio/twilio-python/pull/919
+  patches = [ ./remove-aiounittest.patch ];
 
   build-system = [ setuptools ];
 
@@ -45,7 +43,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    aiounittest
     cryptography
     django
     mock
@@ -59,24 +56,19 @@ buildPythonPackage rec {
     "test_set_user_agent_extensions"
   ];
 
-  disabledTestPaths =
-    [
-      # Tests require API token
-      "tests/cluster/test_webhook.py"
-      "tests/cluster/test_cluster.py"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.11") [
-      # aiounittest is not supported on Python 3.12
-      "tests/unit/http/test_async_http_client.py"
-    ];
+  disabledTestPaths = [
+    # Tests require API token
+    "tests/cluster/test_webhook.py"
+    "tests/cluster/test_cluster.py"
+  ];
 
   pythonImportsCheck = [ "twilio" ];
 
-  meta = with lib; {
+  meta = {
     description = "Twilio API client and TwiML generator";
     homepage = "https://github.com/twilio/twilio-python/";
-    changelog = "https://github.com/twilio/twilio-python/blob/${version}/CHANGES.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/twilio/twilio-python/blob/${finalAttrs.src.tag}/CHANGES.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

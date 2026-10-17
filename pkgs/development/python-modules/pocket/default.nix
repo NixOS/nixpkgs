@@ -12,15 +12,15 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1fc9vc5nyzf1kzmnrs18dmns7nn8wjfrg7br1w4c5sgs35mg2ywh";
+    hash = "sha256-kHvxahn66cIID3mdl53kyNqjbW0o6Gzrn8F9bwvbibk=";
   };
 
   buildInputs = [ requests ];
 
-  meta = with lib; {
+  meta = {
     description = "Wrapper for the pocket API";
     homepage = "https://github.com/tapanpandita/pocket";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ericsagnes ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

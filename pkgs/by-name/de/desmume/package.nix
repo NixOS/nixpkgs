@@ -11,10 +11,10 @@
   gtk3,
   intltool,
   libGLU,
-  libXmu,
+  libxmu,
   libpcap,
   libtool,
-  lua,
+  lua5_2_compat,
   meson,
   ninja,
   openal,
@@ -23,13 +23,16 @@
   tinyxml,
   zlib,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "desmume";
   version = "0.9.13";
 
   src = fetchFromGitHub {
-    owner = "TASVideos";
+    owner = "TASEmulators";
     repo = "desmume";
     rev = "release_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     hash = "sha256-vmjKXa/iXLTwtqnG+ZUvOnOQPZROeMpfM5J3Jh/Ynfo=";
@@ -66,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     gtk3
     libGLU
-    libXmu
+    libxmu
     libpcap
     openal
     soundtouch
@@ -86,8 +89,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dwifi=true"
   ];
 
-  meta = with lib; {
-    homepage = "https://www.github.com/TASVideos/desmume/";
+  meta = {
+    homepage = "https://www.github.com/TASEmulators/desmume/";
     description = "Open-source Nintendo DS emulator";
     longDescription = ''
       DeSmuME is a freeware emulator for the NDS roms & Nintendo DS Lite games
@@ -96,8 +99,8 @@ stdenv.mkDerivation (finalAttrs: {
       demo nds roms. DeSmuME is also able to emulate nearly all of the
       commercial nds rom titles which other DS Emulators aren't.
     '';
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.AndersonTorres ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
 })

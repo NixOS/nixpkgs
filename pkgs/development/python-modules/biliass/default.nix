@@ -8,29 +8,32 @@
   libiconv,
 }:
 
+# r-ryantm wants to downgrade
+# nixpkgs-update: no auto update
 buildPythonPackage rec {
   pname = "biliass";
-  version = "2.2.0";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yutto-dev";
     repo = "yutto";
     tag = "biliass@${version}";
-    hash = "sha256-IrzFjjMNuD5UgdccHxIxZoeZpM1PGtVQRTWHOocnmAU=";
+    hash = "sha256-6lSXex9UOJn2bR6gigSBV4l1ecwtOIkYaK6YKVh3xpY=";
   };
 
-  sourceRoot = "source/packages/biliass";
+  sourceRoot = "${src.name}/packages/biliass";
   cargoRoot = "rust";
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit
       pname
       version
       src
+      sourceRoot
+      cargoRoot
       ;
-    sourceRoot = "${sourceRoot}/${cargoRoot}";
-    hash = "sha256-fXYjIJNrNQSXEACSa/FwxGlBYq5SxfIVIt4LtP0taFc=";
+    hash = "sha256-GwmQOrv2wOT/yLtMlU6FBNbtp1wfEHn8wM0Yfmxs3eE=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -48,11 +51,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "biliass" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/yutto-dev/biliass";
     description = "Convert Bilibili XML/protobuf danmaku to ASS subtitle";
     mainProgram = "biliass";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ linsui ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ linsui ];
   };
 }

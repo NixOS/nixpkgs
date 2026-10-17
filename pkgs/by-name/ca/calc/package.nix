@@ -2,23 +2,22 @@
   lib,
   stdenv,
   fetchurl,
-  makeWrapper,
+  man,
   ncurses,
   readline,
-  unixtools,
   enableReadline ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calc";
-  version = "2.15.0.2";
+  version = "2.17.0.0";
 
   src = fetchurl {
     urls = [
       "https://github.com/lcn2/calc/releases/download/v${finalAttrs.version}/calc-${finalAttrs.version}.tar.bz2"
       "http://www.isthe.com/chongo/src/calc/calc-${finalAttrs.version}.tar.bz2"
     ];
-    hash = "sha256-dPEj32SiR7RhI9fBa9ny9+EEuuiXS2WswRcDVuOMJXc=";
+    hash = "sha256-Cso4Z8E5UBsoXCluuujZ+4Slppb5k6K+EDRPKKrqrDk=";
   };
 
   postPatch = ''
@@ -28,8 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
-    makeWrapper
-    unixtools.col
+    man
   ];
 
   buildInputs = lib.optionals enableReadline [
@@ -37,23 +35,23 @@ stdenv.mkDerivation (finalAttrs: {
     readline
   ];
 
-  makeFlags =
-    [
-      "T=$(out)"
-      "INCDIR="
-      "BINDIR=/bin"
-      "LIBDIR=/lib"
-      "CALC_SHAREDIR=/share/calc"
-      "CALC_INCDIR=/include"
-      "MANDIR=/share/man/man1"
+  makeFlags = [
+    "T=$(out)"
+    "INCDIR="
+    "BINDIR=/bin"
+    "LIBDIR=/lib"
+    "CALC_SHAREDIR=/share/calc"
+    "CALC_INCDIR=/include"
+    "MANDIR=/share/man/man1"
 
-      # Handle LDFLAGS defaults in calc
-      "DEFAULT_LIB_INSTALL_PATH=$(out)/lib"
-    ]
-    ++ lib.optionals enableReadline [
-      "READLINE_LIB=-lreadline"
-      "USE_READLINE=-DUSE_READLINE"
-    ];
+    "EXTRA_CFLAGS=-Wno-error=format-security"
+    # Handle LDFLAGS defaults in calc
+    "DEFAULT_LIB_INSTALL_PATH=$(out)/lib"
+  ]
+  ++ lib.optionals enableReadline [
+    "READLINE_LIB=-lreadline"
+    "USE_READLINE=-DUSE_READLINE"
+  ];
 
   meta = {
     homepage = "http://www.isthe.com/chongo/tech/comp/calc/";
@@ -63,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     # The licensing situation depends on readline (see section 3 of the LGPL)
     # If linked against readline then GPLv2 otherwise LGPLv2.1
     license = if enableReadline then lib.licenses.gpl2Only else lib.licenses.lgpl21Only;
-    maintainers = with lib.maintainers; [ matthewbauer ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

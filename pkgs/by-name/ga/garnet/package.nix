@@ -8,24 +8,36 @@
 
 buildDotnetModule rec {
   pname = "garnet";
-  version = "1.0.50";
+  version = "2.1.8";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "garnet";
     tag = "v${version}";
-    hash = "sha256-jmEPgGO9kQvzyGktFfsyEZdHlgJOZokzE3d5Xneu6/E=";
+    hash = "sha256-GomncmLVYQamSOMScJVaT0dlwf59cXBJ/0z1Zil11ig=";
   };
 
   projectFile = "main/GarnetServer/GarnetServer.csproj";
   nugetDeps = ./deps.json;
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnet-sdk =
+    with dotnetCorePackages;
+    sdk_10_0
+    // {
+      inherit
+        (combinePackages [
+          sdk_10_0
+          sdk_9_0
+          sdk_8_0
+        ])
+        packages
+        targetPackages
+        ;
+    };
 
   dotnetBuildFlags = [
     "-f"
-    "net8.0"
+    "net10.0"
   ];
   dotnetInstallFlags = dotnetBuildFlags;
 
@@ -43,7 +55,10 @@ buildDotnetModule rec {
     homepage = "https://microsoft.github.io/garnet/";
     changelog = "https://github.com/microsoft/garnet/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ getchoo ];
+    maintainers = with lib.maintainers; [
+      getchoo
+      hythera
+    ];
     mainProgram = "GarnetServer";
   };
 }

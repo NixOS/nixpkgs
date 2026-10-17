@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-camera";
-  version = "8.0.1";
+  version = "9.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "camera";
     rev = version;
-    sha256 = "sha256-PSUav16aU9TFX9Zb0TkqLxgn+yed86Qft0rQvbjbXtA=";
+    hash = "sha256-0GwdCckL3+mxCScH5msxwXSbjPqKrn1i6RfP1R72muo=";
   };
 
   nativeBuildInputs = [
@@ -55,12 +55,12 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Camera app designed for elementary OS";
     homepage = "https://github.com/elementary/camera";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
     mainProgram = "io.elementary.camera";
   };
 }

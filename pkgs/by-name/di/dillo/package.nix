@@ -1,21 +1,18 @@
 {
   lib,
   autoreconfHook,
-  fetchFromGitHub,
-  fltk,
-  giflib,
-  libXcursor,
-  libXi,
-  libXinerama,
+  fetchFromCodeberg,
+  fltk_1_3,
   libjpeg,
   libpng,
+  libwebp,
   libressl,
   mbedtls,
   openssl,
-  perl,
   pkg-config,
   stdenv,
   which,
+  nix-update-script,
   # Configurable options
   tlsLibrary ? "libressl",
 }:
@@ -31,32 +28,28 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dillo";
-  version = "3.2.0";
+  version = "3.3.0";
 
-  src = fetchFromGitHub {
-    owner = "dillo-browser";
+  src = fetchFromCodeberg {
+    owner = "dillo";
     repo = "dillo";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-9nJq20iW8/UI3GgXWje+46WDSu3/omd1PN/uTlYCOac=";
+    hash = "sha256-MzfY5Wyrt7ChTxp+BPNuDG10D8CefhgHjuaSvAiquZI=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-    fltk
+    fltk_1_3
     which
   ];
 
   buildInputs = [
-    fltk
-    giflib
-    libXcursor
-    libXi
-    libXinerama
     libjpeg
     libpng
-    perl
+    libwebp
     ssl
+    fltk_1_3
   ];
 
   outputs = [
@@ -66,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://dillo-browser.github.io/";
@@ -86,8 +81,8 @@ stdenv.mkDerivation (finalAttrs: {
       - Helps authors to comply with web standards by using the bug meter.
     '';
     mainProgram = "dillo";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ fgaz ];
     license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.all;
   };
 })

@@ -13,9 +13,9 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "spyder-ide";
-    repo = pname;
+    repo = "pyls-spyder";
     rev = "v${version}";
-    sha256 = "11ajbsia60d4c9s6m6rbvaqp1d69fcdbq6a98lkzkkzv2b9pdhkk";
+    hash = "sha256-c8J20xL7z/knRUkZvBpzybRwsdorm2p0YqQBo6JeUoU=";
   };
 
   propagatedBuildInputs = [ python-lsp-server ];
@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyls_spyder" ];
 
-  meta = with lib; {
+  meta = {
     description = "Spyder extensions for the python-language-server";
     homepage = "https://github.com/spyder-ide/pyls-spyder";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

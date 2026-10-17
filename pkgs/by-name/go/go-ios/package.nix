@@ -1,28 +1,49 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
-, pkg-config
-, libusb1
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+  pkg-config,
+  libusb1,
+  iproute2,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go-ios";
-  version = "1.0.168";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "danielpaulus";
     repo = "go-ios";
-    rev = "v${version}";
-    sha256 = "sha256-BaJFFaNPPpPvDc8bMl89SfGYglvx9TwpoDQUEr0mqYM=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-3wVkJm1WDQKZvCCOlsTypOF0jcivmS7AHkOzvMQVBi8=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-/aVaTC9lfoXQvhDVQm31HmXBnDYYOv6RH69Nm3I/K7s=";
+  vendorHash = "sha256-u5wuM4DR3zy6bawbflikjsW/8t4CG6776A/q0g4x8mQ=";
 
   excludedPackages = [
     "restapi"
+    "test/e2e"
   ];
+
+  ldflags = [
+    "-X main.version=${finalAttrs.version}"
+  ];
+
+  postPatch = ''
+    substituteInPlace main.go \
+      --replace-fail 'const version = ' 'var version = '
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace ncm/linux_commands.go \
+      --replace-fail "ip " "${lib.getExe' iproute2 "ip"} "
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace ios/tunnel/tunnel_darwin.go \
+      --replace-fail "ifconfig" "/sbin/ifconfig"
+  '';
 
   nativeBuildInputs = [
     pkg-config
@@ -39,21 +60,22 @@ buildGoModule rec {
 
   # skips all the integration tests (requires iOS device) (`-tags=fast`)
   # as well as tests that requires networking
-  checkFlags = let
-    skippedTests = [
-      "TestWorksWithoutProxy"
-      "TestUsesProxy"
-    ];
-  in [ "-tags=fast" ]
-  ++ [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+  checkFlags =
+    let
+      skippedTests = [
+        "TestWorksWithoutProxy"
+        "TestUsesProxy"
+      ];
+    in
+    [ "-tags=fast" ] ++ [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Operating system independent implementation of iOS device features";
     homepage = "https://github.com/danielpaulus/go-ios";
-    license = licenses.mit;
-    maintainers = with maintainers; [ eyjhb ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ eyjhb ];
     mainProgram = "ios";
   };
-}
+})

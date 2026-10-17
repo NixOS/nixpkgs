@@ -1,21 +1,46 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, mlton }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  mlton,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mlkit";
-  version = "4.7.14";
+  version = "4.7.22";
 
   src = fetchFromGitHub {
     owner = "melsman";
     repo = "mlkit";
-    rev = "v${version}";
-    sha256 = "sha256-0nAQHBcQgGdcWd4SFhDon7I0zi5U+YRTdGvG78tri6A=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YbWvKakqLnsPeM2kTDlqcRZRqcpUHfd0PI34iwlXQGI=";
   };
 
-  nativeBuildInputs = [ autoreconfHook mlton ];
+  nativeBuildInputs = [
+    autoreconfHook
+    mlton
+  ];
 
-  buildFlags = [ "mlkit" "mlkit_libs" ];
+  buildFlags = [
+    "mlkit"
+    "mlkit_libs"
+    "smltojs"
+    "smltojs_basislibs"
+    "barry"
+  ];
+
+  installTargets = [
+    "install"
+    "install_smltojs"
+    "install_barry"
+  ];
 
   doCheck = true;
+
+  # MLKit intentionally has some of these in its test suite.
+  # Since the test suite is available in `$out/share/mlkit/test`, we must disable this check.
+  dontCheckForBrokenSymlinks = true;
 
   checkPhase = ''
     runHook preCheck
@@ -23,15 +48,19 @@ stdenv.mkDerivation rec {
     make -C test_dev test
     echo ==== Running MLKit test suite: test_prof ====
     make -C test_dev test_prof
+    echo ==== Running Barry test suite ====
+    make -C test/barry
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Standard ML Compiler and Toolkit";
     homepage = "https://elsman.com/mlkit/";
-    changelog = "https://github.com/melsman/mlkit/blob/v${version}/NEWS.md";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ athas ];
+    changelog = "https://github.com/melsman/mlkit/blob/v${finalAttrs.version}/NEWS.md";
+    license = lib.licenses.gpl2Plus;
+    platforms = [
+      "x86_64-linux"
+    ];
+    maintainers = with lib.maintainers; [ athas ];
   };
-}
+})

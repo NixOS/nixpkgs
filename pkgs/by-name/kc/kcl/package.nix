@@ -1,6 +1,5 @@
 {
   buildGoModule,
-  darwin,
   fetchFromGitHub,
   installShellFiles,
   kclvm_cli,
@@ -10,40 +9,34 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kcl";
-  version = "0.11.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "kcl-lang";
     repo = "cli";
-    rev = "v${version}";
-    hash = "sha256-72h/uv22ksiUD3zHmilDZVfgE/3CiBwAD27cggjVNOs=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-CInJNBEr9+CzuP27xTdVwcdEo15a8DKnAl30wSY8y5w=";
   };
 
-  vendorHash = "sha256-ke1cBBgQJ/YWAhf47IsFRV0MmlLe8J5Z1Z7+xoSjhjE=";
+  vendorHash = "sha256-3Jw1lgzNCL+ZvQY3RRXw49t9ajDmHX5ki1kT9QsirFM=";
 
   subPackages = [ "cmd/kcl" ];
 
   ldflags = [
     "-w -s"
-    "-X=kcl-lang.io/cli/pkg/version.version=v${version}"
+    "-X=kcl-lang.io/cli/pkg/version.version=v${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [
     installShellFiles
   ];
 
-  buildInputs =
-    [
-      kclvm
-      kclvm_cli
-    ]
-    ++ (lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.CoreServices
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ]);
+  buildInputs = [
+    kclvm
+    kclvm_cli
+  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     export HOME=$(mktemp -d)
@@ -58,7 +51,7 @@ buildGoModule rec {
     runHook preInstallCheck
     set -o pipefail
     $out/bin/kcl --version | grep $version
-    $out/bin/kcl <(echo 'hello = "KCL"') | grep "hello: KCL"
+    $out/bin/kcl run <(echo 'hello = "KCL"') | grep "hello: KCL"
     runHook postInstallCheck
   '';
 
@@ -67,19 +60,18 @@ buildGoModule rec {
 
   doCheck = true;
 
-  updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A command line interface for KCL programming language";
-    changelog = "https://github.com/kcl-lang/cli/releases/tag/v${version}";
+    description = "Command line interface for KCL programming language";
+    changelog = "https://github.com/kcl-lang/cli/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/kcl-lang/cli";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [
-      peefy
       selfuryon
     ];
     mainProgram = "kcl";
     broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
-}
+})

@@ -13,15 +13,15 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ef60e9210d4727e82f0095a686cb07b676d055918f0c59c5bfa8598da03e59d1";
+    hash = "sha256-72DpIQ1HJ+gvAJWmhssHtnbQVZGPDFnFv6hZjaA+WdE=";
   };
 
   # no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Pure Python library that lets one to read metadata from media files";
-    homepage = "http://hg.hardcoded.net/hsaudiotag/";
-    license = licenses.bsd3;
+    homepage = "https://github.com/chrrrisw/hsaudiotag";
+    license = lib.licenses.bsd3;
   };
 }

@@ -2,22 +2,25 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "subfinder";
-  version = "2.6.8";
+  version = "2.17.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "subfinder";
-    tag = "v${version}";
-    hash = "sha256-xKK34SDjajLngmYsHADqof+/Hma2WuDj4SFkcqqm3hs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-O1Er4Ep3kiYcswaHf0bxcmG2OysHm/j58uC5BXA4qLU=";
   };
 
-  vendorHash = "sha256-jVLkClwjK7Uvj8ZxOpAACafftwpBNHipQetF2FSpbYY=";
-
-  modRoot = "./v2";
+  vendorHash = "sha256-0aHBXN/Yd8hiZcowUUQy65vZI2rvLCHCk+QihjjtZrw=";
 
   patches = [
     # Disable automatic version check
@@ -28,12 +31,20 @@ buildGoModule rec {
     "cmd/subfinder/"
   ];
 
-  ldflags = [
-    "-w"
-    "-s"
+  ldflags = [ "-s" ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
   ];
 
-  meta = with lib; {
+  versionCheckKeepEnvironment = [ "HOME" ];
+
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Subdomain discovery tool";
     longDescription = ''
       SubFinder is a subdomain discovery tool that discovers valid
@@ -41,12 +52,12 @@ buildGoModule rec {
       useful for bug bounties and safe for penetration testing.
     '';
     homepage = "https://github.com/projectdiscovery/subfinder";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/projectdiscovery/subfinder/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       fpletz
-      Br1ght0ne
       Misaka13514
     ];
     mainProgram = "subfinder";
   };
-}
+})

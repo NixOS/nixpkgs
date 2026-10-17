@@ -5,39 +5,33 @@
   pkg-config,
   installShellFiles,
   dbus,
+  writableTmpDirAsHomeHook,
+  git,
   stdenv,
-  darwin,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "veryl";
-  version = "0.13.2";
+  version = "0.20.2";
 
   src = fetchFromGitHub {
     owner = "veryl-lang";
     repo = "veryl";
-    rev = "v${version}";
-    hash = "sha256-LSQ3ZM7BWXiwBqlw6usImpt+w+wC2EvkoAMblTb0pvg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-ldibFrtU/lEL4a0QIhVKx8A0noZF2qyH9iExYNZedoU=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-w7mB0cAN5aRO1pw21BDIFUtnYUJUoYjW+7nXFCBfYgM=";
+  cargoHash = "sha256-mpI3Eo5fkP66Ywr/anQ3ajPrVuuK6Ku7qJ/jpVPHE6Q=";
 
   nativeBuildInputs = [
     pkg-config
     installShellFiles
   ];
 
-  buildInputs =
-    [
-      dbus
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.CoreServices
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    dbus
+  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd veryl \
@@ -45,6 +39,11 @@ rustPlatform.buildRustPackage rec {
       --fish <($out/bin/veryl metadata --completion fish) \
       --zsh <($out/bin/veryl metadata --completion zsh)
   '';
+
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+    git
+  ];
 
   checkFlags = [
     # takes over an hour
@@ -58,16 +57,34 @@ rustPlatform.buildRustPackage rec {
     "--skip=tests::publish"
     "--skip=tests::publish_with_commit"
     # "Permission Denied", while making its cache dir?
+    "--skip=native_test::test"
+    "--skip=native_test::test_ignored_attribute"
+    "--skip=native_test::test_wave_dump"
     "--skip=analyzer::test_25_dependency"
+    "--skip=analyzer::test_84_package_self_ref_2"
     "--skip=analyzer::test_68_std"
+    "--skip=emitter::test_84_package_self_ref_2"
     "--skip=emitter::test_25_dependency"
     "--skip=emitter::test_68_std"
+    "--skip=filelist::test"
+    "--skip=path::directory_directory"
+    "--skip=path::directory_target"
+    "--skip=path::source_directory"
+    "--skip=path::source_target"
+    "--skip=path::rootdir_directory_directory"
+    "--skip=path::rootdir_directory_target"
+    "--skip=path::rootdir_source_directory"
+    "--skip=path::rootdir_source_target"
+    "--skip=path::subdir_directory_directory"
+    "--skip=path::subdir_directory_target"
+    "--skip=path::subdir_source_directory"
+    "--skip=path::subdir_source_target"
   ];
 
   meta = {
     description = "Modern Hardware Description Language";
     homepage = "https://veryl-lang.org/";
-    changelog = "https://github.com/veryl-lang/veryl/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/veryl-lang/veryl/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       mit
       asl20
@@ -75,4 +92,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ pbsds ];
     mainProgram = "veryl";
   };
-}
+})

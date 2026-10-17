@@ -1,38 +1,38 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, ninja
-, libGL
-, libGLU
-, libpng
-, libjpeg_turbo
-, libuv
-, libvorbis
-, mbedtls_2
-, openal
-, pcre
-, SDL2
-, sqlite
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  libGL,
+  libGLU,
+  libpng,
+  libjpeg_turbo,
+  libuv,
+  libvorbis,
+  mbedtls,
+  openal,
+  SDL2,
+  sqlite,
 }:
 
 stdenv.mkDerivation rec {
   pname = "hashlink";
-  version = "1.14";
+  version = "1.15";
 
   src = fetchFromGitHub {
     owner = "HaxeFoundation";
     repo = "hashlink";
     rev = version;
-    sha256 = "sha256-rXw56zoFpLMzz8U3RHWGBF0dUFCUTjXShUEhzp2Qc5g=";
+    sha256 = "sha256-nVr+fDdna8EEHvIiXsccWFRTYzXfb4GG1zrfL+O6zLA=";
   };
 
-  # incompatible pointer type error: const char ** -> const void **
+  # backport of https://github.com/HaxeFoundation/hashlink/pull/767
   postPatch = ''
-    substituteInPlace libs/sqlite/sqlite.c \
+    substituteInPlace CMakeLists.txt \
      --replace-warn \
-       "sqlite3_prepare16_v2(db->db, sql, -1, &r->r, &tl)" \
-       "sqlite3_prepare16_v2(db->db, sql, -1, &r->r, (const void**)&tl)"
+       "cmake_minimum_required(VERSION 3.1)" \
+       "cmake_minimum_required(VERSION 3.13)"
   '';
 
   buildInputs = [
@@ -42,30 +42,40 @@ stdenv.mkDerivation rec {
     libpng
     libuv
     libvorbis
-    mbedtls_2
+    mbedtls
     openal
-    pcre
     SDL2
     sqlite
   ];
 
-  nativeBuildInputs = [ cmake ninja ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
 
   # append default installPhase with library install for haxe
-  postInstall = let
-    haxelibPath = "$out/lib/haxe/hashlink/${lib.replaceStrings [ "." ] [ "," ] version}";
-  in ''
-    mkdir -p "${haxelibPath}"
-    echo -n "${version}" > "${haxelibPath}/../.current"
-    cp -r ../other/haxelib/* "${haxelibPath}"
-  '';
+  postInstall =
+    let
+      haxelibPath = "$out/lib/haxe/hashlink/${lib.replaceStrings [ "." ] [ "," ] version}";
+    in
+    ''
+      mkdir -p "${haxelibPath}"
+      echo -n "${version}" > "${haxelibPath}/../.current"
+      cp -r ../other/haxelib/* "${haxelibPath}"
+    '';
 
-  meta = with lib; {
+  meta = {
     description = "Virtual machine for Haxe";
     mainProgram = "hl";
     homepage = "https://hashlink.haxe.org/";
-    license = licenses.mit;
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    maintainers = with maintainers; [ iblech locallycompact logo ];
+    license = lib.licenses.mit;
+    platforms = [
+      "x86_64-linux"
+    ];
+    maintainers = with lib.maintainers; [
+      iblech
+      locallycompact
+      logo
+    ];
   };
 }

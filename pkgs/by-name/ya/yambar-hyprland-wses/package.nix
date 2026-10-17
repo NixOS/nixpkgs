@@ -4,18 +4,18 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "yambar-hyprland-wses";
   version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "jonhoo";
     repo = "yambar-hyprland-wses";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-furHj1AAFgNiNHP9RBsVrIvrDckSKU8FXilzH9TQ99c=";
   };
 
-  cargoHash = "sha256-/ewEgrBxRw5Xii5PX1GLKzBrZjgnzYc/Hz+M1pJpncQ=";
+  cargoHash = "sha256-bAJ8TTlSgXDYC7gSTuSISIS1HH0jCF9W5WswZhw94vQ=";
 
   meta = {
     description = "Enable Yambar to show Hyprland workspaces";
@@ -28,4 +28,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "yambar-hyprland-wses";
     platforms = lib.platforms.linux;
   };
-}
+})

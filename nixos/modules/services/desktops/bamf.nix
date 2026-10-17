@@ -1,8 +1,13 @@
 # Bamf
-{ config, lib, pkgs, ... }:
 {
-  meta = with lib; {
-    maintainers = with lib.maintainers; [ ];
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+{
+  meta = {
+    maintainers = [ ];
   };
 
   ###### interface

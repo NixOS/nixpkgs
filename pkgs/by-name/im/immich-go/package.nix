@@ -5,16 +5,17 @@
   nix-update-script,
   testers,
   immich-go,
+  writableTmpDirAsHomeHook,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "immich-go";
-  version = "0.22.1";
+  version = "0.32.0";
 
   src = fetchFromGitHub {
     owner = "simulot";
     repo = "immich-go";
-    rev = "${version}";
-    hash = "sha256-6bLjHKkEghbY+UQFrgbfeHwOjtks1HjXbDXEr7DuJbU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-bMbLMlLZpzFP7Zh9kqWzEELt3MdOR8HMkH0gTU8qD9U=";
 
     # Inspired by: https://github.com/NixOS/nixpkgs/blob/f2d7a289c5a5ece8521dd082b81ac7e4a57c2c5c/pkgs/applications/graphics/pdfcpu/default.nix#L20-L32
     # The intention here is to write the information into files in the `src`'s
@@ -31,28 +32,34 @@ buildGoModule rec {
     '';
   };
 
-  vendorHash = "sha256-jED1K2zHv60zxMY4P7Z739uzf7PtlsnvZyStOSLKi4M=";
+  vendorHash = "sha256-BwrP+eG+XPcTAbSKhJk0BOrfBlNeLHEeRhq49ZkQhwY=";
 
   # options used by upstream:
-  # https://github.com/simulot/immich-go/blob/0.13.2/.goreleaser.yaml
+  # https://github.com/simulot/immich-go/blob/v0.25.0/.goreleaser.yaml
   ldflags = [
     "-s"
     "-w"
     "-extldflags=-static"
-    "-X main.version=${version}"
+    "-X github.com/simulot/immich-go/app.Version=${finalAttrs.version}"
   ];
 
   preBuild = ''
-    ldflags+=" -X main.commit=$(cat COMMIT)"
-    ldflags+=" -X main.date=$(cat SOURCE_DATE)"
+    ldflags+=" -X github.com/simulot/immich-go/Commit=$(cat COMMIT)"
+    ldflags+=" -X github.com/simulot/immich-go/Date=$(cat SOURCE_DATE)"
   '';
 
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+  ];
+
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
     tests.versionTest = testers.testVersion {
       package = immich-go;
-      command = "immich-go -version";
-      version = version;
+      command = "immich-go --version";
+      version = finalAttrs.version;
     };
   };
 
@@ -65,7 +72,10 @@ buildGoModule rec {
     homepage = "https://github.com/simulot/immich-go";
     mainProgram = "immich-go";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ kai-tub ];
-    changelog = "https://github.com/simulot/immich-go/releases/tag/${version}";
+    maintainers = with lib.maintainers; [
+      diogotcorreia
+      kai-tub
+    ];
+    changelog = "https://github.com/simulot/immich-go/releases/tag/${finalAttrs.src.tag}";
   };
-}
+})

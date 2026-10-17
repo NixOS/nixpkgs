@@ -3,19 +3,18 @@
   fetchFromGitHub,
   makeWrapper,
   python3,
-  poetry,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "sherlock";
-  version = "0.15.0";
-  format = "pyproject";
+  version = "0.16.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sherlock-project";
     repo = "sherlock";
-    tag = "v${version}";
-    hash = "sha256-+fQDvvwsLpiEvy+vC49AzlOA/KaKrhhpS97sZvFbpLA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pc8/04+W77rvMnK0zYaYkHvmZ5N8gYFM6ZNRHN4o1MM=";
   };
 
   patches = [
@@ -25,20 +24,32 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace tests/sherlock_interactives.py \
-      --replace @sherlockBin@ "$out/bin/sherlock"
+      --replace-fail @sherlockBin@ "$out/bin/sherlock"
+    substituteInPlace sherlock_project/__init__.py \
+      --replace-fail "__version__     = get_version()" "__version__ = \"${finalAttrs.version}\""
   '';
 
   nativeBuildInputs = [ makeWrapper ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     certifi
     colorama
+    openpyxl
     pandas
     pysocks
     requests
     requests-futures
     stem
     torrequest
+    tomli
+  ];
+
+  build-system = with python3.pkgs; [
+    poetry-core
+  ];
+
+  pythonRelaxDeps = [
+    "pandas"
   ];
 
   installPhase = ''
@@ -58,19 +69,14 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   nativeCheckInputs = with python3.pkgs; [
+    rstr
     pytestCheckHook
-    poetry
-    poetry-core
     jsonschema
-    openpyxl
-    stem
   ];
 
-  pythonRelaxDeps = [ "stem" ];
-
-  pytestFlagsArray = [
-    "-m"
-    "'not online'"
+  disabledTestMarks = [
+    # tests require internet access
+    "online"
   ];
 
   meta = {
@@ -80,4 +86,4 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "sherlock";
     maintainers = with lib.maintainers; [ applePrincess ];
   };
-}
+})

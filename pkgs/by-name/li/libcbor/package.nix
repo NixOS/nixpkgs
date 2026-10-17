@@ -7,20 +7,20 @@
 
   # for passthru.tests
   libfido2,
-  mysql80,
+  mysql84,
   openssh,
   systemd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcbor";
-  version = "0.11.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "PJK";
     repo = "libcbor";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-N1xYkZw/6lX/nX/TE6/pVuEFgSyDiUJ50msK42NrKwI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zjajNtj4jKbt3pLjfLrgtYljyMDYJtnzAC5JPdt+Wys=";
   };
 
   outputs = [
@@ -35,6 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
     cmocka # cmake expects cmocka module
   ];
 
+  # BUILD file already exists in the source; this causes issues on
+  # case‐insensitive Darwin systems.
+  cmakeBuildDir = "build.dir";
+
   cmakeFlags =
     lib.optional finalAttrs.finalPackage.doCheck "-DWITH_TESTS=ON"
     ++ lib.optional (!stdenv.hostPlatform.isStatic) "-DBUILD_SHARED_LIBS=ON";
@@ -46,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [ cmocka ];
 
   passthru.tests = {
-    inherit libfido2 mysql80;
+    inherit libfido2 mysql84;
     openssh = (openssh.override { withFIDO = true; });
     systemd = (
       systemd.override {
@@ -56,10 +60,11 @@ stdenv.mkDerivation (finalAttrs: {
     );
   };
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/PJK/libcbor/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "CBOR protocol implementation for C and others";
     homepage = "https://github.com/PJK/libcbor";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 })

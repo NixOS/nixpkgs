@@ -53,12 +53,12 @@ stdenv.mkDerivation {
 
   passthru.tests.tmate-ssh-server = nixosTests.tmate-ssh-server;
 
-  meta = with lib; {
-    homepage = "https://tmate.io/";
+  meta = {
+    homepage = "https://github.com/tmate-io/tmate-ssh-server";
     description = "tmate SSH Server";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ck3d ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ ck3d ];
     mainProgram = "tmate-ssh-server";
   };
 }

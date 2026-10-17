@@ -1,28 +1,27 @@
 {
   lib,
   stdenv,
-  fetchgit,
+  fetchFromSourcehut,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "loadwatch";
-  version = "1.1-1-g6d2544c";
+  version = "1.1-unstable-2026-05-04";
 
-  src = fetchgit {
-    url = "git://woffs.de/git/fd/loadwatch.git";
-    sha256 = "1bhw5ywvhyb6snidsnllfpdi1migy73wg2gchhsfbcpm8aaz9c9b";
-    rev = "6d2544c0caaa8a64bbafc3f851e06b8056c30e6e";
+  src = fetchFromSourcehut {
+    owner = "~woffs";
+    repo = "loadwatch";
+    rev = "f79b9cfad44a9f24aaab69cfad85a9ea14252b79";
+    hash = "sha256-CNf3NpTbTfFQDg0G/I7ydH7ML4YNd8TlvPv8+RVa/sI=";
   };
 
-  installPhase = ''
-    mkdir -p $out/bin
-    install loadwatch lw-ctl $out/bin
-  '';
+  makeFlags = [ "bindir=$(out)/bin" ];
 
-  meta = with lib; {
+  meta = {
     description = "Run a program using only idle cycles";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ woffs ];
-    platforms = platforms.all;
+    homepage = "https://git.sr.ht/~woffs/loadwatch";
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ woffs ];
+    platforms = lib.platforms.all;
   };
-}
+})

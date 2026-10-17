@@ -2,12 +2,13 @@
   lib,
   aenum,
   aiohttp,
+  blinker,
   buildPythonPackage,
   fetchPypi,
   flatdict,
   jwcrypto,
-  pycryptodome,
   pycryptodomex,
+  pydantic,
   pydash,
   pyfakefs,
   pyjwt,
@@ -15,9 +16,9 @@
   pytest-mock,
   pytest-recording,
   pytestCheckHook,
-  python-jose,
-  pythonOlder,
+  python-dateutil,
   pyyaml,
+  requests,
   setuptools,
   xmltodict,
   yarl,
@@ -25,31 +26,29 @@
 
 buildPythonPackage rec {
   pname = "okta";
-  version = "2.9.10";
+  version = "3.4.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hLdq5AlTaCZ9x/x5VL4Q673th2HnE7haAaOp5zOQdjQ=";
+    hash = "sha256-58ghdrWv0jAeO2heBxViDf2SUT/EWZkUfjPXSFJjo/I=";
   };
-
-  pythonRelaxDeps = [ "aenum" ];
 
   build-system = [ setuptools ];
 
   dependencies = [
     aenum
     aiohttp
+    blinker
     flatdict
     jwcrypto
-    pycryptodome
     pycryptodomex
+    pydantic
     pydash
     pyjwt
-    python-jose
+    python-dateutil
     pyyaml
+    requests
     xmltodict
     yarl
   ];
@@ -62,7 +61,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests/" ];
+  enabledTestPaths = [ "tests/" ];
 
   disabledTests = [
     "test_client_raise_exception"
@@ -84,11 +83,11 @@ buildPythonPackage rec {
     "okta.request_executor"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python SDK for the Okta Management API";
     homepage = "https://github.com/okta/okta-sdk-python";
     changelog = "https://github.com/okta/okta-sdk-python/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jbgosselin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jbgosselin ];
   };
 }

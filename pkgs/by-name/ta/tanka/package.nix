@@ -1,17 +1,22 @@
-{ buildGoModule, fetchFromGitHub, lib, installShellFiles }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  installShellFiles,
+}:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tanka";
-  version = "0.31.1";
+  version = "0.38.0";
 
   src = fetchFromGitHub {
     owner = "grafana";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-q/tIG+RS/guRcKLo1iXmXi8IcgXS2pfJNFEvn/jxFks=";
+    repo = "tanka";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-Nr0l5QBpYktOwGsGVY8Ee5sC1RuRelOF05Z6aiSE2Yw=";
   };
 
-  vendorHash = "sha256-/8tPq/piCrguFoRigzGoAUSBJ2C1AY0ghyHosPE5n68=";
+  vendorHash = "sha256-Upp3aEaAgPwHleP+kZ3Jf34agDIiHIc3x/IVtujDhFg=";
 
   doCheck = false;
   # Required for versions >= 0.28 as they introduce a gowork.sum file. This is only used for tests so we can safely disable GOWORK
@@ -19,7 +24,12 @@ buildGoModule rec {
 
   subPackages = [ "cmd/tk" ];
 
-  ldflags = [ "-s" "-w" "-extldflags '-static'" "-X github.com/grafana/tanka/pkg/tanka.CurrentVersion=v${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-extldflags '-static'"
+    "-X github.com/grafana/tanka/pkg/tanka.CurrentVersion=v${finalAttrs.version}"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -51,11 +61,11 @@ buildGoModule rec {
       --zsh tk.zsh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Flexible, reusable and concise configuration for Kubernetes";
     homepage = "https://tanka.dev";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mikefaille ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
     mainProgram = "tk";
   };
-}
+})

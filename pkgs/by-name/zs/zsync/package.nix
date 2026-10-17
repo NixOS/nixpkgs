@@ -3,31 +3,32 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
+  perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zsync";
-  version = "0.6.2-unstable-2017-04-25";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "cph6";
     repo = "zsync";
-    rev = "6cfe374f8f2310cbd624664ca98e5bb28244ba7a";
-    hash = "sha256-SnCzNDMyhMx+2JmgsrjtYDa31Ki1EWix9iBfaduDnro=";
+    tag = finalAttrs.version;
+    hash = "sha256-qZSjh23snJHWmrIUxRvpu5pZ1G3rJcnl08WGEEM+0Jw=";
   };
 
-  sourceRoot = "${src.name}/c";
+  sourceRoot = "${finalAttrs.src.name}/c";
 
   patches = [
     ./remove-inexisting-rsumtest.patch
-    ./read-blocksums-declaration-fix.patch
+    ./c23.patch
   ];
 
   makeFlags = [ "AR=${stdenv.cc.bintools.targetPrefix}ar" ];
 
   # Suppress error "call to undeclared library function 'strcasecmp'" during compilation.
   # The function is found by the linker correctly, so this doesn't introduce any issues.
-  # Also supress errors that come from incompatible pointer types due to GCC 14 changes.
+  # Also suppress errors that come from incompatible pointer types due to GCC 14 changes.
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals stdenv.cc.isClang [
       "-Wno-implicit-function-declaration"
@@ -41,9 +42,14 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
+  doCheck = true;
+
+  nativeCheckInputs = [ perl ];
+
   meta = {
-    homepage = "https://github.com/cph6/zsync";
     description = "File distribution system using the rsync algorithm";
+    homepage = "https://github.com/cph6/zsync";
+    changelog = "https://github.com/cph6/zsync/raw/refs/tags/${finalAttrs.src.tag}/c/NEWS";
     license = lib.licenses.artistic2;
     maintainers = with lib.maintainers; [
       viric
@@ -51,4 +57,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = with lib.platforms; all;
   };
-}
+})

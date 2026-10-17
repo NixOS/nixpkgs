@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -15,6 +16,7 @@
 
   # tests
   dm-haiku,
+  equinox,
   flax,
   funsor,
   graphviz,
@@ -26,16 +28,17 @@
   tensorflow-probability,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "numpyro";
-  version = "0.16.1";
+  version = "0.22.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pyro-ppl";
     repo = "numpyro";
-    tag = version;
-    hash = "sha256-6i7LPdmMakGeLujhA9d7Ep9oiVcND3ni/jzUkqgEqxw=";
+    tag = finalAttrs.version;
+    hash = "sha256-aUd3u/fEMMSTPFyRJgalVTETG561AgJmGhJl2C3lMSw=";
   };
 
   build-system = [ setuptools ];
@@ -50,6 +53,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     dm-haiku
+    equinox
     flax
     funsor
     graphviz
@@ -63,7 +67,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "numpyro" ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # Tests memory consumption grows significantly with the number of parallel processes (reaches ~200GB with 80 jobs)
     "--maxprocesses=8"
 
@@ -71,50 +75,60 @@ buildPythonPackage rec {
     # UserWarning: There are not enough devices to run parallel chains: expected 2 but got 1.
     # Chains will be drawn sequentially. If you are running MCMC in CPU, consider using `numpyro.set_host_device_count(2)` at the beginning of your program.
     # You can double-check how many devices are available in your system using `jax.local_device_count()`.
-    "-W"
-    "ignore::UserWarning"
+    "-Wignore::UserWarning"
+
+    # FutureWarning: In the future `np.object` will be defined as the corresponding NumPy scalar.
+    "-Wignore::FutureWarning"
   ];
 
   disabledTests = [
-    # jax.errors.UnexpectedTracerError: Encountered an unexpected tracer
-    "test_haiku_state_dropout_smoke"
-    "test_flax_state_dropout_smoke"
+    # Failing with jax>=0.9.0
+    # TypeError: Error interpreting argument to closed_call as a JAX value
+    "test_provenance_call"
+    "test_provenance_closed_call"
+    "test_numpyrooptim_no_double_jit"
+
+    # ValueError: Found unexpected Arrays on value of type <class 'list'> in static attribute 'layers'
+    # of Pytree type '<class 'test_module.test_random_nnx_module_mcmc_sequence_params.<locals>.MLP'>'.
+    # This is an error starting from Flax version 0.12.0.
+    "test_random_nnx_module_mcmc_sequence_param"
+
+    # AssertionError, assert GLOBAL["count"] == 4 (assert 5 == 4)
+    "test_mcmc_parallel_chain"
 
     # AssertionError due to tolerance issues
-    "test_beta_binomial_log_prob"
-    "test_collapse_beta"
+    "test_bijective_transforms"
+    "test_constrain_fn_two_batch_dims"
     "test_cpu"
-    "test_gamma_poisson"
-    "test_gof"
-    "test_hpdi"
-    "test_kl_dirichlet_dirichlet"
-    "test_kl_univariate"
-    "test_mean_var"
+    "test_entropy_categorical"
+    "test_gaussian_model"
 
-    # Tests want to download data
-    "data_load"
-    "test_jsb_chorales"
-
-    # RuntimeWarning: overflow encountered in cast
-    "test_zero_inflated_logits_probs_agree"
-
-    # NameError: unbound axis name: _provenance
-    "test_model_transformation"
+    # >       with pytest.warns(UserWarning, match="Hessian of log posterior"):
+    # E       Failed: DID NOT WARN. No warnings of type (<class 'UserWarning'>,) were emitted.
+    # E        Emitted warnings: [].
+    "test_laplace_approximation_warning"
 
     # ValueError: compiling computation that requires 2 logical devices, but only 1 XLA devices are available (num_replicas=2)
     "test_chain"
+
+    # Failed: DID NOT RAISE <class 'UserWarning'>
+    "test_interval_censored_validate_sample"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # AssertionError: Not equal to tolerance rtol=0.06, atol=0
+    "test_functional_map"
   ];
 
   disabledTestPaths = [
-    # require jaxns (unpackaged)
-    "test/contrib/test_nested_sampling.py"
+    # Require internet access
+    "test/test_example_utils.py"
   ];
 
   meta = {
     description = "Library for probabilistic programming with NumPy";
     homepage = "https://num.pyro.ai/";
-    changelog = "https://github.com/pyro-ppl/numpyro/releases/tag/${version}";
+    changelog = "https://github.com/pyro-ppl/numpyro/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -3,39 +3,56 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  nix-update-script,
+  testers,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "simdjson";
-  version = "3.11.6";
+  version = "4.6.11";
 
   src = fetchFromGitHub {
     owner = "simdjson";
     repo = "simdjson";
-    rev = "v${version}";
-    sha256 = "sha256-599gzxJ53nHVo6MkEICzHxaQl0s1vZRjySSRUxC7ZXA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JjcvJldWQTTFq9PU1F0IafL7GVoMfVUDz6hVb5Po/A4=";
   };
+
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags =
-    [
-      "-DSIMDJSON_DEVELOPER_MODE=OFF"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isStatic [
-      "-DBUILD_SHARED_LIBS=OFF"
-    ]
-    ++ lib.optionals (with stdenv.hostPlatform; isPower && isBigEndian) [
-      # Assume required CPU features are available, since otherwise we
-      # just get a failed build.
-      "-DCMAKE_CXX_FLAGS=-mpower8-vector"
-    ];
+  strictDeps = true;
+  __structuredAttrs = true;
 
-  meta = with lib; {
-    homepage = "https://simdjson.org/";
-    description = "Parsing gigabytes of JSON per second";
-    license = licenses.asl20;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ chessai ];
+  cmakeFlags = [
+    (lib.cmakeBool "SIMDJSON_DEVELOPER_MODE" false)
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+  ]
+  ++ lib.optionals (with stdenv.hostPlatform; isPower && isBigEndian) [
+    # Assume required CPU features are available, since otherwise we
+    # just get a failed build.
+    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-mpower8-vector")
+  ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
   };
-}
+
+  meta = {
+    homepage = "https://simdjson.org/";
+    changelog = "https://github.com/simdjson/simdjson/releases/tag/${finalAttrs.src.tag}";
+    description = "Parsing gigabytes of JSON per second";
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ chessai ];
+    pkgConfigModules = [ "simdjson" ];
+  };
+})

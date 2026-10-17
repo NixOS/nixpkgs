@@ -1,14 +1,16 @@
 {
-  fetchurl,
-  stdenv,
-  autoPatchelfHook,
-  makeWrapper,
   lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  desktop-file-utils,
+  dpkg,
+  makeWrapper,
   libnotify,
-  libX11,
-  libXScrnSaver,
-  libXext,
-  libXtst,
+  libx11,
+  libxscrnsaver,
+  libxext,
+  libxtst,
   libuuid,
   libsecret,
   xdg-utils,
@@ -29,21 +31,24 @@ stdenv.mkDerivation (finalAttrs: {
   version = "13.5.2";
 
   src = fetchurl {
+    name = "eudic.deb";
     url = "https://www.eudic.net/download/eudic.deb?v=${finalAttrs.version}";
     hash = "sha256-UPkDRaqWF/oydH6AMo3t3PUT5VU961EPLcFb5XwOXVs=";
   };
 
   nativeBuildInputs = [
     autoPatchelfHook
+    desktop-file-utils
+    dpkg
     makeWrapper
   ];
 
   buildInputs = [
     libnotify
-    libX11
-    libXScrnSaver
-    libXext
-    libXtst
+    libx11
+    libxscrnsaver
+    libxext
+    libxtst
     libuuid
     libsecret
     xdg-utils
@@ -59,26 +64,20 @@ stdenv.mkDerivation (finalAttrs: {
     libgbm
   ];
 
-  unpackPhase = ''
-    ar x $src
-    tar xf data.tar.xz
-  '';
-
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out
-    cp -r usr/* $out/
-
+    rm -r usr/share/icons
+    desktop-file-edit usr/share/applications/eusoft-eudic.desktop \
+      --set-key="Exec" --set-value="eudic %F"
+    mkdir -p $out/bin
+    cp -r usr/share $out/share
     makeWrapper $out/share/eusoft-eudic/eudic $out/bin/eudic \
-      --inherit-argv0
+      --inherit-argv0 \
+      --set GST_PLUGIN_PATH $out/share/eusoft-eudic/gstreamer-1.0 \
+      --set QT_PLUGIN_PATH $out/share/eusoft-eudic/plugins
 
     runHook postInstall
-  '';
-
-  postFixup = ''
-    substituteInPlace $out/share/applications/eusoft-eudic.desktop \
-      --replace-fail '/usr/share/eusoft-eudic/AppRun' 'eudic'
   '';
 
   meta = {

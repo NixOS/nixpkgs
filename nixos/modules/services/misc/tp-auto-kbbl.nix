@@ -9,7 +9,7 @@ let
 
 in
 {
-  meta.maintainers = with lib.maintainers; [ sebtm ];
+  meta.maintainers = [ ];
 
   options = {
     services.tp-auto-kbbl = {
@@ -36,6 +36,8 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
+
+    services.upower.enable = true;
 
     systemd.services.tp-auto-kbbl = {
       serviceConfig = {

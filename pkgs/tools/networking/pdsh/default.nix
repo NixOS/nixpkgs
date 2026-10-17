@@ -11,43 +11,42 @@
   slurmSupport ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pdsh";
-  version = "2.35";
+  version = "2.36";
 
   src = fetchurl {
-    url = "https://github.com/chaos/pdsh/releases/download/pdsh-${version}/pdsh-${version}.tar.gz";
-    sha256 = "sha256-de8VNHhI//Q/jW/5xEJP4Fx90s26ApE5kB+GGgUJPP4=";
+    url = "https://github.com/chaos/pdsh/releases/download/pdsh-${finalAttrs.version}/pdsh-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-pmEJXOUd1fsF45jPXQ4dYxVxI5WEQfbTUSvPGn0lxRc=";
   };
 
   buildInputs = [
     perl
     readline
     ssh
-  ] ++ (lib.optional slurmSupport slurm);
+  ]
+  ++ (lib.optional slurmSupport slurm);
 
   nativeBuildInputs = [ autoreconfHook ];
 
   # Do not use git to derive a version.
   postPatch = ''
-    sed -i 's/m4_esyscmd(\[git describe.*/[${version}])/' configure.ac
+    sed -i 's/m4_esyscmd(\[git describe.*/[${finalAttrs.version}])/' configure.ac
   '';
 
-  preConfigure = ''
-    configureFlagsArray=(
-      "--infodir=$out/share/info"
-      "--mandir=$out/share/man"
-      "--with-machines=/etc/pdsh/machines"
-      ${if readline == null then "--without-readline" else "--with-readline"}
-      ${if ssh == null then "--without-ssh" else "--with-ssh"}
-      ${if rsh == false then "--without-rsh" else "--with-rsh"}
-      ${if slurmSupport then "--with-slurm" else "--without-slurm"}
-      "--with-dshgroups"
-      "--with-xcpu"
-      "--disable-debug"
-      '--with-rcmd-rank-list=ssh,krb4,exec,xcpu,rsh'
-    )
-  '';
+  configureFlags = [
+    "--infodir=$out/share/info"
+    "--mandir=$out/share/man"
+    "--with-machines=/etc/pdsh/machines"
+    (if readline == null then "--without-readline" else "--with-readline")
+    (if ssh == null then "--without-ssh" else "--with-ssh")
+    (if rsh == false then "--without-rsh" else "--with-rsh")
+    (if slurmSupport then "--with-slurm" else "--without-slurm")
+    "--with-dshgroups"
+    "--with-xcpu"
+    "--disable-debug"
+    "--with-rcmd-rank-list=ssh,krb4,exec,xcpu,rsh"
+  ];
 
   meta = {
     homepage = "https://github.com/chaos/pdsh";
@@ -65,4 +64,4 @@ stdenv.mkDerivation rec {
 
     platforms = lib.platforms.unix;
   };
-}
+})

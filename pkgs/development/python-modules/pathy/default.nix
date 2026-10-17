@@ -2,41 +2,48 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  hatchling,
   mock,
+  google-cloud-storage,
   pathlib-abc,
+  azure-storage-blob,
+  boto3,
   pytestCheckHook,
-  pythonOlder,
-  setuptools,
   smart-open,
   typer,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pathy";
-  version = "0.11.0";
+  version = "0.14.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-uz0OawuL92709jxxkeluCvLtZcj9tfoXSI+ch55jcG0=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-GOW+uudNalbgnq0a3JLYeUweejP0VBHAgPef8qTDH64=";
   };
 
   pythonRelaxDeps = [ "smart-open" ];
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
     pathlib-abc
     smart-open
-    typer
   ];
+
+  optional-dependencies = {
+    cli = [ typer ];
+    gcs = [ google-cloud-storage ];
+    s3 = [ boto3 ];
+    azure = [ azure-storage-blob ];
+  };
 
   nativeCheckInputs = [
     mock
     pytestCheckHook
-  ];
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   disabledTestPaths = [
     # Exclude tests that require provider credentials
@@ -47,11 +54,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pathy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Path interface for local and cloud bucket storage";
-    mainProgram = "pathy";
     homepage = "https://github.com/justindujardin/pathy";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ melling ];
+    changelog = "https://github.com/justindujardin/pathy/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = [ ];
+    mainProgram = "pathy";
   };
-}
+})

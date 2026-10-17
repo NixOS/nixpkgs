@@ -6,9 +6,11 @@
   SDL2,
   SDL2_ttf,
   SDL2_image,
+  libx11,
   openssl,
+  zlib,
   which,
-  libsForQt5,
+  kdePackages,
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
@@ -17,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "poptracker";
-  version = "0.29.0";
+  version = "0.35.4";
 
   src = fetchFromGitHub {
     owner = "black-sliver";
     repo = "PopTracker";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-rkEaq8YLt0NhspXVgEqZ/9FF7GDlTU5fKgWGXeA6UX4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ilnBVwzd/tdolchgjz5EsMou7fMWT0xU/gTC+HBnDjU=";
     fetchSubmodules = true;
   };
 
@@ -47,7 +49,9 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     SDL2_ttf
     SDL2_image
+    libx11
     openssl
+    zlib
   ];
 
   buildFlags = [
@@ -58,12 +62,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    install -m555 -Dt $out/bin build/linux-x86_64/poptracker
+    install -m555 -Dt $out/bin build/*/poptracker
     install -m444 -Dt $out/share/poptracker assets/*
     wrapProgram $out/bin/poptracker --prefix PATH : ${
       lib.makeBinPath [
         which
-        libsForQt5.kdialog
+        kdePackages.kdialog
       ]
     }
     mkdir -p $out/share/icons/hicolor/{64x64,512x512}/apps
@@ -101,6 +105,6 @@ stdenv.mkDerivation (finalAttrs: {
       pyrox0
     ];
     mainProgram = "poptracker";
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.unix;
   };
 })

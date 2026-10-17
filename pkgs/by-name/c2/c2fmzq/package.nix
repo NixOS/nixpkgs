@@ -5,15 +5,15 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "c2FmZQ";
-  version = "0.4.25";
+  version = "0.5.7";
 
   src = fetchFromGitHub {
     owner = "c2FmZQ";
-    repo = "c2FmZQ";
-    rev = "v${version}";
-    hash = "sha256-1c2C+BVgf7NumOoCCMfGFpn1qwQ2V4524aG5yZO98vI=";
+    repo = "photos";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-7Jguv2T6x3zKRWcp7XGzmVakwXcsVz2BWcY6uADGPsg=";
   };
 
   ldflags = [
@@ -21,9 +21,9 @@ buildGoModule rec {
     "-w"
   ];
 
-  sourceRoot = "${src.name}/c2FmZQ";
+  sourceRoot = "${finalAttrs.src.name}/c2FmZQ";
 
-  vendorHash = "sha256-9eWLg0+HkpwUC+De62Izh3vadV3dnwPpf8ksH8KwGqQ=";
+  vendorHash = "sha256-6rKFgCKhJQSquMhv7iuzMsm+84qz3V0ynIyB4rv2Kk8=";
 
   subPackages = [
     "c2FmZQ-client"
@@ -32,12 +32,12 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) c2fmzq; };
 
-  meta = with lib; {
+  meta = {
     description = "Securely encrypt, store, and share files, including but not limited to pictures and videos";
-    homepage = "https://github.com/c2FmZQ/c2FmZQ";
-    license = licenses.gpl3Only;
+    homepage = "https://github.com/c2FmZQ/photos";
+    license = lib.licenses.gpl3Only;
     mainProgram = "c2FmZQ-server";
-    maintainers = with maintainers; [ hmenke ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ hmenke ];
+    platforms = lib.platforms.linux;
   };
-}
+})

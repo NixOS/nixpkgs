@@ -2,44 +2,73 @@
   lib,
   buildPythonPackage,
   fetchFromGitLab,
-  numpy,
-  pybind11,
-  pytestCheckHook,
-  pythonOlder,
+
+  # build-system
+  cmake,
+  nanobind,
+  ninja,
+  scikit-build-core,
   setuptools,
+
+  # dependencies
+  numpy,
+
+  # tests
+  pytest-xdist,
+  pytestCheckHook,
+  scipy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ducc0";
-  version = "0.36.0";
+  version = "0.41.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitLab {
     domain = "gitlab.mpcdf.mpg.de";
     owner = "mtr";
     repo = "ducc";
-    rev = "ducc0_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-S/H3+EykNxqbs8Tca3T95SK3Hzst49hOPkO0ocs80t0=";
+    tag = "ducc0_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    hash = "sha256-OeTTrIcvY9bhnctc6h1xUdSriQN4RNy3vjxWKKlT0ew=";
   };
 
-  buildInputs = [ pybind11 ];
-  propagatedBuildInputs = [ numpy ];
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace-fail '"pybind11>=2.13.6", ' ""
+  '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
+  env = {
+    DUCC0_USE_NANOBIND = "";
+    DUCC0_OPTIMIZATION = "portable";
+  };
+
+  build-system = [
+    cmake
+    nanobind
+    ninja
+    scikit-build-core
     setuptools
   ];
-  pytestFlagsArray = [ "python/test" ];
+  dontUseCmakeConfigure = true;
+  dependencies = [ numpy ];
+
+  nativeCheckInputs = [
+    pytest-xdist
+    pytestCheckHook
+    scipy
+  ];
+  enabledTestPaths = [ "python/test" ];
   pythonImportsCheck = [ "ducc0" ];
 
-  DUCC0_OPTIMIZATION = "portable-strip";
+  postInstall = ''
+    mkdir -p $out/include
+    cp -r ${finalAttrs.src}/src/ducc0 $out/include
+  '';
 
-  meta = with lib; {
-    homepage = "https://gitlab.mpcdf.mpg.de/mtr/ducc";
+  meta = {
     description = "Efficient algorithms for Fast Fourier transforms and more";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ parras ];
+    homepage = "https://gitlab.mpcdf.mpg.de/mtr/ducc";
+    changelog = "https://gitlab.mpcdf.mpg.de/mtr/ducc/-/blob/${finalAttrs.src.tag}/ChangeLog?ref_type=tags";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ parras ];
   };
-}
+})

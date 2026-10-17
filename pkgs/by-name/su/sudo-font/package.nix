@@ -2,31 +2,31 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "sudo-font";
-  version = "2.1";
+  version = "3.6";
+
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
   src = fetchzip {
-    url = "https://github.com/jenskutilek/sudo-font/releases/download/v${version}/sudo.zip";
-    hash = "sha256-ER+TpODf+Inqo+XWJRNOHumzGRL4Dms5N1E+BU7Tr94=";
+    url = "https://github.com/jenskutilek/sudo-font/releases/download/v${finalAttrs.version}/sudo.zip";
+    hash = "sha256-4jw1MGxV/a78U7jAfnRLxfZFOqDzyTctCaqKT/s1mMU=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    install -Dm644 *.ttf -t $out/share/fonts/truetype/
-
-    runHook postInstall
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Font for programmers and command line users";
     homepage = "https://www.kutilek.de/sudo-font/";
-    changelog = "https://github.com/jenskutilek/sudo-font/raw/v${version}/sudo/FONTLOG.txt";
-    license = licenses.ofl;
-    maintainers = [ ];
-    platforms = platforms.all;
+    changelog = "https://github.com/jenskutilek/sudo-font/raw/v${finalAttrs.version}/sudo/FONTLOG.txt";
+    license = lib.licenses.ofl;
+    maintainers = with lib.maintainers; [ pancaek ];
+    platforms = lib.platforms.all;
   };
-}
+})

@@ -1,31 +1,39 @@
 {
   lib,
+  stdenv,
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
+  isPyPy,
+  ast-serialize,
+  mypy,
   pytestCheckHook,
-  pythonOlder,
   requests,
+  setuptools,
+  withMypyc ? !isPyPy && !stdenv.hostPlatform.isStatic,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "charset-normalizer";
-  version = "3.4.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.5";
+  version = "3.5.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "Ousret";
+    owner = "jawah";
     repo = "charset_normalizer";
-    tag = version;
-    hash = "sha256-de6rg/e9RPfuO44+/Uipad75YqZQrnqiSPopfBNOFP8=";
+    tag = finalAttrs.version;
+    hash = "sha256-zIN1y9HVwaCqixjRFLn6g/tz95E41m7t7j4eY5jNZMs=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace " --cov=charset_normalizer --cov-report=term-missing" ""
-  '';
+  build-system = [
+    setuptools
+  ]
+  ++ lib.optionals withMypyc [
+    ast-serialize
+    mypy
+  ];
+
+  env.CHARSET_NORMALIZER_USE_MYPYC = lib.optionalString withMypyc "1";
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -35,12 +43,12 @@ buildPythonPackage rec {
     inherit aiohttp requests;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Python module for encoding and language detection";
-    mainProgram = "normalizer";
     homepage = "https://charset-normalizer.readthedocs.io/";
-    changelog = "https://github.com/Ousret/charset_normalizer/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/jawah/charset_normalizer/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "normalizer";
   };
-}
+})

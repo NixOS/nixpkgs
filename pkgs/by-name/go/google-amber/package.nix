@@ -18,8 +18,8 @@ let
   glslang = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
-    rev = "e8dd0b6903b34f1879520b444634c75ea2deedf5";
-    hash = "sha256-B6jVCeoFjd2H6+7tIses+Kj8DgHS6E2dkVzQAIzDHEc=";
+    rev = "340bf88f3fdb4f4a25b7071cd2c1205035fc6eaa";
+    hash = "sha256-3h27yE6k4BgUAugQCkpUYO5aIHpK6Anyh90y3q+aYpM=";
   };
 
   lodepng = fetchFromGitHub {
@@ -32,34 +32,34 @@ let
   shaderc = fetchFromGitHub {
     owner = "google";
     repo = "shaderc";
-    rev = "f59f0d11b80fd622383199c867137ededf89d43b";
-    hash = "sha256-kHz8Io5GZDWv1FjPyBWRpnKhGygKhSU4L9zl/AKXZlU=";
+    rev = "690d259384193c90c01b52288e280b05a8481121";
+    hash = "sha256-p4tP/8lRy0tpdDHIuh2/tWPIBBr2ludFRSr+Q2TbUic=";
   };
 
   spirv-headers = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Headers";
-    rev = "5e3ad389ee56fca27c9705d093ae5387ce404df4";
-    hash = "sha256-gjF5mVTXqU/GZzr2S6oKGChgvqqHcQSrEq/ePP2yJys=";
+    rev = "babee77020ff82b571d723ce2c0262e2ec0ee3f1";
+    hash = "sha256-GWcNNw08XoKaZs/BTW9nPAEMHL8wqbhbUm56PUtEan4=";
   };
 
   spirv-tools = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
-    rev = "9241a58a8028c49510bc174b6c970e3c2b4b8e51";
-    hash = "sha256-0qHUpwNDJI2jV4h68QaTNPIwTPxwTt0iAUnMXqFCiJE=";
+    rev = "4c1ae3cd6f9076271cd64acde8cbef1d1287f27f";
+    hash = "sha256-x7OXe0q9ml8PIxWyTEx3j3tvSgIPp8kg5HwlLWIzNuk=";
   };
 
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "amber";
-  version = "unstable-2024-08-21";
+  version = "0-unstable-2026-04-29";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "amber";
-    rev = "66399a35927606a435bf7a59756e87e6cb5a0013";
-    hash = "sha256-PCO64zI/vzp4HyGz5WpeYpCBeaWjTvz1punWsTz1yiM=";
+    rev = "fc02f9bad7ddaf5ca685ad01c3a0668d19910fbf";
+    hash = "sha256-en+q6pLBTiVRg5XdP2qmPfkPnywYqEOsm2/er3m75Jw=";
   };
 
   buildInputs = [
@@ -67,16 +67,15 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-loader
   ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      makeWrapper
-      pkg-config
-      python3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      cctools
-    ];
+  nativeBuildInputs = [
+    cmake
+    makeWrapper
+    pkg-config
+    python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools
+  ];
 
   # Tests are disabled so we do not have to pull in googletest and more dependencies
   cmakeFlags = [
@@ -97,9 +96,13 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 -t $out/bin amber image_diff
     wrapProgram $out/bin/amber \
       --suffix VK_LAYER_PATH : ${vulkan-validation-layers}/share/vulkan/explicit_layer.d
+
+    runHook postInstall
   '';
 
   passthru.tests.lavapipe =
@@ -151,10 +154,10 @@ stdenv.mkDerivation (finalAttrs: {
         touch $out
       '';
 
-  meta = with lib; {
+  meta = {
     description = "Multi-API shader test framework";
     homepage = "https://github.com/google/amber";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ Flakebi ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ Flakebi ];
   };
 })

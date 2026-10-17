@@ -14,12 +14,12 @@ php.buildComposerWithPlugin {
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "composer-local-repo-plugin";
-    rev = version;
+    tag = version;
     hash = "sha256-edbn07r/Uc1g0qOuVBZBs6N1bMN5kIfA1b4FCufdw5M=";
   };
 
   composerLock = ./composer.lock;
-  vendorHash = "sha256-SL3HiYTVaUwcEfnRO932MWgOP1VRkxTl3lxLbW0qiTY=";
+  vendorHash = "sha256-cup8maS9NkhdqTHoKJaH7r7AJQdkflWTvM6uIuxMPX0=";
 
   meta = {
     changelog = "https://github.com/nix-community/composer-local-repo-plugin/releases/tag/${version}";
@@ -27,7 +27,7 @@ php.buildComposerWithPlugin {
     homepage = "https://github.com/nix-community/composer-local-repo-plugin";
     license = lib.licenses.mit;
     mainProgram = "composer";
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 }

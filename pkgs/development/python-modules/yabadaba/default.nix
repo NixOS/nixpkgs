@@ -8,28 +8,27 @@
   lxml,
   numpy,
   pandas,
+  pillow,
   pymongo,
   pytestCheckHook,
-  pythonOlder,
-  setuptools,
   tqdm,
+  uv-build,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "yabadaba";
-  version = "0.2.2";
+  version = "0.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "usnistgov";
     repo = "yabadaba";
-    tag = "v${version}";
-    hash = "sha256-NfvnUrTnOeNfiTMrcRtWU3a/Wb6qsDeQlk5jwZ1OpgI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-K/GPHocMn4f1E4n3Tb2OOffJqR6cMvjfwYmLwBMA7N8=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ uv-build ];
 
   dependencies = [
     cdcs
@@ -38,23 +37,23 @@ buildPythonPackage rec {
     lxml
     numpy
     pandas
+    pillow
     pymongo
     tqdm
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ];
 
   pythonImportsCheck = [ "yabadaba" ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Abstraction layer allowing for common interactions with databases and records";
     homepage = "https://github.com/usnistgov/yabadaba";
-    changelog = "https://github.com/usnistgov/yabadaba/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/usnistgov/yabadaba/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -1,52 +1,50 @@
 {
   lib,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools-scm,
+
+  # dependencies
   extractcode-7z,
   extractcode-libarchive,
-  fetchPypi,
   patch,
+  six,
+  typecode,
+
+  # tests
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
-  setuptools-scm,
-  six,
-  setuptools,
-  typecode,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "extractcode";
-  version = "31.0.0";
+  version = "31.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-gIGTkum8+BKfdNiQT+ipjA3+0ngjVoQnNygsAoMRPYg=";
+  src = fetchFromGitHub {
+    owner = "aboutcode-org";
+    repo = "extractcode";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-KTLhTvTn5awIJD32lsztm6nh15eoFew1mGJvHIT8H2U=";
   };
-
-  postPatch = ''
-    # PEP440 support was removed in newer setuptools, https://github.com/nexB/extractcode/pull/46
-    substituteInPlace setup.cfg \
-      --replace ">=3.6.*" ">=3.6"
-  '';
 
   dontConfigure = true;
 
   build-system = [ setuptools-scm ];
 
   dependencies = [
-    typecode
-    patch
-    extractcode-libarchive
     extractcode-7z
+    extractcode-libarchive
+    patch
     six
+    typecode
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     pytest-xdist
+    pytestCheckHook
   ];
 
   disabledTestPaths = [
@@ -70,16 +68,25 @@ buildPythonPackage rec {
     "test_patch_info_patch_patches_misc_linux_st710x_patches_motorola_rootdisk_c_patch"
     # extractcode.libarchive2.ArchiveErrorRetryable: Damaged tar archive
     "test_extract_python_testtar_tar_archive_with_special_files"
+    # AssertionError: [<function extract at 0x7ffff493dd00>] == [] for archive/rar/basic.rar
+    "test_get_extractors_2"
+    # assert [functools.pa...ffff452df80>)] == []
+    "test_windows_media_player_skins_are_zip"
+    # AssertionError: assert Handler(name='Nuget', filetypes=('zip archive', 'mic...
+    "test_get_best_handler_nuget_is_selected_over_zip"
+    "test_get_best_handler_nuget_is_selected_over_zip2"
+    "test_get_best_handler_nuget_is_selected_over_zip3"
   ];
 
   pythonImportsCheck = [ "extractcode" ];
 
-  meta = with lib; {
+  meta = {
     description = "Universal archive extractor using z7zip, libarchive, other libraries and the Python standard library";
     homepage = "https://github.com/aboutcode-org/extractcode";
-    changelog = "https://github.com/aboutcode-org/extractcode/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = [ ];
+    changelog = "https://github.com/aboutcode-org/extractcode/releases/tag/v${finalAttrs.version}";
     mainProgram = "extractcode";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ eljamm ];
+    teams = with lib.teams; [ ngi ];
   };
-}
+})

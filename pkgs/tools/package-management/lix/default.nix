@@ -1,74 +1,241 @@
 {
   lib,
+  config,
+  stdenv,
+  makeScopeWithSplicing',
+  generateSplicesForMkScope,
   aws-sdk-cpp,
   boehmgc,
   callPackage,
-  fetchFromGitHub,
+  fetchFromGitea,
   fetchpatch,
-  Security,
+  rustPlatform,
+  editline,
+  ncurses,
+  clangStdenv,
+  nixos-anywhere,
+  nixpkgs-review,
+  nixpkgs-reviewFull,
+  nil,
+  nix-direnv,
+  nix-du,
+  nix-fast-build,
+  haskell,
+  nix-serve-ng,
+  nixos-rebuild-ng,
+  colmena,
+  nix-update,
+  nix-update-script,
+  nix-init,
+  nurl,
 
   storeDir ? "/nix/store",
   stateDir ? "/nix/var",
   confDir ? "/etc",
 }:
 let
-  boehmgc-nix_2_3 = boehmgc.override { enableLargeConfig = true; };
+  lixFunctional2TimeoutPatch = fetchpatch {
+    name = "lix-f2-increase-timeouts-and-max-worker-count.patch";
+    url = "https://git.lix.systems/lix-project/lix/commit/c6d22874d6dffc9646279601ad546c1d78d9a409.patch";
+    hash = "sha256-V6Q9XFsdla/OPwGPvAkb8mBisdfQbkaNKqpCfL3Tk4U=";
+  };
 
-  boehmgc-nix = boehmgc-nix_2_3.overrideAttrs (drv: {
-    patches = (drv.patches or [ ]) ++ [
-      # Part of the GC solution in https://github.com/NixOS/nix/pull/4944
-      ../nix/patches/boehmgc-coroutine-sp-fallback.patch
-    ];
-  });
-
-  aws-sdk-cpp-nix =
-    (aws-sdk-cpp.override {
-      apis = [
-        "s3"
-        "transfer"
+  makeLixScope =
+    {
+      attrName,
+      lix-args,
+      # Starting with 2.93, `nix-eval-jobs` lives in the `lix` repository.
+      nix-eval-jobs-args ? { inherit (lix-args) version src; },
+    }:
+    let
+      # GCC 13.2 is known to miscompile Lix coroutines (introduced in 2.92).
+      lixStdenv = if lib.versionAtLeast lix-args.version "2.92" then clangStdenv else stdenv;
+    in
+    makeScopeWithSplicing' {
+      otherSplices = generateSplicesForMkScope [
+        "lixPackageSets"
+        attrName
       ];
-      customMemoryManagement = false;
-    }).overrideAttrs
-      {
-        # only a stripped down version is build which takes a lot less resources to build
-        requiredSystemFeatures = [ ];
-      };
+      f =
+        self:
+        lib.recurseIntoAttrs {
+          inherit
+            storeDir
+            stateDir
+            confDir
+            ;
 
-  # Since Lix 2.91 does not use boost coroutines, it does not need boehmgc patches either.
-  needsBoehmgcPatches = version: lib.versionOlder version "2.91";
+          boehmgc = boehmgc.override {
+            enableLargeConfig = true;
+            initialMarkStackSize = 1048576;
+          };
 
-  common =
-    args:
-    callPackage (import ./common.nix ({ inherit lib fetchFromGitHub; } // args)) {
-      inherit
-        Security
-        storeDir
-        stateDir
-        confDir
-        ;
-      boehmgc = if needsBoehmgcPatches args.version then boehmgc-nix else boehmgc-nix_2_3;
-      aws-sdk-cpp = aws-sdk-cpp-nix;
+          aws-sdk-cpp =
+            (aws-sdk-cpp.override {
+              apis = [
+                "s3"
+                "transfer"
+              ];
+              customMemoryManagement = false;
+            }).overrideAttrs
+              {
+                # only a stripped down version is build which takes a lot less resources to build
+                requiredSystemFeatures = [ ];
+              };
+
+          editline = editline.override {
+            inherit ncurses;
+            enableTermcap = true;
+          };
+
+          # NOTE: The `common-*.nix` helpers contain a top-level function which
+          # takes the Lix source to build and version information. We use the
+          # outer `callPackage` for that.
+          #
+          # That *returns* another function which takes the actual build
+          # dependencies, and that uses the new scope's `self.callPackage` so
+          # that `nix-eval-jobs` can be built against the correct `lix` version.
+          lix = self.callPackage (callPackage ./common-lix.nix lix-args) {
+            stdenv = lixStdenv;
+          };
+
+          nixos-anywhere = nixos-anywhere.override {
+            nix = self.lix;
+          };
+
+          nixpkgs-review = nixpkgs-review.override {
+            nix = self.lix;
+          };
+
+          # surprisingly nixpkgs-reviewFull.override { nix = self.lix; }
+          # doesn't work, as the way nix-reviewFull is defined uses callPackage
+          # which does it's own makeOverridable and hides the .override
+          # from the derivation.
+          nixpkgs-reviewFull = nixpkgs-reviewFull.override {
+            nixpkgs-review = self.nixpkgs-review;
+          };
+
+          nil = nil.override {
+            nix = self.lix;
+          };
+
+          nix-direnv = nix-direnv.override {
+            nix = self.lix;
+          };
+
+          nix-du = nix-du.override {
+            nix = self.lix;
+          };
+
+          nix-eval-jobs = self.callPackage (callPackage ./common-nix-eval-jobs.nix nix-eval-jobs-args) {
+            stdenv = lixStdenv;
+          };
+
+          nix-fast-build = nix-fast-build.override {
+            inherit (self) nix-eval-jobs;
+          };
+
+          nix-serve-ng = lib.pipe (nix-serve-ng.override { nix = self.lix; }) [
+            (haskell.lib.compose.enableCabalFlag "lix")
+            (haskell.lib.compose.overrideCabal (drv: {
+              # Resetting (previous) broken flag since it may be related to C++ Nix
+              broken = false;
+            }))
+          ];
+
+          nixos-rebuild-ng = nixos-rebuild-ng.override {
+            nix = self.lix;
+          };
+
+          colmena = colmena.override {
+            inherit (self) nix-eval-jobs;
+          };
+
+          nix-update = nix-update.override {
+            nix = self.lix;
+            inherit (self) nixpkgs-review;
+          };
+
+          nix-init = nix-init.override {
+            nix = self.lix;
+            inherit (self) nurl;
+          };
+
+          nurl = nurl.override {
+            nix = self.lix;
+          };
+        };
     };
+
+  removedMessage = version: ''
+    Lix ${version} is now removed from this revision of Nixpkgs. Consider upgrading to stable or the latest version.
+
+          If you notice a problem while upgrading disrupting your workflows which did not occur in version ${version}, please reach out to the Lix team.
+  '';
 in
-lib.makeExtensible (self: {
-  buildLix = common;
+lib.makeExtensible (
+  self:
+  {
+    inherit makeLixScope;
 
-  lix_2_90 = (
-    common {
-      version = "2.90.0";
-      hash = "sha256-f8k+BezKdJfmE+k7zgBJiohtS3VkkriycdXYsKOm3sc=";
-      docCargoHash = "sha256-vSf9MyD2XzofZlbzsmh6NP69G+LiX72GX4Um9UJp3dc=";
-    }
-  );
+    lix_2_96 = self.makeLixScope {
+      attrName = "lix_2_96";
 
-  lix_2_91 = (
-    common {
-      version = "2.91.1";
-      hash = "sha256-hiGtfzxFkDc9TSYsb96Whg0vnqBVV7CUxyscZNhed0U=";
-      docCargoHash = "sha256-F6Ld0HfRvW9r5zn8eMTP6djnV/jvwjYQet4Ghp2T90k=";
-    }
-  );
+      lix-args = (import ./2.96.nix { inherit fetchFromGitea rustPlatform nix-update-script; }) // {
+        patches = [
+          ./lix-rs-tests-whole-archive.patch
+        ];
+      };
+    };
 
-  latest = self.lix_2_91;
-  stable = self.lix_2_91;
-})
+    lix_2_95 = self.makeLixScope {
+      attrName = "lix_2_95";
+
+      lix-args = (import ./2.95.nix { inherit fetchFromGitea rustPlatform nix-update-script; }) // {
+        patches = [
+          lixFunctional2TimeoutPatch
+        ];
+      };
+    };
+
+    git = self.makeLixScope {
+      attrName = "git";
+
+      lix-args = import ./git.nix { inherit fetchFromGitea rustPlatform; };
+    };
+
+    latest = self.lix_2_95;
+
+    stable = self.lix_2_95;
+
+    # Previously, `nix-eval-jobs` was not packaged here, so we export an
+    # attribute with the previously-expected structure for compatibility. This
+    # is also available (for now) as `pkgs.lixVersions`.
+    renamedDeprecatedLixVersions =
+      let
+        mkAlias =
+          version:
+          lib.warnOnInstantiate "'lixVersions.${version}' has been renamed to 'lixPackageSets.${version}.lix'"
+            self.${version}.lix;
+      in
+      lib.dontRecurseIntoAttrs {
+        # NOTE: Do not add new versions of Lix here.
+        stable = mkAlias "stable";
+        latest = mkAlias "latest";
+      }
+      // lib.optionalAttrs config.allowAliases {
+        # Legacy removed versions. We keep their aliases until the lixPackageSets one is dropped.
+        lix_2_90 = mkAlias "lix_2_90";
+        lix_2_91 = mkAlias "lix_2_91";
+      };
+  }
+  // lib.optionalAttrs config.allowAliases {
+    # Removed versions.
+    # When removing a version, add an alias with a date attached to it so we can clean it up after a while.
+    lix_2_90 = throw (removedMessage "2.90"); # added in 2025-09-11
+    lix_2_91 = throw (removedMessage "2.91"); # added in 2025-09-11
+    lix_2_92 = throw (removedMessage "2.92"); # added in 2025-09-11
+    lix_2_93 = throw (removedMessage "2.93"); # added in 2026-04-19
+    lix_2_94 = throw (removedMessage "2.94"); # added in 2026-10-04
+  }
+)

@@ -2,32 +2,56 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  cryptography,
-  setuptools,
-  jinja2,
-  proton-core,
-  pynacl,
   aiohttp,
+  cryptography,
+  distro,
+  fido2,
+  gobject-introspection,
+  iproute2,
+  jinja2,
+  networkmanager,
+  packaging,
+  proton-core,
+  proton-vpn-local-agent,
+  pycairo,
+  pygobject3,
+  pynacl,
   pyopenssl,
   pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pyxdg,
   requests,
   sentry-sdk,
-  distro,
-  pytestCheckHook,
-  pytest-cov-stub,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "proton-vpn-api-core";
-  version = "0.39.0";
+  version = "5.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-vpn-api-core";
     rev = "v${version}";
-    hash = "sha256-1GmLrX3FLwPoj+RGzPxzw1O7Q7r5M1coJelPhn2CTLI=";
+    hash = "sha256-OGbms0FP0UjHjqvzlFpJIZo3bPFirVcwtVgvAvA9QZA=";
   };
+
+  postPatch = ''
+    substituteInPlace proton/vpn/backend/networkmanager/killswitch/wireguard/killswitch_connection_handler.py \
+      --replace-fail '["/usr/sbin/ip", "route"]' '["${iproute2}/bin/ip", "route"]'
+  '';
+
+  nativeBuildInputs = [
+    # Needed to recognize the NM namespace
+    gobject-introspection
+  ];
+
+  propagatedBuildInputs = [
+    # Needed here for the NM namespace
+    networkmanager
+  ];
 
   build-system = [
     setuptools
@@ -36,18 +60,30 @@ buildPythonPackage rec {
   dependencies = [
     cryptography
     distro
+    fido2
     jinja2
-    pynacl
+    packaging
     proton-core
+    proton-vpn-local-agent
+    pycairo
+    pygobject3
+    pynacl
+    pyxdg
     sentry-sdk
   ];
 
   pythonImportsCheck = [
-    "proton.vpn.core"
+    "proton.vpn.backend.networkmanager.core"
+    "proton.vpn.backend.networkmanager.killswitch.default"
+    "proton.vpn.backend.networkmanager.killswitch.wireguard"
+    "proton.vpn.backend.networkmanager.protocol.openvpn"
+    "proton.vpn.backend.networkmanager.protocol.wireguard"
     "proton.vpn.connection"
+    "proton.vpn.core"
     "proton.vpn.killswitch.interface"
     "proton.vpn.logging"
     "proton.vpn.session"
+    "proton.vpn.split_tunneling"
   ];
 
   nativeCheckInputs = [
@@ -59,9 +95,11 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
+  # Needed for `pythonImportsCheck`, `postInstall` happens between `pythonImportsCheckPhase` and `pytestCheckPhase`.
   postInstall = ''
     # Needed for Permission denied: '/homeless-shelter'
     export HOME=$(mktemp -d)
+    export XDG_RUNTIME_DIR=$(mktemp -d)
   '';
 
   disabledTests = [
@@ -82,7 +120,7 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
-      sebtm
+      anthonyroussel
       rapiteanu
     ];
   };

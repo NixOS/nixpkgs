@@ -4,32 +4,32 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "grpcurl";
-  version = "1.9.2";
+  version = "1.9.4";
 
   src = fetchFromGitHub {
     owner = "fullstorydev";
     repo = "grpcurl";
-    rev = "v${version}";
-    sha256 = "sha256-0AnQxEe9jo8R++ALamTkgpaauvDaH4CaHgmwLyBTr3w=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-Id3F5EEO5qf5kUKKeULX8u7aDIZEw5c1MkP4JMrwc6I=";
   };
 
   subPackages = [ "cmd/grpcurl" ];
 
-  vendorHash = "sha256-e/V6MMYGqhZ2Ei7+2XhSsCXJNiwsTPa2Q43rdkns45o=";
+  vendorHash = "sha256-lUCuP4B+O0S90StTirOmhBncNieZkH4mL9SO2BOogxk=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Like cURL, but for gRPC: Command-line tool for interacting with gRPC servers";
     homepage = "https://github.com/fullstorydev/grpcurl";
-    license = licenses.mit;
-    maintainers = with maintainers; [ knl ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "grpcurl";
   };
-}
+})

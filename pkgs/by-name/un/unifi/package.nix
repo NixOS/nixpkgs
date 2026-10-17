@@ -1,59 +1,65 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   dpkg,
   fetchurl,
   nixosTests,
   systemd,
+  autoPatchelfHook,
+  jdk25_headless,
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "unifi-controller";
-  version = "9.0.108";
+  version = "10.6.106";
 
-  # see https://community.ui.com/releases / https://www.ui.com/download/unifi
+  # See https://community.ui.com/releases or https://www.ui.com/download/unifi.
+  #
+  # When upgrading, make sure we don't need to bump `passthru.jrePackage` below
+  # as well.
   src = fetchurl {
-    url = "https://dl.ui.com/unifi/${version}/unifi_sysvinit_all.deb";
-    hash = "sha256-p+t4W8mR+CtmSXZqxpP1U55iHhKz7sXcL3Pu+0peNrU=";
+    url = "https://dl.ui.com/unifi/${finalAttrs.version}/unifi_sysvinit_all.deb";
+    hash = "sha256-6Ttw5zuZg8Xk0KjMwtXRm4bbBeePmowYUMr4msBpskA=";
   };
 
-  nativeBuildInputs = [ dpkg ];
+  nativeBuildInputs = [
+    dpkg
+    autoPatchelfHook
+  ];
+
+  buildInputs = [
+    systemd
+  ];
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out
-    cd ./usr/lib/unifi
-    cp -ar dl lib webapps $out
+    cp -ar usr/lib/unifi/{dl,lib,webapps} $out
 
     runHook postInstall
   '';
 
-  postInstall =
-    if stdenv.hostPlatform.system == "x86_64-linux" then
-      ''
-        patchelf --add-needed "${systemd}/lib/libsystemd.so.0" "$out/lib/native/Linux/x86_64/libubnt_sdnotify_jni.so"
-      ''
-    else if stdenv.hostPlatform.system == "aarch64-linux" then
-      ''
-        patchelf --add-needed "${systemd}/lib/libsystemd.so.0" "$out/lib/native/Linux/aarch64/libubnt_sdnotify_jni.so"
-      ''
-    else
-      null;
+  passthru = {
+    jrePackage = jdk25_headless;
 
-  passthru.tests = {
-    unifi = nixosTests.unifi;
+    tests = {
+      inherit (nixosTests) unifi;
+    };
   };
 
-  meta = with lib; {
-    homepage = "http://www.ubnt.com/";
+  meta = {
+    homepage = "https://www.ui.com";
     description = "Controller for Ubiquiti UniFi access points";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.unfree;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.unfree;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
+    maintainers = with lib.maintainers; [
       globin
       patryk27
     ];
   };
-}
+})

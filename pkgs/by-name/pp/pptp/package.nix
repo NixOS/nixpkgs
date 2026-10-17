@@ -7,12 +7,12 @@
   iproute2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pptp";
   version = "1.10.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/pptpclient/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/pptpclient/pptp-${finalAttrs.version}.tar.gz";
     sha256 = "1x2szfp96w7cag2rcvkdqbsl836ja5148zzfhaqp7kl7wjw2sjc2";
   };
 
@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
     perl # in shebang of pptpsetup
   ];
 
-  meta = with lib; {
+  meta = {
     description = "PPTP client for Linux";
     homepage = "https://pptpclient.sourceforge.net/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
-}
+})

@@ -4,62 +4,67 @@
   fetchPypi,
 
   # build-system
-  hatchling,
+  uv-build,
 
   # dependencies
   click,
   docutils,
   itsdangerous,
   jedi,
+  loro,
   markdown,
+  msgspec,
   narwhals,
   packaging,
   psutil,
   pygments,
   pymdown-extensions,
-  ruff,
+  python-multipart,
+  pyyaml,
+  pyzmq,
   starlette,
   tomlkit,
   uvicorn,
   websockets,
-  pyyaml,
 
   # tests
   versionCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "marimo";
-  version = "0.10.9";
+  version = "0.25.1";
   pyproject = true;
 
   # The github archive does not include the static assets
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WoMfybvKlD8Gy2sc3/EhQZVN9WPh8eEVPlG5ksyjjGc=";
+    hash = "sha256-k02yzrbCuMmuNRSnoi5rIuz1T6vqC2E4rtGYD48VNv8=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [ uv-build ];
 
-  pythonRelaxDeps = [ "websockets" ];
+  pythonRelaxDeps = [ "jedi" ];
 
   dependencies = [
     click
     docutils
     itsdangerous
     jedi
+    loro
     markdown
+    msgspec
     narwhals
     packaging
     psutil
     pygments
     pymdown-extensions
-    ruff
+    python-multipart
+    pyyaml
+    pyzmq
     starlette
     tomlkit
     uvicorn
     websockets
-    pyyaml
   ];
 
   pythonImportsCheck = [ "marimo" ];
@@ -68,7 +73,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
 
   meta = {
     description = "Reactive Python notebook that's reproducible, git-friendly, and deployable as scripts or apps";

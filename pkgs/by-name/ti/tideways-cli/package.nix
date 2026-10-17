@@ -7,11 +7,15 @@
   writeShellApplication,
   gnugrep,
   installShellFiles,
+  versionCheckHook,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tideways-cli";
-  version = "1.2.4";
+  version = "1.3.2";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -22,9 +26,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    cp tideways $out/bin/tideways
-    chmod +x $out/bin/tideways
+    installBin tideways
 
     installShellCompletion --cmd tideways \
       --bash <($out/bin/tideways completion bash) \
@@ -34,23 +36,23 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
+
   passthru = {
     sources = {
       "x86_64-linux" = fetchurl {
         url = "https://s3-eu-west-1.amazonaws.com/tideways/cli/${finalAttrs.version}/tideways-cli_linux_amd64-${finalAttrs.version}.tar.gz";
-        hash = "sha256-PoZHmr4kq6A6aTVlo9kbjnRSkLBJ9q/GneHGWoEvraQ=";
+        hash = "sha256-6arHj82OD5zKY0uEzimioeuD4lRoQ99YrT/aK+S1W38=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://s3-eu-west-1.amazonaws.com/tideways/cli/${finalAttrs.version}/tideways-cli_linux_arm64-${finalAttrs.version}.tar.gz";
-        hash = "sha256-8r3s9izpi8fR+lSDQ6ZAxGWK2XQxrtp7WgRykRC+pD4=";
-      };
-      "x86_64-darwin" = fetchurl {
-        url = "https://s3-eu-west-1.amazonaws.com/tideways/cli/${finalAttrs.version}/tideways-cli_macos_amd64-${finalAttrs.version}.tar.gz";
-        hash = "sha256-D40PF6zgf79NO1K35koZ2gpUeJllF9CpW9DoCQ1uJIU=";
+        hash = "sha256-qOyRCbopaiWE0YtQgF6ocIdbCUDhid3w3X7AeA3kOlI=";
       };
       "aarch64-darwin" = fetchurl {
         url = "https://s3-eu-west-1.amazonaws.com/tideways/cli/${finalAttrs.version}/tideways-cli_macos_arm64-${finalAttrs.version}.tar.gz";
-        hash = "sha256-QGkRu0IRUpydLIy0DgtRhLiH0mLZ0UTRCJo1WZeICQQ=";
+        hash = "sha256-90qhY1TKhOen6+ararnVVu+cIod1luEHyC3U/z9EtJY=";
       };
     };
 
@@ -78,13 +80,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     }/bin/update-tideways-cli";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tideways Profiler CLI";
     homepage = "https://tideways.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "tideways";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ shyim ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ shyim ];
     platforms = lib.attrNames finalAttrs.passthru.sources;
   };
 })

@@ -6,16 +6,16 @@
   deprecation,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "splunk-sdk";
-  version = "2.1.0";
+  version = "3.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "splunk";
     repo = "splunk-sdk-python";
-    tag = version;
-    hash = "sha256-N+QQ4DSkx7yakROhcJ2ISXPWFa7BXDeSUULNquhDPrg=";
+    tag = finalAttrs.version;
+    hash = "sha256-wVndu+f7+6hWSnNZSZatTVuRxjZDA8o9MKMB3QzEOZQ=";
   };
 
   build-system = [ setuptools ];
@@ -25,10 +25,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "splunklib" ];
 
   meta = {
-    description = "The Splunk Enterprise Software Development Kit (SDK) for Python";
+    description = "Splunk Enterprise Software Development Kit (SDK) for Python";
     homepage = "https://github.com/splunk/splunk-sdk-python";
-    changelog = "https://github.com/splunk/splunk-sdk-python/releases/tag/${version}";
+    changelog = "https://github.com/splunk/splunk-sdk-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ levigross ];
   };
-}
+})

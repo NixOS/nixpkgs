@@ -16,29 +16,36 @@
   libdrm,
   libglvnd,
   libnotify,
-  libsForQt5,
   libxkbcommon,
   libgbm,
+  libGL,
   nspr,
   nss,
   openssl,
   pango,
   rpmextract,
   stdenv,
-  systemd,
+  systemdLibs,
   trash-cli,
   vulkan-loader,
   wrapGAppsHook3,
   xdg-utils,
-  xorg,
+  libxtst,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  libxcb,
 }:
 stdenv.mkDerivation rec {
   pname = "plasticity";
-  version = "24.2.6";
+  version = "26.1.4";
 
   src = fetchurl {
     url = "https://github.com/nkallen/plasticity/releases/download/v${version}/Plasticity-${version}-1.x86_64.rpm";
-    hash = "sha256-MEw7pmaDPOxhjeIHWumCxwESZri3gdXULIc7kRh9/BM=";
+    hash = "sha256-paBF0lk8rvuY4lnl5v7nOXaFsZQuNkTtXCoW53xBiMU=";
   };
 
   passthru.updateScript = ./update.sh;
@@ -64,7 +71,6 @@ stdenv.mkDerivation rec {
     hicolor-icon-theme
     libdrm
     libnotify
-    libsForQt5.kde-cli-tools
     libxkbcommon
     nspr
     nss
@@ -76,17 +82,17 @@ stdenv.mkDerivation rec {
   ];
 
   runtimeDependencies = [
-    systemd
+    systemdLibs
     libglvnd
     vulkan-loader # may help with nvidia users
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXrandr
-    xorg.libXtst
+    libx11
+    libxcb
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxrandr
+    libxtst
   ];
 
   dontUnpack = true;
@@ -112,22 +118,34 @@ stdenv.mkDerivation rec {
     rpmextract $src
     mv $out/usr/* $out
     rm -r $out/usr
+    rm -r $out/lib/.build-id
 
     runHook postInstall
   '';
 
-  #--use-gl=egl for it to use hardware rendering it seems. Otherwise there are terrible framerates
   preFixup = ''
-    gappsWrapperArgs+=(--add-flags "--use-gl=egl")
+    patchelf --add-needed libGL.so.1 \
+      --set-rpath "${
+        lib.makeLibraryPath [
+          libGL
+        ]
+      }" \
+      $out/bin/Plasticity
+
+    rm "$out/lib/Plasticity/libvulkan.so.1"
+    ln -s -t "$out/lib/Plasticity" "${lib.getLib vulkan-loader}/lib/libvulkan.so.1"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CAD for artists";
     homepage = "https://www.plasticity.xyz";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     mainProgram = "Plasticity";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ imadnyc ];
+    maintainers = with lib.maintainers; [
+      imadnyc
+      bearfm
+    ];
     platforms = [ "x86_64-linux" ];
   };
 }

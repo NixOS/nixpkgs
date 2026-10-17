@@ -5,17 +5,17 @@
   chromium,
 }:
 buildNpmPackage rec {
-  name = "decktape";
-  version = "3.14.0";
+  pname = "decktape";
+  version = "3.16.1";
 
   src = fetchFromGitHub {
     owner = "astefanutti";
     repo = "decktape";
     rev = "v${version}";
-    hash = "sha256-V7JoYtwP7iQYFi/WhFpkELs7mNKF6CqrMyjWhxLkcTA=";
+    hash = "sha256-ZsNSQlkzIlawQ9FWG9kjz3bDJAx3X5YHv7LESI0tmpc=";
   };
 
-  npmDepsHash = "sha256-rahrIhB0GhqvzN2Vu6137Cywr19aQ70gVbNSSYzFD+s=";
+  npmDepsHash = "sha256-B84p4VBaQMZlhwiwXdF9Ijwpn3MisMlOXWc0E+5R5l8=";
   npmPackFlags = [ "--ignore-scripts" ];
 
   dontNpmBuild = true;

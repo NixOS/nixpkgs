@@ -5,24 +5,33 @@
   ...
 }:
 
+let
+  cfg = config.services.tetrd;
+in
 {
-  options.services.tetrd.enable = lib.mkEnableOption "tetrd";
+  options.services.tetrd = {
+    enable = lib.mkEnableOption "tetrd";
+    package = lib.mkPackageOption pkgs "tetrd" { };
+  };
 
-  config = lib.mkIf config.services.tetrd.enable {
+  config = lib.mkIf cfg.enable {
     environment = {
-      systemPackages = [ pkgs.tetrd ];
-      etc."resolv.conf".source = "/etc/tetrd/resolv.conf";
+      systemPackages = [ cfg.package ];
+      # etc."resolv.conf".source = "/etc/tetrd/resolv.conf"; # Disabled overwriting of resolve.conf since otherwise tetrd disables your dns when its not connected to a device.
     };
+
+    # Our resolv.conf will override resolvconf's version.
+    networking.resolvconf.enable = false;
 
     systemd = {
       tmpfiles.rules = [ "f /etc/tetrd/resolv.conf - - -" ];
 
       services.tetrd = {
-        description = pkgs.tetrd.meta.description;
+        description = cfg.package.meta.description;
         wantedBy = [ "multi-user.target" ];
 
         serviceConfig = {
-          ExecStart = "${pkgs.tetrd}/opt/Tetrd/bin/tetrd";
+          ExecStart = "${cfg.package}/opt/Tetrd/bin/tetrd";
           Restart = "always";
           RuntimeDirectory = "tetrd";
           RootDirectory = "/run/tetrd";
@@ -80,23 +89,20 @@
             builtins.storeDir
             "/etc/ssl"
             "/etc/static/ssl"
-            "${pkgs.nettools}/bin/route:/usr/bin/route"
-            "${pkgs.nettools}/bin/ifconfig:/usr/bin/ifconfig"
+            "${pkgs.net-tools}/bin/route:/usr/bin/route"
+            "${pkgs.net-tools}/bin/ifconfig:/usr/bin/ifconfig"
           ];
 
           BindPaths = [
             "/etc/tetrd/resolv.conf:/etc/resolv.conf"
-            "/run"
-            "/var/log"
+            "/run/tetrd:/run"
           ];
 
           CapabilityBoundingSet = [
-            "CAP_DAC_OVERRIDE"
             "CAP_NET_ADMIN"
           ];
 
           AmbientCapabilities = [
-            "CAP_DAC_OVERRIDE"
             "CAP_NET_ADMIN"
           ];
         };

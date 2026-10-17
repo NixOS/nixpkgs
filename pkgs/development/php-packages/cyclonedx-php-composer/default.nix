@@ -14,7 +14,7 @@ php.buildComposerWithPlugin {
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "cyclonedx-php-composer";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-0fb1QiuVJqcB7CAEyB0y60/O9iiibT06mccZYe52dFQ=";
   };
 
@@ -27,7 +27,7 @@ php.buildComposerWithPlugin {
     homepage = "https://github.com/CycloneDX/cyclonedx-php-composer";
     license = lib.licenses.asl20;
     mainProgram = "composer";
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 }

@@ -3,20 +3,20 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aioblescan";
   version = "0.2.14";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  build-system = [ setuptools ];
 
   src = fetchFromGitHub {
     owner = "frawau";
-    repo = pname;
-    tag = version;
+    repo = "aioblescan";
+    tag = finalAttrs.version;
     hash = "sha256-JeA9jX566OSRiejdnlifbcNGm0J0C+xzA6zXDUyZ6jc=";
   };
 
@@ -24,12 +24,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioblescan" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to listen for BLE advertized packets";
     mainProgram = "aioblescan";
     homepage = "https://github.com/frawau/aioblescan";
-    changelog = "https://github.com/frawau/aioblescan/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/frawau/aioblescan/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

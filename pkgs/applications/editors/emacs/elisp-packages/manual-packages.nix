@@ -15,6 +15,16 @@ lib.packagesFromDirectoryRecursive {
     inherit (pkgs) codeium;
   };
 
+  eaf-browser = callPackage ./manual-packages/eaf-browser {
+    inherit (pkgs) aria2;
+  };
+
+  eaf-git = callPackage ./manual-packages/eaf-git {
+    inherit (pkgs) ripgrep;
+  };
+
+  elpaca = callPackage ./manual-packages/elpaca { inherit (pkgs) git; };
+
   lsp-bridge = callPackage ./manual-packages/lsp-bridge {
     inherit (pkgs)
       basedpyright
@@ -25,6 +35,10 @@ lib.packagesFromDirectoryRecursive {
       ;
   };
 
+  lua = callPackage ./manual-packages/lua { lua = pkgs.lua5_2_compat; };
+
+  straight = callPackage ./manual-packages/straight { inherit (pkgs) git; };
+
   structured-haskell-mode = self.shm;
 
   texpresso = callPackage ./manual-packages/texpresso { inherit (pkgs) texpresso; };
@@ -32,9 +46,6 @@ lib.packagesFromDirectoryRecursive {
   tree-sitter-langs = callPackage ./manual-packages/tree-sitter-langs { final = self; };
 
   zstd = callPackage ./manual-packages/zstd { inherit (pkgs) zstd; };
-
-  # From old emacsPackages (pre emacsPackagesNg)
-  cedille = callPackage ./manual-packages/cedille { inherit (pkgs) cedille; };
 
   # camelCase aliases for some of the kebab-case expressions above
   colorThemeSolarized = self.color-theme-solarized;

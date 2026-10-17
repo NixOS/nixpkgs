@@ -18,8 +18,8 @@ let
   };
 
   deps = stdenv.mkDerivation {
-    name = "${pname}-${version}-deps";
-    inherit src;
+    pname = "deps-${pname}";
+    inherit src version;
 
     nativeBuildInputs = [
       jdk
@@ -45,7 +45,7 @@ let
     '';
 
     outputHashMode = "recursive";
-    outputHash = "sha256-gOw0KUFyZEMONwLwlHSiV+ZZ7JQhjZwg708Q1IciUfo=";
+    outputHash = "sha256-Mtu67CcNY5uThfaa7CQr9cHHpjX+EMFktuSZOlLwyFg=";
 
     doCheck = false;
   };
@@ -78,10 +78,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "jnr-posix is a lightweight cross-platform POSIX emulation layer for Java, written in Java and is part of the JNR project";
+  meta = {
+    description = "Lightweight cross-platform POSIX emulation layer for Java, written in Java and is part of the JNR project";
     homepage = "https://github.com/jnr/jnr-posix";
-    license = with licenses; [
+    license = with lib.licenses; [
       epl20
       gpl2Only
       lgpl21Only

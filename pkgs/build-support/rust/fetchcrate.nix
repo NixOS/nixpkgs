@@ -9,7 +9,7 @@
   pname ? null,
   # The `dl` field of the registry's index configuration
   # https://doc.rust-lang.org/cargo/reference/registry-index.html#index-configuration
-  registryDl ? "https://crates.io/api/v1/crates",
+  registryDl ? "https://static.crates.io/crates",
   version,
   unpack ? true,
   ...
@@ -21,6 +21,8 @@ assert pname == null || pname == crateName;
   {
     name = "${crateName}-${version}.tar.gz";
     url = "${registryDl}/${crateName}/${version}/download";
+
+    passthru = { inherit pname version; };
   }
   // lib.optionalAttrs unpack {
     extension = "tar.gz";

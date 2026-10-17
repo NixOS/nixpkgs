@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libidn";
-  version = "1.42";
+  version = "1.44";
 
   src = fetchurl {
     url = "mirror://gnu/libidn/libidn-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-1sGZ3NgG5P4nk2DLSwg0mg05Vg7VSP/RzK3ajN7LRyM=";
+    hash = "sha256-SZYIurOmVlCg6lKIjBOo3uvj9xQI4xms2exS4C6xOVk=";
   };
 
   outputs = [
@@ -27,9 +27,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
+  strictDeps = true;
+
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
+  __structuredAttrs = true;
+
   meta = {
+    changelog = "https://codeberg.org/libidn/libidn/src/tag/v${finalAttrs.version}/NEWS";
     homepage = "https://www.gnu.org/software/libidn/";
     description = "Library for internationalized domain names";
 
@@ -53,6 +58,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl2Plus;
     pkgConfigModules = [ "libidn" ];
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ lsix ];
   };
 })

@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, python3
-, fetchFromGitHub
-, tesseract4
-, leptonica
-, wl-clipboard
-, libnotify
-, xorg
-, makeDesktopItem
-, copyDesktopItems
+{
+  lib,
+  stdenv,
+  python3,
+  fetchFromGitHub,
+  tesseract4,
+  leptonica,
+  wl-clipboard,
+  libnotify,
+  xvfb,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 let
@@ -19,24 +20,23 @@ let
     leptonica
     tesseract4
     libnotify
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     wl-clipboard
   ];
 
 in
 
-ps.buildPythonApplication rec {
+ps.buildPythonApplication (finalAttrs: {
   pname = "normcap";
-  version = "0.5.9";
-  format = "pyproject";
-
-  disabled = ps.pythonOlder "3.9";
+  version = "0.6.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dynobo";
     repo = "normcap";
-    tag = "v${version}";
-    hash = "sha256-K8BkPRHmcJSzYPxv49a1whKpe+StK7m0ea7t2YNUESw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jkaXwBpa09J6Q07vlnQW8TsUtpiYrPkfMspZI1TyE1g=";
   };
 
   pythonRemoveDeps = [
@@ -44,13 +44,16 @@ ps.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
+    "jeepney"
     "shiboken6"
+    "zxing-cpp"
   ];
 
   build-system = [
     ps.hatchling
     ps.babel
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     ps.toml
   ];
 
@@ -62,12 +65,12 @@ ps.buildPythonApplication rec {
     ps.pyside6
     ps.jeepney
     ps.toml
+    ps.zxing-cpp
   ];
 
   preFixup = ''
     makeWrapperArgs+=(
       "''${qtWrapperArgs[@]}"
-      --set QT_QPA_PLATFORM xcb
       --prefix PATH : ${lib.makeBinPath wrapperDeps}
     )
   ''
@@ -95,23 +98,27 @@ ps.buildPythonApplication rec {
   '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
-    mkdir -p $out/share/pixmaps
-    ln -s $out/${python3.sitePackages}/normcap/resources/icons/normcap.png $out/share/pixmaps/
+    mkdir -p $out/share/icons/hicolor/256x256/apps
+    ln -s $out/${python3.sitePackages}/normcap/resources/icons/normcap.png $out/share/icons/hicolor/256x256/apps
   '';
 
-  nativeCheckInputs = wrapperDeps ++ [
-    ps.pytestCheckHook
-    ps.pytest-cov-stub
-    ps.pytest-instafail
-    ps.pytest-qt
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    ps.pytest-xvfb
-    xorg.xvfb
-  ];
+  nativeCheckInputs =
+    wrapperDeps
+    ++ [
+      ps.pytestCheckHook
+      ps.pytest-cov-stub
+      ps.pytest-instafail
+      ps.pytest-qt
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      ps.pytest-xvfb
+      xvfb
+    ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
-  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     # setup a virtual x11 display
     export DISPLAY=:$((2000 + $RANDOM % 1000))
     Xvfb $DISPLAY -screen 5 1024x768x8 &
@@ -137,7 +144,8 @@ ps.buildPythonApplication rec {
     "test_synchronized_capture"
     # flaky
     "test_normcap_ocr_testcases"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # requires display
     "test_send_via_qt_tray"
     "test_screens"
@@ -164,7 +172,8 @@ ps.buildPythonApplication rec {
     # RuntimeError("Internal C++ object (PySide6.QtGui.QHideEvent) already deleted.")
     # AttributeError("'LoadingIndicator' object has no attribute 'timer'")
     "tests/tests_gui/test_loading_indicator.py"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # requires a display
     "tests/integration/test_normcap.py"
     "tests/integration/test_tray_menu.py"
@@ -189,17 +198,27 @@ ps.buildPythonApplication rec {
       exec = "normcap";
       icon = "normcap";
       terminal = false;
-      categories = ["Utility" "Office"];
-      keywords = ["Text" "Extraction" "OCR"];
+      categories = [
+        "Utility"
+        "Office"
+      ];
+      keywords = [
+        "Text"
+        "Extraction"
+        "OCR"
+      ];
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "OCR powered screen-capture tool to capture information instead of images";
     homepage = "https://dynobo.github.io/normcap/";
-    changelog = "https://github.com/dynobo/normcap/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ cafkafk pbsds ];
+    changelog = "https://github.com/dynobo/normcap/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      cafkafk
+      pbsds
+    ];
     mainProgram = "normcap";
   };
-}
+})

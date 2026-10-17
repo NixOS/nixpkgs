@@ -13,7 +13,7 @@
   libmicrohttpd,
   libsodium,
   libtool,
-  postgresql,
+  libpq,
   taler-exchange,
   taler-merchant,
   runtimeShell,
@@ -21,15 +21,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "taler-challenger";
-  version = "0.14.1";
+  version = "1.3.0";
 
   src = fetchgit {
-    url = "https://git.taler.net/challenger.git";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-W7oImw5ptrLVIK8KPtmb7PJKSpmh8KsazxV6reUoRO8=";
+    url = "https://git-www.taler.net/challenger.git";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-oomrqpA/V2sNTRzFbHS7rnZdTIs8w+SRYsa9AYDFn5o=";
   };
 
-  # https://git.taler.net/challenger.git/tree/bootstrap
+  # https://git-www.taler.net/challenger.git/tree/bootstrap
   preAutoreconf = ''
     # Generate Makefile.am in contrib/
     pushd contrib
@@ -59,9 +59,9 @@ stdenv.mkDerivation (finalAttrs: {
     libgcrypt
     libgnurl
     libmicrohttpd
+    libpq
     libsodium
     libtool
-    postgresql
     taler-exchange
     taler-merchant
   ];
@@ -73,9 +73,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "OAuth 2.0-based authentication service that validates user can receive messages at a certain address";
-    homepage = "https://git.taler.net/challenger.git";
+    homepage = "https://git-www.taler.net/challenger.git";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ wegank ];
+    teams = with lib.teams; [ ngi ];
     platforms = lib.platforms.linux;
   };
 })

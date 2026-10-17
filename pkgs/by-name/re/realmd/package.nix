@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.freedesktop.org";
     owner = "realmd";
     repo = "realmd";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-lmNlrXOOUSDk/8H/ge0IRA64bnau9nYUIkW6OyVxbBg=";
   };
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-systemd-unit-dir=${placeholder "out"}/lib/systemd/system"
 
     # realmd doesn't fails without proper defaults and distro configuration files
-    # These settings will be overriden by the NixOS module
+    # These settings will be overridden by the NixOS module
     "--with-distro=redhat"
 
     # Documentation is disabled

@@ -5,21 +5,20 @@
   versionCheckHook,
   nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hatsu";
-  version = "0.3.2";
+  version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "importantimport";
     repo = "hatsu";
-    tag = "v${version}";
-    hash = "sha256-lIuaG7xfBQ1r3SkgSsXj1Ph9apxwP3oI42uunMh+ijU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ebMVk/OV0fTzj7NhPvplC4bjPoEdlYXZGs2+CDtqPhk=";
   };
 
-  cargoHash = "sha256-0pZ7g0HxceIYlflxeGnAs+SFSaSVNySbZxwK/ihRIAg=";
+  cargoHash = "sha256-+KNysTRSu9BCTYVHXxM4/mEm+zrU2LxdVLRAGJb2QDI=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -27,10 +26,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Self-hosted and fully-automated ActivityPub bridge for static sites";
     homepage = "https://github.com/importantimport/hatsu";
-    changelog = "https://github.com/importantimport/hatsu/releases/tag/v${version}";
+    changelog = "https://github.com/importantimport/hatsu/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     mainProgram = "hatsu";
     maintainers = with lib.maintainers; [ kwaa ];
     platforms = lib.platforms.linux;
   };
-}
+})

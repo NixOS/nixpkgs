@@ -3,20 +3,20 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  opuslib,
+  opuslib-next,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "voip-utils";
-  version = "0.2.2";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "voip-utils";
     tag = "v${version}";
-    hash = "sha256-OlvZSVuoGQi0QEusl01nbw3oD75NfMsbpNOPQgWYu+c=";
+    hash = "sha256-m2fcBjmXwI2rCkmILgWdtCVb89Yj5SMaeKiXv2Ep9hg=";
   };
 
   postPatch = ''
@@ -26,16 +26,16 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  pythonRelaxDeps = [ "opuslib" ];
+  pythonRelaxDeps = [ "opuslib-next" ];
 
-  dependencies = [ opuslib ];
+  dependencies = [ opuslib-next ];
 
   pythonImportsCheck = [ "voip_utils" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
-    changelog = "https://github.com/home-assistant-libs/voip-utils/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/home-assistant-libs/voip-utils/blob/${src.tag}/CHANGELOG.md";
     description = "Voice over IP Utilities";
     homepage = "https://github.com/home-assistant-libs/voip-utils";
     license = lib.licenses.asl20;

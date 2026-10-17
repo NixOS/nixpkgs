@@ -1,20 +1,28 @@
-{ lib, stdenvNoCC, fetchurl, imagemagick, nixosTests }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  nixosTests,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "mediawiki";
-  version = "1.43.0";
+  version = "1.46.2";
 
   src = fetchurl {
     url = "https://releases.wikimedia.org/mediawiki/${lib.versions.majorMinor version}/mediawiki-${version}.tar.gz";
-    hash = "sha256-VuCn/i/3jlC5yHs9WJ8tjfW8qwAY5FSypKI5yFhr2O4=";
+    hash = "sha256-j3+Tf4u8Gs1M7xxTYqlfJI3NJCAg8liHmOsvc6wuabo=";
   };
 
-  postPatch = ''
-    sed -i 's|$vars = Installer::getExistingLocalSettings();|$vars = null;|' includes/installer/CliInstaller.php
+  patches = [
+    # NixOS runs the update script on every start as we might need to run some migrations.
+    # Normally this clears all active sessions, for usability we do not do that.
+    ./keep-session-object-cache.diff
+  ];
 
-    # fix generating previews for SVGs
-    substituteInPlace includes/config-schema.php \
-      --replace-fail "\$path/convert" "${imagemagick}/bin/convert"
+  postPatch = ''
+    substituteInPlace includes/Installer/CliInstaller.php \
+      --replace-fail '$vars = Installer::getExistingLocalSettings();' '$vars = null;'
   '';
 
   installPhase = ''
@@ -33,11 +41,14 @@ stdenvNoCC.mkDerivation rec {
     inherit (nixosTests.mediawiki) mysql postgresql;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Collaborative editing software that runs Wikipedia";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "https://www.mediawiki.org/";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ ] ++ teams.c3d2.members;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
+      # for the C3D2
+      SuperSandro2000
+    ];
   };
 }

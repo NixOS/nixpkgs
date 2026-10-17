@@ -10,13 +10,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "smplayer";
-  version = "24.5.0";
+  version = "26.8.29";
 
   src = fetchFromGitHub {
     owner = "smplayer-dev";
     repo = "smplayer";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-KblVDlE8EglMMAclGFZm81obipm6/JLUvsn5sLrpKqc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5l/vbTQgOkPbahDSKtm/XtRv879nWZ0eWE0bOMNZIc8=";
   };
 
   nativeBuildInputs = [
@@ -26,9 +26,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ qtscript ];
 
+  enableParallelBuilding = true;
+
   dontUseQmakeConfigure = true;
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
+
+  # https://github.com/smplayer-dev/smplayer/issues/1318
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-but-set-variable";
 
   meta = {
     homepage = "https://www.smplayer.info";
@@ -51,10 +56,10 @@ stdenv.mkDerivation (finalAttrs: {
       options of MPlayer, SMPlayer adds other interesting features like the
       possibility to play Youtube videos or download subtitles.
     '';
-    changelog = "https://github.com/smplayer-dev/smplayer/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/smplayer-dev/smplayer/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = [ lib.maintainers.skohtv ];
     platforms = lib.platforms.linux;
   };
 })
-# TODO [ AndersonTorres ]: create a wrapper including mplayer/mpv
+# TODO [ ]: create a wrapper including mplayer/mpv

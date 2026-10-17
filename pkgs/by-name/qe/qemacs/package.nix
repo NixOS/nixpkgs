@@ -6,13 +6,13 @@
   which,
   texi2html,
   enableX11 ? true,
-  libX11,
-  libXext,
-  libXv,
+  libx11,
+  libxext,
+  libxv,
   libpng,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "qemacs";
   version = "6.3.2";
 
@@ -35,20 +35,19 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = lib.optionals enableX11 [
     libpng
-    libX11
-    libXext
-    libXv
+    libx11
+    libxext
+    libxv
   ];
 
   enableParallelBuilding = true;
 
-  configureFlags =
-    [
-      "--cross-prefix=${stdenv.cc.targetPrefix}"
-    ]
-    ++ lib.optionals (!enableX11) [
-      "--disable-x11"
-    ];
+  configureFlags = [
+    "--cross-prefix=${stdenv.cc.targetPrefix}"
+  ]
+  ++ lib.optionals (!enableX11) [
+    "--disable-x11"
+  ];
 
   makeFlags = [
     # is actually used as BUILD_CC
@@ -60,10 +59,10 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/man
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://bellard.org/qemacs/";
     description = "Very small but powerful UNIX editor";
-    license = licenses.mit;
-    maintainers = with maintainers; [ iblech ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ iblech ];
   };
 }

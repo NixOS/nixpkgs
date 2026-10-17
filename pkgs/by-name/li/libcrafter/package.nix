@@ -8,14 +8,14 @@
   libpcap,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcrafter";
   version = "1.0";
 
   src = fetchFromGitHub {
     owner = "pellegre";
     repo = "libcrafter";
-    rev = "version-${version}";
+    rev = "version-${finalAttrs.version}";
     sha256 = "sha256-tCdN3+EzISVl+wp5umOFD+bgV+uUdabH+2LyxlV/W7Q=";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

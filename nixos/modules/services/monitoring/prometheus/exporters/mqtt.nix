@@ -11,6 +11,7 @@ let
     mkIf
     mkEnableOption
     mkOption
+    mkPackageOption
     types
     ;
   cfg = config.services.prometheus.exporters.mqtt;
@@ -21,6 +22,7 @@ in
   # https://github.com/kpetremann/mqtt-exporter/tree/master?tab=readme-ov-file#configuration
   port = 9000;
   extraOpts = {
+    package = mkPackageOption pkgs "mqtt-exporter" { };
     keepFullTopic = mkEnableOption "Keep entire topic instead of the first two elements only. Usecase: Shelly 3EM";
     logLevel = mkOption {
       type = types.enum [
@@ -115,7 +117,7 @@ in
       KEEP_FULL_TOPIC = toConfigBoolean cfg.keepFullTopic;
       LOG_LEVEL = cfg.logLevel;
       LOG_MQTT_MESSAGE = toConfigBoolean cfg.logMqttMessage;
-      MQTT_IGNORED_TOPIC = toConfigList cfg.mqttIgnoredTopics;
+      MQTT_IGNORED_TOPICS = toConfigList cfg.mqttIgnoredTopics;
       MQTT_ADDRESS = cfg.mqttAddress;
       MQTT_PORT = toString cfg.mqttPort;
       MQTT_TOPIC = cfg.mqttTopic;
@@ -134,7 +136,7 @@ in
     };
     serviceConfig = {
       EnvironmentFile = mkIf (cfg.environmentFile != null) cfg.environmentFile;
-      ExecStart = lib.getExe pkgs.mqtt-exporter;
+      ExecStart = lib.getExe cfg.package;
     };
   };
 }

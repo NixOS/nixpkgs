@@ -3,14 +3,11 @@
   buildPythonPackage,
   fetchPypi,
   autopage,
-  cmd2,
-  importlib-metadata,
+  cmd2_4,
   openstackdocstheme,
   pbr,
   prettytable,
-  pyparsing,
   pyyaml,
-  setuptools,
   stevedore,
   sphinxHook,
   callPackage,
@@ -18,23 +15,17 @@
 
 buildPythonPackage rec {
   pname = "cliff";
-  version = "4.8.0";
+  version = "4.16.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-I+/1AuYDzwqoQerqZmKkLNMGQWkWKz5ZayAiZADjTf0=";
+    hash = "sha256-hTFK1JvWL5ClEJTU4xsctNO5L7g8s5Ne66AjbDKDnnU=";
   };
-
-  postPatch = ''
-    # only a small portion of the listed packages are actually needed for running the tests
-    # so instead of removing them one by one remove everything
-    rm test-requirements.txt
-  '';
 
   build-system = [
     openstackdocstheme
-    setuptools
+    pbr
     sphinxHook
   ];
 
@@ -42,11 +33,8 @@ buildPythonPackage rec {
 
   dependencies = [
     autopage
-    cmd2
-    importlib-metadata
-    pbr
+    cmd2_4
     prettytable
-    pyparsing
     pyyaml
     stevedore
   ];
@@ -60,10 +48,10 @@ buildPythonPackage rec {
     pytest = callPackage ./tests.nix { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command Line Interface Formulation Framework";
     homepage = "https://github.com/openstack/cliff";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

@@ -1,44 +1,55 @@
 {
   lib,
-  buildPythonPackage,
-  fetchPypi,
-  pytestCheckHook,
-  numpy,
-  libsndfile,
-  cffi,
-  isPyPy,
   stdenv,
+  buildPythonPackage,
+  cffi,
+  fetchPypi,
+  isPyPy,
+  libsndfile,
+  numpy,
+  pytestCheckHook,
+  setuptools,
+  typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "soundfile";
-  version = "0.12.1";
-  format = "setuptools";
-  # https://github.com/bastibe/python-soundfile/issues/157
-  disabled = isPyPy || stdenv.hostPlatform.isi686;
+  version = "0.14.0";
+  pyproject = true;
+  disabled = isPyPy;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-6OEBeyzx3adnrvGdL9nuXr4H4FDUMPd6Cnxmugi4za4=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-uhwaLWGLylxAZkfIO4nwfMiBD6UGpQYippk7oTDB3hE=";
   };
 
-  patches = [ ./0001-Fix-build-on-linux-arm64.patch ];
-
   postPatch = ''
-    substituteInPlace soundfile.py --replace "_find_library('sndfile')" "'${libsndfile.out}/lib/libsndfile${stdenv.hostPlatform.extensions.sharedLibrary}'"
+    substituteInPlace soundfile.py \
+      --replace "_find_library('sndfile')" "'${libsndfile.out}/lib/libsndfile${stdenv.hostPlatform.extensions.sharedLibrary}'"
   '';
 
-  nativeCheckInputs = [ pytestCheckHook ];
-  propagatedBuildInputs = [
-    numpy
-    libsndfile
+  build-system = [
     cffi
+    setuptools
   ];
-  propagatedNativeBuildInputs = [ cffi ];
+
+  dependencies = [
+    cffi
+    numpy
+    typing-extensions
+  ];
+
+  pythonImportsCheck = [ "soundfile" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Audio library based on libsndfile, CFFI and NumPy";
-    license = lib.licenses.bsd3;
     homepage = "https://github.com/bastibe/python-soundfile";
+    changelog = "https://github.com/bastibe/python-soundfile/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
+    # https://github.com/bastibe/python-soundfile/issues/157
+    broken = stdenv.hostPlatform.isi686;
   };
-}
+})

@@ -7,15 +7,16 @@
   which,
   gperf,
   nix-update-script,
+  python3Packages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libseccomp";
-  version = "2.5.5";
+  version = "2.6.1";
 
   src = fetchurl {
-    url = "https://github.com/seccomp/libseccomp/releases/download/v${version}/libseccomp-${version}.tar.gz";
-    hash = "sha256-JIosik2bmFiqa69ScSw0r+/PnJ6Ut23OAsHJqiX7M3U=";
+    url = "https://github.com/seccomp/libseccomp/releases/download/v${finalAttrs.version}/libseccomp-${finalAttrs.version}.tar.gz";
+    hash = "sha256-UB9mxmciXVN5G5fh18+Fq3ZMKX0EiB9g849FHEsO4b4=";
   };
 
   outputs = [
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ gperf ];
   buildInputs = [ getopt ];
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs .
   '';
 
@@ -51,17 +52,19 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = nix-update-script { };
+    tests = {
+      inherit (python3Packages) seccomp;
+    };
   };
 
-  meta = with lib; {
+  meta = {
     description = "High level library for the Linux Kernel seccomp filter";
     mainProgram = "scmp_sys_resolver";
     homepage = "https://github.com/seccomp/libseccomp";
-    license = licenses.lgpl21Only;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Only;
+    platforms = lib.platforms.linux;
     badPlatforms = [
       "alpha-linux"
-      "loongarch64-linux"
       "m68k-linux"
       "microblaze-linux"
       "microblazeel-linux"
@@ -69,6 +72,7 @@ stdenv.mkDerivation rec {
       "sparc-linux"
       "sparc64-linux"
     ];
-    maintainers = with maintainers; [ thoughtpolice ];
+    maintainers = with lib.maintainers; [ thoughtpolice ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "libseccomp_project" finalAttrs.version;
   };
-}
+})

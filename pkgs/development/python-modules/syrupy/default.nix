@@ -2,33 +2,34 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  python,
-  poetry-core,
+  hatchling,
+  hypothesis,
+  pydantic,
   pytest,
   pytest-xdist,
   invoke,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "syrupy";
-  version = "4.8.0";
+  version = "6.0.0";
   pyproject = true;
-
-  disabled = lib.versionOlder python.version "3.8.1";
 
   src = fetchFromGitHub {
     owner = "syrupy-project";
     repo = "syrupy";
-    tag = "v${version}";
-    hash = "sha256-IifGufCUhjbl8Tqvcjm8XF4QPvOsRacPWxI1yT79eNs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-dpGEX0abz20sI+tVSRXQRbFTz/EOQEwbduOdtLZS/AQ=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   buildInputs = [ pytest ];
 
   nativeCheckInputs = [
+    hypothesis
     invoke
+    pydantic
     pytest
     pytest-xdist
   ];
@@ -43,10 +44,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "syrupy" ];
 
   meta = {
-    changelog = "https://github.com/syrupy-project/syrupy/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/syrupy-project/syrupy/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Pytest Snapshot Test Utility";
     homepage = "https://github.com/syrupy-project/syrupy";
-    license = lib.licenses.asl20;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

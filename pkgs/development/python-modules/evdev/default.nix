@@ -3,20 +3,18 @@
   buildPythonPackage,
   fetchPypi,
   linuxHeaders,
-  pythonOlder,
   setuptools,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "evdev";
-  version = "1.7.1";
+  version = "1.9.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-DHLDcL2inYV+GI2TEBnDJlGpweqXfAjI2TmxztFjf94=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-LBQOAayEN3WPoj/lyHE5dBJGH0LUIaogJB3I/oz8y8k=";
   };
 
   patchPhase = ''
@@ -28,16 +26,23 @@ buildPythonPackage rec {
 
   buildInputs = [ linuxHeaders ];
 
-  doCheck = false;
-
   pythonImportsCheck = [ "evdev" ];
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # tries to open /dev/uinput
+    "tests/test_uinput.py"
+  ];
+
+  meta = {
     description = "Provides bindings to the generic input event interface in Linux";
     homepage = "https://python-evdev.readthedocs.io/";
-    changelog = "https://github.com/gvalkov/python-evdev/blob/v${version}/docs/changelog.rst";
-    license = licenses.bsd3;
+    changelog = "https://github.com/gvalkov/python-evdev/blob/v${finalAttrs.version}/docs/changelog.rst";
+    license = lib.licenses.bsd3;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

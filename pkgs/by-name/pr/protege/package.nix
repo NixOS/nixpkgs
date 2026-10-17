@@ -11,17 +11,17 @@
 
 maven.buildMavenPackage rec {
   pname = "protege";
-  version = "5.6.4";
+  version = "5.6.8";
 
   src = fetchFromGitHub {
     owner = "protegeproject";
     repo = "protege";
     rev = version;
-    hash = "sha256-Q3MHa7nCeF31n7JPltcemFBc/sJwGA9Ev0ymjQhY/U0=";
+    hash = "sha256-GplMEVEBYSTTzrGzbHlbQTXqJYka6r0QfBZFVCS7wCs=";
   };
 
   mvnJdk = jdk11;
-  mvnHash = "sha256-kemP2gDv1CYuaoK0fwzBxdLTusarPasf2jCDQj/HPYE=";
+  mvnHash = "sha256-xC/zLPPLbQ8tZIkCZHOfY6FEaWXFF5ZC1LX4ovaSSqg=";
 
   patches = [
     # Pin built-in Maven plugins to avoid checksum variations on Maven updates
@@ -74,14 +74,14 @@ maven.buildMavenPackage rec {
   meta = {
     homepage = "https://protege.stanford.edu/";
     downloadPage = "https://protege.stanford.edu/software.php#desktop-protege";
-    description = "A free and open-source OWL 2 ontology editor";
+    description = "Free and open-source OWL 2 ontology editor";
     longDescription = ''
       Protégé Desktop is a feature rich ontology editing environment with full
       support for the OWL 2 Web Ontology Language, and direct in-memory
       connections to description logic reasoners.
     '';
     maintainers = with lib.maintainers; [ nessdoor ];
-    license = with lib.licenses; [ bsd2 ];
+    license = lib.licenses.bsd2;
     # TODO Protege is able to run on Darwin as well, but I (@nessdoor) had no
     #      way of testing it nor any experience in packaging Darwin apps, so I
     #      will leave the task to someone who has the right tools and knowledge.

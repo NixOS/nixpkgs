@@ -25,11 +25,8 @@ buildPythonPackage rec {
     hash = "sha256-WIF3pFBOLgozYTrQHLzIRgSlT3dTZTe+7sF/dVjVdTo=";
   };
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace 'pynacl~=1.4' 'pynacl>=1.4' \
-      --replace 'ipaddress' ""
-  '';
+  pythonRelaxDeps = [ "pynacl" ];
+  pythonRemoveDeps = [ "ipaddress" ];
 
   pythonImportsCheck = [ "monero" ];
 
@@ -48,10 +45,10 @@ buildPythonPackage rec {
     responses
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Comprehensive Python module for handling Monero";
     homepage = "https://github.com/monero-ecosystem/monero-python";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ prusnak ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ prusnak ];
   };
 }

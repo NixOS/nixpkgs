@@ -44,10 +44,16 @@ buildPythonPackage rec {
     pytest-mock
   ];
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin { MPLBACKEND = "Agg"; };
+
+  disabledTests = [
+    # exec()'d class no longer leaks into locals() under PEP 667
+    "test_exec_codegen"
+  ];
+
   pythonImportsCheck = [ "hebg" ];
 
   meta = {
-    description = "Hierachical Explainable Behaviors using Graphs";
+    description = "Hierarchical Explainable Behaviors using Graphs";
     homepage = "https://github.com/IRLL/HEB_graphs";
     changelog = "https://github.com/IRLL/HEB_graphs/releases/tag/${version}";
     license = lib.licenses.gpl3Only;

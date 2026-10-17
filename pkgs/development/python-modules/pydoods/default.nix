@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   requests,
 }:
 
@@ -11,11 +10,9 @@ buildPythonPackage rec {
   version = "1.0.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1brpcfj1iy9mhf2inla4gi681zlh7g4qvhr6vrprk6r693glpn3x";
+    hash = "sha256-fdhL30gmm5lv3ibDjck7kP6ATHxEURuFgzX5GKRjN68=";
   };
 
   propagatedBuildInputs = [ requests ];
@@ -25,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pydoods" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for the DOODS service";
     homepage = "https://github.com/snowzach/pydoods";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

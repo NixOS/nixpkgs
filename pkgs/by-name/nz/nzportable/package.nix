@@ -66,6 +66,7 @@ writeShellApplication {
   '';
 
   derivationArgs = {
+    pname = "nzportable";
     inherit version;
     passthru = {
       updateScript = callPackage ./update.nix { };

@@ -2,10 +2,10 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
+  fetchFromGitHub,
 
   # build-system
+  setuptools,
   setuptools-scm,
 
   # dependencies
@@ -13,39 +13,46 @@
   casa-formats-io,
   dask,
   joblib,
-  looseversion,
+  numpy,
+  packaging,
   radio-beam,
+  tqdm,
 
-  # checks
+  # tests
   aplpy,
   pytest-astropy,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "spectral-cube";
-  version = "0.6.5";
+  version = "0.7.0";
   pyproject = true;
+  __structuredAttrs = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-gJzrr3+/FsQN/HHDERxf/NECArwOaTqFwmI/Q2Z9HTM=";
+  src = fetchFromGitHub {
+    owner = "radio-astro-tools";
+    repo = "spectral-cube";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-G/G3OtyhJ84KfnsmrOMK8Z6I/QTp8Wr8Fdo5R1CRnwU=";
   };
 
-  patches = [ ./distutils-looseversion.patch ];
-
-  build-system = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     astropy
     casa-formats-io
     dask
     joblib
-    looseversion
+    numpy
+    packaging
     radio-beam
-  ];
+    tqdm
+  ]
+  ++ dask.optional-dependencies.array;
 
   nativeCheckInputs = [
     aplpy
@@ -58,9 +65,18 @@ buildPythonPackage rec {
     cd build/lib
   '';
 
-  # On x86_darwin, this test fails with "Fatal Python error: Aborted"
-  # when sandbox = true.
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Flaky: AssertionError: assert diffvals.max()*u.B <= 1*u.MB
+    "test_reproject_3D_memory"
+  ];
+
+  disabledTestPaths = [
+    # This test fails with "Passing a non-Collection iterable to parametrize is deprecated".
+    "spectral_cube/tests/test_casafuncs.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # On x86_darwin, this test fails with "Fatal Python error: Aborted"
+    # when sandbox = true.
     "spectral_cube/tests/test_visualization.py"
   ];
 
@@ -69,8 +85,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for reading and analyzing astrophysical spectral data cubes";
     homepage = "https://spectral-cube.readthedocs.io";
-    changelog = "https://github.com/radio-astro-tools/spectral-cube/releases/tag/v${version}";
+    changelog = "https://github.com/radio-astro-tools/spectral-cube/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ smaret ];
   };
-}
+})

@@ -6,7 +6,6 @@
   hatch-fancy-pypi-readme,
   hatchling,
   pytestCheckHook,
-  pythonOlder,
   trio,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "anysqlite";
   version = "0.0.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "karpetrosyan";
@@ -38,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "anysqlite" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sqlite3 for asyncio and trio";
     homepage = "https://github.com/karpetrosyan/anysqlite";
     changelog = "https://github.com/karpetrosyan/anysqlite/blob/${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

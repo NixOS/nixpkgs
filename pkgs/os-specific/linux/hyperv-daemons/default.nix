@@ -19,7 +19,7 @@ let
       # The fcopy program is explicitly left out in the Makefile on aarch64
       (if stdenv.hostPlatform.isAarch64 then null else "fcopy_uio");
 
-  daemons = stdenv.mkDerivation rec {
+  daemons = stdenv.mkDerivation {
     pname = "hyperv-daemons-bin";
     inherit (kernel) src version;
 
@@ -119,7 +119,7 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Integration Services for running NixOS under HyperV";
     mainProgram = "lsvmbus";
     longDescription = ''
@@ -130,7 +130,7 @@ stdenv.mkDerivation {
       we use that name here.
     '';
     homepage = "https://kernel.org";
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with lib.maintainers; [ peterhoeg ];
     platforms = kernel.meta.platforms;
   };
 }

@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   pytestCheckHook,
 }:
@@ -11,23 +10,21 @@ buildPythonPackage rec {
   version = "3.6";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "imaplib2";
     rev = "v${version}";
-    sha256 = "14asi3xnvf4bb394k5j8c3by6svvmrr75pawzy6kaax5jx0h793m";
+    hash = "sha256-daQDQZelKzWN/1zdcnKue2vj12BIlknSWIu4bfuIWpE=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "imaplib2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Threaded Python IMAP4 client";
     homepage = "https://github.com/jazzband/imaplib2";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

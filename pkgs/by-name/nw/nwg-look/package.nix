@@ -1,30 +1,34 @@
-{ lib
-, fetchFromGitHub
-, wrapGAppsHook3
-, buildGoModule
-, glib
-, pkg-config
-, cairo
-, gtk3
-, xcur2png
-, libX11
-, zlib
+{
+  lib,
+  fetchFromGitHub,
+  wrapGAppsHook3,
+  buildGoModule,
+  glib,
+  pkg-config,
+  cairo,
+  gtk3,
+  xcur2png,
+  libx11,
+  zlib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nwg-look";
-  version = "1.0.2";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-look";
-    rev = "v${version}";
-    hash = "sha256-fvL7AGplIGlSEXlV3lCrBogAu2rD2XZKYTfHKK6Ztjc=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-g7lc+z6aCJ1yd5B4qG1yoIUp5n9ln+orv9Eo0M6Q18M=";
   };
 
-  vendorHash = "sha256-J9Wc5MCgztzzYnjm3lAREmYLGPyuCX9Xr+qhAwf9Fzg=";
+  vendorHash = "sha256-Ef3WqmdzwyydeN0A98nN57NvKeDOgv0wMs//KA/FODo=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -35,7 +39,7 @@ buildGoModule rec {
     glib
     cairo
     xcur2png
-    libX11.dev
+    libx11.dev
     zlib
     gtk3
   ];
@@ -43,15 +47,11 @@ buildGoModule rec {
   env.CGO_ENABLED = 1;
 
   postInstall = ''
-    mkdir -p $out/share
     mkdir -p $out/share/nwg-look/langs
-    mkdir -p $out/share/applications
-    mkdir -p $out/share/pixmaps
-    mkdir -p $out/share/icons
     cp stuff/main.glade $out/share/nwg-look/
     cp langs/* $out/share/nwg-look/langs
-    cp stuff/nwg-look.desktop $out/share/applications
-    cp stuff/nwg-look.svg $out/share/pixmaps
+    install -D -m 644 stuff/nwg-look.desktop -t $out/share/applications
+    install -D -m 644 stuff/nwg-look.svg -t $out/share/icons/hicolor/scalable/apps
   '';
 
   preFixup = ''
@@ -62,12 +62,12 @@ buildGoModule rec {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/nwg-piotr/nwg-look";
     description = "GTK settings editor, designed to work properly in wlroots-based Wayland environment";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ max-amb ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ max-amb ];
     mainProgram = "nwg-look";
   };
-}
+})

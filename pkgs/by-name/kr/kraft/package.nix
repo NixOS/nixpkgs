@@ -3,44 +3,89 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
+  writableTmpDirAsHomeHook,
   pkg-config,
   btrfs-progs,
   gpgme,
+  xen,
+  yajl,
   nix-update-script,
 }:
 
-buildGoModule rec {
-  pname = "kraftkit";
-  version = "0.9.4";
+buildGoModule (finalAttrs: {
+  pname = "kraft";
+  version = "0.12.16";
 
   src = fetchFromGitHub {
     owner = "unikraft";
     repo = "kraftkit";
-    rev = "v${version}";
-    hash = "sha256-4+3yMx/Vf4aZKC5GRhnAeH4oaJ0Rbz8oXptMtPV+5tA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-rk6FXPEtBkVzGDbjaiASg8FNYgJBXqYDiZ/TcBSgUok=";
   };
 
   nativeBuildInputs = [
     pkg-config
+    installShellFiles
+    writableTmpDirAsHomeHook
   ];
 
-  buildInputs =
-    [
-      gpgme
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      btrfs-progs
-    ];
+  buildInputs = [
+    gpgme
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    btrfs-progs
+    xen
+    yajl
+  ];
 
-  vendorHash = "sha256-uyoIlNhgL684f+3+I4CFc+iuMRdI5WAUr7dWr0Bt6bA=";
+  vendorHash = "sha256-CNyBwJJIg0C1QE//BH+XaGHjSKCnslvi2Zu8JgqBEls=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X kraftkit.sh/internal/version.version=${version}"
+    "-X kraftkit.sh/internal/cli/kraft.sentryDsn="
+    "-X kraftkit.sh/internal/version.buildTime=1970-01-01T00:00:00Z"
+    "-X kraftkit.sh/internal/version.commit=nixpkgs"
+    "-X kraftkit.sh/internal/version.version=${finalAttrs.version}"
   ];
 
-  subPackages = [ "cmd/kraft" ];
+  tags = [
+    "containers_image_storage_stub"
+    "containers_image_openpgp"
+    "netgo"
+    "osusergo"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "xen"
+  ];
+
+  subPackages = [
+    "cmd/kraft"
+  ]
+  ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ "tools/genman" ];
+
+  excludedPackages = [
+    "test/e2e"
+    "initrd"
+    "tools"
+  ];
+
+  preCheck = ''
+    # Run all tests.
+    unset subPackages
+  '';
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    $out/bin/genman generate ./docs/man/
+    rm $out/bin/genman
+    installManPage ./docs/man/*
+
+    installShellCompletion --cmd kraft \
+      --bash <($out/bin/kraft completion bash) \
+      --fish <($out/bin/kraft completion fish) \
+      --zsh <($out/bin/kraft completion zsh)
+  '';
 
   passthru = {
     updateScript = nix-update-script {
@@ -56,9 +101,8 @@ buildGoModule rec {
     homepage = "https://github.com/unikraft/kraftkit";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
-      dit7ya
       cloudripper
     ];
     mainProgram = "kraft";
   };
-}
+})

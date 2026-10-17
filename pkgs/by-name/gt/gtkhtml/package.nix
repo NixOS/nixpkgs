@@ -14,12 +14,12 @@
   gsettings-desktop-schemas,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtkhtml";
   version = "4.10.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtkhtml/${lib.versions.majorMinor version}/gtkhtml-${version}.tar.xz";
+    url = "mirror://gnome/sources/gtkhtml/${lib.versions.majorMinor finalAttrs.version}/gtkhtml-${finalAttrs.version}.tar.xz";
     hash = "sha256-yjtkJPssesXZy4/a+2kxj6LoJcnPbtF9HjjZsp5WBsM=";
   };
 
@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
       hash = "sha256-f0OToWGHZwxvqf+0qosfA9FfwJ/IXfjIPP5/WrcvArI=";
       extraPrefix = "";
     })
+    # Resolves a GCC14 missing typecast error
+    ./typecast.diff
   ];
 
   passthru = {
@@ -55,8 +57,8 @@ stdenv.mkDerivation rec {
     isocodes
   ];
 
-  meta = with lib; {
-    platforms = platforms.linux;
+  meta = {
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

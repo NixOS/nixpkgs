@@ -7,22 +7,24 @@
   yarnBuildHook,
   yarnInstallHook,
   nodejs,
+  nix-update-script,
+  runCommand,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "prettierd";
-  version = "0.25.3";
+  version = "0.28.0";
 
   src = fetchFromGitHub {
     owner = "fsouza";
     repo = "prettierd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3lvFZ5/p+1kPnHIR2PlQtCY3SVo1rs8IuBigLaabxAE=";
+    hash = "sha256-nPaf5p+/ryhEefkiHW9MUk2An/pIQ1UQqW9LeBojAmg=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-Ti2b102pzUKB6Xy3LwZ7DlrnW0cRscgNLTUIAKz+6Us=";
+    hash = "sha256-Z0IOyp70150zAB7CDvyw87rnzoxNdEuTMZTR6/9QP7U=";
   };
 
   strictDeps = true;
@@ -33,6 +35,26 @@ stdenv.mkDerivation (finalAttrs: {
     yarnInstallHook
     nodejs
   ];
+
+  # launch the daemon with the same node version used to run the CLI
+  # fixes "Error: spawn node ENOENT" if node isn't available on the user's path
+  postInstall = ''
+    wrapProgram $out/bin/prettierd \
+      --prefix PATH : ${lib.makeBinPath [ nodejs ]}
+  '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+
+    tests = lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
+      format =
+        runCommand "prettierd-format-file-test" { nativeBuildInputs = [ finalAttrs.finalPackage ]; }
+          ''
+            export HOME=$(mktemp -d)
+            prettierd ${finalAttrs.src}/package.json < ${finalAttrs.src}/package.json > $out
+          '';
+    };
+  };
 
   meta = {
     mainProgram = "prettierd";

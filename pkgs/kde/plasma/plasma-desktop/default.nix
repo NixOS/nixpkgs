@@ -6,16 +6,19 @@
   glib,
   gsettings-desktop-schemas,
   replaceVars,
-  util-linux,
   pkg-config,
   qtsvg,
   qtwayland,
   breeze,
-  kaccounts-integration,
   SDL2,
   xkeyboard_config,
-  xorg,
+  xorg-server,
+  xf86-input-libinput,
+  xf86-input-evdev,
+  libxft,
+  libxcursor,
   libcanberra,
+  libwacom,
   libxkbfile,
   ibus,
 }:
@@ -31,13 +34,9 @@ mkKdeDerivation {
   pname = "plasma-desktop";
 
   patches = [
-    (replaceVars ./hwclock-path.patch {
-      hwclock = "${lib.getBin util-linux}/bin/hwclock";
-    })
     (replaceVars ./kcm-access.patch {
       gsettings = "${gsettings-wrapper}/bin/gsettings";
     })
-    ./tzdir.patch
     ./no-discover-shortcut.patch
     (replaceVars ./wallpaper-paths.patch {
       wallpapers = "${lib.getBin breeze}/share/wallpapers";
@@ -49,18 +48,17 @@ mkKdeDerivation {
     qtsvg
     qtwayland
 
-    kaccounts-integration
-
     SDL2
     libcanberra
+    libwacom
     libxkbfile
     xkeyboard_config
 
-    xorg.libXcursor
-    xorg.libXft
-    xorg.xf86inputlibinput
-    xorg.xf86inputevdev
-    xorg.xorgserver
+    libxcursor
+    libxft
+    xf86-input-libinput
+    xf86-input-evdev
+    xorg-server
 
     ibus
   ];

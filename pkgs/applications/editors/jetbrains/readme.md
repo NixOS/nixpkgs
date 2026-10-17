@@ -1,54 +1,96 @@
-This directory contains the build expressions needed to build any of the jetbrains IDEs.
+This directory contains the build expressions needed to build any of the JetBrains IDEs.
 The jdk is in `pkgs/development/compilers/jetbrains-jdk`.
-To test the build process of every IDE (as well as the process for adding plugins), build `jetbrains.plugins.tests.default`.
+
+## IDE packages
+
+The IDEs live in by-name/:
+
+| IDE Name                       | Package Location                              |
+|--------------------------------|-----------------------------------------------|
+| Clion                          | pkgs/by-name/cl/clion/package.nix             |
+| DataGrip                       | pkgs/by-name/da/datagrip/package.nix          |
+| DataSpell                      | pkgs/by-name/da/dataspell/package.nix         |
+| Gateway                        | pkgs/by-name/je/jetbrains-gateway/package.nix |
+| Goland                         | pkgs/by-name/go/goland/package.nix            |
+| IntelliJ IDEA                  | pkgs/by-name/in/intellij-idea/package.nix     |
+| IntelliJ IDEA (Open Source)    | pkgs/by-name/in/intellij-idea-oss/package.nix |
+| MPS                            | pkgs/by-name/je/jetbrains-mps/package.nix     |
+| PhpStorm                       | pkgs/by-name/ph/phpstorm/package.nix          |
+| PyCharm                        | pkgs/by-name/py/pycharm/package.nix           |
+| PyCharm (Open Source)          | pkgs/by-name/py/pycharm-oss/package.nix       |
+| Rider                          | pkgs/by-name/ri/rider/package.nix             |
+| RubyMine                       | pkgs/by-name/ru/ruby-mine/package.nix         |
+| RustRover                      | pkgs/by-name/ru/rust-rover/package.nix        |
+| WebStorm                       | pkgs/by-name/we/webstorm/package.nix          |
+
+## Tests:
+- To test the build process of every IDE (as well as the process for adding plugins), build `jetbrains.plugins.tests.empty`.
+- To test that plugins are correctly stored in the plugins directory, build `jetbrains.plugins.tests.stored-correctly`.
 
 ## How to use plugins:
- - Get the ide you want and call `jetbrains.plugins.addPlugins` with a list of plugins you want to add.
- - The list of plugins can be a list of ids or names (as in `plugins/plugins.json`)
- - Example: `jetbrains.plugins.addPlugins jetbrains.pycharm-professional [ "nixidea" ]`
- - The list can also contain a drv giving a `.jar` or `.zip` (this is how you use a plugin not added to nixpkgs)
+ - Pass your IDE package and a list of plugin packages to `jetbrains.plugins.addPlugins`.
+   E.g. `pkgs.jetbrains.plugins.addPlugins pkgs.intellij-idea [ ideavim ]`
+ - The list has to contain drvs giving the directory contents of the plugin or a single `.jar` (executable).
 
-### How to add a new plugin to nixpkgs
- - Find the page for the plugin on https://plugins.jetbrains.com
- - Find the id (it's the number after https://plugins.jetbrains.com/plugin/)
- - Run `plugins/update_plugins.py` add (plugin id)
- - If binaries need patch or some other special treatment, add an entry to `plugins/specialPlugins.nix`
+Nixpkgs does not package JetBrains plugins, however you can use third-party sources, such as
+[nix-jetbrains-plugins](https://github.com/nix-community/nix-jetbrains-plugins).
+Note that some plugins may not work without modification, if they are packaged in a way that is incompatible with NixOS.
+You can try installing such plugins from within the IDE instead.
 
-## How to update stuff:
- - Run ./bin/update_bin.py, this will update binary IDEs and plugins, and automatically commit them
- - Source builds need a bit more effort, as they **aren't automated at the moment**:
-   - Find the build of the stable release you want to target (usually different for pycharm and idea, should have three components)
-   - Build number is avaliable on JetBrains website:
-     - IDEA: https://www.jetbrains.com/idea/download/other.html
-     - PyCharm: https://www.jetbrains.com/pycharm/download/other.html
-   - Update the `version` & `buildNumber` fields in source/ides.json
-   - Empty the `ideaHash`, `androidHash`, `jpsHash` and `restarterHash` (only `ideaHash` and `restarterHash` changes on a regular basis) fields and try to build to get the new hashes
-   - Run these commands respectively:
-     - `nix build .#jetbrains.idea-community-src.src.src && ./source/build_maven.py source/idea_maven_artefacts.json result/` for IDEA
-     - `nix build .#jetbrains.pycharm-community-src.src.src && ./source/build_maven.py source/pycharm_maven_artefacts.json result/` for PyCharm
-   - Update `source/brokenPlugins.json` (from https://plugins.jetbrains.com/files/brokenPlugins.json)
-   - Do a test build
-   - If it succeeds, make a commit
-   - Run ./plugins/update_plugins.py, this will update plugins and automatically commit them
-   - make a PR/merge
-   - If it fails, ping/message GenericNerdyUsername or the nixpkgs Jetbrains maintainer team
+### Example derivations:
+
+#### "Normal" plugin
+
+```nix
+fetchzip {
+  url = "https://plugins.jetbrains.com/files/8607/786671/NixIDEA-0.4.0.18.zip";
+  hash = "sha256-JShheBoOBiWM9HubMUJvBn4H3DnWykvqPyrmetaCZiM=";
+}
+```
+#### "Single JAR file" plugin
+
+```nix
+fetchurl {
+  executable = true;
+  url = "https://plugins.jetbrains.com/files/7425/760442/WakaTime.jar";
+  hash = "sha256-DobKZKokueqq0z75d2Fo3BD8mWX9+LpGdT9C7Eu2fHc=";
+}
+```
+
+## How to update IDEs:
+ - Run `./updater/main.py`.
+   This will update binary and source IDEs.
+   After this you can commit them.
+   - See `./updater/main.py --help` for additional flags.
+   - The IDEs have `passthru.updateScript` set up to run `./updater/main.py`.
+     The script then uses the `UPDATE_NIX_*` environment variables as documented.
+
+To keep things simple, the update script generates files within the package directory:
+- `version.json`: version information for binary packages, and `urls` for the package source.
+- `source_args.json`: arguments to pass to `mkJetBrainsSource` in source packages.
+- `maven_artefacts.json`: maven artefacts used by source packages.
+
+Packages are responsible for importing these files, using `lib.importJSON`.
+Other than `maven_artefacts.json`, which is passed directly to `mkJetBrainsSource` as `mvnDeps`.
 
 ## How to add an IDE:
- - Make dummy entries in `bin/versions.json` (make sure to set the version to something older than the real one)
- - Run `bin/update_bin.py`
- - Add an entry in `bin/ides.json`
- - Add an entry in `default.nix`
+ - Add a new derivation in `/pkgs/by-name/...`
+ - Add an entry to the URL templates in `updater/updateInfo.json`
+ - Add it to the table at the top ("IDE packages")
 
 ### TODO:
- - move/copy plugin docs to nixpkgs manual
+ - get rid of remaining `overrideAttrs` in IDE drvs:
+   - see https://github.com/NixOS/nixpkgs/pull/475183#discussion_r2655348886
+   - see https://github.com/NixOS/nixpkgs/pull/475183#discussion_r2655305961
+ - cleanup this TODO list, especially the following points, which (mostly) have been here since 2023
  - replace `libxcrypt-legacy` with `libxcrypt` when supported
  - make `jetbrains-remote-dev.patch` cleaner
  - is extraLdPath needed for IDEA?
- - set meta.sourceProvenance for everything
  - from source builds:
+   - switch to Bazel builds, see https://github.com/NixOS/nixpkgs/pull/531637
    - remove timestamps in output `.jar` of `jps-bootstrap`
    - automated update scripts
-   - fetch `.jar` s from stuff built in nixpkgs when available
+   - fetch `.jar`s from stuff built in nixpkgs when available
      - what stuff built in nixpkgs provides `.jar`s we care about?
        - kotlin
    - make `configurePhase` respect `$NIX_BUILD_CORES`
@@ -59,12 +101,7 @@ To test the build process of every IDE (as well as the process for adding plugin
    - make `buildPhase` respect `$NIX_BUILD_CORES`
    - automated update script?
  - on `aarch64-linux`:
-   - test plugins
    - from source build
    - see if build (binary or source) works without expat
- - on `x86_64-darwin`:
-   - test plugins
-   - from source build
  - on `aarch64-darwin`:
-   - test plugins
    - from source build

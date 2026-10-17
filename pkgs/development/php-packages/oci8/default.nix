@@ -19,8 +19,8 @@ let
       }
     else
       {
-        version = "3.3.0";
-        sha256 = "sha256-0y5VnRKspJYE6xWeBcX2OG2pJTNbB+27GMywDv4gzwQ=";
+        version = "3.4.1";
+        sha256 = "sha256-xtYSvHUNVR38FblpNG9qZxZ/REHwiUOtqj5/2l2Q3Ss=";
       };
 in
 buildPecl {
@@ -35,10 +35,10 @@ buildPecl {
     sed -i -e 's|OCISDKMANINC=`.*$|OCISDKMANINC="${oracle-instantclient.dev}/include"|' config.m4
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Extension for Oracle Database";
-    license = licenses.php301;
+    license = lib.licenses.php301;
     homepage = "https://pecl.php.net/package/oci8";
-    maintainers = teams.php.members;
+    teams = [ lib.teams.php ];
   };
 }

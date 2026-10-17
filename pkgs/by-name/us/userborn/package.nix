@@ -7,20 +7,20 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "userborn";
-  version = "0.3.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "nikstur";
     repo = "userborn";
-    rev = version;
-    hash = "sha256-ABePye1zuGDH74BL6AP05rR9eBOYu1SoVpd2TcZQMW8=";
+    tag = finalAttrs.version;
+    hash = "sha256-YUJY5Ss29joSkBztf6r7DwSci/hTBYgmN1qkJRfhHAo=";
   };
 
-  sourceRoot = "${src.name}/rust/userborn";
+  sourceRoot = "${finalAttrs.src.name}/rust/userborn";
 
-  cargoHash = "sha256-/S2rkZyXHN5NiW9TFhKguqtf/udFcDOTfV2jYRMV14s=";
+  cargoHash = "sha256-U9RZQ9MabWJEWzMrsmEoIoEUUkFVT7igUBPalXnFeRU=";
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
@@ -33,21 +33,26 @@ rustPlatform.buildRustPackage rec {
     tests = {
       inherit (nixosTests)
         userborn
+        userborn-migration
         userborn-mutable-users
         userborn-mutable-etc
         userborn-immutable-users
         userborn-immutable-etc
+        userborn-static
+        userborn-subids
+        userborn-subids-immutable-etc
+        userborn-subids-mutable-etc
         ;
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/nikstur/userborn";
     description = "Declaratively bear (manage) Linux users and groups";
-    changelog = "https://github.com/nikstur/userborn/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    changelog = "https://github.com/nikstur/userborn/blob/${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ nikstur ];
     mainProgram = "userborn";
   };
-}
+})

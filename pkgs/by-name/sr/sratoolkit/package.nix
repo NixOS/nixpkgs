@@ -16,13 +16,13 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "sratoolkit";
 
   # NOTE: When updating make sure to update ncbi-vdb as well for versions to match
-  version = "3.1.1";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "ncbi";
     repo = "sra-tools";
     tag = finalAttrs.version;
-    hash = "sha256-WVPiAz3EFYuhBnl7BsEjJ2BTi1wAownEunVM4sdLaj8=";
+    hash = "sha256-JMdJ8F4n9WgdP2oj8MN1+QlxCSmqFzsjAovx/+RyVjk=";
   };
 
   cmakeFlags = [
@@ -49,7 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Collection of tools and libraries for using data in the INSDC Sequence Read Archives";
     license = lib.licenses.ncbiPd;
     maintainers = with lib.maintainers; [
-      thyol
       t4ccer
     ];
     platforms = lib.platforms.unix;

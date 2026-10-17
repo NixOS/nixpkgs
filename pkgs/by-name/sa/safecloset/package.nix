@@ -3,42 +3,44 @@
   rustPlatform,
   fetchFromGitHub,
   stdenv,
-  darwin,
-  xorg,
+  libxcb,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "safecloset";
-  version = "1.3.2";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "safecloset";
-    rev = "v${version}";
-    hash = "sha256-buIceYP/dZMDw3tyrzj1bY6+sIIPaVJIVj1L//jZnws=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2Mvn2gWYcIotnAOBZnTSFawF9qORCh3Pfce6SVGjO24=";
   };
 
-  cargoHash = "sha256-rxNp9dOvy/UTx6Q9pzZGccEKmIiWxzWVYyMxb+h5bqw=";
+  cargoHash = "sha256-l7/bgYpiCBBk1uKL2AQb+3UNXJLHA9AQJVMPs64Ka+Y=";
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      xorg.libxcb
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    libxcb
+  ];
 
   checkFlags = [
     # skip flaky test
     "--skip=timer::timer_tests::test_timer_reset"
   ];
 
-  meta = with lib; {
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Cross-platform secure TUI secret locker";
     homepage = "https://github.com/Canop/safecloset";
-    changelog = "https://github.com/Canop/safecloset/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/Canop/safecloset/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.agpl3Only;
+    maintainers = [ lib.maintainers.progrm_jarvis ];
     mainProgram = "safecloset";
   };
-}
+})

@@ -14,7 +14,7 @@ buildKodiAddon rec {
 
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/${lib.toLower rel}/${namespace}/${namespace}-${version}.zip";
-    sha256 = "sha256-1Wy+hxB059UoZnQlncytVT3sQ07dYAhNRnW3/QVD4ZE=";
+    hash = "sha256-1Wy+hxB059UoZnQlncytVT3sQ07dYAhNRnW3/QVD4ZE=";
   };
 
   propagatedBuildInputs = [
@@ -28,10 +28,10 @@ buildKodiAddon rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/websocket-client/websocket-client";
     description = "WebSocket client for Python";
-    license = licenses.lgpl2Only;
-    maintainers = teams.kodi.members;
+    license = lib.licenses.lgpl2Only;
+    teams = [ lib.teams.kodi ];
   };
 }

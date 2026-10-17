@@ -87,6 +87,15 @@ for module in $(< ~-/closure); do
     done || :
 done
 
+for path in $extraFirmwarePaths; do
+    mkdir -p $(dirname $out/lib/firmware/$path)
+    for name in "$path" "$path.xz" "$path.zst" ""; do
+        if cp -v --parents --no-preserve=mode lib/firmware/$name "$out" 2>/dev/null; then
+            break
+        fi
+    done
+done
+
 if test -e lib/firmware/edid ; then
     echo "lib/firmware/edid found, copying."
     mkdir -p "$out/lib/firmware"
@@ -98,9 +107,11 @@ fi
 # copy module ordering hints for depmod
 cp $kernel/lib/modules/"$version"/modules.order $out/lib/modules/"$version"/.
 cp $kernel/lib/modules/"$version"/modules.builtin $out/lib/modules/"$version"/.
+cp $kernel/lib/modules/"$version"/modules.builtin.modinfo $out/lib/modules/"$version"/.
 
 depmod -b $out -a $version
 
 # remove original hints from final derivation
 rm $out/lib/modules/"$version"/modules.order
 rm $out/lib/modules/"$version"/modules.builtin
+rm $out/lib/modules/"$version"/modules.builtin.modinfo

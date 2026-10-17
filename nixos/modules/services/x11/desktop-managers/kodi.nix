@@ -38,5 +38,7 @@ in
     ];
 
     environment.systemPackages = [ cfg.package ];
+
+    services.firewalld.packages = [ cfg.package ];
   };
 }

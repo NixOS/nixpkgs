@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Nmj9r4OzPJQ9tOdQ4MVU4xwg9jM4SWiV3U1kEGgNnEs=";
+    hash = "sha256-Nmj9r4OzPJQ9tOdQ4MVU4xwg9jM4SWiV3U1kEGgNnEs=";
   };
 
   # test_help expects architecture-dependent Linux signal numbers.
@@ -44,11 +44,11 @@ buildPythonPackage rec {
     py.test -vv -k "not test_uwsgi"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ionelmc/python-manhole";
     description = "Debugging manhole for Python applications";
     mainProgram = "manhole-cli";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ ivan ];
+    license = lib.licenses.bsd2;
+    maintainers = [ ];
   };
 }

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   autoreconfHook,
   docbook_xsl,
   docbook_xml_dtd_43,
@@ -11,27 +12,33 @@
   libunistring,
   libxslt,
   pkg-config,
-  python3,
   buildPackages,
   publicsuffix-list,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libpsl";
   version = "0.21.5";
 
   src = fetchurl {
-    url = "https://github.com/rockdaboot/libpsl/releases/download/${version}/libpsl-${version}.tar.lz";
+    url = "https://github.com/rockdaboot/libpsl/releases/download/${finalAttrs.version}/libpsl-${finalAttrs.version}.tar.lz";
     hash = "sha256-mp9qjG7bplDPnqVUdc0XLdKEhzFoBOnHMgLZdXLNOi0=";
   };
 
-  outputs =
-    [
-      "out"
-      "dev"
-    ]
-    # bin/psl-make-dafsa brings a large runtime closure through python3
-    ++ lib.optional (!stdenv.hostPlatform.isStatic) "bin";
+  patches = [
+    # Can be dropped on next release, or if we switch to Meson for
+    # this package.  Test pkgsStatic.curl still builds.
+    (fetchpatch {
+      name = "static.patch";
+      url = "https://github.com/rockdaboot/libpsl/commit/490bd6f98a2addcade55028ea60c36cce07e21e4.patch";
+      hash = "sha256-7Uu9gaVuA9Aly2mmnhUVgv2BYQTSBODJ2rDl5xp0uVY=";
+    })
+  ];
+
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -47,18 +54,18 @@ stdenv.mkDerivation rec {
     libidn2
     libunistring
     libxslt
-  ] ++ lib.optional (
-    !stdenv.hostPlatform.isStatic
-    && !stdenv.hostPlatform.isWindows
-    && (stdenv.hostPlatform.isDarwin -> stdenv.buildPlatform == stdenv.hostPlatform)
-   ) python3;
+  ];
+
+  strictDeps = true;
 
   propagatedBuildInputs = [
     publicsuffix-list
   ];
 
-  postPatch = lib.optionalString (!stdenv.hostPlatform.isStatic) ''
-    patchShebangs src/psl-make-dafsa
+  # bin/psl-make-dafsa brings a large runtime closure through python3
+  # use the libpsl-with-scripts package if you need this
+  postInstall = ''
+    rm $out/bin/psl-make-dafsa $out/share/man/man1/psl-make-dafsa*
   '';
 
   preAutoreconf = ''
@@ -78,7 +85,9 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  __structuredAttrs = true;
+
+  meta = {
     description = "C library for the Publix Suffix List";
     longDescription = ''
       libpsl is a C library for the Publix Suffix List (PSL). A "public suffix"
@@ -88,11 +97,11 @@ stdenv.mkDerivation rec {
       the domain in a user interface or sorting domain lists by site.
     '';
     homepage = "https://rockdaboot.github.io/libpsl/";
-    changelog = "https://raw.githubusercontent.com/rockdaboot/libpsl/libpsl-${version}/NEWS";
-    license = licenses.mit;
-    maintainers = [ maintainers.c0bw3b ];
+    changelog = "https://raw.githubusercontent.com/rockdaboot/libpsl/${finalAttrs.version}/NEWS";
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "psl";
-    platforms = platforms.unix ++ platforms.windows;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
     pkgConfigModules = [ "libpsl" ];
   };
-}
+})

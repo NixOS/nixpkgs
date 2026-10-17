@@ -1,31 +1,30 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
   nbval,
+  writableTmpDirAsHomeHook,
   fetchurl,
 }:
 buildPythonPackage rec {
   pname = "ziafont";
-  version = "0.9";
+  version = "0.11";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "cdelker";
     repo = "ziafont";
     tag = version;
-    hash = "sha256-S7IDL3ItP14/GrCUtSTT+JWuqRAY/Po0Kerq8mggDdg=";
+    hash = "sha256-KjJ+/Yo5mLV6m7Y0eIGHECH0RvdI+eaFTccDmytNTKI=";
   };
 
   build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    writableTmpDirAsHomeHook
     nbval
   ];
 
@@ -38,7 +37,7 @@ buildPythonPackage rec {
     in
     lib.concatMapStrings copyFontCmd checkFonts;
 
-  pytestFlagsArray = [ "--nbval-lax" ];
+  pytestFlags = [ "--nbval-lax" ];
 
   pythonImportsCheck = [ "ziafont" ];
 

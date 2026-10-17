@@ -1,13 +1,16 @@
 {
   buildGoModule,
   authentik,
+  apiGoVendorHook,
+  vendorHash,
 }:
 
 buildGoModule {
   pname = "authentik-radius-outpost";
   inherit (authentik) version src;
+  inherit vendorHash;
 
-  vendorHash = "sha256-FyRTPs2xfostV2x03IjrxEYBSrsZwnuPn+oHyQq1Kq0=";
+  nativeBuildInputs = [ apiGoVendorHook ];
 
   env.CGO_ENABLED = 0;
 

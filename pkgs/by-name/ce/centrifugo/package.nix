@@ -1,36 +1,38 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
-, nixosTests
-, testers
-, centrifugo
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+  nixosTests,
+  testers,
+  centrifugo,
 }:
 let
   # Inspect build flags with `go version -m centrifugo`.
   statsEndpoint = "https://graphite-prod-01-eu-west-0.grafana.net/graphite/metrics,https://stats.centrifugal.dev/usage";
-  statsToken = "425599:eyJrIjoi" +
-    "OWJhMTcyZGNjN2FkYjEzM2E1OTQwZjIyMTU3MTBjMjUyYzAyZWE2MSIsIm4iOiJVc2FnZSBTdGF0cyIsImlkIjo2NDUzOTN9";
+  statsToken =
+    "425599:eyJrIjoi"
+    + "OWJhMTcyZGNjN2FkYjEzM2E1OTQwZjIyMTU3MTBjMjUyYzAyZWE2MSIsIm4iOiJVc2FnZSBTdGF0cyIsImlkIjo2NDUzOTN9";
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "centrifugo";
-  version = "5.4.9";
+  version = "6.9.6";
 
   src = fetchFromGitHub {
     owner = "centrifugal";
     repo = "centrifugo";
-    rev = "v${version}";
-    hash = "sha256-FDtAkoN1bdqVUEP0obbXBfQfVRpZN5YXbU1KT1yXWuI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Tx64oIRGVymqhMHZ8xv8axhAiENbMszna1uj9gdSteE=";
   };
 
-  vendorHash = "sha256-WfYN7bhtOPDp2UeB/WqtN3dD3+WO9lIxnXe2iTqn000=";
+  vendorHash = "sha256-Ps9twv+q0looN4WHr4wYof1ri/Xy99M13zMpZDItLOQ=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/centrifugal/centrifugo/v5/internal/build.Version=${version}"
-    "-X=github.com/centrifugal/centrifugo/v5/internal/build.UsageStatsEndpoint=${statsEndpoint}"
-    "-X=github.com/centrifugal/centrifugo/v5/internal/build.UsageStatsToken=${statsToken}"
+    "-X=github.com/centrifugal/centrifugo/v6/internal/build.Version=${finalAttrs.version}"
+    "-X=github.com/centrifugal/centrifugo/v6/internal/build.UsageStatsEndpoint=${statsEndpoint}"
+    "-X=github.com/centrifugal/centrifugo/v6/internal/build.UsageStatsToken=${statsToken}"
   ];
 
   excludedPackages = [
@@ -44,7 +46,7 @@ buildGoModule rec {
       version = testers.testVersion {
         package = centrifugo;
         command = "centrifugo version";
-        version = "v${version}";
+        version = "v${finalAttrs.version}";
       };
     };
   };
@@ -52,9 +54,12 @@ buildGoModule rec {
   meta = {
     description = "Scalable real-time messaging server";
     homepage = "https://centrifugal.dev";
-    changelog = "https://github.com/centrifugal/centrifugo/releases/tag/v${version}";
+    changelog = "https://github.com/centrifugal/centrifugo/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.tie ];
+    maintainers = [
+      lib.maintainers.tie
+      lib.maintainers.valodim
+    ];
     mainProgram = "centrifugo";
   };
-}
+})

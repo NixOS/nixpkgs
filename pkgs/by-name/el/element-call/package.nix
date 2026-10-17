@@ -1,51 +1,121 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchYarnDeps
-, yarnConfigHook
-, yarnBuildHook
-, yarnInstallHook
-, nodejs
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pnpm_11,
+  pnpmConfigHook,
+  fetchPnpmDeps,
+  nodejs,
+  runCommand,
 }:
 
 let
-  inherit (stdenv.hostPlatform) system;
-  throwSystem = throw "Unsupported system: ${system}";
-  offlineCacheHash = {
-    x86_64-linux = "sha256-bjWPoci9j3LZnOfDgmRVqQp1L2tXBwHQOryn+p5B1Mc=";
-    aarch64-linux = "sha256-bjWPoci9j3LZnOfDgmRVqQp1L2tXBwHQOryn+p5B1Mc=";
-    x86_64-darwin = "sha256-bjWPoci9j3LZnOfDgmRVqQp1L2tXBwHQOryn+p5B1Mc=";
-    aarch64-darwin = "sha256-bjWPoci9j3LZnOfDgmRVqQp1L2tXBwHQOryn+p5B1Mc=";
-  }.${system} or throwSystem;
+  pnpm = pnpm_11;
+
+  # Separately build matrix-js-sdk, as upstream expects to 'pnpm i && pnpm build' in the dependency's directory
+  # Keep this in sync with upstream locked version (likely a stable release, but not always latest)
+  matrix-js-sdk = stdenv.mkDerivation (finalAttrs: {
+    pname = "matrix-js-sdk";
+    version = "42.3.0-rc.0-unstable-2026-08-25";
+
+    src = fetchFromGitHub {
+      owner = "matrix-org";
+      repo = "matrix-js-sdk";
+      rev = "24929be0e741be6a5d0a7226f1c682e245263b8a";
+      hash = "sha256-RCGrdF6S+b0uRYFIt2YJ5FjXoyh6zvQyIHovL8SXySE=";
+    };
+
+    pnpmDeps = fetchPnpmDeps {
+      inherit (finalAttrs) pname version src;
+      inherit pnpm;
+      fetcherVersion = 4;
+      hash = "sha256-X03l+H+GiVsCtUzMxpRZS4B1QeUPyJ/dcj/Arbp/llM=";
+    };
+
+    nativeBuildInputs = [
+      nodejs
+      pnpmConfigHook
+      pnpm
+    ];
+
+    buildPhase = ''
+      runHook preBuild
+      pnpm build
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir $out
+      cp -r src $out/
+      cp -r lib $out/
+      cp package.json $out/
+
+      runHook postInstall
+    '';
+  });
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "element-call";
-  version = "0.7.1";
+  version = "0.26.1";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "element-call";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-HmkFr2DroN1uNNH2pnRwE7vsJsEPLYU6yhroiuR/E6Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-S47A3l5IEKia06iUqgVo6gWkBLR8ncckNHKvlf591g4=";
   };
 
-  offlineCache = fetchYarnDeps {
-    yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = offlineCacheHash;
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-akLaHs+ERvsTsb8zCIS7vMNJo9h5cjn+60O/TatOxzE=";
   };
+
+  inherit matrix-js-sdk;
 
   nativeBuildInputs = [
-    yarnConfigHook
-    yarnBuildHook
-    yarnInstallHook
     nodejs
+    pnpmConfigHook
+    pnpm
   ];
 
-  meta = with lib; {
+  buildPhase = ''
+    runHook preBuild
+    # Instead of making an override, invalidating the pnpm lock, just add the built files in lib right before invoking pnpm build
+    cp -r ${finalAttrs.matrix-js-sdk}/* node_modules/matrix-js-sdk/
+    pnpm build
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir $out
+    cp -r dist/* $out
+
+    runHook postInstall
+  '';
+
+  passthru = {
+    tests.build = runCommand "${finalAttrs.pname}-test" { } ''
+      test -f ${finalAttrs.finalPackage}/index.html
+      test -d ${finalAttrs.finalPackage}/assets
+      touch $out
+    '';
+    inherit (finalAttrs) matrix-js-sdk;
+  };
+
+  meta = {
+    changelog = "https://github.com/element-hq/element-call/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/element-hq/element-call";
-    description = "Group calls powered by Matrix";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ kilimnik ];
-    mainProgram = "element-call";
+    description = "Matrix client for group calls on the web";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
+      bartoostveen
+      kilimnik
+    ];
   };
 })

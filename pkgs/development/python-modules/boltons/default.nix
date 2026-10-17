@@ -2,23 +2,32 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
+  flit-core,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "boltons";
-  version = "24.1.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "25.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mahmoud";
     repo = "boltons";
     tag = version;
-    hash = "sha256-rKBuqJ4EAm0OH97oeGOgcTcMWsloyU2u/PaBEKhm8dA=";
+    hash = "sha256-kBOU17/jRRAGb4MGawY0PY31OJf5arVz+J7xGBoMBkg=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "pytest9-compat.patch";
+      url = "https://github.com/mahmoud/boltons/commit/a2af58548936c51a3d859f780e54ba170a6829bb.patch";
+      hash = "sha256-NRjfEKb0doJEtS5GyrF0dJYYr2u+ukogfUmmVnsHAwM=";
+    })
+  ];
+
+  build-system = [ flit-core ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -27,7 +36,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "boltons" ];
 
-  meta = with lib; {
+  meta = {
     description = "Constructs, recipes, and snippets extending the Python standard library";
     longDescription = ''
       Boltons is a set of over 200 BSD-licensed, pure-Python utilities
@@ -46,7 +55,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/mahmoud/boltons";
     changelog = "https://github.com/mahmoud/boltons/blob/${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ twey ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ twey ];
   };
 }

@@ -1,8 +1,9 @@
 {
   lib,
   awscrt,
+  cacert,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
   # build-system
   setuptools,
@@ -19,17 +20,23 @@
 
 buildPythonPackage rec {
   pname = "botocore";
-  version = "1.35.30"; # N.B: if you change this, change boto3 and awscli to a matching version
+  version = "1.43.79"; # N.B: if you change this, change boto3 and awscli to a matching version
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-q1NQ6KUOSNNx+i1RfWXCmkDEN4jLmhU4f5PqxaI98P0=";
+  src = fetchFromGitHub {
+    owner = "boto";
+    repo = "botocore";
+    tag = version;
+    hash = "sha256-TfrwQiVf7Uc298xllNUcyjAk4btDcjSWVrXt2gfHGew=";
   };
 
-  pythonRelaxDeps = [ "urllib3" ];
+  postPatch = ''
+    ln -sf ${cacert}/etc/ssl/certs/ca-no-trust-rules-bundle.crt botocore/cacert.pem
+  '';
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+  ];
 
   dependencies = [
     jmespath
@@ -59,7 +66,7 @@ buildPythonPackage rec {
   meta = {
     description = "Low-level interface to a growing number of Amazon Web Services";
     homepage = "https://github.com/boto/botocore";
-    changelog = "https://github.com/boto/botocore/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/boto/botocore/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ anthonyroussel ];
   };

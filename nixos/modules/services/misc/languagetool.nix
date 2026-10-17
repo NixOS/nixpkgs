@@ -55,12 +55,10 @@ in
       '';
     };
 
-    jrePackage = lib.mkPackageOption pkgs "jre" { };
-
     jvmOptions = lib.mkOption {
       description = ''
         Extra command line options for the JVM running languagetool.
-        More information can be found here: https://docs.oracle.com/en/java/javase/19/docs/specs/man/java.html#standard-options-for-java
+        More information can be found here: <https://docs.oracle.com/en/java/javase/19/docs/specs/man/java.html#standard-options-for-java>
       '';
       default = [ ];
       type = lib.types.listOf lib.types.str;
@@ -70,8 +68,15 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "services"
+      "languagetool"
+      "jrePackage"
+    ] "The jre is now always taken from the package's jre attribute.")
+  ];
 
+  config = lib.mkIf cfg.enable {
     systemd.services.languagetool = {
       description = "LanguageTool HTTP server";
       wantedBy = [ "multi-user.target" ];
@@ -89,7 +94,7 @@ in
         ProtectHome = "yes";
         Restart = "on-failure";
         ExecStart = ''
-          ${cfg.jrePackage}/bin/java \
+          ${lib.getExe cfg.package.jre} \
             -cp ${cfg.package}/share/languagetool-server.jar \
             ${toString cfg.jvmOptions} \
             org.languagetool.server.HTTPServer \

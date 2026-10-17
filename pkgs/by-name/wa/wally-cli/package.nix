@@ -6,7 +6,7 @@
   libusb1,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "wally-cli";
   version = "2.0.1";
 
@@ -19,21 +19,22 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "zsa";
     repo = "wally-cli";
-    rev = "${version}-linux";
-    sha256 = "NuyQHEygy4LNqLtrpdwfCR+fNy3ZUxOClVdRen6AXMc=";
+    # The newer of two 2.0.1 tags; fixes flashing on darwin.
+    tag = "${finalAttrs.version}-osx";
+    hash = "sha256-8CJreOB+I07oj9dnJIKNnyoekcBy9tmo5qBwYq3qY4E=";
   };
 
-  vendorHash = "sha256-HffgkuKmaOjTYi+jQ6vBlC50JqqbYiikURT6TCqL7e0=";
+  vendorHash = "sha256-m2QuNd0/cfAdFdVzctG+E7t/OsslcufXyh6HX2i1KKg=";
 
-  meta = with lib; {
+  meta = {
     description = "Tool to flash firmware to mechanical keyboards";
     mainProgram = "wally-cli";
     homepage = "https://ergodox-ez.com/pages/wally-planck";
-    platforms = with platforms; linux ++ darwin;
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    platforms = with lib.platforms; linux ++ darwin;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       spacekookie
       r-burns
     ];
   };
-}
+})

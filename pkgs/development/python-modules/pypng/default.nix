@@ -8,17 +8,17 @@
 
 buildPythonPackage rec {
   pname = "pypng";
-  version = "0.20220715.0";
+  version = "0.20250521.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "drj11";
     repo = "pypng";
-    rev = "refs/tags/${pname}-${version}";
-    hash = "sha256-tTnsGCAmHexDWm/T5xpHpcBaQcBEqMfTFaoOAeC+pDs=";
+    tag = "pypng-${version}";
+    hash = "sha256-Q1LXSHMM6pUKM0ZiuS1nYnlR4QKmXcN/K4raXTHr0Tg=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   patches = [
     # pngsuite is imported by code/test_png.py but is not defined in
@@ -38,10 +38,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Pure Python library for PNG image encoding/decoding";
-    homepage = "https://github.com/drj11/pypng";
-    license = licenses.mit;
-    maintainers = with maintainers; [ prusnak ];
+    homepage = "https://gitlab.com/drj11/pypng";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ prusnak ];
   };
 }

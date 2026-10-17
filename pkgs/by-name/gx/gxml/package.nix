@@ -54,16 +54,18 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail ">=0" ">= 0"
   '';
 
-  doCheck = true;
+  # https://github.com/NixOS/nixpkgs/issues/407969
+  doCheck = false;
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
-    description = "GXml provides a GObject API for manipulating XML and a Serializable framework from GObject to XML";
+  meta = {
+    description = "Provides a GObject API for manipulating XML and a Serializable framework from GObject to XML";
     homepage = "https://gitlab.gnome.org/GNOME/gxml";
     changelog = "https://gitlab.gnome.org/GNOME/gxml/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ jmarmstrong1207 ] ++ teams.gnome.members;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ jmarmstrong1207 ];
+    teams = [ lib.teams.gnome ];
   };
 })

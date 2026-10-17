@@ -3,25 +3,32 @@
   stdenv,
   fetchurl,
   copyDesktopItems,
-  libX11,
-  libXpm,
+  libx11,
+  libxpm,
   libpng,
   makeDesktopItem,
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ace-of-penguins";
   version = "1.4";
 
   src = fetchurl {
-    url = "http://www.delorie.com/store/ace/ace-${version}.tar.gz";
+    url = "https://www.delorie.com/store/ace/ace-${finalAttrs.version}.tar.gz";
     hash = "sha256-H+47BTOSGkKHPAYj8z2HOgZ7HuxY8scMAUSRRueaTM4=";
   };
 
   patches = [
     # Fixes a bunch of miscompilations in modern environments
     ./fixup-miscompilations.patch
+    # make-imglib.c:205:5: error: 'return' with no value, in function returning non-void [-Wreturn-mismatch]
+    # imagelib.c:109:17: error: implicit declaration of function 'malloc' [-Wimplicit-function-declaration]
+    ./fix-gcc-14.patch
+    # error: initialization of 'void (*)(int,  int,  int)' from incompatible pointer type 'void (*)(void)' [-Wincompatible-pointer-types]
+    ./fix-gcc-15.patch
+    # fixes Wayland segfault from missing X11 fonts by providing a fallback
+    ./fix-wayland-segfault.patch
   ];
 
   nativeBuildInputs = [
@@ -29,8 +36,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libX11
-    libXpm
+    libx11
+    libxpm
     libpng
     zlib
   ];
@@ -38,7 +45,7 @@ stdenv.mkDerivation rec {
   desktopItems =
     let
       generateItem = gameName: {
-        name = "${pname}-${gameName}";
+        name = "ace-of-penguins-${gameName}";
         exec = "${placeholder "out"}/bin/${gameName}";
         comment = "Ace of Penguins ${gameName} Card Game";
         desktopName = gameName;
@@ -61,8 +68,8 @@ stdenv.mkDerivation rec {
       "thornq"
     ];
 
-  meta = with lib; {
-    homepage = "http://www.delorie.com/store/ace/";
+  meta = {
+    homepage = "https://www.delorie.com/store/ace/";
     description = "Solitaire games in X11";
     longDescription = ''
       The Ace of Penguins is a set of Unix/X solitaire games based on the ones
@@ -73,8 +80,8 @@ stdenv.mkDerivation rec {
       minesweeper, pegged, solitaire, taipei (with editor!), and thornq (by
       Martin Thornquist).
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
-}
+})

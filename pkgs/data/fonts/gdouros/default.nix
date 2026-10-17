@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 let
@@ -70,33 +71,29 @@ let
       hash,
       description,
     }:
-    stdenvNoCC.mkDerivation rec {
+    stdenvNoCC.mkDerivation {
       inherit pname version;
 
       src = fetchzip {
-        url = "https://web.archive.org/web/20240212172059/https://dn-works.com/wp-content/uploads/2020/UFAS-Fonts/${file}";
+        url = "https://web.archive.org/web/20221006174450/https://dn-works.com/wp-content/uploads/2020/UFAS-Fonts/${file}";
         stripRoot = false;
         inherit hash;
       };
 
-      installPhase = ''
-        runHook preInstall
+      nativeBuildInputs = [ installFonts ];
 
-        mkdir -p $out/share/{fonts/opentype,doc/${pname}}
-        mv *.otf                -t "$out/share/fonts/opentype"
-        mv *.{odt,ods,pdf,xlsx}       -t "$out/share/doc/${pname}"  || true  # install docs if any
-
-        runHook postInstall
+      postInstall = ''
+        install -Dm644 *.{odt,ods,pdf,xlsx} -t "$out/share/doc/${pname}" || true  # install docs if any
       '';
 
       meta = {
         inherit description;
-        # see https://web.archive.org/web/20240212172059/https://dn-works.com/wp-content/uploads/2020/UFAS-Docs/License.pdf
+        # see https://web.archive.org/web/20221006174450/https://dn-works.com/wp-content/uploads/2020/UFAS-Docs/License.pdf
         # quite draconian: non-commercial, no modifications,
         # no redistribution, "a single instantiation and no
         # network installation"
         license = lib.licenses.unfree;
-        homepage = "https://web.archive.org/web/20240212172059/https://dn-works.com/ufas/";
+        homepage = "https://web.archive.org/web/20221006174450/https://dn-works.com/ufas/";
       };
     };
 in

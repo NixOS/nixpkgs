@@ -9,10 +9,9 @@
   fftwSinglePrec,
   libsamplerate,
   qtbase,
-  darwin,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "liblastfm-unstable";
   version = "2019-08-23";
 
@@ -31,6 +30,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # CMake 2.8.6 is deprecated and no longer supported by CMake > 4
+  # https://github.com/NixOS/nixpkgs/issues/445447
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 2.8.6)" \
+      "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   nativeBuildInputs = [
     pkg-config
     which
@@ -40,19 +47,19 @@ stdenv.mkDerivation rec {
     fftwSinglePrec
     libsamplerate
     qtbase
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.SystemConfiguration;
+  ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (
-    stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11"
-  ) "-std=c++11";
+  env.NIX_CFLAGS_COMPILE =
+    (lib.optionalString (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11") "-std=c++11")
+    + (lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-dynamic-exception-spec");
 
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lastfm/liblastfm";
     description = "Official LastFM library";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
   };
 }

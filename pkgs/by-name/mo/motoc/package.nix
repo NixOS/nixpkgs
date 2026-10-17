@@ -6,24 +6,18 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "motoc";
-  version = "0.3.4";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "galister";
     repo = "motoc";
-    tag = "v${version}";
-    hash = "sha256-CAKgh9uddDhaFp2O62o1nNZ/ZWJbCR/7dMaI9V992Xk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XvqI6rwy7AOWjJNojs/nk5RsN/BUVTlx8GACiot0pUY=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "libmonado-rs-0.1.0" = "sha256-bbbo/Mkix6nUGLwplvj6m8IXOcZY5UoWc1xZnI67IlU=";
-      "openxr-0.19.0" = "sha256-kbEYoN4UvUEaZA9LJWEKx1X1r+l91GjTWs1hNXhr7cw=";
-    };
-  };
+  cargoHash = "sha256-SLNnRXCavAyOqbKvzsG660yTK5Bcff/VM+EQ1K3npng=";
 
   buildInputs = [
     openxr-loader
@@ -39,4 +33,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ pandapip1 ];
     mainProgram = "motoc";
   };
-}
+})

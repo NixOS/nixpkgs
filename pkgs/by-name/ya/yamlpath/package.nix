@@ -2,27 +2,29 @@
   lib,
   fetchFromGitHub,
   hiera-eyaml,
-  python3,
+  python3Packages,
+  nix-update-script,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "yamlpath";
-  version = "3.8.0";
-  format = "setuptools";
+  version = "3.9.1";
+  pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "wwkimball";
-    repo = pname;
-    tag = "v${version}";
-    sha256 = "sha256-6N2s/LWFa3mgMQ88rt3IaWk+b2PTWfT7z1mi+ioQEyU=";
+    repo = "yamlpath";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-g6DCm2m4521xACWZ6D/HjaWKthSxlNeUocNnUNArWRk=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python3Packages; [
     python-dateutil
     ruamel-yaml
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     hiera-eyaml
     mock
     pytest-console-scripts
@@ -37,19 +39,17 @@ python3.pkgs.buildPythonApplication rec {
     "yamlpath"
   ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Command-line processors for YAML/JSON/Compatible data";
     homepage = "https://github.com/wwkimball/yamlpath";
-    changelog = "https://github.com/wwkimball/yamlpath/releases/tag/v${version}";
+    changelog = "https://github.com/wwkimball/yamlpath/releases/tag/v${finalAttrs.version}";
     longDescription = ''
       Command-line get/set/merge/validate/scan/convert/diff processors for YAML/JSON/Compatible data
       using powerful, intuitive, command-line friendly syntax
     '';
-    license = licenses.isc;
-    maintainers = with maintainers; [ Flakebi ];
-
-    # No support for ruamel.yaml > 0.17.21
-    # https://github.com/wwkimball/yamlpath/issues/217
-    broken = true;
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ drupol ];
   };
-}
+})

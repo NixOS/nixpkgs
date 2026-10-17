@@ -6,8 +6,8 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "see";
-  version = "unstable-2023-03-19";
-  format = "pyproject";
+  version = "0-unstable-2023-03-19";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Textualize";

@@ -16,7 +16,7 @@
   llvmPackages,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   inherit (cppe)
     pname
     version
@@ -42,7 +42,9 @@ buildPythonPackage rec {
 
   buildInputs = [ pybind11 ] ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
-  NIX_CFLAGS_LINK = lib.optional stdenv.cc.isClang "-lomp";
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_LINK = "-lomp";
+  };
 
   hardeningDisable = lib.optional stdenv.cc.isClang "strictoverflow";
 

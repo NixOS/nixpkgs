@@ -11,12 +11,12 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ba6eca5cb5ba02bba4c9f4f985af80c54ec3dccf94cfcd190154386255e47543";
+    hash = "sha256-um7KXLW6ArukyfT5ha+AxU7D3M+Uz80ZAVQ4YlXkdUM=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Display simple tables in terminals";
     homepage = "https://github.com/Robpol86/terminaltables";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

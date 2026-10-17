@@ -4,13 +4,18 @@
   appstream-glib,
   blueprint-compiler,
   cargo,
+  dbus,
   desktop-file-utils,
-  fetchFromGitea,
+  fetchFromCodeberg,
   glib,
+  glycin-loaders,
   gst_all_1,
   gtk4,
   hicolor-icon-theme,
+  lcms2,
   libadwaita,
+  libglycin,
+  libseccomp,
   libxml2,
   meson,
   ninja,
@@ -21,30 +26,28 @@
   sqlite,
   wrapGAppsHook4,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "recordbox";
-  version = "0.9.0";
+  version = "0.11.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "edestcroix";
     repo = "Recordbox";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-KfIlh9ORqjJ5V8mNOx7Q9jsYg4OJDX6q+ht+eckxMRU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-HskhMZy8y61c/j/F5e5aM41AQ8t+TCUq/iY23SFB92o=";
   };
 
-  # Patch in our Cargo.lock and ensure AppStream tests don't use the network
-  # TODO: Switch back to the default `validate` when the upstream file actually
-  # passes it
   postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-
-    substituteInPlace data/meson.build \
-      --replace-fail "['validate', appstream_file]" "['validate-relax', '--nonet', appstream_file]"
+    # With rustc of version 1.96.0 or later, the following error will occur:
+    # `error[E0446]: private type `LyricsSaveDestination` in public interface`.
+    # See also the upstream issue <https://codeberg.org/edestcroix/Recordbox/issues/258>.
+    sed -i 's/enum LyricsSaveDestination/pub enum LyricsSaveDestination/' src/lyrics/edit_dialog.rs
   '';
 
-  cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-xHukIMUG5himj1umKn+IKM7kJ29MH/pt/jPEHd2EeT0=";
+  };
 
   strictDeps = true;
 
@@ -56,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib # For `glib-compile-schemas`
     gtk4 # For `gtk-update-icon-cache`
     libxml2 # For `xmllint`
+    libglycin.patchVendorHook
     meson
     ninja
     pkg-config
@@ -65,21 +69,26 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook4
   ];
 
-  buildInputs =
-    [
-      gtk4
-      hicolor-icon-theme
-      libadwaita
-      sqlite
-    ]
-    ++ (with gst_all_1; [
-      gst-plugins-bad
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-rs
-      gst-plugins-ugly
-      gstreamer
-    ]);
+  buildInputs = [
+    libglycin.setupHook
+    glycin-loaders
+    dbus
+    gtk4
+    hicolor-icon-theme
+    lcms2
+    libadwaita
+    libseccomp
+    sqlite
+  ]
+  ++ (with gst_all_1; [
+    gst-libav
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-rs
+    gst-plugins-ugly
+    gstreamer
+  ]);
 
   mesonBuildType = "release";
 
@@ -96,12 +105,13 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script { extraArgs = [ "--generate-lockfile" ]; };
   };
 
   meta = {
     description = "Relatively simple music player";
     homepage = "https://codeberg.org/edestcroix/Recordbox";
+    changelog = "https://codeberg.org/edestcroix/Recordbox/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "recordbox";

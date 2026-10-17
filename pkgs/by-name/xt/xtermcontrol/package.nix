@@ -4,13 +4,13 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
-  version = "3.8";
+stdenv.mkDerivation (finalAttrs: {
+  version = "3.10";
   pname = "xtermcontrol";
 
   src = fetchurl {
-    url = "https://thrysoee.dk/xtermcontrol/xtermcontrol-${version}.tar.gz";
-    sha256 = "sha256-Vh6GNiDkjNhaD9U/3fG2LpMLN39L3jRUgG/FQeG1z40=";
+    url = "https://thrysoee.dk/xtermcontrol/xtermcontrol-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-Prl7HZ2KrhutT+LEHKOj27ENLWfmykWZqh9jGkBQPe4=";
   };
 
   meta = {
@@ -27,4 +27,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.derchris ];
     mainProgram = "xtermcontrol";
   };
-}
+})

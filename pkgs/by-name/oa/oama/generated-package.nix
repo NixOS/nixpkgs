@@ -4,12 +4,15 @@
   mkDerivation,
   aeson,
   base,
+  base64-bytestring,
   bytestring,
   containers,
+  cryptohash-sha256,
   directory,
   fetchgit,
   hsyslog,
   http-conduit,
+  http-types,
   lib,
   mtl,
   network,
@@ -17,6 +20,7 @@
   optparse-applicative,
   pretty-simple,
   process,
+  random,
   streaming-commons,
   string-qq,
   strings,
@@ -30,29 +34,33 @@
 }:
 mkDerivation {
   pname = "oama";
-  version = "0.14";
+  version = "0.22.0";
   src = fetchgit {
     url = "https://github.com/pdobsan/oama.git";
-    sha256 = "1hdhkc6hh4nvx31vkaii7hd2rxlwqrsvr6i1i0a9r1xlda05ffq0";
-    rev = "4e1ffd3001034771d284678f0160060c1871707c";
-    fetchSubmodules = true;
+    sha256 = "1lasr8psfsgc43in6lgaf7byvmdvanhg7idxijz504z6ga7v0pnj";
+    rev = "e419ef10ca4feacf4818c5cd9bd5e617f7ee2ee7";
+    fetchSubmodules = false;
   };
   isLibrary = true;
   isExecutable = true;
   libraryHaskellDepends = [
     aeson
     base
+    base64-bytestring
     bytestring
     containers
+    cryptohash-sha256
     directory
     hsyslog
     http-conduit
+    http-types
     mtl
     network
     network-uri
     optparse-applicative
     pretty-simple
     process
+    random
     streaming-commons
     string-qq
     strings
@@ -67,17 +75,21 @@ mkDerivation {
   executableHaskellDepends = [
     aeson
     base
+    base64-bytestring
     bytestring
     containers
+    cryptohash-sha256
     directory
     hsyslog
     http-conduit
+    http-types
     mtl
     network
     network-uri
     optparse-applicative
     pretty-simple
     process
+    random
     streaming-commons
     string-qq
     strings
@@ -89,6 +101,6 @@ mkDerivation {
     warp
     yaml
   ];
-  license = lib.licenses.bsd3;
+  license = lib.meta.getLicenseFromSpdxId "BSD-3-Clause";
   mainProgram = "oama";
 }

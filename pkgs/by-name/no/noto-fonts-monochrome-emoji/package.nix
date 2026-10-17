@@ -1,7 +1,8 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, rename
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  rename,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -30,7 +31,7 @@ stdenvNoCC.mkDerivation {
   meta = {
     description = "Monochrome emoji font";
     homepage = "https://fonts.google.com/noto/specimen/Noto+Emoji";
-    license = [ lib.licenses.ofl ];
+    license = lib.licenses.ofl;
     maintainers = [ lib.maintainers.nicoo ];
 
     platforms = lib.platforms.all;

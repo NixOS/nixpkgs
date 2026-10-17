@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "albedo";
-  version = "0.0.16";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "coreruleset";
     repo = "albedo";
-    tag = "v${version}";
-    hash = "sha256-HMW0SIcPDCy2QNfxpMke+/d1XCNpyx6RL6RCZAmU+WE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-H/ViMVzuuQYORDiNXBgs7imy+c4IaL2pY5KVN6ecJoo=";
   };
 
-  vendorHash = "sha256-3YBcu/GEonEoORbB7x6YGpIl7kEzUQ9PAZNFB8NKb+c=";
+  vendorHash = "sha256-FBkHpTn4jG6iw1GYAuGHh2WCRro4mRgumYoGMkmv6qU=";
 
   ldflags = [
     "-s"
@@ -25,9 +25,9 @@ buildGoModule rec {
   meta = {
     description = "HTTP reflector and black hole";
     homepage = "https://github.com/coreruleset/albedo";
-    changelog = "https://github.com/coreruleset/albedo/releases/tag/v${version}";
+    changelog = "https://github.com/coreruleset/albedo/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "albedo";
   };
-}
+})

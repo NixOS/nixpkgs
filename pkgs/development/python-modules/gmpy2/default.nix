@@ -1,10 +1,8 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   isPyPy,
-  pythonOlder,
   setuptools,
   gmp,
   mpfr,
@@ -17,18 +15,18 @@
   sage,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gmpy2";
-  version = "2.2.0a2";
+  version = "2.2.2";
   pyproject = true;
 
-  disabled = isPyPy || pythonOlder "3.7";
+  disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "aleaxit";
     repo = "gmpy";
-    tag = "gmpy2-${version}";
-    hash = "sha256-luLEDEY1cezhzZo4fXmM/MUg2YyAaz7n0HwSpbNayP8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-joeHec/d82sovfASCU3nlNL6SaThnS/XYPqujiZ9h8s=";
   };
 
   build-system = [ setuptools ];
@@ -51,18 +49,6 @@ buildPythonPackage rec {
     mpmath
   ];
 
-  disabledTests =
-    lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-      # issue with some overflow logic
-      "test_mpz_to_bytes"
-      "test_mpz_from_bytes"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # TypeError: mpq() requires numeric or string argument
-      # not sure why it only fails on Darwin
-      "test_mpq_from_Decimal"
-    ];
-
   pythonImportsCheck = [ "gmpy2" ];
 
   passthru.tests = {
@@ -70,10 +56,10 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/aleaxit/gmpy/blob/${src.rev}/docs/history.rst";
+    changelog = "https://github.com/aleaxit/gmpy/blob/${finalAttrs.src.rev}/docs/history.rst";
     description = "Interface to GMP, MPFR, and MPC for Python 3.7+";
     homepage = "https://github.com/aleaxit/gmpy/";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ tomasajt ];
   };
-}
+})

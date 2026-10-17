@@ -1,0 +1,45 @@
+diff --git a/src/pflotran/makefile b/src/pflotran/makefile
+index 17587c91d..7caf73e8c 100644
+--- a/src/pflotran/makefile
++++ b/src/pflotran/makefile
+@@ -51,7 +51,7 @@ PETSC_MAKE_STOP_ON_ERROR=
+ # so that PFLOTRAN will be built with the same options as 
+ # the petsc configured in $PETSC_DIR/$PETSC_ARCH
+ 
+-MYFLAGS = -I. 
++MYFLAGS = -I. -L@HDF5_FORTRAN_LIBS@ -I@HDF5_FORTRAN_INCLUDE@
+ 
+ ###############################################################################
+ # Preprocessor flags for special PFLOTRAN features/hacks
+@@ -183,7 +183,7 @@ ifdef ug_mpi_scatter_ghost
+ endif
+ 
+ ifdef have_hdf5
+-LIBS +=  -L${HDF5_LIB} -lhdf5_fortran -lhdf5 -lz 
++LIBS +=  -L${HDF5_LIB} -lhdf5 -lhdf5_fortran -lhdf5_hl_fortran -lhdf5_f90cstub -lz
+ endif
+ 
+ # Set this accordingly on your platform
+@@ -273,7 +273,7 @@ pflotran_rxn_obj = ${pflotran_src}pflotran_rxn.o
+ 
+ # PFLOTRAN executable
+ pflotran : $(pflotran_obj)
+-	${FLINKER} -o pflotran $(pflotran_obj) ${PETSC_LIB} ${LIBS} 
++	${FLINKER} -o pflotran $(pflotran_obj) ${PETSC_LIB} ${LIBS} -lhdf5 -lhdf5_fortran -lhdf5_hl_fortran -lhdf5_f90cstub
+ 
+ # PFLOTRAN as a library
+ libpflotran.a : $(pflotran_obj)
+@@ -286,11 +286,11 @@ libpflotranchem.a : $(chem_obj) $(shared_mode_aux_obj) $(util_obj)
+ # object files lists below.... This is a workaround.
+ pflotran_rxn : libpflotranchem.a $(pflotran_rxn_obj)
+ 	${FLINKER} -o $@ $(pflotran_rxn_obj) $(chem_obj) $(shared_mode_aux_obj) \
+-	$(util_obj) ${PETSC_LIB} ${LIBS} 
++	$(util_obj) ${PETSC_LIB} ${LIBS} -lhdf5 -lhdf5_fortran -lhdf5_hl_fortran -lhdf5_f90cstub
+ 
+ # PFLOTRAN derivative test
+ pflotran_derivative : $(pflotran_base_obj) pflotran_derivative.o
+-	${FLINKER} -o pflotran_derivative $(pflotran_base_obj) pflotran_derivative.o ${PETSC_LIB} ${LIBS} 
++	${FLINKER} -o pflotran_derivative $(pflotran_base_obj) pflotran_derivative.o ${PETSC_LIB} ${LIBS} -lhdf5 -lhdf5_fortran -lhdf5_hl_fortran -lhdf5_f90cstub
+ 
+ $(SRC_DIR)/pflotran_provenance.F90 : FORCE
+ ifeq ($(UPDATE_PROVENANCE),1)

@@ -3,23 +3,26 @@
   buildPythonPackage,
   cython,
   fetchPypi,
-  pythonOlder,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "clickhouse-cityhash";
-  version = "1.0.2.4";
+  version = "1.0.2.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ezEl19CqE8LMTnWDqWWmv7CqlqEhMUdbRCVSustV9Pg=";
+    inherit (finalAttrs) version;
+    pname = "clickhouse_cityhash";
+    hash = "sha256-Yq9sraxmVWE3cGZKsmgCjlyLcvyXgrMMD12HJK9Sx78=";
   };
 
-  nativeBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "Cython>=3.0,<3.1" "Cython>=3.0"
+  '';
+
+  build-system = [
     cython
     setuptools
   ];
@@ -28,10 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "clickhouse_cityhash" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python-bindings for CityHash, a fast non-cryptographic hash algorithm";
     homepage = "https://github.com/xzkostyan/python-cityhash";
-    license = licenses.upl;
-    maintainers = with maintainers; [ breakds ];
+    changelog = "https://github.com/xzkostyan/clickhouse-cityhash/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ breakds ];
   };
-}
+})

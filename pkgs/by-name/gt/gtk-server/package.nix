@@ -3,19 +3,19 @@
   stdenv,
   fetchurl,
   glib,
-  gtk3,
+  gtk4,
   libffcall,
   pkg-config,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtk-server";
-  version = "2.4.6";
+  version = "2.4.7";
 
   src = fetchurl {
-    url = "https://www.gtk-server.org/stable/gtk-server-${version}.tar.gz";
-    sha256 = "sha256-sFL3y068oXDKgkEUcNnGVsNSPBdI1NzpsqdYJfmOQoA=";
+    url = "https://www.gtk-server.org/stable/gtk-server-${finalAttrs.version}.tar.gz";
+    hash = "sha256-YRvnE4fH5jWITSiMUbtlaOJFKAW0/Alzo1YVDlm8CO8=";
   };
 
   preConfigure = ''
@@ -24,21 +24,21 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    wrapGAppsHook3
+    wrapGAppsHook4
   ];
   buildInputs = [
     libffcall
     glib
-    gtk3
+    gtk4
   ];
 
-  configureOptions = [ "--with-gtk3" ];
-
-  meta = with lib; {
-    homepage = "http://www.gtk-server.org/";
-    description = "gtk-server for interpreted GUI programming";
-    license = licenses.gpl2Plus;
+  meta = {
+    homepage = "https://www.gtk-server.org/";
+    description = "Gtk-server for interpreted GUI programming";
+    changelog = "https://www.gtk-server.org/notes.txt";
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
+    mainProgram = "gtk-server";
   };
-}
+})

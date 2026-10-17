@@ -4,19 +4,26 @@
   lib,
   python3,
   nix-update-script,
+  cmake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ac-library";
-  version = "1.5.1";
+  version = "1.6";
 
   src = fetchFromGitHub {
     owner = "atcoder";
     repo = "ac-library";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AIqG98c1tcxxhYcX+NSf6Rw3onw61T5NTZtqQzT9jls=";
+    fetchSubmodules = true;
+    hash = "sha256-1wwzN/JPS6daj1vDFuEN5z20tMdLfMvEKti0sxCVlHA=";
   };
-
+  patches = [
+    # Fix type_traits_test assumptions about char signedness on platforms
+    # where char is unsigned by default (e.g. aarch64-linux).
+    # Reported upstream: https://github.com/atcoder/ac-library/issues/191
+    ./fix-char-signedness-tests.patch
+  ];
   outputs = [
     "dev"
     "out"
@@ -25,6 +32,41 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     python3
   ];
+
+  nativeInstallCheckInputs = [
+    python3.pkgs.pytest
+    cmake
+  ];
+
+  dontUseCmakeConfigure = true;
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    substituteInPlace test/test_expander.py \
+      --replace-fail "g++" "$CXX"
+    python -m pytest --ignore-glob='test/unittest/googletest/*'
+
+    pushd test/unittest
+    mkdir build
+    cd build
+    cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_STANDARD=$STDCXX
+    make
+    ctest -VV
+    popd
+
+    runHook postInstallCheck
+  '';
+
+  # We don't need -fno-strict-overflow because it will break UBSanitize's overflow check especially when the operation number is static defined.
+  hardeningDisable = [ "strictoverflow" ];
+
+  env = {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=array-bounds"
+    ];
+  };
 
   installPhase = ''
     runHook preInstall

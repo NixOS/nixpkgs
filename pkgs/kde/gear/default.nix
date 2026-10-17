@@ -27,7 +27,6 @@
   calindori = callPackage ./calindori { };
   calligra = callPackage ./calligra { };
   cantor = callPackage ./cantor { };
-  cervisia = callPackage ./cervisia { };
   colord-kde = callPackage ./colord-kde { };
   dolphin = callPackage ./dolphin { };
   dolphin-plugins = callPackage ./dolphin-plugins { };
@@ -98,7 +97,9 @@
   kdf = callPackage ./kdf { };
   kdialog = callPackage ./kdialog { };
   kdiamond = callPackage ./kdiamond { };
+  kdominate = callPackage ./kdominate { };
   keditbookmarks = callPackage ./keditbookmarks { };
+  keepsecret = callPackage ./keepsecret { };
   keysmith = callPackage ./keysmith { };
   kfind = callPackage ./kfind { };
   kfourinline = callPackage ./kfourinline { };
@@ -137,7 +138,6 @@
   kmail-account-wizard = callPackage ./kmail-account-wizard { };
   kmailtransport = callPackage ./kmailtransport { };
   kmbox = callPackage ./kmbox { };
-  kmime = callPackage ./kmime { };
   kmines = callPackage ./kmines { };
   kmix = callPackage ./kmix { };
   kmousetool = callPackage ./kmousetool { };
@@ -172,7 +172,6 @@
   krecorder = callPackage ./krecorder { };
   kreversi = callPackage ./kreversi { };
   krfb = callPackage ./krfb { };
-  kross-interpreters = callPackage ./kross-interpreters { };
   kruler = callPackage ./kruler { };
   ksanecore = callPackage ./ksanecore { };
   kshisen = callPackage ./kshisen { };
@@ -200,7 +199,6 @@
   kwordquiz = callPackage ./kwordquiz { };
   libgravatar = callPackage ./libgravatar { };
   libkcddb = callPackage ./libkcddb { };
-  libkcompactdisc = callPackage ./libkcompactdisc { };
   libkdcraw = callPackage ./libkdcraw { };
   libkdegames = callPackage ./libkdegames { };
   libkdepim = callPackage ./libkdepim { };
@@ -234,15 +232,18 @@
   pim-data-exporter = callPackage ./pim-data-exporter { };
   pim-sieve-editor = callPackage ./pim-sieve-editor { };
   pimcommon = callPackage ./pimcommon { };
+  plasma-camera = callPackage ./plasma-camera { };
+  plasma-phonebook = callPackage ./plasma-phonebook { };
+  plasma-settings = callPackage ./plasma-settings { };
   plasmatube = callPackage ./plasmatube { };
   poxml = callPackage ./poxml { };
   qmlkonsole = callPackage ./qmlkonsole { };
+  qrca = callPackage ./qrca { };
   rocs = callPackage ./rocs { };
   signon-kwallet-extension = callPackage ./signon-kwallet-extension { };
   skanlite = callPackage ./skanlite { };
   skanpage = callPackage ./skanpage { };
   skladnik = callPackage ./skladnik { };
-  spectacle = callPackage ./spectacle { };
   step = callPackage ./step { };
   svgpart = callPackage ./svgpart { };
   sweeper = callPackage ./sweeper { };

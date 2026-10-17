@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "toastdriven";
     repo = "pylev";
     rev = "v${version}";
-    sha256 = "0fgxjdnvnvavnxmxxd0fl5jyr2f31g3a26bwyxcpy56mgpd095c1";
+    hash = "sha256-gZUE2n3VFH9Z93wZocYLw4nsZaEOtN5rt1ttu22T/Tk=";
   };
 
   checkPhase = ''
@@ -23,10 +23,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pylev" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Levenshtein implementation";
     homepage = "https://github.com/toastdriven/pylev";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ jakewaksbaum ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ jakewaksbaum ];
   };
 }

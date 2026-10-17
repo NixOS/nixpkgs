@@ -45,7 +45,7 @@ for line in "${autoLines[@]}"; do
     #   commit is unchanged. This is why the following is also necessary:
     # - The tree filter runs the command on each of our own commits,
     #   effectively reapplying it.
-    FILTER_BRANCH_SQUELCH_WARNING=1 git filter-branch \
+    FILTER_BRANCH_SQUELCH_WARNING=1 git filter-branch -f \
         --parent-filter "sed 's/$parent/$autoCommit/'" \
         --tree-filter "$autoCmd" \
         "$autoCommit"..HEAD

@@ -57,11 +57,11 @@ rec {
         args
         ;
 
-      meta = with lib; {
+      meta = {
         description = "Collection of tools written for use in bootstrapping";
         homepage = "https://github.com/oriansj/stage0-posix";
-        license = licenses.gpl3Plus;
-        maintainers = teams.minimal-bootstrap.members;
+        license = lib.licenses.gpl3Plus;
+        teams = [ lib.teams.minimal-bootstrap ];
         inherit platforms;
       };
     };
@@ -132,8 +132,19 @@ rec {
   # Phase-4 Build cc_arch from M0 #
   ################################
 
+  cc_arch_src =
+    if hostPlatform.isRiscV then
+      # See e.g. https://github.com/oriansj/stage0-posix-riscv64/blob/4688bc66bdfd00efd5964350c9d76bdb90a0f72e/mescc-tools-mini-kaem.kaem#L54
+      run "cc_arch_riscv_c" catm [
+        out
+        "${src}/${stage0Arch}/${m2libcArch}_defs.M1"
+        "${src}/${stage0Arch}/cc_${m2libcArch}.M1"
+      ]
+    else
+      "${src}/${stage0Arch}/cc_${m2libcArch}.M1";
+
   cc_arch-0_hex2 = run "cc_arch-0.hex2" M0 [
-    "${src}/${stage0Arch}/cc_${m2libcArch}.M1"
+    "${cc_arch_src}"
     out
   ];
   cc_arch-1_hex2 = run "cc_arch-1.hex2" catm [
@@ -159,6 +170,7 @@ rec {
     "${src}/M2-Planet/cc_reader.c"
     "${src}/M2-Planet/cc_strings.c"
     "${src}/M2-Planet/cc_types.c"
+    "${src}/M2-Planet/cc_emit.c"
     "${src}/M2-Planet/cc_core.c"
     "${src}/M2-Planet/cc_macro.c"
     "${src}/M2-Planet/cc.c"
@@ -298,6 +310,8 @@ rec {
     "-f"
     "${m2libc}/stddef.h"
     "-f"
+    "${m2libc}/sys/utsname.h"
+    "-f"
     "${m2libc}/${m2libcArch}/linux/unistd.c"
     "-f"
     "${m2libc}/${m2libcArch}/linux/fcntl.c"
@@ -306,7 +320,11 @@ rec {
     "-f"
     "${m2libc}/${m2libcArch}/linux/sys/stat.c"
     "-f"
+    "${m2libc}/ctype.c"
+    "-f"
     "${m2libc}/stdlib.c"
+    "-f"
+    "${m2libc}/stdarg.h"
     "-f"
     "${m2libc}/stdio.h"
     "-f"
@@ -379,13 +397,19 @@ rec {
     "-f"
     "${m2libc}/stddef.h"
     "-f"
+    "${m2libc}/sys/utsname.h"
+    "-f"
     "${m2libc}/${m2libcArch}/linux/fcntl.c"
     "-f"
     "${m2libc}/fcntl.c"
     "-f"
     "${m2libc}/${m2libcArch}/linux/unistd.c"
     "-f"
+    "${m2libc}/stdarg.h"
+    "-f"
     "${m2libc}/string.c"
+    "-f"
+    "${m2libc}/ctype.c"
     "-f"
     "${m2libc}/stdlib.c"
     "-f"
@@ -456,6 +480,8 @@ rec {
     "-f"
     "${m2libc}/stddef.h"
     "-f"
+    "${m2libc}/sys/utsname.h"
+    "-f"
     "${m2libc}/${m2libcArch}/linux/unistd.c"
     "-f"
     "${m2libc}/${m2libcArch}/linux/fcntl.c"
@@ -464,7 +490,11 @@ rec {
     "-f"
     "${m2libc}/${m2libcArch}/linux/sys/stat.c"
     "-f"
+    "${m2libc}/ctype.c"
+    "-f"
     "${m2libc}/stdlib.c"
+    "-f"
+    "${m2libc}/stdarg.h"
     "-f"
     "${m2libc}/stdio.h"
     "-f"
@@ -537,7 +567,7 @@ rec {
     "-f"
     "${m2libc}/stddef.h"
     "-f"
-    "${m2libc}/string.c"
+    "${m2libc}/sys/utsname.h"
     "-f"
     "${m2libc}/${m2libcArch}/linux/unistd.c"
     "-f"
@@ -545,7 +575,13 @@ rec {
     "-f"
     "${m2libc}/fcntl.c"
     "-f"
+    "${m2libc}/ctype.c"
+    "-f"
     "${m2libc}/stdlib.c"
+    "-f"
+    "${m2libc}/string.c"
+    "-f"
+    "${m2libc}/stdarg.h"
     "-f"
     "${m2libc}/stdio.h"
     "-f"

@@ -2,82 +2,81 @@
   lib,
   stdenv,
   buildPythonPackage,
-  click,
-  coverage,
-  fetchPypi,
+  fetchFromGitHub,
+
+  # build-system
   pdm-backend,
-  procps,
-  pytest-sugar,
-  pytest-xdist,
-  pytestCheckHook,
-  pythonOlder,
+
+  # dependencies
+  annotated-doc,
   rich,
   shellingham,
-  typing-extensions,
+
+  # tests
+  pytest-xdist,
+  pytest9_0CheckHook,
+  writableTmpDirAsHomeHook,
+  procps,
 }:
 
 buildPythonPackage rec {
   pname = "typer";
-  version = "0.12.5";
-  format = "pyproject";
+  version = "0.27.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-9ZLwib7cyOwbl0El1khRApw7GvFF8ErKZNaUEPDJtyI=";
+  src = fetchFromGitHub {
+    owner = "fastapi";
+    repo = "typer";
+    tag = version;
+    hash = "sha256-vBHSJoyIQawkqqhbPJGKzPjBPm42OR/Ref/k6XFJTi8=";
   };
 
-  nativeBuildInputs = [ pdm-backend ];
-
-  propagatedBuildInputs = [
-    click
-    typing-extensions
-    # Build includes the standard optional by default
-    # https://github.com/tiangolo/typer/blob/0.12.3/pyproject.toml#L71-L72
-  ] ++ optional-dependencies.standard;
-
-  optional-dependencies = {
-    standard = [
-      shellingham
-      rich
-    ];
-  };
-
-  nativeCheckInputs =
-    [
-      coverage # execs coverage in tests
-      pytest-sugar
-      pytest-xdist
-      pytestCheckHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      procps
-    ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
+  postPatch = ''
+    for f in $(find tests -type f -print); do
+      # replace `sys.executable -m coverage run` with `sys.executable`
+      sed -z -i 's/"-m",\n\?\s*"coverage",\n\?\s*"run",//g' "$f"
+      sed -i 's/-m coverage run//g' "$f"
+    done
+    # These are already included in the PYTHONPATH.
+    # Overriding PYTHONPATH breaks the tests when executed by Nix
+    # ("No module named 'typer'" error) because it's used to find `typer` too.
+    substituteInPlace tests/test_tutorial/test_subcommands/test_tutorial001.py \
+      --replace-fail 'env["PYTHONPATH"] = ":".join(list(tutorial001_py310.__path__))' ""
+    substituteInPlace tests/test_tutorial/test_subcommands/test_tutorial003.py \
+      --replace-fail 'env["PYTHONPATH"] = ":".join(list(tutorial003_py310.__path__))' ""
   '';
 
-  disabledTests =
-    [
-      "test_scripts"
-      # Likely related to https://github.com/sarugaku/shellingham/issues/35
-      # fails also on Linux
-      "test_show_completion"
-      "test_install_completion"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-      "test_install_completion"
-    ];
+  env.TIANGOLO_BUILD_PACKAGE = "typer";
+
+  build-system = [ pdm-backend ];
+
+  dependencies = [
+    annotated-doc
+    rich
+    shellingham
+  ];
+
+  nativeCheckInputs = [
+    pytest-xdist
+    pytest9_0CheckHook
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    procps
+  ];
+
+  preCheck = ''
+    # Fix "No module named 'tests'" error in tests/test_types_file.py::test_binary_stderr
+    export PYTHONPATH="$PWD:$PYTHONPATH"
+  '';
 
   pythonImportsCheck = [ "typer" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for building CLI applications";
     homepage = "https://typer.tiangolo.com/";
     changelog = "https://github.com/tiangolo/typer/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ winpat ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ winpat ];
   };
 }

@@ -15,7 +15,7 @@ buildKodiBinaryAddon rec {
     owner = "kodi-game";
     repo = "game.libretro.genplus";
     rev = "${version}-Matrix";
-    sha256 = "sha256-F3bt129lBZKlDtp7X0S0q10T9k9C2zNeHG+yIP3818Q=";
+    hash = "sha256-F3bt129lBZKlDtp7X0S0q10T9k9C2zNeHG+yIP3818Q=";
   };
 
   extraCMakeFlags = [
@@ -27,11 +27,11 @@ buildKodiBinaryAddon rec {
     libretro
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kodi-game/game.libretro.genplus";
     description = "Genesis Plus GX GameClient for Kodi";
-    platforms = platforms.all;
-    license = licenses.gpl2Only;
-    maintainers = teams.kodi.members;
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl2Only;
+    teams = [ lib.teams.kodi ];
   };
 }

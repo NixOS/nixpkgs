@@ -8,21 +8,26 @@
   zlib,
   libnetfilter_queue,
   libnfnetlink,
-
-  iptables,
-  nftables,
-  gawk,
+  libmnl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zapret";
-  version = "69.9";
+  version = "72.13";
 
   src = fetchFromGitHub {
     owner = "bol-van";
     repo = "zapret";
+
+    leaveDotGit = true;
+    postFetch = ''
+      cd "$out"
+      git rev-parse --short HEAD > $out/COMMIT
+      find "$out" -name .git -print0 | xargs -0 rm -rf
+    '';
+
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rpm9v/7twsrImeipz3I7fHUrk98qzkLQ2b4Kz3Rc+GI=";
+    hash = "sha256-jwhGhxqIhJfkmjT3Zzsy4injQWqSVRet8fZr9VA04sQ=";
   };
 
   buildInputs = [
@@ -30,55 +35,60 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     libnetfilter_queue
     libnfnetlink
+    libmnl
   ];
-  nativeBuildInputs = [
-    iptables
-    nftables
-    gawk
-  ];
+
+  preBuild = ''
+    makeFlagsArray+=("CFLAGS=-DZAPRET_GH_VER=${finalAttrs.src.tag} -DZAPRET_GH_HASH=`cat $src/COMMIT`")
+  '';
 
   makeFlags = [ "TGT=${placeholder "out"}/bin" ];
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/usr/share/zapret/init.d/sysv
-    mkdir -p $out/usr/share/docs
+    # keep $out/usr for backwards compability
+    mkdir -p $out/share $out/usr
+    ln -s ../share $out/usr/share
+
+    mkdir -p $out/share/zapret/init.d/sysv
+    mkdir -p $out/share/docs
 
     cp $src/blockcheck.sh $out/bin/blockcheck
 
     substituteInPlace $out/bin/blockcheck \
-      --replace-fail '$(cd "$EXEDIR"; pwd)' "$out/usr/share/zapret"
+      --replace-fail '$(cd "$EXEDIR"; pwd)' "$out/share/zapret"
 
-    ln -s ../../../bin/blockcheck $out/usr/share/zapret/blockcheck
+    ln -s ../../bin/blockcheck $out/share/zapret/blockcheck
 
-    cp $src/init.d/sysv/functions $out/usr/share/zapret/init.d/sysv/functions
-    cp $src/init.d/sysv/zapret $out/usr/share/zapret/init.d/sysv/init.d
+    cp $src/init.d/sysv/functions $out/share/zapret/init.d/sysv/functions
+    cp $src/init.d/sysv/zapret $out/share/zapret/init.d/sysv/init.d
 
-    substituteInPlace $out/usr/share/zapret/init.d/sysv/functions \
-      --replace-fail "/opt/zapret" "\"$out/usr/share/zapret\""
+    substituteInPlace $out/share/zapret/init.d/sysv/functions \
+      --replace-fail "/opt/zapret" "\"$out/share/zapret\""
 
-    touch $out/usr/share/zapret/config
+    touch $out/share/zapret/config
 
-    cp -r $src/docs/* $out/usr/share/docs
+    cp -r $src/docs/* $out/share/docs
 
-    mkdir -p $out/usr/share/zapret/{common,ipset}
+    mkdir -p $out/share/zapret/{common,files/fake,ipset}
 
-    cp $src/common/* $out/usr/share/zapret/common
-    cp $src/ipset/* $out/usr/share/zapret/ipset
+    cp $src/common/* $out/share/zapret/common
+    cp $src/files/fake/* $out/share/zapret/files/fake
+    cp $src/ipset/* $out/share/zapret/ipset
 
-    rm -f $out/usr/share/zapret/ipset/zapret-hosts-user-exclude.txt.default
+    rm -f $out/share/zapret/ipset/zapret-hosts-user-exclude.txt.default
 
-    mkdir -p $out/usr/share/zapret/nfq
-    ln -s ../../../../bin/nfqws $out/usr/share/zapret/nfq/nfqws
+    mkdir -p $out/share/zapret/nfq
+    ln -s ../../../bin/nfqws $out/share/zapret/nfq/nfqws
 
     for i in ip2net mdig tpws
     do
-      mkdir -p $out/usr/share/zapret/$i
-      ln -s ../../../../bin/$i $out/usr/share/zapret/$i/$i
+      mkdir -p $out/share/zapret/$i
+      ln -s ../../../bin/$i $out/share/zapret/$i/$i
     done
 
-    ln -s ../usr/share/zapret/init.d/sysv/init.d $out/bin/zapret
+    ln -s ../share/zapret/init.d/sysv/init.d $out/bin/zapret
 
     runHook postInstall
   '';
@@ -88,12 +98,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "DPI bypass multi platform";
     homepage = "https://github.com/bol-van/zapret";
-    changelog = "https://github.com/bol-van/zapret/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/bol-van/zapret/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nishimara ];
     mainProgram = "zapret";
-
-    # probably gonna work on darwin, but untested
-    broken = stdenv.hostPlatform.isDarwin;
+    platforms = lib.platforms.linux;
   };
 })

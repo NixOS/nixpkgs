@@ -2,48 +2,39 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  future,
-  mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-ipmi";
-  version = "0.5.7";
+  version = "0.6.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "kontron";
     repo = "python-ipmi";
-    tag = version;
-    hash = "sha256-vwjVUkTeVC1On1I1BtM0kBbne6CbX/6Os1+HA8WN9jU=";
+    tag = finalAttrs.version;
+    hash = "sha256-yCMT0HRpRFoC8yv5f/VKtbRdf0JuwqJRbraLPaniTek=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail "version=version," "version='${version}',"
+      --replace-fail "version=version," "version='${finalAttrs.version}',"
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ future ];
-
-  nativeCheckInputs = [
-    mock
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pyipmi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python IPMI Library";
-    mainProgram = "ipmitool.py";
     homepage = "https://github.com/kontron/python-ipmi";
-    license = with licenses; [ lgpl2Plus ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/kontron/python-ipmi/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "ipmitool.py";
   };
-}
+})

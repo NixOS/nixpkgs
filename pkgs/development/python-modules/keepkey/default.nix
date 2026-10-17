@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "keepkey";
     repo = "python-keepkey";
     rev = "v${version}";
-    sha256 = "00hqppdj3s9y25x4ad59y8axq94dd4chhw9zixq32sdrd9v8z55a";
+    hash = "sha256-qpSPdmq5aTFwjz9xCBlpjSTcFfKpNEV6ET7pIdu9GAI=";
   };
 
   propagatedBuildInputs = [
@@ -38,11 +38,11 @@ buildPythonPackage rec {
   # Remove impossible dependency constraint
   postPatch = "sed -i -e 's|hidapi==|hidapi>=|' setup.py";
 
-  meta = with lib; {
+  meta = {
     description = "KeepKey Python client";
     mainProgram = "keepkeyctl";
     homepage = "https://github.com/keepkey/python-keepkey";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ np ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ np ];
   };
 }

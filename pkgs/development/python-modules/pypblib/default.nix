@@ -11,15 +11,15 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0qlhykm9flj6cv3v0b9q40gy21yz0lnp0wxlxvb3ijkpy45r7pbi";
+    hash = "sha256-cd2TC/F3yjjW7rRzcC0F3wfhHyA4LbDHZkZSl+r0kGI=";
   };
 
   pythonImportsCheck = [ "pypblib" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pypi.org/project/pypblib/";
     description = "PBLib Python3 Bindings";
-    license = licenses.mit;
-    maintainers = [ maintainers.marius851000 ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.marius851000 ];
   };
 }

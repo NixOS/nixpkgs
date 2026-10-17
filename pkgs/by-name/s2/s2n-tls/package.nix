@@ -1,32 +1,39 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, openssl
-, nix
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  openssl,
+  nix,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "s2n-tls";
-  version = "1.5.10";
+  version = "1.7.9";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "s2n-tls";
-    rev = "v${version}";
-    hash = "sha256-oIDWlWE9HE+Zrhei2D56U/dO1VEkbQg3VLrUIopg2oc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-OGEqKjhl+gf8dq9ddIir+P4fUO+c9FGo/IsqDCCltqQ=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   buildInputs = [ openssl ]; # s2n-config has find_dependency(LibCrypto).
+
+  strictDeps = true;
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
     "-DUNSAFE_TREAT_WARNINGS_AS_ERRORS=OFF" # disable -Werror
-  ] ++ lib.optionals stdenv.hostPlatform.isMips64 [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isMips64 [
     # See https://github.com/aws/s2n-tls/issues/1592 and https://github.com/aws/s2n-tls/pull/1609
     "-DS2N_NO_PQ=ON"
   ];
@@ -37,7 +44,7 @@ stdenv.mkDerivation rec {
     # Glob for 'shared' or 'static' subdir
     for f in $out/lib/s2n/cmake/*/s2n-targets.cmake; do
       substituteInPlace "$f" \
-        --replace 'INTERFACE_INCLUDE_DIRECTORIES "''${_IMPORT_PREFIX}/include"' 'INTERFACE_INCLUDE_DIRECTORIES ""'
+        --replace-fail 'INTERFACE_INCLUDE_DIRECTORIES "''${_IMPORT_PREFIX}/include"' 'INTERFACE_INCLUDE_DIRECTORIES ""'
     done
   '';
 
@@ -45,11 +52,13 @@ stdenv.mkDerivation rec {
     inherit nix;
   };
 
-  meta = with lib; {
+  __structuredAttrs = true;
+
+  meta = {
     description = "C99 implementation of the TLS/SSL protocols";
     homepage = "https://github.com/aws/s2n-tls";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ orivej ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
-}
+})

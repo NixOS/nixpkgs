@@ -35,6 +35,7 @@
   lndir,
   makeBinaryWrapper,
   runCommand,
+  runtimeShell,
 }:
 self:
 let
@@ -125,9 +126,19 @@ runCommand (lib.appendToName "with-packages" emacs).name
             local origin_path=$2
             local dest_path=$3
 
-            # Add the path to the search path list, but only if it exists
+            # Add the path to the search path list, but only if it exists.
+            # Executables in /bin are linked by their resolved paths in case they are
+            # relative symlinks (which break when 'lndir'ed as is);
+            # see https://github.com/NixOS/nixpkgs/issues/395442
             if [[ -d "$pkg/$origin_path" ]]; then
-              $lndir/bin/lndir -silent "$pkg/$origin_path" "$out/$dest_path"
+              case "$origin_path" in
+                bin)
+                  for exe in $pkg/$origin_path/*; do
+                    ln -s "$(realpath "$exe")" "$out/$dest_path/$(basename "$exe")"
+                  done
+                  ;;
+                *) $lndir/bin/lndir -silent "$pkg/$origin_path" "$out/$dest_path";;
+              esac
             fi
           }
 
@@ -157,29 +168,55 @@ runCommand (lib.appendToName "with-packages" emacs).name
           # Begin the new site-start.el by loading the original, which sets some
           # NixOS-specific paths. Paths are searched in the reverse of the order
           # they are specified in, so user and system profile paths are searched last.
-          #
-          # NOTE: Avoid displaying messages early at startup by binding
-          # inhibit-message to t. This would prevent the Emacs GUI from showing up
-          # prematurely. The messages would still be logged to the *Messages*
-          # buffer.
           rm -f $siteStart $siteStartByteCompiled $subdirs $subdirsByteCompiled
           cat >"$siteStart" <<EOF
-          (let ((inhibit-message t))
-            (load "$emacs/share/emacs/site-lisp/site-start"))
-          ;; "$out/share/emacs/site-lisp" is added to load-path in wrapper.sh
-          ;; "$out/share/emacs/native-lisp" is added to native-comp-eln-load-path in wrapper.sh
-          (add-to-list 'exec-path "$out/bin")
+          ;;; -*- lexical-binding: t -*-
+          (load "$emacs/share/emacs/site-lisp/site-start" nil t)
           ${lib.optionalString withTreeSitter ''
             (add-to-list 'treesit-extra-load-path "$out/lib/")
           ''}
+
+          ;; Remove wrapper-added dir from EMACSLOADPATH so it's not propagated
+          ;; to any other Emacsen that might be started as subprocesses.
+          ;; Also do it for EMACSNATIVELOADPATH, which probably unnecessary.
+          (let ((restore-load-path
+                 (lambda (load-path-env-var wrapper-dir-env-var)
+                   (when-let* ((wrapper-dir (getenv wrapper-dir-env-var)))
+                     (setenv wrapper-dir-env-var nil)
+                     (when-let* ((env-load-path (getenv load-path-env-var)))
+                       (let* ((env-load-path-list (split-string env-load-path
+                                                                path-separator))
+                              (restored-env-load-path-list (remove wrapper-dir
+                                                                   env-load-path-list)))
+                         (setenv load-path-env-var
+                                 (when restored-env-load-path-list
+                                   (string-join restored-env-load-path-list
+                                                path-separator)))))))))
+            (funcall restore-load-path
+                     "EMACSLOADPATH" "emacsWithPackages_siteLisp")
+            (funcall restore-load-path
+                     "EMACSNATIVELOADPATH" "emacsWithPackages_siteLispNative"))
+
+          (let ((set-from-env (lambda (symbol env-var &optional modify)
+                                (when-let* ((value (getenv env-var)))
+                                  (set symbol (funcall (or modify #'identity) value))
+                                  (setenv env-var nil)))))
+            (funcall set-from-env
+                     'invocation-directory "emacsWithPackages_invocationDirectory"
+                     #'file-name-as-directory)
+            (funcall set-from-env
+                     'invocation-name "emacsWithPackages_invocationName"))
           EOF
 
           # Generate a subdirs.el that statically adds all subdirectories to load-path.
+          cat >"$subdirs" <<EOF
+          ;;; -*- lexical-binding: t -*-
+          EOF
           $emacs/bin/emacs \
             --batch \
             --load ${./mk-wrapper-subdirs.el} \
             --eval "(prin1 (macroexpand-1 '(mk-subdirs-expr \"$out/share/emacs/site-lisp\")))" \
-            > "$subdirs"
+            >> "$subdirs"
 
           # Byte-compiling improves start-up time only slightly, but costs nothing.
           $emacs/bin/emacs --batch -f batch-byte-compile "$siteStart" "$subdirs"
@@ -202,9 +239,10 @@ runCommand (lib.appendToName "with-packages" emacs).name
       rm -f "$out/bin/$progname"
 
       substitute ${./wrapper.sh} $out/bin/$progname \
-        --subst-var-by bash ${emacs.stdenv.shell} \
+        --subst-var-by bash ${runtimeShell} \
         --subst-var-by wrapperSiteLisp "$deps/share/emacs/site-lisp" \
         --subst-var-by wrapperSiteLispNative "$deps/share/emacs/native-lisp" \
+        --subst-var-by wrapperBinDir "$deps/bin" \
         --subst-var-by wrapperInvocationDirectory "$out/bin/" \
         --subst-var-by wrapperInvocationName "$progname" \
         --subst-var prog
@@ -228,9 +266,10 @@ runCommand (lib.appendToName "with-packages" emacs).name
 
 
       substitute ${./wrapper.sh} $out/Applications/Emacs.app/Contents/MacOS/Emacs \
-        --subst-var-by bash ${emacs.stdenv.shell} \
+        --subst-var-by bash ${runtimeShell} \
         --subst-var-by wrapperSiteLisp "$deps/share/emacs/site-lisp" \
         --subst-var-by wrapperSiteLispNative "$deps/share/emacs/native-lisp" \
+        --subst-var-by wrapperBinDir "$deps/bin" \
         --subst-var-by wrapperInvocationDirectory "$out/Applications/Emacs.app/Contents/MacOS/" \
         --subst-var-by wrapperInvocationName "Emacs" \
         --subst-var-by prog "$emacs/Applications/Emacs.app/Contents/MacOS/Emacs"

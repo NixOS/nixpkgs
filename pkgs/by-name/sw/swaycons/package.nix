@@ -4,7 +4,7 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "swaycons";
   version = "unstable-2023-11-29";
 
@@ -15,14 +15,14 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-vyZcfBH2mry8Yd41QPX4+yLv0nS9J1yrgg7lpslJs7M=";
   };
 
-  cargoHash = "sha256-cdZ7DpH//c9TulvPYd6aaXpQHYC1b+T7BrxAyr56Pf0=";
+  cargoHash = "sha256-LE+YEFmkB4EBQcuxbExN9Td5LWpI4AZgyVHXdTyq7gU=";
 
-  meta = with lib; {
-    description = "Window Icons in Sway with Nerd Fonts!";
+  meta = {
+    description = "Window Icons in Sway with Nerd Fonts";
     mainProgram = "swaycons";
     homepage = "https://github.com/allie-wake-up/swaycons";
-    license = licenses.asl20;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ aacebedo ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ aacebedo ];
   };
 }

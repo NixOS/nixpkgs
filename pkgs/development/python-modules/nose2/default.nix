@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -16,36 +15,32 @@
 
 buildPythonPackage rec {
   pname = "nose2";
-  version = "0.15.1";
+  version = "0.16.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NncPUZ31vs08v+C+5Ku/v5ufa0604DNh0oK378/E8N8=";
+    hash = "sha256-Gdta0g4mRQGo7mTj4VejdmpedEFw5Uzuy05coJsIZVo=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   optional-dependencies = {
-    coverage = [ coverage ];
+    coverage_plugin = [ coverage ];
   };
+
+  nativeCheckInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [ "nose2" ];
 
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = [
-    unittestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
-
-  meta = with lib; {
-    changelog = "https://github.com/nose-devs/nose2/blob/${version}/docs/changelog.rst";
+  meta = {
     description = "Test runner for Python";
-    mainProgram = "nose2";
     homepage = "https://github.com/nose-devs/nose2";
-    license = licenses.bsd0;
+    changelog = "https://github.com/nose-devs/nose2/blob/${version}/docs/changelog.rst";
+    license = lib.licenses.bsd0;
     maintainers = [ ];
+    mainProgram = "nose2";
   };
 }

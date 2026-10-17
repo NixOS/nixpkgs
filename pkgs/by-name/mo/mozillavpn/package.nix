@@ -13,6 +13,7 @@
   libsecret,
   nix-update-script,
   pkg-config,
+  polkit,
   python3,
   qt6,
   rustPlatform,
@@ -23,26 +24,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mozillavpn";
-  version = "2.24.3";
+  version = "2.39.0";
   src = fetchFromGitHub {
     owner = "mozilla-mobile";
     repo = "mozilla-vpn-client";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-GRt0diDt8bEeMfDwiEtYyR+20/bJAVcDal9eGfvk340=";
+    hash = "sha256-XEEvH+FBYZVUva8KwPSubFd6+bhdwqxrYk/tBgJve6g=";
   };
   patches = [
-    # Fix build errors from deprecated `QByteArray::count()`, `QVariant::type()`, `QEventPoint::pos()` (#9961)
-    (fetchpatch {
-      url = "https://github.com/mozilla-mobile/mozilla-vpn-client/commit/b4077b9927d9208118e81694dce490dac2f0e76f.patch";
-      hash = "sha256-Vx7aHEBxubthqsmH37ZZDJDPI9jE9vS/p+JNJP6eUlI=";
-    })
-    # Re:#9966 Fix Crash in MZFlickable
-    (fetchpatch {
-      url = "https://github.com/mozilla-mobile/mozilla-vpn-client/pull/9984/commits/485a2ad8feab6b1dee7c672ce03736d819fd9d37.patch";
-      includes = [ "nebula/ui/components/MZFlickable.qml" ];
-      hash = "sha256-fnOXBTsuQC3kqAvHgoJ7rRGX5ra0R/MO8M9Ysys/l7Q=";
-    })
   ];
 
   netfilter = buildGoModule {
@@ -53,12 +43,12 @@ stdenv.mkDerivation (finalAttrs: {
       patches
       ;
     modRoot = "linux/netfilter";
-    vendorHash = "sha256-Cmo0wnl0z5r1paaEf1MhCPbInWeoMhGjnxCxGh0cyO8=";
+    vendorHash = "sha256-RDSZdmQ31RW4PjZsula9V/asT36GJRdxlAHV/wX2DS8=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src patches;
-    hash = "sha256-ryJFvnJIiDKf2EqlzHj79hSPYrD+3UtZ5lT/QeFv6V0=";
+    hash = "sha256-+CdJtFsmjS/y2oMv8mV317alc2oM0eUVj6aTuVMhv64=";
   };
 
   buildInputs = [
@@ -66,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     libgcrypt
     libgpg-error
     libsecret
+    polkit
     qt6.qt5compat
     qt6.qtbase
     qt6.qtnetworkauth
@@ -89,15 +80,23 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    substituteInPlace scripts/cmake/addons.cmake \
+      --replace-fail 'set(ADDON_BUILD_ARGS ' 'set(ADDON_BUILD_ARGS -q ${qt6.qttools.dev}/bin '
+
     substituteInPlace src/cmake/linux.cmake \
-      --replace '/etc/xdg/autostart' "$out/etc/xdg/autostart" \
-      --replace '/usr/share/dbus-1' "$out/share/dbus-1" \
-      --replace '${"$"}{SYSTEMD_UNIT_DIR}' "$out/lib/systemd/system"
+      --replace-fail '/usr/share/dbus-1' '${"$"}{CMAKE_INSTALL_DATADIR}/dbus-1' \
+      --replace-fail '${"$"}{POLKIT_POLICY_DIR}' '${"$"}{CMAKE_INSTALL_DATADIR}/polkit-1/actions' \
+      --replace-fail '${"$"}{SYSTEMD_UNIT_DIR}' '${"$"}{CMAKE_INSTALL_LIBDIR}/systemd/system'
 
     substituteInPlace extension/CMakeLists.txt \
-      --replace '/etc' "$out/etc"
+      --replace-fail '/etc' '${"$"}{CMAKE_INSTALL_SYSCONFDIR}'
+
+    substituteInPlace extension/socks5proxy/bin/CMakeLists.txt \
+      --replace-fail '${"$"}{SYSTEMD_UNIT_DIR}' '${"$"}{CMAKE_INSTALL_LIBDIR}/systemd/system'
 
     ln -s '${finalAttrs.netfilter.goModules}' linux/netfilter/vendor
+
+    patchShebangs scripts/utils/xlifftool.py
   '';
 
   cmakeFlags = [
@@ -105,7 +104,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DQT_LUPDATE_EXECUTABLE=${qt6.qttools.dev}/bin/lupdate"
     "-DQT_LRELEASE_EXECUTABLE=${qt6.qttools.dev}/bin/lrelease"
   ];
-  dontFixCmake = true;
 
   qtWrapperArgs = [
     "--prefix"
@@ -113,6 +111,11 @@ stdenv.mkDerivation (finalAttrs: {
     ":"
     (lib.makeBinPath [ wireguard-tools ])
   ];
+
+  postInstall = ''
+    mkdir "$out/share/polkit-1/rules.d"
+    cp ../linux/org.mozilla.vpn.rules-others "$out/share/polkit-1/rules.d/org.mozilla.vpn.rules"
+  '';
 
   passthru.updateScript = _experimental-update-script-combinators.sequence [
     (nix-update-script { })
@@ -125,7 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Client for the Mozilla VPN service";
     mainProgram = "mozillavpn";
-    homepage = "https://vpn.mozilla.org/";
+    homepage = "https://www.mozilla.org/en-US/products/vpn/";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ andersk ];
     platforms = lib.platforms.linux;

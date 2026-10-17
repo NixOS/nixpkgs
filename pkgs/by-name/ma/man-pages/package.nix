@@ -2,40 +2,98 @@
   lib,
   stdenv,
   fetchurl,
+  directoryListingUpdater,
+  gawk,
+  groff,
+  man,
+  pcre2,
+  nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "man-pages";
-  version = "6.9.1";
+  version = "6.19";
+
+  # `man` is first: most people installing `man-pages` want man pages.
+  # The binaries could be split to a separate package (as upstream suggests),
+  # but storing in a separate not-installed-by-default output is easier,
+  # and has a similar effect.
+  outputs = [
+    "man"
+    "out"
+  ];
 
   src = fetchurl {
-    url = "mirror://kernel/linux/docs/man-pages/${pname}-${version}.tar.xz";
-    hash = "sha256-4jy6wp8RC6Vx8NqFI+edNzaRRm7X8qMTAXIYF9NFML0=";
+    url = "mirror://kernel/linux/docs/man-pages/man-pages-${finalAttrs.version}.tar.xz";
+    hash = "sha256-iKfEKtLgPYuW3HLZXkUfLYdf8PQxA6jrisgkITO9ywU=";
   };
 
-  makeFlags = [
-    "prefix=${placeholder "out"}"
+  # See https://git.kernel.org/pub/scm/docs/man-pages/man-pages.git/tree/man/man7/man.7,
+  # https://github.com/NixOS/nixpkgs/issues/498875
+  postPatch = ''
+    substituteInPlace man/man7/man.7 \
+      --replace-fail '.so man7/groff_man.7' '.so ${lib.getMan groff}/share/man/man7/groff_man.7'
+  '';
+
+  nativeInstallCheckInputs = [
+    gawk
+    man
+    pcre2
   ];
 
   dontBuild = true;
-
-  outputDocdev = "out";
-
   enableParallelInstalling = true;
+  doInstallCheck = true;
 
-  postInstall = ''
-    # The manpath executable looks up manpages from PATH. And this package won't
-    # appear in PATH unless it has a /bin folder. Without the change
-    # 'nix-shell -p man-pages' does not pull in the search paths.
-    # See 'man 5 manpath' for the lookup order.
-    mkdir -p $out/bin
+  makeFlags = [
+    "-R"
+    "VERSION=${finalAttrs.version}"
+    "prefix=${placeholder "out"}"
+    "bindir=${placeholder "out"}/bin"
+    "mandir=${placeholder "man"}/share/man"
+  ];
+
+  preConfigure = ''
+    # If not provided externally, the makefile will attempt to determine the
+    # date and time of the release from the Git repository log, which is not
+    # available in the distributed tarball. We therefore supply it from
+    # $SOURCE_DATE_EPOCH, which is based on the most recent modification time
+    # of all source files. Cf.
+    # nixpkgs/pkgs/build-support/setup-hooks/set-source-date-epoch-to-latest.sh
+    export DISTDATE="$(date --utc --date="@$SOURCE_DATE_EPOCH")"
   '';
 
-  meta = with lib; {
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    # Check for a few well-known man pages
+    for page in ldd write printf null hosts random ld.so; do
+      man -M "$man/share/man" -P cat "$page" >/dev/null
+    done
+
+    runHook postInstallCheck
+  '';
+
+  passthru = {
+    tests = { inherit (nixosTests) man; };
+    updateScript = directoryListingUpdater {
+      url = "https://www.kernel.org/pub/linux/docs/man-pages/";
+    };
+  };
+
+  meta = {
     description = "Linux development manual pages";
+    longDescription = ''
+      This package provides the manual pages in its "man" output,
+      and various utility programs in its "out" output.
+
+      Only the "man" output is installed by default.
+    '';
     homepage = "https://www.kernel.org/doc/man-pages/";
-    license = licenses.gpl2Plus;
-    platforms = with platforms; unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ mdaniels5757 ];
+    platforms = lib.platforms.unix;
+    outputsToInstall = [ "man" ];
     priority = 30; # if a package comes with its own man page, prefer it
   };
-}
+})

@@ -1,6 +1,6 @@
 {
   lib,
-  gcc14Stdenv,
+  gcc16Stdenv,
   fetchFromGitHub,
   cmake,
   pkg-config,
@@ -26,15 +26,15 @@
   nix-update-script,
 }:
 
-gcc14Stdenv.mkDerivation (finalAttrs: {
+gcc16Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprlock";
-  version = "0.6.1";
+  version = "0.9.6";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprlock";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-lT6f/5NB73xj9cVesi2SNsL5jVciwZJp8QRohiv+3Hk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JNDoV4tUGL6mXfXMqOjBwUl3Cg1YNIBbAPbpTYY/BpI=";
   };
 
   nativeBuildInputs = [
@@ -64,16 +64,28 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
   ];
 
+  # Install hyprlock config in location upstream looks
+  # https://github.com/hyprwm/hyprlock/blob/c976b6a1d135d3743556dc225c80e24918ef1fd5/src/config/ConfigManager.cpp#L185-L191
+  # https://github.com/hyprwm/hyprutils/blob/6a8bc9d2a4451df12f5179dc0b1d2d46518a90ab/src/path/Path.cpp#L71-L72
+  postInstall = ''
+    mkdir -p $out/etc/xdg/hypr
+    ln -s $out/share/hypr/hyprlock.conf $out/etc/xdg/hypr/hyprlock.conf
+  '';
+
+  cmakeBuildType = "RelWithDebInfo";
+  separateDebugInfo = true;
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Hyprland's GPU-accelerated screen locking utility";
     homepage = "https://github.com/hyprwm/hyprlock";
+    changelog = "https://github.com/hyprwm/hyprlock/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       iynaix
-      johnrtitor
     ];
+    teams = [ lib.teams.hyprland ];
     mainProgram = "hyprlock";
     platforms = lib.platforms.linux;
   };

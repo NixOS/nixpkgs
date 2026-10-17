@@ -1,51 +1,63 @@
 {
   lib,
   rustPlatform,
+  buildPackages,
   fetchFromGitHub,
   installShellFiles,
   pkg-config,
   oniguruma,
+  libgit2,
   stdenv,
   git,
   zlib,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "delta";
-  version = "0.18.2";
+  version = "0.20.1";
 
   src = fetchFromGitHub {
     owner = "dandavison";
     repo = "delta";
-    tag = version;
-    hash = "sha256-fJSKGa935kwLG8WYmT9Ncg2ozpSNMzUJx0WLo1gtVAA=";
+    tag = finalAttrs.version;
+    hash = "sha256-p/vYclCifRzk8ockxT5k1zBCBL+eF4oldhD3lTvy2EA=";
   };
 
-  cargoHash = "sha256-DIWzRVTADfAZdFckhh2lIfOD13h7GP3KIOQHf/oBHgc=";
+  cargoHash = "sha256-YjmYeSRt9X/+PROEGg3pBQ1IRnNuwziZ30bA/nKqbWc=";
 
   nativeBuildInputs = [
     installShellFiles
     pkg-config
   ];
 
-  buildInputs =
-    [
-      oniguruma
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      zlib
-    ];
+  buildInputs = [
+    oniguruma
+    libgit2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    zlib
+  ];
 
   nativeCheckInputs = [ git ];
 
   env = {
     RUSTONIG_SYSTEM_LIBONIG = true;
+    LIBGIT2_NO_VENDOR = 1;
   };
 
-  postInstall = ''
-    installShellCompletion --cmd delta \
-      etc/completion/completion.{bash,fish,zsh}
-  '';
+  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
+    ''
+      installShellCompletion --cmd delta \
+        --bash <(${emulator} $out/bin/delta --generate-completion bash) \
+        --fish <(${emulator} $out/bin/delta --generate-completion fish) \
+        --zsh <(${emulator} $out/bin/delta --generate-completion zsh)
+    ''
+  );
 
   # test_env_parsing_with_pager_set_to_bat sets environment variables,
   # which can be flaky with multiple threads:
@@ -58,16 +70,22 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_diff_real_files"
   ];
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
+  doInstallCheck = true;
+
+  meta = {
     homepage = "https://github.com/dandavison/delta";
     description = "Syntax-highlighting pager for git";
-    changelog = "https://github.com/dandavison/delta/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/dandavison/delta/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       zowoq
       SuperSandro2000
-      figsoda
     ];
     mainProgram = "delta";
   };
-}
+})

@@ -8,74 +8,71 @@
   setuptools,
 
   # dependencies
-  async-timeout,
+  aiohttp,
   bellows,
-  click,
   coloredlogs,
   crc,
-  libgpiod,
-  pyserial-asyncio-fast,
+  gpiod,
+  tqdm,
   typing-extensions,
   zigpy,
 
   # tests
+  aioresponses,
   pytestCheckHook,
   pytest-asyncio,
-  pytest-mock,
-  pytest-timeout,
 }:
 
 buildPythonPackage rec {
   pname = "universal-silabs-flasher";
-  version = "0.0.25";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "NabuCasa";
     repo = "universal-silabs-flasher";
     tag = "v${version}";
-    hash = "sha256-fmm5QrRpZIYmPO4GK/JrP7w0Utlw52pfh524pgESliM=";
+    hash = "sha256-niNjHhOwy+5mgs4UY9bIBykmZ+7TifbYnMuG1LAV7PA=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail '"setuptools-git-versioning<2"' "" \
+      --replace-fail '"setuptools-git-versioning>=2.0,<3"' "" \
       --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
   build-system = [ setuptools ];
 
-  pythonRelaxDeps = [
-    # https://github.com/NabuCasa/universal-silabs-flasher/pull/50
-    "gpiod"
-  ];
-
-  propagatedBuildInputs = [
-    async-timeout
+  dependencies = [
+    aiohttp
     bellows
-    click
     coloredlogs
     crc
-    pyserial-asyncio-fast
+    tqdm
     typing-extensions
     zigpy
-  ] ++ lib.optionals (stdenv.hostPlatform.isLinux) [ libgpiod ];
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux) [ gpiod ];
 
   nativeCheckInputs = [
+    aioresponses
     pytestCheckHook
     pytest-asyncio
-    pytest-mock
-    pytest-timeout
+  ];
+
+  disabledTests = [
+    # timing sensitive
+    "test_xmodem_happy_path"
   ];
 
   pythonImportsCheck = [ "universal_silabs_flasher" ];
 
-  meta = with lib; {
-    changelog = "https://github.com/NabuCasa/universal-silabs-flasher/releases/tag/v${version}";
+  meta = {
+    changelog = "https://github.com/NabuCasa/universal-silabs-flasher/releases/tag/${src.tag}";
     description = "Flashes Silicon Labs radios running EmberZNet or CPC multi-pan firmware";
     mainProgram = "universal-silabs-flasher";
     homepage = "https://github.com/NabuCasa/universal-silabs-flasher";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

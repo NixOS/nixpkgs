@@ -39,4 +39,8 @@ in
     version = "12.1.14.0";
     hash = "sha256-WJYuFmMGSW+B32LwE7oXv/IeTln6TNEeXSkquHh85Go=";
   };
+  nv-codec-headers-13 = nv-codec-headers-template {
+    version = "13.1.15.0";
+    hash = "sha256-Kr+V64F4cnfprTC9mUqClabGcH2iwWWT9wbqLbmKV4c=";
+  };
 }

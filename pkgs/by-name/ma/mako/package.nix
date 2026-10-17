@@ -6,7 +6,7 @@
   ninja,
   pkg-config,
   scdoc,
-  systemd,
+  systemdMinimal,
   pango,
   cairo,
   gdk-pixbuf,
@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mako";
-  version = "1.9.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = "mako";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QtYtondP7E5QXLRnmcaOQlAm9fKXctfjxeUFqK6FnnE=";
+    hash = "sha256-opCAkYVhp2zQNEi4NBiFfXsC0DdL0kZtaXS9/epzF10=";
   };
 
   strictDeps = true;
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-scanner
   ];
   buildInputs = [
-    systemd
+    systemdMinimal
     pango
     cairo
     gdk-pixbuf
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     gappsWrapperArgs+=(
       --prefix PATH : "${
         lib.makeBinPath [
-          systemd # for busctl
+          systemdMinimal # for busctl
           jq
           bash
         ]
@@ -70,15 +70,20 @@ stdenv.mkDerivation (finalAttrs: {
     substitute $src/contrib/systemd/mako.service $out/lib/systemd/user/mako.service \
       --replace-fail '/usr/bin' "$out/bin"
     chmod 0644 $out/lib/systemd/user/mako.service
+
+    # Route D-Bus activation through the unit installed above, so it
+    # waits for graphical-session.target instead of exec'ing mako
+    # before the compositor is up.
+    echo "SystemdService=mako.service" \
+      >> $out/share/dbus-1/services/fr.emersion.mako.service
   '';
 
   meta = {
     description = "Lightweight Wayland notification daemon";
-    homepage = "https://wayland.emersion.fr/mako/";
+    homepage = "https://github.com/emersion/mako";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       dywedir
-      synthetica
     ];
     platforms = lib.platforms.linux;
     mainProgram = "mako";

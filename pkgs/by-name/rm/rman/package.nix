@@ -1,11 +1,15 @@
-{lib, stdenv, fetchurl}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rman";
   version = "3.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/polyglotman/${version}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/polyglotman/${finalAttrs.version}/rman-${finalAttrs.version}.tar.gz";
     sha256 = "0prdld6nbkdlkcgc2r1zp13h2fh8r0mlwxx423dnc695ddlk18b8";
   };
 
@@ -15,7 +19,10 @@ stdenv.mkDerivation rec {
       --replace gcc '${stdenv.cc.targetPrefix}cc'
   '';
 
-  makeFlags = [ "BINDIR=$(out)/bin" "MANDIR=$(out)/share/man" ];
+  makeFlags = [
+    "BINDIR=$(out)/bin"
+    "MANDIR=$(out)/share/man"
+  ];
 
   preInstall = ''
     mkdir -p $out/bin
@@ -30,8 +37,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Parse formatted man pages and man page source from most flavors of UNIX and converts them to HTML, ASCII, TkMan, DocBook, and other formats";
-    license = "artistic";
+    license = lib.licenses.artistic1;
     platforms = lib.platforms.all;
     mainProgram = "rman";
   };
-}
+})

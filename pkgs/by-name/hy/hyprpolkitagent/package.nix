@@ -1,49 +1,60 @@
 {
   lib,
-  stdenv,
+  gcc16Stdenv,
   cmake,
   pkg-config,
   fetchFromGitHub,
   hyprutils,
-  kdePackages,
+  hyprtoolkit,
+  hyprgraphics,
+  hyprlang,
+  aquamarine,
+  pixman,
+  libdrm,
+  sdbus-cpp_2,
   polkit,
-  qt6,
+  systemd,
+  cairo,
+  pango,
+  libxkbcommon,
 }:
-stdenv.mkDerivation (finalAttrs: {
+gcc16Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpolkitagent";
-  version = "0.1.2";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprpolkitagent";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-K1nSPFlh5VBWNagcaZ/157gfifAXTH8lzeyfYt/UEX8=";
+    hash = "sha256-Ygn+TD4GI3jSKCBNohgITdSicAgMCDq1lJzNN5QR/5o=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
     hyprutils
-    kdePackages.kirigami-addons
-    kdePackages.polkit-qt-1
+    hyprtoolkit
+    hyprgraphics
+    hyprlang
+    aquamarine
+    pixman
+    libdrm
+    sdbus-cpp_2
     polkit
-    qt6.qtbase
-    qt6.qtsvg
-    qt6.qtwayland
+    systemd
+    cairo
+    pango
+    libxkbcommon
   ];
 
   meta = {
-    description = "Polkit authentication agent written in QT/QML";
+    description = "Polkit authentication agent built with hyprtoolkit";
     homepage = "https://github.com/hyprwm/hyprpolkitagent";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
-      fufexan
-      johnrtitor
-    ];
+    teams = [ lib.teams.hyprland ];
     mainProgram = "hyprpolkitagent";
     platforms = lib.platforms.linux;
   };

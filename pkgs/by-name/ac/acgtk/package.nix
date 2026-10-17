@@ -2,36 +2,44 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  dune_3,
   ocamlPackages,
+  darwin,
+  dune,
+  nix-update-script,
+  writableTmpDirAsHomeHook,
 }:
 
 stdenv.mkDerivation {
 
   pname = "acgtk";
-  version = "2.0.0";
+  version = "2.2.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.inria.fr";
     owner = "acg";
     repo = "dev/acgtk";
-    rev = "release-2.0.0-20231009";
-    hash = "sha256-ZymSQkBMBePPw7pJkfLkmqbIkQyIqB+7Pyrih2WAO50=";
+    tag = "release-2.2.0";
+    hash = "sha256-cDP41a3CHh+KW2PAZ3WTRA2HTXKhb8mMCTNddv6M8Bg=";
   };
 
   strictDeps = true;
 
-  nativeBuildInputs = with ocamlPackages; [
-    menhir
-    ocaml
-    findlib
-    dune_3
-  ];
+  nativeBuildInputs =
+    with ocamlPackages;
+    [
+      dune
+      findlib
+      menhir
+      ocaml
+      writableTmpDirAsHomeHook
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.sigtool ];
 
   buildInputs = with ocamlPackages; [
     ansiterminal
     cairo2
     cmdliner
+    dune-site
     fmt
     logs
     menhirLib
@@ -44,19 +52,26 @@ stdenv.mkDerivation {
 
   buildPhase = ''
     runHook preBuild
-    dune build --profile=release ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
+    dune build -p acgtk --profile=release ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
     runHook postBuild
   '';
 
   installPhase = ''
-    dune install --prefix $out --libdir $OCAMLFIND_DESTDIR
+    dune install -p acgtk --prefix $out --libdir $OCAMLFIND_DESTDIR
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^release-(\\d+\\.\\d+\\.\\d+)$"
+    ];
+  };
+
+  meta = {
     homepage = "https://acg.loria.fr/";
     description = "Toolkit for developing ACG signatures and lexicon";
-    license = licenses.cecill20;
+    license = lib.licenses.cecill20;
     inherit (ocamlPackages.ocaml.meta) platforms;
-    maintainers = [ maintainers.jirkamarsik ];
+    maintainers = with lib.maintainers; [ tournev ];
   };
 }

@@ -1,62 +1,68 @@
 {
   lib,
   stdenv,
+  balena-compose-parser,
   buildNpmPackage,
   fetchFromGitHub,
-  nodejs_20,
   versionCheckHook,
   node-gyp,
   python3,
   udev,
-  cctools,
-  apple-sdk_12,
+  xcbuild,
 }:
 
-let
-  buildNpmPackage' = buildNpmPackage.override {
-    nodejs = nodejs_20;
-  };
-  node-gyp' = node-gyp.override {
-    nodejs = nodejs_20;
-  };
-in
-buildNpmPackage' rec {
+buildNpmPackage (finalAttrs: {
   pname = "balena-cli";
-  version = "20.2.3";
+  version = "25.2.6";
 
   src = fetchFromGitHub {
     owner = "balena-io";
     repo = "balena-cli";
-    rev = "v${version}";
-    hash = "sha256-sJksNbsGBzH1tjqAv0kX++J7NCj1fu64Bi/i3Tp8R9E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-OnlVd3rcNwc71ZSMrVp41cQdRjLyXdJsl8UuG+lAzsk=";
   };
 
-  npmDepsHash = "sha256-t1ZTQOuEvRcy9Zl9qqi8DDH2EVkjrBaTX4pTuRGl2ww=";
+  npmDepsHash = "sha256-BtZysLU3FhPusTpEs3aSVs9qNe0u8p6OTaWDmJGxHAE=";
 
-  postPatch = ''
-    ln -s npm-shrinkwrap.json package-lock.json
-  '';
   makeCacheWritable = true;
 
-  nativeBuildInputs =
-    [
-      node-gyp'
-      python3
-      versionCheckHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      cctools
-    ];
+  nativeBuildInputs = [
+    node-gyp
+    python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild
+  ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      udev
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_12
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    udev
+  ];
 
-  doInstallCheck = true;
+  env = {
+    # This is a bit heavy handed but resolves errors stemming from the Node.js
+    # USB package, such as
+    #
+    # > /build/source/node_modules/usb/node_modules/node-addon-api/napi-inl.h:1433:8: note: 'std::string_view' is only available from C++17 onwards
+    #
+    # The issue seems to have been resolved upstream but not released yet:
+    # https://github.com/node-usb/node-usb/pull/964
+    CXXFLAGS = "-std=c++20";
+  };
+
+  postInstall = ''
+    cp ${lib.getExe balena-compose-parser} $out/lib/node_modules/balena-cli/node_modules/@balena/compose-parser/bin/
+  '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  # Disabled on Darwin due to:
+  #
+  # https://github.com/NixOS/nix/issues/5748
+  #
+  # No matter whether $TMP and $HOME point to real writable directories, the
+  # Darwin sandbox tries to use /var/empty and fails.
+  doInstallCheck = !stdenv.hostPlatform.isDarwin;
   versionCheckProgram = "${placeholder "out"}/bin/balena";
 
   meta = {
@@ -68,12 +74,11 @@ buildNpmPackage' rec {
       and the balena SDK, and can also be directly imported in Node.js applications.
     '';
     homepage = "https://github.com/balena-io/balena-cli";
-    changelog = "https://github.com/balena-io/balena-cli/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/balena-io/balena-cli/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       kalebpace
-      doronbehar
     ];
     mainProgram = "balena";
   };
-}
+})

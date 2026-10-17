@@ -4,16 +4,16 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "ioc-scan";
-  version = "2.0.0";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cisagov";
     repo = "ioc-scanner";
-    tag = "v${version}";
-    hash = "sha256-SCyCANZfi7PqexM2Kc8WJwwEEiBQxPBg0ggWsK9WB4k=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-oqXK98Im6OVItjSF8NCrGroE3w3k7QFzqpC2EEpa7N0=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -28,11 +28,11 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "ioc_scan" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to search a filesystem for indicators of compromise (IoC)";
     homepage = "https://github.com/cisagov/ioc-scanner";
-    changelog = "https://github.com/cisagov/ioc-scanner/releases/tag/v${version}";
-    license = with licenses; [ cc0 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/cisagov/ioc-scanner/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.cc0;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

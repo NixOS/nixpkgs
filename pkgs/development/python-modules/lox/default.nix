@@ -12,26 +12,19 @@
 
 buildPythonPackage rec {
   pname = "lox";
-  version = "0.12.0";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BrianPugh";
     repo = "lox";
     tag = "v${version}";
-    hash = "sha256-Iv3ZdfsvFLU6lhlH1n+eQ+KIrXESsnC1S2lVFnKFV08=";
+    hash = "sha256-PZKs+D1TmrBr+1M4ni7kKLywQ8Z6YCVjH2HFF6QjHdY=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [ pathos ];
-
-  pythonRemoveDeps = [ "sphinx-rtd-theme" ];
-
-  # setup.py requires pytest-runner for setuptools, which is wrong
-  postPatch = ''
-    substituteInPlace setup.py --replace-fail '"pytest-runner",' ""
-  '';
 
   pythonImportsCheck = [ "lox" ];
 
@@ -53,7 +46,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Threading and Multiprocessing made easy";
-    changelog = "https://github.com/BrianPugh/lox/releases/tag/v${version}";
+    changelog = "https://github.com/BrianPugh/lox/releases/tag/${src.tag}";
     homepage = "https://github.com/BrianPugh/lox";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.greg ];

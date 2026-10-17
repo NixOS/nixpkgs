@@ -14,9 +14,8 @@ buildPythonPackage rec {
   sourceRoot = "${src.name}/ua-parser-builtins";
 
   postPatch = ''
-    # break dependency cycle and don't use git to determine version
+    # don't use git to determine version
     substituteInPlace pyproject.toml \
-      --replace-fail 'dependencies = ["ua-parser"]' "" \
       --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
@@ -25,4 +24,14 @@ buildPythonPackage rec {
     pyyaml
     versioningit
   ];
+
+  meta = {
+    inherit (ua-parser.meta)
+      description
+      homepage
+      license
+      changelog
+      ;
+    maintainers = [ ];
+  };
 }

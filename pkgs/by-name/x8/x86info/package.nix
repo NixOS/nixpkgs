@@ -7,13 +7,13 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "x86info";
-  version = "unstable-2021-08-07";
+  version = "0-unstable-2021-08-07";
 
   src = fetchFromGitHub {
     owner = "kernelslacker";
-    repo = pname;
+    repo = "x86info";
     rev = "061ea35ecb0697761b6260998fa2045b8bb0be68";
     hash = "sha256-/qWioC4dV1bQkU4SiTR8duYqoGIMIH7s8vuAXi75juo=";
   };

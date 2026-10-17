@@ -10,12 +10,12 @@
 stdenv.mkDerivation {
   pname = "pikchr";
   # To update, use the last check-in in https://pikchr.org/home/timeline?r=trunk
-  version = "0-unstable-2024-02-12";
+  version = "0-unstable-2026-04-03";
 
   src = fetchfossil {
     url = "https://pikchr.org/home";
-    rev = "ae3317b0ec2e635c";
-    hash = "sha256-kCbd6XAaUCwFVYOPPLIux7wW62KRfVnfaxT8Z1RGFfc=";
+    rev = "a7f1c35bc0448daf";
+    hash = "sha256-Yxp1jvxxXQsdljsvw1ed4XfOvGwbwWIeCfYEQ6D9Zqc=";
   };
 
   # can't open generated html files
@@ -31,30 +31,31 @@ stdenv.mkDerivation {
 
   buildFlags = [ "pikchr" ] ++ lib.optional enableTcl "piktcl";
 
-  installPhase =
-    ''
-      runHook preInstall
-      install -Dm755 pikchr $out/bin/pikchr
-      install -Dm755 pikchr.out $out/lib/pikchr.o
-      install -Dm644 pikchr.h $out/include/pikchr.h
-    ''
-    + lib.optionalString enableTcl ''
-      cp -r piktcl $out/lib/piktcl
-    ''
-    + ''
-      runHook postInstall
-    '';
+  installPhase = ''
+    runHook preInstall
+    install -Dm755 pikchr $out/bin/pikchr
+    install -Dm755 pikchr.out $out/lib/pikchr.o
+    install -Dm644 pikchr.h $out/include/pikchr.h
+  ''
+  + lib.optionalString enableTcl ''
+    cp -r piktcl $out/lib/piktcl
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   dontWrapTclBinaries = true;
 
   doCheck = true;
 
-  meta = with lib; {
+  passthru.updateScript = ./update.sh;
+
+  meta = {
     description = "PIC-like markup language for diagrams in technical documentation";
     homepage = "https://pikchr.org";
-    license = licenses.bsd0;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd0;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.all;
     mainProgram = "pikchr";
   };
 }

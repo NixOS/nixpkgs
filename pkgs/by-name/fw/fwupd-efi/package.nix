@@ -1,23 +1,25 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  fetchpatch,
+  fetchFromGitHub,
   pkg-config,
   meson,
   ninja,
   gnu-efi,
   python3,
   python3Packages,
+  fwupd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd-efi";
-  version = "1.6";
+  version = "1.8";
 
-  src = fetchurl {
-    url = "https://github.com/fwupd/fwupd-efi/releases/download/${version}/fwupd-efi-${version}.tar.xz";
-    hash = "sha256-r9CAWirQgafK/y71vABM46AUe1OAFejsqWY0FxaxJg4=";
+  src = fetchFromGitHub {
+    owner = "fwupd";
+    repo = "fwupd-efi";
+    rev = "${finalAttrs.version}";
+    hash = "sha256-resmgi+t1YahXWxt1ZPgAXW3L0ejBclwcA8W8AS31is=";
   };
 
   nativeBuildInputs = [
@@ -44,15 +46,20 @@ stdenv.mkDerivation rec {
     "-Defi-ldsdir=${gnu-efi}/lib"
     "-Defi_sbat_distro_id=nixos"
     "-Defi_sbat_distro_summary=NixOS"
-    "-Defi_sbat_distro_pkgname=${pname}"
-    "-Defi_sbat_distro_version=${version}"
+    "-Defi_sbat_distro_pkgname=${finalAttrs.pname}"
+    "-Defi_sbat_distro_version=${finalAttrs.version}"
     "-Defi_sbat_distro_url=https://search.nixos.org/packages?channel=unstable&show=fwupd-efi&from=0&size=50&sort=relevance&query=fwupd-efi"
+    "-Dgenpeimg=disabled"
   ];
 
-  meta = with lib; {
-    homepage = "https://fwupd.org/";
-    maintainers = [ ];
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
+  meta = {
+    description = "EFI Application used by uefi-capsule plugin in fwupd";
+    inherit (fwupd.meta)
+      homepage
+      maintainers
+      license
+      platforms
+      ;
+    teams = [ lib.teams.boot-security ];
   };
-}
+})

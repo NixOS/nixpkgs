@@ -6,24 +6,22 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "abctl";
-  version = "0.24.0";
+  version = "0.30.4";
 
   src = fetchFromGitHub {
     owner = "airbytehq";
     repo = "abctl";
-    tag = "v${version}";
-    hash = "sha256-O+ABjageccJudXtO5wUYLIT/kI04f68RLW0B7d//jdw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pnzXE3yv/0m0vsiC8iNiPBBrGnzSxbzMBwzFv0Y+O94=";
   };
 
   checkFlags =
     let
       skippedTests = [
         # network access
-        "TestManifestCmd"
-        "TestManifestCmd_Enterprise"
-        "TestManifestCmd_Nightly"
+        "TestResolveChartReference"
         # docker
         "TestValues_BadYaml"
         "TestInvalidHostFlag_IpAddr"
@@ -33,17 +31,17 @@ buildGoModule rec {
     in
     [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
 
-  vendorHash = "sha256-4pi5EX7N4zf72rez2aClFezgnT70A7Crd2YTasl5CvU=";
+  vendorHash = "sha256-hxiR1zv5TlDPuNv2X4VY3p/uTuETQkV+ifc4w09XC2I=";
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Airbyte's CLI for managing local Airbyte installations";
     homepage = "https://airbyte.com/";
-    changelog = "https://github.com/airbytehq/abctl/releases/tag/v${version}";
+    changelog = "https://github.com/airbytehq/abctl/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ xelden ];
     mainProgram = "abctl";
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

@@ -8,14 +8,14 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "eresi";
   version = "0.83-a3-phoenix";
 
   src = fetchFromGitHub {
     owner = "thorkill";
     repo = "eresi";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0a5a7mh2zw9lcdrl8n1mqccrc0xcgj7743l7l4kslkh722fxv625";
   };
 
@@ -31,7 +31,17 @@ stdenv.mkDerivation rec {
       url = "https://github.com/thorkill/eresi/commit/bc5b9a75c326f277e5f89e01a3b8f7f0519a99f6.patch";
       sha256 = "0lqwrnkkhhd3vi1r8ngvziyqkk09h98h93rrs3ndqi048a898ys1";
     })
+
+    # Fix compilation for gcc14 and newer
+    #   https://github.com/thorkill/eresi/pull/167
+    (fetchpatch {
+      url = "https://github.com/thorkill/eresi/commit/f85397c4dce633764fab29b0642f59fc4764658a.patch";
+      sha256 = "sha256-mKmJHjyWwCNh/pueB94Ndhj/3uZLBZNn/m9gXenP5ns=";
+    })
   ];
+
+  # K&R-style function-pointer declarations break under gcc 15's C23 default.
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
   postPatch = ''
     # Two occurences of fprintf() with only two arguments, which should really
@@ -77,10 +87,12 @@ stdenv.mkDerivation rec {
 
   installTargets = lib.singleton "install" ++ lib.optional stdenv.hostPlatform.is64bit "install64";
 
+  __structuredAttrs = true;
+
   meta = {
     description = "ERESI Reverse Engineering Software Interface";
     license = lib.licenses.gpl2Only;
     homepage = "https://github.com/thorkill/eresi"; # Formerly http://www.eresi-project.org/
     platforms = lib.platforms.linux;
   };
-}
+})

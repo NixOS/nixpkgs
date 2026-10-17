@@ -12,15 +12,15 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.7-2";
   pname = "fbterm";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "debian";
-    repo = pname;
-    rev = "debian/${version}";
+    repo = "fbterm";
+    rev = "debian/${finalAttrs.version}";
     hash = "sha256-vRUZgFpA1IkzkLzl7ImT+Yff5XqjFbUlkHmj/hd7XDE=";
   };
 
@@ -95,15 +95,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Framebuffer terminal emulator";
     mainProgram = "fbterm";
     homepage = "https://salsa.debian.org/debian/fbterm";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       lovesegfault
       raskin
     ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
-}
+})

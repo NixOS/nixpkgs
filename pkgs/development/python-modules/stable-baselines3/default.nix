@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -18,24 +19,27 @@
   ale-py,
   pytestCheckHook,
   rich,
+  tensorboard,
   tqdm,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "stable-baselines3";
-  # TODO: To this date, the latest release (2.4.1) is not compatible with numpy 2 and does not build
-  # successfully on nixpkgs
-  version = "2.4.1-unstable-2025-01-07";
+  version = "2.9.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "DLR-RM";
     repo = "stable-baselines3";
-    rev = "b7c64a1aa4dd2fd3efed96e7a9ddb4d1f5c96112";
-    hash = "sha256-oyTOBRZsKkhhGKwwBN9HCV0t8+MkJYpWsTRdS+upMeI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vKbILFjQuD2gAkl3J3RA/vEo5UYqWttJ99kZdlEsqkY=";
   };
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [
+    "gymnasium"
+  ];
   dependencies = [
     cloudpickle
     gymnasium
@@ -49,6 +53,7 @@ buildPythonPackage rec {
     ale-py
     pytestCheckHook
     rich
+    tensorboard
     tqdm
   ];
 
@@ -60,19 +65,37 @@ buildPythonPackage rec {
     "tests/test_dict_env.py"
     "tests/test_her.py"
     "tests/test_save_load.py"
+
+    # gymnasium.error.DeprecatedEnv: Environment version v3 for `Taxi` is deprecated.
+    # Please use `Taxi-v4` instead.
+    "tests/test_spaces.py::test_discrete_obs_space[Taxi-v3-A2C]"
+    "tests/test_spaces.py::test_discrete_obs_space[Taxi-v3-DQN]"
+    "tests/test_spaces.py::test_discrete_obs_space[Taxi-v3-PPO]"
   ];
 
   disabledTests = [
+    # Flaky: Can fail if it takes too long, which happens when the system is under heavy load
+    "test_fps_logger"
+
     # Tests that attempt to access the filesystem
     "test_make_atari_env"
     "test_vec_env_monitor_kwargs"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # RuntimeError: *** -[__NSPlaceholderArray initWithObjects:count:]: attempt to insert nil object from objects[1]
+    "test_report_figure_to_tensorboard"
+    "test_unsupported_figure_format"
+
+    # Doesn't manage to find tqdm and rich from nativeCheckInputs
+    # ImportError: You must install tqdm and rich in order to use the progress bar callback
+    "test_callbacks"
   ];
 
   meta = {
     description = "PyTorch version of Stable Baselines, reliable implementations of reinforcement learning algorithms";
     homepage = "https://github.com/DLR-RM/stable-baselines3";
-    changelog = "https://github.com/DLR-RM/stable-baselines3/releases/tag/v${version}";
+    changelog = "https://github.com/DLR-RM/stable-baselines3/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ derdennisop ];
   };
-}
+})

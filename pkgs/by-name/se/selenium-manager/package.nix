@@ -1,40 +1,39 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, darwin
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "selenium-manager";
-  version = "4.27.0";
+  version = "4.40.0";
 
   src = fetchFromGitHub {
     owner = "SeleniumHQ";
     repo = "selenium";
-    rev = "selenium-${version}";
-    hash = "sha256-1i+kPOWTpLYzwhPgUoQXLQ4k+Q1w9KL2VNxvs38SqPc=";
+    tag = "selenium-${version}";
+    hash = "sha256-Yfm2kpAmmEUP+m48PQf09UvFPeGBxd0ukqTtVah5h+E=";
   };
 
   sourceRoot = "${src.name}/rust";
 
-  cargoHash = "sha256-lD9SFqBO9hhyTD4e7LSBktJzbj7uXk6naHEp9uZPhPc=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.SystemConfiguration
+  patches = [
+    ./disable-telemetry.patch
   ];
+
+  cargoHash = "sha256-D7lki2/xWcNStcHIS8q1fTkW+37Q+m/yetn05DwA2C8=";
 
   # TODO: enable tests
   # The test suite depends on a number of browsers and network requests,
   # check the Gentoo package for inspiration
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Browser automation framework and ecosystem";
     homepage = "https://github.com/SeleniumHQ/selenium";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "selenium-manager";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

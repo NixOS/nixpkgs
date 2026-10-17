@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 let
-  version = "0.1.0";
+  version = "0.1.1";
 in
 rustPlatform.buildRustPackage {
   pname = "icnsify";
@@ -14,15 +14,15 @@ rustPlatform.buildRustPackage {
     owner = "uncenter";
     repo = "icnsify";
     rev = "v${version}";
-    hash = "sha256-v8jwN29S6ZTt2XkPpZM+lJugbP9ClzPhqu52mdwdP00=";
+    hash = "sha256-9BZTY175GaaNCq8gcfw4Wl5vzphy4k+hNhW5m6z3adw=";
   };
 
-  cargoHash = "sha256-5wgioCOKvZ0J/t5v/Ic3unAA5h5Bt6MuCUzFJP7Dusw=";
+  cargoHash = "sha256-SutIlmGVdXb+B0JE7UDG5cKWUdpFlnXBQjBntmUNQVA=";
 
   meta = {
     description = "Convert PNGs to .icns";
     homepage = "https://github.com/uncenter/icnsify";
-    license = lib.licenses.mit;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ uncenter ];
     mainProgram = "icnsify";
   };

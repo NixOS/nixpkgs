@@ -11,6 +11,7 @@
   curl,
   libxml2,
   libxslt,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "lastpass";
-    repo = pname;
+    repo = "lastpass-cli";
     rev = "v${version}";
     sha256 = "sha256-Q0ZG5Ehg29STLeAerMoLfzjaH9JyPk7269RgiPmDJV8=";
   };
@@ -44,17 +45,25 @@ stdenv.mkDerivation rec {
     "install-doc"
   ];
 
+  patches = [
+    # CMake 3.1 is deprecated and no longer supported by CMake > 4
+    # https://github.com/NixOS/nixpkgs/issues/445447
+    # The patch comes from https://github.com/lastpass/lastpass-cli/pull/716 while
+    # it is not merged and integrated in a new release.
+    ./716-bump-cmake-minimum-version.patch
+  ];
+
   postInstall = ''
     install -Dm644 -T ../contrib/lpass_zsh_completion $out/share/zsh/site-functions/_lpass
     install -Dm644 -T ../contrib/completions-lpass.fish $out/share/fish/vendor_completions.d/lpass.fish
     install -Dm755 -T ../contrib/examples/git-credential-lastpass $out/bin/git-credential-lastpass
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Stores, retrieves, generates, and synchronizes passwords securely";
     homepage = "https://github.com/lastpass/lastpass-cli";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ vinylen ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ vinylen ];
   };
 }

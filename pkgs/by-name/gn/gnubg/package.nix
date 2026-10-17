@@ -3,50 +3,54 @@
   stdenv,
   fetchurl,
   pkg-config,
+  flex,
   glib,
   python3,
-  gtk2,
+  gtk3,
   readline,
   copyDesktopItems,
   makeDesktopItem,
+  wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnubg";
-  version = "1.07.001";
+  version = "1.08.003";
 
   src = fetchurl {
-    url = "mirror://gnu/gnubg/gnubg-release-${version}-sources.tar.gz";
-    hash = "sha256-cjmXKUGcrZ8RLDBmoS0AANpFCkVq3XsJTYkVUGnWgh4=";
+    url = "mirror://gnu/gnubg/gnubg-release-${finalAttrs.version}-sources.tar.gz";
+    hash = "sha256-b32WmxPP/3hvupD/jMXl1WS5f08Kppr+Tzg48YxEWXk=";
   };
 
   nativeBuildInputs = [
     copyDesktopItems
     pkg-config
     python3
+    flex
     glib
+    wrapGAppsHook3
   ];
 
   buildInputs = [
-    gtk2
+    gtk3
     readline
   ];
 
   strictDeps = true;
 
   configureFlags = [
-    "--with-gtk"
+    "--with-gtk3"
     "--with--board3d"
   ];
 
   desktopItems = [
     (makeDesktopItem {
       desktopName = "GNU Backgammon";
-      name = pname;
+      name = "gnubg";
       genericName = "Backgammon";
-      comment = meta.description;
-      exec = pname;
-      icon = pname;
+      comment = "World class backgammon application";
+      exec = "gnubg";
+      icon = "gnubg";
       categories = [
         "Game"
         "GTK"
@@ -55,11 +59,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "World class backgammon application";
     homepage = "https://www.gnu.org/software/gnubg/";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.ehmry ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
   };
-}
+})

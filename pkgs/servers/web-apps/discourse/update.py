@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ requests click click-log packaging ])" bundix bundler nix-update nurl prefetch-yarn-deps
+#! nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ requests click click-log packaging ])" bundix bundler nix-update nurl curl unzip
 from __future__ import annotations
 
 import click
@@ -42,10 +42,10 @@ class DiscourseVersion:
         """Take either a tag or version number, calculate the other."""
         if version.startswith('v'):
             self.tag = version
-            self.version = version.lstrip('v')
+            self.version = version.lstrip('v').rstrip("-latest")
         else:
             self.tag = 'v' + version
-            self.version = version
+            self.version = version.rstrip("-latest")
 
         self._version = Version(self.version)
 
@@ -86,13 +86,6 @@ class DiscourseRepo:
 
         return self._latest_commit_sha
 
-    def get_yarn_lock_hash(self, rev: str, path: str):
-        yarnLockText = self.get_file(path, rev)
-        with tempfile.NamedTemporaryFile(mode='w') as lockFile:
-            lockFile.write(yarnLockText)
-            hash = subprocess.check_output(['prefetch-yarn-deps', lockFile.name]).decode().strip()
-            return subprocess.check_output(["nix", "hash", "to-sri", "--type", "sha256", hash]).decode().strip()
-
     def get_file(self, filepath, rev):
         """Return file contents at a given rev.
 
@@ -103,6 +96,24 @@ class DiscourseRepo:
         r = requests.get(f'https://raw.githubusercontent.com/{self.owner}/{self.repo}/{rev}/{filepath}')
         r.raise_for_status()
         return r.text
+
+
+def _get_build_lock_hash():
+    nixpkgs_path = Path(__file__).parent / '../../../../'
+    output = subprocess.run(['nix-build', '-A', 'discourse'], text=True, cwd=nixpkgs_path, capture_output=True)
+    # The line is of the form "    got:    sha256-xxx"
+    lines = [i.strip() for i in output.stderr.splitlines()]
+    new_hash_lines = [i.strip("got:").strip() for i in lines if i.startswith("got:")]
+    if len(new_hash_lines) == 0:
+        if output.returncode != 0:
+            print("Error while fetching new hash with nix build")
+            print(output.stderr)
+        print("No hash change is needed")
+        return None
+    if len(new_hash_lines) > 1:
+        print(new_hash_lines)
+        raise Exception("Got an unexpected number of new hash lines:")
+    return new_hash_lines[0]
 
 
 def _call_nix_update(pkg, version):
@@ -138,6 +149,7 @@ def _diff_file(filepath: str, old_version: DiscourseVersion, new_version: Discou
 
     with tempfile.NamedTemporaryFile(mode='w') as o, tempfile.NamedTemporaryFile(mode='w') as n:
         o.write(old), n.write(new)
+        o.flush(), n.flush()
         width = shutil.get_terminal_size((80, 20)).columns
         diff_proc = subprocess.run(
             ['diff', '--color=always', f'--width={width}', '-y', o.name, n.name],
@@ -225,24 +237,101 @@ def update(rev):
         with open(rubyenv_dir / fn, 'w') as f:
             f.write(repo.get_file(fn, version.tag))
 
+    # download and copy the gems that are specified as path dependencies so bundle/bundix works
+    # currently this is only `migrations`
+    with tempfile.TemporaryDirectory() as d:
+        print("downloading discourse gems (path dependencies) for bundix")
+        subprocess.check_output(['curl',f'https://codeload.github.com/discourse/discourse/zip/refs/tags/{version.tag}','-o','discourse.zip'], cwd=d)
+        subprocess.check_output(['unzip', f'discourse.zip'], cwd=d)
+        subprocess.check_output(['mv', f'discourse-{version.version}/migrations', rubyenv_dir / 'migrations'], cwd=d)
+
+    # -- sed commands borrowed from ../../../by-name/gi/gitlab/update.py which has a similar predicament with path deps
+    # comment from that file: "Undo our gemset.nix patches so that bundix runs through"
+    subprocess.check_output(
+        ["sed", "-i", "-e", "s|\\${src}/||g", "gemset.nix"], cwd=rubyenv_dir
+    )
+    subprocess.check_output(
+        ["sed", "-i", "-e", "s|^src:[[:space:]]||g", "gemset.nix"], cwd=rubyenv_dir
+    )
+
     # work around https://github.com/nix-community/bundix/issues/8
     os.environ["BUNDLE_FORCE_RUBY_PLATFORM"] = "true"
     subprocess.check_output(['bundle', 'lock'], cwd=rubyenv_dir)
     _remove_platforms(rubyenv_dir)
     subprocess.check_output(['bundix'], cwd=rubyenv_dir)
 
+    # -- also from gitlab pkg, see above
+    subprocess.check_output(
+        [
+            "sed",
+            "-i",
+            "-e",
+            "1c\\src: {",
+            "-e",
+            's:path = \\(migrations/[^;]*\\);:path = "${src}/\\1";:g',
+            "gemset.nix",
+        ],
+        cwd=rubyenv_dir,
+    )
+    subprocess.check_output(["rm", "-rf", "migrations"], cwd=rubyenv_dir)
+    # -- end gitlab pkg code
+
+    click.echo("updating dart-sass")
+
+    # update the sass-embedded override
+    # must run *after* the gemfile update!
+    dart_sass_ver = _nix_eval('discourse.rubyEnv.gemset.sass-embedded.version')
+    for platform in ["x64", "arm64"]:
+        prev_hash = _nix_eval(f'discourse.rubyEnv.dart-{platform}-hash')
+        new_hash = subprocess.check_output([
+            "nurl",
+            "--fetcher", "fetchzip",
+            "--hash",
+            f"https://github.com/sass/dart-sass/releases/download/{dart_sass_ver}/dart-sass-{dart_sass_ver}-linux-{platform}.tar.gz",
+        ], text=True).strip("\n")
+
+        if prev_hash == new_hash:
+            click.echo(f"dart-sass for {platform} up to date!")
+            continue
+
+        click.echo(f"Update vendored dart-sass for {platform} to {dart_sass_ver} (hash {prev_hash} -> {new_hash})")
+
+        with open(Path(__file__).parent / "default.nix", 'r+') as f:
+            content = f.read()
+            content = content.replace(prev_hash, new_hash)
+            f.seek(0)
+            f.write(content)
+            f.truncate()
+
+    click.echo("updating discourse package")
+
+    # update the discourse package itself
     _call_nix_update('discourse', version.version)
 
-    old_yarn_hash = _nix_eval('discourse.assets.yarnOfflineCache.outputHash')
-    new_yarn_hash = repo.get_yarn_lock_hash(version.tag, "yarn.lock")
-    click.echo(f"Updating yarn lock hash: {old_yarn_hash} -> {new_yarn_hash}")
+    click.echo("querying old PNPM hash")
+    old_pnpm_hash = _nix_eval('discourse.assets.pnpmDeps.outputHash')
 
+    click.echo("finding new PNPM hash")
+    # the pnpm builder now requires the has to be set to "" to output a "got: sha256-" line
+    empty_hash_line = f"hash = \"\";#{old_pnpm_hash}";
+    mk_hash_line = lambda hash: f"hash = \"{hash}\";"
     with open(Path(__file__).parent / "default.nix", 'r+') as f:
         content = f.read()
-        content = content.replace(old_yarn_hash, new_yarn_hash)
+        content = content.replace(mk_hash_line(old_pnpm_hash), empty_hash_line)
         f.seek(0)
         f.write(content)
         f.truncate()
+    new_pnpm_hash = _get_build_lock_hash()
+
+    if new_pnpm_hash is not None:
+        click.echo(f"Updating pnpm lock hash: {old_pnpm_hash} -> {new_pnpm_hash}")
+
+        with open(Path(__file__).parent / "default.nix", 'r+') as f:
+            content = f.read()
+            content = content.replace(empty_hash_line, mk_hash_line(new_pnpm_hash))
+            f.seek(0)
+            f.write(content)
+            f.truncate()
 
 
 @cli.command()
@@ -268,25 +357,12 @@ def update_mail_receiver(rev):
 def update_plugins():
     """Update plugins to their latest revision."""
     plugins = [
-        {'name': 'discourse-assign'},
         {'name': 'discourse-bbcode-color'},
-        {'name': 'discourse-calendar'},
-        {'name': 'discourse-canned-replies'},
-        {'name': 'discourse-chat-integration'},
-        {'name': 'discourse-checklist'},
-        {'name': 'discourse-data-explorer'},
         {'name': 'discourse-docs'},
-        {'name': 'discourse-github'},
+        {'name': 'discourse-events', 'owner': 'angusmcleod'},
         {'name': 'discourse-ldap-auth', 'owner': 'jonmbake'},
-        {'name': 'discourse-math'},
-        {'name': 'discourse-migratepassword', 'owner': 'discoursehosting'},
-        {'name': 'discourse-openid-connect'},
         {'name': 'discourse-prometheus'},
-        {'name': 'discourse-reactions'},
         {'name': 'discourse-saved-searches'},
-        {'name': 'discourse-solved'},
-        {'name': 'discourse-spoiler-alert'},
-        {'name': 'discourse-voting'},
         {'name': 'discourse-yearly-review'},
     ]
 
@@ -307,8 +383,9 @@ def update_plugins():
         # https://meta.discourse.org/t/pinning-plugin-and-theme-versions-for-older-discourse-installs/156971
         # this makes sure we don't upgrade plugins to revisions that
         # are incompatible with the packaged Discourse version
+        repo_latest_commit = repo.latest_commit_sha
         try:
-            compatibility_spec = repo.get_file('.discourse-compatibility', repo.latest_commit_sha)
+            compatibility_spec = repo.get_file('.discourse-compatibility', repo_latest_commit)
             versions = [(DiscourseVersion(discourse_version), plugin_rev.strip(' '))
                         for [discourse_version, plugin_rev]
                         in [line.lstrip("< ").split(':')
@@ -317,12 +394,12 @@ def update_plugins():
             discourse_version = DiscourseVersion(_get_current_package_version('discourse'))
             versions = list(filter(lambda ver: ver[0] >= discourse_version, versions))
             if versions == []:
-                rev = repo.latest_commit_sha
+                rev = repo_latest_commit
             else:
                 rev = versions[0][1]
                 print(rev)
         except requests.exceptions.HTTPError:
-            rev = repo.latest_commit_sha
+            rev = repo_latest_commit
 
         filename = _nix_eval(f'builtins.unsafeGetAttrPos "src" discourse.plugins.{name}')
         if filename is None:
@@ -348,10 +425,10 @@ def update_plugins():
                              rev = "replace-with-git-rev";
                              sha256 = "replace-with-sha256";
                            }};
-                           meta = with lib; {{
+                           meta = {{
                              homepage = "";
-                             maintainers = with maintainers; [ ];
-                             license = licenses.mit; # change to the correct license!
+                             maintainers = with lib.maintainers; [ ];
+                             license = lib.licenses.mit; # change to the correct license!
                              description = "";
                            }};
                          }}"""))
@@ -403,7 +480,7 @@ def update_plugins():
         plugin_file = plugin_file.replace(",\n", ", ") # fix split lines
         for line in plugin_file.splitlines():
             if 'gem ' in line:
-                line = ','.join(filter(lambda x: ":require_name" not in x, line.split(',')))
+                line = ','.join(filter(lambda x: ":require_name" not in x and "require_name:" not in x, line.split(',')))
                 gemfile_text = gemfile_text + line + os.linesep
 
                 version_file_match = version_file_regex.match(line)

@@ -5,48 +5,48 @@
   ocaml,
   findlib,
   camlpdf,
-  ncurses,
+  nix-update-script,
 }:
 
-if lib.versionOlder ocaml.version "4.10" then
-  throw "cpdf is not available for OCaml ${ocaml.version}"
-else
+stdenv.mkDerivation (finalAttrs: {
+  pname = "ocaml${ocaml.version}-cpdf";
+  version = "2.9.2";
 
-  stdenv.mkDerivation rec {
-    pname = "ocaml${ocaml.version}-cpdf";
-    version = "2.7.1";
+  src = fetchFromGitHub {
+    owner = "johnwhitington";
+    repo = "cpdf-source";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uhgriPA/y5nElQjbNtzx8CJ8O6ZORKCJAzXYrIOWd60=";
+  };
 
-    src = fetchFromGitHub {
-      owner = "johnwhitington";
-      repo = "cpdf-source";
-      rev = "v${version}";
-      hash = "sha256-lFI7f1t70Pw0LJjDrhaB7yQKR1N5906xNYB+fnrz55M=";
-    };
+  nativeBuildInputs = [
+    ocaml
+    findlib
+  ];
+  propagatedBuildInputs = [ camlpdf ];
 
-    nativeBuildInputs = [
-      ocaml
-      findlib
-    ];
-    buildInputs = [ ncurses ];
-    propagatedBuildInputs = [ camlpdf ];
+  strictDeps = true;
 
-    strictDeps = true;
+  preInstall = ''
+    mkdir -p $OCAMLFIND_DESTDIR
+    mkdir -p $out/bin
+    cp cpdf $out/bin
+    mkdir -p $out/share/
+    cp -r doc $out/share
+    cp cpdfmanual.pdf $out/share/doc/cpdf/
+  '';
 
-    preInstall = ''
-      mkdir -p $OCAMLFIND_DESTDIR
-      mkdir -p $out/bin
-      cp cpdf $out/bin
-      mkdir -p $out/share/
-      cp -r doc $out/share
-      cp cpdfmanual.pdf $out/share/doc/cpdf/
-    '';
+  passthru.updateScript = nix-update-script { };
 
-    meta = with lib; {
-      description = "PDF Command Line Tools";
-      homepage = "https://www.coherentpdf.com/";
-      license = licenses.agpl3Only;
-      maintainers = [ maintainers.vbgl ];
-      mainProgram = "cpdf";
-      inherit (ocaml.meta) platforms;
-    };
-  }
+  meta = {
+    description = "PDF Command Line Tools";
+    homepage = "https://www.coherentpdf.com/";
+    changelog = "https://github.com/johnwhitington/cpdf-source/blob/${finalAttrs.src.rev}/Changes.txt";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ vbgl ];
+    teams = with lib.teams; [ ngi ];
+    mainProgram = "cpdf";
+    inherit (ocaml.meta) platforms;
+    broken = lib.versionOlder ocaml.version "4.10";
+  };
+})

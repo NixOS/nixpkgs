@@ -2,91 +2,135 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchYarnDeps,
+  fetchPnpmDeps,
   makeWrapper,
   matrix-sdk-crypto-nodejs,
-  mkYarnPackage,
+  pnpmConfigHook,
   cargo,
+  pnpm_11,
   rustPlatform,
   rustc,
   napi-rs-cli,
   pkg-config,
-  nodejs_22,
+  nodejs,
   openssl,
+  nix-update-script,
 }:
 
 let
-  data = lib.importJSON ./pin.json;
+  pnpm = pnpm_11;
 in
-mkYarnPackage rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "matrix-hookshot";
-  version = data.version;
+  version = "7.5.0";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "matrix-hookshot";
-    rev = data.version;
-    hash = data.srcHash;
+    tag = finalAttrs.version;
+    hash = "sha256-X6A1+AuJyBQJGs8NteGuhUVRt6MISlb4ZtNGcAvPLdk=";
   };
 
-  packageJSON = ./package.json;
-  nodejs = nodejs_22;
-
-  offlineCache = fetchYarnDeps {
-    yarnLock = src + "/yarn.lock";
-    sha256 = data.yarnHash;
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-XQfSMtV4ERo0chry9qPnc3jeOiRDUuV1QfOFUVbNlF8=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = data.cargoHash;
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-zlSAxkBA+IgyT09z8XSgvFjKRa5GGWltkexAvoNmYMk=";
   };
 
-  packageResolutions = {
-    "@matrix-org/matrix-sdk-crypto-nodejs" =
-      "${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs";
-  };
-
-  extraBuildInputs = [ openssl ];
+  buildInputs = [ openssl ];
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
+    pnpmConfigHook
+    pnpm
     pkg-config
     cargo
     rustc
     napi-rs-cli
     makeWrapper
+    nodejs
   ];
+
+  patchPhase = ''
+    runHook prePatch
+
+    patchShebangs scripts/build-modules.sh
+
+    runHook postPatch
+  '';
+
+  preBuild = ''
+    # We want nixpkgs' version of this instead, and yes it's included twice at different versions through different dependencies... Luckily they're all API compatible.
+    rm -rf node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.4.0/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    cp -r ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs \
+      node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.4.0/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    chmod -R a+rwx node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.4.0/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    rm -rf node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.6.6/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    cp -r ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs \
+      node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.6.6/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    chmod -R a+rwx node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.6.6/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+  '';
 
   buildPhase = ''
     runHook preBuild
-    cd deps/${pname}
-    napi build --target ${stdenv.hostPlatform.rust.rustcTargetSpec} --dts ../src/libRs.d.ts --release ./lib
-    yarn run build:app:fix-defs
-    yarn run build:app
-    yarn run build:web
-    cd ../..
+
+    pnpm run build:app:rs --target ${stdenv.hostPlatform.rust.rustcTargetSpec}
+    pnpm run build:app
+    pnpm run build:web
+    pnpm run build:modules
+
     runHook postBuild
   '';
 
+  installPhase = ''
+    runHook preInstall
+
+    rm -r ./node_modules
+    pnpm install --production --offline --ignore-scripts --frozen-lockfile
+
+    # Re-install matrix-sdk-crypto-nodejs
+    rm -rf node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.4.0/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    cp -r ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs \
+      node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.4.0/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    chmod -R a+rwx node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.4.0/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    rm -rf node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.6.6/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    cp -r ${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs \
+      node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.6.6/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+    chmod -R a+rwx node_modules/.pnpm/@matrix-org+matrix-sdk-crypto-nodejs@0.6.6/node_modules/@matrix-org/matrix-sdk-crypto-nodejs
+
+    mkdir -p $out/lib/node_modules/.pnpm/matrix-hookshot/
+    mkdir $out/bin
+
+    mv ./lib/* $out/lib/node_modules/.pnpm/matrix-hookshot
+    mv ./public ./assets ./node_modules ./package.json $out/lib/node_modules/.pnpm/matrix-hookshot
+    # Fix symlink broken by the above mv
+    ln -sf $out/lib/node_modules/.pnpm/matrix-hookshot/public/modules/openproject/element-web \
+      $out/lib/node_modules/.pnpm/matrix-hookshot/node_modules/.pnpm/node_modules/openproject-module
+
+    runHook postInstall
+  '';
+
   postInstall = ''
-    makeWrapper '${nodejs_22}/bin/node' "$out/bin/matrix-hookshot" --add-flags \
-        "$out/libexec/matrix-hookshot/deps/matrix-hookshot/lib/App/BridgeApp.js"
+    makeWrapper '${lib.getExe nodejs}' "$out/bin/matrix-hookshot" \
+      --set NODE_ENV "production" \
+      --add-flags "$out/lib/node_modules/.pnpm/matrix-hookshot/App/BridgeApp.js"
   '';
 
-  postFixup = ''
-    # Scrub reference to rustc
-    rm $out/libexec/matrix-hookshot/deps/matrix-hookshot/target/.rustc_info.json
-  '';
+  passthru.updateScript = nix-update-script { };
 
-  doDist = false;
-
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/matrix-org/matrix-hookshot/blob/${finalAttrs.version}/CHANGELOG.md";
     description = "Bridge between Matrix and multiple project management services, such as GitHub, GitLab and JIRA";
+    homepage = "https://matrix-org.github.io/matrix-hookshot/";
     mainProgram = "matrix-hookshot";
-    maintainers = with maintainers; [ chvp ];
-    license = licenses.asl20;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ chvp ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
   };
-}
+})

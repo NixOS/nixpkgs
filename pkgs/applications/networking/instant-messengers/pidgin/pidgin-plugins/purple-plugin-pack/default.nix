@@ -7,7 +7,7 @@
   pidgin,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "purple-plugin-pack";
   version = "2.8.0";
 
@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
     pidgin
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://keep.imfreedom.org/pidgin/purple-plugin-pack";
     description = "Collection of plugins for purple-based clients such as Pidgin";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ bdimcheff ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ bdimcheff ];
   };
 }

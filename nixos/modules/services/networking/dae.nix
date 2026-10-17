@@ -152,7 +152,8 @@ in
               ExecStartPre = [
                 ""
                 "${daeBin} validate -c \${CREDENTIALS_DIRECTORY}/config.dae"
-              ] ++ (with lib; optional cfg.disableTxChecksumIpGeneric TxChecksumIpGenericWorkaround);
+              ]
+              ++ (with lib; optional cfg.disableTxChecksumIpGeneric TxChecksumIpGenericWorkaround);
               ExecStart = [
                 ""
                 "${daeBin} run --disable-timestamp -c \${CREDENTIALS_DIRECTORY}/config.dae"
@@ -162,14 +163,6 @@ in
           };
 
         assertions = [
-          {
-            assertion = lib.pathExists (toString (genAssetsDrv cfg.assets) + "/share/v2ray");
-            message = ''
-              Packages in `assets` has no preset paths included.
-              Please set `assetsPath` instead.
-            '';
-          }
-
           {
             assertion = !((config.services.dae.config != null) && (config.services.dae.configFile != null));
             message = ''

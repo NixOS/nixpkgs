@@ -2,10 +2,16 @@ import ../make-test-python.nix {
   name = "systemd-confinement";
 
   nodes.machine =
-    { pkgs, lib, ... }:
+    {
+      pkgs,
+      lib,
+      utils,
+      ...
+    }:
     let
       testLib = pkgs.python3Packages.buildPythonPackage {
         name = "confinement-testlib";
+        format = "setuptools";
         unpackPhase = ''
           cat > setup.py <<EOF
           from setuptools import setup
@@ -66,22 +72,21 @@ import ../make-test-python.nix {
             }
           );
 
-          systemd.services.${serviceName} =
-            {
-              inherit description;
-              requiredBy = [ "multi-user.target" ];
-              confinement = (config.confinement or { }) // {
-                enable = true;
-              };
-              serviceConfig = (config.serviceConfig or { }) // {
-                ExecStart = mkTest serviceName testScript;
-                Type = "oneshot";
-              };
-            }
-            // removeAttrs config [
-              "confinement"
-              "serviceConfig"
-            ];
+          systemd.services.${serviceName} = {
+            inherit description;
+            requiredBy = [ "multi-user.target" ];
+            confinement = (config.confinement or { }) // {
+              enable = true;
+            };
+            serviceConfig = (config.serviceConfig or { }) // {
+              ExecStart = mkTest serviceName testScript;
+              Type = "oneshot";
+            };
+          }
+          // removeAttrs config [
+            "confinement"
+            "serviceConfig"
+          ];
         };
 
       parametrisedTests =
@@ -89,7 +94,17 @@ import ../make-test-python.nix {
           (
             { user, privateTmp }:
             let
-              withTmp = if privateTmp then "with PrivateTmp" else "without PrivateTmp";
+              isPrivateTmp = lib.elem privateTmp [
+                true
+                "disconnected"
+              ];
+              withTmp =
+                if privateTmp == true then
+                  "with PrivateTmp=true"
+                else if privateTmp == "disconnected" then
+                  "with PrivateTmp=disconnected"
+                else
+                  "without PrivateTmp";
 
               serviceConfig =
                 if user == "static-user" then
@@ -113,7 +128,7 @@ import ../make-test-python.nix {
                   # Only set if privateTmp is true to ensure that the default is false.
                   serviceConfig =
                     serviceConfig
-                    // lib.optionalAttrs privateTmp {
+                    // lib.optionalAttrs isPrivateTmp {
                       PrivateTmp = true;
                     };
                 };
@@ -127,9 +142,9 @@ import ../make-test-python.nix {
                         'bin': Accessibility.READABLE,
                         'nix': Accessibility.READABLE,
                         'run': Accessibility.READABLE,
-                        ${lib.optionalString privateTmp "'tmp': Accessibility.STICKY,"}
-                        ${lib.optionalString privateTmp "'var': Accessibility.READABLE,"}
-                        ${lib.optionalString privateTmp "'var/tmp': Accessibility.STICKY,"}
+                        ${lib.optionalString isPrivateTmp "'tmp': Accessibility.STICKY,"}
+                        ${lib.optionalString isPrivateTmp "'var': Accessibility.READABLE,"}
+                        ${lib.optionalString isPrivateTmp "'var/tmp': Accessibility.STICKY,"}
                       })
                     ''
                   else
@@ -141,9 +156,9 @@ import ../make-test-python.nix {
                         'bin': Accessibility.READABLE,
                         'nix': Accessibility.READABLE,
                         'run': Accessibility.READABLE,
-                        ${lib.optionalString privateTmp "'tmp': Accessibility.STICKY,"}
-                        ${lib.optionalString privateTmp "'var': Accessibility.READABLE,"}
-                        ${lib.optionalString privateTmp "'var/tmp': Accessibility.STICKY,"}
+                        ${lib.optionalString isPrivateTmp "'tmp': Accessibility.STICKY,"}
+                        ${lib.optionalString isPrivateTmp "'var': Accessibility.READABLE,"}
+                        ${lib.optionalString isPrivateTmp "'var/tmp': Accessibility.STICKY,"}
                       })
                     '';
               }
@@ -153,7 +168,7 @@ import ../make-test-python.nix {
                   # Only set if privateTmp is false to ensure that the default is true.
                   serviceConfig =
                     serviceConfig
-                    // lib.optionalAttrs (!privateTmp) {
+                    // lib.optionalAttrs (!isPrivateTmp) {
                       PrivateTmp = false;
                     };
                 };
@@ -166,15 +181,15 @@ import ../make-test-python.nix {
                       assert_permissions({
                         'bin': Accessibility.READABLE,
                         'nix': Accessibility.READABLE,
-                        ${lib.optionalString privateTmp "'tmp': Accessibility.STICKY,"}
+                        ${lib.optionalString isPrivateTmp "'tmp': Accessibility.STICKY,"}
                         'run': Accessibility.WRITABLE,
 
                         'proc': Accessibility.SPECIAL,
                         'sys': Accessibility.SPECIAL,
                         'dev': Accessibility.WRITABLE,
 
-                        ${lib.optionalString privateTmp "'var': Accessibility.READABLE,"}
-                        ${lib.optionalString privateTmp "'var/tmp': Accessibility.STICKY,"}
+                        ${lib.optionalString isPrivateTmp "'var': Accessibility.READABLE,"}
+                        ${lib.optionalString isPrivateTmp "'var/tmp': Accessibility.STICKY,"}
                       })
                     ''
                   else
@@ -185,7 +200,7 @@ import ../make-test-python.nix {
                       assert_permissions({
                         'bin': Accessibility.READABLE,
                         'nix': Accessibility.READABLE,
-                        ${lib.optionalString privateTmp "'tmp': Accessibility.STICKY,"}
+                        ${lib.optionalString isPrivateTmp "'tmp': Accessibility.STICKY,"}
                         'run': Accessibility.STICKY,
 
                         'proc': Accessibility.SPECIAL,
@@ -194,8 +209,8 @@ import ../make-test-python.nix {
                         'dev/shm': Accessibility.STICKY,
                         'dev/mqueue': Accessibility.STICKY,
 
-                        ${lib.optionalString privateTmp "'var': Accessibility.READABLE,"}
-                        ${lib.optionalString privateTmp "'var/tmp': Accessibility.STICKY,"}
+                        ${lib.optionalString isPrivateTmp "'var': Accessibility.READABLE,"}
+                        ${lib.optionalString isPrivateTmp "'var/tmp': Accessibility.STICKY,"}
                       })
                     '';
               }
@@ -211,126 +226,171 @@ import ../make-test-python.nix {
               privateTmp = [
                 true
                 false
+                "disconnected"
               ];
             }
           );
 
+      concurrentRunner = pkgs.writers.writePython3 "concurrent-runner" {
+        libraries = [
+          pkgs.python3Packages.click
+          pkgs.python3Packages.hypothesis
+        ];
+      } ./concurrent-runner.py;
+
+      concurrentTest = {
+        systemd.services.concurrent-driver = {
+          description = "Driver for orchestrating concurrent processes";
+          requiredBy = [ "multi-user.target" ];
+          after = [
+            "network.target"
+            "concurrent-client.socket"
+          ];
+          serviceConfig.Type = "oneshot";
+          serviceConfig.ExecStart = utils.escapeSystemdExecArgs [
+            concurrentRunner
+            "driver"
+          ];
+        };
+
+        systemd.sockets.concurrent-client = {
+          description = "Socket for concurrent processes";
+          requiredBy = [ "sockets.target" ];
+          socketConfig.ListenStream = 12345;
+          socketConfig.Accept = true;
+        };
+
+        systemd.services."concurrent-client@" = {
+          description = "Process %I running concurrently with others";
+          confinement.enable = true;
+          serviceConfig.StandardInput = "socket";
+          serviceConfig.StandardError = "journal";
+          serviceConfig.ExecStart = utils.escapeSystemdExecArgs [
+            concurrentRunner
+            "client"
+            "${pkgs.fortune}/bin/fortune"
+          ];
+        };
+      };
+
     in
     {
-      imports = lib.imap1 mkTestStep (
-        parametrisedTests
-        ++ [
-          {
-            description = "existence of bind-mounted /etc";
-            config.serviceConfig.BindReadOnlyPaths = [ "/etc" ];
-            testScript = ''
-              assert Path('/etc/passwd').read_text()
-            '';
-          }
-          (
-            let
-              symlink = pkgs.runCommand "symlink" {
-                target = pkgs.writeText "symlink-target" "got me";
-              } "ln -s \"$target\" \"$out\"";
-            in
+      imports =
+        lib.imap1 mkTestStep (
+          parametrisedTests
+          ++ [
             {
-              description = "check if symlinks are properly bind-mounted";
-              config.confinement.packages = lib.singleton symlink;
+              description = "existence of bind-mounted /etc";
+              config.serviceConfig.BindReadOnlyPaths = [ "/etc" ];
               testScript = ''
-                assert Path('${symlink}').read_text() == 'got me'
+                assert Path('/etc/passwd').read_text()
               '';
             }
-          )
-          {
-            description = "check if StateDirectory works";
-            config.serviceConfig.User = "chroot-testuser";
-            config.serviceConfig.Group = "chroot-testgroup";
-            config.serviceConfig.StateDirectory = "testme";
+            (
+              let
+                symlink = pkgs.runCommand "symlink" {
+                  target = pkgs.writeText "symlink-target" "got me";
+                } "ln -s \"$target\" \"$out\"";
+              in
+              {
+                description = "check if symlinks are properly bind-mounted";
+                config.confinement.packages = lib.singleton symlink;
+                testScript = ''
+                  assert Path('${symlink}').read_text() == 'got me'
+                '';
+              }
+            )
+            {
+              description = "check if StateDirectory works";
+              config.serviceConfig.User = "chroot-testuser";
+              config.serviceConfig.Group = "chroot-testgroup";
+              config.serviceConfig.StateDirectory = "testme";
 
-            # We restart on purpose here since we want to check whether the state
-            # directory actually persists.
-            config.serviceConfig.Restart = "on-failure";
-            config.serviceConfig.RestartMode = "direct";
+              # We restart on purpose here since we want to check whether the state
+              # directory actually persists.
+              config.serviceConfig.Restart = "on-failure";
+              config.serviceConfig.RestartMode = "direct";
 
-            testScript = ''
-              assert not Path('/tmp/canary').exists()
-              Path('/tmp/canary').touch()
+              testScript = ''
+                assert not Path('/tmp/canary').exists()
+                Path('/tmp/canary').touch()
 
-              if (foo := Path('/var/lib/testme/foo')).exists():
-                assert Path('/var/lib/testme/foo').read_text() == 'works'
-              else:
-                Path('/var/lib/testme/foo').write_text('works')
-                print('<4>Exiting with failure to check persistence on restart.')
-                raise SystemExit(1)
-            '';
-          }
-          {
-            description = "check if /bin/sh works";
-            testScript = ''
-              assert Path('/bin/sh').exists()
+                if (foo := Path('/var/lib/testme/foo')).exists():
+                  assert Path('/var/lib/testme/foo').read_text() == 'works'
+                else:
+                  Path('/var/lib/testme/foo').write_text('works')
+                  print('<4>Exiting with failure to check persistence on restart.')
+                  raise SystemExit(1)
+              '';
+            }
+            {
+              description = "check if /bin/sh works";
+              testScript = ''
+                assert Path('/bin/sh').exists()
 
-              result = run(
-                ['/bin/sh', '-c', 'echo -n bar'],
-                capture_output=True,
-                check=True,
-              )
-              assert result.stdout == b'bar'
-            '';
-          }
-          {
-            description = "check if suppressing /bin/sh works";
-            config.confinement.binSh = null;
-            testScript = ''
-              assert not Path('/bin/sh').exists()
-              with pytest.raises(FileNotFoundError):
-                run(['/bin/sh', '-c', 'echo foo'])
-            '';
-          }
-          {
-            description = "check if we can set /bin/sh to something different";
-            config.confinement.binSh = "${pkgs.hello}/bin/hello";
-            testScript = ''
-              assert Path('/bin/sh').exists()
-              result = run(
-                ['/bin/sh', '-g', 'foo'],
-                capture_output=True,
-                check=True,
-              )
-              assert result.stdout == b'foo\n'
-            '';
-          }
-          {
-            description = "check if only Exec* dependencies are included";
-            config.environment.FOOBAR = pkgs.writeText "foobar" "eek";
-            testScript = ''
-              with pytest.raises(FileNotFoundError):
-                Path(os.environ['FOOBAR']).read_text()
-            '';
-          }
-          {
-            description = "check if fullUnit includes all dependencies";
-            config.environment.FOOBAR = pkgs.writeText "foobar" "eek";
-            config.confinement.fullUnit = true;
-            testScript = ''
-              assert Path(os.environ['FOOBAR']).read_text() == 'eek'
-            '';
-          }
-          {
-            description = "check if shipped unit file still works";
-            config.confinement.mode = "chroot-only";
-            rawUnit = ''
-              [Service]
-              SystemCallFilter=~kill
-              SystemCallErrorNumber=ELOOP
-            '';
-            testScript = ''
-              with pytest.raises(OSError) as excinfo:
-                os.kill(os.getpid(), signal.SIGKILL)
-              assert excinfo.value.errno == errno.ELOOP
-            '';
-          }
-        ]
-      );
+                result = run(
+                  ['/bin/sh', '-c', 'echo -n bar'],
+                  capture_output=True,
+                  check=True,
+                )
+                assert result.stdout == b'bar'
+              '';
+            }
+            {
+              description = "check if suppressing /bin/sh works";
+              config.confinement.binSh = null;
+              testScript = ''
+                assert not Path('/bin/sh').exists()
+                with pytest.raises(FileNotFoundError):
+                  run(['/bin/sh', '-c', 'echo foo'])
+              '';
+            }
+            {
+              description = "check if we can set /bin/sh to something different";
+              config.confinement.binSh = "${pkgs.hello}/bin/hello";
+              testScript = ''
+                assert Path('/bin/sh').exists()
+                result = run(
+                  ['/bin/sh', '-g', 'foo'],
+                  capture_output=True,
+                  check=True,
+                )
+                assert result.stdout == b'foo\n'
+              '';
+            }
+            {
+              description = "check if only Exec* dependencies are included";
+              config.environment.FOOBAR = pkgs.writeText "foobar" "eek";
+              testScript = ''
+                with pytest.raises(FileNotFoundError):
+                  Path(os.environ['FOOBAR']).read_text()
+              '';
+            }
+            {
+              description = "check if fullUnit includes all dependencies";
+              config.environment.FOOBAR = pkgs.writeText "foobar" "eek";
+              config.confinement.fullUnit = true;
+              testScript = ''
+                assert Path(os.environ['FOOBAR']).read_text() == 'eek'
+              '';
+            }
+            {
+              description = "check if shipped unit file still works";
+              config.confinement.mode = "chroot-only";
+              rawUnit = ''
+                [Service]
+                SystemCallFilter=~kill
+                SystemCallErrorNumber=ELOOP
+              '';
+              testScript = ''
+                with pytest.raises(OSError) as excinfo:
+                  os.kill(os.getpid(), signal.SIGKILL)
+                assert excinfo.value.errno == errno.ELOOP
+              '';
+            }
+          ]
+        )
+        ++ [ concurrentTest ];
 
       config.users.groups.chroot-testgroup = { };
       config.users.users.chroot-testuser = {

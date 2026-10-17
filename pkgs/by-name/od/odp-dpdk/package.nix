@@ -5,6 +5,7 @@
   autoreconfHook,
   pkg-config,
   dpdk,
+  intel-ipsec-mb,
   libbpf,
   libconfig,
   libpcap,
@@ -16,18 +17,25 @@
   elfutils,
   jansson,
   libnl,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "odp-dpdk";
-  version = "1.44.0.0_DPDK_22.11";
+  version = "1.51.0.0_DPDK_24.11";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "OpenDataPlane";
     repo = "odp-dpdk";
-    rev = "v${version}";
-    hash = "sha256-hYtQ7kKB08BImkTYXqtnv1Ny1SUPCs6GX7WOYks8iKA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-L6lF8VaycAz7PcFArAgLhI8+sc0jnAHY3gum/uDIYz4=";
   };
+
+  # fix build w/ glibc-2.44
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
 
   nativeBuildInputs = [
     autoreconfHook
@@ -36,6 +44,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     dpdk
+    intel-ipsec-mb
     libconfig
     libpcap
     numactl
@@ -54,11 +63,16 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Open Data Plane optimized for DPDK";
     homepage = "https://www.opendataplane.org";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.abuibrahim ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      abuibrahim
+      stepbrobd
+    ];
   };
-}
+})

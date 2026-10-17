@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.mjolnir;
 
@@ -15,20 +20,32 @@ let
     rawHomeserverUrl = cfg.homeserverUrl;
 
     pantalaimon = {
-      inherit (cfg.pantalaimon) username;
-
       use = cfg.pantalaimon.enable;
+    }
+    // lib.optionalAttrs cfg.pantalaimon.enable {
+      inherit (cfg.pantalaimon) username;
       password = "@PANTALAIMON_PASSWORD@"; # will be replaced in "generateConfig"
+    };
+    encryption = {
+      inherit (cfg.settings.encryption) username;
+      password = "@ENCRYPTION_PASSWORD@"; # will be replaced in "generateConfig"
     };
   };
 
   moduleConfigFile = pkgs.writeText "module-config.yaml" (
-    lib.generators.toYAML { } (lib.filterAttrs (_: v: v != null)
-      (lib.fold lib.recursiveUpdate { } [ yamlConfig cfg.settings ])));
+    lib.generators.toYAML { } (
+      lib.filterAttrs (_: v: v != null) (
+        lib.foldr lib.recursiveUpdate { } [
+          yamlConfig
+          cfg.settings
+        ]
+      )
+    )
+  );
 
   # these config files will be merged one after the other to build the final config
   configFiles = [
-    "${pkgs.mjolnir}/libexec/mjolnir/deps/mjolnir/config/default.yaml"
+    "${pkgs.mjolnir}/lib/node_modules/mjolnir/config/default.yaml"
     moduleConfigFile
   ];
 
@@ -36,7 +53,9 @@ let
   # replace all secret strings using replace-secret
   generateConfig = pkgs.writeShellScript "mjolnir-generate-config" (
     let
-      yqEvalStr = lib.concatImapStringsSep " * " (pos: _: "select(fileIndex == ${toString (pos - 1)})") configFiles;
+      yqEvalStr = lib.concatImapStringsSep " * " (
+        pos: _: "select(fileIndex == ${toString (pos - 1)})"
+      ) configFiles;
       yqEvalArgs = lib.concatStringsSep " " configFiles;
     in
     ''
@@ -57,6 +76,9 @@ let
       ''}
       ${lib.optionalString (cfg.pantalaimon.passwordFile != null) ''
         ${pkgs.replace-secret}/bin/replace-secret '@PANTALAIMON_PASSWORD@' '${cfg.pantalaimon.passwordFile}' ${cfg.dataPath}/config/default.yaml
+      ''}
+      ${lib.optionalString (cfg.encryption.passwordFile != null) ''
+        ${pkgs.replace-secret}/bin/replace-secret '@ENCRYPTION_PASSWORD@' '${cfg.encryption.passwordFile}' ${cfg.dataPath}/config/default.yaml
       ''}
     ''
   );
@@ -81,6 +103,14 @@ in
       default = null;
       description = ''
         File containing the matrix access token for the `mjolnir` user.
+      '';
+    };
+
+    encryption.passwordFile = lib.mkOption {
+      type = with lib.types; nullOr path;
+      default = null;
+      description = ''
+        File containing the matrix password for the `mjolnir` user.
       '';
     };
 
@@ -173,16 +203,21 @@ in
   config = lib.mkIf config.services.mjolnir.enable {
     assertions = [
       {
+        assertion = !(cfg.settings.encryption.use && cfg.encryption.passwordFile == null);
+        message = "encryption.passwordFile must be specified when native encryption is used.";
+      }
+      {
         assertion = !(cfg.pantalaimon.enable && cfg.pantalaimon.passwordFile == null);
-        message = "Specify pantalaimon.passwordFile";
+        message = "pantalaimon.passwordFile must be specified when pantalaimon is enabled.";
       }
       {
-        assertion = !(cfg.pantalaimon.enable && cfg.accessTokenFile != null);
-        message = "Do not specify accessTokenFile when using pantalaimon";
+        assertion = cfg.accessTokenFile == null -> cfg.pantalaimon.enable || cfg.settings.encryption.use;
+        message = "Do not specify accessTokenFile when using native encryption or pantalaimon";
       }
       {
-        assertion = !(!cfg.pantalaimon.enable && cfg.accessTokenFile == null);
-        message = "Specify accessTokenFile when not using pantalaimon";
+        assertion =
+          !(!cfg.pantalaimon.enable && !cfg.settings.encryption.use && cfg.accessTokenFile == null);
+        message = "Specify accessTokenFile when not using pantalaimon or native encryption.";
       }
     ];
 
@@ -190,19 +225,26 @@ in
     # which breaks older configs using pantalaimon or access tokens
     services.mjolnir.settings.encryption.use = lib.mkDefault false;
 
-    services.pantalaimon-headless.instances."mjolnir" = lib.mkIf cfg.pantalaimon.enable
-      {
+    services.pantalaimon-headless.instances."mjolnir" =
+      lib.mkIf cfg.pantalaimon.enable {
         homeserver = cfg.homeserverUrl;
-      } // cfg.pantalaimon.options;
+      }
+      // cfg.pantalaimon.options;
 
     systemd.services.mjolnir = {
       description = "mjolnir - a moderation tool for Matrix";
-      wants = [ "network-online.target" ] ++ lib.optionals (cfg.pantalaimon.enable) [ "pantalaimon-mjolnir.service" ];
-      after = [ "network-online.target" ] ++ lib.optionals (cfg.pantalaimon.enable) [ "pantalaimon-mjolnir.service" ];
+      wants = [
+        "network-online.target"
+      ]
+      ++ lib.optionals (cfg.pantalaimon.enable) [ "pantalaimon-mjolnir.service" ];
+      after = [
+        "network-online.target"
+      ]
+      ++ lib.optionals (cfg.pantalaimon.enable) [ "pantalaimon-mjolnir.service" ];
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = ''${pkgs.mjolnir}/bin/mjolnir --mjolnir-config ./config/default.yaml'';
+        ExecStart = "${pkgs.mjolnir}/bin/mjolnir --mjolnir-config ./config/default.yaml";
         ExecStartPre = [ generateConfig ];
         WorkingDirectory = cfg.dataPath;
         StateDirectory = "mjolnir";
@@ -215,15 +257,16 @@ in
         User = "mjolnir";
         Restart = "on-failure";
 
-        /* TODO: wait for #102397 to be resolved. Then load secrets from $CREDENTIALS_DIRECTORY+"/NAME"
-        DynamicUser = true;
-        LoadCredential = [] ++
-          lib.optionals (cfg.accessTokenFile != null) [
-            "access_token:${cfg.accessTokenFile}"
-          ] ++
-          lib.optionals (cfg.pantalaimon.passwordFile != null) [
-            "pantalaimon_password:${cfg.pantalaimon.passwordFile}"
-          ];
+        /*
+          TODO: wait for #102397 to be resolved. Then load secrets from $CREDENTIALS_DIRECTORY+"/NAME"
+          DynamicUser = true;
+          LoadCredential = [] ++
+            lib.optionals (cfg.accessTokenFile != null) [
+              "access_token:${cfg.accessTokenFile}"
+            ] ++
+            lib.optionals (cfg.pantalaimon.passwordFile != null) [
+              "pantalaimon_password:${cfg.pantalaimon.passwordFile}"
+            ];
         */
       };
     };

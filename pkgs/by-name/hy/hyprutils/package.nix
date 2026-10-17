@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gcc16Stdenv,
   cmake,
   pkg-config,
   pixman,
@@ -8,15 +8,15 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+gcc16Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprutils";
-  version = "0.3.3";
+  version = "0.14.2";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprutils";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1LimBKvDpBbeX+qW7T240WEyw+DBVpDotZB4JYm8Aps=";
+    hash = "sha256-dpmeFq5vPvSOsi30ZchOLjltAZEuVBucDvGKs3IZYf4=";
   };
 
   nativeBuildInputs = [
@@ -34,17 +34,17 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeBuildType = "RelWithDebInfo";
+  separateDebugInfo = true;
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/hyprwm/hyprutils";
+    changelog = "https://github.com/hyprwm/hyprutils/releases/tag/${finalAttrs.src.tag}";
     description = "Small C++ library for utilities used across the Hypr* ecosystem";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
-    maintainers = with lib.maintainers; [
-      donovanglover
-      johnrtitor
-    ];
+    teams = [ lib.teams.hyprland ];
+    maintainers = with lib.maintainers; [ logger ];
   };
 })

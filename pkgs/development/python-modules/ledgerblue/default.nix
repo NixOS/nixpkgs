@@ -5,7 +5,6 @@
   buildPythonPackage,
   ecpy,
   fetchPypi,
-  future,
   hidapi,
   nfcpy,
   pillow,
@@ -13,24 +12,22 @@
   pycrypto,
   pycryptodomex,
   pyelftools,
+  pyserial,
   python-gnupg,
   python-u2flib-host,
-  pythonOlder,
-  setuptools,
   setuptools-scm,
+  setuptools,
   websocket-client,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ledgerblue";
-  version = "0.1.54";
+  version = "0.1.58";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Hn99ST6RnER6XI6+rqA3O9/aC+whYoTOzeoHGF/fFz4=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-EHniiz6h6qoH8srquVaiWIxpTDQaKp9strNtuIpHeTY=";
   };
 
   build-system = [
@@ -40,9 +37,10 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "protobuf" ];
 
+  pythonRemoveDeps = [ "future" ];
+
   dependencies = [
     ecpy
-    future
     hidapi
     nfcpy
     pillow
@@ -50,20 +48,23 @@ buildPythonPackage rec {
     pycrypto
     pycryptodomex
     pyelftools
+    pyserial
     python-gnupg
     python-u2flib-host
     websocket-client
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ bleak ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ bleak ];
 
   # No tests
   doCheck = false;
 
   pythonImportsCheck = [ "ledgerblue" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to communicate with Ledger Blue/Nano S";
     homepage = "https://github.com/LedgerHQ/blue-loader-python";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ np ];
+    changelog = "https://github.com/LedgerHQ/blue-loader-python/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ np ];
   };
-}
+})

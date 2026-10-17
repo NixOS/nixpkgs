@@ -22,14 +22,14 @@
   xattr,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "swift";
-  version = "2.34.0";
+  version = "2.38.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ZvdWWvPUdZIEadxV0nhqgTXhgJJu+hD1LnYCAP+9gpM=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-DX1qmFYv127uUfKjUgBWVrf6mGQ8BB833xn+EUR9p0Q=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -53,6 +53,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     boto3
+    libredirect.hook
     mock
     stestr
     swiftclient
@@ -68,7 +69,6 @@ buildPythonPackage rec {
   checkPhase = ''
     echo "nameserver 127.0.0.1" > resolv.conf
     export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf)
-    export LD_PRELOAD=${libredirect}/lib/libredirect.so
 
     export SWIFT_TEST_CONFIG_FILE=test/sample.conf
 
@@ -77,10 +77,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "swift" ];
 
-  meta = with lib; {
+  meta = {
     description = "OpenStack Object Storage";
     homepage = "https://github.com/openstack/swift";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
-}
+})

@@ -1,30 +1,57 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dblab";
-  version = "0.30.1";
+  version = "0.53.0";
 
   src = fetchFromGitHub {
     owner = "danvergara";
     repo = "dblab";
-    rev = "v${version}";
-    hash = "sha256-a0452fNr78FDhVoBF8RkKbtamvc5e6gEbTOeRdgGQs4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sHQrHbf8EnM08ygFFj/mRro7ogQH9xkUM/rLdmZ+ftU=";
   };
 
-  vendorHash = "sha256-n1Z3sNvNLX1QpfpDSGDygjbC6IE85SBJHvyliy11OjU=";
+  vendorHash = "sha256-upkZqygtoH+rbuKiYtDO/TJQa+WuBNsI7EZejZLAOtc=";
+  # Fix case-insensitive conflicts producing platform-dependent checksums
+  # https://github.com/microsoft/go-mssqldb/issues/234
+  proxyVendor = true;
 
-  ldflags = [ "-s -w -X main.version=${version}" ];
+  ldflags = [
+    "-s"
+    "-X main.version=${finalAttrs.version}"
+  ];
 
-  # some tests require network access
-  doCheck = false;
+  doCheck = true;
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # modernc reads /etc/protocols during package init, which Darwin sandboxing blocks.
+    go mod download modernc.org/libc
+    chmod -R u+w "$GOPATH/pkg/mod/modernc.org/libc@"*
+    substituteInPlace "$GOPATH"/pkg/mod/modernc.org/libc@*/honnef.co/go/netdb/netdb.go \
+      --replace-fail '!os.IsNotExist(err)' '!os.IsNotExist(err) && !os.IsPermission(err)'
+  '';
+  checkFlags = [
+    "-short"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Tries to bind a local TCP listener, which Darwin sandboxing blocks.
+    "-skip=^TestSSHKeyFileAuthentication$"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Database client every command line junkie deserves";
+    longDescription = ''
+      Fast and lightweight interactive terminal-based UI application
+      for PostgreSQL, MySQL, SQLite, Oracle, and SQL Server.
+    '';
     homepage = "https://github.com/danvergara/dblab";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dit7ya ];
+    changelog = "https://github.com/danvergara/dblab/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ iamanaws ];
+    mainProgram = "dblab";
   };
-}
+})

@@ -31,8 +31,13 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -pv "$out"
-    export HOME="$out"
+    export HOME="$TMPDIR"
     export PATH=$out/bin:$PATH
+
+    # Stop Isabelle trying to use `/tmp`.
+    user_home="$(isabelle getenv -b ISABELLE_HOME_USER)"
+    mkdir -p "$user_home/etc"
+    echo 'ISABELLE_TMP_PREFIX="$TMPDIR/isabelle"' > "$user_home/etc/settings"
 
     pushd zenon
     ./configure --prefix $out

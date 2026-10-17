@@ -12,16 +12,16 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dvgrab";
-  version = "2016-05-16";
+  version = "3.5.2";
 
   src = fetchFromGitHub {
     # mirror of original project with some build fixes
     owner = "ddennedy";
     repo = "dvgrab";
-    rev = "e46042e0c7b3523b6854ee547b0534e8310b7460";
-    sha256 = "17qy76fjpzrbxm4pj0ljx5lbimxryv24fvr13jwkh24j85dxailn";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-SAxI0jYSmNCwhz921nIhMcYVrpwsoX5YTO4qFrkcmeA=";
   };
 
   buildInputs = [
@@ -38,7 +38,7 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Receive and store audio & video over IEEE1394";
 
     longDescription = ''
@@ -51,8 +51,9 @@ stdenv.mkDerivation {
 
     homepage = "https://github.com/ddennedy/dvgrab"; # Formerly http://www.kinodv.org/
 
-    license = licenses.gpl2Plus;
-    platforms = platforms.gnu ++ platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.gnu ++ lib.platforms.linux;
     mainProgram = "dvgrab";
+    maintainers = [ lib.maintainers.ryand56 ];
   };
-}
+})

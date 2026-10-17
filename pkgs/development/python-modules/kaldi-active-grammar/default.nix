@@ -10,7 +10,7 @@
   numpy,
   cffi,
   openfst,
-  substituteAll,
+  replaceVars,
   callPackage,
 }:
 
@@ -24,18 +24,20 @@ let
 in
 buildPythonPackage rec {
   pname = "kaldi-active-grammar";
-  version = "3.1.0";
+  version = "3.2.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "daanzu";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0lilk6yjzcy31avy2z36bl9lr60gzwhmyqwqn8akq11qc3mbffsk";
+    repo = "kaldi-active-grammar";
+    tag = "v${version}";
+    hash = "sha256-VyVshIEVp/ep4Ih7Kj66GF02JEZ4nwgJOtgR2DarzdY=";
   };
 
-  KALDI_BRANCH = "foo";
-  KALDIAG_SETUP_RAW = "1";
+  env = {
+    KALDI_BRANCH = "foo";
+    KALDIAG_SETUP_RAW = "1";
+  };
 
   patches = [
     # Makes sure scikit-build doesn't try to build the dependencies for us
@@ -43,8 +45,7 @@ buildPythonPackage rec {
     # Uses the dependencies' binaries from $PATH instead of a specific directory
     ./0002-exec-path.patch
     # Makes it dynamically link to the correct Kaldi library
-    (substituteAll {
-      src = ./0003-ffi-path.patch;
+    (replaceVars ./0003-ffi-path.patch {
       kaldiFork = "${kaldi}/lib";
     })
   ];
@@ -72,12 +73,12 @@ buildPythonPackage rec {
 
   doCheck = false; # no tests exist
 
-  meta = with lib; {
+  meta = {
     description = "Python Kaldi speech recognition";
     homepage = "https://github.com/daanzu/kaldi-active-grammar";
-    license = licenses.agpl3Plus;
+    license = lib.licenses.agpl3Plus;
     maintainers = [ ];
     # Other platforms are supported upstream.
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

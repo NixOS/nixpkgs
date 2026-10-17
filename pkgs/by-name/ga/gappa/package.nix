@@ -5,16 +5,27 @@
   gmp,
   mpfr,
   boost,
+  flex,
+  bison,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gappa";
-  version = "1.4.0";
+  version = "1.8.0";
 
   src = fetchurl {
-    url = "https://gforge.inria.fr/frs/download.php/file/38436/gappa-${version}.tar.gz";
-    sha256 = "12x42z901pr05ldmparqdi8sq9s7fxbavhzk2dbq3l6hy247dwbb";
+    url = "https://gappa.gitlabpages.inria.fr/releases/gappa-${finalAttrs.version}.tar.gz";
+    hash = "sha256-dA1gOwRkW7lEo04bMldFHX0Chs8gMbd0Yl4/HhYK4qo";
   };
+
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    flex
+    bison
+  ];
 
   buildInputs = [
     gmp
@@ -22,18 +33,42 @@ stdenv.mkDerivation rec {
     boost.dev
   ];
 
-  buildPhase = "./remake";
-  installPhase = "./remake install";
+  # For darwin sandboxed builds
+  postPatch = ''
+    substituteInPlace remake.cpp \
+      --replace 'tempnam(NULL, "rmk-")' 'tempnam(".", "rmk-")'
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+
+    ./remake
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    ./remake install
+
+    runHook postInstall
+  '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
-    homepage = "http://gappa.gforge.inria.fr/";
+    homepage = "https://gappa.gitlabpages.inria.fr/";
     description = "Verifying and formally proving properties on numerical programs dealing with floating-point or fixed-point arithmetic";
     mainProgram = "gappa";
     license = with lib.licenses; [
-      cecill20
-      gpl2
+      cecill21
+      gpl3
     ];
     maintainers = with lib.maintainers; [ vbgl ];
     platforms = lib.platforms.all;
   };
-}
+})

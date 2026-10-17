@@ -1,23 +1,44 @@
-{ lib, stdenv, mkDerivation, fetchurl, cmake, runtimeShell
-, pkg-config, alsa-lib, libjack2, libsndfile, fftw
-, curl, gcc, libXt, qtbase, qttools, qtwebengine
-, readline, qtwebsockets, useSCEL ? false, emacs
-, gitUpdater, supercollider-with-plugins
-, supercolliderPlugins, writeText, runCommand
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  fetchurl,
+  cmake,
+  runtimeShell,
+  pkg-config,
+  alsa-lib,
+  libjack2,
+  libsndfile,
+  fftw,
+  curl,
+  gcc,
+  qt6,
+  libxt,
+  readline,
+  useSCEL ? false,
+  useQtWebEngine ? true,
+  emacs,
+  gitUpdater,
+  supercollider-with-plugins,
+  supercolliderPlugins,
+  runCommand,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "supercollider";
-  version = "3.13.0";
+  version = "3.14.1";
 
   src = fetchurl {
     url = "https://github.com/supercollider/supercollider/releases/download/Version-${version}/SuperCollider-${version}-Source.tar.bz2";
-    sha256 = "sha256-D8Xbpbrq43+Qaa0oiFqkBcaiUwnjiGy+ERvTt8BVMc4=";
+    sha256 = "sha256-7mQMaHd65pdoIGbOXEqLflbFsiPnbHnBO1vlOH7lW7I=";
   };
 
   patches = [
-    # add support for SC_DATA_DIR and SC_PLUGIN_DIR env vars to override compile-time values
-    ./supercollider-3.12.0-env-dirs.patch
+    # add support for Qt 6.11 in SuperCollider 3.14.1
+    (fetchpatch {
+      url = "https://github.com/supercollider/supercollider/commit/e997e47890a9cee137756dede664811a58dbf85a.patch";
+      hash = "sha256-Koh5CwkedDEXwvSFyZSrdKyVIKpX7nPrIcsr2FXaejo=";
+    })
   ];
 
   postPatch = ''
@@ -26,17 +47,35 @@ mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ cmake pkg-config qttools ]
-    ++ lib.optionals useSCEL [ emacs ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    qt6.qttools
+    qt6.wrapQtAppsHook
+  ]
+  ++ lib.optionals useSCEL [ emacs ];
 
-  buildInputs = [ gcc libjack2 libsndfile fftw curl libXt qtbase qtwebengine qtwebsockets readline ]
-    ++ lib.optional (!stdenv.hostPlatform.isDarwin) alsa-lib;
+  buildInputs = [
+    gcc
+    libjack2
+    libsndfile
+    fftw
+    curl
+    libxt
+    qt6.qtbase
+    qt6.qtwebsockets
+    qt6.qtwayland
+    qt6.qtwebengine
+    readline
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) alsa-lib;
 
   hardeningDisable = [ "stackprotector" ];
 
   cmakeFlags = [
     "-DSC_WII=OFF"
     "-DSC_EL=${if useSCEL then "ON" else "OFF"}"
+    (lib.cmakeBool "SC_USE_QTWEBENGINE" useQtWebEngine)
   ];
 
   passthru = {
@@ -47,32 +86,40 @@ mkDerivation rec {
     };
 
     tests = {
-      # test to make sure sclang runs and included plugins are successfully found
-      sclang-sc3-plugins = let
-        supercollider-with-test-plugins = supercollider-with-plugins.override {
-          plugins = with supercolliderPlugins; [ sc3-plugins ];
-        };
-        testsc = writeText "test.sc" ''
-          var err = 0;
-          try {
-          MdaPiano.name.postln;
-          } {
-          err = 1;
+      # Check both language classes and server UGens, without an audio device.
+      sclang-sc3-plugins =
+        let
+          supercollider-with-test-plugins = supercollider-with-plugins.override {
+            plugins = with supercolliderPlugins; [ sc3-plugins ];
           };
-          err.exit;
-        '';
-      in runCommand "sclang-sc3-plugins-test" { } ''
-        timeout 60s env XDG_CONFIG_HOME="$(mktemp -d)" QT_QPA_PLATFORM=minimal ${supercollider-with-test-plugins}/bin/sclang ${testsc} >$out
-      '';
+        in
+        runCommand "sclang-sc3-plugins-test"
+          {
+            QT_QPA_PLATFORM = "offscreen";
+          }
+          ''
+            export XDG_CONFIG_HOME="$TMPDIR/config"
+            export XDG_DATA_HOME="$TMPDIR/data"
+            export XDG_CACHE_HOME="$TMPDIR/cache"
+            mkdir -p "$out"
+            timeout 60s ${supercollider-with-test-plugins}/bin/sclang \
+              ${./tests/sc3-plugins.scd} "$out" 2>&1 | tee "$out/log"
+            grep -Fq 'SC3 plugins rendered successfully' "$out/log"
+            if grep -E 'ERROR|FAILURE|duplicate' "$out/log"; then
+              exit 1
+            fi
+          '';
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Programming language for real time audio synthesis";
     homepage = "https://supercollider.github.io";
     changelog = "https://github.com/supercollider/supercollider/blob/Version-${version}/CHANGELOG.md";
-    maintainers = [ ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [
+      pretentiousUsername
+    ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
 }

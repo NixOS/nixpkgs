@@ -10,18 +10,19 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "git-lfs";
-  version = "3.6.0";
+  version = "3.8.0";
 
   src = fetchFromGitHub {
     owner = "git-lfs";
     repo = "git-lfs";
-    tag = "v${version}";
-    hash = "sha256-PpNdbvtDAZDT43yyEkUvnhfUTAMM+mYImb3dVbAVPic=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0EmIP0h1te5opicGAWJalPCxz2q42M5a0oHHt0QafDA=";
   };
 
-  vendorHash = "sha256-JT0r/hs7ZRtsYh4aXy+v8BjwiLvRJ10e4yRirqmWVW0=";
+  proxyVendor = true;
+  vendorHash = "sha256-5N2ygwzxbSiTuwusCF9/wpcZsrNzPalbrEOLTs2ywII=";
 
   nativeBuildInputs = [
     asciidoctor
@@ -31,13 +32,13 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/git-lfs/git-lfs/v${lib.versions.major version}/config.Vendor=${version}"
+    "-X github.com/git-lfs/git-lfs/v${lib.versions.major finalAttrs.version}/config.Vendor=${finalAttrs.version}"
   ];
 
   subPackages = [ "." ];
 
   preBuild = ''
-    GOARCH= go generate ./commands
+    CC= GOOS= GOARCH= go generate ./commands
   '';
 
   postBuild = ''
@@ -81,21 +82,19 @@ buildGoModule rec {
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ]
   );
 
-  postInstall =
-    ''
-      installManPage man/man*/*
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd git-lfs \
-        --bash <($out/bin/git-lfs completion bash) \
-        --fish <($out/bin/git-lfs completion fish) \
-        --zsh <($out/bin/git-lfs completion zsh)
-    '';
+  postInstall = ''
+    installManPage man/man*/*
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd git-lfs \
+      --bash <($out/bin/git-lfs completion bash) \
+      --fish <($out/bin/git-lfs completion fish) \
+      --zsh <($out/bin/git-lfs completion zsh)
+  '';
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
 
   passthru = {
@@ -107,9 +106,12 @@ buildGoModule rec {
   meta = {
     description = "Git extension for versioning large files";
     homepage = "https://git-lfs.github.com/";
-    changelog = "https://github.com/git-lfs/git-lfs/raw/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/git-lfs/git-lfs/raw/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ twey ];
+    maintainers = with lib.maintainers; [
+      twey
+      savtrip
+    ];
     mainProgram = "git-lfs";
   };
-}
+})

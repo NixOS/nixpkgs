@@ -4,15 +4,15 @@
   fetchFromGitHub,
   nix-update-script,
 }:
-buildGoModule {
+buildGoModule (finalAttrs: {
   pname = "hexxy";
-  version = "0-unstable-2024-09-29";
+  version = "0.1.1";
   src = fetchFromGitHub {
     owner = "sweetbbak";
     repo = "hexxy";
-    # upstream does not publish releases, i.e., there are no tags
-    rev = "36174e436f9d57421b9e9515db32ca1425c382bd";
-    hash = "sha256-5r8yaKlRkIcZXubHBMhdGV0u52rs2WnEaWatm+D56Fs=";
+
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pboOpPGqlSWSiP6yWONxC3wbrGc8FN0++5vHd4ERbkA=";
   };
 
   vendorHash = "sha256-qkBpSVLWZPRgS9bqOVUWHpyj8z/nheQJON3vJOwPUj4=";
@@ -21,18 +21,13 @@ buildGoModule {
     "-w"
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version"
-      "branch"
-    ];
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A modern and beautiful alternative to xxd and hexdump";
+    description = "Modern and beautiful alternative to xxd and hexdump";
     homepage = "https://github.com/sweetbbak/hexxy";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.NotAShelf ];
     mainProgram = "hexxy";
   };
-}
+})

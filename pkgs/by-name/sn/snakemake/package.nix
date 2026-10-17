@@ -1,21 +1,25 @@
 {
   lib,
   stdenv,
-  fetchPypi,
+  fetchFromGitHub,
   python3Packages,
   stress,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
+  snakemake,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "snakemake";
-  version = "8.23.0";
-
+  version = "9.27.0";
   pyproject = true;
+  __structuredAttrs = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-XENI9VJW62KyrxDGSwQiygggYZOu9yW2QSNyp4BO9Us=";
+  src = fetchFromGitHub {
+    owner = "snakemake";
+    repo = "snakemake";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pRL8I8ILaSlZq7CTA+7D/d9PJQlccVQA45csJPBHppw=";
   };
 
   postPatch = ''
@@ -23,65 +27,81 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace tests/common.py \
       --replace-fail 'os.environ["PYTHONPATH"] = os.getcwd()' "pass" \
       --replace-fail 'del os.environ["PYTHONPATH"]' "pass"
-    substituteInPlace snakemake/unit_tests/__init__.py \
+    substituteInPlace src/snakemake/unit_tests/__init__.py \
       --replace-fail '"unit_tests/templates"' '"'"$PWD"'/snakemake/unit_tests/templates"'
+    substituteInPlace src/snakemake/assets/__init__.py \
+      --replace-fail "raise err" "return bytes('err','ascii')"
   '';
 
-  build-system = with python3Packages; [
-    setuptools
-  ];
+  build-system = with python3Packages; [ setuptools-scm ];
 
+  pythonRelaxDeps = [
+    "docutils"
+    "packaging"
+    "sqlmodel"
+  ];
   dependencies = with python3Packages; [
-    appdirs
     conda-inject
     configargparse
     connection-pool
-    datrie
     docutils
+    dpath
     gitpython
     humanfriendly
     immutables
     jinja2
     jsonschema
     nbformat
+    packaging
+    platformdirs
     psutil
     pulp
     pygments
     pyyaml
+    referencing
     requests
-    reretry
     smart-open
-    snakemake-interface-executor-plugins
     snakemake-interface-common
-    snakemake-interface-storage-plugins
+    snakemake-interface-executor-plugins
+    snakemake-interface-logger-plugins
     snakemake-interface-report-plugins
-    stopit
+    snakemake-interface-scheduler-plugins
+    snakemake-interface-storage-plugins
+    sqlmodel
     tabulate
+    tenacity
     throttler
-    toposort
     wrapt
     yte
   ];
+
+  pythonImportsCheck = [ "snakemake" ];
 
   # See
   # https://github.com/snakemake/snakemake/blob/main/.github/workflows/main.yml#L99
   # for the current basic test suite. Slurm, Tibanna and Tes require extra
   # setup.
 
-  nativeCheckInputs = with python3Packages; [
-    numpy
-    pandas
-    pytestCheckHook
-    pytest-mock
-    requests-mock
-    snakemake-executor-plugin-cluster-generic
-    snakemake-storage-plugin-fs
-    stress
-    versionCheckHook
-  ];
-  versionCheckProgramArg = [ "--version" ];
+  nativeCheckInputs =
+    (with python3Packages; [
+      numpy
+      pandas
+      pytestCheckHook
+      pytest-mock
+      requests-mock
+      snakemake-executor-plugin-cluster-generic
+      snakemake-storage-plugin-fs
+      snakemake-storage-plugin-http
+      snakemake-storage-plugin-s3
+      stress
+      polars
+    ])
+    ++ [
+      versionCheckHook
+      writableTmpDirAsHomeHook
+    ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "tests/tests.py"
     "tests/test_expand.py"
     "tests/test_io.py"
@@ -90,69 +110,92 @@ python3Packages.buildPythonApplication rec {
     "tests/test_api.py"
   ];
 
-  disabledTests =
-    [
-      # FAILED tests/tests.py::test_env_modules - AssertionError: expected successful execution
-      "test_ancient"
-      "test_conda_create_envs_only"
-      "test_env_modules"
-      "test_generate_unit_tests"
-      "test_modules_prefix"
-      "test_strict_mode"
-      # Requires perl
-      "test_shadow"
-      # Require peppy and eido
-      "test_peppy"
-      "test_modules_peppy"
-      "test_pep_pathlib"
+  disabledTests = [
+    # AssertionError: expected file "onerror_module2.log" not produced
+    "test_module_onerror"
 
-      # CalledProcessError
-      "test_filegraph" # requires graphviz
-      "test_github_issue1384"
+    # FAILED tests/tests.py::test_env_modules - AssertionError: expected successful execution
+    "test_ancient"
+    "test_conda_create_envs_only"
+    "test_env_modules"
+    "test_generate_unit_tests"
+    "test_modules_prefix"
+    "test_strict_mode"
+    # Requires perl
+    "test_shadow"
+    # Require peppy and eido
+    "test_peppy"
+    "test_modules_peppy"
+    "test_pep_pathlib"
 
-      # AssertionError: assert 127 == 1
-      "test_issue1256"
-      "test_issue2574"
+    # CalledProcessError
+    "test_filegraph" # requires graphviz
+    "test_github_issue1384"
 
-      # Require `snakemake-storage-plugin-fs` (circular dependency)
-      "test_default_storage"
-      "test_default_storage_local_job"
-      "test_deploy_sources"
-      "test_output_file_cache_storage"
-      "test_storage"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Unclear failure:
-      # AssertionError: expected successful execution
-      # `__darwinAllowLocalNetworking` doesn't help
-      "test_excluded_resources_not_submitted_to_cluster"
-      "test_group_job_resources_with_pipe"
-      "test_group_jobs_resources"
-      "test_group_jobs_resources_with_limited_resources"
-      "test_group_jobs_resources_with_max_threads"
-      "test_issue850"
-      "test_issue860"
-      "test_multicomp_group_jobs"
-      "test_queue_input"
-      "test_queue_input_dryrun"
-      "test_queue_input_forceall"
-      "test_resources_submitted_to_cluster"
-      "test_scopes_submitted_to_cluster"
-    ];
+    # AssertionError: assert 127 == 1
+    "test_issue1256"
+    "test_issue2574"
 
-  pythonImportsCheck = [
-    "snakemake"
+    # Tries to access internet
+    "test_report_after_run"
+
+    # Needs stress-ng
+    "test_benchmark"
+    "test_benchmark_jsonl"
+
+    # Needs unshare
+    "test_nodelocal"
+
+    # Requires conda
+    "test_jupyter_notebook"
+    "test_jupyter_notebook_nbconvert"
+    "test_jupyter_notebook_draft"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Unclear failure:
+    # AssertionError: expected successful execution
+    # `__darwinAllowLocalNetworking` doesn't help
+    "test_excluded_resources_not_submitted_to_cluster"
+    "test_group_job_resources_with_pipe"
+    "test_group_jobs_resources"
+    "test_group_jobs_resources_with_limited_resources"
+    "test_group_jobs_resources_with_max_threads"
+    "test_issue850"
+    "test_issue860"
+    "test_multicomp_group_jobs"
+    "test_queue_input"
+    "test_queue_input_dryrun"
+    "test_queue_input_forceall"
+    "test_resources_submitted_to_cluster"
+    "test_scopes_submitted_to_cluster"
+
+    # Issue with /dev/stderr in sandbox
+    "test_protected_symlink_output"
+
+    # Unclear issue:
+    #   pulp.apis.core.PulpSolverError: Pulp: cannot execute cbc cwd:
+    # but pulp solver is not default
+    "test_access_patterns"
+
+    # Hangs with no sandbox, skips due to no network with sandbox relaxed/on
+    "test_modules_meta_wrapper"
+
+    # Hangs
+    # https://github.com/snakemake/snakemake/issues/3939
+    "test_issue1331"
   ];
 
-  preCheck = ''
-    export HOME="$(mktemp -d)"
-  '';
+  # Circular dependencies
+  doCheck = false;
+  passthru.tests.pytest = snakemake.overridePythonAttrs {
+    doCheck = true;
+  };
 
   meta = {
     homepage = "https://snakemake.github.io";
     license = lib.licenses.mit;
     description = "Python-based execution environment for make-like workflows";
-    changelog = "https://github.com/snakemake/snakemake/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/snakemake/snakemake/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     mainProgram = "snakemake";
     longDescription = ''
       Snakemake is a workflow management system that aims to reduce the complexity of
@@ -167,4 +210,4 @@ python3Packages.buildPythonApplication rec {
       veprbl
     ];
   };
-}
+})

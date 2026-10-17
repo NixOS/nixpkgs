@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage {
     hash = "sha256-fCufqCy5H5Up6V15sOz8SJrixth7OQ7tc4yIymmfq1M=";
   };
 
-  cargoHash = "sha256-E/mT+e17Qse4aPCY5Tuvih+ZMDnUqwvEBY0N70kciMs=";
+  cargoHash = "sha256-5B5TIFsfg7fWF5OEq0xVfkIUm1nlkvGfupr5qUtaiwA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -35,12 +35,12 @@ rustPlatform.buildRustPackage {
     poppler
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Small, general purpose file manager built with GTK4";
     homepage = "https://github.com/euclio/fm";
-    license = licenses.mit;
-    maintainers = with maintainers; [ aleksana ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ aleksana ];
     mainProgram = "fm";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

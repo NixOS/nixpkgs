@@ -5,22 +5,22 @@
   fetchPypi,
   pybtex,
   pytestCheckHook,
-  pythonOlder,
+  setuptools_80,
 }:
 
 buildPythonPackage rec {
   pname = "pybtex-docutils";
   version = "1.0.3";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-On69+StZPgDowcU4qpogvKXZLYQjESRxWsyWTVHZPGs=";
   };
 
-  buildInputs = [
+  build-system = [ setuptools_80 ];
+
+  dependencies = [
     docutils
     pybtex
   ];
@@ -29,9 +29,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pybtex_docutils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Docutils backend for pybtex";
     homepage = "https://github.com/mcmtroffaes/pybtex-docutils";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

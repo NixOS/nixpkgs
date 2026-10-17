@@ -41,7 +41,7 @@ in
           "${pkgs.xss-lock}/bin/xss-lock"
           "--session \${XDG_SESSION_ID}"
         ]
-        ++ (builtins.map lib.escapeShellArg cfg.extraOptions)
+        ++ (map lib.escapeShellArg cfg.extraOptions)
         ++ [
           "--"
           cfg.lockerCommand
@@ -49,10 +49,5 @@ in
       );
       serviceConfig.Restart = "always";
     };
-
-    warnings = lib.mkIf (config.services.xserver.displayManager.startx.enable) [
-      "xss-lock service only works if a displayManager is set; it doesn't work when services.xserver.displayManager.startx.enable = true"
-    ];
-
   };
 }

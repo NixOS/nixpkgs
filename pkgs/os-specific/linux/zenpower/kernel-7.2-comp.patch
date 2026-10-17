@@ -1,0 +1,26 @@
+From 746c9af943c5aabdba132fed8473599f511b083b Mon Sep 17 00:00:00 2001
+From: "K.Ohta" <whatisthis.sowhat@gmail.com>
+Date: Tue, 18 Aug 2026 09:47:55 +0900
+Subject: [PATCH] Workaround for kernel v7.2.x by upstream's issue 13.
+
+- See https://github.com/mattkeenan/zenpower5/issues/13 .
+- Thanks @pallaswept for make this workaround.
+---
+ zenpower_core.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/zenpower_core.c b/zenpower_core.c
+index fe8ea44..8cabd4c 100644
+--- a/zenpower_core.c
++++ b/zenpower_core.c
+@@ -46,6 +46,10 @@
+ #include <asm/amd_nb.h>
+ #endif
+ 
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(7, 2, 0)
++#include <asm/cpuid/api.h>
++#endif
++
+ #include "zenpower.h"
+ 
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 14, 0) /* asm/amd_node.h */

@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mockobjects";
   version = "0.09";
 
   src = fetchurl {
-    url = "mirror://sourceforge/mockobjects/mockobjects-bin-${version}.tar";
+    url = "mirror://sourceforge/mockobjects/mockobjects-bin-${finalAttrs.version}.tar";
     sha256 = "18rnyqfcyh0s3dwkkaszdd50ssyjx5fa1y3ii309ldqg693lfgnz";
   };
 
@@ -25,10 +25,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Generic unit testing framework and methodology for testing any kind of code";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    platforms = platforms.unix;
-    license = licenses.asl20;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.asl20;
   };
-}
+})

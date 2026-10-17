@@ -1,15 +1,30 @@
-{ stdenv, lib, fetchurl, nixosTests, makeWrapper, openjdk17, which, gawk }:
-
-stdenv.mkDerivation rec {
+{
+  stdenv,
+  lib,
+  fetchurl,
+  gitUpdater,
+  nixosTests,
+  makeWrapper,
+  openjdk25,
+  which,
+  gawk,
+  bashNonInteractive,
+}:
+let
+  java = openjdk25;
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "neo4j";
-  version = "5.26.1";
+  version = "2026.09.0";
 
   src = fetchurl {
-    url = "https://neo4j.com/artifact.php?name=neo4j-community-${version}-unix.tar.gz";
-    hash = "sha256-RiCUpsUxUaMSz1a4ptNQ8rp99ffj0r4DPggt8RgSj7U=";
+    url = "https://neo4j.com/artifact.php?name=neo4j-community-${finalAttrs.version}-unix.tar.gz";
+    hash = "sha256-zaoJBdmlM7u8R00jnCaPaZeJgutcoxd2ZsBMl5LRw5k=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ bashNonInteractive ];
+  strictDeps = true;
 
   installPhase = ''
     mkdir -p "$out/share/neo4j"
@@ -21,8 +36,14 @@ stdenv.mkDerivation rec {
         chmod +x "$out/share/neo4j/bin/$NEO4J_SCRIPT"
         makeWrapper "$out/share/neo4j/bin/$NEO4J_SCRIPT" \
             "$out/bin/$NEO4J_SCRIPT" \
-            --prefix PATH : "${lib.makeBinPath [ openjdk17 which gawk ]}" \
-            --set JAVA_HOME "${openjdk17}"
+            --prefix PATH : "${
+              lib.makeBinPath [
+                java
+                which
+                gawk
+              ]
+            }" \
+            --set JAVA_HOME "${java}"
     done
 
     patchShebangs $out/share/neo4j/bin/neo4j-admin
@@ -32,13 +53,19 @@ stdenv.mkDerivation rec {
     $out/bin/neo4j-admin dbms set-initial-password neo4jadmin
   '';
 
-  passthru.tests.nixos = nixosTests.neo4j;
+  passthru = {
+    tests.nixos = nixosTests.neo4j;
+    updateScript = gitUpdater {
+      url = "https://github.com/neo4j/neo4j.git";
+      allowedVersions = "^[0-9]{4}\\.[0-9]{2}\\.[0-9]+$";
+    };
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Highly scalable, robust (fully ACID) native graph database";
     homepage = "https://neo4j.com/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ offline ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.c2fc2f ];
+    platforms = lib.platforms.unix;
   };
-}
+})

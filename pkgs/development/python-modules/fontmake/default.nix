@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
+  cattrs,
   fontmath,
   fonttools,
   glyphslib,
@@ -14,16 +15,16 @@
   ufolib2,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fontmake";
-  version = "3.9.0";
+  version = "3.12.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "fontmake";
-    rev = "v${version}";
-    hash = "sha256-q6ul9MYbq85RpZE0ozHOCBNAR4r9InIjumadT1GyJ6k=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RtarjbL4uVBsOM303GDA1BTH3UuPIIQdJGwOAGhvPss=";
   };
 
   build-system = [
@@ -31,34 +32,40 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  dependencies =
-    [
-      fontmath
-      fonttools
-      glyphslib
-      ufo2ft
-      ufolib2
-    ]
-    ++ fonttools.optional-dependencies.ufo
-    ++ fonttools.optional-dependencies.lxml
-    ++ fonttools.optional-dependencies.unicode;
+  dependencies = [
+    fontmath
+    fonttools
+    glyphslib
+    ufo2ft
+    ufolib2
+  ]
+  ++ fonttools.optional-dependencies.ufo
+  ++ fonttools.optional-dependencies.lxml
+  ++ fonttools.optional-dependencies.unicode
+  ++ ufo2ft.optional-dependencies.compreffor;
 
   optional-dependencies = {
     pathops = [ skia-pathops ];
+    lxml = [ ];
+    mutatormath = [ ];
     autohint = [ ttfautohint-py ];
     json = ufolib2.optional-dependencies.json;
     repacker = fonttools.optional-dependencies.repacker;
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.autohint;
+  nativeCheckInputs = [
+    pytestCheckHook
+    cattrs
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.autohint;
 
   pythonImportsCheck = [ "fontmake" ];
 
   meta = {
     description = "Compiles fonts from various sources (.glyphs, .ufo, designspace) into binaries formats (.otf, .ttf)";
     homepage = "https://github.com/googlefonts/fontmake";
-    changelog = "https://github.com/googlefonts/fontmake/releases/tag/v${version}";
+    changelog = "https://github.com/googlefonts/fontmake/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.BarinovMaxim ];
+    maintainers = with lib.maintainers; [ jopejoe1 ];
   };
-}
+})

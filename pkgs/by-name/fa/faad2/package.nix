@@ -11,15 +11,15 @@
   vlc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "faad2";
-  version = "2.11.1";
+  version = "2.11.4";
 
   src = fetchFromGitHub {
     owner = "knik0";
     repo = "faad2";
-    rev = version;
-    hash = "sha256-E6oe7yjYy1SJo8xQkyUk1sSucKDMPxwUFVSAyrf4Pd8=";
+    rev = finalAttrs.version;
+    hash = "sha256-luBimrRvTMb1yo9ZXka2n2YJqmDtymR7ImbEcXqs7dE=";
   };
 
   outputs = [
@@ -36,12 +36,12 @@ stdenv.mkDerivation rec {
     ocaml-faad = ocamlPackages.faad;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open source MPEG-4 and MPEG-2 AAC decoder";
     homepage = "https://sourceforge.net/projects/faac/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ codyopel ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ ];
     mainProgram = "faad";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

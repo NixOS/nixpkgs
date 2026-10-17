@@ -16,15 +16,15 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tig";
-  version = "2.5.10";
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "jonas";
-    repo = pname;
-    rev = "${pname}-${version}";
-    sha256 = "sha256-WTrw7WaSqC2fp76fPvfogWTibev0Hg0LW2x4umc3+1Q=";
+    repo = "tig";
+    rev = "tig-${finalAttrs.version}";
+    sha256 = "sha256-Zfmt2rpnH5sxiay1LAsXxvtvqvwEG4MbNI+p0GWJsMc=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,8 @@ stdenv.mkDerivation rec {
     ncurses
     readline
     git
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   # those files are inherently impure, we'll handle the corresponding dependencies.
   postPatch = ''
@@ -72,22 +73,28 @@ stdenv.mkDerivation rec {
     # ZSH can be used (Completion/Unix/Command/_git: "_tig () { _git-log }"):
     #install -D contrib/tig-completion.zsh $out/share/zsh/site-functions/_tig
 
+    # Prefer the git in PATH, but add a fallback one in case there isn't one.
     wrapProgram $out/bin/tig \
-      --prefix PATH ':' "${git}/bin"
+      --suffix PATH ':' "${git}/bin"
   '';
 
-  meta = with lib; {
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
+
+  meta = {
     homepage = "https://jonas.github.io/tig/";
     description = "Text-mode interface for git";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       bjornfor
-      domenkozar
       qknight
       globin
       ma27
     ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     mainProgram = "tig";
   };
-}
+})

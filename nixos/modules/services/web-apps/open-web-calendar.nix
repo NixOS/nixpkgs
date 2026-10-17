@@ -13,8 +13,6 @@ let
     mkPackageOption
     mkDefault
     types
-    concatMapStringsSep
-    generators
     ;
   cfg = config.services.open-web-calendar;
 
@@ -130,7 +128,7 @@ in
             open_web_calendar.app:app
         '';
         EnvironmentFile = settingsFormat.generate "open-web-calendar.env" cfg.settings;
-        ExecReload = "kill -s HUP $MAINPID";
+        ExecReload = "${lib.getExe' pkgs.coreutils "kill"} -s HUP $MAINPID";
         KillMode = "mixed";
         PrivateTmp = true;
         RuntimeDirectory = "open-web-calendar";

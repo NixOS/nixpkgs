@@ -13,9 +13,9 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "thetimelineproj";
-    repo = pname;
+    repo = "humblewx";
     rev = version;
-    sha256 = "0fv8gwlbcj000qq34inbwgxf0xgibs590dsyqnw0mmyb7f1iq210";
+    hash = "sha256-IAgcgzvL1wq4xV43kIpe8XXg+uPLRjIwBgBItih/aDs=";
   };
 
   propagatedBuildInputs = [ wxpython ];

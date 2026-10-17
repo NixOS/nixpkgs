@@ -6,8 +6,6 @@
   rustPlatform,
   cargo,
   rustc,
-  # provided as callPackage input to enable easier overrides through overlays
-  cargoHash ? "sha256-ePvYL1ps2w7qscYNIgvjn6t/ir0izbS+MlP/jow4VrE=",
 }:
 mkKdeDerivation rec {
   pname = "akonadi-search";
@@ -15,12 +13,10 @@ mkKdeDerivation rec {
 
   cargoRoot = "agent/rs/htmlparser";
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    # include version in the name so we invalidate the FOD
-    name = "${pname}-${version}";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version cargoRoot;
     src = sources.${pname};
-    sourceRoot = "${pname}-${version}/${cargoRoot}";
-    hash = cargoHash;
+    hash = "sha256-F9m2+WSrxjQgFDJ+//GCnMvzUD6734IGqnw7sRYIwTU=";
   };
 
   extraNativeBuildInputs = [

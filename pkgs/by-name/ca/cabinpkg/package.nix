@@ -2,10 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  tbb_2021_11,
+  onetbb,
   libgit2,
   curl,
-  fmt,
+  fmt_11,
   nlohmann_json,
   pkg-config,
 }:
@@ -21,13 +21,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cabinpkg";
-  version = "0.11.0";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "cabinpkg";
     repo = "cabin";
     tag = version;
-    sha256 = "sha256-LIP99Shxu/lOdZ31KVA8RYawZ6dRLtXEGKZs1mUFCus=";
+    sha256 = "sha256-qMmfViu3ol8+Tpyy8hn0j5r+bql0SFeKPVVj/ox4AGQ=";
   };
 
   strictDeps = true;
@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libgit2
-    fmt
-    tbb_2021_11
+    fmt_11
+    onetbb
     nlohmann_json
     curl
   ];
@@ -68,9 +68,9 @@ stdenv.mkDerivation rec {
   meta = {
     broken = (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
     homepage = "https://cabinpkg.com";
-    description = "A package manager and build system for C++";
+    description = "Package manager and build system for C++";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.qwqawawow ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "cabin";
   };

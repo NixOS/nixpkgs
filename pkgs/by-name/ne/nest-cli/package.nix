@@ -1,23 +1,25 @@
-{ buildNpmPackage
-, darwin
-, fetchFromGitHub
-, lib
-, python3
-, stdenv
+{
+  lib,
+  stdenv,
+  python3,
+  clang_20,
+  buildNpmPackage,
+  fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "nest-cli";
-  version = "10.4.9";
+  version = "12.0.8";
 
   src = fetchFromGitHub {
     owner = "nestjs";
-    repo = pname;
-    rev = version;
-    hash = "sha256-dko+hOC3oZToNS+EOqmm+z7DLHfqqKDeQsH2sYxburU=";
+    repo = "nest-cli";
+    tag = finalAttrs.version;
+    hash = "sha256-c/fSr3OizSrEuFRXGrbfmrBt4+Cg5kmIZWWOWoOpVKY=";
   };
 
-  npmDepsHash = "sha256-K4M6Jehy1854SuxDiaHQLlvhOecwInZZbOcgMqchiIM=";
+  npmDepsHash = "sha256-4N0crjsb53XAP1ssmMa2y5x6FdX88fzpB9ZdERZp6dc=";
+  npmFlags = [ "--legacy-peer-deps" ];
 
   env = {
     npm_config_build_from_source = true;
@@ -25,17 +27,19 @@ buildNpmPackage rec {
 
   nativeBuildInputs = [
     python3
-  ];
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [ clang_20 ]; # clang_21 breaks gyp builds
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
-  ];
-
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/nestjs/nest-cli/releases/tag/${finalAttrs.version}";
     description = "CLI tool for Nest applications";
+    downloadPage = "https://github.com/nestjs/nest-cli";
     homepage = "https://nestjs.com";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "nest";
-    maintainers = [ maintainers.ehllie ];
+    maintainers = with lib.maintainers; [
+      ehllie
+      phanirithvij
+    ];
   };
-}
+})

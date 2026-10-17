@@ -5,43 +5,36 @@
   gettext,
 }:
 let
-  version = "3.1.0";
-  dependencies =
-    with python3.pkgs;
-    [
-      pyembroidery
-      inkex
-      wxpython
-      networkx
-      shapely
-      lxml
-      appdirs
-      numpy
-      jinja2
-      requests
-      # Upstream wants colormath2 yet still refers to it as colormath. Curious.
-      colormath
-      flask
-      fonttools
-      trimesh
-      scipy
-      diskcache
-      flask-cors
-    ]
-    # Inkstitch uses the builtin tomllib instead when Python >=3.11
-    ++ lib.optional (pythonOlder "3.11") tomli;
+  dependencies = with python3.pkgs; [
+    pystitch
+    inkex
+    wxpython
+    networkx
+    platformdirs
+    shapely
+    lxml
+    numpy
+    jinja2
+    colormath2
+    flask
+    fonttools
+    trimesh
+    diskcache
+    flask-cors
+  ];
   pyEnv = python3.withPackages (_: dependencies);
 in
-python3.pkgs.buildPythonApplication {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "inkstitch";
-  inherit version;
+  version = "3.3.0";
   pyproject = false; # Uses a Makefile (yikes)
 
   src = fetchFromGitHub {
     owner = "inkstitch";
     repo = "inkstitch";
-    tag = "v${version}";
-    hash = "sha256-CGhJsDRhElgemNv2BXqZr6Vi5EyBArFak7Duz545ivY=";
+    tag = "v${finalAttrs.version}";
+    fetchSubmodules = true; # required to get the embedded fonts
+    hash = "sha256-vQL0Zgzfi3YHfh/WKbIg1ZaaboQQoFj+f5QBvdD9JYU=";
   };
 
   nativeBuildInputs = [
@@ -53,7 +46,7 @@ python3.pkgs.buildPythonApplication {
 
   env = {
     # to overwrite version string
-    GITHUB_REF = version;
+    GITHUB_REF = finalAttrs.version;
     BUILD = "nixpkgs";
   };
   makeFlags = [ "manual" ];
@@ -68,15 +61,23 @@ python3.pkgs.buildPythonApplication {
   '';
 
   patches = [
-    ./0001-force-frozen-true.patch
+    ./0001-force-frozen-True.patch
     ./0002-plugin-invocation-use-python-script-as-entrypoint.patch
   ];
+
+  doCheck = false;
 
   postPatch = ''
     # Add shebang with python dependencies
     substituteInPlace lib/inx/utils.py --replace-fail ' interpreter="python"' ""
     sed -i -e '1i#!${pyEnv.interpreter}' inkstitch.py
     chmod a+x inkstitch.py
+  '';
+
+  postInstall = ''
+    export SITE_PACKAGES=$(find "${pyEnv}" -type d -name 'site-packages')
+    wrapProgram $out/share/inkscape/extensions/inkstitch/inkstitch.py \
+      --set PYTHON_INKEX_PATH "$SITE_PACKAGES"
   '';
 
   nativeCheckInputs = with python3.pkgs; [
@@ -86,10 +87,10 @@ python3.pkgs.buildPythonApplication {
   meta = {
     description = "Inkscape extension for machine embroidery design";
     homepage = "https://inkstitch.org/";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       tropf
       pluiedev
     ];
   };
-}
+})

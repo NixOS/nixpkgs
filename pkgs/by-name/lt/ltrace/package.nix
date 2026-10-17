@@ -8,7 +8,7 @@
   elfutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ltrace";
   version = "0.7.91";
 
@@ -48,6 +48,17 @@ stdenv.mkDerivation rec {
     ./testsuite-newfstatat.patch
     # https://gitlab.com/cespedes/ltrace/-/merge_requests/15
     ./sysdeps-x86.patch
+    # print-instruction-pointer.exp doesn't expect ASLR
+    (fetchurl {
+      url = "https://github.com/gentoo/gentoo/raw/a2eb7e103ec985ff90f59e722e0a8a43373972a2/dev-debug/ltrace/files/ltrace-0.7.3-print-test-pie.patch";
+      hash = "sha256-QRsUoN3WLzfiY5GDPwVYXtJPFMJt6rcc6eE96SAtI6Q=";
+    })
+    # fix pointer conversion warning with GCC 15
+    # https://gitlab.com/cespedes/ltrace/-/merge_requests/28
+    ./trace-clone-gcc15.patch
+    # fix demangle test with GCC 16
+    # https://gitlab.com/cespedes/ltrace/-/merge_requests/112
+    ./demangle-gcc16.patch
   ];
 
   doCheck = true;
@@ -63,12 +74,12 @@ stdenv.mkDerivation rec {
       make check
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library call tracer";
     mainProgram = "ltrace";
     homepage = "https://www.ltrace.org/";
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
   };
 }

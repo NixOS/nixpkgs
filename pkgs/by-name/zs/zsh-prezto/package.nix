@@ -6,15 +6,15 @@
   bash,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "zsh-prezto";
-  version = "0-unstable-2024-12-12";
+  version = "0-unstable-2025-07-30";
 
   src = fetchFromGitHub {
     owner = "sorin-ionescu";
     repo = "prezto";
-    rev = "9626ce2beb8e20afb8f63020d974ff8a213bc773";
-    sha256 = "TkmzNyPKv/K9sW0CCiR8hnXXM0d6En49HcdPsa011Xw=";
+    rev = "af383940911fc3192beb6e0fd2566c52bd1ea9ba";
+    sha256 = "UWDOT6ezJ1LepULU2fqDru/sFcuUh41eP3C9ay8x888=";
     fetchSubmodules = true;
   };
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Configuration framework for Zsh";
     longDescription = ''
       Prezto is the configuration framework for Zsh; it enriches
@@ -41,8 +41,8 @@ stdenv.mkDerivation rec {
       aliases, functions, auto completion, and prompt themes.
     '';
     homepage = "https://github.com/sorin-ionescu/prezto";
-    license = licenses.mit;
-    maintainers = with maintainers; [ holymonson ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ holymonson ];
+    platforms = lib.platforms.unix;
   };
 }

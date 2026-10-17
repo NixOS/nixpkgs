@@ -7,27 +7,25 @@
   etelemetry,
   fetchPypi,
   filelock,
-  git,
   git-annex,
+  git,
   nibabel,
   nipype,
   pydicom,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   versioningit,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "heudiconv";
-  version = "1.3.2";
+  version = "1.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-z7HaouhNuFX16RSY4gsF8gQJIJfmSiBVUANwMM113ds=";
+    hash = "sha256-EO3iKhFs7U/ekueeUK8PRif6NFcV6xoDIMC+9js0Q8o=";
   };
 
   postPatch = ''
@@ -55,24 +53,24 @@ buildPythonPackage rec {
     pytestCheckHook
     git
     git-annex
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   pythonImportsCheck = [ "heudiconv" ];
 
   disabledTests = [
     # No such file or directory
     "test_bvals_are_zero"
+
+    # tries to access internet
+    "test_partial_xa_conversion"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Flexible DICOM converter for organizing imaging data";
     homepage = "https://heudiconv.readthedocs.io";
     changelog = "https://github.com/nipy/heudiconv/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

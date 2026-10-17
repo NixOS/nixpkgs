@@ -4,26 +4,26 @@
   fetchFromGitHub,
   nix-update-script,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "double-entry-generator";
-  version = "2.7.1";
+  version = "2.16.0";
   src = fetchFromGitHub {
     owner = "deb-sig";
     repo = "double-entry-generator";
-    hash = "sha256-2Y8Spj1LAVZsUgChDYDCZ63pTH+nqs2ff9xcmC+gr0c=";
-    rev = "v${version}";
+    hash = "sha256-ZX8V1GgaYI21M0tXByWh9PUx6e9z0QFniF02wGw2hi0=";
+    rev = "v${finalAttrs.version}";
   };
 
-  vendorHash = "sha256-Xedva9oGteOnv3rP4Wo3sOHIPyuy2TYwkZV2BAuxY4M=";
+  vendorHash = "sha256-7KcoC/cIIkTaIvhOsDvM8HVKLHMs6rVxJtl/a8LYWz8=";
 
   excludedPackages = [ "hack" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/deb-sig/double-entry-generator/pkg/version.VERSION=${version}"
+    "-X=github.com/deb-sig/double-entry-generator/pkg/version.VERSION=${finalAttrs.version}"
     "-X=github.com/deb-sig/double-entry-generator/pkg/version.REPOROOT=github.com/deb-sig/double-entry-generator"
-    "-X=github.com/deb-sig/double-entry-generator/pkg/version.COMMIT=${src.rev}"
+    "-X=github.com/deb-sig/double-entry-generator/pkg/version.COMMIT=${finalAttrs.src.rev}"
   ];
 
   doInstallCheck = true;
@@ -39,11 +39,11 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Rule-based double-entry bookkeeping importer (from Alipay/WeChat/Huobi etc. to Beancount/Ledger)";
     homepage = "https://github.com/deb-sig/double-entry-generator";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ rennsax ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ rennsax ];
     mainProgram = "double-entry-generator";
   };
-}
+})

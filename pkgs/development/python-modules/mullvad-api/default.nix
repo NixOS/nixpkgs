@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "mullvad_api";
     inherit version;
-    sha256 = "0r0hc2d6vky52hxdqxn37w0y42ddh1zal6zz2cvqlxamc53wbiv1";
+    hash = "sha256-YcfFR2FVdYo3E/8bqn6ArQniAT/Ddtw6FMXPbZpgEGQ=";
   };
 
   propagatedBuildInputs = [ requests ];
@@ -22,10 +22,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "mullvad_api" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for the Mullvad API";
     homepage = "https://github.com/meichthys/mullvad-api";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

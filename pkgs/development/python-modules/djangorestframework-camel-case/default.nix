@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "djangorestframework_camel_case" ];
 
-  meta = with lib; {
+  meta = {
     description = "Camel case JSON support for Django REST framework";
     homepage = "https://github.com/vbabiy/djangorestframework-camel-case";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

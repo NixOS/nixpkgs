@@ -1,29 +1,34 @@
 {
   lib,
+  callPackage,
   buildGoModule,
   fetchFromGitHub,
-  swtpm,
+  nixosTests,
   openssl,
+  age,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "age-plugin-tpm";
-  version = "0.2.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "Foxboron";
     repo = "age-plugin-tpm";
-    rev = "v${version}";
-    hash = "sha256-oTvK8U5j+llHgoChhGb+vcUrUf9doVYxd3d5MEuCNz8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1BHVQY8ZexwdjchQiG8aQMEPukq/3ez+QYY1X67DgPc=";
   };
 
   proxyVendor = true;
 
-  vendorHash = "sha256-veduD0K3Onkqvyg9E5v854a6/8UIRQZEH098lUepRNU=";
+  vendorHash = "sha256-CbgDGyVQ9MTYCe56M1VzMnap5P6Y9p4jnK8tyr3zh20=";
 
   nativeCheckInputs = [
-    swtpm
+    age
   ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   buildInputs = [
     openssl
@@ -32,17 +37,23 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
+    "-X main.version=${finalAttrs.version}"
   ];
 
-  meta = with lib; {
+  passthru.tests = {
+    encrypt = callPackage ./tests/encrypt.nix { };
+    decrypt = nixosTests.age-plugin-tpm-decrypt;
+  };
+
+  meta = {
     description = "TPM 2.0 plugin for age (This software is experimental, use it at your own risk)";
     mainProgram = "age-plugin-tpm";
     homepage = "https://github.com/Foxboron/age-plugin-tpm";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
-      kranzes
+    changelog = "https://github.com/Foxboron/age-plugin-tpm/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       sgo
     ];
   };
-}
+})

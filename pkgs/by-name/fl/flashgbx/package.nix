@@ -7,15 +7,15 @@
   qt6,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "flashgbx";
-  version = "4.3";
+  version = "5.1";
 
   src = fetchFromGitHub {
     repo = "FlashGBX";
     owner = "lesserkuma";
-    tag = version;
-    hash = "sha256-jPD+7bFU6k1+NRKRHwynEmZ0G6ZwnF8AZVuTqk5DjEY=";
+    tag = finalAttrs.version;
+    hash = "sha256-34oMTYHVTdDdJ+Bt4XlO2PIjDQa5/rkDpA/N1RQDuaI=";
   };
 
   desktopItems = [
@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
       name = "flashgbx";
       desktopName = "FlashGBX UI";
       icon = "flashgbx";
-      exec = meta.mainProgram;
+      exec = finalAttrs.meta.mainProgram;
       comment = "UI for reading and writing Game Boy and Game Boy Advance cartridges";
       categories = [ "Utility" ];
     })
@@ -44,6 +44,7 @@ python3Packages.buildPythonApplication rec {
   propagatedBuildInputs =
     with python3Packages;
     [
+      packaging
       pillow
       pyserial
       pyside6
@@ -56,11 +57,11 @@ python3Packages.buildPythonApplication rec {
       qt6.qtwayland
     ];
 
-  meta = with lib; {
+  meta = {
     description = "GUI for reading and writing GB and GBA cartridges with the GBxCart RW";
     homepage = "https://github.com/lesserkuma/FlashGBX";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "flashgbx";
-    maintainers = with maintainers; [ grahamnorris ];
+    maintainers = with lib.maintainers; [ grahamnorris ];
   };
-}
+})

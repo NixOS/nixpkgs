@@ -8,19 +8,18 @@
   cmake,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "powerstation";
-  version = "0.4.2";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "ShadowBlip";
     repo = "PowerStation";
-    tag = "v${version}";
-    hash = "sha256-R6p3zuYWggnOy60iGZ6G23ig1gzezweswAxVrCB+zvU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BrldZ2adw+tQKjm83E7PTFDMVwp7In0ggwOu+dAR+Hs=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-3mOmDDDGW7AClG4tNuXti07lCNbK5bMnpWUnsxcxGPI=";
+  cargoHash = "sha256-DFYgJMgpD9Y8f6FFxtugZC9pHyUIspHXGkr/WZ/R05k=";
 
   nativeBuildInputs = [
     cmake
@@ -41,8 +40,8 @@ rustPlatform.buildRustPackage rec {
     description = "Open source TDP control and performance daemon with DBus interface";
     homepage = "https://github.com/ShadowBlip/PowerStation";
     license = lib.licenses.gpl3Plus;
-    changelog = "https://github.com/ShadowBlip/PowerStation/releases/tag/v${version}";
+    changelog = "https://github.com/ShadowBlip/PowerStation/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ shadowapex ];
     mainProgram = "powerstation";
   };
-}
+})

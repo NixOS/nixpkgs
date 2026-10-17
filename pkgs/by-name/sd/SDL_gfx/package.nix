@@ -16,12 +16,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-37FaxfjOeklS3BLSrtl0dRjF5rM1wOMWNtI/k8Yw9Bk=";
   };
 
-  nativeBuildInputs = [ SDL ];
-
   buildInputs = [ SDL ];
 
   # SDL_gfx.pc refers to sdl.pc and some SDL_gfx headers import SDL.h
   propagatedBuildInputs = [ SDL ];
+
+  env.SDL_CONFIG = lib.getExe' (lib.getDev SDL) "sdl-config";
 
   configureFlags = [
     (lib.enableFeature false "mmx")
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       The current components of the SDL_gfx library are:
 
-      - Graphic Primitives (SDL_gfxPrimitves.h)
+      - Graphic Primitives (SDL_gfxPrimitives.h)
       - Rotozoomer (SDL_rotozoom.h)
       - Framerate control (SDL_framerate.h)
       - MMX image filters (SDL_imageFilter.h)
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
       written in plain C and can be used in C++ code.
     '';
     license = lib.licenses.zlib;
-    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ ]);
+    teams = [ lib.teams.sdl ];
     inherit (SDL.meta) platforms;
   };
 })

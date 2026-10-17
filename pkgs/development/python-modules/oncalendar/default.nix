@@ -8,6 +8,7 @@
 buildPythonPackage rec {
   pname = "oncalendar";
   version = "1.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "cuu508";
@@ -20,10 +21,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "oncalendar" ];
 
-  meta = with lib; {
+  meta = {
     description = "Systemd OnCalendar expression parser and evaluator";
     homepage = "https://github.com/cuu508/oncalendar";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ phaer ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ phaer ];
   };
 }

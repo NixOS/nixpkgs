@@ -154,53 +154,12 @@ The boot process should have brought up networking (check `ip
 a`). Networking is necessary for the installer, since it will
 download lots of stuff (such as source tarballs or Nixpkgs channel
 binaries). It's best if you have a DHCP server on your network.
-Otherwise configure networking manually using `ifconfig`.
+Otherwise configure networking manually using `ip`.
 
-On the graphical installer, you can configure the network, wifi
-included, through NetworkManager. Using the `nmtui` program, you can do
-so even in a non-graphical session. If you prefer to configure the
-network manually, disable NetworkManager with
+You can configure the network, Wi-Fi included, through NetworkManager.
+Using the `nmtui` program, you can do so even in a non-graphical session.
+ If you prefer to configure the network manually, disable NetworkManager with
 `systemctl stop NetworkManager`.
-
-On the minimal installer, NetworkManager is not available, so
-configuration must be performed manually. To configure the wifi, first
-start wpa_supplicant with `sudo systemctl start wpa_supplicant`, then
-run `wpa_cli`. For most home networks, you need to type in the following
-commands:
-
-```plain
-> add_network
-0
-> set_network 0 ssid "myhomenetwork"
-OK
-> set_network 0 psk "mypassword"
-OK
-> enable_network 0
-OK
-```
-
-For enterprise networks, for example *eduroam*, instead do:
-
-```plain
-> add_network
-0
-> set_network 0 ssid "eduroam"
-OK
-> set_network 0 identity "myname@example.com"
-OK
-> set_network 0 password "mypassword"
-OK
-> enable_network 0
-OK
-```
-
-When successfully connected, you should see a line such as this one
-
-```plain
-<3>CTRL-EVENT-CONNECTED - Connection to 32:85:ab:ef:24:5c completed [id=0 id_str=]
-```
-
-you can now leave `wpa_cli` by typing `quit`.
 
 If you would like to continue the installation from a different machine
 you can use activated SSH daemon. You need to copy your ssh key to
@@ -295,7 +254,7 @@ update /etc/fstab.
     # parted /dev/sda -- mklabel msdos
     ```
 
-2.  Add the *root* partition. This will fill the the disk except for the
+2.  Add the *root* partition. This will fill the disk except for the
     end part, where the swap will live.
 
     ```ShellSession
@@ -326,38 +285,57 @@ Once complete, you can follow with
 #### Formatting {#sec-installation-manual-partitioning-formatting}
 []{#sec-installation-partitioning-formatting} <!-- legacy anchor -->
 
+
+::: {.note}
+If you want to create LVM volumes, encrypted filesystem, or RAID devices,
+do it now before formatting.
+
+-   For creating LVM volumes, the LVM commands, e.g., `pvcreate`,
+    `vgcreate`, and `lvcreate`.
+
+-   For creating an encrypted filesystem for your *root* partition see
+    [LUKS encryption](#sec-luks-file-systems).
+
+-   For creating software RAID devices, use `mdadm`.
+:::
+
 Use the following commands:
 
--   For initialising Ext4 partitions: `mkfs.ext4`. It is recommended
-    that you assign a unique symbolic label to the file system using the
-    option `-L label`, since this makes the file system configuration
-    independent from device changes. For example:
+-   For creating an ext4 partition:
 
     ```ShellSession
-    # mkfs.ext4 -L nixos /dev/sda1
+    # mkfs.ext4 -L nixos -i 8192 /dev/sda1
     ```
 
--   For creating swap partitions: `mkswap`. Again it's recommended to
-    assign a label to the swap partition: `-L label`. For example:
+    This creates an ext4 partition at `/dev/sda1`, adds the label "nixos"
+    and `-i` configures our recommended bytes-per-inode ratio.
+
+    ::: {.note}
+    Nix stores contain a large amount of small files which may exhaust the
+    default ext4 inode allocation.
+    The recommended lower bytes-per-inode ratio costs roughly 1.6% of usable
+    space but doubles the number of inodes, allowing the partition to store
+    twice as many files.
+    :::
+
+-   For creating swap partitions:
 
     ```ShellSession
     # mkswap -L swap /dev/sda2
     ```
 
--   **UEFI systems**
+    Again `-L` is used to add the "swap" Label to the partition.
 
-    For creating boot partitions: `mkfs.fat`. Again it's recommended
-    to assign a label to the boot partition: `-n label`. For
-    example:
+-   **UEFI systems**:
+
+    For creating boot partitions:
 
     ```ShellSession
     # mkfs.fat -F 32 -n boot /dev/sda3
     ```
 
--   For creating LVM volumes, the LVM commands, e.g., `pvcreate`,
-    `vgcreate`, and `lvcreate`.
-
--   For creating software RAID devices, use `mdadm`.
+    The `-F 32` flag selects the FAT32 filesystem and `-n` assigns the "boot"
+    label to the partition.
 
 ### Installing {#sec-installation-manual-installing}
 []{#sec-installation-installing} <!-- legacy anchor -->
@@ -397,6 +375,9 @@ Use the following commands:
     while a list of available configuration options appears in
     [](#ch-options). A minimal example is shown in
     [Example: NixOS Configuration](#ex-config).
+
+    This command accepts an optional `--flake` option, to also generate a
+    `flake.nix` file, if you want to set up a flake-based configuration.
 
     The command `nixos-generate-config` can generate an initial
     configuration file for you:
@@ -490,6 +471,14 @@ Use the following commands:
     from the NixOS binary cache), you can re-run `nixos-install` after
     fixing your `configuration.nix`.
 
+    If you opted for a flake-based configuration, you will need to pass the
+    `--flake` here as well and specify the name of the configuration as used in
+    the `flake.nix` file. For the default generated flake, this is `nixos`.
+
+    ```ShellSession
+    # nixos-install --flake 'path/to/flake.nix#nixos'
+    ```
+
     As the last step, `nixos-install` will ask you to set the password
     for the `root` user, e.g.
 
@@ -569,7 +558,7 @@ corresponding configuration Nix expression.
 With a partitioned disk.
 
 ```ShellSession
-# mkfs.ext4 -L nixos /dev/sda1
+# mkfs.ext4 -L nixos -i 8192 /dev/sda1
 # mkswap -L swap /dev/sda2
 # swapon /dev/sda2
 # mkfs.fat -F 32 -n boot /dev/sda3        # (for UEFI systems only)
@@ -607,12 +596,3 @@ With a partitioned disk.
 :::
 
 ## Additional installation notes {#sec-installation-additional-notes}
-
-```{=include=} sections
-installing-usb.section.md
-installing-pxe.section.md
-installing-kexec.section.md
-installing-virtualbox-guest.section.md
-installing-from-other-distro.section.md
-installing-behind-a-proxy.section.md
-```

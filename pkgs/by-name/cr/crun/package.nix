@@ -1,19 +1,37 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, autoreconfHook
-, go-md2man
-, pkg-config
-, libcap
-, libseccomp
-, python3
-, systemd
-, yajl
-, nixosTests
-, criu
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  go-md2man,
+  pkg-config,
+  json_c,
+  libcap,
+  libkrun,
+  libkrun-sev,
+  libseccomp,
+  python3,
+  systemdMinimal,
+  nixosTests,
+  criu,
+  versionCheckHook,
+  wamr,
+  wasmedge,
+  wasmer,
+  wasmtime,
+  withLibkrun ? lib.meta.availableOn stdenv.hostPlatform libkrun,
+  withLibkrunSEV ? false,
+  withWamr ? false,
+  withWasmedge ? false,
+  withWasmer ? false,
+  withWasmtime ? false,
 }:
 
 let
+  wamrShared = wamr.overrideAttrs (old: {
+    cmakeFlags = (old.cmakeFlags or [ ]) ++ [ "-DBUILD_SHARED_LIBS=ON" ];
+  });
+
   # these tests require additional permissions
   disabledTests = [
     "test_capabilities.py"
@@ -37,49 +55,133 @@ let
   ];
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "crun";
-  version = "1.19.1";
+  version = "1.30.1";
 
   src = fetchFromGitHub {
     owner = "containers";
-    repo = pname;
-    rev = version;
-    hash = "sha256-st8zap9WiM5+aX3spga19Ty4a4297rR3SjAY9Hrv4qg=";
+    repo = "crun";
+    tag = finalAttrs.version;
+    hash = "sha256-SHhmtAySMkVCxPW++zThVEaO5zXoPTMbLqBZRm2CSDY=";
     fetchSubmodules = true;
+    leaveDotGit = true;
+    postFetch = ''
+      cd $out
+      git rev-parse HEAD > COMMIT
+      rm -rf .git
+    '';
   };
 
-  nativeBuildInputs = [ autoreconfHook go-md2man pkg-config python3 ];
+  nativeBuildInputs = [
+    autoreconfHook
+    go-md2man
+    pkg-config
+    python3
+  ];
 
-  buildInputs = [ criu libcap libseccomp systemd yajl ];
+  buildInputs = [
+    criu
+    json_c
+    libcap
+    libseccomp
+    systemdMinimal
+  ]
+  ++ lib.optionals withLibkrun [
+    libkrun
+  ]
+  ++ lib.optionals withLibkrunSEV [
+    libkrun-sev
+  ]
+  ++ lib.optionals withWasmtime [
+    wasmtime.dev
+    wasmtime.lib
+  ]
+  ++ lib.optionals withWasmedge [
+    wasmedge
+  ]
+  ++ lib.optionals withWamr [
+    wamrShared
+  ]
+  ++ lib.optionals withWasmer [
+    wasmer
+  ];
+
+  configureFlags =
+    lib.optionals withLibkrun [
+      "--with-libkrun"
+    ]
+    ++ lib.optionals withWamr [
+      "--with-wamr"
+    ]
+    ++ lib.optionals withWasmedge [
+      "--with-wasmedge"
+    ]
+    ++ lib.optionals withWasmer [
+      "--with-wasmer"
+    ]
+    ++ lib.optionals withWasmtime [
+      "--with-wasmtime"
+    ];
 
   enableParallelBuilding = true;
   strictDeps = true;
 
-  NIX_LDFLAGS = "-lcriu";
+  env = {
+    # wamr.c calls two functions directly instead of via dlsym (upstream bug)
+    NIX_LDFLAGS = "-lcriu" + lib.optionalString withWamr " -liwasm";
+  };
 
   # we need this before autoreconfHook does its thing in order to initialize
   # config.h with the correct values
   postPatch = ''
-    echo ${version} > .tarball-version
-    echo '#define GIT_VERSION "${src.rev}"' > git-version.h
+    echo ${finalAttrs.version} > .tarball-version
+    echo "#define GIT_VERSION \"$(cat COMMIT)\"" > git-version.h
 
-    ${lib.concatMapStringsSep "\n" (e:
-      "substituteInPlace Makefile.am --replace 'tests/${e}' ''"
+    ${lib.concatMapStringsSep "\n" (
+      e: "substituteInPlace Makefile.am --replace-fail 'tests/${e}' ''"
     ) disabledTests}
+  ''
+  + lib.optionalString withLibkrun ''
+    substituteInPlace src/libcrun/handlers/krun.c \
+      --replace-fail '"libkrun.so.1"' '"${libkrun}/lib/libkrun.so.1"'
+  ''
+  + lib.optionalString withLibkrunSEV ''
+    substituteInPlace src/libcrun/handlers/krun.c \
+      --replace-fail '"libkrun-sev.so.1"' '"${libkrun-sev}/lib/libkrun-sev.so.1"'
+  ''
+  + lib.optionalString withWamr ''
+    substituteInPlace src/libcrun/handlers/wamr.c \
+      --replace-fail '"libiwasm.so"' '"${wamrShared}/lib/libiwasm.so"'
+  ''
+  + lib.optionalString withWasmedge ''
+    substituteInPlace src/libcrun/handlers/wasmedge.c \
+      --replace-fail '"libwasmedge.so.0"' '"${wasmedge}/lib/libwasmedge.so.0"'
+  ''
+  + lib.optionalString withWasmer ''
+    substituteInPlace src/libcrun/handlers/wasmer.c \
+      --replace-fail '"libwasmer.so"' '"${wasmer}/lib/libwasmer.so"'
+  ''
+  + lib.optionalString withWasmtime ''
+    substituteInPlace src/libcrun/handlers/wasmtime.c \
+      --replace-fail '"libwasmtime.so"' '"${wasmtime.lib}/lib/libwasmtime.so"'
   '';
 
   doCheck = true;
 
   passthru.tests = { inherit (nixosTests) podman; };
 
-  meta = with lib; {
-    changelog = "https://github.com/containers/crun/releases/tag/${version}";
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+
+  meta = {
+    changelog = "https://github.com/containers/crun/releases/tag/${finalAttrs.version}";
     description = "Fast and lightweight fully featured OCI runtime and C library for running containers";
     homepage = "https://github.com/containers/crun";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ] ++ teams.podman.members;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.podman ];
     mainProgram = "crun";
   };
-}
+})

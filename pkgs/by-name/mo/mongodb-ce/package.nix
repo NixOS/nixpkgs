@@ -5,45 +5,24 @@
   autoPatchelfHook,
   curl,
   openssl,
-  testers,
-  mongodb-ce,
+  versionCheckHook,
   writeShellApplication,
+  common-updater-scripts,
+  gitMinimal,
   jq,
   nix-update,
-  gitMinimal,
-  pup,
+  nixosTests,
 }:
 
-let
-  version = "8.0.4";
-
-  srcs = version: {
-    "x86_64-linux" = {
-      url = "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2204-${version}.tgz";
-      hash = "sha256-N5rwtPrrjVJj7UAk/weBAhV4+7wHRLNowkX6gEWCQVU=";
-    };
-    "aarch64-linux" = {
-      url = "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-ubuntu2204-${version}.tgz";
-      hash = "sha256-uBa7/jxfZBNmB0l2jspJW2QQ8VY0GtWxc/tPlkV6UBk=";
-    };
-    "x86_64-darwin" = {
-      url = "https://fastdl.mongodb.org/osx/mongodb-macos-x86_64-${version}.tgz";
-      hash = "sha256-Ya+HIlRPWXPp9aX1AlRgkh/pfKRgxhqNep/6uuARmCo=";
-    };
-    "aarch64-darwin" = {
-      url = "https://fastdl.mongodb.org/osx/mongodb-macos-arm64-${version}.tgz";
-      hash = "sha256-IZ47PXsxwEn/e890cNOO/3BOVt8qwY1N94Ql4phcz1g=";
-    };
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mongodb-ce";
-  inherit version;
+  version = "8.3.13";
+  __structuredAttrs = true;
+  strictDeps = true;
 
-  src = fetchurl (
-    (srcs version).${stdenv.hostPlatform.system}
-      or (throw "unsupported system: ${stdenv.hostPlatform.system}")
-  );
+  src =
+    finalAttrs.passthru.sources.${stdenv.hostPlatform.system}
+      or (throw "Unsupported platform for mongodb-ce: ${stdenv.hostPlatform.system}");
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
   dontStrip = true;
@@ -57,70 +36,97 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -Dm 755 bin/mongod $out/bin/mongod
-    install -Dm 755 bin/mongos $out/bin/mongos
+    install -Dm 755 bin/mongod -t $out/bin
+    install -Dm 755 bin/mongos -t $out/bin
 
     runHook postInstall
   '';
 
-  passthru = {
+  # Only enable the version install check on darwin.
+  # On Linux, this would fail as mongod relies on tcmalloc, which
+  # requires access to `/sys/devices/system/cpu/possible`.
+  # See https://github.com/NixOS/nixpkgs/issues/377016
+  doInstallCheck = stdenv.hostPlatform.isDarwin;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/mongod";
 
+  # Apple's LibreSSL tries to read this while running `mongod --version`
+  sandboxProfile = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    (allow file-read* (literal "/private/etc/ssl/openssl.cnf"))
+  '';
+
+  passthru = {
+    sources = {
+      "x86_64-linux" = fetchurl {
+        url = "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2404-${finalAttrs.version}.tgz";
+        hash = "sha256-pVeA7Zu1QQrl6o6MW4gssc2TidponEF9YmWSmtKKH38=";
+      };
+      "aarch64-linux" = fetchurl {
+        url = "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-ubuntu2404-${finalAttrs.version}.tgz";
+        hash = "sha256-aLR9KiABYVcy2SDRQbFpUkvB2qporO71L2HqWr/O9F0=";
+      };
+      "aarch64-darwin" = fetchurl {
+        url = "https://fastdl.mongodb.org/osx/mongodb-macos-arm64-${finalAttrs.version}.tgz";
+        hash = "sha256-Giqh7CXAKnFcVbirL+hgxrLdo8rTgqXboaY1xpW28Uc=";
+      };
+    };
     updateScript =
       let
         script = writeShellApplication {
           name = "${finalAttrs.pname}-updateScript";
 
           runtimeInputs = [
+            common-updater-scripts
             curl
+            gitMinimal
             jq
             nix-update
-            gitMinimal
-            pup
           ];
 
-          text =
-            ''
-              # Get latest version string from Github
-              NEW_VERSION=$(curl -s "https://api.github.com/repos/mongodb/mongo/tags?per_page=1000" | jq -r 'first(.[] | .name | select(startswith("r8.0")) | select(contains("rc") | not) | .[1:])')
+          text = ''
+            # Pick the newest production (non-RC) release within the current major version from
+            # MongoDB's official release feed. Major upgrades are left as a deliberate manual change.
+            # A version only shows up in the feed once its binaries are published, so no separate
+            # download-availability check is needed.
+            NEW_VERSION=$(curl -s https://downloads.mongodb.org/current.json \
+              | jq -r --arg major "${lib.versions.major finalAttrs.version}" \
+                '[.versions[] | select(.production_release and (.release_candidate | not)) | .version | select(startswith($major + "."))] | sort_by(split(".") | map(tonumber)) | last')
 
-              # Check if the new version is available for download, if not, exit
-              curl -s https://www.mongodb.com/try/download/community-edition/releases | pup 'h3:not([id]) text{}' | grep "$NEW_VERSION"
+            if [[ "${finalAttrs.version}" = "$NEW_VERSION" ]]; then
+                echo "The new version same as the old version."
+                exit 0
+            fi
 
-              if [[ "${version}" = "$NEW_VERSION" ]]; then
-                  echo "The new version same as the old version."
-                  exit 0
-              fi
-            ''
-            + lib.concatStrings (
-              map (system: ''
-                nix-update --system ${system} --version "$NEW_VERSION" ${finalAttrs.pname}
-              '') finalAttrs.meta.platforms
-            );
+            for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
+              update-source-version "mongodb-ce" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
+            done
+          '';
         };
       in
       {
         command = lib.getExe script;
       };
 
-    tests.version = testers.testVersion {
-      package = mongodb-ce;
-      command = "mongod --version";
+    tests = {
+      inherit (nixosTests) mongodb-ce;
     };
   };
 
   meta = {
-    changelog = "https://www.mongodb.com/docs/upcoming/release-notes/8.0/";
-    description = "MongoDB is a general purpose, document-based, distributed database.";
+    changelog = "https://www.mongodb.com/docs/upcoming/release-notes/${lib.versions.majorMinor finalAttrs.version}/";
+    description = "MongoDB is a general purpose, document-based, distributed database";
     homepage = "https://www.mongodb.com/";
-    license = with lib.licenses; [ sspl ];
+    license = lib.licenses.sspl;
     longDescription = ''
       MongoDB CE (Community Edition) is a general purpose, document-based, distributed database.
       It is designed to be flexible and easy to use, with the ability to store data of any structure.
       This pre-compiled binary distribution package provides the MongoDB daemon (mongod) and the MongoDB Shard utility
       (mongos).
     '';
-    maintainers = with lib.maintainers; [ drupol ];
-    platforms = lib.attrNames (srcs version);
+    maintainers = with lib.maintainers; [
+      wrbbz
+    ];
+    platforms = lib.attrNames finalAttrs.passthru.sources;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

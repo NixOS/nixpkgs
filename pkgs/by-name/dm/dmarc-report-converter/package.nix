@@ -6,14 +6,14 @@
   testers,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dmarc-report-converter";
   version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "tierpod";
     repo = "dmarc-report-converter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-j1uFPCyxLqO3BMxl/02wILj5HGag9qjxCTB8ZxZHEGo=";
   };
 
@@ -24,7 +24,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   passthru.tests.version = testers.testVersion { package = dmarc-report-converter; };
@@ -36,4 +36,4 @@ buildGoModule rec {
     maintainers = [ lib.maintainers.Nebucatnetzer ];
     mainProgram = "dmarc-report-converter";
   };
-}
+})

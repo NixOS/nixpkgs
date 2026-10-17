@@ -5,17 +5,13 @@
   glibcLocales,
   pycodestyle,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
-  tomli,
 }:
 
 buildPythonPackage rec {
   pname = "autopep8";
   version = "2.3.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "hhatto";
@@ -26,7 +22,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ pycodestyle ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  propagatedBuildInputs = [ pycodestyle ];
 
   nativeCheckInputs = [
     glibcLocales
@@ -35,12 +31,12 @@ buildPythonPackage rec {
 
   env.LC_ALL = "en_US.UTF-8";
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/hhatto/autopep8/releases/tag/v${version}";
     description = "Tool that automatically formats Python code to conform to the PEP 8 style guide";
     homepage = "https://github.com/hhatto/autopep8";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "autopep8";
-    maintainers = with maintainers; [ bjornfor ];
+    maintainers = with lib.maintainers; [ bjornfor ];
   };
 }

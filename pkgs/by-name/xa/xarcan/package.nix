@@ -1,17 +1,18 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   arcan,
   audit,
   dbus,
+  dri-pkgconfig-stub,
   libepoxy,
-  fontutil,
+  font-util,
   libGL,
-  libX11,
-  libXau,
-  libXdmcp,
-  libXfont2,
+  libx11,
+  libxau,
+  libxdmcp,
+  libxfont_2,
   libdrm,
   libgcrypt,
   libmd,
@@ -21,17 +22,17 @@
   libxkbfile,
   libxshmfence,
   libgbm,
-  mesa,
+  mesa-gl-headers,
   meson,
   nettle,
   ninja,
   openssl,
   pixman,
   pkg-config,
-  systemd,
-  xcbutil,
-  xcbutilwm,
-  xcbutilimage,
+  systemdLibs,
+  libxcb-util,
+  libxcb-wm,
+  libxcb-image,
   xkbcomp,
   xkeyboard_config,
   xorgproto,
@@ -39,15 +40,15 @@
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation (finalPackages: {
+stdenv.mkDerivation (finalPackages: rec {
   pname = "xarcan";
-  version = "0-unstable-2024-08-26";
+  version = "0.7.1";
 
-  src = fetchFromGitHub {
+  src = fetchFromCodeberg {
     owner = "letoram";
     repo = "xarcan";
-    rev = "5672116f627de492fb4df0b33d36b78041cd3931";
-    hash = "sha256-xZX6uLs/H/wONKrUnYxSynHK7CL7FDfzWvSjtXxT8es=";
+    tag = version;
+    hash = "sha256-j20Wz/Ae4QTincAPgMoj19EfKAPxIGm0Jgmi4sUR88o=";
   };
 
   nativeBuildInputs = [
@@ -60,13 +61,14 @@ stdenv.mkDerivation (finalPackages: {
     arcan
     audit
     dbus
+    dri-pkgconfig-stub
     libepoxy
-    fontutil
+    font-util
     libGL
-    libX11
-    libXau
-    libXdmcp
-    libXfont2
+    libx11
+    libxau
+    libxdmcp
+    libxfont_2
     libdrm
     libgcrypt
     libmd
@@ -76,14 +78,14 @@ stdenv.mkDerivation (finalPackages: {
     libxkbfile
     libxshmfence
     libgbm
-    mesa # uses dri_interface.h
+    mesa-gl-headers
     nettle
     openssl
     pixman
-    systemd
-    xcbutil
-    xcbutilwm
-    xcbutilimage
+    systemdLibs
+    libxcb-util
+    libxcb-wm
+    libxcb-image
     xkbcomp
     xkeyboard_config
     xorgproto
@@ -112,7 +114,7 @@ stdenv.mkDerivation (finalPackages: {
   passthru.updateScript = unstableGitUpdater { };
 
   meta = {
-    homepage = "https://github.com/letoram/letoram";
+    homepage = "https://codeberg.org/letoram/xarcan";
     description = "Patched Xserver that bridges connections to Arcan";
     mainProgram = "Xarcan";
     longDescription = ''
@@ -120,8 +122,8 @@ stdenv.mkDerivation (finalPackages: {
       arcan-shmif to map Xlib/Xcb/X clients to a running arcan instance. It
       allows running an X session as a window under Arcan.
     '';
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

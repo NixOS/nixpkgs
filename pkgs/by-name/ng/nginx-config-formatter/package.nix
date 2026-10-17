@@ -5,18 +5,22 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
-  version = "1.2.3";
+stdenv.mkDerivation (finalAttrs: {
+  version = "1.4.0";
   pname = "nginx-config-formatter";
 
   src = fetchFromGitHub {
     owner = "slomkowski";
     repo = "nginx-config-formatter";
-    rev = "v${version}";
-    sha256 = "sha256-nYaBdVsq7aLE9P1bQlJlQkrk/cq7C1hxM5XtCGyEzC0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-HB1knL/q1G2z6RyVCsOyIKpp4O6x68/93ccvox1FKGQ=";
   };
 
   buildInputs = [ python3 ];
+
+  nativeCheckInputs = [ python3 ];
+
+  strictDeps = true;
 
   doCheck = true;
   checkPhase = ''
@@ -28,11 +32,18 @@ stdenv.mkDerivation rec {
     install -m 0755 $src/nginxfmt.py $out/bin/nginxfmt
   '';
 
-  meta = with lib; {
-    description = "nginx config file formatter";
-    maintainers = with maintainers; [ Baughn ];
-    license = licenses.asl20;
+  doInstallCheck = true;
+  # We can't do a version check because there is no version command
+  # but we do want to check that python3 is available
+  installCheckPhase = ''
+    $out/bin/nginxfmt --help
+  '';
+
+  meta = {
+    description = "Nginx config file formatter";
+    maintainers = with lib.maintainers; [ Baughn ];
+    license = lib.licenses.asl20;
     homepage = "https://github.com/slomkowski/nginx-config-formatter";
     mainProgram = "nginxfmt";
   };
-}
+})

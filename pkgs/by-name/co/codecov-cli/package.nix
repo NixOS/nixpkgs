@@ -1,38 +1,49 @@
 {
-  fetchPypi,
   lib,
   python3Packages,
+  fetchFromGitHub,
+  fetchPypi,
 }:
+let
+  # Due to bug:
+  # https://github.com/codecov/codecov-cli/issues/721
+  click_8_2 = python3Packages.click.overridePythonAttrs (old: rec {
+    version = "8.2.1";
+    src = fetchPypi {
+      pname = "click";
+      inherit version;
+      hash = "sha256-J8SRzAXZaNJx1aHbE+O1oYRjbZ2TDxSMULA48NBkYgI=";
+    };
+  });
+in
 
 python3Packages.buildPythonApplication rec {
   pname = "codecov-cli";
-  version = "9.1.1";
+  version = "11.2.8";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-jaljYA2x2nZUOn9vy/CdtxfGjQKHtrtY13WmBdsICTA=";
+  src = fetchFromGitHub {
+    owner = "getsentry";
+    repo = "prevent-cli";
+    tag = "v${version}";
+    hash = "sha256-1CVl8X05e0Fm7TCKlZtQk+o9i26O9KVdnlUIBYqa8IE=";
   };
 
-  build-system = with python3Packages; [
-    setuptools
-  ];
+  sourceRoot = "${src.name}/${pname}";
+
+  build-system = with python3Packages; [ setuptools ];
 
   pythonRelaxDeps = [
-    "httpx"
     "responses"
-    "tree-sitter"
   ];
 
   dependencies = with python3Packages; [
-    click
-    httpx
+    click_8_2
     ijson
     pyyaml
-    regex
     responses
+    sentry-sdk
     test-results-parser
-    tree-sitter
   ];
 
   meta = {

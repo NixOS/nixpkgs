@@ -13,17 +13,20 @@ buildKodiAddon rec {
 
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/${lib.toLower rel}/${namespace}/${namespace}-${version}.zip";
-    sha256 = "sha256-d6BNpnTg6K7NPX3uWp5X0rog33C+B7YoAtLH/CrUYno=";
+    hash = "sha256-d6BNpnTg6K7NPX3uWp5X0rog33C+B7YoAtLH/CrUYno=";
   };
 
-  passthru.updateScript = addonUpdateScript {
-    attrPath = "kodi.packages.six";
+  passthru = {
+    pythonPath = "lib";
+    updateScript = addonUpdateScript {
+      attrPath = "kodi.packages.six";
+    };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://pypi.org/project/six/";
     description = "Python 2 and 3 compatibility utilities";
-    license = licenses.mit;
-    maintainers = teams.kodi.members;
+    license = lib.licenses.mit;
+    teams = [ lib.teams.kodi ];
   };
 }

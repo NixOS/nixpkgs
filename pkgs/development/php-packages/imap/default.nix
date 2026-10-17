@@ -3,6 +3,7 @@
   fetchFromGitHub,
   fetchpatch,
   lib,
+  php,
   libkrb5,
   openssl,
   pam,
@@ -12,7 +13,7 @@
 }:
 
 let
-  version = "1.0.2";
+  version = "1.0.3";
 in
 buildPecl {
   inherit version;
@@ -21,17 +22,9 @@ buildPecl {
   src = fetchFromGitHub {
     owner = "php";
     repo = "pecl-mail-imap";
-    rev = version;
-    hash = "sha256-QVeimxm3rfWMvMpSgadhMKd24yPdDGVuhXIOs8668do=";
+    tag = version;
+    hash = "sha256-eDrznw5OtQXJZa7dR9roUiJyINXFZI5qmS+cyoaGHnk=";
   };
-
-  patches = [
-    # Fix compilation with PHP 8.4.
-    (fetchpatch {
-      url = "https://github.com/php/pecl-mail-imap/commit/4fc9970a29c205ec328f36edc8c119c158129324.patch";
-      hash = "sha256-MxEaEe4YVeP7W5gDSNJb0thwAhxDj/yRr3qvjlJjRL4=";
-    })
-  ];
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -51,10 +44,11 @@ buildPecl {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
+    broken = lib.versionAtLeast php.version "8.6";
     description = "PHP extension for checking the spelling of a word";
     homepage = "https://pecl.php.net/package/imap";
-    license = licenses.php301;
-    maintainers = teams.php.members;
+    license = lib.licenses.php301;
+    teams = [ lib.teams.php ];
   };
 }

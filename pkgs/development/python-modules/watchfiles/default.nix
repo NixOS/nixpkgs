@@ -1,53 +1,39 @@
 {
   lib,
-  stdenv,
   anyio,
   buildPythonPackage,
-  cargo,
-  fetchFromGitHub,
-  rustPlatform,
-  rustc,
-  pythonOlder,
   dirty-equals,
+  fetchFromGitHub,
   pytest-mock,
   pytest-timeout,
   pytestCheckHook,
-  CoreServices,
-  libiconv,
+  rustPlatform,
+  versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "watchfiles";
-  version = "0.24.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "1.2.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "samuelcolvin";
-    repo = pname;
-    tag = "v${version}";
-    hash = "sha256-uc4CfczpNkS4NMevtRxhUOj9zTt59cxoC0BXnuHFzys=";
+    repo = "watchfiles";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gfH/8o3WsGL4Qki5kRrWpQLyk85HgTtR6iImInPYthg=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes."notify-6.1.1" = "sha256-lT3R5ZQpjx52NVMEKTTQI90EWT16YnbqphqvZmNpw/I=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname src version;
+    hash = "sha256-GFGhEXW0M23G0NB4Bu1FXV9Bmdt9weznHHSD/6rBSjI=";
   };
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    CoreServices
-    libiconv
-  ];
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
-    cargo
-    rustc
   ];
 
-  propagatedBuildInputs = [ anyio ];
+  dependencies = [ anyio ];
 
   # Tests need these permissions in order to use the FSEvents API on macOS.
   sandboxProfile = ''
@@ -59,15 +45,16 @@ buildPythonPackage rec {
     pytest-mock
     pytest-timeout
     pytestCheckHook
+    versionCheckHook
   ];
-
-  postPatch = ''
-    sed -i "/^requires-python =.*/a version = '${version}'" pyproject.toml
-  '';
 
   preCheck = ''
     rm -rf watchfiles
   '';
+
+  pytestFlags = [
+    "-Wignore::pytest.PytestRemovedIn10Warning"
+  ];
 
   disabledTests = [
     #  BaseExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
@@ -76,11 +63,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "watchfiles" ];
 
-  meta = with lib; {
+  meta = {
     description = "File watching and code reload";
-    mainProgram = "watchfiles";
     homepage = "https://watchfiles.helpmanual.io/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/samuelcolvin/watchfiles/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "watchfiles";
   };
-}
+})

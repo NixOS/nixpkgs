@@ -12,15 +12,14 @@
 }:
 
 let
-  pname = "clutter-gtk";
   version = "1.8.4";
 in
-
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  pname = "clutter-gtk";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/clutter-gtk/${lib.versions.majorMinor version}/clutter-gtk-${version}.tar.xz";
     sha256 = "01ibniy4ich0fgpam53q252idm7f4fn5xg5qvizcfww90gn9652j";
   };
 
@@ -57,7 +56,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Clutter-GTK";
-    homepage = "http://www.clutter-project.org/";
+    homepage = "https://gitlab.gnome.org/Archive/clutter-gtk";
     license = lib.licenses.lgpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.unix;

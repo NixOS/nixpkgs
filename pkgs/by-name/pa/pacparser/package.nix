@@ -2,23 +2,27 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pacparser";
-  version = "1.4.5";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "manugarg";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-X842+xPjM404aQJTc2JwqU4vq8kgyKhpnqVu70pNLks=";
+    repo = "pacparser";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-zAntXNjqkOsILsy7FdQVuBpOM9FCRFcDIVT20FhaVzo=";
   };
 
   makeFlags = [
     "NO_INTERNET=1"
     "PREFIX=${placeholder "out"}"
+    "VERSION=v${finalAttrs.version}"
   ];
+
+  enableParallelBuilding = true;
 
   preConfigure = ''
     patchShebangs tests/runtests.sh
@@ -27,12 +31,16 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-v";
+  doInstallCheck = true;
+
+  meta = {
     description = "Library to parse proxy auto-config (PAC) files";
     homepage = "https://pacparser.manugarg.com/";
-    license = licenses.lgpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.all;
+    maintainers = [ ];
     mainProgram = "pactester";
   };
-}
+})

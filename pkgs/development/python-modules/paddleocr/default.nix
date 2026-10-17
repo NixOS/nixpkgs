@@ -2,6 +2,9 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  aiohttp,
   attrdict,
   beautifulsoup4,
   cython,
@@ -24,21 +27,20 @@
   paddlepaddle,
   lanms-neo,
   polygon3,
+  paddlex,
+  pyyaml,
 }:
 
-let
-  version = "2.8.1";
-in
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "paddleocr";
-  inherit version;
-  format = "setuptools";
+  version = "3.7.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PaddlePaddle";
     repo = "PaddleOCR";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-TLNpb+CwLKvtmPppDuUbGyJorhmkVVW01J61+XUICYk=";
+    tag = "v${version}";
+    hash = "sha256-uOtxJmhhPkl1l9R4Qzx8wuMEVXKTUt5YDK4WHozlmMc=";
   };
 
   patches = [
@@ -47,21 +49,24 @@ buildPythonPackage {
     # unmaintained and has been removed from nixpkgs.
     #
     # The image OCR feature of PaddleOCR doesn't use these classes though, so
-    # they work even after stripping the the `IaaAugment` and `CopyPaste`
+    # they work even after stripping the `IaaAugment` and `CopyPaste`
     # exports. It probably breaks some of the OCR model creation tooling that
     # PaddleOCR provides, however.
     ./remove-import-imaug.patch
   ];
 
-  # trying to relax only pymupdf makes the whole build fail
-  pythonRelaxDeps = true;
-  pythonRemoveDeps = [
-    "imgaug"
-    "visualdl"
-    "opencv-contrib-python"
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools==72.1.0" "setuptools"
+  '';
+
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    aiohttp
     attrdict
     beautifulsoup4
     cython
@@ -84,6 +89,8 @@ buildPythonPackage {
     paddlepaddle
     lanms-neo
     polygon3
+    paddlex
+    pyyaml
   ];
 
   # TODO: The tests depend, among possibly other things, on `cudatoolkit`.
@@ -92,19 +99,18 @@ buildPythonPackage {
   # nativeCheckInputs = with pkgs; [ which cudatoolkit ];
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/PaddlePaddle/PaddleOCR";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     description = "Multilingual OCR toolkits based on PaddlePaddle";
     longDescription = ''
       PaddleOCR aims to create multilingual, awesome, leading, and practical OCR
       tools that help users train better models and apply them into practice.
     '';
-    changelog = "https://github.com/PaddlePaddle/PaddleOCR/releases/tag/v${version}";
-    maintainers = with maintainers; [ happysalada ];
+    changelog = "https://github.com/PaddlePaddle/PaddleOCR/releases/tag/${src.tag}";
+    maintainers = with lib.maintainers; [ happysalada ];
     platforms = [
       "x86_64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };

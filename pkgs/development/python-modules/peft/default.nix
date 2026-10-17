@@ -2,51 +2,127 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+  stdenv,
+
+  # build-system
   setuptools,
+
+  # dependencies
+  accelerate,
+  huggingface-hub,
   numpy,
   packaging,
   psutil,
   pyyaml,
+  safetensors,
   torch,
+  tqdm,
   transformers,
-  accelerate,
+
+  # tests
+  datasets,
+  diffusers,
+  parameterized,
+  pytest-cov-stub,
+  pytest-xdist,
+  pytestCheckHook,
+  scipy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "peft";
-  version = "0.14.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "0.18.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
-    repo = pname;
-    tag = "v${version}";
-    hash = "sha256-Bo8nqhxL6st/Nk9wSqly7FH+RNkT0baB+1bbTIolUis=";
+    repo = "peft";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qlM8yEN/CJZbSAGNCltS4JQSzstVXRVqu47qZbLPVNc=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    accelerate
+    huggingface-hub
     numpy
     packaging
     psutil
     pyyaml
+    safetensors
     torch
+    tqdm
     transformers
-    accelerate
   ];
 
-  doCheck = false; # tries to download pretrained models
   pythonImportsCheck = [ "peft" ];
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    datasets
+    diffusers
+    parameterized
+    pytest-cov-stub
+    pytest-xdist
+    pytestCheckHook
+    scipy
+  ];
+
+  enabledTestPaths = [ "tests" ];
+
+  disabledTests =
+    lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+      # RuntimeError: Failed to initialize cpuinfo!
+      "test_randlora_dtypes"
+      "test_shira_dtypes"
+      "test_vblora_dtypes"
+      "test_vera_dtypes"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # These tests fail when MPS devices are detected
+      "gpu"
+      "test_save_load"
+      "test_resume_training_model_with_topk_weights"
+    ];
+
+  disabledTestPaths = [
+    # ValueError: Can't find 'adapter_config.json'
+    "tests/test_config.py"
+
+    # Require internet access to download a dataset
+    "tests/test_adaption_prompt.py"
+    "tests/test_arrow.py"
+    "tests/test_auto.py"
+    "tests/test_boft.py"
+    "tests/test_cpt.py"
+    "tests/test_custom_models.py"
+    "tests/test_decoder_models.py"
+    "tests/test_encoder_decoder_models.py"
+    "tests/test_feature_extraction_models.py"
+    "tests/test_helpers.py"
+    "tests/test_hub_features.py"
+    "tests/test_incremental_pca.py"
+    "tests/test_initialization.py"
+    "tests/test_lora_variants.py"
+    "tests/test_mixed.py"
+    "tests/test_multitask_prompt_tuning.py"
+    "tests/test_other.py"
+    "tests/test_poly.py"
+    "tests/test_stablediffusion.py"
+    "tests/test_trainable_tokens.py"
+    "tests/test_tuners_utils.py"
+    "tests/test_vision_models.py"
+    "tests/test_xlora.py"
+    "tests/test_target_parameters.py"
+    "tests/test_seq_classifier.py"
+    "tests/test_low_level_api.py"
+  ];
+
+  meta = {
     homepage = "https://github.com/huggingface/peft";
     description = "State-of-the art parameter-efficient fine tuning";
-    changelog = "https://github.com/huggingface/peft/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bcdarwin ];
+    changelog = "https://github.com/huggingface/peft/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

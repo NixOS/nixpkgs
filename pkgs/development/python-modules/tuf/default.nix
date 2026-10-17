@@ -1,41 +1,44 @@
 {
   lib,
   buildPythonPackage,
-  ed25519,
   fetchFromGitHub,
+  freezegun,
   hatchling,
   pytestCheckHook,
-  pythonOlder,
   requests,
   securesystemslib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tuf";
-  version = "5.1.0";
+  version = "7.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "theupdateframework";
     repo = "python-tuf";
-    tag = "v${version}";
-    hash = "sha256-Qv9SH4ObC7bgPLd2Wu5XynBddlW6pycwLwaKhZ+l61k=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pn1M3e3Vzu2CYp/3KXkreaHunr+Nblph0QBWAkTmrIE=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "hatchling==1.29.0" "hatchling"
+  '';
 
   build-system = [ hatchling ];
 
-  dependencies =
-    [
-      requests
-      securesystemslib
-    ]
-    ++ securesystemslib.optional-dependencies.pynacl
-    ++ securesystemslib.optional-dependencies.crypto;
+  dependencies = [
+    requests
+    securesystemslib
+  ]
+  ++ securesystemslib.optional-dependencies.pynacl
+  ++ securesystemslib.optional-dependencies.crypto;
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
-    ed25519
+    freezegun
     pytestCheckHook
   ];
 
@@ -48,11 +51,11 @@ buildPythonPackage rec {
   meta = {
     description = "Python reference implementation of The Update Framework (TUF)";
     homepage = "https://github.com/theupdateframework/python-tuf";
-    changelog = "https://github.com/theupdateframework/python-tuf/blob/v${version}/docs/CHANGELOG.md";
+    changelog = "https://github.com/theupdateframework/python-tuf/blob/${finalAttrs.src.tag}/docs/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit
     ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

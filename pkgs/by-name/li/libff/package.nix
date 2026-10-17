@@ -3,33 +3,41 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  boost,
   gmp,
   openssl,
   pkg-config,
   enableStatic ? stdenv.hostPlatform.isStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libff";
   version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "scipr-lab";
     repo = "libff";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "0dczi829497vqlmn6n4fgi89bc2h9f13gx30av5z2h6ikik7crgn";
     fetchSubmodules = true;
   };
 
-  cmakeFlags =
-    [ "-DWITH_PROCPS=Off" ]
-    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-      "-DCURVE=ALT_BN128"
-      "-DUSE_ASM=OFF"
-    ];
+  cmakeFlags = [
+    "-DWITH_PROCPS=Off"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    "-DCURVE=ALT_BN128"
+    "-DUSE_ASM=OFF"
+  ];
 
-  postPatch = lib.optionalString (!enableStatic) ''
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace "VERSION 2.8" "VERSION 3.10"
+    # CMake >= 4.3 treats install(DIRECTORY "" ...) as a no-op instead of
+    # installing the current source directory, so no headers get installed.
+    # https://gitlab.kitware.com/cmake/cmake/-/issues/27568
+    substituteInPlace libff/CMakeLists.txt \
+      --replace-fail 'DIRECTORY "" DESTINATION "include/libff"' 'DIRECTORY "./" DESTINATION "include/libff"'
+  ''
+  + lib.optionalString (!enableStatic) ''
     substituteInPlace libff/CMakeLists.txt --replace "STATIC" "SHARED"
   '';
 
@@ -38,17 +46,16 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
   buildInputs = [
-    boost
     gmp
     openssl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "C++ library for Finite Fields and Elliptic Curves";
     changelog = "https://github.com/scipr-lab/libff/blob/develop/CHANGELOG.md";
     homepage = "https://github.com/scipr-lab/libff";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ arturcygan ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ arturcygan ];
   };
-}
+})

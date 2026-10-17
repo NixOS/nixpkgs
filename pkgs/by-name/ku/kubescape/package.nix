@@ -1,26 +1,26 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   git,
   installShellFiles,
   versionCheckHook,
 }:
-
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubescape";
-  version = "3.0.23";
+  version = "4.0.16";
 
   src = fetchFromGitHub {
     owner = "kubescape";
     repo = "kubescape";
-    tag = "v${version}";
-    hash = "sha256-LC5m+r38mm5c8dmlo4+E5eWlfF0xJIglTcGpvY3EDOg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Cp1Or9lQrlE/8nlBfjhLUrqXibeH0rAsw/8niKfF7P8=";
     fetchSubmodules = true;
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-J8+GyOgzR2MkJSskM7lzloyKw/JywCT38WFnosg6ACM=";
+  vendorHash = "sha256-cjH5+tu0mGApQbhNz+JnrirflzBmpfPYTd32WxjpT+8=";
 
   subPackages = [ "." ];
 
@@ -33,15 +33,14 @@ buildGoModule rec {
 
   ldflags = [
     "-s"
-    "-w"
-    "-X=github.com/kubescape/kubescape/v3/core/cautils.BuildNumber=v${version}"
+    "-X=main.version=v${finalAttrs.version}"
+    "-X=github.com/kubescape/kubescape/v3/core/cautils.BuildNumber=v${finalAttrs.version}"
   ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
 
     # Remove tests that use networking
-    rm core/pkg/resourcehandler/urlloader_test.go
     rm core/pkg/opaprocessor/*_test.go
     rm core/cautils/getter/downloadreleasedpolicy_test.go
     rm core/core/initutils_test.go
@@ -57,7 +56,7 @@ buildGoModule rec {
       --replace-fail "TestSetContextMetadata" "SkipSetContextMetadata"
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd kubescape \
       --bash <($out/bin/kubescape completion bash) \
       --fish <($out/bin/kubescape completion fish) \
@@ -66,12 +65,12 @@ buildGoModule rec {
 
   doInstallCheck = true;
 
-  versionCheckProgramArg = [ "version" ];
+  versionCheckProgramArg = "version";
 
-  meta = with lib; {
+  meta = {
     description = "Tool for testing if Kubernetes is deployed securely";
     homepage = "https://github.com/kubescape/kubescape";
-    changelog = "https://github.com/kubescape/kubescape/releases/tag/v${version}";
+    changelog = "https://github.com/kubescape/kubescape/releases/tag/v${finalAttrs.version}";
     longDescription = ''
       Kubescape is the first open-source tool for testing if Kubernetes is
       deployed securely according to multiple frameworks: regulatory, customized
@@ -83,11 +82,11 @@ buildGoModule rec {
       time. Kubescape integrates natively with other DevOps tools, including
       Jenkins, CircleCI and Github workflows.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       fab
       jk
     ];
     mainProgram = "kubescape";
   };
-}
+})

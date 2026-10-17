@@ -1,8 +1,8 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
+  fetchFromGitHub,
 
   # build-system
   hatch-vcs,
@@ -17,22 +17,28 @@
   pyviz-comms,
 
   # tests
-  pytestCheckHook,
-  pytest-cov,
   flaky,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "holoviews";
-  version = "1.19.1";
+  version = "1.23.1";
   pyproject = true;
+  __structuredAttrs = true;
 
-  disabled = pythonOlder "3.9";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-uehejAcnWkVsDvjQa8FX0Cs37/Zvs2AqoS9chvCEhlw=";
+  src = fetchFromGitHub {
+    owner = "holoviz";
+    repo = "holoviews";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+s7AzER7ipiqjiZL9vmno16MmhSK8Sz9LYLQ2cxNM6Y=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"ignore:No data was collected:coverage.exceptions.CoverageWarning",' ""
+  '';
 
   build-system = [
     hatch-vcs
@@ -49,9 +55,9 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-    pytest-cov
     flaky
+    pytest-asyncio
+    pytestCheckHook
   ];
 
   disabledTests = [
@@ -65,15 +71,23 @@ buildPythonPackage rec {
     "test_server_dynamicmap_with_dims"
     "test_server_dynamicmap_with_stream"
     "test_server_dynamicmap_with_stream_dims"
+
+    # ModuleNotFoundError: No module named 'param'
+    "test_no_blocklist_imports"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fails due to font rendering differences
+    "test_categorical_axis_fontsize_both"
   ];
 
   pythonImportsCheck = [ "holoviews" ];
 
   meta = {
     description = "Python data analysis and visualization seamless and simple";
+    changelog = "https://github.com/holoviz/holoviews/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "holoviews";
     homepage = "https://www.holoviews.org/";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

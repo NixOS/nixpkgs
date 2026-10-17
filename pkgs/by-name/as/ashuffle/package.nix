@@ -10,15 +10,15 @@
   yaml-cpp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ashuffle";
-  version = "3.14.8";
+  version = "3.14.10";
 
   src = fetchFromGitHub {
     owner = "joshkunz";
     repo = "ashuffle";
-    rev = "v${version}";
-    hash = "sha256-XnibLlwUspI2aveWfMg/TOe59vK6Z2WEnF7gafUmx6E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-nvmyup9hW/kI7Wwo5+1/FEoHd4kfMvYbttI8nJkLfVE=";
     fetchSubmodules = true;
   };
 
@@ -40,12 +40,12 @@ stdenv.mkDerivation rec {
     NIX_LDFLAGS = "-framework CoreFoundation";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/joshkunz/ashuffle";
     description = "Automatic library-wide shuffle for mpd";
-    maintainers = [ maintainers.tcbravo ];
-    platforms = platforms.unix;
-    license = licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
     mainProgram = "ashuffle";
   };
-}
+})

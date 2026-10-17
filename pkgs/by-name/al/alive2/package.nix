@@ -5,41 +5,48 @@
   re2c,
   z3,
   hiredis,
-  llvm_18,
+  llvm,
   cmake,
   ninja,
+  nix-update-script,
 }:
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "alive2";
-  version = "0-unstable-2024-09-23";
+  version = "21.0";
 
   src = fetchFromGitHub {
     owner = "AliveToolkit";
     repo = "alive2";
-    rev = "05a964284056b38a6dc1f807e7acad64a0308328";
-    sha256 = "sha256-okKKUU7WLXLD9Hvsfoz+1HQWoyQ/bqRpBk5ogr7kSJA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-LL6/Epn6iHQJGKb8PX+U6zvXK/WTlvOIJPr6JuGRsSU=";
   };
 
   nativeBuildInputs = [
     cmake
+    ninja
+    re2c
   ];
   buildInputs = [
-    re2c
     z3
     hiredis
-    llvm_18
-    ninja
+    llvm
+  ];
+  strictDeps = true;
+
+  cmakeFlags = [
+    (lib.cmakeFeature "BUILD_TV" "1")
   ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
+      --replace-fail '-Werror' "" \
       --replace-fail 'find_package(Git REQUIRED)' ""
   '';
 
   env = {
     ALIVE2_HOME = "$PWD";
-    LLVM2_HOME = "${llvm_18}";
+    LLVM2_HOME = "${llvm}";
     LLVM2_BUILD = "$LLVM2_HOME/build";
   };
 
@@ -52,9 +59,12 @@ clangStdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin
     cp alive $out/bin/
     cp alive-jobserver $out/bin/
+    cp alive-tv $out/bin/
     rm -rf $out/bin/CMakeFiles $out/bin/*.o
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Automatic verification of LLVM optimizations";
@@ -62,6 +72,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ shogo ];
+    teams = [ lib.teams.ngi ];
     mainProgram = "alive";
   };
 })

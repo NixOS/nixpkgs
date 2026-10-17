@@ -3,15 +3,16 @@
   stdenv,
   fetchurl,
   ncurses,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libedit";
-  version = "20240808-3.1";
+  version = "20260508-3.1";
 
   src = fetchurl {
     url = "https://thrysoee.dk/editline/libedit-${finalAttrs.version}.tar.gz";
-    hash = "sha256-XwVzNJ13xKSJZxkc3WY03Xql9jmMalf+A3zAJpbWCZ8=";
+    hash = "sha256-kfQtZXHdjZL67dE0ETTOWrygxdC0s1KBQYbTPysRJy4=";
   };
 
   outputs = [
@@ -24,9 +25,15 @@ stdenv.mkDerivation (finalAttrs: {
     ./01-cygwin.patch
   ];
 
+  nativeBuildInputs = [
+    autoreconfHook
+  ];
+
   propagatedBuildInputs = [
     ncurses
   ];
+
+  strictDeps = true;
 
   # GCC automatically include `stdc-predefs.h` while Clang does not do this by
   # default. While Musl is ISO 10646 compliant, it does not define
@@ -45,6 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
       xargs sed -i -e 's,-lncurses[a-z]*,-L${ncurses.out}/lib -lncursesw,g'
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "http://www.thrysoee.dk/editline/";
     changelog = "https://www.thrysoee.dk/editline/#changelog";
@@ -55,8 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
       provides generic line editing, history, and tokenization functions,
       similar to those found in GNU Readline.
     '';
-    license = with lib.licenses; [ bsd3 ];
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ corngood ];
     platforms = lib.platforms.all;
   };
 })

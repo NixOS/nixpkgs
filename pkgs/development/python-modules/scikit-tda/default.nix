@@ -15,20 +15,18 @@
   kmapper,
   tadasets,
   pytest,
-  isPy27,
 }:
 
 buildPythonPackage rec {
   pname = "scikit-tda";
   version = "1.1.1";
   format = "setuptools";
-  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "scikit-tda";
     repo = "scikit-tda";
     tag = "v${version}";
-    sha256 = "sha256-sf7UxCFJZlIMGOgNFwoh/30U7xsBCZuJ3eumsjEelMc=";
+    hash = "sha256-sf7UxCFJZlIMGOgNFwoh/30U7xsBCZuJ3eumsjEelMc=";
   };
 
   propagatedBuildInputs = [
@@ -55,10 +53,10 @@ buildPythonPackage rec {
   # tests will be included in next release
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Topological Data Analysis for humans";
     homepage = "https://github.com/scikit-tda/scikit-tda";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

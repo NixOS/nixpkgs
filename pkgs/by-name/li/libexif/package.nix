@@ -6,15 +6,15 @@
   gettext,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libexif";
-  version = "0.6.24";
+  version = "0.6.26";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "${pname}-${builtins.replaceStrings [ "." ] [ "_" ] version}-release";
-    sha256 = "sha256-Eqgnm31s8iPJdhTpk5HM89HSZTXTK+e7YZ/CCdbeJX4=";
+    owner = "libexif";
+    repo = "libexif";
+    rev = "libexif-${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}-release";
+    sha256 = "sha256-H51RlMT3swWF8oLWu70eTnuumee5mRMSCWkMFX7mJSk=";
   };
 
   nativeBuildInputs = [
@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
     gettext
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://libexif.github.io/";
     description = "Library to read and manipulate EXIF data in digital photographs";
-    license = licenses.lgpl21;
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 
-}
+})

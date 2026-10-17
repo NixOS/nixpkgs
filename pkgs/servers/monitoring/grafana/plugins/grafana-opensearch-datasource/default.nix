@@ -1,18 +1,17 @@
 { grafanaPlugin, lib }:
 
-grafanaPlugin rec {
+grafanaPlugin {
   pname = "grafana-opensearch-datasource";
-  version = "2.19.0";
+  version = "2.34.4";
   zipHash = {
-    x86_64-linux = "sha256-jTeiIbaM2wPBTxFyXPQhBXxxzgRZbaXkqeN9+tHgWPc=";
-    aarch64-linux = "sha256-8ti5CibWbycAO9o3Wse/CuE07JjwV1Quhy/Vm6BDmyM=";
-    x86_64-darwin = "sha256-6rqdTsYcqjqcXtM20ekJguT42w5dr4EUHvNuRDIU6k0=";
-    aarch64-darwin = "sha256-Z4ISwwkFJXXdVcLOspAK8euI4yor4Ii08K7zZffY9tM=";
+    x86_64-linux = "sha256-61DfhIEV2VEkZ0cm50+odtw2wVXO3sIvInsZcUzrGGc=";
+    aarch64-linux = "sha256-JfYOi13C/ynB+r6aq/dlRmeoWCgYHf2wJUXB9Xa7SVo=";
+    aarch64-darwin = "sha256-Y4c3yh1767eASmwr4K428Qv2YsZ/9NIgvF1GFqnQcC4=";
   };
-  meta = with lib; {
-    description = "The Grafana JSON Datasource plugin empowers you to seamlessly integrate JSON data into Grafana.";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ nagisa ];
-    platforms = platforms.unix;
+  meta = {
+    description = "Empowers you to seamlessly integrate JSON data into Grafana";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ nagisa ];
+    platforms = lib.platforms.unix;
   };
 }

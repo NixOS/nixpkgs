@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxisf";
-  version = "0.2.12";
+  version = "0.2.13";
 
   src = fetchFromGitea {
     domain = "gitea.nouspiro.space";
     owner = "nou";
     repo = "libXISF";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-QhshgKyf9s5U5JMa5TZelIo1tpJGlsOQePPG1kEfbq8=";
+    hash = "sha256-vc42Jw7kBbQYu+/6jakxFnSuVkS8t6ZyYuSMLGMnEn4=";
   };
 
   patches = [
@@ -33,7 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DUSE_BUNDLED_LIBS=OFF"
-  ] ++ lib.optional stdenv.hostPlatform.isStatic "-DBUILD_SHARED_LIBS=OFF";
+  ]
+  ++ lib.optional stdenv.hostPlatform.isStatic "-DBUILD_SHARED_LIBS=OFF";
 
   buildInputs = [
     lz4
@@ -44,11 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Library to load and write XISF format from PixInsight";
     homepage = "https://gitea.nouspiro.space/nou/libXISF";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ panicgh ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ panicgh ];
+    platforms = lib.platforms.linux;
   };
 })

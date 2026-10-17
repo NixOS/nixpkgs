@@ -2,23 +2,26 @@
   lib,
   buildFishPlugin,
   fetchFromGitHub,
+  unstableGitUpdater,
 }:
 
-buildFishPlugin rec {
+buildFishPlugin {
   pname = "hydro";
-  version = "0-unstable-2024-03-24";
+  version = "0-unstable-2026-02-24";
 
   src = fetchFromGitHub {
     owner = "jorgebucaran";
     repo = "hydro";
-    rev = "bc31a5ebc687afbfb13f599c9d1cc105040437e1";
-    hash = "sha256-0MMiM0NRbjZPJLAMDXb+Frgm+du80XpAviPqkwoHjDA=";
+    rev = "f130b55ee3eaf099eccf588e2a62e5447068d120";
+    hash = "sha256-Dfq974KpD1mtQKznIlkXfZfDnSF/4MfLTA18Ak0LADE=";
   };
 
-  meta = with lib; {
+  passthru.updateScript = unstableGitUpdater { };
+
+  meta = {
     description = "Ultra-pure, lag-free prompt with async Git status";
     homepage = "https://github.com/jorgebucaran/hydro";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pyrox0 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ higherorderlogic ];
   };
 }

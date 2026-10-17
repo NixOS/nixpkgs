@@ -12,9 +12,9 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "alorence";
-    repo = pname;
+    repo = "pysvg-py3";
     rev = version;
-    sha256 = "1slync0knpcjgl4xpym8w4249iy6vmrwbarpnbjzn9xca8g1h2f0";
+    hash = "sha256-wAkYHlKsJ/vlsjerxXPdxsdEBOGo+tsJfZJdOwGznuo=";
   };
 
   checkPhase = ''

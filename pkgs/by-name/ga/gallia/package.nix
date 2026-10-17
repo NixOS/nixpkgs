@@ -3,66 +3,65 @@
   fetchFromGitHub,
   python3,
   cacert,
+  addBinToPathHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "gallia";
-  version = "1.9.0";
+  version = "2.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Fraunhofer-AISEC";
     repo = "gallia";
-    tag = "v${version}";
-    hash = "sha256-izMTTZrp4aizq5jS51BNtq3lv9Kr+xI7scZfYKXA/oY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vM19d5alD9xhFgR4are0pDhJyNiUY320nJmjEF2BvxM=";
   };
 
-  pythonRelaxDeps = [ "aiofiles" ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.11,<0.10.0" "uv_build"
+  '';
 
-  build-system = with python3.pkgs; [ poetry-core ];
+  pythonRelaxDeps = [ "pydantic" ];
+
+  build-system = with python3.pkgs; [ uv-build ];
 
   dependencies = with python3.pkgs; [
-    aiofiles
-    aiohttp
     aiosqlite
     argcomplete
-    python-can
-    exitcode
+    boltons
     construct
-    httpx
-    more-itertools
-    msgspec
     platformdirs
-    psutil
     pydantic
-    pygit2
     tabulate
-    tomli
+    wcwidth
     zstandard
   ];
 
-  SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
-  nativeCheckInputs = with python3.pkgs; [
-    pytestCheckHook
-    pytest-asyncio
-  ];
+  nativeCheckInputs =
+    with python3.pkgs;
+    [
+      pytestCheckHook
+      pytest-asyncio
+    ]
+    ++ [
+      addBinToPathHook
+    ];
 
   pythonImportsCheck = [ "gallia" ];
 
-  preCheck = ''
-    export PATH=$out/bin:$PATH
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Extendable Pentesting Framework for the Automotive Domain";
     homepage = "https://github.com/Fraunhofer-AISEC/gallia";
-    changelog = "https://github.com/Fraunhofer-AISEC/gallia/releases/tag/v${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [
+    changelog = "https://github.com/Fraunhofer-AISEC/gallia/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       fab
       rumpelsepp
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

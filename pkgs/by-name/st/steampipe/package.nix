@@ -9,20 +9,20 @@
   testers,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "steampipe";
-  version = "1.0.1";
+  version = "2.4.7";
 
   env.CGO_ENABLED = 0;
 
   src = fetchFromGitHub {
     owner = "turbot";
     repo = "steampipe";
-    tag = "v${version}";
-    hash = "sha256-9Tlc6BlfSQyAmmk/G6TdWB0kWpbwzGWOPNNNgI3tYPM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+r/RMbFrja0gis2OnmRw7zW3MCUmVnrCyPNgPqcBrJo=";
   };
 
-  vendorHash = "sha256-+y9OX/ywS/0AXCnVHf4VisTegFamt3sT/m43yVhbCNc=";
+  vendorHash = "sha256-DZ1lriT05HFet1tSNzJjRzuxM090XRqLCDByUIpnMfg=";
   proxyVendor = true;
 
   postPatch = ''
@@ -40,6 +40,10 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
+    "-X main.version=${finalAttrs.version}"
+    "-X main.commit=${finalAttrs.src.rev}"
+    "-X main.date=unknown"
+    "-X main.builtBy=nixpkgs"
   ];
 
   doCheck = true;
@@ -49,6 +53,10 @@ buildGoModule rec {
       skippedTests = [
         # panic: could not create backups directory: mkdir /var/empty/.steampipe: operation not permitted
         "TestTrimBackups"
+        # Requires network access
+        "TestVersionCheckerBodyReadFailure"
+        "TestVersionCheckerNetworkFailures"
+        "TestVersionCheckerTimeout"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
@@ -69,13 +77,13 @@ buildGoModule rec {
     tests.version = testers.testVersion {
       command = "${lib.getExe steampipe} --version";
       package = steampipe;
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
     };
     updateScript = nix-update-script { };
   };
 
   meta = {
-    changelog = "https://github.com/turbot/steampipe/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/turbot/steampipe/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Dynamically query your cloud, code, logs & more with SQL";
     homepage = "https://steampipe.io/";
     license = lib.licenses.agpl3Only;
@@ -85,4 +93,4 @@ buildGoModule rec {
       anthonyroussel
     ];
   };
-}
+})

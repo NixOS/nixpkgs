@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "tomli";
-  version = "2.0.1";
-  format = "pyproject";
+  version = "2.4.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hukkin";
-    repo = pname;
+    repo = "tomli";
     rev = version;
-    hash = "sha256-v0ZMrHIIaGeORwD4JiBeLthmnKZODK5odZVL0SY4etA=";
+    hash = "sha256-MBcmp0SeK/wum3c2c/eu8VEofXDguolHI30QwKahAGE=";
   };
 
   nativeBuildInputs = [ flit-core ];
@@ -40,10 +40,10 @@ buildPythonPackage rec {
       ;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Python library for parsing TOML, fully compatible with TOML v1.0.0";
     homepage = "https://github.com/hukkin/tomli";
-    license = licenses.mit;
-    maintainers = with maintainers; [ veehaitch ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ veehaitch ];
   };
 }

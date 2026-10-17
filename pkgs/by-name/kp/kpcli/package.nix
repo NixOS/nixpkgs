@@ -7,13 +7,13 @@
   perlPackages,
 }:
 
-stdenv.mkDerivation rec {
-  version = "4.1.2";
+stdenv.mkDerivation (finalAttrs: {
+  version = "4.1.3";
   pname = "kpcli";
 
   src = fetchurl {
-    url = "mirror://sourceforge/kpcli/${pname}-${version}.pl";
-    hash = "sha256-hvyCC8eUXNm1d1g+/kEnVllRJokChgJWzuoQB5Xd8j8=";
+    url = "mirror://sourceforge/kpcli/kpcli-${finalAttrs.version}.pl";
+    hash = "sha256-yRNj5OB/NSGoZ/aNtgLJW1PcFn5DZu5/8lQlK0F2xi8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/{bin,share}
-    cp ${src} $out/share/kpcli.pl
+    cp ${finalAttrs.src} $out/share/kpcli.pl
     chmod +x $out/share/kpcli.pl
 
     makeWrapper $out/share/kpcli.pl $out/bin/kpcli --set PERL5LIB \
@@ -59,16 +59,16 @@ stdenv.mkDerivation rec {
       }"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "KeePass Command Line Interface";
     mainProgram = "kpcli";
     longDescription = ''
       KeePass Command Line Interface (CLI) / interactive shell.
       Use this program to access and manage your KeePass 1.x or 2.x databases from a Unix-like command line.
     '';
-    license = licenses.artistic1;
+    license = lib.licenses.artistic1;
     homepage = "http://kpcli.sourceforge.net";
-    platforms = platforms.all;
-    maintainers = [ maintainers.j-keck ];
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.j-keck ];
   };
-}
+})

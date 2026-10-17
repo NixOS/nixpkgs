@@ -7,25 +7,28 @@
   fetchFromGitHub,
   ronn,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ipp-usb";
-  version = "0.9.28";
+  version = "0.9.34";
 
   src = fetchFromGitHub {
     owner = "openprinting";
     repo = "ipp-usb";
-    rev = version;
-    sha256 = "sha256-fjhiOftiZmc9/mA/0yQuIF4/OsBuGUIpf7DLrJB3GRk=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-4xZf8Q1MfQcB13vHRdb8dQyZWrwnJzubdi+zln1lRc8=";
   };
 
   postPatch = ''
     # rebuild with patched paths
     rm ipp-usb.8
-    substituteInPlace Makefile --replace "install: all" "install: man"
-    substituteInPlace systemd-udev/ipp-usb.service --replace "/sbin" "$out/bin"
-    for i in Makefile paths.go ipp-usb.8.md; do
-      substituteInPlace $i --replace "/usr" "$out"
-      substituteInPlace $i --replace "/var/ipp-usb" "/var/lib/ipp-usb"
+    substituteInPlace Makefile \
+      --replace-fail "install: all" "install: man" \
+      --replace-fail "/usr/" "/" \
+      --replace-fail "install -s" "install" # Nix already strips binaries in $out/sbin, this also fixes cross
+    substituteInPlace systemd-udev/ipp-usb.service --replace-fail "/sbin" "$out/bin"
+    for i in paths.go ipp-usb.8.md; do
+      substituteInPlace $i --replace-fail "/usr" "$out"
+      substituteInPlace $i --replace-fail "/var/ipp-usb" "/var/lib/ipp-usb"
     done
   '';
 
@@ -40,8 +43,10 @@ buildGoModule rec {
 
   vendorHash = null;
 
+  doInstallCheck = true;
+
   postInstall = ''
-    # to accomodate the makefile
+    # to accommodate the makefile
     cp $out/bin/ipp-usb .
     make install DESTDIR=$out
   '';
@@ -54,4 +59,4 @@ buildGoModule rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.bsd2;
   };
-}
+})

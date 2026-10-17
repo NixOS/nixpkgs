@@ -3,7 +3,6 @@
   buildPythonPackage,
   cryptography,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "linknlink";
   version = "0.2.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "xuanxuan000";
@@ -30,11 +27,11 @@ buildPythonPackage rec {
   # Module has no test
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Module and CLI for controlling Linklink devices locally";
     homepage = "https://github.com/xuanxuan000/python-linknlink";
     changelog = "https://github.com/xuanxuan000/python-linknlink/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

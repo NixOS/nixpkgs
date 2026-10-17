@@ -2,57 +2,62 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   accountsservice,
   alsa-lib,
-  budgie-screensaver,
+  budgie-desktop-services,
+  budgie-session,
   docbook-xsl-nons,
   glib,
   gnome-desktop,
   gnome-settings-daemon,
-  graphene,
+  gobject-introspection,
   gst_all_1,
   gtk-doc,
   gtk3,
-  ibus,
-  intltool,
+  gtk-layer-shell,
   libcanberra-gtk3,
   libgee,
-  libGL,
+  libgtop,
   libnotify,
-  libpeas,
+  libpeas2,
   libpulseaudio,
   libuuid,
-  libwnck,
-  magpie,
-  libgbm,
+  libxfce4windowing,
   meson,
   mutter,
   ninja,
   nix-update-script,
-  nixosTests,
   pkg-config,
-  polkit,
+  python3,
   sassc,
   testers,
   upower,
   vala,
   validatePkgConfig,
-  xfce,
   wrapGAppsHook3,
-  zenity,
+  xdg-desktop-portal,
 }:
 
+let
+  pythonEnv = python3.withPackages (
+    pp: with pp; [
+      dbus-python
+      psutil
+      pygobject3
+      systemd-python
+    ]
+  );
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-desktop";
-  version = "10.9.2";
+  version = "10.10.3";
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
     repo = "budgie-desktop";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-lDsQlUAa79gnM8wC5pwyquvFyEiayH4W4gD/uyC5Koo=";
+    hash = "sha256-WEUFB3Q3RQZfsZd/xUn6qmGXPM/dR3sUe6pBnJG3vIk=";
   };
 
   outputs = [
@@ -63,22 +68,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./plugins.patch
-
-    # Adapt to libxfce4windowing v4.19.8
-    # https://github.com/BuddiesOfBudgie/budgie-desktop/pull/627
-    (fetchpatch {
-      url = "https://github.com/BuddiesOfBudgie/budgie-desktop/commit/ba8170b4f3108f9de28331b6a98a9d92bb0ed4de.patch";
-      hash = "sha256-T//1/NmaV81j0jiIYK7vEp8sgKCgF2i10D+Rk9qAAeE=";
-    })
   ];
 
   nativeBuildInputs = [
     docbook-xsl-nons
+    gobject-introspection
     gtk-doc
-    intltool
     meson
     ninja
     pkg-config
+    python3
+    sassc
     vala
     validatePkgConfig
     wrapGAppsHook3
@@ -87,45 +87,47 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     accountsservice
     alsa-lib
-    budgie-screensaver
     glib
     gnome-desktop
     gnome-settings-daemon
-    mutter
-    zenity
-    graphene
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gtk3
-    ibus
+    gtk-layer-shell
     libcanberra-gtk3
     libgee
-    libGL
+    libgtop
     libnotify
     libpulseaudio
     libuuid
-    libwnck
-    magpie
-    libgbm
-    polkit
-    sassc
+    libxfce4windowing
+    mutter # org.gnome.mutter.keybindings
+    pythonEnv
     upower
-    xfce.libxfce4windowing
   ];
 
   propagatedBuildInputs = [
-    # budgie-1.0.pc, budgie-raven-plugin-1.0.pc
-    libpeas
+    # budgie-3.0.pc, budgie-raven-plugin-3.0.pc
+    libpeas2
   ];
+
+  mesonFlags = [
+    "-Dbudgie-session-libexecdir=${budgie-session}/libexec"
+    "-Dgsd-libexecdir=${gnome-settings-daemon}/libexec"
+    "-Dxdp-libexecdir=${xdg-desktop-portal}/libexec"
+    "-Dwith-runtime-dependencies=false"
+  ];
+
+  postPatch = ''
+    patchShebangs po/listUiFiles.py
+
+    substituteInPlace src/session/budgie-desktop.in \
+      --replace-fail "@bindir@/org.buddiesofbudgie.Services" "${lib.getExe budgie-desktop-services}"
+  '';
 
   passthru = {
     providedSessions = [ "budgie-desktop" ];
-
-    tests = {
-      inherit (nixosTests) budgie;
-      pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
-    };
-
+    tests.pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
     updateScript = nix-update-script { };
   };
 
@@ -138,11 +140,11 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl21Plus
       cc-by-sa-30
     ];
-    maintainers = lib.teams.budgie.members;
+    teams = [ lib.teams.budgie ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
-      "budgie-1.0"
-      "budgie-raven-plugin-1.0"
+      "budgie-3.0"
+      "budgie-raven-plugin-3.0"
       "budgie-theme-1.0"
     ];
   };

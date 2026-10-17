@@ -1,0 +1,38 @@
+boost 1.91 rewrote boost::optional and made its converting constructor
+unconditionally explicit, breaking aggregate brace-init of the radius
+member in the profile_point structs. std::optional (C++17) keeps the
+non-explicit converting constructor, so call sites compile unchanged.
+
+--- a/src/ifcgeom/profile_helper.h
++++ b/src/ifcgeom/profile_helper.h
+@@ -1,6 +1,8 @@
+ #ifndef PROFILE_HELPER_H
+ #define PROFILE_HELPER_H
+ 
++#include <optional>
++
+ #include "taxonomy.h"
+ 
+ namespace ifcopenshell {
+@@ -8,18 +10,18 @@
+ 	namespace geometry {
+ 		struct profile_point {
+ 			std::array<double, 2> xy;
+-			boost::optional<double> radius;
++			std::optional<double> radius;
+ 		};
+ 
+ 		struct profile_point_with_edges {
+ 			Eigen::Vector2d xy;
+-			boost::optional<double> radius;
++			std::optional<double> radius;
+ 			taxonomy::edge::ptr previous, next;
+ 		};
+ 
+ 		struct profile_point_with_edges_3d {
+ 			Eigen::Vector3d xy;
+-			boost::optional<double> radius;
++			std::optional<double> radius;
+ 			taxonomy::edge::ptr previous, next;
+ 		};
+ 

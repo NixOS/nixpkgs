@@ -1,48 +1,59 @@
 {
   lib,
+  nodejs,
   buildNpmPackage,
   fetchFromGitHub,
-  makeWrapper,
+  nix-update-script,
   redocly,
   testers,
 }:
 
 buildNpmPackage rec {
   pname = "redocly";
-  version = "1.26.0";
+  version = "2.46.0";
 
   src = fetchFromGitHub {
     owner = "Redocly";
     repo = "redocly-cli";
     rev = "@redocly/cli@${version}";
-    hash = "sha256-jBfAMrmJ9+k1Fx2gZoQ8UiTT13tSvxXUKXNCW3vmuUY=";
+    hash = "sha256-IdMeWY3MXHHoejWh2ZcskdzhUn0Ez3S9oxRx1uTKAWc=";
   };
 
-  npmDepsHash = "sha256-IcyX+LmMduE8CY6wNSTv0D4c3vCZu48EXsUSsqfOqFQ=";
+  npmDepsHash = "sha256-62S71SBbSSADzzHapCmY2r98bLmRbokaxZU5l1x1cFA=";
 
   npmBuildScript = "prepare";
 
-  nativeBuildInputs = [ makeWrapper ];
-
-  postBuild = ''
-    npm --prefix packages/cli run copy-assets
-  '';
-
+  # The CLI is bundled into packages/cli/lib by the `prepare` script (esbuild,
+  # self-contained). That output directory is git-ignored, so `npm pack` drops
+  # it during install; copy it back into the installed package.
   postInstall = ''
-    rm $out/lib/node_modules/@redocly/cli/node_modules/@redocly/{cli,openapi-core}
-    cp -R packages/cli $out/lib/node_modules/@redocly/cli/node_modules/@redocly/cli
-    cp -R packages/core $out/lib/node_modules/@redocly/cli/node_modules/@redocly/openapi-core
+    cliDir="$out/lib/node_modules/@redocly/cli/packages/cli"
+    cp -R packages/cli/lib "$cliDir/lib"
 
-    mkdir $out/bin
-    makeWrapper $out/lib/node_modules/@redocly/cli/node_modules/@redocly/cli/bin/cli.js \
-      $out/bin/redocly \
-      --set-default REDOCLY_TELEMETRY off \
-      --set-default REDOCLY_SUPPRESS_UPDATE_NOTICE true
+    # Create a wrapper script to force the correct command name (Nodejs uses argv[1] for command name)
+    mkdir -p $out/bin
+    cat <<EOF > $out/bin/redocly
+    #!${lib.getBin nodejs}/bin/node
+    // Override argv[1] to show "redocly" instead of "cli.js"
+    process.argv[1] = 'redocly';
+
+    // Set environment variables directly
+    process.env.REDOCLY_TELEMETRY = process.env.REDOCLY_TELEMETRY || "off";
+    process.env.REDOCLY_SUPPRESS_UPDATE_NOTICE = process.env.REDOCLY_SUPPRESS_UPDATE_NOTICE || "true";
+
+    import('$cliDir/bin/cli.js');
+    EOF
+    chmod +x $out/bin/redocly
   '';
 
   passthru = {
-    tests.version = testers.testVersion {
-      package = redocly;
+    tests.version = testers.testVersion { package = redocly; };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "@redocly/cli@(.*)"
+        "--use-github-releases"
+      ];
     };
   };
 
@@ -52,6 +63,9 @@ buildNpmPackage rec {
     homepage = "https://github.com/Redocly/redocly-cli";
     license = lib.licenses.mit;
     mainProgram = "redocly";
-    maintainers = with lib.maintainers; [ szlend ];
+    maintainers = with lib.maintainers; [
+      szlend
+      tembleking
+    ];
   };
 }

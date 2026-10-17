@@ -15,28 +15,28 @@
   intltool,
   libayatana-common,
   libgudev,
-  libqtdbusmock,
-  libqtdbustest,
+  librda,
   libsForQt5,
   lomiri,
-  mate,
+  marco,
+  mate-settings-daemon,
   pkg-config,
   properties-cpp,
   python3,
-  systemd,
+  systemdLibs,
   wrapGAppsHook3,
   xsct,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ayatana-indicator-display";
-  version = "24.5.0";
+  version = "26.6.0";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-indicator-display";
     tag = finalAttrs.version;
-    hash = "sha256-ZEmJJtVK1dHIrY0C6pqVu1N5PmQtYqX0K5v5LvzNfFA=";
+    hash = "sha256-A4v2cdsFgR50b8BGAMpR9DrHxlVlahaM8Fii+eQ3UcA=";
   };
 
   postPatch = ''
@@ -61,25 +61,25 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # TODO Can we get around requiring every desktop's schemas just to avoid segfaulting on some systems?
-  buildInputs =
-    [
-      accountsservice
-      geoclue2
-      gsettings-desktop-schemas # gnome schemas
-      glib
-      libayatana-common
-      libgudev
-      libsForQt5.qtbase
-      systemd
-    ]
-    ++ (with lomiri; [
-      cmake-extras
-      lomiri-schemas # lomiri schema
-    ])
-    ++ (with mate; [
-      mate.marco # marco schema
-      mate.mate-settings-daemon # mate mouse schema
-    ]);
+  buildInputs = [
+    accountsservice
+    geoclue2
+    gsettings-desktop-schemas # gnome schemas
+    glib
+    libayatana-common
+    libgudev
+    librda
+    libsForQt5.qtbase
+    systemdLibs
+  ]
+  ++ (with lomiri; [
+    cmake-extras
+    lomiri-schemas # lomiri schema
+  ])
+  ++ [
+    marco # marco schema
+    mate-settings-daemon # mate mouse schema
+  ];
 
   nativeCheckInputs = [
     cppcheck
@@ -89,8 +89,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkInputs = [
     gtest
-    libqtdbusmock
-    libqtdbustest
+    libsForQt5.libqtdbusmock
+    libsForQt5.libqtdbustest
     properties-cpp
   ];
 
@@ -112,7 +112,10 @@ stdenv.mkDerivation (finalAttrs: {
         "lomiri"
       ];
     };
-    tests.vm = nixosTests.ayatana-indicators;
+    tests = {
+      startup = nixosTests.ayatana-indicators;
+      lomiri = nixosTests.lomiri.desktop-ayatana-indicator-display;
+    };
     updateScript = gitUpdater { };
   };
 

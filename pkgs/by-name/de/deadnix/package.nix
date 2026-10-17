@@ -2,26 +2,38 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  nix-update-script,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deadnix";
-  version = "1.2.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "astro";
     repo = "deadnix";
-    rev = "v${version}";
-    hash = "sha256-xaaXGzTd+t1GjD2KpiS/c8acv6bXufv/lTN+ACRGVJw=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Lx49eqWINMTi3jgacSUHQ0SAU7jWlqaO2ZMrER+Bd/A=";
   };
 
-  cargoHash = "sha256-14onbdsactPJ27GTzG+culsdnwHvGdDXwBD9ZMq192Q=";
+  cargoHash = "sha256-MX4McxCeUQ1stk33BSm/zITHaXqOJUwNMfMVISgfMFA=";
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Find and remove unused code in .nix source files";
     homepage = "https://github.com/astro/deadnix";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "deadnix";
-    maintainers = with maintainers; [ astro ];
+    maintainers = with lib.maintainers; [
+      astro
+      diogotcorreia
+    ];
   };
-}
+})

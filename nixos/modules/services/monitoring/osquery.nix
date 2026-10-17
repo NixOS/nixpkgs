@@ -25,22 +25,25 @@ let
         ({ config_path = conf; } // cfg.flags)
     )
   );
-
+  osquery = cfg.package;
   osqueryi = pkgs.runCommand "osqueryi" { nativeBuildInputs = [ pkgs.makeWrapper ]; } ''
     mkdir -p $out/bin
-    makeWrapper ${pkgs.osquery}/bin/osqueryi $out/bin/osqueryi \
+    makeWrapper ${osquery}/bin/osqueryi $out/bin/osqueryi \
       --add-flags "--flagfile ${flagfile} --disable-database"
   '';
+
 in
 {
   options.services.osquery = {
     enable = lib.mkEnableOption "osqueryd daemon";
 
+    package = lib.mkPackageOption pkgs "osquery" { };
+
     settings = lib.mkOption {
       default = { };
       description = ''
         Configuration to be written to the osqueryd JSON configuration file.
-        To understand the configuration format, refer to https://osquery.readthedocs.io/en/stable/deployment/configuration/#configuration-components.
+        To understand the configuration format, refer to <https://osquery.readthedocs.io/en/stable/deployment/configuration/#configuration-components>.
       '';
       example = {
         options.utc = false;
@@ -52,7 +55,7 @@ in
       default = { };
       description = ''
         Attribute set of flag names and values to be written to the osqueryd flagfile.
-        For more information, refer to https://osquery.readthedocs.io/en/stable/installation/cli-flags.
+        For more information, refer to <https://osquery.readthedocs.io/en/stable/installation/cli-flags>.
       '';
       example = {
         config_refresh = "10";
@@ -65,13 +68,27 @@ in
             database_path = lib.mkOption {
               default = "/var/lib/osquery/osquery.db";
               readOnly = true;
-              description = "Path used for the database file.";
+              description = ''
+                Path used for the database file.
+
+                ::: {.note}
+                If left as the default value, this directory will be automatically created before the
+                service starts, otherwise you are responsible for ensuring the directory exists with
+                the appropriate ownership and permissions.
+              '';
               type = path;
             };
             logger_path = lib.mkOption {
               default = "/var/log/osquery";
               readOnly = true;
-              description = "Base directory used for logging.";
+              description = ''
+                Base directory used for logging.
+
+                ::: {.note}
+                If left as the default value, this directory will be automatically created before the
+                service starts, otherwise you are responsible for ensuring the directory exists with
+                the appropriate ownership and permissions.
+              '';
               type = path;
             };
             pidfile = lib.mkOption {
@@ -94,15 +111,15 @@ in
       ];
       description = "The osquery daemon";
       serviceConfig = {
-        ExecStart = "${pkgs.osquery}/bin/osqueryd --flagfile ${flagfile}";
+        ExecStart = "${osquery}/bin/osqueryd --flagfile ${flagfile}";
         PIDFile = cfg.flags.pidfile;
-        LogsDirectory = cfg.flags.logger_path;
-        StateDirectory = dirname cfg.flags.database_path;
+        LogsDirectory = lib.mkIf (cfg.flags.logger_path == "/var/log/osquery") [ "osquery" ];
+        StateDirectory = lib.mkIf (cfg.flags.database_path == "/var/lib/osquery/osquery.db") [ "osquery" ];
         Restart = "always";
       };
       wantedBy = [ "multi-user.target" ];
     };
-    systemd.tmpfiles.settings."10-osquery".${dirname (cfg.flags.pidfile)}.d = {
+    systemd.tmpfiles.settings."10-osquery".${dirname cfg.flags.pidfile}.d = {
       user = "root";
       group = "root";
       mode = "0755";

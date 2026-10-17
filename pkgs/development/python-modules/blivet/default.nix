@@ -7,6 +7,7 @@
   pygobject3,
   libblockdev,
   bytesize,
+  dasbus,
   pyudev,
   dbus-python,
   util-linux,
@@ -20,7 +21,6 @@
   f2fs-tools,
   ntfs3g,
   btrfs-progs,
-  reiserfsprogs,
   mdadm,
   lvm2,
   gfs2-utils,
@@ -35,14 +35,14 @@ let
 in
 buildPythonPackage rec {
   pname = "blivet";
-  version = "3.11.0";
+  version = "3.13.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "storaged-project";
     repo = "blivet";
     tag = "blivet-${version}";
-    hash = "sha256-X5U6XFmcsTfetpxwH0ONSnTasnwh2USukYtx+8HwVGc=";
+    hash = "sha256-Yq8lIgu2S4L2PNeJ+ybn6daaPA2XlDJkUPihHiH2n+w=";
   };
 
   postPatch = ''
@@ -51,9 +51,9 @@ buildPythonPackage rec {
         --replace \
           'gi.require_version("BlockDev",' \
           'import gi.repository
-    gi.require_version("GIRepository", "2.0")
+    gi.require_version("GIRepository", "3.0")
     from gi.repository import GIRepository
-    GIRepository.Repository.prepend_search_path("${libblockdev}/lib/girepository-1.0")
+    GIRepository.Repository.dup_default().prepend_search_path("${libblockdev}/lib/girepository-1.0")
     gi.require_version("BlockDev",'
     done
   '';
@@ -62,6 +62,7 @@ buildPythonPackage rec {
     pygobject3
     libblockdevPython
     bytesize
+    dasbus
     pyudev
     dbus-python
     util-linux
@@ -76,7 +77,6 @@ buildPythonPackage rec {
     f2fs-tools
     ntfs3g
     btrfs-progs
-    reiserfsprogs
     mdadm
     lvm2
     gfs2-utils
@@ -86,15 +86,14 @@ buildPythonPackage rec {
     stratisd
   ];
 
-  pythonImportsCheck = [ "blivet" ];
+  pythonImportsCheck = [
+    "blivet"
+    "blivet.devicelibs.lvm"
+  ];
 
   # Even unit tests require a system D-Bus.
   # TODO: Write a NixOS VM test?
   doCheck = false;
-
-  # Fails with: TypeError: don't know how to make test from:
-  # <blivet.static_data.luks_data.LUKS_Data object at 0x7ffff4a34b90>
-  dontUseSetuptoolsCheck = true;
 
   meta = {
     description = "Python module for system storage configuration";

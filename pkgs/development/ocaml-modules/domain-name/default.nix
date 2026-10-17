@@ -1,31 +1,27 @@
 {
   lib,
   buildDunePackage,
-  ocaml,
   fetchurl,
   alcotest,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "domain-name";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchurl {
-    url = "https://github.com/hannesm/domain-name/releases/download/v${version}/domain-name-${version}.tbz";
-    sha256 = "sha256-pcBuIoRYlSAZc+gS/jAZJ00duBwKeHPabIAHxK0hCMU=";
+    url = "https://github.com/hannesm/domain-name/releases/download/v${finalAttrs.version}/domain-name-${finalAttrs.version}.tbz";
+    hash = "sha256-nseuLCJ3LBULhM+j8h2b8l+uFKeW8x4g31LYb0ZJnYk=";
   };
 
-  minimalOCamlVersion = "4.04";
-  duneVersion = "3";
-
+  doCheck = true;
   checkInputs = [ alcotest ];
-
-  doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = {
     homepage = "https://github.com/hannesm/domain-name";
+    changelog = "https://github.com/hannesm/domain-name/blob/v${finalAttrs.version}/CHANGES.md";
     description = "RFC 1035 Internet domain names";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})

@@ -5,40 +5,40 @@
   openssl,
   pkg-config,
   libiconv,
-  darwin,
   rustPlatform,
+  libz,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gitrs";
-  version = "v0.3.6";
+  version = "v0.4.1";
 
   src = fetchFromGitHub {
     owner = "mccurdyc";
-    repo = pname;
-    rev = version;
-    hash = "sha256-+43XJroPNWmdUC6FDL84rZWrJm5fzuUXfpDkAMyVQQg=";
+    repo = "gitrs";
+    rev = finalAttrs.version;
+    hash = "sha256-YxojhqcP5Jj+GUhZxwyz1WXpRrTc4mZKxJbJdbnEZ48=";
   };
 
-  cargoHash = "sha256-2TXm1JTs0Xkid91A5tdi6Kokm0K1NOPmlocwFXv48uw=";
+  cargoHash = "sha256-uxK7HSP7rTPsnSwgj8pJRdXR2N9xqx21TycTRCjdAGo=";
 
   nativeBuildInputs = [
     pkg-config # for openssl
   ];
 
-  buildInputs =
-    [ openssl.dev ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    openssl.dev
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+    libz
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple, opinionated, tool, written in Rust, for declaratively managing Git repos on your machine";
     homepage = "https://github.com/mccurdyc/gitrs";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mccurdyc ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mccurdyc ];
     mainProgram = "gitrs";
   };
-}
+})

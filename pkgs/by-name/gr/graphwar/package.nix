@@ -8,14 +8,14 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "graphwar";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "catabriga";
     repo = "graphwar";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-t3Y576dXWp2Mj6OSQN5cm9FuNBWNqKq6xxkVRbjIBgE=";
   };
 
@@ -60,11 +60,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.graphwar.com/";
     description = "Artillery game in which you must hit your enemies using mathematical functions";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     platforms = jdk.meta.platforms;
-    maintainers = with maintainers; [ yrd ];
+    maintainers = with lib.maintainers; [ yrd ];
   };
-}
+})

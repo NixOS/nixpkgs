@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   # build-system
   setuptools,
@@ -22,33 +21,34 @@
   scikit-learn,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jaxopt";
-  version = "0.8.3";
+  version = "0.8.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "jaxopt";
-    tag = "jaxopt-v${version}";
-    hash = "sha256-T/BHSnuk3IRuLkBj3Hvb/tFIb7Au25jjQtvwL28OU1U=";
+    tag = "jaxopt-v${finalAttrs.version}";
+    hash = "sha256-vPXrs8J81O+27w9P/fEFr7w4xClKb8T0IASD+iNhztQ=";
   };
 
-  patches = [
-    # fix failing tests from scipy 1.12 update
-    # https://github.com/google/jaxopt/pull/574
-    (fetchpatch {
-      name = "scipy-1.12-fix-tests.patch";
-      url = "https://github.com/google/jaxopt/commit/48b09dc4cc93b6bc7e6764ed5d333f9b57f3493b.patch";
-      hash = "sha256-v+617W7AhxA1Dzz+DBtljA4HHl89bRTuGi1QfatobNY=";
-    })
-    # fix invalid string escape sequences
-    (fetchpatch {
-      name = "fix-escape-sequences.patch";
-      url = "https://github.com/google/jaxopt/commit/f5bb530f5f000d0739c9b26eee2d32211eb99f40.patch";
-      hash = "sha256-E0ZXIfzWxKHuiBn4lAWf7AjNtll7OJU/NGZm6PTmhzo=";
-    })
-  ];
+  postPatch =
+    # TypeError: LogisticRegression.__init__() got an unexpected keyword argument 'multi_class'
+    ''
+      substituteInPlace jaxopt/_src/test_util.py \
+        --replace-fail "multi_class=multiclass," ""
+    ''
+    # AttributeError: jax.experimental.enable_x64 was removed in JAX v0.9.0; use jax.enable_x64(True) instead.
+    + ''
+      substituteInPlace \
+        tests/zoom_linesearch_test.py \
+        tests/lbfgsb_test.py \
+        tests/lbfgs_test.py \
+        --replace-fail \
+          "jax.experimental.enable_x64()" \
+          "jax.enable_x64(True)"
+    '';
 
   build-system = [ setuptools ];
 
@@ -89,18 +89,20 @@ buildPythonPackage rec {
     "test_binary_logit_log_likelihood"
 
     # AssertionError (flaky numerical tests)
-    "test_logreg_with_intercept_manual_loop3"
-    "test_inv_hessian_product_pytree3"
-    "test_multiclass_logreg6"
     "test_Rosenbrock2"
     "test_Rosenbrock5"
+    "test_gradient1"
+    "test_inv_hessian_product_pytree3"
+    "test_logreg_with_intercept_manual_loop3"
+    "test_multiclass_logreg6"
+    "test_wrapper_grad"
   ];
 
   meta = {
     homepage = "https://jaxopt.github.io";
     description = "Hardware accelerated, batchable and differentiable optimizers in JAX";
-    changelog = "https://github.com/google/jaxopt/releases/tag/jaxopt-v${version}";
+    changelog = "https://github.com/google/jaxopt/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

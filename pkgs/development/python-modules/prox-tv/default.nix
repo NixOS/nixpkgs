@@ -20,7 +20,7 @@ buildPythonPackage {
     owner = "albarji";
     repo = "proxTV";
     rev = "e621585d5aaa7983fbee68583f7deae995d3bafb";
-    sha256 = "0mlrjbb5rw78dgijkr3bspmsskk6jqs9y7xpsgs35i46dvb327q5";
+    hash = "sha256-BR8x1m6GxDL007cfnzSWZk6t69Vr5Cnja+jwXNaSmVY=";
   };
 
   build-system = [ setuptools ];
@@ -43,10 +43,10 @@ buildPythonPackage {
 
   disabledTests = [ "test_tvp_1d" ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_tv2_1d" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/albarji/proxTV";
     description = "Toolbox for fast Total Variation proximity operators";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ multun ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ multun ];
   };
 }

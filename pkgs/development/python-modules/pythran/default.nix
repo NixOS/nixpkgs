@@ -3,8 +3,7 @@
   python,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
-  substituteAll,
+  replaceVars,
 
   # build-system
   setuptools,
@@ -25,25 +24,19 @@ let
 in
 buildPythonPackage rec {
   pname = "pythran";
-  version = "0.16.1";
+  version = "0.19.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "serge-sans-paille";
     repo = "pythran";
     tag = version;
-    hash = "sha256-wiQmShniYZmB8hk/MC5FWFf1s5vqEHiYBkXTo4OeZ+E=";
+    hash = "sha256-+ZHp6cExAi1dFPS+LhNRyFCUhNeDdtAPSWRT5T03dcg=";
   };
 
   patches = [
-    (fetchpatch2 {
-      name = "bump-gast-to-0.6.0.patch";
-      url = "https://github.com/serge-sans-paille/pythran/commit/840a0e706ec39963aec6bcd1f118bf33177c20b4.patch";
-      hash = "sha256-FHGXWuAX/Nmn6uEfQgAXfUxIdApDwSfHHtOStxyme/0=";
-    })
     # Hardcode path to mp library
-    (substituteAll {
-      src = ./0001-hardcode-path-to-libgomp.patch;
+    (replaceVars ./0001-hardcode-path-to-libgomp.patch {
       gomp = "${
         if stdenv.cc.isClang then openmp else (lib.getLib stdenv.cc.cc)
       }/lib/libgomp${stdenv.hostPlatform.extensions.sharedLibrary}";
@@ -66,6 +59,11 @@ buildPythonPackage rec {
     setuptools
   ];
 
+  pythonRelaxDeps = [
+    "gast"
+    "beniget"
+  ];
+
   pythonImportsCheck = [
     "pythran"
     "pythran.backend"
@@ -79,7 +77,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/serge-sans-paille/pythran/blob/${src.rev}/Changelog";
+    changelog = "https://github.com/serge-sans-paille/pythran/blob/${src.tag}/Changelog";
     description = "Ahead of Time compiler for numeric kernels";
     homepage = "https://github.com/serge-sans-paille/pythran";
     license = lib.licenses.bsd3;

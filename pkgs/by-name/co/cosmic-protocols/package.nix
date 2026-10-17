@@ -1,32 +1,55 @@
 {
   lib,
-  fetchFromGitHub,
   stdenv,
+  fetchFromGitHub,
   wayland-scanner,
+  nix-update-script,
+  nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cosmic-protocols";
-  version = "0-unstable-2024-07-31";
+  version = "0-unstable-2026-09-11";
 
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = pname;
-    rev = "de2fead49d6af3a221db153642e4d7c2235aafc4";
-    hash = "sha256-qgo8FMKo/uCbhUjfykRRN8KSavbyhZpu82M8npLcIPI=";
+    repo = "cosmic-protocols";
+    rev = "c0cff4db14c37ed954983158e4055aa94c7741d9";
+    hash = "sha256-FL2YkCVrJ6JWUGMDg+jJJa51oar/PWDfgPgCyjcv6gk=";
   };
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  __structuredAttrs = true;
+  strictDeps = true;
+
   nativeBuildInputs = [ wayland-scanner ];
 
-  meta = with lib; {
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+
+  passthru = {
+    tests = {
+      inherit (nixosTests)
+        cosmic
+        cosmic-autologin
+        cosmic-noxwayland
+        cosmic-autologin-noxwayland
+        ;
+    };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version"
+        "branch=HEAD"
+      ];
+    };
+  };
+
+  meta = {
     homepage = "https://github.com/pop-os/cosmic-protocols";
     description = "Additional wayland-protocols used by the COSMIC desktop environment";
-    license = [
-      licenses.mit
-      licenses.gpl3Only
+    license = with lib.licenses; [
+      mit
+      gpl3Only
     ];
-    maintainers = with maintainers; [ nyabinary ];
-    platforms = platforms.linux;
+    teams = [ lib.teams.cosmic ];
+    platforms = lib.platforms.linux;
   };
 }

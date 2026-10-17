@@ -1,24 +1,27 @@
 {
   lib,
+  stdenv,
   bash,
   buildPythonPackage,
   fetchPypi,
-  stdenv,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "invoke";
-  version = "2.2.0";
-  format = "setuptools";
+  version = "3.0.3";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-7my7EBrxqFnH/oTyomTAWQILDLf+NTX5QkMAq1aPa9U=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-Q3tqYiIjgkOAv7TmT2EnEaa2SMeV9WXvyGJa9m+1fww=";
   };
 
   postPatch = ''
     sed -e 's|/bin/bash|${bash}/bin/bash|g' -i invoke/config.py
   '';
+
+  build-system = [ setuptools ];
 
   # errors with vendored libs
   doCheck = false;
@@ -32,11 +35,11 @@ buildPythonPackage rec {
     $out/bin/inv --print-completion-script=fish >$out/share/fish/vendor_completions.d/inv.fish
   '';
 
-  meta = with lib; {
-    changelog = "https://www.pyinvoke.org/changelog.html";
+  meta = {
     description = "Pythonic task execution";
+    changelog = "https://www.pyinvoke.org/changelog.html";
     homepage = "https://www.pyinvoke.org/";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
-}
+})

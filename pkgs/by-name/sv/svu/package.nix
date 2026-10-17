@@ -4,25 +4,27 @@
   fetchFromGitHub,
   testers,
   svu,
+  installShellFiles,
+  stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "svu";
-  version = "2.2.0";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "caarlos0";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-C5ATwRsi9hJBO9xFlyMDoxu97rJHwcKNToWhcmx6M6g=";
+    repo = "svu";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uU5/BZA5EcIlzwoG42ZjQAkSec1hZ76pTUhK4n7bxBA=";
   };
 
-  vendorHash = "sha256-/FSvNoVDWAkQs09gMrqyoA0su52nlk/nSCYRAhQhbwQ=";
+  vendorHash = "sha256-qRnPj4Hnf+MH96J4oYRCDBqVthHmnAoNt0CUVZZv0CI=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
+    "-X=main.version=${finalAttrs.version}"
     "-X=main.builtBy=nixpkgs"
   ];
 
@@ -31,13 +33,21 @@ buildGoModule rec {
     rm internal/git/git_test.go
   '';
 
+  nativeBuildInputs = [ installShellFiles ];
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd svu \
+      --bash <($out/bin/svu completion bash) \
+      --fish <($out/bin/svu completion fish) \
+      --zsh <($out/bin/svu completion zsh)
+  '';
+
   passthru.tests.version = testers.testVersion { package = svu; };
 
-  meta = with lib; {
+  meta = {
     description = "Semantic Version Util";
     homepage = "https://github.com/caarlos0/svu";
-    maintainers = with maintainers; [ caarlos0 ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ caarlos0 ];
+    license = lib.licenses.mit;
     mainProgram = "svu";
   };
-}
+})

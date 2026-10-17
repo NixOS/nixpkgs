@@ -10,26 +10,23 @@
   cairo,
   pkg-config,
   libxkbcommon,
+  scdoc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wvkbd";
-  version = "0.15";
+  version = "0.20";
 
   src = fetchFromGitHub {
     owner = "jjsullivan5196";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-9gDxMH1hghqjcXlbda7CHjDdjcjApjjie7caihKIg9M=";
+    repo = "wvkbd";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Et1k3M8L/r5WnoNOuiCzVVgJrpXtWSbIUI+2/njiwj0=";
   };
-
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace "pkg-config" "$PKG_CONFIG"
-  '';
 
   nativeBuildInputs = [
     pkg-config
+    scdoc
     wayland-scanner
   ];
   buildInputs = [
@@ -42,11 +39,14 @@ stdenv.mkDerivation rec {
   ];
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  strictDeps = true;
+
+  meta = {
     homepage = "https://github.com/jjsullivan5196/wvkbd";
     description = "On-screen keyboard for wlroots";
-    platforms = platforms.linux;
-    license = licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "wvkbd-mobintl";
+    maintainers = with lib.maintainers; [ colinsane ];
   };
-}
+})

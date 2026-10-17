@@ -14,12 +14,12 @@
   printbox-text,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "phylogenetics";
   version = "0.3.0";
 
   src = fetchurl {
-    url = "https://github.com/biocaml/phylogenetics/releases/download/v${version}/phylogenetics-${version}.tbz";
+    url = "https://github.com/biocaml/phylogenetics/releases/download/v${finalAttrs.version}/phylogenetics-${finalAttrs.version}.tbz";
     hash = "sha256-3oZ9fMAXqOQ02rQ+8W8PZJWXOJLNe2qERrGOeTk3BKg=";
   };
 
@@ -45,11 +45,11 @@ buildDunePackage rec {
   '';
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Algorithms and datastructures for phylogenetics";
     homepage = "https://github.com/biocaml/phylogenetics";
-    license = licenses.cecill-b;
-    maintainers = [ maintainers.bcdarwin ];
+    license = lib.licenses.cecill-b;
+    maintainers = [ lib.maintainers.bcdarwin ];
     mainProgram = "phylosim";
   };
-}
+})

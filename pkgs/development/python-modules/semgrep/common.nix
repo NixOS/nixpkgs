@@ -1,9 +1,13 @@
 { lib }:
 
 rec {
-  version = "1.74.0";
+  version = "1.180.0";
 
-  srcHash = "sha256-PH0fTT6n6o3Jtuq+cyyRb048Tuv3VGNduCZCEKTXMrE=";
+  srcHash = "sha256-IaXW9gExaYqu/SBF/7Xu1Djx2GniVb50ZEv/35lwUNw=";
+
+  # This tag is used to select the correct wheel from PyPI.
+  # It is updated by the update.sh script.
+  pythonWheelTag = "cp310.cp311.cp312.cp313.cp314.py310.py311.py312.py313.py314";
 
   # submodule dependencies
   # these are fetched so we:
@@ -13,8 +17,8 @@ rec {
     "cli/src/semgrep/semgrep_interfaces" = {
       owner = "semgrep";
       repo = "semgrep-interfaces";
-      rev = "9f38254957c50c68ea402eebae0f7aa40dd01cbf";
-      hash = "sha256-/P8b7nSwNZSrm7dUFkehDaGz+r+bofrlFfuIo4U7tJM=";
+      rev = "9782c7582ed1ce8fb93fcf5fb54ebd31408bf61e";
+      hash = "sha256-qwUOcOyZBHfg21CZxFKp8edmMlz9tt+stD7ukrrbP9Y=";
     };
   };
 
@@ -24,24 +28,20 @@ rec {
   # on github releases
   core = {
     x86_64-linux = {
-      platform = "any";
-      hash = "sha256-ZA5KlbSLkC0IJGqyK0XhuDKRx53987vf53vSM0zwD9k=";
+      platform = "manylinux_2_34_x86_64";
+      hash = "sha256-FtsuJwargUqXXu7CXev61Jq7qEa3xRPYjgQURxUvhEc=";
     };
     aarch64-linux = {
-      platform = "musllinux_1_0_aarch64.manylinux2014_aarch64";
-      hash = "sha256-aHq87uzk9TtnlMDfAS6492ocXRJSHdBinng0hu2xLas=";
-    };
-    x86_64-darwin = {
-      platform = "macosx_10_14_x86_64";
-      hash = "sha256-OorDXQ0oYHV8aPu9o1dQAd22u78/EjpUWA2yPYG0S9E=";
+      platform = "manylinux_2_34_aarch64";
+      hash = "sha256-y6BvZLEOXshqCzqXV8/f3zzmwrvbXph2KqKksKKW+Mo=";
     };
     aarch64-darwin = {
       platform = "macosx_11_0_arm64";
-      hash = "sha256-g8sFLh2V9NDIvAZOaDhMpFxKqbS/S1eKep4v1vlOOo8=";
+      hash = "sha256-nGEHDqp954WoMY4dAN5skVHvpmDMPljD4v/W9eYYCvc=";
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://semgrep.dev/";
     downloadPage = "https://github.com/semgrep/semgrep/";
     changelog = "https://github.com/semgrep/semgrep/blob/v${version}/CHANGELOG.md";
@@ -53,7 +53,11 @@ rec {
       uploaded. Its rules look like the code you already write; no abstract
       syntax trees, regex wrestling, or painful DSLs.
     '';
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ jk ambroisie ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [
+      jk
+      ambroisie
+      caverav
+    ];
   };
 }

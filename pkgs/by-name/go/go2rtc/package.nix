@@ -1,20 +1,21 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go2rtc";
-  version = "1.9.8";
+  version = "1.9.14";
 
   src = fetchFromGitHub {
     owner = "AlexxIT";
     repo = "go2rtc";
-    tag = "v${version}";
-    hash = "sha256-gX1hNm3X0OQdmslQ/2pw0F05TO43YsGtz1yn8bbaxR0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-LwMQeRUIIsbsxaX9EItmlGSab4ssidI2Eklw39hXEHQ=";
   };
 
-  vendorHash = "sha256-6QVqBTWI2BJFttWbHHjfSztvOx2oyk7ShxAZmz51oVI=";
+  vendorHash = "sha256-fbDHuLuajAMOQwqyvLdQJYglcygjo4EDqPEjeiSWz2Y=";
 
   env.CGO_ENABLED = 0;
 
@@ -25,12 +26,12 @@ buildGoModule rec {
 
   doCheck = false; # tests fail
 
-  meta = with lib; {
+  meta = {
     description = "Ultimate camera streaming application with support RTSP, RTMP, HTTP-FLV, WebRTC, MSE, HLS, MJPEG, HomeKit, FFmpeg, etc";
     homepage = "https://github.com/AlexxIT/go2rtc";
-    changelog = "https://github.com/AlexxIT/go2rtc/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    changelog = "https://github.com/AlexxIT/go2rtc/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
     mainProgram = "go2rtc";
   };
-}
+})

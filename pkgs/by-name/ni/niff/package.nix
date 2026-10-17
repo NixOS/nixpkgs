@@ -6,11 +6,11 @@
 }:
 
 let
-  pname = "niff";
   version = "0.1";
 in
 stdenv.mkDerivation {
-  name = "${pname}-${version}";
+  pname = "niff";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "FRidh";

@@ -4,7 +4,9 @@
   stdenv,
   pkg-config,
   SDL2,
-  xorg,
+  libxi,
+  libxcursor,
+  libx11,
   libGL,
   roboto,
   imagemagick,
@@ -57,9 +59,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     SDL2
-    xorg.libX11
-    xorg.libXi
-    xorg.libXcursor
+    libx11
+    libxi
+    libxcursor
     libGL
   ];
 
@@ -75,13 +77,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     for i in 16 24 48 64 96 128 256 512; do
       mkdir -p $out/share/icons/hicolor/''${i}x''${i}/apps
-      magick scribbleres/write_512.png -resize ''${i}x''${i} $out/share/icons/hicolor/''${i}x''${i}/apps/${finalAttrs.pname}.png
+      magick scribbleres/write_512.png -resize ''${i}x''${i} $out/share/icons/hicolor/''${i}x''${i}/apps/styluslabs-write.png
     done
 
     install -Dm444 scribbleres/linux/Write.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/Write.desktop \
         --replace-fail 'Exec=/opt/Write/Write' 'Exec=Write' \
-        --replace-fail 'Icon=Write144x144' 'Icon=${finalAttrs.pname}'
+        --replace-fail 'Icon=Write144x144' 'Icon=styluslabs-write'
   '';
 
   enableParallelBuilding = true;

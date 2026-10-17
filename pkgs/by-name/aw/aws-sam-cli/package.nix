@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   python3,
   fetchFromGitHub,
   git,
@@ -11,23 +12,25 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "aws-sam-cli";
-  version = "1.132.0";
+  version = "1.165.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sam-cli";
     tag = "v${version}";
-    hash = "sha256-5h+uACzc4bAIgHoaZw2U/FCPA1ls8JTLqJd608J2uTU=";
+    hash = "sha256-tEsKNhEAMQCsFemsb2Epnc6pVd2kDvOEceMhldqNZn4=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
 
   pythonRelaxDeps = [
-    "aws-lambda-builders"
+    "aws_lambda_builders"
     "aws-sam-translator"
+    "boto3"
     "boto3-stubs"
     "cfn-lint"
+    "click"
     "cookiecutter"
     "docker"
     "jsonschema"
@@ -56,6 +59,7 @@ python3.pkgs.buildPythonApplication rec {
       flask
       jsonschema
       pyopenssl
+      python-dotenv
       pyyaml
       requests
       rich
@@ -65,22 +69,25 @@ python3.pkgs.buildPythonApplication rec {
       tzlocal
       watchdog
     ]
-    ++ (with python3.pkgs.boto3-stubs.optional-dependencies; [
-      apigateway
-      cloudformation
-      ecr
-      iam
-      kinesis
-      lambda
-      s3
-      schemas
-      secretsmanager
-      signer
-      sqs
-      stepfunctions
-      sts
-      xray
-    ]);
+    ++ (
+      with python3.pkgs.boto3-stubs.optional-dependencies;
+      lib.concatLists [
+        apigateway
+        cloudformation
+        ecr
+        iam
+        kinesis
+        lambda
+        s3
+        schemas
+        secretsmanager
+        signer
+        sqs
+        stepfunctions
+        sts
+        xray
+      ]
+    );
 
   postFixup = ''
     # Disable telemetry: https://github.com/aws/aws-sam-cli/issues/1272
@@ -105,12 +112,12 @@ python3.pkgs.buildPythonApplication rec {
     export PATH="$PATH:$out/bin:${lib.makeBinPath [ git ]}"
   '';
 
-  pytestFlagsArray = [
-    "tests"
+  pytestFlags = [
     # Disable warnings
-    "-W"
-    "ignore::DeprecationWarning"
+    "-Wignore::DeprecationWarning"
   ];
+
+  enabledTestPaths = [ "tests" ];
 
   disabledTestPaths = [
     # Disable tests that requires networking or complex setup
@@ -123,7 +130,14 @@ python3.pkgs.buildPythonApplication rec {
     "tests/unit/lib/observability/cw_logs/"
     "tests/unit/lib/build_module/"
     # Disable flaky tests
-    "tests/unit/lib/samconfig/test_samconfig.py"
+    "tests/unit/cli/test_main.py"
+    "tests/unit/commands/samconfig/test_samconfig.py"
+    "tests/unit/local/docker/test_lambda_image.py"
+    # Tests are failing
+    "tests/unit/commands/local/lib/"
+    "tests/unit/local/lambda_service/test_local_lambda_http_service.py"
+    "tests/unit/local/apigw/test_local_apigw_service.py"
+    "tests/unit/local/apigw/test_event_constructor.py"
   ];
 
   disabledTests = [
@@ -132,7 +146,12 @@ python3.pkgs.buildPythonApplication rec {
     "test_delete_deployment"
     "test_request_with_no_data"
     "test_import_should_succeed_for_a_defined_hidden_package_540_pkg_resources_py2_warn"
-  ];
+    "test_updates_imageuri_when_pointing_to_local_archive"
+    "test_subcommand_help_0_invoke"
+    "TestCli"
+    "TestImportModuleProxy"
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin "test_toml_invalid_file_name";
 
   pythonImportsCheck = [ "samcli" ];
 
@@ -151,13 +170,13 @@ python3.pkgs.buildPythonApplication rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool for local development and testing of Serverless applications";
     homepage = "https://github.com/aws/aws-sam-cli";
     changelog = "https://github.com/aws/aws-sam-cli/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "sam";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       lo1tuma
       anthonyroussel
     ];

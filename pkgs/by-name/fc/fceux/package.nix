@@ -1,18 +1,18 @@
 {
   lib,
+  stdenv,
   SDL2,
   cmake,
   fetchFromGitHub,
-  ffmpeg,
-  libX11,
-  libXdmcp,
+  ffmpeg_8,
+  libx11,
+  libxdmcp,
   libxcb,
   lua5_1,
   minizip,
   pkg-config,
   qt5,
   qt6,
-  stdenv,
   x264,
   # Configurable options
   ___qtVersion ? "5",
@@ -31,13 +31,13 @@ assert lib.elem ___qtVersion [
 ];
 stdenv.mkDerivation (finalAttrs: {
   pname = "fceux";
-  version = "2.6.6-unstable-2024-06-09";
+  version = "2.6.6-unstable-2026-05-30";
 
   src = fetchFromGitHub {
     owner = "TASEmulators";
     repo = "fceux";
-    rev = "f980ec2bc7dc962f6cd76b9ae3131f2eb902c9e7";
-    hash = "sha256-baAjrTzRp61Lw1p5axKJ97PuFiuBNQewXrlN0s8o7us=";
+    rev = "a62b868e9247c4aafd66f597cdfa8d2609704087";
+    hash = "sha256-nwlBRlIMUoLJO4T6Grle2AJYTpHt+as/cBMBegsL748=";
   };
 
   nativeBuildInputs = [
@@ -48,9 +48,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     SDL2
-    ffmpeg
-    libX11
-    libXdmcp
+    ffmpeg_8
+    libx11
+    libxdmcp
     libxcb
     lua5_1
     minizip
@@ -58,18 +58,23 @@ stdenv.mkDerivation (finalAttrs: {
     x264
   ];
 
+  cmakeFlags = [ "-DGLVND=1" ];
+
   strictDeps = true;
 
+  postInstall = ''
+    substituteInPlace $out/share/applications/fceux.desktop \
+      --replace-fail "/usr/bin/" "" \
+      --replace-fail "/usr/share/pixmaps/" ""
+  '';
+
   meta = {
-    homepage = "http://www.fceux.com/";
+    homepage = "http://www.fceux.com";
     description = "Nintendo Entertainment System (NES) Emulator";
-    changelog = "https://github.com/TASEmulators/blob/fceux/${finalAttrs.src.rev}/changelog.txt";
-    license = with lib.licenses; [ gpl2Plus ];
+    changelog = "https://github.com/TASEmulators/fceux/blob/${finalAttrs.src.rev}/changelog.txt";
+    license = lib.licenses.gpl2Plus;
     mainProgram = "fceux";
-    maintainers = with lib.maintainers; [
-      AndersonTorres
-      sbruder
-    ];
+    maintainers = with lib.maintainers; [ kuflierl ];
     platforms = lib.platforms.linux;
   };
 })

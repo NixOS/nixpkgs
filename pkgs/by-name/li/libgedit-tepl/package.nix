@@ -1,34 +1,40 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, meson
-, mesonEmulatorHook
-, ninja
-, gobject-introspection
-, gtk3
-, icu
-, libhandy
-, libgedit-amtk
-, libgedit-gfls
-, libgedit-gtksourceview
-, pkg-config
-, gtk-doc
-, docbook-xsl-nons
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  meson,
+  mesonEmulatorHook,
+  ninja,
+  gobject-introspection,
+  gtk3,
+  icu,
+  libhandy,
+  libgedit-amtk,
+  libgedit-gfls,
+  libgedit-gtksourceview,
+  pkg-config,
+  gtk-doc,
+  docbook-xsl-nons,
+  gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgedit-tepl";
-  version = "6.12.0";
+  version = "6.14.0";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     group = "World";
     owner = "gedit";
     repo = "libgedit-tepl";
-    rev = version;
-    hash = "sha256-s3b7wj6b2SM0+i0vXUDDhnspgPcsRAsA5kLblh0orJE=";
+    tag = finalAttrs.version;
+    hash = "sha256-KtmExJCEfa4c6alrtWOLNSKZUs65tZ7p9zcT9f8ZC+k=";
   };
 
   strictDeps = true;
@@ -39,7 +45,8 @@ stdenv.mkDerivation rec {
     pkg-config
     gtk-doc
     docbook-xsl-nons
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     mesonEmulatorHook
   ];
 
@@ -55,11 +62,15 @@ stdenv.mkDerivation rec {
     libgedit-gtksourceview
   ];
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater { ignoredVersions = "(alpha|beta|rc).*"; };
+
+  meta = {
     homepage = "https://gitlab.gnome.org/World/gedit/libgedit-tepl";
     description = "Text editor product line";
-    maintainers = with maintainers; [ manveru bobby285271 ];
-    license = licenses.lgpl3Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [
+      bobby285271
+    ];
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.linux;
   };
-}
+})

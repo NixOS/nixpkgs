@@ -3,25 +3,25 @@
   lib,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
 }:
 
 stdenv.mkDerivation rec {
   pname = "hid-t150";
-  #https://github.com/scarburato/t150_driver/blob/165d0601e11576186c9416c40144927549ef804d/install.sh#L3
-  version = "0.8a";
+  version = "1.0";
 
   src = fetchFromGitHub {
     owner = "scarburato";
     repo = "t150_driver";
-    rev = "580b79b7b479076ba470fcc21fbd8484f5328546";
-    hash = "sha256-6xqm8500+yMXA/WonMv1JAOS/oIeSNDp9HFuYkEd03U=";
+    rev = "${version}";
+    hash = "sha256-cY9rRJ6flo6BqDhBZk6adK33GDfX0gP5agHLrJT+TJg=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   sourceRoot = "${src.name}/hid-t150";
 
-  makeFlags = kernel.moduleMakeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "INSTALL_MOD_PATH=${placeholder "out"}"
   ];
@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
     make -C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build M=$(pwd) modules_install $makeFlags
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux kernel driver for Thrustmaster T150 and TMX Force Feedback wheel";
     homepage = "https://github.com/scarburato/t150_driver";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.dbalan ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.dbalan ];
+    platforms = lib.platforms.linux;
   };
 }

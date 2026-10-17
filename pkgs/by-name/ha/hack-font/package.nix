@@ -2,26 +2,25 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "hack-font";
   version = "3.003";
 
+  outputs = [
+    "out"
+  ];
+
   src = fetchzip {
     url = "https://github.com/chrissimpkins/Hack/releases/download/v${version}/Hack-v${version}-ttf.zip";
     hash = "sha256-SxF4kYp9aL/9L9EUniquFadzWt/+PcvhUQOIOvCrFRM=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    install -Dm644 *.ttf -t $out/share/fonts/truetype
-
-    runHook postInstall
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Typeface designed for source code";
     longDescription = ''
       Hack is hand groomed and optically balanced to be a workhorse face for
@@ -40,8 +39,8 @@ stdenvNoCC.mkDerivation rec {
       and may be modified to derive new typeface branches. The full text of
       the license is available in LICENSE.md" (From the GitHub page)
     */
-    license = licenses.free;
-    maintainers = with maintainers; [ dywedir ];
-    platforms = platforms.all;
+    license = lib.licenses.free;
+    maintainers = with lib.maintainers; [ dywedir ];
+    platforms = lib.platforms.all;
   };
 }

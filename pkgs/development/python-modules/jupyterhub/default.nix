@@ -1,72 +1,84 @@
 {
   lib,
   stdenv,
-  alembic,
-  async-generator,
-  beautifulsoup4,
   buildPythonPackage,
-  certipy,
-  configurable-http-proxy,
-  cryptography,
   fetchFromGitHub,
   fetchNpmDeps,
-  idna,
-  importlib-metadata,
-  jinja2,
-  jsonschema,
-  jupyter-events,
-  jupyterlab,
-  mock,
-  nbclassic,
+  configurable-http-proxy,
+
+  # nativeBuildInputs
   nodejs,
   npmHooks,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
+  aiodns,
+  aiohttp,
+  alembic,
+  certipy,
+  idna,
+  jinja2,
+  jupyter-events,
   oauthlib,
   packaging,
   pamela,
-  playwright,
   prometheus-client,
   pydantic,
-  pytest-asyncio,
-  pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   requests,
-  requests-mock,
-  setuptools,
-  setuptools-scm,
   sqlalchemy,
   tornado,
   traitlets,
+
+  # tests
+  addBinToPathHook,
+  beautifulsoup4,
+  cryptography,
+  jsonschema,
+  jupyterlab,
+  mock,
+  nbclassic,
+  playwright,
+  pytest-asyncio,
+  pytestCheckHook,
+  requests-mock,
+  versionCheckHook,
   virtualenv,
+  # darwin-only
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jupyterhub";
-  version = "5.2.1";
+  version = "6.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jupyterhub";
     repo = "jupyterhub";
-    rev = "refs/tags/${version}";
-    hash = "sha256-zOWcXpByJRzI9sTjTl+w/vo99suKOEN0TvPn1ZWlNmc=";
+    tag = finalAttrs.version;
+    hash = "sha256-/TBlaruXeMbi8fK9mQ0QHeckwt6i1eKNufP4iauXvXM=";
   };
 
   npmDeps = fetchNpmDeps {
-    inherit src;
-    hash = "sha256-My7WUAqIvOrbbVTxSnA6a5NviM6u95+iyykx1xbudpw=";
+    inherit (finalAttrs) src;
+    hash = "sha256-BDyS0/mTgavH/6QlqPGkllSki5c2eUwoGbV7CyMKL5U=";
   };
 
   postPatch = ''
-    substituteInPlace jupyterhub/proxy.py --replace-fail \
-      "'configurable-http-proxy'" \
-      "'${configurable-http-proxy}/bin/configurable-http-proxy'"
+    substituteInPlace jupyterhub/proxy.py \
+      --replace-fail \
+        "'configurable-http-proxy'" \
+        "'${lib.getExe configurable-http-proxy}'"
 
-    substituteInPlace jupyterhub/tests/test_proxy.py --replace-fail \
-      "'configurable-http-proxy'" \
-      "'${configurable-http-proxy}/bin/configurable-http-proxy'"
+    substituteInPlace jupyterhub/tests/test_proxy.py \
+      --replace-fail \
+        "'configurable-http-proxy'" \
+        "'${lib.getExe configurable-http-proxy}'"
   '';
 
   nativeBuildInputs = [
@@ -79,30 +91,30 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  dependencies =
-    [
-      alembic
-      certipy
-      idna
-      jinja2
-      jupyter-events
-      oauthlib
-      packaging
-      pamela
-      prometheus-client
-      pydantic
-      python-dateutil
-      requests
-      sqlalchemy
-      tornado
-      traitlets
-    ]
-    ++ lib.optionals (pythonOlder "3.10") [
-      async-generator
-      importlib-metadata
-    ];
+  dependencies = [
+    aiodns
+    aiohttp
+    alembic
+    certipy
+    idna
+    jinja2
+    jupyter-events
+    oauthlib
+    packaging
+    pamela
+    prometheus-client
+    pydantic
+    python-dateutil
+    requests
+    sqlalchemy
+    tornado
+    traitlets
+  ];
+
+  pythonImportsCheck = [ "jupyterhub" ];
 
   nativeCheckInputs = [
+    addBinToPathHook
     beautifulsoup4
     cryptography
     jsonschema
@@ -110,26 +122,17 @@ buildPythonPackage rec {
     mock
     nbclassic
     playwright
-    # require pytest-asyncio<0.23
-    # https://github.com/jupyterhub/jupyterhub/pull/4663
-    (pytest-asyncio.overrideAttrs (
-      final: prev: {
-        version = "0.21.2";
-        src = fetchFromGitHub {
-          inherit (prev.src) owner repo;
-          rev = "refs/tags/v${final.version}";
-          hash = "sha256-AVVvdo/CDF9IU6l779sLc7wKz5h3kzMttdDNTPLYxtQ=";
-        };
-      }
-    ))
+    pytest-asyncio
     pytestCheckHook
     requests-mock
+    versionCheckHook
     virtualenv
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # PermissionError: [Errno 13] Permission denied:
+    # '/private/tmp/temp_user_1/Library/Jupyter/runtime/jpserver-45402-open.html'
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export PATH=$out/bin:$PATH;
-  '';
 
   disabledTests = [
     # Tries to install older versions through pip
@@ -142,6 +145,17 @@ buildPythonPackage rec {
     "test_valid_events"
     "test_invalid_events"
     "test_user_group_roles"
+    "test_unix_socket_proxy"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Server connection times out under load on Darwin
+    "test_server_token_role"
+    "test_share_flow_full"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # flaky: subprocess times out under load
+    "test_show_config"
+    "test_raise_error_on_missing_specified_config"
   ];
 
   disabledTestPaths = [
@@ -164,13 +178,19 @@ buildPythonPackage rec {
     "jupyterhub/tests/test_user.py"
   ];
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "Serves multiple Jupyter notebook instances";
     homepage = "https://github.com/jupyterhub/jupyterhub";
-    changelog = "https://github.com/jupyterhub/jupyterhub/blob/${version}/docs/source/reference/changelog.md";
-    license = licenses.bsd3;
-    maintainers = teams.jupyter.members;
-    # darwin: E   OSError: dlopen(/nix/store/43zml0mlr17r5jsagxr00xxx91hz9lky-openpam-20170430/lib/libpam.so, 6): image not found
-    broken = stdenv.hostPlatform.isDarwin;
+    changelog = "https://github.com/jupyterhub/jupyterhub/blob/${finalAttrs.src.tag}/docs/source/reference/changelog.md";
+    license = lib.licenses.bsd3;
+    teams = [ lib.teams.jupyter ];
+    badPlatforms = [
+      # E   OSError: dlopen(/nix/store/43zml0mlr17r5jsagxr00xxx91hz9lky-openpam-20170430/lib/libpam.so, 6): image not found
+      # lib.systems.inspect.patterns.isDarwin
+    ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "jupyter" finalAttrs.version;
+    mainProgram = "jupyterhub";
   };
-}
+})

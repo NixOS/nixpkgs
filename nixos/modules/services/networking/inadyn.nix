@@ -89,9 +89,9 @@ in
       };
     in
     {
-      enable = lib.mkEnableOption (''
+      enable = lib.mkEnableOption ''
         synchronise your machine's IP address with a dynamic DNS provider using inadyn
-      '');
+      '';
       user = lib.mkOption {
         default = "inadyn";
         type = lib.types.str;
@@ -146,7 +146,7 @@ in
           options = {
             allow-ipv6 = lib.mkOption {
               default = config.networking.enableIPv6;
-              defaultText = "`config.networking.enableIPv6`";
+              defaultText = lib.literalExpression "config.networking.enableIPv6";
               description = "Whether to get IPv6 addresses from interfaces.";
               type = bool;
             };
@@ -221,7 +221,7 @@ in
         startAt = cfg.interval;
         serviceConfig = {
           Type = "oneshot";
-          ExecStart = ''${lib.getExe pkgs.inadyn} -f ${configFile} --cache-dir ''${CACHE_DIRECTORY} -1 --foreground -l ${cfg.logLevel}'';
+          ExecStart = "${lib.getExe pkgs.inadyn} -f ${configFile} --cache-dir \${CACHE_DIRECTORY} -1 --foreground -l ${cfg.logLevel}";
           LoadCredential = "config:${configFile}";
           CacheDirectory = "inadyn";
 

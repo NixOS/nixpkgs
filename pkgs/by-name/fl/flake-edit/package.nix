@@ -4,37 +4,29 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
-  stdenv,
   installShellFiles,
-  darwin,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "flake-edit";
-  version = "0.1.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "a-kenji";
     repo = "flake-edit";
-    rev = "v${version}";
-    hash = "sha256-dNTvAYBVZLeDlC1bsaonwojE7+1CD16/sCxtQVvT9WE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Cyv26VH7XvsMNAMBOImQGoadr0LeqBpapaxKFAEM88s=";
   };
 
-  cargoHash = "sha256-ipLjbfnNqrUUD40awRnE8URX5pHhG4SwUM9JedoBM8Y=";
+  cargoHash = "sha256-6RxjQI1gUprJvaj8rAsJ1LbCSbis8AVjKIEN41uRflw=";
 
   nativeBuildInputs = [
     installShellFiles
     pkg-config
   ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [ openssl ];
 
   env.ASSET_DIR = "target/assets";
 
@@ -46,12 +38,14 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --zsh --name _flake-edit target/assets/_flake-edit
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Edit your flake inputs with ease";
     homepage = "https://github.com/a-kenji/flake-edit";
-    changelog = "https://github.com/a-kenji/flake-edit/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/a-kenji/flake-edit/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ a-kenji ];
     mainProgram = "flake-edit";
   };
-}
+})

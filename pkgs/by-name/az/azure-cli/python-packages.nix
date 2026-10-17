@@ -1,4 +1,5 @@
 {
+  lib,
   stdenv,
   python3,
   fetchPypi,
@@ -28,6 +29,7 @@ let
       # core and the actual application are highly coupled
       azure-cli-core = buildAzureCliPackage {
         pname = "azure-cli-core";
+        format = "setuptools";
         inherit version src;
 
         sourceRoot = "${src.name}/src/azure-cli-core";
@@ -48,6 +50,7 @@ let
             argcomplete
             azure-cli-telemetry
             azure-common
+            azure-core
             azure-mgmt-core
             cryptography
             distro
@@ -62,6 +65,7 @@ let
             paramiko
             pkginfo
             psutil
+            py-deviceid
             pyjwt
             pyopenssl
             requests
@@ -84,6 +88,9 @@ let
             --ignore=azure/cli/core/tests/test_extension.py \
             --ignore=azure/cli/core/tests/test_util.py \
             --ignore=azure/cli/core/tests/test_argcomplete.py \
+            --ignore=azure/cli/core/tests/test_telemetry.py \
+            --ignore=azure/cli/core/tests/test_help.py \
+            --ignore=azure/cli/core/tests/test_command_table_integrity.py \
             -k 'not metadata_url and not test_send_raw_requests and not test_format_styled_text_legacy_powershell'
         '';
 
@@ -98,6 +105,7 @@ let
       azure-cli-telemetry = buildAzureCliPackage {
         pname = "azure-cli-telemetry";
         version = "1.1.0";
+        format = "setuptools";
         inherit src;
 
         sourceRoot = "${src.name}/src/azure-cli-telemetry";
@@ -117,10 +125,15 @@ let
         meta.downloadPage = "https://github.com/Azure/azure-cli/blob/azure-cli-${version}/src/azure-cli-telemetry/";
       };
 
-      # AttributeError: type object 'WorkspacesOperations' has no attribute 'begin_delete'
-      azure-mgmt-batchai =
-        overrideAzureMgmtPackage super.azure-mgmt-batchai "7.0.0b1" "zip"
-          "sha256-mT6vvjWbq0RWQidugR229E8JeVEiobPD3XA/nDM3I6Y=";
+      # Error loading command module 'batch': No module named 'azure.batch._model_base'
+      azure-batch = super.azure-batch.overridePythonAttrs (attrs: rec {
+        version = "15.0.0b1";
+        src = fetchPypi {
+          pname = "azure_batch"; # Different from src.pname in the original package.
+          inherit version;
+          hash = "sha256-373dFY/63lIZPj5NhsmW6nI2/9JpWkNzT65eBal04u0=";
+        };
+      });
 
       azure-mgmt-billing =
         (overrideAzureMgmtPackage super.azure-mgmt-billing "6.0.0" "zip"
@@ -135,8 +148,14 @@ let
 
       # AttributeError: type object 'CustomDomainsOperations' has no attribute 'disable_custom_https'
       azure-mgmt-cdn =
-        overrideAzureMgmtPackage super.azure-mgmt-cdn "12.0.0" "zip"
-          "sha256-t8PuIYkjS0r1Gs4pJJJ8X9cz8950imQtbVBABnyMnd0=";
+        (overrideAzureMgmtPackage super.azure-mgmt-cdn "12.0.0" "zip"
+          "sha256-t8PuIYkjS0r1Gs4pJJJ8X9cz8950imQtbVBABnyMnd0="
+        ).overridePythonAttrs
+          (attrs: {
+            propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [
+              self.msrest
+            ];
+          });
 
       # ImportError: cannot import name 'ConfigMap' from 'azure.mgmt.containerinstance.models'
       azure-mgmt-containerinstance = super.azure-mgmt-containerinstance.overridePythonAttrs (attrs: rec {
@@ -148,21 +167,6 @@ let
         };
       });
 
-      # ModuleNotFoundError: No module named 'azure.mgmt.containerservice.v2024_09_01'
-      azure-mgmt-containerservice = super.azure-mgmt-containerservice.overridePythonAttrs (attrs: rec {
-        version = "33.0.0";
-        src = fetchPypi {
-          pname = "azure_mgmt_containerservice"; # Different from src.pname in the original package.
-          inherit version;
-          hash = "sha256-hoWD3NuKSQXeA6hKm3kD12octZrNnDc28CvHQ7UEfJ4=";
-        };
-      });
-
-      # ValueError: The operation 'azure.mgmt.devtestlabs.operations#VirtualMachinesOperations.delete' is invalid.
-      azure-mgmt-devtestlabs =
-        overrideAzureMgmtPackage super.azure-mgmt-devtestlabs "4.0.0" "zip"
-          "sha256-WVScTEBo8mRmsQl7V0qOUJn7LNbIvgoAOVsG07KeJ40=";
-
       # ImportError: cannot import name 'ResourceSku' from 'azure.mgmt.eventgrid.models'
       azure-mgmt-eventgrid =
         overrideAzureMgmtPackage super.azure-mgmt-eventgrid "10.2.0b2" "zip"
@@ -172,18 +176,6 @@ let
       azure-mgmt-hdinsight =
         overrideAzureMgmtPackage super.azure-mgmt-hdinsight "9.0.0b3" "tar.gz"
           "sha256-clSeCP8+7T1uI4Nec+zhzDK980C9+JGeeJFsNSwgD2Q=";
-
-      # ValueError: The operation 'azure.mgmt.kusto.operations#ClustersOperations.delete' is invalid.
-      azure-mgmt-kusto =
-        (overrideAzureMgmtPackage super.azure-mgmt-kusto "0.3.0" "zip"
-          "sha256-nri3eB/UQQ7p4gfNDDmDuvnlhBS1tKGISdCYVuNrrN4="
-        ).overridePythonAttrs
-          (attrs: {
-            propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [
-              self.msrest
-              self.msrestazure
-            ];
-          });
 
       # ValueError: The operation 'azure.mgmt.media.operations#MediaservicesOperations.create_or_update' is invalid.
       azure-mgmt-media =
@@ -195,30 +187,71 @@ let
         overrideAzureMgmtPackage super.azure-mgmt-rdbms "10.2.0b17" "tar.gz"
           "sha256-1nnRkyr4Im79B7DDqGz/FOrPAToFaGhE+a7r5bZMuOQ=";
 
-      # ImportError: cannot import name 'IPRule' from 'azure.mgmt.signalr.models'
-      azure-mgmt-signalr =
-        overrideAzureMgmtPackage super.azure-mgmt-signalr "2.0.0b2" "tar.gz"
-          "sha256-05PUV8ouAKq/xhGxVEWIzDop0a7WDTV5mGVSC4sv9P4=";
+      # azure.mgmt.resource will shadow the other azure.mgmt.resource.* packages unless we merge them together
+      azure-mgmt-resource-all = py.pkgs.buildPythonPackage {
+        pname = "azure-mgmt-resource-all";
+        inherit version;
+
+        pyproject = false; # we're not building from sdist/wheel
+
+        src = py.pkgs.azure-mgmt-resource.src;
+
+        # No real build, just symlink all site-packages into one dir
+        installPhase = ''
+          runHook preInstall
+
+          mkdir -p $out/${py.sitePackages}
+          for pkg in ${
+            lib.concatStringsSep " " (
+              map (p: "${p}") [
+                py.pkgs.azure-mgmt-resource
+                py.pkgs.azure-mgmt-resource-deployments
+                py.pkgs.azure-mgmt-resource-deploymentscripts
+                py.pkgs.azure-mgmt-resource-deploymentstacks
+                py.pkgs.azure-mgmt-resource-templatespecs
+              ]
+            )
+          }; do
+            # Copy recursively, keep symlinks, skip duplicates silently
+            cp -rs --no-preserve=mode "$pkg/${py.sitePackages}/." "$out/${py.sitePackages}/" || true
+          done
+
+          runHook postInstall
+        '';
+
+        doCheck = false;
+      };
+
+      # passivestamp subpackage must be installed into recoveryservicesbackup directory.
+      azure-mgmt-recoveryservicesbackup =
+        super.azure-mgmt-recoveryservicesbackup.overridePythonAttrs
+          (attrs: {
+            dependencies = attrs.dependencies ++ [ self.azure-mgmt-recoveryservicesbackup-passivestamp ];
+            postInstall = (attrs.postInstall or "") + ''
+              ln -s ${self.azure-mgmt-recoveryservicesbackup-passivestamp}/${py.sitePackages}/azure/mgmt/recoveryservicesbackup/passivestamp \
+                $out/${py.sitePackages}/azure/mgmt/recoveryservicesbackup/passivestamp
+            '';
+          });
 
       # ImportError: cannot import name 'AdvancedThreatProtectionName' from 'azure.mgmt.sql.models'
       azure-mgmt-sql = super.azure-mgmt-sql.overridePythonAttrs (attrs: rec {
-        version = "4.0.0b20";
+        version = "4.0.0b22";
         src = fetchPypi {
           pname = "azure_mgmt_sql"; # Different from src.pname in the original package.
           inherit version;
-          hash = "sha256-mphqHUet4AhmL8aUoRbrGOjbookCHR3Ex+unpOq7aQM=";
+          hash = "sha256-ku3YN9W9Cyx4zsKxAs4k9/oeDXApzi2uqAURqa72H0k=";
         };
       });
 
-      # ValueError: The operation 'azure.mgmt.sqlvirtualmachine.operations#SqlVirtualMachinesOperations.begin_create_or_update' is invalid.
-      azure-mgmt-sqlvirtualmachine =
-        overrideAzureMgmtPackage super.azure-mgmt-sqlvirtualmachine "1.0.0b5" "zip"
-          "sha256-ZFgJflgynRSxo+B+Vso4eX1JheWlDQjfJ9QmupXypMc=";
-
-      # ModuleNotFoundError: No module named 'azure.mgmt.synapse.operations._kusto_pool_attached_database_configurations_operations'
-      azure-mgmt-synapse =
-        overrideAzureMgmtPackage super.azure-mgmt-synapse "2.1.0b5" "zip"
-          "sha256-5E6Yf1GgNyNVjd+SeFDbhDxnOA6fOAG6oojxtCP4m+k=";
+      # Attribute virtual_machines does not exist - nixpkgs has 37.x but azure-cli 2.82.0 requires ~=34.1.0
+      azure-mgmt-compute = super.azure-mgmt-compute.overridePythonAttrs (attrs: rec {
+        version = "34.1.0";
+        src = fetchPypi {
+          pname = "azure_mgmt_compute";
+          inherit version;
+          hash = "sha256-zZ010cwbjLC9JBrVXJG3fRTgSuc8YyraEUATX5whf+E=";
+        };
+      });
     };
   };
 in

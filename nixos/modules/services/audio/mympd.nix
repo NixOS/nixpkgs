@@ -61,7 +61,7 @@ in
               description = ''
                 Whether to enable listening on the SSL port.
 
-                Refer to <https://jcorporation.github.io/myMPD/configuration/configuration-files#ssl-options>
+                Refer to <https://jcorporation.github.io/myMPD/020-configuration/configuration-files#ssl-options>
                 for more information.
               '';
               default = false;
@@ -70,7 +70,7 @@ in
         };
         description = ''
           Manages the configuration files declaratively. For all the configuration
-          options, see <https://jcorporation.github.io/myMPD/configuration/configuration-files>.
+          options, see <https://jcorporation.github.io/myMPD/020-configuration/configuration-files>.
 
           Each key represents the "File" column from the upstream configuration table, and the
           value is the content of that file.
@@ -81,6 +81,10 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    # Upstream looks for the CA store using lstat(), which doesn't accept the
+    # symlinks NixOS uses under /etc/ssl/certs.
+    services.mympd.settings.ca_cert_store = lib.mkDefault config.security.pki.caBundle;
+
     systemd.services.mympd = {
       # upstream service config: https://github.com/jcorporation/myMPD/blob/master/contrib/initscripts/mympd.service.in
       after = [ "mpd.service" ];
@@ -108,7 +112,7 @@ in
         DynamicUser = true;
         ExecStart = lib.getExe cfg.package;
         LockPersonality = true;
-        MemoryDenyWriteExecute = true;
+        MemoryDenyWriteExecute = false; # pcre2 jit
         PrivateDevices = true;
         ProtectClock = true;
         ProtectControlGroups = true;

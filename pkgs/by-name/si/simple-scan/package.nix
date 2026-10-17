@@ -7,7 +7,6 @@
   pkg-config,
   gettext,
   itstool,
-  python3,
   wrapGAppsHook4,
   cairo,
   gdk-pixbuf,
@@ -25,13 +24,13 @@
   gobject-introspection,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "simple-scan";
-  version = "46.0";
+  version = "50.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/simple-scan/${lib.versions.major version}/simple-scan-${version}.tar.xz";
-    hash = "sha256-wW5lkBQv5WO+UUMSKzu7U/awCn2p2VL2HEf6Jve08Kk=";
+    url = "mirror://gnome/sources/simple-scan/${lib.versions.major finalAttrs.version}/simple-scan-${finalAttrs.version}.tar.xz";
+    hash = "sha256-zDK1Ya4icYLTGpRGZjLjEXI3VuOskFOMPH4qLJqqSgk=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +39,6 @@ stdenv.mkDerivation rec {
     gettext
     itstool
     pkg-config
-    python3
     wrapGAppsHook4
     libxml2
     gobject-introspection # For setup hook
@@ -60,10 +58,6 @@ stdenv.mkDerivation rec {
     sane-backends
   ];
 
-  postPatch = ''
-    patchShebangs data/meson_compile_gschema.py
-  '';
-
   doCheck = true;
 
   passthru = {
@@ -72,7 +66,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple scanning utility";
     mainProgram = "simple-scan";
     longDescription = ''
@@ -84,9 +78,9 @@ stdenv.mkDerivation rec {
       interface is well tested.
     '';
     homepage = "https://gitlab.gnome.org/GNOME/simple-scan";
-    changelog = "https://gitlab.gnome.org/GNOME/simple-scan/-/blob/${version}/NEWS?ref_type=tags";
-    license = licenses.gpl3Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    changelog = "https://gitlab.gnome.org/GNOME/simple-scan/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
-}
+})

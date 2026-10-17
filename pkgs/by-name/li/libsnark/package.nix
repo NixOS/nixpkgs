@@ -23,7 +23,8 @@ stdenv.mkDerivation {
     openssl
     boost
     gmp
-  ] ++ lib.optional withProcps procps;
+  ]
+  ++ lib.optional withProcps procps;
 
   cmakeFlags =
     lib.optionals (!withProcps) [ "-DWITH_PROCPS=OFF" ]
@@ -39,6 +40,13 @@ stdenv.mkDerivation {
     hash = "sha256-5Gk24fwVaXBWEFmhTsN9Qm8x/Qpr1KjavI3staJidxQ=";
     fetchSubmodules = true;
   };
+
+  postPatch = ''
+    substituteInPlace {,depends/{libff,libfqfft}/}CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace depends/gtest/{,googlemock/,googletest/}CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6.4)" "cmake_minimum_required(VERSION 3.10)"
+  '';
 
   meta = {
     broken = withProcps; # Despite procps having a valid pkg-config file, CMake doesn't seem to be able to find it.

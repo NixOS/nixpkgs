@@ -2,69 +2,46 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  gflanguages,
-  num2words,
-  protobuf,
   pytestCheckHook,
-  pythonOlder,
-  pyyaml,
-  setuptools-scm,
-  setuptools,
-  strictyaml,
-  termcolor,
-  ufo2ft,
-  vharfbuzz,
-  youseedee,
+  rustPlatform,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "shaperglot";
-  version = "0.6.4";
+  version = "1.2.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "shaperglot";
-    tag = "v${version}";
-    hash = "sha256-O6z7TJpC54QkqX5/G1HKSvaDYty7B9BnCQ4FpsLsEMs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VVxOkJ6a5UhQvSCswbgeRCLUEOzAbPhHuhJJAr1VvKA=";
   };
 
-  env.PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-WOIYg/QlWEk1StmudlPjpit/cKMkPtqLtf0BhPWQeg8=";
+  };
 
   postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools>=75.0.0" "setuptools"
+    cd shaperglot-py
   '';
 
-  build-system = [
-    setuptools
-    setuptools-scm
-  ];
+  cargoRoot = "..";
 
-  dependencies = [
-    gflanguages
-    num2words
-    protobuf
-    pyyaml
-    strictyaml
-    termcolor
-    ufo2ft
-    vharfbuzz
-    youseedee
+  nativeBuildInputs = with rustPlatform; [
+    cargoSetupHook
+    maturinBuildHook
   ];
-
-  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "shaperglot" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to test OpenType fonts for language support";
     homepage = "https://github.com/googlefonts/shaperglot";
-    changelog = "https://github.com/googlefonts/shaperglot/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ danc86 ];
+    changelog = "https://github.com/googlefonts/shaperglot/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ danc86 ];
     mainProgram = "shaperglot";
   };
-}
+})

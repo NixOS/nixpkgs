@@ -1,30 +1,37 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, git
-, installShellFiles
-, testers
-, faas-cli
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  git,
+  installShellFiles,
+  versionCheckHook,
 }:
 let
-  faasPlatform = platform:
-    let cpuName = platform.parsed.cpu.name; in {
+  faasPlatform =
+    platform:
+    let
+      cpuName = platform.parsed.cpu.name;
+    in
+    {
       "aarch64" = "arm64";
       "armv7l" = "armhf";
       "armv6l" = "armhf";
-    }.${cpuName} or cpuName;
+    }
+    .${cpuName} or cpuName;
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "faas-cli";
-  version = "0.17.0";
+  version = "0.18.12";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "openfaas";
     repo = "faas-cli";
-    rev = version;
-    sha256 = "sha256-ZyRKcvHCZ7xpZ2KeQRMYn7W0YI+qp29C3H26Uk55Vuw=";
+    tag = finalAttrs.version;
+    hash = "sha256-I7P30c7rEVqemgUu/1AtM6jq2f4KB8xyDpjGBMvkLRU=";
   };
 
   vendorHash = null;
@@ -34,13 +41,16 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   ldflags = [
-    "-s" "-w"
-    "-X github.com/openfaas/faas-cli/version.GitCommit=ref/tags/${version}"
-    "-X github.com/openfaas/faas-cli/version.Version=${version}"
+    "-s"
+    "-X github.com/openfaas/faas-cli/version.GitCommit=ref/tags/${finalAttrs.version}"
+    "-X github.com/openfaas/faas-cli/version.Version=${finalAttrs.version}"
     "-X github.com/openfaas/faas-cli/commands.Platform=${faasPlatform stdenv.hostPlatform}"
   ];
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ];
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+  ];
 
   postInstall = ''
     wrapProgram "$out/bin/faas-cli" \
@@ -51,16 +61,18 @@ buildGoModule rec {
       --zsh <($out/bin/faas-cli completion --shell zsh)
   '';
 
-  passthru.tests.version = testers.testVersion {
-    command = "${faas-cli}/bin/faas-cli version --short-version --warn-update=false";
-    package = faas-cli;
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Official CLI for OpenFaaS";
     mainProgram = "faas-cli";
     homepage = "https://github.com/openfaas/faas-cli";
-    license = licenses.mit;
-    maintainers = with maintainers; [ welteki techknowlogick ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      welteki
+      techknowlogick
+    ];
   };
-}
+})

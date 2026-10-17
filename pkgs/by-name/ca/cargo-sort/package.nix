@@ -4,31 +4,30 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-sort";
-  version = "1.1.0";
+  version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "devinr528";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-AUtue1xkhrhlF7PtqsCQ9rdhV0/0i85DWrp7YL9SAYk=";
+    repo = "cargo-sort";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-xT+fWwd92Ll9zcz7FKpQbHKjUGXNOSuCGpFuJ3DQTJY=";
   };
 
-  cargoHash = "sha256-y6lLwk40hmFQKDU7sYz3+QQzdn5eGoEX7izmloK22dg=";
+  cargoHash = "sha256-ygMtfhwoUEIZx+q6KB5yOr8/Fj5FRMIs7dXlYDUKb2U=";
 
-  meta = with lib; {
+  meta = {
     description = "Tool to check that your Cargo.toml dependencies are sorted alphabetically";
     mainProgram = "cargo-sort";
     homepage = "https://github.com/devinr528/cargo-sort";
-    changelog = "https://github.com/devinr528/cargo-sort/blob/v${version}/changelog.md";
-    license = with licenses; [
+    changelog = "https://github.com/devinr528/cargo-sort/blob/v${finalAttrs.version}/changelog.md";
+    license = with lib.licenses; [
       mit # or
       asl20
     ];
-    maintainers = with maintainers; [
-      figsoda
+    maintainers = with lib.maintainers; [
       matthiasbeyer
     ];
   };
-}
+})

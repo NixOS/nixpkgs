@@ -8,18 +8,13 @@
 
 with import ../../lib/testing-python.nix { inherit system pkgs; };
 runTest (
-  { config, ... }:
+  { config, lib, ... }:
   let
     inherit (config) adminuser;
   in
   {
     inherit name;
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [
-        eqyiel
-        ma27
-      ];
-    };
+    meta.maintainers = lib.teams.nextcloud.members;
 
     imports = [ testBase ];
 
@@ -34,6 +29,12 @@ runTest (
               redis = true;
               memcached = false;
             };
+            notify_push = {
+              enable = true;
+              bendDomainToLocalhost = true;
+              logLevel = "debug";
+            };
+            extraAppsEnable = true;
             # This test also validates that we can use an "external" database
             database.createLocally = false;
             config = {
@@ -63,14 +64,14 @@ runTest (
           };
 
           systemd.services.nextcloud-setup = {
-            requires = [ "postgresql.service" ];
-            after = [ "postgresql.service" ];
+            requires = [ "postgresql.target" ];
+            after = [ "postgresql.target" ];
           };
 
           services.postgresql = {
             enable = true;
           };
-          systemd.services.postgresql.postStart = pkgs.lib.mkAfter ''
+          systemd.services.postgresql-setup.postStart = ''
             password=$(cat ${config.services.nextcloud.config.dbpassFile})
             ${config.services.postgresql.package}/bin/psql <<EOF
               CREATE ROLE ${adminuser} WITH LOGIN PASSWORD '$password' CREATEDB;
@@ -82,20 +83,25 @@ runTest (
           # This file is meant to contain secret options which should
           # not go into the nix store. Here it is just used to set the
           # redis password.
-          environment.etc."nextcloud-secrets.json".text = ''
-            {
-              "redis": {
-                "password": "secret"
-              }
-            }
-          '';
+          environment.etc."nextcloud-secrets.json" = {
+            mode = "0600";
+            text = builtins.toJSON {
+              redis.password = "secret";
+            };
+          };
         };
     };
 
     test-helpers.extraTests = ''
       with subtest("non-empty redis cache"):
           # redis cache should not be empty
-          nextcloud.fail('test 0 -lt "$(redis-cli --pass secret --json KEYS "*" | jq "len")"')
+          assert nextcloud.succeed('redis-cli --pass secret --json KEYS "*" | jq length').strip() != "0", """
+            redis-cli for keys * returned 0 entries
+          """
+
+      with subtest("notify-push"):
+          client.execute("${lib.getExe pkgs.nextcloud-notify_push.passthru.test_client} http://nextcloud ${config.adminuser} ${config.adminpass} >&2 &")
+          nextcloud.wait_until_succeeds("journalctl -u nextcloud-notify_push | grep -q \"Sending ping to ${config.adminuser}\"")
     '';
   }
 )

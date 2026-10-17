@@ -1,21 +1,23 @@
-{ stdenv
-, lib
-, fetchurl
-, gtk3
-, glib
-, pkg-config
-, libpng
-, zlib
-, wrapGAppsHook3
+{
+  stdenv,
+  lib,
+  buildPackages,
+  fetchurl,
+  gtk3,
+  glib,
+  pkg-config,
+  libpng,
+  zlib,
+  wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xmedcon";
-  version = "0.25.0";
+  version = "0.26.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-UKM68H2AGfe4+keW/0ZxQwPsF2tTAZQCEZT9var+MHs=";
+    url = "mirror://sourceforge/xmedcon/xmedcon-${finalAttrs.version}.tar.bz2";
+    sha256 = "sha256-r0oDA5wMS2bkKCgM7C+WxUahGvJm7NUA/iUNu2uZJPE=";
   };
 
   buildInputs = [
@@ -25,13 +27,26 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    pkg-config
+    wrapGAppsHook3
+  ];
 
-  meta = with lib; {
+  # xmedcon looks also for a host c compiler when cross-compiling
+  # otherwise you obtain following error message:
+  # "error: no acceptable C compiler found in $PATH"
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+  ];
+
+  meta = {
     description = "Open source toolkit for medical image conversion";
     homepage = "https://xmedcon.sourceforge.net/";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ arianvp flokli ];
-    platforms = platforms.darwin ++ platforms.linux;
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [
+      arianvp
+      flokli
+    ];
+    platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
-}
+})

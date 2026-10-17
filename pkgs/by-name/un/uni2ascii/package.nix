@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "uni2ascii";
   version = "4.20";
 
   src = fetchurl {
-    url = "https://billposer.org/Software/Downloads/uni2ascii-${version}.tar.gz";
+    url = "https://billposer.org/Software/Downloads/uni2ascii-${finalAttrs.version}.tar.gz";
     hash = "sha256-7tjYOpwdLb0NfKTFJRmYg9cxfWiLQhtXjQmKJ7b/cFY=";
   };
 
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

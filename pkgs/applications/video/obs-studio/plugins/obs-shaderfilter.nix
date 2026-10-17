@@ -4,25 +4,27 @@
   fetchFromGitHub,
   cmake,
   obs-studio,
-  qtbase,
+  qt6,
 }:
 
 stdenv.mkDerivation rec {
   pname = "obs-shaderfilter";
-  version = "2.4.0";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "exeldro";
     repo = "obs-shaderfilter";
     rev = version;
-    sha256 = "sha256-k/9/8hMdD5ODNXFBBhaLxc6EjRImO+sGD274SkzenNg=";
+    hash = "sha256-QMN2zMhT125sQ2bFAZ5oMcqfYaRo/wwyerCqGKNCszM=";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     obs-studio
-    qtbase
+    qt6.qtbase
   ];
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers -Wno-error=deprecated-declarations";
 
   cmakeFlags = [
     "-DBUILD_OUT_OF_TREE=On"
@@ -35,14 +37,11 @@ stdenv.mkDerivation rec {
     mv $out/data $out/share/obs
   '';
 
-  meta = with lib; {
+  meta = {
     description = "OBS Studio filter for applying an arbitrary shader to a source";
     homepage = "https://github.com/exeldro/obs-shaderfilter";
-    maintainers = with maintainers; [ flexiondotorg ];
-    license = licenses.gpl2Plus;
-    platforms = [
-      "x86_64-linux"
-      "i686-linux"
-    ];
+    maintainers = with lib.maintainers; [ flexiondotorg ];
+    license = lib.licenses.gpl2Plus;
+    inherit (obs-studio.meta) platforms;
   };
 }

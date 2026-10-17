@@ -5,26 +5,43 @@
   buildGoModule,
   fetchFromGitHub,
   buildNpmPackage,
+  nodejs,
   nix-update-script,
   npm-lockfile-fix,
   fetchNpmDeps,
   jq,
   nixosTests,
 
+  latestVersionInfo ? null,
+  removeUserLimit ? false,
+  removeFreeBadge ? false,
   versionInfo ? {
-    # ESR releases only.
-    # See https://docs.mattermost.com/upgrade/extended-support-release.html
+    # ESR releases only. Note: if NixOS would release with an ESR that goes out
+    # of support during the lifetime of the NixOS release, it is acceptable
+    # to put the latest non-ESR release here if we change it to an ESR shortly after
+    # the NixOS release.
+    #
+    # See <https://docs.mattermost.com/upgrade/extended-support-release.html>.
     # When a new ESR version is available (e.g. 8.1.x -> 9.5.x), update
     # the version regex here as well.
     #
     # Ensure you also check ../mattermostLatest/package.nix.
-    regex = "^v(9\\.11\\.[0-9]+)$";
-    version = "9.11.7";
-    srcHash = "sha256-KeGpYy3jr7/B2mtBk9em2MXJBJR2+Wajmvtz/yT4SG8=";
-    vendorHash = "sha256-alLPBfnA1o6bUUgPRqvYW/98UKR9wltmFTzKIGtVEm4=";
-    npmDepsHash = "sha256-ysz38ywGxJ5DXrrcDmcmezKbc5Y7aug9jOWUzHRAs/0=";
+    regex = "^v(11\\.7\\.[0-9]+)$";
+    version = "11.7.12";
+    srcHash = "sha256-j8ZpLnQ74mDW8mqwO3yhaxkmMEhMPYEHCbKNuPPup3E=";
+    vendorHash = "sha256-SUKDVVnHAuS1SDdVXn5onU/0fx6IEc48yrWr+zOeZng=";
+    npmDepsHash = "sha256-hjNOWUmqRkkSofEMXkOuJt9tStqc24/z3GD2JfYSRlM=";
+    lockfileOverlay = ''
+      .packages["node_modules/rollup"] |= (del(.resolved, .integrity) | .version = "2.80.0")
+    '';
   },
+  ...
 }:
+
+assert lib.warnIf (latestVersionInfo != null && (removeUserLimit || removeFreeBadge)) ''
+  The user limit and free badge patches are not tested with this Mattermost version
+  (${latestVersionInfo.version}).
+'' true;
 
 let
   /*
@@ -42,10 +59,18 @@ let
       wrapMattermost =
         server:
         stdenvNoCC.mkDerivation {
-          pname = "${server.pname}-wrapped";
-          inherit (server) version;
           inherit server;
-          inherit (server) webapp;
+
+          # src and npmDeps must be provided for the update script!
+          inherit (server)
+            pname
+            version
+            src
+            goModules
+            npmDeps
+            webapp
+            meta
+            ;
 
           dontUnpack = true;
 
@@ -59,12 +84,7 @@ let
             done
           '';
 
-          passthru = finalPassthru // {
-            inherit server;
-            inherit (server) webapp;
-          };
-
-          inherit (server) meta;
+          passthru = finalPassthru;
         };
       finalPassthru =
         let
@@ -77,17 +97,28 @@ let
           tests.mattermostWithTests = withTests;
         };
     in
-    finalPassthru.withTests;
+    finalPassthru.withoutTests;
+
+  versionInfo' =
+    if
+      latestVersionInfo != null && lib.versionAtLeast latestVersionInfo.version versionInfo.version
+    then
+      # Prefer the latest if we're building mattermostLatest
+      latestVersionInfo
+    else
+      # Prefer the one we have
+      assert versionInfo != null;
+      versionInfo;
 in
 buildMattermost rec {
   pname = "mattermost";
-  inherit (versionInfo) version;
+  inherit (versionInfo') version;
 
   src = fetchFromGitHub {
     owner = "mattermost";
     repo = "mattermost";
     tag = "v${version}";
-    hash = versionInfo.srcHash;
+    hash = versionInfo'.srcHash;
     postFetch = ''
       cd $out/webapp
 
@@ -98,13 +129,13 @@ buildMattermost rec {
       ' < package-lock.json > package-lock.fixed.json
 
       # Run the lockfile overlay, if present.
-      ${lib.optionalString (versionInfo.lockfileOverlay or null != null) ''
+      ${lib.optionalString (versionInfo'.lockfileOverlay or null != null) ''
         ${lib.getExe jq} ${lib.escapeShellArg ''
           # Unlock a dependency and let npm-lockfile-fix relock it.
           def unlock(root; dependency; path):
             root | .packages[path] |= del(.resolved, .integrity)
                  | .packages[path].version = root.packages.channels.dependencies[dependency];
-          ${versionInfo.lockfileOverlay}
+          ${versionInfo'.lockfileOverlay}
         ''} < package-lock.fixed.json > package-lock.overlaid.json
         mv package-lock.overlaid.json package-lock.fixed.json
       ''}
@@ -115,26 +146,34 @@ buildMattermost rec {
     '';
   };
 
+  patches = lib.optionals removeUserLimit [
+    ./mattermost-remove-user-limit.patch
+  ];
+
   # Needed because buildGoModule does not support go workspaces yet.
   # We use go 1.22's workspace vendor command, which is not yet available
   # in the default version of go used in nixpkgs, nor is it used by upstream:
   # https://github.com/mattermost/mattermost/issues/26221#issuecomment-1945351597
   overrideModAttrs = _: {
     buildPhase = ''
+      runHook preBuild
+
       make setup-go-work
       go work vendor -e -v
+
+      runHook postBuild
     '';
   };
 
   npmDeps = fetchNpmDeps {
     inherit src;
     sourceRoot = "${src.name}/webapp";
-    hash = versionInfo.npmDepsHash;
+    hash = versionInfo'.npmDepsHash;
     makeCacheWritable = true;
     forceGitDeps = true;
   };
 
-  inherit (versionInfo) vendorHash;
+  inherit (versionInfo') vendorHash;
 
   modRoot = "./server";
   preBuild = ''
@@ -179,22 +218,27 @@ buildMattermost rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     for subPackage in $subPackages; do
+      echo "Checking version for: $subPackage" >&2
       "$out/bin/$(basename -- "$subPackage")" version | grep "$version"
     done
+
+    runHook postInstallCheck
   '';
 
   passthru = {
     updateScript = nix-update-script {
-      extraArgs =
-        [
-          "--version-regex"
-          versionInfo.regex
-        ]
-        ++ lib.optionals (versionInfo.autoUpdate or null != null) [
-          "--override-filename"
-          versionInfo.autoUpdate
-        ];
+      extraArgs = [
+        "--use-github-releases"
+        "--version-regex"
+        versionInfo'.regex
+      ]
+      ++ lib.optionals (versionInfo'.autoUpdate or null != null) [
+        "--override-filename"
+        versionInfo'.autoUpdate
+      ];
     };
     tests.mattermost = nixosTests.mattermost;
 
@@ -208,13 +252,18 @@ buildMattermost rec {
 
       sourceRoot = "${src.name}/webapp";
 
+      patches = lib.optionals removeFreeBadge [
+        ./mattermost-remove-free-banner.patch
+      ];
+
       # Remove deprecated image-webpack-loader causing build failures
       # See: https://github.com/tcoopman/image-webpack-loader#deprecated
       postPatch = ''
         substituteInPlace channels/webpack.config.js \
-          --replace-fail 'options: {}' 'options: { disable: true }'
+          --replace-quiet 'options: {}' 'options: { disable: true }'
       '';
 
+      inherit nodejs;
       npmDepsHash = npmDeps.hash;
       makeCacheWritable = true;
       forceGitDeps = true;
@@ -224,10 +273,11 @@ buildMattermost rec {
       buildPhase = ''
         runHook preBuild
 
-        npm run build --workspace=platform/types
-        npm run build --workspace=platform/client
-        npm run build --workspace=platform/components
-        npm run build --workspace=channels
+        for ws in platform/{types,client,shared,components} channels; do
+          if [ -d "$ws" ]; then
+            npm run build --workspace="$ws"
+          fi
+        done
 
         runHook postBuild
       '';
@@ -243,20 +293,19 @@ buildMattermost rec {
     };
   };
 
-  meta = with lib; {
-    description = "Mattermost is an open source platform for secure collaboration across the entire software development lifecycle";
+  meta = {
+    description = "Open source platform for secure collaboration across the entire software development lifecycle";
     homepage = "https://www.mattermost.org";
-    license = with licenses; [
+    license = with lib.licenses; [
       agpl3Only
       asl20
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       ryantm
       numinit
-      kranzes
       mgdelacroix
-      fsagbuya
     ];
+    platforms = lib.platforms.linux;
     mainProgram = "mattermost";
   };
 }

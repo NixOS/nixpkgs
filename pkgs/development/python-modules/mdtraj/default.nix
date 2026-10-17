@@ -6,12 +6,13 @@
   fetchpatch,
   llvmPackages,
   zlib,
-  cython_0,
-  oldest-supported-numpy,
+  cython,
+  numpy,
   setuptools,
+  versioneer,
   wheel,
   astunparse,
-  numpy,
+  netcdf4,
   packaging,
   pyparsing,
   scipy,
@@ -26,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "mdtraj";
-  version = "1.10.0";
+  version = "1.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mdtraj";
     repo = "mdtraj";
     tag = version;
-    hash = "sha256-hNv/humEZOX4W7cOlJSAodk9pIi18//YJNSWNiEFiVg=";
+    hash = "sha256-xSXfV/lrUy33RSOpz3FsX5HP1Wr84rKCYmEKNVVnQao=";
   };
 
   patches = [
@@ -48,16 +49,17 @@ buildPythonPackage rec {
   ];
 
   build-system = [
-    cython_0
-    oldest-supported-numpy
+    cython
+    numpy
     setuptools
+    versioneer
     wheel
   ];
 
   buildInputs = [ zlib ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   dependencies = [
-    astunparse
+    netcdf4
     numpy
     packaging
     pyparsing
@@ -82,8 +84,11 @@ buildPythonPackage rec {
 
   disabledTests = [
     # require network access
-    "test_pdb_from_url"
+    "test_load_pdb_from_url"
+    "test_load_from_url"
     "test_1vii_url_and_gz"
+    "test_1vii_load_from_mixture"
+    "test_3"
 
     # fail due to data race
     "test_read_atomindices_1"
@@ -104,11 +109,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mdtraj" ];
 
-  meta = with lib; {
+  meta = {
     description = "Open library for the analysis of molecular dynamics trajectories";
     homepage = "https://github.com/mdtraj/mdtraj";
-    changelog = "https://github.com/mdtraj/mdtraj/releases/tag/${version}";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ natsukium ];
+    changelog = "https://github.com/mdtraj/mdtraj/releases/tag/${src.tag}";
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

@@ -7,45 +7,44 @@
   libiconv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-flirt";
-  version = "0.8.6";
+  version = "0.9.10";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "williballenthin";
     repo = "lancelot";
-    rev = "v${version}";
-    hash = "sha256-J48tRgJw6JjUrcAQdRELFE50pyDptbmbgYbr+rAK/PA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-fZZTEBkpCE5L4efcNGzAuxCWgOSqc2r77F5U6kpMU6M=";
   };
 
   postPatch = ''
-    cp ${./Cargo.lock} Cargo.lock
+    ln -s ${./Cargo.lock} Cargo.lock
   '';
-
-  format = "pyproject";
 
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
     maturinBuildHook
   ];
 
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "ar-0.9.0" = "sha256-eyi1MlhJVvsiBOsetDHXFpdk+ABeZo/fVXNyvc5mw9s=";
+    };
+  };
+
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   buildAndTestSubdir = "pyflirt";
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "zydis-3.1.3" = "sha256-X+aURjNfXGXO4eh6RJ3bi8Eb2kvF09I34ZHffvYjt9I=";
-    };
-  };
-
   pythonImportsCheck = [ "flirt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for parsing, compiling, and matching Fast Library Identification and Recognition Technology (FLIRT) signatures";
     homepage = "https://github.com/williballenthin/lancelot/tree/master/pyflirt";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ sbruder ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
-}
+})

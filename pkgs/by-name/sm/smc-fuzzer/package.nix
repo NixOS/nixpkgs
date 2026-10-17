@@ -1,6 +1,5 @@
 {
   lib,
-  swiftPackages,
   fetchFromGitHub,
   stdenv,
 }:
@@ -15,8 +14,6 @@ stdenv.mkDerivation {
     rev = "ed60c4efeddea8a9778a976c49c650eee3840eac";
     hash = "sha256-FyiFSVeO46UnBrpC8AhSuGe7alo37pT8J1qQWGPqV2U=";
   };
-
-  buildInputs = [ swiftPackages.apple_sdk.frameworks.AppKit ];
 
   installPhase = ''
     runHook preInstall

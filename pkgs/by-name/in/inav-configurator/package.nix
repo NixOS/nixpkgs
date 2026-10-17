@@ -1,12 +1,22 @@
-{ lib, stdenv, fetchurl, makeDesktopItem, copyDesktopItems, nwjs, wrapGAppsHook3, gsettings-desktop-schemas, gtk3 }:
-
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeDesktopItem,
+  copyDesktopItems,
+  electron,
+  wrapGAppsHook3,
+  gsettings-desktop-schemas,
+  gtk3,
+  unzip,
+}:
 stdenv.mkDerivation rec {
   pname = "inav-configurator";
-  version = "5.1.0";
+  version = "9.0.0";
 
   src = fetchurl {
-    url = "https://github.com/iNavFlight/inav-configurator/releases/download/${version}/INAV-Configurator_linux64_${version}.tar.gz";
-    sha256 = "sha256-ZvZxQICa5fnJBTx0aW/hqQCuhQW9MkcVa2sOjPYaPXM=";
+    url = "https://github.com/iNavFlight/inav-configurator/releases/download/${version}/INAV-Configurator_linux_x64_${version}.zip";
+    sha256 = "sha256-n56QE0ZJ2slL0WZbnBl2pEgAUoDMuh467gWt+eRwa9c=";
   };
 
   icon = fetchurl {
@@ -14,21 +24,30 @@ stdenv.mkDerivation rec {
     sha256 = "1i844dzzc5s5cr4vfpi6k2kdn8jiqq2n6c0fjqvsp4wdidwjahzw";
   };
 
-  nativeBuildInputs = [ copyDesktopItems wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    wrapGAppsHook3
+    unzip
+  ];
 
-  buildInputs = [ gsettings-desktop-schemas gtk3 ];
+  buildInputs = [
+    gsettings-desktop-schemas
+    gtk3
+  ];
+
+  unpackCmd = "unzip $src";
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/bin \
-             $out/opt/${pname}
+             $out/opt/inav-configurator
 
-    cp -r inav-configurator $out/opt/inav-configurator/
+    cp -r "." $out/opt/inav-configurator/
     install -m 444 -D $icon $out/share/icons/hicolor/128x128/apps/${pname}.png
 
     chmod +x $out/opt/inav-configurator/inav-configurator
-    makeWrapper ${nwjs}/bin/nw $out/bin/${pname} --add-flags $out/opt/inav-configurator/inav-configurator
+    makeWrapper ${electron}/bin/electron $out/bin/inav-configurator --add-flags $out/opt/inav-configurator/resources/app
 
     runHook postInstall
   '';
@@ -44,7 +63,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "INav flight control system configuration tool";
     mainProgram = "inav-configurator";
     longDescription = ''
@@ -53,9 +72,15 @@ stdenv.mkDerivation rec {
       quadcopters, hexacopters, octocopters and fixed-wing aircraft.
     '';
     homepage = "https://github.com/iNavFlight/inav/wiki";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ tilcreator wucke13 ];
-    platforms = platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      tilcreator
+      wucke13
+    ];
+    platforms = lib.platforms.linux;
+    knownVulnerabilities = [
+      "Uses Electron 38.7.2, EOL on 28-Jan-2026, with several known CVEs."
+    ];
   };
 }

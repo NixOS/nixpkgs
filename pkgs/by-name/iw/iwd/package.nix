@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchgit,
+  fetchpatch,
   autoreconfHook,
   pkg-config,
   ell,
@@ -13,21 +14,51 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iwd";
-  version = "3.3";
+  version = "3.12";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
-    rev = version;
-    hash = "sha256-+CoXoTlQu7ofXPueia1t1vpeH092fYBxLYB+xV4WNEs=";
+    tag = finalAttrs.version;
+    hash = "sha256-78Zw/i2dXecvC+DDSunPlUzqJj0FFYf7Sm6iN5VXBbA=";
   };
+
+  patches = [
+    # Remove dbus config referencing the netdev group, which we don't have.
+    # Users are advised to use the wheel group instead.
+    ./no_netdev_group.diff
+
+    # Fixes for exploitable memory-safety bugs reported in
+    # https://abhinavagarwal07.github.io/posts/iwd-rrm-stack-overflow/
+    (fetchpatch {
+      name = "rrm-fix-stack-buffer-overflow-in-rrm_report_beacon_results.patch";
+      url = "https://raw.githubusercontent.com/abhinavagarwal07/iwd-security-poc/1d646278412ef446f30cb58025590e6ff5945cb0/patches/0001-rrm-fix-stack-buffer-overflow-in-rrm_report_beacon_r.patch";
+      hash = "sha256-t7f4vrS8Ns0BUt8UxS+62T+xWDZaA/t5A0cnXWm00ZU=";
+    })
+    (fetchpatch {
+      name = "ie-fix-off-by-one-in-he-capabilities-channel-width-set.patch";
+      url = "https://raw.githubusercontent.com/abhinavagarwal07/iwd-security-poc/1d646278412ef446f30cb58025590e6ff5945cb0/patches/0002-ie-fix-off-by-one-in-HE-Capabilities-Channel-Width-S.patch";
+      hash = "sha256-142lowS9YtOGwfRqryxxGnzcNZrz72tIOhVZhlo3fMY=";
+    })
+    (fetchpatch {
+      name = "ft-fix-mde_equal-self-comparison-and-type-mismatch.patch";
+      url = "https://raw.githubusercontent.com/abhinavagarwal07/iwd-security-poc/1d646278412ef446f30cb58025590e6ff5945cb0/patches/0003-ft-fix-mde_equal-self-comparison-and-type-mismatch.patch";
+      hash = "sha256-Qdm8eAw3tbH/wDWvmWIkKxMQ2m16o+VvEPYaKXBgAAw=";
+    })
+    (fetchpatch {
+      name = "ie-fix-uint8_t-underflow-in-fte-sub-element-parser.patch";
+      url = "https://raw.githubusercontent.com/abhinavagarwal07/iwd-security-poc/1d646278412ef446f30cb58025590e6ff5945cb0/patches/0004-ie-fix-uint8_t-underflow-in-FTE-sub-element-parser.patch";
+      hash = "sha256-6At7PUXoORM++9ndIzxTTRu7V09+D31DrdMNLt1EtOc=";
+    })
+  ];
 
   outputs = [
     "out"
     "man"
     "doc"
-  ] ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "test";
+  ]
+  ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "test";
   separateDebugInfo = true;
 
   nativeBuildInputs = [
@@ -72,16 +103,15 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  postInstall =
-    ''
-      mkdir -p $doc/share/doc
-      cp -a doc $doc/share/doc/iwd
-      cp -a README AUTHORS TODO $doc/share/doc/iwd
-    ''
-    + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
-      mkdir -p $test/bin
-      cp -a test/* $test/bin/
-    '';
+  postInstall = ''
+    mkdir -p $doc/share/doc
+    cp -a doc $doc/share/doc/iwd
+    cp -a README AUTHORS TODO $doc/share/doc/iwd
+  ''
+  + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+    mkdir -p $test/bin
+    cp -a test/* $test/bin/
+  '';
 
   preFixup = ''
     wrapPythonPrograms
@@ -101,14 +131,13 @@ stdenv.mkDerivation rec {
     url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
     description = "Wireless daemon for Linux";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
-      dtzWill
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       fpletz
     ];
   };
-}
+})

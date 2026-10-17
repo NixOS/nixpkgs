@@ -5,6 +5,7 @@
   bison,
   flex,
   pam,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,6 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     bison
     flex
+    udevCheckHook
   ];
 
   buildInputs = [ pam ];
@@ -47,16 +49,19 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p "$out/etc/udev/rules.d"
   '';
 
+  doInstallCheck = true;
+
   postInstall = "rmdir $out/dev";
 
   meta = {
+    # last successful hydra build on aarch64-linux was in 2018
+    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
     description = "grsecurity RBAC administration and policy analysis utility";
     homepage = "https://grsecurity.net";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       thoughtpolice
-      joachifm
     ];
   };
 })

@@ -11,11 +11,12 @@
   mesonEmulatorHook,
   gtk3,
   glib,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgedit-gfls";
-  version = "0.2.1";
+  version = "0.4.2";
 
   outputs = [
     "out"
@@ -28,22 +29,22 @@ stdenv.mkDerivation (finalAttrs: {
     group = "World";
     owner = "gedit";
     repo = "libgedit-gfls";
-    rev = finalAttrs.version;
-    hash = "sha256-kMkqEly8RDc5eKqUupQD4tkVIXxL1rt4e/OCAPoutIg=";
+    tag = finalAttrs.version;
+    forceFetchGit = true; # To avoid occasional 501 failures.
+    hash = "sha256-8nr8rBvSBLadhxHipZiWOJj663R9jP6kFurSKp3n0U0=";
   };
 
-  nativeBuildInputs =
-    [
-      docbook-xsl-nons
-      gobject-introspection
-      gtk-doc
-      meson
-      ninja
-      pkg-config
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    docbook-xsl-nons
+    gobject-introspection
+    gtk-doc
+    meson
+    ninja
+    pkg-config
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
   buildInputs = [
     gtk3
@@ -53,6 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Required by libgedit-gfls-1.pc
     glib
   ];
+
+  passthru.updateScript = gitUpdater { ignoredVersions = "(alpha|beta|rc).*"; };
 
   meta = {
     homepage = "https://gitlab.gnome.org/World/gedit/libgedit-gfls";

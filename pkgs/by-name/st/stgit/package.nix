@@ -17,17 +17,18 @@
   libiconv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stgit";
-  version = "2.5.0";
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "stacked-git";
     repo = "stgit";
-    rev = "v${version}";
-    hash = "sha256-XyBVboNrvhOSZBPd5ZqdMuF261TpFzduC6XQtKJGntE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-mR2XsZrTQhpKU5qfOm9Cbj/2zQ9zE8judJkSGtgZHCI=";
   };
-  cargoHash = "sha256-xh8TW8TgwaCqqKVyP9ImHkKAIwW5c6AC1pZD5tu0XBs=";
+
+  cargoHash = "sha256-cOd3t/l+b2gnM0G+atyUXK7oU4JBGXlJY64UmfGuhdU=";
 
   nativeBuildInputs = [
     pkg-config
@@ -41,15 +42,14 @@ rustPlatform.buildRustPackage rec {
   ];
   buildInputs = [ curl ];
 
-  nativeCheckInputs =
-    [
-      git
-      perl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.system_cmds
-      libiconv
-    ];
+  nativeCheckInputs = [
+    git
+    perl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.system_cmds
+    libiconv
+  ];
 
   postPatch = ''
     for f in Documentation/*.xsl; do
@@ -93,12 +93,12 @@ rustPlatform.buildRustPackage rec {
       --zsh completion/stgit.zsh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Patch manager implemented on top of Git";
     homepage = "https://stacked-git.github.io/";
-    license = licenses.gpl2Only;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ jshholland ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ jshholland ];
     mainProgram = "stg";
   };
-}
+})

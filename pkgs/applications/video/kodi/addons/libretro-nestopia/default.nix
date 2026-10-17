@@ -16,7 +16,7 @@ buildKodiBinaryAddon rec {
     owner = "kodi-game";
     repo = "game.libretro.nestopia";
     rev = "${version}-${rel}";
-    sha256 = "sha256-DmBO+HcfIBcz7p16dND09iwXWeObtU/doo/mJ0IZGGg=";
+    hash = "sha256-DmBO+HcfIBcz7p16dND09iwXWeObtU/doo/mJ0IZGGg=";
   };
 
   extraCMakeFlags = [
@@ -28,11 +28,11 @@ buildKodiBinaryAddon rec {
     libretro
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kodi-game/game.libretro.nestopia";
     description = "Nintendo - NES / Famicom (Nestopia UE) GameClient for Kodi";
-    platforms = platforms.all;
-    license = licenses.gpl2Only;
-    maintainers = teams.kodi.members;
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl2Only;
+    teams = [ lib.teams.kodi ];
   };
 }

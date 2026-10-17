@@ -3,26 +3,27 @@
   lib,
   nixosTests,
   fetchFromGitHub,
+  fetchpatch,
   applyPatches,
   bundlerEnv,
-  defaultGemConfig,
   callPackage,
   procps,
   ruby,
   postgresql,
-  imlib2,
   jq,
   moreutils,
   nodejs,
-  pnpm_9,
+  pnpm_11,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   cacert,
-  redis,
+  valkey,
   dataDir ? "/var/lib/zammad",
 }:
 
 let
   pname = "zammad";
-  version = "6.4.1";
+  version = "7.2.2";
 
   src = applyPatches {
     src = fetchFromGitHub (lib.importJSON ./source.json);
@@ -31,15 +32,15 @@ let
     ];
 
     postPatch = ''
-      sed -i -e "s|ruby '3.2.[0-9]\+'|ruby '${ruby.version}'|" Gemfile
-      sed -i -e "s|ruby 3.2.[0-9]\+p[0-9]\+|ruby ${ruby.version}|" Gemfile.lock
-      sed -i -e "s|3.2.[0-9]\+|${ruby.version}|" .ruby-version
+      sed -i -e "s|ruby '3.4.[0-9]\+'|ruby '${ruby.version}'|" Gemfile
+      sed -i -e "s|ruby 3.4.[0-9]\+p[0-9]\+|ruby ${ruby.version}|" Gemfile.lock
+      sed -i -e "s|3.4.[0-9]\+|${ruby.version}|" .ruby-version
       ${jq}/bin/jq '. += {name: "Zammad", version: "${version}"}' package.json | ${moreutils}/bin/sponge package.json
     '';
   };
 
   rubyEnv = bundlerEnv {
-    name = "${pname}-gems-${version}";
+    name = "zammad-gems-${version}";
     inherit version;
 
     # Which ruby version to select:
@@ -57,28 +58,6 @@ let
       "development"
       "postgres" # database
     ];
-    gemConfig = defaultGemConfig // {
-      pg = attrs: {
-        buildFlags = [ "--with-pg-config=${lib.getDev postgresql}/bin/pg_config" ];
-      };
-      rszr = attrs: {
-        buildInputs = [
-          imlib2
-          imlib2.dev
-        ];
-        buildFlags = [ "--without-imlib2-config" ];
-      };
-      mini_racer = attrs: {
-        buildFlags = [
-          "--with-v8-dir=\"${nodejs.libv8}\""
-        ];
-        dontBuild = false;
-        postPatch = ''
-          substituteInPlace ext/mini_racer_extension/extconf.rb \
-            --replace Libv8.configure_makefile '$CPPFLAGS += " -x c++"; Libv8.configure_makefile'
-        '';
-      };
-    };
   };
 
 in
@@ -92,9 +71,10 @@ stdenvNoCC.mkDerivation {
   ];
 
   nativeBuildInputs = [
-    redis
+    valkey
     postgresql
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_11
     nodejs
     procps
     cacert
@@ -102,10 +82,12 @@ stdenvNoCC.mkDerivation {
 
   env.RAILS_ENV = "production";
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit pname src;
+    pnpm = pnpm_11;
 
-    hash = "sha256-bdm1nkJnXE7oZZhG2uBnk3fYhITaMROHGKPbf0G3bFs=";
+    fetcherVersion = 4;
+    hash = "sha256-fLC1bcqVDPUb84SN3J9BKMNL0idK0mXQqwr+o52kRLI=";
   };
 
   buildPhase = ''
@@ -131,11 +113,12 @@ stdenvNoCC.mkDerivation {
   installPhase = ''
     cp -R . $out
     rm -rf $out/config/database.yml $out/config/secrets.yml $out/tmp $out/log
-    # dataDir will be set in the module, and the package gets overriden there
+    # dataDir will be set in the module, and the package gets overridden there
     ln -s ${dataDir}/config/database.yml $out/config/database.yml
     ln -s ${dataDir}/config/secrets.yml $out/config/secrets.yml
-    ln -s ${dataDir}/tmp $out/tmp
     ln -s ${dataDir}/log $out/log
+    ln -s ${dataDir}/storage $out/storage
+    ln -s ${dataDir}/tmp $out/tmp
   '';
 
   passthru = {
@@ -150,17 +133,21 @@ stdenvNoCC.mkDerivation {
     };
   };
 
-  meta = with lib; {
-    description = "Zammad, a web-based, open source user support/ticketing solution";
+  meta = {
+    changelog = "https://zammad.com/en/product/releases/${
+      lib.replaceString "." "-" (lib.removeSuffix ".0" version)
+    }";
+    description = "Web-based, open source user support/ticketing solution";
     homepage = "https://zammad.org";
-    license = licenses.agpl3Plus;
+    license = lib.licenses.agpl3Plus;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       taeer
       netali
+      meenzen
     ];
   };
 }

@@ -8,12 +8,12 @@
   gettext,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xcftools";
   version = "1.0.7";
 
   src = fetchurl {
-    url = "http://henning.makholm.net/xcftools/xcftools-${version}.tar.gz";
+    url = "http://henning.makholm.net/xcftools/xcftools-${finalAttrs.version}.tar.gz";
     sha256 = "19i0x7yhlw6hd2gp013884zchg63yzjdj4hpany011il0n26vgqy";
   };
 
@@ -39,6 +39,9 @@ stdenv.mkDerivation rec {
 
     # xcfview needs mailcap and isn't that useful anyway
     sed -i -e '/BINARIES/s/xcfview//' Makefile.in
+
+    # add missing header
+    sed -e '1i#include <stdlib.h>' -i xcf-general.c
   '';
 
   meta = {
@@ -58,4 +61,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
   };
-}
+})

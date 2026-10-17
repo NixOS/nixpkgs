@@ -6,8 +6,7 @@
   graphvizPkgs,
   isPyPy,
   python,
-  pythonOlder,
-  substituteAll,
+  replaceVars,
   setuptools,
 }:
 
@@ -16,7 +15,7 @@ buildPythonPackage rec {
   version = "3.6.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7" || isPyPy;
+  disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
@@ -24,8 +23,7 @@ buildPythonPackage rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./hardcode-graphviz-path.patch;
+    (replaceVars ./hardcode-graphviz-path.patch {
       graphviz = graphvizPkgs;
     })
   ];
@@ -46,11 +44,11 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Draws Python object reference graphs with graphviz";
     homepage = "https://mg.pov.lt/objgraph/";
     changelog = "https://github.com/mgedmin/objgraph/blob/${version}/CHANGES.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

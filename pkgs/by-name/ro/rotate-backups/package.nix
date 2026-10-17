@@ -7,6 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "rotate-backups";
   version = "8.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "xolox";
@@ -30,11 +31,11 @@ python3.pkgs.buildPythonApplication rec {
     "test_removal_command"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple command line interface for backup rotation";
     mainProgram = "rotate-backups";
     homepage = "https://github.com/xolox/python-rotate-backups";
-    license = licenses.mit;
-    maintainers = with maintainers; [ eyjhb ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ eyjhb ];
   };
 }

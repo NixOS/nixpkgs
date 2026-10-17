@@ -28,23 +28,20 @@ However, [those were unified early 2020](https://github.com/NixOS/nixpkgs/pull/8
 
 ```nix
 { appimageTools, fetchurl }:
-let
+appimageTools.wrapType2 {
   pname = "nuclear";
   version = "0.6.30";
 
   src = fetchurl {
-    url = "https://github.com/nukeop/nuclear/releases/download/v${version}/${pname}-v${version}.AppImage";
+    url = "https://github.com/nukeop/nuclear/releases/download/v${version}/nuclear-v${version}.AppImage";
     hash = "sha256-he1uGC1M/nFcKpMM9JKY4oeexJcnzV0ZRxhTjtJz6xw=";
   };
-in
-appimageTools.wrapType2 {
-  inherit pname version src;
 }
 ```
 
 :::
 
-The argument passed to `wrapType2` can also contain an `extraPkgs` attribute, which allows you to include additional packages inside the FHS environment your AppImage is going to run in.
+The argument passed to `wrapType2` can also contain an `extraPkgs` attribute, which includes additional packages inside the FHS environment your AppImage is going to run in.
 `extraPkgs` must be a function that returns a list of packages.
 There are a few ways to learn which dependencies an application needs:
 
@@ -58,7 +55,7 @@ There are a few ways to learn which dependencies an application needs:
 
 ```nix
 { appimageTools, fetchurl }:
-let
+appimageTools.wrapType2 {
   pname = "irccloud";
   version = "0.16.0";
 
@@ -66,8 +63,7 @@ let
     url = "https://github.com/irccloud/irccloud-desktop/releases/download/v${version}/IRCCloud-${version}-linux-x86_64.AppImage";
     hash = "sha256-/hMPvYdnVB1XjKgU2v47HnVvW4+uC3rhRjbucqin4iI=";
   };
-in appimageTools.wrapType2 {
-  inherit pname version src;
+
   extraPkgs = pkgs: [ pkgs.at-spi2-core ];
 }
 ```
@@ -89,12 +85,12 @@ However, [those were unified early 2020](https://github.com/NixOS/nixpkgs/pull/8
 
 # Extracting an AppImage to install extra files
 
-This example was adapted from a real package in Nixpkgs to show how `extract` is usually used in combination with `wrapType2`.
-Note how `appimageContents` is used in `extraInstallCommands` to install additional files that were extracted from the AppImage.
+`wrapType2` automatically extracts the AppImage for you and makes it available via the `contents` attribute.
+Note how `finalAttrs.contents` is used in `extraInstallCommands` to install additional files that were extracted from the AppImage.
 
 ```nix
 { appimageTools, fetchurl }:
-let
+appimageTools.wrapType2 (finalAttrs: {
   pname = "irccloud";
   version = "0.16.0";
 
@@ -103,39 +99,40 @@ let
     hash = "sha256-/hMPvYdnVB1XjKgU2v47HnVvW4+uC3rhRjbucqin4iI=";
   };
 
-  appimageContents = appimageTools.extract {
-    inherit pname version src;
-  };
-in appimageTools.wrapType2 {
-  inherit pname version src;
-
   extraPkgs = pkgs: [ pkgs.at-spi2-core ];
 
   extraInstallCommands = ''
-    mv $out/bin/${pname}-${version} $out/bin/${pname}
-    install -m 444 -D ${appimageContents}/irccloud.desktop $out/share/applications/irccloud.desktop
-    install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/512x512/apps/irccloud.png \
+    mv $out/bin/irccloud-${version} $out/bin/irccloud
+    install -m 444 -D ${finalAttrs.contents}/irccloud.desktop $out/share/applications/irccloud.desktop
+    install -m 444 -D ${finalAttrs.contents}/usr/share/icons/hicolor/512x512/apps/irccloud.png \
       $out/share/icons/hicolor/512x512/apps/irccloud.png
     substituteInPlace $out/share/applications/irccloud.desktop \
-      --replace-fail 'Exec=AppRun' 'Exec=${pname}'
+      --replace-fail 'Exec=AppRun' 'Exec=irccloud'
   '';
-}
+})
 ```
 
 :::
 
-The argument passed to `extract` can also contain a `postExtract` attribute, which allows you to execute additional commands after the files are extracted from the AppImage.
+`appimageTools` also exposes the `extract` function should you need to do it manually, requiring `pname`, `version`, and `src` arguments (`src` being the AppImage file to extract).
+
+The arguments passed to `extract` can also contain a `postExtract` attribute, which executes additional commands after the files are extracted from the AppImage.
 `postExtract` must be a string with commands to run.
+
+:::{.warning}
+When specifying `postExtract`, you should use `appimageTools.wrapAppImage` instead of `appimageTools.wrapType2`.
+Otherwise `wrapType2` will extract the AppImage contents without respecting the `postExtract` instructions.
+:::
 
 :::{.example #ex-extracting-appimage-with-postextract}
 
 # Extracting an AppImage to install extra files, using `postExtract`
 
-This is a rewrite of [](#ex-extracting-appimage) to use `postExtract`.
+This is a rewrite of [](#ex-extracting-appimage) to use `postExtract` and `wrapAppImage`.
 
 ```nix
 { appimageTools, fetchurl }:
-let
+appimageTools.wrapAppImage (finalAttrs: {
   pname = "irccloud";
   version = "0.16.0";
 
@@ -144,24 +141,22 @@ let
     hash = "sha256-/hMPvYdnVB1XjKgU2v47HnVvW4+uC3rhRjbucqin4iI=";
   };
 
-  appimageContents = appimageTools.extract {
-    inherit pname version src;
+  contents = appimageTools.extract {
+    inherit (finalAttrs) pname version src;
     postExtract = ''
-      substituteInPlace $out/irccloud.desktop --replace-fail 'Exec=AppRun' 'Exec=${pname}'
+      substituteInPlace $out/irccloud.desktop --replace-fail 'Exec=AppRun' 'Exec=irccloud'
     '';
   };
-in appimageTools.wrapType2 {
-  inherit pname version src;
 
   extraPkgs = pkgs: [ pkgs.at-spi2-core ];
 
   extraInstallCommands = ''
-    mv $out/bin/${pname}-${version} $out/bin/${pname}
-    install -m 444 -D ${appimageContents}/irccloud.desktop $out/share/applications/irccloud.desktop
-    install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/512x512/apps/irccloud.png \
+    mv $out/bin/irccloud-${version} $out/bin/irccloud
+    install -m 444 -D ${finalAttrs.contents}/irccloud.desktop $out/share/applications/irccloud.desktop
+    install -m 444 -D ${finalAttrs.contents}/usr/share/icons/hicolor/512x512/apps/irccloud.png \
       $out/share/icons/hicolor/512x512/apps/irccloud.png
   '';
-}
+})
 ```
 
 :::

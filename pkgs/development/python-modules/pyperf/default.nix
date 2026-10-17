@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   psutil,
   unittestCheckHook,
   setuptools,
@@ -10,14 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pyperf";
-  version = "2.8.1";
+  version = "2.10.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7xA+IaTQSZkxUAMCai1lnEinz85eFEDwPW5yWRQAcTo=";
+    hash = "sha256-3ZPM/aeSFHJSk+lfH6bgDLSmStzxMmA5SG1OH5HKqmI=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -34,12 +31,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyperf" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to generate and modify perf";
     mainProgram = "pyperf";
     homepage = "https://pyperf.readthedocs.io/";
     changelog = "https://github.com/psf/pyperf/releases/tag/${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

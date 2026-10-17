@@ -17,8 +17,8 @@ An annotated example of a simple configuration:
   services.yggdrasil = {
     enable = true;
     persistentKeys = false;
-      # The NixOS module will generate new keys and a new IPv6 address each time
-      # it is started if persistentKeys is not enabled.
+    # The NixOS module will generate new keys and a new IPv6 address each time
+    # it is started if persistentKeys is not enabled.
 
     settings = {
       Peers = [
@@ -44,13 +44,17 @@ let
   address = "210:5217:69c0:9afc:1b95:b9f:8718:c3d2";
   prefix = "310:5217:69c0:9afc";
   # taken from the output of "yggdrasilctl getself".
-in {
+in
+{
 
   services.yggdrasil = {
     enable = true;
     persistentKeys = true; # Maintain a fixed public key and IPv6 address.
     settings = {
-      Peers = [ "tcp://1.2.3.4:1024" "tcp://1.2.3.5:1024" ];
+      Peers = [
+        "tcp://1.2.3.4:1024"
+        "tcp://1.2.3.5:1024"
+      ];
       NodeInfo = {
         # This information is visible to the network.
         name = config.networking.hostName;
@@ -60,13 +64,15 @@ in {
   };
 
   boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = 1;
-    # Forward traffic under the prefix.
+  # Forward traffic under the prefix.
 
-  networking.interfaces.${eth0}.ipv6.addresses = [{
-    # Set a 300::/8 address on the local physical device.
-    address = prefix + "::1";
-    prefixLength = 64;
-  }];
+  networking.interfaces.${eth0}.ipv6.addresses = [
+    {
+      # Set a 300::/8 address on the local physical device.
+      address = prefix + "::1";
+      prefixLength = 64;
+    }
+  ];
 
   services.radvd = {
     # Announce the 300::/8 prefix to eth0.
@@ -93,7 +99,7 @@ host:
 ```nix
 let
   yggPrefix64 = "310:5217:69c0:9afc";
-    # Again, taken from the output of "yggdrasilctl getself".
+  # Again, taken from the output of "yggdrasilctl getself".
 in
 {
   boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = 1;
@@ -105,10 +111,12 @@ in
 
     interfaces.br0 = {
       # … configured with a prefix address.
-      ipv6.addresses = [{
-        address = "${yggPrefix64}::1";
-        prefixLength = 64;
-      }];
+      ipv6.addresses = [
+        {
+          address = "${yggPrefix64}::1";
+          prefixLength = 64;
+        }
+      ];
     };
   };
 
@@ -117,24 +125,30 @@ in
     privateNetwork = true;
     hostBridge = "br0";
     # Attach the container to the bridge only.
-    config = { config, pkgs, ... }: {
-      networking.interfaces.eth0.ipv6 = {
-        addresses = [{
-          # Configure a prefix address.
-          address = "${yggPrefix64}::2";
-          prefixLength = 64;
-        }];
-        routes = [{
-          # Configure the prefix route.
-          address = "200::";
-          prefixLength = 7;
-          via = "${yggPrefix64}::1";
-        }];
-      };
+    config =
+      { config, pkgs, ... }:
+      {
+        networking.interfaces.eth0.ipv6 = {
+          addresses = [
+            {
+              # Configure a prefix address.
+              address = "${yggPrefix64}::2";
+              prefixLength = 64;
+            }
+          ];
+          routes = [
+            {
+              # Configure the prefix route.
+              address = "200::";
+              prefixLength = 7;
+              via = "${yggPrefix64}::1";
+            }
+          ];
+        };
 
-      services.httpd.enable = true;
-      networking.firewall.allowedTCPPorts = [ 80 ];
-    };
+        services.httpd.enable = true;
+        networking.firewall.allowedTCPPorts = [ 80 ];
+      };
   };
 
 }

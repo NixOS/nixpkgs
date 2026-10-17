@@ -5,13 +5,13 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "tomlcpp";
   version = "0.pre+date=2022-06-25";
 
   src = fetchFromGitHub {
     owner = "cktan";
-    repo = pname;
+    repo = "tomlcpp";
     rev = "4212f1fccf530e276a2e1b63d3f99fbfb84e86a4";
     hash = "sha256-PM3gURXhyTZr59BWuLHvltjKOlKUSBT9/rqTeX5V//k=";
   };
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/cktan/tomlcpp";
     description = "No fanfare TOML C++ Library";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = [ ];
     platforms = with lib.platforms; unix;
   };
 }

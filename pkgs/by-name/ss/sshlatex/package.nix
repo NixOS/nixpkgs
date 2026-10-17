@@ -10,14 +10,14 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sshlatex";
   version = "0.8";
 
   src = fetchFromGitHub {
     owner = "iblech";
     repo = "sshlatex";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0kaah8is74zba9373xccmsxmnnn6kh0isr4qpg21x3qhdzhlxl7q";
   };
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
       wrapProgram $out/bin/sshlatex --prefix PATH : "${binPath}"
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Collection of hacks to efficiently run LaTeX via ssh";
     longDescription = ''
       sshlatex is a tool which uploads LaTeX source files to a remote, runs
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/iblech/sshlatex";
     license = lib.licenses.gpl3Plus; # actually dual-licensed gpl3Plus | lppl13cplus
     platforms = lib.platforms.all;
-    maintainers = [ maintainers.iblech ];
+    maintainers = [ lib.maintainers.iblech ];
     mainProgram = "sshlatex";
   };
-}
+})

@@ -1,64 +1,78 @@
 {
   fetchurl,
   stdenv,
-  installShellFiles,
+  bash-completion,
+  cmocka,
   lib,
   libftdi1,
   libjaylink,
   libusb1,
+  openssl,
+  meson,
+  ninja,
   pciutils,
   pkg-config,
+  sphinx,
   jlinkSupport ? false,
+  git,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flashrom";
-  version = "1.3.0";
+  version = "1.8.0";
 
   src = fetchurl {
-    url = "https://download.flashrom.org/releases/flashrom-v${version}.tar.bz2";
-    hash = "sha256-oFMjRFPM0BLnnzRDvcxhYlz5e3/Xy0zdi/v/vosUliM=";
+    url = "https://download.flashrom.org/releases/flashrom-v${finalAttrs.version}.tar.xz";
+    hash = "sha256-ZUycYXRcJQzTtczQ5W/EPudpgPkqXgeEIEIGOdZpdaI=";
   };
 
   nativeBuildInputs = [
+    git
+    meson
+    ninja
     pkg-config
-    installShellFiles
+    sphinx
+    bash-completion
   ];
-  buildInputs =
-    [
-      libftdi1
-      libusb1
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ pciutils ]
-    ++ lib.optional jlinkSupport libjaylink;
+  buildInputs = [
+    openssl
+    cmocka
+    libftdi1
+    libusb1
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ pciutils ]
+  ++ lib.optional jlinkSupport libjaylink;
 
   postPatch = ''
     substituteInPlace util/flashrom_udev.rules \
       --replace 'GROUP="plugdev"' 'TAG+="uaccess", TAG+="udev-acl"'
   '';
 
-  makeFlags =
-    [
-      "PREFIX=$(out)"
-      "libinstall"
-    ]
-    ++ lib.optional jlinkSupport "CONFIG_JLINK_SPI=yes"
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-      "CONFIG_INTERNAL_X86=no"
-      "CONFIG_INTERNAL_DMI=no"
-      "CONFIG_RAYER_SPI=no"
-    ];
+  mesonFlags = [
+    (lib.mesonBool "werror" false)
+    (lib.mesonOption "programmer" "auto")
+    (lib.mesonEnable "man-pages" true)
+    (lib.mesonEnable "tests" (!stdenv.buildPlatform.isDarwin))
+    (lib.mesonEnable "generate_authors_list" false)
+  ];
+
+  doCheck = !stdenv.hostPlatform.isDarwin;
+  doInstallCheck = true;
 
   postInstall = ''
-    install -Dm644 util/flashrom_udev.rules $out/lib/udev/rules.d/flashrom.rules
+    install -Dm644 $NIX_BUILD_TOP/$sourceRoot/util/flashrom_udev.rules $out/lib/udev/rules.d/flashrom.rules
   '';
 
-  meta = with lib; {
+  env = lib.optionalAttrs (stdenv.cc.isClang && !stdenv.hostPlatform.isDarwin) {
+    NIX_CFLAGS_COMPILE = "-Wno-gnu-folding-constant";
+  };
+
+  meta = {
     homepage = "https://www.flashrom.org";
     description = "Utility for reading, writing, erasing and verifying flash ROM chips";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fpletz ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ fpletz ];
+    platforms = lib.platforms.all;
     mainProgram = "flashrom";
   };
-}
+})

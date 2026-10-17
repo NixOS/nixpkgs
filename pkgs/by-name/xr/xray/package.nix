@@ -2,29 +2,27 @@
   lib,
   fetchFromGitHub,
   symlinkJoin,
-  buildGoModule,
+  buildGo127Module,
   makeWrapper,
   nix-update-script,
-  v2ray-geoip,
-  v2ray-domain-list-community,
+  v2ray-rules-dat,
   assets ? [
-    v2ray-geoip
-    v2ray-domain-list-community
+    v2ray-rules-dat
   ],
 }:
 
-buildGoModule rec {
+buildGo127Module (finalAttrs: {
   pname = "xray";
-  version = "25.1.1";
+  version = "26.9.9";
 
   src = fetchFromGitHub {
     owner = "XTLS";
     repo = "Xray-core";
-    rev = "v${version}";
-    hash = "sha256-6Ybo8jYDdYlnrLkYV4Wo9T/3lHYByNJN2G0A+YGe504=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-GqPEAgWM9Wx19uxMj0LGeOyHreLbU0IMSmalwLe/SIc=";
   };
 
-  vendorHash = "sha256-f61PmgSojDq6TAfWEd+q0WZ9fvmABdll+Ta3q8fHtEU=";
+  vendorHash = "sha256-6Qa05hFdvfLlH8WQd426IU7MScmeevIgrgP5037pNek=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -61,7 +59,7 @@ buildGoModule rec {
     description = "Platform for building proxies to bypass network restrictions. A replacement for v2ray-core, with XTLS support and fully compatible configuration";
     mainProgram = "xray";
     homepage = "https://github.com/XTLS/Xray-core";
-    license = with lib.licenses; [ mpl20 ];
+    license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ iopq ];
   };
-}
+})

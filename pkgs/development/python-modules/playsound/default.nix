@@ -13,18 +13,18 @@ buildPythonPackage rec {
     owner = "TaylorSMarks";
     repo = "playsound";
     rev = "v${version}";
-    sha256 = "0jbq641lmb0apq4fy6r2zyag8rdqgrz8c4wvydzrzmxrp6yx6wyd";
+    hash = "sha256-zXPTvbm5159/85sThn5+uGX0lP8iG+8IvgqsSgMxeEk=";
   };
 
   doCheck = false;
 
   pythonImportsCheck = [ "playsound" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/TaylorSMarks/playsound";
     description = "Pure Python, cross platform, single function module with no dependencies for playing sounds";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = [ ];
   };
 }

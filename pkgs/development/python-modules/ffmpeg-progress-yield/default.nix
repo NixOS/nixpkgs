@@ -1,53 +1,63 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  fetchPypi,
-  colorama,
+  fetchFromGitHub,
+  uv-build,
   tqdm,
+  pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   ffmpeg,
   procps,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "ffmpeg-progress-yield";
-  version = "0.9.1";
-  format = "setuptools";
+  version = "1.1.4";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-n6zHi6M9SyrNm8MhQ9xvBo2OIzoQYJ4yhgujW5C6QWY=";
+  src = fetchFromGitHub {
+    owner = "slhck";
+    repo = "ffmpeg-progress-yield";
+    tag = "v${version}";
+    hash = "sha256-78F+ttWM7AHa9LkyG0U/Y4V3yN3yCx3olMR5CgJWnD0=";
   };
 
-  propagatedBuildInputs = [
-    colorama
+  build-system = [ uv-build ];
+
+  dependencies = [
     tqdm
   ];
 
   nativeCheckInputs = [
+    pytest-asyncio
     pytestCheckHook
     ffmpeg
     procps
   ];
 
-  disabledTests = [
-    "test_quit"
-    "test_quit_gracefully"
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # cannot access /usr/bin/pgrep from the sandbox
+    "test_context_manager"
+    "test_context_manager_with_exception"
+    "test_automatic_cleanup_on_exception"
+    "test_async_context_manager"
+    "test_async_context_manager_with_exception"
+    "test_async_automatic_cleanup_on_exception"
   ];
-
-  pytestFlagsArray = [ "test/test.py" ];
 
   pythonImportsCheck = [ "ffmpeg_progress_yield" ];
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  meta = {
     description = "Run an ffmpeg command with progress";
     mainProgram = "ffmpeg-progress-yield";
     homepage = "https://github.com/slhck/ffmpeg-progress-yield";
-    changelog = "https://github.com/slhck/ffmpeg-progress-yield/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ prusnak ];
+    changelog = "https://github.com/slhck/ffmpeg-progress-yield/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ prusnak ];
   };
 }

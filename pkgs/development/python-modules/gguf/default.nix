@@ -1,36 +1,73 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  numpy,
+  fetchFromGitHub,
+  nix-update-script,
+
+  # build-system
   poetry-core,
-  pythonOlder,
-  tqdm,
+  pyprojectVersionPatchHook,
+
+  # dependencies
+  numpy,
+  pyside6,
   pyyaml,
+  requests,
+  tqdm,
+
+  # tests
+  pytestCheckHook,
 }:
-buildPythonPackage rec {
+
+buildPythonPackage (finalAttrs: {
   pname = "gguf";
-  version = "0.10.0";
-  format = "pyproject";
+  version = "10798";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-UqMO8mMotBn/xH2SafxYDCOO3xyKGbXqFDwyPgSgOME=";
+  src = fetchFromGitHub {
+    owner = "ggml-org";
+    repo = "llama.cpp";
+    tag = "b${finalAttrs.version}";
+    hash = "sha256-Si0PmgDGjq8iYrSkcdS+UDmg4J2RKvtHGDQaXT8wOtc=";
   };
+
+  sourceRoot = "${finalAttrs.src.name}/gguf-py";
+
+  build-system = [ poetry-core ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     numpy
-    poetry-core
-    tqdm
     pyyaml
+    requests
+    tqdm
   ];
 
-  meta = with lib; {
+  optional-dependencies = {
+    gui = [ pyside6 ];
+  };
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "gguf" ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "b(.*)"
+    ];
+  };
+
+  meta = {
     description = "Module for writing binary files in the GGUF format";
     homepage = "https://ggml.ai/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mitchmindtree ];
+    downloadPage = "https://github.com/ggml-org/llama.cpp/releases";
+    changelog = "https://github.com/ggml-org/llama.cpp/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      mitchmindtree
+      sarahec
+    ];
   };
-}
+})

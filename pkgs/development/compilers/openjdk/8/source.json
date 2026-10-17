@@ -1,6 +1,6 @@
 {
-  "hash": "sha256-48DyJXD7D28LFa+4ONeMgSddqrCLn6FLwEGWGeP4upM=",
+  "hash": "sha256-c0x+4FW1BqpvoMKfkhsea8xBIoRPc7NJuzDk5pcJnd0=",
   "owner": "openjdk",
   "repo": "jdk8u",
-  "rev": "refs/tags/jdk8u432-b06"
+  "rev": "refs/tags/jdk8u504-b01"
 }

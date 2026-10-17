@@ -1,34 +1,55 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  git,
+  runtimeShell,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-insta";
-  version = "1.40";
+  version = "1.49.0";
 
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "insta";
-    rev = "83f33653b687c84823fe6af00806107e1dd4f4b8";
-    hash = "sha256-eau5h75oZpxufTrf0fLHfr+3TIOFXB/kSgHX+o2GtiE=";
+    tag = finalAttrs.version;
+    hash = "sha256-mw+qpTc+J6xjirjxRAhbIF0Nw/lkpnEtTaIxDOWqFmc=";
   };
 
-  cargoHash = "sha256-OqM8SERSWHtbvW6SZfM7lOrQZu66uzsv5wiD3Iqaf3s=";
+  cargoHash = "sha256-s1BLfuBOfjuP+TnmPC9h5OnUCSLGA0TCZrn8Qb/ZCk8=";
 
-  checkFlags = [
-  # Depends on `rustfmt` and does not matter for packaging.
-  "--skip=utils::test_format_rust_expression"
-  # Requires networking
-  "--skip=test_force_update_snapshots"
+  nativeCheckInputs = [
+    # used by test_binary_accept_missing_old_binary
+    git
   ];
 
-  meta = with lib; {
+  postPatch = ''
+    substituteInPlace cargo-insta/tests/functional/test_runner_fallback.rs \
+      --replace-fail '#!/bin/bash' '#!${runtimeShell}'
+  '';
+
+  checkFlags = [
+    # Depends on `rustfmt` and does not matter for packaging.
+    "--skip=utils::test_format_rust_expression"
+    # Requires networking
+    "--skip=test_force_update_snapshots"
+
+    "--skip=test_ignored_snapshots"
+    "--skip=workspace::test_insta_workspace_root"
+    "--skip=env::test_get_cargo_workspace_manifest_dir"
+  ];
+
+  meta = {
     description = "Cargo subcommand for snapshot testing";
     mainProgram = "cargo-insta";
     homepage = "https://github.com/mitsuhiko/insta";
-    changelog = "https://github.com/mitsuhiko/insta/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda oxalica matthiasbeyer ];
+    changelog = "https://github.com/mitsuhiko/insta/blob/${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      oxalica
+      matthiasbeyer
+      figsoda
+    ];
   };
-}
+})

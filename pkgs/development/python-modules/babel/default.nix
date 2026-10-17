@@ -3,13 +3,13 @@
   buildPythonPackage,
   fetchPypi,
   isPyPy,
-  pythonOlder,
 
   # build-system
   setuptools,
 
   # tests
   freezegun,
+  glibcLocales,
   pytestCheckHook,
   pytz,
   tzdata,
@@ -17,24 +17,24 @@
 
 buildPythonPackage rec {
   pname = "babel";
-  version = "2.16.0";
+  version = "2.18.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0fNVTKJmBf4XPz3gxl91D1pC+SRJm/E03mQjWCKY4xY=";
+    hash = "sha256-uAuZoUvQhfys+hXJFl9lH7s0BuZsxgOr8RxXUJN8mS0=";
   };
 
   build-system = [ setuptools ];
 
   nativeCheckInputs = [
     freezegun
+    glibcLocales
     pytestCheckHook
     # https://github.com/python-babel/babel/issues/988#issuecomment-1521765563
     pytz
-  ] ++ lib.optionals isPyPy [ tzdata ];
+  ]
+  ++ lib.optionals isPyPy [ tzdata ];
 
   disabledTests = [
     # fails on days switching from and to daylight saving time in EST

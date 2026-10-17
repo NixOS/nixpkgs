@@ -3,6 +3,7 @@
   lib,
   fetchurl,
   makeWrapper,
+  writeText,
   makeDesktopItem,
   copyDesktopItems,
   jre,
@@ -18,21 +19,29 @@ in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tigerjython";
 
+  #################################################################
   # UPDATE instructions
   #
   # We cache potentially unstable upstream input (.tar.gz file) via https://web.archive.org - this is a common procedure in Nixpkgs.
   #
-  # - Open https://tigerjython.ch/en/products/download and identify the new version string for "TigerJython IDE for Linux"
-  version = "2.39";
+  # - Open https://www.tjgroup.ch/index.php?site=download and identify the new version string
+  version = "2.42";
 
-  # - and copy download link (most likely https://tigerjython.ch/user/pages/download/TigerJython.tar.gz) to clipboard.
-  # - Open http://web.archive.org and paste download link from clipboard into "Save Page Now" field and hit the "Save Page" button.
+  # - and copy the download link (most likely https://www.tjgroup.ch/download/TigerJython.tar.gz) to the clipboard.
+  # - Open http://web.archive.org and paste the download link into the "Save Page Now" field and hit the "Save Page" button.
   # - Unselect "Save Error Pages" and hit "Save Page" again.
-  # - Wait for the archive link to be generated and copy it to the url field - adjust hash accordingly.
   src = fetchurl {
-    url = "http://web.archive.org/web/20240119124245/https://tigerjython.ch/user/pages/download/TigerJython.tar.gz";
-    hash = "sha256-PdoAOjr19aLmXYrLtMCq/tZ2Fqq7pINTuhFyMMiC0yM=";
+    # - Wait for the archive link to be generated and copy it to the url parameter below
+    url = "https://web.archive.org/web/20260804083812/https://www.tjgroup.ch/download/TigerJython.tar.gz";
+    # - Run 'nix --extra-experimental-features "nix-command flakes" store prefetch-file $archive-link' to get the hash of the newly archived file
+    hash = "sha256-jQUQiunrEi3cJhMV9URFeI7JKbGXL/Q2mgd2v0YWRBE=";
   };
+  # build and run the new package locally
+  # - 'nix-build -A tigerjython'
+  # - e.g. '/nix/store/...-tigerjython-2.42/bin/tigerjython'
+  # - optionally run 'nixfmt pkgs/by-name/ti/tigerjython/package.nix'
+  # - finally commit the changes as e.g. "tigerjython: 2.40 -> 2.42" to the working branch, e.g. "tigerjython-2.42" and create a pull request to the main Nixpkgs repository
+  #################################################################
 
   nativeBuildInputs = [
     makeWrapper
@@ -57,22 +66,36 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontConfigure = true;
   dontBuild = true;
 
+  # https://tobiaskohn.ch/jython/faq.html
+  # Q: Can I install TigerJython for multiple users?
+  # A: Yes, create a config file.
+  # This file must be named tigerjython2.cfg and located
+  # in the same folder as tigerjython2.jar
+  tjconfig = writeText "tjconfig" ''
+    configfile = sys.userpath + ".tjython.cfg"
+    jython.cachedir = sys.userpath + ".jython.cache"
+  '';
+
   installPhase = ''
     runHook preInstall
 
     export CUSTOM_LIBS=$out/share/java
     export JAR=$CUSTOM_LIBS/tigerjython2.jar
-    export EXAMPLES_DIR=$CUSTOM_LIBS/Examples
+    export CFG=$CUSTOM_LIBS/tigerjython2.cfg
+    export ADDITIONAL_LIBS_DIR=$CUSTOM_LIBS/Lib
+    export EXAMPLES_DIR=$CUSTOM_LIBS/TestSamples
 
     install -Dm444 bin/tigerjython2.jar $JAR
-    install -Dm444 bin/Lib/* --target-directory=$CUSTOM_LIBS
+    install -Dm444 bin/Lib/* --target-directory=$ADDITIONAL_LIBS_DIR
     install -Dm444 bin/TestSamples/* --target-directory=$EXAMPLES_DIR
+
+    install -Dm444 $tjconfig $CFG
 
     makeWrapper ${jre}/bin/java $out/bin/tigerjython \
       --add-flags "-Duser.dir=$CUSTOM_LIBS/" \
       --add-flags "-Xmx512M" \
       --add-flags "-jar $JAR" \
-      --set _JAVA_OPTIONS '-Dawt.useSystemAAFontSettings=lcd'
+      --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp"
 
     runHook postInstall
   '';

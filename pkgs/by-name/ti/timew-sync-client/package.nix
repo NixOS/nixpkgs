@@ -4,15 +4,15 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "timew-sync-client";
-  version = "1.0.1-unstable-2024-08-05";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "timewarrior-synchronize";
     repo = "timew-sync-client";
-    rev = "de3442bd29b071f54cd1e10af99f3378a83b4794";
-    hash = "sha256-AKRAMEUTIPvR+kaEZZYjd4II2KzYZTwRgGzFMGD5aio=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-8Bw+BI7EiW9UcHo6gaDthX4VH4kAlycm4EvAJEEAOWc=";
   };
 
   pyproject = true;
@@ -38,4 +38,4 @@ python3Packages.buildPythonApplication {
       errnoh
     ];
   };
-}
+})

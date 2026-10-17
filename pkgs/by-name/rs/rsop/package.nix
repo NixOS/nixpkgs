@@ -1,27 +1,27 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   pcsclite,
   nix-update-script,
   testers,
   rsop,
+  stdenv, # for meta.broken
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rsop";
-  version = "0.5.0";
+  version = "0.12.0";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "heiko";
     repo = "rsop";
-    rev = "rsop/v${version}";
-    hash = "sha256-Jh2SrIyMduODr3e3War0jCwHH6UwfU8764txzrImCaA=";
+    rev = "rsop/v${finalAttrs.version}";
+    hash = "sha256-0sXrXDROuqUT6psFdHyxWAaijQqBIyaguR7m3SwY5to=";
   };
 
-  cargoHash = "sha256-OUJXQr3pQGCao0Ra5o9eZF0Jhp818/u5Pm1KJIoJV5w=";
+  cargoHash = "sha256-Oee/9ja5QuBxDr56dO5998RVpdZD/rwSoQGVilGbH5Q=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -40,10 +40,12 @@ rustPlatform.buildRustPackage rec {
     description = "Stateless OpenPGP (SOP) based on rpgp";
     license = with lib.licenses; [
       mit
-      apsl20
+      asl20
       cc0
     ];
     maintainers = with lib.maintainers; [ nikstur ];
     mainProgram = "rsop";
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

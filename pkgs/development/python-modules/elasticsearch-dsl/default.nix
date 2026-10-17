@@ -4,22 +4,19 @@
   elasticsearch,
   fetchPypi,
   python-dateutil,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "elasticsearch-dsl";
-  version = "8.17.1";
+  version = "8.18.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "elasticsearch_dsl";
     inherit version;
-    hash = "sha256-2BcGmb/bT+f6s4VM2sMZotbd26opyep5k9LsIgVttaA=";
+    hash = "sha256-djRl26nq4Wat0QVn6STGVzCqEigZsIv+mgd+kbE7MNE=";
   };
 
   build-system = [ setuptools ];
@@ -38,7 +35,7 @@ buildPythonPackage rec {
   # Tests require a local instance of elasticsearch
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "High level Python client for Elasticsearch";
     longDescription = ''
       Elasticsearch DSL is a high-level library whose aim is to help with
@@ -47,7 +44,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/elasticsearch/elasticsearch-dsl-py";
     changelog = "https://github.com/elastic/elasticsearch-dsl-py/blob/v${version}/Changelog.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ desiderius ];
+    license = lib.licenses.asl20;
   };
 }

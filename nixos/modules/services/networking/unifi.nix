@@ -1,9 +1,19 @@
-{ config, options, lib, pkgs, utils, ... }:
+{
+  config,
+  options,
+  lib,
+  pkgs,
+  utils,
+  jdk25_headless,
+  ...
+}:
 let
   cfg = config.services.unifi;
   stateDir = "/var/lib/unifi";
-  cmd = lib.escapeShellArgs ([
-      "@${cfg.jrePackage}/bin/java" "java"
+  cmd = lib.escapeShellArgs (
+    [
+      "@${cfg.jrePackage}/bin/java"
+      "java"
       "--add-opens=java.base/java.lang=ALL-UNNAMED"
       "--add-opens=java.base/java.time=ALL-UNNAMED"
       "--add-opens=java.base/sun.security.util=ALL-UNNAMED"
@@ -13,30 +23,27 @@ let
     ++ (lib.optional (cfg.initialJavaHeapSize != null) "-Xms${(toString cfg.initialJavaHeapSize)}m")
     ++ (lib.optional (cfg.maximumJavaHeapSize != null) "-Xmx${(toString cfg.maximumJavaHeapSize)}m")
     ++ cfg.extraJvmOptions
-    ++ [ "-jar" "${stateDir}/lib/ace.jar" ]);
+    ++ [
+      "-jar"
+      "${stateDir}/lib/ace.jar"
+    ]
+  );
 in
 {
-
   options = {
+    services.unifi.enable = lib.mkEnableOption "UniFi controller service";
 
-    services.unifi.enable = lib.mkOption {
-      type = lib.types.bool;
-      default = false;
+    services.unifi.jrePackage = lib.mkOption {
+      type = lib.types.package;
+      default = cfg.unifiPackage.passthru.jrePackage or jdk25_headless;
+      defaultText = lib.literalExpression "unifiPackage.passthru.jrePackage";
+
       description = ''
-        Whether or not to enable the unifi controller service.
+        Which Java runtime to use.
       '';
     };
 
-    services.unifi.jrePackage = lib.mkPackageOption pkgs "jdk" {
-      default = "jdk17_headless";
-      extraDescription = ''
-        Check the UniFi controller release notes to ensure it is supported.
-      '';
-    };
-
-    services.unifi.unifiPackage = lib.mkPackageOption pkgs "unifi" {
-      default = "unifi8";
-    };
+    services.unifi.unifiPackage = lib.mkPackageOption pkgs "unifi" { };
 
     services.unifi.mongodbPackage = lib.mkPackageOption pkgs "mongodb" {
       default = "mongodb-7_0";
@@ -45,6 +52,7 @@ in
     services.unifi.openFirewall = lib.mkOption {
       type = lib.types.bool;
       default = false;
+
       description = ''
         Whether or not to open the minimum required ports on the firewall.
 
@@ -58,6 +66,7 @@ in
       type = with lib.types; nullOr int;
       default = null;
       example = 1024;
+
       description = ''
         Set the initial heap size for the JVM in MB. If this option isn't set, the
         JVM will decide this value at runtime.
@@ -68,6 +77,7 @@ in
       type = with lib.types; nullOr int;
       default = null;
       example = 4096;
+
       description = ''
         Set the maximum heap size for the JVM in MB. If this option isn't set, the
         JVM will decide this value at runtime.
@@ -78,22 +88,22 @@ in
       type = with lib.types; listOf str;
       default = [ ];
       example = lib.literalExpression ''["-Xlog:gc"]'';
+
       description = ''
         Set extra options to pass to the JVM.
       '';
     };
-
   };
 
   config = lib.mkIf cfg.enable {
-
     assertions = [
       {
-        assertion = lib.versionAtLeast config.system.stateVersion "24.11"
-        || (
-          options.services.unifi.unifiPackage.highestPrio < (lib.mkOptionDefault { }).priority
-          && options.services.unifi.mongodbPackage.highestPrio < (lib.mkOptionDefault { }).priority
-        );
+        assertion =
+          lib.versionAtLeast config.system.stateVersion "24.11"
+          || (
+            options.services.unifi.unifiPackage.highestPrio < (lib.mkOptionDefault { }).priority
+            && options.services.unifi.mongodbPackage.highestPrio < (lib.mkOptionDefault { }).priority
+          );
         message = ''
           Support for UniFi < 8 has been dropped; please explicitly set
           `services.unifi.unifiPackage` and `services.unifi.mongodbPackage`.
@@ -102,7 +112,7 @@ in
           only supports migrating one major version at a time; therefore, you
           may wish to set `services.unifi.mongodbPackage = pkgs.mongodb-6_0;`
           and activate your configuration before upgrading again to the default
-          `mongodb-7_0` supported by `unifi8`.
+          `mongodb-7_0` supported by `unifi`.
 
           For more information, see the MongoDB upgrade notes:
           <https://www.mongodb.com/docs/manual/release-notes/7.0-upgrade-standalone/#upgrade-recommendations-and-checklists>
@@ -116,18 +126,20 @@ in
       description = "UniFi controller daemon user";
       home = "${stateDir}";
     };
-    users.groups.unifi = {};
 
+    users.groups.unifi = { };
+
+    # https://help.ubnt.com/hc/en-us/articles/218506997
     networking.firewall = lib.mkIf cfg.openFirewall {
-      # https://help.ubnt.com/hc/en-us/articles/218506997
       allowedTCPPorts = [
-        8080  # Port for UAP to inform controller.
-        8880  # Port for HTTP portal redirect, if guest portal is enabled.
-        8843  # Port for HTTPS portal redirect, ditto.
-        6789  # Port for UniFi mobile speed test.
+        8080 # Port for UAP to inform controller.
+        8880 # Port for HTTP portal redirect, if guest portal is enabled.
+        8843 # Port for HTTPS portal redirect, ditto.
+        6789 # Port for UniFi mobile speed test.
       ];
+
       allowedUDPPorts = [
-        3478  # UDP port used for STUN.
+        3478 # UDP port used for STUN.
         10001 # UDP port used for device discovery.
       ];
     };
@@ -139,23 +151,24 @@ in
 
       # This a HACK to fix missing dependencies of dynamic libs extracted from jars
       environment.LD_LIBRARY_PATH = with pkgs.stdenv; "${cc.cc.lib}/lib";
+
       # Make sure package upgrades trigger a service restart
-      restartTriggers = [ cfg.unifiPackage cfg.mongodbPackage ];
+      restartTriggers = [
+        cfg.unifiPackage
+        cfg.mongodbPackage
+      ];
 
       serviceConfig = {
         Type = "notify";
         ExecStart = "${cmd} start";
-        ExecStop = "${cmd} stop";
+        ExecStop = [
+          "${cmd} stop"
+          "${lib.getExe' pkgs.util-linux "waitpid"} -t 30 -e $MAINPID"
+        ];
         Restart = "always";
-        TimeoutSec = "5min";
         User = "unifi";
         UMask = "0077";
         WorkingDirectory = "${stateDir}";
-        # the stop command exits while the main process is still running, and unifi
-        # wants to manage its own child processes. this means we have to set KillSignal
-        # to something the main process ignores, otherwise every stop will have unifi.service
-        # fail with SIGTERM status.
-        KillSignal = "SIGCONT";
 
         # Hardening
         AmbientCapabilities = "";
@@ -208,14 +221,19 @@ in
 
         # Needs network access
         PrivateNetwork = false;
+
         # Cannot be true due to OpenJDK
         MemoryDenyWriteExecute = false;
       };
     };
-
   };
+
   imports = [
-    (lib.mkRemovedOptionModule [ "services" "unifi" "dataDir" ] "You should move contents of dataDir to /var/lib/unifi/data")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "unifi"
+      "dataDir"
+    ] "You should move contents of dataDir to /var/lib/unifi/data")
     (lib.mkRenamedOptionModule [ "services" "unifi" "openPorts" ] [ "services" "unifi" "openFirewall" ])
   ];
 }

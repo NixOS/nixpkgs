@@ -13,7 +13,7 @@ let
 in
 lib.appendToName "with-packages" (symlinkJoin {
 
-  inherit (idris) name;
+  inherit (idris) pname version;
 
   paths = paths ++ [ idris ];
 

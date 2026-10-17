@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  git,
+  gitMinimal,
   mercurial,
   makeWrapper,
   nix-update-script,
@@ -10,24 +10,20 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "fast-export";
-  version = "231118";
+  pname = "git-fast-export";
+  version = "260405";
 
   src = fetchFromGitHub {
     owner = "frej";
     repo = "fast-export";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-JUy0t2yzd4bI7WPGG1E8L1topLfR5leV/WTU+u0bCyM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8bZXTW0dKdkd49KGUyHl+cdmYqUtppzkwV1cLJsUzWE=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/frej/fast-export/commit/a3d0562737e1e711659e03264e45cb47a5a2f46d.patch?full_index=1";
-      hash = "sha256-vZOHnb5lXO22ElCK4oWQKCcPIqRyZV5axWfZqa84V1Y=";
-    })
+  nativeBuildInputs = [
+    gitMinimal
+    makeWrapper
   ];
-
-  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
     mercurial.python
     mercurial
@@ -48,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     for script in $out/bin/*.sh; do
       wrapProgram $script \
-        --prefix PATH : "${git}/bin":"${mercurial.python}/bin":$libexec \
+        --prefix PATH : "${gitMinimal}/bin":"${mercurial.python}/bin":$libexec \
         --prefix PYTHONPATH : "${mercurial}/${mercurial.python.sitePackages}":$sitepackagesPath
     done
   '';
@@ -56,22 +52,28 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   # deliberately not adding git or hg into nativeInstallCheckInputs - package should
   # be able to work without them in runtime env
+
+  nativeCheckInputs = [
+    gitMinimal
+    mercurial
+  ];
+
   installCheckPhase = ''
     mkdir repo-hg
     pushd repo-hg
-    ${mercurial}/bin/hg init
+    hg init
     echo foo > bar
-    ${mercurial}/bin/hg add bar
-    ${mercurial}/bin/hg commit --message "baz"
+    hg add bar
+    hg commit --message "baz"
     popd
 
     mkdir repo-git
     pushd repo-git
-    ${git}/bin/git init
-    ${git}/bin/git config core.ignoreCase false  # for darwin
+    git init
+    git config core.ignoreCase false  # for darwin
     $out/bin/hg-fast-export.sh -r ../repo-hg/ --hg-hash
     for s in "foo" "bar" "baz" ; do
-      (${git}/bin/git show | grep $s > /dev/null) && echo $s found
+      (git show | grep $s > /dev/null) && echo $s found
     done
     popd
   '';
@@ -84,5 +86,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.koral ];
     platforms = lib.platforms.unix;
+    mainProgram = "hg-fast-export.sh";
   };
 })

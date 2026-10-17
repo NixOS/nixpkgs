@@ -1,42 +1,40 @@
 {
   lib,
+  stdenv,
   bzip2,
   cmake,
-  darwin,
   fetchFromGitHub,
   libtomcrypt,
-  stdenv,
   zlib,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "stormlib";
-  version = "9.23";
+  version = "9.30";
 
   src = fetchFromGitHub {
     owner = "ladislav-zezula";
     repo = "StormLib";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-8JDMqZ5BWslH4+Mfo5lnWTmD2QDaColwBOLzcuGZciY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gW3jR9XnBo5uEORu12TpGsUMFAS4w5snWPA/bIUt9UY=";
   };
 
   nativeBuildInputs = [
     cmake
+    pkg-config
   ];
 
-  buildInputs =
-    [
-      bzip2
-      libtomcrypt
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Carbon
-    ];
+  buildInputs = [
+    bzip2
+    libtomcrypt
+    zlib
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
     (lib.cmakeBool "WITH_LIBTOMCRYPT" true)
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
   ];
 
   strictDeps = true;
@@ -50,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "FRAMEWORK DESTINATION /Library/Frameworks" "FRAMEWORK DESTINATION Library/Frameworks"
+      --replace-fail "FRAMEWORK DESTINATION /Library/Frameworks" "FRAMEWORK DESTINATION Library/Frameworks"
   '';
 
   meta = {
@@ -59,7 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       aanderse
-      karolchmist
     ];
     platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # installation directory mismatch

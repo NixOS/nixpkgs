@@ -1,35 +1,52 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   nix-update-script,
+  versionCheckHook,
+  stdenv,
 }:
-buildGoModule rec {
+buildGo127Module (finalAttrs: {
   pname = "jjui";
-  version = "0.1";
+  version = "0.10.11";
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "idursun";
     repo = "jjui";
-    rev = "v${version}";
-    hash = "sha256-MdSzY2JWL34qB13mX4FWG/4wzl30FmATYQ09N1v5Isc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-dHw1imeAenwa1/+bgcpS9LUs59UlJDS5LAujoIabVH0=";
   };
 
-  vendorHash = "sha256-pzbOFXSlEebc4fCyNyQSdeVqar+HfEjsSyJo+mHkQeg=";
+  vendorHash = "sha256-gHfE924uFXtSyRbt2uxK+1/lU04aC1wCgoHWJ3gE7xo=";
 
-  postFixup = ''
-    mv $out/bin/cmd $out/bin/jjui
-  '';
+  excludedPackages = [
+    # docker-based pty tests
+    "e2e"
+  ];
+
+  ldflags = [ "-X main.Version=${finalAttrs.version}" ];
+
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "-skip=TestServerAskpass"
+  ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-version";
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A TUI for Jujutsu VCS";
+    description = "TUI for Jujutsu VCS";
     homepage = "https://github.com/idursun/jjui";
+    changelog = "https://github.com/idursun/jjui/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      adamcstephens
       adda
     ];
     mainProgram = "jjui";
   };
-}
+})

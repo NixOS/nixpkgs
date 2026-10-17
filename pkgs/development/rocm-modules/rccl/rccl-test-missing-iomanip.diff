@@ -1,0 +1,10 @@
+--- a/test/common/TestBed.cpp
++++ b/test/common/TestBed.cpp
+@@ -4,6 +4,7 @@
+  * See LICENSE.txt for license information
+  ************************************************************************/
+ #include <unistd.h>
++#include <iomanip>
+ #include "TestBed.hpp"
+ #include <rccl/rccl.h>
+ 

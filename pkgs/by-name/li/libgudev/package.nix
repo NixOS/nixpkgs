@@ -46,17 +46,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      meson
-      ninja
-      glib # for glib-mkenums needed during the build
-    ]
-    ++ lib.optionals withIntrospection [
-      gobject-introspection
-      vala
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    glib # for glib-mkenums needed during the build
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+    vala
+  ];
 
   buildInputs = [
     udev
@@ -75,6 +74,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "tests" finalAttrs.finalPackage.doCheck)
   ];
 
+  # https://gitlab.gnome.org/GNOME/libgudev/-/issues/10
+  preCheck = ''
+    mesonCheckFlagsArray=( $(meson test --list | grep -v libgudev:test-gudevdevice) )
+  '';
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "libgudev";
@@ -82,11 +86,11 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library that provides GObject bindings for libudev";
     homepage = "https://gitlab.gnome.org/GNOME/libgudev";
-    maintainers = teams.gnome.members;
-    platforms = platforms.linux;
-    license = licenses.lgpl2Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl2Plus;
   };
 })

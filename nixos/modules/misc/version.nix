@@ -14,8 +14,8 @@ let
     concatStringsSep
     mapAttrsToList
     toLower
-    optionalString
     literalExpression
+    match
     mkRenamedOptionModule
     mkDefault
     mkOption
@@ -27,17 +27,18 @@ let
   escapeIfNecessary = s: if needsEscaping s then s else ''"${lib.escape [ "$" "\"" "\\" "`" ] s}"'';
   attrsToText =
     attrs:
-    concatStringsSep "\n" (mapAttrsToList (n: v: ''${n}=${escapeIfNecessary (toString v)}'') attrs)
+    concatStringsSep "\n" (mapAttrsToList (n: v: "${n}=${escapeIfNecessary (toString v)}") attrs)
     + "\n";
 
   osReleaseContents =
     let
       isNixos = cfg.distroId == "nixos";
+      optionalAttr = cond: attr: if cond then attr else null;
     in
     {
       NAME = "${cfg.distroName}";
       ID = "${cfg.distroId}";
-      ID_LIKE = optionalString (!isNixos) "nixos";
+      ${optionalAttr (!isNixos) "ID_LIKE"} = "nixos";
       VENDOR_NAME = cfg.vendorName;
       VERSION = "${cfg.release} (${cfg.codeName})";
       VERSION_CODENAME = toLower cfg.codeName;
@@ -46,16 +47,16 @@ let
       PRETTY_NAME = "${cfg.distroName} ${cfg.release} (${cfg.codeName})";
       CPE_NAME = "cpe:/o:${cfg.vendorId}:${cfg.distroId}:${cfg.release}";
       LOGO = "nix-snowflake";
-      HOME_URL = optionalString isNixos "https://nixos.org/";
-      VENDOR_URL = optionalString isNixos "https://nixos.org/";
-      DOCUMENTATION_URL = optionalString isNixos "https://nixos.org/learn.html";
-      SUPPORT_URL = optionalString isNixos "https://nixos.org/community.html";
-      BUG_REPORT_URL = optionalString isNixos "https://github.com/NixOS/nixpkgs/issues";
-      ANSI_COLOR = optionalString isNixos "0;38;2;126;186;228";
-      IMAGE_ID = optionalString (config.system.image.id != null) config.system.image.id;
-      IMAGE_VERSION = optionalString (config.system.image.version != null) config.system.image.version;
-      VARIANT = optionalString (cfg.variantName != null) cfg.variantName;
-      VARIANT_ID = optionalString (cfg.variant_id != null) cfg.variant_id;
+      ${optionalAttr isNixos "HOME_URL"} = "https://nixos.org/";
+      ${optionalAttr isNixos "VENDOR_URL"} = "https://nixos.org/";
+      ${optionalAttr isNixos "DOCUMENTATION_URL"} = "https://nixos.org/learn.html";
+      ${optionalAttr isNixos "SUPPORT_URL"} = "https://nixos.org/community.html";
+      ${optionalAttr isNixos "BUG_REPORT_URL"} = "https://github.com/NixOS/nixpkgs/issues";
+      ${optionalAttr isNixos "ANSI_COLOR"} = "0;38;2;126;186;228";
+      ${optionalAttr (config.system.image.id != null) "IMAGE_ID"} = config.system.image.id;
+      ${optionalAttr (config.system.image.version != null) "IMAGE_VERSION"} = config.system.image.version;
+      ${optionalAttr (cfg.variantName != null) "VARIANT"} = cfg.variantName;
+      ${optionalAttr (cfg.variant_id != null) "VARIANT_ID"} = cfg.variant_id;
       DEFAULT_HOSTNAME = config.system.nixos.distroId;
     }
     // cfg.extraOSReleaseArgs;
@@ -188,9 +189,9 @@ in
         description = ''
           Image identifier.
 
-          This corresponds to the IMAGE_ID field in os-release. See the
+          This corresponds to the `IMAGE_ID` field in {manpage}`os-release(5)`. See the
           upstream docs for more details on valid characters for this field:
-          https://www.freedesktop.org/software/systemd/man/latest/os-release.html#IMAGE_ID=
+          <https://www.freedesktop.org/software/systemd/man/latest/os-release.html#IMAGE_ID=>
 
           You would only want to set this option if you're build NixOS appliance images.
         '';
@@ -202,9 +203,9 @@ in
         description = ''
           Image version.
 
-          This corresponds to the IMAGE_VERSION field in os-release. See the
+          This corresponds to the `IMAGE_VERSION` field in {manpage}`os-release(5)`. See the
           upstream docs for more details on valid characters for this field:
-          https://www.freedesktop.org/software/systemd/man/latest/os-release.html#IMAGE_VERSION=
+          <https://www.freedesktop.org/software/systemd/man/latest/os-release.html#IMAGE_VERSION=>
 
           You would only want to set this option if you're build NixOS appliance images.
         '';
@@ -253,6 +254,30 @@ in
       '';
     };
 
+    moduleStateRevisions = mkOption {
+      type =
+        let
+          baseType = types.attrsOf types.ints.unsigned;
+          isStateRevisionOption = x: lib.isOption x && x ? migrations;
+        in
+        types.addCheck baseType (
+          attrs:
+          builtins.all (
+            attrPath: isStateRevisionOption (lib.attrByPath (lib.splitString "." attrPath) null options)
+          ) (builtins.attrNames attrs)
+        )
+        // {
+          description = "${baseType.description}, in which every attribute name is the path to an option created with mkStateRevisionOption";
+        };
+      default = { };
+      internal = true;
+      description = ''
+        NixOS modules should set attributes on this option. Users should leave
+        it alone. Future tooling may use it to determine the consequences of
+        updating {option}`system.stateVersion`.
+      '';
+    };
+
     configurationRevision = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -262,6 +287,27 @@ in
   };
 
   config = {
+
+    assertions = [
+      {
+        assertion = match "[0-9]{2}\\.[0-9]{2}" config.system.stateVersion != null;
+        message = ''
+          ${config.system.stateVersion} is an invalid value for 'system.stateVersion'; it must be in the format "YY.MM",
+          which corresponds to a prior release of NixOS.
+
+          If you want to switch releases or switch to unstable, you should change your channel and/or flake input URLs only.
+          *DO NOT* touch the 'system.stateVersion' option, as it will not help you upgrade.
+          Leave it exactly on the previous value, which is likely the value you had for it when you installed your system.
+
+          If you're unsure which value to set it to, use "${
+            if match "[0-9]{2}\\.[0-9]{2}" options.system.stateVersion.default != null then
+              options.system.stateVersion.default
+            else
+              options.system.nixos.release.default
+          }" as a default.
+        '';
+      }
+    ];
 
     system.nixos = {
       # These defaults are set here rather than up there so that

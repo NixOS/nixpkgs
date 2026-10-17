@@ -1,18 +1,18 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
-  setuptools,
-  setuptools-scm,
+  hatch-vcs,
+  hatchling,
 
   # dependencies
   matplotlib,
 
   # optional-dependencies
   arviz,
+  arviz-base,
   ipython,
   myst-nb,
   pandoc,
@@ -21,36 +21,37 @@
   pytest,
   scipy,
 
-  # checks
+  # tests
   pytestCheckHook,
-  corner,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "corner";
-  version = "2.2.2";
+  version = "2.3.0";
   pyproject = true;
-
-  disable = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "dfm";
     repo = "corner.py";
-    tag = "v${version}";
-    hash = "sha256-MYos01YCSUwivymSE2hbjV7eKXfaMqG89koD2CWZjcQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-H59IVXKPT4CLApn4kUuSuiYA9EWdOaH88Rd4YXf0VlQ=";
   };
 
   build-system = [
-    setuptools
-    setuptools-scm
+    hatch-vcs
+    hatchling
   ];
 
   dependencies = [ matplotlib ];
 
   optional-dependencies = {
-    arviz = [ arviz ];
+    arviz = [
+      arviz
+      arviz-base
+    ];
     docs = [
       arviz
+      arviz-base
       ipython
       myst-nb
       pandoc
@@ -66,10 +67,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "corner" ];
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ corner.optional-dependencies.test;
+  nativeCheckInputs = [
+    arviz
+    pytestCheckHook
+    scipy
+  ];
 
-  # matplotlib.testing.exceptions.ImageComparisonFailure: images not close
   disabledTests = [
+    # matplotlib.testing.exceptions.ImageComparisonFailure: images not close
+    "test_1d_fig_argument"
     "test_arviz"
     "test_basic"
     "test_bins"
@@ -97,6 +103,8 @@ buildPythonPackage rec {
     "test_title_quantiles_raises"
     "test_titles1"
     "test_titles2"
+    "test_titles_fmt_multi"
+    "test_titles_fmt_single"
     "test_top_ticks"
     "test_truths"
   ];
@@ -104,8 +112,8 @@ buildPythonPackage rec {
   meta = {
     description = "Make some beautiful corner plots";
     homepage = "https://github.com/dfm/corner.py";
-    changelog = "https://github.com/dfm/corner.py/releases/tag/v${version}";
+    changelog = "https://github.com/dfm/corner.py/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

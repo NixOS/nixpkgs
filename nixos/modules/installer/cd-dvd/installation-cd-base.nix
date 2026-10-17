@@ -1,14 +1,20 @@
 # This module contains the basic configuration for building a NixOS
 # installation CD.
-{ config, lib, options, pkgs, ... }:
 {
-  imports =
-    [ ./iso-image.nix
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
+{
+  imports = [
+    ./iso-image.nix
 
-      # Profiles of this basic installation CD.
-      ../../profiles/base.nix
-      ../../profiles/installation-device.nix
-    ];
+    # Profiles of this basic installation CD.
+    ../../profiles/base.nix
+    ../../profiles/installation-device.nix
+  ];
 
   hardware.enableAllHardware = true;
 
@@ -28,6 +34,7 @@
   # system layout on a fresh machine, before it has been formatted.
   swapDevices = lib.mkImageMediaOverride [ ];
   fileSystems = lib.mkImageMediaOverride config.lib.isoFileSystems;
+  boot.initrd.luks.devices = lib.mkImageMediaOverride { };
 
   boot.postBootCommands = ''
     for o in $(</proc/cmdline); do

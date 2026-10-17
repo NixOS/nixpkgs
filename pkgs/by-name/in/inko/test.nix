@@ -1,32 +1,37 @@
 {
   inko,
   writeText,
+  writableTmpDirAsHomeHook,
   runCommand,
   ...
 }:
 
 let
   source =
+    # https://docs.inko-lang.org/manual/v0.19.1/getting-started/hello-concurrency/#channels
     writeText "hello.inko" # inko
       ''
         import std.process (sleep)
-        import std.stdio (STDOUT)
+        import std.stdio (Stdout)
+        import std.sync (Channel)
         import std.time (Duration)
 
-        class async Printer {
-          fn async print(message: String, channel: Channel[Nil]) {
-            let _ = STDOUT.new.print(message)
+        type async Printer {
+          fn async print(message: String, channel: uni Channel[Nil]) {
+            let _ = Stdout.new.print(message)
 
             channel.send(nil)
           }
         }
 
-        class async Main {
+        type async Main {
           fn async main {
-            let channel = Channel.new(size: 2)
+            let channel = Channel.new
 
-            Printer().print('Hello', channel)
-            Printer().print('world', channel)
+            Printer().print('Hello', recover channel.clone)
+            Printer().print('world', recover channel.clone)
+
+            sleep(Duration.from_millis(500))
 
             channel.receive
             channel.receive
@@ -35,8 +40,12 @@ let
       '';
 in
 
-runCommand "inko-test" { } ''
-  ${inko}/bin/inko run ${source} > $out
-  cat $out | grep -q Hello
-  cat $out | grep -q world
-''
+runCommand "inko-test"
+  {
+    nativeBuildInputs = [ writableTmpDirAsHomeHook ];
+  }
+  ''
+    ${inko}/bin/inko run ${source} > $out
+    cat $out | grep -q Hello
+    cat $out | grep -q world
+  ''

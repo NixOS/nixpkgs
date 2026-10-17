@@ -2,34 +2,40 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  future,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "blockchain";
   version = "1.4.4";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "1qpbmz6dk5gx1996dswpipwhj6sp5j0dlfap012l46zqnvmkxanv";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-26o+67b4G0JFAFc52oAsVxsJ+Y2X62ZSCv2V2cyv6+I=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py --replace "enum-compat" ""
+    substituteInPlace blockchain/blockexplorer.py \
+      --replace-fail "from past.builtins import basestring" "basestring = str"
   '';
 
-  propagatedBuildInputs = [ future ];
+  build-system = [ setuptools ];
 
-  # tests are interacting with the API and not mocking the calls
+  pythonRemoveDeps = [
+    "enum-compat"
+    "future"
+  ];
+
+  # Tests require network access
   doCheck = false;
 
   pythonImportsCheck = [ "blockchain" ];
 
-  meta = with lib; {
-    description = "Python client Blockchain Bitcoin Developer API";
+  meta = {
+    description = "Blockchain API library (v1)";
     homepage = "https://github.com/blockchain/api-v1-client-python";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.jamiemagee ];
   };
-}
+})

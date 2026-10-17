@@ -14,19 +14,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "delly";
-  version = "1.3.3";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "dellytools";
     repo = "delly";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-e1dGiJeOLMFJ9oO7iMvKZHpg4XtrLJBpy8lECx5/iDE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9/nuVrqUHEK7vPtdqiqJLsb720/F4B/cIL3s1j6cWvo=";
   };
-
-  postPatch = lib.optionalString stdenv.cc.isClang ''
-    substituteInPlace Makefile \
-      --replace-fail "-std=c++17" "-std=c++14"
-  '';
 
   buildInputs = [
     boost
@@ -34,7 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
     htslib
     xz
     zlib
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
 
   makeFlags = [
     "EBROOTHTSLIB=${htslib}"
@@ -52,18 +48,19 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     simple = runCommand "${finalAttrs.pname}-test" { } ''
       mkdir $out
-      ${lib.getExe delly} call -g ${delly.src}/example/ref.fa ${delly.src}/example/sr.bam > $out/sr.vcf
+      ${lib.getExe delly} sr -g ${delly.src}/example/ref.fa ${delly.src}/example/sr.bam > $out/sr.vcf
       ${lib.getExe delly} lr -g ${delly.src}/example/ref.fa ${delly.src}/example/lr.bam > $out/lr.vcf
       ${lib.getExe delly} cnv -g ${delly.src}/example/ref.fa -m ${delly.src}/example/map.fa.gz ${delly.src}/example/sr.bam > cnv.vcf
     '';
   };
 
-  meta = with lib; {
-    description = "Structural variant caller for mapped DNA sequenced data";
+  meta = {
+    description = "Structural variant discovery by integrated paired-end and split-read analysis";
+    homepage = "https://github.com/dellytools/delly";
+    changelog = "https://github.com/dellytools/delly/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "delly";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ scalavision ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
     longDescription = ''
       Delly is an integrated structural variant (SV) prediction method
       that can discover, genotype and visualize deletions, tandem duplications,
@@ -72,5 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
       split-reads and read-depth to sensitively and accurately delineate
       genomic rearrangements throughout the genome.
     '';
+    maintainers = with lib.maintainers; [
+      debtquity
+    ];
   };
 })

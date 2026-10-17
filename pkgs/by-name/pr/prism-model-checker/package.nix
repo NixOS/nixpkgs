@@ -11,25 +11,27 @@
   makeDesktopItem,
   makeWrapper,
 }:
+
 let
   stdenv' = if stdenv.hostPlatform.isDarwin then gccStdenv else stdenv;
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "prism-model-checker";
-  version = "4.8.1";
+  version = "4.10";
 
   src = fetchFromGitHub {
     owner = "prismmodelchecker";
     repo = "prism";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-igFRIjPfx0BFpQjaW/vgMEnH2HLC06aL3IMHh+ELB6U=";
+    hash = "sha256-b5YjG/69ZcFxLtW5L6WJOmQBiMegywKgkIiZT42uthQ=";
   };
 
   nativeBuildInputs = [
     openjdk
     copyDesktopItems
     makeWrapper
-  ] ++ lib.optionals stdenv'.hostPlatform.isDarwin [ cctools ];
+  ]
+  ++ lib.optionals stdenv'.hostPlatform.isDarwin [ cctools ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -90,7 +92,7 @@ stdenv'.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Probabalistic Symbolic Model Checker";
+    description = "Probabilistic Symbolic Model Checker";
 
     homepage = "https://www.prismmodelchecker.org";
     license = lib.licenses.gpl2Plus;

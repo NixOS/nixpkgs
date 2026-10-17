@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  isPy27,
   fetchPypi,
   setuptools,
   setuptools-scm,
@@ -17,14 +16,12 @@
 
 buildPythonPackage rec {
   pname = "pooch";
-  version = "1.8.2";
-  format = "pyproject";
-
-  disabled = isPy27;
+  version = "1.9.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dlYfDeaKAdpN9q846ZVcTJ0aXJDac/fkAnalco7IPRA=";
+    hash = "sha256-3kZylXm5hX/9PnQZh6L21eDgMhmJLBZ8ZXjACR+1Ee0=";
   };
 
   nativeBuildInputs = [
@@ -71,10 +68,10 @@ buildPythonPackage rec {
     "test_stream_download"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Friend to fetch your data files";
     homepage = "https://github.com/fatiando/pooch";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ GuillaumeDesforges ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

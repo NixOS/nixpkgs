@@ -9,11 +9,12 @@
   pkg-config,
   openssl,
   curl,
+  writableTmpDirAsHomeHook,
+  installShellFiles,
   zlib,
-  Security,
-  CoreServices,
   libiconv,
   xz,
+  buildPackages,
 }:
 
 let
@@ -22,35 +23,35 @@ let
   ];
 in
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustup";
-  version = "1.27.1";
+  version = "1.29.1";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rustup";
-    rev = version;
-    sha256 = "sha256-BehkJTEIbZHaM+ABaWN/grl9pX75lPqyBj1q1Kt273M=";
+    tag = finalAttrs.version;
+    hash = "sha256-zL/N2Bx3HIEzrRQQVdTQ7VnSoNNbqe8FE26GcjwHSjM=";
   };
 
-  cargoHash = "sha256-iQoMPV97V9WJqT+qVtNpQtW5g+Jyl+U2uA+JEoRYTQA=";
+  cargoHash = "sha256-soSeDzZzIPxR9cham+0VQfI21LgLX5o/9r00xK7fNHY=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
     pkg-config
+    writableTmpDirAsHomeHook
+    installShellFiles
   ];
 
-  buildInputs =
-    [
-      (curl.override { inherit openssl; })
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreServices
-      Security
-      libiconv
-      xz
-    ];
+  buildInputs = [
+    openssl
+    curl
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+    xz
+  ];
 
   buildFeatures = [ "no-self-update" ];
 
@@ -76,6 +77,8 @@ rustPlatform.buildRustPackage rec {
   # Random tests fail nondeterministically on macOS.
   # TODO: Investigate this.
   doCheck = !stdenv.hostPlatform.isDarwin;
+  # Random failures when running tests in parallel.
+  dontUseCargoParallelTests = true;
 
   # skip failing tests
   checkFlags = [
@@ -84,7 +87,13 @@ rustPlatform.buildRustPackage rec {
     "--skip=suite::cli_exact::check_updates_some"
     "--skip=suite::cli_exact::check_updates_with_update"
     # rustup-init is not used in nix rustup
-    "--skip=suite::cli_ui::rustup_init_ui_doc_text_tests"
+    "--skip=suite::cli_rustup_init_ui"
+    # reaches out to the network to test TLS roots, which can't be done in the
+    # build sandbox
+    "--skip=suite::static_roots::store_static_roots"
+    # tries to hide the cc from rustup by setting PATH to an empty directory,
+    # but this doesn't work due to how nixpkgs wraps binaries
+    "--skip=suite::cli_inst_interactive::install_warns_if_default_linker_missing"
   ];
 
   postInstall = ''
@@ -102,18 +111,26 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/rustup --prefix "LD_LIBRARY_PATH" : "${libPath}"
 
     # tries to create .rustup
-    export HOME=$(mktemp -d)
     mkdir -p "$out/share/"{bash-completion/completions,fish/vendor_completions.d,zsh/site-functions}
 
-    # generate completion scripts for rustup
-    $out/bin/rustup completions bash rustup > "$out/share/bash-completion/completions/rustup"
-    $out/bin/rustup completions fish rustup > "$out/share/fish/vendor_completions.d/rustup.fish"
-    $out/bin/rustup completions zsh rustup >  "$out/share/zsh/site-functions/_rustup"
+    ${lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+      let
+        emulator = stdenv.hostPlatform.emulator buildPackages;
+      in
+      ''
+        # generate completion scripts for rustup
+        installShellCompletion --cmd rustup \
+          --bash <(${emulator} $out/bin/rustup completions bash rustup) \
+          --fish <(${emulator} $out/bin/rustup completions fish rustup) \
+          --zsh <(${emulator} $out/bin/rustup completions zsh rustup)
 
-    # generate completion scripts for cargo
-    # Note: fish completion script is not supported.
-    $out/bin/rustup completions bash cargo > "$out/share/bash-completion/completions/cargo"
-    $out/bin/rustup completions zsh cargo >  "$out/share/zsh/site-functions/_cargo"
+        # generate completion scripts for cargo
+        # Note: fish completion script is not supported.
+        installShellCompletion --cmd cargo \
+          --bash <(${emulator} $out/bin/rustup completions bash cargo) \
+          --zsh <(${emulator} $out/bin/rustup completions zsh cargo)
+      ''
+    )}
 
     # add a wrapper script for ld.lld
     mkdir -p $out/nix-support
@@ -127,7 +144,7 @@ rustPlatform.buildRustPackage rec {
     chmod +x $out/nix-support/ld-wrapper.sh
   '';
 
-  env = lib.optionalAttrs (pname == "rustup") {
+  env = {
     inherit (stdenv.cc.bintools)
       expandResponseParams
       shell
@@ -138,13 +155,17 @@ rustPlatform.buildRustPackage rec {
     hardening_unsupported_flags = "";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Rust toolchain installer";
     homepage = "https://www.rustup.rs/";
-    license = with licenses; [
+    changelog = "https://github.com/rust-lang/rustup/blob/${finalAttrs.version}/CHANGELOG.md";
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = [ maintainers.mic92 ];
+    maintainers = with lib.maintainers; [
+      mic92
+    ];
+    mainProgram = "rustup";
   };
-}
+})

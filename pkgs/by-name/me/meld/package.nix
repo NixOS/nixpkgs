@@ -20,15 +20,15 @@
   desktopToDarwinBundle,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "meld";
-  version = "3.22.3";
+  version = "3.24.1";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-N/fynrH/D+xNiwiNVIPFVt4QifbQGP5tSBmTyvJJnYQ=";
+    url = "mirror://gnome/sources/meld/${lib.versions.majorMinor finalAttrs.version}/meld-${finalAttrs.version}.tar.xz";
+    hash = "sha256-Kd/uDYV7icL6Ta18n7nkhQbYveP3G2Y0eYZZ5ml8ax4=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,8 @@ python3.pkgs.buildPythonApplication rec {
     gobject-introspection
     wrapGAppsHook3
     gtk3 # for gtk-update-icon-cache
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   buildInputs = [
     gtk3
@@ -60,22 +61,28 @@ python3.pkgs.buildPythonApplication rec {
     patchShebangs meson_shebang_normalisation.py
   '';
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "meld";
       versionPolicy = "none"; # should be odd-unstable but we are tracking unstable versions for now
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Visual diff and merge tool";
     homepage = "https://meld.app/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [
       jtojnar
       mimame
     ];
     mainProgram = "meld";
   };
-}
+})

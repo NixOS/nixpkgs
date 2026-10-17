@@ -6,17 +6,21 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hanko";
-  version = "0.5.2";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "SRv6d";
     repo = "hanko";
-    tag = "v${version}";
-    hash = "sha256-gytnUta/sNa8vJMvVS/DMwRc4R/8rmOnEfBKEjRpfGs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-raQl8inNOO9pRQnlESrQ5dSbQG7uC3LtQIv8AOqD+e0=";
   };
-  cargoHash = "sha256-rlKFS1ppUoyZ1X2PeG8tEB44Ysqi7kCLqR+ECVIdPjs=";
+
+  cargoHash = "sha256-EuYJX1Ds4Kq2Vka5gDnFHRHl3F20xMDm2XgYy4+FZXE=";
+
+  # Upstream tests require network access, which is unavailable in the sandbox.
+  doCheck = false;
 
   passthru = {
     updateScript = nix-update-script { };
@@ -40,4 +44,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ srv6d ];
     mainProgram = "hanko";
   };
-}
+})

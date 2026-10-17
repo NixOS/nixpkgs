@@ -16,14 +16,13 @@ let
 
   inherit (lib.lists) last;
 
-  /*
+  /**
     IPv6 addresses are 128-bit identifiers. The preferred form is 'x:x:x:x:x:x:x:x',
     where the 'x's are one to four hexadecimal digits of the eight 16-bit pieces of
     the address. See RFC 4291.
   */
   ipv6Bits = 128;
   ipv6Pieces = 8; # 'x:x:x:x:x:x:x:x'
-  ipv6PieceBits = 16; # One piece in range from 0 to 0xffff.
   ipv6PieceMaxValue = 65535; # 2^16 - 1
 in
 let
@@ -33,7 +32,7 @@ let
     the list of strings which then can be parsed using `_parseExpanded`.
     Throws an error when the address is malformed.
 
-    # Type: String -> [ String ]
+    # Type: String -> [String]
 
     # Example:
 
@@ -94,7 +93,7 @@ let
     functions.
     Throws an error some element is not an u16 integer.
 
-    # Type: [ String ] -> IPv6
+    # Type: [String] -> IPv6
 
     # Example:
 
@@ -105,9 +104,9 @@ let
   */
   parseExpandedIpv6 =
     addr:
-    assert lib.assertMsg (
+    assert
       length addr == ipv6Pieces
-    ) "parseExpandedIpv6: expected list of integers with ${ipv6Pieces} elements";
+      || throw "parseExpandedIpv6: expected list of integers with ${ipv6Pieces} elements";
     let
       u16FromHexStr =
         hex:
@@ -138,7 +137,7 @@ let
   parseIpv6FromString = addr: parseExpandedIpv6 (expandIpv6 addr);
 in
 {
-  /*
+  /**
     Internally, an IPv6 address is stored as a list of 16-bit integers with 8
     elements. Wherever you see `IPv6` in internal functions docs, it means that
     it is a list of integers produced by one of the internal parsers, such as
@@ -168,7 +167,7 @@ in
       prefix length are validated and converted to an internal representation
       that can be used by other functions.
 
-      # Type: String -> [ {address :: IPv6, prefixLength :: Int} ]
+      # Type: String -> [{ address :: IPv6; prefixLength :: Int; }]
 
       # Example:
 

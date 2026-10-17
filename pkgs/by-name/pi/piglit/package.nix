@@ -3,6 +3,9 @@
   fetchFromGitLab,
   lib,
   cmake,
+  glslang,
+  libffi,
+  libgbm,
   libglut,
   libGL,
   libGLU,
@@ -11,34 +14,42 @@
   ninja,
   pkg-config,
   python3,
+  vulkan-loader,
   waffle,
   wayland,
-  libX11,
-  libXrender,
+  wayland-protocols,
+  wayland-scanner,
+  libxau,
+  libx11,
+  libxrender,
   libxcb,
   libxkbcommon,
   mesa,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "piglit";
-  version = "unstable-2020-10-23";
+  version = "unstable-2026-05-04";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mesa";
     repo = "piglit";
-    rev = "59e695c16fdcdd4ea4f16365f0e397a93cef7b80";
-    sha256 = "kx0+2Sdvdc3SbpAIl2OuGCWCpaLJC/7cXG+ZLvf92g8=";
+    rev = "1bb2910c3fced64396feddd205e356d80e5ff7d9";
+    hash = "sha256-/3OQeZiK7fHfPpSlFtbW7DLEFV3YFBL1cLMndXyxwYs=";
   };
 
   buildInputs = [
+    glslang
+    libffi
+    libgbm
     libglut
     libGL
     libGLU
     libglvnd
-    libX11
-    libXrender
+    libxau
+    libx11
+    libxrender
     libxcb
     libxkbcommon
     (python3.withPackages (
@@ -47,8 +58,11 @@ stdenv.mkDerivation rec {
         numpy
       ]
     ))
+    vulkan-loader
     waffle
     wayland
+    wayland-protocols
+    wayland-scanner
   ];
 
   nativeBuildInputs = [
@@ -76,12 +90,12 @@ stdenv.mkDerivation rec {
       --prefix PATH : "${waffle}/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "OpenGL test suite, and test-suite runner";
     homepage = "https://gitlab.freedesktop.org/mesa/piglit";
-    license = licenses.free; # custom license. See COPYING in the source repo.
+    license = lib.licenses.free; # custom license. See COPYING in the source repo.
     inherit (mesa.meta) platforms;
-    maintainers = with maintainers; [ Flakebi ];
+    maintainers = with lib.maintainers; [ Flakebi ];
     mainProgram = "piglit";
   };
 }

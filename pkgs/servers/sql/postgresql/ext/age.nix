@@ -1,38 +1,57 @@
 {
-  lib,
-  stdenv,
   bison,
   fetchFromGitHub,
   flex,
+  lib,
   perl,
   postgresql,
-  buildPostgresqlExtension,
+  postgresqlBuildExtension,
+  stdenv,
 }:
 
 let
-  hashes = {
-    # Issue tracking PostgreSQL 17 support: https://github.com/apache/age/issues/2111
-    # "17" = "";
-    "16" = "sha256-sXh/vmGyYj00ALfFVdeql2DZ6nCJQDNKyNgzlOZnPAw=";
-    "15" = "sha256-webZWgWZGnSoXwTpk816tjbtHV1UIlXkogpBDAEL4gM=";
-    "14" = "sha256-jZXhcYBubpjIJ8M5JHXKV5f6VK/2BkypH3P7nLxZz3E=";
-    "13" = "sha256-HR6nnWt/V2a0rD5eHHUsFIZ1y7lmvLz36URt9pPJnCw=";
-    "12" = "sha256-JFNk17ESsIt20dwXrfBkQ5E6DbZzN/Q9eS6+WjCXGd4=";
+  sources = {
+    "19" = {
+      version = "1.8.0-rc0";
+      hash = "sha256-tEWWn2Wtz30N18pfvW+R3TEylustFeII7kBE1aiJw80=";
+    };
+    "18" = {
+      version = "1.8.0-rc0";
+      hash = "sha256-QtcH0lUWvey/URZm/cqh1TempMU2Vnerzu6SQg+yofA=";
+    };
+    "17" = {
+      version = "1.7.0-rc0";
+      hash = "sha256-hAjhNj/benwZbbuxDl9RSjwWRai9CUozbEN6ecPKoFE=";
+    };
+    "16" = {
+      version = "1.6.0-rc0";
+      hash = "sha256-iukdi2c3CukGvjuTojybFFAZBlAw8GEfzFPr2qJuwTA=";
+    };
+    "15" = {
+      version = "1.6.0-rc0";
+      hash = "sha256-W4EALCgCuyzCOUiTu5aU2fz2P8rJFv+7/8m+d+dIV60=";
+    };
+    "14" = {
+      version = "1.6.0-rc0";
+      hash = "sha256-6TTuqJs//QpNgNMw4TZf/3rdtMGSO/ytG4s8i+Jv2d8=";
+    };
   };
+
+  source =
+    sources.${lib.versions.major postgresql.version} or {
+      version = "";
+      hash = throw "Source for Age is not available for ${postgresql.version}";
+    };
 in
-buildPostgresqlExtension rec {
+postgresqlBuildExtension (finalAttrs: {
   pname = "age";
-  version = "1.5.0-rc0";
+  inherit (source) version;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "age";
-    rev = "PG${lib.versions.major postgresql.version}/v${
-      builtins.replaceStrings [ "." ] [ "_" ] version
-    }";
-    hash =
-      hashes.${lib.versions.major postgresql.version}
-      or (throw "Source for Age is not available for ${postgresql.version}");
+    tag = "PG${lib.versions.major postgresql.version}/v${finalAttrs.version}";
+    inherit (source) hash;
   };
 
   makeFlags = [
@@ -43,7 +62,7 @@ buildPostgresqlExtension rec {
 
   enableUpdateScript = false;
   passthru.tests = stdenv.mkDerivation {
-    inherit version src;
+    inherit (finalAttrs) version src;
 
     pname = "age-regression";
 
@@ -51,7 +70,7 @@ buildPostgresqlExtension rec {
 
     buildPhase =
       let
-        postgresqlAge = postgresql.withPackages (ps: [ ps.age ]);
+        postgresqlAge = postgresql.withPackages (_: [ finalAttrs.finalPackage ]);
       in
       ''
         # The regression tests need to be run in the order specified in the Makefile.
@@ -73,13 +92,13 @@ buildPostgresqlExtension rec {
     '';
   };
 
-  meta = with lib; {
-    broken = !builtins.elem (versions.major postgresql.version) (builtins.attrNames hashes);
+  meta = {
+    broken = !builtins.elem (lib.versions.major postgresql.version) (builtins.attrNames sources);
     description = "Graph database extension for PostgreSQL";
     homepage = "https://age.apache.org/";
-    changelog = "https://github.com/apache/age/raw/v${src.rev}/RELEASE";
-    maintainers = [ ];
+    changelog = "https://github.com/apache/age/raw/refs/tags/PG${lib.versions.major postgresql.version}/v${finalAttrs.version}/RELEASE";
+    maintainers = with lib.maintainers; [ anish ];
     platforms = postgresql.meta.platforms;
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
-}
+})

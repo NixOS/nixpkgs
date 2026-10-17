@@ -3,21 +3,28 @@
   buildGoModule,
   fetchFromGitHub,
   runtimeShell,
+  udevCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "xe-guest-utilities";
-  version = "8.4.0";
+  version = "10.0.1";
 
   src = fetchFromGitHub {
     owner = "xenserver";
     repo = "xe-guest-utilities";
-    rev = "v${version}";
-    hash = "sha256-LpZx+Km2qRywYK/eFLP3aCDku6K6HC4+MzEODH+8Gvs=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-KUcsCk5ll+fjLS3HORHB6lirFMgGSNZBorgNPUFKW9Y=";
   };
 
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
+
   deleteVendor = true;
-  vendorHash = "sha256-X/BI+ZhoqCGCmJfccyEBVgZc70aRTp3rL5j+rBWG5fE=";
+  vendorHash = "sha256-YhgCs5iYvY34EWh/bl47Dr3Nrfi55QK4T7i47C77B9w=";
 
   postPatch = ''
     substituteInPlace mk/xen-vcpu-hotplug.rules \
@@ -48,4 +55,4 @@ buildGoModule rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

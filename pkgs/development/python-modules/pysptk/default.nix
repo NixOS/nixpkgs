@@ -1,49 +1,62 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
-  cython,
-  decorator,
   fetchPypi,
+  cython,
+  pytestCheckHook,
+  setuptools,
+  decorator,
   numpy,
-  pythonOlder,
   scipy,
-  six,
+  standard-pkg-resources,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysptk";
   version = "1.0.1";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) version;
+    pname = "pysptk";
     hash = "sha256-eLHJM4v3laQc3D/wP81GmcQBwyP1RjC7caGXEAeNCz8=";
   };
 
-  PYSPTK_BUILD_VERSION = 0;
+  build-system = [
+    cython
+    setuptools
+  ];
 
-  nativeBuildInputs = [ cython ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     decorator
     numpy
     scipy
-    six
+    standard-pkg-resources
   ];
 
-  # Tests are not part of the PyPI releases
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  # Remove source to prevent the tests from trying to import it
+  preCheck = ''
+    rm -r pysptk
+  '';
+
+  disabledTests = [
+    # These tests rely on test data not present in the pypi release
+    "test_rapt_regression"
+    "test_swipe_regression"
+  ];
 
   pythonImportsCheck = [ "pysptk" ];
 
-  meta = with lib; {
-    broken = stdenv.hostPlatform.isDarwin;
+  meta = {
     description = "Wrapper for Speech Signal Processing Toolkit (SPTK)";
     homepage = "https://pysptk.readthedocs.io/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hyphon81 ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
-}
+})

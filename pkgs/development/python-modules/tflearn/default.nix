@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "818aa57667693810415dc203ba3f75f1541e931a8dc30b6e8b21563541a70388";
+    hash = "sha256-gYqldmdpOBBBXcIDuj918VQekxqNwwtuiyFWNUGnA4g=";
   };
 
   buildInputs = [ pytest ];
@@ -30,9 +30,9 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Deep learning library featuring a higher-level API for TensorFlow";
     homepage = "https://github.com/tflearn/tflearn";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

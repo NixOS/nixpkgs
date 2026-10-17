@@ -3,21 +3,18 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "appimage";
-  version = "1.0.0";
+  version = "1.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ssh-mitm";
     repo = "appimage";
-    tag = version;
-    hash = "sha256-d8LwZ4iZ+fwFaBP/IFoKImI/TsYtVD0rllbYN9XP/es=";
+    tag = finalAttrs.version;
+    hash = "sha256-aL0JcA6R2FUMcXykbXaSaUEz1ERs3iKh4c0cbRAClSY=";
   };
 
   build-system = [ hatchling ];
@@ -30,8 +27,8 @@ buildPythonPackage rec {
   meta = {
     description = "AppImage start scripts";
     homepage = "https://github.com/ssh-mitm/appimage";
-    changelog = "https://github.com/ssh-mitm/appimage/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/ssh-mitm/appimage/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

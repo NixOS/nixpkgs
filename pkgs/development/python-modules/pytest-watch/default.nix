@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "06136f03d5b361718b8d0d234042f7b2f203910d8568f63df2f866b547b3d4b9";
+    hash = "sha256-BhNvA9WzYXGLjQ0jQEL3svIDkQ2FaPY98vhmtUez1Lk=";
   };
 
   buildInputs = [ pytest ];
@@ -30,10 +30,10 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "pytest_watch" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/joeyespo/pytest-watch";
     description = "Local continuous test runner with pytest and watchdog";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dmvianna ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dmvianna ];
   };
 }

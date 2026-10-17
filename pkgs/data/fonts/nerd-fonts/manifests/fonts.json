@@ -5,7 +5,7 @@
     "folderName": "0xProto",
     "licenseId": "OFL-1.1-no-RFN",
     "patchedName": "0xProto",
-    "version": "2.201"
+    "version": "2.502"
   },
   {
     "caskName": "3270",
@@ -16,12 +16,28 @@
     "version": "3.0.1"
   },
   {
+    "caskName": "adwaita-mono",
+    "description": "The monospace typeface for GNOME",
+    "folderName": "AdwaitaMono",
+    "licenseId": "OFL-1.1-no-RFN",
+    "patchedName": "AdwaitaMono",
+    "version": "34.1"
+  },
+  {
     "caskName": "agave",
     "description": "A small, monospace, outline font that is geometrically regular and simple",
     "folderName": "Agave",
-    "licenseId": "MIT",
+    "licenseId": "OFL-1.1-no-RFN",
     "patchedName": "Agave",
-    "version": "37"
+    "version": "38"
+  },
+  {
+    "caskName": "annotationmono",
+    "description": "Idealized handwriting; legibility maximized while retaining hand-written character",
+    "folderName": "AnnotationMono",
+    "licenseId": "OFL-1.1-no-RFN",
+    "patchedName": "AnnotationM",
+    "version": "0.4"
   },
   {
     "caskName": "anonymice",
@@ -35,9 +51,17 @@
     "caskName": "arimo",
     "description": "Metrically similar to Arial, pan-European WGL character set, sans serif",
     "folderName": "Arimo",
-    "licenseId": "Apache-2.0",
+    "licenseId": "OFL-1.1-no-RFN",
     "patchedName": "Arimo",
     "version": "1.33"
+  },
+  {
+    "caskName": "atkynson-mono",
+    "description": "A monospaced font designed to improve legibility and readability for individuals with low vision",
+    "folderName": "AtkinsonHyperlegibleMono",
+    "licenseId": "OFL-1.1-RFN",
+    "patchedName": "AtkynsonMono",
+    "version": "2.001"
   },
   {
     "caskName": "aurulent-sans-mono",
@@ -77,7 +101,7 @@
     "folderName": "CascadiaCode",
     "licenseId": "OFL-1.1-RFN",
     "patchedName": "CaskaydiaCove",
-    "version": "2111.01"
+    "version": "2407.24"
   },
   {
     "caskName": "caskaydia-mono",
@@ -85,7 +109,7 @@
     "folderName": "CascadiaMono",
     "licenseId": "OFL-1.1-RFN",
     "patchedName": "CaskaydiaMono",
-    "version": "2111.01"
+    "version": "2407.24"
   },
   {
     "caskName": "code-new-roman",
@@ -101,7 +125,7 @@
     "folderName": "ComicShannsMono",
     "licenseId": "MIT",
     "patchedName": "ComicShannsMono",
-    "version": "1.3.1"
+    "version": "1.3.2"
   },
   {
     "caskName": "commit-mono",
@@ -115,16 +139,16 @@
     "caskName": "cousine",
     "description": "Similar to Courier New with better readablitiy, dotted zeros",
     "folderName": "Cousine",
-    "licenseId": "Apache-2.0",
+    "licenseId": "OFL-1.1-no-RFN",
     "patchedName": "Cousine",
-    "version": "1.211"
+    "version": "1.241"
   },
   {
     "caskName": "d2coding",
     "description": "A coding font for Koreans. This is the variant with ligatures.",
     "folderName": "D2Coding",
-    "licenseId": "OFL-1.1-no-RFN",
-    "patchedName": "D2CodingLigature",
+    "licenseId": "OFL-1.1-RFN",
+    "patchedName": "D2KodingLigature",
     "version": "1.3.2"
   },
   {
@@ -136,20 +160,20 @@
     "version": "1.2.3"
   },
   {
-    "caskName": "departure-mono",
-    "description": "A monospaced pixel font with a lo-fi, techy vibe",
-    "folderName": "DepartureMono",
-    "licenseId": "OFL-1.1-no-RFN",
-    "patchedName": "DepartureMono",
-    "version": "1.422"
-  },
-  {
     "caskName": "dejavu-sans-mono",
     "description": "Dotted zero, based on the Bitstream Vera Fonts with a wider range of character",
     "folderName": "DejaVuSansMono",
     "licenseId": "Bitstream-Vera",
     "patchedName": "DejaVuSansM",
     "version": "2.37"
+  },
+  {
+    "caskName": "departure-mono",
+    "description": "A monospaced pixel font with a lo-fi, techy vibe",
+    "folderName": "DepartureMono",
+    "licenseId": "OFL-1.1-no-RFN",
+    "patchedName": "DepartureMono",
+    "version": "1.500"
   },
   {
     "caskName": "droid-sans-mono",
@@ -197,7 +221,7 @@
     "folderName": "GeistMono",
     "licenseId": "OFL-1.1-no-RFN",
     "patchedName": "GeistMono",
-    "version": "1.2.0 (1.3.0)"
+    "version": "1.702"
   },
   {
     "caskName": "go-mono",
@@ -214,6 +238,14 @@
     "licenseId": "WTFPL",
     "patchedName": "GohuFont",
     "version": "2.0"
+  },
+  {
+    "caskName": "googlesanscode",
+    "description": "Designed to bring clarity, readability, and a bit of Google's distinctive brand character to code",
+    "folderName": "GoogleSansCode",
+    "licenseId": "OFL-1.1-no-RFN",
+    "patchedName": "GoogleSansCode",
+    "version": "7.001"
   },
   {
     "caskName": "hack",
@@ -277,7 +309,7 @@
     "folderName": "InconsolataLGC",
     "licenseId": "OFL-1.1-no-RFN",
     "patchedName": "Inconsolata LGC",
-    "version": "1.5.2"
+    "version": "3.201"
   },
   {
     "caskName": "intone-mono",
@@ -293,7 +325,7 @@
     "folderName": "Iosevka",
     "licenseId": "OFL-1.1-no-RFN",
     "patchedName": "Iosevka",
-    "version": "29.0.4"
+    "version": "34.8.0"
   },
   {
     "caskName": "iosevka-term",
@@ -301,7 +333,7 @@
     "folderName": "IosevkaTerm",
     "licenseId": "OFL-1.1-no-RFN",
     "patchedName": "IosevkaTerm",
-    "version": "29.0.4"
+    "version": "34.8.0"
   },
   {
     "caskName": "iosevka-term-slab",
@@ -309,7 +341,7 @@
     "folderName": "IosevkaTermSlab",
     "licenseId": "OFL-1.1-no-RFN",
     "patchedName": "IosevkaTermSlab",
-    "version": "29.0.4"
+    "version": "34.8.0"
   },
   {
     "caskName": "jetbrains-mono",
@@ -341,7 +373,7 @@
     "folderName": "Lilex",
     "licenseId": "OFL-1.1-no-RFN",
     "patchedName": "Lilex",
-    "version": "2.400"
+    "version": "2.700"
   },
   {
     "caskName": "martian-mono",
@@ -349,7 +381,7 @@
     "folderName": "MartianMono",
     "licenseId": "OFL-1.1-no-RFN",
     "patchedName": "MartianMono",
-    "version": "1.0.0"
+    "version": "1.1.0"
   },
   {
     "caskName": "meslo-lg",
@@ -365,7 +397,7 @@
     "folderName": "Monaspace",
     "licenseId": "OFL-1.1-RFN",
     "patchedName": "Monaspice",
-    "version": "1.101"
+    "version": "1.400"
   },
   {
     "caskName": "monofur",
@@ -392,12 +424,12 @@
     "version": "1.6"
   },
   {
-    "caskName": "mplus",
+    "caskName": "m+",
     "description": "Multiple styles and weights, many glyph sets (e.g. Kana glyphs)",
     "folderName": "MPlus",
     "licenseId": "OFL-1.1-no-RFN",
     "patchedName": "M+",
-    "version": "2023/09"
+    "version": "1.100"
   },
   {
     "caskName": "noto",
@@ -477,7 +509,7 @@
     "folderName": "SpaceMono",
     "licenseId": "OFL-1.1-no-RFN",
     "patchedName": "SpaceMono",
-    "version": "1.001"
+    "version": "1.003"
   },
   {
     "caskName": "symbols-only",
@@ -525,7 +557,7 @@
     "folderName": "UbuntuSans",
     "licenseId": "LicenseRef-UbuntuFont",
     "patchedName": "UbuntuSans",
-    "version": "1.004"
+    "version": "1.006 / 1.100"
   },
   {
     "caskName": "victor-mono",

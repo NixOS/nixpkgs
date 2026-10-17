@@ -4,36 +4,34 @@
   nix-update-script,
   versionCheckHook,
 
-  withFish ? false,
-  fish,
-
   lib,
   makeWrapper,
   xdg-utils,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "granted";
-  version = "0.37.0";
+  version = "0.39.0";
 
   src = fetchFromGitHub {
-    owner = "common-fate";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-dy56xrn2BiVoFoQMnkl9jglecY9HAoRU/yubv5ddNU8=";
+    owner = "fwdcloudsec";
+    repo = "granted";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-/5JP6laC+k+O8GWSl1eo0slqzYzYB86UF3irDX6Z0iQ=";
   };
 
-  vendorHash = "sha256-xL4+N1+Jb8KI9UbLfPV4R/MrIqL+6Lgpzsgq86J9cnE=";
+  vendorHash = "sha256-L96zj/AEUze/SfuFeK+I1+w2zXcxr5BSW3wGQFbTbJU=";
 
   nativeBuildInputs = [ makeWrapper ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/common-fate/granted/internal/build.Version=v${version}"
-    "-X github.com/common-fate/granted/internal/build.Commit=${src.rev}"
-    "-X github.com/common-fate/granted/internal/build.Date=1970-01-01-00:00:01"
-    "-X github.com/common-fate/granted/internal/build.BuiltBy=Nix"
+    "-X github.com/fwdcloudsec/granted/internal/build.Version=v${finalAttrs.version}"
+    "-X github.com/fwdcloudsec/granted/internal/build.Commit=${finalAttrs.src.rev}"
+    "-X github.com/fwdcloudsec/granted/internal/build.Date=1970-01-01-00:00:01"
+    "-X github.com/fwdcloudsec/granted/internal/build.BuiltBy=Nix"
+    "-X github.com/fwdcloudsec/granted/internal/build.ConfigFolderName=.granted"
   ];
 
   subPackages = [
@@ -75,12 +73,11 @@ buildGoModule rec {
 
       # Insert below the #!/bin/sh shebang
       echo "$addToPath" | sed "/#!\/bin\/sh/r /dev/stdin" $src/scripts/assume >> $out/bin/assume
-    ''
-    + lib.optionalString withFish ''
+
       # Install fish script
       install -Dm755 $src/scripts/assume.fish $out/share/assume.fish
       substituteInPlace $out/share/assume.fish \
-        --replace /bin/fish ${fish}/bin/fish
+        --replace-fail "#!/bin/fish" "#!/usr/bin/env fish"
     '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -88,13 +85,13 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Easiest way to access your cloud";
-    homepage = "https://github.com/common-fate/granted";
-    changelog = "https://github.com/common-fate/granted/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    homepage = "https://github.com/fwdcloudsec/granted";
+    changelog = "https://github.com/fwdcloudsec/granted/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       jlbribeiro
     ];
   };
-}
+})

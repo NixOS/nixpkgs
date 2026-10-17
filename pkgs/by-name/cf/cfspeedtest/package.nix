@@ -3,27 +3,53 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cfspeedtest";
-  version = "1.3.0";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "code-inflation";
-    repo = pname;
-    tag = "v${version}";
-    hash = "sha256-7FKUP6ZCIGmP/WX6lUwrUT7QEVo/LGJz46ZmqPeRTW8=";
+    repo = "cfspeedtest";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xwiWYTqs1ZQg7CQYg2IqskMV5HMrFqNstobDkh17GyU=";
   };
 
-  cargoHash = "sha256-gckl2WHpuu7Gcubx/VEpHNW7jT76r9QHaAociQh+Zrc=";
+  cargoHash = "sha256-CBNShvjczlegOOrdULpPZ5GPdaWWqP3yhQFc9spaNlg=";
 
-  meta = with lib; {
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd cfspeedtest \
+      --bash <($out/bin/cfspeedtest --generate-completion bash) \
+      --fish <($out/bin/cfspeedtest --generate-completion fish) \
+      --zsh <($out/bin/cfspeedtest --generate-completion zsh)
+  '';
+
+  # require internet access
+  checkFlags = map (t: "--skip=${t}") [
+    "speedtest::tests::test_fetch_metadata_integration"
+    "speedtest::tests::test_fetch_metadata_ipv6_timeout_error"
+    "speedtest::tests::test_run_tests_does_not_retry_non_retryable_4xx"
+    "speedtest::tests::test_run_tests_retries_429_and_records_success"
+    "speedtest::tests::test_run_tests_retry_delay_resets_after_success"
+    "speedtest::tests::test_run_tests_retry_delay_uses_retry_streak_not_total_attempts"
+    "speedtest::tests::test_run_tests_stops_after_max_attempts_on_retryable_failures"
+    "speedtest::tests::test_upload_duration_excludes_delayed_response_body"
+    "speedtest::tests::test_upload_retryable_failure_parses_retry_after_without_drain_skew"
+  ];
+
+  meta = {
     description = "Unofficial CLI for speed.cloudflare.com";
     homepage = "https://github.com/code-inflation/cfspeedtest";
-    license = with licenses; [ mit ];
-    broken = stdenv.hostPlatform.isDarwin;
-    maintainers = with maintainers; [ colemickens ];
+    changelog = "https://github.com/code-inflation/cfspeedtest/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      colemickens
+      stepbrobd
+    ];
     mainProgram = "cfspeedtest";
   };
-}
+})

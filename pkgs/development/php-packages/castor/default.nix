@@ -3,40 +3,47 @@
   fetchFromGitHub,
   installShellFiles,
   php,
+  stdenv,
   nix-update-script,
-  testers,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "castor";
-  version = "0.22.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "jolicode";
     repo = "castor";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-PJtl1/Eete7zK81grQHdWtr9PBbLL0lC3nwz0vxtFx0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-naG0SBWARro92PGUA9dAKMYCGYEA/vsXOA8inAIcXkk=";
   };
 
-  vendorHash = "sha256-TjvbuvOwML9v1fMOA+ld9PM2wyysgL4Ws9Swf+N2nwk=";
+  vendorHash = "sha256-4YNO5dNtZnnP/UFUax/GQ+UBcIbzXfYwB7yQv6Mf7ig=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    writableTmpDirAsHomeHook
+  ];
 
-  # install shell completions
-  postInstall = ''
+  # castor loads castor.php from the working directory, so generate the
+  # completions outside the source tree to prevent it
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    pushd "$(mktemp -d)"
     installShellCompletion --cmd castor \
       --bash <(php $out/bin/castor completion bash) \
       --fish <(php $out/bin/castor completion fish) \
       --zsh <(php $out/bin/castor completion zsh)
+    popd
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      command = "castor --version";
-      package = php.packages.castor;
-      version = "v${finalAttrs.version}";
-    };
   };
 
   meta = {
@@ -44,7 +51,8 @@ php.buildComposerProject2 (finalAttrs: {
     description = "DX oriented task runner and command launcher built with PHP";
     homepage = "https://github.com/jolicode/castor";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ gaelreyrol ];
+    maintainers = [ ];
     mainProgram = "castor";
+    broken = lib.versionOlder php.version "8.4";
   };
 })

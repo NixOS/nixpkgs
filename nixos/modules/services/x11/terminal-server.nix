@@ -7,8 +7,6 @@
 
 { lib, pkgs, ... }:
 
-with lib;
-
 {
 
   config = {
@@ -17,7 +15,7 @@ with lib;
     services.xserver.videoDrivers = [ ];
 
     # Enable GDM.  Any display manager will do as long as it supports XDMCP.
-    services.xserver.displayManager.gdm.enable = true;
+    services.displayManager.gdm.enable = true;
 
     systemd.sockets.terminal-server = {
       description = "Terminal Server Socket";
@@ -31,12 +29,12 @@ with lib;
       description = "Terminal Server";
 
       path = [
-        pkgs.xorg.xorgserver.out
+        pkgs.xorg-server.out
         pkgs.gawk
         pkgs.which
         pkgs.openssl
-        pkgs.xorg.xauth
-        pkgs.nettools
+        pkgs.xauth
+        pkgs.net-tools
         pkgs.shadow
         pkgs.procps
         pkgs.util-linux

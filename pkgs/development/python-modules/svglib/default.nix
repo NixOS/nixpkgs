@@ -1,9 +1,9 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
   cssselect2,
+  fetchPypi,
+  hatchling,
   lxml,
   pillow,
   pytestCheckHook,
@@ -13,15 +13,15 @@
 
 buildPythonPackage rec {
   pname = "svglib";
-  version = "1.5.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "2.2.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Oudl06lAnuYMD7TSTC3raoBheqknBU9bzX/JjwaV5Yc=";
+    hash = "sha256-veXF+bDgkfHiELiq/doHpJvY6/IcDpDWc4OmZcg1l6w=";
   };
+
+  build-system = [ hatchling ];
 
   propagatedBuildInputs = [
     cssselect2
@@ -43,12 +43,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "svglib.svglib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pure-Python library for reading and converting SVG";
-    mainProgram = "svg2pdf";
     homepage = "https://github.com/deeplook/svglib";
     changelog = "https://github.com/deeplook/svglib/blob/v${version}/CHANGELOG.rst";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ trepetti ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = [ ];
+    mainProgram = "svg2pdf";
   };
 }

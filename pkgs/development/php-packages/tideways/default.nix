@@ -17,19 +17,22 @@ let
       "8.1" = "tideways-php-8.1.so";
       "8.2" = "tideways-php-8.2.so";
       "8.3" = "tideways-php-8.3.so";
+      "8.4" = "tideways-php-8.4.so";
+      "8.5" = "tideways-php-8.5.so";
+      "8.6" = "tideways-php-8.6.so";
     }
     .${lib.versions.majorMinor php.version} or (throw "Unsupported PHP version.");
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tideways-php";
   extensionName = "tideways";
-  version = "5.17.0";
+  version = "5.47.0";
 
   src =
     finalAttrs.passthru.sources.${stdenvNoCC.hostPlatform.system}
       or (throw "Unsupported platform for tideways-php: ${stdenvNoCC.hostPlatform.system}");
 
-  nativeBuildInputs = lib.optionals stdenvNoCC.isLinux [
+  nativeBuildInputs = lib.optionals stdenvNoCC.hostPlatform.isLinux [
     autoPatchelfHook
   ];
 
@@ -43,15 +46,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     sources = {
       "x86_64-linux" = fetchurl {
         url = "https://s3-eu-west-1.amazonaws.com/tideways/extension/${finalAttrs.version}/tideways-php-${finalAttrs.version}-x86_64.tar.gz";
-        hash = "sha256-zWmGGSSvV48dSU+Ox2ypPcIxVzr0oru9Eaoh1hQ+WgI=";
+        hash = "sha256-7kp6cXpbT9VEZPHY2Zg9oqeggjaojDayprE742yqUpw=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://s3-eu-west-1.amazonaws.com/tideways/extension/${finalAttrs.version}/tideways-php-${finalAttrs.version}-arm64.tar.gz";
-        hash = "sha256-xGkyLBy5oXVXs3VHT6fVg82H7Dmfc8VGHV9CEfw3ETY=";
+        hash = "sha256-HtqZcPc4j/A91bKzqEq1y/V4V9a/oqiM4x1eIkkRUlU=";
       };
       "aarch64-darwin" = fetchurl {
         url = "https://s3-eu-west-1.amazonaws.com/tideways/extension/${finalAttrs.version}/tideways-php-${finalAttrs.version}-macos-arm.tar.gz";
-        hash = "sha256-StVPDWGKseagnkEi9dUX2dvu0+tIN8xxUTWmxKW1kDM=";
+        hash = "sha256-bfwJTHZgVKlJHjeg8xIr1kd1HbzXbYtPfqhyIvkvW9Q=";
       };
     };
 
@@ -79,12 +82,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     }/bin/update-tideways-probe";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tideways PHP Probe";
     homepage = "https://tideways.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ shyim ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ shyim ];
     platforms = lib.attrNames finalAttrs.passthru.sources;
   };
 })

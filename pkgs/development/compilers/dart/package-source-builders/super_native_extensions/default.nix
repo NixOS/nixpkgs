@@ -17,18 +17,28 @@ let
     pname = "super_native_extensions-rs";
     inherit version src;
 
+    unpackPhase = ''
+      runHook preUnpack
+
+      if [ -d $src/super_native_extensions ]; then
+        cp -r $src/super_native_extensions ${src.name}
+      else
+        cp -r $src ${src.name}
+      fi
+      chmod -R u+w -- "$sourceRoot"
+
+      runHook postUnpack
+    '';
+
     sourceRoot = "${src.name}/rust";
 
-    cargoLock =
+    cargoHash =
       rec {
-        _0_8_22 = {
-          lockFile = ./Cargo-0.8.22.lock;
-          outputHashes = {
-            "mime_guess-2.0.4" = "sha256-KSw0YUTGqNEWY9pMvQplUGajJgoP2BRwVX6qZPpB2rI=";
-          };
-        };
+        _0_9_1 = _0_9_0-dev_6;
+        _0_9_0-dev_6 = "sha256-1yJIbBxScmkCwy/e+/z2cYA8qQBfT0yoIBmOSPVd4h4=";
         _0_9_0-dev_5 = _0_8_22;
         _0_9_0-dev_3 = _0_8_22;
+        _0_8_22 = "sha256-gYYoC3bGJrYY1uUHfqMv6pp4SK+P9fRoBsLtf34rsCg=";
         _0_8_24 = _0_8_22;
         _0_8_21 = _0_8_22;
         _0_8_20 = _0_8_22;
@@ -38,8 +48,7 @@ let
       }
       .${"_" + (lib.replaceStrings [ "." ] [ "_" ] version)} or (throw ''
         Unsupported version of pub 'super_native_extensions': '${version}'
-        Please add ${src}/rust/Cargo.lock
-        to this path, and add corresponding entry here. If the lock
+        Please add cargoHash to here. If the cargoHash
         is the same with existing versions, add an alias here.
       '');
 
@@ -72,8 +81,14 @@ stdenv.mkDerivation {
     runHook preInstall
 
     cp -r "$src" "$out"
-    chmod +rwx $out/cargokit/cmake/cargokit.cmake
-    cp ${fakeCargokitCmake} $out/cargokit/cmake/cargokit.cmake
+    if [ -d $out/super_native_extensions ]; then
+      pushd $out/super_native_extensions
+    else
+      pushd $out
+    fi
+    chmod +rwx cargokit/cmake/cargokit.cmake
+    cp ${fakeCargokitCmake} cargokit/cmake/cargokit.cmake
+    popd
 
     runHook postInstall
   '';

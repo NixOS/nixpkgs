@@ -3,36 +3,39 @@
   asynctest,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pyserial-asyncio,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   zigpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zigpy-cc";
   version = "0.5.2";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   # https://github.com/Martiusweb/asynctest/issues/152
   # broken by upstream python bug with asynctest and
   # is used exclusively by home-assistant with python 3.8
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy-cc";
-    rev = version;
-    sha256 = "U3S8tQ3zPlexZDt5GvCd+rOv7CBVeXJJM1NGe7nRl2o=";
+    tag = finalAttrs.version;
+    hash = "sha256-U3S8tQ3zPlexZDt5GvCd+rOv7CBVeXJJM1NGe7nRl2o=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     pyserial-asyncio
     zigpy
   ];
 
-  doCheck = pythonOlder "3.11"; # asynctest is unsupported on python3.11
+  doCheck = false; # asynctest unsupported on 3.11+
 
   nativeCheckInputs = [
     asynctest
@@ -50,11 +53,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "zigpy_cc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library which communicates with Texas Instruments CC2531 radios for zigpy";
     homepage = "https://github.com/zigpy/zigpy-cc";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ mvnetbiz ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ mvnetbiz ];
+    platforms = lib.platforms.linux;
   };
-}
+})

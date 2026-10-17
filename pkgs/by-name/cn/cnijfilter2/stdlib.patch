@@ -1,0 +1,10 @@
+--- a/lgmon3/src/keytext.c
++++ b/lgmon3/src/keytext.c
+@@ -37,6 +37,7 @@
+ #include <unistd.h>
+ #include <libxml/parser.h>	/* Ver.2.80 */
+ #include <string.h>
++#include <stdlib.h>
+ 
+ #include "keytext.h"
+ 

@@ -13,13 +13,13 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fd363dae9bd2efd447739bbf7a4f29c1e4741596ae7b02d252fe525b2b4176e7";
+    hash = "sha256-/TY9rpvS79RHc5u/ek8pweR0FZauewLSUv5SWytBduc=";
   };
 
   patches = fetchpatch {
     url = "${meta.homepage}/commit/de3421bf13bf7c3ec11fe0a381f0944e102b1d97.patch";
     excludes = [ "dev-requirements.txt" ];
-    sha256 = "0rgmkyn7i6y1xs8m75dpl8hq7j2ns2s3dvp7kv9j4zwic93rrlsc";
+    hash = "sha256-TNOcR2KRfyLTnufuNrTQVsiDIaK3lVOR7sGbeKyf9WU=";
   };
 
   propagatedBuildInputs = [ sh ];
@@ -27,10 +27,10 @@ buildPythonPackage rec {
   # Tests requires network connections
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Interface for packer.io";
     homepage = "https://github.com/nir0s/python-packer";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ psyanticy ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ psyanticy ];
   };
 }

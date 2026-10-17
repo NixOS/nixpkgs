@@ -1,51 +1,57 @@
 {
   lib,
-  python3,
-  fetchPypi,
+  python3Packages,
+  fetchFromGitLab,
+  qt6,
+  R,
   copyDesktopItems,
-  libsForQt5,
   makeDesktopItem,
 }:
-
-let
-  # get rid of rec
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pyspread";
-  version = "2.3.1";
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-l6b02CIUqPnT16zqOWl6gDdAobkhiqBMFvT+R1Dvtek=";
+  version = "2.4.5";
+  pyproject = true;
+  __structuredAttrs = true;
+
+  src = fetchFromGitLab {
+    owner = "pyspread";
+    repo = "pyspread";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3DAoRIzwFxOEIXSCO+MyCAZ92Y57AD9Z9oq6ps1Ck0k=";
   };
-  inherit (libsForQt5)
-    qtsvg
-    wrapQtAppsHook
-    ;
-in
-python3.pkgs.buildPythonApplication {
-  inherit pname version src;
 
-  nativeBuildInputs = [
-    copyDesktopItems
-    wrapQtAppsHook
-  ];
-
-  buildInputs = [
-    qtsvg
-  ];
-
-  propagatedBuildInputs = with python3.pkgs; [
-    python-dateutil
-    markdown2
-    matplotlib
-    numpy
-    pyenchant
-    pyqt5
+  build-system = with python3Packages; [
     setuptools
   ];
 
-  strictDeps = true;
+  nativeBuildInputs = [
+    R
+    copyDesktopItems
+    qt6.wrapQtAppsHook
+  ];
 
-  doCheck = false; # it fails miserably with a core dump
+  buildInputs = [ qt6.qtsvg ];
 
+  dependencies = with python3Packages; [
+    pyqt6
+    numpy
+    markdown2
+
+    # Optional
+    matplotlib # data visualization
+    pyenchant # spellchecker bindings
+    pip # python package installer
+    python-dateutil # extensions to standard datetime module
+    rpy2 # interface to R
+    plotnine # data visualization
+    openpyxl # r/w Excel 2010 xlsx/xlsm files
+
+    # Optional & not in nixpkgs
+    #py-moneyed # currency & money classes
+    #pycel # compile Excel spreadsheets to Python code
+  ];
+
+  doCheck = true;
   pythonImportsCheck = [ "pyspread" ];
 
   desktopItems = [
@@ -55,13 +61,19 @@ python3.pkgs.buildPythonApplication {
       icon = "pyspread";
       desktopName = "Pyspread";
       genericName = "Spreadsheet";
-      comment = "A Python-oriented spreadsheet application";
+      comment = "Python-oriented spreadsheet application";
       categories = [
         "Office"
         "Development"
         "Spreadsheet"
       ];
     })
+  ];
+
+  makeWrapperArgs = [
+    "--set"
+    "R_HOME"
+    "${lib.getLib R}/lib/R"
   ];
 
   preFixup = ''
@@ -81,8 +93,9 @@ python3.pkgs.buildPythonApplication {
       that can be accessed from other cells. These objects can represent
       anything including lists or matrices.
     '';
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     mainProgram = "pyspread";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ Merikei ];
+    platforms = lib.platforms.linux;
   };
-}
+})

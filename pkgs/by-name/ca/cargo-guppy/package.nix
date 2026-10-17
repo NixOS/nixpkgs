@@ -1,51 +1,52 @@
 {
-  lib,
-  rustPlatform,
   fetchFromGitHub,
-  pkg-config,
+  lib,
+  nix-update-script,
   openssl,
-  stdenv,
-  darwin,
+  pkg-config,
+  rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-guppy";
-  version = "unstable-2023-10-04";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "guppy-rs";
     repo = "guppy";
-    rev = "837d0ae762b9ae79cc8ca5d629842e5ca34293b4";
-    sha256 = "sha256-LWU1yAD/f9w5m522vcKP9D2JusGkwzvfGSGstvFGUpk=";
+    tag = "guppy-${finalAttrs.version}";
+    hash = "sha256-MJyp66Q99rWZda4HNtGg4qsiiFVQuotrZ2F+dUKxvm4=";
   };
 
-  cargoHash = "sha256-IyU5fJSFzef8P5v8ILufGcTP3+5Gm0PH4Cox2G5saHw=";
+  cargoHash = "sha256-ogAcGIF1IgfTTZtRdD/caguB2o5R7EcJy22YMa/aKts=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = [ openssl ];
 
   cargoBuildFlags = [
     "-p"
     "cargo-guppy"
   ];
+
   cargoTestFlags = [
     "-p"
     "cargo-guppy"
   ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=guppy-(.*)" ];
+  };
+
+  meta = {
+    changelog = "https://github.com/guppy-rs/guppy/releases/tag/${finalAttrs.src.tag}";
     description = "Command-line frontend for guppy";
-    mainProgram = "cargo-guppy";
     homepage = "https://github.com/guppy-rs/guppy/tree/main/cargo-guppy";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # or
       asl20
     ];
-    maintainers = with maintainers; [ figsoda ];
+    mainProgram = "cargo-guppy";
+    maintainers = with lib.maintainers; [ hythera ];
   };
-}
+})

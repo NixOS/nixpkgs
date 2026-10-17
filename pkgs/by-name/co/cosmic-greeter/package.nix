@@ -3,73 +3,119 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
+  libcosmicAppHook,
   cmake,
-  coreutils,
   just,
+  cosmic-randr,
+  dav1d,
   libinput,
-  libxkbcommon,
   linux-pam,
-  pkg-config,
   udev,
-  wayland,
+  coreutils,
+  xkeyboard_config,
+  nix-update-script,
+  nixosTests,
+  orca,
+  withLogind ? true,
+  withSystemd ? true,
+  withUpower ? true,
+  withNetworkManager ? true,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-greeter";
-  version = "1.0.0-alpha.2";
+  version = "1.10.0";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-greeter";
-    rev = "epoch-${version}";
-    hash = "sha256-5BSsiGgL369/PePS0FmuE42tktK2bpgJziYuUEnZ2jY=";
+    tag = "epoch-${finalAttrs.version}";
+    hash = "sha256-sMpjlzjVYrgxLwsIEeotttd8wLBO6sDuEdTBsQas15Q=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-5TXFE/pIeIOvy8x8c5sR3YaI8R2RTA8fzloguIpE4TM=";
+  postPatch = ''
+    substituteInPlace src/greeter.rs --replace-fail '/usr/bin/env' '${lib.getExe' coreutils "env"}'
+    substituteInPlace src/greeter.rs --replace-fail '/usr/bin/orca' '${lib.getExe orca}'
+  '';
 
-  cargoBuildFlags = [
-    "--all"
-  ];
+  cargoHash = "sha256-opJvXsGUL6aV5wXtuBLEQiJoPOaaIy78WWPAjl950f8=";
+
+  buildNoDefaultFeatures = true;
+
+  cargoBuildFlags = [ "--workspace" ];
+
+  buildFeatures =
+    lib.optionals withLogind [ "logind" ]
+    ++ lib.optionals withSystemd [ "systemd" ]
+    ++ lib.optionals withUpower [ "upower" ]
+    ++ lib.optionals withNetworkManager [ "networkmanager" ];
+
+  separateDebugInfo = true;
+  __structuredAttrs = true;
+
+  env.VERGEN_GIT_SHA = finalAttrs.src.tag;
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
     cmake
     just
-    pkg-config
+    libcosmicAppHook
   ];
+
   buildInputs = [
+    cosmic-randr
+    dav1d
     libinput
-    libxkbcommon
     linux-pam
     udev
-    wayland
+    orca
   ];
 
   dontUseJustBuild = true;
+  dontUseJustCheck = true;
 
   justFlags = [
     "--set"
     "prefix"
     (placeholder "out")
     "--set"
-    "bin-src"
-    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-greeter"
-    "--set"
-    "daemon-src"
-    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-greeter-daemon"
+    "cargo-target-dir"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
-  postPatch = ''
-    substituteInPlace src/greeter.rs --replace-fail '/usr/bin/env' '${lib.getExe' coreutils "env"}'
+  preFixup = ''
+    libcosmicAppWrapperArgs+=(
+      --prefix PATH : ${lib.makeBinPath [ cosmic-randr ]}
+      --set-default X11_BASE_RULES_XML ${xkeyboard_config}/share/X11/xkb/rules/base.xml
+      --set-default X11_BASE_EXTRA_RULES_XML ${xkeyboard_config}/share/X11/xkb/rules/extra.xml
+    )
   '';
 
-  meta = with lib; {
+  passthru = {
+    tests = {
+      inherit (nixosTests)
+        cosmic
+        cosmic-autologin
+        cosmic-noxwayland
+        cosmic-autologin-noxwayland
+        ;
+    };
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "epoch-(.*)"
+      ];
+    };
+  };
+
+  meta = {
     homepage = "https://github.com/pop-os/cosmic-greeter";
     description = "Greeter for the COSMIC Desktop Environment";
     mainProgram = "cosmic-greeter";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nyabinary ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    teams = [ lib.teams.cosmic ];
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -5,6 +5,7 @@
   aspell,
   which,
   writeScript,
+  config,
 }:
 
 /*
@@ -65,7 +66,8 @@ let
         meta = {
           description = "Aspell dictionary for ${fullName}";
           platforms = lib.platforms.all;
-        } // (args.meta or { });
+        }
+        // (args.meta or { });
       }
       // removeAttrs args [ "meta" ]
     );
@@ -80,89 +82,89 @@ let
       ...
     }@args:
     let
-      buildArgs =
-        {
-          shortName = "${language}";
+      buildArgs = {
+        shortName = "${language}";
 
-          src = fetchurl {
-            url = "mirror://gnu/aspell/dict/${language}/${filename}-${language}-${version}.tar.bz2";
-            inherit sha256;
-          };
+        src = fetchurl {
+          url = "mirror://gnu/aspell/dict/${language}/${filename}-${language}-${version}.tar.bz2";
+          inherit sha256;
+        };
 
-          /*
-            Remove any instances of u-deva.cmap and u-deva.cset since
-            they are included in the main aspell package and can
-            cause conflicts otherwise.
-          */
-          postInstall = ''
-            rm -f $out/lib/aspell/u-deva.{cmap,cset}
-          '';
+        /*
+          Remove any instances of u-deva.cmap and u-deva.cset since
+          they are included in the main aspell package and can
+          cause conflicts otherwise.
+        */
+        postInstall = ''
+          rm -f $out/lib/aspell/u-deva.{cmap,cset}
+        '';
 
-          passthru.updateScript = writeScript "update-aspellDict-${language}" ''
-            #!/usr/bin/env nix-shell
-            #!nix-shell -i bash -p nix curl gnused common-updater-scripts
-            set -eu -o pipefail
+        passthru.updateScript = writeScript "update-aspellDict-${language}" ''
+          #!/usr/bin/env nix-shell
+          #!nix-shell -i bash -p nix curl gnused common-updater-scripts
+          set -eu -o pipefail
 
-            # List tarballs in the dictionary's subdirectory via HTTPS and
-            # the simple list method of Apache's mod_autoindex.
-            #
-            # Catalan dictionary has an exception where an earlier version
-            # compares as newer because the versioning scheme has changed.
-            versions=$(
-                echo '[';
-                curl -s 'https://ftp.gnu.org/gnu/aspell/dict/${language}/?F=0' | \
-                    sed -r 's/.* href="${filename}-${language}-([A-Za-z0-9_+.-]+)\.tar\.bz2".*/"\1"/;t;d' | \
-                    if [ '${language}' = "ca" ]; then grep -v 20040130-1; else cat; fi; \
-                echo ']')
+          # List tarballs in the dictionary's subdirectory via HTTPS and
+          # the simple list method of Apache's mod_autoindex.
+          #
+          # Catalan dictionary has an exception where an earlier version
+          # compares as newer because the versioning scheme has changed.
+          versions=$(
+              echo '[';
+              curl -s 'https://ftp.gnu.org/gnu/aspell/dict/${language}/?F=0' | \
+                  sed -r 's/.* href="${filename}-${language}-([A-Za-z0-9_+.-]+)\.tar\.bz2".*/"\1"/;t;d' | \
+                  if [ '${language}' = "ca" ]; then grep -v 20040130-1; else cat; fi; \
+              echo ']')
 
-            # Sort versions in descending order using Nix's and take the first as the latest.
-            sortVersions="(with builtins; head (sort (a: b: compareVersions a b > 0) $versions))"
-            # nix-instantiate outputs Nix strings (with quotes), so remove them to get
-            # a result similar to `nix eval --raw`.
-            latestVersion=$(nix-instantiate --eval --expr "$sortVersions" | tr -d '"')
+          # Sort versions in descending order using Nix's and take the first as the latest.
+          sortVersions="(with builtins; head (sort (a: b: compareVersions a b > 0) $versions))"
+          # nix-instantiate outputs Nix strings (with quotes), so remove them to get
+          # a result similar to `nix eval --raw`.
+          latestVersion=$(nix-instantiate --eval --expr "$sortVersions" | tr -d '"')
 
-            update-source-version aspellDicts.${language} "$latestVersion"
-          '';
+          update-source-version aspellDicts.${language} "$latestVersion"
+        '';
 
-          meta = {
-            homepage = "http://ftp.gnu.org/gnu/aspell/dict/0index.html";
-          } // (args.meta or { });
-
+        meta = {
+          homepage = "http://ftp.gnu.org/gnu/aspell/dict/0index.html";
         }
-        //
-          lib.optionalAttrs
-            (lib.elem language [
-              "is"
-              "nb"
-            ])
-            {
-              # These have Windows-1251 encoded non-ASCII characters,
-              # so need some special handling.
-              unpackPhase = ''
-                runHook preUnpack
+        // (args.meta or { });
 
-                tar -xf $src --strip-components=1 || true
+      }
+      //
+        lib.optionalAttrs
+          (lib.elem language [
+            "is"
+            "nb"
+          ])
+          {
+            # These have Windows-1251 encoded non-ASCII characters,
+            # so need some special handling.
+            unpackPhase = ''
+              runHook preUnpack
 
-                runHook postUnpack
+              tar -xf $src --strip-components=1 || true
+
+              runHook postUnpack
+            '';
+
+            postPatch = lib.getAttr language {
+              is = ''
+                cp icelandic.alias íslenska.alias
+                sed -i 's/ .slenska\.alias/ íslenska.alias/g' Makefile.pre
               '';
-
-              postPatch = lib.getAttr language {
-                is = ''
-                  cp icelandic.alias íslenska.alias
-                  sed -i 's/ .slenska\.alias/ íslenska.alias/g' Makefile.pre
-                '';
-                nb = ''
-                  cp bokmal.alias bokmål.alias
-                  sed -i 's/ bokm.l\.alias/ bokmål.alias/g' Makefile.pre
-                '';
-              };
-            }
-        // removeAttrs args [
-          "language"
-          "filename"
-          "sha256"
-          "meta"
-        ];
+              nb = ''
+                cp bokmal.alias bokmål.alias
+                sed -i 's/ bokm.l\.alias/ bokmål.alias/g' Makefile.pre
+              '';
+            };
+          }
+      // removeAttrs args [
+        "language"
+        "filename"
+        "sha256"
+        "meta"
+      ];
     in
     buildDict buildArgs;
 
@@ -225,7 +227,7 @@ let
     );
 
 in
-rec {
+{
 
   ### Languages
 
@@ -810,7 +812,7 @@ rec {
     meta.license = lib.licenses.gpl2Only;
   };
 
-  or = buildOfficialDict {
+  "or" = buildOfficialDict {
     language = "or";
     version = "0.03-1";
     fullName = "Oriya";
@@ -1081,65 +1083,8 @@ rec {
     sha256 = "15k7gaxrnqnssdyk9l6g27dq317dqp9jz5yzafd25ri01g6mb8iz";
     meta.license = lib.licenses.lgpl21Only;
   };
-
-  ### Jargons
-
-  en-computers = buildTxtDict {
-    shortName = "en-computers";
-    fullName = "English Computer Jargon";
-    version = "0";
-
-    src = fetchurl {
-      url = "https://mrsatterly.com/computer.dic";
-      sha256 = "1vzk7cdvcm9r1c6mgxpabrdcpvghdv9mjmnf6iq5wllcif5nsw2b";
-    };
-
-    langInputs = [ en ];
-
-    buildPhase = ''
-      runHook preBuild
-      cat $src | aspell-affix en-computers --dont-validate-words --lang=en
-      runHook postBuild
-    '';
-    installPhase = "aspell-install en-computers";
-
-    meta = {
-      homepage = "https://mrsatterly.com/spelling.html";
-      license = lib.licenses.wtfpl; # as a comment the source file
-    };
-  };
-
-  en-science = buildTxtDict {
-    shortName = "en-science";
-    fullName = "English Scientific Jargon";
-    version = "0-unstable-2015-07-27";
-
-    src1 = fetchurl {
-      url = "https://web.archive.org/web/20180806094650if_/http://jpetrie.net/wp-content/uploads/custom_scientific_US.txt";
-      hash = "sha256-I5d/jf/5v9Nptu2H9qfvMBzSwJYoQOTEzJfQTxKoWN8=";
-    };
-
-    src2 = fetchurl {
-      url = "https://web.archive.org/web/20180131231829if_/http://jpetrie.net/wp-content/uploads/custom_scientific_UK.txt";
-      hash = "sha256-oT4nUiev5q4QjHeuF8jNVBcyyHE9fdH9+uDMkZsOWp8=";
-    };
-
-    langInputs = [ en ];
-
-    buildPhase = ''
-      runHook preBuild
-      cat $src1 | aspell-plain en_US-science --dont-validate-words --lang=en
-      cat $src2 | aspell-plain en_GB-science --dont-validate-words --lang=en
-      runHook postBuild
-    '';
-    installPhase = "aspell-install en_US-science en_GB-science";
-
-    meta = {
-      homepage = "https://web.archive.org/web/20210425104207/http://www.jpetrie.net/scientific-word-list-for-spell-checkersspelling-dictionaries/";
-      # no license is given so we have to assume it is unfree
-      license = lib.licenses.unfree;
-    };
-
-  };
-
+}
+// lib.optionalAttrs config.allowAliases {
+  en-computers = throw "'aspellDicts.en-computers' has been removed as upstream url pointed to a gambling website."; # Added 2026-09-28
+  en-science = throw "'aspellDicts.en-science' has been removed as upstream was removed."; # Added 2026-09-28
 }

@@ -1,31 +1,31 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, libgit2
-, zlib
-, stdenv
-, darwin
-, vimUtils
-, nix-update-script
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  fetchpatch2,
+  pkg-config,
+  libgit2,
+  zlib,
+  vimUtils,
+  nix-update-script,
 }:
 
 let
-  version = "0.54-unstable-2024-08-11";
+  version = "0.55";
 
   src = fetchFromGitHub {
     owner = "liuchengxu";
     repo = "vim-clap";
-    rev = "3e8d001f5c9be10e4bb680a1d409326902c96c10";
-    hash = "sha256-7bgbKYjJX2Tfprb69/imyvhsCsurrmPWBXVVLX+ZMnM=";
+    tag = "v${version}";
+    hash = "sha256-vtIA2URex7DOBIZ9KW++/ziqhVd/GDJOKYTUULdMqGc=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Modern performant fuzzy picker for Vim and NeoVim";
     mainProgram = "maple";
     homepage = "https://github.com/liuchengxu/vim-clap";
     changelog = "https://github.com/liuchengxu/vim-clap/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 
@@ -33,14 +33,18 @@ let
     pname = "maple";
     inherit version src meta;
 
-    cargoLock = {
-      lockFile = ./Cargo.lock;
-      outputHashes = {
-        "subprocess-0.2.10" = "sha256-WcGrJ103ofGlQwi32kRGM3Z+uvKSCFBmFZbZXAtuWwM=";
-        "tree-sitter-dockerfile-0.1.0" = "sha256-K+duK3HcxlVgbLXBos3MUxyfnTywcHX6JM4Do0qAJO0=";
-        "tree-sitter-vim-0.3.1-dev.0" = "sha256-CWxZ28LdptiMNO2VIk+Ny/DhQXdN604EuqRIb9oaCmI=";
-      };
-    };
+    strictDeps = false;
+
+    cargoHash = "sha256-RMDlLpPWDLHCRWLz7NAAQhp6FhKA7aNYqx9MCqR8vYM=";
+
+    cargoPatches = [
+      # TODO: remove after next release
+      # https://github.com/liuchengxu/vim-clap/issues/1121
+      (fetchpatch2 {
+        url = "https://github.com/liuchengxu/vim-clap/commit/b95d4a3f9371271096553df1240b3f59a2dc99ec.patch?full_index=1";
+        hash = "sha256-FvGuSFHMOprPSUlR82SR/IMNDd3RaGECQm2wfPCOW4Y=";
+      })
+    ];
 
     nativeBuildInputs = [
       pkg-config
@@ -49,10 +53,6 @@ let
     buildInputs = [
       libgit2
       zlib
-    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-      darwin.apple_sdk.frameworks.CoreServices
-      darwin.apple_sdk.frameworks.SystemConfiguration
     ];
   };
 in
@@ -60,6 +60,8 @@ in
 vimUtils.buildVimPlugin {
   pname = "vim-clap";
   inherit version src meta;
+
+  strictDeps = false;
 
   postInstall = ''
     ln -s ${maple}/bin/maple $out/bin/maple

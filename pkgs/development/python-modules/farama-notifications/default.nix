@@ -5,27 +5,28 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "farama-notifications";
-  version = "0.0.4";
+  version = "0.0.6";
+  pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Farama-Foundation";
-    repo = pname;
-    rev = version;
-    hash = "sha256-UUrJ/5t5x54xs1gweNUhwqrMJQXiyrUPn1bBfTsiPcw=";
+    repo = "farama-notifications";
+    tag = finalAttrs.version;
+    hash = "sha256-gvOLitPqpJW1kLVZUkf8UVhKdjhCZhu9ORmdLHzil1E=";
   };
 
-  format = "pyproject";
-
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "farama_notifications" ];
 
-  meta = with lib; {
+  meta = {
     description = "Allows for providing notifications on import to all Farama Packages";
     homepage = "https://github.com/Farama-Foundation/Farama-Notifications";
-    license = licenses.mit;
-    maintainers = with maintainers; [ GaetanLepage ];
+    changelog = "https://github.com/Farama-Foundation/Farama-Notifications/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

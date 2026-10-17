@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-readme";
-  version = "3.3.1";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "webern";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-FFWHADATEfvZvxGwdkj+eTVoq7pnPuoUAhMGTokUkMs=";
+    repo = "cargo-readme";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-9Tkw/mgHsTsPgJs/C2gBkBSPGfcfZe+P0KkUp89WZ3c=";
   };
 
-  cargoHash = "sha256-OEArMqOiT+PZ+zMRt9h0EzeP7ikFuOYR8mFGtm+xCkQ=";
+  cargoHash = "sha256-1mCTK4NA2LVKbCgBsF+wvJoXjw6TOMagamNDkFkOzQA=";
 
   # disable doc tests
   cargoTestFlags = [
@@ -23,17 +23,17 @@ rustPlatform.buildRustPackage rec {
     "--lib"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Generate README.md from docstrings";
     mainProgram = "cargo-readme";
     homepage = "https://github.com/livioribeiro/cargo-readme";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with maintainers; [
-      baloo
+    maintainers = with lib.maintainers; [
       matthiasbeyer
+      sshine
     ];
   };
-}
+})

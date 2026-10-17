@@ -1,29 +1,41 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  setuptools-scm,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "uritools";
-  version = "4.0.3";
-  format = "setuptools";
+  version = "6.1.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-7gahgqnISUZM6dX6kXU5qsyO3SpJJNG3qr7uyryuO8I=";
+  src = fetchFromGitHub {
+    owner = "tkem";
+    repo = "uritools";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pZzsdl/q5Piul1Q2cLPkeRmZbW12ACKuI2OYbnG+rMc=";
   };
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  # Infinite recursion
+  doCheck = false;
 
   pythonImportsCheck = [ "uritools" ];
 
-  meta = with lib; {
+  meta = {
     description = "RFC 3986 compliant, Unicode-aware, scheme-agnostic replacement for urlparse";
     homepage = "https://github.com/tkem/uritools/";
-    changelog = "https://github.com/tkem/uritools/blob/v${version}/CHANGELOG.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rvolosatovs ];
+    changelog = "https://github.com/tkem/uritools/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rvolosatovs ];
   };
-}
+})

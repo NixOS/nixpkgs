@@ -2,71 +2,75 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   rustPlatform,
   pkg-config,
   dtc,
   openssl,
+  zstd,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cloud-hypervisor";
-  version = "43.0";
+  version = "54.0";
 
   src = fetchFromGitHub {
     owner = "cloud-hypervisor";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-drxJtlvBpkK3I7Ob3+pH4KLUq53GWXe1pmv7CI3bbP4=";
+    repo = "cloud-hypervisor";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-fhOFE82d6GWaR1/jeCNKHAcFgEc83+Gn9xF/czQFp0E=";
   };
 
-  cargoPatches = [
-    (fetchpatch {
-      name = "kvm-ioctls-0.19.1.patch";
-      url = "https://github.com/cloud-hypervisor/cloud-hypervisor/commit/eaa21946993276434403d41419a34e564935c8e9.patch";
-      hash = "sha256-G7B0uGl/RAkwub8x1jNNgBrC0dwq/Gv46XpbtTZWD5M=";
-    })
-  ];
-
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-F6ukvSwMHRHXoZKgXEFnTAN1B80GsQDW8iqZAvsREr4=";
+  cargoHash = "sha256-t4x5FaOuUUG98TqTjumdisizTDcdueOh4da2kj7wUDo=";
 
   separateDebugInfo = true;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = lib.optional stdenv.hostPlatform.isAarch64 dtc;
-  checkInputs = [ openssl ];
+  buildInputs = [
+    openssl
+    zstd
+  ]
+  ++ lib.optional stdenv.hostPlatform.isAarch64 dtc;
 
-  OPENSSL_NO_VENDOR = true;
+  env.OPENSSL_NO_VENDOR = true;
+  env.ZSTD_SYS_USE_PKG_CONFIG = true;
 
   cargoTestFlags = [
     "--workspace"
-    "--bins"
-    "--lib" # Integration tests require root.
     "--exclude"
     "hypervisor" # /dev/kvm
     "--exclude"
     "net_util" # /dev/net/tun
     "--exclude"
     "vmm" # /dev/kvm
+    "--"
+    # io_uring syscalls are blocked by the Lix sandbox
+    "--skip=formats"
+    "--skip=io_impl::async_io::uring_data_io"
   ];
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  meta = {
     homepage = "https://github.com/cloud-hypervisor/cloud-hypervisor";
     description = "Open source Virtual Machine Monitor (VMM) that runs on top of KVM";
-    changelog = "https://github.com/cloud-hypervisor/cloud-hypervisor/releases/tag/v${version}";
-    license = with licenses; [
+    changelog = "https://github.com/cloud-hypervisor/cloud-hypervisor/releases/tag/v${finalAttrs.version}";
+    license = with lib.licenses; [
       asl20
       bsd3
     ];
     mainProgram = "cloud-hypervisor";
-    maintainers = with maintainers; [
-      offline
+    maintainers = with lib.maintainers; [
       qyliss
+      phip1611
     ];
     platforms = [
       "aarch64-linux"
+      "riscv64-linux"
       "x86_64-linux"
     ];
   };
-}
+})

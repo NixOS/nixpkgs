@@ -3,100 +3,119 @@
   stdenvNoCC,
   lib,
   php,
-}:
+}@toplevel:
 
 let
   buildComposerProjectOverride =
-    finalAttrs: previousAttrs:
-
-    let
-      phpDrv = finalAttrs.php or php;
-      composer = finalAttrs.composer or phpDrv.packages.composer;
-    in
+    finalAttrs:
     {
-      composerLock = previousAttrs.composerLock or null;
-      composerNoDev = previousAttrs.composerNoDev or true;
-      composerNoPlugins = previousAttrs.composerNoPlugins or true;
-      composerNoScripts = previousAttrs.composerNoScripts or true;
-      composerStrictValidation = previousAttrs.composerStrictValidation or true;
+      php ? toplevel.php,
+      composer ? php.packages.composer,
+      composerLock ? null,
+      vendorHash ? "",
+      composerNoDev ? true,
+      composerNoPlugins ? true,
+      composerNoScripts ? true,
+      composerStrictValidation ? true,
+      buildInputs ? [ ],
+      nativeBuildInputs ? [ ],
+      strictDeps ? true,
+      patches ? [ ],
+      doCheck ? true,
+      doInstallCheck ? true,
+      dontCheckForBrokenSymlinks ? true,
+      passthru ? { },
+      meta ? { },
+      ...
+    }@args:
+    {
+      inherit
+        patches
+        strictDeps
+        doCheck
+        doInstallCheck
+        dontCheckForBrokenSymlinks
+        composerNoDev
+        composerNoPlugins
+        composerNoScripts
+        ;
 
-      nativeBuildInputs = (previousAttrs.nativeBuildInputs or [ ]) ++ [
+      nativeBuildInputs = nativeBuildInputs ++ [
         composer
-        phpDrv
-        phpDrv.composerHooks2.composerInstallHook
+        php
+        php.composerHooks2.composerInstallHook
       ];
 
-      buildInputs = (previousAttrs.buildInputs or [ ]) ++ [ phpDrv ];
-
-      patches = previousAttrs.patches or [ ];
-      strictDeps = previousAttrs.strictDeps or true;
+      buildInputs = buildInputs ++ [ php ];
 
       # Should we keep these empty phases?
       configurePhase =
-        previousAttrs.configurePhase or ''
+        args.configurePhase or ''
           runHook preConfigure
 
           runHook postConfigure
         '';
 
       buildPhase =
-        previousAttrs.buildPhase or ''
+        args.buildPhase or ''
           runHook preBuild
 
           runHook postBuild
         '';
 
-      doCheck = previousAttrs.doCheck or true;
       checkPhase =
-        previousAttrs.checkPhase or ''
+        args.checkPhase or ''
           runHook preCheck
 
           runHook postCheck
         '';
 
       installPhase =
-        previousAttrs.installPhase or ''
+        args.installPhase or ''
           runHook preInstall
 
           runHook postInstall
         '';
 
-      doInstallCheck = previousAttrs.doInstallCheck or false;
       installCheckPhase =
-        previousAttrs.installCheckPhase or ''
+        args.installCheckPhase or ''
           runHook preInstallCheck
 
           runHook postInstallCheck
         '';
 
       composerVendor =
-        previousAttrs.composerVendor or (phpDrv.mkComposerVendor {
-          inherit composer;
+        args.composerVendor or (php.mkComposerVendor {
           inherit (finalAttrs)
-            patches
             pname
             src
             vendorHash
             version
             ;
-
-          composerLock = previousAttrs.composerLock or null;
-          composerNoDev = previousAttrs.composerNoDev or true;
-          composerNoPlugins = previousAttrs.composerNoPlugins or true;
-          composerNoScripts = previousAttrs.composerNoScripts or true;
-          composerStrictValidation = previousAttrs.composerStrictValidation or true;
+          inherit
+            php
+            composer
+            composerLock
+            composerNoDev
+            composerNoPlugins
+            composerNoScripts
+            composerStrictValidation
+            dontCheckForBrokenSymlinks
+            ;
         });
 
       # Projects providing a lockfile from upstream can be automatically updated.
-      passthru = previousAttrs.passthru or { } // {
+      passthru = passthru // {
         updateScript =
-          previousAttrs.passthru.updateScript
-            or (if finalAttrs.composerVendor.composerLock == null then nix-update-script { } else null);
+          args.passthru.updateScript or (if composerLock == null then nix-update-script { } else null);
       };
 
-      meta = previousAttrs.meta or { } // {
-        platforms = lib.platforms.all;
+      meta = meta // {
+        platforms = meta.platforms or lib.platforms.all;
       };
     };
 in
-args: (stdenvNoCC.mkDerivation args).overrideAttrs buildComposerProjectOverride
+lib.extendMkDerivation {
+  constructDrv = stdenvNoCC.mkDerivation;
+  extendDrvArgs = buildComposerProjectOverride;
+}

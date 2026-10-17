@@ -4,17 +4,18 @@
   fetchFromGitHub,
   dotnetCorePackages,
   testers,
+  nix-update-script,
 }:
 
-buildDotnetModule (finalAttrs: rec {
+buildDotnetModule (finalAttrs: {
   pname = "fsautocomplete";
-  version = "0.75.0";
+  version = "0.83.0";
 
   src = fetchFromGitHub {
-    owner = "fsharp";
+    owner = "ionide";
     repo = "FsAutoComplete";
-    rev = "v${version}";
-    hash = "sha256-+IkoXj7l6a/iPigIVy334XiwQFm/pD63FWpV2r0x84c=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1WK6vb/UfqnF5KlwrjmGTPeAnEgwPswcYweeotB6j00=";
   };
 
   nugetDeps = ./deps.json;
@@ -23,7 +24,7 @@ buildDotnetModule (finalAttrs: rec {
     rm global.json
 
     substituteInPlace src/FsAutoComplete/FsAutoComplete.fsproj \
-      --replace-fail TargetFrameworks TargetFramework \
+      --replace-fail TargetFrameworks TargetFramework
   '';
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
@@ -34,16 +35,19 @@ buildDotnetModule (finalAttrs: rec {
 
   useDotnetFromEnv = true;
 
-  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+  passthru = {
+    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+    updateScript = nix-update-script { };
+  };
 
-  meta = with lib; {
-    description = "FsAutoComplete project (FSAC) provides a backend service for rich editing or intellisense features for editors";
+  meta = {
+    description = "Backend service for rich editing or intellisense features for editors";
     mainProgram = "fsautocomplete";
-    homepage = "https://github.com/fsharp/FsAutoComplete";
-    changelog = "https://github.com/fsharp/FsAutoComplete/releases/tag/v${version}";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    homepage = "https://github.com/ionide/FsAutoComplete";
+    changelog = "https://github.com/ionide/FsAutoComplete/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       gbtb
       mdarocha
     ];

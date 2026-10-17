@@ -7,21 +7,18 @@
   fetchPypi,
   pyjwt,
   python-jose,
-  pythonOlder,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "djangorestframework-simplejwt";
-  version = "5.4.0";
+  version = "5.5.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "djangorestframework_simplejwt";
     inherit version;
-    hash = "sha256-zM7M4aDhpKJA+ugNpz5fwjBVurq7i2feiPpHzTaCIyA=";
+    hash = "sha256-5yxVcvUdeAMCEojiBXr8vQPxf+EdSECW9ApGCrx26H8=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -42,11 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rest_framework_simplejwt" ];
 
-  meta = with lib; {
+  meta = {
     description = "JSON Web Token authentication plugin for Django REST Framework";
     homepage = "https://github.com/davesque/django-rest-framework-simplejwt";
     changelog = "https://github.com/jazzband/djangorestframework-simplejwt/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ arnoldfarkas ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

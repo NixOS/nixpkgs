@@ -5,15 +5,15 @@
   nixosTests,
 }:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "kimai";
-  version = "2.27.0";
+  version = "2.67.0";
 
   src = fetchFromGitHub {
     owner = "kimai";
     repo = "kimai";
-    rev = finalAttrs.version;
-    hash = "sha256-CTYmk6QGEd+WKC+Q+odvLF961u61MCaA6VoZlxpo3Gc=";
+    tag = finalAttrs.version;
+    hash = "sha256-yeQFo6rwtsRL32Pw+o4uXeS80Hyij4MENtdMybq5WMU=";
   };
 
   php = php.buildEnv {
@@ -26,7 +26,6 @@ php.buildComposerProject (finalAttrs: {
         mbstring
         pdo
         tokenizer
-        xml
         xsl
         zip
       ])
@@ -39,16 +38,18 @@ php.buildComposerProject (finalAttrs: {
     '';
   };
 
-  vendorHash = "sha256-DV4yU1PiH2HnAJ2hcVmSkZxTTpjtfqP3dV2d/FL9VHg=";
+  vendorHash = "sha256-VV4+pcMuxy0Xq31aq8J51xHUrt/6Bn4bDNb69OOFSo4=";
 
   composerNoPlugins = false;
-  composerNoScripts = false;
-
   postInstall = ''
     # Make available the console utility, as Kimai doesn't list this in
     # composer.json.
     mkdir -p "$out"/share/php/kimai "$out"/bin
     ln -s "$out"/share/php/kimai/bin/console "$out"/bin/console
+
+    # Install bundled assets. This is normally done in the `composer install`
+    # post-install script, but it's being skipped.
+    (cd "$out"/share/php/kimai && php ./bin/console assets:install)
   '';
 
   passthru.tests = {

@@ -21,12 +21,12 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "049e0b91797ce5b462853395138161fed9e8dfc1f4723f482ebb0739a0bbd289";
+    hash = "sha256-BJ4LkXl85bRihTOVE4Fh/tno38H0cj9ILrsHOaC70ok=";
   };
 
   meta = {
     description = "Convert Matplotlib plots into Leaflet web maps";
     homepage = "https://github.com/jwass/mplleaflet";
-    license = with lib.licenses; [ bsd3 ];
+    license = lib.licenses.bsd3;
   };
 }

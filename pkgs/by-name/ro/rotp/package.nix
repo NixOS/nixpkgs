@@ -50,12 +50,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = ''Open-source modernization of the 1993 classic "Master of Orion", written in Java'';
-    homepage = "https://www.remnantsoftheprecursors.com/";
+    homepage = "https://github.com/rayfowler/rotp-public";
 
     # See LICENSE file in source repo for more details.
-    license = with licenses; [
+    license = with lib.licenses; [
       # All java files created by Ray Fowler:
       gpl3Only
 
@@ -74,10 +74,11 @@ stdenv.mkDerivation {
       # both privately and for commercial purposes, as long as this does not limit
       # what other people may do with the program and the images they produce with
       # the program"
-      {
+      (mkLicense {
+        shortName = "planetGenerator";
         free = true;
         url = "http://hjemmesider.diku.dk/~torbenm/Planet";
-      }
+      })
 
       # All image files are copyright by Peter Penev.
       #
@@ -91,7 +92,7 @@ stdenv.mkDerivation {
       cc-by-nc-nd-40
     ];
 
-    maintainers = with maintainers; [ jtrees ];
+    maintainers = with lib.maintainers; [ jtrees ];
     platforms = [ "x86_64-linux" ];
   };
 }

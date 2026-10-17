@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "matomo";
-  version = "5.2.1";
+  version = "5.13.0";
 
   src = fetchurl {
     url = "https://builds.matomo.org/matomo-${finalAttrs.version}.tar.gz";
-    hash = "sha256-5glMwwIG0Uo8bu904u40FUa+yaUlrQe1nUCkv9/ATks=";
+    hash = "sha256-KHf4zk2pPrjSAvEN9f0m3jmlekgc8KnZGvXY49vziPs=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     for f in $filesToFix; do
       if [ -f "$f" ]; then
         length="$(wc -c "$f" | cut -d' ' -f1)"
-        hash="$(md5sum "$f" | cut -d' ' -f1)"
+        hash="$(sha256sum "$f" | cut -d' ' -f1)"
         sed -i "s:\\(\"$f\"[^(]*(\\).*:\\1\"$length\", \"$hash\"),:g" config/manifest.inc.php
       else
         echo "INFO(files-to-fix): $f does not exist in this version"
@@ -95,6 +95,8 @@ stdenv.mkDerivation (finalAttrs: {
       extraArgs = [
         "--url"
         "https://github.com/matomo-org/matomo"
+        "--version-regex"
+        "^(\\d+\\.\\d+\\.\\d+)$"
       ];
     };
     tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
@@ -109,15 +111,14 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://matomo.org/";
     changelog = "https://github.com/matomo-org/matomo/releases/tag/${finalAttrs.version}";
     platforms = lib.platforms.all;
-    maintainers =
-      with lib.maintainers;
-      [
-        florianjacob
-        sebbel
-        twey
-        boozedog
-        niklaskorz
-      ]
-      ++ lib.teams.flyingcircus.members;
+    maintainers = with lib.maintainers; [
+      florianjacob
+      sebbel
+      twey
+      boozedog
+      niklaskorz
+      leona
+      osnyx
+    ];
   };
 })

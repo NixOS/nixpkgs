@@ -1,6 +1,7 @@
 {
   lib,
   aiohttp,
+  brotli,
   buildPythonPackage,
   fetchPypi,
   google-auth,
@@ -9,22 +10,19 @@
   mock,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-resumable-media";
-  version = "2.7.2";
+  version = "2.10.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "google_resumable_media";
     inherit version;
-    hash = "sha256-UoCu1GKfK2C4R7DUL5hX/Uk1wRryZnRN8z2AdMrpL+A=";
+    hash = "sha256-Ikl1Ay3bc/ftni8PTMCO0bBodMUtSMyFM+PrcpgLIaA=";
   };
 
   build-system = [ setuptools ];
@@ -40,11 +38,13 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    brotli
     google-cloud-testutils
     mock
     pytest-asyncio
     pytestCheckHook
-  ] ++ optional-dependencies.requests;
+  ]
+  ++ optional-dependencies.requests;
 
   preCheck = ''
     # prevent shadowing imports
@@ -60,11 +60,11 @@ buildPythonPackage rec {
     "google.resumable_media"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Utilities for Google Media Downloads and Resumable Uploads";
     homepage = "https://github.com/GoogleCloudPlatform/google-resumable-media-python";
     changelog = "https://github.com/googleapis/google-resumable-media-python/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

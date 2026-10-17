@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  bash,
+  bashNonInteractive,
   bzip2,
   coreutils,
   cpio,
@@ -22,7 +22,6 @@
   ld64,
   libffi,
   libiconv,
-  libtapi,
   libxml2,
   llvmPackages,
   ncurses,
@@ -49,19 +48,12 @@ stdenv.mkDerivation (finalAttrs: {
     let
       inherit (lib) getBin getDev getLib;
 
-      coreutils_ =
-        (coreutils.override (prevArgs: {
-          # We want coreutils without ACL support.
-          aclSupport = false;
-          # Cannot use a single binary build, or it gets dynamically linked against gmp.
-          singleBinary = false;
-        })).overrideAttrs
-          (prevAttrs: {
-            # Increase header size to be able to inject extra RPATHs. Otherwise
-            # x86_64-darwin build fails as:
-            #    https://cache.nixos.org/log/g5wyq9xqshan6m3kl21bjn1z88hx48rh-stdenv-bootstrap-tools.drv
-            NIX_LDFLAGS = (prevAttrs.NIX_LDFLAGS or "") + " -headerpad_max_install_names";
-          });
+      coreutils_ = coreutils.override (prevArgs: {
+        # We want coreutils without ACL support.
+        aclSupport = false;
+        # Cannot use a single binary build, or it gets dynamically linked against gmp.
+        singleBinary = false;
+      });
 
       # Avoid messing with libkrb5 and libnghttp2.
       curl_ = curlMinimal.override (prevArgs: {
@@ -129,9 +121,9 @@ stdenv.mkDerivation (finalAttrs: {
 
       # Copy coreutils, bash, etc.
       cp ${getBin coreutils_}/bin/* $out/bin
-      (cd $out/bin && rm vdir dir sha*sum pinky factor pathchk runcon shuf who whoami shred users)
+      (cd $out/bin && rm vdir dir sha*sum pinky factor pathchk shuf who whoami shred users && rm -f runcon)
 
-      cp -d ${getBin bash}/bin/{ba,}sh $out/bin
+      cp -d ${getBin bashNonInteractive}/bin/{ba,}sh $out/bin
       cp -d ${getBin diffutils}/bin/* $out/bin
       cp ${getBin findutils}/bin/{find,xargs} $out/bin
       cp -d ${getBin gawk}/bin/{g,}awk $out/bin
@@ -150,7 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
       cp -d ${getBin bzip2}/bin/b{,un}zip2 $out/bin
       cp ${getBin cpio}/bin/cpio $out/bin
       cp ${getBin gnutar}/bin/tar $out/bin
-      cp ${getBin gzip}/bin/.gzip-wrapped $out/bin/gzip
+      cp ${getBin gzip}/bin/gzip $out/bin/gzip
       cp ${getBin pbzx}/bin/pbzx $out/bin
       cp ${getBin xz}/bin/xz $out/bin
       cp -d ${getLib bzip2}/lib/libbz2*.dylib $out/lib
@@ -181,18 +173,17 @@ stdenv.mkDerivation (finalAttrs: {
 
       # Copy tools needed to build the SDK
       cp -d ${getBin jq}/bin/* $out/bin
-      cp -d ${getBin libtapi}/bin/* $out/bin
+      cp -d ${getBin llvmPackages.llvm}/bin/llvm-readtapi $out/bin
 
       cp -d ${getLib jq}/lib/lib*.dylib $out/lib
       cp -d ${getLib oniguruma}/lib/lib*.dylib $out/lib
-      cp -d ${getLib libtapi}/lib/libtapi*.dylib $out/lib
 
       # copy sigtool
       cp -d ${getBin darwin.sigtool}/bin/{codesign,sigtool} $out/bin
 
       # tools needed to unpack bootstrap archive
       mkdir -p unpack/bin unpack/lib
-      cp -d ${getBin bash}/bin/{bash,sh} unpack/bin
+      cp -d ${getBin bashNonInteractive}/bin/{ba,}sh unpack/bin
       cp ${getBin coreutils_}/bin/mkdir unpack/bin
       cp ${getBin gnutar}/bin/tar unpack/bin
       cp ${getBin xz}/bin/xz unpack/bin
@@ -232,7 +223,7 @@ stdenv.mkDerivation (finalAttrs: {
           rpath='@loader_path/..'
           ;;
         *)
-          echo unkown executable $1 >&2
+          echo unknown executable $1 >&2
           exit 1
           ;;
         esac
@@ -294,6 +285,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    maintainers = [ lib.maintainers.copumpkin ];
+    teams = [ lib.teams.darwin ];
   };
 })

@@ -1,148 +1,233 @@
 {
-  fetchurl,
   lib,
   stdenv,
+  fetchurl,
   dpkg,
   makeWrapper,
   alsa-lib,
+  atk,
+  bintools,
   brotli,
+  bzip2,
+  cairo,
   cups,
   curl,
   dbus,
   expat,
   fontconfig,
   freetype,
+  gdk-pixbuf,
   glib,
+  gnutls,
+  gsm,
   gst_all_1,
+  gtk3,
   harfbuzz,
+  jbigkit,
   lcms,
+  libbluray,
   libcap,
+  libdrm,
   libevent,
+  libgbm,
   libGL,
   libGLU,
+  libinput,
+  libjpeg,
   libkrb5,
+  libmng,
+  libopenmpt,
   libopus,
   libpulseaudio,
+  librsvg,
+  libssh,
+  libtheora,
+  libtiff,
+  libva,
+  libvdpau,
+  libvorbis,
+  libwebp,
   libxkbcommon,
   libxkbfile,
-  libxml2,
+  # Viber's bundled Qt6WebEngineCore and libavformat need the libxml2.so.2 soname
+  libxml2_13,
   libxslt,
-  libwebp,
-  libgbm,
+  mtdev,
   nspr,
   nss,
+  numactl,
+  ocl-icd,
+  openjpeg,
   openssl,
+  pango,
   snappy,
-  systemd,
+  speex,
+  systemdLibs,
+  tslib,
+  twolame,
+  wavpack,
   wayland,
-  xorg,
+  xkeyboard-config,
+  libxcb-wm,
+  libxcb-util,
+  libxcb-render-util,
+  libxcb-keysyms,
+  libxcb-image,
+  libxtst,
+  libxshmfence,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libsm,
+  libice,
+  libxcb,
+  xvidcore,
   zlib,
   zstd,
-  ...
+  zvbi,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "viber";
-  version = "23.2.0.3";
+  version = "27.3.0.2";
 
   src = fetchurl {
     # Taking Internet Archive snapshot of a specific version to avoid breakage
     # on new versions
-    url = "https://web.archive.org/web/20240824071651/https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb";
-    hash = "sha256-9WHiI2WlsgEhCPkrQoAunmF6lSb2n5RgQJ2+sdnSShM=";
+    url = "https://web.archive.org/web/20260518041738/https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb";
+    hash = "sha256-lhU03Ay5IABux66BCLDhugmkdu7x4TtLNwp5zVLdIPM=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-
-  buildInputs = [ dpkg ];
-
-  dontUnpack = true;
+  nativeBuildInputs = [
+    dpkg
+    makeWrapper
+  ];
 
   libPath = lib.makeLibraryPath [
     alsa-lib
+    atk
     brotli
+    bzip2
+    cairo
     cups
     curl
     dbus
     expat
     fontconfig
     freetype
+    gdk-pixbuf
     glib
+    gnutls
+    gsm
+    gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
     gst_all_1.gstreamer
+    gtk3
     harfbuzz
+    jbigkit
     lcms
+    libbluray
     libcap
+    libdrm
     libevent
-    libGLU
+    libgbm
     libGL
+    libGLU
+    libinput
+    libjpeg
     libkrb5
+    libmng
+    libopenmpt
     libopus
     libpulseaudio
+    librsvg
+    libssh
+    libtheora
+    libtiff
+    libva
+    libvdpau
+    libvorbis
+    libwebp
     libxkbcommon
     libxkbfile
-    libxml2
+    libxml2_13
     libxslt
-    libwebp
-    libgbm
+    mtdev
     nspr
     nss
+    numactl
+    ocl-icd
+    openjpeg
     openssl
+    pango
     snappy
+    speex
     stdenv.cc.cc
-    systemd
+    systemdLibs
+    tslib
+    twolame
+    wavpack
     wayland
+    libice
+    libsm
+    libx11
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxrandr
+    libxrender
+    libxscrnsaver
+    libxshmfence
+    libxtst
+    libxcb
+    libxcb-image
+    libxcb-keysyms
+    libxcb-render-util
+    libxcb-util
+    libxcb-wm
+    xvidcore
     zlib
     zstd
-
-    xorg.libICE
-    xorg.libSM
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXScrnSaver
-    xorg.libXtst
-    xorg.xcbutilimage
-    xorg.xcbutilkeysyms
-    xorg.xcbutilrenderutil
-    xorg.xcbutilwm
+    zvbi
   ];
 
   installPhase = ''
-    dpkg-deb -x $src $out
-    mkdir -p $out/bin
+    runHook preInstall
 
-    # Soothe nix-build "suspicions"
-    chmod -R g-w $out
+    cp -r . $out
 
     for file in $(find $out -type f \( -perm /0111 -o -name \*.so\* \) ); do
-      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$file" || true
-      patchelf --set-rpath $libPath:$out/opt/viber/lib $file || true
+      patchelf --set-interpreter ${bintools.dynamicLinker} "$file" || true
+      patchelf --set-rpath ${finalAttrs.libPath}:$out/opt/viber/lib $file || true
     done
 
+    mkdir $out/bin
     # qt.conf is not working, so override everything using environment variables
-    wrapProgram $out/opt/viber/Viber \
+    makeWrapper $out/opt/viber/Viber $out/bin/viber \
       --set QT_QPA_PLATFORM "xcb" \
       --set QT_PLUGIN_PATH "$out/opt/viber/plugins" \
-      --set QT_XKB_CONFIG_ROOT "${xorg.xkeyboardconfig}/share/X11/xkb" \
-      --set QTCOMPOSE "${xorg.libX11.out}/share/X11/locale" \
+      --set QT_XKB_CONFIG_ROOT "${xkeyboard-config}/share/X11/xkb" \
+      --set QTCOMPOSE "${libx11.out}/share/X11/locale" \
       --set QML2_IMPORT_PATH "$out/opt/viber/qml"
-    ln -s $out/opt/viber/Viber $out/bin/viber
 
     mv $out/usr/share $out/share
     rm -rf $out/usr
-
     # Fix the desktop link
     substituteInPlace $out/share/applications/viber.desktop \
-      --replace /opt/viber/Viber $out/opt/viber/Viber \
-      --replace /usr/share/ $out/share/
+      --replace-fail "/opt/viber/" "$out/opt/viber/"
+
+    runHook postInstall
   '';
 
   dontStrip = true;
@@ -154,7 +239,5 @@ stdenv.mkDerivation {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ jagajaga ];
   };
-
-}
+})

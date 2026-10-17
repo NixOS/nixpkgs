@@ -10,15 +10,15 @@
   ipaddr-sexp,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "conduit";
-  version = "7.1.0";
+  version = "8.0.0";
 
   minimalOCamlVersion = "4.13";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ocaml-conduit/releases/download/v${version}/conduit-${version}.tbz";
-    hash = "sha256-WNIhigfnFwYCXeOMoCUyM+lw81tMrNN/cGlBtMvqV/c=";
+    url = "https://github.com/mirage/ocaml-conduit/releases/download/v${finalAttrs.version}/conduit-${finalAttrs.version}.tbz";
+    hash = "sha256-CmPZEIZbVHOJOhcM2lH2E4j0iOz0xLLtf+nsTiz2b2E=";
   };
 
   propagatedBuildInputs = [
@@ -34,9 +34,8 @@ buildDunePackage rec {
     description = "Network connection establishment library";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [
-      alexfmpe
       vbgl
     ];
     homepage = "https://github.com/mirage/ocaml-conduit";
   };
-}
+})

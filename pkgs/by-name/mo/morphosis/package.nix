@@ -18,20 +18,18 @@
   wrapGAppsHook4,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "morphosis";
-  version = "1.4.1";
+  version = "48.2";
   pyproject = false;
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "morphosis";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ZpxenBqC5qr7yNwjld0u7gSBQfL7Kpa4FWE9gkzG0hg=";
+    tag = finalAttrs.version;
+    hash = "sha256-wDEhXIt1iup7QxKsmWUjQZGTEZhOuNjpLqzpqs+TPHo=";
   };
-
-  strictDeps = true;
 
   nativeBuildInputs = [
     appstream
@@ -71,4 +69,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "morphosis";
     platforms = lib.platforms.linux;
   };
-}
+})

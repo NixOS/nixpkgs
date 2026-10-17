@@ -5,23 +5,21 @@
   makeWrapper,
   iw,
 }:
-let
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "netscanner";
-  version = "0.6.2";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
+  version = "0.6.43";
 
   nativeBuildInputs = [ makeWrapper ];
 
   src = fetchFromGitHub {
     owner = "Chleba";
     repo = "netscanner";
-    tag = "v${version}";
-    hash = "sha256-/8UhnJ4ZPaJ+CQPCeKr1uH0Iw6A4/DARiSukK6+ZZeY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-LLzv8+wAlZgXrj1Ldc+uGDfhvDYDtRU25R7UbmGb+ok=";
   };
 
-  cargoHash = "sha256-u6Q9QPyOSMc356fkO4XVWUL0GGN1c2CoKhVvt1P30AU=";
+  cargoHash = "sha256-47bvcj+0ZRcHjyt0cpZ0PT+NRvYdvBQcTTf9tZHci2Q=";
 
   postFixup = ''
     wrapProgram $out/bin/netscanner \
@@ -31,9 +29,9 @@ rustPlatform.buildRustPackage {
   meta = {
     description = "Network scanner with features like WiFi scanning, packetdump and more";
     homepage = "https://github.com/Chleba/netscanner";
-    changelog = "https://github.com/Chleba/netscanner/releases/tag/v${version}";
+    changelog = "https://github.com/Chleba/netscanner/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ NotAShelf ];
     mainProgram = "netscanner";
   };
-}
+})

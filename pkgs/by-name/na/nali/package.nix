@@ -1,13 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, buildGoModule, installShellFiles }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildGoModule,
+  installShellFiles,
+}:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nali";
   version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "zu1k";
     repo = "nali";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-5AI8TAKYFqjgLVKob9imrf7yVmXmAPq/zHh1bDfC5r0=";
   };
 
@@ -17,22 +23,29 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ];
 
   env.CGO_ENABLED = 0;
-  ldflags = [ "-s" "-w" "-X github.com/zu1k/nali/internal/constant.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/zu1k/nali/internal/constant.Version=${finalAttrs.version}"
+  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      export HOME="$TMPDIR"
-      # write to temp files to avoid race condition in config loading
-      $out/bin/nali completion bash > nali.bash
-      $out/bin/nali completion fish > nali.fish
-      $out/bin/nali completion zsh  > nali.zsh
-      installShellCompletion --cmd nali nali.{bash,fish,zsh}
+    export HOME="$TMPDIR"
+    # write to temp files to avoid race condition in config loading
+    $out/bin/nali completion bash > nali.bash
+    $out/bin/nali completion fish > nali.fish
+    $out/bin/nali completion zsh  > nali.zsh
+    installShellCompletion --cmd nali nali.{bash,fish,zsh}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Offline tool for querying IP geographic information and CDN provider";
     homepage = "https://github.com/zu1k/nali";
-    license = licenses.mit;
-    maintainers = with maintainers; [ diffumist xyenon ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      diffumist
+      xyenon
+    ];
     mainProgram = "nali";
   };
-}
+})

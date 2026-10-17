@@ -17,17 +17,17 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gnome-graphs";
-  version = "1.8.2";
+  version = "1.8.8";
   pyproject = false;
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Graphs";
-    rev = "v${version}";
-    hash = "sha256-juKo4pFAjowGaykHkByfA9kEJ68z1ttGhA0OsfHt/XM=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-XsdrXdIZmAngS52KmjcNbOWwYJsnhNGELSd0p3h/XWE=";
   };
 
   nativeBuildInputs = [
@@ -70,12 +70,12 @@ python3Packages.buildPythonApplication rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple, yet powerful tool that allows you to plot and manipulate your data with ease";
     homepage = "https://apps.gnome.org/Graphs";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "graphs";
-    maintainers = lib.teams.gnome-circle.members;
-    platforms = platforms.linux; # locale.bindtextdomain only available on linux
+    teams = [ lib.teams.gnome-circle ];
+    platforms = lib.platforms.linux; # locale.bindtextdomain only available on linux
   };
-}
+})

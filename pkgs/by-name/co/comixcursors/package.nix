@@ -52,7 +52,7 @@ stdenvNoCC.mkDerivation rec {
     repo = "comixcursors";
     # https://gitlab.com/limitland/comixcursors/-/issues/3
     rev = "8c327c8514ab3a352583605c1ddcb7eb3d1d302b";
-    sha256 = "0bpxqw4izj7m0zb9lnxnmsjicfw60ppkdyv5nwrrz4x865wb296a";
+    hash = "sha256-yiSxeDGok58zt2X7Nu8FhjsWpa62W5rWB/XIHwnH/S4=";
   };
 
   nativeBuildInputs = [
@@ -116,10 +116,10 @@ stdenvNoCC.mkDerivation rec {
   # attributes are used to choose which variant(s) to have.
   outputsToInstall = [ ];
 
-  meta = with lib; {
+  meta = {
     description = "Comix Cursors mouse themes";
     longDescription = ''
-      There are many (${toString ((length outputs) - 1)}) variants of color,
+      There are many (${toString ((lib.length outputs) - 1)}) variants of color,
       opacity, edge thickness, and right- or left-handedness, for this cursor
       theme.  This package's derivation has an output for each of these
       variants, named following the upstream convention, and the attribute for
@@ -131,8 +131,8 @@ stdenvNoCC.mkDerivation rec {
     '';
     homepage = "https://gitlab.com/limitland/comixcursors";
     changelog = "https://gitlab.com/limitland/comixcursors/-/blob/HEAD/NEWS";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.DerickEddington ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.DerickEddington ];
+    platforms = lib.platforms.all;
   };
 }

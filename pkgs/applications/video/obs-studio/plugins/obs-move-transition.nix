@@ -6,15 +6,15 @@
   obs-studio,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "obs-move-transition";
-  version = "3.1.1";
+  version = "3.2.1-unstable-2026-10-04";
 
   src = fetchFromGitHub {
     owner = "exeldro";
     repo = "obs-move-transition";
-    rev = version;
-    sha256 = "sha256-kCiRgfpcFdxoK6e8jtrtzkBD4w5B/ilO1YyBHCG13gg=";
+    rev = "64590490d87d93cc03baf0b35b90709468d9fb03";
+    hash = "sha256-GOXNUwA2ASzDHMjsXSdUYQzqOtEBwmrr3oz5TXueKjY=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -24,14 +24,11 @@ stdenv.mkDerivation rec {
     rm -rf $out/obs-plugins $out/data
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Plugin for OBS Studio to move source to a new position during scene transition";
     homepage = "https://github.com/exeldro/obs-move-transition";
-    maintainers = with maintainers; [ starcraft66 ];
-    license = licenses.gpl2Plus;
-    platforms = [
-      "x86_64-linux"
-      "i686-linux"
-    ];
+    maintainers = with lib.maintainers; [ starcraft66 ];
+    license = lib.licenses.gpl2Plus;
+    inherit (obs-studio.meta) platforms;
   };
 }

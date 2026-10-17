@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "openpreserve";
-    repo = pname;
+    repo = "jpylyzer";
     rev = version;
     hash = "sha256-P42qAks8suI/Xknwd8WAkymbGE7RApRa/a11J/V4LA0=";
   };
@@ -57,11 +57,11 @@ buildPythonPackage rec {
     withFullCheck = jpylyzer.override { doFullCheck = true; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "JP2 (JPEG 2000 Part 1) image validator and properties extractor";
     mainProgram = "jpylyzer";
     homepage = "https://jpylyzer.openpreservation.org/";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ ris ];
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ ris ];
   };
 }

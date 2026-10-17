@@ -2,41 +2,49 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  social-auth-core,
+  setuptools,
   django,
-  python,
-  pythonOlder,
+  social-auth-core,
+  pytest-django,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "social-auth-app-django";
-  version = "5.4.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "6.0.1";
+  pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "python-social-auth";
     repo = "social-app-django";
-    tag = version;
-    hash = "sha256-W9boogixZ7X6qysfh2YEat+TOBy1VNreGr27y8hno+0=";
+    tag = finalAttrs.version;
+    hash = "sha256-5aZQcGPX93XITzJCgL+s5Jxep+qqVbYGvzMXDRpZXdY=";
   };
 
-  propagatedBuildInputs = [ social-auth-core ];
+  build-system = [ setuptools ];
+
+  dependencies = [
+    django
+    social-auth-core
+  ];
 
   pythonImportsCheck = [ "social_django" ];
 
-  nativeCheckInputs = [ django ];
+  nativeCheckInputs = [
+    pytest-django
+    pytestCheckHook
+  ];
 
-  checkPhase = ''
-    ${python.interpreter} -m django test --settings="tests.settings"
+  preCheck = ''
+    export DJANGO_SETTINGS_MODULE=tests.settings
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Module for social authentication/registration mechanism";
     homepage = "https://github.com/python-social-auth/social-app-django";
-    changelog = "https://github.com/python-social-auth/social-app-django/blob/${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/python-social-auth/social-app-django/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
-}
+})

@@ -3,7 +3,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  substituteAll,
+  replaceVars,
 
   # build-system
   setuptools,
@@ -22,7 +22,6 @@
 
   # tests
   pytestCheckHook,
-  pythonOlder,
 
 }:
 
@@ -31,16 +30,13 @@ buildPythonPackage rec {
   version = "1.3.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-GuyzC38oJATxfkN2jL90pqMb8is7eDvdEXoc6dIst0w=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./libportmidi-cdll.patch;
+    (replaceVars ./libportmidi-cdll.patch {
       libportmidi = "${portmidi.out}/lib/libportmidi${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];
@@ -64,11 +60,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mido" ];
 
-  meta = with lib; {
+  meta = {
     description = "MIDI Objects for Python";
     homepage = "https://mido.readthedocs.io";
     changelog = "https://github.com/mido/mido/releases/tag/${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

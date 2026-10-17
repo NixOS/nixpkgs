@@ -1,5 +1,6 @@
 {
   fetchFromGitLab,
+  fetchpatch,
   inih,
   lib,
   libdrm,
@@ -10,21 +11,40 @@
   pkg-config,
   scdoc,
   stdenv,
-  unstableGitUpdater,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "buffybox";
-  version = "3.2.0-unstable-2024-12-09";
+  version = "3.5.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.postmarketos.org";
     owner = "postmarketOS";
     repo = "buffybox";
     fetchSubmodules = true; # to use its vendored lvgl
-    rev = "32f4837e836fbb0b820d68c74c3278c925369b04";
-    hash = "sha256-d9fa/Zqbm/+WMRmO0hBW83PCTDgaVOAxyRuSTItr9Xs=";
+    tag = finalAttrs.version;
+    hash = "sha256-aOPfKqnUIkJozt+DwVJjbNQEcmpjCmUgJUjTx9LV23M=";
   };
+
+  mesonFlags = [
+    (lib.mesonBool "systemd" true)
+  ];
+
+  patches = [
+    /*
+      There's a close to zero chance that anyone with a 32-bit machine will be using BuffyBox.
+      In the case that it happens, I expect no complaints whatsoever.
+
+      https://gitlab.postmarketos.org/postmarketOS/buffybox/-/merge_requests/87
+    */
+
+    (fetchpatch {
+      name = "fix-32-bit-build";
+      url = "https://gitlab.postmarketos.org/postmarketOS/buffybox/-/merge_requests/87.patch";
+      hash = "sha256-GUk+YrG07hL+0w70qvymPzHGTmUXdfzG4Cy35gg/Asw=";
+    })
+  ];
 
   depsBuildBuild = [
     pkg-config
@@ -48,13 +68,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
-    description = "A suite of graphical applications for the terminal";
+  meta = {
+    description = "Suite of graphical applications for the terminal";
     homepage = "https://gitlab.postmarketos.org/postmarketOS/buffybox";
-    license = licenses.gpl3Plus;
+    changelog = "https://gitlab.postmarketos.org/postmarketOS/buffybox/-/blob/main/CHANGELOG.md";
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ colinsane ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

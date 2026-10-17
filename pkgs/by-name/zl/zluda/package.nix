@@ -14,16 +14,17 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zluda";
-  version = "3";
+  version = "6";
 
   src = fetchFromGitHub {
     owner = "vosen";
     repo = "ZLUDA";
-    rev = "v${version}";
-    hash = "sha256-lykM18Ml1eeLMj/y6uPk34QOeh7Y59i1Y0Nr118Manw=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-5+ip6YGIgGH892UzcP/3vHoxRD0YpUNTkryNDg9gojs=";
     fetchSubmodules = true;
+    fetchLFS = true;
   };
 
   buildInputs = [
@@ -34,6 +35,7 @@ rustPlatform.buildRustPackage rec {
     rocmPackages.rocsolver
     rocmPackages.rocblas
     rocmPackages.hipblas
+    rocmPackages.hipblaslt
     rocmPackages.rocm-cmake
     rocmPackages.hipfft
     zlib
@@ -49,25 +51,15 @@ rustPlatform.buildRustPackage rec {
     clang
   ];
 
-  cargoHash = "sha256-gZdLThmaeWVJXoeG7fuusfacgH2RNTHrqm8W0kqkqOY=";
-  cargoLock.lockFile = ./Cargo.lock;
+  cargoHash = "sha256-q5DagH0USWZNni0UrwHzeHe4LpaOCHU0ffOek7PUz50=";
+
+  # Tests require a GPU and segfault in the sandbox
+  doCheck = false;
 
   # xtask doesn't support passing --target, but nix hooks expect the folder structure from when it's set
   env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.cargoShortTarget;
 
-  # vergen panics if the .git directory isn't present
-  # Disable vergen and manually set env
-  postPatch = ''
-    substituteInPlace zluda/build.rs \
-      --replace-fail 'vergen(Config::default())' 'Some(())'
-    # ZLUDA repository missing Cargo.lock: vosen/ZLUDA#43
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
-  env.VERGEN_GIT_SHA = src.rev;
-
   preConfigure = ''
-    # Comment out zluda_blaslt in Cargo.toml until hipBLASLt package is added: https://github.com/NixOS/nixpkgs/issues/197885#issuecomment-2046178008
-    sed -i '/zluda_blaslt/d' Cargo.toml
     # disable test written for windows only: https://github.com/vosen/ZLUDA/blob/774f4bcb37c39f876caf80ae0d39420fa4bc1c8b/zluda_inject/tests/inject.rs#L55
     rm zluda_inject/tests/inject.rs
   '';
@@ -85,12 +77,12 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = {
-    description = "ZLUDA - CUDA on Intel GPUs";
+    description = "CUDA on non-Nvidia GPUs";
     homepage = "https://github.com/vosen/ZLUDA";
-    changelog = "https://github.com/vosen/ZLUDA/releases/tag/${src.rev}";
+    changelog = "https://github.com/vosen/ZLUDA/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = [
       lib.maintainers.errnoh
     ];
   };
-}
+})

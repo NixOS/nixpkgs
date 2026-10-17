@@ -4,7 +4,7 @@
   stdenv,
   fetchurl,
   autoPatchelfHook,
-  undmg,
+  _7zz,
   zstd,
   alsa-lib,
   curl,
@@ -14,7 +14,11 @@
   vulkan-loader,
   wayland,
   xdg-utils,
-  xorg,
+  libxi,
+  libxcursor,
+  libx11,
+  libxcb,
+  xz, # liblzma
   zlib,
   makeWrapper,
   waylandSupport ? false,
@@ -54,6 +58,7 @@ let
       fontconfig
       (lib.getLib stdenv.cc.cc) # libstdc++.so libgcc_s.so
       zlib
+      xz
     ];
 
     runtimeDependencies = [
@@ -62,26 +67,34 @@ let
       stdenv.cc.libc
       vulkan-loader
       xdg-utils
-      xorg.libX11
-      xorg.libxcb
-      xorg.libXcursor
-      xorg.libXi
-    ] ++ lib.optionals waylandSupport [ wayland ];
+      libx11
+      libxcb
+      libxcursor
+      libxi
+    ]
+    ++ lib.optionals waylandSupport [ wayland ];
 
-    installPhase =
-      ''
-        runHook preInstall
+    installPhase = ''
+      runHook preInstall
 
-        mkdir $out
-        cp -r opt usr/* $out
+      mkdir $out
+      cp -r opt usr/* $out
 
-      ''
-      + lib.optionalString waylandSupport ''
-        wrapProgram $out/bin/warp-terminal --set WARP_ENABLE_WAYLAND 1
-      ''
-      + ''
-        runHook postInstall
-      '';
+    ''
+    + lib.optionalString waylandSupport ''
+      wrapProgram $out/bin/warp-terminal --set WARP_ENABLE_WAYLAND 1
+    ''
+    + ''
+      runHook postInstall
+    '';
+
+    postFixup = ''
+      # Link missing libfontconfig to fix font discovery
+      # https://github.com/warpdotdev/Warp/issues/5793
+      patchelf \
+        --add-needed libfontconfig.so.1 \
+        $out/opt/warpdotdev/warp-terminal/warp
+    '';
   });
 
   darwin = stdenvNoCC.mkDerivation (finalAttrs: {
@@ -94,7 +107,13 @@ let
 
     sourceRoot = ".";
 
-    nativeBuildInputs = [ undmg ];
+    # Warp.dmg is APFS formatted, which is unsupported by undmg
+    nativeBuildInputs = [ _7zz ];
+
+    # Warp.app ships signed and notarized. Rewriting the shebang of
+    # Contents/Resources/bin/oz breaks the code signature seal, so macOS
+    # refuses to launch the app. /bin/bash always exists on darwin anyway.
+    dontPatchShebangs = true;
 
     installPhase = ''
       runHook preInstall
@@ -106,18 +125,20 @@ let
     '';
   });
 
-  meta = with lib; {
+  meta = {
     description = "Rust-based terminal";
     homepage = "https://www.warp.dev";
-    license = licenses.unfree;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [
-      emilytrau
-      imadnyc
-      donteatoreo
-      johnrtitor
+    license = with lib.licenses; [
+      mit
+      agpl3Only
     ];
-    platforms = platforms.darwin ++ [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [
+      _4evy
+      johnrtitor
+      logger
+    ];
+    platforms = lib.platforms.darwin ++ [
       "x86_64-linux"
       "aarch64-linux"
     ];

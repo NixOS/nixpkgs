@@ -12,9 +12,9 @@
   makeWrapper,
   removeReferencesTo,
   replaceVars,
-  go,
   applyPatches,
   nvidia-modprobe,
+  go,
 }:
 let
   modprobeVersion = "550.54.14";
@@ -30,15 +30,15 @@ let
     ];
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libnvidia-container";
-  version = "1.17.2";
+  version = "1.20.0";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "libnvidia-container";
-    rev = "v${version}";
-    hash = "sha256-JmJKvAOEPyjVx2Frd0tAMBjnAUTMpMh1KBt6wr5RRmk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FlHMGMyKkqqtIAl/T5nGkfZNsurcoltKwxn2lSIOq7g=";
   };
 
   patches = [
@@ -55,20 +55,17 @@ stdenv.mkDerivation rec {
     (replaceVars ./0002-nvc-nvidia-docker-compatible-binary-lookups.patch {
       inherit (addDriverRunpath) driverLink;
     })
-
-    # fix bogus struct declaration
-    ./0003-nvc-fix-struct-declaration.patch
   ];
 
   postPatch = ''
     sed -i \
-      -e 's/^REVISION ?=.*/REVISION = ${src.rev}/' \
+      -e 's/^REVISION ?=.*/REVISION = ${finalAttrs.src.tag}/' \
       -e 's/^COMPILER :=.*/COMPILER = $(CC)/' \
       mk/common.mk
 
     sed -i \
-      -e 's/^GIT_TAG ?=.*/GIT_TAG = ${version}/' \
-      -e 's/^GIT_COMMIT ?=.*/GIT_COMMIT = ${src.rev}/' \
+      -e 's/^GIT_TAG ?=.*/GIT_TAG = ${finalAttrs.version}/' \
+      -e 's/^GIT_COMMIT ?=.*/GIT_COMMIT = ${finalAttrs.src.tag}/' \
       versions.mk
 
     mkdir -p deps/src/nvidia-modprobe-${modprobeVersion}
@@ -101,6 +98,15 @@ stdenv.mkDerivation rec {
       --replace-fail ldconfig true
   '';
 
+  # Recreate library symlinks which ldconfig would have created
+  postFixup = ''
+    for lib in libnvidia-container libnvidia-container-go; do
+      rm -f "$out/lib/$lib.so"
+      ln -s "$out/lib/$lib.so.${finalAttrs.version}" "$out/lib/$lib.so.1"
+      ln -s "$out/lib/$lib.so.1" "$out/lib/$lib.so"
+    done
+  '';
+
   enableParallelBuilding = true;
 
   preBuild = ''
@@ -108,15 +114,18 @@ stdenv.mkDerivation rec {
   '';
 
   env = {
-    NIX_CFLAGS_COMPILE = toString [ "-I${lib.getInclude libtirpc}/include/tirpc" ];
+    NIX_CFLAGS_COMPILE = toString [
+      "-I${lib.getInclude libtirpc}/include/tirpc"
+      "-DWITH_TIRPC"
+    ];
     CGO_ENABLED = "1"; # Needed for cross-compilation
     GOFLAGS = "-trimpath"; # Don't include paths to Go stdlib to resulting binary
     inherit (go) GOARCH GOOS;
+    NIX_LDFLAGS = toString [
+      "-L${lib.getLib libtirpc}/lib"
+      "-ltirpc"
+    ];
   };
-  NIX_LDFLAGS = [
-    "-L${lib.getLib libtirpc}/lib"
-    "-ltirpc"
-  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -136,10 +145,8 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "WITH_LIBELF=yes"
     "prefix=$(out)"
-    # we can't use the WITH_TIRPC=yes flag that exists in the Makefile for the
-    # same reason we patch out the static library use of libtirpc so we set the
-    # define in CFLAGS
-    "CFLAGS=-DWITH_TIRPC"
+    # We can't use WITH_TIRPC=yes because we don't build static libtirpc.
+    # NIX_CFLAGS_COMPILE sets the required define instead.
   ];
 
   postInstall =
@@ -152,20 +159,20 @@ stdenv.mkDerivation rec {
       ];
     in
     ''
-      remove-references-to -t "${go}" $out/lib/libnvidia-container-go.so.${version}
+      remove-references-to -t "${go}" $out/lib/libnvidia-container-go.so.${finalAttrs.version}
       wrapProgram $out/bin/nvidia-container-cli --prefix LD_LIBRARY_PATH : ${libraryPath}
     '';
   disallowedReferences = [ go ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/NVIDIA/libnvidia-container";
     description = "NVIDIA container runtime library";
-    license = licenses.asl20;
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
     mainProgram = "nvidia-container-cli";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       cpcloud
       msanft
     ];
   };
-}
+})

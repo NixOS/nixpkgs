@@ -5,7 +5,7 @@
   fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage {
   pname = "haste-server";
   version = "unstable-2023-03-06";
 
@@ -22,6 +22,7 @@ buildNpmPackage rec {
 
   postInstall = ''
     install -Dt "$out/share/haste-server" about.md
+    rm -rf "$out/lib/node_modules/haste/node_modules/.bin/"
   '';
 
   passthru = {
@@ -30,11 +31,11 @@ buildNpmPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open source pastebin written in Node.js";
     homepage = "https://github.com/toptal/haste-server";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "haste-server";
-    maintainers = with maintainers; [ mkg20001 ];
+    maintainers = with lib.maintainers; [ mkg20001 ];
   };
 }

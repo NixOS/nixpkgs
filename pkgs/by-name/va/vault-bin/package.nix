@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   pname = "vault-bin";
-  version = "1.18.3";
+  version = "2.2.0";
 
   src =
     let
@@ -16,15 +16,13 @@ stdenv.mkDerivation rec {
         x86_64-linux = "linux_amd64";
         aarch64-linux = "linux_arm64";
         i686-linux = "linux_386";
-        x86_64-darwin = "darwin_amd64";
         aarch64-darwin = "darwin_arm64";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-pELGadExnOMVC+BZMk6vmth6cN2f0DdVz8gQmaHDv8Y=";
-        aarch64-linux = "sha256-53LGpPcJUz+1Dw8UKE5tX6VGMJc4LfXw2MaiKKfYbvI=";
-        i686-linux = "sha256-3SEw3iOEYC/HopzvjJNXgtYZhpSag1lgsmsq7goyZDs=";
-        x86_64-darwin = "sha256-Bz0mhmFOfJL3m1qX7lmLHNGuZCkyKXu14X523M9Dp0Q=";
-        aarch64-darwin = "sha256-GM6pN4cngjt7dhF5mNqeoygS4+fkCjsCGyxo/IEaMWs=";
+        x86_64-linux = "sha256-rTDCCipEKt/lm9Es9MLQG3LCuT4//6nJxFOR0jMiNS0=";
+        aarch64-linux = "sha256-rAxLlAOlL5Q9U7om3zuytO+uze6JVkKDMG7CwmT4zUs=";
+        i686-linux = "sha256-7YN7Ll+374Wr8Hai0h1TkvirpGzHvxCyPV+U7YBSdH8=";
+        aarch64-darwin = "sha256-Qx2oFtFXp63jhxLnnWEu+HgEU79qLdWJMKHz5pWyuv4=";
       };
     in
     fetchzip {
@@ -56,25 +54,20 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = ./update-bin.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Tool for managing secrets, this binary includes the UI";
     homepage = "https://www.vaultproject.io";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.bsl11;
-    maintainers =
-      with maintainers;
-      teams.serokell.members
-      ++ [
-        offline
-        psyanticy
-        Chili-Man
-        techknowlogick
-      ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.bsl11;
+    maintainers = with lib.maintainers; [
+      psyanticy
+      Chili-Man
+      techknowlogick
+    ];
     mainProgram = "vault";
     platforms = [
       "x86_64-linux"
       "i686-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
       "aarch64-linux"
     ];

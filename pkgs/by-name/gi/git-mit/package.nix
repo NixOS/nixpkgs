@@ -1,16 +1,15 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, libgit2
-, openssl
-, zlib
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  libgit2,
+  openssl,
+  zlib,
 }:
 
 let
-  version = "5.14.3";
+  version = "6.6.0";
 in
 rustPlatform.buildRustPackage {
   pname = "git-mit";
@@ -19,11 +18,11 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "PurpleBooth";
     repo = "git-mit";
-    rev = "v${version}";
-    hash = "sha256-+7rl4wxVQq4bLBsnLSeJD+1kkRuf7FCi81pXGrNNOPI=";
+    tag = "v${version}";
+    hash = "sha256-F9lU75X3Ysb1Lgjc0UVoyhBY1jrrgt5wEc4zjn18HjI=";
   };
 
-  cargoHash = "sha256-44Eo3ewjJj+JLnGfqm3Zb4v4qKklC23pFyJSGcKE8q8=";
+  cargoHash = "sha256-hq05UxZ0wzfz1NVvxOUjpsZ3U7h3w/l4d6mdaoFmO8I=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -31,19 +30,17 @@ rustPlatform.buildRustPackage {
     libgit2
     openssl
     zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.AppKit
   ];
 
   env = {
     LIBGIT2_NO_VENDOR = 1;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Minimalist set of hooks to aid pairing and link commits to issues";
     homepage = "https://github.com/PurpleBooth/git-mit";
     changelog = "https://github.com/PurpleBooth/git-mit/releases/tag/v${version}";
-    license = licenses.cc0;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.cc0;
+    maintainers = [ lib.maintainers.matthiasbeyer ];
   };
 }

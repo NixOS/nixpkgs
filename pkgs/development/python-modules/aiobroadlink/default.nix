@@ -3,33 +3,33 @@
   buildPythonPackage,
   cryptography,
   fetchPypi,
-  pythonOlder,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiobroadlink";
-  version = "0.1.3";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "0.1.4";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-uTUtDhL9VtWZE+Y6ZJY4prmlE+Yh2UrCg5+eSyAQzMk=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-3/IGp1gYfLNBkJuh8JJ/Wy73aJW61O0imM5w4HneZH0=";
   };
 
-  propagatedBuildInputs = [ cryptography ];
+  build-system = [ setuptools ];
+
+  dependencies = [ cryptography ];
 
   # Project has no tests
   doCheck = false;
 
   pythonImportsCheck = [ "aiobroadlink" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to control various Broadlink devices";
     mainProgram = "aiobroadlink";
     homepage = "https://github.com/frawau/aiobroadlink";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

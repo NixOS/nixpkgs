@@ -6,15 +6,15 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "z-lua";
-  version = "1.8.20";
+  version = "1.8.26";
 
   src = fetchFromGitHub {
     owner = "skywind3000";
     repo = "z.lua";
-    rev = version;
-    sha256 = "sha256-8ANFHI2lnf81TF3Nrrg+fW0Z3TXYkQR8913GXF304kA=";
+    tag = finalAttrs.version;
+    hash = "sha256-ohcBKf/m8vnypXVFm+09YbwAgA6BQkPB/Objnt/tZpw=";
   };
 
   dontBuild = true;
@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/skywind3000/z.lua";
     description = "New cd command that helps you navigate faster by learning your habits";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ naderhaj ];
     mainProgram = "z.lua";
   };
-}
+})

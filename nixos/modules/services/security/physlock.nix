@@ -116,10 +116,12 @@ in
 
         systemd.services.physlock = {
           enable = true;
+          documentation = [ "man:physlock(1)" ];
           description = "Physlock";
           wantedBy =
             lib.optional cfg.lockOn.suspend "suspend.target"
             ++ lib.optional cfg.lockOn.hibernate "hibernate.target"
+            ++ lib.optional (cfg.lockOn.hibernate || cfg.lockOn.suspend) "suspend-then-hibernate.target"
             ++ cfg.lockOn.extraTargets;
           before =
             lib.optional cfg.lockOn.suspend "systemd-suspend.service"

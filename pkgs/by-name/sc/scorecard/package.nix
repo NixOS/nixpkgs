@@ -1,21 +1,23 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
   testers,
   scorecard,
+  gitMinimal,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "scorecard";
-  version = "5.0.0";
+  version = "5.5.0";
 
   src = fetchFromGitHub {
     owner = "ossf";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-9DuADuEIoZNwkvdKyqus2zNfIK31Jc3+bPW3/z8fvlc=";
+    repo = "scorecard";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JoniiCPz6YvBXGZTxmrcka5zerzmJnb+bAKuIW6/evQ=";
     # populate values otherwise taken care of by goreleaser,
     # unfortunately these require us to use git. By doing
     # this in postFetch we can delete .git afterwards and
@@ -29,7 +31,11 @@ buildGoModule rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorHash = "sha256-apOVAlGjaYSrW4qtUdDNgqwWxnVlBLhrefWEUvN4lzE=";
+  vendorHash =
+    if stdenv.hostPlatform.isLinux then
+      "sha256-MWliMIMjNR6cgkyi2KYemswtFitM8ypnz4qka/WoO0g="
+    else
+      "sha256-y9URHMmKm4JnTHb7RkrL5LaCrcp6b7DOMwNnVrO1rvo=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -38,7 +44,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X sigs.k8s.io/release-utils/version.gitVersion=v${version}"
+    "-X sigs.k8s.io/release-utils/version.gitVersion=v${finalAttrs.version}"
     "-X sigs.k8s.io/release-utils/version.gitTreeState=clean"
   ];
 
@@ -47,6 +53,10 @@ buildGoModule rec {
     ldflags+=" -X sigs.k8s.io/release-utils/version.gitCommit=$(cat COMMIT)"
     ldflags+=" -X sigs.k8s.io/release-utils/version.buildDate=$(cat SOURCE_DATE_EPOCH)"
   '';
+
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [ gitMinimal ];
 
   preCheck = ''
     # Feed in all but the e2e tests for testing
@@ -63,7 +73,7 @@ buildGoModule rec {
     "-skip TestCollectDockerfilePinning/Non-pinned_dockerfile|TestMixedPinning"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd scorecard \
       --bash <($out/bin/scorecard completion bash) \
       --fish <($out/bin/scorecard completion fish) \
@@ -74,25 +84,25 @@ buildGoModule rec {
   installCheckPhase = ''
     runHook preInstallCheck
     $out/bin/scorecard --help
-    $out/bin/scorecard version 2>&1 | grep "v${version}"
+    $out/bin/scorecard version 2>&1 | grep "v${finalAttrs.version}"
     runHook postInstallCheck
   '';
 
   passthru.tests.version = testers.testVersion {
     package = scorecard;
     command = "scorecard version";
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ossf/scorecard";
-    changelog = "https://github.com/ossf/scorecard/releases/tag/v${version}";
+    changelog = "https://github.com/ossf/scorecard/releases/tag/v${finalAttrs.version}";
     description = "Security health metrics for Open Source";
     mainProgram = "scorecard";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       jk
       developer-guy
     ];
   };
-}
+})

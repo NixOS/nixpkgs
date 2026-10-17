@@ -8,24 +8,23 @@
 
 stdenvNoCC.mkDerivation {
   pname = "android-studio-tools";
-  version = "11076708";
+  version = "15859902";
 
   src = fetchzip {
     # The only difference between the Linux and Mac versions is a single comment at the top of all the scripts
     # Therefore, we will use the Linux version and just patch the comment
-    url = "https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip";
-    hash = "sha256-NjxJzHRT2/zZ9YzzjqaMVxpOELkDneQgc1/y1GUnZow=";
+    url = "https://dl.google.com/android/repository/commandlinetools-linux-15859902_latest.zip";
+    hash = "sha256-tCbccw7qa7ncHGyWPWjwQOpaisN3QMRYXRpK7WtyjWY=";
   };
 
-  postPatch =
-    ''
-      find . -type f -not -path "./bin/*" -exec chmod -x {} \;
-    ''
-    + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
-      for f in cmdline-tools/bin/*; do
-        sed -i 's|start up script for Linux|start up script for Mac|' $f
-      done
-    '';
+  postPatch = ''
+    find . -type f -not -path "./bin/*" -exec chmod -x {} \;
+  ''
+  + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+    for f in cmdline-tools/bin/*; do
+      sed -i 's|start up script for Linux|start up script for Mac|' $f
+    done
+  '';
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -52,6 +51,7 @@ stdenvNoCC.mkDerivation {
     changelog = "https://developer.android.com/studio/releases";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ pandapip1 ];
+    teams = [ lib.teams.android ];
     platforms = lib.platforms.all;
     sourceProvenance = with lib.sourceTypes; [ fromSource ]; # The 'binaries' are actually shell scripts
   };

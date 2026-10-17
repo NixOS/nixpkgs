@@ -10,40 +10,19 @@
   libxslt,
   testers,
   offlineimap,
-  fetchpatch,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "offlineimap";
-  version = "8.0.0";
+  version = "8.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OfflineIMAP";
     repo = "offlineimap3";
-    rev = "v${version}";
-    hash = "sha256-XLxKqO5OCXsFu8S3lMp2Ke5hp6uer9npZ3ujmL6Kb3g=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-JWWv3zpiKzQmG8FRFb9h+TnCyR+f7LY3SBgYlcZA+1A=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "sqlite-version-aware-threadsafety-check.patch";
-      url = "https://github.com/OfflineIMAP/offlineimap3/pull/139/commits/7cd32cf834b34a3d4675b29bebcd32dc1e5ef128.patch";
-      hash = "sha256-xNq4jFHMf9XZaa9BFF1lOzZrEGa5BEU8Dr+gMOBkJE4=";
-    })
-    (fetchpatch {
-      # https://github.com/OfflineIMAP/offlineimap3/pull/120
-      name = "python312-comaptibility.patch";
-      url = "https://github.com/OfflineIMAP/offlineimap3/commit/a1951559299b297492b8454850fcfe6eb9822a38.patch";
-      hash = "sha256-CBGMHi+ZzOBJt3TxBf6elrTRMIQ+8wr3JgptL2etkoA=";
-    })
-    (fetchpatch {
-      # https://github.com/OfflineIMAP/offlineimap3/pull/161
-      name = "python312-compatibility.patch";
-      url = "https://github.com/OfflineIMAP/offlineimap3/commit/3dd8ebc931e3f3716a90072bd34e50ac1df629fa.patch";
-      hash = "sha256-2IJ0yzESt+zk+r+Z+9js3oKhFF0+xok0xK8Jd3G/gYY=";
-    })
-  ];
 
   postPatch = ''
     # Skip xmllint to stop failures due to no network access
@@ -66,7 +45,10 @@ python3.pkgs.buildPythonApplication rec {
   dependencies = with python3.pkgs; [
     certifi
     distro
+    gssapi
     imaplib2
+    keyring
+    portalocker
     pysocks
     rfc6555
     urllib3
@@ -76,6 +58,8 @@ python3.pkgs.buildPythonApplication rec {
     make -C docs man
     installManPage docs/offlineimap.1
     installManPage docs/offlineimapui.7
+    install -Dm644 offlineimap.conf -T $out/share/offlineimap/offlineimap.conf
+    install -Dm644 offlineimap.conf.minimal -T $out/share/offlineimap/offlineimap.conf.minimal
   '';
 
   # Test requires credentials
@@ -87,11 +71,11 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.tests.version = testers.testVersion { package = offlineimap; };
 
-  meta = with lib; {
+  meta = {
     description = "Synchronize emails between two repositories, so that you can read the same mailbox from multiple computers";
     homepage = "http://offlineimap.org";
-    license = licenses.gpl2Plus;
-    maintainers = [ ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ stephen-huan ];
     mainProgram = "offlineimap";
   };
-}
+})

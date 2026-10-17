@@ -3,35 +3,33 @@
   attrs,
   buildPythonPackage,
   cattrs,
-  click,
   click-option-group,
+  click,
   fetchPypi,
   hatch-vcs,
   hatchling,
   hypothesis,
   jinja2,
   pydantic,
+  pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
-  tomli,
-  typing-extensions,
+  python-dotenv,
+  pythonAtLeast,
+  rich-click,
+  sybil,
 }:
 buildPythonPackage rec {
   pname = "typed-settings";
-  version = "24.5.0";
+  version = "25.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "typed_settings";
     inherit version;
-    hash = "sha256-HCVwXiKrvAvPQXU5rD5wxflPBBcB+oqcWriJizdOMS8=";
+    hash = "sha256-hl61LDGE9GdwVkWh5Y251xngi515V0SKKtjLvCLtIaY=";
   };
 
   build-system = [ hatchling ];
-
-  dependencies = lib.optionals (pythonOlder "3.11") [ tomli ];
 
   optional-dependencies = {
     all = [
@@ -57,32 +55,41 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     hypothesis
+    pytest-cov-stub
     pytestCheckHook
-    typing-extensions
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+    python-dotenv
+    rich-click
+    sybil
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   disabledTests = [
-    # AssertionError: assert [OptionInfo(p...
-    "test_deep_options"
     # 1Password CLI is not available
     "TestOnePasswordLoader"
     "test_handle_op"
+    # Assertion error
+    "test_help"
+    "test_defaults_from_envvars"
   ];
 
   disabledTestPaths = [
     # 1Password CLI is not available
     "tests/test_onepassword.py"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # All the CLI help messages begin with python3.14 instead of python3
+    "tests/test_cli_argparse.py"
   ];
 
   pythonImportsCheck = [ "typed_settings" ];
 
-  meta = with lib; {
+  meta = {
     description = "Typed settings based on attrs classes";
     homepage = "https://gitlab.com/sscherfke/typed-settings";
     changelog = "https://gitlab.com/sscherfke/typed-settings/-/blob/${version}/CHANGELOG.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

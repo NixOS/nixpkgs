@@ -2,15 +2,17 @@
   lib,
   cmake,
   exiv2,
-  extra-cmake-modules,
   fetchFromGitLab,
   imagemagick,
+  libappimage,
   libarchive,
-  libdevil,
   libraw,
   mpv,
+  openslide,
   pkg-config,
   qt6Packages,
+  withSyntaxHighlighting ? stdenv.hostPlatform.isLinux,
+  kdePackages,
   resvg,
   stdenv,
   vips,
@@ -18,44 +20,59 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "previewqt";
-  version = "3.0";
+  version = "6.0";
 
   src = fetchFromGitLab {
-    name = "previewqt-sources-${finalAttrs.version}";
     owner = "lspies";
     repo = "previewqt";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-cDtqgezKGgSdhw8x1mM4cZ0H3SfUPEyWP6rRD+kRwXc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Bbucjh8AJmH+YmyUDs0B89jwh0YewT2O6az6yuAPo10=";
   };
 
   nativeBuildInputs = [
     cmake
+    kdePackages.extra-cmake-modules
     pkg-config
     qt6Packages.wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      exiv2
-      extra-cmake-modules
-      imagemagick
-      libarchive
-      libdevil
-      libraw
-      mpv
-      resvg
-      vips
-    ]
-    ++ [
-      qt6Packages.poppler
-      qt6Packages.qtmultimedia
-      qt6Packages.qtquick3d
-      qt6Packages.qtsvg
-      qt6Packages.qttools
-      qt6Packages.qtwebengine
-    ];
+  buildInputs = [
+    exiv2
+    imagemagick
+    libappimage
+    libarchive
+    libraw
+    mpv
+    openslide
+    resvg
+    vips
+  ]
+  ++ [
+    qt6Packages.poppler
+    qt6Packages.qtmultimedia
+    qt6Packages.qtquick3d
+    qt6Packages.qtsvg
+    qt6Packages.qttools
+    qt6Packages.qtwebengine
+  ]
+  ++ lib.optionals withSyntaxHighlighting [
+    kdePackages.syntax-highlighting
+  ];
 
   strictDeps = true;
+
+  cmakeFlags = [
+    (lib.cmakeBool "WITH_DEVIL" false)
+    (lib.cmakeBool "WITH_FREEIMAGE" false)
+    (lib.cmakeBool "WITH_KF6SYNTAXHIGHLIGHT" withSyntaxHighlighting)
+    (lib.cmakeBool "WITH_ADAPTSOURCE" (!withSyntaxHighlighting))
+  ];
+
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
+    mv $out/bin/previewqt.app $out/Applications
+    makeWrapper $out/{Applications/previewqt.app/Contents/MacOS,bin}/previewqt
+  '';
 
   meta = {
     homepage = "https://previewqt.org/";
@@ -92,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.com/lspies/previewqt/-/blob/v${finalAttrs.version}/CHANGELOG";
     license = lib.licenses.gpl2Plus;
     mainProgram = "previewqt";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
-    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ wegank ];
+    platforms = lib.platforms.unix;
   };
 })

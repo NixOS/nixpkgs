@@ -7,7 +7,6 @@
   oslo-config,
   oslo-serialization,
   pbr,
-  pythonOlder,
   requests-mock,
   setuptools,
   stestr,
@@ -17,14 +16,13 @@
 
 buildPythonPackage rec {
   pname = "python-keystoneclient";
-  version = "5.5.0";
+  version = "6.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-wvWTT5VXaTbJjkW/WZrUi8sKxFFZPl+DROv1LLD0EfU=";
+    pname = "python_keystoneclient";
+    inherit version;
+    hash = "sha256-1qw6Ca3yMZqqxXKOO/fL6vlSwpW9eDHx35pXOyX7z4I=";
   };
 
   build-system = [ setuptools ];
@@ -52,10 +50,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "keystoneclient" ];
 
-  meta = with lib; {
+  meta = {
     description = "Client Library for OpenStack Identity";
     homepage = "https://github.com/openstack/python-keystoneclient";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

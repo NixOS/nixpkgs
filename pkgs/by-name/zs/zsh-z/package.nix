@@ -4,15 +4,17 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "zsh-z";
-  version = "unstable-2021-02-15";
+  version = "2.0.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "agkozak";
-    repo = pname;
-    rev = "595c883abec4682929ffe05eb2d088dd18e97557";
-    sha256 = "sha256-HnwUWqzwavh/Qox+siOe5lwTp7PBdiYx+9M0NMNFx00=";
+    repo = "zsh-z";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3dDvvDoXfSZlFv0L5wQZW/v/3FdVS9U5gT/r9DfUvjk=";
   };
 
   strictDeps = true;
@@ -23,11 +25,12 @@ stdenvNoCC.mkDerivation rec {
     cp _zshz zsh-z.plugin.zsh $out/share/zsh-z
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Jump quickly to directories that you have visited frequently in the past, or recently";
     homepage = "https://github.com/agkozak/zsh-z";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.evalexpr ];
+    changelog = "https://github.com/agkozak/zsh-z/releases/tag/v${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.evalexpr ];
   };
-}
+})

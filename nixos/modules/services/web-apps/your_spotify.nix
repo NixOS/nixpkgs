@@ -114,7 +114,7 @@ in
             };
             MONGO_ENDPOINT = mkOption {
               type = str;
-              description = ''The endpoint of the Mongo database.'';
+              description = "The endpoint of the Mongo database.";
               default = "mongodb://localhost:27017/your_spotify";
             };
             PORT = mkOption {

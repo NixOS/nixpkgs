@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -123,7 +128,6 @@ in
 
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
@@ -144,11 +148,21 @@ in
     ];
 
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ cfg.fileTransferPort ] ++ (map (port:
-        mkIf cfg.openFirewallServerQuery port
-      ) [cfg.queryPort cfg.querySshPort cfg.queryHttpPort]);
+      allowedTCPPorts = [
+        cfg.fileTransferPort
+      ]
+      ++ (map (port: mkIf cfg.openFirewallServerQuery port) [
+        cfg.queryPort
+        cfg.querySshPort
+        cfg.queryHttpPort
+      ]);
       # subsequent vServers will use the incremented voice port, let's just open the next 10
-      allowedUDPPortRanges = [ { from = cfg.defaultVoicePort; to = cfg.defaultVoicePort + 10; } ];
+      allowedUDPPortRanges = [
+        {
+          from = cfg.defaultVoicePort;
+          to = cfg.defaultVoicePort + 10;
+        }
+      ];
     };
 
     systemd.services.teamspeak3-server = {
@@ -171,7 +185,7 @@ in
             ${optionalString (cfg.fileTransferIP != null) "filetransfer_ip=${cfg.fileTransferIP}"} \
             ${optionalString (cfg.queryIP != null) "query_ip=${cfg.queryIP}"} \
             ${optionalString (cfg.queryIP != null) "query_ssh_ip=${cfg.queryIP}"} \
-            ${optionalString (cfg.queryIP != null) "query_http_ip=${cfg.queryIP}"} \
+            ${optionalString (cfg.queryIP != null) "query_http_ip=${cfg.queryIP}"}
         '';
         WorkingDirectory = cfg.dataDir;
         User = user;

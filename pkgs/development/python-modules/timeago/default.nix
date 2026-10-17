@@ -2,31 +2,36 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "timeago";
   version = "1.0.16";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "hustcc";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-PqORJKAVrjezU/yP2ky3gb1XsM8obDI3GQzi+mok/OM=";
+    repo = "timeago";
+    tag = finalAttrs.version;
+    hash = "sha256-PqORJKAVrjezU/yP2ky3gb1XsM8obDI3GQzi+mok/OM=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "test/testcase.py" ];
+  enabledTestPaths = [ "test/testcase.py" ];
 
   pythonImportsCheck = [ "timeago" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to format past datetime output";
     homepage = "https://github.com/hustcc/timeago";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

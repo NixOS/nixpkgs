@@ -3,26 +3,23 @@
   callPackage,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
-  substituteAll,
+  replaceVars,
   hatchling,
 }:
 
 buildPythonPackage rec {
   pname = "attrs";
-  version = "24.2.0";
-  disabled = pythonOlder "3.7";
-  format = "pyproject";
+  version = "26.1.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XPsbkUi1sIZWm67APyDXtr87ysyaQr6/h/+qyjYvY0Y=";
+    hash = "sha256-0DzricsyKo/XBtT7kZQHN7ZkKqNpmP4TCpvJbJhe/zI=";
   };
 
   patches = [
-    (substituteAll {
+    (replaceVars ./remove-hatch-plugins.patch {
       # hatch-vcs and hatch-fancy-pypi-readme depend on pytest, which depends on attrs
-      src = ./remove-hatch-plugins.patch;
       inherit version;
     })
   ];
@@ -37,7 +34,7 @@ buildPythonPackage rec {
   postInstall = ''
     # Install tests as the tests output.
     mkdir $testout
-    cp -R conftest.py tests $testout
+    cp -R tests $testout
   '';
 
   pythonImportsCheck = [ "attr" ];
@@ -50,11 +47,11 @@ buildPythonPackage rec {
     pytest = callPackage ./tests.nix { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Python attributes without boilerplate";
     homepage = "https://github.com/python-attrs/attrs";
     changelog = "https://github.com/python-attrs/attrs/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mdaniels5757 ];
   };
 }

@@ -2,31 +2,35 @@
   lib,
   fetchFromGitHub,
   python3,
-  bash,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "kanjidraw";
   version = "0.2.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "obfusk";
     repo = "kanjidraw";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "03ag8vkbf85qww857ii8hcnn8bh5qa7rsmhka0v9vfxk272ifbyq";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [ tkinter ];
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [ tkinter ];
 
   postPatch = ''
-    substituteInPlace Makefile --replace /bin/bash ${bash}/bin/bash
+    substituteInPlace Makefile --replace-fail /bin/bash bash
   '';
 
   checkPhase = ''
     make test
   '';
 
-  meta = with lib; {
+  pythonImportsCheck = [ "kanjidraw" ];
+
+  meta = {
     description = "Handwritten kanji recognition";
     mainProgram = "kanjidraw";
     longDescription = ''
@@ -40,10 +44,10 @@ python3.pkgs.buildPythonApplication rec {
       Kanji draw Android app.
     '';
     homepage = "https://github.com/obfusk/kanjidraw";
-    license = with licenses; [
+    license = with lib.licenses; [
       agpl3Plus # code
       cc-by-sa-30 # data.json
     ];
-    maintainers = [ maintainers.obfusk ];
+    maintainers = [ lib.maintainers.obfusk ];
   };
-}
+})

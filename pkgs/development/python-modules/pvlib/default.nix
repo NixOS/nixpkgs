@@ -10,7 +10,6 @@
   pytest-remotedata,
   pytest-rerunfailures,
   pytest-timeout,
-  pythonOlder,
   pytz,
   requests,
   requests-mock,
@@ -19,16 +18,14 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pvlib";
-  version = "0.11.2";
+  version = "0.15.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-NxZF9OZsJ45s8rGySHxiwrrUef9iom7YRCFtD4Q89cw=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-zt7GX2U2oh6mQ1HmUYluhJrJXLVCO1wZYmKVi0DPrBU=";
   };
 
   build-system = [
@@ -56,11 +53,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pvlib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simulate the performance of photovoltaic energy systems";
     homepage = "https://pvlib-python.readthedocs.io";
-    changelog = "https://pvlib-python.readthedocs.io/en/v${version}/whatsnew.html";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ jluttine ];
+    changelog = "https://pvlib-python.readthedocs.io/en/v${finalAttrs.version}/whatsnew.html";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ jluttine ];
   };
-}
+})

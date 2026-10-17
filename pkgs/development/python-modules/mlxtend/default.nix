@@ -2,12 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  isPy27,
   setuptools,
   pytestCheckHook,
   scipy,
   numpy,
-  numpy_1,
   scikit-learn,
   pandas,
   matplotlib,
@@ -16,17 +14,21 @@
 
 buildPythonPackage rec {
   pname = "mlxtend";
-  version = "0.23.3";
+  version = "0.25.0";
   pyproject = true;
-
-  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "rasbt";
     repo = "mlxtend";
     tag = "v${version}";
-    hash = "sha256-c6I0dwu4y/Td2G6m2WP/52W4noQUmQMDvpzXA9RZauo=";
+    hash = "sha256-h0qGvQfsWOCP/9XPlih94nGNp4ppplWJ+89qedYipPk=";
   };
+
+  patches = [
+    # Fixes tests after upgrading scikit-learn 1.8.0->1.9.0
+    # Remove on next release https://github.com/rasbt/mlxtend/commit/93ac19f44b8e9688ea76459bb523a964a1dab2b6
+    ./fix-sklearn-1.9-tests.patch
+  ];
 
   build-system = [ setuptools ];
 
@@ -39,14 +41,9 @@ buildPythonPackage rec {
     joblib
   ];
 
-  patches = [
-    # https://github.com/rasbt/mlxtend/pull/1119
-    ./0001-fix-test-replace-np.float_-to-np.float64.patch
-  ];
-
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "-sv" ];
+  pytestFlags = [ "-sv" ];
 
   disabledTests = [
     # Type changed in numpy2 test should be updated
@@ -66,7 +63,10 @@ buildPythonPackage rec {
     description = "Library of Python tools and extensions for data science";
     homepage = "https://github.com/rasbt/mlxtend";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ evax ];
+    maintainers = with lib.maintainers; [
+      evax
+      jadewilk
+    ];
     platforms = lib.platforms.unix;
   };
 }

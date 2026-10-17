@@ -7,24 +7,25 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stardust-xr-atmosphere";
-  version = "0-unstable-2024-08-22";
+  version = "0.51.1";
 
   src = fetchFromGitHub {
     owner = "stardustxr";
     repo = "atmosphere";
-    rev = "0c8bfb91e8ca32a4895f858067334ed265517309";
-    hash = "sha256-pk1+kkPV6fx+7Xz9hKFFVw402iztcvNC31zVCc3hfTY=";
+    tag = finalAttrs.version;
+    hash = "sha256-FH9Y+p17bGczRhLEfxVqc1peg9Aubw1pu7QOYb6RWvc=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "stardust-xr-0.45.0" = "sha256-WF/uNtFYB+ZQqsyXJe7qUCd8SHUgaNOLMxGuNIN1iKM=";
-      "stardust-xr-molecules-0.45.0" = "sha256-UldPQQ0Psx/lFUdCKJJDeG8W6lK6qDU3JSwffawK3xg=";
-    };
-  };
+  cargoHash = "sha256-TVAm6BdIAE+gxWkpEUqF3R99UKhIGGSZK9qQ7urR7Uc=";
+
+  postInstall = ''
+    mkdir -p $out/share/atmosphere
+    cp -r default_envs $out/share/atmosphere
+  '';
+
+  __structuredAttrs = true;
 
   passthru = {
     tests.versionTest = testers.testVersion {
@@ -32,9 +33,7 @@ rustPlatform.buildRustPackage rec {
       command = "atmosphere --version";
       version = "stardust-xr-atmosphere 0.4.0";
     };
-    updateScript = nix-update-script {
-      extraArgs = [ "--version=branch" ];
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
@@ -42,10 +41,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://stardustxr.org";
     license = lib.licenses.mit;
     mainProgram = "atmosphere";
-    maintainers = with lib.maintainers; [
-      pandapip1
-      technobaboo
-    ];
-    platforms = lib.platforms.linux;
+    teams = with lib.teams; [ stardust-xr ];
+    platforms = lib.platforms.unix;
   };
-}
+})

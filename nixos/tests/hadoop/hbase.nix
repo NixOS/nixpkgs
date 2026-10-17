@@ -1,14 +1,14 @@
 # Test a minimal hbase cluster
-{ pkgs, ... }:
+{ package, pkgs, ... }:
 import ../make-test-python.nix (
   {
-    hadoop ? pkgs.hadoop,
+    hadoop ? package,
     hbase ? pkgs.hbase,
     ...
   }:
   with pkgs.lib;
   {
-    name = "hadoop-hbase";
+    name = "hadoop-${package.version}-hbase";
 
     nodes =
       let
@@ -115,6 +115,9 @@ import ../make-test-python.nix (
       # wait for ZK
       zookeeper.wait_for_unit("zookeeper")
       zookeeper.wait_for_open_port(2181)
+
+      # wait for HDFS cluster to be RW
+      datanode.succeed("sudo -u hdfs hdfs dfsadmin -safemode wait")
 
       # wait for HBase to start up
       master.wait_for_unit("hbase-master")

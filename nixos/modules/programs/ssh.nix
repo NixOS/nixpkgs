@@ -32,7 +32,42 @@ let
 
   knownHostsFiles = [
     "/etc/ssh/ssh_known_hosts"
-  ] ++ builtins.map pkgs.copyPathToStore cfg.knownHostsFiles;
+  ]
+  ++ map pkgs.copyPathToStore cfg.knownHostsFiles;
+
+  sshConfigValue = v: if builtins.isBool v then lib.boolToYesNo v else toString v;
+
+  hostSettingsText = lib.generators.toKeyValue {
+    mkKeyValue = lib.generators.mkKeyValueDefault {
+      mkValueString = sshConfigValue;
+    } " ";
+    indent = "  ";
+  };
+
+  hostsText = lib.pipe cfg.hosts [
+    (lib.mapAttrsToList (
+      pattern: hostCfg:
+      # `order` is forced here so that it is required for a lone block too,
+      # which `sort` would otherwise never compare against anything.
+      lib.seq hostCfg.order {
+        inherit pattern;
+        inherit (hostCfg) order;
+        settings = removeAttrs hostCfg [ "order" ];
+      }
+    ))
+    # `ssh_config(5)` applies the first obtained value for each keyword, so the
+    # blocks are written in ascending `order`, and sharing an `order` value is
+    # an error rather than an arbitrary choice between the two blocks.
+    (lib.sort (
+      a: b:
+      if a.order != b.order then
+        a.order < b.order
+      else
+        throw "programs.ssh.hosts: blocks '${a.pattern}' and '${b.pattern}' cannot have the same order value (${toString a.order})"
+    ))
+    (map (host: "Host ${host.pattern}\n" + hostSettingsText host.settings))
+    (lib.concatStringsSep "\n")
+  ];
 
 in
 {
@@ -47,6 +82,15 @@ in
         default = config.services.xserver.enable;
         defaultText = lib.literalExpression "config.services.xserver.enable";
         description = "Whether to configure SSH_ASKPASS in the environment.";
+      };
+
+      systemd-ssh-proxy.enable = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          Whether to enable systemd's ssh proxy plugin.
+          See {manpage}`systemd-ssh-proxy(1)`.
+        '';
       };
 
       askPassword = lib.mkOption {
@@ -111,6 +155,76 @@ in
           options will be added after a `Host *` pattern.
           See {manpage}`ssh_config(5)`
           for help.
+        '';
+      };
+
+      hosts = lib.mkOption {
+        default = { };
+        type = lib.types.attrsOf (
+          lib.types.submodule {
+            freeformType = lib.types.attrsOf (
+              lib.types.oneOf [
+                lib.types.bool
+                lib.types.int
+                lib.types.str
+              ]
+            );
+            options.order = lib.mkOption {
+              type = lib.types.int;
+              example = 100;
+              description = ''
+                Position of this block in {file}`ssh_config`. Blocks are
+                written in ascending order of this value, and two blocks
+                may not share a value.
+
+                Since {manpage}`ssh_config(5)` applies the *first* obtained
+                value for each keyword, a block with a lower value takes
+                precedence over the blocks that follow it. In particular, a
+                catch-all pattern such as `"*"` should have the highest
+                value, so that it does not shadow the more specific blocks.
+
+                To place a block relative to one that another module
+                declares, derive this value from that block's one instead of
+                hardcoding it, e.g.
+                `config.programs.ssh.hosts."*".order - 100`.
+              '';
+            };
+          }
+        );
+        description = ''
+          Per-host (or host-pattern) client configuration, added as `Host`
+          blocks to {file}`ssh_config`.
+
+          Attribute names are used as the `Host` pattern, as accepted by
+          {manpage}`ssh_config(5)`. Several space-separated patterns can be
+          given to apply one block to all of them, e.g.
+          `"foo bar *.baz.org"`.
+
+          Every attribute of a block besides {option}`order` becomes a
+          `Key Value` line within that block; boolean values are rendered as
+          `yes`/`no`.
+        '';
+        example = lib.literalExpression ''
+          {
+            jumphost = {
+              order = 100;
+              User = "deploy";
+              Port = 2222;
+              IdentityFile = "/root/.ssh/id_deploy";
+              IdentitiesOnly = true;
+            };
+            "*.example.org" = {
+              order = 200;
+              ControlMaster = "auto";
+              ControlPath = "/root/.ssh/master-%r@%n:%p";
+              ControlPersist = "5m";
+            };
+            # Written last, so that it does not shadow the blocks above.
+            "*" = {
+              order = 300;
+              ServerAliveInterval = 60;
+            };
+          }
         '';
       };
 
@@ -310,50 +424,57 @@ in
       || config.services.openssh.settings.X11Forwarding
     );
 
-    assertions =
-      [
-        {
-          assertion = cfg.forwardX11 == true -> cfg.setXAuthLocation;
-          message = "cannot enable X11 forwarding without setting XAuth location";
-        }
-      ]
-      ++ lib.flip lib.mapAttrsToList cfg.knownHosts (
-        name: data: {
-          assertion =
-            (data.publicKey == null && data.publicKeyFile != null)
-            || (data.publicKey != null && data.publicKeyFile == null);
-          message = "knownHost ${name} must contain either a publicKey or publicKeyFile";
-        }
-      );
+    assertions = [
+      {
+        assertion = cfg.forwardX11 == true -> cfg.setXAuthLocation;
+        message = "cannot enable X11 forwarding without setting XAuth location";
+      }
+    ]
+    ++ lib.flip lib.mapAttrsToList cfg.knownHosts (
+      name: data: {
+        assertion =
+          (data.publicKey == null && data.publicKeyFile != null)
+          || (data.publicKey != null && data.publicKeyFile == null);
+        message = "knownHost ${name} must contain either a publicKey or publicKeyFile";
+      }
+    );
+
+    environment.corePackages = [ cfg.package ];
 
     # SSH configuration. Slight duplication of the sshd_config
     # generation in the sshd service.
-    environment.etc."ssh/ssh_config".text = ''
+    environment.etc."ssh/ssh_config".text = lib.concatStringsSep "\n" (
       # Custom options from `extraConfig`, to override generated options
-      ${cfg.extraConfig}
-
-      # Generated options from other settings
-      Host *
-      GlobalKnownHostsFile ${builtins.concatStringsSep " " knownHostsFiles}
-
-      ${lib.optionalString (!config.networking.enableIPv6) "AddressFamily inet"}
-      ${lib.optionalString cfg.setXAuthLocation "XAuthLocation ${pkgs.xorg.xauth}/bin/xauth"}
-      ${lib.optionalString (cfg.forwardX11 != null)
-        "ForwardX11 ${if cfg.forwardX11 then "yes" else "no"}"
-      }
-
-      ${lib.optionalString (
+      lib.optional (cfg.extraConfig != "") cfg.extraConfig
+      ++ lib.optional (cfg.hosts != { }) hostsText
+      ++ [
+        ''
+          # Generated options from other settings
+          Host *
+        ''
+      ]
+      ++ lib.optional cfg.systemd-ssh-proxy.enable ''
+        # See systemd-ssh-proxy(1)
+        Include ${config.systemd.package}/lib/systemd/ssh_config.d/20-systemd-ssh-proxy.conf
+      ''
+      ++ [
+        "GlobalKnownHostsFile ${builtins.concatStringsSep " " knownHostsFiles}"
+      ]
+      ++ lib.optional (!config.networking.enableIPv6) "AddressFamily inet"
+      ++ lib.optional cfg.setXAuthLocation "XAuthLocation ${pkgs.xauth}/bin/xauth"
+      ++ lib.optional (cfg.forwardX11 != null) "ForwardX11 ${lib.boolToYesNo cfg.forwardX11}"
+      ++ lib.optional (
         cfg.pubkeyAcceptedKeyTypes != [ ]
-      ) "PubkeyAcceptedKeyTypes ${builtins.concatStringsSep "," cfg.pubkeyAcceptedKeyTypes}"}
-      ${lib.optionalString (
+      ) "PubkeyAcceptedKeyTypes ${builtins.concatStringsSep "," cfg.pubkeyAcceptedKeyTypes}"
+      ++ lib.optional (
         cfg.hostKeyAlgorithms != [ ]
-      ) "HostKeyAlgorithms ${builtins.concatStringsSep "," cfg.hostKeyAlgorithms}"}
-      ${lib.optionalString (
+      ) "HostKeyAlgorithms ${builtins.concatStringsSep "," cfg.hostKeyAlgorithms}"
+      ++ lib.optional (
         cfg.kexAlgorithms != null
-      ) "KexAlgorithms ${builtins.concatStringsSep "," cfg.kexAlgorithms}"}
-      ${lib.optionalString (cfg.ciphers != null) "Ciphers ${builtins.concatStringsSep "," cfg.ciphers}"}
-      ${lib.optionalString (cfg.macs != null) "MACs ${builtins.concatStringsSep "," cfg.macs}"}
-    '';
+      ) "KexAlgorithms ${builtins.concatStringsSep "," cfg.kexAlgorithms}"
+      ++ lib.optional (cfg.ciphers != null) "Ciphers ${builtins.concatStringsSep "," cfg.ciphers}"
+      ++ lib.optional (cfg.macs != null) "MACs ${builtins.concatStringsSep "," cfg.macs}"
+    );
 
     environment.etc."ssh/ssh_known_hosts".text = knownHostsText;
 
@@ -366,8 +487,8 @@ in
         ExecStartPre = "${pkgs.coreutils}/bin/rm -f %t/ssh-agent";
         ExecStart =
           "${cfg.package}/bin/ssh-agent "
-          + lib.optionalString (cfg.agentTimeout != null) ("-t ${cfg.agentTimeout} ")
-          + lib.optionalString (cfg.agentPKCS11Whitelist != null) ("-P ${cfg.agentPKCS11Whitelist} ")
+          + lib.optionalString (cfg.agentTimeout != null) "-t ${cfg.agentTimeout} "
+          + lib.optionalString (cfg.agentPKCS11Whitelist != null) "-P ${cfg.agentPKCS11Whitelist} "
           + "-a %t/ssh-agent";
         StandardOutput = "null";
         Type = "forking";

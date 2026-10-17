@@ -1,77 +1,90 @@
 {
   lib,
   stdenv,
-  requireFile,
   autoPatchelfHook,
   undmg,
   fetchurl,
   makeDesktopItem,
+  makeWrapper,
   copyDesktopItems,
+  libarchive,
   imagemagick,
   runCommand,
   libgcc,
-  wxGTK32,
-  innoextract,
+  wxwidgets_3_2,
   libGL,
   SDL2,
   openal,
   libmpg123,
   libxmp,
+  libiconv,
+  darwin,
 }:
 
 let
-  version = "469d";
+  version = "469e";
   srcs = {
     x86_64-linux = fetchurl {
-      url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${version}-Linux-amd64.tar.bz2";
-      hash = "sha256-aoGzWuakwN/OL4+xUq8WEpd2c1rrNN/DkffI2vDVGjs=";
+      url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${builtins.elemAt (lib.strings.splitString "-" version) 0}-Linux-amd64.tar.bz2";
+      hash = "sha256-CMgGqjchsZcARaoVitkAUTKdmC6KmjZhFTkA6cy/aww=";
     };
     aarch64-linux = fetchurl {
-      url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${version}-Linux-arm64.tar.bz2";
-      hash = "sha256-2e9lHB12jLTR8UYofLWL7gg0qb2IqFk6eND3T5VqAx0=";
+      url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${builtins.elemAt (lib.strings.splitString "-" version) 0}-Linux-arm64.tar.bz2";
+      hash = "sha256-TDl4BzsSsEnD/9600nXPx6IxNlDz61uU2wb7/ud8Pjs=";
     };
     i686-linux = fetchurl {
-      url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${version}-Linux-x86.tar.bz2";
-      hash = "sha256-1JsFKuAAj/LtYvOUPFu0Hn+zvY3riW0YlJbLd4UnaKU=";
+      url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${builtins.elemAt (lib.strings.splitString "-" version) 0}-Linux-x86.tar.bz2";
+      hash = "sha256-y9bYAW77MOOYJ1elgsaIUygDch7B7HOPwor5s+FdPBQ=";
     };
-    x86_64-darwin = fetchurl {
-      url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${version}-macOS-Sonoma.dmg";
-      hash = "sha256-TbhJbOH4E5WOb6XR9dmqLkXziK3/CzhNjd1ypBkkmvw=";
+    aarch64-darwin = fetchurl {
+      url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${builtins.elemAt (lib.strings.splitString "-" version) 0}-macOS.dmg";
+      hash = "sha256-trOh9GLktwLfDuz5DWY+8fhHzDaq3KHsbdNSeNCR+g0=";
     };
   };
-  unpackGog =
-    runCommand "ut1999-gog"
+  # This upload of the game is officially sanctioned by OldUnreal (who has received permission from Epic Games to link to archive.org) and the UT99.org community
+  # This is a copy of the original Unreal Tournament: Game of the Year Edition (also known as UT or UT99). The first ISO contains the base game.
+  iso1 = fetchurl {
+    url = "https://archive.org/download/ut-goty/UT_GOTY_CD1.iso";
+    hash = "sha256-4YSYTKiPABxd3VIDXXbNZOJm4mx0l1Fhte1yNmx0cE8=";
+  };
+  # The second ISO contains bonus maps and game modes
+  iso2 = fetchurl {
+    url = "https://archive.org/download/ut-goty/UT_GOTY_CD2.iso";
+    hash = "sha256-2V2O4c+VVi7gI/1UA17IgT1CdfY9GEdCMiCYbtyNANg=";
+  };
+  baseGame =
+    runCommand "ut1999-iso1"
       {
-        src = requireFile rec {
-          name = "setup_ut_goty_2.0.0.5.exe";
-          hash = "sha256-TMJX1U2XZZxQYvK/GG0KjGlZVh0R5C2Pzy6sB/GSaAM=";
-          message = ''
-            Unreal Tournament 1999 requires the official GOG package, version 2.0.0.5.
-
-            Once you download the file, run the following command:
-
-            nix-prefetch-url file://\$PWD/${name}
-          '';
-        };
-
-        nativeBuildInputs = [ innoextract ];
+        src = iso1;
+        nativeBuildInputs = [ libarchive ];
       }
       ''
-        innoextract --extract --exclude-temp "$src"
+        bsdtar -xvf "$src"
         mkdir $out
-        cp -r app/* $out
+        cp -r Music Sounds Textures Maps $out
+      '';
+  bonusPacks =
+    runCommand "ut1999-iso2"
+      {
+        src = iso2;
+        nativeBuildInputs = [ libarchive ];
+      }
+      ''
+        bsdtar -xvf "$src"
+        mkdir $out
+        cp -r System Sounds Textures maps $out
       '';
   systemDir =
     {
       x86_64-linux = "System64";
       aarch64-linux = "SystemARM64";
-      x86_64-darwin = "System";
       i686-linux = "System";
+      aarch64-darwin = "System";
     }
     .${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 in
-stdenv.mkDerivation {
-  name = "ut1999";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "ut1999";
   inherit version;
   sourceRoot = ".";
   src =
@@ -79,56 +92,110 @@ stdenv.mkDerivation {
 
   buildInputs = [
     libgcc
-    wxGTK32
+    wxwidgets_3_2
     SDL2
     libGL
     openal
     libmpg123
     libxmp
     stdenv.cc.cc
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
   ];
 
   nativeBuildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [
       copyDesktopItems
       autoPatchelfHook
-      imagemagick
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      makeWrapper
       undmg
+      darwin.autoSignDarwinBinariesHook
     ];
 
   installPhase =
     let
       outPrefix =
-        if stdenv.hostPlatform.isDarwin then "$out/UnrealTournament.app/Contents/MacOS" else "$out";
+        if stdenv.hostPlatform.isDarwin then
+          "$out/Applications/UnrealTournament.app/Contents/MacOS"
+        else
+          "$out";
     in
     ''
       runHook preInstall
-
       mkdir -p $out/bin
-      cp -r ${if stdenv.hostPlatform.isDarwin then "UnrealTournament.app" else "./*"} $out
-      chmod -R 755 $out
-      cd ${outPrefix}
-
-      rm -rf ./{Music,Sounds,Maps}
-      ln -s ${unpackGog}/{Music,Sounds,Maps} .
-
-      cp -n ${unpackGog}/Textures/* ./Textures || true
-      cp -n ${unpackGog}/System/*.{u,int} ./System || true
     ''
     + lib.optionalString (stdenv.hostPlatform.isLinux) ''
+      cp -r ./* $out
+    ''
+    + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+      mkdir -p $out/Applications/
+      cp -r "UnrealTournament.app" $out/Applications/
+      makeWrapper $out/Applications/UnrealTournament.app/Contents/MacOS/UnrealTournament \
+        $out/bin/${finalAttrs.meta.mainProgram}
+      # If the darwin build sandbox is enabled, system libiconv is not available
+      # https://github.com/OldUnreal/UnrealTournamentPatches/issues/1902
+      # Even though ut1999 is able to unpack the map files at runtime, upstream advised to still do it at install time
+      # which is why the UCC binary is fixed to access a copy of iconv from the nix store
+      install_name_tool -change /usr/lib/libiconv.2.dylib \
+        ${libiconv}/lib/libiconv.2.dylib \
+        $out/Applications/UnrealTournament.app/Contents/MacOS/UCC
+      # Needs manual re-signing, as UCC is used during the build, and the auto signer is part of the fixup phase
+      signDarwinBinariesInAllOutputs
+    ''
+    + ''
+      chmod -R 755 $out
+      cd ${outPrefix}
+      # NOTE: OldUnreal patch doesn't include these folders on linux but could in the future
+      # on darwin it does, but they are empty
+      rm -rf ./{Music,Sounds}
+      cp -r ${baseGame}/{Music,Sounds} .
+      chmod u+w ./Sounds
+      cp -n ${bonusPacks}/Sounds/* ./Sounds
+      cp -n ${bonusPacks}/System/*.{u,int} ./System
+    ''
+    + lib.optionalString (stdenv.hostPlatform.isLinux) ''
+      # maps need no post-processing on linux
+      rm -rf ./Maps
+      cp -r ${baseGame}/Maps .
+      chmod u+w ./Maps
+      cp -n ${bonusPacks}/maps/* ./Maps
+    ''
+    + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+      # Maps need post-processing on darwin
+      cp -n ${baseGame}/Maps/* ./Maps || true
+      cp -n ${bonusPacks}/maps/* ./Maps || true
+      # unpack compressed maps with ucc (needs absolute paths)
+      for map in $PWD/Maps/*.uz; do ./UCC decompress $map; done
+      mv ${systemDir}/*.unr ./Maps || true
+      rm ./Maps/*.uz
+    ''
+    + ''
+      cp -n ${baseGame}/Textures/* ./Textures || true
+      cp -n ${bonusPacks}/Textures/* ./Textures || true
+    ''
+    + lib.optionalString (stdenv.hostPlatform.isLinux) ''
+      cp -n ${baseGame}/System/*.{u,int} ./System || true
       ln -s "$out/${systemDir}/ut-bin" "$out/bin/ut1999"
       ln -s "$out/${systemDir}/ucc-bin" "$out/bin/ut1999-ucc"
 
-      convert "${unpackGog}/gfw_high.ico" "ut1999.png"
-      install -D ut1999-5.png "$out/share/icons/hicolor/256x256/apps/ut1999.png"
+      install -D "${./ut1999.svg}" "$out/share/icons/hicolor/scalable/apps/ut1999.svg"
+      for size in 16 24 32 48 64 128 192 256; do
+        square=$(printf "%sx%s" $size $size)
+        ${imagemagick}/bin/magick -background none ${./ut1999.svg} -resize $square ut1999_$square.png
+        install -D "ut1999_$square.png" "$out/share/icons/hicolor/$square/apps/ut1999.png"
+      done
 
+      # TODO consider to remove shared libraries that can be provided by nixpkgs for darwin too
       # Remove bundled libraries to use native versions instead
       rm $out/${systemDir}/libmpg123.so* \
         $out/${systemDir}/libopenal.so* \
         $out/${systemDir}/libSDL2* \
         $out/${systemDir}/libxmp.so*
+        # NOTE: what about fmod?
+        #$out/${systemDir}/libfmod.so*
     ''
     + ''
       runHook postInstall
@@ -151,12 +218,23 @@ stdenv.mkDerivation {
     })
   ];
 
-  meta = with lib; {
+  passthru = {
+    # The ISOs can be appended to `system.extraDependencies` in order to prevent them from getting garbage collected and redownloaded during rebuilds.
+    isos = [
+      iso1
+      iso2
+    ];
+  };
+
+  meta = {
     description = "Unreal Tournament GOTY (1999) with the OldUnreal patch";
-    license = licenses.unfree;
-    platforms = attrNames srcs;
-    maintainers = with maintainers; [ eliandoran ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    platforms = lib.attrNames srcs;
+    maintainers = with lib.maintainers; [
+      eliandoran
+      dwt
+    ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "ut1999";
   };
-}
+})

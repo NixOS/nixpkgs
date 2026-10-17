@@ -5,6 +5,18 @@
   go,
   ncurses,
 }:
+let
+  cpus = {
+    "x86_64" = "amd64";
+    "i686" = "386";
+    "aarch64" = "arm64";
+    "riscv64" = "riscv64";
+  };
+  targetSystem = lib.systems.parse.mkSystemFromString stdenv.targetPlatform.system;
+  targetOS = targetSystem.kernel.name;
+  targetArch = cpus.${targetSystem.cpu.name};
+  targetVMArch = cpus.${(lib.systems.parse.mkSystemFromString stdenv.hostPlatform.system).cpu.name};
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "syzkaller";
   version = "0-unstable-2024-01-09";
@@ -47,6 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postConfigure
   '';
 
+  makeFlags = [
+    "TARGETOS=${targetOS}"
+    "TARGETVMARCH=${targetVMArch}"
+    "TARGETARCH=${targetArch}"
+  ];
+
   dontInstall = true;
 
   meta = {
@@ -54,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/google/syzkaller";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.msanft ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     mainProgram = "syz-manager";
   };
 })

@@ -8,6 +8,7 @@
   gi-docgen,
   docbook-xsl-nons,
   gettext,
+  blueprint-compiler,
   desktop-file-utils,
   wayland-scanner,
   wrapGAppsHook4,
@@ -18,16 +19,19 @@
   adwaita-icon-theme,
   gnome-autoar,
   glib-networking,
+  icu,
   shared-mime-info,
   libnotify,
   libexif,
+  libglycin,
+  libglycin-gtk4,
   libjxl,
   libseccomp,
   librsvg,
   webp-pixbuf-loader,
   tinysparql,
   localsearch,
-  gexiv2,
+  gexiv2_0_16,
   libselinux,
   libcloudproviders,
   gdk-pixbuf,
@@ -36,11 +40,12 @@
   gsettings-desktop-schemas,
   gnome-user-share,
   gobject-introspection,
+  glycin-loaders,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nautilus";
-  version = "47.1";
+  version = "50.2.2";
 
   outputs = [
     "out"
@@ -50,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/nautilus/${lib.versions.major finalAttrs.version}/nautilus-${finalAttrs.version}.tar.xz";
-    hash = "sha256-FUUOvHqmHtL65jEwr567uuFM5walR/WUxmu4zKck10w=";
+    hash = "sha256-4eKF7930LtMN2lsp9/jSQtq0vBQJqQVIY7NnutSzTVo=";
   };
 
   patches = [
@@ -59,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    blueprint-compiler
     desktop-file-utils
     gettext
     gobject-introspection
@@ -72,8 +78,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    gexiv2
+    gexiv2_0_16
     glib-networking
+    icu
     gnome-desktop
     adwaita-icon-theme
     gsettings-desktop-schemas
@@ -92,6 +99,9 @@ stdenv.mkDerivation (finalAttrs: {
     tinysparql
     localsearch
     gnome-autoar
+    libglycin
+    libglycin-gtk4
+    glycin-loaders
   ];
 
   propagatedBuildInputs = [
@@ -100,6 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Ddocs=true"
+    "-Dtests=${if finalAttrs.finalPackage.doCheck then "all" else "none"}"
   ];
 
   preFixup = ''
@@ -124,12 +135,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "File manager for GNOME";
     homepage = "https://apps.gnome.org/Nautilus/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.gnome.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.gnome ];
     mainProgram = "nautilus";
   };
 })

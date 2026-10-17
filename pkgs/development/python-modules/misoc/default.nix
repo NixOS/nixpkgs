@@ -2,33 +2,41 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # dependencies
   pyserial,
   asyncserial,
   jinja2,
   migen,
+
+  # tests
+  unittestCheckHook,
   numpy,
 }:
 
 buildPythonPackage {
   pname = "misoc";
-  version = "0-unstable-2024-05-14";
+  version = "0.12-unstable-2025-10-03";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "m-labs";
     repo = "misoc";
-    rev = "fea9de558c730bc394a5936094ae95bb9d6fa726";
-    hash = "sha256-zZ9LnUwvTvBL9iNFfmNTklQnd0I4PmV0BApMSblTnc0=";
+    rev = "59043e979f78934f2c2f99ac417c65aa0c7be0b9";
+    hash = "sha256-dXamAZkLdTC9UeZV6biipsZN4LHO+ZLoXV4LO+L7HTM=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     pyserial
     asyncserial
     jinja2
     migen
   ];
 
-  nativeCheckInputs = [ numpy ];
+  nativeCheckInputs = [
+    unittestCheckHook
+    numpy
+  ];
 
   pythonImportsCheck = [ "misoc" ];
 

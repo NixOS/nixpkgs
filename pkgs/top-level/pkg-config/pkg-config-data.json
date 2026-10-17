@@ -4,11 +4,6 @@
     "minor": 1
   },
   "modules": {
-    "IL": {
-      "attrPath": [
-        "libdevil"
-      ]
-    },
     "ImageMagick": {
       "attrPath": [
         "imagemagick"
@@ -136,14 +131,9 @@
         "alsa-lib"
       ]
     },
-    "appindicator-0.1": {
-      "attrPath": [
-        "libappindicator-gtk2"
-      ]
-    },
     "appindicator3-0.1": {
       "attrPath": [
-        "libappindicator-gtk3"
+        "libappindicator"
       ]
     },
     "bzip2": {
@@ -219,11 +209,6 @@
         "freetype"
       ]
     },
-    "gdk-2.0": {
-      "attrPath": [
-        "gtk2"
-      ]
-    },
     "gdk-3.0": {
       "attrPath": [
         "gtk3"
@@ -232,11 +217,6 @@
     "gdk-pixbuf-2.0": {
       "attrPath": [
         "gdk-pixbuf"
-      ]
-    },
-    "gdk-x11-2.0": {
-      "attrPath": [
-        "gtk2-x11"
       ]
     },
     "gdk-x11-3.0": {
@@ -324,19 +304,9 @@
         "glib"
       ]
     },
-    "gtk+-2.0": {
-      "attrPath": [
-        "gtk2"
-      ]
-    },
     "gtk+-3.0": {
       "attrPath": [
         "gtk3"
-      ]
-    },
-    "gtk+-x11-2.0": {
-      "attrPath": [
-        "gtk2-x11"
       ]
     },
     "gtksourceview-3.0": {
@@ -391,11 +361,6 @@
     "jack": {
       "attrPath": [
         "libjack2"
-      ]
-    },
-    "javascriptcoregtk-4.0": {
-      "attrPath": [
-        "webkitgtk"
       ]
     },
     "lapack": {
@@ -525,7 +490,7 @@
     },
     "libpq": {
       "attrPath": [
-        "postgresql"
+        "libpq"
       ]
     },
     "libpulse": {
@@ -574,11 +539,6 @@
     "libsodium": {
       "attrPath": [
         "libsodium"
-      ]
-    },
-    "libsoup-gnome-2.4": {
-      "attrPath": [
-        "libsoup_2_4"
       ]
     },
     "libssh2": {
@@ -683,7 +643,7 @@
     },
     "odbc": {
       "attrPath": [
-        "unixODBC"
+        "unixodbc"
       ]
     },
     "ompi": {
@@ -726,11 +686,6 @@
         "openssl"
       ]
     },
-    "orte": {
-      "attrPath": [
-        "openmpi"
-      ]
-    },
     "panel": {
       "attrPath": [
         "ncurses"
@@ -754,11 +709,6 @@
     "python": {
       "attrPath": [
         "python3"
-      ]
-    },
-    "ruby-3.1": {
-      "attrPath": [
-        "ruby_3_1"
       ]
     },
     "sdl2": {
@@ -789,11 +739,6 @@
     "tdjson": {
       "attrPath": [
         "tdlib"
-      ]
-    },
-    "tensorflow": {
-      "attrPath": [
-        "libtensorflow"
       ]
     },
     "uuid": {
@@ -835,32 +780,19 @@
         "isDarwin": false
       }
     },
-    "webkit2gtk-4.0": {
-      "attrPath": [
-        "webkitgtk"
-      ]
-    },
-    "webkit2gtk-web-extension-4.0": {
-      "attrPath": [
-        "webkitgtk"
-      ]
-    },
     "x11": {
       "attrPath": [
-        "xorg",
-        "libX11"
+        "libx11"
       ]
     },
     "xau": {
       "attrPath": [
-        "xorg",
-        "libXau"
+        "libxau"
       ]
     },
     "xcursor": {
       "attrPath": [
-        "xorg",
-        "libXcursor"
+        "libxcursor"
       ]
     },
     "xerces-c": {
@@ -870,26 +802,22 @@
     },
     "xext": {
       "attrPath": [
-        "xorg",
-        "libXext"
+        "libxext"
       ]
     },
     "xft": {
       "attrPath": [
-        "xorg",
-        "libXft"
+        "libxft"
       ]
     },
     "xi": {
       "attrPath": [
-        "xorg",
-        "libXi"
+        "libxi"
       ]
     },
     "xinerama": {
       "attrPath": [
-        "xorg",
-        "libXinerama"
+        "libxinerama"
       ]
     },
     "xkbcommon": {
@@ -899,38 +827,32 @@
     },
     "xpm": {
       "attrPath": [
-        "xorg",
-        "libXpm"
+        "libxpm"
       ]
     },
     "xrandr": {
       "attrPath": [
-        "xorg",
-        "libXrandr"
+        "libxrandr"
       ]
     },
     "xrender": {
       "attrPath": [
-        "xorg",
-        "libXrender"
+        "libxrender"
       ]
     },
     "xscrnsaver": {
       "attrPath": [
-        "xorg",
-        "libXScrnSaver"
+        "libxscrnsaver"
       ]
     },
     "xtst": {
       "attrPath": [
-        "xorg",
-        "libXtst"
+        "libxtst"
       ]
     },
     "xxf86vm": {
       "attrPath": [
-        "xorg",
-        "libXxf86vm"
+        "libxxf86vm"
       ]
     },
     "yaml-0.1": {

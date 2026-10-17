@@ -21,7 +21,6 @@
   pytest-aiohttp,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   responses,
   requests,
   starlette,
@@ -31,19 +30,21 @@
 
 buildPythonPackage rec {
   pname = "openapi-core";
-  version = "0.19.4";
+  version = "0.23.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "p1c2u";
     repo = "openapi-core";
     tag = version;
-    hash = "sha256-JvWusDokov8G0UO9oOkGicAI7wYZTnNywbvKMZKQWiQ=";
+    hash = "sha256-wGaRx+IEqsvs7ygCDgh1H4di662SQhjmpB9LMP/YGKM=";
   };
 
   build-system = [ poetry-core ];
+
+  pythonRelaxDeps = [
+    "jsonschema-path"
+  ];
 
   dependencies = [
     isodate
@@ -81,11 +82,23 @@ buildPythonPackage rec {
     pytestCheckHook
     responses
     webob
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
+
+  pytestFlags = [
+    "-Wignore::pytest.PytestRemovedIn10Warning"
+    # Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    "-Wignore::starlette.exceptions.StarletteDeprecationWarning"
+  ];
 
   disabledTestPaths = [
     # Requires secrets and additional configuration
     "tests/integration/contrib/django/"
+  ];
+
+  disabledTests = [
+    # https://github.com/p1c2u/jsonschema-path/pull/262 broke comparison of `SchemaPath`s
+    "test_returns_default_server"
   ];
 
   pythonImportsCheck = [
@@ -94,11 +107,11 @@ buildPythonPackage rec {
     "openapi_core.validation.response.validators"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/python-openapi/openapi-core/releases/tag/${version}";
     description = "Client-side and server-side support for the OpenAPI Specification v3";
     homepage = "https://github.com/python-openapi/openapi-core";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

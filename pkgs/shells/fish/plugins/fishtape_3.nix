@@ -12,7 +12,7 @@ buildFishPlugin rec {
     owner = "jorgebucaran";
     repo = "fishtape";
     rev = version;
-    sha256 = "072a3qbk1lpxw53bxp91drsffylx8fbywhss3x0jbnayn9m8i7aa";
+    hash = "sha256-Sp2IarJe2SVBH1pD7pdDnXrndG4h3b5G4f3SMBceShw=";
   };
 
   checkFunctionDirs = [ "./functions" ]; # fishtape is introspective
@@ -20,10 +20,10 @@ buildFishPlugin rec {
     fishtape tests/*.fish
   '';
 
-  meta = with lib; {
+  meta = {
     description = "100% pure-Fish test runner";
     homepage = "https://github.com/jorgebucaran/fishtape";
-    license = licenses.mit;
-    maintainers = with maintainers; [ euxane ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ euxane ];
   };
 }

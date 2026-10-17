@@ -1,28 +1,32 @@
 {
   lib,
   fetchFromGitHub,
-  crystal,
+  crystal_1_19,
+  coreutils,
 }:
-
+let
+  crystal = crystal_1_19;
+in
 crystal.buildCrystalPackage rec {
   pname = "ameba";
-  version = "1.6.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "crystal-ameba";
     repo = "ameba";
     tag = "v${version}";
-    hash = "sha256-NwmsNz9YfHDk0hVwVb5zczuzvErrwPhd3rs75t/Fj+I=";
+    hash = "sha256-P2XirYKxq3Y6cjK5O013fPzag9uWR9jdetlLxX70ji4=";
   };
 
   format = "make";
+  installFlags = [ "INSTALL_BIN=${coreutils}/bin/install" ];
 
-  meta = with lib; {
+  meta = {
     description = "Static code analysis tool for Crystal";
     mainProgram = "ameba";
-    homepage = "https://crystal-ameba.github.io";
+    homepage = "https://crystal-ameba.org";
     changelog = "https://github.com/crystal-ameba/ameba/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kimburgess ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

@@ -11,16 +11,16 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0vhjwn0dan3zmffvh80dxb4x67jysvvf1imp6pk4dsfslpwy0bk2";
+    hash = "sha256-Yi7g+aXa6UbmNbfG4PbWXh7TyeoNILidq39Y1YDlEm4=";
   };
 
   # Tests are outdated
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Framework for developing console applications using Python and curses";
     homepage = "https://www.npcole.com/npyscreen/";
-    maintainers = with maintainers; [ dump_stack ];
-    license = licenses.bsd3;
+    maintainers = with lib.maintainers; [ dump_stack ];
+    license = lib.licenses.bsd3;
   };
 }

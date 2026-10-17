@@ -1,39 +1,53 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
   bash,
+  fetchFromCodeberg,
+  meson,
+  ninja,
+  nix-update-script,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "game-devices-udev-rules";
-  version = "0.23";
+  version = "1.1";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  src = fetchFromCodeberg {
     owner = "fabiscafe";
     repo = "game-devices-udev";
-    rev = finalAttrs.version;
-    hash = "sha256-dWWo3qXnxdLP68NuFKM4/Cw5yE6uAsWzj0vZa9UTT0U=";
+    tag = finalAttrs.version;
+    hash = "sha256-EWEfmKSSnJqVYx8oTxJu2el7bA6hEngHQ0a0kiffdNA=";
   };
 
-  postInstall = ''
-    install -Dm444 -t "$out/lib/udev/rules.d" *.rules
-    substituteInPlace $out/lib/udev/rules.d/71-powera-controllers.rules \
-    --replace-fail "/bin/sh" "${bash}/bin/bash"
+  postPatch = ''
+    substituteInPlace src/powera-gdu.rules \
+      --replace-fail '"/bin/sh -c' '"${lib.getExe bash} -c'
   '';
 
-  meta = with lib; {
+  nativeBuildInputs = [
+    meson
+    ninja
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Udev rules to make supported controllers available with user-grade permissions";
-    homepage = "https://codeberg.org/fabiscafe/game-devices-udev";
-    license = licenses.mit;
     longDescription = ''
       These udev rules are intended to be used as a package under 'services.udev.packages'.
       They will not be activated if installed as 'environment.systemPackages' or 'users.user.<user>.packages'.
-
       Additionally, you may need to enable 'hardware.uinput'.
     '';
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ keenanweaver ];
+    homepage = "https://codeberg.org/fabiscafe/game-devices-udev";
+    changelog = "https://codeberg.org/fabiscafe/game-devices-udev/src/tag/${finalAttrs.version}/NEWS.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ keenanweaver ];
+    platforms = lib.platforms.linux;
   };
 })

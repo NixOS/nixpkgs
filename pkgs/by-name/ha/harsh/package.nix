@@ -2,27 +2,39 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "harsh";
-  version = "0.10.7";
+  version = "0.14.5";
 
   src = fetchFromGitHub {
     owner = "wakatara";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-M19JX+a1dFq05UZmPJyhkhxDwNBRQTPE8mdKbCER+4M=";
+    repo = "harsh";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-C3er23ibNCZB1eQSAHPpGBrlJk7DiYD6WTAAEU4JElk=";
   };
 
-  vendorHash = "sha256-hdPkiF1HHuIl6KbilPre6tAqSnYPhYhrxBEj3Ayy2AY=";
+  vendorHash = "sha256-0Nux4EIYscqem1xAbdj0hAP3MNmSM55pJ3xr/fEd3Ns=";
 
-  meta = with lib; {
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+
+  checkFlags =
+    let
+      skippedTests = [
+        "TestNewHabitIntegration" # panic: unexpected call to os.Exit(0) during test
+        "TestBuildGraph" # Expected graph length 10, got 24
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+
+  meta = {
     description = "CLI habit tracking for geeks";
     homepage = "https://github.com/wakatara/harsh";
-    changelog = "https://github.com/wakatara/harsh/releases/tag/v${version}";
-    license = licenses.mit;
+    changelog = "https://github.com/wakatara/harsh/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "harsh";
   };
-}
+})

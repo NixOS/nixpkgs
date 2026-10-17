@@ -58,8 +58,8 @@ in
 
           [bird]
           listen = "0.0.0.0:29184"
-          config = "/etc/bird/bird2.conf"
-          birdc  = "''${pkgs.bird}/bin/birdc"
+          config = "/etc/bird/bird.conf"
+          birdc  = "''${pkgs.bird2}/bin/birdc"
           ttl = 5 # time to live (in minutes) for caching of cli output
 
           [parser]

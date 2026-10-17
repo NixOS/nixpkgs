@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   ninja,
   SDL2,
@@ -20,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "raze";
-  version = "1.10.2";
+  version = "1.11.0-unstable-2025-11-19";
 
   src = fetchFromGitHub {
     owner = "ZDoom";
     repo = "Raze";
-    tag = finalAttrs.version;
-    hash = "sha256-R3Sm/cibg+D2QPS4UisRp91xvz3Ine2BUR8jF5Rbj1g=";
+    rev = "76fe82f5eb318fdeb30ba9fb27093a9a10bc3821";
+    hash = "sha256-QCxszreIExqWVVJL8GFNzfayeSwaelhGpimqn3spEJY=";
     leaveDotGit = true;
     postFetch = ''
       cd $out
@@ -34,15 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
       rm -rf .git
     '';
   };
-
-  patches = [
-    # Fix build with gcc14
-    (fetchpatch {
-      name = "fix-gcc14.patch";
-      url = "https://github.com/ZDoom/Raze/commit/f3cad8426cd808be5ded036ed12a497d27d3742e.patch";
-      hash = "sha256-TMx5gFmcuSQbVPjpBnKgK7EluqPSWhLF+TU8ZRaL7LE=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -79,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     mv $out/bin/raze $out/share/raze
     makeWrapper $out/share/raze/raze $out/bin/raze \
       --set LD_LIBRARY_PATH ${lib.makeLibraryPath [ vulkan-loader ]}
-    install -Dm644 ../source/platform/posix/org.zdoom.Raze.256.png $out/share/pixmaps/org.zdoom.Raze.png
+    install -Dm644 ../source/platform/posix/org.zdoom.Raze.256.png $out/share/icons/hicolor/256x256/apps/org.zdoom.Raze.png
     install -Dm644 ../source/platform/posix/org.zdoom.Raze.desktop $out/share/applications/org.zdoom.Raze.desktop
     install -Dm644 ../soundfont/raze.sf2 $out/share/raze/soundfonts/raze.sf2
   '';

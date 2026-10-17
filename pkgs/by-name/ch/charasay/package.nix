@@ -6,18 +6,18 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "charasay";
-  version = "3.3.0";
+  version = "3.3.3";
 
   src = fetchFromGitHub {
     owner = "latipun7";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-NB2GDDFH9IW/c0acMojYHuzPrx0J3tjlDqjQa6ZRbN4=";
+    repo = "charasay";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-8N3ToXpbDR+g19CT0q1J4QfQstBjS2QfX4IV2D7+ics=";
   };
 
-  cargoHash = "sha256-K6roydkLHvs+xg2LjrSHw8IcYEyOFcrsh4u6Fz7yYKQ=";
+  cargoHash = "sha256-yByNgG8JAdT5jVxe3ijLbmjE1c8YybPkiwMHOvpZPTM=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -32,11 +32,11 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/chara completions --shell zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Future of cowsay - Colorful characters saying something";
     homepage = "https://github.com/latipun7/charasay";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hmajid2301 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hmajid2301 ];
     mainProgram = "chara";
   };
-}
+})

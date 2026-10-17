@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "osslugaru";
     repo = "lugaru";
     rev = version;
-    sha256 = "089rblf8xw3c6dq96vnfla6zl8gxcpcbc1bj5jysfpq63hhdpypz";
+    hash = "sha256-//rbIBwGX6e9LHIFtthl/SH6jaLObpNwM2zwjhxdOSE=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +51,16 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [ "-DSYSTEM_INSTALL=ON" ];
+
+  # CMake 3.0 is deprecated and no longer supported by CMake > 4
+  # https://github.com/NixOS/nixpkgs/issues/445447
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 3.0)" \
+      "cmake_minimum_required(VERSION 3.10)" \
+    --replace-fail \
+      "cmake_policy(SET CMP0004 OLD)" ""
+  '';
 
   meta = {
     description = "Third person ninja rabbit fighting game";

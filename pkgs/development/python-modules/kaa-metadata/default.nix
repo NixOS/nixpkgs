@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0bkbzfgxvmby8lvzkqjp86anxvv3vjd9nksv2g4l7shsk1n7y27a";
+    hash = "sha256-6gh/bJga6kPJE1tPm5rcY+9ulUFX4vk3RX7V3Z/7ay4=";
   };
 
   doCheck = false;
@@ -48,10 +48,10 @@ buildPythonPackage rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python library for parsing media metadata, which can extract metadata (e.g., such as id3 tags) from a wide range of media files";
     homepage = "https://github.com/freevo/kaa-metadata";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = [ ];
   };
 }

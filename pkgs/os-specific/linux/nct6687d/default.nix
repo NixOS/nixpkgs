@@ -3,18 +3,19 @@
   stdenv,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "nct6687d";
-  version = "0-unstable-2024-11-05";
+  version = "0-unstable-2026-08-15";
 
   src = fetchFromGitHub {
     owner = "Fred78290";
     repo = "nct6687d";
-    rev = "2f1a27a29f71797922c74afda6a39ce368e80356";
-    hash = "sha256-fnSy3C6R8SHlu+xB+1ID8m4Eqfgb2+2y3DkDlp3blVo=";
+    rev = "4864fd681346119cf17417f82934a8ce05d88ff6";
+    hash = "sha256-NFoJTDAsSzamZVrx7Tqojb2OBCC73MNc5xugvkonR7w=";
   };
 
   setSourceRoot = ''
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = kernel.moduleMakeFlags ++ [
+  makeFlags = kernelModuleMakeFlags ++ [
     "-C"
     "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "M=$(sourceRoot)"
@@ -37,11 +38,11 @@ stdenv.mkDerivation rec {
     extraArgs = [ "--version=branch=main" ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Kernel module for the Nuvoton NCT6687-R chipset found on many B550/B650 motherboards from ASUS and MSI";
-    license = with licenses; [ gpl2Only ];
+    license = lib.licenses.gpl2Only;
     homepage = "https://github.com/Fred78290/nct6687d/";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ atemu ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ atemu ];
   };
 }

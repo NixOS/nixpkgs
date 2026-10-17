@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mieru";
-  version = "3.11.0";
+  version = "3.36.0";
 
   src = fetchFromGitHub {
     owner = "enfein";
     repo = "mieru";
-    rev = "v${version}";
-    hash = "sha256-xwi9T7M4FEl79kyGj+F1HX8000PFLrBfTmnEaLwnEFg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-P2M05E1kz+7WGGn0oG1q8GO6qMClBJiZNtRHyLy/DCc=";
   };
 
-  vendorHash = "sha256-AOtq6bGijQqpNMNZA3XeMjzKAo7tWTpdrKB6KxQsdMM=";
+  vendorHash = "sha256-pKcdvP38fZ2KFYNDx6I4TfmnnvWKzFDvz80xMkUojqM=";
   proxyVendor = true;
 
   ldflags = [
@@ -30,4 +30,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ oluceps ];
     mainProgram = "mieru";
   };
-}
+})

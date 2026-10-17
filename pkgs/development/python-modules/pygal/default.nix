@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
+  stdenv,
 
   # build-system
   setuptools,
@@ -21,14 +21,12 @@
 
 buildPythonPackage rec {
   pname = "pygal";
-  version = "3.0.5";
+  version = "3.1.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wKDzTlvBwBl1wr+4NCrVIeKTrULlJWmd0AxNelLBS3E=";
+    hash = "sha256-3RGcFM3rVr64UoLj4mh+zjBWEiXUEKgi5rtoaZqm57E=";
   };
 
   postPatch = ''
@@ -48,19 +46,28 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pyquery
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck = ''
     # necessary on darwin to pass the testsuite
     export LANG=en_US.UTF-8
   '';
 
-  meta = with lib; {
+  # Cairo tries to load system fonts by default.
+  # It's surfaced as a Cairo "out of memory" error in tests.
+  __impureHostDeps = [ "/System/Library/Fonts" ];
+
+  postCheck = ''
+    export LANG=${if stdenv.hostPlatform.isDarwin then "en_US.UTF-8" else "C.UTF-8"}
+  '';
+
+  meta = {
     description = "Module for dynamic SVG charting";
-    homepage = "http://www.pygal.org";
+    homepage = "https://www.pygal.org";
     changelog = "https://github.com/Kozea/pygal/blob/${version}/docs/changelog.rst";
     downloadPage = "https://github.com/Kozea/pygal";
-    license = licenses.lgpl3Plus;
+    license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
     mainProgram = "pygal_gen.py";
   };

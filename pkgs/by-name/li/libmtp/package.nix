@@ -3,7 +3,6 @@
   autoconf,
   automake,
   fetchFromGitHub,
-  fetchpatch,
   gettext,
   lib,
   libiconv,
@@ -13,24 +12,16 @@
   buildPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmtp";
-  version = "1.1.21";
+  version = "1.1.23";
 
   src = fetchFromGitHub {
     owner = "libmtp";
     repo = "libmtp";
-    rev = "libmtp-${builtins.replaceStrings [ "." ] [ "-" ] version}";
-    sha256 = "sha256-m9QFVD8udQ3SdGwn276BnIKqGeATA5QuokOK29Ykc1k=";
+    rev = "libmtp-${builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
+    sha256 = "sha256-FlPj9PEeOAWabU11dFTzDgY9TBbgmJclbeL0iULYw6A=";
   };
-
-  patches = [
-    # Backport cross fix.
-    (fetchpatch {
-      url = "https://github.com/libmtp/libmtp/commit/467fa26e6b14c0884b15cf6d191de97e5513fe05.patch";
-      sha256 = "2DrRrdcguJ9su4LxtT6YOjer8gUTxIoHVpk+6M9P4cg=";
-    })
-  ];
 
   outputs = [
     "bin"
@@ -50,7 +41,10 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ libusb1 ];
 
-  preConfigure = "NOCONFIGURE=1 ./autogen.sh";
+  preConfigure = ''
+    autopoint -f
+    NOCONFIGURE=1 ./autogen.sh
+  '';
 
   configureFlags = [ "--with-udev=${placeholder "out"}/lib/udev" ];
 
@@ -67,7 +61,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  doInstallCheck = true;
+
+  meta = {
     homepage = "https://github.com/libmtp/libmtp";
     description = "Implementation of Microsoft's Media Transfer Protocol";
     longDescription = ''
@@ -75,8 +71,8 @@ stdenv.mkDerivation rec {
       in the form of a library suitable primarily for POSIX compliant operating
       systems. We implement MTP Basic, the stuff proposed for standardization.
     '';
-    platforms = platforms.unix;
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ lovesegfault ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ lovesegfault ];
   };
-}
+})

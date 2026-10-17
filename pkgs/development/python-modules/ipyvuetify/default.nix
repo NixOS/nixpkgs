@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "ipyvuetify";
-  version = "1.10.0";
+  version = "1.11.3";
   pyproject = true;
 
   # GitHub version tries to run npm (Node JS)
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-h97mqq3zFu4n7Ymnmz08P14PLltjjaBoFzYEhTJUWsE=";
+    hash = "sha256-NYCvp22a3UrgTMt/1X1KDPA6JhcFdC5xN97z67Zaxx0=";
   };
 
   # drop pynpm which tries to install node_modules
@@ -32,10 +32,10 @@ buildPythonPackage rec {
   doCheck = false; # no tests on PyPi/GitHub
   pythonImportsCheck = [ "ipyvuetify" ];
 
-  meta = with lib; {
+  meta = {
     description = "Jupyter widgets based on Vuetify UI Components";
     homepage = "https://github.com/mariobuikhuizen/ipyvuetify";
-    license = licenses.mit;
-    maintainers = with maintainers; [ drewrisinger ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

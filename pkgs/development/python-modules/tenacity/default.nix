@@ -1,28 +1,31 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
-  setuptools-scm,
   tornado,
   typeguard,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tenacity";
-  version = "9.0.0";
+  version = "9.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-gH83ypfWKqNhJk1Jew4x6SuAJwRJQr+nVhYNkIMg1zs=";
+  src = fetchFromGitHub {
+    owner = "jd";
+    repo = "tenacity";
+    tag = finalAttrs.version;
+    hash = "sha256-FuHzvj5E4GTUjDVQrM0nIapsj5P12p7pClwqJZLlq94=";
   };
 
-  build-system = [ setuptools-scm ];
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -33,11 +36,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "tenacity" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jd/tenacity";
-    changelog = "https://github.com/jd/tenacity/releases/tag/${version}";
+    changelog = "https://github.com/jd/tenacity/releases/tag/${finalAttrs.src.tag}";
     description = "Retrying library for Python";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jakewaksbaum ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jakewaksbaum ];
   };
-}
+})

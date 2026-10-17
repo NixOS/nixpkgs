@@ -1,28 +1,22 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitHub,
+  fetchCrate,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "genemichaels";
-  version = "0.5.13";
+  version = "0.13.0";
 
-  src = fetchFromGitHub {
-    owner = "andrewbaxter";
-    repo = "genemichaels";
-    rev = "genemichaels-v${version}";
-    hash = "sha256-pzGTKswETm7RR0up1eSWC+X633rsVmEAJ3DYM8z6paQ=";
+  src = fetchCrate {
+    inherit (finalAttrs) pname version;
+    hash = "sha256-7+Hb3rvfdX3CaTS3nz9iaCzQBPqNJ4Y7WeC+twkqGzk=";
   };
 
-  cargoHash = "sha256-FjggpBTzxj9AOJjUq5PmbuE/ImmTMpxN0se9uxRy4KQ=";
+  cargoHash = "sha256-OiDSRcmbt/Ns7moswJQcvprtIsV1VlOeV9MUeRnEIYY=";
 
-  cargoBuildFlags = [ "--package ${pname}" ];
-  # cargoTestFlags is not used because genemichaels is tightly coupled to the
-  # other crates in the workspace and by not setting it, we run all the tests.
-  # If a dependency crate is failing its tests, we want to know about it. For
-  # example, between versions 0.5.8 and 0.5.12, there was a failing test in one
-  # of the other workspace members that genemichaels depends on.
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Even formats macros";
@@ -31,4 +25,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ djacu ];
     mainProgram = "genemichaels";
   };
-}
+})

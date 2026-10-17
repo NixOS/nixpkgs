@@ -1,67 +1,74 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
-  python3,
+  nix-update-script,
+  php,
+  python3Packages,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "wapiti";
-  version = "3.2.2";
+  version = "3.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wapiti-scanner";
     repo = "wapiti";
-    tag = version;
-    hash = "sha256-sa4bXZiY5yd0wynUjdLnuuX7Ee0w4APd1G/oGy5AUDk=";
+    tag = finalAttrs.version;
+    hash = "sha256-gnZdNm6XZ2QiSppFAyCqbnpMiy06+qofVnWyUIEwDMI=";
   };
 
   pythonRelaxDeps = true;
 
-  build-system = with python3.pkgs; [ setuptools ];
+  build-system = with python3Packages; [ setuptools ];
 
-  dependencies =
-    with python3.pkgs;
-    [
-      aiocache
-      aiohttp
-      aiosqlite
-      arsenic
-      beautifulsoup4
-      browser-cookie3
-      dnspython
-      h11
-      httpcore
-      httpx
-      httpx-ntlm
-      humanize
-      loguru
-      mako
-      markupsafe
-      mitmproxy
-      prance
-      pyasn1
-      six
-      sqlalchemy
-      tld
-      yaswfp
-    ]
-    ++ httpx.optional-dependencies.brotli
-    ++ httpx.optional-dependencies.socks
-    ++ prance.optional-dependencies.osv;
+  dependencies = with python3Packages; [
+    aiocache
+    aiohttp
+    aiosqlite
+    beautifulsoup4
+    browser-cookie3
+    dnspython
+    h11
+    httpcore
+    httpx
+    httpx-ntlm
+    humanize
+    loguru
+    mako
+    markupsafe
+    mitmproxy
+    msgpack
+    packaging
+    playwright
+    pyasn1
+    sqlalchemy
+    tld
+    typing-extensions
+    urwid
+    yaswfp
+    wapiti-arsenic
+    wapiti-swagger
+  ];
 
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = with python3.pkgs; [
-    respx
-    pytest-asyncio
-    pytest-cov-stub
-    pytestCheckHook
-  ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      respx
+      pytest-asyncio
+      pytest-cov-stub
+      pytestCheckHook
+    ]
+    ++ [
+      php
+      versionCheckHook
+      writableTmpDirAsHomeHook
+    ];
 
   disabledTests = [
     # Tests requires network access
@@ -79,16 +86,22 @@ python3.pkgs.buildPythonApplication rec {
     "test_escape_with_style"
     "test_explorer_extract_links"
     "test_explorer_filtering"
+    "test_explorer_for_non_existing_files"
     "test_false"
+    "test_fetch_source_files_typo3"
+    "test_fetch_source_files"
     "test_frame"
     "test_headers_detection"
     "test_html_detection"
     "test_implies_detection"
     "test_inclusion_detection"
+    "test_magento_multi_version_detected"
+    "test_magento_version_detected"
     "test_merge_with_and_without_redirection"
     "test_meta_detection"
     "test_multi_detection"
     "test_no_crash"
+    "test_ns_takeover"
     "test_options"
     "test_out_of_band"
     "test_partial_tag_name_escape"
@@ -131,16 +144,28 @@ python3.pkgs.buildPythonApplication rec {
     "test_persister_upload"
     # Requires creating a socket to an external URL
     "test_attack_unifi"
+    # AssertionError
+    "test_comment_in_noscript_context"
+    "test_noscript_context"
+    "test_title_context"
   ];
 
   disabledTestPaths = [
     # Requires sslyze which is obsolete and was removed
     "tests/attack/test_mod_ssl.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # PermissionError: [Errno 13] Permission denied: '/tmp/crawl.db'
+    "tests/web/test_persister.py"
   ];
 
   pythonImportsCheck = [ "wapitiCore" ];
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Web application vulnerability scanner";
     longDescription = ''
       Wapiti allows you to audit the security of your websites or web applications.
@@ -151,8 +176,9 @@ python3.pkgs.buildPythonApplication rec {
       if a script is vulnerable.
     '';
     homepage = "https://wapiti-scanner.github.io/";
-    changelog = "https://github.com/wapiti-scanner/wapiti/blob/${version}/doc/ChangeLog_Wapiti";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/wapiti-scanner/wapiti/blob/${finalAttrs.src.tag}/doc/ChangeLog_Wapiti";
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "wapiti";
   };
-}
+})

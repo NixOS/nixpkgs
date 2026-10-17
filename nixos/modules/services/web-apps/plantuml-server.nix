@@ -1,8 +1,12 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib)
-    literalExpression
     mkEnableOption
     mkIf
     mkOption
@@ -17,7 +21,11 @@ in
 
 {
   imports = [
-    (mkRemovedOptionModule [ "services" "plantuml-server" "allowPlantumlInclude" ] "This option has been removed from PlantUML.")
+    (mkRemovedOptionModule [
+      "services"
+      "plantuml-server"
+      "allowPlantumlInclude"
+    ] "This option has been removed from PlantUML.")
   ];
 
   options = {
@@ -29,15 +37,7 @@ in
       packages = {
         jdk = mkPackageOption pkgs "jdk" { };
         jetty = mkPackageOption pkgs "jetty" {
-          default = [ "jetty_11" ];
-          extraDescription = ''
-            At the time of writing (v1.2023.12), PlantUML Server does not support
-            Jetty versions higher than 12.x.
-
-            Jetty 12.x has introduced major breaking changes, see
-            <https://github.com/jetty/jetty.project/releases/tag/jetty-12.0.0> and
-            <https://eclipse.dev/jetty/documentation/jetty-12/programming-guide/index.html#pg-migration-11-to-12>
-          '';
+          default = [ "jetty_12" ];
         };
       };
 
@@ -66,7 +66,7 @@ in
       };
 
       listenPort = mkOption {
-        type = types.int;
+        type = types.port;
         default = 8080;
         description = "Port to listen on.";
       };
@@ -99,19 +99,19 @@ in
       wantedBy = [ "multi-user.target" ];
 
       environment = {
-        PLANTUML_LIMIT_SIZE = builtins.toString cfg.plantumlLimitSize;
+        PLANTUML_LIMIT_SIZE = toString cfg.plantumlLimitSize;
         GRAPHVIZ_DOT = "${cfg.graphvizPackage}/bin/dot";
         PLANTUML_STATS = if cfg.plantumlStats then "on" else "off";
         HTTP_AUTHORIZATION = cfg.httpAuthorization;
       };
       script = ''
-      ${cfg.packages.jdk}/bin/java \
-        -jar ${cfg.packages.jetty}/start.jar \
-          --module=deploy,http,jsp \
-          jetty.home=${cfg.packages.jetty} \
-          jetty.base=${cfg.package} \
-          jetty.http.host=${cfg.listenHost} \
-          jetty.http.port=${builtins.toString cfg.listenPort}
+        ${cfg.packages.jdk}/bin/java \
+          -jar ${cfg.packages.jetty}/start.jar \
+            --module=http,ee11-deploy,ee11-jsp \
+            -Djetty.home=${cfg.packages.jetty} \
+            -Djetty.base=${cfg.package} \
+            -Djetty.http.host=${cfg.listenHost} \
+            -Djetty.http.port=${toString cfg.listenPort}
       '';
 
       serviceConfig = {
@@ -138,7 +138,11 @@ in
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectSystem = "strict";
-        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_UNIX"
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
@@ -148,5 +152,8 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ truh anthonyroussel ];
+  meta.maintainers = with lib.maintainers; [
+    truh
+    anthonyroussel
+  ];
 }

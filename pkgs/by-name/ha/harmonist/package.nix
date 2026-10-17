@@ -1,26 +1,40 @@
 {
   lib,
-  fetchurl,
+  stdenv,
   buildGoModule,
+  fetchFromCodeberg,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "harmonist";
-  version = "0.5.1";
+  version = "1.0.3";
 
-  src = fetchurl {
-    url = "https://download.tuxfamily.org/harmonist/releases/${pname}-${version}.tar.gz";
-    hash = "sha256-NkUrBvOOs6yctW4CVRpJNcdfdPvUJZp9HaWLS7eO4yE=";
+  __structuredAttrs = true;
+
+  src = fetchFromCodeberg {
+    owner = "anaseto";
+    repo = "harmonist";
+    tag = "v${finalAttrs.version}";
+    hash =
+      # darwin's case-insensitive filesystem produces a different source hash because of map-d vs map-D
+      # is this a correctness issue?
+      if stdenv.hostPlatform.isDarwin then
+        "sha256-yNPGoCvCdrmFaUjtA1p8pgPIC9ekIizhG6oMiYRFYGA="
+      else
+        "sha256-9cEKkvQze+hg4CwDe5epTpuQPevylwnSP5xQAVGJ/wQ=";
   };
 
-  vendorHash = "sha256-0DV32a2LYnfYzg/tqwear9uaaahNUIi0M8uWlXOQ5Ic=";
+  vendorHash = "sha256-wibNLDdykV2psOnJbMKu0EZSrrhKRxrN/OTWXmUz2FM=";
 
   ldflags = [
     "-s"
-    "-w"
   ];
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  meta = {
     description = "Stealth coffee-break roguelike game";
     mainProgram = "harmonist";
     longDescription = ''
@@ -31,8 +45,9 @@ buildGoModule rec {
       management and character building, relying on items and player
       adaptability for character progression.
     '';
+    changelog = "https://codeberg.org/anaseto/harmonist/src/tag/v${finalAttrs.version}/CHANGES.md";
     homepage = "https://harmonist.tuxfamily.org/";
-    license = licenses.isc;
+    license = lib.licenses.isc;
     maintainers = [ ];
   };
-}
+})

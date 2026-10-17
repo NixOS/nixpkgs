@@ -5,30 +5,31 @@
   buildPackages,
   fetchurl,
   flex,
+  lzip,
   readline,
   ed,
   texinfo,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bc";
-  version = "1.07.1";
+  version = "1.08.2";
   src = fetchurl {
-    url = "mirror://gnu/bc/bc-${version}.tar.gz";
-    sha256 = "62adfca89b0a1c0164c2cdca59ca210c1d44c3ffc46daf9931cf4942664cb02a";
+    url = "mirror://gnu/bc/bc-${finalAttrs.version}.tar.lz";
+    hash = "sha256-eeMeAiqEsx3YCYFQY9S46lkLQJY3pSxQ7J9Cwr8zJxE=";
   };
 
   configureFlags = [ "--with-readline" ];
 
   # As of 1.07 cross-compilation is quite complicated as the build system wants
   # to build a code generator, bc/fbc, on the build machine.
-  patches = [ ./cross-bc.patch ];
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
     # Tools
     autoreconfHook
     ed
     flex
+    lzip
     texinfo
     # Libraries for build
     buildPackages.readline
@@ -46,11 +47,12 @@ stdenv.mkDerivation rec {
   # masss-rebuild.
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     description = "GNU software calculator";
     homepage = "https://www.gnu.org/software/bc/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
     mainProgram = "bc";
+    maintainers = with lib.maintainers; [ pinpox ];
   };
-}
+})

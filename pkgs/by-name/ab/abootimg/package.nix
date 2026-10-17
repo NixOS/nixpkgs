@@ -10,7 +10,7 @@
   util-linux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "abootimg";
   version = "0.6";
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     cat <<EOF > version.h
-    #define VERSION_STR "${version}"
+    #define VERSION_STR "${finalAttrs.version}"
     EOF
   '';
 
@@ -55,11 +55,11 @@ stdenv.mkDerivation rec {
     }
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ggrandou/abootimg";
     description = "Manipulate Android Boot Images";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.flokli ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ flokli ];
   };
-}
+})

@@ -1,25 +1,23 @@
 { lib, collectd }:
 
-collectd.overrideAttrs (oldAttrs: {
+collectd.overrideAttrs (prevAttrs: {
   pname = "libcollectdclient";
-  inherit (collectd) version;
+
   buildInputs = [ ];
 
-  configureFlags = (oldAttrs.configureFlags or [ ]) ++ [
+  configureFlags = (prevAttrs.configureFlags or [ ]) ++ [
+    "--with-perl-bindings=no"
     "--disable-daemon"
     "--disable-all-plugins"
   ];
 
   postInstall = "rm -rf $out/{bin,etc,sbin,share}";
 
-  meta = with lib; {
+  meta = {
     description = "C Library for collectd, a daemon which collects system performance statistics periodically";
-    homepage = "http://collectd.org";
-    license = licenses.gpl2;
-    platforms = platforms.linux; # TODO: collectd may be linux but the C client may be more portable?
-    maintainers = [
-      maintainers.sheenobu
-      maintainers.bjornfor
-    ];
+    homepage = "https://collectd.org";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ bjornfor ];
   };
 })

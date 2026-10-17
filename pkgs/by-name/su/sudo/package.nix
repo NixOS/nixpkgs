@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchpatch2,
   fetchurl,
   buildPackages,
   coreutils,
@@ -8,6 +9,9 @@
   groff,
   sssd,
   nixosTests,
+  genericUpdater,
+  writeShellScript,
+  curl,
   sendmailPath ? "/run/wrappers/bin/sendmail",
   withInsults ? false,
   withSssd ? false,
@@ -17,40 +21,64 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "sudo";
   # be sure to check if nixos/modules/security/sudo.nix needs updating when bumping
   # e.g. links to man pages, value constraints etc.
-  version = "1.9.16p2";
+  version = "1.9.17p2";
 
   __structuredAttrs = true;
 
   src = fetchurl {
     url = "https://www.sudo.ws/dist/sudo-${finalAttrs.version}.tar.gz";
-    hash = "sha256-l2qlbT47KnVZMweGQoit23SMnBNuJdlanMaZqvp3I5w=";
+    hash = "sha256-SjihqzrbEZklftwqfEor1xRmXrYFsENohDsG2tos/Ps=";
   };
 
   prePatch = ''
     # do not set sticky bit in nix store
-    substituteInPlace src/Makefile.in --replace 04755 0755
+    substituteInPlace src/Makefile.in --replace-fail 04755 0755
   '';
 
-  configureFlags =
-    [
-      "--with-env-editor"
-      "--with-editor=/run/current-system/sw/bin/nano"
-      "--with-rundir=/run/sudo"
-      "--with-vardir=/var/db/sudo"
-      "--with-logpath=/var/log/sudo.log"
-      "--with-iologdir=/var/log/sudo-io"
-      "--with-sendmail=${sendmailPath}"
-      "--enable-tmpfiles.d=no"
-      "--with-passprompt=[sudo] password for %p: " # intentional trailing space
-    ]
-    ++ lib.optionals withInsults [
-      "--with-insults"
-      "--with-all-insults"
-    ]
-    ++ lib.optionals withSssd [
-      "--with-sssd"
-      "--with-sssd-lib=${sssd}/lib"
-    ];
+  patches = [
+    (fetchpatch2 {
+      name = "CVE-2026-96512_1.patch";
+      url = "https://github.com/sudo-project/sudo/commit/db669167ca599f2a94cd8a4c5fae9e473c81a2fd.patch?full_index=1";
+      hash = "sha256-VqfWo/z7CQCtgefzE8xAehjgKn2h1It6GkEt5BUn/OQ=";
+    })
+    (fetchpatch2 {
+      name = "CVE-2026-96512_2.patch";
+      url = "https://github.com/sudo-project/sudo/commit/1820a349687522f51023d1ae5925125f59679a8c.patch?full_index=1";
+      hash = "sha256-guOdOaIqmXAftpj9gpsRFaAS5g2cS4j7o5DQFqyLZv8=";
+    })
+  ];
+
+  configureFlags = [
+    "--with-env-editor"
+    "--with-editor=/run/current-system/sw/bin/nano"
+    "--with-rundir=/run/sudo"
+    "--with-vardir=/var/db/sudo"
+    "--with-logpath=/var/log/sudo.log"
+    "--with-iologdir=/var/log/sudo-io"
+    "--with-sendmail=${sendmailPath}"
+    "--enable-tmpfiles.d=no"
+    "--with-passprompt=[sudo] password for %p: " # intentional trailing space
+  ]
+  ++ lib.optionals withInsults [
+    "--with-insults"
+    "--with-all-insults"
+  ]
+  ++ lib.optionals withSssd [
+    "--with-sssd"
+    "--with-sssd-lib=${sssd}/lib"
+  ];
+
+  outputs = [
+    "out"
+    "man"
+    "doc"
+    "dev"
+  ];
+  # The default stdenv ./configure flags for some reason cause the upstream's
+  # Makefile to `mkdir /var/db`, which fails in the sandbox. Since we split
+  # only trivial outputs - a single header and documentation, we can safely set
+  # the following:
+  setOutputFlags = false;
 
   postConfigure = ''
     cat >> pathnames.h <<'EOF'
@@ -73,9 +101,16 @@ stdenv.mkDerivation (finalAttrs: {
     rm $out/share/doc/sudo/ChangeLog
   '';
 
-  passthru.tests = { inherit (nixosTests) sudo; };
+  passthru = {
+    tests = { inherit (nixosTests) sudo; };
+    updateScript = genericUpdater {
+      versionLister = writeShellScript "sudo-versionLister" ''
+        ${lib.getExe curl} -sL https://www.sudo.ws/dist | grep -Po 'href="sudo-\K[\w.]*(?=\.tar\.gz")'
+      '';
+    };
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Command to run commands as root";
     longDescription = ''
       Sudo (su "do") allows a system administrator to delegate
@@ -85,14 +120,17 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://www.sudo.ws/";
     # From https://www.sudo.ws/about/license/
-    license = with licenses; [
-      sudo
-      bsd2
-      bsd3
-      zlib
-    ];
-    maintainers = with maintainers; [ rhendric ];
-    platforms = platforms.linux ++ platforms.freebsd ++ platforms.openbsd;
+    license =
+      with lib.licenses;
+      AND [
+        isc
+        bsdAskToEndorse
+        bsd2
+        bsd3
+        zlib
+      ];
+    maintainers = with lib.maintainers; [ rhendric ];
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd ++ lib.platforms.openbsd;
     mainProgram = "sudo";
   };
 })

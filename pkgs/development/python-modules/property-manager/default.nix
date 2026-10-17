@@ -5,7 +5,7 @@
   humanfriendly,
   verboselogs,
   coloredlogs,
-  pytest,
+  pytestCheckHook,
   pytest-cov-stub,
 }:
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "xolox";
     repo = "python-property-manager";
     rev = version;
-    sha256 = "1v7hjm7qxpgk92i477fjhpcnjgp072xgr8jrgmbrxfbsv4cvl486";
+    hash = "sha256-BhG6Gdl6uZ5XfVmi/Lo44D5p2YXSnUOiSPPdjk+V8Ow=";
   };
 
   propagatedBuildInputs = [
@@ -27,14 +27,14 @@ buildPythonPackage rec {
     verboselogs
   ];
   nativeCheckInputs = [
-    pytest
+    pytestCheckHook
     pytest-cov-stub
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Useful property variants for Python programming";
     homepage = "https://github.com/xolox/python-property-manager";
-    license = licenses.mit;
-    maintainers = with maintainers; [ eyjhb ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ eyjhb ];
   };
 }

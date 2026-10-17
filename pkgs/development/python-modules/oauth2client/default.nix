@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d486741e451287f69568a4d26d70d9acd73a2bbfa275746c535b4209891cccc6";
+    hash = "sha256-1IZ0HkUSh/aVaKTSbXDZrNc6K7+idXRsU1tCCYkczMY=";
   };
 
   propagatedBuildInputs = [
@@ -26,9 +26,9 @@ buildPythonPackage rec {
   ];
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Client library for OAuth 2.0";
     homepage = "https://github.com/google/oauth2client/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

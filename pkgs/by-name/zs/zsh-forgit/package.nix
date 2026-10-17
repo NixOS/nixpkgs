@@ -11,17 +11,18 @@
   gnugrep,
   gnused,
   makeWrapper,
+  perl,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "zsh-forgit";
-  version = "25.01.0";
+  version = "26.10.0";
 
   src = fetchFromGitHub {
     owner = "wfxr";
     repo = "forgit";
     tag = finalAttrs.version;
-    hash = "sha256-x+Y1o+K6I9DWbn202jNAr40vS71ZAXbS7ztsH+bPGBI=";
+    hash = "sha256-Kno14XqXwtG0zWVjrikoXf7eIXo3pj7YbSoQOYUcAI4=";
   };
 
   strictDeps = true;
@@ -40,7 +41,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     install -D bin/git-forgit $out/bin/git-forgit
     install -D completions/_git-forgit $out/share/zsh/site-functions/_git-forgit
-    install -D forgit.plugin.zsh $out/share/zsh/${finalAttrs.pname}/forgit.plugin.zsh
+    install -D forgit.plugin.zsh $out/share/zsh/zsh-forgit/forgit.plugin.zsh
     wrapProgram $out/bin/git-forgit \
       --prefix PATH : ${
         lib.makeBinPath [
@@ -52,18 +53,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           git
           gnugrep
           gnused
+          perl
         ]
       }
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/wfxr/forgit";
     description = "Utility tool powered by fzf for using git interactively";
     mainProgram = "git-forgit";
-    license = licenses.mit;
-    maintainers = with maintainers; [ deejayem ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ deejayem ];
+    platforms = lib.platforms.all;
   };
 })

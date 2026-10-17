@@ -2,26 +2,34 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "anewer";
-  version = "0.1.6";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "ysf";
-    repo = pname;
-    rev = version;
-    sha256 = "181mi674354bddnq894yyq587w7skjh35vn61i41vfi6lqz5dy3d";
+    repo = "anewer";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-h18La0Xu0SX4yR3TkNCttxNOTLli3tLTifvvL6EpPnM=";
   };
 
-  cargoHash = "sha256-LJ0l5CZM5NqdbCZe4ELkYf9EkKyBxL/LrNmFy+JS6gM=";
+  cargoHash = "sha256-c2AztEVbmY8AzdDHEqZcFLu3OaN2UtSXWU8fd+11doU=";
 
-  meta = with lib; {
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Append lines from stdin to a file if they don't already exist in the file";
     mainProgram = "anewer";
     homepage = "https://github.com/ysf/anewer";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ tomasrivera ];
   };
-}
+})

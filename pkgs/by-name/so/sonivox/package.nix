@@ -5,24 +5,24 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sonivox";
-  version = "3.6.15";
+  version = "4.0.2";
 
   src = fetchFromGitHub {
-    owner = "pedrolcl";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-k+EhhLFp+ehptjDS8ZHvo5tfFxmSCA2lFTjkWFLi+cs=";
+    owner = "EmbeddedSynth";
+    repo = "sonivox";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FExMOhE2iz/FDCldryG1eqxJF/JvYHczyrQ8r0OL6Es=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
-    homepage = "https://github.com/pedrolcl/sonivox";
+  meta = {
+    homepage = "https://github.com/EmbeddedSynth/sonivox";
     description = "MIDI synthesizer library";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ orivej ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.wegank ];
+    platforms = lib.platforms.all;
   };
-}
+})

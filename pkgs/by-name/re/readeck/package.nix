@@ -1,56 +1,47 @@
 {
-  fetchFromGitea,
+  lib,
+  fetchFromCodeberg,
   fetchNpmDeps,
   buildGoModule,
-  nodejs,
+  nodejs_22,
   npmHooks,
-  lib,
+  python3,
+  templ,
+  nix-update-script,
+  nixosTests,
 }:
 
-let
-
-  file-compose = buildGoModule {
-    pname = "file-compose";
-    version = "unstable-2023-10-21";
-
-    src = fetchFromGitea {
-      domain = "codeberg.org";
-      owner = "readeck";
-      repo = "file-compose";
-      rev = "afa938655d412556a0db74b202f9bcc1c40d8579";
-      hash = "sha256-rMANRqUQRQ8ahlxuH1sWjlGpNvbReBOXIkmBim/wU2o=";
-    };
-
-    vendorHash = "sha256-Qwixx3Evbf+53OFeS3Zr7QCkRMfgqc9hUA4eqEBaY0c=";
-  };
-in
-
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "readeck";
-  version = "0.17.1";
+  version = "0.23.4";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "readeck";
     repo = "readeck";
-    tag = version;
-    hash = "sha256-+GgjR1mxD93bFNaLeDuEefPlQEV9jNgFIo8jTAxphyo=";
+    tag = finalAttrs.version;
+    hash = "sha256-EUamQWH0ATc/6ofQHuFX3V2aXzU85nXcYQO+iZR9+Ys=";
   };
 
   nativeBuildInputs = [
-    nodejs
+    nodejs_22
     npmHooks.npmConfigHook
+    (python3.withPackages (ps: with ps; [ babel ]))
+    templ
   ];
 
   npmRoot = "web";
 
-  NODE_PATH = "$npmDeps";
+  env.NODE_PATH = "$npmDeps";
+
+  postPatch = ''
+    templ generate
+  '';
 
   preBuild = ''
-    make web-build
-    ${file-compose}/bin/file-compose -format json docs/api/api.yaml docs/assets/api.json
-    go run ./tools/docs docs/src docs/assets
+    make TEMPL=templ generate
   '';
+
+  subPackages = [ "." ];
 
   tags = [
     "netgo"
@@ -64,8 +55,11 @@ buildGoModule rec {
 
   ldflags = [
     "-X"
-    "codeberg.org/readeck/readeck/configs.version=${version}"
+    "codeberg.org/readeck/readeck/configs.version=${finalAttrs.version}"
+    "-X"
+    "codeberg.org/readeck/readeck/configs.buildTimeStr=1970-01-01T08:00:00Z"
   ];
+
   overrideModAttrs = oldAttrs: {
     # Do not add `npmConfigHook` to `goModules`
     nativeBuildInputs = lib.remove npmHooks.npmConfigHook oldAttrs.nativeBuildInputs;
@@ -74,19 +68,26 @@ buildGoModule rec {
   };
 
   npmDeps = fetchNpmDeps {
-    src = "${src}/web";
-    hash = "sha256-7fRSkXKAMEC7rFmSF50DM66SVhV68g93PMBjrtkd9/E=";
+    src = "${finalAttrs.src}/web";
+    hash = "sha256-H8l9cpGYbLhbaU4PsU6KBhr8QZGh5sihE+3XdFwQRTg=";
   };
 
-  vendorHash = "sha256-O/ZrpT6wTtPwBDUCAmR0XHRgQmd46/MPvWNE0EvD3bg=";
+  vendorHash = "sha256-9BTNWePXmmKUMWM1evhgIMYipHX+pxozONZCbcCt8lo=";
+
+  passthru = {
+    tests = { inherit (nixosTests) readeck; };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
-    description = "Web application that lets you save the readable content of web pages you want to keep forever.";
+    description = "Web application that lets you save the readable content of web pages you want to keep forever";
     mainProgram = "readeck";
     homepage = "https://readeck.org/";
-    changelog = "https://github.com/readeck/readeck/releases/tag/${version}";
+    changelog = "https://codeberg.org/readeck/readeck/releases/tag/${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ julienmalka ];
+    maintainers = with lib.maintainers; [
+      julienmalka
+      linsui
+    ];
   };
-
-}
+})

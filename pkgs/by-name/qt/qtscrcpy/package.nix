@@ -8,26 +8,29 @@
   scrcpy,
   android-tools,
   ffmpeg,
+  imagemagick,
   makeDesktopItem,
   copyDesktopItems,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qtscrcpy";
-  version = "3.0.1";
+  version = "4.2.1";
 
   src =
     (fetchFromGitHub {
       owner = "barry-ran";
       repo = "QtScrcpy";
-      tag = "v${version}";
-      hash = "sha256-uAWVPmULT2aK+XVZ8eAjCbP8TgDlBDTEvKs25yZktCI=";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-NyfRJ+afxHukeTHb7/2aTPod79Zrm1prgobzx91olLU=";
       fetchSubmodules = true;
     }).overrideAttrs
-      (_: {
-        GIT_CONFIG_COUNT = 1;
-        GIT_CONFIG_KEY_0 = "url.https://github.com/.insteadOf";
-        GIT_CONFIG_VALUE_0 = "git@github.com:";
+      (oldAttrs: {
+        env = (oldAttrs.env or { }) // {
+          GIT_CONFIG_COUNT = 1;
+          GIT_CONFIG_KEY_0 = "url.https://github.com/.insteadOf";
+          GIT_CONFIG_VALUE_0 = "git@github.com:";
+        };
       });
 
   patches = [
@@ -46,9 +49,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace QtScrcpy/QtScrcpyCore/{include/QtScrcpyCoreDef.h,src/device/server/server.h} \
-      --replace-fail 'serverVersion = "2.1.1"' 'serverVersion = "${scrcpy.version}"'
-    substituteInPlace QtScrcpy/util/config.cpp \
-      --replace-fail 'COMMON_SERVER_VERSION_DEF "2.1.1"' 'COMMON_SERVER_VERSION_DEF "${scrcpy.version}"'
+      --replace-fail 'serverVersion = "4.1"' 'serverVersion = "${scrcpy.version}"'
     substituteInPlace QtScrcpy/audio/audiooutput.cpp \
       --replace-fail 'sndcpy.sh' "$out/share/qtscrcpy/sndcpy.sh"
     substituteInPlace QtScrcpy/sndcpy/sndcpy.sh \
@@ -61,19 +62,19 @@ stdenv.mkDerivation rec {
     pkg-config
     libsForQt5.wrapQtAppsHook
     copyDesktopItems
+    imagemagick
   ];
 
-  buildInputs =
-    [
-      scrcpy
-      # Upstream vendors ffmpeg_4
-      ffmpeg
-    ]
-    ++ (with libsForQt5; [
-      qtbase
-      qtmultimedia
-      qtx11extras
-    ]);
+  buildInputs = [
+    scrcpy
+    # Upstream vendors ffmpeg_4
+    ffmpeg
+  ]
+  ++ (with libsForQt5; [
+    qtbase
+    qtmultimedia
+    qtx11extras
+  ]);
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=sign-compare"
@@ -89,7 +90,8 @@ stdenv.mkDerivation rec {
       install -Dm644 sndcpy.apk -t $out/share/qtscrcpy
     popd
 
-    install -Dm644 ../QtScrcpy/res/image/tray/logo.png $out/share/pixmaps/qtscrcpy.png
+    mkdir -p $out/share/icons/hicolor/512x512/apps
+    magick ../QtScrcpy/res/image/tray/logo.png -resize 512x512 $out/share/icons/hicolor/512x512/apps/qtscrcpy.png
 
     runHook postInstall
   '';
@@ -135,4 +137,4 @@ stdenv.mkDerivation rec {
       binaryBytecode
     ];
   };
-}
+})

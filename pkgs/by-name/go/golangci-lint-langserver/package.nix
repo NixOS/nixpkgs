@@ -1,29 +1,36 @@
 {
   lib,
   buildGoModule,
+  golangci-lint,
+  writableTmpDirAsHomeHook,
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "golangci-lint-langserver";
-  version = "0.0.9";
+  version = "0.0.12";
 
   src = fetchFromGitHub {
     owner = "nametake";
     repo = "golangci-lint-langserver";
-    rev = "v${version}";
-    sha256 = "sha256-jNRDqg2a5dXo7QI4CBRw0MLwhfpdGuhygpMoSKNcgC0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Sm+y9ccM5zhatzDZ/qDYH4HT2foteCniItdojqnFSxI=";
   };
 
-  vendorHash = "sha256-tAcl6P+cgqFX1eMYdS8vnfdNyb+1QNWwWdJsQU6Fpgg=";
+  vendorHash = "sha256-kbGTORTTxfftdU8ffsfh53nT7wZldOnBZ/1WWzN89Uc=";
 
   subPackages = [ "." ];
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    golangci-lint
+    writableTmpDirAsHomeHook
+  ];
+
+  meta = {
     description = "Language server for golangci-lint";
     homepage = "https://github.com/nametake/golangci-lint-langserver";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kirillrdy ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kirillrdy ];
     mainProgram = "golangci-lint-langserver";
   };
-}
+})

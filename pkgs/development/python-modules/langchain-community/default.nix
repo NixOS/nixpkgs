@@ -2,31 +2,29 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
-  poetry-core,
+  hatchling,
 
   # dependencies
   aiohttp,
-  dataclasses-json,
   httpx-sse,
-  langchain,
+  langchain-classic,
   langchain-core,
   langsmith,
+  numpy,
   pydantic-settings,
   pyyaml,
   requests,
   sqlalchemy,
   tenacity,
 
-  # optional-dependencies
-  typer,
-  numpy,
-
   # tests
-  httpx,
+  blockbuster,
   langchain-tests,
   lark,
+  mypy-extensions,
   pandas,
   pytest-asyncio,
   pytest-mock,
@@ -35,37 +33,39 @@
   responses,
   syrupy,
   toml,
+
+  # passthru
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-community";
-  version = "0.3.15";
+  version = "0.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
-    repo = "langchain";
-    tag = "langchain-community==${version}";
-    hash = "sha256-2/Zrl/wED/zm1m+NqgAD4AdrEh/LjFOeQoOSSM05e+s=";
+    repo = "langchain-community";
+    tag = "libs/community/v${version}";
+    hash = "sha256-I9xULsg+tlXM3Brh6Xa5xvFENx8zn4FRZ1/evNEh8UY=";
   };
 
   sourceRoot = "${src.name}/libs/community";
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
+  # Only needed for mixed python 3.12/3.13 builds
   pythonRelaxDeps = [
     "numpy"
-    "pydantic-settings"
-    "tenacity"
   ];
 
   dependencies = [
     aiohttp
-    dataclasses-json
     httpx-sse
-    langchain
+    langchain-classic
     langchain-core
     langsmith
+    numpy
     pydantic-settings
     pyyaml
     requests
@@ -73,17 +73,13 @@ buildPythonPackage rec {
     tenacity
   ];
 
-  optional-dependencies = {
-    cli = [ typer ];
-    numpy = [ numpy ];
-  };
-
   pythonImportsCheck = [ "langchain_community" ];
 
   nativeCheckInputs = [
-    httpx
+    blockbuster
     langchain-tests
     lark
+    mypy-extensions
     pandas
     pytest-asyncio
     pytest-mock
@@ -94,35 +90,50 @@ buildPythonPackage rec {
     toml
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
-
-  passthru = {
-    inherit (langchain-core) updateScript;
-  };
+  enabledTestPaths = [
+    "tests/unit_tests"
+  ];
 
   __darwinAllowLocalNetworking = true;
 
   disabledTests = [
-    # Test require network access
-    "test_ovhcloud_embed_documents"
-    "test_yandex"
-    # duckdb-engine needs python-wasmer which is not yet available in Python 3.12
-    # See https://github.com/NixOS/nixpkgs/pull/326337 and https://github.com/wasmerio/wasmer-python/issues/778
+    # requires bs4, aka BeautifulSoup
+    "test_importable_all"
+    # flaky
+    "test_llm_caching"
+    "test_llm_caching_async"
+    # Triggered by https://github.com/Mause/duckdb_engine/issues/1379
     "test_table_info"
     "test_sql_database_run"
-    # pydantic.errors.PydanticUserError: `SQLDatabaseToolkit` is not fully defined; you should define `BaseCache`, then call `SQLDatabaseToolkit.model_rebuild()`.
-    "test_create_sql_agent"
-    # pydantic.errors.PydanticUserError: `NatBotChain` is not fully defined; you should define `BaseCache`, then call `NatBotChain.model_rebuild()`.
-    "test_proper_inputs"
-    # pydantic.errors.PydanticUserError: `NatBotChain` is not fully defined; you should define `BaseCache`, then call `NatBotChain.model_rebuild()`.
-    "test_variable_key_naming"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # AttributeError: module 'ast' has no attribute 'Str'
+    # https://github.com/langchain-ai/langchain-community/issues/492
+    "test_no_dynamic__all__"
   ];
 
+  disabledTestPaths = [
+    # depends on Pydantic v1 notations, will not load
+    "tests/unit_tests/document_loaders/test_gitbook.py"
+    # pytest.PytestRemovedIn9Warning: Marks applied to fixtures have no effect
+    # https://docs.pytest.org/en/stable/deprecations.html#applying-a-mark-to-a-fixture-function
+    "tests/unit_tests/document_loaders/test_hugging_face.py"
+    "tests/unit_tests/indexes/test_sql_record_manager.py"
+  ];
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "libs/community/v";
+    ignoredVersions = "a|b|dev|rc";
+  };
+
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-community==${version}";
     description = "Community contributed LangChain integrations";
-    homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/community";
+    homepage = "https://github.com/langchain-ai/langchain-community";
+    changelog = "https://github.com/langchain-ai/langchain-community/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    maintainers = with lib.maintainers; [
+      natsukium
+      sarahec
+    ];
   };
 }

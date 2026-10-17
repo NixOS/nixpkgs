@@ -1,12 +1,22 @@
-{ stdenv, lib, fetchurl, cmake, supercollider, fftw, gitUpdater }:
+{
+  stdenv,
+  lib,
+  fetchpatch2,
+  fetchurl,
+  cmake,
+  supercollider,
+  fftw,
+  fftwFloat,
+  gitUpdater,
+}:
 
 stdenv.mkDerivation rec {
   pname = "sc3-plugins";
-  version = "3.13.0";
+  version = "3.14.1";
 
   src = fetchurl {
     url = "https://github.com/supercollider/sc3-plugins/releases/download/Version-${version}/sc3-plugins-${version}-Source.tar.bz2";
-    sha256 = "sha256-+N7rhh1ALipy21HUC0jEQ2kCYbWlOveJg9TPe6dnF6I=";
+    sha256 = "sha256-Thaj0XjMLnKMYTiA3HK2Lk8xTcIOOhnR2oSUeY0SKvI=";
   };
 
   strictDeps = true;
@@ -16,6 +26,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     supercollider
     fftw
+    fftwFloat # builds without this will return an error message about no FFTW3F-INCLUDE-DIR
   ];
 
   cmakeFlags = [
@@ -23,7 +34,10 @@ stdenv.mkDerivation rec {
     "-DSUPERNOVA=ON"
   ];
 
-  stripDebugList = [ "lib" "share" ];
+  stripDebugList = [
+    "lib"
+    "share"
+  ];
 
   passthru.updateScript = gitUpdater {
     url = "https://github.com/supercollider/sc3-plugins.git";
@@ -31,11 +45,13 @@ stdenv.mkDerivation rec {
     ignoredVersions = "rc|beta";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Community plugins for SuperCollider";
     homepage = "https://supercollider.github.io/sc3-plugins/";
-    maintainers = [ ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [
+      pretentiousUsername
+    ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

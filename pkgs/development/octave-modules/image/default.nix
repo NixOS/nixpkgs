@@ -2,21 +2,33 @@
   buildOctavePackage,
   lib,
   fetchurl,
+  gnuplot,
+  makeFontsConf,
+  writableTmpDirAsHomeHook,
 }:
 
 buildOctavePackage rec {
   pname = "image";
-  version = "2.14.0";
+  version = "2.20.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "sha256-dRXqIRqMuO9dnTurhaNunfVHXosFqRmgeODVJ0YHcTM=";
+    sha256 = "sha256-tLaGXn9l7lucJUppEovxDpOzi8J/W8W5c/7zACF/xyU=";
   };
 
-  meta = with lib; {
-    homepage = "https://octave.sourceforge.io/image/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+  nativeOctavePkgTestInputs = [
+    gnuplot
+    writableTmpDirAsHomeHook
+  ];
+
+  octavePkgTestEnv.FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
+
+  __structuredAttrs = true;
+
+  meta = {
+    homepage = "https://gnu-octave.github.io/packages/image/";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ ravenjoad ];
     description = "Functions for processing images";
     longDescription = ''
       The Octave-forge Image package provides functions for processing

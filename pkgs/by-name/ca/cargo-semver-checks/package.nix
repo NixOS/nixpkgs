@@ -4,37 +4,36 @@
   fetchFromGitHub,
   cmake,
   zlib,
-  stdenv,
-  darwin,
   testers,
   cargo-semver-checks,
   nix-update-script,
+  writableTmpDirAsHomeHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-semver-checks";
-  version = "0.38.0";
+  version = "0.51.0";
 
   src = fetchFromGitHub {
     owner = "obi1kenobi";
-    repo = pname;
-    tag = "v${version}";
-    hash = "sha256-IcKjiKFvkFvu8+LFCAmm39AGUaUdK8zhtNzzSb8VPE0=";
+    repo = "cargo-semver-checks";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3rhrNoO0ldthQWvDzvhowqokuacUxxF6KdYYA0BV1g4=";
   };
 
-  cargoHash = "sha256-QfJ7QnGKmbrGDwYtVyAJNNGoAukD97/tmCwAROvWBIg=";
+  cargoHash = "sha256-ZCq8dh/pYFRx1cYgyYtWFDG4C2k2QnPaQmMLR1Wdj50=";
 
   nativeBuildInputs = [
     cmake
   ];
 
-  buildInputs =
-    [
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+  ];
+
+  buildInputs = [
+    zlib
+  ];
 
   checkFlags = [
     # requires internet access
@@ -52,7 +51,7 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace test_outputs/integration_snapshots__bugreport.snap \
       --replace-fail \
         'cargo-semver-checks [VERSION] ([HASH])' \
-        'cargo-semver-checks ${version}'
+        'cargo-semver-checks ${finalAttrs.version}'
   '';
 
   passthru = {
@@ -64,14 +63,14 @@ rustPlatform.buildRustPackage rec {
     description = "Tool to scan your Rust crate for semver violations";
     mainProgram = "cargo-semver-checks";
     homepage = "https://github.com/obi1kenobi/cargo-semver-checks";
-    changelog = "https://github.com/obi1kenobi/cargo-semver-checks/releases/tag/v${version}";
+    changelog = "https://github.com/obi1kenobi/cargo-semver-checks/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       mit # or
       asl20
     ];
     maintainers = with lib.maintainers; [
-      figsoda
       matthiasbeyer
+      chrjabs
     ];
   };
-}
+})

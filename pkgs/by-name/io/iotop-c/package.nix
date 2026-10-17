@@ -6,36 +6,37 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iotop-c";
-  version = "1.27";
+  version = "1.31";
 
   src = fetchFromGitHub {
     owner = "Tomas-M";
     repo = "iotop";
-    rev = "v${version}";
-    sha256 = "sha256-o8OJnZjrDbzzhwfzRWmyCmhBWxMVKRDeDWWBCXy3C90=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-zJI6zPkkd9GIpnAfRMVLR9Xqog0sgxTnO/NTN3hsjKU=";
   };
 
   nativeBuildInputs = [ pkg-config ];
+
   buildInputs = [ ncurses ];
+
   makeFlags = [
-    "DESTDIR=$(out)"
     "TARGET=iotop-c"
+    "PREFIX=${placeholder "out"}"
+    "BINDIR=${placeholder "out"}/bin"
   ];
 
   postInstall = ''
-    mv $out/usr/share/man/man8/{iotop,iotop-c}.8
-    ln -s $out/usr/sbin $out/bin
-    ln -s $out/usr/share $out/share
+    mv $out/share/man/man8/{iotop,iotop-c}.8
   '';
 
-  meta = with lib; {
-    description = "iotop identifies processes that use high amount of input/output requests on your machine";
+  meta = {
+    description = "Iotop identifies processes that use high amount of input/output requests on your machine";
     homepage = "https://github.com/Tomas-M/iotop";
-    maintainers = [ maintainers.arezvov ];
+    maintainers = [ lib.maintainers.arezvov ];
     mainProgram = "iotop-c";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
-}
+})

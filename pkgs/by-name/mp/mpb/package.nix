@@ -17,15 +17,15 @@
 assert !blas.isILP64;
 assert !lapack.isILP64;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mpb";
-  version = "1.11.1";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "NanoComp";
-    repo = pname;
-    tag = "v${version}";
-    hash = "sha256-+2cMjZSGdfngtGoAeZRPRPBDvflTEIOWO8Se0W6jv9k=";
+    repo = "mpb";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-naxVKD7pxefb/ht5Pa4e/T9eDzlZ0raNYPSvKNaZUn8=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +54,8 @@ stdenv.mkDerivation rec {
     "--with-libctl=${libctl}"
     "--enable-maintainer-mode"
     "--disable-dependency-tracking"
-  ] ++ lib.optional (!stdenv.hostPlatform.isStatic) "--enable-shared";
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isStatic) "--enable-shared";
 
   doCheck = true;
 
@@ -67,4 +68,4 @@ stdenv.mkDerivation rec {
       sheepforce
     ];
   };
-}
+})

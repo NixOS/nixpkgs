@@ -19,12 +19,19 @@ let
   };
 in
 
-appimageTools.wrapAppImage rec {
+appimageTools.wrapAppImage {
   inherit pname version meta;
   src = src';
 
   extraPkgs =
     pkgs: with pkgs; [
+      libva
+      # VAAPI backends
+      intel-media-driver
+      intel-vaapi-driver
+      nvidia-vaapi-driver
+      mesa
+      # Other dependencies
       libgpg-error
       fontconfig
       libGL
@@ -38,8 +45,8 @@ appimageTools.wrapAppImage rec {
       e2fsprogs
       zlib
       libp11
-      xorg.libX11
-      xorg.libSM
+      libx11
+      libsm
     ];
 
   multiArch = true;

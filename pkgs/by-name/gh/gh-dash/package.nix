@@ -1,40 +1,45 @@
 {
   lib,
   fetchFromGitHub,
-  buildGoModule,
-  testers,
-  gh-dash,
+  buildGo127Module,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGo127Module (finalAttrs: {
   pname = "gh-dash";
-  version = "4.9.0";
+  version = "4.26.1";
 
   src = fetchFromGitHub {
     owner = "dlvhdr";
     repo = "gh-dash";
-    rev = "v${version}";
-    hash = "sha256-25Ik5VsTYLssI9u235pBWD1XNABvWCzbXma04pJX2nQ=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-CLci/5Z40pvJW0k+/zMuwOi+ALiCQQBrsVgt6AhJDlo=";
   };
 
-  vendorHash = "sha256-lqmz+6Cr9U5IBoJ5OeSN6HKY/nKSAmszfvifzbxG7NE=";
+  vendorHash = "sha256-edFzZpM1DIwFnMLQlOuh5c8CFzYm3X2YheGFDgOLZ0I=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/dlvhdr/gh-dash/v4/cmd.Version=${version}"
+    "-X github.com/dlvhdr/gh-dash/v4/cmd.Version=${finalAttrs.version}"
   ];
 
-  passthru.tests = {
-    version = testers.testVersion { package = gh-dash; };
-  };
+  checkFlags = [
+    # requires network
+    "-skip=TestFullOutput"
+  ];
+
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
-    changelog = "https://github.com/dlvhdr/gh-dash/releases/tag/${src.rev}";
+    changelog = "https://github.com/dlvhdr/gh-dash/releases/tag/${finalAttrs.src.rev}";
     description = "Github Cli extension to display a dashboard with pull requests and issues";
-    homepage = "https://github.com/dlvhdr/gh-dash";
+    homepage = "https://www.gh-dash.dev";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ amesgen ];
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
     mainProgram = "gh-dash";
   };
-}
+})

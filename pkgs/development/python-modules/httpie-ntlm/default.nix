@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b1f757180c0bd60741ea16cf91fc53d47df402a5c287c4a61a14b335ea0552b3";
+    hash = "sha256-sfdXGAwL1gdB6hbPkfxT1H30AqXCh8SmGhSzNeoFUrM=";
   };
 
   propagatedBuildInputs = [
@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "httpie_ntlm" ];
 
-  meta = with lib; {
+  meta = {
     description = "NTLM auth plugin for HTTPie";
     homepage = "https://github.com/httpie/httpie-ntlm";
-    license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ kfollesdal ];
+    license = lib.licenses.bsdOriginal;
+    maintainers = with lib.maintainers; [ kfollesdal ];
   };
 }

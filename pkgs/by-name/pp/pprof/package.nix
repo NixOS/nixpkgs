@@ -2,29 +2,36 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  libllvm,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "pprof";
-  version = "0-unstable-2024-09-25";
+  version = "0-unstable-2026-09-03";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "pprof";
-    rev = "fa3061bff0bcf0d611f07dbdba73665bd2bbac97";
-    hash = "sha256-wUHCbgmJI3YTettVVrLnRPIexaHuAQDmbnHXPTLBBYM=";
+    rev = "d6c3cb2f37ec22719bbaf5eb031d9a46635cb5b2";
+    hash = "sha256-2LflblPAds0JRZZPvxW986cgXCMV+R3qikLt9w+9vU0=";
   };
+
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
+    libllvm
+  ];
 
   postPatch = ''
     rm -rf browsertests   # somewhat independent module to ignore.
   '';
 
-  vendorHash = "sha256-oOjkjVb3OIGMwz3/85KTewXISpBZM3o1BfFG9aysFbo=";
+  vendorHash = "sha256-nGBPg0OV6sOSpKEY+EPt9v5eIm/3OrxNYLJDOcdDwio=";
 
-  meta = with lib; {
+  meta = {
     description = "Tool for visualization and analysis of profiling data";
     homepage = "https://github.com/google/pprof";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     longDescription = ''
       pprof reads a collection of profiling samples in profile.proto format and
       generates reports to visualize and help analyze the data. It can generate
@@ -46,6 +53,9 @@ buildGoModule rec {
       This is not an official Google product.
     '';
     mainProgram = "pprof";
-    maintainers = with maintainers; [ hzeller ];
+    maintainers = with lib.maintainers; [
+      hzeller
+      lromor
+    ];
   };
 }

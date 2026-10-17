@@ -1,22 +1,56 @@
-{ lib, stdenv, fetchFromGitHub, cmake, python3, libX11, libXxf86vm, libXrandr, vulkan-headers, libGL, vulkan-loader, wayland, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  python3,
+  libx11,
+  libxxf86vm,
+  libxrandr,
+  vulkan-headers,
+  libGL,
+  vulkan-loader,
+  wayland,
+  pkg-config,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openxr-loader";
-  version = "1.1.43";
+  version = "1.1.62";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "OpenXR-SDK-Source";
-    rev = "release-${version}";
-    sha256 = "sha256-Ze7r3qcYomcAIAoAO6FZDraKfFr/Wwrnv0HxmY6uE6w=";
+    tag = "release-${finalAttrs.version}";
+    hash = "sha256-FEjn42uK27HI50CKxoD08T0LJdH4d3Fc1HLwdnsYRDU=";
   };
 
-  nativeBuildInputs = [ cmake python3 pkg-config ];
-  buildInputs = [ libX11 libXxf86vm libXrandr vulkan-headers libGL vulkan-loader wayland ];
+  nativeBuildInputs = [
+    cmake
+    python3
+    pkg-config
+  ];
+  buildInputs = [
+    vulkan-headers
+    libGL
+    vulkan-loader
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libx11
+    libxxf86vm
+    libxrandr
+    wayland
+  ];
 
   cmakeFlags = [ "-DBUILD_TESTS=ON" ];
 
-  outputs = [ "out" "dev" "layers" ];
+  outputs = [
+    "out"
+    "dev"
+  ]
+  # layers don't currently build on darwin
+  # https://github.com/KhronosGroup/OpenXR-SDK-Source/issues/582
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) "layers";
 
   # https://github.com/KhronosGroup/OpenXR-SDK-Source/issues/305
   postPatch = ''
@@ -24,7 +58,7 @@ stdenv.mkDerivation rec {
       --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     mkdir -p "$layers/share"
     mv "$out/share/openxr" "$layers/share"
     # Use absolute paths in manifests so no LD_LIBRARY_PATH shenanigans are necessary
@@ -35,11 +69,11 @@ stdenv.mkDerivation rec {
     mv "$out/lib/libXrApiLayer"* "$layers/lib"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Khronos OpenXR loader";
-    homepage    = "https://www.khronos.org/openxr";
-    platforms   = platforms.linux;
-    license     = licenses.asl20;
-    maintainers = [ maintainers.ralith ];
+    homepage = "https://www.khronos.org/openxr";
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.ralith ];
   };
-}
+})

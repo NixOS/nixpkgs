@@ -4,18 +4,18 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "workshop-runner";
-  version = "0.1.5";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "mainmatter";
     repo = "rust-workshop-runner";
-    rev = "v${version}";
-    hash = "sha256-2lt4RloIRnFvWZ+HeZx7M2cg/wHb1/j0qDmhUhOoF+M=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-vaCMnytN3GidEzn3r0zDyD2uBTLaLSnaho/j1Ti3yHE=";
   };
 
-  cargoHash = "sha256-VoIAwPrkhrRl48czXtKWmLTktsZ/U4TVV924wx0DL+A=";
+  cargoHash = "sha256-/Oj4B2W+fprOML1KdiU8fHkeGj1JXq8o0GlKxa46/64=";
 
   meta = {
     description = "CLI tool to drive test-driven Rust workshops";
@@ -28,4 +28,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ RaghavSood ];
     mainProgram = "wr";
   };
-}
+})

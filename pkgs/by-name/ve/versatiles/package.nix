@@ -1,38 +1,62 @@
 {
   lib,
   fetchFromGitHub,
+  openssl,
+  pkg-config,
   rustPlatform,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "versatiles";
-  version = "0.14.5"; # When updating: Replace with current version
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "versatiles-org";
     repo = "versatiles-rs";
-    tag = "v${version}"; # When updating: Replace with long commit hash of new version
-    hash = "sha256-ejMqTMGLbVr/Aaqw8U0ojV43N6t0GeWdYIcP0guAsO0="; # When updating: Use `lib.fakeHash` for recomputing the hash once. Run: 'nix-build -A versatiles'. Swap with new hash and proceed.
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-M7HGsrmE6sg4wTjl97+7lRE8/jf45svfvdSc1WMC1yI=";
   };
 
-  cargoHash = "sha256-2C/oPB48CTX7i4xoF1iegrpNvaSMkIbVeEyy/WteKqM="; # When updating: Same as above
+  cargoHash = "sha256-gwY8cgc+conuYElgSlGj7Rcdi8MBWcVPuzlSOPT5ByI=";
 
-  # Testing only necessary for the `bins` and `lib` features
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    openssl
+  ];
+
+  # Needed to get openssl-sys to use pkg-config.
+  env.OPENSSL_NO_VENDOR = 1;
+
+  __darwinAllowLocalNetworking = true;
+
+  # Testing only necessary for `bins`
   cargoTestFlags = [
     "--bins"
-    "--lib"
   ];
 
   # Skip tests that require network access
   checkFlags = [
-    "--skip tools::convert::tests::test_remote1"
-    "--skip tools::convert::tests::test_remote2"
-    "--skip tools::probe::tests::test_remote"
-    "--skip tools::serve::tests::test_remote"
-    "--skip utils::io::data_reader_http"
-    "--skip utils::io::data_reader_http::tests::read_range_git"
-    "--skip utils::io::data_reader_http::tests::read_range_googleapis"
+    "--skip=tools::convert::tests::test_remote1"
+    "--skip=tools::convert::tests::test_remote2"
+    "--skip=tools::probe::tests::test_remote"
+    "--skip=tools::serve::tests::test_config"
+    "--skip=tools::serve::tests::test_remote"
+    "--skip=utils::io::data_reader_http"
+    "--skip=utils::io::data_reader_http::tests::read_range_git"
+    "--skip=utils::io::data_reader_http::tests::read_range_googleapis"
+    "--skip=io::data_reader_http::tests::read_range_git"
+    "--skip=io::data_reader_http::tests::read_range_googleapis"
   ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   meta = {
     description = "Toolbox for converting, checking and serving map tiles in various formats";
@@ -42,10 +66,10 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://versatiles.org/";
     downloadPage = "https://github.com/versatiles-org/versatiles-rs";
-    changelog = "https://github.com/versatiles-org/versatiles-rs/releases/tag/v${version}";
+    changelog = "https://github.com/versatiles-org/versatiles-rs/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ wilhelmines ];
     mainProgram = "versatiles";
     platforms = with lib.platforms; linux ++ darwin ++ windows;
   };
-}
+})

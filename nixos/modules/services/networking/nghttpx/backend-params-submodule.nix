@@ -11,7 +11,7 @@
         This option configures the protocol the backend server expects
         to use.
 
-        Please see https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx-b
+        Please see <https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx-b>
         for more detail.
       '';
     };
@@ -24,7 +24,7 @@
         connection with a backend server using TLS or not. The burden
         is on the backend server to provide the TLS certificate!
 
-        Please see https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx-b
+        Please see <https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx-b>
         for more detail.
       '';
     };
@@ -36,7 +36,7 @@
         Override the TLS SNI field value. This value (in nghttpx)
         defaults to the host value of the backend configuration.
 
-        Please see https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx-b
+        Please see <https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx-b>
         for more detail.
       '';
     };
@@ -50,7 +50,7 @@
         balancing. If N is 0 the backend is never excluded from load
         balancing.
 
-        Please see https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx-b
+        Please see <https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx-b>
         for more detail.
       '';
     };
@@ -65,7 +65,7 @@
         re-included in load balancing. If N is 0 a backend is never
         reconsidered for load balancing once it falls.
 
-        Please see https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx-b
+        Please see <https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx-b>
         for more detail.
       '';
     };
@@ -90,7 +90,7 @@
         one of the backend gets unreachable, or backend settings are
         reloaded or replaced by API.
 
-        Please see https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx-b
+        Please see <https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx-b>
         for more detail.
       '';
     };
@@ -107,7 +107,7 @@
         "dns" is true, name resolution of a backend's host name at
         start up, or configuration reload is skipped.
 
-        Please see https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx-b
+        Please see <https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx-b>
         for more detail.
       '';
     };
@@ -130,7 +130,7 @@
         pattern. It is advised to set "redirect-if-no-tls" parameter
         to all backends explicitly if this feature is desired.
 
-        Please see https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx-b
+        Please see <https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx-b>
         for more detail.
       '';
     };

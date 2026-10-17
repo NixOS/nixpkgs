@@ -2,29 +2,29 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
-  libXi,
-  libXt,
-  libXfixes,
-  libXext,
+  libx11,
+  libxi,
+  libxt,
+  libxfixes,
+  libxext,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.8";
   pname = "xbanish";
 
   buildInputs = [
-    libX11
-    libXi
-    libXt
-    libXfixes
-    libXext
+    libx11
+    libxi
+    libxt
+    libxfixes
+    libxext
   ];
 
   src = fetchFromGitHub {
     owner = "jcs";
-    repo = pname;
-    rev = "v${version}";
+    repo = "xbanish";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-jwCoJ2shFGuJHhmXmlw/paFpMl5ARD6e5zDnDZHlsoo=";
   };
 
@@ -48,9 +48,10 @@ stdenv.mkDerivation rec {
       The name comes from ratpoison's "banish" command that sends the cursor to the
       corner of the screen.
     '';
+    homepage = "https://github.com/jcs/xbanish";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.choochootrain ];
     platforms = lib.platforms.linux;
     mainProgram = "xbanish";
   };
-}
+})

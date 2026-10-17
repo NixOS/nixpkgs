@@ -1,23 +1,24 @@
-{ stdenv
-, lib
-, gnat
-, gprbuild
-, fetchFromGitHub
-, fetchpatch2
-, which
-, python3
-, rsync
-, enableGnatcollCore ? true
+{
+  stdenvNoCC,
+  lib,
+  gnat,
+  gprbuild,
+  fetchFromGitHub,
+  fetchpatch2,
+  which,
+  python3,
+  rsync,
+  enableGnatcollCore ? true,
   # TODO(@sternenseemann): figure out a way to split this up into three packages
-, enableGnatcollProjects ? true
+  enableGnatcollProjects ? true,
   # for tests
-, gnatcoll-core
+  gnatcoll-core,
 }:
 
 # gnatcoll-projects depends on gnatcoll-core
 assert enableGnatcollProjects -> enableGnatcollCore;
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "gnatcoll-core";
   version = "25.0.0";
 
@@ -29,11 +30,11 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # Fix compilation with GNAT 12 https://github.com/AdaCore/gnatcoll-core/issues/88
+    # Fix compilation with GNAT 16
     (fetchpatch2 {
-      name = "gnatcoll-core-gnat-12.patch";
-      url = "https://github.com/AdaCore/gnatcoll-core/commit/515db1c9f1eea8095f2d9ff9570159a78c981ec6.patch";
-      sha256 = "1ghnkhp5fncb7qcmf59kyqvy0sd0pzf1phnr2z7b4ljwlkbmcp36";
+      name = "gnatcoll-core-gnat-16.patch";
+      url = "https://github.com/AdaCore/gnatcoll-core/commit/b266466e0a05b30615ec43d72782c345470455b9.patch?full_index=1";
+      hash = "sha256-rG0D1y2dbXA2M2Arnto+f7iAhg3yCfTPDbDRN+pMJKQ=";
     })
   ];
 
@@ -61,9 +62,9 @@ stdenv.mkDerivation rec {
     "prefix=${placeholder "out"}"
     "PROCESSORS=$(NIX_BUILD_CORES)"
     # confusingly, for gprbuild --target is autoconf --host
-    "TARGET=${stdenv.hostPlatform.config}"
-    "GNATCOLL_MINIMAL_ONLY=${if !enableGnatcollCore then "yes" else "no"}"
-    "GNATCOLL_PROJECTS=${if enableGnatcollProjects then "yes" else "no"}"
+    "TARGET=${stdenvNoCC.hostPlatform.config}"
+    "GNATCOLL_MINIMAL_ONLY=${lib.boolToYesNo (!enableGnatcollCore)}"
+    "GNATCOLL_PROJECTS=${lib.boolToYesNo enableGnatcollProjects}"
   ];
 
   passthru.tests = {
@@ -77,11 +78,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/AdaCore/gnatcoll-core";
     description = "GNAT Components Collection - Core packages";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.sternenseemann ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.sternenseemann ];
+    platforms = lib.platforms.all;
   };
 }

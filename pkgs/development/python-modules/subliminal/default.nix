@@ -2,16 +2,22 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
+  # build-system
+  hatchling,
+  hatch-vcs,
+
+  # dependencies
   babelfish,
   beautifulsoup4,
   chardet,
   click,
   click-option-group,
+  defusedxml,
   dogpile-cache,
   enzyme,
   guessit,
+  knowit,
   srt,
   pysubs2,
   rarfile,
@@ -19,7 +25,11 @@
   platformdirs,
   stevedore,
   tomli,
+  tomlkit,
 
+  # nativeCheckInputs
+  colorama,
+  pypandoc,
   pytestCheckHook,
   pytest-cov-stub,
   pytest-xdist,
@@ -30,27 +40,32 @@
 
 buildPythonPackage rec {
   pname = "subliminal";
-  version = "2.2.1";
+  version = "2.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Diaoul";
     repo = "subliminal";
     tag = version;
-    hash = "sha256-g7gg2qdLKl7bg/nNXRWN9wZaNShOOc38sVASZrIycMU=";
+    hash = "sha256-4pM9XHqz87yFeicB6IK7sNzXCdWGlLvT9Dm00e1fMXo=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
+
+  dependencies = [
     babelfish
     beautifulsoup4
     chardet
     click
     click-option-group
+    defusedxml
     dogpile-cache
     enzyme
     guessit
+    knowit
     srt
     pysubs2
     rarfile
@@ -58,9 +73,12 @@ buildPythonPackage rec {
     platformdirs
     stevedore
     tomli
+    tomlkit
   ];
 
   nativeCheckInputs = [
+    colorama
+    pypandoc
     pytestCheckHook
     pytest-cov-stub
     pytest-xdist
@@ -73,6 +91,10 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Tests require network access
+    "integration"
+    "test_cli_cache"
+    "test_cli_download"
+    "test_is_supported_archive"
     "test_refine"
     "test_scan"
     "test_hash"
@@ -80,8 +102,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python library to search and download subtitles";
+    mainProgram = "subliminal";
     homepage = "https://github.com/Diaoul/subliminal";
-    changelog = "https://github.com/Diaoul/subliminal/blob/${version}/HISTORY.rst";
+    changelog = "https://github.com/Diaoul/subliminal/blob/${src.tag}/HISTORY.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];
   };

@@ -8,18 +8,18 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sequoia-sqv";
-  version = "1.2.1";
+  version = "1.5.0";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
     repo = "sequoia-sqv";
-    rev = "v${version}";
-    hash = "sha256-frGukJDsxq+BWLPC/4imfc42lDKVF8BPIQQDazaLaQ0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-z8ZZf5+I8YXR6ugP3EF3zynBicQYKoDfCwWmFfrC8FA=";
   };
 
-  cargoHash = "sha256-1h1nXtXMTwL8ICxWTV8My0IdE+6w0L7xXZD012Cv5U8=";
+  cargoHash = "sha256-fsD5LcJ5JTtZbajjU1yaxUGQ+tJk6tyChSmDtJ6k9Bk=";
 
   nativeBuildInputs = [
     pkg-config
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     nettle
   ];
-  # Install shell completion files and manual pages. Unfortunatly it is hard to
+  # Install shell completion files and manual pages. Unfortunately it is hard to
   # predict the paths to all of these files generated during the build, and it
   # is impossible to control these using `$OUT_DIR` or alike, as implied by
   # upstream's `build.rs`. This is a general Rust issue also discussed in
@@ -55,4 +55,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ doronbehar ];
     mainProgram = "sqv";
   };
-}
+})

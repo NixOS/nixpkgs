@@ -65,11 +65,11 @@ stdenv.mkDerivation {
     "install-doc"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://repo.or.cz/cdimgtools.git/blob_plain/refs/heads/release:/README.html";
     description = "Tools to inspect and manipulate CD/DVD optical disc images";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ hhm ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ hhm ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

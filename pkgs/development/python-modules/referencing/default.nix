@@ -6,26 +6,23 @@
   hatch-vcs,
   hatchling,
   jsonschema,
-  pytest-subtests,
   pytestCheckHook,
-  pythonOlder,
   rpds-py,
+  typing-extensions,
 }:
 
 let
   self = buildPythonPackage rec {
     pname = "referencing";
-    version = "0.35.1";
+    version = "0.37.0";
     pyproject = true;
-
-    disabled = pythonOlder "3.8";
 
     src = fetchFromGitHub {
       owner = "python-jsonschema";
       repo = "referencing";
       tag = "v${version}";
       fetchSubmodules = true;
-      hash = "sha256-Ix0cpdOs7CtersdfW9daF/+BEJaV/na1WRTlYywUJV8=";
+      hash = "sha256-4e06rzvIOyWAgkpzAisc4uUK8pWshDZiQ6qpvJCq3GY=";
     };
 
     build-system = [
@@ -36,11 +33,11 @@ let
     dependencies = [
       attrs
       rpds-py
+      typing-extensions
     ];
 
     nativeCheckInputs = [
       jsonschema
-      pytest-subtests
       pytestCheckHook
     ];
 
@@ -51,12 +48,12 @@ let
 
     pythonImportsCheck = [ "referencing" ];
 
-    meta = with lib; {
+    meta = {
       description = "Cross-specification JSON referencing";
       homepage = "https://github.com/python-jsonschema/referencing";
-      changelog = "https://github.com/python-jsonschema/referencing/releases/tag/v${version}";
-      license = licenses.mit;
-      maintainers = with maintainers; [ fab ];
+      changelog = "https://github.com/python-jsonschema/referencing/releases/tag/${src.tag}";
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ fab ];
     };
   };
 in

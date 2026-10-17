@@ -2,41 +2,39 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "xcaddy";
-  version = "0.4.4";
+  version = "0.4.7";
+
+  __structuredAttrs = true;
 
   subPackages = [ "cmd/xcaddy" ];
 
   src = fetchFromGitHub {
     owner = "caddyserver";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-vpaweUU++3ZHj7KT5WNUCw3X93sQBTgjKlB8rJwrHlM=";
+    repo = "xcaddy";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-q69Ey6gf/Uyui9x3nKkGFHiwTpMB0N3ix89JLgTsR1A=";
   };
-
-  patches = [
-    ./inject_version_info.diff
-    ./use_tmpdir_on_darwin.diff
-  ];
 
   ldflags = [
     "-s"
-    "-w"
-    "-X github.com/caddyserver/xcaddy/cmd.customVersion=v${version}"
+    "-X github.com/caddyserver/xcaddy/cmd.CustomVersion=v${finalAttrs.version}"
   ];
 
-  vendorHash = "sha256-vU/ptOzBjMpRG2Do6ODC+blcCNl15D9mSsEV8QgNN3Y=";
+  vendorHash = "sha256-bZs+2XrwVwfJdNLBZk6FPNi26ctVQ82ywesEU0o5Gkc=";
 
-  meta = with lib; {
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  meta = {
     homepage = "https://github.com/caddyserver/xcaddy";
     description = "Build Caddy with plugins";
     mainProgram = "xcaddy";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
-      tjni
-    ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.stepbrobd ];
   };
-}
+})

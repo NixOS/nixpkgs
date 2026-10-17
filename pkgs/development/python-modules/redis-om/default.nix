@@ -2,57 +2,68 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+  hatchling,
   unasync,
-  poetry-core,
   python,
   click,
   hiredis,
   more-itertools,
   pydantic,
+  pydantic-extra-types,
   python-ulid,
   redis,
+  redisvl,
+  redisTestHook,
   types-redis,
   typing-extensions,
-  pkgs,
   pytest-asyncio,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "redis-om";
-  version = "0.3.3";
+  version = "1.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "redis";
     repo = "redis-om-python";
     tag = "v${version}";
-    hash = "sha256-Pp404HaFpYEPie9xknoabotFrqcI2ibDlPTM+MmnMbg=";
+    hash = "sha256-hpDGF+9YiJSCOSUrulE5iCG/YL5xlAWNxZcadOp3XBM=";
   };
 
-  build-system = [
-    unasync
-    poetry-core
+  pythonRelaxDeps = [
+    "more-itertools"
+    "redis"
   ];
 
-  # it has not been maintained at all for a half year and some dependencies are outdated
-  # https://github.com/redis/redis-om-python/pull/554
-  # https://github.com/redis/redis-om-python/pull/577
-  pythonRelaxDeps = true;
+  build-system = [
+    hatchling
+    unasync
+  ];
 
   dependencies = [
     click
     hiredis
     more-itertools
     pydantic
+    pydantic-extra-types
     python-ulid
     redis
+    redisvl
     types-redis
     typing-extensions
   ];
+
+  postPatch = ''
+    # We don't want to use a formatter in our build.
+    substituteInPlace make_sync.py \
+      --replace-fail 'ruff' 'true'
+
+    # Fix `click` not finding the correct package to use for the version command.
+    substituteInPlace aredis_om/cli/main.py \
+      --replace-fail '@click.version_option()' '@click.version_option(package_name = "redis_om")'
+  '';
 
   preBuild = ''
     ${python.pythonOnBuildForHost.interpreter} make_sync.py
@@ -61,16 +72,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
+    redisTestHook
   ];
-
-  preCheck = ''
-    ${pkgs.redis}/bin/redis-server &
-    REDIS_PID=$!
-  '';
-
-  postCheck = ''
-    kill $REDIS_PID
-  '';
 
   # probably require redisearch
   # https://github.com/redis/redis-om-python/issues/532
@@ -81,12 +84,13 @@ buildPythonPackage rec {
     "redis_om"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Object mapping, and more, for Redis and Python";
-    mainProgram = "migrate";
+    mainProgram = "om";
     homepage = "https://github.com/redis/redis-om-python";
-    changelog = "https://github.com/redis/redis-om-python/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    changelog = "https://github.com/redis/redis-om-python/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ natsukium ];
+    teams = [ lib.teams.redis ];
   };
 }

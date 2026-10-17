@@ -2,26 +2,32 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  six,
   pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "imapclient";
-  version = "3.0.1";
-
-  format = "setuptools";
+  version = "4.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mjs";
     repo = "imapclient";
-    tag = version;
-    hash = "sha256-WY3OLPUwixrL2NSLfNBSSNMXJEoYBL+O6KoglU3Cz9g=";
+    tag = finalAttrs.version;
+    hash = "sha256-ISlu27FRFHNvPaMyvtCY3izwYDx9Vd5BXTWjklZ5+ZE=";
   };
 
-  propagatedBuildInputs = [ six ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  preCheck = ''
+    # NIX_SSL_CERT_FILE is set to an invalid path (/no-cert-file.crt)
+    # by default and overrides SSL_CERT_FILE when it's set. This
+    # results in the tests relying on modifying SSL_CERT_FILE failing.
+    unset NIX_SSL_CERT_FILE
+  '';
 
   pythonImportsCheck = [
     "imapclient"
@@ -31,13 +37,14 @@ buildPythonPackage rec {
     "imapclient.tls"
   ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/mjs/imapclient/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://imapclient.readthedocs.io";
     description = "Easy-to-use, Pythonic and complete IMAP client library";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       almac
       dotlambda
     ];
   };
-}
+})

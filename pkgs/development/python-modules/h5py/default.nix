@@ -2,7 +2,6 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  pythonOlder,
   setuptools,
   numpy,
   hdf5,
@@ -12,7 +11,6 @@
   openssh,
   pytestCheckHook,
   pytest-mpi,
-  cached-property,
 }:
 
 assert hdf5.mpiSupport -> mpi4py != null && hdf5.mpi == mpi4py.mpi;
@@ -22,31 +20,22 @@ let
   mpiSupport = hdf5.mpiSupport;
 in
 buildPythonPackage rec {
-  version = "3.12.1";
+  version = "3.16.0";
   pname = "h5py";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Mm1wtT0xuqYfALiqX5XC/LliGj7oNl13DFUaE9u8v98=";
+    hash = "sha256-oNuq15aEDMqmekwUSg0MgIAHPDTHbVppQdaBhnjvJzg=";
   };
 
   pythonRelaxDeps = [ "mpi4py" ];
 
-  # avoid strict pinning of numpy and mpi4py, can't be replaced with
-  # pythonRelaxDepsHook, see: https://github.com/NixOS/nixpkgs/issues/327941
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "numpy >=2.0.0, <3" "numpy"
-    substituteInPlace setup.py \
-      --replace-fail "mpi4py ==3.1.6" "mpi4py"
-  '';
-
   env = {
     HDF5_DIR = "${hdf5}";
     HDF5_MPI = if mpiSupport then "ON" else "OFF";
+    # See discussion at https://github.com/h5py/h5py/issues/2560
+    H5PY_SETUP_REQUIRES = 0;
   };
 
   postConfigure = ''
@@ -66,13 +55,13 @@ buildPythonPackage rec {
 
   buildInputs = [ hdf5 ] ++ lib.optional mpiSupport mpi;
 
-  dependencies =
-    [ numpy ]
-    ++ lib.optionals mpiSupport [
-      mpi4py
-      openssh
-    ]
-    ++ lib.optionals (pythonOlder "3.8") [ cached-property ];
+  dependencies = [
+    numpy
+  ]
+  ++ lib.optionals mpiSupport [
+    mpi4py
+    openssh
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -89,6 +78,11 @@ buildPythonPackage rec {
   disabledTests = lib.optionals mpiSupport [ "TestPageBuffering" ];
 
   pythonImportsCheck = [ "h5py" ];
+
+  passthru = {
+    # To evaluate more easily *Support flags of it from within Python Packages.
+    inherit hdf5;
+  };
 
   meta = {
     changelog = "https://github.com/h5py/h5py/blob/${version}/docs/whatsnew/${lib.versions.majorMinor version}.rst";

@@ -1,8 +1,8 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  fetchpatch,
+  fetchgit,
+  fetchDebianPatch,
   pkg-config,
   libjack2,
   gettext,
@@ -15,7 +15,7 @@
   libsndfile,
   aubio,
   gtk3,
-  gtksourceview,
+  gtksourceview3,
   evince,
   fluidsynth,
   rubberband,
@@ -27,27 +27,15 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "denemo";
-  version = "2.6.0";
+  version = "2.6.49";
 
-  src = fetchurl {
-    url = "https://ftp.gnu.org/gnu/denemo/denemo-${version}.tar.gz";
-    sha256 = "sha256-S+WXDGmEf5fx+HYnXJdE5QNOfJg7EqEEX7IMI2SUtV0=";
+  src = fetchgit {
+    url = "https://git.savannah.gnu.org/git/denemo.git";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TUdaGOChqwK3fAmdaP9Lg2FGrEWF0yjwqsRXK7h/83Y=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "allow-guile-3.patch";
-      url = "https://git.savannah.gnu.org/cgit/denemo.git/patch/?id=9de1c65e56a021925af532bb55336b0ce86d3084";
-      postFetch = ''
-        substituteInPlace $out \
-          --replace "2.6.8" "2.6.0" \
-          --replace "2.6.9" "2.6.0"
-      '';
-      hash = "sha256-Jj33k/KgvZgKG43MuLgjb4A2KNkm/z9ytzGKcXMAOI4=";
-    })
-  ];
 
   buildInputs = [
     libjack2
@@ -59,13 +47,40 @@ stdenv.mkDerivation rec {
     libsndfile
     aubio
     gtk3
-    gtksourceview
+    gtksourceview3
     evince
     fluidsynth
     rubberband
     portaudio
     fftw
     portmidi
+  ];
+
+  # error by default in GCC 14
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
+  patches = [
+    (fetchDebianPatch {
+      pname = "denemo";
+      version = "2.6.49";
+      debianRevision = "0.2";
+      patch = "0002-Prevent-incompatible-pointer-types.patch";
+      hash = "sha256-l1eXjQieH5ySqwaTJAE8lUq/FsB//cl02Wgt0TRQBMo=";
+    })
+    (fetchDebianPatch {
+      pname = "denemo";
+      version = "2.6.49";
+      debianRevision = "0.2";
+      patch = "0013-Fix-FTBFS-with-GCC-14.patch";
+      hash = "sha256-H3hRmAPazYRkwQI97vNR9kpV0lYpIiAXyMfrnJl+lNo=";
+    })
+    (fetchDebianPatch {
+      pname = "denemo";
+      version = "2.6.49";
+      debianRevision = "0.2";
+      patch = "0014-Fix-FTBFS-with-GCC-15.patch";
+      hash = "sha256-UG/YZWp+twJdvqiXR4NfB3knm04lAyICh5/LHN2pm54=";
+    })
   ];
 
   preFixup = ''
@@ -83,11 +98,11 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Music notation and composition software used with lilypond";
     homepage = "http://denemo.org";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.olynch ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.olynch ];
   };
-}
+})

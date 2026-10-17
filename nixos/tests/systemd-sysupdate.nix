@@ -1,7 +1,7 @@
-# Tests downloading a signed update aritfact from a server to a target machine.
+# Tests downloading a signed update artifact from a server to a target machine.
 # This test does not rely on the `systemd.timer` units provided by the
-# `systemd-sysupdate` module but triggers the `systemd-sysupdate` service
-# manually to make the test more robust.
+# `systemd-sysupdate` module but triggers the `updatectl` tool directly to
+# demonstrate how to initiate updates manually.
 
 { lib, pkgs, ... }:
 
@@ -40,6 +40,10 @@ in
     target = {
       systemd.sysupdate = {
         enable = true;
+        timerConfig = {
+          OnActiveSec = 0;
+          RandomizedDelaySec = 0;
+        };
         transfers = {
           "text-file" = {
             Source = {
@@ -56,13 +60,26 @@ in
       };
 
       environment.etc."systemd/import-pubring.gpg".source = "${gpgKeyring}/pubkey.gpg";
+
+      systemd.targets.network-online.wantedBy = [ "multi-user.target" ];
     };
   };
 
   testScript = ''
-    server.wait_for_unit("nginx.service")
+    import datetime as dt
 
-    target.succeed("systemctl start systemd-sysupdate")
-    assert "nixos" in target.wait_until_succeeds("cat /nixos_1.txt", timeout=5)
+    server.wait_for_unit("nginx.service")
+    target.wait_for_unit("network-online.target")
+
+    def update_done(_last_try: bool) -> bool:
+        info = target.get_unit_info("systemd-sysupdate-update.service")
+        return info["InactiveEnterTimestampMonotonic"] != "0"
+    retry(update_done, timeout=dt.timedelta(seconds=60))
+    assert "nixos" in target.wait_until_succeeds("cat /nixos_1.txt", timeout=dt.timedelta(seconds=5))
+    target.succeed("rm /nixos_1.txt");
+
+    print(target.succeed("updatectl list"))
+    target.succeed("updatectl update")
+    assert "nixos" in target.wait_until_succeeds("cat /nixos_1.txt", timeout=dt.timedelta(seconds=5))
   '';
 }

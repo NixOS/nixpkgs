@@ -3,27 +3,27 @@
   stdenv,
   fetchurl,
   pkg-config,
-  libX11,
-  libXft,
-  libXrandr,
+  libx11,
+  libxft,
+  libxrandr,
   gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bevelbar";
-  version = "24.07";
+  version = "25.08";
 
   src = fetchurl {
     url = "https://www.uninformativ.de/git/bevelbar/archives/bevelbar-v${finalAttrs.version}.tar.gz";
-    hash = "sha256-PUYgbJCII0JecetoY3dMBUgrtaVhlLKeaJY27JJ78RQ=";
+    hash = "sha256-XGnvpPNonMVCaMgSqJIiklBMLam/k4XLHUrgnhxoxNI=";
   };
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    libX11
-    libXft
-    libXrandr
+    libx11
+    libxft
+    libxrandr
   ];
 
   makeFlags = [ "prefix=$(out)" ];
@@ -38,7 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "X11 status bar with beveled borders";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      AndersonTorres
       neeasade
     ];
     platforms = lib.platforms.linux;

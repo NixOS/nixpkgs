@@ -3,7 +3,7 @@
   fetchFromGitHub,
   lib,
   callPackage,
-  gradle_8,
+  gradle,
   makeBinaryWrapper,
   openjdk21,
   unzip,
@@ -20,7 +20,9 @@
 let
   pkg_path = "$out/lib/ghidra";
   pname = "ghidra";
-  version = "11.2.1";
+  version = "12.1.4";
+
+  isMacArm64 = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
 
   releaseName = "NIX";
   distroPrefix = "ghidra_${version}_${releaseName}";
@@ -28,17 +30,17 @@ let
     owner = "NationalSecurityAgency";
     repo = "Ghidra";
     rev = "Ghidra_${version}_build";
-    hash = "sha256-UVX56yNZSAbUejiQ0AIn00r7R+fUW1DEjZmCr1iYwV4=";
+    hash = "sha256-EeB3wHE2fbGhvC9Aik83ekGoeXxaA5ZWBSvRi9qLRQc=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
     postFetch = ''
       cd "$out"
       git rev-parse HEAD > $out/COMMIT
-      # 1970-Jan-01
-      date -u -d "@$(git log -1 --pretty=%ct)" "+%Y-%b-%d" > $out/SOURCE_DATE_EPOCH
-      # 19700101
-      date -u -d "@$(git log -1 --pretty=%ct)" "+%Y%m%d" > $out/SOURCE_DATE_EPOCH_SHORT
+      # Git commit date, e.g. 2026-Sep-11
+      date -u -d "@$(git log -1 --pretty=%ct)" "+%Y-%b-%d" > $out/COMMIT_DATE
+      # Git commit date, e.g. 20260911
+      date -u -d "@$(git log -1 --pretty=%ct)" "+%Y%m%d" > $out/COMMIT_DATE_SHORT
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
@@ -53,9 +55,8 @@ let
     # Remove build dates from output filenames for easier reference
     ./0003-Remove-build-datestamp.patch
 
-    # Fix build on Gradle 8.12
-    # Upstream: https://github.com/NationalSecurityAgency/ghidra/commit/20285e267d110cfa585676dfd40804a59031598b
-    ./0004-Fix-build-on-Gradle-8.12.patch
+    # Remove timestamps from generated JavaHelp files
+    ./0004-Remove-help-timestamps.patch
   ];
 
   postPatch = ''
@@ -63,12 +64,12 @@ let
     sed -i -e 's/application\.release\.name=.*/application.release.name=${releaseName}/' Ghidra/application.properties
 
     # Set build date and git revision
-    echo "application.build.date=$(cat SOURCE_DATE_EPOCH)" >> Ghidra/application.properties
-    echo "application.build.date.short=$(cat SOURCE_DATE_EPOCH_SHORT)" >> Ghidra/application.properties
+    echo "application.build.date=$(cat COMMIT_DATE)" >> Ghidra/application.properties
+    echo "application.build.date.short=$(cat COMMIT_DATE_SHORT)" >> Ghidra/application.properties
     echo "application.revision.ghidra=$(cat COMMIT)" >> Ghidra/application.properties
 
     # Tells ghidra to use our own protoc binary instead of the prebuilt one.
-    cat >>Ghidra/Debug/Debugger-gadp/build.gradle <<HERE
+    tee -a Ghidra/Debug/Debugger-{isf,rmi-trace}/build.gradle <<HERE
     protobuf {
       protoc {
         path = '${protobuf}/bin/protoc'
@@ -76,9 +77,6 @@ let
     }
     HERE
   '';
-
-  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
-  gradle = gradle_8;
 
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -109,20 +107,19 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs =
-    [
-      gradle
-      unzip
-      makeBinaryWrapper
-      copyDesktopItems
-      protobuf
-      python3
-      python3Packages.pip
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      xcbuild
-      desktopToDarwinBundle
-    ];
+  nativeBuildInputs = [
+    gradle
+    unzip
+    makeBinaryWrapper
+    copyDesktopItems
+    protobuf
+    python3
+    python3Packages.pip
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild
+    desktopToDarwinBundle
+  ];
 
   dontStrip = true;
 
@@ -133,7 +130,22 @@ stdenv.mkDerivation (finalAttrs: {
     data = ./deps.json;
   };
 
-  gradleFlags = [ "-Dorg.gradle.java.home=${openjdk21}" ];
+  gradleFlags = [
+    "-Dorg.gradle.java.home=${openjdk21}"
+  ]
+  ++ lib.optionals isMacArm64 [
+    # For some reason I haven't been able to figure out yet, ghidra builds for
+    # arm64 seems to build the x64 binaries of the decompiler. These fail to
+    # build due to trying to link the x64 object files with arm64 stdc++
+    # library, which obviously fails.
+    #
+    # Those binaries are entirely unnecessary anyways, since we're targeting
+    # arm64 build here, so let's exclude them from the build.
+    "-x"
+    "Decompiler:linkSleighMac_x86_64Executable"
+    "-x"
+    "Decompiler:linkDecompileMac_x86_64Executable"
+  ];
 
   preBuild = ''
     export JAVA_TOOL_OPTIONS="-Duser.home=$NIX_BUILD_TOP/home"
@@ -167,7 +179,11 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     mkdir -p "$out/bin"
     ln -s "${pkg_path}/ghidraRun" "$out/bin/ghidra"
-    ln -s "${pkg_path}/support/analyzeHeadless" "$out/bin/ghidra-analyzeHeadless"
+    for bin in ${pkg_path}/support/*; do
+      if [[ -x $bin ]]; then
+        ln -s "$bin" "$out/bin/ghidra-$(basename $bin)"
+      fi
+    done
     wrapProgram "${pkg_path}/support/launch.sh" \
       --set-default NIX_GHIDRAHOME "${pkg_path}/Ghidra" \
       --prefix PATH : ${lib.makeBinPath [ openjdk21 ]}
@@ -183,7 +199,7 @@ stdenv.mkDerivation (finalAttrs: {
     withExtensions = callPackage ./with-extensions.nix { ghidra = finalAttrs.finalPackage; };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://htmlpreview.github.io/?https://github.com/NationalSecurityAgency/ghidra/blob/Ghidra_${finalAttrs.version}_build/Ghidra/Configurations/Public_Release/src/global/docs/ChangeHistory.html";
     description = "Software reverse engineering (SRE) suite of tools";
     mainProgram = "ghidra";
@@ -191,15 +207,15 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # deps
     ];
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      tbaldwin
       roblabla
       vringar
     ];

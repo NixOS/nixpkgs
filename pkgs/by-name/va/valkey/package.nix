@@ -2,13 +2,14 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  lua,
   jemalloc,
   pkg-config,
+  nixosTests,
   tcl,
   which,
   ps,
   getconf,
+  python3Packages,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   systemd,
   # dependency ordering is broken at the moment when building with openssl
@@ -23,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "valkey";
-  version = "8.0.2";
+  version = "9.1.2";
 
   src = fetchFromGitHub {
     owner = "valkey-io";
     repo = "valkey";
     rev = finalAttrs.version;
-    hash = "sha256-05EuPjVokzfJxhrnvFHD7prwt5y7gPxemeDIkLML7lw=";
+    hash = "sha256-Lq5AqrLKILnsaOdAgWeeukPNF7KerB17R1mUOZjOsUg=";
   };
 
   patches = lib.optional useSystemJemalloc ./use_system_jemalloc.patch;
@@ -37,8 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs =
-    [ lua ]
-    ++ lib.optional useSystemJemalloc jemalloc
+    lib.optional useSystemJemalloc jemalloc
     ++ lib.optional withSystemd systemd
     ++ lib.optional tlsSupport openssl;
 
@@ -49,28 +49,29 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # More cross-compiling fixes.
-  makeFlags =
-    [ "PREFIX=${placeholder "out"}" ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-      "AR=${stdenv.cc.targetPrefix}ar"
-      "RANLIB=${stdenv.cc.targetPrefix}ranlib"
-    ]
-    ++ lib.optionals withSystemd [ "USE_SYSTEMD=yes" ]
-    ++ lib.optionals tlsSupport [ "BUILD_TLS=yes" ];
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "AR=${stdenv.cc.targetPrefix}ar"
+    "RANLIB=${stdenv.cc.targetPrefix}ranlib"
+  ]
+  ++ lib.optionals withSystemd [ "USE_SYSTEMD=yes" ]
+  ++ lib.optionals tlsSupport [ "BUILD_TLS=yes" ];
 
   enableParallelBuilding = true;
 
-  hardeningEnable = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "pie" ];
-
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [ "-std=c11" ]);
 
-  # darwin currently lacks a pure `pgrep` which is extensively used here
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  # Tests are in the `tests` passthru derivation: the suite is very large and significantly slows down the build.
+  doCheck = false;
+
   nativeCheckInputs = [
     which
     tcl
     ps
-  ] ++ lib.optionals stdenv.hostPlatform.isStatic [ getconf ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isStatic [ getconf ];
   checkPhase = ''
     runHook preCheck
 
@@ -85,22 +86,42 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i '/^proc wait_load_handlers_disconnected/{n ; s/wait_for_condition 50 100/wait_for_condition 50 500/; }' \
       tests/support/util.tcl
 
+    CLIENTS="$NIX_BUILD_CORES"
+    if (( $CLIENTS > 4)); then
+      CLIENTS=4
+    fi
+
+    # Skip some more flaky tests.
+    # Skip test requiring custom jemalloc (unit/memefficiency, unit/type/string).
     ./runtest \
       --no-latency \
       --timeout 2000 \
-      --clients $NIX_BUILD_CORES \
+      --clients "$CLIENTS" \
       --tags -leaks \
-      --skipunit integration/failover # flaky and slow
+      --skipunit unit/memefficiency \
+      --skipunit unit/type/string \
+      --skipunit integration/failover \
+      --skipunit integration/aof-multi-part \
+      --skipunit integration/dual-channel-replication
 
     runHook postCheck
   '';
 
-  meta = with lib; {
+  passthru = {
+    tests = {
+      valkey = nixosTests.valkey;
+      unitTests = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
+      valkey-python = python3Packages.valkey;
+    };
+    serverBin = "valkey-server";
+  };
+
+  meta = {
     homepage = "https://valkey.io/";
     description = "High-performance data structure server that primarily serves key/value workloads";
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ rucadi ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    teams = [ lib.teams.redis ];
     changelog = "https://github.com/valkey-io/valkey/releases/tag/${finalAttrs.version}";
     mainProgram = "valkey-cli";
   };

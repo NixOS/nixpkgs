@@ -6,15 +6,15 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mbusd";
-  version = "0.5.2";
+  version = "0.5.3";
 
   src = fetchFromGitHub {
     owner = "3cky";
     repo = "mbusd";
-    rev = "v${version}";
-    hash = "sha256-RQRSqlbPwBhw0SiNSP+euMVAwVBJo3lx0qB5gyWA+cM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JCDDoyDh1mlnZSfthKfFT+NjVAm3Menzm5FvfMgQYmw=";
   };
 
   nativeBuildInputs = [
@@ -22,13 +22,13 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Modbus TCP to Modbus RTU (RS-232/485) gateway";
     homepage = "https://github.com/3cky/mbusd";
-    changelog = "https://github.com/3cky/mbusd/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/3cky/mbusd/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ sikmir ];
+    platforms = lib.platforms.unix;
     mainProgram = "mbusd";
   };
-}
+})

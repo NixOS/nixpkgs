@@ -5,31 +5,34 @@
   gsettings-desktop-schemas,
   adwaita-icon-theme,
   wrapGAppsHook3,
+  gobject-introspection,
   gdk-pixbuf,
   makeDesktopItem,
   copyDesktopItems,
 }:
 let
-  version = "2.61.3";
+  version = "2.69.2";
 in
 python3Packages.buildPythonApplication rec {
   inherit version;
   pname = "pyfa";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "pyfa-org";
     repo = "Pyfa";
     tag = "v${version}";
-    hash = "sha256-i8NcRTn817gqwQP6j0RPUJkq09eTI4nfe3EVqYnWRpo=";
+    hash = "sha256-Zf4Vjcp731AZOeHi+S9hJRkoVMf6wbSv0bZoY93ZEzI=";
   };
+
+  patches = [ ./dark-theme-wxpython-4.2-compat.patch ];
 
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
-      exec = "${pname} %U";
+      name = "pyfa";
+      exec = "pyfa %U";
       icon = "pyfa";
-      desktopName = pname;
+      desktopName = "pyfa";
       genericName = "Python fitting assistant for Eve Online";
       categories = [ "Game" ];
     })
@@ -42,15 +45,17 @@ python3Packages.buildPythonApplication rec {
     matplotlib
     python-dateutil
     requests
-    sqlalchemy_1_4
+    sqlalchemy
     cryptography
     markdown2
+    packaging
     beautifulsoup4
     pyaml
     roman
     numpy
     python-jose
     requests-cache
+    pygobject3
   ];
 
   buildInputs = [
@@ -62,6 +67,7 @@ python3Packages.buildPythonApplication rec {
   dontWrapGApps = true;
   nativeBuildInputs = [
     python3Packages.pyinstaller
+    gobject-introspection
     wrapGAppsHook3
     copyDesktopItems
   ];
@@ -69,11 +75,11 @@ python3Packages.buildPythonApplication rec {
   #
   # upstream does not include setup.py
   #
-  patchPhase = ''
+  postPatch = ''
     cat > setup.py <<EOF
       from setuptools import setup
       setup(
-        name = "${pname}",
+        name = "pyfa",
         version = "${version}",
         scripts = ["pyfa.py"],
         packages = setuptools.find_packages(),
@@ -107,12 +113,10 @@ python3Packages.buildPythonApplication rec {
     runHook preInstall
 
     mkdir -p $out/bin
-    mkdir -p $out/share/pixmaps
     mkdir -p $out/share/icons/hicolor/64x64/apps/
 
     cp -r dist/pyfa $out/share/
-    cp imgs/gui/pyfa64.png $out/share/pixmaps/pyfa.png
-    cp imgs/gui/pyfa64.png $out/share/icons/hicolor/64x64/apps/${pname}.png
+    cp imgs/gui/pyfa64.png $out/share/icons/hicolor/64x64/apps/pyfa.png
     ln -sf $out/share/pyfa/pyfa $out/bin/pyfa
 
     runHook postInstall

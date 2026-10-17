@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "cg2121";
     repo = "obs-vintage-filter";
     rev = version;
-    sha256 = "sha256-K7AxvwVLe4G+75aY430lygSRB7rMtsGi17pGzdygEac=";
+    hash = "sha256-K7AxvwVLe4G+75aY430lygSRB7rMtsGi17pGzdygEac=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -27,14 +27,11 @@ stdenv.mkDerivation rec {
     mv $out/data $out/share/obs
   '';
 
-  meta = with lib; {
+  meta = {
     description = "OBS Studio filter where the source can be set to be black & white or sepia";
     homepage = "https://github.com/cg2121/obs-vintage-filter";
-    maintainers = with maintainers; [ flexiondotorg ];
-    license = licenses.gpl2Plus;
-    platforms = [
-      "x86_64-linux"
-      "i686-linux"
-    ];
+    maintainers = with lib.maintainers; [ flexiondotorg ];
+    license = lib.licenses.gpl2Plus;
+    inherit (obs-studio.meta) platforms;
   };
 }

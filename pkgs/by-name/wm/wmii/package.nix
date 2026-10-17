@@ -3,12 +3,12 @@
   stdenv,
   fetchFromGitHub,
   dash,
-  libX11,
-  libXext,
-  libXft,
-  libXinerama,
-  libXrandr,
-  libXrender,
+  libx11,
+  libxext,
+  libxft,
+  libxinerama,
+  libxrandr,
+  libxrender,
   libixp,
   pkg-config,
   txt2tags,
@@ -16,7 +16,7 @@
   which,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "wmii";
   version = "0-unstable-2023-09-30";
 
@@ -57,12 +57,12 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     dash
-    libX11
-    libXext
-    libXft
-    libXinerama
-    libXrandr
-    libXrender
+    libx11
+    libxext
+    libxft
+    libxinerama
+    libxrandr
+    libxrender
     libixp
     txt2tags
     which

@@ -3,18 +3,17 @@
   stdenv,
   fetchurl,
   fetchpatch,
-  perl,
   zlib,
   bzip2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "routino";
-  version = "3.4.1";
+  version = "3.4.4";
 
   src = fetchurl {
-    url = "https://routino.org/download/routino-${version}.tgz";
-    hash = "sha256-C6qNKljRdV0ProbgSxfrZLgZH+Pl8kcpKmTb83GLhSs=";
+    url = "https://routino.org/download/routino-${finalAttrs.version}.tgz";
+    hash = "sha256-pwF/8EMT+k+1O5ld5Q/to56l54Z7tAo/nIhhh69wKDA=";
   };
 
   patchFlags = [ "-p0" ];
@@ -34,8 +33,6 @@ stdenv.mkDerivation rec {
       --subst-var-by PREFIX $out
   '';
 
-  nativeBuildInputs = [ perl ];
-
   buildInputs = [
     zlib
     bzip2
@@ -46,16 +43,18 @@ stdenv.mkDerivation rec {
     "doc"
   ];
 
-  CLANG = lib.optionalString stdenv.cc.isClang "1";
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    CLANG = "1";
+  };
 
   makeFlags = [ "prefix=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.routino.org/";
     changelog = "http://routino.org/software/NEWS.txt";
     description = "OpenStreetMap Routing Software";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
-    platforms = with platforms; linux ++ darwin;
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ dotlambda ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

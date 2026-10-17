@@ -8,18 +8,18 @@
   slurp,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "shotman";
-  version = "0.4.7";
+  version = "0.4.10";
 
   src = fetchFromSourcehut {
     owner = "~whynothugo";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-kf/qloCaptxPzPEgd8fkzTfgqsI/PC3KJfHpBQWadjQ=";
+    repo = "shotman";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-j9HNqRJnGiy720uS0zC6Tt1WjF4b6+XqPEMTqTEOD6w=";
   };
 
-  cargoHash = "sha256-a70zJdhPncagah/gCvkHtSvnYhnYMTINCd5ZyBeDwAE=";
+  cargoHash = "sha256-+PpNf79yz5e5Mr6HAqE9Wg/0S8JO4rWrMT7JtQYAWPs=";
 
   nativeBuildInputs = [
     pkg-config
@@ -33,14 +33,14 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH ":" "${lib.makeBinPath [ slurp ]}";
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Uncompromising screenshot GUI for Wayland compositors";
     homepage = "https://git.sr.ht/~whynothugo/shotman";
-    license = licenses.isc;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.isc;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       zendo
       fpletz
     ];
   };
-}
+})

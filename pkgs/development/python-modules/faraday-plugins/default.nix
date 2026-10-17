@@ -8,33 +8,32 @@
   html2text,
   lxml,
   markdown,
+  pandas,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   pytz,
   requests,
   setuptools,
   simplejson,
   tabulate,
+  tldextract,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "faraday-plugins";
-  version = "1.21.0";
+  version = "1.31.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "infobyte";
     repo = "faraday_plugins";
-    tag = version;
-    hash = "sha256-8q+uGFeMR0OqZuI35iGugQH8pHv14El+NAurX7S9Exo=";
+    tag = finalAttrs.version;
+    hash = "sha256-Z2jkw2HS3NNZ0YURHe7sEWpZ8FArDGHEvXvyC3AMaYc=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail "version=version," "version='${version}',"
+      --replace-fail "version=version," "version='${finalAttrs.version}',"
   '';
 
   build-system = [ setuptools ];
@@ -46,11 +45,13 @@ buildPythonPackage rec {
     html2text
     lxml
     markdown
+    pandas
     python-dateutil
     pytz
     requests
     simplejson
     tabulate
+    tldextract
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -63,7 +64,8 @@ buildPythonPackage rec {
   disabledTests = [
     # Fail because of missing faraday
     "test_detect_report"
-    "test_process_report_summary"
+    "test_process_report"
+    "TestNuclei3x"
     # JSON parsing issue
     "test_process_report_ignore_info"
     "test_process_report_tags"
@@ -71,12 +73,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "faraday_plugins" ];
 
-  meta = with lib; {
+  meta = {
     description = "Security tools report parsers for Faraday";
     homepage = "https://github.com/infobyte/faraday_plugins";
-    changelog = "https://github.com/infobyte/faraday_plugins/releases/tag/${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/infobyte/faraday_plugins/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "faraday-plugins";
   };
-}
+})

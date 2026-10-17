@@ -2,30 +2,37 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nomino";
-  version = "1.5.0";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "yaa110";
-    repo = pname;
-    rev = version;
-    hash = "sha256-/5rKlPRo3+BsqPgHJ0M/JDGwA0c4rAiOd7gGClPfxMg=";
+    repo = "nomino";
+    rev = finalAttrs.version;
+    hash = "sha256-By7zVHtbrQU0+cSbxNNxCcmTCoFABsjOLk8TCX8iFWA=";
   };
 
-  cargoHash = "sha256-LaLMa66paTW9Wubus3phc7IgDW54sJFSf4VHnJHGq3o=";
+  cargoHash = "sha256-daHhCr55RzIHooGXBK831SYD1b8NPEDD6mtDut6nuaQ=";
 
-  meta = with lib; {
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Batch rename utility for developers";
     homepage = "https://github.com/yaa110/nomino";
-    changelog = "https://github.com/yaa110/nomino/releases/tag/${src.rev}";
-    license = with licenses; [
+    changelog = "https://github.com/yaa110/nomino/releases/tag/v${finalAttrs.version}";
+    license = with lib.licenses; [
       mit # or
       asl20
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ lib.maintainers.progrm_jarvis ];
     mainProgram = "nomino";
   };
-}
+})

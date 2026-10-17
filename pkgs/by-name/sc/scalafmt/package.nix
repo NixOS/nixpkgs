@@ -5,11 +5,13 @@
   coursier,
   makeWrapper,
   setJavaClassPath,
+  callPackage,
+  testers,
 }:
 
 let
   baseName = "scalafmt";
-  version = "3.7.17";
+  version = "3.11.5";
   deps = stdenv.mkDerivation {
     name = "${baseName}-deps-${version}";
     buildCommand = ''
@@ -19,10 +21,10 @@ let
       cp $(< deps) $out/share/java/
     '';
     outputHashMode = "recursive";
-    outputHash = "sha256-8gK+fOnqwPFBbSWltNKInzXRJQ3WZxPlLqpvuTxF4fk=";
+    outputHash = "sha256-NTi63ufQE9FX6AR3TJMzE9rYm1FuKZVuXTTSaf3IxVc=";
   };
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = baseName;
   inherit version;
 
@@ -43,15 +45,27 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  installCheckPhase = ''
-    $out/bin/${baseName} --version | grep -q "${version}"
-  '';
+  passthru = {
+    updateScript = {
+      command = lib.getExe (callPackage ./update.nix { });
+      supportedFeatures = [ "commit" ];
+    };
 
-  meta = with lib; {
+    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+  };
+
+  meta = {
     description = "Opinionated code formatter for Scala";
     homepage = "http://scalameta.org/scalafmt";
-    license = licenses.asl20;
-    maintainers = [ maintainers.markus1189 ];
+    changelog = "https://github.com/scalameta/scalafmt/releases/tag/v${version}";
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      agilesteel
+      markus1189
+    ];
     mainProgram = "scalafmt";
+    # a jar plus a launcher wrapper, so it runs wherever the jre does
+    platforms = jre.meta.platforms;
   };
-}
+})

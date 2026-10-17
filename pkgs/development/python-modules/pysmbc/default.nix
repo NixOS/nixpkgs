@@ -4,15 +4,13 @@
   fetchPypi,
   samba,
   pkg-config,
-  pythonOlder,
+  stdenv, # for meta.broken
 }:
 
 buildPythonPackage rec {
   pname = "pysmbc";
   version = "1.0.25.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -28,10 +26,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "smbc" ];
 
-  meta = with lib; {
-    description = "libsmbclient binding for Python";
+  meta = {
+    description = "Libsmbclient binding for Python";
     homepage = "https://github.com/hamano/pysmbc";
-    license = with licenses; [ gpl2Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ fab ];
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

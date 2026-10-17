@@ -15,6 +15,7 @@
   which,
   unzip,
   lua,
+  versionCheckHook,
   # for 'luarocks pack'
   zip,
   nix-update-script,
@@ -25,13 +26,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "luarocks_bootstrap";
-  version = "3.11.1";
+  version = "3.13.0";
 
   src = fetchFromGitHub {
     owner = "luarocks";
     repo = "luarocks";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-GglygI8HP+aDFEuucOkjQ2Pgfv4+jW+og+2vL3KoZCQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ETVoDpeFSsW7ld2z31Vog3RKsMquoxd7c8m9y7Fb1wk=";
   };
 
   patches = [
@@ -46,6 +47,10 @@ stdenv.mkDerivation (finalAttrs: {
   #   Error: Unknown flag: --build=x86_64-unknown-linux-gnu
   configurePlatforms = [ ];
 
+  # ... nor the --enable-static/--disable-shared that pkgsStatic injects:
+  #   Error: Unknown flag: --enable-static
+  dontAddStaticConfigureFlags = true;
+
   preConfigure = ''
     lua -e "" || {
         luajit -e "" && {
@@ -57,6 +62,10 @@ stdenv.mkDerivation (finalAttrs: {
     if test -n "$lua_inc"; then
         appendToVar configureFlags "--with-lua-include=$lua_inc"
     fi
+    lua_lib="${lua}/lib"
+    if test -d "$lua_lib"; then
+        appendToVar configureFlags "--with-lua-lib=$lua_lib"
+    fi
   '';
 
   nativeBuildInputs = [
@@ -64,6 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     installShellFiles
     lua
     unzip
+    versionCheckHook
   ];
 
   buildInputs = [
@@ -71,41 +81,43 @@ stdenv.mkDerivation (finalAttrs: {
     which
   ];
 
-  postInstall =
-    ''
-      sed -e "1s@.*@#! ${lua}/bin/lua$LUA_SUFFIX@" -i "$out"/bin/*
-      substituteInPlace $out/etc/luarocks/* \
-       --replace-quiet '${lua.luaOnBuild}' '${lua}'
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd luarocks \
-        --bash <($out/bin/luarocks completion bash) \
-        --fish <($out/bin/luarocks completion fish) \
-        --zsh <($out/bin/luarocks completion zsh)
+  postInstall = ''
+    sed -e "1s@.*@#! ${lua}/bin/lua$LUA_SUFFIX@" -i "$out"/bin/*
+    substituteInPlace $out/etc/luarocks/* \
+     --replace-quiet '${lua.luaOnBuild}' '${lua}'
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd luarocks \
+      --bash <($out/bin/luarocks completion bash) \
+      --fish <($out/bin/luarocks completion fish) \
+      --zsh <($out/bin/luarocks completion zsh)
 
-      installShellCompletion --cmd luarocks-admin \
-        --bash <($out/bin/luarocks-admin completion bash) \
-        --fish <($out/bin/luarocks-admin completion fish) \
-        --zsh <($out/bin/luarocks-admin completion zsh)
-    ''
-    + ''
-      for i in "$out"/bin/*; do
-          test -L "$i" || {
-              wrapProgram "$i" \
-                --suffix LUA_PATH ";" "$(echo "$out"/share/lua/*/)?.lua" \
-                --suffix LUA_PATH ";" "$(echo "$out"/share/lua/*/)?/init.lua" \
-                --suffix LUA_CPATH ";" "$(echo "$out"/lib/lua/*/)?.so" \
-                --suffix LUA_CPATH ";" "$(echo "$out"/share/lua/*/)?/init.lua" \
-                --suffix PATH : ${lib.makeBinPath finalAttrs.propagatedNativeBuildInputs}
-          }
-      done
-    '';
+    installShellCompletion --cmd luarocks-admin \
+      --bash <($out/bin/luarocks-admin completion bash) \
+      --fish <($out/bin/luarocks-admin completion fish) \
+      --zsh <($out/bin/luarocks-admin completion zsh)
+  ''
+  + ''
+    for i in "$out"/bin/*; do
+        test -L "$i" || {
+            wrapProgram "$i" \
+              --suffix LUA_PATH ";" "$(echo "$out"/share/lua/*/)?.lua" \
+              --suffix LUA_PATH ";" "$(echo "$out"/share/lua/*/)?/init.lua" \
+              --suffix LUA_CPATH ";" "$(echo "$out"/lib/lua/*/)?.so" \
+              --suffix LUA_CPATH ";" "$(echo "$out"/share/lua/*/)?/init.lua" \
+              --suffix PATH : ${lib.makeBinPath finalAttrs.propagatedNativeBuildInputs}
+        }
+    done
+  '';
 
   propagatedNativeBuildInputs = [
     zip
     unzip
     cmake
   ];
+
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/luarocks";
 
   # unpack hook for src.rock and rockspec files
   setupHook = ./setup-hook.sh;
@@ -126,15 +138,16 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Package manager for Lua";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    homepage = "https://github.com/luarocks/luarocks";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       raskin
       teto
     ];
     mainProgram = "luarocks";
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     downloadPage = "http://luarocks.org/releases/";
   };
 })

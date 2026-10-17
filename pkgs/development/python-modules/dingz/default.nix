@@ -5,27 +5,31 @@
   buildPythonPackage,
   click,
   fetchFromGitHub,
-  pythonOlder,
+  pkg-resources-backport,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dingz";
   version = "0.5.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
     repo = "python-dingz";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-bCytQwLWw8D1UkKb/3LQ301eDCkVR4alD6NHjTs6I+4=";
   };
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [ "async_timeout" ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     async-timeout
     click
+    pkg-resources-backport
   ];
 
   # Project has no tests
@@ -33,11 +37,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dingz" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for interacting with Dingz devices";
-    mainProgram = "dingz";
     homepage = "https://github.com/home-assistant-ecosystem/python-dingz";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/home-assistant-ecosystem/python-dingz/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "dingz";
   };
-}
+})

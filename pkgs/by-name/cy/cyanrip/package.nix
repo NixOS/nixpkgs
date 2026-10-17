@@ -5,10 +5,10 @@
   meson,
   ninja,
   pkg-config,
-  ffmpeg-headless,
+  ffmpeg_8-headless,
   libcdio,
   libcdio-paranoia,
-  libmusicbrainz5,
+  libmusicbrainz,
   curl,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -29,20 +29,20 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    ffmpeg-headless
+    ffmpeg_8-headless
     libcdio
     libcdio-paranoia
-    libmusicbrainz5
+    libmusicbrainz
     curl
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/cyanreg/cyanrip";
     changelog = "https://github.com/cyanreg/cyanrip/releases/tag/${finalAttrs.src.rev}";
     description = "Bule-ish CD ripper";
     mainProgram = "cyanrip";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.all;
-    maintainers = [ maintainers.zane ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.zane ];
   };
 })

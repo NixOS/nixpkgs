@@ -10,26 +10,29 @@
   six,
   stevedore,
   pytestCheckHook,
-  setuptools,
+  setuptools_80,
   testtools,
   pytest-mock,
   nixosTests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jenkins-job-builder";
-  version = "6.4.2";
+  version = "6.5.0";
+  pyproject = true;
 
-  build-system = [ setuptools ];
-
+  # forge at opendev.org does not provide release tarballs
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-G+DVRd6o3GwTdFNnJkotIidrxexJZSdgCGXTA4KnJJA=";
+    pname = "jenkins_job_builder";
+    inherit (finalAttrs) version;
+    hash = "sha256-9E3tWR9olpAZrloh/dxsIztz2PJJfRJrPUzMvpuLFJ0=";
   };
 
   postPatch = ''
     export HOME=$(mktemp -d)
   '';
+
+  build-system = [ setuptools_80 ];
 
   dependencies = [
     pbr
@@ -56,4 +59,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
   };
-}
+})

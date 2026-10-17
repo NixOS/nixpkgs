@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0wvdv0frl7xib05sixjv9m6jywaa2wdhdhsqqdfk45akk2r80pcn";
+    hash = "sha256-ll2AsphTFTJdw1jDBhsXSnEvTU1b9qgLWLEfmh3YbXM=";
   };
 
   postPatch = ''
@@ -25,10 +25,10 @@ buildPythonPackage rec {
   # There are no unit tests
   doCheck = false;
 
-  meta = with lib; {
-    description = "utilities for testing.* packages";
+  meta = {
+    description = "Utilities for testing.* packages";
     homepage = "https://github.com/tk0miya/testing.common.database";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jluttine ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jluttine ];
   };
 }

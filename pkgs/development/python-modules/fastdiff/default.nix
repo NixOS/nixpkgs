@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4dfa09c47832a8c040acda3f1f55fc0ab4d666f0e14e6951e6da78d59acd945a";
+    hash = "sha256-TfoJxHgyqMBArNo/H1X8CrTWZvDhTmlR5tp41ZrNlFo=";
   };
 
   postPatch = ''
@@ -38,14 +38,14 @@ buildPythonPackage rec {
     pytest-benchmark
   ];
 
-  pytestFlagsArray = [ "--benchmark-skip" ];
+  pytestFlags = [ "--benchmark-skip" ];
 
   pythonImportsCheck = [ "fastdiff" ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast native implementation of diff algorithm with a pure Python fallback";
     homepage = "https://github.com/syrusakbary/fastdiff";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     # resulting compiled object panics at import
     broken = stdenv.hostPlatform.is32bit;

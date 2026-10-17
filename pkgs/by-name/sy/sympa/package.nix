@@ -47,6 +47,7 @@ let
       TemplateToolkit
       URI
       UnicodeLineBreak
+      UnicodeUTF8
       XMLLibXML
 
       ### Features
@@ -68,15 +69,15 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sympa";
-  version = "6.2.74";
+  version = "6.2.76";
 
   src = fetchFromGitHub {
     owner = "sympa-community";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-Z5V4LqogIobs8pT+ED6iZGjnC+J+GQBHq2opu1yv/7k=";
+    repo = "sympa";
+    rev = finalAttrs.version;
+    sha256 = "sha256-XvLTO2Wau34zMoi+5d16JnWd/K96w2py9xC5oLlRfRM=";
   };
 
   configureFlags = [
@@ -92,13 +93,15 @@ stdenv.mkDerivation rec {
     "--with-spooldir=${dataDir}/spool"
     "--with-expldir=${dataDir}/list_data"
   ];
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ perlEnv ];
-  patches = [ ./make-docs.patch ];
-
-  prePatch = ''
-    patchShebangs po/sympa/add-lang.pl
-  '';
+  nativeBuildInputs = [
+    autoreconfHook
+    perlEnv
+  ];
+  strictDeps = true;
+  patches = [
+    ./make-docs.patch
+    ./gettext-0.25.patch
+  ];
 
   preInstall = ''
     mkdir "$TMP/bin"
@@ -117,14 +120,13 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) sympa;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open source mailing list manager";
-    homepage = "https://www.sympa.org";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    homepage = "https://www.sympa.community/sympa/";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       sorki
-      mmilata
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

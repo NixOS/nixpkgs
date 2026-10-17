@@ -1,30 +1,36 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   autoAddDriverRunpath,
   installShellFiles,
+  writableTmpDirAsHomeHook,
   versionCheckHook,
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bottom";
-  version = "0.10.2";
+  version = "0.14.9";
 
   src = fetchFromGitHub {
     owner = "ClementTsang";
     repo = "bottom";
-    tag = version;
-    hash = "sha256-hm0Xfd/iW+431HflvZErjzeZtSdXVb/ReoNIeETJ5Ik=";
+    tag = finalAttrs.version;
+    hash = "sha256-Dvo3A8NIYp0URgYSJOxLW/zEA7Gnpqu9pk6hvpagFZE=";
   };
 
-  cargoHash = "sha256-FQbJx6ijX8kE4qxT7OQ7FwxLKJB5/moTKhBK0bfvBas=";
+  cargoHash = "sha256-PYbmqiE8G+or1NEtPxnWIXcHnKIBSjQ3FN/Zafb/BTw=";
 
   nativeBuildInputs = [
     autoAddDriverRunpath
     installShellFiles
   ];
+
+  env = {
+    BTM_GENERATE = true;
+  };
 
   postInstall = ''
     installManPage target/tmp/bottom/manpage/btm.1
@@ -33,34 +39,34 @@ rustPlatform.buildRustPackage rec {
       --zsh target/tmp/bottom/completion/_btm
 
     install -Dm444 desktop/bottom.desktop -t $out/share/applications
+    install -Dm644 assets/icons/bottom-system-monitor.svg -t $out/share/icons/hicolor/scalable/apps
   '';
 
-  preCheck = ''
-    HOME=$(mktemp -d)
-  '';
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    # fails to get list of processes due to sandboxing, this functionality works at runtime
+    "--skip=collection::tests::test_data_collection"
+  ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [
     versionCheckHook
+    writableTmpDirAsHomeHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/btm";
-
-  BTM_GENERATE = true;
 
   passthru = {
     updateScript = nix-update-script { };
   };
 
   meta = {
-    changelog = "https://github.com/ClementTsang/bottom/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/ClementTsang/bottom/blob/${finalAttrs.version}/CHANGELOG.md";
     description = "Cross-platform graphical process/system monitor with a customizable interface";
     homepage = "https://github.com/ClementTsang/bottom";
     license = lib.licenses.mit;
     mainProgram = "btm";
     maintainers = with lib.maintainers; [
       berbiche
-      figsoda
       gepbird
     ];
   };
-}
+})

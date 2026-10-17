@@ -10,7 +10,7 @@
   pkg-config,
   vala,
   wayland-scanner,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
   at-spi2-core,
   gnome-settings-daemon,
   gnome-desktop,
@@ -18,31 +18,26 @@
   granite7,
   gtk3,
   gtk4,
-  libcanberra,
+  ibus,
+  json-glib,
   libgee,
   libhandy,
   mutter,
   sqlite,
-  systemd,
+  systemdLibs,
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gala";
-  version = "8.1.0";
+  version = "8.6.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
-    rev = version;
-    hash = "sha256-C0Vct2xuGHd/G5x0Faif0DfpyNyCLJDxki+O9697c2s=";
+    repo = "gala";
+    tag = finalAttrs.version;
+    hash = "sha256-M3EqQS7xJbNryQ2emJdhOZfm1l2iO6qmG0X/6cRwpN4=";
   };
-
-  patches = [
-    # We look for plugins in `/run/current-system/sw/lib/` because
-    # there are multiple plugin providers (e.g. gala and wingpanel).
-    ./plugins-dir.patch
-  ];
 
   depsBuildBuild = [ pkg-config ];
 
@@ -55,7 +50,7 @@ stdenv.mkDerivation rec {
     pkg-config
     vala
     wayland-scanner
-    wrapGAppsHook3
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -64,26 +59,32 @@ stdenv.mkDerivation rec {
     gnome-desktop
     granite
     granite7
-    gtk3
-    gtk4 # gala-daemon
-    libcanberra
+    gtk3 # daemon-gtk3
+    gtk4
+    ibus
+    json-glib
     libgee
     libhandy
     mutter
     sqlite
-    systemd
+    systemdLibs
   ];
+
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace-fail "conf.set('PLUGINDIR', plugins_dir)" "conf.set('PLUGINDIR','/run/current-system/sw/lib/gala/plugins')"
+  '';
 
   passthru = {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Window & compositing manager based on mutter and designed by elementary for use with Pantheon";
     homepage = "https://github.com/elementary/gala";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
     mainProgram = "gala";
   };
-}
+})

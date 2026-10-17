@@ -6,11 +6,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "sil-padauk";
-  version = "5.100";
+  version = "6.000";
 
   src = fetchzip {
     url = "https://software.sil.org/downloads/r/padauk/Padauk-${version}.zip";
-    hash = "sha256-Y4ZcxbPcgF349wDuT352xqaJji+FMfBH6P7WSWOw2iI=";
+    hash = "sha256-zxhYMQ+Go00vETokHpPHIqrVLxuM0F8OKIXATtE3S2s=";
   };
 
   installPhase = ''
@@ -24,11 +24,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Unicode-based font family with broad support for writing systems that use the Myanmar script";
     homepage = "https://software.sil.org/padauk";
-    license = licenses.ofl;
-    maintainers = with maintainers; [ serge ];
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    maintainers = with lib.maintainers; [ serge ];
+    platforms = lib.platforms.all;
   };
 }

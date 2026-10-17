@@ -3,7 +3,6 @@
   lib,
   gitUpdater,
   fetchFromGitHub,
-  fetchpatch,
   testers,
   cmake,
   pkg-config,
@@ -15,23 +14,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wlcs";
-  version = "1.7.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
-    owner = "MirServer";
+    owner = "canonical";
     repo = "wlcs";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-BQPRymkbGu4YvTYXTaTMuyP5fHpqMWI4xPwjDRHZNEQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-W4/a7neFcaqdPIAWDk5TcIuIWZ76rC7xCk3beJVqE/E=";
   };
-
-  patches = [
-    # Remove when version > 1.7.0
-    (fetchpatch {
-      name = "0001-wlcs-Fix-GCC14-compat.patch";
-      url = "https://github.com/canonical/wlcs/commit/5c812e560052e2cbff4c6d26439935020ddee52f.patch";
-      hash = "sha256-8YrVKhgpTYZi8n4dZ4pRWJoAcZtr9eaFMv0NNV7/kWU=";
-    })
-  ];
 
   strictDeps = true;
 
@@ -48,8 +38,11 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-scanner # needed by cmake
   ];
 
-  # GCC14-exclusive maybe-uninitialized error at higher optimisation levels that looks weird
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=maybe-uninitialized";
+  env.NIX_CFLAGS_COMPILE =
+    # https://github.com/canonical/wlcs/issues/462
+    "-Wno-error=deprecated-declarations "
+    # GCC14-exclusive maybe-uninitialized error at higher optimisation levels that looks weird
+    + lib.optionalString stdenv.cc.isGNU " -Wno-error=maybe-uninitialized";
 
   passthru = {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
@@ -58,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Wayland Conformance Test Suite";
     longDescription = ''
       wlcs aspires to be a protocol-conformance-verifying test suite usable by Wayland
@@ -75,11 +68,11 @@ stdenv.mkDerivation (finalAttrs: {
       standard debugging tools can follow control flow from the test client to the
       compositor and back again.
     '';
-    homepage = "https://github.com/MirServer/wlcs";
-    changelog = "https://github.com/MirServer/wlcs/releases/tag/v${finalAttrs.version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.linux;
+    homepage = "https://github.com/canonical/wlcs";
+    changelog = "https://github.com/canonical/wlcs/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.linux;
     pkgConfigModules = [
       "wlcs"
     ];

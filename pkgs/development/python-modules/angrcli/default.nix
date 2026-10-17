@@ -7,23 +7,20 @@
   fetchFromGitHub,
   pygments,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "angrcli";
-  version = "1.2.0";
+  version = "1.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "fmagin";
     repo = "angr-cli";
     tag = "v${version}";
-    hash = "sha256-a5ajUBQwt3xUNkeSOeGOAFf47wd4UVk+LcuAHGqbq4s=";
+    hash = "sha256-egu7jlEk8/i36qQMHztGr959sBt9d5crW8mj6+sKaHI=";
   };
 
   postPatch = ''
@@ -53,10 +50,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "angrcli" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python modules to allow easier interactive use of angr";
     homepage = "https://github.com/fmagin/angr-cli";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

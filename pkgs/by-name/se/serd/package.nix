@@ -13,9 +13,9 @@
   writeScript,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "serd";
-  version = "0.32.2";
+  version = "0.32.10";
 
   outputs = [
     "out"
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://download.drobilla.net/${pname}-${version}.tar.xz";
-    hash = "sha256-333CyW8rod7P11bkWOBh3tfYFY0lVVTnaTSDrAljxWs=";
+    url = "https://download.drobilla.net/serd-${finalAttrs.version}.tar.xz";
+    hash = "sha256-sOk7SeUvAaBJR1t4hu8UBAcRWjLTseXcX5UUHIgnXRw=";
   };
 
   nativeBuildInputs = [
@@ -47,15 +47,15 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = writeScript "update-poke" ''
       #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl pcre common-updater-scripts
+      #!nix-shell -i bash -p curl pcre2 common-updater-scripts
 
       set -eu -o pipefail
 
       # Expect the text in format of 'download.drobilla.net/serd-0.30.16.tar.xz">'
       new_version="$(curl -s https://drobilla.net/category/serd/ |
-          pcregrep -o1 'download.drobilla.net/serd-([0-9.]+).tar.xz' |
+          pcre2grep -o1 'download.drobilla.net/serd-([0-9.]+).tar.xz' |
           head -n1)"
-      update-source-version ${pname} "$new_version"
+      update-source-version ${finalAttrs.pname} "$new_version"
     '';
   };
 
@@ -67,4 +67,4 @@ stdenv.mkDerivation rec {
     mainProgram = "serdi";
     platforms = lib.platforms.unix;
   };
-}
+})

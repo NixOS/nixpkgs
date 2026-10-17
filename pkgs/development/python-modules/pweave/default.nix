@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Pweave";
     inherit version;
-    sha256 = "5e5298d90e06414a01f48e0d6aa4c36a70c5f223d929f2a9c7e2d388451c7357";
+    hash = "sha256-XlKY2Q4GQUoB9I4NaqTDanDF8iPZKfKpx+LTiEUcc1c=";
   };
 
   disabled = !isPy3k;
@@ -38,9 +38,9 @@ buildPythonPackage rec {
   # fails due to trying to run CSS as test
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Scientific reports with embedded python computations with reST, LaTeX or markdown";
     homepage = "https://mpastell.com/pweave/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 }

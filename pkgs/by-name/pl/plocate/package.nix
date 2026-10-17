@@ -5,23 +5,30 @@
   pkg-config,
   meson,
   ninja,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
   systemd,
   liburing,
   zstd,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "plocate";
-  version = "1.1.23";
+  version = "1.1.25";
 
   src = fetchgit {
     url = "https://git.sesse.net/plocate";
-    rev = version;
-    sha256 = "sha256-TWQ2mVzosB6sGNUXI2D9GGqgaRZcmiL9GSGrrusck5Q=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-EXlmisJObF3WVDI1KxlFeFDmaUqwsHWZSwUAXH1CITs=";
   };
 
   postPatch = ''
     sed -i meson.build \
       -e '/mkdir\.sh/d'
+  ''
+  # musl's <sys/stat.h> (pulled in via <liburing.h>) defines struct statx,
+  # clashing with the <linux/stat.h> include.
+  + lib.optionalString stdenv.hostPlatform.isMusl ''
+    substituteInPlace io_uring_engine.h \
+      --replace-fail '#include <linux/stat.h>' ""
   '';
 
   nativeBuildInputs = [
@@ -31,10 +38,10 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    systemd
     liburing
     zstd
-  ];
+  ]
+  ++ lib.optionals systemdSupport [ systemd ];
 
   mesonFlags = [
     "-Dsystemunitdir=${placeholder "out"}/etc/systemd/system"
@@ -42,14 +49,14 @@ stdenv.mkDerivation rec {
     "-Ddbpath=locatedb"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Much faster locate";
     homepage = "https://plocate.sesse.net/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       peterhoeg
       SuperSandro2000
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

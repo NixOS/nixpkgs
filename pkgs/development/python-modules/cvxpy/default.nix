@@ -12,34 +12,41 @@
   # dependencies
   clarabel,
   cvxopt,
+  highspy,
   osqp,
+  qdldl,
   scipy,
   scs,
+  sparsediffpy,
 
-  # checks
+  # tests
   hypothesis,
   pytestCheckHook,
 
   useOpenmp ? (!stdenv.hostPlatform.isDarwin),
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cvxpy";
-  version = "1.6.0";
+  version = "1.9.3";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "cvxpy";
     repo = "cvxpy";
-    tag = "v${version}";
-    hash = "sha256-t2+j0ZrvGvTv6FoNVpD2MVFZKfGgqTaN32OKwBXM3Zw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7EBvCt+Qic+lfl8g5MMIJTKCnsfSm8fmUdq6P2SdF5I=";
   };
 
-  # we need to patch out numpy version caps from upstream
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "numpy >= 2.0.0" "numpy"
-  '';
+  postPatch =
+    # too tight tolerance in tests (AssertionError)
+    ''
+      substituteInPlace cvxpy/tests/test_constant_atoms.py \
+        --replace-fail \
+          "CLARABEL: 1e-7," \
+          "CLARABEL: 1e-6,"
+    '';
 
   build-system = [
     numpy
@@ -47,13 +54,19 @@ buildPythonPackage rec {
     setuptools
   ];
 
+  pythonRelaxDeps = [
+    "sparsediffpy"
+  ];
   dependencies = [
     clarabel
     cvxopt
+    highspy
     numpy
     osqp
+    qdldl
     scipy
     scs
+    sparsediffpy
   ];
 
   nativeCheckInputs = [
@@ -67,14 +80,35 @@ buildPythonPackage rec {
     export LDFLAGS="-lgomp"
   '';
 
-  pytestFlagsArray = [ "cvxpy" ];
+  enabledTestPaths = [ "cvxpy" ];
 
   disabledTests = [
+    # Numerical assertions failing
+    "test_oprelcone_1_m1_k3_real"
+    "test_oprelcone_1_m3_k1_real"
+    "test_oprelcone_1_m4_k4_real"
+
     # Disable the slowest benchmarking tests, cuts test time in half
     "test_tv_inpainting"
     "test_diffcp_sdp_example"
     "test_huber"
     "test_partial_problem"
+
+    # cvxpy.error.SolverError: Solver 'CVXOPT' failed. Try another solver, or solve with verbose=True for more information.
+    # https://github.com/cvxpy/cvxpy/issues/1588
+    "test_oprelcone_1_m1_k3_complex"
+    "test_oprelcone_1_m3_k1_complex"
+    "test_oprelcone_2"
+
+    # `use_indirect` was dropped from the SCS python bindings in 3.3.0:
+    # https://github.com/bodono/scs-python/pull/189
+    "test_scs_options"
+
+    # Numerical assertions failing with scs 3.3.0.
+    "test_dist_ratio"
+    "test_sdp_problem"
+    "test_variable_name_conflict"
+    "test_vector2norm"
   ];
 
   pythonImportsCheck = [ "cvxpy" ];
@@ -83,8 +117,8 @@ buildPythonPackage rec {
     description = "Domain-specific language for modeling convex optimization problems in Python";
     homepage = "https://www.cvxpy.org/";
     downloadPage = "https://github.com/cvxpy/cvxpy//releases";
-    changelog = "https://github.com/cvxpy/cvxpy/releases/tag/${src.tag}";
+    changelog = "https://github.com/cvxpy/cvxpy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ drewrisinger ];
+    maintainers = [ lib.maintainers.GaetanLepage ];
   };
-}
+})

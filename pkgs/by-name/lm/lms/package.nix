@@ -2,11 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  makeWrapper,
   cmake,
   pkg-config,
   gtest,
-  boost,
+  boost190,
   wt,
   taglib,
   libconfig,
@@ -14,29 +13,34 @@
   graphicsmagick,
   ffmpeg,
   zlib,
-  libSM,
-  libICE,
   stb,
   openssl,
+  xxhash,
+  pugixml,
+  onnxruntime,
 }:
 
-stdenv.mkDerivation rec {
+let
+  boost = boost190;
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "lms";
-  version = "3.62.1";
+  version = "3.81.0";
 
   src = fetchFromGitHub {
     owner = "epoupon";
     repo = "lms";
-    rev = "v${version}";
-    hash = "sha256-LzDEK17Gh/r3tXGRItQfOeTCD9yGcRzIYMBX77MuwAU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-wyMTnTlKMS4N3zTY4C574BTB88nRugsi21QWjDeLZrg=";
   };
 
   strictDeps = true;
+
   nativeBuildInputs = [
     cmake
     pkg-config
-    makeWrapper
   ];
+
   buildInputs = [
     gtest
     boost
@@ -44,13 +48,14 @@ stdenv.mkDerivation rec {
     taglib
     libconfig
     libarchive
-    graphicsmagick
     ffmpeg
     zlib
-    libSM
-    libICE
     stb
     openssl
+    xxhash
+    pugixml
+    onnxruntime
+    ffmpeg
   ];
 
   postPatch = ''
@@ -58,45 +63,19 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    substituteInPlace $out/share/lms/lms.conf --replace-fail "/usr/bin/ffmpeg" "${ffmpeg}/bin/ffmpeg"
     substituteInPlace $out/share/lms/lms.conf --replace-fail "/usr/share/Wt/resources" "${wt}/share/Wt/resources"
-    substituteInPlace $out/share/lms/lms.conf --replace-fail "/usr/share/lms/docroot" "$out/share/lms/docroot"
-    substituteInPlace $out/share/lms/lms.conf --replace-fail "/usr/share/lms/approot" "$out/share/lms/approot"
+    substituteInPlace $out/share/lms/lms.conf --replace-fail "/usr/share/lms" "$out/share/lms"
     substituteInPlace $out/share/lms/default.service --replace-fail "/usr/bin/lms" "$out/bin/lms"
     install -Dm444 $out/share/lms/default.service -T $out/lib/systemd/system/lmsd.service
   '';
 
-  preFixup = ''
-    wrapProgram $out/bin/lms \
-      --prefix LD_LIBRARY_PATH : "${
-        lib.strings.makeLibraryPath [
-          libSM
-          libICE
-        ]
-      }"
-    wrapProgram $out/bin/lms-metadata \
-      --prefix LD_LIBRARY_PATH : "${
-        lib.strings.makeLibraryPath [
-          libSM
-          libICE
-        ]
-      }"
-    wrapProgram $out/bin/lms-recommendation \
-      --prefix LD_LIBRARY_PATH : "${
-        lib.strings.makeLibraryPath [
-          libSM
-          libICE
-        ]
-      }"
-  '';
-
   meta = {
     homepage = "https://github.com/epoupon/lms";
-    changelog = "https://github.com/epoupon/lms/releases/tag/${src.rev}";
+    changelog = "https://github.com/epoupon/lms/releases/tag/${finalAttrs.src.rev}";
     description = "Lightweight Music Server - Access your self-hosted music using a web interface";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     mainProgram = "lms";
     maintainers = with lib.maintainers; [ mksafavi ];
   };
-}
+})

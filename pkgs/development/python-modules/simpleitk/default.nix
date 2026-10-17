@@ -1,6 +1,5 @@
 {
   buildPythonPackage,
-  pythonOlder,
   cmake,
   swig,
   elastix,
@@ -17,8 +16,7 @@ buildPythonPackage rec {
     src
     meta
     ;
-  format = "pyproject";
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   sourceRoot = "${src.name}/Wrapping/Python";
   preBuild = ''
@@ -30,6 +28,11 @@ buildPythonPackage rec {
     swig
     scikit-build
   ];
+
+  cmakeFlags = [
+    "-DSimpleITK_BUILD_DISTRIBUTE=ON"
+  ];
+
   propagatedBuildInputs = [
     elastix
     itk

@@ -1,7 +1,6 @@
 {
   lib,
   axisregistry,
-  babelfont,
   beautifulsoup4,
   beziers,
   buildPythonPackage,
@@ -10,13 +9,11 @@
   collidoscope,
   defcon,
   dehinter,
-  fetchPypi,
-  font-v,
+  fetchFromGitHub,
   fonttools,
   freetype-py,
   gflanguages,
   gfsubsets,
-  git,
   glyphsets,
   installShellFiles,
   jinja2,
@@ -29,7 +26,6 @@
   protobuf,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests-mock,
   requests,
@@ -42,25 +38,33 @@
   ufo2ft,
   ufolint,
   unicodedata2,
+  uharfbuzz,
   vharfbuzz,
+  myst-parser,
+  sphinx,
+  sphinx-rtd-theme,
+  pytest-cov-stub,
+  pylint,
+  black,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fontbakery";
-  version = "0.12.10";
+  version = "1.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-+9O7cAE6CUATvybG22qULNNHi94zSGqU9UjhvrF9R8k=";
+  src = fetchFromGitHub {
+    owner = "fonttools";
+    repo = "fontbakery";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IkGcaRW8RjwR/foACR38HtCuETyXTyCjpIUaY+awMQo=";
   };
 
   env.PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
 
   pythonRelaxDeps = [
     "collidoscope"
+    "freetype-py"
     "protobuf"
     "vharfbuzz"
   ];
@@ -75,73 +79,98 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    axisregistry
-    babelfont
-    beautifulsoup4
     beziers
     cmarkgfm
-    collidoscope
     defcon
     dehinter
-    font-v
     fonttools
     freetype-py
-    gflanguages
-    gfsubsets
-    glyphsets
     jinja2
-    lxml
     munkres
     opentypespec
     ots-python
     packaging
     pip-api
-    protobuf
     pyyaml
     requests
     rich
-    shaperglot
-    stringbrewer
     toml
     ufo2ft
     ufolint
-    unicodedata2
+    uharfbuzz
     vharfbuzz
-  ];
+  ]
+  ++ fonttools.optional-dependencies.ufo;
 
   nativeCheckInputs = [
-    git
     pytestCheckHook
     pytest-xdist
-    requests-mock
     ufolint
-  ];
+    pytest-cov-stub
+    requests-mock
+    pylint
+    black
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.all;
+
+  optional-dependencies = {
+    beautifulsoup4 = [ beautifulsoup4 ];
+    shaperglot = [ shaperglot ];
+    googlefontsalwayslatest = [
+      axisregistry
+      gflanguages
+      gfsubsets
+      glyphsets
+      shaperglot
+    ];
+    adobefonts = [ ];
+    fontval = [ lxml ];
+    fontwerk = finalAttrs.passthru.optional-dependencies.googlefonts;
+    googlefonts = [
+      collidoscope
+      fonttools
+      protobuf
+      stringbrewer
+      unicodedata2
+    ]
+    ++ fonttools.optional-dependencies.lxml
+    ++ fonttools.optional-dependencies.unicode
+    ++ finalAttrs.passthru.optional-dependencies.beautifulsoup4
+    ++ finalAttrs.passthru.optional-dependencies.googlefontsalwayslatest
+    ++ finalAttrs.passthru.optional-dependencies.shaperglot;
+    iso15008 = [ ];
+    microsoft = [ ];
+    notofonts = finalAttrs.passthru.optional-dependencies.googlefonts;
+    typenetwork = [
+      unicodedata2
+    ]
+    ++ finalAttrs.passthru.optional-dependencies.beautifulsoup4
+    ++ finalAttrs.passthru.optional-dependencies.shaperglot;
+    docs = [
+      myst-parser
+      sphinx
+      sphinx-rtd-theme
+    ];
+    all =
+      finalAttrs.passthru.optional-dependencies.docs
+      ++ finalAttrs.passthru.optional-dependencies.adobefonts
+      ++ finalAttrs.passthru.optional-dependencies.fontval
+      ++ finalAttrs.passthru.optional-dependencies.fontwerk
+      ++ finalAttrs.passthru.optional-dependencies.googlefonts
+      ++ finalAttrs.passthru.optional-dependencies.iso15008
+      ++ finalAttrs.passthru.optional-dependencies.notofonts
+      ++ finalAttrs.passthru.optional-dependencies.typenetwork;
+  };
 
   preCheck = ''
     # Let the tests invoke 'fontbakery' command.
     export PATH="$out/bin:$PATH"
-    # font-v tests assume they are running from a git checkout, although they
-    # don't care which one. Create a dummy git repo to satisfy the tests:
-    git init -b main
-    git config user.email test@example.invalid
-    git config user.name Test
-    git commit --allow-empty --message 'Dummy commit for tests'
   '';
 
   disabledTests = [
     # These require network access
-    "test_check_description_broken_links"
-    "test_check_description_family_update"
-    "test_check_metadata_designer_profiles"
-    "test_check_metadata_has_tags"
-    "test_check_metadata_includes_production_subsets"
-    "test_check_vertical_metrics"
+    "test_check_axes_match"
     "test_check_vertical_metrics_regressions"
-    "test_check_cjk_vertical_metrics"
-    "test_check_cjk_vertical_metrics_regressions"
-    "test_check_fontbakery_version_live_apis"
-    # AssertionError
-    "test_check_shape_languages"
   ];
 
   postInstall = ''
@@ -151,11 +180,15 @@ buildPythonPackage rec {
 
   passthru.tests.simple = callPackage ./tests.nix { };
 
-  meta = with lib; {
+  meta = {
     description = "Tool for checking the quality of font projects";
     homepage = "https://github.com/googlefonts/fontbakery";
-    changelog = "https://github.com/fonttools/fontbakery/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ danc86 ];
+    changelog = "https://github.com/fonttools/fontbakery/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    mainProgram = "fontbakery";
+    maintainers = with lib.maintainers; [
+      danc86
+      jopejoe1
+    ];
   };
-}
+})

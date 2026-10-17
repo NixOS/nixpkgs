@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   makeWrapper,
   perlPackages,
@@ -11,16 +12,27 @@
   minc_tools,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "minc-widgets";
-  version = "unstable-2016-04-20";
+  version = "1.0.0-unstable-2016-04-20";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "BIC-MNI";
-    repo = pname;
+    repo = "minc-widgets";
     rev = "f08b643894c81a1a2e0fbfe595a17a42ba8906db";
-    sha256 = "1b9g6lf37wpp211ikaji4rf74rl9xcmrlyqcw1zq3z12ji9y33bm";
+    hash = "sha256-dY3hU5Qi/IF/4Ax7mivriWZyXCZRqhlDEPfyMxw1L60=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "cmake4-fix.patch";
+      url = "https://github.com/BIC-MNI/minc-widgets/commit/9f5bc1996d2f9b4702efdb010834e2c7f1e3fbf1.patch";
+      hash = "sha256-qqMKbxQS+HTRQaOP2DH/m8Z3DqoCMGLFp1AEKaQ6l5s=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -50,11 +62,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
-    homepage = "https://github.com/BIC-MNI/${pname}";
+  meta = {
+    homepage = "https://github.com/BIC-MNI/minc-widgets";
     description = "Collection of Perl and shell scripts for processing MINC files";
-    maintainers = with maintainers; [ bcdarwin ];
-    platforms = platforms.unix;
-    license = licenses.free;
+    maintainers = with lib.maintainers; [ bcdarwin ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.free;
   };
 }

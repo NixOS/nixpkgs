@@ -1,34 +1,36 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, wayland-scanner
-, wrapGAppsHook3
-, pkg-config
-, meson
-, ninja
-, vala
-, gala
-, gtk3
-, libgee
-, granite
-, gettext
-, mutter
-, wayland
-, json-glib
-, elementary-gtk-theme
-, elementary-icon-theme
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  wayland-scanner,
+  wrapGAppsHook3,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  gala,
+  glib,
+  gtk3,
+  libgee,
+  granite,
+  gettext,
+  mutter,
+  wayland,
+  json-glib,
+  elementary-gtk-theme,
+  elementary-icon-theme,
 }:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel";
-  version = "8.0.1";
+  version = "8.0.4";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-c77ebUTs4D5M3//AfvtWI643n1a1sPb5Z70P+4tX3y8=";
+    repo = "wingpanel";
+    tag = version;
+    hash = "sha256-+m1TydQtbXuA7uS6hZVC8z6JgOUxDh/QXL/4tROHhwk=";
   };
 
   patches = [
@@ -53,11 +55,15 @@ stdenv.mkDerivation rec {
     elementary-icon-theme
     gala
     granite
-    gtk3
     json-glib
     libgee
     mutter
     wayland
+  ];
+
+  propagatedBuildInputs = [
+    glib
+    gtk3
   ];
 
   preFixup = ''
@@ -74,16 +80,16 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Extensible top panel for Pantheon";
     longDescription = ''
       Wingpanel is an empty container that accepts indicators as extensions,
       including the applications menu.
     '';
     homepage = "https://github.com/elementary/wingpanel";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
     mainProgram = "io.elementary.wingpanel";
   };
 }

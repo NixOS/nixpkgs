@@ -1,31 +1,37 @@
-{ lib, rustPlatform, fetchFromGitHub, libpcap }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  libpcap,
+  nix-update-script,
+}:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dnspeep";
   version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "jvns";
-    repo = pname;
-    rev = "v${version}";
+    repo = "dnspeep";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-QpUbHiMDQFRCTVyjrO9lfQQ62Z3qanv0j+8eEXjE3n4=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "pcap-0.8.1" = "sha256-baoHK3Q+5Qp9ccGqDGd5K5q87c5JufpNJHRdBin0zto=";
-    };
+  cargoHash = "sha256-tZlh7+END6oOy3uWOrjle+nwqFhMU6bbXmr4hdt6gqY=";
+
+  env = {
+    LIBPCAP_LIBDIR = lib.makeLibraryPath [ libpcap ];
+    LIBPCAP_VER = libpcap.version;
   };
 
-  LIBPCAP_LIBDIR = lib.makeLibraryPath [ libpcap ];
-  LIBPCAP_VER = libpcap.version;
+  passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Spy on the DNS queries your computer is making";
     mainProgram = "dnspeep";
     homepage = "https://github.com/jvns/dnspeep";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/jvns/dnspeep/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.progrm_jarvis ];
   };
-}
+})

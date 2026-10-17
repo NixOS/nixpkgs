@@ -9,30 +9,23 @@
 
 let
   inherit (stdenv.hostPlatform) system;
-
-  target =
-    {
-      "aarch64-darwin" = "arm64";
-      "x86_64-darwin" = "x86";
-    }
-    .${system} or (throw "Unsupported system: ${system}");
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sketchybar";
-  version = "2.22.0";
+  version = "2.24.1";
 
   src = fetchFromGitHub {
     owner = "FelixKratz";
     repo = "SketchyBar";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0082rRSfIKJFTAzmJ65ItEdLSwjFks5ZkTlVZqaWKEw=";
+    hash = "sha256-fEbVzafjFTigR7TjQ41gOnDpk6S4B8qCwpz890ZNgwE=";
   };
 
   buildInputs = [
     apple-sdk_15
   ];
 
-  makeFlags = [ target ];
+  makeFlags = [ "arm64" ];
 
   installPhase = ''
     runHook preInstall
@@ -46,12 +39,12 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {
     description = "Highly customizable macOS status bar replacement";
     homepage = "https://github.com/FelixKratz/SketchyBar";
+    changelog = "https://github.com/FelixKratz/SketchyBar/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3;
     mainProgram = "sketchybar";
     maintainers = with lib.maintainers; [

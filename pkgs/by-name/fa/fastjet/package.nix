@@ -6,20 +6,28 @@
   withPython ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fastjet";
-  version = "3.4.3";
+  version = "3.5.1";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchurl {
-    url = "http://fastjet.fr/repo/fastjet-${version}.tar.gz";
-    hash = "sha256-zBdUcb+rhla4xhg6jl6a0F1fdQbkbzISqagjCQW49qM=";
+    url = "https://fastjet.fr/repo/fastjet-${finalAttrs.version}.tar.gz";
+    hash = "sha256-mkFUFj5yBB3uP93pyyToFGJeF4CRqHNKatU3XlNxtCM=";
   };
 
-  buildInputs = lib.optional withPython python;
+  postPatch = ''
+    patchShebangs --build fastjet-config.in
+  '';
+
+  nativeBuildInputs = lib.optionals withPython [ python ];
 
   configureFlags = [
     "--enable-allcxxplugins"
-  ] ++ lib.optional withPython "--enable-pyext";
+  ]
+  ++ lib.optionals withPython [ "--enable-pyext" ];
 
   enableParallelBuilding = true;
 
@@ -31,4 +39,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

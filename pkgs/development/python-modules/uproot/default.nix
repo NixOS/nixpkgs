@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -11,31 +10,42 @@
   # dependencies
   awkward,
   cramjam,
-  numpy,
   fsspec,
+  numpy,
   packaging,
 
-  # checks
+  # tests
   awkward-pandas,
   pandas,
-  pytestCheckHook,
   pytest-timeout,
+  pytestCheckHook,
   rangehttpserver,
   scikit-hep-testdata,
+  writableTmpDirAsHomeHook,
   xxhash,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "uproot";
-  version = "5.5.1";
+  version = "5.7.7";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "uproot5";
-    tag = "v${version}";
-    hash = "sha256-a5gCsv8iBUUASHCJIpxFbgBXTSm/KJOTt6fvSvP/Lio=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uEFX5VRG6baA0NPubjTQLJo3zxOrc+rISiQUAKRDbjw=";
   };
+
+  # shutil.copy preserves the read-only permissions of the test files from the nix store,
+  # which then cannot be opened in update mode.
+  postPatch = ''
+    substituteInPlace tests/test_1687_rntuple_update.py tests/test_1690_ttree_inplace.py \
+      --replace-fail \
+        "shutil.copy(" \
+        "shutil.copyfile("
+  '';
 
   build-system = [
     hatch-vcs
@@ -45,8 +55,8 @@ buildPythonPackage rec {
   dependencies = [
     awkward
     cramjam
-    numpy
     fsspec
+    numpy
     packaging
     xxhash
   ];
@@ -54,55 +64,47 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     awkward-pandas
     pandas
-    pytestCheckHook
     pytest-timeout
+    pytestCheckHook
     rangehttpserver
     scikit-hep-testdata
+    writableTmpDirAsHomeHook
   ];
 
-  preCheck = ''
-    export HOME="$(mktemp -d)"
-  '';
+  disabledTests = [
+    # Tests that try to download files
+    "test_descend_into_path_classname_of"
+    "test_fallback"
+    "test_fsspec_cache_http"
+    "test_fsspec_cache_http_directory"
+    "test_fsspec_chunks"
+    "test_fsspec_globbing_http"
+    "test_http"
+    "test_http_fallback_workers"
+    "test_http_multipart"
+    "test_http_port"
+    "test_http_size"
+    "test_http_size_port"
+    "test_http_workers"
+    "test_issue176"
+    "test_issue176_again"
+    "test_issue_1054_filename_colons"
+    "test_no_multipart"
+    "test_open_fsspec_github"
+    "test_open_fsspec_http"
+    "test_pickle_roundtrip_http"
 
-  disabledTests =
-    [
-      # Tests that try to download files
-      "test_descend_into_path_classname_of"
-      "test_fallback"
-      "test_fsspec_cache_http"
-      "test_fsspec_cache_http_directory"
-      "test_fsspec_chunks"
-      "test_fsspec_globbing_http"
-      "test_http"
-      "test_http_fallback_workers"
-      "test_http_multipart"
-      "test_http_port"
-      "test_http_size"
-      "test_http_size_port"
-      "test_http_workers"
-      "test_issue176"
-      "test_issue176_again"
-      "test_issue_1054_filename_colons"
-      "test_no_multipart"
-      "test_open_fsspec_github"
-      "test_open_fsspec_http"
-      "test_pickle_roundtrip_http"
-
-      # Cyclic dependency with dask-awkward
-      "test_dask_duplicated_keys"
-      "test_decompression_executor_for_dask"
-      "test_decompression_threadpool_executor_for_dask"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Tries to connect to localhost:22
-      # PermissionError: [Errno 1] Operation not permitted
-      "test_open_fsspec_ssh"
-    ];
+    # Cyclic dependency with dask-awkward
+    "test_dask_duplicated_keys"
+    "test_decompression_executor_for_dask"
+    "test_decompression_threadpool_executor_for_dask"
+  ];
 
   disabledTestPaths = [
     # Tests that try to download files
     "tests/test_0066_fix_http_fallback_freeze.py"
     "tests/test_0220_contiguous_byte_ranges_in_http.py"
+    "tests/test_1610_read_TMatrixTSym_from_ttree.py"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -112,8 +114,8 @@ buildPythonPackage rec {
   meta = {
     description = "ROOT I/O in pure Python and Numpy";
     homepage = "https://github.com/scikit-hep/uproot5";
-    changelog = "https://github.com/scikit-hep/uproot5/releases/tag/v${version}";
+    changelog = "https://github.com/scikit-hep/uproot5/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

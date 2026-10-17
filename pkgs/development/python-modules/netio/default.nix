@@ -4,31 +4,26 @@
   fetchFromGitHub,
   poetry-core,
   pyopenssl,
-  pythonOlder,
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "netio";
-  version = "1.0.13";
+  version = "2.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "netioproducts";
     repo = "PyNetio";
-    tag = "v${version}";
-    hash = "sha256-s/X2WGhQXYsbo+ZPpkVSF/vclaThYYNHu0UY0yCnfPA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-OmYSa8boZPAqw1PXc3BmLAxGiNgnAYiXbHTk5QF/5b8=";
   };
-
-  nativeBuildInputs = [
-    poetry-core
-  ];
 
   pythonRelaxDeps = [ "pyopenssl" ];
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     requests
     pyopenssl
   ];
@@ -38,12 +33,12 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Module for interacting with NETIO devices";
-    mainProgram = "Netio";
     homepage = "https://github.com/netioproducts/PyNetio";
-    changelog = "https://github.com/netioproducts/PyNetio/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/netioproducts/PyNetio/blob/v${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "Netio";
   };
-}
+})

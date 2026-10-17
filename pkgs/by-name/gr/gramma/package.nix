@@ -40,11 +40,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "command-line grammar checker";
+    description = "Command-line grammar checker";
     homepage = "https://caderek.github.io/gramma/";
     changelog = "https://github.com/caderek/gramma/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.isc;
     mainProgram = "gramma";
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

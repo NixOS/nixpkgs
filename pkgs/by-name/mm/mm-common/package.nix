@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mm-common";
-  version = "1.0.6";
+  version = "1.0.8";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "tVxGA3282rxc7js4nqEcw5EK22jr6IPpR3hHqmYIYuc=";
+    url = "mirror://gnome/sources/mm-common/${lib.versions.majorMinor version}/mm-common-${version}.tar.xz";
+    sha256 = "sYnuY26DnRLADavvrgmf1IirI1jewk0mR2HAEZULAqk=";
   };
 
   strictDeps = true;
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Common build files of GLib/GTK C++ bindings";
     longDescription = ''
       The mm-common module provides the build infrastructure and utilities
@@ -48,9 +48,9 @@ stdenv.mkDerivation rec {
       control repository. An installation of mm-common is not required for
       building tarball releases, unless configured to use maintainer-mode.
     '';
-    homepage = "https://www.gtkmm.org";
-    license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    homepage = "https://gitlab.gnome.org/GNOME/mm-common";
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 }

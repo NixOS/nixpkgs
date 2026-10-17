@@ -9,20 +9,20 @@
 
 buildPythonPackage rec {
   pname = "tblib";
-  version = "3.0.0";
+  version = "3.2.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-k2InkKCingTwNGRY+s4eFE3E0y9JNxTGw9/4Kkrbd+Y=";
+    hash = "sha256-6aZSaS2Rv090PUoVvBdMC3avx1D+jHttGVzBwdbSzOw=";
   };
 
   nativeBuildInputs = [ setuptools ];
 
-  meta = with lib; {
+  meta = {
     description = "Traceback fiddling library. Allows you to pickle tracebacks";
     homepage = "https://github.com/ionelmc/python-tblib";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ teh ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ teh ];
   };
 }

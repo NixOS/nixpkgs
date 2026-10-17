@@ -3,20 +3,22 @@
   stdenv,
   fetchurl,
   readline,
+  autoreconfHook,
 }:
 
 let
   version = "1.5c";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zssh";
   inherit version;
 
   src = fetchurl {
-    url = "mirror://sourceforge/zssh/${pname}-${version}.tgz";
+    url = "mirror://sourceforge/zssh/zssh-${finalAttrs.version}.tgz";
     sha256 = "06z73iq59lz8ibjrgs7d3xl39vh9yld1988yx8khssch4pw41s52";
   };
 
+  nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ readline ];
 
   patches = [
@@ -30,9 +32,16 @@ stdenv.mkDerivation rec {
 
   patchFlags = [ "-p0" ];
 
+  postPatch = ''
+    sed -i 1i'#include <pty.h>' openpty.c
+    # readline has renamed the type name
+    substituteInPlace completion.c \
+      --replace-fail CPPFunction rl_completion_func_t
+  '';
+
   # The makefile does not create the directories
   postBuild = ''
-    install -dm755 "$out"/{bin,man/man1}
+    install -dm755 "$out"/{bin,share/man/man1}
   '';
 
   meta = {
@@ -42,4 +51,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ]; # required by deepin-terminal
     platforms = lib.platforms.linux;
   };
-}
+})

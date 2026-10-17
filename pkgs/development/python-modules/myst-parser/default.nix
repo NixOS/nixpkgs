@@ -2,9 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
   pythonOlder,
-  defusedxml,
+
+  # build-system
+  flit-core,
+
+  # dependencies
   docutils,
   jinja2,
   markdown-it-py,
@@ -12,33 +15,39 @@
   pyyaml,
   sphinx,
   typing-extensions,
+
+  # tests
   beautifulsoup4,
+  defusedxml,
   pytest-param-files,
   pytest-regressions,
-  sphinx-pytest,
   pytestCheckHook,
+  sphinx-pytest,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "myst-parser";
-  version = "4.0.0";
-  format = "pyproject";
+  version = "5.1.0-unstable-2026-07-12";
+  pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "executablebooks";
-    repo = pname;
-    tag = "v${version}";
-    hash = "sha256-QbFENC/Msc4pkEOPdDztjyl+2TXtAbMTHPJNAsUB978=";
+    repo = "myst-parser";
+    rev = "e843b5ff61d9834b4864a95bf6a668909c2de3a6";
+    hash = "sha256-lt2AECSVfakN63EcheYSdkHsQGl9pfcLhS9+lkMqQ7w=";
   };
 
   build-system = [ flit-core ];
 
+  pythonRelaxDeps = [
+    "markdown-it-py"
+  ];
   dependencies = [
     docutils
     jinja2
-    mdit-py-plugins
     markdown-it-py
+    mdit-py-plugins
     pyyaml
     sphinx
     typing-extensions
@@ -49,26 +58,23 @@ buildPythonPackage rec {
     defusedxml
     pytest-param-files
     pytest-regressions
-    sphinx-pytest
     pytestCheckHook
-  ] ++ markdown-it-py.optional-dependencies.linkify;
+    sphinx-pytest
+  ]
+  ++ markdown-it-py.optional-dependencies.linkify;
 
-  disabledTests = [
-    # sphinx 7.4 compat
-    "test_gettext"
-    "test_gettext_additional_targets"
-    "test_amsmath"
+  disabledTestPaths = [
+    # outdated sphinx fixtures
+    "tests/test_renderers/test_fixtures_sphinx.py"
   ];
 
   pythonImportsCheck = [ "myst_parser" ];
 
-  pythonRelaxDeps = [ "docutils" ];
-
-  meta = with lib; {
+  meta = {
     description = "Sphinx and Docutils extension to parse MyST";
     homepage = "https://myst-parser.readthedocs.io/";
-    changelog = "https://raw.githubusercontent.com/executablebooks/MyST-Parser/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ loicreynier ];
+    # changelog = "https://raw.githubusercontent.com/executablebooks/MyST-Parser/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ loicreynier ];
   };
-}
+})

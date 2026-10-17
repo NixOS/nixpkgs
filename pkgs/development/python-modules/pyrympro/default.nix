@@ -4,24 +4,25 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  pythonOlder,
+  setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyrympro";
-  version = "0.0.8";
+  version = "0.0.10";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "OnFreund";
     repo = "pyrympro";
-    tag = "v${version}";
-    hash = "sha256-mRvKLPgtBgmFDTHqra7GslxsgsJpQ2w/DE0Zgz5jujk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EHYgFAKlkHfrTzhv2VeBeikyoN1wrYejmwxktxuISZw=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [ aiohttp ];
 
@@ -30,10 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyrympro" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with Read Your Meter Pro";
     homepage = "https://github.com/OnFreund/pyrympro";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/OnFreund/pyrympro/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

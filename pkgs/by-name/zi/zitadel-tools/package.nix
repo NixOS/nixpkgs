@@ -1,32 +1,33 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "zitadel-tools";
-  version = "0.5.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "zitadel";
     repo = "zitadel-tools";
-    rev = "v${version}";
-    hash = "sha256-wtCBRsP0b7qPOQfYgvmgDT0t2zZHocokO5J8yLZcsgQ=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-0Wr+2zWcFDBsQgNRgbCHKyaLdWlldPNkXKo++yoy0KE=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
-  vendorHash = "sha256-ql5Qw5Va/wLBKsb9bCmPciuVrgORU8nndRkhjoJBIgs=";
+  vendorHash = "sha256-oqw0Cj+EdYGjNdg8ZazudU8iQXd5oSVrQ34ae1r7Kl4=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     local INSTALL="$out/bin/zitadel-tools"
     installShellCompletion --cmd zitadel-tools \
       --bash <($out/bin/zitadel-tools completion bash) \
@@ -34,11 +35,11 @@ buildGoModule rec {
       --zsh <($out/bin/zitadel-tools completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Helper tools for zitadel";
     homepage = "https://github.com/zitadel/zitadel-tools";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "zitadel-tools";
   };
-}
+})

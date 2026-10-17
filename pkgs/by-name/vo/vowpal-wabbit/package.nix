@@ -2,45 +2,43 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   boost,
   eigen,
+  gtest,
+  help2man,
   rapidjson,
   spdlog,
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vowpal-wabbit";
-  version = "9.6.0";
+  version = "9.11.2";
 
   src = fetchFromGitHub {
     owner = "VowpalWabbit";
     repo = "vowpal_wabbit";
-    rev = version;
-    sha256 = "sha256-iSsxpeTRZjIhZaYBeoKLHl9j1aBIXWjONmAInmKvU/I=";
+    tag = finalAttrs.version;
+    hash = "sha256-A1Eqj843QidqVlADi6qEKFuw+T0h1FxkRwJ9oRTZgeU=";
+    fetchSubmodules = true;
   };
 
   patches = [
-    # Fix x86_64-linux build by adding missing include
-    # https://github.com/VowpalWabbit/vowpal_wabbit/pull/4275
-    (fetchpatch {
-      url = "https://github.com/VowpalWabbit/vowpal_wabbit/commit/0cb410dfc885ca1ecafd1f8a962b481574fb3b82.patch";
-      sha256 = "sha256-bX3eJ+vMTEMAo3EiESQTDryBP0h2GtnMa/Fz0rTeaNY=";
-    })
-
-    # Fix gcc-13 build:
-    #   https://github.com/VowpalWabbit/vowpal_wabbit/pull/4657
-    (fetchpatch {
-      name = "gcc-13.patch";
-      url = "https://github.com/VowpalWabbit/vowpal_wabbit/commit/a541d85a66088d2b74fa2562d32fecb68af33c58.patch";
-      includes = [ "vowpalwabbit/core/include/vw/core/named_labels.h" ];
-      hash = "sha256-JAuLDe5JtlE7/043RSIKM20Qr77rmuE0rVg/DGc95MY=";
-    })
+    # https://github.com/VowpalWabbit/vowpal_wabbit/pull/4916
+    ./add-missing-includes.patch
   ];
 
-  nativeBuildInputs = [ cmake ];
+  postPatch = ''
+    # Avoid duplicate add RapidJSON
+    substituteInPlace ext_libs/ext_libs.cmake \
+      --replace-fail "add_library(RapidJSON INTERFACE)" ""
+  '';
+
+  nativeBuildInputs = [
+    cmake
+    help2man
+  ];
 
   buildInputs = [
     boost
@@ -51,6 +49,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
+    "-DUSE_LATEST_STD=ON"
     "-DVW_INSTALL=ON"
     "-DBUILD_JAVA=OFF"
     "-DBUILD_PYTHON=OFF"
@@ -59,17 +58,27 @@ stdenv.mkDerivation rec {
     "-DSPDLOG_SYS_DEP=ON"
     "-DVW_BOOST_MATH_SYS_DEP=ON"
     "-DVW_EIGEN_SYS_DEP=ON"
+    "-DVW_GTEST_SYS_DEP=ON"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-DCMAKE_CTEST_ARGUMENTS=-E;SpanningTreeTest"
   ];
 
-  meta = with lib; {
+  checkInputs = [
+    gtest
+  ];
+
+  doCheck = true;
+
+  meta = {
     description = "Machine learning system focused on online reinforcement learning";
     homepage = "https://github.com/VowpalWabbit/vowpal_wabbit/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     longDescription = ''
       Machine learning system which pushes the frontier of machine learning with techniques such as online,
       hashing, allreduce, reductions, learning2search, active, and interactive and reinforcement learning
     '';
-    maintainers = with maintainers; [ jackgerrits ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ jackgerrits ];
+    platforms = lib.platforms.unix;
   };
-}
+})

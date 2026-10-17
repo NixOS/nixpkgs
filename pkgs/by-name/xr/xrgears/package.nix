@@ -20,14 +20,14 @@
 
 stdenv.mkDerivation {
   pname = "xrgears";
-  version = "1.0.1-unstable-2024-07-09";
+  version = "1.0.1-unstable-2026-09-06";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "monado";
     repo = "demos/xrgears";
-    rev = "9cabbd34b1f60f27402a9a50fc260f77a41b835b";
-    sha256 = "sha256-9VV1zAOZKkl1zzjnsQQQOINi+T+wpbltdWpJ/d66+cM=";
+    rev = "51ef6c779c8d3134d8df9eca1294779e61c8243f";
+    hash = "sha256-/j23NgqazHNKIJuRa05bycnvizifTUhth5XXI7HUNCw=";
   };
 
   nativeBuildInputs = [
@@ -59,12 +59,12 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.freedesktop.org/monado/demos/xrgears";
     description = "OpenXR example using Vulkan for rendering";
     mainProgram = "xrgears";
-    platforms = platforms.linux;
-    license = licenses.mit;
-    maintainers = with maintainers; [ Scrumplex ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Scrumplex ];
   };
 }

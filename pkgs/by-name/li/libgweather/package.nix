@@ -3,7 +3,6 @@
   stdenv,
   buildPackages,
   fetchurl,
-  makeWrapper,
   meson,
   ninja,
   pkg-config,
@@ -11,10 +10,10 @@
   json-glib,
   glib,
   gettext,
+  gweather-locations,
   libsoup_3,
   gi-docgen,
   gobject-introspection,
-  python3,
   tzdata,
   geocode-glib_2,
   vala,
@@ -26,16 +25,17 @@
 
 stdenv.mkDerivation rec {
   pname = "libgweather";
-  version = "4.4.4";
+  version = "4.6.0";
 
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optional withIntrospection "devdoc";
+  ]
+  ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-cBdnd1PN99H9w1Xkv82x66g2l5Oo3yTSQUJ6k5y/QoM=";
+    url = "mirror://gnome/sources/libgweather/${lib.versions.majorMinor version}/libgweather-${version}.tar.xz";
+    hash = "sha256-f10OjJaF7y/0bC86V8rkjXvzVAstg5IfiJ7yjmqHZ4g=";
   };
 
   patches = [
@@ -46,47 +46,40 @@ stdenv.mkDerivation rec {
   ];
 
   depsBuildBuild = [
-    makeWrapper
     pkg-config
   ];
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      gettext
-      glib
-      (python3.pythonOnBuildForHost.withPackages (ps: [ ps.pygobject3 ]))
-    ]
-    ++ lib.optionals withIntrospection [
-      gi-docgen
-      gobject-introspection
-      vala
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gettext
+    glib
+  ]
+  ++ lib.optionals withIntrospection [
+    gi-docgen
+    gobject-introspection
+    vala
+  ];
 
   buildInputs = [
     glib
+    gweather-locations
     libsoup_3
     libxml2
     json-glib
     geocode-glib_2
   ];
 
-  mesonFlags =
-    [
-      "-Dzoneinfo_dir=${tzdata}/share/zoneinfo"
-      (lib.mesonBool "introspection" withIntrospection)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-Dc_args=-D_DARWIN_C_SOURCE"
-    ];
+  mesonFlags = [
+    "-Dzoneinfo_dir=${tzdata}/share/zoneinfo"
+    (lib.mesonBool "introspection" withIntrospection)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-Dc_args=-D_DARWIN_C_SOURCE"
+  ];
 
   postPatch = ''
-    patchShebangs --build build-aux/meson/gen_locations_variant.py
-    wrapProgram $PWD/build-aux/meson/gen_locations_variant.py \
-      --prefix GI_TYPELIB_PATH : ${lib.getLib buildPackages.glib}/lib/girepository-1.0 \
-
     # Run-time dependency gi-docgen found: NO (tried pkgconfig and cmake)
     # it should be a build-time dep for build
     # TODO: send upstream
@@ -120,11 +113,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library to access weather information from online services for numerous locations";
     homepage = "https://gitlab.gnome.org/GNOME/libgweather";
-    license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
   };
 }

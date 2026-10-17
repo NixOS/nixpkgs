@@ -1,30 +1,43 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "buildkit";
-  version = "0.19.0";
+  version = "0.32.2";
 
   src = fetchFromGitHub {
     owner = "moby";
     repo = "buildkit";
-    rev = "v${version}";
-    hash = "sha256-TN6IJLQxbwhflNdnrPgcqzw2o6di+aHOqwa6efkyV0k=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-sRSFypb/CZiCISMumVTor9XI4KOCvBhY6UaNUk2Y4t8=";
   };
 
   vendorHash = null;
 
   subPackages = [ "cmd/buildctl" ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "cmd/buildkitd" ];
 
-  ldflags = [ "-s" "-w" "-X github.com/moby/buildkit/version.Version=${version}" "-X github.com/moby/buildkit/version.Revision=${src.rev}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/moby/buildkit/version.Version=${finalAttrs.version}"
+    "-X github.com/moby/buildkit/version.Revision=${finalAttrs.src.rev}"
+  ];
 
   doCheck = false;
 
   meta = {
     description = "Concurrent, cache-efficient, and Dockerfile-agnostic builder toolkit";
     homepage = "https://github.com/moby/buildkit";
-    changelog = "https://github.com/moby/buildkit/releases/tag/v${version}";
+    changelog = "https://github.com/moby/buildkit/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ developer-guy vdemeester ];
+    maintainers = with lib.maintainers; [
+      developer-guy
+      vdemeester
+    ];
     mainProgram = "buildctl";
   };
-}
+})

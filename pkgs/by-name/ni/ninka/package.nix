@@ -37,12 +37,12 @@ perlPackages.buildPerlPackage {
     perl Makefile.PL
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Sentence based license detector";
     mainProgram = "ninka";
-    homepage = "http://ninka.turingmachine.org/";
-    license = licenses.gpl2;
+    homepage = "https://github.com/dmgerman/ninka";
+    license = lib.licenses.gpl2;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

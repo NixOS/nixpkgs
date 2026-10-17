@@ -2,28 +2,19 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   numpy,
 }:
 
 buildPythonPackage rec {
   pname = "biopython";
-  version = "1.83";
+  version = "1.88";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-eOa/t43mMDQDev01/nfLbgqeW2Jwa+z3in2SKxbtg/c=";
+    hash = "sha256-mqoxwL2k0Fn3su4Av9tcu3Ot4wV6pLc3p8wBhwkdBxo=";
   };
-
-  patches = [
-    # cherry-picked from https://github.com/biopython/biopython/commit/3f9bda7ef44f533dadbaa0de29ac21929bc0b2f1
-    # fixes SeqXMLIO parser to process all data. remove on next update
-    ./close_parser_on_time.patch
-  ];
 
   build-system = [ setuptools ];
 

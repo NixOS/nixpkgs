@@ -1,38 +1,68 @@
-{ lib, stdenv, fetchzip, autoreconfHook, pkg-config, gnumake42, glib, pcre
-, json_c, flex, bison, dtc, pciutils, dmidecode, acpica-tools, libbsd }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  glib,
+  json_c,
+  flex,
+  bison,
+  dtc,
+  pciutils,
+  dmidecode,
+  acpica-tools,
+  libbsd,
+  zlib,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fwts";
-  version = "24.09.00";
+  version = "26.07.00";
 
-  src = fetchzip {
-    url = "https://fwts.ubuntu.com/release/${pname}-V${version}.tar.gz";
-    sha256 = "sha256-ZJSlx8O38e7bJYTgZacayslr28TLHHJsISXq9Uzsnyc=";
-    stripRoot = false;
+  src = fetchFromGitHub {
+    owner = "fwts";
+    repo = "fwts";
+    rev = "V${finalAttrs.version}";
+    hash = "sha256-82rk3yOvQCBfq833xiD82QParDJi8voszMGp47UR0qk=";
   };
 
-  # fails with make 4.4
-  nativeBuildInputs = [ autoreconfHook pkg-config gnumake42 ];
-  buildInputs = [ glib pcre json_c flex bison dtc pciutils dmidecode acpica-tools libbsd ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+
+  buildInputs = [
+    glib
+    json_c
+    flex
+    bison
+    dtc
+    pciutils
+    dmidecode
+    acpica-tools
+    libbsd
+    zlib
+  ];
 
   postPatch = ''
     substituteInPlace src/lib/include/fwts_binpaths.h \
-      --replace "/usr/bin/lspci"      "${pciutils}/bin/lspci" \
-      --replace "/usr/sbin/dmidecode" "${dmidecode}/bin/dmidecode" \
-      --replace "/usr/bin/iasl"       "${acpica-tools}/bin/iasl"
+      --replace-fail "/usr/bin/lspci"      "${pciutils}/bin/lspci" \
+      --replace-fail "/usr/sbin/dmidecode" "${dmidecode}/bin/dmidecode" \
+      --replace-fail "/usr/bin/iasl"       "${acpica-tools}/bin/iasl"
 
     substituteInPlace src/lib/src/fwts_devicetree.c \
                       src/devicetree/dt_base/dt_base.c \
-      --replace "dtc -I" "${dtc}/bin/dtc -I"
+      --replace-fail "dtc -I" "${dtc}/bin/dtc -I"
   '';
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://wiki.ubuntu.com/FirmwareTestSuite";
     description = "Firmware Test Suite";
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ tadfisher ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ tadfisher ];
   };
-}
+})

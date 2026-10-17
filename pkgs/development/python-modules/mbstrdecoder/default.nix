@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  setuptools-scm,
   chardet,
   pytestCheckHook,
   faker,
@@ -10,17 +11,20 @@
 
 buildPythonPackage rec {
   pname = "mbstrdecoder";
-  version = "1.1.3";
-  format = "pyproject";
+  version = "1.1.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "thombashi";
-    repo = pname;
+    repo = "mbstrdecoder";
     tag = "v${version}";
-    hash = "sha256-GcAxXcCYC2XAE8xu/jdDxjPxkLJzbmvWZ3OgmcvQcmk=";
+    hash = "sha256-RPtxoI4fFiBHBOWOdGueVjPPOAUjDThawS80SIoTQ78=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [ chardet ];
 
@@ -28,10 +32,10 @@ buildPythonPackage rec {
 
   checkInputs = [ faker ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/thombashi/mbstrdecoder";
     description = "Library for decoding multi-byte character strings";
-    maintainers = with maintainers; [ genericnerdyusername ];
-    license = licenses.mit;
+    maintainers = [ ];
+    license = lib.licenses.mit;
   };
 }

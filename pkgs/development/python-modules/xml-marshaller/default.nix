@@ -2,32 +2,37 @@
   buildPythonPackage,
   fetchPypi,
   lib,
+  setuptools,
   lxml,
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "xml-marshaller";
-  version = "1.0.2";
-  format = "setuptools";
+  version = "1.0.3";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "xml_marshaller";
-    inherit version;
-    hash = "sha256-QvBALLDD8o5nZQ5Z4bembhadK6jcydWKQpJaSmGqqJM=";
+    inherit (finalAttrs) version;
+    hash = "sha256-xbi9HAURxUD/7gHVhwR/ibejHGCqdbv/TE76mCPemU4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     lxml
     six
   ];
 
   pythonImportsCheck = [ "xml_marshaller" ];
 
-  meta = with lib; {
+  meta = {
     description = "This module allows one to marshal simple Python data types into a custom XML format";
     homepage = "https://www.python.org/community/sigs/current/xml-sig/";
-    license = licenses.psfl;
-    maintainers = with maintainers; [ mazurel ];
+    license = lib.licenses.psfl;
+    maintainers = with lib.maintainers; [ mazurel ];
   };
-}
+})

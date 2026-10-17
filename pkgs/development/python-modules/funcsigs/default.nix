@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0l4g5818ffyfmfs1a924811azhjj8ax9xd1cffr1mzd3ycn0zfx7";
+    hash = "sha256-p7sPLPOj/Rqycyy0nrpCUsKvQkBEJBW0q847hwIqj1A=";
   };
 
   # https://github.com/testing-cabal/funcsigs/issues/10
@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "funcsigs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python function signatures from PEP362 for Python 2.6, 2.7 and 3.2+";
     homepage = "https://github.com/aliles/funcsigs";
     maintainers = [ ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

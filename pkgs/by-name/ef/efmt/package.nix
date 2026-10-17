@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "efmt";
-  version = "0.18.3";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "sile";
     repo = "efmt";
-    rev = version;
-    hash = "sha256-3CL9NcwDsAs6fHUWA/ibkwqOW0Ur4glpHVZTrfLQUXs=";
+    rev = finalAttrs.version;
+    hash = "sha256-Qk33fKOQmBnT0D3/VEF8txm0GIPLziISkqxGjn2gWdM=";
   };
 
-  cargoHash = "sha256-hEJb1SOQ3daY2otroCds8zitoodSjRyRTyR7GwF8dgk=";
+  cargoHash = "sha256-WW6vh/Efv1NweVNfgNDyRVM8cWOPYA2py5jEcL358dk=";
 
   meta = {
     description = "Erlang code formatter";
@@ -27,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ haruki7049 ];
     mainProgram = "efmt";
   };
-}
+})

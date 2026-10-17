@@ -10,6 +10,7 @@
   SDL2,
   SDL2_image,
   libvorbis,
+  libx11,
   bullet,
   curl,
   gettext,
@@ -49,6 +50,7 @@ let
       SDL2
       SDL2_image
       libvorbis
+      libx11
       bullet
       curl
       gettext
@@ -84,6 +86,7 @@ in
   exec ${bin}/bin/vdrift "$@"
 '').overrideAttrs
   (_: {
+    inherit (bin) pname version;
     name = wrappedName;
     meta = bin.meta // {
       hydraPlatforms = [ ];

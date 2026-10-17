@@ -10,15 +10,20 @@
 
 buildPythonPackage {
   pname = "migen";
-  version = "0.9.2-unstable-2024-12-25";
+  version = "0.9.2-unstable-2025-10-03";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "m-labs";
     repo = "migen";
-    rev = "4c2ae8dfeea37f235b52acb8166f12acaaae4f7c";
-    hash = "sha256-P4vaF+9iVekRAC2/mc9G7IwI6baBpPAxiDQ8uye4sAs=";
+    rev = "147f003fb7076ac4c7cf76a9a5ce152dc10e0ca6";
+    hash = "sha256-gRAvl5cUvrjq4t7htXsDBt4F8MEbHXFZoS0jbhrEs1I=";
   };
+
+  patches = [
+    # Add LOAD_FAST_BORROW to opcode tracer for python 3.14.
+    ./tracer-3.14.patch
+  ];
 
   nativeBuildInputs = [ setuptools ];
 
@@ -31,9 +36,9 @@ buildPythonPackage {
   passthru.updateScript = unstableGitUpdater { };
 
   meta = {
-    description = " A Python toolbox for building complex digital hardware";
+    description = "Python toolbox for building complex digital hardware";
     homepage = "https://m-labs.hk/migen";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ l-as ];
+    maintainers = [ ];
   };
 }

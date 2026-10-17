@@ -4,50 +4,52 @@
   fetchFromGitHub,
   pkg-config,
   clang,
-  ffmpeg,
+  ffmpeg-headless,
   openssl,
   alsa-lib,
-  opencv,
   makeWrapper,
+  mpv,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tplay";
-  version = "0.6.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "maxcurzi";
     repo = "tplay";
-    rev = "v${version}";
-    hash = "sha256-SRn7kg5FdSimKMFowKNUIan+MrojtNO0apeehIRTzfw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Xil60rQWLPpDpXTUES3hbO4I04M1H6kffu00teczjiQ=";
   };
 
-  cargoHash = "sha256-ztWs20Vl+fX0enL12pybiM6lhFh0/EFa1aSTRpzz64g=";
+  cargoHash = "sha256-Ce5H1rUfZEoo6Wt7VZM1EIolQWJ8etCY+WDvqx/3L0k=";
   checkFlags = [
     # requires network access
     "--skip=pipeline::image_pipeline::tests::test_process"
     "--skip=pipeline::image_pipeline::tests::test_to_ascii"
     "--skip=pipeline::image_pipeline::tests::test_to_ascii_ext"
     "--skip=pipeline::runner::tests::test_time_to_send_next_frame"
+    "--skip=pipeline::runner::tests::test_playback_speed_affects_frame_duration"
+    "--skip=pipeline::runner::tests::test_playback_speed_clamping"
   ];
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
     pkg-config
     clang
-    ffmpeg
     makeWrapper
+    ffmpeg-headless
   ];
 
   buildInputs = [
-    openssl.dev
-    alsa-lib.dev
-    ffmpeg.dev
-    opencv
+    openssl
+    alsa-lib
+    ffmpeg-headless
+    mpv
   ];
 
   postFixup = ''
     wrapProgram $out/bin/tplay \
-      --prefix PATH : "${lib.makeBinPath [ ffmpeg ]}"
+      --prefix PATH : "${lib.makeBinPath [ ffmpeg-headless ]}"
   '';
 
   meta = {
@@ -60,4 +62,4 @@ rustPlatform.buildRustPackage rec {
       colemickens
     ];
   };
-}
+})

@@ -3,42 +3,38 @@
   aiohttp,
   aresponses,
   awesomeversion,
-  backoff,
   buildPythonPackage,
   cachetools,
   fetchFromGitHub,
   poetry-core,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
+  python-backoff,
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-technove";
-  version = "1.3.1";
+  version = "2.1.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Moustachauve";
     repo = "pytechnove";
-    tag = "v${version}";
-    hash = "sha256-umtM2fIyEiimt/X2SvgqjaTYGutvJHkSJ3pRfwSbOfQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8POreYBoGBKBsN+4EA7wenj90hKgqgFi1sfMp3S4/7Q=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov" ""
-  '';
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     awesomeversion
-    backoff
+    python-backoff
     cachetools
     yarl
   ];
@@ -46,16 +42,17 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "technove" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to interact with TechnoVE local device API";
     homepage = "https://github.com/Moustachauve/pytechnove";
-    changelog = "https://github.com/Moustachauve/pytechnove/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Moustachauve/pytechnove/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

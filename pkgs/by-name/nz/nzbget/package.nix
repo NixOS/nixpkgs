@@ -1,47 +1,57 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, boost
-, pkg-config
-, gnutls
-, libgcrypt
-, libpar2
-, libcap
-, libsigcxx
-, libxml2
-, ncurses
-, openssl
-, zlib
-, deterministic-uname
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  boost,
+  pkg-config,
+  gnutls,
+  libgcrypt,
+  libpar2,
+  libcap,
+  libsigcxx_2_0,
+  libxml2,
+  ncurses,
+  openssl,
+  zlib,
+  deterministic-uname,
+  nixosTests,
 }:
 
 let
   par2TurboSrc = fetchFromGitHub {
     owner = "nzbgetcom";
     repo = "par2cmdline-turbo";
-    rev = "v1.1.1-nzbget-20241128"; # from cmake/par2-turbo.cmake
-    hash = "sha256-YBv61DAUWgf4jGQciTsGX7SAC2oZZ6h/lnJgJ40gMZE=";
+    rev = "v1.4.0-20260803"; # from cmake/par2-turbo.cmake
+    hash = "sha256-9fggVR2Zb9NgAuuuW5ayCyEF6kaaD7GIlX1BX6psiK0=";
+  };
+  rapidyencSrc = fetchFromGitHub {
+    owner = "nzbgetcom";
+    repo = "rapidyenc";
+    rev = "v1.1.1-20260821"; # from cmake/rapidyenc.cmake
+    hash = "sha256-17nny4+BlztfMsLX36wzK/5BP6TMniRgnNbLKvDsNcA=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nzbget";
-  version = "24.5";
+  version = "26.3";
 
   src = fetchFromGitHub {
     owner = "nzbgetcom";
     repo = "nzbget";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-HftzgdG6AjCyJVMV2btjBRLJLQ0wc1f8FJzGDWrdxR4=";
+    hash = "sha256-e8uzUjuVH237G/sajpyL2FYpyN0TcXcJQqV2KOjNFTU=";
   };
 
   patches = [
-    # remove git usage for fetching modified+vendored par2cmdline-turbo
+    # remove git usage for fetching modified+vendored par2cmdline-turbo and rapidyenc
     ./remove-git-usage.patch
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   buildInputs = [
     boost
@@ -49,20 +59,20 @@ stdenv.mkDerivation (finalAttrs: {
     libgcrypt
     libpar2
     libcap
-    libsigcxx
+    libsigcxx_2_0
     libxml2
     ncurses
     openssl
     zlib
   ];
 
-  preConfigure = ''
-    mkdir -p build/par2-turbo/src
-    cp -r ${par2TurboSrc} build/par2-turbo/src/par2-turbo
-    chmod -R u+w build/par2-turbo/src/par2-turbo
-  '';
-
   postPatch = ''
+    substituteInPlace cmake/par2-turbo.cmake \
+      --subst-var-by 'par2_turbo_src' '${par2TurboSrc}' \
+
+    substituteInPlace cmake/rapidyenc.cmake \
+      --subst-var-by 'rapidyenc_src' '${rapidyencSrc}'
+
     substituteInPlace daemon/util/Util.cpp \
       --replace-fail "std::string(\"uname \")" "std::string(\"${lib.getExe deterministic-uname} \")"
   '';
@@ -75,13 +85,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = { inherit (nixosTests) nzbget; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://nzbget.com/";
     changelog = "https://github.com/nzbgetcom/nzbget/releases/tag/v${finalAttrs.version}";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     description = "Command line tool for downloading files from news servers";
-    maintainers = with maintainers; [ pSub devusb ];
-    platforms = with platforms; unix;
+    maintainers = with lib.maintainers; [
+      pSub
+      devusb
+    ];
+    platforms = with lib.platforms; unix;
     mainProgram = "nzbget";
   };
 })

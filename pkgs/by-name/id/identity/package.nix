@@ -8,10 +8,12 @@
   desktop-file-utils,
   fetchFromGitLab,
   glib,
+  glycin-loaders,
   gst_all_1,
   gtk4,
   lcms,
   libadwaita,
+  libglycin-gtk4,
   libseccomp,
   libwebp,
   meson,
@@ -26,20 +28,26 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "identity";
-  version = "0.7.0";
+  version = "26.03";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "YaLTeR";
     repo = "identity";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-h8/mWGuosBiQRpoW8rINJht/7UBVEnUnTKY5HBCAyw4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-CVSUk0xhfsMM47L0BVQj69Jw2MhsElBI3mxETCWBqcU=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-oO7l4zVKR93fFLqkY67DfzrAA9kUN06ov9ogwDuaVlE=";
+    hash = "sha256-AuIAfk6BipUHkIfRiLJf0tjadVxsEIKKvpZgKA11oJE=";
   };
+
+  # The crate can't find our provided gstreamer-gl-egl-1.0.pc in the PKG_CONFIG_PATH otherwise.
+  postPatch = ''
+    substituteInPlace $cargoDepsCopy/*/gstreamer-gl-egl-sys-*/Cargo.toml \
+      --replace-fail 'gstreamer-gl-egl-1.0' 'gstreamer-gl-1.0'
+  '';
 
   strictDeps = true;
 
@@ -61,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     dav1d
+    glycin-loaders
     gst_all_1.gst-libav
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-base
@@ -69,6 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk4
     lcms
     libadwaita
+    libglycin-gtk4
     libseccomp
     libwebp
   ];
@@ -97,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.gnome.org/YaLTeR/identity";
     changelog = "https://gitlab.gnome.org/YaLTeR/identity/-/releases/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = lib.teams.gnome-circle.members;
+    teams = [ lib.teams.gnome-circle ];
     mainProgram = "identity";
     platforms = lib.platforms.linux;
   };

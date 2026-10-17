@@ -1,12 +1,12 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   pkg-config,
   makeself,
   yasm,
-  fuse,
-  wxGTK32,
+  fuse3,
+  wxwidgets_3_2,
   lvm2,
   replaceVars,
   e2fsprogs,
@@ -19,11 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "veracrypt";
-  version = "1.26.18";
+  version = "1.26.29";
 
-  src = fetchurl {
-    url = "https://launchpad.net/veracrypt/trunk/${finalAttrs.version}/+download/VeraCrypt_${finalAttrs.version}_Source.tar.bz2";
-    hash = "sha256-fWmvHvYCgHQi50CsjMKaGHFzw4vPYZLl7GqL3tO5XBw=";
+  src = fetchFromGitHub {
+    owner = "veracrypt";
+    repo = "VeraCrypt";
+    tag = "VeraCrypt_${finalAttrs.version}";
+    hash = "sha256-Q+WUz8F63cP9/KlZUn9xLu2V9wO4FeY7AtErE1T9Km4=";
   };
 
   patches = [
@@ -35,9 +37,14 @@ stdenv.mkDerivation (finalAttrs: {
       ntfs = "${ntfs3g}/bin/mkfs.ntfs";
       btrfs = "${btrfs-progs}/bin/mkfs.btrfs";
     })
+
+    # https://github.com/veracrypt/VeraCrypt/commit/2cca2e1dafa405addc3af8724baf8563f352ac1c
+    ./nix-system-paths.patch
   ];
 
-  sourceRoot = "src";
+  sourceRoot = "${finalAttrs.src.name}/src";
+
+  buildFlags = [ "WITHFUSE3=1" ];
 
   nativeBuildInputs = [
     makeself
@@ -46,9 +53,9 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
   buildInputs = [
-    fuse
+    fuse3
     lvm2
-    wxGTK32
+    wxwidgets_3_2
     pcsclite
   ];
 
@@ -67,14 +74,13 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Free Open-Source filesystem on-the-fly encryption";
     homepage = "https://www.veracrypt.fr/";
-    license = with lib.licenses; [
-      asl20 # and
-      unfree # TrueCrypt License version 3.0
-    ];
-    maintainers = with lib.maintainers; [
-      dsferruzza
-      ryand56
-    ];
+    license =
+      with lib.licenses;
+      AND [
+        asl20 # and
+        unfree # TrueCrypt License version 3.0
+      ];
+    maintainers = [ lib.maintainers.ryand56 ];
     platforms = lib.platforms.linux;
   };
 })

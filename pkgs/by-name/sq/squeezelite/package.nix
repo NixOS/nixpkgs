@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  darwin,
   fetchFromGitHub,
   flac,
   libgpiod,
@@ -29,7 +28,7 @@
 }:
 
 let
-  inherit (lib) optional optionals optionalString;
+  inherit (lib) optional optionalString;
 
   pulseSupport = audioBackend == "pulse";
 
@@ -40,42 +39,31 @@ stdenv.mkDerivation {
   pname = binName;
   # versions are specified in `squeezelite.h`
   # see https://github.com/ralph-irving/squeezelite/issues/29
-  version = "2.0.0.1518";
+  version = "2.0.0.1610";
 
   src = fetchFromGitHub {
     owner = "ralph-irving";
     repo = "squeezelite";
-    rev = "ed3c82052db4846e8e0da01c5bf8db130db00dee";
-    hash = "sha256-nxEsraKV5OPaeRuN2NRvxGtUb189ArP3blxSOMPD2II=";
+    rev = "4e0ec3188320da7de059c571499e626ff8b3712f";
+    hash = "sha256-iOE6i06dq4rAE0x1+BErld9U1qdz2Zypt5BFJb3qHcU=";
   };
 
-  buildInputs =
-    [
-      flac
-      libmad
-      libvorbis
-      mpg123
-    ]
-    ++ optional pulseSupport libpulseaudio
-    ++ optional alsaSupport alsa-lib
-    ++ optional portaudioSupport portaudio
-    ++ optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk_11_0.frameworks;
-      [
-        CoreVideo
-        VideoDecodeAcceleration
-        CoreAudio
-        AudioToolbox
-        AudioUnit
-        Carbon
-      ]
-    )
-    ++ optional faad2Support faad2
-    ++ optional ffmpegSupport ffmpeg
-    ++ optional opusSupport opusfile
-    ++ optional resampleSupport soxr
-    ++ optional sslSupport openssl
-    ++ optional (stdenv.hostPlatform.isAarch32 or stdenv.hostPlatform.isAarch64) libgpiod;
+  buildInputs = [
+    flac
+    libmad
+    libvorbis
+    mpg123
+  ]
+  ++ optional pulseSupport libpulseaudio
+  ++ optional alsaSupport alsa-lib
+  ++ optional portaudioSupport portaudio
+
+  ++ optional faad2Support faad2
+  ++ optional ffmpegSupport ffmpeg
+  ++ optional opusSupport opusfile
+  ++ optional resampleSupport soxr
+  ++ optional sslSupport openssl
+  ++ optional (stdenv.hostPlatform.isAarch32 or stdenv.hostPlatform.isAarch64) libgpiod;
 
   enableParallelBuilding = true;
 
@@ -84,24 +72,31 @@ stdenv.mkDerivation {
       --replace "<opusfile.h>" "<opus/opusfile.h>"
   '';
 
-  EXECUTABLE = binName;
+  env = {
+    EXECUTABLE = binName;
 
-  OPTS =
-    [
-      "-DLINKALL"
-      "-DGPIO"
-    ]
-    ++ optional dsdSupport "-DDSD"
-    ++ optional (!faad2Support) "-DNO_FAAD"
-    ++ optional ffmpegSupport "-DFFMPEG"
-    ++ optional opusSupport "-DOPUS"
-    ++ optional portaudioSupport "-DPORTAUDIO"
-    ++ optional pulseSupport "-DPULSEAUDIO"
-    ++ optional resampleSupport "-DRESAMPLE"
-    ++ optional sslSupport "-DUSE_SSL"
-    ++ optional (stdenv.hostPlatform.isAarch32 or stdenv.hostPlatform.isAarch64) "-DRPI";
-
-  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin { LDADD = "-lportaudio -lpthread"; };
+    OPTS = toString (
+      [
+        "-DLINKALL"
+        "-DGPIO"
+      ]
+      ++ optional dsdSupport "-DDSD"
+      ++ optional (!faad2Support) "-DNO_FAAD"
+      ++ optional ffmpegSupport "-DFFMPEG"
+      ++ optional opusSupport "-DOPUS"
+      ++ optional portaudioSupport "-DPORTAUDIO"
+      ++ optional pulseSupport "-DPULSEAUDIO"
+      ++ optional resampleSupport "-DRESAMPLE"
+      ++ optional sslSupport "-DUSE_SSL"
+      ++ optional (stdenv.hostPlatform.isAarch32 or stdenv.hostPlatform.isAarch64) "-DRPI"
+    );
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    LDADD = toString [
+      "-lportaudio"
+      "-lpthread"
+    ];
+  };
 
   installPhase = ''
     runHook preInstall
@@ -117,13 +112,16 @@ stdenv.mkDerivation {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight headless squeezebox client emulator";
     homepage = "https://github.com/ralph-irving/squeezelite";
-    license = with licenses; [ gpl3Plus ] ++ optional dsdSupport bsd2;
+    license = with lib.licenses; [ gpl3Plus ] ++ optional dsdSupport bsd2;
     mainProgram = binName;
-    maintainers = with maintainers; [ adamcstephens ];
+    maintainers = with lib.maintainers; [ adamcstephens ];
     platforms =
-      if (audioBackend == "pulse") then platforms.linux else platforms.linux ++ platforms.darwin;
+      if (audioBackend == "pulse") then
+        lib.platforms.linux
+      else
+        lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

@@ -65,56 +65,55 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ./fix-perm.patch
   ];
 
-  installPhase =
-    ''
-      runHook preInstall
-      mkdir -p $out
-      cp -ar opt $out/opt
+  installPhase = ''
+    runHook preInstall
+    mkdir -p $out
+    cp -ar opt $out/opt
 
-      # delete unnecessary files for the current architecture
-    ''
-    + lib.concatMapStrings (arch: ''
-      echo Deleting files for ${arch}
-      rm -r "$out/opt/brother/Printers/MFCL5750DW/lpd/${arch}"
-    '') (builtins.filter (arch: arch != stdenvNoCC.hostPlatform.linuxArch) arches)
-    + ''
-      # bundled scripts don't understand the arch subdirectories for some reason
-      ln -s \
-        "$out/opt/brother/Printers/MFCL5750DW/lpd/${stdenvNoCC.hostPlatform.linuxArch}/"* \
-        "$out/opt/brother/Printers/MFCL5750DW/lpd/"
+    # delete unnecessary files for the current architecture
+  ''
+  + lib.concatMapStrings (arch: ''
+    echo Deleting files for ${arch}
+    rm -r "$out/opt/brother/Printers/MFCL5750DW/lpd/${arch}"
+  '') (builtins.filter (arch: arch != stdenvNoCC.hostPlatform.linuxArch) arches)
+  + ''
+    # bundled scripts don't understand the arch subdirectories for some reason
+    ln -s \
+      "$out/opt/brother/Printers/MFCL5750DW/lpd/${stdenvNoCC.hostPlatform.linuxArch}/"* \
+      "$out/opt/brother/Printers/MFCL5750DW/lpd/"
 
-      # Fix global references and replace auto discovery mechanism with hardcoded values
-      substituteInPlace $out/opt/brother/Printers/MFCL5750DW/lpd/lpdfilter \
-        --replace "my \$BR_PRT_PATH =" "my \$BR_PRT_PATH = \"$out/opt/brother/Printers/MFCL5750DW\"; #" \
-        --replace "PRINTER =~" "PRINTER = \"MFCL5750DW\"; #"
-
-      substituteInPlace $out/opt/brother/Printers/MFCL5750DW/cupswrapper/lpdwrapper \
-      --replace "my \$basedir = C" "my \$basedir = \"$out/opt/brother/Printers/MFCL5750DW\" ; #" \
+    # Fix global references and replace auto discovery mechanism with hardcoded values
+    substituteInPlace $out/opt/brother/Printers/MFCL5750DW/lpd/lpdfilter \
+      --replace "my \$BR_PRT_PATH =" "my \$BR_PRT_PATH = \"$out/opt/brother/Printers/MFCL5750DW\"; #" \
       --replace "PRINTER =~" "PRINTER = \"MFCL5750DW\"; #"
 
-      # Make sure all executables have the necessary runtime dependencies available
-      find "$out" -executable -and -type f | while read file; do
-        wrapProgram "$file" --prefix PATH : "${lib.makeBinPath runtimeDeps}"
-      done
-      # Symlink filter and ppd into a location where CUPS will discover it
-      mkdir -p $out/lib/cups/filter
-      mkdir -p $out/share/cups/model
-      mkdir -p $out/etc/opt/brother/Printers/MFCL5750DW/inf
-      ln -s $out/opt/brother/Printers/MFCL5750DW/inf/brMFCL5750DWrc \
-      $out/etc/opt/brother/Printers/MFCL5750DW/inf/brMFCL5750DWrc
-      ln -s \
-      $out/opt/brother/Printers/MFCL5750DW/cupswrapper/lpdwrapper \
-      $out/lib/cups/filter/brother_lpdwrapper_MFCL5750DW
-      ln -s \
-      $out/opt/brother/Printers/MFCL5750DW/cupswrapper/brother-MFCL5750DW-cups-en.ppd \
-      $out/share/cups/model/
-      runHook postInstall
-    '';
+    substituteInPlace $out/opt/brother/Printers/MFCL5750DW/cupswrapper/lpdwrapper \
+    --replace "my \$basedir = C" "my \$basedir = \"$out/opt/brother/Printers/MFCL5750DW\" ; #" \
+    --replace "PRINTER =~" "PRINTER = \"MFCL5750DW\"; #"
+
+    # Make sure all executables have the necessary runtime dependencies available
+    find "$out" -executable -and -type f | while read file; do
+      wrapProgram "$file" --prefix PATH : "${lib.makeBinPath runtimeDeps}"
+    done
+    # Symlink filter and ppd into a location where CUPS will discover it
+    mkdir -p $out/lib/cups/filter
+    mkdir -p $out/share/cups/model
+    mkdir -p $out/etc/opt/brother/Printers/MFCL5750DW/inf
+    ln -s $out/opt/brother/Printers/MFCL5750DW/inf/brMFCL5750DWrc \
+    $out/etc/opt/brother/Printers/MFCL5750DW/inf/brMFCL5750DWrc
+    ln -s \
+    $out/opt/brother/Printers/MFCL5750DW/cupswrapper/lpdwrapper \
+    $out/lib/cups/filter/brother_lpdwrapper_MFCL5750DW
+    ln -s \
+    $out/opt/brother/Printers/MFCL5750DW/cupswrapper/brother-MFCL5750DW-cups-en.ppd \
+    $out/share/cups/model/
+    runHook postInstall
+  '';
   meta = {
     homepage = "https://www.brother.com/";
     description = "Brother MFCL5750DW CUPS driver";
     license = lib.licenses.unfree;
-    platforms = builtins.map (arch: "${arch}-linux") arches;
+    platforms = map (arch: "${arch}-linux") arches;
     maintainers = with lib.maintainers; [ qdlmcfresh ];
   };
 })

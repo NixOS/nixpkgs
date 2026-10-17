@@ -1,14 +1,32 @@
-{ stdenv, fetchurl, libxml2, gnutls, libxslt, pkg-config, libgcrypt, libtool
-, openssl, nss, lib, runCommandCC, writeText }:
-
-lib.fix (self:
-stdenv.mkDerivation rec {
+{
+  stdenv,
+  fetchurl,
+  libxml2,
+  gnutls,
+  libxslt,
+  pkg-config,
+  libtool,
+  openssl,
+  nss,
+  lib,
+  python3Packages,
+  runCommandCC,
+  writeText,
+}:
+stdenv.mkDerivation (finalAttrs: {
   pname = "xmlsec";
-  version = "1.3.6";
+  version = "1.3.12";
+
+  __structuredAttrs = true;
 
   src = fetchurl {
-    url = "https://www.aleksey.com/xmlsec/download/xmlsec1-${version}.tar.gz";
-    sha256 = "sha256-lStiatPzvhpFmGItq1L9qyqGBNCDfBsAWJ82N1Na+S8=";
+    urls = [
+      "https://www.aleksey.com/xmlsec/download/xmlsec1-${finalAttrs.version}.tar.gz"
+
+      # for when the ${finalAttrs.version} gets older than the last two
+      "https://www.aleksey.com/xmlsec/download/older-releases/xmlsec1-${finalAttrs.version}.tar.gz"
+    ];
+    hash = "sha256-JARRma8S2T/l/bu/fjhugj5IQgcelDLiuQrBCLiJqSM=";
   };
 
   patches = [
@@ -17,14 +35,25 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    substituteAllInPlace src/dl.c
+    substituteInPlace src/dl.c --replace-fail "@out@" "$out"
   '';
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
+
+  strictDeps = true;
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libxml2 gnutls libgcrypt libtool openssl nss ];
+  buildInputs = [
+    libxml2
+    gnutls
+    libtool
+    openssl
+    nss
+  ];
 
   propagatedBuildInputs = [
     # required by xmlsec/transforms.h
@@ -43,44 +72,50 @@ stdenv.mkDerivation rec {
   # https://dev.entrouvert.org/issues/18771
   configureFlags = [ "--enable-soap" ];
 
-  # otherwise libxmlsec1-gnutls.so won't find libgcrypt.so, after #909
-  NIX_LDFLAGS = "-lgcrypt";
-
   postInstall = ''
     moveToOutput "bin/xmlsec1-config" "$dev"
     moveToOutput "lib/xmlsec1Conf.sh" "$dev"
   '';
 
-  passthru.tests.libxmlsec1-crypto = runCommandCC "libxmlsec1-crypto-test"
-    {
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [ self libxml2 libxslt libtool ];
-    } ''
-    $CC $(pkg-config --cflags --libs xmlsec1) -o crypto-test ${writeText "crypto-test.c" ''
-      #include <xmlsec/xmlsec.h>
-      #include <xmlsec/crypto.h>
+  passthru.tests = {
+    python-xmlsec = python3Packages.xmlsec;
+    libxmlsec1-crypto =
+      runCommandCC "libxmlsec1-crypto-test"
+        {
+          nativeBuildInputs = [ pkg-config ];
+          buildInputs = [
+            finalAttrs.finalPackage
+            libxml2
+            libxslt
+            libtool
+          ];
+        }
+        ''
+          $CC $(pkg-config --cflags --libs xmlsec1) -o crypto-test ${writeText "crypto-test.c" ''
+            #include <xmlsec/xmlsec.h>
+            #include <xmlsec/crypto.h>
 
-      int main(int argc, char **argv) {
-        return xmlSecInit() ||
-          xmlSecCryptoDLLoadLibrary(argc > 1 ? argv[1] : 0) ||
-          xmlSecCryptoInit();
-      }
-    ''}
+            int main(int argc, char **argv) {
+              return xmlSecInit() ||
+                xmlSecCryptoDLLoadLibrary(argc > 1 ? argv[1] : 0) ||
+                xmlSecCryptoInit();
+            }
+          ''}
 
-    for crypto in "" gcrypt gnutls nss openssl; do
-      ./crypto-test $crypto
-    done
-    touch $out
-  '';
+          for crypto in "" gnutls nss openssl; do
+            ./crypto-test $crypto
+          done
+          touch $out
+        '';
+  };
 
-  meta = with lib; {
+  meta = {
     description = "XML Security Library in C based on libxml2";
     homepage = "https://www.aleksey.com/xmlsec/";
     downloadPage = "https://www.aleksey.com/xmlsec/download.html";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "xmlsec1";
     maintainers = [ ];
-    platforms = with platforms; linux ++ darwin;
+    platforms = with lib.platforms; linux ++ darwin;
   };
-}
-)
+})

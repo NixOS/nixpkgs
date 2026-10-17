@@ -9,25 +9,27 @@
   openssh,
   openssl,
   python3,
-  xxHash,
+  xxhash,
   zstd,
   installShellFiles,
   nixosTests,
+  nix-update-script,
+  versionCheckHook,
 }:
 
 let
   python = python3;
 in
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "borgbackup";
-  version = "1.4.0";
+  version = "1.4.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "borgbackup";
     repo = "borg";
-    tag = version;
-    hash = "sha256-n1hCM7Sp0t2bOJEzErEd1PS/Xc7c+KDmJ4PjQuuF140=";
+    tag = finalAttrs.version;
+    hash = "sha256-jkFF+nNZL8lEXgworFLNoEKTr2LgCat1fOFlTh7AWs4=";
   };
 
   postPatch = ''
@@ -45,6 +47,7 @@ python.pkgs.buildPythonApplication rec {
   nativeBuildInputs = with python.pkgs; [
     # docs
     sphinxHook
+    sphinxcontrib-jquery
     guzzle-sphinx-theme
 
     # shell completions
@@ -52,31 +55,47 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   sphinxBuilders = [
-    "singlehtml"
-    "man"
+    # HACK: sphinxBuilders is currently broken with __structuredAttrs = true,
+    # and ignores all but the first array item. for now, pass them as a single
+    # space-separated entry. fixed on staging, but requires a mass-rebuild.
+    # TODO: revert to [ "singlehtml" "man" ] on staging.
+    "singlehtml man"
   ];
 
-  buildInputs =
+  buildInputs = [
+    libb2
+    lz4
+    xxhash
+    zstd
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    acl
+  ];
+
+  dependencies =
+    with python.pkgs;
     [
-      libb2
-      lz4
-      xxHash
-      zstd
-      openssl
+      msgpack
+      packaging
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
-      acl
+      pyfuse3
     ];
 
-  dependencies = with python.pkgs; [
-    msgpack
-    packaging
-    (if stdenv.hostPlatform.isLinux then pyfuse3 else llfuse)
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    "${openssh}/bin"
   ];
 
-  makeWrapperArgs = [
-    ''--prefix PATH ':' "${openssh}/bin"''
-  ];
+  preInstallSphinx = ''
+    # remove invalid outputs for manpages
+    rm .sphinx/man/man/_static/jquery.js
+    rm .sphinx/man/man/_static/_sphinx_javascript_frameworks_compat.js
+    rmdir .sphinx/man/man/_static/
+  '';
 
   postInstall = ''
     installShellCompletion --cmd borg \
@@ -90,10 +109,11 @@ python.pkgs.buildPythonApplication rec {
     py
     pytest-benchmark
     pytest-xdist
-    pytestCheckHook
+    pytest9_0CheckHook
+    versionCheckHook
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--benchmark-skip"
     "--pyargs"
     "borg.testsuite"
@@ -113,8 +133,11 @@ python.pkgs.buildPythonApplication rec {
     "test_get_keys_dir"
     "test_get_security_dir"
     "test_get_config_dir"
-    # https://github.com/borgbackup/borg/issues/6573
-    "test_basic_functionality"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Tests create files with append-only flags that cause cleanup issues on macOS
+    "test_extract_restores_append_flag"
+    "test_file_status_excluded"
   ];
 
   preCheck = ''
@@ -131,18 +154,23 @@ python.pkgs.buildPythonApplication rec {
     "man"
   ];
 
-  disabled = python.pythonOlder "3.9";
-
-  meta = with lib; {
-    changelog = "https://github.com/borgbackup/borg/blob/${src.rev}/docs/changes.rst";
-    description = "Deduplicating archiver with compression and encryption";
-    homepage = "https://www.borgbackup.org";
-    license = licenses.bsd3;
-    platforms = platforms.unix; # Darwin and FreeBSD mentioned on homepage
-    mainProgram = "borg";
-    maintainers = with maintainers; [
-      dotlambda
-      globin
+  passthru.updateScript = nix-update-script {
+    # Only match tags formatted as x.y.z (e.g., 1.2.3)
+    extraArgs = [
+      "--version-regex"
+      "^([0-9]+\\.[0-9]+\\.[0-9]+)$"
     ];
   };
-}
+
+  meta = {
+    changelog = "https://github.com/borgbackup/borg/blob/${finalAttrs.src.rev}/docs/changes.rst";
+    description = "Deduplicating archiver with compression and encryption";
+    homepage = "https://www.borgbackup.org";
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix; # Darwin and FreeBSD mentioned on homepage
+    mainProgram = "borg";
+    maintainers = with lib.maintainers; [
+      dotlambda
+    ];
+  };
+})

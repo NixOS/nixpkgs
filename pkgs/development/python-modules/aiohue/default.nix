@@ -8,28 +8,25 @@
   pytestCheckHook,
   pytest-aiohttp,
   pytest-asyncio,
-  pythonOlder,
+  pytest-cov-stub,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiohue";
-  version = "4.7.3";
+  version = "4.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "aiohue";
-    tag = version;
-    hash = "sha256-uS6pyJOntjbGa9UU1g53nuzgfP6AKAzN4meHrZY6Uic=";
+    tag = finalAttrs.version;
+    hash = "sha256-AZQzt/JoCvGtz4AR7afI4k1BFrYjmq5Vp+NFbxzED9c=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"' \
-      --replace-fail "--cov" ""
+      --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
   '';
 
   build-system = [ setuptools ];
@@ -44,6 +41,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-asyncio
     pytest-aiohttp
+    pytest-cov-stub
   ];
 
   pythonImportsCheck = [
@@ -56,11 +54,11 @@ buildPythonPackage rec {
     "examples/"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package to talk to Philips Hue";
     homepage = "https://github.com/home-assistant-libs/aiohue";
-    changelog = "https://github.com/home-assistant-libs/aiohue/releases/tag/${version}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/home-assistant-libs/aiohue/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

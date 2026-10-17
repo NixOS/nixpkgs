@@ -11,15 +11,15 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "899d8fb5f8c2555213aea95efca02934c7343df6ace9d7628a5176b176906267";
+    hash = "sha256-iZ2PtfjCVVITrqle/KApNMc0Pfas6ddiilF2sXaQYmc=";
   };
 
   # Require networking
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python NTP library";
     homepage = "http://code.google.com/p/ntplib/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

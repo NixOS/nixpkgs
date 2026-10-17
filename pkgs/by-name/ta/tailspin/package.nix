@@ -2,32 +2,54 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  installShellFiles,
+  procps,
+  stdenv,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tailspin";
-  version = "4.0.0";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "bensadeh";
     repo = "tailspin";
-    rev = version;
-    hash = "sha256-5VbxQDK69If5N8EiS8sIKNqHkCAfquOz8nUS7ynp+nA=";
+    tag = finalAttrs.version;
+    hash = "sha256-RI604v8ImQSgvNUGsnCLe6FuzEMJwE0tNVuFLmJLwvM=";
   };
 
-  cargoHash = "sha256-ohfza2ti7Ar/9TV/WoTL5g6CPaONrxtr7nW0qmLdB/8=";
+  cargoHash = "sha256-kcd6rBoonoCKuybVIVtZqt+njHFhVDTjTyF2UURuOSI=";
 
-  postPatch = ''
-    substituteInPlace tests/utils.rs --replace-fail \
-      'target/debug' "target/$(rustc -vV | sed -n 's|host: ||p')/debug"
+  nativeBuildInputs = [ installShellFiles ];
+
+  nativeCheckInputs = [ procps ];
+  checkFlags = lib.optionals (!(stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isCygwin)) [
+    # Requires pgrep, which is not provided by procps on non-Linux systems
+    "--skip=failing_pager_spawn_kills_the_exec_child"
+    "--skip=pager_killed_by_ctrl_c_is_a_quiet_quit"
+    "--skip=quitting_the_pager_kills_the_exec_child"
+    "--skip=stream_error_while_paging_kills_the_pager"
+  ];
+
+  postInstall = ''
+    installShellCompletion completions/tspin.{bash,fish,zsh}
+    installManPage man/tspin.1
   '';
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/tspin";
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Log file highlighter";
     homepage = "https://github.com/bensadeh/tailspin";
-    changelog = "https://github.com/bensadeh/tailspin/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dit7ya ];
+    changelog = "https://github.com/bensadeh/tailspin/blob/${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "tspin";
   };
-}
+})

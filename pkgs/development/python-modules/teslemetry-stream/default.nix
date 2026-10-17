@@ -6,16 +6,16 @@
   aiohttp,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "teslemetry-stream";
-  version = "0.6.3";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Teslemetry";
     repo = "python-teslemetry-stream";
-    rev = "v${version}";
-    hash = "sha256-hKGYZYRfI4FikTPsf7Wy0gOA+dCiMdlpWtEb/Gn1y7s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6Dv00IXc92DRs7llGi9G+aRNnKCvGlbisuqVa5F7TD4=";
   };
 
   build-system = [ setuptools ];
@@ -27,10 +27,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "teslemetry_stream" ];
 
   meta = {
-    changelog = "https://github.com/Teslemetry/python-teslemetry-stream/releases/tag/v${version}";
+    changelog = "https://github.com/Teslemetry/python-teslemetry-stream/releases/tag/${finalAttrs.src.tag}";
     description = "Python library for the Teslemetry Streaming API";
     homepage = "https://github.com/Teslemetry/python-teslemetry-stream";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

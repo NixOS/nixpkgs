@@ -1,55 +1,116 @@
-{ lib, stdenv, fetchurl, bundlerEnv, ruby_3_2, makeWrapper, nixosTests }:
+{
+  defaultGemConfig,
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  fetchpatch,
+  bundlerEnv,
+  ruby_4_0,
+  makeWrapper,
+  nixosTests,
+  openssl,
+  rustc,
+  cargo,
+  rustPlatform,
+  buildRubyGem,
+}:
 
 let
-  version = "5.1.5";
+  version = "7.0.2";
   rubyEnv = bundlerEnv {
     name = "redmine-env-${version}";
 
-    ruby = ruby_3_2;
+    ruby = ruby_4_0;
     gemdir = ./.;
-    groups = [ "development" "ldap" "markdown" "common_mark" "minimagick" "test" ];
+    groups = [
+      "development"
+      "ldap"
+      "markdown"
+      "common_mark"
+      "minimagick"
+      "test"
+    ];
+    gemConfig = defaultGemConfig // {
+      trilogy = attrs: {
+        buildInputs = [ openssl ];
+      };
+      commonmarker = attrs: {
+        cargoDeps = rustPlatform.fetchCargoVendor {
+          inherit (buildRubyGem { inherit (attrs) gemName version source; })
+            name
+            src
+            unpackPhase
+            nativeBuildInputs
+            ;
+          hash = "sha256-Xw0VWl3qZLvNNmRFHuWkltC1XfoIaHJKWM8Po4FSmoQ=";
+        };
+        dontBuild = false;
+        nativeBuildInputs = [
+          cargo
+          rustc
+          rustPlatform.cargoSetupHook
+          rustPlatform.bindgenHook
+        ];
+        disallowedReferences = [
+          rustc.unwrapped
+        ];
+        preInstall = ''
+          export CARGO_HOME="$PWD/../.cargo/"
+        '';
+        postInstall = ''
+          find $out -type f -name .rustc_info.json -delete
+        '';
+      };
+    };
   };
 in
-  stdenv.mkDerivation rec {
-    pname = "redmine";
-    inherit version;
+stdenvNoCC.mkDerivation (finalAttrs: {
+  pname = "redmine";
+  inherit version;
 
-    src = fetchurl {
-      url = "https://www.redmine.org/releases/redmine-${version}.tar.gz";
-      hash = "sha256-LJc5URcS/BOB2VhPoAX5EaMCLoNm0dalP+wPAU2sAWg=";
-    };
+  strictDeps = true;
+  __structuredAttrs = true;
 
-    nativeBuildInputs = [ makeWrapper ];
-    buildInputs = [ rubyEnv rubyEnv.wrappedRuby rubyEnv.bundler ];
+  src = fetchurl {
+    url = "https://www.redmine.org/releases/redmine-${finalAttrs.version}.tar.gz";
+    hash = "sha256-1F5tTDc8w8jTPx9NSi/64eGtsYcDFgcHRnST3ntL5ZE=";
+  };
 
-    # taken from https://www.redmine.org/issues/33784
-    # can be dropped when the upstream bug is closed and the fix is present in the upstream release
-    patches = [ ./0001-python3.patch ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [
+    rubyEnv
+    rubyEnv.wrappedRuby
+    rubyEnv.bundler
+  ];
 
-    buildPhase = ''
-      mv config config.dist
-      mv public/themes public/themes.dist
-    '';
+  buildPhase = ''
+    mv config config.dist
+    mv themes themes.dist
+  '';
 
-    installPhase = ''
-      mkdir -p $out/bin $out/share
-      cp -r . $out/share/redmine
-      for i in config files log plugins public/plugin_assets public/themes tmp; do
-        rm -rf $out/share/redmine/$i
-        ln -fs /run/redmine/$i $out/share/redmine/$i
-      done
+  installPhase = ''
+    mkdir -p $out/bin $out/share
+    cp -r . $out/share/redmine
+    mkdir $out/share/redmine/public/assets
+    for i in config files log plugins public/assets public/plugin_assets themes tmp; do
+      rm -rf $out/share/redmine/$i
+      ln -fs /run/redmine/$i $out/share/redmine/$i
+    done
 
-      makeWrapper ${rubyEnv.wrappedRuby}/bin/ruby $out/bin/rdm-mailhandler.rb --add-flags $out/share/redmine/extra/mail_handler/rdm-mailhandler.rb
-    '';
+    makeWrapper ${rubyEnv.wrappedRuby}/bin/ruby $out/bin/rdm-mailhandler.rb --add-flags $out/share/redmine/extra/mail_handler/rdm-mailhandler.rb
+  '';
 
-    passthru.tests.redmine = nixosTests.redmine;
+  passthru.tests.redmine = nixosTests.redmine;
 
-    meta = with lib; {
-      homepage = "https://www.redmine.org/";
-      changelog = "https://www.redmine.org/projects/redmine/wiki/changelog";
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ aanderse felixsinger megheaiulian ];
-      license = licenses.gpl2;
-      knownVulnerabilities = [ "CVE-2024-54133" "GHSA-r95h-9x8f-r3f7" ];
-    };
-  }
+  meta = {
+    homepage = "https://www.redmine.org/";
+    changelog = "https://www.redmine.org/projects/redmine/wiki/changelog";
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      aanderse
+      felixsinger
+      megheaiulian
+    ];
+    license = lib.licenses.gpl2;
+  };
+})

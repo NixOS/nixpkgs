@@ -24,13 +24,13 @@
   uutf,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "mrmime";
-  version = "0.6.1";
+  version = "0.7.0";
 
   src = fetchurl {
-    url = "https://github.com/mirage/mrmime/releases/download/v${version}/mrmime-${version}.tbz";
-    hash = "sha256-Dzsr7xPzu5RIzIdubF4OAAjHJY7CdBVnHRZxQbcCsBY=";
+    url = "https://github.com/mirage/mrmime/releases/download/v${finalAttrs.version}/mrmime-${finalAttrs.version}.tbz";
+    hash = "sha256-w23xtro9WgyLLwqdwfqLMN/ZDqwpvFcEvurbsqnsJLc=";
   };
 
   propagatedBuildInputs = [
@@ -68,4 +68,4 @@ buildDunePackage rec {
     maintainers = [ ];
     mainProgram = "mrmime.generate";
   };
-}
+})

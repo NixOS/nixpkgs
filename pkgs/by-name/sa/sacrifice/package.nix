@@ -31,13 +31,12 @@ stdenv.mkDerivation {
     ./pythia83xx.patch
   ];
 
-  preConfigure =
-    ''
-      substituteInPlace configure --replace HAVE_LCG=yes HAVE_LCG=no
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace configure --replace LIB_SUFFIX=\"so\" LIB_SUFFIX=\"dylib\"
-    '';
+  preConfigure = ''
+    substituteInPlace configure --replace HAVE_LCG=yes HAVE_LCG=no
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace configure --replace LIB_SUFFIX=\"so\" LIB_SUFFIX=\"dylib\"
+  '';
 
   configureFlags = [
     "--with-HepMC=${hepmc2}"

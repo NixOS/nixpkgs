@@ -4,7 +4,7 @@
   fetchFromGitLab,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fcast-client";
   version = "0.1.0-unstable-2024-05-23";
 
@@ -16,8 +16,9 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-vsD4xgrC5KbnZT6hPX3fi3M/CH39LtoRfa6nYD0iFew=";
   };
 
-  sourceRoot = "${src.name}/clients/terminal";
-  cargoHash = "sha256-VVG7AbwbbgCANMcFYNAIF76MQr7Fkmq5HXPxL3MnEhI=";
+  sourceRoot = "${finalAttrs.src.name}/clients/terminal";
+
+  cargoHash = "sha256-yzsAe+fr1yX8RBJPtXSr/R7W0iJpeF3JW3E4ius+8nU=";
 
   meta = {
     description = "FCast Client Terminal, a terminal open-source media streaming client";
@@ -31,7 +32,7 @@ rustPlatform.buildRustPackage rec {
       receiver devices or integrate the FCast protocol into their own apps.
     '';
     mainProgram = "fcast";
-    maintainers = with lib.maintainers; [ drupol ];
-    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ yusufraji ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

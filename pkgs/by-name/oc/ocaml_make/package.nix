@@ -27,9 +27,13 @@ stdenv.mkDerivation {
   setupHook = ./setup-hook.sh;
 
   meta = {
-    homepage = "http://www.ocaml.info/home/ocaml_sources.html";
+    homepage = "https://mmottl.github.io/ocaml-makefile/";
     description = "Generic OCaml Makefile for GNU Make";
-    license = "LGPL";
+    license = with lib.licenses; [
+      lgpl21Only
+      ocamlLgplLinkingException
+      gpl3Only
+    ];
     platforms = lib.platforms.unix;
   };
 }

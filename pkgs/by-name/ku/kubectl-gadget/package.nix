@@ -1,24 +1,29 @@
-{ lib, buildGoModule, fetchFromGitHub, kubectl-gadget, testers }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubectl-gadget";
-  version = "0.34.0";
+  version = "0.56.2";
 
   src = fetchFromGitHub {
     owner = "inspektor-gadget";
     repo = "inspektor-gadget";
-    rev = "v${version}";
-    hash = "sha256-qOenoC1NycRVFMXETJ1WpAhjeUAnminhkhJ39skvt4k=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-lr5w3NFs1h1wB+DiYW715BF/QbFSW/YcDdfR3u0/Zgs=";
   };
 
-  vendorHash = "sha256-V2bgMFJGo1t1MiJyACdB9mjM2xtHwgH6bNEbEeZC2XM=";
+  vendorHash = "sha256-ZhXIMgyaQE4pDEhckX19H0tXRhoM5iwwD3jNymzrffU=";
 
   env.CGO_ENABLED = 0;
 
   ldflags = [
-    "-s" "-w"
-    "-X github.com/inspektor-gadget/inspektor-gadget/internal/version.version=v${version}"
-    "-X main.gadgetimage=ghcr.io/inspektor-gadget/inspektor-gadget:v${version}"
+    "-s"
+    "-w"
+    "-X github.com/inspektor-gadget/inspektor-gadget/internal/version.version=v${finalAttrs.version}"
+    "-X main.gadgetimage=ghcr.io/inspektor-gadget/inspektor-gadget:v${finalAttrs.version}"
     "-extldflags=-static"
   ];
 
@@ -28,17 +33,15 @@ buildGoModule rec {
 
   subPackages = [ "cmd/kubectl-gadget" ];
 
-  passthru.tests.version = testers.testVersion {
-    package = kubectl-gadget;
-    command = "kubectl-gadget version || true"; # mask non-zero return code if no kubeconfig present
-    version = "v${version}";
-  };
-
-  meta = with lib; {
+  meta = {
     description = "Collection of gadgets for troubleshooting Kubernetes applications using eBPF";
     mainProgram = "kubectl-gadget";
     homepage = "https://inspektor-gadget.io";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ kranurag7 devusb ];
+    changelog = "https://github.com/inspektor-gadget/inspektor-gadget/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      kranurag7
+      devusb
+    ];
   };
-}
+})

@@ -1,13 +1,13 @@
 {
   lib,
+  stdenv,
   aiodns,
   aiohttp,
+  aiosqlite,
   boto3,
   buildPythonPackage,
   fetchFromGitHub,
-  flake8,
   moto,
-  psutil,
   pytest-asyncio,
   pytestCheckHook,
   setuptools,
@@ -16,53 +16,60 @@
   websockets,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "slack-sdk";
-  version = "3.34.0";
+  version = "3.45.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "slackapi";
     repo = "python-slack-sdk";
-    tag = "v${version}";
-    hash = "sha256-aL8XOlvnAxT9cgPf8EvJT80FmlgL2Vhu7JxDRHkUoSM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-52v2IiTn2AdTcA0ZEEh6E0PP0/yfU6ULzHjBZ8hFk/g=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail ', "pytest-runner"' ""
-  '';
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    aiodns
-    aiohttp
-    boto3
-    sqlalchemy
-    websocket-client
-    websockets
-  ];
-
-  pythonImportsCheck = [ "slack_sdk" ];
+  optional-dependencies = {
+    optional = [
+      aiodns
+      aiohttp
+      boto3
+      sqlalchemy
+      websocket-client
+      websockets
+    ];
+  };
 
   nativeCheckInputs = [
-    flake8
+    aiosqlite
     moto
-    psutil
     pytest-asyncio
     pytestCheckHook
-  ];
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  pythonImportsCheck = [ "slack_sdk" ];
 
   disabledTests = [
     # Requires internet access (to slack API)
     "test_start_raises_an_error_if_rtm_ws_url_is_not_returned"
-    # Requires network access: [Errno 111] Connection refused
     "test_send_message_while_disconnection"
+    "TestWebClient_HttpRetry"
+    "test_issue_690_oauth_access"
+    "test_issue_690_oauth_v2_access"
+    "test_error_response"
+    "test_issue_1441_mixing_user_and_bot_installations"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-darwin") [
+    # ConnectionResetError in webhook test server
+    "test_send_dict"
+  ];
+
+  disabledTestPaths = [
+    # Event loop issues
+    "tests/slack_sdk/oauth/installation_store/test_file.py"
+    "tests/slack_sdk/oauth/state_store/test_file.py"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -70,8 +77,8 @@ buildPythonPackage rec {
   meta = {
     description = "Slack Developer Kit for Python";
     homepage = "https://slack.dev/python-slack-sdk/";
-    changelog = "https://github.com/slackapi/python-slack-sdk/releases/tag/v${version}";
+    changelog = "https://github.com/slackapi/python-slack-sdk/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

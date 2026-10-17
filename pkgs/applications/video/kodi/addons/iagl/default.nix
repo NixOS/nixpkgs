@@ -20,7 +20,7 @@ buildKodiAddon rec {
     owner = "zach-morris";
     repo = "plugin.program.iagl";
     rev = version;
-    sha256 = "sha256-b8nO3D/xTnj/5UDshGlIJdiHd75VhIlkrGUi0vkZqG4=";
+    hash = "sha256-b8nO3D/xTnj/5UDshGlIJdiHd75VhIlkrGUi0vkZqG4=";
   };
 
   propagatedBuildInputs = [
@@ -33,10 +33,10 @@ buildKodiAddon rec {
     infotagger
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/zach-morris/plugin.program.iagl";
     description = "Launch Games from the Internet using Kodi";
-    license = licenses.gpl3Plus;
-    maintainers = teams.kodi.members;
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.kodi ];
   };
 }

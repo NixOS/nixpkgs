@@ -8,13 +8,13 @@
 callPackage ./default.nix {
   # The patch version is the timestamp of the git commit,
   # obtain via `cat $(nix-build -A luajit_2_1.src)/.relver`
-  version = "2.1.1713773202";
+  version = "2.1.1785763465";
 
   src = fetchFromGitHub {
     owner = "LuaJIT";
     repo = "LuaJIT";
-    rev = "5790d253972c9d78a0c2aece527eda5b134bbbf7";
-    hash = "sha256-WG8AWDI182/9O7NrZlQ6ZH/esyYE2pWXMuSzWUuntSA=";
+    rev = "1edc3e52b67eaf6ce5f809be8e17d6862594b8bc";
+    hash = "sha256-mcOvVJ7AaoHrbEXxznpOkFoY7Kbd2aWMoOmyx5B4FIg=";
   };
 
   inherit self passthruFun;

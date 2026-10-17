@@ -12,13 +12,13 @@
 
 buildGoModule rec {
   pname = "orbiton";
-  version = "2.68.7";
+  version = "2.74.6";
 
   src = fetchFromGitHub {
     owner = "xyproto";
     repo = "orbiton";
     tag = "v${version}";
-    hash = "sha256-x64sHd6d8zpOp9XWhjXkRfBqzyZWRC80QLZ8dYCgGjo=";
+    hash = "sha256-kSysajnrS5XbRE92IeYuhlDlGCfL7UEsY9/907BRmSY=";
   };
 
   vendorHash = null;
@@ -33,20 +33,24 @@ buildGoModule rec {
 
   preBuild = "cd v2";
 
-  checkFlags = [
-    "-skip=TestPBcopy" # Requires impure pbcopy and pbpaste
-  ];
+  checkFlags =
+    let
+      skippedTests = [
+        "TestPBcopy" # Requires impure pbcopy and pbpaste
+        "TestPkill" # error: no process named "sleep" found
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
-  postInstall =
-    ''
-      cd ..
-      installManPage o.1
-      mv $out/bin/{orbiton,o}
-    ''
-    + lib.optionalString withGui ''
-      make install-gui PREFIX=$out
-      wrapProgram $out/bin/og --prefix PATH : $out/bin
-    '';
+  postInstall = ''
+    cd ..
+    installManPage o.1
+    mv $out/bin/{orbiton,o}
+  ''
+  + lib.optionalString withGui ''
+    make install-gui PREFIX=$out
+    wrapProgram $out/bin/og --prefix PATH : $out/bin
+  '';
 
   meta = {
     description = "Config-free text editor and IDE limited to VT100";

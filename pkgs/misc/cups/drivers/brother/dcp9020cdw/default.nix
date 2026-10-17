@@ -19,14 +19,14 @@ let
   version = "1.1.2";
   model = "dcp9020cdw";
 in
-rec {
+{
   driver = stdenv.mkDerivation {
     pname = "${model}-lpr";
     inherit version;
 
     src = fetchurl {
       url = "https://download.brother.com/welcome/dlf100441/dcp9020cdwlpr-${version}-1.i386.deb";
-      sha256 = "1z6nma489s0a0b0a8wyg38yxanz4k99dg29fyjs4jlprsvmwk56y";
+      hash = "sha256-3pTJ69b5Ukm09C6J11Ka5FvVPRrPc6TAAgrohIiq1vw=";
     };
 
     nativeBuildInputs = [
@@ -66,14 +66,14 @@ rec {
         }
     '';
 
-    meta = with lib; {
+    meta = {
       homepage = "http://www.brother.com/";
       description = "Brother ${model} printer driver";
-      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-      license = licenses.unfree;
-      platforms = platforms.linux;
+      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+      license = lib.licenses.unfree;
+      platforms = lib.platforms.linux;
       downloadPage = "https://support.brother.com/g/b/downloadlist.aspx?c=gb&lang=en&prod=${model}_eu&os=128";
-      maintainers = with maintainers; [ pshirshov ];
+      maintainers = with lib.maintainers; [ pshirshov ];
     };
   };
 
@@ -83,7 +83,7 @@ rec {
 
     src = fetchurl {
       url = "https://download.brother.com/welcome/dlf100443/dcp9020cdwcupswrapper-${version}-1.i386.deb";
-      sha256 = "04yqm1qv9p4hgp1p6mqq4siygl4056s6flv6kqln8mvmcr8zaq1s";
+      hash = "sha256-OmD1UWZ1V2QpnmZTZ7QpgNDnoyYYV3PDfZDctHGo2BM=";
     };
 
     nativeBuildInputs = [
@@ -114,14 +114,14 @@ rec {
       ln -s $out/opt/brother/Printers/${model}/cupswrapper/brother_${model}_printer_en.ppd $out/share/cups/model/
     '';
 
-    meta = with lib; {
+    meta = {
       homepage = "http://www.brother.com/";
       description = "Brother ${model} printer CUPS wrapper driver";
-      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-      license = licenses.unfree;
-      platforms = platforms.linux;
+      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+      license = lib.licenses.unfree;
+      platforms = lib.platforms.linux;
       downloadPage = "https://support.brother.com/g/b/downloadlist.aspx?c=gb&lang=en&prod=${model}_eu&os=128";
-      maintainers = with maintainers; [ pshirshov ];
+      maintainers = with lib.maintainers; [ pshirshov ];
     };
   };
 }

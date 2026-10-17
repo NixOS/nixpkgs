@@ -7,24 +7,37 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "numbat";
-  version = "1.15.0";
+  version = "1.24.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "numbat";
-    tag = "v${version}";
-    hash = "sha256-5XsrOAvBrmCG6k7YRwGZZtBP/o1jVVtBBTrwIT5CDX8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-b+2DMNfg3ZZcGNJh/C6YKfKdZJBQwuNcaOhF5YOE7E0=";
   };
 
-  cargoHash = "sha256-RMON7JThY6Ad1QHQFiNbTb2PUsfviR2t+55k1ZtlOd8=";
+  cargoHash = "sha256-Lz5S4GT3cUaeKj7js0E6XSwkg3LnGiVplKzTlN54td8=";
 
   env.NUMBAT_SYSTEM_MODULE_PATH = "${placeholder "out"}/share/numbat/modules";
 
   postInstall = ''
     mkdir -p $out/share/numbat
     cp -r $src/numbat/modules $out/share/numbat/
+
+    mkdir -p $out/share/applications
+    cp $src/assets/numbat.desktop $out/share/applications
+
+    for size in 16 22 24 32 48 64 128 256 512; do
+      dims="''${size}x''${size}"
+      dest=$out/share/icons/hicolor/''${dims}/apps
+      mkdir -p $dest
+      cp $src/assets/numbat-''${dims}.png ''${dest}/numbat.png
+    done
+
+    mkdir -p $out/share/icons/hicolor/scalable/apps
+    cp $src/assets/numbat.svg $out/share/icons/hicolor/scalable/apps
   '';
 
   preCheck = ''
@@ -36,7 +49,6 @@ rustPlatform.buildRustPackage rec {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  versionCheckProgramArg = [ "--version" ];
 
   passthru.updateScript = nix-update-script { };
 
@@ -47,7 +59,7 @@ rustPlatform.buildRustPackage rec {
       with first class support for physical dimensions and units
     '';
     homepage = "https://numbat.dev";
-    changelog = "https://github.com/sharkdp/numbat/releases/tag/v${version}";
+    changelog = "https://github.com/sharkdp/numbat/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       asl20
       mit
@@ -58,4 +70,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "numbat";
   };
-}
+})

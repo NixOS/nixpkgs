@@ -8,19 +8,19 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libimobiledevice-glue";
-  version = "1.3.1";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
-    repo = pname;
-    rev = version;
-    hash = "sha256-Fu0zQIryESRaTGzDlAaewX9Yo2nPEeUxmcb3yPJLuSI=";
+    repo = "libimobiledevice-glue";
+    rev = finalAttrs.version;
+    hash = "sha256-3MEATpgk8OlRvPJRFcfJxkVAtB1Nszokp9u68/SME6c=";
   };
 
   preAutoreconf = ''
-    export RELEASE_VERSION=${version}
+    export RELEASE_VERSION=${finalAttrs.version}
   '';
 
   nativeBuildInputs = [
@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/libimobiledevice/libimobiledevice-glue";
     description = "Library with common code used by the libraries and tools around the libimobiledevice project";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

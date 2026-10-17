@@ -3,7 +3,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+  fetchpatch,
 
   # build-system
   setuptools-scm,
@@ -11,7 +11,6 @@
   # dependencies
   exceptiongroup,
   idna,
-  sniffio,
   typing-extensions,
 
   # optionals
@@ -21,6 +20,7 @@
   hypothesis,
   psutil,
   pytest-mock,
+  pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
   trustme,
@@ -32,29 +32,29 @@
 
 buildPythonPackage rec {
   pname = "anyio";
-  version = "4.6.2";
+  version = "4.15.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "agronholm";
     repo = "anyio";
     tag = version;
-    hash = "sha256-8QLOAjQpiNtbd+YSHfqcBVdtMSGJFRevOcacZErKuso=";
+    hash = "sha256-cuTOVLyqLfp4LMuBd1BnFgey2gu3wehDk7VAb7yoqng=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/agronholm/anyio/commit/818e4ac441fa27e9fac893496fc5a4fbe0a58689.patch";
+      hash = "sha256-BKREdk6kUQHxX8ab1dijdvNwBHNcCHK25cqal7lDbqA=";
+    })
+  ];
 
   build-system = [ setuptools-scm ];
 
-  dependencies =
-    [
-      idna
-      sniffio
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [
-      exceptiongroup
-      typing-extensions
-    ];
+  dependencies = [
+    idna
+    typing-extensions
+  ];
 
   optional-dependencies = {
     trio = [ trio ];
@@ -65,32 +65,63 @@ buildPythonPackage rec {
     hypothesis
     psutil
     pytest-mock
+    pytest-timeout
     pytest-xdist
     pytestCheckHook
     trustme
     uvloop
-  ] ++ optional-dependencies.trio;
+  ]
+  ++ optional-dependencies.trio;
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::trio.TrioDeprecationWarning"
-    "-m"
-    "'not network'"
+  pytestFlags = [
+    "-Wignore::trio.TrioDeprecationWarning"
+    # DeprecationWarning for asyncio.iscoroutinefunction is propagated from uvloop used internally
+    # https://github.com/agronholm/anyio/commit/e7bb0bd496b1ae0d1a81b86de72312d52e8135ed
+    "-Wignore::DeprecationWarning"
   ];
 
-  disabledTests =
-    [
-      # TypeError: __subprocess_run() got an unexpected keyword argument 'umask'
-      "test_py39_arguments"
-      # AttributeError: 'module' object at __main__ has no attribute '__file__'
-      "test_nonexistent_main_module"
-      #  3 second timeout expired
-      "test_keyboardinterrupt_during_test"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # PermissionError: [Errno 1] Operation not permitted: '/dev/console'
-      "test_is_block_device"
-    ];
+  disabledTestMarks = [
+    "network"
+  ];
+
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Work around "OSError: AF_UNIX path too long"
+    export TMPDIR="/tmp"
+  '';
+
+  disabledTests = [
+    # TypeError: __subprocess_run() got an unexpected keyword argument 'umask'
+    "test_py39_arguments"
+    # AttributeError: 'module' object at __main__ has no attribute '__file__'
+    "test_nonexistent_main_module"
+    #  3 second timeout expired
+    "test_keyboardinterrupt_during_test"
+    "test_dynamic_async_fixture_access_does_not_hang"
+    # 5 second timeout expires on weak hardware
+    "test_keyboard_interrupt_does_not_resume_test"
+    # racy with high thread count, see https://github.com/NixOS/nixpkgs/issues/448125
+    "test_multiple_threads"
+
+    # These tests become flaky under heavy load
+    "test_asyncio_run_sync_called"
+    "test_handshake_fail"
+    "test_run_in_custom_limiter"
+    "test_cancel_from_shielded_scope"
+    "test_start_task_soon_cancel_later"
+
+    # fails to monkeypatch __file__.__main__
+    "test_entrypoint_main_module"
+
+    # pip install requires network access
+    "test_sourceless_install"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # PermissionError: [Errno 1] Operation not permitted: '/dev/console'
+    "test_is_block_device"
+
+    # AssertionError: assert 'wheel' == 'nixbld'
+    "test_group"
+  ];
 
   disabledTestPaths = [
     # lots of DNS lookups
@@ -105,11 +136,11 @@ buildPythonPackage rec {
     inherit starlette;
   };
 
-  meta = with lib; {
-    changelog = "https://github.com/agronholm/anyio/blob/${src.rev}/docs/versionhistory.rst";
+  meta = {
+    changelog = "https://github.com/agronholm/anyio/blob/${src.tag}/docs/versionhistory.rst";
     description = "High level compatibility layer for multiple asynchronous event loop implementations on Python";
     homepage = "https://github.com/agronholm/anyio";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

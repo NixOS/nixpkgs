@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -16,7 +21,7 @@ with lib;
       data = mkOption {
         type = types.lines;
         default = "";
-        description = "The DNS data to serve, in the format described by tinydns-data(8)";
+        description = "The DNS data to serve, in the format described by {manpage}`tinydns-data(8)`";
       };
 
       ip = mkOption {
@@ -36,13 +41,16 @@ with lib;
       isSystemUser = true;
       group = "tinydns";
     };
-    users.groups.tinydns = {};
+    users.groups.tinydns = { };
 
     systemd.services.tinydns = {
       description = "djbdns tinydns server";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      path = with pkgs; [ daemontools djbdns ];
+      path = with pkgs; [
+        daemontools
+        djbdns
+      ];
       preStart = ''
         rm -rf /var/lib/tinydns
         tinydns-conf tinydns tinydns /var/lib/tinydns ${config.services.tinydns.ip}
@@ -50,10 +58,11 @@ with lib;
         ln -sf ${pkgs.writeText "tinydns-data" config.services.tinydns.data} data
         tinydns-data
       '';
-      script = ''
-        cd /var/lib/tinydns
-        exec ./run
-      '';
+      serviceConfig = {
+        StateDirectory = "tinydns";
+        WorkingDirectory = "/var/lib/tinydns";
+        ExecStart = "/var/lib/tinydns/run";
+      };
     };
   };
 }

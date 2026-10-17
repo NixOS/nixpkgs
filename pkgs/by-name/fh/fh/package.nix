@@ -4,24 +4,22 @@
   fetchFromGitHub,
   installShellFiles,
   stdenv,
-  darwin,
   gcc,
-  libcxx,
   cacert,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fh";
-  version = "0.1.21";
+  version = "0.1.27";
 
   src = fetchFromGitHub {
     owner = "DeterminateSystems";
     repo = "fh";
-    rev = "v${version}";
-    hash = "sha256-EepDB25iZ8li+fGwhqOqg7XipFBishv4SvcDE2FE+is=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EUCV7/J9wJRroCGW5JqonFJIqcvJEBAwB7l3eWYxiSk=";
   };
 
-  cargoHash = "sha256-lXcz0sX96Sjtrh4vmBSDJh1A1bCoxRyKcOj1ap1q+ng=";
+  cargoHash = "sha256-HOQqUNd0I85lAD6YVWT9baEj31JpjIgq9Ujfn4ys/3o=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -31,30 +29,27 @@ rustPlatform.buildRustPackage rec {
   checkInputs = [ cacert ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
     gcc.cc.lib
   ];
 
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    NIX_CFLAGS_COMPILE = "-I${lib.getDev libcxx}/include/c++/v1";
+    NIX_CFLAGS_COMPILE = "-I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1";
   };
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd fh \
-      --bash <($out/bin/fh completion bash) \
-      --fish <($out/bin/fh completion fish) \
-      --zsh <($out/bin/fh completion zsh)
+    for shell in bash fish zsh; do
+      installShellCompletion --cmd fh --"$shell" <("$out/bin/fh" completion "$shell")
+    done
   '';
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Official FlakeHub CLI";
     homepage = "https://github.com/DeterminateSystems/fh";
-    changelog = "https://github.com/DeterminateSystems/fh/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/DeterminateSystems/fh/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ iamanaws ];
     mainProgram = "fh";
   };
-}
+})

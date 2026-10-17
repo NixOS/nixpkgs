@@ -5,9 +5,6 @@
   fetchPypi,
   cython_0,
   alsa-lib,
-  CoreAudio,
-  CoreMIDI,
-  CoreServices,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1wpcaxfpbmsjc78g8841kpixr0a3v6zn0ak058s3mm25kcysp4m0";
+    hash = "sha256-oJKrPZtF1Do0KmAqYL/ZQ4Hc452BIPTQYVLXdV1X7PI=";
   };
 
   postPatch = ''
@@ -25,13 +22,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [ cython_0 ];
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreAudio
-      CoreMIDI
-      CoreServices
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
 
   setupPyBuildFlags = [ "--from-cython" ];
 
@@ -40,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rtmidi_python" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for RtMidi";
     homepage = "https://github.com/superquadratic/rtmidi-python";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

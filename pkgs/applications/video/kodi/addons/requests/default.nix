@@ -16,7 +16,7 @@ buildKodiAddon rec {
 
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/${lib.toLower rel}/${namespace}/${namespace}-${version}.zip";
-    sha256 = "sha256-05BSD5aoN2CTnjqaSKYMb93j5nIfLvpJHyeQsK++sTw=";
+    hash = "sha256-05BSD5aoN2CTnjqaSKYMb93j5nIfLvpJHyeQsK++sTw=";
   };
 
   propagatedBuildInputs = [
@@ -33,10 +33,10 @@ buildKodiAddon rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://python-requests.org";
     description = "Python HTTP for Humans";
-    license = licenses.asl20;
-    maintainers = teams.kodi.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.kodi ];
   };
 }

@@ -1,37 +1,125 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
-  flutterPackages,
+  flutter338,
   corrosion,
   rustPlatform,
   cargo,
   rustc,
+  jdk,
   udev,
+  zlib,
   copyDesktopItems,
   makeDesktopItem,
+  runCommand,
+  writeText,
+  pkg-config,
+  dbus,
 }:
-flutterPackages.stable.buildFlutterApplication rec {
+
+let
+  zlib-root = runCommand "zlib-root" { } ''
+    mkdir $out
+    ln -s ${zlib.dev}/include $out/include
+    ln -s ${zlib}/lib $out/lib
+  '';
+
   pname = "intiface-central";
-  version = "2.6.4";
+
+  version = "3.0.4+40";
+
   src = fetchFromGitHub {
     owner = "intiface";
     repo = "intiface-central";
-    rev = "v${version}";
-    hash = "sha256-QBNEKhjBfKxArBykUq/fE4lftCYzGdAaWYD1F7rar5Y=";
+    tag = "v${version}";
+    hash = "sha256-RMllaThwCp2mRl0ecMtj3z6DC4uhdLqYNPI8lZChmhI=";
   };
+
+  rustDep = rustPlatform.buildRustPackage {
+    inherit pname version src;
+
+    sourceRoot = "${src.name}/rust";
+
+    preBuild = ''
+      chmod +w ../..
+      ln -s ${buttplug} ../../buttplug
+    '';
+
+    cargoHash = "sha256-2KmwfvSDIaLvGda/EofUxGPRevv+/UQOUdSPRF2LEJw=";
+
+    nativeBuildInputs = [ pkg-config ];
+
+    buildInputs = [
+      dbus
+      udev
+    ];
+
+    passthru.libraryPath = "lib/librust_lib_intiface_central.so";
+  };
+
+  buttplug_dart = fetchFromGitHub {
+    owner = "buttplugio";
+    repo = "buttplug_dart";
+    tag = "v1.0.0";
+    hash = "sha256-nm9TdEL9+80hCbaPnpAJTQ0w1t40vWYcxyilQTwvEBU=";
+  };
+
+  buttplug = fetchFromGitHub {
+    owner = "buttplugio";
+    repo = "buttplug";
+    tag = "intiface_engine_4.0.2";
+    hash = "sha256-4tzGZEsqfCnz/ZX6qNx/Hku6yDK0g6gyep6p6WZGoQk=";
+  };
+in
+flutter338.buildFlutterApplication {
+  inherit pname version src;
+
   patches = [
     ./corrosion.patch
   ];
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    name = "${pname}-${version}-cargo-deps";
-    inherit src;
-    sourceRoot = "${src.name}/intiface-engine-flutter-bridge";
-    hash = "sha256-S3Yy0IIMiRUUpFNlLvS1PGwpvxePMB1sO5M6mpm1OgY=";
+  gitHashes.buttplug = "sha256-nm9TdEL9+80hCbaPnpAJTQ0w1t40vWYcxyilQTwvEBU=";
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    sourceRoot = "${src.name}/rust";
+    hash = rustDep.cargoHash;
   };
-  cargoRoot = "intiface-engine-flutter-bridge";
+
+  cargoRoot = "rust";
+
+  customSourceBuilders = {
+    rust_lib_intiface_central =
+      { version, src, ... }:
+      stdenv.mkDerivation {
+        pname = "rust_lib_intiface_central";
+        inherit version src;
+        inherit (src) passthru;
+
+        postPatch =
+          let
+            fakeCargokitCmake = writeText "FakeCargokit.cmake" ''
+              function(apply_cargokit target manifest_dir lib_name any_symbol_name)
+                set("''${target}_cargokit_lib" ${rustDep}/${rustDep.passthru.libraryPath} PARENT_SCOPE)
+              endfunction()
+            '';
+          in
+          ''
+            cp ${fakeCargokitCmake} rust_builder/cargokit/cmake/cargokit.cmake
+          '';
+
+        installPhase = ''
+          runHook preInstall
+
+          cp -r . "$out"
+
+          runHook postInstall
+        '';
+      };
+  };
 
   preConfigure = ''
     export CMAKE_PREFIX_PATH="${corrosion}:$CMAKE_PREFIX_PATH"
@@ -46,18 +134,23 @@ flutterPackages.stable.buildFlutterApplication rec {
   ];
 
   buildInputs = [
+    jdk
     udev
   ];
 
-  # without this, only the splash screen will be shown and the logs will contain the
-  # line `Failed to load dynamic library 'lib/libintiface_engine_flutter_bridge.so'`
-  # Environmental variables don't quite eval outside of hooks so use pname and
-  # version directly.
-  extraWrapProgramArgs = "--chdir $out/app/${pname}";
+  env.ZLIB_ROOT = zlib-root;
+
+  preBuild = ''
+    chmod +w ..
+    ln -s ${buttplug_dart} ../buttplug_dart
+    ln -s ${buttplug} ../buttplug
+  '';
+
+  # without this, only the splash screen will be shown
+  extraWrapProgramArgs = "--set FRB_DART_LOAD_EXTERNAL_LIBRARY_NATIVE_LIB_DIR $out/app/intiface-central/lib";
 
   postInstall = ''
-    mkdir -p $out/share/pixmaps
-    cp $out/app/$pname/data/flutter_assets/assets/icons/intiface_central_icon.png $out/share/pixmaps/intiface-central.png
+    install -Dm644 $out/app/intiface-central/data/flutter_assets/assets/icons/intiface_central_icon.png $out/share/icons/hicolor/512x512/apps/intiface-central.png
   '';
 
   desktopItems = [
@@ -70,12 +163,14 @@ flutterPackages.stable.buildFlutterApplication rec {
     })
   ];
 
-  meta = with lib; {
+  passthru.updateScript = ./update.sh;
+
+  meta = {
     mainProgram = "intiface_central";
     description = "Intiface Central (Buttplug Frontend) Application for Desktop";
     homepage = "https://intiface.com/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ _999eagle ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ _999eagle ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinx_copybutton" ];
 
-  meta = with lib; {
+  meta = {
     description = "Small sphinx extension to add a \"copy\" button to code blocks";
     homepage = "https://github.com/executablebooks/sphinx-copybutton";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Luflosi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Luflosi ];
   };
 }

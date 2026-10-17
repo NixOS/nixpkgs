@@ -24,8 +24,6 @@ buildGoModule rec {
     "-w"
   ];
 
-  hardeningEnable = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "pie" ];
-
   passthru.updateScript = nix-update-script { };
 
   meta = {
@@ -37,7 +35,7 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/jaksi/sshesame";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "sshesame";
   };
 }

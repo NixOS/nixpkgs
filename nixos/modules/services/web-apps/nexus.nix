@@ -46,7 +46,7 @@ in
       };
 
       listenPort = mkOption {
-        type = types.int;
+        type = types.port;
         default = 8081;
         description = "Port to listen on.";
       };
@@ -142,9 +142,8 @@ in
         fi
       '';
 
-      script = "${cfg.package}/bin/nexus run";
-
       serviceConfig = {
+        ExecStart = "${cfg.package}/bin/nexus run";
         User = cfg.user;
         Group = cfg.group;
         PrivateTmp = true;

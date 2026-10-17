@@ -18,25 +18,25 @@
   pantheon,
   pkg-config,
   poppler,
-  poppler_utils,
+  poppler-utils,
   python3,
   sqlite,
   unar,
   unzip,
   vala,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "bookworm";
-  version = "unstable-2022-01-09";
+  version = "1.1.2-unstable-2026-05-28";
 
   src = fetchFromGitHub {
     owner = "babluboy";
-    repo = pname;
-    rev = "f3df858ce748a6bbc43f03a6e261ff76a6d7d303";
-    hash = "sha256-mLyJfblF5WnWBV3rX1ZRupccou4t5mBpo3W7+ECNMVI=";
+    repo = "bookworm";
+    rev = "fa06f1b80bb2372c1f20b0cfb21dc88eed410e29";
+    hash = "sha256-xml6jOE0tJBz1CwE+0ecSbiGAajh398bw+leFapctiE=";
   };
 
   nativeBuildInputs = [
@@ -60,12 +60,18 @@ stdenv.mkDerivation rec {
     poppler
     python3
     sqlite
-    webkitgtk_4_0
+    webkitgtk_4_1
   ];
 
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
+    substituteInPlace meson.build \
+      --replace-fail "webkit2gtk-4.0" "webkit2gtk-4.1"
+    substituteInPlace src/window.vala \
+      --replace-fail "Soup.URI.decode" "Uri.unescape_string"
+    substituteInPlace src/utils.vala \
+      --replace-fail "Soup.URI.decode" "Uri.unescape_string"
   '';
 
   # These programs are expected in PATH from the source code and scripts
@@ -75,7 +81,7 @@ stdenv.mkDerivation rec {
         lib.makeBinPath [
           unzip
           unar
-          poppler_utils
+          poppler-utils
           html2text
           coreutils
           curl
@@ -91,14 +97,14 @@ stdenv.mkDerivation rec {
     patchShebangs $out/share/bookworm/scripts/tasks/*.sh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple, focused eBook reader";
     mainProgram = "com.github.babluboy.bookworm";
     longDescription = ''
       Read the books you love without having to worry about different format complexities like epub, pdf, mobi, cbr, etc.
     '';
     homepage = "https://babluboy.github.io/bookworm/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
 }

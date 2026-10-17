@@ -13,20 +13,19 @@
 
 buildPythonPackage rec {
   pname = "ahocorasick-rs";
-  version = "0.22.0";
+  version = "1.0.3";
 
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "ahocorasick_rs";
-    hash = "sha256-lzRwODlJlymMSih3CqNIeR+HrUbgVhroM1JuHFfW848=";
+    hash = "sha256-V503Bwp8Idqc2ZiLn7RxKXJztgy0EmWG1tzZn6r8XKU=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-CIt/ChNcoqKln6PgeTGp9pfmIWlJj+c5SCPtBhsnT6U=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-RfgjO0qffiAZynQ/xChd81L8S0sqTGdWvpHPrz3bKlQ=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -43,14 +42,16 @@ buildPythonPackage rec {
     hypothesis
   ];
 
+  pytestFlags = [ "--benchmark-disable" ];
+
   pythonImportsCheck = [ "ahocorasick_rs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast Aho-Corasick algorithm for Python";
     homepage = "https://github.com/G-Research/ahocorasick_rs/";
     changelog = "https://github.com/G-Research/ahocorasick_rs/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ erictapen ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ erictapen ];
   };
 
 }

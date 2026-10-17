@@ -23,13 +23,13 @@ stdenv.mkDerivation {
     cp ./traceFileSim "$out/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Ease the analysis of existing memory management techniques, as well as the prototyping of new memory management techniques";
     mainProgram = "traceFileSim";
     homepage = "https://github.com/GarCoSim";
-    maintainers = [ maintainers.cmcdragonkai ];
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.cmcdragonkai ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 
 }

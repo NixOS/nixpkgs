@@ -9,16 +9,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-annoying";
-  version = "0.10.7";
+  version = "0.10.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "skorokithakis";
     repo = "django-annoying";
-    tag = "v${version}";
-    hash = "sha256-lEl9k2DOJUiCxiSp1xWIGsKbZ9iJlNWr3mxTXlKXbt4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zBOHVar4iKb+BioIwmDosNZKi/0YcjYfBusn0Lv8pMw=";
   };
 
   build-system = [ setuptools ];
@@ -28,18 +28,18 @@ buildPythonPackage rec {
     six
   ];
 
-  DJANGO_SETTINGS_MODULE = "tests.settings";
+  env.DJANGO_SETTINGS_MODULE = "tests.settings";
 
   nativeCheckInputs = [
     pytest-django
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Django application that tries to eliminate annoying things in the Django framework";
     homepage = "https://skorokithakis.github.io/django-annoying/";
-    changelog = "https://github.com/skorokithakis/django-annoying/releases/tag/v$version";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ambroisie ];
+    changelog = "https://github.com/skorokithakis/django-annoying/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ambroisie ];
   };
-}
+})

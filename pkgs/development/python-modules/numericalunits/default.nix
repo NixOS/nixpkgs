@@ -1,26 +1,44 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  isPy3k,
+  pythonAtLeast,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
-  version = "1.25";
-  format = "setuptools";
+buildPythonPackage (finalAttrs: {
   pname = "numericalunits";
+  version = "1.28";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "c32a482adae818a1a8d6c799bf9fb153326461d490c0de9deab9c694a6537eec";
+  __structuredAttrs = true;
+
+  src = fetchFromGitHub {
+    owner = "sbyrnes321";
+    repo = "numericalunits";
+    tag = "numericalunits-${finalAttrs.version}";
+    hash = "sha256-ep+lkVFdaHxaMeBJimjI55KFsE3OUgrcvXHl//glG70=";
   };
 
-  disabled = !isPy3k;
+  build-system = [
+    setuptools
+  ];
 
-  meta = with lib; {
-    homepage = "http://pypi.python.org/pypi/numericalunits";
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "numericalunits" ];
+
+  enabledTestPaths = [
+    "tests/tests.py"
+  ];
+
+  meta = {
+    homepage = "http://pypi.org/pypi/numericalunits/";
     description = "Package that lets you define quantities with unit";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
-}
+})

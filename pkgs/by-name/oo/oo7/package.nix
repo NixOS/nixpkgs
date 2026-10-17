@@ -1,60 +1,48 @@
 {
-  lib,
-  rustPlatform,
   fetchFromGitHub,
+  lib,
+  nix-update-script,
   oo7,
-  openssl,
   pkg-config,
+  rustPlatform,
   testers,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oo7";
-  version = "0.3.3";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
-    owner = "bilelmoussaoui";
+    owner = "linux-credentials";
     repo = "oo7";
-    rev = version;
-    hash = "sha256-KoceqJCxb61EF29Fw9UU2LCHxDR0ExR3lnt85Nqg6tg=";
+    tag = finalAttrs.version;
+    hash = "sha256-FPt37KEap7z1ant+6VHqqFBRwwE4YV3yQrc0V/kd+Mo=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  # TODO: this won't cover tests from the client crate
+  # Additionally cargo-credential will also not be built here
+  buildAndTestSubdir = "cli";
 
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
+  cargoHash = "sha256-79bSlSbDaOtAXsJe1suMhvhsC/LoSDMZ+G/dhTTQ4EA=";
 
   nativeBuildInputs = [ pkg-config ];
-
-  buildInputs = [ openssl ];
-
-  postInstall = ''
-    install -Dm644 portal/data/oo7-portal.portal $out/share/xdg-desktop-portal/portals/oo7.portal
-    install -Dm644 portal/data/oo7-portal.service $out/share/dbus-1/services/oo7-portal.service
-    substituteInPlace $out/share/dbus-1/services/oo7-portal.service \
-      --replace-fail "@bindir@" "$out/bin"
-  '';
 
   passthru = {
     tests.testVersion = testers.testVersion { package = oo7; };
 
-    # TODO: re-enable this when upstream adds a Cargo.lock
-    # updateScript = nix-update-script { };
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "James Bond went on a new mission as a Secret Service provider";
-    homepage = "https://github.com/bilelmoussaoui/oo7";
-    changelog = "https://github.com/bilelmoussaoui/oo7/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    homepage = "https://github.com/linux-credentials/oo7";
+    changelog = "https://github.com/linux-credentials/oo7/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       getchoo
       Scrumplex
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "oo7-cli";
   };
-}
+})

@@ -27,7 +27,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    description = "Simple decorator to set attributes of target function or class in a DRY way.";
+    description = "Simple decorator to set attributes of target function or class in a DRY way";
     homepage = "https://github.com/denis-ryzhkov/attr";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pyrox0 ];

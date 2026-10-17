@@ -25,12 +25,12 @@
 
 buildPythonPackage rec {
   pname = "httpbin";
-  version = "0.10.2";
-  format = "pyproject";
+  version = "0.10.4";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YyFIaYJhyGhOotK2JM3qhFtAKx/pFzbonfiGQIxjF6k=";
+    hash = "sha256-YCOlouj7jpGr3W000fH0VQkvl9VnwlYA4bSO4ReKpzg=";
   };
 
   nativeBuildInputs = [
@@ -71,10 +71,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "httpbin" ];
 
-  meta = with lib; {
+  meta = {
     description = "HTTP Request and Response Service";
     homepage = "https://github.com/psf/httpbin";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

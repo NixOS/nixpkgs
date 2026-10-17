@@ -11,12 +11,12 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "02lijkq6v379r8zkqg9q2srin3i80m4wvwik3hcbih0s14v0ng0i";
+    hash = "sha256-ETwLNgkawLgYHDPyzUkFKA4bsxY4PTw/yumMbfCUkQo=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Patched mailcap module that conforms to RFC 1524";
     homepage = "https://github.com/michael-lazar/mailcap_fix";
-    license = licenses.unlicense;
+    license = lib.licenses.unlicense;
   };
 }

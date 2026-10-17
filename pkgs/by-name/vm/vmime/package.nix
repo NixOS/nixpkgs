@@ -14,16 +14,16 @@
   sendmailPath ? "/run/wrappers/bin/sendmail",
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "vmime";
   # XXX: using unstable rev for now to comply with the removal of
   # deprecated symbols in the latest release of gsasl
-  version = "unstable-2022-03-26";
+  version = "0-unstable-2025-07-21";
   src = fetchFromGitHub {
     owner = "kisli";
     repo = "vmime";
-    rev = "fc69321d5304c73be685c890f3b30528aadcfeaf";
-    sha256 = "sha256-DUcGQcT7hp5Rs2Z5C8wo+3BYwWqED0KrF3h3vgLiiow=";
+    rev = "7046a4360bbeea21d1d8b5cfa4589bb4df7f980d";
+    sha256 = "sha256-cwilSnybH5E0wq384lPnqAjPkQTLtlWS8NhmoFE/13k=";
   };
 
   buildInputs = [

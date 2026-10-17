@@ -2,72 +2,90 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  ddt,
+
+  # build-system
+  pbr,
+  setuptools,
+
+  # dependencies
+  cryptography,
   debtcollector,
-  eventlet,
-  fixtures,
   iso8601,
   netaddr,
-  netifaces,
   oslo-i18n,
-  oslotest,
   packaging,
-  pbr,
+  psutil,
   pyparsing,
   pytz,
+
+  # tests
+  ddt,
+  eventlet,
+  fixtures,
+  iana-etc,
+  libredirect,
+  libxcrypt-legacy,
+  oslotest,
+  pyyaml,
   qemu-utils,
-  setuptools,
+  stdenv,
   stestr,
   testscenarios,
   tzdata,
-  pyyaml,
-  iana-etc,
-  libredirect,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "oslo-utils";
-  version = "7.3.0";
+  version = "10.2.0";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "oslo.utils";
-    inherit version;
-    hash = "sha256-WaXT5Oe7x42AHM68K4I+QptiTBK7bjtudvccKfK/Id8=";
+    pname = "oslo_utils";
+    inherit (finalAttrs) version;
+    hash = "sha256-uoOd6iwetBXj7hUcTMaI9S4oP1m8H3fMhnchkKizQlk=";
   };
 
-  postPatch = ''
-    # only a small portion of the listed packages are actually needed for running the tests
-    # so instead of removing them one by one remove everything
-    rm test-requirements.txt
-  '';
+  postPatch =
+    let
+      soext = stdenv.hostPlatform.extensions.sharedLibrary;
+    in
+    ''
+      substituteInPlace oslo_utils/secretutils.py \
+        --replace-fail "ctypes.util.find_library(\"crypt\")" '"${lib.getLib libxcrypt-legacy}/lib/libcrypt${soext}"'
 
-  nativeBuildInputs = [
+      # only a small portion of the listed packages are actually needed for running the tests
+      # so instead of removing them one by one remove everything
+      rm test-requirements.txt
+    '';
+
+  build-system = [
     pbr
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    cryptography
     debtcollector
     iso8601
     netaddr
-    netifaces
     oslo-i18n
     packaging
+    psutil
     pyparsing
     pytz
-    tzdata
   ];
 
   nativeCheckInputs = [
     ddt
     eventlet
     fixtures
+    libredirect.hook
     oslotest
+    pyyaml
     qemu-utils
     stestr
     testscenarios
-    pyyaml
+    tzdata
   ];
 
   # disabled tests:
@@ -76,20 +94,20 @@ buildPythonPackage rec {
   checkPhase = ''
     echo "nameserver 127.0.0.1" > resolv.conf
     export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf)
-    export LD_PRELOAD=${libredirect}/lib/libredirect.so
 
     stestr run -e <(echo "
       oslo_utils.tests.test_netutils.NetworkUtilsTest.test_is_valid_ip
       oslo_utils.tests.test_netutils.NetworkUtilsTest.test_is_valid_ipv4
+      oslo_utils.tests.test_eventletutils.EventletUtilsTest.test_event_set_clear_timeout
     ")
   '';
 
   pythonImportsCheck = [ "oslo_utils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Oslo Utility library";
     homepage = "https://github.com/openstack/oslo.utils";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
-}
+})

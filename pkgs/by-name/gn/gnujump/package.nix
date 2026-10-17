@@ -4,6 +4,8 @@
   makeDesktopItem,
   copyDesktopItems,
   fetchurl,
+  libGL,
+  libGLU,
   SDL,
   SDL_image,
   SDL_mixer,
@@ -19,12 +21,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ copyDesktopItems ];
   buildInputs = [
+    libGL
+    libGLU
     SDL
     SDL_image
     SDL_mixer
   ];
 
-  NIX_LDFLAGS = "-lm";
+  patches = [ ./fix-c23-prototypes.patch ];
+
+  env.NIX_LDFLAGS = "-lm";
 
   desktopItems = [
     (makeDesktopItem {
@@ -41,10 +47,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = ''
-    install -Dm644 ${./gnujump.xpm} $out/share/pixmaps/gnujump.xpm
+    install -Dm644 ${./gnujump.png} $out/share/icons/hicolor/32x32/apps/gnujump.png
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://jump.gnu.sinusoid.es/index.php?title=Main_Page";
     description = "Clone of the simple yet addictive game Xjump";
     mainProgram = "gnujump";
@@ -54,8 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
       Try to survive longer get upper than anyone. It might seem too simple but
       once you've tried you'll realize how addictive this is.
     '';
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.linux;
   };
 })

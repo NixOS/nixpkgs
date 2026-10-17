@@ -6,18 +6,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gum";
-  version = "0.15.0";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-DHIFU+dfZpeQo9kN9Krc1dhTf2HlnC7PEwTfN6RYmSU=";
+    repo = "gum";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-KTRoxYeAT3t4GLWrgmJ6AUD5jnmB3iWBRtqSRzd3z0U=";
   };
 
-  vendorHash = "sha256-BcHwFj4nGmKcbVnLEVd9rK54DAyVNc2Dlt085N+HtFA=";
+  vendorHash = "sha256-HkBg28oJw5wkK221T79D2shQ+ZdK+EJFemYU2xNhBA0=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -26,27 +26,31 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.Version=${version}"
+    "-X=main.Version=${finalAttrs.version}"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic) [
+    "-linkmode=external"
+    "-extldflags"
+    "-static"
   ];
 
-  postInstall =
-    ''
-      $out/bin/gum man > gum.1
-      installManPage gum.1
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd gum \
-        --bash <($out/bin/gum completion bash) \
-        --fish <($out/bin/gum completion fish) \
-        --zsh <($out/bin/gum completion zsh)
-    '';
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    $out/bin/gum man > gum.1
+    installManPage gum.1
+    installShellCompletion --cmd gum \
+      --bash <($out/bin/gum completion bash) \
+      --fish <($out/bin/gum completion fish) \
+      --zsh <($out/bin/gum completion zsh)
+  '';
 
-  meta = with lib; {
+  meta = {
     description = "Tasty Bubble Gum for your shell";
     homepage = "https://github.com/charmbracelet/gum";
-    changelog = "https://github.com/charmbracelet/gum/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ maaslalani ];
+    changelog = "https://github.com/charmbracelet/gum/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      savtrip
+    ];
     mainProgram = "gum";
   };
-}
+})

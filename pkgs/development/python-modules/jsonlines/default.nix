@@ -4,33 +4,35 @@
   fetchFromGitHub,
   buildPythonPackage,
   pytestCheckHook,
-  pythonOlder,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jsonlines";
-  version = "3.1.0";
-  format = "setuptools";
+  version = "4.0.0";
 
-  disabled = pythonOlder "3.6";
+  __structuredAttrs = true;
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wbolster";
-    repo = pname;
-    rev = version;
-    hash = "sha256-eMpUk5s49OyD+cNGdAeKA2LvpXdKta2QjZIFDnIBKC8=";
+    repo = "jsonlines";
+    tag = finalAttrs.version;
+    hash = "sha256-KNEJdAxEgd0NGPnk9J51C3yUN2e6Cvvevth0iKOMlhE=";
   };
 
-  propagatedBuildInputs = [ attrs ];
+  build-system = [ setuptools ];
+
+  dependencies = [ attrs ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "jsonlines" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to simplify working with jsonlines and ndjson data";
     homepage = "https://github.com/wbolster/jsonlines";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

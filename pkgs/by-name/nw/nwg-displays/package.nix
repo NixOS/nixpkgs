@@ -7,21 +7,22 @@
   gtk-layer-shell,
   gtk3,
   pango,
-  python310Packages,
+  python3Packages,
   wrapGAppsHook3,
   hyprlandSupport ? true,
   wlr-randr,
 }:
 
-python310Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nwg-displays";
-  version = "0.3.22";
+  version = "0.4.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-displays";
-    tag = "v${version}";
-    hash = "sha256-lTFei4NR8eu5/5V9MEc/k6qQYRRZkQ5m6B7Bx9xIS6c=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7imcxGOHTaVM86M09Atqm6c2fhqVGO9DZuDw1ClyEDc=";
   };
 
   nativeBuildInputs = [
@@ -33,19 +34,18 @@ python310Packages.buildPythonApplication rec {
     gtk3
   ];
 
-  propagatedBuildInputs =
-    [
-      atk
-      gdk-pixbuf
-      gtk-layer-shell
-      pango
-      python310Packages.gst-python
-      python310Packages.i3ipc
-      python310Packages.pygobject3
-    ]
-    ++ lib.optionals hyprlandSupport [
-      wlr-randr
-    ];
+  propagatedBuildInputs = [
+    atk
+    gdk-pixbuf
+    gtk-layer-shell
+    pango
+    python3Packages.gst-python
+    python3Packages.i3ipc
+    python3Packages.pygobject3
+  ]
+  ++ lib.optionals hyprlandSupport [
+    wlr-randr
+  ];
 
   dontWrapGApps = true;
 
@@ -63,10 +63,10 @@ python310Packages.buildPythonApplication rec {
 
   meta = {
     homepage = "https://github.com/nwg-piotr/nwg-displays";
-    description = "Output management utility for Sway and Hyprland";
+    description = "Output management utility for Sway, Hyprland and Niri";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ qf0xb ];
     mainProgram = "nwg-displays";
   };
-}
+})

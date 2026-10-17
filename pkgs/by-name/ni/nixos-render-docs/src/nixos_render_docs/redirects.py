@@ -28,8 +28,7 @@ Identifiers must not be identical to any historical location's anchor of the sam
     The following identifiers violate this rule:
     - {"\n    - ".join(self.conflicting_anchors)}
 
-    This can break links or redirects. If you added new content, choose a different identifier.
-""")
+    This can break links or redirects. If you added new content, choose a different identifier.""")
         if self.divergent_redirects:
             error_messages.append(f"""
 All historical content locations must correspond to exactly one identifier.
@@ -37,8 +36,7 @@ All historical content locations must correspond to exactly one identifier.
     - {"\n    - ".join(self.divergent_redirects)}
 
     It leads to inconsistent behavior depending on which redirect is applied.
-    Please update doc/redirects.json or nixos/doc/manual/redirects.json!
-""")
+    Please update doc/redirects.json or nixos/doc/manual/redirects.json!""")
         if self.identifiers_missing_current_outpath:
             error_messages.append(f"""
 The first element of an identifier's redirects list must denote its current location.
@@ -46,52 +44,40 @@ The first element of an identifier's redirects list must denote its current loca
     - {"\n    - ".join(self.identifiers_missing_current_outpath)}
 
     If you moved content, add its new location as the first element of the redirects mapping.
-    Please update doc/redirects.json or nixos/doc/manual/redirects.json!
-""")
+    Please update doc/redirects.json or nixos/doc/manual/redirects.json!""")
         if self.identifiers_without_redirects:
             error_messages.append(f"""
 Identifiers present in the source must have a mapping in the redirects file.
-    - {"\n    - ".join(self.identifiers_without_redirects)}
-
-    This can happen when an identifier was added or renamed.
-
-    Added new content?
-        redirects add-content ❬identifier❭ ❬path❭
-
-    Moved existing content to a different output path?
-        redirects move-content ❬identifier❭ ❬path❭
-
-    Renamed existing identifiers?
-        redirects rename-identifier ❬old-identifier❭ ❬new-identifier❭
-
-    Removed content? Redirect to alternatives or relevant release notes.
-        redirects remove-and-redirect ❬identifier❭ ❬target-identifier❭
-
-    Note that you need to run `nix-shell doc` or `nix-shell nixos/doc/manual` to be able to run this command.
-""")
+    - {"\n    - ".join(self.identifiers_without_redirects)}""")
         if self.orphan_identifiers:
             error_messages.append(f"""
 Keys of the redirects mapping must correspond to some identifier in the source.
-    - {"\n    - ".join(self.orphan_identifiers)}
-
-    This can happen when an identifier was removed or renamed.
+    - {"\n    - ".join(self.orphan_identifiers)}""")
+        if self.identifiers_without_redirects or self.orphan_identifiers or self.identifiers_missing_current_outpath:
+            error_messages.append(f"""
+This can happen when an identifier was added, renamed, or removed.
 
     Added new content?
-        redirects add-content ❬identifier❭ ❬path❭
+        $ redirects add-content <identifier> <path>
+    often:
+        $ redirects add-content <identifier> index.html
 
     Moved existing content to a different output path?
-        redirects move-content ❬identifier❭ ❬path❭
+        $ redirects move-content <identifier> <path>
 
     Renamed existing identifiers?
-        redirects rename-identifier ❬old-identifier❭ ❬new-identifier❭
+        $ redirects rename-identifier <old-identifier> <new-identifier>
 
-    Removed content? (good for redirecting deprecations to new content or release notes)
-        redirects remove-and-redirect ❬identifier❭ ❬target-identifier❭
+    Removed content? Redirect to alternatives or relevant release notes.
+        $ redirects remove-and-redirect <identifier> <target-identifier>
 
-    Note that you need to run `nix-shell doc` or `nix-shell nixos/doc/manual` to be able to run this command.
+    NOTE: Run the right nix-shell to make this command available.
+        Nixpkgs:
+        $ nix-shell doc
+        NixOS:
+        $ nix-shell nixos/doc/manual
 """)
-
-        error_messages.append("NOTE: If your Manual build passes locally and you see this message in CI, you probably need a rebase.")
+        error_messages.append("NOTE: If your build passes locally and you see this message in CI, you probably need a rebase.")
         return "\n".join(error_messages)
 
 
@@ -114,7 +100,7 @@ class Redirects:
           - The first element of an identifier's redirects list must denote its current location.
         """
         xref_targets = {}
-        ignored_identifier_patterns = ("opt-", "auto-generated-", "function-library-")
+        ignored_identifier_patterns = ("opt-", "auto-generated-", "function-library-", "service-opt-", "systemd-service-opt")
         for id, target in initial_xref_targets.items():
             # filter out automatically generated identifiers from module options and library documentation
             if id.startswith(ignored_identifier_patterns):

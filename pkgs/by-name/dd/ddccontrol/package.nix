@@ -2,37 +2,51 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
+
+  # nativeBuildInputs
   autoreconfHook,
   intltool,
+  pkg-config,
+  rustPlatform,
+  cargo,
+  rustc,
+
+  # buildInputs
   libxml2,
   pciutils,
-  pkg-config,
-  gtk2,
+  gtk3,
   ddccontrol-db,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ddccontrol";
-  version = "1.0.3";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "ddccontrol";
     repo = "ddccontrol";
-    rev = version;
-    sha256 = "sha256-qyD6i44yH3EufIW+LA/LBMW20Tejb49zvsDfv6YFD6c=";
+    tag = finalAttrs.version;
+    sha256 = "sha256-1rCO99n89N2dbUU5vfTFyCrLC18iBF3ShcCjVjTz2to=";
+  };
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-eLRK1fNl/vCs7pR78BglN87/axh8G/gYvZv0dQzzy8c=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
     intltool
     pkg-config
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
   ];
 
   buildInputs = [
     libxml2
     pciutils
-    gtk2
+    gtk3
     ddccontrol-db
   ];
 
@@ -41,24 +55,29 @@ stdenv.mkDerivation rec {
   ];
 
   prePatch = ''
-    substituteInPlace configure.ac              \
-      --replace                                 \
-      "\$""{datadir}/ddccontrol-db"             \
+    substituteInPlace configure.ac \
+      --replace-fail \
+      "\$""{datadir}/ddccontrol-db" \
       "${ddccontrol-db}/share/ddccontrol-db"
-
-    substituteInPlace src/ddcpci/Makefile.am    \
-       --replace "chmod 4711" "chmod 0711"
+    substituteInPlace src/lib/Makefile.am \
+      --replace-fail \
+      'DDCONTROL_DATADIR="$(datadir)/ddccontrol-db"' \
+      'DDCONTROL_DATADIR="${ddccontrol-db}/share/ddccontrol-db"'
   '';
 
   preConfigure = ''
     intltoolize --force
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Program used to control monitor parameters by software";
     homepage = "https://github.com/ddccontrol/ddccontrol";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with lib.maintainers; [ pakhfn ];
+    mainProgram = "ddccontrol";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      pakhfn
+      doronbehar
+    ];
   };
-}
+})

@@ -6,12 +6,12 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libndp";
   version = "1.9";
 
   src = fetchurl {
-    url = "http://libndp.org/files/libndp-${version}.tar.gz";
+    url = "http://libndp.org/files/libndp-${finalAttrs.version}.tar.gz";
     hash = "sha256-qKshTgHcOpthUnaQU5VjfzkSmMhNd2UfDL8LEILdLdQ=";
   };
 
@@ -34,13 +34,13 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://libndp.org/";
     description = "Library for Neighbor Discovery Protocol";
     mainProgram = "ndptool";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
-    license = licenses.lgpl21;
+    license = lib.licenses.lgpl21;
   };
 
-}
+})

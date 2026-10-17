@@ -15,23 +15,20 @@
 
   # checks
   pytestCheckHook,
-  pythonOlder,
   tornado,
   libsodium,
   zeromq,
   pytest-asyncio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyzmq";
-  version = "26.2.0";
+  version = "27.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-BwZywlhYHI5PZAtRWSl1gKmXSwJgQ71KsEcL6e0yTx8=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-VNQlnRv64k7Ntcp596zC6sbChqAtagrmF3l8tF8HJtM=";
   };
 
   build-system = [
@@ -40,7 +37,8 @@ buildPythonPackage rec {
     packaging
     pathspec
     scikit-build-core
-  ] ++ (if isPyPy then [ cffi ] else [ cython ]);
+  ]
+  ++ (if isPyPy then [ cffi ] else [ cython ]);
 
   dontUseCmakeConfigure = true;
 
@@ -63,9 +61,8 @@ buildPythonPackage rec {
     rm -r zmq
   '';
 
-  pytestFlagsArray = [
-    "-m"
-    "'not flaky'"
+  disabledTestMarks = [
+    "flaky"
   ];
 
   disabledTests = [
@@ -85,13 +82,14 @@ buildPythonPackage rec {
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for ØMQ";
     homepage = "https://pyzmq.readthedocs.io/";
-    license = with licenses; [
+    changelog = "https://pyzmq.readthedocs.io/en/latest/changelog.html";
+    license = with lib.licenses; [
       bsd3 # or
       lgpl3Only
     ];
     maintainers = [ ];
   };
-}
+})

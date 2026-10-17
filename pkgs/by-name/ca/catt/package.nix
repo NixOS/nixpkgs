@@ -1,71 +1,62 @@
 {
   lib,
-  fetchPypi,
-  fetchpatch,
-  python3,
+  fetchFromGitHub,
+  nix-update-script,
+  python3Packages,
+  versionCheckHook,
 }:
-
-let
-  python = python3.override {
-    self = python;
-    packageOverrides = self: super: {
-      pychromecast = super.pychromecast.overridePythonAttrs (_: rec {
-        version = "13.1.0";
-
-        src = fetchPypi {
-          pname = "PyChromecast";
-          inherit version;
-          hash = "sha256-COYai1S9IRnTyasewBNtPYVjqpfgo7V4QViLm+YMJnY=";
-        };
-
-        postPatch = "";
-      });
-    };
-  };
-in
-
-python.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "catt";
-  version = "0.12.11";
-  format = "pyproject";
+  version = "0.13.3";
+  pyproject = true;
+  __structuredAttrs = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-0bqYYfWwF7yYoAbjZPhi/f4CLcL89imWGYaMi5Bwhtc=";
+  src = fetchFromGitHub {
+    owner = "skorokithakis";
+    repo = "catt";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UiO46HNzeO2wg41Zn89bUdl34UeZZmWjekGxxsLgGwQ=";
   };
 
-  patches = [
-    (fetchpatch {
-      # set explicit build-system
-      url = "https://github.com/skorokithakis/catt/commit/08e7870a239e85badd30982556adc2aa8a8e4fc1.patch";
-      hash = "sha256-QH5uN3zQNVPP6Th2LHdDBF53WxwMhoyhhQUAZOeHh4k=";
-    })
+  build-system = [
+    python3Packages.poetry-core
   ];
 
-  nativeBuildInputs = with python.pkgs; [
-    poetry-core
+  dependencies = [
+    python3Packages.click
+    python3Packages.ifaddr
+    python3Packages.pychromecast
+    python3Packages.requests
+    python3Packages.yt-dlp
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
-    click
-    ifaddr
-    pychromecast
-    protobuf
-    requests
-    yt-dlp
+  nativeCheckInputs = [
+    python3Packages.pytestCheckHook
   ];
 
-  doCheck = false; # attempts to access various URLs
+  disabledTests = [
+    # Require network access.
+    "test_stream_info_youtube_video"
+    "test_stream_info_youtube_playlist"
+    "test_stream_info_other_video"
+    "test_stream_info_direct_link"
+  ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   pythonImportsCheck = [
     "catt"
   ];
 
-  meta = with lib; {
-    description = "Tool to send media from online sources to Chromecast devices";
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "Allows you to send videos from many, many online sources to your Chromecast";
     homepage = "https://github.com/skorokithakis/catt";
-    license = licenses.bsd2;
-    maintainers = [ ];
+    changelog = "https://github.com/skorokithakis/catt/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.bsd2;
+    maintainers = [ lib.maintainers.aaravrav ];
     mainProgram = "catt";
   };
-}
+})

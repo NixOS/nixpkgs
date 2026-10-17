@@ -16,19 +16,17 @@
   wrapGAppsHook4,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "binary";
-  version = "5.2";
+  version = "5.4";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "fizzyizzy05";
     repo = "binary";
-    tag = version;
-    hash = "sha256-0pVQMPwy/XXJl2fHQ/gIi+e/cJY87CA9G+GPkdYFQBc=";
+    tag = finalAttrs.version;
+    hash = "sha256-Yz+DMTf89QY7W6WrInNvHz8sx3uCOch/zU/FssY90eA=";
   };
-
-  strictDeps = true;
 
   nativeBuildInputs = [
     appstream
@@ -48,7 +46,9 @@ python3Packages.buildPythonApplication rec {
   dependencies = with python3Packages; [ pygobject3 ];
 
   dontWrapGApps = true;
-  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   # NOTE: `postCheck` is intentionally not used here, as the entire checkPhase
   # is skipped by `buildPythonApplication`
@@ -64,10 +64,10 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Small and simple app to convert numbers to a different base";
     homepage = "https://github.com/fizzyizzy05/binary";
-    changelog = "https://github.com/fizzyizzy05/binary/releases/tag/${version}";
+    changelog = "https://github.com/fizzyizzy05/binary/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = lib.teams.gnome-circle.members;
+    teams = [ lib.teams.gnome-circle ];
     mainProgram = "binary";
     platforms = lib.platforms.linux;
   };
-}
+})

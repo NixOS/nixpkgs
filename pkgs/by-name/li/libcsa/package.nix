@@ -5,7 +5,7 @@
   unstableGitUpdater,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  name = "csa";
+  pname = "csa";
   version = "1.26-unstable-2024-03-22";
 
   src = fetchFromGitHub {
@@ -19,12 +19,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "C code for cubic spline approximation of 2D scattered data";
     homepage = "https://github.com/sakov/csa-c/";
-    platforms = platforms.unix;
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ mkez ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ mkez ];
     mainProgram = "csabathy";
   };
 })

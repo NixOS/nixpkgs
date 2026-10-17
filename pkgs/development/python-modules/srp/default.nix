@@ -2,37 +2,39 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   six,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "srp";
   version = "1.0.22";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-8zDQ7HOH4qyFd0h7FkljFV1KAxvKbiAk8bCTDrkrql0=";
   };
 
-  propagatedBuildInputs = [ six ];
+  build-system = [ setuptools ];
+
+  dependencies = [ six ];
 
   # Tests ends up with libssl.so cannot load shared
   doCheck = false;
 
   pythonImportsCheck = [ "srp" ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the Secure Remote Password protocol (SRP)";
     longDescription = ''
       This package provides an implementation of the Secure Remote Password protocol (SRP).
       SRP is a cryptographically strong authentication protocol for password-based, mutual authentication over an insecure network connection.
     '';
     homepage = "https://github.com/cocagne/pysrp";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jefflabonte ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jefflabonte ];
   };
-}
+})

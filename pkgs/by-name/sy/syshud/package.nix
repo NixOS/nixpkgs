@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  glibmm,
+  glibmm_2_4,
   gtk4-layer-shell,
   gtkmm4,
   libevdev,
@@ -14,18 +14,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "syshud";
-  version = "0-unstable-2024-11-25";
+  version = "0-unstable-2026-09-07";
 
   src = fetchFromGitHub {
     owner = "System64fumo";
     repo = "syshud";
-    rev = "922d3fbc811644cb14d0f11cff91f8e8f97eca56";
-    hash = "sha256-ubsmkC/mjDe/6AH/2Y6e9CmhBX3CxtOW2xOhvPJiAqg=";
+    rev = "ef3fb52ea37f57170a5e91b266ed9a449de9d2e9";
+    hash = "sha256-tTY4DP9F3Mi5fylnaAPsipnOhMj/9MBbg4/+qZ+AGFo=";
   };
 
   postPatch = ''
-    substituteInPlace Makefile \
-      --replace-fail pkg-config ''${PKG_CONFIG}
     substituteInPlace src/main.cpp \
       --replace-fail /usr/share/sys64/hud/config.conf $out/share/sys64/hud/config.conf
     substituteInPlace src/window.cpp \
@@ -38,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    glibmm
+    glibmm_2_4
     gtk4-layer-shell
     gtkmm4
     libevdev
@@ -65,6 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/syshud --prefix LD_LIBRARY_PATH : $out/lib
   '';
 
+  strictDeps = true;
+
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version"
@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "simple heads up display written in gtkmm 4";
+    description = "Simple heads up display written in gtkmm 4";
     mainProgram = "syshud";
     homepage = "https://github.com/System64fumo/syshud";
     license = lib.licenses.wtfpl;

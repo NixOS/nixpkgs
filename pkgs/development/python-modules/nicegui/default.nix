@@ -4,7 +4,6 @@
   aiohttp,
   buildPythonPackage,
   certifi,
-  pkgs,
   docutils,
   fastapi,
   fetchFromGitHub,
@@ -13,52 +12,62 @@
   itsdangerous,
   jinja2,
   libsass,
+  lxml-html-clean,
+  lxml,
   markdown2,
   matplotlib,
   orjson,
   pandas,
+  pkgs,
   plotly,
   poetry-core,
+  poetry-dynamic-versioning,
+  polars,
   pyecharts,
   pygments,
   pytest-asyncio,
   pytest-selenium,
   pytestCheckHook,
+  python-dotenv,
   python-multipart,
   python-socketio,
-  pythonOlder,
   pywebview,
+  redis,
   requests,
   setuptools,
+  tinycss2,
   typing-extensions,
   urllib3,
   uvicorn,
   vbuild,
   watchfiles,
   webdriver-manager,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nicegui";
-  version = "2.5.0";
+  version = "3.17.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "zauberzeug";
     repo = "nicegui";
-    tag = "v${version}";
-    hash = "sha256-oT191QVpvE5xszgBFt3o4A2hU50zmzPUywmAQuKZ5OE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EUXqx8f1buYGjFBRP4WsScOdTWXwBU9WdtdOV5T3990=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail '"setuptools>=30.3.0,<50",' ""
-  '';
+  pythonRelaxDeps = [
+    "idna"
+    "lxml"
+    "orjson"
+    "python-multipart"
+    "requests"
+  ];
 
   build-system = [
     poetry-core
+    poetry-dynamic-versioning
     setuptools
   ];
 
@@ -72,12 +81,16 @@ buildPythonPackage rec {
     ifaddr
     itsdangerous
     jinja2
+    lxml
+    lxml-html-clean
     markdown2
     orjson
     pygments
+    python-dotenv
     python-multipart
     python-socketio
     requests
+    tinycss2
     typing-extensions
     urllib3
     uvicorn
@@ -92,21 +105,21 @@ buildPythonPackage rec {
     native = [ pywebview ];
     plotly = [ plotly ];
     sass = [ libsass ];
+    redis = [ redis ];
   };
 
   nativeCheckInputs = [
     pandas
     pkgs.chromedriver
+    polars
     pyecharts
     pytest-asyncio
     pytest-selenium
     pytestCheckHook
     webdriver-manager
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "nicegui" ];
 
@@ -116,8 +129,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to create web-based user interfaces";
     homepage = "https://github.com/zauberzeug/nicegui/";
-    changelog = "https://github.com/zauberzeug/nicegui/releases/tag/v${version}";
+    changelog = "https://github.com/zauberzeug/nicegui/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

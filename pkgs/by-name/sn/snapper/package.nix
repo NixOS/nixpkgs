@@ -25,15 +25,15 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "snapper";
-  version = "0.12.1";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "snapper";
-    rev = "v${version}";
-    sha256 = "sha256-yVjsbWa7t+md0xdy5eFST+pkPbXhgfyJcTt+aNkQpsQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-oPIIEReHWkWSj4K/mi1VD3Ukaltquzqh8UVBPc4q+vw=";
   };
 
   strictDeps = true;
@@ -62,18 +62,14 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  passthru.tests.snapper = nixosTests.snapper;
-
+  # Hard-coded root paths, hard-coded root paths everywhere...
   postPatch = ''
-    # Hard-coded root paths, hard-coded root paths everywhere...
-    for file in {client,client/installation-helper,client/systemd-helper,data,pam,scripts,zypp-plugin}/Makefile.am; do
+    for file in {client/installation-helper,client/systemd-helper,data,scripts,zypp-plugin,scripts/completion}/Makefile.am; do
       substituteInPlace $file \
-        --replace '$(DESTDIR)/usr' "$out" \
-        --replace "DESTDIR" "out" \
-        --replace "/usr" "$out"
+        --replace-warn '$(DESTDIR)/usr' "$out" \
+        --replace-warn "DESTDIR" "out" \
+        --replace-warn "/usr" "$out"
     done
-    substituteInPlace pam/Makefile.am \
-      --replace '/`basename $(libdir)`' "$out/lib"
   '';
 
   configureFlags = [
@@ -92,16 +88,18 @@ stdenv.mkDerivation rec {
       $out/lib/systemd/system/* \
       $out/share/dbus-1/system-services/* \
     ; do
-      substituteInPlace $file --replace "/usr" "$out"
+      substituteInPlace $file --replace-warn "/usr" "$out"
     done
   '';
+
+  passthru.tests.snapper = nixosTests.snapper;
 
   meta = {
     description = "Tool for Linux filesystem snapshot management";
     homepage = "http://snapper.io";
     license = lib.licenses.gpl2Only;
     mainProgram = "snapper";
-    maintainers = with lib.maintainers; [ markuskowa ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

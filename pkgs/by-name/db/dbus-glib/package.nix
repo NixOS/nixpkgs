@@ -11,13 +11,13 @@
   glib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dbus-glib";
-  version = "0.112";
+  version = "0.116";
 
   src = fetchurl {
-    url = "${meta.homepage}/releases/dbus-glib/dbus-glib-${version}.tar.gz";
-    sha256 = "sha256-fVUNzN/NKG4ziVUBgp7Zce62XGFOc6rbSgiu73GbFDo=";
+    url = "https://dbus.freedesktop.org/releases/dbus-glib/dbus-glib-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-4/PUSH4og4AHcO1Yme0RG9xLpwVq80olXExGrYokhvM=";
   };
 
   outputs = [
@@ -43,17 +43,19 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  configureFlags =
-    [ "--exec-prefix=${placeholder "dev"}" ]
-    ++ lib.optional (
-      stdenv.buildPlatform != stdenv.hostPlatform
-    ) "--with-dbus-binding-tool=${buildPackages.dbus-glib.dev}/bin/dbus-binding-tool";
+  configureFlags = [
+    "--exec-prefix=${placeholder "dev"}"
+  ]
+  ++ lib.optional (
+    stdenv.buildPlatform != stdenv.hostPlatform
+  ) "--with-dbus-binding-tool=${buildPackages.dbus-glib.dev}/bin/dbus-binding-tool";
 
   doCheck = false;
 
   passthru = { inherit dbus glib; };
 
   meta = {
+    changelog = "https://gitlab.freedesktop.org/dbus/dbus-glib/-/blob/dbus-glib-${finalAttrs.version}/NEWS";
     homepage = "https://dbus.freedesktop.org";
     license = with lib.licenses; [
       afl21
@@ -64,4 +66,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

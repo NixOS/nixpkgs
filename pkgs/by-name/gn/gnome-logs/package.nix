@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  appstream,
   meson,
   ninja,
   pkg-config,
@@ -21,16 +22,17 @@
   gsettings-desktop-schemas,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-logs";
-  version = "45.0";
+  version = "50.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-logs/${lib.versions.major version}/gnome-logs-${version}.tar.xz";
-    hash = "sha256-sooG6lyYvRfyhztQfwhbDKDemBATZhH08u6wmGFOzlI=";
+    url = "mirror://gnome/sources/gnome-logs/${lib.versions.major finalAttrs.version}/gnome-logs-${finalAttrs.version}.tar.xz";
+    hash = "sha256-tGbGZgFVUhuoE1M5xt8ICg4HGkb5kRuZFysh+eLf2Ag=";
   };
 
   nativeBuildInputs = [
+    appstream
     meson
     ninja
     pkg-config
@@ -62,12 +64,12 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript { packageName = "gnome-logs"; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://apps.gnome.org/Logs/";
     description = "Log viewer for the systemd journal";
     mainProgram = "gnome-logs";
-    maintainers = teams.gnome.members;
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
-}
+})

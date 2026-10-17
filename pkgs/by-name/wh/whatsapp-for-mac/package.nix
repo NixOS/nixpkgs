@@ -1,21 +1,22 @@
-{ lib
-, fetchzip
-, stdenvNoCC
-, writeShellApplication
-, curl
-, xmlstarlet
-, common-updater-scripts
+{
+  lib,
+  fetchzip,
+  stdenvNoCC,
+  writeShellApplication,
+  curl,
+  xmlstarlet,
+  common-updater-scripts,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "whatsapp-for-mac";
-  version = "2.24.23.82";
+  version = "2.26.40.20";
 
   src = fetchzip {
     extension = "zip";
     name = "WhatsApp.app";
-    url = "https://web.whatsapp.com/desktop/mac_native/release/?version=${finalAttrs.version}&extension=zip&configuration=Release&branch=relbranch";
-    hash = "sha256-FnXW3l4JUdJkDQ7eASlDeUzRdZ2N5l3WvEKcuBuE0nY=";
+    url = "https://web.whatsapp.com/desktop/mac_native/release/?version=${finalAttrs.version}&extension=zip&configuration=Release&branch=master";
+    hash = "sha256-WN2mOYL/rQgStXIgV4YqC8mGAKdQXPY0a4qeawnnJjA=";
   };
 
   dontConfigure = true;
@@ -40,7 +41,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       common-updater-scripts
     ];
     text = ''
-      url=$(curl --silent "https://web.whatsapp.com/desktop/mac_native/updates/?branch=relbranch&configuration=Release")
+      url=$(curl --silent "https://web.whatsapp.com/desktop/mac_native/updates/?branch=master&configuration=Release")
       version=$(echo "$url" | xmlstarlet sel -t -v "substring-before(substring-after(//enclosure/@url, 'version='), '&')")
       update-source-version whatsapp-for-mac "$version" --file=./pkgs/by-name/wh/whatsapp-for-mac/package.nix
     '';

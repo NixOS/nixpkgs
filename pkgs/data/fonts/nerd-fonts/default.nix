@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchurl,
+  installFonts,
 }:
 
 let
@@ -49,6 +50,9 @@ let
 
       sourceRoot = ".";
 
+      nativeBuildInputs = [ installFonts ];
+      dontInstallFonts = true;
+
       installPhase =
         let
           dirName = lib.strings.concatStrings (lib.strings.splitString " " patchedName);
@@ -56,11 +60,8 @@ let
         ''
           runHook preInstall
 
-          dst_opentype=$out/share/fonts/opentype/NerdFonts/${dirName}
-          dst_truetype=$out/share/fonts/truetype/NerdFonts/${dirName}
-
-          find -name \*.otf -exec mkdir -p $dst_opentype \; -exec cp -p {} $dst_opentype \;
-          find -name \*.ttf -exec mkdir -p $dst_truetype \; -exec cp -p {} $dst_truetype \;
+          installFont otf $out/share/fonts/opentype/NerdFonts/${dirName}
+          installFont ttf $out/share/fonts/truetype/NerdFonts/${dirName}
 
           runHook postInstall
         '';
@@ -77,7 +78,7 @@ let
         description = "Nerd Fonts: " + description;
         license = lib.unique (
           (with lib.licenses; [
-            # > Nerd Fonts source fonts, patched fonts, and folders with explict OFL SIL files
+            # > Nerd Fonts source fonts, patched fonts, and folders with explicit OFL SIL files
             ofl
             # > Nerd Fonts original source code files (such as `.sh`, `.py`, `font-patcher` and others)
             mit

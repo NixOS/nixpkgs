@@ -1,22 +1,21 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromGitHub,
   pkg-config,
   gtk3,
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "zenmonitor";
-  version = "unstable-2024-05-21";
+  version = "1.5.0-unstable-2025-06-12";
 
-  src = fetchFromGitea {
-    domain = "git.exozy.me";
-    owner = "a";
+  src = fetchFromGitHub {
+    owner = "detiam";
     repo = "zenmonitor3";
-    rev = "a09f0b25d33967fd32f3831304be049b008cdabf";
-    sha256 = "sha256-5N1Hhv2s0cv4Rujw4wFGHyIy7NyKAFThVvAo+xXqSyk=";
+    rev = "1e1ceec7353dc418578fe8ae56536bfee6adeca3";
+    hash = "sha256-q5BeLu0A2XJkJL8ptN4hj/iLhQmpb16QEhOuIhNzVaI=";
   };
 
   buildInputs = [ gtk3 ];
@@ -27,16 +26,16 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with lib; {
-    inherit (src.meta) homepage;
+  meta = {
     description = "Monitoring software for AMD Zen-based CPUs";
+    homepage = "https://github.com/detiam/zenmonitor3";
     mainProgram = "zenmonitor";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = [
       "i686-linux"
       "x86_64-linux"
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       alexbakker
       artturin
     ];

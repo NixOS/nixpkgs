@@ -4,55 +4,37 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
-  nix-update-script,
   pkg-config,
+  bluez,
   dbus,
   libpulseaudio,
-  bluez,
 }:
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "earbuds";
-  version = "0.1.9-unstable-2024-06-28";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "JojiiOfficial";
     repo = "LiveBudsCli";
-    rev = "df46706e44fa9e7de355b11eab4cc850efe968a3";
-    hash = "sha256-IEor7aZnwCA6Rg2gXIYSQ65hV/jJOKehujOSZnVzVis=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-x0PXOWj77VgJDPY4j+1PRg0M7+vIYSk+6yfj8s0UKx8=";
   };
 
-  # fix daemon autostart not working
-  patches = [
-    ./fix-daemon.patch
-  ];
-
-  # git dependencies are currently not supported in the fixed-output derivation fetcher.
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "galaxy_buds_rs-0.2.10" = "sha256-95PBmGwHJiXi72Rir8KK7as+i9yjs5nf45SaBhj1geg=";
-    };
-  };
+  cargoHash = "sha256-N0/VtqulNRsuoiKcw1LMWTpYNLfX9IiU+hSDlm3ZP1Y=";
 
   nativeBuildInputs = [
-    pkg-config
     installShellFiles
+    pkg-config
   ];
 
   buildInputs = [
+    bluez
     dbus
     libpulseaudio
-    bluez
   ];
 
   # package does not contain any tests
   doCheck = false;
-
-  # nativeInstallCheckInputs = [
-  #   versionCheckHook
-  # ];
-  # versionCheckProgramArg = [ "--version" ];
-  # doInstallCheck = true;
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd earbuds \
@@ -70,4 +52,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "earbuds";
     platforms = lib.platforms.linux;
   };
-}
+})

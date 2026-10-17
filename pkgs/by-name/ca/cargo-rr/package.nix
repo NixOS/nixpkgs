@@ -7,18 +7,18 @@
   rr,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-rr";
   version = "0.3.0";
 
   src = fetchFromGitHub {
-    owner = "danielzfranklin";
-    repo = pname;
-    rev = "v${version}";
+    owner = "dzfranklin";
+    repo = "cargo-rr";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-t8pRqeOdaRVG0titQhxezT2aDjljSs//MnRTTsJ73Yo=";
   };
 
-  cargoHash = "sha256-P4r4XRolORdSGAsNg5RutZ2VVRR8rAfiBZNm+vIH3aM=";
+  cargoHash = "sha256-s3KZFntAb/q4oreJLDQ2Pnz+Oj8Ik36vYR2InY0BIBw=";
 
   passthru = {
     updateScript = nix-update-script { };
@@ -30,14 +30,14 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/cargo-rr --prefix PATH : ${lib.makeBinPath [ rr ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cargo subcommand \"rr\": a light wrapper around rr, the time-travelling debugger";
     mainProgram = "cargo-rr";
-    homepage = "https://github.com/danielzfranklin/cargo-rr";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [
+    homepage = "https://github.com/dzfranklin/cargo-rr";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       otavio
       matthiasbeyer
     ];
   };
-}
+})

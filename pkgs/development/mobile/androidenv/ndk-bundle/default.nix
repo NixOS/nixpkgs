@@ -1,18 +1,48 @@
-{ stdenv, lib, pkgs, pkgsHostHost, makeWrapper, autoPatchelfHook
-, deployAndroidPackage, package, os, platform-tools
+{
+  stdenv,
+  lib,
+  pkgs,
+  pkgsHostHost,
+  makeWrapper,
+  autoPatchelfHook,
+  deployAndroidPackage,
+  package,
+  os,
+  arch,
+  platform-tools,
+  meta,
 }:
 
 let
-  runtime_paths = lib.makeBinPath (with pkgsHostHost; [
-    coreutils file findutils gawk gnugrep gnused jdk python3 which
-  ]) + ":${platform-tools}/platform-tools";
+  runtime_paths =
+    lib.makeBinPath (
+      with pkgsHostHost;
+      [
+        coreutils
+        file
+        findutils
+        gawk
+        gnugrep
+        gnused
+        jdk_headless
+        python3
+        which
+      ]
+    )
+    + ":${platform-tools}/platform-tools";
 in
 deployAndroidPackage rec {
-  inherit package os;
-  nativeBuildInputs = [ makeWrapper ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  inherit package os arch;
+  nativeBuildInputs = [
+    makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
   autoPatchelfIgnoreMissingDeps = [ "*" ];
-  buildInputs = lib.optionals (os == "linux") [ pkgs.zlib pkgs.libcxx (lib.getLib stdenv.cc.cc) ];
+  buildInputs = lib.optionals (os == "linux") [
+    pkgs.zlib
+    pkgs.libcxx
+    (lib.getLib stdenv.cc.cc)
+  ];
 
   patchElfBnaries = ''
     # Patch the executables of the toolchains, but not the libraries -- they are needed for crosscompiling
@@ -46,8 +76,8 @@ deployAndroidPackage rec {
 
     # Ndk now has a prebuilt toolchains inside, the file layout has changed, we do a symlink
     # to still support the old standalone toolchains builds.
-    if [ -d $out/libexec/android-sdk/ndk ] && [ ! -d $out/libexec/android-sdk/ndk-bundle ]; then
-      ln -sf $out/libexec/android-sdk/ndk/${package.revision} $out/libexec/android-sdk/ndk-bundle
+    if [ -d $out/libexec/android-sdk/${package.path} ] && [ ! -d $out/libexec/android-sdk/ndk-bundle ]; then
+      ln -sf $out/libexec/android-sdk/${package.path} $out/libexec/android-sdk/ndk-bundle
     elif [ ! -d $out/libexec/android-sdk/ndk-bundle ]; then
       echo "The ndk-bundle layout has changed. The nix expressions have to be updated!"
       exit 1
@@ -70,8 +100,10 @@ deployAndroidPackage rec {
     done
   '';
 
-  patchInstructions = patchOsAgnostic
-    + lib.optionalString stdenv.hostPlatform.isLinux patchElfBnaries;
+  patchInstructions =
+    patchOsAgnostic + lib.optionalString stdenv.hostPlatform.isLinux patchElfBnaries;
 
   noAuditTmpdir = true; # Audit script gets invoked by the build/ component in the path for the make standalone script
+
+  inherit meta;
 }

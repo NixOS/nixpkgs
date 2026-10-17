@@ -16,12 +16,14 @@ let
       inherit tiling_wm;
     };
   stableVersion = {
-    version = "2023.2.1.20"; # Android Studio Iguana | 2023.2.1 Beta 2
-    sha256Hash = "sha256-cM/pkSghqLUUvJVF/OVLDOxVBJlJLH8ge1bfZtDUegY=";
+    version = "2025.3.2.6";
+    versionPrefix = "Panda%202";
+    sha256Hash = "sha256-mAJPmDSoE9STOh45u0dIejL4TyR8CIqcGMhiixIFIWc=";
   };
   canaryVersion = {
-    version = "2023.3.2.1"; # Android Studio Jellyfish | 2023.3.2 Canary 1
-    sha256Hash = "sha256-XOsbMyNentklfEp1k49H3uFeiRNMCV/Seisw9K1ganM=";
+    version = "2026.1.2.1";
+    versionPrefix = "canary-Quail%202";
+    sha256Hash = "sha256-UYj+6CSmtxC11HVjPxc+m9r6b5RrXXFOzpDfSkx4mw4=";
   };
 in
 {

@@ -7,14 +7,14 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "catatonit";
   version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
-    repo = pname;
-    rev = "v${version}";
+    repo = "catatonit";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-sc/T4WjCPFfwUWxlBx07mQTmcOApblHygfVT824HcJM=";
   };
 
@@ -29,17 +29,18 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
-    readelf -d $out/bin/catatonit | grep 'There is no dynamic section in this file.'
+    ${stdenv.cc.targetPrefix}readelf -d $out/bin/catatonit | grep 'There is no dynamic section in this file.'
   '';
 
   passthru.tests = { inherit (nixosTests) podman; };
 
-  meta = with lib; {
+  meta = {
     description = "Container init that is so simple it's effectively brain-dead";
     homepage = "https://github.com/openSUSE/catatonit";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ erosennin ] ++ teams.podman.members;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ erosennin ];
+    teams = [ lib.teams.podman ];
+    platforms = lib.platforms.linux;
     mainProgram = "catatonit";
   };
-}
+})

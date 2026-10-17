@@ -1,0 +1,224 @@
+From bb95a9794abc077ef29066ab6e769fee564c5592 Mon Sep 17 00:00:00 2001
+From: David Wronek <david.wronek@mainlining.org>
+Date: Thu, 12 Feb 2026 14:57:40 +0100
+Subject: [PATCH 1/2] Use $PATH to find programs
+
+Signed-off-by: David Wronek <david.wronek@mainlining.org>
+---
+ cleanup.sh   |  3 ---
+ repackimg.sh | 30 ++++++++++++++----------------
+ unpackimg.sh | 32 +++++++++++++++-----------------
+ 3 files changed, 29 insertions(+), 36 deletions(-)
+
+diff --git a/cleanup.sh b/cleanup.sh
+index 159d04c..b262c73 100755
+--- a/cleanup.sh
++++ b/cleanup.sh
+@@ -23,9 +23,6 @@ case $1 in
+   *) cd "$aik";;
+ esac;
+ 
+-chmod -R 755 "$bin" "$aik"/*.sh;
+-chmod 644 "$bin/magic" "$bin/androidbootimg.magic" "$bin/androidsign.magic" "$bin/boot_signer.jar" "$bin/avb/"* "$bin/chromeos/"*;
+-
+ if [ -d ramdisk ] && [ "$(stat $statarg ramdisk | head -n 1)" = "root" -o ! "$(find ramdisk 2>&1 | cpio -o >/dev/null 2>&1; echo $?)" -eq "0" ]; then
+   sudo=sudo;
+ fi;
+diff --git a/repackimg.sh b/repackimg.sh
+index 185a180..d5e7bc4 100755
+--- a/repackimg.sh
++++ b/repackimg.sh
+@@ -49,8 +49,6 @@ case $1 in
+   --local) shift;;
+   *) cd "$aik";;
+ esac;
+-chmod -R 755 "$bin" "$aik"/*.sh;
+-chmod 644 "$bin/magic" "$bin/androidbootimg.magic" "$bin/androidsign.magic" "$bin/boot_signer.jar" "$bin/avb/"* "$bin/chromeos/"*;
+ 
+ if [ -z "$(ls split_img/* 2>/dev/null)" -o ! -e ramdisk ]; then
+   echo "No files found to be packed/built.";
+@@ -135,8 +133,8 @@ else
+     xz) repackcmd="xz $level -Ccrc32";;
+     lzma) repackcmd="xz $level -Flzma";;
+     bzip2) compext=bz2;;
+-    lz4) repackcmd="$bin/$arch/lz4 $level";;
+-    lz4-l) repackcmd="$bin/$arch/lz4 $level -l"; compext=lz4;;
++    lz4) repackcmd="lz4 $level";;
++    lz4-l) repackcmd="lz4 $level -l"; compext=lz4;;
+     cpio) repackcmd="cat"; compext="";;
+     *) abort; exit 1;;
+   esac;
+@@ -263,7 +261,7 @@ if [ -f split_img/*-mtktype ]; then
+   echo "Generating MTK headers...";
+   echo " ";
+   echo "Using ramdisk type: $mtktype";
+-  "$bin/$arch/mkmtkhdr" --kernel "$kernel" --$mtktype "$ramdisk" >/dev/null;
++  mkmtkhdr --kernel "$kernel" --$mtktype "$ramdisk" >/dev/null;
+   if [ ! $? -eq "0" ]; then
+     abort;
+     exit 1;
+@@ -293,18 +291,18 @@ echo " ";
+ echo "Using format: $imgtype";
+ echo " ";
+ case $imgtype in
+-  AOSP_VNDR) "$bin/$arch/mkbootimg" --vendor_ramdisk "$ramdisk" "${dtb[@]}" --vendor_cmdline "$cmdline" --board "$board" --base $base --pagesize $pagesize --kernel_offset $kerneloff --ramdisk_offset $ramdiskoff --tags_offset $tagsoff --dtb_offset $dtboff --os_version "$osver" --os_patch_level "$oslvl" --header_version $hdrver --vendor_boot $outname;;
+-  AOSP) "$bin/$arch/mkbootimg" --kernel "$kernel" --ramdisk "$ramdisk" "${second[@]}" "${dtb[@]}" "${recoverydtbo[@]}" --cmdline "$cmdline" --board "$board" --base $base --pagesize $pagesize --kernel_offset $kerneloff --ramdisk_offset $ramdiskoff --second_offset "$secondoff" --tags_offset "$tagsoff" --dtb_offset "$dtboff" --os_version "$osver" --os_patch_level "$oslvl" --header_version "$hdrver" $hashtype "${dt[@]}" -o $outname;;
+-  AOSP-PXA) "$bin/$arch/pxa-mkbootimg" --kernel "$kernel" --ramdisk "$ramdisk" "${second[@]}" --cmdline "$cmdline" --board "$board" --base $base --pagesize $pagesize --kernel_offset $kerneloff --ramdisk_offset $ramdiskoff --second_offset "$secondoff" --tags_offset "$tagsoff" --unknown $unknown "${dt[@]}" -o $outname;;
+-  ELF) "$bin/$arch/elftool" pack -o $outname header="$header" "$kernel" "$ramdisk",ramdisk "${rpm[@]}" "${cmd[@]}" >/dev/null;;
+-  KRNL) "$bin/$arch/rkcrc" -k "$ramdisk" $outname;;
++  AOSP_VNDR) mkbootimg --vendor_ramdisk "$ramdisk" "${dtb[@]}" --vendor_cmdline "$cmdline" --board "$board" --base $base --pagesize $pagesize --kernel_offset $kerneloff --ramdisk_offset $ramdiskoff --tags_offset $tagsoff --dtb_offset $dtboff --os_version "$osver" --os_patch_level "$oslvl" --header_version $hdrver --vendor_boot $outname;;
++  AOSP) mkbootimg --kernel "$kernel" --ramdisk "$ramdisk" "${second[@]}" "${dtb[@]}" "${recoverydtbo[@]}" --cmdline "$cmdline" --board "$board" --base $base --pagesize $pagesize --kernel_offset $kerneloff --ramdisk_offset $ramdiskoff --second_offset "$secondoff" --tags_offset "$tagsoff" --dtb_offset "$dtboff" --os_version "$osver" --os_patch_level "$oslvl" --header_version "$hdrver" $hashtype "${dt[@]}" -o $outname;;
++  AOSP-PXA) pxa-mkbootimg --kernel "$kernel" --ramdisk "$ramdisk" "${second[@]}" --cmdline "$cmdline" --board "$board" --base $base --pagesize $pagesize --kernel_offset $kerneloff --ramdisk_offset $ramdiskoff --second_offset "$secondoff" --tags_offset "$tagsoff" --unknown $unknown "${dt[@]}" -o $outname;;
++  ELF) elftool pack -o $outname header="$header" "$kernel" "$ramdisk",ramdisk "${rpm[@]}" "${cmd[@]}" >/dev/null;;
++  KRNL) rkcrc -k "$ramdisk" $outname;;
+   OSIP)
+     mkdir split_img/.temp 2>/dev/null;
+     for i in bootstub cmdline.txt hdr kernel parameter sig; do
+       cp -f split_img/*-*$(basename $i .txt | sed -e 's/hdr/header/') split_img/.temp/$i 2>/dev/null;
+     done;
+     cp -f "$ramdisk" split_img/.temp/ramdisk.cpio.gz;
+-    "$bin/$arch/mboot" -d split_img/.temp -f $outname;
++    mboot -d split_img/.temp -f $outname;
+   ;;
+   U-Boot)
+     part0="$kernel";
+@@ -312,7 +310,7 @@ case $imgtype in
+       Multi) part1=(:"$ramdisk");;
+       RAMDisk) part0="$ramdisk";;
+     esac;
+-    "$bin/$arch/mkimage" -A $uarch -O $os -T $type -C $comp -a $addr -e $ep -n "$name" -d "$part0""${part1[@]}" $outname >/dev/null;
++    mkimage -A $uarch -O $os -T $type -C $comp -a $addr -e $ep -n "$name" -d "$part0""${part1[@]}" $outname >/dev/null;
+   ;;
+   *) echo " "; echo "Unsupported format."; abort; exit 1;;
+ esac;
+@@ -341,13 +339,13 @@ if [ -f split_img/*-sigtype ]; then
+     AVBv2) echo "AVBv2 detected, no need to sign.";;
+     BLOB)
+       awk 'BEGIN { printf "-SIGNED-BY-SIGNBLOB-\00\00\00\00\00\00\00\00" }' > image-new.img;
+-      "$bin/$arch/blobpack" blob.tmp $blobtype unsigned-new.img >/dev/null;
++      blobpack blob.tmp $blobtype unsigned-new.img >/dev/null;
+       cat blob.tmp >> image-new.img;
+       rm -f blob.tmp;
+     ;;
+-    CHROMEOS) "$bin/$arch/futility" vbutil_kernel --pack image-new.img --keyblock "$bin/chromeos/kernel.keyblock" --signprivate "$bin/chromeos/kernel_data_key.vbprivk" --version 1 --vmlinuz unsigned-new.img --bootloader "$bin/chromeos/empty" --config "$bin/chromeos/empty" --arch arm --flags 0x1;;
++    CHROMEOS) futility vbutil_kernel --pack image-new.img --keyblock "$bin/chromeos/kernel.keyblock" --signprivate "$bin/chromeos/kernel_data_key.vbprivk" --version 1 --vmlinuz unsigned-new.img --bootloader "$bin/chromeos/empty" --config "$bin/chromeos/empty" --arch arm --flags 0x1;;
+     DHTB)
+-      "$bin/$arch/dhtbsign" -i unsigned-new.img -o image-new.img >/dev/null;
++      dhtbsign -i unsigned-new.img -o image-new.img >/dev/null;
+       rm -f split_img/*-tailtype 2>/dev/null;
+     ;;
+     NOOK*) cat split_img/*-master_boot.key unsigned-new.img > image-new.img;;
+@@ -366,7 +364,7 @@ if [ -f split_img/*-lokitype ]; then
+   echo " ";
+   mv -f image-new.img unlokied-new.img;
+   if [ -f aboot.img ]; then
+-    "$bin/$arch/loki_tool" patch $lokitype aboot.img unlokied-new.img image-new.img >/dev/null;
++    loki_tool patch $lokitype aboot.img unlokied-new.img image-new.img >/dev/null;
+     if [ ! $? -eq "0" ]; then
+       echo "Patching failed.";
+       abort;
+diff --git a/unpackimg.sh b/unpackimg.sh
+index 9b74f3d..a81eaf0 100755
+--- a/unpackimg.sh
++++ b/unpackimg.sh
+@@ -53,8 +53,6 @@ esac;
+ if [ ! "$local" ]; then
+   cd "$aik";
+ fi;
+-chmod -R 755 "$bin" "$aik"/*.sh;
+-chmod 644 "$bin/magic" "$bin/androidbootimg.magic" "$bin/androidsign.magic" "$bin/boot_signer.jar" "$bin/avb/"* "$bin/chromeos/"*;
+ 
+ img="$1";
+ [ -f "$cur/$1" ] && img="$cur/$1";
+@@ -109,10 +107,10 @@ if [ "$(echo $imgtest | awk '{ print $2 }' | cut -d, -f1)" = "signing" ]; then
+   case $sigtype in
+     BLOB)
+       cp -f "$img" "$file";
+-      "$bin/$arch/blobunpack" "$file" | tail -n+5 | cut -d" " -f2 | dd bs=1 count=3 > "$file-blobtype" 2>/dev/null;
++      blobunpack "$file" | tail -n+5 | cut -d" " -f2 | dd bs=1 count=3 > "$file-blobtype" 2>/dev/null;
+       mv -f "$file."* "$file";
+     ;;
+-    CHROMEOS) "$bin/$arch/futility" vbutil_kernel --get-vmlinuz "$img" --vmlinuz-out "$file";;
++    CHROMEOS) futility vbutil_kernel --get-vmlinuz "$img" --vmlinuz-out "$file";;
+     DHTB) dd bs=4096 skip=512 iflag=skip_bytes conv=notrunc if="$img" of="$file" 2>/dev/null;;
+     NOOK)
+       dd bs=1048576 count=1 conv=notrunc if="$img" of="$file-master_boot.key" 2>/dev/null;
+@@ -123,7 +121,7 @@ if [ "$(echo $imgtest | awk '{ print $2 }' | cut -d, -f1)" = "signing" ]; then
+       dd bs=262144 skip=1 conv=notrunc if="$img" of="$file" 2>/dev/null;
+     ;;
+     SIN*)
+-      "$bin/$arch/sony_dump" . "$img" >/dev/null;
++      sony_dump . "$img" >/dev/null;
+       mv -f "$file."* "$file";
+       rm -f "$file-sigtype";
+     ;;
+@@ -165,7 +163,7 @@ case $(echo $imgtest | awk '{ print $3 }') in
+     echo " ";
+     echo "Warning: A dump of your device's aboot.img is required to re-Loki!";
+     echo " ";
+-    "$bin/$arch/loki_tool" unlok "$img" "$file" >/dev/null;
++    loki_tool unlok "$img" "$file" >/dev/null;
+     img="$file";
+   ;;
+   AMONET)
+@@ -220,26 +218,26 @@ case $imgtype in
+   AOSP_VNDR) vendor=vendor_;;
+ esac;
+ case $imgtype in
+-  AOSP|AOSP_VNDR) "$bin/$arch/unpackbootimg" -i "$img";;
+-  AOSP-PXA) "$bin/$arch/pxa-unpackbootimg" -i "$img";;
++  AOSP|AOSP_VNDR) unpackbootimg -i "$img";;
++  AOSP-PXA) pxa-unpackbootimg -i "$img";;
+   ELF)
+     mkdir elftool_out;
+-    "$bin/$arch/elftool" unpack -i "$img" -o elftool_out >/dev/null;
++    elftool unpack -i "$img" -o elftool_out >/dev/null;
+     mv -f elftool_out/header "$file-header" 2>/dev/null;
+     rm -rf elftool_out;
+-    "$bin/$arch/unpackelf" -i "$img";
++    unpackelf -i "$img";
+   ;;
+   KRNL) dd bs=4096 skip=8 iflag=skip_bytes conv=notrunc if="$img" of="$file-ramdisk" 2>&1 | tail -n+3 | cut -d" " -f1-2;;
+   OSIP)
+-    "$bin/$arch/mboot" -u -f "$img";
++    mboot -u -f "$img";
+     [ ! $? -eq "0" ] && error=1;
+     for i in bootstub cmdline.txt hdr kernel parameter ramdisk.cpio.gz sig; do
+       mv -f $i "$file-$(basename $i .txt | sed -e 's/hdr/header/' -e 's/ramdisk.cpio.gz/ramdisk/')" 2>/dev/null || true;
+     done;
+   ;;
+   U-Boot)
+-    "$bin/$arch/dumpimage" -l "$img";
+-    "$bin/$arch/dumpimage" -l "$img" > "$file-header";
++    dumpimage -l "$img";
++    dumpimage -l "$img" > "$file-header";
+     grep "Name:" "$file-header" | cut -c15- > "$file-name";
+     grep "Type:" "$file-header" | cut -c15- | cut -d" " -f1 > "$file-arch";
+     grep "Type:" "$file-header" | cut -c15- | cut -d" " -f2 > "$file-os";
+@@ -248,10 +246,10 @@ case $imgtype in
+     grep "Address:" "$file-header" | cut -c15- > "$file-addr";
+     grep "Point:" "$file-header" | cut -c15- > "$file-ep";
+     rm -f "$file-header";
+-    "$bin/$arch/dumpimage" -p 0 -o "$file-kernel" "$img";
++    dumpimage -p 0 -o "$file-kernel" "$img";
+     [ ! $? -eq "0" ] && error=1;
+     case $(cat "$file-type") in
+-      Multi) "$bin/$arch/dumpimage" -p 1 -o "$file-ramdisk" "$img";;
++      Multi) dumpimage -p 1 -o "$file-ramdisk" "$img";;
+       RAMDisk) mv -f "$file-kernel" "$file-ramdisk";;
+       *) touch "$file-ramdisk";;
+     esac;
+@@ -318,8 +316,8 @@ case $ramdiskcomp in
+   xz) ;;
+   lzma) ;;
+   bzip2) compext=bz2;;
+-  lz4) unpackcmd="$bin/$arch/lz4 -dcq";;
+-  lz4-l) unpackcmd="$bin/$arch/lz4 -dcq"; compext=lz4;;
++  lz4) unpackcmd="lz4 -dcq";;
++  lz4-l) unpackcmd="lz4 -dcq"; compext=lz4;;
+   cpio) unpackcmd="cat"; compext="";;
+   empty) compext=empty;;
+   *) compext="";;
+-- 
+2.52.0
+

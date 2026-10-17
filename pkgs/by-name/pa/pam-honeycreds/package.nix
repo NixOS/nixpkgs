@@ -6,21 +6,21 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "pam-honeycreds";
-  version = "1.9";
+  version = "2.0";
   src = fetchFromGitHub {
     owner = "ColumPaget";
     repo = "pam_honeycreds";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-GRJnH431foNI10g95rrtgi31DM15FWhzNq9L0SwoZoM=";
+    hash = "sha256-b4qKrvIu0JOAG/YWOL8k3OOY+6oR/gA8fZbKsOpfQKk=";
   };
 
   buildInputs = [ pam ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ColumPaget/pam_honeycreds";
     description = "PAM module that sends warnings when fake passwords are used";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ h7x4 ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ h7x4 ];
   };
 })

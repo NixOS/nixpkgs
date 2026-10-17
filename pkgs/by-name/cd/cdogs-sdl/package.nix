@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, SDL2
-, SDL2_image
-, SDL2_mixer
-, cmake
-, gtk3-x11
-, python3
-, protobuf
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
+  cmake,
+  gtk3-x11,
+  python3,
+  protobuf,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cdogs-sdl";
-  version = "2.2.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
-    repo = pname;
+    repo = "cdogs-sdl";
     owner = "cxong";
-    rev = version;
-    sha256 = "sha256-uZPCki9G62nSrf8YfdyCfY1qgWlPT9BB2FqPicw32FM=";
+    tag = finalAttrs.version;
+    hash = "sha256-588bPis3n9BZnEywLmgouRgpiEvB+sKp6/xhUDhfddQ=";
   };
 
   postPatch = ''
@@ -34,12 +35,19 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = toString [
     # Needed with GCC 12
     "-Wno-error=stringop-overflow"
+    # Needed with GCC 16
+    "-Wno-error=unused-but-set-variable"
   ];
 
   nativeBuildInputs = [
     pkg-config
     cmake
-    (python3.withPackages (pp: with pp; [ pp.protobuf setuptools ]))
+    (python3.withPackages (
+      pp: with pp; [
+        pp.protobuf
+        setuptools
+      ]
+    ))
   ];
 
   buildInputs = [
@@ -53,12 +61,12 @@ stdenv.mkDerivation rec {
   # inlining failed in call to 'tinydir_open': --param max-inline-insns-single limit reached
   hardeningDisable = [ "fortify3" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://cxong.github.io/cdogs-sdl";
     description = "Open source classic overhead run-and-gun game";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ nixinator ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/cdogs-sdl.x86_64-darwin
   };
-}
+})

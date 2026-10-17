@@ -3,37 +3,42 @@
   buildGoModule,
   fetchFromGitHub,
   fq,
+  installShellFiles,
   testers,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "fq";
-  version = "0.13.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "wader";
     repo = "fq";
-    rev = "v${version}";
-    hash = "sha256-bHyLEJiSM42arZiM1VVKga6wp3Q3EAMgUrFnh3hbk9M=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Prd0GkLQOdVtpjeu6Ga6dq3imOm7m4m1/kLp9g/1O0I=";
   };
 
-  vendorHash = "sha256-in+c8Wl7ffXAqMvs+3K6dzAd5ePqBpRaxU2iM81moQM=";
+  vendorHash = "sha256-oqS6j8YTllObGKR8rFvlcFaUGnT3uouOP7pfzuTcgGk=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   subPackages = [ "." ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = "installManPage doc/fq.1";
+
   passthru.tests = testers.testVersion { package = fq; };
 
-  meta = with lib; {
+  meta = {
     description = "jq for binary formats";
     mainProgram = "fq";
     homepage = "https://github.com/wader/fq";
-    license = licenses.mit;
-    maintainers = with maintainers; [ siraben ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ siraben ];
   };
-}
+})

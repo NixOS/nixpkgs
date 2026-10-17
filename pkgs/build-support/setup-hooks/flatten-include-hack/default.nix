@@ -1,2 +1,8 @@
-{ makeSetupHook }:
-makeSetupHook { name = "flatten-include-hack-hook"; } ./flatten-include-hack-hook.sh
+{
+  lib,
+  makeSetupHook,
+}:
+makeSetupHook {
+  name = "flatten-include-hack-hook";
+  meta.license = lib.licenses.mit;
+} ./flatten-include-hack-hook.sh

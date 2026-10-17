@@ -1,6 +1,11 @@
 # To build, use:
 # nix-build nixos -I nixos-config=nixos/modules/installer/sd-card/sd-image-aarch64.nix -A config.system.build.sdImage
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   imports = [
@@ -16,59 +21,69 @@
   # The serial ports listed here are:
   # - ttyS0: for Tegra (Jetson TX1)
   # - ttyAMA0: for QEMU's -machine virt
-  boot.kernelParams = ["console=ttyS0,115200n8" "console=ttyAMA0,115200n8" "console=tty0"];
+  boot.kernelParams = [
+    "console=ttyS0,115200n8"
+    "console=ttyAMA0,115200n8"
+    "console=tty0"
+  ];
 
   sdImage = {
-    populateFirmwareCommands = let
-      configTxt = pkgs.writeText "config.txt" ''
-        [pi3]
-        kernel=u-boot-rpi3.bin
+    populateFirmwareCommands =
+      let
+        configTxt = pkgs.writeText "config.txt" ''
+          kernel=u-boot.bin
 
-        # Otherwise the serial output will be garbled.
-        core_freq=250
+          # Boot in 64-bit mode.
+          arm_64bit=1
 
-        [pi02]
-        kernel=u-boot-rpi3.bin
+          # U-Boot needs this to work, regardless of whether UART is actually used or not.
+          # Look in arch/arm/mach-bcm283x/Kconfig in the U-Boot tree to see if this is still
+          # a requirement in the future.
+          enable_uart=1
 
-        [pi4]
-        kernel=u-boot-rpi4.bin
-        enable_gic=1
-        armstub=armstub8-gic.bin
+          # Prevent the firmware from smashing the framebuffer setup done by the mainline kernel
+          # when attempting to show low-voltage or overtemperature warnings.
+          avoid_warnings=1
 
-        # Otherwise the resolution will be weird in most cases, compared to
-        # what the pi3 firmware does by default.
-        disable_overscan=1
+          [pi3]
+          # Otherwise the serial output will be garbled.
+          core_freq=250
 
-        # Supported in newer board revisions
-        arm_boost=1
+          [pi4]
+          enable_gic=1
+          armstub=armstub8-gic.bin
 
-        [cm4]
-        # Enable host mode on the 2711 built-in XHCI USB controller.
-        # This line should be removed if the legacy DWC2 controller is required
-        # (e.g. for USB device mode) or if USB support is not required.
-        otg_mode=1
+          # Otherwise the resolution will be weird in most cases, compared to
+          # what the pi3 firmware does by default.
+          disable_overscan=1
 
-        [all]
-        # Boot in 64-bit mode.
-        arm_64bit=1
+          # Supported in newer board revisions
+          arm_boost=1
 
-        # U-Boot needs this to work, regardless of whether UART is actually used or not.
-        # Look in arch/arm/mach-bcm283x/Kconfig in the U-Boot tree to see if this is still
-        # a requirement in the future.
-        enable_uart=1
+          [cm4]
+          # Enable host mode on the 2711 built-in XHCI USB controller.
+          # This line should be removed if the legacy DWC2 controller is required
+          # (e.g. for USB device mode) or if USB support is not required.
+          otg_mode=1
 
-        # Prevent the firmware from smashing the framebuffer setup done by the mainline kernel
-        # when attempting to show low-voltage or overtemperature warnings.
-        avoid_warnings=1
-      '';
-      in ''
+          [cm5]
+          dtoverlay=dwc2,dr_mode=host
+
+          [pi5]
+          # On some revisions of the RPi5, U-Boot interprets picks up
+          # ghost inputs from the uart, interrupting the boot process.
+          # https://bugzilla.opensuse.org/show_bug.cgi?id=1251192
+          enable_uart=0
+        '';
+      in
+      ''
         (cd ${pkgs.raspberrypifw}/share/raspberrypi/boot && cp bootcode.bin fixup*.dat start*.elf $NIX_BUILD_TOP/firmware/)
+        cp ${pkgs.ubootRaspberryPiAarch64}/u-boot.bin firmware/u-boot.bin
 
         # Add the config
         cp ${configTxt} firmware/config.txt
 
         # Add pi3 specific files
-        cp ${pkgs.ubootRaspberryPi3_64bit}/u-boot.bin firmware/u-boot-rpi3.bin
         cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/bcm2710-rpi-2-b.dtb firmware/
         cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/bcm2710-rpi-3-b.dtb firmware/
         cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/bcm2710-rpi-3-b-plus.dtb firmware/
@@ -77,12 +92,20 @@
         cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/bcm2710-rpi-zero-2-w.dtb firmware/
 
         # Add pi4 specific files
-        cp ${pkgs.ubootRaspberryPi4_64bit}/u-boot.bin firmware/u-boot-rpi4.bin
         cp ${pkgs.raspberrypi-armstubs}/armstub8-gic.bin firmware/armstub8-gic.bin
         cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/bcm2711-rpi-4-b.dtb firmware/
         cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/bcm2711-rpi-400.dtb firmware/
         cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/bcm2711-rpi-cm4.dtb firmware/
         cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/bcm2711-rpi-cm4s.dtb firmware/
+
+        # Add pi5 specific files
+        cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/bcm2712-d-rpi-5-b.dtb firmware/
+        cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/bcm2712-rpi-5-b.dtb firmware/
+        cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/bcm2712-rpi-500.dtb firmware/
+        cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/bcm2712-rpi-cm5-cm4io.dtb firmware/
+        cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/bcm2712-rpi-cm5-cm5io.dtb firmware/
+        cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/bcm2712-rpi-cm5l-cm4io.dtb firmware/
+        cp ${pkgs.raspberrypifw}/share/raspberrypi/boot/bcm2712-rpi-cm5l-cm5io.dtb firmware/
       '';
     populateRootCommands = ''
       mkdir -p ./files/boot

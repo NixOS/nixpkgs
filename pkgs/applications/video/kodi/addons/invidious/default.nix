@@ -17,7 +17,7 @@ buildKodiAddon rec {
 
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/${lib.toLower rel}/plugin.video.invidious/plugin.video.invidious-${version}+nexus.0.zip";
-    sha256 = "sha256-XnlnhvtHMh4uQTupW/SSOmaEV8xZrL61/6GoRpyKR0o=";
+    hash = "sha256-XnlnhvtHMh4uQTupW/SSOmaEV8xZrL61/6GoRpyKR0o=";
   };
 
   propagatedBuildInputs = [
@@ -34,10 +34,10 @@ buildKodiAddon rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/petterreinholdtsen/kodi-invidious-plugin";
     description = "Privacy-friendly way of watching YouTube content";
-    license = licenses.mit;
-    maintainers = teams.kodi.members;
+    license = lib.licenses.mit;
+    teams = [ lib.teams.kodi ];
   };
 }

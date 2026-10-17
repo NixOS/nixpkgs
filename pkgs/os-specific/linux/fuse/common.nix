@@ -14,29 +14,31 @@
   pkg-config,
   autoreconfHook,
   runtimeShell,
+  udevCheckHook,
 }:
 
 let
   isFuse3 = lib.hasPrefix "3" version;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fuse";
   inherit version;
 
   src = fetchFromGitHub {
     owner = "libfuse";
     repo = "libfuse";
-    rev = "${pname}-${version}";
+    tag = "fuse-${version}";
     inherit hash;
   };
 
-  preAutoreconf = "touch config.rpath";
+  strictDeps = true;
+  __structuredAttrs = true;
 
   patches =
     lib.optional (!isFuse3 && (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isLoongArch64))
       (fetchpatch {
         url = "https://github.com/libfuse/libfuse/commit/914871b20a901e3e1e981c92bc42b1c93b7ab81b.patch";
-        sha256 = "1w4j6f1awjrycycpvmlv0x5v9gprllh4dnbjxl4dyl2jgbkaw6pa";
+        hash = "sha256-6hqu5npSUN8I7XLZRiCl+b60Sweb1n2ZZz5LroIzkvA=";
       })
     ++ (
       if isFuse3 then
@@ -49,8 +51,9 @@ stdenv.mkDerivation rec {
           ./fuse2-Do-not-set-FUSERMOUNT_DIR.patch
           (fetchpatch {
             url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-fs/fuse/files/fuse-2.9.9-closefrom-glibc-2-34.patch?id=8a970396fca7aca2d5a761b8e7a8242f1eef14c9";
-            sha256 = "sha256-ELYBW/wxRcSMssv7ejCObrpsJHtOPJcGq33B9yHQII4=";
+            hash = "sha256-ELYBW/wxRcSMssv7ejCObrpsJHtOPJcGq33B9yHQII4=";
           })
+          ./fuse2-gettext-0.25.patch
         ]
     );
 
@@ -61,6 +64,7 @@ stdenv.mkDerivation rec {
         ninja
         pkg-config
       ]
+      ++ lib.optionals (!stdenv.hostPlatform.isMusl) [ udevCheckHook ] # inf rec on musl, so skip
     else
       [
         autoreconfHook
@@ -72,12 +76,14 @@ stdenv.mkDerivation rec {
     "out"
     "dev"
     "man"
-  ] ++ lib.optional isFuse3 "udev";
+  ]
+  ++ lib.optional isFuse3 "udev";
 
   mesonFlags = lib.optionals isFuse3 [
     "-Dudevrulesdir=/udev/rules.d"
     "-Duseroot=false"
     "-Dinitscriptdir="
+    "-Dexamples=false" # examples fail on musl and are just generally useless
   ];
 
   # Ensure that FUSE calls the setuid wrapper, not
@@ -85,32 +91,29 @@ stdenv.mkDerivation rec {
   # $PATH, so it should also work on non-NixOS systems.
   env.NIX_CFLAGS_COMPILE = ''-DFUSERMOUNT_DIR="/run/wrappers/bin"'';
 
-  preConfigure =
-    ''
-      substituteInPlace lib/mount_util.c \
-        --replace-fail "/bin/mount" "${lib.getBin util-linux}/bin/mount" \
-        --replace-fail "/bin/umount" "${lib.getBin util-linux}/bin/umount"
-      substituteInPlace util/mount.fuse.c \
-        --replace-fail "/bin/sh" "${runtimeShell}"
-    ''
-    + lib.optionalString (!isFuse3) ''
-      export MOUNT_FUSE_PATH=$bin/bin
+  preConfigure = ''
+    substituteInPlace lib/mount_util.c \
+      --replace-fail "/bin/mount" "${lib.getBin util-linux}/bin/mount" \
+      --replace-fail "/bin/umount" "${lib.getBin util-linux}/bin/umount"
+    substituteInPlace util/mount.fuse.c \
+      --replace-fail "/bin/sh" "${runtimeShell}"
+  ''
+  + lib.optionalString (!isFuse3) ''
+    export MOUNT_FUSE_PATH=$bin/bin
 
-      # Do not install these files for fuse2 which are not useful for NixOS.
-      export INIT_D_PATH=$TMPDIR/etc/init.d
-      export UDEV_RULES_PATH=$TMPDIR/etc/udev/rules.d
+    # Do not install these files for fuse2 which are not useful for NixOS.
+    export INIT_D_PATH=$TMPDIR/etc/init.d
+    export UDEV_RULES_PATH=$TMPDIR/etc/udev/rules.d
 
-      # This is for `setuid=`, and needs root permission anyway.
-      # No need to use the SUID wrapper.
-      substituteInPlace util/mount.fuse.c \
-        --replace-fail '"su"' '"${lib.getBin shadow.su}/bin/su"'
-      substituteInPlace makeconf.sh \
-        --replace-fail 'CONFIG_RPATH=/usr/share/gettext/config.rpath' 'CONFIG_RPATH=${lib.getLib gettext}/share/gettext/config.rpath'
-      ./makeconf.sh
-    '';
+    # This is for `setuid=`, and needs root permission anyway.
+    # No need to use the SUID wrapper.
+    substituteInPlace util/mount.fuse.c \
+      --replace-fail '"su"' '"${lib.getBin shadow.su}/bin/su"'
+  '';
 
   # v2: no tests, v3: all tests get skipped in a sandbox
   doCheck = false;
+  doInstallCheck = true;
 
   # Drop `/etc/fuse.conf` because it is a no-op config and
   # would conflict with our fuse module.
@@ -141,9 +144,8 @@ stdenv.mkDerivation rec {
       lgpl21Only
     ];
     maintainers = with lib.maintainers; [
-      primeos
       oxalica
     ];
     outputsToInstall = [ "bin" ];
   };
-}
+})

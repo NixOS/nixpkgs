@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "todoist";
-  version = "0.20.0";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "sachaos";
     repo = "todoist";
-    rev = "v${version}";
-    sha256 = "sha256-mdh+DOqlxcAqWIxEiKXmtvlsaaRCnRWEvrn56IFhBwk=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-Q3sqgqN4xUGeVmncEAGDker6tau8h30zBPEjgLSxazI=";
   };
 
-  vendorHash = "sha256-fWFFWFVnLtZivlqMRIi6TjvticiKlyXF2Bx9Munos8M=";
+  vendorHash = "sha256-eVB5k/Z5Z6SsPqySPm4xZIh07c9xbijImRk8zdvY6tA=";
 
   doCheck = false;
 
@@ -25,4 +25,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     mainProgram = "todoist";
   };
-}
+})

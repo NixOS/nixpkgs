@@ -9,14 +9,14 @@
   umount,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "interlock";
   version = "2020.03.05";
 
   src = fetchFromGitHub {
     owner = "usbarmory";
     repo = "interlock";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-YXa4vErt3YnomTKAXCv8yUVhcc0ST47n9waW5E8QZzY=";
   };
 
@@ -48,11 +48,11 @@ buildGoModule rec {
   # Tests are broken due to an error during key generation.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/usbarmory/interlock";
     description = "File encryption tool and an HSM frontend";
     mainProgram = "interlock";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
-}
+})

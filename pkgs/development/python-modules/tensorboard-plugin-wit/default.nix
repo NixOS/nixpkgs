@@ -13,13 +13,13 @@ buildPythonPackage rec {
     inherit pname version;
     format = "wheel";
     python = "py3";
-    sha256 = "0nv855qm2fav70lndsrv810pqgg41sbmd70fk86wk18ih825yxzf";
+    hash = "sha256-7ndfBIIRhckNmg6cVpcO5D18QUA762YpOFs5UXEpaFs=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "What-If Tool TensorBoard plugin";
     homepage = "http://tensorflow.org";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ndl ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ndl ];
   };
 }

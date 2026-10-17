@@ -1,18 +1,22 @@
 {
+  lib,
   buildDunePackage,
+  ocaml,
   alcotest,
   atd,
+  atd-jsonlike,
+  atd-yamlx,
   atdgen-codec-runtime,
   atdgen-runtime,
+  atdml,
+  biniou,
   re,
-  python3,
+  yamlx,
 }:
 
 buildDunePackage {
   pname = "atdgen";
   inherit (atdgen-codec-runtime) version src;
-
-  duneVersion = "3";
 
   buildInputs = [
     atd
@@ -21,17 +25,21 @@ buildDunePackage {
 
   propagatedBuildInputs = [ atdgen-runtime ];
 
-  doCheck = true;
+  doCheck = lib.versionAtLeast ocaml.version "4.14";
   nativeCheckInputs = [
     atd
-    (python3.withPackages (ps: [ ps.jsonschema ]))
+    atdml
+    biniou
   ];
   checkInputs = [
     alcotest
     atdgen-codec-runtime
+    yamlx
+    atd-jsonlike
+    atd-yamlx
   ];
 
-  meta = (builtins.removeAttrs atd.meta [ "mainProgram" ]) // {
+  meta = (removeAttrs atd.meta [ "mainProgram" ]) // {
     description = "Generates efficient JSON serializers, deserializers and validators";
   };
 }

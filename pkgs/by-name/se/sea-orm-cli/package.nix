@@ -7,23 +7,24 @@
   nix-update-script,
   versionCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sea-orm-cli";
-  version = "1.1.3";
+  version = "2.0.4";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-4j4jeZBe4HyPpa8Em4/zPcIjlJmGfymyEJP2PfDdELQ=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-jQda7XP8w8SCqlmCcyf3N3apaMHBrbdVgMTCmqBa3c4=";
   };
+
+  cargoHash = "sha256-PevIaSzmdC2Yix4c5Y+oTIQoBrmYAuGOqPKlzgP4o1w=";
+
+  __structuredAttrs = true;
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ];
 
-  cargoHash = "sha256-ZdKDQUBpFEVBvvGCulRH+riTeLoXGMMBn2RGSL1uUy4=";
-
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
   __darwinAllowLocalNetworking = true;
 
@@ -35,10 +36,14 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "sea-orm-cli";
     homepage = "https://www.sea-ql.org/SeaORM";
     description = "Command line utility for SeaORM";
+    changelog = "https://github.com/SeaQL/sea-orm/releases/tag/sea-orm-cli%40${finalAttrs.version}";
     license = with lib.licenses; [
       mit # or
       asl20
     ];
-    maintainers = with lib.maintainers; [ traxys ];
+    maintainers = with lib.maintainers; [
+      traxys
+      anish
+    ];
   };
-}
+})

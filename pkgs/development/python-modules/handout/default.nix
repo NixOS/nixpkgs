@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "52daaf1f9a4cb2ceb88c1dedf85d22ef449b9422b424a2534d21f941e57bc915";
+    hash = "sha256-UtqvH5pMss64jB3t+F0i70SblCK0JKJTTSH5QeV7yRU=";
   };
 
   propagatedBuildInputs = [
@@ -21,10 +21,10 @@ buildPythonPackage rec {
     imageio-ffmpeg
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Turn Python scripts into handouts with Markdown and figures";
     homepage = "https://github.com/danijar/handout";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ averelld ];
+    license = lib.licenses.gpl3;
+    maintainers = [ ];
   };
 }

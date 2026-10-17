@@ -5,24 +5,26 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "compiledb";
-  version = "0.10.1";
+  version = "0.10.7";
   pyproject = true;
-
-  build-system = [ python3Packages.setuptools ];
 
   src = fetchFromGitHub {
     owner = "nickdiego";
     repo = "compiledb";
-    tag = "v${version}";
-    hash = "sha256-pN2F0bFT5r8w+8kZOP/tU7Cx1SDN81fzkMfnj19jMWM=";
+    tag = finalAttrs.version;
+    hash = "sha256-toqBf5q1EfZVhZN5DAtxkyFF7UlyNbqxWAIWFMwacxw=";
   };
+
+  build-system = with python3Packages; [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = with python3Packages; [
     click
     bashlex
-    shutilwhich
   ];
 
   # fix the tests
@@ -42,4 +44,4 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/nickdiego/compiledb";
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

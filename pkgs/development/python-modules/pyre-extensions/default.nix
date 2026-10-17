@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   # build inputs
   typing-extensions,
@@ -14,8 +13,6 @@ in
 buildPythonPackage {
   inherit pname version;
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit version;
@@ -30,10 +27,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "pyre_extensions" ];
 
-  meta = with lib; {
+  meta = {
     description = "This module defines extensions to the standard “typing” module that are supported by the Pyre typechecker";
     homepage = "https://pypi.org/project/pyre-extensions";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

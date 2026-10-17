@@ -12,17 +12,17 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2d08fad1e7a8b47a90a4e43da485ba95705923425aefc4e2a3efa540dbd470d7";
+    hash = "sha256-LQj60eeotHqQpOQ9pIW6lXBZI0Ja78Tio++lQNvUcNc=";
   };
 
   propagatedBuildInputs = [ requests ];
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Simple Python interface to epsg.io";
-    license = licenses.lgpl3;
+    license = lib.licenses.lgpl3;
     homepage = "https://pyepsg.readthedocs.io/en/latest/";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

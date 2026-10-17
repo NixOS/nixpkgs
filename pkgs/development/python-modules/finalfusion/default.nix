@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "finalfusion";
     repo = "finalfusion-python";
     rev = version;
-    sha256 = "0pwzflamxqvpl1wcz0zbhhd6aa4xn18rmza6rggaic3ckidhyrh4";
+    hash = "sha256-BGYPW5xssKjey0b9mlGwnShlGoTrg894oHfjXhV1n18=";
   };
 
   nativeBuildInputs = [ cython ];
@@ -48,11 +48,11 @@ buildPythonPackage rec {
     PATH=$PATH:$out/bin tests/integration/all.sh
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python module for using finalfusion, word2vec, and fastText word embeddings";
     homepage = "https://github.com/finalfusion/finalfusion-python/";
     maintainers = [ ];
-    platforms = platforms.all;
-    license = licenses.blueOak100;
+    platforms = lib.platforms.all;
+    license = lib.licenses.blueOak100;
   };
 }

@@ -1,26 +1,47 @@
-{ stdenv, lib
-, fetchurl
-, pkg-config, meson, ninja, makeWrapper
-, libbsd, numactl, libbpf, zlib, elfutils, jansson, openssl, libpcap, rdma-core
-, doxygen, python3, pciutils
-, fetchpatch
-, withExamples ? []
-, shared ? false
-, machine ? (
-    if stdenv.hostPlatform.isx86_64 then "nehalem"
-    else if stdenv.hostPlatform.isAarch64 then "generic"
-    else null
-  )
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  meson,
+  ninja,
+  makeWrapper,
+  libbsd,
+  numactl,
+  libbpf,
+  zlib,
+  elfutils,
+  intel-ipsec-mb,
+  jansson,
+  openssl,
+  libpcap,
+  rdma-core,
+  doxygen,
+  python3,
+  pciutils,
+  withExamples ? [ ],
+  shared ? false,
+  machine ? (
+    if stdenv.hostPlatform.isx86_64 then
+      "nehalem"
+    else if stdenv.hostPlatform.isAarch64 then
+      "generic"
+    else
+      null
+  ),
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dpdk";
-  version = "24.07";
+  version = "26.03";
 
   src = fetchurl {
-    url = "https://fast.dpdk.org/rel/dpdk-${version}.tar.xz";
-    sha256 = "sha256-mUT35fJo56ybQZPizVTvbZj24dfd3JZ8d65PZhbW+70=";
+    url = "https://fast.dpdk.org/rel/dpdk-${finalAttrs.version}.tar.xz";
+    hash = "sha256-hJiSArvg+67rYvj9xj9pGICsC2bNDcZMFnhDxZ2ynSw=";
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   nativeBuildInputs = [
     makeWrapper
@@ -41,6 +62,9 @@ stdenv.mkDerivation rec {
     openssl.dev
     zlib
     python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+    intel-ipsec-mb
   ];
 
   propagatedBuildInputs = [
@@ -51,26 +75,20 @@ stdenv.mkDerivation rec {
     libbsd
   ];
 
-  patches = [
-    (fetchpatch {
-      name = "CVE-2024-11614.patch";
-      url = "https://git.dpdk.org/dpdk-stable/patch/?id=fdf13ea6fede07538fbe5e2a46fa6d4b2368fa81";
-      hash = "sha256-lD2mhPm5r1tWZb4IpzHa2SeK1DyQ3rwjzArRTpAgZAY=";
-    })
-  ];
-
   postPatch = ''
     patchShebangs config/arm buildtools
   '';
 
   mesonFlags = [
-    "-Dtests=false"
-    "-Denable_docs=true"
-    "-Ddeveloper_mode=disabled"
+    (lib.mesonBool "tests" false)
+    (lib.mesonBool "enable_docs" true)
+    (lib.mesonEnable "developer_mode" false)
+    (lib.mesonOption "default_library" (if shared then "shared" else "static"))
   ]
-  ++ [(if shared then "-Ddefault_library=shared" else "-Ddefault_library=static")]
-  ++ lib.optional (machine != null) "-Dmachine=${machine}"
-  ++ lib.optional (withExamples != []) "-Dexamples=${builtins.concatStringsSep "," withExamples}";
+  ++ lib.optionals (machine != null) [ (lib.mesonOption "machine" machine) ]
+  ++ lib.optionals (withExamples != [ ]) [
+    (lib.mesonOption "examples" (lib.concatStringsSep "," withExamples))
+  ];
 
   postInstall = ''
     # Remove Sphinx cache files. Not only are they not useful, but they also
@@ -79,20 +97,31 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/bin/dpdk-devbind.py \
       --prefix PATH : "${lib.makeBinPath [ pciutils ]}"
-  '' + lib.optionalString (withExamples != []) ''
+  ''
+  + lib.optionalString (withExamples != [ ]) ''
     mkdir -p $examples/bin
     find examples -type f -executable -exec install {} $examples/bin \;
   '';
 
-  outputs =
-    [ "out" "doc" ]
-    ++ lib.optional (withExamples != []) "examples";
+  outputs = [
+    "out"
+    "doc"
+  ]
+  ++ lib.optional (withExamples != [ ]) "examples";
 
-  meta = with lib; {
+  meta = {
     description = "Set of libraries and drivers for fast packet processing";
     homepage = "http://dpdk.org/";
-    license = with licenses; [ lgpl21 gpl2Only bsd2 ];
-    platforms =  platforms.linux;
-    maintainers = with maintainers; [ magenbluten orivej mic92 zhaofengli ];
+    license = with lib.licenses; [
+      lgpl21
+      gpl2Only
+      bsd2
+    ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      mic92
+      stepbrobd
+      zhaofengli
+    ];
   };
-}
+})

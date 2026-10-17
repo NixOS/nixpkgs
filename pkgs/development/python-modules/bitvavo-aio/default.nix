@@ -3,33 +3,36 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bitvavo-aio";
   version = "1.0.3";
-  format = "setuptools";
-  disabled = pythonOlder "3.6";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "cyberjunky";
-    repo = pname;
-    rev = version;
-    sha256 = "1d9nbbvv7xnkixj03sfhs2da5j3i2m7p73r7j1yb7b39zas2rbig";
+    repo = "bitvavo-aio";
+    tag = finalAttrs.version;
+    hash = "sha256-L64stPpprLN8kCePc08VcciimtDQ6QFkj9P2s/daNrU=";
   };
 
-  propagatedBuildInputs = [ aiohttp ];
+  build-system = [ setuptools ];
+
+  dependencies = [ aiohttp ];
 
   # Project has no tests
   doCheck = false;
 
   pythonImportsCheck = [ "bitvavo" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for Bitvavo crypto exchange API";
     homepage = "https://github.com/cyberjunky/bitvavo-aio";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

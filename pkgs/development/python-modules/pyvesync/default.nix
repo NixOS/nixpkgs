@@ -1,35 +1,50 @@
 {
   lib,
+  aiohttp,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  mashumaro,
+  pytestCheckHook,
+  python-dateutil,
+  pyyaml,
   requests,
-  pythonOlder,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyvesync";
-  version = "2.1.12";
-  format = "setuptools";
+  version = "3.4.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-k9eAbHFFo5rFYTNVxN4qEFnW2zmXThr3Ki1lZtj9V/g=";
+  src = fetchFromGitHub {
+    owner = "webdjoe";
+    repo = "pyvesync";
+    tag = finalAttrs.version;
+    hash = "sha256-pJv5CMsM82ZUfc9ZuuAut+wHp2pMHOeOqMcH1jg3uRs=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
 
-  # Test are not available (not in PyPI tarball and there are no GitHub releases)
-  doCheck = false;
+  dependencies = [
+    aiohttp
+    mashumaro
+    python-dateutil
+  ]
+  ++ mashumaro.optional-dependencies.orjson;
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pyyaml
+    requests
+  ];
 
   pythonImportsCheck = [ "pyvesync" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to manage Etekcity Devices and Levoit Air Purifier";
     homepage = "https://github.com/webdjoe/pyvesync";
-    changelog = "https://github.com/webdjoe/pyvesync/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/webdjoe/pyvesync/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -1,101 +1,105 @@
 {
   lib,
-  cmake,
-  dbus,
-  fetchFromGitHub,
-  fetchYarnDeps,
-  openssl,
-  pkg-config,
-  freetype,
-  libsoup_2_4,
-  gtk3,
-  webkitgtk_4_0,
-  perl,
-  cyrus_sasl,
   stdenv,
-  yarnConfigHook,
-  nodejs-slim,
-  cargo-tauri_1,
+
+  fetchFromGitHub,
+  substitute,
+  yarn-berry_4,
+
   cargo,
-  rustPlatform,
+  cargo-tauri,
+  cmake,
+  nodejs-slim,
+  pkg-config,
   rustc,
-  jq,
-  moreutils,
-  fetchpatch,
+  rustPlatform,
+  webkitgtk_4_1,
+
+  cyrus_sasl,
+  freetype,
+  libsoup_3,
+  openssl,
+  curl,
+
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "insulator2";
-  version = "2.13.2";
+  version = "2.14.0";
 
   src = fetchFromGitHub {
     owner = "andrewinci";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-34JRIB7/x7miReWOxR/m+atjfUiE3XGyh9OBSbMg3m4=";
+    repo = "insulator2";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-QCoDiFEgVuF/+MqgzcMTXqjC/nDA+A2v3l01kZyviDs=";
+
+    # Remove after upstream updates to Yarn 4.15
+    # https://github.com/andrewinci/insulator2/blob/main/package.json#L105
+    postFetch = ''
+      cd $out
+      patch -p1 < ${
+        (substitute {
+          src = ./yarn-fix.patch;
+          substitutions = [
+            "--replace-fail"
+            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+            yarn-berry_4.lockfileVersion
+          ];
+        })
+      }
+    '';
   };
 
-  patches = [
-    # see: https://github.com/andrewinci/insulator2/pull/733
-    ./fix-rust-1.80.0.patch
-  ];
-
-  # Yarn *really* wants us to use corepack if this is set
-  postPatch = ''
-    jq 'del(.packageManager)' package.json | sponge package.json
-  '';
-
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
-    hash = "sha256-5wOgVrcHJVF07QpnN52d4VWEM3FKw3NdLrZ1goAP2oI=";
+  missingHashes = ./missing-hashes.json;
+  offlineCache = yarn-berry_4.fetchYarnBerryDeps {
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-2w1fMVwQFClyrpNmJrjJoDqbU2nxRZh9NkBIcMUEjec=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "apache-avro-0.16.0" = "sha256-v4TeJEhLEqQUgj+EHgFRVUGoLC+SpOUhAXngMP7R7nM=";
-      "rust-keystore-0.1.1" = "sha256-Cj64uJFZNxnrplhRuqf9/HK/RAaawzfYHo/J9snZ+TU=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    sourceRoot = finalAttrs.src.name + "/backend";
+    hash = "sha256-u5WFV7luvqSQQtEJFlN//GH6iNcQpH/o01ME1dPtOB4=";
   };
 
   cargoRoot = "backend/";
-  buildAndTestSubdir = cargoRoot;
+  buildAndTestSubdir = finalAttrs.cargoRoot;
+
+  strictDeps = true;
 
   dontUseCmakeConfigure = true;
 
-  preInstall = ''
-    mkdir -p "$out"
-  '';
-
   nativeBuildInputs = [
-    cmake
-    pkg-config
-    perl
-    rustPlatform.cargoSetupHook
     cargo
-    rustc
-    cargo-tauri_1.hook
-    yarnConfigHook
+    cargo-tauri.hook
+    cmake
     nodejs-slim
-    cyrus_sasl
-    jq
-    moreutils # for sponge
+    pkg-config
+    rustc
+    rustPlatform.cargoSetupHook
+    yarn-berry_4
+    yarn-berry_4.yarnBerryConfigHook
   ];
 
   buildInputs = [
-    dbus
-    openssl.out
+    cyrus_sasl
     freetype
-    libsoup_2_4
-    gtk3
-    webkitgtk_4_0
+    libsoup_3
+    openssl
+    webkitgtk_4_1
+    curl
   ];
 
-  meta = with lib; {
+  env.OPENSSL_NO_VENDOR = 1;
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Client UI to inspect Kafka topics, consume, produce and much more";
     homepage = "https://github.com/andrewinci/insulator2";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ tc-kaluza ];
-    mainProgram = "insulator-2";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ tc-kaluza ];
+    mainProgram = "insulator2";
   };
-}
+})

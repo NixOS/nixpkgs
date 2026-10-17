@@ -1,10 +1,11 @@
-import ./make-test-python.nix (
-  { lib, ... }:
-  {
-    name = "Wakapi";
+{ lib, ... }:
+{
+  name = "Wakapi";
 
-    nodes = {
-      wakapiPsql = {
+  nodes = {
+    wakapiPsql =
+      { pkgs, ... }:
+      {
         services.wakapi = {
           enable = true;
           settings = {
@@ -22,12 +23,18 @@ import ./make-test-python.nix (
           database.createLocally = true; # only works with Postgresql for now
 
           # Created with `cat /dev/urandom | LC_ALL=C tr -dc 'a-zA-Z0-9' | fold -w ${1:-32} | head -n 1`
-          # Prefer passwordSaltFile in production.
-          passwordSalt = "NpqCY7eY7fMoIWYmPx5mAgr6YoSlXSuI";
+          # In production you should use sops-nix, agenix or something alike.
+          environmentFiles = [
+            (pkgs.writeText "env" ''
+              WAKAPI_PASSWORD_SALT=NpqCY7eY7fMoIWYmPx5mAgr6YoSlXSuI
+            '')
+          ];
         };
       };
 
-      wakapiSqlite = {
+    wakapiSqlite =
+      { pkgs, ... }:
+      {
         services.wakapi = {
           enable = true;
           settings = {
@@ -39,29 +46,32 @@ import ./make-test-python.nix (
             };
           };
 
-          passwordSalt = "NpqCY7eY7fMoIWYmPx5mAgr6YoSlXSuI";
+          environmentFiles = [
+            (pkgs.writeText "env" ''
+              WAKAPI_PASSWORD_SALT=NpqCY7eY7fMoIWYmPx5mAgr6YoSlXSuI
+            '')
+          ];
         };
       };
-    };
+  };
 
-    # Test that service works under both postgresql and sqlite3
-    # by starting all machines, and curling the default address.
-    # This is not very comprehensive for a test, but it should
-    # catch very basic mistakes in the module.
-    testScript = ''
-      with subtest("Test Wakapi with postgresql backend"):
-        wakapiPsql.start()
-        wakapiPsql.wait_for_unit("wakapi.service")
-        wakapiPsql.wait_for_open_port(3000)
-        wakapiPsql.succeed("curl --fail http://localhost:3000")
+  # Test that service works under both postgresql and sqlite3
+  # by starting all machines, and curling the default address.
+  # This is not very comprehensive for a test, but it should
+  # catch very basic mistakes in the module.
+  testScript = ''
+    with subtest("Test Wakapi with postgresql backend"):
+      wakapiPsql.start()
+      wakapiPsql.wait_for_unit("wakapi.service")
+      wakapiPsql.wait_for_open_port(3000)
+      wakapiPsql.succeed("curl --fail http://localhost:3000")
 
-      with subtest("Test Wakapi with sqlite3 backend"):
-        wakapiSqlite.start()
-        wakapiSqlite.wait_for_unit("wakapi.service")
-        wakapiSqlite.wait_for_open_port(3001)
-        wakapiSqlite.succeed("curl --fail http://localhost:3001")
-    '';
+    with subtest("Test Wakapi with sqlite3 backend"):
+      wakapiSqlite.start()
+      wakapiSqlite.wait_for_unit("wakapi.service")
+      wakapiSqlite.wait_for_open_port(3001)
+      wakapiSqlite.succeed("curl --fail http://localhost:3001")
+  '';
 
-    meta.maintainers = [ lib.maintainers.NotAShelf ];
-  }
-)
+  meta.maintainers = [ lib.maintainers.NotAShelf ];
+}

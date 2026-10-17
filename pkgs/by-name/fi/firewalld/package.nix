@@ -1,104 +1,173 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, bash
-, docbook_xml_dtd_42
-, docbook-xsl-nons
-, glib
-, gobject-introspection
-, gtk3
-, intltool
-, libnotify
-, libxml2
-, libxslt
-, networkmanagerapplet
-, pkg-config
-, python3
-, wrapGAppsNoGuiHook
-, withGui ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch2,
+  autoconf,
+  automake,
+  docbook_xml_dtd_42,
+  docbook-xsl-nons,
+  glib,
+  gobject-introspection,
+  gtk3,
+  intltool,
+  ipset,
+  iptables,
+  kmod,
+  libnotify,
+  librsvg,
+  libxml2,
+  libxslt,
+  networkmanager,
+  pkg-config,
+  python3,
+  qt6,
+  sysctl,
+  wrapGAppsNoGuiHook,
+  withGui ? false,
+  nixosTests,
 }:
 
 let
-  pythonPath = python3.withPackages (ps: with ps; [
-    dbus-python
-    nftables
-    pygobject3
-  ] ++ lib.optionals withGui [
-    pyqt5
-    pyqt5-sip
-  ]);
+  pythonPath = python3.withPackages (
+    ps:
+    with ps;
+    [
+      dbus-python
+      nftables
+      pygobject3
+    ]
+    ++ lib.optionals withGui [
+      pyqt6
+    ]
+  );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "firewalld";
-  version = "2.3.0";
+  version = "2.5.2";
+
+  __structuredAttrs = true;
+  strictDeps = true;
+  enableParallelBuilding = true;
 
   src = fetchFromGitHub {
     owner = "firewalld";
     repo = "firewalld";
-    rev = "v${version}";
-    sha256 = "sha256-ubE1zMIOcdg2+mgXsk6brCZxS1XkvJYwVY3E+UXIIiU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-LKwjponEBNhCtTifeJQQrWP+1vdpaiH1UhriUCAljBE=";
   };
 
   patches = [
+    ./add-config-path-env-var.patch
     ./respect-xml-catalog-files-var.patch
-  ];
+    ./specify-localedir.patch
+
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/firewalld/-/raw/5f2f37e3018835d0183ca44bc4467b3a096edec7/fix_gettext_domain.patch";
+      hash = "sha256-cZnat9fAVktgDn3rdKOLCbK27ddcKW7o2KuKAm8GV8Y=";
+    })
+  ]
+  ++ lib.optional withGui ./nm-connection-editor.patch;
 
   postPatch = ''
-    substituteInPlace src/firewall/config/__init__.py.in \
-      --replace "/usr/share" "$out/share"
+    substituteInPlace config/xmlschema/check.sh \
+      --replace-fail /usr/bin/ ""
 
-    for file in config/firewall-{applet,config}.desktop.in; do
-      substituteInPlace $file \
-        --replace "/usr/bin/" "$out/bin/"
+    for file in src/{firewall-offline-cmd.in,firewall/config/__init__.py.in}; do
+        substituteInPlace $file \
+          --replace-fail /usr "$out"
     done
-  '' + lib.optionalString withGui ''
-    substituteInPlace src/firewall-applet.in \
-      --replace "/usr/bin/nm-connection-editor" "${networkmanagerapplet}/bin/nm-connection-editor"
   '';
 
   nativeBuildInputs = [
-    autoreconfHook
+    autoconf
+    automake
     docbook_xml_dtd_42
     docbook-xsl-nons
     glib
+    gobject-introspection
     intltool
     libxml2
     libxslt
     pkg-config
     python3
     python3.pkgs.wrapPython
-  ] ++ lib.optionals withGui [
-    gobject-introspection
     wrapGAppsNoGuiHook
+  ]
+  ++ lib.optionals withGui [
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    bash
     glib
-  ] ++ lib.optionals withGui [
+    ipset
+    iptables
+    kmod
+    networkmanager
+    pythonPath
+    sysctl
+  ]
+  ++ lib.optionals withGui [
     gtk3
     libnotify
-    pythonPath
+    librsvg
+    qt6.qtbase
   ];
 
-  dontWrapGApps = true;
+  preConfigure = ''
+    ./autogen.sh
+  '';
 
-  preFixup = lib.optionalString withGui ''
+  ac_cv_path_MODPROBE = lib.getExe' kmod "modprobe";
+  ac_cv_path_RMMOD = lib.getExe' kmod "rmmod";
+  ac_cv_path_SYSCTL = lib.getExe' sysctl "sysctl";
+
+  configureFlags = [
+    "--with-iptables=${lib.getExe' iptables "iptables"}"
+    "--with-iptables-restore=${lib.getExe' iptables "iptables-restore"}"
+    "--with-ip6tables=${lib.getExe' iptables "ip6tables"}"
+    "--with-ip6tables-restore=${lib.getExe' iptables "ip6tables-restore"}"
+    "--with-ebtables=${lib.getExe' iptables "ebtables"}"
+    "--with-ebtables-restore=${lib.getExe' iptables "ebtables-restore"}"
+    "--with-ipset=${lib.getExe' ipset "ipset"}"
+  ];
+
+  postInstall = ''
+    rm -r $out/share/firewalld/testsuite
+  ''
+  + lib.optionalString (!withGui) ''
+    rm $out/bin/firewall-{applet,config}
+    rm $out/etc/xdg/autostart/firewall-applet.desktop
+    rm $out/share/applications/firewall-config.desktop
+    rm $out/share/metainfo/org.firewalld.firewall-config.metainfo.xml
+  '';
+
+  dontWrapGApps = true;
+  dontWrapQtApps = true;
+
+  preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  ''
+  + lib.optionalString withGui ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
   postFixup = ''
-    chmod +x $out/share/firewalld/*.py $out/share/firewalld/testsuite/python/*.py $out/share/firewalld/testsuite/{,integration/}testsuite
-    patchShebangs --host $out/share/firewalld/testsuite/{,integration/}testsuite $out/share/firewalld/*.py
+    chmod +x $out/share/firewalld/*.py
+    patchShebangs --host $out/share/firewalld/*.py
     wrapPythonProgramsIn "$out/bin" "$out ${pythonPath}"
-    wrapPythonProgramsIn "$out/share/firewalld/testsuite/python" "$out ${pythonPath}"
   '';
 
-  meta = with lib; {
-    description = "Firewall daemon with D-Bus interface";
-    homepage = "https://github.com/firewalld/firewalld";
-    license = licenses.gpl2Plus;
-    maintainers = [ ];
+  passthru.tests = {
+    inherit (nixosTests) firewalld firewall-firewalld;
   };
-}
+
+  meta = {
+    description = "Firewall daemon with D-Bus interface";
+    homepage = "https://firewalld.org";
+    downloadPage = "https://github.com/firewalld/firewalld/releases";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ prince213 ];
+    platforms = lib.platforms.linux;
+  };
+})

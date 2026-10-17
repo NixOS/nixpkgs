@@ -9,18 +9,18 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "terraform-plugin-docs";
-  version = "0.20.1";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "terraform-plugin-docs";
-    tag = "v${version}";
-    hash = "sha256-i5J0dBXqfm5YvELU8q5jLTtfgo8r1u/x/VW55TPmJLQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-QgN2gcGu9Laq4gQkYBvbE7gadiwzAyERLaKVLI+XiHQ=";
   };
 
-  vendorHash = "sha256-UmPbtLHy2PAGxDPo1NziHYpNifuI8lsYDASHyjVzGJo=";
+  vendorHash = "sha256-+D3JwUpLJ6gZAkTFO0fQAFpl0OCp36HMbWES/+lK+9g=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -35,8 +35,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
-    "-X main.commit=${src.rev}"
+    "-X github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs/build.version=${finalAttrs.version}"
+    "-X github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs/build.commit=${finalAttrs.src.tag}"
   ];
 
   postInstall = ''
@@ -51,12 +51,12 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Generate and validate Terraform plugin/provider documentation";
     homepage = "https://github.com/hashicorp/terraform-plugin-docs";
-    changelog = "https://github.com/hashicorp/terraform-plugin-docs/releases/tag/v${version}";
-    license = licenses.mpl20;
+    changelog = "https://github.com/hashicorp/terraform-plugin-docs/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mpl20;
     mainProgram = "tfplugindocs";
-    maintainers = with maintainers; [ lewo ];
+    maintainers = with lib.maintainers; [ lewo ];
   };
-}
+})

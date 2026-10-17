@@ -8,7 +8,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "notifymuch";
   version = "0.1";
   format = "setuptools";
@@ -21,15 +21,14 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "1lssr7iv43mp5v6nzrfbqlfzx8jcc7m636wlfyhhnd8ydd39n6k4";
   };
 
-  propagatedBuildInputs =
-    [
-      libnotify
-      gtk3
-    ]
-    ++ (with python3.pkgs; [
-      notmuch
-      pygobject3
-    ]);
+  propagatedBuildInputs = [
+    libnotify
+    gtk3
+  ]
+  ++ (with python3.pkgs; [
+    notmuch
+    pygobject3
+  ]);
 
   nativeBuildInputs = [
     gobject-introspection
@@ -44,11 +43,11 @@ python3.pkgs.buildPythonApplication rec {
 
   strictDeps = false;
 
-  meta = with lib; {
+  meta = {
     description = "Display desktop notifications for unread mail in a notmuch database";
     mainProgram = "notifymuch";
     homepage = "https://github.com/kspi/notifymuch";
-    maintainers = with maintainers; [ arjan-s ];
-    license = licenses.gpl3;
+    maintainers = with lib.maintainers; [ arjan-s ];
+    license = lib.licenses.gpl3;
   };
 }

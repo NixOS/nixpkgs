@@ -6,7 +6,7 @@
   jansson,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "jshon";
   version = "20170302";
 
@@ -37,12 +37,12 @@ stdenv.mkDerivation rec {
     export DESTDIR=$out
   '';
 
-  meta = with lib; {
-    homepage = "http://kmkeen.com/jshon";
+  meta = {
+    homepage = "https://github.com/keenerd/jshon";
     description = "JSON parser designed for maximum convenience within the shell";
     mainProgram = "jshon";
-    license = licenses.free;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ rushmorem ];
+    license = lib.licenses.free;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ rushmorem ];
   };
 }

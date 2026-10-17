@@ -1,36 +1,48 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  setuptools,
   zope-interface,
   zope-exceptions,
-  zope-testing,
-  six,
 }:
 
 buildPythonPackage rec {
-  pname = "zope.testrunner";
-  version = "6.6";
+  pname = "zope-testrunner";
+  version = "8.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-sReX6XWocHseM7ZUTKz5A3KHiG7leA7P7UvxiZ1CFe8=";
+  src = fetchFromGitHub {
+    owner = "zopefoundation";
+    repo = "zope.testrunner";
+    tag = version;
+    hash = "sha256-MqlS/VkLAv9M1WtJ6t2nPMZPH+Cz5wfy2VhtCx/Fwmw=";
   };
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools ==" "setuptools >="
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     zope-interface
     zope-exceptions
-    zope-testing
-    six
   ];
+
+  pythonImportsCheck = [ "zope.testrunner" ];
 
   doCheck = false; # custom test modifies sys.path
 
-  meta = with lib; {
+  pythonNamespaces = [ "zope" ];
+
+  meta = {
     description = "Flexible test runner with layer support";
     mainProgram = "zope-testrunner";
-    homepage = "https://pypi.python.org/pypi/zope.testrunner";
-    license = licenses.zpl20;
+    homepage = "https://github.com/zopefoundation/zope.testrunner";
+    changelog = "https://github.com/zopefoundation/zope.testrunner/blob/${src.tag}/CHANGES.rst";
+    license = lib.licenses.zpl21;
     maintainers = [ ];
   };
 }

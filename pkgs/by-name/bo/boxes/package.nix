@@ -9,15 +9,15 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "boxes";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "ascii-boxes";
     repo = "boxes";
-    rev = "v${version}";
-    hash = "sha256-dvhb5KWBQt7g4n0ZTQMcJQljIfavV3g8i+P3PWB6Gwk=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-dkL5VYs6j9LzvhCLU4BEbiTDWJpW1vQrmLWQ40P3Yzo=";
   };
 
   # Building instructions:
@@ -51,12 +51,12 @@ stdenv.mkDerivation rec {
     install -Dm644 -t $out/share/man/man1 doc/boxes.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line program which draws, removes, and repairs ASCII art boxes";
     mainProgram = "boxes";
     homepage = "https://boxes.thomasjensen.com";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ waiting-for-dev ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ waiting-for-dev ];
+    platforms = lib.platforms.unix;
   };
-}
+})

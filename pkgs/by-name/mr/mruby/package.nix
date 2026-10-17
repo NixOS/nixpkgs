@@ -4,18 +4,19 @@
   ruby,
   rake,
   fetchFromGitHub,
+  fetchpatch,
   testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mruby";
-  version = "3.3.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "mruby";
     repo = "mruby";
     rev = finalAttrs.version;
-    sha256 = "sha256-rCoEC1ioX6bOocPoPi+Lsn4PM8gY0DjKja1/MJvJ1n8=";
+    sha256 = "sha256-7CDTRQncpjY0HO0S1lM57aUvV6ZseEp+/nxXp4ZuuQs=";
   };
 
   nativeBuildInputs = [ rake ];
@@ -41,12 +42,16 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Embeddable implementation of the Ruby language";
     homepage = "https://mruby.org";
-    maintainers = with maintainers; [ nicknovitski ];
-    license = licenses.mit;
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [
+      nicknovitski
+      nomadium
+    ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
     mainProgram = "mruby";
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

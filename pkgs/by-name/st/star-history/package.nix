@@ -1,40 +1,34 @@
 {
   lib,
   rustPlatform,
-  darwin,
   fetchCrate,
   pkg-config,
   openssl,
-  stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "star-history";
-  version = "1.0.26";
+  version = "1.0.32";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-qwpUV+amv/n/lRcFYf/TgXoj3aHdg3kZJigEeA0fKBg=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-JilIVnxSXEK525TK+mHal+37G7PYcaQogVC2ozYeLY4=";
   };
 
-  cargoHash = "sha256-dKC+ZrQEcJW8jiYmFWBVWYiFzJ4guGAw4X4nazi9u6Y=";
+  cargoHash = "sha256-9qKdn3q4d4N36+jng4ZKfazcxR9iMOh1PeUNYfZz8pg=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [ openssl ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line program to generate a graph showing number of GitHub stars of a user, org or repo over time";
     homepage = "https://github.com/dtolnay/star-history";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ lib.maintainers.matthiasbeyer ];
     mainProgram = "star-history";
   };
-}
+})

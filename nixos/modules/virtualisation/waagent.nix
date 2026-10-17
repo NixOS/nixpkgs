@@ -31,7 +31,7 @@ let
       attrsOf (
         either atom (attrsOf atom)
         // {
-          description = atom.description + "or an attribute set of them";
+          description = atom.description + " or an attribute set of them";
         }
       );
     generate =
@@ -67,7 +67,7 @@ let
         convert =
           attrs:
           pipe (recurse [ ] attrs) [
-            # Filter out null values and emoty lists
+            # Filter out null values and empty lists
             (filter (kv: kv.value != null && kv.value != [ ]))
             # Transform to Key=Value form, then concatenate
             (map (kv: "${kv.name}=${transform kv.value}"))
@@ -110,14 +110,18 @@ let
       };
 
       ResourceDisk = {
-        Format = mkEnableOption ''
-          If set to `true`, waagent formats and mounts the resource disk that the platform provides,
-          unless the file system type in `ResourceDisk.FileSystem` is set to `ntfs`.
-          The agent makes a single Linux partition (ID 83) available on the disk.
-          This partition isn't formatted if it can be successfully mounted.
+        Format = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            If set to `true`, waagent formats and mounts the resource disk that the platform provides,
+            unless the file system type in `ResourceDisk.FileSystem` is set to `ntfs`.
+            The agent makes a single Linux partition (ID 83) available on the disk.
+            This partition isn't formatted if it can be successfully mounted.
 
-          This configuration has no effect if resource disk is managed by cloud-init.
-        '';
+            This configuration has no effect if resource disk is managed by cloud-init.
+          '';
+        };
 
         FileSystem = mkOption {
           type = types.str;
@@ -151,38 +155,50 @@ let
           ];
           description = ''
             This option specifies disk mount options to be passed to the `mount -o` command.
-            For more information, see the `mount(8)` manual page.
+            For more information, see the {manpage}`mount(8)` manual page.
           '';
         };
 
-        EnableSwap = mkEnableOption ''
-          If enabled, the agent creates a swap file (`/swapfile`) on the resource disk
-          and adds it to the system swap space.
+        EnableSwap = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            If enabled, the agent creates a swap file (`/swapfile`) on the resource disk
+            and adds it to the system swap space.
 
-          This configuration has no effect if resource disk is managed by cloud-init.
-        '';
+            This configuration has no effect if resource disk is managed by cloud-init.
+          '';
+        };
 
         SwapSizeMB = mkOption {
           type = types.int;
           default = 0;
           description = ''
-            Specifies the size of the swap file in megabytes.
+            Specifies the size of the swap file in MiB (1024×1024 bytes).
 
             This configuration has no effect if resource disk is managed by cloud-init.
           '';
         };
       };
 
-      Logs.Verbose = lib.mkEnableOption ''
-        If you set this option, log verbosity is boosted.
-        Waagent logs to `/var/log/waagent.log` and uses the system logrotate functionality to rotate logs.
-      '';
+      Logs.Verbose = lib.mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          If you set this option, log verbosity is boosted.
+          Waagent logs to `/var/log/waagent.log` and uses the system logrotate functionality to rotate logs.
+        '';
+      };
 
       OS = {
-        EnableRDMA = lib.mkEnableOption ''
-          If enabled, the agent attempts to install and then load an RDMA kernel driver
-          that matches the version of the firmware on the underlying hardware.
-        '';
+        EnableRDMA = lib.mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            If enabled, the agent attempts to install and then load an RDMA kernel driver
+            that matches the version of the firmware on the underlying hardware.
+          '';
+        };
 
         RootDeviceScsiTimeout = lib.mkOption {
           type = types.nullOr types.int;
@@ -204,7 +220,7 @@ let
         };
 
         Port = lib.mkOption {
-          type = types.nullOr types.int;
+          type = types.nullOr types.port;
           default = null;
           description = ''
             If you set http proxy, waagent will use this proxy to access the Internet.
@@ -212,17 +228,19 @@ let
         };
       };
 
-      AutoUpdate.Enable = lib.mkEnableOption ''
-        Enable or disable autoupdate for goal state processing.
-      '';
+      AutoUpdate.UpdateToLatestVersion = lib.mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether or not to enable auto-update of the Extension Handler.
+        '';
+      };
     };
   };
 in
 {
   options.services.waagent = {
-    enable = lib.mkEnableOption ''
-      Whether to enable the Windows Azure Linux Agent.
-    '';
+    enable = lib.mkEnableOption "Windows Azure Linux Agent";
 
     package = lib.mkPackageOption pkgs "waagent" { };
 
@@ -239,7 +257,7 @@ in
       type = settingsType;
       default = { };
       description = ''
-        The waagent.conf configuration, see https://learn.microsoft.com/en-us/azure/virtual-machines/extensions/agent-linux for documentation.
+        The waagent.conf configuration, see <https://learn.microsoft.com/en-us/azure/virtual-machines/extensions/agent-linux> for documentation.
       '';
     };
   };
@@ -311,7 +329,8 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [
         "network-online.target"
-      ] ++ lib.optionals config.services.cloud-init.enable [ "cloud-init.service" ];
+      ]
+      ++ lib.optionals config.services.cloud-init.enable [ "cloud-init.service" ];
       wants = [
         "network-online.target"
         "sshd.service"
@@ -333,7 +352,7 @@ in
           parted
 
           # for hostname
-          nettools
+          net-tools
           # for pidof
           procps
           # for useradd, usermod
@@ -351,7 +370,6 @@ in
         Type = "simple";
         Restart = "always";
         Slice = "azure.slice";
-        CPUAccounting = true;
         MemoryAccounting = true;
       };
     };

@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "16gbizy8vkxasxylwzj4p66yw8979nvzxdj6csidgmng7gi2k8nx";
+    hash = "sha256-3aIp4jvP1teiZka2/rdNJyHujblEfk5916rPjfyP65k=";
   };
 
   propagatedBuildInputs = [
@@ -35,10 +35,10 @@ buildPythonPackage rec {
   # No tests distributed
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "GitHub API client implemented using Twisted";
     homepage = "https://github.com/tomprince/txgithub";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -1,34 +1,34 @@
 {
   lib,
   stdenv,
+  appimageTools,
   fetchurl,
   _7zz,
-  appimageTools,
 }:
+
 let
   pname = "dbgate";
-  version = "6.1.0";
+  version = "7.2.4";
   src =
     fetchurl
       {
         aarch64-linux = {
           url = "https://github.com/dbgate/dbgate/releases/download/v${version}/dbgate-${version}-linux_arm64.AppImage";
-          hash = "sha256-gUACJGegHFhOd9t/MVt5imwsTnOKA9Q66dKtzLHzjSo=";
+          hash = "sha256-9X8AyFcKy94blybAEU/H83Ku5oFQU4piVtCTNn4mobE=";
         };
         x86_64-linux = {
           url = "https://github.com/dbgate/dbgate/releases/download/v${version}/dbgate-${version}-linux_x86_64.AppImage";
-          hash = "sha256-hSqBwsroOWcyHuUimkiy13tdTKqdAjXOnECv5J9KRbw=";
-        };
-        x86_64-darwin = {
-          url = "https://github.com/dbgate/dbgate/releases/download/v${version}/dbgate-${version}-mac_x64.dmg";
-          hash = "sha256-tUY9TM/wP7N1giZpBlzCQlF+01XT7HA4v/kTrT57jX8=";
+          hash = "sha256-v3HPdY5so4IYY8tfk5mqjKOglCvcKk7uKYHV51DoiLM=";
         };
         aarch64-darwin = {
           url = "https://github.com/dbgate/dbgate/releases/download/v${version}/dbgate-${version}-mac_universal.dmg";
-          hash = "sha256-b5IJfpe3XnY1bSI6dzQro8PY4L72aFKy9GtolgFZzsA=";
+          hash = "sha256-GPdDglP2DVGCdchvj1Q5oLU3+DSzTccUbH5LmHGRj/M=";
         };
       }
-      .${stdenv.system} or (throw "dbgate: ${stdenv.system} is unsupported.");
+      .${stdenv.hostPlatform.system} or (throw "dbgate: ${stdenv.hostPlatform.system} is unsupported.");
+
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "Database manager for MySQL, PostgreSQL, SQL Server, MongoDB, SQLite and others";
     homepage = "https://dbgate.org/";
@@ -38,7 +38,6 @@ let
     mainProgram = "dbgate";
     platforms = [
       "x86_64-linux"
-      "x86_64-darwin"
       "aarch64-linux"
       "aarch64-darwin"
     ];
@@ -51,6 +50,7 @@ if stdenv.hostPlatform.isDarwin then
       pname
       version
       src
+      passthru
       meta
       ;
 
@@ -62,8 +62,10 @@ if stdenv.hostPlatform.isDarwin then
 
     installPhase = ''
       runHook preInstall
+
       mkdir -p $out/Applications
       cp -r *.app $out/Applications
+
       runHook postInstall
     '';
   }
@@ -76,11 +78,14 @@ else
       pname
       version
       src
+      passthru
       meta
       ;
+
     extraInstallCommands = ''
-      install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
-      substituteInPlace $out/share/applications/${pname}.desktop --replace-warn "Exec=AppRun --no-sandbox" "Exec=$out/bin/${pname}"
+      install -Dm644 ${appimageContents}/dbgate.desktop -t $out/share/applications
+      substituteInPlace $out/share/applications/dbgate.desktop \
+        --replace-warn "Exec=AppRun --no-sandbox" "Exec=dbgate"
       cp -r ${appimageContents}/usr/share/icons $out/share
     '';
   }

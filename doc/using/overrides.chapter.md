@@ -13,27 +13,34 @@ It is used to override the arguments passed to a function.
 Example usages:
 
 ```nix
-pkgs.foo.override { arg1 = val1; arg2 = val2; /* ... */ }
+pkgs.foo.override {
+  arg1 = val1;
+  arg2 = val2; # ...
+}
 ```
 
 It's also possible to access the previous arguments.
 
 ```nix
-pkgs.foo.override (previous: { arg1 = previous.arg1; /* ... */ })
+pkgs.foo.override (previous: {
+  arg1 = previous.arg1; # ...
+})
 ```
 
 <!-- TODO: move below programlisting to a new section about extending and overlays and reference it -->
 
 ```nix
-import pkgs.path { overlays = [ (self: super: {
-  foo = super.foo.override { barSupport = true ; };
-  })];}
+import pkgs.path {
+  overlays = [ (self: super: { foo = super.foo.override { barSupport = true; }; }) ];
+}
 ```
 
 ```nix
 {
   mypkg = pkgs.callPackage ./mypkg.nix {
-    mydep = pkgs.mydep.override { /* ... */ };
+    mydep = pkgs.mydep.override {
+      # ...
+    };
   };
 }
 ```
@@ -49,15 +56,15 @@ If you want to ensure that things keep working, consider [becoming a maintainer]
 
 ## &lt;pkg&gt;.overrideAttrs {#sec-pkg-overrideAttrs}
 
-The function `overrideAttrs` allows overriding the attribute set passed to a `stdenv.mkDerivation` call, producing a new derivation based on the original one. This function is available on all derivations produced by the `stdenv.mkDerivation` function, which is most packages in the nixpkgs expression `pkgs`.
+The function `overrideAttrs` allows overriding the attribute set passed to a `stdenv.mkDerivation` call, producing a new derivation based on the original one. This function is available on all derivations produced by the `stdenv.mkDerivation` function, which is most packages in the Nixpkgs expression `pkgs`.
 
 Example usages:
 
 ```nix
 {
-  helloBar = pkgs.hello.overrideAttrs (finalAttrs: previousAttrs: {
-    pname = previousAttrs.pname + "-bar";
-  });
+  helloBar = pkgs.hello.overrideAttrs (
+    finalAttrs: previousAttrs: { pname = previousAttrs.pname + "-bar"; }
+  );
 }
 ```
 
@@ -72,11 +79,7 @@ If only a one-argument function is written, the argument has the meaning of `pre
 Function arguments can be omitted entirely if there is no need to access `previousAttrs` or `finalAttrs`.
 
 ```nix
-{
-  helloWithDebug = pkgs.hello.overrideAttrs {
-    separateDebugInfo = true;
-  };
-}
+{ helloWithDebug = pkgs.hello.overrideAttrs { separateDebugInfo = true; }; }
 ```
 
 In the above example, the `separateDebugInfo` attribute is overridden to be true, thus building debug info for `helloWithDebug`.
@@ -95,7 +98,7 @@ You should prefer `overrideAttrs` in almost all cases, see its documentation for
 Do not use this function in Nixpkgs as it evaluates a derivation before modifying it, which breaks package abstraction. In addition, this evaluation-per-function application incurs a performance penalty, which can become a problem if many overrides are used. It is only intended for ad-hoc customisation, such as in `~/.config/nixpkgs/config.nix`.
 :::
 
-The function `overrideDerivation` creates a new derivation based on an existing one by overriding the original's attributes with the attribute set produced by the specified function. This function is available on all derivations defined using the `makeOverridable` function. Most standard derivation-producing functions, such as `stdenv.mkDerivation`, are defined using this function, which means most packages in the nixpkgs expression, `pkgs`, have this function.
+The function `overrideDerivation` creates a new derivation based on an existing one by overriding the original's attributes with the attribute set produced by the specified function. This function is available on all derivations defined using the `makeOverridable` function. Most standard derivation-producing functions, such as `stdenv.mkDerivation`, are defined using this function, which means most packages in the Nixpkgs expression, `pkgs`, have this function.
 
 Example usage:
 
@@ -107,7 +110,7 @@ Example usage:
       url = "ftp://alpha.gnu.org/gnu/sed/sed-4.2.2-pre.tar.bz2";
       hash = "sha256-MxBJRcM2rYzQYwJ5XKxhXTQByvSg5jZc5cSHEZoB2IY=";
     };
-    patches = [];
+    patches = [ ];
   });
 }
 ```
@@ -128,8 +131,15 @@ Example usage:
 
 ```nix
 {
-  f = { a, b }: { result = a+b; };
-  c = lib.makeOverridable f { a = 1; b = 2; };
+  f =
+    { a, b }:
+    {
+      result = a + b;
+    };
+  c = lib.makeOverridable f {
+    a = 1;
+    b = 2;
+  };
 }
 ```
 

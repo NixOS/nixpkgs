@@ -13,16 +13,18 @@
   pkg-config,
   wrapGAppsHook4,
   glib,
-  appstream-glib,
+  appstream,
   desktop-file-utils,
   blueprint-compiler,
   sqlite,
-  clapper,
+  clapper-unwrapped,
+  clapper-enhancers,
   gettext,
   gst_all_1,
-  gtuber,
   glib-networking,
   gnome,
+  libjxl,
+  libheif,
   webp-pixbuf-loader,
   librsvg,
   nix-update-script,
@@ -30,30 +32,31 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pipeline";
-  version = "2.1.0";
+  version = "4.1.0";
 
   src = fetchFromGitLab {
     owner = "schmiddi-on-mobile";
     repo = "pipeline";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-jAwVJjRU/Fq386XW4eQhiAe4IQUtQuYp35J2KSUNogY=";
+    tag = finalAttrs.version;
+    hash = "sha256-8/UMZGXCwqUw1EL7QFnpRqtSA6D9sU1ycG+AeHNeaXw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src;
-    hash = "sha256-VGWt7t5r0cDrO2WXpBqYM15HDfSRQ2MbSUWzdfU9JjA=";
+    inherit (finalAttrs) src pname version;
+    hash = "sha256-7Hod81YwKpPJ6Uk9u0zyEO75Wb8Q8xOBpiyTypefDP4=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     cargo
+    gettext
     rustPlatform.cargoSetupHook
     rustc
     pkg-config
     wrapGAppsHook4
     glib
-    appstream-glib
+    appstream
     desktop-file-utils
     blueprint-compiler
   ];
@@ -63,39 +66,46 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
     openssl
     sqlite
-    clapper
-
+    clapper-unwrapped
+    clapper-enhancers
     gst_all_1.gstreamer
     gst_all_1.gst-libav
     gst_all_1.gst-plugins-base
-    (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
+    gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-bad
-    gettext
-    gtuber
+    gst_all_1.gst-plugins-ugly
     glib-networking # For GIO_EXTRA_MODULES. Fixes "TLS support is not available"
   ];
 
-  # Pull in WebP support for YouTube avatars.
-  # In postInstall to run before gappsWrapperArgsHook.
-  postInstall = ''
-    export GDK_PIXBUF_MODULE_FILE="${
-      gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
-        extraLoaders = [
-          webp-pixbuf-loader
-          librsvg
-        ];
-      }
-    }"
+  preFixup = ''
+    gappsWrapperArgs+=(
+       --set GDK_PIXBUF_MODULE_FILE ${
+         gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+           extraLoaders = [
+             libjxl
+             librsvg
+             webp-pixbuf-loader
+             libheif.lib
+           ];
+         }
+       }
+       --set CLAPPER_ENHANCERS_PATH ${clapper-enhancers}/${clapper-enhancers.passthru.pluginPath}
+    )
   '';
 
-  passthru.updateScript = nix-update-script { attrPath = finalAttrs.pname; };
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Watch YouTube and PeerTube videos in one place";
     homepage = "https://mobile.schmidhuberj.de/pipeline";
     mainProgram = "tubefeeder";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ chuangzhu ];
+    maintainers = with lib.maintainers; [
+      chuangzhu
+      Kladki
+    ];
     platforms = lib.platforms.linux;
   };
 })

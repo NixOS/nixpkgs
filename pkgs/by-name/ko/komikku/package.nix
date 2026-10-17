@@ -1,73 +1,80 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
+  blueprint-compiler,
   desktop-file-utils,
   gettext,
   glib,
+  glib-networking,
+  gnome,
   gobject-introspection,
-  blueprint-compiler,
   gtk4,
+  gtksourceview5,
   libadwaita,
-  libnotify,
-  webkitgtk_6_0,
+  libglycin,
+  librsvg,
   meson,
   ninja,
   pkg-config,
   python3,
-  wrapGAppsHook4,
-  librsvg,
-  gnome,
+  webkitgtk_6_0,
   webp-pixbuf-loader,
+  wrapGAppsHook4,
   nix-update-script,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "komikku";
-  version = "1.67.0";
+  version = "51.1.0";
   pyproject = false;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "valos";
     repo = "Komikku";
-    rev = "v${version}";
-    hash = "sha256-vWAYsImJseEQvgq7vreqS76M963zfuL56R87P3od9m4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-I5qu1P6X4A8w3EfdlTPlSqvon+uqNfUx4KICWXoMaQk=";
   };
 
   nativeBuildInputs = [
+    blueprint-compiler
+    desktop-file-utils
+    gettext
+    glib # for glib-compile-resources
+    gobject-introspection
     meson
     ninja
     pkg-config
     wrapGAppsHook4
-    gettext
-    glib # for glib-compile-resources
-    desktop-file-utils
-    gobject-introspection
-    blueprint-compiler
   ];
 
   buildInputs = [
     glib
+    glib-networking
     gtk4
+    gtksourceview5
     libadwaita
-    libnotify
+    libglycin
     webkitgtk_6_0
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     beautifulsoup4
     brotli
     colorthief
+    curl-cffi
     dateparser
+    ebooklib
     emoji
+    jxlpy
     keyring
     lxml
     natsort
     piexif
     pillow
-    pillow-heif
-    curl-cffi
     pygobject3
+    pyjwt
+    pypdf
+    pytesseract
     python-magic
     rarfile
     requests
@@ -92,11 +99,8 @@ python3.pkgs.buildPythonApplication rec {
 
   # Prevent double wrapping.
   dontWrapGApps = true;
-
   preFixup = ''
-    makeWrapperArgs+=(
-      "''${gappsWrapperArgs[@]}"
-    )
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   passthru = {
@@ -108,13 +112,11 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "komikku";
     homepage = "https://apps.gnome.org/Komikku/";
     license = lib.licenses.gpl3Plus;
-    changelog = "https://codeberg.org/valos/Komikku/releases/tag/v${version}";
-    maintainers =
-      with lib.maintainers;
-      [
-        chuangzhu
-        Gliczy
-      ]
-      ++ lib.teams.gnome-circle.members;
+    changelog = "https://codeberg.org/valos/Komikku/releases/tag/v${finalAttrs.version}";
+    maintainers = with lib.maintainers; [
+      chuangzhu
+      Gliczy
+    ];
+    teams = [ lib.teams.gnome-circle ];
   };
-}
+})

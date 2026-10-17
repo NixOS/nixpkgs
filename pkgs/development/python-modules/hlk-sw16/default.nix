@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "jameshilliard";
     repo = "hlk-sw16";
     rev = version;
-    sha256 = "010s85nr6xn89i8yvdagg72a97dh1v2pyfqa33v76p9p8xbgh8dz";
+    hash = "sha256-vyH4Vkc3XXP2GAo7f8UOsJ2kxHlPte1RTMh2k21BGgQ=";
   };
 
   # no tests implemented
@@ -21,10 +21,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "hlk_sw16" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for HLK-SW16";
     homepage = "https://github.com/jameshilliard/hlk-sw16";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

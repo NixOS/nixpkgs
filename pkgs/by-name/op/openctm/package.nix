@@ -4,9 +4,8 @@
   fetchurl,
   pkg-config,
   libglut,
-  gtk2,
   libGLU,
-  darwin,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,20 +26,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      libglut
-      libGLU
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ gtk2 ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ];
+  buildInputs = [
+    libglut
+    libGLU
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libx11 ];
 
   postPatch =
     lib.optionalString stdenv.hostPlatform.isLinux ''
       substituteInPlace "tools/tinyxml/Makefile.linux" \
         --replace-warn "-Wno-format" "-Wno-format -Wno-format-security"
       substituteInPlace "tools/Makefile.linux" \
-        --replace-warn "-lglut" "-lglut -lGL -lGLU"
+        --replace-warn "-lglut" "-lglut -lGL -lGLU" \
+        --replace-fail "all: ctmconv ctmviewer ctmbench" "all: ctmconv ctmbench"
+      substituteInPlace "Makefile.linux" \
+        --replace-fail "$""(CP) tools/ctmviewer $""(BINDIR)" "" \
+        --replace-fail "$""(CP) doc/ctmviewer.1 $""(MAN1DIR)" ""
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace "lib/Makefile.macosx" \
@@ -63,10 +64,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   preInstall = "mkdir -p $bin/bin $dev/include $out/lib $man/share/man/man1";
 
-  meta = with lib; {
+  meta = {
     description = "File format, software library and a tool set for compression of 3D triangle meshes";
     homepage = "https://sourceforge.net/projects/openctm/";
-    license = licenses.zlib;
-    maintainers = with maintainers; [ nim65s ];
+    license = lib.licenses.zlib;
+    maintainers = with lib.maintainers; [ nim65s ];
   };
 })

@@ -1,33 +1,36 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   rustPlatform,
   nix-update-script,
   imagemagick,
   makeWrapper,
   installShellFiles,
+  libgit2,
+  pkg-config,
 }:
-let
-  version = "3.1.0";
-in
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wallust";
-  inherit version;
+  version = "3.5.2";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "explosion-mental";
     repo = "wallust";
-    rev = version;
-    hash = "sha256-Tad+zyhmTr734GEW0A4SNrfWzqcL0gLFsM6MoMrV17k=";
+    rev = finalAttrs.version;
+    hash = "sha256-ZgkeM9gMw9TB5NR+xyxBepKHO16bLVVFJN4IY39gllg=";
   };
 
-  cargoHash = "sha256-SEaq0qeWuDeIeCqz9imb5nV4WK44CF5wIwG62nhyqlU=";
+  cargoHash = "sha256-XrIi+8p2OZ7O6MTgqKbgN/9gLUbvB7uN9Yr2X1BYHIU=";
+
+  env.LIBGIT2_NO_VENDOR = 1;
 
   nativeBuildInputs = [
     makeWrapper
     installShellFiles
+    pkg-config
   ];
+
+  buildInputs = [ libgit2 ];
 
   postInstall = ''
     installManPage man/wallust*
@@ -52,7 +55,7 @@ rustPlatform.buildRustPackage {
       onemoresuza
       iynaix
     ];
-    downloadPage = "https://codeberg.org/explosion-mental/wallust/releases/tag/${version}";
+    downloadPage = "https://codeberg.org/explosion-mental/wallust/releases/tag/${finalAttrs.version}";
     mainProgram = "wallust";
   };
-}
+})

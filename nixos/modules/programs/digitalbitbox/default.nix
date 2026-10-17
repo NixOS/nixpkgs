@@ -36,6 +36,5 @@ in
 
   meta = {
     doc = ./default.md;
-    maintainers = with lib.maintainers; [ vidbina ];
   };
 }

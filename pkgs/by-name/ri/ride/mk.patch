@@ -22,19 +22,19 @@ index a5baa0f..4ed2350 100644
      },
    };
    wf('_/version.js', `D=${JSON.stringify(vi)}`);
-@@ -51,8 +51,7 @@ const incl = new RegExp('^$'
- const pkg = (x, y, f) => {
-   rq('electron-packager')({
+@@ -53,8 +53,7 @@ const pkg = (x, y, f) => {
+   const tmpdir = `/tmp/ridebuild_${version}_${rq('os').userInfo().username}`;
+   rq('@electron/packager')({
      dir: '.',
 -    platform: x,
 -    arch: y,
 +    asar: true,
-     tmpdir: '/tmp/ridebuild',
+     tmpdir,
      out: `_/${pj.name}`,
      overwrite: true,
-@@ -79,8 +78,8 @@ const pkg = (x, y, f) => {
-       ProductName: 'RIDE',
-       InternalName: 'RIDE',
+@@ -81,8 +80,8 @@ const pkg = (x, y, f) => {
+       ProductName: 'Ride',
+       InternalName: 'Ride',
      },
 -  }).then(() => {
 -    const d = `_/${pj.name}/${pj.productName}-${x}-${y}`;
@@ -43,15 +43,15 @@ index a5baa0f..4ed2350 100644
      rm(`${d}/version`);
      fs.existsSync(`${d}/LICENSE`) && mv(`${d}/LICENSE`, `${d}/LICENSE.electron`);
      generateLicenses(`${d}/ThirdPartyNotices.txt`);
-@@ -88,6 +87,7 @@ const pkg = (x, y, f) => {
+@@ -90,6 +89,7 @@ const pkg = (x, y, f) => {
    }, e => f(e));
  };
  
 +const self = (f) => { b(e => (e ? f(e) : pkg(undefined, undefined, f))); };
  const l = (f) => { b(e => (e ? f(e) : pkg('linux', 'x64', f))); };
+ const la= (f) => { b(e => (e ? f(e) : pkg('linux', 'arm64', f))); };
  const w = (f) => { b(e => (e ? f(e) : pkg('win32', 'ia32', f))); };
- const o = (f) => { b(e => (e ? f(e) : pkg('darwin', 'x64', f))); };
-@@ -109,6 +109,7 @@ tasks.ma=ma; tasks.masarm = ma;
+@@ -113,6 +113,7 @@ tasks.ma=ma; tasks.masarm = ma;
  tasks.a = a; tasks.arm = a;
  tasks.d = d; tasks.dist = d;
  tasks.c = c; tasks.clean = c;

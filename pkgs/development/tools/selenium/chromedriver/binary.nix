@@ -9,24 +9,8 @@
 
 let
   upstream-info =
-    (lib.importJSON ../../../../applications/networking/browsers/chromium/info.json).chromium;
-
-  # See ./source.nix for Linux
-  allSpecs = {
-    x86_64-darwin = {
-      system = "mac-x64";
-      hash = upstream-info.chromedriver.hash_darwin;
-    };
-
-    aarch64-darwin = {
-      system = "mac-arm64";
-      hash = upstream-info.chromedriver.hash_darwin_aarch64;
-    };
-  };
-
-  spec =
-    allSpecs.${stdenv.hostPlatform.system}
-      or (throw "missing chromedriver binary for ${stdenv.hostPlatform.system}");
+    (lib.importJSON ../../../../applications/networking/browsers/chromium/info.json)
+    .chromium.chromedriver;
 
   inherit (upstream-info) version;
 in
@@ -35,8 +19,8 @@ stdenv.mkDerivation {
   inherit version;
 
   src = fetchzip {
-    url = "https://storage.googleapis.com/chrome-for-testing-public/${version}/${spec.system}/chromedriver-${spec.system}.zip";
-    inherit (spec) hash;
+    url = "https://storage.googleapis.com/chrome-for-testing-public/${version}/mac-arm64/chromedriver-mac-arm64.zip";
+    hash = upstream-info.hash_darwin_aarch64;
   };
 
   nativeBuildInputs = [ unzip ];
@@ -47,7 +31,7 @@ stdenv.mkDerivation {
 
   passthru.tests.version = testers.testVersion { package = chromedriver; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://chromedriver.chromium.org/";
     description = "WebDriver server for running Selenium tests on Chrome";
     longDescription = ''
@@ -56,12 +40,12 @@ stdenv.mkDerivation {
       input, JavaScript execution, and more. ChromeDriver is a standalone
       server that implements the W3C WebDriver standard.
     '';
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ primeos ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
     # Note from primeos: By updating Chromium I also update Google Chrome and
     # ChromeDriver.
-    platforms = platforms.darwin;
+    platforms = lib.platforms.darwin;
     mainProgram = "chromedriver";
   };
 }

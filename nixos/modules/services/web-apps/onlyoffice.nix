@@ -20,6 +20,25 @@ in
       description = "FQDN for the OnlyOffice instance.";
     };
 
+    securityNonceFile = lib.mkOption {
+      type = lib.types.str;
+      example = "/run/keys/onlyoffice-nginx-nonce.conf";
+      description = ''
+        File holding nginx configuration that sets the nonce used to create secret links.
+
+        Example:
+        ```
+        set $secure_link_secret "changeme";
+        ```
+
+        This file must be readable both by nginx and by the onlyoffice
+        documentserver. Since nginx is added to the onlyoffice group,
+        you may want to make the file readable to the onlyoffice group.
+
+        NOTE: The file must be a valid nginx configuration file. The secret must not contain `$` characters, as they will be interpreted as variables by nginx.
+      '';
+    };
+
     jwtSecretFile = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = null;
@@ -31,10 +50,18 @@ in
 
     package = lib.mkPackageOption pkgs "onlyoffice-documentserver" { };
 
+    x2t = lib.mkPackageOption pkgs "onlyoffice-documentserver.passthru.x2t" { };
+
     port = lib.mkOption {
       type = lib.types.port;
       default = 8000;
       description = "Port the OnlyOffice document server should listen on.";
+    };
+
+    allowLocalConnections = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Whether to allow the document server to download files from private IP addresses.";
     };
 
     examplePort = lib.mkOption {
@@ -78,6 +105,14 @@ in
       default = "amqp://guest:guest@localhost:5672";
       description = "The Rabbitmq in amqp URI style OnlyOffice should connect to.";
     };
+
+    wopi = lib.mkEnableOption "Enable WOPI support";
+
+    loglevel = lib.mkOption {
+      type = lib.types.str;
+      default = "WARN";
+      description = "Default loglevel to use for documentserver and converter";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -105,33 +140,42 @@ in
         virtualHosts.${cfg.hostname} = {
           locations = {
             # /etc/nginx/includes/ds-docservice.conf
-            "~ ^(\\/[\\d]+\\.[\\d]+\\.[\\d]+[\\.|-][\\d]+)?\\/(web-apps\\/apps\\/api\\/documents\\/api\\.js)$".extraConfig =
+            # disable caching for api.js
+            "~ ^(\\/[\\d]+\\.[\\d]+\\.[\\d]+[\\.|-][\\w]+)?\\/(web-apps\\/apps\\/api\\/documents\\/api\\.js)$".extraConfig =
               ''
                 expires -1;
+                # gzip_static on;
                 alias ${cfg.package}/var/www/onlyoffice/documentserver/$2;
               '';
-            "~ ^(\\/[\\d]+\\.[\\d]+\\.[\\d]+[\\.|-][\\d]+)?\\/(web-apps)(\\/.*\\.json)$".extraConfig = ''
+            "~ ^(\\/[\\d]+\\.[\\d]+\\.[\\d]+[\\.|-][\\w]+)?\\/(document_editor_service_worker\\.js)$".extraConfig =
+              ''
+                expires 365d;
+                alias ${cfg.package}/var/www/onlyoffice/documentserver/sdkjs/common/serviceworker/$2;
+              '';
+            # suppress logging the unsupported locale error in web-apps
+            "~ ^(\\/[\\d]+\\.[\\d]+\\.[\\d]+[\\.|-][\\w]+)?\\/(web-apps)(\\/.*\\.json)$".extraConfig = ''
               expires 365d;
               error_log /dev/null crit;
               alias ${cfg.package}/var/www/onlyoffice/documentserver/$2$3;
             '';
-            "~ ^(\\/[\\d]+\\.[\\d]+\\.[\\d]+[\\.|-][\\d]+)?\\/(sdkjs-plugins)(\\/.*\\.json)$".extraConfig = ''
+            # suppress logging the unsupported locale error in plugins
+            "~ ^(\\/[\\d]+\\.[\\d]+\\.[\\d]+[\\.|-][\\w]+)?\\/(sdkjs-plugins)(\\/.*\\.json)$".extraConfig = ''
               expires 365d;
               error_log /dev/null crit;
               alias ${cfg.package}/var/www/onlyoffice/documentserver/$2$3;
             '';
-            "~ ^(\\/[\\d]+\\.[\\d]+\\.[\\d]+[\\.|-][\\d]+)?\\/(web-apps|sdkjs|sdkjs-plugins|fonts)(\\/.*)$".extraConfig =
+            "~ ^(\\/[\\d]+\\.[\\d]+\\.[\\d]+[\\.|-][\\w]+)?\\/(web-apps|sdkjs|sdkjs-plugins|fonts|dictionaries)(\\/.*)$".extraConfig =
               ''
                 expires 365d;
                 alias ${cfg.package}/var/www/onlyoffice/documentserver/$2$3;
               '';
             "~* ^(\\/cache\\/files.*)(\\/.*)".extraConfig = ''
               alias /var/lib/onlyoffice/documentserver/App_Data$1;
-              add_header Content-Disposition "attachment; filename*=UTF-8''$arg_filename";
+              more_set_headers "Content-Disposition: attachment; filename*=UTF-8''$arg_filename";
 
-              set $secret_string verysecretstring;
+              include ${cfg.securityNonceFile};
               secure_link $arg_md5,$arg_expires;
-              secure_link_md5 "$secure_link_expires$uri$secret_string";
+              secure_link_md5 "$secure_link_expires$uri$secure_link_secret";
 
               if ($secure_link = "") {
                 return 403;
@@ -141,12 +185,17 @@ in
                 return 410;
               }
             '';
-            "~* ^(\\/[\\d]+\\.[\\d]+\\.[\\d]+[\\.|-][\\d]+)?\\/(internal)(\\/.*)$".extraConfig = ''
+            # Allow "/internal" interface only from 127.0.0.1
+            # Don't comment out the section below for the security reason!
+            "~* ^(\\/[\\d]+\\.[\\d]+\\.[\\d]+[\\.|-][\\w]+)?\\/(internal)(\\/.*)$".extraConfig = ''
               allow 127.0.0.1;
               deny all;
               proxy_pass http://onlyoffice-docservice/$2$3;
             '';
-            "~* ^(\\/[\\d]+\\.[\\d]+\\.[\\d]+[\\.|-][\\d]+)?\\/(info)(\\/.*)$".extraConfig = ''
+            # Allow "/info" interface only from 127.0.0.1 by default
+            # Comment out lines allow 127.0.0.1; and deny all;
+            # of below section to turn on the info page
+            "~* ^(\\/[\\d]+\\.[\\d]+\\.[\\d]+[\\.|-][\\w]+)?\\/(info)(\\/.*)$".extraConfig = ''
               allow 127.0.0.1;
               deny all;
               proxy_pass http://onlyoffice-docservice/$2$3;
@@ -154,19 +203,16 @@ in
             "/".extraConfig = ''
               proxy_pass http://onlyoffice-docservice;
             '';
-            "~ ^(\\/[\\d]+\\.[\\d]+\\.[\\d]+[\\.|-][\\d]+)?(\\/doc\\/.*)".extraConfig = ''
-              proxy_pass http://onlyoffice-docservice$2;
+            "~ ^(\\/[\\d]+\\.[\\d]+\\.[\\d]+[\\.|-][\\w]+)?(\\/(doc|downloadas)\\/.*)".extraConfig = ''
+              proxy_pass http://onlyoffice-docservice$2$is_args$args;
               proxy_http_version 1.1;
             '';
+            # end of /etc/nginx/includes/ds-docservice.conf
             "/${cfg.package.version}/".extraConfig = ''
               proxy_pass http://onlyoffice-docservice/;
             '';
-            "~ ^(\\/[\\d]+\\.[\\d]+\\.[\\d]+[\\.|-][\\d]+)?\\/(dictionaries)(\\/.*)$".extraConfig = ''
-              expires 365d;
-              alias ${cfg.package}/var/www/onlyoffice/documentserver/$2$3;
-            '';
             # /etc/nginx/includes/ds-example.conf
-            "~ ^(\\/welcome\\/.*)$".extraConfig = ''
+            "~ ^(\\/welcome\\/.*)$".extraConfig = lib.mkIf cfg.enableExampleServer ''
               expires 365d;
               alias ${cfg.package}/var/www/onlyoffice/documentserver-example$1;
               index docker.html;
@@ -215,16 +261,23 @@ in
         after = [
           "network.target"
           "onlyoffice-docservice.service"
-          "postgresql.service"
+          "postgresql.target"
         ];
         requires = [
           "network.target"
           "onlyoffice-docservice.service"
-          "postgresql.service"
+          "postgresql.target"
         ];
         wantedBy = [ "multi-user.target" ];
+        environment = {
+          NODE_CONFIG_DIR = "/run/onlyoffice/config";
+          NODE_DISABLE_COLORS = "1";
+          NODE_ENV = "production-linux";
+        };
         serviceConfig = {
-          ExecStart = "${cfg.package.fhs}/bin/onlyoffice-wrapper FileConverter/converter /run/onlyoffice/config";
+          # needs to be ran wrapped in FHS for now
+          # because the default config refers to many FHS paths
+          ExecStart = "${cfg.package.fhs}/bin/onlyoffice-wrapper ${cfg.package.fileconverter}/bin/fileconverter";
           Group = "onlyoffice";
           Restart = "always";
           RuntimeDirectory = "onlyoffice";
@@ -259,7 +312,13 @@ in
 
             # for a mapping of environment variables from the docker container to json options see
             # https://github.com/ONLYOFFICE/Docker-DocumentServer/blob/master/run-document-server.sh
+            FS_SECRET_STRING=$(cut -d '"' -f 2 < ${cfg.securityNonceFile})
             jq '
+            ${lib.optionalString cfg.allowLocalConnections ''
+              .services.CoAuthoring."request-filtering-agent".allowPrivateIPAddress = true |
+              .services.CoAuthoring."request-filtering-agent".allowMetaIPAddress = true |
+            ''}
+              .storage.fs.secretString = "'$FS_SECRET_STRING'" |
               .services.CoAuthoring.server.port = ${toString cfg.port} |
               .services.CoAuthoring.sql.dbHost = "${cfg.postgresHost}" |
               .services.CoAuthoring.sql.dbName = "${cfg.postgresName}" |
@@ -275,8 +334,19 @@ in
               .services.CoAuthoring.secret.outbox.string = "'"$(cat ${cfg.jwtSecretFile})"'" |
               .services.CoAuthoring.secret.session.string = "'"$(cat ${cfg.jwtSecretFile})"'" |
             ''}
-              .rabbitmq.url = "${cfg.rabbitmqUrl}"
+              .rabbitmq.url = "${cfg.rabbitmqUrl}" |
+              .wopi.enable = "${toString cfg.wopi}"
               ' /run/onlyoffice/config/default.json | sponge /run/onlyoffice/config/default.json
+
+            chmod u+w /run/onlyoffice/config/production-linux.json
+            jq '
+              .log.filePath = "/run/onlyoffice/config/log4js/production.json" |
+              .FileConverter.converter.x2tPath = "${cfg.package.x2t-with-fonts-and-themes}/bin/x2t"
+              ' /run/onlyoffice/config/production-linux.json | sponge /run/onlyoffice/config/production-linux.json
+
+            chmod u+w /run/onlyoffice/config/log4js/production.json
+            jq '.categories.default.level = "${cfg.loglevel}"' \
+              /run/onlyoffice/config/log4js/production.json | sponge /run/onlyoffice/config/log4js/production.json
 
             if psql -d onlyoffice -c "SELECT 'task_result'::regclass;" >/dev/null; then
               psql -f ${cfg.package}/var/www/onlyoffice/documentserver/server/schema/postgresql/removetbl.sql
@@ -290,12 +360,18 @@ in
           description = "onlyoffice documentserver";
           after = [
             "network.target"
-            "postgresql.service"
+            "postgresql.target"
+            "rabbitmq.service"
           ];
-          requires = [ "postgresql.service" ];
+          requires = [ "postgresql.target" ];
           wantedBy = [ "multi-user.target" ];
+          environment = {
+            NODE_CONFIG_DIR = "/run/onlyoffice/config";
+            NODE_DISABLE_COLORS = "1";
+            NODE_ENV = "production-linux";
+          };
           serviceConfig = {
-            ExecStart = "${cfg.package.fhs}/bin/onlyoffice-wrapper DocService/docservice /run/onlyoffice/config";
+            ExecStart = "${cfg.package.fhs}/bin/onlyoffice-wrapper ${cfg.package.docservice}/bin/docservice";
             ExecStartPre = [ onlyoffice-prestart ];
             Group = "onlyoffice";
             Restart = "always";
@@ -319,4 +395,6 @@ in
 
     users.groups.onlyoffice = { };
   };
+
+  meta.maintainers = with lib.maintainers; [ raboof ];
 }

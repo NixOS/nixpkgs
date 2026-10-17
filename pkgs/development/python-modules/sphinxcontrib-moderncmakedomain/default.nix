@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-moderncmakedomain";
-  version = "3.29.0";
+  version = "4.4.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "sphinxcontrib_moderncmakedomain";
-    hash = "sha256-NYfe8kH/JXfQu+8RgQoILp3sG3ij1LSgZiQLXz3BtbI=";
+    hash = "sha256-I/gBiLskGk2miG+eSyBNxiuudgYKQapZe5DwTSd0EKg=";
   };
 
   build-system = [ hatchling ];
@@ -31,10 +31,10 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sphinx extension which renders CMake documentation";
     homepage = "https://github.com/scikit-build/moderncmakedomain";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ jhol ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ jhol ];
   };
 }

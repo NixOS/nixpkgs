@@ -11,18 +11,18 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
-    repo = pname;
+    repo = "skytemple-icons";
     rev = version;
-    sha256 = "0wagdvzks9irdl5lj8sfqkkvfwwmdpvjyzx6424shvpp5mk28dcv";
+    hash = "sha256-mzUkZi33bqiJIKZ/L/dtlXO358ROI0kLbTkmPf9uT3E=";
   };
 
   doCheck = false; # there are no tests
   pythonImportsCheck = [ "skytemple_icons" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/SkyTemple/skytemple-icons";
     description = "Icons for SkyTemple";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
 }

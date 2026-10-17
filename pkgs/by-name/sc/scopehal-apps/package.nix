@@ -4,91 +4,115 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  gtkmm3,
-  cairomm,
+  gtk3,
   yaml-cpp,
   glfw,
+  libpng,
   libtirpc,
   liblxi,
-  libsigcxx,
-  glew,
-  zstd,
-  wrapGAppsHook4,
+  libsigcxx_2_0,
+  zlib,
+  wrapGAppsHook3,
+  makeBinaryWrapper,
+  writeDarwinBundle,
   shaderc,
   vulkan-headers,
   vulkan-loader,
-  vulkan-tools,
   glslang,
   spirv-tools,
-  ffts,
   moltenvk,
   llvmPackages,
+  hidapi,
+  wayland,
+  wayland-scanner,
 }:
 
+let
+  version = "0.3";
+in
 stdenv.mkDerivation {
   pname = "scopehal-apps";
-  version = "0-unstable-2024-09-16";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "ngscopeclient";
     repo = "scopehal-apps";
-    rev = "d2a1a2f17e9398a3f60c99483dd2f6dbc2e62efc";
-    hash = "sha256-FQoaTuL6mEqnH8oNXwHpDcOEAPGExqj6lhrUhZ9VAQ4=";
+    tag = "v${version}";
+    hash = "sha256-zA1kRGEMM/71PAH0vfy7OdJHf80eSPXW9T9H8kb30n0=";
     fetchSubmodules = true;
   };
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-      shaderc
-      spirv-tools
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wrapGAppsHook4
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    shaderc
+    spirv-tools
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wrapGAppsHook3
+    wayland-scanner
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    makeBinaryWrapper
+    writeDarwinBundle
+  ];
 
-  buildInputs =
-    [
-      cairomm
-      glew
-      glfw
-      glslang
-      liblxi
-      libsigcxx
-      vulkan-headers
-      vulkan-loader
-      vulkan-tools
-      yaml-cpp
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      ffts
-      gtkmm3
-      libtirpc
-    ]
-    ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      moltenvk
-    ];
+  buildInputs = [
+    glfw
+    glslang
+    hidapi
+    liblxi
+    libpng
+    libsigcxx_2_0
+    vulkan-headers
+    vulkan-loader
+    yaml-cpp
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    gtk3
+    libtirpc
+    wayland
+  ]
+  ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    moltenvk
+  ];
 
-  # Targets InitializeSearchPaths
-  postPatch = ''
-    substituteInPlace lib/scopehal/scopehal.cpp \
-      --replace-fail '"/share/' '"/../share/'
+  cmakeFlags = [
+    "-DNGSCOPECLIENT_PACKAGE_VERSION=v${version}"
+    "-DNGSCOPECLIENT_PACKAGE_VERSION_LONG=v${version}-0"
+  ];
+
+  patches = [
+    ./remove-required-lsb-release.patch
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    ./remove-macos-bundle-fixup.patch
+  ];
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mv -v $out/bin/ngscopeclient $out/bin/.ngscopeclient-unwrapped
+    makeWrapper $out/bin/.ngscopeclient-unwrapped $out/bin/ngscopeclient \
+      --prefix DYLD_LIBRARY_PATH : "${lib.makeLibraryPath [ vulkan-loader ]}"
   '';
 
-  cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DCMAKE_INSTALL_RPATH=${lib.strings.makeLibraryPath [ vulkan-loader ]}"
-  ];
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications/ngscopeclient.app/Contents/{MacOS,Resources}
+
+    install -m644 {../src/ngscopeclient/icons/macos,$out/Applications/ngscopeclient.app/Contents/Resources}/ngscopeclient.icns
+
+    write-darwin-bundle $out ngscopeclient ngscopeclient ngscopeclient
+  '';
 
   meta = {
     description = "Advanced test & measurement remote control and analysis suite";
     homepage = "https://www.ngscopeclient.org/";
     license = lib.licenses.bsd3;
     mainProgram = "ngscopeclient";
+    mainDarwinApp = "ngscopeclient.app";
     maintainers = with lib.maintainers; [
       bgamari
       carlossless

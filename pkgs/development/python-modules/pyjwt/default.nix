@@ -11,16 +11,16 @@
   oauthlib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyjwt";
-  version = "2.10.1";
+  version = "2.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jpadilla";
     repo = "pyjwt";
-    tag = version;
-    hash = "sha256-BPVythRLpglYtpLEoaC7+Q4l9izYXH2M9JEbxdyQZqU=";
+    tag = finalAttrs.version;
+    hash = "sha256-C2l0QN8Vg2WkWniAfN/jpC6LAuy6gjcigzK1dvfJnj8=";
   };
 
   outputs = [
@@ -38,7 +38,10 @@ buildPythonPackage rec {
 
   optional-dependencies.crypto = [ cryptography ];
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ (lib.flatten (lib.attrValues optional-dependencies));
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ (lib.concatAttrValues finalAttrs.passthru.optional-dependencies);
 
   disabledTests = [
     # requires internet connection
@@ -51,11 +54,11 @@ buildPythonPackage rec {
     inherit oauthlib;
   };
 
-  meta = with lib; {
-    changelog = "https://github.com/jpadilla/pyjwt/blob/${version}/CHANGELOG.rst";
+  meta = {
+    changelog = "https://github.com/jpadilla/pyjwt/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     description = "JSON Web Token implementation in Python";
     homepage = "https://github.com/jpadilla/pyjwt";
-    license = licenses.mit;
-    maintainers = with maintainers; [ prikhi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ prikhi ];
   };
-}
+})

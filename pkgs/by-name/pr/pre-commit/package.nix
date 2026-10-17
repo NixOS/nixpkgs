@@ -1,34 +1,45 @@
 {
   lib,
-  fetchFromGitHub,
+  stdenv,
   python3Packages,
-  libiconv,
-  cargo,
-  coursier,
-  dotnet-sdk,
-  git,
-  glibcLocales,
-  go,
-  nodejs,
-  perl,
+  fetchFromGitHub,
+
+  # tests
+  runtimeShell,
   cabal-install,
-  testers,
+  cargo,
+  gitMinimal,
+  go,
+  perl,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
+  coursier,
+  dotnetCorePackages,
+  nodejs,
+
+  # passthru
+  callPackage,
+  pkgsi686Linux,
   pre-commit,
 }:
 
-with python3Packages;
-buildPythonApplication rec {
-  pname = "pre-commit";
-  version = "4.0.1";
-  format = "setuptools";
+let
+  i686Linux = stdenv.buildPlatform.system == "i686-linux";
 
-  disabled = pythonOlder "3.9";
+  # The source-built SDK patches codesign paths for the Darwin sandbox.
+  dotnet-sdk = dotnetCorePackages.sdk_8_0-source;
+  dotnetAvailable = lib.meta.availableOn stdenv.buildPlatform dotnet-sdk;
+in
+python3Packages.buildPythonApplication (finalAttrs: {
+  pname = "pre-commit";
+  version = "4.7.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pre-commit";
     repo = "pre-commit";
-    tag = "v${version}";
-    hash = "sha256-qMNnzAxJOS7mabHmGYZ/VkDrpaZbqTJyETSCxq/OrGQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-iCs3ja53pC0iFmBYIvs2nH6IDgplXd1S5+gXg+Kcbrg=";
   };
 
   patches = [
@@ -37,81 +48,79 @@ buildPythonApplication rec {
     ./pygrep-pythonpath.patch
   ];
 
-  propagatedBuildInputs = [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
     cfgv
     identify
     nodeenv
     pyyaml
-    toml
     virtualenv
   ];
 
   nativeCheckInputs = [
+    cabal-install
     cargo
-    coursier
-    dotnet-sdk
-    git
-    glibcLocales
+    gitMinimal
     go
-    libiconv # For rust tests on Darwin
     nodejs
     perl
+    writableTmpDirAsHomeHook
+  ]
+  ++ (with python3Packages; [
     pytest-env
-    pytest-forked
     pytest-xdist
-    pytestCheckHook
     re-assert
-    cabal-install
-  ];
+  ])
+  ++ lib.optionals (!i686Linux) [
+    # coursier can be moved back to the main nativeCheckInputs list once we’re able to bootstrap a
+    # JRE on i686-linux: <https://github.com/NixOS/nixpkgs/issues/314873>. When coursier gets
+    # moved back to the main nativeCheckInputs list, don’t forget to re-enable the
+    # coursier-related test that is currently disabled on i686-linux.
+    coursier
+  ]
+  ++ lib.optional dotnetAvailable dotnet-sdk;
 
-  # i686-linux: dotnet-sdk not available
-  doCheck = stdenv.buildPlatform.system != "i686-linux";
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   postPatch = ''
     substituteInPlace pre_commit/resources/hook-tmpl \
       --subst-var-by pre-commit $out
     substituteInPlace pre_commit/languages/python.py \
-      --subst-var-by virtualenv ${virtualenv}
+      --subst-var-by virtualenv ${python3Packages.virtualenv}
     substituteInPlace pre_commit/languages/node.py \
-      --subst-var-by nodeenv ${nodeenv}
+      --subst-var-by nodeenv ${python3Packages.nodeenv}
+
+    # These shebangs are embedded in hooks generated during the tests.
+    substituteInPlace tests/commands/install_uninstall_test.py \
+      --replace-fail '/usr/bin/env bash' '${runtimeShell}'
 
     patchShebangs pre_commit/resources/hook-tmpl
   '';
 
-  pytestFlagsArray = [
-    "--forked"
-  ];
+  env = lib.optionalAttrs dotnetAvailable {
+    DOTNET_ROOT = "${dotnet-sdk}/share/dotnet";
 
-  preCheck =
-    lib.optionalString (!(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64)) ''
-      # Disable outline atomics for rust tests on aarch64-linux.
-      export RUSTFLAGS="-Ctarget-feature=-outline-atomics"
-    ''
-    + ''
-      export GIT_AUTHOR_NAME=test GIT_COMMITTER_NAME=test \
-             GIT_AUTHOR_EMAIL=test@example.com GIT_COMMITTER_EMAIL=test@example.com \
-             VIRTUALENV_NO_DOWNLOAD=1 PRE_COMMIT_NO_CONCURRENCY=1 LANG=en_US.UTF-8
+    # NuGet auditing requires network access.
+    NuGetAudit = "false";
+  };
 
-      # Resolve `.NET location: Not found` errors for dotnet tests
-      export DOTNET_ROOT="${dotnet-sdk}/share/dotnet"
+  preCheck = ''
+    export GIT_AUTHOR_NAME=test GIT_COMMITTER_NAME=test \
+           GIT_AUTHOR_EMAIL=test@example.com GIT_COMMITTER_EMAIL=test@example.com \
+           PRE_COMMIT_NO_CONCURRENCY=1
 
-      export HOME=$(mktemp -d)
-
-      git init -b master
-
-      python -m venv --system-site-packages venv
-      source "$PWD/venv/bin/activate"
-    '';
-
-  postCheck = ''
-    deactivate
+    # Some CLI tests expect to run in a Git repository.
+    git init
   '';
 
   disabledTests = [
     # ERROR: The install method you used for conda--probably either `pip install conda`
     # or `easy_install conda`--is not compatible with using conda as an application.
-    "test_conda_"
-    "test_local_conda_"
+    "test_conda_language"
+    "test_conda_additional_deps"
 
     # /build/pytest-of-nixbld/pytest-0/test_install_ruby_with_version0/rbenv-2.7.2/libexec/rbenv-init:
     # /usr/bin/env: bad interpreter: No such file or directory
@@ -119,10 +128,7 @@ buildPythonApplication rec {
 
     # network
     "test_additional_dependencies_roll_forward"
-    "test_additional_golang_dependencies_installed"
-    "test_additional_node_dependencies_installed"
-    "test_additional_rust_cli_dependencies_installed"
-    "test_additional_rust_lib_dependencies_installed"
+    "test_automatic_toolchain_switching"
     "test_coursier_hook"
     "test_coursier_hook_additional_dependencies"
     "test_dart"
@@ -138,30 +144,44 @@ buildPythonApplication rec {
     "test_language_version_with_rustup"
     "test_installs_rust_missing_rustup"
     "test_installs_without_links_outside_env"
+    "test_julia_hook"
+    "test_julia_repo_local"
     "test_local_golang_additional_deps"
     "test_lua"
     "test_lua_additional_dependencies"
     "test_node_additional_deps"
     "test_node_hook_versions"
+    "test_npm_install_succeeds_with_build"
     "test_perl_additional_dependencies"
     "test_r_hook"
     "test_r_inline"
-    "test_r_inline_hook"
-    "test_r_local_with_additional_dependencies_hook"
-    "test_r_with_additional_dependencies_hook"
-    "test_run_a_node_hook_default_version"
     "test_run_lib_additional_dependencies"
-    "test_run_versioned_node_hook"
     "test_rust_cli_additional_dependencies"
     "test_swift_language"
     "test_run_example_executable"
     "test_run_dep"
+    "test_control_c_control_c_on_install"
+    "test_healthy_default_creator"
+    "test_healthy_venv_creator"
+    "test_invalidated_virtualenv"
+    "test_language_versioned_python_hook"
+    "test_local_python_repo"
+    "test_local_repo_with_other_artifacts"
+    "test_python_hook_weird_setup_cfg"
+    "test_really_long_file_paths"
+    "test_reinstall"
+    "test_repository_state_compatibility[v1]"
+    "test_repository_state_compatibility[v2]"
+    "test_simple_python_hook_default_version"
+    "test_simple_python_hook"
+    "test_unhealthy_old_virtualenv"
+    "test_unhealthy_python_goes_missing"
+    "test_unhealthy_system_version_changes"
+    "test_unhealthy_then_replaced"
+    "test_unhealthy_unexpected_pyvenv"
+    "test_unhealthy_with_version_change"
 
-    # i don't know why these fail
-    "test_install_existing_hooks_no_overwrite"
-    "test_installed_from_venv"
-    "test_uninstall_restores_legacy_hooks"
-    "test_dotnet_"
+    # R required
     "test_health_check_"
 
     # Expects `git commit` to fail when `pre-commit` is not in the `$PATH`,
@@ -169,22 +189,43 @@ buildPythonApplication rec {
     "test_environment_not_sourced"
 
     # Docker required
-    "test_docker_"
+    "test_docker_fallback_user"
+    "test_docker_hook"
+    "test_docker_image_"
+  ]
+  ++ lib.optional (!dotnetAvailable) "test_dotnet_"
+  ++ lib.optionals i686Linux [
+    # From coursier_test.py:
+    "test_error_if_no_deps_or_channel"
   ];
 
   pythonImportsCheck = [
     "pre_commit"
   ];
 
-  passthru.tests = callPackage ./tests.nix {
-    inherit git pre-commit;
-  };
+  # add gitMinimal as fallback, if git is not installed
+  preFixup = ''
+    makeWrapperArgs+=(--suffix PATH : ${lib.makeBinPath [ gitMinimal ]})
+  '';
 
-  meta = with lib; {
+  passthru.tests =
+    callPackage ./tests.nix {
+      inherit gitMinimal pre-commit;
+    }
+    // lib.optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
+      i686 = pkgsi686Linux.pre-commit;
+    };
+
+  meta = {
     description = "Framework for managing and maintaining multi-language pre-commit hooks";
     homepage = "https://pre-commit.com/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ borisbabic ];
+    changelog = "https://github.com/pre-commit/pre-commit/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      booxter
+      borisbabic
+      savtrip
+    ];
     mainProgram = "pre-commit";
   };
-}
+})

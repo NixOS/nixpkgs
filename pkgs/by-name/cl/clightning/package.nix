@@ -19,6 +19,7 @@
   sqlite,
   zlib,
   jq,
+  libpq,
 }:
 let
   py3 = python3.withPackages (p: [
@@ -26,35 +27,35 @@ let
     p.mako
   ]);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clightning";
-  version = "24.11.1";
+  version = "26.06.9";
 
   src = fetchurl {
-    url = "https://github.com/ElementsProject/lightning/releases/download/v${version}/clightning-v${version}.zip";
-    hash = "sha256-FdrD+FA0t90oJnXjUA8oalU7DDjUv70fAteNxbhscgk=";
+    url = "https://github.com/ElementsProject/lightning/releases/download/v${finalAttrs.version}/clightning-v${finalAttrs.version}.zip";
+    hash = "sha256-rDextsQbbGDPBt2M11APH6sEQRzy87wSaDjYyvq0U40=";
   };
 
   # when building on darwin we need cctools to provide the correct libtool
   # as libwally-core detects the host as darwin and tries to add the -static
   # option to libtool, also we have to add the modified gsed package.
-  nativeBuildInputs =
-    [
-      autoconf
-      autogen
-      automake
-      gettext
-      libtool
-      lowdown-unsandboxed
-      protobuf
-      py3
-      unzip
-      which
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      cctools
-      darwin.autoSignDarwinBinariesHook
-    ];
+  nativeBuildInputs = [
+    autoconf
+    autogen
+    automake
+    gettext
+    libtool
+    lowdown-unsandboxed
+    protobuf
+    py3
+    unzip
+    which
+    libpq.pg_config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools
+    darwin.autoSignDarwinBinariesHook
+  ];
 
   buildInputs = [
     gmp
@@ -67,24 +68,31 @@ stdenv.mkDerivation rec {
   # this causes some python trouble on a darwin host so we skip this step.
   # also we have to tell libwally-core to use sed instead of gsed.
   postPatch =
-    if !stdenv.hostPlatform.isDarwin then
-      ''
-        patchShebangs \
-          tools/generate-wire.py \
-          tools/update-mocks.sh \
-          tools/mockup.sh \
-          tools/fromschema.py \
-          devtools/sql-rewrite.py
-      ''
-    else
-      ''
-        substituteInPlace external/libwally-core/tools/autogen.sh --replace gsed sed && \
-        substituteInPlace external/libwally-core/configure.ac --replace gsed sed
-      '';
+    # chmod for `blockreplace.py` seems needed for all platforms
+    ''
+      chmod +x devtools/blockreplace.py
+    ''
+    + (
+      if !stdenv.hostPlatform.isDarwin then
+        ''
+          patchShebangs \
+            tools/generate-wire.py \
+            tools/update-mocks.sh \
+            tools/mockup.sh \
+            tools/fromschema.py \
+            devtools/sql-rewrite.py \
+            devtools/blockreplace.py
+        ''
+      else
+        ''
+          substituteInPlace external/libwally-core/tools/autogen.sh --replace gsed sed && \
+            substituteInPlace external/libwally-core/configure.ac --replace gsed sed
+        ''
+    );
 
   configureFlags = [ "--disable-valgrind" ];
 
-  makeFlags = [ "VERSION=v${version}" ];
+  makeFlags = [ "VERSION=v${finalAttrs.version}" ];
 
   enableParallelBuilding = true;
 
@@ -95,25 +103,22 @@ stdenv.mkDerivation rec {
     stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
   ) "-Wno-error=gnu-folding-constant";
 
-  # The `clnrest` plugin requires a Python environment to run
-  postInstall = ''
-    rm -r $out/libexec/c-lightning/plugins/clnrest
-  '';
+  passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Bitcoin Lightning Network implementation in C";
     longDescription = ''
-      c-lightning is a standard compliant implementation of the Lightning
-      Network protocol. The Lightning Network is a scalability solution for
-      Bitcoin, enabling secure and instant transfer of funds between any two
-      parties for any amount.
+      Core Lightning (CLN), previously c-lightning, is standard compliant
+      implementation of the Lightning Network protocol. The Lightning Network
+      is a scalability solution for Bitcoin, enabling secure and instant
+      transfer of funds between any two parties for any amount.
     '';
     homepage = "https://github.com/ElementsProject/lightning";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       jb55
       prusnak
     ];
-    license = licenses.mit;
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

@@ -2,26 +2,39 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  meson,
+  ninja,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libucontext";
-  version = "1.2";
+  version = "1.5";
 
   src = fetchFromGitHub {
     owner = "kaniini";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-fk3ZKkp3dsyeF6SOWSccr5MkKEwS4AAuosD/h+6wjSw=";
+    repo = "libucontext";
+    rev = "libucontext-${finalAttrs.version}";
+    hash = "sha256-asT0pV3s4L4zB2qtDJ+2XYxEP6agIEo1LtCuFeOjpRA=";
   };
 
-  makeFlags = [ "DESTDIR=$(out)" ];
+  nativeBuildInputs = [
+    meson
+    ninja
+  ];
 
-  meta = with lib; {
+  # Makefile builds the asm files with -Wa,--noexecstack, meson.build does not.
+  # If you do not pass it, you get PT_GNU_STACK=RWE on static consumers of the library.
+  # https://github.com/kaniini/libucontext/issues/83
+  env.NIX_CFLAGS_COMPILE = "-Wa,--noexecstack";
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     homepage = "https://github.com/kaniini/libucontext";
     description = "ucontext implementation featuring glibc-compatible ABI";
-    license = licenses.isc;
-    platforms = platforms.linux;
-    maintainers = [ ];
+    license = lib.licenses.isc;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.lix ];
   };
-}
+})

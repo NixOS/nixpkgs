@@ -1,5 +1,4 @@
 {
-  async-timeout,
   buildPythonPackage,
   coloredlogs,
   fetchFromGitHub,
@@ -8,29 +7,35 @@
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
+  serialx,
   setuptools,
   voluptuous,
   zigpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zigpy-zboss";
-  version = "1.2.0";
+  version = "2.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kardia-as";
     repo = "zigpy-zboss";
-    tag = "v${version}";
-    hash = "sha256-T2R291GeFIsnDRI1tAydTlLamA3LF5tKxKFhPtcEUus=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Yb2vlFhWpyv337SlnoR/I6oOr4OUIR25gjuE3HJ09tU=";
   };
+
+  patches = [
+    # https://github.com/kardia-as/zigpy-zboss/pull/95
+    ./zigpy-2.0-support.patch
+  ];
 
   build-system = [ setuptools ];
 
   dependencies = [
-    async-timeout
     coloredlogs
     jsonschema
+    serialx
     voluptuous
     zigpy
   ];
@@ -43,21 +48,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTestPaths = [
-    # AttributeError: 'Ledvance' object has no attribute 'get'
-    "tests/application/test_connect.py"
-    "tests/application/test_join.py"
-    "tests/application/test_requests.py"
-    "tests/application/test_startup.py"
-    "tests/application/test_zdo_requests.py"
-    "tests/application/test_zigpy_callbacks.py"
-  ];
-
   meta = {
-    changelog = "https://github.com/kardia-as/zigpy-zboss/releases/tag/v${version}";
+    changelog = "https://github.com/kardia-as/zigpy-zboss/releases/tag/${finalAttrs.src.tag}";
     description = "Library for zigpy which communicates with Nordic nRF52 radios";
     homepage = "https://github.com/kardia-as/zigpy-zboss";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

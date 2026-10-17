@@ -5,20 +5,19 @@
 # See `python3Packages.jax.passthru` for CUDA tests.
 
 {
-  absl-py,
   autoPatchelfHook,
   buildPythonPackage,
   fetchPypi,
-  flatbuffers,
   lib,
   ml-dtypes,
+  numpy,
   python,
   scipy,
   stdenv,
 }:
 
 let
-  version = "0.4.38";
+  version = "0.11.2";
   inherit (python) pythonVersion;
 
   # As of 2023-06-06, google/jax upstream is no longer publishing CPU-only wheels to their GCS bucket. Instead the
@@ -40,94 +39,57 @@ let
             ;
           pname = "jaxlib";
           format = "wheel";
-          # See the `disabled` attr comment below.
           python = dist;
           abi = dist;
         };
     in
     {
-      "3.10-x86_64-linux" = getSrcFromPypi {
-        platform = "manylinux2014_x86_64";
-        dist = "cp310";
-        hash = "sha256-Ya7MuaJ8Z/24RQ9jVyQAGc1FEcudYqROR2R1bThIU60=";
-      };
-      "3.10-aarch64-linux" = getSrcFromPypi {
-        platform = "manylinux2014_aarch64";
-        dist = "cp310";
-        hash = "sha256-7hnBY6j98IOdTBi4il+/tOcxunxDdBbT5Ug+Vwu3ZOQ=";
-      };
-      "3.10-aarch64-darwin" = getSrcFromPypi {
-        platform = "macosx_11_0_arm64";
-        dist = "cp310";
-        hash = "sha256-MLL1LLUNdHNK8vR3wlM6elg+O7eyyKzes2Hud9lAV3o=";
-      };
-      "3.10-x86_64-darwin" = getSrcFromPypi {
-        platform = "macosx_10_14_x86_64";
-        dist = "cp310";
-        hash = "sha256-VcGbnT8zpvxZ9kSqWiH7oCY5zN13bLSptVJmJfV4Of8=";
-      };
-
-      "3.11-x86_64-linux" = getSrcFromPypi {
-        platform = "manylinux2014_x86_64";
-        dist = "cp311";
-        hash = "sha256-J1H/cDfWqZfQvg53zEvjgcWp+buLMU7bdVwTpv2Wn0U=";
-      };
-      "3.11-aarch64-linux" = getSrcFromPypi {
-        platform = "manylinux2014_aarch64";
-        dist = "cp311";
-        hash = "sha256-Q9tYxMQnYnKWNmpWwQMY4fAPUDaQ4X+Uu0NEKT4ZleA=";
-      };
-      "3.11-aarch64-darwin" = getSrcFromPypi {
-        platform = "macosx_11_0_arm64";
-        dist = "cp311";
-        hash = "sha256-P7DqrnNpFXr+y+rVCq8p5z/936d6IzXXIb2XlPPFEOQ=";
-      };
-      "3.11-x86_64-darwin" = getSrcFromPypi {
-        platform = "macosx_10_14_x86_64";
-        dist = "cp311";
-        hash = "sha256-tn/eq9bf7Qi3do873/tSEWAIX4MFZpvRl77vYdCN4Is=";
-      };
-
       "3.12-x86_64-linux" = getSrcFromPypi {
-        platform = "manylinux2014_x86_64";
+        platform = "manylinux_2_27_x86_64";
         dist = "cp312";
-        hash = "sha256-2tbAqWVnwG0IPARp/sQPIBIQsJk2W9aYvjGm0uyI/Vk=";
+        hash = "sha256-Yzih8JVvYNAlKUBKwzqAcAFaUmNc22u7FdDRmXVwd7s=";
       };
       "3.12-aarch64-linux" = getSrcFromPypi {
-        platform = "manylinux2014_aarch64";
+        platform = "manylinux_2_27_aarch64";
         dist = "cp312";
-        hash = "sha256-SW9FsOABojQTCc0MdK8LZwU33O15wWjLIwz8x3PwqoY";
+        hash = "sha256-1JcAToDaqRuYJY1kWzdOjf9IC/AX0sXz4wsTcayPVLE=";
       };
       "3.12-aarch64-darwin" = getSrcFromPypi {
         platform = "macosx_11_0_arm64";
         dist = "cp312";
-        hash = "sha256-8zvK/jLJelYuz2iU18QWdMgMCs3t+lQj1Jr1EUcUmHQ=";
-      };
-      "3.12-x86_64-darwin" = getSrcFromPypi {
-        platform = "macosx_10_14_x86_64";
-        dist = "cp312";
-        hash = "sha256-P+/qmF8EFYFvO7r9PwOkNwUCde+brJpywTFOFkSsV8E=";
+        hash = "sha256-7KgOdFt2IzaadrX2hWduwjOjOlXWn2D6flfL78/Uetw=";
       };
 
       "3.13-x86_64-linux" = getSrcFromPypi {
-        platform = "manylinux2014_x86_64";
+        platform = "manylinux_2_27_x86_64";
         dist = "cp313";
-        hash = "sha256-LOd7qM2pJZpLypevwcci5CkabEY6Y/jTcsbtyFEX1iU=";
+        hash = "sha256-XzysjXAwwfgKGCAl1xceo7EkUWKnEPbljSXuP+F0iqw=";
       };
       "3.13-aarch64-linux" = getSrcFromPypi {
-        platform = "manylinux2014_aarch64";
+        platform = "manylinux_2_27_aarch64";
         dist = "cp313";
-        hash = "sha256-JIzKN3Hr8ksHD0lwE2TOraM+YTlEWwbHgsylrFrZK/Q=";
+        hash = "sha256-X504M8sr6l40a9ITi6dJkgF+CEHGPYkKAVehP5y/Q54=";
       };
       "3.13-aarch64-darwin" = getSrcFromPypi {
         platform = "macosx_11_0_arm64";
         dist = "cp313";
-        hash = "sha256-b+MmuK82Y4fdR8zzElg7Kxf+0ScSybdKZIsYoTy9ur8=";
+        hash = "sha256-dmvZDieg/1O4e7nXDHNWXsgLmxFlMgzLj3LeRrhVEN8=";
       };
-      "3.13-x86_64-darwin" = getSrcFromPypi {
-        platform = "macosx_10_14_x86_64";
-        dist = "cp313";
-        hash = "sha256-QeVa5YGKiC5XiehI9vFmh6wTK8+7Wl+hFKXRi3jQXy0=";
+
+      "3.14-x86_64-linux" = getSrcFromPypi {
+        platform = "manylinux_2_27_x86_64";
+        dist = "cp314";
+        hash = "sha256-HzHYprH7Exgf8YB3V1BtEPbny6aycH9/gPc7hTyy/yI=";
+      };
+      "3.14-aarch64-linux" = getSrcFromPypi {
+        platform = "manylinux_2_27_aarch64";
+        dist = "cp314";
+        hash = "sha256-BhRo61rGtiEyFf0RArI3vLyT8kSAyIEkW3NhnQwqMh4=";
+      };
+      "3.14-aarch64-darwin" = getSrcFromPypi {
+        platform = "macosx_11_0_arm64";
+        dist = "cp314";
+        hash = "sha256-7a1rKhjWPcKWTMl6FtEm2tQWIe2sedZR4PbIeF2JE2k=";
       };
     };
 in
@@ -135,6 +97,8 @@ buildPythonPackage {
   pname = "jaxlib";
   inherit version;
   format = "wheel";
+
+  __structuredAttrs = true;
 
   # See https://discourse.nixos.org/t/ofborg-does-not-respect-meta-platforms/27019/6.
   src = (
@@ -149,9 +113,8 @@ buildPythonPackage {
   buildInputs = [ (lib.getLib stdenv.cc.cc) ];
 
   dependencies = [
-    absl-py
-    flatbuffers
     ml-dtypes
+    numpy
     scipy
   ];
 
@@ -159,16 +122,15 @@ buildPythonPackage {
 
   meta = {
     description = "Prebuilt jaxlib backend from PyPi";
-    homepage = "https://github.com/google/jax";
+    homepage = "https://github.com/jax-ml/jax";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ samuela ];
-    badPlatforms = [
-      # Fails at pythonImportsCheckPhase:
-      # ...-python-imports-check-hook.sh/nix-support/setup-hook: line 10: 28017 Illegal instruction: 4
-      # /nix/store/5qpssbvkzfh73xih07xgmpkj5r565975-python3-3.11.9/bin/python3.11 -c
-      # 'import os; import importlib; list(map(lambda mod: importlib.import_module(mod), os.environ["pythonImportsCheck"].split()))'
-      "x86_64-darwin"
+    # Keep in sync with `srcs` above
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
     ];
   };
 }

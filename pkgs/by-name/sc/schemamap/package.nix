@@ -1,11 +1,9 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
   pkg-config,
   openssl,
-  darwin,
 }:
 
 let
@@ -24,26 +22,16 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "${src.name}/rust";
 
-  cargoHash = "sha256-iq1/8oWVgiqdYfmJKzrIe9gkCz7fDw08QcaQgfd7vuo=";
+  cargoHash = "sha256-8UmLAT7Etb9MARoGhvOHPhkdR/8jCEAjAK/mWRHL9hk=";
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk;
-      [
-        frameworks.Security
-        frameworks.CoreFoundation
-        frameworks.CoreServices
-        frameworks.SystemConfiguration
-      ]
-    );
+  buildInputs = [ openssl ];
 
   nativeBuildInputs = [ pkg-config ];
 
   meta = {
     changelog = "https://github.com/schemamap/schemamap/releases/tag/v${version}";
     description = "Instant batch data import for Postgres";
-    homepage = "https://schemamap.io";
+    homepage = "https://github.com/schemamap/schemamap";
     license = lib.licenses.mit;
     mainProgram = "schemamap";
     maintainers = with lib.maintainers; [ thenonameguy ];

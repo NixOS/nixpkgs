@@ -33,7 +33,8 @@ let
         meta = {
           platforms = lib.platforms.all;
           maintainers = with lib.maintainers; [ katexochen ];
-        } // (args.meta or { });
+        }
+        // (args.meta or { });
       }
       // removeAttrs args [
         "meta"
@@ -61,12 +62,12 @@ in
 
   google = buildStyle rec {
     name = "Google";
-    version = "0.6.2";
+    version = "0.7.1";
     src = fetchFromGitHub {
       owner = "errata-ai";
       repo = "Google";
       rev = "v${version}";
-      hash = "sha256-ldwK9tMA04H/jTd3dQeRX/sZOwZcyPb+I56cDg0vZDg=";
+      hash = "sha256-fGhbLgi3HQF8iKnUBgxPFlctQr8ebZfmYEksxyv0reQ=";
     };
     meta = {
       description = "Vale-compatible implementation of the Google Developer Documentation Style Guide";
@@ -93,12 +94,12 @@ in
 
   microsoft = buildStyle rec {
     name = "Microsoft";
-    version = "0.14.1";
+    version = "0.15.1";
     src = fetchFromGitHub {
       owner = "errata-ai";
       repo = "Microsoft";
       rev = "v${version}";
-      hash = "sha256-4j05bIGAVEy6untUqtrUxdLKlhyOcJsbcsow8OxRp1A=";
+      hash = "sha256-MycWukXoeTZzGAcoNODzt592VHWgjnMXZdNPoQWDC18=";
     };
     meta = {
       description = "Vale-compatible implementation of the Microsoft Writing Style Guide";
@@ -125,16 +126,33 @@ in
 
   readability = buildStyle rec {
     name = "Readability";
-    version = "0.1.1";
+    version = "0.2.0";
     src = fetchFromGitHub {
       owner = "errata-ai";
       repo = "readability";
       rev = "v${version}";
-      hash = "sha256-5Y9v8QsZjC2w3/pGIcL5nBdhpogyJznO5IFa0s8VOOI=";
+      hash = "sha256-3IGEt42ifvv3kSunDsHu7dJov7Y2AWUDIob2luIu2ak=";
     };
     meta = {
       description = "Vale-compatible implementations of many popular \"readability\" metrics";
       homepage = "https://github.com/errata-ai/readability";
+      license = lib.licenses.mit;
+    };
+  };
+
+  redhat = buildStyle rec {
+    name = "RedHat";
+    version = "680";
+    src = fetchFromGitHub {
+      owner = "redhat-documentation";
+      repo = "vale-at-red-hat";
+      rev = "v${version}";
+      hash = "sha256-1n/hKmNRxSpKFNBSnXdtcgxzu4A+ZF4cIP+6qCVewYo=";
+    };
+    stylePath = ".vale/styles/RedHat";
+    meta = {
+      description = "Vale-compatible implementation of the Red Hat documentation style guide";
+      homepage = "https://github.com/redhat-documentation/vale-at-red-hat";
       license = lib.licenses.mit;
     };
   };

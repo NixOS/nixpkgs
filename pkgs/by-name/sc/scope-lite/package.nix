@@ -4,17 +4,16 @@
   fetchFromGitHub,
   lib,
 }:
-let
-  version = "0.2.0";
-in
-stdenv.mkDerivation {
-  name = "scope-lite-${version}";
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "scope-lite";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
-    owner = "martinmoene";
+    owner = "nonstd-lite";
     repo = "scope-lite";
-    rev = "v${version}";
-    hash = "sha256-/Vu3blgyEOQRFqhQjuT/6ukV0iWA0TdPrLnt2Z/gd6E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EZ+bBnMPpgATANa+al5SnVEfUFYc0TkaPTLNHD6zcWU=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -23,7 +22,7 @@ stdenv.mkDerivation {
     description = "Migration path to C++ library extensions scope_exit, scope_fail, scope_success, unique_resource";
     license = lib.licenses.boost;
     maintainers = [ lib.maintainers.shlevy ];
-    homepage = "https://github.com/martinmoene/scope-lite";
+    homepage = "https://github.com/nonstd-lite/scope-lite";
     platforms = lib.platforms.all;
   };
-}
+})

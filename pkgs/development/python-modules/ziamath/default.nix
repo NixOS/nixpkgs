@@ -1,27 +1,25 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   ziafont,
   pytestCheckHook,
   nbval,
   latex2mathml,
+  writableTmpDirAsHomeHook,
   fetchurl,
 }:
 buildPythonPackage rec {
   pname = "ziamath";
-  version = "0.11";
+  version = "0.13";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "cdelker";
     repo = "ziamath";
     tag = version;
-    hash = "sha256-DLpbidQEeQVKxGCbS2jeeCvmVK9ElDIDQMj5bh/x7/Q=";
+    hash = "sha256-4TSKxCCU4DP+CQKJoi3nBqstHVUb9ycz+JAlYctxGxY=";
   };
 
   build-system = [ setuptools ];
@@ -32,6 +30,7 @@ buildPythonPackage rec {
     pytestCheckHook
     nbval
     latex2mathml
+    writableTmpDirAsHomeHook
   ];
 
   preCheck =
@@ -43,7 +42,7 @@ buildPythonPackage rec {
     in
     lib.concatMapStrings copyFontCmd checkFonts;
 
-  pytestFlagsArray = [ "--nbval-lax" ];
+  pytestFlags = [ "--nbval-lax" ];
 
   pythonImportsCheck = [ "ziamath" ];
 

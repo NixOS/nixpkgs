@@ -8,14 +8,14 @@
   osi,
 }:
 
-stdenv.mkDerivation rec {
-  version = "1.17.10";
+stdenv.mkDerivation (finalAttrs: {
+  version = "1.17.11";
   pname = "clp";
   src = fetchFromGitHub {
     owner = "coin-or";
     repo = "Clp";
-    rev = "releases/${version}";
-    hash = "sha256-9IlBT6o1aHAaYw2/39XrUis72P9fesmG3B6i/e+v3mM=";
+    rev = "releases/${finalAttrs.version}";
+    hash = "sha256-Gt42F6xc1XgcB6VvtaSAam8/QLJjPRHNKkx3sBFwcFg=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
-    license = licenses.epl20;
+  meta = {
+    license = lib.licenses.epl20;
     homepage = "https://github.com/coin-or/Clp";
     description = "Open-source linear programming solver written in C++";
     mainProgram = "clp";
-    platforms = platforms.darwin ++ platforms.linux;
-    maintainers = [ maintainers.vbgl ];
+    platforms = lib.platforms.darwin ++ lib.platforms.linux;
+    maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})

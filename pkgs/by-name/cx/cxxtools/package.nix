@@ -8,14 +8,14 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cxxtools";
   version = "3.0";
 
   src = fetchFromGitHub {
     owner = "maekitalo";
     repo = "cxxtools";
-    rev = "V${version}";
+    rev = "V${finalAttrs.version}";
     hash = "sha256-AiMVmtvI20nyv/nuHHxGH4xFnlc9AagVkKlnRlaYCPM=";
   };
 
@@ -46,10 +46,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = "http://www.tntnet.org/cxxtools.html";
+    homepage = "https://github.com/maekitalo/cxxtools";
     description = "Comprehensive C++ class library for Unix and Linux";
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.juliendehos ];
   };
-}
+})

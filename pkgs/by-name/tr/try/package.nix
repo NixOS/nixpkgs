@@ -1,38 +1,73 @@
 {
-  stdenvNoCC,
+  stdenv,
+  autoreconfHook,
   lib,
   fetchFromGitHub,
-  fuse-overlayfs,
   util-linux,
+  mergerfs,
+  attr,
   makeWrapper,
+  pandoc,
+  coreutils,
+  installShellFiles,
+  versionCheckHook,
 }:
-stdenvNoCC.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "try";
-  version = "0.2.0";
+  version = "0.2.1";
+
   src = fetchFromGitHub {
     owner = "binpash";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-2EDRVwW4XzQhd7rAM2rDuR94Fkaq4pH5RTooFEBBh5g=";
+    repo = "try";
+    tag = "v0.2.1";
+    hash = "sha256-BWCe2oHRUmyLnVdh1BOsVXlmopvSH/N1ux2/YglK21Q=";
   };
-  nativeBuildInputs = [ makeWrapper ];
+
+  # skip TRY_REQUIRE_PROG as it detects executable dependencies by running it
+  postPatch = ''
+    sed -i '/^AC_DEFUN(\[TRY_REQUIRE_PROG\]/,/^])$/c\AC_DEFUN([TRY_REQUIRE_PROG], [])' configure.ac
+  '';
+
+  nativeBuildInputs = [
+    makeWrapper
+    autoreconfHook
+    pandoc
+    installShellFiles
+  ];
+
   installPhase = ''
     runHook preInstall
     install -Dt $out/bin try
+    install -Dt $out/bin utils/try-commit
+    install -Dt $out/bin utils/try-summary
     wrapProgram $out/bin/try --prefix PATH : ${
       lib.makeBinPath [
-        fuse-overlayfs
+        coreutils
         util-linux
+        mergerfs
+        attr
       ]
     }
+    installManPage man/try.1.gz
+    installShellCompletion --bash --name try.bash completions/try.bash
     runHook postInstall
   '';
-  meta = with lib; {
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "-v";
+
+  meta = {
     homepage = "https://github.com/binpash/try";
     description = "Lets you run a command and inspect its effects before changing your live system";
     mainProgram = "try";
-    maintainers = with maintainers; [ pasqui23 ];
-    license = with licenses; [ mit ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [
+      pasqui23
+      ezrizhu
+    ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
   };
 }

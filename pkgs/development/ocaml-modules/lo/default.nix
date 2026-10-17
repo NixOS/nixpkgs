@@ -7,7 +7,7 @@
   liblo,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "lo";
   version = "0.2.0";
 
@@ -16,7 +16,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-lo";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0mi8h6f6syxjkxz493l5c3l270pvxx33pz0k3v5465wqjsnppar2";
   };
 
@@ -30,10 +30,10 @@ buildDunePackage rec {
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ liblo ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/savonet/ocaml-lo";
     description = "Bindings for LO library";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ dandellion ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ dandellion ];
   };
-}
+})

@@ -17,23 +17,24 @@ assert enableReadline -> readline != null;
 assert enableMspds -> mspds != null;
 
 stdenv.mkDerivation rec {
-  version = "0.25";
+  version = "0.26";
   pname = "mspdebug";
   src = fetchFromGitHub {
     owner = "dlbeer";
     repo = "mspdebug";
     rev = "v${version}";
-    sha256 = "0prgwb5vx6fd4bj12ss1bbb6axj2kjyriyjxqrzd58s5jyyy8d3c";
+    sha256 = "sha256-4TisC0Nm3lYMWCJ3TtaHDAfLDejMQZJIruh2f7fCndU=";
   };
 
   enableParallelBuilding = true;
   nativeBuildInputs =
     lib.optional stdenv.hostPlatform.isDarwin pkg-config
     ++ lib.optional (enableMspds && stdenv.hostPlatform.isLinux) autoPatchelfHook;
-  buildInputs =
-    [ libusb-compat-0_1 ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin hidapi
-    ++ lib.optional enableReadline readline;
+  buildInputs = [
+    libusb-compat-0_1
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin hidapi
+  ++ lib.optional enableReadline readline;
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # TODO: remove once a new 0.26+ release is made
@@ -59,12 +60,12 @@ stdenv.mkDerivation rec {
   makeFlags = [ "UNAME_S=$(unameS)" ] ++ lib.optional (!enableReadline) "WITHOUT_READLINE=1";
   unameS = lib.optionalString stdenv.hostPlatform.isDarwin "Darwin";
 
-  meta = with lib; {
+  meta = {
     description = "Free programmer, debugger, and gdb proxy for MSP430 MCUs";
     mainProgram = "mspdebug";
     homepage = "https://dlbeer.co.nz/mspdebug/";
-    license = licenses.gpl2;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ aerialx ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ aerialx ];
   };
 }

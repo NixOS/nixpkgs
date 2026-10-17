@@ -5,18 +5,18 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dapr-cli";
-  version = "1.14.1";
+  version = "1.18.2";
 
   src = fetchFromGitHub {
     owner = "dapr";
     repo = "cli";
-    rev = "v${version}";
-    hash = "sha256-NjGTH9aKupv/32ibqMSmPPaNA0TSq6AXjN8cjVD6r/M=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-A21Fk5WzlyMcHG2wpPQVChwkDdcCrDx3zhzl0KZLBS0=";
   };
 
-  vendorHash = "sha256-Ec1z8Wvq8gk8dYcm10ujy7zYWR7Mus1nl21Od3SUFrU=";
+  vendorHash = "sha256-P7zrfUcb/Hxo7QbIQfq9JSf2d7meZShQ++GG8HkEoLE=";
 
   proxyVendor = true;
 
@@ -29,10 +29,10 @@ buildGoModule rec {
   '';
 
   ldflags = [
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
     "-X main.apiVersion=1.0"
-    "-X github.com/dapr/cli/pkg/standalone.gitcommit=${src.rev}"
-    "-X github.com/dapr/cli/pkg/standalone.gitversion=${version}"
+    "-X github.com/dapr/cli/pkg/standalone.gitcommit=${finalAttrs.src.rev}"
+    "-X github.com/dapr/cli/pkg/standalone.gitversion=${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -43,14 +43,14 @@ buildGoModule rec {
       --zsh <($out/bin/dapr completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CLI for managing Dapr, the distributed application runtime";
     homepage = "https://dapr.io";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       joshvanl
       lucperkins
     ];
     mainProgram = "dapr";
   };
-}
+})

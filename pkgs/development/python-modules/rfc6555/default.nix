@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -11,11 +10,9 @@ buildPythonPackage rec {
   version = "0.1.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "sethmlarson";
-    repo = pname;
+    repo = "rfc6555";
     rev = "v${version}";
     hash = "sha256-Lmwgusc4EQlF0GHmMTUxWzUCjBk19cvurNwbOnT+1jM=";
   };
@@ -29,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rfc6555" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of the Happy Eyeballs Algorithm";
     homepage = "https://github.com/sethmlarson/rfc6555";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

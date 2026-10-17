@@ -1,35 +1,29 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdbook-d2";
-  version = "0.3.1";
+  version = "0.3.9";
 
   src = fetchFromGitHub {
     owner = "danieleades";
     repo = "mdbook-d2";
-    rev = "v${version}";
-    hash = "sha256-5/vChjSYMlCcieA10jncoXZw9Gpeol+Am7mUo78Zqho=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-TGNH89LeFsBTeL92ZFesHLxFzdAweSg3j0SXwvUzqig=";
   };
 
-  cargoHash = "sha256-lZ92vvRYXEBMx6ka8RP1wXctf73QNp5rNE8n7O96AEc=";
+  cargoHash = "sha256-A+viDBoK/L5yKnEfO0Vrh223AI1KJbuQIdRatpmz1dw=";
   doCheck = false;
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-    darwin.apple_sdk.frameworks.CoreServices
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "D2 diagram generator plugin for MdBook";
     mainProgram = "mdbook-d2";
     homepage = "https://github.com/danieleades/mdbook-d2";
-    changelog = "https://github.com/danieleades/mdbook-d2/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ blaggacao matthiasbeyer ];
+    changelog = "https://github.com/danieleades/mdbook-d2/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
-}
+})

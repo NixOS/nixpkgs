@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  bash,
   perl,
   flex,
   bison,
@@ -14,28 +15,28 @@
   git,
   numactl,
   coreutils,
+  gdb,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "verilator";
-  version = "5.028";
-
-  # Verilator gets the version from this environment variable
-  # if it can't do git describe while building.
-  VERILATOR_SRC_VERSION = "v${version}";
+  version = "5.052";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-YgK60fAYG5575uiWmbCODqNZMbRfFdOVcJXz5h5TLuE=";
+    owner = "verilator";
+    repo = "verilator";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3xeodLkal/crtcB091lthUe/7/wC+sjAYRqNyl7/kv0=";
   };
-
   enableParallelBuilding = true;
   buildInputs = [
     perl
-    python3
     systemc
+    (python3.withPackages (
+      pp: with pp; [
+        distro
+      ]
+    ))
     # ccache
   ];
   nativeBuildInputs = [
@@ -45,45 +46,69 @@ stdenv.mkDerivation rec {
     autoconf
     help2man
     git
-  ];
-  nativeCheckInputs = [
-    which
-    numactl
-    coreutils
-    # cmake
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    gdb
   ];
 
-  doCheck = stdenv.hostPlatform.isLinux; # darwin tests are broken for now...
+  nativeCheckInputs = [
+    which
+    coreutils
+    # cmake
+    python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    numactl
+  ];
+
+  doCheck = true;
   checkTarget = "test";
 
   preConfigure = "autoconf";
 
   postPatch = ''
     patchShebangs bin/* src/* nodist/* docs/bin/* examples/xml_py/* \
-    test_regress/{driver.pl,t/*.{pl,pf}} \
+    test_regress/{driver.py,t/*.{pl,pf}} \
+    test_regress/t/t_a1_first_cc.py \
+    test_regress/t/t_a2_first_sc.py \
     ci/* ci/docker/run/* ci/docker/run/hooks/* ci/docker/buildenv/build.sh
-    # verilator --gdbbt uses /bin/echo to test if gdb works.
-    sed -i 's|/bin/echo|${coreutils}\/bin\/echo|' bin/verilator
+    # verilator --gdbbt uses /bin/sh to test if gdb works.
+    substituteInPlace bin/verilator --replace-fail "/bin/sh" "${bash}/bin/sh"
+  ''
+  # prevent rewriting the lexer signatures to size_t for macOS 26+; upstream flex's FlexLexer.h uses int.
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/flexfix \
+      --replace-fail 'if platform.system() == "Darwin":' 'if False:'
   '';
   # grep '^#!/' -R . | grep -v /nix/store | less
   # (in nix-shell after patchPhase)
 
+  # This is needed to ensure that the check phase can find the verilator_bin_dbg.
+  preCheck = ''
+    export PATH=$PWD/bin:$PATH
+  '';
+
   env = {
+    # Verilator gets the version from this environment variable
+    # if it can't do git describe while building.
+    VERILATOR_SRC_VERSION = "v${finalAttrs.version}";
+
     SYSTEMC_INCLUDE = "${lib.getDev systemc}/include";
     SYSTEMC_LIBDIR = "${lib.getLib systemc}/lib";
   };
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/verilator/verilator/blob/${finalAttrs.src.tag}/Changes";
     description = "Fast and robust (System)Verilog simulator/compiler and linter";
     homepage = "https://www.veripool.org/verilator";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl3Only
       artistic2
     ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       thoughtpolice
-      amiloradovsky
+      carlossless
     ];
   };
-}
+})

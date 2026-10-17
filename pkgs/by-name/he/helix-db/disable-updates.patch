@@ -1,0 +1,44 @@
+diff --git a/helix-cli/src/main.rs b/helix-cli/src/main.rs
+--- a/helix-cli/src/main.rs
++++ b/helix-cli/src/main.rs
+@@ -185,13 +185,6 @@
+         action: DashboardAction,
+     },
+ 
+-    /// Update to the latest version
+-    Update {
+-        /// Force update even if already on latest version
+-        #[arg(long)]
+-        force: bool,
+-    },
+-
+     /// Migrate v1 project to v2 format
+     Migrate {
+         /// Project directory to migrate (defaults to current directory)
+@@ -384,9 +377,6 @@
+     // Send CLI install event (only first time)
+     metrics_sender.send_cli_install_event_if_first_time();
+ 
+-    // Check for updates before processing commands
+-    let update_available = update::check_for_updates().await?;
+-
+     let cli = Cli::parse();
+ 
+     // Set verbosity level from flags
+@@ -394,7 +384,7 @@
+ 
+     let result = match cli.command {
+         None => {
+-            display_welcome(update_available);
++            display_welcome(None);
+             Ok(())
+         }
+         Some(cmd) => match cmd {
+@@ -432,7 +422,6 @@
+             Commands::Delete { instance } => commands::delete::run(instance).await,
+             Commands::Metrics { action } => commands::metrics::run(action).await,
+             Commands::Dashboard { action } => commands::dashboard::run(action).await,
+-            Commands::Update { force } => commands::update::run(force).await,
+             Commands::Migrate {
+                 path,
+                 queries_dir,

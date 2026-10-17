@@ -1,0 +1,23 @@
+--- a/lib/overlay.nix	2025-12-12 14:17:10.585262065 -0500
++++ b/lib/overlay.nix	2025-12-12 14:17:31.567341843 -0500
+@@ -35,9 +35,17 @@
+     ];
+   };
+ 
+-  curlFetcher = fetcher: setFunctionArgs (args: fetcher (args // {
+-    curlOpts = (args.curlOpts or "") + " --no-insecure --cacert ${cacert}/etc/ssl/certs/ca-bundle.crt ";
+-  })) (functionArgs fetcher);
++  # Handle both attrset and function arguments for extendMkDerivation compatibility
++  curlFetcher = fetcher: setFunctionArgs (args:
++    let
++      modifyArgs = a: a // {
++        curlOpts = (a.curlOpts or "") + " --no-insecure --cacert ${cacert}/etc/ssl/certs/ca-bundle.crt ";
++      };
++    in
++      if isFunction args
++      then fetcher (final: modifyArgs (args final))
++      else fetcher (modifyArgs args)
++  ) (functionArgs fetcher);
+ 
+   unsafeFetcher = name: reason: throw "The fetcher ${name} is deemed unsafe: ${reason}.";
+ 

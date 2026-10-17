@@ -1,27 +1,42 @@
 {
+  fetchFromGitHub,
   lib,
   stdenv,
-  fetchurl,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dtach";
-  version = "0.9";
+  version = "0.9-unstable-2025-06-20";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/project/dtach/dtach/${version}/dtach-${version}.tar.gz";
-    sha256 = "1wwj2hlngi8qn2pisvhyfxxs8gyqjlgrrv5lz91w8ly54dlzvs9j";
+  src = fetchFromGitHub {
+    owner = "crigler";
+    repo = "dtach";
+    rev = "b027c27b2439081064d07a86883c8e0b20a183c9";
+    hash = "sha256-ilxBbrqwGe+jpFbQ93nfyp3HuDY0D7NgIXkIkw9YXkI=";
   };
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp dtach $out/bin/dtach
+    runHook preInstall
+
+    install -D dtach $out/bin/dtach
+
+    runHook postInstall
   '';
 
-  meta = {
-    homepage = "https://dtach.sourceforge.net/";
-    description = "Program that emulates the detach feature of screen";
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  preVersionCheck = ''
+    version=${builtins.head (lib.splitString "-" finalAttrs.version)}
+  '';
 
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+
+  meta = {
+    homepage = "https://dtach.sourceforge.net";
+    description = "Program that emulates the detach feature of screen";
     longDescription = ''
       dtach is a tiny program that emulates the detach feature of
       screen, allowing you to run a program in an environment that is
@@ -30,11 +45,12 @@ stdenv.mkDerivation rec {
       thus works best with programs that know how to redraw
       themselves.
     '';
-
     license = lib.licenses.gpl2Plus;
-
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      jmbaur
+      yiyu
+    ];
     mainProgram = "dtach";
   };
-}
+})

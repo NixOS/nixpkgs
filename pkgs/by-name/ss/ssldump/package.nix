@@ -9,7 +9,7 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ssldump";
   version = "1.8-unstable-2024-10-16";
 
@@ -31,12 +31,15 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "SSLv3/TLS network protocol analyzer";
     homepage = "https://ssldump.sourceforge.net";
-    license = "BSD-style";
-    maintainers = with maintainers; [ aycanirican ];
-    platforms = platforms.unix;
+    license = with lib.licenses; [
+      bsdOriginal
+      bsdOriginalShortened
+    ];
+    maintainers = with lib.maintainers; [ aycanirican ];
+    platforms = lib.platforms.unix;
     mainProgram = "ssldump";
   };
 }

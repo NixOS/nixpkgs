@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fb4195aaabfc01586863f60d3190b5cb1bf8f12622fd597e23e48768dad6bde8";
+    hash = "sha256-+0GVqqv8AVhoY/YNMZC1yxv48SYi/Vl+I+SHaNrWveg=";
   };
 
   patches = [
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   '';
 
   # requires hardware access
-  pytestFlagsArray = [ "--ignore=test/test_smbus_integration.py" ];
+  disabledTestPaths = [ "test/test_smbus_integration.py" ];
 
   nativeCheckInputs = [
     py
@@ -46,11 +46,11 @@ buildPythonPackage rec {
     pyserial
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for SMBus access through Linux I2C /dev interface";
     homepage = "https://github.com/bivab/smbus-cffi";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ mic92 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ mic92 ];
+    platforms = lib.platforms.linux;
   };
 }

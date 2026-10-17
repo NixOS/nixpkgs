@@ -6,29 +6,40 @@
   fftwFloat,
   freetype,
   libGL,
-  libX11,
-  libXcursor,
-  libXext,
-  libXrender,
+  libx11,
+  libxcursor,
+  libxext,
+  libxrender,
+  lv2,
   meson,
   ninja,
   pkg-config,
+
+  # empty means build all available plugins
+  plugins ? [ ],
+
+  buildVST3 ? true,
+  buildLV2 ? true,
+  buildVST2 ? true,
 }:
 
 let
   rpathLibs = [
     fftwFloat
   ];
+
+  mesonPlugins = lib.mesonOption "plugins" "[${lib.concatMapStringsSep "," (x: "\"${x}\"") plugins}]";
 in
 stdenv.mkDerivation {
   pname = "distrho-ports";
-  version = "2021-03-15-unstable-2024-05-01";
+  version = "2021-03-15-unstable-2025-08-15";
 
   src = fetchFromGitHub {
     owner = "DISTRHO";
     repo = "DISTRHO-Ports";
-    rev = "b3596e6a690eb0556e69e8b6d943fee2dfbb04fb";
-    sha256 = "00fgqwayd20akww3n2imyqscmyrjyc9jj0ar13k9dhpaxqk2jxbf";
+    rev = "d3b62da2e83c69b0866af5bb2e29ac78dc8014cf";
+    sha256 = "sha256-wlppmRTdgA/9wWqFp75UyDLYJOqzg1aY+w97wTgJ8lk=";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
@@ -41,29 +52,55 @@ stdenv.mkDerivation {
     alsa-lib
     freetype
     libGL
-    libX11
-    libXcursor
-    libXext
-    libXrender
+    libx11
+    libxcursor
+    libxext
+    libxrender
+    lv2
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [ "-fpermissive" ];
 
-  postFixup = ''
-    for file in \
-      $out/lib/lv2/vitalium.lv2/vitalium.so \
-      $out/lib/vst/vitalium.so \
-      $out/lib/vst3/vitalium.vst3/Contents/x86_64-linux/vitalium.so
-    do
-      patchelf --set-rpath "${lib.makeLibraryPath rpathLibs}:$(patchelf --print-rpath $file)" $file
-    done
+  postPatch = ''
+    chmod +x scripts/*.sh
+    patchShebangs scripts
   '';
+
+  postFixup =
+    let
+      files = [
+        (lib.optionalString buildLV2 "$out/lib/lv2/vitalium.lv2/vitalium-lv2.so")
+        (lib.optionalString buildVST2 "$out/lib/vst/vitalium.so")
+        (lib.optionalString buildVST3 "$out/lib/vst3/vitalium.vst3/Contents/x86_64-linux/vitalium.so")
+      ];
+    in
+    lib.optionalString (lib.elem "vitalium" plugins || plugins == [ ]) ''
+      for file in ${lib.concatMapStringsSep " \\\n" (x: "${x}") files}
+      do
+        patchelf --set-rpath "${lib.makeLibraryPath rpathLibs}:$(patchelf --print-rpath $file)" $file
+      done
+    '';
+
+  mesonFlags = [
+    (lib.mesonBool "build-lv2" buildLV2)
+    (lib.mesonBool "build-vst2" buildVST2)
+    (lib.mesonBool "build-vst3" buildVST3)
+  ]
+  ++ lib.optional (plugins != [ ]) mesonPlugins;
 
   meta = {
     homepage = "http://distrho.sourceforge.net/ports";
     description = "Linux audio plugins and LV2 ports";
     longDescription = ''
-      Includes:
+      You can override this package to only include some plugins like so:
+
+      ```nix
+      distrho-ports.override {
+        plugins = [ "vitalium" "swankyamp" ];
+      }
+      ```
+
+      Available plugins:
       - arctican-function
       - arctican-pilgrim
       - dexed
@@ -107,7 +144,7 @@ stdenv.mkDerivation {
       lgpl3Only
       mit
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ bandithedoge ];
     platforms = lib.systems.inspect.patternLogicalAnd lib.systems.inspect.patterns.isLinux lib.systems.inspect.patterns.isx86;
   };
 }

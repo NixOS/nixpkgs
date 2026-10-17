@@ -7,21 +7,18 @@
   hatchling,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "platformdirs";
-  version = "4.3.6";
+  version = "4.11.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
-    owner = "platformdirs";
+    owner = "tox-dev";
     repo = "platformdirs";
-    tag = version;
-    hash = "sha256-Zo1fEqiUbrI3pbVp3ndjV8gd+sbcGgUm1PJhQudmiMQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-T98Ep64tBazYs2JtgsHtmzfVwU+dJC30xzrieVve3DI=";
   };
 
   build-system = [
@@ -37,11 +34,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "platformdirs" ];
 
-  meta = with lib; {
+  preCheck = ''
+    unset XDG_DATA_DIRS
+  '';
+
+  meta = {
     description = "Module for determining appropriate platform-specific directories";
     homepage = "https://platformdirs.readthedocs.io/";
-    changelog = "https://github.com/platformdirs/platformdirs/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/tox-dev/platformdirs/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

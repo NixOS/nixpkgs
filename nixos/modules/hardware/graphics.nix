@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.hardware.graphics;
 
@@ -14,16 +19,35 @@ let
 in
 {
   imports = [
-    (lib.mkRenamedOptionModule [ "services" "xserver" "vaapiDrivers" ] [ "hardware" "graphics" "extraPackages" ])
-    (lib.mkRemovedOptionModule [ "hardware" "opengl" "s3tcSupport" ] "S3TC support is now always enabled in Mesa.")
-    (lib.mkRemovedOptionModule [ "hardware" "opengl" "driSupport"] "The setting can be removed.")
+    (lib.mkRenamedOptionModule
+      [ "services" "xserver" "vaapiDrivers" ]
+      [ "hardware" "graphics" "extraPackages" ]
+    )
+    (lib.mkRemovedOptionModule [
+      "hardware"
+      "opengl"
+      "s3tcSupport"
+    ] "S3TC support is now always enabled in Mesa.")
+    (lib.mkRemovedOptionModule [ "hardware" "opengl" "driSupport" ] "The setting can be removed.")
 
-    (lib.mkRenamedOptionModule [ "hardware" "opengl" "enable"] [ "hardware" "graphics" "enable" ])
-    (lib.mkRenamedOptionModule [ "hardware" "opengl" "driSupport32Bit"] [ "hardware" "graphics" "enable32Bit" ])
-    (lib.mkRenamedOptionModule [ "hardware" "opengl" "package"] [ "hardware" "graphics" "package" ])
-    (lib.mkRenamedOptionModule [ "hardware" "opengl" "package32"] [ "hardware" "graphics" "package32" ])
-    (lib.mkRenamedOptionModule [ "hardware" "opengl" "extraPackages"] [ "hardware" "graphics" "extraPackages" ])
-    (lib.mkRenamedOptionModule [ "hardware" "opengl" "extraPackages32"] [ "hardware" "graphics" "extraPackages32" ])
+    (lib.mkRenamedOptionModule [ "hardware" "opengl" "enable" ] [ "hardware" "graphics" "enable" ])
+    (lib.mkRenamedOptionModule
+      [ "hardware" "opengl" "driSupport32Bit" ]
+      [ "hardware" "graphics" "enable32Bit" ]
+    )
+    (lib.mkRenamedOptionModule [ "hardware" "opengl" "package" ] [ "hardware" "graphics" "package" ])
+    (lib.mkRenamedOptionModule
+      [ "hardware" "opengl" "package32" ]
+      [ "hardware" "graphics" "package32" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "hardware" "opengl" "extraPackages" ]
+      [ "hardware" "graphics" "extraPackages" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "hardware" "opengl" "extraPackages32" ]
+      [ "hardware" "graphics" "extraPackages32" ]
+    )
   ];
 
   options.hardware.graphics = {
@@ -56,16 +80,13 @@ in
         The package that provides the default driver set.
       '';
       type = lib.types.package;
-      internal = true;
     };
 
     package32 = lib.mkOption {
       description = ''
         The package that provides the 32-bit driver set. Used when {option}`enable32Bit` is enabled.
-        set.
       '';
       type = lib.types.package;
-      internal = true;
     };
 
     extraPackages = lib.mkOption {
@@ -78,7 +99,7 @@ in
         :::
       '';
       type = lib.types.listOf lib.types.package;
-      default = [];
+      default = [ ];
       example = lib.literalExpression "with pkgs; [ intel-media-driver intel-ocl intel-vaapi-driver ]";
     };
 
@@ -92,7 +113,7 @@ in
         :::
       '';
       type = lib.types.listOf lib.types.package;
-      default = [];
+      default = [ ];
       example = lib.literalExpression "with pkgs.pkgsi686Linux; [ intel-media-driver intel-vaapi-driver ]";
     };
   };
@@ -117,10 +138,10 @@ in
         else if cfg.enable32Bit then
           { "L+".argument = toString driversEnv32; }
         else
-          { "r" = {}; };
+          { "r" = { }; };
     };
 
-    hardware.graphics.package = lib.mkDefault pkgs.mesa.drivers;
-    hardware.graphics.package32 = lib.mkDefault pkgs.pkgsi686Linux.mesa.drivers;
+    hardware.graphics.package = lib.mkDefault pkgs.mesa;
+    hardware.graphics.package32 = lib.mkDefault pkgs.pkgsi686Linux.mesa;
   };
 }

@@ -2,59 +2,65 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
-  setuptools-scm,
+
+  # build-system
+  hatch-vcs,
+  hatchling,
+
+  # dependencies
   matplotlib,
   mplhep-data,
   numpy,
-  packaging,
   uhi,
+
+  # tests
+  hist,
+  pytest-benchmark,
+  pytest-mock,
+  pytest-mpl,
   pytestCheckHook,
   scipy,
-  pytest-mpl,
-  pytest-mock,
   uproot,
-  hist,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mplhep";
-  version = "0.3.52";
+  version = "1.3.3";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "mplhep";
-    tag = "v${version}";
-    hash = "sha256-fcc/DG4irTvAOjCGAW7hW96z0yJNSvcpanfDGN9H9XI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EiLhxkuHDxslz2HH/WIc20eYCJECXV414qnJdsUSVQY=";
   };
 
   build-system = [
-    setuptools
-    setuptools-scm
+    hatch-vcs
+    hatchling
   ];
 
   dependencies = [
     matplotlib
     mplhep-data
     numpy
-    packaging
     uhi
   ];
 
   nativeCheckInputs = [
+    hist
+    pytest-benchmark
+    pytest-mock
+    pytest-mpl
     pytestCheckHook
     scipy
-    pytest-mpl
-    pytest-mock
     uproot
-    hist
   ];
 
-  disabledTests = [
+  disabledTestPaths = [
     # requires uproot4
-    "test_inputs_uproot"
-    "test_uproot_versions"
+    "tests/test_inputs.py"
   ];
 
   pythonImportsCheck = [ "mplhep" ];
@@ -62,7 +68,8 @@ buildPythonPackage rec {
   meta = {
     description = "Extended histogram plots on top of matplotlib and HEP compatible styling similar to current collaboration requirements (ROOT)";
     homepage = "https://github.com/scikit-hep/mplhep";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://github.com/scikit-hep/mplhep/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

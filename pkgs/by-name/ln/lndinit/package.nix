@@ -3,18 +3,18 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "lndinit";
-  version = "0.1.22-beta";
+  version = "0.1.38-beta";
 
   src = fetchFromGitHub {
     owner = "lightninglabs";
     repo = "lndinit";
-    rev = "v${version}";
-    hash = "sha256-KXCObRUhXTEeb48hnQYrnb55g+nJomr52IIVpFDn+nY=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-O1sC6wFqfnC9sKsiNBurPI/vhJugmOJjG/7MLVrp0cQ=";
   };
 
-  vendorHash = "sha256-peyLhDEH9DKHAQfxVCvv92DErHjidA3DSjpN357Px6M=";
+  vendorHash = "sha256-Z/7PFoyTcZv6+T4fbNffXOPfeIP8f4+WEjFwDqMJutU";
 
   subPackages = [ "." ];
 
@@ -25,4 +25,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aldoborrero ];
   };
-}
+})

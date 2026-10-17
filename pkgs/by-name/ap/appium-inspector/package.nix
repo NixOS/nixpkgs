@@ -2,36 +2,41 @@
   lib,
   buildNpmPackage,
   copyDesktopItems,
-  electron_33,
+  electron_44,
   fetchFromGitHub,
   makeDesktopItem,
   makeWrapper,
   nix-update-script,
+  _experimental-update-script-combinators,
+  writeShellApplication,
+  nix,
+  jq,
 }:
 
 let
-  electron = electron_33;
-  version = "2024.12.1";
+  electron = electron_44;
 in
 
-buildNpmPackage {
+buildNpmPackage (finalAttrs: {
   pname = "appium-inspector";
-  inherit version;
+  version = "2026.9.2";
 
   src = fetchFromGitHub {
     owner = "appium";
     repo = "appium-inspector";
-    tag = "v${version}";
-    hash = "sha256-O2rBODsZuW6M3dM1zL2TVTPxnTPaReD+yOyBLywnxIU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ePHLOHEXaigZwoCrZG18K7oYVeFEg3ZhZIKJJHyFQe8=";
   };
 
-  npmDepsHash = "sha256-RhRa0VgEfVv9kW+EY7yhmm6k/waYAVcvom55xUbfhDs=";
+  npmDepsHash = "sha256-MvDKtSx/1w3s8NjQczEzvxSE6SmJrWb5CUpPYhSX7Ts=";
   npmFlags = [ "--ignore-scripts" ];
 
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
   ];
+
+  makeCacheWritable = true;
 
   buildPhase = ''
     runHook preBuild
@@ -57,7 +62,7 @@ buildNpmPackage {
       --set NODE_ENV production
 
     install -m 444 -D 'app/common/renderer/assets/images/icon.png' \
-      $out/share/icons/hicolor/512x512/apps/appium-inspector.png
+      $out/share/icons/hicolor/256x256/apps/appium-inspector.png
 
     runHook postInstall
   '';
@@ -73,15 +78,37 @@ buildNpmPackage {
     })
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (nix-update-script { })
+    (lib.getExe (writeShellApplication {
+      name = "${finalAttrs.pname}-electron-updater";
+      runtimeInputs = [
+        nix
+        jq
+      ];
+      runtimeEnv = {
+        PNAME = finalAttrs.pname;
+        PKG_FILE = toString ./package.nix;
+      };
+      text = ''
+        current_electron_version="$(grep -oP -m 1 "(?<=electron_)(\d+)" "$PKG_FILE")"
+        new_src="$(nix-build --attr "pkgs.$PNAME.src" --no-out-link)"
+        new_electron_major="$(jq -r '.devDependencies.electron | split(".")[0] | tonumber' "$new_src/package.json")"
+        if (( current_electron_version >= new_electron_major )); then
+          exit 0
+        fi
+        sed -i -E "s/electron_$current_electron_version/electron_$new_electron_major/g" "$PKG_FILE"
+      '';
+    }))
+  ];
 
   meta = {
     description = "GUI inspector for the appium UI automation tool";
     homepage = "https://appium.github.io/appium-inspector";
-    changelog = "https://github.com/appium/appium-inspector/releases/tag/v${version}";
+    changelog = "https://github.com/appium/appium-inspector/releases/tag/v${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     mainProgram = "appium-inspector";
     maintainers = with lib.maintainers; [ marie ];
-    inherit (electron.meta) platforms;
+    platforms = lib.platforms.linux;
   };
-}
+})

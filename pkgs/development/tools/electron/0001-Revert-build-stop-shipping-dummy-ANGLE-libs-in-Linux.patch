@@ -1,0 +1,58 @@
+From e624b5e2ff50227b78803d46dc1e35ebff1ee297 Mon Sep 17 00:00:00 2001
+From: Yureka <yuka@yuka.dev>
+Date: Sun, 6 Sep 2026 11:03:47 +0200
+Subject: [PATCH] Revert "build: stop shipping dummy ANGLE libs in Linux dist
+ zip (#52226)"
+
+This reverts commit b7b76b1afbfad5e1f1f777161a30a570ef7118a6.
+---
+ electron/build/zip.py                                       | 5 -----
+ electron/script/zip_manifests/dist_zip.linux.arm64.manifest | 2 ++
+ electron/script/zip_manifests/dist_zip.linux.x64.manifest   | 2 ++
+ 3 files changed, 4 insertions(+), 5 deletions(-)
+
+diff --git a/electron/build/zip.py b/electron/build/zip.py
+index 94004ff835..4cf7b654c1 100644
+--- a/electron/build/zip.py
++++ b/electron/build/zip.py
+@@ -22,11 +22,6 @@ EXTENSIONS_TO_SKIP = [
+ PATHS_TO_SKIP = [
+   # Skip because it is an output of //ui/gl that we don't need.
+   'angledata',
+-  # Skip because ANGLE is statically linked; these are dummy stubs
+-  # that upstream generates only for Chromium bot infrastructure and nothing
+-  # loads them at runtime. See the TODO(crbug.com/514229803) in ui/gl/BUILD.gn.
+-  './libEGL',
+-  './libGLESv2',
+   # Skip because these are outputs that we don't need.
+   './libVkICD_mock_',
+   # Skip because these are outputs that we don't need.
+diff --git a/electron/script/zip_manifests/dist_zip.linux.arm64.manifest b/electron/script/zip_manifests/dist_zip.linux.arm64.manifest
+index a1ad11ffea..224d2f036d 100644
+--- a/electron/script/zip_manifests/dist_zip.linux.arm64.manifest
++++ b/electron/script/zip_manifests/dist_zip.linux.arm64.manifest
+@@ -6,6 +6,8 @@ chrome_200_percent.pak
+ chrome_crashpad_handler
+ electron
+ icudtl.dat
++libEGL.so
++libGLESv2.so
+ libffmpeg.so
+ libvk_swiftshader.so
+ libvulkan.so.1
+diff --git a/electron/script/zip_manifests/dist_zip.linux.x64.manifest b/electron/script/zip_manifests/dist_zip.linux.x64.manifest
+index a1ad11ffea..224d2f036d 100644
+--- a/electron/script/zip_manifests/dist_zip.linux.x64.manifest
++++ b/electron/script/zip_manifests/dist_zip.linux.x64.manifest
+@@ -6,6 +6,8 @@ chrome_200_percent.pak
+ chrome_crashpad_handler
+ electron
+ icudtl.dat
++libEGL.so
++libGLESv2.so
+ libffmpeg.so
+ libvk_swiftshader.so
+ libvulkan.so.1
+-- 
+2.55.0
+

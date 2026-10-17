@@ -9,13 +9,13 @@ let
 in
 buildGoModule {
   pname = "hujsonfmt";
-  version = "0-unstable-2022-12-23";
+  version = "0-unstable-2025-06-05";
 
   src = fetchFromGitHub {
     owner = "tailscale";
     repo = "hujson";
-    rev = "20486734a56a3455c47994bf4942974d6f9969a0";
-    hash = "sha256-j2HRs5zZ0jTIqWIRhHheO9eaGzMMkNuKXuhboq9KpB4=";
+    rev = "992244df8c5ad853c10f498549e0eab54e515d13";
+    hash = "sha256-5lEvWiCxU+5oKbBon8EvBUON9WtxDausRVFU1+q2TZE=";
   };
 
   proxyVendor = true;

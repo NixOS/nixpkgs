@@ -1,30 +1,43 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
-  poetry-core,
+
+  # build-system
+  uv-build,
+
+  # dependencies
   markdown-it-py,
   pytest,
+
+  # tests
+  mdit-py-plugins,
+  pytest-asyncio,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-markdown-docs";
-  version = "0.5.1";
+  version = "0.9.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "modal-com";
     repo = "pytest-markdown-docs";
-    tag = "v${version}";
-    hash = "sha256-mclN28tfPcoFxswECjbrkeOI51XXSqUXfbvuSHrd7Sw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-V1volx1BckCmYwnM9Q43gRECYdccwaPWX7zUsk/+BoI=";
   };
 
-  build-system = [ poetry-core ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.10.9,<0.11.0" "uv_build"
+  '';
 
+  build-system = [ uv-build ];
+
+  pythonRelaxDeps = [
+    "markdown-it-py"
+  ];
   dependencies = [
     markdown-it-py
     pytest
@@ -32,12 +45,17 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_markdown_docs" ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    mdit-py-plugins
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Run pytest on markdown code fence blocks";
     homepage = "https://github.com/modal-com/pytest-markdown-docs";
-    license = licenses.mit;
-    maintainers = with maintainers; [ GaetanLepage ];
+    changelog = "https://github.com/modal-labs/pytest-markdown-docs/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -19,7 +18,6 @@ buildPythonPackage rec {
   pname = "apollo-fpga";
   version = "1.1.1";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
@@ -55,7 +53,7 @@ buildPythonPackage rec {
 
   meta = {
     changelog = "https://github.com/greatscottgadgets/apollo/releases/tag/v${version}";
-    description = "microcontroller-based FPGA / JTAG programmer";
+    description = "Microcontroller-based FPGA / JTAG programmer";
     homepage = "https://github.com/greatscottgadgets/apollo";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ carlossless ];

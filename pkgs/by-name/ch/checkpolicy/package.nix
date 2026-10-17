@@ -7,14 +7,14 @@
   libsepol,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "checkpolicy";
-  version = "3.7";
+  version = "3.11";
   inherit (libsepol) se_url;
 
   src = fetchurl {
-    url = "${se_url}/${version}/checkpolicy-${version}.tar.gz";
-    sha256 = "sha256-/T4ZJUd9SZRtERaThmGvRMH4bw1oFGb9nwLqoGACoH8=";
+    url = "${finalAttrs.se_url}/${finalAttrs.version}/checkpolicy-${finalAttrs.version}.tar.gz";
+    hash = "sha256-m4G/zu9/qdAvmHLlanhvND3FjvS1cT3ODVxBbluEzvo=";
   };
 
   nativeBuildInputs = [
@@ -28,7 +28,13 @@ stdenv.mkDerivation rec {
     "LIBSEPOLA=${lib.getLib libsepol}/lib/libsepol.a"
   ];
 
-  meta = removeAttrs libsepol.meta [ "outputsToInstall" ] // {
-    description = "SELinux policy compiler";
-  };
-}
+  meta =
+    removeAttrs libsepol.meta [
+      "outputsToInstall"
+      "name"
+    ]
+    // {
+      description = "SELinux policy compiler";
+      mainProgram = "checkpolicy";
+    };
+})

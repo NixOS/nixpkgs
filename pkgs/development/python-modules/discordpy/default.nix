@@ -2,35 +2,49 @@
   lib,
   stdenv,
   aiohttp,
+  audioop-lts,
   buildPythonPackage,
   fetchFromGitHub,
+  ffmpeg,
   libopus,
   pynacl,
-  withVoice ? true,
-  ffmpeg,
   setuptools,
+  withVoice ? true,
+  aiodns,
+  brotli,
+  orjson,
 }:
 
-let
+buildPythonPackage (finalAttrs: {
   pname = "discord.py";
-  version = "2.4.0";
-in
-buildPythonPackage {
-  inherit pname version;
+  version = "2.6.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Rapptz";
     repo = "discord.py";
-    tag = "v${version}";
-    hash = "sha256-GIwXx7bRCH2+G3zlilJ/Tb8el50SDbxGGX2/1bqL3+U=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-glFXgTNdOQ3cG/jlvi/1ASon2HpcoKli45IhLhjpIvA=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [ aiohttp ] ++ lib.optionals withVoice [ pynacl ];
+  dependencies = [
+    aiohttp
+    audioop-lts
+  ]
+  ++ lib.optionals withVoice finalAttrs.passthru.optional-dependencies.voice;
 
-  patchPhase = lib.optionalString withVoice ''
+  optional-dependencies = {
+    speed = [
+      aiodns
+      brotli
+      orjson
+    ];
+    voice = [ pynacl ];
+  };
+
+  postPatch = lib.optionalString withVoice ''
     substituteInPlace "discord/opus.py" \
       --replace-fail "ctypes.util.find_library('opus')" "'${libopus}/lib/libopus${stdenv.hostPlatform.extensions.sharedLibrary}'"
 
@@ -54,8 +68,8 @@ buildPythonPackage {
   meta = {
     description = "Python wrapper for the Discord API";
     homepage = "https://discordpy.rtfd.org/";
-    changelog = "https://github.com/Rapptz/discord.py/blob/v${version}/docs/whats_new.rst";
+    changelog = "https://github.com/Rapptz/discord.py/blob/${finalAttrs.src.tag}/docs/whats_new.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ getpsyched ];
   };
-}
+})

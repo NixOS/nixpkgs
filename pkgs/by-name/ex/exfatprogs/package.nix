@@ -5,17 +5,18 @@
   pkg-config,
   autoreconfHook,
   file,
+  util-linux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "exfatprogs";
-  version = "1.2.6";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-VUvVPABgQ7EUQu90DbWU7a+YThrWhusTk/YreKSqU/M=";
+    owner = "exfatprogs";
+    repo = "exfatprogs";
+    tag = finalAttrs.version;
+    hash = "sha256-twzHX8Uee0Uf8w1OsXWjecOl+Qs51jdJXK1sqdt6+4k=";
   };
 
   nativeBuildInputs = [
@@ -24,11 +25,20 @@ stdenv.mkDerivation rec {
     file
   ];
 
-  meta = with lib; {
+  buildInputs = [
+    util-linux
+  ];
+
+  outputs = [
+    "out"
+    "man"
+  ];
+
+  meta = {
     description = "exFAT filesystem userspace utilities";
     homepage = "https://github.com/exfatprogs/exfatprogs";
-    license = licenses.gpl2Plus;
-    maintainers = [ ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ yuannan ];
+    platforms = lib.platforms.linux;
   };
-}
+})

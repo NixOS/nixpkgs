@@ -4,22 +4,19 @@
   fetchFromGitHub,
   setuptools,
   pyasn1,
-  pythonOlder,
   tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "pysmb";
-  version = "1.2.10";
+  version = "1.2.15";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "miketeo";
     repo = "pysmb";
     tag = "pysmb-${version}";
-    hash = "sha256-Zid6KGNr7BBuyHaxdXkhRC/Ug93HmVXKMtreFf+M7OE=";
+    hash = "sha256-Unc5CfLOyaoy25x7vhe3wqO2+bocvCbu3yrDwX3K06U=";
   };
 
   build-system = [ setuptools ];
@@ -38,11 +35,11 @@ buildPythonPackage rec {
     "smb"
   ];
 
-  meta = with lib; {
-    changelog = "https://github.com/miketeo/pysmb/releases/tag/pysmb-${version}";
-    description = "Experimental SMB/CIFS library written in Python to support file sharing between Windows and Linux machines";
-    homepage = "https://miketeo.net/wp/index.php/projects/pysmb";
-    license = licenses.zlib;
-    maintainers = with maintainers; [ kamadorueda ];
+  meta = {
+    description = "Experimental SMB/CIFS library to support file sharing between Windows and Linux machines";
+    homepage = "https://pysmb.readthedocs.io/";
+    changelog = "https://github.com/miketeo/pysmb/releases/tag/${src.tag}";
+    license = lib.licenses.zlib;
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 }

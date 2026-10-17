@@ -11,11 +11,11 @@
 buildPythonPackage rec {
   pname = "pytest-astropy-header";
   version = "0.2.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "77891101c94b75a8ca305453b879b318ab6001b370df02be2c0b6d1bb322db10";
+    hash = "sha256-d4kRAclLdajKMFRTuHmzGKtgAbNw3wK+LAttG7Mi2xA=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -27,10 +27,10 @@ buildPythonPackage rec {
     numpy
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Plugin to add diagnostic information to the header of the test output";
     homepage = "https://astropy.org";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

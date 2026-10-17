@@ -15,41 +15,48 @@
   gobject-introspection,
   gtk-doc,
   docbook_xsl,
-  xorgserver,
+  xorg-server,
   dbus,
   python3,
   wrapGAppsHook3,
+  withDocs ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bamf";
   version = "0.5.6";
 
   outputs = [
     "out"
     "dev"
+  ]
+  ++ lib.optionals withDocs [
     "devdoc"
   ];
 
   src = fetchgit {
     url = "https://git.launchpad.net/~unity-team/bamf";
-    rev = version;
+    tag = finalAttrs.version;
     sha256 = "7U+2GcuDjPU8quZjkd8bLADGlG++tl6wSo0mUQkjAXQ=";
   };
 
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
-    (python3.withPackages (ps: with ps; [ lxml ])) # Tests
+    (python3.pythonOnBuildForHost.withPackages (ps: with ps; [ lxml ])) # Tests
     autoreconfHook
     dbus
     docbook_xsl
     gnome-common
     gobject-introspection
-    gtk-doc
+    gtk-doc # required for autoreconfHook, even when `withDocs = false`
     pkg-config
     vala
     which
     wrapGAppsHook3
-    xorgserver
+    xorg-server
   ];
 
   buildInputs = [
@@ -67,8 +74,10 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--enable-gtk-doc"
     "--enable-headless-tests"
+  ]
+  ++ lib.optionals withDocs [
+    "--enable-gtk-doc"
   ];
 
   # Fix paths
@@ -79,6 +88,7 @@ stdenv.mkDerivation rec {
 
   # TODO: Requires /etc/machine-id
   doCheck = false;
+  strictDeps = true;
 
   # Ignore deprecation errors
   env.NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
@@ -87,15 +97,16 @@ stdenv.mkDerivation rec {
     ignoredVersions = ".ubuntu.*";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Application matching framework";
     longDescription = ''
       Removes the headache of applications matching
       into a simple DBus daemon and c wrapper library.
     '';
     homepage = "https://launchpad.net/bamf";
-    license = licenses.lgpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ davidak ] ++ teams.pantheon.members;
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ davidak ];
+    teams = [ lib.teams.pantheon ];
   };
-}
+})

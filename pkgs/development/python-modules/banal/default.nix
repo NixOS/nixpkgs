@@ -10,7 +10,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2fe02c9305f53168441948f4a03dfbfa2eacc73db30db4a93309083cb0e250a5";
+    hash = "sha256-L+AskwX1MWhEGUj0oD37+i6sxz2zDbSpMwkIPLDiUKU=";
   };
 
   # no tests
@@ -18,10 +18,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "banal" ];
 
-  meta = with lib; {
+  meta = {
     description = "Commons of banal micro-functions for Python";
     homepage = "https://github.com/pudo/banal";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -24,35 +24,23 @@ let
   broken = addMetaAttrs { broken = true; };
   brokenOnDarwin = addMetaAttrs { broken = stdenv.hostPlatform.isDarwin; };
   addToCscOptions = opt: old: {
-    CSC_OPTIONS = lib.concatStringsSep " " ([ old.CSC_OPTIONS or "" ] ++ lib.toList opt);
+    env.CSC_OPTIONS = lib.concatStringsSep " " ([ old.env.CSC_OPTIONS or "" ] ++ lib.toList opt);
+  };
+  # chicken-install installs every .egg it finds, so keep only the canonical <eggName>.egg.
+  removeBundledEggs = eggName: old: {
+    preBuild = (old.preBuild or "") + ''
+      for f in *.egg; do
+        [ -e "$f" ] || continue
+        [ "$f" = "${eggName}.egg" ] || rm "$f"
+      done
+    '';
   };
 in
 {
-  allegro =
-    old:
-    (
-      (addToBuildInputsWithPkgConfig (
-        [
-          pkgs.allegro5
-          pkgs.libglvnd
-          pkgs.libGLU
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.darwin.apple_sdk.frameworks.OpenGL ]
-        ++ lib.optionals stdenv.hostPlatform.isLinux [ pkgs.xorg.libX11 ]
-      ))
-      old
-    )
-    // {
-      # depends on 'chicken' egg, which doesn't exist,
-      # so we specify all the deps here
-      propagatedBuildInputs = [
-        chickenEggs.foreigners
-      ];
-    };
   breadline = addToBuildInputs pkgs.readline;
   blas = addToBuildInputsWithPkgConfig pkgs.blas;
   blosc = addToBuildInputs pkgs.c-blosc;
-  botan = addToBuildInputsWithPkgConfig pkgs.botan2;
+  botan = broken;
   cairo =
     old:
     (addToBuildInputsWithPkgConfig pkgs.cairo old)
@@ -61,93 +49,146 @@ in
       srfi-13
     ]) old);
   cmark = addToBuildInputs pkgs.cmark;
-  comparse = old: {
-    # For some reason lazy-seq 2 gets interpreted as lazy-seq 0.0.0??
-    postPatch = ''
-      substituteInPlace comparse.egg \
-        --replace-fail 'lazy-seq "0.1.0"' 'lazy-seq "0.0.0"'
-    '';
-  };
+  crypt = addToBuildInputs pkgs.libxcrypt;
   epoxy =
     old:
     (addToPropagatedBuildInputsWithPkgConfig pkgs.libepoxy old)
-    // lib.optionalAttrs stdenv.cc.isClang {
+    // {
       env.NIX_CFLAGS_COMPILE = toString [
-        "-Wno-error=incompatible-function-pointer-types"
+        (
+          if stdenv.cc.isClang then
+            "-Wno-error=incompatible-function-pointer-types"
+          else
+            "-Wno-error=incompatible-pointer-types"
+        )
         "-Wno-error=int-conversion"
       ];
     };
   espeak = addToBuildInputsWithPkgConfig pkgs.espeak-ng;
+  http-curl = addToBuildInputsWithPkgConfig pkgs.curl;
+  ephem = addToBuildInputs pkgs.libnova;
   exif = addToBuildInputsWithPkgConfig pkgs.libexif;
   expat =
     old:
     (addToBuildInputsWithPkgConfig pkgs.expat old)
-    // lib.optionalAttrs stdenv.cc.isClang {
+    // {
       env.NIX_CFLAGS_COMPILE = toString [
-        "-Wno-error=incompatible-function-pointer-types"
+        (
+          if stdenv.cc.isClang then
+            "-Wno-error=incompatible-function-pointer-types"
+          else
+            "-Wno-error=incompatible-pointer-types"
+        )
       ];
     };
   ezxdisp =
     old:
-    (addToBuildInputsWithPkgConfig pkgs.xorg.libX11 old)
-    // lib.optionalAttrs stdenv.cc.isClang {
+    (addToBuildInputsWithPkgConfig pkgs.libx11 old)
+    // {
       env.NIX_CFLAGS_COMPILE = toString [
         "-Wno-error=implicit-function-declaration"
       ];
     };
   freetype = addToBuildInputsWithPkgConfig pkgs.freetype;
-  fuse = addToBuildInputsWithPkgConfig pkgs.fuse;
+  # requires fuse2
+  fuse = broken;
+  isaac =
+    old:
+    (addToBuildInputsWithPkgConfig pkgs.libffi old)
+    // {
+      postPatch = ''
+        substituteInPlace rand.h \
+          --replace-fail '/*_ randctx *r, word flag _*/' 'randctx *r, word flag' \
+          --replace-fail '/*_ randctx *r _*/' 'randctx *r'
+      '';
+    };
+  gl-math = old: {
+    env.NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=incompatible-pointer-types"
+    ];
+  };
   gl-utils = addPkgConfig;
   glfw3 = addToBuildInputsWithPkgConfig pkgs.glfw3;
   glls = addPkgConfig;
-  iconv = addToBuildInputs (lib.optional stdenv.hostPlatform.isDarwin pkgs.libiconv);
+  glut =
+    old:
+    (brokenOnDarwin old)
+    // lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) (
+      addToCscOptions [
+        "-I${(lib.getDev pkgs.libglut)}/include"
+        "-I${(lib.getDev pkgs.libGL)}/include"
+        "-I${(lib.getDev pkgs.libGLU)}/include"
+      ] old
+    )
+    // (addToBuildInputs pkgs.libglut old);
+  hypergiant = addPkgConfig;
   icu = addToBuildInputsWithPkgConfig pkgs.icu;
   imlib2 = addToBuildInputsWithPkgConfig pkgs.imlib2;
-  inotify =
-    old:
-    (addToBuildInputs (lib.optional stdenv.hostPlatform.isDarwin pkgs.libinotify-kqueue) old)
-    // lib.optionalAttrs stdenv.hostPlatform.isDarwin (addToCscOptions "-L -linotify" old);
+  # "Error: extension is not targeted for this system: \"inotify\""
+  inotify = brokenOnDarwin;
   leveldb = addToBuildInputs pkgs.leveldb;
-  lowdown = old: {
-    # For some reason comparse version gets interpreted as 0.0.0
-    postPatch = ''
-      substituteInPlace lowdown.egg \
-        --replace-fail 'comparse "3"' 'comparse "0.0.0"'
-    '';
+  libyaml = old: {
+    env.NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
   };
+  lmdb-ht = addToBuildInputs pkgs.lmdb;
   magic = addToBuildInputs pkgs.file;
-  mdh =
-    old:
-    (addToBuildInputs pkgs.pcre old)
-    // lib.optionalAttrs stdenv.cc.isClang {
-      env.NIX_CFLAGS_COMPILE = toString [
-        "-Wno-error=implicit-function-declaration"
-        "-Wno-error=implicit-int"
-      ];
-    };
-  medea = old: {
-    # For some reason comparse gets interpreted as comparse 0.0.0
-    postPatch = ''
-      substituteInPlace medea.egg \
-        --replace-fail 'comparse "0.3.0"' 'comparse "0.0.0"'
-    '';
-  };
+  # requires PCRE
+  mdh = broken;
   # missing dependency in upstream egg
   mistie = addToPropagatedBuildInputs (with chickenEggs; [ srfi-1 ]);
-  mosquitto = addToPropagatedBuildInputs ([ pkgs.mosquitto ]);
+  mosquitto = addToPropagatedBuildInputs [ pkgs.mosquitto ];
+  mpi =
+    old:
+    (addToBuildInputs pkgs.openmpi old)
+    // {
+      preBuild = ''
+        mkdir -p $NIX_BUILD_TOP/mpi-dir
+        ln -sf ${lib.getDev pkgs.openmpi}/include $NIX_BUILD_TOP/mpi-dir/include
+        ln -sf ${lib.getLib pkgs.openmpi}/lib $NIX_BUILD_TOP/mpi-dir/lib
+        export MPI_DIR=$NIX_BUILD_TOP/mpi-dir
+      '';
+      env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+    };
+  nanograd = addToPropagatedBuildInputs (with chickenEggs; [ blas ]);
   nanomsg = addToBuildInputs pkgs.nanomsg;
   ncurses = addToBuildInputsWithPkgConfig [ pkgs.ncurses ];
-  opencl = addToBuildInputs (
-    [
-      pkgs.opencl-headers
-      pkgs.ocl-icd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.darwin.apple_sdk.frameworks.OpenCL ]
-  );
+  oauthtoothy =
+    old:
+    (addToPropagatedBuildInputs [ chickenEggs.http-client ] old)
+    // {
+      postPatch = ''
+        sed -i 's/http-curl/http-client/' oauthtoothy.scm oauthtoothy.egg
+      '';
+    };
+  opencl = addToBuildInputs [
+    pkgs.opencl-headers
+    pkgs.ocl-icd
+  ];
   openssl = addToBuildInputs pkgs.openssl;
+  orm-db-rqlite = removeBundledEggs "orm-db-rqlite";
+  orm-db-sqlite = removeBundledEggs "orm-db-sqlite";
+  orm = removeBundledEggs "orm";
   plot = addToBuildInputs pkgs.plotutils;
-  postgresql = addToBuildInputsWithPkgConfig pkgs.postgresql;
+  postgresql = addToBuildInputsWithPkgConfig pkgs.libpq;
+  pyffi = addToBuildInputsWithPkgConfig pkgs.python3;
   rocksdb = addToBuildInputs pkgs.rocksdb_8_3;
+  # missing dependency in upstream egg
+  s9fes-char-graphics-shapes = addToPropagatedBuildInputs (
+    with chickenEggs;
+    [
+      utf8
+      s9fes-char-graphics
+    ]
+  );
+  # missing dependency in upstream egg
+  s9fes-char-graphics = addToPropagatedBuildInputs (
+    with chickenEggs;
+    [
+      srfi-1
+      utf8
+      record-variants
+    ]
+  );
   scheme2c-compatibility = addPkgConfig;
   sdl-base =
     old:
@@ -186,17 +227,52 @@ in
   stemmer = old: (addToBuildInputs pkgs.libstemmer old) // (addToCscOptions "-L -lstemmer" old);
   stfl =
     old: (addToBuildInputs [ pkgs.ncurses pkgs.stfl ] old) // (addToCscOptions "-L -lncurses" old);
+  svn-client =
+    old:
+    (addToBuildInputs [ pkgs.subversion pkgs.aprutil ] old)
+    // (addToNativeBuildInputs [ pkgs.apr pkgs.pkg-config ] old)
+    // {
+      postPatch =
+        let
+          svnInclude = "${lib.getDev pkgs.subversion}/include/subversion-1";
+          aprUtilInclude = "${lib.getDev pkgs.aprutil}/include";
+        in
+        ''
+          substituteInPlace build-svn-client \
+            --replace-fail 'CFLAGS="$CFLAGS `pkg-config --cflags libsvn_client`"' 'CFLAGS="$CFLAGS `pkg-config --cflags libsvn_client` -I${svnInclude}"'
+          substituteInPlace svn-client.setup \
+            --replace-fail '-I/usr/include/subversion-1' "-I${svnInclude}" \
+            --replace-fail '-I/usr/local/include/subversion-1' "-I${aprUtilInclude} -I${svnInclude}"
+        '';
+    };
   taglib =
     old:
-    (addToBuildInputs [ pkgs.zlib pkgs.taglib ] old)
+    (addToBuildInputs [ pkgs.zlib pkgs.taglib_1 ] old)
     // (
       # needed for tablib-config to be in PATH
-      addToNativeBuildInputs pkgs.taglib old
+      addToNativeBuildInputs pkgs.taglib_1 old
     );
+  tokyocabinet =
+    old:
+    (addToBuildInputs pkgs.tokyocabinet old)
+    // {
+      env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+    };
   uuid-lib = addToBuildInputs pkgs.libuuid;
-  webview = addToBuildInputsWithPkgConfig pkgs.webkitgtk_4_0;
   ws-client = addToBuildInputs pkgs.zlib;
-  xlib = addToPropagatedBuildInputs pkgs.xorg.libX11;
+  xlib =
+    old:
+    (addToPropagatedBuildInputs pkgs.libx11 old)
+    // {
+      env.NIX_CFLAGS_COMPILE = toString [
+        (
+          if stdenv.cc.isClang then
+            "-Wno-error=incompatible-function-pointer-types"
+          else
+            "-Wno-error=incompatible-pointer-types"
+        )
+      ];
+    };
   yaml = addToBuildInputs pkgs.libyaml;
   zlib = addToBuildInputs pkgs.zlib;
   zmq = addToBuildInputs pkgs.zeromq;
@@ -209,36 +285,17 @@ in
     // {
       postPatch = ''
         substituteInPlace libgit2.scm \
-          --replace "asize" "reserved"
+          --replace-fail "asize" "reserved"
       '';
     };
-  lazy-ffi =
-    old:
-    (addToBuildInputs pkgs.libffi old)
-    // {
-      postPatch = ''
-        substituteInPlace lazy-ffi.scm \
-          --replace "ffi/ffi.h" "ffi.h"
-      '';
-    };
+  lazy-ffi = old: (addToBuildInputs pkgs.libffi old);
   opengl =
     old:
-    (addToBuildInputsWithPkgConfig (
-      lib.optionals (!stdenv.hostPlatform.isDarwin) [
-        pkgs.libGL
-        pkgs.libGLU
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        pkgs.darwin.apple_sdk.frameworks.Foundation
-        pkgs.darwin.apple_sdk.frameworks.OpenGL
-      ]
-    ) old)
-    // {
-      postPatch = ''
-        substituteInPlace opengl.egg \
-          --replace 'framework ' 'framework" "'
-      '';
-    };
+    (brokenOnDarwin old)
+    // (addToBuildInputsWithPkgConfig (lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      pkgs.libGL
+      pkgs.libGLU
+    ]) old);
   posix-shm = old: {
     postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace build.scm \
@@ -260,8 +317,8 @@ in
       preBuild = ''
         substituteInPlace \
           dbus.egg dbus.setup \
-          --replace '`pkg-config --cflags dbus-1`' "$(pkg-config --cflags dbus-1)" \
-          --replace '`pkg-config --libs dbus-1`' "$(pkg-config --libs dbus-1)"
+          --replace-fail '`pkg-config --cflags dbus-1`' "$(pkg-config --cflags dbus-1)" \
+          --replace-fail '`pkg-config --libs dbus-1`' "$(pkg-config --libs dbus-1)"
       '';
     };
   math = old: {
@@ -273,6 +330,7 @@ in
         --replace-quiet 'only chicken.base' 'only chicken.base define-values'
     '';
   };
+  raylib = addToBuildInputsWithPkgConfig pkgs.raylib;
   socket = old: {
     # chicken-do checks for changes to a file that doesn't exist
     preBuild = ''
@@ -281,29 +339,42 @@ in
   };
 
   # mark broken
-  "ephem-v1.1" = broken;
-  F-operator = broken;
-  atom = broken;
-  begin-syntax = broken;
+  allegro =
+    old:
+    (broken old)
+    // {
+      # depends on 'chicken' egg, which doesn't exist, so we specify all the deps here (needs to be
+      # kept around even when marked as broken so that evaluation doesn't break due to the missing
+      # attribute).
+      propagatedBuildInputs = [
+        chickenEggs.foreigners
+      ];
+    };
+  # cond-expand has no chicken-5 clause any more
+  slib-wt-tree = broken;
+  srfi-137 = broken;
+  srfi-38 = broken;
+  # depends on srfi-38, which is broken
+  magic-pipes = broken;
+  srfi-48 = broken;
+  # imports scheme.base, which CHICKEN 5 does not provide
+  matchertext = broken;
+  # csc: file `lsp-server.private.chicken.import.scm' does not exist
+  lsp-server = broken;
   canvas-draw = broken;
-  chicken-doc-admin = broken;
-  coops-utils = broken;
-  crypt = broken;
-  hypergiant = broken;
+  gemini = broken;
+  gemini-client = broken;
   iup = broken;
   kiwi = broken;
-  lmdb-ht = broken;
-  mpi = broken;
-  pyffi = broken;
   qt-light = broken;
-  salmonella-html-report = broken;
   sundials = broken;
-  svn-client = broken;
-  system = broken;
-  tokyocabinet = broken;
+  # webkitgtk_4_0 was removed
+  webview = broken;
 
   # mark broken darwin
 
+  # The last successful Darwin Hydra build was in 2024
+  iconv = brokenOnDarwin;
   # fatal error: 'mqueue.h' file not found
   posix-mq = brokenOnDarwin;
   # Undefined symbols for architecture arm64: "_pthread_setschedprio"

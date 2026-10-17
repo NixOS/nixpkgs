@@ -9,20 +9,22 @@
   zlib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "below";
-  version = "0.8.1";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "facebookincubator";
     repo = "below";
-    rev = "v${version}";
-    sha256 = "sha256-87Fdx3Jqi3dNWM5DZl+UYs031qn2DoiiWd3IysT/glQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Paf3+aVsJpC8wyNqszCp3y5qQS8LEAyXvJBp9VG4uFM=";
   };
 
-  cargoHash = "sha256-y2fNypA0MrCdUI/K6QrZWw/5mkYafj2s6jrGHU2zGXw=";
+  cargoHash = "sha256-8+8mBbQSFPcjfBB7y+dgyno+EW82ojhPNxx836gCMik=";
 
-  prePatch = ''sed -i "s,ExecStart=.*/bin,ExecStart=$out/bin," etc/below.service'';
+  prePatch = ''
+    sed -i "s,ExecStart=.*/bin,ExecStart=$out/bin," etc/below.service
+  '';
   postInstall = ''
     install -d $out/lib/systemd/system
     install -t $out/lib/systemd/system etc/below.service
@@ -47,12 +49,12 @@ rustPlatform.buildRustPackage rec {
   # needs /sys/fs/cgroup
   doCheck = false;
 
-  meta = with lib; {
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ globin ];
+  meta = {
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ globin ];
     description = "Time traveling resource monitor for modern Linux systems";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://github.com/facebookincubator/below";
     mainProgram = "below";
   };
-}
+})

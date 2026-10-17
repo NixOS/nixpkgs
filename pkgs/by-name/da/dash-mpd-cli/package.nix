@@ -4,40 +4,43 @@
   rustPlatform,
   fetchFromGitHub,
   makeWrapper,
+  bento4,
   protobuf,
   ffmpeg,
+  gpac,
   libxslt,
   shaka-packager,
+  nix-update-script,
+  runCommand,
+  versionCheckHook,
 }:
 
 let
   # dash-mpd-cli looks for a binary named `shaka-packager`, while
   # shaka-packager provides `packager`.
-  shaka-packager-wrapped = stdenvNoCC.mkDerivation {
-    name = "shaka-packager-wrapped";
-    phases = [ "installPhase" ];
-    installPhase = ''
-      mkdir -p $out/bin
-      ln -s ${lib.getExe shaka-packager} $out/bin/shaka-packager
-    '';
-  };
+  shaka-packager-wrapped = runCommand "shaka-packager-wrapped" { } ''
+    mkdir -p $out/bin
+    ln -s ${lib.getExe shaka-packager} $out/bin/shaka-packager
+  '';
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dash-mpd-cli";
-  version = "0.2.24";
+  version = "0.2.35";
 
   src = fetchFromGitHub {
     owner = "emarsden";
     repo = "dash-mpd-cli";
-    tag = "v${version}";
-    hash = "sha256-Q4zzKdp8GROL8vHi8XETErqufSqgZH/zf/mqEH2lIzE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vFSP5K8MsVbs2CbndMr+LGqWJ92UHnMA+1iOmK6M/24=";
   };
 
-  patches = [
-    ./use-shaka-by-default.patch
-  ];
+  cargoHash = "sha256-KzBJwmFWd8ztOcWOqCnHuztnnM764aDKz92whVJ3W4E=";
 
-  cargoHash = "sha256-R54Np08hYpDoidsHr3rmhpX/QZZkZHGcCSoKk6nw9R8=";
+  __structuredAttrs = true;
+
+  # Needed for HTTP3 support (which is enabled by default):
+  # https://github.com/emarsden/dash-mpd-cli/blob/2d53fa0c077ede18c9cee198903a7884e880d47a/.github/workflows/ci.yml#L5-L7
+  env.RUSTFLAGS = "--cfg reqwest_unstable";
 
   nativeBuildInputs = [
     makeWrapper
@@ -51,12 +54,20 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/dash-mpd-cli \
       --prefix PATH : ${
         lib.makeBinPath [
-          ffmpeg.bin
-          libxslt.bin
+          bento4
+          ffmpeg
+          gpac
+          libxslt
           shaka-packager-wrapped
         ]
       }
   '';
+
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Download media content from a DASH-MPEG or DASH-WebM MPD manifest";
@@ -72,4 +83,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ al3xtjames ];
     mainProgram = "dash-mpd-cli";
   };
-}
+})

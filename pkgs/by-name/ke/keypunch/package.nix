@@ -19,18 +19,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "keypunch";
-  version = "5.1";
+  version = "7.0";
 
   src = fetchFromGitHub {
     owner = "bragefuglseth";
     repo = "keypunch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-C0WD8vBPlKvCJHVJHSfEbMIxNARoRrCn7PNebJ0rkoI=";
+    hash = "sha256-I6nHobhQqcUdfTXDP9oIx+0BJz/VKaQb/OD77VQsWek=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
+  cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-RufJy5mHuirAO056p5/w63jw5h00E41t+H4VQP3kPks=";
+    hash = "sha256-gQg6CCb5OzK2fLWMtkRTv1hK642IezRN+5qLMGVV6s8=";
   };
 
   strictDeps = true;
@@ -54,6 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ libadwaita ];
 
+  # Required to avoid building with development assets.
+  # See https://github.com/bragefuglseth/keypunch/blob/v7.0/meson.build#L18-L21
+  mesonBuildType = "release";
+
   passthru = {
     updateScript = nix-update-script { };
   };
@@ -61,12 +65,13 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Practice your typing skills";
     homepage = "https://github.com/bragefuglseth/keypunch";
+    changelog = "https://github.com/bragefuglseth/keypunch/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     mainProgram = "keypunch";
     maintainers = with lib.maintainers; [
       tomasajt
-      getchoo
     ];
+    teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.linux;
   };
 })

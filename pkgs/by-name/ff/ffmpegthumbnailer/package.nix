@@ -9,15 +9,15 @@
   libjpeg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ffmpegthumbnailer";
-  version = "unstable-2024-01-04";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "dirkvdb";
     repo = "ffmpegthumbnailer";
-    rev = "1b5a77983240bcf00a4ef7702c07bcd8f4e5f97c";
-    hash = "sha256-7SPRQMPgdvP7J3HCf7F1eXxZjUH5vCYZ9UOwTUFMLp0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1FM0jMzCdLLi91B4Vtcfa9Yiz23DPXRHi12lzgTurr0=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,10 @@ stdenv.mkDerivation rec {
     libjpeg
   ];
 
-  cmakeFlags = [ "-DENABLE_THUMBNAILER=ON" ];
+  cmakeFlags = [
+    "-DENABLE_THUMBNAILER=ON"
+    "-DENABLE_AUDIO_THUMBNAILER=ON"
+  ];
 
   # https://github.com/dirkvdb/ffmpegthumbnailer/issues/215
   postPatch = ''
@@ -40,11 +43,11 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    substituteInPlace $out/share/thumbnailers/ffmpegthumbnailer.thumbnailer \
+    substituteInPlace $out/share/thumbnailers/ffmpegthumbnailer{,-audio}.thumbnailer \
       --replace-fail '=ffmpegthumbnailer' "=$out/bin/ffmpegthumbnailer"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight video thumbnailer";
     longDescription = "FFmpegthumbnailer is a lightweight video
         thumbnailer that can be used by file managers to create thumbnails
@@ -55,9 +58,8 @@ stdenv.mkDerivation rec {
         The only dependencies are ffmpeg and libpng/libjpeg.
     ";
     homepage = "https://github.com/dirkvdb/ffmpegthumbnailer";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.jagajaga ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     mainProgram = "ffmpegthumbnailer";
   };
-}
+})

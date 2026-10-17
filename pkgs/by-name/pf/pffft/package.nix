@@ -3,26 +3,32 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pffft";
-  version = "unstable-2022-04-10";
+  version = "1.1.0";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "marton78";
-    repo = pname;
-    rev = "08f5ed2618ac06d7dcc83d209d7253dc215274d5";
-    sha256 = "sha256-9LfLQ17IRsbEwGQJZzhW2Av4en1KuJVicLrS2AyjUZY=";
+    repo = "pffft";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+efWiBrJzC188tDSPHMARRDArzx/4E8GYPMfDHAND8k=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Pretty Fast FFT (PFFFT) library";
     homepage = "https://github.com/marton78/pffft";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ sikmir ];
+    platforms = lib.platforms.unix;
   };
-}
+})

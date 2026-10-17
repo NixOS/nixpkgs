@@ -24,17 +24,23 @@
   cinnamon-desktop,
   yelp-tools,
   xapp,
+  xapp-symbolic-icons,
+  gnome,
+  libavif,
+  libheif,
+  libjxl,
+  webp-pixbuf-loader,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xviewer";
-  version = "3.4.8";
+  version = "3.4.17";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
-    repo = pname;
-    rev = version;
-    hash = "sha256-Wn1a/tGNIJNGbgDKoMMMo/oCXrqCXDM1nTUgCZt0O/U=";
+    repo = "xviewer";
+    rev = finalAttrs.version;
+    hash = "sha256-U6p79pgiXdCLLnLZ4h3fvXj9UXG0atBccoBXGvAM5Yo=";
   };
 
   nativeBuildInputs = [
@@ -65,12 +71,34 @@ stdenv.mkDerivation rec {
     xapp
   ];
 
-  meta = with lib; {
+  postInstall = ''
+    # In postInstall to run before gappsWrapperArgsHook.
+    export GDK_PIXBUF_MODULE_FILE="${
+      gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+        extraLoaders = [
+          libavif
+          libheif.lib
+          libjxl
+          librsvg
+          webp-pixbuf-loader
+        ];
+      }
+    }"
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${lib.makeSearchPath "share" [ xapp-symbolic-icons ]}"
+    )
+  '';
+
+  meta = {
     description = "Generic image viewer from Linux Mint";
     mainProgram = "xviewer";
     homepage = "https://github.com/linuxmint/xviewer";
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ tu-maurice ] ++ teams.cinnamon.members;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ tu-maurice ];
+    teams = [ lib.teams.cinnamon ];
   };
-}
+})

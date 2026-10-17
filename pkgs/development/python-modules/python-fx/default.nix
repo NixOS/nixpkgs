@@ -6,9 +6,7 @@
   buildPythonPackage,
   click,
   dacite,
-  decorator,
   fetchFromGitHub,
-  future,
   first,
   jsonpath-ng,
   loguru,
@@ -18,28 +16,28 @@
   pyfiglet,
   pyperclip,
   pytestCheckHook,
-  pythonOlder,
+  pyprojectVersionPatchHook,
+  pythonAtLeast,
   antlr4,
   pyyaml,
   setuptools,
+  typing-extensions,
   urwid,
   parameterized,
   wcwidth,
   yamale,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-fx";
-  version = "0.3.2";
+  version = "0.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "cielong";
     repo = "pyfx";
-    tag = "v${version}";
-    hash = "sha256-Q5ihWnoa7nf4EkrY4SgrwjaNvTva4RdW9GRbnbsPXPc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-a9gKdM6InH0KP0yrDOo6W90ClMVshbVxLjtiG9yiq1s=";
   };
 
   postPatch = ''
@@ -48,20 +46,24 @@ buildPythonPackage rec {
     rm src/pyfx/model/common/jsonpath/*.{g4,interp,tokens} # no need to install
   '';
 
+  # the antlr stuff is broken: NameError: name 'JSONPathParser' is not defined
+  disabled = pythonAtLeast "3.14";
+
   pythonRelaxDeps = true;
 
   build-system = [ setuptools ];
 
-  nativeBuildInputs = [ antlr4 ];
+  nativeBuildInputs = [
+    antlr4
+    pyprojectVersionPatchHook
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     antlr4-python3-runtime
     asciimatics
     click
     dacite
-    decorator
     first
-    future
     jsonpath-ng
     loguru
     overrides
@@ -70,6 +72,7 @@ buildPythonPackage rec {
     pyfiglet
     pyperclip
     pyyaml
+    typing-extensions
     urwid
     wcwidth
     yamale
@@ -85,12 +88,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyfx" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to view JSON in a TUI";
     homepage = "https://github.com/cielong/pyfx";
-    changelog = "https://github.com/cielong/pyfx/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/cielong/pyfx/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pyfx";
   };
-}
+})

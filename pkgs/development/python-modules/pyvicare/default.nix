@@ -2,35 +2,36 @@
   lib,
   authlib,
   buildPythonPackage,
+  deprecated,
   fetchFromGitHub,
   poetry-core,
   requests,
   pytest-cov-stub,
   pytestCheckHook,
-  simplejson,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyvicare";
-  version = "2.39.1";
+  version = "2.63.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openviess";
     repo = "PyViCare";
-    tag = version;
-    hash = "sha256-gD6eLhng8oUmXPHOwYZoyLRpMQBgH0xbopaVJ6qJQsg=";
+    tag = finalAttrs.version;
+    hash = "sha256-axJhzF21lwMRp5OIZBJhwE1hNkX5KdcZvqCCbLQvoNc=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.1.0"' 'version = "${version}"'
+      --replace-fail 'version = "0.1.0"' 'version = "${finalAttrs.version}"'
   '';
 
   build-system = [ poetry-core ];
 
   dependencies = [
     authlib
+    deprecated
     requests
   ];
 
@@ -41,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "PyViCare" ];
 
-  meta = with lib; {
-    changelog = "https://github.com/openviess/PyViCare/releases/tag/${version}";
+  meta = {
     description = "Python Library to access Viessmann ViCare API";
     homepage = "https://github.com/somm15/PyViCare";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/openviess/PyViCare/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

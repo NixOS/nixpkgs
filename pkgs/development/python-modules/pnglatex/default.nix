@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  poppler_utils,
+  poppler-utils,
   netpbm,
 }:
 
@@ -18,18 +18,18 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    poppler_utils
+    poppler-utils
     netpbm
   ];
 
   # There are no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/MaT1g3R/pnglatex";
     description = "Small program that converts LaTeX snippets to png";
     mainProgram = "pnglatex";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   mono,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "wavefunctioncollapse";
   version = "0.0pre20170130";
   src = fetchFromGitHub {
@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ mono ];
   meta = {
     description = "Generator of bitmaps that are locally similar to the input bitmap";
+    homepage = "https://github.com/mxgmn/WaveFunctionCollapse";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;

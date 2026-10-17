@@ -2,8 +2,8 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
-
 stdenvNoCC.mkDerivation rec {
   pname = "victor-mono";
   version = "1.5.6";
@@ -21,22 +21,20 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-PnCCU7PO+XcxUk445sU5xVl8XqdSPJighjtDTqI6qiw=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
-    mkdir -p "$out/share/fonts/"
-
-    mv OTF $out/share/fonts/opentype
-    mv TTF $out/share/fonts/truetype
-
-    runHook postInstall
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Free programming font with cursive italics and ligatures";
     homepage = "https://rubjo.github.io/victor-mono";
-    license = licenses.ofl;
-    maintainers = with maintainers; [ jpotier ];
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    maintainers = with lib.maintainers; [
+      jpotier
+      seudonym
+    ];
+    platforms = lib.platforms.all;
   };
 }

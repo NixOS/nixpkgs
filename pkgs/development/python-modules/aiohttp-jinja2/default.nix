@@ -5,8 +5,8 @@
   fetchPypi,
   jinja2,
   pytest-aiohttp,
+  pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -15,12 +15,15 @@ buildPythonPackage rec {
   version = "1.6";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-o6f/UmTlvKUuiuVHu/0HYbcklSMNQ40FtsCRW+YZsOI=";
   };
+
+  patches = [
+    # Adapted from https://github.com/aio-libs/aiohttp-jinja2/pull/1025
+    ./aiohttp-3.14.patch
+  ];
 
   build-system = [ setuptools ];
 
@@ -31,25 +34,22 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-aiohttp
+    pytest-cov-stub
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace-fail "--cov=aiohttp_jinja2/ --cov=tests/ --cov-report term" ""
-  '';
+  __darwinAllowLocalNetworking = true;
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   pythonImportsCheck = [ "aiohttp_jinja2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Jinja2 support for aiohttp";
     homepage = "https://github.com/aio-libs/aiohttp_jinja2";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

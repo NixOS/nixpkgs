@@ -11,22 +11,23 @@
   ocaml,
   menhir,
   apron,
+  arg-complete,
   camlidl,
   yojson,
   zarith,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "mopsa";
-  version = "1.0";
+  version = "1.1";
 
-  minimalOCamlVersion = "4.12";
+  minimalOCamlVersion = "4.13";
 
   src = fetchFromGitLab {
     owner = "mopsa";
     repo = "mopsa-analyzer";
-    rev = "v${version}";
-    hash = "sha256-nGnWwV7g3SYgShbXGUMooyOdFwXFrQHnQvlc8x9TAS4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-lO5dtGAl1dq8oJco/hPXrAbN05rKc62Zrci/8CLrQ0c=";
   };
 
   nativeBuildInputs = [
@@ -36,15 +37,16 @@ buildDunePackage rec {
   ];
 
   buildInputs = [
+    arg-complete
     camlidl
-    flint
-    libclang
     mpfr
-    pplite
   ];
 
   propagatedBuildInputs = [
     apron
+    flint
+    libclang
+    pplite
     yojson
     zarith
   ];
@@ -73,8 +75,8 @@ buildDunePackage rec {
   meta = {
     license = lib.licenses.lgpl3Plus;
     homepage = "https://mopsa.lip6.fr/";
-    description = "A Modular and Open Platform for Static Analysis using Abstract Interpretation";
+    description = "Modular and Open Platform for Static Analysis using Abstract Interpretation";
     maintainers = [ lib.maintainers.vbgl ];
   };
 
-}
+})

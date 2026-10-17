@@ -6,23 +6,20 @@
   hatch-vcs,
   pytest,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-repeat";
-  version = "0.9.3";
+  version = "0.9.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "pytest_repeat";
     inherit version;
-    hash = "sha256-/9ODbfzWe7JwvsZIszDiC+N9KWZEjEFIxAktHoq6gYU=";
+    hash = "sha256-2SrBTfqm/8/mkX5dFvDJvII4DBNbA8Kl9BLSY38iRIU=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
     hatch-vcs
   ];
@@ -33,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_repeat" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin for repeating tests";
     homepage = "https://github.com/pytest-dev/pytest-repeat";
     changelog = "https://github.com/pytest-dev/pytest-repeat/blob/v${version}/CHANGES.rst";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     maintainers = [ ];
   };
 }

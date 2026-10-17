@@ -2,7 +2,11 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+
+  # build-system
   hatchling,
+
+  # dependencies
   jsonschema,
   jupyter-events,
   jupyter-server,
@@ -13,15 +17,16 @@
   jupyter-collaboration,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jupyter-server-ydoc";
-  version = "1.1.0";
+  version = "3.0.4";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "jupyter_server_ydoc";
-    inherit version;
-    hash = "sha256-Jw7FFBilQegSSTVXgWM7ccEw4r9KCQXIjqI7bOUIDW8=";
+    inherit (finalAttrs) version;
+    hash = "sha256-8ATHnGxKzgPt/5F2u4aV+WmWYJzToCxNAZeQWikyM4c=";
   };
 
   build-system = [ hatchling ];
@@ -41,12 +46,12 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  passthru.tests = jupyter-collaboration.tests;
+  passthru.tests = jupyter-collaboration;
 
   meta = {
     description = "Jupyter-server extension integrating collaborative shared models";
     homepage = "https://github.com/jupyterlab/jupyter-collaboration/tree/main/projects/jupyter-server-ydoc";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.jupyter.members;
+    teams = [ lib.teams.jupyter ];
   };
-}
+})

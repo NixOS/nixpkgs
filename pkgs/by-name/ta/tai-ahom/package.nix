@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "tai-ahom";
-  version = "unstable-2015-07-06";
+  version = "0-unstable-2015-07-06";
 
   src = fetchurl {
     url = "https://github.com/enabling-languages/tai-languages/raw/b57a3ea4589af69bb8e87c6c4bb7cd367b52f0b7/ahom/.fonts/ttf/.original/AhomUnicode_FromMartin.ttf";
@@ -23,11 +23,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/enabling-languages/tai-languages";
     description = "Unicode-compliant Tai Ahom font";
-    maintainers = with maintainers; [ mathnerd314 ];
-    license = licenses.ofl; # See font metadata
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ mathnerd314 ];
+    license = lib.licenses.ofl; # See font metadata
+    platforms = lib.platforms.all;
   };
 }

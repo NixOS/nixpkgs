@@ -14,15 +14,15 @@
   aha,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "asn";
-  version = "0.78.0";
+  version = "0.83.0";
 
   src = fetchFromGitHub {
     owner = "nitefood";
     repo = "asn";
-    tag = "v${version}";
-    hash = "sha256-pXPc6cAPqvbECvP3v3Z1Og8jhIhh5zvXomZrxNX6KVI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-d1DlPX1FZNBh1u55DN3S/7/8Q0RElJ6os5J9XlH+EOU=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
       }"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "OSINT command line tool for investigating network data";
     longDescription = ''
       ASN / RPKI validity / BGP stats / IPv4v6 / Prefix / URL / ASPath / Organization /
@@ -56,9 +56,9 @@ stdenv.mkDerivation rec {
       lookup API server / Web traceroute server
     '';
     homepage = "https://github.com/nitefood/asn";
-    changelog = "https://github.com/nitefood/asn/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ devhell ];
+    changelog = "https://github.com/nitefood/asn/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ devhell ];
     mainProgram = "asn";
   };
-}
+})

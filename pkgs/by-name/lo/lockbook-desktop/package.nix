@@ -16,19 +16,18 @@
 let
   desc = "Private, polished note-taking platform";
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lockbook-desktop";
-  version = "0.9.16";
+  version = "26.9.18";
 
   src = fetchFromGitHub {
     owner = "lockbook";
     repo = "lockbook";
-    tag = version;
-    hash = "sha256-FHD84IJ2ahxB8L75xep+TSb8e+DtUsjEyHc6P/SFi9c=";
+    tag = finalAttrs.version;
+    hash = "sha256-paeLm9zw6pBCNM8d/Ay4AlV9p9vBAj7ko4zOl/HSt5A=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-z00WBA/51zmqFCBX1hD3dLKvuvxQvuyvtBGrxxAr7FE=";
+  cargoHash = "sha256-mSLjvC+RMZQPHNuZjt/lK2v3sdWhEmRh4H1tRJw1418=";
 
   nativeBuildInputs = [
     pkg-config
@@ -41,17 +40,17 @@ rustPlatform.buildRustPackage rec {
     glib
     gobject-introspection
     gdk-pixbuf
-    libxkbcommon
   ];
 
   runtimeDependencies = [
     vulkan-loader
+    libxkbcommon
   ];
 
   doCheck = false; # there are no cli tests
   cargoBuildFlags = [
     "--package"
-    "lockbook-linux"
+    "lockbook-desktop"
   ];
 
   desktopItems = makeDesktopItem {
@@ -68,8 +67,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   postInstall = ''
-    mv $out/bin/lockbook-linux $out/bin/lockbook-desktop
-    install -D public_site/favicon.svg $out/share/icons/hicolor/scalable/apps/lockbook.svg
+    install -D docs/graphics/logo.svg $out/share/icons/hicolor/scalable/apps/lockbook.svg
   '';
 
   meta = {
@@ -84,7 +82,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://lockbook.net";
     license = lib.licenses.unlicense;
     platforms = lib.platforms.linux;
-    changelog = "https://github.com/lockbook/lockbook/releases/tag/${version}";
+    changelog = "https://github.com/lockbook/lockbook/releases/tag/${finalAttrs.version}";
     maintainers = [ lib.maintainers.parth ];
   };
-}
+})

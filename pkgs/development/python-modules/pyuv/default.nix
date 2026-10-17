@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "saghul";
     repo = "pyuv";
     rev = "pyuv-${version}";
-    sha256 = "1wiwwdylz66lfsjh6p4iv7pfhzvnhwjk332625njizfhz3gq9fwr";
+    hash = "sha256-mbuE3/jQ/ShtEUaMMSWHdn/o7tmRXAOldtSYT33jPPI=";
   };
 
   patches = [
@@ -42,10 +42,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyuv" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface for libuv";
     homepage = "https://github.com/saghul/pyuv";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

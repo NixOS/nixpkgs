@@ -56,6 +56,39 @@ in
         GZIP compression level of the resulting disk image (1-9).
       '';
     };
+
+    virtualisation.googleComputeImage.buildMemSize = mkOption {
+      type = types.int;
+      default = 1024;
+      description = "Memory size (in MiB) for the temporary VM used to build the image.";
+    };
+
+    virtualisation.googleComputeImage.contents = mkOption {
+      type = with types; listOf attrs;
+      default = [ ];
+      description = ''
+        The files and directories to be placed in the image.
+        This is a list of attribute sets {source, target, mode, user, group} where
+        `source' is the file system object (regular file or directory) to be
+        grafted in the file system at path `target', `mode' is a string containing
+        the permissions that will be set (ex. "755"), `user' and `group' are the
+        user and group name that will be set as owner of the files.
+        `mode', `user', and `group' are optional.
+        When setting one of `user' or `group', the other needs to be set too.
+      '';
+      example = literalExpression ''
+        [
+          {
+            source = ./default.nix;
+            target = "/etc/nixos/default.nix";
+            mode = "0644";
+            user = "root";
+            group = "root";
+          }
+        ];
+      '';
+    };
+
     virtualisation.googleComputeImage.efi = mkEnableOption "EFI booting";
   };
 
@@ -99,8 +132,10 @@ in
       '';
       format = "raw";
       configFile = if cfg.configFile == null then defaultConfigFile else cfg.configFile;
+      inherit (cfg) contents;
       partitionTableType = if cfg.efi then "efi" else "legacy";
       inherit (config.virtualisation) diskSize;
+      memSize = cfg.buildMemSize;
       inherit config lib pkgs;
     };
 

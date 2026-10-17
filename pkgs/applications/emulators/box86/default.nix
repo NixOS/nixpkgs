@@ -29,22 +29,21 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "NOGIT" true)
+  cmakeFlags = [
+    (lib.cmakeBool "NOGIT" true)
 
-      # Arch mega-option
-      (lib.cmakeBool "POWERPCLE" (stdenv.hostPlatform.isPower && stdenv.hostPlatform.isLittleEndian))
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isi686 [
-      # x86 has no arch-specific mega-option, manually enable the options that apply to it
-      (lib.cmakeBool "LD80BITS" true)
-      (lib.cmakeBool "NOALIGN" true)
-    ]
-    ++ [
-      # Arch dynarec
-      (lib.cmakeBool "ARM_DYNAREC" (withDynarec && stdenv.hostPlatform.isAarch))
-    ];
+    # Arch mega-option
+    (lib.cmakeBool "POWERPCLE" (stdenv.hostPlatform.isPower && stdenv.hostPlatform.isLittleEndian))
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isi686 [
+    # x86 has no arch-specific mega-option, manually enable the options that apply to it
+    (lib.cmakeBool "LD80BITS" true)
+    (lib.cmakeBool "NOALIGN" true)
+  ]
+  ++ [
+    # Arch dynarec
+    (lib.cmakeBool "ARM_DYNAREC" (withDynarec && stdenv.hostPlatform.isAarch))
+  ];
 
   installPhase = ''
     runHook preInstall

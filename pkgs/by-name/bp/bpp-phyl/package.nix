@@ -6,15 +6,15 @@
   bpp-seq,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bpp-phyl";
 
-  inherit (bpp-core) version;
+  inherit (bpp-core) version postPatch;
 
   src = fetchFromGitHub {
     owner = "BioPP";
-    repo = pname;
-    rev = "v${version}";
+    repo = "bpp-phyl";
+    rev = "v${finalAttrs.version}";
     sha256 = "192zks6wyk903n06c2lbsscdhkjnfwms8p7jblsmk3lvjhdipb20";
   };
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   postFixup = ''
-    substituteInPlace $out/lib/cmake/${pname}/${pname}-targets.cmake  \
+    substituteInPlace $out/lib/cmake/bpp-phyl/bpp-phyl-targets.cmake  \
       --replace 'set(_IMPORT_PREFIX' '#set(_IMPORT_PREFIX'
   '';
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/BioPP/bpp-phyl";
     changelog = "https://github.com/BioPP/bpp-phyl/blob/master/ChangeLog";
   };
-}
+})

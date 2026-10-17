@@ -7,20 +7,20 @@
   testers,
   benchexec,
 }:
-python3.pkgs.buildPythonApplication rec {
+
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "benchexec";
-  version = "3.21";
+  version = "3.35";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sosy-lab";
     repo = "benchexec";
-    rev = version;
-    hash = "sha256-bE3brmmLHZQakDKvd47I1hm9Dcsu6DrSeJyjWWtEZWI=";
+    tag = finalAttrs.version;
+    hash = "sha256-qYBSpDZqKBPiGkftjTVxVah+eS8NaAt9q0UEaara+iE=";
   };
 
-  pyproject = true;
-
-  nativeBuildInputs = with python3.pkgs; [ setuptools ];
+  build-system = with python3.pkgs; [ setuptools ];
 
   # NOTE: CPU Energy Meter is not added,
   # because BenchExec should call the wrapper configured
@@ -29,14 +29,18 @@ python3.pkgs.buildPythonApplication rec {
   # capabilities to access MSR.
   # If we add `cpu-energy-meter` here, BenchExec will instead call an executable
   # without `CAP_SYS_RAWIO` and fail.
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     coloredlogs
     lxml
     pystemd
     pyyaml
   ];
 
-  makeWrapperArgs = [ "--set-default LIBSECCOMP ${lib.getLib libseccomp}/lib/libseccomp.so" ];
+  makeWrapperArgs = [
+    "--set-default"
+    "LIBSECCOMP"
+    "${lib.getLib libseccomp}/lib/libseccomp.so"
+  ];
 
   passthru.tests =
     let
@@ -55,11 +59,11 @@ python3.pkgs.buildPythonApplication rec {
       containerexec-version = testVersion "containerexec";
     };
 
-  meta = with lib; {
+  meta = {
     description = "Framework for Reliable Benchmarking and Resource Measurement";
     homepage = "https://github.com/sosy-lab/benchexec";
-    maintainers = with maintainers; [ lorenzleutgeb ];
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ lorenzleutgeb ];
+    license = lib.licenses.asl20;
     mainProgram = "benchexec";
   };
-}
+})

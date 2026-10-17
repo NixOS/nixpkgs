@@ -4,9 +4,9 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "zalgo";
-  version = "unstable-2020-08-26";
+  version = "0-unstable-2020-08-26";
 
   src = fetchFromGitHub {
     owner = "lunasorcery";
@@ -19,12 +19,12 @@ stdenv.mkDerivation rec {
     install -Dm755 zalgo -t $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Read stdin and corrupt it with combining diacritics";
     homepage = "https://github.com/lunasorcery/zalgo";
-    license = licenses.unfree;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ djanatyn ];
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ djanatyn ];
     mainProgram = "zalgo";
   };
 }

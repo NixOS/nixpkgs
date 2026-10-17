@@ -18,7 +18,7 @@ buildPythonPackage {
     owner = "hickeroar";
     # NOTE: This is actually 1.5.8 but the tag is wrong!
     rev = "1.5.7";
-    sha256 = "0mp7rvfdmpfxnka4czw3lv5kkh6gdxh6dm4r6hcln1zzfg9lxp4h";
+    hash = "sha256-kNxO03P/B0sZNJnUZmBvz8A5y6aDf0bUtN3d2tzO51Y=";
   };
 
   nativeCheckInputs = [
@@ -30,9 +30,9 @@ buildPythonPackage {
     sed -i -e 's/open *(\([^)]*\))/open(\1, encoding="utf-8")/' setup.py
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Memory-based naive bayesian text classifier";
     homepage = "https://github.com/hickeroar/simplebayes";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

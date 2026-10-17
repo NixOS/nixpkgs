@@ -1,35 +1,54 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   cmake,
   pkg-config,
-  darwin,
+  testers,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libdiscid";
-  version = "0.6.4";
+  version = "0.7.0";
 
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.IOKit ];
-
-  src = fetchurl {
-    url = "http://ftp.musicbrainz.org/pub/musicbrainz/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-3V6PHJrq1ELiO3SanMkzY3LmLoitcHmitiiVsDkMsoI=";
+  src = fetchFromGitHub {
+    owner = "metabrainz";
+    repo = "libdiscid";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ynQuEzHblXnqvV6bKtjJNFuwUkd/ACVCy+jFfUAD+jo=";
   };
 
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-framework CoreFoundation -framework IOKit";
+  postPatch = ''
+    substituteInPlace libdiscid.pc.in \
+      --replace-fail 'libdir=@libdir@' 'libdir=@CMAKE_INSTALL_FULL_LIBDIR@' \
+      --replace-fail 'includedir=@includedir@' 'includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@'
+  '';
 
-  meta = with lib; {
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = toString [
+      "-framework"
+      "CoreFoundation"
+      "-framework"
+      "IOKit"
+    ];
+  };
+
+  passthru = {
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "C library for creating MusicBrainz DiscIDs from audio CDs";
-    homepage = "http://musicbrainz.org/doc/libdiscid";
-    maintainers = with maintainers; [ ehmry ];
-    license = licenses.lgpl21;
-    platforms = platforms.all;
+    homepage = "https://musicbrainz.org/doc/libdiscid";
+    license = lib.licenses.lgpl21;
+    platforms = lib.platforms.all;
+    pkgConfigModules = [ "libdiscid" ];
   };
-}
+})

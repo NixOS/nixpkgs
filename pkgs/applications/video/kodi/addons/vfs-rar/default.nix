@@ -14,15 +14,16 @@ buildKodiBinaryAddon rec {
     owner = "xbmc";
     repo = namespace;
     rev = "${version}-${rel}";
-    sha256 = "sha256-8IEYA2gNchCa7O9kzrCbO5DxYWJqPzQN3SJIr9zCWc8=";
+    hash = "sha256-8IEYA2gNchCa7O9kzrCbO5DxYWJqPzQN3SJIr9zCWc8=";
   };
 
   extraBuildInputs = [ tinyxml ];
 
-  meta = with lib; {
+  meta = {
     description = "RAR archive Virtual Filesystem add-on for Kodi";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
-    maintainers = teams.kodi.members;
+    homepage = "https://github.com/xbmc/vfs.rar";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    teams = [ lib.teams.kodi ];
   };
 }

@@ -15,7 +15,7 @@ buildPythonPackage {
     owner = "kootenpv";
     repo = "cliche";
     rev = "80a9ae2e90f4493880b669d5db51f1d4038589df"; # no tags
-    sha256 = "sha256-7/icSneLQzwdkRL/mS4RjsgnKa6YIVvGCmdS6pB6r5Y=";
+    hash = "sha256-7/icSneLQzwdkRL/mS4RjsgnKa6YIVvGCmdS6pB6r5Y=";
   };
 
   postPatch = ''
@@ -29,11 +29,11 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "cliche" ];
 
-  meta = with lib; {
+  meta = {
     description = "Build a simple command-line interface from your functions :computer:";
     mainProgram = "cliche";
     homepage = "https://github.com/kootenpv/cliche";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

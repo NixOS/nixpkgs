@@ -22,16 +22,16 @@ rustPlatform.buildRustPackage {
 
   sourceRoot = "${src.name}/wishbone-tool";
 
-  cargoHash = "sha256-wOw3v47AekJUW+8dpHVysheA+42HwEahn/hriYF7CfA=";
+  cargoHash = "sha256-YJEsTGnBUkQ35VOwZQeBbO3RZqglLYm2xecmIS4jiZM=";
 
   buildInputs = [ libusb-compat-0_1 ];
 
-  meta = with lib; {
+  meta = {
     description = "Manipulate a Wishbone device over some sort of bridge";
     mainProgram = "wishbone-tool";
     homepage = "https://github.com/litex-hub/wishbone-utils";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ edef ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ edef ];
+    platforms = lib.platforms.linux;
   };
 }

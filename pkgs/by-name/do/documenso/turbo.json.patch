@@ -1,0 +1,20 @@
+diff --git a/turbo.json b/turbo.json
+index c5c0db0..8c79030 100644
+--- a/turbo.json
++++ b/turbo.json
+@@ -1,6 +1,6 @@
+ {
+   "$schema": "https://turbo.build/schema.json",
+-  "pipeline": {
++  "tasks": {
+     "build": {
+       "dependsOn": ["prebuild", "^build"],
+       "outputs": [".next/**", "!.next/cache/**"]
+@@ -152,5 +152,6 @@
+     "NEXT_PRIVATE_WEBHOOK_SSRF_BYPASS_HOSTS",
+     "NEXT_PUBLIC_TURNSTILE_SITE_KEY",
+     "NEXT_PRIVATE_TURNSTILE_SECRET_KEY"
+-  ]
++  ],
++  "envMode": "loose"
+ }

@@ -18,9 +18,9 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "randy3k";
-    repo = pname;
+    repo = "lineedit";
     rev = "v${version}";
-    sha256 = "fq2NpjIQkIq1yzXEUxi6cz80kutVqcH6MqJXHtpTFsk=";
+    hash = "sha256-fq2NpjIQkIq1yzXEUxi6cz80kutVqcH6MqJXHtpTFsk=";
   };
 
   propagatedBuildInputs = [
@@ -38,10 +38,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lineedit" ];
 
-  meta = with lib; {
+  meta = {
     description = "Readline library based on prompt_toolkit which supports multiple modes";
     homepage = "https://github.com/randy3k/lineedit";
-    license = licenses.mit;
-    maintainers = with maintainers; [ savyajha ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ savyajha ];
   };
 }

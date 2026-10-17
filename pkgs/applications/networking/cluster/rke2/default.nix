@@ -2,36 +2,16 @@
 
 let
   common = opts: callPackage (import ./builder.nix lib opts);
-  extraArgs = builtins.removeAttrs args [ "callPackage" ];
+  extraArgs = removeAttrs args [ "callPackage" ];
 in
-{
-  rke2_stable = common (
-    (import ./stable/versions.nix)
-    // {
-      updateScript = [
-        ./update-script.sh
-        "stable"
-      ];
-    }
-  ) extraArgs;
+rec {
+  rke2_1_34 = common (import ./1_34/versions.nix) extraArgs;
 
-  rke2_latest = common (
-    (import ./latest/versions.nix)
-    // {
-      updateScript = [
-        ./update-script.sh
-        "latest"
-      ];
-    }
-  ) extraArgs;
+  rke2_1_35 = common (import ./1_35/versions.nix) extraArgs;
 
-  rke2_testing = common (
-    (import ./testing/versions.nix)
-    // {
-      updateScript = [
-        ./update-script.sh
-        "testing"
-      ];
-    }
-  ) extraArgs;
+  rke2_1_36 = common (import ./1_36/versions.nix) extraArgs;
+
+  # Automatically set by update script, changes shouldn't be backported
+  rke2_stable = rke2_1_35;
+  rke2_latest = rke2_1_36;
 }

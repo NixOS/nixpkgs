@@ -2,94 +2,84 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchYarnDeps,
   jq,
-  yarn,
-  fixup-yarn-lock,
   nodejs,
   jitsi-meet,
+  fetchPnpmDeps,
+  pnpm_11,
+  pnpmConfigHook,
+  faketty,
 }:
 
 let
-  pinData = import ./element-web-pin.nix;
-  inherit (pinData.hashes) webSrcHash webYarnHash;
+  pnpm = pnpm_11;
   noPhoningHome = {
     disable_guests = true; # disable automatic guest account registration at matrix.org
   };
+  # Do not inherit jitsi-meet's knownVulnerabilities (libolm).
+  # https://github.com/NixOS/nixpkgs/pull/335753
+  # https://github.com/NixOS/nixpkgs/pull/334638
+  jitsi-meet-override = jitsi-meet.overrideAttrs (previousAttrs: {
+    meta = removeAttrs previousAttrs.meta [ "knownVulnerabilities" ];
+  });
 in
-stdenv.mkDerivation (
-  finalAttrs:
-  builtins.removeAttrs pinData [ "hashes" ]
-  // {
-    pname = "element-web";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "element-web";
+  version = "1.12.30";
 
-    src = fetchFromGitHub {
-      owner = "element-hq";
-      repo = "element-web";
-      rev = "v${finalAttrs.version}";
-      hash = webSrcHash;
-    };
+  src = fetchFromGitHub {
+    owner = "element-hq";
+    repo = "element-web";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4MdfIEfpWtYHmBGMX7d1S/PgUpHLTLIkVT28/LpeSm0=";
+  };
 
-    offlineCache = fetchYarnDeps {
-      yarnLock = finalAttrs.src + "/yarn.lock";
-      sha256 = webYarnHash;
-    };
+  pnpmDeps = fetchPnpmDeps {
+    pname = "element";
+    inherit (finalAttrs) version src;
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-6Kyv9Hp6p04JVmDfAyMkb0AAbRqswthNvku0S42QzDA=";
+  };
 
-    nativeBuildInputs = [
-      yarn
-      fixup-yarn-lock
-      jq
-      nodejs
-    ];
+  nativeBuildInputs = [
+    jq
+    nodejs
+    pnpm
+    pnpmConfigHook
+    faketty
+  ];
 
-    buildPhase = ''
-      runHook preBuild
+  # faketty is required to work around a bug in nx.
+  # See: https://github.com/nrwl/nx/issues/22445
+  buildPhase = ''
+    runHook preBuild
 
-      export VERSION=${finalAttrs.version}
-      yarn --offline build:res
-      yarn --offline build:module_system
-      yarn --offline build:bundle
+    cd apps/web
 
-      runHook postBuild
-    '';
+    export VERSION=${finalAttrs.version}
+    faketty pnpm run build
 
-    configurePhase = ''
-      runHook preConfigure
+    runHook postBuild
+  '';
 
-      export HOME=$PWD/tmp
-      # with the update of openssl3, some key ciphers are not supported anymore
-      # this flag will allow those codecs again as a workaround
-      # see https://medium.com/the-node-js-collection/node-js-17-is-here-8dba1e14e382#5f07
-      # and https://github.com/element-hq/element-web/issues/21043
-      export NODE_OPTIONS=--openssl-legacy-provider
-      mkdir -p $HOME
+  installPhase = ''
+    runHook preInstall
 
-      fixup-yarn-lock yarn.lock
-      yarn config --offline set yarn-offline-mirror $offlineCache
-      yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
-      patchShebangs node_modules
+    cp -R webapp $out
+    cp ${jitsi-meet-override}/libs/external_api.min.js $out/jitsi_external_api.min.js
+    echo "${finalAttrs.version}" > "$out/version"
+    jq -s '.[0] * $conf' "config.sample.json" --argjson "conf" '${builtins.toJSON noPhoningHome}' > "$out/config.json"
 
-      runHook postConfigure
-    '';
+    runHook postInstall
+  '';
 
-    installPhase = ''
-      runHook preInstall
-
-      cp -R webapp $out
-      tar --extract --to-stdout --file ${jitsi-meet.src} jitsi-meet/libs/external_api.min.js > $out/jitsi_external_api.min.js
-      echo "${finalAttrs.version}" > "$out/version"
-      jq -s '.[0] * $conf' "config.sample.json" --argjson "conf" '${builtins.toJSON noPhoningHome}' > "$out/config.json"
-
-      runHook postInstall
-    '';
-
-    meta = {
-      description = "Glossy Matrix collaboration client for the web";
-      homepage = "https://element.io/";
-      changelog = "https://github.com/element-hq/element-web/blob/v${finalAttrs.version}/CHANGELOG.md";
-      maintainers = lib.teams.matrix.members;
-      license = lib.licenses.asl20;
-      platforms = lib.platforms.all;
-    };
-  }
-)
+  meta = {
+    description = "Matrix client for the web";
+    homepage = "https://element.io/";
+    changelog = "https://github.com/element-hq/element-web/blob/v${finalAttrs.version}/CHANGELOG.md";
+    teams = [ lib.teams.matrix ];
+    license = lib.licenses.agpl3Plus;
+    platforms = lib.platforms.all;
+  };
+})

@@ -1,32 +1,47 @@
-{ lib, stdenv, appimageTools, fetchurl, makeWrapper, _7zz }:
+{
+  lib,
+  stdenv,
+  appimageTools,
+  fetchurl,
+  makeWrapper,
+  _7zz,
+}:
 
 let
   pname = "notesnook";
-  version = "3.0.19";
+  version = "3.4.7";
 
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
 
-  suffix = {
-    x86_64-linux = "linux_x86_64.AppImage";
-    x86_64-darwin = "mac_x64.dmg";
-    aarch64-darwin = "mac_arm64.dmg";
-  }.${system} or throwSystem;
+  suffix =
+    {
+      x86_64-linux = "linux_x86_64.AppImage";
+      aarch64-linux = "linux_arm64.AppImage";
+      aarch64-darwin = "mac_arm64.dmg";
+    }
+    .${system} or throwSystem;
 
   src = fetchurl {
     url = "https://github.com/streetwriters/notesnook/releases/download/v${version}/notesnook_${suffix}";
-    hash = {
-      x86_64-linux = "sha256-yCzREyFyGoAPXVVnNX6GUrr83oaPtoNOgZOOd6vJD1Q=";
-      x86_64-darwin = "sha256-WciEpt0vUuXS6YeZkbyFGqQaotXoZkWnkkn5B6/JXwE=";
-      aarch64-darwin = "sha256-iP3Xd/otYEVwU85U2dlFcX9QjDq2CbIqHmcDYVxzqzI=";
-    }.${system} or throwSystem;
+    hash =
+      {
+        x86_64-linux = "sha256-NwNfhTufJ25wqdZuRXV73aVOHjdqGPQ4jZdMXaW+3vM=";
+        aarch64-linux = "sha256-dAjLOiWvozJoz8O/feKrM4/qE9XS83INA4IC4gWZtg0=";
+        aarch64-darwin = "sha256-aZFiaWA8tr1Nuule/qKTr1hUuQ/9gTs2AJqrojAFeDQ=";
+      }
+      .${system} or throwSystem;
   };
 
-  appimageContents = appimageTools.extractType2 {
+  passthru = {
+    updateScript = ./update.sh;
+  };
+
+  appimageContents = appimageTools.extract {
     inherit pname version src;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fully open source & end-to-end encrypted note taking alternative to Evernote";
     longDescription = ''
       Notesnook is a free (as in speech) & open source note taking app
@@ -35,14 +50,24 @@ let
       XChaCha20-Poly1305 & Argon2.
     '';
     homepage = "https://notesnook.com";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ cig0 j0lol ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    license = lib.licenses.gpl3Only;
+    maintainers = [ ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
     mainProgram = "notesnook";
   };
 
   linux = appimageTools.wrapType2 rec {
-    inherit pname version src meta;
+    inherit
+      pname
+      version
+      src
+      meta
+      passthru
+      ;
 
     nativeBuildInputs = [ makeWrapper ];
 
@@ -54,18 +79,24 @@ let
       wrapProgram $out/bin/notesnook \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
       install -Dm444 ${appimageContents}/notesnook.desktop -t $out/share/applications
-      install -Dm444 ${appimageContents}/notesnook.png -t $out/share/pixmaps
+      install -Dm444 ${appimageContents}/notesnook.png -t $out/share/icons
       substituteInPlace $out/share/applications/notesnook.desktop \
         --replace 'Exec=AppRun --no-sandbox %U' 'Exec=${pname}'
     '';
   };
 
   darwin = stdenv.mkDerivation {
-    inherit pname version src meta;
+    inherit
+      pname
+      version
+      src
+      meta
+      passthru
+      ;
 
     nativeBuildInputs = [ _7zz ];
 
-    sourceRoot = "Notesnook.app";
+    sourceRoot = "Install Notesnook/Notesnook.app";
 
     # 7zz did not unpack in setup hook for some reason, done manually here
     unpackPhase = ''
@@ -78,6 +109,4 @@ let
     '';
   };
 in
-if stdenv.hostPlatform.isDarwin
-then darwin
-else linux
+if stdenv.hostPlatform.isDarwin then darwin else linux

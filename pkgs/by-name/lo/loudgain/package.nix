@@ -7,18 +7,18 @@
   ffmpeg,
   libebur128,
   libresample,
-  taglib,
+  taglib_1,
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "loudgain";
   version = "0.6.8";
 
   src = fetchFromGitHub {
     owner = "Moonbase59";
-    repo = pname;
-    rev = "v${version}";
+    repo = "loudgain";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-XLj+n0GlY/GAkJlW2JVMd0jxMzgdv/YeSTuF6QUIGwU=";
   };
 
@@ -44,16 +44,20 @@ stdenv.mkDerivation rec {
     ffmpeg
     libebur128
     libresample
-    taglib
+    taglib_1
     zlib
   ];
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+  '';
 
   postInstall = ''
     sed -e "1aPATH=$out/bin:\$PATH" -i "$out/bin/rgbpm"
   '';
 
-  meta = src.meta // {
+  meta = finalAttrs.src.meta // {
     license = lib.licenses.free;
-    maintainers = with lib.maintainers; [ ehmry ];
   };
-}
+})

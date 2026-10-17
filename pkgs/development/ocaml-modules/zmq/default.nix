@@ -15,15 +15,14 @@ buildDunePackage rec {
     hash = "sha256-tetCmVg27/WHZ+HMwKZVHCrHTzWAlKwkAjNDibB1+6g=";
   };
 
-  buildInputs = [
-    czmq
-    dune-configurator
-  ];
+  buildInputs = [ dune-configurator ];
+
+  propagatedBuildInputs = [ czmq ];
 
   meta = {
     description = "ZeroMQ bindings for OCaml";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ akavel ];
-    homepage = "https://engineering.issuu.com/ocaml-zmq/";
+    homepage = "https://github.com/issuu/ocaml-zmq";
   };
 }

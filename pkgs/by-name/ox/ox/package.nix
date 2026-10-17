@@ -6,39 +6,37 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ox";
-  version = "0.7.6";
+  version = "0.7.7";
 
   src = fetchFromGitHub {
     owner = "curlpipe";
-    repo = pname;
-    tag = version;
-    hash = "sha256-kTCdq3C0OUQS3tQRwEJ0+MTHZ8j2nnUARjdbmfH6ed4=";
+    repo = "ox";
+    tag = finalAttrs.version;
+    hash = "sha256-h4oC+TRLPKgXid4YIn2TdTxgEBvbBDy66jfbyA5ia4o=";
   };
 
-  cargoHash = "sha256-GiKSkpXEngQtnGW8zjy2RWQOG1b/xQrYRSLHsndkooo=";
+  cargoHash = "sha256-Vf5Y/rXykaYkrnTjVMShnGYikDIu2b1l2oDOiB0O95I=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
   doInstallCheck = true;
-  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
 
   passthru = {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Independent Rust text editor that runs in your terminal";
     homepage = "https://github.com/curlpipe/ox";
-    changelog = "https://github.com/curlpipe/ox/releases/tag/${version}";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/curlpipe/ox/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       moni
-      kachick
     ];
     mainProgram = "ox";
   };
-}
+})

@@ -8,14 +8,13 @@
   pillow,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   pywavelets,
   scikit-learn,
   setuptools,
   torch,
   torchvision,
   tqdm,
-  fetchpatch,
+  writableTmpDirAsHomeHook,
 }:
 let
   MobileNetV3 = fetchurl {
@@ -31,26 +30,30 @@ let
     hash = "sha256-I6uLzVvb72GnpDuRrcrYH2Iv1/NvtJNaVpgo13iIxE4=";
   };
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "imagededup";
-  version = "0.3.2";
+  version = "0.3.3.post2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "idealo";
     repo = "imagededup";
-    tag = "v${version}";
-    hash = "sha256-B2IuNMTZnzBi6IxrHBoMDsmIcqGQpznd/2f1XKo1Oa4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+/83xsfbrny8x7szVQezix+FBYvoeYXNfTA+Go18ASY=";
   };
 
-  nativeBuildInputs = [
+  # don't install the docs generator as a top-level `mkdocs` package
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'exclude = ["tests*"]' 'exclude = ["tests*", "mkdocs*"]'
+  '';
+
+  build-system = [
     cython
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     matplotlib
     pillow
     pywavelets
@@ -63,11 +66,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
-
     # Checks with CNN are preloaded to avoid downloads in the check phase
     mkdir -p $HOME/.cache/torch/hub/checkpoints/
     ln -s ${MobileNetV3} $HOME/.cache/torch/hub/checkpoints/${MobileNetV3.name}
@@ -75,22 +77,18 @@ buildPythonPackage rec {
     ln -s ${EfficientNet} $HOME/.cache/torch/hub/checkpoints/${EfficientNet.name}
   '';
 
-  pythonImportsCheck = [ "imagededup" ];
-
-  patches = [
-    # https://github.com/idealo/imagededup/pull/217
-    (fetchpatch {
-      name = "pytest-warnings-none.patch";
-      url = "https://github.com/idealo/imagededup/commit/e2d7a21568e3115acd0632af569549c511ad5c0d.patch";
-      hash = "sha256-AQwJpU3Ag6ONRAw0z8so5icW4fRpMHuBOMT5X+HsQ2w=";
-    })
+  disabledTests = [
+    # deletes the preloaded MobileNet checkpoint, so later tests try to download it
+    "test_import_defaults"
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "imagededup" ];
+
+  meta = {
     homepage = "https://idealo.github.io/imagededup/";
-    changelog = "https://github.com/idealo/imagededup/releases/tag/v${version}";
+    changelog = "https://github.com/idealo/imagededup/releases/tag/${finalAttrs.src.tag}";
     description = "Finding duplicate images made easy";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ stunkymonkey ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ stunkymonkey ];
   };
-}
+})

@@ -6,13 +6,13 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pietrasanta-traceroute";
   version = "0.0.5-unstable-2024-09-06";
 
   src = fetchFromGitHub {
     owner = "catchpoint";
-    repo = "Networking.traceroute";
+    repo = "Pietrasanta-traceroute";
     rev = "e4a5cf94dccd646e03b9b75a762e9b014e3a3128";
     hash = "sha256-5FbuITewgSh6UFUU1vttkokk8uZ2IrzkDwsCuWJPKlM=";
   };
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl ];
   makeFlags = [ "prefix=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "ECN-aware version of traceroute";
     longDescription = ''
       An enhanced version of Dmitry Butskoy's traceroute, developed by Catchpoint.
@@ -31,15 +31,15 @@ stdenv.mkDerivation rec {
       - Similar QUIC-based traceroute.
       - Enhanced ToS (DSCP/ECN) field report.
     '';
-    homepage = "https://github.com/catchpoint/Networking.traceroute/";
-    changelog = "https://github.com/catchpoint/Networking.traceroute/blob/${src.rev}/ChangeLog";
-    license = with licenses; [
+    homepage = "https://github.com/catchpoint/Pietrasanta-traceroute/";
+    changelog = "https://github.com/catchpoint/Pietrasanta-traceroute/blob/${finalAttrs.src.rev}/ChangeLog";
+    license = with lib.licenses; [
       gpl2Only
       lgpl21Only
     ];
     mainProgram = "traceroute";
-    maintainers = with maintainers; [ nicoo ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ nicoo ];
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

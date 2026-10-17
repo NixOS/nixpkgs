@@ -1,9 +1,10 @@
 PERL5LIB="$PERL5LIB${PERL5LIB:+:}$out/lib/perl5/site_perl"
 
-perlFlags=
+perlUseLibs='use lib'
 for i in $(IFS=:; echo $PERL5LIB); do
-    perlFlags="$perlFlags -I$i"
+    perlUseLibs="$perlUseLibs \"$i\","
 done
+perlUseLibs=$(echo "$perlUseLibs" | sed 's/,$/;/')
 
 oldPreConfigure="$preConfigure"
 preConfigure() {
@@ -15,7 +16,7 @@ preConfigure() {
             first=$(dd if="$fn" count=2 bs=1 2> /dev/null)
             if test "$first" = "#!"; then
                 echo "patching $fn..."
-                sed -i "$fn" -e "s|^#\!\(.*\bperl\b.*\)$|#\!\1$perlFlags|"
+                sed -i "$fn" -e "s|^#\!\(.*\bperl\b.*\)$|#\!\1\n$perlUseLibs|"
             fi
         fi
     done
@@ -23,7 +24,14 @@ preConfigure() {
     local flagsArray=()
     concatTo flagsArray makeMakerFlags
 
-    perl Makefile.PL PREFIX=$out INSTALLDIRS=site "${flagsArray[@]}" PERL=$(type -P perl) FULLPERL=\"$fullperl/bin/perl\"
+    # Perl expect these to be exported
+    export CPPRUN="$CC -E"
+    export FULL_AR=$AR
+    # Requires to be $CC since it tries adding "-Wl"
+    export LD=$CC
+    perl Makefile.PL AR="$AR" FULL_AR="$AR" CC="$CC" LD="$CC" CPPRUN="$CPPRUN" \
+        PREFIX=$out INSTALLDIRS=site "${flagsArray[@]}" \
+        PERL=$(type -P perl) FULLPERL=\"$fullperl/bin/perl\"
 }
 
 if test -n "$perlPreHook"; then

@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ZE/HKzo3ejKpW/ih3sJwn2hzCtsBhAXeJWGezYd6Yc4";
   };
 
-  # Don't search for non-existant gumbo cmake config
+  # Don't search for non-existent gumbo cmake config
   # This will mislead cmake that litehtml is not found
   # Affects build of pkgs that depend on litehtml
   postPatch = ''
@@ -39,11 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-DLITEHTML_BUILD_TESTING=OFF"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast and lightweight HTML/CSS rendering engine";
     homepage = "http://www.litehtml.com/";
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ fgaz ];
   };
 })

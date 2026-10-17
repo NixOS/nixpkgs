@@ -6,7 +6,7 @@
   ppx_sexp_conv,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "ipaddr-sexp";
 
   inherit (ipaddr) version src;
@@ -23,6 +23,6 @@ buildDunePackage rec {
   doCheck = true;
 
   meta = ipaddr.meta // {
-    description = "Library for manipulation of IP address representations usnig sexp";
+    description = "Library for manipulation of IP address representations using sexp";
   };
 }

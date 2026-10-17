@@ -1,25 +1,37 @@
-{ lib, stdenv, rustPlatform, fetchFromGitLab, libcap_ng, libseccomp }:
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitLab,
+  libcap_ng,
+  libseccomp,
+  versionCheckHook,
+}:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "virtiofsd";
-  version = "1.13.0";
+  version = "1.14.0";
 
   src = fetchFromGitLab {
     owner = "virtio-fs";
     repo = "virtiofsd";
-    rev = "v${version}";
-    hash = "sha256-IM1xdwiP2NhWpxnyHzwXhsSL4bw2jH0IZLcVhY+Gr50=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-NeqeSqPeD3hjAcbck+g8bmarbUL1Nks8AMAi/WxwzwY=";
   };
 
   separateDebugInfo = true;
 
-  cargoHash = "sha256-mD6hZxkqLGdzMfeD9BDZDObCm607mR6LTWhWwDsfRH8=";
+  cargoHash = "sha256-7byiMT2/jf0R7zHr/HBeXKk2T+OQhlVhZ9QJHlEY/Ao=";
 
-  LIBCAPNG_LIB_PATH = "${lib.getLib libcap_ng}/lib";
-  LIBCAPNG_LINK_TYPE =
-    if stdenv.hostPlatform.isStatic then "static" else "dylib";
+  env = {
+    LIBCAPNG_LIB_PATH = "${lib.getLib libcap_ng}/lib";
+    LIBCAPNG_LINK_TYPE = if stdenv.hostPlatform.isStatic then "static" else "dylib";
+  };
 
-  buildInputs = [ libcap_ng libseccomp ];
+  buildInputs = [
+    libcap_ng
+    libseccomp
+  ];
 
   postConfigure = ''
     sed -i "s|/usr/libexec|$out/bin|g" 50-virtiofsd.json
@@ -29,12 +41,24 @@ rustPlatform.buildRustPackage rec {
     install -Dm644 50-virtiofsd.json "$out/share/qemu/vhost-user/50-virtiofsd.json"
   '';
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  meta = {
     homepage = "https://gitlab.com/virtio-fs/virtiofsd";
+    changelog = "https://gitlab.com/virtio-fs/virtiofsd/-/releases/v${finalAttrs.version}";
     description = "vhost-user virtio-fs device backend written in Rust";
-    maintainers = with maintainers; [ qyliss astro ];
+    maintainers = with lib.maintainers; [
+      qyliss
+      astro
+    ];
     mainProgram = "virtiofsd";
-    platforms = platforms.linux;
-    license = with licenses; [ asl20 /* and */ bsd3 ];
+    platforms = lib.platforms.linux;
+    license = with lib.licenses; [
+      asl20 # and
+      bsd3
+    ];
   };
-}
+})

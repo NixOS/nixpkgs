@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
   meson,
   sassc,
@@ -9,22 +9,24 @@
   ninja,
   python3,
   gtk3,
-  gnome-themes-extra,
-  gtk-engine-murrine,
+  nix-update-script,
   humanity-icon-theme,
   hicolor-icon-theme,
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "yaru";
-  version = "24.10.4";
+  version = "26.10.3";
 
   src = fetchFromGitHub {
     owner = "ubuntu";
     repo = "yaru";
-    rev = version;
-    hash = "sha256-ioBni/prc2HzrXd6zBgZQQsfQDWxlfWOphtY0o/8uM0=";
+    tag = finalAttrs.version;
+    hash = "sha256-E8CYl0i9/UzlwhnmBl8IDDeAoB9AxOWAbOnPm2HOcz0=";
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   nativeBuildInputs = [
     meson
@@ -33,31 +35,33 @@ stdenv.mkDerivation rec {
     glib
     ninja
     python3
-  ];
-  buildInputs = [
-    gtk3
-    gnome-themes-extra
+    gtk3 # for gtk-update-icon-cache
+    hicolor-icon-theme # its setup hook symlinks inherited parent icon themes
   ];
   propagatedBuildInputs = [
     humanity-icon-theme
     hicolor-icon-theme
   ];
-  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   dontDropIconThemeCache = true;
 
   postPatch = "patchShebangs .";
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Ubuntu community theme 'yaru' - default Ubuntu theme since 18.10";
     homepage = "https://github.com/ubuntu/yaru";
-    license = with licenses; [
+    license = with lib.licenses; [
       cc-by-sa-40
       gpl3Plus
       lgpl21Only
       lgpl3Only
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ moni ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
+      mershl
+      moni
+    ];
   };
-}
+})

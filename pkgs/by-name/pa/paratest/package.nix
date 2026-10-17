@@ -2,22 +2,30 @@
   php,
   fetchFromGitHub,
   lib,
+  versionCheckHook,
 }:
 
 (php.withExtensions ({ enabled, all }: enabled ++ [ all.pcov ])).buildComposerProject2
   (finalAttrs: {
     pname = "paratest";
-    version = "7.6.0";
+    version = "7.26.0";
 
     src = fetchFromGitHub {
       owner = "paratestphp";
       repo = "paratest";
-      rev = "v${finalAttrs.version}";
-      hash = "sha256-p7m/MDHy+NOh+MnoIWy74Ipm/5hevp4x6Qwn4uPIEAM=";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-90bAexyxHlqSCz7r8FnVFq9Z8TuiyHWawh7U9kpVHUc=";
     };
 
     composerLock = ./composer.lock;
-    vendorHash = "sha256-NQWwfSYgvAmvWnr563vAKh+IdFRDB/CJZReDUzftOvw=";
+    vendorHash = "sha256-sl2pdV5ABqLY5nu8JCE5pfOUatBHA4yjhCy82K6VL28=";
+
+    passthru.updateScript = ./update.sh;
+
+    nativeInstallCheckInputs = [
+      versionCheckHook
+    ];
+    doInstallCheck = true;
 
     meta = {
       changelog = "https://github.com/paratestphp/paratest/releases/tag/v${finalAttrs.version}";
@@ -25,6 +33,9 @@
       homepage = "https://github.com/paratestphp/paratest";
       license = lib.licenses.mit;
       mainProgram = "paratest";
-      maintainers = [ ];
+      maintainers = [
+        lib.maintainers.patka
+        lib.maintainers.piotrkwiecinski
+      ];
     };
   })

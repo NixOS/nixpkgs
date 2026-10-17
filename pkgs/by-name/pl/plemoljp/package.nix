@@ -2,33 +2,45 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
+  nix-update-script,
+  plemoljp-hs,
+  plemoljp-nf,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "plemoljp";
-  version = "2.0.3";
+  version = "3.1.0";
 
   src = fetchzip {
-    url = "https://github.com/yuru7/PlemolJP/releases/download/v${version}/PlemolJP_v${version}.zip";
-    hash = "sha256-cT2BpD2PoAd38uYCQlq5fv9NYgwInblrYdK/XDEmOWI=";
+    url = "https://github.com/yuru7/PlemolJP/releases/download/v${finalAttrs.version}/PlemolJP_v${finalAttrs.version}.zip";
+    hash = "sha256-X4DUAU7uicWtm8o3L9HmfU9By1YMnnjVrVU0iyw273A=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    install -Dm444 PlemolJP/*.ttf -t $out/share/fonts/truetype/plemoljp
-    install -Dm444 PlemolJP35/*.ttf -t $out/share/fonts/truetype/plemoljp-35
-    install -Dm444 PlemolJPConsole/*.ttf -t $out/share/fonts/truetype/plemoljp-console
-    install -Dm444 PlemolJP35Console/*.ttf -t $out/share/fonts/truetype/plemoljp-35console
+  passthru = {
+    inherit plemoljp-hs plemoljp-nf;
 
-    runHook postInstall
-  '';
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex=^v([0-9.]+)$"
+        "--subpackage"
+        "plemoljp-hs"
+        "--subpackage"
+        "plemoljp-nf"
+      ];
+    };
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Composite font of IBM Plex Mono and IBM Plex Sans JP";
     homepage = "https://github.com/yuru7/PlemolJP";
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ kachick ];
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
+      kachick
+      yvnth
+    ];
   };
-}
+})

@@ -2,27 +2,35 @@
   lib,
   stdenv,
   buildPythonPackage,
+  nix-update-script,
   fetchFromGitHub,
   setuptools,
   urllib3,
   dnspython,
   pytestCheckHook,
-  etcd_3_4,
   mock,
   pyopenssl,
+  python,
 }:
 
 buildPythonPackage {
   pname = "python-etcd";
-  version = "0.5.0-unstable-2023-10-31";
+  version = "0.4.5-unstable-2024-08-09";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jplana";
     repo = "python-etcd";
-    rev = "5aea0fd4461bd05dd96e4ad637f6be7bceb1cee5";
-    hash = "sha256-eVirStLOPTbf860jfkNMWtGf+r0VygLZRjRDjBMCVKg=";
+    rev = "d2889f7b23feee8797657b19c404f0d4034dd03c";
+    hash = "sha256-osiSeBdZBT3w9pJUBxD7cI9/2T7eiyj6M6+87T8bTj0=";
   };
+
+  patches = [
+    ./remove-getheader-usage.patch
+  ]
+  ++ lib.optionals (python.pythonAtLeast "3.14") [
+    ./Fix-multiprocessing-errors-for-python-3.14.patch
+  ];
 
   build-system = [ setuptools ];
 
@@ -33,7 +41,6 @@ buildPythonPackage {
 
   nativeCheckInputs = [
     pytestCheckHook
-    etcd_3_4
     mock
     pyopenssl
   ];
@@ -48,6 +55,14 @@ buildPythonPackage {
     done
   '';
 
+  disabledTestPaths = [
+    # these tests expect that etcd is at version 3.4, which has been dropped in
+    # Nixpkgs due to it being unmaintained.
+    "src/etcd/tests/integration/test_simple.py"
+    "src/etcd/tests/integration/test_ssl.py"
+    "src/etcd/tests/test_auth.py"
+  ];
+
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # Seems to be failing because of network restrictions
     # AttributeError: Can't get local object 'TestWatch.test_watch_indexed_generator.<locals>.watch_value'
@@ -58,6 +73,10 @@ buildPythonPackage {
   ];
 
   __darwinAllowLocalNetworking = true;
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     description = "Python client for Etcd";

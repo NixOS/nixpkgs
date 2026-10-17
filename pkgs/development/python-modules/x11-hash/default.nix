@@ -23,10 +23,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "x11_hash" ];
 
-  meta = with lib; {
+  meta = {
     description = "Binding for X11 proof of work hashing";
     homepage = "https://github.com/mazaclub/x11_hash";
-    license = licenses.mit;
-    maintainers = with maintainers; [ np ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ np ];
   };
 }

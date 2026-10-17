@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vrrtest";
-  version = "2.1.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "Nixola";
     repo = "VRRTest";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-esyD+BpdnB8miUrIjV6P8Lho1xztmhLDnKxdQKW8GXc=";
+    hash = "sha256-xosnYd55fUas3p90oWUCT5p5Y37iX2nTxkcgejYWmLE=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -36,12 +36,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool testing variable refresh rates";
     homepage = "https://github.com/Nixola/VRRTest";
-    license = licenses.zlib;
+    license = lib.licenses.zlib;
     mainProgram = "vrrtest";
-    maintainers = with maintainers; [ justinlime ];
+    maintainers = with lib.maintainers; [ justinlime ];
     inherit (love.meta) platforms;
   };
 })

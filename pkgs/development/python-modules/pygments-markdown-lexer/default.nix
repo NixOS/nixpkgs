@@ -13,16 +13,16 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "1pzb5wy23q3fhs0rqzasjnw6hdzwjngpakb73i98cn0b8lk8q4jc";
+    hash = "sha256-TBKMJkULWIZSHGdNdZ+V/DdouJVafZyBhm7gITwv698=";
   };
 
   propagatedBuildInputs = [ pygments ];
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jhermann/pygments-markdown-lexer";
     description = "Pygments Markdown Lexer – A Markdown lexer for Pygments to highlight Markdown code snippets";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

@@ -4,38 +4,37 @@
   colorful,
   fetchFromGitHub,
   git,
+  hatchling,
   httpx,
+  httpx2,
   lxml,
   packaging,
-  poetry-core,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   semver,
   shtab,
   rich,
   tomlkit,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pontos";
-  version = "25.1.0";
+  version = "26.9.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "pontos";
-    tag = "v${version}";
-    hash = "sha256-Aw5PU3YfWH/YxOWkJcrUwhio71ASasZzyAsnjztOm5o=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gUBnk7Fbt7SECR8Oypsoa3ubLspGUtI2NlfaB4PryOA=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     colorful
     httpx
+    httpx2
     lxml
     packaging
     python-dateutil
@@ -43,7 +42,8 @@ buildPythonPackage rec {
     shtab
     rich
     tomlkit
-  ] ++ httpx.optional-dependencies.http2;
+  ]
+  ++ httpx.optional-dependencies.http2;
 
   nativeCheckInputs = [
     git
@@ -74,11 +74,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pontos" ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of Python utilities, tools, classes and functions";
     homepage = "https://github.com/greenbone/pontos";
-    changelog = "https://github.com/greenbone/pontos/releases/tag/v${version}";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/greenbone/pontos/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -3,21 +3,25 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
+  runCommandLocal,
   withFzf ? true,
   fzf,
   installShellFiles,
   libiconv,
+  testers,
+  nushell,
+  zoxide,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zoxide";
-  version = "0.9.6";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "ajeetdsouza";
     repo = "zoxide";
-    tag = "v${version}";
-    hash = "sha256-3XC5K4OlituoFMPN9yJkYi+tkH6M0KK5jVAGdr/GLd0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BLGjsmljY2UZSWmbRX+Xf5sIgSBrDviKGzXjyGmB+2w=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -29,26 +33,51 @@ rustPlatform.buildRustPackage rec {
       --replace '"fzf"' '"${fzf}/bin/fzf"'
   '';
 
-  cargoHash = "sha256-ZRsnoLysNzDIi9hDOqwAzbxcyFQgn2Wv3gRNAjV5HfE=";
+  cargoHash = "sha256-5Be/eIMn3JurFIhoPK6B5L054lLPek9CR93zTJzJS6w=";
+
+  passthru = {
+    tests = {
+      version = testers.testVersion {
+        package = zoxide;
+      };
+      nushell-integration =
+        runCommandLocal "test-${zoxide.name}-nushell-integration"
+          {
+            nativeBuildInputs = [
+              nushell
+              zoxide
+            ];
+            meta.platforms = nushell.meta.platforms;
+          }
+          ''
+            mkdir $out
+            nu -c "zoxide init nushell | save zoxide.nu"
+            nu -c "source zoxide.nu"
+          '';
+    };
+  };
 
   postInstall = ''
     installManPage man/man*/*
     installShellCompletion --cmd zoxide \
       --bash contrib/completions/zoxide.bash \
       --fish contrib/completions/zoxide.fish \
+      --nushell contrib/completions/zoxide.nu \
       --zsh contrib/completions/_zoxide
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast cd command that learns your habits";
     homepage = "https://github.com/ajeetdsouza/zoxide";
-    changelog = "https://github.com/ajeetdsouza/zoxide/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [
+    changelog = "https://github.com/ajeetdsouza/zoxide/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       ysndr
       cole-h
       SuperSandro2000
+      matthiasbeyer
+      ryan4yin
     ];
     mainProgram = "zoxide";
   };
-}
+})

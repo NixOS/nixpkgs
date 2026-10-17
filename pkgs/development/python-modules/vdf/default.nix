@@ -3,20 +3,23 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch2,
+  setuptools,
   mock,
   pytestCheckHook,
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "vdf";
   version = "3.4";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ValvePython";
     repo = "vdf";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6ozglzZZNKDtADkHwxX2Zsnkh6BE8WbcRcC9HkTTgPU=";
   };
 
@@ -27,6 +30,8 @@ buildPythonPackage rec {
       hash = "sha256-kLAbbB0WHjxq4rokLoGTPx43BU44EshteR59Ey9JnXo=";
     })
   ];
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     mock
@@ -39,10 +44,10 @@ buildPythonPackage rec {
   # The python updater requires GitHub releases, but vdf only uses tags
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Library for working with Valve's VDF text format";
     homepage = "https://github.com/ValvePython/vdf";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kira-bruneau ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kira-bruneau ];
   };
-}
+})

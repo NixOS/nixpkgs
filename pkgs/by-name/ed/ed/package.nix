@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ed";
-  version = "1.20.2";
+  version = "1.22.6";
 
   src = fetchurl {
     url = "mirror://gnu/ed/ed-${finalAttrs.version}.tar.lz";
-    hash = "sha256-Zf7HMY9IwsoX8zSsD0cD3v5iA3uxPMI5IN4He1+iRSM=";
+    hash = "sha256-PzOyITUhnDnDxpX3txccJWfT4qF8eYwKkGBzIMuyaPI=";
   };
 
   nativeBuildInputs = [ lzip ];
@@ -40,6 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://www.gnu.org/software/ed/";
     description = "GNU implementation of the standard Unix editor";
@@ -54,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl3Plus;
     mainProgram = "ed";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ mdaniels5757 ];
     platforms = lib.platforms.unix;
   };
 })

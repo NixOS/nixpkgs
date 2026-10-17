@@ -8,12 +8,12 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mod_perl";
   version = "2.0.13";
 
   src = fetchurl {
-    url = "mirror://apache/perl/${pname}-${version}.tar.gz";
+    url = "mirror://apache/perl/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-reO+McRHuESIaf7N/KziWNbVh7jGx3PF8ic19w2C1to=";
   };
 
@@ -46,13 +46,13 @@ stdenv.mkDerivation rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Integration of perl with the Apache2 web server";
     homepage = "https://perl.apache.org/download/index.html";
     changelog = "https://github.com/apache/mod_perl/blob/trunk/Changes";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "mp2bug";
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

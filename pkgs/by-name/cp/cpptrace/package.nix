@@ -5,30 +5,46 @@
   cmake,
   pkg-config,
   libdwarf,
+  libunwind,
   gtest,
   callPackage,
   zstd,
+  nix-update-script,
   static ? stdenv.hostPlatform.isStatic,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cpptrace";
-  version = "0.6.2";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "jeremy-rifkin";
     repo = "cpptrace";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-zjPxPtq+OQ104sJoeBD3jpMV9gV57FSHEJS4W6SF8GM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-KmAJEEU1aTKwleGBllSxlrsO4jVSTKnSTQQZyJ50loY=";
   };
+
+  patches = [
+    ./0001-Use-libdwarf-2-as-the-base-include-path.patch
+  ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
 
-  buildInputs = [ libdwarf ];
-  propagatedBuildInputs = [ zstd ];
+  buildInputs = [
+    (lib.getDev libdwarf)
+    libunwind
+  ];
+
+  propagatedBuildInputs = [
+    zstd
+  ]
+  ++ (lib.optionals static [
+    libdwarf
+    libunwind
+  ]);
 
   cmakeFlags = [
     (lib.cmakeBool "CPPTRACE_USE_EXTERNAL_LIBDWARF" true)
@@ -36,18 +52,33 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!static))
     (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "CPPTRACE_USE_EXTERNAL_GTEST" true)
+    (lib.cmakeBool "CPPTRACE_UNWIND_WITH_LIBUNWIND" true)
   ];
 
   checkInputs = [ gtest ];
 
-  # Unit tests are flaky and hard to get right.
-  doCheck = false;
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    dsymutil unittest
+  '';
 
-  passthru.tests = {
-    findpackage-integration = callPackage ./findpackage-integration.nix {
-      src = "${finalAttrs.src}/test/findpackage-integration";
-      checkOutput = finalAttrs.finalPackage.doCheck;
-    };
+  doCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+    tests =
+      let
+        mkIntegrationTest =
+          { static }:
+          callPackage ./findpackage-integration.nix {
+            src = "${finalAttrs.src}/test/findpackage-integration";
+            checkOutput = finalAttrs.finalPackage.doCheck;
+            inherit static;
+          };
+      in
+      {
+        findpackage-integration-shared = mkIntegrationTest { static = false; };
+        findpackage-integration-static = mkIntegrationTest { static = true; };
+      };
   };
 
   meta = {

@@ -5,16 +5,21 @@
   makeWrapper,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "charge-lnd";
-  version = "0.2.13";
+  version = "0.3.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "accumulator";
     repo = "charge-lnd";
-    tag = "v${version}";
-    hash = "sha256-mNU8bhiZqvYbNUU8vJNk9WbpAVrCTi9Fy3hlIpb06ac=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rACpIHVVq4q3iOEJgJbslCzEcP3qYrc3rZQ85YJfzoQ=";
   };
+
+  build-system = with python3Packages; [
+    setuptools
+  ];
 
   propagatedBuildInputs = with python3Packages; [
     aiorpcx
@@ -57,4 +62,4 @@ python3Packages.buildPythonApplication rec {
     ];
     mainProgram = "charge-lnd";
   };
-}
+})

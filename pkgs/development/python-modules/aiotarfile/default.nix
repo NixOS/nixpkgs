@@ -1,35 +1,40 @@
 {
   lib,
   fetchFromGitHub,
-  nix-update-script,
-
   buildPythonPackage,
-  unittestCheckHook,
   pythonOlder,
+  unittestCheckHook,
   cargo,
   rustc,
   rustPlatform,
+  semver,
 }:
 
 buildPythonPackage rec {
   pname = "aiotarfile";
-  version = "0.5.1";
+  version = "0.5.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "rhelmot";
     repo = "aiotarfile";
     tag = "v${version}";
-    hash = "sha256-DslG+XxIYb04I3B7m0fmRmE3hFCczF039QhSVdHGPL8=";
+    hash = "sha256-V88cvVw6ss7iiojhlqDd2frG/gCEH0YKTP0IpgeFASw=";
   };
-  passthru.updateScript = nix-update-script { };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes."async-tar-0.4.2" = "sha256-C8M/5YEo3OIfN+654pVTfDm8C8qmKX5qy61NKFt7Jb4=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-Yf6N615X9ZB+HDp3xehMc3kjKbdsSbIJrqARRXwCRDQ=";
   };
+
+  postPatch = ''
+    patchShebangs release.py
+    ./release.py finalize
+  '';
+
+  build-system = [
+    semver # required for release.py
+  ];
 
   nativeBuildInputs = [
     cargo
@@ -39,15 +44,19 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [ unittestCheckHook ];
+
   unittestFlagsArray = [ "tests/" ]; # Not sure why it isn't autodiscovered
+
+  # pyo3-asyncio 0.20 segfaults on the python 3.14 interpreter state.
+  doCheck = pythonOlder "3.14";
 
   pythonImportsCheck = [ "aiotarfile" ];
 
-  meta = with lib; {
+  meta = {
     description = "Stream-based, asynchronous tarball processing";
     homepage = "https://github.com/rhelmot/aiotarfile";
-    changelog = "https://github.com/rhelmot/aiotarfile/commits/v{version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nicoo ];
+    changelog = "https://github.com/rhelmot/aiotarfile/commits/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nicoo ];
   };
 }

@@ -57,9 +57,10 @@ mkDerivation {
     csu
   ];
 
-  env.NIX_CFLAGS_COMPILE = builtins.toString [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-B${csu}/lib"
     "-Wno-error"
+    "-fno-builtin"
   ];
 
   # Suppress lld >= 16 undefined version errors
@@ -72,6 +73,11 @@ mkDerivation {
     "COMPILER_VERSION=clang"
     "LIBC_TAGS=no"
   ];
+
+  # -fret-clean requires OpenBSD-specific patches to the compiler.
+  postPatch = ''
+    find . -type f -exec sed -i 's/-fret-clean//g' {} \;
+  '';
 
   postInstall = ''
     pushd ${include}

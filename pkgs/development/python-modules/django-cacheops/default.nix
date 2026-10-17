@@ -1,10 +1,12 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  fetchpatch,
   django,
   funcy,
   redis,
+  redisTestHook,
   six,
   pytestCheckHook,
   pytest-django,
@@ -12,24 +14,28 @@
   dill,
   jinja2,
   before-after,
-  pythonOlder,
-  nettools,
+  net-tools,
   pkgs,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-cacheops";
-  version = "7.1";
+  version = "7.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    pname = "django_cacheops";
-    inherit version;
-    hash = "sha256-7Aeau5aFVzIe4gjGJ0ggIxgg+YymN33alx8EmBvCq1I=";
+  src = fetchFromGitHub {
+    owner = "Suor";
+    repo = "django-cacheops";
+    tag = finalAttrs.version;
+    hash = "sha256-o0QPBfoYZzBPMjDQt8ck2Tkx3qInyfnN88buire0yc4=";
   };
+
+  patches = [
+    # Fixes failure with python3.14 pickle changes
+    # https://github.com/Suor/django-cacheops/pull/511
+    ./Support-Python-3.14-pickle-changes.patch
+  ];
 
   pythonRelaxDeps = [ "funcy" ];
 
@@ -51,30 +57,18 @@ buildPythonPackage rec {
     dill
     jinja2
     before-after
-    nettools
-    pkgs.redis
+    net-tools
+    pkgs.valkey
+    redisTestHook
   ];
 
-  preCheck = ''
-    redis-server &
-    REDIS_PID=$!
-    while ! redis-cli --scan ; do
-      echo waiting for redis to be ready
-      sleep 1
-    done
-  '';
+  env.DJANGO_SETTINGS_MODULE = "tests.settings";
 
-  postCheck = ''
-    kill $REDIS_PID
-  '';
-
-  DJANGO_SETTINGS_MODULE = "tests.settings";
-
-  meta = with lib; {
+  meta = {
     description = "Slick ORM cache with automatic granular event-driven invalidation for Django";
     homepage = "https://github.com/Suor/django-cacheops";
-    changelog = "https://github.com/Suor/django-cacheops/blob/${version}/CHANGELOG";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ onny ];
+    changelog = "https://github.com/Suor/django-cacheops/blob/${finalAttrs.version}/CHANGELOG";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ onny ];
   };
-}
+})

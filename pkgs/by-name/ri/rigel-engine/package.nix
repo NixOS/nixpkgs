@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  libx11,
   SDL2,
   SDL2_mixer,
   buildOpenGLES ? false,
@@ -12,6 +13,7 @@ stdenv.mkDerivation {
   pname = "rigel-engine";
   version = "0-unstable-2024-05-26";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "lethal-guitar";
     repo = "RigelEngine";
@@ -25,13 +27,16 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
+    libx11
     SDL2
     SDL2_mixer
   ];
 
   cmakeFlags = [
     "-Wno-dev"
-  ] ++ lib.optional buildOpenGLES "-DUSE_GL_ES=ON";
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
+  ]
+  ++ lib.optional buildOpenGLES "-DUSE_GL_ES=ON";
 
   meta = {
     description = "Modern re-implementation of the classic DOS game Duke Nukem II";

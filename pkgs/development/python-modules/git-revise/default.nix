@@ -1,40 +1,50 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  pythonOlder,
+  hatchling,
   git,
+  openssh,
   gnupg,
   fetchFromGitHub,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "git-revise";
-  version = "0.7.0";
-  format = "setuptools";
+  version = "0.8.0";
+  pyproject = true;
 
   # Missing tests on PyPI
   src = fetchFromGitHub {
     owner = "mystor";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-xV1Z9O5FO4Q/XEpNwnX31tbv8CrXY+wF1Ltpfq+ITRg=";
+    repo = "git-revise";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-OdkhYEq30RtDOeCQWl/L9FMgCttznzihbYgT8B6KYuY=";
   };
 
-  disabled = pythonOlder "3.8";
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [
     git
-    gnupg
+    openssh
     pytestCheckHook
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    gnupg
   ];
 
-  meta = with lib; {
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # `gpg: agent_genkey failed: No agent running`
+    "test_gpgsign"
+  ];
+
+  meta = {
     description = "Efficiently update, split, and rearrange git commits";
     homepage = "https://github.com/mystor/git-revise";
-    changelog = "https://github.com/mystor/git-revise/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
+    changelog = "https://github.com/mystor/git-revise/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
     mainProgram = "git-revise";
-    maintainers = with maintainers; [ emily ];
+    maintainers = with lib.maintainers; [ _9999years ];
   };
-}
+})

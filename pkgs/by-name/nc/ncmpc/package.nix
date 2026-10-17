@@ -15,15 +15,15 @@
   pcre2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ncmpc";
-  version = "0.51";
+  version = "0.54";
 
   src = fetchFromGitHub {
     owner = "MusicPlayerDaemon";
     repo = "ncmpc";
-    rev = "v${version}";
-    sha256 = "sha256-mFZ8szJT7eTPHQHxjpP5pThCcY0YERGkGR8528Xu9MA=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-POeMWDpN0tXo/8NpDVHv9MGAe5O6fukVph3rfmjACZY=";
   };
 
   buildInputs = [
@@ -52,13 +52,13 @@ stdenv.mkDerivation rec {
     "doc"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Curses-based interface for MPD (music player daemon)";
     homepage = "https://www.musicpd.org/clients/ncmpc/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    badPlatforms = platforms.darwin;
-    maintainers = with maintainers; [ fpletz ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    badPlatforms = lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ fpletz ];
     mainProgram = "ncmpc";
   };
-}
+})

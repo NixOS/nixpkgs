@@ -17,17 +17,20 @@
   git,
   libusb-compat-0_1,
   cereal,
+  minizip,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "domoticz";
-  version = "2024.7";
+  version = "2026.4";
 
   src = fetchFromGitHub {
     owner = "domoticz";
-    repo = pname;
-    rev = version;
-    hash = "sha256-D8U1kK3m1zT83YvZ42hGSU9PzBfS1VGr2mxUYbM2vNQ=";
+    repo = "domoticz";
+    tag = finalAttrs.version;
+    hash = "sha256-zuZI/2VD5nDg2nK8ivqMHXEDLQTcSONCVOI+KCN19B4=";
     fetchSubmodules = true;
   };
 
@@ -44,6 +47,7 @@ stdenv.mkDerivation rec {
     git
     libusb-compat-0_1
     cereal
+    minizip
   ];
 
   nativeBuildInputs = [
@@ -60,7 +64,7 @@ stdenv.mkDerivation rec {
     "-DUSE_BUILTIN_ZLIB=false"
     "-DUSE_OPENSSL_STATIC=false"
     "-DUSE_STATIC_BOOST=false"
-    "-DUSE_BUILTIN_MINIZIP=true"
+    "-DUSE_BUILTIN_MINIZIP=false"
   ];
 
   installPhase = ''
@@ -69,25 +73,36 @@ stdenv.mkDerivation rec {
     cp -r $src/Config $out/share/domoticz
     cp -r $src/scripts $out/share/domoticz
     cp -r $src/plugins $out/share/domoticz
+    cp -r $src/dzVents $out/share/domoticz
 
     mkdir -p $out/bin
     cp domoticz $out/bin
     wrapProgram $out/bin/domoticz --set LD_LIBRARY_PATH ${python3}/lib;
   '';
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Home automation system";
     longDescription = ''
       Domoticz is a home automation system that lets you monitor and configure
       various devices like: lights, switches, various sensors/meters like
       temperature, rain, wind, UV, electra, gas, water and much more
     '';
-    maintainers = with maintainers; [ edcragg ];
+    maintainers = with lib.maintainers; [
+      edcragg
+      lenny
+    ];
     homepage = "https://www.domoticz.com/";
-    changelog = "https://github.com/domoticz/domoticz/blob/${version}/History.txt";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
+    changelog = "https://github.com/domoticz/domoticz/blob/${finalAttrs.version}/History.txt";
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/domoticz.x86_64-darwin
     mainProgram = "domoticz";
   };
-}
+})

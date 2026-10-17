@@ -1,8 +1,10 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, nixosTests
-, gitUpdater
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  nixosTests,
+  gitUpdater,
+  static ? false,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -12,14 +14,21 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "notofonts";
     repo = "noto-cjk";
-    rev = "Sans${version}";
-    hash = "sha256-IgalJkiOAVjNxKaPAQWfb5hKeqclliR4qVXCq63FGWY=";
-    sparseCheckout = [ "Sans/Variable/OTC" ];
+    tag = "Sans${version}";
+    hash = "sha256-i3ZKoSy2SVs46IViha+Sg8atH4n3ywgrunHPLtVT4Pk=";
+    sparseCheckout = [
+      "Sans/OTC"
+      "Sans/Variable/OTC"
+    ];
   };
 
-  installPhase = ''
-    install -m444 -Dt $out/share/fonts/opentype/noto-cjk Sans/Variable/OTC/*.otf.ttc
-  '';
+  installPhase =
+    let
+      font-path = if static then "Sans/OTC/*.ttc" else "Sans/Variable/OTC/*.otf.ttc";
+    in
+    ''
+      install -m444 -Dt $out/share/fonts/opentype/noto-cjk ${font-path}
+    '';
 
   passthru.tests.noto-fonts = nixosTests.noto-fonts;
 
@@ -44,6 +53,9 @@ stdenvNoCC.mkDerivation rec {
     '';
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ mathnerd314 emily ];
+    maintainers = with lib.maintainers; [
+      mathnerd314
+      emily
+    ];
   };
 }

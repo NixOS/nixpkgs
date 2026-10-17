@@ -1,7 +1,8 @@
-{ config
-, lib
-, pkgs
-, ...
+{
+  config,
+  lib,
+  pkgs,
+  ...
 }:
 
 let
@@ -12,6 +13,7 @@ let
     elem
     filterAttrsRecursive
     hasPrefix
+    literalExpression
     makeLibraryPath
     mkDefault
     mkEnableOption
@@ -20,59 +22,98 @@ let
     mkOption
     optionalAttrs
     optionals
-    types;
+    types
+    ;
 
   cfg = config.services.frigate;
 
   format = pkgs.formats.yaml { };
 
-  filteredConfig = converge (filterAttrsRecursive (_: v: ! elem v [ null ])) cfg.settings;
+  filteredConfig = converge (filterAttrsRecursive (_: v: !elem v [ null ])) cfg.settings;
 
-  cameraFormat = with types; submodule {
-    freeformType = format.type;
-    options = {
-      ffmpeg = {
-        inputs = mkOption {
-          description = ''
-            List of inputs for this camera.
-          '';
-          type = listOf (submodule {
-            freeformType = format.type;
-            options = {
-              path = mkOption {
-                type = str;
-                example = "rtsp://192.0.2.1:554/rtsp";
-                description = ''
-                  Stream URL
-                '';
+  configFileUnchecked = format.generate "frigate.yaml" filteredConfig;
+  configFileChecked =
+    pkgs.runCommand "frigate-config"
+      {
+        preferLocalBuilds = true;
+      }
+      ''
+        function error() {
+          cat << 'HEREDOC'
+
+        Note that not all configurations can be reliably checked in the
+        build sandbox.
+
+        This check can be disabled using `services.frigate.checkConfig`.
+        HEREDOC
+
+          exit 1
+        }
+
+        cp ${configFileUnchecked} $out
+        export CONFIG_FILE=$out
+        export PYTHONPATH=${cfg.package.pythonPath}
+        ${cfg.preCheckConfig}
+        ${cfg.package.python.interpreter} -m frigate --validate-config || error
+      '';
+  configFile = if cfg.checkConfig then configFileChecked else configFileUnchecked;
+
+  cameraFormat =
+    with types;
+    submodule {
+      freeformType = format.type;
+      options = {
+        ffmpeg = {
+          inputs = mkOption {
+            description = ''
+              List of inputs for this camera.
+            '';
+            type = listOf (submodule {
+              freeformType = format.type;
+              options = {
+                path = mkOption {
+                  type = str;
+                  example = "rtsp://192.0.2.1:554/rtsp";
+                  description = ''
+                    Stream URL
+                  '';
+                };
+                roles = mkOption {
+                  type = listOf (enum [
+                    "audio"
+                    "detect"
+                    "record"
+                  ]);
+                  example = [
+                    "detect"
+                    "record"
+                  ];
+                  description = ''
+                    List of roles for this stream
+                  '';
+                };
               };
-              roles = mkOption {
-                type = listOf (enum [ "audio" "detect" "record" ]);
-                example = [ "detect" "record" ];
-                description = ''
-                  List of roles for this stream
-                '';
-              };
-            };
-          });
+            });
+          };
         };
       };
     };
-  };
 
   # auth_request.conf
   nginxAuthRequest = ''
     # Send a subrequest to verify if the user is authenticated and has permission to access the resource.
     auth_request /auth;
 
-    # Save the upstream metadata response headers from Authelia to variables.
+    # Save the upstream metadata response headers from the auth request to variables
     auth_request_set $user $upstream_http_remote_user;
+    auth_request_set $role $upstream_http_remote_role;
     auth_request_set $groups $upstream_http_remote_groups;
     auth_request_set $name $upstream_http_remote_name;
     auth_request_set $email $upstream_http_remote_email;
 
     # Inject the metadata response headers from the variables into the request made to the backend.
     proxy_set_header Remote-User $user;
+    proxy_set_header Remote-Role $role;
     proxy_set_header Remote-Groups $groups;
     proxy_set_header Remote-Email $email;
     proxy_set_header Remote-Name $name;
@@ -103,9 +144,9 @@ let
   '';
 
   # Discover configured detectors for acceleration support
-  detectors = attrValues cfg.settings.detectors or {};
+  detectors = attrValues cfg.settings.detectors or { };
   withCoralUSB = any (d: d.type == "edgetpu" && hasPrefix "usb" d.device or "") detectors;
-  withCoralPCI =  any (d: d.type == "edgetpu" && hasPrefix "pci" d.device or "") detectors;
+  withCoralPCI = any (d: d.type == "edgetpu" && hasPrefix "pci" d.device or "") detectors;
   withCoral = withCoralPCI || withCoralUSB;
 in
 
@@ -128,7 +169,14 @@ in
     };
 
     vaapiDriver = mkOption {
-      type = nullOr (enum [ "i965" "iHD" "nouveau" "vdpau" "nvidia" "radeonsi" ]);
+      type = nullOr (enum [
+        "i965"
+        "iHD"
+        "nouveau"
+        "vdpau"
+        "nvidia"
+        "radeonsi"
+      ]);
       default = null;
       example = "radeonsi";
       description = ''
@@ -143,8 +191,31 @@ in
 
         See also:
 
-        - https://docs.frigate.video/configuration/hardware_acceleration
-        - https://docs.frigate.video/configuration/ffmpeg_presets#hwaccel-presets
+        - <https://docs.frigate.video/configuration/hardware_acceleration>
+        - <https://docs.frigate.video/configuration/ffmpeg_presets#hwaccel-presets>
+      '';
+    };
+
+    checkConfig = mkOption {
+      type = bool;
+      default =
+        pkgs.stdenv.buildPlatform.canExecute pkgs.stdenv.hostPlatform
+        && (!pkgs.stdenv.hostPlatform.isAarch64);
+      defaultText = literalExpression ''
+        pkgs.stdenv.buildPlatform.canExecute pkgs.stdenv.hostPlatform && !(pkgs.stdenv.hostPlaform.isAarch64)
+      '';
+      description = ''
+        Whether to check the configuration at build time.
+      '';
+    };
+
+    preCheckConfig = mkOption {
+      type = types.lines;
+      default = "";
+      description = ''
+        This script gets run before the config is checked. It can be used to,
+        e.g., set environment variables needed or transform the config
+        (available as `$out`) to make it checkable in the sandbox.
       '';
     };
 
@@ -157,7 +228,7 @@ in
             description = ''
               Attribute set of cameras configurations.
 
-              https://docs.frigate.video/configuration/cameras
+              <https://docs.frigate.video/configuration/cameras>
             '';
           };
 
@@ -167,6 +238,17 @@ in
               default = "/var/lib/frigate/frigate.db";
               description = ''
                 Path to the SQLite database used
+              '';
+            };
+          };
+
+          ffmpeg = {
+            path = mkOption {
+              type = coercedTo package toString str;
+              default = pkgs.ffmpeg-headless;
+              example = literalExpression "pkgs.ffmpeg-full";
+              description = ''
+                Package providing the ffmpeg and ffprobe executables below the bin/ directory.
               '';
             };
           };
@@ -246,6 +328,9 @@ in
               # Pass info about the request
               proxy_set_header X-Original-Method $request_method;
               proxy_set_header X-Original-URL $scheme://$http_host$request_uri;
+              # set by the go2rtc stream locations; client headers are not forwarded, so
+              # this cannot be spoofed
+              proxy_set_header X-Go2rtc-Stream-Proxy $go2rtc_stream_proxy;
               proxy_set_header X-Server-Port $server_port;
               proxy_set_header Content-Length "";
 
@@ -253,6 +338,9 @@ in
               proxy_set_header Authorization $http_authorization;
               proxy_set_header Cookie $http_cookie;
               proxy_set_header X-CSRF-TOKEN "1";
+
+              # Header used to validate reverse proxy trust
+              proxy_set_header X-Proxy-Secret $http_x_proxy_secret;
 
               # Pass headers for common auth proxies
               proxy_set_header Remote-User $http_remote_user;
@@ -263,6 +351,10 @@ in
               proxy_set_header X-Forwarded-Groups $http_x_forwarded_groups;
               proxy_set_header X-Forwarded-Email $http_x_forwarded_email;
               proxy_set_header X-Forwarded-Preferred-Username $http_x_forwarded_preferred_username;
+              proxy_set_header X-Auth-Request-User $http_x_auth_request_user;
+              proxy_set_header X-Auth-Request-Groups $http_x_auth_request_groups;
+              proxy_set_header X-Auth-Request-Email $http_x_auth_request_email;
+              proxy_set_header X-Auth-Request-Preferred-Username $http_x_auth_request_preferred_username;
               proxy_set_header X-authentik-username $http_x_authentik_username;
               proxy_set_header X-authentik-groups $http_x_authentik_groups;
               proxy_set_header X-authentik-email $http_x_authentik_email;
@@ -277,12 +369,25 @@ in
               aio threads;
               vod hls;
 
+              # Use fMP4 (fragmented MP4) instead of MPEG-TS for better performance
+              # Smaller segments, faster generation, better browser compatibility
+              vod_hls_container_format fmp4;
+
               secure_token $args;
               secure_token_types application/vnd.apple.mpegurl;
 
               add_header Cache-Control "no-store";
               expires off;
+
+              keepalive_disable safari;
+
+              # vod module returns 502 for non-existent media
+              # https://github.com/kaltura/nginx-vod-module/issues/468
+              error_page 502 =404 /vod-not-found;
             '';
+          };
+          "/vod-not-found" = {
+            return = 404;
           };
           "/stream/" = {
             alias = "/var/cache/frigate/stream/";
@@ -303,7 +408,9 @@ in
             extraConfig = nginxAuthRequest + ''
               types {
                   video/mp4 mp4;
-                  image/jpeg jpg;
+                  image/jpeg jpg jpeg;
+                  image/png png;
+                  image/webp webp;
               }
 
               expires 7d;
@@ -356,108 +463,140 @@ in
             proxyPass = "http://frigate-go2rtc/api/ws";
             proxyWebsockets = true;
             recommendedProxySettings = true;
-            extraConfig = nginxAuthRequest + nginxProxySettings + ''
-              limit_except GET {
-                  deny  all;
-              }
-            '';
+            extraConfig =
+              nginxAuthRequest
+              + nginxProxySettings
+              + ''
+                # tells /auth to apply the go2rtc stream checks
+                set $go2rtc_stream_proxy 1;
+                limit_except GET {
+                    deny  all;
+                }
+              '';
           };
           "/live/webrtc/api/ws" = {
             proxyPass = "http://frigate-go2rtc/api/ws";
             proxyWebsockets = true;
             recommendedProxySettings = true;
-            extraConfig = nginxAuthRequest + nginxProxySettings + ''
-              limit_except GET {
-                  deny  all;
-              }
-            '';
+            extraConfig =
+              nginxAuthRequest
+              + nginxProxySettings
+              + ''
+                # tells /auth to apply the go2rtc stream checks
+                set $go2rtc_stream_proxy 1;
+                limit_except GET {
+                    deny  all;
+                }
+              '';
           };
           # pass through go2rtc player
           "/live/webrtc/webrtc.html" = {
             proxyPass = "http://frigate-go2rtc/webrtc.html";
             recommendedProxySettings = true;
-            extraConfig = nginxAuthRequest + nginxProxySettings + ''
-              limit_except GET {
-                  deny  all;
-              }
-            '';
-          };
-          # frontend uses this to fetch the version
-          "/api/go2rtc/api" = {
-            proxyPass = "http://frigate-go2rtc/api";
-            recommendedProxySettings = true;
-            extraConfig = nginxAuthRequest + nginxProxySettings + ''
-              limit_except GET {
-                  deny  all;
-              }
-            '';
+            extraConfig =
+              nginxAuthRequest
+              + nginxProxySettings
+              + ''
+                limit_except GET {
+                    deny  all;
+                }
+              '';
           };
           # integrationn uses this to add webrtc candidate
           "/api/go2rtc/webrtc" = {
             proxyPass = "http://frigate-go2rtc/api/webrtc";
             proxyWebsockets = true;
             recommendedProxySettings = true;
-            extraConfig = nginxAuthRequest + nginxProxySettings + ''
-              limit_except GET {
-                  deny  all;
-              }
-            '';
+            extraConfig =
+              nginxAuthRequest
+              + nginxProxySettings
+              + ''
+                # tells /auth to apply the go2rtc stream checks
+                set $go2rtc_stream_proxy 1;
+                limit_except POST {
+                    deny  all;
+                }
+              '';
           };
           "~* /api/.*\\.(jpg|jpeg|png|webp|gif)$" = {
             proxyPass = "http://frigate-api";
             recommendedProxySettings = true;
-            extraConfig = nginxAuthRequest + nginxProxySettings + ''
-              rewrite ^/api/(.*)$ $1 break;
-            '';
+            extraConfig =
+              nginxAuthRequest
+              + nginxProxySettings
+              + ''
+                rewrite ^/api/(.*)$ /$1 break;
+              '';
           };
           "/api/" = {
             proxyPass = "http://frigate-api/";
             recommendedProxySettings = true;
-            extraConfig = nginxAuthRequest + nginxProxySettings + ''
-              add_header Cache-Control "no-store";
-              expires off;
+            extraConfig =
+              nginxAuthRequest
+              + nginxProxySettings
+              + ''
+                add_header Cache-Control "no-store";
+                expires off;
 
-              proxy_cache frigate_api_cache;
-              proxy_cache_lock on;
-              proxy_cache_use_stale updating;
-              proxy_cache_valid 200 5s;
-              proxy_cache_bypass $http_x_cache_bypass;
-              proxy_no_cache $should_not_cache;
-              add_header X-Cache-Status $upstream_cache_status;
+                proxy_cache frigate_api_cache;
+                proxy_cache_key "$scheme$proxy_host$request_uri|$role|$groups|$user";
+                proxy_cache_lock on;
+                proxy_cache_use_stale updating;
+                proxy_cache_valid 200 5s;
+                proxy_cache_bypass $http_x_cache_bypass;
+                proxy_no_cache $should_not_cache;
+                add_header X-Cache-Status $upstream_cache_status;
 
-              location /api/vod/ {
-                  ${nginxAuthRequest}
-                  proxy_pass http://frigate-api/vod/;
-                  proxy_cache off;
-                  add_header Cache-Control "no-store";
-                  ${nginxProxySettings}
-              }
+                location /api/vod/ {
+                    ${nginxAuthRequest}
+                    proxy_pass http://frigate-api/vod/;
+                    proxy_cache off;
+                    add_header Cache-Control "no-store";
+                    ${nginxProxySettings}
+                }
 
-              location /api/login {
-                  auth_request off;
-                  rewrite ^/api(/.*)$ $1 break;
-                  proxy_pass http://frigate-api;
-                  ${nginxProxySettings}
-              }
+                location /api/login {
+                    auth_request off;
+                    rewrite ^/api(/.*)$ $1 break;
+                    proxy_pass http://frigate-api;
+                    ${nginxProxySettings}
+                }
 
-              location /api/stats {
-                  ${nginxAuthRequest}
-                  access_log off;
-                  rewrite ^/api/(.*)$ $1 break;
-                  add_header Cache-Control "no-store";
-                  proxy_pass http://frigate-api;
-                  ${nginxProxySettings}
-              }
+                location /api/logout {
+                    auth_request off;
+                    rewrite ^/api(/.*)$ $1 break;
+                    proxy_pass http://frigate-api;
+                    ${nginxProxySettings}
+                }
 
-              location /api/version {
-                  ${nginxAuthRequest}
-                  access_log off;
-                  rewrite ^/api/(.*)$ $1 break;
-                  add_header Cache-Control "no-store";
-                  proxy_pass http://frigate-api;
-                  ${nginxProxySettings}
-              }
-            '';
+                location /api/auth/first_time_login {
+                    auth_request off;
+                    limit_except GET {
+                        deny all;
+                    }
+                    rewrite ^/api(/.*)$ $1 break;
+                    proxy_pass http://frigate-api;
+                    ${nginxProxySettings}
+                }
+
+                location /api/stats {
+                    ${nginxAuthRequest}
+                    access_log off;
+                    rewrite ^/api(/.*)$ $1 break;
+                    add_header Cache-Control "no-store";
+                    proxy_pass http://frigate-api;
+                    ${nginxProxySettings}
+                }
+
+                location /api/version {
+                    ${nginxAuthRequest}
+                    access_log off;
+                    rewrite ^/api(/.*)$ $1 break;
+                    add_header Cache-Control "no-store";
+                    proxy_pass http://frigate-api;
+                    ${nginxProxySettings}
+                }
+              '';
           };
           "/assets/" = {
             root = cfg.package.web;
@@ -465,6 +604,31 @@ in
               access_log off;
               expires 1y;
               add_header Cache-Control "public";
+            '';
+          };
+          "/fonts" = {
+            root = cfg.package.web;
+            extraConfig = ''
+              access_log off;
+              expires 1y;
+              add_header Cache-Control "public";
+            '';
+          };
+          "/locales/" = {
+            root = cfg.package.web;
+            extraConfig = ''
+              access_log off;
+              add_header Cache-Control "public";
+            '';
+          };
+          "~ ^/.*-([A-Za-z0-9]+)\\.webmanifest$" = {
+            root = cfg.package.web;
+            extraConfig = ''
+              access_log off;
+              expires 1y;
+              add_header Cache-Control "public";
+              default_type application/json;
+              proxy_set_header Accept-Encoding "";
             '';
           };
           "/" = {
@@ -482,6 +646,7 @@ in
           listen 127.0.0.1:5000;
 
           # vod settings
+          vod_hls_version 6;
           vod_base_url "";
           vod_segments_base_url "";
           vod_mode mapped;
@@ -491,6 +656,8 @@ in
           vod_manifest_segment_durations_mode accurate;
           vod_ignore_edit_list on;
           vod_segment_duration 10000;
+
+          # MPEG-TS settings (not used when fMP4 is enabled, kept for reference)
           vod_hls_mpegts_align_frames off;
           vod_hls_mpegts_interleave_frames on;
 
@@ -500,6 +667,9 @@ in
           open_file_cache_min_uses 1;
           open_file_cache_errors on;
           aio on;
+
+          # file upload size
+          client_max_body_size 20M;
 
           # https://github.com/kaltura/nginx-vod-module#vod_open_file_thread_pool
           vod_open_file_thread_pool default;
@@ -513,6 +683,7 @@ in
         '';
       };
       appendConfig = ''
+        # frigate
         rtmp {
             server {
                 listen 1935;
@@ -529,6 +700,7 @@ in
         }
       '';
       appendHttpConfig = ''
+        # frigate
         map $sent_http_content_type $should_not_cache {
           'application/json' 0;
           default 1;
@@ -560,29 +732,46 @@ in
         "multi-user.target"
       ];
       environment = {
-        CONFIG_FILE = format.generate "frigate.yml" filteredConfig;
+        CONFIG_FILE = "/run/frigate/frigate.yml";
         HOME = "/var/lib/frigate";
         PYTHONPATH = cfg.package.pythonPath;
-      } // optionalAttrs (cfg.vaapiDriver != null) {
+      }
+      // optionalAttrs (cfg.vaapiDriver != null) {
         LIBVA_DRIVER_NAME = cfg.vaapiDriver;
-      } // optionalAttrs withCoral {
+      }
+      // optionalAttrs withCoral {
         LD_LIBRARY_PATH = makeLibraryPath (with pkgs; [ libedgetpu ]);
       };
-      path = with pkgs; [
-        # unfree:
-        # config.boot.kernelPackages.nvidiaPackages.latest.bin
-        ffmpeg-headless
-        libva-utils
-        procps
-        radeontop
-      ] ++ optionals (!stdenv.hostPlatform.isAarch64) [
-        # not available on aarch64-linux
-        intel-gpu-tools
-      ];
+      path =
+        with pkgs;
+        [
+          # unfree:
+          # config.boot.kernelPackages.nvidiaPackages.latest.bin
+          libva-utils
+          procps
+          radeontop
+        ]
+        ++ optionals (!stdenv.hostPlatform.isAarch64) [
+          # not available on aarch64-linux
+          rocmPackages.rocminfo
+        ];
       serviceConfig = {
-        ExecStartPre = pkgs.writeShellScript "frigate-clear-cache" ''
-          rm --recursive --force /var/cache/frigate/*
-        '';
+        ExecStartPre = [
+          (pkgs.writeShellScript "frigate-clear-cache" ''
+            ${lib.getExe pkgs.findutils} /var/cache/frigate -not -path '/var/cache/frigate/model_cache/*' -type f -delete
+          '')
+          (pkgs.writeShellScript "frigate-create-writable-config" ''
+            cp --no-preserve=mode ${configFile} /run/frigate/frigate.yml
+          '')
+        ]
+        ++ lib.optionals (!config.systemd.services.frigate.environment ? LIBAVFORMAT_VERSION_MAJOR) [
+          # Extract libavformat version to enable version-dependent flags in ffmpeg
+          (pkgs.writeShellScript "frigate-libavformat-major-version" ''
+            echo "LIBAVFORMAT_VERSION_MAJOR=$(${cfg.settings.ffmpeg.path}/bin/ffmpeg -version | ${lib.getExe pkgs.gnugrep} -Po "libavformat\W+\K\d+")" > /run/frigate/ffmpeg-env
+            echo "Detected $(cat /run/frigate/ffmpeg-env)"
+          '')
+        ];
+        EnvironmentFile = [ "-/run/frigate/ffmpeg-env" ];
         ExecStart = "${cfg.package.python.interpreter} -m frigate";
         Restart = "on-failure";
         SyslogIdentifier = "frigate";
@@ -591,8 +780,10 @@ in
         Group = "frigate";
         SupplementaryGroups = [ "render" ] ++ optionals withCoral [ "coral" ];
 
-        AmbientCapabilities = optionals (elem cfg.vaapiDriver [ "i965" "iHD" ]) [ "CAP_PERFMON" ]; # for intel_gpu_top
+        # No capabilities
+        CapabilityBoundingSet = [ "" ];
 
+        # Allow delegating access
         UMask = "0027";
 
         StateDirectory = "frigate";
@@ -600,12 +791,69 @@ in
 
         # Caches
         PrivateTmp = true;
-        CacheDirectory = "frigate";
+        TemporaryFileSystem = "/dev/shm:mode=1777,nosuid,nodev";
+        CacheDirectory = [
+          "frigate"
+          # https://github.com/blakeblackshear/frigate/discussions/18129
+          "frigate/model_cache"
+        ];
         CacheDirectoryMode = "0750";
 
         # Sockets/IPC
         RuntimeDirectory = "frigate";
+        RemoveIPC = true;
+
+        # Reduce visible process scope to cgroup
+        ProtectProc = "invisible";
+
+        # Allow wide /proc inspection, e.g. for cpuinfo
+        ProcSubset = "all";
+
+        # Protect various system locations/interfaces
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectSystem = "strict";
+
+        # No JIT compilation
+        MemoryDenyWriteExecute = true;
+
+        # No ABI personality changes
+        LockPersonality = true;
+
+        # Only IP/Unix sockets
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
+
+        # Deny namespace creation
+        RestrictNamespaces = true;
+
+        # No privilege escalation
+        NoNewPrivileges = true;
+        RestrictSUIDSGID = true;
+
+        # No realtime schedulign
+        RestrictRealtime = true;
+
+        # Restrict allowed syscalls
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+        ];
+        SystemCallArchitectures = "native";
+        SystemCallErrorNumber = "EPERM";
       };
+    };
+
+    systemd.tmpfiles.settings."frigate" = {
+      # prevent gc of multiprocessing forkserver socket due to default systemd tmpfiles rules
+      "/tmp/systemd-private-%b-${config.systemd.services.frigate.name}-*/tmp/pymp-*".x = { };
     };
   };
 }

@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sleuthkit";
-  version = "4.12.1"; # Note: when updating don't forget to also update the rdeps outputHash
+  version = "4.15.0"; # Note: when updating don't forget to also update the rdeps outputHash
 
   src = fetchFromGitHub {
     owner = "sleuthkit";
     repo = "sleuthkit";
     rev = "sleuthkit-${finalAttrs.version}";
-    hash = "sha256-q51UY2lIcLijycNaq9oQIwUXpp/1mfc3oPN4syOPF44=";
+    hash = "sha256-11KK7O7V8bMp0YMt9ZPwAJ00n0VeXMooYTbu+By6b2Q=";
   };
 
   # Fetch libraries using a fixed output derivation
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-mc/KQrwn3xpPI0ngOLcpoQDaJJm/rM8XgaX//5PiRZk=";
+    outputHash = "sha256-ktMP2gkAole0QDhWiX0VG4qYuGbQffLmGrV69Lt8RqA=";
   };
 
   postUnpack = ''
@@ -66,11 +66,11 @@ stdenv.mkDerivation (finalAttrs: {
     export ANT_ARGS="-Doffline=true -Ddefault-jar-location=$IVY_HOME/lib"
 
     # pre-positioning these jar files allows -Doffline=true to work
-    mkdir -p source/{bindings,case-uco}/java $IVY_HOME
-    cp -r ${finalAttrs.rdeps}/bindings/java/lib source/bindings/java
-    chmod -R 755 source/bindings/java
-    cp -r ${finalAttrs.rdeps}/case-uco/java/lib source/case-uco/java
-    chmod -R 755 source/case-uco/java
+    mkdir -p ${finalAttrs.src.name}/{bindings,case-uco}/java $IVY_HOME
+    cp -r ${finalAttrs.rdeps}/bindings/java/lib ${finalAttrs.src.name}/bindings/java
+    chmod -R 755 ${finalAttrs.src.name}/bindings/java
+    cp -r ${finalAttrs.rdeps}/case-uco/java/lib ${finalAttrs.src.name}/case-uco/java
+    chmod -R 755 ${finalAttrs.src.name}/case-uco/java
     cp -r ${finalAttrs.rdeps}/lib $IVY_HOME
     chmod -R 755 $IVY_HOME
   '';
@@ -101,19 +101,19 @@ stdenv.mkDerivation (finalAttrs: {
     rm -rf */.libs
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Forensic/data recovery tool";
     homepage = "https://www.sleuthkit.org/";
     changelog = "https://github.com/sleuthkit/sleuthkit/blob/${finalAttrs.src.rev}/NEWS.txt";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       raskin
       gfrascadorio
     ];
-    platforms = platforms.linux;
-    sourceProvenance = with sourceTypes; [
+    platforms = lib.platforms.unix;
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # dependencies
     ];
-    license = licenses.ipl10;
+    license = lib.licenses.ipl10;
   };
 })

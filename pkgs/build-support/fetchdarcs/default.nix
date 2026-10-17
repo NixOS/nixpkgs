@@ -8,7 +8,11 @@
 lib.makeOverridable (
   lib.fetchers.withNormalizedHash { } (
     {
+      # Repository to fetch
       url,
+      # Additional list of repositories specifying alternative download
+      # location to be tried in order, if the prior repository failed to fetch.
+      mirrors ? [ ],
       rev ? null,
       context ? null,
       outputHash ? lib.fakeHash,
@@ -23,15 +27,19 @@ lib.makeOverridable (
         darcs
       ];
 
+      strictDeps = true;
+      __structuredAttrs = true;
+
       inherit outputHash outputHashAlgo;
       outputHashMode = "recursive";
 
       inherit
-        url
         rev
         context
         name
         ;
+
+      repositories = [ url ] ++ mirrors;
     }
   )
 )

@@ -52,12 +52,22 @@ in
       channel = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
         default = null;
-        example = "https://nixos.org/channels/nixos-14.12-small";
+        example = "https://channels.nixos.org/nixos-14.12-small";
         description = ''
           The URI of the NixOS channel to use for automatic
           upgrades. By default, this is the channel set using
           {command}`nix-channel` (run `nix-channel --list`
           to see the current value).
+        '';
+      };
+
+      upgrade = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          Disable adding the `--upgrade` parameter when `channel`
+          is not set, such as when upgrading to the latest version
+          of a flake honouring its lockfile.
         '';
       };
 
@@ -130,9 +140,19 @@ in
       rebootWindow = lib.mkOption {
         description = ''
           Define a lower and upper time value (in HH:MM format) which
-          constitute a time window during which reboots are allowed after an upgrade.
+          constitute a time window during which reboots are allowed
+          immediately after the upgrade finishes.
+
           This option only has an effect when {option}`allowReboot` is enabled.
           The default value of `null` means that reboots are allowed at any time.
+
+          If the system should be rebooted but the time window is missed,
+          no reboot will be scheduled, and no switch will be performed.
+          The reboot will be reattempted after the next upgrade operation,
+          even when no further system upgrades are available,
+          as long as the time window is then met.
+          Therefore {option}`dates` (with and without {option}`randomizedDelaySec`)
+          should be enclosed by the time window.
         '';
         default = null;
         example = {
@@ -174,6 +194,15 @@ in
         '';
       };
 
+      runGarbageCollection = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Whether to automatically run `nix-gc.service` after a successful
+          system upgrade.
+        '';
+      };
+
     };
 
   };
@@ -185,6 +214,12 @@ in
         assertion = !((cfg.channel != null) && (cfg.flake != null));
         message = ''
           The options 'system.autoUpgrade.channel' and 'system.autoUpgrade.flake' cannot both be set.
+        '';
+      }
+      {
+        assertion = (cfg.runGarbageCollection -> config.nix.enable);
+        message = ''
+          The option 'system.autoUpgrade.runGarbageCollection = true' requires 'nix.enable = true'.
         '';
       }
     ];
@@ -208,6 +243,9 @@ in
 
       restartIfChanged = false;
       unitConfig.X-StopOnRemoval = false;
+      unitConfig.OnSuccess = lib.optional (
+        cfg.runGarbageCollection && config.nix.enable
+      ) "nix-gc.service";
 
       serviceConfig.Type = "oneshot";
 
@@ -235,7 +273,7 @@ in
           date = "${pkgs.coreutils}/bin/date";
           readlink = "${pkgs.coreutils}/bin/readlink";
           shutdown = "${config.systemd.package}/bin/shutdown";
-          upgradeFlag = lib.optional (cfg.channel == null) "--upgrade";
+          upgradeFlag = lib.optional (cfg.channel == null && cfg.upgrade) "--upgrade";
         in
         if cfg.allowReboot then
           ''

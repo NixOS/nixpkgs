@@ -32,18 +32,18 @@ in
     configFile = mkOption {
       type = types.path;
       visible = false;
-      default = pkgs.writeTextFile {
-        name = "suricata.yaml";
-        text = ''
-          %YAML 1.1
-          ---
-          ${builtins.readFile (
-            yaml.generate "suricata-settings-raw.yaml" (
+      default =
+        pkgs.runCommand "suricata.yaml"
+          {
+            settingsYaml = yaml.generate "suricata-settings-raw.yaml" (
               filterAttrsRecursive (name: value: value != null) cfg.settings
-            )
-          )}
-        '';
-      };
+            );
+          }
+          ''
+            echo "%YAML 1.1" > $out
+            echo "---" >> $out
+            cat $settingsYaml >> $out
+          '';
       description = ''
         Configuration file for suricata.
 
@@ -117,15 +117,16 @@ in
       type = types.listOf types.str;
       # see: nix-shell -p suricata python3Packages.pyyaml --command 'suricata-update list-sources'
       default = [
+        "abuse.ch/sslbl-blacklist"
+        "abuse.ch/sslbl-c2"
+        "abuse.ch/sslbl-ja3"
         "et/open"
         "etnetera/aggressive"
         "stamus/lateral"
         "oisf/trafficid"
         "tgreen/hunting"
-        "sslbl/ja3-fingerprints"
-        "sslbl/ssl-fp-blacklist"
-        "malsilo/win-malware"
         "pawpatrules"
+        "ptrules/open"
       ];
       description = ''
         List of sources that should be enabled.
@@ -143,9 +144,33 @@ in
         "2270002"
         "2270003"
         "2270004"
+        "2270005"
+        "2270006"
+        "2270007"
       ];
       description = ''
-        List of rules that should be disabled.
+        List of matchers specifying which rules should be disabled.
+        These can be raw SID numbers or something like "group:emerging-coinminer.rules".
+      '';
+    };
+
+    dropRules = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      example = literalExpression ''
+        [ "2274852" "4327876" "902244405" ]
+      '';
+      description = ''
+        List of matchers specifying which rules should be converted to drop rules.
+        These can be raw SID numbers or something like "group:emerging-coinminer.rules".
+      '';
+    };
+    reloadOnRulesetUpdate = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to reload Suricata if it is running after an automated ruleset update.
+        This is a blocking reload, and may take some time depending on the number of rules and computational power of the host.
       '';
     };
   };
@@ -197,12 +222,32 @@ in
         "d ${cfg.settings."default-rule-path"} 755 ${cfg.settings.run-as.user} ${cfg.settings.run-as.group}"
       ];
 
+      systemd.timers = {
+        suricata-update = {
+          timerConfig = {
+            OnBootSec = lib.mkDefault "30s";
+            OnUnitActiveSec = lib.mkDefault "24h";
+            Persistent = true;
+            Unit = config.systemd.services.suricata-update.name;
+          };
+        };
+      };
+
       systemd.services = {
+        suricata-blocking-reload = lib.mkIf cfg.reloadOnRulesetUpdate {
+          description = "Refresh Runtime Suricata Ruleset";
+          serviceConfig = {
+            Type = "oneshot";
+            ExecCondition = "systemctl is-active --quiet suricata.service";
+            ExecStart = "${pkg}/bin/suricatasc -c reload-rules";
+          };
+        };
         suricata-update = {
           description = "Update Suricata Rules";
           wantedBy = [ "multi-user.target" ];
           wants = [ "network-online.target" ];
           after = [ "network-online.target" ];
+          onSuccess = lib.mkIf cfg.reloadOnRulesetUpdate [ "suricata-blocking-reload.service" ];
 
           script =
             let
@@ -215,7 +260,8 @@ in
               ${concatStringsSep "\n" enabledSourcesCmds}
               ${python.interpreter} ${pkg}/bin/suricata-update update-sources
               ${python.interpreter} ${pkg}/bin/suricata-update update --suricata-conf ${cfg.configFile} --no-test \
-                --disable-conf ${pkgs.writeText "suricata-disable-conf" "${concatStringsSep "\n" cfg.disabledRules}"}
+                --disable-conf ${pkgs.writeText "suricata-disable-conf" "${concatStringsSep "\n" cfg.disabledRules}"} \
+                --drop-conf ${pkgs.writeText "suricata-drop.conf" "${concatStringsSep "\n" cfg.dropRules}"}
             '';
           serviceConfig = {
             Type = "oneshot";
@@ -258,9 +304,9 @@ in
               ProtectSystem = "strict";
               DevicePolicy = "closed";
               LockPersonality = true;
-              MemoryDenyWriteExecute = true;
+              MemoryDenyWriteExecute = false; # pcre2 jit
               ProtectHostname = true;
-              ProtectProc = true;
+              ProtectProc = "invisible";
               ProtectKernelLogs = true;
               ProtectKernelModules = true;
               ProtectKernelTunables = true;

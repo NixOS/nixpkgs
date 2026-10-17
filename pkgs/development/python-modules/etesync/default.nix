@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  isPy27,
   appdirs,
   asn1crypto,
   cffi,
@@ -29,11 +28,10 @@ buildPythonPackage rec {
   pname = "etesync";
   version = "0.12.1";
   format = "setuptools";
-  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f20f7e9922ee789c4b71379676ebfe656b675913fe524f2ee722e1b9ef4e5197";
+    hash = "sha256-8g9+mSLueJxLcTeWduv+ZWtnWRP+Uk8u5yLhue9OUZc=";
   };
 
   propagatedBuildInputs = [
@@ -65,10 +63,10 @@ buildPythonPackage rec {
     pytest tests/test_crypto.py
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.etesync.com/";
     description = "Python API to interact with an EteSync server";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ valodim ];
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ valodim ];
   };
 }

@@ -3,10 +3,9 @@
   buildPythonPackage,
   fetchPypi,
   mock,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytest-trio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   twisted,
@@ -16,15 +15,18 @@
 
 buildPythonPackage rec {
   pname = "pyee";
-  version = "12.1.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "13.0.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-u8M8CeL/gn90GR4+W7xr59oC9ie37DDYb1zhpvskJKM=";
+    hash = "sha256-C5MffBRTVmftTH4NUxcWNocV6GC5iHcPx+uFeNH2f8g=";
   };
+
+  postPatch = ''
+    # specifies a string for addopts, but must be a list since pytest9
+    sed -i '/addopts/d' pyproject.toml
+  '';
 
   nativeBuildInputs = [
     setuptools
@@ -36,7 +38,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     mock
-    pytest-asyncio
+    pytest-asyncio_0
     pytest-trio
     pytestCheckHook
     twisted
@@ -44,10 +46,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyee" ];
 
-  meta = with lib; {
+  meta = {
     description = "Port of Node.js's EventEmitter to Python";
     homepage = "https://github.com/jfhbrook/pyee";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kmein ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kmein ];
   };
 }

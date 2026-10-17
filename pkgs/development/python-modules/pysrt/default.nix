@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "byroot";
     repo = "pysrt";
     rev = "v${version}";
-    sha256 = "1f5hxyzlh5mdvvi52qapys9qcinffr6ghgivb6k4jxa92cbs3mfg";
+    hash = "sha256-z9WhFxNJdUmmWTs++Ex2zkaGk/ZXYVHi3q0WSL/vsLg=";
   };
 
   patches = [
@@ -33,9 +33,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/byroot/pysrt";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     description = "Python library used to edit or create SubRip files";
     mainProgram = "srt";
   };

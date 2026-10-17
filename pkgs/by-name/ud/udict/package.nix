@@ -1,25 +1,23 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
   openssl,
-  darwin,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "udict";
   version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "lsmb";
     repo = "udict";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-vcyzMw2tWil4MULEkf25S6kXzqMG6JXIx6GibxxspkY=";
   };
 
-  cargoHash = "sha256-WI+dz7FKa3kot3gWr/JK/v6Ua/u2ioZ04Jwk8t9r1ls=";
+  cargoHash = "sha256-KlWzcJtNBTLCDDH01vI1mn9H7LUqni5o/Q6PsNeI7HE=";
 
   cargoPatches = [
     ./0001-update-version-in-lock-file.patch
@@ -29,20 +27,15 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = [
+    openssl
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Urban Dictionary CLI - written in Rust";
     homepage = "https://github.com/lsmb/udict";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "udict";
   };
-}
+})

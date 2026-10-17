@@ -2,26 +2,20 @@
   lib,
   ocamlPackages,
   stdenv,
-  overrideSDK,
   fetchFromGitHub,
+  fetchpatch,
   python3,
-  dune_3,
+  dune,
   makeWrapper,
   pandoc,
-  poppler_utils,
+  poppler-utils,
   testers,
   docfd,
 }:
 
-let
-  # Needed for x86_64-darwin
-  buildDunePackage' = ocamlPackages.buildDunePackage.override {
-    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-  };
-in
-buildDunePackage' rec {
+ocamlPackages.buildDunePackage rec {
   pname = "docfd";
-  version = "8.0.3";
+  version = "12.3.2";
 
   minimalOCamlVersion = "5.1";
 
@@ -29,12 +23,23 @@ buildDunePackage' rec {
     owner = "darrenldl";
     repo = "docfd";
     rev = version;
-    hash = "sha256-890/3iBruaQtWwlcvwuz4ujp7+P+5y1/2Axx4Iuik8Q=";
+    hash = "sha256-d7c72jXadwBtUqarfdGnEDo9yFwCAeEX0GGVqCe70Ak=";
   };
+
+  patches = [
+    # Compatibility with nottui ≥ 0.4
+    ./nottui-unix.patch
+    # Compatibility with lwd ≥ 0.5
+    (fetchpatch {
+      url = "https://github.com/darrenldl/docfd/commit/439ff57e80778f684cf8526b3b33c745a02da2a7.patch";
+      includes = [ "*.ml" ];
+      hash = "sha256-bB+zta2VcrDd42FUD9ExBui787LmtN3PMyb/MJQO7u0=";
+    })
+  ];
 
   nativeBuildInputs = [
     python3
-    dune_3
+    dune
     makeWrapper
   ];
 
@@ -42,18 +47,23 @@ buildDunePackage' rec {
     cmdliner
     containers-data
     decompress
+    diet
     digestif
     eio_main
     lwd
     nottui
-    notty
+    nottui-unix
+    notty-community
+    sqlite3
     ocolor
     oseq
     ppx_deriving
     ppxlib
+    progress
     re
     spelll
     timedesc
+    uuseg
     yojson
   ];
 
@@ -61,14 +71,14 @@ buildDunePackage' rec {
     wrapProgram $out/bin/docfd --prefix PATH : "${
       lib.makeBinPath [
         pandoc
-        poppler_utils
+        poppler-utils
       ]
     }"
   '';
 
   passthru.tests.version = testers.testVersion { package = docfd; };
 
-  meta = with lib; {
+  meta = {
     description = "TUI multiline fuzzy document finder";
     longDescription = ''
       Think interactive grep for text and other document files.
@@ -77,9 +87,9 @@ buildDunePackage' rec {
       integration with common text editors and other file viewers.
     '';
     homepage = "https://github.com/darrenldl/docfd";
-    license = licenses.mit;
-    maintainers = with maintainers; [ chewblacka ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.all;
     mainProgram = "docfd";
   };
 }

@@ -23,9 +23,9 @@
   callPackage,
   symlinkJoin,
   rsync,
+  unstableGitUpdater,
 
-  appName,
-  CMAKE_BUILD_TYPE ? "RelWithDebInfo", # "Choose the type of build, recommended options are: Debug Release RelWithDebInfo"
+  appName ? "vanillatd",
 }:
 assert lib.assertOneOf "appName" appName [
   "vanillatd"
@@ -33,17 +33,15 @@ assert lib.assertOneOf "appName" appName [
 ];
 stdenv.mkDerivation (finalAttrs: {
   pname = appName;
-  version = "0.0.0";
+  version = "0-unstable-2026-07-16";
 
   src = fetchFromGitHub {
     owner = "TheAssemblyArmada";
     repo = "Vanilla-Conquer";
-    # FIXME: This version has format-security
-    rev = "ebc8083d5d149f98abc20f460a512a2d16fdc59f";
-    hash = "sha256-iUF9UFc0FMvOwLkGqSyLYGy5E8YqNySqDp5VVUa+u4o=";
+    rev = "ce83b59edd99cccac6cebaae054ca04962c744b7";
+    hash = "sha256-jjiqW3J1XQr4+cNd86yXO0dFpt5VEKmxtMywBjTceTc=";
+
   };
-  # TODO: Remove this. Just add this flag to ignore the format-security error temporarily.
-  NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
 
   buildInputs = [
     SDL2
@@ -51,26 +49,24 @@ stdenv.mkDerivation (finalAttrs: {
     openal
   ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      git
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      imagemagick
-      libicns
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      copyDesktopItems
-    ];
+  nativeBuildInputs = [
+    cmake
+    git
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    imagemagick
+    libicns
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    copyDesktopItems
+  ];
 
   cmakeFlags = [
-    (lib.cmakeFeature "BUILD_VANILLATD" (if appName == "vanillatd" then "ON" else "OFF"))
-    (lib.cmakeFeature "BUILD_VANILLARA" (if appName == "vanillara" then "ON" else "OFF"))
-    (lib.cmakeFeature "BUILD_REMASTERTD" (if appName == "remastertd" then "ON" else "OFF"))
-    (lib.cmakeFeature "BUILD_REMASTERRA" (if appName == "remasterra" then "ON" else "OFF"))
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" CMAKE_BUILD_TYPE)
+    (lib.cmakeBool "BUILD_VANILLATD" (appName == "vanillatd"))
+    (lib.cmakeBool "BUILD_VANILLARA" (appName == "vanillara"))
+    (lib.cmakeBool "BUILD_REMASTERTD" (appName == "remastertd"))
+    (lib.cmakeBool "BUILD_REMASTERRA" (appName == "remasterra"))
   ];
 
   # TODO: Fix this from the upstream
@@ -82,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase =
-    if stdenv.isDarwin then
+    if stdenv.hostPlatform.isDarwin then
       ''
         runHook preInstall
 
@@ -127,6 +123,13 @@ stdenv.mkDerivation (finalAttrs: {
     {
       inherit packages;
 
+      updateScript = unstableGitUpdater {
+        # A 'latest' tag exists,
+        # but it appears to be there only for upstream to provide builds
+        # and might move around.
+        hardcodeZeroVersion = true;
+      };
+
       withPackages =
         cb:
         let
@@ -142,11 +145,10 @@ stdenv.mkDerivation (finalAttrs: {
           buildInputs = [ dataDerivation ] ++ finalAttrs.buildInputs;
           nativeBuildInputs = [ rsync ];
 
-          phases = [ "buildPhase" ];
-          buildPhase =
+          buildCommand =
             let
               Default_Data_Path =
-                if stdenv.isDarwin then
+                if stdenv.hostPlatform.isDarwin then
                   "$out/Applications/${appName}.app/Contents/share/${appName}"
                 else
                   "$out/share/${appName}";
@@ -156,7 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
               rsync --archive --mkpath --chmod=a+w ${finalAttrs.finalPackage}/ $out/
 
               # Symlink the data derivation to the default data path
-              mkdir -p ${builtins.dirOf Default_Data_Path}
+              mkdir -p ${dirOf Default_Data_Path}
               ln -s ${dataDerivation} ${Default_Data_Path}
 
               # Fix `error: suspicious ownership or permission on '/nix/store/xxx-0.0.0' for output 'out'; rejecting this build output`
@@ -175,7 +177,7 @@ stdenv.mkDerivation (finalAttrs: {
       }
       ."${appName}";
     homepage = "https://github.com/TheAssemblyArmada/Vanilla-Conquer";
-    license = with lib.licenses; [ gpl3Only ];
+    license = lib.licenses.gpl3Only;
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     maintainers = with lib.maintainers; [ xiaoxiangmoe ];
     platforms = with lib.platforms; darwin ++ linux;

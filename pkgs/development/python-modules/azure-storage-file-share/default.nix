@@ -5,22 +5,19 @@
   cryptography,
   fetchPypi,
   isodate,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "azure-storage-file-share";
-  version = "12.20.0";
+  version = "12.26.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "azure_storage_file_share";
     inherit version;
-    hash = "sha256-8SD8Z7rgqEwbVNBvqnDfNRvhTROVuaCFNQ6DP300emU=";
+    hash = "sha256-CM+LxDbfUyzbm/3857sQxfHYPVE2CVTNju9Wy8z0MAo=";
   };
 
   build-system = [ setuptools ];
@@ -44,11 +41,11 @@ buildPythonPackage rec {
     "azure.storage"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Azure File Share Storage Client Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/storage/azure-storage-file-share";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-storage-file-share_${version}/sdk/storage/azure-storage-file-share/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kamadorueda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 }

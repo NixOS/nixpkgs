@@ -29,16 +29,15 @@ stdenv.mkDerivation rec {
     gprbuild
   ];
 
-  makeFlags =
-    [
-      "prefix=$(out)"
-      "PROCESSORS=$(NIX_BUILD_CORES)"
-      "ENABLE_SHARED=${if enableShared then "yes" else "no"}"
-      "GPR2_BUILD=release"
-    ]
-    ++ lib.optionals (gpr2kbdir != null) [
-      "GPR2KBDIR=${gpr2kbdir}"
-    ];
+  makeFlags = [
+    "prefix=$(out)"
+    "PROCESSORS=$(NIX_BUILD_CORES)"
+    "ENABLE_SHARED=${lib.boolToYesNo enableShared}"
+    "GPR2_BUILD=release"
+  ]
+  ++ lib.optionals (gpr2kbdir != null) [
+    "GPR2KBDIR=${gpr2kbdir}"
+  ];
 
   configurePhase = ''
     runHook preConfigure
@@ -49,6 +48,7 @@ stdenv.mkDerivation rec {
   # fool make into thinking pregenerated targets are up to date
   preBuild = lib.optionalString (gpr2kbdir == null) ''
     touch .build/kb/{*.adb,*.ads,collect_kb}
+    chmod +x .build/kb/collect_kb
   '';
 
   propagatedBuildInputs = [
@@ -58,15 +58,15 @@ stdenv.mkDerivation rec {
     gnatcoll-iconv
   ];
 
-  meta = with lib; {
-    description = "The framework for analyzing the GNAT Project (GPR) files";
+  meta = {
+    description = "Framework for analyzing the GNAT Project (GPR) files";
     homepage = "https://github.com/AdaCore/gpr";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       gpl3Only
     ];
-    maintainers = with maintainers; [ heijligen ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ heijligen ];
+    platforms = lib.platforms.all;
     # TODO(@sternenseemann): investigate failure with gnat 13
     broken = lib.versionOlder gnat.version "14";
   };

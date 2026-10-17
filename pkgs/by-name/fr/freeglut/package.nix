@@ -2,11 +2,11 @@
   lib,
   stdenv,
   fetchurl,
-  libICE,
-  libXext,
-  libXi,
-  libXrandr,
-  libXxf86vm,
+  libice,
+  libxext,
+  libxi,
+  libxrandr,
+  libxxf86vm,
   libGLX,
   libGLU,
   cmake,
@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "freeglut";
-  version = "3.6.0";
+  version = "3.8.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/freeglut/freeglut-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-nD1NZRb7+gKA7ck8d2mPtzA+RDwaqvN9Jp4yiKbD6lI=";
+    hash = "sha256-Z03K/yUBDgnkUK7EWLiHDZ6YxG+ZU420V6tlmzIdmYk=";
   };
 
   outputs = [
@@ -29,25 +29,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
-    libICE
-    libXext
-    libXi
-    libXrandr
-    libXxf86vm
+    libice
+    libxext
+    libxi
+    libxrandr
+    libxxf86vm
     libGLU
   ];
 
   cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DOPENGL_INCLUDE_DIR=${libGLX.dev}/include"
-    "-DOPENGL_gl_LIBRARY:FILEPATH=${libGLX}/lib/libGL.dylib"
-    "-DOPENGL_glu_LIBRARY:FILEPATH=${libGLU}/lib/libGLU.dylib"
+    "-DOPENGL_INCLUDE_DIR=${lib.getInclude libGLX}/include"
+    "-DOPENGL_gl_LIBRARY:FILEPATH=${lib.getLib libGLX}/lib/libGL.dylib"
     "-DFREEGLUT_BUILD_DEMOS:BOOL=OFF"
-    "-DFREEGLUT_BUILD_STATIC:BOOL=OFF"
   ];
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "Create and manage windows containing OpenGL contexts";
     longDescription = ''
       FreeGLUT is an open source alternative to the OpenGL Utility Toolkit
@@ -58,9 +56,9 @@ stdenv.mkDerivation (finalAttrs: {
       differences.
     '';
     homepage = "https://freeglut.sourceforge.net/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     pkgConfigModules = [ "glut" ];
-    platforms = platforms.all;
-    maintainers = [ maintainers.bjornfor ];
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
 })

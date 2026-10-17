@@ -1,59 +1,67 @@
 {
   lib,
-  aiohttp,
   buildPythonPackage,
-  dill,
   fetchFromGitHub,
+  # build-system
+  setuptools,
+
+  # dependencies
+  dill,
+  filelock,
   fsspec,
+  httpx,
   huggingface-hub,
-  importlib-metadata,
   multiprocess,
   numpy,
-  packaging,
   pandas,
   pyarrow,
-  pythonOlder,
+  pyyaml,
   requests,
-  responses,
   tqdm,
   xxhash,
 }:
-
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "datasets";
-  version = "2.21.0";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.8";
+  version = "4.5.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
-    repo = pname;
-    tag = version;
-    hash = "sha256-b84Y7PixZUG1VXW11Q4fKxEcsWJjpXEHZIYugf2MSUU=";
+    repo = "datasets";
+    tag = finalAttrs.version;
+    hash = "sha256-K8JqIbYz3ZfT1t1h5dRGCo9kBQp0E+kElqzaw2InaOI=";
   };
 
-  # remove pyarrow<14.0.1 vulnerability fix
-  postPatch = ''
-    substituteInPlace src/datasets/features/features.py \
-      --replace "import pyarrow_hotfix" "#import pyarrow_hotfix"
-  '';
+  build-system = [
+    setuptools
+  ];
 
-  propagatedBuildInputs = [
-    aiohttp
+  dependencies = [
     dill
+    filelock
     fsspec
+    httpx
     huggingface-hub
     multiprocess
     numpy
-    packaging
     pandas
     pyarrow
+    pyyaml
     requests
-    responses
     tqdm
     xxhash
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ]
+  ++ fsspec.optional-dependencies.http;
+
+  pythonRelaxDeps = [
+    # https://github.com/huggingface/datasets/blob/a256b85cbc67aa3f0e75d32d6586afc507cf535b/setup.py#L117
+    # "pin until dill has official support for determinism"
+    "dill"
+    # https://github.com/huggingface/datasets/blob/4.5.0/setup.py#L127
+    "multiprocess"
+    # https://github.com/huggingface/datasets/blob/4.5.0/setup.py#L130
+    "fsspec"
+  ];
 
   # Tests require pervasive internet access
   doCheck = false;
@@ -63,13 +71,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "datasets" ];
 
-  meta = with lib; {
+  meta = {
     description = "Open-access datasets and evaluation metrics for natural language processing";
     mainProgram = "datasets-cli";
     homepage = "https://github.com/huggingface/datasets";
-    changelog = "https://github.com/huggingface/datasets/releases/tag/${version}";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = [ ];
+    changelog = "https://github.com/huggingface/datasets/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ osbm ];
   };
-}
+})

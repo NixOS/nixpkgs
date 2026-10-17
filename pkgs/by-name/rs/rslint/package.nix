@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rslint";
   version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "rslint";
-    repo = pname;
-    rev = "v${version}";
+    repo = "rslint";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-3DEwi+bhqwP8aMpZYl07GZbe7IecraB3m54lZ5LViVc=";
   };
 
-  cargoHash = "sha256-bqF5v52uxbvmVmphXAmcWlCI6nbQzZemCxlTcqhRDTY=";
+  cargoHash = "sha256-4DzQSnrUUNaeyNLKvnx4HKM4dAS10y5mu5S2NpzfFRQ=";
 
   cargoBuildFlags = [
     "-p"
@@ -24,10 +24,15 @@ rustPlatform.buildRustPackage rec {
     "rslint_lsp"
   ];
 
-  meta = with lib; {
+  patches = [
+    # This patch comes from https://github.com/rslint/rslint/pull/165, which was unmerged.
+    ./fix-rustc-1.89-compatibility.patch
+  ];
+
+  meta = {
     description = "Fast, customizable, and easy to use JavaScript and TypeScript linter";
     homepage = "https://rslint.org";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
-}
+})

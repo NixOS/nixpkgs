@@ -1,8 +1,10 @@
 {
   stdenv,
   lib,
+  blas,
   callPackage,
-  fetchgit,
+  curl,
+  fetchFromGitHub,
   fetchurl,
   makeWrapper,
   writeText,
@@ -11,36 +13,33 @@
   coreutils,
   git,
   davix,
+  fftw,
   ftgl,
   gl2ps,
-  glew,
   gnugrep,
   gnused,
   gsl,
-  gtest,
-  lapack,
-  libX11,
-  libXpm,
-  libXft,
-  libXext,
   libGLU,
   libGL,
   libxcrypt,
   libxml2,
-  llvm_18,
+  llvm_20,
   lsof,
   lz4,
+  libxpm,
+  libxft,
+  libxext,
+  libx11,
   xz,
   man,
-  openblas,
   openssl,
-  pcre,
+  pcre2,
   nlohmann_json,
   pkg-config,
   procps,
   python3,
   which,
-  xxHash,
+  xxhash,
   zlib,
   zstd,
   giflib,
@@ -50,30 +49,35 @@
   patchRcPathCsh,
   patchRcPathFish,
   patchRcPathPosix,
-  tbb,
+  onetbb,
   xrootd,
+  freetype,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "root";
-  version = "6.34.02";
+  version = "6.40.04";
 
   passthru = {
     tests = import ./tests { inherit callPackage; };
   };
 
   src = fetchurl {
-    url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    hash = "sha256-FmvsVi5CDhd6rzEz+j+wn4Ls3avoouGQY0W61EJRP5Q=";
+    url = "https://root.cern.ch/download/root_v${finalAttrs.version}.source.tar.gz";
+    hash = "sha256-RK2iU7GTXTS2gBIiIy1Qcx/nxePLz6tHc0yFAxz75NM=";
   };
 
-  clad_src = fetchgit {
-    url = "https://github.com/vgvassilev/clad";
+  clad_src = fetchFromGitHub {
+    owner = "vgvassilev";
+    repo = "clad";
     # Make sure that this is the same tag as in the ROOT build files!
     # https://github.com/root-project/root/blob/master/interpreter/cling/tools/plugins/clad/CMakeLists.txt#L76
-    rev = "refs/tags/v1.7";
-    hash = "sha256-iKrZsuUerrlrjXBrxcTsFu/t0Pb0sa4UlfSwd1yhg3g=";
+    tag = "v2.3";
+    hash = "sha256-gEJlQ2Vg9EUX1tslI4HaUnusvdSomsYHiE8mZMygEOw=";
   };
+
+  # ROOT requires a patched version of clang
+  clang = (callPackage ./clang-root.nix { });
 
   nativeBuildInputs = [
     makeWrapper
@@ -84,108 +88,87 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     nlohmann_json # link interface of target "ROOT::ROOTEve"
   ];
-  buildInputs =
-    [
-      davix
-      ftgl
-      giflib
-      gl2ps
-      glew
-      gsl
-      gtest
-      lapack
-      libjpeg
-      libpng
-      libtiff
-      libxcrypt
-      libxml2
-      llvm_18
-      lz4
-      openblas
-      openssl
-      patchRcPathCsh
-      patchRcPathFish
-      patchRcPathPosix
-      pcre
-      python3.pkgs.numpy
-      tbb
-      xrootd
-      xxHash
-      xz
-      zlib
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk.privateFrameworksHook ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libX11
-      libXpm
-      libXft
-      libXext
-      libGLU
-      libGL
-    ];
+  buildInputs = [
+    finalAttrs.clang
+    blas
+    curl
+    davix
+    fftw
+    ftgl
+    giflib
+    gl2ps
+    gsl
+    libjpeg
+    libpng
+    libtiff
+    libxcrypt
+    libxml2
+    llvm_20
+    lz4
+    openssl
+    patchRcPathCsh
+    patchRcPathFish
+    patchRcPathPosix
+    pcre2
+    python3
+    onetbb
+    xrootd
+    xxhash
+    xz
+    zlib
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk.privateFrameworksHook
+    freetype
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libGLU
+    libGL
+    libx11
+    libxpm
+    libxft
+    libxext
+  ];
 
-  preConfigure =
-    ''
-      for path in builtins/*; do
-        if [[ "$path" != "builtins/openui5" ]] && [[ "$path" != "builtins/rendercore" ]]; then
-          rm -rf "$path"
-        fi
-      done
-      substituteInPlace cmake/modules/SearchInstalledSoftware.cmake \
-        --replace-fail 'set(lcgpackages ' '#set(lcgpackages '
+  preConfigure = ''
+    for path in builtins/*; do
+      if [[ "$path" != "builtins/openui5" ]] && [[ "$path" != "builtins/rendercore" ]]; then
+        rm -rf "$path"
+      fi
+    done
+    substituteInPlace cmake/modules/SearchInstalledSoftware.cmake \
+      --replace-fail 'set(lcgpackages ' '#set(lcgpackages '
 
-      # Make sure that clad is not downloaded when building
-      substituteInPlace interpreter/cling/tools/plugins/clad/CMakeLists.txt \
-        --replace-fail 'UPDATE_COMMAND ""' 'DOWNLOAD_COMMAND "" UPDATE_COMMAND ""'
-      # Make sure that clad is finding the right llvm version
-      substituteInPlace interpreter/cling/tools/plugins/clad/CMakeLists.txt \
-        --replace-fail '-DLLVM_DIR=''${LLVM_BINARY_DIR}' '-DLLVM_DIR=''${LLVM_CMAKE_PATH}'
+    patchShebangs cmake/unix/
+  ''
+  +
+    lib.optionalString
+      (stdenv.hostPlatform.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11")
+      ''
+        MACOSX_DEPLOYMENT_TARGET=10.16
+      '';
 
-      substituteInPlace interpreter/llvm-project/clang/tools/driver/CMakeLists.txt \
-        --replace-fail 'add_clang_symlink(''${link} clang)' ""
-
-      patchShebangs cmake/unix/
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # Eliminate impure reference to /System/Library/PrivateFrameworks
-      substituteInPlace core/macosx/CMakeLists.txt \
-        --replace-fail "-F/System/Library/PrivateFrameworks " ""
-    ''
-    +
-      lib.optionalString
-        (stdenv.hostPlatform.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11")
-        ''
-          MACOSX_DEPLOYMENT_TARGET=10.16
-        '';
-
-  cmakeFlags =
-    [
-      "-DCLAD_SOURCE_DIR=${clad_src}"
-      "-DCMAKE_INSTALL_BINDIR=bin"
-      "-DCMAKE_INSTALL_INCLUDEDIR=include"
-      "-DCMAKE_INSTALL_LIBDIR=lib"
-      "-Dbuiltin_llvm=OFF"
-      "-Dfail-on-missing=ON"
-      "-Dfitsio=OFF"
-      "-Dgnuinstall=ON"
-      "-Dmathmore=ON"
-      "-Dmysql=OFF"
-      "-Dpgsql=OFF"
-      "-Dsqlite=OFF"
-      "-Dvdt=OFF"
-    ]
-    ++ lib.optional (
-      (!stdenv.hostPlatform.isDarwin) && (stdenv.cc.libc != null)
-    ) "-DC_INCLUDE_DIRS=${lib.getDev stdenv.cc.libc}/include"
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # fatal error: module map file '/nix/store/<hash>-Libsystem-osx-10.12.6/include/module.modulemap' not found
-      # fatal error: could not build module '_Builtin_intrinsics'
-      "-Druntime_cxxmodules=OFF"
-    ];
+  cmakeFlags = [
+    "-DCLAD_SOURCE_DIR=${finalAttrs.clad_src}"
+    "-DClang_DIR=${finalAttrs.clang}/lib/cmake/clang"
+    "-Dbuiltin_clang=OFF"
+    "-Dbuiltin_llvm=OFF"
+    "-Dfail-on-missing=ON"
+    "-Dfftw3=ON"
+    "-Dfitsio=OFF"
+    "-Dmathmore=ON"
+    "-Dsqlite=OFF"
+    "-Dvdt=OFF"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # fatal error: module map file '/nix/store/<hash>-Libsystem-osx-10.12.6/include/module.modulemap' not found
+    # fatal error: could not build module '_Builtin_intrinsics'
+    "-Druntime_cxxmodules=OFF"
+  ];
 
   postInstall = ''
-    for prog in rootbrowse rootcp rooteventselector rootls rootmkdir rootmv rootprint rootrm rootslimtree; do
+    for prog in rooteventselector rootmv rootprint rootslimtree; do
       wrapProgram "$out/bin/$prog" \
         --set PYTHONPATH "$out/lib"
     done
@@ -236,12 +219,6 @@ stdenv.mkDerivation rec {
     }"
   '';
 
-  # workaround for
-  # https://github.com/root-project/root/issues/14778
-  env.NIX_LDFLAGS = lib.optionalString (
-    !stdenv.hostPlatform.isDarwin
-  ) "--version-script,${writeText "version.map" "ROOT { global: *; };"}";
-
   # To use the debug information on the fly (without installation)
   # add the outPath of root.debug into NIX_DEBUG_INFO_DIRS (in PATH-like format)
   # and make sure that gdb from Nixpkgs can be found in PATH.
@@ -253,14 +230,14 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://root.cern/";
     description = "Data analysis framework";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     maintainers = [
-      maintainers.guitargeek
-      maintainers.veprbl
+      lib.maintainers.guitargeek
+      lib.maintainers.veprbl
     ];
-    license = licenses.lgpl21;
+    license = lib.licenses.lgpl21;
   };
-}
+})

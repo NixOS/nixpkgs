@@ -9,7 +9,7 @@
   libgbm,
   lz4,
   zstd,
-  ffmpeg,
+  ffmpeg_8,
   cargo,
   rustc,
   vulkan-headers,
@@ -19,25 +19,26 @@
   autoPatchelfHook,
   wayland-scanner,
   rust-bindgen,
+  nix-update-script,
 }:
-llvmPackages.stdenv.mkDerivation rec {
+llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "waypipe";
-  version = "0.10.1";
+  version = "0.11.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mstoeckl";
     repo = "waypipe";
-    tag = "v${version}";
-    hash = "sha256-l9gZ7FtLxGKBRlMem3VGJGTvOkVAtLBa7eF9+gA5Vfo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Tbd/yY90yb2+/ODYVL3SudHaJCGJKatZ9FuGM2uAX+8=";
   };
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit pname version src;
-    hash = "sha256-DjqyKXbCQ6kzb1138wNWPnRXIgUaaE1nnCExLeLX6pw=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-IUvXHLxrhc2Au57wsE53Q+NL1cZzFcaRG3HDV8s3xWw=";
   };
 
   strictDeps = true;
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+  env.LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
   depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
@@ -58,18 +59,21 @@ llvmPackages.stdenv.mkDerivation rec {
     libgbm
     lz4
     zstd
-    ffmpeg
+    # FFmpeg 9 dropped AVVulkanDeviceContext fixed-queue fields that waypipe 0.11.0 still uses.
+    ffmpeg_8
     vulkan-headers
     vulkan-loader
   ];
 
   runtimeDependencies = [
     libgbm
-    ffmpeg.lib
+    ffmpeg_8.lib
     vulkan-loader
   ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Network proxy for Wayland clients (applications)";
     longDescription = ''
       waypipe is a proxy for Wayland clients. It forwards Wayland messages and
@@ -77,10 +81,10 @@ llvmPackages.stdenv.mkDerivation rec {
       makes application forwarding similar to ssh -X feasible.
     '';
     homepage = "https://mstoeckl.com/notes/gsoc/blog.html";
-    changelog = "https://gitlab.freedesktop.org/mstoeckl/waypipe/-/releases#v${version}";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ mic92 ];
+    changelog = "https://gitlab.freedesktop.org/mstoeckl/waypipe/-/releases#v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ mic92 ];
     mainProgram = "waypipe";
   };
-}
+})

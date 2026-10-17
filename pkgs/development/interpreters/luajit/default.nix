@@ -4,7 +4,7 @@
   buildPackages,
   version,
   src,
-  substituteAll,
+  replaceVars,
   extraMeta ? { },
   self,
   packageOverrides ? (final: prev: { }),
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
   luaversion = "5.1";
 
   postPatch = ''
-    substituteInPlace Makefile --replace ldconfig :
+    substituteInPlace Makefile --replace-fail ldconfig :
     if test -n "''${dontStrip-}"; then
       # CCDEBUG must be non-empty or everything will be stripped, -g being
       # passed by nixpkgs CC wrapper is insufficient on its own
@@ -87,23 +87,35 @@ stdenv.mkDerivation (finalAttrs: {
   buildFlags = [
     "amalg" # Build highly optimized version
   ];
-  makeFlags =
-    [
-      "PREFIX=$(out)"
-      "DEFAULT_CC=cc"
-      "CROSS=${stdenv.cc.targetPrefix}"
-      "HOST_CC=${buildStdenv.cc}/bin/cc"
-    ]
-    ++ lib.optional enableJITDebugModule "INSTALL_LJLIBD=$(INSTALL_LMOD)"
-    ++ lib.optional stdenv.hostPlatform.isStatic "BUILDMODE=static";
+  makeFlags = [
+    "PREFIX=$(out)"
+    "DEFAULT_CC=cc"
+    "CROSS=${stdenv.cc.targetPrefix}"
+    "HOST_CC=${buildStdenv.cc}/bin/cc"
+  ]
+  # LuaJIT's build system needs an explicit target on MinGW, otherwise it can
+  # emit ELF-specific assembler directives (e.g. .hidden/.type/.size) that the
+  # PE/COFF toolchain doesn't accept.
+  ++ lib.optionals stdenv.hostPlatform.isMinGW [
+    "TARGET_SYS=Windows"
+  ]
+  ++ lib.optional enableJITDebugModule "INSTALL_LJLIBD=$(INSTALL_LMOD)"
+  ++ lib.optional stdenv.hostPlatform.isStatic "BUILDMODE=static";
   enableParallelBuilding = true;
   env.NIX_CFLAGS_COMPILE = toString XCFLAGS;
+
+  # The LuaJIT build produces `src/luajit.exe` on Windows targets, but the
+  # upstream install rule expects `src/luajit`. Provide a compatibility copy.
+  preInstall = lib.optionalString stdenv.hostPlatform.isMinGW ''
+    if [[ -e src/luajit.exe && ! -e src/luajit ]]; then
+      cp -p src/luajit.exe src/luajit
+    fi
+  '';
 
   postInstall = ''
     mkdir -p $out/nix-support
     cp ${
-      substituteAll {
-        src = ../lua-5/utils.sh;
+      replaceVars ../lua-5/utils.sh {
         luapathsearchpaths = lib.escapeShellArgs finalAttrs.LuaPathSearchPaths;
         luacpathsearchpaths = lib.escapeShellArgs finalAttrs.LuaCPathSearchPaths;
       }
@@ -149,20 +161,24 @@ stdenv.mkDerivation (finalAttrs: {
     };
 
   meta =
-    with lib;
+
     {
       description = "High-performance JIT compiler for Lua 5.1";
       homepage = "https://luajit.org/";
-      license = licenses.mit;
-      platforms = platforms.linux ++ platforms.darwin;
+      license = lib.licenses.mit;
+      # MSYS2 ships LuaJIT for mingw-w64, and nixpkgs consumers (like phosphor)
+      # need it in Windows cross builds.
+      platforms = lib.platforms.linux ++ lib.platforms.darwin ++ lib.platforms.windows;
       badPlatforms = [
-        "riscv64-linux"
+        "loongarch64-linux" # See https://github.com/LuaJIT/LuaJIT/issues/1278
         "riscv64-linux" # See https://github.com/LuaJIT/LuaJIT/issues/628
-        "powerpc64le-linux" # `#error "No support for PPC64"`
+        # `#error "No support for PPC64"`
+        "powerpc64-linux"
+        "powerpc64le-linux"
       ];
-      maintainers = with maintainers; [
+      mainProgram = "lua";
+      maintainers = with lib.maintainers; [
         thoughtpolice
-        smironov
         vcunat
         lblasc
       ];

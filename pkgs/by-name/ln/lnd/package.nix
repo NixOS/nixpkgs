@@ -21,33 +21,35 @@
   ],
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "lnd";
-  version = "0.18.4-beta";
+  version = "0.21.4-beta";
 
   src = fetchFromGitHub {
     owner = "lightningnetwork";
     repo = "lnd";
-    rev = "v${version}";
-    hash = "sha256-vZ5A0AsxZ8gpvXB4tH+GQIIvlJbSFvk38UbR24BVOPc=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-SCoUMVFi7svhbNuBMeFIGaIPDVsKlL8YAjuD5nKSU2g=";
   };
 
-  vendorHash = "sha256-Irlf2dwI0QZyzMFeBVr2I5iUe0PJyv20HX4rPOE8M54=";
+  vendorHash = "sha256-wLIyIwfvM7pP4p6wMEXsNPzHBtnlCnLSqMUFW5L7FyQ=";
 
   subPackages = [
     "cmd/lncli"
     "cmd/lnd"
   ];
 
+  env.CGO_ENABLED = 0;
+
   inherit tags;
 
-  meta = with lib; {
+  meta = {
     description = "Lightning Network Daemon";
     homepage = "https://github.com/lightningnetwork/lnd";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       cypherpunk2140
       prusnak
     ];
   };
-}
+})

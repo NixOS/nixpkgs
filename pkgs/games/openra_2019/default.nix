@@ -13,7 +13,7 @@ let
   /*
     Building an engine or out-of-tree mod is very similar,
      but different enough not to be able to build them with the same package definition,
-     so instaed we define what is common between them in a separate file.
+     so instead we define what is common between them in a separate file.
 
      Although `callPackage` could be used, it would require undoing `makeOverridable`,
      because `common.nix` does not define a package, but just an attribute set,
@@ -49,7 +49,7 @@ let
   callWithName = name: value: if lib.isFunction value then value name else value;
   buildOpenRASet =
     f: args:
-    pkgs.recurseIntoAttrs (
+    lib.recurseIntoAttrs (
       lib.mapAttrs callWithName (
         f (
           {
@@ -65,15 +65,14 @@ let
     );
 
 in
-pkgs.recurseIntoAttrs rec {
+lib.recurseIntoAttrs rec {
   # The whole attribute set is destructered to ensure those (and only those) attributes are given
   # and to provide defaults for those that are optional.
   buildOpenRAEngine =
     {
       name ? null,
       version,
-      description,
-      homepage,
+      meta,
       mods,
       src,
     }@engine:
@@ -98,8 +97,7 @@ pkgs.recurseIntoAttrs rec {
       name ? null,
       version,
       title,
-      description,
-      homepage,
+      meta,
       src,
       engine,
       assetsError ? "",

@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1b0hmnsxw4s2wf9pks8dg6dfy5cx3zcbzs8517lfccxsfizhqz8f";
+    hash = "sha256-Dn0Mf3S6M+boCQXpv9gfnRXvmnkN6XmT40IT3rWtEKw=";
   };
 
   patches = [
@@ -28,10 +28,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Helps to use fixtures in pytest.mark.parametrize";
     homepage = "https://github.com/tvorog/pytest-lazy-fixture";
-    license = licenses.mit;
-    maintainers = with maintainers; [ tobim ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ tobim ];
   };
 }

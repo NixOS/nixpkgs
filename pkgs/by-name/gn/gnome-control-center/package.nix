@@ -2,9 +2,10 @@
   fetchurl,
   lib,
   stdenv,
-  substituteAll,
+  replaceVars,
   accountsservice,
   adwaita-icon-theme,
+  blueprint-compiler,
   colord,
   colord-gtk4,
   cups,
@@ -12,6 +13,7 @@
   docbook-xsl-nons,
   fontconfig,
   gdk-pixbuf,
+  gdm,
   gettext,
   glib,
   glib-networking,
@@ -27,6 +29,7 @@
   gsettings-desktop-schemas,
   gsound,
   gst_all_1,
+  gtk3,
   gtk4,
   ibus,
   json-glib,
@@ -42,7 +45,6 @@
   libsecret,
   libsoup_3,
   libwacom,
-  libXi,
   libxml2,
   libxslt,
   meson,
@@ -63,27 +65,28 @@
   tinysparql,
   localsearch,
   tzdata,
-  udisks2,
+  udisks,
   upower,
+  wayland-scanner,
   libepoxy,
+  gmobile,
   gnome-user-share,
   gnome-remote-desktop,
   wrapGAppsHook4,
-  xorgserver,
+  xorg-server,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-control-center";
-  version = "47.2";
+  version = "50.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-control-center/${lib.versions.major finalAttrs.version}/gnome-control-center-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Q0oyLcN0OFi4nYFl2J+J3AWWi2t740AJRM7UJxJQ0+k=";
+    hash = "sha256-WFbHOZm+30XnT3O6w9YeK17BaJ+LzxlDc3uu7oIE+xE=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./paths.patch;
+    (replaceVars ./paths.patch {
       gcm = gnome-color-manager;
       inherit glibc tzdata shadow;
       inherit cups networkmanagerapplet;
@@ -91,6 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    blueprint-compiler
     docbook-xsl-nons
     gettext
     libxslt
@@ -99,6 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3
     shared-mime-info
+    wayland-scanner
     wrapGAppsHook4
   ];
 
@@ -110,9 +115,11 @@ stdenv.mkDerivation (finalAttrs: {
     cups
     fontconfig
     gdk-pixbuf
+    gdm # org.gnome.login-screen schema, gates the fingerprint row in the Users panel
     glib
     glib-networking
     gcr_4
+    gmobile
     gnome-bluetooth
     gnome-desktop
     gnome-online-accounts
@@ -122,6 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
     gnome-user-share # optional, sharing panel
     gsettings-desktop-schemas
     gsound
+    gtk3 # org.gtk.Settings.FileChooser schema (datetime panel sets clock-format)
     gtk4
     ibus
     json-glib
@@ -137,7 +145,6 @@ stdenv.mkDerivation (finalAttrs: {
     libsecret
     libsoup_3
     libwacom
-    libXi
     libxml2
     modemmanager
     mutter # schemas for the keybindings
@@ -146,7 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
     samba
     tinysparql
     localsearch # for search locations dialog
-    udisks2
+    udisks
     upower
     # For animations in Mouse panel.
     gst_all_1.gst-plugins-base
@@ -158,7 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3.pkgs.pygobject3 # for test-networkmanager-service.py
     python3.pkgs.python-dbusmock
     setxkbmap
-    xorgserver # for Xvfb
+    xorg-server # for Xvfb
   ];
 
   doCheck = true;
@@ -207,11 +214,11 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Utilities to configure the GNOME desktop";
     mainProgram = "gnome-control-center";
-    license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 })

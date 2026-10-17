@@ -13,16 +13,16 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b2a34a8af0a6625ccbdf45cd343b854fc6c1a85231dadc80b8805db836756323";
+    hash = "sha256-sqNKivCmYlzL30XNNDuFT8bBqFIx2tyAuIBduDZ1YyM=";
   };
 
   patchPhase = ''
     substituteInPlace dialog.py --replace ":/bin:/usr/bin" ":$out/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python interface to the UNIX dialog utility and mostly-compatible programs";
     homepage = "http://pythondialog.sourceforge.net/";
-    license = licenses.lgpl3;
+    license = lib.licenses.lgpl3;
   };
 }

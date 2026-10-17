@@ -3,67 +3,82 @@
   stdenv,
   fetchurl,
   autoPatchelfHook,
+  copyDesktopItems,
   fontconfig,
   freetype,
-  libICE,
-  libSM,
-  libX11,
-  libXcursor,
-  libXfixes,
-  libXrandr,
-  libXrender,
+  libice,
+  libsm,
+  libx11,
+  libxcursor,
+  libxfixes,
+  libxrandr,
+  libxrender,
+  makeDesktopItem,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "segger-ozone";
-  version = "3.30b";
+  version = "3.50a";
 
-  src =
-    {
-      x86_64-linux = fetchurl {
-        url = "https://www.segger.com/downloads/jlink/Ozone_Linux_V${
-          builtins.replaceStrings [ "." ] [ "" ] version
-        }_x86_64.tgz";
-        hash = "sha256-W8Fo0q58pAn1aB92CjYARcN3vMLEguvsyozsS7VRArQ=";
-      };
-      i686-linux = fetchurl {
-        url = "https://www.segger.com/downloads/jlink/Ozone_Linux_V${
-          builtins.replaceStrings [ "." ] [ "" ] version
-        }_i386.tgz";
-        hash = "sha256-Xq/69lwF2Ll5VdkYMDNRtc0YUUvWc+XR0FHJXxOLNQ4=";
-      };
-    }
-    .${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
+  src = fetchurl {
+    url = "https://www.segger.com/downloads/jlink/Ozone_Linux_V${
+      lib.replaceString "." "" finalAttrs.version
+    }_x86_64.tgz";
+    hash = "sha256-pE9uaYwE0df/bOE5kgiBEiVZjUol3lvLKHMj1cPskDc=";
+  };
 
   nativeBuildInputs = [
     autoPatchelfHook
+    copyDesktopItems
   ];
 
   buildInputs = [
     fontconfig
     freetype
-    libICE
-    libSM
-    libX11
-    libXcursor
-    libXfixes
-    libXrandr
-    libXrender
+    libice
+    libsm
+    libx11
+    libxcursor
+    libxfixes
+    libxrandr
+    libxrender
     (lib.getLib stdenv.cc.cc)
+  ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      categories = [
+        "Development"
+        "Debugger"
+        "X-MandrivaLinux-MoreApplications-Development"
+      ];
+      comment = "SEGGER Ozone";
+      desktopName = "Ozone";
+      exec = "Ozone %%f";
+      icon = "Ozone";
+      keywords = [
+        "ARM"
+        "Development"
+        "Embedded"
+      ];
+      name = "segger-ozone";
+      startupNotify = true;
+      terminal = false;
+    })
   ];
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    mv Lib lib
-    mv * $out
-    ln -s $out/Ozone $out/bin
+    mkdir -p $out/libexec $out/bin
+    cp --recursive . $out/libexec/segger-ozone
+    ln -s $out/libexec/segger-ozone/Ozone $out/bin/Ozone
+    install -D --mode=0644 Ozone.png $out/share/icons/hicolor/256x256/apps/Ozone.png
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "J-Link Debugger and Performance Analyzer";
     longDescription = ''
       Ozone is a cross-platform debugger and performance analyzer for J-Link
@@ -86,12 +101,9 @@ stdenv.mkDerivation rec {
       not guaranteed to be.
     '';
     homepage = "https://www.segger.com/products/development-tools/ozone-j-link-debugger";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = [ maintainers.bmilanov ];
-    platforms = [
-      "x86_64-linux"
-      "i686-linux"
-    ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.bmilanov ];
+    platforms = [ "x86_64-linux" ];
   };
-}
+})

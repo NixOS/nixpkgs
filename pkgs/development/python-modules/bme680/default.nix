@@ -41,11 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bme680" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for driving the Pimoroni BME680 Breakout";
     homepage = "https://github.com/pimoroni/bme680-python";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ mic92 ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ mic92 ];
   };
 }

@@ -3,81 +3,62 @@
   fetchFromGitHub,
   nixosTests,
   fetchYarnDeps,
-  nodejs,
   php,
   yarnConfigHook,
   yarnBuildHook,
   yarnInstallHook,
-  nodePackages,
-  python3,
-  pkg-config,
-  libsass,
-  stdenv,
+  grunt-cli,
   fetchzip,
 }:
 let
-  version = "1.6.2";
+  version = "1.7.2";
   # Fetch release tarball which contains language files
   # https://github.com/InvoicePlane/InvoicePlane/issues/1170
   languages = fetchzip {
     url = "https://github.com/InvoicePlane/InvoicePlane/releases/download/v${version}/v${version}.zip";
-    hash = "sha256-ME8ornP2uevvH8DzuI25Z8OV0EP98CBgbunvb2Hbr9M=";
+    hash = "sha256-DpQazuLOJnNGrrQo7l6uQReoKZEd5es2DT0a50NuQB0=";
   };
 in
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "invoiceplane";
-  inherit version;
+  # unstable-2026-09-28 version syntax not supported here
+  version = "1.7.2.1";
 
   src = fetchFromGitHub {
     owner = "InvoicePlane";
     repo = "InvoicePlane";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-E2TZ/FhlVKZpGuczXb/QLn27gGiO7YYlAkPSolTEoeQ=";
+    rev = "a934e27e6c0961ac96d4b8c19baf6e17c03beb1f";
+    hash = "sha256-Nh0F0IGiY25g2MvuEdLs/p2oIAJuni116KKwzyVSa9c=";
   };
 
-  vendorHash = "sha256-k7YBs6x/ABNTHPx9/EZXa4W9kcLQqpruV7YFGAADZq0=";
+  # Composer.lock validation currently fails for unknown reason
+  composerStrictValidation = true;
 
-  buildInputs = [ libsass ];
+  vendorHash = "sha256-bkPoUd+u1wKM+CpbrbmD8lT6zyMKf/vx6km5kzo9s5Q=";
 
   nativeBuildInputs = [
     yarnConfigHook
     yarnBuildHook
     yarnInstallHook
     # Needed for executing package.json scripts
-    nodePackages.grunt-cli
-    pkg-config
-    (python3.withPackages (ps: with ps; [ distutils ]))
-    stdenv.cc
+    grunt-cli
   ];
 
   offlineCache = fetchYarnDeps {
-    yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-KVlqC9zSijPP4/ifLBHD04fm6IQJpil0Gy9M3FNvUUw=";
+    inherit (finalAttrs) src patches;
+    hash = "sha256-faEq9sVsE5xcqL07IIEmXcavcWPZicb7asmuhuBI+h4=";
   };
 
-  # Upstream composer.json file is missing the name, description and license fields
-  composerStrictValidation = false;
-
   postBuild = ''
-    # Building node-sass dependency
-    mkdir -p "$HOME/.node-gyp/${nodejs.version}"
-    echo 9 >"$HOME/.node-gyp/${nodejs.version}/installVersion"
-    ln -sfv "${nodejs}/include" "$HOME/.node-gyp/${nodejs.version}"
-    export npm_config_nodedir=${nodejs}
-
-    pushd node_modules/node-sass
-    LIBSASS_EXT=auto yarn run build --offline
-    popd
-
-    # Running package.json scripts
     grunt build
   '';
 
   # Cleanup and language files
   postInstall = ''
+    chmod -R u+w $out/share
     mv $out/share/php/invoiceplane/* $out/
     cp -r ${languages}/application/language $out/application/
-    rm -r $out/{composer.json,composer.lock,CONTRIBUTING.md,docker-compose.yml,Gruntfile.js,package.json,node_modules,yarn.lock,share}
+    rm -r $out/{composer.json,composer.lock,docker-compose.yml,Gruntfile.js,package.json,node_modules,yarn.lock,share}
   '';
 
   passthru.tests = {

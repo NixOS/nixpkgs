@@ -1,8 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
+  fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   hatchling,
@@ -15,17 +15,17 @@
 
 buildPythonPackage rec {
   pname = "traitlets";
-  version = "5.14.3";
-  format = "pyproject";
+  version = "5.15.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ntBXnTUCyUtLNzKsEgN1zalvkjEUUihH3ks7uYuWtrc=";
+  src = fetchFromGitHub {
+    owner = "ipython";
+    repo = "traitlets";
+    tag = "v${version}";
+    hash = "sha256-c4OZSC2MrX6Jx8x49lOzlkgwpwz+/2l+GGVCzpO/P+8=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [
     argcomplete
@@ -36,6 +36,9 @@ buildPythonPackage rec {
   disabledTests = [
     # https://github.com/ipython/traitlets/issues/902
     "test_complete_custom_completers"
+    # https://github.com/ipython/traitlets/issues/925
+    "test_complete_simple_app"
+    "test_complete_subcommands_subapp1"
   ];
 
   disabledTestPaths = [

@@ -2,7 +2,6 @@
   lib,
   aiohttp,
   aresponses,
-  async-timeout,
   awesomeversion,
   backoff,
   buildPythonPackage,
@@ -10,30 +9,27 @@
   fetchFromGitHub,
   poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   syrupy,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "pyipp";
-  version = "0.17.0";
+  version = "0.17.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ctalkington";
     repo = "python-ipp";
     tag = version;
-    hash = "sha256-B3x6WkTSTGlZWMAK2BTA2EVVz+IvB3QL+arZGBAkZsE=";
+    hash = "sha256-YlIc/FNM3SdYQj0DN0if3R7h0383V5CHGpD7FHErWhA=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"' \
-      --replace-fail "--cov" ""
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
   '';
 
   build-system = [ poetry-core ];
@@ -44,11 +40,12 @@ buildPythonPackage rec {
     backoff
     deepmerge
     yarl
-  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ];
 
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     syrupy
   ];
@@ -57,11 +54,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyipp" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/ctalkington/python-ipp/releases/tag/${version}";
     description = "Asynchronous Python client for Internet Printing Protocol (IPP)";
     homepage = "https://github.com/ctalkington/python-ipp";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

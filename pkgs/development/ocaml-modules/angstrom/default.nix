@@ -10,7 +10,7 @@
   gitUpdater,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "angstrom";
   version = "0.16.1";
 
@@ -18,8 +18,8 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "inhabitedtype";
-    repo = pname;
-    rev = version;
+    repo = "angstrom";
+    rev = finalAttrs.version;
     hash = "sha256-EPqDK+7RU2vHEHvuoTXb8V2FkdXQ6tGu0ghbNPS3gZ4=";
   };
 
@@ -39,4 +39,4 @@ buildDunePackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ sternenseemann ];
   };
-}
+})

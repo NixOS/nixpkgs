@@ -1,42 +1,44 @@
 {
   lib,
+  aiohttp,
+  aiointercept,
+  aioresponses,
   buildPythonPackage,
   click,
   defusedxml,
   fetchFromGitHub,
-  httpx,
   mashumaro,
-  poetry-core,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
-  respx,
+  uv-build,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sfrbox-api";
-  version = "0.0.11";
+  version = "0.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "hacf-fr";
     repo = "sfrbox-api";
-    tag = "v${version}";
-    hash = "sha256-Ec3UOserFijBK6goyM6AMOekfLgjBq8l/9sMKYnj240=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-yyfCc36egn5qKZwPpWTndfq0ShacEEEV2PW8FMzjF6k=";
   };
 
-  pythonRelaxDeps = [
-    "defusedxml"
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.12.21,<0.13" "uv_build"
+  '';
 
-  build-system = [ poetry-core ];
+  build-system = [ uv-build ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
+    aiohttp
     defusedxml
     mashumaro
-    httpx
   ];
 
   optional-dependencies = {
@@ -44,19 +46,21 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    aiointercept
+    aioresponses
     pytest-asyncio
     pytestCheckHook
-    respx
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "sfrbox_api" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for the SFR Box API";
     homepage = "https://github.com/hacf-fr/sfrbox-api";
-    changelog = "https://github.com/hacf-fr/sfrbox-api/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/hacf-fr/sfrbox-api/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "sfrbox-api";
   };
-}
+})

@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "plan9-from-bell-labs";
     repo = "u9fs";
     rev = "d65923fd17e8b158350d3ccd6a4e32b89b15014a";
-    sha256 = "0h06l7ciikp3gzrr550z0fyrfp3y2067dfd3rxxw0q95z4l6vhy1";
+    hash = "sha256-wcNtKPklYcB7z6O5dgwQflyXvQMflJLzf+POGNmhBkA=";
   };
 
   installPhase = ''
@@ -20,12 +20,11 @@ stdenv.mkDerivation {
     install -Dm755 u9fs -t "$out/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Serve 9P from Unix";
     homepage = "http://p9f.org/magic/man2html?man=u9fs&sect=4";
-    license = licenses.dtoa;
-    maintainers = [ maintainers.ehmry ];
-    platforms = platforms.unix;
+    license = lib.licenses.dtoa;
+    platforms = lib.platforms.unix;
     mainProgram = "u9fs";
   };
 }

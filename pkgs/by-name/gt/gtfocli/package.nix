@@ -4,30 +4,30 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gtfocli";
-  version = "0.0.5";
+  version = "0.0.6";
 
   src = fetchFromGitHub {
     owner = "cmd-tools";
     repo = "gtfocli";
-    tag = version;
-    hash = "sha256-yvL9H9yOiYTaWtm5cj9A8y+kKXLQgLqUMu9JMnm1llI=";
+    tag = finalAttrs.version;
+    hash = "sha256-w3x01ZoJHeze0eGyx5jLqWHSd4taS+P+MdVlq2BcI2o=";
   };
 
-  vendorHash = "sha256-M1/XTY4ihkPNDiCv87I+kPgsTPU+sCqdnRoP09iVFu4=";
+  vendorHash = "sha256-FyClL+3fOe56+Y7CSNJtGoJaYnMeo2hoxYNPpg5FQJ8=";
 
   ldflags = [
     "-s"
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "GTFO Command Line Interface for search binaries commands to bypass local security restrictions";
     homepage = "https://github.com/cmd-tools/gtfocli";
-    changelog = "https://github.com/cmd-tools/gtfocli/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/cmd-tools/gtfocli/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "gtfocli";
   };
-}
+})

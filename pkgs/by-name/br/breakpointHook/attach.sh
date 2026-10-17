@@ -49,12 +49,16 @@ id="$1"
 pids="$(pgrep "sleep $id" || :)"
 if [ -z "$pids" ]; then
   echo "Error: No process found for 'sleep $id'. The build must still be running in order to attach. Also make sure it's not on a remote builder." >&2
-  exit 1s
+  exit 1
 elif [ "$(echo "$pids" | wc -l)" -ne 1 ]; then
   echo "Error: Multiple processes found matching 'sleep $id'" >&2
   exit 1
 fi
 pid="$(echo "$pids" | head -n1)"
+
+
+# get the build top level directory inside the sandbox (eg. /build)
+buildDir=$(getVar NIX_BUILD_TOP)
 
 # bash is needed to load the env vars, as we do not know the syntax of the debug shell.
 # bashInteractive is used instead of bash, as we depend on it anyways, due to it being
@@ -69,13 +73,13 @@ pwd="$(readlink /proc/$pid/cwd)"
 # bash needs to be executed with --init-file /build/env-vars to include the bash native
 #   variables like ones declared via `declare -a`.
 # If another shell is chosen via `debugShell`, it will only have simple env vars avaialable.
-exec nsenter --mount --ipc --uts --pid  --net --target "$pid" "$bashInteractive" -c "
+exec nsenter --mount --ipc --uts --pid --user --setuid follow --setgid follow --net --target "$pid" "$bashInteractive" -c "
   set -eu -o pipefail
-  source /build/env-vars
+  source \"$buildDir/env-vars\"
   cd \"$pwd\"
   if [ -n \"$debugShell\" ]; then
     exec \"$debugShell\"
   else
-    exec \"$bashInteractive\" --init-file /build/env-vars
+    exec \"$bashInteractive\" --init-file \"$buildDir/env-vars\"
   fi
 "

@@ -6,24 +6,22 @@
   fetchFromGitHub,
   home-assistant-bluetooth,
   poetry-core,
+  pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   sensor-state-data,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "inkbird-ble";
-  version = "0.5.8";
+  version = "1.7.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "inkbird-ble";
-    tag = "v${version}";
-    hash = "sha256-cUqU4XaY7CORhzy0AGjXI5c5ka+PnF4cHdyopyEBcLo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-suoxPOXMA3sB94gzBB6tkrPDtp6xhVNJDA4PpCSuAFA=";
   };
 
   build-system = [ poetry-core ];
@@ -36,17 +34,18 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "inkbird_ble" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for Inkbird BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/inkbird-ble";
-    changelog = "https://github.com/Bluetooth-Devices/inkbird-ble/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Bluetooth-Devices/inkbird-ble/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

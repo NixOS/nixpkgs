@@ -2,42 +2,52 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
+  hatch-vcs,
   lxml,
   paramiko,
   pytestCheckHook,
-  pythonOlder,
-  six,
 }:
 
 buildPythonPackage rec {
   pname = "ncclient";
-  version = "0.6.16";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "0.7.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "ncclient";
+    repo = "ncclient";
     tag = "v${version}";
-    hash = "sha256-IMCMlGt5/G4PRz525ZomsovU55vBnGhHndBtC7ym6lc=";
+    # Upstream uses .gitattributes to inject information about the revision
+    # hash and the refname into `ncclient/_version.py`, see:
+    #
+    # - https://git-scm.com/docs/gitattributes#_export_subst and
+    # - https://github.com/ncclient/ncclient/blob/e056e38af2843de0608da58e2f4662465c96d587/ncclient/_version.py#L25-L28
+    postFetch = ''
+      sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' $out/ncclient/_version.py
+    '';
+    hash = "sha256-A1e1YE+RW6mkuhF9eEUPiMiKw3YuHqA+4pNqJpYtAJU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
+
+  dependencies = [
     paramiko
     lxml
-    six
-  ] ++ paramiko.optional-dependencies.ed25519;
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "ncclient" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for NETCONF clients";
     homepage = "https://github.com/ncclient/ncclient";
-    changelog = "https://github.com/ncclient/ncclient/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ xnaveira ];
+    changelog = "https://github.com/ncclient/ncclient/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ xnaveira ];
   };
 }

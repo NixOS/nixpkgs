@@ -11,22 +11,22 @@
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
+  gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "microsoft-kiota-authentication-azure";
-  version = "1.1.0";
+  version = "1.14.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "microsoft";
-    repo = "kiota-authentication-azure-python";
-    tag = "v${version}";
-    hash = "sha256-JoR7qjAPNqtcV35AGwbyjhIro6AnFUZXXLHLOj7InY8=";
+    repo = "kiota-python";
+    tag = "microsoft-kiota-authentication-azure-v${finalAttrs.version}";
+    hash = "sha256-D1wfzkg4VdqH27fUuOlbl/tGPr18a41feNI0PpX1zMM=";
   };
+
+  sourceRoot = "${finalAttrs.src.name}/packages/authentication/azure/";
 
   build-system = [ flit-core ];
 
@@ -46,11 +46,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "kiota_authentication_azure" ];
 
-  meta = with lib; {
-    description = "Kiota Azure authentication provider";
-    homepage = "https://github.com/microsoft/kiota-authentication-azure-python";
-    changelog = "https://github.com/microsoft/kiota-authentication-azure-python/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "microsoft-kiota-authentication-azure-v";
   };
-}
+
+  meta = {
+    description = "Kiota Azure authentication provider";
+    homepage = "https://github.com/microsoft/kiota-python/tree/main/packages/authentication/azure";
+    changelog = "https://github.com/microsoft/kiota-python/releases/tag/microsoft-kiota-authentication-azure-${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+  };
+})

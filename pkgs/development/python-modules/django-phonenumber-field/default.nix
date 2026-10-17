@@ -5,26 +5,28 @@
   django,
   djangorestframework,
   fetchFromGitHub,
+  gettext,
   phonenumbers,
   phonenumberslite,
   python,
-  pythonOlder,
+  pytestCheckHook,
+  pytest-django,
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-phonenumber-field";
-  version = "8.0.0";
+  version = "8.5.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
-    owner = "stefanfoulis";
+    owner = "django-phonenumber-field";
     repo = "django-phonenumber-field";
-    tag = version;
-    hash = "sha256-l+BAh7QYGN0AgDHICvlQnBYAcpEn8acu+JBmoo85kF0=";
+    tag = finalAttrs.version;
+    hash = "sha256-hTrW7QeZPBsln9iHh9sV7JMQxdJ9cFcAq4ETyhxFGv0=";
   };
+
+  nativeBuildInputs = [ gettext ];
 
   build-system = [ setuptools-scm ];
 
@@ -32,29 +34,36 @@ buildPythonPackage rec {
   # make sense without either of the two optional dependencies. Since, in
   # Nixpkgs, phonenumberslite depends on phonenumbers, add the latter
   # unconditionally.
-  dependencies = [ django ] ++ optional-dependencies.phonenumbers;
-
-  nativeCheckInputs = [
-    babel
-    djangorestframework
-  ];
-
-  pythonImportsCheck = [ "phonenumber_field" ];
-
-  checkPhase = ''
-    ${python.interpreter} -m django test --settings tests.settings
-  '';
+  dependencies = [ django ] ++ finalAttrs.passthru.optional-dependencies.phonenumbers;
 
   optional-dependencies = {
+    babel = [ babel ];
     phonenumbers = [ phonenumbers ];
     phonenumberslite = [ phonenumberslite ];
   };
 
-  meta = with lib; {
+  preBuild = ''
+    ${python.interpreter} -m django compilemessages
+  '';
+
+  nativeCheckInputs = [
+    djangorestframework
+    pytestCheckHook
+    pytest-django
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
+
+  preCheck = ''
+    export DJANGO_SETTINGS_MODULE=tests.settings
+  '';
+
+  pythonImportsCheck = [ "phonenumber_field" ];
+
+  meta = {
     description = "Django model and form field for normalised phone numbers using python-phonenumbers";
-    homepage = "https://github.com/stefanfoulis/django-phonenumber-field/";
-    changelog = "https://github.com/stefanfoulis/django-phonenumber-field/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sephi ];
+    homepage = "https://github.com/django-phonenumber-field/django-phonenumber-field";
+    changelog = "https://github.com/django-phonenumber-field/django-phonenumber-field/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sephi ];
   };
-}
+})

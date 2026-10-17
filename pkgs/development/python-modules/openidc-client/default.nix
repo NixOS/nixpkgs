@@ -12,16 +12,15 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "680e969cae18c30adbddd6a087ed09f6a296b4937b4c8bc69be813bdbbfa9847";
+    hash = "sha256-aA6WnK4Ywwrb3dagh+0J9qKWtJN7TIvGm+gTvbv6mEc=";
   };
   propagatedBuildInputs = [ requests ];
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "CLI python OpenID Connect client with token caching and management";
     homepage = "https://github.com/puiterwijk";
-    license = licenses.mit;
-    maintainers = with maintainers; [ disassembler ];
+    license = lib.licenses.mit;
   };
 }

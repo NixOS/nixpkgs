@@ -1,12 +1,12 @@
 {
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   kernel,
+  kernelModuleMakeFlags,
   lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "vendor-reset";
   version = "unstable-2024-04-16-${kernel.version}";
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "pic" ];
 
-  makeFlags = [
+  makeFlags = kernelModuleMakeFlags ++ [
     "KVER=${kernel.modDirVersion}"
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
@@ -40,10 +40,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Linux kernel vendor specific hardware reset module";
     homepage = "https://github.com/gnif/vendor-reset";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     broken = kernel.kernelOlder "4.19";

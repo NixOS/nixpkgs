@@ -14,15 +14,15 @@
   zstd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nvc";
-  version = "1.15.0";
+  version = "1.23.0";
 
   src = fetchFromGitHub {
     owner = "nickg";
     repo = "nvc";
-    rev = "r${version}";
-    hash = "sha256-EpDJhgj1oYz+050qPwrToQAJNMtkSb423+Bh09qlka0=";
+    tag = "r${finalAttrs.version}";
+    hash = "sha256-1L7IdncoQ1H6e51Bikmjnw8XLse+ttUgrI/0/h+Q56Q=";
   };
 
   nativeBuildInputs = [
@@ -33,16 +33,15 @@ stdenv.mkDerivation rec {
     which
   ];
 
-  buildInputs =
-    [
-      libffi
-      llvm
-      zlib
-      zstd
-    ]
-    ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
-      elfutils
-    ];
+  buildInputs = [
+    libffi
+    llvm
+    zlib
+    zstd
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
+    elfutils
+  ];
 
   preConfigure = ''
     mkdir build
@@ -58,12 +57,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "VHDL compiler and simulator";
     mainProgram = "nvc";
     homepage = "https://www.nickg.me.uk/nvc/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ wegank ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ wegank ];
+    platforms = lib.platforms.unix;
   };
-}
+})

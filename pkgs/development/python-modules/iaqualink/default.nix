@@ -4,49 +4,60 @@
   fetchFromGitHub,
   hatch-vcs,
   hatchling,
+  httpx-retries,
   httpx,
+  pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
+  pyyaml,
   respx,
+  typer,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "iaqualink";
-  version = "0.5.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "0.7.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "flz";
     repo = "iaqualink-py";
-    rev = "v${version}";
-    hash = "sha256-ewPP2Xq+ecZGc5kokvLEsRokGqTWlymrzkwk480tapk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Bn4dcfTRkY+qc/c39ip+vZvlbqll7qZOl7phMgw9EjY=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = [ httpx ] ++ httpx.optional-dependencies.http2;
+  dependencies = [
+    httpx
+    httpx-retries
+  ]
+  ++ httpx.optional-dependencies.http2;
+
+  optional-dependencies = {
+    cli = [
+      pyyaml
+      typer
+    ];
+  };
 
   nativeCheckInputs = [
+    pytest-cov-stub
     pytestCheckHook
     respx
-  ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "pytest --cov-config=pyproject.toml --cov-report=xml --cov-report=term --cov=src --cov=tests" ""
-  '';
+    typer
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "iaqualink" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for Jandy iAqualink";
     homepage = "https://github.com/flz/iaqualink-py";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/flz/iaqualink-py/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

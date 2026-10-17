@@ -1,41 +1,45 @@
-{ config
-, stdenv
-, lib
-, fetchurl
-, fetchpatch2
-, pkg-config
-, zlib
-, expat
-, openssl
-, autoconf
-, libjpeg
-, libpng
-, libtiff
-, freetype
-, fontconfig
-, libpaper
-, jbig2dec
-, libiconv
-, ijs
-, lcms2
-, callPackage
-, bash
-, buildPackages
-, openjpeg
-, fixDarwinDylibNames
-, cupsSupport ? config.ghostscript.cups or (!stdenv.hostPlatform.isDarwin)
-, cups
-, x11Support ? cupsSupport
-, xorg # with CUPS, X11 only adds very little
-, dynamicDrivers ? true
+{
+  config,
+  stdenv,
+  lib,
+  fetchurl,
+  fetchpatch2,
+  pkg-config,
+  zlib,
+  expat,
+  openssl,
+  autoconf,
+  libjpeg,
+  libpng,
+  libtiff,
+  freetype,
+  fontconfig,
+  libpaper,
+  jbig2dec,
+  libiconv,
+  ijs,
+  lcms2,
+  callPackage,
+  bash,
+  buildPackages,
+  openjpeg,
+  fixDarwinDylibNames,
+  cupsSupport ? config.ghostscript.cups or (!stdenv.hostPlatform.isDarwin),
+  cups,
+  x11Support ? cupsSupport,
+  libice,
+  libx11,
+  libxext,
+  libxt,
+  dynamicDrivers ? true,
 
-# for passthru.tests
-, graphicsmagick
-, imagemagick
-, libspectre
-, lilypond
-, pstoedit
-, python3
+  # for passthru.tests
+  graphicsmagick,
+  imagemagick,
+  libspectre,
+  lilypond,
+  pstoedit,
+  python3,
 }:
 
 let
@@ -61,13 +65,15 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ghostscript${lib.optionalString x11Support "-with-X"}";
-  version = "10.04.0";
+  version = "10.08.0";
 
   src = fetchurl {
-    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs${lib.replaceStrings ["."] [""] version}/ghostscript-${version}.tar.xz";
-    hash = "sha256-Un7vC2zQTs8cjXoReWxppS00/+Nq/KhqQAcpovwByIc=";
+    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs${
+      lib.replaceStrings [ "." ] [ "" ] finalAttrs.version
+    }/ghostscript-${finalAttrs.version}.tar.xz";
+    hash = "sha256-wgSSvI67lsh/ouUqCSbhzajN6V1mFF4BiscT/tXaOM8=";
   };
 
   patches = [
@@ -81,7 +87,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  outputs = [ "out" "man" "doc" "fonts" ];
+  outputs = [
+    "out"
+    "man"
+    "doc"
+    "fonts"
+  ];
 
   enableParallelBuilding = true;
 
@@ -89,18 +100,38 @@ stdenv.mkDerivation rec {
     buildPackages.stdenv.cc
   ];
 
-  nativeBuildInputs = [ pkg-config autoconf zlib ]
-    ++ lib.optional cupsSupport cups
-    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  nativeBuildInputs = [
+    pkg-config
+    autoconf
+    zlib
+  ]
+  ++ lib.optional cupsSupport cups
+  ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   buildInputs = [
-    zlib expat openssl
-    libjpeg libpng libtiff freetype fontconfig libpaper jbig2dec
-    libiconv ijs lcms2 bash openjpeg
+    zlib
+    expat
+    openssl
+    libjpeg
+    libpng
+    libtiff
+    freetype
+    fontconfig
+    libpaper
+    jbig2dec
+    libiconv
+    ijs
+    lcms2
+    bash
+    openjpeg
   ]
-  ++ lib.optionals x11Support [ xorg.libICE xorg.libX11 xorg.libXext xorg.libXt ]
-  ++ lib.optional cupsSupport cups
-  ;
+  ++ lib.optionals x11Support [
+    libice
+    libx11
+    libxext
+    libxt
+  ]
+  ++ lib.optional cupsSupport cups;
 
   preConfigure = ''
     # https://ghostscript.com/doc/current/Make.htm
@@ -121,19 +152,24 @@ stdenv.mkDerivation rec {
       --replace-fail "--without-x" "--without-x --without-tesseract"
 
     autoconf
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     export DARWIN_LDFLAGS_SO_PREFIX=$out/lib/
   '';
 
   configureFlags = [
+    "CFLAGS=-std=gnu17"
     "--with-system-libtiff"
     "--without-tesseract"
-  ] ++ lib.optionals dynamicDrivers [
+  ]
+  ++ lib.optionals dynamicDrivers [
     "--enable-dynamic"
     "--disable-hidden-visibility"
-  ] ++ lib.optionals x11Support [
+  ]
+  ++ lib.optionals x11Support [
     "--with-x"
-  ] ++ lib.optionals cupsSupport [
+  ]
+  ++ lib.optionals cupsSupport [
     "--enable-cups"
   ];
 
@@ -141,16 +177,18 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   # don't build/install statically linked bin/gs
-  buildFlags = [ "so" ]
-    # without -headerpad, the following error occurs on Darwin when compiling with X11 support (as of 10.02.0)
-    # error: install_name_tool: changing install names or rpaths can't be redone for: [...]libgs.dylib.10 (the program must be relinked, and you may need to use -headerpad or -headerpad_max_install_names)
-    ++ lib.optional (x11Support && stdenv.hostPlatform.isDarwin) "LDFLAGS=-headerpad_max_install_names";
+  buildFlags = [
+    "so"
+  ]
+  # without -headerpad, the following error occurs on Darwin when compiling with X11 support (as of 10.02.0)
+  # error: install_name_tool: changing install names or rpaths can't be redone for: [...]libgs.dylib.10 (the program must be relinked, and you may need to use -headerpad or -headerpad_max_install_names)
+  ++ lib.optional (x11Support && stdenv.hostPlatform.isDarwin) "LDFLAGS=-headerpad_max_install_names";
   installTargets = [ "soinstall" ];
 
   postInstall = ''
     ln -s gsc "$out"/bin/gs
 
-    cp -r Resource "$out/share/ghostscript/${version}"
+    cp -r Resource "$out/share/ghostscript/${finalAttrs.version}"
 
     mkdir -p $fonts/share/fonts
     cp -rv ${fonts}/* "$fonts/share/fonts/"
@@ -182,13 +220,20 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    test-corpus-render = callPackage ./test-corpus-render.nix {};
-    inherit graphicsmagick imagemagick libspectre lilypond pstoedit;
+    test-corpus-render = callPackage ./test-corpus-render.nix { };
+    inherit
+      graphicsmagick
+      imagemagick
+      libspectre
+      lilypond
+      pstoedit
+      ;
     inherit (python3.pkgs) matplotlib;
   };
 
   meta = {
     homepage = "https://www.ghostscript.com/";
+    changelog = "https://ghostscript.readthedocs.io/en/gs${finalAttrs.version}/News.html";
     description = "PostScript interpreter (mainline version)";
     longDescription = ''
       Ghostscript is the name of a set of tools that provides (i) an
@@ -200,7 +245,7 @@ stdenv.mkDerivation rec {
     '';
     license = lib.licenses.agpl3Plus;
     platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.tobim ];
+    maintainers = with lib.maintainers; [ tobim ];
     mainProgram = "gs";
   };
-}
+})

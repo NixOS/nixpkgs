@@ -3,12 +3,11 @@
   stdenv,
   fetchurl,
   fetchFromGitHub,
-  wrapQtAppsHook,
   python3,
   zbar,
   secp256k1,
   enableQt ? true,
-  qtwayland,
+  qt5,
 }:
 
 let
@@ -48,10 +47,11 @@ in
 python3.pkgs.buildPythonApplication {
   pname = "electrum-ltc";
   inherit version;
+  format = "setuptools";
 
   src = fetchurl {
     url = "https://electrum-ltc.org/download/Electrum-LTC-${version}.tar.gz";
-    sha256 = "sha256-7F28cve+HD5JDK5igfkGD/NvTCfA33g+DmQJ5mwPM9Q=";
+    hash = "sha256-7F28cve+HD5JDK5igfkGD/NvTCfA33g+DmQJ5mwPM9Q=";
   };
 
   postUnpack = ''
@@ -59,7 +59,7 @@ python3.pkgs.buildPythonApplication {
     cp -ar ${tests} $sourceRoot/electrum_ltc/tests
   '';
 
-  nativeBuildInputs = lib.optionals enableQt [ wrapQtAppsHook ];
+  nativeBuildInputs = lib.optionals enableQt [ qt5.wrapQtAppsHook ];
 
   propagatedBuildInputs =
     with python3.pkgs;
@@ -69,22 +69,23 @@ python3.pkgs.buildPythonApplication {
       aiorpcx
       attrs
       bitstring
+      certifi
       cryptography
       dnspython
       jsonrpclib-pelix
       matplotlib
       pbkdf2
       protobuf
-      py-scrypt
       pysocks
       qrcode
       requests
-      certifi
+      scrypt
       # plugins
       btchip-python
       ckcc-protocol
       keepkey
       trezor
+      distutils
     ]
     ++ lib.optionals enableQt [
       pyqt5
@@ -114,23 +115,22 @@ python3.pkgs.buildPythonApplication {
     protoc --proto_path=electrum_ltc/ --python_out=electrum_ltc/ electrum_ltc/paymentrequest.proto
   '';
 
-  preBuild =
-    ''
-      sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py
-      substituteInPlace ./electrum_ltc/ecc_fast.py \
-        --replace ${libsecp256k1_name} ${secp256k1}/lib/libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}
-    ''
-    + (
-      if enableQt then
-        ''
-          substituteInPlace ./electrum_ltc/qrscanner.py \
-            --replace ${libzbar_name} ${zbar.lib}/lib/libzbar${stdenv.hostPlatform.extensions.sharedLibrary}
-        ''
-      else
-        ''
-          sed -i '/qdarkstyle/d' contrib/requirements/requirements.txt
-        ''
-    );
+  preBuild = ''
+    sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py
+    substituteInPlace ./electrum_ltc/ecc_fast.py \
+      --replace ${libsecp256k1_name} ${secp256k1}/lib/libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}
+  ''
+  + (
+    if enableQt then
+      ''
+        substituteInPlace ./electrum_ltc/qrscanner.py \
+          --replace ${libzbar_name} ${zbar.lib}/lib/libzbar${stdenv.hostPlatform.extensions.sharedLibrary}
+      ''
+    else
+      ''
+        sed -i '/qdarkstyle/d' contrib/requirements/requirements.txt
+      ''
+  );
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     # Despite setting usr_share above, these files are installed under
@@ -155,9 +155,9 @@ python3.pkgs.buildPythonApplication {
     pyaes
     pycryptodomex
   ];
-  buildInputs = lib.optional stdenv.hostPlatform.isLinux qtwayland;
+  buildInputs = lib.optional stdenv.hostPlatform.isLinux qt5.qtwayland;
 
-  pytestFlagsArray = [ "electrum_ltc/tests" ];
+  enabledTestPaths = [ "electrum_ltc/tests" ];
 
   disabledTests = [
     "test_loop" # test tries to bind 127.0.0.1 causing permission error
@@ -173,7 +173,7 @@ python3.pkgs.buildPythonApplication {
     $out/bin/electrum-ltc help >/dev/null
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight Litecoin Client";
     mainProgram = "electrum-ltc";
     longDescription = ''
@@ -183,8 +183,8 @@ python3.pkgs.buildPythonApplication {
       your litecoins to theft or hardware failure.
     '';
     homepage = "https://electrum-ltc.org/";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ bbjubjub ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ bbjubjub ];
   };
 }

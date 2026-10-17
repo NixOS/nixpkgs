@@ -6,16 +6,16 @@
   gmp,
   zlib,
   iproute2,
-  nettools,
+  net-tools,
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gvpe";
   version = "3.1";
 
   src = fetchurl {
-    url = "https://ftp.gnu.org/gnu/gvpe/gvpe-${version}.tar.gz";
+    url = "https://ftp.gnu.org/gnu/gvpe/gvpe-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-8evVctclu5QOCAdxocEIZ8NQnc2DFvYRSBRQPcux6LM=";
   };
 
@@ -34,14 +34,14 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -e 's@"/sbin/ifconfig.*"@"${iproute2}/sbin/ip link set dev $IFNAME address $MAC mtu $MTU"@' -i src/device-linux.C
-    sed -e 's@/sbin/ifconfig@${nettools}/sbin/ifconfig@g' -i src/device-*.C
+    sed -e 's@/sbin/ifconfig@${net-tools}/sbin/ifconfig@g' -i src/device-*.C
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Protected multinode virtual network";
     homepage = "http://software.schmorp.de/pkg/gvpe.html";
-    maintainers = [ maintainers.raskin ];
-    platforms = with platforms; linux ++ freebsd;
-    license = licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = with lib.platforms; linux ++ freebsd;
+    license = lib.licenses.gpl2Plus;
   };
-}
+})

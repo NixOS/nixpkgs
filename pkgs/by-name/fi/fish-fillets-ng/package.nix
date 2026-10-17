@@ -10,6 +10,7 @@
   SDL_mixer,
   SDL_image,
   SDL_ttf,
+  imagemagick,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,13 +29,22 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     copyDesktopItems
+    imagemagick
   ];
+
   buildInputs = [
     SDL
     lua5_1
     SDL_mixer
     SDL_image
     SDL_ttf
+  ];
+
+  # pass in correct sdl-config for cross builds
+  env.SDL_CONFIG = lib.getExe' (lib.getDev SDL) "sdl-config";
+
+  makeFlags = [
+    "AR=${stdenv.cc.targetPrefix}ar"
   ];
 
   desktopItems = [
@@ -54,15 +64,16 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/share/games/fillets-ng
     tar -xf ${data} -C $out/share/games/fillets-ng --strip-components=1
-    install -Dm644 ${./icon.xpm} $out/share/pixmaps/fish-fillets-ng.xpm
+    mkdir -p $out/share/icons/hicolor/32x32/apps
+    magick ${./icon.xpm} $out/share/icons/hicolor/32x32/apps/fish-fillets-ng.png
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Puzzle game";
     mainProgram = "fillets";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
     homepage = "https://fillets.sourceforge.net/";
   };
 }

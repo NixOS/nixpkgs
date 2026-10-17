@@ -14,13 +14,13 @@
   pplite,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ocaml${ocaml.version}-apron";
   version = "0.9.15";
   src = fetchFromGitHub {
     owner = "antoinemine";
     repo = "apron";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-gHLCurydxX1pS66DTAWUJGl9Yqu9RWRjkZh6lXzM7YY=";
   };
 
@@ -31,13 +31,15 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     gmp
-    mpfr
     ppl
-    camlidl
     flint
     pplite
   ];
-  propagatedBuildInputs = [ mlgmpidl ];
+  propagatedBuildInputs = [
+    camlidl
+    mlgmpidl
+    mpfr
+  ];
 
   outputs = [
     "out"
@@ -58,9 +60,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     license = lib.licenses.lgpl21;
-    homepage = "http://apron.cri.ensmp.fr/library/";
+    homepage = "https://github.com/antoinemine/apron";
     maintainers = [ lib.maintainers.vbgl ];
     description = "Numerical abstract domain library";
     inherit (ocaml.meta) platforms;
   };
-}
+})

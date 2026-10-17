@@ -1,0 +1,47 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+
+  # Build the FMUs following the latest FMI standard
+  FMIVersion ? 3,
+}:
+
+# C.f. <https://fmi-standard.org/>
+assert lib.asserts.assertMsg (
+  FMIVersion >= 2 && FMIVersion <= 3
+) "FMIVersion must be a valid FMI specification standard of: 2 or 3; not ${toString FMIVersion}";
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "reference-fmus";
+  version = "0.0.41";
+  src = fetchFromGitHub {
+    owner = "modelica";
+    repo = "reference-fmus";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-RI57hQqoWtOwUEDfEzPk8sZZ2imiDhbKZj4FHdvOvNY=";
+  };
+
+  nativeBuildInputs = [ cmake ];
+
+  cmakeFlags = [
+    "-DFMI_VERSION=${toString FMIVersion}"
+  ];
+
+  env = lib.optionalAttrs (FMIVersion == 3) {
+    CFLAGS = "-Wno-stringop-truncation";
+  };
+
+  meta = {
+    # CMakeLists.txt explicitly states support for aarch64-darwin, but
+    # the build fails in a Nix environment. C.f.
+    # <https://github.com/NixOS/nixpkgs/pull/397658#issuecomment-2851958172>.
+    broken = with stdenv.hostPlatform; isAarch64 && isDarwin;
+    description = "Functional Mock-up Units for development, testing and debugging";
+    homepage = "https://github.com/modelica/Reference-FMUs";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ tmplt ];
+    platforms = lib.platforms.all;
+  };
+})

@@ -1,31 +1,48 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.archisteamfarm;
 
   format = pkgs.formats.json { };
 
-  configFile = format.generate "ASF.json" (cfg.settings // {
-    # we disable it because ASF cannot update itself anyways
-    # and nixos takes care of restarting the service
-    # is in theory not needed as this is already the default for default builds
-    UpdateChannel = 0;
-    Headless = true;
-  } // lib.optionalAttrs (cfg.ipcPasswordFile != null) {
-    IPCPassword = "#ipcPassword#";
-  });
+  configFile = format.generate "ASF.json" (
+    cfg.settings
+    // {
+      # we disable it because ASF cannot update itself anyways
+      # and nixos takes care of restarting the service
+      # is in theory not needed as this is already the default for default builds
+      UpdateChannel = 0;
+      Headless = true;
+    }
+    // lib.optionalAttrs (cfg.ipcPasswordFile != null) {
+      IPCPassword = "#ipcPassword#";
+    }
+    // lib.optionalAttrs (cfg.licenseFile != null) {
+      LicenseID = "#licenseID#";
+    }
+  );
 
   ipc-config = format.generate "IPC.config" cfg.ipcSettings;
 
-  mkBot = n: c:
-    format.generate "${n}.json" (c.settings // {
-      SteamLogin = if c.username == "" then n else c.username;
-      Enabled = c.enabled;
-    } // lib.optionalAttrs (c.passwordFile != null) {
-      SteamPassword = c.passwordFile;
-      # sets the password format to file (https://github.com/JustArchiNET/ArchiSteamFarm/wiki/Security#file)
-      PasswordFormat = 4;
-    });
+  mkBot =
+    n: c:
+    format.generate "${n}.json" (
+      c.settings
+      // {
+        SteamLogin = if c.username == "" then n else c.username;
+        Enabled = c.enabled;
+      }
+      // lib.optionalAttrs (c.passwordFile != null) {
+        SteamPassword = c.passwordFile;
+        # sets the password format to file (https://github.com/JustArchiNET/ArchiSteamFarm/wiki/Security#file)
+        PasswordFormat = 4;
+      }
+    );
 in
 {
   options.services.archisteamfarm = {
@@ -46,7 +63,7 @@ in
             description = "Whether to start the web-ui. This is the preferred way of configuring things such as the steam guard token.";
           };
 
-          package = lib.mkPackageOption pkgs [ "ArchiSteamFarm" "ui" ] {
+          package = lib.mkPackageOption pkgs [ "archisteamfarm" "ui" ] {
             extraDescription = ''
               ::: {.note}
               Contents must be in lib/dist
@@ -64,7 +81,7 @@ in
       description = "The Web-UI hosted on 127.0.0.1:1242.";
     };
 
-    package = lib.mkPackageOption pkgs "ArchiSteamFarm" {
+    package = lib.mkPackageOption pkgs "archisteamfarm" {
       extraDescription = ''
         ::: {.warning}
         Should always be the latest version, for security reasons,
@@ -95,6 +112,12 @@ in
       default = { };
     };
 
+    licenseFile = lib.mkOption {
+      type = with lib.types; nullOr path;
+      default = null;
+      description = "Path to a file containing the license. The file must be readable by the `archisteamfarm` user/group.";
+    };
+
     ipcPasswordFile = lib.mkOption {
       type = with lib.types; nullOr path;
       default = null;
@@ -120,35 +143,37 @@ in
     };
 
     bots = lib.mkOption {
-      type = lib.types.attrsOf (lib.types.submodule {
-        options = {
-          username = lib.mkOption {
-            type = lib.types.str;
-            description = "Name of the user to log in. Default is attribute name.";
-            default = "";
+      type = lib.types.attrsOf (
+        lib.types.submodule {
+          options = {
+            username = lib.mkOption {
+              type = lib.types.str;
+              description = "Name of the user to log in. Default is attribute name.";
+              default = "";
+            };
+            passwordFile = lib.mkOption {
+              type = with lib.types; nullOr path;
+              default = null;
+              description = ''
+                Path to a file containing the password. The file must be readable by the `archisteamfarm` user/group.
+                Omit or set to null to provide the password a different way, such as through the web-ui.
+              '';
+            };
+            enabled = lib.mkOption {
+              type = lib.types.bool;
+              default = true;
+              description = "Whether to enable the bot on startup.";
+            };
+            settings = lib.mkOption {
+              type = lib.types.attrs;
+              description = ''
+                Additional settings that are documented [here](https://github.com/JustArchiNET/ArchiSteamFarm/wiki/Configuration#bot-config).
+              '';
+              default = { };
+            };
           };
-          passwordFile = lib.mkOption {
-            type = with lib.types; nullOr path;
-            default = null;
-            description = ''
-              Path to a file containing the password. The file must be readable by the `archisteamfarm` user/group.
-              Omit or set to null to provide the password a different way, such as through the web-ui.
-            '';
-          };
-          enabled = lib.mkOption {
-            type = lib.types.bool;
-            default = true;
-            description = "Whether to enable the bot on startup.";
-          };
-          settings = lib.mkOption {
-            type = lib.types.attrs;
-            description = ''
-              Additional settings that are documented [here](https://github.com/JustArchiNET/ArchiSteamFarm/wiki/Configuration#bot-config).
-            '';
-            default = { };
-          };
-        };
-      });
+        }
+      );
       description = ''
         Bots name and configuration.
       '';
@@ -156,7 +181,9 @@ in
         exampleBot = {
           username = "alice";
           passwordFile = "/var/lib/archisteamfarm/secrets/password";
-          settings = { SteamParentalCode = "1234"; };
+          settings = {
+            SteamParentalCode = "1234";
+          };
         };
       };
       default = { };
@@ -221,24 +248,33 @@ in
             RestrictSUIDSGID = true;
             SecureBits = "noroot-locked";
             SystemCallArchitectures = "native";
-            SystemCallFilter = [ "@system-service" "~@privileged" "mincore" ];
+            SystemCallFilter = [
+              "@system-service"
+              "~@privileged"
+              "mincore"
+            ];
             UMask = "0077";
           }
         ];
 
         preStart =
           let
-            createBotsScript = pkgs.runCommand "ASF-bots" {
-              preferLocalBuild = true;
-            } ''
-              mkdir -p $out
-              # clean potential removed bots
-              rm -rf $out/*.json
-              for i in ${lib.concatStringsSep " " (map (x: "${lib.getName x},${x}") (lib.mapAttrsToList mkBot cfg.bots))}; do IFS=",";
-                set -- $i
-                ln -fs $2 $out/$1
-              done
-            '';
+            createBotsScript =
+              pkgs.runCommand "ASF-bots"
+                {
+                  preferLocalBuild = true;
+                }
+                ''
+                  mkdir -p $out
+                  # clean potential removed bots
+                  rm -rf $out/*.json
+                  for i in ${
+                    lib.concatStringsSep " " (map (x: "${lib.getName x},${x}") (lib.mapAttrsToList mkBot cfg.bots))
+                  }; do IFS=",";
+                    set -- $i
+                    ln -fs $2 $out/$1
+                  done
+                '';
             replaceSecretBin = "${pkgs.replace-secret}/bin/replace-secret";
           in
           ''
@@ -246,15 +282,19 @@ in
 
             cp --no-preserve=mode ${configFile} config/ASF.json
 
+            ${lib.optionalString (cfg.licenseFile != null) ''
+              ${replaceSecretBin} '#licenseID#' '${cfg.licenseFile}' config/ASF.json
+            ''}
+
             ${lib.optionalString (cfg.ipcPasswordFile != null) ''
               ${replaceSecretBin} '#ipcPassword#' '${cfg.ipcPasswordFile}' config/ASF.json
             ''}
 
-            ${lib.optionalString (cfg.ipcSettings != {}) ''
+            ${lib.optionalString (cfg.ipcSettings != { }) ''
               ln -fs ${ipc-config} config/IPC.config
             ''}
 
-            ${lib.optionalString (cfg.bots != {}) ''
+            ${lib.optionalString (cfg.bots != { }) ''
               ln -fs ${createBotsScript}/* config/
             ''}
 

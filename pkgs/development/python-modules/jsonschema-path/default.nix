@@ -1,38 +1,31 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   poetry-core,
   pathable,
   pyyaml,
   referencing,
+  pytest-cov-stub,
   pytestCheckHook,
   responses,
 }:
 
 buildPythonPackage rec {
   pname = "jsonschema-path";
-  version = "0.3.3";
-
-  disabled = pythonOlder "3.8";
-
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "p1c2u";
     repo = "jsonschema-path";
     tag = version;
-    hash = "sha256-oBzB6Ke19QDcMQm4MpnaS132/prrtnCekAXuPMloZx4=";
+    hash = "sha256-CDDwhIlwytUPVwq/+0T5kVzl8viJfSalSIxC5VrQdgs=";
   };
-
-  postPatch = ''
-    sed -i '/--cov/d' pyproject.toml
-  '';
 
   build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pathable
     pyyaml
     referencing
@@ -41,6 +34,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "jsonschema_path" ];
 
   nativeCheckInputs = [
+    pytest-cov-stub
     pytestCheckHook
     responses
   ];

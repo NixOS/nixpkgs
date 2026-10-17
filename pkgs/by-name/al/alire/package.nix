@@ -1,20 +1,20 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
   gprbuild,
   gnat,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "alire";
-  version = "2.0.2";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "alire-project";
     repo = "alire";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-m4EPiqh7KCeNgq4G727jrW5ABb+uecvvpmZyskqtml4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YOUFTKbqbFfdYNWcGCvtFCDCW2tH8E3YuRQrV522Px4=";
 
     fetchSubmodules = true;
   };

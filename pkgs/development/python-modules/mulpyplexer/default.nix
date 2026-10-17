@@ -11,17 +11,17 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0c5xzci1djy1yi9hxxh8g67l6ms8r7ad7ja20pv8hfbdysdrwkhl";
+    hash = "sha256-FE6em/ZtOYj2BULJ09TJSFdDj3kI9g5T9MHLFiL7vTA=";
   };
 
   # Project has no tests
   doCheck = false;
   pythonImportsCheck = [ "mulpyplexer" ];
 
-  meta = with lib; {
+  meta = {
     description = "Multiplex interactions with lists of Python objects";
     homepage = "https://github.com/zardus/mulpyplexer";
-    license = with licenses; [ bsd2 ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

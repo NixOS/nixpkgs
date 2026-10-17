@@ -2,8 +2,9 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  fetchpatch,
   writeText,
-  substituteAll,
+  replaceVars,
   meson,
   pkg-config,
   ninja,
@@ -17,13 +18,15 @@
   libxkbcommon,
   pango,
   systemd,
-  xorg,
+  xkeyboard-config,
   fontconfig,
+  bashNonInteractive,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "plymouth";
-  version = "24.004.60";
+  version = "26.134.222";
 
   outputs = [
     "out"
@@ -34,8 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.freedesktop.org";
     owner = "plymouth";
     repo = "plymouth";
-    rev = finalAttrs.version;
-    hash = "sha256-9JmZCm8bjteJTQrMSJeL4x2CAI6RpKowFUDSCcMS4MM=";
+    tag = finalAttrs.version;
+    hash = "sha256-TarN9NLWzYmE9GS/rtaa0w8SVOES86sUMZWbnsgRDHY=";
   };
 
   patches = [
@@ -44,8 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     # add support for loading plugins from /run to assist NixOS module
     ./add-runtime-plugin-path.patch
     # fix FHS hardcoded paths
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       fcmatch = "${fontconfig}/bin/fc-match";
     })
   ];
@@ -62,14 +64,17 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    bashNonInteractive
     gtk3
     libdrm
     libevdev
     libpng
     libxkbcommon
     pango
+    xkeyboard-config
+  ]
+  ++ lib.optionals systemdSupport [
     systemd
-    xorg.xkeyboardconfig
   ];
 
   mesonFlags =
@@ -88,9 +93,12 @@ stdenv.mkDerivation (finalAttrs: {
       "-Dbackground-start-color-stop=0x000000"
       "-Dbackground-end-color-stop=0x000000"
       "-Drelease-file=/etc/os-release"
-      "-Dudev=enabled"
+      "-Dudev=${if systemdSupport then "enabled" else "disabled"}"
       "-Drunstatedir=/run"
       "-Druntime-plugins=true"
+      "-Dsystemd-integration=${lib.boolToString systemdSupport}"
+    ]
+    ++ lib.optionals systemdSupport [
       "--cross-file=${crossFile}"
     ];
 
@@ -112,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
         rm -r "$DESTDIR/''${!o}"
     done
     # Ensure the DESTDIR is removed.
-    rmdir "$DESTDIR/${builtins.storeDir}" "$DESTDIR/${builtins.dirOf builtins.storeDir}" "$DESTDIR"
+    rmdir "$DESTDIR/${builtins.storeDir}" "$DESTDIR/${dirOf builtins.storeDir}" "$DESTDIR"
   '';
 
   # HACK: We want to install configuration files to $out/etc
@@ -123,11 +131,11 @@ stdenv.mkDerivation (finalAttrs: {
   # location using DESTDIR and then move it to proper one in postInstall.
   env.DESTDIR = "${placeholder "out"}/dest";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.freedesktop.org/wiki/Software/Plymouth/";
     description = "Boot splash and boot logger";
-    license = licenses.gpl2Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 })

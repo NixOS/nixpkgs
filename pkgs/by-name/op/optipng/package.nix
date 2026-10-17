@@ -10,14 +10,20 @@
 
 stdenv.mkDerivation rec {
   pname = "optipng";
-  version = "0.7.8";
+  version = "7.9.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/optipng/optipng-${version}.tar.gz";
-    hash = "sha256-JaO9aEgfIVAsyqD0wT+E3PayAzjkxOjFHyzvvYUTOYw=";
+    hash = "sha256-wleb5YwsZtrp1jFU7cs9Qn/vZMsA7Ar/B5ydFW7Ebyk=";
   };
 
   buildInputs = [ libpng ];
+
+  postPatch = ''
+    substituteInPlace ./third_party/gifread/Makefile ./third_party/minitiff/Makefile ./third_party/pnmio/Makefile \
+      --replace-fail "AR = ar" "AR = ${stdenv.cc.targetPrefix}ar" \
+      --replace-fail "RANLIB = ranlib" "RANLIB = ${stdenv.cc.targetPrefix}ranlib"
+  '';
 
   # Workaround for crash in cexcept.h. See
   # https://github.com/NixOS/nixpkgs/issues/28106
@@ -30,14 +36,13 @@ stdenv.mkDerivation rec {
   dontAddStaticConfigureFlags = true;
   configurePlatforms = [ ];
 
-  configureFlags =
-    [
-      "--with-system-zlib"
-      "--with-system-libpng"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      #"-prefix=$out"
-    ];
+  configureFlags = [
+    "--with-system-zlib"
+    "--with-system-libpng"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    #"-prefix=$out"
+  ];
 
   postInstall =
     if stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isWindows then
@@ -47,11 +52,11 @@ stdenv.mkDerivation rec {
     else
       null;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://optipng.sourceforge.net/";
     description = "PNG optimizer";
-    license = licenses.zlib;
-    platforms = platforms.unix;
+    license = lib.licenses.zlib;
+    platforms = lib.platforms.unix;
     mainProgram = "optipng";
   };
 }

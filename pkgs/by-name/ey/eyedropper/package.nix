@@ -18,21 +18,20 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "eyedropper";
-  version = "2.0.1";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "FineFindus";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-FyGj0180Wn8iIDTdDqnNEvFYegwdWCsCq+hmyTTUIo4=";
+    repo = "eyedropper";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-008VFC2jjLWW6t6e7C8ZEoD+hFFqJVSmlgovO2RHGjw=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-jXo7Aq+pXWySe6MyH9GCTQVNwbboER7RwJe6Asqbxxc=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname src version;
+    hash = "sha256-P5Ligi6yfSHPHjO5Gsxsf7ZbXh3GOK/q8k4GqNnsQck=";
   };
 
   nativeBuildInputs = [
@@ -61,9 +60,11 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Pick and format colors";
     homepage = "https://github.com/FineFindus/eyedropper";
+    changelog = "https://github.com/FineFindus/eyedropper/releases/tag/v${finalAttrs.version}";
     mainProgram = "eyedropper";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ zendo ] ++ lib.teams.gnome-circle.members;
+    maintainers = with lib.maintainers; [ zendo ];
+    teams = [ lib.teams.gnome-circle ];
   };
-}
+})

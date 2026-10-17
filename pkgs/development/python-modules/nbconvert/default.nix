@@ -1,8 +1,6 @@
 {
   lib,
-  fetchurl,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   hatchling,
   beautifulsoup4,
@@ -17,32 +15,21 @@
   packaging,
   pandocfilters,
   pygments,
-  tinycss2,
   traitlets,
-  importlib-metadata,
   flaky,
   ipykernel,
   ipywidgets,
   pytestCheckHook,
 }:
 
-let
-  # see https://github.com/jupyter/nbconvert/issues/1896
-  style-css = fetchurl {
-    url = "https://cdn.jupyter.org/notebook/5.4.0/style/style.min.css";
-    hash = "sha256-WGWmCfRDewRkvBIc1We2GQdOVAoFFaO4LyIvdk61HgE=";
-  };
-in
 buildPythonPackage rec {
   pname = "nbconvert";
-  version = "7.16.4";
+  version = "7.17.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hsqRuiZrCkSNyW+mxbnZiv+r3ihns2MlhwNTaAf59/Q=";
+    hash = "sha256-NNDQp+c848urbFquj09Gh5coCwH9i9LKdG2oVp7d19I=";
   };
 
   # Add $out/share/jupyter to the list of paths that are used to search for
@@ -51,14 +38,11 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteAllInPlace ./nbconvert/exporters/templateexporter.py
-
-    mkdir -p share/templates/classic/static
-    cp ${style-css} share/templates/classic/static/style.css
   '';
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     beautifulsoup4
     bleach
     defusedxml
@@ -71,9 +55,9 @@ buildPythonPackage rec {
     packaging
     pandocfilters
     pygments
-    tinycss2
     traitlets
-  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ]
+  ++ bleach.optional-dependencies.css;
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -86,9 +70,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTests = [
@@ -108,6 +91,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jupyter/nbconvert";
     changelog = "https://github.com/jupyter/nbconvert/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.jupyter.members;
+    teams = [ lib.teams.jupyter ];
   };
 }

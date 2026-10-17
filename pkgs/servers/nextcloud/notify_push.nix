@@ -3,29 +3,45 @@
   fetchFromGitHub,
   nixosTests,
   rustPlatform,
+  fetchNextcloudApp,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "notify_push";
-  version = "1.0.0";
+
+  # NOTE: make sure this is compatible with all Nextcloud versions
+  # in nixpkgs!
+  # For that, check the `<dependencies>` section of `appinfo/info.xml`
+  # in the app (https://github.com/nextcloud/notify_push/blob/main/appinfo/info.xml)
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "nextcloud";
     repo = "notify_push";
     tag = "v${version}";
-    hash = "sha256-Y71o+ARi/YB2BRDfEyORbrA9HPvsUlWdh5UjM8hzmcA=";
+    hash = "sha256-lg/gffgfUJHLCL1TOPdYAw7DtRZeGDH+jO9deQSUbEY=";
   };
 
-  cargoHash = "sha256-Mk+0LKP55Um5YiCx2O49rUZPwaXtKFnWtRC+WPGBadE=";
+  cargoHash = "sha256-skKOCJBtpvtdc594eOxbvSIl+SucaH0jl1gFv9kfvNA=";
 
   passthru = rec {
+    app = fetchNextcloudApp {
+      appName = "notify_push";
+      appVersion = version;
+      hash = "sha256-C/2jXLpuIbxjWO3kMb3nkLA5762uVLuzk1YPz/YSfjY=";
+      license = "agpl3Plus";
+      homepage = "https://github.com/nextcloud/notify_push";
+      url = "https://github.com/nextcloud-releases/notify_push/releases/download/v${version}/notify_push-v${version}.tar.gz";
+      description = "Push update support for desktop app";
+    };
+
     test_client = rustPlatform.buildRustPackage {
       pname = "${pname}-test_client";
       inherit src version;
 
       buildAndTestSubdir = "test_client";
 
-      cargoHash = "sha256-SBEuFOTgqNjPtKx0PFDA5Gkiksn3cZEmYcs2shAo2Po=";
+      cargoHash = "sha256-skKOCJBtpvtdc594eOxbvSIl+SucaH0jl1gFv9kfvNA=";
 
       meta = meta // {
         mainProgram = "test_client";
@@ -40,13 +56,13 @@ rustPlatform.buildRustPackage rec {
       };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/nextcloud/notify_push/releases/tag/v${version}";
     description = "Update notifications for nextcloud clients";
     mainProgram = "notify_push";
     homepage = "https://github.com/nextcloud/notify_push";
-    license = licenses.agpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.helsinki-systems.members;
+    license = lib.licenses.agpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ helsinki-Jo ];
   };
 }

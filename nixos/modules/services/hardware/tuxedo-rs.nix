@@ -49,5 +49,7 @@ in
     ]
   );
 
-  meta.maintainers = with lib.maintainers; [ mrcjkb ];
+  meta.maintainers = with lib.maintainers; [
+    xaverdh
+  ];
 }

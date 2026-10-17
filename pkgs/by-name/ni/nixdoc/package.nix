@@ -1,35 +1,31 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  darwin,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nixdoc";
-  version = "3.0.8";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nixdoc";
-    rev = "v${version}";
-    sha256 = "sha256-0tMGTKcuvyDE5281nGCvZKYJKIEAU01G6vV8Fnt/1ZQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FW8yZLO+hVDn2vs4pEUfjMM/5P508WKCLxd4AozLElk=";
   };
 
-  cargoHash = "sha256-5KV2VDsPmSgrdZIqCuQ5gjgCVs/Ki6uG6GTwjmtKLlQ=";
+  cargoHash = "sha256-pV/KEg3/UaT7bbgtRgjZZGq+RVyN1xY28YqzfslYoQo=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.Security ];
-
-  meta = with lib; {
+  meta = {
     description = "Generate documentation for Nix functions";
     mainProgram = "nixdoc";
     homepage = "https://github.com/nix-community/nixdoc";
-    license = [ licenses.gpl3 ];
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       infinisil
       hsjobeki
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

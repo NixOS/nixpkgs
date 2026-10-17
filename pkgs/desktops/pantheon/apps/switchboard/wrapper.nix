@@ -3,7 +3,7 @@
   glib,
   lib,
   stdenv,
-  xorg,
+  lndir,
   switchboard,
   switchboardPlugs,
   plugs,
@@ -21,7 +21,7 @@ let
 
   testingName = lib.optionalString (testName != null) "${testName}-";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "${testingName}${switchboard.pname}-with-plugs";
   inherit (switchboard) version;
 
@@ -29,16 +29,16 @@ stdenv.mkDerivation rec {
 
   paths = [
     switchboard
-  ] ++ selectedPlugs;
-
-  passAsFile = [ "paths" ];
+  ]
+  ++ selectedPlugs;
 
   nativeBuildInputs = [
     glib
+    lndir
     wrapGAppsHook4
   ];
 
-  buildInputs = lib.forEach selectedPlugs (x: x.buildInputs) ++ selectedPlugs;
+  buildInputs = lib.concatMap (x: x.buildInputs) selectedPlugs ++ selectedPlugs;
 
   dontUnpack = true;
   dontConfigure = true;
@@ -46,12 +46,18 @@ stdenv.mkDerivation rec {
 
   preferLocalBuild = true;
   allowSubstitutes = false;
+  strictDeps = true;
 
   installPhase = ''
     mkdir -p $out
-    for i in $(cat $pathsPath); do
-      ${xorg.lndir}/bin/lndir -silent $i $out
+    for i in "''${paths[@]}"; do
+      lndir -silent $i $out
     done
+
+    dbus_file="share/dbus-1/services/io.elementary.settings.service"
+    rm -f "$out/$dbus_file"
+    substitute "${switchboard}/$dbus_file" "$out/$dbus_file" \
+      --replace-fail "${switchboard}" "$out"
   '';
 
   preFixup = ''
@@ -59,6 +65,8 @@ stdenv.mkDerivation rec {
       --set SWITCHBOARD_PLUGS_PATH "$out/lib/switchboard-3"
     )
   '';
+
+  __structuredAttrs = true;
 
   inherit (switchboard) meta;
 }

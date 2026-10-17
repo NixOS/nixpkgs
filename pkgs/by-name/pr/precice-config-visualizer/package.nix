@@ -4,29 +4,36 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "config-visualizer";
-  version = "unstable-2022-02-23";
+  version = "1.1.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "precice";
-    repo = pname;
-    rev = "60f2165f25352c8261f370dc4ceb64a8b422d4ec";
-    hash = "sha256-2dnpkec9hN4oAqwu+1WmDJrfeu+JbfqZ6guv3bC4H1c=";
+    repo = "config-visualizer";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-IYQwAaWFSoYBsGMclAk+dDedwZqKsVV+/RLHB1xAahY=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools
+    setuptools-git-versioning
+  ];
+
+  dependencies = with python3Packages; [
     lxml
     pydot
+    typing-extensions
   ];
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/precice/config-visualizer";
     description = "Small python tool for visualizing the preCICE xml configuration";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ Scriptkiddi ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ Scriptkiddi ];
     mainProgram = "precice-config-visualizer";
   };
-}
+})

@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   boost,
-  gtkmm2,
+  libx11,
   lv2,
   pkg-config,
   python3,
@@ -32,22 +32,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost
-    gtkmm2
+    libx11
     lv2
     pugl
   ];
+
+  postInstall = ''
+    mv $out/include/lvtk-3.0/lvtk $out/include/
+    rmdir $out/include/lvtk-3.0/
+  '';
 
   enableParallelBuilding = true;
 
   meta = {
     description = "Set C++ wrappers around the LV2 C API";
-    mainProgram = "ttl2c";
     homepage = "https://lvtk.org/";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
     platforms = lib.platforms.unix;
     badPlatforms = [
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };

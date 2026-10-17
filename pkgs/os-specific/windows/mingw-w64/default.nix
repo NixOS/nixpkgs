@@ -7,11 +7,6 @@
   crt ? stdenv.hostPlatform.libc,
 }:
 
-assert lib.assertOneOf "crt" crt [
-  "msvcrt"
-  "ucrt"
-];
-
 stdenv.mkDerivation {
   pname = "mingw-w64";
   inherit (mingw_w64_headers) version src meta;
@@ -32,10 +27,15 @@ stdenv.mkDerivation {
     (lib.enableFeature stdenv.hostPlatform.isAarch64 "libarm64")
   ];
 
+  # MinGW has no pthreads of its own; threading goes through the Win32 API
+  # declared by these headers. See `threadModel` in
+  # pkgs/development/compilers/gcc/ng/common/libgcc/default.nix.
+  passthru.threadModel = "win32";
+
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ windows.mingw_w64_headers ];
+  buildInputs = [ mingw_w64_headers ];
   hardeningDisable = [
     "stackprotector"
     "fortify"

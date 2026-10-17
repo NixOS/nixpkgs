@@ -9,7 +9,7 @@
   pkg-config,
   pantheon,
   python3,
-  substituteAll,
+  replaceVars,
   glib,
   gtk3,
   dosfstools,
@@ -21,20 +21,19 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "formatter";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "Djaler";
     repo = "Formatter";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-8lZ0jUwHuc3Kntz73Btj6dJvkW2bvShu2KWTSQszbJo=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       ext4 = "${e2fsprogs}/bin/mkfs.ext4";
       exfat = "${exfat}/bin/mkfs.exfat";
       fat = "${dosfstools}/bin/mkfs.fat";
@@ -68,12 +67,13 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple formatter designed for elementary OS";
     homepage = "https://github.com/Djaler/Formatter";
-    maintainers = with maintainers; [ xiorcale ] ++ teams.pantheon.members;
-    platforms = platforms.linux;
-    license = licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [ xiorcale ];
+    teams = [ lib.teams.pantheon ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl2Plus;
     mainProgram = "com.github.djaler.formatter";
   };
-}
+})

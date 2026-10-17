@@ -5,25 +5,21 @@
   hatchling,
   installShellFiles,
   pytestCheckHook,
-  pythonOlder,
 
   # for passthru.tests
   django,
-  django_4,
   django-silk,
   pgadmin4,
 }:
 
 buildPythonPackage rec {
   pname = "sqlparse";
-  version = "0.5.2";
+  version = "0.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-njezXhbRzGUqJUXwmXwd6yPqKPofPu/mCe7jBjw7EF8=";
+    hash = "sha256-ETw1x1Nlq5zJxyMdaMZCj7EcCF/I6esa1lm33b9s0rk=";
   };
 
   build-system = [ hatchling ];
@@ -39,20 +35,19 @@ buildPythonPackage rec {
   passthru.tests = {
     inherit
       django
-      django_4
       django-silk
       pgadmin4
       ;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Non-validating SQL parser for Python";
     longDescription = ''
       Provides support for parsing, splitting and formatting SQL statements.
     '';
     homepage = "https://github.com/andialbrecht/sqlparse";
     changelog = "https://github.com/andialbrecht/sqlparse/blob/${version}/CHANGELOG";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     mainProgram = "sqlformat";
   };
 }

@@ -12,7 +12,10 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "mswatch";
   # Stable release won't compile successfully
-  version = "unstable-2018-11-21";
+  version = "1.2.0-unstable-2018-11-21";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchsvn {
     url = "svn://svn.code.sf.net/p/mswatch/code/trunk";
@@ -29,11 +32,11 @@ stdenv.mkDerivation (finalAttrs: {
     glib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command-line Linux utility that efficiently directs mail synchronization between a pair of mailboxes";
     homepage = "https://mswatch.sourceforge.net/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 })

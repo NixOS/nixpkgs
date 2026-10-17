@@ -7,15 +7,15 @@
   rofi-unwrapped,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rofi-pulse-select";
   version = "0.2.0";
 
   src = fetchFromGitLab {
     owner = "DamienCassou";
-    repo = pname;
-    rev = version;
-    sha256 = "1405v0bh2m8ip9c23l95i8iq2gfrpanc6f4dz17nysdcff2ay2p3";
+    repo = "rofi-pulse-select";
+    rev = finalAttrs.version;
+    hash = "sha256-4wqvhHOsaW9P+I04w6y62T2BI4ol0SFYuhFVARfYBZA=";
   };
 
   installPhase = ''
@@ -36,12 +36,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  meta = with lib; {
+  meta = {
     description = "Rofi-based interface to select source/sink (aka input/output) with PulseAudio";
     mainProgram = "rofi-pulse-select";
     homepage = "https://gitlab.com/DamienCassou/rofi-pulse-select";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ DamienCassou ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ DamienCassou ];
+    platforms = lib.platforms.linux;
   };
-}
+})

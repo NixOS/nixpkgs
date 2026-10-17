@@ -2,23 +2,28 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "autologging";
   version = "1.3.2";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "Autologging";
-    inherit version;
-    sha256 = "117659584d8aab8cf62046f682f8e57b54d958b8571c737fa8bf15c32937fbb6";
+    inherit (finalAttrs) version;
+    hash = "sha256-EXZZWE2Kq4z2IEb2gvjle1TZWLhXHHN/qL8Vwyk3+7Y=";
     extension = "zip";
   };
 
-  meta = with lib; {
-    homepage = "https://ninthtest.info/python-autologging/";
+  build-system = [ setuptools ];
+
+  meta = {
     description = "Easier logging and tracing for Python classes";
-    license = licenses.mit;
-    maintainers = with maintainers; [ twey ];
+    homepage = "https://github.com/mzipay/Autologging";
+    changelog = "https://github.com/mzipay/Autologging/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ twey ];
   };
-}
+})

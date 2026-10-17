@@ -77,7 +77,7 @@
         is used. In the single process mode, the signal handling
         feature is disabled.
 
-        Please see https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx--single-process
+        Please see <https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx--single-process>
       '';
     };
 
@@ -87,7 +87,7 @@
       description = ''
         Listen backlog size.
 
-        Please see https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx--backlog
+        Please see <https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx--backlog>
       '';
     };
 
@@ -104,7 +104,7 @@
         only IPv4 address is considered. If "IPv6" is given, only IPv6
         address is considered.
 
-        Please see https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx--backend-address-family
+        Please see <https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx--backend-address-family>
       '';
     };
 
@@ -114,7 +114,7 @@
       description = ''
         Set the number of worker threads.
 
-        Please see https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx-n
+        Please see <https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx-n>
       '';
     };
 
@@ -127,7 +127,7 @@
         the platforms which lack thread support. If threading is
         disabled, this option is always enabled.
 
-        Please see https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx--single-thread
+        Please see <https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx--single-thread>
       '';
     };
 
@@ -138,7 +138,7 @@
         Set maximum number of open files (RLIMIT_NOFILE) to \<N\>. If 0
         is given, nghttpx does not set the limit.
 
-        Please see https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx--rlimit-nofile
+        Please see <https://nghttp2.org/documentation/nghttpx.1.html#cmdoption-nghttpx--rlimit-nofile>
       '';
     };
   };

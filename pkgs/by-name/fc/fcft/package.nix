@@ -1,8 +1,7 @@
 {
   stdenv,
   lib,
-  fetchFromGitea,
-  fetchpatch,
+  fetchFromCodeberg,
   pkg-config,
   meson,
   ninja,
@@ -32,16 +31,15 @@ let
   ];
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fcft";
-  version = "3.1.9";
+  version = "3.3.3";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "dnkl";
     repo = "fcft";
-    rev = version;
-    hash = "sha256-D4W62IHuM7ofEeU/3sp038tv2a1+xQd0mdSKXaY7Ikg=";
+    rev = finalAttrs.version;
+    hash = "sha256-MkGlph9WpqH4daov5ZZPO2ua2mUbrsuo8Xk6GoKhoxg=";
   };
 
   depsBuildBuild = [ pkg-config ];
@@ -51,26 +49,22 @@ stdenv.mkDerivation rec {
     ninja
     scdoc
   ];
-  buildInputs =
-    [
-      freetype
-      fontconfig
-      nanosvg
-      pixman
-      tllist
-    ]
-    ++ lib.optionals (withShapingTypes != [ ]) [ harfbuzz ]
-    ++ lib.optionals (builtins.elem "run" withShapingTypes) [ utf8proc ];
+  buildInputs = [
+    freetype
+    fontconfig
+    nanosvg
+    pixman
+    tllist
+  ]
+  ++ lib.optionals (withShapingTypes != [ ]) [ harfbuzz ]
+  ++ lib.optionals (builtins.elem "run" withShapingTypes) [ utf8proc ];
   nativeCheckInputs = [ check ];
 
   mesonBuildType = "release";
-  mesonFlags =
-    [
-      (lib.mesonEnable "system-nanosvg" true)
-    ]
-    ++ builtins.map (
-      t: lib.mesonEnable "${t}-shaping" (lib.elem t withShapingTypes)
-    ) availableShapingTypes;
+  mesonFlags = [
+    (lib.mesonEnable "system-nanosvg" true)
+  ]
+  ++ map (t: lib.mesonEnable "${t}-shaping" (lib.elem t withShapingTypes)) availableShapingTypes;
 
   doCheck = true;
 
@@ -85,18 +79,18 @@ stdenv.mkDerivation rec {
     onlyGraphemeShaping = fcft.override { withShapingTypes = [ "grapheme" ]; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://codeberg.org/dnkl/fcft";
-    changelog = "https://codeberg.org/dnkl/fcft/releases/tag/${version}";
+    changelog = "https://codeberg.org/dnkl/fcft/releases/tag/${finalAttrs.version}";
     description = "Simple library for font loading and glyph rasterization";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       fionera
       sternenseemann
     ];
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       zlib
     ];
-    platforms = with platforms; linux;
+    platforms = with lib.platforms; linux;
   };
-}
+})

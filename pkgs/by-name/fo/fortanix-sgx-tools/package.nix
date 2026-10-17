@@ -3,22 +3,23 @@
   fetchCrate,
   rustPlatform,
   pkg-config,
-  openssl_3,
+  openssl_3_5,
   protobuf,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fortanix-sgx-tools";
-  version = "0.5.1";
+  version = "0.6.1";
   nativeBuildInputs = [
     pkg-config
     protobuf
   ];
-  buildInputs = [ openssl_3 ];
+  buildInputs = [ openssl_3_5 ];
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-F0lZG1neAPVvyOxUtDPv0t7o+ZC+aQRtpFeq55QwcmE=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-IVkmZs3imzj8uN8kqEzN/Oio3H+Nqzu8ORjARNx1TpQ=";
   };
-  cargoHash = "sha256-jYfsmPwhvt+ccUr4Vwq5q1YzNlxA+Vnpxd4KpWZrYo8=";
+
+  cargoHash = "sha256-jYd9KRZgdBoVepmV4x4E3Y7h1SzSLv2clB0uPSWv8tE=";
   meta = {
     description = "Tools for building and running enclaves for the Fortanix SGX ABI";
     homepage = "https://github.com/fortanix/rust-sgx";
@@ -26,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     platforms = [ "x86_64-linux" ];
     license = lib.licenses.mpl20;
   };
-}
+})

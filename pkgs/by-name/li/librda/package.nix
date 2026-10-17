@@ -28,6 +28,12 @@ stdenv.mkDerivation (finalAttrs: {
     "bin"
   ];
 
+  patches = [
+    # Use proper gettext instead of GLib macros
+    # Remove when https://github.com/ArcticaProject/librda/pull/10 merged & in release
+    ./1001-configure-GLib-gettext-is-deprecated-use-regular-get.patch
+  ];
+
   strictDeps = true;
 
   nativeBuildInputs = [
@@ -48,13 +54,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "Remote Desktop Awareness Shared Library";
     homepage = "https://github.com/ArcticaProject/librda";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "rdacheck";
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.linux;
     pkgConfigModules = [
       "rda"
     ];

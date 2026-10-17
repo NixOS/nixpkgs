@@ -11,15 +11,18 @@
   jdupes,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "moka-icon-theme";
-  version = "unstable-2019-05-29";
+  version = "5.4.0-unstable-2019-05-30";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "snwh";
-    repo = pname;
+    repo = "moka-icon-theme";
     rev = "c0355ea31e5cfdb6b44d8108f602d66817546a09";
-    sha256 = "0m4kfarkl94wdhsds2q1l9x5hfa9l3117l8j6j7qm7sf7yzr90c8";
+    hash = "sha256-iIGUvz9On4qPNBLRE8KgSTlYeqIBC900bJwkOrNyk1Q=";
   };
 
   nativeBuildInputs = [
@@ -50,15 +53,15 @@ stdenvNoCC.mkDerivation rec {
     jdupes -l -r $out/share/icons
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Icon theme designed with a minimal flat style using simple geometry and bright colours";
     homepage = "https://snwh.org/moka";
-    license = with licenses; [
+    license = with lib.licenses; [
       cc-by-sa-40
       gpl3Only
     ];
     # darwin cannot deal with file names differing only in case
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ romildo ];
   };
 }

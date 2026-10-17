@@ -2,19 +2,29 @@
   lib,
   stdenv,
   fetchFromSourcehut,
+  fetchpatch,
   scdoc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scd2html";
   version = "1.0.0";
 
   src = fetchFromSourcehut {
     owner = "~bitfehler";
-    repo = pname;
-    rev = "v${version}";
+    repo = "scd2html";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-oZSHv5n/WOrvy77tC94Z8pYugLpHkcv7U1PrzR+8fHM=";
   };
+
+  patches = [
+    # gcc-16 fix
+    (fetchpatch {
+      name = "gcc-16.patch";
+      url = "https://git.sr.ht/~bitfehler/scd2html/commit/7fd6434fe74dc08cb8cbd15b9bfc374a87ec0d11.patch";
+      hash = "sha256-go4tfb44l89lATt6gWgiOx1z8H0Xe48eHiCV/lgTMVM=";
+    })
+  ];
 
   strictDeps = true;
 
@@ -24,7 +34,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "LDFLAGS+=-static" "LDFLAGS+="
+      --replace-fail "LDFLAGS+=-static" "LDFLAGS+="
   '';
 
   makeFlags = [
@@ -33,12 +43,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
-    description = "scd2html generates HTML from scdoc source files";
+  meta = {
+    description = "Generates HTML from scdoc source files";
     homepage = "https://git.sr.ht/~bitfehler/scd2html";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
     mainProgram = "scd2html";
   };
-}
+})

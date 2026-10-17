@@ -3,26 +3,33 @@
   lib,
   fetchurl,
   makeWrapper,
+  # instead of default patchelf, for bundled qemu binaries have non-contiguous PT_NOTE segments
+  patchelfUnstable,
   which,
   zlib,
   libGL,
   glib,
-  xorg,
+  libx11,
   libxkbcommon,
   xdg-utils,
-  libXrender,
+  libxrender,
   fontconfig,
   freetype,
-  systemd,
+  systemdLibs,
   libpulseaudio,
   cairo,
   gdk-pixbuf,
   gtk3,
   pixman,
   # For glewinfo
-  libXmu,
-  libXi,
-  libXext,
+  libxmu,
+  libxi,
+  libxext,
+  nss,
+  nspr,
+  expat,
+  libxcb,
+  alsa-lib,
 }:
 
 let
@@ -30,49 +37,58 @@ let
     stdenv.cc.cc
     zlib
     glib
-    xorg.libX11
+    libx11
     libxkbcommon
-    libXmu
-    libXi
-    libXext
+    libxmu
+    libxi
+    libxext
     libGL
-    libXrender
+    libxrender
     fontconfig
     freetype
-    systemd
+    systemdLibs
     libpulseaudio
     cairo
     gdk-pixbuf
     gtk3
     pixman
+    nss
+    nspr
+    expat
+    libxcb
+    alsa-lib
   ];
   libPath = lib.makeLibraryPath packages;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "genymotion";
-  version = "3.8.0";
+  version = "3.11.0";
   src = fetchurl {
-    url = "https://dl.genymotion.com/releases/genymotion-${version}/genymotion-${version}-linux_x64.bin";
-    name = "genymotion-${version}-linux_x64.bin";
-    sha256 = "sha256-Tgp9ud/Tq0K9ADf/POr+luuFm+QBWMucjKTbELbIveo=";
+    url = "https://dl.genymotion.com/releases/genymotion-${finalAttrs.version}/genymotion-${finalAttrs.version}-linux_x64.run";
+    name = "genymotion-${finalAttrs.version}-linux_x64.run";
+    hash = "sha256-jNcnr0C0N6UGdN9qZqRnFZnJhuo/Ft5j/CG7s5TKBS8=";
   };
 
   nativeBuildInputs = [
     makeWrapper
     which
     xdg-utils
+    patchelfUnstable
   ];
 
   unpackPhase = ''
     mkdir -p phony-home $out/share/applications
     export HOME=$TMP/phony-home
 
-    mkdir ${pname}
-    echo "y" | sh $src -d ${pname}
-    sourceRoot=${pname}
+    mkdir genymotion
+    sh $src --yes -d genymotion
+    sourceRoot=genymotion
 
-    substitute phony-home/.local/share/applications/genymobile-genymotion.desktop \
-      $out/share/applications/genymobile-genymotion.desktop --replace "$TMP/${pname}" "$out/libexec"
+    for desktopFile in genymotion-launchpad genymotion-player; do
+      substitute phony-home/.local/share/applications/$desktopFile.desktop \
+        $out/share/applications/$desktopFile.desktop \
+        --replace-fail "$TMP/genymotion" "$out/libexec"
+    done
   '';
 
   installPhase = ''
@@ -113,7 +129,9 @@ stdenv.mkDerivation rec {
     rm $out/libexec/genymotion/libxkbcommon*
   '';
 
-  meta = with lib; {
+  passthru.updateScript = ./update.sh;
+
+  meta = {
     description = "Fast and easy Android emulation";
     longDescription = ''
       Genymotion is a relatively fast Android emulator which comes with
@@ -121,9 +139,12 @@ stdenv.mkDerivation rec {
       suitable for application testing.
     '';
     homepage = "https://www.genymotion.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = [ maintainers.puffnfresh ];
+    maintainers = with lib.maintainers; [
+      puffnfresh
+      ulysseszhan
+    ];
   };
-}
+})

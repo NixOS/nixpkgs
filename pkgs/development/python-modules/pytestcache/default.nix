@@ -9,10 +9,11 @@
 buildPythonPackage rec {
   pname = "pytest-cache";
   version = "1.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1a873fihw4rhshc722j4h6j7g3nj7xpgsna9hhg3zn6ksknnhx5y";
+    hash = "sha256-vnRo7dTT2D8ehElZ/W4/0o53pIFECnEY1DATDqMbB6k=";
   };
 
   buildInputs = [ pytest ];
@@ -25,9 +26,9 @@ buildPythonPackage rec {
   # Too many failing tests. Are they maintained?
   doCheck = false;
 
-  meta = with lib; {
-    license = licenses.mit;
-    homepage = "https://pypi.python.org/pypi/pytest-cache/";
-    description = "pytest plugin with mechanisms for caching across test runs";
+  meta = {
+    license = lib.licenses.mit;
+    homepage = "https://pypi.org/project/pytest-cache/";
+    description = "Pytest plugin with mechanisms for caching across test runs";
   };
 }

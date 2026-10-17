@@ -1,6 +1,7 @@
 {
   stdenvNoCC,
   fetchFromGitLab,
+  nix-update-script,
   lib,
   full ? true,
   # see https://gitlab.com/jschx/ufetch for a list
@@ -20,7 +21,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/bin $out/share/licenses/${finalAttrs.pname}
+    mkdir -p $out/bin $out/share/licenses/ufetch
     ${
       if !full then
         "install -Dm755 ufetch-${osName} $out/bin/ufetch"
@@ -30,9 +31,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           ln -s $out/bin/ufetch-${osName} $out/bin/ufetch
         ''
     }
-    install -Dm644 LICENSE $out/share/licenses/${finalAttrs.pname}/LICENSE
+    install -Dm644 LICENSE $out/share/licenses/ufetch/LICENSE
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tiny system info for Unix-like operating systems";

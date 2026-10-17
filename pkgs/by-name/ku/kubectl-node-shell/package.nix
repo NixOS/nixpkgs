@@ -27,12 +27,12 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Exec into node via kubectl";
     mainProgram = "kubectl-node_shell";
     homepage = "https://github.com/kvaps/kubectl-node-shell";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jocelynthode ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jocelynthode ];
+    platforms = lib.platforms.unix;
   };
 }

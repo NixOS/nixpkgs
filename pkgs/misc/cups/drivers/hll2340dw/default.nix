@@ -19,12 +19,12 @@ let
   version = "3.2.0-1";
   lprdeb = fetchurl {
     url = "https://download.brother.com/welcome/dlf101912/hll2340dlpr-${version}.i386.deb";
-    sha256 = "c0ae98b49b462cd8fbef445550f2177ce9d8bf627c904e182daa8cbaf8781e50";
+    hash = "sha256-wK6YtJtGLNj770RVUPIXfOnYv2J8kE4YLaqMuvh4HlA=";
   };
 
   cupsdeb = fetchurl {
     url = "https://download.brother.com/welcome/dlf101913/hll2340dcupswrapper-${version}.i386.deb";
-    sha256 = "8aa24a6a825e3a4d5b51778cb46fe63032ec5a731ace22f9ef2b0ffcc2033cc9";
+    hash = "sha256-iqJKaoJeOk1bUXeMtG/mMDLsWnMaziL57ysP/MIDPMk=";
   };
 
 in
@@ -93,13 +93,13 @@ stdenv.mkDerivation {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.brother.com/";
     description = "Brother hl-l2340dw printer driver";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    platforms = platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.linux;
     downloadPage = "https://support.brother.com/g/b/downloadlist.aspx?c=us&lang=es&prod=hll2340dw_us_eu_as&os=128&flang=English";
-    maintainers = [ maintainers.qknight ];
+    maintainers = [ lib.maintainers.qknight ];
   };
 }

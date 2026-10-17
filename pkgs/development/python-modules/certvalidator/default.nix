@@ -2,24 +2,29 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   asn1crypto,
   oscrypto,
   cacert,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "certvalidator";
   version = "0.11.1";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "wbond";
-    repo = pname;
-    rev = version;
+    repo = "certvalidator";
+    tag = finalAttrs.version;
     hash = "sha256-yVF7t4FuU3C9fDg67JeM7LWZZh/mv5F4EKmjlO4AuBY=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     asn1crypto
     oscrypto
   ];
@@ -33,10 +38,10 @@ buildPythonPackage rec {
   '';
   pythonImportsCheck = [ "certvalidator" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/wbond/certvalidator";
     description = "Validates X.509 certificates and paths";
-    license = licenses.mit;
-    maintainers = with maintainers; [ baloo ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ baloo ];
   };
-}
+})

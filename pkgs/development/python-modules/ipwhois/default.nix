@@ -5,11 +5,9 @@
   defusedxml,
   dnspython,
   fetchFromGitHub,
-  fetchpatch,
   iana-etc,
   libredirect,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -17,8 +15,6 @@ buildPythonPackage rec {
   pname = "ipwhois";
   version = "1.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "secynic";
@@ -38,14 +34,16 @@ buildPythonPackage rec {
     dnspython
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    libredirect.hook
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "ipwhois" ];
 
   preCheck = lib.optionalString stdenv.hostPlatform.isLinux ''
     echo "nameserver 127.0.0.1" > resolv.conf
-    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf) \
-      LD_PRELOAD=${libredirect}/lib/libredirect.so
+    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/resolv.conf=$(realpath resolv.conf)
   '';
 
   disabledTestPaths = [
@@ -61,11 +59,11 @@ buildPythonPackage rec {
     "test_get_http_json"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to retrieve and parse whois data";
     homepage = "https://github.com/secynic/ipwhois";
     changelog = "https://github.com/secynic/ipwhois/blob/v${version}/CHANGES.rst";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

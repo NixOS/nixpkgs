@@ -1,47 +1,57 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "shaarli";
-  version = "0.14.0";
+  version = "0.16.7";
 
   src = fetchurl {
-    url = "https://github.com/shaarli/Shaarli/releases/download/v${version}/shaarli-v${version}-full.tar.gz";
-    sha256 = "sha256-vTSjYrde6ODQnIh77Um4McR9M8KKWnuIGRGE7SCMZC0=";
+    url = "https://github.com/shaarli/Shaarli/releases/download/v${finalAttrs.version}/shaarli-v${finalAttrs.version}-full.zip";
+    sha256 = "sha256-ADnP/wcyDMUh9lsXeffNZCku27LyKjdCwdrJ8+K1zI4=";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
+
+  nativeBuildInputs = [ unzip ];
 
   patchPhase = ''
     substituteInPlace index.php \
       --replace "new ConfigManager();" "new ConfigManager(getenv('SHAARLI_CONFIG'));"
   '';
 
-#    Point $SHAARLI_CONFIG to your configuration file, see https://github.com/shaarli/Shaarli/wiki/Shaarli-configuration.
-#    For example:
-#      <?php /*
-#      {
-#          "credentials": {
-#              "login": "user",
-#              "hash": "(password hash)",
-#              "salt": "(password salt)"
-#          },
-#          "resource": {
-#              "data_dir": "\/var\/lib\/shaarli",
-#              "config": "\/var\/lib\/shaarli\/config.json.php",
-#              "datastore": "\/var\/lib\/shaarli\/datastore.php",
-#              "ban_file": "\/var\/lib\/shaarli\/ipbans.php",
-#              "updates": "\/var\/lib\/shaarli\/updates.txt",
-#              "log": "\/var\/lib\/shaarli\/log.txt",
-#              "update_check": "\/var\/lib\/shaarli\/lastupdatecheck.txt",
-#              "raintpl_tmp": "\/var\/lib\/shaarli\/tmp",
-#              "thumbnails_cache": "\/var\/lib\/shaarli\/cache",
-#              "page_cache": "\/var\/lib\/shaarli\/pagecache"
-#          },
-#          "updates": {
-#              "check_updates": false
-#          }
-#      }
-#      */ ?>
+  #    Point $SHAARLI_CONFIG to your configuration file, see https://github.com/shaarli/Shaarli/wiki/Shaarli-configuration.
+  #    For example:
+  #      <?php /*
+  #      {
+  #          "credentials": {
+  #              "login": "user",
+  #              "hash": "(password hash)",
+  #              "salt": "(password salt)"
+  #          },
+  #          "resource": {
+  #              "data_dir": "\/var\/lib\/shaarli",
+  #              "config": "\/var\/lib\/shaarli\/config.json.php",
+  #              "datastore": "\/var\/lib\/shaarli\/datastore.php",
+  #              "ban_file": "\/var\/lib\/shaarli\/ipbans.php",
+  #              "updates": "\/var\/lib\/shaarli\/updates.txt",
+  #              "log": "\/var\/lib\/shaarli\/log.txt",
+  #              "update_check": "\/var\/lib\/shaarli\/lastupdatecheck.txt",
+  #              "raintpl_tmp": "\/var\/lib\/shaarli\/tmp",
+  #              "thumbnails_cache": "\/var\/lib\/shaarli\/cache",
+  #              "page_cache": "\/var\/lib\/shaarli\/pagecache"
+  #          },
+  #          "updates": {
+  #              "check_updates": false
+  #          }
+  #      }
+  #      */ ?>
 
   installPhase = ''
     rm -r {cache,pagecache,tmp,data}/
@@ -51,11 +61,11 @@ stdenv.mkDerivation rec {
     cp -R ./* $out
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Personal, minimalist, super-fast, database free, bookmarking service";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     homepage = "https://github.com/shaarli/Shaarli";
-    maintainers = with maintainers; [ schneefux ];
-    platforms = platforms.all;
+    maintainers = [ ];
+    platforms = lib.platforms.all;
   };
-}
+})

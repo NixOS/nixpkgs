@@ -4,15 +4,40 @@
   callPackage,
   lib,
   dbus,
-  xorg,
+  kmod,
+  libxt,
+  libxrandr,
+  libxmu,
+  libxfixes,
+  libxext,
+  libxcursor,
   zlib,
   patchelf,
   makeWrapper,
   wayland,
-  libX11,
+  libx11,
 }:
 let
-  virtualBoxNixGuestAdditionsBuilder = callPackage ./builder.nix { };
+  virtualboxVersion = "7.2.20";
+  virtualboxSubVersion = "";
+  virtualboxSha256 = "5c2138213b72f36c129b92c2c267f2a40e9c98513f4c86a584327f09f9be706d";
+
+  platform =
+    if stdenv.hostPlatform.isAarch64 then
+      "arm64"
+    else if stdenv.hostPlatform.is32bit then
+      "x86"
+    else
+      "amd64";
+
+  virtualBoxNixGuestAdditionsBuilder = callPackage ./builder.nix {
+    inherit
+      virtualboxVersion
+      virtualboxSubVersion
+      virtualboxSha256
+      platform
+      ;
+  };
 
   # Specifies how to patch binaries to make sure that libraries loaded using
   # dlopen are found. We grep binaries for specific library names and patch
@@ -24,11 +49,11 @@ let
     }
     {
       name = "libXfixes.so";
-      pkg = xorg.libXfixes;
+      pkg = libxfixes;
     }
     {
       name = "libXrandr.so";
-      pkg = xorg.libXrandr;
+      pkg = libxrandr;
     }
     {
       name = "libwayland-client.so";
@@ -36,41 +61,55 @@ let
     }
     {
       name = "libX11.so";
-      pkg = libX11;
+      pkg = libx11;
     }
     {
       name = "libXt.so";
-      pkg = xorg.libXt;
+      pkg = libxt;
     }
   ];
 in
 stdenv.mkDerivation {
   pname = "VirtualBox-GuestAdditions";
-  version = "${virtualBoxNixGuestAdditionsBuilder.version}-${kernel.version}";
+  version = "${virtualboxVersion}${virtualboxSubVersion}-${kernel.version}";
 
-  src = "${virtualBoxNixGuestAdditionsBuilder}/VBoxGuestAdditions-${
-    if stdenv.hostPlatform.is32bit then "x86" else "amd64"
-  }.tar.bz2";
+  src = "${virtualBoxNixGuestAdditionsBuilder}/VBoxGuestAdditions-${platform}.tar.bz2";
   sourceRoot = ".";
-
-  KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
-  KERN_INCL = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/source/include";
 
   hardeningDisable = [ "pic" ];
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -Wno-error=implicit-function-declaration";
+  env = {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=incompatible-pointer-types"
+      "-Wno-error=implicit-function-declaration"
+    ];
+
+    KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+    KERN_INCL = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/source/include";
+  };
 
   nativeBuildInputs = [
     patchelf
     makeWrapper
     virtualBoxNixGuestAdditionsBuilder
-  ] ++ kernel.moduleBuildDependencies;
+    kmod
+  ]
+  ++ kernel.moduleBuildDependencies;
+
+  # https://github.com/VirtualBox/virtualbox/issues/812
+  postPatch = ''
+    substituteInPlace ./src/vboxguest-${virtualboxVersion}_NixOS/vboxvideo/vbox_fb.c \
+      --replace-fail "RTLNX_VER_MIN(6,19,0) || RTLNX_VER_RANGE(6,12,103, 6,13,0)" \
+      "RTLNX_VER_MIN(6,19,0) || RTLNX_VER_RANGE(6,12,103, 6,13,0) || RTLNX_VER_RANGE(6,6,152, 6,6,999) || RTLNX_VER_RANGE(6,18,44, 6,18,999)"
+
+    sed -i '0,/RTLNX_VER_MIN(6,19,0)/s//RTLNX_VER_MIN(6,19,0) || RTLNX_VER_RANGE(6,12,112, 6,12,999) || RTLNX_VER_RANGE(6,18,55, 6,18,999)/' ./src/vboxguest-${virtualboxVersion}_NixOS/vboxvideo/vbox_main.c
+  '';
 
   buildPhase = ''
     runHook preBuild
 
     # Build kernel modules.
-    cd src/vboxguest-${virtualBoxNixGuestAdditionsBuilder.version}_NixOS
+    cd src/vboxguest-${virtualboxVersion}_NixOS
     # Run just make first. If we only did make install, we get symbol warnings during build.
     make
     cd ../..
@@ -83,12 +122,12 @@ stdenv.mkDerivation {
             stdenv.cc.cc
             stdenv.cc.libc
             zlib
-            xorg.libX11
-            xorg.libXt
-            xorg.libXext
-            xorg.libXmu
-            xorg.libXfixes
-            xorg.libXcursor
+            libx11
+            libxt
+            libxext
+            libxmu
+            libxfixes
+            libxcursor
           ]
         } $i
     done
@@ -102,7 +141,7 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
 
     # Install kernel modules.
-    cd src/vboxguest-${virtualBoxNixGuestAdditionsBuilder.version}_NixOS
+    cd src/vboxguest-${virtualboxVersion}_NixOS
     make install INSTALL_MOD_PATH=$out KBUILD_EXTRA_SYMBOLS=$PWD/vboxsf/Module.symvers
     cd ../..
 
@@ -121,6 +160,11 @@ stdenv.mkDerivation {
     # Additionally, 3d support seems to rely on VBoxOGL.so being symlinked from
     # libGL.so (which we can't), and Oracle doesn't plan on supporting libglvnd
     # either. (#18457)
+
+    mkdir -p $out/etc/depmod.d
+    for mod in $out/lib/modules/*/misc/*; do
+      echo "override $(modinfo -F name "$mod") * misc" >> $out/etc/depmod.d/vbox.conf
+    done
 
     runHook postInstall
   '';
@@ -144,14 +188,14 @@ stdenv.mkDerivation {
       host/guest clipboard support.
     '';
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl3Only;
     maintainers = [
-      lib.maintainers.sander
       lib.maintainers.friedrichaltheide
     ];
     platforms = [
       "i686-linux"
       "x86_64-linux"
+      "aarch64-linux"
     ];
     broken = stdenv.hostPlatform.is32bit && (kernel.kernelAtLeast "5.10");
   };

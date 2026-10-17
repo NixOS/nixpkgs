@@ -18,9 +18,11 @@
   # Build dependencies
   appimageTools,
   autoPatchelfHook,
+  patchelfUnstable,
   fetchzip,
   lib,
   stdenv,
+  bashInteractive,
 
   # Runtime dependencies;
   # A few additional ones (e.g. Node) are already shipped together with the
@@ -30,39 +32,40 @@
   fuse,
   gsettings-desktop-schemas,
   gtk3,
-  libdbusmenu-gtk2,
-  libXdamage,
+  libdbusmenu-gtk3,
+  libgbm,
+  libxdamage,
   nss,
   udev,
 }:
 
 let
   pname = "pcloud";
-  version = "1.14.8";
-  code = "XZxqNX5Z7nKd4XMTlkbMbnuRDuhyfL1g5efk";
+  version = "2.3.0";
+  code = "XZrYdRJZLS6RF4kf6Jy6GFr4jqkc4S34Rlgy";
 
   # Archive link's codes: https://www.pcloud.com/release-notes/linux.html
   src = fetchzip {
     url = "https://api.pcloud.com/getpubzip?code=${code}&filename=pcloud-${version}.zip";
-    hash = "sha256-+uWvaNA9mCF9vkBbNnsak+h11mcl9QBamBhMzt68Rfc=";
-  };
-
-  appimageContents = appimageTools.extractType2 {
-    inherit pname version;
-    src = "${src}/pcloud";
+    hash = "sha256-aeZHTtqw7ml8k1GZt013WG3GFVXfIzGhEDdBKMkzpj4=";
   };
 
 in
 stdenv.mkDerivation {
   inherit pname version;
 
-  src = appimageContents;
+  src = appimageTools.extract {
+    inherit pname version;
+
+    src = "${src}/pCloud.AppImage";
+  };
 
   dontConfigure = true;
   dontBuild = true;
 
   nativeBuildInputs = [
     autoPatchelfHook
+    patchelfUnstable
   ];
 
   buildInputs = [
@@ -70,10 +73,12 @@ stdenv.mkDerivation {
     dbus-glib
     fuse
     gtk3
-    libdbusmenu-gtk2
-    libXdamage
+    libdbusmenu-gtk3
+    libgbm
+    libxdamage
     nss
     udev
+    bashInteractive
   ];
 
   installPhase = ''
@@ -81,12 +86,17 @@ stdenv.mkDerivation {
     cp -ar . "$out/app"
     cd "$out"
 
-    # Remove the AppImage runner, since users are not supposed to use it; the
-    # actual entry point is the `pcloud` binary
+    # Remove AppImage runner, users are not supposed to use it - `pcloud` binary
+    # itself is the correct entrypoint
     rm app/AppRun
 
-    # Adjust directory structure, so that the `.desktop` etc. files are
-    # properly detected
+    # Remove random stuff that causes patchelf to complain about missing deps
+    # that are not, in fact, missing deps, because those files don't get
+    # executed in the first place
+    rm app/resources/app.asar.unpacked/node_modules/koffi/build/koffi/musl_x64/koffi.node
+    rm app/resources/app.asar.unpacked/node_modules/koffi/build/koffi/openbsd_x64/koffi.node
+
+    # Adjust the directory structure, so that `.desktop` etc. files are detected
     mkdir bin
     mv app/usr/share .
     mv app/usr/lib .
@@ -97,15 +107,17 @@ stdenv.mkDerivation {
     substitute \
       app/pcloud.desktop \
       share/applications/pcloud.desktop \
-      --replace 'Name=pcloud' 'Name=pCloud' \
       --replace 'Exec=AppRun' 'Exec=${pname}'
 
-    # Build the main executable
+    # Adjust the icons
+    ln -snf $out/share/icons/hicolor/512x512/apps/pcloud.png app/.DirIcon
+    ln -snf $out/share/icons/hicolor/512x512/apps/pcloud.png app/pcloud.png
+
+    # Build the entrypoint
     cat > bin/pcloud <<EOF
     #! $SHELL -e
 
-    # This is required for the file picker dialog - otherwise pcloud just
-    # crashes
+    # Required for the file picker dialog - otherwise pcloud crashes
     export XDG_DATA_DIRS="${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS"
 
     exec "$out/app/pcloud"
@@ -114,12 +126,14 @@ stdenv.mkDerivation {
     chmod +x bin/pcloud
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Secure and simple to use cloud storage for your files; pCloud Drive, Electron Edition";
     homepage = "https://www.pcloud.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ patryk27 ];
+    changelog = "https://www.pcloud.com/release-notes/linux.html";
+    downloadPage = "https://www.pcloud.com/release-notes/linux.html";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ patryk27 ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "pcloud";
   };

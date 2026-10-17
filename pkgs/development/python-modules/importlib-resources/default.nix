@@ -2,8 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  fetchpatch2,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -23,25 +21,18 @@
 
 buildPythonPackage rec {
   pname = "importlib-resources";
-  version = "6.4.5";
+  version = "7.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "importlib_resources";
     inherit version;
-    hash = "sha256-mAhiodFsnhR6WWA2d/oqpf2CuH8iO2y4cGlbz86DAGU=";
+    hash = "sha256-ByLUxiEkicUw8qFFo0wKejtHIbyWoV+tpZMOKgt2Bwg=";
   };
 
-  patches = [
-    (fetchpatch2 {
-      # https://github.com/python/importlib_resources/issues/318
-      name = "python-3.13-compat.patch";
-      url = "https://github.com/python/importlib_resources/commit/8684c7a028b65381ec6c6724e2f9c9bea7df0aee.patch";
-      hash = "sha256-mb2V4rQPKyi5jMQ+yCf9fY3vHxB54BhvLzy2NNc0zNc=";
-    })
-  ];
+  postPatch = ''
+    sed -i '/coherent.licensed/d' pyproject.toml
+  '';
 
   build-system = [
     setuptools
@@ -62,10 +53,10 @@ buildPythonPackage rec {
     inherit sage;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Read resources from Python packages";
     homepage = "https://importlib-resources.readthedocs.io/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

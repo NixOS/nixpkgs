@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
@@ -9,27 +8,23 @@
   vulkan-loader,
   freetype,
   fontconfig,
-  darwin,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wgpu-utils";
-  version = "22.1.0";
+  version = "29.0.1";
 
   src = fetchFromGitHub {
     owner = "gfx-rs";
     repo = "wgpu";
-    rev = "v${version}";
-    hash = "sha256-Gtq0xYZoWNwW+BKVLqVVKGqc+4HjaD7NN1hlzyFP5g0=";
+    tag = "wgpu-v${finalAttrs.version}";
+    hash = "sha256-BLw1HnB0DghtWAe8jo6GPO54U3qNNO4yprArme1CdeE=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "noise-0.8.2" = "sha256-7GvShJeSNfwMCBIfqLghXgKQv7EDMqVchJw0uxPhNr4=";
-      "rspirv-0.11.0+sdk-1.2.198" = "sha256-AcJqkcXBr/+SHdUDXd63sQ0h5eosMqRhV4aUREJH8Bw=";
-    };
-  };
+  # cargo-auditable fails on wgpu's dep:-based feature wiring.
+  auditable = false;
+
+  cargoHash = "sha256-QMH5GHjOHbzYdFUQxJ6aEQ+rX6Okl1HYog0hMh6bc8w=";
 
   nativeBuildInputs = [
     pkg-config
@@ -37,19 +32,10 @@ rustPlatform.buildRustPackage rec {
     makeWrapper
   ];
 
-  buildInputs =
-    [
-      freetype
-      fontconfig
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        CoreServices
-        QuartzCore
-        AppKit
-      ]
-    );
+  buildInputs = [
+    freetype
+    fontconfig
+  ];
 
   # Tests fail, as the Nix sandbox doesn't provide an appropriate adapter (e.g. Vulkan).
   doCheck = false;
@@ -59,14 +45,14 @@ rustPlatform.buildRustPackage rec {
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Safe and portable GPU abstraction in Rust, implementing WebGPU API";
     homepage = "https://wgpu.rs/";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ erictapen ];
+    maintainers = with lib.maintainers; [ erictapen ];
     mainProgram = "wgpu-info";
   };
-}
+})

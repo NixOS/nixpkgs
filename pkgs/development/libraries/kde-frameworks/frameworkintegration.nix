@@ -1,5 +1,6 @@
 {
   mkDerivation,
+  cmake,
   extra-cmake-modules,
   kbookmarks,
   kcompletion,
@@ -12,13 +13,16 @@
   knotifications,
   kpackage,
   kwidgetsaddons,
-  libXcursor,
+  libxcursor,
   qtx11extras,
 }:
 
 mkDerivation {
   pname = "frameworkintegration";
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+  ];
   buildInputs = [
     kbookmarks
     kcompletion
@@ -29,7 +33,7 @@ mkDerivation {
     knotifications
     kpackage
     kwidgetsaddons
-    libXcursor
+    libxcursor
     qtx11extras
   ];
   propagatedBuildInputs = [

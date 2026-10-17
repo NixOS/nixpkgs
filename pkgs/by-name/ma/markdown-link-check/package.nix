@@ -7,16 +7,16 @@
 
 buildNpmPackage rec {
   pname = "markdown-link-check";
-  version = "3.13.6";
+  version = "3.15.0";
 
   src = fetchFromGitHub {
     owner = "tcort";
     repo = "markdown-link-check";
     rev = "v${version}";
-    hash = "sha256-UuzfIJL3nHIbGFQrs9ya+QiS/sM0z1GCHbJGLQBN5pE=";
+    hash = "sha256-lnyCpDtyXWzlLBDLIXEEQg/tMMs8jIeTJdW7I6LCg9w=";
   };
 
-  npmDepsHash = "sha256-Lxywr3M/4+DwVWxkWZHHn02K7RNWSI5LyMm12lyZT8w=";
+  npmDepsHash = "sha256-cThGNjM9Jpy281CCpfFOubImrYnMiFp/kljp1mmA1p8=";
 
   dontNpmBuild = true;
 
@@ -27,6 +27,6 @@ buildNpmPackage rec {
     mainProgram = "markdown-link-check";
     homepage = "https://github.com/tcort/markdown-link-check";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 }

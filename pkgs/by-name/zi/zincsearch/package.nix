@@ -1,6 +1,6 @@
 {
   lib,
-  buildGo122Module,
+  buildGoModule,
   fetchFromGitHub,
   buildNpmPackage,
 }:
@@ -8,7 +8,7 @@
 let
   version = "0.4.10-unstable-2024-10-25";
   src = fetchFromGitHub {
-    owner = "zinclabs";
+    owner = "zincsearch";
     repo = "zincsearch";
     rev = "0652db6d39badc753f28ee1122dcbc0e5da1c35e";
     hash = "sha256-Py4fiZJ2fMwPe2afd19brR+62PGVoU67nMDMPlUFhKQ=";
@@ -33,7 +33,7 @@ let
   };
 in
 
-buildGo122Module rec {
+buildGoModule rec {
   pname = "zincsearch";
   inherit src version;
 
@@ -50,11 +50,11 @@ buildGo122Module rec {
     "-X github.com/zinclabs/zincsearch/pkg/meta.Version=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight alternative to elasticsearch that requires minimal resources, written in Go";
     mainProgram = "zincsearch";
     homepage = "https://zincsearch-docs.zinc.dev/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

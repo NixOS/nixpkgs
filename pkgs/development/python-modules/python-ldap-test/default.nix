@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1qh9x3lncaldnw79fgpqbayichs8pbz8abr6pxb5qxbs7zrnyrwf";
+    hash = "sha256-jmdv8z96dVxWvyYvhf66SEMWvVr4PpcOt40qZunoCeI=";
   };
 
   propagatedBuildInputs = [ py4j ];
@@ -20,14 +20,14 @@ buildPythonPackage rec {
   # Tests needs java to be present in path
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tool for testing code speaking with LDAP server";
     homepage = "https://github.com/zoldar/python-ldap-test";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode
     ];
-    license = licenses.mit;
-    maintainers = with maintainers; [ psyanticy ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ psyanticy ];
   };
 }

@@ -3,46 +3,77 @@
   stdenvNoCC,
   fetchurl,
   installShellFiles,
-  testers,
-  mas,
+  jq,
+  libarchive,
+  p7zip,
+  versionCheckHook,
+  zsh,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mas";
-  version = "1.8.6";
+  version = "7.0.0";
 
+  __structuredAttrs = true;
+
+  # nix store prefetch-file https://github.com/mas-cli/mas/releases/download/v$VERSION/mas-$VERSION-arm64.pkg
   src = fetchurl {
-    # Use the tarball until https://github.com/mas-cli/mas/issues/452 is fixed.
-    # Even though it looks like an OS/arch specific build it is actually a universal binary.
-    url = "https://github.com/mas-cli/mas/releases/download/v${version}/mas-${version}.monterey.bottle.tar.gz";
-    sha256 = "0q4skdhymgn5xrwafyisfshx327faia682yv83mf68r61m2jl10d";
+    url = "https://github.com/mas-cli/mas/releases/download/v${finalAttrs.version}/mas-${finalAttrs.version}-arm64.pkg";
+    hash = "sha256-vCGKhUyF2eHJVJapayYoe7ZgVrlWiLkPkdBPpi7SG3U=";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    libarchive
+    p7zip
+  ];
 
-  installPhase = ''
-    install -D './${version}/bin/mas' "$out/bin/mas"
-    installShellCompletion --cmd mas --bash './${version}/etc/bash_completion.d/mas'
+  unpackPhase = ''
+    runHook preUnpack
+
+    7z x $src
+    bsdtar -xf Payload~
+
+    runHook postUnpack
   '';
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = mas;
-      command = "mas version";
-    };
-  };
+  dontConfigure = true;
+  dontBuild = true;
+  strictDeps = true;
 
-  meta = with lib; {
+  installPhase = ''
+    runHook preInstall
+
+    installBin usr/local/opt/mas/bin/mas
+    install -D --mode=755 usr/local/opt/mas/libexec/bin/mas "$out/libexec/bin/mas"
+
+    substituteInPlace "$out/bin/mas" \
+      --replace-fail "#!/bin/zsh" "#!${lib.getExe zsh}" \
+      --replace-fail "/usr/bin/jq" "${lib.getExe jq}"
+
+    installManPage usr/local/opt/mas/share/man/man1/mas.1
+    installShellCompletion --bash usr/local/opt/mas/etc/bash_completion.d/mas
+    installShellCompletion --fish usr/local/opt/mas/share/fish/vendor_completions.d/mas.fish
+
+    runHook postInstall
+  '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  passthru.updateScript = ./update.sh;
+
+  meta = {
     description = "Mac App Store command line interface";
     homepage = "https://github.com/mas-cli/mas";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      steinybot
+    license = lib.licenses.mit;
+    mainProgram = "mas";
+    maintainers = with lib.maintainers; [
       zachcoyle
+      tiferrei
     ];
     platforms = [
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };
-}
+})

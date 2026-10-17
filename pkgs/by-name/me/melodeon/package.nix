@@ -8,27 +8,26 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "melodeon";
-  version = "0.4.3";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "CDrummond";
     repo = "melodeon";
     tag = finalAttrs.version;
-    hash = "sha256-Og0o4Iy0mvGE7H5IY9h7uo7w64jZjXtdsGd4ApYO8oU=";
+    hash = "sha256-4pSqt4dagdM7mUgynAW41RadP/0ck/5BzdL5kjPtwaQ=";
     fetchSubmodules = true;
   };
 
   buildInputs = [
     qt6.qtbase
     qt6.qtwebengine
+    qt6.qtsvg
   ];
 
   nativeBuildInputs = [
     cmake
     qt6.wrapQtAppsHook
   ];
-
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
 
   meta = {
     description = "QWebEngine wrapper for MaterialSkin on Lyrion Music Server (formerly Logitech Media Server)";

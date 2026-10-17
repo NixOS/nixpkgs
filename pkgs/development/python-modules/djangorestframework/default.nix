@@ -2,14 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   setuptools,
 
   # dependencies
   django,
-  pytz,
 
   # optional-dependencies
   coreapi,
@@ -21,63 +19,61 @@
   pyyaml,
 
   # tests
+  dj-database-url,
   pytestCheckHook,
   pytest-django,
+  pytz,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "djangorestframework";
-  version = "3.15.2";
+  version = "3.18.3";
   pyproject = true;
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = "django-rest-framework";
-    rev = version;
-    hash = "sha256-ne0sk4m11Ha77tNmCsdhj7QVmCkYj5GjLn/dLF4qxU8=";
+    tag = finalAttrs.version;
+    hash = "sha256-D3A9fUBc8QhkAA8GyECifQh/VJa1Jxwx3W0usA3RoD4=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     django
-    pygments
-  ] ++ (lib.optional (lib.versionOlder django.version "5.0.0") pytz);
+  ];
 
   optional-dependencies = {
-    complete =
-      [
-        coreschema
-        django-guardian
-        inflection
-        psycopg2
-        pygments
-        pyyaml
-      ]
-      ++ lib.optionals (pythonOlder "3.13") [
-        # broken on 3.13
-        coreapi
-      ];
+    complete = [
+      coreapi
+      coreschema
+      django-guardian
+      inflection
+      psycopg2
+      pygments
+      pyyaml
+    ];
   };
 
   nativeCheckInputs = [
+    dj-database-url
     pytest-django
     pytestCheckHook
-  ] ++ optional-dependencies.complete;
+    pytz
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.complete;
 
-  disabledTests = [
-    # https://github.com/encode/django-rest-framework/issues/9422
-    "test_urlpatterns"
+  disabledTestPaths = lib.optionals (lib.versionAtLeast django.version "5") [
+    # AssertionError: assert '�\\u0125\\u01a6.txt' == 'ÀĥƦ.txt'"
+    "tests/test_parsers.py::TestFileUploadParser::test_get_encoded_filename"
   ];
 
   pythonImportsCheck = [ "rest_framework" ];
 
-  meta = with lib; {
-    changelog = "https://github.com/encode/django-rest-framework/releases/tag/3.15.1";
+  meta = {
+    changelog = "https://github.com/encode/django-rest-framework/releases/tag/${finalAttrs.src.tag}";
     description = "Web APIs for Django, made easy";
     homepage = "https://www.django-rest-framework.org/";
-    maintainers = with maintainers; [ desiderius ];
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
   };
-}
+})

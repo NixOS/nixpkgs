@@ -6,45 +6,46 @@
   fetchzip,
   lib,
   libGL,
-  libXScrnSaver,
-  libXcursor,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libXxf86vm,
   libpulseaudio,
   libudev0-shim,
+  libxcursor,
+  libxi,
+  libxinerama,
+  libxrandr,
+  libxscrnsaver,
+  libxxf86vm,
   makeDesktopItem,
   nix-update-script,
   stdenv,
   vulkan-loader,
+  zlib,
   pname ? "daggerfall-unity",
   includeUnfree ? false,
 }:
 let
-  docFiles =
-    [
-      (fetchurl {
-        url = "https://www.dfworkshop.net/static_files/daggerfallunity/Daggerfall%20Unity%20Manual.pdf";
-        hash = "sha256-FywlD0K5b4vUWzyzANlF9575XTDLivbsym7F+qe0Dm8=";
-        name = "Daggerfall Unity Manual.pdf";
-        meta.license = lib.licenses.mit;
-      })
-    ]
-    ++ lib.optionals includeUnfree [
-      (fetchurl {
-        url = "https://cdn.bethsoft.com/bethsoft.com/manuals/Daggerfall/daggerfall-en.pdf";
-        hash = "sha256-24KSP/E7+KvSRTMDq63NVlVWTFZnQj1yya8wc36yrC0=";
-        meta.license = lib.licenses.unfree;
-      })
-    ];
+  docFiles = [
+    (fetchurl {
+      url = "https://www.dfworkshop.net/static_files/daggerfallunity/Daggerfall%20Unity%20Manual.pdf";
+      hash = "sha256-FywlD0K5b4vUWzyzANlF9575XTDLivbsym7F+qe0Dm8=";
+      name = "Daggerfall Unity Manual.pdf";
+      meta.license = lib.licenses.mit;
+    })
+  ]
+  ++ lib.optionals includeUnfree [
+    (fetchurl {
+      url = "https://cdn.bethsoft.com/bethsoft.com/manuals/Daggerfall/daggerfall-en.pdf";
+      hash = "sha256-24KSP/E7+KvSRTMDq63NVlVWTFZnQj1yya8wc36yrC0=";
+      meta.license = lib.licenses.unfree;
+    })
+  ];
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "1.1.1";
+  zipVersion = "1.1.1";
+  version = "${finalAttrs.zipVersion}-cve-2025";
 
   src = fetchzip {
-    url = "https://github.com/Interkarma/daggerfall-unity/releases/download/v${finalAttrs.version}/dfu_linux_64bit-v${finalAttrs.version}.zip";
+    url = "https://github.com/Interkarma/daggerfall-unity/releases/download/v${finalAttrs.version}/dfu_linux_64bit-v${finalAttrs.zipVersion}.zip";
     hash = "sha256-JuhhVLpREM9e9UtlDttvFUhHWpH7Sh79OEo1OM4ggKA=";
     stripRoot = false;
   };
@@ -57,15 +58,16 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     alsa-lib
     libGL
-    libXScrnSaver
-    libXcursor
-    libXi
-    libXinerama
-    libXrandr
-    libXxf86vm
     libpulseaudio
     libudev0-shim
+    libxcursor
+    libxi
+    libxinerama
+    libxrandr
+    libxscrnsaver
+    libxxf86vm
     vulkan-loader
+    zlib
   ];
 
   strictDeps = true;
@@ -73,8 +75,10 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir --parents "$out/share/doc/"
+    mkdir --parents "$out/bin" "$out/share/doc" "$out/share/icons/hicolor/128x128/apps/"
     cp --recursive * "$out"
+    ln --symbolic "$out/${finalAttrs.meta.mainProgram}" "$out/bin/"
+    ln --symbolic $out/DaggerfallUnity_Data/Resources/UnityPlayer.png $out/share/icons/hicolor/128x128/apps/daggerfall-unity.png
 
     ${lib.strings.concatMapStringsSep "\n" (file: ''
       cp "${file}" "$out/share/doc/${file.name}"
@@ -90,8 +94,8 @@ stdenv.mkDerivation (finalAttrs: {
       name = "daggerfall-unity";
       desktopName = "Daggerfall Unity";
       comment = finalAttrs.meta.description;
-      icon = "UnityPlayer";
-      exec = "DaggerfallUnity.x86_64";
+      icon = "daggerfall-unity";
+      exec = finalAttrs.meta.mainProgram;
       categories = [ "Game" ];
     })
   ];

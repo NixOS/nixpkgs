@@ -13,11 +13,10 @@
   cachetools,
   cloudpickle,
   correctionlib,
-  dask,
-  dask-awkward,
-  dask-histogram,
-  fsspec-xrootd,
+  fsspec,
   hist,
+  ipywidgets,
+  loky,
   lz4,
   matplotlib,
   mplhep,
@@ -26,30 +25,34 @@
   packaging,
   pandas,
   pyarrow,
+  pydantic,
+  pyyaml,
   requests,
+  rich,
   scipy,
   toml,
   tqdm,
   uproot,
   vector,
 
-  # checks
+  # tests
   distributed,
   pyinstrument,
-  pytestCheckHook,
   pytest-xdist,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "coffea";
-  version = "2025.1.0";
+  version = "2026.9.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "CoffeaTeam";
     repo = "coffea";
-    tag = "v${version}";
-    hash = "sha256-l/HjTX3zm1jquAhuvNNI+oaC7TbaICNnmfqXxBNlaic=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zVcTAlL4Wl6oUm2VOmX0zBgsHbEyI93RNQwf4NBhE9s=";
   };
 
   build-system = [
@@ -63,11 +66,10 @@ buildPythonPackage rec {
     cachetools
     cloudpickle
     correctionlib
-    dask
-    dask-awkward
-    dask-histogram
-    fsspec-xrootd
+    fsspec
     hist
+    ipywidgets
+    loky
     lz4
     matplotlib
     mplhep
@@ -76,19 +78,22 @@ buildPythonPackage rec {
     packaging
     pandas
     pyarrow
+    pydantic
+    pyyaml
     requests
+    rich
     scipy
     toml
     tqdm
     uproot
     vector
-  ] ++ dask.optional-dependencies.array;
+  ];
 
   nativeCheckInputs = [
     distributed
     pyinstrument
-    pytestCheckHook
     pytest-xdist
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "coffea" ];
@@ -102,10 +107,6 @@ buildPythonPackage rec {
     # https://github.com/scikit-hep/coffea/issues/1246
     "test_packed_selection_cutflow_dak" # cutflow.npz
     "test_packed_selection_nminusone_dak" # nminusone.npz
-
-    # AssertionError: bug in Awkward Array: attempt to convert TypeTracerArray into a concrete array
-    "test_apply_to_fileset"
-    "test_lorentz_behavior"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -113,8 +114,8 @@ buildPythonPackage rec {
   meta = {
     description = "Basic tools and wrappers for enabling not-too-alien syntax when running columnar Collider HEP analysis";
     homepage = "https://github.com/CoffeaTeam/coffea";
-    changelog = "https://github.com/CoffeaTeam/coffea/releases/tag/v${version}";
-    license = with lib.licenses; [ bsd3 ];
+    changelog = "https://github.com/CoffeaTeam/coffea/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

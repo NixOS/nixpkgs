@@ -10,26 +10,32 @@
   openssl,
   pkg-config,
   buildPackages,
+  lz4,
 }:
 
 let
-  buildBarebox =
+  defaultVersion = "2026.06.1";
+  defaultSrc = fetchurl {
+    url = "https://www.barebox.org/download/barebox-${defaultVersion}.tar.bz2";
+    sha256 = "sha256-h1KzdSgZ7EqvhIodBt8FJCpklUUl+xW2zwezw91+vX8=";
+  };
+
+  buildBarebox = lib.makeOverridable (
     {
+      version ? null,
+      src ? null,
       filesToInstall,
       installDir ? "$out",
       defconfig,
       extraMeta ? { },
       ...
     }@args:
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation (finalAttrs: {
       pname = "barebox-${defconfig}";
+      strictDeps = true;
 
-      version = "2020.12.0";
-
-      src = fetchurl {
-        url = "https://www.barebox.org/download/barebox-${version}.tar.bz2";
-        sha256 = "06vsd95ihaa2nywpqy6k0c7xwk2pzws4yvbp328yd2pfiigachrv";
-      };
+      version = if version == null then defaultVersion else version;
+      src = if src == null then defaultSrc else src;
 
       postPatch = ''
         patchShebangs scripts
@@ -39,11 +45,18 @@ let
         bison
         dtc
         flex
-        openssl
-        libusb1
+        lz4
         lzop
+        openssl
         pkg-config
       ];
+
+      buildInputs = [
+        libusb1
+        lzop
+        openssl
+      ];
+
       depsBuildBuild = [ buildPackages.stdenv.cc ];
 
       hardeningDisable = [ "all" ];
@@ -72,20 +85,22 @@ let
 
       enableParallelBuilding = true;
 
+      __structuredAttrs = true;
+
       dontStrip = true;
 
       meta =
         with lib;
         {
           homepage = "https://www.barebox.org";
-          description = "Swiss Army Knive for bare metal";
+          description = "Swiss Army Knife for bare metal";
           license = licenses.gpl2Only;
           maintainers = with maintainers; [ emantor ];
         }
         // extraMeta;
-    }
-    // removeAttrs args [ "extraMeta" ];
-
+    })
+    // removeAttrs args [ "extraMeta" ]
+  );
 in
 {
   inherit buildBarebox;
@@ -100,6 +115,7 @@ in
       "scripts/omap4_usbboot"
       "scripts/omap3-usb-loader"
       "scripts/kwboot"
+      "scripts/rk-usb-loader"
     ];
   };
 }

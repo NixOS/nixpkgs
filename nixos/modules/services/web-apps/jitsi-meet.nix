@@ -8,6 +8,7 @@
 with lib;
 
 let
+
   cfg = config.services.jitsi-meet;
 
   # The configuration files are JS of format "var <<string>> = <<JSON>>;". In order to
@@ -24,7 +25,7 @@ let
       userJson = pkgs.writeText "user.json" (builtins.toJSON userCfg);
     in
     (pkgs.runCommand "${varName}.js" { } ''
-      ${pkgs.nodejs}/bin/node ${extractor} ${source} ${varName} > default.json
+      ${pkgs.lib.getExe pkgs.nodejs-slim} ${extractor} ${source} ${varName} > default.json
       (
         echo "var ${varName} = "
         ${pkgs.jq}/bin/jq -s '.[0] * .[1]' default.json ${userJson}
@@ -187,6 +188,16 @@ in
         off if you want to configure it manually.
       '';
     };
+
+    prosody.allowners_muc = mkOption {
+      type = bool;
+      default = false;
+      description = ''
+        Add module allowners, any user in chat is able to
+        kick other. Usefull in jitsi-meet to kick ghosts.
+      '';
+    };
+
     prosody.lockdown = mkOption {
       type = bool;
       default = false;
@@ -206,7 +217,7 @@ in
     excalidraw.port = mkOption {
       type = types.port;
       default = 3002;
-      description = ''The port which the Excalidraw backend for Jitsi should listen to.'';
+      description = "The port which the Excalidraw backend for Jitsi should listen to.";
     };
 
     secureDomain = {
@@ -214,13 +225,21 @@ in
       authentication = mkOption {
         type = types.str;
         default = "internal_hashed";
-        description = ''The authentication type to be used by jitsi'';
+        description = "The authentication type to be used by jitsi";
       };
     };
   };
 
   config = mkIf cfg.enable {
     services.prosody = mkIf cfg.prosody.enable {
+
+      # required for muc_breakout_rooms
+      package = lib.mkDefault (
+        pkgs.prosody.override {
+          withExtraLuaPackages = p: with p; [ cjson ];
+        }
+      );
+
       enable = mkDefault true;
       xmppComplianceSuite = mkDefault false;
       modules = {
@@ -240,8 +259,11 @@ in
         {
           domain = "conference.${cfg.hostName}";
           name = "Jitsi Meet MUC";
+          allowners_muc = cfg.prosody.allowners_muc;
           roomLocking = false;
           roomDefaultPublicJids = true;
+          # muc_meeting_id loads jitsi_permissions for moderator features
+          extraModules = [ "muc_meeting_id" ];
           extraConfig = ''
             restrict_room_creation = true
             storage = "memory"
@@ -253,6 +275,7 @@ in
           name = "Jitsi Meet Breakout MUC";
           roomLocking = false;
           roomDefaultPublicJids = true;
+          extraModules = [ "muc_meeting_id" ];
           extraConfig = ''
             restrict_room_creation = true
             storage = "memory"
@@ -287,7 +310,6 @@ in
         "speakerstats"
         "external_services"
         "conference_duration"
-        "end_conference"
         "muc_lobby_rooms"
         "muc_breakout_rooms"
         "av_moderation"
@@ -301,6 +323,7 @@ in
       ];
       extraPluginPaths = [ "${pkgs.jitsi-meet-prosody}/share/prosody-plugins" ];
       extraConfig = lib.mkMerge [
+        (mkBefore "component_admins_as_room_owners = true")
         (mkAfter ''
           Component "focus.${cfg.hostName}" "client_proxy"
             target_address = "focus@auth.${cfg.hostName}"
@@ -328,7 +351,9 @@ in
           ''
             muc_mapper_domain_base = "${cfg.hostName}"
 
-            cross_domain_websocket = true;
+            http_cors_override = {
+              websocket = { enabled = true }
+            }
             consider_websocket_secure = true;
 
             unlimited_jids = {
@@ -361,7 +386,6 @@ in
           conference_duration_component = "conferenceduration.${cfg.hostName}"
           end_conference_component = "endconference.${cfg.hostName}"
 
-          c2s_require_encryption = false
           lobby_muc = "lobby.${cfg.hostName}"
           breakout_rooms_muc = "breakout.${cfg.hostName}"
           room_metadata_component = "metadata.${cfg.hostName}"
@@ -408,6 +432,7 @@ in
               cfg.videobridge.passwordFile
             else
               "/var/lib/jitsi-meet/videobridge-secret";
+
         in
         ''
           ${config.services.prosody.package}/bin/prosodyctl register focus auth.${cfg.hostName} "$(cat /var/lib/jitsi-meet/jicofo-user-secret)"
@@ -424,7 +449,7 @@ in
         EnvironmentFile = [ "/var/lib/jitsi-meet/secrets-env" ];
         SupplementaryGroups = [ "jitsi-meet" ];
       };
-      reloadIfChanged = true;
+      reloadIfChanged = false;
     };
 
     users.groups.jitsi-meet = { };
@@ -432,15 +457,28 @@ in
       "d '/var/lib/jitsi-meet' 0750 root jitsi-meet - -"
     ];
 
+    systemd.services.jicofo = mkIf (cfg.jicofo.enable && cfg.prosody.enable) {
+      partOf = [ "prosody.service" ];
+      after = [ "prosody.service" ];
+    };
+    systemd.services.jibri =
+      mkIf ((config.services.jibri.enable || cfg.jibri.enable) && cfg.prosody.enable)
+        {
+          partOf = [ "prosody.service" ];
+          after = [
+            "jicofo.service"
+            "prosody.service"
+          ];
+        };
+
     systemd.services.jitsi-meet-init-secrets = {
       wantedBy = [ "multi-user.target" ];
-      before =
-        [
-          "jicofo.service"
-          "jitsi-videobridge2.service"
-        ]
-        ++ (optional cfg.prosody.enable "prosody.service")
-        ++ (optional cfg.jigasi.enable "jigasi.service");
+      before = [
+        "jicofo.service"
+        "jitsi-videobridge2.service"
+      ]
+      ++ (optional cfg.prosody.enable "prosody.service")
+      ++ (optional cfg.jigasi.enable "jigasi.service");
       serviceConfig = {
         Type = "oneshot";
         UMask = "027";
@@ -451,18 +489,17 @@ in
 
       script =
         let
-          secrets =
-            [
-              "jicofo-component-secret"
-              "jicofo-user-secret"
-              "jibri-auth-secret"
-              "jibri-recorder-secret"
-            ]
-            ++ (optionals cfg.jigasi.enable [
-              "jigasi-user-secret"
-              "jigasi-component-secret"
-            ])
-            ++ (optional (cfg.videobridge.passwordFile == null) "videobridge-secret");
+          secrets = [
+            "jicofo-component-secret"
+            "jicofo-user-secret"
+            "jibri-auth-secret"
+            "jibri-recorder-secret"
+          ]
+          ++ (optionals cfg.jigasi.enable [
+            "jigasi-user-secret"
+            "jigasi-component-secret"
+          ])
+          ++ (optional (cfg.videobridge.passwordFile == null) "videobridge-secret");
         in
         ''
           ${concatMapStringsSep "\n" (s: ''
@@ -509,7 +546,7 @@ in
         ProtectSystem = "strict";
         ProtectClock = true;
         ProtectHome = true;
-        ProtectProc = true;
+        ProtectProc = "noaccess";
         ProtectKernelLogs = true;
         PrivateTmp = true;
         PrivateDevices = true;
@@ -632,19 +669,17 @@ in
       };
     };
 
-    services.jitsi-meet.config =
-      recursiveUpdate
-        (mkIf cfg.excalidraw.enable {
-          whiteboard = {
-            enabled = true;
-            collabServerBaseUrl = "https://${cfg.hostName}";
-          };
-        })
-        (
-          mkIf cfg.secureDomain.enable {
-            hosts.anonymousdomain = "guest.${cfg.hostName}";
-          }
-        );
+    services.jitsi-meet.config = mkMerge [
+      (mkIf cfg.excalidraw.enable {
+        whiteboard = {
+          enabled = true;
+          collabServerBaseUrl = "https://${cfg.hostName}";
+        };
+      })
+      (mkIf cfg.secureDomain.enable {
+        hosts.anonymousdomain = "guest.${cfg.hostName}";
+      })
+    ];
 
     services.jitsi-videobridge = mkIf cfg.videobridge.enable {
       enable = true;
@@ -737,5 +772,5 @@ in
   };
 
   meta.doc = ./jitsi-meet.md;
-  meta.maintainers = lib.teams.jitsi.members;
+  meta.teams = [ lib.teams.jitsi ];
 }

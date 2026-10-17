@@ -4,41 +4,43 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "time-decode";
-  version = "7.0.2";
+  version = "10.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "digitalsleuth";
     repo = "time_decode";
-    tag = "v${version}";
-    hash = "sha256-K60xIQ6TWPYlsR6YjIquey5Ioaw4oAId59CPlQNK4yk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-icSMwPtJShFtzbzo0HaMaaq8yUdzJsuwJc3sHAzhsf4=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
+    bbpb
     colorama
-    python-dateutil
+    juliandate
+    prettytable
     pyqt6
+    python-dateutil
+    python-ulid
+    pytz
+    tzdata
   ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "time_decode"
-  ];
+  pythonImportsCheck = [ "time_decode" ];
 
-  meta = with lib; {
+  meta = {
     description = "Timestamp and date decoder";
     homepage = "https://github.com/digitalsleuth/time_decode";
-    changelog = "https://github.com/digitalsleuth/time_decode/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/digitalsleuth/time_decode/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "time-decode";
   };
-}
+})

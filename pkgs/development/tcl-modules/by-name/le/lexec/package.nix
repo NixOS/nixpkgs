@@ -3,9 +3,10 @@
   mkTclDerivation,
   fetchzip,
   autoreconfHook,
+  tcl,
 }:
 
-mkTclDerivation rec {
+mkTclDerivation {
   pname = "lexec";
   version = "0-unstable-2020-03-11";
 
@@ -24,5 +25,6 @@ mkTclDerivation rec {
     license = lib.licenses.tcltk;
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
+    broken = tcl.isTcl9;
   };
 }

@@ -46,15 +46,10 @@ of actions is always the same:
 
 By default, some units are filtered from the outputs to make it less spammy.
 This can be disabled for development or testing by setting the environment variable
-`STC_DISPLAY_ALL_UNITS=1`
+`STC_DISPLAY_ALL_UNITS=1`.
+
+More detailed output can be displayed by setting `STC_DEBUG=1`.
 
 Most of these actions are either self-explaining but some of them have to do
 with our units or the activation script. For this reason, these topics are
 explained in the next sections.
-
-```{=include=} sections
-unit-handling.section.md
-activation-script.section.md
-non-switchable-systems.section.md
-etc-overlay.section.md
-```

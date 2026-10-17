@@ -1,27 +1,33 @@
 {
   lib,
-  nodejs_20,
+
   buildNpmPackage,
   fetchFromGitHub,
   writeShellScriptBin,
-  nss,
+
   cmake,
+  nodejs_24,
+  nss,
   pkg-config,
-  openssl,
+
   libdatachannel,
+  openssl,
+  plog,
 }:
 
 let
-  nodejs = nodejs_20;
+  nodejs = nodejs_24;
   buildNpmPackage' = buildNpmPackage.override { inherit nodejs; };
 
-  version = "1.19.0";
+  # update together with httptoolkit
+  # nixpkgs-update: no auto update
+  version = "1.27.1";
 
   src = fetchFromGitHub {
     owner = "httptoolkit";
     repo = "httptoolkit-server";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-S4Io4X5Hlvm/5HoKIQ/OTor9jZvMz6me5RyfZ8FwOdM=";
+    tag = "v${version}";
+    hash = "sha256-t7Rxh8BuzfhdBfMGMNWUV/xMtbhgw0yU9t97LbdKB9o=";
   };
 
   overridesNodeModules = buildNpmPackage' {
@@ -29,7 +35,7 @@ let
     inherit version src;
     sourceRoot = "${src.name}/overrides/js";
 
-    npmDepsHash = "sha256-GRN6ua3FY1AE61bB7PM2wgbKPZI/zJeXa5HOOh/2N2Y=";
+    npmDepsHash = "sha256-oZcroK5zmQvvxBas9OmAXins+7+olGWwouUepprWFxk=";
 
     dontBuild = true;
 
@@ -39,22 +45,23 @@ let
     '';
   };
 
+  # Check update in package-lock.json
   nodeDatachannel = buildNpmPackage' {
     pname = "node-datachannel";
-    version = "0.4.3";
+    version = "0.12.0";
 
     src = fetchFromGitHub {
       owner = "murat-dogan";
       repo = "node-datachannel";
-      rev = "refs/tags/v${nodeDatachannel.version}";
-      hash = "sha256-BlfeocqSG+pqbK0onnCf0VKbQw8Qq4qMxhAcfGlFYR8=";
+      tag = "v${nodeDatachannel.version}";
+      hash = "sha256-xjYja+e2Z7X5cU4sEuSsJzG0gtmTPl3VrUf+ypd3zdw=";
     };
 
     npmFlags = [ "--ignore-scripts" ];
 
     makeCacheWritable = true;
 
-    npmDepsHash = "sha256-pgcOOjiuWKlpD+WJyPj/c9ZhDjYuEnybpLS/BPmzeFM=";
+    npmDepsHash = "sha256-Qhib9ZGulTXjoYcZIWunf3/BSd2SLXZuWEmMcstaphs=";
 
     nativeBuildInputs = [
       cmake
@@ -62,8 +69,9 @@ let
     ];
 
     buildInputs = [
-      openssl
       libdatachannel
+      openssl
+      plog
     ];
 
     dontUseCmakeConfigure = true;
@@ -73,16 +81,16 @@ let
 
     preBuild = ''
       # don't use static libs and don't use FetchContent
+      # don't try to link plog (it's headers-only)
       substituteInPlace CMakeLists.txt \
-          --replace-fail 'OPENSSL_USE_STATIC_LIBS TRUE' 'OPENSSL_USE_STATIC_LIBS FALSE' \
-          --replace-fail 'if(NOT libdatachannel)' 'if(false)' \
-          --replace-fail 'datachannel-static' 'datachannel'
+        --replace-fail 'OPENSSL_USE_STATIC_LIBS TRUE' 'OPENSSL_USE_STATIC_LIBS FALSE' \
+        --replace-fail 'if(NOT libdatachannel)' 'if(false)' \
+        --replace-fail 'datachannel-static' 'datachannel' \
+        --replace-fail 'plog::plog' ""
 
       # don't fetch node headers
       substituteInPlace node_modules/cmake-js/lib/dist.js \
-          --replace-fail '!this.downloaded' 'false'
-
-      npm rebuild --verbose
+        --replace-fail '!this.downloaded' 'false'
     '';
 
     installPhase = ''
@@ -98,7 +106,7 @@ buildNpmPackage' {
 
   patches = [ ./only-build-for-one-platform.patch ];
 
-  npmDepsHash = "sha256-njSNdpo+CIfS9LTnshawJ7297tFc8ssjUqJcHk8kBZE=";
+  npmDepsHash = "sha256-xICvMGB3RLsI0UDGPrtxkNrO1SgZqGGmfBzCQOFGJzY=";
 
   npmFlags = [ "--ignore-scripts" ];
 
@@ -113,8 +121,8 @@ buildNpmPackage' {
   postConfigure = ''
     # make sure `oclif-dev' doesn't fetch `node` binary to bundle with the app
     substituteInPlace node_modules/@oclif/dev-cli/lib/tarballs/node.js --replace-fail \
-        'async function fetchNodeBinary({ nodeVersion, output, platform, arch, tmp }) {' \
-        'async function fetchNodeBinary({ nodeVersion, output, platform, arch, tmp }) { return;'
+      'async function fetchNodeBinary({ nodeVersion, output, platform, arch, tmp }) {' \
+      'async function fetchNodeBinary({ nodeVersion, output, platform, arch, tmp }) { return;'
 
     # manually place our prebuilt `node-datachannel` binary into its place, since we used '--ignore-scripts'
     ln -s ${nodeDatachannel}/build node_modules/node-datachannel/build
@@ -148,12 +156,12 @@ buildNpmPackage' {
 
     # disable updating functionality
     substituteInPlace $out/share/httptoolkit-server/node_modules/@oclif/plugin-update/lib/commands/update.js \
-        --replace-fail "await this.skipUpdate()" "'cannot update nix based package'"
+      --replace-fail "await this.skipUpdate()" "'cannot update nix based package'"
 
     # the app determines if it's in production by checking if HTTPTOOLKIT_SERVER_BINPATH is set to anything
     makeWrapper $out/share/httptoolkit-server/bin/run $out/bin/httptoolkit-server \
-        --set HTTPTOOLKIT_SERVER_BINPATH dummy \
-        --prefix PATH : ${lib.makeBinPath [ nss.tools ]}
+      --set HTTPTOOLKIT_SERVER_BINPATH dummy \
+      --prefix PATH : ${lib.makeBinPath [ nss.tools ]}
 
     runHook postInstall
   '';

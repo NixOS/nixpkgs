@@ -50,7 +50,8 @@ let
           (pkgs.writeTextDir "locks/nixos-generated-dconf-locks" (
             lib.concatStringsSep "\n" (if val.lockAll then mkAllLocks val.settings else val.locks)
           ))
-        ] ++ (map checkDconfKeyfiles val.keyfiles);
+        ]
+        ++ (map checkDconfKeyfiles val.keyfiles);
       }
     );
 
@@ -126,7 +127,7 @@ let
             {
               "com/raggesilver/BlackBox" = {
                 scrollback-lines = mkUint32 10000;
-                theme-dark = "Tommorow Night";
+                theme-dark = "Tomorrow Night";
               };
             }
           '';

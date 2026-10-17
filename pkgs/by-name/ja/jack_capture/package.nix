@@ -7,7 +7,7 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "jack_capture";
   version = "0.9.73.2023-01-04";
 
@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with lib; {
+  meta = {
     description = "Program for recording soundfiles with jack";
     mainProgram = "jack_capture";
     homepage = "https://github.com/kmatheussen/jack_capture/";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ orivej ];
+    license = lib.licenses.gpl2;
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

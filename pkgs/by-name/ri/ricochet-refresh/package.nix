@@ -4,21 +4,23 @@
   fetchFromGitHub,
   qt5,
   openssl,
-  protobuf,
+  tor,
+  # https://github.com/blueprint-freespeech/ricochet-refresh/issues/178
+  protobuf_21,
   pkg-config,
   cmake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ricochet-refresh";
-  version = "3.0.25";
+  version = "3.0.45";
 
   src = fetchFromGitHub {
     owner = "blueprint-freespeech";
     repo = "ricochet-refresh";
-    rev = "v${finalAttrs.version}-release";
+    tag = "v${finalAttrs.version}-release";
     fetchSubmodules = true;
-    hash = "sha256-MXbsNrF3y2DimXUuf6XbqqCxcNsTGfNHSAMstdX1MoU=";
+    hash = "sha256-zfQF7DT+RSpD/uquknywaogq51i/lCXfmyDaKE9HjRk=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
@@ -35,15 +37,18 @@ stdenv.mkDerivation (finalAttrs: {
     ])
     ++ [
       openssl
-      protobuf
+      protobuf_21
     ];
 
   nativeBuildInputs = [
     pkg-config
-    protobuf
+    protobuf_21
     cmake
     qt5.wrapQtAppsHook
   ];
+
+  # Ricochet Refresh expects the Tor executable to be available in PATH.
+  qtWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ tor ]}" ];
 
   enableParallelBuilding = true;
 

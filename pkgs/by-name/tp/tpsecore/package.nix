@@ -1,46 +1,37 @@
 {
   lib,
   fetchFromGitLab,
+  nix-update-script,
   rustPlatform,
   rustc,
-  wasm-pack,
-  wasm-bindgen-cli,
+  writableTmpDirAsHomeHook,
   binaryen,
 }:
 
-let
-  version = "0.1.1";
-
-  wasm-bindgen-cli-95 = wasm-bindgen-cli.override {
-    version = "0.2.95";
-    hash = "sha256-prMIreQeAcbJ8/g3+pMp1Wp9H5u+xLqxRxL+34hICss=";
-    cargoHash = "sha256-6iMebkD7FQvixlmghGGIvpdGwFNLfnUcFke/Rg8nPK4=";
-  };
-in
 rustPlatform.buildRustPackage {
   pname = "tpsecore";
-  inherit version;
+  version = "0.1.1-unstable-2026-04-06";
 
   src = fetchFromGitLab {
     owner = "UniQMG";
     repo = "tpsecore";
-    rev = "v${version}";
-    hash = "sha256-+OynnLMBEiYwdFzxGzgkcBN6xrHoH1Q6O5i+OW7RBLo=";
+    rev = "549767cac60df6f887f6012fa5d26ca12d55a2eb";
+    hash = "sha256-nnekiqs9W7oOl0/yjuQI83MsRgRZRrgipnwIbhRdLW8=";
   };
 
-  cargoHash = "sha256-mPaWXiDjJd/uTBpktauKWg8X9sNBb3FXw5BSGB33NxI=";
+  cargoHash = "sha256-rJDy0gbtIGM5q6w0tfgIE09HW1lQ9pEL9o+LSdX6RyU=";
 
   nativeBuildInputs = [
-    wasm-pack
-    wasm-bindgen-cli-95
     binaryen
     rustc.llvmPackages.lld
+    writableTmpDirAsHomeHook
   ];
 
   buildPhase = ''
     runHook preBuild
 
-    HOME=$(mktemp -d) wasm-pack build --target web --release
+    cargo build --profile release \
+      --target wasm32-unknown-unknown --features wasm_rendering
 
     runHook postBuild
   '';
@@ -48,21 +39,23 @@ rustPlatform.buildRustPackage {
   installPhase = ''
     runHook preInstall
 
-    cp -r pkg/ $out
+    mkdir -p $out
+
+    cp target/wasm32-unknown-unknown/release/tpsecore.wasm $out/
+    cp tpsecore.js $out/
 
     runHook postInstall
   '';
 
   doCheck = false;
 
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+
   meta = {
     description = "Self contained toolkit for creating, editing, and previewing TPSE files";
     homepage = "https://gitlab.com/UniQMG/tpsecore";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      huantian
-      wackbyte
-    ];
+    maintainers = with lib.maintainers; [ huantian ];
     platforms = lib.platforms.linux;
   };
 }

@@ -1,56 +1,45 @@
 {
   lib,
-  darwin,
-  fetchFromGitHub,
-  testers,
-  nix-update-script,
   rustPlatform,
-  stdenv,
-  rainfrog,
+  fetchFromGitHub,
+  pkg-config,
+  libgit2,
+  versionCheckHook,
+  nix-update-script,
 }:
-let
-  version = "0.2.11";
-in
-rustPlatform.buildRustPackage {
-  inherit version;
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rainfrog";
+  version = "0.4.6";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "achristmascarl";
     repo = "rainfrog";
-    tag = "v${version}";
-    hash = "sha256-gtiwkgNyqq+KMATkzaLOjPB6jcjVAM2qq6zwZ1WGkPE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-fcQFHUw1+h1PqmPlanvcFsudUb9nePZA0yJaFOwvx3U=";
   };
 
-  cargoHash = "sha256-u0BmDtOIlYfHEAiDp+BnY1/ne3tKwmy/Cem6+5CX3GE=";
+  cargoHash = "sha256-IXbPCxz+plIa6jYMTRcG44e7sHmwxzA+lbtWb/ukzcU=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks;
-    [
-      AppKit
-      CoreGraphics
-      SystemConfiguration
-    ]
-  );
+  env.LIBGIT2_NO_VENDOR = 1;
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = rainfrog;
+  nativeBuildInputs = [ pkg-config ];
 
-      command = ''
-        RAINFROG_DATA="$(mktemp -d)" rainfrog --version
-      '';
-    };
+  buildInputs = [ libgit2 ];
 
-    updateScript = nix-update-script { };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/achristmascarl/rainfrog/releases/tag/v${version}";
-    description = "A database management TUI for postgres";
+    changelog = "https://github.com/achristmascarl/rainfrog/releases/tag/v${finalAttrs.version}";
+    description = "Database management TUI for postgres";
     homepage = "https://github.com/achristmascarl/rainfrog";
     license = lib.licenses.mit;
     mainProgram = "rainfrog";
     maintainers = with lib.maintainers; [ patka ];
   };
-}
+})

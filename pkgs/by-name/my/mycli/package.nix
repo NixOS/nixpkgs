@@ -1,25 +1,42 @@
 {
-  fetchPypi,
   lib,
+  fetchFromGitHub,
   python3Packages,
+  writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mycli";
-  version = "1.27.2";
+  version = "2.20.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-0R2k5hRkAJbqgGZEPXWUb48oFxTKMKiQZckf3F+VC3I=";
+  # test_ssh_tunnel.py binds to localhost to find a free port; the darwin
+  # sandbox blocks loopback networking unless this is enabled
+  __darwinAllowLocalNetworking = true;
+
+  src = fetchFromGitHub {
+    owner = "dbcli";
+    repo = "mycli";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jbEbyY5N6IY344sLiY9cjhPbwzHtNUJK4+SXkXU2lqM=";
   };
 
   pythonRelaxDeps = [
+    "pygments"
+    "pymysql"
+    "wcwidth"
+    "sqlglot"
+    "sqlglotc"
     "sqlparse"
+    "click"
+    "cryptography"
+    "cli_helpers"
+    "yaspin"
   ];
 
   build-system = with python3Packages; [
     setuptools
+    setuptools-scm
   ];
 
   dependencies =
@@ -27,27 +44,48 @@ python3Packages.buildPythonApplication rec {
     [
       cli-helpers
       click
+      clickdc
       configobj
       cryptography
-      paramiko
+      jinja2
+      keyring
+      llm
       prompt-toolkit
-      pyaes
+      pycryptodomex
       pygments
       pymysql
       pyperclip
+      rapidfuzz
       sqlglot
       sqlparse
+      pyfzf
+      wcwidth
     ]
-    ++ cli-helpers.optional-dependencies.styles;
+    ++ cli-helpers.optional-dependencies.styles
+    ++ [ yaspin ];
 
-  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
-
-  preCheck = ''
-    export HOME="$(mktemp -d)"
-  '';
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+  ]
+  ++ (with python3Packages; [
+    pytestCheckHook
+    pytest-random-order
+  ]);
 
   disabledTestPaths = [
-    "mycli/packages/paramiko_stub/__init__.py"
+    # require optional polars dependency (not packaged)
+    "test/pytests/test_polars_transform.py"
+    "test/pytests/test_polars_completion.py"
+  ];
+
+  pytestFlags = [
+    # environment-specific completion keyword differences
+    "--deselect=test/pytests/test_smart_completion_public_schema_only.py::test_backticked_column_completion_three_character"
+    "--deselect=test/pytests/test_smart_completion_public_schema_only.py::test_backticked_column_completion_two_character"
+    "--deselect=test/pytests/test_naive_completion.py::test_function_name_completion"
+    # bash completion harness is sensitive to the system bash version and
+    # exercises only the static completion script, not the packaged code
+    "--deselect=test/pytests/test_bash_completion.py::test_bash_completion_matches_mycli_completion_behavior"
   ];
 
   meta = {
@@ -61,4 +99,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ jojosch ];
   };
-}
+})

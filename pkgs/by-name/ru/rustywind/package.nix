@@ -2,33 +2,34 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
-  darwin,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustywind";
-  version = "0.23.1";
+  version = "0.28.0";
 
   src = fetchFromGitHub {
     owner = "avencera";
     repo = "rustywind";
-    rev = "v${version}";
-    hash = "sha256-NRIWjmKjteJibqnOjkkUY9eKIM65H7NaRX8rn1MdXmY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-DHZF/ftJqeKvjgaYUY8KNOkq7MBguPi2yXyrb1V91M8=";
   };
 
-  cargoHash = "sha256-yUODUAhWtRGCj3U9nBlw3+5dNv6vGHXmJzUd8hGKnu0=";
+  cargoHash = "sha256-A2bD4uXU4/9uMJjCHc83dfFVqjn/zgjZ31gDWiAhFVk=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "CLI for organizing Tailwind CSS classes";
     mainProgram = "rustywind";
     homepage = "https://github.com/avencera/rustywind";
-    changelog = "https://github.com/avencera/rustywind/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/avencera/rustywind/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.progrm_jarvis ];
   };
-}
+})

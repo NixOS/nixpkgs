@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  substituteAll,
+  replaceVars,
   buildPythonPackage,
   fetchPypi,
   joblib,
@@ -11,24 +11,22 @@
   typing-extensions,
   espeak-ng,
   setuptools,
-  pytest,
 }:
 
 buildPythonPackage rec {
   pname = "phonemizer";
-  version = "3.3.0";
+  version = "3.4.0";
   pyproject = true;
 
   build-system = [ setuptools ];
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Xgw4Ei7/4LMxok5nSv8laHTs4WnXCpzxEgM3tW+OPQw=";
+    hash = "sha256-4TIxmAxQvGcewEZjeboCcmCtnWGSmVLYrpZls9DyUes=";
   };
 
   patches = [
-    (substituteAll {
-      src = ./backend-paths.patch;
+    (replaceVars ./backend-paths.patch {
       libespeak = "${lib.getLib espeak-ng}/lib/libespeak-ng${stdenv.hostPlatform.extensions.sharedLibrary}";
       # FIXME package festival
     })

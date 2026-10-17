@@ -21,19 +21,19 @@
   socat,
   sqlite,
   stdenv,
-  systemd,
+  systemdLibs,
   tigervnc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nemu";
-  version = "3.3.1";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "nemuTUI";
     repo = "nemu";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-6WzqBkspKKs1e8kg1i71ntZHa78s5pJ1u02mXvzpiEc=";
+    hash = "sha256-DGHrCQjaikjkANb+/H69JCIO3S4vgag28BLx1HcCnQ0=";
   };
 
   cmakeFlags = [
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     qemu
     socat
     sqlite
-    systemd # for libudev
+    systemdLibs # for libudev
     tigervnc
   ];
 

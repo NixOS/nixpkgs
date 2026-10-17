@@ -6,27 +6,28 @@
   buildPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libstemmer";
-  version = "2.2.0";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "snowballstem";
     repo = "snowball";
-    rev = "v${version}";
-    sha256 = "sha256-qXrypwv/I+5npvGHGsHveijoui0ZnoGYhskCfLkewVE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FpvV2brpjl0/l/EmrHN9tWFrXUUz9BDUH548MAjiTa8=";
   };
 
   nativeBuildInputs = [ perl ];
 
-  prePatch =
-    ''
-      patchShebangs .
-    ''
-    + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      substituteInPlace GNUmakefile \
-        --replace './snowball' '${lib.getBin buildPackages.libstemmer}/bin/snowball'
-    '';
+  strictDeps = true;
+
+  prePatch = ''
+    patchShebangs .
+  ''
+  + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    substituteInPlace GNUmakefile \
+      --replace-fail './snowball ' '${lib.getExe' buildPackages.libstemmer "snowball"} '
+  '';
 
   makeTarget = "libstemmer.a";
 
@@ -38,11 +39,14 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  __structuredAttrs = true;
+
+  meta = {
     description = "Snowball Stemming Algorithms";
     homepage = "https://snowballstem.org/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fpletz ];
-    platforms = platforms.all;
+    changelog = "https://github.com/snowballstem/snowball/blob/v${finalAttrs.version}/NEWS";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fpletz ];
+    platforms = lib.platforms.all;
   };
-}
+})

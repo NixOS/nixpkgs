@@ -1,27 +1,69 @@
-{ gnustep, lib, fetchFromGitHub, makeWrapper, python3, lndir, libxcrypt
-, openssl, openldap, sope, libmemcached, curl, libsodium, libytnef, libzip, pkg-config, nixosTests
-, oath-toolkit
-, enableActiveSync ? false
-, libwbxml }:
-gnustep.stdenv.mkDerivation rec {
+{
+  lib,
+  clangStdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  python3,
+  lndir,
+  libxcrypt,
+  openssl,
+  openldap,
+  sope,
+  libmemcached,
+  curl,
+  libsodium,
+  libytnef,
+  libzip,
+  pkg-config,
+  nixosTests,
+  oath-toolkit,
+  gnustep-make,
+  gnustep-base,
+  enableActiveSync ? false,
+  libwbxml,
+}:
+
+clangStdenv.mkDerivation rec {
   pname = "sogo";
-  version = "5.11.2";
+  version = "5.12.11";
 
   # always update the sope package as well, when updating sogo
   src = fetchFromGitHub {
     owner = "Alinto";
-    repo = pname;
+    repo = "sogo";
     rev = "SOGo-${version}";
-    hash = "sha256-c+547x7ugYoLMgGVLcMmmb9rzquRJOv8n+Js2CuE7I0=";
+    hash = "sha256-zGCQ6uI6TYTZONl3WeCHbE8k57Yn21uz7OFJOHUXDfE=";
   };
 
-  nativeBuildInputs = [ gnustep.make makeWrapper python3 pkg-config ];
-  buildInputs = [ gnustep.base sope openssl libmemcached curl libsodium libytnef libzip openldap oath-toolkit libxcrypt ]
-    ++ lib.optional enableActiveSync libwbxml;
+  nativeBuildInputs = [
+    makeWrapper
+    python3
+    pkg-config
+  ];
+  buildInputs = [
+    gnustep-base
+    sope
+    openssl
+    libmemcached
+    curl
+    libsodium
+    libytnef
+    libzip
+    openldap
+    oath-toolkit
+    libxcrypt
+  ]
+  ++ lib.optional enableActiveSync libwbxml;
 
   patches = lib.optional enableActiveSync ./enable-activesync.patch;
 
   postPatch = ''
+    # Don't record the compile command line in .GCC.command.line sections of
+    # the installed binaries: it embeds the store paths of the whole toolchain
+    # and turns clang, llvm and gcc into runtime dependencies.
+    substituteInPlace general.make \
+      --replace-fail ' $(call cc-option,-frecord-gcc-switches)' ""
+
     # Exclude NIX_ variables
     sed -i 's/grep GNUSTEP_/grep ^GNUSTEP_/g' configure
 
@@ -33,7 +75,7 @@ gnustep.stdenv.mkDerivation rec {
 
     # Move all GNUStep makefiles to a common directory
     mkdir -p makefiles
-    cp -r {${gnustep.make},${sope}}/share/GNUstep/Makefiles/* makefiles
+    cp -r {${gnustep-make},${sope}}/share/GNUstep/Makefiles/* makefiles
 
     # Modify the search path for GNUStep makefiles
     find . -type f -name GNUmakefile -exec sed -i "s:\\$.GNUSTEP_MAKEFILES.:$PWD/makefiles:g" {} +
@@ -50,11 +92,11 @@ gnustep.stdenv.mkDerivation rec {
   preFixup = ''
     # Create gnustep.conf
     mkdir -p $out/share/GNUstep
-    cp ${gnustep.make}/etc/GNUstep/GNUstep.conf $out/share/GNUstep/
-    sed -i "s:${gnustep.make}:$out:g" $out/share/GNUstep/GNUstep.conf
+    cp ${gnustep-make}/etc/GNUstep/GNUstep.conf $out/share/GNUstep/
+    sed -i "s:${gnustep-make}:$out:g" $out/share/GNUstep/GNUstep.conf
 
     # Link in GNUstep base
-    ${lndir}/bin/lndir ${lib.getLib gnustep.base}/lib/GNUstep/ $out/lib/GNUstep/
+    ${lndir}/bin/lndir ${lib.getLib gnustep-base}/lib/GNUstep/ $out/lib/GNUstep/
 
     # Link in sope
     ${lndir}/bin/lndir ${sope}/ $out/
@@ -72,12 +114,14 @@ gnustep.stdenv.mkDerivation rec {
 
   passthru.tests.sogo = nixosTests.sogo;
 
-  meta = with lib; {
+  meta = {
     description = "Very fast and scalable modern collaboration suite (groupware)";
-    license = with licenses; [ gpl2Only lgpl21Only ];
+    license = with lib.licenses; [
+      gpl2Only
+      lgpl21Only
+    ];
     homepage = "https://sogo.nu/";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ jceb ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ jceb ];
   };
 }
-

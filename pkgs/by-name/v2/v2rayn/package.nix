@@ -1,31 +1,39 @@
 {
-  fetchFromGitHub,
+  lib,
+  stdenv,
   buildDotnetModule,
+  fetchFromGitHub,
   dotnetCorePackages,
+  autoPatchelfHook,
+  copyDesktopItems,
+  makeDesktopItem,
   icu,
   zlib,
-  stdenv,
-  lib,
   fontconfig,
-  autoPatchelfHook,
   openssl,
   lttng-ust_2_12,
   krb5,
-  makeDesktopItem,
-  copyDesktopItems,
   bash,
-  xorg,
-  xdg-utils,
+  libxrandr,
+  libxi,
+  libxext,
+  libxcursor,
+  libx11,
+  libsm,
+  libice,
+  nix-update-script,
 }:
-buildDotnetModule rec {
+
+buildDotnetModule (finalAttrs: {
   pname = "v2rayn";
-  version = "7.7.0";
+  version = "7.25.6";
 
   src = fetchFromGitHub {
     owner = "2dust";
     repo = "v2rayN";
-    tag = version;
-    hash = "sha256-gnGZtHSmmyxTf+/Dp1cEXI1odI8SiFLzATd9PNnAC7E=";
+    tag = finalAttrs.version;
+    hash = "sha256-EsljyeXE1UwGjV6tL8+d8lbZYktnzkzpQkkeuGt9HDg=";
+    fetchSubmodules = true;
   };
 
   projectFile = "v2rayN/v2rayN.Desktop/v2rayN.Desktop.csproj";
@@ -33,19 +41,25 @@ buildDotnetModule rec {
   nugetDeps = ./deps.json;
 
   postPatch = ''
-    substituteInPlace v2rayN/ServiceLib/Common/Utils.cs \
-      --replace-fail "/bin/bash" "${bash}/bin/bash"
+    chmod +x v2rayN/ServiceLib/Sample/proxy_set_linux_sh
+    patchShebangs v2rayN/ServiceLib/Sample/proxy_set_linux_sh
+    chmod +x v2rayN/ServiceLib/Sample/kill_as_sudo_linux_sh
+    patchShebangs v2rayN/ServiceLib/Sample/kill_as_sudo_linux_sh
+    substituteInPlace v2rayN/ServiceLib/Global.cs \
+      --replace-fail "/bin/bash" "${lib.getExe bash}"
+    substituteInPlace v2rayN/ServiceLib/Manager/CoreAdminManager.cs \
+      --replace-fail "/bin/bash" "${lib.getExe bash}"
     substituteInPlace v2rayN/ServiceLib/Handler/AutoStartupHandler.cs \
-      --replace-fail "Utils.GetExePath())" '"${placeholder "out"}/bin/v2rayN")'
-    substituteInPlace v2rayN/ServiceLib/ViewModels/MainWindowViewModel.cs \
-      --replace-fail "nautilus" "${xdg-utils}/bin/xdg-open"
+      --replace-fail "Utils.GetExePath())" '"v2rayN")'
+    substituteInPlace v2rayN/ServiceLib/Manager/CoreManager.cs \
+      --replace-fail 'Environment.GetEnvironmentVariable(Global.LocalAppData) == "1"' "false"
   '';
 
   dotnetBuildFlags = [ "-p:PublishReadyToRun=false" ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
 
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
   executables = [ "v2rayN" ];
 
@@ -65,13 +79,13 @@ buildDotnetModule rec {
   ];
 
   runtimeDeps = [
-    xorg.libX11
-    xorg.libXrandr
-    xorg.libXi
-    xorg.libICE
-    xorg.libSM
-    xorg.libXcursor
-    xorg.libXext
+    libx11
+    libxrandr
+    libxi
+    libice
+    libsm
+    libxcursor
+    libxext
   ];
 
   desktopItems = [
@@ -81,30 +95,27 @@ buildDotnetModule rec {
       icon = "v2rayn";
       genericName = "v2rayN";
       desktopName = "v2rayN";
-      categories = [
-        "Network"
-        "Application"
-      ];
+      categories = [ "Network" ];
       terminal = false;
       comment = "A GUI client for Windows and Linux, support Xray core and sing-box-core and others";
     })
   ];
 
   postInstall = ''
-    install -Dm644 v2rayN/v2rayN.Desktop/v2rayN.png $out/share/pixmaps/v2rayn.png
+    install -D --mode 0644 v2rayN/v2rayN.Desktop/v2rayN.png $out/share/icons/hicolor/256x256/apps/v2rayn.png
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "GUI client for Windows and Linux, support Xray core and sing-box-core and others";
+    description = "GUI client support Xray core and sing-box-core and others";
     homepage = "https://github.com/2dust/v2rayN";
     mainProgram = "v2rayN";
-    license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ aucub ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ andrewzah ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
   };
-}
+})

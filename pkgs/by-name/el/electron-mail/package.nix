@@ -2,44 +2,96 @@
   appimageTools,
   lib,
   fetchurl,
-  nix-update-script,
+  stdenvNoCC,
+  makeWrapper,
+  _7zz,
 }:
 
 let
   pname = "electron-mail";
-  version = "5.2.3";
+  version = "5.3.10";
 
-  src = fetchurl {
-    url = "https://github.com/vladimiry/ElectronMail/releases/download/v${version}/electron-mail-${version}-linux-x86_64.AppImage";
-    sha256 = "sha256-ajekPPRgprYNWE2osAXe46qVjnxXzkXa+MkWiNYJ5Fc=";
+  sources = {
+    x86_64-linux = fetchurl {
+      url = "https://github.com/vladimiry/ElectronMail/releases/download/v${version}/electron-mail-${version}-linux-x86_64.AppImage";
+      hash = "sha256-dzWp1HsFHGurzxqzLcNsUvcSEFcuushcwtUL+ogOoAg=";
+    };
+    aarch64-darwin = fetchurl {
+      url = "https://github.com/vladimiry/ElectronMail/releases/download/v${version}/electron-mail-${version}-mac-arm64.dmg";
+      hash = "sha256-eGOpOBZ/6CSBaFFXxD0tYdhWPCTwR9n+/stsEH7vR2U=";
+    };
   };
 
-  appimageContents = appimageTools.extract { inherit pname version src; };
-in
-appimageTools.wrapType2 {
-  inherit pname version src;
+  src = sources.${stdenvNoCC.hostPlatform.system};
 
-  extraInstallCommands = ''
-    install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
-    substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
-    cp -r ${appimageContents}/usr/share/icons $out/share
-  '';
+  appimageContents = appimageTools.extract {
+    inherit src pname version;
+  };
 
-  extraPkgs = pkgs: [
-    pkgs.libsecret
-    pkgs.libappindicator-gtk3
-  ];
-
-  passthru.updateScript = nix-update-script { };
-
-  meta = with lib; {
-    description = "ElectronMail is an Electron-based unofficial desktop client for ProtonMail";
+  meta = {
+    description = "Unofficial Election-based ProtonMail desktop client";
     mainProgram = "electron-mail";
     homepage = "https://github.com/vladimiry/ElectronMail";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.princemachiavelli ];
-    platforms = [ "x86_64-linux" ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
+      princemachiavelli
+      BatteredBunny
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-darwin"
+    ];
     changelog = "https://github.com/vladimiry/ElectronMail/releases/tag/v${version}";
   };
-}
+
+  linux = appimageTools.wrapType2 {
+    inherit
+      src
+      pname
+      version
+      meta
+      ;
+
+    passthru.updateScript = ./update.sh;
+
+    extraInstallCommands = ''
+      install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
+      substituteInPlace $out/share/applications/${pname}.desktop \
+        --replace-fail 'Exec=AppRun' 'Exec=${pname}'
+      cp -r ${appimageContents}/usr/share/icons $out/share
+    '';
+
+    extraPkgs = pkgs: [
+      pkgs.libsecret
+      pkgs.libappindicator
+    ];
+  };
+
+  darwin = stdenvNoCC.mkDerivation {
+    inherit
+      src
+      pname
+      version
+      meta
+      ;
+
+    passthru.updateScript = ./update.sh;
+
+    sourceRoot = ".";
+    nativeBuildInputs = [
+      _7zz
+      makeWrapper
+    ];
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/Applications
+      cp -r *.app $out/Applications/
+      makeWrapper "$out/Applications/electron-mail.app/Contents/MacOS/electron-mail" $out/bin/${pname}
+
+      runHook postInstall
+    '';
+  };
+in
+if stdenvNoCC.hostPlatform.isDarwin then darwin else linux
