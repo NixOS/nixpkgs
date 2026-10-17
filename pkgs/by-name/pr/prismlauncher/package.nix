@@ -37,7 +37,7 @@
   additionalPrograms ? [ ],
   controllerSupport ? stdenv.hostPlatform.isLinux,
   gamemodeSupport ? stdenv.hostPlatform.isLinux,
-  jdks ? [
+  jdks ? lib.filter (lib.meta.availableOn stdenv.hostPlatform) [
     jdk25
     jdk21
     jdk17
