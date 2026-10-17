@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "i3altlayout";
-  version = "0.3";
+  version = "1.1.5";
   pyproject = true;
 
   __structuredAttrs = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-DhOYeSCxKthr2fEMGMBXjUYeCJjj6AV4d05So4eDF8A=";
+    hash = "sha256-LB5EdVaTB2Z6L6z9REk6QTL22qlKDPoa+OEWksUs8gc=";
   };
 
   build-system = with python3Packages; [
