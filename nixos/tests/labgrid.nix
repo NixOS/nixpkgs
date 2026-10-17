@@ -22,6 +22,22 @@
       environment.systemPackages = [ pkgs.python3Packages.labgrid ];
     };
 
+  nodes.exporter =
+    { pkgs, ... }:
+    {
+      services.labgrid.exporter.enable = true;
+      services.labgrid.exporter.coordinatorAddress = "coordinator";
+      services.labgrid.exporter.name = "testexportername";
+      services.labgrid.exporter.resources = {
+        testgroup = {
+          location = "testlocation";
+          NetworkInterface = {
+            ifname = "lo";
+          };
+        };
+      };
+    };
+
   testScript =
     { nodes, ... }:
     #python
@@ -39,9 +55,14 @@
           coordinator.wait_for_unit("labgrid-coordinator.service")
           coordinator.wait_for_open_port(20408)
 
+      with subtest("Wait for exporter startup"):
+          exporter.start()
+          exporter.wait_for_unit("labgrid-exporter.service")
+
       with subtest("Connect from client"):
           client.start()
           out = client.succeed("labgrid-client resources")
+          assert_contains(out, "testexportername/testgroup/RemoteNetworkInterface")
 
       with subtest("Create place"):
           client.succeed("labgrid-client -p testplace create")
@@ -58,9 +79,14 @@
           out = client.succeed("labgrid-client places")
           assert_contains(out, "testplace")
 
-      with subtest("Check systemd hardening does not degrade unnoticed"):
+      with subtest("Check systemd hardening does not degrade unnoticed (coordinator)"):
           exact_threshold = 11
           out = coordinator.fail(f"systemd-analyze security labgrid-coordinator.service --threshold={exact_threshold-1}")
           out = coordinator.succeed(f"systemd-analyze security labgrid-coordinator.service --threshold={exact_threshold}")
+
+      with subtest("Check systemd hardening does not degrade unnoticed (exporter)"):
+          exact_threshold = 11
+          out = exporter.fail(f"systemd-analyze security labgrid-exporter.service --threshold={exact_threshold-1}")
+          out = exporter.succeed(f"systemd-analyze security labgrid-exporter.service --threshold={exact_threshold}")
     '';
 }
