@@ -79,6 +79,12 @@ nix-build --no-out-link --expr '
 '
 ```
 
+`tests.cuda.gpuCheck` runs all three GPU-host suites in a single derivation with
+logs under its output directory. GPU-test discovery conventions match the
+`gpuCheck` name (e.g. the NixOS-CUDA Hydra gpu-checks jobset builds every
+`tests.<name>.gpuCheck`), so use that attribute when adding the suites to an
+auto-discovering CI.
+
 For an interactive run of the same PJRT suite, select its tester:
 
 ```sh
