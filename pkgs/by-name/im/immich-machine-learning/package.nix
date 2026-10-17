@@ -16,8 +16,6 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   src = "${immich.src}/machine-learning";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   pythonRelaxDeps = [
     "onnx"
   ];
