@@ -12,13 +12,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "taze";
-  version = "21.2.0";
+  version = "21.3.0";
 
   src = fetchFromGitHub {
     owner = "antfu-collective";
     repo = "taze";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-raAtOH9fVaN8BuQASXailJLMWKUKi0zhZ+/rECcgAQo=";
+    hash = "sha256-ZKA1b8r/THz+0+TZ31oT11gq9JryB7yM0KT6zu3umQQ=";
   };
 
   pnpmDeps = fetchPnpmDeps {
