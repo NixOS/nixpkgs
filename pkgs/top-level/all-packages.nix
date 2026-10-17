@@ -1981,8 +1981,6 @@ with pkgs;
 
   iperf = iperf3;
 
-  i-pi = with python3Packages; toPythonApplication i-pi;
-
   # ipscan is commonly known under the name angryipscanner
   angryipscanner = ipscan;
 
