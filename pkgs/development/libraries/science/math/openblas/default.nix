@@ -66,7 +66,8 @@ let
 
     armv7l-linux = {
       BINARY = 32;
-      TARGET = setTarget "ARMV7";
+      # Generic ARMv7 only guarantees VFPv3-D16; ARMV7 kernels require d16-d31.
+      TARGET = setTarget "ARMV6";
       DYNAMIC_ARCH = setDynamicArch false;
       USE_OPENMP = true;
     };
