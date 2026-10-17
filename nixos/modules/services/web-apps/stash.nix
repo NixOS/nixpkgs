@@ -366,12 +366,49 @@ let
             done
           '';
     };
+
+  secretOptionType =
+    let
+      contractSecretsType = lib.contracts.fileSecrets.mkContract {
+        request = {
+          mode.readOnly = true;
+          owner = {
+            default = cfg.user;
+            defaultText = literalExpression "config.services.stash.user";
+            readOnly = true;
+          };
+          group = {
+            default = cfg.group;
+            defaultText = literalExpression "config.services.stash.group";
+            readOnly = true;
+          };
+        };
+      };
+    in
+    types.oneOf [
+      types.path
+      contractSecretsType
+    ];
+
+  # A secret option holds either a plain path or a file secrets contract.
+  secretPath = secret: if lib.contract.isInstance secret then secret.response.path else secret;
 in
 {
   meta = {
     buildDocsInSandbox = false;
     maintainers = with lib.maintainers; [ DrakeTDL ];
   };
+
+  imports = [
+    (lib.mkRenamedOptionModule
+      [ "services" "stash" "jwtSecretKeyFile" ]
+      [ "services" "stash" "jwtSecretKey" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "stash" "sessionStoreKeyFile" ]
+      [ "services" "stash" "sessionStoreKey" ]
+    )
+  ];
 
   options = {
     services.stash = {
@@ -418,7 +455,7 @@ in
       };
 
       passwordFile = mkOption {
-        type = types.nullOr types.path;
+        type = types.nullOr secretOptionType;
         default = null;
         example = "/path/to/password/file";
         description = ''
@@ -431,12 +468,12 @@ in
         '';
       };
 
-      jwtSecretKeyFile = mkOption {
-        type = types.path;
+      jwtSecretKey = mkOption {
+        type = secretOptionType;
         description = "Path to file containing a secret used to sign JWT tokens.";
       };
-      sessionStoreKeyFile = mkOption {
-        type = types.path;
+      sessionStoreKey = mkOption {
+        type = secretOptionType;
         description = "Path to file containing a secret for session store.";
       };
 
@@ -463,6 +500,20 @@ in
   };
 
   config = mkIf cfg.enable {
+    # Send the request of each secret option that uses the contract to `want`.
+    # The user sets the `response`, for example from `results`.
+    contracts.fileSecrets.want.stash = {
+      passwordFile = mkIf (lib.contract.isInstance cfg.passwordFile) {
+        inherit (cfg.passwordFile) request;
+      };
+      jwtSecretKey = mkIf (lib.contract.isInstance cfg.jwtSecretKey) {
+        inherit (cfg.jwtSecretKey) request;
+      };
+      sessionStoreKey = mkIf (lib.contract.isInstance cfg.sessionStoreKey) {
+        inherit (cfg.sessionStoreKey) request;
+      };
+    };
+
     assertions = [
       {
         assertion =
@@ -514,9 +565,9 @@ in
               install -d ${cfg.settings.generated}
               if [[ -z "${toString cfg.mutableSettings}" || ! -f ${cfg.dataDir}/config.yml ]]; then
                 env \
-                  password=$(< ${cfg.passwordFile}) \
-                  jwtSecretKeyFile=$(< ${cfg.jwtSecretKeyFile}) \
-                  sessionStoreKeyFile=$(< ${cfg.sessionStoreKeyFile}) \
+                  password=$(< ${secretPath cfg.passwordFile}) \
+                  jwtSecretKeyFile=$(< ${secretPath cfg.jwtSecretKey}) \
+                  sessionStoreKeyFile=$(< ${secretPath cfg.sessionStoreKey}) \
                   ${lib.getExe pkgs.yq-go} '
                     .jwt_secret_key = strenv(jwtSecretKeyFile) |
                     .session_store_key = strenv(sessionStoreKeyFile) |
