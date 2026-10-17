@@ -1498,8 +1498,6 @@ with pkgs;
 
   seaborn-data = callPackage ../tools/misc/seaborn-data { };
 
-  nixpkgs-pytools = with python3.pkgs; toPythonApplication nixpkgs-pytools;
-
   nsz = with python3.pkgs; toPythonApplication nsz;
 
   ocrmypdf = with python3.pkgs; toPythonApplication ocrmypdf;
