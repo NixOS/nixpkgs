@@ -1571,8 +1571,6 @@ with pkgs;
     callPackage ../applications/window-managers/hyprwm/hyprland-plugins { }
   );
 
-  intensity-normalization = with python3Packages; toPythonApplication intensity-normalization;
-
   klaus = with python3Packages; toPythonApplication klaus;
 
   klipper-firmware = callPackage ../servers/klipper/klipper-firmware.nix { };
