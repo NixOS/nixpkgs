@@ -2443,8 +2443,6 @@ with pkgs;
 
   po4a = perlPackages.Po4a;
 
-  remarshal = with python3Packages; toPythonApplication remarshal;
-
   rtaudio = rtaudio_5;
 
   mpi = openmpi; # this attribute should used to build MPI applications
