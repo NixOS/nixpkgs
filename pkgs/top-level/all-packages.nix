@@ -2636,8 +2636,6 @@ with pkgs;
 
   vinyl-cache = vinyl-cache_9;
 
-  vncdotool = with python3Packages; toPythonApplication vncdotool;
-
   # An alias to work around the splicing incidents
   # Related:
   # https://github.com/NixOS/nixpkgs/issues/204303
