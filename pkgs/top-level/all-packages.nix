@@ -931,8 +931,6 @@ with pkgs;
 
   ### TOOLS
 
-  actdiag = with python3.pkgs; toPythonApplication actdiag;
-
   opnplug = adlplug.override { type = "OPN"; };
 
   aflplusplus = callPackage ../tools/security/aflplusplus { wine = null; };
