@@ -26,13 +26,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "leocad";
-  version = "25.09";
+  version = "26.09";
 
   src = fetchFromGitHub {
     owner = "leozide";
     repo = "leocad";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Utiy9JBKaPddb2yNv1Ta61KIB1vCsayZlxagn3or5UE=";
+    hash = "sha256-2lsYVdDQrqkOW6o/2BZpmu64mANzmwUlfT1E/UjJxLg=";
   };
 
   nativeBuildInputs = [
