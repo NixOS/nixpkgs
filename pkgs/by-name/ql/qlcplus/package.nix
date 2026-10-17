@@ -15,6 +15,7 @@
   libsndfile,
   fftw,
   libgpiod,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -95,6 +96,11 @@ stdenv.mkDerivation rec {
   postInstall = ''
     ln -sf $out/lib/*/libqlcplus* $out/lib
   '';
+
+  passthru.updateScript = nix-update-script {
+    # Tags look like QLC+_5.3.0
+    extraArgs = [ "--version-regex=^QLC\\+_(.*)$" ];
+  };
 
   meta = {
     description = "Free and cross-platform software to control DMX or analog lighting systems like moving heads, dimmers, scanners etc";
