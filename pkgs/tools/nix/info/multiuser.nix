@@ -1,7 +1,7 @@
 let
   pkgs = import <nixpkgs> { };
 in
-pkgs.runCommand "diagnostics-multiuser" { } ''
+pkgs.runCommandLocal "diagnostics-multiuser" { } ''
   set -x
   # no cache: ${toString builtins.currentTime}
   # For reproducibility, nix always uses nixbld group:
