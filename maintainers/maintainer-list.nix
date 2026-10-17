@@ -1267,6 +1267,11 @@
     name = "Emi";
     matrix = "@emi:the-apothecary.club";
   };
+  alden = {
+    github = "alden";
+    githubId = 84120;
+    name = "Alden";
+  };
   aldenparker = {
     github = "aldenparker";
     githubId = 32986873;
@@ -13205,6 +13210,11 @@
     githubId = 1536838;
     name = "Jean-Baptiste Gosselin";
   };
+  jbiel = {
+    name = "Jared Biel";
+    github = "jbiel";
+    githubId = 961717;
+  };
   jboy = {
     email = "jboy+nixos@bius.moe";
     githubId = 2187261;
@@ -20553,13 +20563,10 @@
   };
   nanoyaki = {
     name = "Hana Kretzer";
-    email = "hanakretzer@nanoyaki.space";
+    email = "contact@nanoyaki.space";
     github = "nanoyaki";
     githubId = 144328493;
-    keys = [
-      { fingerprint = "D89F 440C 6CD7 4753 090F  EC7A 4682 C5CB 4D9D EA3C"; }
-      { fingerprint = "5A1D C7CE 51DC 0A85 6DEA  41F7 31A8 CE0D 2E7D 30C3"; }
-    ];
+    keys = [ { fingerprint = "Y/0kozwJjkoqpQPqm8lI0zvFuikIPm7hl2JRbcQTDh0"; } ];
   };
   naomieow = {
     name = "Naomi Roberts";

@@ -79,7 +79,7 @@ let
     owner = "rycee";
     repo = "nmt";
     rev = "d2cc8c1042b1c2511f68f40e2790a8c0e29eeb42";
-    sha256 = "1ykcvyx82nhdq167kbnpgwkgjib8ii7c92y3427v986n2s5lsskc";
+    hash = "sha256-bGpNixbWoLSPIMOLxE6MaEX5Jn/XrnlMwA1agbrfbPo=";
   };
 
   /*
