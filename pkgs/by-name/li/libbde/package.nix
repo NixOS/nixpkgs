@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libbde";
-  version = "20240502";
+  version = "20260916";
 
   src = fetchurl {
     url = "https://github.com/libyal/libbde/releases/download/${finalAttrs.version}/libbde-alpha-${finalAttrs.version}.tar.gz";
-    hash = "sha256-La6rzBOfyBIXDn78vXb8GUt8jgQkzsqM38kRZ7t3Fp0=";
+    hash = "sha256-IqJ8gffopRMjXBjWQoibaQ/v00ql7mh5KRA75iJG2mg=";
   };
 
   nativeBuildInputs = [ pkg-config ];
