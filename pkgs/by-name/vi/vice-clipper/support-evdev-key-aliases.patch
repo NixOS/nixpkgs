@@ -1,0 +1,16 @@
+diff --git a/vice/hotkey.py b/vice/hotkey.py
+index 769a020..cf7b65b 100644
+--- a/vice/hotkey.py
++++ b/vice/hotkey.py
+@@ -304,4 +304,9 @@ def can_access_hotkeys() -> bool:
+-
++
+ def list_available_keys() -> list[str]:
+     """Return all KEY_* names evdev knows about (for documentation/config help)."""
+-    return sorted(k for k in ecodes.bytype[ecodes.EV_KEY].values() if k.startswith("KEY_"))
++    return sorted(
++        name
++        for value in ecodes.bytype[ecodes.EV_KEY].values()
++        for name in (value if isinstance(value, tuple) else (value,))
++        if isinstance(name, str) and name.startswith("KEY_")
++    )
