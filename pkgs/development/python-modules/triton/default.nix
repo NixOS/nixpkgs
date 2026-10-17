@@ -25,6 +25,7 @@
   gtest,
   libxml2,
   ncurses,
+  nlohmann_json,
   pybind11,
   zlib,
 
@@ -47,7 +48,7 @@ let
 in
 buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
   pname = "triton";
-  version = "3.7.1";
+  version = "3.8.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -56,7 +57,7 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
     owner = "triton-lang";
     repo = "triton";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2+NAHZZjFQxj+9UGiNpk4TVAKW6nydw1L1FTTJpNya4=";
+    hash = "sha256-ynBRAtCxAkEmV470rxZ7h6I1MBMEDd5OImH4ZhBAj3Y=";
   };
 
   patches = [
@@ -90,10 +91,18 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
     # Avoid downloading dependencies remove any downloads
     + ''
       substituteInPlace setup.py \
-        --replace-fail "[get_json_package_info()]" "[]" \
-        --replace-fail "[get_llvm_package_info()]" "[]" \
-        --replace-fail 'yield ("triton.profiler", "third_party/proton/proton")' 'pass' \
-        --replace-fail "curr_version.group(1) != version" "False"
+        --replace-fail 'yield ("triton.profiler", "third_party/proton/proton")' 'pass'
+    ''
+    # `is_git_repo` shells out to `git`, which is absent from the sandbox, and only
+    # handles `CalledProcessError`. Upstream already tolerates a missing `git` at the
+    # call site: https://github.com/triton-lang/triton/blob/v3.8.0/setup.py#L84
+    + ''
+      substituteInPlace setup.py \
+        --replace-fail \
+          'except subprocess.CalledProcessError:
+              return False' \
+          'except (subprocess.CalledProcessError, FileNotFoundError):
+              return False'
     ''
     # Don't fetch googletest
     + ''
@@ -138,6 +147,7 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeFeature "LLVM_SYSPATH" "${llvm}")
+    (lib.cmakeFeature "JSON_SYSPATH" "${nlohmann_json}")
 
     # `find_package` is called with `NO_DEFAULT_PATH`
     # https://cmake.org/cmake/help/latest/command/find_package.html
