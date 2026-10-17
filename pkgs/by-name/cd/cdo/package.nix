@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cdo";
-  version = "2.5.1";
+  version = "2.6.0";
 
   src = fetchurl {
     url = "https://code.mpimet.mpg.de/attachments/download/29864/cdo-${finalAttrs.version}.tar.gz";
-    hash = "sha256-QYv5HoZMv+VHw8jhUNMUGc+nFefTRVCMVZGxq9pUV9E=";
+    hash = "sha256-dS1c2m+j/bigTc6havWRjl+fVGV9ml0uNa409XVcMdg=";
   };
 
   # Dependencies
