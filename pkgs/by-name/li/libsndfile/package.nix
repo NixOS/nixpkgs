@@ -61,6 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
 
+  strictDeps = true;
+
   enableParallelBuilding = true;
 
   outputs = [
