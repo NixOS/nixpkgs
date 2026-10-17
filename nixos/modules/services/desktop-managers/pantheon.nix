@@ -179,10 +179,10 @@ in
       services.zeitgeist.enable = mkDefault true;
       services.geoclue2.enable = mkDefault true;
       # pantheon has pantheon-agent-geoclue2
-      services.geoclue2.enableDemoAgent = false;
+      services.geoclue2.demoAgent.enable = false;
       services.geoclue2.appConfig."io.elementary.desktop.agent-geoclue2" = {
-        isAllowed = true;
-        isSystem = true;
+        allowed = true;
+        system = true;
       };
       services.udev.packages = [
         pkgs.pantheon.gnome-settings-daemon
