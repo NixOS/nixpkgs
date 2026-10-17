@@ -253,7 +253,10 @@ let
         # -dev outputs in the runtime closure. The cc wrapper already passes these
         # paths, so have pkgconf treat them as system paths and omit them.
         PKG_CONFIG_SYSTEM_INCLUDE_PATH = lib.makeSearchPathOutput "dev" "include" sharedLibInputs;
-        PKG_CONFIG_SYSTEM_LIBRARY_PATH = lib.makeSearchPathOutput "dev" "lib" sharedLibInputs;
+        PKG_CONFIG_SYSTEM_LIBRARY_PATH = lib.concatStringsSep ":" [
+          (lib.makeSearchPathOutput "dev" "lib" sharedLibInputs)
+          (lib.makeLibraryPath sharedLibInputs)
+        ];
       }
       // lib.optionalAttrs (!canExecute && !canEmulate) {
         # these are used in the --cross-compiling case. see comment at postConfigure.
@@ -318,10 +321,7 @@ let
       ++ lib.optional useSharedTemporal "--v8-enable-temporal-support"
       ++ lib.optionals (lib.versionOlder version "19") [ "--without-dtrace" ]
       ++ lib.optionals (lib.versionAtLeast version "22") [ "--use-prefix-to-find-headers" ]
-      ++ lib.concatMap (name: [
-        "--shared-${name}"
-        "--shared-${name}-libpath=${lib.getLib sharedLibDeps.${name}}/lib"
-      ]) (builtins.attrNames sharedLibDeps);
+      ++ map (name: "--shared-${name}") (builtins.attrNames sharedLibDeps);
 
       configurePlatforms = [ ];
 
