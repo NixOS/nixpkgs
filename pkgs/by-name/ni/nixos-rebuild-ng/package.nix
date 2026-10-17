@@ -8,6 +8,7 @@
   python3Packages,
   runCommand,
   scdoc,
+  stdenv,
   withShellFiles ? true,
   # passthru.tests
   nixosTests,
@@ -46,6 +47,7 @@ python3Packages.buildPythonApplication rec {
   postPatch = ''
     substituteInPlace nixos_rebuild/constants.py \
       --subst-var-by executable ${executable} \
+      --subst-var-by system ${stdenv.hostPlatform.system} \
       --subst-var-by withShellFiles ${lib.boolToString withShellFiles}
   '';
 
