@@ -2494,8 +2494,6 @@ with pkgs;
 
   shellify = haskellPackages.shellify.bin;
 
-  shiv = with python3Packages; toPythonApplication shiv;
-
   slither-analyzer = with python3Packages; toPythonApplication slither-analyzer;
 
   # aka., pgp-tools
