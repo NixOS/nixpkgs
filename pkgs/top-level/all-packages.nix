@@ -1195,8 +1195,6 @@ with pkgs;
 
   authentik-outposts = recurseIntoAttrs (callPackages ../by-name/au/authentik/outposts.nix { });
 
-  autoflake = with python3.pkgs; toPythonApplication autoflake;
-
   azure-cli-extensions = recurseIntoAttrs azure-cli.extensions;
 
   azure-sdk-for-cpp = recurseIntoAttrs (callPackage ../development/libraries/azure-sdk-for-cpp { });
