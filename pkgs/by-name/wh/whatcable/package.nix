@@ -10,14 +10,14 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "whatcable";
-  version = "1.2.1";
+  version = "1.5.0";
 
   strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchzip {
     url = "https://github.com/darrylmorley/whatcable/releases/download/v${finalAttrs.version}/WhatCable.zip";
-    hash = "sha256-znu0y7rj7HYxTs3Kr9hR44461NoROMKGX0KHsaNfAes=";
+    hash = "sha256-iiUeQSYFOwJYv3LtVygBTkA/00r4r72XlpypScMCpLM=";
   };
 
   dontPatch = true;
@@ -35,12 +35,43 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    re-plistbuddy
+  ];
   versionCheckProgram = writeShellScript "whatcable-version-check" ''
     ${lib.getExe' re-plistbuddy "PlistBuddy"} -c "Print :CFBundleShortVersionString" "$1"
   '';
   versionCheckProgramArg = [ "${placeholder "out"}/Applications/WhatCable.app/Contents/Info.plist" ];
   doInstallCheck = true;
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    app="$out/Applications/WhatCable.app"
+    executable=$(PlistBuddy -c 'Print :CFBundleExecutable' "$app/Contents/Info.plist")
+    test -n "$executable"
+    test -x "$app/Contents/MacOS/$executable"
+    test -x "$app/Contents/Helpers/whatcable"
+    test -L "$out/bin/whatcable"
+    test "$(readlink "$out/bin/whatcable")" = "$app/Contents/Helpers/whatcable"
+
+    # Execute a disposable copy outside the app bundle so macOS does not add
+    # protected com.apple.macl metadata to the output. Keep the plist and Swift
+    # resource bundles next to it: the CLI uses them for its version and help.
+    mkdir cli-test
+    cp "$out/bin/whatcable" cli-test/whatcable
+    cp "$app/Contents/Info.plist" cli-test/
+    cp -R "$app/Contents/Resources/"*.bundle cli-test/
+
+    # These modes exit before hardware probing or launching the GUI.
+    cliVersion=$(cli-test/whatcable --version)
+    test "$cliVersion" = "$version"
+    cli-test/whatcable --help > help.txt
+    grep -F 'Usage: whatcable [options]' help.txt
+
+    runHook postInstallCheck
+  '';
 
   passthru.updateScript = nix-update-script { };
 
