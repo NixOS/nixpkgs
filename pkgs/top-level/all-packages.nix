@@ -9956,8 +9956,6 @@ with pkgs;
 
   pgadmin4-desktopmode = pgadmin4.override { server-mode = false; };
 
-  pyupgrade = with python3Packages; toPythonApplication pyupgrade;
-
   pwntools = with python3Packages; toPythonApplication pwntools;
 
   qmasterpassword-wayland = qmasterpassword.override {
