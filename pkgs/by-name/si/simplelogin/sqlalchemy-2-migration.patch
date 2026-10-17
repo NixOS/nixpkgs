@@ -1,0 +1,11 @@
+diff --git a/migrations/versions/2021_080409_9014cca7097c_.py b/migrations/versions/2021_080409_9014cca7097c_.py
+--- a/migrations/versions/2021_080409_9014cca7097c_.py
++++ b/migrations/versions/2021_080409_9014cca7097c_.py
+@@ -18,0 +19 @@
++from sqlalchemy import text
+@@ -28 +29 @@
+-    session.execute("""
++    session.execute(text("""
+@@ -31 +32 @@
+-    """)
++    """))
