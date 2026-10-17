@@ -1,6 +1,7 @@
 {
   haskellPackages,
   lib,
+  lua55Packages,
   guile-lib,
   akkuPackages,
   katex,
@@ -36,6 +37,7 @@ let
     writeJSBin
     writeJSON
     writeLua
+    writeLuaBin
     writeNim
     writeNimBin
     writeNu
@@ -198,23 +200,13 @@ recurseIntoAttrs {
     #  print(y[0]['test'])
     #'');
 
-    # Could not test this because of external package issues :(
-    #lua = writeLuaBin "test-writers-lua-bin" { libraries = [ pkgs.luaPackages.say ]; } ''
-    #  s = require("say")
-    #  s:set_namespace("en")
-
-    #  s:set('money', 'I have %s dollars')
-    #  s:set('wow', 'So much money!')
-
-    #  print(s('money', {1000})) -- I have 1000 dollars
-
-    #  s:set_namespace("fr") -- switch to french!
-    #  s:set('wow', "Tant d'argent!")
-
-    #  print(s('wow')) -- Tant d'argent!
-    #  s:set_namespace("en")  -- switch back to english!
-    #  print(s('wow')) -- So much money!
-    #'';
+    lua = expectSuccessBin (
+      writeLuaBin "test-writers-lua-bin" { libraries = [ lua55Packages.say ]; } ''
+        local s = require("say")
+        s:set("result", "success")
+        print(s("result"))
+      ''
+    );
 
     #ruby = expectSuccessBin (writeRubyBin "test-writers-ruby-bin" { libraries = [ rubyPackages.rubocop ]; } ''
     #puts "This should work!"
@@ -438,7 +430,29 @@ recurseIntoAttrs {
 
     luaNoLibs = expectSuccess (
       writeLua "test-writers-lua-no-libs" { } ''
+        assert(_VERSION == "Lua 5.5")
         print("success")
+      ''
+    );
+
+    luaCModule = expectSuccess (
+      writeLua "test-writers-lua-c-module" { libraries = [ lua55Packages.luafilesystem ]; } ''
+        local lfs = require("lfs")
+        assert(lfs.attributes(".", "mode") == "directory")
+        print("success")
+      ''
+    );
+
+    luaTransitive = expectSuccess (
+      writeLua "test-writers-lua-transitive" { libraries = [ lua55Packages.luacov ]; } ''
+        assert(type(require("datafile")) == "table")
+        print("success")
+      ''
+    );
+
+    luaInvalidSyntax = testers.testBuildFailure (
+      writeLuaBin "test-writers-lua-invalid-syntax" { } ''
+        local =
       ''
     );
 
@@ -615,6 +629,23 @@ recurseIntoAttrs {
 
           if os.environ.get("ThaigerSprint") == "Thailand":
               print("success")
+        ''
+    );
+
+    lua = expectSuccess (
+      writeLua "test-writers-wrapping-lua"
+        {
+          libraries = [ lua55Packages.say ];
+          makeWrapperArgs = [
+            "--set"
+            "WRITER_RESULT"
+            "success"
+          ];
+        }
+        ''
+          local s = require("say")
+          s:set("result", os.getenv("WRITER_RESULT"))
+          print(s("result"))
         ''
     );
 
