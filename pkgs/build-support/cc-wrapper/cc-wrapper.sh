@@ -181,6 +181,14 @@ if [[ "$isCxx" = 1 ]]; then
     if [[ "$cxxLibrary" = 1 ]]; then
         NIX_CFLAGS_LINK_@suffixSalt@+=" $NIX_CXXSTDLIB_LINK_@suffixSalt@"
     fi
+    # Give clang a stable, build-local module cache directory. Clang creates
+    # the directory itself if it does not exist yet.
+    # We're not using a flag for this, because it causes warnings when it's
+    # unused. We need to set it explicitly, because otherwise it points to a
+    # directory under HOME and fails inside a sandbox.
+    if [[ "@isClang@" = 1 ]]; then
+        export CLANG_MODULE_CACHE_PATH="$NIX_BUILD_TOP/clang-modules-cache"
+    fi
 fi
 
 source @out@/nix-support/add-hardening.sh
