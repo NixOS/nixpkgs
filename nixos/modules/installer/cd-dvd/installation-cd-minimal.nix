@@ -17,5 +17,9 @@
 
   fonts.fontconfig.enable = lib.mkOverride 500 false;
 
+  # keyboard support is required at the initrd level for the emergency shell,
+  # in case of a system load failure
+  boot.initrd.availableKernelModules = [ "hyperv_keyboard" ];
+
   isoImage.edition = lib.mkOverride 500 "minimal";
 }
