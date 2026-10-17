@@ -60,6 +60,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals isDarwin [
     cctools
     darwin.bootstrap_cmds
+    darwin.sigtool
   ];
 
   buildInputs = [
@@ -73,6 +74,12 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     readline
     libedit
   ];
+
+  postPatch = lib.optionalString isDarwin ''
+    substituteInPlace Source/cmake/WebKitMacros.cmake \
+      --replace-fail /usr/bin/codesign \
+        'CODESIGN_ALLOCATE=${cctools}/bin/${cctools.targetPrefix}codesign_allocate codesign'
+  '';
 
   # Review these settings against Bun's local WebKit build in webkit.ts.
   cmakeBuildType = "RelWithDebInfo";
