@@ -45,8 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     substituteInPlace $out/share/cups/model/EPSON_L120.ppd \
-      --replace-fail "/home/epson/projects/PrinterDriver/P2/_rpmbuild/SOURCES/epson-inkjet-printer-201310w-1.0.1/watermark" "$out/watermark" \
-      --replace-fail "Epson_201310w.1.data" "$out/resource/Epson_201310w.1.data"
+      --replace-fail "/home/epson/projects/PrinterDriver/P2/_rpmbuild/SOURCES/epson-inkjet-printer-201310w-1.0.1/watermark" "$out/watermark"
   '';
 
   meta = {
