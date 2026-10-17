@@ -1,0 +1,15 @@
+diff --git a/bin/Code/__init__.py b/bin/Code/__init__.py
+index ce166e9..5b66e5f 100644
+--- a/bin/Code/__init__.py
++++ b/bin/Code/__init__.py
+@@ -11,6 +11,10 @@ Util.randomize()
+ 
+ current_dir = os.path.abspath(os.path.realpath(os.path.dirname(sys.argv[0])))
+ 
++# File arguments are relative to the launch directory
++if len(sys.argv) > 1 and sys.argv[1].lower().endswith((".pgn", ".lcdb", ".lcsb", ".bmt")):
++    sys.argv[1] = os.path.abspath(sys.argv[1])
++
+ # Where to write user data, logs and caches instead of the program folder, which may be read-only
+ folder_home: str | None = None
+ if os.environ.get("LUCASCHESS_HOME"):
