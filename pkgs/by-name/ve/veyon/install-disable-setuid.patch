@@ -1,0 +1,21 @@
+diff --git a/plugins/platform/linux/auth-helper/CMakeLists.txt b/plugins/platform/linux/auth-helper/CMakeLists.txt
+index c18b71a..59d8a67 100644
+--- a/plugins/platform/linux/auth-helper/CMakeLists.txt
++++ b/plugins/platform/linux/auth-helper/CMakeLists.txt
+@@ -7,4 +7,4 @@ set_default_target_properties(veyon-auth-helper)
+ target_include_directories(veyon-auth-helper PRIVATE ${PAM_INCLUDE_DIR})
+ target_link_libraries(veyon-auth-helper PRIVATE veyon-core ${PAM_LIBRARY})
+ 
+-install(TARGETS veyon-auth-helper RUNTIME DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE SETUID GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
++install(TARGETS veyon-auth-helper RUNTIME DESTINATION bin PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+diff --git a/plugins/platform/linux/input-helper/CMakeLists.txt b/plugins/platform/linux/input-helper/CMakeLists.txt
+index be7cda0..be0892a 100644
+--- a/plugins/platform/linux/input-helper/CMakeLists.txt
++++ b/plugins/platform/linux/input-helper/CMakeLists.txt
+@@ -8,5 +8,5 @@ set_target_properties(veyon-input-helper PROPERTIES
+ )
+ 
+ install(TARGETS veyon-input-helper RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+-	PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE SETUID
++	PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
+ 	GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
