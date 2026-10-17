@@ -121,6 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
     "bin"
     "dev"
+    "static"
   ];
 
   dontDisableStatic = true;
@@ -172,6 +173,13 @@ stdenv.mkDerivation (finalAttrs: {
     install -D ${queue_h} $dev/include/sys/queue.h
     install -D ${cdefs_h} $dev/include/sys/cdefs.h
     install -D ${tree_h} $dev/include/sys/tree.h
+  ''
+  + ''
+    mkdir -p $static/lib
+    mv $out/lib/*.a $static/lib
+    for a in $static/lib/lib*_nonshared.a; do
+      if [ -e "$a" ]; then mv "$a" $out/lib; fi
+    done
   '';
 
   passthru = {
