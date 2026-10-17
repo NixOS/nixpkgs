@@ -7058,8 +7058,6 @@ with pkgs;
 
   tomcat = tomcat11;
 
-  virtualenv-clone = with python3Packages; toPythonApplication virtualenv-clone;
-
   whisparr = whisparr_2;
 
   mkfontdir = mkfontscale;
