@@ -1359,8 +1359,6 @@ with pkgs;
 
   cplex = callPackage ../applications/science/math/cplex (config.cplex or { });
 
-  dataclass-wizard = with python3Packages; toPythonApplication dataclass-wizard;
-
   datasette = with python3Packages; toPythonApplication datasette;
 
   discourse = callPackage ../servers/web-apps/discourse { };
