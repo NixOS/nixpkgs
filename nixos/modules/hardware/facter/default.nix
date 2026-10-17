@@ -6,6 +6,7 @@
 {
   imports = [
     ./amd-cpu.nix
+    ./bare-metal.nix
     ./boot.nix
     ./bluetooth.nix
     ./camera
@@ -15,6 +16,7 @@
     ./firmware.nix
     ./graphics
     ./keyboard.nix
+    ./laptop.nix
     ./networking
     ./system.nix
     ./virtualisation.nix
