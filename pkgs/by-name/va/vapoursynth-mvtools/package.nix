@@ -1,36 +1,38 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  pkg-config,
-  autoreconfHook,
+  fetchPypi,
+  python3Packages,
   vapoursynth,
+  pkg-config,
   nasm,
   fftwFloat,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "vapoursynth-mvtools";
-  version = "24";
+  version = "29";
+  pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "dubhatervapoursynth";
-    repo = "vapoursynth-mvtools";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-bEifU1PPNOBr6o9D6DGIzTaG4xjygBxkQYnZxd/4SwQ=";
+  src = fetchPypi {
+    pname = "vapoursynth_mvtools";
+    inherit (finalAttrs) version;
+    hash = "sha256-4XTunwe8xAWMVyVZVy3lxE46hHsI3WWFIKkTCicsWH4=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    autoreconfHook
+  build-system = [
+    python3Packages.meson-python
   ];
-  buildInputs = [
+
+  nativeBuildInputs = [
     nasm
+    pkg-config
+  ];
+
+  buildInputs = [
     vapoursynth
     fftwFloat
   ];
-
-  configureFlags = [ "--libdir=$(out)/lib/vapoursynth" ];
 
   meta = {
     description = "Set of filters for motion estimation and compensation";
