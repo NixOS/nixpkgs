@@ -122,7 +122,10 @@ let
         }:
         stdenv.mkDerivation (finalAttrs: {
           pname = "ruby";
-          inherit version;
+          # `version` is a rich attribute set; `passthru.version` below keeps it
+          # available as `ruby.version`, while the derivation itself takes the
+          # plain string it already coerced to.
+          version = toString version;
 
           src = fetchurl {
             url = "https://cache.ruby-lang.org/pub/ruby/${ver.majMin}/ruby-${ver}.tar.gz";
