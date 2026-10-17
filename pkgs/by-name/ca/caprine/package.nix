@@ -11,18 +11,18 @@
 
 buildNpmPackage rec {
   pname = "caprine";
-  version = "2.61.0";
+  version = "2.61.24";
 
   src = fetchFromGitHub {
-    owner = "sindresorhus";
+    owner = "bankjaneo";
     repo = "caprine";
     rev = "v${version}";
-    hash = "sha256-hBGsqOqKMHNy2SNw1kHCQq1lPDd2S36L5pdKgD2O8FA=";
+    hash = "sha256-7iqB+gLphQzc53tS57ubH5c0gp/rZ6S2p7QTZ9oUx5c=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
-  npmDepsHash = "sha256-FgOHuMMUX92VHF6hdznoi7bhO/27t6+l038kmpqjctQ=";
+  npmDepsHash = "sha256-n+GNKx1m7e7B+NHG5RSlWNzIiz98spoIqByUCj349I4=";
 
   nativeBuildInputs = [ copyDesktopItems ];
 
@@ -86,9 +86,9 @@ buildNpmPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/sindresorhus/caprine/releases/tag/${src.rev}";
+    changelog = "https://github.com/bankjaneo/caprine/releases/tag/${src.rev}";
     description = "Elegant Facebook Messenger desktop app";
-    homepage = "https://github.com/sindresorhus/caprine";
+    homepage = "https://github.com/bankjaneo/caprine";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       khaneliman
