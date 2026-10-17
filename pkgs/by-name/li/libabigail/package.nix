@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libabigail";
-  version = "2.10";
+  version = "3.0";
 
   outputs = [
     "bin"
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://mirrors.kernel.org/sourceware/libabigail/libabigail-${finalAttrs.version}.tar.xz";
-    hash = "sha256-DMEOZHE5gzDgAbn+N/HoxRCKmrYysIypY01sZLw4C3g=";
+    hash = "sha256-006nxLFQ9h4i7bHRYVfhLEP9GPjo8Jq84FPYLMr5LgY=";
   };
 
   nativeBuildInputs = [
