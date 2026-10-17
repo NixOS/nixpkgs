@@ -84,6 +84,9 @@ buildPythonPackage (finalAttrs: {
   disabledTestPaths = [
     # test connects to the internet
     "test/contrib/test_resolver.py::test_url_resolver"
+    # https://github.com/jawah/urllib3.future/issues/437
+    "test/contrib/asynchronous/test_socks.py"
+    "test/contrib/test_socks.py"
   ];
 
   meta = {
