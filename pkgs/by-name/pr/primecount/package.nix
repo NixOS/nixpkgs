@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "primecount";
-  version = "8.5";
+  version = "8.8";
 
   src = fetchFromGitHub {
     owner = "kimwalisch";
     repo = "primecount";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-o+oMC5Lnh1eCHj2gT0njyf6GNO1MfxjTrACQNePCjJ0=";
+    hash = "sha256-pG1kJ2Q5+fS9Ny7ARWlXVNHsHACRWkUJLhOmrehywMg=";
   };
 
   outputs = [
