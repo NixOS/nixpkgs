@@ -871,12 +871,12 @@ in
   session-wizard = mkTmuxPlugin rec {
     pluginName = "session-wizard";
     rtpFilePath = "session-wizard.tmux";
-    version = "1.4.0";
+    version = "1.6.0";
     src = pkgs.fetchFromGitHub {
       owner = "27medkamal";
       repo = "tmux-session-wizard";
       rev = "V${version}";
-      hash = "sha256-mLpZQSo8nildawsPxGwkcETNwlRq6O1pfy/VusMNMaw=";
+      hash = "sha256-+X5Qk+ZyqIXsn1mD1JskJyojieFr6AV3HVPvJUeKTj4=";
     };
     meta = {
       homepage = "https://github.com/27medkamal/tmux-session-wizard";
