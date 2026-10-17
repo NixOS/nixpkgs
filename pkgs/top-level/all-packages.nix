@@ -8588,8 +8588,6 @@ with pkgs;
     })
   );
 
-  myfitnesspal = with python3Packages; toPythonApplication myfitnesspal;
-
   lightdm_qt = lightdm.override { withQt5 = true; };
 
   super-slicer-beta = super-slicer.beta;
