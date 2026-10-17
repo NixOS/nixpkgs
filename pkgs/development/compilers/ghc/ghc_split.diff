@@ -1,0 +1,80 @@
+diff -ur -x '*.in' -x '*-nix' -x '*.py' -x '*lint' -x '*build-*' -x '*build' -x '*.sh' ghc-9.10.3-source/hadrian/src/Hadrian/BuildPath.hs ../ghc-9.10.3-source/hadrian/src/Hadrian/BuildPath.hs
+--- ghc-9.10.3-source/hadrian/src/Hadrian/BuildPath.hs	1970-01-01 00:00:01.000000000 +0000
++++ ../ghc-9.10.3-source/hadrian/src/Hadrian/BuildPath.hs	2026-03-25 13:07:18.095438381 +0000
+@@ -62,8 +62,9 @@
+     _ <- Parsec.string root *> Parsec.optional (Parsec.char '/')
+     stage <- parseStage
+     _ <- Parsec.char '/'
+-    regPath <- Parsec.string "lib/"
+-            <> Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.string "/")
++    regPath <-
++      (Parsec.string "NIXOUT/" <> Parsec.many1 (Parsec.noneOf "/") <> Parsec.string "/" <> Parsec.string "lib/")
++      <|> (Parsec.string "lib/" <> Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.string "/"))
+     a <- after
+     return (GhcPkgPath root stage regPath a)
+ 
+diff -ur -x '*.in' -x '*-nix' -x '*.py' -x '*lint' -x '*build-*' -x '*build' -x '*.sh' ghc-9.10.3-source/hadrian/src/Rules/BinaryDist.hs ../ghc-9.10.3-source/hadrian/src/Rules/BinaryDist.hs
+--- ghc-9.10.3-source/hadrian/src/Rules/BinaryDist.hs	1970-01-01 00:00:01.000000000 +0000
++++ ../ghc-9.10.3-source/hadrian/src/Rules/BinaryDist.hs	2026-03-26 12:16:56.432683646 +0000
+@@ -222,6 +222,7 @@
+                   IO.createFileLink version_prog versioned_runhaskell_path
+ 
+         copyDirectory (ghcBuildDir -/- "lib") bindistFilesDir
++        copyDirectory (ghcBuildDir -/- "NIXOUT") bindistFilesDir
+         copyDirectory (rtsIncludeDir)         bindistFilesDir
+         when windowsHost $ createGhcii (bindistFilesDir -/- "bin")
+ 
+@@ -548,4 +549,3 @@
+       [ "#!/bin/sh"
+       , "exec \"$(dirname \"$0\")\"/ghc --interactive \"$@\""
+       ]
+-
+diff -ur -x '*.in' -x '*-nix' -x '*.py' -x '*lint' -x '*build-*' -x '*build' -x '*.sh' ghc-9.10.3-source/hadrian/src/Rules/Library.hs ../ghc-9.10.3-source/hadrian/src/Rules/Library.hs
+--- ghc-9.10.3-source/hadrian/src/Rules/Library.hs	1970-01-01 00:00:01.000000000 +0000
++++ ../ghc-9.10.3-source/hadrian/src/Rules/Library.hs	2026-03-24 12:08:54.463849628 +0000
+@@ -25,16 +25,16 @@
+ libraryRules :: Rules ()
+ libraryRules = do
+     root <- buildRootRules
+-    root -/- "**/libHS*-*.dylib"       %> buildDynamicLib root "dylib"
+-    root -/- "**/libHS*-*.so"          %> buildDynamicLib root "so"
+-    root -/- "**/libHS*-*.dll"         %> buildDynamicLib root "dll"
++    root -/- "**/build/libHS*-*.dylib"       %> buildDynamicLib root "dylib"
++    root -/- "**/build/libHS*-*.so"          %> buildDynamicLib root "so"
++    root -/- "**/build/libHS*-*.dll"         %> buildDynamicLib root "dll"
+     root -/- "**/*.a"                  %> buildStaticLib  root
+     root -/- "**/stamp-*"              %> buildPackage root
+     priority 2 $ do
+-        root -/- "stage*/lib/**/libHS*-*.dylib" %> registerDynamicLib root "dylib"
+-        root -/- "stage*/lib/**/libHS*-*.so"    %> registerDynamicLib root "so"
+-        root -/- "stage*/lib/**/libHS*-*.dll"   %> registerDynamicLib root "dll"
+-        root -/- "stage*/lib/**/*.a"            %> registerStaticLib  root
++        root -/- "stage*/**/lib/**/libHS*-*.dylib" %> registerDynamicLib root "dylib"
++        root -/- "stage*/**/lib/**/libHS*-*.so"    %> registerDynamicLib root "so"
++        root -/- "stage*/**/lib/**/libHS*-*.dll"   %> registerDynamicLib root "dll"
++        root -/- "stage*/**/lib/**/*.a"            %> registerStaticLib  root
+         root -/- "**/HS*-*.o"   %> buildGhciLibO root
+         root -/- "**/HS*-*.p_o" %> buildGhciLibO root
+ 
+diff -ur -x '*.in' -x '*-nix' -x '*.py' -x '*lint' -x '*build-*' -x '*build' -x '*.sh' ghc-9.10.3-source/hadrian/src/Settings/Builders/Cabal.hs ../ghc-9.10.3-source/hadrian/src/Settings/Builders/Cabal.hs
+--- ghc-9.10.3-source/hadrian/src/Settings/Builders/Cabal.hs	1970-01-01 00:00:01.000000000 +0000
++++ ../ghc-9.10.3-source/hadrian/src/Settings/Builders/Cabal.hs	2026-03-26 13:06:50.455693077 +0000
+@@ -86,6 +86,7 @@
+   pkg       <- getPackage
+   package_id <- expr $ pkgUnitId stage pkg
+   let prefix = "${pkgroot}" ++ (if windowsHost then "" else "/..")
++      dynlibdir = "$libdir/../NIXOUT/$compiler/lib"
+   mconcat [ -- Don't strip libraries when cross compiling.
+             -- TODO: We need to set @--with-strip=(stripCmdPath :: Action FilePath)@,
+             -- and if it's @:@ disable stripping as well. As it is now, I believe
+@@ -103,6 +104,8 @@
+             , arg package_id
+             , arg "--prefix"
+             , arg prefix
++            , arg "--dynlibdir"
++            , arg dynlibdir
+ 
+             -- NB: this is valid only because Hadrian puts the @doc@ and
+             -- @libraries@ folders in the same relative position:
+Only in ../ghc-9.10.3-source/hadrian/src/Settings/Builders: Cabal.hs.orig
+Only in ../ghc-9.10.3-source/hadrian/src/Settings/Builders: Cabal.hs.rej
