@@ -316,6 +316,19 @@ Delete on sight:
 
 Every word must earn its place.
 
+### One sentence per line
+
+Put each sentence in its own line.
+This is [semantic line break](https://sembr.org/).
+It makes reviews and suggestions much easier, since GitHub's review system is based on lines.
+
+A single line break on source markdown renders output in the same line.
+Two consecutive line breaks will render a line break in the output.
+
+Not everything has been migrated to this format yet.
+Please always use it for new content.
+When changing existing content, update formatting if possible, in a separate commit.
+
 ### Writing procedures
 
 One instruction per sentence. Don't pack multiple actions into one sentence.
