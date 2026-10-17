@@ -1,0 +1,36 @@
+From 77e837f0034d1b9237e09244fb17fed81c9c9e45 Mon Sep 17 00:00:00 2001
+From: Alessandro Astone <alessandro.astone@canonical.com>
+Date: Sun, 29 Mar 2026 23:10:03 +0200
+Subject: [PATCH] Allow service's start even if graphical-session is not
+ reached
+
+While this is not ideal, we need to support desktop environments that do not
+bind to graphical-session.target, at least as a temporary measure.
+
+We keep the After=graphical-session.target stanza, since 'After' will only
+affect the ordering of start operations if both are queued up to start, while
+it is a no-op if graphical-session.target is not pending start.
+
+This partially reverts commit 4d284de29d1d0740c9b80b634631a8f253287680.
+
+Resolves: https://github.com/flatpak/xdg-desktop-portal/issues/1983
+Bug-Fedora: https://bugzilla.redhat.com/show_bug.cgi?id=2481764
+Bug-Ubuntu: https://launchpad.net/bugs/2144855
+---
+ desktop-portal/xdg-desktop-portal.service.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/xdg-desktop-portal.service.in b/src/xdg-desktop-portal.service.in
+index 1029f5901..d7a9e8b55 100644
+--- a/src/xdg-desktop-portal.service.in
++++ b/src/xdg-desktop-portal.service.in
+@@ -4,7 +4,8 @@
+ [Unit]
+ Description=Portal service
+ PartOf=graphical-session.target
+-Requisite=graphical-session.target
++Requires=dbus.service
++After=dbus.service
+ After=graphical-session.target
+ 
+ [Service]
