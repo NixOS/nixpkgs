@@ -12,7 +12,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "denon-rs232";
-  version = "4.2.3";
+  version = "4.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -21,7 +21,7 @@ buildPythonPackage (finalAttrs: {
     owner = "home-assistant-libs";
     repo = "denon-rs232";
     tag = finalAttrs.version;
-    hash = "sha256-3GgXbhNVmMNZycgSoqqoFVWZp3pRCwy0V1Dagt8TpC8=";
+    hash = "sha256-PIYzoMa2FQhdZGLGc955RN5/Gd0Vk7K+UzUoc0Wv/uM=";
   };
 
   build-system = [ uv-build ];
