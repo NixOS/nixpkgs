@@ -25,6 +25,7 @@ let
       changelog = "${homepage}/releases/tag/${version}";
       license = lib.licenses.gpl3Only;
       maintainers = with lib.maintainers; [
+        different-error
         novalkun
       ];
       platforms = lib.platforms.linux;
