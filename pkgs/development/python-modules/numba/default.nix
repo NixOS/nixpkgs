@@ -56,7 +56,7 @@ let
       addDriverRunpath.driverLink;
 in
 buildPythonPackage (finalAttrs: {
-  version = "0.67.0";
+  version = "0.68.0";
   pname = "numba";
   pyproject = true;
   __structuredAttrs = true;
@@ -73,7 +73,7 @@ buildPythonPackage (finalAttrs: {
     postFetch = ''
       sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${finalAttrs.src.tag})"/' $out/numba/_version.py
     '';
-    hash = "sha256-xQFJSO9kcRwyNx/G/ALQXZWE6+4wL1Dz+5kIDXK5Eow=";
+    hash = "sha256-ESDEhvodemsIFOUsp/Bpj4DGbUf/w4ALE28+8zp6Crc=";
   };
 
   patches = lib.optionals cudaSupport [
