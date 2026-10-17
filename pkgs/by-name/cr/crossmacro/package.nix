@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildDotnetModule,
   dotnetCorePackages,
   fetchFromGitHub,
@@ -7,6 +8,10 @@
   clang,
   autoPatchelfHook,
   nix-update-script,
+  testers,
+  desktop-file-utils,
+  file,
+  appstream,
   fontconfig,
   freetype,
   expat,
@@ -28,44 +33,15 @@
   pipewire,
 }:
 
-buildDotnetModule rec {
-  pname = "crossmacro";
-  version = "1.3.1";
-
-  src = fetchFromGitHub {
-    owner = "alper-han";
-    repo = "CrossMacro";
-    tag = "v${version}";
-    hash = "sha256-2L25A2OO2Ju6n1QlblNBtKva1PfbidFz/QESjLBVuSU=";
-  };
-
-  projectFile = "src/CrossMacro.UI.Linux/CrossMacro.UI.Linux.csproj";
-  nugetDeps = ./deps.json;
-
-  dotnet-sdk = dotnetCorePackages.sdk_10_0;
-  dotnet-runtime = null;
-
-  executables = [ "CrossMacro.UI" ];
-  buildType = "Release";
-  selfContainedBuild = true;
-
-  dotnetFlags = [
-    "-p:PublishAot=true"
-    "-p:PublishReadyToRun=false"
-    "-p:OptimizationPreference=Speed"
-    "-p:StripSymbols=true"
-    "-p:IlcTrimMetadata=true"
-    "-p:DebugType=None"
-    "-p:DebugSymbols=false"
-    "-p:Version=${version}"
-  ];
-
-  buildInputs = runtimeDeps;
-
-  runtimeDeps = [
+let
+  isLinux = stdenv.hostPlatform.isLinux;
+  isDarwin = stdenv.hostPlatform.isDarwin;
+  commonLibs = [
     zlib
     icu
     openssl
+  ];
+  linuxLibs = [
     fontconfig
     freetype
     expat
@@ -83,60 +59,134 @@ buildDotnetModule rec {
     libxkbcommon
     pipewire
   ];
+  runtimeLibs = map lib.getLib (commonLibs ++ lib.optionals isLinux linuxLibs);
+  uiHostProject =
+    if isDarwin then
+      "src/CrossMacro.UI.MacOS/CrossMacro.UI.MacOS.csproj"
+    else
+      "src/CrossMacro.UI.Linux/CrossMacro.UI.Linux.csproj";
+in
+buildDotnetModule (finalAttrs: {
+  pname = "crossmacro";
+  version = "1.5.0";
+
+  src = fetchFromGitHub {
+    owner = "alper-han";
+    repo = "CrossMacro";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JV3Fa7LVhts6TXOWL+0vnKxH1FbMSm/AELUgYUgVLco=";
+  };
+
+  projectFile = uiHostProject;
+  nugetDeps = ./deps.json;
+
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = null;
+
+  # The upstream profile publishes a self-contained Native AOT binary without
+  # a .NET apphost; keep the builder settings aligned with that contract.
+  buildType = "Release";
+  selfContainedBuild = true;
+  useAppHost = false;
+  executables = lib.optional isDarwin "CrossMacro.UI";
+  dotnetFlags = [
+    "-p:CrossMacroPublishProfile=native-aot"
+    "-p:Version=${finalAttrs.version}"
+  ];
+
+  buildInputs = lib.optionals isLinux runtimeLibs;
+  runtimeDependencies = lib.optionals isLinux runtimeLibs;
 
   nativeBuildInputs = [
     installShellFiles
     clang
-    autoPatchelfHook
-  ];
+  ]
+  ++ lib.optionals isLinux [ autoPatchelfHook ];
 
   postInstall = ''
     installManPage docs/man/crossmacro.1
-
-    install -Dm644 scripts/assets/CrossMacro.desktop $out/share/applications/crossmacro.desktop
-    substituteInPlace $out/share/applications/crossmacro.desktop \
-      --replace-fail "Exec=crossmacro" "Exec=$out/lib/crossmacro/CrossMacro.UI"
+  ''
+  + lib.optionalString isLinux ''
+    install -Dm644 scripts/assets/CrossMacro.desktop \
+      $out/share/applications/CrossMacro.desktop
+    substituteInPlace $out/share/applications/CrossMacro.desktop \
+      --replace-fail "Exec=crossmacro" \
+        "Exec=$out/lib/crossmacro/CrossMacro.UI"
 
     for size in 16 32 48 64 128 256 512; do
-      install -Dm644 src/CrossMacro.UI/Assets/icons/''${size}x''${size}/apps/crossmacro.png \
-        $out/share/icons/hicolor/''${size}x''${size}/apps/crossmacro.png
+      install -Dm644 \
+        src/CrossMacro.UI/Assets/icons/$size"x"$size/apps/crossmacro.png \
+        $out/share/icons/hicolor/$size"x"$size/apps/crossmacro.png
     done
 
-    install -Dm644 scripts/assets/io.github.alper-han.CrossMacro.metainfo.xml \
-      $out/share/metainfo/io.github.alper-han.CrossMacro.metainfo.xml
-  '';
-
-  postFixup = ''
-    # Align wrapper and ELF paths so KWin's strict /proc/<pid>/exe check grants Wayland permissions.
-    # Move the real ELF binary to .CrossMacro.UI-wrapped
-    mv $out/lib/crossmacro/CrossMacro.UI \
-       $out/lib/crossmacro/.CrossMacro.UI-wrapped
-
-    # Move the buildDotnetModule wrapper from bin/ into lib/ so
-    # its path matches what KWin resolves after unwrapping.
-    mv $out/bin/CrossMacro.UI $out/lib/crossmacro/CrossMacro.UI
-
-    # Update the wrapper's exec target to the renamed binary
-    substituteInPlace $out/lib/crossmacro/CrossMacro.UI \
+    install -Dm644 \
+      scripts/assets/io.github.alper_han.crossmacro.metainfo.xml \
+      $out/share/metainfo/io.github.alper_han.crossmacro.metainfo.xml
+    substituteInPlace $out/share/metainfo/io.github.alper_han.crossmacro.metainfo.xml \
       --replace-fail \
-        "\"$out/lib/crossmacro/CrossMacro.UI\"" \
-        "\"$out/lib/crossmacro/.CrossMacro.UI-wrapped\""
+        '<launchable type="desktop-id">io.github.alper_han.crossmacro.desktop</launchable>' \
+        '<launchable type="desktop-id">CrossMacro.desktop</launchable>'
 
-    # Point bin/ entries at the lib/ wrapper
-    rm -f $out/bin/crossmacro
-    ln -s $out/lib/crossmacro/CrossMacro.UI $out/bin/CrossMacro.UI
-    ln -s $out/bin/CrossMacro.UI $out/bin/crossmacro
+    mkdir -p $out/bin
+    ln -s ../lib/crossmacro/CrossMacro.UI $out/bin/CrossMacro.UI
+    ln -s CrossMacro.UI $out/bin/crossmacro
+  ''
+  + lib.optionalString isDarwin ''
+    mkdir -p $out/bin
+    ln -s CrossMacro.UI $out/bin/crossmacro
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      version = testers.runCommand {
+        name = "crossmacro-test-version";
+        nativeBuildInputs = [ finalAttrs.finalPackage ];
+        script = ''
+          test "$(crossmacro --version)" = "CrossMacro.UI v${finalAttrs.version}"
+          touch "$out"
+        '';
+      };
+    }
+    // lib.optionalAttrs isLinux {
+      desktop = testers.runCommand {
+        name = "crossmacro-desktop-contract";
+        nativeBuildInputs = [
+          appstream
+          desktop-file-utils
+          file
+        ];
+        script = ''
+          desktop=${finalAttrs.finalPackage}/share/applications/CrossMacro.desktop
+          executable=${finalAttrs.finalPackage}/lib/crossmacro/CrossMacro.UI
+
+          desktop-file-validate "$desktop"
+          grep -Fx "Exec=$executable" "$desktop"
+          grep -Fx "X-KDE-DBUS-Restricted-Interfaces=org.kde.KWin.ScreenShot2" "$desktop"
+          test -x "$executable"
+          file -L "$executable" | grep -q ELF
+          env -i "$executable" --version | grep -Fx "CrossMacro.UI v${finalAttrs.version}"
+          test "$(readlink -f ${finalAttrs.finalPackage}/bin/crossmacro)" = "$(readlink -f "$executable")"
+          test "$(readlink -f ${finalAttrs.finalPackage}/bin/CrossMacro.UI)" = "$(readlink -f "$executable")"
+          appstreamcli validate-tree --no-net ${finalAttrs.finalPackage}
+
+          touch "$out"
+        '';
+      };
+    };
+  };
 
   meta = {
-    description = "Cross-platform mouse and keyboard macro recorder and player";
+    description = "Mouse and keyboard macro recorder and automation tool";
     homepage = "https://github.com/alper-han/CrossMacro";
-    changelog = "https://github.com/alper-han/CrossMacro/releases/tag/v${version}";
+    changelog = "https://github.com/alper-han/CrossMacro/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.linux;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
     mainProgram = "crossmacro";
     maintainers = with lib.maintainers; [ alper-han ];
   };
-}
+})
