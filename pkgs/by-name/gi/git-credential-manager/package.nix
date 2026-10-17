@@ -115,7 +115,10 @@ buildDotnetModule rec {
     homepage = "https://github.com/git-ecosystem/git-credential-manager";
     license = [ lib.licenses.mit ] ++ lib.optional msalBroker lib.licenses.unfree;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ _999eagle ];
+    maintainers = with lib.maintainers; [
+      _999eagle
+      creepycode
+    ];
     longDescription = ''
       git-credential-manager is a secure, cross-platform Git credential storage with authentication to GitHub, Azure Repos, and other popular Git hosting services.
 
