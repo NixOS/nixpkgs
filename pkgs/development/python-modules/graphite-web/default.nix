@@ -13,6 +13,7 @@
   pyparsing,
   python-memcached,
   pytz,
+  setuptools,
   six,
   txamqp,
   urllib3,
@@ -31,15 +32,19 @@
 
 buildPythonPackage {
   pname = "graphite-web";
-  version = "1.1.10-unstable-2025-02-24";
+  version = "1.1.10-unstable-2026-07-19";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "graphite-project";
     repo = "graphite-web";
-    rev = "49c28e2015d605ad9ec93524f7076dd924a4731a";
-    hash = "sha256-TxsQPhnI5WhQvKKkDEYZ8xnyg/qf+N9Icej6d6A0jC0=";
+    rev = "b23b548b24a2300f55d2fb676e37ed9f4bff9c31";
+    hash = "sha256-u73HCerkH3CayaxLZFkHWforQ3XjonGMzHsgzhhMqLw=";
   };
+
+  build-system = [
+    setuptools
+  ];
 
   postPatch = ''
     substituteInPlace webapp/graphite/settings.py \
@@ -127,7 +132,5 @@ buildPythonPackage {
     maintainers = with lib.maintainers; [
       basvandijk
     ];
-    # last successful hydra build on darwin was in 2025
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }
