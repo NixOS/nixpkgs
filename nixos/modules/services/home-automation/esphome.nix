@@ -16,8 +16,6 @@ let
 
   cfg = config.services.esphome;
 
-  stateDir = "/var/lib/esphome";
-
   esphomeParams =
     if cfg.enableUnixSocket then
       "--socket /run/esphome/esphome.sock"
@@ -100,6 +98,13 @@ in
         Use this option for setting the dashboard password.
       '';
     };
+    stateDir = mkOption {
+      default = "/var/lib/esphome";
+      type = types.str;
+      description = ''
+        The place where esphome stores its state.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -111,7 +116,7 @@ in
     # See: https://github.com/NixOS/nixpkgs/issues/339557
     users.users.esphome = {
       isSystemUser = true;
-      home = stateDir;
+      home = cfg.stateDir;
       group = "esphome";
     };
 
@@ -126,26 +131,26 @@ in
       environment = {
         # Set PLATFORMIO_CORE_DIR to a real path (not a symlink) so PlatformIO
         # and its downloaded toolchains can resolve paths correctly.
-        PLATFORMIO_CORE_DIR = "${stateDir}/.platformio";
+        PLATFORMIO_CORE_DIR = "${cfg.stateDir}/.platformio";
         # platformio needs a writable HOME for its configuration
-        HOME = stateDir;
+        HOME = cfg.stateDir;
       }
       // lib.optionalAttrs cfg.usePing { ESPHOME_DASHBOARD_USE_PING = "true"; }
       // cfg.environment;
 
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/esphome dashboard ${esphomeParams} ${stateDir}";
+        ExecStart = "${cfg.package}/bin/esphome dashboard ${esphomeParams} ${cfg.stateDir}";
         User = "esphome";
         Group = "esphome";
-        WorkingDirectory = stateDir;
+        WorkingDirectory = cfg.stateDir;
         StateDirectory = "esphome";
         StateDirectoryMode = "0750";
         Restart = "on-failure";
         RuntimeDirectory = mkIf cfg.enableUnixSocket "esphome";
         RuntimeDirectoryMode = "0750";
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
-        ReadWritePaths = [ stateDir ];
-        ExecPaths = [ stateDir ];
+        ReadWritePaths = [ cfg.stateDir ];
+        ExecPaths = [ cfg.stateDir ];
 
         # Hardening
         CapabilityBoundingSet = "";
