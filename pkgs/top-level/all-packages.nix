@@ -9447,8 +9447,6 @@ with pkgs;
 
   ### SCIENCE/MACHINE LEARNING
 
-  streamlit = with python3Packages; toPythonApplication streamlit;
-
   ### SCIENCE/MATH
 
   blas-ilp64 = blas.override { isILP64 = true; };
