@@ -656,6 +656,7 @@ in
 
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
         StateDirectory = "bulwark";
+        CacheDirectory = "bulwark";
         BindReadOnlyPaths = [
           "/nix/store"
         ];
