@@ -4,22 +4,26 @@
   fetchFromGitHub,
   buildGoModule,
   installShellFiles,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "cirrus-cli";
   version = "1.0.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "cirruslabs";
     repo = "cirrus-cli";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Bh1fLHmd5iCMHMJHgBaeZ8zQ9Fjl5Q4jpk1GUyrhiic=";
   };
 
   vendorHash = "sha256-RcgU3DR7ndF7YDCNQaeDh/EpCMs9JQhbpKP7dwB2ilI=";
 
   ldflags = [
+    "-s"
     "-X github.com/cirruslabs/cirrus-cli/internal/version.Version=v${finalAttrs.version}"
     "-X github.com/cirruslabs/cirrus-cli/internal/version.Commit=v${finalAttrs.version}"
   ];
@@ -31,6 +35,9 @@ buildGoModule (finalAttrs: {
       --zsh <($out/bin/cirrus completion zsh) \
       --fish <($out/bin/cirrus completion fish)
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   # tests fail on read-only filesystem
   doCheck = false;
