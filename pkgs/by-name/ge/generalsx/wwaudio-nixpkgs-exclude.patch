@@ -1,0 +1,44 @@
+WWAudio is only needed for the Miles Sound System (Windows W3DView tools).
+When OpenAL or MiniAudio is used (Linux/macOS), the game does not link it,
+and the AIL stub functions in MilesStub.h are incomplete, causing 100+
+compilation errors.  Skip the WWAudio subdirectory in this configuration.
+
+--- a/Core/Libraries/Source/WWVegas/CMakeLists.txt
++++ b/Core/Libraries/Source/WWVegas/CMakeLists.txt
+@@ -31,7 +31,9 @@
+ )
+ 
+ add_subdirectory(WW3D2)
+-add_subdirectory(WWAudio)
++if(NOT SAGE_USE_OPENAL AND NOT SAGE_USE_MINIAUDIO)
++    add_subdirectory(WWAudio)
++endif()
+ add_subdirectory(WWDebug)
+ add_subdirectory(WWDownload)
+ add_subdirectory(WWLib)
+--- a/Generals/Code/Libraries/Source/WWVegas/CMakeLists.txt
++++ b/Generals/Code/Libraries/Source/WWVegas/CMakeLists.txt
+@@ -20,7 +20,9 @@
+     WW3D2
+ )
+ 
+-add_subdirectory(WWAudio)
++if(NOT SAGE_USE_OPENAL AND NOT SAGE_USE_MINIAUDIO)
++    add_subdirectory(WWAudio)
++endif()
+ add_subdirectory(WW3D2)
+ add_subdirectory(WWDownload)
+ 
+--- a/GeneralsMD/Code/Libraries/Source/WWVegas/CMakeLists.txt
++++ b/GeneralsMD/Code/Libraries/Source/WWVegas/CMakeLists.txt
+@@ -20,7 +20,9 @@
+     WW3D2
+ )
+ 
+-add_subdirectory(WWAudio)
++if(NOT SAGE_USE_OPENAL AND NOT SAGE_USE_MINIAUDIO)
++    add_subdirectory(WWAudio)
++endif()
+ add_subdirectory(WW3D2)
+ add_subdirectory(WWDownload)
+ 
