@@ -348,7 +348,6 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       uskudnik
       jefflabonte
-      nasirhm
       buckley310
       rachalaraj
     ];
