@@ -4037,6 +4037,14 @@ self: super: with self; {
 
   darkdetect = callPackage ../development/python-modules/darkdetect { };
 
+  darnit-baseline = callPackage ../development/python-modules/darnit-baseline { };
+
+  darnit-core = callPackage ../development/python-modules/darnit-core { };
+
+  darnit-gittuf = callPackage ../development/python-modules/darnit-gittuf { };
+
+  darnit-reproducibility = callPackage ../development/python-modules/darnit-reproducibility { };
+
   dartsim = toPythonModule (
     pkgs.dartsim.override {
       pythonSupport = true;
