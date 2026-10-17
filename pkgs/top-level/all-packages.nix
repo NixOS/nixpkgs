@@ -4195,8 +4195,6 @@ with pkgs;
 
   pythonDocs = recurseIntoAttrs (callPackage ../development/interpreters/python/cpython/docs { });
 
-  svg2tikz = with python3.pkgs; toPythonApplication svg2tikz;
-
   poetryPlugins = recurseIntoAttrs poetry.plugins;
 
   pipx = with python3.pkgs; toPythonApplication pipx;
