@@ -2,6 +2,8 @@
   _cuda,
   backendStdenv,
   buildRedist,
+  callPackage,
+  callPackages,
   setupCudaHook,
   cudaAtLeast,
   cudaOlder,
@@ -164,6 +166,18 @@ buildRedist (finalAttrs: {
           "''${!outputBin:?}/bin/nvcc" \
           --prefix PATH : ${lib.makeBinPath [ backendStdenv.cc ]}
       ''
+      # nvlink records its command line, including the library and NVVM directories in the Nix store, in the cubins it
+      # writes. See README.md.
+      # NOTE: libstdc++ is linked statically, as nvlink doesn't use it and may run with an incompatible one on
+      # LD_LIBRARY_PATH (e.g. from JAX).
+      + ''
+        nixLog "wrapping nvlink to remove references to the Nix store from the command line it records"
+        mv --verbose "''${!outputBin:?}/bin/nvlink" "''${!outputBin:?}/bin/.nvlink-wrapped"
+        "$CXX" -std=c++23 -O2 -Wall -Wextra -static-libstdc++ -static-libgcc \
+          -DNVLINK_WRAPPED="\"''${!outputBin:?}/bin/.nvlink-wrapped\"" \
+          ${./nvlink-wrapper.cpp} \
+          -o "''${!outputBin:?}/bin/nvlink"
+      ''
       # Fix compatibility with glibc 2.42:
       # The cospi|sinpi|rsqrt function signatures in include/common/math_functions.h do not match
       # glibc 2.42's.
@@ -250,6 +264,11 @@ buildRedist (finalAttrs: {
       assertion = backendStdenv.hostNixSystem == "x86_64-linux" -> backendStdenv.cc.libcxx == null;
     }
   ];
+
+  passthru = {
+    gpuCheck = callPackage ./gpu-check.nix { cuda_nvcc = finalAttrs.finalPackage; };
+    tests = callPackages ./tests.nix { cuda_nvcc = finalAttrs.finalPackage; };
+  };
 
   meta = {
     description = "CUDA compiler driver";
