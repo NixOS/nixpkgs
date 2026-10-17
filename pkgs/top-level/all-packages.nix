@@ -2454,8 +2454,6 @@ with pkgs;
     rekor-server
     ;
 
-  rstcheck = with python3Packages; toPythonApplication rstcheck;
-
   rstcheckWithSphinx = rstcheck.overridePythonAttrs (oldAttrs: {
     dependencies = oldAttrs.dependencies ++ oldAttrs.optional-dependencies.sphinx;
   });
