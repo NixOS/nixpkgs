@@ -2186,8 +2186,6 @@ with pkgs;
 
   man = man-db;
 
-  marimo = with python3Packages; toPythonApplication marimo;
-
   mcstatus = with python3Packages; toPythonApplication mcstatus;
 
   miniupnpd-nftables = miniupnpd.override { firewall = "nftables"; };
