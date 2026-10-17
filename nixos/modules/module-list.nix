@@ -722,6 +722,7 @@
   ./services/hardware/libinput.nix
   ./services/hardware/lirc.nix
   ./services/hardware/logiops.nix
+  ./services/hardware/macfanctld.nix
   ./services/hardware/monado.nix
   ./services/hardware/nvidia-container-toolkit
   ./services/hardware/nvidia-optimus.nix
