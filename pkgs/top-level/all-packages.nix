@@ -9076,8 +9076,6 @@ with pkgs;
     withGui = false;
   };
 
-  napari = with python3Packages; toPythonApplication napari;
-
   pycoin = with python3Packages; toPythonApplication pycoin;
 
   vertcoind = vertcoin.override {
