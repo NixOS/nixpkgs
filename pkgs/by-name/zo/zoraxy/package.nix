@@ -2,22 +2,23 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "zoraxy";
-  version = "3.3.1";
+  version = "3.3.3";
 
   src = fetchFromGitHub {
     owner = "tobychui";
     repo = "zoraxy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NhjT1z/O2KJtlF/LkGWgxhm2/i83mJUZeBHDiZke0FE=";
+    hash = "sha256-TpkDGFmYKKMeU62mcCM0YWtvADdQk7/uP0KkskelnBI=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
 
-  vendorHash = "sha256-HaQP6ZARSHwEnW/G95t5NHdM8/EcXEfN2Q1wPVRWIzQ=";
+  vendorHash = "sha256-yQyq4RrRdIzmx6O19/ogt6zid+7HDTIYvZtpMcQKuqY=";
 
   checkFlags =
     let
@@ -34,8 +35,14 @@ buildGoModule (finalAttrs: {
         "TestGetPluginListFromURL"
         "TestUpdateDownloadablePluginList"
       ];
+      # Upstream test bug: AccessRuleCreatedEvent gained a `trust_proxy_headers_only`
+      # field in 3.3.3 but the test's hardcoded expectedJson was not updated.
+      brokenTests = [ "TestEventDeSerialization/AccessRuleCreated" ];
     in
-    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+    [ "-skip=^${builtins.concatStringsSep "$|^" (skippedTests ++ brokenTests)}$" ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
     description = "General purpose HTTP reverse proxy and forwarding tool written in Go";
