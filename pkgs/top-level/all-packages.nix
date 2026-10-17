@@ -10016,8 +10016,6 @@ with pkgs;
       }
     );
 
-  py-wacz = with python3Packages; toPythonApplication wacz;
-
   wibo = pkgsi686Linux.callPackage ../applications/emulators/wibo { };
 
   winePackagesFor = wineBuild: callPackage ./wine-packages.nix { inherit wineBuild; };
