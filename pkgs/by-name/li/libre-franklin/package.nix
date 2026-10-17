@@ -16,6 +16,11 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-GR1KHiQ1lTOmU8eAPR2pxUlMpWiW2EDMG78VDjELxDU=";
   };
 
+  outputs = [
+    "out"
+    "doc"
+  ];
+
   nativeBuildInputs = [ installFonts ];
 
   preInstall = ''
@@ -25,7 +30,7 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -m444 -Dt $out/share/doc/${pname}-${version} README.md FONTLOG.txt
+    install -m444 -Dt $doc/share/doc/${pname}-${version} README.md FONTLOG.txt
 
     runHook postInstall
   '';
