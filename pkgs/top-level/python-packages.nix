@@ -7849,6 +7849,8 @@ self: super: with self; {
 
   htmltools = callPackage ../development/python-modules/htmltools { };
 
+  htpy = callPackage ../development/python-modules/htpy { };
+
   htseq = callPackage ../development/python-modules/htseq { };
 
   httmock = callPackage ../development/python-modules/httmock { };
@@ -12491,6 +12493,8 @@ self: super: with self; {
   ohme = callPackage ../development/python-modules/ohme { };
 
   oic = callPackage ../development/python-modules/oic { };
+
+  oidc-provider-mock = callPackage ../development/python-modules/oidc-provider-mock { };
 
   oinker = callPackage ../development/python-modules/oinker { };
 
