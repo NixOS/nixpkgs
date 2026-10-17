@@ -2454,8 +2454,6 @@ with pkgs;
     rekor-server
     ;
 
-  rst2pdf = with python3Packages; toPythonApplication rst2pdf;
-
   rstcheck = with python3Packages; toPythonApplication rstcheck;
 
   rstcheckWithSphinx = rstcheck.overridePythonAttrs (oldAttrs: {
