@@ -4756,8 +4756,6 @@ with pkgs;
       })
     );
 
-  mkdocs = with python3Packages; toPythonApplication mkdocs;
-
   mold = wrapBintoolsWith {
     bintools = mold-unwrapped;
     extraBuildCommands = ''
