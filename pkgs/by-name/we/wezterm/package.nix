@@ -134,6 +134,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # notifications require that the app bundle be codesigned (beyond the linker-signing that happens automatically for the executable)
   postFixup = lib.optionalString stdenv.hostPlatform.isDarwin "rcodesign sign $out/Applications/WezTerm.app";
 
+  env.OPENSSL_NO_VENDOR = 1;
+
   passthru = {
     # the headless variant is useful when deploying wezterm's mux server on remote severs
     headless = import ./headless.nix {
