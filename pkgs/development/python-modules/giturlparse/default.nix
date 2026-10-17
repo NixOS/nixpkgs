@@ -27,6 +27,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Parse & rewrite git urls (supports GitHub, Bitbucket, Assembla ...)";
     homepage = "https://github.com/nephila/giturlparse";
+    changelog = "https://github.com/nephila/giturlparse/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ yajo ];
   };
