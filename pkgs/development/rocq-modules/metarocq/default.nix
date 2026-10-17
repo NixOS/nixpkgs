@@ -99,6 +99,7 @@ let
             coq.ocamlPackages.zarith
             coq.ocamlPackages.stdlib-shims
           ]
+          ++ lib.optional (package == "template-rocq") coq
           ++ metarocq-deps;
 
           patchPhase = ''
