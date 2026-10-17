@@ -7777,8 +7777,6 @@ with pkgs;
   xkeyboard_config = xkeyboard-config;
   xkeyboard-config_custom = callPackage ../by-name/xk/xkeyboard-config/custom.nix { };
 
-  xlsx2csv = with python3Packages; toPythonApplication xlsx2csv;
-
   ### APPLICATIONS / GIS
 
   qgis-ltr = callPackage ../applications/gis/qgis/ltr.nix { };
