@@ -28,6 +28,11 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-MvsC82PMmh7PP1sXNwZRNDNFU7r5LWRA6YqvuvZ9yZE=";
   };
 
+  # An empty compiler sysroot must preserve Nix's pkg-config search paths.
+  patches = [
+    ./preserve-empty-sysroot-pkg-config.patch
+  ];
+
   nativeBuildInputs = [
     pkg-config
     asciidoc
