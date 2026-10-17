@@ -244,10 +244,10 @@ let
     ${coreutils}/bin/chmod 755 /run/modprobe
     echo /run/modprobe > /proc/sys/kernel/modprobe
 
-    # For debugging: if this is the second time this image is run,
-    # then don't start the build again, but instead drop the user into
-    # an interactive shell.
-    if test -n "$origBuilder" -a ! -e /.debug; then
+    # For debugging: if this is the second time this image is run, or
+    # `run-vm --shell` asked for it, then don't start the build again,
+    # but instead drop the user into an interactive shell.
+    if test -n "$origBuilder" -a ! -e /.debug -a ! -e /tmp/xchg/debug-shell; then
       exec < /dev/null
       ${coreutils}/bin/touch /.debug
       declare -a argsArray=()
@@ -262,6 +262,7 @@ let
       export PATH=/bin:/usr/bin:${coreutils}/bin
       echo "Starting interactive shell..."
       echo "(To run the original builder: \$origBuilder \$origArgs)"
+      echo "(To power off the VM: ${busybox}/bin/poweroff -f, or Ctrl-A X)"
       exec ${busybox}/bin/setsid ${bashInteractive}/bin/bash < /dev/${qemu-common.qemuSerialDevice} &> /dev/${qemu-common.qemuSerialDevice}
     fi
   '';
@@ -279,6 +280,21 @@ let
       -initrd ${initrd}/initrd \
       -append "console=${qemu-common.qemuSerialDevice} panic=1 command=${stage2Init} mountDisk=$mountDisk loglevel=4" \
       $QEMU_OPTS
+  '';
+
+  # Start the virtiofsd daemons that share the Nix store and ./xchg with the
+  # VM (see qemuCommandLinux), and wait for their sockets.
+  startVirtiofsd = ''
+    # GitHub Actions runners seems to not allow installing seccomp filter: https://github.com/rcambrj/nix-pi-loader/issues/1#issuecomment-2605497516
+    # Since we are running in a sandbox already, the difference between seccomp and none is minimal
+    # File handles need CAP_DAC_READ_SEARCH, which a build never has, so do not try them; and only
+    # log what might need attention, not every connect and disconnect.
+    ${virtiofsd}/bin/virtiofsd --xattr --socket-path virtio-store.sock --sandbox none --seccomp none --inode-file-handles=never --log-level warn --shared-dir "${storeDir}" &
+    ${virtiofsd}/bin/virtiofsd --xattr --socket-path virtio-xchg.sock --sandbox none --seccomp none --inode-file-handles=never --log-level warn --shared-dir xchg &
+
+    # Wait until virtiofsd has created these sockets to avoid race condition.
+    until [[ -e virtio-store.sock ]]; do ${coreutils}/bin/sleep 0.1; done
+    until [[ -e virtio-xchg.sock ]]; do ${coreutils}/bin/sleep 0.1; done
   '';
 
   vmRunCommand =
@@ -315,14 +331,13 @@ let
       ${coreutils}/bin/cat > ./run-vm <<EOF
       #! ${bash}/bin/sh
       ''${diskImage:+diskImage=$diskImage}
-      # GitHub Actions runners seems to not allow installing seccomp filter: https://github.com/rcambrj/nix-pi-loader/issues/1#issuecomment-2605497516
-      # Since we are running in a sandbox already, the difference between seccomp and none is minimal
-      ${virtiofsd}/bin/virtiofsd --xattr --socket-path virtio-store.sock --sandbox none --seccomp none --shared-dir "${storeDir}" &
-      ${virtiofsd}/bin/virtiofsd --xattr --socket-path virtio-xchg.sock --sandbox none --seccomp none --shared-dir xchg &
-
-      # Wait until virtiofsd has created these sockets to avoid race condition.
-      until [[ -e virtio-store.sock ]]; do ${coreutils}/bin/sleep 0.1; done
-      until [[ -e virtio-xchg.sock ]]; do ${coreutils}/bin/sleep 0.1; done
+      # \`./run-vm --shell\` boots into an interactive shell instead of the build.
+      if [ "\''${1-}" = --shell ]; then
+        ${coreutils}/bin/touch xchg/debug-shell
+      else
+        ${coreutils}/bin/rm -f xchg/debug-shell
+      fi
+      ${startVirtiofsd}
 
       ${qemuCommand}
       EOF
@@ -504,7 +519,9 @@ let
           diskImage=$(pwd)/disk-image.qcow2
           origImage=${attrs.diskImage}
           if test -d "$origImage"; then origImage="$origImage/disk-image.qcow2"; fi
-          ${qemu}/bin/qemu-img create -F ${attrs.diskImageFormat} -b "$origImage" -f qcow2 $diskImage
+          ${qemu}/bin/qemu-img create -F ${
+            attrs.diskImageFormat or "qcow2"
+          } -b "$origImage" -f qcow2 $diskImage
         '';
 
         /*
@@ -631,13 +648,19 @@ let
       if ! test -e "$diskImage"; then
         ${qemu}/bin/qemu-img create -b ${image}/disk-image.qcow2 -f qcow2 -F qcow2 "$diskImage"
       fi
+      diskImage=$(${coreutils}/bin/realpath "$diskImage")
       export TMPDIR=$(mktemp -d)
+      cd "$TMPDIR"
       export out=/dummy
+      export stdenv=${stdenv}
       export origBuilder=
       export origArgs=
-      mkdir $TMPDIR/xchg
-      export > $TMPDIR/xchg/saved-env
+      mkdir xchg
+      export > xchg/saved-env
       mountDisk=1
+      # virtiofs needs the guest's memory to be shared with virtiofsd.
+      QEMU_OPTS="-m 1024 -object memory-backend-memfd,id=mem,size=1024M,share=on -machine memory-backend=mem ''${QEMU_OPTS:-}"
+      ${startVirtiofsd}
       ${qemuCommandLinux}
     '';
 
