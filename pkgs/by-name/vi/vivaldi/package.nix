@@ -231,6 +231,7 @@ stdenv.mkDerivation rec {
       marcusramberg
       max06
       wineee
+      brw
     ];
     platforms = [
       "x86_64-linux"
