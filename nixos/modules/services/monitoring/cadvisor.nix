@@ -119,7 +119,7 @@ in
           "influxdb.service"
         ];
 
-        path = lib.optionals config.boot.zfs.enabled [ pkgs.zfs ];
+        path = lib.optionals config.boot.zfs.enabled [ config.boot.zfs.package ];
 
         postStart = lib.mkBefore ''
           until ${pkgs.curl.bin}/bin/curl -s -o /dev/null 'http://${cfg.listenAddress}:${toString cfg.port}/containers/'; do
