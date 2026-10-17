@@ -8,12 +8,12 @@
 
 stdenv.mkDerivation {
   pname = "numad";
-  version = "0.5-unstable-2023-09-06";
+  version = "0.5-unstable-2025-11-04";
 
   src = fetchgit {
     url = "https://pagure.io/numad.git";
-    rev = "3399d89305b6560e27e70aff4ad9fb403dedf947";
-    hash = "sha256-USEffVcakaAbilqijJmpro92ujvxbglcXxyBlntMxaI=";
+    rev = "2aa0c3cf7fbc0d7a30d6355c887fedf08b77b88d";
+    hash = "sha256-5KjimzjNMCmCNaoJTWjqTJrNObyb/DatSM8W70jhl0c=";
   };
 
   postPatch = ''
