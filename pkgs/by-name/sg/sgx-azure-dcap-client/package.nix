@@ -35,13 +35,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "azure-dcap-client";
-  version = "1.13.0-pre0";
+  version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "azure-dcap-client";
-    rev = "839ac4a2acc11b90cb91a483fcfc0cf7ae6a75c7";
-    hash = "sha256-dVO5cSOcpkOuxql06exS4aLJgvtRg+Oi6k8HBIjwPlg=";
+    tag = finalAttrs.version;
+    hash = "sha256-OdsZd4/iFmWeeC1kbuZ+MBQDQ8sQZPVPLAgxHUl2zsk=";
   };
 
   patches = [
@@ -82,10 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Interfaces between SGX SDKs and the Azure Attestation SGX Certification Cache";
     homepage = "https://github.com/microsoft/azure-dcap-client";
-    maintainers = with lib.maintainers; [
-      phlip9
-      veehaitch
-    ];
+    maintainers = with lib.maintainers; [ phlip9 ];
     platforms = [ "x86_64-linux" ];
     license = lib.licenses.mit;
   };
