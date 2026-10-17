@@ -1,0 +1,12 @@
+--- a/src/native/Include.h.in
++++ b/src/native/Include.h.in
+@@ -1,4 +1,8 @@
+ #else
+-#define HYPER_THREAD_YIELD __builtin_ia32_pause()
++#if defined(__aarch64__)
++#define HYPER_THREAD_YIELD __asm__ ( "isb SY;" );
++#else
++#define HYPER_THREAD_YIELD __builtin_ia32_pause()
++#endif
+ #endif // __apple_build_version__
+ #endif
