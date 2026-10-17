@@ -321,6 +321,7 @@ Every word must earn its place.
 Put each sentence in its own line.
 This makes reviews and suggestions much easier, since GitHub's review system is based on lines.
 It also helps identifying long sentences at a glance.
+This is [semantic line break](https://sembr.org/).
 
 Not everything has been migrated to this format yet.
 Please always use it for new content.
