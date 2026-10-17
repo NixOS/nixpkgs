@@ -1,11 +1,11 @@
 {
   lib,
   libguestfs,
-  libguestfs-appliance,
+  libguestfs-appliance-nixos,
 }:
 
 let
-  appliance = libguestfs-appliance;
+  appliance = libguestfs-appliance-nixos;
   # check explicit forward compatibility declaration:
   # then do not warn if older appliance if known to work fine with newer libguestfs
   libguestfsCompatible =
