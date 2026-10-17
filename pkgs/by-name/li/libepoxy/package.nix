@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   propagatedBuildInputs =
-    lib.optionals (x11Support && !stdenv.hostPlatform.isDarwin) [
+    lib.optionals (!stdenv.hostPlatform.isDarwin) [
       libGL
     ]
     ++ lib.optionals x11Support [
@@ -63,14 +63,14 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   mesonFlags = [
-    "-Degl=${lib.boolToYesNo (x11Support && !stdenv.hostPlatform.isDarwin)}"
+    "-Degl=${lib.boolToYesNo (!stdenv.hostPlatform.isDarwin)}"
     "-Dglx=${lib.boolToYesNo x11Support}"
     "-Dtests=${lib.boolToString finalAttrs.finalPackage.doCheck}"
     "-Dx11=${lib.boolToString x11Support}"
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString (
-    x11Support && !stdenv.hostPlatform.isDarwin
+    !stdenv.hostPlatform.isDarwin
   ) ''-DLIBGL_PATH="${lib.getLib libGL}/lib"'';
 
   doCheck = true;
