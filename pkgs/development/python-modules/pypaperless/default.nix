@@ -1,27 +1,28 @@
 {
-  aiohttp,
-  aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
+  httpx,
   lib,
+  pydantic,
+  pydantic-settings,
   pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-cov-stub,
+  pytest-httpx,
   pytestCheckHook,
-  yarl,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pypaperless";
-  version = "5.2.3";
+  version = "6.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tb1337";
     repo = "paperless-api";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-G40x/3bb3h49eynwYCoJPeBLmX1Ty+mq3AGQoBAiZOA=";
+    hash = "sha256-TlukfZkoM25XWwWoj5zxjBmglHO8D9TPJPiSN2ea00U=";
   };
 
   nativeBuildInputs = [
@@ -30,17 +31,22 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ hatchling ];
 
+  pythonRelaxDeps = [
+    "pydantic-settings"
+  ];
+
   dependencies = [
-    aiohttp
-    yarl
+    httpx
+    pydantic
+    pydantic-settings
   ];
 
   pythonImportsCheck = [ "pypaperless" ];
 
   nativeCheckInputs = [
-    aioresponses
     pytest-asyncio
     pytest-cov-stub
+    pytest-httpx
     pytestCheckHook
   ];
 
