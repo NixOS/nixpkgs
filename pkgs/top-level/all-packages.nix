@@ -2422,8 +2422,6 @@ with pkgs;
   playwright-driver = (callPackage ../development/web/playwright/driver.nix { }).playwright-core;
   playwright-test = (callPackage ../development/web/playwright/driver.nix { }).playwright-test;
 
-  tabview = with python3Packages; toPythonApplication tabview;
-
   tdarrPackages = callPackage ../tools/misc/tdarr { };
 
   tdarr-server = tdarrPackages.server;
