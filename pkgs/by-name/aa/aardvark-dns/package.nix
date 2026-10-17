@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  fetchpatch2,
   nixosTests,
 }:
 
@@ -15,6 +16,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-EQFTkJQaW4f6AFmMP5h24ugK5st1rg9c/QK3WjBORAQ=";
   };
+
+  patches = [
+    # Fix builds on musl.
+    # https://github.com/containers/aardvark-dns/pull/731
+    (fetchpatch2 {
+      url = "https://github.com/containers/aardvark-dns/commit/9e73fd8ddde844d755f3f992ca9cd7bb0502d87e.patch?full_index=1";
+      hash = "sha256-gUUI5UT7iHXHbDNgzhuooyeZAJ4/IX/QbLIcAPhwF3k=";
+    })
+  ];
 
   cargoHash = "sha256-nTcAuhfez2ub+4z9E2YGp5i+JJr9K/PpG22ZvMW5ni4=";
 
