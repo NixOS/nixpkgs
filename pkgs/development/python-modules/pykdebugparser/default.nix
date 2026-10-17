@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pykdebugparser";
-  version = "1.2.7";
+  version = "1.2.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "matan1008";
     repo = "pykdebugparser";
     tag = "v${version}";
-    hash = "sha256-V6WyFsPcjiBUJ+Amc3xk0GwdHzwakRizB/dPnSXT6vo=";
+    hash = "sha256-/uBhimzcQm16npPbmcs0k6lXcaMFlueZct/sGHEMSmw=";
   };
 
   build-system = [ setuptools ];
