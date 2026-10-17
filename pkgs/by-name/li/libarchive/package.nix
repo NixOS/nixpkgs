@@ -22,6 +22,8 @@
 
   # for passthru.tests
   cmake,
+  fetchzip,
+  libarchive,
   nix,
   samba,
   testers,
@@ -156,6 +158,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   __structuredAttrs = true;
 
+  setupHook = ./setup-hook.sh;
+
   meta = {
     homepage = "http://libarchive.org";
     description = "Multi-format archive and compression library";
@@ -179,6 +183,12 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
     };
+    fetchzipWithBsdtar =
+      testers.invalidateFetcherByDrvHash (fetchzip.override { unzip = libarchive; })
+        {
+          url = "https://github.com/libarchive/libarchive/archive/27cbc7827172698143e440801fc0ba39ccb4f1f5.zip";
+          hash = "sha256-/CoInUlOiFvR83mEeV3Tx+2SQGywWDQ4nY+NstE/cP4=";
+        };
   };
 
   # bsdtar is detected as "cannot" because its exec is internal to
