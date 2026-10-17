@@ -1,0 +1,38 @@
+Use r.status_code instead of contents['statusCode'] for HTTP status of
+the SignalK access request response. The JSON body does not always
+carry a 'statusCode' field (notably on 404 when security is disabled),
+so reading it from there raises a KeyError.
+
+Also handle HTTP 404: when signalk-server returns 404 on
+POST /signalk/v1/access/requests, it means server security is not
+enabled and no access token is needed. In that case skip further
+access requests and connect to the WebSocket stream without
+authentication.
+
+--- a/pypilot/signalk.py
++++ b/pypilot/signalk.py
+@@ -420,9 +420,12 @@
+ 
+             contents = pyjson.loads(r.content)
+             print('signalk post', contents)
+-            if contents['statusCode'] == 202 or contents['statusCode'] == 400:
++            if r.status_code == 202 or r.status_code == 400:
+                 self.signalk_access_url = base + contents['href']
+                 print('signalk ' + _('request access url'), self.signalk_access_url)
++            elif r.status_code == 404:
++                print('signalk ' + _('security not enabled, connecting without token'))
++                self.token = 'none'
+         except Exception as e:
+             print('signalk ' + _('error posting access'), e)
+             import traceback
+@@ -454,7 +457,9 @@
+         self.signalk_values = {}
+         self.keep_token = False
+         try:
+-            connect_kwargs = {'header': {'Authorization': 'JWT ' + self.token}}
++            connect_kwargs = {}
++            if self.token and self.token != 'none':
++                connect_kwargs['header'] = {'Authorization': 'JWT ' + self.token}
+             # For a wss:// stream with verification disabled, tell
+             # websocket-client to skip certificate checks (self-signed
+             # certs). It also clears check_hostname when cert_reqs is
