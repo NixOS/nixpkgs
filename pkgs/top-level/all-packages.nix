@@ -2449,8 +2449,6 @@ with pkgs;
 
   quota = if stdenv.hostPlatform.isLinux then linuxquota else unixtools.quota;
 
-  ratarmount = with python3Packages; toPythonApplication ratarmount;
-
   inherit (callPackage ../tools/security/rekor { })
     rekor-cli
     rekor-server
