@@ -91,6 +91,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     "pillow"
     "publicsuffixlist"
     "python-dateutil"
+    "redis"
     "reportlab"
     "requests"
     "rules"

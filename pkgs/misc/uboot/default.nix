@@ -87,6 +87,9 @@ let
         # binman, so we use this workaround for now.
         + ''
           for f in scripts/Makefile.lib dts/upstream/Makefile; do
+            # dts/upstream only exists since U-Boot 2024.07
+            # https://github.com/u-boot/u-boot/commit/dbe9334e5125efcf8a825e7c5c924e2780e609e3
+            [ -e "$f" ] || continue
             substituteInPlace "$f" --replace-fail -Wno-graph_child_address -Eno-node_name_not_empty
           done
         '';

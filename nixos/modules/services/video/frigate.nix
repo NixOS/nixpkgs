@@ -148,6 +148,7 @@ let
   withCoralUSB = any (d: d.type == "edgetpu" && hasPrefix "usb" d.device or "") detectors;
   withCoralPCI = any (d: d.type == "edgetpu" && hasPrefix "pci" d.device or "") detectors;
   withCoral = withCoralPCI || withCoralUSB;
+  withOpenVINO = any (d: d.type == "openvino") detectors;
 in
 
 {
@@ -818,8 +819,9 @@ in
         ProtectKernelTunables = true;
         ProtectSystem = "strict";
 
-        # No JIT compilation
-        MemoryDenyWriteExecute = true;
+        # OpenVINO calls `mprotect(PROT_READ|PROT_WRITE|PROT_EXEC)` as confirmed by strace. See
+        # #575222.
+        MemoryDenyWriteExecute = !withOpenVINO;
 
         # No ABI personality changes
         LockPersonality = true;
