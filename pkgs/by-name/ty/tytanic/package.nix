@@ -1,12 +1,12 @@
 {
-  lib,
-  stdenv,
-  rustPlatform,
   fetchFromGitHub,
   installShellFiles,
-  pkg-config,
-  openssl,
+  lib,
   nix-update-script,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  stdenv,
   testers,
   tytanic,
   versionCheckHook,
@@ -15,6 +15,7 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tytanic";
   version = "0.4.1";
+
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
@@ -36,7 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   env = {
-    OPENSSL_NO_VENDOR = true;
+    OPENSSL_NO_VENDOR = true; # From the typst package.
   };
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -54,7 +55,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
 
   passthru = {
     updateScript = nix-update-script { };
@@ -65,19 +68,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
+    changelog = "https://github.com/typst-community/tytanic/releases/tag/v${finalAttrs.version}";
+    downloadPage = "https://github.com/typst-community/tytanic/releases";
     description = "Test runner for Typst projects";
     longDescription = ''
       Tytanic is a test runner for Typst projects. It helps you worry less about
       regressions and speeds up your development.
     '';
     homepage = "https://typst-community.github.io/tytanic/";
-    changelog = "https://github.com/typst-community/tytanic/releases/tag/v${finalAttrs.version}";
-    downloadPage = "https://github.com/typst-community/tytanic/releases";
     license = with lib.licenses; [
-      mit
       asl20
+      mit
     ];
     mainProgram = "tt";
-    maintainers = with lib.maintainers; [ apcamargo ];
+    maintainers = with lib.maintainers; [
+      andrew15-5
+      apcamargo
+      tingerrr
+    ];
   };
 })
