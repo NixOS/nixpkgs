@@ -37,7 +37,20 @@ let
         imagick
       ]);
   };
-  configFile = pkgs.writeText "pixelfed-env" (lib.generators.toKeyValue { } cfg.settings);
+  # Pixelfed reads `.env` with `vlucas/phpdotenv`. An unquoted value stops at a space, is cut at `#`
+  # and expands `$`. Thus write each string in double quotes, and escape the characters that are
+  # special there.
+  dotenvValue =
+    v:
+    if lib.isString v then
+      "\"${lib.replaceStrings [ "\\" "\"" "$" "\n" "\r" ] [ "\\\\" "\\\"" "\\$" "\\n" "\\r" ] v}\""
+    else
+      lib.generators.mkValueStringDefault { } v;
+  configFile = pkgs.writeText "pixelfed-env" (
+    lib.generators.toKeyValue {
+      mkKeyValue = lib.generators.mkKeyValueDefault { mkValueString = dotenvValue; } "=";
+    } cfg.settings
+  );
   # Management script
   pixelfed-manage = pkgs.writeShellScriptBin "pixelfed-manage" ''
     cd ${pixelfed}
