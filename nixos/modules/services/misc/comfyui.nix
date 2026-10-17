@@ -10,6 +10,11 @@ let
   # By default a StateDirectory is used; anything else needs its own directory and a hole in the unit's mount namespace.
   isDefaultDataDir = cfg.dataDir == "/var/lib/comfyui";
 
+  package = cfg.package.override (oldArgs: {
+    extraPackages = ps: (oldArgs.extraPackages or (_: [ ]) ps) ++ cfg.extraPackages ps;
+    acceleration = cfg.acceleration;
+  });
+
   modelDrvs = map (m: {
     inherit m;
     drv = pkgs.fetchurl (lib.filterAttrs (n: _: n == "name" || n == "url" || n == "hash") m);
@@ -40,6 +45,36 @@ in
           Any other directory is created with systemd-tmpfiles and bind-mounted into the service.
 
           Existing state is not migrated, you need to move it yourself.
+        '';
+      };
+
+      finalPackage = lib.mkOption {
+        type = lib.types.package;
+        internal = true;
+        readOnly = true;
+        default = package;
+        description = "The final ComfyUI package which is being used in the service.";
+      };
+
+      acceleration = lib.mkOption {
+        type = lib.types.enum [
+          "cpu"
+          "cuda"
+        ];
+        default = "cpu";
+        example = "cuda";
+        description = ''
+          Specifies the device to use for hardware acceleration.
+
+          - `"cpu"`: pass `--cpu` to the server. Not recommended for production use as it is very slow.
+          - `"cuda"`: use the prebuilt CUDA wheels and let ComfyUI select the CUDA device
+            automatically. This is Linux-only, and the wheels ship unfree NVIDIA
+            redistributables, so `nixpkgs.config.allowUnfree` has to be enabled.
+            Building torch from source is deliberately not offered: against the
+            pinned CUDA version it has no binary cache and takes hours.
+
+            The prebuilt torch does not expose the CUDA metadata that
+            `comfy-kitchen` needs, so it runs without its CUDA kernels.
         '';
       };
 
@@ -138,16 +173,34 @@ in
           Files placed manually in the `models` directory are left untouched.
         '';
       };
+
+      extraPackages = lib.mkOption {
+        type = lib.types.functionTo (lib.types.listOf lib.types.package);
+        default = _: [ ];
+        defaultText = lib.literalExpression "ps: with ps; [ ]";
+        example = lib.literalExpression ''
+          ps: with ps; [ comfyui-manager ]
+        '';
+        description = ''
+          List of packages to add to ComfyUI's Python environment.
+
+          A popular example is `python3Packages.comfyui-manager` for installing and
+          managing custom nodes from within ComfyUI.
+        '';
+      };
     };
   };
 
   config = lib.mkIf cfg.enable {
-    services.comfyui.extraArgs = lib.mkBefore [
-      "--base-directory=${cfg.dataDir}"
-      "--database-url=sqlite:///${cfg.dataDir}/user/comfyui.db"
-      "--listen=${lib.concatStringsSep "," cfg.listen}"
-      "--port=${toString cfg.port}"
-    ];
+    services.comfyui.extraArgs = lib.mkBefore (
+      [
+        "--base-directory=${cfg.dataDir}"
+        "--database-url=sqlite:///${cfg.dataDir}/user/comfyui.db"
+        "--listen=${lib.concatStringsSep "," cfg.listen}"
+        "--port=${toString cfg.port}"
+      ]
+      ++ lib.optionals (cfg.acceleration == "cpu") [ "--cpu" ]
+    );
 
     # owner read back from the unit, not spelled out: StateDirectory= infers it, this rule has to be told
     systemd.tmpfiles.settings = lib.mkIf (!isDefaultDataDir) {
@@ -166,7 +219,7 @@ in
       preStart = ''
         for d in custom_nodes input output models; do
           if [[ ! -d "${cfg.dataDir}/$d" ]]; then
-            cp --no-preserve=all -r ${cfg.package}/share/comfyui/$d "${cfg.dataDir}/"
+            cp --no-preserve=all -r ${cfg.finalPackage}/share/comfyui/$d "${cfg.dataDir}/"
           fi
         done
 
@@ -183,7 +236,7 @@ in
       '';
 
       serviceConfig = {
-        ExecStart = "${lib.getExe cfg.package} ${lib.escapeShellArgs cfg.extraArgs}";
+        ExecStart = "${lib.getExe cfg.finalPackage} ${lib.escapeShellArgs cfg.extraArgs}";
         Group = "comfyui";
         Restart = "always";
         RestartSec = "5sec"; # don't crash loop immediately
