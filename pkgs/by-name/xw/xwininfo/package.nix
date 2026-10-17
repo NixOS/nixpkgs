@@ -10,11 +10,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xwininfo";
-  version = "1.1.6";
+  version = "1.1.7";
 
   src = fetchurl {
     url = "mirror://xorg/individual/app/xwininfo-${finalAttrs.version}.tar.xz";
-    hash = "sha256-NRiJfBdEjfm6ma1tm7HKDxe8DtfA/WEoGzTO7SmpJT8=";
+    hash = "sha256-vuFNWUzIbMWarhAVwbRSpxv2DDBBMeJxbKHPDfcztKw=";
   };
 
   strictDeps = true;
