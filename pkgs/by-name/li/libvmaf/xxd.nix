@@ -3,8 +3,8 @@
 { writeShellScriptBin }:
 
 writeShellScriptBin "xxd" ''
-  if [ "$1" != "--include" ]; then
-    echo "xxd: only --include mode is supported" >&2
+  if [ "$1" != "-i" ]; then
+    echo "xxd: only -i mode is supported" >&2
     exit 1
   fi
   input="$2"
