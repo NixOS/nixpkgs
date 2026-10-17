@@ -1,0 +1,30 @@
+--- a/composeApp/build.gradle.kts
++++ b/composeApp/build.gradle.kts
+@@ -6,27 +6,12 @@
+     alias(libs.plugins.compose.hot.reload)
+ }
+ 
+-android {
+-    dependenciesInfo {
+-        includeInApk = false
+-        includeInBundle = false
+-    }
+-}
+-
+ kotlin {
+     compilerOptions {
+         freeCompilerArgs.add("-Xexpect-actual-classes")
+     }
+ 
+     sourceSets {
+-        androidMain.dependencies {
+-            implementation(libs.androidx.compose.ui.tooling.preview)
+-            implementation(libs.androidx.activity.compose)
+-
+-            implementation(libs.core.splashscreen)
+-
+-            implementation(libs.koin.android)
+-        }
+         commonMain.dependencies {
+             implementation(projects.core.data)
+             implementation(projects.core.domain)
