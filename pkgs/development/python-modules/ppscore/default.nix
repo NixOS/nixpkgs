@@ -12,7 +12,6 @@ buildPythonPackage (finalAttrs: {
   pname = "ppscore";
   version = "1.3.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "8080labs";

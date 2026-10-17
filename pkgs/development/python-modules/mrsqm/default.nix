@@ -17,7 +17,6 @@ buildPythonPackage (finalAttrs: {
   pname = "mrsqm";
   version = "0.0.7";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mlgig";

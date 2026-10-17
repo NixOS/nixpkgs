@@ -28,7 +28,6 @@ buildPythonPackage (finalAttrs: {
   pname = "spectral-cube";
   version = "0.7.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "radio-astro-tools";

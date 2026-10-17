@@ -43,7 +43,6 @@ buildPythonPackage (finalAttrs: {
   pname = "openai";
   version = "3.14.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "openai";
