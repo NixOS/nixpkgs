@@ -1500,8 +1500,6 @@ with pkgs;
 
   inherit (ocamlPackages) patdiff;
 
-  scour = with python3Packages; toPythonApplication scour;
-
   steampipePackages = recurseIntoAttrs (callPackage ../tools/misc/steampipe-packages { });
 
   inherit (callPackages ../servers/rainloop { })
