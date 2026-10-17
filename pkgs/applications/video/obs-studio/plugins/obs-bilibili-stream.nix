@@ -52,12 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Bilibili streaming plugin for OBS Studio";
     homepage = "https://github.com/Zarosmm/obs-bilibili-stream";
     changelog = "https://github.com/Zarosmm/obs-bilibili-stream/releases/tag/${finalAttrs.version}";
-    # The project's own appstream metadata declares <project_license>GPL-2.0-only</project_license>.
-    # The LICENSE file is the stock GPLv2 text, and src/plugin-support.{h,c.in} are the
-    # unmodified OBS plugin template (placeholders still unfilled), so the "or any later
-    # version" wording there is boilerplate rather than the author's grant.
     license = lib.licenses.gpl2Only;
-    # A plugin cannot be built where its host cannot: obs-studio has no riscv64.
     inherit (obs-studio.meta) platforms;
     maintainers = with lib.maintainers; [ kitsunori ];
   };
