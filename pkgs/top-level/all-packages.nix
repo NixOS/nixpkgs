@@ -1335,8 +1335,6 @@ with pkgs;
       '';
     });
 
-  cleanit = with python3Packages; toPythonApplication cleanit;
-
   clickgen = with python3Packages; toPythonApplication clickgen;
 
   coloredlogs = with python3Packages; toPythonApplication coloredlogs;
