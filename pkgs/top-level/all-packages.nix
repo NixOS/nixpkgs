@@ -2186,8 +2186,6 @@ with pkgs;
 
   man = man-db;
 
-  mcstatus = with python3Packages; toPythonApplication mcstatus;
-
   miniupnpd-nftables = miniupnpd.override { firewall = "nftables"; };
 
   mitmproxy = with python3Packages; toPythonApplication mitmproxy;
