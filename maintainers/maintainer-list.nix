@@ -24682,6 +24682,11 @@
     githubId = 1973389;
     name = "Reuben D'Netto";
   };
+  rebizzz = {
+    name = "ReBiz";
+    github = "rebizzz";
+    githubId = 70316178;
+  };
   rebmit = {
     name = "Lu Wang";
     email = "rebmit@rebmit.moe";
