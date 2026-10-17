@@ -1,54 +1,54 @@
 {
-  "version": "3.47.4",
-  "engineVersion": "06a2e2a110089dff50fe635cffd2a61e1b24fbcd",
+  "version": "3.47.7",
+  "engineVersion": "deb287481e3ce9468f3434937ced4240a70539ca",
   "channel": "stable",
-  "dartVersion": "3.13.3",
+  "dartVersion": "3.13.5",
   "dartHash": {
-    "x86_64-linux": "sha256-VJwYLP+9xoZN91CcFv7GRsc/5suKGMLLVy2xKS8wDNc=",
-    "aarch64-linux": "sha256-xZxTViPzq5cX6HVSN99pXxU/s687+w9sKBsutP7+Zp4=",
-    "aarch64-darwin": "sha256-xwO8uyXKDMXfkQn7gnLVJ4asFHgkN72eNloBmFJzwcw="
+    "x86_64-linux": "sha256-6oZLxk3zCmuL3zCy4yVQ93F9mokN6PQCk66ruST+Iys=",
+    "aarch64-linux": "sha256-GacxZHw+1VBY7kbd4AMwFQ5qhym7YSG0ox6GCEyKPm0=",
+    "aarch64-darwin": "sha256-nf59byVYgWwql4r/bIDopFCcbLcmwHAqYWxk0ob2Dog="
   },
-  "flutterHash": "sha256-9AJI6DJnP6ZFlgOgyhMjsQdCBjwhQfymRGVC9y5js+s=",
+  "flutterHash": "sha256-dNtmwYnSaU51BcjkGbK8i5Bo7E+2Hqvc/LatCrXTImM=",
   "artifactHashes": {
     "android": {
-      "aarch64-darwin": "sha256-zJsZIxEL27d8areToXL/gF1/ywI2EPGXWzqCFHBLhrc=",
-      "aarch64-linux": "sha256-VrEdFA4gGwacrFxzVCHab33gjd6yfTQMyd4LQsqQOtU=",
-      "x86_64-linux": "sha256-VrEdFA4gGwacrFxzVCHab33gjd6yfTQMyd4LQsqQOtU="
+      "aarch64-darwin": "sha256-A7Rk8hm90w+1K/IyDVmPW3Hh9ithYU9KLtl5TpaLScI=",
+      "aarch64-linux": "sha256-QYiTns4cXovAfW5cHX/dwt3dA5DxGHUSQ+x2sP8WCg4=",
+      "x86_64-linux": "sha256-QYiTns4cXovAfW5cHX/dwt3dA5DxGHUSQ+x2sP8WCg4="
     },
     "fuchsia": {
-      "aarch64-darwin": "sha256-PfqiaULfgE9W33NKJ/xcmiOpxfv+hIbt2xNhb+Zsxg0=",
-      "aarch64-linux": "sha256-PfqiaULfgE9W33NKJ/xcmiOpxfv+hIbt2xNhb+Zsxg0=",
-      "x86_64-linux": "sha256-PfqiaULfgE9W33NKJ/xcmiOpxfv+hIbt2xNhb+Zsxg0="
+      "aarch64-darwin": "sha256-h5571MNQEqIN53VKlfFNT4lJrTLNP9CVooPNmB1Mkck=",
+      "aarch64-linux": "sha256-h5571MNQEqIN53VKlfFNT4lJrTLNP9CVooPNmB1Mkck=",
+      "x86_64-linux": "sha256-h5571MNQEqIN53VKlfFNT4lJrTLNP9CVooPNmB1Mkck="
     },
     "ios": {
-      "aarch64-darwin": "sha256-uIQxxFQlvZPK7kEJOTg6DTzkO83EJ7Iq7R8znmunbWw=",
-      "aarch64-linux": "sha256-uIQxxFQlvZPK7kEJOTg6DTzkO83EJ7Iq7R8znmunbWw=",
-      "x86_64-linux": "sha256-uIQxxFQlvZPK7kEJOTg6DTzkO83EJ7Iq7R8znmunbWw="
+      "aarch64-darwin": "sha256-+nU7jNAeTeZtO8UFTb+ZdJKaCu+NuCRS3ZoJa7GEN1Y=",
+      "aarch64-linux": "sha256-+nU7jNAeTeZtO8UFTb+ZdJKaCu+NuCRS3ZoJa7GEN1Y=",
+      "x86_64-linux": "sha256-+nU7jNAeTeZtO8UFTb+ZdJKaCu+NuCRS3ZoJa7GEN1Y="
     },
     "linux": {
-      "aarch64-darwin": "sha256-DrO0MI7aC5DXDnSaAMJE+S7fd4RJYvko3YXww/T4y+8=",
-      "aarch64-linux": "sha256-DrO0MI7aC5DXDnSaAMJE+S7fd4RJYvko3YXww/T4y+8=",
-      "x86_64-linux": "sha256-WCauovQQ6LPUbfbLl4slCO+6wea18469Res2s+3erX0="
+      "aarch64-darwin": "sha256-Z7zx0LiRb7GaWCT0q9aLXSbKp98/gLXWv8GEjYABgIk=",
+      "aarch64-linux": "sha256-Z7zx0LiRb7GaWCT0q9aLXSbKp98/gLXWv8GEjYABgIk=",
+      "x86_64-linux": "sha256-QxP1htwB78DhV5gaK6yMWSHGGwu7/mBtqVOk6eDoMaA="
     },
     "macos": {
-      "aarch64-darwin": "sha256-3csYc6v7JQUQlusJ+OhYs3gK5R84nU+dFSHBqlqxovY=",
-      "aarch64-linux": "sha256-3csYc6v7JQUQlusJ+OhYs3gK5R84nU+dFSHBqlqxovY=",
-      "x86_64-linux": "sha256-3csYc6v7JQUQlusJ+OhYs3gK5R84nU+dFSHBqlqxovY="
+      "aarch64-darwin": "sha256-64+buAopfifVJG7W9x5DadL6MeOsnqWc6NxrDVapgjc=",
+      "aarch64-linux": "sha256-64+buAopfifVJG7W9x5DadL6MeOsnqWc6NxrDVapgjc=",
+      "x86_64-linux": "sha256-64+buAopfifVJG7W9x5DadL6MeOsnqWc6NxrDVapgjc="
     },
     "universal": {
-      "aarch64-darwin": "sha256-RSyXHLtS8Ai1YWYiNvc1cw/TiG+VQIQGrDFF+xK4aqQ=",
-      "aarch64-linux": "sha256-AHuEm/ZnhamiGSJdhYwchpUlmviI6zcKPjR2IQHBzeA=",
-      "x86_64-linux": "sha256-7y8wSMwsmEnac2FYJXqv94NY03mFFwiZ/dD4uDhovGc="
+      "aarch64-darwin": "sha256-fCzJiRZNqgX6SrWoF54Yrp7YCSw9XhNVxBwV09BqQ0o=",
+      "aarch64-linux": "sha256-lSr1rFXbDjm+DZcdNX//IcWfBbKir73JMvu8my1RWOk=",
+      "x86_64-linux": "sha256-1pCCpIn0ZflHcZbWDwFKdq2T0QKTPb/MjvCrhfpamXM="
     },
     "web": {
-      "aarch64-darwin": "sha256-Gmi8YpI6F5J+eQfJArGowQh8aECGT8wBrjE81K+HVjc=",
-      "aarch64-linux": "sha256-Gmi8YpI6F5J+eQfJArGowQh8aECGT8wBrjE81K+HVjc=",
-      "x86_64-linux": "sha256-Gmi8YpI6F5J+eQfJArGowQh8aECGT8wBrjE81K+HVjc="
+      "aarch64-darwin": "sha256-19CyRs384WXGCy4kg3Ob/784Fc6OMm1i3isLw/tOOts=",
+      "aarch64-linux": "sha256-19CyRs384WXGCy4kg3Ob/784Fc6OMm1i3isLw/tOOts=",
+      "x86_64-linux": "sha256-19CyRs384WXGCy4kg3Ob/784Fc6OMm1i3isLw/tOOts="
     },
     "windows": {
-      "aarch64-darwin": "sha256-TkislgPc3zFB+7WDP+4K4f5+C5UHca3u8Dws2qEK6Yw=",
-      "aarch64-linux": "sha256-TkislgPc3zFB+7WDP+4K4f5+C5UHca3u8Dws2qEK6Yw=",
-      "x86_64-linux": "sha256-l20AwkuwN242ihuaMBHPpVLEpAPTNdMq8ZbY+mq0pbw="
+      "aarch64-darwin": "sha256-pecw4FGbZBTv9+x3rCyT+8iBPnY6XHzXAdNy4maIdV8=",
+      "aarch64-linux": "sha256-pecw4FGbZBTv9+x3rCyT+8iBPnY6XHzXAdNy4maIdV8=",
+      "x86_64-linux": "sha256-5VtvmYrE0l5Lz/yhzYqorsYTRRLBIloptW0jaP8qEJg="
     }
   },
   "pubspecLock": {
@@ -297,11 +297,11 @@
         "dependency": "direct main",
         "description": {
           "name": "dds",
-          "sha256": "6673c5b29e502fd44dbf5836685e7c7c16b11c0fa7f91ef241e0cbf0638c8794",
+          "sha256": "f8e875dcd7b5e5073a7bfe54095144c70487f18e2f8e47fa51c09dd67eccfb0c",
           "url": "https://pub.dev"
         },
         "source": "hosted",
-        "version": "5.3.0"
+        "version": "5.4.0"
       },
       "dds_service_extensions": {
         "dependency": "direct main",
@@ -317,11 +317,11 @@
         "dependency": "direct main",
         "description": {
           "name": "devtools_shared",
-          "sha256": "2daf7a9fba6a470668b26ecbd04200f7bf992aad81a2c31d12457c7791419dea",
+          "sha256": "13df2c17d5f21dd7c92d08145386d45e1153364c04e531e994afb0ee7b67554b",
           "url": "https://pub.dev"
         },
         "source": "hosted",
-        "version": "12.1.0"
+        "version": "13.1.0"
       },
       "dtd": {
         "dependency": "direct main",
