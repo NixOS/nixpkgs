@@ -2571,8 +2571,6 @@ with pkgs;
 
   translatelocally-models = recurseIntoAttrs (callPackages ../misc/translatelocally-models { });
 
-  trytond = with python3Packages; toPythonApplication trytond;
-
   ttfautohint-nox = ttfautohint.override { enableGUI = false; };
 
   uftraceFull = uftrace.override {
