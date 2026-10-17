@@ -107,6 +107,79 @@ let
       '';
     };
 
+  makeVentoyTest =
+    name: config:
+    let
+      startCommand = mkStartCommand (
+        builtins.removeAttrs config [ "ventoyFile" ]
+        // {
+          usb = "$NIX_BUILD_TOP/ventoy.qcow2";
+        }
+      );
+
+      ventoyJSON = pkgs.writeText "ventoy.json" (
+        builtins.toJSON {
+          control = [
+            { VTOY_DEFAULT_IMAGE = baseNameOf config.ventoyFile; }
+            { VTOY_MENU_TIMEOUT = "0"; }
+            { VTOY_SECONDARY_BOOT_MENU = "0"; }
+          ];
+        }
+      );
+    in
+    makeTest {
+      name = "boot-ventoy-${name}";
+      nodes.setup = {
+        environment.systemPackages = [ pkgs.ventoy ];
+        virtualisation.qemu.drives = [
+          {
+            file = "$NIX_BUILD_TOP/ventoy.qcow2";
+            deviceExtraOpts.serial = "ventoy";
+          }
+        ];
+      };
+
+      testScript =
+        { nodes, ... }:
+        ''
+          import os, math, subprocess
+          from pathlib import Path
+
+          iso_size = os.path.getsize("${config.ventoyFile}")
+          mebibyte = 1024 * 1024
+          # 256MiB larger than the ISO size rounded up to the nearest MiB
+          drive_size = (256 * mebibyte) + (math.ceil(iso_size / mebibyte) * mebibyte)
+          drive_path = Path(os.environ["NIX_BUILD_TOP"]) / "ventoy.qcow2"
+
+          subprocess.run([
+            "${nodes.setup.virtualisation.qemu.package}/bin/qemu-img",
+            "create",
+            "-f",
+            "qcow2",
+            drive_path,
+            f"{drive_size}",
+          ])
+
+          setup.succeed(
+            # Not sure why ventoy exits 1
+            "yes | ventoy -i -g /dev/disk/by-id/virtio-ventoy || true",
+            "mkdir /mnt",
+            "mount /dev/disk/by-id/virtio-ventoy-part1 /mnt",
+            "cp -v ${config.ventoyFile} /mnt/",
+            "mkdir /mnt/ventoy",
+            "cp -v ${ventoyJSON} /mnt/ventoy/ventoy.json",
+            "umount /mnt",
+          )
+          setup.shutdown()
+
+          machine = create_machine("${startCommand}")
+          machine.start()
+          machine.wait_for_unit("multi-user.target")
+          machine.succeed("stat /run/ventoy/${baseNameOf config.ventoyFile}")
+          machine.shutdown()
+        '';
+    };
+
   makeNetbootTest =
     name: extraConfig:
     let
@@ -169,6 +242,11 @@ in
     usb = "${iso}/iso/${iso.isoName}";
   };
 
+  uefiVentoy = makeVentoyTest "uefi-ventoy" {
+    uefi = true;
+    ventoyFile = "${iso}/iso/${iso.isoName}";
+  };
+
   uefiNetboot = makeNetbootTest "uefi" {
     uefi = true;
   };
@@ -180,6 +258,10 @@ in
 
   biosUsb = makeBootTest "bios-usb" {
     usb = "${iso}/iso/${iso.isoName}";
+  };
+
+  biosVentoy = makeVentoyTest "uefi-ventoy" {
+    ventoyFile = "${iso}/iso/${iso.isoName}";
   };
 
   biosNetboot = makeNetbootTest "bios" { };
