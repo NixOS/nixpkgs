@@ -18,7 +18,6 @@
   freetype,
   qt6,
   lame,
-  libjack2,
   libogg,
   libopus,
   libopusenc,
@@ -83,25 +82,19 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "MUE_BUILD_MACOS_INTEGRATION" false)
   ];
 
-  qtWrapperArgs = [
-    # MuseScore JACK backend loads libjack at runtime.
-    "--prefix"
-    "${lib.optionalString stdenv.hostPlatform.isDarwin "DY"}LD_LIBRARY_PATH"
-    ":"
-    (lib.makeLibraryPath [ libjack2 ])
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux) [
-    "--set"
-    "ALSA_PLUGIN_DIR"
-    "${alsa-plugins}/lib/alsa-lib"
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    # There are some issues with using the wayland backend, see:
-    # https://musescore.org/en/node/321936
-    "--set-default"
-    "QT_QPA_PLATFORM"
-    "xcb"
-  ];
+  qtWrapperArgs =
+    lib.optionals (stdenv.hostPlatform.isLinux) [
+      "--set"
+      "ALSA_PLUGIN_DIR"
+      "${alsa-plugins}/lib/alsa-lib"
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      # There are some issues with using the wayland backend, see:
+      # https://musescore.org/en/node/321936
+      "--set-default"
+      "QT_QPA_PLATFORM"
+      "xcb"
+    ];
 
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
@@ -132,7 +125,6 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtscxml
     qt6.qtsvg
     lame
-    libjack2
     libogg
     libopus
     libopusenc
