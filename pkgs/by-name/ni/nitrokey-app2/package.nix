@@ -17,14 +17,14 @@ in
 
 python3Packages.buildPythonApplication rec {
   pname = "nitrokey-app2";
-  version = "2.5.2";
+  version = "2.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Nitrokey";
     repo = "nitrokey-app2";
     tag = "v${version}";
-    hash = "sha256-HkGdu8A8xpZheO+2NcKkTPXZGln28CnhRQzdpwRUlRE=";
+    hash = "sha256-Q6OWQ1Sb2qM72MYZy85XqcWEbD32sfvgluAaLyDzAEc=";
   };
 
   nativeBuildInputs = [
