@@ -7,14 +7,14 @@
 }:
 buildPythonPackage rec {
   pname = "giturlparse";
-  version = "0.15.0";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nephila";
     repo = "giturlparse";
     tag = version;
-    hash = "sha256-EGhmWudQjzqw8xK/pIj5nZqosBX2lnYEgNRNQ/ePEmo=";
+    hash = "sha256-EzybKpff9u4axubSbFR/knSVYtOoz7Ls9rAjMohWP8k=";
   };
 
   build-system = [
