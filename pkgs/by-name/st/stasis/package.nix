@@ -57,7 +57,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     homepage = "https://github.com/saltnpepper97/stasis";
     changelog = "https://github.com/saltnpepper97/stasis/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.mit;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ nartsiss ];
     platforms = lib.platforms.linux;
     mainProgram = "stasis";

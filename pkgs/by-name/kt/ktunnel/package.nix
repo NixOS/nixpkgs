@@ -39,7 +39,7 @@ buildGoModule {
     description = "Cli that exposes your local resources to kubernetes";
     mainProgram = "ktunnel";
     homepage = "https://github.com/omrikiei/ktunnel";
-    license = lib.licenses.asl20;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ happysalada ];
   };
 }
