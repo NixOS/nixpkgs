@@ -1,0 +1,28 @@
+diff --git i/combined/cmd/config.go w/combined/cmd/config.go
+index 890c86876..736ab6cd6 100644
+--- i/combined/cmd/config.go
++++ w/combined/cmd/config.go
+@@ -13,6 +13,7 @@ import (
+ 	log "github.com/sirupsen/logrus"
+ 	"gopkg.in/yaml.v3"
+ 
++	"github.com/netbirdio/netbird/idp/dex"
+ 	"github.com/netbirdio/netbird/management/server/idp"
+ 	"github.com/netbirdio/netbird/management/server/types"
+ 	"github.com/netbirdio/netbird/util"
+@@ -155,6 +156,7 @@ type AuthConfig struct {
+ 	Owner                           *AuthOwnerConfig  `yaml:"owner,omitempty"`
+ 	DashboardPostLogoutRedirectURIs []string          `yaml:"dashboardPostLogoutRedirectURIs"`
+ 	GrantTypes                      []string          `yaml:"grantTypes"`
++	StaticConnectors                []dex.Connector   `yaml:"staticConnectors"`
+ }
+ 
+ // AuthStorageConfig contains auth storage settings
+@@ -628,6 +630,7 @@ func (c *CombinedConfig) buildEmbeddedIdPConfig(mgmt ManagementConfig) (*idp.Emb
+ 		CLIRedirectURIs:                 mgmt.Auth.CLIRedirectURIs,
+ 		DashboardPostLogoutRedirectURIs: mgmt.Auth.DashboardPostLogoutRedirectURIs,
+ 		GrantTypes:                      mgmt.Auth.GrantTypes,
++		StaticConnectors:                mgmt.Auth.StaticConnectors,
+ 	}
+ 
+ 	if mgmt.Auth.Owner != nil && mgmt.Auth.Owner.Email != "" {
