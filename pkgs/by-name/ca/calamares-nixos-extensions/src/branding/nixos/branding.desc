@@ -157,10 +157,10 @@ strings:
 # These filenames can also use substitutions from os-release (see above).
 images:
     # productBanner:       "banner.png"
-    productIcon:         "nixos-logomark-default-flat-none.svg"
-    productLogo:         "white.png"
+    productIcon:         "@branding@/logomark/nixos-logomark-default-gradient-none.svg"
+    productLogo:         "@branding@/logomark/nixos-logomark-white-flat-none-320.png"
     # productWallpaper:    "wallpaper.png"
-    productWelcome:      "nixos-logomark-default-flat-none.svg"
+    productWelcome:      "@branding@/logomark/nixos-logomark-default-gradient-none.svg"
 
 # Colors for text and background components.
 #
