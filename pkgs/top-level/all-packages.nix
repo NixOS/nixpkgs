@@ -931,8 +931,6 @@ with pkgs;
 
   ### TOOLS
 
-  acquire = with python3Packages; toPythonApplication acquire;
-
   actdiag = with python3.pkgs; toPythonApplication actdiag;
 
   opnplug = adlplug.override { type = "OPN"; };
