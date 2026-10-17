@@ -2,8 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  testers,
-  vpcs,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,27 +16,36 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-sWqQDf3xqrr6k7MFXV/9K9KdsEAvftsDkGlSUhA5CmY=";
   };
 
+  strictDeps = true;
+
   sourceRoot = "${finalAttrs.src.name}/src";
 
-  buildPhase = ''
-    runHook preBuild
+  makefile =
+    if stdenv.hostPlatform.isDarwin then
+      "Makefile.osx"
+    else if stdenv.hostPlatform.isFreeBSD then
+      "Makefile.fbsd"
+    else if stdenv.hostPlatform.isOpenBSD then
+      "Makefile.obsd"
+    else
+      "Makefile.linux";
 
-    MKOPT="CC=${stdenv.cc.targetPrefix}cc" ./mk.sh ${stdenv.buildPlatform.linuxArch}
-
-    runHook postBuild
-  '';
-
-  postInstall = ''
-    install -D -m555 vpcs $out/bin/vpcs
-    install -D -m444 ../man/vpcs.1 $out/share/man/man1/vpcs.1
-  '';
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   enableParallelBuilding = true;
 
-  passthru.tests.version = testers.testVersion {
-    package = vpcs;
-    command = "vpcs -v";
-  };
+  installPhase = ''
+    runHook preInstall
+
+    install -D -m555 vpcs $out/bin/vpcs
+    install -D -m444 ../man/vpcs.1 $out/share/man/man1/vpcs.1
+
+    runHook postInstall
+  '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-v";
+  doInstallCheck = true;
 
   meta = {
     description = "Simple virtual PC simulator";
@@ -46,7 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
       ping/traceroute them, or ping/traceroute the other hosts/routers from the
       VPCS when you study the Cisco routers in the dynamips.
     '';
-    inherit (finalAttrs.src.meta) homepage;
+    homepage = "https://github.com/GNS3/vpcs";
+    changelog = "https://github.com/GNS3/vpcs/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "vpcs";
