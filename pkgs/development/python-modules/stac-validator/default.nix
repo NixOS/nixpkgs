@@ -25,6 +25,11 @@ buildPythonPackage rec {
     hash = "sha256-H4vhinsfOY4kM2YRGJrl8+9Wj91gKo5aj8sTZV/LHX0=";
   };
 
+  postPatch = ''
+    substituteInPlace ./pyproject.toml \
+      --replace-fail  'name = "stac_valid"' 'name = "stac_validator"'
+  '';
+
   build-system = [ setuptools ];
 
   pythonRelaxDeps = [
