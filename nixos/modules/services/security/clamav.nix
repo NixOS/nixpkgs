@@ -211,6 +211,21 @@ in
       }
     ];
 
+    warnings =
+      lib.optional
+        (cfg.daemon.enable && (cfg.daemon.settings ? TCPSocket || cfg.daemon.settings ? TCPAddr))
+        ''
+          services.clamav.daemon: `TCPSocket`/`TCPAddr` in `settings` have no effect.
+          clamd is started via systemd socket activation (the clamav-daemon.socket unit
+          passes it only the LocalSocket), and a socket-activated clamd uses only the file
+          descriptors it receives, ignoring the LocalSocket/TCPSocket/TCPAddr directives in
+          clamd.conf -- so clamd never listens on the configured TCP port. Connect via the
+          unix socket (services.clamav.daemon.settings.LocalSocket), or expose TCP by adding
+          it to the socket unit, e.g.
+            systemd.sockets.clamav-daemon.listenStreams = [ "127.0.0.1:3310" ];
+          (as Debian's packaging does). See https://bugs.debian.org/771911
+        '';
+
     environment.systemPackages = [ cfg.package ];
 
     users.users.${clamavUser} = {
