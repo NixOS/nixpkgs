@@ -1,40 +1,40 @@
 {
-  "version": "1.4.2",
-  "revision": "744846f844374847c902b5e7fd59b4342a51ef99",
-  "sourceHash": "sha256-N+4Dcac5aUmL+SMvCrMl3NRBvx0F/uFc7Ip3tRvoy6w=",
-  "cargoHash": "sha256-Q4oN80cRJrZwh90sR+Ajo6F2z70uf6BWt+hZSDcWEqY=",
+  "version": "1.4.3",
+  "revision": "c6da4a4d3010e5553438c60f6bd76d981976867c",
+  "sourceHash": "sha256-NXKOmxQHguwkGIuq9z5kFrektrxPEmFzjoBHWyOlovU=",
+  "cargoHash": "sha256-041/YqOJ8Tm5gfnRtac5yDSmdyKyQnKdO5rv8FUeOoc=",
   "bootstrapAssets": {
     "aarch64-darwin": {
       "name": "bun-darwin-aarch64",
-      "hash": "sha256-kJh6OhbX21VtiGrD1VHnttPt8KHPQ6yu1iLoZ2vh0S8="
+      "hash": "sha256-gK/UwGm0am+o8+xSC+vHUKeEPkqNW5WD0prUNsAKNAM="
     },
     "aarch64-linux": {
       "name": "bun-linux-aarch64",
-      "hash": "sha256-VDKLvC2cjgyfiSxUTWbFeoO4QTnjSQnl7oF1jxrI/ac="
+      "hash": "sha256-76mBPaXtckI7+Ef5FujSxHwNd2rdlyNUAmp14Q2pqiE="
     },
     "aarch64-linux-musl": {
       "name": "bun-linux-aarch64-musl",
-      "hash": "sha256-cXYLbI6jBiO4GkkHy4FdSOLqJm8uc+dRU0pEoGB5UN8="
+      "hash": "sha256-jeigADzCcHu1VYh+PUUOJOHt8/YF9JE5PontYaiFNCA="
     },
     "x86_64-linux": {
       "name": "bun-linux-x64-baseline",
-      "hash": "sha256-xngEDxT+BEDrg503y9DOTAUaMtpygGrJfeamqra/co8="
+      "hash": "sha256-H8LtrIQxApCeOhvh2NmALMYHHPB05n6IIx9P/g+LOXs="
     },
     "x86_64-linux-musl": {
       "name": "bun-linux-x64-musl-baseline",
-      "hash": "sha256-duHbhOmPIveN4Kh+MJv7vyl3MoR/lyDbNnUGRshcjBg="
+      "hash": "sha256-S1sLVQP26/FRYejFbrWiYxNMBc2YqG3BHuQ6xb2phi4="
     }
   },
   "nodeModulesHashes": {
-    "aarch64-darwin": "sha256-MgFDUaLABE8tHha+eygb06WGBOJPujqVwWTK/U1XECc=",
-    "aarch64-linux": "sha256-lrs/up/xPZY0LR0/eCVWbJe0Q87GPTGx28OXS4+6Hbo=",
-    "x86_64-linux": "sha256-zRkE+ju7f1wbUO+nc4Sh3hatSAVPok6S8UueI74EdIc="
+    "aarch64-darwin": "sha256-cMY9sk0wiEP77jLvqg7dd6mKk5sfUtrQowAPQJQDUTA=",
+    "aarch64-linux": "sha256-WBVogHQ9VG32Fpn2tTrxQnSx1RBYJe93g5stEUV5ziw=",
+    "x86_64-linux": "sha256-lXuuA9NAw+UqTAkHfzSB6ng5iHrHqGsox1CVTZjFEU4="
   },
   "downloads": [
     {
       "name": "picohttpparser",
-      "url": "https://github.com/h2o/picohttpparser/archive/066d2b1e9ab820703db0837a7255d92d30f0c9f5.tar.gz",
-      "hash": "sha256-Y3/yq29cf34FpbXcOT1c8v6o1HVPys6q+TX//1wTI+4="
+      "url": "https://github.com/h2o/picohttpparser/archive/f4d94b48b31e0abae029ebeafcfd9ca0680ede58.tar.gz",
+      "hash": "sha256-vXc/rR4sZTK3pl72tg3sNhKj5WbjyEQnLMLLq4ncfpw="
     },
     {
       "name": "zlib",
@@ -48,23 +48,23 @@
     },
     {
       "name": "brotli",
-      "url": "https://github.com/google/brotli/archive/v1.1.0.tar.gz",
-      "hash": "sha256-5yCmyilCi4A/StFlNxdx9TmPq6OX7fZ3iDehhZnqE/8="
+      "url": "https://github.com/google/brotli/archive/028fb5a23661f123017c060daa546b55cf4bde29.tar.gz",
+      "hash": "sha256-Cv4JpTyLrZhhyN0fwShDCNVPGdKXm6NUHP3MmwX+Ng8="
     },
     {
       "name": "libdeflate",
-      "url": "https://github.com/ebiggers/libdeflate/archive/c8c56a20f8f621e6a966b716b31f1dedab6a41e3.tar.gz",
-      "hash": "sha256-HlzAa9vz4SRdi4nJ41iPUH48i8U/6Lgil3Cp6GYd6oE="
+      "url": "https://github.com/ebiggers/libdeflate/archive/92e6a0db9fa848d742f9eb286c92afc60f2c3dda.tar.gz",
+      "hash": "sha256-r1ZJgUmCf1pePx/7ZTx5yMdVV/PcLK9gAsrDilm4RLc="
     },
     {
       "name": "libarchive",
-      "url": "https://github.com/libarchive/libarchive/archive/ded82291ab41d5e355831b96b0e1ff49e24d8939.tar.gz",
-      "hash": "sha256-BC8O/nFHBj/5uhDxo47QgOlJvL0Evb81kriEbdEbHaI="
+      "url": "https://github.com/libarchive/libarchive/archive/27cbc7827172698143e440801fc0ba39ccb4f1f5.tar.gz",
+      "hash": "sha256-gemB7/R0baTIDmYi3IJ7Iy5jM/8uJzIKbuj96GyJG5I="
     },
     {
       "name": "libjpeg-turbo",
-      "url": "https://github.com/libjpeg-turbo/libjpeg-turbo/archive/e352b02f794f701407b39af08576035ba3360d60.tar.gz",
-      "hash": "sha256-RA86lDkMeOq4j3S5KUTS9rJI5ZLphEEuOJiF37V5a/A="
+      "url": "https://github.com/libjpeg-turbo/libjpeg-turbo/archive/c85e6b905bf237038faa936dab160ebfc5da0344.tar.gz",
+      "hash": "sha256-RSCaPzFe1hVtrI1/pFG4vmLYPy2qVYHLa5Tunz+Cz28="
     },
     {
       "name": "libspng",
@@ -83,8 +83,8 @@
     },
     {
       "name": "hdrhistogram",
-      "url": "https://github.com/HdrHistogram/HdrHistogram_c/archive/be60a9987ee48d0abf0d7b6a175bad8d6c1585d1.tar.gz",
-      "hash": "sha256-gRxeWuUwOnWt5QaIiAr2qtXS+VHsV4X2gYa9GGNc38k="
+      "url": "https://github.com/HdrHistogram/HdrHistogram_c/archive/18c7a324383dded1451d15621cd018b0048057d0.tar.gz",
+      "hash": "sha256-QnKQwgZ+xMkZYy+bo3LsKqyQBUGFePMu85LbX5ihKjI="
     },
     {
       "name": "highway",
@@ -103,18 +103,18 @@
     },
     {
       "name": "lshpack",
-      "url": "https://github.com/litespeedtech/ls-hpack/archive/8905c024b6d052f083a3d11d0a169b3c2735c8a1.tar.gz",
-      "hash": "sha256-B9i/kBuxsVVD846r0jk4UZ4SEO6621Lz1lHW7xMO+XM="
+      "url": "https://github.com/litespeedtech/ls-hpack/archive/cf0f70dd10b352194c97448eb5d00b4aa484f531.tar.gz",
+      "hash": "sha256-sTjY/HHl9/NTtXhJQs8IrVcFDXsyESHwlWJ/aWdX+fg="
     },
     {
       "name": "lsqpack",
-      "url": "https://github.com/litespeedtech/ls-qpack/archive/1e9c5b8e59f8161c54f168a570c8bfdc59ded0c3.tar.gz",
-      "hash": "sha256-6dir5bfB41uZCKlSHirNfB0XVHurwB1zxyl+Aq67zC0="
+      "url": "https://github.com/litespeedtech/ls-qpack/archive/91567706c41c0d97ab8dc576873ecd472d7869fa.tar.gz",
+      "hash": "sha256-Ho96aamu45cMs/qPvCLi3wC32vjytR2vNfUAAebGlDw="
     },
     {
       "name": "mimalloc",
-      "url": "https://github.com/oven-sh/mimalloc/archive/6a64e1ba7f5b2130d4efccb67ec87fd0003f0f6a.tar.gz",
-      "hash": "sha256-82NDQWrYI9/MphvRitS7fw2IFKt34P1e8Wn0qc3euLg="
+      "url": "https://github.com/oven-sh/mimalloc/archive/92ef6587c57b262f6e6abf513f7776a2f8d12aeb.tar.gz",
+      "hash": "sha256-HnCLFzC5ayG52q1DzWexDLSvE4pz2vVJ21/cDKrGlRA="
     },
     {
       "name": "tinycc",
@@ -128,8 +128,8 @@
     },
     {
       "name": "lsquic",
-      "url": "https://github.com/litespeedtech/lsquic/archive/3181911301b1aa4f54c1ed690901abc674ee08fb.tar.gz",
-      "hash": "sha256-+MuQ+zJ+uRWXwjFjv1lsDRiCVgvjW2Ydm6hIkcxGFzU="
+      "url": "https://github.com/litespeedtech/lsquic/archive/f812ceb9529e26717df78c6064a2ff648b949f3e.tar.gz",
+      "hash": "sha256-xagdC4EOhdNe2UYOF1dscfAoHr+roF2FnAvf2Mlt9z0="
     },
     {
       "name": "nodejs-headers",
@@ -138,9 +138,9 @@
     }
   ],
   "webkit": {
-    "rev": "2e2aa2290fac856d6f451ceacb58f7f5b44dd057",
-    "version": "0-unstable-2026-09-04",
-    "hash": "sha256-6H33n41YBi0w2sPJbO6zYjxW3VtIyRMR/3zjyGlFDOA=",
+    "rev": "0c06faadf65bf8e8c8ad3a5a8aca83e1e9ed653f",
+    "version": "0-unstable-2026-10-06",
+    "hash": "sha256-K+V3yJTPuUAS8EIXF5NO1kvSMkgr1e5kz9pWrww1I0Q=",
     "sparseCheckout": [
       "Configurations",
       "Source/cmake",
