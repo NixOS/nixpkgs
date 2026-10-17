@@ -32447,6 +32447,12 @@
     githubId = 364160;
     matrix = "@woobilicious:matrix.org";
   };
+  yeoldegrove = {
+    email = "git@yeoldegrove.de";
+    github = "yeoldegrove";
+    githubId = 8668070;
+    name = "Eike Waldt";
+  };
   yesbox = {
     email = "jesper.geertsen.jonsson@gmail.com";
     github = "yesbox";
