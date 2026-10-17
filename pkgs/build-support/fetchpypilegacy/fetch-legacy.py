@@ -41,7 +41,7 @@ class Pep503(HTMLParser):
             if not self.name:
                 raise ValueError("Name not set")
 
-            self.sources[self.name] = self.url
+            self.sources[self.name.strip()] = self.url
         self.url = None
 
 
