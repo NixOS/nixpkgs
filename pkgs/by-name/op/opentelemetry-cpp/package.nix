@@ -11,7 +11,6 @@
   prometheus-cpp,
   nlohmann_json,
   nix-update-script,
-  cxxStandard ? null,
   enableHttp ? false,
   enableGrpc ? false,
   enablePrometheus ? false,
@@ -82,10 +81,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "OTELCPP_WITH_ELASTICSEARCH" enableElasticSearch)
     (lib.cmakeBool "OTELCPP_WITH_ZIPKIN" enableZipkin)
     (lib.cmakeFeature "OTELCPP_PROTO_PATH" "${opentelemetry-proto}")
-  ]
-  ++ lib.optionals (cxxStandard != null) [
-    (lib.cmakeFeature "CMAKE_CXX_STANDARD" cxxStandard)
-    (lib.cmakeFeature "WITH_STL" "CXX${cxxStandard}")
+    (lib.cmakeFeature "CMAKE_CXX_STANDARD" "20")
+    (lib.cmakeFeature "WITH_STL" "CXX20")
   ];
 
   outputs = [
