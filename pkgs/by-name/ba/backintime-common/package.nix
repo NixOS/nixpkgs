@@ -39,13 +39,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "backintime-common";
-  version = "1.6.1";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "bit-team";
     repo = "backintime";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/33Lx62S/9RcqrfJumE6/o3KnAObBa3DcmuGkcOXIQE=";
+    hash = "sha256-8LQ/m+EZUlL4EoZ4EKV0GvYJR6bPpj9gW6AZhMctum8=";
   };
 
   __structuredAttrs = true;
