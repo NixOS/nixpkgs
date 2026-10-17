@@ -3,6 +3,7 @@
   cmake,
   dbus,
   fetchFromGitHub,
+  fetchpatch2,
   guiSupport ? true,
   lib,
   libtorrent-rasterbar,
@@ -29,6 +30,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "release-${finalAttrs.version}";
     hash = "sha256-HCfcwO8GEi4Ixfa+Ue2vgWyp407R3VDGRoLxUqJl1eM=";
   };
+
+  # Remove with the release of version 5.3.0
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/qbittorrent/qBittorrent/commit/e154c1a811021ab0bd6e6f9595c2b3c6518aaea3.patch";
+      hash = "sha256-4IMWQywt8XjZ6c8QXsJck7LLra/lI3wKHFw29W5MxZ0";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
