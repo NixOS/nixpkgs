@@ -329,7 +329,6 @@ Not everything has been migrated to this format yet.
 Please always use it for new content.
 When changing existing content, update formatting if possible, in a separate commit.
 
-
 ### Writing procedures
 
 One instruction per sentence. Don't pack multiple actions into one sentence.
