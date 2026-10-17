@@ -1,0 +1,52 @@
+diff --git a/tests/dumps/test_main.argparse_code_script_help.txt b/tests/dumps/test_main.argparse_code_script_help.txt
+index 83622e1..c0239c3 100644
+--- a/tests/dumps/test_main.argparse_code_script_help.txt
++++ b/tests/dumps/test_main.argparse_code_script_help.txt
+@@ -1,6 +1,6 @@
+ usage: code.py [-h]
+ --a A
+ 
+-optional arguments:
++options:
+   -h, --help  show this help message and exit
+   --a A
+diff --git a/tests/dumps/test_main.module.txt b/tests/dumps/test_main.module.txt
+index 59737d1..659b0ba 100644
+--- a/tests/dumps/test_main.module.txt
++++ b/tests/dumps/test_main.module.txt
+@@ -4,13 +4,14 @@ usage: server.py [-h]
+ [--directory DIRECTORY]
+ [port]
+ positional arguments:
+-  port                  Specify alternate port [default: 8000]
+-optional arguments:
++  port                  specify alternate port (default: 8000)
++
++options:
+   -h, --help            show this help message and exit
+-  --cgi                 Run as CGI Server
++  --cgi                 run as CGI server
+   --bind ADDRESS, -b ADDRESS
+-                        Specify alternate bind address [default: all
+-                        interfaces]
+---directory DIRECTORY, -d DIRECTORY
+-                        Specify alternative directory [default:current
+-                        directory]
++                        specify alternate bind address (default: all
++                        interfaces)
++  --directory DIRECTORY, -d DIRECTORY
++                        specify alternate directory (default: current
++                        directory)
+diff --git a/tests/dumps/test_main.simple_code_tool_help.txt b/tests/dumps/test_main.simple_code_tool_help.txt
+index 33a15dc..daecd9c 100644
+--- a/tests/dumps/test_main.simple_code_tool_help.txt
++++ b/tests/dumps/test_main.simple_code_tool_help.txt
+@@ -13,7 +13,7 @@ positional arguments:
+   script
+   script-arg
+ 
+-optional arguments:
++options:
+   -h, --help            show this help message and exit
+   --max-value-str-len MAX_VALUE_STR_LEN
+   --max-exc-str-len MAX_EXC_STR_LEN
