@@ -24224,6 +24224,12 @@
     githubId = 125415641;
     name = "Quinn Edenfield";
   };
+  quinnputer = {
+    name = "Quinn Heyman";
+    email = "quinn@emo.gay";
+    github = "quinnputer";
+    githubId = 337308300;
+  };
   QuiNzX = {
     name = "QuiNz-";
     github = "QuiNzX";
