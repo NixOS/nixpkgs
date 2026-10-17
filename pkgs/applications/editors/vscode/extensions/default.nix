@@ -3934,6 +3934,23 @@ let
         };
       };
 
+      radicle-ide-plugins-team.radicle = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "radicle-ide-plugins-team";
+          name = "radicle";
+          version = "0.7.1";
+          hash = "sha256-5ik0RYo8IFV//y8UY9MXcjbVCg8jeYRereni07GXVTM=";
+        };
+
+        meta = {
+          description = "Bring support for the Radicle network to your VS code.";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=radicle-ide-plugins-team.radicle";
+          homepage = "https://github.com/maninak/radicle-vscode-extension";
+          license = lib.licenses.asl20;
+          maintainers = [ lib.maintainers.liamthexpl0rer ];
+        };
+      };
+
       rangav.vscode-thunder-client = callPackage ./rangav.vscode-thunder-client { };
 
       rebornix.ruby = buildVscodeMarketplaceExtension {
