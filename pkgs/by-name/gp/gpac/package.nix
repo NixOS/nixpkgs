@@ -52,12 +52,12 @@ let
     };
   };
   unstable = {
-    version = "26.07.0-unstable-2026-08-04";
+    version = "26.07.0-unstable-2026-10-12";
     src = fetchFromGitHub {
       owner = "gpac";
       repo = "gpac";
-      rev = "014bb6de5136e9466f6339486901db4d46570784";
-      hash = "sha256-Uj3+CH2xkw504A2LUmruQ5vdQXhGqKY7Lx1Yp5263J0=";
+      rev = "f9f542406c0b2f05839ea3527facc87ec439c9df";
+      hash = "sha256-MQLzjub9G42u4fEDamm7JAbF+WVrfWvCfux4VWmoJJ4=";
     };
     updateScript = unstableGitUpdater {
       tagFormat = "v*";
