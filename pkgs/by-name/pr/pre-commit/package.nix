@@ -14,7 +14,7 @@
   versionCheckHook,
   writableTmpDirAsHomeHook,
   coursier,
-  dotnet-sdk,
+  dotnetCorePackages,
   nodejs,
 
   # passthru
@@ -25,6 +25,9 @@
 
 let
   i686Linux = stdenv.buildPlatform.system == "i686-linux";
+
+  # The source-built SDK patches codesign paths for the Darwin sandbox.
+  dotnet-sdk = dotnetCorePackages.sdk_8_0-source;
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pre-commit";
@@ -97,6 +100,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
     patchShebangs pre_commit/resources/hook-tmpl
   '';
 
+  env = lib.optionalAttrs (!i686Linux) {
+    DOTNET_ROOT = "${dotnet-sdk}/share/dotnet";
+
+    # NuGet auditing requires network access.
+    NuGetAudit = "false";
+  };
+
   preCheck = ''
     export GIT_AUTHOR_NAME=test GIT_COMMITTER_NAME=test \
            GIT_AUTHOR_EMAIL=test@example.com GIT_COMMITTER_EMAIL=test@example.com \
@@ -104,10 +114,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
     # Some CLI tests expect to run in a Git repository.
     git init
-  ''
-  + lib.optionalString (!i686Linux) ''
-    # Resolve `.NET location: Not found` errors for dotnet tests
-    export DOTNET_ROOT="${dotnet-sdk}/share/dotnet"
   '';
 
   disabledTests = [
