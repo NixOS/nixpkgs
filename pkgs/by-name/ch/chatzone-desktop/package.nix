@@ -1,30 +1,29 @@
 {
   lib,
-  appimageTools,
   fetchurl,
+  appimageTools,
+  electron,
   stdenvNoCC,
   makeDesktopItem,
   copyDesktopItems,
-  makeWrapper,
+  makeBinaryWrapper,
 }:
 
-let
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "chatzone-desktop";
   version = "5.7.0";
-  src = fetchurl {
-    url = "https://ir.ozone.ru/s3/chatzone-clients/ci/5.7.0/1258/chatzone-desktop-linux-5.7.0.AppImage";
-    hash = "sha256-t8qAdrvs1M9NuaQYZj+pCaYiSb4TZc7rY1rJVjSYaAE=";
-  };
-  appimageContents = appimageTools.extract { inherit pname version src; };
-in
-stdenvNoCC.mkDerivation {
-  inherit pname version;
 
-  src = appimageTools.wrapType2 { inherit pname version src; };
+  src = appimageTools.extract {
+    inherit (finalAttrs) pname version;
+    src = fetchurl {
+      url = "https://ir.ozone.ru/s3/chatzone-clients/ci/5.7.0/1258/chatzone-desktop-linux-5.7.0.AppImage";
+      hash = "sha256-t8qAdrvs1M9NuaQYZj+pCaYiSb4TZc7rY1rJVjSYaAE=";
+    };
+  };
 
   nativeBuildInputs = [
     copyDesktopItems
-    makeWrapper
+    makeBinaryWrapper
   ];
 
   desktopItems = [
@@ -52,15 +51,16 @@ stdenvNoCC.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/
-    cp -r bin $out/bin
+    mkdir -p "$out/opt/chatzone-desktop" "$out/bin"
 
-    mkdir -p $out/share/chatzone-desktop/
-    cp ${appimageContents}/app_icon.png $out/share/chatzone-desktop/
-    cp -r ${appimageContents}/usr/share/icons $out/share
+    cp -r --no-preserve=mode resources "$out/opt/chatzone-desktop/"
 
-    wrapProgram $out/bin/chatzone-desktop \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
+    cp -r --no-preserve=mode usr/share/icons "$out/share"
+
+    makeWrapper "${electron}/bin/electron" "$out/bin/chatzone-desktop" \
+      --add-flags "$out/opt/chatzone-desktop/resources/app.asar" \
+      --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
+      --inherit-argv0
 
     runHook postInstall
   '';
@@ -75,4 +75,4 @@ stdenvNoCC.mkDerivation {
     maintainers = [ lib.maintainers.progrm_jarvis ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})
