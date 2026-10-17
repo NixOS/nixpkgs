@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
       easily control the volume of all clients, sinks, etc.
     '';
     mainProgram = "pavucontrol";
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.kamadorueda ];
     platforms = lib.platforms.linux;
   };
 })
