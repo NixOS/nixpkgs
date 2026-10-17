@@ -4785,8 +4785,6 @@ with pkgs;
     sdk = true;
   };
 
-  openai-whisper = with python3.pkgs; toPythonApplication openai-whisper;
-
   oprofile = callPackage ../development/tools/profiling/oprofile {
     libiberty_static = libiberty.override { staticBuild = true; };
   };
