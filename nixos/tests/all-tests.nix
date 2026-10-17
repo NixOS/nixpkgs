@@ -284,9 +284,10 @@ in
   angie-api = runTest ./angie-api.nix;
   angrr = runTest ./angrr.nix;
   anki-sync-server = runTest ./anki-sync-server.nix;
-  any2nix-api = runTest ./any2nix-api.nix;
   anubis = runTest ./anubis.nix;
   anuko-time-tracker = runTest ./anuko-time-tracker.nix;
+  any2nix-api = runTest ./any2nix-api.nix;
+  any2nix-website = runTest ./any2nix-website.nix;
   apcupsd = runTest ./apcupsd.nix;
   apfs = runTest ./apfs.nix;
   apparmor = runTest ./apparmor;

@@ -860,6 +860,7 @@
   ./services/misc/angrr.nix
   ./services/misc/anki-sync-server.nix
   ./services/misc/any2nix-api.nix
+  ./services/misc/any2nix-website.nix
   ./services/misc/apache-kafka.nix
   ./services/misc/atuin.nix
   ./services/misc/aurral.nix
