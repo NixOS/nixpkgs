@@ -9457,8 +9457,6 @@ with pkgs;
 
   liblapack = lapack-reference;
 
-  notus-scanner = with python3Packages; toPythonApplication notus-scanner;
-
   openblas = callPackage ../development/libraries/science/math/openblas {
     inherit (llvmPackages) openmp;
   };
