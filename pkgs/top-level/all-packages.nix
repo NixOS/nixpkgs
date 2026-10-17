@@ -2339,8 +2339,6 @@ with pkgs;
     inherit (llvmPackages) stdenv;
   };
 
-  update-dotdee = with python3Packages; toPythonApplication update-dotdee;
-
   update-nix-fetchgit = haskell.lib.compose.justStaticExecutables haskellPackages.update-nix-fetchgit;
 
   update-resolv-conf = callPackage ../tools/networking/openvpn/update-resolv-conf.nix { };
