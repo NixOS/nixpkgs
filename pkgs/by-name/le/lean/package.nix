@@ -1,82 +1,121 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  fetchpatch,
   cmake,
+  cctools,
+  fetchFromGitHub,
+  gitMinimal,
   gmp,
-  coreutils,
+  cadical,
+  leangz,
+  makeWrapper,
+  openssl,
+  pkg-config,
+  libuv,
+  enableMimalloc ? true,
+  perl,
+  versionCheckHook,
 }:
+let
+  cadical' = cadical.override { version = "2.1.3"; };
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "lean4";
+  version = "4.34.1";
 
-stdenv.mkDerivation rec {
-  pname = "lean";
-  version = "3.51.0";
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
-    owner = "leanprover-community";
-    repo = "lean";
-    # lean's version string contains the commit sha1 it was built
-    # from. this is then used to check whether an olean file should be
-    # rebuilt. don't use a tag as rev because this will get replaced into
-    # src/githash.h.in in preConfigure.
-    rev = "9fc1dee97a72a3e34d658aefb4b8a95ecd3d477c";
-    hash = "sha256-Vcsph4dTNLafeaTtVwJS8tWoWCgcP6pxF0ssZDE/YfM=";
+    owner = "leanprover";
+    repo = "lean4";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JO1pCqWeotC4zjiIQZccEPXfVHnuDQC0DugyuJvIMRs=";
   };
 
-  patches = [
-    # Fix gcc-13 build failure
-    (fetchpatch {
-      name = "gcc-13.patch";
-      url = "https://github.com/leanprover-community/lean/commit/21d264a66d53b0a910178ae7d9529cb5886a39b6.patch";
-      hash = "sha256-hBm2QNFS1jdoR6LUQHLReKxMKv7kbkrkrTGJ43YnvfA=";
-    })
-  ];
-
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ gmp ];
-
-  cmakeDir = "../src";
-
-  cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
-  ];
-
-  # Running the tests is required to build the *.olean files for the core
-  # library.
-  doCheck = true;
-
-  preConfigure =
-    assert builtins.stringLength src.rev == 40;
+  postPatch =
+    let
+      pattern = "\${LEAN_BINARY_DIR}/../mimalloc/src/mimalloc";
+    in
     ''
-      substituteInPlace src/githash.h.in \
-        --subst-var-by GIT_SHA1 "${src.rev}"
-      substituteInPlace library/init/version.lean.in \
-        --subst-var-by GIT_SHA1 "${src.rev}"
+      substituteInPlace \
+        src/CMakeLists.txt \
+        src/runtime/CMakeLists.txt \
+        stage0/src/CMakeLists.txt \
+        stage0/src/runtime/CMakeLists.txt \
+        --replace-fail '${pattern}' '${finalAttrs.mimalloc-src}'
+    ''
+    # Remove tests that fails in sandbox.
+    # It expects `sourceRoot` to be a git repository.
+    + ''
+      rm -rf src/lake/examples/git/
     '';
 
-  postPatch = ''
-    patchShebangs .
-
-    sed -e '1i #include <cstdint>' -i src/util/hash.{cpp,h}
+  preConfigure = ''
+    patchShebangs stage0/src/bin/ src/bin/
   '';
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=template-body";
+  nativeBuildInputs = [
+    cadical'
+    cmake
+    pkg-config
+    makeWrapper
+    leangz # Provides leantar
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools.libtool
+  ];
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace $out/bin/leanpkg \
-      --replace "greadlink" "${coreutils}/bin/readlink"
+  buildInputs = [
+    gmp
+    libuv
+    openssl
+  ];
+
+  postInstall = ''
+    wrapProgram $out/bin/lean \
+      --prefix PATH : ${cadical'}/bin
   '';
+
+  nativeCheckInputs = [
+    gitMinimal
+    perl
+  ];
+
+  # Using a vendored version rather than nixpkgs' version to match the exact version required by
+  # Lean.  Apparently, even a slight version change can impact greatly the final performance.
+  mimalloc-src = fetchFromGitHub {
+    owner = "microsoft";
+    repo = "mimalloc";
+    tag = "v3.4.5";
+    hash = "sha256-vNVZw2YsDkf0GcdFTNb/fXMQLQYvoc8P425LupPShpo=";
+  };
+
+  cmakeFlags = [
+    (lib.cmakeBool "USE_GITHASH" false)
+    (lib.cmakeBool "INSTALL_LICENSE" false)
+    (lib.cmakeBool "INSTALL_CADICAL" false)
+    (lib.cmakeBool "USE_MIMALLOC" enableMimalloc)
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MIMALLOC" finalAttrs.mimalloc-src.outPath)
+  ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   meta = {
-    # last successful hydra build on darwin was in 2024
-    broken = stdenv.hostPlatform.isDarwin;
     description = "Automatic and interactive theorem prover";
     homepage = "https://leanprover.github.io/";
-    changelog = "https://github.com/leanprover-community/lean/blob/v${version}/doc/changes.md";
+    changelog = "https://github.com/leanprover/lean4/blob/${finalAttrs.src.tag}/RELEASES.md";
     license = lib.licenses.asl20;
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
-      thoughtpolice
+      danielbritten
+      jthulhu
+      nadja-y
+      niklashh
     ];
+    mainProgram = "lean";
   };
-}
+})
