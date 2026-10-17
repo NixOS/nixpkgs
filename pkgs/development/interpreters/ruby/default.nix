@@ -398,12 +398,6 @@ in
   mkRubyVersion = rubyVersion;
   mkRuby = generic;
 
-  ruby_3_3 = generic {
-    version = rubyVersion "3" "3" "12" "";
-    hash = "sha256-sG1jvq4nGTMDPifwo4m8WCoAnnhFNX1ENlw53lJaBRs=";
-    cargoHash = "sha256-xE7Cv+NVmOHOlXa/Mg72CTSaZRb72lOja98JBvxPvSs=";
-  };
-
   ruby_3_4 = generic {
     version = rubyVersion "3" "4" "11" "";
     hash = "sha256-XCK+RFJDErPUM9aHObzFMGM7HaXvi6CvoKN2gNoX094=";
