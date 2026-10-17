@@ -76,7 +76,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://docs.rsshub.app";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ xinyangli ];
+    maintainers = with lib.maintainers; [
+      xinyangli
+      davinci42
+    ];
     mainProgram = "rsshub";
     platforms = lib.platforms.all;
   };
