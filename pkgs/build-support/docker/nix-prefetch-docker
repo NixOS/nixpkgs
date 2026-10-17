@@ -24,6 +24,7 @@ Options:
       --image-digest digest     Image digest
       --final-image-name name   Desired name of the image
       --final-image-tag tag     Desired image tag
+      --oci-archive             Save the image as an OCI-compatible archive
       --json                    Output result in json format instead of nix
       --quiet                   Only print the final result
 "
@@ -60,6 +61,7 @@ for arg; do
             --image-digest) argfun=set_imageDigest;;
             --final-image-name) argfun=set_finalImageName;;
             --final-image-tag) argfun=set_finalImageTag;;
+            --oci-archive) ociArchive=true;;
             --quiet) QUIET=true;;
             --json) format=json;;
             --help) usage; exit;;
@@ -128,10 +130,27 @@ trap "rm -rf \"$tmpPath\"" EXIT
 
 tmpFile="$tmpPath/$(get_name $finalImageName $finalImageTag)"
 
-if test -z "$QUIET"; then
-    skopeo --insecure-policy --tmpdir=$TMPDIR --override-os ${os} --override-arch ${arch} copy "$sourceUrl" "docker-archive://$tmpFile:$finalImageName:$finalImageTag" >&2
+if test -z "$ociArchive"; then
+    preserveDigests=false
+    destUrl="docker-archive://$tmpFile:$finalImageName:$finalImageTag"
 else
-    skopeo --insecure-policy --tmpdir=$TMPDIR --override-os ${os} --override-arch ${arch} copy "$sourceUrl" "docker-archive://$tmpFile:$finalImageName:$finalImageTag" > /dev/null
+    preserveDigests=true
+    destUrl="oci-archive://$tmpFile:$finalImageName@$imageDigest"
+fi
+
+if test -z "$QUIET"; then
+    skopeo --insecure-policy --tmpdir=$TMPDIR --override-os ${os} --override-arch ${arch} copy --preserve-digests=${preserveDigests} "$sourceUrl" "$destUrl" >&2
+else
+    skopeo --insecure-policy --tmpdir=$TMPDIR --override-os ${os} --override-arch ${arch} copy --preserve-digests=${preserveDigests} "$sourceUrl" "$destUrl" > /dev/null
+fi
+
+if test -z "$ociArchive"; then
+    ociArchive=false
+else
+    # Ensure fetched archive is reproducible
+    mkdir "$tmpPath/image"
+    tar -C "$tmpPath/image" -xf $tmpFile
+    tar -C "$tmpPath/image" -cf $tmpFile --sort=name --mtime='1970-01-01 UTC' --numeric-owner --owner=0 --group=0 --format=gnu .
 fi
 
 # Compute the hash.
@@ -157,6 +176,7 @@ cat <<EOF
   hash = "$imageHash";
   finalImageName = "$finalImageName";
   finalImageTag = "$finalImageTag";
+  ociArchive = $ociArchive;
 }
 EOF
 
@@ -168,7 +188,8 @@ cat <<EOF
   "imageDigest": "$imageDigest",
   "hash": "$imageHash",
   "finalImageName": "$finalImageName",
-  "finalImageTag": "$finalImageTag"
+  "finalImageTag": "$finalImageTag",
+  "ociArchive": $ociArchive
 }
 EOF
 
