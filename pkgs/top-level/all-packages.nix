@@ -10261,6 +10261,7 @@ with pkgs;
     kops_1_31
     kops_1_32
     kops_1_33
+    kops_1_34
     ;
   kops = kops_1_33;
 
