@@ -1,0 +1,213 @@
+diff --git a/install.sh b/install.sh
+index 9021ab5..712be0c 100755
+--- a/install.sh
++++ b/install.sh
+@@ -55,40 +55,40 @@ invalid_arg() {
+     exit 1
+ }
+ 
+-check_command_exists() {
+-    command_name="$1"
++# check_command_exists() {
++#     command_name="$1"
+ 
+-    if ! command -v "$command_name" >/dev/null 2>&1; then
+-        echo "Error: Dependency '$command_name' is not met." >&2
+-        echo "Exiting.." >&2
+-        exit 1
+-    fi
+-}
++#     if ! command -v "$command_name" >/dev/null 2>&1; then
++#         echo "Error: Dependency '$command_name' is not met." >&2
++#         echo "Exiting.." >&2
++#         exit 1
++#     fi
++# }
+ 
+ # clear blanks the screen between prompts but errors under set -e on a dumb
+ # terminal and wipes diagnostics in ci, so only run it on a real tty.
+-clear_screen() {
+-    if [ -t 1 ]; then
+-        clear || true
+-    fi
+-}
++# clear_screen() {
++#     if [ -t 1 ]; then
++#         clear || true
++#     fi
++# }
+ 
+ if [ "$LOCAL_CURSOR" -eq 1 ] && [ "$DEBUGMODE" = "cursor" ]; then
+     invalid_arg "Debug mode 'cursor' does not support --local-cursor."
+ fi
+ 
+-COLORDIR="${XDG_DATA_HOME:-$HOME/.local/share}/color-schemes"
+-AURORAEDIR="${XDG_DATA_HOME:-$HOME/.local/share}/aurorae/themes"
+-LOOKANDFEELDIR="${XDG_DATA_HOME:-$HOME/.local/share}/plasma/look-and-feel"
+-CURSORDIR="${XDG_DATA_HOME:-$HOME/.local/share}/icons"
++COLORDIR="$out/share/color-schemes"
++AURORAEDIR="$out/share/aurorae/themes"
++LOOKANDFEELDIR="$out/share/plasma/look-and-feel"
++CURSORDIR="$out/share/icons"
+ 
+ log "Creating theme directories.."
+ mkdir -p "$COLORDIR" "$AURORAEDIR" "$LOOKANDFEELDIR" "$CURSORDIR"
+ mkdir -p ./dist
+ 
+-if [ "$DEBUGMODE" != "auto" ] && [ "$QUIET" -ne 1 ]; then
+-    clear_screen
+-fi
++# if [ "$DEBUGMODE" != "auto" ] && [ "$QUIET" -ne 1 ]; then
++#     clear_screen
++# fi
+ 
+ if [ -z "$FLAVOUR" ]; then
+     if [ "$QUIET" -eq 1 ]; then
+@@ -104,7 +104,7 @@ Choose flavor out of -
+     (Type the number corresponding to said palette)
+ EOF
+     read -r FLAVOUR || true
+-    clear_screen
++    # clear_screen
+ fi
+ 
+ case "$FLAVOUR" in
+@@ -142,7 +142,7 @@ Choose an accent -
+     14. Lavender
+ EOF
+     read -r ACCENT || true
+-    clear_screen
++    # clear_screen
+ fi
+ 
+ # Sets accent based on the palette selected (Best to fold this in your respective editor)
+@@ -326,7 +326,7 @@ Choose window decoration style -
+     2. Classic (MacOS like)
+ EOF
+     read -r WINDECSTYLE || true
+-    clear_screen
++    # clear_screen
+ fi
+ 
+ WINDECSTYLENAME=""
+@@ -383,19 +383,19 @@ esac
+ # dependency checks run after the flavour/accent/decoration validation so a bad
+ # argument reports the right error even headless. only the full install needs the
+ # plasma tools; the build-only debug modes (color/aurorae/splash/cursor) don't.
+-[ "$LOCAL_CURSOR" -eq 1 ] || check_command_exists "wget"
+-[ "$LOCAL_CURSOR" -eq 1 ] || check_command_exists "unzip"
+-check_command_exists "sed"
+-check_command_exists "tar"
+-case "$DEBUGMODE" in
+-    global) check_command_exists "kpackagetool6" ;;
+-    "" | auto)
+-        check_command_exists "kpackagetool6"
+-        check_command_exists "kwriteconfig6"
+-        check_command_exists "plasma-apply-lookandfeel"
+-        ;;
+-    *) ;;
+-esac
++# [ "$LOCAL_CURSOR" -eq 1 ] || check_command_exists "wget"
++# [ "$LOCAL_CURSOR" -eq 1 ] || check_command_exists "unzip"
++# check_command_exists "sed"
++# check_command_exists "tar"
++# case "$DEBUGMODE" in
++#     global) check_command_exists "kpackagetool6" ;;
++#     "" | auto)
++#         check_command_exists "kpackagetool6"
++#         check_command_exists "kwriteconfig6"
++#         check_command_exists "plasma-apply-lookandfeel"
++#         ;;
++#     *) ;;
++# esac
+ 
+ BuildColorscheme() {
+     # Add Metadata & Replace Accent in colors file
+@@ -486,14 +486,15 @@ EOF
+     log "Installing Global Theme.."
+     (
+         cd ./dist || exit
+-        tar -czf "$GLOBALTHEMENAME".tar.gz "$GLOBALTHEMENAME"
+-        if [ "$QUIET" -eq 1 ]; then
+-            kpackagetool6 -t Plasma/LookAndFeel -i "$GLOBALTHEMENAME".tar.gz >/dev/null 2>&1 ||
+-                kpackagetool6 -t Plasma/LookAndFeel -u "$GLOBALTHEMENAME".tar.gz >/dev/null 2>&1
+-        else
+-            kpackagetool6 -t Plasma/LookAndFeel -i "$GLOBALTHEMENAME".tar.gz ||
+-                kpackagetool6 -t Plasma/LookAndFeel -u "$GLOBALTHEMENAME".tar.gz
+-        fi
++        # tar -czf "$GLOBALTHEMENAME".tar.gz "$GLOBALTHEMENAME"
++        # if [ "$QUIET" -eq 1 ]; then
++        #     kpackagetool6 -t Plasma/LookAndFeel -i "$GLOBALTHEMENAME".tar.gz >/dev/null 2>&1 ||
++        #         kpackagetool6 -t Plasma/LookAndFeel -u "$GLOBALTHEMENAME".tar.gz >/dev/null 2>&1
++        # else
++        #     kpackagetool6 -t Plasma/LookAndFeel -i "$GLOBALTHEMENAME".tar.gz ||
++        #         kpackagetool6 -t Plasma/LookAndFeel -u "$GLOBALTHEMENAME".tar.gz
++        # fi
++        cp -r "$GLOBALTHEMENAME" "$LOOKANDFEELDIR"
+     )
+ 
+     # Build SplashScreen
+@@ -551,7 +552,7 @@ InstallCursor() {
+ # Syntax [-q|--quiet] <Flavour> <Accent> <WindowDec> <Debug = aurorae/global/color/splash/cursor>
+ # splash and cursor debug modes fall through to the confirmation check below
+ # without setting this, so default it for set -u.
+-CONFIRMATION=""
++CONFIRMATION="y"
+ case "$DEBUGMODE" in
+     "")
+         if [ "$QUIET" -eq 1 ]; then
+@@ -559,8 +560,8 @@ case "$DEBUGMODE" in
+         else
+             echo
+             echo "Install $FLAVOURNAME $ACCENTNAME? with the $WINDECSTYLENAME window Decorations? [y/N]:"
+-            read -r CONFIRMATION || true
+-            clear_screen
++            # read -r CONFIRMATION || true
++            # clear_screen
+         fi
+         ;;
+     auto)
+@@ -600,8 +601,8 @@ if [ "$CONFIRMATION" = "Y" ] || [ "$CONFIRMATION" = "y" ]; then
+     # Build Colorscheme
+     InstallColorscheme
+ 
+-    log "Installing Catppuccin Cursor theme.."
+-    InstallCursor
++    # log "Installing Catppuccin Cursor theme.."
++    # InstallCursor
+ 
+     # Cleanup
+     log "Cleaning up.."
+@@ -611,17 +612,17 @@ if [ "$CONFIRMATION" = "Y" ] || [ "$CONFIRMATION" = "y" ]; then
+         # Apply theme
+         log ""
+         log "Do you want to apply theme? [Y/n]:"
+-        read -r CONFIRMATION || true
++        # read -r CONFIRMATION || true
+     fi
+ 
+     if [ "$CONFIRMATION" = "Y" ] || [ "$CONFIRMATION" = "y" ] || [ "$CONFIRMATION" = "" ]; then
+         # KWin's BorderSizeAuto=true overrides the look-and-feel BorderSize=None, so the
+         # global theme alone can't set it. Write it directly for borderless windows.
+-        kwriteconfig6 --file kwinrc --group org.kde.kdecoration2 --key BorderSizeAuto false
+-        plasma-apply-lookandfeel -a "$GLOBALTHEMENAME"
+-        if [ "$DEBUGMODE" != "auto" ]; then
+-            [ "$QUIET" -eq 1 ] || clear_screen
+-        fi
++        # kwriteconfig6 --file kwinrc --group org.kde.kdecoration2 --key BorderSizeAuto false
++        # plasma-apply-lookandfeel -a "$GLOBALTHEMENAME"
++        # if [ "$DEBUGMODE" != "auto" ]; then
++        #     [ "$QUIET" -eq 1 ] || clear_screen
++        # fi
+         # Some legacy apps still look in ~/.icons
+         if [ "$QUIET" -ne 1 ]; then
+             cat <<EOF
+@@ -632,7 +633,7 @@ EOF
+         fi
+     else
+         log "You can apply theme at any time using system settings"
+-        [ "$QUIET" -eq 1 ] || sleep 1
++        # [ "$QUIET" -eq 1 ] || sleep 1
+     fi
+ else
+     log "Exiting.."
