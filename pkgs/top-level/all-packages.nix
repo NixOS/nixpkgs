@@ -10157,8 +10157,6 @@ with pkgs;
     nanoizeNewlib = true;
   };
 
-  wfuzz = with python3Packages; toPythonApplication wfuzz;
-
   sieveshell = with python3.pkgs; toPythonApplication managesieve;
 
   duden = python3Packages.toPythonApplication python3Packages.duden;
