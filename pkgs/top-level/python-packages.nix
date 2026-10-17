@@ -7154,6 +7154,8 @@ self: super: with self; {
 
   google-cloud-translate = callPackage ../development/python-modules/google-cloud-translate { };
 
+  google-cloud-vectorsearch = callPackage ../development/python-modules/google-cloud-vectorsearch { };
+
   google-cloud-videointelligence =
     callPackage ../development/python-modules/google-cloud-videointelligence
       { };
