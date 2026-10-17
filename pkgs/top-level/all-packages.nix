@@ -1234,8 +1234,6 @@ with pkgs;
     buildbot-worker
     ;
 
-  certipy = with python3Packages; toPythonApplication certipy-ad;
-
   fedora-backgrounds = recurseIntoAttrs (callPackage ../data/misc/fedora-backgrounds { });
 
   coconut = with python312Packages; toPythonApplication coconut;
