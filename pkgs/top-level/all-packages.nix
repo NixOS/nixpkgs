@@ -9426,8 +9426,6 @@ with pkgs;
 
   libxc_7 = pkgs.libxc.override { version = "7.0.0"; };
 
-  molbar = with python3Packages; toPythonApplication molbar;
-
   pdb2pqr = with python3Packages; toPythonApplication pdb2pqr;
 
   quantum-espresso = callPackage ../applications/science/chemistry/quantum-espresso {
