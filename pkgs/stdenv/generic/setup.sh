@@ -1238,6 +1238,10 @@ recordPropagatedDependencies() {
     done
 }
 
+    if [ -n "${patches:-}" ];then
+        mkdir -p "${!outputDev}/nix-support"
+        printWords $patches > "${!outputDev}/nix-support/patches"
+    fi
 
 unpackCmdHooks+=(_defaultUnpack)
 _defaultUnpack() {
