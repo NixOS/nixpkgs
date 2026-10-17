@@ -42,6 +42,9 @@ class Debug(DebugAbstract):
         self.logger.log_test_error(
             f"Breakpoint reached, run 'sudo {self.attach} {pattern}'"
         )
+        self.logger.log_test_error(
+            f"Afterward, run 'socat readline tcp:{host}:{port}' to attach a debugger"
+        )
         os.environ["bashInteractive"] = shutil.which("bash")  # ty: ignore[invalid-assignment]
         if os.fork() == 0:
             subprocess.run(["sleep", pattern])
