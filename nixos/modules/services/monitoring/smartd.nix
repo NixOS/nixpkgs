@@ -61,7 +61,7 @@ let
     ''}
   '';
 
-  notifyOpts = lib.optionalString (nm.enable || nw.enable || nx.enable) (
+  notifyOpts = lib.optionalString (nm.enable || ns.enable || nw.enable || nx.enable) (
     "-m <nomailer> -M exec ${smartdNotify} " + lib.optionalString cfg.notifications.test "-M test "
   );
 
