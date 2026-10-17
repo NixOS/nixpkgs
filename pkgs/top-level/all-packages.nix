@@ -1238,8 +1238,6 @@ with pkgs;
 
   inherit (cue) writeCueValidator;
 
-  detect-secrets = with python3Packages; toPythonApplication detect-secrets;
-
   deterministic-host-uname = deterministic-uname.override {
     forPlatform = stdenv.targetPlatform; # offset by 1 so it works in nativeBuildInputs
   };
