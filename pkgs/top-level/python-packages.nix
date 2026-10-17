@@ -19498,6 +19498,8 @@ self: super: with self; {
 
   solaredge-web = callPackage ../development/python-modules/solaredge-web { };
 
+  solaredged = callPackage ../development/python-modules/solaredged { };
+
   solarlog-cli = callPackage ../development/python-modules/solarlog-cli { };
 
   solarman-opendata = callPackage ../development/python-modules/solarman-opendata { };
