@@ -66,7 +66,9 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/gazebosim/gz-cmake/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ guelakais ];
-    badPlatforms = lib.platforms.darwin; # hard replicable building error
+    maintainers = with lib.maintainers; [
+      guelakais
+      taylorhoward92
+    ];
   };
 })
