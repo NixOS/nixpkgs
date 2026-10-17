@@ -8151,8 +8151,6 @@ with pkgs;
     withDoc = true;
   };
 
-  hachoir = with python3Packages; toPythonApplication hachoir;
-
   hledger = haskell.lib.compose.justStaticExecutables haskellPackages.hledger;
   hledger-iadd = haskell.lib.compose.justStaticExecutables haskellPackages.hledger-iadd;
   hledger-interest = haskell.lib.compose.justStaticExecutables haskellPackages.hledger-interest;
