@@ -2569,8 +2569,6 @@ with pkgs;
       })
     );
 
-  ttp = with python3.pkgs; toPythonApplication ttp;
-
   translatelocally-models = recurseIntoAttrs (callPackages ../misc/translatelocally-models { });
 
   translatepy = with python3.pkgs; toPythonApplication translatepy;
