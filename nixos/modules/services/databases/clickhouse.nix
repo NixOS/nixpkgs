@@ -127,6 +127,14 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
+      # We generate fixed config file paths (names independent from content), so
+      # we need `restartTriggers` to ensure they are used when their contents change.
+      restartTriggers =
+        lib.optional (cfg.serverConfig != { }) serverConfigFile
+        ++ lib.optional (cfg.usersConfig != { }) usersConfigFile
+        ++ lib.optional (cfg.extraServerConfig != "") cfg.extraServerConfig
+        ++ lib.optional (cfg.extraUsersConfig != "") cfg.extraUsersConfig;
+
       serviceConfig = {
         Type = "notify";
         User = "clickhouse";
