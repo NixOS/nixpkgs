@@ -28,7 +28,7 @@
   warcio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mrjob";
   version = "0.7.4";
   pyproject = true;
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Yelp";
     repo = "mrjob";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Yp4yUx6tkyGB622I9y+AWK2AkIDVGKQPMM+LtB/M3uo=";
   };
 
@@ -72,15 +72,15 @@ buildPythonPackage rec {
     unittestCheckHook
     warcio
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.finalPackage.passthru.optional-dependencies;
 
-  unittestFlagsArray = [ "-v" ];
+  unittestFlags = [ "-v" ];
 
   meta = {
-    changelog = "https://github.com/Yelp/mrjob/blob/v${version}/CHANGES.txt";
+    changelog = "https://github.com/Yelp/mrjob/blob/v${finalAttrs.version}/CHANGES.txt";
     description = "Run MapReduce jobs on Hadoop or Amazon Web Services";
     homepage = "https://github.com/Yelp/mrjob";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

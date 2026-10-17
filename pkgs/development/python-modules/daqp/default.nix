@@ -31,11 +31,9 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [
-    "-s"
-    "test"
-    "-p"
-    "'*.py'"
+  unittestFlags = [
+    "--start-directory=test"
+    "--pattern=*.py"
     "-v"
   ];
 
