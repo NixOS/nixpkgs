@@ -4716,8 +4716,6 @@ with pkgs;
   gradle_9 = gradle-packages.gradle_9.wrapped;
   gradle = gradle-packages.gradle.wrapped;
 
-  griffe = with python3Packages; toPythonApplication griffe;
-
   hadolint = haskell.lib.compose.justStaticExecutables haskellPackages.hadolint;
 
   iaca_2_1 = callPackage ../development/tools/iaca/2.1.nix { };
