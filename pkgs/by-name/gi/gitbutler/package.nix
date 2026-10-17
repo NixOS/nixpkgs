@@ -32,13 +32,13 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gitbutler";
-  version = "0.19.9";
+  version = "0.22.3";
 
   src = fetchFromGitHub {
     owner = "gitbutlerapp";
     repo = "gitbutler";
     tag = "release/${finalAttrs.version}";
-    hash = "sha256-hUxtvCxLB++33gKc+UNOAns3UFozWTETYJvEr+HcOgU=";
+    hash = "sha256-nW3yCbpbIhawLQVV+DptzGYiFBSKcyAP89NtDWHJM+0=";
   };
 
   # Let Tauri know what version we're building and deactivate the built-in updater
@@ -49,20 +49,29 @@ rustPlatform.buildRustPackage (finalAttrs: {
     jq '.
         | (.version = "${finalAttrs.version}")
         | (.bundle.createUpdaterArtifacts = false)
-        | (.bundle.externalBin = ["gitbutler-git-setsid", "gitbutler-git-askpass"])
+        | (.bundle.externalBin = ["gitbutler-git-askpass"])
       ' "$tauriConfRelease" | sponge "$tauriConfRelease"
 
     substituteInPlace apps/desktop/src/lib/backend/tauri.ts \
       --replace-fail 'checkUpdate = tauriCheck;' 'checkUpdate = () => null;'
+
+    # Test-generated installers keep a portable /usr/bin/env shebang, but
+    # the Nix build sandbox has no /usr/bin/env. Invoke them through bash.
+    substituteInPlace crates/but-debug/tests/debug/dump.rs \
+      --replace-fail 'Command::new(&installer)' 'Command::new("bash").arg(&installer)'
+
+    # gix-testtools executes these fixtures directly in the build sandbox.
+    mapfile -d "" fixtureScripts < <(find crates -path '*/tests/fixtures/*' -name '*.sh' -print0)
+    patchShebangs "''${fixtureScripts[@]}"
   '';
 
-  cargoHash = "sha256-7dF865YPcVp/g6PUs5QRaU3wZ0UmlAgaPGhHsIjIZPY=";
+  cargoHash = "sha256-XRc2yok9K7f/vRAqgO78JUq/U36XSiUeOINupfOOSjw=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-SqIf61KryWEvrw9rqA4UXTS+DCe08o+LqT4s1o9cPVE=";
+    hash = "sha256-aqz9IbpvG0zOz7cQWpRzEtqLAgI250dN2bBTp1wBhkE=";
   };
 
   nativeBuildInputs = [
@@ -83,7 +92,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optional stdenv.hostPlatform.isDarwin makeBinaryWrapper;
 
   buildInputs = [
-    libgit2
+    (libgit2.override { withExperimentalSha256 = true; })
     openssl
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin curl
@@ -113,12 +122,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # `Expecting driver to be located at "../../target/debug/gitbutler-cli" - we also assume a certain crate location`
     # We're not (usually) building in debug mode and always have a different target directory, so...
     "gitbutler-branch-actions"
-    "gitbutler-stack"
     "gitbutler-edit-mode"
     "gitbutler-operating-modes"
     "gitbutler-project"
-    "but-cherry-apply"
-    "but-worktrees"
   ]
   ++ [
     "--"
@@ -146,6 +152,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "new_from_project_handle_keeps_repo_cached"
     # darwin: Error: timeout waiting for matching event
     "track_directory_changes_after_rename"
+    # TUI snapshots depend on the system's desktop file associations.
+    "command::legacy::status::tui::tests::open_tests::"
+    # These tests require builtin programs gated on debug_assertions.
+    "command::open::"
   ];
 
   env = {
