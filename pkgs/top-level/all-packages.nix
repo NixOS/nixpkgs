@@ -1289,8 +1289,6 @@ with pkgs;
     novacomd = callPackage ../development/mobile/webos/novacomd.nix { };
   };
 
-  apprise = with python3Packages; toPythonApplication apprise;
-
   babelfish = callPackage ../shells/fish/babelfish.nix { };
 
   bat-extras = recurseIntoAttrs (lib.makeScope newScope (import ../tools/misc/bat-extras));
