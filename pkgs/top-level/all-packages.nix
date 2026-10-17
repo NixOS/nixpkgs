@@ -4694,8 +4694,6 @@ with pkgs;
         binutils = binutils;
       };
 
-  dot2tex = with python3.pkgs; toPythonApplication dot2tex;
-
   doxygen_gui = lowPrio (doxygen.override { withGui = true; });
 
   # NOTE: Override and set useIcon = false to use Awk instead of Icon.
