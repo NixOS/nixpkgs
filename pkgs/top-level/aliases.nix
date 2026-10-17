@@ -1334,6 +1334,7 @@ mapAliases {
   kodiPlugins = throw "'kodiPlugins' has been renamed to/replaced by 'kodiPackages'"; # Converted to throw 2025-10-27
   kops_1_31 = throw "'kops_1_31' has been removed from nixpkgs as it has reached end of life"; # Added 2026-10-17
   kops_1_32 = throw "'kops_1_32' has been removed from nixpkgs as it has reached end of life"; # Added 2026-10-17
+  kops_1_33 = throw "'kops_1_33' has been removed from nixpkgs as it has reached end of life"; # Added 2026-10-17
   krb5Full = throw "'krb5Full' has been renamed to/replaced by 'krb5'"; # Converted to throw 2025-10-27
   krunner-pass = throw "'krunner-pass' has been removed, as it only works on Plasma 5"; # Added 2025-08-30
   krunner-translator = throw "'krunner-translator' has been removed, as it only works on Plasma 5"; # Added 2025-08-30

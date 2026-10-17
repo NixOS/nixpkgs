@@ -10258,7 +10258,6 @@ with pkgs;
   # Exceptions are versions that we need to keep to allow upgrades from older NixOS releases
   inherit (callPackage ../applications/networking/cluster/kops { })
     mkKops
-    kops_1_33
     kops_1_34
     kops_1_35
     kops_1_36
