@@ -1979,8 +1979,6 @@ with pkgs;
 
   incus-lts = callPackage ../by-name/in/incus/lts.nix { };
 
-  internetarchive = with python3Packages; toPythonApplication internetarchive;
-
   iocextract = with python3Packages; toPythonApplication iocextract;
 
   iocsearcher = with python3Packages; toPythonApplication iocsearcher;
