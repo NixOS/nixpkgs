@@ -1443,8 +1443,6 @@ with pkgs;
 
   ghidra-bin = callPackage ../tools/security/ghidra { };
 
-  hocr-tools = with python3Packages; toPythonApplication hocr-tools;
-
   hypr = callPackage ../applications/window-managers/hyprwm/hypr {
     cairo = cairo.override { xcbSupport = true; };
   };
