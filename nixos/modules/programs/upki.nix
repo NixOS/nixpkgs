@@ -51,6 +51,19 @@ in
     };
     users.groups.upki = { };
 
+    systemd.tmpfiles.settings."upki" = {
+      "/var/cache/upki".d = {
+        mode = "0755";
+        user = "upki";
+        group = "upki";
+      };
+      "/var/cache/upki/revocation".d = {
+        mode = "0755";
+        user = "upki";
+        group = "upki";
+      };
+    };
+
     systemd.services.upki-fetch = {
       description = "Update the upki cache";
       after = [ "network-online.target" ];
@@ -64,7 +77,7 @@ in
         User = "upki";
         Group = "upki";
         ConfigurationDirectory = "upki";
-        CacheDirectory = "upki";
+        CacheDirectory = "upki/revocation";
         CacheDirectoryMode = "0755";
         UMask = "0022";
 
@@ -77,16 +90,24 @@ in
         ProtectHome = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
+        ProtectKernelLogs = true;
         ProtectSystem = "strict";
         RestrictAddressFamilies = [
-          "AF_UNIX"
           "AF_INET"
           "AF_INET6"
         ];
         RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        RemoveIPC = true;
+        ProcSubset = "pid";
         SystemCallArchitectures = "native";
         SystemCallErrorNumber = "EPERM";
-        SystemCallFilter = "@system-service";
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged @resources"
+        ];
+        CapabilityBoundingSet = [ "" ];
+        AmbientCapabilities = [ "" ];
       };
     };
 
@@ -94,8 +115,9 @@ in
       description = "Update the upki cache every ${cfg.interval}";
       wantedBy = [ "timers.target" ];
       timerConfig = {
-        OnActiveSec = "0";
+        OnBootSec = "10min";
         OnUnitActiveSec = cfg.interval;
+        Persistent = true;
       };
     };
   };
