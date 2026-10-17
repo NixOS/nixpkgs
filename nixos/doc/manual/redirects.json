@@ -1,4 +1,16 @@
 {
+  "module-services-ovn": [
+    "index.html#module-services-ovn"
+  ],
+  "module-services-ovn-standalone": [
+    "index.html#module-services-ovn-standalone"
+  ],
+  "module-services-ovn-raft": [
+    "index.html#module-services-ovn-raft"
+  ],
+  "module-services-ovn-controller": [
+    "index.html#module-services-ovn-controller"
+  ],
   "module-services-netbird-relay": [
     "index.html#module-services-netbird-relay"
   ],
