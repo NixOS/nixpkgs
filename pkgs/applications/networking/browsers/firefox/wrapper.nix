@@ -25,6 +25,7 @@
   libdbusmenu-gtk3,
   libglvnd,
   libnotify,
+  libsecret,
   opensc,
   adwaita-icon-theme,
   pipewire,
@@ -104,6 +105,9 @@ let
       withJACK = browser.withJACK or false;
       # PCSC-Lite daemon (services.pcscd) also must be enabled for firefox to access smartcards
       withPCSC = cfg.smartcardSupport or false;
+      # Loading libsecret selects Secret Service without checking for a provider
+      # or migrating existing OS key-store secrets from the profile's NSS store.
+      withLibsecret = cfg.libsecretSupport or false;
 
       allNativeMessagingHosts = map lib.getBin (lib.unique nativeMessagingHosts);
 
@@ -141,6 +145,7 @@ let
         ++ lib.optional withSndio sndio
         ++ lib.optional withJACK libjack2
         ++ lib.optional withPCSC opensc
+        ++ lib.optional withLibsecret libsecret
         ++ pkcs11Modules
         ++ lib.optionals (!isDarwin) gtk_modules;
       gtk_modules = lib.optionals (!isDarwin) [ libcanberra-gtk3 ];
