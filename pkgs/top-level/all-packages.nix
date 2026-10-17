@@ -4954,8 +4954,6 @@ with pkgs;
   allegro4 = callPackage ../development/libraries/allegro { };
   allegro5 = callPackage ../development/libraries/allegro/5.nix { };
 
-  ansi2html = with python3.pkgs; toPythonApplication ansi2html;
-
   appstream = callPackage ../development/libraries/appstream { };
 
   argparse-manpage = with python3Packages; toPythonApplication argparse-manpage;
