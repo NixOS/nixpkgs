@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "hut";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromSourcehut {
     owner = "~xenrox";
     repo = "hut";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-dbFqc+zlUihf/gz4Oo3LtbOClDDDB/khlCbI9/UgD2E=";
+    hash = "sha256-hruD8JNscS3h3f+QrU9n1OH9AyfnHsOb9M3JZkNYbSQ=";
   };
 
-  vendorHash = "sha256-7N+Zn7tzEG3dGeqNWmY98XUUKV7Y6g8wFZcQP9wea/8=";
+  vendorHash = "sha256-zb1+7D6+9kKsFUNtvtO+sXMNNRPHSs6tpWTjtnSsjhI=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
