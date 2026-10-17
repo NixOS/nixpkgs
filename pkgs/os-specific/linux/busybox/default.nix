@@ -118,6 +118,14 @@ stdenv.mkDerivation (finalAttrs: {
     # [PATCH v2 1/1] wget: don't allow control characters or spaces in the URL
     # https://lists.busybox.net/pipermail/busybox/2025-November/091840.html
     ./CVE-2025-60876.patch
+
+    # archival/libarchive: sanitize filenames on output (CVE-2025-46394)
+    # https://bugs.busybox.net/show_bug.cgi?id=16018
+    (fetchpatch {
+      name = "CVE-2025-46394.patch";
+      url = "https://github.com/vda-linux/busybox_mirror/commit/f5e1bf966b19ea1821f00a8c9ecd7774598689b4.patch";
+      hash = "sha256-BNAF25DpkxjJpu2nA0chOwPuadPzVUcaoAJMLRQCUik=";
+    })
   ]
   ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ./clang-cross.patch;
 
