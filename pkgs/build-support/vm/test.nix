@@ -8,6 +8,7 @@
 }:
 let
   inherit (vmTools)
+    diskImageFuns
     diskImages
     makeImageTestScript
     runInLinuxImage
@@ -59,6 +60,27 @@ in
         perl -v
         echo Check if perl is installed
         dpkg -l | grep 'ii *perl'
+        mkdir $out
+      ''
+  );
+
+  # A package that still ships ./bin/ must leave the /bin -> usr/bin symlink
+  # alone, and every package's maintainer scripts have to have run.
+  checkMergedUsrInUbuntu = runInLinuxImage (
+    runCommand "check-merged-usr"
+      {
+        diskImage = diskImageFuns.ubuntu2404x86_64 { extraPackages = [ "busybox-static" ]; };
+        diskImageFormat = "qcow2";
+        memSize = 512;
+      }
+      ''
+        test -L /bin
+        /bin/sh -c true
+        audit=$(dpkg --audit)
+        if [ -n "$audit" ]; then
+          echo "$audit" >&2
+          exit 1
+        fi
         mkdir $out
       ''
   );
