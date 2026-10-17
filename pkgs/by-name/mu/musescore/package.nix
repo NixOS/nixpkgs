@@ -26,6 +26,7 @@
   libsndfile,
   libvorbis,
   mnxdom,
+  pipewire,
   portaudio,
   portmidi,
   pugixml,
@@ -64,6 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT" false)
     # Don't build unit tests unless we are going to run them.
     (lib.cmakeBool "MUSE_ENABLE_UNIT_TESTS" finalAttrs.finalPackage.doCheck)
+    # Upstream defaults this to OFF outside their CI builds
+    (lib.cmakeBool "MUSE_MODULE_AUDIO_PIPEWIRE" stdenv.hostPlatform.isLinux)
   ]
   # Use our versions of system libraries, see:
   # https://github.com/musescore/MuseScore/issues/11572
@@ -140,6 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
+    pipewire
     qt6.qtwayland
   ];
 
