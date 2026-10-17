@@ -61,6 +61,8 @@ let
   };
 in
 rustPlatform.buildRustPackage {
+  __structuredAttrs = true;
+
   pname = "beagleeditor";
   inherit version src;
 
