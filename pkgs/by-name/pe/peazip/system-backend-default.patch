@@ -1,0 +1,24 @@
+Apply the hardcoded backend policy before reading the configuration.
+
+An incomplete configuration can fail before readconf_defaults applies
+HSYSBIN, leaving all compression backends in application-relative mode.
+Initialize the policy and its controls together with the other defaults.
+HSYSBIN=0 retains the upstream configurable default.
+
+--- a/dev/peach.pas
++++ b/dev/peach.pas
+@@ -23461,7 +23461,13 @@
+ forceconvert:=0;
+ nativedrag:=1;
+ autosync:=1;
+-sys7zlin:=0;
++sys7zlin:=HSYSBIN;
++if HSYSBIN>0 then
++   begin
++   FormPeach.LabelSysBin.enabled:=false;
++   FormPeach.ComboBoxSysbin.enabled:=false;
++   FormPeach.ComboBoxSysbin.ItemIndex:=HSYSBIN;
++   end;
+ ignorepathdd:=0;
+ level_brotli:=3;
+ level_rar:=3;
