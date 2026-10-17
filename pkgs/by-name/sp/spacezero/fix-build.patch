@@ -1,0 +1,68 @@
+diff --git a/Makefile b/Makefile
+index 5619dab..28a516c 100755
+--- a/Makefile
++++ b/Makefile
+@@ -1,4 +1,4 @@
+-CC = /usr/bin/gcc 
++CC ?= gcc 
+ #CC=gcc
+ 
+ BINDIR= ./bin
+diff --git a/include/randomnamegen.h b/include/randomnamegen.h
+index 9d54cec..fc4864f 100755
+--- a/include/randomnamegen.h
++++ b/include/randomnamegen.h
+@@ -28,7 +28,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ 
+ char *createName(int length);
+ void loadFrequencyTable(char *filename);
+-char *getRandomName();
+ char *getRandomName(int length);
+ char *getRandomFullName();
+ char *getRandomOrkishName();
+diff --git a/include/snow.h b/include/snow.h
+index 1e531ec..bb881a1 100644
+--- a/include/snow.h
++++ b/include/snow.h
+@@ -32,7 +32,7 @@
+ #include "objects.h"
+ 
+ 
+-struct Flake *flakes;
++extern struct Flake *flakes;
+ 
+ struct Flake{
+   float x,y;
+@@ -41,7 +41,6 @@ struct Flake{
+ };
+ 
+ void UpdateFlakes(struct Planet *planet);
+-void DrawFlakes(GdkPixmap *pxmap,GdkGC *pen,int x,int y);
+ void CreateSnow(int h,int w);
+ void DrawFlakes(GdkPixmap *pixmap,GdkGC *pen,int h,int w);
+ 
+diff --git a/src/snow.c b/src/snow.c
+index 0ed9f6b..709fcdb 100644
+--- a/src/snow.c
++++ b/src/snow.c
+@@ -38,6 +38,7 @@
+ 
+ #define NFLAKES 1000
+ 
++struct Flake *flakes;
+ 
+ void CreateSnow(int w,int h){
+   int i;
+diff --git a/src/spacezero.c b/src/spacezero.c
+index 8fa0a7c..02ab6d8 100755
+--- a/src/spacezero.c
++++ b/src/spacezero.c
+@@ -48,7 +48,7 @@
+ #include "planetnames.h"
+ #include "randomnamegen.h"
+ #include "sectors.h"
+-//#include "snow.h"
++#include "snow.h"
+ 
+ 
+ extern int g_objid;  /* id of the objects */
