@@ -15,6 +15,7 @@
   libsndfile,
   fftw,
   libgpiod,
+  versionCheckHook,
   nix-update-script,
 }:
 
@@ -92,6 +93,12 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  # The QApplication needs a platform even to print --version
+  preVersionCheck = ''
+    export QT_QPA_PLATFORM=offscreen
+  '';
+  versionCheckKeepEnvironment = [ "QT_QPA_PLATFORM" ];
 
   passthru.updateScript = nix-update-script {
     # Tags look like QLC+_5.3.0
