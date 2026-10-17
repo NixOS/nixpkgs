@@ -118,6 +118,16 @@ in
       sha256 = "sha256-54siSmzgPlnCRpkpZhXU9theNQ3hqL3j+Ip4Ie2w2vA=";
     };
 
+    # Plugin imports the Python 2 compatibility shim `basestring` from
+    # `past.builtins` (part of the `future` package), which isn't declared
+    # as a dependency upstream and is unsupported on Python >= 3.13. It's
+    # only used for isinstance checks here, so drop the dead Python 2
+    # codepath instead of depending on the unsupported `future` package.
+    postPatch = ''
+      substituteInPlace octoprint_curalegacy/profile.py \
+        --replace-fail "from past.builtins import basestring, unicode" "basestring = (bytes, str); unicode = str"
+    '';
+
     meta = {
       description = "Plugin for slicing via Cura Legacy from within OctoPrint";
       homepage = "https://github.com/OctoPrint/OctoPrint-CuraEngineLegacy";
@@ -157,6 +167,16 @@ in
       rev = version;
       sha256 = "sha256-hhHc2SPixZCPJzCP8enMMWNYaYbNZAU0lNSx1B0d++4=";
     };
+
+    # Plugin imports the Python 2 compatibility shims `basestring`/`unicode`
+    # from `past.builtins` (part of the `future` package), which isn't
+    # declared as a dependency upstream and is unsupported on Python >= 3.13.
+    # Both names are only ever used as plain `str` aliases under Python 3, so
+    # drop the dead Python 2 codepath instead of depending on `future`.
+    postPatch = ''
+      substituteInPlace octoprint_DisplayLayerProgress/stringUtils.py \
+        --replace-fail "from past.builtins import basestring, unicode" "basestring = (bytes, str); unicode = str"
+    '';
 
     meta = {
       description = "OctoPrint-Plugin that sends the current progress of a print via M117 command";
@@ -199,6 +219,16 @@ in
     };
 
     propagatedBuildInputs = with super; [ pyserial ];
+
+    # Plugin imports the Python 2 compatibility shim `basestring` from
+    # `past.builtins` (part of the `future` package), which isn't declared
+    # as a dependency upstream and is unsupported on Python >= 3.13. It's
+    # only used for isinstance checks here, so drop the dead Python 2
+    # codepath instead of depending on the unsupported `future` package.
+    postPatch = ''
+      substituteInPlace octoprint_firmwareupdater/__init__.py \
+        --replace-fail "from past.builtins import basestring" "basestring = (bytes, str)"
+    '';
 
     meta = {
       description = "Printer Firmware Updater";
@@ -396,6 +426,7 @@ in
     propagatedBuildInputs = with super; [
       psutil
       sarge
+      pkg-resources-backport
     ];
 
     preConfigure = ''
@@ -424,7 +455,12 @@ in
       sha256 = "sha256-5TUx64i3VIUXtpIf4mo3hP//kXE+LuuLaZEJYgv4hVs=";
     };
 
-    propagatedBuildInputs = with super; [ psutil ];
+    # Plugin imports `imghdr`, part of the standard library removed in
+    # Python 3.13 (PEP 594). Add nixpkgs' backport of it.
+    propagatedBuildInputs = with super; [
+      psutil
+      standard-imghdr
+    ];
 
     meta = {
       description = "Plugin that extracts thumbnails from uploaded gcode files sliced by PrusaSlicer";

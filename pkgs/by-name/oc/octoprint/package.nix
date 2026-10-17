@@ -214,14 +214,46 @@ let
             "tests/test_octoprint_setuptools.py" # fails due to distutils and python3.12
           ];
 
-          passthru = {
-            inherit (self) python;
-            updateScript = nix-update-script { };
-            tests = {
+          passthru =
+            let
               plugins = (callPackage ./plugins.nix { }) super self;
-              inherit (nixosTests) octoprint;
+              # buildPlugin is a function, not a plugin; the allowAliases
+              # entries are either a `throw` (removed plugin) or a duplicate
+              # of another attr, so none of these belong in an actual
+              # plugin environment.
+              pluginDerivations = builtins.attrValues (
+                removeAttrs plugins [
+                  "buildPlugin"
+                  "octolapse"
+                  "octoprint-dashboard"
+                ]
+              );
+            in
+            {
+              inherit (self) python;
+              updateScript = nix-update-script { };
+              tests = {
+                inherit plugins;
+                inherit (nixosTests) octoprint;
+                # Builds every packaged plugin alongside OctoPrint itself and
+                # asserts that OctoPrint's own plugin loader can actually
+                # import all of them without error. This catches plugins
+                # that build fine but are silently dropped at runtime, e.g.
+                # a missing runtime dependency or a use of a module removed
+                # from a newer Python's standard library.
+                pluginsLoad =
+                  pkgs.runCommand "octoprint-plugins-load-test"
+                    {
+                      nativeBuildInputs = [
+                        (self.python.withPackages (ps: [ ps.octoprint ] ++ pluginDerivations))
+                      ];
+                    }
+                    ''
+                      python3 ${./test-plugins-load.py}
+                      touch $out
+                    '';
+              };
             };
-          };
 
           meta = {
             homepage = "https://octoprint.org/";
