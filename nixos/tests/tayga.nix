@@ -116,7 +116,6 @@
       services.tayga = {
         enable = true;
         ipv4 = {
-          address = "192.0.2.0";
           router = {
             address = "192.0.2.1";
           };
@@ -126,7 +125,6 @@
           };
         };
         ipv6 = {
-          address = "2001:db8::1";
           router = {
             address = "64:ff9b::1";
           };
@@ -135,16 +133,20 @@
             prefixLength = 96;
           };
         };
-        mappings = {
-          "192.0.2.42" = "2001:db8::2";
+        settings = {
+          ipv4-addr = "192.0.2.0";
+          ipv6-addr = "2001:db8::1";
+          map = {
+            "192.0.2.42" = "2001:db8::2";
+          };
+          log = [
+            "drop"
+            "reject"
+            "icmp"
+            "self"
+          ];
+          wkpf-strict = false;
         };
-        log = [
-          "drop"
-          "reject"
-          "icmp"
-          "self"
-        ];
-        wkpfStrict = false;
       };
       environment.systemPackages = [ pkgs.tcpdump ];
     };
@@ -189,7 +191,6 @@
       services.tayga = {
         enable = true;
         ipv4 = {
-          address = "192.0.2.0";
           router = {
             address = "192.0.2.1";
           };
@@ -199,7 +200,6 @@
           };
         };
         ipv6 = {
-          address = "2001:db8::1";
           router = {
             address = "64:ff9b::1";
           };
@@ -208,16 +208,20 @@
             prefixLength = 96;
           };
         };
-        mappings = {
-          "192.0.2.42" = "2001:db8::2";
+        settings = {
+          ipv4-addr = "192.0.2.0";
+          ipv6-addr = "2001:db8::1";
+          map = {
+            "192.0.2.42" = "2001:db8::2";
+          };
+          log = [
+            "drop"
+            "reject"
+            "icmp"
+            "self"
+          ];
+          wkpf-strict = false;
         };
-        log = [
-          "drop"
-          "reject"
-          "icmp"
-          "self"
-        ];
-        wkpfStrict = false;
       };
       environment.systemPackages = [ pkgs.tcpdump ];
     };
