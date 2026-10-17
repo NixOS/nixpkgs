@@ -3768,8 +3768,6 @@ with pkgs;
     vala
     ;
 
-  vyper = with python3Packages; toPythonApplication vyper;
-
   wrapCCWith =
     {
       cc,
