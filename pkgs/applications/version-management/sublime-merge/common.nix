@@ -16,10 +16,8 @@
   gtk3,
   cairo,
   pango,
-  libredirect,
   makeWrapper,
   wrapGAppsHook3,
-  pkexecPath ? "/run/wrappers/bin/pkexec",
   writeShellScript,
   common-updater-scripts,
   curl,
@@ -56,11 +54,6 @@ let
     curl
   ];
 
-  redirects = [
-    "/usr/bin/pkexec=${pkexecPath}"
-    "/bin/true=${coreutils}/bin/true"
-  ];
-
   binaryPackage = stdenv.mkDerivation rec {
     pname = "${pnameBase}-bin";
     version = buildVersion;
@@ -89,8 +82,13 @@ let
           $binary
       done
 
-      # Rewrite pkexec argument. Note that we cannot delete bytes in binary.
-      sed -i -e 's,/bin/cp\x00,cp\x00\x00\x00\x00\x00\x00,g' ${primaryBinary}
+      # Resolve helpers through PATH instead of preloading libredirect into
+      # child processes, which breaks Chromium-based editors. Keep the binary
+      # size unchanged by padding the shorter strings with null bytes.
+      sed -i \
+        -e 's,/bin/cp\x00,cp\x00\x00\x00\x00\x00\x00,g' \
+        -e 's,/bin/true\x00,true\x00\x00\x00\x00\x00\x00,g' \
+        ${primaryBinary}
 
       runHook postBuild
     '';
@@ -108,8 +106,7 @@ let
 
     postFixup = ''
       wrapProgram $out/${primaryBinary} \
-        --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
-        --set NIX_REDIRECTS ${builtins.concatStringsSep ":" redirects} \
+        --prefix PATH : "${lib.makeBinPath [ coreutils ]}" \
         --set LOCALE_ARCHIVE "${glibcLocales.out}/lib/locale/locale-archive" \
         "''${gappsWrapperArgs[@]}"
 
