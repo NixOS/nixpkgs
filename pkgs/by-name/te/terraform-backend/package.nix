@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nixosTests,
 }:
 
 buildGoModule (finalAttrs: {
@@ -28,6 +29,10 @@ buildGoModule (finalAttrs: {
     cp "$GOPATH/bin/cmd" $out/bin/terraform-backend
     runHook postInstall
   '';
+
+  passthru.tests = {
+    nixos = nixosTests.terraform-backend;
+  };
 
   meta = {
     description = "State backend server which implements the Terraform HTTP backend API with pluggable modules for authentication, storage, locking and state encryption";
