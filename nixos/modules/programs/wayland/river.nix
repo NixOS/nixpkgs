@@ -6,16 +6,16 @@
 }:
 
 let
-  cfg = config.programs.river-classic;
+  cfg = config.programs.river;
 
   wayland-lib = import ./lib.nix { inherit lib; };
 in
 {
-  options.programs.river-classic = {
-    enable = lib.mkEnableOption "river-classic, a dynamic tiling Wayland compositor";
+  options.programs.river = {
+    enable = lib.mkEnableOption "river, a non-monolithic Wayland compositor";
 
     package =
-      lib.mkPackageOption pkgs "river-classic" {
+      lib.mkPackageOption pkgs "river" {
         nullable = true;
         extraDescription = ''
           If the package is not overridable with `xwaylandSupport`, then the module option
@@ -40,6 +40,8 @@ in
       default = true;
     };
 
+    withUWSM = lib.mkEnableOption "UWSM (Unified Wayland Session Manager) to run river without a display manager while still activating `graphical-session.target` for the portal and XDG autostart services";
+
     extraPackages = lib.mkOption {
       type = with lib.types; listOf package;
       default = with pkgs; [
@@ -61,22 +63,6 @@ in
     };
   };
 
-  imports = [
-    (lib.mkRenamedOptionModule [ "programs" "river" "enable" ] [ "programs" "river-classic" "enable" ])
-    (lib.mkRenamedOptionModule
-      [ "programs" "river" "package" ]
-      [ "programs" "river-classic" "package" ]
-    )
-    (lib.mkRenamedOptionModule
-      [ "programs" "river" "xwayland" "enable" ]
-      [ "programs" "river-classic" "xwayland" "enable" ]
-    )
-    (lib.mkRenamedOptionModule
-      [ "programs" "river" "extraPackages" ]
-      [ "programs" "river-classic" "extraPackages" ]
-    )
-  ];
-
   config = lib.mkIf cfg.enable (
     lib.mkMerge [
       {
@@ -96,8 +82,21 @@ in
         inherit lib pkgs;
         enableXWayland = cfg.xwayland.enable;
       })
+
+      {
+        programs.uwsm = {
+          enable = lib.mkDefault cfg.withUWSM;
+          waylandCompositors = {
+            river = lib.mkIf (cfg.package != null) {
+              prettyName = lib.mkDefault "River";
+              comment = lib.mkDefault "River compositor managed by UWSM";
+              binPath = lib.mkDefault (lib.getExe cfg.package);
+            };
+          };
+        };
+      }
     ]
   );
 
-  meta.maintainers = with lib.maintainers; [ GaetanLepage ];
+  meta.maintainers = with lib.maintainers; [ yiyu ];
 }
