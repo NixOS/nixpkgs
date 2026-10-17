@@ -632,6 +632,8 @@ in
       aliases = [ "dbus-org.freedesktop.NetworkManager.service" ];
 
       serviceConfig = {
+        # required for dnsmasq DHCP server when doing a hotspot
+        CapabilityBoundingSet = "CAP_CHOWN";
         StateDirectory = "NetworkManager";
         StateDirectoryMode = 755; # not sure if this really needs to be 755
       };
