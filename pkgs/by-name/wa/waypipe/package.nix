@@ -23,18 +23,18 @@
 }:
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "waypipe";
-  version = "0.11.0";
+  version = "0.11.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "mstoeckl";
     repo = "waypipe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Tbd/yY90yb2+/ODYVL3SudHaJCGJKatZ9FuGM2uAX+8=";
+    hash = "sha256-n/Of0jz4tm0q+uSV4i2LbZNqzF13ToOmeeywFtvW7wM=";
   };
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-IUvXHLxrhc2Au57wsE53Q+NL1cZzFcaRG3HDV8s3xWw=";
+    hash = "sha256-38C9H1NL14xuacvjlUR45EYomdUznKC5BXg1Y5RkSH4=";
   };
 
   strictDeps = true;
