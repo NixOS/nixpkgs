@@ -1,134 +1,161 @@
 {
+  cmake,
+  qt6,
+  ninja,
   lib,
   stdenv,
   fetchgit,
   fetchFromGitHub,
-  cmake,
-  openssl,
-  qt6,
-  zlib-ng,
-  bzip2,
-  xz,
-  zstd,
-  cryptopp,
-  pkg-config,
-  makeWrapper,
   versionCheckHook,
+  libwebp,
+  zstd,
+  miniz,
+  qoi,
+  hat-trie,
+  makeBinaryWrapper,
+  xz,
+  zlib-ng,
+  cryptopp,
+  bzip2,
+  enableLto ? true,
+  wrapGui ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
+
+  # `version` and `tag` are set differently because of inconsistencies in release and tag naming schemes
+  # setting them this way prevents the versionCheckProgram from failing
+
   pname = "vpkedit";
-  version = "4.4.2";
+  version = "5.0.0-beta.4";
 
   src = fetchFromGitHub {
     owner = "craftablescience";
     repo = "VPKEdit";
-    tag = "v${finalAttrs.version}";
+    tag = "v5.0.0.4";
     fetchSubmodules = true;
-    hash = "sha256-bxY190G12djkyfprrNt83+qzya44fnYV6Ij7D8SWelQ=";
+    hash = "sha256-gdH+iowpNvWeh1UOSdehKKYvzqqvmrkM0aHe2RtwFdo=";
   };
 
-  # The following sources should be updated according to what was available
-  # at the time of VPKEdit's release, according to the vendored submodules
-  # and their nested submodules. These need to exist to avoid CMake's
-  # FetchContent trying to pull stuff over the network.
-  #
-  #
-  # v4.4.2
-  # |
-  # --> src/thirdparty/sourcepp @ 5bb0e05
-  #   |
-  #   --> ext/cryptopp (which is actually cryptopp-cmake) @ d2b07a
-  #   | |
-  #   | --> sources cryptopp (the actual one) from latest release tag of https://github.com/weidai11/cryptopp
-  #   |
-  #   --> ext/minizip-ng @ fe5fedc
-  #     |
-  #     --> sources zlib from stable branch of https://github.com/zlib-ng/zlib-ng (pinned to latest release tag)
-  #     |
-  #     --> sources bzip2 from master branch of https://sourceware.org/git/bzip
-  #     |
-  #     --> sources xz from master branch of https://github.com/tukaani-project/xz
-  #     |   (i used the most recent release tag. slightly newer than what would've been used, but only minor version changes)
-  #     |
-  #     --> sources zstd from release branch of https://github.com/facebook/zstd (pinned to latest release tag)
+  # these sources are generated using the generate-deps.py script
+  # we only fetch those not already in nixpkgs and upstream's forks
+  # when the nixpkgs src is incompatible
 
-  cryptopp-src = fetchgit {
-    url = "https://github.com/weidai11/cryptopp.git";
-    tag = "CRYPTOPP_8_9_0";
-    hash = "sha256-HV+afSFkiXdy840JbHBTR8lLL0GMwsN3QdwaoQmicpQ=";
+  bufferstream-src = fetchgit {
+    url = "https://github.com/craftablescience/BufferStream";
+    rev = "070a5f0a510da1b982dd68f204ad154d8aaf55b1";
+    hash = "sha256-wBmBEPceJUSFYk6Ctq49Uufhv8TYHvb0Jhpl9YjZDKc=";
   };
 
-  zlib-src = fetchgit {
-    url = "https://github.com/zlib-ng/zlib-ng.git";
-    tag = "2.2.4";
-    hash = "sha256-NZgnctJ6nA8Pp+wQ70p6m01LwY3wyl4G5bnLhQZYfps=";
+  cmp_compressonator-src = fetchgit {
+    url = "https://github.com/craftablescience/compressonator";
+    rev = "a599efbe2e30f7c8e3287e15436ec6c1be580b99";
+    hash = "sha256-twGuceidzUXm6/h6SxK76A6iCO2mmxW7nGKnOyfTuf4=";
   };
 
-  bzip2-src = fetchgit {
-    url = "git://sourceware.org/git/bzip2.git";
-    rev = "fbc4b11da543753b3b803e5546f56e26ec90c2a7";
-    hash = "sha256-kg/y9ZGbvaQd86tXxekxcv+h8nbNk3UvWad50fm5FtA=";
+  cryptopp-cmake-src = fetchgit {
+    url = "https://github.com/abdes/cryptopp-cmake";
+    rev = "866aceb8b13b6427a3c4541288ff412ad54f11ea";
+    hash = "sha256-BjCehnZeTZ87eb0NBEilHFw0BMlpV08Ms+vjP+8dw8o=";
   };
 
-  xz-src = fetchgit {
-    url = "https://github.com/tukaani-project/xz.git";
-    tag = "v5.8.0";
-    hash = "sha256-oH9aI5norOBIzyybYU3SnHJL8PXJ9lmZRX/RN0e+NXs=";
+  minizip-ng-src = fetchgit {
+    url = "https://github.com/craftablescience/minizip-ng";
+    rev = "567affbf0caf11c5a0e1f76f722fbadc65c6efd9";
+    hash = "sha256-5n4/+nLigrDmsCHI74KO9tANCAcUeAaxcfTHxQ4Le/w=";
   };
 
-  zstd-src = fetchgit {
-    url = "https://github.com/facebook/zstd.git";
-    tag = "v1.5.7";
-    hash = "sha256-tNFWIT9ydfozB8dWcmTMuZLCQmQudTFJIkSr0aG7S44=";
-  };
+  strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
-    pkg-config
+    makeBinaryWrapper
+    ninja
     cmake
-    makeWrapper
     qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    bzip2
-    cryptopp
-    openssl
     qt6.qtbase
     qt6.qttools
-    xz
-    zlib-ng
-    zstd
   ];
 
-  cmakeFlags = with finalAttrs; [
-    (lib.cmakeFeature "CRYPTOPP_SOURCES" "${cryptopp-src}")
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ZLIB" "${zlib-src}")
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_BZIP2" "${bzip2-src}")
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_LIBLZMA" "${xz-src}")
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ZSTD" "${zstd-src}")
-    (lib.cmakeBool "MZ_OPENSSL" true)
-  ];
+  # for an explanation of FETCHCONTENT_SOURCE_DIR flags see:
+  # * https://cmake.org/cmake/help/latest/module/FetchContent.html#variable:FETCHCONTENT_SOURCE_DIR_%3CuppercaseName%3E
+  # necessary here to prevent cmake from trying and failing to access the network
+  # this list is mostly generated by the generate-deps.py script, with a few modifications
+  cmakeFlags =
+    with finalAttrs;
+    [
+      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_BUFFERSTREAM" "${bufferstream-src}")
+      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CMP_COMPRESSONATOR" "${cmp_compressonator-src}")
+      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CRYPTOPP-CMAKE" "${cryptopp-cmake-src}")
+      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_TSL_HAT_TRIE" "${hat-trie.src}")
+      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MINIZ" "${miniz.src}")
+      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MINIZIP-NG" "/build/minizip-ng")
+      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ZLIB" "${zlib-ng.src}")
+      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_LIBLZMA" "/build/liblzma")
+      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ZSTD" "${zstd.src}")
+      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_QOI" "${qoi.src}")
+      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_WEBP" "${libwebp.src}")
+      (lib.cmakeFeature "CRYPTOPP_SOURCES" "${cryptopp.src}")
+      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_BZIP2" "/build/bzip2")
+      (lib.cmakeFeature "BZIP2_SOURCE_DIR" "/build/bzip2")
+      (lib.cmakeFeature "CPACK_GENERATOR" "DEB")
+      (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
+      # hack to point sourcepp's includes correctly (1/2)
+      (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-I/build/include")
+    ]
+    ++ lib.optional enableLto (lib.cmakeBool "VPKEDIT_USE_LTO" true);
 
-  patches = [
-    ./patches/fix-config-and-i18n-paths.patch
-    ./patches/fix-installer-cmake.patch
-    ./patches/fix-miniz-cmake-dirs.patch
-    ./patches/fix-qquaternion-include.patch
-  ];
+  doInstallCheck = true;
 
-  postInstall = ''
-    mkdir -p $out/lib/vpkedit/i18n
-    mv *.qm $out/lib/vpkedit/i18n
-    substituteInPlace $out/share/applications/vpkedit.desktop \
-      --replace-fail "/opt/vpkedit/vpkedit" "vpkedit"
+  postPatch =
+    with finalAttrs;
+    let
+      VPKEDIT_NIX_LIBDIR = "${builtins.placeholder "out"}/lib/";
+    in
+    # fix the search path for the core plugins to be nix-compliant
+    ''
+      substituteInPlace /build/source/src/gui/utility/PluginFinder.cpp \
+        --replace-fail \
+        'pluginLocations << "/usr/" VPKEDIT_LIBDIR "/" + QString{PROJECT_NAME.data()};' \
+        "pluginLocations << \"${VPKEDIT_NIX_LIBDIR}\" + QString{PROJECT_NAME.data()};"
+    ''
+    # apply a patch that prevents CMake errors when using nixpkgs' bzip2. needed as it's expecting the
+    # gitlab src and nixpkgs packages the sourcware src
+    + ''
+      mkdir -p /build/minizip-ng
+      cp -r ${minizip-ng-src}/* /build/minizip-ng
+      patch -i ${./minizip-ng-bzip2-fix.patch} -p1 /build/minizip-ng/CMakeLists.txt
+    '';
+
+  preConfigure =
+    # these have tarball sources, so we need to extract them out like this to avoid CMake erroring with
+    # `add_subdirectory given source "${path/to/source}.tar.xz" which is not an existing directory.`
+    ''
+      mkdir -p /build/{liblzma,bzip2}
+      tar -Jxf ${xz.src} -C /build/liblzma --strip-components=1
+      tar -zxf ${bzip2.src} -C /build/bzip2 --strip-components=1
+    ''
+    # hack to point sourcepp's includes correctly (2/2)
+    + ''
+      mkdir -p /build/include
+      cp -r ${cryptopp.src} /build/include/cryptopp
+    '';
+
+  # temporary wrapper to fix GUI failing to initialize on Wayland, see
+  # * https://github.com/craftablescience/VPKEdit/issues/292
+  # * https://github.com/craftablescience/VPKEdit/issues/304#issuecomment-4076336179
+  postInstall = lib.optionalString wrapGui ''
+    wrapProgram $out/bin/vpkedit --prefix QT_QPA_PLATFORM : xcb
   '';
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+
   versionCheckProgram = "${placeholder "out"}/bin/vpkeditcli";
-  doInstallCheck = true;
 
   meta = {
     description = "CLI/GUI tool to create, read, and write several pack file formats";
@@ -136,7 +163,10 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "vpkeditcli";
     license = lib.licenses.mit;
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ srp ];
-    changelog = "https://github.com/craftablescience/VPKEdit/releases/tag/v${finalAttrs.version}";
+    maintainers = with lib.maintainers; [
+      srp
+      smudgebun
+    ];
+    changelog = "https://github.com/craftablescience/VPKEdit/releases/tag/v${finalAttrs.src.tag}";
   };
 })
