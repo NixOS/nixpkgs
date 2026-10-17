@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "syncterm";
-  version = "1.6";
+  version = "1.9";
 
   src = fetchurl {
     url = "mirror://sourceforge/syncterm/syncterm-${finalAttrs.version}-src.tgz";
-    hash = "sha256-eeOuQ9OfmKWSJo/0AJQJTaYqpYe1uSXmt0WdZqXRHUk=";
+    hash = "sha256-HtFYy/21+4Y61tf6pX2BBx0t3rwdz9q8pLlj9y5KmAE=";
   };
 
   # We can't use sourceRoot, as the cherry-picked patches apply to files outside of it.
