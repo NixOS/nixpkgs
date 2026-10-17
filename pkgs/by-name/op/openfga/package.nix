@@ -3,6 +3,8 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  nix-update-script,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -12,11 +14,13 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "openfga";
     repo = "openfga";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-HI3iQIV21AHb2hpoNA++2Wm5yeENhASe9MoWwzrtL5A=";
   };
 
   vendorHash = "sha256-Jd8EtZf97e7qr7GcK1sMjC14mga1Jui8aNvbMAHZyA0=";
+
+  __structuredAttrs = true;
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -44,8 +48,15 @@ buildGoModule (finalAttrs: {
     installShellCompletion $completions_dir/*
   '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "High performance and flexible authorization/permission engine built for developers and inspired by Google Zanzibar";
+    changelog = "https://github.com/openfga/openfga/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://openfga.dev/";
     license = lib.licenses.asl20;
     mainProgram = "openfga";
