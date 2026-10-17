@@ -351,7 +351,12 @@ buildFHSEnv {
     ''--bind "$HOME"/.local/share/DaVinciResolve/Extras ${davinci}/Extras''
   ];
 
+  # Resolve bundles Qt without a wayland platform plugin; fallback to `xcb`
+  # INFO: https://github.com/NixOS/nixpkgs/issues/341634
   runScript = "${bash}/bin/bash ${writeText "davinci-wrapper" ''
+    case "$QT_QPA_PLATFORM" in
+      wayland | wayland-egl) export QT_QPA_PLATFORM=xcb ;;
+    esac
     export QT_XKB_CONFIG_ROOT="${xkeyboard_config}/share/X11/xkb"
     export QT_PLUGIN_PATH="${davinci}/libs/plugins:$QT_PLUGIN_PATH"
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib:/usr/lib32:${davinci}/libs
