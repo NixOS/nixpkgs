@@ -111,6 +111,8 @@ stdenv.mkDerivation (finalAttrs: {
     lame = (lame.override { sndfileFileIOSupport = true; });
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "C library for reading and writing files containing sampled sound";
     homepage = "https://libsndfile.github.io/libsndfile/";
