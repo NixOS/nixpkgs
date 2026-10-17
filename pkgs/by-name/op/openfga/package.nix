@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -39,13 +40,11 @@ buildGoModule (finalAttrs: {
   # Tests depend on docker
   doCheck = false;
 
-  postInstall = ''
-    completions_dir=$TMPDIR/openfga_completions
-    mkdir $completions_dir
-    $out/bin/openfga completion bash > $completions_dir/openfga.bash
-    $out/bin/openfga completion zsh > $completions_dir/_openfga.zsh
-    $out/bin/openfga completion fish > $completions_dir/openfga.fish
-    installShellCompletion $completions_dir/*
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd openfga \
+      --bash <($out/bin/openfga completion bash) \
+      --fish <($out/bin/openfga completion fish) \
+      --zsh <($out/bin/openfga completion zsh)
   '';
 
   doInstallCheck = true;
