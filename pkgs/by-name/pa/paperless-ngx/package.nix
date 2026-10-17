@@ -59,14 +59,14 @@ let
 in
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "paperless-ngx";
-  version = "3.3.0";
+  version = "3.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-a46gdO5gjPF2Zo+oinfAbKibBgy4UrXTV55HtslyoTk=";
+    hash = "sha256-523WG24e9qhBTdIl327HE/o8e0TwE+HEbHkWPxRZwgI=";
   };
 
   postPatch = ''
@@ -84,6 +84,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
 
   pythonRelaxDeps = [
     "django-allauth"
+    "python-ipware"
     "redis"
     "regex"
     "turbohtml"
@@ -167,7 +168,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     ++ django-allauth.optional-dependencies.mfa
     ++ django-allauth.optional-dependencies.socialaccount
     ++ gotenberg-client.optional-dependencies.httpx
-    ++ ocrmypdf.optional-dependencies.heic or [ ]
+    ++ ocrmypdf.optional-dependencies.heic
     ++ redis.optional-dependencies.hiredis
     ++ tika-client.optional-dependencies.httpx
     ++ whoosh-compat.optional-dependencies.tantivy;

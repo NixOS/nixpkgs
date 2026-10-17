@@ -4,6 +4,7 @@
   aioresponses,
   awesomeversion,
   buildPythonPackage,
+  click,
   fetchFromGitHub,
   mashumaro,
   orjson,
@@ -12,7 +13,7 @@
   pytest-cov-stub,
   pytestCheckHook,
   rich,
-  syrupy_6,
+  syrupy,
   textual,
   textual-plotext,
   typer,
@@ -57,12 +58,18 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     aioresponses
+    click
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
-    syrupy_6
+    syrupy
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
+
+  disabledTests = [
+    # https://github.com/frenck/python-fumis/issues/807
+    "test_cli_structure"
+  ];
 
   pythonImportsCheck = [ "fumis" ];
 

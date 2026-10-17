@@ -56,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       RossComputerGuy
       numinit
+      naxdy
     ];
     license = lib.licenses.gpl2Plus;
     pkgConfigModules = [ "libselinux" ];

@@ -3,6 +3,7 @@
   config,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   cudaPackages,
   replaceVars,
 
@@ -42,6 +43,10 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
   };
 
   sourceRoot = "${finalAttrs.src.name}/python/cuda_cccl";
+  # Some patches touch files outside of sourceRoot
+  postUnpack = ''
+    chmod -R u+w -- "$sourceRoot/../.."
+  '';
 
   patches = [
     (replaceVars ./patch-nvidia-libs-paths.patch {
@@ -52,9 +57,21 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
 
     # Disable all tests requiring unpackaged `numba-cuda-mlir` through `cuda.compute`
     ./skip-missing-jit-backend.patch
+
+    # Fix build with CUDA >= 13.4
+    # https://github.com/NVIDIA/cccl/pull/11823
+    (fetchpatch {
+      name = "c-parallel-allow-cuda-13_4.patch";
+      url = "https://github.com/NVIDIA/cccl/commit/1504f9d7a6a8b15679c36df2f1ee11a413fdedc8.patch";
+      hash = "sha256-OPwoxwshkw+h4pD60/eCxUi8O1WM2WhNSchxkGdagU4=";
+    })
   ];
-  # Apply patch relative to python/cuda_cccl
-  patchFlags = [ "-p3" ];
+  # Apply patches from the repository root (parent of sourceRoot)
+  patchFlags = [
+    "-p1"
+    "-d"
+    "../.."
+  ];
 
   postPatch = ''
     substituteInPlace cuda/cccl/headers/include_paths.py \

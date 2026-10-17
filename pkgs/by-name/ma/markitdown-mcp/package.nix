@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "markitdown-mcp";
-  version = "0.1.5";
+  version = "0.1.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "markitdown";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sqWfft/yaI/0FavhIbAHqltgVfTNk0GJk/phyvdn7Ck=";
+    hash = "sha256-nOzhvIqyq5iV2pKeHqStKELFLRnTRF7+pbxHaV0XZ4s=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/markitdown-mcp";
@@ -23,15 +23,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
     python3Packages.hatchling
   ];
 
-  pythonRelaxDeps = [
-    "mcp"
-  ];
-
   dependencies =
     with python3Packages;
     [
       markitdown
-      mcp
+      mcp_2
+      requests
     ]
     ++ markitdown.optional-dependencies.all;
 

@@ -27,14 +27,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "djangorestframework";
-  version = "3.18.1";
+  version = "3.18.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = "django-rest-framework";
     tag = finalAttrs.version;
-    hash = "sha256-ZOzGJOIyN6X7NxplIDUeII87IlsXViNLPeW7f4/vIfY=";
+    hash = "sha256-D3A9fUBc8QhkAA8GyECifQh/VJa1Jxwx3W0usA3RoD4=";
   };
 
   build-system = [ setuptools ];
@@ -63,7 +63,7 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ finalAttrs.passthru.optional-dependencies.complete;
 
-  disabledTestPaths = lib.optionals (lib.versionAtLeast django.version "6") [
+  disabledTestPaths = lib.optionals (lib.versionAtLeast django.version "5") [
     # AssertionError: assert '�\\u0125\\u01a6.txt' == 'ÀĥƦ.txt'"
     "tests/test_parsers.py::TestFileUploadParser::test_get_encoded_filename"
   ];

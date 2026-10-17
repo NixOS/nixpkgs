@@ -129,7 +129,7 @@ let
     meta = {
       description = "Oxc Parser Node API";
       homepage = "https://oxc.rs/docs/guide/usage/parser";
-      license = "MIT";
+      license = lib.licenses.mit;
     };
   });
 in

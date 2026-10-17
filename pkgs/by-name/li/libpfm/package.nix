@@ -7,12 +7,12 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "4.13.0";
+  version = "4.14.1";
   pname = "libpfm";
 
   src = fetchurl {
     url = "mirror://sourceforge/perfmon2/libpfm4/libpfm-${finalAttrs.version}.tar.gz";
-    hash = "sha256-0YuXdkx1VSjBBR03bjNUXQ62DG6/hWgENoE/pbBMw9E=";
+    hash = "sha256-r1GOqyEUsOEd/qz43WGLCh6gTyjNCzisrS7Jmr/y/QQ=";
   };
 
   # Don't install libpfm.so on windows as it doesn't exist

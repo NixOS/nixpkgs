@@ -15,7 +15,7 @@ buildKodiAddon rec {
 
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/${lib.toLower rel}/${namespace}/${namespace}-${version}.zip";
-    sha256 = "sha256-sbyI6ZK8HvXgMxNDtm2Tb/ub93IcdXB5PSdxoL+QIqU=";
+    hash = "sha256-sbyI6ZK8HvXgMxNDtm2Tb/ub93IcdXB5PSdxoL+QIqU=";
   };
 
   propagatedBuildInputs = [

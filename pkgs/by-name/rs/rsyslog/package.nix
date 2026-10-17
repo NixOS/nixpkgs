@@ -64,10 +64,6 @@
   nixosTests,
 }:
 
-let
-  # TODO: remove when https://github.com/NixOS/nixpkgs/pull/571072 hits master
-  systemdLibs' = systemdLibs.override { withCompression = true; };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rsyslog";
   version = "8.2608.0";
@@ -123,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withHiredis hiredis
   ++ lib.optional withMaxminddb libmaxminddb
   ++ lib.optional withMysql libmysqlclient
-  ++ lib.optional withSystemd systemdLibs';
+  ++ lib.optional withSystemd systemdLibs;
 
   configureFlags = [
     "--sysconfdir=/etc"

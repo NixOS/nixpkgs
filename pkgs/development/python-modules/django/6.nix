@@ -65,6 +65,7 @@ buildPythonPackage (finalAttrs: {
     # https://code.djangoproject.com/ticket/36997
     # https://github.com/django/django/pull/21019
     ./6.x/invalidate-importlib-cache.patch
+    ./6.x/fix-flaky-tests.patch
   ]
   ++ lib.optionals withGdal [
     (replaceVars ./6.x/gdal.patch {

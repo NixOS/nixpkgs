@@ -65,6 +65,7 @@ buildPythonPackage (finalAttrs: {
     text = ''
       nix-update --build --commit python3Packages.genai-prices
       nix-update --build --commit python3Packages.pydantic-graph
+      nix-update --build --commit python3Packages.pydantic-ai-harness
       nix-update --build python3Packages.pydantic-ai-slim
     '';
   });
@@ -72,7 +73,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     changelog = "https://github.com/pydantic/pydantic-ai/releases/tag/${finalAttrs.src.tag}";
     description = "GenAI Agent Framework, the Pydantic way";
-    homepage = "https://github.com/pydantic/pydantic-ai";
+    homepage = "https://github.com/pydantic/pydantic-ai/tree/main/pydantic_ai_slim";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };

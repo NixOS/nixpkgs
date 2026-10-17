@@ -37,6 +37,7 @@ php.buildComposerProject2 (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
+    broken = lib.versionAtLeast php.version "8.6";
     changelog = "https://github.com/vimeo/psalm/releases/tag/${finalAttrs.version}";
     description = "Static analysis tool for finding errors in PHP applications";
     homepage = "https://github.com/vimeo/psalm";

@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "tuios";
-  version = "0.9.2";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "Gaurav-Gosain";
     repo = "tuios";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5R3iEWW002g9OfKpqwQz6/oSCznJQ8l2/PjXJ3VdGzU=";
+    hash = "sha256-dV0iDTm52+5x4EqlwDWXQQG20DVBDCavT4IZcUSsnm0=";
   };
 
-  vendorHash = "sha256-aZzPq2tbvggw9ikOI1VvqOvpE9ff2XEjnUceTFBPkUk=";
+  vendorHash = "sha256-a9Jy56b5vwFex9MGaXye8KTrrfUlyGqQKFMspnFIsaA=";
 
   ldflags = [
     "-s"
@@ -29,6 +29,8 @@ buildGoModule (finalAttrs: {
     "-X=main.date=1970-01-01T00:00:00Z"
     "-X=main.builtBy=nixpkgs"
   ];
+
+  env.GOWORK = "off";
 
   subPackages = [
     "cmd/tuios"

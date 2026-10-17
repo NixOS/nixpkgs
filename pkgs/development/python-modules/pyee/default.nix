@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "pyee";
-  version = "13.0.0";
+  version = "13.0.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-s5HjxaQ00fURiiVhUAHbyPZpz0EKtn0ExNTgfFVIHDc=";
+    hash = "sha256-C5MffBRTVmftTH4NUxcWNocV6GC5iHcPx+uFeNH2f8g=";
   };
 
   postPatch = ''

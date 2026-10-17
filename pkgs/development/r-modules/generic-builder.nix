@@ -102,11 +102,14 @@ stdenv.mkDerivation (
       runHook postInstall
     '';
 
-    stripDebugList = [
-      "library/${attrs.pname}/libs"
-      # Note: this is non-standard, but some packages do place binaries here via custom install logic (e.g. via install.libs.R)
-      "library/${attrs.pname}/bin"
-    ];
+    preFixup = ''
+      for path in "$out"/library/*; do
+        pkg_name="$(basename "$path")"
+        stripDebugList+=("library/$pkg_name/libs" "library/$pkg_name/bin")
+        # Note: the bin directory is non-standard, but some packages do place binaries there
+        # via custom install logic (e.g. via install.libs.R)
+      done
+    '';
 
     postFixup = ''
       if test -e $out/nix-support/propagated-build-inputs; then

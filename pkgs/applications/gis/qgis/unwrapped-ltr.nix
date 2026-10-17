@@ -85,7 +85,7 @@ let
   ];
 in
 mkDerivation rec {
-  version = "3.44.14";
+  version = "3.44.15";
   pname = "qgis-ltr-unwrapped";
   outputs = [ "out" ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) "man";
 
@@ -93,7 +93,7 @@ mkDerivation rec {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-v2BmgSgBgzoeJgypnJ47bTxZzt7kbBc/QmJrmWxZCYI=";
+    hash = "sha256-HX9U1lAV2B0F6GsoiNcOhiTGRKhrTaLlbxBXflv8oI0=";
   };
 
   passthru = {

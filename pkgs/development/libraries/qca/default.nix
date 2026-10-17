@@ -14,11 +14,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "qca";
-  version = "2.3.10";
+  version = "2.3.12";
 
   src = fetchurl {
     url = "mirror://kde/stable/qca/${version}/qca-${version}.tar.xz";
-    sha256 = "sha256-HFtyLak9VZNlcZImuxIccm7DwNxMZ96jTx5Q5ODRSgI=";
+    sha256 = "sha256-1KKzqgJy1z6gxM0hQJYBd/o03cIDDlmkjs+4DHV1csM=";
   };
 
   buildInputs = [
@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
   # tells CMake to use this CA bundle file if it is accessible
   preConfigure = "export QC_CERTSTORE_PATH=/etc/ssl/certs/ca-certificates.crt";
 
+  separateDebugInfo = true;
+
   cmakeFlags = [
     (lib.cmakeBool "QT6" isQt6)
     # tricks CMake into using this CA bundle file if it is not accessible (in a sandbox)
@@ -45,7 +47,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Qt Cryptographic Architecture";
     homepage = "https://invent.kde.org/libraries/qca";
-    maintainers = [ ];
+    teams = [ lib.teams.qt-kde ];
     license = lib.licenses.lgpl21Plus;
     platforms = with lib.platforms; unix;
   };

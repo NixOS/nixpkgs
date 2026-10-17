@@ -86,7 +86,10 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${
+    "--prefix"
+    "PATH"
+    ":"
+    "${
       lib.makeBinPath [
         dmidecode
         cloud-utils.guest

@@ -15,6 +15,8 @@
   setuptools-scm,
 
   # dependencies
+  aiodns,
+  aiohttp,
   alembic,
   certipy,
   idna,
@@ -51,7 +53,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "jupyterhub";
-  version = "5.5.0";
+  version = "6.0.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -59,12 +61,12 @@ buildPythonPackage (finalAttrs: {
     owner = "jupyterhub";
     repo = "jupyterhub";
     tag = finalAttrs.version;
-    hash = "sha256-BDU0RP6NRRnSZelRadhvSm2mfsuewyMwpcRlDBPDC0E=";
+    hash = "sha256-/TBlaruXeMbi8fK9mQ0QHeckwt6i1eKNufP4iauXvXM=";
   };
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-64FRdLHBpnywpCLjsMoXmWp/tK00+QwNIR9yAoQFIbg=";
+    hash = "sha256-BDyS0/mTgavH/6QlqPGkllSki5c2eUwoGbV7CyMKL5U=";
   };
 
   postPatch = ''
@@ -90,6 +92,8 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
+    aiodns
+    aiohttp
     alembic
     certipy
     idna
@@ -141,6 +145,7 @@ buildPythonPackage (finalAttrs: {
     "test_valid_events"
     "test_invalid_events"
     "test_user_group_roles"
+    "test_unix_socket_proxy"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Server connection times out under load on Darwin
@@ -185,5 +190,7 @@ buildPythonPackage (finalAttrs: {
       # E   OSError: dlopen(/nix/store/43zml0mlr17r5jsagxr00xxx91hz9lky-openpam-20170430/lib/libpam.so, 6): image not found
       # lib.systems.inspect.patterns.isDarwin
     ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "jupyter" finalAttrs.version;
+    mainProgram = "jupyterhub";
   };
 })

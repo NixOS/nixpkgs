@@ -37,10 +37,15 @@ let
   hasUDSbind = any (hasPrefix "/") (
     mapAttrsToList (_server: cfg: cfg.bind) (cfg.settings.server or { })
   );
+  hasTCPbind =
+    (cfg.settings == null)
+    || (any (addr: !(hasPrefix "/" addr)) (
+      mapAttrsToList (_server: cfg: cfg.bind) (cfg.settings.server or { })
+    ));
 
   ifHasSettings = optional (cfg.settings != null);
 
-  hasFirewall = cfg.settings.firewall.enable;
+  hasFirewall = cfg.settings.firewall.enable or false;
 
   description = "iocaine, the deadliest poison known to AI";
 in
@@ -182,13 +187,14 @@ in
             MemoryDenyWriteExecute = false;
             NoNewPrivileges = true;
 
-            RestrictAddressFamilies =
-              (optionals hasUDSbind [
-                "AF_INET"
-                "AF_INET6"
-                "AF_UNIX"
-              ])
-              ++ (optionals hasFirewall [ "AF_NETLINK" ]);
+            RestrictAddressFamilies = [
+              "AF_UNIX"
+            ]
+            ++ (optionals hasTCPbind [
+              "AF_INET"
+              "AF_INET6"
+            ])
+            ++ (optionals hasFirewall [ "AF_NETLINK" ]);
 
             RestrictNamespaces = true;
             RestrictRealtime = true;

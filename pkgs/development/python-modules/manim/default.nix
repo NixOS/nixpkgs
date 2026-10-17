@@ -188,7 +188,7 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "manim";
-  version = "0.21.0";
+  version = "0.22.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -196,7 +196,7 @@ buildPythonPackage (finalAttrs: {
     owner = "ManimCommunity";
     repo = "manim";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-K6+U+ri/bBf760JmyhpkzQsQqp+ofve5zBByZPVdc1w=";
+    hash = "sha256-/CGwhRef6e+BRcodoXd95GwjaPtfC4nM1xvhiz95fNc=";
   };
 
   patches = [ ./pytest-report-header.patch ];
@@ -302,6 +302,7 @@ buildPythonPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       osbm
       ivyfanchiang
+      haansn08
     ];
   };
 })

@@ -47,6 +47,8 @@ buildPythonPackage rec {
   disabledTests = [
     # AssertionError: 'ERROR' != 'INFO'
     "test_postprocessor"
+    # broken by SVG sizing math changes in svglib 2.x
+    "ThumbnailSVGImage"
   ];
 
   preCheck = ''

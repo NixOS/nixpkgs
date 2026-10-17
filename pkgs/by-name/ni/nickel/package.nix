@@ -10,6 +10,7 @@
   nixVersions,
   nix-update-script,
   enableNixImport ? false,
+  nickel,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -41,7 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = lib.optionals enableNixImport [
-    nixVersions.nix_2_31
+    nixVersions.nix_2_34
     boost
   ];
 
@@ -87,6 +88,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
+  passthru.tests = {
+    build = lib.recurseIntoAttrs {
+      nickelWithNix = nickel.override {
+        enableNixImport = true;
+      };
+    };
+  };
 
   meta = {
     homepage = "https://nickel-lang.org/";

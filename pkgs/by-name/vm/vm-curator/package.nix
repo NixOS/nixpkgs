@@ -10,17 +10,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vm-curator";
-  version = "1.4.0";
+  version = "1.5.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mroboff";
     repo = "vm-curator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-W0UsPEsUQfAfnQ6rkgBX1L23Fr2iPQ1Z7la9yzKl1ZA=";
+    hash = "sha256-Yy2G8QKeqSy9BPuCK2mN9DvJhWXP2goEit+/d3ilMKM=";
   };
 
-  cargoHash = "sha256-Z3jT9nz4ezGI36dZla+43NVTS7KP2Yzgk9McukVsLtg=";
+  cargoHash = "sha256-hTytwrh3QmDa/nZDMIggWElymJvYt75S893/buXlkfU=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ udev ];

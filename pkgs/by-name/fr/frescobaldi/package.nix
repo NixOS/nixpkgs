@@ -40,9 +40,11 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   dontWrapQtApps = true;
-  makeWrapperArgs = [
-    "\${qtWrapperArgs[@]}"
-  ];
+  preFixup = ''
+    makeWrapperArgs+=(
+      "''${qtWrapperArgs[@]}"
+    )
+  '';
 
   meta = {
     homepage = "https://frescobaldi.org/";

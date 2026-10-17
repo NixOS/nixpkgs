@@ -12,7 +12,7 @@
   pyprojectVersionPatchHook,
   pytest-asyncio,
   pytestCheckHook,
-  syrupy_6,
+  syrupy,
   tabulate,
   typeguard,
   uv-build,
@@ -58,7 +58,7 @@ buildPythonPackage (finalAttrs: {
     aiointercept
     pytest-asyncio
     pytestCheckHook
-    syrupy_6
+    syrupy
     typeguard
   ]
   ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);

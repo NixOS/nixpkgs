@@ -21,6 +21,7 @@
   imageio-ffmpeg,
   pillow-heif,
   psutil,
+  pydicom,
   tifffile,
 
   # tests
@@ -78,6 +79,7 @@ buildPythonPackage rec {
     lytro = [ ];
     numpy = [ ];
     pillow = [ ];
+    pydicom = [ pydicom ];
     simpleitk = [ ];
     spe = [ ];
     swf = [ ];

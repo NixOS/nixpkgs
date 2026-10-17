@@ -5,23 +5,23 @@
   cryptography,
   deprecated,
   pytestCheckHook,
-  setuptools,
+  hatchling,
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jwcrypto";
-  version = "1.5.6";
+  version = "1.5.8";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-dxqHdioMCBrmFmlYqVT4CEiCCyqwZpN9yLg3nWWxsDk=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-w9cRS29uZbUva32oF+uMuEI+HaMeHvE1CER8gey9zDQ=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cryptography
     deprecated
     typing-extensions
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Implementation of JOSE Web standards";
     homepage = "https://github.com/latchset/jwcrypto";
-    changelog = "https://github.com/latchset/jwcrypto/releases/tag/v${version}";
+    changelog = "https://github.com/latchset/jwcrypto/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
   };
-}
+})

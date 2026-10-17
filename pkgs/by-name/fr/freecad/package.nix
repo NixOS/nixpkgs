@@ -6,6 +6,7 @@
   doxygen,
   eigen,
   fetchFromGitHub,
+  fetchpatch,
   fmt,
   graphviz,
   gts,
@@ -105,7 +106,15 @@ freecad-utils.makeCustomizable (
     ]
     ++ pythonDeps;
 
-    patches = [ ./0001-NIXOS-don-t-ignore-PYTHONPATH.patch ];
+    patches = [
+      ./0001-NIXOS-don-t-ignore-PYTHONPATH.patch
+      (fetchpatch {
+        # PythonWrapper.cpp: add missing include for PySide 6.12
+        # https://github.com/FreeCAD/FreeCAD/pull/33408
+        url = "https://github.com/FreeCAD/FreeCAD/commit/636365fd4a30e017c76ef6a44cf045e77ec5e632.patch";
+        hash = "sha256-+7zdFhxtACzoBZoXVnHBJ+1bax4dd+HHiVKNsoO+jzw=";
+      })
+    ];
 
     postPatch = ''
       substituteInPlace src/Mod/Fem/femmesh/gmshtools.py \

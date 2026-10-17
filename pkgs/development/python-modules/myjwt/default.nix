@@ -32,6 +32,7 @@ buildPythonPackage (finalAttrs: {
 
   pythonRelaxDeps = [
     "cryptography"
+    "exrex"
     "pyopenssl"
     "questionary"
   ];

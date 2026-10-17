@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "gmr";
     repo = "helper";
     rev = version;
-    sha256 = "0zypjv8rncvrsgl200v7d3bn08gs48dwqvgamfqv71h07cj6zngp";
+    hash = "sha256-99lvJDsAhrOxq+ptzBsi+iFg12hnAyDo03kzm9GW138=";
   };
 
   propagatedBuildInputs = [ pyyaml ];

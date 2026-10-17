@@ -4,9 +4,11 @@
   fetchFromGitea,
   fetchpatch2,
   installShellFiles,
-  openssl,
+  libsodium,
   pkg-config,
   protobuf,
+  sqlite,
+  zstd,
   cacert,
   nix-update-script,
   nixosTests,
@@ -30,7 +32,7 @@ let
         domain = "git.deuxfleurs.fr";
         owner = "Deuxfleurs";
         repo = "garage";
-        rev = "v${version}";
+        tag = "v${version}";
         inherit hash;
       };
 
@@ -43,19 +45,26 @@ let
       ];
 
       buildInputs = [
-        openssl
+        libsodium
+        sqlite
+        zstd
       ];
 
       checkInputs = [
         cacert
       ];
 
-      env.OPENSSL_NO_VENDOR = true;
+      env = {
+        SODIUM_USE_PKG_CONFIG = true;
+        LIBSQLITE3_SYS_USE_PKG_CONFIG = true;
+        ZSTD_SYS_USE_PKG_CONFIG = true;
+      };
 
-      # See https://git.deuxfleurs.fr/Deuxfleurs/garage/src/tag/v2.3.0/nix/compile.nix#L71-L78
+      # See https://git.deuxfleurs.fr/Deuxfleurs/garage/src/tag/v2.4.1/nix/compile.nix#L71-L78
       # on version changes for checking if changes are required here
+      buildNoDefaultFeatures = true;
       buildFeatures = [
-        "bundled-libs"
+        "system-libs"
         "consul-discovery"
         "fjall"
         "journald"

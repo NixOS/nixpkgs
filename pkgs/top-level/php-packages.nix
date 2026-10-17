@@ -795,6 +795,8 @@ lib.makeScope pkgs.newScope (
               configureFlags = [
                 "--with-zlib"
               ];
+              # Tests launch the builtin webserver.
+              __darwinAllowLocalNetworking = true;
             }
           ]
           ++ lib.optionals (lib.versionOlder php.version "8.3") [

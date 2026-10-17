@@ -15,7 +15,7 @@ buildPecl rec {
   src = fetchFromGitHub {
     owner = "jvoisin";
     repo = "snuffleupagus";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-pSLJsAi6Ex5E8ZeNuIlXSFutBbBMmvYdUzosFNSzqfg=";
   };
 
@@ -37,6 +37,7 @@ buildPecl rec {
   '';
 
   meta = {
+    broken = lib.versionAtLeast php.version "8.6";
     description = "Security module for php7 and php8 - Killing bugclasses and virtual-patching the rest";
     homepage = "https://github.com/jvoisin/snuffleupagus";
     license = lib.licenses.lgpl3Only;

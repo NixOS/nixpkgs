@@ -8,11 +8,12 @@
   pkg-config,
   libadwaita,
   makeWrapper,
+  wl-clipboard,
   fetchFromGitHub,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "waytator";
-  version = "1.2.4";
+  version = "1.2.5";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -21,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "faetalize";
     repo = "waytator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/Tq4fVrgss/v/+ugAueWCx1mbQlsyQ0LE4jRtIhT4qU=";
+    hash = "sha256-sv7UwNsW+UTIGLDIz4JwRpPU6t5bolsz/n4bO68dDi0=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +39,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     wrapProgram $out/bin/waytator \
-      --prefix PATH : ${lib.makeBinPath [ tesseract ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          tesseract
+          wl-clipboard
+        ]
+      }
   '';
 
   mesonBuildType = "release";

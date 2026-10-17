@@ -221,6 +221,10 @@ let
         ++ map (f: "KERNEL_${f}") kernelModuleMakeFlags
       );
 
+      # Ensure that all of the kernel module Make flags propagate
+      # through to the recursive Make kernel module build.
+      makeFlags = optionals buildKernel kernelModuleMakeFlags;
+
       enableParallelBuilding = true;
 
       doInstallCheck = true;

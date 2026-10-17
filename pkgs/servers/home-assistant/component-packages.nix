@@ -6973,7 +6973,8 @@
       ];
     "sunsynk" =
       ps: with ps; [
-      ]; # missing inputs: sunsynk-api-client
+        sunsynk-api-client
+      ];
     "sunweg" =
       ps: with ps; [
       ];
@@ -8069,7 +8070,8 @@
       ];
     "willow" =
       ps: with ps; [
-      ]; # missing inputs: pywillow
+        pywillow
+      ];
     "window" =
       ps: with ps; [
       ];
@@ -9398,6 +9400,7 @@
     "suez_water"
     "sun"
     "sunricher_dali"
+    "sunsynk"
     "sunweg"
     "supla"
     "surepetcare"
@@ -9565,6 +9568,7 @@
     "wiffi"
     "wiim"
     "wilight"
+    "willow"
     "window"
     "wirelesstag"
     "withings"

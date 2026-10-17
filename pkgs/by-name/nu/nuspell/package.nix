@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nuspell";
-  version = "5.1.8";
+  version = "5.1.9";
 
   src = fetchFromGitHub {
     owner = "nuspell";
     repo = "nuspell";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-foMq1Gx30/EmYIHMPXTeraV3XcwBBVGnjMRjGE9+Xbw=";
+    hash = "sha256-39lj/44rnMWDzCVLY1LMuutCVL7Y0+7CSl7zydUF1cU=";
   };
 
   nativeBuildInputs = [

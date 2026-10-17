@@ -22,6 +22,8 @@ buildPythonPackage (finalAttrs: {
   version = "2.54.0";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "pydantic-ai";
@@ -52,7 +54,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     changelog = "https://github.com/pydantic/pydantic-ai/releases/tag/${finalAttrs.src.tag}";
     description = "GenAI Agent Framework, the Pydantic way";
-    homepage = "https://github.com/pydantic/pydantic-ai";
+    homepage = "https://github.com/pydantic/pydantic-ai/tree/main/pydantic_graph";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };

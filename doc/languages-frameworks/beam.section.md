@@ -299,13 +299,13 @@ in
       # Implied by DynamicUser, but just to emphasize due to RELEASE_TMP
       PrivateTmp = true;
       ExecStart = ''
-        ${release}/bin/${release_name} start
+        ${lib.getExe' release release_name} start
       '';
       ExecStop = ''
-        ${release}/bin/${release_name} stop
+        ${lib.getExe' release release_name} stop
       '';
       ExecReload = ''
-        ${release}/bin/${release_name} restart
+        ${lib.getExe' release release_name} restart
       '';
       Restart = "on-failure";
       RestartSec = 5;

@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "repoze-sphinx-autointerface";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "repoze.sphinx.autointerface";
     inherit version;
-    hash = "sha256-SGvxQjpGlrkVPkiM750ybElv/Bbd6xSwyYh7RsYOKKE=";
+    hash = "sha256-PRe6d2AZ78mzZBX7P7sIIPI8PC6BYjjEIPHYA/atMTc=";
   };
 
   nativeBuildInputs = [ setuptools ];

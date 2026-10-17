@@ -7,9 +7,7 @@
   pkg-config,
   perl,
   python3,
-  # fails to build with protobuf_36
-  # FIXME: unpin when upstream is fixed
-  protobuf_35,
+  protobuf,
   zlib,
   gtest,
   brotli,
@@ -26,11 +24,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "android-tools";
-  version = "37.0.0";
+  version = "37.0.0p1";
 
   src = fetchurl {
     url = "https://github.com/nmeum/android-tools/releases/download/${version}/android-tools-${version}.tar.xz";
-    hash = "sha256-JyXQn4kqOjjlNEKfR6Mh9Y7PajFpyqQskV+yy31Gvg4=";
+    hash = "sha256-LG3hq+FrIRx9n1knYhfhT9ng4Ysg4zHTyENY9d/9V24=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +38,7 @@ stdenv.mkDerivation rec {
     perl
   ];
   buildInputs = [
-    protobuf_35
+    protobuf
     zlib
     gtest
     brotli

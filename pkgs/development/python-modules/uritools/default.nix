@@ -2,9 +2,9 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
   setuptools,
   setuptools-scm,
+  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -26,12 +26,15 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  # Infinite recursion
+  doCheck = false;
+
   pythonImportsCheck = [ "uritools" ];
 
   meta = {
     description = "RFC 3986 compliant, Unicode-aware, scheme-agnostic replacement for urlparse";
     homepage = "https://github.com/tkem/uritools/";
-    changelog = "https://github.com/tkem/uritools/blob/v${finalAttrs.version}/CHANGELOG.rst";
+    changelog = "https://github.com/tkem/uritools/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rvolosatovs ];
   };

@@ -25,8 +25,8 @@ pkgs.makeSetupHook
       pkgs.cowsay
     ];
     substitutions = {
-      shell = "${pkgs.bash}/bin/bash";
-      cowsay = "${pkgs.cowsay}/bin/cowsay";
+      shell = lib.getExe pkgs.bash;
+      cowsay = lib.getExe pkgs.cowsay;
     };
   }
   (

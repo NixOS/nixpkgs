@@ -31,8 +31,6 @@ buildGoModule (finalAttrs: {
     $out/bin/mc --version | grep ${finalAttrs.version} > /dev/null
   '';
 
-  passthru.tests.minio = nixosTests.minio;
-
   meta = {
     homepage = "https://github.com/minio/mc";
     description = "Replacement for ls, cp, mkdir, diff and rsync commands for filesystems and object storage";
@@ -42,5 +40,8 @@ buildGoModule (finalAttrs: {
     ];
     mainProgram = "mc";
     license = lib.licenses.asl20;
+    knownVulnerabilities = [
+      "minio-client has been abandoned by upstream and security issues won't be fixed. Users should migrate to alternatives such as awscli2 or rclone."
+    ];
   };
 })

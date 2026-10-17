@@ -19,6 +19,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-/wvA/CS3DKuD7kBmzaIvhElkpdEPjRA3UiJUvzCSths=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.11.26,<0.12" "uv_build"
+  '';
+
   build-system = [ uv-build ];
 
   dependencies = [ xmltodict ];
@@ -30,7 +35,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Class allowing for data models equivalently represented as Python dictionaries, JSON, and XML";
     homepage = "https://github.com/usnistgov/DataModelDict/";
-    changelog = "https://github.com/usnistgov/DataModelDict/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/usnistgov/DataModelDict/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };

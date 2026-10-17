@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  buildPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -12,6 +13,8 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://sourceforge/findent/findent-${finalAttrs.version}.tar.gz";
     hash = "sha256-4tqLjAwZYbK8nc5MbKp5ytCSRdNjiL6h/ALE7B/YuZg=";
   };
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   enableParallelBuilding = true;
 
@@ -25,6 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     mainProgram = "findent";
     maintainers = with lib.maintainers; [ sheepforce ];
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux;
   };
 })

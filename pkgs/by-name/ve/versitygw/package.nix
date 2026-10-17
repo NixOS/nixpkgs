@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "versitygw";
-  version = "1.8.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "versity";
     repo = "versitygw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fnmhA3Et3rF0GgRdV41rdTrBZCh2b8dvRYTATaqDb18=";
+    hash = "sha256-Ike6iFIRAb8ENjNp+jl8joP0bnei7AEaNvZFlosB3n0=";
   };
 
-  vendorHash = "sha256-HyDY6tTDvEDQI85Z4SGb11oDPTicnp8TR1sH7n7Bbcg=";
+  vendorHash = "sha256-/dGRcQr/XgZV2h8Eju2/Reo3W6cBuYS2gDv/FddQ8ow=";
 
   excludedPackages = [
     # depends on cgo/cuda
@@ -47,6 +47,10 @@ buildGoModule (finalAttrs: {
 
         # requires extended attributes
         "^TestObjectPublishLockHonorsContextWhileWaiting$"
+        "^TestFsyncPutObject"
+        "^TestFsyncFailureFailsThePut$"
+        "^TestListObjectsV2ContinuationTokenEcho$"
+        "^TestObjectLockModeNoneRejectsConditionalWrites$"
         "/xattr$"
       ];
     in

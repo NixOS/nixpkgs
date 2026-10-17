@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  lua5_2_compat,
   jemalloc,
   pkg-config,
   nixosTests,
@@ -22,9 +21,6 @@
   # their custom patched version of jemalloc.
   useSystemJemalloc ? true,
 }:
-let
-  lua = lua5_2_compat;
-in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "valkey";
@@ -41,12 +37,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    lua
-  ]
-  ++ lib.optional useSystemJemalloc jemalloc
-  ++ lib.optional withSystemd systemd
-  ++ lib.optional tlsSupport openssl;
+  buildInputs =
+    lib.optional useSystemJemalloc jemalloc
+    ++ lib.optional withSystemd systemd
+    ++ lib.optional tlsSupport openssl;
 
   strictDeps = true;
 

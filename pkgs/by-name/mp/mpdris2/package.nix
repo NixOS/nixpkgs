@@ -52,7 +52,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
   # https://nixos.org/manual/nixpkgs/stable/#ssec-gnome-common-issues-double-wrapped
   dontWrapGApps = true;
 
-  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   patches = [ ./fix-gettext-0.25.patch ];
 

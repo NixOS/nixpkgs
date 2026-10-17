@@ -20,6 +20,7 @@
   swift-llbuild,
   swift-syntax,
   swift-system,
+  swift-tools-protocols,
   swift-tools-support-core,
   swiftpmHook,
   swift_release,
@@ -41,6 +42,7 @@ let
     swift-llbuild
     swift-syntax-no-toolchain
     swift-system
+    swift-tools-protocols
     swift-tools-support-core
   ];
 in
@@ -90,6 +92,8 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/swiftlang/swift-package-manager/commit/e1910f814cc1be40c709c3987a29488b9bee2f92.patch?full_index=1";
       hash = "sha256-4Ew/cKlk+Zn8cIQvh0jQy4Fz+xGYBYwch4+SBu1nKpI=";
     })
+    # Include the Darwin testing helper in the CMake-built package.
+    ./patches/0012-Build-and-install-the-Darwin-testing-helper-for-the-.patch
   ];
 
   postPatch = ''
@@ -106,6 +110,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   strictDeps = true;
+
+  # Needed for rpath fixups to work on Darwin.
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-headerpad_max_install_names";
 
   preConfigure = ''
     appendToVar cmakeFlags -DCMAKE_Swift_COMPILER_TARGET=${stdenv.hostPlatform.swift.triple}
@@ -132,6 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
     swift-llbuild
     swift-syntax-no-toolchain
     swift-system
+    swift-tools-protocols
     swift-tools-support-core
   ];
 

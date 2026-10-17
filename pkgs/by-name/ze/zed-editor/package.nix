@@ -99,7 +99,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zed-editor";
-  version = "1.22.0";
+  version = "1.24.2";
 
   outputs = [
     "out"
@@ -112,7 +112,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XdWQjtdkbSqyEP/c2bGycPFEHS37tonSzTeVxyK1AHw=";
+    hash = "sha256-rw3HiLmIRnW0+FXsbzqYDPohTq8yXJroH2Q/6aJoa/E=";
   };
 
   postPatch = ''
@@ -135,7 +135,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail 'builder.include(&glib_path_config);' 'builder.include("${lib.getLib glib}/lib/glib-2.0/include");'
   '';
 
-  cargoHash = "sha256-9EjEMN+oyUE2HdhC42dxPk4q20qhB49qRBTqg4iY/b8=";
+  cargoHash = "sha256-RME1H5pDPLUV/qzoNEysolYJho3+jVzonZkjjGmPrfQ=";
 
   __structuredAttrs = true;
 
@@ -245,6 +245,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   useNextest = true;
 
+  checkFlags = [
+    # GPUI debug selectors are disabled in release builds, so this UI test
+    # cannot look up the footer's bounds.
+    # https://github.com/zed-industries/zed/issues/65611
+    "--skip"
+    "watcher_debug::tests::tabs_separate_rows_and_keep_footer_visible"
+  ];
+
   remoteServerExecutableName = "zed-remote-server-${channel}-${finalAttrs.version}+${channel}";
   installPhase = ''
     runHook preInstall
@@ -256,10 +264,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mv $release_target/zed target/release/zed
 
     pushd crates/zed
-    # Note that this is GNU sed, while Zed's bundle-mac uses BSD sed
-    sed -i "s/package.metadata.bundle-stable/package.metadata.bundle/" Cargo.toml
+    # Select the stable bundle and migrate its macOS keys to cargo-bundle 0.12's schema.
+    substituteInPlace Cargo.toml \
+      --replace-fail '[package.metadata.bundle-stable]' '[package.metadata.bundle]' \
+      --replace-fail 'osx_minimum_system_version' 'osx.minimum_system_version' \
+      --replace-fail 'osx_info_plist_exts' 'osx.info_plist_exts' \
+      --replace-fail 'osx_url_schemes' 'osx.url_schemes'
     export CARGO_BUNDLE_SKIP_BUILD=true
-    app_path=$(cargo bundle --release | xargs)
+    app_path=$(cargo bundle --release --format osx | xargs)
     popd
 
     mkdir -p $out/Applications $out/bin

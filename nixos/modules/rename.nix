@@ -306,6 +306,13 @@ in
     ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "meguca" ] "Use meguca has been removed from nixpkgs")
     (mkRemovedOptionModule [ "services" "mesos" ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule
+      [
+        "services"
+        "minio"
+      ]
+      "The minio module has been removed because the `minio` package was abandoned upstream and therefore dropped from nixpkgs."
+    ) # Added 2026-10-11
     (mkRemovedOptionModule [
       "services"
       "mxisd"
@@ -393,6 +400,13 @@ in
       "services"
       "wakeonlan"
     ] "This module was removed in favor of enabling it with networking.interfaces.<name>.wakeOnLan")
+    (mkRemovedOptionModule
+      [
+        "services"
+        "wasabibackend"
+      ]
+      "This module was removed as the corresponding package was removed due to being unmaintained in nixpkgs."
+    )
     (mkRemovedOptionModule [
       "services"
       "winstone"

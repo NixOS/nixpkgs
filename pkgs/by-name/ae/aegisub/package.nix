@@ -3,7 +3,6 @@
   alsa-lib,
   boost,
   meson,
-  config,
   expat,
   fetchFromGitHub,
   ffmpeg,
@@ -35,7 +34,7 @@
   alsaSupport ? stdenv.hostPlatform.isLinux,
   openalSupport ? true,
   portaudioSupport ? true,
-  pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
+  pulseaudioSupport ? stdenv.hostPlatform.isLinux,
   spellcheckSupport ? true,
   useBundledLuaJIT ? false,
 }:

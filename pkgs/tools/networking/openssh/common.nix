@@ -30,7 +30,7 @@
   libredirect,
   etcDir ? null,
   withKerberos ? false,
-  withLdns ? true,
+  withLdns ? false,
   withSelinux ? false,
   libselinux,
   krb5,

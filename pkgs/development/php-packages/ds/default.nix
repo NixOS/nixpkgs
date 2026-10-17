@@ -16,13 +16,14 @@ buildPecl {
   src = fetchFromGitHub {
     owner = "php-ds";
     repo = "ext-ds";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-QWBxjt3rzD3m3y2ScbYvtZnjPUYsd3uMMQOFY/RQ3Io=";
   };
 
   buildInputs = [ pcre2 ];
 
   meta = {
+    broken = lib.versionAtLeast php.version "8.6";
     changelog = "https://github.com/php-ds/ext-ds/releases/tag/v${version}";
     description = "Extension providing efficient data structures for PHP";
     license = lib.licenses.mit;

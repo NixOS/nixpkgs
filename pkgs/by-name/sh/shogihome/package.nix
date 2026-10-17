@@ -24,16 +24,16 @@ let
 in
 buildNpmPackage (finalAttrs: {
   pname = "shogihome";
-  version = "1.29.0";
+  version = "1.29.1";
 
   src = fetchFromGitHub {
     owner = "sunfish-shogi";
     repo = "shogihome";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vo9ZxiTJNPBVOlylmXbBzVzXCEr++JZRgHyJ0JYYstY=";
+    hash = "sha256-F13rgUdquKJHz41Gz2ou8cAk3FmZF/FjA19DKtkJr2E=";
   };
 
-  npmDepsHash = "sha256-1LQIhHCTx8ZY2r/kwkd+qPM1FNo4dxx2jDDTtBscemY=";
+  npmDepsHash = "sha256-9pitop6ZGw4JlN/iUfQ7xqY7jN5PyffTSH2Tc/coi+c=";
 
   postPatch = ''
     substituteInPlace package.json \

@@ -126,6 +126,7 @@ buildGoModule (finalAttrs: {
   excludedPackages = [
     "documentation/prometheus-mixin"
     "internal/tools"
+    "promql/promqltest/cmd/migrate"
     "web/ui/mantine-ui/src/promql/tools"
   ];
 

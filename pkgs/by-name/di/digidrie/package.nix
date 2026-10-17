@@ -45,10 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/magnetophon/DigiDrie";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.magnetophon ];
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-    ];
+    platforms = lib.platforms.linux;
     mainProgram = "DigiDrie";
   };
 })

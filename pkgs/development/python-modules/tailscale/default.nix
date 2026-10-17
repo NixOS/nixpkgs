@@ -11,7 +11,7 @@
   pytest-cov-stub,
   pytestCheckHook,
   rich,
-  syrupy,
+  syrupy_5,
   typer,
   yarl,
 }:
@@ -55,7 +55,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
-    syrupy
+    syrupy_5
   ]
   ++ lib.concatAttrValues optional-dependencies;
 

@@ -166,7 +166,7 @@ let
         # udev's 80-drivers.rules file, which contains rules for
         # automatically calling modprobe.
         ${lib.optionalString (!config.boot.hardwareScan) ''
-          ln -s /dev/null $out/80-drivers.rules
+          ln -sf /dev/null $out/80-drivers.rules
         ''}
       '';
 
@@ -458,6 +458,7 @@ in
       "initrd-udevadm-cleanup-db.service"
       "systemd-udevd-control.socket"
       "systemd-udevd-kernel.socket"
+      "systemd-udevd-varlink.socket"
       "systemd-udevd.service"
       "systemd-udev-trigger.service"
     ];

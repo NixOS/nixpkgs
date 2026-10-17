@@ -125,7 +125,11 @@ buildPythonPackage (finalAttrs: {
   '';
 
   # Set env variable explicitly for Darwin, but allow overriding when invoking directly
-  makeWrapperArgs = [ "--set-default FONTCONFIG_FILE ${finalAttrs.env.FONTCONFIG_FILE}" ];
+  makeWrapperArgs = [
+    "--set-default"
+    "FONTCONFIG_FILE"
+    finalAttrs.env.FONTCONFIG_FILE
+  ];
 
   pythonImportsCheck = [ "weasyprint" ];
 

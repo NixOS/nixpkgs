@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     owner = "libvdwxc";
     repo = "libvdwxc";
     rev = "92f4910c6ac88e111db2fb3a518089d0510c53b0";
-    sha256 = "1c7pjrvifncbdyngs2bv185imxbcbq64nka8gshhp8n2ns6fids6";
+    hash = "sha256-RrfojLbCoguhfkhNSwxebPUaCwp7Cf2sb4tZF3eW97A=";
   };
 
   nativeBuildInputs = [

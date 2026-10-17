@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "svxlink";
-  version = "26.05.1";
+  version = "26.05.2";
 
   src = fetchFromGitHub {
     owner = "sm0svx";
     repo = "svxlink";
     tag = finalAttrs.version;
-    hash = "sha256-qpIVMERl+mZIRf90CVSRitlqnZrXPXgFDLErFnejfNc=";
+    hash = "sha256-I0mTCoXDcOUL6+dgqyHIXs2WlGkZp+JV8IytL+e1Ocg=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";

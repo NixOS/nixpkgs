@@ -104,20 +104,35 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     # platformio is used in esphome/platformio_api.py
     # esptool is used in esphome/__main__.py
     # git is used in esphome/git.py
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        platformio
-        esptool
-        git
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      platformio
+      esptool
+      git
+    ])
+
     # The dashboard requires esphome to be importable
     # dependencies are added to show better error messages
-    "--prefix PYTHONPATH : $out/${python.sitePackages}:${python.pkgs.makePythonPath finalAttrs.passthru.dependencies}"
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ stdenv.cc.cc ]}"
-    "--set ESPHOME_USE_SUBPROCESS ''"
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    "$out/${python.sitePackages}:${python.pkgs.makePythonPath finalAttrs.passthru.dependencies}"
+
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    (lib.makeLibraryPath [ stdenv.cc.cc ])
+
+    "--set"
+    "ESPHOME_USE_SUBPROCESS"
+    "''"
+
     # https://github.com/NixOS/nixpkgs/issues/362193
-    "--set PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION 'python'"
+    "--set"
+    "PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION"
+    "'python'"
   ];
 
   # Needed for tests

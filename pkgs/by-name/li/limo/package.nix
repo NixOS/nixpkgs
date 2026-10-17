@@ -33,6 +33,9 @@ stdenv.mkDerivation (finalAttrs: {
   patches = lib.optionals (!withUnrar) [
     # remove `unrar` as fallback when libarchive fails
     ./remove-unrar.patch
+
+    # fix build on gcc16
+    ./fix-gcc16.patch
   ];
 
   strictDeps = true;

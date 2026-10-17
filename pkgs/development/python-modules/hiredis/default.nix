@@ -12,7 +12,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "hiredis";
-  version = "3.4.2";
+  version = "3.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
     repo = "hiredis-py";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-eQvSEjJpswQthTLlhazypo+Q6AtXaTlgOmo4SfVkE7U=";
+    hash = "sha256-D6w9c9HQwET26YUQy737GZoKYyuQFc2JXt63wQb17QY=";
   };
 
   build-system = [ setuptools ];

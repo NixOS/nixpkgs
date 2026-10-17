@@ -2,6 +2,7 @@
   fetchCrate,
   lib,
   openssl,
+  zstd,
   pkg-config,
   rustPlatform,
 }:
@@ -33,6 +34,7 @@ let
 
       buildInputs = [
         openssl
+        zstd
       ];
 
       preCheck = ''

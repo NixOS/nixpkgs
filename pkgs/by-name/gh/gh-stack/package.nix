@@ -23,11 +23,6 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-TC1mSXYjOQo00fb2yuGdk1rl6z6rp0WT3AmzXomPzis=";
 
-  # the go-modules derivation inherits the installAgentSkills hook but has no pname
-  overrideModAttrs = _: {
-    dontInstallAgentSkills = true;
-  };
-
   ldflags = [
     "-s"
     "-X=github.com/github/gh-stack/cmd.Version=${finalAttrs.version}"

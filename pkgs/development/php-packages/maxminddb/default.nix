@@ -14,7 +14,7 @@ buildPecl {
   src = fetchFromGitHub {
     owner = "maxmind";
     repo = "MaxMind-DB-Reader-php";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-2ooq36ylpS+RchgyLc1N+q20ona+j8Rsg27vGSRni5I=";
   };
 

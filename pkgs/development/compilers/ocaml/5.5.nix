@@ -1,6 +1,6 @@
 import ./generic.nix {
   major_version = "5";
   minor_version = "5";
-  patch_version = "0";
-  sha256 = "sha256-/MauZl0exR1SUQ6qx4NKhqmAa/WiWLt8ynhzP8zwFbo=";
+  patch_version = "1";
+  sha256 = "sha256-zQqXvb/JnwD1P07khJGWTHNievsJ7Y5N4jC6RIij1rk=";
 }

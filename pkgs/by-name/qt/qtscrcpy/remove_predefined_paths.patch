@@ -1,22 +1,18 @@
 diff --git a/QtScrcpy/main.cpp b/QtScrcpy/main.cpp
-index a24ba60..51e3d76 100644
+index aa9dd18..6605005 100644
 --- a/QtScrcpy/main.cpp
 +++ b/QtScrcpy/main.cpp
-@@ -27,27 +27,16 @@
- {
+@@ -58,23 +58,12 @@ int main(int argc, char *argv[])
+
      // set env
  #ifdef Q_OS_WIN32
 -    qputenv("QTSCRCPY_ADB_PATH", "../../../QtScrcpy/QtScrcpyCore/src/third_party/adb/win/adb.exe");
 -    qputenv("QTSCRCPY_SERVER_PATH", "../../../QtScrcpy/QtScrcpyCore/src/third_party/scrcpy-server");
-     qputenv("QTSCRCPY_KEYMAP_PATH", "../../../keymap");
-     qputenv("QTSCRCPY_CONFIG_PATH", "../../../config");
  #endif
 
- #ifdef Q_OS_OSX
+ #ifdef Q_OS_MACOS
 -    qputenv("QTSCRCPY_ADB_PATH", "../../../../../../QtScrcpy/QtScrcpyCore/src/third_party/adb/mac/adb");
 -    qputenv("QTSCRCPY_SERVER_PATH", "../../../../../../QtScrcpy/QtScrcpyCore/src/third_party/scrcpy-server");
-     qputenv("QTSCRCPY_KEYMAP_PATH", "../../../../../../keymap");
-     qputenv("QTSCRCPY_CONFIG_PATH", "../../../../../../config");
  #endif
 
  #ifdef Q_OS_LINUX
@@ -27,6 +23,6 @@ index a24ba60..51e3d76 100644
 -    if (qgetenv("QTSCRCPY_SERVER_PATH").isEmpty()) {
 -        qputenv("QTSCRCPY_SERVER_PATH", "../../../QtScrcpy/QtScrcpyCore/src/third_party/scrcpy-server");
 -    }
-     if (qgetenv("QTSCRCPY_KEYMAP_PATH").isEmpty()) {
-         qputenv("QTSCRCPY_KEYMAP_PATH", "../../../keymap");
-     }
+ #endif
+
+     g_msgType = covertLogLevel(Config::getInstance().getLogLevel());

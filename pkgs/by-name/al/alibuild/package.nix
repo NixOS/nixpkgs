@@ -6,12 +6,12 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "alibuild";
-  version = "1.17.44";
+  version = "1.17.46";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-hLFbxJVOWp1j8pV2v3h7UBZ691EONGb5HNIDrizyq6E=";
+    hash = "sha256-fF1G5ec6DE1ktcKhGc6U5KGzf8S3jlsMpWjD2hUgrk4=";
   };
 
   build-system = with python3Packages; [
@@ -38,7 +38,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   meta = {
     homepage = "https://alisw.github.io/alibuild/";
     description = "Build tool for ALICE experiment software";
-    license = lib.licenses.gpl3;
+    changelog = "https://github.com/alisw/alibuild/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ ktf ];
   };
 })

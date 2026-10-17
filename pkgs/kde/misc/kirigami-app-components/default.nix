@@ -5,11 +5,11 @@
 }:
 mkKdeDerivation rec {
   pname = "kirigami-app-components";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchurl {
     url = "mirror://kde/stable/kirigami-app-components/kirigami-app-components-${version}.tar.xz";
-    hash = "sha256-+D+S7Pq4n6i3WGfEfCkfFhnho5cK/DBDezN0qnX2Uw8=";
+    hash = "sha256-9o9NCCkzIT2CuAUhfy+gaQ9R330AIU3bhzgSpgprgws=";
   };
 
   meta.license = with lib.licenses; [

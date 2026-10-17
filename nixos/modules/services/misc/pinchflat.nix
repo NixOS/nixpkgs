@@ -166,6 +166,9 @@ in
         ExecStartPre = "${lib.getExe' cfg.package "migrate"}";
         ExecStart = "${getExe cfg.package} start";
         Restart = "on-failure";
+
+        # give enough time for migrations to run
+        TimeoutStartSec = "600s";
       };
     };
 

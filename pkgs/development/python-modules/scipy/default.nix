@@ -63,7 +63,13 @@ buildPythonPackage (finalAttrs: {
       excludes = [ "doc/source/building/cross_compilation.rst" ];
     })
   ];
-  postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"pybind11>=2.13.2,<3.1.0",' '"pybind11",' \
+      --replace-fail "Cython>=3.2.0,<3.3.0" "Cython>=3.2.0"
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
     substituteInPlace scipy/meson.build \
       --replace-fail "r = run_command('xcrun', '-sdk', 'macosx', '--show-sdk-version', check: true)" ""
     substituteInPlace scipy/meson.build \

@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "minicom-team";
     repo = "minicom";
     rev = finalAttrs.version;
-    sha256 = "sha256-Gj7inEj630krn2IU/XTWql11vIRh3Pl5U73J3BcGYpY=";
+    hash = "sha256-Gj7inEj630krn2IU/XTWql11vIRh3Pl5U73J3BcGYpY=";
   };
 
   buildInputs = [

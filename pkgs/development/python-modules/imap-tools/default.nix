@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "imap-tools";
-  version = "1.15.1";
+  version = "1.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ikvk";
     repo = "imap_tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4TAO3sxsTtvF/JYpltMjM4LHGlbUZfU8P/x4LSExwFY=";
+    hash = "sha256-YYGL39bPYFST7NRtYml9Ui5Mym4rK/v1WRrHeNzf4Jc=";
   };
 
   build-system = [ setuptools ];
@@ -30,10 +30,6 @@ buildPythonPackage (finalAttrs: {
     "test_folders"
     "test_idle"
     "test_live"
-    # broken on Python 3.14.7
-    # reported upstream: https://github.com/ikvk/imap_tools/issues/271
-    "test_login_quotes_plain_username"
-    "test_login_quotes_username_with_special_chars"
   ];
 
   pythonImportsCheck = [ "imap_tools" ];

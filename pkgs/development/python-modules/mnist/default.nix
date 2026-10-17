@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "datapythonista";
     repo = "mnist";
     rev = "${pname}-${version}";
-    sha256 = "17r37pbxiv5dw857bmg990x836gq6sgww069w3q5jjg9m3xdm7dh";
+    hash = "sha256-sJ3a+qjpSVnw4MkAzp82+JmBOkjp1XUK4q3s2Nc9I58=";
   };
 
   propagatedBuildInputs = [ numpy ];

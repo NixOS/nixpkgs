@@ -10,6 +10,7 @@
   mccabe,
   platformdirs,
   py,
+  pyprojectVersionPatchHook,
   pytest-timeout,
   pytest-xdist,
   pytest7CheckHook,
@@ -23,7 +24,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pylint";
-  version = "4.0.6-unstable-2026-07-14";
+  version = "4.0.7";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -34,6 +35,8 @@ buildPythonPackage (finalAttrs: {
   };
 
   build-system = [ setuptools ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     astroid

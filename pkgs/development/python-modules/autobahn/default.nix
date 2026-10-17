@@ -46,14 +46,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "autobahn";
-  version = "25.12.2";
+  version = "26.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "crossbario";
     repo = "autobahn-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vSS7DpfGfNwQT8OsgEXJaP5J40QFIopdAD94/y7/jFY=";
+    hash = "sha256-OepX1Hf2McNQhXPWfshU2SgLMzqz8AEbRm8ha1s//K8=";
   };
 
   build-system = [
@@ -138,6 +138,12 @@ buildPythonPackage (finalAttrs: {
 
     # Requires insecure ecdsa library
     "src/autobahn/wamp/test/test_wamp_cryptosign.py"
+  ];
+
+  disabledTests = [
+    # Tests require insecure ecdsa library
+    "test_crypto_extras_present"
+    "test_import[autobahn.wamp.cryptosign]"
   ];
 
   meta = {

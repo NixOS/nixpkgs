@@ -11,6 +11,7 @@
   libavif,
   libjxl,
   librsvg,
+  libwebp,
   libxslt,
   libxml2,
   docbook_xml_dtd_412,
@@ -57,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     libavif
     libjxl
     librsvg
+    libwebp
   ];
 
   patches = [ ./xmlcatalog_patch.patch ];

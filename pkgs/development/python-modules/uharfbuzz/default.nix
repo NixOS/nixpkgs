@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "uharfbuzz";
-  version = "0.53.2";
+  version = "0.56.2";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     repo = "uharfbuzz";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-EY5jAzcAHY4lmGsitVFtFMijEfAaSCifCjkdJhU2N1g=";
+    hash = "sha256-E1r9ZqlakOTsajt37CqdeMvFzqb8hcPDKe6ot1iemB4=";
   };
 
   build-system = [

@@ -100,18 +100,20 @@ python3Packages.buildPythonApplication {
 
   dontWrapGApps = true;
 
-  makeWrapperArgs = [
-    "\${gappsWrapperArgs[@]}"
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        android-tools
-        bindfs
-        e2fsprogs
-        fakeroot
-        unzip
-      ]
-    }"
-  ];
+  preFixup = ''
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
+      "--prefix" "PATH" ":" "${
+        lib.makeBinPath [
+          android-tools
+          bindfs
+          e2fsprogs
+          fakeroot
+          unzip
+        ]
+      }"
+    )
+  '';
 
   postInstallCheck = ''
     mesonCheckPhase

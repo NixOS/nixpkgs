@@ -3,6 +3,7 @@
   cmake,
   fetchFromGitHub,
   ninja,
+  patchesForVersion,
   stdenv,
   swift-collections,
   swift-foundation-icu,
@@ -25,12 +26,10 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (swift_sources.swift-foundation) hash;
   };
 
-  patches = [
-    ./patches/0001-gnu-install-dirs.patch
-    ./patches/0002-Devendor-SwiftFoundationICU.patch
-    # This is needed after the Glibc 2.44 upgrade.
-    ./patches/0003-Add-missing-imports.patch
-  ];
+  patches = patchesForVersion {
+    inherit (finalAttrs) version;
+    path = ./patches;
+  };
 
   postPatch = ''
     # Build FoundationMacros as a dylib instead of as an executable.

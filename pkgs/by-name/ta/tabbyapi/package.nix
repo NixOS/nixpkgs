@@ -7,14 +7,14 @@
 }:
 python3Packages.buildPythonApplication {
   pname = "tabbyapi";
-  version = "0-unstable-2026-09-28";
+  version = "0-unstable-2026-10-11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "theroyallab";
     repo = "tabbyAPI";
-    rev = "be74bf0a00bcb3a518e6feb7606f150c189be637";
-    hash = "sha256-VnqD6nTgMx++zSjsLr5hpMH2jdGkreugXPcjQMQF6Mg=";
+    rev = "2636ef602b55b5343cf3740dd55a77f21e0a8003";
+    hash = "sha256-oQnM8aYLbqwdjJOQ2l3R8iyrv5tCZrMNRjy6rwQYQTI=";
   };
 
   build-system = with python3Packages; [
@@ -87,7 +87,7 @@ python3Packages.buildPythonApplication {
   '';
 
   passthru = {
-    cudaSupport = python3Packages.torch.cudaSupport;
+    inherit (python3Packages.torch) cudaSupport rocmSupport;
     updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
   };
 

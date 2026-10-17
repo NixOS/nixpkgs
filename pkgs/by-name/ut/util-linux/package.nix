@@ -41,11 +41,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "util-linux" + lib.optionalString isMinimal "-minimal";
-  version = "2.42.3";
+  version = "2.42.4";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor finalAttrs.version}/util-linux-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Zqx8DnJSeOsrA54xBPLJERk0HZQbQbrHooXGlflAvVc=";
+    hash = "sha256-+9YqEAq3u4dGugZhJVw8SBhbHpAhUHxiTaAfvGljMOw=";
   };
 
   # Note: fetchpatch/fetchpatch2 cause infinite recursion with util-linuxMinimal.
@@ -55,14 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     # which isn't valid on NixOS (and a compatibility link on most other modern
     # distros anyway).
     ./rtcwake-search-PATH-for-shutdown.patch
-
-    # Build fix. Can be removed in 2.42.4 (or newer).
-    # https://github.com/util-linux/util-linux/commit/a323dddbcd1ed05a10e7e870b3e1a48b4ed44a43
-    ./libmount-build-fix.patch
-
-    # Fixes incomplete security fix in 2.42.3:
-    # https://github.com/util-linux/util-linux/commit/286dd3ff41526b582ef48830de239dffbaa61f90
-    ./CVE-2026-78408.patch
   ];
 
   # We separate some of the utilities into their own outputs. This

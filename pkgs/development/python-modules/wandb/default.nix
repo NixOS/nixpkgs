@@ -411,6 +411,17 @@ buildPythonPackage (finalAttrs: {
 
     # AssertionError: Not all requests have been executed
     "test_image_refs"
+
+    # cursed regression in click 8.4 leads to ansi escapes not being stripped
+    # in output. since this output is asserted on in tests, we get failures to
+    # match strings.
+    # remove when updating to click >= 3.5.0
+    # https://github.com/pallets/click/issues/3572
+    # https://github.com/wandb/wandb/blob/v0.30.0/requirements/requirements_dev.txt#L3-L4
+    "test_finds_synced_runs"
+    "test_include_unsynced"
+    "test_include_unsynced_mixed"
+    "test_reports_rmtree_errors"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError: assert not copy2_mock.called

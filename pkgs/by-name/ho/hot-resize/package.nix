@@ -15,16 +15,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hot-resize";
-  version = "0.1.7";
+  version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "liberodark";
     repo = "hot-resize";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TMLtU2c5jkZEc14rII/+I1GtUzBnnZgPyPUgghqs7sM=";
+    hash = "sha256-CZZKxWg6EPx7kyFCExHUWXM0Be0kjdcD0bjyPTBtfvE=";
   };
 
-  cargoHash = "sha256-z9jWAGhSjYFQ8EhK0V4JsxToLYbEB4TJvhJJfUTGZS0=";
+  cargoHash = "sha256-TAvYQFSHDRNqBhEiGyAxbBTOeJ4GgQwCD2L+O5QYgRg=";
 
   nativeBuildInputs = [
     makeWrapper

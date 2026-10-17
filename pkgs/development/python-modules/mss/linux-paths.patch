@@ -1,8 +1,54 @@
-diff --git a/src/mss/linux.py b/src/mss/linux.py
-index 6dac52b..c90bd93 100644
---- a/src/mss/linux.py
-+++ b/src/mss/linux.py
-@@ -185,9 +185,9 @@ class XWindowAttributes(Structure):
+diff --git a/src/mss/linux/xcbhelpers.py b/src/mss/linux/xcbhelpers.py
+index fada044c00..47a02d4486 100644
+--- a/src/mss/linux/xcbhelpers.py
++++ b/src/mss/linux/xcbhelpers.py
+@@ -454,7 +454,7 @@
+                 self.c.free.argtypes = [c_void_p]
+                 self.c.free.restype = None
+ 
+-                libxcb_so = ctypes.util.find_library("xcb")
++                libxcb_so = "@xcb@"
+                 if libxcb_so is None:
+                     msg = "Library libxcb.so not found"
+                     raise ScreenShotError(msg)
+@@ -487,28 +487,28 @@
+                     InternAtomReply,
+                 )
+ 
+-                libxcb_randr_so = ctypes.util.find_library("xcb-randr")
++                libxcb_randr_so = "@xcb-randr@"
+                 if libxcb_randr_so is None:
+                     msg = "Library libxcb-randr.so not found"
+                     raise ScreenShotError(msg)
+                 self.randr = cdll.LoadLibrary(libxcb_randr_so)
+                 self.randr_id = XcbExtension.in_dll(self.randr, "xcb_randr_id")
+ 
+-                libxcb_render_so = ctypes.util.find_library("xcb-render")
++                libxcb_render_so = "@xcb-render@"
+                 if libxcb_render_so is None:
+                     msg = "Library libxcb-render.so not found"
+                     raise ScreenShotError(msg)
+                 self.render = cdll.LoadLibrary(libxcb_render_so)
+                 self.render_id = XcbExtension.in_dll(self.render, "xcb_render_id")
+ 
+-                libxcb_shm_so = ctypes.util.find_library("xcb-shm")
++                libxcb_shm_so = "@xcb-shm@"
+                 if libxcb_shm_so is None:
+                     msg = "Library libxcb-shm.so not found"
+                     raise ScreenShotError(msg)
+                 self.shm = cdll.LoadLibrary(libxcb_shm_so)
+                 self.shm_id = XcbExtension.in_dll(self.shm, "xcb_shm_id")
+ 
+-                libxcb_xfixes_so = ctypes.util.find_library("xcb-xfixes")
++                libxcb_xfixes_so = "@xcb-xfixes@"
+                 if libxcb_xfixes_so is None:
+                     msg = "Library libxcb-xfixes.so not found"
+                     raise ScreenShotError(msg)
+diff --git a/src/mss/linux/xlib.py b/src/mss/linux/xlib.py
+index bd95049c17..0bcfaad2ad 100644
+--- a/src/mss/linux/xlib.py
++++ b/src/mss/linux/xlib.py
+@@ -260,9 +260,9 @@
  
  
  _ERROR = {}
@@ -14,4 +60,4 @@ index 6dac52b..c90bd93 100644
 +_XRANDR = "@xrandr@"
  
  
- @CFUNCTYPE(c_int, POINTER(Display), POINTER(XErrorEvent))
+ class XError(ScreenShotError):

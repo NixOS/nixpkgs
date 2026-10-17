@@ -151,8 +151,8 @@ in
 
       # Register all runners which are enabled.
       for name, tokenFile, enabled in [
-          ("shell", "${runnerConfigs.shell.tokenFile}", "${lib.boolToString runnerConfigs.shell.enabled}"),
-          ("podman", "${runnerConfigs.podman.tokenFile}", "${lib.boolToString runnerConfigs.podman.enabled}")]:
+          ("shell", "${runnerConfigs.shell.tokenFile}", "${lib.boolToString runnerConfigs.shell.enabled}")
+      ]:
         if enabled == "true":
           test_register_runner(name=name, tokenFile=tokenFile)
 

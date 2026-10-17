@@ -11,6 +11,7 @@
   makeWrapper,
   python3,
   dart-sass,
+  node-gyp,
   bash,
   jemalloc,
   ffmpeg-headless,
@@ -21,13 +22,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "misskey";
-  version = "2026.6.0";
+  version = "2026.10.0";
 
   src = fetchFromGitHub {
     owner = "misskey-dev";
     repo = "misskey";
     tag = finalAttrs.version;
-    hash = "sha256-jq1HtLabix9qxaAjaCgUN3nsY438ruHgHgC3MuGeR2E=";
+    hash = "sha256-GRJcqCItqQJToxnJGxlTOnBSiaIq8uxQNAFLEW1KJy0=";
     fetchSubmodules = true;
   };
 
@@ -52,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     python3
     dart-sass
+    node-gyp # for sharp and re2
   ];
 
   pnpmDeps = fetchPnpmDeps {
@@ -62,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-GCkSASkgwUvlAlm8hiy4Yk/QMVerVGacxOh1AYouH0g=";
+    hash = "sha256-l19dCv7vid/6rbNLU0fjMAewMgo12JOdqGfN4IVh5DY=";
   };
 
   buildPhase = ''
@@ -79,10 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
     (
       cd node_modules/.pnpm/node_modules/re2
       pnpm run rebuild --nodedir=${nodejs}
-    )
-    (
-      cd node_modules/.pnpm/node_modules/sharp
-      pnpm run install
     )
 
     # Force sass-embedded npm package to use our dart-sass instead of bundled binaries.
@@ -155,6 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Open source, federated social media platform";
     homepage = "https://misskey-hub.net/";
+    changelog = "https://github.com/misskey-dev/misskey/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.feathecutie ];
     teams = [ lib.teams.ngi ];

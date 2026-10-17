@@ -9,13 +9,13 @@
 
 buildPecl rec {
   pname = "phalcon";
-  version = "5.22.1";
+  version = "5.23.0";
 
   src = fetchFromGitHub {
     owner = "phalcon";
     repo = "cphalcon";
-    rev = "v${version}";
-    hash = "sha256-eMb11feNg7BTEBy+FjQGAqDC0sBfdGqOzr6gLe/LWHY=";
+    tag = "v${version}";
+    hash = "sha256-Eh52Hnf6GB4T3a68lqWQTDAQ+WAEWEPrQn0eh3XKZxI=";
   };
 
   internalDeps = [

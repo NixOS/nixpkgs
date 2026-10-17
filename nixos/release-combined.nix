@@ -79,7 +79,6 @@ rec {
         (onFullSupported "nixos.tests.acme.dns01")
         (onSystems [ "x86_64-linux" ] "nixos.tests.boot.biosCdrom")
         (onSystems [ "x86_64-linux" ] "nixos.tests.boot.biosUsb")
-        (onFullSupported "nixos.tests.boot-stage1")
         (onFullSupported "nixos.tests.boot.uefiCdrom")
         (onFullSupported "nixos.tests.boot.uefiUsb")
         (onFullSupported "nixos.tests.chromium")

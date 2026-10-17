@@ -4,7 +4,6 @@
   fetchFromGitHub,
   fetchpatch2,
   apple-sdk,
-  lua5_2_compat,
   jemalloc,
   pkg-config,
   nixosTests,
@@ -24,9 +23,6 @@
   # their custom patched version of jemalloc.
   useSystemJemalloc ? true,
 }:
-let
-  lua = lua5_2_compat;
-in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "redis";
@@ -65,12 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  buildInputs = [
-    lua
-  ]
-  ++ lib.optional useSystemJemalloc jemalloc
-  ++ lib.optional withSystemd systemd
-  ++ lib.optional tlsSupport openssl;
+  buildInputs =
+    lib.optional useSystemJemalloc jemalloc
+    ++ lib.optional withSystemd systemd
+    ++ lib.optional tlsSupport openssl;
 
   # More cross-compiling fixes.
   makeFlags = [

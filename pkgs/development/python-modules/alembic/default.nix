@@ -20,12 +20,12 @@
 
 buildPythonPackage rec {
   pname = "alembic";
-  version = "1.18.1";
+  version = "1.19.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-g6xrgTWVloFvs7iTCZhBoIYvIReyljJY6WXXDcYvuGY=";
+    hash = "sha256-4PygUYEYx4rMST4xvLVALxkAV6r234tblc6UxHic9kg=";
   };
 
   build-system = [ setuptools ];

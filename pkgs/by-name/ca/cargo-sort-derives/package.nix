@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-sort-derives";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "lusingander";
     repo = "cargo-sort-derives";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-o92jmQ+AYZIadVUMqsZdAq7x1Y4HneWx3RYEVKTVJyM=";
+    hash = "sha256-AOoltabANFWxaI0jeAR+XNk4qn6y2UujGWNFbNakfoo=";
   };
 
-  cargoHash = "sha256-DPjwCzP7nsqJjsERHO3YMUEXbU7TjUTZc8Jo1R9XThg=";
+  cargoHash = "sha256-Mwgscv6VrrVBArV05V+xGmaWuWqvr3kG8QZYO5S+vOE=";
 
   meta = {
     description = "Cargo subcommand to sort derive attributes";

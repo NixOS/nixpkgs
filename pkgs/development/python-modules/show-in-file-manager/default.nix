@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "show-in-file-manager";
-  version = "1.1.5";
+  version = "1.1.6";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7ROhgKHUj9iP3UxYv7yzhgJoZBo4gFGSyBTUE4cZLYQ=";
+    hash = "sha256-VZtZbj5WOADPadc0zSNoJCeanYINHYQWQMXxPgBY+bY=";
   };
 
   nativeBuildInputs = [

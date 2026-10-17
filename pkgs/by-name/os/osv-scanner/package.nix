@@ -1,12 +1,13 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
+  nix-update-script,
   testers,
   osv-scanner,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "osv-scanner";
   version = "2.5.1";
 
@@ -34,8 +35,11 @@ buildGoModule (finalAttrs: {
   # Tests require network connectivity to query https://api.osv.dev.
   doCheck = false;
 
-  passthru.tests.version = testers.testVersion {
-    package = osv-scanner;
+  passthru = {
+    tests.version = testers.testVersion {
+      package = osv-scanner;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = {

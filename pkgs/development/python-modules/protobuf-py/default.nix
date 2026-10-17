@@ -14,7 +14,7 @@ buildPythonPackage (finalAttrs: {
   pname = "protobuf-py";
   # connectrpc requires this exact version and e2b requires <0.2; bump all three
   # together.
-  version = "0.1.1";
+  version = "0.3.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -23,7 +23,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchPypi {
     pname = "protobuf_py";
     inherit (finalAttrs) version;
-    hash = "sha256-a9CKxNjxZhllu+JoVCnXkENwTN0e5yCnqJYXMxdCJAs=";
+    hash = "sha256-P9GHOAqFuYUOxUizJOsab146cNYtSD73PE7WLgeRwmw=";
   };
 
   build-system = [

@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  substitute,
   makeWrapper,
   nodejs,
   nixosTests,
@@ -11,29 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "outline";
-  version = "1.10.1";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "outline";
     repo = "outline";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-xFNWxsNrihrcdFqrl1I9RYuIlHufoFtl8IFJhquhJfI=";
-
-    # Remove after upstream updates to Yarn 4.15
-    # https://github.com/outline/outline/blob/main/package.json#L393
-    postFetch = ''
-      cd $out
-      patch -p1 < ${
-        (substitute {
-          src = ./yarn-fix.patch;
-          substitutions = [
-            "--replace-fail"
-            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
-            yarn-berry_4.lockfileVersion
-          ];
-        })
-      }
-    '';
+    hash = "sha256-CMjgYl1RL9N1P/xCM0/yVAU280pOF2S+4b+xfv4/2WU=";
   };
 
   missingHashes = ./missing-hashes.json;
@@ -46,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-rgqRRWZdy938rPuTV+E1pWfJ6O1w6Z3F84qlGUZgorM=";
+    hash = "sha256-d36+pdV/hq4YVWCNXWqWaoltQnTQm4NfrJIjtYTill4=";
   };
 
   buildPhase = ''

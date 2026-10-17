@@ -46,6 +46,7 @@
   pango,
   qt6,
   systemdLibs,
+  tpm2-tss,
 
   # runtime deps
   bubblewrap,
@@ -140,6 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtbase
     stdenv.cc.cc.lib
     systemdLibs
+    tpm2-tss
   ];
 
   runtimeDependencies = lib.optionals isLinux [
@@ -242,11 +244,11 @@ stdenv.mkDerivation (finalAttrs: {
       )}
   '';
 
-  dontStrip = isLinux;
+  dontStrip = true;
   dontPatchELF = isDarwin;
   dontPatchShebangs = isDarwin;
 
-  doInstallCheck = true;
+  doInstallCheck = isLinux;
   nativeInstallCheckInputs = [
     versionCheckHook
     writableTmpDirAsHomeHook

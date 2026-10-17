@@ -8,7 +8,7 @@ Subject: [PATCH 10/11] Load IndexStore from the store
  1 file changed, 3 insertions(+), 6 deletions(-)
 
 diff --git a/Sources/Build/LLBuildProgressTracker.swift b/Sources/Build/LLBuildProgressTracker.swift
-index 63a6a6caa..ac9b63419 100644
+index ec5d85fb0..39a2a426b 100644
 --- a/Sources/Build/LLBuildProgressTracker.swift
 +++ b/Sources/Build/LLBuildProgressTracker.swift
 @@ -114,15 +114,12 @@ public final class BuildExecutionContext {

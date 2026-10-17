@@ -47,6 +47,18 @@ buildRedist {
         extraPrefix = "include/";
         hash = "sha256-eko1GSD2NPSLtbQ3diwgKMbuS6wU9lHDOajLJy5lBwM=";
       })
+    ]
+    ++ lib.optionals (cudaAtLeast "13.4" && cudaOlder "13.5") [
+      # cuda::make_tma_descriptor checks the outermost box dimension instead of the innermost against the 16-byte
+      # requirement, rejecting valid descriptors; fixed in CCCL 3.5.0.
+      # Backport: https://github.com/NVIDIA/cccl/pull/10546
+      (fetchpatch {
+        name = "fix-make_tma_descriptor";
+        url = "https://github.com/NVIDIA/cccl/commit/c95095c8d5faf1d8e978057a4f5cc0c27bccab70.patch";
+        relative = "libcudacxx/include";
+        extraPrefix = "include/";
+        hash = "sha256-QmbzcRMHNX2PuUihaXNrbB2kWwAOUArC4OZ6v9+Tf/g=";
+      })
     ];
 
   # NVIDIA, in their wisdom, expect CCCL to be a directory inside include.

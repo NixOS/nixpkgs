@@ -83,6 +83,18 @@
     "members": {},
     "name": "bootstrapping"
   },
+  "calamares-nixos-extensions": {
+    "description": "Maintainers of the calamares-nixos-extensions",
+    "id": 5946247,
+    "maintainers": {
+      "ElvishJerricco": 1365692,
+      "RaitoBezarius": 314564,
+      "lulu-berlin": 10565807,
+      "vlinkz": 20145996
+    },
+    "members": {},
+    "name": "calamares-nixos-extensions"
+  },
   "categorization": {
     "description": "Maintain the categorization system in Nixpkgs, per RFC 0146. This team has authority over all categorization issues in Nixpkgs. Matrix: https://matrix.to/#/%23nixpkgs-categorization:matrix.org",
     "id": 11723948,
@@ -392,7 +404,8 @@
       "jtojnar": 705123
     },
     "members": {
-      "Hythera": 87016780
+      "Hythera": 87016780,
+      "hesiod": 3159881
     },
     "name": "Freedesktop"
   },
@@ -483,8 +496,7 @@
       "kalbasit": 87115
     },
     "members": {
-      "mfrw": 4929861,
-      "qbit": 68368
+      "mfrw": 4929861
     },
     "name": "golang"
   },
@@ -757,6 +769,7 @@
       "edolstra": 1148549,
       "lisanna-dettwyler": 72424138,
       "lovesegfault": 7243783,
+      "roberth": 496447,
       "tomberek": 178444,
       "xokdvium": 145775305
     },
@@ -974,7 +987,7 @@
     "description": "Maintain core SDL libraries. Matrix: #nixpkgs-sdl-team:nixos.org",
     "id": 13033942,
     "maintainers": {
-      "LordGrimmauld": 49513131,
+      "GrimmTheShrimp": 49513131,
       "marcin-serwin": 12128106,
       "pbsds": 140964
     },
@@ -1039,11 +1052,22 @@
     },
     "members": {
       "ElvishJerricco": 1365692,
-      "LordGrimmauld": 49513131,
+      "GrimmTheShrimp": 49513131,
       "aanderse": 7755101,
       "arianvp": 628387
     },
     "name": "systemd"
+  },
+  "tenstorrent": {
+    "description": "Maintain Tenstorrent-related packages ",
+    "id": 19876744,
+    "maintainers": {
+      "RossComputerGuy": 19699320,
+      "ju1m": 21160136,
+      "liberodark": 4238928
+    },
+    "members": {},
+    "name": "tenstorrent"
   },
   "test-driver": {
     "description": "Maintain the NixOS integration test driver.",

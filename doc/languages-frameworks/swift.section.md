@@ -78,7 +78,7 @@ Otherwise, set `swiftpmDeps` as follows:
 ```
 
 The `src` attribute is required as is the `hash`.
-The first time you build your  package, you will need to set `hash` to an empty value by using `lib.fakeHash` to get the hash for your dependencies.
+The hash in most cases can be calculated using [`prefetch-swiftpm-deps`](#ssec-swiftpm-prefetch-dependencies).
 The following optional attributes can also be used:
 
 - `name`: Sets the name of the vendored dependencies fixed-output derivation.
@@ -164,6 +164,24 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 })
 ```
+
+#### prefetch-swiftpm-deps {#ssec-swiftpm-prefetch-dependencies}
+
+`prefetch-swiftpm-deps` is a package in Nixpkgs that calculates the hash required by `fetchSwiftPMDeps`.
+It is intended for use in update scripts.
+If you perform non-trivial manipulations of or apply patches to `Package.resolved` in `fetchSwiftPMDeps`, you must perform the same manipulations in your update script before passing it to `prefetch-swiftpm-deps`.
+
+```console
+$ ls
+Package.resolved  Package.swift  Sources
+$ prefetch-swiftpm-deps Package.resolved
+...
+sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+```
+
+Note: `prefetch-swiftpm-deps` takes an optional third argument for where to save the dependencies.
+This is used in the implementation of `fetchSwiftPMDeps` and is not intended for general use.
+You can (and should) omit it in your update scripts.
 
 #### Patching dependencies {#ssec-swiftpm-patching-dependencies}
 

@@ -2,6 +2,7 @@
   stdenv,
   buildPecl,
   lib,
+  php,
   unixodbc,
   libiconv,
 }:
@@ -14,6 +15,7 @@ buildPecl {
   buildInputs = [ unixodbc ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   meta = {
+    broken = lib.versionAtLeast php.version "8.6";
     description = "Microsoft Drivers for PHP for SQL Server";
     license = lib.licenses.mit;
     homepage = "https://github.com/Microsoft/msphpsql";

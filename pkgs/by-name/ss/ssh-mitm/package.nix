@@ -8,14 +8,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "ssh-mitm";
-  version = "6.0.0";
+  version = "6.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ssh-mitm";
     repo = "ssh-mitm";
     tag = finalAttrs.version;
-    hash = "sha256-fgvvqiQnuESpAvq70G6K8/tFG47QduG12rloufS4Xg8=";
+    hash = "sha256-ABzAXnyG77oCW6gzw67OJ/Amw7EHWM82Tsk+D6fFtpU=";
   };
 
   postPatch = ''

@@ -33,14 +33,14 @@ let
 in
 llvmPackages_20.stdenv.mkDerivation {
   pname = "xenia-canary";
-  version = "0-unstable-2026-09-22";
+  version = "0-unstable-2026-10-16";
 
   src = fetchFromGitHub {
     owner = "xenia-canary";
     repo = "xenia-canary";
     fetchSubmodules = true;
-    rev = "c9c8e483b13249ba5f0060fc4b36071da6d67261";
-    hash = "sha256-aXRR+U95/LnyY1EG7O69WD4vydFN0me5VBtQqROjGss=";
+    rev = "dac2794ca72e20b2cb5e6ca9e765da8811a19d6d";
+    hash = "sha256-UA9fVkvObrWvGBdYYoAKQdJBp4nHN5B+1mKTbWihJNg=";
   };
 
   dontConfigure = true;

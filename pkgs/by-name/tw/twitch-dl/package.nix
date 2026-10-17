@@ -4,7 +4,7 @@
   python3Packages,
   installShellFiles,
   scdoc,
-  ffmpeg,
+  ffmpeg-headless,
   writableTmpDirAsHomeHook,
 }:
 
@@ -63,7 +63,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "--prefix"
     "PATH"
     ":"
-    (lib.makeBinPath [ ffmpeg ])
+    (lib.makeBinPath [ ffmpeg-headless ])
   ];
 
   postInstall = ''

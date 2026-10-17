@@ -24,14 +24,14 @@
 
 resholve.mkDerivation (finalAttrs: {
   pname = "arch-install-scripts";
-  version = "31";
+  version = "32";
 
   src = fetchFromGitLab {
     domain = "gitlab.archlinux.org";
     owner = "archlinux";
     repo = "arch-install-scripts";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Oh1nC/gPJDDy8cXiZPbEfpwOuO+RFRcxVCZuTtB2MV8=";
+    hash = "sha256-WC/4133KJOzBG/O0hykQahVjC3/j4Z5AFD/hG2e5Yag=";
   };
 
   nativeBuildInputs = [

@@ -11,7 +11,7 @@ buildFishPlugin {
     owner = "oh-my-fish";
     repo = "theme-bobthefish";
     rev = "72a89d424644d087c182843a48fbf0a43c796f31";
-    sha256 = "sha256-wzC+PNpKCJy4zRAdY9wagrgUulAMb8B6lrwc106P7Zc=";
+    hash = "sha256-wzC+PNpKCJy4zRAdY9wagrgUulAMb8B6lrwc106P7Zc=";
   };
 
   meta = {

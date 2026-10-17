@@ -4,7 +4,8 @@
   buildPythonPackage,
   cudaPackages,
   fetchFromGitHub,
-  symlinkJoin,
+  fetchpatch,
+  replaceVars,
 
   # build-system
   cuda-bindings,
@@ -39,26 +40,43 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
     owner = "NVIDIA";
     repo = "cuda-python";
     tag = "cuda-core-v${finalAttrs.version}";
+    # GitHub expands the export-subst'd .git_archival.txt when generating the tarball. Its ref-names line lists every
+    # branch pointing at the tagged commit, so the hash changes when e.g. a release branch moves on, even though the tag
+    # did not. Keep only the tag, which setuptools-scm still resolves to the right version.
+    postFetch = ''
+      sed -i 's/^ref-names: .*$/ref-names: tag: cuda-core-v${finalAttrs.version}/' "$out/.git_archival.txt"
+      grep -qx 'ref-names: tag: cuda-core-v${finalAttrs.version}' "$out/.git_archival.txt"
+    '';
     hash = "sha256-SRy/hnOzzb4wUCLOre4k326RNhYI0650XzC8Dc9kf/M=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/cuda_core";
 
-  env = {
-    CUDA_HOME = symlinkJoin {
-      name = "cuda-redist";
-      paths =
-        with cudaPackages;
-        [
-          # Used to detect CUDA MAJOR VERSION
-          (lib.getInclude cuda_cudart)
-        ]
-        ++ lib.optionals finalAttrs.doInstallCheck [
-          # Compilation tests include <cuda/atomic> etc. (found via $CUDA_HOME/include)
-          (lib.getInclude cccl)
-        ];
-    };
-  };
+  # The build reads the CUDA major version from $CUDA_HOME/include/cuda.h and adds $CUDA_HOME/include to the include
+  # path; every other header comes from buildInputs.
+  env.CUDA_HOME = lib.getInclude cudaPackages.cuda_cudart;
+
+  patches = [
+    # Compile out the CCCL-based TMA descriptor path. It's used whenever <cuda/tma> is found at build time, which upstream's
+    # own builds never do, and doesn't work: it references cudart symbols the extension doesn't link, so with CCCL on the
+    # include path importing cuda.core fails with "undefined symbol: cudaGetErrorString".
+    # https://github.com/NVIDIA/cuda-python/pull/2777
+    (fetchpatch {
+      name = "cuda-core-disable-cccl-tma.patch";
+      url = "https://github.com/NVIDIA/cuda-python/commit/c2fc72bf083564511f33ae94448665693d189b14.patch";
+      relative = "cuda_core";
+      hash = "sha256-bfy+CFp8PCu383qobuEb9undcMFmnW+WlkYHhloip3k=";
+    })
+  ]
+  # Tests and examples compile code with NVRTC against $CUDA_HOME/include and its cccl/ subdirectory, which assumes one
+  # CUDA Toolkit root. Point them at the separate CCCL and runtime header prefixes instead. Only when testing, so that
+  # the package itself doesn't depend on CCCL.
+  ++ lib.optionals finalAttrs.doInstallCheck [
+    (replaceVars ./cuda-include-paths.patch {
+      cccl = "${lib.getInclude cudaPackages.cccl}/include";
+      cudartInclude = "${lib.getInclude cudaPackages.cuda_cudart}/include";
+    })
+  ];
 
   build-system = [
     cuda-bindings
@@ -89,9 +107,40 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
 
   pythonImportsCheck = [ "cuda.core" ];
 
-  preCheck = ''
-    rm -rf cuda/core
-  '';
+  preCheck =
+    # Force tests to import `cuda.core` from `$out` instead of from `$PWD`
+    ''
+      rm -rf cuda/core
+    ''
+    # The tests import cuda.bindings._test_helpers, which cuda-bindings releases newer than the one packaged here ship.
+    # Import the copy in this source tree instead.
+    + ''
+      mkdir -p "$TMPDIR/test-helpers"
+      cp -r ../cuda_bindings/cuda/bindings/_test_helpers "$TMPDIR/test-helpers/cuda_bindings_test_helpers"
+      export PYTHONPATH="$TMPDIR/test-helpers''${PYTHONPATH:+:$PYTHONPATH}"
+      substituteInPlace \
+        tests/conftest.py \
+        tests/test_device.py \
+        tests/system/conftest.py \
+        tests/example_tests/test_basic_examples.py \
+        --replace-fail \
+          "cuda.bindings._test_helpers" \
+          "cuda_bindings_test_helpers"
+    ''
+    # A trailing comma in the argument names makes pytest 9 unpack a bare NumPy array sample into several values
+    + ''
+      substituteInPlace tests/test_utils.py \
+        --replace-fail '@pytest.mark.parametrize("in_arr,", _cpu_array_samples())' \
+          '@pytest.mark.parametrize("in_arr", _cpu_array_samples())'
+    ''
+    # The checkpoint scenarios run in a child interpreter started with -I, which ignores PYTHONPATH and so can't import
+    # pytest
+    + ''
+      substituteInPlace tests/test_checkpoint.py \
+        --replace-fail \
+          '[sys.executable, "-I", ' \
+          '[sys.executable, '
+    '';
 
   nativeCheckInputs = [
     cffi
@@ -110,6 +159,15 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
     "test_device_pci_info"
     "test_to_cuda_device"
     "test_to_system_device"
+
+    # cuda-bindings 13.4 has enum members this release of cuda.core doesn't map yet (BRAND_NVIDIA_NPU,
+    # NvlinkVersion.VERSION_6_0, EVENT_REASON_BOARD_LIMIT, ...), and recent drivers report them:
+    #   ValueError: Unknown clock event reason bit: 1024
+    "test_wrapper_covers_all_binding_members"
+    "test_clock_event_reasons"
+
+    # Assumes green context SM partitions of at least 8 on compute capability >= 9.0; GB10 (12.1) reports 2
+    "test_arch_constraints_hopper_plus"
   ];
 
   disabledTestPaths = [

@@ -9,7 +9,7 @@
   pytest-cov-stub,
   pytest-freezer,
   pytestCheckHook,
-  syrupy_6,
+  syrupy,
   yarl,
 }:
 
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytest-freezer
     pytestCheckHook
-    syrupy_6
+    syrupy
   ];
 
   pythonImportsCheck = [ "energyzero" ];

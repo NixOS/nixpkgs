@@ -61,16 +61,23 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        winetricks
-        yad
-      ]
-    }"
-    # Steam Runtime does not work outside of steam-run, so don't use it
-    "--set STEAM_RUNTIME 0"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      winetricks
+      yad
+    ]) # Steam Runtime does not work outside of steam-run, so don't use it
+
+    "--set"
+    "STEAM_RUNTIME"
+    "0"
   ]
-  ++ lib.optional (extraCompatPaths != "") "--set STEAM_EXTRA_COMPAT_TOOLS_PATHS ${extraCompatPaths}";
+  ++ lib.optionals (extraCompatPaths != "") [
+    "--set"
+    "STEAM_EXTRA_COMPAT_TOOLS_PATHS"
+    extraCompatPaths
+  ];
 
   nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
