@@ -10,9 +10,11 @@
   pnpmBuildHook,
   makeWrapper,
   nixosTests,
+  extraBuildEnv ? { },
 }:
 let
   pnpm = pnpm_11;
+  toEnv = v: if lib.isBool v then lib.boolToString v else toString v;
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "elk";
@@ -53,10 +55,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       src
       ;
     fetcherVersion = 4;
-    hash = "sha256-+5hbR1nBInUKTalF7ZHMqPfi/etplR5aNsEE/a/ZASs=";
+    hash = "sha256-6K7EywYkJRgQmxGm6y1FTu/CRFlnf3+1LsvpzvAIxzk=";
   };
 
-  env.NUXT_TELEMETRY_DISABLED = "1";
+  env = {
+    NUXT_TELEMETRY_DISABLED = "1";
+  }
+  // lib.mapAttrs (_: v: toEnv v) extraBuildEnv;
 
   doCheck = true;
 
@@ -64,7 +69,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preCheck
 
     # Runs the 'test:unit:ci' script, which does not need network access.
-    pnpm run test:unit:ci
+    # Snapshots assume default values, so custom build variables are unset.
+    env ${
+      lib.concatMapStringsSep " " (name: "-u ${name}") (builtins.attrNames extraBuildEnv)
+    } pnpm run test:unit:ci
 
     runHook postCheck
   '';
