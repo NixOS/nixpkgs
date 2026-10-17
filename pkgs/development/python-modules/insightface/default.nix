@@ -35,14 +35,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "insightface";
-  version = "1.0.1";
+  version = "2.1";
   pyproject = true;
   __structuredAttrs = true;
 
   # No tags on GitHub
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-J68kiRu7pHDLNXOzZqD8yomJ/IUDyfjygejLpv1xYHU=";
+    hash = "sha256-d2y9NrcPXyrhoCYQHPuAOH8LIoCg268HP40+1p9VTgE=";
   };
 
   build-system = [
