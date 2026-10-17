@@ -247,7 +247,12 @@ in
   aarch64-musl = mapTestOnCross systems.examples.aarch64-multiplatform-musl linuxCommon;
 
   # Linux on RISCV
-  riscv64 = mapTestOnCross systems.examples.riscv64 linuxCommon;
+  riscv64 = mapTestOnCross systems.examples.riscv64 (
+    linuxCommon
+    // {
+      dotnetCorePackages.dotnet_10.sdk = [ "x86_64-linux" ];
+    }
+  );
   riscv32 = mapTestOnCross systems.examples.riscv32 linuxCommon;
 
   # Linux on LoongArch
@@ -343,6 +348,22 @@ in
       ) cygwinTools;
     in
     linux // freebsd // cygwin;
+
+  # Seed for native riscv64 .NET: an x86_64-built cross stage0 (pkgsReverseCross)
+  dotnetRiscv64Bootstrap =
+    let
+      pkgs = import ../.. (nixpkgsArgs // { localSystem = "riscv64-linux"; });
+      mkJob =
+        drv:
+        assert elem drv.system supportedSystems;
+        hydraJob' drv;
+    in
+    {
+      dotnet_8 = mkJob pkgs.dotnetCorePackages.dotnet_8.vmr.stage0.sdk;
+      dotnet_9 = mkJob pkgs.dotnetCorePackages.dotnet_9.vmr.stage0.sdk;
+      dotnet_10 = mkJob pkgs.dotnetCorePackages.dotnet_10.vmr.stage0.sdk;
+      dotnet_11 = mkJob pkgs.dotnetCorePackages.dotnet_11.vmr.stage0.sdk;
+    };
 
   # Cross-built nixStatic for platforms for enabled-but-unsupported platforms
   mips64el-nixCrossStatic = mapTestOnCross systems.examples.mips64el-linux-gnuabi64 nixCrossStatic;
