@@ -1,0 +1,24 @@
+--- x/CMakeLists.txt	2026-08-14 01:11:31.296420655 +0200
++++ y/CMakeLists.txt	2026-08-20 17:43:39.082357025 +0200
+@@ -63,10 +63,17 @@
+     add_library(ZLIB::ZLIB ALIAS zlibstatic)
+ endif (MINGW OR NOT ZLIB_FOUND)
+ 
+-set(IXWEBSOCKET_INSTALL OFF CACHE BOOL "" FORCE)
+-add_subdirectory(IXWebSocket)
+-include_directories(IXWebSocket)
+-target_link_libraries(APCpp ixwebsocket)
++# Attempt finding system version of IxWebSocket
++find_package(PkgConfig)
++if (PKGCONFIG_FOUND AND (NOT MINGW))
++    pkg_check_modules(IXWEBSOCKET ixwebsocket)
++    if (IXWEBSOCKET_FOUND)
++        include_directories(${IXWEBSOCKET_INCLUDE_DIRS})
++        target_link_libraries(APCpp ${IXWEBSOCKET_LDFLAGS})
++    endif(IXWEBSOCKET_FOUND)
++endif(PKGCONFIG_FOUND AND (NOT MINGW))
++
++target_link_libraries(APCpp)
+ 
+ if (MINGW)
+     target_link_libraries(APCpp -static -static-libstdc++ -static-libgcc)
