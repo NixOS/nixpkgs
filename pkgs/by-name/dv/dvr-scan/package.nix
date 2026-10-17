@@ -27,7 +27,10 @@ python3Packages.buildPythonApplication rec {
     opencv-contrib-python
     pillow
     platformdirs
-    scenedetect
+    # dvr-scan 1.8.2 is incompatible with scenedetect 0.7 (breaking API change);
+    # upstream's 0.7 support only lands in the unreleased 2.0 branch. Pin to 0.6
+    # until a compatible dvr-scan release is available.
+    scenedetect_0_6
     screeninfo
     tqdm
 
