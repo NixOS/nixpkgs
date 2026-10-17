@@ -207,7 +207,7 @@ checkConfigOutput '"ok"' config.result ./specialArgs-lib.nix
 checkConfigError 'It seems as if you.re trying to declare an option by placing it into .config. rather than .options.' config.wrong1 ./error-mkOption-in-config.nix
 # We currently throw this error already in `config`, but throwing in `config.nest.wrong2` would be acceptable.
 checkConfigError 'It seems as if you.re trying to declare an option by placing it into .config. rather than .options.' config.nest.wrong2 ./error-mkOption-in-config.nix
-checkConfigError 'The option .sub.wrong2. does not exist. Definition values:' config.sub ./error-mkOption-in-submodule-config.nix
+checkConfigError 'The option .sub.wrong2. does not exist. Defined in .*error-mkOption-in-submodule-config.nix.' config.sub ./error-mkOption-in-submodule-config.nix
 checkConfigError '.*This can happen if you e.g. declared your options in .types.submodule.' config.sub ./error-mkOption-in-submodule-config.nix
 checkConfigError '.*A definition for option .bad. is not of type .non-empty .list of .submodule...\.' config.bad ./error-nonEmptyListOf-submodule.nix
 
@@ -274,10 +274,9 @@ checkConfigError 'A definition for option .* is not of type .VAL value.. .*' con
 
 # Check boolean option.
 checkConfigOutput '^false$' config.enable ./declare-enable.nix
-checkConfigError 'The option .* does not exist. Definition values:\n\s*- In .*: true' config.enable ./define-enable.nix
-checkConfigError 'The option .* does not exist. Definition values:\n\s*- In .*' config.enable ./define-enable-throw.nix
-checkConfigError 'while evaluating a definition from `.*/define-enable-abort.nix' config.enable ./define-enable-abort.nix
-checkConfigError 'while evaluating the error message for definitions for .enable., which is an option that does not exist' config.enable ./define-enable-abort.nix
+checkConfigError 'The option .enable. does not exist. Defined in .*define-enable.nix.' config.enable ./define-enable.nix
+checkConfigError 'The option .enable. does not exist. Defined in .*define-enable-throw.nix.' config.enable ./define-enable-throw.nix
+checkConfigError 'The option .enable. does not exist. Defined in .*define-enable-abort.nix.' config.enable ./define-enable-abort.nix
 
 # Check boolByOr type.
 checkConfigOutput '^false$' config.value.falseFalse ./boolByOr.nix
@@ -365,7 +364,7 @@ set -- config.enable ./define-enable.nix ./declare-enable.nix
 checkConfigOutput '^true$' "$@"
 checkConfigOutput '^false$' "$@" ./disable-define-enable.nix
 checkConfigOutput '^false$' "$@" ./disable-define-enable-string-path.nix
-checkConfigError "The option .*enable.* does not exist. Definition values:\n\s*- In .*: true" "$@" ./disable-declare-enable.nix
+checkConfigError "The option .enable. does not exist. Defined in .*define-enable.nix." "$@" ./disable-declare-enable.nix
 checkConfigError "attribute .*enable.* in selection path .*config.enable.* not found" "$@" ./disable-define-enable.nix ./disable-declare-enable.nix
 checkConfigError "attribute .*enable.* in selection path .*config.enable.* not found" "$@" ./disable-enable-modules.nix
 
@@ -390,7 +389,7 @@ REQUIRE_INFINITE_RECURSION_HINT=1 checkConfigError 'infinite recursion encounter
 
 # Check _module.check.
 set -- config.enable ./declare-enable.nix ./define-enable.nix ./define-attrsOfSub-foo.nix
-checkConfigError 'The option .* does not exist. Definition values:\n\s*- In .*' "$@"
+checkConfigError 'The option .attrsOfSub. does not exist. Defined in .*define-attrsOfSub-foo.nix.' "$@"
 checkConfigOutput '^true$' "$@" ./define-module-check.nix
 
 # Check coerced value.
@@ -482,12 +481,16 @@ checkConfigError '.*lib/tests/modules/deferred-module-error.nix, via option defe
 # Check the file location information is propagated into submodules
 checkConfigOutput the-file.nix config.submodule.internalFiles.0 ./submoduleFiles.nix
 
+# Verify that attempting to print definitions for an undeclared option doesn't evaluate definition thunks with errors.
+checkConfigError 'The option .module.doesnt_exist. does not exist. Defined in .*submodule-check-undeclared-throw.nix.' config.module ./submodule-check-undeclared-throw.nix
+checkConfigError 'The option .module.doesnt_exist. does not exist. Defined in .*submodule-check-undeclared-inf-rec.nix.' config.module ./submodule-check-undeclared-inf-rec.nix
+
 
 # Check that disabledModules works recursively and correctly
 checkConfigOutput '^true$' config.enable ./disable-recursive/main.nix
 checkConfigOutput '^true$' config.enable ./disable-recursive/{main.nix,disable-foo.nix}
 checkConfigOutput '^true$' config.enable ./disable-recursive/{main.nix,disable-bar.nix}
-checkConfigError 'The option .* does not exist. Definition values:\n\s*- In .*: true' config.enable ./disable-recursive/{main.nix,disable-foo.nix,disable-bar.nix}
+checkConfigError 'The option .enable. does not exist. Defined in .*disable-recursive/main.nix.' config.enable ./disable-recursive/{main.nix,disable-foo.nix,disable-bar.nix}
 
 # Check that imports can depend on derivations
 checkConfigOutput '^true$' config.enable ./import-from-store.nix
