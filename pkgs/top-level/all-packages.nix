@@ -8918,8 +8918,6 @@ with pkgs;
     ];
   };
 
-  webssh = with python3Packages; toPythonApplication webssh;
-
   wrapWeechat = callPackage ../applications/networking/irc/weechat/wrapper.nix { };
 
   weechat-unwrapped = callPackage ../applications/networking/irc/weechat {
