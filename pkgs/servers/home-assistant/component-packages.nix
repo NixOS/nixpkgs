@@ -7879,7 +7879,8 @@
       ];
     "vitesy" =
       ps: with ps; [
-      ]; # missing inputs: aiovitesy
+        aiovitesy
+      ];
     "vivotek" =
       ps: with ps; [
         libpyvivotek
@@ -9531,6 +9532,7 @@
     "victron_remote_monitoring"
     "vilfo"
     "vistapool"
+    "vitesy"
     "vivotek"
     "vizio"
     "vlc_telnet"
