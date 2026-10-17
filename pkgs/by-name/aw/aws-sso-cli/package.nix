@@ -43,9 +43,9 @@ buildGoModule (finalAttrs: {
   '';
 
   nativeCheckInputs = [
-    getent
     writableTmpDirAsHomeHook
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ getent ];
 
   preCheck = ''
     mkdir -p "$HOME/.config/aws-sso"
