@@ -11,13 +11,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "casa-formats-io";
-  version = "0.3.0";
+  version = "0.3.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "casa_formats_io";
     inherit (finalAttrs) version;
-    hash = "sha256-FpQj0XeZ7vvOzUM/+5qG6FRwNXl3gzoUBItYdQ1M4m4=";
+    hash = "sha256-m3ETLE88Pubm/A6qETjsFJQBl8NkzcJn+iSPvMvxoGk=";
   };
 
   build-system = [ setuptools-scm ];
