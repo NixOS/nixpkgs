@@ -10265,7 +10265,7 @@ with pkgs;
     kops_1_35
     kops_1_36
     ;
-  kops = kops_1_33;
+  kops = kops_1_36;
 
   lilypond-unstable-with-fonts = lilypond-with-fonts.override {
     lilypond = lilypond-unstable;
