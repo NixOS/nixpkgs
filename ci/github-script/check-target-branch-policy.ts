@@ -62,6 +62,12 @@ export function evaluateTargetBranchPolicy({
     shouldCheckNixosRebuild,
   } = getTargetBranchPolicy({ base, head })
 
+  // https://github.com/NixOS/nixpkgs/pull/571141#issuecomment-6031098750
+  // kernel config should go to staging-nixos
+  const isExemptKernelConfig =
+    base === 'staging-nixos' &&
+    onlyChangedFile === 'pkgs/os-specific/linux/kernel/common-config.nix'
+
   // https://github.com/NixOS/nixpkgs/pull/553786#issuecomment-5510286851
   // kernels-org should go to staging-nixos (or master) and staging-nixos-xx.xx (or release-xx.xx) when backported
   // https://github.com/NixOS/nixpkgs/pull/521157
@@ -86,6 +92,7 @@ export function evaluateTargetBranchPolicy({
 
   const isMassRebuild =
     maxRebuildCount >= 1000 &&
+    !isExemptKernelConfig &&
     !isExemptKernelUpdate &&
     !isExemptHomeAssistantUpdate
 
@@ -100,6 +107,7 @@ export function evaluateTargetBranchPolicy({
   const isPossibleMassRebuild =
     maxRebuildCount >= 500 &&
     !isMassRebuild &&
+    !isExemptKernelConfig &&
     !isExemptKernelUpdate &&
     !isExemptHomeAssistantUpdate
   if (
