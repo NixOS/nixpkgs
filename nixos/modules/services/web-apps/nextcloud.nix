@@ -107,8 +107,7 @@ let
     ]
   );
 
-  # NOTE: The credentials required by all services at runtime, not including things like the
-  #       admin password which is only needed by the setup service.
+  # NOTE: The credentials required by all services at runtime.
   runtimeSystemdCredentials =
     [ ]
     ++ (lib.optional (cfg.config.dbpassFile != null) "dbpass:${cfg.config.dbpassFile}")
@@ -370,6 +369,12 @@ in
       [ "services" "nextcloud" "config" "objectstore" "s3" "autocreate" ]
       [ "services" "nextcloud" "config" "objectstore" "s3" "verify_bucket_exists" ]
     )
+    (lib.mkRemovedOptionModule [ "services" "nextcloud" "config" "adminuser" ] ''
+      To create an admin user after the installation, use nextcloud-occ user:add <username> and nextcloud-occ group:adduser admin <username>.
+    '')
+    (lib.mkRemovedOptionModule [ "services" "nextcloud" "config" "adminpassFile" ] ''
+      To create an admin user after the installation, use nextcloud-occ user:add <username> and nextcloud-occ group:adduser admin <username>.
+    '')
   ];
 
   options.services.nextcloud = {
@@ -668,22 +673,6 @@ in
           __Note:__ since Nextcloud 20 it's not an option anymore to create a database
           schema with a custom table prefix. This option only exists for backwards compatibility
           with installations that were originally provisioned with Nextcloud <20.
-        '';
-      };
-      adminuser = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
-        default = "root";
-        description = ''
-          Username for the admin account. The username is only set during the
-          initial setup of Nextcloud! Since the username also acts as unique
-          ID internally, it cannot be changed later!
-        '';
-      };
-      adminpassFile = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
-        description = ''
-          The full path to a file that contains the admin's password. The password is
-          set only in the initial setup of Nextcloud by the systemd service `nextcloud-setup.service`.
         '';
       };
       objectstore = {
@@ -1294,26 +1283,6 @@ in
             '';
           }
           {
-            assertion =
-              lib.versionAtLeast cfg.package.version "32.0.0"
-              || (cfg.config.adminuser != null && cfg.config.adminpassFile != null);
-            message = ''
-              Disabling initial admin user creation is only available on Nextcloud >= 32.0.0.
-            '';
-          }
-          {
-            assertion = cfg.config.adminuser == null -> cfg.config.adminpassFile == null;
-            message = ''
-              If `services.nextcloud.config.adminuser` is null, `services.nextcloud.config.adminpassFile` must be null as well in order to disable initial admin user creation.
-            '';
-          }
-          {
-            assertion = cfg.config.adminpassFile == null -> cfg.config.adminuser == null;
-            message = ''
-              If `services.nextcloud.config.adminpassFile` is null, `services.nextcloud.config.adminuser` must be null as well in order to disable initial admin user creation.
-            '';
-          }
-          {
             assertion = !(cfg.settings ? mail_smtppassword);
             message = ''
               The option `services.nextcloud.settings.mail_smtppassword` must not be used, as it puts the password into the world-readable nix store.
@@ -1363,14 +1332,6 @@ in
                     arg = "DBPASS";
                     value = if c.dbpassFile != null then ''"$(<"$CREDENTIALS_DIRECTORY/dbpass")"'' else ''""'';
                   };
-                  adminpass =
-                    if c.adminpassFile != null then
-                      {
-                        arg = "ADMINPASS";
-                        value = ''"$(<"$CREDENTIALS_DIRECTORY/adminpass")"'';
-                      }
-                    else
-                      null;
                   installFlags = lib.concatStringsSep " \\\n    " (
                     lib.mapAttrsToList (k: v: "${k} ${toString v}") {
                       "--database" = ''"${c.dbtype}"'';
@@ -1381,16 +1342,13 @@ in
                       ${if c.dbhost != null then "--database-host" else null} = ''"${c.dbhost}"'';
                       ${if c.dbuser != null then "--database-user" else null} = ''"${c.dbuser}"'';
                       "--database-pass" = "\"\$${dbpass.arg}\"";
-                      ${if c.adminuser != null then "--admin-user" else null} = ''"${c.adminuser}"'';
-                      ${if adminpass != null then "--admin-pass" else null} = "\"\$${adminpass.arg}\"";
-                      ${if c.adminuser == null && adminpass == null then "--disable-admin-user" else null} = "";
+                      "--disable-admin-user" = "";
                       "--data-dir" = ''"${datadir}/data"'';
                     }
                   );
                 in
                 ''
                   ${mkExport dbpass}
-                  ${lib.optionalString (adminpass != null) (mkExport adminpass)}
                   ${lib.getExe occ} maintenance:install \
                       ${installFlags}
                 '';
@@ -1416,12 +1374,6 @@ in
                 ${lib.optionalString (c.dbpassFile != null) ''
                   if [ -z "$(<"$CREDENTIALS_DIRECTORY/dbpass")" ]; then
                     echo "dbpassFile ${c.dbpassFile} is empty!"
-                    exit 1
-                  fi
-                ''}
-                ${lib.optionalString (c.adminpassFile != null) ''
-                  if [ -z "$(<"$CREDENTIALS_DIRECTORY/adminpass")" ]; then
-                    echo "adminpassFile ${c.adminpassFile} is empty!"
                     exit 1
                   fi
                 ''}
@@ -1466,9 +1418,7 @@ in
               '';
               serviceConfig.Type = "oneshot";
               serviceConfig.User = "nextcloud";
-              serviceConfig.LoadCredential =
-                lib.optional (cfg.config.adminpassFile != null) "adminpass:${cfg.config.adminpassFile}"
-                ++ runtimeSystemdCredentials;
+              serviceConfig.LoadCredential = runtimeSystemdCredentials;
               # On Nextcloud ≥ 26, it is not necessary to patch the database files to prevent
               # an automatic creation of the database user.
               environment.NC_setup_create_db_user = "false";
