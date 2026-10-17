@@ -24,6 +24,8 @@ let
   settingsFormat = pkgs.formats.keyValue { };
 in
 {
+  imports = [ ./nvidia-nvlink5.nix ];
+
   options = {
     hardware.nvidia = {
       enabled = lib.mkOption {
@@ -865,7 +867,7 @@ in
 
             services = lib.mkMerge [
               {
-                nvidia-fabricmanager = {
+                nvidia-fabricmanager = lib.mkIf (!cfg.datacenter.nvlink5.enable) {
                   enable = true;
                   description = "Start NVIDIA NVLink Management";
                   wantedBy = [ "multi-user.target" ];
@@ -881,7 +883,7 @@ in
                         # be overridden in `cfg.datacenter.settings` if needed.
                         fabricManagerConfDefaults = {
                           TOPOLOGY_FILE_PATH = "${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
-                          DATABASE_PATH = "${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
+                          DATABASE_PATH = "/var/lib/nvidia-fabricmanager";
                         };
                         nv-fab-conf = settingsFormat.generate "fabricmanager.conf" (
                           fabricManagerConfDefaults // cfg.datacenter.settings
@@ -889,6 +891,8 @@ in
                       in
                       "${lib.getExe nvidia_x11.fabricmanager} -c ${nv-fab-conf}";
                     LimitCORE = "infinity";
+                    StateDirectory = "nvidia-fabricmanager";
+                    StateDirectoryMode = "0700";
                   };
                 };
               }
