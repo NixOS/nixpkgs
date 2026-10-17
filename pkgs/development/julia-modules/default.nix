@@ -312,7 +312,7 @@ runCommand "julia-${julia.version}-env"
     ''
       mkdir -p $out/bin
       makeWrapper ${juliaWrapped}/bin/julia $out/bin/julia \
-        --suffix JULIA_DEPOT_PATH : "${projectAndDepot}/depot" \
+        --suffix JULIA_DEPOT_PATH : "${projectAndDepot}/depot:${julia}/share/julia" \
         --set-default JULIA_PROJECT "${projectAndDepot}/project" \
         --set-default JULIA_LOAD_PATH '@:${projectAndDepot}/project/Project.toml:@v#.#:@stdlib'
     ''
