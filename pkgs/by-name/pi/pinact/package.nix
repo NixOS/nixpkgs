@@ -4,6 +4,7 @@
   fetchFromGitHub,
   buildGo127Module,
   installShellFiles,
+  installAgentSkills,
   versionCheckHook,
   nix-update-script,
 }:
@@ -32,6 +33,7 @@ buildGo127Module (finalAttrs: {
 
   nativeBuildInputs = [
     installShellFiles
+    installAgentSkills
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
