@@ -28,7 +28,7 @@
 buildPythonPackage (finalAttrs: {
   pname = "datafusion";
   # WARNING: Ensure rerun-sdk is compatible with this version of datafusion
-  version = "54.0.0";
+  version = "55.0.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -39,12 +39,12 @@ buildPythonPackage (finalAttrs: {
     tag = finalAttrs.version;
     # Fetch arrow-testing and parquet-testing (tests assets)
     fetchSubmodules = true;
-    hash = "sha256-Kh8w8L3AJCs9a3KA9RHaA0btbJEBdYZge1VK7AX0lX0=";
+    hash = "sha256-IMCMdqOrenmHA06V2Cb/wuQw95Vg+5ozGrG96lxkTuc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname src version;
-    hash = "sha256-s4+Y2axZKL7wKiw8Z6c12eWAnf1zGPAFFvWS45vFrlo=";
+    hash = "sha256-l1c/drkxnFjYc3PztSP62rTcTM3EH1rDcxaR7nSVkmI=";
   };
 
   nativeBuildInputs = with rustPlatform; [
