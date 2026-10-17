@@ -5,7 +5,7 @@
   cmake,
   pkg-config,
   fuse3,
-  mbedtls,
+  openssl,
   nix-update-script,
 }:
 
@@ -27,8 +27,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     fuse3
-    mbedtls
+    openssl
   ];
+
+  cmakeFlags = [
+    (lib.cmakeFeature "CRYPTO_BACKEND" "openssl")
+  ];
+
+  doCheck = true; # runs some sanity checks against crypto library bindings
 
   env.CFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-DFUSE_DARWIN_ENABLE_EXTENSIONS=0";
 
