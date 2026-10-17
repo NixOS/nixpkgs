@@ -1,31 +1,31 @@
 {
   "version": {
-    "major": 156,
+    "major": 158,
     "minor": 0,
-    "build": 8066,
-    "patch": 2
+    "build": 8110,
+    "patch": 1
   },
   "pdfium": {
-    "hash": "sha256-gABzgxJYoRvkGyWi9EwHGLq+gmdzJsQyzOeXKwbcx/0="
+    "hash": "sha256-PMU7tXIJJs1WXZLw8yP4Qz0tPT+N8IjIxIIWqzub5dQ="
   },
   "build": {
-    "rev": "2cd94c0abeada712aeea6906d99021913c9fc28d",
-    "hash": "sha256-ZKYkK/h2Ll8Q2zp3CJlc+mZuZe6b55fwh7xUkT1x27U="
+    "rev": "ebdaeefa62db7c40f27cacb0eb034db3a5cdb849",
+    "hash": "sha256-y5OihZ42g75TGGWNdc5L2p3WqzmYm37qMBO6zIS/I3E="
   },
   "chromiumBuildtools": {
-    "hash": "sha256-hCMtQADZX2xHvnyZneNRuUEZlunLqyLp7cshudfPLuw="
+    "hash": "sha256-Vtow8uVdeSMUVlV2o6bXrzHutzDEiGu0a3mTunw1reE="
   },
   "abseil": {
-    "rev": "435e7d977fb36fb47854a4c552c0706dad0bd7cf",
-    "hash": "sha256-khfl3Y7Q823BSBmQUgacU83HdODjhVRLY0pu4cGCoec="
+    "rev": "a00d74bb55b38f213a3c6110b4bcab5bb565bd56",
+    "hash": "sha256-g6Yiw9VB5wMNkm0PFVrk11qLQFFHtD5wZp+hEMOvNRE="
   },
   "dragonbox": {
     "rev": "beeeef91cf6fef89a4d4ba5e95d47ca64ccb3a44",
     "hash": "sha256-j6swuGgYGfiFcK3iqd4EKTeU92rZHKTbF5T1fcak/ko="
   },
   "fastFloat": {
-    "rev": "34164f547b7df3f5d794ff67e9f885c36819ebfc",
-    "hash": "sha256-DOwDLnMwlXAP5SfDJuxhkmLmcBZ1wBvXEJr5RuHepp4="
+    "rev": "b0ab987b3dfdde13fa1915f65ef2a5c068d9208c",
+    "hash": "sha256-Hfnoet/FMCqm5Qx7A6/2NnSlmWgTFJrOqHvXh1TDd6U="
   },
   "gtest": {
     "rev": "4fe3307fb2d9f86d19777c7eb0e4809e9694dde7",

@@ -16,9 +16,11 @@
   harfbuzz,
   icu,
   lcms2,
+  libhwy,
   libjpeg,
   libpng,
   libtiff,
+  libyuv,
   llvmPackages,
   ninja,
   openjpeg,
@@ -231,6 +233,8 @@ stdenv.mkDerivation (finalAttrs: {
     ./use-system-clang-runtime.patch
     # Let the nixpkgs compiler wrapper configure system libc++ hardening.
     ./use-system-libcxx-hardening.patch
+    # Resolve JPEG headers through the target that supports system libjpeg.
+    ./use-system-libjpeg-headers.patch
     # Keep thin archives linkable when Linux Clang builds use the system linker.
     ./thin-archive-no-lld.patch
     # Fix Chromium's Linux unbundle cross toolchain on nixpkgs.
@@ -268,9 +272,11 @@ stdenv.mkDerivation (finalAttrs: {
     harfbuzz
     icu
     lcms2
+    libhwy
     libjpeg
     libpng
     libtiff
+    libyuv
     openjpeg
     zlib
   ];
@@ -291,8 +297,15 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace public/fpdfview.h \
       --replace-fail '#if defined(COMPONENT_BUILD)' '#if defined(COMPONENT_BUILD) || defined(FPDF_IMPLEMENTATION)'
 
+    mkdir -p third_party/highway/src
+    cp build/linux/unbundle/highway.gn third_party/highway/BUILD.gn
+    cp ${libhwy.src}/hwy.gni third_party/highway/src/hwy.gni
+
     mkdir -p third_party/icu
     cp build/linux/unbundle/icu.gn third_party/icu/BUILD.gn
+
+    mkdir -p third_party/libyuv
+    cp build/linux/unbundle/libyuv.gn third_party/libyuv/BUILD.gn
 
     install -Dm644 ${generateShimHeaders}/generate_shim_headers.py \
       tools/generate_shim_headers/generate_shim_headers.py
