@@ -4,13 +4,13 @@
 declare -a autoPatchcilLibs
 declare -a extraAutoPatchcilLibs
 
-gatherLibraries() {
+gatherAutoPatchcilLibraries() {
     if [ -d "$1/lib" ]; then
         autoPatchcilLibs+=("$1/lib")
     fi
 }
 
-addEnvHooks "${targetOffset:?}" gatherLibraries
+addEnvHooks "${targetOffset:?}" gatherAutoPatchcilLibraries
 
 # Can be used to manually add additional directories with shared object files
 # to be included for the next autoPatchcil invocation.
@@ -90,8 +90,11 @@ autoPatchcil() {
         --rid "$rid"
         "${ignoreMissingDepsArray[@]}"
         --paths "$@"
-        --libs "${autoPatchcilLibs[@]}"
     )
+
+    if (( ${#autoPatchcilLibs[@]} > 0 )); then
+        autoPatchcilFlags+=(--libs "${autoPatchcilLibs[@]}")
+    fi
 
     # shellcheck disable=SC2016
     echoCmd 'patchcil auto flags' "${autoPatchcilFlags[@]}"
