@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   libsForQt5,
 
@@ -63,6 +64,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./darwin.patch
+
+    (fetchpatch2 {
+      name = "CVE-2026-69150.patch";
+      url = "https://github.com/keepassxreboot/keepassxc/commit/6a534f38c61295d60b0e937739a12511e76dbfeb.patch?full_index=1";
+      hash = "sha256-izHjFIqtBcMXK3XMPvSKv1d/1I5It59ClGrrcCz6lL4=";
+    })
   ];
 
   cmakeFlags = [
