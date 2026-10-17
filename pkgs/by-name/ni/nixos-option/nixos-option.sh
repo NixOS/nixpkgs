@@ -5,7 +5,7 @@ set -eou pipefail
 recursive=false
 no_flake=false
 positional_args=()
-nix_args=(--arg nixos "import <nixpkgs/nixos> { }")
+nix_args=()
 flake=""
 
 
@@ -83,18 +83,31 @@ done
 
 # Detection order, from high to low:
 # `--flake`
+# <nixos-system> in NIX_PATH
+# /etc/nixos/system.nix
 # $NIXOS_CONFIG
 # nixos-config=<path> in NIX_PATH (normally /etc/nixos/configuration.nix)
 # `-I` (implies `--no-flake`)
 # `--no-flake`
 # /etc/nixos/flake.nix (if exists)
 
-if [[ -n "${NIXOS_CONFIG:-}" ]] || nix-instantiate --find-file nixos-config >/dev/null 2>&1; then
-  no_flake=true
+hostname=$(< /proc/sys/kernel/hostname)
+if [[ -z "${hostname:-}" ]]; then
+  hostname=default
 fi
 
-if [[ -z "$flake" ]] && [[ -e /etc/nixos/flake.nix ]] && [[ "$no_flake" == "false" ]]; then
+if [[ -n "$flake" ]]; then
+  : # flake set by --flake flag, handled below
+elif nix-instantiate --find-file nixos-system >/dev/null 2>&1; then
+  nix_args+=(--arg nixos "(import <nixos-system>).\"$hostname\"")
+elif [[ -e /etc/nixos/system.nix ]]; then
+  nix_args+=(--arg nixos "(import /etc/nixos/system.nix).\"$hostname\"")
+elif [[ -n "${NIXOS_CONFIG:-}" ]] || nix-instantiate --find-file nixos-config >/dev/null 2>&1; then
+  nix_args+=(--arg nixos "import <nixpkgs/nixos> { }")
+elif [[ -e /etc/nixos/flake.nix ]] && [[ "$no_flake" == "false" ]]; then
   flake="$(dirname "$(realpath /etc/nixos/flake.nix)")"
+else
+  nix_args+=(--arg nixos "import <nixpkgs/nixos> { }")
 fi
 
 if [[ -n "$flake" ]]; then
@@ -111,10 +124,6 @@ if [[ -n "$flake" ]]; then
     fi
   fi
   if [[ -z "${flakeAttr:-}" ]]; then
-    hostname=$(< /proc/sys/kernel/hostname)
-    if [[ -z "${hostname:-}" ]]; then
-      hostname=default
-    fi
     flakeAttr="nixosConfigurations.\"$hostname\""
   else
     flakeAttr="nixosConfigurations.\"$flakeAttr\""
