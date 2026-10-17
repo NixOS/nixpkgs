@@ -68,6 +68,8 @@ let
 
         selenium-webdriver-at-spi = null; # Used for integration tests that we don't run, stub
 
+        okular-mobile = self.okular.override { mobile = true; };
+
         alpaka = self.callPackage ./misc/alpaka { };
         cxx-rust-cssparser = self.callPackage ./misc/cxx-rust-cssparser { };
         glaxnimate = self.callPackage ./misc/glaxnimate { };
