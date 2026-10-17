@@ -31,7 +31,7 @@ let
       owner = "erlang";
       repo = "rebar3";
       tag = finalAttrs.version;
-      sha256 = "Om6c2cpeFCdPAemeA965YxKXhasHbx3gHVgSh+jO2TI=";
+      hash = "sha256-Om6c2cpeFCdPAemeA965YxKXhasHbx3gHVgSh+jO2TI=";
     };
 
     nativeBuildInputs = [

@@ -26,7 +26,7 @@ let
     owner = "pritunl";
     repo = "pritunl-client";
     rev = version;
-    sha256 = "sha256-BJWm+nuqt9+wqmFsYqJap9vHvMQIusCnH4k8UzBjfbs=";
+    hash = "sha256-BJWm+nuqt9+wqmFsYqJap9vHvMQIusCnH4k8UzBjfbs=";
   };
 
   cli = buildGoModule {

@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "Avature";
     repo = "lxd-image-server";
     rev = finalAttrs.version;
-    sha256 = "yx8aUmMfSzyWaM6M7+WcL6ouuWwOpqLzODWSdNgwCwo=";
+    hash = "sha256-yx8aUmMfSzyWaM6M7+WcL6ouuWwOpqLzODWSdNgwCwo=";
   };
 
   patches = [

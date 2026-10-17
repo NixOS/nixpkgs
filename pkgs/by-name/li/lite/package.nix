@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rxi";
     repo = "lite";
     rev = "v${finalAttrs.version}";
-    sha256 = "0wxqfb4ly8g7w5qph76xys95b55ackkags8jgd1nasmiyi8gcd5a";
+    hash = "sha256-qjT2UPSxamVDexLpp+ZkqpRVkvbdHHhx4echT8lyuHM=";
   };
 
   nativeBuildInputs = [

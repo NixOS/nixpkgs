@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "szechyjs";
     repo = "mbelib";
     rev = "v${finalAttrs.version}";
-    sha256 = "0v6b7nf8fgxy7vzgcwffqyql5zhldrz30c88k1ylbjp78hwh4rif";
+    hash = "sha256-LmYCOUTnykV9mAgxMH5uFP5CscfOcfb+Pr4/h5w9y2w=";
   };
 
   nativeBuildInputs = [ cmake ];

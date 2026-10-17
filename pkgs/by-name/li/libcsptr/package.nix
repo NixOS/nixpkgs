@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Snaipe";
     repo = "libcsptr";
     rev = "v${finalAttrs.version}";
-    sha256 = "0i1498h2i6zq3fn3zf3iw7glv6brn597165hnibgwccqa8sh3ich";
+    hash = "sha256-kMUBNVKYMf5WtLCYcFKxeZlN3+FxuD+sG/ibKCBKJEQ=";
   };
 
   nativeBuildInputs = [ cmake ];

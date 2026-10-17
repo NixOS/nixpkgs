@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     owner = "jaredsburrows";
     repo = "Rarcrack";
     rev = "35ead64cd2b967eec3e3e3a4c328b89b11ff32a0";
-    sha256 = "134fq84896w5vp8vg4qg0ybpb466njibigyd7bqqm1xydr07qrgn";
+    hash = "sha256-9mV8QG6+h4rxOs2/uKK0xpB1lwcPk7fR3YWbhAjCjow=";
   };
 
   nativeBuildInputs = [ unzip ];

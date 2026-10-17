@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "GATB";
     repo = "minia";
     tag = "v${finalAttrs.version}";
-    sha256 = "0bmfrywixaaql898l0ixsfkhxjf2hb08ssnqzlzacfizxdp46siq";
+    hash = "sha256-OGpDbus/OqY+/dhqjcCCwskOp9M9AooSolipHrnPri4=";
     fetchSubmodules = true;
   };
 

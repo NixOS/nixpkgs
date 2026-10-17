@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "hasura";
     repo = "graphql-engine";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-LnkX3JrpEM/MmLmENqrOJ2tAZ1EVxFfFO3GNqBNJF+w=";
+    hash = "sha256-LnkX3JrpEM/MmLmENqrOJ2tAZ1EVxFfFO3GNqBNJF+w=";
   };
   modRoot = "./cli";
 

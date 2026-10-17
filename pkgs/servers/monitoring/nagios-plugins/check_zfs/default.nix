@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "zlacelle";
     repo = "nagios_check_zfs_linux";
     tag = version;
-    sha256 = "gPLCNt6hp4E94s9/PRgsnBN5XXQQ+s2MGcgRFeknXg4=";
+    hash = "sha256-gPLCNt6hp4E94s9/PRgsnBN5XXQQ+s2MGcgRFeknXg4=";
   };
 
   buildInputs = [

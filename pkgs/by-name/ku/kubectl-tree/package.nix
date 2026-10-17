@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "ahmetb";
     repo = "kubectl-tree";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Ti2RWGNjCgaf02c2PXHL4Uml8Nws9gICwbrKcWmQ9pE=";
+    hash = "sha256-Ti2RWGNjCgaf02c2PXHL4Uml8Nws9gICwbrKcWmQ9pE=";
   };
 
   vendorHash = "sha256-34mxaCX5Em6/SiIrUDvTG9ZvWCzVUURk0SH+oQuOvlA=";

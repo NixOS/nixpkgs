@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rauc";
     repo = "rauc";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-wWj4tOUFVn+dgt4741YPF0+x85wRb46DM9lGLNon03Q=";
+    hash = "sha256-wWj4tOUFVn+dgt4741YPF0+x85wRb46DM9lGLNon03Q=";
   };
 
   enableParallelBuilding = true;

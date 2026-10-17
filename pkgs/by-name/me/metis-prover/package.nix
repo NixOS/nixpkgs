@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "gilith";
     repo = "metis";
     rev = "d17c3a8cf6537212c5c4bfdadcf865bd25723132";
-    sha256 = "phu1x0yahK/B2bSOCvlze7UJw8smX9zw6dJTpDD9chM=";
+    hash = "sha256-phu1x0yahK/B2bSOCvlze7UJw8smX9zw6dJTpDD9chM=";
   };
 
   nativeBuildInputs = [ perl ];

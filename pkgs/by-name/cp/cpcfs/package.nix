@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "derikz";
     repo = "cpcfs";
     rev = "v${finalAttrs.version}";
-    sha256 = "0rfbry0qy8mv746mzk9zdfffkdgq4w7invgb5cszjma2cp83q3i2";
+    hash = "sha256-Ig480GVCVfk1K+ttGw8n+LXpnGs/zV8NObsij4HPy2U=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";

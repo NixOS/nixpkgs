@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     owner = "hyperkineticnerd";
     repo = "OpenCorsairLink";
     rev = "46dbf206e19a40d6de6bd73142ed93bdb26c5c1a";
-    sha256 = "1nizicl0mc9pslc6065mnrs0fnn8sh7ca8iiw7w9ix57zrhabpld";
+    hash = "sha256-jd6lYP6n9Jj44TEixQ7UyFoHdLa1GGAY1TexCiiLP9o=";
   };
 
   # Fix GCC 14 build.

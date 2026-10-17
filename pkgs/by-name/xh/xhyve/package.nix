@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "machyve";
     repo = "xhyve";
     rev = "83516a009c692ea5d2993d1071e68d05d359b11e";
-    sha256 = "1pjdg4ppy6qh3vr1ls5zyw3jzcvwny9wydnmfpadwij1hvns7lj3";
+    hash = "sha256-Q9Kj7YZBRt7UddU2z5O3fLMvB/e/aBryHhAbfy95Td4=";
   };
 
   buildInputs = [

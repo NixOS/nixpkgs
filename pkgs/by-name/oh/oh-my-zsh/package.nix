@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "ohmyzsh";
     repo = "ohmyzsh";
     rev = "97e11051e2f8053b1d694788d1cb4b0dbb1e2365";
-    sha256 = "sha256-Fn6R7zlXiicUE8PtFfqoHY3iQrXZeKCBHxtSYHW3fBQ=";
+    hash = "sha256-Fn6R7zlXiicUE8PtFfqoHY3iQrXZeKCBHxtSYHW3fBQ=";
   };
 
   strictDeps = true;

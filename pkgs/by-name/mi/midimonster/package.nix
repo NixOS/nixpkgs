@@ -35,7 +35,7 @@ stdenv.mkDerivation {
     repo = "midimonster";
     owner = "cbdevnet";
     rev = "f16f7db86662fcdbf45b6373257c90c824b0b4b0";
-    sha256 = "131zs4j9asq9xl72cbyi463xpkj064ca1s7i77q5jrwqysgy52sp";
+    hash = "sha256-V4vin/aYZ1nwOfHooBgxQM7bhyHRLyYO7QlrlSTRP4w=";
   };
 
   doCheck = true;

@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "8bitbubsy";
     repo = "pt2-clone";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-gEcaE7Tyr6WoP8trxC9FgLbomZWnjferNSBxaZavR5E=";
+    hash = "sha256-gEcaE7Tyr6WoP8trxC9FgLbomZWnjferNSBxaZavR5E=";
   };
 
   nativeBuildInputs = [ cmake ];

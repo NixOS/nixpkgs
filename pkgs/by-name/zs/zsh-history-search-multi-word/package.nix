@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "zdharma-continuum";
     repo = "history-search-multi-word";
     rev = "5b44d8cea12351d91fbdc3697916556f59f14b8c";
-    sha256 = "11r2mmy6bg3b6pf6qc0ml3idh333cj8yz754hrvd1sc4ipfkkqh7";
+    hash = "sha256-B+I53Y2E6dB2hqSc75FkYwzY4qAVMGzcNWu8ZXytIoc=";
   };
 
   strictDeps = true;

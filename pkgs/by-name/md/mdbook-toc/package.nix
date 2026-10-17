@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "badboy";
     repo = "mdbook-toc";
     tag = finalAttrs.version;
-    sha256 = "sha256-mmmAMZC/YEAMRd8Yu8dGwheHM5CvzS0TpVmGzM08vEY=";
+    hash = "sha256-mmmAMZC/YEAMRd8Yu8dGwheHM5CvzS0TpVmGzM08vEY=";
   };
 
   cargoHash = "sha256-AlYik588J013Ee6YMF0sWAf5DfK2OVcTR3SxHT/v8nI=";

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "driehuis";
     repo = "Nagios_check_smartmon";
     tag = version;
-    sha256 = "tiIeFiHdDgqoeznk9XdCE7owIMnnsQ0fmtj8foFoUD8=";
+    hash = "sha256-tiIeFiHdDgqoeznk9XdCE7owIMnnsQ0fmtj8foFoUD8=";
   };
 
   buildInputs = [

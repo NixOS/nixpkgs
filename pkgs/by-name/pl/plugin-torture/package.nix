@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     owner = "cth103";
     repo = "plugin-torture";
     rev = "8b9c43197dca372da6b9c8212224ec86b5f16b4a";
-    sha256 = "1xyhvhm85d9z0kw716cjllrrzksn4s4bw34layg8hf4m5m31sp2p";
+    hash = "sha256-V1wdRi2VOIieV5QMvogmVs+fM6WSmXD4BD+1girc0Pc=";
   };
 
   nativeBuildInputs = [ pkg-config ];

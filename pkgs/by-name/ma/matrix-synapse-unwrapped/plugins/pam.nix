@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "14mRh4X0r";
     repo = "matrix-synapse-pam";
     rev = "v${version}";
-    sha256 = "0jgz49cwiyih5cg3hr4byva04zjnq8aj7rima9874la9fc5sd2wf";
+    hash = "sha256-joumC3NJUXJQUjXmIxXCVn4C1PaLZDgeKzD6yFki/0k=";
   };
 
   propagatedBuildInputs = [

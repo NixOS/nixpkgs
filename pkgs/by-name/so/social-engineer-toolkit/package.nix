@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
     owner = "trustedsec";
     repo = "social-engineer-toolkit";
     rev = version;
-    sha256 = "ePbmUvnzLO0Wfuhym3bNSPV1x8rcCPqKMeWSRcbJGAo=";
+    hash = "sha256-ePbmUvnzLO0Wfuhym3bNSPV1x8rcCPqKMeWSRcbJGAo=";
   };
 
   postPatch = ''

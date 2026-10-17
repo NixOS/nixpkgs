@@ -18,7 +18,7 @@ buildGoModule (finalAttrs: {
     owner = "naggie";
     repo = "dstask";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-/SXQz+HDkKWGrIArqEjti93mo6Els9haitV0FfWfVTQ=";
+    hash = "sha256-/SXQz+HDkKWGrIArqEjti93mo6Els9haitV0FfWfVTQ=";
   };
 
   # Set vendorHash to "sha256-HSqAbxkkjuMulFymeqApWr/JZ+a7OUTu5EYLGPL/j2U=" because dstask vendors its dependencies (meaning

@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "norlab-ulaval";
     repo = "libnabo";
     rev = finalAttrs.version;
-    sha256 = "sha256-/XXRwiLLaEvp+Q+c6lBiuWBb9by6o0pDf8wFtBNp7o8=";
+    hash = "sha256-/XXRwiLLaEvp+Q+c6lBiuWBb9by6o0pDf8wFtBNp7o8=";
   };
 
   nativeBuildInputs = [ cmake ];

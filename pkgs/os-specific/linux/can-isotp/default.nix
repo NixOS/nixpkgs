@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     owner = "hartkopp";
     repo = "can-isotp";
     rev = "21a3a59e2bfad246782896841e7af042382fcae7";
-    sha256 = "1laax93czalclg7cy9iq1r7hfh9jigh7igj06y9lski75ap2vhfq";
+    hash = "sha256-2MEtrionTk2TN0C+eOCLMkEHTw44Js/Oo4yqz0bqStE=";
   };
 
   makeFlags = kernelModuleMakeFlags ++ [

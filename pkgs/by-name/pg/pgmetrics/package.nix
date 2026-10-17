@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "rapidloop";
     repo = "pgmetrics";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-IwPWhH55GvquVsHswy9p+V6U23UEzYFsPqInqdx6LnI=";
+    hash = "sha256-IwPWhH55GvquVsHswy9p+V6U23UEzYFsPqInqdx6LnI=";
   };
 
   vendorHash = "sha256-20e4fE30DZMYOSlvhBPJLD5HoCe712NUONnJsvbfQ9g=";

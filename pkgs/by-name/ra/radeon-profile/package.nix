@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       owner = "marazmista";
       repo = "radeon-profile";
       rev = version;
-      sha256 = "0z6a9w79s5wiy8cvwcdp5wmgf6702d0wzw95f6176yhp4cwy4cq2";
+      hash = "sha256-AjPiOSMXenOCcSXxz0ET4Bj3Ki+3Mb4Z8pEXnQ5Pynw=";
     })
     + "/radeon-profile";
 

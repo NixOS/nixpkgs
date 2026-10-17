@@ -17,7 +17,7 @@ buildGoModule (finalAttrs: {
     owner = "fwdcloudsec";
     repo = "granted";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-/5JP6laC+k+O8GWSl1eo0slqzYzYB86UF3irDX6Z0iQ=";
+    hash = "sha256-/5JP6laC+k+O8GWSl1eo0slqzYzYB86UF3irDX6Z0iQ=";
   };
 
   vendorHash = "sha256-L96zj/AEUze/SfuFeK+I1+w2zXcxr5BSW3wGQFbTbJU=";

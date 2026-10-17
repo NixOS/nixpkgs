@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "digibyte-core";
     repo = "digibyte";
     rev = "v${finalAttrs.version}";
-    sha256 = "zPwnC2qd28fA1saG4nysPlKU1nnXhfuSG3DpCY6T+kM=";
+    hash = "sha256-zPwnC2qd28fA1saG4nysPlKU1nnXhfuSG3DpCY6T+kM=";
   };
 
   postPatch = ''

@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "voutcn";
     repo = "megahit";
     rev = "v${finalAttrs.version}";
-    sha256 = "1r5d9nkdmgjsbrpj43q9hy3s8jwsabaz3ji561v18hy47v58923c";
+    hash = "sha256-bIiEyj7EQxR2MCXK8dVSmkukh4cJDyJvXlq+2qZNreQ=";
   };
 
   patches = [

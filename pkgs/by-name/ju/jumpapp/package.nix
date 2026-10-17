@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "mkropat";
     repo = "jumpapp";
     rev = "v${version}";
-    sha256 = "sha256-9sh0+zpDxwqRGC1jUgGTDdSDRdAFsL12mQ/Opwh/UBc=";
+    hash = "sha256-9sh0+zpDxwqRGC1jUgGTDdSDRdAFsL12mQ/Opwh/UBc=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

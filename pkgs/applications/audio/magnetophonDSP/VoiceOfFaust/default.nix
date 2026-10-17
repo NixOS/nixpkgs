@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "magnetophon";
     repo = "VoiceOfFaust";
     tag = "V${finalAttrs.version}";
-    sha256 = "sha256-wsc4yzytK2hPVBQwMhdhjnH1pDtpkNCFJnItyzszEs0=";
+    hash = "sha256-wsc4yzytK2hPVBQwMhdhjnH1pDtpkNCFJnItyzszEs0=";
   };
 
   nativeBuildInputs = [

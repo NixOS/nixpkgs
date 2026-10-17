@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "Syncplay";
     repo = "syncplay";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-DXkigo3XzR9G0g1egte96LEynSHyfhW7PjVG8i2r8Lc=";
+    hash = "sha256-DXkigo3XzR9G0g1egte96LEynSHyfhW7PjVG8i2r8Lc=";
   };
 
   patches = [

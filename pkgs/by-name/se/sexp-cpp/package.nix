@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     owner = "lispparser";
     repo = "sexp-cpp";
     rev = "677b6f3ecd54e92339d33062084b081ebb9f14a6";
-    sha256 = "sha256-/wH9Cgo+4eyYRyUcYRNkYR38rLRv/mJq87dpE9wCPlw=";
+    hash = "sha256-/wH9Cgo+4eyYRyUcYRNkYR38rLRv/mJq87dpE9wCPlw=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "zevv";
     repo = "bucklespring";
     tag = "v${finalAttrs.version}";
-    sha256 = "0prhqibivxzmz90k79zpwx3c97h8wa61rk5ihi9a5651mnc46mna";
+    hash = "sha256-ylZDmK2hmKJShLHMHIziCJ7ERuf3pzNB+vX3HVfEMF8=";
   };
 
   nativeBuildInputs = [

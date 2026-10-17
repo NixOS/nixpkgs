@@ -35,7 +35,7 @@ stdenv.mkDerivation {
     owner = "r4m0n";
     repo = "ZenStates-Linux";
     rev = "0bc27f4740e382f2a2896dc1dabfec1d0ac96818";
-    sha256 = "1h1h2n50d2cwcyw3zp4lamfvrdjy1gjghffvl3qrp6arfsfa615y";
+    hash = "sha256-vgSjnHZZmZvxoNs5+OQLXra8XVWU3D+4Z5yJBooVMMA=";
   };
 
   buildInputs = [ python3 ];

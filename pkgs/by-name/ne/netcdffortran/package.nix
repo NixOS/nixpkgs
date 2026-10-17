@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Unidata";
     repo = "netcdf-fortran";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-nC93NcA4VJbrqaLwyhjP10j/t6rQSYcAzKBxclpZVe0=";
+    hash = "sha256-nC93NcA4VJbrqaLwyhjP10j/t6rQSYcAzKBxclpZVe0=";
   };
 
   nativeBuildInputs = [ gfortran ];

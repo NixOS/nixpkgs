@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "robertpsoane";
     repo = "ducker";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-ly5+2GySq2yiEDXG+IXfAB70Wzp58B+Py0GCuvwKXxw=";
+    hash = "sha256-ly5+2GySq2yiEDXG+IXfAB70Wzp58B+Py0GCuvwKXxw=";
   };
 
   cargoHash = "sha256-Sgn7dxmt/kn40jqMcRUIxdLfJRDWrHEAUb3TXUuGqSk=";

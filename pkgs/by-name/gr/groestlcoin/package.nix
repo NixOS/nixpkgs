@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Groestlcoin";
     repo = "groestlcoin";
     rev = "v${finalAttrs.version}";
-    sha256 = "17b83jch717d91srw1yc93p8ndl894ld9gx916wyy6jis07px6xh";
+    hash = "sha256-sJt+D9BRGu+5Cam/1ChJiDaL7kjMB551SO2EA5kcaJ0=";
   };
 
   nativeBuildInputs = [

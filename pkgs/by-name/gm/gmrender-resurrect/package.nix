@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     owner = "hzeller";
     repo = "gmrender-resurrect";
     rev = "v${version}";
-    sha256 = "sha256-e8X/Ab4E6FmPpbRx4y8UZbuPTFaq2hz4Ye8dbKTqGUc=";
+    hash = "sha256-e8X/Ab4E6FmPpbRx4y8UZbuPTFaq2hz4Ye8dbKTqGUc=";
   };
 
   buildInputs = [

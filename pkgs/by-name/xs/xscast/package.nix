@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     owner = "tckmn";
     repo = "xscast";
     rev = "9e6fd3c28d3f5ae630619f6dbccaf1f6ca594b21";
-    sha256 = "0br27bq9bpglfdpv63h827bipgvhlh10liyhmhcxls4227kagz72";
+    hash = "sha256-4vyn5hGCaNoZrNBHCgKkcL8b1xEIDrNvc/TdlfA6Ii8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

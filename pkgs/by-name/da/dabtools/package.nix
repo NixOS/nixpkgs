@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     owner = "Opendigitalradio";
     repo = "dabtools";
     rev = "8b0b2258b02020d314efd4d0d33a56c8097de0d1";
-    sha256 = "18nkdybgg2w6zh56g6xwmg49sifalvraz4rynw8w5d8cqi3dm9sm";
+    hash = "sha256-VafaRsQMtcIRtz6Tr/KmykWdyKu8m2cK/IaL95Zv06I=";
   };
 
   nativeBuildInputs = [

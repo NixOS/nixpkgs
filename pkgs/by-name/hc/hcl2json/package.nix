@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "tmccombs";
     repo = "hcl2json";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-CiF5xbRov28xWWygSI9JIG1t/irUyuUxM2vzGnbazGg=";
+    hash = "sha256-CiF5xbRov28xWWygSI9JIG1t/irUyuUxM2vzGnbazGg=";
   };
 
   vendorHash = "sha256-bQFm3BmYxvSe5NRbh1+tG6wWP5C3DSr3g+E36oqk5oY=";

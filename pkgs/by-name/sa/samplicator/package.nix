@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "sleinen";
     repo = "samplicator";
     rev = finalAttrs.version;
-    sha256 = "0fv5vldmwd6qrdv2wkk946dk9rn9nrv3c84ldvvqqn1spxfzgirm";
+    hash = "sha256-Ncf3Xb86WIz3bpQgNna2yeY0myFpTi52y9g0XhvdZTs=";
   };
 
   meta = {

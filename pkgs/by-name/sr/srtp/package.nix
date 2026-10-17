@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "cisco";
     repo = "libsrtp";
     rev = "v${version}";
-    sha256 = "sha256-kLuz3gPVDhm1fzcrXL4xky+hrTprJbcxgQCyb4nVThQ=";
+    hash = "sha256-kLuz3gPVDhm1fzcrXL4xky+hrTprJbcxgQCyb4nVThQ=";
   };
 
   outputs = [

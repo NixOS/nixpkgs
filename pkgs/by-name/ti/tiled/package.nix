@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "mapeditor";
     repo = "tiled";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Pq36xfaKtloyf0bneBE2xC/9twO/0qLq533dDbAyBCU=";
+    hash = "sha256-Pq36xfaKtloyf0bneBE2xC/9twO/0qLq533dDbAyBCU=";
   };
 
   nativeBuildInputs = [

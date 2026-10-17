@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "mptre";
     repo = "pick";
     rev = "v${finalAttrs.version}";
-    sha256 = "8cgt5KpLfnLwhucn4DQYC/7ot1u24ahJxWG+/1SL584=";
+    hash = "sha256-8cgt5KpLfnLwhucn4DQYC/7ot1u24ahJxWG+/1SL584=";
   };
 
   buildInputs = [ ncurses ];

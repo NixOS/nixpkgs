@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dhewm";
     repo = "dhewm3";
     rev = finalAttrs.version;
-    sha256 = "sha256-sC6XNEYqTFC49y+Pn6y3mS1/g9XbZaDl/6TOmGkdtFM=";
+    hash = "sha256-sC6XNEYqTFC49y+Pn6y3mS1/g9XbZaDl/6TOmGkdtFM=";
   };
 
   # Add libGLU libGL linking

@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "mackyle";
     repo = "blocksruntime";
     rev = "9cc93ae2b58676c23fd02cf0c686fa15b7a3ff81";
-    sha256 = "sha256-pQMNZBgkF4uADOVCWXB5J3qQt8JMe8vo6ZmbtSVA5Xo=";
+    hash = "sha256-pQMNZBgkF4uADOVCWXB5J3qQt8JMe8vo6ZmbtSVA5Xo=";
   };
 
   buildPhase = ''

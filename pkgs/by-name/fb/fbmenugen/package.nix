@@ -19,7 +19,7 @@ perlPackages.buildPerlPackage rec {
     owner = "trizen";
     repo = "fbmenugen";
     rev = version;
-    sha256 = "A0yhoK/cPp3JlNZacgLaDhaU838PpFna7luQKNDvyOg=";
+    hash = "sha256-A0yhoK/cPp3JlNZacgLaDhaU838PpFna7luQKNDvyOg=";
   };
 
   patches = [

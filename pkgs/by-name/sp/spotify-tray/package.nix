@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "tsmetana";
     repo = "spotify-tray";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-E86rA8cBjy/bI7sZHlT40o7i23PcONXT5GTHEfcaDf0=";
+    hash = "sha256-E86rA8cBjy/bI7sZHlT40o7i23PcONXT5GTHEfcaDf0=";
   };
 
   patches = [

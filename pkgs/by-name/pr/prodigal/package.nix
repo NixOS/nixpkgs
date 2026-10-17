@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "Prodigal";
     owner = "hyattpd";
     rev = "v${finalAttrs.version}";
-    sha256 = "1fs1hqk83qjbjhrvhw6ni75zakx5ki1ayy3v6wwkn3xvahc9hi5s";
+    hash = "sha256-ukSYGFS7Dzs5N3t4r0KcpU/1y4nWcLgzlEvigSaGQbs=";
   };
 
   makeFlags = [

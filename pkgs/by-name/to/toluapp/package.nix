@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "LuaDist";
     repo = "toluapp";
     tag = finalAttrs.version;
-    sha256 = "0zd55bc8smmgk9j4cf0jpibb03lgsvl0knpwhplxbv93mcdnw7s0";
+    hash = "sha256-QB9uG6sj7dXphfzaCejWjw6wVrwSOEZkmq9WjdgqpX0=";
   };
 
   nativeBuildInputs = [ cmake ];

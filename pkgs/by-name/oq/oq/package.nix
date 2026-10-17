@@ -16,7 +16,7 @@ crystal.buildCrystalPackage rec {
     owner = "Blacksmoke16";
     repo = "oq";
     tag = "v${version}";
-    sha256 = "sha256-AgUVHlk39J1V1Vv91FjglT4mSbP4IHiRlTrlfmrJxfY=";
+    hash = "sha256-AgUVHlk39J1V1Vv91FjglT4mSbP4IHiRlTrlfmrJxfY=";
   };
 
   patches = [

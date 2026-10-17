@@ -15,7 +15,7 @@ buildGoModule (finalAttrs: {
     owner = "chmouel";
     repo = "clipman";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-bee40nTmFMhWeP9vC7PTRQUZ/5OLZ4CtC5LlVBbfeNQ=";
+    hash = "sha256-bee40nTmFMhWeP9vC7PTRQUZ/5OLZ4CtC5LlVBbfeNQ=";
   };
 
   vendorHash = "sha256-I31qF84k1r/xpROW9sZ5rs7lGAxwgqXUEQ9EEo8vsTY=";

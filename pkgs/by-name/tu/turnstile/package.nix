@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "chimera-linux";
     repo = "turnstile";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-94J+w0RHxzw7wS70LcpEzMvgevAqAwl0EtiANUmdRYU=";
+    hash = "sha256-94J+w0RHxzw7wS70LcpEzMvgevAqAwl0EtiANUmdRYU=";
   };
 
   strictDeps = true;

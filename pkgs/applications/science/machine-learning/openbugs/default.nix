@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "jsta";
     repo = "openbugs";
     rev = "cd921342ba13ee89ee60f9aebd2e96c42bd59ae3";
-    sha256 = "sha256-11LrScN1kvtq0Fo7RWGjbQO0U5b5brCbipl5pdZnrFs=";
+    hash = "sha256-11LrScN1kvtq0Fo7RWGjbQO0U5b5brCbipl5pdZnrFs=";
   };
 
   meta = {

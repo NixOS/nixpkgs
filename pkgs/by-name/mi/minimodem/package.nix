@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "kamalmostafa";
     repo = "minimodem";
     rev = "${pname}-${version}";
-    sha256 = "1b5xy36fjcp7vkp115dpx4mlmqg2fc7xvxdy648fb8im953bw7ql";
+    hash = "sha256-FB++Rkk1ouUQMb713Q9z4uFKK+m3lRDu3Ocy6czwvaw=";
   };
 
   nativeBuildInputs = [

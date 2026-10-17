@@ -18,7 +18,7 @@ buildGoModule (finalAttrs: {
     owner = "rfjakob";
     repo = "gocryptfs";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-uQLFcabN418m1dvogJ71lJeTF3F9JycK/8qCPaXblSU=";
+    hash = "sha256-uQLFcabN418m1dvogJ71lJeTF3F9JycK/8qCPaXblSU=";
   };
 
   patches = [ ./0001-mount.go-try-fusermount3-suid-wrapper-and-fallback-t.patch ];

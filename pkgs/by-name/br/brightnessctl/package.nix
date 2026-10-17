@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Hummer12007";
     repo = "brightnessctl";
     tag = finalAttrs.version;
-    sha256 = "0immxc7almmpg80n3bdn834p3nrrz7bspl2syhb04s3lawa5y2lq";
+    hash = "sha256-mApfFFd0aAIW9FrQq9f5OdtxyUC2rWEBerdWqg7rtUY=";
   };
 
   postPatch = ''

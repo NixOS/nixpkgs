@@ -16,7 +16,7 @@ python3Packages.buildPythonPackage rec {
     owner = "ealbiter";
     repo = "qnotero";
     tag = "v${version}";
-    sha256 = "sha256-Rym7neluRbYCpuezRQyLc6gSl3xbVR9fvhOxxW5+Nzo=";
+    hash = "sha256-Rym7neluRbYCpuezRQyLc6gSl3xbVR9fvhOxxW5+Nzo=";
   };
 
   propagatedBuildInputs = [

@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Dougal-s";
     repo = "aether";
     tag = "v${finalAttrs.version}";
-    sha256 = "0xhih4smjxn87s0f4gaab51d8594qlp0lyypzxl5lm37j1i9zigs";
+    hash = "sha256-+sWfYpBnVFpo/9d7Ci7FJBXUQllKPeKAPsh2WTWBEXY=";
     fetchSubmodules = true;
   };
 

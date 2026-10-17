@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "s0md3v";
     repo = "Photon";
     rev = "v${finalAttrs.version}";
-    sha256 = "02z1xj72bq35dilr4b6njry4kixz6j2a3ag02nla98q0fvgmgnvy";
+    hash = "sha256-fttX33YAo6SoFeCpoYQ0v8dJfJbWLJJpbGXgJY7s4Qs=";
   };
 
   dontBuild = true;

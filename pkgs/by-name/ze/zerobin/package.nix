@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
     owner = "Tygs";
     repo = "0bin";
     rev = "v${version}";
-    sha256 = "1dfy3h823ylz4w2vv3mrmnmiyvf6rvyvsp4j3llr074w9id0zy16";
+    hash = "sha256-JvgPWkycHJApHZJcvf3Oxm0fq625jr0FJ5/6IRAc3rU=";
   };
 
   nativeBuildInputs = [

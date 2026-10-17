@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     owner = "vi";
     repo = "syscall_limiter";
     rev = "481c8c883f2e1260ebc83b352b63bf61a930a341";
-    sha256 = "0z5arj1kq1xczgrbw1b8m9kicbv3vs9bd32wvgfr4r6ndingsp5m";
+    hash = "sha256-tVz9bGzWZJLd21yMtpLeYy8WZ6poBb7y+6wHPIPMqnw=";
   };
 
   buildInputs = [ libseccomp ];

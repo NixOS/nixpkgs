@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Matty9191";
     repo = "ssl-cert-check";
     rev = "4056ceeab5abc0e39f4e0ea40cd54147253a3369";
-    sha256 = "07k2n4l68hykraxvy030djc208z8rqff3kc7wy4ib9g6qj7s4mif";
+    hash = "sha256-Llaij8TmpRWJ54fN4RzO6CMgmGxgAL+7ytNDZCixYh4=";
   };
 
   nativeBuildInputs = [

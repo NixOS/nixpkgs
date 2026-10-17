@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "kubernetes";
     repo = "repo-infra";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-m3DoReEtgkRaAfj6fcPFBaUgng4E4wFLU2Lsaug46PU=";
+    hash = "sha256-m3DoReEtgkRaAfj6fcPFBaUgng4E4wFLU2Lsaug46PU=";
   };
 
   vendorHash = "sha256-1+7Mx1Zh1WolqTpWNe560PRzRYaWVUVLvNvUOysaW5I=";

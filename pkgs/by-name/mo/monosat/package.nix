@@ -21,7 +21,7 @@ let
     owner = "sambayless";
     repo = "monosat";
     tag = version;
-    sha256 = "0q3a8x3iih25xkp2bm842sm2hxlb8hxlls4qmvj7vzwrh4lvsl7b";
+    hash = "sha256-61C9KYGZ/33krphoSjtEi3YoqhYE1SXu7EXAGEdHamA=";
   };
 
   patches = [

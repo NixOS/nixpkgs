@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "homewsn";
     repo = "whsniff";
     rev = "v${finalAttrs.version}";
-    sha256 = "000l5vk9c0332m35lndk8892ivdr445lgg25hmq1lajn24cash5w";
+    hash = "sha256-vECtGBFWKhpwhUW8Rwshue0oEkKzWVpGFWMAluYuFAA=";
   };
 
   buildInputs = [ libusb1 ];

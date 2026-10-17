@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "stedolan";
     repo = "ocaml-${pname}";
     rev = "v${version}";
-    sha256 = "06yyds2vcwlfr2nd3gvyrazlijjcrd1abnvkfpkaadgwdw3qam1i";
+    hash = "sha256-MVSFB2/8NaXmdXPbpULLTMpIv8p+v9GsyI5ytoVu3hs=";
   };
 
   strictDeps = true;

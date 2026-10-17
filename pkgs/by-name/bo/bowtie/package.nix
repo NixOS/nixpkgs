@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "BenLangmead";
     repo = "bowtie";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-mWItmrTMPst/NnzSpxxTHcBztDqHPCza9yOsZPwp7G4=";
+    hash = "sha256-mWItmrTMPst/NnzSpxxTHcBztDqHPCza9yOsZPwp7G4=";
   };
 
   patches = [

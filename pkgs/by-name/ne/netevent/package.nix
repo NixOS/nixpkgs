@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "Blub";
     repo = "netevent";
     rev = "bcadfcc42db0f57a28abddbf19d382453cb1c81f";
-    sha256 = "ikC6S1LNkmv474dlhajtEuHat497Rcdo9O+bCQMXTHQ=";
+    hash = "sha256-ikC6S1LNkmv474dlhajtEuHat497Rcdo9O+bCQMXTHQ=";
   };
 
   buildInputs = [ docutils ];

@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "sjaehn";
     repo = "bschaffl";
     tag = finalAttrs.version;
-    sha256 = "sha256-zfhPYH4eUNWHV27ZtX2IIvobyPdKs5yGr/ryJRQa6as=";
+    hash = "sha256-zfhPYH4eUNWHV27ZtX2IIvobyPdKs5yGr/ryJRQa6as=";
   };
 
   nativeBuildInputs = [ pkg-config ];

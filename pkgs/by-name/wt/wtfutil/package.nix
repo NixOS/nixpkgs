@@ -17,7 +17,7 @@ buildGoModule (finalAttrs: {
     owner = "wtfutil";
     repo = "wtf";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-kD3Fw8Qpl0tz8Kix0YDbGc/iM6CqgiGG+rEKjAEB4l0=";
+    hash = "sha256-kD3Fw8Qpl0tz8Kix0YDbGc/iM6CqgiGG+rEKjAEB4l0=";
   };
 
   vendorHash = "sha256-Or1l8Miq3PGwKzG8ZqupePSU/8SH5W6gfOcNrHEzWtA=";

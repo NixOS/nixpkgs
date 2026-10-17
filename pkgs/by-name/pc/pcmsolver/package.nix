@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "PCMSolver";
     repo = "pcmsolver";
     rev = "v${finalAttrs.version}";
-    sha256 = "0jrxr8z21hjy7ik999hna9rdqy221kbkl3qkb06xw7g80rc9x9yr";
+    hash = "sha256-2aeeWAboHd4NWBMPOtcMQnjcclIWppRmPF7CID7KPUs=";
   };
 
   # Glibc 2.34 changed SIGSTKSZ to a dynamic value, which breaks

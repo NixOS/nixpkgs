@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "todotxt-rs";
     repo = "effitask";
     rev = finalAttrs.version;
-    sha256 = "sha256-6BA/TCCqVh5rtgGkUgk8nIqUzozipC5rrkbXMDWYpdQ=";
+    hash = "sha256-6BA/TCCqVh5rtgGkUgk8nIqUzozipC5rrkbXMDWYpdQ=";
   };
 
   cargoHash = "sha256-j9WCzsh6aitmJeeyLDm0YrZHEAZlCNfGWANM/nmuncw=";

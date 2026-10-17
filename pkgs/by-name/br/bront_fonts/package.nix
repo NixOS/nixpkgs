@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation {
     owner = "chrismwendt";
     repo = "bront";
     rev = "aef23d9a11416655a8351230edb3c2377061c077";
-    sha256 = "1sx2gv19pgdyccb38sx3qnwszksmva7pqa1c8m35s6cipgjhhgb4";
+    hash = "sha256-ZD0I5buRGV1GRSwofI/aVc+vucWjazQWY769m8J+ous=";
   };
 
   preInstall = "rm {DejaVuSansMono,UbuntuMono}.ttf";

@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "terranix";
     repo = "terranix";
     rev = finalAttrs.version;
-    sha256 = "sha256-Jh0Zk+g0pEbNopADEtqvrnhrl83rlNFHpn3Zhz4s+VM=";
+    hash = "sha256-Jh0Zk+g0pEbNopADEtqvrnhrl83rlNFHpn3Zhz4s+VM=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

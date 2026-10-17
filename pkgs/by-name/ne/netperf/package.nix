@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     owner = "HewlettPackard";
     repo = "netperf";
     rev = "3bc455b23f901dae377ca0a558e1e32aa56b31c4";
-    sha256 = "s4G1ZN+6LERdEMDkc+12ZQgTi6K+ppUYUCGn4faCS9c=";
+    hash = "sha256-s4G1ZN+6LERdEMDkc+12ZQgTi6K+ppUYUCGn4faCS9c=";
   };
 
   patches = [

@@ -16,7 +16,7 @@ buildGoModule (finalAttrs: {
     owner = "foundriesio";
     repo = "fioctl";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-hZ8jkIbNY2z4M7sHCYq6vVacetThcoYPJjkr8PFQmQA=";
+    hash = "sha256-hZ8jkIbNY2z4M7sHCYq6vVacetThcoYPJjkr8PFQmQA=";
   };
 
   vendorHash = "sha256-SUjHHsZGi5C5juYdJJ0Z7i6P6gySQOdn1VaReCIwfzU=";

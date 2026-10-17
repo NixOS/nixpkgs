@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "Neo23x0";
     repo = "xorex";
     rev = finalAttrs.version;
-    sha256 = "rBsOSXWnHRhpLmq20XBuGx8gGBM8ouMyOISkbzUcvE4=";
+    hash = "sha256-rBsOSXWnHRhpLmq20XBuGx8gGBM8ouMyOISkbzUcvE4=";
   };
 
   installPhase = ''

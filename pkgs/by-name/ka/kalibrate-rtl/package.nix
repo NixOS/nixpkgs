@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     owner = "steve-m";
     repo = "kalibrate-rtl";
     rev = "340003eb0846b069c3edef19ed3363b8ac7b5215";
-    sha256 = "n9mfu8H2OS8dKPNhtJxBfMDp8aHEIcxg/R+kcRNOBpk=";
+    hash = "sha256-n9mfu8H2OS8dKPNhtJxBfMDp8aHEIcxg/R+kcRNOBpk=";
   };
 
   nativeBuildInputs = [

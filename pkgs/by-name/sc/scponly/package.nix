@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "scponly";
     repo = "scponly";
     rev = "d8ca58257b9905186aa5706f35813d5f80ea07c1";
-    sha256 = "U0K7lOp18ytNjh3KVFmc6vL+/tG4ETnwLEPQEhM4lXE=";
+    hash = "sha256-U0K7lOp18ytNjh3KVFmc6vL+/tG4ETnwLEPQEhM4lXE=";
   };
 
   patches = [ ./scponly-fix-make.patch ];

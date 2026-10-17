@@ -16,7 +16,7 @@ stdenvNoLibc.mkDerivation {
     owner = "itszor";
     repo = "newlib-vc4";
     rev = "89abe4a5263d216e923fbbc80495743ff269a510";
-    sha256 = "131r4v0nn68flnqibjcvhsrys3hs89bn0i4vwmrzgjd7v1rbgqav";
+    hash = "sha256-W+G3ctinyfdz5ZtEYFdCGg7ts4abyRWxpQ4Za8EmOYw=";
   };
   dontUpdateAutotoolsGnuConfigScripts = true;
   configurePlatforms = [ "target" ];

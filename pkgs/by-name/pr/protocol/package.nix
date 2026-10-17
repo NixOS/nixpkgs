@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication {
     owner = "luismartingarcia";
     repo = "protocol";
     rev = "4e8326ea6c2d288be5464c3a7d9398df468c0ada";
-    sha256 = "13l10jhf4vghanmhh3pn91b2jdciispxy0qadz4n08blp85qn9cm";
+    hash = "sha256-lSWLC7p0IWDJbwoD36+OkTUpVkj2DgirVfBt4qAEgY4=";
   };
 
   postPatch = ''

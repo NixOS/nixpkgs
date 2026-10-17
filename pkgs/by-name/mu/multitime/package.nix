@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ltratt";
     repo = "multitime";
     rev = "multitime-${finalAttrs.version}";
-    sha256 = "sha256-oLtBUJbu+tVhzsUv+toz2oLeXCVLYKHQXUNsqpCZBGc=";
+    hash = "sha256-oLtBUJbu+tVhzsUv+toz2oLeXCVLYKHQXUNsqpCZBGc=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ya-mouse";
     repo = "fatresize";
     rev = "v${finalAttrs.version}";
-    sha256 = "1vhz84kxfyl0q7mkqn68nvzzly0a4xgzv76m6db0bk7xyczv1qr2";
+    hash = "sha256-IuOwP/P9zAVWM9Wc/V8nCnj6/7bIWDzrwYB61ydBH+4=";
   };
 
   buildInputs = [

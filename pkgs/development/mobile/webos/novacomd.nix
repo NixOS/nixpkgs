@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "openwebos";
     repo = "novacomd";
     rev = "submissions/${version}";
-    sha256 = "1gahc8bvvvs4d6svrsw24iw5r0mhy4a2ars3j2gz6mp6sh42bznl";
+    hash = "sha256-1P4lCNTmVvOfkENnJRTxsIJceCSC67y1aUTvvRdiUL0=";
   };
 
   patches = [

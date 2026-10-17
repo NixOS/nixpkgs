@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "fortran-lang";
     repo = "fprettify";
     rev = "v${finalAttrs.version}";
-    sha256 = "17v52rylmsy3m3j5fcb972flazykz2rvczqfh8mxvikvd6454zyj";
+    hash = "sha256-0n9SiGl7xt0rgg5/trP4039FnThpMVfkqMPrSn0WZZ8=";
   };
 
   preConfigure = ''

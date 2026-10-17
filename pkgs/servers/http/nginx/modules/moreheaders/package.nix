@@ -12,7 +12,7 @@ mkNginxPlugin (finalAttrs: {
     owner = "openresty";
     repo = "headers-more-nginx-module";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-4oddjLXtJyDmxCa2ocBtNAeKWXxI38I9eHeFVw9/ANc=";
+    hash = "sha256-4oddjLXtJyDmxCa2ocBtNAeKWXxI38I9eHeFVw9/ANc=";
   };
 
   meta = {

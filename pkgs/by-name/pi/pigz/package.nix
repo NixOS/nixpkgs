@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "madler";
     repo = "pigz";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-PzdxyO4mCg2jE/oBk1MH+NUdWM95wIIIbncBg71BkmQ=";
+    hash = "sha256-PzdxyO4mCg2jE/oBk1MH+NUdWM95wIIIbncBg71BkmQ=";
   };
 
   strictDeps = true;

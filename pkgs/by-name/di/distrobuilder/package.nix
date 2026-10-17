@@ -43,7 +43,7 @@ buildGoModule (finalAttrs: {
     owner = "lxc";
     repo = "distrobuilder";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-dcRUUHpaqNCq4eld+anVrGKywJNpZLJYu3WtERlP3Ps=";
+    hash = "sha256-dcRUUHpaqNCq4eld+anVrGKywJNpZLJYu3WtERlP3Ps=";
   };
 
   buildInputs = bins;

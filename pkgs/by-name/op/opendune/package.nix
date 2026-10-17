@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "OpenDUNE";
     repo = "OpenDUNE";
     rev = finalAttrs.version;
-    sha256 = "15rvrnszdy3db8s0dmb696l4isb3x2cpj7wcl4j09pdi59pc8p37";
+    hash = "sha256-Z1zEbiqx3QQkoYwfeZnoY+lIqElm1QY0Wm349rXNO5c=";
   };
 
   postPatch = ''

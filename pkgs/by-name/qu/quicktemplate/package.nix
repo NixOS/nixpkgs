@@ -11,7 +11,7 @@ buildGoModule (finalAttrs: {
     owner = "valyala";
     repo = "quicktemplate";
     rev = "v${finalAttrs.version}";
-    sha256 = "cra3LZ3Yq0KNQErQ2q0bVSy7rOLKdSkIryIgQsNRBHw=";
+    hash = "sha256-cra3LZ3Yq0KNQErQ2q0bVSy7rOLKdSkIryIgQsNRBHw=";
   };
 
   vendorHash = null;

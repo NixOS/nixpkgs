@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "pololu";
     repo = "arduino-ci";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-9RbBxgwsSQ7oGGKr1Vsn9Ug9AsacoRgvQgd9jbRQ034=";
+    hash = "sha256-9RbBxgwsSQ7oGGKr1Vsn9Ug9AsacoRgvQgd9jbRQ034=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

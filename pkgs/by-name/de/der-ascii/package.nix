@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "google";
     repo = "der-ascii";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-/9Go4fAwXmA3SLl0bP7aLy6fEItPZoscQ4pdA2GZuyM=";
+    hash = "sha256-/9Go4fAwXmA3SLl0bP7aLy6fEItPZoscQ4pdA2GZuyM=";
   };
   vendorHash = null;
 

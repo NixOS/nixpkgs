@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "intel";
     repo = "thermal_daemon";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-pppza3HVKl27K/dM4G5h9095N9Fw4a/7FZD95/2Llu8=";
+    hash = "sha256-pppza3HVKl27K/dM4G5h9095N9Fw4a/7FZD95/2Llu8=";
   };
 
   patches = [

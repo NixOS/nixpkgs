@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "skeeto";
     repo = "enchive";
     rev = finalAttrs.version;
-    sha256 = "0fdrfc5l42lj2bvmv9dmkmhmm7qiszwk7cmdvnqad3fs7652g0qa";
+    hash = "sha256-CoMnijnajaaw3a2yM/nXEZ9aYZ21pV33EpIKQgtzuTk=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

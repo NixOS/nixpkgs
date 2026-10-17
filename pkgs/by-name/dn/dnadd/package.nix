@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "JoeLancaster";
     repo = "dnadd";
     rev = "v${finalAttrs.version}";
-    sha256 = "1vzbgz8y9gj4lszsx4iczfbrj373sl4wi43j7rp46zfcbw323d4r";
+    hash = "sha256-mbQhBl/MfUNuPnKQyAnV4wyZl/sskq6/pkS+5NF/6+8=";
   };
 
   strictDeps = true;

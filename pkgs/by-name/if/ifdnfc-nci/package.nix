@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "StarGate01";
     repo = "ifdnfc-nci";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-I2MNzmaxQUh4bN3Uytf2bQRthByEaFWM7c79CKZJQZA=";
+    hash = "sha256-I2MNzmaxQUh4bN3Uytf2bQRthByEaFWM7c79CKZJQZA=";
   };
 
   nativeBuildInputs = [

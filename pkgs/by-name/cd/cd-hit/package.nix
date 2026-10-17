@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "weizhongli";
     repo = "cdhit";
     rev = "V${version}";
-    sha256 = "032nva6iiwmw59gjipm1mv0xlcckhxsf45mc2qbnv19lbis0q22i";
+    hash = "sha256-UQgMdFw0hW0XFqwW4nSHkzHawa6h3ihfKrzyGI3aVgw=";
   };
 
   propagatedBuildInputs = [

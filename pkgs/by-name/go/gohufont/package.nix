@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     owner = "hchargois";
     repo = "gohufont";
     rev = "cc36b8c9fed7141763e55dcee0a97abffcf08224";
-    sha256 = "1hmp11mrr01b29phw0xyj4h9b92qz19cf56ssf6c47c5j2c4xmbv";
+    hash = "sha256-e9VOmJCFHcKM09oUx1L4WKSVIJG+Aw5vEiuAnGsIt8I=";
   };
 
   nativeBuildInputs = [

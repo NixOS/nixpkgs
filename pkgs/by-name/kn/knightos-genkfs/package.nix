@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "KnightOS";
     repo = "genkfs";
     rev = finalAttrs.version;
-    sha256 = "0f50idd2bb73b05qjmwlirjnhr1bp43zhrgy6z949ab9a7hgaydp";
+    hash = "sha256-t3n14FFpqUTSN/5l+Ae5K2RoZY6UV4kLWOOsJVqLoDg=";
   };
 
   strictDeps = true;

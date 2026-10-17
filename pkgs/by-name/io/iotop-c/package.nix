@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Tomas-M";
     repo = "iotop";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-zJI6zPkkd9GIpnAfRMVLR9Xqog0sgxTnO/NTN3hsjKU=";
+    hash = "sha256-zJI6zPkkd9GIpnAfRMVLR9Xqog0sgxTnO/NTN3hsjKU=";
   };
 
   nativeBuildInputs = [ pkg-config ];

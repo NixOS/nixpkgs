@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
     owner = "aaronjanse";
     repo = "3mux";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-QT4QXTlJf2NfTqXE4GF759EoW6Ri12lxDyodyEFc+ag=";
+    hash = "sha256-QT4QXTlJf2NfTqXE4GF759EoW6Ri12lxDyodyEFc+ag=";
   };
 
   patches = [

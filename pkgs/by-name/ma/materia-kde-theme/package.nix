@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "PapirusDevelopmentTeam";
     repo = "materia-kde";
     rev = finalAttrs.version;
-    sha256 = "sha256-/O+/L6C9WjxhfWZ8RzIeimNU+8sjKvbDvQwNlvVOjU4=";
+    hash = "sha256-/O+/L6C9WjxhfWZ8RzIeimNU+8sjKvbDvQwNlvVOjU4=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

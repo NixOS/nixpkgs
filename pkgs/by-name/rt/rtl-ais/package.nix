@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     owner = "dgiardini";
     repo = "rtl-ais";
     rev = "0e85f4e5f9ce7378834c3129bc894580efc24291";
-    sha256 = "0wm4zai1vs89mf0zgz52q5w5rj8f3i3v6zg42hfb7aqabi25r3jf";
+    hash = "sha256-To5cRFwKq7McFOR9s0ccDslceMGi/PeBqwnpHaL6pHI=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

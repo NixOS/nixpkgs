@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     # branch 6.1.3h2, as they aren't pushing tags
     # https://github.com/adaptivecomputing/torque/issues/467
     rev = "458883319157cfc5c509046d09f9eb8e68e8d398";
-    sha256 = "1b56bc5j9wg87kcywzmhf7234byyrwax9v1pqsr9xmv2x7saakrr";
+    hash = "sha256-OU+l9Oli156yxjfs1BXP3i8yxHGwfu7ZPOjxJAtbpqw=";
   };
 
   strictDeps = true;

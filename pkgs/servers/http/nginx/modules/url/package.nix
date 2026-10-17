@@ -12,7 +12,7 @@ mkNginxPlugin (finalAttrs: {
     owner = "vozlt";
     repo = "nginx-module-url";
     rev = "9299816ca6bc395625c3683fbd2aa7b916bfe91e";
-    sha256 = "0mk1gjmfnry6hgdsnlavww9bn7223idw50jlkhh5k00q5509w4ip";
+    hash = "sha256-NxKeQCkYgFkgnFSCwlscQhy7EudbUavbg8Zn66p8YVY=";
   };
 
   meta = {

@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
     owner = "mitchellh";
     repo = "gox";
     rev = "v${finalAttrs.version}";
-    sha256 = "0mkh81hd7kn45dz7b6yhzqsg2mvg1g6pwx89jjigxrnqhyg9vrl7";
+    hash = "sha256-h+adnofY5v6ilAl1fs0Lb1fxNP7Qm3V+K8TO02BAcFY=";
   };
 
   vendorHash = null;

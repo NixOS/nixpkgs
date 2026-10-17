@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     owner = "zsugabubus";
     repo = "mbidled";
     rev = "c724a34cc01b829b19a60655fc1652a378db7f27";
-    sha256 = "sha256-XQXLPjEEesBd+bATsKE2nvoNcuqtRA1JIsV7306CssA=";
+    hash = "sha256-XQXLPjEEesBd+bATsKE2nvoNcuqtRA1JIsV7306CssA=";
   };
 
   preConfigure = ''

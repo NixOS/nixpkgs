@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "lucc";
     repo = "nvimpager";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-hwUI0DlkXveE+m4BkO8xEF/IARqSVk2E6tw07+UtnbA=";
+    hash = "sha256-hwUI0DlkXveE+m4BkO8xEF/IARqSVk2E6tw07+UtnbA=";
   };
 
   buildInputs = [

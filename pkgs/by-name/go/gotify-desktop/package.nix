@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "desbma";
     repo = "gotify-desktop";
     rev = finalAttrs.version;
-    sha256 = "sha256-bKLqe02/KnSjeho7SYAiN2k3YY4XMpjLCZfWJngTIOQ=";
+    hash = "sha256-bKLqe02/KnSjeho7SYAiN2k3YY4XMpjLCZfWJngTIOQ=";
   };
 
   cargoHash = "sha256-IgenG3xPxo4JRzQ/F3pxrYM4KiPU0TfFYc32TDT8rag=";

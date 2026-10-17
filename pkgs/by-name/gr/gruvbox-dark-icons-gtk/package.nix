@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "jmattheis";
     repo = "gruvbox-dark-icons-gtk";
     rev = "v${finalAttrs.version}";
-    sha256 = "1fks2rrrb62ybzn8gqan5swcgksrb579vk37bx4xpwkc552dz2z2";
+    hash = "sha256-4ovfRCls8ttJX2fMnU5ZWc/HuC5W4YfsX16YlXMWero=";
   };
 
   nativeBuildInputs = [ gtk3 ];

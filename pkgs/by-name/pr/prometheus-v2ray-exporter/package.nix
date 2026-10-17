@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "wi1dcard";
     repo = "v2ray-exporter";
     rev = "v${version}";
-    sha256 = "12mzng3cw24fyyh8zjfi26gh853k5blzg3zbxcccnv5lryh2r0yi";
+    hash = "sha256-0YMsoM+0bMsY6+uP9+kqcxQEnxHRyY+g944Izsazv4o=";
   };
 
   vendorHash = "sha256-+jrD+QatTrMaAdbxy5mpCm8lF37XDIy1GFyEiUibA2k=";

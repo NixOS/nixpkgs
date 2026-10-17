@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "enzo1982";
     repo = "boca";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-HIYUMFj5yiEC+liZLMXD9otPyoEb1sxHlECTYtYXc2I=";
+    hash = "sha256-HIYUMFj5yiEC+liZLMXD9otPyoEb1sxHlECTYtYXc2I=";
   };
 
   nativeBuildInputs = [

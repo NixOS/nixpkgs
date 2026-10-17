@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "cespare";
     repo = "reflex";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-qc33ppo+RdhztgCUKPSbVFWlz5FTCEExVHkUre+MR+o=";
+    hash = "sha256-qc33ppo+RdhztgCUKPSbVFWlz5FTCEExVHkUre+MR+o=";
   };
 
   vendorHash = "sha256-QCdhZmuxWUAwCwoLLWqEP6zoBBGh5OpDTz4uLIY0xAg=";

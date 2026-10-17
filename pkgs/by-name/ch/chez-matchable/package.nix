@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fedeinthemix";
     repo = "chez-matchable";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-UYoT8Kp1FTfiL22ntrFXFcAB1HGVrJ6p9JgvhUKi+Yo=";
+    hash = "sha256-UYoT8Kp1FTfiL22ntrFXFcAB1HGVrJ6p9JgvhUKi+Yo=";
   };
 
   buildInputs = [ chez ];

@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "keesL";
     repo = "metar";
     rev = "20e9ca69faea330f6c2493b6829131c24cb55147";
-    sha256 = "1fgrlnpasqf1ihh9y6zy6mzzybqx0lxvh7gmv03rjdb55dr42dxj";
+    hash = "sha256-sjdBcitlNZkH2PUduDsFHS//fzX+G58gjMFhra6l+bk=";
   };
 
   buildInputs = [ curl ];

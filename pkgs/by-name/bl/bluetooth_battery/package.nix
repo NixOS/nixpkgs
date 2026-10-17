@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "TheWeirdDev";
     repo = "Bluetooth_Headset_Battery_Level";
     rev = "v${finalAttrs.version}";
-    sha256 = "067qfxh228cy1x95bnjp88dx4k00ajj7ay7fz5vr1gkj2yfa203s";
+    hash = "sha256-egChnBdyvpB3+e54daRUAEzSG0JX2lVSD54hIWB3+Bg=";
   };
 
   propagatedBuildInputs = with python3Packages; [ pybluez ];

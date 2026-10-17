@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "alexanderepstein";
     repo = "Bash-Snippets";
     rev = "v${finalAttrs.version}";
-    sha256 = "044nxgd3ic2qr6hgq5nymn3dyf5i4s8mv5z4az6jvwlrjnvbg8cp";
+    hash = "sha256-l6G3tpWZ8i3NV+SXXZEmsTjfhq3eFvygyViwONrrlhA=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -16,7 +16,7 @@ buildGoModule (finalAttrs: {
     owner = "google";
     repo = "gops";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-2xY/e+lqE1XtMMOJ+WmbMWibQMCIoEouOXNIJKEikvs=";
+    hash = "sha256-2xY/e+lqE1XtMMOJ+WmbMWibQMCIoEouOXNIJKEikvs=";
   };
 
   vendorHash = "sha256-mumni9LEUhnJz6RYp1MjjFQd9iXe7V0RjXR+S266WaE=";

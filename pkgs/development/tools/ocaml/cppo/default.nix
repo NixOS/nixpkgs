@@ -55,7 +55,7 @@ else
       owner = "mjambon";
       repo = pname;
       rev = "v${version}";
-      sha256 = "1xqldjz9risndnabvadw41fdbi5sa2hl4fnqls7j9xfbby1izbg8";
+      hash = "sha256-6K0fg1/L9SSPptg6QqFQusTVXCC8qb2UbVbHnL5sFPc=";
     };
 
     strictDeps = true;

@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jeffreytse";
     repo = "zsh-vi-mode";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-EYr/jInRGZSDZj+QVAc9uLJdkKymx1tjuFBWgpsaCFw=";
+    hash = "sha256-EYr/jInRGZSDZj+QVAc9uLJdkKymx1tjuFBWgpsaCFw=";
   };
 
   strictDeps = true;

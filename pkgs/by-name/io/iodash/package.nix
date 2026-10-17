@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "YukiWorkshop";
     repo = "IODash";
     rev = "9dcb26621a9c17dbab704b5bab0c3a5fc72624cb";
-    sha256 = "0db5y2206fwh3h1pzjm9hy3m76inm0xpm1c5gvrladz6hiqfp7bx";
+    hash = "sha256-fZ3rcITmN0XzfoWFejuoNppTh4epyn8DHJA7A4TwZTU=";
     fetchSubmodules = true;
   };
   # adds missing cmake install directives

@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     owner = "B-Lang-org";
     repo = "bsc";
     tag = version;
-    sha256 = "sha256-gA/vfAkkM2cuArN99JZVYEWTIJqg82HlC+BHNVS5Ot0=";
+    hash = "sha256-gA/vfAkkM2cuArN99JZVYEWTIJqg82HlC+BHNVS5Ot0=";
   };
 
   yices-src = fetchurl {

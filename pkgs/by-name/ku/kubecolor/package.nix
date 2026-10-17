@@ -15,7 +15,7 @@ buildGoModule (finalAttrs: {
     owner = "kubecolor";
     repo = "kubecolor";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-ePjiWDvNWZ3RnB5Lz3K7BhWCnlsz458Nj1KauYze55I=";
+    hash = "sha256-ePjiWDvNWZ3RnB5Lz3K7BhWCnlsz458Nj1KauYze55I=";
   };
 
   vendorHash = "sha256-z3I5XP/ZebZeSSM/+dzJvPG1OK7fFW2vVYPHLhhG1xo=";

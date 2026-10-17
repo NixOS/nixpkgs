@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "void-linux";
     repo = "musl-fts";
     tag = "v${finalAttrs.version}";
-    sha256 = "Azw5qrz6OKDcpYydE6jXzVxSM5A8oYWAztrHr+O/DOE=";
+    hash = "sha256-Azw5qrz6OKDcpYydE6jXzVxSM5A8oYWAztrHr+O/DOE=";
   };
 
   nativeBuildInputs = [

@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "openAVproductions";
     repo = "openAV-Luppp";
     rev = "release-${finalAttrs.version}";
-    sha256 = "1ncbn099fyfnr7jw2bp3wf2g9k738lw53m6ssw6wji2wxwmghv78";
+    hash = "sha256-6Gz4Ku9cRMkN19rUUThF48z0hOPjLsHlydZ5lxKwi9k=";
   };
 
   nativeBuildInputs = [

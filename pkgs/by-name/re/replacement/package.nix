@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "siriobalmelli";
     repo = "replacement";
     rev = "v${finalAttrs.version}";
-    sha256 = "0j4lvn3rx1kqvxcsd8nhc2lgk48jyyl7qffhlkvakhy60f9lymj3";
+    hash = "sha256-Q1ZPkwPGw6n2pNA5fKj3EpH5qGDQoqZZ33iGnofdlEg=";
   };
 
   build-system = with python3Packages; [

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "Facepunch";
     repo = "gmad";
     rev = "5236973a2fcbb3043bdd3d4529ce68b6d938ad93";
-    sha256 = "04an17nvnj38mpi0w005v41ib8ynb5qhgrdkmsda4hq7l1gn276s";
+    hash = "sha256-2hxhX6AHQ6KarrPlB3FZ1qMVA9kFAA7irWhIu+0JVhE=";
   };
 
   buildInputs = [

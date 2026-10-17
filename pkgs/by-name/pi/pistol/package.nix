@@ -15,7 +15,7 @@ buildGoModule (finalAttrs: {
     owner = "doronbehar";
     repo = "pistol";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-8ZoGGb2/jfRpeEaSKZtPdd+vsTBSvtOQ2U5nBo1EyAs=";
+    hash = "sha256-8ZoGGb2/jfRpeEaSKZtPdd+vsTBSvtOQ2U5nBo1EyAs=";
   };
 
   vendorHash = "sha256-1+kt6SUqy/acMEJJhWjuC8nnU7UT/7BkmZ25prHpjnM=";

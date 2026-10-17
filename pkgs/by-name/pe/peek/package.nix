@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "phw";
     repo = "peek";
     rev = finalAttrs.version;
-    sha256 = "1xwlfizga6hvjqq127py8vabaphsny928ar7mwqj9cyqfl6fx41x";
+    hash = "sha256-PZDuDHXYsyQxrycrJJK3Gl611Eb+HhEwlhsa9X50lPc=";
   };
 
   patches = [

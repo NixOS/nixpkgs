@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "boumenot";
     repo = "gocover-cobertura";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-7NrdoAUwbN6S19elYkYEiDbxIFVOaAnT7CbYZej/cfs=";
+    hash = "sha256-7NrdoAUwbN6S19elYkYEiDbxIFVOaAnT7CbYZej/cfs=";
   };
 
   deleteVendor = true;

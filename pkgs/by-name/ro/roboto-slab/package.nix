@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation {
     owner = "googlefonts";
     repo = "robotoslab";
     rev = "baeeba45e0c3ccdcfb6a70dc564785941aafef5d";
-    sha256 = "1v6z0a2xgwgf9dyj62sriy8ckwpbwlxkki6gfax1f4h4livvzpdn";
+    hash = "sha256-tt2/d6QEEhe6cs/EOTvl6/LJkI9ZCyN9S+7x14UC3+w=";
   };
 
   postPatch = ''

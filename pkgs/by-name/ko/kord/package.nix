@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "twitchax";
     repo = "kord";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-CeMh6yB4fGoxtGLbkQe4OMMvBM0jesyP+8JtU5kCP84=";
+    hash = "sha256-CeMh6yB4fGoxtGLbkQe4OMMvBM0jesyP+8JtU5kCP84=";
   };
 
   cargoHash = "sha256-ciam95rUUh9iKmhTadqWCy1rU4otuRiQkWg0lGRHzng=";

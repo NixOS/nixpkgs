@@ -22,7 +22,7 @@ let
         owner = "digitalocean";
         repo = "prometheus-client-c";
         rev = "v${version}";
-        sha256 = "0g69s24xwrv5974acshrhnp6i8rpby8c6bhz15m3d8kpgjw3cm8f";
+        hash = "sha256-DlU2uHx3ojZqCR8uw5BfN6NoroUZaqbISWVn3onQyTw=";
       };
 
       nativeBuildInputs = [ cmake ];

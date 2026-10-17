@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "mtrojnar";
     repo = "osslsigncode";
     rev = finalAttrs.version;
-    sha256 = "sha256-jAiGW6B3wxasESvpMRYxh0sWIPkV7L37owpwlNNlyxs=";
+    hash = "sha256-jAiGW6B3wxasESvpMRYxh0sWIPkV7L37owpwlNNlyxs=";
   };
 
   nativeBuildInputs = [

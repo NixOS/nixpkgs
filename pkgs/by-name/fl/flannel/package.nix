@@ -16,7 +16,7 @@ buildGoModule rec {
     inherit rev;
     owner = "flannel-io";
     repo = "flannel";
-    sha256 = "sha256-RqTdSaB1KLjlgBFYGaecp/Cij1qOWVq0RuvPDYQ70xg=";
+    hash = "sha256-RqTdSaB1KLjlgBFYGaecp/Cij1qOWVq0RuvPDYQ70xg=";
   };
 
   ldflags = [ "-X github.com/flannel-io/flannel/pkg/version.Version=${rev}" ];

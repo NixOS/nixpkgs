@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "vanhauser-thc";
     repo = "thc-ipv6";
     rev = "v${finalAttrs.version}";
-    sha256 = "07kwika1zdq62s5p5z94xznm77dxjxdg8k0hrg7wygz50151nzmx";
+    hash = "sha256-vX4bSgDlP8/PyxBM9FqXvZ1T7e8k/XKLFga3H9SMfB4=";
   };
 
   patches = [

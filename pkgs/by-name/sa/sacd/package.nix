@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Sound-Linux-More";
     repo = "sacd";
     rev = finalAttrs.version;
-    sha256 = "03s7jr75pzqj1xd41rkgbszlgf9zx6vzhd0nizc05wyf0fxq5xif";
+    hash = "sha256-LvaCuwPO8wLYjxY0+LfpP7lHv15v5kBaDxL/W06WRw8=";
   };
 
   patches = [

@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     owner = "BatchDrake";
     repo = "SuWidgets";
     rev = "826b3eeae5b682dc063f53b427caa9c7c48131ea";
-    sha256 = "sha256-cyFLsP+8GbALdlgEnVX4201Qq/KAxb/Vv+sJqbFpvUk=";
+    hash = "sha256-cyFLsP+8GbALdlgEnVX4201Qq/KAxb/Vv+sJqbFpvUk=";
   };
 
   dontWrapQtApps = true;

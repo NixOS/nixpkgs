@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Mellanox";
     repo = "sockperf";
     rev = finalAttrs.version;
-    sha256 = "sha256-VvxL/bcn69uL7CBpDu4qwbKZwlC4N/kNeRX4k3UzxPI=";
+    hash = "sha256-VvxL/bcn69uL7CBpDu4qwbKZwlC4N/kNeRX4k3UzxPI=";
   };
 
   nativeBuildInputs = [

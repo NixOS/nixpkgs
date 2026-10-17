@@ -12,7 +12,7 @@ mkNginxPlugin (finalAttrs: {
     owner = "tony2001";
     repo = "ngx_http_pinba_module";
     rev = "28131255d4797a7e2f82a6a35cf9fc03c4678fe6";
-    sha256 = "00fii8bjvyipq6q47xhjhm3ylj4rhzmlk3qwxmfpdn37j7bc8p8c";
+    hash = "sha256-DF3E1pFn2HZd7RyPSeuHmUjqR4US9kOwwTf6LReK0QE=";
   };
 
   meta = {

@@ -15,7 +15,7 @@ buildGoModule (finalAttrs: {
     owner = "genuinetools";
     repo = "img";
     rev = "v${finalAttrs.version}";
-    sha256 = "0r5hihzp2679ki9hr3p0f085rafy2hc8kpkdhnd4m5k4iibqib08";
+    hash = "sha256-CKyIV4xklkqahW3eiRgU3qlcEHDgjgxTnOkYcT+MsGQ=";
   };
 
   vendorHash = null;

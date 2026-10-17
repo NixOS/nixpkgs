@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     owner = "tohojo";
     repo = "http-getter";
     rev = "0b20f08133206aaf225946814ceb6b85ab37e136";
-    sha256 = "0plyqqwfm9bysichda0w3akbdxf6279wd4mx8mda0c4mxd4xy9nl";
+    hash = "sha256-1CbfSeuVMKBaRb2SxtMRxvW2phocqAZZ1H6l6jjGnl4=";
   };
 
   patches = [

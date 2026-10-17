@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "ammgws";
     repo = "autotiling-rs";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-PuWSS2676IGmbjhiMEpHiOPfOoXyqNEQSbb6pd6FUHc=";
+    hash = "sha256-PuWSS2676IGmbjhiMEpHiOPfOoXyqNEQSbb6pd6FUHc=";
   };
 
   cargoHash = "sha256-E+nn6rMbj1FzN0bl5jX3YnSHotSaXZGp3AdZuGlziv0=";

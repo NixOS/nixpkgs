@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     owner = "lwfinger";
     repo = "rtw89";
     rev = "e834edfe8bee6e27e31c2f783817a9c13ff45665";
-    sha256 = "19ApYiEvA0E6qgf5XQc03paZ+ghjZL8JoC3vSYYw3xU=";
+    hash = "sha256-19ApYiEvA0E6qgf5XQc03paZ+ghjZL8JoC3vSYYw3xU=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;

@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "kaoh";
     repo = "globalplatform";
     tag = finalAttrs.version;
-    sha256 = "sha256-ZnPu94q4wye9uH8A7N13Q5kt9M5sJjTEHpeveVUpLzc=";
+    hash = "sha256-ZnPu94q4wye9uH8A7N13Q5kt9M5sJjTEHpeveVUpLzc=";
   };
 
   nativeBuildInputs = [

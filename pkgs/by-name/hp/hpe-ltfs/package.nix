@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     rev = finalAttrs.version;
     owner = "nix-community";
     repo = "hpe-ltfs";
-    sha256 = "193593hsc8nf5dn1fkxhzs1z4fpjh64hdkc8q6n9fgplrpxdlr4s";
+    hash = "sha256-mmTa+s30PpeswYjNBomB8jryg/6wTxdsK84ipuFIZaQ=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/ltfs";

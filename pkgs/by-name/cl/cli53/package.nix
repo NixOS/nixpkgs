@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
     owner = "barnybug";
     repo = "cli53";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-ojLqveOZ8IIJXNd6PdXbqWYcwXqAjjEpKiquqXwcZt8=";
+    hash = "sha256-ojLqveOZ8IIJXNd6PdXbqWYcwXqAjjEpKiquqXwcZt8=";
   };
 
   vendorHash = "sha256-OpBeuIyyFOliVtN1z9Ll9ji2qNS41NvZBjL7vJvRe6E=";

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "cas--";
     repo = "XCreateMouseVoid";
     rev = version;
-    sha256 = "151pv4gmzz9g6nd1xw94hmawlb5z8rgs1jb3x1zpvn3znd7f355c";
+    hash = "sha256-rJThTrN/2H1/6GPJoF9GvyzKVYUk8R6aNS/9Xx/ZN5Q=";
   };
 
   buildInputs = [ libx11 ];

@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "afaerber";
     repo = "meson-tools";
     rev = "v${finalAttrs.version}";
-    sha256 = "1bvshfa9pa012yzdwapi3nalpgcwmfq7d3n3w3mlr357a6kq64qk";
+    hash = "sha256-ExODp1GnjEzr4MOOdrCrnL1LlR3xKt6+FwGom5SDeq8=";
   };
 
   buildInputs = [ openssl ];

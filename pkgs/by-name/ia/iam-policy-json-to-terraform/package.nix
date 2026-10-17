@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "flosell";
     repo = "iam-policy-json-to-terraform";
     rev = finalAttrs.version;
-    sha256 = "sha256-YCkM6ddTue1nYqQj56iUADl9v72Um51TLhwwGK3USEw=";
+    hash = "sha256-YCkM6ddTue1nYqQj56iUADl9v72Um51TLhwwGK3USEw=";
   };
 
   vendorHash = "sha256-HOeMkyH7voQAXCRCdfpv/Cy9oLJDY+DXwh4h2yFf7Nk=";

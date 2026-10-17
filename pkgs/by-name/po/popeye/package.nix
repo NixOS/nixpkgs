@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
     rev = "v${finalAttrs.version}";
     owner = "derailed";
     repo = "popeye";
-    sha256 = "sha256-CbVYQIE7kjUah+SDEjs5Qz+n4+f3HriQNxYPqDcdr/I=";
+    hash = "sha256-CbVYQIE7kjUah+SDEjs5Qz+n4+f3HriQNxYPqDcdr/I=";
   };
 
   ldflags = [

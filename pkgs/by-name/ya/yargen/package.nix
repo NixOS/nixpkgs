@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "Neo23x0";
     repo = "yarGen";
     rev = finalAttrs.version;
-    sha256 = "6PJNAeeLAyUlZcIi0g57sO1Ex6atn7JhbK9kDbNrZ6A=";
+    hash = "sha256-6PJNAeeLAyUlZcIi0g57sO1Ex6atn7JhbK9kDbNrZ6A=";
   };
 
   patches = [

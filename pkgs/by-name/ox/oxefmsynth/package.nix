@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "oxesoft";
     repo = "oxefmsynth";
     rev = "v${version}";
-    sha256 = "1rk71ls33a38wx8i22plsi7d89cqqxrfxknq5i4f9igsw1ipm4gn";
+    hash = "sha256-9pF6Y+D6xeRILNjO7nLHmCXUTtT0ChFR52ioMTQNZ+Y=";
   };
 
   env.NIX_CFLAGS_COMPILE = toString [ "-Wno-narrowing" ];

@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "cvc4";
     repo = "cvc4-archived";
     rev = finalAttrs.version;
-    sha256 = "1rhs4pvzaa1wk00czrczp58b2cxfghpsnq534m0l3snnya2958jp";
+    hash = "sha256-V6KShPLW6kFBJaNgqy98rjOxULmf5c8AmDwo9fclGuY=";
   };
 
   nativeBuildInputs = [

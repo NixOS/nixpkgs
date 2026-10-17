@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "anko";
     repo = "zthrottle";
     rev = "f62066661e49375baeb891fa8e43ad4527cbd0a0";
-    sha256 = "1ipvwmcsigzmxlg7j22cxpvdcgqckkmfpsnvzy18nbybd5ars9l5";
+    hash = "sha256-hSadVWnLL4uC/9vq6+qcDD/W9u1MCHke7fW/qFnl+8Y=";
   };
 
   buildInputs = [ zsh ];

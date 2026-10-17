@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "rslint";
     repo = "rslint";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-3DEwi+bhqwP8aMpZYl07GZbe7IecraB3m54lZ5LViVc=";
+    hash = "sha256-3DEwi+bhqwP8aMpZYl07GZbe7IecraB3m54lZ5LViVc=";
   };
 
   cargoHash = "sha256-4DzQSnrUUNaeyNLKvnx4HKM4dAS10y5mu5S2NpzfFRQ=";

@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "petervanderdoes";
     repo = "gitflow-avh";
     rev = finalAttrs.version;
-    sha256 = "sha256-kHirHG/bfsU6tKyQ0khNSTyChhzHfzib+HyA3LOtBI8=";
+    hash = "sha256-kHirHG/bfsU6tKyQ0khNSTyChhzHfzib+HyA3LOtBI8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

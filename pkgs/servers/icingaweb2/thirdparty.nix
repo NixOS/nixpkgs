@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "Icinga";
     repo = "icinga-php-thirdparty";
     rev = "v${version}";
-    sha256 = "sha256-vPr6rh/X5G///rqmgIdCYKDLeZMQVNK7FoINONO7Cw8=";
+    hash = "sha256-vPr6rh/X5G///rqmgIdCYKDLeZMQVNK7FoINONO7Cw8=";
   };
 
   installPhase = ''

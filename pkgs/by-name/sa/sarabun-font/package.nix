@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation {
     owner = "cadsondemak";
     repo = "sarabun";
     rev = "854cdbc6afa002ff8c2ce6aa7b86f99c7f71c9eb";
-    sha256 = "jcSQ72WK0GucZPgG7IQKrKzCOEbGgbQVl21RIKSF6A0=";
+    hash = "sha256-jcSQ72WK0GucZPgG7IQKrKzCOEbGgbQVl21RIKSF6A0=";
   };
 
   nativeBuildInputs = [ installFonts ];

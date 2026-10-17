@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "parallaxinc";
     repo = "OpenSpin";
     rev = "f3a587ed3e4f6a50b3c8d2022bbec5676afecedb";
-    sha256 = "1knkbzdanb60cwp7mggymkhd0167lh2sb1c00d1vhw7s0s1rj96n";
+    hash = "sha256-1iSZgwb6cLhDA4CFpQWkxwTQ4Kz+vXouZ8Asq9pf084=";
   };
 
   installPhase = ''

@@ -14,7 +14,7 @@ buildGoModule {
     owner = "omrikiei";
     repo = "ktunnel";
     rev = "v${version}";
-    sha256 = "sha256-SJ6WCLJLKVODVsvPQUngV0oz60dpFT1mRDLNaeJ6P7M=";
+    hash = "sha256-SJ6WCLJLKVODVsvPQUngV0oz60dpFT1mRDLNaeJ6P7M=";
   };
 
   ldflags = [

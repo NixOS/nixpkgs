@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Koihik";
     repo = "LuaFormatter";
     rev = finalAttrs.version;
-    sha256 = "14l1f9hrp6m7z3cm5yl0njba6gfixzdirxjl8nihp9val0685vm0";
+    hash = "sha256-oO6CDKBqpwujRVT2HNvv0T2jlrSA+lLZ+Keam2FygZI=";
   };
 
   patches = [

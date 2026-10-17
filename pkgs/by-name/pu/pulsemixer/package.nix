@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "GeorgeFilipkin";
     repo = "pulsemixer";
     rev = finalAttrs.version;
-    sha256 = "1jagx9zmz5pfsld8y2rj2kqg6ww9f6vqiawfy3vhqc49x3xx92p4";
+    hash = "sha256-5IrU++iJMAz38I6riLdxiXPz8BQyC48a1e6WX3/qT8k=";
   };
 
   inherit libpulseaudio;

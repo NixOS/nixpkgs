@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "cdown";
     repo = "psi-notify";
     rev = finalAttrs.version;
-    sha256 = "sha256-GhGiSI5r0Ki6+MYNa5jCDyYZEW5R9LDNZ/S8K+6L0jo=";
+    hash = "sha256-GhGiSI5r0Ki6+MYNa5jCDyYZEW5R9LDNZ/S8K+6L0jo=";
   };
 
   buildInputs = [

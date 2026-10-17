@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "bo0ts";
     repo = "ddate";
     tag = "v${finalAttrs.version}";
-    sha256 = "1qchxnxvghbma6gp1g78wnjxsri0b72ha9axyk31cplssl7yn73f";
+    hash = "sha256-bhzrD9WaXhbG9F0lBcVZIGbdpeXovHCfUXXBt7vtkOE=";
   };
 
   patches = [

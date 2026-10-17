@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "ChrisJohnsen";
     repo = "tmux-MacOSX-pasteboard";
     rev = "v${version}";
-    sha256 = "1qgimh58hcx5f646gj2kpd36ayvrdkw616ad8cb3lcm11kg0ag79";
+    hash = "sha256-6TwF3gyhMjoWQ02ZYPhseXtlRrtTyGeIcaUziAqs8eE=";
   };
 
   buildFlags =

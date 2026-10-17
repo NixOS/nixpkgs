@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ram-on";
     repo = "imgurbash2";
     rev = finalAttrs.version;
-    sha256 = "sha256-7J3LquzcYX0wBR6kshz7VuPv/TftTzKFdWcgsML2DnI=";
+    hash = "sha256-7J3LquzcYX0wBR6kshz7VuPv/TftTzKFdWcgsML2DnI=";
   };
 
   installPhase = ''

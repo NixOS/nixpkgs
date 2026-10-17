@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     owner = "sadko4u";
     repo = "tamgamp.lv2";
     rev = "426da74142fcb6b7687a35b2b1dda3392e171b92";
-    sha256 = "0dqsnim7v79rx13bkkh143gqz0xg26cpf6ya3mrwwprpf5hns2bp";
+    hash = "sha256-dwltYXE3X85zHcobd5kRr4OP3yABzrlG6DmdfWq0Gjc=";
   };
 
   nativeBuildInputs = [ pkg-config ];

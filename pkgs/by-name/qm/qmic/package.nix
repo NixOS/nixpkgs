@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "linux-msm";
     repo = "qmic";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-0/mIg98pN66ZaVsQ6KmZINuNfiKvdEHMsqDx0iciF8w=";
+    hash = "sha256-0/mIg98pN66ZaVsQ6KmZINuNfiKvdEHMsqDx0iciF8w=";
   };
 
   installFlags = [ "prefix=$(out)" ];

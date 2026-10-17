@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "sonald";
     repo = "blur-effect";
     tag = finalAttrs.version;
-    sha256 = "0cjw7iz0p7x1bi4vmwrivfidry5wlkgfgdl9wly88cm3z9ib98jj";
+    hash = "sha256-UqK0YvqjMoQ85Ym2596kvPjcotsx87pJXKGfC348XDI=";
   };
 
   patches = [

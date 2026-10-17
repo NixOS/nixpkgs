@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
     owner = "aquasecurity";
     repo = "chain-bench";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-5+jSbXbT1UwHMVeZ07qcY8Is88ddHdr7QlgcbQK+8FA=";
+    hash = "sha256-5+jSbXbT1UwHMVeZ07qcY8Is88ddHdr7QlgcbQK+8FA=";
   };
   vendorHash = "sha256-uN4TSAxb229NhcWmiQmWBajla9XKnpiZrXOWJxt/mic=";
 

@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     owner = "HannesMann";
     repo = "gcadapter-oc-kmod";
     rev = "d4ddf15deb74c51dbdfc814d481ef127c371f444";
-    sha256 = "sha256-bHA1611rcO8/d48b1CHsiurEt3/n+5WErtHXAU7Eh1o=";
+    hash = "sha256-bHA1611rcO8/d48b1CHsiurEt3/n+5WErtHXAU7Eh1o=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;

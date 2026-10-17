@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "ilanschnell";
     repo = "perfect-hash";
     rev = finalAttrs.version;
-    sha256 = "0gkc3n613hl0q4jknrh2nm1n96j97p36q9jjgarb9d8yii9q7792";
+    hash = "sha256-Ip2DU4wetbSyelImbMY9SZpkQ7UCZjslwYDCEYwdbD4=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];

@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "christophgysin";
     repo = "pasystray";
     rev = finalAttrs.version;
-    sha256 = "sha256-QaTQ8yUviJaFEQaQm2vYAUngqHliKe8TDYqfWt1Nx/0=";
+    hash = "sha256-QaTQ8yUviJaFEQaQm2vYAUngqHliKe8TDYqfWt1Nx/0=";
   };
 
   patches = [

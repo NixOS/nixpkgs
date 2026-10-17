@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Trepan-Debuggers";
     repo = "bashdb";
     tag = finalAttrs.version;
-    sha256 = "sha256-cbrBRP/NT3pUwT9KPpS3DxzrDhY2PGmLO/l+jKAbI68=";
+    hash = "sha256-cbrBRP/NT3pUwT9KPpS3DxzrDhY2PGmLO/l+jKAbI68=";
   };
 
   patches = [

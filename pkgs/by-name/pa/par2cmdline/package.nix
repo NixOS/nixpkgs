@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Parchive";
     repo = "par2cmdline";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-hBuen7Gr5UQhAmPKFX1rmt4ZjkT0F3hPC/08qEVlX7E=";
+    hash = "sha256-hBuen7Gr5UQhAmPKFX1rmt4ZjkT0F3hPC/08qEVlX7E=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

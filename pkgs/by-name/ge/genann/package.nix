@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "codeplea";
     repo = "genann";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-WZuJbCJZXjJE4X6pAcWvlDqHMw3bEdFIBbTvFJNXM04=";
+    hash = "sha256-WZuJbCJZXjJE4X6pAcWvlDqHMw3bEdFIBbTvFJNXM04=";
   };
 
   dontBuild = true;

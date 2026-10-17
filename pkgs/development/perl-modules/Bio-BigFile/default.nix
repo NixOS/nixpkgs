@@ -32,7 +32,7 @@ buildPerlModule rec {
       owner = "ucscGenomeBrowser";
       repo = "kent";
       rev = "v${version}_base";
-      sha256 = "1455dwzpaq4hyhcqj3fpwgq5a39kp46qarfbr6ms6l2lz583r083";
+      hash = "sha256-A4E8UPlUUKOryctlhQ25Mw1V8OPXDYkZ9JBgdT9vpZA=";
     };
 
     patches = [

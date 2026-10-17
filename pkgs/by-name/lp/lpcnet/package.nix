@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "drowe67";
     repo = "LPCNet";
     rev = "c8e51ac5e2fe674849cb53e7da44689b572cc246";
-    sha256 = "sha256-0Knoym+deTuFAyJrrD55MijVh6DlhJp3lss66BJUHiA=";
+    hash = "sha256-0Knoym+deTuFAyJrrD55MijVh6DlhJp3lss66BJUHiA=";
   };
 
   patches = [

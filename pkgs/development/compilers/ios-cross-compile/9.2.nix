@@ -21,13 +21,13 @@ clangStdenv.mkDerivation rec {
     owner = "tpoechtrager";
     repo = "cctools-port";
     rev = "7d405492b09fa27546caaa989b8493829365deab";
-    sha256 = "0nj1q5bqdx5jm68dispybxc7wnkb6p8p2igpnap9q6qyv2r9p07w";
+    hash = "sha256-/ICbstgeG5yusvdFcdE1a1p+WF/+6tiQqbL0hlfBQVo=";
   };
   ldid = fetchFromGitHub {
     owner = "tpoechtrager";
     repo = "ldid";
     rev = "3064ed628108da4b9a52cfbe5d4c1a5817811400";
-    sha256 = "1a6zaz8fgbi239l5zqx9xi3hsrv3jmfh8dkiy5gmnjs6v4gcf6sf";
+    hash = "sha256-ThvHHtlGS1tf8XE2BF2VY2cNR+yp419oGiKu59BX36g=";
   };
   src = requireFile rec {
     name = "iPhoneOS9.2.sdk.tar.xz";

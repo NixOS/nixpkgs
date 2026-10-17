@@ -16,7 +16,7 @@ buildGoModule (finalAttrs: {
     owner = "cloudflare";
     repo = "cf-terraforming";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-jq0xBmn+ZGYF6Yup/82wVYgtuIs9RcPHviGxj9JpTF0=";
+    hash = "sha256-jq0xBmn+ZGYF6Yup/82wVYgtuIs9RcPHviGxj9JpTF0=";
   };
 
   vendorHash = "sha256-7/VRs7BEFLCx7sqIbOFA7b7tQwlpgzeWYUdgankHNCo=";

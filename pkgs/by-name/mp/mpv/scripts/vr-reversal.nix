@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "dfaker";
     repo = "vr-reversal";
     rev = "v${version}";
-    sha256 = "1wn2ngcvn7wcsl3kmj782x5q9130qw951lj6ilrkafp6q6zscpqr";
+    hash = "sha256-GV+mv8HmOjUzjUbSUBLHYISESxfoyDoH1Ywfu9mzwvI=";
   };
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 

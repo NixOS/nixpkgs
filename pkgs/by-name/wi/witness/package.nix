@@ -18,7 +18,7 @@ buildGoModule (finalAttrs: {
     owner = "in-toto";
     repo = "witness";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-HCSaNK6zYyqH9c+NrYrgdlMcnwvg2WUrgBpo0MlbgIg=";
+    hash = "sha256-HCSaNK6zYyqH9c+NrYrgdlMcnwvg2WUrgBpo0MlbgIg=";
   };
   vendorHash = "sha256-TFklnNeXRQBWegKxbAMJnxWn5FTgsJSiwAShOn9co/s=";
 

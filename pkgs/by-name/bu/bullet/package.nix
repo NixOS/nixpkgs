@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "bulletphysics";
     repo = "bullet3";
     tag = finalAttrs.version;
-    sha256 = "sha256-AGP05GoxLjHqlnW63/KkZe+TjO3IKcgBi+Qb/osQuCM=";
+    hash = "sha256-AGP05GoxLjHqlnW63/KkZe+TjO3IKcgBi+Qb/osQuCM=";
   };
 
   nativeBuildInputs = [ cmake ];

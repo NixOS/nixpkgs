@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "sagemath";
     repo = "sagetex";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-OfhbXHbGI+DaDHqZCOGiSHJPHjGuT7ZqSEjKweloW38=";
+    hash = "sha256-OfhbXHbGI+DaDHqZCOGiSHJPHjGuT7ZqSEjKweloW38=";
   };
 
   outputs = [ "tex" ];

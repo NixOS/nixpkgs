@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "lpan";
     repo = "viw";
     rev = "2cf317f6d82a6fa58f284074400297b6dc0f44c2";
-    sha256 = "0bnkh57v01zay6ggk0rbddaf75i48h8z06xsv33wfbjldclaljp1";
+    hash = "sha256-4UqqKGtULsfH2Lob8BFEJJbjVGsrg/me8eoHsE+B0y4=";
   };
 
   buildInputs = [ ncurses ];

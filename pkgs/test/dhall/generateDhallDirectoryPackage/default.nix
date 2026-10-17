@@ -11,7 +11,7 @@ dhallPackages.generateDhallDirectoryPackage {
     owner = "cdepillabout";
     repo = "example-dhall-nix";
     rev = "e6a675c72ecd4dd23d254a02aea8181fe875747f";
-    sha256 = "sha256-c/EZq76s/+hmLkaeJWKqgh2KrHuJRYI6kWry0E0YQ6s=";
+    hash = "sha256-c/EZq76s/+hmLkaeJWKqgh2KrHuJRYI6kWry0E0YQ6s=";
   };
   file = "mydhallfile.dhall";
 }

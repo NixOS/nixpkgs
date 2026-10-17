@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "linuxaudio";
     repo = "ntk";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-NyEdg6e+9CI9V+TIgdpPyH1ei+Vq8pUxD3wPzWY5fEU=";
+    hash = "sha256-NyEdg6e+9CI9V+TIgdpPyH1ei+Vq8pUxD3wPzWY5fEU=";
   };
 
   nativeBuildInputs = [

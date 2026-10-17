@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "philpennock";
     repo = "sieve-connect";
     rev = "v${finalAttrs.version}";
-    sha256 = "1ghvfa5ifa68b6imh85bkmy00r93c5f9hs6d039axb73gmma580p";
+    hash = "sha256-F6Cian3jrK7SAM1omFxhI2UAfJ2rIFijWcgoF4tyG74=";
   };
 
   buildInputs = [ perlPackages.perl ];

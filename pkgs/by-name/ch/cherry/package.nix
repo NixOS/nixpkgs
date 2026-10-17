@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "turquoise-hexagon";
     repo = "cherry";
     tag = finalAttrs.version;
-    sha256 = "13zkxwp6r6kcxv4x459vwscr0n0sik4a3kcz5xnmlpvcdnbxi586";
+    hash = "sha256-BpXYl21sX1ptL5/NociMGliQmeY7FdLJ7myabC7v848=";
   };
 
   nativeBuildInputs = [

@@ -15,7 +15,7 @@ buildGoModule {
     owner = "packwiz";
     repo = "packwiz";
     rev = "dfd8b68a4796c763e25bad50265ea1f1233e24f1";
-    sha256 = "sha256-QK8sY7e6QHhg+GH8NiiePGFlsQBI0jjUlsgBuq1Yopc=";
+    hash = "sha256-QK8sY7e6QHhg+GH8NiiePGFlsQBI0jjUlsgBuq1Yopc=";
   };
   passthru.updateScript = unstableGitUpdater { };
 

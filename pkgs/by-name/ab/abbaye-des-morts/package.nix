@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "nevat";
     repo = "abbayedesmorts-gpl";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-muJt1cml0nYdgl0v8cudpUXcdSntc49e6zICTCwzkks=";
+    hash = "sha256-muJt1cml0nYdgl0v8cudpUXcdSntc49e6zICTCwzkks=";
   };
 
   buildInputs = [

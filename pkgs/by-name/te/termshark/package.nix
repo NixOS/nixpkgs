@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
     owner = "gcla";
     repo = "termshark";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-qq7BDGprRkWKRMJiVnqPeTwtHd3tea9dPE8RIPL2YVI=";
+    hash = "sha256-qq7BDGprRkWKRMJiVnqPeTwtHd3tea9dPE8RIPL2YVI=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

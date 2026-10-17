@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "AndreiUlmeyda";
     repo = "oil";
     rev = version;
-    sha256 = "12g0fd7h11hh94b2pyg3pqwbf8bc7gcnrnm1qqbf18s6z02b6ixr";
+    hash = "sha256-uUezBPhGo+AWxqHabNk7bCG3OL7j+SsWSRCGAE9z4Ik=";
   };
 
   postPatch = ''

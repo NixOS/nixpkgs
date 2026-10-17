@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libesmtp";
     repo = "libESMTP";
     rev = "v${finalAttrs.version}";
-    sha256 = "1bhh8hlsl9597x0bnfl563k2c09b61qnkb9mfyqcmzlq63m1zw5y";
+    hash = "sha256-vvAf6jCY/sqwdzWtaXEwKwEm5jCFOrtAP6kkqilEEK4=";
   };
 
   meta = {

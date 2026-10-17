@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     owner = "njh";
     repo = "twolame";
     rev = "977c8ac55d8ca6d5f35d1d413a119dac2b3b0333";
-    sha256 = "1rq3yc8ygzdqid9zk6pixmm4w9sk2vrlx217lhn5bjaglv7iyf7x";
+    hash = "sha256-/Tgfz6ZPyVUspCeITvMWUydOau3xmvlTi7j95xHzA+c=";
   };
 
   nativeBuildInputs = [

@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
     owner = "redhat-developer";
     repo = "odo";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-zEN8yfjW3JHf6OzPQC6Rg2/hJ+3d9d2nYhz60BdSK9s=";
+    hash = "sha256-zEN8yfjW3JHf6OzPQC6Rg2/hJ+3d9d2nYhz60BdSK9s=";
   };
 
   vendorHash = null;

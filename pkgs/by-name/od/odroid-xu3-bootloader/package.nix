@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     owner = "hardkernel";
     repo = "u-boot";
     rev = "fe2f831fd44a4071f58a42f260164544697aa666";
-    sha256 = "1h5yvawzla0vqhkk98gxcwc824bhc936bh6j77qkyspvqcw761fr";
+    hash = "sha256-2QVzOMP7aj/xOdLAZUZicBGBGGf9oTQnxBso+rnavsA=";
   };
 
   buildCommand = ''

@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "troglobit";
     repo = "smcroute";
     rev = finalAttrs.version;
-    sha256 = "sha256-UaIiYtPD6nsk5ZnqoWJ6SOsvmM3xIcu/ImqG5ESPOo0=";
+    hash = "sha256-UaIiYtPD6nsk5ZnqoWJ6SOsvmM3xIcu/ImqG5ESPOo0=";
   };
 
   nativeBuildInputs = [

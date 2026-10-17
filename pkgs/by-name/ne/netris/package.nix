@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "naclander";
     repo = "netris";
     rev = "6773c9b2d39a70481a5d6eb5368e9ced6229ad2b";
-    sha256 = "0gmxbpn50pnffidwjchkzph9rh2jm4wfq7hj8msp5vhdq5h0z9hm";
+    hash = "sha256-FaYPYMEN7nJ1RRIe7DipUsCc4P0TMslbdM5eUOxdvT4=";
   };
 
   patches = [

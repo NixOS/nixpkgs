@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "carvel-dev";
     repo = "vendir";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-1S6rxh0YD0Iui++CqiB0yQWDmU8l3p70B/h+6bjgSQ0=";
+    hash = "sha256-1S6rxh0YD0Iui++CqiB0yQWDmU8l3p70B/h+6bjgSQ0=";
   };
 
   vendorHash = null;

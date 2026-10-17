@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rfc2822";
     repo = "GfxTablet";
     rev = "android-app-${finalAttrs.version}";
-    sha256 = "1i2m98yypfa9phshlmvjlgw7axfisxmldzrvnbzm5spvv5s4kvvb";
+    hash = "sha256-a+9JdNn76lL/sjv/RmvX0XV1+KNyVwo1vEm56z1KVcQ=";
   };
 
   preBuild = "cd driver-uinput";

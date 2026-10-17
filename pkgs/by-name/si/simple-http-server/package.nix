@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "TheWaWaR";
     repo = "simple-http-server";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-JG9dqc8E8rUjSG3pBypamjNqFpM87r7cK+zP+PSyMCQ=";
+    hash = "sha256-JG9dqc8E8rUjSG3pBypamjNqFpM87r7cK+zP+PSyMCQ=";
   };
 
   cargoHash = "sha256-3DelxN2oTFZzoSke7uLbSKYJnF2Bq4MWDvfnKTIsbGk=";

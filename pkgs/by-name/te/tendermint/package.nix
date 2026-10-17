@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "tendermint";
     repo = "tendermint";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-3tggW+M3vZChDT1g77W5M3hchEN6pTSVvkrZda6ZTCY=";
+    hash = "sha256-3tggW+M3vZChDT1g77W5M3hchEN6pTSVvkrZda6ZTCY=";
   };
 
   vendorHash = "sha256-/enY0qERFzAIJNcuw1djRGoAcmtz7R5Ikvlts0f7rLc=";

@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     owner = "fplll";
     repo = "fplll";
     rev = "11dea26c2f9396ffb7a7191aa371343f1f74c5c3";
-    sha256 = "1clxch9hbr30w6s84m2mprxv58adhg5qw6sa2p3jr1cy4r7r59ib";
+    hash = "sha256-K6aSTyaehSzHFUobjsuDTaGye75VVIK04WDkBRNknbI=";
   };
   nativeBuildInputs = [
     autoconf

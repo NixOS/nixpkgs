@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     owner = "xdbob";
     repo = "xss-lock";
     rev = "cd0b89df9bac1880ea6ea830251c6b4492d505a5";
-    sha256 = "040nqgfh564frvqkrkmak3x3h0yadz6kzk81jkfvd9vd20a9drh7";
+    hash = "sha256-B+aWFBBtp7bdlAHNP81vygM4+piqzjzxzo6YAt3DFhA=";
   };
 
   patches = [

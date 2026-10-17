@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "yskoht";
     repo = "keymapviz";
     rev = finalAttrs.version;
-    sha256 = "sha256-eCvwgco22uPEDDsT8FfTRon1xCGy5p1PBp0pDfNprMs=";
+    hash = "sha256-eCvwgco22uPEDDsT8FfTRon1xCGy5p1PBp0pDfNprMs=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];

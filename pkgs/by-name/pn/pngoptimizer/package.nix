@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "hadrien-psydk";
     repo = "pngoptimizer";
     rev = "v${finalAttrs.version}";
-    sha256 = "1hbgf91vzx46grslfdx86smdvm6gs6lq9hpa3bax9xfbsknxi0i7";
+    hash = "sha256-J4LY7dTL9dTVGurChKnRz9TdqjaoN0d1fob0v0Nyb8E=";
   };
 
   nativeBuildInputs = [ pkg-config ];

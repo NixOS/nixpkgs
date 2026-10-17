@@ -13,7 +13,7 @@ buildDotnetModule rec {
     owner = "UnderminersTeam";
     repo = "UndertaleModTool";
     tag = version;
-    sha256 = "sha256-bNSIU5SdyvFqDt1a63NUIuBWRxzk4bNYALSrCku6Cvg=";
+    hash = "sha256-bNSIU5SdyvFqDt1a63NUIuBWRxzk4bNYALSrCku6Cvg=";
     fetchSubmodules = true;
   };
   projectFile = "UndertaleModCli";

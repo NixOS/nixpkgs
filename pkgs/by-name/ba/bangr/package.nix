@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "BAngr";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    sha256 = "sha256-od1UPriojDQHrAWzCYjuNoz27MRGIe+NvntUEFgGGWE=";
+    hash = "sha256-od1UPriojDQHrAWzCYjuNoz27MRGIe+NvntUEFgGGWE=";
   };
 
   nativeBuildInputs = [ pkg-config ];

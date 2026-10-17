@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "karlkleinpaste";
     repo = "biblesync";
     tag = finalAttrs.version;
-    sha256 = "sha256-8CPP0ndrnJrGhNR7Y3lX3td5jXNE8VuwEiD8C2D4K5I=";
+    hash = "sha256-8CPP0ndrnJrGhNR7Y3lX3td5jXNE8VuwEiD8C2D4K5I=";
   };
 
   # `bind` is pulled from std::bind because of `using namespace std;`, so we

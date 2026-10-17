@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "feediron";
     repo = "ttrss_plugin-feediron";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-KU4XQJNK7Ua7rZaXA32lv16RlloCysAb54E5kEY847A=";
+    hash = "sha256-KU4XQJNK7Ua7rZaXA32lv16RlloCysAb54E5kEY847A=";
   };
 
   installPhase = ''

@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "martymac";
     repo = "fpart";
     rev = "fpart-${finalAttrs.version}";
-    sha256 = "sha256-S+paRGjqALohSkm3kpbsiYiYZyC4WWL3ccTMX0FGhEg=";
+    hash = "sha256-S+paRGjqALohSkm3kpbsiYiYZyC4WWL3ccTMX0FGhEg=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

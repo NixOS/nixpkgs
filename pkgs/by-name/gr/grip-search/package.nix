@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "sc0ty";
     repo = "grip";
     rev = "v${finalAttrs.version}";
-    sha256 = "0bkqarylgzhis6fpj48qbifcd6a26cgnq8784hgnm707rq9kb0rx";
+    hash = "sha256-PYM1E84HnGofJOggbB8zQpnGXFwYEXmd0RH+R31WeC4=";
   };
 
   nativeBuildInputs = [

@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "arrufat";
     repo = "pdftag";
     rev = "v${finalAttrs.version}";
-    sha256 = "1paj8hs27akzsivn01a30fl3zx5gfn1h89wxg2m72fd806hk0hql";
+    hash = "sha256-FEMwoQGoOXGqeJ0nBIN1r/Q/qANDBWB31H+qIzREUt0=";
   };
 
   nativeBuildInputs = [

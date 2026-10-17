@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "alexlarsson";
     repo = "gthree";
     rev = finalAttrs.version;
-    sha256 = "09fcnjc3j21lh5fjf067wm35sb4qni4vgzing61kixnn2shy79iy";
+    hash = "sha256-PqbjoRbW9jiDeTb+t0m0mCxdRuXHACddgTQIOZi0zCU=";
   };
 
   patches = [

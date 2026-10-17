@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "obdasystems";
     repo = "eddy";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-K8yd7A4D1LAgwuaJvxdF0oqACuMxX/CZ6yKbR7D+uEQ=";
+    hash = "sha256-K8yd7A4D1LAgwuaJvxdF0oqACuMxX/CZ6yKbR7D+uEQ=";
   };
 
   propagatedBuildInputs = [

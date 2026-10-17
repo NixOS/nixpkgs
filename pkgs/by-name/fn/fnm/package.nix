@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "Schniz";
     repo = "fnm";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-sCPrHy1+hdv6schBxOP1+Y1hpag4/hdKPhG/PZhqKQA=";
+    hash = "sha256-sCPrHy1+hdv6schBxOP1+Y1hpag4/hdKPhG/PZhqKQA=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

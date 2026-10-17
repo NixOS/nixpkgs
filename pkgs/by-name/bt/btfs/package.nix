@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "johang";
     repo = "btfs";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-kl58bz+iozviWMmqjUNAcccxKcB3bg6iDAcWNezmN6g=";
+    hash = "sha256-kl58bz+iozviWMmqjUNAcccxKcB3bg6iDAcWNezmN6g=";
   };
 
   nativeBuildInputs = [
