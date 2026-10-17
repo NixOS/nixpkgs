@@ -45,6 +45,7 @@ rustPlatform.buildRustPackage (
       installShellCompletion contrib/completion/hx.{bash,fish,zsh}
       mkdir -p $out/share/{applications,icons/hicolor/256x256/apps}
       cp contrib/Helix.desktop $out/share/applications
+      install -Dm644 contrib/Helix.appdata.xml $out/share/metainfo/com.helix_editor.Helix.metainfo.xml
       cp contrib/helix.png $out/share/icons/hicolor/256x256/apps
       wrapProgram $out/bin/hx --set HELIX_RUNTIME ${helix.runtime}
     '';

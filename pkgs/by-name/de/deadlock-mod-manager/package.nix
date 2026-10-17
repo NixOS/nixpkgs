@@ -109,6 +109,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     )
   '';
 
+  postInstall = ''
+    install -Dm644 apps/desktop/src-tauri/dev.stormix.deadlock-mod-manager.metainfo.xml -t $out/share/metainfo
+  '';
+
   desktopItems = [
     (makeDesktopItem {
       desktopName = "deadlock-mod-manager";

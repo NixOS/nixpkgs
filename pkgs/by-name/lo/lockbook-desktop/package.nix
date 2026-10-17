@@ -68,6 +68,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = ''
     install -D docs/graphics/logo.svg $out/share/icons/hicolor/scalable/apps/lockbook.svg
+    install -Dm644 utils/dev/flatpak-package/net.lockbook.Lockbook.appdata.xml -t $out/share/metainfo
   '';
 
   meta = {

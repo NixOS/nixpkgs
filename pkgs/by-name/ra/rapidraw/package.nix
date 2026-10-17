@@ -138,6 +138,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       # Patch the .desktop file to set the Categories field
       sed -i '/^Categories=/c\Categories=Graphics;Photography' "$out/share/applications/RapidRAW.desktop"
 
+      install -Dm644 data/io.github.CyberTimon.RapidRAW.metainfo.xml -t $out/share/metainfo
+
       # Ensure the resources directory exists before linking
       mkdir -p $out/lib/RapidRAW/resources
 

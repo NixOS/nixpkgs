@@ -224,6 +224,7 @@ stdenv.mkDerivation (finalAttrs: {
         mkdir --parents $out/lib/${binName}/
         mv packages/frontend/apps/electron/out/${buildType}/${productName}-linux-${nodeArch}/{resources,LICENSE*} $out/lib/${binName}/
         install -Dm644 packages/frontend/apps/electron/resources/icons/icon_${buildType}_64x64.png $out/share/icons/hicolor/64x64/apps/${binName}.png
+        install -Dm644 packages/frontend/apps/electron/resources/affine.metainfo.xml -t $out/share/metainfo
 
         makeWrapper "${lib.getExe electron}" $out/bin/${binName} \
           --inherit-argv0 \

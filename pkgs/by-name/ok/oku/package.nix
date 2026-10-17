@@ -55,10 +55,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env.RUSTONIG_SYSTEM_LIBONIG = 1;
 
   # the program expects icons to be installed but the
-  # program does not install them itself
+  # program does not install them itself, nor its
+  # desktop entry and AppStream metainfo
   postInstall = ''
     mkdir -p $out/share/icons
     cp -r ${finalAttrs.src}/data/hicolor $out/share/icons
+    install -Dm644 data/io.github.OkuBrowser.oku.desktop -t $out/share/applications
+    install -Dm644 data/io.github.OkuBrowser.oku.metainfo.xml -t $out/share/metainfo
   '';
 
   passthru = {
