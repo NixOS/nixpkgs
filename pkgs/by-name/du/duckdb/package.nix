@@ -6,6 +6,7 @@
   ninja,
   openssl,
   python3,
+  versionsJson ? ./versions.json,
   versionCheckHook,
 }:
 
@@ -32,7 +33,7 @@ let
           "i686";
     in
     "${os}_${arch}${lib.optionalString stdenv.hostPlatform.isMusl "_musl"}${lib.optionalString stdenv.hostPlatform.isMinGW "_mingw"}";
-  versions = lib.importJSON ./versions.json;
+  versions = lib.importJSON versionsJson;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "duckdb";
@@ -44,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (versions) hash;
     owner = "duckdb";
     repo = "duckdb";
-    tag = "v${finalAttrs.version}";
+    rev = "${finalAttrs.rev}";
   };
 
   outputs = [
