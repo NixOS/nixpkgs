@@ -1,0 +1,14 @@
+--- a/plugins/CMakeLists.txt
++++ b/plugins/CMakeLists.txt
+@@ -5,11 +5,9 @@ add_subdirectory(CompensatedDelay)
+ add_subdirectory(Compressor)
+ add_subdirectory(Crossfeed)
+ add_subdirectory(Delay)
+-add_subdirectory(EQ3)
+ add_subdirectory(Expander)
+ add_subdirectory(Gate)
+ add_subdirectory(HugeGain)
+-add_subdirectory(Keyboard)
+ add_subdirectory(Limiter)
+ add_subdirectory(Maths)
+ add_subdirectory(MidiLooper)
