@@ -11,15 +11,15 @@
   sops,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "helm-secrets";
-  version = "4.7.6";
+  version = "4.7.9";
 
   src = fetchFromGitHub {
     owner = "jkroepke";
     repo = "helm-secrets";
-    rev = "v${version}";
-    hash = "sha256-gCsXnZCvQqc5PIQGheOdzZ1YSUNDhbMvJIROMGA65Jg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-MXeuc54StPKWhflbdEoTuDh1hOx0CZeLXtpGa9Lzm/c=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -31,18 +31,18 @@ stdenv.mkDerivation rec {
   # NOTE: helm-secrets is comprised of shell scripts.
   dontBuild = true;
 
-  # NOTE: Fix version string
+  # NOTE: Fix version string in the Helm 4 CLI plugin manifest.
   postPatch = ''
-    sed -i 's/^version:.*/version: "${version}"/' plugin.yaml
+    sed -i 's/^version:.*/version: "${finalAttrs.version}"/' plugins/helm-secrets-cli/plugin.yaml
   '';
 
   installPhase = ''
     runHook preInstall
 
-    install -dm755 $out/helm-secrets $out/helm-secrets/scripts
-    install -m644 -Dt $out/helm-secrets plugins/helm-secrets-cli/plugin.yaml
-    cp -r plugins/helm-secrets-cli/scripts/* $out/helm-secrets/scripts
-    wrapProgram $out/helm-secrets/scripts/run.sh \
+    install -dm755 $out/${finalAttrs.pname} $out/${finalAttrs.pname}/scripts
+    install -m644 -Dt $out/${finalAttrs.pname} plugins/helm-secrets-cli/plugin.yaml
+    cp -rL scripts/* $out/${finalAttrs.pname}/scripts
+    wrapProgram $out/${finalAttrs.pname}/scripts/run.sh \
         --prefix PATH : ${
           lib.makeBinPath [
             coreutils
@@ -64,4 +64,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ yurrriq ];
     platforms = lib.platforms.unix;
   };
-}
+})
