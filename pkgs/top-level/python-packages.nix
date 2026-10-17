@@ -7270,8 +7270,6 @@ self: super: with self; {
 
   grad-cam = callPackage ../development/python-modules/grad-cam { };
 
-  gradient = callPackage ../development/python-modules/gradient { };
-
   gradient-statsd = callPackage ../development/python-modules/gradient-statsd { };
 
   gradio = callPackage ../development/python-modules/gradio { };
@@ -20422,7 +20420,7 @@ self: super: with self; {
 
   syrupy = callPackage ../development/python-modules/syrupy { };
 
-  syrupy_6 = callPackage ../development/python-modules/syrupy/6.nix { };
+  syrupy_5 = callPackage ../development/python-modules/syrupy/5.nix { };
 
   syslog-rfc5424-formatter = callPackage ../development/python-modules/syslog-rfc5424-formatter { };
 

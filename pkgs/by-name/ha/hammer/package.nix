@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "hammer";
     repo = "hammer";
     rev = finalAttrs.version;
-    sha256 = "sha256-xMZhUnycGeHkNZfHQ2d9mETti8HwGHZNskFqh9f0810=";
+    hash = "sha256-xMZhUnycGeHkNZfHQ2d9mETti8HwGHZNskFqh9f0810=";
   };
 
   nativeBuildInputs = [

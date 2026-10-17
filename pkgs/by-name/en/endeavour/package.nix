@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "World";
     repo = "Endeavour";
     rev = finalAttrs.version;
-    sha256 = "sha256-1mCTw+nJ1w7RdCXfPCO31t1aYOq9Bki3EaXsHiiveD0=";
+    hash = "sha256-1mCTw+nJ1w7RdCXfPCO31t1aYOq9Bki3EaXsHiiveD0=";
   };
 
   nativeBuildInputs = [

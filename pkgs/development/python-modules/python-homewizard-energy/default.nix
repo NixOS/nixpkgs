@@ -14,7 +14,7 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  syrupy,
+  syrupy_5,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -53,7 +53,7 @@ buildPythonPackage (finalAttrs: {
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
-    syrupy
+    syrupy_5
   ];
 
   pythonImportsCheck = [ "homewizard_energy" ];

@@ -9,7 +9,7 @@
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
-  syrupy,
+  syrupy_5,
 }:
 
 buildPythonPackage rec {
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     pytest-timeout
     pytest-xdist
     pytestCheckHook
-    syrupy
+    syrupy_5
   ];
 
   pytestFlags = [ "--snapshot-warn-unused" ];

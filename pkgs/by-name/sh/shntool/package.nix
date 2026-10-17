@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "debian";
     repo = "shntool";
     rev = "debian/${finalAttrs.version}";
-    sha256 = "sha256-Qn4LwVx34EhypiZDIxuveNhePigkuiICn1nBukoQf5Y=";
+    hash = "sha256-Qn4LwVx34EhypiZDIxuveNhePigkuiICn1nBukoQf5Y=";
   };
 
   patches = [

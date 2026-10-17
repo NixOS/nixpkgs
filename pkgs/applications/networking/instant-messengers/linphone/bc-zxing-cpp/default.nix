@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "public/external";
     repo = "zxing-cpp";
     rev = "722123ad0cadee0e4c313f80eac5162a9f8d7d73";
-    sha256 = "sha256-GhrrIk2Kph6H5qs0g01b98F1Xzh/6vCS3+p+q0mhqcQ=";
+    hash = "sha256-GhrrIk2Kph6H5qs0g01b98F1Xzh/6vCS3+p+q0mhqcQ=";
   };
 
   nativeBuildInputs = [

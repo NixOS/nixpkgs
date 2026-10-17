@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "mobile-broadband";
     repo = "libqrtr-glib";
     rev = finalAttrs.version;
-    sha256 = "sha256-1zsGwZogsI0QvIvvQy5FhcRSq2Q75/J724OcM+K/QBo=";
+    hash = "sha256-1zsGwZogsI0QvIvvQy5FhcRSq2Q75/J724OcM+K/QBo=";
   };
 
   strictDeps = true;

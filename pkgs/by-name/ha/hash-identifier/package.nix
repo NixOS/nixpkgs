@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "kalilinux";
     repo = "packages/hash-identifier";
     rev = "kali/${finalAttrs.version}+git20180314-0kali1";
-    sha256 = "1amz48ijwjjkccg6gmdn3ffnyp2p52ksagy4m9gy8l2v5wj3j32h";
+    hash = "sha256-UAw5JC9bUORfqsQ/pacoV1xvnRu21WceY1NKLiMiv6o=";
   };
 
   pyproject = false; # no setup.py
