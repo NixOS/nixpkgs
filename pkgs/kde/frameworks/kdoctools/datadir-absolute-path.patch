@@ -1,0 +1,8 @@
+--- a/config-kdoctools.h.cmake
++++ b/config-kdoctools.h.cmake
+@@ -2,4 +2,4 @@
+ 
+ #define DOCBOOK_XML_CURRDTD "@DocBookXML4_DTD_DIR@"
+ 
+-#define KDOCTOOLS_INSTALL_DATADIR_KF "${CMAKE_INSTALL_PREFIX}/${KDE_INSTALL_DATADIR_KF}"
++#define KDOCTOOLS_INSTALL_DATADIR_KF "${KDE_INSTALL_FULL_DATADIR_KF}"
