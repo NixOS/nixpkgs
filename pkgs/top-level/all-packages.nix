@@ -1642,8 +1642,6 @@ with pkgs;
         { };
   };
 
-  blacken-docs = with python3Packages; toPythonApplication blacken-docs;
-
   cffconvert = python3Packages.toPythonApplication python3Packages.cffconvert;
 
   aiovban-pyaudio = python3Packages.toPythonApplication python3Packages.aiovban-pyaudio;
