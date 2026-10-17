@@ -1,0 +1,29 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 277ab62..3fbe1f9 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -214,7 +214,10 @@ else ()
+     set(LIBCAESIUM_EXTERNAL_PATH ${LIBCAESIUM_SOURCE_DIR}/target/${LIBCAESIUM_BUILD_TYPE}/libcaesium.so)
+ endif ()
+
+-ExternalProject_Add(
++if (LIBCAESIUM)
++    target_link_libraries(${TARGET} PRIVATE ${LIBCAESIUM})
++else ()
++    ExternalProject_Add(
+         libcaesium
+         GIT_REPOSITORY https://github.com/Lymphatus/libcaesium
+         GIT_TAG ${LIBCAESIUM_VERSION}
+@@ -225,8 +228,9 @@ ExternalProject_Add(
+         LOG_OUTPUT_ON_FAILURE ON
+         LOG_BUILD ON
+         BUILD_BYPRODUCTS ${LIBCAESIUM_EXTERNAL_PATH}
+-)
+-add_dependencies(${TARGET} libcaesium)
++    )
++    add_dependencies(${TARGET} libcaesium)
++endif ()
+
+ # --- WinSparkle ---
+ if (WIN32)
+
