@@ -11,13 +11,13 @@
   pytest-asyncio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gmqtt";
   version = "0.8.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Yft2QRCfV8op9z0tjyy0h95J12M474xoIo25YbbpaWo=";
   };
 
@@ -30,6 +30,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-asyncio
   ];
+
   pythonImportsCheck = [ "gmqtt" ];
 
   meta = {
@@ -38,4 +39,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})
