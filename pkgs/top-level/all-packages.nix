@@ -2494,8 +2494,6 @@ with pkgs;
 
   shellify = haskellPackages.shellify.bin;
 
-  slither-analyzer = with python3Packages; toPythonApplication slither-analyzer;
-
   # aka., pgp-tools
 
   specup = haskellPackages.specup.bin;
