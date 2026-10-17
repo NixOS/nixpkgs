@@ -20,6 +20,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-c";
   version = "0.10.22";
 
+  __structuredAttrs = true;
+
   src = fetchCrate {
     inherit (finalAttrs) pname;
     version = "${finalAttrs.version}+cargo-${cargoVersion}";
