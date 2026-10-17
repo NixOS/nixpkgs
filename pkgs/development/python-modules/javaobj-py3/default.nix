@@ -32,6 +32,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/tcalmant/python-javaobj";
     changelog = "https://github.com/tcalmant/python-javaobj/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ kamadorueda ];
+    maintainers = [ ];
   };
 })

@@ -41,6 +41,6 @@ buildPythonPackage rec {
     description = "Core package for using GraphQL in a custom server easily";
     homepage = "https://github.com/graphql-python/graphql-server-core";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kamadorueda ];
+    maintainers = [ ];
   };
 }

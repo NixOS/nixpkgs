@@ -38,6 +38,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/AzureAD/microsoft-authentication-library-for-python";
     changelog = "https://github.com/AzureAD/microsoft-authentication-library-for-python/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kamadorueda ];
+    maintainers = [ ];
   };
 })
