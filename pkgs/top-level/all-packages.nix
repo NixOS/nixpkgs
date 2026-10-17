@@ -2487,8 +2487,6 @@ with pkgs;
 
   ruby-lsp = rubyPackages.ruby-lsp;
 
-  safety-cli = with python3.pkgs; toPythonApplication safety;
-
   segger-jlink-headless = callPackage ../by-name/se/segger-jlink/package.nix { headless = true; };
 
   semgrep = python3.pkgs.toPythonApplication python3.pkgs.semgrep;
