@@ -55,10 +55,15 @@ python3Packages.buildPythonApplication rec {
 
   installFlags = [
     "PREFIX=${placeholder "out"}"
-    "USE_SYSTEMD=0"
     "SYSCONFDIR=${placeholder "out"}/etc"
   ]
   ++ lib.optional withNftables "USE_NFTABLES=1";
+
+  # The D-Bus service names this unit, so it has to come along
+  postInstall = ''
+    substituteInPlace $out/lib/systemd/system/waydroid-container.service \
+      --replace-fail /usr/bin/waydroid $out/bin/waydroid
+  '';
 
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
