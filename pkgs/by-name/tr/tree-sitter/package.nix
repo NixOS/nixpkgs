@@ -137,6 +137,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tree-sitter";
   version = "0.26.11";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "tree-sitter";
