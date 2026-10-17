@@ -5,7 +5,7 @@
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
-  pname = "arsenik";
+  pname = "kanata-config-aekeynox";
   version = "0.2.0";
 
   src = fetchFromGitHub {
@@ -17,6 +17,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   dontConfigure = true;
   dontBuild = true;
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   installPhase = ''
     runHook preInstall
