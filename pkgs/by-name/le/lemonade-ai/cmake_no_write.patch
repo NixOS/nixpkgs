@@ -1,0 +1,17 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 70c3bf35..dcf56843 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -374,10 +374,10 @@ if(NOT USE_SYSTEM_LWS)
+     # Patch the CMakeLists.txt files to remove -Werror
+     file(READ "${libwebsockets_SOURCE_DIR}/CMakeLists.txt" LWS_CMAKE_MAIN)
+     string(REPLACE "-Werror" "" LWS_CMAKE_MAIN "${LWS_CMAKE_MAIN}")
+-    file(WRITE "${libwebsockets_SOURCE_DIR}/CMakeLists.txt" "${LWS_CMAKE_MAIN}")
++    # file(WRITE "${libwebsockets_SOURCE_DIR}/CMakeLists.txt" "${LWS_CMAKE_MAIN}")
+     file(READ "${libwebsockets_SOURCE_DIR}/lib/CMakeLists.txt" LWS_CMAKE_LIB)
+     string(REPLACE "-Werror" "" LWS_CMAKE_LIB "${LWS_CMAKE_LIB}")
+-    file(WRITE "${libwebsockets_SOURCE_DIR}/lib/CMakeLists.txt" "${LWS_CMAKE_LIB}")
++    # file(WRITE "${libwebsockets_SOURCE_DIR}/lib/CMakeLists.txt" "${LWS_CMAKE_LIB}")
+     # Now add the subdirectory
+     add_subdirectory(${libwebsockets_SOURCE_DIR} ${libwebsockets_BINARY_DIR})
+     message(STATUS "libwebsockets will be fetched (v${MIN_LWS_VERSION})")
