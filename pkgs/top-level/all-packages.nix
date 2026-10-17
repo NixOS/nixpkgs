@@ -4849,8 +4849,6 @@ with pkgs;
     replay-node-cli
     ;
 
-  rnginline = with python3Packages; toPythonApplication rnginline;
-
   rr = callPackage ../development/tools/analysis/rr { };
 
   muonStandalone = muon.override {
