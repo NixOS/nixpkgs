@@ -770,7 +770,10 @@ in
             User = cfg.user;
             Group = cfg.group;
             Type = "notify";
-            RestartSec = 60;
+            Restart = "always";
+            RestartSec = 1;
+            RestartSteps = 20;
+            RestartMaxDelaySec = 120;
             LimitNOFILE = 65536;
             NoNewPrivileges = true;
             LockPersonality = true;
