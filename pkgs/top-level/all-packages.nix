@@ -2449,8 +2449,6 @@ with pkgs;
 
   quota = if stdenv.hostPlatform.isLinux then linuxquota else unixtools.quota;
 
-  rapidgzip = with python3Packages; toPythonApplication rapidgzip;
-
   ratarmount = with python3Packages; toPythonApplication ratarmount;
 
   inherit (callPackage ../tools/security/rekor { })
