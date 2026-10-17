@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Replace the embedded Tor binary (which is in a Tar archive)
     # with one from Nixpkgs.
     cp ${briar-tor} ./tor
-    for arch in {aarch64,armhf,x86_64}; do
+    for arch in aarch64 armhf x86_64; do
       7z a tor_linux-$arch.zip tor
       7z a $out/lib/briar-desktop.jar tor_linux-$arch.zip
     done
