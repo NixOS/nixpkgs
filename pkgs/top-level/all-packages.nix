@@ -9985,8 +9985,6 @@ with pkgs;
 
   selinuxPackages = recurseIntoAttrs (callPackage ../os-specific/linux/selinux { });
 
-  snscrape = with python3Packages; toPythonApplication snscrape;
-
   sourceAndTags = callPackage ../misc/source-and-tags {
     hasktags = haskellPackages.hasktags;
   };
