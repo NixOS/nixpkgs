@@ -2,6 +2,7 @@
   fetchFromGitHub,
   lib,
   nix-update-script,
+  nixosTests,
   rustPlatform,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -16,7 +17,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
   cargoHash = "sha256-k+7FXcyn5hdW3da9xFMePaZZ90ET3zrq0HtSHgGdS0I=";
   buildAndTestSubdir = "any2nix-api";
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = {
+      inherit (nixosTests) any2nix-api;
+    };
+    updateScript = nix-update-script { };
+  };
   meta = {
     description = "JSON-based API for translating from different formats to Nix.";
     homepage = "https://github.com/gbr-ufs/any2nix";
