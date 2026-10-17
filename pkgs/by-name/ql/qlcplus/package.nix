@@ -93,10 +93,6 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
 
-  postInstall = ''
-    ln -sf $out/lib/*/libqlcplus* $out/lib
-  '';
-
   passthru.updateScript = nix-update-script {
     # Tags look like QLC+_5.3.0
     extraArgs = [ "--version-regex=^QLC\\+_(.*)$" ];
