@@ -7,6 +7,7 @@
   # Many Salt modules require various Python modules to be installed,
   # passing them in this array enables Salt to find them.
   extraInputs ? [ ],
+  nixosTests,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
@@ -65,6 +66,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   # possibly there are more issues but I didn't leave the test suite running
   # as is it rather long.
   doCheck = false;
+
+  passthru.tests.nixos = nixosTests.salt;
 
   meta = {
     homepage = "https://saltproject.io/";
