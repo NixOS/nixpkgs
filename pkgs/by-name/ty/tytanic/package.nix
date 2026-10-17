@@ -82,6 +82,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     mainProgram = "tt";
     maintainers = with lib.maintainers; [
+      andrew15-5
       apcamargo
     ];
   };
