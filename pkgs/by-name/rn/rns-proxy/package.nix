@@ -12,6 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rns-proxy";
   version = "0.2.0";
   __structuredAttrs = true;
+  __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "mytecor";
