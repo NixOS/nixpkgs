@@ -49,7 +49,10 @@ in
 # 'parsed.cpu.family' won't be correct for every platform.
 + (lib.optionalString
   (
-    stdenv.targetPlatform.isLoongArch64 || stdenv.targetPlatform.isS390 || stdenv.targetPlatform.isAlpha
+    stdenv.targetPlatform.isLoongArch64
+    || stdenv.targetPlatform.isS390
+    || stdenv.targetPlatform.isAlpha
+    || stdenv.targetPlatform.isHppa
   )
   ''
     touch libgcc/config/${stdenv.targetPlatform.parsed.cpu.family}/crt{i,n}.S
