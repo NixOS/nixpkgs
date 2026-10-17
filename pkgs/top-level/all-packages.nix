@@ -5524,8 +5524,6 @@ with pkgs;
   inherit (callPackage ../development/libraries/libliftoff { }) libliftoff_0_4 libliftoff_0_5;
   libliftoff = libliftoff_0_5;
 
-  libretranslate = with python3.pkgs; toPythonApplication libretranslate;
-
   librsb = callPackage ../development/libraries/librsb {
     # Taken from https://build.opensuse.org/package/view_file/science/librsb/librsb.spec
     memHierarchy = "L3:16/64/8192K,L2:16/64/2048K,L1:8/64/16K";
