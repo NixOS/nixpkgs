@@ -8311,8 +8311,6 @@ with pkgs;
     withFonts = true;
   };
 
-  magic-wormhole = with python3Packages; toPythonApplication magic-wormhole;
-
   magnetophonDSP = recurseIntoAttrs {
     CharacterCompressor = callPackage ../applications/audio/magnetophonDSP/CharacterCompressor { };
     CompBus = callPackage ../applications/audio/magnetophonDSP/CompBus { };
