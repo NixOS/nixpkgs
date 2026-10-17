@@ -36,6 +36,15 @@
   hypothesis,
 }:
 
+let
+  # https://github.com/scipp/scipp/blob/v26.9.0/pyproject.toml#L7-L10
+  pybind11' = pybind11.overridePythonAttrs (old: {
+    version = "3.0.4";
+    src = old.src.override {
+      hash = "sha256-QZKnIOopEDsiRFkc1qQ+DaDHoTNuEEgQVeiAL0sQqak=";
+    };
+  });
+in
 buildPythonPackage (finalAttrs: {
   pname = "scipp";
   version = "26.9.0";
@@ -73,7 +82,7 @@ buildPythonPackage (finalAttrs: {
     boost
     eigen
     gtest
-    pybind11
+    pybind11'
     units-llnl.passthru.top-level
     onetbb
   ];
@@ -102,6 +111,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Multi-dimensional data arrays with labeled dimensions";
     homepage = "https://scipp.github.io";
+    changelog = "https://github.com/scipp/scipp/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
