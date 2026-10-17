@@ -1,32 +1,54 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
-  util-linux,
-  coreutils,
+  makeWrapper,
+  rsync,
+  kmod,
+  gawk,
+  glib,
+  fuse-overlayfs,
+  fuse3,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "profile-sync-daemon";
-  version = "6.50";
+  version = "7.04";
 
   src = fetchFromGitHub {
     owner = "graysky2";
     repo = "profile-sync-daemon";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-Wb9YLxuu9i9s/Y6trz5NZDU9WRywe3138cp5Q2gWbxM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-G2w5V9Eq19Jjx7PZcKH8bBZ3tOoghYaPQyMjlwFkARY=";
   };
 
-  installPhase = ''
-    PREFIX=\"\" DESTDIR=$out make install
-    substituteInPlace $out/bin/profile-sync-daemon \
-      --replace "/usr/" "$out/" \
-      --replace "sudo " "/run/wrappers/bin/sudo "
-    # $HOME detection fails (and is unnecessary)
-    sed -i '/^HOME/d' $out/bin/profile-sync-daemon
-    substituteInPlace $out/bin/psd-overlay-helper \
-      --replace "PATH=/usr/bin:/bin" "PATH=${util-linux.bin}/bin:${coreutils}/bin" \
-      --replace "sudo " "/run/wrappers/bin/sudo "
+  nativeBuildInputs = [ makeWrapper ];
+
+  makeFlags = [
+    "PREFIX=$(out)"
+    "INITDIR_SYSTEMD=$(out)/lib/systemd/user"
+  ];
+
+  postInstall = ''
+    substituteInPlace \
+      $out/bin/{profile-sync-daemon,psd-suspend-sync} \
+      $out/lib/systemd/user/psd{.service,-resync.service} \
+      --replace-fail /usr $out
+
+    for f in $out/bin/*; do
+      if [ ! -L "$f" ]; then
+        wrapProgram $f --prefix PATH : ${
+          lib.makeBinPath [
+            rsync
+            kmod
+            gawk
+            glib
+            fuse-overlayfs
+            fuse3
+          ]
+        }
+      fi
+    done
   '';
 
   meta = {
