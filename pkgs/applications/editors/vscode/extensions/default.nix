@@ -2634,8 +2634,8 @@ let
         mktplcRef = {
           publisher = "jkillian";
           name = "custom-local-formatters";
-          version = "0.1.1";
-          hash = "sha256-Yxui136wK+C5d0h79nXpGQ+lEclmne8XNNxDgUEG6kM=";
+          version = "0.2.0";
+          hash = "sha256-GNHo2Q13Anoui5wugSpO4I2puZ6nRDBgZtEsNRUeeFk=";
         };
         meta = {
           license = lib.licenses.mit;
