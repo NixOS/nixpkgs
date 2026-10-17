@@ -5163,8 +5163,6 @@ with pkgs;
     useMinimalFeatures = true;
   };
 
-  ghp-import = with python3Packages; toPythonApplication ghp-import;
-
   ghcid = haskellPackages.ghcid.bin;
   glfw = glfw3;
 
