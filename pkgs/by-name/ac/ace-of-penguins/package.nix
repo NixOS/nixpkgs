@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     let
       generateItem = gameName: {
         name = "ace-of-penguins-${gameName}";
-        exec = "${placeholder "out"}/bin/${gameName}";
+        exec = "@out@/bin/${gameName}";
         comment = "Ace of Penguins ${gameName} Card Game";
         desktopName = gameName;
         genericName = gameName;
@@ -67,6 +67,11 @@ stdenv.mkDerivation (finalAttrs: {
       "taipei"
       "thornq"
     ];
+
+  preFixup = ''
+    substituteInPlace $out/share/applications/ace-of-penguins-*.desktop \
+      --subst-var out
+  '';
 
   meta = {
     homepage = "https://www.delorie.com/store/ace/";
