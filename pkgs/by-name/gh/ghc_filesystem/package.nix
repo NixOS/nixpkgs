@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "filesystem";
-  version = "1.5.14";
+  version = "1.5.16";
 
   src = fetchFromGitHub {
     owner = "gulrak";
     repo = "filesystem";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XZ0IxyNIAs2tegktOGQevkLPbWHam/AOFT+M6wAWPFg=";
+    hash = "sha256-9jGjdFgsu9zIebB2gjkPGI4UkCf627jKTHUzZvXXelQ=";
   };
 
   nativeBuildInputs = [ cmake ];
