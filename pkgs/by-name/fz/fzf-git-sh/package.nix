@@ -18,15 +18,15 @@
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "fzf-git-sh";
-  version = "0-unstable-2026-08-06";
+  version = "0-unstable-2026-09-28";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = "fzf-git.sh";
-    rev = "d5b0a5dcd1e073b8bfca45338d5dfad3e5642471";
-    hash = "sha256-j7co9UjWdSMC7Ojyhuz2bIALrucF94o+irF4pJ6hgG4=";
+    rev = "110c0a10b744131b90861aa1d1fff6fbe0794f9d";
+    hash = "sha256-pu3qAtY/M5IPfRHGKhC1rFscSCBvgnjaD2KlAXbZ8L0=";
   };
 
   dontBuild = true;
@@ -34,48 +34,57 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -i \
-      -e "s,\bfzf\b,${fzf}/bin/fzf," \
-      -e "s,\bawk\b,${gawk}/bin/awk," \
-      -e "s,\bbash\b,${bash}/bin/bash," \
-      -e "s,\bbat\b,${bat}/bin/bat," \
-      -e "s,\bcat\b,${coreutils}/bin/cat," \
-      -e "s,\bcut\b,${coreutils}/bin/cut," \
-      -e "s,\bhead\b,${coreutils}/bin/head," \
-      -e "s,\buniq\b,${coreutils}/bin/uniq," \
-      -e "s,\bcolumn\b,${util-linux}/bin/column," \
-      -e "s,\bgrep\b,${gnugrep}/bin/grep," \
-      -e "s,\bsed\b,${gnused}/bin/sed," \
-      -e "s,\bxargs\b,${findutils}/bin/xargs," \
-      -e "s,\bxdg-open\b,${xdg-utils}/bin/xdg-open," \
-      -e "s,\bzsh\b,${zsh}/bin/zsh," \
-      -e "/display-message\|fzf-git-\$o-widget\|\burl=\|\$remote_url =~ /!s,\bgit\b,${git}/bin/git,g" \
-      -e "s,__fzf_git=.*BASH_SOURCE.*,__fzf_git=$out/share/${pname}/fzf-git.sh," \
+      -e "/fzf-git-\$o-widget/!s,\bfzf\b,${lib.getExe fzf},g" \
+      -e "s,\bawk\b,${lib.getExe' gawk "awk"},g" \
+      -e "s,\bbash\b,${lib.getExe bash},g" \
+      -e "s,\bbat\b,${lib.getExe bat},g" \
+      -e "s,\bcat\b,${lib.getExe' coreutils "cat"},g" \
+      -e "s,\bcut\b,${lib.getExe' coreutils "cut"},g" \
+      -e "s,\bhead\b,${lib.getExe' coreutils "head"},g" \
+      -e "s,\buniq\b,${lib.getExe' coreutils "uniq"},g" \
+      -e "s,\bcolumn\b,${lib.getExe' util-linux "column"},g" \
+      -e "s,\bgrep\b,${lib.getExe gnugrep},g" \
+      -e "s,\bsed\b,${lib.getExe gnused},g" \
+      -e "s,\bxargs\b,${lib.getExe' findutils "xargs"},g" \
+      -e "s,\bxdg-open\b,${lib.getExe' xdg-utils "xdg-open"},g" \
+      -e "s,\bzsh\b,${lib.getExe zsh},g" \
+      -e "/display-message\|fzf-git-\$o-widget\|\burl=\|\$remote_url =~ /!s,\bgit\b,${lib.getExe git},g" \
+      -e "s,__fzf_git=.*BASH_SOURCE.*,__fzf_git=$out/share/fzf-git-sh/fzf-git.sh," \
       -e "/__fzf_git=.*readlink.*/d" \
       fzf-git.sh
 
     sed -i \
-      -e "s,\bbash\b,${bash}/bin/bash," \
-      -e "s,\''$fzf_git_sh_path\b,$out/share/${pname}," \
+      -e "s,\bbash\b,${lib.getExe bash},g" \
+      -e "s,\''$fzf_git_sh_path\b,$out/share/fzf-git-sh," \
       fzf-git.fish
+
+    sed -i \
+      -e "s,\bbash\b,${lib.getExe bash},g" \
+      -e "s,\bcat\b,${lib.getExe' coreutils "cat"},g" \
+      -e "s,__fzf_git_tmux=.*BASH_SOURCE.*,__fzf_git_tmux=$out/share/fzf-git-sh/fzf-git.tmux," \
+      -e "s,__fzf_git=.*/fzf-git.sh\$,__fzf_git=$out/share/fzf-git-sh/fzf-git.sh," \
+      -e "/__fzf_git_tmux=.*readlink.*/d" \
+      fzf-git.tmux
   '';
 
   installPhase = ''
-    install -D fzf-git.sh $out/share/${pname}/fzf-git.sh
-    install -D fzf-git.fish $out/share/${pname}/fzf-git.fish
+    install -D fzf-git.sh $out/share/fzf-git-sh/fzf-git.sh
+    install -D fzf-git.fish $out/share/fzf-git-sh/fzf-git.fish
+    install -D fzf-git.tmux $out/share/fzf-git-sh/fzf-git.tmux
   '';
 
   # Smoke test
   installCheckPhase = ''
     export HOME=$(mktemp -d)
-    ${bash}/bin/bash -c "source $out/share/${pname}/fzf-git.sh"
-    ${fish}/bin/fish -c "source $out/share/${pname}/fzf-git.fish"
+    ${lib.getExe bash} -c "source $out/share/fzf-git-sh/fzf-git.sh"
+    ${lib.getExe fish} -c "source $out/share/fzf-git-sh/fzf-git.fish"
   '';
 
   passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     homepage = "https://github.com/junegunn/fzf-git.sh";
-    description = "Bash, zsh and fish key bindings for Git objects, powered by fzf";
+    description = "Bash, zsh, fish and tmux key bindings for Git objects, powered by fzf";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ deejayem ];
     platforms = lib.platforms.all;
