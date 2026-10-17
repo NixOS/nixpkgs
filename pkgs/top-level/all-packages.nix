@@ -2266,8 +2266,6 @@ with pkgs;
     nomad_2_0
     ;
 
-  nth = with python3Packages; toPythonApplication name-that-hash;
-
   nvchecker =
     with python3Packages;
     toPythonApplication (
