@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-dropbox-api";
-  version = "0.1.4";
+  version = "0.1.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bdr99";
     repo = "python-dropbox-api";
     tag = finalAttrs.version;
-    hash = "sha256-Ry2FsatM2pOxcnwdlPr1RFaHCEvbsaa+RAHxpav5leM=";
+    hash = "sha256-Jr6JkkQ4jOZ8ZEtGN6/ZqeTl5cADKOq8DKwq4LU3Glc=";
   };
 
   build-system = [ poetry-core ];

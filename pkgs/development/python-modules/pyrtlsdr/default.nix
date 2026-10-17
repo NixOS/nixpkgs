@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "pyrtlsdr";
-  version = "0.5.0";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-I9EevRtoCz5qKpJrc95P/ocssf/thwHyV80cRtGoQKw=";
+    hash = "sha256-9fXB19nl+YCVwD8UMfLzm+RfVMweFwLMCJGr4Hsy5Ls=";
   };
 
   build-system = [ setuptools ];
