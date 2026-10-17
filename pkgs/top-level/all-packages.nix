@@ -2002,8 +2002,6 @@ with pkgs;
     usePulseaudio = true;
   };
 
-  jello = with python3Packages; toPythonApplication jello;
-
   jl = haskellPackages.jl;
 
   jpylyzer = with python3Packages; toPythonApplication jpylyzer;
