@@ -2392,8 +2392,6 @@ with pkgs;
     polkitSupport = true;
   };
 
-  pdfminer = with python3Packages; toPythonApplication pdfminer-six;
-
   pdsh = callPackage ../tools/networking/pdsh {
     rsh = true; # enable internal rsh implementation
     ssh = openssh;
