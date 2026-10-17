@@ -44,6 +44,7 @@ let
     # and check we got it?
   '';
   testPasswordFile = pkgs.writeText "anki-password" "passfilepassword";
+  testHashedPasswordFile = pkgs.writeText "anki-password" "$pbkdf2-sha256$i=600000,l=32$RagpwNMr9yv709bN/HyvKA$UC73Ef1IBePbkpl96YKDrgj0zsWAN054cLAzm0/bpJo";
 in
 {
   name = "anki-sync-server";
@@ -54,6 +55,7 @@ in
   nodes.machine = {
     services.anki-sync-server = {
       enable = true;
+      hashedPasswords = false;
       users = [
         {
           username = "user";
@@ -67,6 +69,22 @@ in
     };
   };
 
+  nodes.machineHashedPasswords = {
+    services.anki-sync-server = {
+      enable = true;
+      hashedPasswords = true;
+      users = [
+        {
+          username = "user";
+          password = "$pbkdf2-sha256$i=600000,l=32$g6qx1Io6LBOBCPaddQZGrw$nTbHvImoONfL+Ju4n2IIg0Lw+pWQvrmiGTMyE/XNejk";
+        }
+        {
+          username = "passfileuser";
+          passwordFile = testHashedPasswordFile;
+        }
+      ];
+    };
+  };
   testScript = ''
     start_all()
 
@@ -77,5 +95,13 @@ in
 
     with subtest("Can sync"):
         machine.succeed("${ankiSyncTest}")
+
+    with subtest("hashed passwords: Server starts successfully"):
+        # service won't start without users
+        machineHashedPasswords.wait_for_unit("anki-sync-server.service")
+        machineHashedPasswords.wait_for_open_port(27701)
+
+    with subtest("hashed passwords: Can sync"):
+        machineHashedPasswords.succeed("${ankiSyncTest}")
   '';
 }
