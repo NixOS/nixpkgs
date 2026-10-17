@@ -102,7 +102,7 @@ sub link {
     $created{$fn} = 1;
 
     # Rename doesn't work if target is directory.
-    if (-l $_ && -d $target) {
+    if (-l $_ && -d $target && ! -l $target) {
         if (isStatic $target) {
             rmtree $target or warn;
         } else {

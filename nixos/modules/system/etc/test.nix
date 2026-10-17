@@ -3,6 +3,7 @@
   coreutils,
   fakechroot,
   fakeroot,
+  inotify-tools,
   evalMinimalConfig,
   pkgsModule,
   runCommand,
@@ -25,6 +26,7 @@ let
         text = hostsText;
         mode = "0751";
       };
+      environment.etc."dirlink".source = dirlinkTarget;
     }
   );
   passwdText = ''
@@ -35,6 +37,7 @@ let
     ::1 localhost
     # testing...
   '';
+  dirlinkTarget = runCommand "dirlink-target" { } "mkdir $out";
 in
 lib.recurseIntoAttrs {
   test-etc-vm = vmTools.runInLinuxVM (
@@ -46,6 +49,16 @@ lib.recurseIntoAttrs {
       diff /etc/passwd ${writeText "expected-passwd" passwdText}
       [[ 751 = $(stat --format %a /etc/hosts) ]]
       diff /etc/hosts ${writeText "expected-hosts" hostsText}
+      [[ -L /etc/dirlink && -d /etc/dirlink ]]
+      # A second activation must replace the symlink to a directory atomically, never remove it.
+      ${inotify-tools}/bin/inotifywait --monitor --event delete --format %f --outfile deleted /etc 2> inotify.log &
+      until grep -q "Watches established" inotify.log; do sleep 0.1; done
+      ${node.config.system.build.etcActivationCommands}
+      kill $!
+      if grep -qx dirlink deleted; then
+        echo "/etc/dirlink was removed during activation"
+        exit 1
+      fi
       set +x
       touch $out
     ''
