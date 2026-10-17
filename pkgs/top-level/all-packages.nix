@@ -1902,8 +1902,6 @@ with pkgs;
 
   gparted-full = gparted.override { withAllTools = true; };
 
-  gdown = with python3Packages; toPythonApplication gdown;
-
   gprof2dot = with python3Packages; toPythonApplication gprof2dot;
 
   grails = callPackage ../development/web/grails { jdk = null; };
