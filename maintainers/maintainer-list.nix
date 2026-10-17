@@ -11002,6 +11002,12 @@
     githubId = 343415;
     name = "Greg Roodt";
   };
+  grubmeshi = {
+    email = "agrub@meshcloud.io";
+    github = "grubmeshi";
+    githubId = 247164247;
+    name = "Andreas Grub";
+  };
   gruve-p = {
     email = "groestlcoin@gmail.com";
     github = "gruve-p";
@@ -11553,6 +11559,12 @@
     github = "henrispriet";
     githubId = 36509362;
     name = "Henri Spriet";
+  };
+  henryde = {
+    email = "hdettmer@meshcloud.io";
+    github = "henryde";
+    githubId = 38420038;
+    name = "Henry Dettmer";
   };
   henrytill = {
     email = "henrytill@gmail.com";
@@ -13999,6 +14011,12 @@
     github = "JosephSalisbury";
     githubId = 297653;
     name = "Joe Salisbury";
+  };
+  JohannesRudolph = {
+    email = "jrudolph@meshcloud.io";
+    github = "JohannesRudolph";
+    githubId = 130103;
+    name = "Johannes Rudolph";
   };
   johannwagner = {
     email = "nix@wagner.digital";
@@ -17917,6 +17935,12 @@
     github = "malbarbo";
     githubId = 1678126;
     name = "Marco A L Barbosa";
+  };
+  malhussan = {
+    email = "malhussan@meshcloud.io";
+    github = "malhussan";
+    githubId = 30862222;
+    name = "Mohammad Alhussan";
   };
   malik = {
     name = "Malik";
