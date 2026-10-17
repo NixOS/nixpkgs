@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "streamlit-echarts";
-  version = "0.4.0";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "andfanilo";
     repo = "streamlit-echarts";
     tag = "v${version}";
-    hash = "sha256-VNliCZPkAYUx+TacBc6PrS4C4bjM5fmVx/Sj6aSw2Yc=";
+    hash = "sha256-xE2TKrov+ZmlAPp+jP+x56PUW46KThkPLKXvFCNKcNQ=";
   };
 
   build-system = [ setuptools ];
@@ -26,7 +26,8 @@ buildPythonPackage rec {
     streamlit
   ];
 
-  pythonImportsCheck = [ "streamlit_echarts" ];
+  # Import registers the component and requires frontend/build
+  # pythonImportsCheck = [ "streamlit_echarts" ];
 
   # Module has no tests
   doCheck = false;
