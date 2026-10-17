@@ -18,6 +18,7 @@
   nix-update-script,
   moreutils,
   jq,
+  xdg-utils,
 
   cef-binary,
   autoAddDriverRunpath,
@@ -46,6 +47,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # Nix-specific: keep URI handlers pointing at the installed application wrapper.
+    ./use-installed-uri-handlers.patch
+  ];
   postUnpack = ''
     # pnpm.configHook has to write to ../.., as our sourceRoot is set to
     # apps/readest-app
@@ -101,7 +106,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
         '"beforeBuildCommand": ""' \
       --replace-fail '"createUpdaterArtifacts": true' '"createUpdaterArtifacts": false' \
       --replace-fail '"productName": "Readest"' '"productName": "readest"'
-    jq 'del(.plugins."deep-link")' src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
+    # Keep desktop URI schemes for OAuth callbacks; omit mobile-only entries.
+    jq 'del(.plugins."deep-link".mobile)' src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
     substituteInPlace src/services/constants.ts \
       --replace-fail "autoCheckUpdates: true" "autoCheckUpdates: false" \
       --replace-fail "telemetryEnabled: true" "telemetryEnabled: false"
@@ -162,6 +168,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   postInstall = ''
+    # Pass OAuth callback URLs and opened files to the application.
+    substituteInPlace "$out/share/applications/readest.desktop" \
+      --replace-fail $'Exec=readest\n' $'Exec=readest %U\n'
+
     # Follow upstream's CEF packaging by removing unused WebKit dependencies.
     # Check for references before removing their DT_NEEDED entries.
     $NM -D --undefined-only "$out/bin/readest" > readest-undefined-symbols.txt
@@ -201,6 +211,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # The shared CEF libraries are symlinks, so our fixup hooks skip them.
     # Use the wrapper's search path for loads originating in those libraries.
     gappsWrapperArgs+=(
+      # The opener plugin uses xdg-open to launch the browser for OAuth.
+      --prefix PATH : "${lib.makeBinPath [ xdg-utils ]}"
       --prefix LD_LIBRARY_PATH : "${
         lib.makeLibraryPath [
           addDriverRunpath.driverLink
