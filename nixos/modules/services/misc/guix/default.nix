@@ -35,7 +35,7 @@ let
     # The default Guix profile managed by `guix pull`. Take note this should be
     # the profile with the most precedence in `PATH` env to let users use their
     # updated versions of `guix` CLI.
-    "current-guix" = "\${XDG_CONFIG_HOME}/guix/current";
+    "current-guix" = "\${XDG_CONFIG_HOME:-$HOME/.config}/guix/current";
 
     # The default Guix home profile. This profile contains more than exports
     # such as an activation script at `$GUIX_HOME_PROFILE/activate`.
