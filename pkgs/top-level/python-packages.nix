@@ -5573,6 +5573,8 @@ self: super: with self; {
 
   energieleser = callPackage ../development/python-modules/energieleser { };
 
+  energyflip-api-client = callPackage ../development/python-modules/energyflip-api-client { };
+
   energyflip-client = callPackage ../development/python-modules/energyflip-client { };
 
   energyflow = callPackage ../development/python-modules/energyflow { };
