@@ -9080,8 +9080,6 @@ with pkgs;
     withGui = false;
   };
 
-  beancount-black = with python3.pkgs; toPythonApplication beancount-black;
-
   beanhub-cli = with python3.pkgs; toPythonApplication beanhub-cli;
 
   bean-add = callPackage ../applications/office/beancount/bean-add.nix { };
