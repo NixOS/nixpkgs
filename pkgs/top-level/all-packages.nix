@@ -350,8 +350,6 @@ with pkgs;
 
   kdePackages = callPackage ../kde { };
 
-  buildcatrust = with python3.pkgs; toPythonApplication buildcatrust;
-
   mumps-mpi = callPackage ../by-name/mu/mumps/package.nix { mpiSupport = true; };
 
   protoc-gen-grpc-web = callPackage ../development/tools/protoc-gen-grpc-web {
