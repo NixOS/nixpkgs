@@ -6,12 +6,12 @@
   pkg-config,
   kdePackages,
   fcitx5,
-  lua5_3,
+  lua5_5,
   gettext,
 }:
 
 let
-  lua = lua5_3;
+  lua = lua5_5;
 in
 
 stdenv.mkDerivation (finalAttrs: {
