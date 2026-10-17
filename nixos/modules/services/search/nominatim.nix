@@ -26,6 +26,7 @@ in
     };
 
     package = lib.mkPackageOption pkgs.python3Packages "nominatim-api" { };
+    cli.package = lib.mkPackageOption pkgs "nominatim" { };
 
     hostName = lib.mkOption {
       type = lib.types.str;
@@ -69,6 +70,93 @@ in
           Nominatim_Config.Page_Title='My Nominatim instance';
           Nominatim_Config.Nominatim_API_Endpoint='https://localhost/';
         '';
+      };
+    };
+
+    mapData = {
+      maps = lib.mkOption {
+        description = ''
+          An attrset of maps to be imported into the nominatim database.
+        '';
+        type = lib.types.attrsOf (
+          lib.types.submodule {
+            options = {
+              enable =
+                lib.mkEnableOption ''
+                  downloading this map into nominatim.
+
+                  Note that disabling or removing a map from your config will not
+                  remove it from nominatim once it has been downloaded.
+                ''
+                // {
+                  default = true;
+                };
+              mapUrl = lib.mkOption {
+                type = lib.types.str;
+                description = ''
+                  The url at which to download the main map
+                '';
+                example = "https://planet.openstreetmap.org/pbf/planet-latest.osm.pbf";
+              };
+              replicationUrl = lib.mkOption {
+                type = lib.types.str;
+                description = ''
+                  The url under which the diffs and the `state.txt` file can be found
+                '';
+                example = "https://planet.openstreetmap.org/replication/hour";
+              };
+            };
+          }
+        );
+      };
+      updates = {
+        enable = lib.mkEnableOption "Regular updates of nominatim maps";
+        startAt = lib.mkOption {
+          type = lib.types.either lib.types.str (lib.types.listOf lib.types.str);
+          default = "hourly";
+          description = ''
+            How often and when to update nominatim map data
+
+            The format is described in
+            {manpage}`systemd.time(7)`.
+          '';
+        };
+      };
+    };
+
+    importanceData = {
+      enable = lib.mkEnableOption ''
+        wikimedia importance data for nominatim
+
+        See [upstream documentation on importance data]<https://nominatim.org/release-docs/latest/admin/Import/#downloading-additional-data>
+        for more information.
+      '';
+      url = lib.mkOption {
+        type = lib.types.str;
+        default = "https://nominatim.org/data/wikimedia-importance.sql.gz";
+        description = ''
+          Url for the importance data.
+        '';
+      };
+      secondaryUrl = lib.mkOption {
+        type = lib.types.str;
+        default = "https://nominatim.org/data/wikimedia-secondary-importance.sql.gz";
+        description = ''
+          Url for the secondary importance data.
+        '';
+      };
+      updates = {
+        enable = lib.mkEnableOption "Regular updates of nominatim importance data";
+        startAt = lib.mkOption {
+          type = lib.types.either lib.types.str (lib.types.listOf lib.types.str);
+          default = "yearly";
+          description = ''
+            How often and when to update importance data
+
+            The format is described in
+            {manpage}`systemd.time(7)`.
+          '';
+        };
       };
     };
 
@@ -165,10 +253,23 @@ in
         + lib.optionalString (cfg.database.extraConnectionParams != null) (
           ";" + cfg.database.extraConnectionParams
         );
+      serviceEnvironment = {
+        PYTHONPATH =
+          with pkgs.python3Packages;
+          pkgs.python3Packages.makePythonPath [
+            cfg.package
+            falcon
+            uvicorn
+            nominatim-api
+          ];
+        NOMINATIM_DATABASE_DSN = nominatimApiDsn;
+        NOMINATIM_DATABASE_WEBUSER = cfg.database.apiUser;
+      }
+      // cfg.settings;
     in
     lib.mkIf cfg.enable {
       # CLI package
-      environment.systemPackages = [ pkgs.nominatim ];
+      environment.systemPackages = [ cfg.cli.package ];
 
       # Database
       users.users.${cfg.database.superUser} = lib.mkIf localDb {
@@ -192,8 +293,6 @@ in
         ];
       };
 
-      # TODO: add nominatim-update service
-
       systemd.services.nominatim-init = lib.mkIf localDb {
         after = [ "postgresql-setup.service" ];
         requires = [ "postgresql-setup.service" ];
@@ -209,7 +308,7 @@ in
           db_exists=$(${pkgs.postgresql}/bin/psql --dbname postgres -tAc "$sql")
 
           if [ "$db_exists" == "0" ]; then
-            ${lib.getExe pkgs.nominatim} import --prepare-database
+            ${lib.getExe cfg.cli.package} import --prepare-database
           else
             echo "Database ${cfg.database.dbname} already exists. Skipping ..."
           fi
@@ -254,19 +353,7 @@ in
           KillMode = "mixed";
           TimeoutStopSec = 5;
         };
-        environment = {
-          PYTHONPATH =
-            with pkgs.python3Packages;
-            pkgs.python3Packages.makePythonPath [
-              cfg.package
-              falcon
-              uvicorn
-              nominatim-api
-            ];
-          NOMINATIM_DATABASE_DSN = nominatimApiDsn;
-          NOMINATIM_DATABASE_WEBUSER = cfg.database.apiUser;
-        }
-        // cfg.settings;
+        environment = serviceEnvironment;
       };
 
       systemd.sockets.nominatim = {
@@ -277,6 +364,136 @@ in
           SocketUser = cfg.database.apiUser;
           SocketGroup = config.services.nginx.group;
         };
+      };
+
+      systemd.services.nominatim-import-map-data = lib.mkIf (cfg.mapData.maps != { }) {
+        description = "Import nominatim map data";
+        serviceConfig = {
+          User = cfg.database.superUser;
+          StateDirectory = "nominatim";
+          Type = "oneshot";
+        };
+        script =
+          let
+            importOneMap =
+              mapName:
+              {
+                enable,
+                mapUrl,
+                replicationUrl,
+              }:
+              lib.optionalString enable ''
+                cd "$STATE_DIRECTORY"
+                mkdir -p "import-map-data/${mapName}"
+                cd "import-map-data/${mapName}"
+                export NOMINATIM_REPLICATION_URL="${replicationUrl}"
+
+                if [[ ! -f ./initial-setup-done ]]; then
+                  echo ">>> ${mapName}: No existing data found. Importing fresh map."
+
+                  echo ">>> ${mapName}: Downloading the initial map (this can take some time)"
+                  curl --silent --show-error --location --output map.osm.pbf "${mapUrl}"
+                  trap 'rm -rf map.osm.pbf' EXIT
+
+                  echo ">>> ${mapName}: Importing the initial map (this can take a lot of time!)"
+                  nominatim import --continue import-from-file --project-dir "$STATE_DIRECTORY" --osm-file map.osm.pbf
+
+                  rm map.osm.pbf
+                  trap - EXIT
+
+                  nominatim replication --verbose --project-dir "$STATE_DIRECTORY" --init
+
+                  touch ./initial-setup-done
+
+                else
+                ${
+                  if cfg.mapData.updates.enable then
+                    ''
+                      echo ">>> Refreshing functions"
+                      nominatim refresh --functions --project-dir "$STATE_DIRECTORY"
+
+                      echo ">>> Migrating DB if needed"
+                      nominatim admin --migrate --project-dir "$STATE_DIRECTORY"
+
+                      echo ">>> Checking replication URL is reachable ($NOMINATIM_REPLICATION_URL)"
+                      curl --location --head --fail-with-body "$NOMINATIM_REPLICATION_URL" &> /dev/null
+
+                      echo ">>> ${mapName}: Updating and indexing..."
+                      nominatim replication --verbose --project-dir "$STATE_DIRECTORY" --catch-up
+                    ''
+                  else
+                    ''
+                      echo ">>> ${mapName}: Existing data found, and updates are disabled. leaving as-is.
+                    ''
+                }
+                fi
+                echo ">>> ${mapName}: Checking database"
+                nominatim admin --project-dir "$STATE_DIRECTORY" --check-database
+              '';
+          in
+          ''
+            set -euo pipefail
+
+            nominatim --version
+
+            (flock -n 9 || ( echo "failed to acquire lock" && exit 1 ) # Don't try to update map data and importance files at the same time
+
+              ${lib.concatStringsSep "\n" (lib.mapAttrsToList importOneMap cfg.mapData.maps)}
+
+            ) 9>"$STATE_DIRECTORY/update-lock"
+          '';
+        path = [
+          cfg.cli.package
+          pkgs.curl
+          config.services.postgresql.package
+          pkgs.flock
+        ];
+        after = [ "nominatim.service" ];
+        requires = [ "nominatim.service" ];
+        wantedBy = [ "multi-user.target" ];
+        startAt = cfg.mapData.updates.startAt;
+        environment = serviceEnvironment;
+      };
+
+      systemd.services.nominatim-import-importance-data = lib.mkIf cfg.importanceData.enable {
+        description = "Import nominatim wikimedia importance data";
+        serviceConfig = {
+          User = cfg.database.superUser;
+          StateDirectory = "nominatim";
+          Type = "oneshot";
+        };
+        script = ''
+          set -euo pipefail
+
+          ${lib.optionalString cfg.importanceData.updates.enable ''
+            if [[ -f "$STATE_DIRECTORY/initial-setup-done" ]]; then
+              echo ">>> Existing importance data found, and updates are disabled. leaving as-is"
+              exit 0
+            fi
+          ''}
+
+          (flock -n 9 || ( echo "failed to acquire lock" && exit 1 ) # Don't try to update map data and importance files at the same time
+            trap 'rm -rf "$STATE_DIRECTORY/wikimedia-importance.sql.gz" "$STATE_DIRECTORY/secondary_importance.sql.gz"' EXIT
+
+            echo ">>> downloading wikimedia importance files"
+            curl --silent -L -A "Wget/1.21.2" ${cfg.importanceData.url} -o "$STATE_DIRECTORY/wikimedia-importance.sql.gz"
+            curl --silent -L -A "Wget/1.21.2" ${cfg.importanceData.secondaryUrl} -o "$STATE_DIRECTORY/secondary_importance.sql.gz"
+
+            echo ">>> Refresh data"
+            nominatim refresh --wiki-data --secondary-importance --importance --project-dir "$STATE_DIRECTORY"
+
+            touch "$STATE_DIRECTORY/initial-setup-done"
+          ) 9>"$STATE_DIRECTORY/update-lock"
+        '';
+        path = [
+          cfg.cli.package
+          pkgs.curl
+          config.services.postgresql.package
+          pkgs.flock
+        ];
+        after = [ "nominatim-import-map-data.service" ];
+        wantedBy = [ "multi-user.target" ];
+        startAt = lib.mkIf cfg.importanceData.updates.enable cfg.importanceData.updates.startAt;
       };
 
       services.nginx = {
