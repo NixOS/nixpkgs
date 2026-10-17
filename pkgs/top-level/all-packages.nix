@@ -8311,8 +8311,6 @@ with pkgs;
     withFonts = true;
   };
 
-  luddite = with python3Packages; toPythonApplication luddite;
-
   magic-wormhole = with python3Packages; toPythonApplication magic-wormhole;
 
   magnetophonDSP = recurseIntoAttrs {
