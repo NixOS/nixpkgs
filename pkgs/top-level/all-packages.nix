@@ -5778,8 +5778,6 @@ with pkgs;
     withPm = [ ];
   };
 
-  mygpoclient = with python3.pkgs; toPythonApplication mygpoclient;
-
   ncurses5 = ncurses.override {
     abiVersion = "5";
   };
