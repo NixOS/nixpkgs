@@ -104,5 +104,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
     homepage = "https://www.qlcplus.org/";
+    mainProgram = "qlcplus5";
   };
 }
