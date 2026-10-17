@@ -1405,8 +1405,6 @@ with pkgs;
 
   dblatexFull = dblatex.override { enableAllFeatures = true; };
 
-  latex2mathml = with python3Packages; toPythonApplication latex2mathml;
-
   pgf = pgf2;
 
   texFunctions = callPackage ../tools/typesetting/tex/nix pkgs;
