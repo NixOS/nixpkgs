@@ -187,7 +187,10 @@ let
       let
         crateTarball = fetchCrate pkg registries.${registryIndexUrl};
       in
-      runCommand "${pkg.name}-${pkg.version}" { } ''
+      runCommand "${pkg.name}-${pkg.version}" {
+        strictDeps = true;
+        __structuredAttrs = true;
+      } ''
         mkdir $out
         tar xf "${crateTarball}" -C $out --strip-components=1
 
@@ -224,7 +227,10 @@ let
           else
             missingHash;
       in
-      runCommand "${pkg.name}-${pkg.version}" { } ''
+      runCommand "${pkg.name}-${pkg.version}" {
+        strictDeps = true;
+        __structuredAttrs = true;
+      } ''
         tree=${tree}
 
         # If the target package is in a workspace, or if it's the top-level
@@ -291,6 +297,7 @@ let
     runCommand "cargo-vendor-dir"
       (
         {
+          strictDeps = true;
           __structuredAttrs = true;
         }
         // (
