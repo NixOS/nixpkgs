@@ -1316,8 +1316,6 @@ with pkgs;
 
   libtorch-bin = callPackage ../development/libraries/science/math/libtorch/bin.nix { };
 
-  blockdiag = with python3Packages; toPythonApplication blockdiag;
-
   bogofilter-sqlite = bogofilter.override { database = sqlite; };
   bogofilter-db = bogofilter.override { database = db; };
 
