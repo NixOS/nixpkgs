@@ -4350,8 +4350,6 @@ with pkgs;
     alloy
     ;
 
-  anybadge = with python3Packages; toPythonApplication anybadge;
-
   ansible = python3Packages.toPythonApplication python3Packages.ansible-core;
 
   ansible-language-server =
