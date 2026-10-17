@@ -6,6 +6,7 @@
   pkg-config,
   installShellFiles,
   writableTmpDirAsHomeHook,
+  aws-lc,
   libgit2,
   oniguruma,
   openssl,
@@ -34,6 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     libgit2
     oniguruma
     openssl
