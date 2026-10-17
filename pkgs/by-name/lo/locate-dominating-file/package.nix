@@ -31,7 +31,8 @@ resholve.mkDerivation {
     coreutils
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    getopt
     (bats.withLibraries (p: [
       p.bats-support
       p.bats-assert
