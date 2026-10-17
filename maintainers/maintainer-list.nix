@@ -30218,6 +30218,12 @@
     githubId = 11936772;
     matrix = "@tristan957:matrix.org";
   };
+  tristanlirette = {
+    name = "Tristan Lirette";
+    email = "dev@tristanl.net";
+    github = "tristanlirette";
+    githubId = 31151912;
+  };
   trobert = {
     email = "thibaut.robert@gmail.com";
     github = "trobert";
