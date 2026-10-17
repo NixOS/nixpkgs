@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   rocmUpdateScript,
+  bashNonInteractive,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,6 +22,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
   sourceRoot = "${finalAttrs.src.name}/projects/hip";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  buildInputs = [ bashNonInteractive ];
+
   dontConfigure = true;
   dontBuild = true;
 
@@ -38,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "C++ Heterogeneous-Compute Interface for Portability";
     homepage = "https://github.com/ROCm/rocm-systems/tree/develop/projects/hip";
+    changelog = "https://github.com/ROCm/rocm-systems/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lovesegfault ];
     teams = [ lib.teams.rocm ];
