@@ -1,6 +1,6 @@
 {
   stdenv,
-  buildGoModule,
+  buildGoLatestModule,
   exiftool,
   fetchurl,
   ffmpeg-headless,
@@ -16,13 +16,21 @@ let
       version = "7.8.2";
       appHash = "sha256-O59G5kUkYlYxr8p/vEqs3LqLRKJZbeEgDhdY5eHfnZg=";
       srcHash = "sha256-KyUfrKHnRO3lMin0seSNFRnRRTPo12NbbvbkSpxSMQE=";
+      vendorHash = null;
     };
     "33" = {
       version = "8.1.0";
       appHash = "sha256-SQ1gPdfICFqNBJM0dJOfKIJ/E1tBBcBQOjRdb/mKb04=";
       srcHash = "sha256-T0oz5d4kPX/Pm06vKGTrltUFd1pKccsz5IDjv/Vmuz0=";
+      vendorHash = null;
     };
     "34" = latestVersionForNc."33";
+    "35" = {
+      version = "9.0.1";
+      appHash = "sha256-xrGXpjBVvW4qtlrPynGh8c2ImmJ/u0itqHETZND0nzA=";
+      srcHash = "sha256-OLsA8wNZ7sbnGsUGJrq/Jtae74P3wraKgwlWR0ipQCY=";
+      vendorHash = "sha256-2MD8zRu2aLn2klqEgprr48rNNGvtj37JlKYHwbVioRg=";
+    };
   };
   currentVersionInfo =
     latestVersionForNc.${ncVersion}
@@ -35,9 +43,9 @@ let
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 
-  go-vod = buildGoModule rec {
+  go-vod = buildGoLatestModule rec {
     pname = "go-vod";
-    inherit (currentVersionInfo) version;
+    inherit (currentVersionInfo) version vendorHash;
 
     src = fetchFromGitHub {
       owner = "pulsejet";
@@ -48,7 +56,7 @@ let
 
     sourceRoot = "${src.name}/go-vod";
 
-    vendorHash = null;
+    nativeCheckInputs = [ ffmpeg-headless ];
 
     meta = commonMeta // {
       description = "Extremely minimal on-demand video transcoding server in go";
