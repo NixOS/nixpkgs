@@ -8416,8 +8416,6 @@ with pkgs;
     softmaker-office-nx
     ;
 
-  taxi-cli = with python3Packages; toPythonApplication taxi;
-
   mupdf-headless = mupdf.override {
     enableX11 = false;
     enableGL = false;
