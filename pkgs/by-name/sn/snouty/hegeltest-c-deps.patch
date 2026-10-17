@@ -1,0 +1,149 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index a5e0e5f..a0a7a02 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -3868,3 +3868,144 @@ name = "zmij"
+ version = "1.0.21"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "b8848ee67ecc8aedbaf3e4122217aff892639231befc6a1b58d29fff4c2cabaa"
++
++[[package]]
++name = "bitflags"
++version = "2.11.1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "c4512299f36f043ab09a583e57bceb5a5aab7a73db1805848e8fef3c9e8c78b3"
++
++[[package]]
++name = "cbindgen"
++version = "0.29.2"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "befbfd072a8e81c02f8c507aefce431fe5e7d051f83d48a23ffc9b9fe5a11799"
++dependencies = [
++ "clap",
++ "heck",
++ "indexmap",
++ "log",
++ "proc-macro2",
++ "quote",
++ "serde",
++ "serde_json",
++ "syn",
++ "tempfile",
++ "toml",
++]
++
++[[package]]
++name = "clap"
++version = "4.6.1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "1ddb117e43bbf7dacf0a4190fef4d345b9bad68dfc649cb349e7d17d28428e51"
++dependencies = [
++ "clap_builder",
++]
++
++[[package]]
++name = "console"
++version = "0.16.3"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "d64e8af5551369d19cf50138de61f1c42074ab970f74e99be916646777f8fc87"
++dependencies = [
++ "encode_unicode",
++ "libc",
++ "windows-sys",
++]
++
++[[package]]
++name = "ctor"
++version = "0.2.9"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "32a2785755761f3ddc1492979ce1e48d2c00d09311c39e4466429188f3dd6501"
++dependencies = [
++ "quote",
++ "syn",
++]
++
++[[package]]
++name = "dashu-base"
++version = "0.4.1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "c0b80bf6b85aa68c58ffea2ddb040109943049ce3fbdf4385d0380aef08ef289"
++
++[[package]]
++name = "dashu-int"
++version = "0.4.1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "ee99d08031ca34a4d044efbbb21dff9b8c54bb9d8c82a189187c0651ffdb9fbf"
++dependencies = [
++ "cfg-if",
++ "dashu-base",
++ "num-modular",
++ "rustversion",
++ "static_assertions",
++]
++
++[[package]]
++name = "fastrand"
++version = "2.4.1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "9f1f227452a390804cdb637b74a86990f2a7d7ba4b7d5693aac9b4dd6defd8d6"
++
++[[package]]
++name = "hashbrown"
++version = "0.17.1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "ed5909b6e89a2db4456e54cd5f673791d7eca6732202bbf2a9cc504fe2f9b84a"
++
++[[package]]
++name = "insta"
++version = "1.47.2"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "7b4a6248eb93a4401ed2f37dfe8ea592d3cf05b7cf4f8efa867b6895af7e094e"
++dependencies = [
++ "console",
++ "once_cell",
++ "similar",
++ "tempfile",
++]
++
++[[package]]
++name = "libc"
++version = "0.2.186"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "68ab91017fe16c622486840e4c83c9a37afeff978bd239b5293d61ece587de66"
++
++[[package]]
++name = "libloading"
++version = "0.8.9"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "d7c4b02199fee7c5d21a5ae7d8cfa79a6ef5bb2fc834d6e9058e89c825efdc55"
++dependencies = [
++ "cfg-if",
++ "windows-link",
++]
++
++[[package]]
++name = "num-modular"
++version = "0.6.1"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "17bb261bf36fa7d83f4c294f834e91256769097b3cb505d44831e0a179ac647f"
++
++[[package]]
++name = "similar"
++version = "2.7.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "bbbb5d9659141646ae647b42fe094daf6c6192d1620870b449d9557f748b2daa"
++
++[[package]]
++name = "wasip2"
++version = "1.0.1+wasi-0.2.4"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "0562428422c63773dad2c345a1882263bbf4d65cf3f42e90921f787ef5ad58e7"
++dependencies = [
++ "wit-bindgen 0.46.0",
++]
++
++[[package]]
++name = "wit-bindgen"
++version = "0.46.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "f17a85883d4e6d00e8a97c586de764dabcc06133f7f1d55dce5cdc070ad7fe59"
