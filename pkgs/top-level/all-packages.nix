@@ -7872,8 +7872,6 @@ with pkgs;
 
   cdparanoia = cdparanoia-iii;
 
-  cdxj-indexer = with python3Packages; toPythonApplication cdxj-indexer;
-
   chromium = callPackage ../applications/networking/browsers/chromium (config.chromium or { });
 
   cni = callPackage ../applications/networking/cluster/cni { };
