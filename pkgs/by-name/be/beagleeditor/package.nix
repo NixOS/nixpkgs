@@ -1,4 +1,3 @@
-
 {
   lib,
   stdenv,
@@ -7,6 +6,7 @@
   bun,
   nodejs,
   pkg-config,
+  jq,
   wrapGAppsHook3,
   cargo-tauri,
   gtk3,
@@ -15,69 +15,97 @@
   webkitgtk_4_1,
   openssl,
   zstd,
-  darwin,
+  apple-sdk_15,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "beagleeditor";
-  version = "26.4.1";
+let
+  version = "26.4.2";
 
   src = fetchFromGitHub {
     owner = "beagleeditor";
     repo = "editor";
-    tag = "v${finalAttrs.version}";
-    hash = lib.fakeHash;
+    tag = "v${version}";
+    hash = "sha256-zNz409/PBe9rtCrQSSh1mhCCdhnZEwzPLnIF2jSYJsQ=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/src-tauri";
+  frontend = stdenv.mkDerivation {
+    pname = "beagleeditor-frontend";
+    inherit version;
+    inherit src;
 
-  cargoHash = lib.fakeHash;
+    nativeBuildInputs = [
+      bun
+      nodejs
+    ];
+
+    buildPhase = ''
+      runHook preBuild
+
+      export HOME="$TMPDIR"
+      export BUN_INSTALL_CACHE_DIR="$TMPDIR/bun-cache"
+
+      bun install
+      bun run build
+
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p "$out"
+      cp -r dist "$out/dist"
+
+      runHook postInstall
+    '';
+  };
+in
+rustPlatform.buildRustPackage {
+  pname = "beagleeditor";
+  inherit version src;
+
+  sourceRoot = "source/src-tauri";
+
+  cargoHash = "sha256-0LztXUG8puMxiYsHPHSpNIZKMvAejsldUAJN1+sT9I4=";
 
   nativeBuildInputs = [
-    bun
-    nodejs
+    cargo-tauri.hook
     pkg-config
-    cargo-tauri
-  ] ++ lib.optionals stdenv.isLinux [
+    jq
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      openssl
-      zstd
-    ]
-    ++ lib.optionals stdenv.isLinux [
-      gtk3
-      glib
-      libsoup_3
-      webkitgtk_4_1
-    ]
-    ++ lib.optionals stdenv.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-      darwin.apple_sdk.frameworks.WebKit
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.CoreServices
-    ];
+  buildInputs = [
+    openssl
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    gtk3
+    glib
+    libsoup_3
+    webkitgtk_4_1
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_15
+  ];
 
-  preBuild = ''
-    cd ..
-    bun install --frozen-lockfile
-    bun run build
-    cd src-tauri
-  '';
+  postPatch = ''
+    chmod -R u+w "$NIX_BUILD_TOP/source"
 
-  buildPhase = ''
-    runHook preBuild
-    cargo build --release --locked
-    runHook postBuild
-  '';
+    cp -r ${frontend}/dist ../dist
 
-  installPhase = ''
-    runHook preInstall
-    install -Dm755 target/release/beagleeditor \
-      "$out/bin/beagleeditor"
-    runHook postInstall
+    jq '
+      del(.build.beforeBuildCommand) |
+      .bundle.createUpdaterArtifacts = false |
+      .bundle.macOS += {
+        signingIdentity: null,
+        hardenedRuntime: false
+      }
+    ' tauri.conf.json > tauri.conf.json.tmp
+
+    mv tauri.conf.json.tmp tauri.conf.json
   '';
 
   meta = {
@@ -87,4 +115,4 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "beagleeditor";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-})
+}
