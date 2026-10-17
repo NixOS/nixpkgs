@@ -2118,8 +2118,6 @@ with pkgs;
 
   importNpmLock = callPackages ../build-support/node/import-npm-lock { };
 
-  ldapdomaindump = with python3Packages; toPythonApplication ldapdomaindump;
-
   leanblueprint = with python3Packages; toPythonApplication leanblueprint;
 
   leanPackages = recurseIntoAttrs (callPackage ../top-level/lean-packages.nix { });
