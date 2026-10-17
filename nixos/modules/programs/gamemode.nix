@@ -59,6 +59,9 @@ in
       etc."gamemode.ini".source = configFile;
     };
 
+    # systemPackages puts gamemode's session D-Bus service file in the system profile.
+    services.dbus.packages = [ cfg.package ];
+
     security = {
       polkit = {
         enable = true;

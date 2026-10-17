@@ -64,5 +64,10 @@ in
       pkgs.wmderlandc
     ]
     ++ cfg.extraPackages;
+
+    # `dunst` from `extraPackages` above ships a D-Bus service file.  The D-Bus
+    # daemons do not look at the system profile, so it has to be registered
+    # explicitly, but only when it is actually installed.
+    services.dbus.packages = lib.optional (elem pkgs.dunst cfg.extraPackages) pkgs.dunst;
   };
 }
