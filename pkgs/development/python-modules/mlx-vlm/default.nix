@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
@@ -58,7 +59,10 @@ buildPythonPackage (finalAttrs: {
     uvicorn
   ];
 
-  pythonImportsCheck = [ "mlx_vlm" ];
+  # Metal-enabled mlx imports crash in the sandbox (No Metal device available),
+  # and the test suite fails on GPU-dependent assertions.
+  pythonImportsCheck = lib.optionals (!config.metalSupport) [ "mlx_vlm" ];
+  dontUsePytestCheck = config.metalSupport;
 
   nativeCheckInputs = [
     psutil
