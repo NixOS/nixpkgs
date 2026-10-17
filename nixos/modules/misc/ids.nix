@@ -260,7 +260,7 @@ in
       ejabberd = 219;
       postsrsd = 220;
       opendkim = 221;
-      dspam = 222;
+      # dspam = 222; # unused, module removed 2026-09-02
       # gale = 223; removed 2021-06-10
       matrix-synapse = 224;
       rspamd = 225;
@@ -594,7 +594,7 @@ in
       ejabberd = 219;
       postsrsd = 220;
       opendkim = 221;
-      dspam = 222;
+      # dspam = 222; # unused, module removed 2026-09-02
       # gale = 223; removed 2021-06-10
       matrix-synapse = 224;
       rspamd = 225;
