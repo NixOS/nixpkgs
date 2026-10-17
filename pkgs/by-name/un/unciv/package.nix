@@ -1,81 +1,106 @@
 {
   stdenv,
   lib,
-  fetchurl,
-  copyDesktopItems,
-  makeDesktopItem,
+  fetchFromGitHub,
+  gradle_9,
+  jdk21,
+  desktopToDarwinBundle,
   makeWrapper,
+  makeBinaryWrapper,
   jre,
   libGL,
   libpulseaudio,
   libxxf86vm,
   nix-update-script,
 }:
-let
-  version = "4.22.8";
-
-  desktopItem = makeDesktopItem {
-    name = "unciv";
-    exec = "unciv";
-    comment = "An open-source Android/Desktop remake of Civ V";
-    desktopName = "Unciv";
-    icon = "unciv";
-    categories = [ "Game" ];
-  };
-
-  desktopIcon = fetchurl {
-    url = "https://github.com/yairm210/Unciv/blob/${version}/extraImages/Icons/Unciv%20icon%20v6.png?raw=true";
-    hash = "sha256-Zuz+HGfxjGviGBKTiHdIFXF8UMRLEIfM8f+LIB/xonk=";
-  };
-
-  envLibPath = lib.makeLibraryPath (
-    lib.optionals stdenv.hostPlatform.isLinux [
-      libGL
-      libpulseaudio
-      libxxf86vm
-    ]
-  );
-in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "unciv";
-  inherit version;
+  version = "4.22.11";
 
-  src = fetchurl {
-    url = "https://github.com/yairm210/Unciv/releases/download/${version}/Unciv.jar";
-    hash = "sha256-BCVNMG6e3qDSWklcGIt9VGpQCcXNtYUPj8hmaei0KOM=";
+  src = fetchFromGitHub {
+    owner = "yairm210";
+    repo = "Unciv";
+    tag = finalAttrs.version;
+    hash = "sha256-v7J2yNrWaDa3UAlZ6VBgkxM6wLh0RukyMBn1c6RzF9s=";
+  };
+  nativeBuildInputs = [
+    gradle_9
+    jdk21
+    makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    desktopToDarwinBundle
+    makeBinaryWrapper
+  ];
+
+  # Gradle needs to bind
+  __darwinAllowLocalNetworking = true;
+
+  env = {
+    JAVA_HOME = jdk21;
+  }
+  # Prefer IPv4 to fix sandboxed Darwin builds.
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    JAVA_TOOL_OPTIONS = "-Djava.net.preferIPv4Stack=true";
   };
 
-  dontUnpack = true;
+  gradleBuildTask = ":desktop:dist";
 
-  nativeBuildInputs = [
-    copyDesktopItems
-    makeWrapper
-  ];
+  mitmCache = gradle_9.fetchDeps {
+    inherit (finalAttrs) pname;
+    data = ./deps.json;
+  };
 
   installPhase = ''
     runHook preInstall
 
-    makeWrapper ${jre}/bin/java $out/bin/unciv \
-      --prefix LD_LIBRARY_PATH : "${envLibPath}" \
-      --prefix PATH : ${lib.makeBinPath [ jre ]} \
-      --add-flags "-jar ${src}"
+    install -d $out/share/unciv $out/bin
+    cp desktop/build/libs/Unciv.jar $out/share/unciv/
 
-    install -Dm444 ${desktopIcon} $out/share/icons/hicolor/512x512/apps/unciv.png
+    install -Dm444 "extraImages/Icons/Unciv icon v6.png" "$out/share/icons/hicolor/512x512/apps/unciv.png"
+
+    install -Dm644 desktop/linuxFilesForJar/unciv.desktop $out/share/applications/unciv.desktop
+
+    makeShellWrapper ${lib.getExe' jre "java"} $out/bin/unciv \
+      --prefix LD_LIBRARY_PATH : "${finalAttrs.passthru.libraries}" \
+      --add-flags "-jar $out/share/unciv/Unciv.jar" \
+      --append-flags '--data-dir=$HOME/.local/share/unciv'     # relies on the shell expanding $HOME at runtime
 
     runHook postInstall
   '';
 
-  desktopItems = [ desktopItem ];
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Launch Services refuses to launch an app
+    # bundle whose executable is a symlink into the Nix store.
+    rm "$out/Applications/Unciv.app/Contents/MacOS/Unciv"
+    makeBinaryWrapper "$out/bin/unciv" "$out/Applications/Unciv.app/Contents/MacOS/Unciv"
+  '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    libraries = lib.makeLibraryPath (
+      [
+        libGL
+        libpulseaudio
+      ]
+      ++ lib.optional stdenv.hostPlatform.isLinux libxxf86vm
+    );
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Open-source Android/Desktop remake of Civ V";
     mainProgram = "unciv";
     homepage = "https://github.com/yairm210/Unciv";
-    maintainers = with lib.maintainers; [ iedame ];
-    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    changelog = "https://github.com/yairm210/Unciv/blob/master/changelog.md";
+    maintainers = with lib.maintainers; [
+      iedame
+      philocalyst
+    ];
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryBytecode
+    ];
     license = lib.licenses.mpl20;
     platforms = lib.platforms.all;
   };
-}
+})
