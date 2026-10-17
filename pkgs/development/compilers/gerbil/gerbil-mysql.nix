@@ -28,7 +28,12 @@
   meta = {
     description = "MySQL bindings for Gerbil";
     homepage = "https://github.com/mighty-gerbils/gerbil-mysql";
-    license = lib.licenses.asl20;
+    license =
+      with lib.licenses;
+      AND [
+        asl20
+        lgpl21Only
+      ];
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ fare ];
   };
