@@ -23,6 +23,17 @@ let
   CC = "PATH= ${lib.getExe' stdenv.cc "${stdenv.cc.targetPrefix}cc"}";
   CXX = "PATH= ${lib.getExe' stdenv.cc "${stdenv.cc.targetPrefix}c++"}";
   READELF = "PATH= ${lib.getExe' stdenv.cc "${stdenv.cc.targetPrefix}readelf"}";
+  # ld-wrapper only computes an rpath for ELF shared libraries.
+  rpathWorking = stdenv.hostPlatform.isElf && !stdenv.hostPlatform.isStatic;
+  # A shared library in a store path of its own, so that only ld-wrapper's
+  # rpath logic can put its directory into the rpath.
+  fooLib = stdenv.mkDerivation {
+    name = "cc-wrapper-test-libfoo";
+    buildCommand = ''
+      mkdir -p $out/lib
+      $CC -shared -DVALUE=42 -o $out/lib/libfoo.so ${./foo.c}
+    '';
+  };
 in
 stdenv.mkDerivation {
   pname = "cc-wrapper-test-${stdenv.cc.cc.pname}${libcxxStdenvSuffix}";
@@ -142,6 +153,22 @@ stdenv.mkDerivation {
 
     NIX_LDFLAGS="-L$NIX_BUILD_TOP/foo/lib -rpath $NIX_BUILD_TOP/foo/lib" ${CC} -lfoo -o ldflags-check ${./ldflags-main.c}
     ${emulator} ./ldflags-check
+
+    ${lib.optionalString rpathWorking ''
+      # Regression test for https://github.com/NixOS/nixpkgs/pull/566486
+      echo "checking whether ld-wrapper follows -L symlinks into the store for the rpath... " >&2
+      mkdir links
+      ln -s ${fooLib}/lib links/foo-abs
+      # A relative target resolves against the link's directory, which is not
+      # the working directory.
+      mkdir links/sub
+      ln -s ../foo-abs links/sub/foo-rel
+      for link in links/foo-abs links/sub/foo-rel; do
+        ${CC} -L"$NIX_BUILD_TOP/$link" -lfoo -o symlink-rpath-check ${./ldflags-main.c}
+        ${READELF} -d symlink-rpath-check | grep -F "${fooLib}/lib"
+        ${emulator} ./symlink-rpath-check
+      done
+    ''}
 
     echo "Check whether -nostdinc and -nostdinc++ is handled correctly" >&2
     mkdir -p std-include
