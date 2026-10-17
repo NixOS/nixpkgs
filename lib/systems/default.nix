@@ -162,10 +162,16 @@ let
 
         # Use the split GCC package set (`gccNGPackages`) instead of the
         # monolithic `gcc`.
-        #
-        # NetBSD is here to dogfood it: it is low tier and has to use GCC
-        # rather than LLVM.
-        useGccNG = final.isCygwin || final.isNetBSD;
+        useGccNG =
+
+          # Cygwin and NetBSD are natural candidates to dogfood it: they are low
+          # tier and have to use GCC rather than LLVM.
+          final.isCygwin
+          || final.isNetBSD
+
+          # MinGW is a higher profile but still lower tier test. It only uses
+          # it off aarch64 since it uses LLVM there already.
+          || (final.isMinGW && !final.isAarch64);
 
         libc =
           if final.isDarwin then
