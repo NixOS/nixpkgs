@@ -2697,8 +2697,6 @@ with pkgs;
 
   fishPlugins = recurseIntoAttrs (callPackage ../shells/fish/plugins { });
 
-  powerline = with python3Packages; toPythonApplication powerline;
-
   ### DEVELOPMENT / COMPILERS
   temurin-bin-27 = javaPackages.compiler.temurin-bin.jdk-27;
   temurin-jre-bin-27 = javaPackages.compiler.temurin-bin.jre-27;
