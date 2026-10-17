@@ -9,6 +9,10 @@ vimUtils.buildVimPlugin {
   pname = "cosh";
   inherit (cosh) version;
   src = "${cosh.src}/vim";
+  patches = [
+    # Unescaped pipes, `|`, crashes. Patch emailed.
+    ./vim-escape-pipes.diff
+  ];
   # Upstream *only* ships syntax/cosh.vim, so providing a minimal ftdetect.
   # Chill is the default detection for *.ch which causes a conflict. If
   # installing the Vim plugin, force cosh by default. Opt out of detection with
