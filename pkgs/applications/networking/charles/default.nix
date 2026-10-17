@@ -114,8 +114,8 @@ in
 {
   charles5 = (
     generic {
-      version = "5.2.1";
-      hash = "sha256-li08tpPDumfXnjeVkkNdO7kRhxqyrGIaWCWU2rV1fu8=";
+      version = "5.2.2";
+      hash = "sha256-oj6yCojocVHUzia8Hy+D36r8OB+cESUYHfAqMIniUok=";
       platform = "_x86_64";
       jdk = jdk25;
 
