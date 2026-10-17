@@ -21,8 +21,11 @@ let
     depsAttrsOrFile:
     let
       depsAttrs = if lib.isAttrs depsAttrsOrFile then depsAttrsOrFile else lib.importJSON depsAttrsOrFile;
-      fetchdep = dep: fetchers.${dep.fetcher} dep.args;
-      fetchedDeps = lib.mapAttrs (_name: fetchdep) depsAttrs;
+      # Name each source after its gclient checkout path, instead of the default "source".
+      fetchdep =
+        path: dep:
+        fetchers.${dep.fetcher} ({ name = lib.strings.sanitizeDerivationName path; } // dep.args);
+      fetchedDeps = lib.mapAttrs fetchdep depsAttrs;
       manifestContents = lib.mapAttrs (_: dep: {
         path = dep;
       }) fetchedDeps;
