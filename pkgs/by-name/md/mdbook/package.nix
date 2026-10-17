@@ -14,6 +14,8 @@ rustPlatform.buildRustPackage rec {
   inherit version;
   pname = "mdbook";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "mdBook";
