@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "Chris00";
     repo = "ocaml-magic";
     tag = "v${version}";
-    sha256 = "sha256-rsBMx68UDqmVVsyeZCxIS97A/0JCBM/JOgh60ly1uSs=";
+    hash = "sha256-rsBMx68UDqmVVsyeZCxIS97A/0JCBM/JOgh60ly1uSs=";
   };
 
   createFindlibDestdir = true;
