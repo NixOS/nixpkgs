@@ -20,7 +20,6 @@ buildPythonPackage (finalAttrs: {
   pname = "gliner";
   version = "0.2.29";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "urchade";

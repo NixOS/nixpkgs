@@ -16,7 +16,6 @@ buildPythonPackage (finalAttrs: {
   pname = "fasttransform";
   version = "0.0.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "AnswerDotAI";

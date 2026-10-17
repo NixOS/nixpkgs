@@ -29,8 +29,6 @@ buildPythonPackage (finalAttrs: {
   version = "5.2.4-unstable-2026-05-20";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "dirkjanm";
     repo = "selenium-wire-roadtx";

@@ -53,7 +53,6 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "deepspeed";
   version = "0.19.6";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "deepspeedai";

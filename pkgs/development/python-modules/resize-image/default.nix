@@ -32,8 +32,6 @@ buildPythonPackage (finalAttrs: {
     "resize"
   ];
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Commandline utility to resize an image";
     homepage = "https://github.com/jaymu53/resize-image";

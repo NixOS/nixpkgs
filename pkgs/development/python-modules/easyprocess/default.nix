@@ -16,8 +16,6 @@ buildPythonPackage (finalAtrrs: {
   version = "1.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "EasyProcess";
     inherit (finalAtrrs) version;

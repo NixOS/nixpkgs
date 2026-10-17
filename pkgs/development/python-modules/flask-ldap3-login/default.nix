@@ -16,7 +16,6 @@ buildPythonPackage rec {
   pname = "flask-ldap3-login";
   version = "1.0.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "nickw444";

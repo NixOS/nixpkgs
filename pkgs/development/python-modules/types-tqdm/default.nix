@@ -10,7 +10,6 @@ buildPythonPackage (finalAttrs: {
   pname = "types-tqdm";
   version = "4.70.0.20260906";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "types_tqdm";

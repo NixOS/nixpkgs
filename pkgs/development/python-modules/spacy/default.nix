@@ -51,7 +51,6 @@ buildPythonPackage (finalAttrs: {
   pname = "spacy";
   version = "3.8.16";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "explosion";

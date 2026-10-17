@@ -21,7 +21,6 @@ buildPythonPackage (finalAttrs: {
   pname = "emsutil";
   version = "0.8.3-unstable-2026-08-03";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "FennisRobert";

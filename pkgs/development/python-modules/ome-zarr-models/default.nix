@@ -25,7 +25,6 @@ buildPythonPackage (finalAttrs: {
   pname = "ome-zarr-models";
   version = "1.7";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ome-zarr-models";

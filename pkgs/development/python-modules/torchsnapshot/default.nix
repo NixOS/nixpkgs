@@ -27,7 +27,6 @@ buildPythonPackage (finalAttrs: {
   pname = "torchsnapshot";
   version = "0.1.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";

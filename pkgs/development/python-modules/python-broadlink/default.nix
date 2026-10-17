@@ -35,8 +35,6 @@ buildPythonPackage (finalAttrs: {
     "broadlink"
   ];
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Python module for controlling Broadlink RM2/3 (Pro) remote controls, A1 sensor platforms and SP2/3 smartplugs";
     homepage = "https://github.com/DAB-LABS/python-broadlink";

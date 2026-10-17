@@ -12,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.8.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "latent-to";
     repo = "bt-decode";

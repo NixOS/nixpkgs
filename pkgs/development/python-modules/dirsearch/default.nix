@@ -35,7 +35,6 @@
 buildPythonPackage (finalAttrs: {
   pname = "dirsearch";
   version = "0.5.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "maurosoria";

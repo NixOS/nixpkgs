@@ -23,7 +23,6 @@ buildPythonPackage (finalAttrs: {
   pname = "quack-kernels";
   version = "0.6.5";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Dao-AILab";

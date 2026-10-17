@@ -19,8 +19,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.4.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "chrisguidry";
     repo = "uncalled-for";

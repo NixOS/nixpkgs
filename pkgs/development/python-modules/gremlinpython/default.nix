@@ -15,7 +15,6 @@
 }:
 
 buildPythonPackage rec {
-  __structuredAttrs = true;
 
   pname = "gremlinpython";
   version = "3.8.0";

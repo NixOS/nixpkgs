@@ -37,7 +37,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pandas-stubs";
   version = "3.0.5.260914";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pandas-dev";

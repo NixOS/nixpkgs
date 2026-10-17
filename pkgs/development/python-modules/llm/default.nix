@@ -166,7 +166,6 @@ let
     pname = "llm";
     version = "0.35";
     pyproject = true;
-    __structuredAttrs = true;
 
     build-system = [ setuptools ];
 

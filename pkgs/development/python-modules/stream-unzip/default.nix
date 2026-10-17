@@ -17,8 +17,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.0.101";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "uktrade";
     repo = "stream-unzip";

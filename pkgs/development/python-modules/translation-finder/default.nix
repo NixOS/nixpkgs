@@ -15,7 +15,6 @@ buildPythonPackage (finalAttrs: {
   version = "3.4.0";
 
   pyproject = true;
-  __structuredAttrs = true;
 
   # nixpkgs-update: no auto update
   # Only weblate uses this and we want to follow its version constraints

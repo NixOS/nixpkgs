@@ -34,7 +34,6 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
   pname = "cuda-core";
   version = "1.0.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "NVIDIA";

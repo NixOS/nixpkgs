@@ -50,8 +50,6 @@ buildPythonPackage (finalAttrs: {
   version = "9.4.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "mandiant";
     repo = "capa";

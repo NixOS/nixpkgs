@@ -22,7 +22,6 @@ buildPythonPackage (finalAttrs: {
   pname = "jupyter-builder";
   version = "1.2.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jupyterlab";

@@ -27,7 +27,6 @@ buildPythonPackage (finalAttrs: {
   pname = "licomp-toolkit";
   version = "0.5.20";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromCodeberg {
     owner = "software-compliance-org";

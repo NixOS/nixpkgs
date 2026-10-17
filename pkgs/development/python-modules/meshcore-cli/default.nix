@@ -40,8 +40,6 @@ buildPythonPackage (finalAttrs: {
 
   doCheck = false; # no tests
 
-  __structuredAttrs = true;
-
   meta = {
     changelog = "https://github.com/meshcore-dev/meshcore-cli/releases/tag/${finalAttrs.src.tag}";
     description = "Command line interface to MeshCore node";

@@ -40,7 +40,6 @@ buildPythonPackage (finalAttrs: {
   pname = "scippneutron";
   version = "26.7.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "scipp";
@@ -92,7 +91,6 @@ buildPythonPackage (finalAttrs: {
         name = "plopp-test-data";
         dontUnpack = true;
         strictDeps = true;
-        __structuredAttrs = true;
         nativeBuildInputs = [
           curl
         ];

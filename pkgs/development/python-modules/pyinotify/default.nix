@@ -9,7 +9,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pyinotify";
   version = "0.9.6";
 
-  __structuredAttrs = true;
   pyproject = true;
 
   src = fetchPypi {

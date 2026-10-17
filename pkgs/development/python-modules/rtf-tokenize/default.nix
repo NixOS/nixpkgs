@@ -10,7 +10,6 @@
 }:
 
 buildPythonPackage (finalAttrs: {
-  __structuredAttrs = true;
 
   pname = "rtf-tokenize";
   version = "1.0.1";

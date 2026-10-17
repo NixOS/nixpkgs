@@ -31,7 +31,6 @@ buildPythonPackage (finalAttrs: {
   pname = "bambi";
   version = "0.21.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "bambinos";

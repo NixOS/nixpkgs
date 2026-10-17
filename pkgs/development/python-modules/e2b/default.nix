@@ -30,7 +30,6 @@ buildPythonPackage (finalAttrs: {
   pname = "e2b";
   version = "2.51.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "e2b-dev";

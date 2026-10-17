@@ -47,7 +47,6 @@ buildPythonPackage (finalAttrs: {
   pname = "mcp";
   version = "1.29.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "modelcontextprotocol";

@@ -15,8 +15,6 @@ buildPythonPackage {
 
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "claudep";
     repo = "translitcodec";

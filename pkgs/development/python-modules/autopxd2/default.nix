@@ -13,7 +13,6 @@ buildPythonPackage rec {
   pname = "autopxd2";
   version = "3.2.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "autopxd2";

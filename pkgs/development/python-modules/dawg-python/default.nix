@@ -10,8 +10,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.7.2";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "DAWG-Python";

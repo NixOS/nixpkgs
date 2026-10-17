@@ -18,7 +18,6 @@ buildPythonPackage (finalAttrs: {
   pname = "cutie";
   version = "0.3.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "kamik423";

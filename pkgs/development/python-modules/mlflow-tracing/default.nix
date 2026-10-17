@@ -21,7 +21,6 @@ buildPythonPackage (finalAttrs: {
   pname = "mlflow-tracing";
   inherit (mlflow) version;
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mlflow";

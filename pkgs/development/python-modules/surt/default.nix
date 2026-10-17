@@ -13,8 +13,6 @@ buildPythonPackage {
   version = "0.3.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "internetarchive";
     repo = "surt";

@@ -31,7 +31,6 @@ buildPythonPackage (finalAttrs: {
   pname = "notebook";
   version = "7.6.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jupyter";

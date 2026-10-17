@@ -34,7 +34,6 @@ buildPythonPackage (finalAttrs: {
   pname = "gluonts";
   version = "0.17.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "awslabs";

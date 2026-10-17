@@ -22,7 +22,6 @@ buildPythonPackage (finalAttrs: {
   pname = "hist";
   version = "2.12.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";

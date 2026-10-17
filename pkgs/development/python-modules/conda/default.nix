@@ -26,7 +26,6 @@
   defaultPkgPath ? "~/.conda/pkgs", # default path to store download conda packages
 }:
 buildPythonPackage rec {
-  __structuredAttrs = true;
   pname = "conda";
   version = "26.5.2";
   pyproject = true;

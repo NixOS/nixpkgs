@@ -27,8 +27,6 @@ buildPythonPackage (finalAttrs: {
   version = "4.3.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "vulnersCom";
     repo = "api";

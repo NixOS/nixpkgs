@@ -12,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   version = "3.2.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "crownstone";
     repo = "crownstone-lib-python-core";

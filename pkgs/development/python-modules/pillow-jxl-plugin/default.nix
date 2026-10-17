@@ -17,7 +17,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pillow-jxl-plugin";
   version = "1.3.8";
   pyproject = true;
-  __structuredAttrs = true;
 
   # Contains Cargo.lock
   src = fetchPypi {

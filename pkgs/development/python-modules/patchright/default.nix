@@ -12,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.58.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "Kaliiiiiiiiii-Vinyzu";
     repo = "patchright-python";

@@ -17,7 +17,6 @@ buildPythonPackage (finalAttrs: {
   pname = "django-vpg";
   version = "0.4.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitLab {
     owner = "glitchtip";

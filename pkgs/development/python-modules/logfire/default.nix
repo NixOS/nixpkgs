@@ -66,7 +66,6 @@ buildPythonPackage (finalAttrs: {
   pname = "logfire";
   version = "4.41.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pydantic";

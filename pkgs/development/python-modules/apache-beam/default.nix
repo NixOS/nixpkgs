@@ -68,7 +68,6 @@ buildPythonPackage (finalAttrs: {
   pname = "apache-beam";
   version = "2.75.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "apache";

@@ -11,7 +11,6 @@ buildPythonPackage (finalAttrs: {
   pname = "nvidia-cutlass-dsl";
   inherit (nvidia-cutlass-dsl-libs-base) version;
   format = "wheel";
-  __structuredAttrs = true;
 
   # Universal metadata-only wheel that just pulls in `nvidia-cutlass-dsl-libs-base`
   # (which actually ships the Python code and the bundled MLIR/CUDA runtime libs).

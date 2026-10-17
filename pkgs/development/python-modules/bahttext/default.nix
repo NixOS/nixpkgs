@@ -11,7 +11,6 @@ buildPythonPackage (finalAttrs: {
   pname = "bahttext";
   version = "1.0.2-unstable-2020-05-31";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "sekz";

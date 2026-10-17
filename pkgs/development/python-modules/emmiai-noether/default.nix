@@ -36,7 +36,6 @@ buildPythonPackage (finalAttrs: {
   pname = "emmiai-noether";
   version = "2026.4.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Emmi-AI";

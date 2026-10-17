@@ -10,7 +10,6 @@ buildPythonPackage (finalAttrs: {
   pname = "langchain-protocol";
   version = "0.0.19";
   pyproject = true;
-  __structuredAttrs = true;
 
   # Not available vis Github yet; required by langchain-core
   src = fetchFromGitHub {

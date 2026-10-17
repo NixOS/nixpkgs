@@ -78,7 +78,6 @@ buildPythonPackage (finalAttrs: {
   pname = "cuda-bindings";
   inherit (versionSpecificAttrs) version;
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "NVIDIA";

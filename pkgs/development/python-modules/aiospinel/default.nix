@@ -43,8 +43,6 @@ buildPythonPackage (finalAttrs: {
     "aiospinel"
   ];
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Asyncio implementation of the Spinel protocol used to communicate with OpenThread RCPs over a serial connection";
     homepage = "https://github.com/home-assistant-libs/aiospinel";

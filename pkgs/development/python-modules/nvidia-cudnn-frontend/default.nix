@@ -36,7 +36,6 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
 
   pname = "nvidia-cudnn-frontend";
   pyproject = true;
-  __structuredAttrs = true;
 
   postPatch =
     cudaPackages.cudnn-frontend.postPatch

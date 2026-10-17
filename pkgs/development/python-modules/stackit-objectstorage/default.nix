@@ -15,8 +15,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.5.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "stackit_objectstorage";
     inherit (finalAttrs) version;

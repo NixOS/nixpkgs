@@ -24,7 +24,6 @@ buildPythonPackage (finalAttrs: {
   pname = "nvidia-cutlass";
   version = "4.2.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "NVIDIA";

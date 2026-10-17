@@ -20,7 +20,6 @@ buildPythonPackage (finalAttrs: {
   pname = "finetuning-scheduler";
   version = "2.14.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "speediedan";
