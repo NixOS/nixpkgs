@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lxsession";
-  version = "0.5.6";
+  version = "0.5.7";
 
   src = fetchFromGitHub {
     owner = "lxde";
     repo = "lxsession";
     tag = finalAttrs.version;
-    hash = "sha256-3RnRF4oMCtZbIraHVqEPnkviAkELq7uYqyHY0uCf/lU=";
+    hash = "sha256-7dtQ6DgJxLO2T1Ioh/onMMkhvtt/JmaBIWEVSjuJTf8=";
   };
 
   nativeBuildInputs = [
