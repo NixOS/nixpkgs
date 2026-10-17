@@ -125,6 +125,17 @@
     "https://cdn.kernel.org/pub/"
     "http://linux-kernel.uio.no/pub/"
     "ftp://ftp.funet.fi/pub/mirrors/ftp.kernel.org/pub/"
+    "https://mirrors.mit.edu/kernel/"
+    "https://ftp.metu.edu.tr/pub/mirrors/ftp.kernel.org/pub/"
+    "https://ftp.iij.ad.jp/pub/"
+    "https://mirror.yandex.ru/pub/"
+    "https://mirror.math.princeton.edu/pub/kernel/"
+    "https://ftp.cvut.cz/pub/"
+    "https://ftp.iitm.ac.in/kernel/"
+    "https://ftp.riken.jp/Linux/kernel.org/"
+    "https://mirrors.hust.edu.cn/kernel.org/"
+    "https://mirrors.ustc.edu.cn/kernel.org/"
+    "https://mirror.nju.edu.cn/kernel.org/"
   ];
 
   # MySQL
