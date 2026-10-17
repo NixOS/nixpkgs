@@ -42,6 +42,20 @@ in
       services.displayManager.defaultSession = "sway";
       programs.sway.enable = true;
     };
+  nodes.machineKmscon =
+    { ... }:
+    lib.attrsets.recursiveUpdate machineBase {
+      services.kmscon.enable = true;
+      services.displayManager.ly = {
+        x11Support = false;
+      };
+      services.displayManager.defaultSession = "sway";
+      services.displayManager.autoLogin = {
+        enable = true;
+        user = "alice";
+      };
+      programs.sway.enable = true;
+    };
 
   testScript =
     { nodes, ... }:
@@ -115,5 +129,11 @@ in
       machineNoX11.wait_for_file("/run/user/${toString user.uid}/sway-ipc.*.sock")
       machineNoX11.sleep(5)
       machineNoX11.screenshot("sway")
+
+      machineKmscon.wait_for_unit("display-manager.service")
+      machineKmscon.wait_until_succeeds("pgrep -x kmscon")
+      machineKmscon.wait_until_succeeds("pgrep -af ly | grep -- --use-kmscon-vt")
+      machineKmscon.wait_for_file("/run/user/${toString user.uid}/wayland-1")
+      machineKmscon.wait_for_file("/run/user/${toString user.uid}/sway-ipc.*.sock")
     '';
 }
