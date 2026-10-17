@@ -356,6 +356,13 @@ Each of them is passed to `define-with-packages-non-batch-ert-test'."
                                       nil
                                       t)))))))
 
+(defun with-packages-fonts-of-requested-packages-are-available ()
+  (let ((graphical-frame (make-frame-on-display (getenv "DISPLAY"))))
+    (unwind-protect
+        (list (display-graphic-p graphical-frame)
+              (member "Hack" (font-family-list graphical-frame)))
+      (delete-frame graphical-frame))))
+
 (defun with-packages-no-jit-native-comp ()
   "Test no JIT native-comp is triggered during non-batch tests.
 This is a regression test for URL `https://github.com/NixOS/nixpkgs/pull/538964'."
@@ -382,6 +389,11 @@ This is a regression test for URL `https://github.com/NixOS/nixpkgs/pull/538964'
 (define-with-packages-non-batch-ert-test
     with-packages-no-jit-native-comp
   (skip-unless (native-comp-available-p)))
+
+(define-with-packages-non-batch-ert-test
+    with-packages-fonts-of-requested-packages-are-available
+  :expected-result (if (eq system-type 'darwin) :failed :passed)
+  (skip-unless (fboundp 'x-create-frame)))
 
 (provide 'with-packages)
 
