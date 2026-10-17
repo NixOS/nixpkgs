@@ -124,6 +124,7 @@ GetOptions(
     "no-allow-dirty" => \&copyNixFlags0,
     "recreate-lock-file" => \&copyNixFlags0,
     "refresh" => \&copyNixFlags0,
+    "show-trace" => \&copyNixFlags0,
     ) or exit 1;
 
 push @nixFlags, @nixFlags2;
