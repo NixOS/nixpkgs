@@ -342,8 +342,6 @@ with pkgs;
     }
   );
 
-  dnf-plugins-core = with python3Packages; toPythonApplication dnf-plugins-core;
-
   dnf4 = python3Packages.callPackage ../development/python-modules/dnf4/wrapper.nix { };
 
   inherit (gridlock) nyarr;
