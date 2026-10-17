@@ -706,7 +706,8 @@
       ];
     "bitvis" =
       ps: with ps; [
-      ]; # missing inputs: bitvis-protobuf
+        bitvis-protobuf
+      ];
     "bizkaibus" =
       ps: with ps; [
         bizkaibus
@@ -8525,6 +8526,7 @@
     "bayesian"
     "besen"
     "binary_sensor"
+    "bitvis"
     "blackbird"
     "blebox"
     "blink"
