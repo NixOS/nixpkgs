@@ -130,10 +130,8 @@ buildPythonPackage (finalAttrs: {
     "test_default_handler"
     "test_filter_inf_trials_message"
     "test_propagation"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # ValueError: Failed to start Kaleido subprocess. Error stream
-    # kaleido/executable/kaleido: line 5:  5956 Illegal instruction: 4  ./bin/kaleido $@
+
+    # choreographer.browsers._errors.BrowserFailedError: Browser failed to start: [1:0:1017/165222.300020:ERROR:zygote_linux.cc(651)] write: Broken pipe
     "test_edf_plot_no_trials"
     "test_edf_plot_no_trials_studies"
     "test_get_optimization_history_plot"
