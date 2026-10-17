@@ -25,22 +25,23 @@ let
     platforms = with lib.platforms; linux;
   };
   plugins' = lib.attrsets.filterAttrs (_: lib.isDerivation) plugins;
-in
-let
   fwdir = symlinkJoin {
     name = "esci-firmware-dir";
     paths = lib.mapAttrsToList (name: value: value + "/share/esci") plugins';
   };
-in
-let
   iscan-data = stdenv.mkDerivation rec {
     pname = "iscan-data";
     version = "1.39.2-1";
 
     src = fetchurl {
       urls = [
-        "http://support.epson.net/linux/src/scanner/iscan/iscan-data_${version}.tar.gz"
+        "https://support.epson.net/linux/src/scanner/iscan/iscan-data_${version}.tar.gz"
         "https://web.archive.org/web/http://support.epson.net/linux/src/scanner/iscan/iscan-data_${version}.tar.gz"
+      ];
+      # HTTP 403 otherwise
+      curlOptsList = [
+        "--user-agent"
+        "Mozilla/5.0 Gecko/20100101 Firefox/150.0"
       ];
       sha256 = "092qhlnjjgz11ifx6mng7mz20i44gc0nlccrbmw18xr5hipbqqka";
     };
