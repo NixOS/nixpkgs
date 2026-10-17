@@ -1,30 +1,31 @@
 {
-  boost,
-  cmake,
-  fetchFromGitHub,
   lib,
-  libGLU,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
   libGL,
-  openssl,
+  libGLU,
+  nix-update-script,
   pkg-config,
-  sdl12-compat,
+  SDL_gfx,
   SDL_image,
   SDL_mixer,
-  SDL_gfx,
-  stdenv,
+  sdl12-compat,
   yaml-cpp,
-  zlib,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openxcom";
-  version = "1.0.0-unstable-2025-09-28";
+  version = "1.0-unstable-2026-09-28";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "OpenXcom";
     repo = "OpenXcom";
-    rev = "0f262a10ff447d09571375cef6e646f70868dae2";
-    hash = "sha256-q36Lx+PRFKhL87hZr2INcjlxNUX5Y5k8YkA9WDEjagQ=";
+    rev = "4a4bae5fa2e5a09282928e84943fc84b093e34ff";
+    hash = "sha256-hgW0n1BzzQe0guXJWF9KlDcpWz1JpFFJ6IGPP1nZgTA=";
   };
 
   nativeBuildInputs = [
@@ -33,24 +34,36 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    boost
-    libGL
-    libGLU
-    sdl12-compat
     SDL_gfx
     SDL_image
     SDL_mixer
+    sdl12-compat
     yaml-cpp
-    openssl
-    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libGL
+    libGLU
   ];
 
+  cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [ (lib.cmakeBool "CREATE_BUNDLE" false) ];
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+
   meta = {
-    description = "Open source clone of UFO: Enemy Unknown";
-    mainProgram = "openxcom";
+    description = "Open source clone of UFO: Enemy Unknown and X-COM: Terror From the Deep (legacy version)";
+    longDescription = ''
+      OpenXcom is an open source clone of UFO: Enemy Unknown (X-COM: UFO
+      Defense) and X-COM: Terror From the Deep. It requires the data files
+      from either or both of the original games.
+
+      OpenXcom is kept as a legacy version which only receives bugfixes. Its
+      developers recommend OpenXcom Extended instead, see openxcom-extended.
+    '';
     homepage = "https://openxcom.org";
-    license = lib.licenses.gpl3;
-    maintainers = [ ];
-    platforms = lib.platforms.linux;
+    downloadPage = "https://openxcom.org/download/";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ keenanweaver ];
+    mainProgram = "openxcom";
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})
