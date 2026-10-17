@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://download.librdf.org/source/rasqal-${finalAttrs.version}.tar.gz";
-    sha256 = "0z6rrwn4jsagvarg8d5zf0j352kjgi33py39jqd29gbhcnncj939";
+    hash = "sha256-aSTJrGVwvSQalmn4O0Z8cooyJHC/NPSy2k9pSSzP2Xw=";
   };
 
   nativeBuildInputs = [ pkg-config ];

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://kde/stable/qca/${version}/qca-${version}.tar.xz";
-    sha256 = "sha256-1KKzqgJy1z6gxM0hQJYBd/o03cIDDlmkjs+4DHV1csM=";
+    hash = "sha256-1KKzqgJy1z6gxM0hQJYBd/o03cIDDlmkjs+4DHV1csM=";
   };
 
   buildInputs = [
