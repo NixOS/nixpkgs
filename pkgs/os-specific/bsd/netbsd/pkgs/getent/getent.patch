@@ -1,8 +1,8 @@
 Author: Matthew Bauer
 Description: Remove unavailable getent databases
 Version: 7.1.2
---- a/usr.bin/getent/getent.c	2018-04-16 13:33:49.000000000 -0500
-+++ b/usr.bin/getent/getent.c	2018-04-16 13:29:30.000000000 -0500
+--- a/usr.bin/getent/getent.c
++++ b/usr.bin/getent/getent.c
 @@ -42,7 +42,6 @@
  #include <grp.h>
  #include <limits.h>
@@ -57,10 +57,12 @@ Version: 7.1.2
  	{	"services",	services,	},
  	{	"shells",	shells,		},
  
-@@ -195,49 +177,6 @@
+@@ -193,49 +175,6 @@
+ 		curpref = sep;
+ 	}
  	(void)printf("\n");
- }
- 
+-}
+-
 -
 -		/*
 -		 * ethers
@@ -102,11 +104,9 @@ Version: 7.1.2
 -		}
 -	}
 -	return rv;
--}
--
+ }
+ 
  		/*
- 		 * group
- 		 */
 @@ -298,7 +237,7 @@
  hosts(int argc, char *argv[])
  {
@@ -177,7 +177,7 @@ Version: 7.1.2
  		 * networks
  		 */
  
-@@ -464,227 +361,6 @@
+@@ -464,228 +361,7 @@
  	return rv;
  }
  
@@ -361,7 +361,7 @@ Version: 7.1.2
 -					if (cap) {
 -						capprint(cap);
 -						break;
--					} 
+-					}
 -				}
 -				if (j == sizeof(sfx) - 1)
 -					printf("false\n");
@@ -372,7 +372,7 @@ Version: 7.1.2
 -	return rv;
 -}
 -
--		/*
+ 		/*
 -		 * gettytab
 -		 */
 -
@@ -402,9 +402,10 @@ Version: 7.1.2
 -	return handlecap(_PATH_DISKTAB, argc, argv);
 -}
 -
- 		/*
+-		/*
  		 * protocols
  		 */
+ 
 @@ -726,47 +402,6 @@
  }
  
@@ -418,7 +419,7 @@ Version: 7.1.2
 -	struct rpcent	*re;
 -	unsigned long	id;
 -	int		i, rv;
--	
+-
 -	assert(argc > 1);
 -	assert(argv != NULL);
 -
