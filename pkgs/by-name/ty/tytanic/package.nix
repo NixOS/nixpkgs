@@ -84,6 +84,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       andrew15-5
       apcamargo
+      tingerrr
     ];
   };
 })
