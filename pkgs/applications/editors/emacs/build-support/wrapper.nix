@@ -33,6 +33,7 @@
 {
   lib,
   lndir,
+  writeText,
   makeBinaryWrapper,
   runCommand,
   runtimeShell,
@@ -42,6 +43,8 @@ let
   inherit (self) emacs;
   withNativeCompilation = emacs.withNativeCompilation or false;
   withTreeSitter = emacs.withTreeSitter or false;
+  inherit (emacs.stdenv.hostPlatform) isDarwin;
+  withFontconfig = !isDarwin;
 in
 packagesFun: # packages explicitly requested by the user
 let
@@ -95,6 +98,7 @@ let
         }
         mkdir -p $out/bin
         mkdir -p $out/share/emacs/site-lisp
+        mkdir -p $out/share/fonts
         ${lib.optionalString withNativeCompilation ''
           mkdir -p $out/share/emacs/native-lisp
         ''}
@@ -132,6 +136,7 @@ let
         linkEmacsPackage() {
           linkPath "$1" "bin" "bin"
           linkPath "$1" "share/emacs/site-lisp" "share/emacs/site-lisp"
+          linkPath "$1" "share/fonts" "share/fonts"
           ${lib.optionalString withNativeCompilation ''
             linkPath "$1" "share/emacs/native-lisp" "share/emacs/native-lisp"
           ''}
@@ -184,6 +189,39 @@ let
           (funcall restore-load-path
                    "EMACSNATIVELOADPATH" "emacsWithPackages_siteLispNative"))
 
+        ;; Undo the wrapper's XDG_DATA_DIRS addition so it is not propagated
+        ;; to subprocesses.  Preserve the caller's directories and distinguish
+        ;; an originally unset variable from an explicitly empty one.
+        (let ((wrapper-site-data (getenv "emacsWithPackages_siteData"))
+              (was-set (getenv "emacsWithPackages_xdgDataDirsWasSet"))
+              (xdg-data-dirs (getenv "XDG_DATA_DIRS")))
+          (when wrapper-site-data
+            (let ((prefix (concat wrapper-site-data path-separator)))
+              (cond
+              ;; The wrapper directory is the entire value: originally unset
+              ;; or empty.
+              ((equal xdg-data-dirs wrapper-site-data)
+                (setenv "XDG_DATA_DIRS"
+                        (when (equal was-set "x") "")))
+
+              ;; Remove exactly the prefix added by wrapper.sh.
+              ((and xdg-data-dirs
+                    (string-prefix-p prefix xdg-data-dirs))
+                (setenv "XDG_DATA_DIRS"
+                        (substring xdg-data-dirs (length prefix))))))
+
+            (setenv "emacsWithPackages_siteData" nil)
+            (setenv "emacsWithPackages_xdgDataDirsWasSet" nil)))
+
+        ;; Do not propagate the wrapper's fontconfig configuration to
+        ;; subprocesses, including other Emacs instances.
+        (let ((wrapper-fontconfig-file (getenv "emacsWithPackages_fontconfigFile")))
+          (when wrapper-fontconfig-file
+            (when (equal (getenv "FONTCONFIG_FILE")
+                         wrapper-fontconfig-file)
+              (setenv "FONTCONFIG_FILE" nil))
+            (setenv "emacsWithPackages_fontconfigFile" nil)))
+
         (let ((set-from-env (lambda (symbol env-var &optional modify)
                               (when-let* ((value (getenv env-var)))
                                 (set symbol (funcall (or modify #'identity) value))
@@ -214,6 +252,20 @@ let
             -f batch-native-compile "$siteStart" "$subdirs"
         ''}
       '';
+
+  fontconfigFile =
+    if withFontconfig then
+      writeText "emacs-with-packages-fontconfig" ''
+        <?xml version="1.0"?>
+        <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
+        <fontconfig>
+          <description>Extend the standard config with fonts from the Emacs withPackages wrapper</description>
+          <dir>${deps}/share/fonts</dir>
+          <include ignore_missing="yes">/etc/fonts/fonts.conf</include>
+        </fontconfig>
+      ''
+    else
+      "";
 in
 runCommand (lib.appendToName "with-packages" emacs).name
   {
@@ -241,6 +293,9 @@ runCommand (lib.appendToName "with-packages" emacs).name
         --subst-var-by bash ${runtimeShell} \
         --subst-var-by wrapperSiteLisp "$deps/share/emacs/site-lisp" \
         --subst-var-by wrapperSiteLispNative "$deps/share/emacs/native-lisp" \
+        --subst-var-by wrapperSiteData "$deps/share" \
+        --subst-var-by withFontconfig "${lib.boolToString withFontconfig}" \
+        --subst-var-by wrapperFontconfigFile "${fontconfigFile}" \
         --subst-var-by wrapperBinDir "$deps/bin" \
         --subst-var-by wrapperInvocationDirectory "$out/bin/" \
         --subst-var-by wrapperInvocationName "$progname" \
@@ -268,6 +323,9 @@ runCommand (lib.appendToName "with-packages" emacs).name
         --subst-var-by bash ${runtimeShell} \
         --subst-var-by wrapperSiteLisp "$deps/share/emacs/site-lisp" \
         --subst-var-by wrapperSiteLispNative "$deps/share/emacs/native-lisp" \
+        --subst-var-by wrapperSiteData "$deps/share" \
+        --subst-var-by withFontconfig "${lib.boolToString withFontconfig}" \
+        --subst-var-by wrapperFontconfigFile "${fontconfigFile}" \
         --subst-var-by wrapperBinDir "$deps/bin" \
         --subst-var-by wrapperInvocationDirectory "$out/Applications/Emacs.app/Contents/MacOS/" \
         --subst-var-by wrapperInvocationName "Emacs" \

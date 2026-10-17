@@ -170,6 +170,102 @@ Set this variable before running related tests.")
       (should find-function-C-source-directory)
       (should (cdr (find-function-noselect function-to-find))))))
 
+(defun with-packages--check-xdg-data-dirs (original site-data)
+  "Check that startup restored ORIGINAL after prepending SITE-DATA."
+  ;; Ensure the shell wrapper actually added its directory and markers.
+  (let ((process-environment initial-environment))
+    (should (equal (getenv "emacsWithPackages_siteData") site-data))
+    (should (equal (getenv "emacsWithPackages_xdgDataDirsWasSet")
+                   (if original "x" "")))
+    (should (equal (getenv "XDG_DATA_DIRS")
+                   (if (or (null original) (equal original ""))
+                       site-data
+                     (concat site-data ":" original)))))
+
+  ;; Check the environment after the real site-start.el has run.
+  (should (equal (getenv "XDG_DATA_DIRS") original))
+  (should-not (getenv "emacsWithPackages_siteData"))
+  (should-not (getenv "emacsWithPackages_xdgDataDirsWasSet"))
+
+  ;; Check actual subprocess inheritance too.  Prefix each output line
+  ;; so an unset variable and an empty value remain distinguishable.
+  (should
+   (equal
+    (process-lines
+     "sh" "-c"
+     (concat
+      "printf '%s\\n' "
+      "\"set=${XDG_DATA_DIRS+x}\" "
+      "\"value=${XDG_DATA_DIRS-}\" "
+      "\"siteData=${emacsWithPackages_siteData+x}\" "
+      "\"wasSet=${emacsWithPackages_xdgDataDirsWasSet+x}\""))
+    (list (if original "set=x" "set=")
+          (concat "value=" original)
+          "siteData="
+          "wasSet="))))
+
+(ert-deftest with-packages-xdg-data-dirs-is-restored ()
+  "Undo only the wrapper's XDG_DATA_DIRS addition, including its markers."
+  (skip-unless (not (eq system-type 'darwin)))
+  (let ((wrapped-emacs
+         (expand-file-name invocation-name invocation-directory))
+        (site-data
+         (let ((process-environment initial-environment))
+           (getenv "emacsWithPackages_siteData"))))
+    ;; A missing marker is a failure, not a reason to skip the test.
+    (should (stringp site-data))
+    (dolist (original (list nil
+                            ""
+                            "/test/share-a:/test/share-b"
+                            site-data
+                            (concat site-data ":/test/share-a")
+                            (concat "/test/share-a:" site-data)
+                            ":/test/share-a::/test/share-b:"))
+      (ert-info ((format "Original XDG_DATA_DIRS: %S" original))
+        (let ((process-environment (copy-sequence process-environment)))
+          (setenv "XDG_DATA_DIRS" original)
+          (setenv "emacsWithPackages_siteData" nil)
+          (setenv "emacsWithPackages_xdgDataDirsWasSet" nil)
+          (with-temp-buffer
+            (let ((status
+                   (call-process
+                    wrapped-emacs nil '(t t) nil
+                    "--batch" "--load=with-packages"
+                    "--eval"
+                    (prin1-to-string
+                     `(with-packages--check-xdg-data-dirs
+                       ,original ,site-data)))))
+              (ert-info ((buffer-string))
+                (should (equal status 0))))))))))
+
+(ert-deftest with-packages-fontconfig-environment-is-cleaned ()
+  "The wrapper's fontconfig environment must not reach subprocesses."
+  ;; The test runner must start Emacs with FONTCONFIG_FILE unset.
+  (skip-unless (not (eq system-type 'darwin)))
+
+  ;; Confirm that the wrapper supplied the configuration at startup.
+  (let ((process-environment initial-environment))
+    (should (getenv "emacsWithPackages_fontconfigFile"))
+    (should
+     (equal (getenv "FONTCONFIG_FILE")
+            (getenv "emacsWithPackages_fontconfigFile"))))
+
+  ;; The startup cleanup must remove both variables.
+  (should-not (getenv "FONTCONFIG_FILE"))
+  (should-not (getenv "emacsWithPackages_fontconfigFile"))
+
+  ;; Check actual subprocess inheritance, without another Emacs startup
+  ;; potentially cleaning up the environment and hiding the regression.
+  (should
+   (equal
+    (process-lines
+     shell-file-name "-c"
+     (concat
+      "test \"${FONTCONFIG_FILE+x}\" != x && "
+      "test \"${emacsWithPackages_fontconfigFile+x}\" != x && "
+      "printf '%s\\n' ok"))
+    '("ok"))))
+
 ;;;; Utils for non-batch tests
 
 (defmacro define-with-packages-non-batch-test-via-bound-and-true-p (test-name)
