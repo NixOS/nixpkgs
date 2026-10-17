@@ -512,6 +512,7 @@ in
         Group = cfg.group;
         ExecStart = "${cfg.package}/bin/cassandra -f";
         SuccessExitStatus = 143;
+        PrivateTmp = true;
       };
     };
 
@@ -523,6 +524,7 @@ in
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
+        PrivateTmp = true;
         ExecStart = concatStringsSep " " (
           [
             "${cfg.package}/bin/nodetool"
@@ -552,6 +554,7 @@ in
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
+        PrivateTmp = true;
         ExecStart = concatStringsSep " " (
           [
             "${cfg.package}/bin/nodetool"
