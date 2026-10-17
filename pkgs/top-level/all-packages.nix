@@ -1925,8 +1925,6 @@ with pkgs;
     callPackage ../development/tools/haskell/haskell-language-server/withWrapper.nix
       { };
 
-  hassil = with python3Packages; toPythonApplication hassil;
-
   hareThirdParty = recurseIntoAttrs (callPackage ./hare-third-party.nix { });
 
   hdf5 = callPackage ../tools/misc/hdf5 {
