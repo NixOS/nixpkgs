@@ -46,6 +46,15 @@
           description = ''
             Enable dynamic CDI configuration for Nvidia devices by running
             nvidia-container-toolkit on boot.
+
+            Note: this module only writes /etc/nvidia-container-runtime/config.toml
+            (with mode = "cdi") for Docker, i.e. when
+            virtualisation.docker.enableNvidia is set. With other runtimes
+            (containerd, Podman) you write that file yourself, and on NixOS
+            the runtime then has to run in cdi or legacy mode: the default auto
+            mode cannot find the driver libraries (no /etc/ld.so.cache, and the
+            libs live outside the toolkit's search paths), so GPU containers
+            fail to start with e.g. "dlopen lib*.so.<driver-version> failed".
           '';
         };
 
