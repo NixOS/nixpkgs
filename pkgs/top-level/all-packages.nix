@@ -4877,8 +4877,6 @@ with pkgs;
   # pandoc takes long to build and documentation isn't needed for just running the cli
   shellcheck-minimal = haskell.lib.compose.justStaticExecutables shellcheck.unwrapped;
 
-  speedtest-cli = with python3Packages; toPythonApplication speedtest-cli;
-
   splint = callPackage ../development/tools/analysis/splint {
     flex = flex_2_5_35;
   };
