@@ -446,7 +446,7 @@ let
           mkdir -p tmp
           mount -o loop,ro,ufstype=44bsd ${lib.optionalString (fs != null) "-t ${fs} "}${file} tmp ||
             mount -o loop,ro ${lib.optionalString (fs != null) "-t ${fs} "}${file} tmp
-          cp -Rv tmp/* $out/ || exit 0
+          cp -Rv tmp/. $out/
         '';
       }
     );
@@ -467,10 +467,8 @@ let
           ln -s ${kernelModules}/lib /lib
           ${kmod}/bin/modprobe mtd
           ${kmod}/bin/modprobe mtdram total_size=131072
-          ${kmod}/bin/modprobe mtdchar
           ${kmod}/bin/modprobe mtdblock
           ${kmod}/bin/modprobe jffs2
-          ${kmod}/bin/modprobe zlib
 
           mkdir -p $out
           mkdir -p tmp
@@ -478,7 +476,7 @@ let
           dd if=${file} of=/dev/mtd0
           mount ${lib.optionalString (fs != null) "-t ${fs} "}/dev/mtdblock0 tmp
 
-          cp -R tmp/* $out/
+          cp -R tmp/. $out/
         '';
       }
     );
