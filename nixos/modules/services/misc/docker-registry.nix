@@ -28,6 +28,7 @@ let
     };
   };
 
+  settingsFormat = pkgs.formats.json { };
   configFile = cfg.configFile;
 in
 {
@@ -95,14 +96,20 @@ in
         }
       '';
       default = { };
-      type = lib.types.attrs;
+      type = lib.types.submodule {
+        freeformType = settingsFormat.type;
+      };
     };
 
     configFile = lib.mkOption {
-      default = pkgs.writeText "docker-registry-config.yml" (
-        builtins.toJSON (lib.recursiveUpdate registryConfig cfg.extraConfig)
+      default = settingsFormat.generate "docker-registry-config.yml" (
+        lib.recursiveUpdate registryConfig cfg.extraConfig
       );
-      defaultText = lib.literalExpression ''pkgs.writeText "docker-registry-config.yml" "# my custom docker-registry-config.yml ..."'';
+      defaultText = lib.literalExpression ''
+        (pkgs.formats.json { }).generate "docker-registry-config.yml" (
+          lib.recursiveUpdate registryDefaultConfig config.services.dockerRegistry.extraConfig
+        )
+      '';
       description = ''
         Path to CNCF distribution config file.
 
