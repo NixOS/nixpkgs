@@ -1,0 +1,13 @@
+diff --git a/src/main/main.ts b/src/main/main.ts
+index 56dc0a0..33226c9 100644
+--- a/src/main/main.ts
++++ b/src/main/main.ts
+@@ -46,7 +46,7 @@ if (process.platform === 'win32') {
+ 
+ const RESOURCES_PATH = app.isPackaged
+   ? path.join(process.resourcesPath, 'assets')
+-  : path.join(__dirname, '../../assets')
++  : path.join(app.getAppPath(), '../assets')
+ 
+ const getAssetPath = (...paths: string[]): string => {
+   return path.join(RESOURCES_PATH, ...paths)
