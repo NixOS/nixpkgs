@@ -96,8 +96,7 @@ stdenv.mkDerivation {
 
   postFixup = ''
     substituteInPlace $out/share/applications/tana.desktop \
-      --replace "Exec=tana" "Exec=$out/bin/tana" \
-      --replace "Name=tana" "Name=Tana"
+      --replace-fail "Name=tana" "Name=Tana"
   '';
 
   meta = {
