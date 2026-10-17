@@ -35,14 +35,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "labgrid";
-  version = "26.0";
+  version = "26.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "labgrid-project";
     repo = "labgrid";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SX7FIaSl2sy1hMPEmgGCQQAzXUeFZRw/CrXf/ZHRBDU=";
+    hash = "sha256-rHEWh78DbDF/k0jalNXOisi/v3+ft3aI8oj5iaxJbWY=";
   };
 
   passthru.updateScript = nix-update-script { };
