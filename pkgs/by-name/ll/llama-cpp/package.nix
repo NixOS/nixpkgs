@@ -256,6 +256,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       booxter
       philiptaron
+      recutita
       xddxdd
       yuannan
     ];
