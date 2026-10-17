@@ -203,6 +203,12 @@
     github = "1nv0k32";
     githubId = 30079271;
   };
+  _1zun4 = {
+    name = "Izuna Seikatsu";
+    email = "izuna.seikatsu@ccbluex.net";
+    github = "1zun4";
+    githubId = 12410754;
+  };
   _21CSM = {
     name = "21CSM";
     email = "21CSM@tutanota.com";
