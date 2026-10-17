@@ -32,6 +32,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
   buildInputs = [ fuse3 ];
 
+  postInstall = ''
+    mkdir -p $out/sbin
+    ln -sf $out/bin/mount-s3 $out/sbin/mount.mount-s3
+  '';
+
   # The S3CrtClient doctest in mountpoint-s3-client constructs a real client,
   # which requires a TLS trust store unavailable in the sandbox.
   cargoTestFlags = [
