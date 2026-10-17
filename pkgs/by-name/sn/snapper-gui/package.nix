@@ -14,7 +14,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "snapper-gui";
-  version = "0.1-unstable-2022-06-26";
+  version = "0-unstable-2022-06-26";
   format = "setuptools";
 
   src = fetchFromGitHub {
