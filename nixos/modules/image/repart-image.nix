@@ -39,7 +39,7 @@
   definitionsDirectory,
   imageSize ? "auto",
   sectorSize,
-  mkfsEnv ? { },
+  env ? { },
   createEmpty ? true,
 }:
 
@@ -159,9 +159,7 @@ stdenvNoCC.mkDerivation (
     ]
     ++ fileSystemTools;
 
-    env = mkfsEnv;
-
-    inherit finalPartitions definitionsDirectory;
+    inherit env finalPartitions definitionsDirectory;
 
     partitionsJSON = builtins.toJSON finalAttrs.finalPartitions;
 
