@@ -1921,8 +1921,6 @@ with pkgs;
     withXorg = false;
   };
 
-  gvm-tools = with python3.pkgs; toPythonApplication gvm-tools;
-
   haskell-language-server =
     callPackage ../development/tools/haskell/haskell-language-server/withWrapper.nix
       { };
