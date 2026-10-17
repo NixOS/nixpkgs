@@ -7270,8 +7270,6 @@ self: super: with self; {
 
   grad-cam = callPackage ../development/python-modules/grad-cam { };
 
-  gradient = callPackage ../development/python-modules/gradient { };
-
   gradient-statsd = callPackage ../development/python-modules/gradient-statsd { };
 
   gradio = callPackage ../development/python-modules/gradio { };
