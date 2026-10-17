@@ -22,7 +22,7 @@ in
         SPOOLMAN_AUTOMATIC_BACKUP = "TRUE";
         SPOOLMAN_BASE_PATH = "/spoolman";
         SPOOLMAN_METRICS_ENABLED = "TRUE";
-        SPOOLMAN_CORS_ORIGIN = "source1.domain.com:p1, source2.domain.com:p2";
+        SPOOLMAN_CORS_ORIGIN = "https://source1.domain.com,http://source2.domain.com:8080";
       };
       description = ''
         Environment variables to be passed to the spoolman service.
