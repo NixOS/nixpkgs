@@ -686,6 +686,11 @@ let
       # The default (=y) forces us to have the XHCI firmware available in initrd,
       # which our initrd builder can't currently do easily.
       USB_XHCI_TEGRA = lib.mkIf stdenv.hostPlatform.isAarch64 module;
+
+      # Must match CONFIG_USB to work!
+      # Introduced 6.0, renamed 6.10
+      USB_ONBOARD_DEV = whenAtLeast "6.10" yes;
+      USB_ONBOARD_HUB = whenBetween "6.0" "6.10" yes;
     };
 
     usb-serial = {
