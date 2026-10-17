@@ -9295,8 +9295,6 @@ with pkgs;
   steam-run = steam.run;
   steam-run-free = steam.run-free;
 
-  protonup-ng = with python3Packages; toPythonApplication protonup-ng;
-
   teeworlds-server = teeworlds.override { buildClient = false; };
 
   ultrastar-creator = callPackage ../tools/misc/ultrastar-creator { };
