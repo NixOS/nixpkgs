@@ -1451,8 +1451,6 @@ with pkgs;
     callPackage ../applications/window-managers/hyprwm/hyprland-plugins { }
   );
 
-  klaus = with python3Packages; toPythonApplication klaus;
-
   klipper-firmware = callPackage ../servers/klipper/klipper-firmware.nix { };
 
   klipper-flash = callPackage ../servers/klipper/klipper-flash.nix { flashDevice = "/dev/null"; };
