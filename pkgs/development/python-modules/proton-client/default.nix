@@ -41,16 +41,20 @@ buildPythonPackage rec {
     })
   ];
 
+  # bcrypt 5.0 raises ValueError for passwords longer than 72 bytes instead of
+  # silently truncating them.  Truncate explicitly so that such passwords keep
+  # producing the same hashes as with older bcrypt versions.
+  postPatch = ''
+    substituteInPlace proton/srp/util.py \
+      --replace-fail 'bcrypt.hashpw(password,' 'bcrypt.hashpw(password[:72],'
+  '';
+
   nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = [
-    #ValueError: Invalid modulus
-    "test_modulus_verification"
-    # bcrypt 5.0 rejects test fixture password longer than 72 bytes
-    "test_compute_v"
-    "test_generate_v"
-    "test_srp"
-  ];
+  # GnuPG needs a writable home directory to import the SRP modulus key
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   pythonImportsCheck = [ "proton" ];
 
