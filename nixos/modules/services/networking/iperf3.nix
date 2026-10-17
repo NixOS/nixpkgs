@@ -14,7 +14,7 @@ let
     port = mkOption {
       type = types.port;
       default = 5201;
-      description = "Server port to listen on for iperf3 client requests.";
+      description = "Server port to listen on for iperf3 client requests (both TCP and UDP).";
     };
     affinity = mkOption {
       type = types.nullOr types.ints.unsigned;
@@ -67,6 +67,7 @@ let
 
     networking.firewall = mkIf cfg.openFirewall {
       allowedTCPPorts = [ cfg.port ];
+      allowedUDPPorts = [ cfg.port ];
     };
 
     systemd.services.iperf3 = {
