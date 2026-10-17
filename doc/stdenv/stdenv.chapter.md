@@ -303,23 +303,44 @@ This can lead to conflicting dependencies that cannot easily be resolved.
 ```nix
 with import <nixpkgs> { };
 let
-  bar = stdenv.mkDerivation {
-    name = "bar";
+  fake-lib = stdenv.mkDerivation {
+    name = "fake-lib";
+    strictDeps = true;
     dontUnpack = true;
-    # `hello` is also made available to dependents, such as `foo`
-    propagatedBuildInputs = [ hello ];
+    # If `fake-lib` goes in `buildInputs` then `propagatedNativeBuildInputs` should be used to have `hello` in `$PATH`
+    propagatedNativeBuildInputs = [ hello ];
     postInstall = "mkdir $out";
   };
-  foo = stdenv.mkDerivation {
-    name = "foo";
+  build-that-uses-fake-lib = stdenv.mkDerivation {
+    name = "program-that-uses-fake-lib";
+    strictDeps = true;
     dontUnpack = true;
-    # `bar` is a direct dependency, which implicitly includes the propagated `hello`
-    buildInputs = [ bar ];
+    # `fake-lib` is a direct dependency, which implicitly includes the propagated `hello`
+    buildInputs = [ fake-lib ];
     # The `hello` binary is available!
     postInstall = "hello > $out";
   };
+
+  fake-program = stdenv.mkDerivation {
+    name = "fake-program";
+    strictDeps = true;
+    dontUnpack = true;
+    # If `fake-program` goes in `nativeBuildInputs` then `propagatedBuildInputs` should be used to have `hello` in `$PATH`
+    # If `hello` is in `propagatedNativeBuildInputs` and `fake-program` is in `nativeBuildInputs` then `hello` will NOT be in `$PATH`
+    propagatedBuildInputs = [ hello ];
+    postInstall = "mkdir $out";
+  };
+  build-that-uses-fake-program = stdenv.mkDerivation {
+    name = "program-that-uses-fake-program";
+    strictDeps = true;
+    dontUnpack = true;
+    nativeBuildInputs = [ fake-program ];
+    postInstall = "hello > $out";
+  };
 in
-foo
+{
+  inherit build-that-uses-fake-lib build-that-uses-fake-program;
+}
 ```
 :::
 
