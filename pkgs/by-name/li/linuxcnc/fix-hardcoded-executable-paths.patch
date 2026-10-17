@@ -1,0 +1,26 @@
+diff --git a/tcl/bin/genedit.tcl b/tcl/bin/genedit.tcl
+index 03eed07eb0..1dd7d26544 100755
+--- a/tcl/bin/genedit.tcl
++++ b/tcl/bin/genedit.tcl
+@@ -150,7 +150,7 @@ proc geneditStart {name {ifilename "untitled.txt"} {itypes { {"All files" *} {"T
+         $menubar add cascade -label [msgcat::mc "Scripts"] -menu $scriptmenu -underline 1
+         #replaced scriptdir
+ 	#set scriptdir tcl/scripts
+-        set files [exec /bin/ls $linuxcnc::TCL_SCRIPT_DIR]
++        set files [exec ls $linuxcnc::TCL_SCRIPT_DIR]
+ 	foreach file $files {
+     	    if {[string match *.ncw $file]} {
+         	set geneditfname [file rootname $file]
+diff --git a/tcl/tklinuxcnc.tcl b/tcl/tklinuxcnc.tcl
+index d35db33840..9030ca219e 100755
+--- a/tcl/tklinuxcnc.tcl
++++ b/tcl/tklinuxcnc.tcl
+@@ -797,7 +797,7 @@ set scriptsmenu [menu $menubar.scripts -tearoff 1]
+ $menubar add cascade -label [msgcat::mc "Scripts"] -menu $scriptsmenu -underline 1
+ 
+ if { $windows == 0 } {
+-    set files [exec /bin/ls $linuxcnc::TCL_SCRIPT_DIR]
++    set files [exec ls $linuxcnc::TCL_SCRIPT_DIR]
+     foreach file $files {
+ 	if {[string match *.tcl $file]} {
+ 	    set fname [file rootname $file]
