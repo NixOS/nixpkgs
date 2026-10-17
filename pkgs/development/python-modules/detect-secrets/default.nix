@@ -17,7 +17,7 @@
   withWordList ? true,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "detect-secrets";
   version = "1.5.0";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Yelp";
     repo = "detect-secrets";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pNLAZUJhjZ3b01XaltJUJ9O7Blv6/pHQrRvURe7MJ5A=";
     leaveDotGit = true;
   };
@@ -36,8 +36,8 @@ buildPythonPackage rec {
     pyyaml
     requests
   ]
-  ++ lib.optionals withGibberish optional-dependencies.gibberish
-  ++ lib.optionals withWordList optional-dependencies.word_list;
+  ++ lib.optionals withGibberish finalAttrs.passthru.optional-dependencies.gibberish
+  ++ lib.optionals withWordList finalAttrs.passthru.optional-dependencies.word_list;
 
   optional-dependencies = {
     gibberish = [ gibberish-detector ];
@@ -82,8 +82,8 @@ buildPythonPackage rec {
   meta = {
     description = "Enterprise friendly way of detecting and preventing secrets in code";
     homepage = "https://github.com/Yelp/detect-secrets";
-    changelog = "https://github.com/Yelp/detect-secrets/releases/tag/${src.tag}";
+    changelog = "https://github.com/Yelp/detect-secrets/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})
