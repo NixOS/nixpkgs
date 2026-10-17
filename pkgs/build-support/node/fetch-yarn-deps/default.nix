@@ -24,6 +24,10 @@ let
     url = "https://registry.yarnpkg.com/@yarnpkg/lockfile/-/lockfile-1.1.0.tgz";
     hash = "sha512-GpSwvyXOcOOlV70vbnzjj4fW5xW/FdUF6nQEt1ENy7m4ZCczi1+/buVUPAqmGfqznsORNFzUMjctTIp8a9tuCQ==";
   };
+  undici = fetchurl {
+    url = "https://registry.yarnpkg.com/undici/-/undici-8.11.2.tgz";
+    hash = "sha512-u4UB2/IrKdU6lFxumHmmo1a3fCQO5tzQllRorfoRS63txhrB7xTpSn1PftwC4qEHkOaqP95fCWW4lJzwErwzhQ==";
+  };
 
   tests = callPackage ./tests { };
 in
@@ -45,6 +49,11 @@ in
 
       tar --strip-components=1 -xf ${yarnpkg-lockfile-tar} package/index.js
       mv index.js $out/libexec/yarnpkg-lockfile.js
+
+      mkdir -p $out/libexec/undici
+      tar --strip-components=1 -xf ${undici} -C $out/libexec/undici
+      rm -r $out/libexec/undici/{types,docs}
+
       cp ${./common.js} $out/libexec/common.js
       cp ${./index.js} $out/libexec/index.js
 
