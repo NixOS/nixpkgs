@@ -19,7 +19,7 @@ let
       (lib.imap0 (i: p: {
         path = p;
         update = _: {
-          meta.maintainersPosition.file = lib.concatStringsSep "/" p;
+          attributePositionInformation.meta.maintainers.__pos.file = lib.concatStringsSep "/" p;
           meta.nonTeamMaintainers = [ { githubId = i; } ];
           meta.teams =
             if githubTeams then [ { githubId = i + 100; } ] else [ { members = [ { githubId = i + 100; } ]; } ];
