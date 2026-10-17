@@ -2004,8 +2004,6 @@ with pkgs;
 
   jl = haskellPackages.jl;
 
-  jpylyzer = with python3Packages; toPythonApplication jpylyzer;
-
   jsbeautifier = with python3Packages; toPythonApplication jsbeautifier;
 
   json-schema-for-humans = with python3Packages; toPythonApplication json-schema-for-humans;
