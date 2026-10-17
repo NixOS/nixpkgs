@@ -7,6 +7,7 @@
   nodejs,
   pnpm_11,
   pnpmConfigHook,
+  coreutils,
   geist-font,
   nix-update-script,
   which,
@@ -17,18 +18,18 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "agent-browser";
-  version = "0.38.2";
+  version = "0.39.1";
 
   src = fetchFromGitHub {
     owner = "vercel-labs";
     repo = "agent-browser";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PNIQvTMYqcu8hS1TOiXJtVEYTmFJdRv1nu0T5nG3MlE=";
+    hash = "sha256-WIg6WAnk3728NrZVh8JYtu2iRoHi8lYT2e5CDgOg2Sc=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/cli";
 
-  cargoHash = "sha256-RaIiFKYBt00kqodNoz3NlC7qnko+buvYB7w7mB1cHI8=";
+  cargoHash = "sha256-f+7fTDs/irnf/6jCmSlSKaIaVAuqmTvjhW/vBT5gBKM=";
 
   # Place the pre-built dashboard where RustEmbed expects it
   postUnpack = ''
@@ -36,12 +37,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cp -r ${finalAttrs.passthru.dashboard} source/packages/dashboard/out
   '';
 
-  # `which_exists` spawns the external `which` binary at runtime to probe
-  # for optional tools; pin it to an absolute store path.
   postPatch = ''
+    # `which_exists` spawns the external `which` binary at runtime to probe
+    # for optional tools; pin it to an absolute store path.
     substituteInPlace src/doctor/helpers.rs src/install.rs \
       src/native/cdp/chrome.rs src/native/cdp/lightpanda.rs --replace-fail \
       '"which"' '"${lib.getExe which}"'
+
+    substituteInPlace src/native/browser.rs src/native/cdp/obscura.rs \
+      --replace-fail '"/bin/sleep"' '"${lib.getExe' coreutils "sleep"}"'
+    substituteInPlace src/native/e2e_tests.rs \
+      --replace-fail '"/bin/false"' '"${lib.getExe' coreutils "false"}"'
   '';
 
   nativeCheckInputs = [
@@ -50,6 +56,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Some tests use a shared state that makes them flaky when run concurrently.
   dontUseCargoParallelTests = true;
+
+  # https://github.com/vercel-labs/agent-browser/blob/v0.39.1/cli/src/install.rs#L401-L411
+  checkFlags = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    "--skip=install_rejects_an_invalid_explicit_ca_before_network_or_daemon"
+  ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -81,7 +92,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         inherit pnpm;
         pnpmWorkspaces = [ "dashboard" ];
         fetcherVersion = 4;
-        hash = "sha256-X9kDzM6/LqBMMHhR9KEw+M2xH3yUJu2y4o26WLjNdAE=";
+        hash = "sha256-iaZzDTeRzz3NocNNypzsHfJthyhVT2EA7wNnu4kbY30=";
       };
 
       pnpmWorkspaces = [ "dashboard" ];
