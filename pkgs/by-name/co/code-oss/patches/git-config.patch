@@ -1,0 +1,14 @@
+diff --git a/build/npm/postinstall.js b/build/npm/postinstall.js
+index 1033e4ecf68..a66b28cfb9c 100644
+--- a/build/npm/postinstall.js
++++ b/build/npm/postinstall.js
+@@ -176,5 +176,7 @@ for (let dir of dirs) {
+ 	npmInstall(dir, opts);
+ }
+ 
+-cp.execSync('git config pull.rebase merges');
+-cp.execSync('git config blame.ignoreRevsFile .git-blame-ignore-revs');
++if (fs.existsSync(path.join(root, '.git'))) {
++	cp.execSync('git config pull.rebase merges');
++	cp.execSync('git config blame.ignoreRevsFile .git-blame-ignore-revs');
++}
