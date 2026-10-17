@@ -5,6 +5,7 @@
   fetchFromGitHub,
 
   # tests
+  runtimeShell,
   cabal-install,
   cargo,
   gitMinimal,
@@ -27,14 +28,14 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pre-commit";
-  version = "4.6.2";
+  version = "4.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pre-commit";
     repo = "pre-commit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aCEN9dVz/3lB2gy7U+6dVj3jSM7cmVsstOp+LHvYRsU=";
+    hash = "sha256-iCs3ja53pC0iFmBYIvs2nH6IDgplXd1S5+gXg+Kcbrg=";
   };
 
   patches = [
@@ -88,6 +89,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
       --subst-var-by virtualenv ${python3Packages.virtualenv}
     substituteInPlace pre_commit/languages/node.py \
       --subst-var-by nodeenv ${python3Packages.nodeenv}
+
+    # These shebangs are embedded in hooks generated during the tests.
+    substituteInPlace tests/commands/install_uninstall_test.py \
+      --replace-fail '/usr/bin/env bash' '${runtimeShell}'
 
     patchShebangs pre_commit/resources/hook-tmpl
   '';
@@ -181,10 +186,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "test_docker_fallback_user"
     "test_docker_hook"
     "test_docker_image_"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    "test_install_existing_hooks_no_overwrite"
-    "test_uninstall_restores_legacy_hooks"
   ]
   ++ lib.optionals i686Linux [
     # i686-linux: dotnet-sdk not available
