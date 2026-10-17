@@ -5,7 +5,6 @@
   pytest-asyncio,
   pytest-timeout,
   pytestCheckHook,
-  pythonOlder,
   serialx,
   uv-build,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage (finalAttrs: {
   pname = "denon-rs232";
   version = "4.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
