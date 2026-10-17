@@ -10,6 +10,7 @@
   cuda_nvcc,
   cudaAtLeast,
   lib,
+  pkgConfigCheckHook,
 }:
 buildRedist (finalAttrs: {
   redistName = "cuda";
@@ -91,6 +92,14 @@ buildRedist (finalAttrs: {
     fi
     popd >/dev/null
   '';
+
+  nativeInstallCheckInputs = [ pkgConfigCheckHook ];
+  dontPkgConfigCheckVersion = true; # 13.4 vs 13.4.92
+  pkgConfigModules = [
+    "cuda"
+    "cudart"
+  ];
+  doInstallCheck = true;
 
   # "Never again", cf. https://github.com/NixOS/nixpkgs/pull/457424
   disallowedRequisites = [ (lib.getBin cuda_nvcc) ];

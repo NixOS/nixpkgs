@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmake,
   plutovg,
+  pkgConfigCheckHook,
   testers,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -35,11 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
+  nativeInstallCheckInputs = [ pkgConfigCheckHook ];
+  pkgConfigModules = [ "lunasvg" ];
+  doInstallCheck = true;
+
   passthru.tests = {
-    pkg-config = testers.hasPkgConfigModules {
-      package = finalAttrs.finalPackage;
-      versionCheck = true;
-    };
     cmake-config = testers.hasCmakeConfigModules {
       package = finalAttrs.finalPackage;
       buildInputs = [ plutovg ];
@@ -54,7 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.eymeric ];
     platforms = lib.platforms.all;
-    pkgConfigModules = [ "lunasvg" ];
     cmakeConfigModules = [ "lunasvg" ];
   };
 })
