@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pglive";
-  version = "0.9.0";
+  version = "0.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "domarm-comat";
     repo = "pglive";
     tag = "v${version}";
-    hash = "sha256-mdqQoWH1FF19vnXqDizKjU8zFwyCiUok4AyDaWbjEPk=";
+    hash = "sha256-zUtRONRt5af4qdvSmmQSf5fSsNoL/mT12YdmfMNOYUE=";
   };
 
   build-system = [
