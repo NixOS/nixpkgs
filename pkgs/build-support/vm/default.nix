@@ -252,8 +252,10 @@ let
       ${coreutils}/bin/touch /.debug
       declare -a argsArray=()
       concatTo argsArray origArgs
-      "$origBuilder" "''${argsArray[@]}"
-      echo $? > /tmp/xchg/in-vm-exit
+      # Record the builder's status even when it fails: under `set -e` a
+      # failing builder would otherwise end this script, and with it PID 1.
+      "$origBuilder" "''${argsArray[@]}" && exitCode=0 || exitCode=$?
+      echo $exitCode > /tmp/xchg/in-vm-exit
 
       ${busybox}/bin/mount -o remount,ro dummy /
 
