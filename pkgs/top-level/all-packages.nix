@@ -2443,8 +2443,6 @@ with pkgs;
 
   po4a = perlPackages.Po4a;
 
-  pycflow2dot = with python3.pkgs; toPythonApplication pycflow2dot;
-
   pyinfra = with python3Packages; toPythonApplication pyinfra;
 
   pylint = with python3Packages; toPythonApplication pylint;
