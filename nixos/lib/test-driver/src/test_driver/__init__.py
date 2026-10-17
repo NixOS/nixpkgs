@@ -141,6 +141,14 @@ def main() -> None:
 
     args = arg_parser.parse_args()
 
+    config = load_driver_configuration(args.config)
+    if config.containers and os.geteuid() != 0:
+        arg_parser.exit(
+            1,
+            "nixos-test-driver: systemd-nspawn containers require root; "
+            "rerun the test driver as root (for example, with sudo).\n",
+        )
+
     if "--keep-vm-state" in sys.argv:
         warnings.warn(
             "The flag '--keep-vm-state' is deprecated. Use '--keep-machine-state' instead.",
@@ -168,7 +176,6 @@ def main() -> None:
     if args.debug_hook_attach is not None:
         debugger = Debug(logger, args.debug_hook_attach)
 
-    config = load_driver_configuration(args.config)
     if args.test_script is not None:
         config.test_script = args.test_script
 
