@@ -1,0 +1,33 @@
+diff --git a/Makefile b/Makefile
+index 95dcfc3..ee7f64c 100644
+--- a/Makefile
++++ b/Makefile
+@@ -19,17 +19,10 @@ else
+ 	LIB_WIN_PATH = -Ilib/raylib_win/include -Llib/raylib_win/lib -I$(MINGW_PREFIX)/include -L$(MINGW_PREFIX)/lib
+ endif
+ 
+-UNAME_M := $(shell uname -m)
+-ifeq ($(UNAME_M),aarch64)
+-LIB_LIN_PATH = -Ilib/raylib_lin_arm64/include -Llib/raylib_lin_arm64/lib
+-else
+-LIB_LIN_PATH = -Ilib/raylib_lin/include -Llib/raylib_lin/lib
+-endif
+-
+ SRC       = src/main.c src/astro.c src/config.c src/ui.c src/rotator.c
+ OBJ       = $(SRC:src/%.c=build/%.o)
+ 
+-LDFLAGS_LIN = $(LIB_LIN_PATH) -lraylib -lcurl -lGL -lm -lpthread -ldl -lrt -lX11
++LDFLAGS_LIN = -lraylib -lcurl -lGL -lm -lpthread -ldl -lrt -lX11
+ CURL_FIX = $(shell $(PKG_CONFIG_WIN) --libs --static libcurl 2>/dev/null | sed -e 's/-R[^ ]*//g' -e 's/-lzstd//g' || echo "-lcurl -lnghttp2 -lssl -lcrypto -lssh2 -lz -lcrypt32 -lwldap32 -lws2_32")
+ 
+ LDFLAGS_WIN = $(LIB_WIN_PATH) -lraylib -Wl,-Bstatic $(CURL_FIX) -lssp_nonshared -Wl,-Bdynamic -lzstd -lbcrypt -lsecur32 -liphlpapi -lopengl32 -lgdi32 -lwinmm -Wl,-Bstatic,--whole-archive -lwinpthread -Wl,--no-whole-archive,--allow-multiple-definition -mwindows
+@@ -121,7 +114,7 @@ bin/TLEscope-arm64.exe: $(SRC) | bin
+ 	$(CC_WIN) $(CFLAGS_WIN) -o $@ $^ $(LDFLAGS_WIN)
+ 
+ build/%.o: src/%.c | build
+-	$(CC_LINUX) $(CFLAGS) $(LIB_LIN_PATH) -c $< -o $@
++	$(CC_LINUX) $(CFLAGS) -c $< -o $@
+ 
+ build:
+ 	mkdir -p build
+
