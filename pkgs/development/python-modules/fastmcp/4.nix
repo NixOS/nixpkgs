@@ -1,0 +1,162 @@
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  writableTmpDirAsHomeHook,
+
+  # build-system
+  hatchling,
+  uv-dynamic-versioning,
+
+  # dependencies
+  fastmcp-slim_4,
+  fastmcp-tasks,
+
+  # tests
+  dirty-equals,
+  fastapi,
+  inline-snapshot,
+  opentelemetry-sdk,
+  psutil,
+  pytest-asyncio,
+  pytest-examples,
+  pytest-rerunfailures,
+  pytest-timeout,
+  pytest-xdist,
+  pytestCheckHook,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "fastmcp";
+  version = "4.1.0";
+  pyproject = true;
+  __structuredAttrs = true;
+
+  src = fetchFromGitHub {
+    owner = "PrefectHQ";
+    repo = "fastmcp";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2T/BwHX+1lBgNZr0PIyqnodItDnduu9CeoIRbJzKxPc=";
+  };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "timeout = 5" "timeout = 50"
+  '';
+
+  build-system = [
+    hatchling
+    uv-dynamic-versioning
+  ];
+
+  dependencies = [
+    fastmcp-slim_4
+  ]
+  ++ fastmcp-slim_4.optional-dependencies.client
+  ++ fastmcp-slim_4.optional-dependencies.server;
+
+  optional-dependencies = {
+    anthropic = fastmcp-slim_4.optional-dependencies.anthropic;
+    apps = fastmcp-slim_4.optional-dependencies.apps;
+    azure = fastmcp-slim_4.optional-dependencies.azure;
+    code-mode = fastmcp-slim_4.optional-dependencies.code-mode;
+    gemini = fastmcp-slim_4.optional-dependencies.gemini;
+    openai = fastmcp-slim_4.optional-dependencies.openai;
+    tasks = [ fastmcp-tasks ];
+  };
+
+  pythonImportsCheck = [ "fastmcp" ];
+
+  nativeCheckInputs = [
+    dirty-equals
+    fastapi
+    inline-snapshot
+    opentelemetry-sdk
+    psutil
+    pytest-asyncio
+    pytest-examples
+    pytest-rerunfailures
+    pytest-timeout
+    pytest-xdist
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.anthropic
+  ++ finalAttrs.passthru.optional-dependencies.apps
+  ++ finalAttrs.passthru.optional-dependencies.azure
+  ++ finalAttrs.passthru.optional-dependencies.code-mode
+  ++ finalAttrs.passthru.optional-dependencies.gemini
+  ++ finalAttrs.passthru.optional-dependencies.openai
+  ++ finalAttrs.passthru.optional-dependencies.tasks
+  ++ inline-snapshot.optional-dependencies.dirty-equals;
+
+  disabledTests = [
+    # Requires internet access
+    "test_github_api_schema_performance"
+
+    # Requires uv
+    "test_uv_transport"
+    "test_uv_transport_module"
+
+    # Requires prefab-ui (optional dependency)
+    # https://github.com/NixOS/nixpkgs/pull/510123 adds the prefab-ui package.
+    "TestPickerForm"
+    "TestPrefabAppConfig"
+    "test_doc_examples_quality"
+    "test_run_dev_apps_log_panel_propagation"
+    "test_run_dev_apps_with_host"
+
+    # AssertionError: assert 'INFO' == 'DEBUG'
+    "test_temporary_settings"
+
+    # Spawning servers from an MCP config file does not work in the sandbox
+    "test_run_mcp_config"
+    "test_single_server_config_include_tags_filtering"
+
+    # Subprocess-based multi-client tests fail in the sandbox
+    "test_canonical_multi_client_with_transforms"
+    "test_multi_client"
+    "test_server_starts_without_auth"
+
+    # Unlike the rest of the module, these spawn a server that does a real
+    # `import fastmcp`, and `stdio_client` does not forward PYTHONPATH to it
+    "TestLogFile"
+    "test_stdio_advertises_list_changed_for_all_components"
+
+    # Server startup is flaky when the suite runs with pytest-xdist
+    "test_unauthorized_access"
+
+    # Timing-sensitive and flaky
+    "test_medium_schema_performance"
+    "test_rate_limiting_recovery_over_time"
+    "test_rate_limiting_with_different_operations"
+    "test_timeout"
+
+    # RuntimeError: Attempted to exit a cancel scope that isn't the current tasks's current cancel scope
+    "test_stateful_proxy"
+    "test_concurrent_log_requests_no_mixing"
+    "test_multi_proxies_no_mixing"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    # floating point error
+    "test_index_retrieval[float32-quantization1-1-metric0-3]"
+  ];
+
+  disabledTestPaths = [
+    # Requires prefab-ui (optional dependency)
+    "tests/apps"
+    "tests/test_apps_prefab.py"
+    "tests/test_fastmcp_app.py"
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
+    description = "Fast, Pythonic way to build MCP servers and clients";
+    changelog = "https://github.com/PrefectHQ/fastmcp/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/PrefectHQ/fastmcp";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
+  };
+})
