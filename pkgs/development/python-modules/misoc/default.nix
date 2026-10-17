@@ -16,7 +16,7 @@
 
 buildPythonPackage {
   pname = "misoc";
-  version = "0.12-unstable-2025-10-03";
+  version = "0.12";
   format = "setuptools";
 
   src = fetchFromGitHub {
