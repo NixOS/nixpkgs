@@ -33,6 +33,16 @@ in
           there available in your config.
         '';
       };
+
+      envFilePath = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        description = ''
+          The path to an environment file to pass to the service. Environment variables can be referenced
+          in the fluentd config with `#{ENV['YOUR_ENV_VARIABLE']}` syntax.
+        '';
+        example = "/etc/fluentd/fluentd.env";
+      };
     };
   };
 
@@ -45,6 +55,7 @@ in
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/fluentd -c ${pkgs.writeText "fluentd.conf" cfg.config} ${pluginArgs}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        EnvironmentFile = lib.mkIf (cfg.envFilePath != null) [ cfg.envFilePath ];
       };
     };
   };
