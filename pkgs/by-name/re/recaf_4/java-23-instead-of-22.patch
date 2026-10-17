@@ -1,0 +1,20 @@
+diff --git a/build.gradle b/build.gradle
+index af978ba29..0e3a43af2 100644
+--- a/build.gradle
+@@ -51,7 +51,7 @@
+     // gradlew -q javaToolchains - see the list of detected toolchains.
+     java {
+         toolchain {
+-            languageVersion = JavaLanguageVersion.of(22)
++            languageVersion = JavaLanguageVersion.of(23)
+         }
+     }
+
+@@ -136,8 +135,6 @@
+ tasks.register('test') {
+     dependsOn(subprojects.test)
+     doLast {
+-        if (subprojects.test.stream().anyMatch(Task::getDidWork))
+-            buildJacocoAggregate.execute()
+     }
+ }
