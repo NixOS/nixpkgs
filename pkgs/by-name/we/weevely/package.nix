@@ -9,7 +9,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "weevely";
-  version = "4.0.2-unstable-2024-04-29";
+  version = "4.0.3";
   pyproject = false;
 
   src = fetchFromGitHub {
