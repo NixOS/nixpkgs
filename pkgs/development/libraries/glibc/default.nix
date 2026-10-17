@@ -207,6 +207,7 @@ in
       '';
 
     separateDebugInfo = true;
+    moveToStatic = false; # Default $static output handling breaks things in this drv.
 
     passthru =
       (previousAttrs.passthru or { })
