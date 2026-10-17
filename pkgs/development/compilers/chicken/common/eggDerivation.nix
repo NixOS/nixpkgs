@@ -11,6 +11,7 @@
 {
   src,
   buildInputs ? [ ],
+  checkInputs ? [ ],
   chickenInstallFlags ? [ ],
   cscOptions ? [ ],
   ...
@@ -19,7 +20,7 @@
 let
   nameVersionAssertion =
     pred: lib.assertMsg pred "either name or both pname and version must be given";
-  pname =
+  eggName =
     if args ? pname then
       assert nameVersionAssertion (!args ? name && args ? version);
       args.pname
@@ -28,18 +29,53 @@ let
       lib.getName args.name;
   version = if args ? version then args.version else lib.getVersion args.name;
   overrides = callPackage overridesFile { };
-  override = if builtins.hasAttr pname overrides then builtins.getAttr pname overrides else lib.id;
+  override =
+    if builtins.hasAttr eggName overrides then builtins.getAttr eggName overrides else lib.id;
 in
 (stdenv.mkDerivation (
+  finalAttrs:
+  let
+    # Some eggs' tests expect the egg to be installed already so that their modules can be imported
+    # and their programs found in PATH. The `doCheck = false` override below builds and installs the
+    # egg without running its tests, and the checked derivation takes it as an input. We avoid
+    # running the build twice by disabling the build in the main derivation and capturing the
+    # no-check derivation's build artifacts in a separate output. The main derivation then restores
+    # the build artifacts from that output in `checkPhase`.
+    noCheckDrv = finalAttrs.finalPackage.overrideAttrs { doCheck = false; };
+    # From CHICKEN 6 on, chicken-install takes a lock in its egg cache even
+    # when building an egg from the current directory, and the cache defaults
+    # to a location under HOME, which is not writable in the sandbox. The
+    # cache itself stays empty: with -cached, chicken-install builds the
+    # unpacked egg in place. The install phase runs in the same shell, so it
+    # inherits this. This snippet is included in all phases which need to run
+    # chicken-install.
+    setupCache = ''
+      export CHICKEN_EGG_CACHE="$NIX_BUILD_TOP/chicken-egg-cache"
+      mkdir -p "$CHICKEN_EGG_CACHE"
+    '';
+  in
   {
-    pname = "chicken-${pname}";
+    pname = "chicken-${lib.versions.major chicken.version}-${eggName}${
+      lib.optionalString (!finalAttrs.doCheck) "-no-check"
+    }";
     inherit version;
     propagatedBuildInputs = buildInputs;
     nativeBuildInputs = [
       chicken
       makeWrapper
     ];
-    buildInputs = [ chicken ];
+    buildInputs = [
+      chicken
+    ]
+    ++ lib.optionals finalAttrs.doCheck [
+      noCheckDrv
+    ];
+    nativeCheckInputs = [
+      chicken
+    ]
+    ++ lib.optionals finalAttrs.doCheck [
+      noCheckDrv
+    ];
 
     strictDeps = true;
 
@@ -48,25 +84,53 @@ in
     }
     // (args.env or { });
 
+    outputs = [
+      "out"
+    ]
+    ++ lib.optional (!finalAttrs.doCheck) "build";
+
+    dontUnpack = finalAttrs.doCheck;
+    dontPatch = finalAttrs.doCheck;
+    # Disable build when doCheck is true and re-use the build artifacts of the no-check variant via the "build" output.
+    # This way, we only need to build the egg once across the no-check and check variants.
+    dontBuild = finalAttrs.doCheck;
+
     buildPhase = ''
       runHook preBuild
 
-      # From CHICKEN 6 on, chicken-install takes a lock in its egg cache even
-      # when building an egg from the current directory, and the cache defaults
-      # to a location under HOME, which is not writable in the sandbox. The
-      # cache itself stays empty: with -cached, chicken-install builds the
-      # unpacked egg in place. The install phase runs in the same shell, so it
-      # inherits this.
-      export CHICKEN_EGG_CACHE="$NIX_BUILD_TOP/chicken-egg-cache"
-      mkdir -p "$CHICKEN_EGG_CACHE"
+      ${setupCache}
 
       chicken-install -cached -no-install -host ${lib.escapeShellArgs chickenInstallFlags}
+
+      # Capture sources and build artifacts so we can re-use them in checkPhase
+      cp -r . $build
 
       runHook postBuild
     '';
 
+    doCheck = true;
+
+    checkPhase = lib.optionalString finalAttrs.doCheck ''
+      runHook preCheck
+
+      # Restore build output since buildPhase is disabled when we arrive here
+      cp -r ${noCheckDrv.build}/. .
+      chmod -R +w .
+
+      if [ -e tests/run.scm ]; then
+        (
+          cd tests
+          csi -s run.scm ${eggName} "${version}"
+        )
+      fi
+
+      runHook postCheck
+    '';
+
     installPhase = ''
       runHook preInstall
+
+      ${setupCache}
 
       export CHICKEN_INSTALL_PREFIX=$out
       export CHICKEN_INSTALL_REPOSITORY=$out/lib/chicken/${toString chicken.binaryVersion}
@@ -76,8 +140,8 @@ in
       # around https://bugs.call-cc.org/ticket/1855, which is unfixed as of
       # CHICKEN 6.0.0: eggs whose .egg carries no version property are
       # installed without one.
-      csi -e "(write (cons '(version \"${version}\") (read)))" < "$CHICKEN_INSTALL_REPOSITORY/${pname}.egg-info" > "${pname}.egg-info.new"
-      mv "${pname}.egg-info.new" "$CHICKEN_INSTALL_REPOSITORY/${pname}.egg-info"
+      csi -e "(write (cons '(version \"${version}\") (read)))" < "$CHICKEN_INSTALL_REPOSITORY/${eggName}.egg-info" > "${eggName}.egg-info.new"
+      mv "${eggName}.egg-info.new" "$CHICKEN_INSTALL_REPOSITORY/${eggName}.egg-info"
 
       for f in $out/bin/*
       do
