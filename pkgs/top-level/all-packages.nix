@@ -8588,8 +8588,6 @@ with pkgs;
     })
   );
 
-  maestral = with python3Packages; toPythonApplication maestral;
-
   myfitnesspal = with python3Packages; toPythonApplication myfitnesspal;
 
   lightdm_qt = lightdm.override { withQt5 = true; };
