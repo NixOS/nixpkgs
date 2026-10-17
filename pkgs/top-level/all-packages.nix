@@ -9956,8 +9956,6 @@ with pkgs;
 
   pgadmin4-desktopmode = pgadmin4.override { server-mode = false; };
 
-  philipstv = with python3Packages; toPythonApplication philipstv;
-
   pyupgrade = with python3Packages; toPythonApplication pyupgrade;
 
   pwntools = with python3Packages; toPythonApplication pwntools;
