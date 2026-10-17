@@ -3,28 +3,31 @@
   stdenvNoCC,
   fetchFromGitHub,
   perlPackages,
-  perl,
   installShellFiles,
 }:
 
-stdenvNoCC.mkDerivation rec {
+let
+  inherit (perlPackages) perl;
+  perlInputs = with perlPackages; [
+    XMLParser
+    XMLTokeParser
+  ];
+in
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "xmltoman";
   version = "0.6";
 
   src = fetchFromGitHub {
     owner = "atsb";
     repo = "xmltoman";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-EmFdGIeBEcTY0Pqp7BJded9WB/DaXWcMNWh6aTsZlLg=";
   };
 
-  nativeBuildInputs = [
-    perl
-    installShellFiles
-  ];
+  buildInputs = [ perl ] ++ perlInputs;
 
-  buildInputs = [
-    perlPackages.XMLTokeParser
+  nativeBuildInputs = finalAttrs.buildInputs ++ [
+    installShellFiles
   ];
 
   dontBuild = true;
@@ -36,6 +39,11 @@ stdenvNoCC.mkDerivation rec {
     mkdir -p $out
     perl xmltoman xml/xmltoman.1.xml > xmltoman.1
     perl xmltoman xml/xmlmantohtml.1.xml > xmlmantohtml.1
+
+    sed -e "2i ${
+      lib.concatMapStrings (i: "use lib '${i}/${perl.libPrefix}';") perlInputs
+    }" -i xmltoman xmlmantohtml
+
     install -d $out/bin $out/share/xmltoman
     install -m 0755 xmltoman xmlmantohtml $out/bin
     install -m 0644 xmltoman.dtd xmltoman.css xmltoman.xsl $out/share/xmltoman
@@ -52,4 +60,4 @@ stdenvNoCC.mkDerivation rec {
     mainProgram = "xmltoman";
     platforms = lib.platforms.all;
   };
-}
+})
