@@ -9076,8 +9076,6 @@ with pkgs;
     withGui = false;
   };
 
-  pycoin = with python3Packages; toPythonApplication pycoin;
-
   vertcoind = vertcoin.override {
     withGui = false;
   };
