@@ -30,6 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
     mbedtls
   ];
 
+  doCheck = true; # runs some sanity checks against crypto library bindings
+
   env.CFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-DFUSE_DARWIN_ENABLE_EXTENSIONS=0";
 
   passthru.updateScript = nix-update-script {
