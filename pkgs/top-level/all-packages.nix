@@ -1242,8 +1242,6 @@ with pkgs;
     forPlatform = stdenv.targetPlatform; # offset by 1 so it works in nativeBuildInputs
   };
 
-  libfx2 = with python3Packages; toPythonApplication fx2;
-
   foxdot = with python3Packages; toPythonApplication foxdot;
 
   fluffychat-web = fluffychat.override { targetFlutterPlatform = "web"; };
