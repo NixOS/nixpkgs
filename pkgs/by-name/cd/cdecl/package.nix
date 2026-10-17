@@ -11,17 +11,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cdecl";
-  version = "18.5";
+  version = "18.7.2";
 
   src = fetchFromGitHub {
     owner = "paul-j-lucas";
     repo = "cdecl";
     tag = "cdecl-${finalAttrs.version}";
-    hash = "sha256-cC098+W8cbcumBv+3ZFwGYXmens4u0aQSx5Lvw6maYM=";
+    hash = "sha256-j6NEKnc/2j4Btlo1fzTWoO0DdqRNV9iksRQCADaW3w8=";
   };
 
   strictDeps = true;
-  preConfigure = "./bootstrap";
+  preConfigure = ''
+    mkdir .git
+    ./bootstrap
+  '';
 
   nativeBuildInputs = [
     autoconf
@@ -40,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
       ++ lib.optionals stdenv.cc.isClang [
         "-Wno-error=int-conversion"
         "-Wno-error=incompatible-function-pointer-types"
+        "-Wno-implicit-function-declaration"
       ]
     );
     NIX_LDFLAGS = "-lreadline";
