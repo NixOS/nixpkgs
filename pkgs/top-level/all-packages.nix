@@ -1774,8 +1774,6 @@ with pkgs;
 
   emborg = python3Packages.callPackage ../development/python-modules/emborg { };
 
-  executor = with python3Packages; toPythonApplication executor;
-
   exiftool = perlPackages.ImageExifTool;
 
   expect = tcl8Packages.expect_5;
