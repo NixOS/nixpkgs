@@ -9434,8 +9434,6 @@ with pkgs;
 
   ### SCIENCE/BIOLOGY
 
-  deep-translator = with python3Packages; toPythonApplication deep-translator;
-
   nest-mpi = nest.override { withMpi = true; };
 
   neuron-mpi = neuron.override { useMpi = true; };
