@@ -47,6 +47,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
       --replace-fail "/usr/share/xsessions" "/run/current-system/sw/share/xsessions" \
       --replace-fail "/usr/share/wayland-sessions" "/run/current-system/sw/share/wayland-sessions"
 
+    substituteInPlace nwg-hello-default.css \
+      --replace-fail "/usr/share/nwg-hello/nwg.jpg" "$out/share/nwg-hello/nwg.jpg"
+
     substituteInPlace nwg_hello/ui.py --replace-fail '/usr/share/nwg-hello' "$out/share/nwg-hello"
   '';
 
