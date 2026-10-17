@@ -3,6 +3,8 @@
   stdenv,
   python3Packages,
   fetchFromGitHub,
+  callPackage,
+  rustPlatform,
 
   # tests
   gitMinimal,
@@ -13,7 +15,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "2.25.0";
+  version = "2.26.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -21,14 +23,53 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "mistralai";
     repo = "mistral-vibe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vwlN4VdyVhaALT8Ob233Lcc7261teCD7jyfn8uiH0MA=";
+    hash = "sha256-+LIobI41N01cZ7eLQWWhJIDdKj8YBRLjFwqqnSQdJ2c=";
   };
 
-  build-system = with python3Packages; [
-    editables
-    hatch-vcs
-    hatchling
+  patches = [
+    # os.nice() fails with EPERM in the sandbox
+    ./tolerate-unavailable-nice.patch
   ];
+
+  postPatch =
+    # The e2e tests expect the `vibe` executable to sit next to the Python interpreter
+    ''
+      substituteInPlace tests/e2e/common.py tests/e2e/conftest.py \
+        --replace-fail \
+          'str(Path(sys.executable).with_name("vibe"))' \
+          "'$out/bin/vibe'"
+    '';
+
+  # The Unified Harness native extension (`mistralai_vibe_local_harness._native`)
+  cargoRoot = "harness/core";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    sourceRoot = "${finalAttrs.src.name}/${finalAttrs.cargoRoot}";
+    hash = "sha256-JkmZ65pnioLfTLg9Nmtsjs4m6lB72c6iTKvnwz48Gqo=";
+  };
+
+  nativeBuildInputs = [
+    rustPlatform.cargoSetupHook
+    rustPlatform.maturinBuildHook
+  ];
+
+  env = {
+    # The v8 crate would otherwise download these at build time
+    RUSTY_V8_ARCHIVE = finalAttrs.passthru.librusty_v8.archive;
+    RUSTY_V8_SRC_BINDING_PATH = finalAttrs.passthru.librusty_v8.srcBinding;
+  };
+
+  # Replicate what upstream's custom build backend (build_backend/maturin_backend.py)
+  # does before handing over to maturin, without its zig/manylinux portability
+  # tweaks and with the Rust TUI built separately.
+  preBuild = ''
+    mkdir -p .native-build
+    cp -r harness/core .native-build/harness-core
+    cp -r harness/runtimes/python/python/mistralai_vibe_local_harness .
+
+    mkdir -p vibe/_bin
+    cp ${lib.getExe finalAttrs.passthru.vibe-rs} vibe/_bin/vibe-rs
+  '';
 
   pythonRelaxDeps = true;
   dependencies =
@@ -44,6 +85,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       cffi
       charset-normalizer
       click
+      croniter
       cryptography
       eval-type-backport
       gitdb
@@ -73,6 +115,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       mcp
       mdit-py-plugins
       mdurl
+      miniaudio
       mistralai
       more-itertools
       opentelemetry-api
@@ -108,7 +151,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       setproctitle
       six
       smmap
-      sounddevice
       soupsieve
       sse-starlette
       starlette
@@ -150,6 +192,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
   versionCheckKeepEnvironment = [ "HOME" ];
 
+  # Make sure that the installed runtime, which ships the native extension, is imported
+  preCheck = ''
+    rm -rf mistralai_vibe_local_harness
+  '';
+
   disabledTests = [
     # The finite stdio input closes before all responses are flushed in the sandbox.
     "test_stdio_server_uses_the_same_json_rpc_lifecycle"
@@ -172,11 +219,25 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # TypeError: cannot pickle 'itertools.count' object (Python 3.14 compatibility)
     "test_orchestrator_deepcopies_and_stays_functional"
 
-    # Flaky: AssertionError: assert <fingerprint> != <fingerprint>
-    "test_changes_when_file_changes"
-
     # Flaky: AssertionError: Timed out waiting for UI state
     "test_incomplete_stream_does_not_retry_ahead_of_queued_prompts"
+
+    # The sandbox helper runs `python3 -I`, which cannot import the harness runtime
+    # assert 3 == 1
+    "test_a_sandbox_without_skills_of_its_own_needs_no_upload"
+
+    # An extra notification is emitted because connectors fail to load (no network)
+    "test_opening_a_unified_session_notifies_invalid_managed_config"
+
+    # Flaky: TimeoutError
+    "test_unified_host_reads_the_live_public_event_cursor"
+
+    # Flaky: session references are not yet garbage-collected
+    "test_closed_sessions_release_their_servers_and_background_tasks"
+
+    # Both writes land in the same coarse filesystem timestamp tick, so the
+    # (device, inode, mtime, size) fingerprint does not change
+    "test_changes_when_file_changes"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # AssertionError: Timed out waiting for UI state
@@ -203,7 +264,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "tests/e2e/agent_loop_characterization/test_tool_execution.py"
     "tests/e2e/agent_loop_characterization/test_tool_permissions.py"
     "tests/e2e/agent_loop_characterization/test_user_interaction.py"
-    "tests/e2e/test_cli_tui_fresh_install.py"
     "tests/e2e/test_cli_tui_hooks.py"
     "tests/e2e/test_cli_tui_onboarding.py"
     "tests/e2e/test_cli_tui_session_exit.py"
@@ -213,11 +273,23 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # ACP tests require network access
     "tests/acp/test_acp_entrypoint_smoke.py"
 
-    # FileNotFoundError: [Errno 2] No such file or directory: 'bash'
+    # The installer is run with a PATH restricted to /usr/bin:/bin, where the
+    # sandbox provides no `bash`
     "tests/test_install_script.py"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # Flaky: the 0.5s double/triple click chain threshold expires on slow builders
+    "tests/cli/textual_ui/test_chat_input_word_drag.py"
   ];
 
   __darwinAllowLocalNetworking = true;
+
+  passthru = {
+    librusty_v8 = callPackage ./librusty_v8.nix { };
+    vibe-rs = callPackage ./vibe-rs.nix {
+      inherit (finalAttrs) version src meta;
+    };
+  };
 
   meta = {
     description = "Minimal CLI coding agent by Mistral";
