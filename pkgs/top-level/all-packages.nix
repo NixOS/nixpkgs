@@ -2816,8 +2816,6 @@ with pkgs;
 
   fbc = callPackage ../development/compilers/fbc { };
 
-  filecheck = with python3Packages; toPythonApplication filecheck;
-
   flutterPackages-bin = recurseIntoAttrs (callPackage ../development/compilers/flutter { });
   flutterPackages = flutterPackages-bin;
   flutter = flutterPackages.stable;
