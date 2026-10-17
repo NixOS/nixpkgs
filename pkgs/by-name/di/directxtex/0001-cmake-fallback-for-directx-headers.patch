@@ -1,0 +1,17 @@
+diff -ruN a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt	2026-08-22 01:52:44.644347661 -0700
++++ b/CMakeLists.txt	2026-08-22 02:09:56.617878659 -0700
+@@ -384,7 +384,12 @@
+     find_package(directxmath CONFIG REQUIRED)
+     target_link_libraries(${PROJECT_NAME} PUBLIC Microsoft::DirectXMath)
+ 
+-    find_package(directx-headers CONFIG REQUIRED)
++    find_package(directx-headers CONFIG QUIET)
++    if(NOT TARGET Microsoft::DirectX-Headers)
++        find_package(PkgConfig REQUIRED)
++        pkg_check_modules(DirectX-Headers REQUIRED IMPORTED_TARGET DirectX-Headers)
++        add_library(Microsoft::DirectX-Headers ALIAS PkgConfig::DirectX-Headers)
++    endif()
+     target_link_libraries(${PROJECT_NAME} PUBLIC Microsoft::DirectX-Headers)
+     target_compile_definitions(${PROJECT_NAME} PUBLIC USING_DIRECTX_HEADERS)
+ else()
