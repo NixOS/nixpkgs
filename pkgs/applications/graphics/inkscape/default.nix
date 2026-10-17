@@ -111,6 +111,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
     # https://gitlab.com/inkscape/inkscape/-/merge_requests/7968
     ./fix-build-poppler-26.06.0.patch
+    # https://gitlab.com/inkscape/inkscape/-/merge_requests/8034
+    ./fix-build-poppler-26.07.0.patch
   ];
 
   postPatch = ''
