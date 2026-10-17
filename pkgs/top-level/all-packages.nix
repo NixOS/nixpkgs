@@ -2492,8 +2492,6 @@ with pkgs;
   semgrep = python3.pkgs.toPythonApplication python3.pkgs.semgrep;
   inherit (semgrep.passthru) semgrep-core;
 
-  seqdiag = with python3Packages; toPythonApplication seqdiag;
-
   shellify = haskellPackages.shellify.bin;
 
   shiv = with python3Packages; toPythonApplication shiv;
