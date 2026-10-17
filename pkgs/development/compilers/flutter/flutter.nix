@@ -139,6 +139,9 @@ let
 
     postInstall = ''
       $out/bin/flutter bash-completion "$TMPDIR/flutter.bash"
+      # Remove timestamps in generated completion file to ensure a
+      # deterministic build.
+      sed -ri '/^## Generated .*Z$/d' "$TMPDIR/flutter.bash"
       installShellCompletion --bash "$TMPDIR/flutter.bash"
       installShellCompletion --zsh "$TMPDIR/flutter.bash"
     '';
