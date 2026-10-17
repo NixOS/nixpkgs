@@ -25,17 +25,29 @@ ghidra.buildGhidraExtension (finalAttrs: {
     # The vendored-in dependency does not work for us because maven
     # needs to download dependencies while building.
     ./local-binary-file-toolkit.patch
+    ./use-gradle-dependency-cache.patch
   ];
 
   postPatch = ''
+    if [[ -n "''${IN_GRADLE_UPDATE_DEPS-}" ]]; then
+      gradlePluginRepository="https://plugins.gradle.org/m2"
+      mavenRepository="https://repo.maven.apache.org/maven2"
+    else
+      gradlePluginRepository="file://${finalAttrs.mitmCache}/https/plugins.gradle.org/m2"
+      mavenRepository="file://${finalAttrs.mitmCache}/https/repo.maven.apache.org/maven2"
+    fi
+
+    substituteInPlace settings.gradle \
+      --replace-fail '@gradle-plugin-repository@' "$gradlePluginRepository" \
+      --replace-fail '@maven-repository@' "$mavenRepository"
+
     substituteInPlace build.gradle \
+      --replace-fail '@maven-repository@' "$mavenRepository" \
       --replace-fail '"GIT_VERSION", gitVersionProvider' '"GIT_VERSION", "v${finalAttrs.version}"' \
       --replace-fail '"@binary-file-toolkit@"' '"${binary-file-toolkit}"'
   '';
 
   gradleBuildTask = "buildExtension";
-
-  __darwinAllowLocalNetworking = true;
 
   mitmCache = gradle.fetchDeps {
     pkg = finalAttrs.finalPackage;
@@ -48,5 +60,9 @@ ghidra.buildGhidraExtension (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.jchw ];
     platforms = lib.platforms.unix;
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryBytecode # mitm cache
+    ];
   };
 })
