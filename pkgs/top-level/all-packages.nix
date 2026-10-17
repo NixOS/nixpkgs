@@ -2058,8 +2058,6 @@ with pkgs;
 
   mhonarc = perlPackages.MHonArc;
 
-  nanoemoji = with python3Packages; toPythonApplication nanoemoji;
-
   buildNavidromeGoPlugin = callPackage ../by-name/na/navidrome/plugins/build-go-plugin.nix { };
 
   buildNavidromeRustPlugin = callPackage ../by-name/na/navidrome/plugins/build-rust-plugin.nix { };
