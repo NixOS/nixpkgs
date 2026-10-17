@@ -116,7 +116,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (!interactive) "--disable-readline"
   # autosetup only looks up readline.h in predefined set of directories.
   ++ lib.optional interactive "--with-readline-header=${lib.getDev readline}/include/readline/readline.h"
-  ++ lib.optional (stdenv.hostPlatform.isStatic) "--disable-shared";
+  ++ lib.optional (stdenv.hostPlatform.isStatic) "--disable-shared"
+  # keep the libsqlite3.so.0 soname that 3.48.0 stopped setting by default
+  ++ lib.optional stdenv.hostPlatform.isElf "--soname=legacy";
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-DSQLITE_ENABLE_COLUMN_METADATA"
