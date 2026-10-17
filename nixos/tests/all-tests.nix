@@ -1590,6 +1590,7 @@ in
   prometheus-exporters = import ./prometheus-exporters.nix {
     inherit lib runTest;
   };
+  pronounscc = runTest ./pronounscc.nix;
   prosody = runTest ./xmpp/prosody.nix;
   prosody-mysql = handleTest ./xmpp/prosody-mysql.nix { };
   prowlarr = runTest ./prowlarr.nix;
