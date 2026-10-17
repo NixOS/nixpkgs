@@ -20,7 +20,7 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "tokenspeed-triton";
-  version = "3.8.10.post20260920";
+  version = "3.9.10.post20261008";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -28,7 +28,7 @@ buildPythonPackage (finalAttrs: {
     owner = "lightseekorg";
     repo = "triton";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IsPm9yrtTTAzjsrFAfZOLSthCHi8akUemv2jZI6SuVM=";
+    hash = "sha256-rYabt9T7eXH44qBGMyFeaDwkCR73galHrG2UoPBp3+0=";
   };
 
   postPatch = ''
