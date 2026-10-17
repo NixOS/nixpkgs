@@ -40,6 +40,7 @@ let
     { hypr-darkwindow = import ./hypr-darkwindow.nix; }
     { hypr-dynamic-cursors = import ./hypr-dynamic-cursors.nix; }
     { hyprfocus = import ./hyprfocus.nix; }
+    { hyprglass = import ./hyprglass.nix; }
     { hyprgrass = import ./hyprgrass.nix; }
     { hyprspace = import ./hyprspace.nix; }
     { hyprsplit = import ./hyprsplit.nix; }
