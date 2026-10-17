@@ -5,6 +5,7 @@
   fetchFromGitHub,
   installShellFiles,
   nix-update-script,
+  nixosTests,
   versionCheckHook,
 }:
 
@@ -81,7 +82,10 @@ buildGoModule (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "version";
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = { inherit (nixosTests) openfga; };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "High performance and flexible authorization/permission engine built for developers and inspired by Google Zanzibar";
