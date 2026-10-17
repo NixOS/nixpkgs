@@ -1,64 +1,90 @@
-{ lib, stdenv, fetchFromGitHub, python3, pyinstaller, pip, makeWrapper }:
 
-stdenv.mkDerivation rec {
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  bun,
+  nodejs,
+  pkg-config,
+  wrapGAppsHook3,
+  cargo-tauri,
+  gtk3,
+  glib,
+  libsoup_3,
+  webkitgtk_4_1,
+  openssl,
+  zstd,
+  darwin,
+}:
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "beagleeditor";
-  version = "2024.4.0.1";
+  version = "26.4.1";
 
   src = fetchFromGitHub {
-    owner = "beaglesoftware";
+    owner = "beagleeditor";
     repo = "editor";
-    rev = "refs/heads/main";
-    sha256 = "sha256-placeholder"; # Replace this with the actual hash from nix-prefetch-url
+    tag = "v${finalAttrs.version}";
+    hash = lib.fakeHash;
   };
 
+  sourceRoot = "${finalAttrs.src.name}/src-tauri";
+
+  cargoHash = lib.fakeHash;
+
   nativeBuildInputs = [
-    pyinstaller
-    makeWrapper
+    bun
+    nodejs
+    pkg-config
+    cargo-tauri
+  ] ++ lib.optionals stdenv.isLinux [
+    wrapGAppsHook3
   ];
 
-  buildInputs = [
-    python3
-  ];
+  buildInputs =
+    [
+      openssl
+      zstd
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      gtk3
+      glib
+      libsoup_3
+      webkitgtk_4_1
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.AppKit
+      darwin.apple_sdk.frameworks.WebKit
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.CoreServices
+    ];
+
+  preBuild = ''
+    cd ..
+    bun install --frozen-lockfile
+    bun run build
+    cd src-tauri
+  '';
 
   buildPhase = ''
-    # Extract the tarball to a temporary directory
-    mkdir -p /tmp/beagleeditor-nix-setup
-    cp -r . /tmp/beagleeditor-nix-setup
-
-    # Download requirements.txt and install dependencies with pip
-    curl -o requirements.txt https://raw.githubusercontent.com/beaglesoftware/editor/refs/heads/main/requirements.txt
-    ${python3.executable} -m pip install --prefix=$out --upgrade pip
-    ${python3.executable} -m pip install --prefix=$out -r requirements.txt
-
-    # Run PyInstaller to build the binary
-    cd /tmp/beagleeditor-nix-setup
-    pyinstaller \
-      --add-data "syntax.py:." \
-      --add-data "autocomplete.py:." \
-      --add-data "splash.py:." \
-      --add-data "compile_c.sh:." \
-      --add-data "compile_cpp.sh:." \
-      --add-data "compile_c_cpp.bat:." \
-      --add-data "compile_cs.bat:." \
-      --add-data "splash.png:." \
-      -i ~/Downloads/Frame\\ 1-3.png \
-      --windowed \
-      --onefile BeagleEditor.py
+    runHook preBuild
+    cargo build --release --locked
+    runHook postBuild
   '';
 
   installPhase = ''
-    # Move the generated binary to the output directory
-    mkdir -p $out/bin/beagleeditor
-    mv dist/BeagleEditor $out/bin/beagleeditor
-
-    # Create a wrapper for better usage
-    makeWrapper $out/bin/beagleeditor $out/bin/beagleeditor-wrapper
+    runHook preInstall
+    install -Dm755 target/release/beagleeditor \
+      "$out/bin/beagleeditor"
+    runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "BeagleEditor: A Python-based editor with custom tools";
-    homepage = "https://github.com/beaglesoftware/editor";
-    license = licenses.mit;
-    maintainers = with maintainers; [ your-nixpkgs-handle ];
+  meta = {
+    description = "A 'beagleful' editor";
+    homepage = "https://github.com/beagleeditor/editor";
+    license = lib.licenses.mit;
+    mainProgram = "beagleeditor";
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})
