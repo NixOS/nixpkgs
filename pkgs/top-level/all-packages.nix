@@ -999,8 +999,6 @@ with pkgs;
 
   winbox = winbox4;
 
-  datalad-gooey = with python3Packages; toPythonApplication datalad-gooey;
-
   forgejo-lts = callPackage ../by-name/fo/forgejo/lts.nix { };
 
   gerrit_3_12 = callPackage ../by-name/ge/gerrit/3_12.nix { };
