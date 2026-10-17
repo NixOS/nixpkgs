@@ -34,7 +34,7 @@ stdenv.mkDerivation (
     enterprise = fetchGristEnterprise {
       gristSrc = finalAttrs.src;
       inherit (finalAttrs) version;
-      hash = "sha256-fAi0qCfNPH+w51EmsaecS1y0aP4vx2kYK9hS5UQHIA8=";
+      hash = "sha256-m/kYML0Mk8AmoLQeKQ0TA1vcYZ7lukjyf/yQ8toy2ng=";
       offlineCacheHash = "sha256-oMLNZZolY9Wg4DwJyYPDL6K28aEyWcXS9ivnzCuYcS0=";
     };
 
@@ -66,14 +66,14 @@ stdenv.mkDerivation (
   in
   {
     pname = "grist-core";
-    version = "1.7.20";
+    version = "1.7.21";
     __structuredAttrs = true;
 
     src = fetchFromGitHub {
       owner = "gristlabs";
       repo = "grist-core";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-umLdlxC0YBhhb17XMDVOeSNVJqkO9+DFwaHP3Sq3rWw=";
+      hash = "sha256-Hj96QRJx1O98UowuDw/iwViPnToUisWjx/m0ujIryAE=";
     };
 
     offlineCache = fetchYarnDeps {
