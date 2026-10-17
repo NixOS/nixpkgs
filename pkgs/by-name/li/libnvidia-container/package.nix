@@ -13,17 +13,17 @@
   removeReferencesTo,
   replaceVars,
   applyPatches,
-  linuxPackages,
   go,
 }:
 let
   modprobeVersion = "550.54.14";
   patchedModprobe = applyPatches {
-    src =
-      (linuxPackages.nvidiaPackages.stable.modprobe.override {
-        version = modprobeVersion;
-        hash = "sha256-iBRMkvOXacs/llTtvc/ZC5i/q9gc8lMuUHxMbu8A+Kg=";
-      }).src;
+    src = fetchFromGitHub {
+      owner = "NVIDIA";
+      repo = "nvidia-modprobe";
+      rev = modprobeVersion;
+      hash = "sha256-iBRMkvOXacs/llTtvc/ZC5i/q9gc8lMuUHxMbu8A+Kg=";
+    };
     patches = [
       (replaceVars ./modprobe.patch {
         inherit modprobeVersion;
