@@ -400,6 +400,13 @@ in
       "services"
       "wakeonlan"
     ] "This module was removed in favor of enabling it with networking.interfaces.<name>.wakeOnLan")
+    (mkRemovedOptionModule
+      [
+        "services"
+        "wasabibackend"
+      ]
+      "This module was removed as the corresponding package was removed due to being unmaintained in nixpkgs."
+    )
     (mkRemovedOptionModule [
       "services"
       "winstone"
