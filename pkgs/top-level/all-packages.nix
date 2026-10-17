@@ -6696,8 +6696,6 @@ with pkgs;
   dnsutils = bind.dnsutils;
   dig = lib.addMetaAttrs { mainProgram = "dig"; } bind.dnsutils;
 
-  clickhouse-cli = with python3Packages; toPythonApplication clickhouse-cli;
-
   couchdb3 = callPackage ../servers/http/couchdb/3.nix { };
 
   dict = callPackage ../servers/dict {
