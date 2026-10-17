@@ -28,8 +28,8 @@ let
   # cd jetbrainsruntime
   # git tag --points-at [revision]
   # Look for the line that starts with jbr-
-  javaVersion = "25.0.3";
-  build = "508.4";
+  javaVersion = "25.0.4.1";
+  build = "583.48";
 in
 callPackage ./common.nix
   {
@@ -38,8 +38,8 @@ callPackage ./common.nix
   {
     inherit javaVersion build;
     # run `git log -1 --pretty=%ct` in jdk repo for new value on update
-    sourceDateEpoch = 1780959777;
-    srcHash = "sha256-N+7D++Cxu0RGWChEWW8gtNz7E2I8qM2AFbXv4luAXto=";
+    sourceDateEpoch = 1786554980;
+    srcHash = "sha256-kVL0saXyA+CpKG/1MDUWVQEKsJjAzSHMbQXucFWqG1c=";
     jcefPackage = jetbrains.jcef;
     extraBuildPhase = ''
       cp -r ${gtk-protocols.out} gtk-shell.xml
