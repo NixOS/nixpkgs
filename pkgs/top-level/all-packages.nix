@@ -4553,8 +4553,6 @@ with pkgs;
       {
       };
 
-  bundlewrap = with python3.pkgs; toPythonApplication bundlewrap;
-
   # Wrapper that works as gcc or g++
   # It can be used by setting in nixpkgs config like this, for example:
   #    replaceStdenv = { pkgs }: pkgs.ccacheStdenv;
