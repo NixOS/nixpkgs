@@ -1,0 +1,25 @@
+From 45b478a879a4a50e22b58e5aae0dce1e2a3fd786 Mon Sep 17 00:00:00 2001
+From: whoomee <git@miglix.eu>
+Date: Sat, 3 Oct 2026 21:40:56 +0200
+Subject: [PATCH 2/2] Fix use of deprecated /deep/
+
+---
+ src/components/element-ui/ScrollPane/index.vue | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/components/element-ui/ScrollPane/index.vue b/src/components/element-ui/ScrollPane/index.vue
+index 3e8375e3..6ff1cdc7 100644
+--- a/src/components/element-ui/ScrollPane/index.vue
++++ b/src/components/element-ui/ScrollPane/index.vue
+@@ -67,7 +67,7 @@ export default {
+   position: relative;
+   overflow: hidden;
+   width: 100%;
+-  /deep/ {
++  ::v-deep {
+     .el-scrollbar__bar {
+       bottom: 0px;
+     }
+-- 
+2.55.0
+
