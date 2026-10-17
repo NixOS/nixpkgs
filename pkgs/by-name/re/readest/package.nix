@@ -14,8 +14,7 @@
   autoPatchelfHook,
   lib,
   nix-update-script,
-  moreutils,
-  jq,
+  xdg-utils,
 
   cef-binary,
   autoAddDriverRunpath,
@@ -41,6 +40,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # Use the installed desktop entry so URI launches go through the Nix wrapper.
+    ./use-installed-uri-handlers.patch
+  ];
   postUnpack = ''
     # pnpm.configHook has to write to ../.., as our sourceRoot is set to
     # apps/readest-app
@@ -107,7 +110,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
         'productionBrowserSourceMaps: exportOutput' \
         'productionBrowserSourceMaps: false'
 
-    jq 'del(.plugins."deep-link")' src-tauri/tauri.conf.json | sponge src-tauri/tauri.conf.json
     substituteInPlace src/services/constants.ts \
       --replace-fail "autoCheckUpdates: true" "autoCheckUpdates: false" \
       --replace-fail "telemetryEnabled: true" "telemetryEnabled: false"
@@ -121,8 +123,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
     wrapGAppsHook3
     autoPatchelfHook
-    moreutils
-    jq
     autoAddDriverRunpath
   ];
 
@@ -173,6 +173,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   postInstall = ''
+    # Pass OAuth callback URLs and opened files to the application.
+    # Remove once cargo-tauri includes https://github.com/tauri-apps/tauri/pull/15929.
+    substituteInPlace "$out/share/applications/readest.desktop" \
+      --replace-fail $'Exec=readest\n' $'Exec=readest %U\n'
+
     mkdir -p $out/lib/readest
     mv $out/bin/readest $out/lib/readest/readest
 
@@ -191,6 +196,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       # Preserve cargo-tauri.hook's NVIDIA explicit-sync workaround because
       # dontTauriFixup = true disables the hook's entire fixup script.
       --set-default __NV_DISABLE_EXPLICIT_SYNC 1
+      # The opener plugin uses xdg-open to launch the browser for OAuth.
+      --prefix PATH : "${lib.makeBinPath [ xdg-utils ]}"
       --prefix LD_LIBRARY_PATH : "${
         lib.makeLibraryPath [
           addDriverRunpath.driverLink
