@@ -100,6 +100,7 @@ buildNpmPackage (finalAttrs: {
   doInstallCheck = true;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--no-sandbox";
 
   desktopItems = lib.singleton (makeDesktopItem {
     name = "mullvad-vpn";
@@ -112,7 +113,10 @@ buildNpmPackage (finalAttrs: {
     terminal = false;
   });
 
-  passthru.hasMullvadGUI = true;
+  passthru = {
+    inherit electron;
+    hasMullvadGUI = true;
+  };
 
   meta = {
     homepage = "https://mullvad.net/";

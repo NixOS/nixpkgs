@@ -46,6 +46,7 @@ version: hashes:
 let
   pname = "electron";
 
+  sandboxExecutableName = "__electron_${lib.versions.major version}-bin-suid-sandbox";
   meta = {
     description = "Cross platform desktop application shell";
     homepage = "https://github.com/electron/electron";
@@ -140,8 +141,9 @@ let
 
     nativeBuildInputs = [
       unzip
-      makeWrapper
+      # important order for makeWrapper --run
       wrapGAppsHook3
+      makeWrapper
     ];
 
     dontUnpack = true;
@@ -158,7 +160,11 @@ let
 
     preFixup = ''
       makeWrapper "$out/libexec/electron/electron" $out/bin/electron \
-        "''${gappsWrapperArgs[@]}"
+        "''${gappsWrapperArgs[@]}" \
+        --run 'export CHROME_DEVEL_SANDBOX="$(
+                [ -x /run/wrappers/bin/${sandboxExecutableName} ] \
+                && echo /run/wrappers/bin/${sandboxExecutableName} \
+                || echo '$out'/libexec/electron/chrome-sandbox)"'
     '';
 
     postFixup = ''
