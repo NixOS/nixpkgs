@@ -2525,8 +2525,6 @@ with pkgs;
 
   strip-nondeterminism = perlPackages.strip-nondeterminism;
 
-  staticjinja = with python3.pkgs; toPythonApplication staticjinja;
-
   stoken = callPackage ../tools/security/stoken (config.stoken or { });
 
   stutter = haskell.lib.compose.justStaticExecutables haskellPackages.stutter;
