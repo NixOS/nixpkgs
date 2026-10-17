@@ -4634,8 +4634,6 @@ with pkgs;
     ];
   };
 
-  css-html-js-minify = with python3Packages; toPythonApplication css-html-js-minify;
-
   cvise = callPackage ../development/tools/misc/cvise {
     # cvise needs a port to latest llvm-21:
     #   https://github.com/marxin/cvise/issues/340
