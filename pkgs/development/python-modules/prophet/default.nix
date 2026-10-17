@@ -20,14 +20,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "prophet";
-  version = "1.3.0";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "prophet";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Bu+ztg6sj1jh2iair6v1CdbF0Fi4b+h8yLzB3xTMD3Y=";
+    hash = "sha256-nKrElwUf9HH+qJr6tUjeEUtU/CnSuT05NA6BVxbFvIQ=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python";
