@@ -4956,8 +4956,6 @@ with pkgs;
 
   appstream = callPackage ../development/libraries/appstream { };
 
-  argparse-manpage = with python3Packages; toPythonApplication argparse-manpage;
-
   asio_1_32_0 = callPackage ../by-name/as/asio/package.nix { asioVersion = "1.32.0"; };
   asio_1_36_0 = callPackage ../by-name/as/asio/package.nix { asioVersion = "1.36.0"; };
 
