@@ -54,8 +54,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -Dm0644 chrome.json $out/etc/chromium/native-messaging-hosts/com.samhh.bukubrow.json
   '';
 
-  __structuredAttrs = true;
-
   meta = {
     description = "WebExtension for Buku, a command-line bookmark manager";
     homepage = "https://github.com/SamHH/bukubrow-host";

@@ -7,7 +7,6 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  __structuredAttrs = true;
 
   pname = "cargo-sbom";
   version = "0.10.0";

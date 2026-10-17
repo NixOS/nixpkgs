@@ -10,8 +10,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "corrode-scanner";
   version = "0.5.3";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "ul0gic";
     repo = "corrode";

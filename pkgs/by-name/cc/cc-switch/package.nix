@@ -28,8 +28,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cc-switch";
   version = "3.16.5";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "farion1231";
     repo = "cc-switch";

@@ -12,8 +12,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "harmonia";
   version = "3.3.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "harmonia";

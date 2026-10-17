@@ -13,7 +13,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "typst";
   version = "0.15.1";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "typst";

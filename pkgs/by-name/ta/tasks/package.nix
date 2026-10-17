@@ -15,8 +15,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tasks";
   version = "0.3.1";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "cosmic-utils";
     repo = "tasks";

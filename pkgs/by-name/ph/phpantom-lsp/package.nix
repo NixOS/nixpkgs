@@ -20,8 +20,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "phpantom-lsp";
   version = "0.11.1";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "PHPantom-dev";
     repo = "phpantom_lsp";

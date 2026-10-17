@@ -14,8 +14,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lumen";
   version = "2.32.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "jnsahaj";
     repo = "lumen";

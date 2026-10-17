@@ -8,7 +8,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bttf";
   version = "0.1.4";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "BurntSushi";

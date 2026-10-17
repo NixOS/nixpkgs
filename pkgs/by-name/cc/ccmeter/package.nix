@@ -8,8 +8,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ccmeter";
   version = "2.0.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "hmenzagh";
     repo = "CCMeter";

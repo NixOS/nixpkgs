@@ -77,8 +77,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --zsh <($out/bin/scx_flow --completions zsh)
   '';
 
-  __structuredAttrs = true;
-
   doInstallCheck = true;
   installCheckPhase = ''
     runHook preInstallCheck

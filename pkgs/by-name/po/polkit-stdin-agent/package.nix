@@ -19,8 +19,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-TbvJit+xbT7IIv7/uxXIKGjgEmVUwwdKfb4ptMQEztM=";
 
-  __structuredAttrs = true;
-
   passthru = {
     updateScript = nix-update-script { };
     tests = { inherit (nixosTests) nixos-rebuild-target-host; };

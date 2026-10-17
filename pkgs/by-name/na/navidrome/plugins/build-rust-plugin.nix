@@ -27,7 +27,6 @@ lib.extendMkDerivation {
       ...
     }@args:
     {
-      __structuredAttrs = true;
       nativeBuildInputs = [
         lld
         navidromePluginInstallHook

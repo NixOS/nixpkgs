@@ -9,7 +9,6 @@
 rustPlatform.buildRustPackage {
   pname = "buzz-cli";
   version = "0.1.0-unstable-2026-09-02";
-  __structuredAttrs = true;
   __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {

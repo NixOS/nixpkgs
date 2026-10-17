@@ -9,8 +9,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "basalt";
   version = "0.13.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "erikjuhani";
     repo = "basalt";

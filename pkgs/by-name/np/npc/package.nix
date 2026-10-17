@@ -10,8 +10,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "npc";
   version = "1.0.1";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "samestep";
     repo = "npc";

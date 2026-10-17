@@ -10,8 +10,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "json-sort";
   version = "1.1.6";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "drupol";
     repo = "json-sort";

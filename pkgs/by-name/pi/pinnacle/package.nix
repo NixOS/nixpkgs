@@ -188,5 +188,4 @@ rustPlatform.buildRustPackage (finalAttrs: {
     providedSessions = [ "pinnacle" ];
     lua-client-api = lua-client-api;
   };
-  __structuredAttrs = true;
 })

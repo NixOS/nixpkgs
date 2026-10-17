@@ -12,7 +12,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "communique";
   version = "1.3.5";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jdx";

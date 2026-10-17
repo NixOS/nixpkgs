@@ -13,8 +13,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ast-grep";
   version = "0.50.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "ast-grep";
     repo = "ast-grep";

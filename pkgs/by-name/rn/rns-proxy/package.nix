@@ -11,7 +11,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rns-proxy";
   version = "0.1.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mytecor";

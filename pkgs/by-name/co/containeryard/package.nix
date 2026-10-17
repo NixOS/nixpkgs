@@ -8,7 +8,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "containeryard";
   version = "0.4.1";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mcmah309";

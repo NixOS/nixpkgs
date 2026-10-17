@@ -17,8 +17,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-o71CVr5Zr2ZGzRfJbqXxGMX8HZbOW0Cyf6mk2isUHEs=";
   cargoDepsName = finalAttrs.pname;
 
-  __structuredAttrs = true;
-
   meta = {
     description = "OpenVR bindings TUI for xrizer, VapoR and OpenComposite";
     homepage = "https://github.com/galister/obah";

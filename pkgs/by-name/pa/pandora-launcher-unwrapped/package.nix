@@ -32,8 +32,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pandora-launcher-unwrapped";
   version = "6.0.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "Moulberry";
     repo = "PandoraLauncher";

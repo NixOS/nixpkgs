@@ -11,7 +11,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "leviculum";
   version = "0.9.0";
-  __structuredAttrs = true;
 
   src = fetchFromCodeberg {
     owner = "Lew_Palm";

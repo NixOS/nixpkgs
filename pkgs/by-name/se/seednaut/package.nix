@@ -16,8 +16,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-1GZ7ZoiGKEQGN2AQFcz/YXpcqg3iYLRSzl2GfTmGk8g=";
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Inspect, verify and extract files from Seedvault Android backups";
     longDescription = ''

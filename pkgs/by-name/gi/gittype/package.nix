@@ -62,8 +62,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
-  __structuredAttrs = true;
-
   passthru.updateScript = nix-update-script { };
 
   meta = {

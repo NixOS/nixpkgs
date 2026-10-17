@@ -12,8 +12,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pikpaktui";
   version = "0.0.56";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "Bengerthelorf";
     repo = "pikpaktui";

@@ -29,8 +29,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=should_verify_memory_layout"
   ];
 
-  __structuredAttrs = true;
-
   passthru.updateScript = nix-update-script {
     # Ignore the stray flip-link-v0.1.12 tag upstream carries.
     extraArgs = [

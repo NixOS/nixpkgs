@@ -13,8 +13,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dezoomify-rs";
   version = "2.20.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "lovasoa";
     repo = "dezoomify-rs";

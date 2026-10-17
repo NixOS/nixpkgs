@@ -5,7 +5,6 @@
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
-  __structuredAttrs = true;
 
   pname = "oyui";
   version = "0.2.1";

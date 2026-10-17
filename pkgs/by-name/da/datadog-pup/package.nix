@@ -12,8 +12,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "datadog-pup";
   version = "1.27.1";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "DataDog";
     repo = "pup";

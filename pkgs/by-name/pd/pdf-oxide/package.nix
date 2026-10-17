@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-xW5rSB3PAn95LYNZfv5zun+Ai/ddy0GmM33WDMdhYBM=";
-  __structuredAttrs = true;
 
   cargoBuildFlags = [
     "--package=pdf_oxide_cli"

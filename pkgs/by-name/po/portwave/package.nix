@@ -11,7 +11,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "portwave";
   version = "0.19.4";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "assassin-marcos";

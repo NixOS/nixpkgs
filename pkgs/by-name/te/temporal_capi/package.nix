@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-nKE5n/ingB/+sEPJvpUQVsjCn+4/EPpcfZAM91CCZDE=";
   };
 
-  __structuredAttrs = true;
   outputs = [
     "out"
     "dev"

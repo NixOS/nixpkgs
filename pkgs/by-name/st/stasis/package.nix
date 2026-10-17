@@ -12,7 +12,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stasis";
   version = "1.6.3";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "saltnpepper97";

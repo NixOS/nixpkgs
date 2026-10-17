@@ -17,7 +17,6 @@ let
 in
 rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } {
   inherit pname version;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "domcyrus";

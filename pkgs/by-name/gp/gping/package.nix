@@ -13,8 +13,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gping";
   version = "1.21.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "orf";
     repo = "gping";

@@ -9,7 +9,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "crack-hash";
   version = "1.2.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "kOaDT";

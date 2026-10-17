@@ -12,8 +12,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "qownnotes-tui";
   version = "1.3.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "qownnotes";
     repo = "qownnotes-tui";

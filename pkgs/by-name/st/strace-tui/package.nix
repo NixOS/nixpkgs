@@ -8,7 +8,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "strace-tui";
   version = "1.0.1";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Rodrigodd";

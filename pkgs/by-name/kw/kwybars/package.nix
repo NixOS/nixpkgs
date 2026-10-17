@@ -16,7 +16,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kwybars";
   version = "0.2.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "naurissteins";

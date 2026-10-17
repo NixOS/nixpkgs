@@ -13,7 +13,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "protoscan";
   version = "0.3.2";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "douzebis";

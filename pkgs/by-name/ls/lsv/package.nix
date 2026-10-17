@@ -6,7 +6,6 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  __structuredAttrs = true;
 
   pname = "lsv";
   version = "0.1.15";

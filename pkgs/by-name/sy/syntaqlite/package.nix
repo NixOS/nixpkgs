@@ -9,8 +9,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "syntaqlite";
   version = "0.12.1";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "LalitMaganti";
     repo = "syntaqlite";

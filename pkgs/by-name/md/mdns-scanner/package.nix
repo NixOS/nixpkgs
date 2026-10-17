@@ -9,8 +9,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdns-scanner";
   version = "1.0.1";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "CramBL";
     repo = "mdns-scanner";

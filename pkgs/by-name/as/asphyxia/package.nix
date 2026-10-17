@@ -11,7 +11,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "asphyxia";
   version = "0.10.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jtprogru";

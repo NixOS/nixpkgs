@@ -17,8 +17,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-bj7YB7xNlfdrYYZv3CDuqkm+/pg+C1KwizPTlNqQWt8=";
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Cross-platform patching of shared libraries in Rust";
     longDescription = ''

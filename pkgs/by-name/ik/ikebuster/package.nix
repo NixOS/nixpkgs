@@ -11,7 +11,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ikebuster";
   version = "0.2.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "myOmikron";

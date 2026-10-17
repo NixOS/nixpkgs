@@ -12,8 +12,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clipcat";
   version = "0.26.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "xrelkd";
     repo = "clipcat";

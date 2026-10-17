@@ -50,8 +50,6 @@ rustPlatform.buildRustPackage (
     pname = "pitchfork";
     version = "2.24.0";
 
-    __structuredAttrs = true;
-
     src = fetchFromGitHub {
       owner = "jdx";
       repo = "pitchfork";

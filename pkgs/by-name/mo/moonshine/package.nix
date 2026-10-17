@@ -38,8 +38,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-CmSOU263HD4qDFwGRxyozo2u2BlM+bT8AE7EwFPEhnA=";
   };
 
-  __structuredAttrs = true;
-
   cargoHash = "sha256-g9X9tiO+mUW4eTYi16nvesHIvWsQgAft7ZLEK1/CQHg=";
 
   # Build Moonshine binary and Vulkan layer

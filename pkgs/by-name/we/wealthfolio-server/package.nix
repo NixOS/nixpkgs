@@ -54,7 +54,6 @@ rustPlatform.buildRustPackage (
     };
   in
   {
-    __structuredAttrs = true;
 
     pname = "wealthfolio-server";
     version = "3.9.1";

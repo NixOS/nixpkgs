@@ -11,8 +11,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "skewrun";
   version = "1.1.1";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "JVBotelho";
     repo = "skewrun";

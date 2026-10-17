@@ -66,8 +66,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFlags = [ "--package=js-pdk-core" ];
 
-  __structuredAttrs = true;
-
   meta = {
     # Fails to build on darwin due to libiconv linking failure (ld: library not found for -liconv)
     # See https://github.com/NixOS/nixpkgs/pull/523442 for a (failed) attempt at fixing the issue

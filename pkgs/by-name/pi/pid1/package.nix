@@ -8,8 +8,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pid1";
   version = "0.1.6";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "fpco";
     repo = "pid1-rs";

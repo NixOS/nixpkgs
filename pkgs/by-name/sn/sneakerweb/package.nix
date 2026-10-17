@@ -22,8 +22,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  __structuredAttrs = true;
-
   meta = {
     description = "A parallel web transported by physical media";
     homepage = "https://sneakerweb.org/";

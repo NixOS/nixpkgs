@@ -12,8 +12,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oxicloud";
   version = "0.8.3";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "AtalayaLabs";
     repo = "OxiCloud";

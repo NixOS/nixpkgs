@@ -25,8 +25,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lookout";
   version = "0.3.11";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "hackclub";
     repo = "lookout";

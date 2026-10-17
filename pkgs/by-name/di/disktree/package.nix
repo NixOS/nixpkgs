@@ -19,7 +19,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "disktree";
   version = "0.10.1";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tobi";

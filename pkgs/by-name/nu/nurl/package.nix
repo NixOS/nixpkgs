@@ -14,8 +14,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nurl";
   version = "0.4.1";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nurl";

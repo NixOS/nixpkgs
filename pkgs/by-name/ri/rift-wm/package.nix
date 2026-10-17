@@ -9,7 +9,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rift-wm";
   version = "0.6.7";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "acsandmann";

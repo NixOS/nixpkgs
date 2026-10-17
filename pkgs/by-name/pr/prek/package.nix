@@ -11,7 +11,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prek";
   version = "0.5.5";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "j178";

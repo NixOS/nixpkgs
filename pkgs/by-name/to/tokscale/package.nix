@@ -13,8 +13,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tokscale";
   version = "4.0.4";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "junhoyeo";
     repo = "tokscale";

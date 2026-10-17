@@ -19,8 +19,6 @@ let
 
       inherit version;
 
-      __structuredAttrs = true;
-
       src = fetchCrate {
         inherit version hash;
         pname = "cargo-pgrx";

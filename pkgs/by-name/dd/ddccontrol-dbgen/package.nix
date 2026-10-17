@@ -11,7 +11,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cargoDeps
     meta
     ;
-  __structuredAttrs = true;
 
   cargoBuildFlags = [
     "--package"

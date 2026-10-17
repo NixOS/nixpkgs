@@ -10,8 +10,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dirstat-rs";
   version = "0.3.7";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "scullionw";
     repo = "dirstat-rs";

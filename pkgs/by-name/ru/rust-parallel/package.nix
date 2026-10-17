@@ -11,8 +11,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rust-parallel";
   version = "1.24.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "aaronriekenberg";
     repo = "rust-parallel";

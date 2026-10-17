@@ -12,8 +12,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "introspectre";
   version = "1.13.5";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "m3m0rydmp";
     repo = "Introspectre";

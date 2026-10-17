@@ -10,7 +10,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hcom";
   version = "0.7.23";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "aannoo";

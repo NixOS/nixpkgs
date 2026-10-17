@@ -26,8 +26,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  __structuredAttrs = true;
-
   meta = {
     homepage = "https://github.com/cyberus-technology/usbvfiod";
     description = "A tool for USB device pass-through using the vfio-user protocol.";

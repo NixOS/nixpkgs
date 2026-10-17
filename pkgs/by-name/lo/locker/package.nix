@@ -8,7 +8,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "locker";
   version = "4.0.1";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tgirlcloud";

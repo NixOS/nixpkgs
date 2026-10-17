@@ -57,8 +57,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "handy";
   version = "0.9.6";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "cjpais";
     repo = "Handy";

@@ -44,8 +44,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     inherit firefox-esr-unwrapped firefox-unwrapped thunderbird-unwrapped;
   };
 
-  __structuredAttrs = true;
-
   meta = {
     changelog = "https://github.com/mozilla/dump_syms/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Command-line utility for parsing the debugging information the compiler provides in ELF or stand-alone PDB files";

@@ -10,7 +10,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "terminus-rs";
   version = "3.8.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "gbiagomba";

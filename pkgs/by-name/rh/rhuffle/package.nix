@@ -10,7 +10,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rhuffle";
   version = "0.4.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ctylim";

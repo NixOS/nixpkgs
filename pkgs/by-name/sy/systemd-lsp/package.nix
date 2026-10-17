@@ -19,8 +19,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "systemd-lsp";
   version = "${crateVersion}-${releaseDate}";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "JFryy";
     repo = "systemd-lsp";

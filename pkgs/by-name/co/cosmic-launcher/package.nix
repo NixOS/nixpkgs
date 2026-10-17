@@ -25,7 +25,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-W4set6miB69uLnQEs+Nl+FEpw62kzZ6FkH79idDgk9Y=";
 
   separateDebugInfo = true;
-  __structuredAttrs = true;
 
   env."CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_RUSTFLAGS" = "--cfg tokio_unstable";
 

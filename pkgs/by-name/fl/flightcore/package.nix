@@ -16,7 +16,6 @@
   wrapGAppsHook4,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
-  __structuredAttrs = true;
   pname = "flightcore";
   version = "3.2.2";
 

@@ -31,8 +31,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
   ];
 
-  __structuredAttrs = true;
-
   passthru.updateScript = nix-update-script { };
 
   meta = {

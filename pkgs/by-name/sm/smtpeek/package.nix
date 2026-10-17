@@ -8,7 +8,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "smtpeek";
   version = "1.0.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "0xricksanchez";

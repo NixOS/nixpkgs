@@ -39,8 +39,6 @@ rustPlatform.buildRustPackage rec {
   pname = "spotifast";
   version = "0.13.2";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "crmne";
     repo = "spotifast";

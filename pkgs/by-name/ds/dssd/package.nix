@@ -33,8 +33,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install org.freedesktop.secrets.service -Dt $out/share/dbus-1/system-services/
   '';
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Dead Simple Secret Daemon";
     homepage = "https://github.com/ylxdzsw/dssd";

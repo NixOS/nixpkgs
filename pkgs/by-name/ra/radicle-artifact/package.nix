@@ -11,8 +11,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-artifact";
   version = "0.23.1";
 
-  __structuredAttrs = true;
-
   src = fetchFromRadicle {
     seed = "radicle.norman.life";
     repo = "z4VYyJ9KuwMNkXGQnmKuGPGKw3inv";

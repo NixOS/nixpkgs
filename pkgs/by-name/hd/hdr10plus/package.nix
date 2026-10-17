@@ -13,7 +13,6 @@ let
   inherit (buildPackages.rust.envVars) setEnv;
 in
 rustPlatform.buildRustPackage (finalAttrs: {
-  __structuredAttrs = true;
 
   pname = "hdr10plus";
   # Version of the library, not the tool

@@ -28,8 +28,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-6c4NdXGPsDFqlLLMH2BL0MpoQpZiLxJnWMzWKN1bO84=";
   };
 
-  __structuredAttrs = true;
-
   cargoHash = "sha256-WZK3QkeBqDkH/5m9mqhyJQDKZoA6LfEuFbMRImJN4oQ=";
 
   cargoBuildFlags = [

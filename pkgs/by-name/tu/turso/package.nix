@@ -9,8 +9,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "turso";
   version = "0.8.3";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "tursodatabase";
     repo = "turso";

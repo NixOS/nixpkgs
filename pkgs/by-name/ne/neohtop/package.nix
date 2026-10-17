@@ -19,8 +19,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "neohtop";
   version = "1.2.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "Abdenasser";
     repo = "neohtop";

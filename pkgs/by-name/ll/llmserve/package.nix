@@ -18,7 +18,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-5svPhLTpWfJgDVNyoytF42efiXzSZ2vbbrglSuNl3Ck=";
 
-  __structuredAttrs = true;
   __darwinAllowLocalNetworking = true;
 
   passthru.updateScript = nix-update-script { };

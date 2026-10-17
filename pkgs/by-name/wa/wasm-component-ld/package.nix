@@ -8,8 +8,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wasm-component-ld";
   version = "0.5.31";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "wasm-component-ld";

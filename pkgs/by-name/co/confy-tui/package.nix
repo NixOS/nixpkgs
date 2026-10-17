@@ -8,8 +8,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "confy-tui";
   version = "3.1.1";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "phluxjr";
     repo = "confy";

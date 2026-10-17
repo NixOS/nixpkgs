@@ -9,7 +9,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rosa-backdoor-detector";
   version = "0.6.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "binsec";

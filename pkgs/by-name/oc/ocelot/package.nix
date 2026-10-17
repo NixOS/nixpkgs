@@ -30,8 +30,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --zsh  <($out/bin/ocelot completions zsh)
   '';
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Process supervisor and init system written in Rust Programming Language";
     homepage = "https://github.com/xrelkd/ocelot";

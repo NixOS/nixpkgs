@@ -16,8 +16,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-g+u6WBJtizIgQwC0kkWdAcTiYCM1zMI4YBLVRU4MOrs=";
   };
 
-  __structuredAttrs = true;
-
   outputs = [
     "out"
     "man"

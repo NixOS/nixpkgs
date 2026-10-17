@@ -24,8 +24,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-81wwGMtF2Phj+t4xUKBiBfN9DdSyL5gQVg8iC2RY1Gc=";
 
-  __structuredAttrs = true;
-
   nativeBuildInputs = [
     gzip
     makeBinaryWrapper

@@ -17,7 +17,6 @@ in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bichon";
   version = "2.1.1";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rustmailer";

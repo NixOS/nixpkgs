@@ -11,8 +11,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "1.2.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "StrongWind1";
     repo = "WEPWolf";

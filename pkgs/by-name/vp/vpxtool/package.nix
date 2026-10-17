@@ -9,7 +9,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vpxtool";
   version = "0.37.1";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "francisdb";

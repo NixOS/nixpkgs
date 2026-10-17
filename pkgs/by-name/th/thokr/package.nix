@@ -8,8 +8,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "thokr";
   version = "0.5.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "jrnxf";
     repo = "thokr";

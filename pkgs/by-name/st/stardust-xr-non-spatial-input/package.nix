@@ -30,7 +30,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-QZaVDMeuxqHy9iQngb/wpv/P+KxevkoQqGojYIVzo2s=";
 
-  __structuredAttrs = true;
   nativeBuildInputs = [
     cmake
     pkg-config

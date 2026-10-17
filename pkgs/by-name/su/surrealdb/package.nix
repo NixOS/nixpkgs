@@ -20,8 +20,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = if hasRocksDB then "surrealdb" else "surrealdb-surrealkv";
   version = "3.0.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "surrealdb";
     repo = "surrealdb";

@@ -8,7 +8,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codex-relay";
   version = "0.5.8";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "MetaFARS";

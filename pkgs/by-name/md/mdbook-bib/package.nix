@@ -9,7 +9,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdbook-bib";
   version = "0.5.3";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "francisco-perez-sorrosal";

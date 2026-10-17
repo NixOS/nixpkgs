@@ -16,7 +16,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-9bvheR4zLutIn8phClza8tpkE72L/hjZzroupnSk8ec=";
   };
   cargoHash = "sha256-w3Ux5EjpJlb1RnYz5IZVnagQ1lvIaNqnMuefEI02b/U=";
-  __structuredAttrs = true;
   __darwinAllowLocalNetworking = true;
   # called `Result::unwrap()` on an `Err` value: Tls("rustls platform verifier: unexpected error: No CA certificates were loaded from the system")
   nativeCheckInputs = [

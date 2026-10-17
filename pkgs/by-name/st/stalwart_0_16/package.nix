@@ -30,7 +30,6 @@ let
     python3Packages.buildPythonApplication {
       pname = "migrate_v016";
       inherit src version;
-      __structuredAttrs = true;
       format = "other";
       dontBuild = true;
       dependencies = [
@@ -52,8 +51,6 @@ in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stalwart" + (lib.optionalString stalwartEnterprise "-enterprise");
   version = "0.16.26";
-
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "stalwartlabs";

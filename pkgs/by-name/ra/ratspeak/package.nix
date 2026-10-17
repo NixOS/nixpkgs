@@ -51,7 +51,6 @@ in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ratspeak";
   version = "1.0.34";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ratspeak";

@@ -10,8 +10,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rgx";
   version = "0.14.2";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "brevity1swos";
     repo = "rgx";

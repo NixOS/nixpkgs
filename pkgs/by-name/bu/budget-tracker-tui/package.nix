@@ -8,8 +8,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "budget-tracker-tui";
   version = "1.7.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "Feromond";
     repo = "budget_tracker_tui";

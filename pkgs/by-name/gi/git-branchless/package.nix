@@ -17,8 +17,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-branchless";
   version = "0.11.1";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "arxanas";
     repo = "git-branchless";

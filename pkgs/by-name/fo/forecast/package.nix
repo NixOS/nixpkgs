@@ -17,7 +17,6 @@
 rustPlatform.buildRustPackage {
   pname = "forecast";
   version = "0-unstable-2026-10-01";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "cosmic-utils";

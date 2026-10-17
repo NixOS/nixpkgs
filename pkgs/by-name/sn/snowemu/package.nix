@@ -21,8 +21,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "snowemu";
   version = "1.5.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "twvd";
     repo = "snow";

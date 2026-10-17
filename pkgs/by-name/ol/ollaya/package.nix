@@ -24,8 +24,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [ onnxruntime ];
 
-  __structuredAttrs = true;
-
   env = {
     ORT_STRATEGY = "system";
     ORT_LIB_LOCATION = "${lib.getLib onnxruntime}/lib";

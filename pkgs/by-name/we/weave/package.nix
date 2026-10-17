@@ -13,8 +13,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "weave";
   version = "0.5.4";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "ataraxy-labs";
     repo = "weave";

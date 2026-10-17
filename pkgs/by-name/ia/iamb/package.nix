@@ -11,8 +11,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "iamb";
   version = "0.0.12";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "ulyssa";
     repo = "iamb";

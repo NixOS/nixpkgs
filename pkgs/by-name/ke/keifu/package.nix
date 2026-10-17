@@ -16,7 +16,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "keifu";
   version = "0.6.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "trasta298";

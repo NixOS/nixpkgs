@@ -19,7 +19,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ty";
   version = "0.0.87";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "astral-sh";

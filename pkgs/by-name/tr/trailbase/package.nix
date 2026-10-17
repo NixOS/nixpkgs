@@ -23,8 +23,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "trailbase";
   version = "0.32.2";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "trailbaseio";
     repo = "trailbase";

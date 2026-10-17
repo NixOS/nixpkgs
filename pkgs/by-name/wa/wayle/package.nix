@@ -23,8 +23,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wayle";
   version = "0.7.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "wayle-rs";
     repo = "wayle";

@@ -11,7 +11,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zsh-patina";
   version = "1.11.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "michel-kraemer";

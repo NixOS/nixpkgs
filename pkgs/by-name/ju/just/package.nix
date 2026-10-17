@@ -30,8 +30,6 @@ rustPlatform.buildRustPackage {
   ]
   ++ lib.optionals withDocumentation [ "doc" ];
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "casey";
     repo = "just";

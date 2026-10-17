@@ -13,8 +13,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = cargoToml.package.name;
   inherit (cargoToml.package) version;
 
-  __structuredAttrs = true;
-
   src = lib.sourceFilesBySuffices ./. [
     ".rs"
     ".toml"

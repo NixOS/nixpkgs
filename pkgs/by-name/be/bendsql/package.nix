@@ -10,8 +10,6 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  __structuredAttrs = true;
-
   pname = "bendsql";
   version = "0.34.2";
 

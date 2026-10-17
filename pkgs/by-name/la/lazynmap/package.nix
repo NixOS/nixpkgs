@@ -10,7 +10,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lazynmap";
   version = "0.1.3";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ruiiiijiiiiang";

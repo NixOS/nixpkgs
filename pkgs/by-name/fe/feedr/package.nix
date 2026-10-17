@@ -14,8 +14,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "feedr";
   version = "0.8.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "bahdotsh";
     repo = "feedr";

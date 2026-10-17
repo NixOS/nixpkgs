@@ -9,7 +9,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bleur";
   version = "0.0.7";
-  __structuredAttrs = true;
 
   src = fetchFromCodeberg {
     owner = "bleur";

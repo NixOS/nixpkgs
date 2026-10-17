@@ -10,8 +10,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "process-viewer";
   version = "0.5.11";
 
-  __structuredAttrs = true;
-
   src = fetchCrate {
     inherit (finalAttrs) version;
     pname = "process_viewer";

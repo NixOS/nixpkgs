@@ -10,8 +10,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdterm";
   version = "2.0.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "bahdotsh";
     repo = "mdterm";

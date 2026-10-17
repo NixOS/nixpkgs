@@ -29,8 +29,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stremio-linux-shell";
   version = "1.2.2";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "Stremio";
     repo = "stremio-linux-shell";

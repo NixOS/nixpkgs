@@ -9,7 +9,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cloudflare-speed-cli";
   version = "1.0.9";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "kavehtehrani";

@@ -15,7 +15,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dprint";
   version = "0.61.1";
-  __structuredAttrs = true;
 
   # Prefer repository rather than crate here
   #   - They have Cargo.lock in the repository

@@ -12,8 +12,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "introspectme";
   version = "0.0.2";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "bountyyfi";
     repo = "IntrospectMe";

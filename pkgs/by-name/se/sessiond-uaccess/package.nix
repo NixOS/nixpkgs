@@ -7,7 +7,6 @@
   acl,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
-  __structuredAttrs = true;
   pname = "sessiond-uaccess";
   version = "0.1.1";
 

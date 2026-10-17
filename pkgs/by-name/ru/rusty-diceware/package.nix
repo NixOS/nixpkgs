@@ -8,8 +8,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rusty-diceware";
   version = "0.5.10";
 
-  __structuredAttrs = true;
-
   src = fetchFromCodeberg {
     owner = "kakafarm";
     repo = "rusty-diceware";

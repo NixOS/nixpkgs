@@ -9,7 +9,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mprocs";
   version = "0.9.6";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pvolok";

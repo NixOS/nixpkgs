@@ -7,8 +7,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "niri-sidebar";
   version = "0.4.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "Vigintillionn";
     repo = "niri-sidebar";

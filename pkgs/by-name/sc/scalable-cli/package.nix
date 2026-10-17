@@ -10,8 +10,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "scalable-cli";
   version = "1.1.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "ScalableCapital";
     repo = "scalable-cli";

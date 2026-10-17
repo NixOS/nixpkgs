@@ -13,8 +13,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pve-tool";
   version = "0.1.2";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "liberodark";
     repo = "pve-tool";

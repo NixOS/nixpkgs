@@ -33,7 +33,6 @@ rustPlatform.buildRustPackage rec {
   # Upstream does not tag releases. Use the `0-unstable-<date>` convention so
   # the version compares lower than any future tagged release.
   version = "0-unstable-2026-05-10";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "robbert-vdh";

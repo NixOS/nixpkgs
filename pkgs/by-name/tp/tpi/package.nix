@@ -8,8 +8,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tpi";
   version = "1.0.7";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "turing-machines";
     repo = "tpi";

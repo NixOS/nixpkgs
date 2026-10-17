@@ -12,8 +12,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "click";
   version = "0.6.3";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "click";

@@ -12,7 +12,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jsonschema-cli";
   version = "0.58.6";
-  __structuredAttrs = true;
 
   src = fetchCrate {
     pname = "jsonschema-cli";

@@ -40,7 +40,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   passthru.updateScript = nix-update-script { };
-  __structuredAttrs = true;
 
   meta = {
     description = "Bridge Jujutsu (jj) bookmarks to GitHub stacked pull requests";

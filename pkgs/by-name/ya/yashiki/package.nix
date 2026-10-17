@@ -12,8 +12,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "yashiki";
   version = "0.15.2";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "typester";
     repo = "yashiki";

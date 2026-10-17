@@ -13,8 +13,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "krill";
   version = "0.16.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = "krill";

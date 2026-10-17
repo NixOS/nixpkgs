@@ -10,7 +10,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "flux9s";
   version = "1.3.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "dgunzy";

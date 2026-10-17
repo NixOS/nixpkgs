@@ -20,7 +20,6 @@ in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tabularis";
   version = "0.22.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "TabularisDB";

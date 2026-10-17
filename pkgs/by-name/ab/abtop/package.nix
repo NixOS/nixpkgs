@@ -9,7 +9,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "abtop";
   version = "0.5.5";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "graykode";

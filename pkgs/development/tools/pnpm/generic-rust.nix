@@ -93,8 +93,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
   };
 
-  __structuredAttrs = true;
-
   # Tests take way too long to run
   doCheck = false;
 

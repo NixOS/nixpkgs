@@ -23,8 +23,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "losange";
   version = "0.10.2";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "tymmesyde";
     repo = "losange";

@@ -12,8 +12,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hinoirisetr";
   version = "1.6.3";
 
-  __structuredAttrs = true;
-
   src = fetchFromForgejo {
     domain = "git.vavakado.xyz";
     owner = "me";

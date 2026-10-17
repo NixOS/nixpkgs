@@ -24,8 +24,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cardwire";
   version = "0.12.3";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "opengamingcollective";
     repo = "cardwire";

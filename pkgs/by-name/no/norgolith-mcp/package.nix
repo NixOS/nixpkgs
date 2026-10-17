@@ -7,7 +7,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "norgolith-mcp";
   version = "1.2.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "norgolith";

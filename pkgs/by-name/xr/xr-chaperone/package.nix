@@ -39,8 +39,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -m 444 -D resources/xr-chaperone.svg $out/share/icons/hicolor/scalable/apps/xr-chaperone.svg
   '';
 
-  __structuredAttrs = true;
-
   meta = {
     description = "VR Chaperone System for OpenXR ";
     homepage = "https://github.com/FrostyCoolSlug/xr-chaperone";

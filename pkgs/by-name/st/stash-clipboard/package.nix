@@ -18,8 +18,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-8xQ501X4AJrsZN/jnG/mSRZp4JTcaFxSYM3TeWfDhQ8=";
 
-  __structuredAttrs = true;
-
   postInstall = lib.optionalString createSymlinks ''
     mkdir -p $out
     for bin in stash-copy stash-paste wl-copy wl-paste; do

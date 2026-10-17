@@ -45,8 +45,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Modern iperf3 alternative with a live TUI, multi-client server, and QUIC support.";
     mainProgram = "xfr";

@@ -118,8 +118,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     inherit (tectonic.passthru) tests;
   };
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Modernized, complete, self-contained TeX/LaTeX engine, powered by XeTeX and TeXLive";
     homepage = "https://tectonic-typesetting.github.io/";

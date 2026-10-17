@@ -20,8 +20,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mullvad";
   version = "2026.5";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "mullvad";
     repo = "mullvadvpn-app";

@@ -17,8 +17,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # this derivation.
   version = "0.15.8";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "Myriad-Dreamin";
     repo = "tinymist";

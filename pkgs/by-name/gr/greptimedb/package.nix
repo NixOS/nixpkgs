@@ -14,8 +14,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "greptimedb";
   version = "1.2.1";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "GreptimeTeam";
     repo = "greptimedb";

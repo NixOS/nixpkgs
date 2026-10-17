@@ -54,8 +54,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Fast PostgreSQL TUI written in Rust. driver-less, vim-first, with ER diagrams. No database drivers, no setup, just psql";
     mainProgram = "sabiql";

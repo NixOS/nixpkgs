@@ -10,7 +10,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hydra-builder";
   inherit (hydra) version src;
-  __structuredAttrs = true;
 
   cargoHash = "sha256-Hkf6DS/MUrxqD/xp9mIv0CjbRq2FL3QNGIkZMw8BehY=";
 

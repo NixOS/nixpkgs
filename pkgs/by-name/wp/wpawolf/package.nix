@@ -10,8 +10,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wpawolf";
   version = "1.3.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "StrongWind1";
     repo = "WPAWolf";

@@ -17,8 +17,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "eilmeldung";
   version = "1.9.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "christo-auer";
     repo = "eilmeldung";

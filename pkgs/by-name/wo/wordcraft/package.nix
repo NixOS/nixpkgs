@@ -39,7 +39,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wordcraft";
   version = "0.6.1";
 
-  __structuredAttrs = true;
   strictDeps = true;
 
   src = fetchFromGitHub {

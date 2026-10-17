@@ -8,8 +8,6 @@ rustPlatform.buildRustPackage {
   pname = "i3-auto-layout";
   version = "0.2-unstable-2022-03-29";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "chmln";
     repo = "i3-auto-layout";

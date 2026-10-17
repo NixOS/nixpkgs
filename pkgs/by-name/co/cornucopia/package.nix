@@ -9,7 +9,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cornucopia";
   version = "1.0.1";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "cornucopia-rs";

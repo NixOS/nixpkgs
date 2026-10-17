@@ -11,7 +11,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dnst";
   version = "0.2.0-alpha3";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "NLnetLabs";

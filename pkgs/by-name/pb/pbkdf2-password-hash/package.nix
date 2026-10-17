@@ -16,8 +16,6 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-n3VxmR+bjFN/mEJ/SuDYQJWcndR7QFmcVJdZhSHDdmQ=";
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Prompts for a password and prints the pbkdf2 hash";
     homepage = "https://git.sr.ht/~laalsaas/pbkdf2-password-hash";

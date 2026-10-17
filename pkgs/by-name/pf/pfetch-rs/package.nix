@@ -9,7 +9,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pfetch-rs";
   version = "2.11.1";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Gobidev";

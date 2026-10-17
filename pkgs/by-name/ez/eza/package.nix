@@ -19,8 +19,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "eza";
   version = "0.23.5";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "eza-community";
     repo = "eza";

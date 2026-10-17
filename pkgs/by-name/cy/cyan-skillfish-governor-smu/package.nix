@@ -12,8 +12,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cyan-skillfish-governor-smu";
   version = "0.4.14";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "filippor";
     repo = "cyan-skillfish-governor";

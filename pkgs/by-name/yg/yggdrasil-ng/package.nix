@@ -16,8 +16,6 @@ rustPlatform.buildRustPackage (oldAttrs: {
 
   cargoHash = "sha256-QdvbVSTGhV+9PF6txwiMCTNx8U20X/Fj9U1YYBvIcX8=";
 
-  __structuredAttrs = true;
-
   meta = {
     mainProgram = "telemt";
     description = "Yggdrasil Network rewritten in Rust";

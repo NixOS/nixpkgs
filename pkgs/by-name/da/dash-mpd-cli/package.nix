@@ -36,8 +36,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-KzBJwmFWd8ztOcWOqCnHuztnnM764aDKz92whVJ3W4E=";
 
-  __structuredAttrs = true;
-
   # Needed for HTTP3 support (which is enabled by default):
   # https://github.com/emarsden/dash-mpd-cli/blob/2d53fa0c077ede18c9cee198903a7884e880d47a/.github/workflows/ci.yml#L5-L7
   env.RUSTFLAGS = "--cfg reqwest_unstable";

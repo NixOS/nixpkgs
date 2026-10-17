@@ -83,8 +83,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     };
   };
 
-  __structuredAttrs = true;
-
   meta = {
     changelog = "https://github.com/extism/js-pdk/releases/tag/${finalAttrs.src.tag}";
     description = "Write Extism plugins in JavaScript & TypeScript (CLI)";

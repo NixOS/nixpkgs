@@ -8,8 +8,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "swaytreesave";
   version = "0.4.2";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "fabienjuif";
     repo = "swaytreesave";

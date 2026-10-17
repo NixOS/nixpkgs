@@ -14,8 +14,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gitlogue";
   version = "0.12.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "unhappychoice";
     repo = "gitlogue";

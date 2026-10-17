@@ -6,7 +6,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "re-derq";
   version = "1.0.1";
-  __structuredAttrs = true;
 
   src = fetchFromCodeberg {
     owner = "viraptor";

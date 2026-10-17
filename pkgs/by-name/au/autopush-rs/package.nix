@@ -24,8 +24,6 @@ let
       pname = "fernet_key";
       inherit version src;
 
-      __structuredAttrs = true;
-
       format = "other";
 
       # this would run the upstream docker makefile
@@ -48,8 +46,6 @@ in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "autopush";
   version = "1.83.1";
-
-  __structuredAttrs = true;
 
   outputs = [
     "out"

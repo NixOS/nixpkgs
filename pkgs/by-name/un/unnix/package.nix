@@ -16,7 +16,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "unnix";
   version = "0.1.1";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "figsoda";

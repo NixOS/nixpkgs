@@ -18,8 +18,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-PevIaSzmdC2Yix4c5Y+oTIQoBrmYAuGOqPKlzgP4o1w=";
 
-  __structuredAttrs = true;
-
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ];

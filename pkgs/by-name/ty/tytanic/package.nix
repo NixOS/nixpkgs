@@ -15,7 +15,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tytanic";
   version = "0.4.1";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "typst-community";

@@ -13,8 +13,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bark-wallet";
   version = "0.7.1";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitLab {
     owner = "ark-bitcoin";
     repo = "bark";

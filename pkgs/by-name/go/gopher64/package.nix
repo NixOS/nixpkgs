@@ -33,8 +33,6 @@ rustPlatform.buildRustPackage.override { inherit stdenv; } (finalAttrs: {
   pname = "gopher64";
   version = "1.1.20";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "gopher64";
     repo = "gopher64";

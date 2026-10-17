@@ -13,7 +13,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-Skd0r+gcoraNlijXJ5WXONkmlWb0TZq7/7vfQcKumOY=";
   };
-  __structuredAttrs = true;
   __darwinAllowLocalNetworking = true;
   cargoHash = "sha256-GO0WsEwfeISbIlbywdV0Y6ThqDQjRHL2uv0zfVlvi5g=";
   # `Result::unwrap()` on an `Err` value: Tls("platform verifier: unexpected error: No CA certificates were loaded from the system")

@@ -17,7 +17,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ocsp-server";
   version = "0.7.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "DorianCoding";

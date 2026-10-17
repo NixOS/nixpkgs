@@ -9,7 +9,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kache";
   version = "1.2.2";
-  __structuredAttrs = true;
 
   outputs = [ "out" ] ++ lib.optional stdenv.hostPlatform.isUnix "shims";
 

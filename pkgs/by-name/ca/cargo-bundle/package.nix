@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-bundle";
   version = "0.12.0";
 
-  __structuredAttrs = true;
   strictDeps = true;
 
   # git source doesn't ship a cargo.lock

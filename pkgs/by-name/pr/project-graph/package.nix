@@ -25,8 +25,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "project-graph";
   version = "3.0.8";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "graphif";
     repo = "project-graph";

@@ -9,7 +9,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "systemctl-tui";
   version = "0.8.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rgwood";

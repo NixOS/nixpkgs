@@ -89,8 +89,6 @@ let
       cp -r pkg $out
     '';
 
-    __structuredAttrs = true;
-
     meta = ironcalc.meta // {
       description = "Ironcalc wasm bindings";
     };

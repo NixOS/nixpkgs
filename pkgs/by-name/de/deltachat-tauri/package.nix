@@ -26,7 +26,6 @@ in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deltachat-tauri";
   version = "2.59.0-unstable-2026-08-15";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "deltachat";

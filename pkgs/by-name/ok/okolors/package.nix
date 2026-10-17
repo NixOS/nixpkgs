@@ -22,8 +22,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Generate a color palette from an image using k-means clustering in the Oklab color space";
     homepage = "https://github.com/IanManske/Okolors";

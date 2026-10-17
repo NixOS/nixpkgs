@@ -106,8 +106,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     LIBCLANG_PATH = lib.optionalString stdenv.hostPlatform.isDarwin "${lib.getLib llvmPackages.libclang}/lib";
   };
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Official companion desktop app for Music Assistant";
     changelog = "https://github.com/music-assistant/desktop-app/releases/tag/${finalAttrs.src.tag}";

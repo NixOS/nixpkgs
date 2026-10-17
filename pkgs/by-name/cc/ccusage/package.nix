@@ -48,8 +48,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-23l/BCCGcZ1i5mFBC6Q+FE7sQRHnPLbU4QoQe7TfoiQ=";
 
-  __structuredAttrs = true;
-
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [

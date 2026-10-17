@@ -28,8 +28,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "annot";
   version = "0.19.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "denolehov";
     repo = "annot";

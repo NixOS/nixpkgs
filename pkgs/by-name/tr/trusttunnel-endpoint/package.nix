@@ -11,7 +11,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "trusttunnel-endpoint";
   version = "1.1.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "TrustTunnel";

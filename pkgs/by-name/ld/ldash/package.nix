@@ -8,7 +8,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ldash";
   version = "1.3.1";
-  __structuredAttrs = true;
 
   src = fetchFromCodeberg {
     owner = "md-weber";

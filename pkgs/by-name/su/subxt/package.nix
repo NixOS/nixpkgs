@@ -28,8 +28,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Requires a running substrate node
   doCheck = false;
 
-  __structuredAttrs = true;
-
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   # subxt exposes its version through a subcommand, not a --version flag

@@ -9,7 +9,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pedantix";
   version = "1.2.2";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Swarsel";

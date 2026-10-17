@@ -15,8 +15,6 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  __structuredAttrs = true;
-
   pname = "pijul";
   version = "1.0.0-beta.24";
 

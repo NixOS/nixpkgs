@@ -12,7 +12,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tau-tower";
   version = "0.2.3";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tau-org";

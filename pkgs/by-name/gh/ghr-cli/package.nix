@@ -11,8 +11,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ghr-cli";
   version = "0.9.1";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "chenyukang";
     repo = "ghr";

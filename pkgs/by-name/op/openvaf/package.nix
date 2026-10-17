@@ -9,7 +9,6 @@
 rustPlatform.buildRustPackage.override { inherit (llvmPackages) stdenv; } (finalAttrs: {
   pname = "openvaf";
   version = "24.0.1";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "OpenVAF";

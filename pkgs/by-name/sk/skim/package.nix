@@ -13,7 +13,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "skim";
   version = "5.7.3";
-  __structuredAttrs = true;
 
   outputs = [
     "out"

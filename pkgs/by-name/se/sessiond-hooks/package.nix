@@ -4,7 +4,6 @@
   rustPlatform,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
-  __structuredAttrs = true;
   pname = "sessiond-hooks";
   version = "0.2.0";
 

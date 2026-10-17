@@ -27,8 +27,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "frame-media-converter";
   version = "0.33.1";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "66HEX";
     repo = "frame";

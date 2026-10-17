@@ -10,8 +10,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pigeons";
   version = "0.2.1";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "n0-computer";
     repo = "pigeons";

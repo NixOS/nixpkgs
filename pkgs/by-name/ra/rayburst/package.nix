@@ -72,8 +72,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libayatana-appindicator
   ];
 
-  __structuredAttrs = true;
-
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 

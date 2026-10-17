@@ -8,8 +8,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rust-rpxy";
   version = "0.14.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "junkurihara";
     repo = "rust-rpxy";

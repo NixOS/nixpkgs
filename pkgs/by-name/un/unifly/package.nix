@@ -12,7 +12,6 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  __structuredAttrs = true;
 
   pname = "unifly";
   version = "0.11.0";

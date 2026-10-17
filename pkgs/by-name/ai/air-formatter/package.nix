@@ -9,7 +9,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "air-formatter";
   version = "0.12.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "posit-dev";

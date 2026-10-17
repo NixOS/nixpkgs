@@ -11,8 +11,6 @@ rustPlatform.buildRustPackage rec {
   pname = "tmaze";
   version = "1.18.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "ur-fault";
     repo = "TMaze";

@@ -7,7 +7,6 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  __structuredAttrs = true;
 
   pname = "popcorn-cli";
   version = "1.3.32";

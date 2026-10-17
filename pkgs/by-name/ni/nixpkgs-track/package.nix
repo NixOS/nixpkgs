@@ -11,8 +11,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nixpkgs-track";
   version = "0.6.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "uncenter";
     repo = "nixpkgs-track";

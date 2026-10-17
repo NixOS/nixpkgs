@@ -20,8 +20,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-YuwIaPA2E1QtSVz4mwteDEaZEBwaUoYLdfArGsJqHn0=";
   };
 
-  __structuredAttrs = true;
-
   postPatch = ''
     substituteInPlace data/org.freedesktop.impl.portal.desktop.generic.service \
       --replace-fail '/usr/libexec/' '${placeholder "out"}/libexec/'

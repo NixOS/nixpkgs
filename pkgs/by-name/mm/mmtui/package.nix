@@ -9,8 +9,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mmtui";
   version = "0.2.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "SL-RU";
     repo = "mmtui";

@@ -11,7 +11,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jaq";
   version = "3.1.1";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "01mf02";

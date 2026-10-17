@@ -10,8 +10,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lk-jwt-service";
   version = "0.9.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "lk-jwt-service";

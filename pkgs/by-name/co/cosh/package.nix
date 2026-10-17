@@ -11,8 +11,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosh";
   version = "0.4.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "tomhrr";
     repo = "cosh";

@@ -23,8 +23,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bite";
   version = "0.43";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "WINSDK";
     repo = "bite";

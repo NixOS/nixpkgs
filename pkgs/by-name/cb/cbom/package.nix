@@ -10,8 +10,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cbom";
   version = "0.1.1";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "qelens";
     repo = "cbom";

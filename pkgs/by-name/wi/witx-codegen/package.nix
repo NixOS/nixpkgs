@@ -8,7 +8,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "witx-codegen";
   version = "0.11.4";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jedisct1";

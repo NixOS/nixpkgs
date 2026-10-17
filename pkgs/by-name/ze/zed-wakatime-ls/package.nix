@@ -23,8 +23,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  __structuredAttrs = true;
-
   meta = {
     description = "WakaTime language server for Zed";
     longDescription = ''

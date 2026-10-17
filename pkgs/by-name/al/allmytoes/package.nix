@@ -27,8 +27,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Provides thumbnails by using the freedesktop-specified thumbnail database (aka XDG standard)";
     homepage = "https://gitlab.com/allmytoes/allmytoes";

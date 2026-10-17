@@ -52,8 +52,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     extraArgs = [ "--version=stable" ];
   };
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Native Wayland desktop tools for wlroots";
     homepage = "https://github.com/sjourdois/wlr-utils";

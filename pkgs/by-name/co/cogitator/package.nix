@@ -11,7 +11,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cogitator";
   version = "0.7.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "LeechoShoop";

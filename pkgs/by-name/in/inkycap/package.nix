@@ -71,8 +71,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "inkycap";
   inherit version src;
 
-  __structuredAttrs = true;
-
   cargoRoot = "src-tauri";
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src cargoRoot;

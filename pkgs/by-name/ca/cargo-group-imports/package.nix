@@ -7,7 +7,6 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  __structuredAttrs = true;
 
   pname = "cargo-group-imports";
   version = "0.1.5";

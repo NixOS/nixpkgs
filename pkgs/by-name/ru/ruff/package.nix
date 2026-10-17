@@ -18,8 +18,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ruff";
   version = "0.17.1";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff";

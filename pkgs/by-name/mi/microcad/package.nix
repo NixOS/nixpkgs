@@ -10,7 +10,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "microcad";
   version = "0.5.1";
-  __structuredAttrs = true;
 
   src = fetchFromCodeberg {
     owner = "microcad";

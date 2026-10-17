@@ -26,7 +26,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-mC19GLLHrjqYXl052HoNFscz9zzQWVBBm0OxzXoUd8U=";
 
   separateDebugInfo = true;
-  __structuredAttrs = true;
 
   env.VERGEN_GIT_SHA = finalAttrs.src.tag;
 

@@ -8,8 +8,6 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
 
-  __structuredAttrs = true;
-
   pname = "diskonaut-ng";
   version = "0.13.2";
 

@@ -154,8 +154,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Local-first, executable runbook editor";
     homepage = "https://atuin.sh";

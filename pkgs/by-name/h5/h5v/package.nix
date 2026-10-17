@@ -12,7 +12,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "h5v";
   version = "0.15.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "DanielHauge";

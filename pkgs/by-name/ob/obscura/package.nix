@@ -18,7 +18,6 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "obscura";
-  __structuredAttrs = true;
   version = "0.2.2";
 
   src = fetchFromGitHub {

@@ -65,7 +65,6 @@ in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "liteparse";
   version = "2.15.1";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "run-llama";

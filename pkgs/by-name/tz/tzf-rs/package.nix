@@ -8,8 +8,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tzf-rs";
   version = "2.1.3";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "ringsaturn";
     repo = "tzf-rs";

@@ -8,7 +8,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prjoxide";
   version = "0.1-unstable-2026-07-19";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "gatecat";

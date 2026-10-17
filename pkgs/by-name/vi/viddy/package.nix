@@ -18,8 +18,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-P+TtxV2kuHeBHr8GQeJ0VWPkjimfcAtBUFt0z79ML6A=";
 
-  __structuredAttrs = true;
-
   env = {
     VERGEN_BUILD_DATE = "2026-06-14"; # managed via the update script
     VERGEN_GIT_DESCRIBE = "Nixpkgs";

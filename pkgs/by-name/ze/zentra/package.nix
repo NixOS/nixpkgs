@@ -15,7 +15,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zentra";
   version = "0.15.3";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "johannus22";

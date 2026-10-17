@@ -9,7 +9,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pumpkin";
   version = "0.2.0+26.3-26.51";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Pumpkin-MC";

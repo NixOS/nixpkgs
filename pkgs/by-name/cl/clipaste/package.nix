@@ -19,8 +19,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-N2QYxyJApXAeBnG1m3kNwm4d8ZOmjjhmOFF+x6E7as4=";
 
-  __structuredAttrs = true;
-
   checkFlags = [
     # Runs the generated bash script in a simulated remote environment
     # (PATH=/usr/bin:/bin:...).  In the Nix sandbox standard tools like `grep`

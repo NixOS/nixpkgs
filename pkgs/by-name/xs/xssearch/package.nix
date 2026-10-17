@@ -10,8 +10,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xssearch";
   version = "0.2.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "affolter-engineering";
     repo = "xssearch";

@@ -19,7 +19,6 @@ in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "surfpool-cli";
   version = "1.5.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "solana-foundation";

@@ -36,7 +36,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-bZVmC+q/CVLPttQC762ZC1Qkr4zHOMMvchqMBHObCyM=";
 
   separateDebugInfo = true;
-  __structuredAttrs = true;
 
   env.ORCA = "orca"; # get orca from $PATH
 

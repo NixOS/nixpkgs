@@ -13,8 +13,6 @@ rustPlatform.buildRustPackage {
   pname = "handlr";
   version = "0.6.4-unstable-2021-08-28";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "chmln";
     repo = "handlr";

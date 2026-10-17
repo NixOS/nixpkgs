@@ -19,7 +19,6 @@
   makeWrapper,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
-  __structuredAttrs = true;
 
   pname = "iloader";
   version = "2.3.3";

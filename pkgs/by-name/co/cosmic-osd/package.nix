@@ -28,7 +28,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-bA9XNfYGC5tqNGSrhQMks+Khjeaao76AYIThsY40Bs8=";
 
   separateDebugInfo = true;
-  __structuredAttrs = true;
 
   env.POLKIT_AGENT_HELPER_1 = "/run/wrappers/bin/polkit-agent-helper-1";
 

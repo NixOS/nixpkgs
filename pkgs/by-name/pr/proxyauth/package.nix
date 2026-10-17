@@ -37,8 +37,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libpq
   ];
 
-  __structuredAttrs = true;
-
   nativeCheckInputs = [
     cacert
   ];

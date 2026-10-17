@@ -9,8 +9,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gcan";
   version = "1.1.1";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "applicative-systems";
     repo = "gcan";

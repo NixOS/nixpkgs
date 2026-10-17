@@ -28,8 +28,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoTestFlags = [ "--max-fail=all" ];
 
-  __structuredAttrs = true;
-
   passthru = {
     internal = callPackage ./internal.nix { };
 

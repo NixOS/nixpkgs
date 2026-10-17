@@ -16,8 +16,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-absorb";
   version = "0.9.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "tummychow";
     repo = "git-absorb";

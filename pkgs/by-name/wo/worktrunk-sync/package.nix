@@ -11,7 +11,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "worktrunk-sync";
   version = "0.2.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pablospe";

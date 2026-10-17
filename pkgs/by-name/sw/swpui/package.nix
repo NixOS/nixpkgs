@@ -7,7 +7,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "swpui";
   version = "0.10.1";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "beeb";

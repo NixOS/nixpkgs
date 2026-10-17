@@ -25,7 +25,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ringboard" + lib.optionalString (displayServer == "wayland") "-wayland";
 
   version = "0.17.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "SUPERCILEX";

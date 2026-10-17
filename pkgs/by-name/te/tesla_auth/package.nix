@@ -22,8 +22,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tesla_auth";
   version = "0.15.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "adriankumpf";
     repo = "tesla_auth";

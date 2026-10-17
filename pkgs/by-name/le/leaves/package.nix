@@ -9,7 +9,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "leaves";
   version = "0.2.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "patonw";

@@ -11,7 +11,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vm-curator";
   version = "1.5.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mroboff";

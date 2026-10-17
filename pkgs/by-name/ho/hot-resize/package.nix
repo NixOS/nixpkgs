@@ -43,8 +43,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       }
   '';
 
-  __structuredAttrs = true;
-
   nativeInstallCheckInputs = [
     versionCheckHook
   ];

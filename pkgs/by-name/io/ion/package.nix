@@ -8,8 +8,6 @@ rustPlatform.buildRustPackage {
   pname = "ion";
   version = "1.0.5-unstable-2024-09-20";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitLab {
     domain = "gitlab.redox-os.org";
     owner = "redox-os";

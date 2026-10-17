@@ -17,8 +17,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-4YlfR2ft5D910IKSDx/3PxrwFLln2dqscdVg+OhnSYk=";
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Tool for calculating which UK Gilt will give the best return if held to maturity";
     homepage = "https://github.com/simonhollingshead/gilt-rs";

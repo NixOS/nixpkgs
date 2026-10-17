@@ -31,8 +31,6 @@ rustPlatform.buildRustPackage (
     pname = "pipeweaver";
     version = "0.1.9";
 
-    __structuredAttrs = true;
-
     src = fetchFromGitHub {
       owner = "pipeweaver";
       repo = "pipeweaver";

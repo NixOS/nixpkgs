@@ -8,7 +8,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prmt";
   version = "0.7.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     repo = "prmt";

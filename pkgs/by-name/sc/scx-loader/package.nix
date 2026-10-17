@@ -18,8 +18,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-NbTakrEdk3pundjk554QrUpKTXxQl6I8Y/IgmxjGKuw=";
   };
 
-  __structuredAttrs = true;
-
   env = {
     VENDOR_PREFIX = "";
     VENDOR_DATADIR = "/share";

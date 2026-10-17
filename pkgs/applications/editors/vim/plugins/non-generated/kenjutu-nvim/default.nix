@@ -26,8 +26,6 @@ let
     inherit version src;
     cargoHash = "sha256-eND52/L3kPuuqND7fF7eiOs0nWikFWcGDT2eG2m6+Ho=";
 
-    __structuredAttrs = true;
-
     # As this is a monorepo, building everything results in unneeded/unwanted dependencies.
     cargoBuildFlags = [
       "-p"

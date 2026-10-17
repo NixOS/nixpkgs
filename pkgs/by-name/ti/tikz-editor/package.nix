@@ -16,7 +16,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tikz-editor";
   version = "0.6.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     name = "${finalAttrs.pname}-${finalAttrs.version}-source";

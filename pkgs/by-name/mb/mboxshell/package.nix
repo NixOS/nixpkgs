@@ -12,8 +12,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mboxshell";
   version = "1.0.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "dcarrero";
     repo = "mboxshell";

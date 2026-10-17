@@ -18,8 +18,6 @@ rustPlatform.buildRustPackage rec {
   pname = "gitpulsar";
   version = "1.4.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitLab {
     owner = "ilshat-apps";
     repo = "gitpulsar";

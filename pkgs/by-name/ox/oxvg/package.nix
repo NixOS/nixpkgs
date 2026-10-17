@@ -9,7 +9,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oxvg";
   version = "0.0.7";
-  __structuredAttrs = true;
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;

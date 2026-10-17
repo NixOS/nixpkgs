@@ -10,8 +10,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "asphalt";
   version = "2.0.2";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "jackTabsCode";
     repo = "asphalt";

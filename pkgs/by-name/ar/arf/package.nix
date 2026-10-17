@@ -16,8 +16,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "arf";
   version = "0.6.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "eitsupi";
     repo = "arf";

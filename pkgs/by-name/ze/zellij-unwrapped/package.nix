@@ -17,7 +17,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zellij-unwrapped";
   version = "0.45.1";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "zellij-org";

@@ -15,7 +15,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fluere";
   version = "0.8.1";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "SkuldNorniern";

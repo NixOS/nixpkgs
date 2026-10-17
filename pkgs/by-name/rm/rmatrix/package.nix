@@ -8,8 +8,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rmatrix";
   version = "0.4.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "Tripstack-Corp";
     repo = "rmatrix";

@@ -17,8 +17,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-dIRtqn6vismwgQUwfK5KzApBDBlAmOt+mfdBY8sr47g=";
   };
 
-  __structuredAttrs = true;
-
   cargoPatches = [
     # https://github.com/yetidevworks/yscan/pull/2
     (fetchpatch2 {

@@ -10,8 +10,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ghdump";
   version = "0.2.2";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "drupol";
     repo = "ghdump";

@@ -6,7 +6,6 @@
 rustPlatform.buildRustPackage {
   pname = "json2x";
   version = "0.1.0";
-  __structuredAttrs = true;
 
   src = lib.sourceByRegex ./. [
     "^src(/.*)?$"

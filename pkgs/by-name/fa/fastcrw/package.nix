@@ -11,7 +11,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fastcrw";
   version = "0.37.2";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "fastcrw";

@@ -28,8 +28,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     sqlite
   ];
 
-  __structuredAttrs = true;
-
   passthru.updateScript = nix-update-script { };
 
   meta = {

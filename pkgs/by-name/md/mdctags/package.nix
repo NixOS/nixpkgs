@@ -8,8 +8,6 @@ rustPlatform.buildRustPackage {
   pname = "mdctags";
   version = "0.1.0-unstable-2020-07-11"; # v0.1.0 does not build with our rust version
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "wsdjeg";
     repo = "mdctags.rs";

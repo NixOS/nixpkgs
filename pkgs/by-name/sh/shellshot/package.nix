@@ -10,8 +10,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "shellshot";
   version = "0.6.2";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "lhenry-dev";
     repo = "shellshot";

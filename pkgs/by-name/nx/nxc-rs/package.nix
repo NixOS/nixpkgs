@@ -15,7 +15,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nxc-rs";
   version = "0.4.8";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "thrive-spectrexq";

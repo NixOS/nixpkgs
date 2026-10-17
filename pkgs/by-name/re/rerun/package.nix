@@ -43,8 +43,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rerun";
   version = "0.39.0";
 
-  __structuredAttrs = true;
-
   outputs = [
     "out"
     "dev"

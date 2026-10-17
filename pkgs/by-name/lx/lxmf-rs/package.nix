@@ -14,7 +14,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lxmf-rs";
   version = "0.9.8";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "FreeTAKTeam";

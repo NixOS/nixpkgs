@@ -102,8 +102,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
         '';
       });
 
-  __structuredAttrs = true;
-
   # Match upstream's release build for the codex binary, plus its
   # codex-code-mode-host runtime companion for out-of-process V8 execution.
   cargoBuildFlags = [

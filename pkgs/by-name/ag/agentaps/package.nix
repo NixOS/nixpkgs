@@ -22,8 +22,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "agentaps";
   version = "0.5.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "domenkozar";
     repo = "agentaps";

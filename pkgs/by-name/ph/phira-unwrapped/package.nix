@@ -16,8 +16,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "phira-unwrapped";
   version = "0.8.2";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "TeamFlos";
     repo = "phira";

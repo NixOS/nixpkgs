@@ -12,8 +12,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nvme-rs";
   version = "0.2.3";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "liberodark";
     repo = "nvme-rs";

@@ -9,7 +9,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "amdtop";
   version = "0.2.6";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "lhl";

@@ -13,8 +13,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "findomain";
   version = "10.0.1";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "findomain";
     repo = "findomain";

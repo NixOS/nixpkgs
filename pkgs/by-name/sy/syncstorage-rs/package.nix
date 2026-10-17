@@ -35,8 +35,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "syncstorage-rs";
   version = "0.23.3";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "mozilla-services";
     repo = "syncstorage-rs";

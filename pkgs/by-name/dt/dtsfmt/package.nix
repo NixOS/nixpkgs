@@ -8,8 +8,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dtsfmt";
   version = "0.8.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "mskelton";
     repo = "dtsfmt";

@@ -8,8 +8,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "enroll";
   version = "1.2.9";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "cosmic-utils";
     repo = "enroll";

@@ -23,8 +23,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [ openssl ];
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Tool to render real world maps in your terminal";
     homepage = "https://github.com/psmux/TerminalMap";

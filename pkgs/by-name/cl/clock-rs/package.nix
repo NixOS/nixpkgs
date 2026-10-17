@@ -8,8 +8,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clock-rs";
   version = "0.2.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "Oughie";
     repo = "clock-rs";

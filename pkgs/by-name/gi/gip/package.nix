@@ -23,8 +23,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [ openssl ];
 
-  __structuredAttrs = true;
-
   # Tests that require network access
   doCheck = false;
 

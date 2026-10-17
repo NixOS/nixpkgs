@@ -9,7 +9,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rura";
   version = "1.13.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tlipinski";

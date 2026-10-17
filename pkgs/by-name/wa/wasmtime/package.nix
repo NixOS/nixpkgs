@@ -60,8 +60,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "lib"
   ];
 
-  __structuredAttrs = true;
-
   nativeBuildInputs = [
     cmake
     installShellFiles

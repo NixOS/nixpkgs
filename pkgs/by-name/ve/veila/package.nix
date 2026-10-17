@@ -13,7 +13,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "veila";
   version = "0.4.4";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "naurissteins";

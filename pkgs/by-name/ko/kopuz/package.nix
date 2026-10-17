@@ -42,7 +42,6 @@ let
   };
 in
 rustPlatform.buildRustPackage (finalAttrs: {
-  __structuredAttrs = true;
 
   pname = "kopuz";
   version = "0.14.0";

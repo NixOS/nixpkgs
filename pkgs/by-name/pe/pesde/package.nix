@@ -10,7 +10,6 @@
 rustPlatform.buildRustPackage {
   pname = "pesde";
   version = "0.7.4";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pesde-pkg";

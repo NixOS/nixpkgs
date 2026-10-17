@@ -9,7 +9,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oas2html";
   version = "0.1.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "affolter-engineering";

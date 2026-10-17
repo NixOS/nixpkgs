@@ -10,7 +10,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ark";
   version = "0.1.252";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "posit-dev";

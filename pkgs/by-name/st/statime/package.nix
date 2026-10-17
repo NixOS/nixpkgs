@@ -8,7 +8,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "statime";
   version = "0.4.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pendulum-project";

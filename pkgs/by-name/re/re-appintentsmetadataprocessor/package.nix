@@ -6,7 +6,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "re-appintentsmetadataprocessor";
   version = "1.0.0";
-  __structuredAttrs = true;
 
   src = fetchFromCodeberg {
     owner = "viraptor";

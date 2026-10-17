@@ -9,8 +9,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "woxi";
   version = "0.3.0";
 
-  __structuredAttrs = true;
-
   src = fetchCrate {
     inherit (finalAttrs) pname version;
     hash = "sha256-gw2pudFKAFJ6MXzpqg7p5pHPhmQMTPH6hjlEPK6wr60=";

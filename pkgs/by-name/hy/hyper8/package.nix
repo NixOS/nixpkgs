@@ -25,8 +25,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-AQAWGmzixDFfL7wqJJXCvNSYojVtYHRP0zqdj0C8JRE=";
 
-  __structuredAttrs = true;
-
   env = {
     OPENSSL_DIR = lib.getDev openssl;
     OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";

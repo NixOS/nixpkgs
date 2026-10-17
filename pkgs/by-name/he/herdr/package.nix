@@ -15,8 +15,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "herdr";
   version = "0.9.5";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "herdrdev";
     repo = "herdr";

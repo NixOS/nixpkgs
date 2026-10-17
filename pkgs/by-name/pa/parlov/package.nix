@@ -11,8 +11,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "parlov";
   version = "0.8.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "gnufood";
     repo = "parlov";

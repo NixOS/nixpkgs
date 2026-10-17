@@ -32,8 +32,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Utility for decoding and printing defmt encoded logs to stdout";
     mainProgram = "defmt-print";

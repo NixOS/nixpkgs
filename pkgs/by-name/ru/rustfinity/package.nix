@@ -8,7 +8,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustfinity";
   version = "0.4.9";
-  __structuredAttrs = true;
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;

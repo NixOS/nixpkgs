@@ -18,7 +18,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "objdiff";
   version = "3.8.2";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "encounter";

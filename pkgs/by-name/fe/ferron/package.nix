@@ -11,7 +11,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ferron";
   version = "2.8.1";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ferronweb";

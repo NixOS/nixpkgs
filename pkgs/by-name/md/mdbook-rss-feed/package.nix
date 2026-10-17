@@ -15,7 +15,6 @@ in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdbook-rss-feed";
   version = "2.0.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "saylesss88";

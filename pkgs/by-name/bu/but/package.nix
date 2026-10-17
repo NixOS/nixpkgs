@@ -10,7 +10,6 @@
   rustPlatform,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
-  __structuredAttrs = true;
   pname = "but";
   version = "0.22.3";
   src = fetchFromGitHub {

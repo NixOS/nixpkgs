@@ -9,7 +9,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustlens";
   version = "0.2.1";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "yashksaini-coder";

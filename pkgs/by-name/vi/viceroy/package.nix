@@ -8,8 +8,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "viceroy";
   version = "0.21.1";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "fastly";
     repo = "viceroy";

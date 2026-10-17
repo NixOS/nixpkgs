@@ -7,7 +7,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-clean-all";
   version = "0.6.5";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "dnlmlr";

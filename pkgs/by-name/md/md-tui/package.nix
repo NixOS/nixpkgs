@@ -10,8 +10,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "md-tui";
   version = "0.11.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "henriklovhaug";
     repo = "md-tui";

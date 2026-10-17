@@ -9,7 +9,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lintspec";
   version = "0.19.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "beeb";

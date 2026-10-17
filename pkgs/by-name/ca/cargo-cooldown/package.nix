@@ -8,7 +8,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-cooldown";
   version = "0.3.5";
-  __structuredAttrs = true;
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;

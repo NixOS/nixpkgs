@@ -13,8 +13,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zapp";
   version = "1.0.2";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "zsa";
     repo = "zapp";

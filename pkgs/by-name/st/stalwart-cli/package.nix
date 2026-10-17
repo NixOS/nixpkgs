@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-8HiFxJT5mGZp/9al1y8Ycm5im+E0PMDhw2+XeJAabTY=";
   };
   cargoHash = "sha256-Lj7wBLMqN4xP2GXicFGgIxkPrGi7F8i9KBSfFSn+KNk=";
-  __structuredAttrs = true;
   # `Result::unwrap()` on an `Err` value: Network(reqwest::Error { kind: Builder, source: General("No CA certificates were loaded from the system") })
   nativeCheckInputs = [ cacert ];
   doInstallCheck = true;

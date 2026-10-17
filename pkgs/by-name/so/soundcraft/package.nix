@@ -24,7 +24,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "soundcraft";
   version = "0.6.1";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "storytold";

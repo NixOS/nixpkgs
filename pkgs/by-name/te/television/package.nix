@@ -22,8 +22,6 @@ let
 
     version = "0.15.9";
 
-    __structuredAttrs = true;
-
     src = fetchFromGitHub {
       owner = "alexpasmantier";
       repo = "television";

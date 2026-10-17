@@ -21,8 +21,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-6wwzxJNcArC4i1vH3xJlT9wVUw7vQ+q1u11h3tRu/X4=";
   };
 
-  __structuredAttrs = true;
-
   cargoBuildFlags = [
     "-p"
     "nh"

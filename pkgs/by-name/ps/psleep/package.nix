@@ -9,7 +9,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "psleep";
   version = "0.3.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Yesh-02";

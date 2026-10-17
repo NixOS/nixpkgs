@@ -11,8 +11,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdbook-linkcheck2";
   version = "0.13.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "marxin";
     repo = "mdbook-linkcheck2";

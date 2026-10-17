@@ -6,7 +6,6 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  __structuredAttrs = true;
 
   pname = "rawst";
   version = "0.8.1";

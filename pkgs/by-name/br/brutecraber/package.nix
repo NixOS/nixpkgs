@@ -11,7 +11,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "brutecraber";
   version = "0.9.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Erikgavs";

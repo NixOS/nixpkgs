@@ -11,7 +11,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zond";
   version = "0.19.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "zond-rs";

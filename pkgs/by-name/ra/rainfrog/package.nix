@@ -12,8 +12,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rainfrog";
   version = "0.4.6";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "achristmascarl";
     repo = "rainfrog";

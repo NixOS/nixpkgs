@@ -11,7 +11,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-ext-applet-workspace-icons";
   version = "1.4.0";
 
-  __structuredAttrs = true;
   src = fetchFromGitHub {
     owner = "crocodile";
     repo = "cosmic-ext-applet-workspace-icons";

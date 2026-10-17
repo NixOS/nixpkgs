@@ -18,8 +18,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kingfisher";
   version = "2.8.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "kingfisher";

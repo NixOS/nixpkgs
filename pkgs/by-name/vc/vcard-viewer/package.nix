@@ -10,8 +10,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vcard-viewer";
   version = "0.1.2";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "affolter-engineering";
     repo = "vcard-viewer";

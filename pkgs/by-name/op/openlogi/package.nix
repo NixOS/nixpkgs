@@ -36,8 +36,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "openlogi";
   version = "0.6.25";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "AprilNEA";
     repo = "OpenLogi";

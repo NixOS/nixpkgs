@@ -19,7 +19,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "helixnotes";
   version = "1.3.6";
-  __structuredAttrs = true;
 
   src = fetchFromGitLab {
     owner = "ArkHost";

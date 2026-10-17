@@ -14,8 +14,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nixfmt-rs";
   version = "0.5.3";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "nixfmt-rs";

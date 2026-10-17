@@ -13,8 +13,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-graph";
   version = "0.8.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "git-bahn";
     repo = "git-graph";

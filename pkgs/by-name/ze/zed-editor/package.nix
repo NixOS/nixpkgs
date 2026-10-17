@@ -137,8 +137,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-RME1H5pDPLUV/qzoNEysolYJho3+jVzonZkjjGmPrfQ=";
 
-  __structuredAttrs = true;
-
   nativeBuildInputs = [
     cmake
     pkg-config

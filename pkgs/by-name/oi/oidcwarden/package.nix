@@ -14,7 +14,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oidcwarden";
   version = "2026.4.2-1";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Timshel";

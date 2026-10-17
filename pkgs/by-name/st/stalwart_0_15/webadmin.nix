@@ -49,7 +49,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     name = "${finalAttrs.pname}-npm-deps";
     hash = "sha256-na1HEueX8w7kuDp8LEtJ0nD1Yv39cyk6sEMpS1zix2s=";
   };
-  __structuredAttrs = true;
   cargoHash = "sha256-qYIg1BthkpS77I6duYGGX168Y/IO8Mx4SWMQbE0BwDA=";
 
   postPatch = ''

@@ -108,8 +108,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Tiny game backup and homebrew app manager for the Wii";
     homepage = "https://github.com/mq1/TinyWiiBackupManager";

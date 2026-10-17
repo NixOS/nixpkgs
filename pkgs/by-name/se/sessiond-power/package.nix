@@ -4,7 +4,6 @@
   rustPlatform,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
-  __structuredAttrs = true;
   pname = "sessiond-power";
   version = "0.1.0";
 

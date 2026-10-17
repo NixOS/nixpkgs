@@ -5,7 +5,6 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  __structuredAttrs = true;
 
   pname = "pgtui";
   version = "0.14.0";

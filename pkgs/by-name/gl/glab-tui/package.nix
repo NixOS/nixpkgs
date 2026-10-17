@@ -12,7 +12,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "glab-tui";
   version = "0.9.1";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rcieri";

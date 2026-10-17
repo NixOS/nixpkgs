@@ -8,7 +8,6 @@
   rust-jemalloc-sys,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
-  __structuredAttrs = true;
 
   pname = "porxie";
   version = "0.3.5";

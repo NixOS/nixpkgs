@@ -6,7 +6,6 @@
   versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
-  __structuredAttrs = true;
 
   pname = "putzen";
   version = "3.3.3";

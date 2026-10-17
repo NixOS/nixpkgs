@@ -29,7 +29,6 @@ let
 
 in
 rustPlatform.buildRustPackage (finalAttrs: {
-  __structuredAttrs = true;
 
   inherit pname version src;
 

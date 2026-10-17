@@ -14,7 +14,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "libsecretspec";
   version = "0.21.1";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "cachix";

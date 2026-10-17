@@ -9,8 +9,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jolt-tui";
   version = "1.2.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "jordond";
     repo = "jolt";

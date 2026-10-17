@@ -35,8 +35,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stremio-service";
   version = "0.1.21";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "Stremio";
     repo = "stremio-service";

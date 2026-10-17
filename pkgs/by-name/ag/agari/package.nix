@@ -10,7 +10,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "agari";
   version = "0.27.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "agari-industries";

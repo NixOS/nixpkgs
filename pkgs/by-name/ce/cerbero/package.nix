@@ -10,8 +10,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cerbero";
   version = "0.0.22";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitLab {
     owner = "Zer1t0";
     repo = "cerbero";

@@ -14,8 +14,6 @@ rustPlatform.buildRustPackage {
   pname = "git-chain";
   version = "0-unstable-2025-03-25";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "dashed";
     repo = "git-chain";

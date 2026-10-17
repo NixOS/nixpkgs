@@ -9,7 +9,6 @@
   installShellFiles,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
-  __structuredAttrs = true;
   pname = "sessiond";
   version = "0.3.0";
 

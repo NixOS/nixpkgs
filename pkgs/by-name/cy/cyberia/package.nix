@@ -20,8 +20,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cyberia";
   version = "0.2.8";
 
-  __structuredAttrs = true;
-
   src = fetchFromForgejo {
     domain = "git.gay";
     owner = "zutyosh";

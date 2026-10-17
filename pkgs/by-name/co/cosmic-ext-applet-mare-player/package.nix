@@ -27,7 +27,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-R87TNV0Fn6VIsIdotjnpS9KYPeD5QuhHVaBS2c1dSt8=";
 
   separateDebugInfo = true;
-  __structuredAttrs = true;
 
   # The install requires the mare-video-window workspace member.
   cargoBuildFlags = [ "--workspace" ];

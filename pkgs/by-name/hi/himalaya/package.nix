@@ -18,7 +18,6 @@ let
 
 in
 rustPlatform.buildRustPackage (finalAttrs: {
-  __structuredAttrs = true;
 
   inherit buildFeatures buildNoDefaultFeatures;
 

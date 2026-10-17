@@ -54,8 +54,6 @@ let
 
     cargoHash = "sha256-46IwZJI9AOs+IQFbfz89A2yIi5db7rVMVNsO9W+tn+c=";
 
-    __structuredAttrs = true;
-
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [
       bzip2
@@ -89,8 +87,6 @@ let
       # nix specific issue, can't reproduce without nix, not upstreaming
       ./0001-FIX-test-message.patch
     ];
-
-    __structuredAttrs = true;
 
     nativeBuildInputs = [
       pkg-config

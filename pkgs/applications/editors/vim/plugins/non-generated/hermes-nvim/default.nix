@@ -59,7 +59,6 @@ in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hermes-nvim";
   inherit version src;
-  __structuredAttrs = true;
 
   cargoHash = "sha256-X1YI0iT3/5hncU0M5qJY+12nO6Et4B/xqwvjaq8AV1Q=";
 

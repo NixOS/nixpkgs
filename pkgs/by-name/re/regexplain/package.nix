@@ -7,8 +7,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "regexplain";
   version = "1.0.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "kapilpokhrel";
     repo = "regexplain";

@@ -39,7 +39,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildNoDefaultFeatures = !useSystemd;
 
   separateDebugInfo = true;
-  __structuredAttrs = true;
 
   nativeBuildInputs = [
     just

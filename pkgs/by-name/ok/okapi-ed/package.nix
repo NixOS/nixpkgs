@@ -8,7 +8,6 @@
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
-  __structuredAttrs = true;
 
   pname = "okapi-ed";
   version = "0.5.0";

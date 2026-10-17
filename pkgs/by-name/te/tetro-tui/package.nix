@@ -10,7 +10,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tetro-tui";
   version = "3.6.2";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Strophox";

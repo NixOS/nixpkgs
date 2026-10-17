@@ -12,8 +12,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kepler";
   version = "1.0.1";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "Exein-io";
     repo = "kepler";

@@ -15,8 +15,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-xet";
   version = "0.2.1";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "xet-core";

@@ -11,8 +11,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lazyrsync";
   version = "0.3.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "westpoint-io";
     repo = "lazyrsync";

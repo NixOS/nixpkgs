@@ -12,8 +12,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hyprland-preview-share-picker";
   version = "0.2.1";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "WhySoBad";
     repo = "hyprland-preview-share-picker";

@@ -16,7 +16,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mold-unwrapped";
   version = "3.0.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rui314";

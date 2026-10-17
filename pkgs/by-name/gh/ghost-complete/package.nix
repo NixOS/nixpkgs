@@ -17,8 +17,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-AOhH98qGHISf8AZw3MSMnS5ADL6wQJ5jlo4PXsw7CAo=";
   };
 
-  __structuredAttrs = true;
-
   # Upstream hardcodes `-fuse-ld=/usr/bin/ld` for darwin targets, which the
   # Nix clang wrapper rejects ("invalid linker name"). Drop the flag and let
   # the wrapper pick the right linker.

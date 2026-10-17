@@ -13,7 +13,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "smeagol";
   version = "0.5.1";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "AustinWise";

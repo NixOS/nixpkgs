@@ -14,7 +14,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rs-reticulum";
   version = "1.2.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ratspeak";

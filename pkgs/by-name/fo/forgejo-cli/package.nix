@@ -16,8 +16,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "forgejo-cli";
   version = "0.6.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromCodeberg {
     owner = "forgejo-contrib";
     repo = "forgejo-cli";

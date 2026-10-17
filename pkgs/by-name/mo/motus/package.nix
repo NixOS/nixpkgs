@@ -10,7 +10,6 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  __structuredAttrs = true;
 
   pname = "motus";
   version = "0.5.0";

@@ -10,8 +10,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "just-lsp";
   version = "0.10.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "terror";
     repo = "just-lsp";

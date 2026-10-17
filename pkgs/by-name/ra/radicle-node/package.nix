@@ -39,8 +39,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
   };
 
-  __structuredAttrs = true;
-
   env.RADICLE_VERSION = finalAttrs.version;
 
   nativeBuildInputs = [

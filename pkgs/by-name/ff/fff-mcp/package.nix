@@ -10,7 +10,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fff-mcp";
   version = "0.10.6";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "dmtrKovalenko";

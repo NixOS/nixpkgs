@@ -20,7 +20,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tau-radio";
   version = "0.2.3";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tau-org";

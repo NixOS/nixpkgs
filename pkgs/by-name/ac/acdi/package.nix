@@ -10,8 +10,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "acdi";
   version = "0.5.2";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "vral-parmar";
     repo = "acdi";

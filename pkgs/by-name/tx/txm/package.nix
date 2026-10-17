@@ -9,7 +9,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "txm";
   version = "0.1.6";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "thatmagicalcat";

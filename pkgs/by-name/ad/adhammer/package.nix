@@ -12,8 +12,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "adhammer";
   version = "1.5.2";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "icedracon";
     repo = "adhammer";

@@ -39,8 +39,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
   version = "2.9.7";
 
-  __structuredAttrs = true;
-
   outputs = [
     "out"
     "denort"

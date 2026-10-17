@@ -9,8 +9,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pqrs";
   version = "0.3.2";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "manojkarthick";
     repo = "pqrs";

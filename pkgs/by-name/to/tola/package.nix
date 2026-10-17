@@ -8,7 +8,6 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  __structuredAttrs = true;
   pname = "tola";
   version = "0.8.0";
 

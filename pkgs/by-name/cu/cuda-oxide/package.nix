@@ -11,7 +11,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cuda-oxide";
   version = "0.2.1";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "NVlabs";

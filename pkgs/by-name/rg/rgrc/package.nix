@@ -12,8 +12,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rgrc";
   version = "0.6.35";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "lazywalker";
     repo = "rgrc";

@@ -48,8 +48,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Build and publish Rust crates Python packages";
     longDescription = ''

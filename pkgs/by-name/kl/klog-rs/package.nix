@@ -9,8 +9,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "klog-rs";
   version = "0.6.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "tobifroe";
     repo = "klog";

@@ -12,8 +12,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "passless";
   version = "0.20.2";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "pando85";
     repo = "passless";

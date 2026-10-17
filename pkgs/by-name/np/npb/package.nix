@@ -26,8 +26,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "npb";
   version = "1.2.1";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "samestep";
     repo = "npb";

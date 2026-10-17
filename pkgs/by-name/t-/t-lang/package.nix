@@ -8,7 +8,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "t-lang";
   version = "0.3.1";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "alecthomas";

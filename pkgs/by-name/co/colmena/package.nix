@@ -12,8 +12,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "colmena";
   version = "0.5.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "colmena";

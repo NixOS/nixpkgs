@@ -25,8 +25,6 @@ rustPlatform.buildRustPackage {
     updateScript = nix-update-script { };
   };
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Symlink or copy files according to a JSON manifest";
     mainProgram = "putter";

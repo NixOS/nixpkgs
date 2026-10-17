@@ -10,7 +10,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sampo";
   version = "0.22.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "bruits";

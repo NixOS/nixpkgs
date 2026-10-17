@@ -8,8 +8,6 @@ rustPlatform.buildRustPackage {
   pname = "i3-cycle-focus";
   version = "0-unstable-2021-09-27";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "TheDoctor314";
     repo = "i3-cycle-focus";

@@ -15,7 +15,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ciphey";
   version = "0.12.1";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "bee-san";

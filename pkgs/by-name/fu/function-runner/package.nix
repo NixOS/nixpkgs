@@ -11,8 +11,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "function-runner";
   version = "9.2.2";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "Shopify";
     repo = "function-runner";

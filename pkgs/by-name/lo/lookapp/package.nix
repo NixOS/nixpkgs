@@ -29,8 +29,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lookapp";
   version = "0.7.1";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "kunkka19xx";
     repo = "look";

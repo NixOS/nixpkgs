@@ -12,7 +12,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-igitt";
   version = "0.2.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "git-bahn";

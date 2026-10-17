@@ -8,8 +8,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kotofetch";
   version = "0.2.23";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "hxpe-dev";
     repo = "kotofetch";

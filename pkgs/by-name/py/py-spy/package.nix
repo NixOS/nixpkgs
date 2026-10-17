@@ -25,7 +25,6 @@ in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "py-spy";
   version = "0.4.2";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "benfred";

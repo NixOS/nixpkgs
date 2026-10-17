@@ -11,8 +11,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hacksguard";
   version = "0.3";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "Rhacknarok";
     repo = "hacksguard";

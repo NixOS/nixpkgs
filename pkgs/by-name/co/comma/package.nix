@@ -15,8 +15,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "comma";
   version = "2.4.2";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "comma";

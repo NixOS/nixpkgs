@@ -11,8 +11,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "keylights";
   version = "0.1.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromCodeberg {
     owner = "wjohnsto";
     repo = "keylights";

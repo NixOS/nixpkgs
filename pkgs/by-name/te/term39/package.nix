@@ -10,7 +10,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "term39";
   version = "1.6.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "alejandroqh";

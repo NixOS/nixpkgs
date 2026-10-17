@@ -75,7 +75,6 @@ in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mistral-rs";
   version = "0.9.4";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "EricLBuehler";

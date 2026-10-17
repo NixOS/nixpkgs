@@ -11,7 +11,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wallet-engine";
   version = "0.0.7-unstable-2026-10-02";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "i582";
@@ -34,7 +33,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     bindgen-cpp = buildPackages.rustPlatform.buildRustPackage {
       pname = "wallet-engine-bindgen-cpp";
       inherit (finalAttrs) version src patches;
-      __structuredAttrs = true;
       cargoRoot = "bindgen/cpp";
       buildAndTestSubdir = "bindgen/cpp";
       cargoHash = "sha256-n3VKg3OMU9a4fbaxISWKEVXRe9vRe63/GeRdpmDEZTM=";

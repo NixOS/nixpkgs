@@ -37,8 +37,6 @@ rustPlatform.buildRustPackage rec {
   pname = "zapfast";
   version = "0.19.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "crmne";
     repo = "zapfast";

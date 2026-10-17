@@ -11,7 +11,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sniffcrack";
   version = "0-unstable-2026-08-19";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "THE-M0P";

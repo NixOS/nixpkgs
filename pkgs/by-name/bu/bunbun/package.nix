@@ -9,7 +9,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bunbun";
   version = "1.6.1";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "devraza";

@@ -19,8 +19,6 @@ rustPlatform.buildRustPackage (finalAttrs: rec {
 
   passthru.updateScript = nix-update-script { };
 
-  __structuredAttrs = true;
-
   meta = {
     description = "GNOME keyring provider for rosec";
     homepage = "https://github.com/jmylchreest/rosec";

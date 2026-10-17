@@ -11,7 +11,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ghosthound";
   version = "0.1.2";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "JVBotelho";

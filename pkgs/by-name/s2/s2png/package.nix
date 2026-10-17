@@ -8,8 +8,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "s2png";
   version = "1.0.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "dbohdan";
     repo = "s2png";

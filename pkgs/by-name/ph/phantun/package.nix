@@ -8,7 +8,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "phantun";
   version = "0.8.1";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "dndx";

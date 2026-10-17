@@ -11,7 +11,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "netwatch-tui";
   version = "0.30.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "matthart1983";

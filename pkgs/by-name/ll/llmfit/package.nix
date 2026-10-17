@@ -10,8 +10,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "llmfit";
   version = "1.1.16";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "AlexsJones";
     repo = "llmfit";

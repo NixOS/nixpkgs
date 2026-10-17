@@ -9,8 +9,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "flake-du";
   version = "0.2.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "kmein";
     repo = "flake-du";

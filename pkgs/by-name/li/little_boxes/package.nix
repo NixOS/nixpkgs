@@ -10,8 +10,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "little_boxes";
   version = "1.12.1";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "giodamelio";
     repo = "little_boxes";

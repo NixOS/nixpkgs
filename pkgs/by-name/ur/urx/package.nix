@@ -26,8 +26,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  __structuredAttrs = true;
-
   checkFlags = [
     # Tests require network access
     "--skip=providers"

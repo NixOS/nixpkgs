@@ -10,7 +10,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tuxedo";
   version = "2026.8.1";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "webstonehq";

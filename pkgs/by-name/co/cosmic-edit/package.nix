@@ -34,7 +34,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-IUqI1LuMcZAUZ5FjgwrIqBN28LMKsnBAeoBjli6XqV0=";
 
   separateDebugInfo = true;
-  __structuredAttrs = true;
 
   env = {
     RUSTONIG_SYSTEM_LIBONIG = true;

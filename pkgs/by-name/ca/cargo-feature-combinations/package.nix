@@ -6,7 +6,6 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  __structuredAttrs = true;
 
   pname = "cargo-feature-combinations";
   version = "0.7.0";

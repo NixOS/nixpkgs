@@ -31,7 +31,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeCheckInputs = [ git ];
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  __structuredAttrs = true;
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script {

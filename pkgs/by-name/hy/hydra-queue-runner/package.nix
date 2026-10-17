@@ -11,7 +11,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hydra-queue-runner";
   inherit (hydra) version src;
-  __structuredAttrs = true;
 
   cargoHash = "sha256-Hkf6DS/MUrxqD/xp9mIv0CjbRq2FL3QNGIkZMw8BehY=";
 

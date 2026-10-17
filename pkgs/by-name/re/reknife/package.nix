@@ -9,7 +9,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "reknife";
   version = "1.8.3";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "bl4ckr0ss3";

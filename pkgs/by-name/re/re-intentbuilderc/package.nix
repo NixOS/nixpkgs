@@ -6,7 +6,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "re-intentbuilderc";
   version = "1.0.2";
-  __structuredAttrs = true;
 
   src = fetchFromCodeberg {
     owner = "viraptor";

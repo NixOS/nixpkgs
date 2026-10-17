@@ -32,8 +32,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "spectral-mic";
   version = "0.9.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromCodeberg {
     owner = "mmc";
     repo = "spectral";

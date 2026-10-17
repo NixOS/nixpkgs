@@ -11,7 +11,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tgrep";
   version = "1.1.0";
-  __structuredAttrs = true;
   __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {

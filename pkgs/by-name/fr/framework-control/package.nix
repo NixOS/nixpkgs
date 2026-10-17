@@ -15,8 +15,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "framework-control";
   version = "0.5.4";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "ozturkkl";
     repo = "framework-control";

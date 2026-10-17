@@ -10,8 +10,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kubectl-view-allocations";
   version = "3.0.2";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "davidB";
     repo = "kubectl-view-allocations";

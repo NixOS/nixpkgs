@@ -7,7 +7,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "freqle";
   version = "0.1.0";
-  __structuredAttrs = true;
   src = fetchCrate {
     inherit (finalAttrs) pname version;
     hash = "sha256-1LL1C9jYPjboGgz0z7AdWeMZR7DApCDlQ8Cj7I+iADY=";

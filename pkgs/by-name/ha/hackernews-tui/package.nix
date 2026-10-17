@@ -7,7 +7,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hackernews-tui";
   version = "0.13.5";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "aome510";

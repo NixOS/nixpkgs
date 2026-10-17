@@ -11,8 +11,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "arity";
   version = "0.24.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "jolars";
     repo = "arity";

@@ -10,8 +10,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "corn-cli";
   version = "0.10.1";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "corn-config";
     repo = "corn";

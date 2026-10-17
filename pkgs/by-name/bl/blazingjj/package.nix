@@ -40,8 +40,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=commander::files::tests::get_file_diff"
   ];
 
-  __structuredAttrs = true;
-
   meta = {
     description = "TUI for Jujutsu/jj";
     homepage = "https://github.com/blazingjj/blazingjj";

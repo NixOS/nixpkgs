@@ -17,8 +17,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hk";
   version = "2.0.1";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "hk";

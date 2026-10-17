@@ -49,8 +49,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "murmure";
   version = "1.10.1";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "Kieirra";
     repo = "murmure";

@@ -14,7 +14,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prototext";
   version = "0.3.3";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "douzebis";

@@ -10,8 +10,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dix";
   version = "2.2.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "manic-systems";
     repo = "dix";

@@ -9,7 +9,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cell";
   version = "0.5.1";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "garritfra";

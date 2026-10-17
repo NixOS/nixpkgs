@@ -52,8 +52,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Fast Node.js package manager";
     homepage = "https://github.com/jdx/aube";

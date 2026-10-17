@@ -8,7 +8,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ytsub";
   version = "0.11.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "sarowish";

@@ -10,7 +10,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "watt";
   version = "1.4.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "notashelf";

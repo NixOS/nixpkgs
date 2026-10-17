@@ -17,8 +17,6 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-bnBtchG87ya7nlf20Zv3htnZDN5jv29DKY+8nx5CK5o=";
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Linux Apple Silicon to Apple Silicon VDM utility";
     homepage = "https://github.com/AsahiLinux/tuxvdmtool#readme";

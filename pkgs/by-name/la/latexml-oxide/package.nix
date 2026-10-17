@@ -11,7 +11,6 @@
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
-  __structuredAttrs = true;
 
   pname = "latexml-oxide";
   version = "0.7.6";

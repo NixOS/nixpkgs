@@ -15,8 +15,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hurl";
   version = "8.0.1";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "Orange-OpenSource";
     repo = "hurl";

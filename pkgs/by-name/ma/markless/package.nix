@@ -9,8 +9,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "markless";
   version = "0.9.29";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "jvanderberg";
     repo = "markless";

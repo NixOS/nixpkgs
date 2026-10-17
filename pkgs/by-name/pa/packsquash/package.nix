@@ -9,7 +9,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "packsquash";
   version = "0.4.1";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     repo = "PackSquash";

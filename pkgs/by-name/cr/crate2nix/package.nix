@@ -14,8 +14,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "crate2nix";
   version = "0.15.0";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "crate2nix";

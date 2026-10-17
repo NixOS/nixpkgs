@@ -14,8 +14,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-cliff";
   version = "2.14.2";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "git-cliff";

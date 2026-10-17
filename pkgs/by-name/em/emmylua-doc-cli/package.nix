@@ -8,8 +8,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "emmylua_doc_cli";
   inherit (emmylua-ls) version src cargoHash;
 
-  __structuredAttrs = true;
-
   buildAndTestSubdir = "crates/emmylua_doc_cli";
 
   nativeInstallCheckInputs = [

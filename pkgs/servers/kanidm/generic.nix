@@ -58,8 +58,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     inherit hash;
   };
 
-  __structuredAttrs = true;
-
   env.KANIDM_BUILD_PROFILE = "release_nixpkgs_${arch}";
 
   patches =

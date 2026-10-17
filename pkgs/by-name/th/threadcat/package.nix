@@ -20,8 +20,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Converts a Mastodon thread to Markdown, and downloads all contained media files";
     homepage = "https://codeberg.org/blinry/threadcat";

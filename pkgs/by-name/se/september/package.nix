@@ -10,7 +10,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "september";
   version = "0.5.3";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "gemrest";

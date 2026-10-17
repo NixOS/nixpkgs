@@ -9,7 +9,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ldapin";
   version = "0.1.1";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "affolter-engineering";

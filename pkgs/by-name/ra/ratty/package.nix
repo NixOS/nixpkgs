@@ -55,8 +55,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       }"
   '';
 
-  __structuredAttrs = true;
-
   meta = {
     description = "GPU-rendered terminal emulator with inline 3D graphics";
     homepage = "https://ratty-term.org/";

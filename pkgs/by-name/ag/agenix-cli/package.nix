@@ -9,8 +9,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "agenix-cli";
   version = "0.1.2";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "cole-h";
     repo = "agenix-cli";

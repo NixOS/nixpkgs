@@ -57,7 +57,6 @@ in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustfs";
   version = "1.0.2";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rustfs";

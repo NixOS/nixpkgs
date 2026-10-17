@@ -44,8 +44,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-nY2DHKanLq6oe/NeWEdCU160OJ9srofVN34S/pfDk9I=";
   };
 
-  __structuredAttrs = true;
-
   nativeBuildInputs = [
     cargo-tauri.hook
     nodejs

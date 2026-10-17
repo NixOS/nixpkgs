@@ -14,7 +14,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "icm";
   version = "0.10.63";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rtk-ai";

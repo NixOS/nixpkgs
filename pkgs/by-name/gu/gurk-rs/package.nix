@@ -16,8 +16,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gurk-rs";
   version = "0.10.1";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "boxdot";
     repo = "gurk-rs";

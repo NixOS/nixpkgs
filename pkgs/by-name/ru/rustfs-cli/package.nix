@@ -8,7 +8,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustfs-cli";
   version = "0.1.36";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rustfs";

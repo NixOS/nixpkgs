@@ -28,7 +28,6 @@ in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bacon";
   version = "3.26.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Canop";

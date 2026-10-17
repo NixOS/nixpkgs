@@ -45,7 +45,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   auditable = false;
 
   separateDebugInfo = true;
-  __structuredAttrs = true;
 
   env = {
     VERGEN_GIT_SHA = finalAttrs.src.tag;

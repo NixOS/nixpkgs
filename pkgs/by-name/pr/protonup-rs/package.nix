@@ -8,8 +8,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "protonup-rs";
   version = "0.15.1";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "auyer";
     repo = "protonup-rs";

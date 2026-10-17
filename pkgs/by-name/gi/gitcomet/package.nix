@@ -24,7 +24,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gitcomet";
   version = "0.2.3";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Auto-Explore";

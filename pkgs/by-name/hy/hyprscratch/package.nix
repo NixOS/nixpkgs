@@ -8,7 +8,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hyprscratch";
   version = "0.6.5";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "sashetophizika";

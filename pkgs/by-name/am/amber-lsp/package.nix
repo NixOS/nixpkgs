@@ -8,7 +8,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "amber-lsp";
   version = "0.3.0";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "amber-lang";

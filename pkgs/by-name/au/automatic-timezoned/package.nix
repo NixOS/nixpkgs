@@ -9,8 +9,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "automatic-timezoned";
   version = "2.0.160";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "maxbrunet";
     repo = "automatic-timezoned";

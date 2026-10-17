@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fnox";
   version = "1.39.0";
 
-  __structuredAttrs = true;
   __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {

@@ -25,8 +25,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cp -r default_envs $out/share/atmosphere
   '';
 
-  __structuredAttrs = true;
-
   passthru = {
     tests.versionTest = testers.testVersion {
       package = stardust-xr-atmosphere;

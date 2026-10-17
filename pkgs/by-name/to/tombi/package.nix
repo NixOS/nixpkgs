@@ -11,8 +11,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tombi";
   version = "1.8.4";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "tombi-toml";
     repo = "tombi";
