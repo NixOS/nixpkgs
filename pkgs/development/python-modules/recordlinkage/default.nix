@@ -22,7 +22,6 @@ buildPythonPackage (finalAttrs: {
   pname = "recordlinkage";
   version = "0.16";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
