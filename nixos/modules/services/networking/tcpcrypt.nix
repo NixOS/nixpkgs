@@ -37,8 +37,12 @@ in
 
     users.users.tcpcryptd = {
       uid = config.ids.uids.tcpcryptd;
+      group = "tcpcryptd";
+      isSystemUser = true;
       description = "tcpcrypt daemon user";
     };
+
+    users.groups.tcpcryptd = { };
 
     systemd.services.tcpcrypt = {
       description = "tcpcrypt";
