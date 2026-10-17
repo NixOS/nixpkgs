@@ -23,7 +23,7 @@
 }:
 
 let
-  sources = lib.importJSON ../sources.json;
+  sources = lib.importJSON ./sources.json;
   inherit (llvmPackages.stdenv.hostPlatform)
     isAarch64
     isDarwin
@@ -94,6 +94,10 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_MEDIA_STREAM" false)
     (lib.cmakeBool "ENABLE_WEB_RTC" false)
     (lib.cmakeBool "CMAKE_POSITION_INDEPENDENT_CODE" false)
+  ]
+  # Clang 21 omits BuiltinsSourceProvider's vtable when consuming WebKit's PCH.
+  ++ lib.optionals (isDarwin && lib.versions.major llvmPackages.clang.version == "21") [
+    (lib.cmakeBool "CMAKE_DISABLE_PRECOMPILE_HEADERS" true)
   ]
   ++ lib.optionals isDarwin [
     (lib.cmakeFeature "CMAKE_OSX_SYSROOT" "")

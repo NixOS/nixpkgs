@@ -6,17 +6,14 @@
   bun-unwrapped,
 }:
 
-let
-  unwrapped = bun-unwrapped;
-in
 symlinkJoin {
   pname = "bun";
-  inherit (unwrapped) version; # nixpkgs-update: no auto update
+  inherit (bun-unwrapped) version; # nixpkgs-update: no auto update
 
   __structuredAttrs = true;
   strictDeps = true;
 
-  paths = [ unwrapped ];
+  paths = [ bun-unwrapped ];
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ makeBinaryWrapper ];
 
@@ -30,11 +27,12 @@ symlinkJoin {
   '';
 
   passthru = {
-    inherit unwrapped;
+    unwrapped = bun-unwrapped;
+    inherit (bun-unwrapped) tests;
   };
 
   meta = {
-    inherit (unwrapped.meta)
+    inherit (bun-unwrapped.meta)
       changelog
       description
       homepage
@@ -49,6 +47,6 @@ symlinkJoin {
     hydraPlatforms = [ ];
 
     # Prefer the wrapper when both packages are installed in the same profile.
-    priority = (unwrapped.meta.priority or lib.meta.defaultPriority) - 1;
+    priority = (bun-unwrapped.meta.priority or lib.meta.defaultPriority) - 1;
   };
 }

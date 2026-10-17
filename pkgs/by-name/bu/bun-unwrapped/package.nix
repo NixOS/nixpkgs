@@ -4,6 +4,7 @@
   buildPackages,
   pkgsBuildBuild,
   callPackage,
+  callPackages,
   runCommand,
   symlinkJoin,
   fetchFromGitHub,
@@ -15,8 +16,6 @@
   perl,
   gitMinimal,
   nasm,
-  rustc,
-  cargo,
   rustPlatform,
   llvmPackages,
   icu,
@@ -24,12 +23,14 @@
   cctools,
   darwin,
   rcodesign,
-  bun-webkit ? callPackage ./webkit/package.nix {
+  bun-webkit ? callPackage ./webkit.nix {
     inherit llvmPackages;
   },
 }:
 
 let
+  inherit (buildPackages) rustc cargo;
+  rustLibSrc = buildPackages.rustPlatform.rustLibSrc;
   sources = lib.importJSON ./sources.json;
   inherit (sources)
     bootstrapAssets
@@ -42,10 +43,21 @@ let
   inherit (hostPlatform) isDarwin isLinux isMusl;
   isCross = buildPlatform != hostPlatform;
   bootstrapPlatformKey = buildPlatform.system + lib.optionalString buildPlatform.isMusl "-musl";
-  hostClang = pkgsBuildBuild.llvmPackages.clang;
+  buildClang = pkgsBuildBuild.llvmPackages.clang;
 
-  # Bun checks the LLVM major in scripts/build/tools.ts. Review llvmPackages when
-  # it changes. The override accepts one bin directory, so join the LLVM outputs.
+  # Bun rebuilds std as part of its Rust dependency graph.
+  rustSysroot = buildPackages.symlinkJoin {
+    name = "bun-rust-sysroot-${rustc.version}";
+    paths = [ rustc.unwrapped ];
+    postBuild = ''
+      mkdir -p "$out/lib/rustlib/src/rust"
+      ln -s ${rustLibSrc} "$out/lib/rustlib/src/rust/library"
+    '';
+  };
+  rustcWithLibSrc = rustc.override { sysroot = rustSysroot; };
+
+  # BUN_TOOLCHAIN_LLVM accepts one bin directory and bypasses the version pin.
+  # Rust bitcode still requires clang and rustc to use the same LLVM major.
   llvmToolchain = symlinkJoin {
     name = "bun-llvm-toolchain";
     paths = [
@@ -64,15 +76,6 @@ let
   nodeModulesHash =
     nodeModulesHashes.${buildPlatform.system}
       or (throw "Unsupported Bun node_modules platform: ${buildPlatform.system}");
-
-  # macOS libicucore lacks _ubrk_clone. Use Nix ICU until Bun stops needing it.
-  fixDarwinBinary =
-    binary:
-    lib.optionalString isDarwin ''
-      '${lib.getExe' cctools "${cctools.targetPrefix}install_name_tool"}' "${binary}" \
-        -change /usr/lib/libicucore.A.dylib '${lib.getLib darwin.ICU}/lib/libicucore.A.dylib'
-      '${lib.getExe rcodesign}' sign --code-signature-flags linker-signed "${binary}"
-    '';
 
   src = fetchFromGitHub {
     owner = "oven-sh";
@@ -143,6 +146,8 @@ let
           --code-signature-flags linker-signed \
           "$out/bin/bun"
       '';
+
+    meta.sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 
   # Keep these directories in sync with NODE_MODULE_DIRS in update.py and
@@ -205,17 +210,31 @@ let
     inherit version src;
     hash = sources.cargoHash;
   };
+
+  # build-std also resolves registry crates from the matching Rust source tree.
+  cargoVendor = runCommand "bun-cargo-vendor-${version}" { } ''
+    mkdir -p "$out"
+    for crate in ${cargoDeps}/source-registry-0/* ${rustLibSrc}/vendor/*; do
+      name="''${crate##*/}"
+      if [ ! -e "$out/$name" ]; then
+        ln -s "$crate" "$out/$name"
+      fi
+    done
+  '';
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bun-unwrapped";
   inherit version src;
 
   __structuredAttrs = true;
 
   patches = [
-    # Review after upstream changes dependency installs, Linux targets, Rust
-    # release flags, or host tool discovery.
+    # Review after upstream changes dependency installs, Linux targets, or
+    # host tool discovery.
     ./support-nix-build-environment.patch
+
+    # The pinned nightly's type_info::of helper is not available in Rust 1.99.
+    ./rust-1.99-compat.patch
 
     # Keep this bridge in sync with build() and provides() in webkit.ts.
     ./use-nix-webkit.patch
@@ -228,7 +247,7 @@ stdenv.mkDerivation {
 
   depsBuildBuild = lib.optionals (isLinux && isCross) [
     pkgsBuildBuild.stdenv.cc
-    hostClang
+    buildClang
   ];
 
   nativeBuildInputs = [
@@ -243,7 +262,7 @@ stdenv.mkDerivation {
     llvmPackages.clang
     llvmPackages.llvm
     llvmPackages.lld
-    rustc
+    rustcWithLibSrc
     cargo
   ]
   ++ lib.optionals isDarwin [
@@ -282,6 +301,8 @@ stdenv.mkDerivation {
     NIX_CFLAGS_COMPILE = lib.concatStringsSep " " [
       # Nix LLVM 21 has no zstd debug compression support.
       "-gz=zlib"
+      # WebKit is native code; its lambda types are invisible to ThinLTO.
+      "-fno-whole-program-vtables"
       # Keep the build-only WebKit output out of the Bun runtime closure.
       "-ffile-prefix-map=${bun-webkit}=build/release/deps/webkit"
     ];
@@ -303,13 +324,15 @@ stdenv.mkDerivation {
       if buildPlatform.isMusl then "musl" else "gnu"
     );
     BUN_NIX_CROSS = lib.optionalString (isLinux && isCross) "1";
-    BUN_NIX_HOST_CC = lib.optionalString isCross "${hostClang}/bin/clang";
-    BUN_NIX_HOST_CXX = lib.optionalString isCross "${hostClang}/bin/clang++";
+    BUN_NIX_HOST_CC = lib.optionalString isCross "${buildClang}/bin/clang";
+    BUN_NIX_HOST_CXX = lib.optionalString isCross "${buildClang}/bin/clang++";
 
     # Upstream uses nightly-only Rust compiler options.
     RUSTC_BOOTSTRAP = 1;
     BUN_BUILD_PREFETCH_DIR = buildPrefetch;
     BUN_TOOLCHAIN_LLVM = llvmToolchain;
+    BUN_TOOLCHAIN_RUST = rustcWithLibSrc;
+    BUN_TOOLCHAIN_CARGO = lib.getExe cargo;
   };
 
   preBuild = ''
@@ -328,7 +351,7 @@ stdenv.mkDerivation {
     mkdir -p "$HOME" "$BUN_INSTALL" "$CARGO_HOME" "$RUSTUP_HOME"
 
     substitute ${cargoDeps}/.cargo/config.toml "$CARGO_HOME/config.toml" \
-      --replace-fail '@vendor@' '${cargoDeps}'
+      --replace-fail '@vendor@/source-registry-0' '${cargoVendor}'
     cat >> "$CARGO_HOME/config.toml" <<EOF
 
     [net]
@@ -370,7 +393,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  postFixup = fixDarwinBinary "$out/bin/bun";
+  # macOS libicucore lacks _ubrk_clone. Use Nix ICU until Bun stops needing it.
+  postFixup = lib.optionalString isDarwin ''
+    '${lib.getExe' cctools "${cctools.targetPrefix}install_name_tool"}' "$out/bin/bun" \
+      -change /usr/lib/libicucore.A.dylib '${lib.getLib darwin.ICU}/lib/libicucore.A.dylib'
+    '${lib.getExe rcodesign}' sign --code-signature-flags linker-signed "$out/bin/bun"
+  '';
 
   doInstallCheck = buildPlatform.canExecute hostPlatform;
   __darwinAllowLocalNetworking = true;
@@ -422,6 +450,12 @@ stdenv.mkDerivation {
   passthru = {
     updateScript = ./update.py;
     webkit = bun-webkit;
+    tests = lib.optionalAttrs (!isCross) (
+      callPackages ./tests.nix {
+        bun-unwrapped = finalAttrs.finalPackage;
+        inherit bootstrap rustcWithLibSrc cargo;
+      }
+    );
   };
 
   meta = {
@@ -446,4 +480,4 @@ stdenv.mkDerivation {
     mainProgram = "bun";
     platforms = builtins.attrNames nodeModulesHashes;
   };
-}
+})
