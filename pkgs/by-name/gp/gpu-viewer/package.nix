@@ -20,7 +20,7 @@
   python3,
   clinfo,
   lsb-release,
-  mesa-demos,
+  mesa-utils,
   vdpauinfo,
 
   # passthru
@@ -69,7 +69,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
         lib.makeBinPath [
           clinfo
           lsb-release
-          mesa-demos
+          mesa-utils
           vdpauinfo
           vulkan-tools
         ]
