@@ -9,7 +9,7 @@ pub struct Mounts {
 #[derive(Debug)]
 pub struct Mount {
     _spec: String,
-    file: String,
+    pub file: String,
     _vfstype: String,
     pub mntopts: MntOpts,
 }
@@ -43,6 +43,10 @@ impl Mounts {
 
     pub fn find_mountpoint(&self, mountpoint: &str) -> Option<&Mount> {
         self.inner.iter().rev().find(|m| m.file == mountpoint)
+    }
+
+    pub fn iter(&self) -> impl Iterator<Item = &Mount> {
+        self.inner.iter()
     }
 }
 
