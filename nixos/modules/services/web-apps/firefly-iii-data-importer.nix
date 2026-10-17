@@ -19,7 +19,9 @@ let
   env-file-values = lib.attrsets.mapAttrs' (
     n: v: lib.attrsets.nameValuePair (lib.strings.removeSuffix "_FILE" n) v
   ) (lib.attrsets.filterAttrs (n: v: lib.strings.hasSuffix "_FILE" n) cfg.settings);
-  env-nonfile-values = lib.attrsets.filterAttrs (n: v: !lib.strings.hasSuffix "_FILE" n) cfg.settings;
+  env-nonfile-values = lib.attrsets.mapAttrs (
+    _: v: if builtins.isBool v then lib.boolToString v else v
+  ) (lib.attrsets.filterAttrs (n: v: !lib.strings.hasSuffix "_FILE" n) cfg.settings);
 
   data-importer-maintenance = pkgs.writeShellScript "data-importer-maintenance.sh" ''
     set -a
