@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hunspell";
-  version = "1.7.3";
+  version = "1.7.4";
 
   outputs = [
     "bin"
@@ -26,10 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "hunspell";
     repo = "hunspell";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-NoLlH+4Hb6w+HYl2fSBzroav1Pb3GojFSTJGBxlteBM=";
+    hash = "sha256-/2emgmXwgbFMYIt61jqejx2xiHaNg4OyHC1xjYwwQuw=";
   };
-
-  patches = [ ./0001-Make-hunspell-look-in-XDG_DATA_DIRS-for-dictionaries.patch ];
 
   postPatch = ''
     patchShebangs tests
