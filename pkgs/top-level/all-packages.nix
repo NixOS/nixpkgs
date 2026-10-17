@@ -9426,8 +9426,6 @@ with pkgs;
 
   libxc_7 = pkgs.libxc.override { version = "7.0.0"; };
 
-  pdb2pqr = with python3Packages; toPythonApplication pdb2pqr;
-
   quantum-espresso = callPackage ../applications/science/chemistry/quantum-espresso {
     hdf5 = hdf5-fortran;
   };
