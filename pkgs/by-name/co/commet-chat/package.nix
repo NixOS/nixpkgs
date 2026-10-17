@@ -30,13 +30,13 @@ let
 in
 flutter341.buildFlutterApplication (finalAttrs: {
   pname = "commet-chat";
-  version = "0.4.2+hotfix.2";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "commetchat";
     repo = "commet";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Pf+JeVuTPxpufcx/whn8RVcYp1e69CJBFzyZaQ8I5RQ=";
+    hash = "sha256-VEvIE0nhTo5Qik47kNgiQRhcE1stQc4WnYGc7p1v8QM=";
     fetchSubmodules = true;
     leaveDotGit = true;
 
@@ -61,13 +61,15 @@ flutter341.buildFlutterApplication (finalAttrs: {
     flutter_html = "sha256-576KYoYB4sZeavcAS8V5rjDG9hezYlN2Q4zlyvBOouw=";
     flutter_local_notifications = "sha256-AgvvFoJgos/gsTwcLGX/CxbHauWiH3OHksqtF0Dauuw=";
     flutter_local_notifications_linux = "sha256-AgvvFoJgos/gsTwcLGX/CxbHauWiH3OHksqtF0Dauuw=";
+    flutter_webrtc = "sha256-ylrdyUzz3h2By+V/qm6dc7gWHP7MGPKdKwEOWqkb61c=";
+    launcher_entry = "sha256-T/zQRvY6jOKroMrhVwBtsoSm2xCFjOd5jsJC0PA4cpc=";
+    livekit_client = "sha256-4I5c23gxPbBwSQg1yzjwWWFNGDnC1hx90jtEKnExM64=";
     markdown = "sha256-2rEMNJM9Vy7LrFLt30/Z3pyqERTYJei9D3mgOAAvVPg=";
     matrix = "sha256-PB7xjulxmV2jE0WGVG116T50BrT3G5LsdLreR1cJTPI=";
-    matrix_dart_sdk_drift_db = "sha256-2sSN2TcPAPVdEm3NXpZyWlPvArNn2CWnPph5Vz48KQ8=";
+    matrix_dart_sdk_drift_db = "sha256-5cO5C2yL1ZVgQvByRoOvhtfb+Z8aTsnRK4gLMorsH0Y=";
     receive_intent = "sha256-wGIOZRH4O3a44I8zG5Q1hCwn4SMuTWB7i9wtGSLZWeQ=";
-    signal_sticker_api = "sha256-VdEE3Bt8gpfUpxxYSz5319YEL49Eh+loO+ZipI1DoyA=";
+    signal_sticker_api = "sha256-L00iG1Qf0x0S3RvUfHle0XOINnp2fdAH46hwu8WREeY=";
     starfield = "sha256-ebVRyVkyLfHCC6EBmx5evXL1U71S3tgCMo1yLWlIcw4=";
-    launcher_entry = "sha256-T/zQRvY6jOKroMrhVwBtsoSm2xCFjOd5jsJC0PA4cpc=";
   };
 
   buildInputs = [
@@ -111,6 +113,11 @@ flutter341.buildFlutterApplication (finalAttrs: {
         '';
       };
   };
+
+  prePatch = ''
+    substituteInPlace ../rust/rust_builder/cargokit/cmake/cargokit.cmake \
+      --replace-fail "execute_process(COMMAND chmod +x \"\''${cargokit_cmake_root}/run_build_tool\''${SCRIPT_EXTENSION}\")" ""
+  '';
 
   # The original codegen.dart hardcodes flutter calls inside, so the patch basically rewrites the codegen script forcing nix.
   patches = [
