@@ -22,14 +22,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fumis";
-  version = "0.4.1";
+  version = "0.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-fumis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xW7X6SLVFH8nCRUmABp0Rk+UWM15ODknGsCkCtMYOGs=";
+    hash = "sha256-coD95rnX6zs4gDqfa/FcO/bM6NjrrZ/nluidhedDGfg=";
   };
 
   postPatch = ''
@@ -65,11 +65,6 @@ buildPythonPackage (finalAttrs: {
     syrupy
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
-
-  disabledTests = [
-    # https://github.com/frenck/python-fumis/issues/807
-    "test_cli_structure"
-  ];
 
   pythonImportsCheck = [ "fumis" ];
 
