@@ -120,6 +120,12 @@ stdenv.mkDerivation (finalAttrs: {
     ./avr-size.patch
 
     ./windres-locate-gcc.patch
+
+    # Fix a heap buffer overflow in `xcoff_link_add_symbols` (CVE-2026-6846).
+    # Remove when updating to 2.47 or later.
+    # https://sourceware.org/bugzilla/show_bug.cgi?id=34049
+    # https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=7a089e0302382f4d4e077941156e1eaa68d01393
+    ./CVE-2026-6846.patch
   ];
 
   outputs = [
