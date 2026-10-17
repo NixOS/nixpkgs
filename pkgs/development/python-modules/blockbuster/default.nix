@@ -39,7 +39,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   __darwinAllowLocalNetworking = true;
-  __structuredAttrs = true;
 
   pythonImportsCheck = [ "blockbuster" ];
 
