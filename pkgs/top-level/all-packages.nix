@@ -2194,8 +2194,6 @@ with pkgs;
 
   mkpasswd = hiPrio (callPackage ../tools/security/mkpasswd { });
 
-  molecule = with python3Packages; toPythonApplication molecule;
-
   moreutils = callPackage ../tools/misc/moreutils {
     docbook-xsl = docbook_xsl;
   };
