@@ -20418,6 +20418,8 @@ self: super: with self; {
 
   syrupy = callPackage ../development/python-modules/syrupy { };
 
+  syrupy_5 = callPackage ../development/python-modules/syrupy/5.nix { };
+
   syslog-rfc5424-formatter = callPackage ../development/python-modules/syslog-rfc5424-formatter { };
 
   sysrsync = callPackage ../development/python-modules/sysrsync { };
