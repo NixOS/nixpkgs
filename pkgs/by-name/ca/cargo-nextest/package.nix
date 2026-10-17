@@ -42,6 +42,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     extraArgs = [ "--version-regex=^cargo-nextest-([0-9.]+)$" ];
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Next-generation test runner for Rust projects";
     mainProgram = "cargo-nextest";
