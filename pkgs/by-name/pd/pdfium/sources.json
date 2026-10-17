@@ -15,21 +15,9 @@
   "chromiumBuildtools": {
     "hash": "sha256-Vtow8uVdeSMUVlV2o6bXrzHutzDEiGu0a3mTunw1reE="
   },
-  "abseil": {
-    "rev": "a00d74bb55b38f213a3c6110b4bcab5bb565bd56",
-    "hash": "sha256-g6Yiw9VB5wMNkm0PFVrk11qLQFFHtD5wZp+hEMOvNRE="
-  },
   "dragonbox": {
     "rev": "beeeef91cf6fef89a4d4ba5e95d47ca64ccb3a44",
     "hash": "sha256-j6swuGgYGfiFcK3iqd4EKTeU92rZHKTbF5T1fcak/ko="
-  },
-  "fastFloat": {
-    "rev": "b0ab987b3dfdde13fa1915f65ef2a5c068d9208c",
-    "hash": "sha256-Hfnoet/FMCqm5Qx7A6/2NnSlmWgTFJrOqHvXh1TDd6U="
-  },
-  "gtest": {
-    "rev": "4fe3307fb2d9f86d19777c7eb0e4809e9694dde7",
-    "hash": "sha256-gJhv3DQQSP5BQ6GmDobq42/Gkx4AbOg/ZS80bM0WpEw="
   },
   "generateShimHeaders": {
     "hash": "sha256-/ViuvxJjjJ4gixjoGu6GXxKX8iXSZuy3BL+Yi0GLVDQ="
@@ -41,9 +29,5 @@
       "object": "cd96fc55dc243f6c6f4cb63ad117cad6cd48dceb",
       "hash": "sha256-7Jc+zNZp1Bf78tCk2scwdEoxdCaP8GLbVFG1XIK8NJI="
     }
-  },
-  "simdutf": {
-    "rev": "f7356eed293f8208c40b3c1b344a50bd70971983",
-    "hash": "sha256-l0VPVhfabaMx0oJphFjA9S1LVtavWFZ4w3btW7avCDY="
   }
 }

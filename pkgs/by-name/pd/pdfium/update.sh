@@ -72,14 +72,10 @@ pdfium_src=$(jq -er '.storePath' <<< "$pdfium_prefetch")
 
 deps_file="$pdfium_src/DEPS"
 build_rev=$(extract_deps_rev "$deps_file" build_revision)
-abseil_rev=$(extract_deps_rev "$deps_file" abseil_revision)
 dragonbox_rev=$(extract_deps_rev "$deps_file" dragonbox_revision)
-fast_float_rev=$(extract_deps_rev "$deps_file" fast_float_revision)
-gtest_rev=$(extract_deps_rev "$deps_file" gtest_revision)
 test_fonts_rev=$(extract_deps_rev "$deps_file" test_fonts_revision)
-simdutf_rev=$(extract_deps_rev "$deps_file" simdutf_revision)
 
-for dep_var in build_rev abseil_rev dragonbox_rev fast_float_rev gtest_rev test_fonts_rev simdutf_rev; do
+for dep_var in build_rev dragonbox_rev test_fonts_rev; do
   if [[ -z ${!dep_var} ]]; then
     echo "failed to extract $dep_var from $deps_file" >&2
     exit 1
@@ -104,10 +100,7 @@ done
 
 build_hash=$(prefetch_archive_hash "${chromium_git_url}/chromium/src/build.git/+archive/${build_rev}.tar.gz")
 chromium_buildtools_hash=$(prefetch_archive_hash "${chromium_git_url}/chromium/src/+archive/refs/branch-heads/${target_version}/buildtools.tar.gz")
-abseil_hash=$(prefetch_archive_hash "${chromium_git_url}/chromium/src/third_party/abseil-cpp/+archive/${abseil_rev}.tar.gz")
 dragonbox_hash=$(prefetch_archive_hash "${chromium_git_url}/external/github.com/jk-jeon/dragonbox/+archive/${dragonbox_rev}.tar.gz")
-fast_float_hash=$(prefetch_archive_hash "${chromium_git_url}/external/github.com/fastfloat/fast_float/+archive/${fast_float_rev}.tar.gz")
-gtest_hash=$(prefetch_archive_hash "${chromium_git_url}/external/github.com/google/googletest/+archive/${gtest_rev}.tar.gz")
 generate_shim_headers_hash=$(prefetch_subdir_archive_hash "${chromium_git_url}/chromium/src/+archive/refs/branch-heads/${target_version}/tools/generate_shim_headers.tar.gz")
 test_fonts_hash=$(prefetch_archive_hash "${chromium_git_url}/chromium/src/third_party/test_fonts/+archive/${test_fonts_rev}.tar.gz")
 test_fonts_bundle_object=$(
@@ -123,7 +116,6 @@ test_fonts_bundle_hash=$(
   prefetch file "https://storage.googleapis.com/chromium-fonts/${test_fonts_bundle_object}" \
     | jq -er '.hash'
 )
-simdutf_hash=$(prefetch_archive_hash "${chromium_git_url}/chromium/src/third_party/simdutf/+archive/${simdutf_rev}.tar.gz")
 
 tmp=$(mktemp "$script_dir/.sources.json.XXXXXX")
 trap 'rm -f "$tmp"' EXIT
@@ -137,21 +129,13 @@ jq -n \
   --arg build_rev "$build_rev" \
   --arg build_hash "$build_hash" \
   --arg chromium_buildtools_hash "$chromium_buildtools_hash" \
-  --arg abseil_rev "$abseil_rev" \
-  --arg abseil_hash "$abseil_hash" \
   --arg dragonbox_rev "$dragonbox_rev" \
   --arg dragonbox_hash "$dragonbox_hash" \
-  --arg fast_float_rev "$fast_float_rev" \
-  --arg fast_float_hash "$fast_float_hash" \
-  --arg gtest_rev "$gtest_rev" \
-  --arg gtest_hash "$gtest_hash" \
   --arg generate_shim_headers_hash "$generate_shim_headers_hash" \
   --arg test_fonts_rev "$test_fonts_rev" \
   --arg test_fonts_hash "$test_fonts_hash" \
   --arg test_fonts_bundle_object "$test_fonts_bundle_object" \
   --arg test_fonts_bundle_hash "$test_fonts_bundle_hash" \
-  --arg simdutf_rev "$simdutf_rev" \
-  --arg simdutf_hash "$simdutf_hash" \
   '{
     version: {
       major: $major,
@@ -165,21 +149,9 @@ jq -n \
       hash: $build_hash
     },
     chromiumBuildtools: { hash: $chromium_buildtools_hash },
-    abseil: {
-      rev: $abseil_rev,
-      hash: $abseil_hash
-    },
     dragonbox: {
       rev: $dragonbox_rev,
       hash: $dragonbox_hash
-    },
-    fastFloat: {
-      rev: $fast_float_rev,
-      hash: $fast_float_hash
-    },
-    gtest: {
-      rev: $gtest_rev,
-      hash: $gtest_hash
     },
     generateShimHeaders: { hash: $generate_shim_headers_hash },
     testFonts: {
@@ -189,10 +161,6 @@ jq -n \
         object: $test_fonts_bundle_object,
         hash: $test_fonts_bundle_hash
       }
-    },
-    simdutf: {
-      rev: $simdutf_rev,
-      hash: $simdutf_hash
     }
   }' > "$tmp"
 
