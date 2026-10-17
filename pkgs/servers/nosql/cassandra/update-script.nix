@@ -45,7 +45,11 @@ writeScript "update-cassandra_${generation}" ''
 
   # See https://downloads.apache.org/cassandra/KEYS
   # Make sure that any new key corresponds to someone on the project
-  for key in A4C465FEA0C552561A392A61E91335D77E3E87CB; do
+  # Michael Semb Wever (mck), Stefan Miklosovic (smiklosovic)
+  for key in \
+    A4C465FEA0C552561A392A61E91335D77E3E87CB \
+    7464AAD9068241C50BA6A26232F35CB2F546D93E \
+    ; do
     gpg --trustdb-name "$tmp/trust.db" --batch --recv-keys "$key"
     echo "$key:5:" | gpg --trustdb-name "$tmp/trust.db" --batch --import-ownertrust
   done
