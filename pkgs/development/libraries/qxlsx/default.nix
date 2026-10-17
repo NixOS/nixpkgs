@@ -2,36 +2,32 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   qtbase,
 }:
 
 stdenv.mkDerivation rec {
   pname = "qxlsx";
-  version = "1.5.0";
+  version = "1.5.1.1";
 
   src = fetchFromGitHub {
     owner = "QtExcel";
     repo = "QXlsx";
     rev = "v${version}";
-    hash = "sha256-twOlAiLE0v7+9nWo/Gd+oiKT1umL3UnG1Xa0zDG7u7s=";
+    hash = "sha256-jhTRI/6bBNc8cai9AUe9B2PDXwIpTGP4Csa3nZfmLts=";
   };
 
-  patches = [
-    # Fix for Qt 6.10, can likely be removed when version bump passes v1.5.0.
-    (fetchpatch {
-      url = "https://github.com/QtExcel/QXlsx/commit/90d762625750c6b2c73f6cd96b633e9158aed72e.patch";
-      hash = "sha256-/0xLrkjuJGZRocK1EyBhuaUmg0usueQz2F340DkQhb0=";
-    })
-  ];
-
   nativeBuildInputs = [ cmake ];
+
   buildInputs = [ qtbase ];
 
   preConfigure = ''
     cd QXlsx
   '';
+
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+  ];
 
   dontWrapQtApps = true;
 
