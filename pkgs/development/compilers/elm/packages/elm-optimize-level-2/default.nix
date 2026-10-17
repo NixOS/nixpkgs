@@ -7,16 +7,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "elm-optimize-level-2";
-  version = "0.3.4-unstable-2022-04-05";
+  version = "0.4.0-unstable-2026-05-12";
 
   src = fetchFromGitHub {
     owner = "mdgriffith";
     repo = "elm-optimize-level-2";
-    rev = "46b0975d5349260d2492c2ee532af7230f5af407";
-    hash = "sha256-l93qrkGAmGdZdj9j97MEUiprQT7gFqtL71rb5zOJwk4=";
+    rev = "72bce44dc892dbb003c16fbc1551f5bf8e967296";
+    hash = "sha256-PAQSR/Oe/Sl54wmTG51zrFdF2pidlzf0Dy7s/c4D1vc=";
   };
 
-  npmDepsHash = "sha256-4noXdD/KUNridPlwQ2cqVcAaUoP5XUwZhpbEPHVBeqo=";
+  npmDepsHash = "sha256-Tqw5YhNdJpZcLeG8Ttsn70Bojl7EJy1lRcY57eyPLfQ=";
 
   npmFlags = [ "--ignore-scripts" ];
 
