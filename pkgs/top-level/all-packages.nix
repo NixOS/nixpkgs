@@ -4645,8 +4645,6 @@ with pkgs;
     includeUnfree = true;
   };
 
-  dbt = with python3Packages; toPythonApplication dbt-core;
-
   libcxx = llvmPackages.libcxx;
 
   libgcc = stdenv.cc.cc.libgcc or null;
