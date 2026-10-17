@@ -2004,8 +2004,6 @@ with pkgs;
 
   jl = haskellPackages.jl;
 
-  json-schema-for-humans = with python3Packages; toPythonApplication json-schema-for-humans;
-
   jupyter = callPackage ../applications/editors/jupyter { };
 
   jupyter-all = jupyter.override {
