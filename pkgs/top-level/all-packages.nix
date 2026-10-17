@@ -7737,8 +7737,6 @@ with pkgs;
 
   openmoji-black = callPackage ../data/fonts/openmoji { fontFormats = [ "glyf" ]; };
 
-  papis = with python3Packages; toPythonApplication papis;
-
   scheherazade-new = scheherazade.override {
     version = "4.400";
   };
