@@ -9699,8 +9699,6 @@ with pkgs;
     cudaSupport = true;
   };
 
-  spyder = with python3.pkgs; toPythonApplication spyder;
-
   ### SCIENCE / PHYSICS
 
   yoda-with-root = lowPrio (
