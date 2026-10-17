@@ -1,24 +1,23 @@
 {
   lib,
   stdenv,
+  qt6,
   fetchFromGitHub,
   pkg-config,
   qaseprite,
   qbs,
-  libsForQt5,
   zlib,
   zstd,
   libGL,
 }:
 
 let
-  qtEnv = libsForQt5.env "tiled-qt-env" [
+  qtEnv = qt6.env "tiled-qt-env" [
     qaseprite
-    libsForQt5.qtbase
-    libsForQt5.qtdeclarative
-    libsForQt5.qtsvg
-    libsForQt5.qttools
-    libsForQt5.qtwayland
+    qt6.qtdeclarative
+    qt6.qtsvg
+    qt6.qttools
+    qt6.qtwayland
   ];
 in
 
@@ -36,10 +35,11 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     qbs
-    libsForQt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
   buildInputs = [
     qtEnv
+    qt6.qtbase
     zlib
     zstd
     libGL
