@@ -133,5 +133,6 @@ buildDotnetModule {
     maintainers = [ lib.maintainers.coca ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "SS14.Launcher";
+    teams = [ lib.teams.gaming ];
   };
 }
