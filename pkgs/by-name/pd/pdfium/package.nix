@@ -444,6 +444,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit versionInfo;
+    updateScript = ./update.sh;
     fullVersion = lib.concatStringsSep "." (
       map toString [
         versionInfo.major
