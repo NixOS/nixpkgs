@@ -7,14 +7,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "asahi-wifisync";
-  version = "0.2.3";
+  version = "0.2.4";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-YO7Yq3S7F7WuW79MR1wrViw3tTBZi8XIsXrd4f0xCzs=";
+    hash = "sha256-ifLXeT9J4J+ghli9QKX0PKrdQbNs/TwDFnKV5iurtgQ=";
   };
 
-  cargoHash = "sha256-cfgsY34wFeBTy0CYwVRZN22Ndifn6ZPs2t6f8DS3S2k=";
+  cargoHash = "sha256-XSNpKRPtgoM3oDnCdnhVMzec0r7NzTg4ag+JKANoaWw=";
   cargoDepsName = finalAttrs.pname;
 
   passthru = {
