@@ -7,7 +7,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "xkeysnail";
-  version = "0.4";
+  version = "HEAD";
   pyproject = true;
 
   src = fetchFromGitHub {
