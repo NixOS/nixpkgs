@@ -31,13 +31,13 @@
 
 buildDunePackage (finalAttrs: {
   pname = "smtml";
-  version = "0.28.0";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "formalsec";
     repo = "smtml";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TZMBUnw1AtsVUfLLQJ/gs0CBtnphBiREH99QP3VuAL0=";
+    hash = "sha256-w/mEDIDydZ2xgTsMx/fbA+VxU8OlcAbOUMTogDQa5jo=";
   };
 
   minimalOCamlVersion = "4.14";
