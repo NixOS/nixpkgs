@@ -10,7 +10,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "troposphere";
-  version = "4.10.2";
+  version = "4.11.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -19,7 +19,7 @@ buildPythonPackage (finalAttrs: {
     owner = "cloudtools";
     repo = "troposphere";
     tag = finalAttrs.version;
-    hash = "sha256-o8Wq1kRBg4yFozQo02jlR5huBtpuLGZLTkLG5LuoI8s=";
+    hash = "sha256-ceycXZ3lstbRazglUL/m9lsQG9ueIfkZn+5cYKOMsDU=";
   };
 
   build-system = [ setuptools ];
