@@ -19259,6 +19259,11 @@
     githubId = 43088426;
     name = "Mihnea Stoian";
   };
+  mijowi = {
+    github = "mijowi";
+    githubId = 10594600;
+    name = "mijowi";
+  };
   mikaeladev = {
     email = "mikaeladev@icloud.com";
     github = "mikaeladev";
