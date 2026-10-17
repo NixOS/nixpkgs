@@ -26,6 +26,7 @@
   libsndfile,
   libvorbis,
   mnxdom,
+  pipewire,
   portaudio,
   portmidi,
   pugixml,
@@ -77,6 +78,10 @@ stdenv.mkDerivation (finalAttrs: {
     "PUGIXML"
     "LAME"
     "UTF8CPP"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # Upstream defaults this to OFF outside their CI builds
+    (lib.cmakeBool "MUSE_MODULE_AUDIO_PIPEWIRE" true)
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # https://github.com/musescore/MuseScore/issues/33467
@@ -147,6 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
+    pipewire
     qt6.qtwayland
   ];
 
