@@ -9,6 +9,8 @@
 
 runCommand "update-python-libraries"
   {
+    pname = "update-python-libraries";
+    version = "0";
     buildInputs = [
       (python3.withPackages (
         ps: with ps; [
