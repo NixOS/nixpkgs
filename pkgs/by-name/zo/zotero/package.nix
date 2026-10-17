@@ -35,14 +35,14 @@ let
   firefox = callPackage ./firefox-esr-140-bin.nix { };
 
   pname = "zotero";
-  version = "10.0.4";
+  version = "10.0.6";
 
   src = fetchFromGitHub {
     owner = "zotero";
     repo = "zotero";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-vevcTBWo4o2K7ibg+FOetx07EyH3k1V2I43UF2tQrRU=";
+    hash = "sha256-x3Y+rDhfhAA54MgTRQeME8eAjfmWKuz7XitdUrCjEoQ=";
   };
 
   pdf-js = buildNpmPackage {
