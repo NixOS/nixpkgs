@@ -16,7 +16,6 @@
   eigen,
   expat,
   ffmpeg,
-  gcc-unwrapped,
   glew,
   glfw,
   glib,
@@ -106,7 +105,6 @@ stdenv.mkDerivation (finalAttrs: {
     eigen
     expat
     ffmpeg
-    gcc-unwrapped
     glew
     glfw
     glib
