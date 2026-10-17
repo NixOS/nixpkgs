@@ -1,0 +1,12 @@
+--- a/package.json
++++ b/package.json
+@@ -15,8 +15,7 @@
+     "start:docs": "npx nx serve docs",
+     "start:dev": "concurrently -p=\"{name}\" -n=\"Angular,NestJS, Docusaurus\" -c=\"red,orange,green\" \"npm run start:front\" \"npm run start:api\" \"npm run start:docs\"",
+     "serve:node": "npm run migrate && node dist/apps/api/main.js",
+-    "serve:pm2": "npm run migrate && pm2 start dist/apps/api/main.js --name \"scholarsome\"",
+-    "prepare": "husky"
++    "serve:pm2": "npm run migrate && pm2 start dist/apps/api/main.js --name \"scholarsome\""
+   },
+   "private": true,
+   "dependencies": {

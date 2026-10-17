@@ -1,0 +1,54 @@
+--- a/apps/api/src/main.ts
++++ b/apps/api/src/main.ts
+@@ -16,6 +16,35 @@ import { missingSitemapMiddleware } from "./app/providers/missing-sitemap.middle
+ import { noIndexMiddleware } from "./app/providers/no-index.middleware";
+ 
+ async function bootstrap() {
++  // api-spec.json is generated at run time in the original code (needs some env vars like `HOST`)
++  // 
++  // But :
++  //   * It doesn't play well with nix packaging (tries to write in the nix store) ;
++  //   * And prevents the generation of /handbook/api/ during build because the specs are missing,
++  //     which would mean one has to rebuild the docs after first spinning up the server in production.
++  //
++  // This patch generates the specs at build time instead.
++  // The following code will be run once during build and exit right away.
++  if (process.env.GENERATE_API_SPEC_AND_EXIT) {
++      const server = express();
++
++      const app = await NestFactory.create(AppModule, new ExpressAdapter(server), {
++        bufferLogs: process.env.NODE_ENV !== "development"
++      });
++  
++      const config = new DocumentBuilder()
++        .setTitle("Scholarsome API")
++        .setVersion("")
++        .setDescription("This page contains documentation about how to use the Scholarsome API. Currently, only endpoints that do not require authentication are able to be used. In a future update, API tokens will be introduced that allow for the usage of privileged endpoints.")
++        .build();
++
++      const document = SwaggerModule.createDocument(app, config);
++      fs.writeFileSync("./dist/api-spec.json", JSON.stringify(document));
++      await app.close();
++      return;
++  }
++
++
+   const validation = envSchema
+       .prefs({ errors: { label: "key" } })
+       .validate(process.env);
+@@ -105,15 +134,6 @@ async function bootstrap() {
+         .listen(8443);
+   }
+ 
+-  const config = new DocumentBuilder()
+-      .setTitle("Scholarsome API")
+-      .setVersion("")
+-      .setDescription("This page contains documentation about how to use the Scholarsome API. Currently, only endpoints that do not require authentication are able to be used. In a future update, API tokens will be introduced that allow for the usage of privileged endpoints.")
+-      .build();
+-
+-  const document = SwaggerModule.createDocument(app, config);
+-  fs.writeFileSync("./dist/api-spec.json", JSON.stringify(document));
+-
+   await app.init();
+ 
+   http.createServer(server).listen(process.env.HTTP_PORT);
