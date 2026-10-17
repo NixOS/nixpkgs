@@ -21,6 +21,10 @@ in
     "aarch64-linux"
   ],
   variant ? "cuda",
+  # Gate additonal functinality used by NVIDIA Jetson
+  additionalCudaCapabilities ? {
+    aarch64-linux = [ "8.7" ];
+  },
   # Attributes passed to nixpkgs.
   nixpkgsArgs ? {
     config = {
@@ -57,13 +61,21 @@ let
     mapTestOn
     packagePlatforms
     pkgs
+    pkgsFor
+    supportedMatches
     ;
 
   # Package sets to evaluate whole
   # Derivations from these package sets are selected based on the value
   # of their meta.{hydraPlatforms,platforms,badPlatforms} attributes
-  autoPackageSets = builtins.filter (lib.strings.hasPrefix "cudaPackages") (builtins.attrNames pkgs);
-  autoPackagePlatforms = lib.genAttrs autoPackageSets (pset: packagePlatforms pkgs.${pset});
+  autoPackagePlatformsIn =
+    targetPkgs:
+    let
+      autoPackageSets = builtins.filter (lib.strings.hasPrefix "cudaPackages") (
+        builtins.attrNames targetPkgs
+      );
+    in
+    lib.genAttrs autoPackageSets (pset: packagePlatforms targetPkgs.${pset});
 
   # Explicitly select additional packages to also evaluate
   # The desired platforms must be set explicitly here
@@ -172,8 +184,38 @@ let
     };
 
   # Explicitly specified platforms take precedence over the platforms
-  # automatically inferred in autoPackagePlatforms
-  allPackagePlatforms = lib.recursiveUpdate autoPackagePlatforms explicitPackagePlatforms;
-  jobs = mapTestOn allPackagePlatforms;
+  # automatically inferred in autoPackagePlatformsIn
+  allPackagePlatformsIn =
+    targetPkgs: lib.recursiveUpdate (autoPackagePlatformsIn targetPkgs) explicitPackagePlatforms;
+
+  # Filter and build package set that is supported by the system asking
+  capabilityPackagePlatforms =
+    system: cudaCapability:
+    let
+      realArchitecture = cudaLib.mkRealArchitecture cudaCapability;
+      targetPkgs = (pkgsFor system).pkgsForCudaArch.${realArchitecture};
+      restrictToSystem =
+        _: declaredPlatforms: lib.intersectLists (supportedMatches declaredPlatforms) [ system ];
+    in
+    {
+      ${realArchitecture} = lib.mapAttrsRecursive restrictToSystem (allPackagePlatformsIn targetPkgs);
+    };
+
+  requestedCudaCapabilities = lib.filterAttrs (
+    system: _: lib.elem system supportedSystems
+  ) additionalCudaCapabilities;
+
+  additionalCapabilityPackagePlatforms = lib.foldl' lib.recursiveUpdate { } (
+    lib.concatLists (
+      lib.mapAttrsToList (system: map (capabilityPackagePlatforms system)) requestedCudaCapabilities
+    )
+  );
+
+  jobs = mapTestOn (
+    allPackagePlatformsIn pkgs
+    // lib.optionalAttrs (variant == "cuda") {
+      pkgsForCudaArch = additionalCapabilityPackagePlatforms;
+    }
+  );
 in
 jobs
