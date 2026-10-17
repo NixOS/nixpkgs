@@ -357,4 +357,149 @@ in
       )
     '';
   };
+
+  # ZED brings a physically returned mirror drive back online and
+  # triggers a resilver.
+  auto-online = runTest {
+    name = "zfs-auto-online";
+    meta.maintainers = with lib.maintainers; [
+      tomfitzhenry
+    ];
+
+    nodes.hotplug =
+      { ... }:
+      {
+        boot.supportedFilesystems = [ "zfs" ];
+        boot.zfs.forceImportRoot = false;
+        networking.hostId = "deadbeef";
+        virtualisation.qemu.options = [
+          "-device"
+          "virtio-scsi-pci,id=scsi0"
+        ];
+      };
+
+    testScript =
+      { ... }:
+      ''
+        from datetime import timedelta
+
+        hotplug.wait_for_unit("multi-user.target", timeout=timedelta(minutes=5))
+
+        DISK_BYTES = 2048 * 1024 * 1024
+        # Backend/device id -> explicit SCSI serial. The serial is what udev
+        # turns into the persistent /dev/disk/by-id link that ZED matches.
+        SERIALS = {"diskA": "ZA", "diskB": "ZB"}
+
+        def by_id(name):
+            return f"/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_{SERIALS[name]}"
+
+        def attach(name):
+            img = hotplug.state_dir / f"{name}.img"
+            if not img.exists():
+                with open(img, "wb") as f:
+                    f.truncate(DISK_BYTES)
+            # QEMU keeps the if=none backend across device_del, so a repeated
+            # drive_add reports a duplicate id, which is harmless.
+            out = hotplug.send_monitor_command(
+                f"drive_add 0 id={name},if=none,file={img},format=raw"
+            )
+            assert "Error" not in out or "Duplicate ID" in out, out
+            out = hotplug.send_monitor_command(
+                f"device_add scsi-hd,id={name},drive={name},bus=scsi0.0,serial={SERIALS[name]}"
+            )
+            assert "Error" not in out, out
+            hotplug.wait_until_succeeds(
+                f"test -e {by_id(name)}", timeout=timedelta(seconds=120)
+            )
+            return by_id(name)
+
+        def unplug(name):
+            out = hotplug.send_monitor_command(f"device_del {name}")
+            assert "Error" not in out, out
+            hotplug.wait_until_fails(
+                f"test -e {by_id(name)}", timeout=timedelta(seconds=120)
+            )
+
+        with subtest("ZED auto-onlines a physically returned mirror leg"):
+            a, b = attach("diskA"), attach("diskB")
+
+            hotplug.succeed(
+                f"zpool create -f -O primarycache=none tank mirror {a} {b}",
+                timeout=timedelta(seconds=120),
+            )
+            hotplug.succeed(
+                "zfs create -o primarycache=none tank/data",
+                timeout=timedelta(seconds=60),
+            )
+            # primarycache=none is set before any test file is written, so the
+            # read can never be served from the ARC.
+            cache = hotplug.succeed(
+                "zfs get -H -o value primarycache tank/data",
+                timeout=timedelta(seconds=60),
+            ).strip()
+            print("tank/data primarycache =", cache)
+            assert cache == "none", cache
+
+            # A control file present on both legs, checksummed now. foo's
+            # expected hash is recorded once leg A is gone.
+            hotplug.succeed(
+                "printf pre > /tank/data/pre; sync; sha256sum /tank/data/pre > /tmp/pre.sha",
+                timeout=timedelta(seconds=120),
+            )
+
+            unplug("diskA")
+            hotplug.wait_until_succeeds(
+                "zpool list -H -o health tank | grep -qx DEGRADED",
+                timeout=timedelta(seconds=120),
+            )
+            # foo is written while the pool is degraded, so only the
+            # surviving leg B can receive it.
+            hotplug.succeed(
+                "printf foo > /tank/data/foo; sync; sha256sum /tank/data/foo > /tmp/foo.sha",
+                timeout=timedelta(seconds=120),
+            )
+
+            attach("diskA")
+            hotplug.wait_until_succeeds(
+                "zpool status tank | grep -q 'resilvered.*with 0 errors'",
+                timeout=timedelta(seconds=240),
+            )
+            hotplug.wait_until_succeeds(
+                "zpool status -x | grep -qx 'all pools are healthy'",
+                timeout=timedelta(seconds=120),
+            )
+
+            # Pull B, the leg that certainly holds foo, and drop the page
+            # cache so the read must come from a vdev. Over a 2-disk mirror
+            # this can only work if ZED resilvered A; otherwise A is stale
+            # and B is gone.
+            unplug("diskB")
+            hotplug.succeed(
+                "sync; echo 3 > /proc/sys/vm/drop_caches",
+                timeout=timedelta(seconds=120),
+            )
+
+            readback = hotplug.succeed(
+                "timeout 60 cat /tank/data/foo",
+                timeout=timedelta(seconds=90),
+            ).strip()
+            print("read back /tank/data/foo with leg B pulled:", readback)
+            assert readback == "foo", readback
+            hotplug.succeed(
+                "timeout 60 sha256sum -c /tmp/foo.sha",
+                timeout=timedelta(seconds=90),
+            )
+            hotplug.succeed(
+                "timeout 60 sha256sum -c /tmp/pre.sha",
+                timeout=timedelta(seconds=90),
+            )
+
+            # Reinsert B and let ZED heal the mirror again.
+            attach("diskB")
+            hotplug.wait_until_succeeds(
+                "zpool status -x | grep -qx 'all pools are healthy'",
+                timeout=timedelta(seconds=240),
+            )
+      '';
+  };
 }
