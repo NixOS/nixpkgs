@@ -169,9 +169,8 @@ def run(
         level=logging.WARNING,
     )
 
-    assert os.geteuid() == 0, (
-        f"systemd-nspawn requires root to work. You are {os.geteuid()}"
-    )
+    if os.geteuid() != 0:
+        sys.exit("systemd-nspawn requires root; rerun run-nspawn as root.")
 
     root_dir = Path(root_dir_str)
 

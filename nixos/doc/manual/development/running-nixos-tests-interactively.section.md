@@ -11,8 +11,8 @@ $ ./result/bin/nixos-test-driver
 ```
 
 ::: {.note}
-Tests using `systemd-nspawn` container machines require root privileges to run interactively,
-since the driver calls `systemd-nspawn` directly to start the containers:
+For tests using `systemd-nspawn` containers, run the driver as root
+(see [System Requirements](#sec-running-nixos-tests-requirements)):
 
 ```
 $ sudo ./result/bin/nixos-test-driver
