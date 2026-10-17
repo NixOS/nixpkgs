@@ -1301,7 +1301,7 @@ builtins.intersectAttrs super {
             # Prevent Makefile from calling cabal/Setup again
             "BUILDER=:"
             # Make Haskell build dependencies available
-            "GHC=${self.buildHaskellPackages.ghc.targetPrefix}ghc -global-package-db -package-db $setupPackageConfDir"
+            "GHC=${self.buildHaskellPackages._wrappers.ghc.targetPrefix}ghc -global-package-db -package-db $setupPackageConfDir"
           )
         '';
         installPhase = null;
