@@ -1254,8 +1254,6 @@ with pkgs;
 
   hinit = haskell.lib.compose.justStaticExecutables haskellPackages.hinit;
 
-  hwi = with python3Packages; toPythonApplication hwi;
-
   pass-nodmenu = pass.override {
     dmenuSupport = false;
     pass = pass-nodmenu;
