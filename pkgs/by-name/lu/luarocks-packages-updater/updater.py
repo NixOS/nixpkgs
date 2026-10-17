@@ -13,6 +13,7 @@ import os
 import re
 import shutil
 import subprocess
+import sys
 import tempfile
 import textwrap
 from dataclasses import dataclass
@@ -131,7 +132,9 @@ class LuaPlugin:
 
 
 class LuaUpdateError(RuntimeError):
-    pass
+    def __init__(self, failures: list[tuple[str, str]]):
+        super().__init__(f"Failed to update Lua packages: {', '.join(name for name, _ in failures)}")
+        self.failures = failures
 
 
 def extract_version(nix_expr: str) -> str | None:
@@ -229,7 +232,7 @@ class LuaEditor(nixpkgs_plugin_update.Editor):
             return
 
         assert self.nixpkgs_repo is not None
-        failed_packages = []
+        failures: list[tuple[str, str]] = []
         for spec in specs:
             update = self.get_update(
                 str(args.input_file),
@@ -239,8 +242,8 @@ class LuaEditor(nixpkgs_plugin_update.Editor):
             )
             try:
                 _redirects, updated_plugins = update()
-            except LuaUpdateError:
-                failed_packages.append(spec.name)
+            except LuaUpdateError as e:
+                failures.extend(e.failures)
                 continue
 
             for name, old_ver, new_ver in updated_plugins:
@@ -251,8 +254,8 @@ class LuaEditor(nixpkgs_plugin_update.Editor):
 
                 commit_files(self.nixpkgs_repo, msg, [args.outfile])
 
-        if failed_packages:
-            raise LuaUpdateError(f"Failed to update Lua packages: {', '.join(failed_packages)}")
+        if failures:
+            raise LuaUpdateError(failures)
 
     def generate_nix(self, results: list[tuple[LuaPlugin, str]], outfilename: str):
         with tempfile.NamedTemporaryFile("w+", suffix=".nix") as f:
@@ -448,10 +451,7 @@ class LuaEditor(nixpkgs_plugin_update.Editor):
             self.generate_nix(successful_results, output_file)
 
             if errors:
-                log.error("The following plugins failed to update:")
-                for plug, error in errors:
-                    log.error("%s: %s", plug.name, error)
-                raise LuaUpdateError(f"Failed to update Lua packages: {', '.join(plug.name for plug, _ in errors)}")
+                raise LuaUpdateError([(plug.name, error) for plug, error in errors])
 
             redirects: Redirects = {}
             return redirects, updated_plugins
@@ -560,7 +560,13 @@ def main():
         default_out=Path(GENERATED_NIXFILE),
     )
 
-    editor.run()
+    try:
+        editor.run()
+    except LuaUpdateError as e:
+        log.error("%d Lua package(s) failed to update:", len(e.failures))
+        for name, error in e.failures:
+            log.error("%s: %s", name, error)
+        sys.exit(1)
 
 
 if __name__ == "__main__":
