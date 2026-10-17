@@ -16284,6 +16284,12 @@
     github = "langsjo";
     githubId = 104687438;
   };
+  lapo = {
+    name = "Lapo Luchini";
+    email = "lapo@lapo.it";
+    github = "lapo-luchini";
+    githubId = 420454;
+  };
   larry0x = {
     name = "Larry Engineer";
     email = "nixpkgs@larry.engineer";
