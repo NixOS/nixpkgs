@@ -6178,8 +6178,6 @@ with pkgs;
     fftw = fftwFloat;
   };
 
-  sphinx = with python3Packages; toPythonApplication sphinx;
-
   sphinx-autobuild = with python3Packages; toPythonApplication sphinx-autobuild;
 
   sphinx-serve = with python3Packages; toPythonApplication sphinx-serve;
