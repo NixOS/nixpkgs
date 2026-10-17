@@ -7,6 +7,8 @@
   darwin,
   dbus,
   dotnetCorePackages,
+  dotnet-sdk ? if withMono then dotnetCorePackages.sdk_8_0-source else null,
+  dotnet-sdk_alt ? if withMono then dotnetCorePackages.sdk_9_0-source else null,
   embree,
   enet,
   exportTemplatesHash,
@@ -88,14 +90,47 @@ assert lib.asserts.assertOneOf "withPrecision" withPrecision [
   "double"
 ];
 let
+  # we're including sdk 8 as without it the build breaks if it can't find a specific package from 8.0.0
+  # the potentially overriden sdk is first to prioritize it over the default
+  _dotnet-sdk =
+    let
+      sdk_8_0 = dotnetCorePackages.sdk_8_0-source;
+    in
+    if withMono then
+      if (builtins.compareVersions sdk_8_0.version dotnet-sdk.version) != 0 then
+        dotnetCorePackages.combinePackages [
+          dotnet-sdk
+          sdk_8_0
+        ]
+      else
+        sdk_8_0
+    else
+      null;
+
+  _dotnet-sdk_alt =
+    let
+      sdk_9_0 = dotnetCorePackages.sdk_9_0-source;
+    in
+    if withMono then
+      if (builtins.compareVersions sdk_9_0.version dotnet-sdk_alt.version) != 0 then
+        dotnetCorePackages.combinePackages [
+          dotnet-sdk_alt
+          sdk_9_0
+        ]
+      else
+        sdk_9_0
+    else
+      null;
+in
+let
   mkSconsFlagsFromAttrSet = lib.mapAttrsToList (
     k: v: if builtins.isString v then "${k}=${v}" else "${k}=${builtins.toJSON v}"
   );
 
   arch = stdenv.hostPlatform.linuxArch;
 
-  dotnet-sdk = if withMono then dotnetCorePackages.sdk_8_0-source else null;
-  dotnet-sdk_alt = if withMono then dotnetCorePackages.sdk_9_0-source else null;
+  dotnet-sdk = _dotnet-sdk;
+  dotnet-sdk_alt = _dotnet-sdk_alt;
 
   dottedVersion = lib.replaceStrings [ "-" ] [ "." ] version + lib.optionalString withMono ".mono";
 
