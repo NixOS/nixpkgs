@@ -5876,7 +5876,6 @@ with pkgs;
   openstackclient-full = openstackclient.overridePythonAttrs (oldAttrs: {
     dependencies = oldAttrs.dependencies ++ oldAttrs.optional-dependencies.cli-plugins;
   });
-  mistralclient = with python313Packages; toPythonApplication python-mistralclient;
   neutronclient = with python313Packages; toPythonApplication python-neutronclient;
   swiftclient = with python313Packages; toPythonApplication python-swiftclient;
   troveclient = with python313Packages; toPythonApplication python-troveclient;
