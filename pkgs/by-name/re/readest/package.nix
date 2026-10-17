@@ -78,7 +78,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     jq '.version = "${finalAttrs.version}"' package.json | sponge package.json
 
     mkdir -p src-tauri/plugins/tauri-plugin-turso/dist-js
-    cp -r ${finalAttrs.passthru.tursoPlugin} src-tauri/plugins/tauri-plugin-turso/dist-js
+    cp -r ${finalAttrs.passthru.tursoPlugin}/. src-tauri/plugins/tauri-plugin-turso/dist-js/
     jq '.scripts.build = "true"' \
       src-tauri/plugins/tauri-plugin-turso/package.json | \
       sponge src-tauri/plugins/tauri-plugin-turso/package.json
@@ -123,7 +123,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pnpm --filter @readest/readest-app build
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--subpackage"
+      "tursoPlugin"
+    ];
+  };
 
   passthru.tursoPluginDeps = fetchPnpmDeps {
     pname = "tauri-plugin-turso";
@@ -148,11 +153,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pnpmDeps = finalAttrs.passthru.tursoPluginDeps;
 
     buildPhase = ''
+      runHook preBuild
       pnpm build
+      runHook postBuild
     '';
 
     installPhase = ''
-      cp -r dist-js $out
+      runHook preInstall
+      cp -r dist-js "$out"
+      runHook postInstall
     '';
   };
 
