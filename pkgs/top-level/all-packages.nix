@@ -2282,8 +2282,6 @@ with pkgs;
   # ntfsprogs are merged into ntfs-3g
   ntfsprogs = pkgs.ntfs3g;
 
-  ome_zarr = with python3Packages; toPythonApplication ome-zarr;
-
   ophcrack-cli = ophcrack.override { enableGui = false; };
 
   openbaoPlugins = callPackage ../by-name/op/openbao/plugins.nix { };
