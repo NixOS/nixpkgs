@@ -5,6 +5,8 @@
   replaceVarsWith,
   lib,
   writeShellApplication,
+  hack-font,
+  xwayland-run,
 }:
 
 let
@@ -14,6 +16,7 @@ let
     name = "run-test";
     runtimeInputs = [
       (emacs.pkgs.withPackages (epkgs: [
+        hack-font
         epkgs.dash
         epkgs.flx-ido
         (epkgs.callPackage (mkEpkg {
@@ -64,10 +67,11 @@ runCommand "test-emacs-withPackages-wrapper"
   {
     nativeBuildInputs = [
       run-test
+      xwayland-run
     ];
   }
   ''
-    run-test
+    xwfb-run -- run-test
 
     touch $out
   ''
