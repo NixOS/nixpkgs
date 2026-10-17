@@ -6,12 +6,12 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.2.8";
+  version = "2.3.0";
   pname = "libpaper";
 
   src = fetchurl {
     url = "https://github.com/rrthomas/libpaper/releases/download/v${finalAttrs.version}/libpaper-${finalAttrs.version}.tar.gz";
-    hash = "sha256-HjMFcWkBkYdOykFex2iJ3RG6uYh6IwLWo2Zc0IHE13s=";
+    hash = "sha256-iCscdjYFL8mjGMqiApKzVha1iIJLcOcFMBgmKymxQJo=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
