@@ -187,10 +187,10 @@ maven.buildMavenPackage {
     # Ensure the main executable has execute permissions
     chmod +x $out/Applications/TuxGuitar.app/Contents/MacOS/tuxguitar.sh
 
-    # Symlink doesn't work. We have to create a wrapper script instead
     mkdir -p $out/bin
-    makeWrapper "$out/Applications/TuxGuitar.app/Contents/MacOS/tuxguitar.sh" \
-      "$out/bin/tuxguitar"
+    # the script depends on $0 to work. We wrap it to give it a stable $0 without space. The script doesn't handle $0 containing space correctly.
+    wrapProgram "$out/Applications/TuxGuitar.app/Contents/MacOS/tuxguitar.sh"
+    ln -s $out/Applications/TuxGuitar.app/Contents/MacOS/tuxguitar.sh $out/bin/tuxguitar
   ''
   # Linux: Install traditional layout
   + lib.optionalString stdenv.hostPlatform.isLinux ''
