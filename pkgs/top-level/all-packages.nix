@@ -2443,8 +2443,6 @@ with pkgs;
 
   po4a = perlPackages.Po4a;
 
-  pyocd = with python3Packages; toPythonApplication pyocd;
-
   pypass = with python3Packages; toPythonApplication pypass;
 
   pydeps = with python3Packages; toPythonApplication pydeps;
