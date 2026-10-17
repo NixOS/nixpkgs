@@ -82,6 +82,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     # Copy language files from release tarball (contains all translations)
     cp -r ${finalAttrs.passthru.releaseTarball}/resources/lang/* $out/resources/lang/
+    cp -r ${finalAttrs.passthru.releaseTarball}/public/v3/i18n/* $out/public/v3/i18n/
 
     rm -R $out/share $out/storage $out/bootstrap/cache $out/node_modules
     ln -s ${dataDir}/storage $out/storage
