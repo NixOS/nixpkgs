@@ -18,6 +18,16 @@
     services.journald.settings.Journal.Audit = lib.mkDefault true;
     security.audit.enable = true;
   };
+  nodes.namespaced = {
+    services.journald.namespaces.namespace-test.settings.Journal.Storage = "volatile";
+    systemd.services.log-for-namespace-test = {
+      serviceConfig = {
+        Type = "oneshot";
+        LogNamespace = "namespace-test";
+        ExecStart = "${pkgs.coreutils}/bin/echo hello-from-namespace-test";
+      };
+    };
+  };
   nodes.containerCheck = {
     containers.c1 = {
       autoStart = true;
@@ -54,6 +64,19 @@
       journaldAudit.succeed("journalctl _TRANSPORT=audit --grep 'unit=systemd-journald'")
       # logs should NOT end up in audit log
       journaldAudit.fail("grep 'unit=systemd-journald' /var/log/audit/audit.log")
+
+
+    with subtest("journal namespaces"):
+      namespaced.wait_for_unit("multi-user.target")
+      namespaced.succeed("grep -Fx 'Storage=volatile' /etc/systemd/journald@namespace-test.conf")
+      namespaced.systemctl("start log-for-namespace-test.service")
+      namespaced.wait_until_succeeds("journalctl --namespace=namespace-test --grep=hello-from-namespace-test")
+      namespaced.succeed("systemctl is-active systemd-journald@namespace-test.service")
+      # volatile storage lands under /run, not /var
+      namespaced.succeed("find /run/log/journal/$(cat /etc/machine-id).namespace-test -name '*.journal' | grep -q .")
+      namespaced.fail("find /var/log/journal/$(cat /etc/machine-id).namespace-test -name '*.journal' | grep -q .")
+      # the default namespace must not see it
+      namespaced.fail("journalctl --grep=hello-from-namespace-test")
 
 
     with subtest("container systemd-journald-audit not running"):

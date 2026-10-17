@@ -60,9 +60,44 @@ in
         freeformType = lib.types.attrsOf utils.systemdUtils.unitOptions.unitOption;
       };
     };
+    services.journald.namespaces = lib.mkOption {
+      default = { };
+      example = {
+        postfix.settings.Journal = {
+          Storage = "persistent";
+          MaxRetentionSec = "14day";
+        };
+      };
+      description = ''
+        Options for systemd journal namespaces. See "Journal Namespaces"
+        section of {manpage}`systemd-journald.service(8)`.
+      '';
+      type = lib.types.attrsOf (
+        lib.types.submodule {
+          options.settings.Journal = lib.mkOption {
+            default = { };
+            example = {
+              Storage = "volatile";
+            };
+            description = ''
+              Options for this journal namespace. See {manpage}`journald.conf(5)`
+              man page for available options.
+            '';
+            type = lib.types.submodule {
+              freeformType = lib.types.attrsOf utils.systemdUtils.unitOptions.unitOption;
+            };
+          };
+        }
+      );
+    };
   };
 
   config = {
+    assertions = lib.mapAttrsToList (name: _: {
+      assertion = builtins.match "[A-Za-z0-9:_.-]+" name != null;
+      message = "services.journald.namespaces: `${name}` is not a valid journal namespace name. Must match this regex [A-Za-z0-9:_.-]+";
+    }) cfg.namespaces;
+
     services.journald.settings.Journal = {
       # "keep" isn't systemd's default since v258, so set it explicitly.
       Audit = lib.mkOptionDefault "keep";
@@ -89,19 +124,36 @@ in
       "sockets.target"
     ];
 
-    environment.etc."systemd/journald.conf".text =
-      utils.systemdUtils.lib.settingsToSections cfg.settings;
+    environment.etc = {
+      "systemd/journald.conf".text = utils.systemdUtils.lib.settingsToSections cfg.settings;
+    }
+    // lib.mapAttrs' (
+      name: ns:
+      lib.nameValuePair "systemd/journald@${name}.conf" {
+        text = utils.systemdUtils.lib.settingsToSections ns.settings;
+      }
+    ) cfg.namespaces;
 
     users.groups.systemd-journal.gid = config.ids.gids.systemd-journal;
 
-    systemd.services.systemd-journal-flush.restartIfChanged = false;
-    systemd.services.systemd-journald.restartTriggers = [
-      config.environment.etc."systemd/journald.conf".source
-    ];
-    systemd.services.systemd-journald.stopIfChanged = false;
-    systemd.services."systemd-journald@".restartTriggers = [
-      config.environment.etc."systemd/journald.conf".source
-    ];
-    systemd.services."systemd-journald@".stopIfChanged = false;
+    systemd.services = {
+      systemd-journal-flush.restartIfChanged = false;
+      systemd-journald.restartTriggers = [
+        config.environment.etc."systemd/journald.conf".source
+      ];
+      systemd-journald.stopIfChanged = false;
+      "systemd-journald@".stopIfChanged = false;
+    }
+    # Namespaced instances only read journald@<name>.conf (plus drop-ins),
+    # never journald.conf, so trigger restarts on their own file.
+    // lib.mapAttrs' (
+      name: _:
+      lib.nameValuePair "systemd-journald@${name}" {
+        overrideStrategy = "asDropin";
+        restartTriggers = [
+          config.environment.etc."systemd/journald@${name}.conf".source
+        ];
+      }
+    ) cfg.namespaces;
   };
 }
