@@ -213,7 +213,7 @@ in
             if [[ "$state" != "$lastState" ]]; then
               # https://github.com/tailscale/tailscale/blob/v1.72.1/ipn/backend.go#L24-L32
               case "$state" in
-                NeedsLogin|NeedsMachineAuth|Stopped)
+                NeedsLogin)
                   echo "Server needs authentication, sending auth key"
                   tailscale up --auth-key "$(cat ${cfg.authKeyFile})${params}" ${escapeShellArgs cfg.extraUpFlags}
                   ;;
@@ -221,6 +221,9 @@ in
                   echo "Tailscale is running"
                   systemd-notify --ready
                   exit 0
+                  ;;
+                Stopped)
+                  tailscale up
                   ;;
                 *)
                   echo "Waiting for Tailscale State = Running or systemd timeout"
