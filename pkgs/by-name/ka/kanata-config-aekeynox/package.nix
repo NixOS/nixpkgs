@@ -2,17 +2,18 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "kanata-config-aekeynox";
-  version = "0.2.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "OneDeadKey";
-    repo = "arsenik";
+    repo = "kanata-config-aekeynox";
     tag = finalAttrs.version;
-    hash = "sha256-qY+SRWvZoy3iwsoZbzN5+TVWNIe3WWXkUGu/9MT20AU=";
+    hash = "sha256-P2Ogi5xyRCzLEtf0UwTDX2BfTmoJRFz+JI32ONcjeVA=";
   };
 
   dontConfigure = true;
@@ -24,17 +25,22 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share
-    cp -r kanata $out/share/arsenik
+    mkdir -p $out/share/kanata-config-aekeynox
+    cp -r defcfg defsrc deflayer defalias $out/share/kanata-config-aekeynox
 
     runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
-    description = "33-key layout that works with all keyboards";
-    homepage = "https://github.com/OneDeadKey/arsenik";
+    description = "Kanata implementation of the Arsenik keymap";
+    homepage = "https://github.com/OneDeadKey/kanata-config-aekeynox";
     license = lib.licenses.unlicense;
-    maintainers = with lib.maintainers; [ nim65s ];
+    maintainers = with lib.maintainers; [
+      nim65s
+      severindupouy
+    ];
     platforms = lib.platforms.all;
   };
 })
