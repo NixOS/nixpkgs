@@ -18,19 +18,37 @@
   };
 
   config = lib.mkIf config.security.lockKernelModules {
-    boot.kernelModules = lib.concatMap (
-      x:
-      lib.optionals (x.device != null) (
-        if x.fsType == "vfat" then
-          [
-            "vfat"
-            "nls-cp437"
-            "nls-iso8859-1"
-          ]
-        else
-          [ x.fsType ]
-      )
-    ) config.system.build.fileSystems;
+    boot.kernelModules =
+      let
+        # Pseudo-filesystems that are always built into the kernel (CONFIG_TMPFS=y,
+        # CONFIG_PROC_FS=y, etc.) and are never loadable modules.  Passing them to
+        # modprobe causes "Failed to find module 'tmpfs'" warnings from
+        # systemd-modules-load.service.
+        # This list mirrors `specialFSTypes` in tasks/filesystems.nix.
+        builtinFS = [
+          "proc"
+          "sysfs"
+          "tmpfs"
+          "ramfs"
+          "devtmpfs"
+          "devpts"
+        ];
+      in
+      lib.filter (m: !builtins.elem m builtinFS) (
+        lib.concatMap (
+          x:
+          lib.optionals (x.device != null) (
+            if x.fsType == "vfat" then
+              [
+                "vfat"
+                "nls-cp437"
+                "nls-iso8859-1"
+              ]
+            else
+              [ x.fsType ]
+          )
+        ) config.system.build.fileSystems
+      );
 
     systemd.services.disable-kernel-module-loading = {
       description = "Disable kernel module loading";
