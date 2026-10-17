@@ -9434,8 +9434,6 @@ with pkgs;
 
   ### SCIENCE/BIOLOGY
 
-  deepdiff = with python3Packages; toPythonApplication deepdiff;
-
   deep-translator = with python3Packages; toPythonApplication deep-translator;
 
   nest-mpi = nest.override { withMpi = true; };
