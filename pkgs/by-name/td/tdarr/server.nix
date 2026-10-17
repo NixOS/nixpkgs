@@ -5,9 +5,9 @@ callPackage ./common.nix { } {
   component = "server";
 
   hashes = {
-    linux_x64 = "sha256-dAXcBPJ8wOxx4gg50mN6nEgUcDqEOn17eByX2FvphrQ=";
-    linux_arm64 = "sha256-MDDhkSmMTiOEezKpInR86TItkVnX20IKblUf2JUKnKg=";
-    darwin_arm64 = "sha256-NNEvCFZvPJFy6Elh7voeSe847bGVJpnOt/ac5nLEy7Y=";
+    linux_x64 = "sha256-ZyWs710xd34+fj2jCRKIJGe6by6Id3vlIy/golumi0o=";
+    linux_arm64 = "sha256-cmhRNZJTflRS3eFGFXTnbX3d8NfOUzXxzG5XWNl5iPM=";
+    darwin_arm64 = "sha256-A+W/hTELVm8aVUvhN49NO5KbI88MmJsH2ktre4GTM3s=";
   };
 
   includeInPath = [ ccextractor ];
