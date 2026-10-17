@@ -5418,8 +5418,6 @@ with pkgs;
 
   icu = icu78;
 
-  idasen = with python3Packages; toPythonApplication idasen;
-
   imlib2Full = imlib2.override {
     # Compilation error on Darwin with librsvg. For more information see:
     # https://github.com/NixOS/nixpkgs/pull/166452#issuecomment-1090725613
