@@ -15,11 +15,11 @@
 }:
 
 let
-  llvmVersion = "17.0.6";
+  llvmVersion = "22.1.8";
 in
 stdenv.mkDerivation rec {
   pname = "intel-graphics-compiler";
-  version = "2.40.13";
+  version = "2.41.15";
 
   # See the repository for expected versions:
   # <https://github.com/intel/intel-graphics-compiler/blob/v2.16.0/documentation/build_ubuntu.md#revision-table>
@@ -29,14 +29,14 @@ stdenv.mkDerivation rec {
       owner = "intel";
       repo = "intel-graphics-compiler";
       tag = "v${version}";
-      hash = "sha256-koc3ee6ItemDkNpWlBhJX8Dr8Wa4Zpvo08LxiR6BNLE=";
+      hash = "sha256-msKpMkzTyczjLIkmiLmw8QFrsnT6VsB+RDGRSBXHimA=";
     })
     (fetchFromGitHub {
       name = "llvm-project";
       owner = "llvm";
       repo = "llvm-project";
       tag = "llvmorg-${llvmVersion}";
-      hash = "sha256-8MEDLLhocshmxoEBRSKlJ/GzJ8nfuzQ8qn0X/vLA+ag=";
+      hash = "sha256-SF7wFuh4kXZTytpdgX7vUZItKtRobnVICm+ixze4iG0=";
     })
     (fetchFromGitHub {
       name = "vc-intrinsics";
@@ -49,29 +49,19 @@ stdenv.mkDerivation rec {
       name = "opencl-clang";
       owner = "intel";
       repo = "opencl-clang";
-      tag = "v17.0.9";
-      hash = "sha256-hnwUBOy+NebhPyBf4GtsXHdzKEWAFsq8sj0ssIlGjtw=";
+      tag = "v22.1.4";
+      hash = "sha256-pd1HLp/PzSWJASkl+wMs0J+mwxojv79idXJx8s4ygaQ=";
     })
     (fetchFromGitHub {
       name = "llvm-spirv";
       owner = "KhronosGroup";
       repo = "SPIRV-LLVM-Translator";
-      tag = "v17.0.26";
-      hash = "sha256-Q3tUr4FjHDjDRCyOqOKyVx29mMz/88POHs2rWnjBGb4=";
+      tag = "v22.1.5";
+      hash = "sha256-5qqkYcG8JGaLldD9PvbMKUURPpucD44voezQlaQuPmk=";
     })
   ];
 
   patches = [
-    # Fix for GCC 15 by adding a previously-implicit `#include <cstdint>` and
-    # replacing `<ciso646>` with `<version>` in the the llvm directory. Based
-    # on https://github.com/intel/intel-graphics-compiler/pull/383.
-    ./gcc15-llvm-header-fixes.patch
-
-    # Fix for GCC 15 by disabling `-Werror` for `-Wfree-nonheap-object`
-    # warnings within LLVM. This is in accordance with IGC disabling warnings
-    # that originate from within LLVM (see `IGC/common/LLVMWarningsPush.hpp`).
-    ./gcc15-allow-llvm-free-nonheap-object-warning.patch
-
     ./fix-create-directories-to-apply-patches.diff
   ];
 
@@ -102,8 +92,8 @@ stdenv.mkDerivation rec {
     # "git am" wants to check the git history if the commit is already applied, but we do not have that.
     # "git apply" works very similar, but without a git history and supports the same options unlike patch.
     substituteInPlace llvm-project/llvm/projects/opencl-clang/cmake/modules/CMakeFunctions.cmake \
-      --replace-fail 'COMMAND ''${GIT_EXECUTABLE} am --3way --keep-non-patch --ignore-whitespace -C0 ' \
-                     'COMMAND ''${GIT_EXECUTABLE} apply --3way --ignore-whitespace -C0 '
+      --replace-fail 'COMMAND ''${GIT_EXECUTABLE} am --3way --keep-non-patch --ignore-whitespace' \
+                     'COMMAND ''${GIT_EXECUTABLE} apply --3way --ignore-whitespace -C0'
 
     # The build system only applies patches when the sources are in a Git repository.
     export HOME=$(mktemp -d)
