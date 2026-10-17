@@ -9872,8 +9872,6 @@ with pkgs;
 
   isabelle-components = recurseIntoAttrs (callPackage ../by-name/is/isabelle/components { });
 
-  lean3 = lean;
-
   leo2 = callPackage ../applications/science/logic/leo2 {
     inherit (ocaml-ng.ocamlPackages_4_14_unsafe_string) ocaml camlp4;
   };
