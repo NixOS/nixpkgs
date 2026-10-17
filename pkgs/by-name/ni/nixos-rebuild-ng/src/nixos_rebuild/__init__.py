@@ -352,6 +352,8 @@ def parse_args(
         if args.flake is None:
             # Disable flake auto-detection since we're using a pre-built store path
             args.flake = False
+        # When using a store-path, there is no way to find the attribute for a newer nixos-rebuild
+        args.no_reexec = True
 
     return args, grouped_nix_args
 
