@@ -7,11 +7,8 @@
   nukeReferences,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  # Use of the rtl8852bu and rlt8832bu drivers should no longer be required in Linux kernel version '7.2' and greater.
-  #
-  # See: https://github.com/morrownr/rtl8852bu-20250826/blob/b6a299b4fe95cb6a37eec27a6c3b21cbaa6abfa8/README.md?plain=1#L25
   pname = "rtl8852bu";
-  version = "${kernel.version}-unstable-2026-10-10";
+  version = "${kernel.version}-unstable-2026-10-02";
 
   src = fetchFromGitHub {
     owner = "morrownr";
@@ -31,7 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    ./support-linux-kernel-versions-6.1-6.7.patch
+    # https://github.com/morrownr/rtl8852bu-20250826/pull/27
+    ./widen-support-for-kernel-versions-without-drvwrap.patch
   ];
 
   postPatch = ''
@@ -67,6 +65,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  # Use of the rtl8852bu and rtl8832bu drivers should no longer be required in Linux kernel version '7.2' and greater.
+  #
+  # See: https://github.com/morrownr/rtl8852bu-20250826/blob/b6a299b4fe95cb6a37eec27a6c3b21cbaa6abfa8/README.md?plain=1#L25
   meta = {
     description = "Driver for Realtek rtl8852bu and rtl8832bu chipsets, provides the 8852bu mod";
     homepage = "https://github.com/morrownr/rtl8852bu-20250826";
