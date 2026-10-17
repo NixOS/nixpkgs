@@ -96,6 +96,68 @@
   # or doc/build-helpers/testers.chapter.md
   testEqualArrayOrMap = callPackage ./testEqualArrayOrMap { };
 
+  testEqualEvalSet = lib.extendMkDerivation {
+    constructDrv = stdenvNoCC.mkDerivation;
+    excludeDrvArgNames = [
+      "tests"
+    ];
+    extendDrvArgs =
+      finalAttrs:
+      {
+        name,
+        tests,
+        literalPackage ? "",
+        # Name attributes handled by mkDerivation
+      }:
+      let
+        genPassthruHint =
+          attrName:
+          if finalAttrs.literalPackage != "" then
+            finalAttrs.literalPackage + "." + attrName
+          else
+            "the test package's passthru." + attrName;
+      in
+      {
+        __structuredAttrs = true;
+        preferLocalBuild = true;
+        inherit
+          name
+          literalPackage
+          ;
+        nTests = lib.length (lib.attrNames finalAttrs.passthru.all-tests);
+        nFailures = lib.length finalAttrs.passthru.failures;
+        testResultsText = lib.concatMapAttrsStringSep "\n" (
+          n: v: "[${if v.expr == v.expected then "PASS" else "FAIL"}] ${n}"
+        ) finalAttrs.passthru.all-tests;
+        testFailuresText = lib.concatLines (map (t: "- " + t.name) finalAttrs.passthru.failures);
+        testAccessText = ''
+          The tests can be found in ${genPassthruHint "all-tests"}
+          The failures in ${genPassthruHint "failures"}
+        '';
+        buildCommand = ''
+          echo "''${literalPackage:-$name} has $nTests tests, $nFailures failed."
+          echo "$testResultsText"
+          if [[ -n "$testFailuresText" ]]; then
+            echo "ERROR: ''${literalPackage:-name}: $nFailures failed tests encountered."
+            echo "$testFailuresText"
+            echo "$testAccessText"
+            exit 1
+          fi
+          echo "''${literalPackage:-name}: All tests passed."
+          touch "$out"
+        '';
+        passthru = {
+          all-tests = tests;
+          failures = lib.runTests (
+            {
+              tests = lib.attrNames finalAttrs.passthru.all-tests;
+            }
+            // finalAttrs.passthru.all-tests
+          );
+        };
+      };
+  };
+
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testVersion
   # or doc/build-helpers/testers.chapter.md
   testVersion =
