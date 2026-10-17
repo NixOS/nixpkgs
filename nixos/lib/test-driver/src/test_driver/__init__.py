@@ -43,6 +43,16 @@ class EnvDefault(argparse.Action):
         setattr(namespace, self.dest, values)
 
 
+class DeprecatedKeepVMState(argparse.Action):
+    def __call__(self, parser, namespace, values, option_string=None):
+        print(
+            f"{parser.prog}: warning: --keep-vm-state is deprecated; "
+            "use --keep-machine-state instead.",
+            file=sys.stderr,
+        )
+        setattr(namespace, self.dest, True)
+
+
 def writeable_dir(arg: str) -> Path:
     """Raises an ArgumentTypeError if the given argument isn't a writeable directory
     Note: We want to fail as early as possible if a directory isn't writeable,
@@ -98,7 +108,9 @@ def main() -> None:
         "--keep-vm-state",
         help=argparse.SUPPRESS,
         dest="keep_machine_state",
-        action="store_true",
+        action=DeprecatedKeepVMState,
+        nargs=0,
+        default=False,
     )
     arg_parser.add_argument(
         "-K",
@@ -140,12 +152,6 @@ def main() -> None:
     )
 
     args = arg_parser.parse_args()
-
-    if "--keep-vm-state" in sys.argv:
-        warnings.warn(
-            "The flag '--keep-vm-state' is deprecated. Use '--keep-machine-state' instead.",
-            DeprecationWarning,
-        )
 
     output_directory = args.output_directory.resolve()
     logger = CompositeLogger([TerminalLogger()])
