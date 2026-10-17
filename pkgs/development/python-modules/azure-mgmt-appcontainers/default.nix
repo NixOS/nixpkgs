@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-appcontainers";
-  version = "4.0.0";
+  version = "5.1.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_appcontainers";
     inherit version;
-    hash = "sha256-FzETbKAWbF+8IaWM036nZ4fSCYnn+V3BKuYn768dw6U=";
+    hash = "sha256-0hiEOkknHMSkcJS9VD1JE3Hf2SVElqZ6NzWSJ2MeU8I=";
   };
 
   build-system = [ setuptools ];
