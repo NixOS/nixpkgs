@@ -10,6 +10,7 @@
   lib,
   libclang,
   makeDesktopItem,
+  copyDesktopItems,
   nix-update-script,
   pango,
   pkg-config,
@@ -17,20 +18,6 @@
   stdenv,
 }:
 
-let
-  desktopItem = makeDesktopItem {
-    categories = [
-      "Audio"
-      "AudioVideo"
-    ];
-    comment = "Spotify client with native GUI written in Rust, without Electron";
-    desktopName = "Psst";
-    exec = "psst-gui %U";
-    icon = "psst";
-    name = "Psst";
-    startupWMClass = "psst-gui";
-  };
-in
 rustPlatform.buildRustPackage {
   pname = "psst";
   version = "0-unstable-2026-08-18";
@@ -51,7 +38,10 @@ rustPlatform.buildRustPackage {
     LIBCLANG_PATH = "${lib.getLib libclang}/lib";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    copyDesktopItems
+  ];
 
   buildInputs = [
     atk
@@ -71,9 +61,23 @@ rustPlatform.buildRustPackage {
     ./make-build-reproducible.patch
   ];
 
+  desktopItems = [
+    (makeDesktopItem {
+      categories = [
+        "Audio"
+        "AudioVideo"
+      ];
+      comment = "Spotify client with native GUI written in Rust, without Electron";
+      desktopName = "Psst";
+      exec = "psst-gui %U";
+      icon = "psst";
+      name = "Psst";
+      startupWMClass = "psst-gui";
+    })
+  ];
+
   postInstall = ''
     install -Dm644 psst-gui/assets/logo_512.png -t $out/share/icons/hicolor/512x512/apps/psst.png
-    install -Dm644 ${desktopItem}/share/applications/* -t $out/share/applications
   '';
 
   passthru.updateScript = nix-update-script {

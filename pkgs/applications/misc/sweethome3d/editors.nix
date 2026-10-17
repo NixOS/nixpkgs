@@ -4,6 +4,7 @@
   fetchzip,
   makeWrapper,
   makeDesktopItem,
+  copyDesktopItems,
   jdk,
   ant,
   stripJavaArchivesHook,
@@ -38,21 +39,25 @@ let
         description
         ;
       exec = sweetExec module;
-      editorItem = makeDesktopItem {
-        inherit exec desktopName;
-        name = pname;
-        comment = description;
-        genericName = "Computer Aided (Interior) Design";
-        categories = [
-          "Graphics"
-          "2DGraphics"
-          "3DGraphics"
-        ];
-      };
+
+      desktopItems = [
+        (makeDesktopItem {
+          inherit exec desktopName;
+          name = pname;
+          comment = description;
+          genericName = "Computer Aided (Interior) Design";
+          categories = [
+            "Graphics"
+            "2DGraphics"
+            "3DGraphics"
+          ];
+        })
+      ];
 
       nativeBuildInputs = [
         makeWrapper
         stripJavaArchivesHook
+        copyDesktopItems
       ];
       buildInputs = [
         ant
@@ -78,13 +83,16 @@ let
       '';
 
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out/bin
         mkdir -p $out/share/{java,applications}
         cp ${module}-${version}.jar $out/share/java/.
-        cp "${editorItem}/share/applications/"* $out/share/applications
         makeWrapper ${jdk}/bin/java $out/bin/$exec \
           --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3.out}/share:${gsettings-desktop-schemas}/share:$out/share:$GSETTINGS_SCHEMAS_PATH" \
           --add-flags "-jar $out/share/java/${module}-${version}.jar -d${toString stdenv.hostPlatform.parsed.cpu.bits}"
+
+        runHook postInstall
       '';
 
       dontStrip = true;

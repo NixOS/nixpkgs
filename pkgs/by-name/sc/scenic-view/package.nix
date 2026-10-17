@@ -7,6 +7,7 @@
   gradle_8,
   fetchpatch2,
   makeDesktopItem,
+  copyDesktopItems,
   makeWrapper,
 }:
 let
@@ -17,35 +18,19 @@ let
     }
   );
 
+  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
+  gradle = gradle_8;
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "scenic-view";
   version = "11.0.2";
 
   src = fetchFromGitHub {
     owner = "JonathanGiles";
     repo = "scenic-view";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1idfh9hxqs4fchr6gvhblhvjqk4mpl4rnpi84vn1l3yb700z7dwy";
   };
-
-  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
-  gradle = gradle_8;
-
-  desktopItem = makeDesktopItem {
-    name = "scenic-view";
-    desktopName = "scenic-view";
-    exec = "scenic-view";
-    comment = "JavaFx application to visualize and modify the scenegraph of running JavaFx applications.";
-    mimeTypes = [
-      "application/java"
-      "application/java-vm"
-      "application/java-archive"
-    ];
-    categories = [ "Development" ];
-  };
-
-in
-stdenv.mkDerivation rec {
-  inherit pname version src;
 
   patches = [
     (fetchpatch2 {
@@ -60,10 +45,26 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     gradle
     makeWrapper
+    copyDesktopItems
+  ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "scenic-view";
+      desktopName = "scenic-view";
+      exec = "scenic-view";
+      comment = "JavaFx application to visualize and modify the scenegraph of running JavaFx applications.";
+      mimeTypes = [
+        "application/java"
+        "application/java-vm"
+        "application/java-archive"
+      ];
+      categories = [ "Development" ];
+    })
   ];
 
   mitmCache = gradle.fetchDeps {
-    inherit pname;
+    inherit (finalAttrs) pname;
     data = ./deps.json;
   };
 
@@ -80,8 +81,6 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
-
-  desktopItems = [ desktopItem ];
 
   meta = {
     broken =
@@ -102,4 +101,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ wirew0rm ];
     platforms = lib.platforms.all;
   };
-}
+})
