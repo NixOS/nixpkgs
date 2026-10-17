@@ -1,0 +1,22 @@
+See https://github.com/Blosc/c-blosc2/issues/769
+
+3.0.0 removed BLOSC2_MAX_DIM. Restoring it temporarily allows
+us to upgrade past 3.0.0 without waiting for every depending
+package to upgrade their bundled hdf5-blosc2 past
+https://github.com/Blosc/HDF5-Blosc2/pull/3. Remove once
+hdf5plugin, pytables et al compile without it.
+
+--- b/include/blosc2.h
++++ a/include/blosc2.h
+@@ -39,8 +39,11 @@
+ #ifdef __cplusplus
+ extern "C" {
+ #endif
++
++/* The maximum number of dimensions for Blosc2 NDim arrays */
++#define BLOSC2_MAX_DIM 8
+ 
+ // For compatibility with the Blosc 1.x series
+ #ifdef BLOSC1_COMPAT
+   // Blosc2 symbols that should be accessible from Blosc 1.x API
+   #define BLOSC_VERSION_MAJOR BLOSC2_VERSION_MAJOR
