@@ -20,6 +20,7 @@
   llvmPackages_20,
   llvmPackages_21,
   llvmPackages_22,
+  llvmPackages_23,
   makeWrapper,
   openssl,
   pcre2,
@@ -366,5 +367,13 @@ rec {
     doCheck = false;
   };
 
-  crystal = crystal_1_21;
+  crystal_1_22 = generic {
+    version = "1.22.3";
+    sha256 = "sha256-UvuuJ18FZm7PGJ0mLskdrOxgRnlVDSl/QL5rQTu7Guc=";
+    binary = binaryCrystal_1_10;
+    llvmPackages = llvmPackages_23;
+    doCheck = false;
+  };
+
+  crystal = crystal_1_22;
 }
