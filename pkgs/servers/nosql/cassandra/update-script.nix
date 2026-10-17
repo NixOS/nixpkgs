@@ -56,6 +56,7 @@ writeScript "update-cassandra_${generation}" ''
   gpg --trustdb-name "$tmp/trust.db" --batch --verify --trust-model direct $tmp/src.tar.gz.asc $tmp/src.tar.gz
 
   hash="$(nix-prefetch-url "file://$tmp/src.tar.gz")"
+  hash="$(nix --extra-experimental-features nix-command hash convert --hash-algo sha256 --to sri "$hash")"
   cat >${filename} <<EOF
   {
     "version": "$version",
