@@ -5142,7 +5142,7 @@ with pkgs;
 
   patchelfUnstable = lowPrio (callPackage ../development/tools/misc/patchelf/unstable.nix { });
 
-  pgcli = with pkgs.python3Packages; toPythonApplication pgcli;
+  pgcli = with python3Packages; toPythonApplication pgcli;
 
   pkgconf = callPackage ../build-support/pkg-config-wrapper {
     pkg-config = pkgconf-unwrapped;
