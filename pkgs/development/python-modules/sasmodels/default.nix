@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "sasmodels";
-  version = "1.0.12";
+  version = "1.1.0b1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SasView";
     repo = "sasmodels";
     tag = "v${version}";
-    hash = "sha256-2AeFYFyK3jgJB/t4wMiHyKuKBD7CVLKl6cRSeICO+zQ=";
+    hash = "sha256-J+S4pCT5Ru8gXKkfLc/OeK+9frO1HSH9rx+OpNiuzBY=";
   };
 
   postPatch = ''
