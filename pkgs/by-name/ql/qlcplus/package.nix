@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qlcplus";
-  version = "5.2.2";
+  version = "5.3.0";
 
   src = fetchFromGitHub {
     owner = "mcallegari";
     repo = "qlcplus";
     rev = "QLC+_${version}";
-    hash = "sha256-e8KyuCnzTUz/f6cfT7LyUQ9snaFBnE5WTc4FP7jhdRY=";
+    hash = "sha256-55Jy4t60Lc6YOGko6fW/pUjS5uAiNhVDn4bm8LBWkzI=";
   };
 
   nativeBuildInputs = [
@@ -62,6 +62,12 @@ stdenv.mkDerivation rec {
 
     # Drop hardcoded "/usr" prefix so files install to $out instead of $out/usr
     substituteInPlace variables.cmake --replace-fail 'set(INSTALLROOT "/usr")' 'set(INSTALLROOT "")'
+
+    # Keep our CMAKE_INSTALL_LIBDIR instead of recomputing it, which picks lib64
+    # and leaves the binary unable to find libqlcplusengine5.so
+    substituteInPlace variables.cmake \
+      --replace-fail 'unset(CMAKE_INSTALL_LIBDIR CACHE)' "" \
+      --replace-fail 'unset(CMAKE_INSTALL_LIBDIR)' ""
   '';
 
   cmakeFlags = [
