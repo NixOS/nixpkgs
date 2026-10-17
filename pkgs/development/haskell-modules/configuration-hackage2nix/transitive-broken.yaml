@@ -4,46 +4,181 @@
 # depend on a dependency marked as broken.
 dont-distribute-packages:
 
+ - 2captcha
+ - 3d-graphics-examples
+ - 3dmodels
  - 4Blocks
  - a50
+ - AAI
+ - aasam
+ - abacate
  - abcBridge
+ - abcnotation
+ - abeson
+ - abides
+ - abnf
  - AbortT-monadstf
  - AbortT-mtl
+ - AbortT-transformers
+ - abstract-par-accelerate
+ - abt
+ - AC-BuildPlatform
+ - AC-EasyRaster-GTK
+ - AC-HalfInteger
+ - ac-machine
  - ac-machine-conduit
+ - AC-MiniTest
+ - AC-Terminal
+ - AC-VanillaArray
  - accelerate-arithmetic
+ - accelerate-fftw
  - accelerate-fourier
+ - accelerate-llvm-native
+ - accelerate-random
  - accelerate-typelits
+ - accelerate-utility
+ - accentuateus
+ - access-time
  - access-token-provider
+ - accuerr
+ - achille
+ - acid-state-dist
+ - acid-state-tls
+ - ACME
+ - acme-all-monad
  - acme-circular-containers
+ - acme-comonad
+ - acme-dont
+ - acme-flipping-tables
+ - acme-hq9plus
+ - acme-http
+ - acme-inator
+ - acme-io
+ - acme-kitchen-sink
+ - acme-left-pad
+ - acme-memorandom
+ - acme-miscorder
+ - acme-mutable-package
+ - acme-not-a-joke
+ - acme-now
+ - acme-numbersystem
+ - acme-operators
  - acme-php
  - acme-safe
+ - acme-schoenfinkel
+ - acme-strfry
+ - acme-stringly-typed
+ - acme-strtok
+ - acme-this
+ - acme-zalgo
+ - acme-zero
+ - acousticbrainz-client
+ - ActionKid
  - activehs
+ - activehs-base
+ - activitypub
+ - activitystreams-aeson
  - actor
+ - Adaptive
+ - Adaptive-Blaisorblade
+ - adaptive-containers
+ - adaptive-tuple
+ - adb
+ - addy
+ - adhoc-fixtures-hspec
  - adhoc-network
  - adict
+ - adjunction
+ - adobe-swatch-exchange
+ - adp-multi
  - adp-multi-monadiccp
  - ADPfusion
  - ADPfusionForest
  - ADPfusionSet
+ - adtrees
  - Advgame
  - Advise-me
+ - AERN-Basics
  - AERN-Net
  - AERN-Real
  - AERN-Real-Double
  - AERN-Real-Interval
  - AERN-RnToRm
  - AERN-RnToRm-Plot
+ - aeson-applicative
+ - aeson-bson
+ - aeson-commit
+ - aeson-compat
+ - aeson-decode
+ - aeson-default
+ - aeson-dependent-sum
+ - aeson-deriving
+ - aeson-diff-generic
+ - aeson-filthy
+ - aeson-flat
+ - aeson-flatten
+ - aeson-flowtyped
+ - aeson-generic-default
+ - aeson-generics-typescript
+ - aeson-injector
+ - aeson-iproute
+ - aeson-json-ast
+ - aeson-lens
+ - aeson-modern-tojson
  - aeson-native
+ - aeson-options
+ - aeson-parsec-picky
+ - aeson-picker
+ - aeson-prefix
+ - aeson-schema
+ - aeson-single-field
+ - aeson-smart
+ - aeson-streams
+ - aeson-t
+ - aeson-toolkit
+ - aeson-utils
+ - aeson-with
+ - affection
  - affine
+ - affine-invariant-ensemble-mcmc
  - afis
  - afv
+ - ag-pictgen
+ - Agata
+ - Agda-executable
+ - agda-language-server
  - agda-server
+ - agda-snippets
  - agda-snippets-hakyll
+ - agda-unused
+ - agda2train
  - agentx
+ - AGI
+ - AhoCorasick
+ - aig
+ - aihc-parser
  - aip
+ - aip-version
+ - air-extra
+ - air-th
+ - airbrake
+ - airgql
+ - airship
+ - airtable-api
+ - ajhc
+ - al
+ - AlanDeniseEricLauren
+ - alerta
+ - alex-prelude
+ - alfred
  - alg
+ - alga
  - algebra-checkers
+ - algebra-dag
  - algebra-sql
+ - algebraic
+ - algebraic-prelude
+ - algo-s
  - algolia
  - AlgoRhythm
  - algorithmic-composition-additional
@@ -51,37 +186,107 @@ dont-distribute-packages:
  - algorithmic-composition-complex
  - algorithmic-composition-frequency-shift
  - algorithmic-composition-overtones
+ - AlgorithmW
  - algraph
+ - align-affine
+ - align-equal
+ - align-text
  - AlignmentAlgorithms
+ - allen
+ - alloy
  - alloy-proxy-fd
+ - ally-invest
  - alms
+ - alpaca-netcode
+ - alpha
+ - alphachar
+ - alpino-tools
+ - alsa
  - alsa-gui
+ - alsa-midi
  - alsa-pcm-tests
  - alsa-seq-tests
+ - altcomposition
+ - alternative-extra
+ - alternative-io
+ - altfloat
  - alto
+ - alure
+ - amazon-emailer
  - amazon-emailer-client-snap
+ - amazon-products
+ - amazonka-contrib-rds-utils
+ - amazonka-dynamodb
+ - amazonka-dynamodb-streams
+ - amazonka-iam-policy
+ - amazonka-mtl
  - amby
+ - AMI
+ - ampersand
+ - amqp-conduit
+ - amqp-streamly
+ - amqp-worker
+ - amrun
+ - analyze
  - analyze-client
+ - anansi
  - anansi-hscolour
+ - anansi-pandoc
  - anatomy
+ - android
+ - android-activity
+ - android-lint-summary
  - AndroidViewHierarchyImporter
+ - angel
+ - angle
+ - animalcase
+ - Animas
+ - animascii
+ - animate
  - animate-example
  - animate-frames
  - animate-preview
  - animate-sdl2
+ - anitomata-aseprite
+ - anki-tools
  - annah
+ - annotated-fix
  - Annotations
+ - anonymous-sums
  - anonymous-sums-tests
+ - ansi-pretty
  - antagonist
+ - antfarm
  - anticiv
+ - antigate
+ - antimirov
+ - antiope-athena
  - antiope-contract
  - antiope-core
  - antiope-dynamodb
+ - antiope-es
+ - antiope-messages
+ - antiope-optparse-applicative
  - antiope-s3
  - antiope-shell
+ - antiope-sns
+ - antiope-sqs
+ - antiope-swf
+ - antiquoter
+ - antisplice
+ - antlr-haskell
  - antlrc
+ - anydbm
+ - aosd
+ - apache-md5
+ - apart
+ - apecs-brillo
  - apelsin
+ - api-builder
+ - api-maker
+ - api-monobank
  - api-rpc-accumulate
+ - api-rpc-factom
  - api-rpc-pegnet
  - api-yoti
  - apiary
@@ -100,57 +305,183 @@ dont-distribute-packages:
  - apiary-session
  - apiary-websockets
  - apis
+ - apns-http2
  - apotiki
+ - app-lens
+ - app-settings
+ - appc
+ - appendful-persistent
+ - apple
  - ApplePush
+ - applicative-fail
+ - applicative-parsec
+ - applicative-quoters
+ - applicative-splice
+ - apply-unordered
+ - approveapi
+ - approx
  - approx-rand-test
+ - ApproxFun-hs
+ - arb-fft
+ - arbb-vm
+ - arbor-lru-cache
+ - arbor-monad-counter
+ - arbor-monad-logger
+ - arbor-monad-metric
  - arbor-monad-metric-datadog
+ - arbor-postgres
+ - arch-hs
+ - archive
  - archive-tar-bytestring
+ - archiver
+ - archlinux
  - archlinux-web
+ - archnews
  - arduino-copilot
+ - arena
  - arff
  - arghwxhaskell
+ - argo
  - argon
+ - argparser
+ - arguedit
  - ariadne
+ - arion
  - arith-encode
  - arithmetic-circuits
+ - armada
+ - armor
+ - arpa
+ - arpack
  - array-forth
+ - array-list
+ - array-mhs
+ - array-primops
+ - arrayfire
  - arraylist
+ - ArrayRef
+ - arrow-improve
+ - arrow-list
+ - arrowapply-utils
+ - arrowp
+ - arrowp-qq
+ - ArrowVHDL
+ - artery
+ - artifact
+ - arxiv-client
  - arxiv-client-cli
+ - asap
  - ascii
+ - ascii-caseless
  - ascii-cows
+ - ascii-flatten
+ - ascii-group
  - ascii-numbers
+ - ascii-string
  - ascii-superset
  - ascii-table
  - ascii-th
+ - ascii-vector-avc
+ - ascii85-conduit
+ - ascii85x
+ - asciidiagram
  - asic
+ - asif
+ - asil
  - ASN1
+ - asn1-ber-syntax
+ - asn1-codec
+ - asn1-data
+ - assembler
+ - assert
  - assert4hs
  - assert4hs-core
  - assert4hs-hspec
  - assert4hs-tasty
+ - assertions
+ - asset-map
  - assimp
+ - assoc-list
+ - assoc-listlike
+ - associative
+ - assumpta
+ - assumpta-core
+ - ast-monad
  - ast-monad-json
+ - astar-monad
+ - astrds
  - astview
  - async-ajax
+ - async-combinators
+ - async-dejafu
+ - async-manager
+ - async-timer
+ - asynchronous-exceptions
+ - AsyncRattus
  - atelier-db
  - atelier-testing
+ - aterm
  - aterm-utils
  - atlassian-connect-core
+ - atlassian-connect-descriptor
  - atmos-dimensional-tf
+ - atndapi
+ - atom
  - atom-msp430
+ - atomic-css
+ - atomic-modify
+ - atomic-modify-general
  - atomic-primops-foreign
+ - atomic-primops-vector
+ - atomo
  - atp
+ - ats-format
+ - ats-pkg
+ - ats-setup
+ - ats-storable
+ - attempt
+ - attenuation
  - attenuation-profunctors
+ - attic
+ - attic-schedule
+ - atto-lisp
+ - AttoBencode
  - AttoJson
+ - attomail
+ - attoparsec-csv
  - attoparsec-enumerator
  - attoparsec-iteratee
+ - attoparsec-run
+ - attoparsec-text
  - attoparsec-text-enumerator
+ - attoparsec-trans
+ - attosplit
+ - Attrac
  - atuin
  - audiovisual
+ - augeas
+ - augur
+ - aur
+ - aur-api
  - aura
+ - Aurochs
+ - authenticate-ldap
+ - authinfo-hs
  - authoring
+ - auto
+ - auto-export
+ - auto-extract
+ - auto-import
+ - auto-split
+ - autoapply
  - AutoForms
+ - autom
+ - automata
+ - autonix-deps
  - autonix-deps-kf5
+ - autopack
+ - autoproc
+ - avatar-generator
  - avers
  - avers-api
  - avers-api-docs
@@ -158,34 +489,75 @@ dont-distribute-packages:
  - aviation-cessna172-diagrams
  - aviation-cessna172-weight-balance
  - aviation-navigation
+ - aviation-units
  - aviation-weight-balance
+ - avr-shake
+ - avro
+ - avro-piper
+ - avwx
+ - awesome-prelude
  - awesomium
  - awesomium-glut
+ - awesomium-raw
+ - aws-academy-grade-exporter
+ - aws-cloudfront-signed-cookies
+ - aws-cloudfront-signer
  - aws-configuration-tools
  - aws-dynamodb-conduit
  - aws-dynamodb-streams
+ - aws-easy
+ - aws-ec2
+ - aws-ec2-knownhosts
  - aws-elastic-transcoder
+ - aws-eventbridge-cron
+ - aws-general
  - aws-kinesis
  - aws-kinesis-client
  - aws-kinesis-reshard
  - aws-lambda
+ - aws-lambda-runtime
+ - aws-larpi
  - aws-mfa-credentials
+ - aws-performance-tests
+ - aws-route53
  - aws-sdk
+ - aws-sdk-text-converter
  - aws-sdk-xml-unordered
+ - aws-secrets
+ - aws-ses-easy
  - aws-sign4
+ - aws-simple
  - aws-sns
+ - aws-transcribe-ws
+ - awsspendsummary
+ - axel
  - axiom
  - axiomatic-classes
  - azimuth-hs
+ - aztecs-asset
+ - aztecs-hierarchy
+ - aztecs-sdl
  - aztecs-sdl-image
  - aztecs-sdl-text
+ - azubi
+ - azure-acs
+ - azure-email
  - azure-functions-worker
  - azure-service-api
  - azure-servicebus
+ - azurify
+ - b-tree
  - b9
+ - babl
  - babylon
+ - babynf
  - backblaze-b2-hs
  - backdropper
+ - backstop
+ - backtracking-exceptions
+ - backward-state
+ - bag
+ - Baggins
  - baikai
  - baikai-agent
  - baikai-claude
@@ -193,6 +565,7 @@ dont-distribute-packages:
  - baikai-kit
  - baikai-openai
  - baikai-trace-otel
+ - bake
  - balkon
  - ballast
  - bamboo
@@ -201,47 +574,166 @@ dont-distribute-packages:
  - bamboo-plugin-photo
  - bamboo-theme-blueprint
  - bamboo-theme-mini-html5
+ - bamse
  - bamstats
+ - Bang
+ - banwords
+ - barbies-th
+ - barchart
+ - barcodes-code128
+ - barecheck
  - barley
  - Barracuda
+ - barrie
+ - barrier
+ - barrier-monad
+ - base-compat-migrate
+ - base-encoding
+ - base-feature-macros
+ - base-generics
+ - base-io-access
+ - base16-lens
  - base32-bytestring
+ - base32-lens
+ - base32-z-bytestring
+ - base58address
+ - base62
+ - base64-conduit
+ - base64-lens
+ - based
+ - basement-cd
+ - basen
  - baserock-schema
+ - basex-client
+ - bash
  - BASIC
+ - basic
+ - basic-gps
+ - basics
+ - baskell
  - batchd
  - batchd-core
  - batchd-docker
  - batchd-libvirt
  - batching
+ - battlenet
  - battlenet-yesod
+ - battleplace
  - battleplace-api
  - battleships
  - bayes-stack
+ - bazel-coverage-report-renderer
+ - bbcode
  - bbi
+ - BCMtools
  - bcp47-orphans
  - bdcs
  - bdcs-api
+ - bdd
+ - bdelta
+ - bdo
+ - beam
+ - beam-automigrate
+ - beam-mysql
+ - beam-newtype-field
  - beam-th
+ - beamable
+ - bearlibterminal
  - beautifHOL
+ - beeminder-api
+ - Befunge93
  - bein
  - belka
+ - bench-graph
+ - BenchmarkHistory
+ - bencodex
+ - bencoding-lens
+ - berkeleydb
+ - BerkeleyDBXML
  - BerlekampAlgorithm
+ - berp
+ - bert
+ - besout
  - BesselJ
+ - bet
+ - betacode
+ - betris
  - bff
+ - bff-mono
+ - bglib
+ - bgmax
+ - bgzf
+ - bibdb
+ - bidi-icu
+ - bidirectional
+ - bidirectional-instances
+ - bidirectionalization-combined
+ - bidispec
+ - bidispec-extras
  - bifunctor
+ - BiGUL
  - billboard-parser
  - billeksah-forms
  - billeksah-main
+ - billeksah-main-static
  - billeksah-pane
+ - billeksah-services
+ - binary-bits
+ - binary-communicator
+ - binary-derive
+ - binary-ext
  - binary-file
+ - binary-indexed-tree
+ - binary-protocol
  - binary-protocol-zmq
+ - binary-store
  - binary-streams
+ - binary-strict
  - binary-tagged
+ - binary-tree
+ - binary-typed
+ - bind-marshal
+ - binder
+ - BinderAnn
+ - binding-core
  - binding-gtk
  - binding-wx
+ - bindings-apr
  - bindings-apr-util
+ - bindings-bfd
+ - bindings-cctools
+ - bindings-common
+ - bindings-dc1394
+ - bindings-eskit
+ - bindings-EsounD
+ - bindings-fann
+ - bindings-fluidsynth
+ - bindings-friso
+ - bindings-gsl
+ - bindings-hamlib
+ - bindings-hdf5
+ - bindings-K8055
+ - bindings-levmar
+ - bindings-libftdi
+ - bindings-libg15
+ - bindings-libpci
+ - bindings-librrd
+ - bindings-libstemmer
+ - bindings-libusb
+ - bindings-libv4l2
  - bindings-linux-videodev2
+ - bindings-monetdb-mapi
+ - bindings-mpdecimal
  - bindings-ppdev
+ - bindings-sc3
+ - bindings-sipc
+ - bindings-wlc
+ - bindynamic
+ - binembed
  - binembed-example
+ - binsm
+ - bio
+ - bio-sequence
  - bioace
  - bioalign
  - Biobase
@@ -260,8 +752,10 @@ dont-distribute-packages:
  - BiobaseTypes
  - BiobaseVienna
  - BiobaseXNA
+ - biocore
  - biofasta
  - biofastq
+ - biohazard
  - BioHMM
  - bioinformatics-toolkit
  - biophd
@@ -272,121 +766,357 @@ dont-distribute-packages:
  - birch-beer
  - bird
  - BirdPP
+ - biscuit-haskell
  - biscuit-servant
+ - bisect-binary
  - bishbosh
  - bit-array
+ - bit-stream
  - bitcoin-address
  - bitcoin-api
  - bitcoin-api-extra
  - bitcoin-block
+ - bitcoin-compact-filters
+ - bitcoin-hs
+ - bitcoin-keys
+ - bitcoin-payment-channel
+ - bitcoin-rpc
+ - bitcoin-script
+ - bitcoin-scripting
  - bitcoin-tx
  - bitcoind-regtest
+ - bitcoind-rpc
+ - bitfield
  - Bitly
  - bitly-cli
  - bitmaps
+ - bits-atomic
+ - bits-conduit
+ - bits-extras
+ - bits-show
+ - bitset
+ - bitspeak
+ - BitStringRandomMonad
+ - BitSyntax
  - bittorrent
+ - bitx-bitcoin
+ - bizzlelude-js
+ - bkr
  - bla
+ - blagda
+ - blakesum
  - blakesum-demo
  - Blammo
  - Blammo-wai
+ - blas
  - BlastHTTP
  - blastxml
  - blatex
  - blaze-builder-enumerator
  - blaze-colonnade
+ - blaze-html-contrib
+ - blaze-html-hexpat
+ - blaze-html-truncate
+ - blaze-json
+ - blaze-shields
+ - blaze-textual-native
+ - blazeT
  - ble
+ - blindpass
  - blink1
  - blip
+ - bliplib
  - Blobs
+ - blockchain
+ - blockhash
  - blockio
+ - blockio-uring
+ - Blogdown
  - blogination
+ - BlogLiterately
  - BlogLiterately-diagrams
+ - bloodhound-amazonka-auth
+ - bloohm
+ - bloomfilter-redis
+ - blosum
  - bloxorz
  - blubber
+ - blubber-server
+ - bludigon
+ - Blueprint
  - bluetile
+ - bluetileutils
+ - blunk-hask-tests
  - blunt
  - bno055-haskell
+ - boardgame
+ - bogocopy
  - bogre-banana
+ - boilerplate
+ - bolt
  - bolty
  - bolty-streamly
+ - boltzmann-brain
  - bond
  - bond-haskell
  - bond-haskell-compiler
+ - bookhound
+ - bookhound-format
  - bookkeeper
  - bookkeeper-permissions
+ - bookkeeping
  - bookkeeping-jp
  - Bookshelf
+ - boolean-like
+ - boolean-normal-forms
+ - boombox
  - boomslang
+ - boots
  - boots-app
  - boots-cloud
  - boots-web
  - borel
+ - boring-window-switcher
+ - borsh
+ - bot
  - both
+ - botpp
+ - bottom
  - bound-gen
+ - bound-simple
+ - bowntz
+ - box-csv
+ - box-tuples
+ - bpath
  - BPS
+ - braid
+ - brain-bleep
+ - brassica
+ - Bravo
  - breakout
+ - brians-brain
+ - brick-calendar
+ - brick-dropdownmenu
+ - brick-filetree
+ - brick-list-search
  - bricks
+ - bricks-internal
  - bricks-internal-test
  - bricks-parsec
  - bricks-rendering
  - bricks-syntax
+ - brillig
  - brillo-examples
+ - brittany
+ - broadcast-chan-conduit
+ - broadcast-chan-tests
+ - broccoli
+ - brok
+ - broker-haskell
+ - bronyradiogermany-common
  - bronyradiogermany-streaming
+ - brotli-conduit
+ - browscap
  - brush-strokes
  - brush-stroking
+ - bsd-sysctl
+ - bson-generic
+ - bson-generics
+ - bson-mapping
+ - bsparse
  - btc-lsp
  - btree
+ - btree-concurrent
  - buchhaltung
+ - buffer
+ - buffer-builder-aeson
+ - BufferedSocket
+ - buffet
+ - buffon
+ - buffon-machines
+ - bugsnag-haskell
+ - bugzilla
+ - build
+ - build-env
+ - buildable
+ - buildbox
  - buildbox-tools
+ - builder
  - buildwrapper
  - bulletproofs
  - bulmex
+ - bunz
+ - bureaucromancy
  - burnt-explorer
+ - burst-detection
+ - bus-pirate
+ - Buster
+ - buster
  - buster-gtk
  - buster-network
+ - bustle
+ - butter
  - butterflies
+ - buttplug-hs-core
  - bv-little
+ - bv-sized-lens
+ - by-other-names
  - bytable
+ - byte-containers
+ - bytearray-parsing
+ - bytepatch
+ - bytestring-arbitrary
+ - bytestring-builder-varword
+ - bytestring-class
+ - bytestring-csv
+ - bytestring-delta
+ - bytestring-handle
+ - bytestring-mmap
+ - bytestring-nums
+ - bytestring-plain
  - bytestring-read
+ - bytestring-rematch
+ - bytestring-show
+ - bytestring-substring
+ - bytestring-time
+ - bytestring-typenats
+ - bytestringparser
+ - bytestringparser-temporary
+ - bytestringreadp
  - bytetrie
+ - bzlib-conduit-jappie
+ - c-dsl
+ - c-io
+ - c-mosquitto
+ - C-structs
+ - c10k
+ - c2ats
  - ca
+ - ca-patterns
+ - cabal
+ - cabal-audit
+ - cabal-auto-expose
+ - cabal-build-programs
+ - cabal-bundle-clib
  - cabal-cache
+ - cabal-constraints
+ - cabal-db
+ - cabal-debian
+ - cabal-dependency-licenses
+ - cabal-dev
+ - cabal-dir
+ - cabal-edit
+ - cabal-file-th
+ - cabal-fix
+ - cabal-ghc-dynflags
+ - cabal-ghci
+ - cabal-graphdeps
+ - cabal-helper
+ - Cabal-ide-backend
+ - cabal-info
+ - cabal-install-bundle
+ - cabal-install-ghc72
+ - cabal-install-ghc74
+ - cabal-matrix
+ - cabal-meta
+ - cabal-mon
+ - cabal-nirvana
+ - cabal-progdeps
  - cabal-query
+ - cabal-scaffold
+ - cabal-setup
+ - cabal-sign
+ - cabal-src
  - cabal-test
+ - cabal-test-quickcheck
+ - cabal-toolkit
+ - cabal-uninstall
+ - cabal-upload
  - cabal2arch
+ - cabal2doap
+ - cabal2ebuild
+ - cabal2ghci
+ - cabal2json
+ - cabalgraph
+ - cabalish
  - cabalmdvrpm
+ - cabalQuery
  - cabalrpmdeps
+ - CabalSearch
+ - cabalvchk
+ - cabin
+ - cabocha
+ - cache-polysemy
+ - cached
+ - caching
  - cadence
+ - caerbannog
+ - cafeteria-prelude
  - caffegraph
+ - cairo-canvas
+ - cairo-core
  - cake
+ - cake3
  - cakyrespa
+ - cal-layout
+ - cal3d
  - cal3d-examples
  - cal3d-opengl
+ - calamity
  - calc
  - calculator
  - caldims
+ - caledon
+ - calenderweek
  - call
+ - call-alloy
+ - call-haskell-from-anything
+ - call-plantuml
  - camfort
  - campfire
  - canadian-income-tax
+ - canon
+ - canonical-filepath
  - canteven-http
+ - canteven-listen-http
+ - canteven-log
+ - canteven-parsedate
+ - cantor
  - cao
  - cap
+ - Capabilities
+ - capataz
  - capnp
+ - capped-list
+ - capri
+ - caps
  - captcha-2captcha
  - captcha-capmonster
  - captcha-core
  - car-pool
+ - caramia
+ - carbonara
  - carboncopy
+ - cardano-transactions
+ - carettah
  - CarneadesIntoDung
+ - carte
  - cartel
+ - Cartesian
+ - cas-hashable
  - cas-hashable-s3
  - cas-store
  - casadi-bindings
  - casadi-bindings-control
+ - casadi-bindings-core
  - casadi-bindings-ipopt-interface
  - casadi-bindings-snopt-interface
+ - Cascade
+ - cascading
+ - case-insensitive-match
+ - caseof
  - cash
+ - casr-logbook
  - casr-logbook-html
  - casr-logbook-meta
  - casr-logbook-meta-html
@@ -394,44 +1124,116 @@ dont-distribute-packages:
  - casr-logbook-reports-html
  - casr-logbook-reports-meta
  - casr-logbook-reports-meta-html
+ - casr-logbook-types
+ - cassandra-cql
  - cassandra-thrift
+ - Cassava
+ - cassava-conduit
+ - cassava-generic
+ - cassava-records
  - cassy
+ - castle
  - casui
+ - catamorphism
+ - Catana
+ - catch-fd
  - categorical-algebra
  - category
  - category-extras
+ - category-traced
+ - catnplus
  - cattrap
+ - cautious-file
+ - cautious-gen
+ - cayene-lpp
+ - cayley-client
+ - cbf
+ - cblrepo
  - CBOR
+ - CC-delcont
  - CC-delcont-alt
+ - CC-delcont-cxe
+ - CC-delcont-exc
+ - CC-delcont-ref
+ - CC-delcont-ref-tf
+ - CCA
+ - ccast
+ - cci
+ - ccnx
  - cctools-workqueue
+ - cdp
+ - cedict
+ - cef
+ - cef3-raw
  - cef3-simple
  - ceilometer-common
+ - cellrenderer-cairo
  - celtchar
+ - cerberus
+ - cereal-data-dword
+ - cereal-derive
  - cereal-enumerator
+ - cereal-ieee754
  - cereal-io-streams
+ - cereal-plus
  - cereal-streams
+ - cereal-uuid
  - certificate
+ - cf
+ - cfenv
  - cfipu
  - cflp
+ - cfn-flip
  - cfopu
+ - cg
+ - cgen
+ - cgi-utils
+ - cgroup-rts-threads
  - chainweb-mining-client
+ - chakra
+ - chalkboard
  - chalkboard-viewer
+ - chalmers-lava2000
+ - changelogged
  - chapelure
+ - char-qq
+ - character-cases
  - charade
  - chart-cli
  - Chart-fltkhs
+ - chart-histogram
+ - Chart-simple
  - chart-svg-various
  - chart-unit
+ - charter
+ - chaselev-deque
  - chassis
+ - chatty-text
+ - chatwork
  - cheapskate-highlight
  - cheapskate-terminal
+ - check-cfg-ambiguity
  - check-pvp
+ - Checked
+ - checked
+ - checked-literals
+ - checkmate
+ - chell-quickcheck
+ - cherry-core-alpha
+ - chessica
  - chessIO
  - chevalier-common
+ - chez-grater
+ - chiasma
  - chiasma-test
+ - chiphunk
  - chitauri
+ - Chitra
+ - choose
  - choose-exe
+ - chorale
  - chorale-geo
+ - chp
  - chp-mtl
  - chp-plus
  - chp-spec
@@ -439,31 +1241,74 @@ dont-distribute-packages:
  - chr-core
  - chr-data
  - chr-lang
+ - chr-parse
+ - ChristmasTree
  - chromatin
+ - chronograph
+ - chronos-bench
  - chu2
  - chuchu
  - chunks
+ - chunky
+ - church
+ - church-maybe
+ - churros
+ - cicero-api
+ - cielo
+ - cil
+ - cinvoke
+ - cio
+ - cipher-aes128
+ - cipher-blowfish
+ - cipher-des
+ - circle
+ - circlehs
+ - circuit-notation
  - citation-resolve
+ - citeproc-hs
  - citeproc-hs-pandoc-filter
+ - cj-token
+ - cjk
+ - cl3-hmatrix-interface
+ - cl3-linear-interface
  - clac
  - clafer
  - claferIG
  - claferwiki
+ - clang-compilation-database
+ - clang-pure
+ - clanki
+ - clarifai
+ - CLASE
  - clash
+ - clash-finite
  - clash-ghc
  - clash-lib
  - clash-lib-hedgehog
+ - clash-multisignal
  - clash-prelude
  - clash-prelude-hedgehog
+ - clash-prelude-quickcheck
  - clash-protocols
  - clash-protocols-base
+ - Clash-Royale-Hack-Cheats
  - clash-shake
  - clash-shockwaves
+ - clash-systemverilog
+ - clash-verilog
  - clash-vexriscv
+ - clash-vhdl
+ - clashilator
  - classify-frog
+ - ClassLaws
  - classy-effects
+ - classy-effects-base
  - classy-effects-th
+ - classy-influxdb-simple
  - classy-miso
+ - classy-parallel
+ - classyplate
+ - ClassyPrelude
  - clckwrks
  - clckwrks-cli
  - clckwrks-dot-com
@@ -476,213 +1321,655 @@ dont-distribute-packages:
  - clckwrks-theme-bootstrap
  - clckwrks-theme-clckwrks
  - clckwrks-theme-geo-bootstrap
+ - cld2
+ - Clean
+ - clean-unions
+ - cleff
  - cleff-plugin
+ - clerk
  - cless
  - cleveland
+ - clevercss
+ - clexer
+ - CLI
+ - cli-builder
  - click-clack
+ - clickhouse-haskell
+ - clif
  - clifford
+ - clifm
+ - clingo
+ - clippard
+ - clipper
  - clippings
+ - clisparkline
+ - clit
+ - cloben
+ - clock-extras
+ - clocked
+ - clod
+ - clogparse
+ - clone-all
+ - closed-classes
+ - closed-intervals
+ - closure
  - cloud-haskell
  - cloud-seeder
+ - cloudchor
+ - cloudfront-signer
  - cloudyfs
+ - clplug
  - clr-bindings
+ - clr-host
  - clr-inline
+ - clr-typed
+ - cltw
  - clua
+ - cluss
  - ClustalParser
  - clustering
  - clustertools
  - clutterhs
+ - cmark-gfm-lens
+ - cmark-highlight
+ - cmark-lens
+ - cmark-patterns
+ - cmark-sections
+ - cmath
  - cmathml3
  - CMCompare
+ - cmd-item
+ - cmdlib
+ - cmdtheline
+ - cmf
+ - cmonad
+ - cmph
  - cmptype
+ - CMQ
+ - cmt
  - cmv
  - cnc-spec-compiler
  - co-feldspar
+ - co-log-effectful
+ - co-log-json
+ - co-log-polysemy-formatting
+ - co-log-sys
  - Coadjute
  - cobot-io
+ - cobot-tools
+ - code-builder
  - codec
+ - codec-beam
+ - Codec-Image-DevIL
  - codec-libevent
  - codec-rpm
+ - codecov-haskell
+ - codeforces-cli
  - codemonitor
+ - codepad
+ - codet-plugin
+ - codeworld-api
+ - codex
+ - codo-notation
+ - coercible-utils
+ - coercion-extras
  - coformat
  - cognimeta-utils
+ - coin
  - coinbase-exchange
+ - coinbase-pro
  - coincident-root-loci
  - colada
+ - colchis
+ - collada-output
  - collapse-duplication
+ - collapse-util
+ - collate
  - collection-json
+ - collections
+ - collections-api
  - collections-base-instances
+ - colonnade
  - color-counter
+ - colorless
  - colorless-http-client
  - colorless-scotty
  - colour-space
+ - colour-text
+ - coltrane
  - columbia
  - columnar
  - comark
+ - comark-html
+ - comark-parser
+ - comark-syntax
+ - combinat
+ - combinat-compat
  - combinat-diagrams
+ - combinator-interactive
+ - combinatorial-problems
  - Combinatorrent
+ - combobuffer
  - comic
+ - comma-and
+ - Command
+ - commander
+ - Commando
+ - commodities
  - commsec
  - commsec-keyexchange
+ - comonad-extras
  - comonad-random
  - ComonadSheet
+ - compact-list
+ - compact-map
  - compact-mutable
+ - compact-mutable-vector
+ - compact-sequences
+ - compact-socket
+ - compact-string
+ - compact-string-fix
+ - compact-word-vectors
+ - Compactable
+ - compactable
+ - compaREST
+ - comparse
+ - compdata
  - compdata-automata
+ - compdata-dags
+ - compdata-param
  - compdoc
  - compdoc-dhall-decoder
+ - compendium-client
+ - competition
+ - compilation
+ - complex-generic
  - complexity
+ - composable-associations-aeson
+ - compose-trans
  - composite-aeson
  - composite-aeson-cofree-list
+ - composite-aeson-path
+ - composite-aeson-refined
  - composite-aeson-throw
  - composite-aeson-writeonly
+ - composite-base
  - composite-binary
+ - composite-cassava
+ - composite-dhall
+ - composite-ekg
  - composite-hashable
  - composite-ix
  - composite-lens-extra
+ - composite-opaleye
+ - composite-swagger
  - composite-tuple
  - composite-xml
  - composite-xstep
+ - composition-tree
+ - compositional-data
+ - comprehensions-ghc
+ - compressed
+ - compression
+ - compstrat
+ - comptrans
  - computational-algebra
+ - computational-geometry
+ - computations
+ - conala-dataset
+ - ConClusion
  - concraft
  - concraft-hr
  - concraft-pl
  - concrete-haskell
  - concrete-haskell-autogen
+ - concrete-relaxng-parser
+ - concrete-typerep
  - concurrency-benchmarks
+ - concurrent-buffer
+ - Concurrent-Cache
+ - concurrent-hashtable
+ - concurrent-machines
+ - concurrent-st
+ - concurrent-state
+ - concurrent-utilities
+ - Concurrential
  - ConcurrentUtils
+ - conditional-restriction-parser
  - Condor
  - condor
+ - condorcet
+ - conductive-base
  - conductive-hsc3
  - conductive-song
+ - conduit-audio-lame
+ - conduit-audio-samplerate
+ - conduit-audio-sndfile
+ - conduit-connection
+ - conduit-find
+ - conduit-iconv
+ - conduit-network-stream
+ - conduit-resumablesink
  - conduit-throttle
+ - conduit-tokenize-attoparsec
+ - conduit-vfs
  - conduit-vfs-zip
+ - conf
  - confcrypt
+ - conferer
  - conferer-aeson
  - conferer-dhall
  - conferer-hedis
+ - conferer-hspec
  - conferer-provider-dhall
+ - conferer-provider-json
  - conferer-provider-yaml
+ - conferer-snap
  - conferer-source-dhall
+ - conferer-source-json
  - conferer-source-yaml
+ - conferer-warp
  - conferer-yaml
  - conffmt
  - confide
+ - config-parser
  - config-select
+ - config-value-getopt
+ - ConfigFile
+ - ConfigFileTH
  - Configger
  - configifier
+ - Configurable
+ - configuration
  - configurator-ng
+ - confsolve
+ - conftrack
+ - congruence-relation
  - conic-graphs
+ - conjure
+ - conkin
+ - conlogger
+ - connection
+ - connection-pool
+ - connection-string
+ - connections
+ - Conscript
+ - consistent
+ - console-program
+ - console-style
+ - const
+ - const-math-ghc-plugin
+ - constable
+ - constr-eq
+ - constrained
  - constrained-category
+ - constrained-dynamic
+ - constrained-monads
  - constrained-platform-instances
  - constraint
  - constraint-manip
  - constraint-reflection
+ - ConstraintKinds
+ - constraints-deriving
+ - constraints-emerge
  - constructible
+ - constructive-algebra
+ - consul-haskell
+ - Consumer
  - container
  - containers-accelerate
+ - containers-benchmark
+ - containers-verified
+ - ContArrow
  - content-store
+ - context-stack
+ - ContextAlgebra
+ - contiguous-checked
+ - contiguous-fft
+ - continue
+ - continued-fractions
+ - continuum
+ - continuum-client
+ - contra-tracers
+ - contracheck-applicative
+ - Contract
  - control
+ - control-dsl
  - control-invariants
+ - control-iso
  - control-monad-attempt
  - control-monad-exception
  - control-monad-exception-monadsfd
  - control-monad-exception-monadstf
  - control-monad-exception-mtl
+ - control-monad-failure
+ - control-monad-failure-mtl
  - Control-Monad-MultiPass
+ - Control-Monad-ST2
+ - contstuff-monads-tf
+ - contstuff-transformers
+ - conversion-bytestring
  - conversion-text
  - conversions
  - convert
+ - convert-annotation
  - convertible-ascii
  - convertible-text
+ - convex-schema-parser
+ - convexHullNd
+ - cookie-tray
+ - cooklang-hs
  - coordinate
+ - copilot-bluespec
  - copilot-cbmc
+ - copilot-frp-sketch
+ - copilot-sbv
+ - copilot-verifier
+ - copilot-visualizer
+ - copr
+ - core
+ - core-compiler
+ - core-effect-effectful
+ - core-haskell
+ - core-warn
+ - corebot-bliki
+ - CoreDump
+ - CoreErlang
  - CoreFoundation
+ - corenlp-parser
+ - corenlp-types
+ - Coroutine
  - coroutine-enumerator
  - coroutine-iteratee
+ - coroutine-object
+ - couch-hs
  - couch-simple
+ - CouchDB
+ - couchdb-conduit
  - couchdb-enumerator
+ - counter
+ - country-codes
+ - courier
+ - court
+ - covenant
+ - coverage
+ - cozo-hs
+ - cparsing
  - CPBrainfuck
+ - cpio-conduit
+ - cplusplus-th
+ - cpmonad
  - cprng-aes
  - cprng-aes-effect
+ - cps-except
+ - cpuperf
+ - cql-io
  - cql-io-tinylog
+ - cqrs-core
  - cqrs-example
  - cqrs-memory
  - cqrs-postgresql
  - cqrs-sqlite3
  - cqrs-test
  - cqrs-testkit
+ - cr
+ - crack
+ - cradle
  - craft
+ - Craft3e
+ - craftwerk
  - craftwerk-cairo
  - craftwerk-gtk
+ - crawlchain
  - craze
+ - crc16
+ - crdt
+ - creatur
+ - credential-store
+ - credentials
  - credentials-cli
+ - crem
  - crf-chain1
  - crf-chain1-constrained
  - crf-chain2-generic
  - crf-chain2-tiers
+ - critbit
+ - criterion-cmp
+ - criterion-compare
+ - criterion-plus
+ - criterion-to-html
  - criu-rpc
+ - criu-rpc-types
+ - crjdt-haskell
+ - crockford
+ - crocodile
  - cron-compat
+ - cronus
+ - croque-mort
+ - crucible-debug
+ - crucible-llvm
+ - cruncher-types
+ - crunghc
  - crux
  - crux-llvm
+ - Crypto
+ - crypto-cipher-benchmarks
  - crypto-classical
  - crypto-conduit
+ - crypto-enigma
+ - crypto-keys-ssh
+ - crypto-multihash
+ - crypto-numbers
  - crypto-pubkey
+ - crypto-pubkey-openssh
+ - crypto-random
+ - crypto-random-effect
+ - crypto-simple
  - crypto-sodium
  - cryptocipher
+ - cryptocompare
+ - cryptoconditions
  - cryptoids
  - cryptoids-class
+ - cryptoids-types
+ - crypton-box
  - cryptonite-cd
+ - cryptsy-api
  - crystalfontz
+ - csa
+ - cse-ghc-plugin
+ - csg
  - CSPM-cspm
  - CSPM-FiringRules
+ - CSPM-Frontend
  - CSPM-Interpreter
  - CSPM-ToProlog
  - cspmchecker
+ - cspretty
+ - css
+ - css-easings
+ - css-selectors
+ - css-simple
  - csv-enumerator
+ - csv-nptools
+ - csv-sip
+ - ctemplate
+ - ctkl
  - ctpl
  - cube
+ - cubical
+ - cuboid
+ - cuckoo
+ - cuckoo-filter
+ - cudd
+ - curl-aeson
+ - curl-runnings
+ - curly-expander
+ - currency-convert
+ - curry-base
+ - curry-frontend
+ - CurryDB
  - curryer-rpc
+ - curryrs
+ - cursedcsv
+ - curves
+ - custom-interpolation
+ - custom-prelude
+ - CV
  - cv-combinators
  - cypher
+ - d-bus
+ - d10
+ - d3js
+ - daemonize-doublefork
+ - dag
+ - DAG-Tournament
+ - dahdit
  - dahdit-audio
  - dahdit-midi
  - dahdit-network
  - dahdit-test
  - daino
+ - damnpacket
  - danecheck
  - Dangerous
+ - dani-sqlite
+ - danibot
+ - Dao
+ - dao
  - dapi
  - darcs-benchmark
  - darcs-beta
+ - darcs-buildpackage
+ - darcs-cabalized
  - darcs-fastconvert
+ - darcs-graph
+ - darcs-monitor
+ - darcs2dot
  - darcsden
  - DarcsHelpers
  - darcswatch
  - darkplaces-demo
+ - darkplaces-rcon
  - darkplaces-rcon-util
+ - darkplaces-text
+ - data-accessor-monadLib
+ - data-accessor-monads-fd
+ - data-accessor-monads-tf
+ - data-accessor-template
+ - data-ascii
+ - data-aviary
+ - data-base
  - data-basic
+ - data-check
+ - data-combinator-gen
+ - data-concurrent-queue
+ - data-construction
+ - data-constructors
  - data-cycle
  - data-default-extra
+ - data-default-instances-base
+ - data-default-instances-bytestring
+ - data-default-instances-case-insensitive
+ - data-default-instances-containers
+ - data-default-instances-dlist
+ - data-default-instances-new-base
+ - data-default-instances-old-locale
+ - data-default-instances-text
+ - data-default-instances-unordered-containers
+ - data-default-instances-vector
+ - data-dispersal
+ - data-diverse-lens
+ - data-easy
+ - data-emoticons
+ - data-filepath
+ - data-fin
+ - data-fin-simple
+ - data-flagset
+ - data-foldapp
+ - data-forced
+ - data-forest
+ - data-index
+ - data-ivar
+ - data-kiln
  - data-layer
+ - data-lens-fd
  - data-lens-ixset
+ - data-lens-template
+ - data-list-zigzag
+ - data-map-multikey
+ - data-named
+ - data-nat
+ - data-object
  - data-object-json
  - data-object-yaml
+ - data-pdf-fieldreader
+ - data-pprint
+ - data-quotientref
+ - data-r-tree
+ - data-reify-cse
+ - data-repr
  - data-result
+ - data-rev
+ - Data-Rope
+ - data-rope
  - data-rtuple
+ - data-size
+ - data-spacepart
+ - data-standards
+ - data-store
+ - data-stringmap
  - data-structure-inferrer
+ - data-type
+ - data-util
+ - data-validation
+ - data-variant
+ - data-vector-growable
  - database-id-groundhog
+ - database-migrate
+ - database-study
+ - datadog
  - datadog-tracing
  - datafix
  - dataflow
+ - DataIndex
+ - datalog
+ - datapacker
+ - datarobot
  - datasets
+ - DataTreeView
  - date-conversions
+ - dates
+ - datetime
+ - datetime-sb
+ - dawdle
+ - dawg
+ - dawg-ord
+ - dawgdic
+ - daytripper
+ - dbcleaner
+ - dbf
+ - DBFunctor
  - dbjava
+ - DBlimited
+ - dbm
+ - dbmigrations
  - dbmigrations-mysql
  - dbmigrations-postgresql
  - dbmigrations-sqlite
+ - dbmonitor
+ - DBus
+ - dbus-app-launcher
  - dbus-client
+ - dbus-core
+ - dbus-qq
+ - dclabel
+ - dclabel-eci11
+ - dcpu16
  - ddate
+ - ddc-base
  - ddc-build
+ - ddc-code
  - ddc-core-eval
  - ddc-core-flow
  - ddc-driver
@@ -691,95 +1978,282 @@ dont-distribute-packages:
  - ddc-war
  - ddci-core
  - dde
+ - dead-code-detection
+ - dead-simple-json
+ - Deadpan-DDP
  - debug
+ - debug-me
+ - debug-pp
+ - debug-trace-file
+ - debug-tracy
+ - debugger-hs
+ - decepticons
  - decimal-arithmetic
+ - decision-diagrams
+ - DecisionTree
+ - decoder-conduit
  - dedukti
  - DeepArrow
+ - deepcontrol
+ - DeepDarkFantasy
+ - deepl
+ - deeplearning-hs
+ - deepseq-bounded
+ - deepseq-instances
+ - deepseq-magic
+ - deepseq-th
  - deepzoom
  - defargs
+ - defaultable-map
  - DefendTheKing
+ - definitive-base
  - definitive-filesystem
  - definitive-graphics
  - definitive-parser
  - definitive-reactive
  - definitive-sound
+ - deiko-config
+ - deka
  - deka-tests
+ - delaunayNd
  - delicious
  - delimited-text
  - delimiter-separated
  - delta
  - delta-h
+ - Delta-Lambda
+ - delta-store
+ - delude
+ - demangler
+ - demarcate
+ - denominate
+ - dense
+ - dense-int-set
+ - dep-t
  - dep-t-advice
  - dep-t-dynamic
  - dep-t-value
+ - dependency
+ - dependent-hashmap
  - dependent-literals
  - dependent-literals-plugin
  - dependent-state
  - depends
  - dephd
+ - deptrack-core
  - deptrack-devops
  - deptrack-dot
  - dequeue
+ - derangement
+ - derivation-trees
+ - derive
+ - derive-enumerable
+ - derive-gadt
  - derive-IG
+ - derive-monoid
+ - derive-prim
+ - derive-storable-plugin
+ - derive-trie
+ - deriveJsonNoPrefix
+ - deriving-openapi3
+ - derp-lib
+ - derulo
+ - describe
  - descript-lang
+ - descriptive
+ - desktop-portal
+ - deterministic-game-engine
+ - detour-via-sci
  - detour-via-uom
+ - detrospector
+ - deunicode
+ - devanagari-transliterations
+ - devil
  - devtools
  - dewdrop
  - dfinity-radix-tree
+ - Dflow
+ - dfsbuild
+ - dgim
+ - dgs
+ - dhall-check
+ - dhall-csv
+ - dhall-fly
  - dhall-lex
+ - dhall-recursive-adt
+ - dhall-text
+ - dhall-text-shell
+ - dhall-to-cabal
+ - dhcp-lease-parser
+ - dhrun
+ - dhscanner-ast
+ - dhscanner-bitcode
  - dhscanner-kbapi
  - dhscanner-kbgen
+ - dia-base
  - dia-functions
+ - diagnose
+ - diagrams-boolean
+ - diagrams-haddock
  - diagrams-html5
+ - diagrams-pdf
+ - diagrams-qrcode
  - diagrams-reflex
+ - diagrams-rubiks-cube
+ - diagrams-tikz
  - diagrams-wx
  - dialog
+ - dialogflow-fulfillment
+ - dib
+ - dice2tex
+ - dicom
+ - dictionaries
+ - dictparser
+ - diet
+ - diff
+ - diff-gestalt
+ - diffcabal
  - difference-monoid
  - DifferenceLogic
  - differential
+ - DifferentialEvolution
+ - diffmap
+ - difftodo
+ - digest-pure
+ - digestive-bootstrap
  - digestive-foundation-lucid
+ - digestive-functors-aeson
+ - digestive-functors-happstack
+ - digestive-functors-heist
  - digestive-functors-hsp
+ - digestive-functors-lucid
+ - digestive-functors-scotty
+ - digestive-functors-snap
+ - digit
+ - DigitalOcean
+ - digitalocean-kzs
+ - dijkstra-simple
  - dimensional-tf
+ - DimensionalHash
  - dimensions
  - dingo-core
  - dingo-example
  - dingo-widgets
+ - dino
+ - diophantine
+ - diplomacy
  - diplomacy-server
+ - direct-binary-files
+ - direct-fastcgi
+ - direct-http
+ - direct-plugins
  - direct-rocksdb
+ - directed-cubical
+ - direm
  - dirfiles
+ - dirstream
+ - disco
  - discogs-haskell
  - discord-gateway
  - discord-haskell-voice
  - discord-hs
+ - discord-register
  - discord-rest
+ - discord-types
+ - discordian-calendar
+ - discount
+ - discrete
+ - DiscussionSupportSystem
+ - Dish
+ - disjoint-set
+ - disjoint-set-stateful
+ - disk-bytes
+ - diskhash
+ - disposable
+ - Dist
+ - dist-upload
+ - distance
  - DisTract
+ - distributed-fork-aws-lambda
  - distributed-process-azure
+ - distributed-process-fsm
+ - distributed-process-lifted
+ - distributed-process-platform
+ - distributed-process-registry
+ - distributed-process-simplelocalnet
+ - distributed-process-task
+ - distribution
  - distribution-plot
+ - ditto-lucid
  - dixi
+ - djembe
+ - djinn-ghc
+ - djinn-th
  - dl-fedora
+ - dlist-nonempty
+ - dmcc
+ - dmenu
  - dmenu-pkill
  - dmenu-pmount
  - dmenu-search
  - DMuCheck
  - DnaProteinAlignment
  - dnf-repo
+ - dns-patterns
  - dnsbase
+ - dnscache
+ - dnsrbl
+ - dnssd
+ - do-notation-dsl
+ - do-spaces
+ - dobutok
+ - dobutokO
  - dobutokO-poetry
  - dobutokO-poetry-general
  - dobutokO-poetry-general-languages
  - dobutokO3
  - dobutokO4
  - doc-review
+ - doccheck
+ - docidx
+ - docker
+ - docker-build-cacher
+ - dockercook
+ - dockerfile-creator
+ - docrecords
  - DocTest
+ - doctest-discover-configurator
+ - doctest-prop
+ - docusign-example
+ - docvim
+ - DOH
+ - doi
  - dojang
  - DOM
+ - dom-events
+ - dom-selector
  - domaindriven
+ - domaindriven-core
+ - dominion
+ - domplate
  - dormouse-client
+ - dormouse-uri
+ - dot-linker
+ - dotfs
+ - doublezip
+ - doublify-toolkit
  - dovetail
  - dovetail-aeson
+ - dovin
  - dow
+ - downhill
  - download-media-content
+ - downloader
+ - dozenal
+ - dozens
  - DP
+ - dpapi
+ - dph-base
  - dph-examples
  - dph-lifted-base
  - dph-lifted-copy
@@ -787,80 +2261,288 @@ dont-distribute-packages:
  - dph-prim-interface
  - dph-prim-par
  - dph-prim-seq
+ - dpkg
+ - DPM
+ - dpor
+ - dr-cabal
+ - dragen
+ - drawille
  - DRBG
+ - drClickOn
+ - dresdner-verkehrsbetriebe
  - DrHylo
+ - DrIFT
+ - DrIFT-cabalized
+ - drifter-postgresql
+ - driving-classes-plugin
+ - drmaa
+ - drone
+ - dropbox
  - dropbox-sdk
  - dropsolve
+ - ds-kanren
  - DSA
+ - dsc
  - DSH
  - dsh-sql
+ - dsmc
  - dsmc-tools
+ - dson
+ - dson-parsec
  - DSTM
+ - dstring
+ - dsv
+ - DTC
  - dtd
+ - dtd-text
+ - dtw
+ - dual
+ - dualizer
+ - duckdb-haskell
+ - duckling
+ - duet
+ - dump-core
+ - dunai-core
+ - Dung
+ - dupIO
+ - duplo
+ - dura
+ - duration
  - Dust
  - Dust-crypto
  - Dust-tools
  - Dust-tools-pcap
+ - dvault
  - dvda
+ - dvdread
+ - dvi-processing
+ - dvorak
+ - dwarf
+ - dwarfadt
+ - dyckword
+ - dyna-brick
+ - dyna-processing
  - dynamic-cabal
+ - dynamic-graph
+ - dynamic-graphs
+ - dynamic-mvector
+ - dynamic-object
+ - dynamic-pipeline
  - dynamic-plot
  - dynamic-pp
+ - DynamicTimeWarp
+ - dynamodb-simple
+ - dynloader
  - dynobud
+ - DysFRP
  - DysFRP-Cairo
  - DysFRP-Craftwerk
+ - dywapitchtrack
+ - dzen-dhall
+ - dzen-utils
+ - e11y
  - e11y-otel
+ - each
+ - eager-sockets
+ - earclipper
+ - earcut
+ - early
+ - easy-api
+ - easy-args
+ - easy-bitcoin
+ - easy-logger
+ - easyjson
+ - easyplot
+ - easyrender
  - easytensor
  - easytensor-vulkan
+ - easytest
+ - ebeats
+ - ebird-api
  - ebird-cli
+ - ebird-client
+ - ebnf-bff
+ - ec2-unikernel
  - ecdsa
+ - ecma262
+ - ecta
+ - ecta-plugin
+ - ecu
+ - eddie
+ - edenmodules
  - edenskel
  - edentv
+ - edf
  - edge
  - edges
+ - edis
+ - edit
+ - edit-lenses
  - editable
+ - editline
+ - edits
  - EditTimeReport
+ - effect-handlers
  - effect-monad
+ - effect-stack
+ - effectful-st
+ - effectful-zoo
+ - effective-aspects
  - effective-aspects-mzv
+ - effet
+ - effin
+ - eflint
+ - egison-pattern-src-haskell-mode
+ - egison-quote
+ - egison-tutorial
+ - ehaskell
+ - ehs
+ - eibd-client-simple
+ - eigen
  - eigen-hhlo
+ - Eight-Ball-Pool-Hack-Cheats
+ - eio
+ - either-both
+ - either-list-functions
+ - either-unwrap
+ - EitherT
+ - ejdb2-binding
+ - ekg-bosun
  - ekg-carbon
+ - ekg-cloudwatch
+ - ekg-elastic
+ - ekg-elasticsearch
+ - ekg-log
+ - ekg-push
+ - ekg-rrd
  - elasticsearch-interchange
  - electrs-client
  - elerea-examples
+ - elevator
+ - elision
  - elliptic-curve
+ - Elm
+ - elm-build-lib
+ - elm-compiler
+ - elm-export-persistent
+ - elm-get
+ - elm-make
+ - elm-package
+ - elm-reactor
+ - elm-repl
+ - elm-server
+ - elm-websocket
+ - elm-yesod
+ - elminator
+ - elocrypt
  - elsa
  - ema-extra
+ - ema-generics
  - emacs-keys
+ - email
+ - email-header
+ - email-postmark
+ - emailaddress
  - emailparse
+ - emanote
+ - embed-config
+ - embla
  - embroidery
+ - emgm
+ - Emping
+ - Empty
+ - empty-monad
+ - enchant
+ - Encode
+ - encode-string
+ - encoding-io
+ - encryptable
+ - endo
+ - engine-io
  - engine-io-growler
  - engine-io-snap
  - engine-io-wai
  - engine-io-yesod
  - entangle
  - EntrezHTTP
+ - entwine
+ - enum-text
  - enum-text-rio
+ - enum-utf8
+ - EnumContainers
  - enumerate
  - enumerate-function
  - enumeration
+ - enumerator
  - enumerator-fd
  - enumerator-tf
  - enumfun
+ - EnumMap
+ - enummapmap
+ - enummaps
+ - enummapset-th
+ - env-parser
+ - envelope
+ - envstatus
+ - envy-extensible
+ - eo-phi-normalizer
+ - epanet-haskell
+ - epass
+ - ephemeral
+ - ephemeral-pg
+ - epi-sim
+ - epic
+ - epoll
+ - eprocess
+ - epubname
+ - Eq
+ - EqualitySolver
+ - equational-reasoning-induction
+ - equeue
+ - erd
+ - erebos
  - erf-native
+ - erlang
+ - erlang-ffi
+ - eros
  - eros-client
  - eros-http
+ - erpnext-api-client
+ - errno
+ - error-context
+ - error-continuations
+ - error-list
+ - error-loc
  - error-message
+ - error-util
  - errors-ext
+ - ersaconcat
+ - ersatz
  - ersatz-toysat
  - ersatz-viz
+ - ert
+ - escape-artist
+ - escoger
  - esotericbot
  - EsounD
+ - espial
  - esqueleto
  - esqueleto-compat
+ - esqueleto-pgcrypto
  - esqueleto-postgis
  - esqueleto-streaming
+ - esqueleto-textsearch
+ - ess
+ - essence-of-live-coding-gloss-example
+ - essence-of-live-coding-pulse-example
+ - estimators
+ - EstProgress
  - estreps
+ - Etage
  - Etage-Graph
  - EtaMOO
+ - etc
+ - etcd
  - Eternal10Seconds
  - eternity
  - eternity-timestamped
@@ -868,11 +2550,20 @@ dont-distribute-packages:
  - Etherbunny
  - ethereum-analyzer
  - ethereum-analyzer-cli
+ - ethereum-analyzer-deps
  - ethereum-analyzer-webui
  - ethereum-client-haskell
  - ethereum-merkle-patricia-db
+ - ethereum-rlp
  - eths-rlp
  - euphoria
+ - eurofxref
+ - evdev-streamly
+ - eve
+ - eve-cli
+ - eved
+ - event
+ - event-driven
  - event-monad
  - eventful-core
  - eventful-dynamodb
@@ -884,44 +2575,137 @@ dont-distribute-packages:
  - eventium-memory
  - eventium-postgresql
  - eventium-sqlite
+ - eventium-test-helpers
+ - eventium-testkit
  - eventlog-live
  - eventlog-live-influxdb
  - eventlog-live-otelcol
+ - eventloop
  - EventSocket
+ - eventsource-api
  - eventsource-geteventstore-store
  - eventsource-store-specs
  - eventsource-stub-store
+ - eventsourced
+ - eventsourcing
  - eventsourcing-postgresql
+ - eventstore
+ - eventuo11y
  - eventuo11y-batteries
+ - eventuo11y-dsl
  - eventuo11y-json
  - eventuo11y-otel
  - eventuo11y-prometheus
  - every-bit-counts
+ - evoke
+ - EVP
+ - ewe
+ - exact-cover
  - exact-kantorovich
+ - exact-real-positional
+ - except-exceptions
+ - exception-monads-fd
+ - exception-monads-tf
+ - exception-via
+ - exceptional
+ - exceptionfree-readfile
+ - exchangerates
+ - execs
+ - executor
  - exference
+ - exh
+ - exhaustive
+ - exherbo-cabal
+ - exif
+ - exiftool
+ - exigo-schema
+ - exinst-deepseq
+ - exinst-hashable
  - exist-instances
  - existential
+ - exists
+ - exitcode
+ - exp-cache
  - expand
  - expat-enumerator
+ - experimenter
  - expiring-containers
+ - explain
+ - explicit-constraint-lens
+ - explicit-determinant
+ - explicit-iomodes
  - explicit-iomodes-bytestring
  - explicit-iomodes-text
  - explicit-sharing
  - explore
+ - exposed-containers
+ - expression-parser
+ - expressions
  - expressions-z3
+ - expresso
+ - extcore
  - extemp
+ - extended
+ - extended-categories
+ - extended-containers
  - extended-containers-lens
+ - extensible
+ - extensible-data
+ - extensible-effects
+ - extensible-effects-concurrent
  - extensible-skeleton
+ - extensioneer
+ - external-sort
+ - extism
+ - extism-manifest
+ - extism-pdk
+ - Extra
  - extract-dependencies
+ - extractelf
+ - ez-couch
+ - ez3
+ - f-algebra-gen
+ - f-ree-hack-cheats-free-v-bucks-generator
+ - Facebook-Password-Hacker-Online-Latest-Version
+ - faceted
+ - factory
+ - Facts
+ - facts
  - factual-api
+ - fad
  - fadno
+ - fadno-braids
+ - fadno-xml
+ - failable
+ - failable-list
+ - failure-detector
  - FailureT
+ - fake
+ - fake-type
+ - fakedata-quickcheck
+ - faktory
+ - falling-turnip
  - fallingblocks
  - family-tree
  - fast-arithmetic
+ - fast-combinatorics
+ - fast-downward
+ - fast-nats
+ - fast-tagsoup-utf8-only
+ - fastbayes
  - fastcdc
+ - fastedit
+ - faster-megaparsec
  - fastirc
+ - fastly
+ - fastparser
+ - fastpbkdf2
+ - FastPush
+ - fastsum
+ - FastxPipe
+ - fathead-util
  - fault-tree
+ - fay
  - fay-base
  - fay-builder
  - fay-dom
@@ -933,55 +2717,169 @@ dont-distribute-packages:
  - fay-text
  - fay-uri
  - fay-websockets
+ - fb-persistent
+ - fb-stubs
+ - fb-util
+ - fbmessenger-api
  - fbrnch
+ - fca
+ - fcache
  - fcd
+ - fcf-composite
+ - fcf-containers
+ - fcf-graphs
+ - fcg
+ - fckeditor
+ - fclabels
+ - fclabels-monadlib
+ - fcm-client
  - FComp
+ - fdo-trash
+ - feather
+ - feature-flipper
  - feature-flipper-postgres
+ - fec
  - fedora-composes
  - fedora-img-dl
+ - fedora-packages
+ - fedora-repoquery
+ - feed-cli
+ - feed-collect
+ - feed-crawl
  - feed-translator
  - feed2lj
  - feed2twitter
+ - feedback
  - fei-base
+ - fei-cocoapi
  - fei-dataiter
  - fei-datasets
  - fei-examples
  - fei-modelzoo
  - fei-nn
  - feldspar-compiler
+ - feldspar-language
+ - feldspar-signal
+ - fenfire
  - FermatsLastMargin
+ - fernet
+ - FerryCore
+ - festival
  - festung
+ - Feval
+ - fez-conf
+ - ffeed
+ - ffmpeg-light
  - ffmpeg-tutorials
+ - ffunctor
+ - fgl-extras-decompositions
+ - fib
+ - fibon
  - ficketed
+ - fields
+ - fields-and-cases
  - FieldTrip
+ - fieldwise
+ - fig
+ - file-collection
+ - file-command-qq
+ - file-embed-poly
+ - file-location
+ - file-templates
+ - filediff
+ - FileManip
+ - FileManipCompat
+ - fileneglect
  - filepath-crypto
  - filepath-io-access
+ - FilePather
+ - filepather
+ - Files
+ - FileSystem
+ - filesystem-abstractions
+ - filesystem-conduit
  - filesystem-enumerator
+ - filesystem-trees
+ - fillit
  - Fin
  - fin-int
+ - final-pretty-printer
+ - Finance-Quote-Yahoo
  - Finance-Treasury
  - find-clumpiness
+ - find-conduit
+ - find-source-files
  - findhttp
+ - fingertree-psqueue
+ - fingertree-tf
  - finitary-derive
+ - finitary-optics
+ - finite-field
+ - finite-fields
  - finite-table
  - FiniteCategories
+ - FiniteCategoriesGraphViz
  - FiniteMap
+ - finito
+ - firebase-database
+ - firefly-example
+ - firestore
+ - first-and-last
+ - first-class-patterns
  - firstify
  - FirstOrderTheory
  - fishfood
+ - fit
+ - fitsio
+ - fix-imports
  - fix-parser-simple
+ - fix-symbols-gitit
+ - fixed-point
  - fixed-point-vector
  - fixed-point-vector-space
+ - fixed-precision
+ - fixed-storable-array
+ - fixed-timestep
+ - fixed-vector-hetero
+ - fixed-width
+ - fixedprec
+ - fixer
+ - fixfile
  - fixhs
+ - fixie
+ - fizzbuzz
+ - fizzbuzz-as-a-service
+ - flaccuraterip
+ - flamethrower
+ - flamingra
  - flashblast
+ - flat-maybe
+ - flat-mcmc
+ - flatbuffers
+ - flatbuffers-parser
+ - flexible-numeric-parsers
+ - flexible-time
  - flexiwrap
  - flexiwrap-smallcheck
+ - flickr
  - flight-kml
+ - flink-statefulfun
+ - Flint2
  - Flint2-Examples
  - Flippi
  - flite
+ - float-binstring
+ - flock
+ - flow-er
+ - flow2dot
+ - flowdock
+ - flowdock-api
+ - flowdock-rest
  - flower
+ - flowlocks-framework
  - flowsim
+ - flp
+ - fltkhs
  - fltkhs-demos
  - fltkhs-fluid-demos
  - fltkhs-fluid-examples
@@ -989,33 +2887,85 @@ dont-distribute-packages:
  - fltkhs-themes
  - fluent-logger
  - fluent-logger-conduit
+ - fluffy-parser
+ - fluid-idl
  - fluid-idl-http-client
  - fluid-idl-scotty
+ - fluidsynth
  - FM-SBLEX
+ - fmark
+ - FModExRaw
  - fmt-for-rio
+ - fn-extra
+ - foldable1
+ - foldl-exceptions
+ - foldl-incremental
+ - foldl-statistics
+ - foldl-transduce
  - foldl-transduce-attoparsec
+ - folds-common
+ - follow
+ - follow-file
  - follower
+ - folly-clib
+ - font-opengl-basic4x6
+ - fontconfig-pure
  - foo
+ - for-free
+ - forbidden-fruit
+ - fordo
+ - forecast-io
+ - foreign
+ - foreign-var
+ - forest
+ - forest-fire
  - Forestry
+ - forex2ledger
+ - forger
+ - ForkableT
+ - formal
  - FormalGrammars
  - format
  - format-status
+ - formattable
+ - forml
  - formlets
  - formlets-hsp
  - forms-data-format
+ - formura
  - ForSyDe
  - forsyde-deep
  - forth-hll
+ - Fortnite-Hack-Cheats-Free-V-Bucks-Generator
+ - fortran-src
+ - fortran-src-extras
+ - fortran-vars
+ - fortytwo
  - foscam-directory
+ - foscam-filename
  - foscam-sort
  - Foster
  - fpco-api
  - fplll
  - fpnla-examples
+ - FPretty
+ - fptest
+ - fquery
+ - Fractaler
+ - fractals
+ - fraction
+ - frag
+ - frame
  - frame-markdown
+ - Frames
+ - Frames-beam
  - Frames-dsv
  - Frames-map-reduce
+ - Frames-streamly
+ - franchise
  - Frank
+ - franz
+ - fraxl
  - freckle-app
  - freckle-ecs
  - freckle-exception
@@ -1025,148 +2975,469 @@ dont-distribute-packages:
  - freckle-otel
  - freckle-prelude
  - freckle-stats
+ - freddy
+ - free-alacarte
+ - free-applicative-t
+ - free-concurrent
+ - free-foil
  - free-game
+ - free-http
+ - free-listt
+ - free-operational
+ - free-theorems
+ - free-theorems-counterexamples
+ - free-theorems-seq
  - free-theorems-seq-webui
+ - free-theorems-webui
+ - free-v-bucks-generator-no-survey
+ - free-v-bucks-generator-ps4-no-survey
+ - free-vector-spaces
  - freekick2
  - freelude
+ - freenect
  - freer-converse
+ - freer-effects
+ - freer-simple
+ - freer-simple-catching
+ - freer-simple-http
+ - freer-simple-profiling
+ - freer-simple-random
+ - freer-simple-time
+ - freesect
+ - freesound
+ - freetype-simple
+ - FreeTypeGL
+ - fregel
+ - freq
  - frequent-substring
+ - fresh
+ - fresnel
  - fresnel-fused-effects
+ - friday
  - friday-devil
  - friday-juicypixels
  - friday-scale-dct
+ - from-env
  - front
+ - frown
+ - frp-arduino
+ - frpnow
  - frpnow-gloss
  - frpnow-gtk
  - frpnow-gtk3
  - frpnow-vty
+ - fs-events
  - fs-sim
+ - fsh-csv
+ - FSM
+ - fsmActions
+ - fsnotify-conduit
+ - fst
+ - fsutils
+ - fswait
+ - fswatch
+ - fswatcher
+ - ft-generator
  - ftdi
+ - FTGL-bytestring
  - ftp-client-conduit
+ - ftp-conduit
+ - ftphs
  - FTPLine
  - ftree
  - ftshell
+ - fudgets
+ - fugue
+ - FULE
+ - full-sessions
  - funbot
+ - funbot-client
  - funbot-git-hook
  - funcons-intgen
  - funcons-lambda-cbv-mp
  - funcons-simple
+ - funcons-tools
+ - funcons-values
  - function-combine
+ - function-instances-algebra
+ - functional-arrow
  - functor
+ - functor-classes-compat
  - functor-combo
+ - functor-friends
+ - functor-infix
  - functor-monad
+ - functor-utils
+ - functora-witch
+ - functorm
  - funflow
  - funflow-nix
+ - Fungi
  - funion
+ - funnyprint
+ - funpat
  - funsat
+ - funspection
+ - fused-effects-exceptions
+ - fused-effects-mwc-random
+ - fused-effects-resumable
+ - fused-effects-squeal
+ - fused-effects-th
+ - fusion
+ - futun
+ - future
+ - futures
+ - fuzzy-parse
+ - fuzzy-timings
+ - fuzzyfind
+ - fuzzySets
+ - fvars
+ - fwgl
  - fwgl-glfw
+ - fwgl-javascript
+ - fxpak
+ - g-npm
  - g2
  - g2q
+ - g4ip
  - gact
  - galois-fft
  - galois-field
+ - gambler
+ - game-probability
+ - gameclock
+ - gamgee
  - gamma
+ - gang-of-threads
+ - Ganymede
+ - garepinoh
+ - gas
+ - gather
+ - gauge
  - gbs-downloader
  - gbu
+ - gc-monitoring-wai
+ - gconf
  - gdax
  - gdiff-ig
+ - gdiff-th
+ - gearhash
  - GeBoP
  - gedcom
  - geek
  - geek-server
  - gegl
+ - gelatin
  - gelatin-freetype2
  - gelatin-fruity
  - gelatin-gl
  - gelatin-sdl2
  - gelatin-shaders
+ - gemcap
+ - gemmula-altera
+ - gemstone
+ - gen-imports
+ - gen-passwd
+ - genai-lib
  - Genbank
  - gencheck
+ - gender
+ - genders
  - Gene-CluEDO
+ - general-allocate
+ - general-prelude
+ - GeneralTicTacToe
+ - generator
+ - generators
  - generic-accessors
+ - generic-binary
+ - generic-church
+ - generic-enum
+ - generic-labels
+ - generic-lens-labels
+ - generic-lucid-scaffold
+ - generic-match
+ - generic-maybe
+ - generic-override
  - generic-override-aeson
+ - generic-persistence
+ - generic-pretty
+ - generic-pretty-instances
+ - generic-records
+ - generic-server
+ - generic-storable
+ - generic-tree
+ - generic-trie
  - generic-xml
+ - generic-xmlpickler
+ - generics-mrsop
  - generics-mrsop-gdiff
+ - genericserialize
  - genesis
  - genesis-test
+ - genetics
  - GenI
  - geni-gui
  - geni-util
  - geniconvert
+ - genifunctors
+ - geniplate
+ - geniplate-mirror
  - geniserver
+ - genprog
+ - GenSmsPdu
+ - gentlemark
  - GenussFold
+ - genvalidity-appendful
+ - genvalidity-mergeful
+ - geo-resolver
+ - geo-uk
+ - geocode-google
+ - GeocoderOpenCage
  - geodetic
+ - geodetic-types
+ - GeoIp
+ - geojson-types
  - geolite-csv
+ - geom2d
+ - GeomPredicates-SSE
+ - geos
+ - Get
  - getemx
+ - getflag
+ - gev-lib
+ - gf
+ - GGg
+ - ggtsTC
+ - gh
+ - gh-labeler
+ - ghc-api-compat
+ - ghc-clippy-plugin
+ - ghc-compat
+ - ghc-core-smallstep
+ - ghc-corroborate
+ - ghc-debugger
+ - ghc-definitions-th
+ - ghc-dump-core
+ - ghc-dump-tree
  - ghc-dump-util
+ - ghc-dup
+ - ghc-events-analyze
+ - ghc-events-parallel
+ - ghc-generic-instances
+ - ghc-hotswap
  - ghc-imported-from
  - ghc-instances
+ - ghc-justdoit
+ - ghc-man-completion
  - ghc-mod
+ - ghc-mtl
+ - ghc-options
+ - ghc-parmake
+ - ghc-pkg-autofix
+ - ghc-pkg-lib
+ - ghc-plugin-non-empty
  - ghc-plugs-out
+ - ghc-proofs
  - ghc-session
+ - ghc-simple
+ - ghc-srcspan-plugin
+ - ghc-stack-profiler
+ - ghc-stack-profiler-speedscope
+ - ghc-syb
+ - ghc-syb-utils
+ - ghc-symbol
+ - ghc-time-alloc-prof
+ - ghc-typelits-presburger
+ - ghc-usage
+ - ghci-diagrams
+ - ghci-haskeline
+ - ghci-history-parser
+ - ghci-lib
+ - ghci-ng
  - ghci-pretty
+ - ghcide-bench
+ - ghcide-test-utils
+ - ghcjs-ajax
+ - ghcjs-base-stub
  - ghcjs-dom-hello
  - ghcjs-dom-webkit
+ - ghcjs-fetch
  - ghcjs-hplay
+ - ghcjs-promise
+ - ghcjs-vdom
+ - ghcjs-websockets
+ - ghcjs-xhr
+ - ghclive
+ - ghcprofview
  - ght
  - gi-cairo-again
+ - gi-coglpango
  - gi-ges
+ - gi-gio-hs-list-model
+ - gi-gstapp
  - gi-gstpbutils
+ - gi-gsttag
+ - gi-gtk-declarative
  - gi-gtk-declarative-app-simple
+ - gi-gtk4-layer-shell
+ - gi-gtksheet
+ - gi-ibus
+ - gi-keybinder
+ - gi-soup2
+ - gi-webkit
  - gi-webkit2
+ - gi-webkit2webextension
+ - gi-webkitwebprocessextension
+ - giak
+ - gibberish
+ - Gifcurry
+ - gigaparsec
+ - ginger2
+ - gingersnap
+ - ginsu
+ - gipeda
+ - giphy-api
+ - GiST
+ - gist
+ - git
+ - git-checklist
  - git-config
+ - git-cuk
+ - git-date
  - git-fmt
  - git-gpush
+ - git-jump
  - git-monitor
  - git-object
+ - git-phoenix
  - git-remote-ipfs
+ - git-repair
  - git-sanity
+ - git-vogue
  - gitdo
+ - gitea-api
+ - github-backup
  - github-data
+ - github-post-receive
+ - github-tools
+ - github-utils
+ - github-webhook-handler
  - github-webhook-handler-snap
+ - gitHUD
+ - githud
+ - gitignore
+ - gitlab-api
+ - gitlib
+ - gitlib-cmdline
  - gitlib-cross
  - gitlib-libgit2
  - gitlib-s3
  - gitlib-sample
  - gitlib-test
+ - gitlib-utils
  - gitson
+ - gitter
  - givegif
+ - glade
  - gladexml-accessor
+ - glambda
+ - glapp
+ - glaze
  - glazier
  - glazier-pipes
  - glazier-react
  - glazier-react-examples
  - glazier-react-widget
+ - Gleam
  - glean
  - glean-lsp
+ - GLFW
+ - GLFW-b-demo
  - GLFW-OGL
  - GLFW-task
+ - gli
+ - glider-nlp
+ - GLMatrix
+ - glob-posix
  - global
  - global-config
+ - global-variables
  - glome-hs
+ - GlomeTrace
  - GlomeView
  - gloss-accelerate
+ - gloss-banana
  - gloss-devil
+ - gloss-examples
+ - gloss-export
+ - gloss-game
+ - gloss-raster
  - gloss-raster-accelerate
+ - gloss-raster-massiv
  - gloss-sodium
+ - glpk-hs
+ - glsl
+ - gltf-codec
  - gltf-loader
+ - glualint
+ - glue
+ - glue-ekg
  - glue-example
+ - gmap
  - gmndl
  - gnome-desktop
  - gnomevfs
  - gnss-converters
+ - gnutls
+ - goa
+ - goal-core
  - goal-geometry
  - goal-graphical
  - goal-probability
  - goal-simulation
+ - goatee
  - goatee-gtk
+ - gochan
+ - godot-haskell
+ - godot-megaparsec
+ - gofer-prelude
+ - goggles-gcs
+ - gogol-admin-emailmigration
+ - gogol-affiliates
+ - gogol-autoscaler
+ - gogol-cloudmonitoring
+ - gogol-freebasesearch
+ - gogol-latencytest
+ - gogol-maps-coordinate
+ - gogol-maps-engine
+ - gogol-photoslibrary
+ - gogol-prediction
+ - gogol-resourceviews
+ - gogol-taskqueue
+ - gogol-useraccounts
+ - gooey
+ - google-cloud
+ - google-cloud-pubsub
  - google-drive
+ - google-html5-slide
  - google-mail-filters
  - google-maps-geocoding
+ - google-oauth2
+ - google-oauth2-easy
+ - google-search
+ - google-server-api
+ - google-static-maps
+ - google-translate
+ - GoogleCodeJam
  - GoogleDirections
  - googleplus
+ - googlepolyline
  - GoogleSB
  - GoogleTranslate
+ - gopherbot
+ - gopro-plus
+ - gore-and-ash
  - gore-and-ash-actor
  - gore-and-ash-async
  - gore-and-ash-demo
@@ -1176,24 +3447,40 @@ dont-distribute-packages:
  - gore-and-ash-network
  - gore-and-ash-sdl
  - gore-and-ash-sync
+ - GotoT-transformers
+ - gotta-go-fast
+ - gotyno-hs
+ - gpah
+ - GPipe
  - GPipe-Collada
+ - GPipe-Core
  - GPipe-Examples
  - GPipe-GLFW
  - GPipe-GLFW4
  - GPipe-TextureLoad
+ - gpmf
  - gps
  - gps2htmlReport
  - GPX
+ - gpx-conduit
+ - grab
  - grab-form
+ - graceful
+ - grafana
  - graflog
+ - Grafos
+ - grakn
  - grammar-combinators
  - GrammarProducts
+ - grammatical-parsers
  - grapefruit-examples
  - grapefruit-frp
  - grapefruit-records
  - grapefruit-ui
  - grapefruit-ui-gtk
  - grapesy-etcd
+ - graph-matchings
+ - graph-rewriting
  - graph-rewriting-cl
  - graph-rewriting-gl
  - graph-rewriting-lambdascope
@@ -1202,84 +3489,245 @@ dont-distribute-packages:
  - graph-rewriting-strategies
  - graph-rewriting-trs
  - graph-rewriting-ww
+ - graph-serialize
+ - graph-trace
+ - graph-utils
  - graph-visit
+ - graph-wrapper
+ - Graph500
+ - Graphalyze
+ - graphbuilder
+ - graphene
  - GraphHammer
  - GraphHammer-examples
+ - graphics-drawingcombinators
+ - graphics-formats-collada
  - graphicsFormats
  - graphicstools
+ - graphmod-plugin
+ - graphql-api
+ - graphql-utils
+ - graphql-w-persistent
+ - graphted
  - graphtype
+ - graphula-core
+ - graql
+ - grasp
+ - gray-code
+ - graylog
+ - greencard
  - greencard-lib
+ - greg-client
+ - gremlin-haskell
+ - Grempa
+ - grenade
+ - greplicate
+ - grfn
+ - grid
  - gridbounds
+ - gridfs
  - gridland
+ - grids
+ - grisette-monad-coroutine
+ - grm
+ - groot
  - gross
+ - GroteTrap
+ - groundhog
  - groundhog-converters
  - groundhog-inspector
  - groundhog-mysql
  - groundhog-postgresql
  - groundhog-sqlite
  - groundhog-th
+ - group-theory
+ - group-with
+ - groupBy
+ - grouped-list
  - Grow
+ - grow-vector
+ - growable-vector
+ - growler
  - GrowlNotify
+ - grpc-api-etcd
  - grpc-etcd-client
  - grpc-haskell
+ - grpc-haskell-core
  - gruff
  - gruff-examples
  - gsc-weighting
  - gscholar-rss
+ - gsl-random
  - gsl-random-fu
  - gsmenu
  - gstorable
+ - gstreamer
+ - GTALib
  - gtfs
  - gtfs-realtime
+ - gtk-helpers
  - gtk-serialized-event
+ - gtk-toy
  - gtk2hs-cast-glade
  - gtk2hs-cast-gnomevfs
  - gtk2hs-cast-gtk
  - gtk2hs-cast-gtkglext
  - gtk2hs-cast-gtksourceview2
+ - gtk2hs-cast-th
+ - gtk2hs-hello
+ - gtk2hs-rpn
  - Gtk2hsGenerics
+ - gtk3-helpers
+ - gtkglext
  - GtkGLTV
  - gtkimageview
  - gtkrsync
+ - gtksourceview2
+ - gtksourceview3
  - GtkTV
+ - gtvm-hs
  - guarded-rewriting
+ - guardian
+ - guess-combinator
  - GuiHaskell
  - GuiTV
+ - gulcii
+ - gw
+ - gyah-bin
+ - gym-hs
+ - gym-http-api
+ - H
+ - h-booru
+ - h-gpgme
+ - h-reversi
+ - h2048
+ - h2c
+ - h3-hs
+ - haar
  - habit
  - hablo
+ - hablog
+ - HABQT
  - Hach
  - hack-contrib
  - hack-contrib-press
+ - hack-frontend-happstack
+ - hack-handler-cgi
  - hack-handler-epoll
  - hack-handler-evhttp
  - hack-handler-fastcgi
+ - hack-handler-happstack
  - hack-handler-hyena
+ - hack-handler-kibro
  - hack-handler-simpleserver
  - hack-middleware-cleanpath
  - hack-middleware-clientsession
  - hack-middleware-jsonp
+ - hack2-contrib
  - hack2-contrib-extra
  - hack2-handler-happstack-server
  - hack2-handler-mongrel2-http
  - hack2-handler-snap-server
+ - hack2-handler-warp
+ - hackage-api
+ - hackage-diff
+ - hackage-mirror
+ - hackage-processing
+ - hackage-proxy
+ - hackage-publish
+ - hackage-server
+ - hackage-whatsnew
+ - hackage2hwn
  - hackage2twitter
+ - hackager
+ - hackernews
+ - HackMail
  - hackmanager
+ - hactor
+ - hactors
  - haddock
+ - haddock-leksah
+ - haddock-test
+ - hadoop-formats
+ - hadoop-rpc
+ - hadoop-streaming
  - hadoop-tools
+ - hafar
  - haggis
+ - Haggressive
+ - HaGL
+ - hahp
+ - haiji
+ - hailgun-send
+ - hails
  - hails-bin
+ - hairy
+ - hakaru
  - hake
+ - hakismet
+ - hakka
+ - hako
+ - hakyll-agda
+ - hakyll-blaze-templates
+ - hakyll-contrib
+ - hakyll-contrib-csv
+ - hakyll-contrib-elm
+ - hakyll-contrib-i18n
+ - hakyll-contrib-links
+ - hakyll-dhall
+ - hakyll-dir-list
  - hakyll-elm
  - hakyll-ogmarkup
+ - hakyll-process
+ - hakyll-R
+ - hakyll-series
+ - hakyll-shortcode
+ - hakyll-typescript
+ - hakyllbars
+ - hal
  - halberd
+ - HaLeX
+ - half-space
+ - halfs
  - halide-arrayfire
+ - halide-haskell
  - halide-JuicyPixels
+ - halipeto
+ - halive
  - hall-symbols
+ - halma
  - halma-gui
  - halma-telegram-bot
+ - halves
+ - halvm-web
+ - ham
+ - hamilton
+ - HaMinitel
+ - hampp
+ - hamsql
+ - hamtmap
  - hamusic
+ - hanabi-dealer
+ - handa-gdata
+ - handle-like
+ - HandlerSocketClient
+ - handsy
+ - handwriting
+ - Hangman
+ - hangman
+ - HangmanAscii
+ - hannahci
+ - hans
  - hans-pcap
+ - hans-pfq
+ - hanspell
+ - haphviz
+ - hapistrano
+ - happindicator
+ - happindicator3
+ - happlets
  - happlets-lib-gtk
+ - happraise
  - HAppS-Data
  - happs-hsp
  - happs-hsp-template
@@ -1287,8 +3735,11 @@ dont-distribute-packages:
  - HAppS-Server
  - HAppS-State
  - happs-tutorial
+ - HAppS-Util
+ - happstack
  - happstack-auth
  - happstack-authenticate
+ - happstack-clientsession
  - happstack-contrib
  - happstack-data
  - happstack-dlg
@@ -1296,48 +3747,151 @@ dont-distribute-packages:
  - happstack-fay
  - happstack-fay-ajax
  - happstack-foundation
+ - happstack-hamlet
+ - happstack-heist
  - happstack-helpers
  - happstack-hsp
+ - happstack-hstringtemplate
  - happstack-ixset
+ - happstack-lite
+ - happstack-monad-peel
  - happstack-plugins
+ - happstack-server-tls-cryptonite
  - happstack-state
+ - happstack-util
+ - happstack-yui
+ - happy-hour
+ - happybara
  - happybara-webkit
+ - happybara-webkit-server
+ - HappyTree
+ - hapstone
+ - HaPy
+ - haquery
  - haquil
+ - harchive
+ - hardware-edsl
  - HaRe
+ - harfbuzz-pure
+ - harg
  - hark
+ - HARM
  - harmony
  - HarmTrace
+ - HarmTrace-Base
+ - haroonga
  - haroonga-httpd
+ - harp
+ - harpy
+ - harvest-api
+ - has
  - has-th
+ - hasbolt-extras
+ - HasCacBDD
+ - hascal
+ - hascalam
+ - hascar
+ - hascard
+ - hascas
  - hascat
  - hascat-lib
  - hascat-setup
  - hascat-system
+ - Haschoo
+ - HasChor
  - HasGP
+ - hash
  - hash-addressed
  - hash-addressed-cli
+ - hash-cons
+ - hashable-extras
+ - hashable-generics
+ - hashable-orphans
+ - hashable-time
+ - hashabler
+ - hashed-storage
  - Hashell
+ - hasherize
  - hashflare
+ - hashids
+ - hashmap-io
+ - hashring
+ - hashtables-plus
+ - hasim
+ - hask
  - hask-home
+ - haskades
  - haskanoid
+ - haskarrow
+ - haskbot-core
  - haskdeep
  - haskeem
+ - haskeline-class
+ - haskelisp
+ - haskell-abci
  - haskell-admin
+ - haskell-admin-core
  - haskell-admin-health
  - haskell-admin-managed-functions
  - haskell-aliyun
+ - haskell-awk
+ - haskell-bcrypt
+ - haskell-bee-pgmq
  - haskell-bitmex-client
+ - haskell-bitmex-rest
+ - haskell-brainfuck
+ - haskell-cnc
+ - haskell-compression
+ - haskell-conll
+ - haskell-course-preludes
  - haskell-debugger
+ - haskell-debugger-view
+ - haskell-disque
+ - haskell-docs-cli
  - haskell-eigen-util
+ - haskell-ffprobe
+ - haskell-formatter
  - haskell-ftp
+ - haskell-generate
+ - haskell-go-checkers
+ - haskell-halogen-core
+ - haskell-holes-th
+ - haskell-igraph
+ - haskell-import-graph
+ - haskell-in-space
+ - haskell-kubernetes
  - haskell-lsp
  - haskell-lsp-client
+ - haskell-lsp-types
+ - haskell-ml
+ - haskell-mpfr
+ - haskell-mpi
+ - haskell-names
+ - haskell-neo4j-client
+ - haskell-openflow
  - haskell-opentimestamps
  - haskell-opentimestamps-client
+ - haskell-overridez
+ - haskell-packages
  - haskell-pdf-presenter
  - haskell-platform-test
+ - haskell-player
+ - haskell-plot
+ - haskell-postal
+ - haskell-postgis
+ - haskell-read-editor
  - haskell-reflect
+ - haskell-rules
+ - haskell-snake
+ - haskell-spacegoo
  - haskell-src-exts-observe
+ - haskell-src-exts-prisms
+ - haskell-src-exts-qq
+ - haskell-src-exts-sc
+ - haskell-src-match
+ - haskell-src-meta-mwotton
+ - haskell-stack-trace-plugin
+ - haskell-throttle
  - haskell-token-utils
  - haskell-tools-ast
  - haskell-tools-ast-fromghc
@@ -1354,7 +3908,16 @@ dont-distribute-packages:
  - haskell-tools-refactor
  - haskell-tools-rewrite
  - haskell-tor
+ - haskell-type-exts
+ - haskell-typescript
+ - haskell-tyrant
  - haskell-xmpp
+ - haskell2010
+ - haskell2020
+ - haskell98
+ - haskell98libraries
+ - HaskellAnalysisProgram
+ - haskelldb
  - haskelldb-connect-hdbc
  - haskelldb-connect-hdbc-catchio-mtl
  - haskelldb-connect-hdbc-catchio-tf
@@ -1370,24 +3933,48 @@ dont-distribute-packages:
  - haskelldb-hsql
  - haskelldb-hsql-mysql
  - haskelldb-hsql-odbc
+ - haskelldb-hsql-oracle
  - haskelldb-hsql-postgresql
+ - haskelldb-hsql-sqlite
  - haskelldb-hsql-sqlite3
  - haskelldb-th
+ - haskelldb-wx
+ - HaskellForMaths
+ - HaskellLM
+ - HaskellNN
+ - Haskelloids
+ - haskellscrabble
+ - haskellscript
+ - HaskellTorrent
+ - HaskellTutorials
  - haskelm
+ - haskelzinc
+ - haskeme
  - haskey
+ - haskey-btree
  - haskey-mtl
  - haskgame
+ - haskheap
+ - haskhol-core
  - hasklepias
+ - haskmon
+ - haskoin
  - haskoin-bitcoind
  - haskoin-crypto
  - haskoin-protocol
  - haskoin-script
+ - haskoin-util
  - haskoin-wallet
  - haskoon
  - haskoon-httpspec
  - haskoon-salvia
+ - haskore-realtime
  - haskore-supercollider
  - haskore-synthesizer
+ - haskore-vintage
+ - HaskRel
+ - hasktorch-codegen
+ - hasktorch-ffi-th
  - hasktorch-ffi-thc
  - hasktorch-indef
  - hasktorch-signatures
@@ -1396,92 +3983,241 @@ dont-distribute-packages:
  - haskus-system-build
  - haskus-utils
  - haskus-utils-compat
+ - haskus-utils-variant
  - haskus-web
+ - haskyapi
  - haslo
  - hasloGUI
+ - hasmin
+ - haspara
+ - hasparql-client
+ - hasql-backend
+ - hasql-class
+ - hasql-cursor-query
+ - hasql-explain-tests
+ - hasql-generate
+ - hasql-generic
+ - hasql-migration
+ - hasql-mover
+ - hasql-pipes
  - hasql-postgres
  - hasql-postgres-options
  - hasql-queue
+ - hasql-resource-pool
+ - hasql-simple
+ - hasql-streams-conduit
  - hasql-streams-core
  - hasql-streams-example
+ - hasql-streams-pipes
+ - hasql-streams-streaming
+ - hasql-streams-streamly
+ - hasql-transaction-io
+ - hasql-url
+ - hasqly-mysql
+ - hastache
  - hastache-aeson
+ - haste
  - haste-app
+ - haste-compiler
  - haste-gapi
  - haste-lib
  - haste-markup
  - haste-perch
+ - haste-prim
+ - hastily
+ - hat
  - Hate
+ - hatex-guide
  - HaTeX-meta
  - HaTeX-qq
  - hatexmpp3
+ - hats
+ - hatt
+ - haven
+ - haverer
  - HaVSA
  - hawitter
  - Hawk
+ - hax
+ - haxl-amazonka
+ - haxl-facebook
+ - haxparse
+ - haxr-th
  - haxy
+ - hayland
  - Hayoo
+ - hayoo-cli
  - hback
  - hbayes
  - hbayesian
  - hbb
+ - hBDD
+ - hBDD-CMUBDD
+ - hBDD-CUDD
+ - hbeanstalk
+ - hbeat
  - hbf
+ - hblas
+ - hblock
  - hbro
  - hbro-contrib
+ - hburg
+ - hcad
+ - HCard
+ - hcc
+ - hcg-minus
  - hcg-minus-cairo
  - hcheat
  - hcheckers
+ - hchesslib
+ - hcltest
+ - hcoap
+ - hcobs
+ - hcount
+ - hcron
+ - hCsound
  - hcube
+ - hdaemonize-buildfix
+ - hdbc-aeson
+ - HDBC-mysql
+ - HDBC-postgresql-hstore
+ - hdbc-postgresql-hstore
  - hdbi
  - hdbi-conduit
  - hdbi-postgresql
  - hdbi-sqlite
  - hdbi-tests
+ - hdevtools
+ - hdf
+ - hDFA
  - hdiff
+ - hdigest
  - hdirect
+ - hdis86
+ - hdiscount
+ - hdm
+ - hdo
  - hdph
+ - hdph-closure
+ - hdr-histogram
+ - headergen
+ - heap-console
+ - heapsort
  - heart-app
+ - heart-core
+ - heartbeat-streams
  - heatitup
+ - heatitup-complete
  - heavy-log-shortcuts
  - heavy-logger
  - heavy-logger-amazon
  - heavy-logger-instances
+ - hebrew-time
  - hecc
+ - heckle
+ - heddit
+ - hedgehog-checkers
  - hedgehog-checkers-lens
+ - hedgehog-gen
  - hedgehog-gen-json
+ - hedgehog-generic
+ - hedgehog-golden
+ - hedgehog-lens
+ - hedgehog-optics
+ - hedgehog-servant
  - Hedi
+ - hedis-config
+ - hedis-monadic
+ - hedis-namespace
  - hedis-pile
+ - hedis-simple
+ - hedis-tags
+ - hedra
+ - hegel
+ - hegg
+ - heidi
+ - hein
  - heist-aeson
+ - heist-async
+ - heist-emanote
  - helic
  - helics
  - helics-wai
+ - helisp
  - helium
+ - helium-overture
+ - helix
  - hellage
  - hellnet
+ - helm
+ - help-esb
+ - hemkay
  - hemokit
  - hen
  - henet
  - hepevt
+ - her-lexer-parsec
+ - HERA
+ - herbalizer
+ - HerbiePlugin
+ - heredocs
+ - Hermes
  - hermit
  - hermit-syb
+ - herms
+ - heroku
+ - heroku-persistent
  - herringbone
  - herringbone-embed
  - herringbone-wai
  - hesh
  - hesql
+ - hetero-dict
+ - heterogeneous-list-literals
  - heterolist
+ - hetris
+ - heukarya
  - hevolisa
  - hevolisa-dph
+ - HExcel
+ - hexchat
+ - hexif
+ - hexmino
+ - hexml-lens
  - hexpat-conduit
  - hexpat-iteratee
+ - hexpat-lens
+ - hexpat-pickle-generic
+ - hexpat-streamparser
+ - hexpr
+ - hexpress
+ - hexquote
+ - hext
+ - hextra
+ - hextream
+ - heyefi
+ - heyting-algebras
+ - hF2
+ - hfann
  - hfd
  - hfiar
+ - HFitUI
+ - hfmt
+ - hfoil
+ - hfov
  - hfractal
+ - HFrequencyQueue
+ - hfusion
+ - hg-buildpackage
  - hgalib
+ - HGamer3D
  - HGamer3D-API
  - HGamer3D-Audio
  - HGamer3D-Bullet-Binding
  - HGamer3D-CAudio-Binding
  - HGamer3D-CEGUI-Binding
  - HGamer3D-Common
+ - HGamer3D-Data
  - HGamer3D-Enet-Binding
  - HGamer3D-Graphics3D
  - HGamer3D-GUI
@@ -1493,78 +4229,252 @@ dont-distribute-packages:
  - HGamer3D-SFML-Binding
  - HGamer3D-WinEvent
  - HGamer3D-Wire
+ - hgdbmi
+ - HGE2D
+ - hgearman
+ - hGelf
  - hgen
+ - hgeometric
  - hgeometry
  - hgeometry-combinatorial
  - hgeometry-ipe
  - hgeometry-svg
+ - hgis
  - hgithub
+ - hgl-example
+ - hgom
+ - hgopher
+ - HGraphStorage
+ - hgreet
+ - hgrep
+ - hgrev
+ - hgrib
+ - hharp
+ - HHDL
+ - hhlo
+ - hhp
+ - hhwloc
+ - hi
+ - hi3status
+ - hic
  - hiccup
+ - hichi
+ - hid
+ - hid-examples
+ - hidden-char
  - hie-core
+ - hiedb-plugin
+ - hieraclus
+ - hierarchical-clustering
  - hierarchical-clustering-diagrams
  - hierarchical-env
+ - hierarchical-exceptions
  - hierarchical-spectral-clustering
+ - hierarchy
+ - hiernotify
  - Hieroglyph
+ - hifi
+ - higgledy
  - HiggsSet
+ - higher-leveldb
+ - higherorder
+ - highjson
  - highjson-swagger
  - highjson-th
+ - highlight-versions
+ - highlighter
+ - highlighting-kate
+ - highWaterMark
+ - hikchr
+ - hills
+ - himari
+ - himerge
+ - himg
  - himpy
+ - hindley-milner
+ - hindley-milner-type-check
  - hinduce-classifier
  - hinduce-classifier-decisiontree
  - hinduce-examples
+ - hinotify-bytestring
+ - hinotify-conduit
+ - hinquire
+ - hinstaller
+ - hint-nix
+ - hint-server
+ - hinter
+ - hinterface
  - hinvaders
  - hinze-streams
  - hipbot
+ - hipchat-hs
  - hipe
+ - Hipmunk
  - Hipmunk-Utils
  - HipmunkPlayground
+ - hips
+ - hipsql-api
  - hipsql-client
+ - hipsql-monad
  - hipsql-server
  - hipsql-tx-simple
+ - hircules
  - hirt
+ - Hish
+ - hissmetrics
  - hist-pl
  - hist-pl-dawg
  - hist-pl-fusion
  - hist-pl-lexicon
  - hist-pl-lmf
+ - hist-pl-types
+ - histogram-simple
+ - historian
  - hit
  - hit-graph
+ - hit-on
+ - hix
+ - HJavaScript
+ - hjcase
  - hjpath
+ - hjs
  - HJScript
+ - hjson
+ - hjson-query
+ - hjsonpointer
  - hjsonschema
  - hjugement-cli
+ - hjugement-protocol
+ - HJVM
+ - hkd
+ - hkd-delta
+ - hkd-lens
+ - hkd-records
+ - hkt
+ - hlatex
+ - hlbfgsb
  - hlcm
+ - hleap
  - HLearn-algebra
  - HLearn-approximation
  - HLearn-classification
  - HLearn-datastructures
  - HLearn-distributions
+ - hledger-api
+ - hledger-chart
+ - hledger-diff
+ - hledger-irr
+ - hledger-makeitso
+ - hledger-vty
+ - hlibBladeRF
+ - hlibev
+ - hlibfam
+ - hlint-plugin
+ - hlivy
+ - hLLVM
+ - HLogger
+ - hlogger
+ - hlongurl
  - hls
+ - hls-alternate-number-format-plugin
+ - hls-cabal-fmt-plugin
+ - hls-cabal-plugin
  - hls-call-hierarchy-plugin
+ - hls-change-type-signature-plugin
+ - hls-code-range-plugin
+ - hls-eval-plugin
  - hls-exactprint-utils
+ - hls-explicit-fixity-plugin
+ - hls-explicit-imports-plugin
+ - hls-explicit-record-fields-plugin
+ - hls-fourmolu-plugin
+ - hls-module-name-plugin
+ - hls-ormolu-plugin
+ - hls-overloaded-record-dot-plugin
+ - hls-pragmas-plugin
+ - hls-qualify-imported-names-plugin
+ - hls-refine-imports-plugin
+ - hls-selection-range-plugin
  - hls-semantic-tokens-plugin
+ - hlwm
+ - hly
  - hmark
+ - HMarkov
+ - hmarkup
+ - hmatrix-banded
+ - hmatrix-mmap
+ - hmatrix-morpheus
+ - hmatrix-nipals
+ - hmatrix-sparse
+ - hmatrix-static
  - hmatrix-sundials
+ - hmatrix-svdlibc
+ - hmatrix-syntax
+ - hmatrix-tests
  - hmeap
  - hmeap-utils
+ - hmenu
  - hmep
+ - hmk
+ - HMM
+ - hmm
+ - hmm-hmatrix
+ - hMollom
+ - hmp3
+ - Hmpf
  - hmt-diagrams
+ - hmumps
+ - hnetcdf
  - hnix-store-db
  - HNM
+ - hnn
+ - hnock
+ - hnop
  - hnormalise
+ - ho-rewriting
+ - hoauth
+ - hoauth2-demo
+ - hoauth2-providers
+ - hoauth2-providers-tutorial
+ - hoauth2-tutorial
  - hob
+ - hobbes
+ - hobbits
+ - hocilib
+ - hocker
+ - hocon
+ - hodatime
+ - HODE
+ - hoe
  - Hoed
  - hOff-display
+ - hofix-mtl
+ - hog
+ - hogg
+ - hoggl
  - hogre
  - hogre-examples
+ - hois
+ - hold-em
+ - hole
+ - holidays
+ - holmes
  - Holumbus-Distribution
  - Holumbus-MapReduce
+ - Holumbus-Searchengine
  - Holumbus-Storage
  - holy-project
+ - homeomorphic
  - hommage
+ - homoiconic
  - homotuple
+ - homplexity
  - HongoDB
+ - honi
+ - hoobuddy
  - hood
+ - hood-off
+ - hood2
  - hoodie
  - hoodle
  - hoodle-builder
@@ -1573,89 +4483,271 @@ dont-distribute-packages:
  - hoodle-parser
  - hoodle-publish
  - hoodle-render
+ - hoodle-types
+ - hoogle-index
+ - hooks-dir
+ - hoop
+ - hoopl
  - hoovie
+ - hopencc
+ - hopencl
+ - HOpenCV
+ - hopfield
+ - hopfli
  - hoppy-docs
+ - hoppy-generator
  - hoppy-runtime
  - hoppy-std
+ - hops
+ - hoq
+ - horizon
+ - horizon-gen-nix
+ - horizon-spec
+ - horizon-spec-lens
+ - horizon-spec-pretty
+ - horname
+ - hosc-json
+ - hosc-utils
+ - hosts-server
+ - hothasktags
  - hotswap
+ - hourglass-fuzzy-parsing
+ - houseman
+ - hout
+ - hp2any-core
  - hp2any-graph
  - hp2any-manager
+ - hpack-convert
+ - hpack-dhall
  - hpaco
  - hpaco-lib
  - hpage
+ - hpapi
  - hpaste
+ - hpasteit
+ - HPath
  - hpath-directory
  - hpath-io
+ - hpc-coveralls
  - hpc-tracer
  - hPDB
  - hPDB-examples
+ - hpdft
+ - hpg
  - HPhone
+ - HPi
+ - hpio
  - hplayground
+ - hplaylist
  - HPlot
+ - hpodder
  - HPong
  - hprotoc
  - hprotoc-fork
  - hps
  - hps-cairo
+ - hps-kmeans
+ - hPushover
+ - hpygments
+ - hpylos
+ - hpyrg
  - hpython
  - hq
+ - hqcsim
  - HQu
+ - hquantlib
+ - hquery
+ - hR
  - hranker
  - HRay
  - hreq-client
  - hreq-conduit
+ - hreq-core
+ - hRESP
+ - Hricket
+ - hricket
  - hriemann
  - HROOT
+ - HROOT-core
  - HROOT-graf
  - HROOT-hist
  - HROOT-io
  - HROOT-math
  - HROOT-net
  - HROOT-tree
+ - hruby
  - hs
+ - hs-asapo
+ - hs-aws-lambda
  - hs-blake2
+ - hs-brotli
+ - hs-carbon
+ - hs-carbon-examples
+ - hs-conllu
+ - hs-di
+ - hs-dotnet
+ - hs-duktape
+ - hs-excelx
  - hs-ffmpeg
+ - hs-fltk
  - hs-functors
  - hs-gen-iface
+ - hs-gizapp
+ - hs-hath
  - hs-ix
+ - hs-java
+ - hs-json-rpc
+ - hs-logo
+ - hs-multiaddr
+ - hs-nombre-generator
+ - hs-onnxruntime-capi
+ - hs-openmoji-data
+ - hs-opentelemetry-awsxray
+ - hs-opentelemetry-instrumentation-auto
+ - hs-pattrans
+ - hs-pgms
+ - hs-pkg-config
  - hs-profunctors
+ - hs-re
+ - hs-rqlite
+ - hs-rs-notify
+ - hs-samtools
+ - hs-scrape
  - hs-sdl-term-emulator
+ - hs-server-starter
+ - hs-snowtify
+ - hs-tags
+ - hs-tango
+ - hs-term-emulator
+ - hs-twitter
+ - hs-twitterarchiver
+ - hs-vcard
+ - hs-watchman
  - hs2ats
+ - hs2bf
  - hs2dot
  - Hs2lib
+ - hs2ps
  - hS3
+ - hsakamai
+ - hsaml2
+ - HsASA
+ - hsautogui
+ - hsay
  - hsbackup
+ - hsbc
+ - hsbencher
  - hsbencher-codespeed
  - hsbencher-fusion
+ - hsblst
  - hsc3-auditor
+ - hsc3-cairo
  - hsc3-data
+ - hsc3-db
+ - hsc3-dot
  - hsc3-forth
  - hsc3-graphs
+ - hsc3-lang
  - hsc3-lisp
  - hsc3-plot
+ - hsc3-process
+ - hsc3-rec
+ - hsc3-rw
  - hsc3-server
+ - hsc3-sf
  - hsc3-sf-hsndfile
+ - hsc3-unsafe
  - hsc3-utils
+ - hscaffold
+ - hscamwire
  - hscassandra
+ - hscd
+ - hscdio
+ - hschema-aeson
+ - hscim
+ - hsclock
  - hscope
+ - hScraper
+ - hscuid
  - hsdev
+ - hsdif
+ - hsdip
+ - hsdns-cache
+ - hsebaysdk
+ - hsec-sync
+ - hsec-tools
  - Hsed
+ - hsenv
  - hsfacter
+ - hsfcsh
+ - HSFFIG
+ - hsfilt
+ - hsforce
+ - hsftp
  - HSGEP
+ - hsgnutls
+ - hsgnutls-yj
+ - hsgsom
+ - HsHaruPDF
  - HSHHelpers
+ - HsHyperEstraier
+ - hsI2C
+ - hSimpleDB
+ - hsimport
+ - hsinspect
  - hsinspect-lsp
+ - HsJudy
+ - hskeleton
+ - hslackbuilder
+ - hslibsvm
+ - hslinks
+ - hslogger-reader
+ - hslogger-template
  - hslogstash
+ - hsluv-haskell
+ - hsmagick
+ - hsmin
+ - hsmodetweaks
+ - hsmrc
  - hsmrc-marc8
+ - Hsmtlib
+ - hsmtpclient
+ - hsnock
+ - hsns
+ - hsnsq
+ - hsntp
+ - hsoptions
  - HSoundFile
+ - hsoz
+ - hsp
+ - hsp-cgi
+ - hsparql
  - HsParrot
+ - hspear
  - hspec-dirstream
+ - hspec-expectations-match
  - hspec-expectations-pretty
+ - hspec-experimental
+ - hspec-jenkins
+ - hspec-monad-control
  - hspec-pg-transact
  - hspec-setup
  - hspec-shouldbe
+ - hspec-slow
+ - hspec-snap
+ - hspec-structured-formatter
+ - hspec-tables
  - hspec-webdriver
+ - hspec2
  - hspecVariant
+ - HsPerl5
+ - hspkcs11
+ - hspray
+ - hspread
+ - hspresent
+ - hspretty
  - hsprocess
+ - hsql
  - hsql-mysql
  - hsql-odbc
  - hsql-postgresql
@@ -1665,175 +4757,479 @@ dont-distribute-packages:
  - hsqml-morris
  - hsreadability
  - hsrs
+ - hsseccomp
+ - hsshellscript
  - hssourceinfo
+ - hsSqlite3
+ - hssqlppp
  - hssqlppp-th
+ - HsSVN
+ - HsSyck
  - hstar
+ - hstats
+ - hstatsd
+ - hstest
+ - hstidy
+ - HsTools
  - hstox
  - hstradeking
  - HStringTemplateHelpers
+ - hstyle
  - hstzaar
  - hsubconvert
+ - hsudoku
  - HsWebots
  - hswip
+ - hsx
  - hsx-jmacro
  - hsx-xhtml
+ - hsx2hs
+ - hsXenCtrl
+ - hsyscall
  - hsyslog-tcp
+ - hsyslog-udp
+ - hszephyr
  - HTab
+ - htags
+ - htalkat
+ - hTalos
+ - htar
+ - htdp-image
+ - hTensor
+ - htestu
+ - HTicTacToe
+ - htiled
+ - htlset
  - html-kure
+ - html-rules
+ - html-tokenizer
+ - htoml
+ - htoml-megaparsec
  - htoml-parse
+ - hts
+ - htsn
  - htsn-import
+ - htssets
+ - http-attoparsec
  - http-client-auth
+ - http-client-lens
+ - http-client-request-modifiers
  - http-client-rustls
+ - http-client-session
+ - http-client-streams
+ - http-conduit-browser
+ - http-conduit-downloader
+ - http-directory
+ - http-dispatch
+ - http-encodings
  - http-enumerator
+ - http-exchange-instantiations
+ - http-kinder
+ - http-kit
+ - http-listen
+ - http-monad
+ - http-pony
+ - http-pony-serve-wai
+ - http-proxy
+ - http-querystring
  - http-response-decoder
+ - http-rfc7807
+ - http-server
+ - http-shed
+ - http-test
  - http-tower-hs
+ - http-wget
+ - http2-client-exe
  - http2-client-grpc
  - http2-client-grpc-effectful
  - http2-grpc-proto-lens
  - http2-grpc-proto3-wire
+ - http2-grpc-types
  - https-everywhere-rules
  - https-everywhere-rules-raw
  - httpspec
+ - httpstan
+ - htune
+ - htvm
+ - htzaar
+ - hub
  - hubris
+ - huck
+ - HueAPI
+ - huff
  - hugs2yc
  - hulk
+ - HulkImport
+ - hum
+ - human-parse
+ - human-text
+ - humble-prelude
+ - hums
+ - hunch
  - Hungarian-Munkres
+ - HUnit-Diff
  - hunit-gui
+ - HUnit-Plus
+ - hunit-rematch
  - hunp
  - hunt-searchengine
  - hunt-server
+ - hunt-server-cli
+ - hup
  - hurdle
  - hurl
  - hurl-xml
+ - hurriyet
+ - husk-scheme
  - husk-scheme-libs
+ - husky
+ - hutton
+ - huttons-razor
  - huzzy
+ - hVOIDP
+ - hw-aeson
  - hw-all
+ - hw-aws-sqs-conduit
  - hw-balancedparens
+ - hw-ci-assist
+ - hw-conduit
+ - hw-conduit-merges
+ - hw-diagnostics
+ - hw-dsv
+ - hw-dump
  - hw-eliasfano
  - hw-excess
+ - hw-fingertree-strict
  - hw-json
  - hw-json-demo
  - hw-json-lens
  - hw-json-simple-cursor
  - hw-json-standard-cursor
  - hw-kafka-avro
+ - hw-kafka-conduit
+ - hw-lazy
+ - hw-packed-vector
+ - hw-parser
+ - hw-playground-linear
+ - hw-polysemy
+ - hw-prim-bits
  - hw-rankselect
+ - hw-rankselect-base
  - hw-simd
+ - hw-simd-cli
  - hw-succinct
+ - hw-tar
  - hw-uri
+ - hw-xml
+ - hwall-auth-iitk
+ - hweblib
+ - hwhile
+ - hwm
+ - hworker
  - hworker-ses
  - hwormhole
  - hws
+ - hwsl2
  - hwsl2-bytevector
  - hwsl2-reducers
+ - hx
  - HXMPP
+ - hxmppc
  - hxournal
+ - HXQ
  - hxt-binary
  - hxt-filter
+ - hxt-pickle-utils
+ - hxthelper
  - hxweb
+ - hyakko
  - hybrid
+ - hydra
+ - hydra-hs
  - hydra-print
  - Hydrogen
+ - hydrogen
  - hydrogen-cli
  - hydrogen-cli-args
  - hydrogen-data
+ - hydrogen-multimap
  - hydrogen-parsing
  - hydrogen-prelude
  - hydrogen-prelude-parsec
  - hydrogen-syntax
  - hydrogen-util
  - hyena
+ - hylide
+ - HyloDP
+ - hylolib
  - hylotab
  - hyloutils
  - hyperbole
  - hyperbole-oauth2
+ - hyperdrive
+ - hypergeomatrix
+ - hyperion
+ - hyperloglogplus
  - hyperpublic
+ - hyperscript
+ - hypertypes
+ - hypher
+ - hyraxAbif
+ - hzulip
+ - i
+ - i18n
+ - I1M
+ - i3blocks-hs-contrib
+ - i3ipc
+ - iap-verifier
+ - ib-api
+ - iban
+ - ical
+ - ice40-prim
+ - icepeak
+ - icfpc2020-galaxy
+ - IcoGrid
+ - iconv-typed
  - ide-backend
+ - ide-backend-common
  - ide-backend-server
+ - ideas
  - ideas-math
  - ideas-math-types
  - ideas-statistics
+ - idempotent
  - identicon-style-squares
+ - identifiers
+ - idiii
+ - idiomatic
  - idna
+ - IDynamic
+ - ieee-utils
  - iException
+ - iexcloud
+ - if-instance
+ - ifcxt
+ - IFS
+ - ig
+ - ige
  - ige-mac-integration
+ - ignore
+ - igraph
  - igrf
+ - ihaskell-charts
+ - ihaskell-gnuplot
+ - ihaskell-graphviz
  - ihaskell-inline-r
+ - ihaskell-parsec
+ - ihaskell-plot
  - ihaskell-rlangqq
  - ihaskell-symtegration
+ - ihaskell-widgets
  - ihttp
+ - illuminate
+ - image-type
+ - imagemagick
+ - imagepaste
  - imap
+ - imapget
  - imbib
+ - imgur
  - imgurder
  - imj-animation
  - imj-base
  - imj-game-hamazed
  - imj-measure-stdout
+ - imj-prelude
+ - imm
+ - immortal-worker
  - immutaball-core
  - imparse
+ - imperative-edsl
+ - imperative-edsl-vhdl
+ - ImperativeHaskell
+ - impl
+ - implicit-hie-cradle
+ - implicit-logging
+ - implicit-params
+ - import-style-plugin
  - importify
+ - imports
+ - impossible
+ - imprevu
  - imprevu-happstack
+ - imprint
  - improve
+ - impure-containers
  - imsos-monad
+ - in-other-words
+ - in-other-words-plugin
  - INblobs
  - inch
  - incremental-computing
  - incremental-maps
+ - incremental-sat-solver
  - increments
  - indentation
+ - indentation-core
  - indentation-parsec
  - indentation-trifecta
+ - index-core
  - indexation
+ - indexed-containers
+ - indexed-do-notation
+ - indexed-extras
  - IndexedList
+ - indextype
+ - indices
+ - indieweb-algorithms
  - indigo
+ - inf-interval
+ - infer-upstream
+ - infernal
  - inferno-core
  - inferno-lsp
+ - inferno-types
  - inferno-vc
+ - infernu
  - infinity
+ - infix
  - InfixApplicative
+ - inflist
+ - informative
+ - ini-qq
+ - inilist
+ - initialize
+ - inj-base
+ - inject
+ - inject-function
+ - injections
+ - inline-c-cuda
+ - inline-c-objc
  - inline-java
+ - inline-r
+ - inquire
+ - inserts
  - inspector-wrecker
+ - instana-haskell-trace-sdk
+ - instance-control
+ - instance-map
  - instant-aeson
  - instant-bytes
  - instant-deepseq
+ - instant-generics
  - instant-hashable
  - instant-zipper
+ - instapaper-sender
+ - instinct
+ - instrument
  - instrument-cloudwatch
+ - int-cast
+ - int-interval-map
+ - int-multimap
+ - intcode
+ - integer-pure
+ - integer-simple
+ - integer-types
  - integreat
  - intel-aes
+ - intelli-monad
+ - intensional-datatys
+ - interact
+ - interactive-plot
+ - interleavableGen
+ - interleavableIO
+ - interlude-l
+ - internetmarke
+ - intero
+ - interp
+ - interpol
  - interpolatedstring-qq
  - interpolatedstring-qq-mwotton
+ - interpolatedstring-qq2
+ - interpolator
+ - interruptible
+ - interspersed
+ - interval
+ - interval-algebra
+ - interval-tree-clock
+ - IntFormats
+ - intricacy
+ - intrinsic-superclasses
+ - intro
  - intro-prelude
+ - introduction
  - introduction-test
  - intset
+ - inventory
+ - invert
+ - invertible-hlist
+ - invertible-syntax
+ - involutive-semigroups
+ - io-capture
+ - io-choice
  - io-classes-mtl
+ - io-reactive
+ - ioctl
  - ion
+ - IOR
  - IORefCAS
+ - iostring
+ - iothread
+ - iotransaction
+ - ip-quoter
  - ipatch
  - ipc
+ - ipcvar
  - ipedb
+ - ipfs
  - ipld-cid
+ - ipopt-hs
  - ipprint
+ - iptables-helpers
  - iptadmin
+ - IPv6DB
+ - Irc
+ - irc-dcc
  - irc-fun-bot
  - irc-fun-client
  - irc-fun-color
  - irc-fun-messages
+ - irc-fun-types
+ - ircbot
+ - ireal
+ - iridium
+ - iris
+ - iron-mq
  - ironforge
+ - irt
+ - isdicom
  - isevaluated
  - ismtp
+ - IsNull
+ - iso-deriving
+ - isobmff
  - isobmff-builder
  - isohunt
+ - isotope
+ - it-has
+ - itcli
+ - itemfield
  - iter-stats
+ - iterable
+ - iteratee
  - iteratee-compress
  - iteratee-mtl
  - iteratee-parsec
  - iteratee-stm
+ - iterative-forward-search
+ - iterIO
  - iterio-server
+ - iterm-show
  - iterm-show-diagrams
  - iterm-show-JuicyPixels
  - ival
  - ivor
+ - ivory
  - ivory-avr-atmega328p-registers
  - ivory-backend-c
  - ivory-bitdata
@@ -1846,72 +5242,195 @@ dont-distribute-packages:
  - ivory-stdlib
  - ivy-web
  - ix
+ - ixdopp
+ - ixmonad
  - ixset
  - ixset-typed-conversions
+ - ixshader
  - iyql
+ - j
  - j2hs
+ - jack-bindings
+ - JackMiniMix
+ - jackminimix
  - jackpolynomials
+ - jacobi-roots
+ - jaeger-flamegraph
+ - jail
+ - jalla
+ - jammittools
+ - jarfind
+ - jarify
+ - jaskell
+ - jason
+ - java-bridge
  - java-bridge-extras
  - java-character
  - java-reflect
  - javaclass
+ - javascript-bridge
+ - javascript-extras
  - Javasf
  - javasf
+ - Javav
+ - javav
+ - jbi
+ - jcdecaux-vls
+ - Jdh
+ - jdi
+ - jenga
+ - jenkinsPlugins2nix
  - jespresso
+ - jet
+ - Jikka
+ - jinquantities
+ - jl
+ - jmacro-rpc
  - jmacro-rpc-happstack
  - jmacro-rpc-snap
+ - jml-web-service
+ - jni
  - jobqueue
  - jobs-ui
  - join
+ - join-api
+ - joinlist
+ - joint
+ - jonathanscard
+ - jordan
  - jordan-openapi
  - jordan-servant
  - jordan-servant-client
  - jordan-servant-openapi
  - jordan-servant-server
+ - jort
+ - joy-rewrite
+ - jpeg
+ - js-good-parts
  - jsaddle-hello
  - jsaddle-webkit2gtk
  - jsaddle-webkitgtk
  - jsc
  - JsContracts
  - jsmw
+ - json-api
+ - json-api-lib
+ - json-assertions
  - json-ast-json-encoder
+ - json-ast-quickcheck
+ - json-autotype
  - json-b
+ - json-builder
+ - json-bytes-builder
  - JSON-Combinator
  - JSON-Combinator-Examples
+ - json-encoder
  - json-enumerator
+ - json-extra
+ - json-fu
  - json-incremental-decoder
+ - json-litobj
+ - json-pointer
  - json-pointer-aeson
  - json-pointer-hasql
+ - json-pointy
+ - json-python
+ - json-qq
  - json-query
  - json-rpc-client
+ - json-rpc-generic
+ - json-rpc-server
+ - json-schema
  - json-state
+ - json-syntax
+ - json-to-haskell
+ - json-to-type
  - json-togo
+ - json-tokens
+ - json-tools
+ - json-tracer
+ - json2
  - json2-hdbc
  - json2sg
+ - JSONb
+ - jsonextfilter
  - JsonGrammar
+ - jsonlogic
+ - jsonlogic-aeson
+ - jsonnet
+ - jsonresume
  - jsons-to-schema
+ - jsonschema-gen
+ - jsonsql
+ - jsontsv
+ - jsonxlsx
+ - jsop
  - jspath
+ - judge
+ - judy
+ - juicy-gcode
+ - JuicyPixels-blp
+ - JuicyPixels-blurhash
+ - JuicyPixels-canvas
+ - JuicyPixels-util
+ - JunkDB
  - JunkDB-driver-gdbm
  - JunkDB-driver-hashtables
+ - jupyter
  - JuPyTer-notebook
+ - justified-containers
+ - JustParse
  - jvm
  - jvm-batching
+ - jvm-binary
+ - jvm-parser
  - jvm-streaming
+ - JYU-Utils
+ - k8s-wrapper
+ - kademlia
+ - kafka-client
+ - kafka-client-sync
  - kafka-device
  - kafka-device-glut
  - kafka-device-joystick
  - kafka-device-leap
  - kafka-device-spacenav
  - kafka-device-vrpn
+ - kafka-interchange
  - kaleidoscope
+ - Kalman
+ - kalman
+ - kangaroo
+ - kanji
  - kansas-lava
  - kansas-lava-cores
  - kansas-lava-papilio
  - kansas-lava-shake
+ - karabiner-config
  - karakuri
+ - karps
+ - katip-datadog
+ - katip-effectful
+ - katip-elasticsearch
+ - katip-kafka
+ - katip-logzio
  - katip-rollbar
+ - katip-scalyr-scribe
+ - katip-syslog
+ - katt
+ - katydid
+ - kawa
+ - kawaii
+ - kawhi
  - kb-text-layout
+ - kb-text-shape
+ - kcd
+ - kd-tree
+ - kdesrc-build-extra
+ - kdt
+ - keccak
  - keelung
+ - keenser
  - keera-hails-mvc-environment-gtk
  - keera-hails-mvc-model-lightmodel
  - keera-hails-mvc-model-protectedmodel
@@ -1926,12 +5445,16 @@ dont-distribute-packages:
  - keera-hails-reactive-wx
  - keera-hails-reactive-yampa
  - keera-hails-reactivelenses
+ - keera-hails-reactivevalues
  - keera-posture
  - keid-core
  - keid-frp-banana
  - keid-geometry
+ - keid-render-basic
  - keid-resource-gltf
  - keid-sound-openal
+ - keid-ui-dearimgui
+ - keiretsu
  - keiro
  - keiro-core
  - keiro-dsl
@@ -1939,215 +5462,602 @@ dont-distribute-packages:
  - keiro-ops
  - keiro-pgmq
  - keiro-test-support
+ - kempe
  - kerry
+ - kesha
+ - Ketchup
  - kevin
+ - key
  - key-vault
+ - keycloak-hs
+ - keyed
  - keyring
+ - keysafe
  - keyvaluehash
  - keyword-args
+ - khph
+ - ki-effectful
  - kicad-data
+ - kickass-torrents-dump-parser
+ - kickchan
  - KiCS
  - KiCS-debugger
  - KiCS-prophecy
  - kif-parser
+ - kindly-functors
  - kioku-cli
  - kioku-core
  - kioku-migrate
  - kioku-migrations
+ - kiroku-cli
+ - kiroku-metrics
+ - kiroku-otel
+ - kiroku-store
  - kiroku-store-migrations
  - kit
+ - kleene-list
  - kmeans-par
  - kmeans-vector
+ - kmn-programming
+ - kmp-dfa
+ - knead-arithmetic
  - knit-haskell
+ - knots
+ - koellner-phonetic
  - koji-install
  - koji-tool
+ - koneko
+ - Konf
+ - konnakol
+ - kontra-config
+ - koofr-client
+ - korea-holidays
  - korfu
+ - kraken
+ - krapsh
+ - Kriens
+ - krpc
  - ks-test
+ - KSP
+ - ktx
  - ktx-font
  - kubernetes-client
+ - kubernetes-client-core
+ - kubernetes-webhook-haskell
+ - kudzu
+ - kuifje
+ - kure
  - kure-your-boilerplate
  - kurita
+ - KyotoCabinet
+ - l-bfgs-b
+ - L-seed
+ - l10n
+ - labeled-graph
  - laborantin-hs
  - labsat
  - labyrinth
  - labyrinth-server
  - lagrangian
  - laika
+ - lambda
+ - lambda-bridge
+ - lambda-calculator
+ - lambda-canvas
+ - lambda-cube
  - lambda-devs
  - lambda-options
+ - lambda-sampler
+ - lambda-toolbox
+ - lambda2js
+ - lambdaBase
+ - lambdabot-telegram-plugins
+ - lambdabot-utils
+ - lambdabot-xmpp
  - lambdabot-zulip
  - lambdacat
+ - lambdacms-core
  - lambdacms-media
  - lambdacube
  - lambdacube-bullet
  - lambdacube-compiler
+ - lambdacube-core
  - lambdacube-edsl
+ - lambdacube-engine
  - lambdacube-examples
  - lambdacube-gl
+ - lambdacube-ir
  - lambdacube-samples
+ - LambdaDesigner
  - lambdaFeed
  - LambdaINet
+ - Lambdajudge
  - lambdaLit
+ - LambdaNet
  - LambdaPrettyQuote
  - LambdaShell
+ - lambdasound
+ - lambdatex
+ - lambdatwit
+ - Lambdaya
  - lambdaya-bus
  - lambdiff
+ - lame
+ - lame-tester
+ - laminar
  - landlock
  - lang
+ - langchain-hs
+ - language-asn
  - language-ats
  - language-avro
  - language-boogie
+ - language-c-comments
+ - language-c-inline
+ - language-conf
+ - language-csharp
+ - language-dart
+ - language-dockerfile
+ - language-ecmascript
  - language-ecmascript-analysis
  - language-eiffel
+ - language-elm
+ - language-fortran
+ - language-gcl
+ - language-go
+ - language-guess
+ - language-hcl
+ - language-java-classfile
+ - language-js
  - language-kort
+ - language-lua
+ - language-lua-qq
+ - language-lua2
+ - language-mixal
  - language-Modula2
  - language-ninja
  - language-oberon
+ - language-objc
+ - language-ocaml
+ - language-openscad
+ - language-pig
  - language-puppet
+ - language-python
  - language-python-colour
  - language-python-test
  - language-qux
+ - language-rust
+ - language-sally
+ - language-sh
  - language-spelling
+ - language-sqlite
+ - language-sygus
+ - language-thrift
+ - language-typescript
+ - language-webidl
+ - laop
+ - LargeCardinalHierarchy
+ - Lastik
  - lat
+ - latest-npm-version
  - latex-formulae-hakyll
+ - latex-formulae-image
  - latex-formulae-pandoc
  - latex-svg-hakyll
+ - latex-svg-image
  - latex-svg-pandoc
+ - LATS
  - Lattices
+ - launchdarkly-server-sdk
  - launchdarkly-server-sdk-redis-hedis
+ - launchpad-control
  - lawful-classes-hedgehog
  - lawful-classes-quickcheck
+ - lawful-classes-types
+ - lawless-concurrent-machines
  - layered-state
+ - layers
+ - layers-game
+ - layout
+ - layout-bootstrap
+ - layout-rules
  - layouting
+ - lazify
+ - lazy
+ - lazy-async
+ - lazy-bracket
+ - lazy-cache
+ - lazy-hash
  - lazy-hash-cache
+ - lazy-priority-queue
+ - lazyarray
+ - lazyboy
+ - lazyset
+ - lbfgs
+ - LC3
+ - lcs
+ - ld-intervals
  - lda
  - ldap-scim-bridge
  - ldapply
  - LDAPv3
+ - ldif
+ - leaf
  - leaky
  - lean
+ - leanpub-concepts
  - leanpub-wreq
+ - leapseconds
+ - learn
+ - learn-physics-examples
+ - Learning
  - learning-hmm
+ - leetify
  - legion
  - legion-discovery
  - legion-discovery-client
  - legion-extra
  - leksah
  - leksah-server
+ - lendingclub
+ - lens-accelerate
+ - lens-datetime
+ - lens-filesystem
+ - lens-indexed-plated
+ - lens-labels
+ - lens-prelude
+ - lens-process
+ - lens-simple
+ - lens-tell
+ - lens-text-encoding
+ - lens-th-rewrite
+ - lens-time
+ - lens-tutorial
+ - lens-typelevel
  - lens-utils
+ - lens-witherable
+ - lens-xml
+ - lenses
+ - lensref
  - lenz
  - lenz-mtl
+ - lenz-template
+ - less-arbitrary
+ - level-monad
+ - Level0
+ - levmar
  - levmar-chart
  - lex-applicative
+ - lfst
  - lgtk
  - lha
  - lhae
+ - lhc
  - lhe
+ - lhs2TeX-hl
+ - lhslatex
+ - libarchive-clib
+ - LibClang
  - libconfig
  - libcspm
+ - libexpect
+ - libGenI
+ - libgit
  - libgraph
+ - libhbb
+ - libheif-hs
+ - libinfluxdb
+ - libiserv
+ - libjenkins
+ - libjwt-typed
  - liblastfm
  - liblawless
  - liblinear-enumerator
+ - libltdl
+ - libmdbx
  - libmolude
+ - liboath-hs
+ - liboleg
+ - libpafe
+ - libphonenumber
+ - libpq
  - libraft
+ - librandomorg
  - librarian
+ - librato
+ - libremidi
+ - libretls
+ - libriscv
+ - libsecp256k1
+ - libsodium
+ - libstackexchange
+ - libsystemd-daemon
+ - libtagc
+ - libtelnet
+ - libvirt-hs
+ - libxls
+ - libxlsxwriter-hs
  - libxml-enumerator
+ - libxml-sax
+ - libxslt
+ - LibZip
+ - licensor
+ - lie
+ - life-sync
+ - lifetimes
  - lifted-base-tf
+ - lifted-protolude
+ - lifter
+ - ligature
+ - light
  - lightning-haskell
  - lightstep-haskell
  - lighttpd-conf
  - lighttpd-conf-qq
+ - lilypond
+ - lima
+ - Limit
+ - limp
+ - limp-cbc
+ - linda
+ - linden
+ - line
+ - line-bot-sdk
+ - line-drawing
+ - line-indexed-cursor
+ - linear-accelerate
+ - linear-algebra-cblas
  - linear-code
+ - linear-core-prototype
+ - linear-free
+ - linear-maps
+ - linear-massiv
+ - linear-socket
+ - linear-vect
+ - linearmap-category
+ - linearscan
  - linearscan-hoopl
  - LinearSplit
+ - lines-of-action
+ - lingo
+ - linguistic-ordinals
+ - link-canonical-effectful
  - LinkChecker
  - linkchk
  - linkcore
+ - linked-list-with-iterator
+ - linkedhashmap
+ - linklater
+ - linnet
  - linnet-aeson
  - linnet-conduit
+ - linode
+ - linode-v4
+ - linux-blkid
+ - linux-cgroup
+ - linux-evdev
+ - linux-framebuffer
+ - linux-kmod
+ - linux-perf
+ - linux-ptrace
+ - linux-xattr
+ - linx-gateway
  - lio-eci11
+ - lio-fs
+ - lio-simple
  - lion
+ - lipsum-gen
+ - liquid
  - liquid-base
  - liquid-bytestring
  - liquid-containers
+ - liquid-finfield
+ - liquid-ghc-prim
+ - liquid-parallel
  - liquid-platform
+ - liquid-prelude
+ - liquid-vector
+ - liquidhaskell-cabal
  - liquidhaskell-cabal-demo
+ - Liquorice
+ - list-fusion-probe
+ - list-mux
+ - list-prompt
+ - list-singleton
  - list-t-attoparsec
  - list-t-html-parser
+ - list-t-http-client
+ - list-t-libcurl
+ - list-t-text
  - list-tuple
+ - list-zip-def
  - listenbrainz-client
+ - listlike-instances
+ - ListT
  - liszt
  - lit
+ - literal-flake-input
+ - literals
+ - LiterateMarkdown
+ - little-earley
  - live-sequencer
+ - liveplot
+ - ll-picosat
+ - llama-cpp-hs
+ - llsd
  - llvm
  - llvm-analysis
+ - llvm-base
  - llvm-base-types
  - llvm-base-util
+ - llvm-codegen
  - llvm-data-interop
+ - llvm-extension
  - llvm-general
+ - llvm-general-pure
  - llvm-general-quote
+ - llvm-hs
  - llvm-hs-pretty
+ - llvm-hs-pure
+ - llvm-ht
+ - llvm-party
  - llvm-tools
+ - lmdb-high-level
+ - lmdb-simple
+ - lmonad
  - lmonad-yesod
  - lnd-client
+ - lnurl
  - lnurl-authenticator
+ - load-balancing
+ - load-font
  - loc
+ - loc-test
+ - local-address
  - local-search
  - localize
+ - located
+ - located-monad-logger
+ - loch
  - locked-poll
+ - log
+ - log-effect
  - log-effect-syslog
  - log-utils
+ - log-warper
+ - log2json
  - log4hs
+ - logentries
+ - logger
  - logging-effect-extra
+ - logging-effect-extra-file
+ - logging-effect-extra-handler
+ - logging-effect-syslog
+ - Logic
+ - logic-classes
  - LogicGrowsOnTrees
  - LogicGrowsOnTrees-MPI
  - LogicGrowsOnTrees-network
  - LogicGrowsOnTrees-processes
+ - logicst
+ - logict-sequence
+ - logplex-parse
  - lojban
+ - lojbanParser
+ - lojbanXiragan
  - lojysamban
  - lol
  - lol-apps
  - lol-benches
+ - lol-calculus
  - lol-cpp
  - lol-repa
  - lol-tests
  - lol-typing
  - loli
+ - longboi
+ - longshot
  - looksee-trip
+ - lookup-tables
+ - loop-dsl
  - loop-effin
+ - loop-while
+ - loopbreaker
+ - looper
+ - loops
+ - loopy
+ - lord
+ - lorem
  - lorentz
+ - loris
+ - loshadka
  - lostcities
+ - louis
  - loup
+ - lowgl
+ - lp-diagrams
+ - lp-diagrams-svg
  - LPPaver
+ - LRU
  - ls-usb
+ - lscabal
+ - lsfrom
+ - lsh
  - LslPlus
  - lsm-tree
+ - lsql-csv
+ - lss
  - lsystem
+ - lti13
+ - ltiv1p1
+ - ltk
+ - LTS
+ - lua-bc
  - luachunk
+ - luautils
+ - lucid-alpine
+ - lucid-aria
  - lucid-colonnade
+ - lucid-hyperscript
+ - lucid2-htmx
  - lucienne
  - Lucu
  - lui
+ - luis-client
+ - luka
+ - luminance
  - luminance-samples
+ - lushtags
+ - luthor
  - lvish
+ - lvmlib
+ - lvmrun
+ - lxd-client
+ - lxd-client-config
+ - lye
  - Lykah
  - lz4-conduit
+ - lzip
  - lzma-enumerator
+ - lzma-streams
+ - lzo
+ - maam
  - macbeth-lib
+ - machinecell
  - machines-amazonka
+ - machines-attoparsec
+ - machines-binary
+ - machines-bytestring
  - machines-directory
+ - machines-encoding
+ - machines-io
  - machines-process
+ - machines-zlib
+ - macho
  - mackerel-client
+ - maclight
+ - macos-corelibs
  - macosx-make-standalone
+ - macrm
+ - madlang
+ - mage
+ - magic-tyfams
  - magic-wormhole
+ - magicbane
+ - MagicHaskeller
  - mahoro
  - maid
+ - mailchimp
+ - mailchimp-subscribe
  - MailchimpSimple
  - mailgun
  - majordomo
  - majority
+ - make-hard-links
+ - make-monofoldable-foldable
  - make-package
+ - makedo
+ - mallard
  - manatee
  - manatee-all
  - manatee-anything
@@ -2165,144 +6075,430 @@ dont-distribute-packages:
  - manatee-template
  - manatee-terminal
  - manatee-welcome
+ - mandulia
  - mangle
  - mangopay
  - mangrove
  - manifold-random
+ - manifolds
  - Map
+ - map-exts
+ - map-reduce-folds
+ - mapalgebra
+ - Mapping
+ - mappy
+ - MapWith
+ - maquinitas-tidal
  - marionetta
  - marionette-effectful
+ - markdown-kate
  - markdown-pap
  - markdown2svg
+ - marked-pretty
+ - markov-chain-usage-model
  - markov-processes
+ - markov-realization
+ - markup
  - markup-preview
  - marmalade-upload
  - marquise
+ - mars
+ - marshal-contt
  - marvin
+ - marvin-interpolate
  - marxup
  - masakazu-bot
+ - MASMGen
+ - massiv-scheduler
+ - massiv-serialise
+ - master-plan
+ - matcha
+ - matcher
  - matchers
+ - math-grads
+ - math-interpolate
+ - math-metric
+ - math-programming
  - math-programming-glpk
  - math-programming-tests
  - mathblog
+ - mathflow
  - mathlink
+ - matrix-as-xyz
+ - matrix-lens
+ - matrix-market
+ - matrix-sized
+ - matroid
  - matsuri
  - matterhorn
+ - mattermost-api
  - mattermost-api-qc
+ - maude
  - maxent
+ - maxent-learner-hw
  - maxent-learner-hw-gui
  - maxsharing
+ - maybench
+ - MaybeT
+ - MaybeT-monads-tf
+ - MaybeT-transformers
+ - MazesOfMonad
+ - MBot
+ - mbox-tools
+ - mbtiles
+ - mbug
  - MC-Fold-DP
+ - mcl
+ - mcm
+ - mcmaster-gloss-examples
  - mcmc-samplers
+ - mcmc-synthesis
+ - mcpi
+ - mdapi
+ - mdcat
  - mDNSResponder-client
+ - mdp
+ - mealstrom
+ - MeanShift
+ - Measure
+ - mecab
+ - mech
+ - Mecha
+ - Mechs
+ - mechs
  - medea
+ - mediabus
  - mediabus-fdk-aac
  - mediabus-rtp
+ - mediawiki
  - mediawiki2latex
+ - medium-sdk-haskell
+ - meep
+ - megalisp
+ - megastore
  - mello
+ - mellon-core
  - mellon-gpio
  - mellon-web
+ - melody
+ - membrain
  - memcache-conduit
+ - memcache-haskell
+ - memcached
+ - memcached-binary
+ - memfd
+ - memis
+ - memo-ptr
+ - memo-sqlite
+ - memoization-utils
+ - memoize
+ - memorable-bits
  - memory-cd
+ - memorypool
+ - menoh
+ - menshen
+ - mercury-api
+ - mergeful-persistent
  - merkle-patricia-db
  - message-db-temp
+ - messagepack-rpc
+ - messente
+ - meta-misc
+ - meta-par
  - meta-par-accelerate
+ - metadata
+ - MetaHDBC
+ - metaheuristics
  - MetaObject
  - metaplug
+ - method
+ - metric
  - Metrics
+ - metricsd-client
  - metro
  - metro-socket
  - metro-transport-crypto
+ - metro-transport-tls
  - metro-transport-websockets
  - metro-transport-xor
  - metronome
+ - mezzo
+ - mezzolens
  - MFlow
+ - mgeneric
  - Mhailist
+ - MHask
+ - mi
  - Michelangelo
+ - miconix-test
  - micro-gateway
+ - micro-recursion-schemes
+ - microbase
+ - microdns
  - microformats2-types
+ - microgroove
+ - microlens-each
+ - microlens-process
+ - micrologger
+ - microsoft-translator
  - MicrosoftTranslator
+ - mida
+ - midi-simple
+ - midi-util
+ - midi-utils
  - midimory
+ - midisurface
  - mighttpd
+ - mikmod
+ - mikrokosmos
+ - miku
+ - milena
+ - mime-directory
+ - min-max-pqueue
  - minecraft-data
+ - mines
  - minesweeper
+ - mini-egison
+ - MiniAgda
+ - minicurl
+ - miniforth
+ - minilens
  - minilight
  - minilight-lua
  - minimung
+ - minions
  - minioperational
+ - miniplex
  - minirotate
+ - minisat-solver
+ - ministg
+ - minizinc-process
+ - minst-idx
+ - mios
+ - mirror-tweet
+ - mismi-core
  - mismi-kernel
+ - mismi-p
+ - mismi-s3
  - mismi-s3-core
+ - miso-aeson
+ - miso-from-html
+ - miso-optics
  - miss
  - miss-porcelain
  - missing-py2
  - MissingPy
+ - mit-3qvpPyAi6mH
+ - mix-arrows
  - mixed-strategies
+ - mixpanel-client
  - mkbndl
+ - mkcabal
+ - ml-w
  - mlist
+ - mltool
+ - mm2
+ - mmsyn2
+ - mmsyn4
  - mmsyn6ukr
+ - mmsyn6ukr-array
  - mmsyn7h
  - mmsyn7s
  - mmsyn7ukr
+ - mmtf
+ - mmtl
  - mmtl-base
  - mmzk-env
  - moan
+ - Mobile-Legends-Hack-Cheats
+ - mock-httpd
+ - mockazo
+ - modbus-tcp
+ - model
+ - modelicaparser
  - modify-fasta
  - modsplit
+ - modular-prelude
  - modular-prelude-classy
  - modularity
+ - module-management
+ - modulespection
  - modulo
+ - Moe
+ - moe
+ - MoeDict
+ - moesocks
  - moffy-samples-gtk3
+ - moffy-samples-gtk3-run
  - moffy-samples-gtk4
+ - moffy-samples-gtk4-run
+ - mohws
  - mole
+ - mollie-api-haskell
+ - monad-atom
+ - monad-atom-simple
+ - monad-branch
+ - monad-choice
  - monad-connect
  - monad-exception
+ - monad-fork
+ - monad-gen
  - monad-http
+ - monad-introspect
+ - monad-journal
+ - monad-levels
+ - monad-lgbt
+ - monad-log
+ - monad-logger-aeson
+ - monad-logger-prefix
+ - monad-lrs
+ - monad-mersenne-random
+ - monad-mock
+ - monad-open
+ - monad-parallel-progressbar
+ - monad-param
+ - monad-peel
+ - monad-persist
+ - monad-primitive
+ - monad-products
+ - monad-ran
+ - monad-recorder
+ - monad-skeleton
  - monad-state
+ - monad-statevar
+ - monad-ste
+ - monad-stlike-io
  - monad-stlike-stm
+ - monad-supply
+ - monad-task
+ - monad-throw-exit
+ - monad-timing
+ - monad-tree
+ - monad-tx
+ - monad-unify
+ - monad-wrap
+ - monadacme
+ - MonadCatchIO-mtl
  - MonadCatchIO-mtl-foreign
+ - MonadCatchIO-transformers
+ - MonadCatchIO-transformers-foreign
+ - MonadCompose
+ - monadcryptorandom
+ - monadic-arrays
+ - monadiccp
  - monadiccp-gecode
+ - monadio-unwrappable
+ - Monadius
  - MonadLab
+ - monadLib-compose
+ - monadloc
+ - monadloc-pp
+ - monadlog
+ - Monadoro
+ - MonadRandomLazy
+ - monads-fd
+ - MonadStack
+ - monadtransform
  - monarch
  - Monaris
+ - Monatron
  - Monatron-IO
+ - mondo
  - Mondrian
  - monetdb-mapi
+ - money
+ - mongodb-queue
  - mongrel2-handler
+ - monitor
  - monky
+ - mono-foldable
+ - mono-traversable-keys
  - Monocle
+ - monocypher
+ - monoid
+ - monoid-absorbing
+ - monoid-owns
+ - monoid-statistics
+ - monoidplus
+ - monoids
  - monomer
  - monomer-flatpak-example
  - monomer-hagrid
+ - monopati
+ - montage
+ - montage-client
  - monte-carlo
+ - monus
+ - monus-weighted-search
+ - monzo
  - moo
  - moo-nad
+ - morfette
+ - morfeusz
  - morley
  - morley-client
  - morley-prelude
  - morley-upgradeable
+ - morloc
+ - morpheus-graphql-cli
+ - morphisms-functors
  - morphisms-functors-inventory
+ - morphisms-objects
+ - morte
+ - mortred
+ - mosaico-lib
  - motor
  - motor-diagrams
+ - motor-reflection
+ - mount
+ - movie-monad
  - mp
  - mp3decoder
  - mpdmate
+ - mpppc
  - mprelude
  - mpretty
+ - mpris
  - mprover
  - mps
  - mptcp
+ - mptcp-pm
  - mptcpanalyzer
+ - mpvguihs
+ - mqtt
+ - mqtt-hs
+ - mrifk
+ - mrm
+ - ms
+ - ms-auth
+ - ms-azure-api
+ - ms-graph-api
+ - msdf-atlas
+ - msgpack-aeson
  - msgpack-arbitrary
  - msgpack-binary
  - msgpack-idl
  - msgpack-persist
+ - msgpack-rpc
  - msgpack-rpc-conduit
  - msgpack-testsuite
+ - msgpack-types
+ - msh
  - msi-kb-backlit
  - MSQueue
  - mstate
+ - MTGBuilder
  - mtgoxapi
+ - mtl-c
+ - mtl-evil-instances
+ - mtl-extras
+ - mtl-tf
+ - mtl-unleashed
+ - mtl-uplift
+ - mtlx
+ - mtp
+ - mtree
+ - mtsl
  - mu-avro
  - mu-graphql
  - mu-grpc-client
@@ -2315,25 +6511,53 @@ dont-distribute-packages:
  - mu-prometheus
  - mu-protobuf
  - mu-rpc
+ - mu-schema
  - mu-servant-server
  - mu-tracing
+ - MuCheck
  - MuCheck-Hspec
  - MuCheck-HUnit
  - MuCheck-QuickCheck
  - MuCheck-SmallCheck
+ - mud
+ - mudbath
+ - mulang
+ - multext-east-msd
  - multi-cabal
+ - multi-containers
+ - multi-instance
+ - multiaddr
+ - multiarg
  - multibase
+ - MultiChor
+ - multicurryable
+ - multidir
  - multifocal
+ - multihash
  - multihash-serialise
+ - multilinear
  - multilinear-io
+ - multipass
+ - multipath
+ - multiplate
+ - multiplate-simplified
  - multiplicity
+ - multipool
  - multipool-persistent
  - multipool-persistent-postgresql
  - multipool-postgresql-simple
+ - multirec
  - multirec-alt-deriver
  - multirec-binary
  - multisetrewrite
+ - multivariant
+ - multivector
+ - multiwalk
+ - Munkres
  - Munkres-simple
+ - muon
+ - murder
+ - murmur
  - murmurhash3
  - mushu
  - music-graphics
@@ -2343,73 +6567,227 @@ dont-distribute-packages:
  - music-score
  - music-sibelius
  - music-suite
+ - music-util
  - musicbrainz-email
+ - musicScroll
+ - musicw
+ - musicxml
  - musicxml2
  - musig2
+ - mustache-haskell
+ - mustache2hs
+ - mutable
  - mutable-iter
  - MutationOrder
  - mute-unmute
+ - mvar-lock
  - mvclient
  - mwc-random-monad
+ - mxnet
  - mxnet-dataiter
  - mxnet-examples
  - mxnet-nn
+ - mxnet-nnvm
+ - my-package-testing
+ - my-test-docs
+ - myanimelist-export
+ - myo
+ - MyPrimes
+ - mysnapsession
  - mysnapsession-example
+ - mysql-effect
  - mysql-haskell-openssl
+ - mysql-pure
+ - mysql-simple-quasi
  - mysql-simple-typed
+ - mystem
  - myTestlll
  - mywatch
+ - mywork
+ - myxine-client
+ - mzv
+ - n-m
+ - n2o-protocols
  - n2o-web
  - NaCl
+ - nagios-plugin-ekg
  - nakadi-client
+ - named-binary-tag
+ - named-formlet
+ - named-lock
+ - named-servant
  - named-servant-client
  - named-servant-server
+ - named-sop
+ - namelist
+ - nano-cryptr
+ - nano-hmac
+ - nano-md5
+ - nanoAgda
+ - nanocurses
+ - nanomsg
+ - nanoparsec
+ - nanopass
+ - NanoProlog
+ - nanovg
+ - nanovg-simple
  - nanq
+ - Naperian
+ - naperian
  - NaperianNetCDF
+ - naqsha
+ - narc
+ - nat-optics
+ - nat-sized-numbers
  - national-australia-bank
+ - nationstates
+ - nats-client
  - nats-queue
+ - natural
  - natural-number
+ - NaturalLanguageAlphabets
+ - NaturalSort
+ - nauty-parser
+ - naver-translate
+ - nbparts
+ - nbt
+ - ncurses
+ - ndjson-conduit
  - NearContextAlgebra
+ - neat
+ - needle
+ - neet
+ - nehe-tuts
+ - neil
+ - neither
+ - neither-data
+ - neko-lib
+ - neko-obfs
+ - nekos-best
+ - Neks
  - nemesis-titan
+ - neptune-backend
  - nerf
+ - nero
  - nero-wai
  - nero-warp
+ - nest
  - nested-routes
+ - nested-sequence
+ - NestedFunctor
+ - nestedmap
+ - net-concurrent
+ - net-spider
  - net-spider-cli
  - net-spider-pangraph
  - net-spider-rpl
  - net-spider-rpl-cli
+ - netclock
  - netcore
+ - netease-fm
  - netlines
+ - netrium
+ - NetSNMP
+ - netspec
  - netstring-enumerator
  - nettle-frp
  - nettle-netkit
  - nettle-openflow
+ - netw
+ - netwire-input-javascript
+ - netwire-vinylglfw-examples
+ - network-address
  - network-anonymous-i2p
  - network-anonymous-tor
+ - network-api-support
+ - network-attoparsec
+ - network-bitcoin
+ - network-builder
+ - network-bytestring
+ - network-carbon
  - network-connection
+ - network-dbus
  - network-enumerator
  - network-hans
  - network-interfacerequest
+ - network-manager-tui
+ - network-messagepack-rpc-websocket
+ - network-metrics
  - network-minihttp
+ - network-msg
+ - network-msgpack-rpc
  - network-netpacket
  - Network-NineP
+ - network-packet-linux
  - network-pgi
  - network-protocol-xmpp
  - network-rpca
+ - network-server
+ - network-service
+ - network-simple-sockaddr
+ - network-socket-options
  - network-stream
  - network-topic-models
+ - network-transport-amqp
+ - network-uri-json
+ - network-voicetext
+ - network-wai-router
  - network-websocket
+ - networked-game
+ - neural
+ - neural-network-blashs
+ - neural-network-hmatrix
  - neuron
+ - newbase60
+ - NewBinary
+ - newhope
+ - newline
+ - newports
+ - newsletter
  - newsletter-mailgun
  - newsynth
+ - newt
+ - newtype-deriving
+ - newtype-th
+ - next-ref
+ - nextstep-plist
  - NGLess
- - ngx-export-tools-extra
+ - NGrams
+ - ngrams-loader
+ - ngx-export-log
+ - niagra
+ - nibblestring
+ - nice-html
+ - nicovideo-translator
  - nikepub
  - Ninjas
  - nirum
+ - nist-beacon
+ - nitro
+ - nix-cache-server
+ - nix-delegate
+ - nix-eval
+ - nix-freeze-tree
+ - nix-tools
+ - nixdu
+ - nixfromnpm
+ - nixpkgs-update
+ - nkeys
  - nkjp
+ - nlp-scores
  - nlp-scores-scripts
+ - nm
+ - NMap
+ - nme
+ - nmis-parser
+ - nn
+ - nntp
+ - no-role-annots
+ - noether
+ - nofib-analyse
+ - nofib-analyze
+ - noise
+ - noli
  - nom
  - Nomyx
  - nomyx-api
@@ -2421,15 +6799,33 @@ dont-distribute-packages:
  - Nomyx-Rules
  - nomyx-server
  - Nomyx-Web
+ - nomyx-web
+ - non-empty-containers
+ - non-empty-zipper
+ - NonEmpty
+ - nonempty-lift
  - NonEmptyList
+ - nonemptymap
+ - nonlinear-optimization
  - nonlinear-optimization-ad
  - nonlinear-optimization-backprop
+ - noodle
+ - normalization-insensitive
  - NoSlow
  - nostr
  - not-gloss
  - not-gloss-examples
+ - not-prelude
+ - notcpp
+ - notmuch-haskell
  - notmuch-web
+ - NoTrace
+ - notzero
+ - nova-cache
+ - nova-nix
  - now-haskell
+ - np-linear
+ - nptools
  - nri-env-parser
  - nri-http
  - nri-kafka
@@ -2438,254 +6834,824 @@ dont-distribute-packages:
  - nri-prelude
  - nri-redis
  - nri-test-encoding
+ - ntha
+ - ntp-control
+ - ntrip-client
  - NTRU
+ - nuha
+ - null-canvas
+ - nullary
+ - nullpipe
+ - number-wall
+ - NumberSieves
+ - NumberTheory
  - numeric-kinds
+ - numeric-logarithms
  - numeric-ode
  - numeric-optimization
  - numeric-optimization-ad
+ - numeric-optimization-backprop
+ - numeric-qq
+ - numeric-ranges
  - numerical
+ - numhask-array
+ - numhask-free
  - numhask-hedgehog
+ - numhask-histogram
+ - numhask-prelude
  - numhask-range
  - numhask-test
+ - numtype
+ - numtype-tf
+ - nurbs
  - Nussinov78
+ - Nutri
+ - nuxeo
+ - NXT
+ - NXTDSL
  - nyan
  - nyan-interpolation
+ - nyan-interpolation-core
  - nyan-interpolation-simple
+ - nylas
  - nymphaea
  - nyx-game
+ - o-clock
+ - oanda-rest-api
+ - oasis-xrd
  - oath
  - oauth2-jwt-bearer
+ - oauthenticated
+ - ob
+ - obd
  - obdd
  - oberon0
  - obj
+ - Object
  - objectid
+ - ObjectIO
  - objective
+ - ocaml-export
  - ochan
  - ochintin-daicho
  - octane
  - octohat
  - octopus
+ - Octree
  - oculus
  - odd-jobs
+ - OddWord
+ - oden-go-packages
+ - oeis2
  - off-simple
+ - OGDF
+ - OGL
+ - ogma-language-cocospec
  - ogma-language-fret-cs
  - ogma-language-fret-reqs
+ - ogmarkup
+ - ohhecs
+ - ohloh-hs
+ - oi
  - ois-input-manager
+ - okapi
  - okf-cli
+ - old-version
+ - ollama-holes-plugin
  - olwrapper
+ - om-actor
+ - om-http
+ - om-http-logging
  - om-kubernetes
+ - om-plugin-imports
+ - omaketex
+ - ombra
+ - Omega
+ - omega
+ - omnifmt
+ - on-a-horse
+ - on-demand-ssh-tunnel
+ - onama
+ - ONC-RPC
+ - one
+ - one-line-aeson-text
+ - oneormore
+ - online
  - online-csv
+ - onpartitions
  - OnRmt
+ - onu-course
+ - oops
  - oops-examples
+ - op
+ - op2
+ - opaleye-classy
+ - opaleye-sqlite
+ - opaleye-textsearch
+ - opaleye-trans
  - opc-xml-da-client
+ - open-adt
  - open-adt-tutorial
+ - open-haddock
+ - open-pandoc
+ - open-signals
+ - open-typerep
+ - OpenAFP
  - OpenAFP-Utils
+ - openai
+ - openai-servant-gen
+ - openapi-petstore
+ - openapi-typed
+ - opench-meteo
+ - OpenCL
+ - OpenCLRaw
+ - OpenCLWrappers
+ - opencog-atomspace
+ - opencv
+ - opencv-extra
+ - opencv-raw
+ - opendatatable
+ - opendht-hs
+ - openexchangerates
+ - openflow
  - OpenGLCheck
+ - opengles
+ - OpenGLRaw21
+ - openid
+ - openid-connect
+ - openpgp
  - openpgp-Crypto
  - openpgp-crypto-api
  - OpenSCAD
+ - opensoundcontrol-ht
  - openssh-github-keys
+ - openssh-protocol
+ - opentelemetry-extra
+ - opentelemetry-http-client
  - opentelemetry-lightstep
+ - opentheory-char
  - opentok
+ - opentype
  - OpenVG
+ - OpenVGRaw
+ - Operads
+ - operate-do
+ - operational-class
+ - operational-extra
+ - oplang
+ - opn
+ - opt-env-conf-test
+ - optics-operators
+ - optima-for-hasql
  - optimal-blocks
+ - optimization
  - optimusprime
+ - optional
+ - options-time
+ - optparse-applicative-simple
  - optparse-enum
+ - optparse-helper
+ - optstream
+ - opus
+ - orc
+ - orchestrate
+ - OrchestrateDB
  - orchid
  - orchid-demo
  - order-maintenance
+ - order-statistics
+ - ordered
+ - ordinal
+ - Ordinary
+ - ordrea
+ - oref
+ - org-mode
  - org-mode-lucid
+ - org-parser
+ - organize-imports
+ - orgmode
+ - orgmode-parse
  - orgstat
+ - origami
+ - orion-hs
+ - orizentic
+ - OrPatterns
+ - orthotope-hmatrix
+ - orville-postgresql
+ - ory-hydra-client
+ - ory-kratos
+ - osc
+ - oscpacking
+ - oset
+ - Oslo-Vectize
+ - OSM
+ - osm-conduit
  - osm-download
+ - oso2pdf
+ - osx-ar
+ - ot
+ - OTP
  - otp-authenticator
+ - ottparse-pretty
  - overeasy
  - overload
+ - overloaded
+ - overloaded-records
+ - overture
+ - owoify-hs
+ - pa-field-parser
  - pa-json
+ - pack
+ - package-description-remote
  - package-o-tron
+ - package-vt
+ - packdeps
+ - packed
+ - packed-data
+ - packed-dawg
+ - packed-multikey-map
+ - packedstring
+ - packer-messagepack
+ - packman
+ - packstream
  - packstream-bolt
+ - packunused
+ - pacman-memcache
+ - padic
  - padKONTROL
+ - pads-haskell
+ - pagarme
  - PageIO
+ - pagerduty
+ - pagure-hook-receiver
  - Paillier
  - pairing
+ - pan-os-syslog
  - panda
+ - pandoc-citeproc
+ - pandoc-columns
+ - pandoc-csv2table
+ - pandoc-dhall-decoder
+ - pandoc-emphasize-code
+ - pandoc-filter-graphviz
  - pandoc-highlighting-extensions
+ - pandoc-include
+ - pandoc-include-code
+ - pandoc-include-plus
  - pandoc-japanese-filters
+ - pandoc-linear-table
+ - pandoc-logic-proof
+ - pandoc-markdown-ghci-filter
+ - pandoc-placetable
+ - pandoc-plantuml-diagrams
+ - pandoc-pyplot
+ - pandoc-query
+ - pandoc-select-code
+ - pandoc-symreg
+ - pandoc-typescript
+ - pandoc-unlit
+ - pandoc-utils
+ - PandocAgda
+ - pandocz
+ - pandora
  - pandora-io
  - panfiguration
+ - pang-a-lambda
+ - pangraph
+ - panhandle
+ - panpipe
+ - pansite
+ - pantry-tmp
  - papa
  - papa-base
+ - papa-base-export
  - papa-base-implement
  - papa-export
  - papa-implement
+ - papa-include
  - papa-lens
+ - papa-lens-export
+ - papa-lens-implement
+ - papa-prelude
+ - papa-prelude-core
+ - papa-prelude-lens
+ - papa-prelude-semigroupoids
+ - papa-prelude-semigroups
  - papa-semigroupoids
+ - papa-semigroupoids-export
+ - papa-semigroupoids-implement
+ - paphragen
+ - papillon
+ - pappy
+ - paprika
  - par-dual
+ - paragon
  - Paraiso
  - Parallel-Arrows-BaseSpec
+ - Parallel-Arrows-Definition
  - Parallel-Arrows-Eden
  - Parallel-Arrows-Multicore
  - Parallel-Arrows-ParMonad
+ - parallel-tasks
  - parallel-tree-search
+ - parameterized-data
+ - paranoia
+ - parco
  - parco-attoparsec
  - parco-parsec
+ - parcom-lib
  - parconc-examples
+ - pareto
+ - paripari
+ - parochial
  - parquet-hs
+ - PArrows
+ - Parry
+ - parse
+ - parse-gcstats
  - parse-help
+ - parsec-extra
+ - parsec-free
+ - parsec-parsers
+ - parsec-pratt
+ - parsec2
+ - parsec3
+ - parseerror-eq
+ - parsely
+ - parser-combinators-tests
+ - parser-helper
+ - parser-unbiased-choice-monad-embedding
+ - parser241
+ - parsergen
+ - parsers-megaparsec
  - parsestar
+ - parsimony
+ - parsix
  - parsley
+ - parsley-core
  - parsley-garnish
+ - parsnip
  - partage
+ - partial-lens
+ - partial-order
+ - partial-records
+ - partial-semigroup
+ - partial-semigroup-hedgehog
  - partial-semigroup-test
+ - partly
+ - paseto
+ - passage
+ - passman
  - passman-cli
+ - passman-core
+ - PasswordGenerator
+ - passwords
+ - pasta
+ - pasta-curves
+ - pastis
+ - pasty
+ - patches-vector
+ - path-formatting
+ - path-sing
+ - path-text-utf8
+ - Pathfinder
+ - pathfindingcore
+ - paths
+ - PathTree
+ - patronscraper
+ - pattern-matcher
+ - pattern-trie
  - patterns
+ - paynow-zw
+ - paypal-adaptive-hoops
+ - paypal-api
  - paypal-rest-client
+ - pb
+ - pb-next
+ - pbc4hs
+ - PBKDF2
  - pcap-enumerator
  - pcapng
+ - pcd-loader
  - pcf
+ - pcf-font
+ - pcf-font-embed
+ - pcgen
+ - PCLT
  - PCLT-DB
+ - pcre-light-extra
+ - pcubature
  - pdf-slave
+ - pdf-slave-server
+ - pdf-slave-template
+ - pdf-toolbox-viewer
+ - pdfinfo
  - pdfname
  - pdfsplit
+ - pdynload
  - peakachu
+ - PeanoWitnesses
  - pec
+ - pecoff
+ - pedestrian-dag
+ - peg
+ - peggy
  - pell
+ - pencil
+ - penntreebank-megaparsec
  - penny
  - penny-bin
  - penny-lib
+ - penrose
  - peparser
+ - percent-encoder
+ - perceptron
  - perdure
+ - peregrin
  - perf-analysis
+ - perfect-vector-shuffle
+ - PerfectHash
  - perfecthash
+ - perhaps
+ - periodic
  - periodic-client
  - periodic-client-exe
+ - periodic-common
+ - periodic-polynomials
  - periodic-server
  - perm
+ - permutation
  - permutations
+ - permute
  - PermuteEffects
+ - persist-state
+ - persist2er
+ - Persistence
  - persistent-audit
+ - persistent-cereal
+ - persistent-database-url
+ - persistent-equivalence
  - persistent-event-source
  - persistent-eventsource
+ - persistent-generic
  - persistent-hssqlppp
+ - persistent-ip
  - persistent-iproute
  - persistent-map
+ - persistent-mongoDB
+ - persistent-mtl
+ - persistent-mysql-haskell
+ - persistent-mysql-pure
+ - persistent-odbc
  - persistent-pagination
  - persistent-postgresql
+ - persistent-postgresql-streaming
  - persistent-protobuf
+ - persistent-ratelimit
+ - persistent-refs
+ - persistent-relational-record
  - persistent-sql-lifted
+ - persistent-stm
+ - persistent-template-classy
  - persistent-typed-db
+ - persistent-vector
+ - persona
  - persona-idp
+ - pesca
  - peyotls
  - peyotls-codec
+ - pez
  - pg-entity
+ - pg-extras
+ - pg-harness
+ - pg-harness-server
  - pg-migrate-test-support
+ - pg-query
+ - pg-recorder
+ - pg-schema
+ - pg-store
+ - pg-transact
+ - pgdl
+ - pgf2
  - pgmq-config
  - pgmq-effectful
  - pgmq-hasql
  - pgmq-migration
+ - pgp-wordlist
+ - pgsql-simple
+ - pgstream
+ - pgvector
+ - phasechange
+ - phaser
+ - phash
+ - phino
+ - phladiprelio-general-datatype
  - phladiprelio-general-shared
  - phladiprelio-general-simple
  - phladiprelio-ukrainian-shared
  - phladiprelio-ukrainian-simple
+ - phoityne
+ - phoityne-vscode
+ - phone-metadata
+ - phone-numbers
+ - phone-push
  - phonetic-languages-common
+ - phonetic-languages-constaints
  - phonetic-languages-constraints
  - phonetic-languages-examples
  - phonetic-languages-general
  - phonetic-languages-permutations
+ - phonetic-languages-phonetics-basics
  - phonetic-languages-properties
  - phonetic-languages-simplified-common
  - phonetic-languages-simplified-examples-array
  - phonetic-languages-simplified-examples-common
+ - phonetic-languages-simplified-generalized-examples-array
  - phonetic-languages-simplified-generalized-examples-common
+ - phonetic-languages-simplified-generalized-properties-array
  - phonetic-languages-simplified-lists-examples
+ - phonetic-languages-simplified-properties-array
+ - phonetic-languages-simplified-properties-array-old
  - phonetic-languages-simplified-properties-lists
  - phonetic-languages-simplified-properties-lists-double
  - phonetic-languages-ukrainian
+ - phonetic-languages-ukrainian-array
+ - phonetic-languages-vector
  - phooey
+ - photoname
+ - phraskell
+ - Phsu
  - phybin
+ - pi-calculus
+ - pi-forall
+ - pi-hoole
+ - pi-lcd
+ - pia-forward
  - pianola
+ - picedit
+ - pickle
+ - picologic
+ - picoparsec
+ - picosat
+ - pictikz
+ - pid
+ - pidfile
  - pier
+ - pier-core
+ - piet
+ - pig
+ - pinboard
+ - pinch-gen
+ - pinchot
  - pine
  - ping
  - pinpon
+ - Pipe
  - pipe-enumerator
+ - piped
+ - pipes-async
  - pipes-attoparsec-streaming
+ - pipes-bgzf
+ - pipes-break
+ - pipes-brotli
+ - pipes-bzip
+ - pipes-cacophony
+ - pipes-category
+ - pipes-cereal
  - pipes-cereal-plus
  - pipes-conduit
+ - pipes-core
  - pipes-courier
+ - pipes-errors
  - pipes-extra
  - pipes-files
  - pipes-fluid
  - pipes-illumina
+ - pipes-interleave
+ - pipes-io
+ - pipes-kafka
  - pipes-key-value-csv
+ - pipes-lines
+ - pipes-lzma
  - pipes-misc
+ - pipes-network-ws
  - pipes-p2p
  - pipes-p2p-examples
+ - pipes-protolude
+ - pipes-pulse-simple
+ - pipes-rt
+ - pipes-s3
+ - pipes-shell
+ - pipes-sqlite-simple
+ - pipes-transduce
+ - pipes-vector
+ - pipes-zeromq4
  - pisigma
+ - Piso
+ - pit
  - pitchtrack
+ - pivotal-tracker
+ - pixel-printer
+ - pixela
+ - pixelated-avatar-generator
+ - pixiv
  - piyo
+ - pkcs10
+ - pkcs7
+ - pkggraph
  - pkgtreediff
+ - pl-synth
+ - plailude
+ - plan-applicative
+ - plan-b
+ - planar-graph
+ - planb-token-introspection
  - planet-mitchell
+ - planet-mitchell-test
+ - plankton
+ - plat
+ - platinum-parsing
+ - PlayingCards
+ - playlists-http
+ - plegg
+ - plexus-protocol
  - plexus-synapse
+ - plist
+ - plist-buddy
+ - plivo
  - plocketed
+ - plot-gtk
+ - plot-gtk-ui
+ - plot-gtk3
  - Plot-ho-matic
+ - plot-lab
+ - ploterific
+ - plots
+ - plow-log
+ - plow-log-async
  - PlslTools
+ - plucky
+ - plugins
  - plugins-auto
+ - plugins-multistage
+ - plumbers
+ - plur
+ - plural
+ - ply-loader
+ - plzwrk
  - png-file
  - pngload
+ - pngload-fixed
+ - pocket
+ - podenv
+ - point-octree
+ - pointedalternative
+ - pointfree-fancy
+ - pointful
+ - pointless-haskell
  - pointless-lenses
  - pointless-rewrite
+ - poke
+ - pokemon-go-protobuf-types
  - poker
+ - poker-base
+ - poker-eval
+ - pokitdok
+ - polar-configfile
+ - polar-shader
  - polh-lexicon
+ - policeman
+ - polling-cache
+ - Pollutocracy
+ - poly
+ - poly-cont
+ - poly-control
  - polydata
+ - polydata-core
+ - polyglot
+ - polynom
+ - polynomial
  - polynomial-algebra
  - polysemy-account
  - polysemy-account-api
+ - polysemy-blockfrost
  - polysemy-db
  - polysemy-extra
  - polysemy-fskvstore
  - polysemy-hasql
  - polysemy-hasql-test
+ - polysemy-http
+ - polysemy-keyed-state
+ - polysemy-kvstore
  - polysemy-kvstore-jsonfile
+ - polysemy-log-co
+ - polysemy-managed
  - polysemy-methodology
  - polysemy-methodology-co-log
  - polysemy-methodology-composite
+ - polysemy-optics
  - polysemy-path
  - polysemy-RandomFu
+ - polysemy-req
  - polysemy-scoped-fs
+ - polysemy-several
+ - polysemy-socket
  - polysemy-uncontrolled
  - polysemy-video
  - polysemy-vinyl
+ - polysemy-zoo
+ - polyseq
+ - polysoup
+ - polytypeable
  - polytypeable-utils
+ - polyvariadic
+ - pomaps
  - pomodoro
+ - pomohoro
+ - ponder
+ - pong-server
  - pontarius-mediaserver
+ - pontarius-xpmn
+ - pool
+ - pool-conduit
+ - pop3-client
  - popenhs
+ - popkey
+ - poppler
  - porcupine-core
  - porcupine-http
  - porcupine-s3
+ - porpoise
+ - portager
+ - porte
+ - PortFusion
+ - portray
  - portray-diff
  - portray-diff-hunit
  - portray-diff-quickcheck
  - portray-pretty
  - portray-prettyprinter
  - ports
+ - posable
  - poseidon
  - poseidon-postgis
+ - positron
+ - posix-acl
+ - posix-filelock
+ - posix-realtime
+ - postcodes
+ - postgis-trivial
+ - postgres-embedded
+ - postgres-tmp
+ - PostgreSQL
+ - postgresql-common
  - postgresql-common-persistent
+ - postgresql-config
+ - postgresql-cube
+ - postgresql-lo-stream
+ - postgresql-ltree
  - postgresql-migration-persistent
+ - postgresql-named
+ - postgresql-orm
  - postgresql-pure
+ - postgresql-query
+ - postgresql-replicant
+ - postgresql-resilient
+ - postgresql-simple-bind
+ - postgresql-simple-interval
  - postgresql-simple-ltree
+ - postgresql-simple-named
+ - postgresql-simple-opts
  - postgresql-simple-queue
+ - postgresql-simple-sop
  - postgresql-simple-typed
+ - postgresql-simple-url
+ - postgresql-tx
+ - postgresql-tx-monad-logger
  - postgresql-tx-query
+ - postgresql-tx-simple
  - postgresql-tx-squeal
  - postgresql-tx-squeal-compat-simple
+ - postgresql-typed-lifted
+ - postgrest-ws
+ - postie
  - postmark
+ - postmark-streams
+ - postmaster
+ - potato-tool
  - potoki
  - potoki-cereal
  - potoki-conduit
+ - potoki-core
  - potoki-hasql
  - potoki-zlib
+ - potrace-diagrams
+ - powerdns
+ - powermate
+ - powerpc
+ - powerqueue-levelmem
  - powerqueue-sqs
+ - ppad-aead
  - ppad-base58
  - ppad-bip32
  - ppad-bip39
@@ -2698,97 +7664,305 @@ dont-distribute-packages:
  - ppad-hmac-drbg
  - ppad-pbkdf
  - ppad-secp256k1
+ - ppad-sha256
+ - ppad-sha512
  - ppad-tx
+ - pprecord
+ - PPrinter
+ - pqc
  - pqueue-mtl
+ - pr-tools
  - practice-room
+ - praglude
+ - preamble
+ - precis
+ - precursor
  - pred-trie
+ - predicate-class
+ - predicate-typed
+ - prednote
  - prednote-test
+ - prefork
+ - pregame
+ - preliminaries
+ - Prelude
+ - prelude-generalize
+ - prelude-plus
+ - preprocess-haskell
+ - preprocessor
+ - preql
+ - presburger
+ - present
+ - press
  - presto-hdbc
+ - pretty-compact
  - pretty-diff
+ - pretty-ghci
+ - pretty-html
+ - pretty-loc
+ - pretty-ncols
+ - pretty-types
+ - prettyprint-avh4
+ - prettyprinter-convert-ansi-wl-pprint
+ - prettyprinter-vty
  - preview
+ - prim
+ - prim-array
+ - prim-instances
+ - prim-ref
+ - primal
  - primal-memory
+ - prime
+ - primecount
+ - primes-type
+ - primitive-checked
+ - primitive-containers
+ - primitive-convenience
+ - primitive-foreign
+ - primitive-indexed
+ - primitive-maybe
+ - primitive-primvar
+ - primitive-simd
+ - primitive-slice
+ - primitive-stablename
+ - PrimitiveArray
+ - PrimitiveArray-Pretty
  - primula-board
  - primula-bot
+ - pringletons
+ - print-debugger
+ - print-info
+ - printcess
  - Printf-TH
+ - prints
+ - priority-queue
+ - PriorityChansConverger
+ - pro-abstract
+ - pro-source
+ - prob-fx
  - ProbabilityMonads
+ - probable
+ - Probnet
  - proc
+ - process-conduit
  - process-iterio
+ - process-leksah
+ - process-listlike
  - process-progress
  - process-qq
+ - process-sequential
  - process-streaming
+ - processing
+ - processmemory
+ - procex
  - procrastinating-structure
+ - procrastinating-variable
+ - procstat
+ - prodapi
+ - prodapi-proxy
+ - prodapi-userauth
  - producer
  - product
+ - prof-flamegraph
  - prof2dot
+ - prof2pretty
+ - profunctor-monad
+ - profunctor-optics
+ - progress-meter
+ - progress-reporting
  - progressbar
+ - progression
+ - progressive
+ - proj4-hs-bindings
+ - project-forge
  - project-m36
+ - projectile
+ - prolens
+ - prolog
  - prolog-graph
  - prolog-graph-lib
  - prologue
  - prolude
+ - prometheus-effect
  - prometheus-proc
+ - prometheus-wai-middleware
+ - promise
+ - prompt
+ - pronounce
+ - proof-assistant-bot
+ - proof-combinators
+ - PropaFP
  - propane
+ - propeller
+ - Proper
+ - properties
+ - property-list
  - proplang
  - PropRatt
+ - prosidy
  - prosidyc
+ - prosper
+ - proteaaudio
+ - proteaaudio-sdl
+ - proteome
+ - proto-lens-combinators
  - proto-lens-descriptors
+ - proto-lens-etcd
+ - proto-lens-jsonpb
  - protobuf-native
+ - protocol
+ - protocol-buffers
  - protocol-buffers-descriptor
  - protocol-buffers-descriptor-fork
+ - protocol-buffers-fork
+ - protolude-lifted
  - proton
+ - proton-haskell
+ - prototype
+ - prove-everywhere-server
+ - provenience
+ - proxy-kindness
+ - proxy-mapping
+ - prune-juice
+ - psc-ide
+ - pseudo-trie
  - psql
+ - pstemmer
+ - psx
  - ptera
+ - ptera-core
  - ptera-th
+ - PTQ
+ - pub
+ - publicsuffix
  - publicsuffixlist
+ - publicsuffixlistcreate
+ - publish
+ - pubnub
+ - pubsub
  - puffytools
+ - pugixml
  - Pugs
  - pugs-compat
+ - pugs-DrIFT
  - pugs-hsregex
+ - pugs-HsSyck
+ - PUH-Project
  - punkt
+ - punycode
  - Pup-Events
  - Pup-Events-Demo
+ - Pup-Events-Server
  - puppetresources
  - pure-cdb
+ - pure-io
+ - pure-priority-queue
  - pure-priority-queue-tests
+ - pure-zlib
+ - purescript-ast
+ - purescript-cst
  - purescript-iso
+ - purescript-tsd-gen
+ - purview
+ - push-notifications
  - push-notify
  - push-notify-ccs
  - push-notify-general
+ - pushbullet
+ - pushbullet-types
+ - pusher-haskell
+ - pusher-ws
+ - pushover
+ - putlenses
+ - puzzle-draw
  - puzzle-draw-cmdline
  - pvd
+ - pvector
+ - pvss
+ - pyffi
+ - pyfi
+ - python-pickle
+ - q4c12-twofinger
+ - qbe
+ - qc-oi-testgenerator
+ - qd
  - qd-vec
+ - qed
  - qhull
+ - qhull-simple
+ - qif
+ - QIO
+ - QLearn
+ - qlinear
+ - qm-interpolated-string
  - qnap-decrypt
+ - qr-imager
  - qr-repa
+ - qrcode
+ - qsem
+ - qt
  - qtah-cpp-qt5
  - qtah-cpp-qt6
  - qtah-examples
  - qtah-generator
  - qtah-qt5
  - qtah-qt6
+ - QuadEdge
+ - QuadTree
+ - qualified-imports-plugin
+ - quandl-api
  - quantfin
+ - quantification
  - quantification-aeson
+ - quantum-arrow
+ - quantum-random
+ - quarantimer
+ - qudb
  - Quelea
+ - quenya-verb
  - queryparser
  - queryparser-demo
  - queryparser-hive
  - queryparser-presto
  - queryparser-vertica
+ - querystring-pickle
+ - questioner
  - queuelike
+ - quick-schema
+ - QuickAnnotate
+ - quickbooks
+ - quickcheck-arbitrary-template
  - quickcheck-poly
+ - quickcheck-property-comb
+ - quickcheck-property-monad
  - quickcheck-regex
  - quickcheck-relaxng
+ - quickcheck-rematch
+ - quickcheck-report
+ - quickcheck-state-machine
+ - quickcheck-state-machine-distributed
+ - quickcheck-webdriver
+ - QuickCheckVariant
+ - quickjs-hs
+ - QuickPlot
+ - quickpull
+ - quickset
+ - Quickson
+ - quickson
  - quicktest
+ - quickwebapp
  - quipper
  - quipper-algorithms
  - quipper-all
  - quipper-cabal
+ - quipper-core
  - quipper-demos
  - quipper-language
  - quipper-libraries
  - quipper-rendering
  - quipper-tools
  - quipper-utils
+ - quiver
  - quiver-binary
  - quiver-bytestring
  - quiver-cell
@@ -2799,20 +7973,51 @@ dont-distribute-packages:
  - quiver-instances
  - quiver-interleave
  - quiver-sort
+ - quokka
+ - quoridor-hs
+ - quotet
  - qux
+ - r-glpk-phonetic-languages-ukrainian-durations
+ - R-pandoc
+ - RabbitMQ
+ - rad
+ - radian
+ - radium
+ - radium-formula-parser
+ - radix
+ - rados-haskell
+ - raft
  - rail-compiler-editor
  - rails-session
  - rainbow-tests
  - Raincat
  - raketka
+ - rakhana
+ - rakuten
  - rallod
+ - raml
+ - rand-vars
  - randfile
+ - rando
  - random-access-file
+ - random-access-list
+ - random-cycle
+ - random-derive
+ - random-eff
  - random-effin
  - random-extras
+ - random-fu-multivariate
  - random-hypergeometric
+ - random-source
+ - random-stream
+ - random-string
+ - Randometer
+ - Range
  - range-space
+ - rangemin
+ - rank-product
  - Ranka
+ - rapid-term
  - rasa
  - rasa-example-config
  - rasa-ext-bufs
@@ -2826,78 +8031,242 @@ dont-distribute-packages:
  - rasa-ext-views
  - rasa-ext-vim
  - rascal
+ - Rasenschach
+ - rating-chgk-info
+ - rational-list
+ - rattle
+ - rattletrap
+ - Rattus
  - raw-feldspar
+ - rawr
+ - raylib-imgui
+ - raytrace
+ - raz
  - razom-text-util
+ - rbpcp-api
  - rbr
+ - rbst
  - rc
+ - rclient
  - rdioh
+ - rds-data
+ - rds-data-codecs
  - rds-data-polysemy
+ - re2
+ - react
+ - react-flux
  - react-flux-servant
+ - react-haskell
+ - react-tutorial-haskell-server
+ - reaction-logic
  - reactive
+ - reactive-bacon
+ - reactive-banana-gi-gtk
  - reactive-banana-sdl
+ - reactive-banana-sdl2
+ - reactive-banana-threepenny
  - reactive-banana-wx
  - reactive-fieldtrip
  - reactive-glut
+ - reactive-thread
  - reactor
+ - read-bounded
+ - read-ctags
+ - read-io
+ - readability
+ - reader-soup
  - readline-in-other-words
+ - readline-statevar
+ - readme-lhs
  - readpyc
+ - readshp
+ - really-simple-xml-parser
+ - reason-export
+ - reasonable-lens
+ - rebound
+ - rec-smallarray
+ - record
  - record-aeson
+ - record-dot-preprocessor
+ - record-encode
  - record-gl
+ - record-impl
  - record-preprocessor
  - record-syntax
+ - record-wrangler
+ - records
  - records-th
  - recursion-schemes-ix
+ - recursive-line-count
+ - recursors
  - reddit
  - redHandlers
+ - redis-hs
  - redis-io
+ - redis-simple
+ - Redmine
+ - reduce-equations
+ - reedsolomon
+ - reenact
+ - Ref
+ - ref
+ - ref-extras
+ - ref-mtl
+ - refcount
+ - Referees
+ - reference-counting
+ - references
  - refh
+ - refined-http-api-data
+ - refined-with
+ - refined1
+ - refinery
+ - reflection-extras
  - reflex-animation
+ - reflex-backend-socket
  - reflex-backend-wai
+ - reflex-basic-host
  - reflex-dom
+ - reflex-dom-ace
  - reflex-dom-colonnade
+ - reflex-dom-contrib
+ - reflex-dom-fragment-shader-canvas
+ - reflex-dom-helpers
+ - reflex-dom-pandoc
+ - reflex-dom-retractable
+ - reflex-dom-svg
+ - reflex-dynamic-containers
+ - reflex-external-ref
+ - reflex-ghci
+ - reflex-gi-gtk
  - reflex-gloss-scene
+ - reflex-jsx
  - reflex-libtelnet
  - reflex-localize
  - reflex-localize-dom
  - reflex-monad-auth
+ - reflex-orphans
+ - reflex-sdl2
+ - reflex-transformers
+ - reform-blaze
+ - reform-hamlet
+ - reform-hsp
+ - reform-lucid
+ - reformat
  - refractor
+ - refresht
+ - refty
  - refurb
+ - reg-alloc
  - reg-alloc-graph-color
  - regex-deriv
+ - regex-dfa
+ - regex-do
+ - regex-generator
  - regex-genex
+ - regex-parsec
  - regex-pcre-text
  - regex-pderiv
+ - regex-posix-unittest
+ - regex-tdfa-pipes
+ - regex-tdfa-quasiquoter
+ - regex-tdfa-rc
+ - regex-tdfa-text
+ - regex-tdfa-unittest
+ - regex-tdfa-utf8
+ - regex-tre
+ - regex-type
  - regex-xmlschema
  - regexchar
+ - regexdot
  - regexp-tries
+ - regexpr
+ - regexpr-symbolic
+ - regexqq
  - regional-pointers
+ - regions
  - regions-monadsfd
  - regions-monadstf
  - regions-mtl
+ - register-machine-typelevel
+ - registry-messagepack
+ - registry-options
+ - regress
+ - regular
  - regular-extras
  - regular-web
  - regular-xmlpickler
  - reheat
+ - rehoo
+ - rei
+ - reified-records
+ - reify
  - rel8
+ - relacion
+ - relation
+ - relational-postgresql8
+ - relational-query-postgresql-pure
  - relative-date
  - relay-pagination-conformance
  - relay-pagination-hasql
+ - relevant-time
+ - reload
+ - remark
+ - remarks
+ - rematch-text
+ - remote
+ - remote-debugger
  - remote-json
  - remote-json-client
  - remote-json-server
+ - remote-monad
  - remotion
+ - reorderable
  - repa-array
+ - repa-bytestring
+ - repa-devil
+ - repa-examples
  - repa-flow
+ - repa-linear-algebra
  - repa-plugin
+ - repa-series
+ - repa-stream
  - repa-v4l2
+ - repl
  - repl-alliance
+ - repl-toolkit
+ - ReplaceUmlaut
+ - RepLib
+ - replica
  - replicant
+ - ReplicateEffects
  - repo-based-blog
  - repr
+ - representable-functors
  - representable-tries
+ - reprinter
+ - reproject
+ - req-conduit
+ - req-url-extra
+ - reqcatcher
+ - request
+ - request-monad
+ - rescue
  - reserve
+ - reservoir
+ - resin
+ - resolve
+ - resolve-trivial-conflicts
+ - resource-effect
+ - resource-effectful
+ - resource-embed
  - resource-pool-catchio
+ - resource-pool-monad
+ - resource-registry
  - resource-simple
+ - resourcet-pool
+ - resp
+ - respond
  - rest-client
  - rest-core
  - rest-example
@@ -2907,35 +8276,73 @@ dont-distribute-packages:
  - rest-stringmap
  - rest-types
  - rest-wai
+ - restartable
  - restful-snap
  - RESTng
  - restricted-workers
+ - restyle
+ - resumable-exceptions
+ - rethinkdb
+ - rethinkdb-client-driver
  - rethinkdb-model
  - rethinkdb-wereHamster
+ - retrie
+ - retroclash-lib
  - retroclash-sim
+ - retryer
+ - reverse-geocoding
+ - reverse-list
+ - reversi
+ - ReviewBoard
  - rewrite
+ - rewrite-inspector
  - rewriting
  - rezoom
+ - rfc
  - rfc-env
  - rfc-http-client
+ - rfc-prelude
  - rfc-psql
  - rfc-redis
  - rfc-servant
  - rhythm-game-tutorial
+ - riak
+ - riak-protobuf-lens
  - rib
+ - rib-core
+ - ribbit
  - ribosome
  - ribosome-app
  - ribosome-host
  - ribosome-host-test
  - ribosome-root
  - ribosome-test
+ - RichConditional
+ - ridley
  - ridley-extras
+ - riemann
+ - riff
+ - rigel-viz
+ - ring-buffers
+ - rings
  - rio-process-pool
  - riot
  - ripple
  - ripple-federation
+ - risc-v
+ - riscv-isa
+ - risk-weaver
+ - rison
+ - Ritt-Wu
+ - rivers
  - rivet
+ - rivet-migration
+ - rivet-simple-deploy
  - RJson
+ - rl-satton
+ - Rlang-QQ
+ - rle
+ - rlglue
  - rlwe-challenges
  - rmonad
  - RMP
@@ -2947,96 +8354,235 @@ dont-distribute-packages:
  - RNAwolf
  - rncryptor
  - rob
+ - robin
+ - robin-hood-profit
+ - roboservant
  - robot
+ - robots-txt
+ - roc-cluster
  - roc-cluster-demo
  - rock
+ - roguestar
  - roguestar-engine
  - roguestar-gl
  - roguestar-glut
+ - roku-api
  - rollbar-cli
+ - rollbar-client
+ - rollbar-hs
  - rollbar-wai
  - rollbar-yesod
+ - roller
  - RollingDirectory
+ - roman-numerals
+ - ron-hs
+ - ron-schema
+ - ron-storage
+ - ronn-envparse
+ - ronn-opt-env-conf
+ - ronn-optparse-applicative
+ - rope
+ - rose
+ - rose-trees
  - rose-trie
+ - rosebud
  - roshask
+ - rosmsg
  - rosmsg-bin
+ - rospkg
+ - rosso
+ - rotating-log
+ - rounding
+ - roundtrip-aeson
  - roundtrip-xml
  - route-generator
  - route-planning
+ - rowrecord
  - rpc
+ - rpc-framework
  - rpf
+ - rpm
+ - rpmbuild-order
+ - rpmostree-update
+ - rrule
  - rsagl
  - rsagl-frp
  - rsagl-math
+ - rsi-break
+ - rspp
+ - rss2irc
+ - rstream
  - rtcm
+ - RtMidi
+ - rtnetlink
+ - rtorrent-state
+ - rts-loader
+ - rubberband
+ - ruby-marshal
+ - ruby-qq
+ - ruff
+ - ruin
  - ruler
  - ruler-core
+ - run-haskell-module
+ - runGhcBWrap-core
+ - runhs
+ - runmany
  - runtime-arbitrary
+ - runtime-instances
+ - rustls
  - rv
+ - rws
+ - RxHaskell
+ - rz-pipe
+ - rzk
  - s-expression
  - S3
+ - SableCC2Hs
+ - safe-access
+ - safe-buffer-monad
+ - safe-coerce
  - safe-coupling
+ - safe-decimal
+ - safe-exceptions-checked
  - safe-failure-cme
+ - safe-freeze
+ - safe-globals
+ - safe-lazy-io
+ - safe-length
+ - safe-money-xmlbf
  - safe-plugins
+ - safe-printf
+ - safe-tensor
+ - safecopy-migrate
+ - safecopy-store
+ - safeint
+ - safepath
  - safer-file-handles
  - safer-file-handles-bytestring
  - safer-file-handles-text
+ - saferoute
  - sai-shape-syb
+ - sajson
  - sak
+ - sakuraio-platform
+ - salak
  - salak-toml
  - salak-yaml
+ - Salsa
  - saltine-quickcheck
  - salvia
  - salvia-demo
  - salvia-extras
+ - salvia-protocol
  - salvia-sessions
  - salvia-websocket
  - samtools
  - samtools-conduit
  - samtools-enumerator
  - samtools-iteratee
+ - sandlib
+ - sandman
+ - sandwatch
+ - sandwich-contexts
  - sandwich-contexts-kubernetes
  - sandwich-contexts-minio
  - sandwich-webdriver
+ - sarasvati
  - sarsi
+ - sasha
  - sasl
+ - sat
  - sat-micro-hs
+ - sat-simple
+ - satchmo-backends
  - satchmo-examples
  - satchmo-funsat
+ - satchmo-minisat
  - satchmo-toysat
+ - Saturnin
+ - satyros
  - sauron
+ - savage
+ - sax
  - SBench
+ - sbv-program
+ - sbvPlugin
  - sc2-lowlevel
+ - sc2-proto
  - sc2-support
  - sc2hs
  - sc3-rdu
  - scalable-server
+ - scaleimage
  - SCalendar
+ - scalendar
  - scalp-webhooks
  - scalpel-search
  - scan-metadata
  - scan-vector-machine
+ - scgi
+ - schedevr
+ - schedule-planner
+ - scheduling
+ - schedyield
+ - schemas
  - schematic
  - scholdoc
  - scholdoc-citeproc
  - scholdoc-texmath
+ - scholdoc-types
+ - sci-ratio
+ - scidb-hquery
+ - SciFlow
  - SciFlow-drmaa
  - scion
  - scion-browser
+ - scons2dot
  - scope
  - scope-cairo
+ - scottish
+ - scotty-binding-play
+ - scotty-blaze
+ - scotty-cookie
  - scotty-fay
  - scotty-form
+ - scotty-format
  - scotty-hastache
+ - scotty-haxl
  - scotty-params-parser
+ - scotty-path-normalizer
+ - scotty-rest
+ - scotty-session
+ - scotty-utils
+ - scotty-view
  - scp-streams
  - scrabble-bot
  - scrapbook
+ - scrapbook-core
+ - scrape-changes
+ - ScratchFs
+ - screenshot-to-clipboard
+ - script-monad
  - SCRIPTWriter
+ - scrobble
+ - scrod
  - scroll
+ - scroll-list
+ - scrz
  - scubature
  - Scurry
+ - scythe
+ - scyther-proof
+ - sd-jwt
+ - sde-solver
+ - sdl2-cairo-image
+ - sdl2-compositor
+ - sdl2-fps
+ - sdl2-image
  - sdl2-sprite
+ - SDL2-ttf
+ - sdp
  - sdp-binary
  - sdp-deepseq
  - sdp-hashable
@@ -3046,31 +8592,78 @@ dont-distribute-packages:
  - sdp4text
  - sdp4unordered
  - sdp4vector
+ - sdr
+ - seacat
+ - seakale
  - seakale-postgresql
  - seakale-tests
+ - search
+ - sec
+ - secd
+ - secdh
+ - seclib
+ - second-transfer
+ - secp256k1
+ - secp256k1-legacy
+ - secret-santa
  - secret-sharing
  - secrm
+ - secure-memory
+ - secure-sockets
+ - SecureHash-SHA3
+ - secureUDP
  - sednaDBXML
+ - SegmentTree
  - seihou-cli
  - seitz-symbol
+ - selectors
  - SelectSequencesFromMSA
+ - selenium
  - selenium-server
+ - selinux
  - semantic-source
  - semantic-version
+ - Semantique
+ - semdoc
  - semi-iso
  - semialign-extras
+ - semialign-indexed
+ - semialign-optics
+ - semibounded-lattices
+ - Semigroup
+ - semigroupoid-extras
+ - semigroupoids-do
+ - semigroupoids-syntax
+ - semigroups-actions
  - semiring
  - semiring-num
+ - sendgrid-haskell
+ - sendgrid-v3
  - sensenet
+ - sensu-run
  - sentence-jp
+ - sentry
+ - seonbi
+ - separated
  - seqaid
+ - SeqAlign
  - seqloc
  - seqloc-datafiles
+ - sequent-core
+ - sequential-index
+ - sequitur
  - sequor
+ - serf
+ - serial
+ - serialize-instances
+ - serokell-util
  - serpentine
  - serv
  - serv-wai
  - servant-aeson-generics-typescript
+ - servant-aeson-specs
+ - servant-auth-cookie
+ - servant-auth-hmac
  - servant-auth-token
  - servant-auth-token-acid
  - servant-auth-token-api
@@ -3078,59 +8671,167 @@ dont-distribute-packages:
  - servant-auth-token-persistent
  - servant-auth-token-rocksdb
  - servant-auth-wordpress
+ - servant-avro
+ - servant-benchmark
+ - servant-cassava
  - servant-checked-exceptions
  - servant-checked-exceptions-core
+ - servant-client-js
  - servant-client-namedargs
+ - servant-combinators
  - servant-csharp
+ - servant-db
  - servant-db-postgresql
- - servant-ede
+ - servant-dhall
+ - servant-docs-simple
+ - servant-ekg
+ - servant-errors
  - servant-examples
+ - servant-gdp
+ - servant-generate
+ - servant-generic
+ - servant-github
+ - servant-github-webhook
+ - servant-haxl-client
+ - servant-htmx
+ - servant-http-streams
+ - servant-http2-client
+ - servant-iCalendar
+ - servant-jquery
  - servant-js
+ - servant-kotlin
+ - servant-lint
  - servant-matrix-param
+ - servant-mock
+ - servant-namedargs
+ - servant-nix
  - servant-oauth2
  - servant-oauth2-examples
+ - servant-pandoc
+ - servant-polysemy
+ - servant-pool
  - servant-postgresql
+ - servant-proto-lens
+ - servant-purescript
  - servant-pushbullet-client
+ - servant-py
+ - servant-quickcheck
  - servant-rate-limit
  - servant-reason
+ - servant-reflex
+ - servant-router
+ - servant-routes
  - servant-routes-golden
+ - servant-ruby
+ - servant-scotty
+ - servant-seo
+ - servant-serf
  - servant-server-namedargs
+ - servant-smsc-ru
  - servant-snap
+ - servant-stache
+ - servant-static-th
+ - servant-streaming
  - servant-streaming-client
  - servant-streaming-docs
  - servant-streaming-server
+ - servant-streamly
+ - servant-subscriber
  - servant-swagger-tags
+ - servant-to-elm
  - servant-tower-hs
+ - servant-tracing
+ - servant-typed-error
+ - servant-util
  - servant-util-beam-pg
  - servant-waargonaut
+ - servant-wasm
+ - servant-xml-conduit
+ - servant-yaml
+ - servant-zeppelin
  - servant-zeppelin-client
  - servant-zeppelin-server
  - servant-zeppelin-swagger
+ - server-generic
+ - serverless-haskell
+ - serversession-backend-persistent
+ - services
+ - serviette
+ - ses-html-snaplet
+ - SessionLogger
+ - sessions
+ - sessiontypes
  - sessiontypes-distributed
+ - Set
+ - set-monad
+ - set-of
+ - set-with
+ - setdown
+ - setgame
+ - setoid
+ - sets
+ - setters
+ - sexp
+ - sexpr-parser
+ - sexpresso
+ - sext
+ - SFML
+ - sfml-audio
  - SFML-control
+ - sfmt
  - SFont
+ - SG
+ - sgd
  - SGdemo
+ - sgf
+ - SGplus
  - sgrep
+ - sh2md
+ - sha-streams
+ - sha1
+ - shade
+ - shadower
  - shady-gen
  - shady-graphics
  - shake-ats
+ - shake-cabal-build
+ - shake-dhall
+ - shake-extras
  - shake-language-c
+ - shake-minify
  - shake-minify-css
+ - shake-pack
+ - shake-path
+ - shake-persist
  - shakebook
  - shaker
+ - shakespeare-babel
+ - shakespeare-sass
  - shapefile
  - shapely-data
+ - shapes
  - shapes-demo
+ - shared-buffer
+ - shared-fields
+ - she
  - sheets
  - shelduck
+ - shell-pipe
+ - Shellac
  - Shellac-compatline
  - Shellac-editline
  - Shellac-haskeline
  - Shellac-readline
+ - shellish
+ - shellmate
  - shellmate-extras
+ - shentong
+ - shibuya-core
  - shibuya-kafka-adapter
+ - shibuya-kiroku-adapter
  - shibuya-metrics
  - shibuya-pgmq-adapter
+ - shikensu
  - shikumi
  - shikumi-cache
  - shikumi-cache-postgres
@@ -3142,20 +8843,34 @@ dont-distribute-packages:
  - shikumi-tools
  - shikumi-trace
  - shikumi-trace-otel
+ - shimmer
+ - shine
+ - shine-examples
  - shine-varying
+ - shivers-cfg
+ - shoap
  - shomei-migrations
  - shomei-postgres
+ - shopify
  - short-vec
  - short-vec-lens
+ - shortbytestring
+ - shorten-strings
  - ShortestPathProblems
+ - show-prettyprint
+ - show-type
  - showdown
+ - Shpadoinkle
  - Shpadoinkle-backend-pardiff
  - Shpadoinkle-backend-snabbdom
  - Shpadoinkle-backend-static
+ - Shpadoinkle-console
+ - Shpadoinkle-debug
  - Shpadoinkle-developer-tools
  - Shpadoinkle-disembodied
  - Shpadoinkle-examples
  - Shpadoinkle-html
+ - Shpadoinkle-isreal
  - Shpadoinkle-lens
  - Shpadoinkle-router
  - Shpadoinkle-streaming
@@ -3163,322 +8878,1054 @@ dont-distribute-packages:
  - Shpadoinkle-widgets
  - shpider
  - shuffle
+ - shwifty
  - si-clock
+ - si-timers
  - sibe
+ - sifflet
+ - sifflet-lib
  - sigma-ij
+ - signable
+ - signable-haskell-protoc
+ - signal-messaging-dbus
  - signals
+ - signature
+ - signed-multiset
+ - significant-figures
+ - silero-vad
  - silvi
+ - simd
+ - simfin
  - simgi
+ - simple-actors
+ - simple-atom
+ - simple-bluetooth
  - simple-c-value
+ - simple-conduit
+ - simple-config
+ - simple-css
+ - simple-download
+ - simple-effects
+ - simple-eval
  - simple-firewire
+ - simple-form
+ - simple-genetic-algorithm
+ - simple-index
+ - simple-log
  - simple-log-syslog
  - simple-logging
+ - simple-media-timestamp-formatting
+ - simple-money
+ - simple-neural-networks
  - simple-nix
+ - simple-parser
  - simple-pascal
+ - simple-pipe
  - simple-postgresql-orm
+ - simple-rope
+ - simple-server
+ - simple-stacked-vm
+ - simple-tabular
+ - simple-tar
+ - simple-ui
+ - simple-units
+ - simple-zipper
+ - simpleargs
+ - simpleconfig
  - SimpleGL
+ - SimpleH
+ - simpleirc
  - simpleirc-lens
  - SimpleLog
+ - simplenote
+ - simpleprelude
  - SimpleServer
+ - simplesmtpclient
+ - simplessh
+ - simplex
+ - simplex-method
+ - simplexmq
+ - simplistic-generics
  - simseq
+ - sindre
+ - single-tuple
+ - singlethongs
+ - singleton-dict
+ - singleton-typelits
  - singletons-presburger
+ - singnal
+ - singular-factory
+ - sink
+ - sint
+ - siphash
  - siphon
  - siren-json
  - sirkel
+ - sitepipe
+ - sixfiguregroup
+ - sixty-five-oh-two
  - sized
+ - sized-grid
+ - sized-types
+ - sized-vector
+ - sjsp
+ - SJW
+ - skeletal-set
  - skeleton
  - skeletons
+ - skell
+ - skemmtun
+ - sketch-frp-copilot
+ - skopedate
+ - skulk
  - skylark-client
+ - skylighting-extensions
+ - skype4hs
+ - skypelogexport
+ - slack
+ - slack-api
+ - slack-notify-haskell
+ - slack-progressbar
+ - slack-verify
  - slate
+ - sliceofpy
+ - slidemews
+ - Slides
+ - slim
  - slip32
+ - sloane
+ - slot-lambda
+ - sloth
+ - slug
+ - slugify
+ - smallarray
+ - smallcaps
+ - smallcheck-kind-generics
  - smallcheck-laws
  - smallcheck-lens
+ - smallcheck-series
+ - smallpt-hs
  - smallstring
+ - smap
+ - smartcheck
+ - smartconstructor
+ - smartGroup
  - smartword
+ - smash
  - smash-aeson
  - smash-lens
  - smash-microlens
  - smash-optics
+ - smawk
  - smcdel
+ - sme
+ - smerdyakov
+ - smh
+ - smiles
  - smith-cli
  - smith-client
+ - SmithNormalForm
  - Smooth
+ - smoothie
+ - smsaero
+ - smt-lib
+ - SmtLib
+ - smtlib2
  - smtlib2-debug
  - smtlib2-pipe
  - smtlib2-quickcheck
  - smtlib2-timing
+ - smtp-mail-ng
  - smtp2mta
+ - SMTPClient
+ - smtps-gmail
+ - smuggler
+ - smuggler2
+ - snack
+ - snail
+ - snake
+ - snake-game
+ - snap-accept
  - snap-auth-cli
+ - snap-blaze-clay
+ - snap-configuration-utilities
  - snap-elm
+ - snap-error-collector
  - snap-extras
+ - snap-language
+ - snap-loader-dynamic
+ - snap-predicates
+ - snap-routes
+ - snap-stream
+ - snap-templates
+ - snap-testing
  - snap-utils
+ - snap-web-routes
+ - snaplet-acid-state
  - snaplet-actionlog
+ - snaplet-amqp
  - snaplet-auth-acid
+ - snaplet-coffee
+ - snaplet-css-min
+ - snaplet-customauth
+ - snaplet-environments
  - snaplet-fay
  - snaplet-hasql
  - snaplet-haxl
  - snaplet-hdbc
+ - snaplet-hslogger
+ - snaplet-influxdb
  - snaplet-lss
+ - snaplet-mandrill
  - snaplet-mongoDB
+ - snaplet-mongodb-minimalistic
  - snaplet-mysql-simple
  - snaplet-oauth
+ - snaplet-persistent
+ - snaplet-postgresql-simple
  - snaplet-postmark
+ - snaplet-purescript
  - snaplet-recaptcha
+ - snaplet-redis
  - snaplet-redson
  - snaplet-rest
  - snaplet-riak
+ - snaplet-sass
+ - snaplet-scoped-session
  - snaplet-sedna
+ - snaplet-ses-html
+ - snaplet-sqlite-simple
  - snaplet-sqlite-simple-jwt-auth
  - snaplet-stripe
  - snaplet-tasks
+ - snaplet-typed-sessions
  - snaplet-wordpress
+ - snappy-conduit
  - snappy-iteratee
  - sndfile-enumerators
  - sneakyterm
  - sneathlane-haste
+ - snelstart-import
+ - SNet
+ - snipcheck
  - snm
  - snmp
+ - snorkels
  - snow-white
  - snowflake-core
  - snowflake-server
+ - snowtify
  - snumber
  - Snusmumrik
  - SoccerFun
  - SoccerFunGL
  - sock2stream
+ - socket-activation
  - socket-io
+ - socket-sctp
+ - socketed
+ - socketio
+ - sockets
  - sockets-and-pipes
  - socketson
+ - socks5
+ - sodium
+ - soegtk
+ - softfloat-hs
+ - solar
+ - solga
  - solga-swagger
  - solr
+ - som
+ - sonic-visualiser
+ - Sonnex
+ - SoOSiM
+ - sop-satisfier
+ - sorted
+ - sorting
+ - sorty
  - souffle-dsl
+ - souffle-haskell
  - source-code-server
+ - source-constraints
  - SourceGraph
+ - sousit
+ - soyuz
+ - SpaceInvaders
+ - spacepart
  - SpacePrivateers
+ - spake2
+ - spanout
  - sparkle
  - sparrow
+ - spars
+ - sparse
+ - sparse-lin-alg
+ - sparse-linear-algebra
+ - sparse-merkle-trees
+ - sparse-tensor
  - sparsebit
+ - sparsecheck
  - spartacon
  - spata
  - spatial-math
+ - spatial-rotations
+ - SpatialMath
+ - special-functors
+ - special-keys
  - specialize-th
+ - spectacle
  - spectral-clustering
+ - speculation
  - speculation-transformers
  - speechmatics
  - spelling-suggest
  - sphero
+ - sphinx-cli
+ - sphinxesc
  - spice
+ - spike
  - SpinCounter
+ - spir-v
+ - spiros
+ - splay
+ - splaytree
  - splines
+ - splint
+ - split-morphism
+ - splitter
+ - splot
+ - Spock-api-ghcjs
+ - Spock-auth
+ - spoonutil
+ - spotify
+ - spoty
+ - Sprig
  - sprinkles
+ - spritz
  - sproxy
+ - sproxy-web
+ - sproxy2
+ - spsa
+ - spy
+ - sqel
+ - sqids
+ - sql-simple
  - sql-simple-mysql
  - sql-simple-pool
  - sql-simple-postgresql
  - sql-simple-sqlite
- - sqlc-hs
+ - sqlcipher
+ - sqlcli
  - sqlcli-odbc
+ - sqlite
+ - sqlite-easy
+ - sqlite-simple-errors
  - sqlite-simple-interpolate
  - sqlite-simple-typed
+ - sqlvalue-list
+ - sqsd-local
  - squealgen
  - squeeze
+ - sr-extra
+ - srcinst
+ - srt
+ - srt-attoparsec
  - srt-dhall
  - srt-formatting
+ - srv
+ - sscan
  - sscgi
+ - ssh
+ - ssh-tunnel
  - sshd-lint
+ - sshtun
  - sssp
  - sstable
+ - SSTG
+ - st2
+ - stable-maps
+ - stable-memo
  - stable-tree
+ - Stack
+ - stack-bump
+ - stack-fix
+ - stack-lib
  - stack-network
+ - stack-prism
+ - stack-run
  - stack-run-auto
+ - stack-tag
+ - stack-type
+ - stack-wrapper
+ - stack2cabal
+ - stack2nix
  - stackage
  - stackage-build-plan
  - stackage-cabal
+ - stackage-cli
+ - stackage-curator
+ - stackage-metadata
  - stackage-query
  - stackage-sandbox
  - stackage-setup
+ - stackage-to-hackage
+ - stackage-types
  - stackage-upload
  - stackage2nix
+ - stackcollapse-ghc
  - stackctl
+ - stacker
+ - staged-gg
+ - stagen
+ - standalone-derive-topdown
+ - standalone-haddock
+ - starling
  - starrover2
+ - starter
+ - starter-snake-haskell
+ - stash
+ - Stasis
+ - state
+ - state-bag
+ - state-plus
+ - state-record
  - stateful-mtl
+ - statethread
+ - static
+ - static-canvas
  - static-closure
+ - static-ls
+ - static-resources
+ - static-tensor
  - statistics-dirichlet
+ - statistics-fusion
+ - statistics-hypergeometric-genvar
+ - statistics-skinny
+ - stats
+ - statsd
  - statsd-client
  - statsdi
+ - statvfs
+ - staversion
+ - stb-image-redux
+ - stc-lang
+ - stdata
+ - stdf
+ - stdio
+ - steambrowser
+ - stego-uuid
+ - stemmer
+ - stemmer-german
+ - stepwise
  - stern-brocot
+ - stgi
+ - STL
  - STLinkUSB
+ - stm-actor
+ - stm-chunked-queues
+ - stm-firehose
+ - stm-lifted
+ - stm-promise
  - stm-sbchan
+ - stm-stats
+ - stm-tlist
  - STM32-Zombie
  - stmcontrol
+ - stochastic
  - StockholmAlignment
+ - Stomp
+ - stooq-api
+ - storable
+ - storable-offset
+ - storable-static-array
  - storablevector-streamfusion
+ - stp
+ - str
+ - Strafunski-ATermLib
  - Strafunski-Sdf2Haskell
+ - Strafunski-StrategyLib
+ - StrappedTemplates
+ - StrategyLib
  - stratum-tool
  - stratux
  - stratux-demo
  - stratux-http
+ - stratux-types
  - stratux-websockets
+ - stream
+ - stream-fusion
+ - stream-monad
+ - streamdeck
+ - streamed
  - streaming-base64
+ - streaming-brotli
+ - streaming-cassava
  - streaming-concurrency
+ - streaming-conduit
+ - streaming-events
  - streaming-fft
+ - streaming-lzma
+ - streaming-osm
+ - streaming-pcap
+ - streaming-png
+ - streaming-postgresql-simple
  - streaming-process
  - streaming-sort
+ - streaming-with
+ - streamly-archive
+ - streamly-binary
+ - streamly-cassava
+ - streamly-lmdb
+ - streamly-lz4
+ - streamly-posix
+ - streamly-zip
+ - streamproc
+ - streamt
  - strelka
+ - strelka-core
  - strelka-wai
+ - strict-checked-vars
+ - strict-containers
  - strict-containers-lens
  - strict-containers-serialise
  - strict-data
+ - strict-ghc-plugin
+ - strict-io
+ - strict-mvar
+ - strict-stm
+ - strict-tuple-lens
+ - strict-writer
+ - StrictBench
+ - strictly
+ - string-conv-tests
+ - string-interpreter
+ - string-isos
+ - string-quote
  - string-typelits
+ - stringlike
+ - stringtable-atom
+ - stripe
+ - stripe-core
  - stripe-haskell
+ - stripe-hs
  - stripe-http-client
  - stripe-http-streams
+ - stripe-scotty
  - stripe-tests
  - strongswan-sql
+ - struct-inspector
  - structural-induction
+ - structural-traversal
+ - structured
+ - structured-cli
  - structured-haskell-mode
  - structured-mongoDB
+ - structures
+ - stt
+ - stunclient
  - stunts
  - stutter
+ - stylish-cabal
+ - stylist
+ - stylized
+ - styx
+ - sub-state
+ - subG-instances
  - subhask
+ - subleq-toolchain
+ - submark
+ - subsample
+ - substrate-protocol
  - substrate-synapse
  - substring-parser
+ - subwordgraph
+ - success
+ - successors
+ - succinct
+ - suffix-array
+ - suffixarray
+ - SuffixStructures
+ - sugar
  - sugar-data
  - sugar-json
  - sugar-scheme
+ - sugarhaskell
+ - suitable
+ - sum-type-boilerplate
+ - summoner
  - summoner-tui
+ - sump
+ - sunlight
+ - sunroof-compiler
  - sunroof-examples
  - sunroof-server
+ - super-user-spark
+ - superbubbles
  - supercollider-ht
  - supercollider-midi
  - superconstraints
+ - superevent
+ - supermonad
  - supernova
+ - supero
+ - superrecord
+ - supervisor
+ - supervisors
+ - supplemented
  - supply-chain
+ - supply-chain-core
  - supply-next
+ - surjective
  - sv
  - sv-cassava
+ - sv-core
  - sv-svfactor
+ - SVD2HS
+ - svfactor
+ - svg-builder-fork
  - SVG2Q
  - svg2q
+ - svgsym
+ - svgutils
+ - svm-light-utils
+ - svm-simple
+ - svndump
+ - swagger
+ - swagger-petstore
+ - swagger-test
  - swapper
+ - swarm
+ - swearjure
+ - swf
+ - swift-lda
+ - swiss
+ - swiss-ephemeris
  - switch
+ - sws
+ - syb-extras
+ - syb-with-class
  - syb-with-class-instances-text
  - SybWidget
  - sydtest-amqp
+ - sydtest-autodocodec
+ - sydtest-hedis
  - sydtest-mutation-plugin
+ - sydtest-persistent-postgresql
+ - sydtest-rabbitmq
  - sydtest-sqitch-postgres
  - sydtest-sqitch-postgres-persistent
+ - sydtest-webdriver
  - sydtest-webdriver-screenshot
  - sydtest-webdriver-yesod
+ - syfco
  - sylvia
+ - symantic
  - symantic-atom
+ - symantic-cli
+ - symantic-http-client
  - symantic-http-demo
  - symantic-http-test
  - symantic-lib
+ - symantic-parser
+ - symantic-xml
  - symbiote
+ - symbolic-link
+ - symbolic-regression
+ - symbolise
+ - symengine
  - symmetry-operations-symbols
+ - symtegration
  - Synapse
  - synapse
  - synapse-cc
+ - sync
+ - sync-mht
  - syncthing-hs
+ - synt
  - syntax
  - syntax-attoparsec
  - syntax-example
  - syntax-example-json
  - syntax-pretty
  - syntax-printer
+ - syntax-trees
+ - syntax-trees-fork-bairyn
+ - SyntaxMacros
  - syntaxnet-haskell
+ - synthesizer
+ - synthesizer-filter
+ - synthesizer-inference
+ - synthesizer-llvm
  - sys-process
+ - Sysmon
+ - system-canonicalpath
+ - system-command
+ - system-extra
+ - system-inotify
+ - system-lifted
+ - system-locale
+ - system-random-effect
+ - system-test
+ - system-util
+ - systemd-ntfy
+ - systemd-socket-activation
  - systemstats
+ - t-regex
  - t3-client
+ - t3-server
  - ta
+ - table
+ - table-tennis
+ - tableaux
+ - Tables
+ - tables
+ - tablestorage
+ - Tablify
+ - tabloid
+ - tabs
+ - tag-bits
  - tag-stream
+ - tagged-exception-core
  - tagged-list
  - tagged-th
+ - tagged-timers
+ - taglib-api
+ - tagshare
+ - tagsoup-ht
+ - tagsoup-megaparsec
  - tagsoup-navigate
+ - tagsoup-parsec
+ - tagsoup-selection
+ - Tahin
+ - tahoe-capabilities
+ - tahoe-chk
  - tahoe-directory
  - tahoe-great-black-swamp
  - tahoe-great-black-swamp-testing
+ - tahoe-great-black-swamp-types
  - tahoe-ssk
+ - tai
+ - tai64
+ - tailwind
+ - Tainted
+ - taiwan-id
+ - tak
  - tak-ai
  - takahashi
+ - Takusen
+ - takusen-oracle
  - tal
+ - talash
  - tamarin-prover
  - tamarin-prover-term
  - tamarin-prover-theory
+ - tamarin-prover-utils
+ - Tape
+ - tapioca
  - tar-bytestring
  - target
+ - targeted-quickcheck
+ - tart
  - task
  - task-distribution
+ - taskell
  - tasklite
  - tasklite-core
+ - TaskMonad
+ - tasty-auto
  - tasty-bdd
+ - tasty-fail-fast
+ - tasty-grading-system
  - tasty-groundhog-converters
+ - tasty-hedgehog-coverage
  - tasty-integrate
  - tasty-jenkins-xml
  - tasty-laws
  - tasty-lens
+ - tasty-mgolden
+ - tasty-papi
+ - tasty-stats
+ - tasty-test-reporter
+ - tasty-test-vector
+ - tasty-travis
  - TastyTLT
  - tateti-tateti
  - Taxonomy
  - TaxonomyTools
+ - TBC
+ - TBit
  - tbox
+ - tcache-AWS
  - tccli
+ - tcod-haskell
+ - tcp
+ - tcp-streams
+ - tcp-streams-openssl
  - tdd-util
+ - tdigest-Chart
+ - tdoc
+ - tds
  - TeaHS
+ - teams
  - techlab
+ - technique
+ - tedious-web
+ - tehepero
+ - telega
+ - telegram
+ - telegram-api
  - telegram-bot
  - telegram-raw-api
+ - telegram-types
+ - telegraph
+ - teleport
+ - telescope
+ - teleshell
+ - tell
+ - tellbot
+ - tempered
+ - template-default
+ - template-haskell-optics
+ - template-haskell-util
+ - template-hsml
+ - template-toolkit
+ - template-yj
+ - templateify
+ - templatepg
  - templates
+ - templatise
+ - tempo
+ - tempodb
+ - temporal-csound
  - temporal-sdk
+ - temporal-sdk-core
+ - tempus
+ - ten
  - ten-lens
  - ten-unordered-containers
+ - tensor
+ - tensor-safe
+ - tensorflow
+ - tensorflow-core-ops
+ - tensorflow-logging
+ - tensorflow-mnist
+ - tensorflow-ops
+ - tensors
+ - term-rewriting
+ - termbox-bindings
  - terminal-text
+ - termination-combinators
+ - termonad
+ - termplot
+ - terntup
  - terrahs
+ - tersmu
+ - tesla
+ - test-fixture
+ - test-framework-doctest
+ - test-framework-golden
+ - test-framework-quickcheck
+ - test-framework-skip
+ - test-framework-testing-feat
+ - test-framework-th-prime
+ - test-lib
+ - test-monad-laws
+ - test-pkg
  - test-sandbox-compose
+ - test-shouldbe
  - test-simple
  - testbench
+ - testCom
+ - TestExplode
+ - testloop
+ - testpack
+ - testpattern
+ - testPkg
+ - testrunner
+ - tex-join-bib
+ - TeX-my-math
+ - tex2txt
+ - texbuilder
+ - text-all
+ - text-and-plots
+ - text-ascii
+ - text-compression
+ - text-containers
+ - text-format
+ - text-format-heavy
+ - text-generic-pretty
+ - text-icu-normalized
+ - text-icu-translit
  - text-json-qq
+ - text-lens
  - text-locale-encoding
+ - text-markup
+ - text-normal
+ - text-offset
  - text-plus
+ - text-position
+ - text-register-machine
+ - text-render
+ - text-replace
+ - text-stream-decode
+ - text-trie
+ - text-utf7
+ - text-utf8
  - text-xml-generic
+ - text-xml-qq
+ - text-zipper-monad
+ - text1
  - textmatetags
+ - textocat-api
+ - textual
+ - tfp-th
+ - tftp
+ - tga
  - th-alpha
+ - th-build
  - th-context
+ - th-dict-discovery
+ - th-fold
+ - th-format
+ - th-inline-io-action
+ - th-instance-reification
  - th-instances
+ - th-kinds
+ - th-kinds-fork
+ - th-pprint
+ - th-sccs
+ - th-tc
+ - th-to-exp
+ - th-traced
+ - th-typegraph
+ - thank-you-stars
+ - THEff
+ - themoviedb
+ - thentos-cookie-session
+ - Theora
+ - theoremquest
  - theoremquest-client
+ - thih
  - thimk
+ - Thingie
+ - thock
+ - thorn
+ - threadmanager
+ - threepenny-editors
+ - threepenny-gui-contextmenu
+ - threepenny-gui-flexbox
+ - Thrift
+ - thrift
  - thrift-compiler
  - thrift-haxl
  - thrift-http
  - thrift-lib
+ - throttle-io-stream
+ - throttled-io-loop
+ - through-text
+ - throwable-exceptions
+ - thumbnail
+ - thumbnail-plus
  - thumbnail-polish
+ - tianbar
  - tic-tac-toe
+ - ticket-management
  - tickle
+ - TicTacToe
+ - tictactoe3d
+ - tidal-midi
+ - tidal-serial
+ - tidal-vis
+ - tie-knot
+ - tiempo
+ - tiger
+ - tigerbeetle-hs
+ - TigerHash
+ - tightrope
  - tighttp
+ - tikzsd
  - timberc
+ - time-extras
  - time-exts
  - time-http
  - time-io-access
+ - time-parsers
+ - time-qq
+ - time-quote
+ - time-recurrence
+ - time-series
+ - time-series-lib
+ - time-w3c
  - time-warp
+ - timecalc
+ - timemap
+ - timeout
+ - timeout-with-results
+ - timeparsers
+ - TimePiece
+ - timeplot
  - timeprint
+ - timeseries
+ - timestamp
+ - timeutils
+ - timezone-detect
  - timezone-unix
+ - tini
  - tinkoff-invest-sdk
+ - tintin
+ - tiny-scheduler
+ - tinyapp
+ - tinyid
+ - TinyLaunchbury
+ - tinylog
+ - tinyMesh
+ - tinytemplate
+ - tinytools
  - tinytools-vty
+ - TinyURL
+ - tinyXml
  - tip-haskell-frontend
  - tip-lib
+ - tiphys
  - titan
+ - titan-debug-yampa
+ - titan-record-yampa
+ - Titim
+ - tkhs
+ - tkyprof
  - tlex
+ - tlex-core
  - tlex-debug
  - tlex-encoding
  - tlex-th
+ - tls-debug
  - tls-extra
+ - TLT
+ - tmp-postgres
+ - tmp-proc-example
+ - tmp-proc-zipkin
  - tn
+ - to-haskell
+ - to-string-class
  - to-string-instances
  - toboggan
  - todos
+ - tofromxml
+ - token-limiter
+ - token-search
+ - tokenify
+ - tokenizer
+ - tokenizer-streaming
+ - tokstyle
  - toktok
+ - tokyocabinet-haskell
+ - tokyotyrant-haskell
+ - toml
+ - toml-test-drivers
  - tomlcheck
+ - tonalude
+ - tonaparser
  - tonatona
  - tonatona-google-server-api
  - tonatona-logger
@@ -3486,273 +9933,804 @@ dont-distribute-packages:
  - tonatona-persistent-sqlite
  - tonatona-servant
  - too-many-cells
+ - toodles
+ - toolbox
+ - Top
  - top
  - topaz
+ - topkata
+ - torch
+ - TORCS
+ - tostring
  - total-map
+ - total-maps
+ - TotalMap
+ - touched
+ - Tournament
+ - tower-hs
  - toxcore
  - toxcore-c
+ - toxiproxy-haskell
  - toysolver
+ - tpar
  - tpb
  - tpdb
+ - tptp
+ - trace
+ - trace-call
+ - trace-function-call
+ - traced
+ - tracetree
  - tracing-control
+ - tracked-files
+ - tracker
+ - traction
+ - tracy
+ - trade-journal
+ - traildb
  - trajectory
+ - trans-fx-core
  - trans-fx-data
  - trans-fx-io
+ - transactional-events
+ - transf
  - transfer-db
  - transformations
+ - TransformeR
+ - transformers-bifunctors
+ - transformers-compose
+ - transformers-continue
  - transformers-convert
+ - transformers-eff
+ - transformers-fix
+ - transformers-free
+ - transformers-lift
+ - transformers-runnable
+ - transformers-supply
+ - TransformersStepByStep
+ - transient
  - transient-universe
  - transient-universe-tls
+ - translatable-intset
+ - translate
  - translate-cli
+ - trasa
  - trasa-client
  - trasa-extra
  - trasa-form
  - trasa-reflex
  - trasa-server
  - trasa-th
+ - traversal-template
+ - traverse-code
+ - travis
+ - travis-meta-yaml
+ - trawl
+ - traypoweroff
+ - treap
+ - tree-monad
+ - tree-render-text
+ - tree-traversals
  - TreeCounter
+ - treemap
+ - treemap-html
  - treemap-html-tools
  - treersec
  - Treiber
  - trek-app
  - trek-db
+ - tremulous-query
+ - TrendGraph
+ - trhsx
  - triangulation
  - TrieMap
+ - tries
  - trigger
+ - trim
  - trimpolya
+ - triplesec
+ - tripLL
+ - trivia
+ - tropical
+ - tropical-geometry
+ - true-name
  - trurl
+ - trust-chain
+ - tsession
  - tsession-happstack
+ - tslib
+ - tsp-viz
+ - tsparse
+ - tsuntsun
+ - tsvsql
  - tsweb
+ - ttask
+ - ttl-hashtables
+ - ttn-client
+ - tttool
+ - tubes
+ - tuntap
  - tuntap-simple
  - tup-functor
+ - tuple-append-instances
+ - tuple-fields
  - tuple-gen
+ - tuple-hlist
+ - tuple-lenses
+ - tuple-morph
  - tuple-ops
+ - tupleinstances
+ - turing-machines
+ - turing-music
  - turingMachine
  - turncoat
+ - turtle-options
  - TV
+ - tweak
  - tweet-hs
  - twentefp-eventloop-graphics
  - twentefp-eventloop-trees
  - twentefp-graphs
  - twentefp-rosetree
  - twentefp-trees
+ - twentefp-websockets
+ - twentyseven
  - twfy-api-client
+ - twhs
  - twidge
  - twilight-stm
+ - twilio
  - twill
+ - twiml
+ - twine
  - twirl
+ - twirp
+ - twisty
+ - twitch
+ - twitchapi
+ - twitter
+ - twitter-conduit
  - twitter-enumerator
+ - twitter-feed
+ - tx
+ - txt
+ - txtblk
+ - TYB
+ - tyfam-witnesses
+ - typalyze
+ - type
  - type-assertions
  - type-cache
  - type-cereal
+ - type-combinators
  - type-combinators-quote
  - type-combinators-singletons
+ - type-compare
  - type-digits
+ - type-eq
+ - type-errors-pretty
+ - type-indexed-queues
+ - type-int
+ - type-interpreter
+ - type-level-bst
+ - type-level-kv-list-esqueleto
+ - type-level-kv-list-persistent
+ - type-level-natural-number-induction
+ - type-level-natural-number-operations
+ - type-level-sets
+ - type-list
  - type-natural
+ - type-of-html-static
+ - type-operators
  - type-ord
  - type-ord-spine-cereal
+ - type-prelude
+ - type-reflection
+ - type-safe-avl
  - type-sets
+ - type-settheory
+ - type-spine
  - type-structure
  - type-sub-th
+ - type-tree
+ - type-unary
+ - typeable-th
+ - typechain
  - TypeClass
+ - TypeCompose
+ - typed-admin
+ - typed-digits
+ - typed-encoding
  - typed-encoding-encoding
+ - typed-gui
+ - typed-process-effectful
+ - typed-protocols-doc
+ - typed-session
+ - typed-session-state-algorithm
+ - typed-spreadsheet
  - typed-streams
+ - typed-time
+ - typed-wire
  - typedflow
+ - typedquery
+ - typehash
  - TypeIlluminator
  - typelevel
+ - typelevel-rewrite-rules
+ - typelevel-tensor
+ - typeparams
+ - types-compat
  - typescript-docs
+ - typist
+ - typograffiti
  - typson-beam
+ - typson-core
  - typson-esqueleto
  - typson-selda
+ - tyro
+ - tztime
  - u2f
+ - uacpid
+ - uAgda
  - uber
+ - uberlast
  - ucam-webauth
+ - ucam-webauth-types
+ - ucd
+ - ucl
+ - uconv
+ - udbus
  - udbus-model
+ - udp-conduit
+ - udp-streaming
+ - ueberzug
  - uhc-light
  - uhc-util
+ - uhexdump
+ - uhttpc
+ - ui-command
  - ukrainian-phonetics-basic
+ - ukrainian-phonetics-basic-array
+ - ukrainian-phonetics-basic-array-bytestring
+ - uku
+ - ulid-tight
  - UMM
+ - unac-bindings
  - unagi-bloomfilter
+ - unamb-custom
+ - unbeliever
  - unbound
+ - unbounded-delays-units
+ - unboxed
+ - unboxed-containers
+ - unboxed-references
+ - unbreak
+ - unescaping-print
+ - unfix-binders
+ - unfork
+ - unfree
  - uni-events
  - uni-graphs
  - uni-htk
  - uni-posixutil
  - uni-reactor
  - uni-uDrawGraph
+ - uni-util
+ - unicode-general-category
  - unicode-normalization
+ - unicode-prelude
+ - unicode-symbols
+ - unicode-tricks
  - unicoder
  - uniform-io
+ - uniform-shake
  - uniform-watch
+ - unimap
+ - union-find
+ - union-map
+ - uniprot-kb
+ - unique-lang
+ - uniqueid
+ - uniquely-represented-sets
  - uniqueness-periods
+ - uniqueness-periods-general
+ - uniqueness-periods-vector
+ - uniqueness-periods-vector-common
  - uniqueness-periods-vector-examples
  - uniqueness-periods-vector-filters
  - uniqueness-periods-vector-general
  - uniqueness-periods-vector-properties
+ - units-attoparsec
+ - units-list
+ - unittyped
+ - unitym
  - unitym-servant
  - unitym-yesod
  - universal
+ - universal-binary
+ - universe-instances-base
+ - universe-instances-trans
  - universe-th
  - unix-fcntl
+ - unix-handle
+ - unix-memory
+ - unix-process-conduit
+ - unix-recursive
+ - unix-simple
  - unleash-client-haskell
+ - unleash-client-haskell-core
+ - unlift
+ - unlift-stm
+ - unlifted-list
+ - unliftio-messagebox
+ - unm-hip
+ - unordered-containers-rematch
+ - unordered-graphs
+ - unordered-intmap
+ - unpack-funcs
+ - unpacked-containers
+ - unpacked-either
+ - unpacked-maybe
+ - unpacked-maybe-text
  - unpacked-these
  - unpacked-validation
  - unparse-attoparsec
+ - unroll-ghc-plugin
+ - unsafely
+ - unsatisfiable
  - unscramble
+ - unsequential
+ - unused
+ - uom-plugin
  - up
+ - update-monad
+ - Updater
+ - updo
+ - uploadcare
+ - upskirt
  - urbit-airlock
  - urbit-api
+ - urbit-hob
  - ureader
  - urembed
+ - uri
+ - uri-conduit
+ - uri-encoder
  - uri-enumerator
  - uri-enumerator-file
+ - uri-parse
+ - uri-template
+ - url-bytes
+ - url-decoders
+ - url-generic
+ - URLb
+ - urlcheck
+ - urldecode
  - UrlDisp
+ - urldisp-happstack
  - URLT
+ - urn
+ - urn-random
+ - urxml
  - usb
  - usb-enumerator
  - usb-hid
  - usb-id-database
  - usb-iteratee
  - usb-safe
+ - useragents
+ - users-mysql-haskell
+ - users-persistent
+ - users-postgresql-simple
+ - utc
+ - utf
+ - utf8-conversions
+ - utf8-prelude
+ - utf8-validator
  - UTFTConverter
  - util-exception
+ - util-logict
+ - util-plus
+ - util-primitive
  - util-primitive-control
  - util-universe
  - utxorpc-client
  - utxorpc-server
+ - uu-cco
  - uu-cco-examples
  - uu-cco-hut-parsing
  - uu-cco-uu-parsinglib
  - uu-options
+ - uuagc-bootstrap
+ - uuagc-diagrams
+ - uuid-aeson
  - uuid-crypto
+ - uvector
  - uvector-algorithms
+ - uxadt
  - v4l2
  - v4l2-examples
  - vabal
+ - vabal-lib
+ - vacuum
  - vacuum-cairo
  - vacuum-graphviz
  - vacuum-opengl
  - vacuum-ubigraph
+ - vado
+ - valid
+ - valid-names
  - validated-literals
+ - validated-types
+ - Validation
+ - validations
+ - validationt
+ - validators
+ - valuations
+ - value-supply
+ - ValveValueKeyvalue
+ - vampire
+ - var
+ - var-monad
+ - varan
+ - variable-media-field
  - variable-media-field-dhall
  - variable-media-field-optics
  - variable-precision
+ - variables
+ - variadic
+ - variation
+ - vary
+ - vault-tool
  - vault-tool-server
  - vault-trans
  - vaultaire-common
+ - vcache
  - vcache-trie
  - vcard
+ - vcatt
+ - vcf
  - vcsgui
+ - vcswrapper
+ - Vec-Boolean
+ - Vec-OpenGLRaw
+ - vect-floating
  - vect-floating-accelerate
+ - vect-opengl
+ - vector-bytestring
+ - vector-circular
+ - vector-clock
+ - vector-conduit
+ - vector-doublezip
+ - vector-endian
+ - vector-functorlazy
+ - vector-heterogenous
  - vector-instances-collections
+ - vector-random
+ - vector-read-instances
+ - vector-shuffling
+ - vector-space-map
+ - vector-space-opengl
+ - vector-space-points
+ - vector-static
  - vector-text
  - vectortiles
+ - velma
  - venzone
+ - Verba
+ - verbalexpressions
+ - verdict
  - verdict-json
+ - verifiable-expressions
+ - verify
+ - verilog
+ - verismith
+ - versioning
  - versioning-servant
  - vertexenum
+ - vext
  - vflow-types
+ - vformat
  - vformat-aeson
  - vformat-time
  - vfr-waypoints
+ - vgrep
+ - vhd
+ - vhdl
+ - vicinity
+ - ViennaRNA-bindings
  - ViennaRNA-extras
+ - viewprof
+ - views
  - vigilance
+ - vikunja-api
+ - Villefort
  - vimeta
+ - vimus
+ - vintage-basic
+ - vinyl-generics
+ - vinyl-json
+ - vinyl-named-sugar
  - vinyl-operational
+ - vinyl-plus
+ - vinyl-utils
+ - vinyl-vectors
+ - virthualenv
+ - visibility
  - vision
  - visual-graphrewrite
+ - visual-prof
+ - vitrea
+ - vk-aws-route53
+ - VKHS
+ - vocoder
  - vocoder-audio
  - vocoder-conduit
  - vocoder-dunai
  - voicebase
  - vorbiscomment
+ - vowpal-utils
+ - voyeur
+ - vpq
+ - VRML
+ - vt-utils
+ - vte
+ - vtegtk3
+ - vty-examples
+ - vty-menu
+ - vty-ui
  - vty-ui-extras
  - waargonaut
+ - wacom-daemon
+ - waddle
  - wahsp
  - wai-devel
  - wai-dispatch
+ - wai-env
+ - wai-git-http
+ - wai-graceful
+ - wai-handler-devel
  - wai-handler-hal
+ - wai-handler-scgi
  - wai-handler-snap
+ - wai-handler-webkit
  - wai-hastache
+ - wai-hmac-auth
+ - wai-lambda
+ - wai-lens
+ - wai-lite
+ - wai-logger-buffered
+ - wai-logger-prefork
+ - wai-middleware-auth
  - wai-middleware-brotli
  - wai-middleware-cache
  - wai-middleware-cache-redis
+ - wai-middleware-catch
  - wai-middleware-consul
+ - wai-middleware-content-type
+ - wai-middleware-crowd
+ - wai-middleware-etag
+ - wai-middleware-headers
+ - wai-middleware-hmac-client
+ - wai-middleware-preprocessor
  - wai-middleware-rollbar
  - wai-middleware-route
+ - wai-middleware-static-caching
+ - wai-middleware-travisci
+ - wai-middleware-validation
+ - wai-middleware-verbs
+ - wai-predicates
+ - wai-problem-details
+ - wai-rate-limit-postgres
+ - wai-rate-limit-redis
+ - wai-request-spec
+ - wai-responsible
  - wai-route
+ - wai-router
+ - wai-routes
  - wai-routing
+ - wai-session-alt
+ - wai-session-mysql
+ - wai-session-postgresql
+ - wai-session-redis
  - wai-session-tokyocabinet
+ - wai-static-cache
  - wai-thrift
+ - wai-throttler
+ - waitfree
+ - waitra
+ - wakame
  - waldo
+ - wallpaper
+ - warc
+ - warp-dynamic
  - warp-grpc
  - warp-s2n-tls
+ - warp-static
+ - warp-tls-simple
+ - warp-tls-uid
  - warped
+ - warpZ
  - warpZ-tls
  - WashNGo
+ - wasm
+ - watcher
+ - watchit
  - WaveFront
+ - wavefront-obj
  - wavesurfer
  - wavy
+ - weak-bag
+ - WeakSets
+ - Weather
+ - weather-api
  - weatherhs
  - weave
  - web-browser-in-haskell
+ - web-css
+ - web-encodings
  - web-mongrel2
+ - web-output
+ - web-page
+ - web-plugins
+ - web-push
  - web-routes-hsp
+ - web-routes-quasi
  - web-routes-regular
+ - web-routes-transformers
+ - web-routes-wai
  - web-routing
+ - web-view
  - web-view-colonnade
+ - web3-ipfs
+ - webapi
+ - webapp
+ - webauthn
+ - WebBits
  - WebBits-Html
  - WebBits-multiplate
+ - webcloud
  - WebCont
+ - webcrank
+ - webcrank-dispatch
  - webcrank-wai
  - webdriver
+ - webdriver-angular
+ - webdriver-snoy
  - webdriver-w3c
  - webdriver-wrapper
+ - WeberLogic
+ - webfinger-client
+ - webgpu-dawn
+ - webidl
  - webify
+ - webkit
+ - webkit-javascriptcore
+ - webkitgtk3
+ - webkitgtk3-javascriptcore
+ - webmention
+ - Webrexp
  - webserver
+ - webshow
  - websnap
+ - websockets-json
+ - websockets-rpc
+ - webwire
+ - wedged
+ - WEditor
  - WEditorBrick
  - WEditorHyphen
  - weekdaze
  - weierstrass-functions
  - weighted
+ - weighted-regexp
+ - welshy
+ - werewolf
  - werewolf-slack
  - wgpu-hs
+ - wgpu-raw-hs
+ - Wheb
  - wheb-mongo
  - wheb-redis
  - wheb-strapped
+ - while-lang-parser
+ - whim
+ - whiskers
  - whitespace
+ - whois
  - wholepixels
+ - why3
+ - wide-word-instances
  - WidgetRattus
+ - wikicfp-scraper
+ - WikimediaParser
  - wikimusic-api
  - wikimusic-api-spec
  - wikimusic-ssr
  - wikipedia4epub
+ - wild-bind-indicator
  - wild-bind-task-x11
+ - willow
+ - windns
  - windowslive
  - winery
+ - winio
+ - wire-streams
  - Wired
+ - wireguard-hs
+ - wires
+ - wiring
+ - with-location
+ - witherable-class
+ - witty
+ - wkt
+ - wkt-geom
  - wl-pprint-ansiterm
+ - wl-pprint-console
+ - wl-pprint-extras
  - wl-pprint-terminfo
  - WL500gPControl
+ - WL500gPLib
  - wlc-hs
+ - WMSigner
  - wobsurv
+ - woe
+ - woffex
+ - wol
  - wolf
  - word
+ - word16
+ - word24
+ - word2vec-model
  - WordAlignment
+ - wordify
+ - Wordlint
+ - wordlist
+ - wordn
+ - WordNet
+ - WordNet-ghc74
+ - wordpass
+ - wordpress-auth
+ - wordsearch
+ - work-time
+ - workdays
+ - Workflow
  - workflow-extra
+ - workflow-osx
  - workflow-pure
  - workflow-types
+ - workflow-windows
+ - world-peace
+ - worldturtle
+ - wp-archivebot
+ - wrapped
+ - wrapped-generic-default
  - wrecker
  - wrecker-ui
+ - wreq-effectful
+ - wreq-helper
+ - wreq-patchable
+ - wreq-sb
  - wright
  - WringTwistree
+ - write-buffer-core
  - write-buffer-stm
+ - writer-cps-exceptions
  - writer-cps-full
+ - writer-cps-lens
+ - writer-cps-monads-tf
+ - writer-cps-morph
+ - writer-cps-mtl
+ - wsdl
+ - wsedit
+ - wsjtx-udp
+ - wss-client
  - wstunnel
+ - wtk
  - wtk-gtk
  - wu-wei
  - wumpus-basic
+ - wumpus-core
  - wumpus-drawing
  - wumpus-microprint
  - wumpus-tree
@@ -3762,44 +10740,125 @@ dont-distribute-packages:
  - wxc
  - wxcore
  - WXDiffCtrl
+ - wxdirect
  - wxFruit
  - WxGeneric
  - wxhnotepad
  - wxSimpleCanvas
  - wxturtle
+ - wybor
  - wyvern
+ - wyvern-diagrams
+ - X
+ - x-dsp
+ - x-sum-type-boilerplate
+ - X11-extras
+ - X11-rm
+ - X11-xdamage
+ - X11-xfixes
+ - x86-64bit
+ - xcffib
+ - xcframework
+ - xchat-plugin
+ - xcp
  - xdcc
  - xdg-basedir-compliant
+ - Xec
+ - xenstore
+ - xfconf
+ - xformat
+ - xhaskell-library
+ - xhb
  - xhb-atom-cache
  - xhb-ewmh
+ - xilinx-lava
+ - xine
+ - xing-api
+ - xkbcommon
+ - xkcd
+ - xleb
+ - xlsior
+ - xlsx-tabular
+ - xlsx-templater
  - XML
  - xml-catalog
+ - xml-conduit-decode
+ - xml-conduit-parse
+ - xml-conduit-selectors
+ - xml-conduit-stylist
  - xml-enumerator
  - xml-enumerator-combinators
+ - xml-extractors
+ - xml-html-conduit-lens
+ - xml-indexed-cursor
+ - xml-isogen
  - xml-monad
+ - xml-parsec
+ - xml-parser
  - xml-pipe
+ - xml-prettify
+ - xml-prettify-text
  - xml-push
+ - xml-query
  - xml-query-xml-conduit
  - xml-query-xml-types
+ - xml-syntax
+ - xml-to-json
  - xml-tydom-conduit
+ - xml-tydom-core
+ - xml-types-content
+ - xml-verify
+ - xml2json
  - xml2x
+ - XmlHtmlWriter
  - xmltv
+ - XMMS
  - xmms2-client
  - xmms2-client-glib
+ - xmonad-bluetilebranch
  - xmonad-contrib-bluetilebranch
+ - xmonad-contrib-gpl
+ - xmonad-entryhelper
+ - xmonad-eval
+ - xmonad-screenshot
+ - xmonad-vanessa
+ - xmonad-wallpaper
+ - xmonad-windownames
  - xmpipe
  - XMPP
+ - xnobar
+ - xorshift-plus
+ - Xorshift128Plus
  - xournal-builder
  - xournal-convert
  - xournal-parser
  - xournal-render
  - xournal-types
  - xrefcheck
+ - xsact
  - XSaiga
+ - xsd
+ - xsha1
+ - xslt
  - xtc
+ - xtea
+ - xxhash
+ - y0l0bot
+ - yabi-muno
  - Yablog
+ - yackage
+ - YACPong
+ - yahoo-finance-api
+ - yahoo-finance-conduit
+ - yahoo-prices
+ - yahoo-web-search
+ - yajl
  - yajl-enumerator
+ - yak
+ - yall
  - yam
+ - yam-app
+ - yam-config
  - yam-datasource
  - yam-job
  - yam-logger
@@ -3809,65 +10868,211 @@ dont-distribute-packages:
  - yam-transaction-odbc
  - yam-transaction-postgresql
  - yam-web
+ - yamemo
+ - yaml-combinators
+ - yaml-config
  - yaml-light
+ - yaml-light-lens
+ - yaml-pretty-extras
+ - yaml-rpc
  - yaml-rpc-scotty
  - yaml-rpc-snap
+ - yaml-union
+ - yamlkeysdiff
+ - yamlparse-applicative
+ - YamlReference
+ - yamlscript
+ - yampa-glfw
+ - yampa-gloss
+ - yampa-glut
+ - yampa-sdl2
+ - yampa-test
+ - yampa2048
+ - YampaSynth
+ - yandex-translate
+ - yaop
+ - yapb
+ - yarn2nix
+ - yarr
  - yarr-image-io
+ - yate
  - yavie
+ - yaya-test
+ - yaya-unsafe-test
  - ycextra
  - yeamer
+ - yeller
  - yeshql
+ - yeshql-hdbc
+ - yeshql-postgresql-simple
+ - yesod-angular
+ - yesod-angular-ui
  - yesod-articles
+ - yesod-auth-account
+ - yesod-auth-account-fork
+ - yesod-auth-bcrypt
+ - yesod-auth-bcryptdb
+ - yesod-auth-deskcom
+ - yesod-auth-fb
+ - yesod-auth-hashdb
+ - yesod-auth-hmac-keccak
+ - yesod-auth-kerberos
  - yesod-auth-ldap
+ - yesod-auth-ldap-mediocre
+ - yesod-auth-ldap-native
  - yesod-auth-lti13
+ - yesod-auth-nopassword
+ - yesod-auth-oidc
+ - yesod-auth-pam
+ - yesod-auth-smbclient
+ - yesod-auth-zendesk
+ - yesod-bootstrap
  - yesod-colonnade
+ - yesod-comments
+ - yesod-content-pdf
  - yesod-continuations
+ - yesod-crud
+ - yesod-crud-persist
+ - yesod-datatables
+ - yesod-dsl
  - yesod-examples
+ - yesod-fast-devel
  - yesod-fay
+ - yesod-filter
+ - yesod-form-json
+ - yesod-form-richtext
+ - yesod-gitrev
+ - yesod-goodies
+ - yesod-ip
+ - yesod-job-queue
+ - yesod-katip
+ - yesod-links
+ - yesod-lucid
  - yesod-mangopay
+ - yesod-media-simple
+ - yesod-paginate
+ - yesod-pagination
  - yesod-paypal-rest
  - yesod-platform
+ - yesod-pnotify
+ - yesod-pure
  - yesod-purescript
+ - yesod-raml
  - yesod-raml-bin
  - yesod-raml-docs
  - yesod-raml-mock
+ - yesod-recaptcha
+ - yesod-routes
  - yesod-routes-typescript
+ - yesod-rst
+ - yesod-s3
+ - yesod-sass
  - yesod-session-redis
+ - yesod-static-angular
+ - yesod-static-remote
+ - yesod-static-streamly
+ - yesod-test-json
+ - yesod-text-markdown
+ - yesod-tls
+ - yesod-transloadit
+ - yesod-vend
+ - yesod-vite
  - yesod-worker
+ - YFrob
+ - yggdrasil
+ - yggdrasil-schema
+ - yhccore
+ - yhseq
+ - yi-contrib
+ - yi-monokai
+ - yi-solarized
+ - yi-spolsky
+ - yices
  - yjftp
  - yjftp-libs
+ - yoctoparsec
+ - Yogurt
  - Yogurt-Standalone
  - yoko
  - york-lava
+ - yosys-rtl
  - yql
  - yu-auth
+ - yu-core
  - yu-launch
+ - yu-tool
+ - yu-utils
+ - yuiGrid
  - yuuko
+ - yxdb-utils
  - Z-Botan
+ - Z-Data
  - Z-IO
  - Z-MessagePack
  - Z-YAML
+ - z3-encoding
+ - z85
+ - zabt
+ - zampolit
  - zasni-gerna
+ - zbar
+ - ZEBEDDE
+ - zendesk-api
+ - zeno
+ - zeolite-lang
+ - zephyr
  - zephyr-copilot
+ - zero
+ - zeromq-haskell
  - zeromq3-conduit
+ - zeromq3-haskell
+ - zeromq4-clone-pattern
+ - zeromq4-conduit
+ - zeromq4-patterns
  - zeroth
+ - zettelkast
+ - ZFS
+ - zifter
  - zifter-cabal
  - zifter-git
  - zifter-google-java-format
  - zifter-hindent
  - zifter-hlint
  - zifter-stack
+ - zigbee-znet25
+ - zio
+ - zip-conduit
+ - zipedit
  - ZipFold
+ - zipkin
  - zipper
  - zipper-extra
  - zippo
  - ziptastic-client
+ - ziptastic-core
  - zlib-enum
+ - zlib-lens
  - zm
+ - ZMachine
  - zmcat
+ - zmidi-score
+ - zmqat
+ - zoneinfo
+ - zoom
  - zoom-cache
  - zoom-cache-pcm
  - zoom-cache-sndfile
+ - zoom-refs
  - zoovisitor
+ - zsdd
+ - zsh-battery
+ - zsyntax
+ - ztail
  - zuramaru
+ - zuul
+ - Zwaluw
  - zwirn
+ - zwirn-core
+ - zxcvbn-dvorak
+ - zydiskell
+ - zyre2

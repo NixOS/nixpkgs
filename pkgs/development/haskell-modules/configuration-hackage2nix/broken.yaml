@@ -1540,7 +1540,6 @@ broken-packages:
   - ecta-plugin # failure in job https://hydra.nixos.org/build/233224764 at 2023-09-02
   - ecu # failure in job https://hydra.nixos.org/build/233230797 at 2023-09-02
   - eddie # failure in job https://hydra.nixos.org/build/233254499 at 2023-09-02
-  - ede # failure in job https://hydra.nixos.org/build/233207345 at 2023-09-02
   - edenmodules # failure in job https://hydra.nixos.org/build/233255833 at 2023-09-02
   - edf # failure in job https://hydra.nixos.org/build/233257484 at 2023-09-02
   - edis # failure in job https://hydra.nixos.org/build/233258962 at 2023-09-02
