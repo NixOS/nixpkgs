@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # ncurses is needed for `tput`
     wrapProgram $out/lib/diff-so-fancy/diff-so-fancy \
-      --prefix PATH : "${git}/share/git/contrib/diff-highlight" \
+      --prefix PATH : "${git.out}/share/git/contrib/diff-highlight" \
       --prefix PATH : "${git}/bin" \
       --prefix PATH : "${coreutils}/bin" \
       --prefix PATH : "${ncurses.out}/bin"

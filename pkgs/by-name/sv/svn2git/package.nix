@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     wrapProgram $out/bin/svn2git \
       --set RUBYLIB $out/lib \
-      --prefix PATH : ${gitSVN}/bin
+      --prefix PATH : ${gitSVN.out}/bin
   '';
 
   meta = {

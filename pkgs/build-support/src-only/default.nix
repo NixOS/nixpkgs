@@ -74,6 +74,10 @@ let
     // lib.optionalAttrs (lib.isAttrs args.outputChecks or null) {
       # If the original derivation includes outputChecks for output we are removing, we need to reset it to an empty check.
       outputChecks = { };
+    }
+    // lib.optionalAttrs (args ? meta.outputsToInstall) {
+      # outputsToInstall may name an output we are removing, so let it default to out.
+      meta = removeAttrs args.meta [ "outputsToInstall" ];
     };
 in
 
