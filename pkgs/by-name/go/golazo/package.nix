@@ -8,7 +8,7 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "golazo";
-  version = "0.26.0";
+  version = "0.33.0";
 
   src = fetchFromGitHub {
     owner = "0xjuanma";
