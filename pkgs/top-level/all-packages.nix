@@ -6707,8 +6707,6 @@ with pkgs;
 
   dictDBCollector = callPackage ../servers/dict/dictd-db-collector.nix { };
 
-  dodgy = with python3Packages; toPythonApplication dodgy;
-
   dovecot_2_3 = callPackage ../by-name/do/dovecot/2.3.nix {
     dovecot_pigeonhole = dovecot_pigeonhole_0_5;
   };
