@@ -175,8 +175,17 @@ lib.extendMkDerivation {
 
       doCheck = args.doCheck or true;
 
-      strictDeps = true;
-      inherit __structuredAttrs;
+      strictDeps =
+        if args ? strictDeps then
+          lib.warn "Explicitly setting `strictDeps = ${if args.strictDeps then "true" else "false"};` for Rust package ${args.name or "${finalAttrs.pname}-${finalAttrs.version}"} is inconsequential. `strictDeps` is always true." true
+        else
+          true;
+
+      __structuredAttrs =
+        if args.__structuredAttrs or false then
+          lib.warn "Explicitly setting `__structuredAttrs = true;` for Rust package ${args.name or "${finalAttrs.pname}-${finalAttrs.version}"} is redundant" __structuredAttrs
+        else
+          __structuredAttrs;
 
       meta = meta // {
         badPlatforms = meta.badPlatforms or [ ] ++ rustc.badTargetPlatforms;
