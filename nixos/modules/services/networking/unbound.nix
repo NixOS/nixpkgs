@@ -30,11 +30,31 @@ let
     else
       throw (traceSeq v "services.unbound.settings: unexpected type");
 
-  confNoServer = concatStringsSep "\n" (
-    (mapAttrsToList (toConf "") (removeAttrs cfg.settings [ "server" ])) ++ [ "" ]
+  # Most settings can be mapped using toConf. Some require special handling
+  confBase = concatLines (
+    (mapAttrsToList (toConf "") (
+      removeAttrs cfg.settings [
+        "server"
+        "view"
+      ]
+    ))
+    ++ [ "" ]
   );
-  confServer = concatStringsSep "\n" (
+  confServer = concatLines (
     mapAttrsToList (toConf "  ") (removeAttrs cfg.settings.server [ "define-tag" ])
+  );
+  # View entries have to start with the name property
+  confViews = concatLines (
+    flatten (
+      map (
+        view:
+        [
+          "view:"
+          "  name: ${view.name}"
+        ]
+        ++ mapAttrsToList (toConf "  ") (removeAttrs view [ "name" ])
+      ) cfg.settings.view or [ ]
+    )
   );
 
   confFileUnchecked = pkgs.writeText "unbound.conf" ''
@@ -43,7 +63,8 @@ let
       toOption "  " "define-tag" cfg.settings.server.define-tag
     )}
     ${confServer}
-    ${confNoServer}
+    ${confBase}
+    ${confViews}
   '';
   confFile =
     if cfg.checkconf then
