@@ -17,7 +17,7 @@ buildPecl {
     owner = "krakjoe";
     repo = "apcu";
     tag = "v${version}";
-    sha256 = "sha256-L8bGSPUuBsZXsJdeY6cVA0DvI2+0wEbNHH6IcfT+cFU=";
+    hash = "sha256-L8bGSPUuBsZXsJdeY6cVA0DvI2+0wEbNHH6IcfT+cFU=";
   };
 
   # PHP 8.6 compatibility, backported from upstream master
