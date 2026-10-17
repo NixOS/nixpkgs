@@ -291,6 +291,10 @@ let
         ${coreutils}/bin/cp $NIX_ATTRS_JSON_FILE $NIX_ATTRS_SH_FILE xchg
         source "$NIX_ATTRS_SH_FILE"
       fi
+      # The setup script is sourced here only so that `preVM` sees `$out` and
+      # friends. `postHook` belongs to the build inside the VM, where it may
+      # rely on the guest's tools (see `runInLinuxImage`), so skip it here.
+      postHook=
       source $stdenv/setup
 
       eval "$preVM"
