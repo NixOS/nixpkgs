@@ -2,17 +2,28 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "3270font";
   version = "3.0.1";
 
+  # Added outputs to handle the web fonts
+  outputs = [
+    "out"
+    "webfont"
+  ];
+
   src = fetchzip {
-    url = "https://github.com/rbanffy/3270font/releases/download/v${version}/3270_fonts_d916271.zip";
-    sha256 = "sha256-Zi6Lp5+sqfjIaHmnaaemaw3i+hXq9mqIsK/81lTkwfM=";
+    url = "https://github.com/rbanffy/3270font/releases/download/v${finalAttrs.version}/3270_fonts_d916271.zip";
+    hash = "sha256-Zi6Lp5+sqfjIaHmnaaemaw3i+hXq9mqIsK/81lTkwfM=";
     stripRoot = false;
   };
+
+  nativeBuildInputs = [
+    installFonts
+  ];
 
   dontPatch = true;
   dontConfigure = true;
@@ -20,19 +31,10 @@ stdenvNoCC.mkDerivation rec {
   doCheck = false;
   dontFixup = true;
 
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm644 -t $out/share/fonts/opentype/ *.otf
-    install -Dm644 -t $out/share/fonts/truetype/ *.ttf
-
-    runHook postInstall
-  '';
-
   meta = {
     description = "Monospaced font based on IBM 3270 terminals";
     homepage = "https://github.com/rbanffy/3270font";
-    changelog = "https://github.com/rbanffy/3270font/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/rbanffy/3270font/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = [
       lib.licenses.bsd3
       lib.licenses.ofl
@@ -40,4 +42,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})
