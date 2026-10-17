@@ -2118,8 +2118,6 @@ with pkgs;
 
   importNpmLock = callPackages ../build-support/node/import-npm-lock { };
 
-  leanblueprint = with python3Packages; toPythonApplication leanblueprint;
-
   leanPackages = recurseIntoAttrs (callPackage ../top-level/lean-packages.nix { });
 
   inherit (callPackage ../development/tools/lerna { })
