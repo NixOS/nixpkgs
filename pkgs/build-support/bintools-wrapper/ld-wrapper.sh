@@ -207,19 +207,32 @@ if [[ "$NIX_DONT_SET_RPATH_@suffixSalt@" != 1 && "$linkType" != static-pie ]]; t
         # If it is outside the store, resolve symlinks step by step until it falls
         # into the store or it becomes not a symlink.
         # Always canonicalize the path before checking it is in the store or not.
-        if dir2=$(realpath -s "$dir"); then
+        # Fast path: an already-canonical absolute path (the overwhelmingly
+        # common case, e.g. /nix/store/...-foo/lib) is returned unchanged by
+        # realpath -s, so skip the fork+exec and just check existence.
+        if [[ "$dir" == /* && "$dir" != *'//'* && "$dir" != *'/./'* && "$dir" != *'/../'* \
+              && "$dir" != */ && "$dir" != */. && "$dir" != */.. ]]; then
+            if ! [ -e "$dir" ]; then continue; fi
+        elif dir2=$(realpath -s "$dir"); then
             dir="$dir2"
         else
             continue
         fi
+        symlinkDepth=0
         while [ -z "${rpaths[$dir]:-}" ] && [[ "$dir" != "${NIX_STORE:-}"/* ]] && [ -L "$dir" ]; do
+            (( ++symlinkDepth > 40 )) && break
             if dir2=$(readlink "$dir"); then
-                dir="dir2"
+                # A relative link target is relative to the directory containing
+                # the link, not to our working directory.
+                case "$dir2" in
+                    /*) dir="$dir2" ;;
+                    *) dir="${dir%/*}/$dir2" ;;
+                esac
             else
                 break
             fi
             if dir2=$(realpath -s "$dir"); then
-                dir="dir2"
+                dir="$dir2"
             else
                 break
             fi
