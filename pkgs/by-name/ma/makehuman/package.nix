@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   python3,
   git-lfs,
   libsForQt5,
@@ -67,6 +68,27 @@ stdenv.mkDerivation (finalAttrs: {
     sourceRoot=$finalSource
   '';
 
+  patches = [
+    # https://github.com/makehumancommunity/makehuman/pull/271 (closed unmerged)
+    ./replace-deprecated-tostring.patch
+    # Remove use of the imp module, which was removed in Python 3.12
+    (fetchpatch2 {
+      url = "https://github.com/makehumancommunity/makehuman/commit/4dbb64b82cd618cfb45cbb2d06c6f25627e922fe.patch?full_index=1";
+      hash = "sha256-bSRsVHY3UjQ1T+WSvIdP7MzrepmjCCZ0cHayTB8HOeE=";
+    })
+    (fetchpatch2 {
+      url = "https://github.com/makehumancommunity/makehuman/commit/fca763c4360f7c16597f23b8d5f552586a82c32a.patch?full_index=1";
+      hash = "sha256-GeFpHg0OD7fNDmJZVIiBMjjBRt16b6jbezYUqwXbMvY=";
+    })
+  ];
+
+  # ndarray.tostring was removed in NumPy 2 and is not fully covered by the
+  # patch above
+  postPatch = ''
+    substituteInPlace makehuman/makehuman.py makehuman/shared/proxy.py \
+      --replace-fail '.tostring()' '.tobytes()'
+  '';
+
   configurePhase = ''
     runHook preConfigure
     pushd ./makehuman
@@ -107,6 +129,5 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "makehuman";
     maintainers = with lib.maintainers; [ elisesouche ];
     platforms = lib.platforms.all;
-    broken = true; # Added 2026-05-12
   };
 })
