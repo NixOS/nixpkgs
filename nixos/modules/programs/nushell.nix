@@ -43,6 +43,17 @@ in
         Set this to override the generated script(s).
       '';
     };
+
+    interactiveShellInit = lib.mkOption {
+      type = lib.types.lines;
+      default = "";
+      description = ''
+        Shell script code called during interactive nushell initialisation.
+
+        It is installed as a vendor autoload script, so it runs after the
+        user's `config.nu` and before their own autoload directories.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -58,7 +69,10 @@ in
       cfg.package
     ]
     ++ cfg.plugins
-    ++ cfg.autoloads;
+    ++ cfg.autoloads
+    ++ lib.optional (cfg.interactiveShellInit != "") (
+      pkgs.writeTextDir "share/nushell/vendor/autoload/60-nixos-interactive-shell-init.nu" cfg.interactiveShellInit
+    );
 
     environment.pathsToLink = [ "/share/nushell" ];
   };
