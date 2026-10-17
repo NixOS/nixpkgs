@@ -6178,8 +6178,6 @@ with pkgs;
     fftw = fftwFloat;
   };
 
-  sphinx-serve = with python3Packages; toPythonApplication sphinx-serve;
-
   inherit (python3Packages) sphinxHook;
 
   sqlite = lowPrio (callPackage ../development/libraries/sqlite { });
