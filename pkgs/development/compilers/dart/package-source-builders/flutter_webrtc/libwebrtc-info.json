@@ -1,0 +1,9 @@
+{
+  "1.5.2": {
+    "version": "libwebrtc.m144.7559.09",
+    "hashes": {
+      "linux-x64": "sha256-uzS07voCGM1zs663UalYpb8pWiYpkrKMxKt/wB4rcB4=",
+      "linux-arm64": "sha256-nMMU/HrCN4zSB4vO1O4TfJRBtK87OX+zYbxZRq8Q4Us="
+    }
+  }
+}
