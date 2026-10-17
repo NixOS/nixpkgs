@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   libbsd,
   pkg-config,
 }:
@@ -10,11 +10,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "signify";
   version = "32";
 
-  src = fetchFromGitHub {
+  src = fetchFromCodeberg {
     owner = "aperezdc";
     repo = "signify";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-y2A+Szt451CmaWOc2Y2vBSwSgziJsSnTjNClbdyxG2U=";
+    hash = "sha256-y2A+Szt451CmaWOc2Y2vBSwSgziJsSnTjNClbdyxG2U=";
   };
 
   doCheck = true;
