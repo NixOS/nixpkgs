@@ -751,7 +751,8 @@ in
   geth = runTest ./geth.nix;
   ghostunnel = runTest ./ghostunnel.nix;
   ghostunnel-modular = runTest ./ghostunnel-modular.nix;
-  git-pages-modular = runTest ./git-pages.nix;
+  git-pages = runTest ./git-pages.nix;
+  git-pages-modular = runTest ./git-pages-modular.nix;
   gitdaemon = runTest ./gitdaemon.nix;
   gitea = import ./gitea.nix {
     inherit (pkgsLinux) gitea;
