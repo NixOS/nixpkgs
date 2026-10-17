@@ -6114,8 +6114,6 @@ with pkgs;
   SDL = sdl12-compat;
   SDL2 = sdl2-compat;
 
-  sev-snp-measure = with python3Packages; toPythonApplication sev-snp-measure;
-
   graphite2 = callPackage ../development/libraries/silgraphite/graphite2.nix { };
 
   simavr = callPackage ../development/tools/simavr {
