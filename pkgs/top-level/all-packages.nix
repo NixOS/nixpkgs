@@ -315,6 +315,8 @@ with pkgs;
 
   buildEnv = callPackage ../build-support/buildenv { }; # not actually a package
 
+  foreignPackages = callPackage ../build-support/foreign-packages { };
+
   buildFHSEnv = buildFHSEnvBubblewrap;
   buildFHSEnvBubblewrap = callPackage ../build-support/build-fhsenv-bubblewrap { };
 
