@@ -271,6 +271,14 @@ stdenvNoCC.mkDerivation {
       basename=$(basename "${if exeSuffix != "" then "\${variant%${exeSuffix}}" else "$variant"}")
       wrap $basename ${./ld-wrapper.sh} $variant
     done
+  ''
+
+  # targetPlatform and hostPlatform have the same config (e.g. differ only in isStatic),
+  # so also create unprefixed symlinks for native toolchain compatibility
+  + optionalString (targetPlatform.config == hostPlatform.config && targetPlatform != hostPlatform) ''
+    for f in $out/bin/${targetPrefix}*; do
+      ln -s "$f" "$out/bin/''${f##*${targetPrefix}}" 2>/dev/null || true
+    done
   '';
 
   strictDeps = true;
