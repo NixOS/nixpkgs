@@ -22,7 +22,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lean4";
-  version = "4.34.1";
+  version = "4.35.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "leanprover";
     repo = "lean4";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JO1pCqWeotC4zjiIQZccEPXfVHnuDQC0DugyuJvIMRs=";
+    hash = "sha256-WjyIRo2BvfnNq13r+YSnTc6VaYupKJIsgfQhFBMa0aU=";
   };
 
   postPatch =
@@ -62,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     makeWrapper
     leangz # Provides leantar
+    gitMinimal
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cctools.libtool
