@@ -8,23 +8,28 @@
   rustPlatform,
   versionCheckHook,
   stdenv,
+  cacert,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "yarn-zpm";
-  version = "6.0.0-rc.22";
+  version = "6.0.0-rc.23";
 
   src = fetchFromGitHub {
     owner = "yarnpkg";
     repo = "zpm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hUofl9mo/lBHasVR/7/2l8fek0dHr2E0aiSq28R+uVk=";
+    hash = "sha256-db6uqSBfzr55eLYYf95krHjA47MycnjZVJ2a82Q/Dbw=";
   };
 
-  cargoHash = "sha256-OhlTQ/NMXwUnvyEJv20hPN7g1eaZWIQdJcWWDeKOK+s=";
+  cargoHash = "sha256-f/GSG4cqwT8z6Uj7XCl2rN1ZI7Q9DGTDUQ8/pMG+suI=";
 
   cargoBuildFlags = [ "--package=zpm" ];
   cargoTestFlags = [ "--package=zpm" ];
+
+  env = {
+    SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  };
 
   checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     "--skip=http::tests::network_concurrency_permit_is_released_after_failure"
@@ -46,6 +51,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       simple-test =
         runCommand "yarn-zpm-simple-test"
           {
+            env = finalAttrs.env;
             nativeBuildInputs = [
               jq
               gitMinimal
@@ -67,7 +73,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
             jq -n '{name: "workspace-test"}' > workspace-test/package.json
             yarn install
             jq -e '.name == "workspace-test"' node_modules/workspace-test/package.json
-            jq -e '.project.workspaces | has("workspace-test")' yarn.lock
+            jq -e '.entries | has("workspace-test@workspace:^")' yarn.lock
             touch $out
           '';
     };
