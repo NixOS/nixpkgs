@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "lsplug";
-  version = "7";
+  version = "235c5386a85559bbc050508354f45f9fd8be50a9";
   pyproject = true;
 
   src = fetchFromSourcehut {
     owner = "~martijnbraam";
     repo = "lsplug";
     tag = finalAttrs.version;
-    hash = "sha256-eY9XNEdJfQREKroxsuPlv3CKqNX/XiMEnN8TdGYGa+g=";
+    hash = "sha256-L3McMLAjiuWbyXdaij5FZq5M7z+rP4RVzg83hBkxOWk=";
   };
 
   build-system = with python3Packages; [
