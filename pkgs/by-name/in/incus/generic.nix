@@ -22,6 +22,7 @@
   libcap,
   lxc,
   pkg-config,
+  python3,
   sqlite,
   udev,
   udevCheckHook,
@@ -32,7 +33,7 @@
 
 let
   pname = "incus${lib.optionalString lts "-lts"}";
-  docsPython = buildPackages.python3.withPackages (
+  docsPython = python3.withPackages (
     py: with py; [
       furo
       gitpython

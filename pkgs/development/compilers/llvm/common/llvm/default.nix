@@ -71,13 +71,7 @@ stdenv.mkDerivation (
     # on, taking into account whether checks are enabled or not:
     python =
       if finalAttrs.finalPackage.doCheck && !isDarwinBootstrap then
-        # Note that we _explicitly_ ask for a python interpreter for our host
-        # platform here; the splicing that would ordinarily take care of this for
-        # us does not seem to work once we use `withPackages`.
-        let
-          checkDeps = ps: [ ps.psutil ];
-        in
-        pkgsBuildBuild.targetPackages.python3.withPackages checkDeps
+        python3.withPackages (ps: [ ps.psutil ])
       else
         python3;
   in

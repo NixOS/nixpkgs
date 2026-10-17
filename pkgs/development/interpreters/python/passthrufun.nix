@@ -121,7 +121,25 @@ rec {
     python = self;
     inherit (pythonPackages) requiredPythonModules;
   };
-  withPackages = import ./with-packages.nix { inherit buildEnv pythonPackages; };
+  withPackages =
+    f:
+    let
+      env = import ./with-packages.nix { inherit buildEnv pythonPackages; } f;
+    in
+    env.overrideAttrs (oldAttrs: {
+      passthru = oldAttrs.passthru // {
+        __spliced =
+          lib.mapAttrs (_: python: python.withPackages f) {
+            buildBuild = pythonOnBuildForBuild;
+            buildHost = pythonOnBuildForHost;
+            buildTarget = pythonOnBuildForTarget;
+            hostHost = pythonOnHostForHost;
+          }
+          // {
+            hostTarget = env;
+          };
+      };
+    });
   pkgs = pythonPackages;
   interpreter = "${self}/bin/${executable}";
   inherit

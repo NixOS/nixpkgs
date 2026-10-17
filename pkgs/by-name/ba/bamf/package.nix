@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    (python3.pythonOnBuildForHost.withPackages (ps: with ps; [ lxml ])) # Tests
+    (python3.withPackages (ps: with ps; [ lxml ])) # Tests
     autoreconfHook
     dbus
     docbook_xsl

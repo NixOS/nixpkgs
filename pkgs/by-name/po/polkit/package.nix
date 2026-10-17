@@ -109,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [
     dbus
     util-linux # for mount
-    (python3.pythonOnBuildForHost.withPackages (
+    (python3.withPackages (
       pp: with pp; [
         dbus-python
         (python-dbusmock.override {
