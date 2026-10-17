@@ -1,6 +1,7 @@
 {
   stdenv,
   fetchurl,
+  fetchpatch,
   lib,
   ncurses,
   openssl,
@@ -112,9 +113,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-uHRMb13FVDBieR9WPgUW28lqNhYeGgPEaLO33Mi+Wv8=";
   };
 
-  # Why is this needed? https://github.com/weechat/weechat/issues/2031
-  patches = lib.optionals gettext.gettextNeedsLdflags [
-    ./gettext-intl.patch
+  patches = [
+    # https://github.com/weechat/weechat/issues/2031
+    (fetchpatch {
+      url = "https://github.com/weechat/weechat/commit/b457688b41e429372a3dac64efd2534fdf4b2f73.patch";
+      excludes = [ "CHANGELOG.md" ];
+      hash = "sha256-3UBsAsAVWDnaQ9RSxJkg8+MYTXyoM4l46b56BW7wzuY=";
+    })
   ];
 
   outputs = [
