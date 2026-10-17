@@ -1220,8 +1220,6 @@ with pkgs;
     bitwarden-directory-connector
     ;
 
-  blocksat-cli = with python3Packages; toPythonApplication blocksat-cli;
-
   bucklespring-x11 = callPackage ../by-name/bu/bucklespring-libinput/package.nix { legacy = true; };
   bucklespring = bucklespring-x11;
 
