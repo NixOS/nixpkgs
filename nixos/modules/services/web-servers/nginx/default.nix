@@ -187,7 +187,18 @@ let
   '';
 
   configFile =
-    (if cfg.validateConfigFile then pkgs.writers.writeNginxConfig else pkgs.writeText) "nginx.conf"
+    (
+      if cfg.checkConfig.enable then
+        (pkgs.writers.writeNginxConfig (
+          {
+            skips = lib.concatStringsSep "," cfg.checkConfig.skips;
+          }
+          // cfg.checkConfig.extraArgs
+        ))
+      else
+        pkgs.writeText
+    )
+      "nginx.conf"
       ''
         ${cfg.prependConfig}
 
@@ -1367,8 +1378,35 @@ in
         '';
         description = "Declarative vhost config";
       };
-      validateConfigFile = lib.mkEnableOption "validating configuration with pkgs.writeNginxConfig" // {
-        default = true;
+
+      checkConfig = {
+        enable = lib.mkEnableOption "check the resulting config with gixy" // {
+          default = true;
+        };
+
+        skips = lib.mkOption {
+          type = types.listOf types.str;
+          default = [ "default_server_flag" ];
+          example = [ "version_disclosure" ];
+          description = ''
+            List of gixy checks to skip.
+
+            Check {command}`gixy --help` for available plugins.
+          '';
+        };
+
+        extraArgs = lib.mkOption {
+          type = types.attrs;
+          default = { };
+          example = {
+            debug = true;
+          };
+          description = ''
+            Extra arguments passed to gixy.
+
+            Check {command}`gixy --help` for possible flags.
+          '';
+        };
       };
     };
   };
@@ -1415,6 +1453,10 @@ in
       `services.nginx.experimentalZstdSettings` which adds the same configuration as the
       removed option.
     '')
+    (mkRenamedOptionModule
+      [ "services" "nginx" "validateConfigFile" ]
+      [ "services" "nginx" "checkConfig" "enable" ]
+    )
   ];
 
   config = mkIf cfg.enable {
