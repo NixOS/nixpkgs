@@ -17,14 +17,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "discord.py";
-  version = "2.6.4";
+  version = "2.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Rapptz";
     repo = "discord.py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-glFXgTNdOQ3cG/jlvi/1ASon2HpcoKli45IhLhjpIvA=";
+    hash = "sha256-WH1HgzJ2pVyxX0/6j8XsBQcEeR88bBrNrOtQOC8ZCWE=";
   };
 
   build-system = [ setuptools ];
