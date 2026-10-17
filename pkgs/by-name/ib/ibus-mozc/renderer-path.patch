@@ -1,0 +1,21 @@
+--- a/src/base/system_util.cc
++++ b/src/base/system_util.cc
+@@ -538,7 +538,7 @@ std::string SystemUtil::GetRendererPath() {
+   if (server_path.empty()) {
+     return "";
+   }
+-  return FileUtil::JoinPath(server_path, kMozcRenderer);
++  return FileUtil::JoinPath("@renderer_dir@", kMozcRenderer);
+ }
+ 
+ std::string SystemUtil::GetToolPath() {
+--- a/src/unix/ibus/mozc_engine.cc
++++ b/src/unix/ibus/mozc_engine.cc
+@@ -216,6 +216,5 @@ bool UseMozcCandidateWindow(const IbusConfig& ibus_config) {
+-  const std::string renderer_path =
+-      FileUtil::JoinPath(SystemUtil::GetServerDirectory(), "mozc_renderer");
++  const std::string renderer_path = SystemUtil::GetRendererPath();
+   if (absl::Status s = FileUtil::FileExists(renderer_path); !s.ok()) {
+     LOG(ERROR) << s;
+     return false;
+   }
