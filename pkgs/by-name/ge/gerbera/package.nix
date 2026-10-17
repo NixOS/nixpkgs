@@ -2,10 +2,16 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   nixosTests,
-  # required
+
+  # required deps
+  # keep-sorted start case=no numeric=no block=yes
+  fmt,
+  icu77,
+  jsoncpp,
   libiconv,
   libupnp,
   libuuid,
@@ -13,35 +19,55 @@
   spdlog,
   sqlite,
   zlib,
-  fmt,
-  jsoncpp,
-  icu77,
-  # options
-  enableMysql ? false,
-  libmysqlclient,
-  enableDuktape ? true,
-  duktape,
+  # keep-sorted end
+
+  # optional deps
+  # keep-sorted start case=no numeric=no group_start_regex=["^  enable"] newline_separated=2
+  enableAvcodec ? false,
+  ffmpeg,
+
   enableCurl ? true,
   curl,
-  enableTaglib ? true,
-  taglib,
+
+  enableDuktape ? true,
+  duktape,
+
+  enableExiv2 ? false,
+  exiv2,
+
+  enableFFmpegThumbnailer ? false,
+  ffmpegthumbnailer,
+
+  enableInotifyTools ? true,
+  inotify-tools,
+
+  enableLibexif ? true,
+  libexif,
+
   enableLibmagic ? true,
   file,
+
   enableLibmatroska ? true,
   libmatroska,
   libebml,
-  enableAvcodec ? false,
-  ffmpeg,
-  enableLibexif ? true,
-  libexif,
-  enableExiv2 ? false,
-  exiv2,
-  enableFFmpegThumbnailer ? false,
-  ffmpegthumbnailer,
-  enableInotifyTools ? true,
-  inotify-tools,
-  wavpack,
+
+  enableMysql ? false,
+  libmysqlclient,
+
+  enablePgsql ? false,
+  libpqxx,
+  libpq,
+
+  enableTaglib ? true,
+  taglib,
+
   enableWavPack ? false,
+  wavpack,
+
+  enableZip ? true,
+  libzippp,
+  libzip,
+  # keep-sorted end
 }:
 
 let
@@ -53,6 +79,7 @@ let
   });
 
   options = [
+    # keep-sorted start case=no numeric=no block=yes
     {
       name = "AVCODEC";
       enable = enableAvcodec;
@@ -107,6 +134,14 @@ let
       packages = [ libmysqlclient ];
     }
     {
+      name = "PGSQL";
+      enable = enablePgsql;
+      packages = [
+        libpqxx
+        libpq
+      ];
+    }
+    {
       name = "TAGLIB";
       enable = enableTaglib;
       packages = [ taglib ];
@@ -116,6 +151,15 @@ let
       enable = enableWavPack;
       packages = [ wavpack ];
     }
+    {
+      name = "ZIP";
+      enable = enableZip;
+      packages = [
+        libzippp
+        libzip
+      ];
+    }
+    # keep-sorted end
   ];
 
   inherit (lib) flatten;
@@ -123,26 +167,42 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gerbera";
-  version = "3.0.0";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     repo = "gerbera";
     owner = "gerbera";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-dszd4WSTjOWwLNha0yq1gtC5kxCrJMhnnhKYaor8JyU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6GEJjX0wDjwXHGgn5d0UOdAyPXS5jekDuI2SY82vOtM=";
   };
+
+  patches = [
+    # https://github.com/gerbera/gerbera/pull/3841
+    # fixes build with newer gcc versions
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/gerbera/gerbera/pull/3841.patch";
+      hash = "sha256-R43VBw9imoy8HJpjmtBzPgPQyHH5gLaDUymqhWrSj+w=";
+    })
+    # https://github.com/gerbera/gerbera/pull/3889
+    # fixes build with newer gcc versions
+    (fetchpatch {
+      url = "https://github.com/gerbera/gerbera/commit/772a538e16d9585d3e5dd71cffa9953710f1ae9e.patch";
+      hash = "sha256-2pR1l+Ss9CHZmdFDtso1vDv4yz9RhteOPS9wmycmUfs=";
+    })
+  ];
 
   postPatch =
     let
       mysqlPatch = lib.optionalString enableMysql ''
         substituteInPlace cmake/FindMySQL.cmake \
-          --replace /usr/include/mysql ${lib.getDev libmysqlclient}/include/mariadb \
-          --replace /usr/lib/mysql     ${lib.getLib libmysqlclient}/lib/mariadb
+          --replace-fail /usr/include/mysql ${lib.getDev libmysqlclient}/include/mariadb \
+          --replace-fail /usr/lib/mysql     ${lib.getLib libmysqlclient}/lib/mariadb
       '';
     in
     ''
       ${mysqlPatch}
-      substituteInPlace CMakeLists.txt --replace-fail /usr/share/bash-completion/completions $out/share/bash-completion/completions
+      substituteInPlace CMakeLists.txt \
+        --replace-fail /usr/share/bash-completion/completions ${placeholder "out"}/share/bash-completion/completions
     '';
 
   cmakeFlags = [
@@ -151,15 +211,18 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ map (e: "-DWITH_${e.name}=${if e.enable then "ON" else "OFF"}") options;
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
 
   buildInputs = [
+    # keep-sorted start case=no numeric=no block=yes
     libiconv
     libupnp'
-    libuuid
     pugixml
     spdlog
     sqlite
@@ -167,15 +230,18 @@ stdenv.mkDerivation (finalAttrs: {
     fmt
     jsoncpp
     icu77
+    # keep-sorted end
   ]
+  # "not required on *BSD"
+  ++ lib.optional (!stdenv.hostPlatform.isBSD) libuuid
   ++ flatten (builtins.catAttrs "packages" (builtins.filter (e: e.enable) options));
 
   passthru.tests = { inherit (nixosTests) mediatomb; };
 
   meta = {
-    homepage = "https://docs.gerbera.io/";
+    homepage = "https://gerbera.io/";
     changelog = "https://github.com/gerbera/gerbera/releases/tag/v${finalAttrs.version}";
-    description = "UPnP Media Server for 2024";
+    description = "UPnP media server";
     longDescription = ''
       Gerbera is a Mediatomb fork.
       It allows to stream your digital media through your home network and consume it on all kinds
