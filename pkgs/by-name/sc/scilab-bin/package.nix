@@ -5,31 +5,52 @@
   makeWrapper,
   undmg,
   autoPatchelfHook,
+  testers,
   alsa-lib,
-  ncurses5,
-  libxxf86vm,
-  libxtst,
-  libxrender,
-  libxrandr,
-  libxi,
-  libxft,
-  libxext,
-  libxcursor,
+  libgbm,
+  zlib,
+  glib,
+  nss,
+  nspr,
+  dbus,
+  at-spi2-core,
+  cups,
+  expat,
+  pango,
+  cairo,
+  udev,
+
+  libxkbcommon,
+  libxfixes,
+  libxcb,
   libx11,
+  libxext,
+  libxi,
+  libxrender,
+  libxtst,
+  libxxf86vm,
+  libxrandr,
+  libxcursor,
+  libxcomposite,
+  libxdamage,
+  fontconfig,
+  freetype,
+  libGL,
+  gtk3,
 }:
 
 let
   pname = "scilab-bin";
-  version = "6.1.1";
+  version = "2026.1.0";
 
   srcs = {
     aarch64-darwin = fetchurl {
-      url = "https://www.utc.fr/~mottelet/scilab/download/${version}/scilab-${version}-accelerate-arm64.dmg";
-      sha256 = "sha256-L4dxD8R8bY5nd+4oDs5Yk0LlNsFykLnAM+oN/O87SRI=";
+      url = "https://www.scilab.org/download/${version}/scilab-${version}-arm64.dmg";
+      sha256 = "sha256-qG5osaeUiPEkUHu8q4lr+zhkxhpbHOlxVa1dSYRGOLc=";
     };
     x86_64-linux = fetchurl {
-      url = "https://www.scilab.org/download/${version}/scilab-${version}.bin.linux-x86_64.tar.gz";
-      sha256 = "sha256-PuGnz2YdAhriavwnuf5Qyy0cnCeRHlWC6dQzfr7bLHk=";
+      url = "https://www.scilab.org/download/${version}/scilab-${version}.bin.x86_64-linux-gnu.tar.xz";
+      sha256 = "sha256-lncn1r5QfxO1Kss2jj/UAfCr7MKfLJIAlMs6maBAvck=";
     };
   };
   src =
@@ -45,15 +66,19 @@ let
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.gpl2Only;
     mainProgram = "scilab";
+    changelog = "https://help.scilab.org/docs/${version}/en_US/CHANGES.html";
   };
 
-  darwin = stdenv.mkDerivation {
+  darwin = stdenv.mkDerivation (finalAttrs: {
     inherit
       pname
       version
       src
       meta
       ;
+
+    __structuredAttrs = true;
+    strictDeps = true;
 
     nativeBuildInputs = [
       makeWrapper
@@ -71,11 +96,9 @@ let
 
       runHook postInstall
     '';
+  });
 
-    dontCheckForBrokenSymlinks = true;
-  };
-
-  linux = stdenv.mkDerivation {
+  linux = stdenv.mkDerivation (finalAttrs: {
     inherit
       pname
       version
@@ -83,23 +106,43 @@ let
       meta
       ;
 
+    __structuredAttrs = true;
+    strictDeps = true;
+
     nativeBuildInputs = [
       autoPatchelfHook
+      makeWrapper
     ];
 
     buildInputs = [
       alsa-lib
-      ncurses5
       stdenv.cc.cc
+      libgbm
+      zlib
+      glib
+      nss
+      nspr
+      dbus
+      at-spi2-core
+      cups
+      expat
+      pango
+      cairo
+      udev
+
+      libxkbcommon
+      libxfixes
+      libxcb
       libx11
-      libxcursor
       libxext
-      libxft
       libxi
-      libxrandr
       libxrender
       libxtst
       libxxf86vm
+      libxrandr
+      libxcursor
+      libxcomposite
+      libxdamage
     ];
 
     installPhase = ''
@@ -119,7 +162,25 @@ let
       runHook postInstall
     '';
 
-    dontCheckForBrokenSymlinks = true;
-  };
+    postFixup = ''
+      for f in scilab-bin scilab-cli-bin; do
+        wrapProgram $out/bin/$f \
+          --prefix LD_LIBRARY_PATH : ${
+            lib.makeLibraryPath [
+              libGL
+              fontconfig
+              freetype
+              gtk3
+            ]
+          }
+      done
+    '';
+
+    # A small version test for scilab
+    passthru.tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = "scilab -version";
+    };
+  });
 in
 if stdenv.hostPlatform.isDarwin then darwin else linux
