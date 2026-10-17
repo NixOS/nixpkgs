@@ -241,9 +241,12 @@ def source_archives(source: Path) -> list[Archive]:
         archives_by_symbol[name] for name in order if name in archives_by_symbol
     ]
 
-    node_headers_path = directory / "nodejs-headers.ts"
-    node_headers = node_headers_path.read_text()
-    node_version = resolve_constant(node_headers, "NODEJS_VERSION", node_headers_path)
+    pins_path = source / "scripts/build/ci-images/spec.ts"
+    node_version = capture(
+        r'nodejs:\s*\{\s*version:\s*"([^"]+)"',
+        pins_path.read_text(),
+        pins_path,
+    )
     archives.append(
         Archive(
             "nodejs-headers",
@@ -368,8 +371,14 @@ pkgs.stdenvNoCC.mkDerivation {{
     ${{pkgs.lib.getExe pkgs.rcodesign}} sign --code-signature-flags linker-signed "$out/bin/bun"
   '';
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 bun "$out/bin/bun"
+
+    runHook postInstall
   '';
+
+  meta.sourceProvenance = [ pkgs.lib.sourceTypes.binaryNativeCode ];
 }}
 """
     return Path(
@@ -506,7 +515,7 @@ def main() -> None:
         }
 
     webkit = pin_webkit(source, current["webkit"], force=arguments.force)
-    cargo = cargo_hash(version, source)
+    cargo_vendor_hash = cargo_hash(version, source)
     bootstrap_platform = output(
         [
             "nix",
@@ -529,7 +538,7 @@ pkgs.stdenv.buildPlatform.system
         "version": version,
         "revision": revision,
         "sourceHash": source_hash,
-        "cargoHash": cargo,
+        "cargoHash": cargo_vendor_hash,
         "bootstrapAssets": bootstrap_assets,
         "nodeModulesHashes": node_modules_hashes(source, bootstrap),
         "downloads": pin_downloads(downloads, hashes),
