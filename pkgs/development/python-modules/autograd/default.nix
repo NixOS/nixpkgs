@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "autograd";
-  version = "1.9.0";
+  version = "1.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "HIPS";
     repo = "autograd";
     tag = "v${version}";
-    hash = "sha256-R9l+k4qkxlBW4z4ly0H5wfg4mX7kZv41hZlykMKKui0=";
+    hash = "sha256-2sMOrhtNmp1dahN9SLRaAPZgaAnHzeviGIcXT617YDA=";
   };
 
   postPatch = ''
