@@ -15,13 +15,13 @@
 buildHomeAssistantComponent (finalAttrs: {
   owner = "meshcore-dev";
   domain = "meshcore";
-  version = "3.0.1";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "meshcore-dev";
     repo = "meshcore-ha";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-psPwZcMypAXf5vMvJZcSwPRxxbHkqEW3BwbTrw7u2qc=";
+    hash = "sha256-eshYgWo37lxTJJiRKMMlIYZsKtjXr7GjKhywH4ABPao=";
   };
 
   dependencies = [
