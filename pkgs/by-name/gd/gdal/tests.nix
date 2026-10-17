@@ -4,6 +4,18 @@
   jdk,
   lib,
   testers,
+  useArmadillo,
+  useArrow,
+  useHDF,
+  useJava,
+  useLibAvif,
+  useLibHEIF,
+  useLibJXL,
+  useMysql,
+  useNetCDF,
+  usePoppler,
+  usePostgres,
+  useTiledb,
 }:
 
 let
@@ -54,16 +66,18 @@ in
     touch $out
   '';
 
-  java-bindings = runCommand "${pname}-java-bindings" { } ''
-    cat <<EOF > main.java
-    import org.gdal.gdal.gdal;
-    class Main {
-      public static void main(String[] args) {
-      gdal.AllRegister();
+  java-bindings = lib.optional useJava (
+    runCommand "${pname}-java-bindings" { } ''
+      cat <<EOF > main.java
+      import org.gdal.gdal.gdal;
+      class Main {
+        public static void main(String[] args) {
+        gdal.AllRegister();
+        }
       }
-    }
-    EOF
-    ${lib.getExe jdk} -Djava.library.path=${gdal}/lib/ -cp ${gdal}/share/java/gdal-${version}.jar main.java
-    touch $out
-  '';
+      EOF
+      ${lib.getExe jdk} -Djava.library.path=${gdal}/lib/ -cp ${gdal}/share/java/gdal-${version}.jar main.java
+      touch $out
+    ''
+  );
 }
