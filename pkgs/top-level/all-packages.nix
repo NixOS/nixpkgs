@@ -4358,7 +4358,7 @@ with pkgs;
 
   luajit = if stdenv.hostPlatform.isRiscV64 then luajit_openresty else luajit_2_1;
 
-  luarocks = lua52Packages.luarocks;
+  luarocks = lua55Packages.luarocks;
   luarocks-nix = lua52Packages.luarocks-nix;
 
   ### END OF LUA
