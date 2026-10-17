@@ -22,9 +22,4 @@ fn main() {
         code_for_dbus_xml(systemd_dbus_interface_dir.join("org.freedesktop.systemd1.Manager.xml"));
     let mut file = std::fs::File::create(out_path.join("systemd_manager.rs")).unwrap();
     file.write_all(systemd_manager_code.as_bytes()).unwrap();
-
-    let logind_manager_code =
-        code_for_dbus_xml(systemd_dbus_interface_dir.join("org.freedesktop.login1.Manager.xml"));
-    let mut file = std::fs::File::create(out_path.join("logind_manager.rs")).unwrap();
-    file.write_all(logind_manager_code.as_bytes()).unwrap();
 }
