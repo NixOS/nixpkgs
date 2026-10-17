@@ -1,0 +1,32 @@
+--- a/mlx_audio/tts/tests/test_models.py
++++ b/mlx_audio/tts/tests/test_models.py
+@@ -3199,6 +3199,11 @@
+                 "codec_eos_token_id": 30,
+                 "codec_pad_id": 28,
+                 "codec_bos_id": 29,
++                # Real ids 2154-2157 sit past this fixture's codec table.
++                "codec_think_id": 32,
++                "codec_nothink_id": 31,
++                "codec_think_bos_id": 33,
++                "codec_think_eos_id": 34,
+                 "codec_language_id": {"english": 20, "chinese": 21},
+                 "spk_id": {"chelsie": 10, "ethan": 11},
+                 "code_predictor_config": {
+@@ -3220,11 +3225,12 @@
+             },
+             "speaker_encoder_config": None,
+             "tokenizer_config": None,
+-            "im_start_token_id": 151644,
+-            "im_end_token_id": 151645,
+-            "tts_pad_token_id": 151671,
+-            "tts_bos_token_id": 151672,
+-            "tts_eos_token_id": 151673,
++            # Real ids 151644-151673 sit past this fixture's text table.
++            "im_start_token_id": 50,
++            "im_end_token_id": 51,
++            "tts_pad_token_id": 60,
++            "tts_bos_token_id": 61,
++            "tts_eos_token_id": 62,
+             "sample_rate": 24000,
+         }
+ 
