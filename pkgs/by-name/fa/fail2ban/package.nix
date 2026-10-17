@@ -52,9 +52,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       substituteInPlace $i \
         --replace /usr/sbin/sendmail sendmail
     done
-
-    substituteInPlace config/filter.d/dovecot.conf \
-      --replace dovecot.service dovecot2.service
   '';
 
   doCheck = false;

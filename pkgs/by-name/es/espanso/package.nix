@@ -19,7 +19,7 @@
   setxkbmap,
   wl-clipboard,
   wxwidgets_3_2,
-  makeWrapper,
+  makeBinaryWrapper,
   securityWrapperPath ? null,
   nix-update-script,
   stdenv,
@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     kdePackages.extra-cmake-modules
     pkg-config
-    makeWrapper
+    makeBinaryWrapper
     wxwidgets_3_2
   ];
 
