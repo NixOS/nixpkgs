@@ -15,6 +15,7 @@
   setuptools,
   setuptools-rust,
   sqlalchemy,
+  typing-extensions,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -44,6 +45,10 @@ buildPythonPackage (finalAttrs: {
     inherit (finalAttrs) pname version src;
     hash = "sha256-xIjcK69rwtE86DfvD9qXEn8MDIvU0Dl+d4Fmw9BUuCM=";
   };
+
+  dependencies = [
+    typing-extensions
+  ];
 
   optional-dependencies = {
     execnet = [ execnet ];
