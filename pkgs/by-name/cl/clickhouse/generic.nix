@@ -196,6 +196,7 @@ llvmStdenv.mkDerivation (finalAttrs: {
     "-DCOMPILER_CACHE=disabled"
     "-DDISABLE_HERMETIC_BUILD=ON"
   ]
+  ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) "-DX86_ARCH_LEVEL=1"
   ++ lib.optional (
     stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64
   ) "-DNO_ARMV81_OR_HIGHER=1";
