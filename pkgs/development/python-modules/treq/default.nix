@@ -20,12 +20,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "treq";
-  version = "25.5.0";
+  version = "26.7.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-Jd3jpVroXsLyxWMyyZrvJVqxT5l9DQBVLr/xNTipgEo=";
+    hash = "sha256-Q+co4SrKLYl8Ymzwfce0OSdJtz3gUKfWbghss6bhXak=";
   };
 
   nativeBuildInputs = [
