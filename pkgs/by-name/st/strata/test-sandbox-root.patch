@@ -1,0 +1,22 @@
+--- a/src/portal_setup.rs
++++ b/src/portal_setup.rs
+@@ -819,7 +819,18 @@
+                 "The Strata executable path must contain only directories",
+             ));
+         }
+-        if !trusted_owner(metadata.uid(), effective_user) {
++        let owner = metadata.uid();
++        // Nix maps the isolated build root to nobody; this exception is test-only.
++        #[cfg(test)]
++        let owner = if component == Path::new("/")
++            && std::env::var_os("NIX_BUILD_TOP").is_some()
++            && owner == 65534
++        {
++            0
++        } else {
++            owner
++        };
++        if !trusted_owner(owner, effective_user) {
+             return Err(crate::i18n::tr(
+                 "The Strata executable path must be owned by the current user or root",
+             ));

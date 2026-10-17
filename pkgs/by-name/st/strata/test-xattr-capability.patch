@@ -1,0 +1,43 @@
+--- a/src/adapters/local_operations/tests/restore_safety.rs
++++ b/src/adapters/local_operations/tests/restore_safety.rs
+@@ -312,12 +312,21 @@
+             .set_accessed(accessed)
+             .set_modified(modified),
+     )?;
+-    rustix::fs::fsetxattr(
++    let xattrs_supported = match rustix::fs::fsetxattr(
+         &source_file,
+         "user.strata-test",
+         b"metadata",
+         rustix::fs::XattrFlags::empty(),
+-    )?;
++    ) {
++        Ok(()) => true,
++        Err(Errno::OPNOTSUPP) => {
++            eprintln!(
++                "user xattrs are unsupported in the restore fixture; permissions and timestamps remain checked"
++            );
++            false
++        }
++        Err(error) => return Err(error.into()),
++    };
+     let destination = fixture.path().join("destination");
+     glib::MainContext::default().block_on(move_restore_path_with(
+         source.clone(),
+@@ -330,10 +339,12 @@
+     assert_eq!(fs::metadata(&destination)?.mode() & 0o777, 0o750);
+     assert_eq!(fs::metadata(&destination)?.modified()?, modified);
+     assert_eq!(fs::metadata(&destination)?.accessed()?, accessed);
+-    let target = fs::File::open(destination)?;
+-    let mut value = [0u8; 32];
+-    let count = rustix::fs::fgetxattr(&target, "user.strata-test", &mut value[..])?;
+-    assert_eq!(&value[..count], b"metadata");
++    if xattrs_supported {
++        let target = fs::File::open(destination)?;
++        let mut value = [0u8; 32];
++        let count = rustix::fs::fgetxattr(&target, "user.strata-test", &mut value[..])?;
++        assert_eq!(&value[..count], b"metadata");
++    }
+     Ok(())
+ }
+ 

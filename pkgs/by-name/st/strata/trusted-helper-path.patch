@@ -1,0 +1,145 @@
+--- a/src/trusted_command.rs
++++ b/src/trusted_command.rs
+@@ -31,11 +31,28 @@
+ mod tests;
+ 
+ pub(crate) fn resolve(name: &str) -> Result<PathBuf, String> {
+-    let search: Vec<&Path> = SEARCH_ROOTS.iter().copied().map(Path::new).collect();
++    let mut search_roots: Vec<PathBuf> = SEARCH_ROOTS.iter().copied().map(PathBuf::from).collect();
++    append_compiled_search_paths(
++        &mut search_roots,
++        option_env!("STRATA_TRUSTED_COMMAND_PATH"),
++    );
++    let search: Vec<&Path> = search_roots.iter().map(PathBuf::as_path).collect();
+     let trust: Vec<&Path> = TRUST_ROOTS.iter().copied().map(Path::new).collect();
+     resolve_in(name, &search, &trust)
+ }
+ 
++// Build-configured runtime tools follow host roots and still use canonical trust checks.
++fn append_compiled_search_paths(roots: &mut Vec<PathBuf>, configured: Option<&str>) {
++    let Some(configured) = configured else {
++        return;
++    };
++
++    roots.extend(
++        std::env::split_paths(configured)
++            .filter(|root| !root.as_os_str().is_empty() && root.is_absolute()),
++    );
++}
++
+ pub(crate) fn command(name: &str) -> Result<Command, String> {
+     Ok(Command::new(resolve(name)?))
+ }
+--- a/src/trusted_command/tests.rs
++++ b/src/trusted_command/tests.rs
+@@ -1,8 +1,13 @@
+ // SPDX-License-Identifier: MIT
+ 
+-use std::{fs, path::Path};
+-
+-use super::{SEARCH_ROOTS, TRUST_ROOTS, command, resolve, resolve_in};
++use std::{
++    fs,
++    path::{Path, PathBuf},
++};
++
++use super::{
++    SEARCH_ROOTS, TRUST_ROOTS, append_compiled_search_paths, command, resolve, resolve_in,
++};
+ 
+ fn scratch() -> tempfile::TempDir {
+     tempfile::tempdir().expect("scratch directory")
+@@ -116,3 +121,93 @@
+     }
+     assert!(command("strata-missing-trusted-helper").is_err());
+ }
++
++#[test]
++fn compiled_runtime_helper_path_resolves_bwrap_when_configured() {
++    let Some(configured) = option_env!("STRATA_TRUSTED_COMMAND_PATH") else {
++        return;
++    };
++    let configured_roots: Vec<PathBuf> = std::env::split_paths(configured)
++        .filter(|path| !path.as_os_str().is_empty() && path.is_absolute())
++        .collect();
++    let bundle_root = configured_roots
++        .iter()
++        .find(|path| path.join("bwrap").is_file())
++        .expect("configured runtime paths include bwrap");
++
++    let actual = resolve("bwrap").expect("resolve bwrap from system or compiled runtime paths");
++    let system_roots: Vec<&Path> = SEARCH_ROOTS.iter().map(Path::new).collect();
++    let trust_roots: Vec<&Path> = TRUST_ROOTS.iter().map(Path::new).collect();
++    match resolve_in("bwrap", &system_roots, &trust_roots) {
++        Ok(system_path) => assert_eq!(actual, system_path),
++        Err(_) => assert_eq!(actual, bundle_root.join("bwrap")),
++    }
++}
++
++#[test]
++fn compiled_paths_are_appended_after_system_wrappers() {
++    let root = scratch();
++    let wrapper = root.path().join("run/wrappers/bin");
++    let system = root.path().join("usr/bin");
++    let bundled = root.path().join("store/bin");
++    write_helper(&wrapper, "bwrap");
++    write_helper(&system, "bwrap");
++    write_helper(&bundled, "bwrap");
++
++    let configured = bundled.to_string_lossy().into_owned();
++    let mut search_roots = vec![wrapper.clone(), system];
++    append_compiled_search_paths(&mut search_roots, Some(&configured));
++    let search: Vec<&Path> = search_roots.iter().map(PathBuf::as_path).collect();
++    let resolved = resolve_in("bwrap", &search, &[root.path()]).expect("find wrapper");
++
++    assert_eq!(resolved, wrapper.join("bwrap"));
++}
++
++#[test]
++fn compiled_paths_ignore_empty_and_relative_components() {
++    let root = scratch();
++    let bundled = root.path().join("store/bin");
++    write_helper(&bundled, "bwrap");
++    let configured = format!("::relative/bin:{}:", bundled.display());
++    let mut search_roots = Vec::new();
++
++    append_compiled_search_paths(&mut search_roots, Some(&configured));
++
++    assert_eq!(search_roots, vec![bundled.clone()]);
++    let search: Vec<&Path> = search_roots.iter().map(PathBuf::as_path).collect();
++    assert_eq!(
++        resolve_in("bwrap", &search, &[root.path()]).expect("find bundled helper"),
++        bundled.join("bwrap")
++    );
++}
++
++#[test]
++fn compiled_paths_keep_canonical_trust_and_basename_checks() {
++    let root = scratch();
++    let store = root.path().join("store");
++    let bundled = store.join("bin");
++    let outside = root.path().join("outside/bin");
++    write_helper(&bundled, "bwrap");
++    write_helper(&outside, "escaped");
++    write_helper(&outside, "outsider");
++    std::os::unix::fs::symlink(outside.join("escaped"), bundled.join("escaped"))
++        .expect("helper symlink");
++
++    let configured = format!("{}:{}", bundled.display(), outside.display());
++    let mut search_roots = Vec::new();
++    append_compiled_search_paths(&mut search_roots, Some(&configured));
++    let search: Vec<&Path> = search_roots.iter().map(PathBuf::as_path).collect();
++
++    assert_eq!(
++        resolve_in("bwrap", &search, &[store.as_path()]).expect("trusted bundled helper"),
++        bundled.join("bwrap")
++    );
++    assert!(resolve_in("escaped", &search, &[store.as_path()]).is_err());
++    assert!(resolve_in("outsider", &search, &[store.as_path()]).is_err());
++    for name in ["", ".", "..", "../bwrap", "store/bin/bwrap"] {
++        assert!(
++            resolve_in(name, &search, &[store.as_path()]).is_err(),
++            "{name:?}"
++        );
++    }
++}
