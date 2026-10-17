@@ -14,6 +14,7 @@
   libusb1,
   libsndfile,
   fftw,
+  libgpiod,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,6 +44,7 @@ stdenv.mkDerivation rec {
     libsndfile
     fftw
   ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libgpiod ]
   ++ (with qt6; [
     qtbase
     qtdeclarative
@@ -68,6 +70,13 @@ stdenv.mkDerivation rec {
     substituteInPlace variables.cmake \
       --replace-fail 'unset(CMAKE_INSTALL_LIBDIR CACHE)' "" \
       --replace-fail 'unset(CMAKE_INSTALL_LIBDIR)' ""
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    # Upstream ships these commented out. They drive DMX over a serial port
+    # (e.g. Raspberry Pi DMX HATs) and take triggers from GPIO pins.
+    substituteInPlace plugins/CMakeLists.txt \
+      --replace-fail '#    add_subdirectory(uart)' 'add_subdirectory(uart)' \
+      --replace-fail '#    add_subdirectory(gpio)' 'add_subdirectory(gpio)'
   '';
 
   cmakeFlags = [
