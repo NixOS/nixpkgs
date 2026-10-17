@@ -314,12 +314,6 @@ in
           else
             null;
 
-        intel-speed-select =
-          if lib.versionAtLeast kernel.version "5.3" then
-            callPackage ../os-specific/linux/intel-speed-select { }
-          else
-            null;
-
         ipu6-drivers = callPackage ../os-specific/linux/ipu6-drivers { };
 
         ipu7-drivers = callPackage ../os-specific/linux/ipu7-drivers { };
