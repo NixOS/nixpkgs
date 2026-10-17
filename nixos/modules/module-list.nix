@@ -595,6 +595,7 @@
   ./services/desktops/dunst.nix
   ./services/desktops/espanso.nix
   ./services/desktops/flatpak.nix
+  ./services/desktops/gammastep.nix
   ./services/desktops/geoclue2.nix
   ./services/desktops/gnome/at-spi2-core.nix
   ./services/desktops/gnome/evolution-data-server.nix
@@ -1945,7 +1946,6 @@
   ./services/x11/hardware/wacom.nix
   ./services/x11/imwheel.nix
   ./services/x11/picom.nix
-  ./services/x11/redshift.nix
   ./services/x11/touchegg.nix
   ./services/x11/unclutter-xfixes.nix
   ./services/x11/unclutter.nix
