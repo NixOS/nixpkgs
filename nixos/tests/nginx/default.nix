@@ -15,6 +15,8 @@ recurseIntoAttrs (
     in
     mapAttrs (const callTest) {
       basic = ./basic.nix;
+      etag = ./etag.nix;
+      etag-compression = ./etag-compression.nix;
     }
   ) packages
 )

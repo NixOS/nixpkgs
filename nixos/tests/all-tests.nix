@@ -1273,8 +1273,6 @@ in
   nginx-auth = runTest ./nginx-auth.nix;
   nginx-compression = runTest ./nginx-compression.nix;
   nginx-dynamic-modules = runTest ./nginx-dynamic-modules.nix;
-  nginx-etag = runTest ./nginx-etag.nix;
-  nginx-etag-compression = runTest ./nginx-etag-compression.nix;
   nginx-globalredirect = runTest ./nginx-globalredirect.nix;
   nginx-grpc-error-pages = runTest ./nginx-grpc-error-pages.nix;
   nginx-http3 = import ./nginx-http3.nix { inherit pkgs runTest; };

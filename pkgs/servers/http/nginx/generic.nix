@@ -319,11 +319,11 @@ mkDerivation {
       passthru.tests or {
         inherit (nixosTests.nginx.${flavor})
           basic
+          etag
           ;
         inherit (nixosTests)
           nginx-auth
           nginx-dynamic-modules
-          nginx-etag
           nginx-etag-compression
           nginx-globalredirect
           nginx-http3

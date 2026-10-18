@@ -1,6 +1,10 @@
-{ ... }:
 {
-  name = "nginx-etag";
+  mkPackage ? builtins.getAttr "nginx",
+  name ? "default",
+  ...
+}:
+{
+  name = "nginx-etag-${name}";
 
   nodes = {
     server =
@@ -8,6 +12,7 @@
       {
         networking.firewall.enable = false;
         services.nginx.enable = true;
+        services.nginx.package = mkPackage pkgs;
         services.nginx.virtualHosts.server = {
           root = pkgs.runCommandLocal "testdir" { } ''
             mkdir "$out"
