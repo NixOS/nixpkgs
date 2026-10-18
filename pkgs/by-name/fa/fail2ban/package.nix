@@ -67,6 +67,12 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       url = "https://github.com/fail2ban/fail2ban/commit/50ff131a0fd8f54fdeb14b48353f842ee8ae8c1a.patch";
       hash = "sha256-YGsUPfQRRDVqhBl7LogEfY0JqpLNkwPjihWIjfGdtnQ=";
     })
+    # remove next release
+    (fetchpatch {
+      name = "CVE-2026-109786.patch";
+      url = "https://github.com/fail2ban/fail2ban/commit/ddd879d22664904ace24e1255ac6571808c58187.patch";
+      hash = "sha256-0gsSgwlpsHAhF5LfV+tnGF/8ZgEWt5Sesk1eC7/iIcY=";
+    })
   ];
 
   preInstall = ''
@@ -110,6 +116,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     homepage = "https://www.fail2ban.org/";
     description = "Program that scans log files for repeated failing login attempts and bans IP addresses";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      Deric-W
+    ];
   };
 })
