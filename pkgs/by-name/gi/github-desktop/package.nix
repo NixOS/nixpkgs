@@ -46,6 +46,18 @@ stdenv.mkDerivation (finalAttrs: {
     postCheckout = "git -C $out rev-parse HEAD > $out/.gitrev";
   };
 
+  # The OAuth callback (x-github-desktop-dev-auth://...) is forwarded to the
+  # running instance as second-instance argv, but upstream only looks for
+  # protocol URLs there on Windows (macOS uses `open-url`, which never fires
+  # on Linux), so sign-in hangs. Take the same path on Linux.
+  # https://github.com/NixOS/nixpkgs/issues/344911
+  postPatch = ''
+    substituteInPlace app/src/main-process/main.ts \
+      --replace-fail \
+        "if (__WIN32__ && args['protocol-launcher'] === true) {" \
+        "if ((__WIN32__ && args['protocol-launcher'] === true) || (__LINUX__ && argv.some(arg => Array.from(possibleProtocols).some(p => arg.startsWith(\`\''${p}://\`))))) {"
+  '';
+
   yarnBuildScript = "build:prod";
 
   buildInputs = [
