@@ -36,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [ readline ];
 
+  enableParallelBuilding = true;
+
   env = {
     NIX_CFLAGS_COMPILE = toString (
       [
