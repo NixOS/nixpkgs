@@ -2207,6 +2207,8 @@ with pkgs;
 
   keycloakPlugins = recurseIntoAttrs keycloak.plugins;
 
+  lean = lean4;
+
   limine-full = limine.override { enableAll = true; };
 
   logstash7 = callPackage ../tools/misc/logstash/7.x.nix {
