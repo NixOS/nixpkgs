@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  fetchFromGitHub,
 
   # build-system
   setuptools,
@@ -25,7 +26,6 @@
   distrax,
   dm-haiku,
   dm-sonnet,
-  fetchPypi,
   optax,
   pytestCheckHook,
   rlax,
@@ -37,9 +37,11 @@ buildPythonPackage (finalAttrs: {
   version = "0.3.6";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-GPHmxJ/0CSKItlfk+YPHeUaTMA+4U81l1Z4Cfe+hikA=";
+  src = fetchFromGitHub {
+    owner = "google-deepmind";
+    repo = "bsuite";
+    tag = finalAttrs.version;
+    hash = "sha256-5TeNyPY0taVLhhQVXwYGMPXBeDzY+6jOt6LXBrHxE9M=";
   };
 
   build-system = [ setuptools ];
