@@ -8,14 +8,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mint-artwork";
-  version = "1.9.4";
+  version = "1.9.5";
 
   src = fetchurl {
     urls = [
       "http://packages.linuxmint.com/pool/main/m/mint-artwork/mint-artwork_${finalAttrs.version}.tar.xz"
       "https://web.archive.org/web/20261007095334/http://packages.linuxmint.com/pool/main/m/mint-artwork/mint-artwork_${finalAttrs.version}.tar.xz"
     ];
-    hash = "sha256-GofkGgAaLsvZ2zMe080Oq3JSl2Z1m5L1oGctw/LFKhw=";
+    hash = "sha256-n523U1aq5iF8mxv3qBDN2SzuaDT2os5ZfI1wJC5hdsg=";
   };
 
   nativeBuildInputs = [
