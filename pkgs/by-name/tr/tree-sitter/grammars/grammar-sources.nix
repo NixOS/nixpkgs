@@ -1362,9 +1362,9 @@
   };
 
   hurl = {
-    version = "1.7.0";
+    version = "1.8.0";
     url = "github:pfeiferj/tree-sitter-hurl";
-    hash = "sha256-sQjjx3DGfi0l8/XNOIoyFYAcDpaQOkD4Ics3g6vkgjM=";
+    hash = "sha256-3CUxaokNyayxxZ8u2LVXBmaiVuzCJL5UarE/cKlYVZw=";
     meta = {
       license = lib.licenses.asl20;
       maintainers = with lib.maintainers; [
