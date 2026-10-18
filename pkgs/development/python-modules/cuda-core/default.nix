@@ -10,7 +10,7 @@
   # build-system
   cuda-bindings,
   cuda-pathfinder,
-  cython,
+  cython_3_2,
   setuptools,
   setuptools-scm,
 
@@ -81,7 +81,7 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
   build-system = [
     cuda-bindings
     cuda-pathfinder
-    cython
+    cython_3_2
     setuptools
     setuptools-scm
   ];
