@@ -10,17 +10,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "cfait";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitea {
     domain = "git.disroot.org";
     owner = "trougnouf";
     repo = "cfait";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AB9bGo+C7ySM0EodoHLxpcxKPEK6ytFaiWgnXLi5FSg=";
+    hash = "sha256-Y5O6+bsfoNC52+YTgptfH8Rv7IORN/m2MwzXh39ofXk=";
   };
 
-  cargoHash = "sha256-pSXujSOdK51LjT3MaVXR1V7FmrJs2o3O5y/mZmAXxag=";
+  cargoHash = "sha256-t+Ppfw+Zx1fXOksm9IXxrvR6Qoy9bhuEVGtcwrTwD00=";
 
   nativeBuildInputs = [ pkg-config ];
 
