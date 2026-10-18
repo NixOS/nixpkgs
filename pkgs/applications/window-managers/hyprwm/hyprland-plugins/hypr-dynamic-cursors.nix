@@ -27,6 +27,7 @@ mkHyprlandPlugin {
     runHook postInstall
   '';
 
+  # nixpkgs-update: no auto update
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
