@@ -3092,6 +3092,7 @@ with pkgs;
     crystal_1_19
     crystal_1_20
     crystal_1_21
+    crystal_1_22
     crystal
     ;
 
