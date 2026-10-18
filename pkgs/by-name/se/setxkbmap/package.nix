@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.freedesktop.org/xorg/app/setxkbmap";
     license = lib.licenses.hpnd;
     mainProgram = "setxkbmap";
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.kamadorueda ];
     platforms = lib.platforms.unix;
   };
 })

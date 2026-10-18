@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.freedesktop.org/xorg/font/cursor-misc";
     # "These ""glyphs"" are unencumbered"
     license = lib.licenses.publicDomain;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.kamadorueda ];
     platforms = lib.platforms.unix;
   };
 })
