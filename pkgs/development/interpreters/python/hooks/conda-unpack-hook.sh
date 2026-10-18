@@ -8,7 +8,7 @@ condaUnpackPhase() {
     # use lbzip2 for parallel decompression (bz2 is slow)
     lbzip2 -dc -n $NIX_BUILD_CORES $src | tar --exclude='info' -x
 
-    runHookDone[postUnpack]=1 # Calls find...?
+    # runHook postUnpack # Calls find...?
     echo "Finished executing condaUnpackPhase"
 }
 

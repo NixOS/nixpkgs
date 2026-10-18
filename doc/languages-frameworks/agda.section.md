@@ -216,8 +216,12 @@ mkDerivation {
   libraryName = "IAL-1.3";
 
   buildPhase = ''
+    runHook preBuild
+
     patchShebangs find-deps.sh
     make
+
+    runHook postBuild
   '';
 }
 ```

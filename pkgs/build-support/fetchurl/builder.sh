@@ -85,7 +85,6 @@ finish() {
     if [ -z "$skipPostFetch" ]; then
         runHook postFetch
     fi
-    runHookDone[postFetch]=1
 
     exit 0
 }

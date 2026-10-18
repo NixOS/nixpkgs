@@ -33,11 +33,15 @@ maven.buildMavenPackage (finalAttrs: {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/jd-cli
     install -Dm644 jd-cli/target/jd-cli.jar $out/share/jd-cli
 
     makeWrapper ${lib.getExe jre} $out/bin/jd-cli \
       --add-flags "-jar $out/share/jd-cli/jd-cli.jar"
+
+    runHook postInstall
   '';
 
   meta = {
@@ -201,11 +205,15 @@ maven_4.buildMavenPackage (finalAttrs: {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/jd-cli
     install -Dm644 jd-cli/target/jd-cli.jar $out/share/jd-cli
 
     makeWrapper ${lib.getExe jre} $out/bin/jd-cli \
       --add-flags "-jar $out/share/jd-cli/jd-cli.jar"
+
+    runHook postInstall
   '';
 
   meta = {
@@ -350,16 +358,24 @@ stdenv.mkDerivation {
   buildInputs = [ maven ];
   src = ./.; # or fetchFromGitHub, cleanSourceWith, etc
   buildPhase = ''
+    runHook preBuild
+
     mvn package -Dmaven.repo.local=$out
+
+    runHook postBuild
   '';
 
   # keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files with lastModified timestamps inside
   installPhase = ''
+    runHook preInstall
+
     find $out -type f \
       -name \*.lastUpdated -or \
       -name resolver-status.properties -or \
       -name _remote.repositories \
       -delete
+
+    runHook postInstall
   '';
 
   # don't do any fixup
@@ -415,12 +431,20 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ maven ];
 
   buildPhase = ''
+    runHook preBuild
+
     echo "Using repository ${repository}"
     mvn --offline -Dmaven.repo.local=${repository} package;
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm644 target/${finalAttrs.pname}-${finalAttrs.version}.jar $out/share/java
+
+    runHook postInstall
   '';
 })
 ```
@@ -480,11 +504,17 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ maven ];
 
   buildPhase = ''
+    runHook preBuild
+
     echo "Using repository ${repository}"
     mvn --offline -Dmaven.repo.local=${repository} package;
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
 
     classpath=$(find ${repository} -name "*.jar" -printf ':%h/%f');
@@ -494,6 +524,8 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper ${lib.getExe jre} $out/bin/maven-demo \
           --add-flags "-classpath $out/share/java/maven-demo-${finalAttrs.version}.jar:''${classpath#:}" \
           --add-flags "Main"
+
+    runHook postInstall
   '';
 })
 ```
@@ -566,11 +598,17 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ maven ];
 
   buildPhase = ''
+    runHook preBuild
+
     echo "Using repository ${repository}"
     mvn --offline -Dmaven.repo.local=${repository} package;
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
 
     # create a symbolic link for the repository directory
@@ -581,6 +619,8 @@ stdenv.mkDerivation (finalAttrs: {
     # this should be the paths from the dependency derivation
     makeWrapper ${lib.getExe jre} $out/bin/maven-demo \
           --add-flags "-jar $out/share/java/maven-demo-${finalAttrs.version}.jar"
+
+    runHook postInstall
   '';
 })
 ```

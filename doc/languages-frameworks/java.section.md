@@ -18,12 +18,18 @@ stdenv.mkDerivation {
   ];
 
   buildPhase = ''
+    runHook preBuild
     ant # build the project using ant
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     # copy generated jar file(s) to an appropriate location in $out
     install -Dm644 build/foo.jar $out/share/java/foo.jar
+
+    runHook postInstall
   '';
 }
 ```
@@ -63,9 +69,13 @@ script to run it using a JRE. You can use `makeWrapper` for this:
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     makeWrapper ${lib.getExe jre} $out/bin/foo \
       --add-flags "-cp $out/share/java/foo.jar org.foo.Main"
+
+    runHook postInstall
   '';
 }
 ```
