@@ -375,5 +375,5 @@ rec {
     doCheck = false;
   };
 
-  crystal = crystal_1_20;
+  crystal = crystal_1_22;
 }
