@@ -9,6 +9,7 @@
   nunicode,
   util-linux,
   python3,
+  typescript_5,
   getopt,
   nixosTests,
   nix-update-script,
@@ -43,21 +44,25 @@ buildNpmPackage (finalAttrs: {
   inherit nodejs;
 
   buildInputs = [ util-linux ];
-  nativeBuildInputs = [ python3 ];
+  nativeBuildInputs = [
+    python3
+    typescript_5
+  ];
 
-  dontNpmBuild = true;
+  npmBuildScript = "build:server";
   npmInstallFlags = [ "--omit=dev" ];
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/opt/client
-    cp -r index.js server package* node_modules $out/opt/
+    mkdir -p $out/opt/{client,dist-server}
+    cp -r dist-server/{index.js,package.json,server} $out/opt/dist-server/
+    cp -r node_modules package.json $out/opt/
     cp -r ${finalAttrs.passthru.client} $out/opt/client/dist
     mkdir $out/bin
 
     echo '${wrapper}' > $out/bin/audiobookshelf
-    echo "  exec ${finalAttrs.nodejs}/bin/node $out/opt/index.js" >> $out/bin/audiobookshelf
+    echo "  exec ${finalAttrs.nodejs}/bin/node $out/opt/dist-server/index.js" >> $out/bin/audiobookshelf
 
     chmod +x $out/bin/audiobookshelf
 
