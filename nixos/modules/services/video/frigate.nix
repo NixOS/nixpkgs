@@ -774,6 +774,7 @@ in
         ];
         EnvironmentFile = [ "-/run/frigate/ffmpeg-env" ];
         ExecStart = "${cfg.package.python.interpreter} -m frigate";
+        KillMode = "mixed";
         Restart = "on-failure";
         SyslogIdentifier = "frigate";
 
