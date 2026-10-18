@@ -30,8 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
     mbedtls
   ];
 
-  env.CFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-DFUSE_DARWIN_ENABLE_EXTENSIONS=0";
-
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version=branch" ];
   };
@@ -45,6 +43,5 @@ stdenv.mkDerivation (finalAttrs: {
       yuannan
     ];
     platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })
