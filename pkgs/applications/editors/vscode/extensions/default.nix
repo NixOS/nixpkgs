@@ -1101,8 +1101,8 @@ let
         mktplcRef = {
           publisher = "coolbear";
           name = "systemd-unit-file";
-          version = "1.0.6";
-          sha256 = "0sc0zsdnxi4wfdlmaqwb6k2qc21dgwx6ipvri36x7agk7m8m4736";
+          version = "1.0.8";
+          hash = "sha256-lstyN/XtaJNRzL17XIc9lPsG3fEGxCciarRVSEPdSEg=";
         };
         meta = {
           license = lib.licenses.mit;
