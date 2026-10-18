@@ -20,7 +20,6 @@ in
 buildPythonPackage {
   inherit version pname;
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "nielstron";

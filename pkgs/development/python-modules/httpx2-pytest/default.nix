@@ -21,7 +21,6 @@ buildPythonPackage (finalAttrs: {
   pname = "httpx2-pytest";
   version = "2.0.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "angryfoxx";
