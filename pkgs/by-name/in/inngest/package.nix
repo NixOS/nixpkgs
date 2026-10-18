@@ -10,14 +10,14 @@
   testers,
 }:
 let
-  version = "1.45.1";
+  version = "1.46.0";
   websiteRev = "159c0ac611e85ec85ffe0a8c8bf2c4a0330bdb38";
 
   src = fetchFromGitHub {
     owner = "inngest";
     repo = "inngest";
     tag = "v${version}";
-    hash = "sha256-HdQHZb1JSPBe4zRbRSj4C2EtH91RUqZZxFHZpk5GRno=";
+    hash = "sha256-ATUA4oIcNpaHaGuGLgvc+zLswLOY1NtBQqvEmEBE52k=";
   };
 
   website = fetchFromGitHub {
@@ -42,7 +42,7 @@ let
       pnpm = pnpm_10;
       sourceRoot = "${finalAttrs.src.name}/ui";
       fetcherVersion = 4;
-      hash = "sha256-zYosPseMgRdMPB07BXwfVD3KPR+uLaltbuzxJburSr0=";
+      hash = "sha256-VKOAn/0vuTuae9e+zh6AfFyj6txAGAPXe5NlOY8cV18=";
     };
     pnpmRoot = "ui";
 
