@@ -1,10 +1,11 @@
+diff --git a/build.rs b/build.rs
+index 103c6c9..696bf66 100644
 --- a/build.rs
 +++ b/build.rs
-@@ -63,14 +63,7 @@
-         .include("parallel-rdp/parallel-rdp-standalone/volk")
+@@ -73,13 +73,7 @@ fn main() {
          .include("parallel-rdp/parallel-rdp-standalone/vulkan")
          .include("parallel-rdp/parallel-rdp-standalone/vulkan-headers/include")
--        .include("parallel-rdp/parallel-rdp-standalone/util")
+         .include("parallel-rdp/parallel-rdp-standalone/util")
 -        .include(
 -            std::path::PathBuf::from(std::env::var("DEP_SDL3_OUT_DIR").unwrap()).join("include"),
 -        )
@@ -12,75 +13,107 @@
 -            std::path::PathBuf::from(std::env::var("DEP_SDL3_TTF_OUT_DIR").unwrap())
 -                .join("include"),
 -        );
-+        .include("parallel-rdp/parallel-rdp-standalone/util");
++        ;
  
      let mut retroachievements_build = cc::Build::new();
      retroachievements_build
+diff --git a/Cargo.lock b/Cargo.lock
+index 5492b47..b35a2d2 100644
 --- a/Cargo.lock
 +++ b/Cargo.lock
-@@ -4782,12 +4782,6 @@
+@@ -1267,15 +1267,6 @@ dependencies = [
+  "hashbrown 0.16.1",
  ]
  
+-[[package]]
+-name = "cmake"
+-version = "0.1.58"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "c0f78a02292a74a88ac736019ab962ece0bc380e3f977bf72e376c5d78ff0678"
+-dependencies = [
+- "cc",
+-]
+-
  [[package]]
+ name = "cmov"
+ version = "0.5.4"
+@@ -5758,12 +5749,6 @@ dependencies = [
+  "memchr",
+ ]
+ 
+-[[package]]
 -name = "rpkg-config"
 -version = "0.1.2"
 -source = "registry+https://github.com/rust-lang/crates.io-index"
 -checksum = "5a2d2f3481209a6b42eec2fbb49063fb4e8d35b57023401495d4fe0f85c817f0"
 -
--[[package]]
+ [[package]]
  name = "rspolib"
  version = "0.1.2"
- source = "registry+https://github.com/rust-lang/crates.io-index"
-@@ -5002,28 +4996,10 @@
+@@ -6034,43 +6019,24 @@ dependencies = [
+  "tiny-skia 0.11.4",
  ]
  
- [[package]]
--name = "sdl3-src"
--version = "3.4.8"
--source = "registry+https://github.com/rust-lang/crates.io-index"
--checksum = "997bff4c8d3d9d1e846d7ad8caa33e6fe18a07ec9dc474e1efbbb20923d87bd9"
--
 -[[package]]
+-name = "sdl3-src"
+-version = "3.4.18"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "400d0fb006a4485fde477cfc56a250c99d7bfb183fefd145c15fe7607db7fc49"
+-
+ [[package]]
  name = "sdl3-sys"
- version = "0.6.5+SDL-3.4.8"
+ version = "0.7.2+SDL-3.4.18"
  source = "registry+https://github.com/rust-lang/crates.io-index"
- checksum = "51ca7a36c908d1d2b6c259d426a5000fbb70e764dcc430f6a373cc151f614f68"
--dependencies = [
+ checksum = "82b6a7f3cad40c5b318b3539bb4624389f4a03504cd5f4c65030787b962505ac"
+ dependencies = [
 - "cc",
 - "cmake",
+  "pkg-config",
 - "rpkg-config",
 - "sdl3-src",
--]
--
+  "vcpkg",
+ ]
+ 
 -[[package]]
 -name = "sdl3-ttf-src"
 -version = "3.2.3"
 -source = "registry+https://github.com/rust-lang/crates.io-index"
 -checksum = "f28923d2ce72ff317d8eb7cec97ddfb8f351c330d7bcbf8c76e91332122c93b3"
- 
+-
  [[package]]
  name = "sdl3-ttf-sys"
-@@ -5031,10 +5007,7 @@
+ version = "0.7.1+SDL-ttf-3.2.2"
  source = "registry+https://github.com/rust-lang/crates.io-index"
- checksum = "c30da3dcd7e062f19350b47a532f7629c42801b801687535fd31e8ba2adfd71d"
+ checksum = "d254e537d2d96b3e2d6e8a3dd4850a1361b8689c3d95c6c1dfdc02b091307eef"
  dependencies = [
 - "cmake",
+  "pkg-config",
 - "rpkg-config",
   "sdl3-sys",
 - "sdl3-ttf-src",
+  "vcpkg",
  ]
  
- [[package]]
+diff --git a/Cargo.toml b/Cargo.toml
+index 55cac11..2ef57d3 100644
 --- a/Cargo.toml
 +++ b/Cargo.toml
-@@ -19,8 +19,8 @@
- slint = { version = "1.16", default-features = false, features = ["compat-1-2", "std", "unstable-winit-030", "backend-winit", "renderer-skia", "accessibility"], optional = true }
- open = "5.3"
- sha2 = "0.11"
--sdl3-sys = { version = "0.6", features = ["build-from-source-static"] }
--sdl3-ttf-sys = { version = "0.6", features = ["build-from-source-static", "no-sdlttf-harfbuzz", "no-sdlttf-plutosvg"] }
-+sdl3-sys = { version = "0.6" }
-+sdl3-ttf-sys = { version = "0.6" }
+@@ -45,14 +45,14 @@ slint = { version = "1.16", default-features = false, features = ["compat-1-2",
  rfd = {version = "0.17", optional = true }
- tokio = {version = "1.46", features = ["rt-multi-thread", "macros", "fs", "process"] }
- spin_sleep = "1.3"
+ dirs = "7.0"
+ open = { version = "5.3", optional = true }
+-sdl3-sys = { version = "0.7", features = ["build-from-source-static"] }
+-sdl3-ttf-sys = { version = "0.7", features = ["build-static-vendored", "no-sdlttf-harfbuzz", "no-sdlttf-plutosvg"] }
++sdl3-sys = { version = "0.7" }
++sdl3-ttf-sys = { version = "0.7" }
+ 
+ [target.'cfg(target_os = "android")'.dependencies]
+ slint = { version = "1.16", default-features = false, features = ["compat-1-2", "std", "backend-android-activity-06", "accessibility"], optional = true }
+ jni = "0.22"
+-sdl3-sys = { version = "0.7", features = ["build-from-source"] }
+-sdl3-ttf-sys = { version = "0.7", features = ["build-from-source", "no-sdlttf-harfbuzz", "no-sdlttf-plutosvg"] }
++sdl3-sys = { version = "0.7" }
++sdl3-ttf-sys = { version = "0.7" }
+ webpki-roots = "1.0"
+ 
+ [build-dependencies]
