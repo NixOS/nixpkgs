@@ -223,6 +223,7 @@ stdenv.mkDerivation (
     ];
 
     passthru = {
+      inherit electron;
       updateScript = nix-update-script {
         attrPath = "t3code.unwrapped";
         extraArgs = [ "--use-github-releases" ];
