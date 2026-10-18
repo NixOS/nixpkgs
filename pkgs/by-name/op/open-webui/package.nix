@@ -63,6 +63,132 @@ let
       runHook postInstall
     '';
   };
+  # Runtime Python dependencies, hoisted to a let-binding so that makeWrapperArgs
+  # can reference them directly (finalAttrs does not expose package-level fields
+  # such as 'dependencies').
+  pyDeps = with python3Packages; [
+    accelerate
+    aiocache
+    aiodns
+    aiofiles
+    aiohttp
+    aiosqlite
+    alembic
+    anthropic
+    apscheduler
+    argon2-cffi
+    asgiref
+    async-timeout
+    authlib
+    azure-ai-documentintelligence
+    azure-identity
+    azure-storage-blob
+    bcrypt
+    beautifulsoup4
+    black
+    boto3
+    brotli
+    brotlicffi
+    chardet
+    chromadb
+    cryptography
+    datasets
+    ddgs
+    docx2txt
+    einops
+    fake-useragent
+    fastapi
+    faster-whisper
+    fpdf2
+    ftfy
+    google-api-python-client
+    google-auth-httplib2
+    google-auth-oauthlib
+    google-cloud-storage
+    google-genai
+    google-re2
+    googleapis-common-protos
+    hiredis
+    httpx
+    itsdangerous
+    joserfc
+    langchain
+    langchain-classic
+    langchain-community
+    langchain-text-splitters
+    ldap3
+    loguru
+    lxml
+    markdown
+    mcp
+    msoffcrypto-tool
+    nltk
+    onnxruntime
+    openai
+    opencv-python-headless
+    openpyxl
+    opensearch-py
+    opentelemetry-api
+    opentelemetry-exporter-otlp
+    opentelemetry-instrumentation
+    opentelemetry-instrumentation-aiohttp-client
+    opentelemetry-instrumentation-fastapi
+    opentelemetry-instrumentation-httpx
+    opentelemetry-instrumentation-logging
+    opentelemetry-instrumentation-redis
+    opentelemetry-instrumentation-requests
+    opentelemetry-instrumentation-sqlalchemy
+    opentelemetry-sdk
+    orjson
+    pandas
+    pillow
+    psutil
+    psycopg
+    pyarrow
+    pycrdt
+    pydantic
+    pydub
+    pyjwt
+    pymdown-extensions
+    pymysql
+    pyotp
+    pypandoc
+    pypdf
+    python-docx
+    python-dotenv
+    python-mimeparse
+    python-multipart
+    python-pptx
+    python-socketio
+    pytube
+    pytz
+    pyxlsb
+    qrcode
+    rank-bm25
+    rapidocr
+    redis
+    regex
+    requests
+    restrictedpython
+    sentence-transformers
+    sentencepiece
+    soundfile
+    sqlalchemy
+    starlette-compress
+    starsessions
+    tiktoken
+    transformers
+    uvicorn
+    validators
+    xlrd
+    youtube-transcript-api
+  ]
+  ++ (with python3Packages.httpx.optional-dependencies; brotli ++ cli ++ http2 ++ socks ++ zstd)
+  ++ python3Packages.uvicorn.optional-dependencies.standard
+  ++ python3Packages.psycopg.optional-dependencies.c
+  ++ python3Packages.pyjwt.optional-dependencies.crypto
+  ++ python3Packages.sqlalchemy.optional-dependencies.asyncio
+  ++ python3Packages.starsessions.optional-dependencies.redis;
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   inherit pname version src;
@@ -80,131 +206,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonRelaxDeps = true;
 
-  dependencies =
-    with python3Packages;
-    [
-      accelerate
-      aiocache
-      aiodns
-      aiofiles
-      aiohttp
-      aiosqlite
-      alembic
-      anthropic
-      apscheduler
-      argon2-cffi
-      asgiref
-      async-timeout
-      authlib
-      azure-ai-documentintelligence
-      azure-identity
-      azure-storage-blob
-      bcrypt
-      beautifulsoup4
-      black
-      boto3
-      brotli
-      brotlicffi
-      chardet
-      chromadb
-      cryptography
-      datasets
-      ddgs
-      docx2txt
-      einops
-      fake-useragent
-      fastapi
-      faster-whisper
-      fpdf2
-      ftfy
-      google-api-python-client
-      google-auth-httplib2
-      google-auth-oauthlib
-      google-cloud-storage
-      google-genai
-      google-re2
-      googleapis-common-protos
-      hiredis
-      httpx
-      itsdangerous
-      joserfc
-      langchain
-      langchain-classic
-      langchain-community
-      langchain-text-splitters
-      ldap3
-      loguru
-      lxml
-      markdown
-      mcp
-      msoffcrypto-tool
-      nltk
-      onnxruntime
-      openai
-      opencv-python-headless
-      openpyxl
-      opensearch-py
-      opentelemetry-api
-      opentelemetry-exporter-otlp
-      opentelemetry-instrumentation
-      opentelemetry-instrumentation-aiohttp-client
-      opentelemetry-instrumentation-fastapi
-      opentelemetry-instrumentation-httpx
-      opentelemetry-instrumentation-logging
-      opentelemetry-instrumentation-redis
-      opentelemetry-instrumentation-requests
-      opentelemetry-instrumentation-sqlalchemy
-      opentelemetry-sdk
-      orjson
-      pandas
-      pillow
-      psutil
-      psycopg
-      pyarrow
-      pycrdt
-      pydantic
-      pydub
-      pyjwt
-      pymdown-extensions
-      pymysql
-      pyotp
-      pypandoc
-      pypdf
-      python-docx
-      python-dotenv
-      python-mimeparse
-      python-multipart
-      python-pptx
-      python-socketio
-      pytube
-      pytz
-      pyxlsb
-      qrcode
-      rank-bm25
-      rapidocr
-      redis
-      regex
-      requests
-      restrictedpython
-      sentence-transformers
-      sentencepiece
-      soundfile
-      sqlalchemy
-      starlette-compress
-      starsessions
-      tiktoken
-      transformers
-      uvicorn
-      validators
-      xlrd
-      youtube-transcript-api
-    ]
-    ++ (with httpx.optional-dependencies; brotli ++ cli ++ http2 ++ socks ++ zstd)
-    ++ uvicorn.optional-dependencies.standard
-    ++ psycopg.optional-dependencies.c
-    ++ pyjwt.optional-dependencies.crypto
-    ++ sqlalchemy.optional-dependencies.asyncio
-    ++ starsessions.optional-dependencies.redis;
+  dependencies = pyDeps;
 
   optional-dependencies = with python3Packages; {
     postgres = [
@@ -246,7 +248,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # ImportErrors and silent failures (e.g. "Invalid RRULE: ").  Expose the
     # complete runtime dependency tree as PYTHONPATH so child processes can
     # find all required modules.  See https://github.com/NixOS/nixpkgs/issues/574466
-    "--set PYTHONPATH ${python3Packages.makePythonPath finalAttrs.dependencies}"
+    "--set PYTHONPATH ${python3Packages.makePythonPath pyDeps}"
   ];
 
   passthru = {
