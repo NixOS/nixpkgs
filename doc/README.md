@@ -17,13 +17,6 @@ The NixOS manual is found at [nixpkgs/nixos](../nixos/doc/manual).
 > If you would like to help, [get in touch](#getting-help) with the Documentation Team!
 >
 
-We are actively working to generate reference documentation from the [doc-comments](https://github.com/NixOS/rfcs/blob/master/rfcs/0145-doc-strings.md) present in code, which also lets you view it locally with the `:doc` command in `nix repl`, e.g.:
-
-```
-nix-repl> :l <nixpkgs>
-nix-repl> :doc lib.mapAttrsToList
-```
-
 ## Building and navigating documentation locally
 
 The Nixpkgs manual is rendered by [`nixos-render-docs`](../pkgs/by-name/ni/nixos-render-docs/).
