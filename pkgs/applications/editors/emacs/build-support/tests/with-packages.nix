@@ -55,6 +55,8 @@ let
       EMACS_TEST_VERBOSE = 1; # make ERT output verbose
     };
     text = ''
+      testSelector="''${1-t}"
+
       # Give Emacs a HOME to emulate a real user environment.
       HOME="$PWD"
 
@@ -63,7 +65,7 @@ let
 
       emacs --batch --load=with-packages \
         --eval="(setq with-packages-non-batch-emacs-socket \"$nonBatchEmacsSocket\")" \
-        --funcall=ert-run-tests-batch-and-exit
+        --eval="(ert-run-tests-batch-and-exit $testSelector)"
     '';
   };
 in
