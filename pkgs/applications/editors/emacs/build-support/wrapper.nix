@@ -163,25 +163,22 @@ let
           (add-to-list 'treesit-extra-load-path "$out/lib/")
         ''}
 
-        ;; Remove wrapper-added dir from EMACSLOADPATH so it's not propagated
-        ;; to any other Emacsen that might be started as subprocesses.
-        ;; Also do it for EMACSNATIVELOADPATH, which probably unnecessary.
-        (let ((restore-load-path
-               (lambda (load-path-env-var wrapper-dir-env-var)
+        ;; Remove wrapper-added dir from PATH-like environment variable
+        ;; so that the wrapper-added dir is not propagated to subprocesses.
+        (let ((restore-path
+               (lambda (path-env-var wrapper-dir-env-var)
                  (when-let* ((wrapper-dir (getenv wrapper-dir-env-var)))
                    (setenv wrapper-dir-env-var nil)
-                   (when-let* ((env-load-path (getenv load-path-env-var)))
-                     (let* ((env-load-path-list (split-string env-load-path
-                                                              path-separator))
-                            (restored-env-load-path-list (remove wrapper-dir
-                                                                 env-load-path-list)))
-                       (setenv load-path-env-var
-                               (when restored-env-load-path-list
-                                 (string-join restored-env-load-path-list
+                   (when-let* ((env-path (getenv path-env-var)))
+                     (let* ((env-path-list (split-string env-path path-separator))
+                            (restored-env-path-list (remove wrapper-dir env-path-list)))
+                       (setenv path-env-var
+                               (when restored-env-path-list
+                                 (string-join restored-env-path-list
                                               path-separator)))))))))
-          (funcall restore-load-path
+          (funcall restore-path
                    "EMACSLOADPATH" "emacsWithPackages_siteLisp")
-          (funcall restore-load-path
+          (funcall restore-path
                    "EMACSNATIVELOADPATH" "emacsWithPackages_siteLispNative"))
 
         (let ((set-from-env (lambda (symbol env-var &optional modify)
