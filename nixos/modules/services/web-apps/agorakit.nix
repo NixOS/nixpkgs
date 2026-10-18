@@ -35,7 +35,7 @@ in
   options.services.agorakit = {
     enable = mkEnableOption "agorakit";
 
-    phpPackage = mkPackageOption pkgs "php82" { };
+    phpPackage = mkPackageOption pkgs "php83" { };
 
     user = mkOption {
       default = "agorakit";
