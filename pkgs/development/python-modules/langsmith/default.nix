@@ -28,6 +28,7 @@
   dataclasses-json,
   multipart,
   opentelemetry-sdk,
+  pyjwt,
   pytest-asyncio,
   pytest-httpx,
   pytest-socket,
@@ -38,19 +39,22 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langsmith";
-  version = "0.12.4";
+  version = "0.14.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-e5+lttn90eBL4xkvxN9oH3aPp1wRBfy5Q0pS8LDCiq8=";
+    hash = "sha256-ffJk20vEHid8bLj2oiKZzK+DCjW48fccSGX7CakMEWQ=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python";
 
-  pythonRelaxDeps = [ "orjson" ];
+  pythonRelaxDeps = [
+    "orjson"
+    "uuid-utils" # 1.0.0 is out and langsmith specifies <1 defensively
+  ];
 
   build-system = [ hatchling ];
 
@@ -76,6 +80,7 @@ buildPythonPackage (finalAttrs: {
     dataclasses-json
     multipart
     opentelemetry-sdk
+    pyjwt
     pytest-asyncio
     pytest-httpx
     pytest-socket
@@ -100,6 +105,16 @@ buildPythonPackage (finalAttrs: {
     "test_as_runnable_batch"
     "test_as_runnable_async"
     "test_as_runnable_async_batch"
+
+    # timing sensitive
+    "test_retry_after_header_value_drives_the_delay"
+
+    # requires langchain-core, unavailable due to circular dependency
+    "test_langchain_tool_attributes_reach_otel_spans"
+
+    # requires unpackaged otel packages
+    "test_get_otlp_tracer_provider_resolves_real_exporter_endpoint"
+
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # flaky (timing sensitive)
@@ -148,6 +163,15 @@ buildPythonPackage (finalAttrs: {
     "tests/unit_tests/sandbox/test_sandbox.py::TestSandboxWrite"
     "tests/unit_tests/sandbox/test_transport.py::TestAsyncRetryTransport"
     "tests/unit_tests/sandbox/test_transport.py::TestRetryTransport"
+    "tests/unit_tests/sandbox/test_access_delegation.py"
+    "tests/unit_tests/sandbox/test_endpoints.py"
+    "tests/unit_tests/sandbox/test_aws_role_auth.py"
+    "tests/unit_tests/sandbox/test_run_config_and_files.py::TestRunConfigModel"
+    "tests/unit_tests/sandbox/test_run_config_and_files.py::TestRunConfigOnRequests"
+    "tests/unit_tests/sandbox/test_run_config_and_files.py::TestFileSearch"
+    "tests/unit_tests/sandbox/test_run_config_and_files.py::TestRangeRead"
+    "tests/unit_tests/sandbox/test_tracing.py"
+    "tests/unit_tests/sandbox/test_verify.py"
   ];
 
   pythonImportsCheck = [ "langsmith" ];
