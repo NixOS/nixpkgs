@@ -13,6 +13,7 @@
     hunspellDictsChromium.fr-fr
     hunspellDictsChromium.sv-se
   ],
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -37,16 +38,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   nativeBuildInputs = [
     qt6.wrapQtAppsHook
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
     qt6.qtwayland
     qt6.qtsvg
   ];
-
-  preBuild = ''
-    export HOME=$(mktemp -d)
-  '';
 
   build-system = with python3Packages; [ setuptools ];
 

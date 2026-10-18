@@ -19,6 +19,7 @@
   testers,
   runCommand,
   jq,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -81,6 +82,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     git
     python3
     rustPlatform.bindgenHook
+    writableTmpDirAsHomeHook
   ];
 
   env = {
@@ -144,11 +146,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip"
     "system_install::tests::archive_boundary"
   ];
-
-  # mise-util's own tests keep their caches under the real $HOME
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   # every test process resets the same fixed $HOME/cwd
   dontUseCargoParallelTests = true;

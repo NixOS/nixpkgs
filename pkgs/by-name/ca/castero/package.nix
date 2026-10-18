@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   python3,
+  writableTmpDirAsHomeHook,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
@@ -37,6 +38,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   enabledTestPaths = [
@@ -61,11 +63,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   pythonImportsCheck = [
     "castero"
   ];
-
-  # Resolve configuration tests, which access $HOME
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   # Satisfy the python-mpv dependency, which is mpv within NixOS
   postPatch = ''
