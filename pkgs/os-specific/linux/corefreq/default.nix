@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
   # See the official readme for a list of optional flags:
   # https://github.com/cyring/CoreFreq/blob/master/README.md
   extraFlags ? [ ],
@@ -25,6 +26,11 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [
     "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "INSTALL_MOD_PATH=$(out)"
+  ]
+  ++ kernelModuleMakeFlags
+  ++ [
+    # The userspace daemon must be linked with the wrapped compiler.
+    "CC=${stdenv.cc.targetPrefix}cc"
   ]
   ++ extraFlags;
 
