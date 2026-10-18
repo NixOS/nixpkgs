@@ -46,7 +46,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     rev = "7d185b25dacce7950bf7194830aad90c5b1bb6aa";
     hash = "sha256-og8BVjFAQwlS2M9js6+5lk6VMZXLuySH+eC5pLvmA8I=";
     fetchSubmodules = true;
-
   };
 
   nativeBuildInputs = [
