@@ -8,6 +8,7 @@
   writeShellApplication,
   hack-font,
   xvfb-run,
+  writeText,
 }:
 
 let
@@ -66,8 +67,19 @@ let
       emacs --batch --load=with-packages \
         --eval="(setq with-packages-non-batch-emacs-socket \"$nonBatchEmacsSocket\")" \
         --eval="(ert-run-tests-batch-and-exit $testSelector)"
+
+      emacsclient --socket-name="$nonBatchEmacsSocket" --eval "(kill-emacs)"
     '';
   };
+  fontconfigFileWithXdgFonts = writeText "fontconfig-include-fonts-in-xdg-dirs.conf" ''
+    <?xml version="1.0"?>
+    <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
+    <fontconfig>
+      <description>An example config including fonts in xdg dirs</description>
+      <dir prefix="xdg">fonts</dir>
+      <include ignore_missing="yes">/etc/fonts/fonts.conf</include>
+    </fontconfig>
+  '';
 in
 runCommand "test-emacs-withPackages-wrapper"
   {
@@ -78,6 +90,8 @@ runCommand "test-emacs-withPackages-wrapper"
   }
   ''
     xvfb-run -- env --unset=FONTCONFIG_FILE run-test
+
+    xvfb-run -- env FONTCONFIG_FILE=${fontconfigFileWithXdgFonts} run-test "'(tag :font)"
 
     touch $out
   ''
