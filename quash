@@ -1,0 +1,49 @@
+[1m[38;5;2m@[0m  [1m[38;5;13mxw[38;5;8mvvkwly[39m [38;5;3mseclark@nextquestion.net[39m [38;5;14m2026-10-19 10:58:32[39m [38;5;12m9[38;5;8mbe7b6fa[39m[0m
+│  [1m[38;5;3m(no description set)[39m[0m
+│ ○  [1m[38;5;5mynnp[0m[38;5;8mxzqm[39m [38;5;3mseclark@nextquestion.net[39m [38;5;6m2026-10-18 20:36:34[39m [38;5;5mai-tools-bump*[39m [1m[38;5;4m1a[0m[38;5;8m514f66[39m
+│ │  python3Packages.gto: add missing dependency
+│ ○  [1m[38;5;5mq[0m[38;5;8mopqxvok[39m [38;5;3mseclark@nextquestion.net[39m [38;5;6m2026-10-18 20:33:00[39m [1m[38;5;4m85[0m[38;5;8m765467[39m
+├─╯  python3Packages.langgraph-prebuilt: 1.1.0 -> 1.1.1
+○  [1m[38;5;5mz[0m[38;5;8mytvppyy[39m [38;5;3mseclark@nextquestion.net[39m [38;5;6m2026-10-18 20:33:00[39m [1m[38;5;4m6[0m[38;5;8m22aa47a[39m
+│  python3Packages.langsmith: 0.12.4 -> 0.14.9
+○  [1m[38;5;5mt[0m[38;5;8mxwrrlxw[39m [38;5;3mseclark@nextquestion.net[39m [38;5;6m2026-10-18 20:33:00[39m [1m[38;5;4m1c9[0m[38;5;8mc1a85[39m
+│  python3Packages.langgraph-sdk: 0.4.4 -> 0.4.8
+○  [1m[38;5;5mk[0m[38;5;8mprzkztv[39m [38;5;3mseclark@nextquestion.net[39m [38;5;6m2026-10-18 20:33:00[39m [1m[38;5;4mb3[0m[38;5;8m37bfc4[39m
+│  python3Packages.langgraph-checkpoint-sqlite: 3.1.1 -> 3.1.2
+○  [1m[38;5;5mps[0m[38;5;8mxpnxru[39m [38;5;3mseclark@nextquestion.net[39m [38;5;6m2026-10-18 20:33:00[39m [1m[38;5;4me2[0m[38;5;8md6a363[39m
+│  python3Packages.langgraph-runtime-inmem: 0.34.1 -> 0.36.1
+○  [1m[38;5;5mmz[0m[38;5;8mnlworq[39m [38;5;3mseclark@nextquestion.net[39m [38;5;6m2026-10-18 20:33:00[39m [1m[38;5;4meb[0m[38;5;8m48253a[39m
+│  python3Packages.langgraph-checkpoint: 4.2.0 -> 4.3.0
+○  [1m[38;5;5mwy[0m[38;5;8mzxvqyn[39m [38;5;3mseclark@nextquestion.net[39m [38;5;6m2026-10-18 20:33:00[39m [1m[38;5;4m09[0m[38;5;8mae5aa4[39m
+│  python3Packages.langgraph-checkpoint-postgres: 3.1.2 -> 3.2.0
+○  [1m[38;5;5mmo[0m[38;5;8mrvrxyr[39m [38;5;3mseclark@nextquestion.net[39m [38;5;6m2026-10-18 20:33:00[39m [1m[38;5;4m1c5[0m[38;5;8mca3fb[39m
+│  python3Packages.langgraph-checkpoint-mongodb: 0.5.0 -> 0.5.1
+○  [1m[38;5;5mpu[0m[38;5;8mnktoml[39m [38;5;3mseclark@nextquestion.net[39m [38;5;6m2026-10-18 20:33:00[39m [1m[38;5;4m89[0m[38;5;8m908206[39m
+│  python3Packages.langchain-openai: 1.6.2 -> 1.7.2
+○  [1m[38;5;5myx[0m[38;5;8mslumtz[39m [38;5;3mseclark@nextquestion.net[39m [38;5;6m2026-10-18 20:33:00[39m [1m[38;5;4m43[0m[38;5;8m6b198e[39m
+│  python3Packages.langgraph: 1.2.11 -> 1.2.16
+○  [1m[38;5;5mwm[0m[38;5;8mumwult[39m [38;5;3mseclark@nextquestion.net[39m [38;5;6m2026-10-18 20:33:00[39m [1m[38;5;4mc[0m[38;5;8m1ecbba4[39m
+│  python313Packages.langchain-deepseek: 1.1.0 -> 1.1.1
+○  [1m[38;5;5mn[0m[38;5;8mrymvsxv[39m [38;5;3mseclark@nextquestion.net[39m [38;5;6m2026-10-18 20:33:00[39m [1m[38;5;4mf[0m[38;5;8mcd21773[39m
+│  python313Packages.langchain-fireworks: 1.6.1 -> 1.7.1
+○  [1m[38;5;5mwq[0m[38;5;8mymxkko[39m [38;5;3mseclark@nextquestion.net[39m [38;5;6m2026-10-18 20:33:00[39m [1m[38;5;4m04[0m[38;5;8me32ab6[39m
+│  python313Packages.langchain-google-genai: 4.3.4 -> 4.4.2
+○  [1m[38;5;5mynnu[0m[38;5;8mnwls[39m [38;5;3mseclark@nextquestion.net[39m [38;5;6m2026-10-18 20:33:00[39m [1m[38;5;4m77[0m[38;5;8maf4d15[39m
+│  python313Packages.langchain: 1.4.0 -> 1.4.6
+○  [1m[38;5;5mr[0m[38;5;8mvwyyozw[39m [38;5;3mseclark@nextquestion.net[39m [38;5;6m2026-10-18 20:33:00[39m [1m[38;5;4m7a[0m[38;5;8m95c9da[39m
+│  python313Packages.langchain-core: 1.6.6 -> 1.6.12
+○  [1m[38;5;5ml[0m[38;5;8mrrslqmp[39m [38;5;3mseclark@nextquestion.net[39m [38;5;6m2026-10-18 20:33:00[39m [1m[38;5;4m46[0m[38;5;8mdade42[39m
+│  python313Packages.langchain-aws: 1.7.8 -> 1.9.0
+○  [1m[38;5;5mv[0m[38;5;8mkkwtxqx[39m [38;5;3mseclark@nextquestion.net[39m [38;5;6m2026-10-18 20:33:00[39m [1m[38;5;4m42[0m[38;5;8mc07fac[39m
+│  python313Packages.langchain-anthropic: 1.7.2 -> 1.7.6
+○  [1m[38;5;5mxt[0m[38;5;8msoulsv[39m [38;5;3mseclark@nextquestion.net[39m [38;5;6m2026-10-18 20:33:00[39m [1m[38;5;4m75[0m[38;5;8m4155c1[39m
+│  python313Packages.google-api-python-client: 2.199.0 -> 2.201.0
+○  [1m[38;5;5mwk[0m[38;5;8mvqtpvu[39m [38;5;3mseclark@nextquestion.net[39m [38;5;6m2026-10-18 20:33:00[39m [1m[38;5;4mbc[0m[38;5;8mf43528[39m
+│  python313Packages.fireworks-ai: 1.2.11 -> 1.2.27
+○  [1m[38;5;5myy[0m[38;5;8mxwrqvx[39m [38;5;3mseclark@nextquestion.net[39m [38;5;6m2026-10-18 20:33:00[39m [1m[38;5;4m79[0m[38;5;8m0273fe[39m
+│  langgraph-cli: 0.4.33 -> 0.4.36
+○  [1m[38;5;5mo[0m[38;5;8mwqwnxmw[39m [38;5;3mseclark@nextquestion.net[39m [38;5;6m2026-10-18 20:13:07[39m [1m[38;5;4m2[0m[38;5;8me68b2be[39m
+│  python313Packages.anthropic_0: 0.125.0 -> 1.15.0
+[1m[38;5;14m◆[0m  [1m[38;5;5mmp[0m[38;5;8mkmnsuy[39m [38;5;3mseclark@nextquestion.net[39m [38;5;6m2026-10-18 14:40:57[39m [1m[38;5;4m3[0m[38;5;8mb9c2ab5[39m
+│  python313Packages.anthropic: 1.8.0 -> 1.15.0
+~

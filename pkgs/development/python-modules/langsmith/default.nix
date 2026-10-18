@@ -28,6 +28,7 @@
   dataclasses-json,
   multipart,
   opentelemetry-sdk,
+  pyjwt,
   pytest-asyncio,
   pytest-httpx,
   pytest-socket,
@@ -38,14 +39,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langsmith";
-  version = "0.12.4";
+  version = "0.14.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-e5+lttn90eBL4xkvxN9oH3aPp1wRBfy5Q0pS8LDCiq8=";
+    hash = "sha256-ffJk20vEHid8bLj2oiKZzK+DCjW48fccSGX7CakMEWQ=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python";
@@ -76,6 +77,7 @@ buildPythonPackage (finalAttrs: {
     dataclasses-json
     multipart
     opentelemetry-sdk
+    pyjwt
     pytest-asyncio
     pytest-httpx
     pytest-socket
@@ -148,6 +150,15 @@ buildPythonPackage (finalAttrs: {
     "tests/unit_tests/sandbox/test_sandbox.py::TestSandboxWrite"
     "tests/unit_tests/sandbox/test_transport.py::TestAsyncRetryTransport"
     "tests/unit_tests/sandbox/test_transport.py::TestRetryTransport"
+    "tests/unit_tests/sandbox/test_access_delegation.py"
+    "tests/unit_tests/sandbox/test_endpoints.py"
+    "tests/unit_tests/sandbox/test_aws_role_auth.py"
+    "tests/unit_tests/sandbox/test_run_config_and_files.py::TestRunConfigModel"
+    "tests/unit_tests/sandbox/test_run_config_and_files.py::TestRunConfigOnRequests"
+    "tests/unit_tests/sandbox/test_run_config_and_files.py::TestFileSearch"
+    "tests/unit_tests/sandbox/test_run_config_and_files.py::TestRangeRead"
+    "tests/unit_tests/sandbox/test_tracing.py"
+    "tests/unit_tests/sandbox/test_verify.py"
   ];
 
   pythonImportsCheck = [ "langsmith" ];
