@@ -324,6 +324,10 @@ mkDerivation {
           dynamic-modules
           globalredirect
           grpc-error-pages
+          modsecurity
+          moreheaders
+          njs
+          otel
           ;
         inherit (nixosTests)
           nginx-auth

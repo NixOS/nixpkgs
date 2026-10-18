@@ -21,6 +21,10 @@ recurseIntoAttrs (
       globalredirect = ./globalredirect.nix;
       dynamic-modules = ./dynamic-modules.nix;
       grpc-error-pages = ./grpc-error-pages.nix;
+      modsecurity = ./modsecurity.nix;
+      moreheaders = ./moreheaders.nix;
+      njs = ./njs.nix;
+      otel = ./otel.nix;
     }
   ) packages
 )

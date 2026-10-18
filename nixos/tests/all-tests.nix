@@ -1274,10 +1274,6 @@ in
   nginx-http3 = import ./nginx-http3.nix { inherit pkgs runTest; };
   nginx-lua = runTest ./nginx-lua.nix;
   nginx-mime = runTest ./nginx-mime.nix;
-  nginx-modsecurity = runTest ./nginx-modsecurity.nix;
-  nginx-moreheaders = runTest ./nginx-moreheaders.nix;
-  nginx-njs = runTest ./nginx-njs.nix;
-  nginx-otel = runTest ./nginx-otel.nix;
   nginx-proxyprotocol = runTest ./nginx-proxyprotocol/default.nix;
   nginx-pubhtml = runTest ./nginx-pubhtml.nix;
   nginx-redirectcode = runTest ./nginx-redirectcode.nix;
