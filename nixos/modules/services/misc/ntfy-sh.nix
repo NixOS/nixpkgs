@@ -148,9 +148,10 @@ in
       };
 
       services.nginx = lib.mkIf cfg.nginx.enable {
-        enable = true;
+        enable = lib.mkDefault true;
+
         virtualHosts."${cfg.nginx.virtualHost}" = {
-          forceSSL = true;
+          forceSSL = lib.mkDefault true;
 
           locations."/" = {
             proxyPass = "http://[::1]:${toString cfg.nginx.port}";
