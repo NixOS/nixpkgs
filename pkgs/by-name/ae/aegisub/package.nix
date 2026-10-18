@@ -41,6 +41,8 @@
 
 let
   luajit' = luajit.override { enable52Compat = true; };
+  boost' =
+    if stdenv.hostPlatform.isDarwin then boost.override { extraB2Args = [ "cxxstd=17" ]; } else boost;
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -65,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    boost
+    boost'
     expat
     ffmpeg
     ffms
