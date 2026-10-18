@@ -25,7 +25,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pillow-heif";
   version = "1.8.1";
   pyproject = true;
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bigcat88";
     repo = "pillow_heif";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-UO8FlVPlxBAM/8kM9jh+GTCsqLSRSsrEpFdxIG/AxMA=";
   };
 
@@ -95,7 +95,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/bigcat88/pillow_heif/releases/tag/${src.tag}";
+    changelog = "https://github.com/bigcat88/pillow_heif/releases/tag/${finalAttrs.src.tag}";
     description = "Python library for working with HEIF images and plugin for Pillow";
     homepage = "https://github.com/bigcat88/pillow_heif";
     license = with lib.licenses; [
@@ -107,4 +107,4 @@ buildPythonPackage rec {
       kuflierl
     ];
   };
-}
+})
