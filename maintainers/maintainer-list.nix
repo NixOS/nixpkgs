@@ -7389,6 +7389,12 @@
     githubId = 2096594;
     email = "Dietrich@Daroch.me";
   };
+  different-error = {
+    name = "Sanfer D'Souza";
+    email = "tundra.louse2584@eagereverest.com";
+    github = "different-error";
+    githubId = 9338001;
+  };
   different-name = {
     name = "different-name";
     email = "hello@different-name.dev";
