@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "atom";
   version = "0.13.0";
   pyproject = true;
@@ -15,11 +15,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nucleic";
     repo = "atom";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-AwrzCd0kRiEeWnh5ywMYzFmcqzlOpiknfu17gQRU8hg=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
   buildInputs = [ cppy ];
 
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   meta = {
     description = "Memory efficient Python objects";
     homepage = "https://github.com/nucleic/atom";
-    changelog = "https://github.com/nucleic/atom/releases/tag/${version}";
+    changelog = "https://github.com/nucleic/atom/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
   };
-}
+})
