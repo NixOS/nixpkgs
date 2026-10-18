@@ -36,6 +36,7 @@ buildPythonPackage (finalAttrs: {
 
   pythonRelaxDeps = [
     "numpy"
+    "pandas"
     "plotly"
     "scikit-learn"
   ];
@@ -62,6 +63,8 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Test requires extra nltk data dependency
     "test_text_mining"
+    # AttributeError: 'Poly3DCollection' object has no attribute '_vec'
+    "test_hill_slopes"
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
