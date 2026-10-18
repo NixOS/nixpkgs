@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  versionCheckHook,
   testers,
 }:
 
@@ -21,6 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
   strictDeps = true;
 
   outputs = [
@@ -36,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Tests take a very long time, and use Make, which rebuilds
   # the code which we build with CMake instead of re-using it.
   doCheck = false;
+  doInstallCheck = true;
 
   passthru.tests = {
     version = testers.testVersion {
