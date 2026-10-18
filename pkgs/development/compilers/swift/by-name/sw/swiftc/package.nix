@@ -577,8 +577,5 @@ stdenv.mkDerivation (finalAttrs: {
     badPlatforms = [ lib.systems.inspect.patterns.is32bit ];
     license = lib.licenses.asl20;
     teams = [ lib.teams.swift ];
-    # TODO(@reckenrode): Drop in the Swift 6.4.0 update, which switches the linker to LLD.
-    # aarch64-linux is failing to link with gold on Hydra: https://hydra.nixos.org/build/349228350
-    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
   };
 })
