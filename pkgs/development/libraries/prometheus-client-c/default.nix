@@ -22,7 +22,7 @@ let
         owner = "digitalocean";
         repo = "prometheus-client-c";
         rev = "v${version}";
-        sha256 = "0g69s24xwrv5974acshrhnp6i8rpby8c6bhz15m3d8kpgjw3cm8f";
+        hash = "sha256-DlU2uHx3ojZqCR8uw5BfN6NoroUZaqbISWVn3onQyTw=";
       };
 
       nativeBuildInputs = [ cmake ];
@@ -34,11 +34,11 @@ let
         # installs headers in /usr/include (absolute)
         (fetchpatch {
           url = "https://github.com/digitalocean/prometheus-client-c/commit/5fcedeb506b7d47dd7bab35797f2c3f23db6fe10.patch";
-          sha256 = "10hzg8v5jcgxz224kdq0nha9vs78wz098b0ys7gig2iwgrg018fy";
+          hash = "sha256-3qEAXn48ihff0R4slMDn6OidFLQAt0mE+P0xWTZ6H4I=";
         })
         (fetchpatch {
           url = "https://github.com/digitalocean/prometheus-client-c/commit/0c15e7e45ad0c3726593591fdd7d8f2fde845fe3.patch";
-          sha256 = "06899v1xz3lpsdxww4p3q7pv8nrymnibncdc472056znr5fidlp0";
+          hash = "sha256-4NIWXcn2mwLEIawxu6KtPlu078HjEs5705eO38NOCRk=";
         })
       ];
 

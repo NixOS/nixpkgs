@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     fetchurl {
       url = "mirror://gnome/sources/gtksourceview/${lib.versions.majorMinor version}/gtksourceview-${version}.tar.xz";
-      sha256 = "fsnRj7KD0fhKOj7/O3pysJoQycAGWXs/uru1lYQgqH0=";
+      hash = "sha256-fsnRj7KD0fhKOj7/O3pysJoQycAGWXs/uru1lYQgqH0=";
     };
 
   patches = [
