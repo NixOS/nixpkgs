@@ -2,29 +2,25 @@
   lib,
   fetchFromGitHub,
   python3Packages,
+
+  # dependencies
   anki,
+
+  # tests
+  gitMinimal,
 }:
 
-python3Packages.buildPythonApplication {
-  pname = "ki";
-  version = "0-unstable-2023-11-08";
-
+python3Packages.buildPythonApplication (finalAttrs: {
+  pname = "ki-ng";
+  version = "0.0.20a";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "langfield";
+    owner = "eljamm";
     repo = "ki";
-    rev = "eb32fbd3229dc1a60bcc76a937ad63f3eb869f65";
-    hash = "sha256-5mQhJhvJQC9835goL3t3DRbD+c4P3KxnOflxvqmxL58=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-HUKm5uWPPzSHwuSuDkHS06D9xMAl0jSsPoneXZn5OM8=";
   };
-
-  patches = [
-    ./fix-beartype-error.patch
-    ./replace-deprecated-distutils-with-setuptools.patch
-    ./update-to-newer-anki-versions.patch
-    ./fix-gitpython-remote-url-type.patch
-    ./replace-removed-note-importer.patch
-  ];
 
   build-system = with python3Packages; [
     setuptools
@@ -43,9 +39,18 @@ python3Packages.buildPythonApplication {
     whatthepatch
   ]);
 
+  pythonRelaxDeps = [
+    "anki"
+    "tqdm"
+    "click"
+    "beartype"
+    "gitpython"
+  ];
+
   nativeCheckInputs = with python3Packages; [
     bitstring
     checksumdir
+    gitMinimal
     gitpython
     loguru
     pytest-mock
@@ -58,12 +63,11 @@ python3Packages.buildPythonApplication {
     "test_clone_clean_up_preserves_directories_that_exist_a_priori"
   ];
 
-  dontCheckRuntimeDeps = true;
-
   meta = {
     description = "Version control for Anki collections";
-    homepage = "https://github.com/langfield/ki";
+    homepage = "https://github.com/eljamm/ki";
+    mainProgram = "ki";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ eljamm ];
   };
-}
+})
