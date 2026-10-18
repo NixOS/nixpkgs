@@ -10,13 +10,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "radicle-explorer";
-  version = "0-unstable-2026-10-05";
+  version = "0-unstable-2026-10-16";
 
   src = fetchFromRadicle {
     seed = "seed.radicle.dev";
     repo = "z4V1sjrXqjvFdnCUbxPFqd5p4DtH5";
-    rev = "244c5711df12d21d70eadde4b5a4d425306d7971";
-    hash = "sha256-rE8XJrJogtKJkiP+9WMFJLMkXC8MJCVPUYQzs01BjiQ=";
+    rev = "002f109b0adb5a1dca4528336e348c5f3d571771";
+    hash = "sha256-dW3GKRKRp6U2tyGz72XDIUTEqaSZF1FUeUgPRzQj7dA=";
   };
 
   npmDepsHash = "sha256-juF44uY1zLwajEprmMWCSyGlOTet76AcXhA+O9Em4Lg=";
