@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "pymunk";
-  version = "7.3.0";
+  version = "7.3.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ed50/c5o9HUUwubljvVQKgu2i6HDx35ONZuqRm6dTBY=";
+    hash = "sha256-028QrHg1W19HmNWxfjIQChoSMCWLHzcAj3eOznLdtxk=";
   };
 
   nativeBuildInputs = [ cffi ];
