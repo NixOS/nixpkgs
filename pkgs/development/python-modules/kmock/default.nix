@@ -14,23 +14,27 @@
   yarl,
   typing-extensions,
 
+  # optional deps
+  kubernetes,
+
   # tests
   pytestCheckHook,
   pytest-asyncio,
+  pytest-mock,
   looptime,
   aresponses,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "kmock";
-  version = "0.6";
+  version = "0.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nolar";
     repo = "kmock";
     tag = finalAttrs.version;
-    hash = "sha256-qpRuSWwaPEgfE+wN1ADSyn2AbXPDzZfZ7dOf8Vw0zJA=";
+    hash = "sha256-XXJEqAIK+k+6M0mfClboQLP3D/l1u06DTJzAH10LFps=";
   };
 
   build-system = [
@@ -46,11 +50,16 @@ buildPythonPackage (finalAttrs: {
     typing-extensions
   ];
 
+  optional-dependencies = {
+    fetch = [ kubernetes ];
+  };
+
   pythonImportsCheck = [ "kmock" ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
+    pytest-mock
     aresponses
     looptime
   ];

@@ -8,13 +8,13 @@
 buildHomeAssistantComponent rec {
   owner = "robbinjanssen";
   domain = "omnik_inverter";
-  version = "3.0.0";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "robbinjanssen";
     repo = "home-assistant-omnik-inverter";
     tag = version;
-    hash = "sha256-L9us48J8fpIK3QHeEe3VhIAYBXbYegWYDi7OjeUollU=";
+    hash = "sha256-jbUEkWgnq+GODPgzK1y1bXLDuRrfEg6wZn6WpDH2SZ0=";
   };
 
   dependencies = [

@@ -8,6 +8,7 @@
   versionCheckHook,
   esptool,
   esphome,
+  nixosTests,
 }:
 
 let
@@ -140,6 +141,10 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   ];
 
   passthru = {
+    tests = {
+      inherit (nixosTests) esphome;
+    };
+
     frontend = pythonPackages.esphome-device-builder-frontend;
     updateScript = callPackage ./update.nix { };
   };

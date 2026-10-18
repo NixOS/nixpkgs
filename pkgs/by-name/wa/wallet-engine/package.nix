@@ -5,6 +5,7 @@
   buildPackages,
   fetchFromGitHub,
   fetchpatch2,
+  fixDarwinDylibNames,
   nix-update-script,
 }:
 
@@ -28,6 +29,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   cargoHash = "sha256-b9LErZRUgVa/bHjmbN3ltW8vUoF9UhCjMAfFPSbpzbY=";
+
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
+  ];
 
   passthru = {
     updateScript = nix-update-script { };

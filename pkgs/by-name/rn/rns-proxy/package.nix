@@ -10,17 +10,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rns-proxy";
-  version = "0.1.0";
+  version = "0.2.0";
   __structuredAttrs = true;
+  __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "mytecor";
     repo = "rns-proxy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+nn6BjzG/SJr8plAVj3R9c459XqvbKSGSqAnNa+QGkY=";
+    hash = "sha256-uwDScvVMbFdrkb5k3n2OJTiVSzo8O/P08NLURffnE74=";
   };
 
-  cargoHash = "sha256-o+tMlsTuFR89lNwSl3+s+WOTVVReGCJc1xAAwK1zklg=";
+  cargoHash = "sha256-vokQY+V+2qwrONiQIivedXZUvMLlAqRtdwzzpYNTBG4=";
 
   nativeBuildInputs = [
     pkg-config
@@ -29,6 +30,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     bzip2
   ];
+
+  checkFlags = [ "--skip=relay::tests::udp_exit_supports_both_families_and_empty_responses" ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

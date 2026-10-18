@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2026.10.1";
+  version = "2026.10.2";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -885,8 +885,7 @@
       ];
     "broadlink" =
       ps: with ps; [
-        python-broadlink
-      ];
+      ]; # missing inputs: broadlink-async
     "brother" =
       ps: with ps; [
         brother
@@ -8542,7 +8541,6 @@
     "brands"
     "braviatv"
     "bring"
-    "broadlink"
     "brother"
     "brottsplatskartan"
     "brunt"

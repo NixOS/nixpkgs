@@ -18,7 +18,7 @@ buildOctavePackage rec {
     repo = "pkg-control";
     tag = "${pname}-${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-go7ylTl1jitLwVo5ozi2hjUKFjOCnHOasRM4/EqqAaw=";
+    hash = "sha256-go7ylTl1jitLwVo5ozi2hjUKFjOCnHOasRM4/EqqAaw=";
   };
 
   # Running autoreconfHook inside the src directory fixes a compile issue about
