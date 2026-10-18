@@ -1,0 +1,28 @@
+From 447220589f3e65dd7a14dcddd15a7610fcbb2ae2 Mon Sep 17 00:00:00 2001
+From: Paul Grandperrin <paul.grandperrin@gmail.com>
+Date: Sun, 18 Oct 2026 01:55:57 +0200
+Subject: [PATCH 2/2] Build the ROM asset objects as C11
+
+The asset objects are compiled by a raw compiler invocation that repeats
+CMakeLists.txt's flags by hand, and that list has no -std. With GCC 15 the
+default standard is C23, where bondtypes.h's `typedef s32 bool` is an error
+because bool is a keyword.
+---
+ CMakeLists.txt | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index fe4e1d9..8551f6f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -174,7 +174,9 @@ set(GU_SRC
+ # Known caveats: bg .c interior point tables, ANIM_DATA_* streams and
+ # oddtextures texel data are big-endian blobs.
+ set(ASSET_C_FLAGS
+-    -m32 -malign-data=abi
++    # these objects are compiled with a raw compiler call, so the C standard
++    # CMAKE_C_STANDARD sets for the rest of the tree has to be repeated here
++    -m32 -std=gnu11 -malign-data=abi
+     -fms-extensions -ffreestanding -fno-strict-aliasing -fwrapv -funsigned-char
+     -fno-common -fno-zero-initialized-in-bss -fno-toplevel-reorder -fno-pic
+     -Og -w
