@@ -10,8 +10,8 @@
   libx11,
   libxext,
   xorgproto,
+  x11Support ? true,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "libglvnd";
   version = "1.7.0";
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     addDriverRunpath
   ];
-  buildInputs = [
+  buildInputs = lib.optionals x11Support [
     libx11
     libxext
     xorgproto
@@ -71,6 +71,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags =
     [ ]
+    ++ lib.optionals (!x11Support) [
+      "--disable-x11"
+      "--disable-glx"
+    ]
     # Indirectly: https://bugs.freedesktop.org/show_bug.cgi?id=35268
     ++ lib.optional stdenv.hostPlatform.isMusl "--disable-tls"
     # Remove when aarch64-darwin asm support is upstream: https://gitlab.freedesktop.org/glvnd/libglvnd/-/issues/216
@@ -84,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Set RUNPATH so that libGLX can find driver libraries in /run/opengl-driver(-32)/lib.
   # Note that libEGL does not need it because it uses driver config files which should
   # contain absolute paths to libraries.
-  postFixup = ''
+  postFixup = lib.optionalString x11Support ''
     addDriverRunpath $out/lib/libGLX.so
   '';
 
