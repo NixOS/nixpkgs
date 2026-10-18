@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  valgrind,
   testers,
 }:
 
@@ -22,10 +21,6 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
-  nativeCheckInputs = lib.optionals finalAttrs.finalPackage.doCheck [
-    valgrind
-  ];
-
   strictDeps = true;
 
   outputs = [
@@ -38,8 +33,9 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeDir = "../build/cmake";
   cmakeBuildDir = "build-dist";
 
-  doCheck = false; # tests take a very long time
-  checkTarget = "test";
+  # Tests take a very long time, and use Make, which rebuilds
+  # the code which we build with CMake instead of re-using it.
+  doCheck = false;
 
   passthru.tests = {
     version = testers.testVersion {
