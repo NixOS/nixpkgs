@@ -9620,6 +9620,7 @@ with pkgs;
     gnome48Extensions
     gnome49Extensions
     gnome50Extensions
+    gnome51Extensions
     ;
 
   lomiri = recurseIntoAttrs (callPackage ../desktops/lomiri { });

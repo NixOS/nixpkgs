@@ -75,6 +75,9 @@
   "tailscale-gnome-qs@tailscale-qs.github.io" = "tailscale-qs";
   "tailscale@joaophi.github.com" = "tailscale-qs-2";
 
+  "text-extractor@aditya190803" = "text-extractor";
+  "text-extractor@imshaaz21.github.com" = "ocr-text-extractor";
+
   "workspace-wallpapers@jonathan.aljl.eu" = "workspace-wallpapers";
   "workspace-wallpapers@ero" = "workspace-wallpapers-2";
 

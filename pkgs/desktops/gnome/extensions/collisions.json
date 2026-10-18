@@ -92,6 +92,10 @@
     "tailscale-gnome-qs@tailscale-qs.github.io",
     "tailscale@joaophi.github.com"
   ],
+  "text-extractor": [
+    "text-extractor@aditya190803",
+    "text-extractor@imshaaz21.github.com"
+  ],
   "workspace-wallpapers": [
     "workspace-wallpapers@ero",
     "workspace-wallpapers@jonathan.aljl.eu"

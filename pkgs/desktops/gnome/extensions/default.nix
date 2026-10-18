@@ -69,6 +69,7 @@ rec {
   gnome48Extensions = mapUuidNames (produceExtensionsList "48");
   gnome49Extensions = mapUuidNames (produceExtensionsList "49");
   gnome50Extensions = mapUuidNames (produceExtensionsList "50");
+  gnome51Extensions = mapUuidNames (produceExtensionsList "51");
 
   # Keep the last three versions in here
   gnomeExtensions = lib.trivial.pipe (gnome48Extensions // gnome49Extensions // gnome50Extensions) [
