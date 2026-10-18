@@ -7,17 +7,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "diego";
-  version = "0.23.0";
+  version = "0.24.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "kent-tokyo";
     repo = "diego";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ufuDdnjM2Hnhpqu1D3/qXfr5Mjur3tdi+e14Yn88VCo=";
+    hash = "sha256-RnQezfJ+4d81Sl+b8PvEeRGRddniIHJZ1u/oqdA4okc=";
   };
 
-  cargoHash = "sha256-GXyQZaj1CGAJutOup36I39xYKMW7VWkMN5q7e2fPsWQ=";
+  cargoHash = "sha256-ODikAKNgZFthhMdPH5Os/SKFY3BGUhYjvVjSm/tx4/A=";
 
   passthru.updateScript = nix-update-script { };
 
