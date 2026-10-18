@@ -24,7 +24,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain-fireworks";
-  version = "1.6.1";
+  version = "1.7.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -32,7 +32,7 @@ buildPythonPackage (finalAttrs: {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-fireworks==${finalAttrs.version}";
-    hash = "sha256-tJduBjY+JcG9bhZYsOi7+2TdR4DTi/ZCTIaNZ87R8JM=";
+    hash = "sha256-rLgWf1aJro9bDISJUBNfzgxS6qcD8cd6euSsf4ki5o0=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/partners/fireworks";
