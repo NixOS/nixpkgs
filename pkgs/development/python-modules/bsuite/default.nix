@@ -27,6 +27,7 @@
   distrax,
   dm-haiku,
   dm-sonnet,
+  mock,
   optax,
   pytestCheckHook,
   rlax,
@@ -69,6 +70,7 @@ buildPythonPackage (finalAttrs: {
     distrax
     dm-haiku
     dm-sonnet
+    mock
     optax
     pytestCheckHook
     rlax
@@ -77,7 +79,16 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "bsuite" ];
 
+  disabledTestPaths = [
+    # Require unpackaged trfl
+    "bsuite/baselines/tf/actor_critic/run_test.py"
+    "bsuite/baselines/tf/actor_critic_rnn/run_test.py"
+  ];
+
   disabledTests = [
+    # ValueError: too many values to unpack (expected 4)
+    "test_gym_cartpole"
+
     # Tests require network connection
     "test_run9"
     "test_longer_action_sequence"
