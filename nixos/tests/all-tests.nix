@@ -1493,10 +1493,6 @@ in
   phosh = runTest ./phosh.nix;
   photonvision = runTest ./photonvision.nix;
   photoprism = runTest ./photoprism.nix;
-  php = import ./php/default.nix {
-    inherit runTest;
-    php = pkgs.php;
-  };
   php82 = import ./php/default.nix {
     inherit runTest;
     php = pkgs.php82;
