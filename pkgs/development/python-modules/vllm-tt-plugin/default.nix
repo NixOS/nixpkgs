@@ -85,6 +85,7 @@ buildPythonPackage (finalAttrs: {
     description = "Tenstorrent backend plugin for vLLM";
     homepage = "https://github.com/tenstorrent/vllm-tt-plugin";
     license = lib.licenses.asl20;
+    teams = [ lib.teams.tenstorrent ];
     maintainers = with lib.maintainers; [ liberodark ];
     platforms = lib.platforms.linux;
     problems = lib.optionalAttrs (!lib.elem vllm.version supportedVllmVersions) {
