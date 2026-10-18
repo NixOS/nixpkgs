@@ -14,7 +14,7 @@ assert
 
 buildGoModule (finalAttrs: {
   pname = "open-policy-agent";
-  version = "1.19.1";
+  version = "1.21.2";
 
   __structuredAttrs = true;
 
@@ -22,10 +22,10 @@ buildGoModule (finalAttrs: {
     owner = "open-policy-agent";
     repo = "opa";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-P1ppqfCoQtpNFdSvJpYRmwLYdDi1oV+ipt5BBPXNZeE=";
+    hash = "sha256-4c6AZCTyOIj8NnzkjJg0PsSrrLPwaEwpOAWAyJbmKUI=";
   };
 
-  vendorHash = "sha256-ElqyT5dllacm49PEdxAVvEO7aV5W0ga1N0tb3qIy/cA=";
+  vendorHash = "sha256-XH55Xf5ENmdOcvOzAOTIhU249rBB/D/44dJeZUKrprM=";
 
   nativeBuildInputs = [ installShellFiles ];
 
