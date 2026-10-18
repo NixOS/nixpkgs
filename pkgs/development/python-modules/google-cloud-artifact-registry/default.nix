@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-cloud-artifact-registry";
-  version = "1.22.0";
+  version = "1.23.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
     tag = "google-cloud-artifact-registry-v${finalAttrs.version}";
-    hash = "sha256-M/7uDWWz4YCfxa4gyM9BaAo10iyTMvtR2MhNpdFYnis=";
+    hash = "sha256-b0FYupZU0ZNeIL9xJIqEXgg7ToRCQLjiswJ67YzX7OI=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/google-cloud-artifact-registry";
@@ -48,6 +48,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [
+
     "google.cloud.artifactregistry"
     "google.cloud.artifactregistry_v1"
     "google.cloud.artifactregistry_v1beta2"
@@ -58,7 +59,7 @@ buildPythonPackage (finalAttrs: {
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
-        "^google-cloud-artifact-registry: v([0-9.]+)"
+        "^google-cloud-artifact-registry-v([0-9.]+)"
       ];
     };
   };
