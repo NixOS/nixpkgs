@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "amplitude-analytics";
-  version = "1.2.3";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "amplitude";
     repo = "Amplitude-Python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-on4TJPiPyznYkBeJsTd7W59KhN7UaSX5+XJaSjkqFaE=";
+    hash = "sha256-KX0XTQK09S3pJfHp89V4CQQi3U5NxHSl+8Wy8ZLM670=";
   };
 
   build-system = [ setuptools ];
