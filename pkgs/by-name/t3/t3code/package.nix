@@ -82,8 +82,9 @@ let
       "T3CODE_RESOURCE_MONITOR_PATH"
       (lib.getExe t3code-resource-monitor)
     ]
-    # Both entry points can start the headless browser downloaded at runtime,
-    # whose libraries cannot be patched into its RPATH during the build.
+    # HTML previews and recording use the downloaded headless browser even in
+    # desktop mode. Its RPATH cannot be patched during the build.
+    # On NixOS, running it currently requires nix-ld or manual ELF patching.
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       "--prefix"
       "LD_LIBRARY_PATH"
