@@ -7,7 +7,6 @@
   python,
 }:
 buildPythonPackage (finalAttrs: {
-  __structuredAttrs = true;
 
   pname = "netbox-bgp";
   version = "0.20.1";

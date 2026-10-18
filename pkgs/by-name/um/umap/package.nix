@@ -22,8 +22,6 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   version = "3.8.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "umap-project";
     repo = "umap";

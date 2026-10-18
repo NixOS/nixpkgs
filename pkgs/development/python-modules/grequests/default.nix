@@ -12,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.7.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "grequests";
     inherit (finalAttrs) version;

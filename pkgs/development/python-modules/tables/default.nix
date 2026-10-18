@@ -33,7 +33,6 @@ buildPythonPackage (finalAttrs: {
   pname = "tables";
   version = "3.11.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "PyTables";

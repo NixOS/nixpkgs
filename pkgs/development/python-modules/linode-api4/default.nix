@@ -18,8 +18,6 @@ buildPythonPackage (finalAttrs: {
   version = "5.48.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "linode";
     repo = "linode_api4-python";

@@ -21,7 +21,6 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-KvAUshMFDu+QCQcdSI2i4SmnLm+sOMPvu8JUCs912Go=";
   };
 
-  __structuredAttrs = true;
   build-system = [
     setuptools
     patchelfUnstable # Depends on --clear-execstack which is not in any tagged release yet

@@ -17,7 +17,6 @@ buildPythonPackage (finalAttrs: {
   pname = "caio";
   version = "0.12.9";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mosquito";

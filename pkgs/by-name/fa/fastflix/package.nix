@@ -13,8 +13,6 @@ python3Packages.buildPythonApplication rec {
   version = "6.2.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "cdgriffith";
     repo = "FastFlix";

@@ -11,7 +11,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pyspread";
   version = "2.4.5";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitLab {
     owner = "pyspread";

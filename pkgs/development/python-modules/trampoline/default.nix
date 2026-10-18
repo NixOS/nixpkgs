@@ -11,8 +11,6 @@ buildPythonPackage {
   version = "0.1.2";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   # only wheel on pypi, no tags on git
   src = fetchFromGitLab {
     owner = "ferreum";

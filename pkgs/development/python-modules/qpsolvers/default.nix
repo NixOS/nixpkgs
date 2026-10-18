@@ -31,7 +31,6 @@ buildPythonPackage (finalAttrs: {
   pname = "qpsolvers";
   version = "4.13.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "qpsolvers";

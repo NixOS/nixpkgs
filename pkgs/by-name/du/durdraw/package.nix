@@ -13,7 +13,6 @@ python3Packages.buildPythonApplication rec {
   pname = "durdraw";
   version = "0.30.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "durdraw";

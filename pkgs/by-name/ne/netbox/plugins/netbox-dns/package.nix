@@ -6,7 +6,6 @@
   dnspython,
 }:
 buildPythonPackage (finalAttrs: {
-  __structuredAttrs = true;
 
   pname = "netbox-plugin-dns";
   version = "1.7.3";

@@ -41,7 +41,6 @@ buildPythonPackage (finalAttrs: {
   pname = "coiled";
   version = "1.135.4";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;

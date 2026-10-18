@@ -13,8 +13,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.18.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "fuzzywuzzy";

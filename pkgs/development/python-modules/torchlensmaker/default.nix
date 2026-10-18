@@ -28,7 +28,6 @@ buildPythonPackage (finalAttrs: {
   pname = "torchlensmaker";
   version = "0.0.14";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "victorpoughon";

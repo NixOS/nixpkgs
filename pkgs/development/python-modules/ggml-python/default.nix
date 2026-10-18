@@ -37,7 +37,6 @@ buildPythonPackage (finalAttrs: {
   pname = "ggml-python";
   version = "0.0.45";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "abetlen";

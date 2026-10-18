@@ -27,7 +27,6 @@ buildPythonPackage (finalAttrs: {
   pname = "dask-glm";
   version = "0.4.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "dask";

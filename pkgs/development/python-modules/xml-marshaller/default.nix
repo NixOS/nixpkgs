@@ -12,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.0.3";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "xml_marshaller";
     inherit (finalAttrs) version;

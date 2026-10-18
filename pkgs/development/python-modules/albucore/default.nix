@@ -21,7 +21,6 @@ buildPythonPackage (finalAttrs: {
   pname = "albucore";
   version = "0.2.4";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "albumentations-team";

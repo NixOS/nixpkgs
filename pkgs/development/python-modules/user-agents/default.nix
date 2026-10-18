@@ -11,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   version = "2.2.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   # PyPI is missing devices.json
   src = fetchFromGitHub {
     owner = "selwin";

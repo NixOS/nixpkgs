@@ -7,7 +7,6 @@
   python,
 }:
 buildPythonPackage (finalAttrs: {
-  __structuredAttrs = true;
 
   pname = "netbox-data-flows";
   version = "1.5.4";

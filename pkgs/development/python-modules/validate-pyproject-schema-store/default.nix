@@ -13,8 +13,6 @@ buildPythonPackage (finalAttrs: {
   version = "2026.10.06";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "henryiii";
     repo = "validate-pyproject-schema-store";

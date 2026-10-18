@@ -16,7 +16,6 @@ buildPythonPackage (finalAttrs: {
   pname = "smg-grpc-servicer";
   version = "0.5.6";
   pyproject = true;
-  __structuredAttrs = true;
 
   # No tags on GitHub
   src = fetchPypi {

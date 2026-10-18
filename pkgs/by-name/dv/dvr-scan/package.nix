@@ -9,8 +9,6 @@ python3Packages.buildPythonApplication rec {
   version = "1.8.2";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "Breakthrough";
     repo = "DVR-Scan";

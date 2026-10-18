@@ -17,7 +17,6 @@ buildPythonPackage (finalAttrs: {
   pname = "adbc-driver-postgresql";
   version = "1.12.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "adbc_driver_postgresql";

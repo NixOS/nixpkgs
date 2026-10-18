@@ -9,7 +9,6 @@
   django,
 }:
 buildPythonPackage (finalAttrs: {
-  __structuredAttrs = true;
 
   pname = "netbox-napalm-plugin";
   version = "0.3.7";

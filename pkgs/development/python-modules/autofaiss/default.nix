@@ -22,7 +22,6 @@ buildPythonPackage (finalAttrs: {
   pname = "autofaiss";
   version = "2.18.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "criteo";

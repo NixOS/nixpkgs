@@ -18,8 +18,6 @@ python3Packages.buildPythonApplication {
     hash = "sha256-va1qDfQ0s1/VsZc9xCIqGBfI3EGl+sfYTvYDnJqFe+0=";
   };
 
-  __structuredAttrs = true;
-
   build-system = with python3Packages; [
     hatchling
   ];

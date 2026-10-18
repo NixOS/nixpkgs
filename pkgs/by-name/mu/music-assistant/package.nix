@@ -80,7 +80,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "music-assistant";
   version = "2.10.6";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";

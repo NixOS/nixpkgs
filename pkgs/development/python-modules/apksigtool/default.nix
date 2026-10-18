@@ -14,7 +14,6 @@ buildPythonPackage (finalAttrs: {
   pname = "apksigtool";
   version = "0.1.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "obfusk";

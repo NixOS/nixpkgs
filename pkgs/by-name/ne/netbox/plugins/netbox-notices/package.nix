@@ -11,7 +11,6 @@ buildPythonPackage (finalAttrs: {
   pname = "netbox-notices";
   version = "1.3.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jsenecal";

@@ -42,8 +42,6 @@ python3.pkgs.buildPythonApplication rec {
   nativeCheckInputs = [ versionCheckHook ];
   # doCheck = false; # no tests - restore this after versionCheckHook can be moved
 
-  __structuredAttrs = true;
-
   postFixup = ''
     # Do not propagate Python
     substituteInPlace $out/nix-support/propagated-build-inputs \

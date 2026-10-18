@@ -9,7 +9,6 @@
   python,
 }:
 buildPythonPackage (finalAttrs: {
-  __structuredAttrs = true;
 
   pname = "netbox-floorplan-plugin";
   version = "0.9.2";

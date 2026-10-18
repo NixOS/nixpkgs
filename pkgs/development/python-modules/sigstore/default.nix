@@ -39,7 +39,6 @@ buildPythonPackage (finalAttrs: {
   pname = "sigstore";
   version = "4.2.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "sigstore";

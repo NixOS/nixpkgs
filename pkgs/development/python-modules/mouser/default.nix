@@ -18,7 +18,6 @@ buildPythonPackage (finalAttrs: {
   pname = "mouser";
   version = "0.1.6";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "sparkmicro";

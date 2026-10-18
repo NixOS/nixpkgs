@@ -17,7 +17,6 @@ let
   extraBuildInputs = plugins py.pkgs;
 in
 py.pkgs.buildPythonApplication (finalAttrs: {
-  __structuredAttrs = true;
 
   pname = "netbox";
   version = "4.7.3";

@@ -33,7 +33,6 @@ buildPythonPackage (finalAttrs: {
   pname = "minari";
   version = "0.5.4";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Farama-Foundation";

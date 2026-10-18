@@ -9,7 +9,6 @@ python3Packages.buildPythonApplication rec {
   pname = "pdf-mcp";
   version = "1.21.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jztan";

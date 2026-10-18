@@ -12,7 +12,6 @@ buildPythonPackage (finalAttrs: {
   pname = "cryptomobile";
   version = "0-unstable-2025-08-30";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mitshell";

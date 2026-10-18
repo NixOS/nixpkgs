@@ -52,7 +52,6 @@ let
   '';
 in
 buildPythonPackage (finalAttrs: {
-  __structuredAttrs = true;
 
   pname = "plover";
   version = "5.4.0";

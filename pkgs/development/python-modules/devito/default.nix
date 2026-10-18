@@ -34,7 +34,6 @@ buildPythonPackage (finalAttrs: {
   pname = "devito";
   version = "4.8.23";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "devitocodes";

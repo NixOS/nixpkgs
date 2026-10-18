@@ -8,7 +8,6 @@
 }:
 
 buildPythonPackage (finalAttrs: {
-  __structuredAttrs = true;
 
   pname = "netbox-lists";
   version = "4.0.4";

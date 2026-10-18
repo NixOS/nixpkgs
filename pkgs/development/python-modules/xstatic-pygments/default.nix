@@ -10,8 +10,6 @@ buildPythonPackage (finalAttrs: {
   version = "2.9.0.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "XStatic-Pygments";
     inherit (finalAttrs) version;

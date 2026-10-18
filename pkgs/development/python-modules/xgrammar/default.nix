@@ -30,7 +30,6 @@ buildPythonPackage (finalAttrs: {
   pname = "xgrammar";
   version = "0.2.8";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mlc-ai";

@@ -54,8 +54,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Tools to manage the Chrome OS bootloader";
     homepage = "https://gitlab.postmarketos.org/postmarketOS/depthcharge-tools";

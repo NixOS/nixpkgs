@@ -34,7 +34,6 @@ buildPythonPackage (finalAttrs: {
   pname = "botorch";
   version = "0.18.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "meta-pytorch";

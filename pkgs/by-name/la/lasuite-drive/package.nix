@@ -148,8 +148,6 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     };
   };
 
-  __structuredAttrs = true;
-
   meta = meta // {
     description = "A collaborative file sharing and document management platform that scales. Built with Django and React. Opensource alternative to Sharepoint or Google Drive";
     mainProgram = "drive";

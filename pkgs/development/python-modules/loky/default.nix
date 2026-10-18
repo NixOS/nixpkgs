@@ -21,7 +21,6 @@ buildPythonPackage (finalAttrs: {
   pname = "loky";
   version = "3.7.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "joblib";

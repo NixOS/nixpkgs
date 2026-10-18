@@ -5,7 +5,6 @@
   setuptools,
 }:
 buildPythonPackage (finalAttrs: {
-  __structuredAttrs = true;
 
   pname = "netbox-contextmenus";
   version = "1.4.14";

@@ -6,7 +6,6 @@
 }:
 
 python3Packages.buildPythonApplication rec {
-  __structuredAttrs = true;
   pname = "graphify";
   version = "0.9.91";
   pyproject = true;

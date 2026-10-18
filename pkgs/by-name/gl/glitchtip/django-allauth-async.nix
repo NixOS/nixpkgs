@@ -41,7 +41,6 @@ buildPythonPackage (finalAttrs: {
   pname = "django-allauth-async";
   version = "65.16.1.7";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitLab {
     owner = "glitchtip";

@@ -44,8 +44,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     hash = "sha256-cXnEx3HNvTEsSz2Gz/W5gswmvQ3bxHMPGq0Y4MwIHjM=";
   };
 
-  __structuredAttrs = true;
-
   nativeBuildInputs = with pythonPackages; [
     pyprojectVersionPatchHook
   ];

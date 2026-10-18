@@ -43,8 +43,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     hash = "sha256-6zjIEwDHdOIAIucV4T/zY10F80nQNOgnRkA+i2n7Sng=";
   };
 
-  __structuredAttrs = true;
-
   dontWrapGApps = true;
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")

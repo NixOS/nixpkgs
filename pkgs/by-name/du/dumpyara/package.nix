@@ -71,8 +71,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Android firmware dumper";
     homepage = "https://github.com/sebaubuntu-python/dumpyara";

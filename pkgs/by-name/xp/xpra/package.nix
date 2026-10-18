@@ -106,7 +106,6 @@ effectiveBuildPythonApplication (finalAttrs: {
   pname = "xpra";
   version = "6.5.4";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Xpra-org";

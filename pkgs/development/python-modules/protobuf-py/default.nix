@@ -16,7 +16,6 @@ buildPythonPackage (finalAttrs: {
   # together.
   version = "0.3.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   # No tag on GitHub for this release: bufbuild/protobuf-py's only tag is v0.2.0,
   # which connectrpc (`protobuf-py==0.1.1`) and e2b (`<0.2`) do not accept yet.

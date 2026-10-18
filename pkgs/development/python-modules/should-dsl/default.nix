@@ -10,8 +10,6 @@ buildPythonPackage (finalAttrs: {
   version = "2.1.2";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "should_dsl";

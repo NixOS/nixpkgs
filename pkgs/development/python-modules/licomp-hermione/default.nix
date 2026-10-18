@@ -12,7 +12,6 @@ buildPythonPackage (finalAttrs: {
   pname = "licomp-hermione";
   version = "0.5.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "hesa";

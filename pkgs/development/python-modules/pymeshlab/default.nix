@@ -98,8 +98,6 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "pymeshlab" ];
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Open source mesh processing python library";
     homepage = "https://github.com/cnr-isti-vclab/PyMeshLab";

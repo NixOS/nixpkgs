@@ -12,7 +12,6 @@ buildPythonPackage (finalAttrs: {
   pname = "cmake-parser";
   version = "0.9.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "roehling";

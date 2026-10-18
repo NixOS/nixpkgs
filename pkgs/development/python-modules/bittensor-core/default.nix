@@ -13,8 +13,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.1.3";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "bittensor_core";
     inherit (finalAttrs) version;

@@ -21,7 +21,6 @@ buildPythonPackage (finalAttrs: {
   pname = "asynch";
   version = "0.4.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "long2ice";

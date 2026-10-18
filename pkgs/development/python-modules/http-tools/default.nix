@@ -11,7 +11,6 @@ buildPythonPackage (finalAttrs: {
   pname = "http-tools";
   version = "6.0.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "MobSF";

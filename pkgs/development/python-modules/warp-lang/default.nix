@@ -51,7 +51,6 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
   # TODO(@connorbaker): Some CUDA setup hook is failing when __structuredAttrs is false,
   # causing a bunch of missing math symbols (like expf) when linking against the static library
   # provided by NVCC.
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "NVIDIA";

@@ -12,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   version = "3.12.5";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "brocaar";
     repo = "chirpstack-api";

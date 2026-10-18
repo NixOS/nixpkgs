@@ -11,7 +11,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nix-fast-build";
   version = "2.0.4";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Mic92";

@@ -30,7 +30,6 @@ let
     python3Packages.buildPythonApplication {
       pname = "migrate_v016";
       inherit src version;
-      __structuredAttrs = true;
       format = "other";
       dontBuild = true;
       dependencies = [

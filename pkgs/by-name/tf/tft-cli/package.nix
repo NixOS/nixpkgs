@@ -10,8 +10,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   version = "0.0.38";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitLab {
     owner = "testing-farm";
     repo = "cli";

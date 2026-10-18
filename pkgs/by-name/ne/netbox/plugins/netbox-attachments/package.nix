@@ -9,7 +9,6 @@
   netaddr,
 }:
 buildPythonPackage (finalAttrs: {
-  __structuredAttrs = true;
 
   pname = "netbox-attachments";
   version = "12.0.0";

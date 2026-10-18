@@ -24,8 +24,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.3.3";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   disabled = isPyPy; # hangs at [translation:info]
 
   src = fetchPypi {

@@ -31,7 +31,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gpu-viewer";
   version = "4.02";
   pyproject = false;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "arunsivaramanneo";

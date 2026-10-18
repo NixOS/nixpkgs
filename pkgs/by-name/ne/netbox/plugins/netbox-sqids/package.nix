@@ -11,7 +11,6 @@ buildPythonPackage (finalAttrs: {
   pname = "netbox-sqids";
   version = "0.3.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jsenecal";

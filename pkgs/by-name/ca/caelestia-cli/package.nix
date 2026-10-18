@@ -19,7 +19,6 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "caelestia-cli";
-  __structuredAttrs = true;
   version = "1.1.3";
 
   src = fetchFromGitHub {
