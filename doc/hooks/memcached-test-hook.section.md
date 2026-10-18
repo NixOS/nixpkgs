@@ -13,6 +13,19 @@ stdenv.mkDerivation {
 }
 ```
 
+If you use a custom `checkPhase`, remember to add the `runHook` calls:
+```nix
+{
+  checkPhase = ''
+    runHook preCheck
+
+    # ... your tests
+
+    runHook postCheck
+  '';
+}
+```
+
 ## Variables {#sec-memcachedTestHook-variables}
 
 Bash-only variables:

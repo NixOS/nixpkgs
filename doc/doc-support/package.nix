@@ -86,6 +86,8 @@ stdenvNoCC.mkDerivation (
     '';
 
     buildPhase = ''
+      runHook preBuild
+
       substituteInPlace ./languages-frameworks/python.section.md \
         --subst-var-by python-interpreter-table "$(<"${pythonInterpreterTable}")"
 
@@ -121,9 +123,13 @@ stdenvNoCC.mkDerivation (
         --no-navheader \
         manual.md \
         out/index.html
+
+      runHook postBuild
     '';
 
     installPhase = ''
+      runHook preInstall
+
       dest="$out/share/doc/nixpkgs"
       mkdir -p "$(dirname "$dest")"
       mv out "$dest"
@@ -136,6 +142,8 @@ stdenvNoCC.mkDerivation (
       mkdir -p $out/nix-support/
       echo "doc manual $dest index.html" >> $out/nix-support/hydra-build-products
       echo "doc manual $dest nixpkgs-manual.epub" >> $out/nix-support/hydra-build-products
+
+      runHook postInstall
     '';
 
     passthru = {

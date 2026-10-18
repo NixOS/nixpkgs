@@ -18,4 +18,10 @@ stdenvNoCC.mkDerivation {
     mkdir -p $out
     nixdoc --manifest ${../function-catalog.json} --root src --output $out/lib-functions.json
   '';
+
+  installPhase = ''
+    runHook preInstall
+
+    runHook postInstall
+  '';
 }
