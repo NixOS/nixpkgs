@@ -11,6 +11,7 @@
   pkg-config,
   stdenv,
   unstableGitUpdater,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -56,10 +57,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  passthru.updateScript = unstableGitUpdater {
-    tagFormat = "release-1.*";
-    tagPrefix = "release-";
-    branch = "SDL-1.2";
+  passthru = {
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+    updateScript = unstableGitUpdater {
+      tagFormat = "release-1.*";
+      tagPrefix = "release-";
+      branch = "SDL-1.2";
+    };
   };
 
   meta = {
@@ -68,6 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.zlib;
     teams = [ lib.teams.sdl ];
     inherit (SDL.meta) platforms;
+    pkgConfigModules = [ "SDL_image" ];
     identifiers.cpeParts =
       let
         # version shenanigans to strip -unstable suffix which is not supported by CPE
