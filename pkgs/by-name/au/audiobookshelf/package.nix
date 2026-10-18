@@ -80,6 +80,7 @@ buildNpmPackage (finalAttrs: {
       jvanbruegge
       adamcstephens
       tebriel
+      connor-grady
     ];
     platforms = lib.platforms.linux;
     mainProgram = "audiobookshelf";
