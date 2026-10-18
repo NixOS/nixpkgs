@@ -320,12 +320,13 @@ mkDerivation {
         inherit (nixosTests.nginx.${flavor})
           basic
           etag
+          etag-compression
+          dynamic-modules
+          globalredirect
+          grpc-error-pages
           ;
         inherit (nixosTests)
           nginx-auth
-          nginx-dynamic-modules
-          nginx-etag-compression
-          nginx-globalredirect
           nginx-http3
           nginx-lua
           nginx-proxyprotocol

@@ -15,8 +15,12 @@ recurseIntoAttrs (
     in
     mapAttrs (const callTest) {
       basic = ./basic.nix;
+      compression = ./compression.nix;
       etag = ./etag.nix;
       etag-compression = ./etag-compression.nix;
+      globalredirect = ./globalredirect.nix;
+      dynamic-modules = ./dynamic-modules.nix;
+      grpc-error-pages = ./grpc-error-pages.nix;
     }
   ) packages
 )

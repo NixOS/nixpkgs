@@ -1,6 +1,10 @@
-{ ... }:
 {
-  name = "nginx-globalredirect";
+  mkPackage ? builtins.getAttr "nginx",
+  name ? "default",
+  ...
+}:
+{
+  name = "nginx-globalredirect-${name}";
 
   nodes = {
     webserver =
@@ -8,6 +12,7 @@
       {
         services.nginx = {
           enable = true;
+          package = mkPackage pkgs;
           virtualHosts.localhost = {
             globalRedirect = "other.example.com";
             # Add an exception
