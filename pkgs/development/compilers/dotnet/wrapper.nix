@@ -2,7 +2,7 @@
   stdenv,
   stdenvNoCC,
   lib,
-  writeText,
+  makeWrapper,
   testers,
   runCommand,
   runCommandWith,
@@ -47,13 +47,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     replaceVars ./dotnet-sdk-setup-hook.sh {
       inherit lndir xmlstarlet;
     }
+  )
+  ++ lib.optional (unwrapped.passthru ? workloadPackRoot) (
+    replaceVars ./dotnet-workload-hook.sh {
+      inherit (unwrapped.passthru) workloadPackRoot;
+    }
   );
 
   propagatedSandboxProfile = toString unwrapped.__propagatedSandboxProfile;
 
   propagatedBuildInputs = lib.optional (type == "sdk") nugetPackageHook;
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+  ]
+  ++ lib.optional (unwrapped.passthru ? workloadPackRoot) makeWrapper;
 
   outputs = [ "out" ] ++ lib.optional (unwrapped ? man) "man";
 
@@ -71,6 +79,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --bash ${./completions/dotnet.bash} \
       --zsh ${./completions/dotnet.zsh} \
       --fish ${./completions/dotnet.fish}
+  ''
+  + lib.optionalString (unwrapped.passthru ? workloadPackRoot) ''
+    wrapProgram "$out"/bin/dotnet \
+      --set DOTNET_ROOT "${unwrapped}/share/dotnet" \
+      --set DOTNET_HOST_PATH "${unwrapped}/share/dotnet/dotnet" \
+      --prefix DOTNETSDK_WORKLOAD_PACK_ROOTS : "${unwrapped.passthru.workloadPackRoot}/share/dotnet"
   '';
 
   doInstallCheck = true;

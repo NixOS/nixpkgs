@@ -14,6 +14,9 @@ dotnetPackages:
 let
   cli = builtins.head dotnetPackages;
   mkWrapper = callPackage ./wrapper.nix { };
+  workloadRoot = lib.optionalString (lib.any (package: package ? workloadIds) dotnetPackages) ''
+    --set DOTNET_ROOT "$out/share/dotnet"
+  '';
 in
 assert lib.assertMsg ((builtins.length dotnetPackages) > 0) ''
   You must include at least one package, e.g
@@ -26,6 +29,7 @@ mkWrapper "sdk" (
     paths = dotnetPackages;
     pathsToLink = map (x: "/share/dotnet/${x}") [
       "host"
+      "library-packs"
       "metadata"
       "packs"
       "sdk"
@@ -41,6 +45,7 @@ mkWrapper "sdk" (
       cp "${cli}"/share/dotnet/dotnet "$out"/share/dotnet
       # dotnet won't run if it's renamed, so we can't wrap it in-place
       makeWrapper "$out"/share/dotnet/dotnet "$out"/share/dotnet/.dotnet-wrapper \
+        ${lib.trim workloadRoot} \
         --set-default DOTNET_HOST_PATH "$out"/share/dotnet/dotnet
       # the wrapper itself can't be in $out/bin, because things follow symlinks
       # to find DOTNET_ROOT
@@ -48,6 +53,7 @@ mkWrapper "sdk" (
       if [[ -e "${cli}"/share/dotnet/dnx ]]; then
         cp "${cli}"/share/dotnet/dnx "$out"/share/dotnet
         makeWrapper "$out"/share/dotnet/dnx "$out"/share/dotnet/.dnx-wrapper \
+          ${lib.trim workloadRoot} \
           --set-default DOTNET_HOST_PATH "$out"/share/dotnet/dotnet
         ln -s "$out"/share/dotnet/.dnx-wrapper "$out"/bin/dnx
       fi
