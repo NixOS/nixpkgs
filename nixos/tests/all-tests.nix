@@ -2008,6 +2008,7 @@ in
     _module.args.package = pkgsLinux.vinyl-cache_9;
   };
   virtualbox = handleTestOn [ "x86_64-linux" ] ./virtualbox.nix { };
+  vllm-modular = runTest ./vllm-modular.nix;
   vm-variant = handleTest ./vm-variant.nix { };
   vnstat = runTest ./vnstat.nix;
   vscode-remote-ssh = handleTestOn [ "x86_64-linux" ] ./vscode-remote-ssh.nix { };
