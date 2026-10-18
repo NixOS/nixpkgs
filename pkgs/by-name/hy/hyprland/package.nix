@@ -4,7 +4,7 @@
   stdenvAdapters,
   fetchFromGitHub,
   pkg-config,
-  makeWrapper,
+  makeBinaryWrapper,
   cmake,
   aquamarine,
   binutils,
@@ -129,7 +129,7 @@ customStdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     hyprwayland-scanner
     hyprwire
-    makeWrapper
+    makeBinaryWrapper
     cmake
     pkg-config
     wayland-scanner

@@ -186,11 +186,11 @@ let
 
   linux = stdenvNoCC.mkDerivation (finalAttrs: {
     inherit pname meta;
-    version = "155.0.4283.45";
+    version = "155.0.4283.62";
 
     src = fetchurl {
       url = "https://packages.microsoft.com/repos/edge/pool/main/m/microsoft-edge-stable/microsoft-edge-stable_${finalAttrs.version}-1_amd64.deb";
-      hash = "sha256-NayIGJ7ZG2DP9Eb7YCDKYFE84g+YUBDTxbmWEV4+xKQ=";
+      hash = "sha256-PlODTZ1uUFvFfmv/RNks/ozwvtkGTojvxbDY8cdfcPo=";
     };
 
     # With strictDeps on, some shebangs were not being patched correctly
@@ -296,12 +296,12 @@ let
 
   darwin = stdenvNoCC.mkDerivation (finalAttrs: {
     inherit pname meta;
-    version = "155.0.4283.45";
-    uuid = "6b10bfa6-9f61-4b45-8508-31f5cdc70657";
+    version = "155.0.4283.62";
+    uuid = "709306ae-6f10-4efb-8abb-f6899182f264";
 
     src = fetchurl {
       url = "https://msedge.sf.dl.delivery.mp.microsoft.com/filestreamingservice/files/${finalAttrs.uuid}/MicrosoftEdge-${finalAttrs.version}.dmg";
-      hash = "sha256-ElNfXNqMhhLTXcywirzmwVZBEr6mcgl9K0n4pilLCT4=";
+      hash = "sha256-KStX9RSRe+iVddHooRJt7Ch1fLDEJGeDFofyVIvnixc=";
     };
 
     dontPatch = true;
