@@ -27,6 +27,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Library to interact with the Bluez Bluetooth Management API";
     homepage = "https://github.com/ukBaz/python-btsocket";
+    changelog = "https://github.com/ukBaz/python-btsocket/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
