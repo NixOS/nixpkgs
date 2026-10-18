@@ -1,10 +1,10 @@
 {
   lib,
   stdenvNoCC,
-  fetchurl,
+  fetchFromGitHub,
   bun,
   llvmPackages,
-  makeWrapper,
+  makeBinaryWrapper,
   symlinkJoin,
   versionCheckHook,
   config,
@@ -12,10 +12,7 @@
   cudaPackages,
   addDriverRunpath,
   apple-sdk_15,
-  writeShellScript,
-  curl,
-  jq,
-  nix-update,
+  nix-update-script,
 }:
 
 let
@@ -32,19 +29,19 @@ in
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bend2";
-  version = "2.0.5";
+  version = "2.0.37";
 
-  src = fetchurl {
-    url = "https://bend-lang.com/dl/${finalAttrs.version}.tar.gz";
-    hash = "sha256-TbcOd84bECfx0OFd7gJZIfp5SptBWt1DUOx8ZKzyd1s=";
+  src = fetchFromGitHub {
+    owner = "bendlang";
+    repo = "bend";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BtOznD2a757sWIqHU57fRJdjEGDOcYnwHO3dp9YxBIY=";
   };
-
-  sourceRoot = ".";
 
   __structuredAttrs = true;
   strictDeps = true;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
   dontBuild = true;
 
@@ -90,16 +87,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  # upstream tags no releases; its manifest names the latest one
-  passthru.updateScript = writeShellScript "update-bend2" ''
-    set -euo pipefail
-    version=$(${lib.getExe curl} -fsSL https://bend-lang.com/dl/latest.json | ${lib.getExe jq} -r .ver)
-    ${lib.getExe nix-update} bend2 --version "$version"
-  '';
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Dependently typed, affine language that verifies proofs and runs on CPU threads and GPUs";
     homepage = "https://bend-lang.com";
+    changelog = "https://github.com/bendlang/bend/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     mainProgram = "bend";
     maintainers = with lib.maintainers; [ reu ];
