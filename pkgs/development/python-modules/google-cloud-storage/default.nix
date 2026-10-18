@@ -127,6 +127,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "google.cloud.storage" ];
 
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
+
   meta = {
     description = "Google Cloud Storage API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-storage";

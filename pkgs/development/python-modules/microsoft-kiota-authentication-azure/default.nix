@@ -46,8 +46,12 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "kiota_authentication_azure" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "microsoft-kiota-authentication-azure-v";
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "microsoft-kiota-authentication-azure-v";
+    };
   };
 
   meta = {

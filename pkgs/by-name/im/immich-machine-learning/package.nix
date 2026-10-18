@@ -1,6 +1,8 @@
 {
   lib,
   immich,
+  ocl-icd,
+  openvino,
   python3,
   nixosTests,
   stdenv,
@@ -15,6 +17,12 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   inherit (immich) version;
   src = "${immich.src}/machine-learning";
   pyproject = true;
+
+  postPatch = ''
+    substituteInPlace immich_ml/sessions/ort.py \
+      --replace-fail 'Path(ort.__file__).parent / "capi" / "libopenvino_c.so"' '"${lib.getLib openvino}/lib/libopenvino_c.so"' \
+      --replace-fail '"libOpenCL.so.1"' '"${lib.getLib ocl-icd}/lib/libOpenCL.so.1"'
+  '';
 
   pythonRelaxDeps = [
     "onnx"

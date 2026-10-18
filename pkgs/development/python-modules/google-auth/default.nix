@@ -99,8 +99,12 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "google-auth-v";
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "google-auth-v";
+    };
   };
 
   meta = {

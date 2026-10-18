@@ -12,13 +12,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "stackit-objectstorage";
-  version = "1.5.0";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "stackit_objectstorage";
     inherit (finalAttrs) version;
-    hash = "sha256-UO+2jSI0BI5XjZWQsKJlGG1dDXNsk+OUm5vQqgsH2XA=";
+    hash = "sha256-vCpHhlhF6F2JoFgLG6Nar48pKAGNes1WVPCexzv1jio=";
   };
 
   build-system = [ hatchling ];

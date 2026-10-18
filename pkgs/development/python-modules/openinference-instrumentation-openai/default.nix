@@ -75,7 +75,11 @@ buildPythonPackage (finalAttrs: {
     "tests/openinference/instrumentation/openai/test_instrumentor.py"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "OpenInference OpenAI SDK Instrumentation";

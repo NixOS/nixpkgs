@@ -13,14 +13,14 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "netbox-peering-manager";
-  version = "0.3.1";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jsenecal";
     repo = "netbox-peering-manager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+sgQo2ahFHNNfSK8MTT75BbFTgf4GqFRxF9DZtBu2yI=";
+    hash = "sha256-9ApKrlPCM6yzgd0HKJjyzcKIPGk8FT+EIH8ocI5zebw=";
   };
 
   build-system = [ setuptools ];

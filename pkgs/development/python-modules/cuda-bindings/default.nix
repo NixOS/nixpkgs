@@ -221,9 +221,13 @@ buildPythonPackage (finalAttrs: {
 
   # Tests need access to a GPU
   doCheck = false;
-  passthru.gpuCheck = finalAttrs.finalPackage.overrideAttrs {
-    requiredSystemFeatures = [ "cuda" ];
-    doInstallCheck = true;
+  passthru = {
+    gpuCheck = finalAttrs.finalPackage.overrideAttrs {
+      requiredSystemFeatures = [ "cuda" ];
+      doInstallCheck = true;
+    };
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
   };
 
   meta = {

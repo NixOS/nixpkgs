@@ -30,7 +30,8 @@ let
 in
 buildFHSEnv (
   lib.recursiveUpdate fhsArgs {
-    inherit name;
+    pname = name;
+    version = "0";
 
     targetPkgs = pkgs: [ appimageTools.appimage-exec ] ++ fhsArgs.targetPkgs pkgs ++ extraPkgs pkgs;
     runScript = "appimage-exec.sh";

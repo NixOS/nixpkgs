@@ -44,6 +44,7 @@
   twolame,
   enableWavpack ? true,
   wavpack,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -103,6 +104,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Another Swiss Army Knife of sound processing utilities";

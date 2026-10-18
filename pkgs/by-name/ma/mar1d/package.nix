@@ -14,7 +14,10 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "MAR1D";
-  version = "unstable-2023-02-02";
+  version = "0.3.1-unstable-2023-02-02";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     hash = "sha256-kZERhwnTpBhjx6MLdf1bYCWMjtTiId/5a69kRt+/6oY=";

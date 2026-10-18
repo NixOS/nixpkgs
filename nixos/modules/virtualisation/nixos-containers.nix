@@ -1257,5 +1257,8 @@ in
     ))
   ];
 
-  meta.buildDocsInSandbox = false;
+  meta = {
+    buildDocsInSandbox = false;
+    maintainers = with lib.maintainers; [ graysontinker ];
+  };
 }
