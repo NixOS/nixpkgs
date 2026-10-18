@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   buildNpmPackage,
   callPackage,
@@ -10,23 +9,13 @@
   util-linux,
   python3,
   typescript_5,
-  getopt,
+  jq,
   nixosTests,
   nix-update-script,
 }:
 
 let
-  ffmpeg-full = ffmpeg_8-full;
   nodejs = nodejs_24;
-
-  wrapper = import ./wrapper.nix {
-    inherit
-      stdenv
-      ffmpeg-full
-      nunicode
-      getopt
-      ;
-  };
 in
 buildNpmPackage (finalAttrs: {
   pname = "audiobookshelf";
@@ -47,24 +36,44 @@ buildNpmPackage (finalAttrs: {
   nativeBuildInputs = [
     python3
     typescript_5
+    jq
   ];
 
   npmBuildScript = "build:server";
   npmInstallFlags = [ "--omit=dev" ];
 
+  makeWrapperArgs = [
+    "--set"
+    "FFMPEG_PATH"
+    (lib.getExe ffmpeg_8-full)
+    "--set"
+    "FFPROBE_PATH"
+    (lib.getExe' ffmpeg_8-full "ffprobe")
+    "--set"
+    "NODE_ENV"
+    "production"
+    "--set"
+    "NUSQLITE3_PATH"
+    "${nunicode.sqlite}/lib/libnusqlite3"
+    "--set"
+    "SKIP_BINARIES_CHECK"
+    "1"
+    "--set"
+    "SOURCE"
+    "nixpkgs"
+  ];
+
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/opt/{client,dist-server}
-    cp -r dist-server/{index.js,package.json,server} $out/opt/dist-server/
-    cp -r node_modules package.json $out/opt/
-    cp -r ${finalAttrs.passthru.client} $out/opt/client/dist
-    mkdir $out/bin
+    packageOut="$out/lib/node_modules/$(jq --raw-output '.name' package.json)"
 
-    echo '${wrapper}' > $out/bin/audiobookshelf
-    echo "  exec ${finalAttrs.nodejs}/bin/node $out/opt/dist-server/index.js" >> $out/bin/audiobookshelf
+    mkdir -p "$packageOut"/{client,dist-server}
+    cp -r dist-server/{index.js,package.json,server} "$packageOut"/dist-server/
+    cp -r node_modules package.json "$packageOut"/
+    cp -r ${finalAttrs.passthru.client} "$packageOut"/client/dist
 
-    chmod +x $out/bin/audiobookshelf
+    nodejsInstallExecutables
 
     runHook postInstall
   '';
