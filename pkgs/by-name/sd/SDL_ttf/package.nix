@@ -53,5 +53,11 @@ stdenv.mkDerivation (finalAttrs: {
       # CVE applies to SDL2 https://github.com/NixOS/nixpkgs/pull/274836#issuecomment-2708627901
       # "CVE-2022-27470"
     ];
+    identifiers.cpeParts =
+      let
+        # version shenanigans to strip -unstable suffix which is not supported by CPE
+        versionString = "${lib.versions.majorMinor finalAttrs.version}.${lib.versions.patch finalAttrs.version}";
+      in
+      lib.meta.cpeFullVersionWithVendor "libsdl" versionString;
   };
 })
