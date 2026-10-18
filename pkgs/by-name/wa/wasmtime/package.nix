@@ -67,16 +67,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellFiles
   ];
 
-  doCheck =
-    with stdenv.buildPlatform;
-    # SIMD tests are only executed on platforms that support all
-    # required processor features (e.g. SSE3, SSSE3 and SSE4.1 on x86_64):
-    # https://github.com/bytecodealliance/wasmtime/blob/v9.0.0/cranelift/codegen/src/isa/x64/mod.rs#L220
-    (isx86_64 -> sse3Support && ssse3Support && sse4_1Support)
-    &&
-      # The dependency `wasi-preview1-component-adapter` fails to build because of:
-      # error: linker `rust-lld` not found
-      !isAarch64;
+  # The test suite compiles guest programs for the wasm32-wasip1
+  # target, whose standard library is not shipped by the nixpkgs Rust
+  # toolchain, and also expects wasi-sdk.
+  doCheck = false;
 
   postInstall =
     let
