@@ -26,7 +26,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-session";
-  # Also bump ./ctl.nix when bumping major version.
+  # Also bump ../gnome-session-ctl/package.nix when bumping major version.
   version = "50.1";
 
   outputs = [
