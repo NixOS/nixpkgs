@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     repo = "lz4";
     owner = "lz4";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ZuizCK3zcF4BEn5g9s0XhHOUvzgEFA4h66BM+bfUDSA=";
   };
 
@@ -47,6 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
       moduleNames = [ "liblz4" ];
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Extremely fast compression algorithm";
