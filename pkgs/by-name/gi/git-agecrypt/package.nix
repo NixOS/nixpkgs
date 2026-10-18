@@ -41,7 +41,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/vlaci/git-agecrypt";
     changelog = "https://github.com/vlaci/git-agecrypt/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ kuznetsss ];
+    maintainers = with lib.maintainers; [
+      kuznetsss
+      vlaci
+    ];
     mainProgram = "git-agecrypt";
   };
 })
