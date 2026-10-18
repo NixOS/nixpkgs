@@ -12,8 +12,9 @@
   anyio,
   distro,
   docstring-parser,
-  httpx,
+  httpx2,
   jiter,
+  opentelemetry-api,
   pydantic,
   sniffio,
   typing-extensions,
@@ -30,6 +31,7 @@
   http-snapshot,
   inline-snapshot,
   nest-asyncio,
+  opentelemetry-sdk,
   pytest-asyncio,
   pytest-xdist,
   pytestCheckHook,
@@ -63,8 +65,9 @@ buildPythonPackage (finalAttrs: {
     anyio
     distro
     docstring-parser
-    httpx
+    httpx2
     jiter
+    opentelemetry-api
     pydantic
     sniffio
     typing-extensions
@@ -87,6 +90,7 @@ buildPythonPackage (finalAttrs: {
     http-snapshot
     inline-snapshot
     nest-asyncio
+    opentelemetry-sdk
     pytest-asyncio
     pytest-xdist
     pytestCheckHook
