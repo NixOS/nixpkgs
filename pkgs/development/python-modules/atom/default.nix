@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "atom";
-  version = "0.12.1";
+  version = "0.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nucleic";
     repo = "atom";
     tag = version;
-    hash = "sha256-XFJujJrxubtdCLTr1oaM7h0LNS1Ep08f8+1tRzARBqs=";
+    hash = "sha256-AwrzCd0kRiEeWnh5ywMYzFmcqzlOpiknfu17gQRU8hg=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
