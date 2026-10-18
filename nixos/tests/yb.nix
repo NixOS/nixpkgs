@@ -34,9 +34,13 @@ pkgs.testers.nixosTest {
     if "test result: ok" not in out:
       raise Exception("hardware_piv_tests failed:\n" + out)
 
-    # Tier-2: CLI subprocess tests against the Nix-built yb binary.
+    # The packaged yb ignores YB_FIXTURE: a nonexistent file is not read.
+    machine.succeed("YB_FIXTURE=/nonexistent yb list-readers")
+
+    # Tier-2: CLI subprocess tests against a yb built, from the same source,
+    # with the test-fixture feature, which honors YB_FIXTURE.
     out = machine.succeed(
-      "YB_BIN=${pkgs.yb}/bin/yb yb_cli_tests --test-threads=1 2>&1"
+      "YB_BIN=${ybPivHarnessTests}/libexec/yb-test-fixture yb_cli_tests --test-threads=1 2>&1"
     )
     print(out)
     if "test result: ok" not in out:
