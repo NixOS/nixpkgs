@@ -73,6 +73,12 @@
             passed to `nvidia-ctk cdi generate`. This will affect how
             you reference the device using `nvidia.com/gpu=` in
             the container runtime.
+
+            In `cdi` mode, `nvidia-container-runtime` looks up each ID in
+            {env}`NVIDIA_VISIBLE_DEVICES` as `nvidia.com/gpu=<ID>`. NVIDIA's
+            Kubernetes device plugin passes GPU UUIDs by default, so either
+            use `"uuid"` here or run the plugin with `DEVICE_ID_STRATEGY=index`.
+            `NVIDIA_VISIBLE_DEVICES=all` works with any strategy.
           '';
         };
 
