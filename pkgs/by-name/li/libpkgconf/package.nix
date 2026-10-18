@@ -32,6 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
     removeReferencesTo
   ];
 
+  strictDeps = true;
+
   # Debian has outputs like these too
   # (https://packages.debian.org/source/bullseye/pkgconf), so it is safe to
   # remove those references
@@ -57,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://github.com/pkgconf/pkgconf";
     rev-prefix = "pkgconf-";
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://github.com/pkgconf/pkgconf";
