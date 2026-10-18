@@ -58,26 +58,38 @@ let
       toString s
   ) cfg.settings);
 
-  manage = pkgs.writeShellScriptBin "paperless-manage" ''
-    set -o allexport # Export the following env vars
-    ${lib.toShellVars env}
-    ${lib.optionalString (cfg.environmentFile != null) "source ${cfg.environmentFile}"}
-    if [[ -z "''${PAPERLESS_SECRET_KEY:-}" && -e '${secretKeyFile}' ]]; then
-      source '${secretKeyFile}'
-    fi
+  paperlessManageScript = (
+    pkgs.writeShellScriptBin "paperless-manage" ''
+      set -o allexport # Export the following env vars
+      ${lib.toShellVars env}
+      ${lib.optionalString (cfg.environmentFile != null) "source ${cfg.environmentFile}"}
+      if [[ -z "''${PAPERLESS_SECRET_KEY:-}" && -e '${secretKeyFile}' ]]; then
+        source '${secretKeyFile}'
+      fi
+      set +o allexport
 
-    cd '${cfg.dataDir}'
-    sudo=exec
-    if [[ "$USER" != ${cfg.user} ]]; then
-      ${
-        if config.security.sudo.enable then
-          "sudo='exec ${config.security.wrapperDir}/sudo -u ${cfg.user} -E'"
-        else
-          ">&2 echo 'Aborting, paperless-manage must be run as user `${cfg.user}`!'; exit 2"
-      }
-    fi
-    $sudo ${lib.getExe cfg.package} "$@"
-  '';
+      cd '${cfg.dataDir}'
+
+      # Switch user and run script
+      case "$(whoami)" in
+        "root")
+          ${lib.getExe' pkgs.util-linux "runuser"} ${
+            lib.cli.toCommandLineShellGNU { } {
+              preserve-environment = true;
+              user = cfg.user;
+              group = cfg.group;
+              supp-group = if enableRedis then redisServer.group else null;
+            }
+          } -- ${lib.getExe cfg.package} "$@";;
+        "${cfg.user}")
+          exec ${lib.getExe cfg.package} "$@";;
+        *)
+          echo "Aborting, paperless-manage must be run as `root` or user `${cfg.user}`!" >&2
+          echo "You may wish to rerun this with `sudo`" >&2
+          exit 2
+      esac
+    ''
+  );
 
   defaultServiceConfig = {
     Slice = "system-paperless.slice";
@@ -450,8 +462,8 @@ in
           }
         ];
 
-        services.paperless.manage = manage;
-        environment.systemPackages = [ manage ];
+        services.paperless.manage = paperlessManageScript;
+        environment.systemPackages = [ paperlessManageScript ];
 
         services.nginx = lib.mkIf cfg.configureNginx {
           enable = true;
@@ -765,7 +777,7 @@ in
               OnSuccess = services;
             };
           enableStrictShellChecks = true;
-          path = [ manage ];
+          path = [ paperlessManageScript ];
           script = ''
             paperless-manage document_exporter ${cfg.exporter.directory} ${
               lib.cli.toCommandLineShellGNU { } cfg.exporter.settings
