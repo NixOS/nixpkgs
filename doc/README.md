@@ -248,7 +248,7 @@ Checklist:
 
 ## Syntax
 
-As per [RFC 0072](https://github.com/NixOS/rfcs/pull/72), all new documentation content should be written in [CommonMark](https://commonmark.org/) Markdown dialect.
+As per [RFC 0072](https://github.com/NixOS/rfcs/pull/72), documentation is written in [CommonMark](https://commonmark.org/) Markdown dialect.
 
 Additional syntax extensions are available, all of which can be used in NixOS option documentation.
 The following extensions are currently used:
