@@ -15,7 +15,7 @@
   flac,
   enableFFTW ? true,
   fftw,
-  enableLadspa ? true,
+  enableLadspa ? stdenv.hostPlatform.isLinux,
   ladspa-sdk,
   enableLame ? config.sox.enableLame or false,
   lame,
@@ -48,13 +48,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sox";
-  version = "14.7.1.2";
+  version = "14.8.1";
 
   src = fetchFromCodeberg {
     owner = "sox_ng";
     repo = "sox_ng";
     tag = "sox_ng-${finalAttrs.version}";
-    hash = "sha256-yIebX0a/fbpr/NMgiK+gjDPNValf3gITpxDSJAc6eAw=";
+    hash = "sha256-dCpYG9iUS374cedXk2dSO8N4qifLCXqlXfoiyJsxMIo=";
   };
 
   strictDeps = true;
