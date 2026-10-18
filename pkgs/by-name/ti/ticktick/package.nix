@@ -77,6 +77,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "Powerful to-do & task management app with seamless cloud synchronization across all your devices";
     homepage = "https://ticktick.com/home/";
