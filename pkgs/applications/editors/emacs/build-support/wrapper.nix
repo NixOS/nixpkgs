@@ -33,6 +33,7 @@
 {
   lib,
   lndir,
+  writeText,
   makeBinaryWrapper,
   runCommand,
   runtimeShell,
@@ -42,6 +43,8 @@ let
   inherit (self) emacs;
   withNativeCompilation = emacs.withNativeCompilation or false;
   withTreeSitter = emacs.withTreeSitter or false;
+  inherit (emacs.stdenv.hostPlatform) isDarwin;
+  withFontconfig = !isDarwin;
 in
 packagesFun: # packages explicitly requested by the user
 let
@@ -101,6 +104,7 @@ let
         ${lib.optionalString withTreeSitter ''
           mkdir -p $out/lib
         ''}
+        mkdir -p $out/share/fonts
 
         local requires
         for pkg in $explicitRequires; do
@@ -138,6 +142,7 @@ let
           ${lib.optionalString withTreeSitter ''
             linkPath "$1" "lib" "lib"
           ''}
+          linkPath "$1" "share/fonts" "share/fonts"
         }
 
         # Iterate over the array of inputs (avoiding nix's own interpolation)
@@ -179,7 +184,12 @@ let
           (funcall restore-path
                    "EMACSLOADPATH" "emacsWithPackages_siteLisp")
           (funcall restore-path
-                   "EMACSNATIVELOADPATH" "emacsWithPackages_siteLispNative"))
+                   "EMACSNATIVELOADPATH" "emacsWithPackages_siteLispNative")
+          ;; Abuse restore-path for single-item PATH-like variable FONTCONFIG_FILE.
+          (funcall restore-path
+                   "FONTCONFIG_FILE" "emacsWithPackages_fontconfigFile")
+          (funcall restore-path
+                   "XDG_DATA_DIRS" "emacsWithPackages_xdgDataDir"))
 
         (let ((set-from-env (lambda (symbol env-var &optional modify)
                               (when-let* ((value (getenv env-var)))
@@ -211,6 +221,20 @@ let
             -f batch-native-compile "$siteStart" "$subdirs"
         ''}
       '';
+
+  fontconfigFile =
+    if withFontconfig then
+      writeText "emacs-with-packages-fonts.conf" ''
+        <?xml version="1.0"?>
+        <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
+        <fontconfig>
+          <description>Extend the standard config with fonts from the Emacs withPackages wrapper</description>
+          <dir>${deps}/share/fonts</dir>
+          <include ignore_missing="yes">/etc/fonts/fonts.conf</include>
+        </fontconfig>
+      ''
+    else
+      "notUsed";
 in
 runCommand (lib.appendToName "with-packages" emacs).name
   {
@@ -239,6 +263,9 @@ runCommand (lib.appendToName "with-packages" emacs).name
         --subst-var-by wrapperSiteLisp "$deps/share/emacs/site-lisp" \
         --subst-var-by wrapperSiteLispNative "$deps/share/emacs/native-lisp" \
         --subst-var-by wrapperBinDir "$deps/bin" \
+        --subst-var-by withFontconfig "${lib.boolToString withFontconfig}" \
+        --subst-var-by wrapperFontconfigFile "${fontconfigFile}" \
+        --subst-var-by wrapperXdgDataDir "$deps/share" \
         --subst-var-by wrapperInvocationDirectory "$out/bin/" \
         --subst-var-by wrapperInvocationName "$progname" \
         --subst-var prog
@@ -266,6 +293,9 @@ runCommand (lib.appendToName "with-packages" emacs).name
         --subst-var-by wrapperSiteLisp "$deps/share/emacs/site-lisp" \
         --subst-var-by wrapperSiteLispNative "$deps/share/emacs/native-lisp" \
         --subst-var-by wrapperBinDir "$deps/bin" \
+        --subst-var-by withFontconfig "${lib.boolToString withFontconfig}" \
+        --subst-var-by wrapperFontconfigFile "${fontconfigFile}" \
+        --subst-var-by wrapperXdgDataDir "$deps/share" \
         --subst-var-by wrapperInvocationDirectory "$out/Applications/Emacs.app/Contents/MacOS/" \
         --subst-var-by wrapperInvocationName "Emacs" \
         --subst-var-by prog "$emacs/Applications/Emacs.app/Contents/MacOS/Emacs"

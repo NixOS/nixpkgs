@@ -1,10 +1,13 @@
 {
   runCommand,
   emacs,
+  fontconfig,
   hello,
   replaceVarsWith,
   lib,
   writeShellApplication,
+  hack-font,
+  xvfb-run,
 }:
 
 let
@@ -14,6 +17,7 @@ let
     name = "run-test";
     runtimeInputs = [
       (emacs.pkgs.withPackages (epkgs: [
+        hack-font
         epkgs.dash
         epkgs.flx-ido
         (epkgs.callPackage (mkEpkg {
@@ -43,6 +47,7 @@ let
         hello
         (epkgs.treesit-grammars.with-grammars (ps: [ ps.tree-sitter-nix ]))
       ]))
+      fontconfig
     ];
     runtimeEnv = {
       # emulate a default NixOS env where INFOPATH is set like this (not ending with a ":")
@@ -66,10 +71,11 @@ runCommand "test-emacs-withPackages-wrapper"
   {
     nativeBuildInputs = [
       run-test
+      xvfb-run
     ];
   }
   ''
-    run-test
+    xvfb-run -- env --unset=FONTCONFIG_FILE run-test
 
     touch $out
   ''

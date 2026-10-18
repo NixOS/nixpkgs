@@ -53,6 +53,22 @@ export emacsWithPackages_siteLispNative=@wrapperSiteLispNative@
 export emacsWithPackages_invocationDirectory=@wrapperInvocationDirectory@
 export emacsWithPackages_invocationName=@wrapperInvocationName@
 
+if [[ @withFontconfig@ == true ]]
+then
+    if [[ ! -v FONTCONFIG_FILE ]]
+    then
+        # If no FONTCONFIG_FILE is set, set it to the wrapper's fontconfig file.
+        export FONTCONFIG_FILE=@wrapperFontconfigFile@
+        export emacsWithPackages_fontconfigFile=@wrapperFontconfigFile@
+    else
+        # If FONTCONFIG_FILE is set by the user, respect that and do not change it.
+        # Instead, extend XDG_DATA_DIRS so that Emacs can find wrapper-added fonts
+        # when the user-provided FONTCONFIG_FILE has <dir prefix="xdg">fonts</dir>.
+        export XDG_DATA_DIRS="@wrapperXdgDataDir@${XDG_DATA_DIRS:+:$XDG_DATA_DIRS}"
+        export emacsWithPackages_xdgDataDir=@wrapperXdgDataDir@
+    fi
+fi
+
 if [[ ${PATH-} != *"@wrapperBinDir@":* ]]
 then
     export PATH="@wrapperBinDir@${PATH:+:$PATH}"

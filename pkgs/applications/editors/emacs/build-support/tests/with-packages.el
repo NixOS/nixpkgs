@@ -275,6 +275,17 @@ This is a regression test for URL `https://github.com/NixOS/nixpkgs/pull/538964'
               (and (not (file-exists-p eln-dir))
                    (file-exists-p (file-name-parent-directory eln-dir)))))))
 
+(defun with-packages-fonts-of-requested-packages-are-available ()
+  (let ((font "Hack"))
+    (append
+     (let ((graphical-frame (make-frame-on-display (getenv "DISPLAY"))))
+       (unwind-protect
+           (list (display-graphic-p graphical-frame)
+                 (member font (font-family-list graphical-frame)))
+         (delete-frame graphical-frame)))
+     ;; Subprocess does not see wrapper-added fonts.
+     (list (equal 1 (call-process "fc-list" nil nil nil "--quiet" font))))))
+
 (define-with-packages-non-batch-ert-tests
   with-packages-early-default-is-loaded
   with-packages-default-is-loaded
@@ -284,6 +295,12 @@ This is a regression test for URL `https://github.com/NixOS/nixpkgs/pull/538964'
 (define-with-packages-non-batch-ert-test
     with-packages-no-jit-native-comp
   (skip-unless (native-comp-available-p)))
+
+(define-with-packages-non-batch-ert-test
+    with-packages-fonts-of-requested-packages-are-available
+  :expected-result (if (eq system-type 'darwin) :failed :passed)
+  ;; Skip if this Emacs cannot create graphical frames.
+  (skip-unless (fboundp 'x-create-frame)))
 
 (provide 'with-packages)
 
