@@ -1,5 +1,4 @@
 {
-  buildEnv,
   fetchFromSourcehut,
   hareHook,
   hareThirdParty,
@@ -31,10 +30,6 @@ let
     harfbuzz.dev
     pango.dev
   ];
-  usrShare = buildEnv {
-    name = "usr-share";
-    paths = scriptDeps;
-  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hare-gtk4-layer-shell";
@@ -59,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace scripts/generate \
-      --replace-fail "/usr/share/gir-1.0/" "${usrShare}/share/gir-1.0/"
+      --replace-fail "/usr/share/gir-1.0/" "gir-1.0/"
   '';
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];

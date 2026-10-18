@@ -1,6 +1,6 @@
 {
-  buildEnv,
   fetchFromSourcehut,
+  fetchpatch,
   hareHook,
   lib,
   stdenv,
@@ -32,10 +32,6 @@ let
     gtk4.dev
     graphene.dev
   ];
-  usrShare = buildEnv {
-    name = "usr-share";
-    paths = scriptDeps;
-  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hare-gi";
@@ -48,18 +44,18 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-L9BatUF+5SJhkFpzvjkDGMk2bSlQCv4ed2W5gJz6P+4=";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://lists.sr.ht/~yerinalexey/public-inbox/patches/72004/mbox";
+      hash = "sha256-Ws+Z349H1aGo/AOQFWXXHl5Sj46bBXjTzXK8Z7VVz0s=";
+    })
+  ];
+
   strictDeps = true;
   __structuredAttrs = true;
 
   nativeBuildInputs = [ hareHook ] ++ scriptDeps;
   propagatedBuildInputs = scriptDeps;
-
-  postPatch = ''
-    substituteInPlace scripts/generate-gtk3 \
-      --replace-fail "/usr/share/gir-1.0/" "${usrShare}/share/gir-1.0/"
-    substituteInPlace scripts/generate-gtk4 \
-      --replace-fail "/usr/share/gir-1.0/" "${usrShare}/share/gir-1.0/"
-  '';
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 

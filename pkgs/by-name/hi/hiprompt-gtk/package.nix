@@ -26,12 +26,13 @@ stdenv.mkDerivation (finalAttrs: {
     hareHook
     pkg-config
     himitsu
+    # generated .ha files
     hareThirdParty.hare-gi
     hareThirdParty.hare-adwaita
     hareThirdParty.hare-gtk4-layer-shell
   ];
   buildInputs = [
-    # needed to get the propagatedBuildInputs
+    # propagated .h headers
     hareThirdParty.hare-gi
     hareThirdParty.hare-adwaita
     hareThirdParty.hare-gtk4-layer-shell
