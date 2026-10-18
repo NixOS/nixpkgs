@@ -763,6 +763,9 @@ in
           '')
           (pkgs.writeShellScript "frigate-create-writable-config" ''
             cp --no-preserve=mode ${configFile} /run/frigate/frigate.yml
+            if [ -f /var/lib/frigate/.runtime_state.json ]; then
+              cp /var/lib/frigate/.runtime_state.json /run/frigate/.runtime_state.json
+            fi
           '')
         ]
         ++ lib.optionals (!config.systemd.services.frigate.environment ? LIBAVFORMAT_VERSION_MAJOR) [
@@ -774,6 +777,11 @@ in
         ];
         EnvironmentFile = [ "-/run/frigate/ffmpeg-env" ];
         ExecStart = "${cfg.package.python.interpreter} -m frigate";
+        ExecStopPost = pkgs.writeShellScript "frigate-save-runtime-state" ''
+          if [ -f /run/frigate/.runtime_state.json ]; then
+            cp /run/frigate/.runtime_state.json /var/lib/frigate/.runtime_state.json
+          fi
+        '';
         Restart = "on-failure";
         SyslogIdentifier = "frigate";
 
