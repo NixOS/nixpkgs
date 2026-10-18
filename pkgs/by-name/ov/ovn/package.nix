@@ -8,6 +8,7 @@
   libbpf,
   libcap_ng,
   nix-update-script,
+  nixosTests,
   numactl,
   openssl,
   pkg-config,
@@ -57,6 +58,34 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/ovn-org/ovn/commit/fb3dbe3d9fb0c4e46874480b6ad30b4014b24b03.patch";
       hash = "sha256-C3nucwyyouMY+CcfZQJrwIlpqq9Oh6vwuxKDKHnsQBA=";
     })
+    # Allow systemd to supervise database servers directly.
+    (fetchpatch {
+      url = "https://github.com/ovn-org/ovn/commit/27d229960ae0c23683238b6a2744b8e31fa65e12.patch";
+      hash = "sha256-DT+jykJcsL9Kt0HbVk7e3X5p7S70sKMLSY6rRldZYeQ=";
+    })
+    # Retry storing chassis indices and serialize concurrent allocations.
+    (fetchpatch {
+      url = "https://github.com/ovn-org/ovn/commit/cb3f002fcb4fa7987e63a40332bccdee96286311.patch";
+      hash = "sha256-Ol8Qj5THNM6miWhHuk95yioHhHr/W+zRWhNtXkG2nBw=";
+    })
+    (fetchpatch {
+      url = "https://github.com/ovn-org/ovn/commit/8e66599f4c152541fa69a361969ea1b70ed1c086.patch";
+      hash = "sha256-1Et1OX2MXZ9NhcJvdvK2s5VViNORpq8UF7bn5DjSGYE=";
+    })
+    # Use the configured OVN binary directories.
+    (fetchpatch {
+      url = "https://github.com/ovn-org/ovn/commit/b09bdd1aab6b73b77ca864470c00d2760892e7e7.patch";
+      hash = "sha256-ghQEaV/7Hxd4x++UR5UtoghXJJ/xr13xat3zqGTAb2U=";
+    })
+    (fetchpatch {
+      url = "https://github.com/ovn-org/ovn/commit/196afaf300bcd5a50a68917ba6c96282752a2b02.patch";
+      hash = "sha256-4Mo3SWbFcm1GM5jPfqTp71YUDtDn/BzrU8gB7fzb640=";
+    })
+    # Prevent early listener FINs from interrupting ACL CT TCP tests.
+    (fetchpatch {
+      url = "https://github.com/ovn-org/ovn/commit/aa02ed31006e11b556ee8d1f6dc9e2539e2b70d2.patch";
+      hash = "sha256-PLA7jP8p7uxvlJbGicxmRg4ueKW/pOMlNpphJ0epSLw=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -84,7 +113,12 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     pushd ovs
     ./boot.sh
-    ./configure --with-dbdir=/var/lib/openvswitch ${lib.optionalString stdenv.hostPlatform.isStatic withOpensslConfigureFlag}
+    # ovn-controller uses the run directory compiled into the vendored OVS.
+    ./configure \
+      --localstatedir=/var \
+      --sharedstatedir=/var \
+      --with-dbdir=/var/lib/openvswitch \
+      ${lib.optionalString stdenv.hostPlatform.isStatic withOpensslConfigureFlag}
     make -j $NIX_BUILD_CORES
     popd
   '';
@@ -132,7 +166,9 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -vp $out/share/openvswitch/scripts
     ln -s ${openvswitch}/share/openvswitch/scripts/ovs-lib $out/share/openvswitch/scripts/ovs-lib
 
+    # ovn-ctl creates $OVN_SYSCONFDIR/ovn at runtime.
     wrapProgram $out/share/ovn/scripts/ovn-ctl \
+      --set-default OVN_SYSCONFDIR /var/lib \
       --prefix PATH : ${
         lib.makeBinPath [
           openvswitch
@@ -174,9 +210,14 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests = callPackage ./tests.nix { ovn = finalAttrs.finalPackage; };
-
     updateScript = nix-update-script { };
+    tests = callPackage ./tests.nix { ovn = finalAttrs.finalPackage; } // {
+      inherit (nixosTests.ovn)
+        basic
+        multiple-controllers
+        raft
+        ;
+    };
   };
 
   meta = {
