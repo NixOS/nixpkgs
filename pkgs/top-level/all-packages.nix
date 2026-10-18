@@ -3727,7 +3727,6 @@ with pkgs;
   julia-stable-bin = julia_113-bin;
   julia-bin = julia-stable-bin;
 
-  kotlin = callPackage ../development/compilers/kotlin { };
   lazarus = callPackage ../development/compilers/fpc/lazarus.nix {
     fpc = fpc;
   };
@@ -3875,8 +3874,6 @@ with pkgs;
     ;
 
   inherit (ocamlPackages) odig;
-
-  opam = callPackage ../development/tools/ocaml/opam { };
 
   wrapWatcom = callPackage ../development/compilers/open-watcom/wrapper.nix { };
 
@@ -4259,8 +4256,6 @@ with pkgs;
 
   jacinda = haskell.lib.compose.justStaticExecutables haskellPackages.jacinda;
 
-  janet = callPackage ../development/interpreters/janet { };
-
   lambda-lisp-blc = lambda-lisp;
 
   love = love_11;
@@ -4443,7 +4438,6 @@ with pkgs;
     stdenv = stdenvAdapters.makeStaticLibraries stdenv;
   };
 
-  rakudo = callPackage ../development/interpreters/rakudo { };
   inherit (ocamlPackages) reason rtop;
 
   buildRubyGem = callPackage ../development/ruby-modules/gem { };
@@ -4565,7 +4559,6 @@ with pkgs;
 
   guile = guile_3_0;
 
-  mspds = callPackage ../development/misc/msp430/mspds { };
   ### DEVELOPMENT / TOOLS
 
   inherit (callPackage ../development/tools/alloy { })
@@ -4680,7 +4673,6 @@ with pkgs;
   electron-bin = electron_43-bin;
   electron-chromedriver = electron-chromedriver_43;
 
-  autoconf = callPackage ../development/tools/misc/autoconf { };
   automake = automake118x;
 
   automake116x = callPackage ../development/tools/misc/automake/automake-1.16.x.nix { };
@@ -4846,8 +4838,6 @@ with pkgs;
 
   cookiecutter = with python3Packages; toPythonApplication cookiecutter;
 
-  ctags = callPackage ../development/tools/misc/ctags { };
-
   # can't use override - it triggers infinite recursion
   cmakeMinimal = callPackage ../by-name/cm/cmake/package.nix {
     isMinimalBuild = true;
@@ -4943,8 +4933,6 @@ with pkgs;
     haskellPackages.callPackage ../tools/misc/fffuu { }
   );
 
-  flex = callPackage ../development/tools/parsing/flex { };
-
   m4 = gnum4;
 
   gradle-packages = callPackage ../development/tools/build-managers/gradle { };
@@ -4969,8 +4957,6 @@ with pkgs;
     ;
 
   jenkins-job-builder = with python3Packages; toPythonApplication jenkins-job-builder;
-
-  kustomize = callPackage ../development/tools/kustomize { };
 
   libtool = libtool_2;
 
@@ -5209,7 +5195,6 @@ with pkgs;
   acl = callPackage ../development/libraries/acl { };
 
   allegro = allegro4;
-  allegro4 = callPackage ../development/libraries/allegro { };
   ansi2html = with python3.pkgs; toPythonApplication ansi2html;
 
   appstream = callPackage ../development/libraries/appstream { };
@@ -5931,9 +5916,6 @@ with pkgs;
     libxml2
     ;
 
-  libxmlxx = callPackage ../development/libraries/libxmlxx { };
-  libwpe = callPackage ../development/libraries/libwpe { };
-
   luabind = callPackage ../development/libraries/luabind { lua = lua5_1; };
 
   luabind_luajit = luabind.override { lua = luajit; };
@@ -6055,7 +6037,6 @@ with pkgs;
 
   libnghttp2 = nghttp2.lib;
 
-  ngtcp2 = callPackage ../development/libraries/ngtcp2 { };
   nss_latest = callPackage ../development/libraries/nss/latest.nix { };
   nss_esr = callPackage ../development/libraries/nss/esr.nix { };
   nss = nss_esr;
@@ -6510,7 +6491,6 @@ with pkgs;
 
   vtkWithQt6 = vtk.override { withQt6 = true; };
 
-  wayland = callPackage ../development/libraries/wayland { };
   waylandpp = callPackage ../development/libraries/waylandpp {
     graphviz = graphviz-nox;
   };
@@ -7204,7 +7184,6 @@ with pkgs;
     boost = boost179.override { enableShared = false; };
   };
 
-  mssql_jdbc = callPackage ../servers/sql/mssql/jdbc { };
   inherit (callPackage ../servers/mir { })
     mir
     mir_2_15
@@ -8125,7 +8104,6 @@ with pkgs;
 
   chromium = callPackage ../applications/networking/browsers/chromium (config.chromium or { });
 
-  cni = callPackage ../applications/networking/cluster/cni { };
   codeblocksFull = codeblocks.override { contribPlugins = true; };
 
   darcs = haskell.lib.compose.disableCabalFlag "library" (
@@ -8217,8 +8195,6 @@ with pkgs;
   firewalld-gui = firewalld.override { withGui = true; };
 
   fvwm = fvwm2;
-
-  gauche = callPackage ../development/interpreters/gauche { };
 
   gimagereader-qt = gimagereader.override {
     withQt6 = true;
@@ -9060,8 +9036,6 @@ with pkgs;
     lua = lua5_1;
   };
   neovim = wrapNeovim neovim-unwrapped { };
-
-  gnvim-unwrapped = callPackage ../applications/editors/neovim/gnvim { };
 
   virtualbox = callPackage ../applications/virtualization/virtualbox {
     stdenv = stdenv_32bit;
