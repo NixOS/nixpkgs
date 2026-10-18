@@ -12,6 +12,7 @@
   dm-tree,
   frozendict,
   gym,
+  immutabledict,
   matplotlib,
   mizani,
   pandas,
@@ -52,6 +53,7 @@ buildPythonPackage (finalAttrs: {
     dm-tree
     frozendict
     gym
+    immutabledict
     matplotlib
     mizani
     pandas
