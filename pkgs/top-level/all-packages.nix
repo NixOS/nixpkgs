@@ -2770,6 +2770,7 @@ with pkgs;
 
   spflashtool5 = spflashtoolPackages.spflashtool5;
 
+  spflashtool6 = spflashtoolPackages.spflashtool6;
 
   spglib = callPackage ../development/libraries/spglib {
     inherit (llvmPackages) openmp;
