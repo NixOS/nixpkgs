@@ -1,0 +1,12 @@
+--- a/tests/chip.c
++++ b/tests/chip.c
+@@ -781,7 +781,8 @@ static void setup_bad_chip(struct flashrom_flashctx *flashctx)
+ 	g_test_read_injector = NULL;
+ 	g_test_erase_injector[0] = NULL;
+ 
+-	struct flashchip mock_chip = chip_bad;
++	static struct flashchip mock_chip;
++	mock_chip = chip_bad;
+ 	const char *param = ""; /* Default values for all params. */
+ 
+ 	setup_chip(flashctx, &mock_chip, param, NULL);
