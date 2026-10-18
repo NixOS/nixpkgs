@@ -593,6 +593,9 @@ in
     (mkRemovedOptionModule [ "services" "unit" ] ''
       services.unit has been removed together with pkgs.unit.
     '')
+    (mkRemovedOptionModule [ "services" "castopod" ] ''
+      services.castopod has been removed together with pkgs.castopod.
+    '')
     # Do NOT add any option renames here, see top of the file
   ];
 }
