@@ -9,7 +9,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "uuid-utils";
-  version = "0.17.0";
+  version = "1.0.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -17,12 +17,12 @@ buildPythonPackage (finalAttrs: {
     owner = "aminalaee";
     repo = "uuid-utils";
     tag = finalAttrs.version;
-    hash = "sha256-AshQOXB6o1CMByRn9um8E2Y4sexyRu4W8H3NelFe1HM=";
+    hash = "sha256-NzipRczC2NSNQm7aA9eVTNP1KToFbXGllyuSi7wlC9o=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname src version;
-    hash = "sha256-vf6w+oYH3tdxvV5TLSgZOAXlFypCe2swjkw25VWCqB8=";
+    hash = "sha256-khea+XMxNDkWaRVYgRdFQqABVoL3uSpRKMrM7BlE/B4=";
   };
 
   nativeBuildInputs = with rustPlatform; [
