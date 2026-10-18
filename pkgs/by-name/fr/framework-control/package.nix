@@ -13,7 +13,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "framework-control";
-  version = "0.5.4";
+  version = "0.5.6";
 
   __structuredAttrs = true;
 
@@ -21,10 +21,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "ozturkkl";
     repo = "framework-control";
     tag = finalAttrs.version;
-    hash = "sha256-YNqViisLHF00/XnQxoGNDwTbJybB4SFYPmhA0GbJgCk=";
+    hash = "sha256-FJ7u5EZt7aHueeWZ1DBNDv1/yw2Oz1EsweaNHLREFbs=";
   };
 
-  cargoHash = "sha256-vjWmgaG4qqlY67yvSx0W8NbqgUD5cEasdhVV+foZAQA=";
+  cargoHash = "sha256-saJnpj1wtw/w5LwPJcgYGP0FVxOihna0vJAbJrkw+t0=";
 
   cargoRoot = "service";
   buildAndTestSubdir = "service";
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   npmDeps = fetchNpmDeps {
     name = "framework-control-npm-deps";
     src = "${finalAttrs.src}/web";
-    hash = "sha256-zRKUAaqOiGsd5igrb7By43KsxLXhBY/HmhD8qVB6VlU=";
+    hash = "sha256-UbvEcHxKx/C/JgeEKkkqy8eUSgsHLTNiBw80CII7cUE=";
   };
 
   nativeBuildInputs = [
