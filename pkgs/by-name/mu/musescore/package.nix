@@ -13,12 +13,12 @@
   # buildInputs
   alsa-lib,
   alsa-plugins,
-  ffmpeg,
+  # MuseScore Studio v4.7.x does not support FFmpeg v9. Support for it is coming in v5.
+  ffmpeg_8,
   flac,
   freetype,
   qt6,
   lame,
-  libjack2,
   libogg,
   libopus,
   libopusenc,
@@ -83,25 +83,19 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "MUE_BUILD_MACOS_INTEGRATION" false)
   ];
 
-  qtWrapperArgs = [
-    # MuseScore JACK backend loads libjack at runtime.
-    "--prefix"
-    "${lib.optionalString stdenv.hostPlatform.isDarwin "DY"}LD_LIBRARY_PATH"
-    ":"
-    (lib.makeLibraryPath [ libjack2 ])
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux) [
-    "--set"
-    "ALSA_PLUGIN_DIR"
-    "${alsa-plugins}/lib/alsa-lib"
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    # There are some issues with using the wayland backend, see:
-    # https://musescore.org/en/node/321936
-    "--set-default"
-    "QT_QPA_PLATFORM"
-    "xcb"
-  ];
+  qtWrapperArgs =
+    lib.optionals (stdenv.hostPlatform.isLinux) [
+      "--set"
+      "ALSA_PLUGIN_DIR"
+      "${alsa-plugins}/lib/alsa-lib"
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      # There are some issues with using the wayland backend, see:
+      # https://musescore.org/en/node/321936
+      "--set-default"
+      "QT_QPA_PLATFORM"
+      "xcb"
+    ];
 
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
@@ -132,7 +126,6 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtscxml
     qt6.qtsvg
     lame
-    libjack2
     libogg
     libopus
     libopusenc
@@ -155,8 +148,8 @@ stdenv.mkDerivation (finalAttrs: {
   # the /usr/lib/x86_64-linux-gnu location for any Linux (e.g aarch64 too).
   preConfigure = ''
     substituteInPlace src/framework/media/internal/ffmpegutils.cpp \
-      --replace-fail "/usr/lib/x86_64-linux-gnu" "${lib.getLib ffmpeg}/lib" \
-      --replace-fail "/opt/homebrew/lib" "${lib.getLib ffmpeg}/lib" \
+      --replace-fail "/usr/lib/x86_64-linux-gnu" "${lib.getLib ffmpeg_8}/lib" \
+      --replace-fail "/opt/homebrew/lib" "${lib.getLib ffmpeg_8}/lib" \
   '';
 
   strictDeps = true;

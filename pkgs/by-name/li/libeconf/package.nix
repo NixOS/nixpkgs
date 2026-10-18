@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libeconf";
-  version = "0.8.5";
+  version = "0.8.6";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "libeconf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FR0oLGF0q2WPsZtQK2KGVeqh2UaBiEYNd5pLfNq+zGc=";
+    hash = "sha256-2x/PVDg/H9+u7FJKHbjLLLM++FGFe0mXY9mYKCrD6kw=";
   };
 
   # unsupported flags that we can just remove

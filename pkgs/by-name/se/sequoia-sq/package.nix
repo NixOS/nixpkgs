@@ -15,16 +15,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sequoia-sq";
-  version = "1.4.1";
+  version = "1.5.0";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
     repo = "sequoia-sq";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-sBmaSIzeDj5LHyS6zb46TXHH1mGidWFIs/RH6iu+TRY=";
+    tag = "sequoia-sq/v${finalAttrs.version}";
+    hash = "sha256-DLJ32QGFbCNcIDZnNAx+JCP7xvL+Qoy3Eju1/xCu/AA=";
   };
 
-  cargoHash = "sha256-OLlQFm+uLjL13+2NZjXVB8htl7FzRPDbrB5D4uH1AY4=";
+  cargoHash = "sha256-mYrDtPE010isOdGpq70sRzB02y9Tiiei0S1McOM4AVM=";
 
   __structuredAttrs = true;
 
@@ -59,20 +59,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
   versionCheckProgramArg = "version";
 
   postInstall = ''
-    installManPage ${finalAttrs.env.ASSET_OUT_DIR}/man-pages/*.*
+    installManPage tool/${finalAttrs.env.ASSET_OUT_DIR}/man-pages/*.*
     installShellCompletion \
       --cmd sq \
-      --bash ${finalAttrs.env.ASSET_OUT_DIR}/shell-completions/sq.bash \
-      --fish ${finalAttrs.env.ASSET_OUT_DIR}/shell-completions/sq.fish \
-      --zsh ${finalAttrs.env.ASSET_OUT_DIR}/shell-completions/_sq
+      --bash tool/${finalAttrs.env.ASSET_OUT_DIR}/shell-completions/sq.bash \
+      --fish tool/${finalAttrs.env.ASSET_OUT_DIR}/shell-completions/sq.fish \
+      --zsh tool/${finalAttrs.env.ASSET_OUT_DIR}/shell-completions/_sq
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=sequoia-sq/v(.*)" ];
+  };
 
   meta = {
     description = "Command line application exposing a useful set of OpenPGP functionality for common tasks";
     homepage = "https://sequoia-pgp.org/";
-    changelog = "https://gitlab.com/sequoia-pgp/sequoia-sq/-/blob/v${finalAttrs.version}/NEWS";
+    changelog = "https://gitlab.com/sequoia-pgp/sequoia-sq/-/blob/${finalAttrs.src.tag}/tool/NEWS";
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [
       doronbehar

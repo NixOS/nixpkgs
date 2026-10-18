@@ -1,11 +1,11 @@
 diff --git a/windmill-worker/nsjail/run.php.config.proto b/windmill-worker/nsjail/run.php.config.proto
-index d3752d33b..9e4b19793 100644
+index 3156d6a..28642d3 100644
 --- a/windmill-worker/nsjail/run.php.config.proto
 +++ b/windmill-worker/nsjail/run.php.config.proto
-@@ -15,16 +15,24 @@ keep_caps: false
- keep_env: true
+@@ -20,16 +20,24 @@ keep_env: true
+ {ENVARS}
  mount_proc: true
- 
+
 +mount {
 +    src: "/nix/store"
 +    dst: "/nix/store"
@@ -18,20 +18,20 @@ index d3752d33b..9e4b19793 100644
  	is_bind: true
 +    mandatory: false
  }
- 
+
  mount {
      src: "/lib"
      dst: "/lib"
  	is_bind: true
 +    mandatory: false
  }
- 
- 
-@@ -40,6 +48,7 @@ mount {
+
+
+@@ -45,6 +53,7 @@ mount {
      src: "/usr"
      dst: "/usr"
  	is_bind: true
 +    mandatory: false
  }
- 
+
  mount {

@@ -25,6 +25,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-qFJ0mA+kmhvXcjPaYnSr7gR2GZ2rfqcS1t2HMtAaFcc=";
 
+  __darwinAllowLocalNetworking = true;
+
   nativeBuildInputs = lib.optionals (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isLinux) [
     pkg-config
   ];
