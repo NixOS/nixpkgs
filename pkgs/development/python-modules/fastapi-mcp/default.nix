@@ -72,6 +72,8 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = {
+    # https://github.com/tadata-org/fastapi_mcp/issues/322
+    broken = lib.versionAtLeast mcp.version "1.12";
     description = "Expose your FastAPI endpoints as Model Context Protocol (MCP) tools, with Auth";
     homepage = "https://github.com/tadata-org/fastapi_mcp";
     changelog = "https://github.com/tadata-org/fastapi_mcp/blob/${src.tag}/CHANGELOG.md";
