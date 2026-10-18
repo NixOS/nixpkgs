@@ -409,13 +409,13 @@ rec {
         argsOrScript
         // {
           interpreter = "${lib.getExe pkgs.dash}";
-          check = argsOrScript.check or "${lib.getExe pkgs.dash} -n";
+          check = argsOrScript.check or "${lib.getExe buildPackages.dash} -n";
         }
       ) name
     else
       makeScriptWriter {
         interpreter = "${lib.getExe pkgs.dash}";
-        check = "${lib.getExe pkgs.dash} -n";
+        check = "${lib.getExe buildPackages.dash} -n";
       } name argsOrScript;
 
   /**
@@ -490,13 +490,13 @@ rec {
         argsOrScript
         // {
           interpreter = "${lib.getExe pkgs.fish} --no-config";
-          check = "${lib.getExe pkgs.fish} --no-config --no-execute"; # syntax check only
+          check = "${lib.getExe buildPackages.fish} --no-config --no-execute"; # syntax check only
         }
       ) name
     else
       makeScriptWriter {
         interpreter = "${lib.getExe pkgs.fish} --no-config";
-        check = "${lib.getExe pkgs.fish} --no-config --no-execute"; # syntax check only
+        check = "${lib.getExe buildPackages.fish} --no-config --no-execute"; # syntax check only
       } name argsOrScript;
 
   /**
@@ -606,7 +606,7 @@ rec {
     {
       makeWrapperArgs ? [ ],
       babashka ? pkgs.babashka-unwrapped,
-      check ? "${lib.getExe pkgs.clj-kondo} --lint",
+      check ? "${lib.getExe buildPackages.clj-kondo} --lint",
       ...
     }@args:
     makeScriptWriter (
@@ -947,7 +947,7 @@ rec {
         interpreter =
           if libraries == [ ] then "${ruby}/bin/ruby" else "${(ruby.withPackages (ps: libraries))}/bin/ruby";
         # Rubocop doesn't seem to like running in this fashion.
-        #check = (writeDash "rubocop.sh" ''
+        #check = (buildPackages.writers.writeDash "rubocop.sh" ''
         #  exec ${lib.getExe buildRubyPackages.rubocop} "$1"
         #'');
       }
@@ -992,7 +992,7 @@ rec {
         # else (lua.withPackages (ps: libraries)).interpreter
         # This should support packages! I just cant figure out why some dependency collision happens whenever I try to run this.
         check = (
-          writeDash "luacheck.sh" ''
+          buildPackages.writers.writeDash "luacheck.sh" ''
             exec ${buildLuaPackages.luacheck}/bin/luacheck "$1"
           ''
         );
@@ -1214,7 +1214,7 @@ rec {
           else
             (python.withPackages (toFunction libraries)).interpreter;
         check = optionalString (python.isPy3k && doCheck) (
-          writeDash "pythoncheck.sh" ''
+          buildPackages.writers.writeDash "pythoncheck.sh" ''
             exec ${buildPythonPackages.flake8}/bin/flake8 --show-source ${ignoreAttribute} "$1"
           ''
         );
