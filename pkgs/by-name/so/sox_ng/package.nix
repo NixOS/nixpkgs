@@ -15,7 +15,7 @@
   flac,
   enableFFTW ? true,
   fftw,
-  enableLadspa ? true,
+  enableLadspa ? stdenv.hostPlatform.isLinux,
   ladspa-sdk,
   enableLame ? config.sox.enableLame or false,
   lame,
