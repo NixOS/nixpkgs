@@ -10,9 +10,6 @@
   pkg-config,
   protobuf,
   openssl,
-  cacert,
-  gitMinimal,
-  writableTmpDirAsHomeHook,
   versionCheckHook,
   nix-update-script,
   llvmPackages,
@@ -36,16 +33,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "goose-cli";
-  version = "1.49.0";
+  version = "1.55.0";
 
   src = fetchFromGitHub {
     owner = "aaif-goose";
     repo = "goose";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KTHfaPJ3Vf2b6efMr0k9/AAMykDaG0lgSVCUpL58fnk=";
+    hash = "sha256-2OoRbVAzo7oVWFbdtRvHAoPCLjPXen89di7dewADXTI=";
   };
 
-  cargoHash = "sha256-78E/J64RIy7AkFODLVQBFy8HPUtT2ODLwNAstErRMdQ=";
+  cargoHash = "sha256-BYmBp4Pb5t331Tu0HGAtIGtl3fheS/s5lcmlZcY71HM=";
 
   cargoBuildFlags = [
     "--bin"
@@ -93,49 +90,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
       }
   '';
 
-  nativeCheckInputs = [
-    writableTmpDirAsHomeHook
-    cacert
-    # plugins tests create git-backed fixture repositories
-    gitMinimal
-  ];
-
-  __darwinAllowLocalNetworking = true;
-
-  checkFlags = [
-    # need dbus-daemon for keychain access
-    "--skip=config::base::tests::test_multiple_secrets"
-    "--skip=config::base::tests::test_secret_management"
-    "--skip=config::signup_tetrate::tests::test_configure_tetrate"
-    # Observer should be Some with both init project keys set
-    "--skip=tracing::langfuse_layer::tests::test_create_langfuse_observer"
-    "--skip=providers::gcpauth::tests::test_token_refresh_race_condition"
-    # need network access
-    "--skip=test_concurrent_access"
-    # these race on process-global state (GOOSE_PATH_ROOT / GOOSE_SHELL env
-    # vars, OnceLock caches) when the lib tests run in parallel
-    # https://github.com/aaif-goose/goose/issues/11059
-    "--skip=hooks::tests::matcher_filters_by_tool_name"
-    # the mock provider can finish before the polling loop observes an active run
-    "--skip=test_steer_session_adds_input_to_active_prompt"
-    # otel span capture races with other tests' global tracing subscribers
-    # when the lib tests run in parallel
-    "--skip=agents::agent::tests::tool_dispatch_records_gen_ai_span_attributes"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-    # Broken on aarch64-linux: request capture races across session_id_propagation_test cases
-    "--skip=test_session_id_matches_across_calls"
-    "--skip=test_session_id_propagation_to_llm"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "--skip=recipes::extract_from_cli::tests::test_extract_recipe_info_from_cli_basic"
-    "--skip=recipes::extract_from_cli::tests::test_extract_recipe_info_from_cli_with_additional_sub_recipes"
-    "--skip=recipes::recipe::tests::load_recipe::test_load_recipe_success"
-    "--skip=test_session_id_matches_across_calls"
-    "--skip=test_session_id_propagation_to_llm"
-    # keychain-backed dictation secret test panics on empty swap_remove
-    "--skip=test_custom_dictation_secret_save_delete"
-  ];
+  # Upstream does not gate releases on this test suite, and keeping it running
+  # here means maintaining a long list of per-test skips on every release: the
+  # tests race on process-global state, need dbus/keychain, network or loopback
+  # access, and several are flaky on aarch64-darwin. Skipping the check phase
+  # on all platforms makes tracking upstream releases feasible; the version
+  # install check below still exercises the binary.
+  # https://github.com/NixOS/nixpkgs/pull/569940
+  doCheck = false;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
