@@ -2,8 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  autoconf,
-  automake,
+  autoreconfHook,
   bison,
   flex,
   readline,
@@ -21,7 +20,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   strictDeps = true;
-  preConfigure = "./bootstrap";
 
   # Manually generate lexer.c to avoid triggering the broken ylwrap logic
   preBuild = ''
@@ -29,8 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
-    autoconf
-    automake
+    autoreconfHook
     bison
     flex
   ];
