@@ -70,10 +70,6 @@ let
     );
 in
 {
-  php82 = mkPhp {
-    version = "8.2.34";
-    hash = "sha256-BGfWOoGQFoEdNf0U9zR2SBOrFJdQN5eQY0KUxyPNdWI=";
-  };
   php83 = mkPhp {
     version = "8.3.35";
     hash = "sha256-4nnZ7JDZvKuQDRRoFuWxHT6JJLgOK6NsfX2ufXHcvy0=";
