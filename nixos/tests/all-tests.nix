@@ -1269,7 +1269,7 @@ in
   nfs3 = handleTest ./nfs { version = 3; };
   nfs4 = handleTest ./nfs { version = 4; };
   nghttpx = runTest ./nghttpx.nix;
-  nginx = runTest ./nginx.nix;
+  nginx = import ./nginx { inherit lib runTest; };
   nginx-auth = runTest ./nginx-auth.nix;
   nginx-compression = runTest ./nginx-compression.nix;
   nginx-dynamic-modules = runTest ./nginx-dynamic-modules.nix;

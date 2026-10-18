@@ -32,6 +32,7 @@ outer@{
   pname ? "nginx",
   version,
   nginxVersion ? version,
+  flavor ? "stable",
   src ? null, # defaults to upstream nginx ${version}
   hash ? null, # when not specifying src
   configureFlags ? [ ],
@@ -313,11 +314,13 @@ mkDerivation {
     postInstall + dynamicPost;
 
   passthru = {
-    inherit modules dynamicModules;
+    inherit modules dynamicModules flavor;
     tests =
       passthru.tests or {
+        inherit (nixosTests.nginx.${flavor})
+          basic
+          ;
         inherit (nixosTests)
-          nginx
           nginx-auth
           nginx-dynamic-modules
           nginx-etag

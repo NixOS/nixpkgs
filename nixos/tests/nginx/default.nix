@@ -1,0 +1,20 @@
+{ lib, runTest, ... }:
+let
+  inherit (lib) recurseIntoAttrs mapAttrs const;
+
+  packages = {
+    mainline = builtins.getAttr "nginxMainline";
+    stable = builtins.getAttr "nginxStable";
+  };
+in
+recurseIntoAttrs (
+  mapAttrs (
+    name: mkPackage:
+    let
+      callTest = path: runTest (import path { inherit mkPackage name lib; });
+    in
+    mapAttrs (const callTest) {
+      basic = ./basic.nix;
+    }
+  ) packages
+)
