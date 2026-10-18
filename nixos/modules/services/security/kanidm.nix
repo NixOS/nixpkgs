@@ -36,7 +36,6 @@ let
     optionals
     optionalString
     splitString
-    subtractLists
     types
     unique
     versionAtLeast
@@ -790,27 +789,6 @@ in
           acc: { type, name }: acc // { ${name} = (acc.${name} or [ ]) ++ [ type ]; }
         ) { } entities;
 
-        assertGroupsKnown =
-          opt: groups:
-          let
-            knownGroups = attrNames (filterPresent cfg.provision.groups);
-            unknownGroups = subtractLists knownGroups groups;
-          in
-          {
-            assertion = (cfg.server.enable && cfg.provision.enable) -> unknownGroups == [ ];
-            message = "${opt} refers to unknown groups: ${toString unknownGroups}";
-          };
-
-        assertEntitiesKnown =
-          opt: entities:
-          let
-            unknownEntities = subtractLists (attrNames entitiesByName) entities;
-          in
-          {
-            assertion = (cfg.server.enable && cfg.provision.enable) -> unknownEntities == [ ];
-            message = "${opt} refers to unknown entities: ${toString unknownEntities}";
-          };
-
         invalidEntryManagementNames = filter (name: builtins.match "[0-9]{2}-.+" name == null) (
           attrNames cfg.server.entryManagement.migrations
         );
@@ -916,39 +894,12 @@ in
           }
         )
       ]
-      ++ (optionals (cfg.provision.extraJsonFile == null) (
-        flip mapAttrsToList (filterPresent cfg.provision.persons) (
-          person: personCfg:
-          assertGroupsKnown "services.kanidm.provision.persons.${person}.groups" personCfg.groups
-        )
-      ))
-      ++ (optionals (cfg.provision.extraJsonFile == null) (
-        flip mapAttrsToList (filterPresent cfg.provision.groups) (
-          group: groupCfg:
-          assertEntitiesKnown "services.kanidm.provision.groups.${group}.members" groupCfg.members
-        )
-      ))
       ++ concatLists (
         flip mapAttrsToList (filterPresent cfg.provision.systems.oauth2) (
           oauth2: oauth2Cfg:
-          (optional (cfg.provision.extraJsonFile == null) (
-            assertGroupsKnown "services.kanidm.provision.systems.oauth2.${oauth2}.scopeMaps" (
-              attrNames oauth2Cfg.scopeMaps
-            )
-          ))
-          ++ (optional (cfg.provision.extraJsonFile == null) (
-            assertGroupsKnown "services.kanidm.provision.systems.oauth2.${oauth2}.supplementaryScopeMaps" (
-              attrNames oauth2Cfg.supplementaryScopeMaps
-            )
-          ))
-          ++ concatLists (
+          concatLists (
             flip mapAttrsToList oauth2Cfg.claimMaps (
               claim: claimCfg: [
-                (mkIf (cfg.provision.extraJsonFile == null) (
-                  assertGroupsKnown "services.kanidm.provision.systems.oauth2.${oauth2}.claimMaps.${claim}.valuesByGroup" (
-                    attrNames claimCfg.valuesByGroup
-                  )
-                ))
                 # At least one group must map to a value in each claim map
                 (mkIf (cfg.provision.extraJsonFile == null) {
                   assertion =

@@ -46,6 +46,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/storage/azure-storage-file-share";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-storage-file-share_${version}/sdk/storage/azure-storage-file-share/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kamadorueda ];
+    maintainers = [ ];
   };
 }

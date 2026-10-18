@@ -45,6 +45,7 @@ PKG_PREFERENCES = {
     "fints": "fints",
     "HAP-python": "hap-python",
     "ha-av": "av",
+    "mcp": "mcp",
     "numpy": "numpy",
     "ollama-hass": "ollama",
     "paho-mqtt": "paho-mqtt",

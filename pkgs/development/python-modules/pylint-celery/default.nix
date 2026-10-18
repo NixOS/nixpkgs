@@ -34,6 +34,6 @@ buildPythonPackage (finalAttrs: {
     description = "Pylint plugin to analyze Celery applications";
     homepage = "https://github.com/PyCQA/pylint-celery";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ kamadorueda ];
+    maintainers = [ ];
   };
 })
