@@ -70,6 +70,10 @@ buildPythonPackage rec {
     export PYTHONPATH="$PWD:$PYTHONPATH"
   '';
 
+  # Long Nix build paths can make Rich wrap the filename in the error message.
+  # https://github.com/fastapi/typer/discussions/1984
+  disabledTests = [ "test_file_error" ];
+
   pythonImportsCheck = [ "typer" ];
 
   meta = {
