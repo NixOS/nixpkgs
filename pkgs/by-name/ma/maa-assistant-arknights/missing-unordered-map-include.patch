@@ -1,0 +1,10 @@
+--- a/src/MaaCore/Config/Roguelike/RoguelikeMapConfig.h
++++ b/src/MaaCore/Config/Roguelike/RoguelikeMapConfig.h
+@@ -1,5 +1,7 @@
+ #pragma once
+ 
++#include <unordered_map>
++
+ #include "Config/AbstractConfig.h"
+ 
+ namespace asst
