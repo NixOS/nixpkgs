@@ -30,8 +30,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   buildPhase = ''
     substituteInPlace autorandr.py \
-      --replace 'os.popen("xrandr' 'os.popen("${xrandr}/bin/xrandr' \
-      --replace '["xrandr"]' '["${xrandr}/bin/xrandr"]'
+      --replace-fail 'os.popen("xrandr' 'os.popen("${xrandr}/bin/xrandr' \
+      --replace-fail '["xrandr"]' '["${xrandr}/bin/xrandr"]'
   '';
 
   patches = [ ./0001-don-t-use-sys.executable.patch ];
@@ -64,7 +64,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
             SYSTEMD_UNIT_DIR=/lib/systemd/system \
             UDEV_RULES_DIR=/etc/udev/rules.d
           substituteInPlace $out/etc/udev/rules.d/40-monitor-hotplug.rules \
-            --replace /bin/systemctl "/run/current-system/systemd/bin/systemctl"
+            --replace-fail /bin/systemctl "/run/current-system/systemd/bin/systemctl"
         ''
       else
         ''
