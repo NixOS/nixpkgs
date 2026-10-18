@@ -319,6 +319,20 @@ Every word must earn its place.
 ### One sentence per line
 
 Put each sentence in its own line.
+
+**Don't:**
+
+```
+Write short sentences. One per unit of thought.
+```
+
+**Do:**
+
+```
+Write short sentences.
+One per unit of thought.
+```
+
 This is [semantic line break](https://sembr.org/).
 It makes reviews and suggestions much easier, since GitHub's review system is based on lines.
 
