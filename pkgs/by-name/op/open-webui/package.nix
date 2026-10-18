@@ -239,7 +239,15 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonImportsCheck = [ "open_webui" ];
 
-  makeWrapperArgs = [ "--set FRONTEND_BUILD_DIR ${frontend}/share/open-webui" ];
+  makeWrapperArgs = [
+    "--set FRONTEND_BUILD_DIR ${frontend}/share/open-webui"
+    # Subprocesses spawned at runtime (e.g. the RRULE parser) do not inherit
+    # the Python path configured via site.addsitedir in the wrapper, causing
+    # ImportErrors and silent failures (e.g. "Invalid RRULE: ").  Expose the
+    # complete runtime dependency tree as PYTHONPATH so child processes can
+    # find all required modules.  See https://github.com/NixOS/nixpkgs/issues/574466
+    "--set PYTHONPATH ${python3Packages.makePythonPath finalAttrs.dependencies}"
+  ];
 
   passthru = {
     tests = {
