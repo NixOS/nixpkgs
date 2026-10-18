@@ -1,30 +1,36 @@
 {
   lib,
-  absl-py,
   buildPythonPackage,
-  distrax,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  absl-py,
   dm-env,
-  dm-haiku,
-  dm-sonnet,
   dm-tree,
-  fetchpatch,
-  fetchPypi,
   frozendict,
   gym,
   matplotlib,
   mizani,
-  optax,
   pandas,
   patsy,
   plotnine,
-  pytestCheckHook,
-  rlax,
   scikit-image,
   scipy,
-  setuptools,
   statsmodels,
-  tensorflow-probability,
   termcolor,
+
+  # tests
+  distrax,
+  dm-haiku,
+  dm-sonnet,
+  fetchPypi,
+  fetchpatch,
+  optax,
+  pytestCheckHook,
+  rlax,
+  tensorflow-probability,
 }:
 
 buildPythonPackage (finalAttrs: {
