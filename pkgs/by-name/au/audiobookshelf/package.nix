@@ -48,14 +48,12 @@ buildNpmPackage (finalAttrs: {
   dontNpmBuild = true;
   npmInstallFlags = [ "--omit=dev" ];
 
-  client = callPackage ./client.nix { inherit (finalAttrs) src version nodejs; };
-
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/opt/client
     cp -r index.js server package* node_modules $out/opt/
-    cp -r ${finalAttrs.client}/lib/node_modules/audiobookshelf-client/dist $out/opt/client/dist
+    cp -r ${finalAttrs.passthru.client} $out/opt/client/dist
     mkdir $out/bin
 
     echo '${wrapper}' > $out/bin/audiobookshelf
@@ -67,6 +65,7 @@ buildNpmPackage (finalAttrs: {
   '';
 
   passthru = {
+    client = callPackage ./client.nix { inherit (finalAttrs) src version nodejs; };
     tests.basic = nixosTests.audiobookshelf;
     updateScript = nix-update-script { extraArgs = [ "--subpackage=client" ]; };
   };
