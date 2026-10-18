@@ -15,6 +15,7 @@
   wavpack,
   libxmp,
   game-music-emu,
+  testers,
   # Boolean flags
   enableSdltest ? (!stdenv.hostPlatform.isDarwin),
 }:
@@ -76,12 +77,19 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature true "music-ogg-vorbis")
   ];
 
+  passthru = {
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+  };
+
   meta = {
     homepage = "https://github.com/libsdl-org/SDL_mixer";
     description = "SDL multi-channel audio mixer library";
     license = lib.licenses.zlib;
     teams = [ lib.teams.sdl ];
     platforms = lib.platforms.unix;
+    pkgConfigModules = [ "SDL2_mixer" ];
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "libsdl" finalAttrs.version;
   };
 })
