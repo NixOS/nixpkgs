@@ -1,6 +1,6 @@
 {
   lib,
-  stdenvNoCC,
+  stdenv,
   dpkg,
   fetchurl,
   nixosTests,
@@ -9,7 +9,7 @@
   jdk25_headless,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "unifi-controller";
   version = "10.6.106";
 
@@ -28,6 +28,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    stdenv.cc.cc.lib
     systemd
   ];
 
