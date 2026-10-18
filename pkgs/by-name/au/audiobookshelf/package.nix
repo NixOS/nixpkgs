@@ -6,8 +6,6 @@
   nodejs_24,
   ffmpeg_8-full,
   nunicode,
-  util-linux,
-  python3,
   typescript_5,
   jq,
   nixosTests,
@@ -15,9 +13,6 @@
   routerBasePath ? "/audiobookshelf",
 }:
 
-let
-  nodejs = nodejs_24;
-in
 buildNpmPackage (finalAttrs: {
   pname = "audiobookshelf";
   version = "2.37.1";
@@ -31,11 +26,9 @@ buildNpmPackage (finalAttrs: {
 
   npmDepsHash = "sha256-xHjZ3E1DGeb5NueP67hEX3vHH0Qlk4LTeZkMEFBhGyE=";
 
-  inherit nodejs;
+  nodejs = nodejs_24;
 
-  buildInputs = [ util-linux ];
   nativeBuildInputs = [
-    python3
     typescript_5
     jq
   ];
@@ -94,8 +87,8 @@ buildNpmPackage (finalAttrs: {
   meta = {
     homepage = "https://www.audiobookshelf.org/";
     description = "Self-hosted audiobook and podcast server";
-    changelog = "https://github.com/advplyr/audiobookshelf/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.gpl3;
+    changelog = "https://github.com/advplyr/audiobookshelf/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       jvanbruegge
       adamcstephens
@@ -104,5 +97,9 @@ buildNpmPackage (finalAttrs: {
     ];
     platforms = lib.platforms.linux;
     mainProgram = "audiobookshelf";
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryBytecode
+    ];
   };
 })
