@@ -11827,6 +11827,12 @@
     githubId = 1064477;
     name = "Hannes Hornwall";
   };
+  hoseok-lee = {
+    email = "hoseoklee99@proton.me";
+    github = "hoseok-lee";
+    githubId = 47509132;
+    name = "Ho Seok Lee";
+  };
   hougo = {
     name = "Hugo Renard";
     email = "hugo.renard@proton.me";
