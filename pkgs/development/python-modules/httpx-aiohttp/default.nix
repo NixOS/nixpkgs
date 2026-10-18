@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "httpx-aiohttp";
-  version = "0.1.12";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "karpetrosyan";
     repo = "httpx-aiohttp";
     tag = version;
-    hash = "sha256-5k/+oEsW2oPN2OM0jXU/+FcsWQLvSdYgM8AuzTU9XrI=";
+    hash = "sha256-STZyNPPeSaeINjylrT6FCdqnP41syBr2ZjZZ7LAUQ0c=";
     fetchSubmodules = true;
   };
 
