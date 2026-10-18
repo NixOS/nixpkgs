@@ -5,6 +5,7 @@
   pkg-config,
   stdenv,
   unstableGitUpdater,
+  testers,
   # Boolean flags
   enableSdltest ? (!stdenv.hostPlatform.isDarwin),
 }:
@@ -35,10 +36,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  passthru.updateScript = unstableGitUpdater {
-    tagFormat = "release-1.*";
-    tagPrefix = "release-";
-    branch = "SDL-1.2";
+  passthru = {
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+    updateScript = unstableGitUpdater {
+      tagFormat = "release-1.*";
+      tagPrefix = "release-";
+      branch = "SDL-1.2";
+    };
   };
 
   meta = {
@@ -47,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.zlib;
     teams = [ lib.teams.sdl ];
     inherit (SDL.meta) platforms;
+    pkgConfigModules = [ "SDL_net" ];
     identifiers.cpeParts =
       let
         # version shenanigans to strip -unstable suffix which is not supported by CPE
