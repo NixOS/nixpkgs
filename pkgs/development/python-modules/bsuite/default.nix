@@ -28,13 +28,13 @@
 }:
 
 let
-  bsuite = buildPythonPackage rec {
+  bsuite = buildPythonPackage (finalAttrs: {
     pname = "bsuite";
     version = "0.3.6";
     pyproject = true;
 
     src = fetchPypi {
-      inherit pname version;
+      inherit (finalAttrs) pname version;
       hash = "sha256-GPHmxJ/0CSKItlfk+YPHeUaTMA+4U81l1Z4Cfe+hikA=";
     };
 
@@ -114,10 +114,10 @@ let
     meta = {
       description = "Collection of experiments that investigate core capabilities of a reinforcement learning (RL) agent";
       homepage = "https://github.com/deepmind/bsuite";
-      changelog = "https://github.com/google-deepmind/bsuite/releases/tag/${version}";
+      changelog = "https://github.com/google-deepmind/bsuite/releases/tag/${finalAttrs.src.tag}";
       license = lib.licenses.asl20;
       maintainers = with lib.maintainers; [ onny ];
     };
-  };
+  });
 in
 bsuite
