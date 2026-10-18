@@ -590,6 +590,9 @@ in
       ]
       "`services.overseerr` has been replaced by `services.seerr` as the project has been merged with Jellyseerr under Seerr."
     )
+    (mkRemovedOptionModule [ "services" "unit" ] ''
+      services.unit has been removed together with pkgs.unit.
+    '')
     # Do NOT add any option renames here, see top of the file
   ];
 }
