@@ -15,6 +15,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-WdpWbezOunwqeXCkoDtI2ZBfEmL/lEEKZJIk4z0kQrw=";
   };
 
+  strictDeps = true;
+
   passthru = {
     updateScript = writeScript "update-${finalAttrs.pname}" ''
       #!/usr/bin/env nix-shell
