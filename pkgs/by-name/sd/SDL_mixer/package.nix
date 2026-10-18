@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "SDL multi-channel audio mixer library";
-    homepage = "http://www.libsdl.org/projects/SDL_mixer/";
+    homepage = "https://www.libsdl.org/projects/SDL_mixer/";
     pkgConfigModules = [ "SDL_mixer" ];
     teams = [ lib.teams.sdl ];
     license = lib.licenses.zlib;
