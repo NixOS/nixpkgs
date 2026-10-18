@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   cmake,
+  versionCheckHook,
   testers,
 }:
 
@@ -30,6 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
   strictDeps = true;
 
   outputs = [
@@ -45,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Tests take a very long time, and require CMake trickery
   # because they are implemented in a completely separate cmakeDir.
   doCheck = false;
+  doInstallCheck = true;
 
   passthru.tests = {
     version = testers.testVersion {
