@@ -22,9 +22,11 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
-  buildInputs = lib.optionals finalAttrs.finalPackage.doCheck [
+  nativeCheckInputs = lib.optionals finalAttrs.finalPackage.doCheck [
     valgrind
   ];
+
+  strictDeps = true;
 
   outputs = [
     "dev"
