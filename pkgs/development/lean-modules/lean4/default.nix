@@ -24,7 +24,7 @@
 let
   lean4 = stdenv.mkDerivation (finalAttrs: {
     pname = "lean4";
-    version = "4.34.1";
+    version = "4.35.0";
 
     mimalloc-src = fetchFromGitHub {
       owner = "microsoft";
@@ -37,7 +37,7 @@ let
       owner = "leanprover";
       repo = "lean4";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-JO1pCqWeotC4zjiIQZccEPXfVHnuDQC0DugyuJvIMRs=";
+      hash = "sha256-WjyIRo2BvfnNq13r+YSnTc6VaYupKJIsgfQhFBMa0aU=";
     };
 
     # Vendor mimalloc. Upstream has since partially adopted FetchContent:
@@ -69,6 +69,7 @@ let
       cmake
       leangz
       pkg-config
+      git
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools.libtool ];
 
