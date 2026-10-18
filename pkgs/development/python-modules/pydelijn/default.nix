@@ -1,46 +1,45 @@
 {
   lib,
   aiohttp,
-  async-timeout,
+  aioresponses,
   buildPythonPackage,
-  fetchPypi,
-  pytz,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pydelijn";
-  version = "1.1.0";
-  format = "setuptools";
+  version = "2.0.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-xyBq2h3ipUarkjCXq9GIbY7bhsf9729aQwHde3o5K6g=";
+  src = fetchFromGitHub {
+    owner = "bollewolle";
+    repo = "pydelijn";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-13BMHMdjnTrGGdVrrKT3zlDgiC1V7qXiD2XCX4PT+WY=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
-    async-timeout
-    pytz
   ];
 
-  postPatch = ''
-    # Remove with next release
-    substituteInPlace setup.py \
-      --replace "async_timeout>=3.0.1,<4.0" "async_timeout>=3.0.1"
-    # https://github.com/bollewolle/pydelijn/pull/11
-    substituteInPlace pydelijn/common.py \
-      --replace ", loop=self.loop" ""
-  '';
-
-  # Project has no tests
-  doCheck = false;
+  nativeCheckInputs = [
+    aioresponses
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "pydelijn" ];
 
   meta = {
+    changelog = "https://github.com/bollewolle/pydelijn/releases/tag/${finalAttrs.src.tag}";
     description = "Python package to retrieve realtime data of passages at stops of De Lijn";
     homepage = "https://github.com/bollewolle/pydelijn";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
