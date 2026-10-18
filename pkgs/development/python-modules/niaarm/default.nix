@@ -6,6 +6,7 @@
 
   # build-system
   poetry-core,
+  pyprojectVersionPatchHook,
 
   # dependencies
   niapy,
@@ -39,7 +40,10 @@ buildPythonPackage (finalAttrs: {
     "scikit-learn"
   ];
 
-  build-system = [ poetry-core ];
+  build-system = [
+    poetry-core
+    pyprojectVersionPatchHook
+  ];
 
   dependencies = [
     niapy
