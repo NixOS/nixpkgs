@@ -38,6 +38,8 @@ buildPythonPackage rec {
   ];
 
   passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
     updateScript = gitUpdater { rev-prefix = "azure.eventhub."; };
   };
 

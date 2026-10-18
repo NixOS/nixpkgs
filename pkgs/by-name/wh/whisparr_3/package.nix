@@ -16,13 +16,13 @@
 }:
 buildDotnetModule (finalAttrs: {
   pname = "whisparr";
-  version = "3.6.4-release.1865";
+  version = "3.6.5-release.1886";
 
   src = fetchFromGitHub {
     owner = "Whisparr";
     repo = "Whisparr-Eros";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PCEzbJykKOr3hFzdxB4VMDKhtX89uSdFt/Q2Khvn4Eg=";
+    hash = "sha256-evJ4wJynWKK4WK3m1/QMd5hfEr4yaSu5tcAYVGhbw+c=";
   };
 
   __structuredAttrs = true;
@@ -109,7 +109,7 @@ buildDotnetModule (finalAttrs: {
 
       yarnOfflineCache = fetchYarnDeps {
         yarnLock = "${finalAttrs.src}/yarn.lock";
-        hash = "sha256-ROqqIz31tnmkpKUZmKsx3FDYzFluUMH5S3srktwcMCM=";
+        hash = "sha256-wsHtPZ2K5+fBRAVUuqk81jip37NHG0rV0DojfejiR1o=";
       };
 
       installPhase = ''
