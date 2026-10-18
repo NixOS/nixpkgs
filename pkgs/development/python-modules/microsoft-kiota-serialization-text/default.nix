@@ -40,8 +40,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "kiota_serialization_text" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "microsoft-kiota-serialization-text-v";
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "microsoft-kiota-serialization-text-v";
+    };
   };
 
   meta = {

@@ -35,7 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontUnpack = true;
   dontBuild = true;
-  __noChroot = stdenv.hostPlatform.isDarwin;
   # otherwise the bun runtime is executed instead of the binary
   dontStrip = true;
 

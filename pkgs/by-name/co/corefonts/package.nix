@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchurl,
   cabextract,
   installFonts,
@@ -63,31 +63,33 @@ let
     hash = "sha256-LOgNEsM+dANEreP2LsFi+pAnBNDMFB9Pg+KJAahlC6s=";
   };
 in
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "corefonts";
   version = "1";
 
-  env.exes = toString (
-    map (
-      { name, hash }:
-      fetchurl {
-        url = "mirror://sourceforge/corefonts/the%20fonts/final/${name}32.exe";
-        inherit hash;
-      }
-    ) fonts
-  );
+  srcs = map (
+    { name, hash }:
+    fetchurl {
+      url = "mirror://sourceforge/corefonts/the%20fonts/final/${name}32.exe";
+      inherit hash;
+    }
+  ) fonts;
 
   nativeBuildInputs = [
     cabextract
     installFonts
   ];
 
-  buildCommand = ''
-    for i in $exes; do
+  unpackPhase = ''
+    runHook preUnpack
+    for i in "''${srcs[@]}"; do
       cabextract --lowercase $i
     done
     cabextract --lowercase viewer1.cab
+    runHook postUnpack
+  '';
 
+  preInstall = ''
     # rename to more standard names
     # handle broken macOS file-system
     mv andalemo.ttf  Andale_Mono.ttf
@@ -127,11 +129,9 @@ stdenv.mkDerivation {
     mv verdanaz.ttf  Verdana_Bold_Italic.ttf
     mv webdings.ttf  Webdings.ttf.tmp
     mv Webdings.ttf.tmp  Webdings.ttf
+  '';
 
-    # using buildCommand means no phases are run
-    # so we run the function ourselves
-    installFonts
-
+  postInstall = ''
     # Also put the EULA there to be on the safe side.
     cp ${eula} $out/share/fonts/truetype/eula.html
 
@@ -146,6 +146,7 @@ stdenv.mkDerivation {
   '';
 
   __structuredAttrs = true;
+  strictDeps = true;
 
   meta = {
     homepage = "https://corefonts.sourceforge.net/";

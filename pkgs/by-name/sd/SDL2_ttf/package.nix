@@ -61,5 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.sdl ];
     inherit (SDL2.meta) platforms;
     pkgConfigModules = [ "SDL2_ttf" ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "libsdl" finalAttrs.version;
   };
 })
