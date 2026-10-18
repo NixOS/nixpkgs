@@ -44,9 +44,8 @@ buildPythonPackage {
     export HOME=$(mktemp -d)
   '';
 
-  unittestFlagsArray = [
-    "-s"
-    "test"
+  unittestFlags = [
+    "--start-directory=test"
     "-v"
   ];
 
