@@ -12,6 +12,7 @@
   jq,
   nixosTests,
   nix-update-script,
+  routerBasePath ? "/audiobookshelf",
 }:
 
 let
@@ -56,6 +57,9 @@ buildNpmPackage (finalAttrs: {
     "NUSQLITE3_PATH"
     "${nunicode.sqlite}/lib/libnusqlite3"
     "--set"
+    "ROUTER_BASE_PATH"
+    (lib.escapeShellArg routerBasePath)
+    "--set"
     "SKIP_BINARIES_CHECK"
     "1"
     "--set"
@@ -79,7 +83,10 @@ buildNpmPackage (finalAttrs: {
   '';
 
   passthru = {
-    client = callPackage ./client.nix { inherit (finalAttrs) src version nodejs; };
+    client = callPackage ./client.nix {
+      inherit (finalAttrs) src version nodejs;
+      inherit routerBasePath;
+    };
     tests.basic = nixosTests.audiobookshelf;
     updateScript = nix-update-script { extraArgs = [ "--subpackage=client" ]; };
   };
