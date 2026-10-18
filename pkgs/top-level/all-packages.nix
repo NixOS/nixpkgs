@@ -3109,8 +3109,6 @@ with pkgs;
   };
   fasm-bin = callPackage ../development/compilers/fasm/bin.nix { };
 
-  fbc = callPackage ../development/compilers/fbc { };
-
   filecheck = with python3Packages; toPythonApplication filecheck;
 
   flutterPackages-bin = recurseIntoAttrs (callPackage ../development/compilers/flutter { });
@@ -4023,8 +4021,6 @@ with pkgs;
   scala-runners = callPackage ../development/compilers/scala-runners {
     coursier = coursier.override { jre = jdk8; };
   };
-
-  smlnj = callPackage ../development/compilers/smlnj { };
 
   squeak = callPackage ../development/compilers/squeak {
     stdenv = clangStdenv;
@@ -6432,8 +6428,6 @@ with pkgs;
     useQt6 = true;
   };
 
-  qgnomeplatform = callPackage ../development/libraries/qgnomeplatform { };
-
   qgnomeplatform-qt6 = qgnomeplatform.override {
     useQt6 = true;
   };
@@ -7574,9 +7568,6 @@ with pkgs;
   };
 
   dmraid = callPackage ../os-specific/linux/dmraid { lvm2 = lvm2_dmeventd; };
-
-  # unstable until the first 1.x release
-  fwts = callPackage ../os-specific/linux/fwts { };
 
   libuuid = if stdenv.hostPlatform.isLinux then util-linuxMinimal else null;
 
@@ -9762,10 +9753,6 @@ with pkgs;
   protonup-ng = with python3Packages; toPythonApplication protonup-ng;
 
   teeworlds-server = teeworlds.override { buildClient = false; };
-
-  ultrastar-creator = callPackage ../tools/misc/ultrastar-creator { };
-
-  ultrastar-manager = callPackage ../tools/misc/ultrastar-manager { };
 
   ut2004Packages = recurseIntoAttrs (callPackage ../by-name/ut/ut2004/packages.nix { });
 
