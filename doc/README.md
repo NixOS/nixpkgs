@@ -7,6 +7,7 @@ This directory houses the source files for the Nixpkgs manual, including
 - [Language frameworks](./languages-frameworks) shipped with Nixpkgs.
 
 There are renderings for the [rolling release](https://nixos.org/manual/nixpkgs/unstable/) and [latest stable release](https://nixos.org/manual/nixpkgs/stable/).
+The NixOS manual is found at [nixpkgs/nixos](../nixos/doc/manual).
 
 > [!NOTE]
 >
