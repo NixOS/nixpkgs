@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "surepy";
-  version = "0.9.0";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "benleb";
     repo = "surepy";
     tag = "v${version}";
-    hash = "sha256-ETgpXSUUsV1xoZjdnL2bzn4HwDjKC2t13yXwf28OBqI=";
+    hash = "sha256-b93SqZr+9VKYHoFxkutZ01LsuvtGiDO5FrHIrZvho94=";
   };
 
   pythonRelaxDeps = [
