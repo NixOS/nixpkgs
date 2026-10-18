@@ -1,4 +1,4 @@
-# Contributing to the Nixpkgs manual
+# Contributing to the Nixpkgs repository documentation
 
 This directory houses the source files for the Nixpkgs manual, including
 
@@ -76,7 +76,7 @@ To test redirects, perform a browser refresh, as browsers do not re-run client J
 
 ## Documentation conventions
 
-The Nixpkgs manual follows a set of conventions.
+The Nixpkgs repository documentation follows a set of conventions.
 
 * prose and technical writing follows the [style guide](./styleguide.md);
 * source files can use the [supported markdown features](#syntax);
