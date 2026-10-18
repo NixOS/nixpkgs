@@ -24,7 +24,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-cloud-logging";
-  version = "3.16.0";
+  version = "3.17.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -32,7 +32,7 @@ buildPythonPackage (finalAttrs: {
     owner = "googleapis";
     repo = "google-cloud-python";
     tag = "google-cloud-logging-v${finalAttrs.version}";
-    hash = "sha256-M/7uDWWz4YCfxa4gyM9BaAo10iyTMvtR2MhNpdFYnis=";
+    hash = "sha256-b0FYupZU0ZNeIL9xJIqEXgg7ToRCQLjiswJ67YzX7OI=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/google-cloud-logging";
