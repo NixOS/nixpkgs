@@ -184,7 +184,7 @@ let
           (funcall restore-path
                    "EMACSLOADPATH" "emacsWithPackages_siteLisp")
           (funcall restore-path
-                   "EMACSNATIVELOADPATH" "emacsWithPackages_siteLispNative")
+                   "EMACSNATIVELOADPATH" "emacsWithPackages_nativeLisp")
           ;; Abuse restore-path for single-item PATH-like variable FONTCONFIG_FILE.
           (funcall restore-path
                    "FONTCONFIG_FILE" "emacsWithPackages_fontconfigFile")
@@ -261,7 +261,7 @@ runCommand (lib.appendToName "with-packages" emacs).name
       substitute ${./wrapper.sh} $out/bin/$progname \
         --subst-var-by bash ${runtimeShell} \
         --subst-var-by wrapperSiteLisp "$deps/share/emacs/site-lisp" \
-        --subst-var-by wrapperSiteLispNative "$deps/share/emacs/native-lisp" \
+        --subst-var-by wrapperNativeLisp "$deps/share/emacs/native-lisp" \
         --subst-var-by wrapperBinDir "$deps/bin" \
         --subst-var-by withFontconfig "${lib.boolToString withFontconfig}" \
         --subst-var-by wrapperFontconfigFile "${fontconfigFile}" \
@@ -291,7 +291,7 @@ runCommand (lib.appendToName "with-packages" emacs).name
       substitute ${./wrapper.sh} $out/Applications/Emacs.app/Contents/MacOS/Emacs \
         --subst-var-by bash ${runtimeShell} \
         --subst-var-by wrapperSiteLisp "$deps/share/emacs/site-lisp" \
-        --subst-var-by wrapperSiteLispNative "$deps/share/emacs/native-lisp" \
+        --subst-var-by wrapperNativeLisp "$deps/share/emacs/native-lisp" \
         --subst-var-by wrapperBinDir "$deps/bin" \
         --subst-var-by withFontconfig "${lib.boolToString withFontconfig}" \
         --subst-var-by wrapperFontconfigFile "${fontconfigFile}" \
