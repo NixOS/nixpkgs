@@ -2,12 +2,10 @@
 
 grafanaPlugin {
   pname = "redis-datasource";
-  version = "2.2.0";
-  zipHash = "sha256-a4at8o185XSOyNxZZKfb0/j1CVoKQ9JZx0ofoPUBqKs=";
+  inherit (lib.importTOML ./sources.toml) version packages;
   meta = {
     description = "Redis Data Source for Grafana";
     license = lib.licenses.asl20;
     maintainers = [ ];
-    platforms = lib.platforms.unix;
   };
 }
