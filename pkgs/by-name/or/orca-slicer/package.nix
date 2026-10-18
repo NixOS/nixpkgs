@@ -141,6 +141,18 @@ clangStdenv.mkDerivation (finalAttrs: {
       hash = "sha256-hgQeagPhS3aNQoFSq0S+Ch60ygm81uHMIvGopw/AZT8=";
     })
 
+    # some patches are required for linux kernel 7.2.9 / Mesa 26.2.4 or else some GL stuff crashes
+    (fetchpatch {
+      name = "pr-15873-fix-slice-crash.patch";
+      url = "https://github.com/OrcaSlicer/OrcaSlicer/commit/42009cf385381216d86b724c2c8532a497463b61.patch";
+      hash = "sha256-9GpG8S6PgaAylW/sI3mriRdZ+2sck381pVewN6xVNmE=";
+    })
+    (fetchpatch {
+      name = "pr-16109-fix-toolpath-freeze.patch";
+      url = "https://github.com/OrcaSlicer/OrcaSlicer/commit/36fb9905e5f99fc2bb1a1beef51c1acb9866c7dc.patch";
+      hash = "sha256-zijJ47O1H8x37uz0oxSqvPwvpIKFjAPb3kjEtW0wp/Y=";
+    })
+
     # Pick https://github.com/prusa3d/PrusaSlicer/pull/14207 to remove unused and insecure ilmbase dependency
     ./patches/no-ilmbase.patch
   ];
