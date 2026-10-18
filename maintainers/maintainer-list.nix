@@ -32797,6 +32797,12 @@
     github = "zinzilulo";
     githubId = 214774502;
   };
+  zirancumin = {
+    email = "zirancumin@hotmail.com";
+    github = "zirancumin";
+    githubId = 204525452;
+    name = "zirancumin";
+  };
   Zirconium419122 = {
     name = "Rasmus Liaskar";
     github = "Zirconium419122";
