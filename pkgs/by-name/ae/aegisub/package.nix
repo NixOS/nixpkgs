@@ -45,13 +45,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "aegisub";
-  version = "3.5.0";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "TypesettingTools";
     repo = "aegisub";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Oonk/aDBB6clWeqxNcUtc923dv9eUY5uQyLsWwwVPDw=";
+    hash = "sha256-3tL5TZpuxCzpoYlyWujvpryUspBq6piZsl4lSzu76kQ=";
   };
 
   nativeBuildInputs = [
