@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   acl,
   attr,
   autoreconfHook,
@@ -40,6 +41,17 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-B2leEyMwSy7YSEMKSTsgfeBbKo4kOQPU0ME0XWuZMik=";
   };
+
+  patches = [
+    # fixes test_create_child_environment test
+    # https://github.com/libarchive/libarchive/issues/3676
+    # https://github.com/libarchive/libarchive/pull/3677
+    (fetchpatch {
+      name = "archive-read-fix-large-child-environment-test.patch";
+      url = "https://github.com/libarchive/libarchive/commit/28d2900e51b6d20f22d3a74eca6ddac5939ef104.patch";
+      hash = "sha256-4vL54mn8iblIMB7i46nSDc/CXl2eyrZ43Tj+QOgC4mk=";
+    })
+  ];
 
   outputs = [
     "out"
