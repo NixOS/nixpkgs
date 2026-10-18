@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "unityhub";
-  version = "3.19.5";
+  version = "3.22.3";
 
   src = fetchurl {
     url = "https://hub-dist.unity3d.com/artifactory/hub-debian-prod-local/pool/main/u/unity/unityhub_amd64/UnityHubSetup-${version}-amd64.deb";
-    hash = "sha256-WltXrcnOIJMcQVTFf/3tCPP/onQyhv3xTJ563WshJUA=";
+    hash = "sha256-o6tsYcvtvNS67U2gaDShc3xEGfXIx2H+MmE2+HQ1SB8=";
   };
 
   nativeBuildInputs = [
@@ -126,25 +126,21 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out
-    mv opt/ usr/share/ $out
+    mv usr/lib/ usr/share/ $out
 
-    # `/opt/unityhub/unityhub` is a shell wrapper that runs `/opt/unityhub/unityhub-bin`
+    # `/usr/lib/unityhub/unityhub` is a shell wrapper that runs `/usr/lib/unityhub/unityhub-bin`
     # which we don't need and overwrite with our own wrapper that uses the fhs env.
-    makeWrapper ${fhsEnv}/bin/${pname}-fhs-env $out/opt/unityhub/unityhub \
-      --add-flags $out/opt/unityhub/unityhub-bin \
+    makeWrapper ${fhsEnv}/bin/${pname}-fhs-env $out/lib/unityhub/unityhub \
+      --add-flags $out/lib/unityhub/unityhub-bin \
       --argv0 unityhub
 
     mkdir -p $out/bin
-    ln -s $out/opt/unityhub/unityhub $out/bin/unityhub
-
-    # Replace absolute path in desktop file to correctly point to nix store
-    substituteInPlace $out/share/applications/unityhub.desktop \
-      --replace-fail /opt/unityhub/unityhub $out/opt/unityhub/unityhub
+    ln -s $out/lib/unityhub/unityhub $out/bin/unityhub
 
     # This file is used by auto updater to determine whether this install is
     # a .deb, .rpm, etc. Remove this to disable the auto updater, which auto
     # downloads the update, in addition to being useless.
-    rm $out/opt/unityhub/resources/package-type
+    rm $out/lib/unityhub/resources/package-type
 
     runHook postInstall
   '';
