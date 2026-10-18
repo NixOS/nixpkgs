@@ -37,6 +37,7 @@ in
         // lib.optionalAttrs config.system.etc.overlay.enable {
           etc_metadata_image = config.system.build.etcMetadataImage;
           etc_basedir = config.system.build.etcBasedir;
+          etc_overlay_mutable = config.system.etc.overlay.mutable;
         };
       };
     }

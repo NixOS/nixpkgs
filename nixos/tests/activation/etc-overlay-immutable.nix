@@ -45,6 +45,11 @@
       boot.initrd.systemd.enable = true;
       time.timeZone = "Utc";
 
+      # The default writable store (overlayfs) does not support file-backed
+      # erofs. nix.enable=false because nix-daemon-init chowns the 9p store.
+      virtualisation.writableStore = false;
+      nix.enable = false;
+
       # The standard resolvconf service tries to write to /etc and crashes,
       # which makes nixos-rebuild exit uncleanly when switching into the new generation
       services.resolved.enable = true;
@@ -62,16 +67,11 @@
       };
     };
 
-  testScript = # python
+  testScript =
+    { nodes, ... }:
+    # python
     ''
       newergen = machine.succeed("realpath /run/current-system/specialisation/newer-generation/bin/switch-to-configuration").rstrip()
-
-      with subtest("/run/nixos-etc-metadata/ is mounted"):
-        print(machine.succeed("mountpoint /run/nixos-etc-metadata"))
-
-      with subtest("No temporary files leaked into stage 2"):
-        machine.succeed("[ ! -e /etc-metadata-image ]")
-        machine.succeed("[ ! -e /etc-basedir ]")
 
       with subtest("/etc is mounted as an overlay"):
         machine.succeed("findmnt --kernel --type overlay /etc")
@@ -89,26 +89,36 @@
             "systemctl show -P ConditionResult systemd-machine-id-commit.service"
         ).strip() == "no"
 
+      with subtest("file-backed erofs fast path was used"):
+        machine.fail("journalctl -b -o cat | grep -F 'falling back to a loop device'")
+        machine.fail("losetup --noheadings | grep etc-metadata")
+
       with subtest("modes work correctly"):
         machine.succeed("stat --format '%F' /etc/modetest | tee /dev/stderr | grep -q 'regular file'")
         machine.succeed("stat --format '%F' /etc/modetest2 | tee /dev/stderr | grep -q 'regular file'")
+
+      # The metadata layer is passed to overlayfs by fd, so it is not
+      # visible in the filesystem. Loop-mount the image to inspect it.
+      machine.succeed("mkdir -p /tmp/etc-metadata && mount -t erofs -o ro,loop ${nodes.machine.system.build.etcMetadataImage} /tmp/etc-metadata")
 
       with subtest("small regular files are inlined into the metadata image"):
         assert machine.succeed("cat /etc/inlinetest") == "inline-content\n"
         machine.succeed("stat --format '%a' /etc/inlinetest | tee /dev/stderr | grep -Eq '^640$'")
         # Inlined files are stored in the metadata erofs image, not redirected
         # to the basedir data layer, so they carry no overlay redirect xattr.
-        machine.fail("getfattr -h -n trusted.overlay.redirect /run/nixos-etc-metadata/inlinetest")
+        machine.fail("getfattr -h -n trusted.overlay.redirect /tmp/etc-metadata/inlinetest")
 
       with subtest("empty regular files are served from the metadata image"):
         assert machine.succeed("cat /etc/emptytest") == ""
         machine.succeed("stat --format '%F %s %a' /etc/emptytest | tee /dev/stderr | grep -Eq '^regular empty file 0 644$'")
-        machine.fail("getfattr -h -n trusted.overlay.redirect /run/nixos-etc-metadata/emptytest")
+        machine.fail("getfattr -h -n trusted.overlay.redirect /tmp/etc-metadata/emptytest")
 
       with subtest("large regular files are served from the basedir"):
         assert machine.succeed("wc -c < /etc/bigfile").strip() == "5000"
         assert machine.succeed("head -c 10 /etc/bigfile") == "aaaaaaaaaa"
-        machine.succeed("getfattr -h -n trusted.overlay.redirect /run/nixos-etc-metadata/bigfile")
+        machine.succeed("getfattr -h -n trusted.overlay.redirect /tmp/etc-metadata/bigfile")
+
+      machine.succeed("umount /tmp/etc-metadata")
 
       with subtest("direct symlinks point to the target without indirection"):
         assert machine.succeed("readlink -n /etc/localtime") == "/etc/zoneinfo/Utc"
@@ -152,14 +162,7 @@
 
         machine.succeed(f"{newergen} switch")
 
-        tmpMounts = machine.succeed("find /run -maxdepth 1 -type d -regex '/run/nixos-etc\\..*'").rstrip()
-        print(tmpMounts)
-        metaMounts = machine.succeed("find /run -maxdepth 1 -type d -regex '/run/nixos-etc-metadata.*'").rstrip()
-        print(metaMounts)
-
-        numOfTmpMounts = len(tmpMounts.splitlines())
-        numOfMetaMounts = len(metaMounts.splitlines())
-        assert numOfTmpMounts == 0, f"Found {numOfTmpMounts} remaining tmpmounts"
-        assert numOfMetaMounts == 1, f"Found {numOfMetaMounts} remaining metamounts"
+        leftovers = machine.succeed("find /run -maxdepth 1 -type d -regex '/run/nixos-etc.*'").rstrip()
+        assert leftovers == "", f"Found leftover mounts under /run: {leftovers}"
     '';
 }
