@@ -32,7 +32,7 @@
 # It exists so the langgraph team can iterate on it without having to rebuild langgraph.
 buildPythonPackage (finalAttrs: {
   pname = "langgraph-prebuilt";
-  version = "1.1.0";
+  version = "1.1.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -40,7 +40,7 @@ buildPythonPackage (finalAttrs: {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "prebuilt==${finalAttrs.version}";
-    hash = "sha256-xSYJ9D86GuaJEgQYk+pkJ4O7HK6HXfAOGBv4f1CBY5g=";
+    hash = "sha256-go7dX2cnBCaFIHG8qDLhXWflxCP/3WVhVKbnw0v5AXY=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/prebuilt";
