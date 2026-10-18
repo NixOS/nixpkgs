@@ -2,27 +2,30 @@
 
 set -euo pipefail
 
-directory="$(dirname $0 | xargs realpath)"
+directory="$(dirname "$0" | xargs realpath)"
+repo="MaaAssistantArknights/MaaAssistantArknights"
 
-version_stable="$(curl "https://api.github.com/repos/MaaAssistantArknights/MaaAssistantArknights/releases/latest" | jq -r '.tag_name')"
+prefetch_source() {
+    local version="$1" hash maa_utils_rev maa_utils_hash
+    hash=$(nix-prefetch-github MaaAssistantArknights MaaAssistantArknights --rev "$version" -v | jq -er .hash) || return
+    maa_utils_rev=$(curl -fsSL "https://api.github.com/repos/$repo/contents/src/MaaUtils?ref=$version" | jq -er .sha) || return
+    maa_utils_hash=$(nix-prefetch-github MaaXYZ MaaUtils --rev "$maa_utils_rev" -v | jq -er .hash) || return
 
-hash_stable=$(nix-prefetch-github MaaAssistantArknights MaaAssistantArknights --rev ${version_stable} -v | jq -r .hash)
-
-version_beta="$(curl "https://api.github.com/repos/MaaAssistantArknights/MaaAssistantArknights/releases?per_page=1" | jq -r '.[0].tag_name')"
-
-hash_beta=$(nix-prefetch-github MaaAssistantArknights MaaAssistantArknights --rev ${version_beta} -v | jq -r .hash)
-
-cat > $directory/pin.json << EOF
-{
-  "stable": {
-    "version": "${version_stable#*v}",
-    "hash": "$hash_stable"
-  },
-  "beta": {
-    "version": "${version_beta#*v}",
-    "hash": "$hash_beta"
-  }
+    jq -n --arg version "${version#v}" --arg hash "$hash" \
+        --arg rev "$maa_utils_rev" --arg utilsHash "$maa_utils_hash" \
+        '{version: $version, hash: $hash, maaUtils: {rev: $rev, hash: $utilsHash}}'
 }
-EOF
 
-cat $directory/pin.json
+version_stable=$(curl -fsSL "https://api.github.com/repos/$repo/releases/latest" | jq -er .tag_name)
+version_beta=$(curl -fsSL "https://api.github.com/repos/$repo/releases?per_page=1" | jq -er '.[0].tag_name')
+
+stable=$(prefetch_source "$version_stable")
+if [[ "$version_beta" == "$version_stable" ]]; then
+    beta="$stable"
+else
+    beta=$(prefetch_source "$version_beta")
+fi
+
+jq -n --argjson stable "$stable" --argjson beta "$beta" \
+    '{stable: $stable, beta: $beta}' > "$directory/pin.json"
+cat "$directory/pin.json"

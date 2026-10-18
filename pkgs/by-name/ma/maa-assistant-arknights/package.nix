@@ -4,33 +4,42 @@
   callPackage,
   stdenv,
   fetchFromGitHub,
-  asio,
+  boost,
   cmake,
-  libcpr,
+  nlohmann_json,
+  python3,
   onnxruntime,
   opencv,
+  zlib,
   isBeta ? false,
   cudaSupport ? config.cudaSupport,
   cudaPackages ? { },
 }:
 
 let
-  fastdeploy = callPackage ./fastdeploy-ppocr.nix { };
+  fastdeploy = callPackage ./fastdeploy-ppocr.nix {
+    inherit cudaSupport cudaPackages;
+  };
   sources = lib.importJSON ./pin.json;
+  source = if isBeta then sources.beta else sources.stable;
+  maaUtils = fetchFromGitHub {
+    owner = "MaaXYZ";
+    repo = "MaaUtils";
+    inherit (source.maaUtils) rev hash;
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "maa-assistant-arknights" + lib.optionalString isBeta "-beta";
-  version = if isBeta then sources.beta.version else sources.stable.version;
+  version = source.version;
 
   src = fetchFromGitHub {
     owner = "MaaAssistantArknights";
     repo = "MaaAssistantArknights";
     rev = "v${finalAttrs.version}";
-    hash = if isBeta then sources.beta.hash else sources.stable.hash;
+    hash = source.hash;
   };
 
   nativeBuildInputs = [
-    asio
     cmake
     fastdeploy.cmake
   ]
@@ -38,9 +47,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     fastdeploy
-    libcpr
+    boost
+    nlohmann_json
     onnxruntime
     opencv
+    zlib
   ]
   ++ lib.optionals cudaSupport (
     with cudaPackages;
@@ -57,19 +68,60 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeBuildType = "None";
 
+  doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  nativeInstallCheckInputs = [ python3 ];
+  installCheckPhase = ''
+    runHook preInstallCheck
+    python3 - <<'PYTHON'
+    import ctypes
+    import os
+
+    out = os.environ["out"]
+    core = ctypes.CDLL(f"{out}/lib/libMaaCore${stdenv.hostPlatform.extensions.sharedLibrary}")
+    core.AsstGetVersion.restype = ctypes.c_char_p
+    assert core.AsstGetVersion().decode() == "v${finalAttrs.version}"
+    core.AsstSetUserDir.argtypes = [ctypes.c_char_p]
+    core.AsstSetUserDir.restype = ctypes.c_bool
+    assert core.AsstSetUserDir(os.fsencode(os.environ["TMPDIR"]))
+    core.AsstLoadResource.argtypes = [ctypes.c_char_p]
+    core.AsstLoadResource.restype = ctypes.c_bool
+    assert core.AsstLoadResource(os.fsencode(f"{out}/share/${finalAttrs.pname}"))
+    PYTHON
+    runHook postInstallCheck
+  '';
+
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" true)
     (lib.cmakeBool "INSTALL_FLATTEN" false)
     (lib.cmakeBool "INSTALL_PYTHON" true)
     (lib.cmakeBool "INSTALL_RESOURCE" true)
-    (lib.cmakeBool "USE_MAADEPS" false)
-    (lib.cmakeFeature "MAA_VERSION" "v${finalAttrs.version}")
+    (lib.cmakeBool "WITH_RPATH_LIBRARY" false)
+    (lib.cmakeFeature "MAA_HASH_VERSION" "v${finalAttrs.version}")
+  ];
+
+  postUnpack = ''
+    mkdir -p "$sourceRoot/src/MaaUtils"
+    cp -r --no-preserve=mode ${maaUtils}/. "$sourceRoot/src/MaaUtils/"
+  '';
+
+  patches = [
+    ./use-system-dependencies.patch
+    ./boost-process-v1.patch
+    ./missing-unordered-map-include.patch
   ];
 
   passthru.updateScript = ./update.sh;
 
   postPatch = ''
-    cp -v ${fastdeploy.cmake}/Findonnxruntime.cmake cmake/
+    substituteInPlace src/MaaCore/Config/OnnxSessions.cpp \
+      --replace-fail '#if __has_include(<onnxruntime/coreml_provider_factory.h>)' '#if defined(__APPLE__) && __has_include(<onnxruntime/coreml_provider_factory.h>)'
+    substituteInPlace src/MaaUtils/cmake/config.cmake \
+      --replace-fail '-Werror;' ""
+    cp ${fastdeploy.cmake}/Findonnxruntime.cmake src/MaaUtils/cmake/modules/
+    substituteInPlace src/MaaUtils/MaaUtils.cmake \
+      --replace-fail 'find_package(ONNXRuntime REQUIRED)' 'find_package(onnxruntime REQUIRED)'
+    substituteInPlace src/MaaCore/CMakeLists.txt \
+      --replace-fail 'ONNXRuntime::ONNXRuntime' 'onnxruntime::onnxruntime'
   '';
 
   postInstall = ''
