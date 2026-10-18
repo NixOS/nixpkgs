@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   django,
-  fetchPypi,
+  fetchFromGitHub,
   flask,
   google-api-core,
   google-cloud-appengine-logging,
@@ -19,18 +19,23 @@
   pytestCheckHook,
   rich,
   setuptools,
+  nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-logging";
   version = "3.16.0";
   pyproject = true;
+  __structuredAttrs = true;
 
-  src = fetchPypi {
-    pname = "google_cloud_logging";
-    inherit version;
-    hash = "sha256-CKMHa48PckIZ1vc7KiQu9p1R6LziJhM66+QaJfI/VAA=";
+  src = fetchFromGitHub {
+    owner = "googleapis";
+    repo = "google-cloud-python";
+    tag = "google-cloud-logging-v${finalAttrs.version}";
+    hash = "sha256-M/7uDWWz4YCfxa4gyM9BaAo10iyTMvtR2MhNpdFYnis=";
   };
+
+  sourceRoot = "${finalAttrs.src.name}/packages/google-cloud-logging";
 
   build-system = [ setuptools ];
 
@@ -84,11 +89,24 @@ buildPythonPackage rec {
     "google.cloud.logging_v2"
   ];
 
+  # The ATOM feed loses this update most of the time due to a high update volume,
+  # so query github directly.
+  passthru = {
+    skipBulkUpdate = true;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "google-cloud-logging-v([0-9.]+)"
+        "--use-github-releases"
+      ];
+    };
+  };
+
   meta = {
     description = "Stackdriver Logging API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-logging";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/${version}/packages/google-cloud-logging/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/${finalAttrs.version}/packages/google-cloud-logging/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ sarahec ];
   };
-}
+})
