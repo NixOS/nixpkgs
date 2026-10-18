@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "viaggiatreno-ha";
-  version = "0.2.4";
+  version = "0.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "monga";
     repo = "viaggiatreno_ha";
     tag = "v${version}";
-    hash = "sha256-XmZVguuZK4pnAqINBWJbyAa5VesrQS6wP1jNPdWqhiQ=";
+    hash = "sha256-DHsxkj/tMgPrFtV4AlAA+W0jLTtaprNYGqG+U6FTSUk=";
   };
 
   build-system = [ setuptools ];
