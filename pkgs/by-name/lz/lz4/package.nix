@@ -4,7 +4,6 @@
   fetchFromGitHub,
   fetchpatch,
   cmake,
-  valgrind,
   testers,
 }:
 
@@ -31,10 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
-  nativeCheckInputs = lib.optionals finalAttrs.finalPackage.doCheck [
-    valgrind
-  ];
-
   strictDeps = true;
 
   outputs = [
@@ -47,8 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeDir = "../build/cmake";
   cmakeBuildDir = "build-dist";
 
-  doCheck = false; # tests take a very long time
-  checkTarget = "test";
+  # Tests take a very long time, and require CMake trickery
+  # because they are implemented in a completely separate cmakeDir.
 
   passthru.tests = {
     version = testers.testVersion {
