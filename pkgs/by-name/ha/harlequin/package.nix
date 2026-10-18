@@ -9,6 +9,7 @@
   writableTmpDirAsHomeHook,
   withPostgresAdapter ? true,
   withBigQueryAdapter ? true,
+  withMysqlAdapter ? true,
   withOdbcAdapter ? true,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -62,6 +63,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ]
     ++ lib.optionals withPostgresAdapter [ harlequin-postgres ]
     ++ lib.optionals withBigQueryAdapter [ harlequin-bigquery ]
+    ++ lib.optionals withMysqlAdapter [ harlequin-mysql ]
     ++ lib.optionals withOdbcAdapter [ harlequin-odbc ];
 
   pythonImportsCheck = [

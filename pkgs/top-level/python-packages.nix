@@ -7547,6 +7547,8 @@ self: super: with self; {
 
   harlequin-bigquery = callPackage ../development/python-modules/harlequin-bigquery { };
 
+  harlequin-mysql = callPackage ../development/python-modules/harlequin-mysql { };
+
   harlequin-odbc = callPackage ../development/python-modules/harlequin-odbc { };
 
   harlequin-postgres = callPackage ../development/python-modules/harlequin-postgres { };
