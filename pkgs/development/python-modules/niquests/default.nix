@@ -41,6 +41,7 @@ buildPythonPackage (finalAttrs: {
       brotli
       socks
       ws
+      ws-fast
       zstd
       ;
     full = [

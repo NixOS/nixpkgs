@@ -87,6 +87,7 @@ buildPythonPackage {
     changelog = "https://github.com/tenstorrent/tt-metal/releases/tag/v${tt-metal'.version}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
+    teams = [ lib.teams.tenstorrent ];
     maintainers = with lib.maintainers; [ liberodark ];
   };
 }

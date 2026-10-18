@@ -30,6 +30,6 @@ buildPythonPackage rec {
     description = "High performance functions to work with the async IO";
     homepage = "https://kamadorueda.github.io/aioextensions";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kamadorueda ];
+    maintainers = [ ];
   };
 }

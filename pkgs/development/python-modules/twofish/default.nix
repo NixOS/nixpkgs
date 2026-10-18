@@ -26,6 +26,6 @@ buildPythonPackage rec {
     description = "Bindings for the Twofish implementation by Niels Ferguson";
     homepage = "https://github.com/keybase/python-twofish";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ kamadorueda ];
+    maintainers = [ ];
   };
 }

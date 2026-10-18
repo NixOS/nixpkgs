@@ -35,6 +35,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/PyCQA/pylint-plugin-utils";
     changelog = "https://github.com/pylint-dev/pylint-plugin-utils/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ kamadorueda ];
+    maintainers = [ ];
   };
 })

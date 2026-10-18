@@ -14,17 +14,20 @@
   libusb1,
   libsndfile,
   fftw,
+  libgpiod,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "qlcplus";
-  version = "5.2.2";
+  version = "5.3.0";
 
   src = fetchFromGitHub {
     owner = "mcallegari";
     repo = "qlcplus";
     rev = "QLC+_${version}";
-    hash = "sha256-e8KyuCnzTUz/f6cfT7LyUQ9snaFBnE5WTc4FP7jhdRY=";
+    hash = "sha256-55Jy4t60Lc6YOGko6fW/pUjS5uAiNhVDn4bm8LBWkzI=";
   };
 
   nativeBuildInputs = [
@@ -43,6 +46,7 @@ stdenv.mkDerivation rec {
     libsndfile
     fftw
   ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libgpiod ]
   ++ (with qt6; [
     qtbase
     qtdeclarative
@@ -62,6 +66,19 @@ stdenv.mkDerivation rec {
 
     # Drop hardcoded "/usr" prefix so files install to $out instead of $out/usr
     substituteInPlace variables.cmake --replace-fail 'set(INSTALLROOT "/usr")' 'set(INSTALLROOT "")'
+
+    # Keep our CMAKE_INSTALL_LIBDIR instead of recomputing it, which picks lib64
+    # and leaves the binary unable to find libqlcplusengine5.so
+    substituteInPlace variables.cmake \
+      --replace-fail 'unset(CMAKE_INSTALL_LIBDIR CACHE)' "" \
+      --replace-fail 'unset(CMAKE_INSTALL_LIBDIR)' ""
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    # Upstream ships these commented out. They drive DMX over a serial port
+    # (e.g. Raspberry Pi DMX HATs) and take triggers from GPIO pins.
+    substituteInPlace plugins/CMakeLists.txt \
+      --replace-fail '#    add_subdirectory(uart)' 'add_subdirectory(uart)' \
+      --replace-fail '#    add_subdirectory(gpio)' 'add_subdirectory(gpio)'
   '';
 
   cmakeFlags = [
@@ -76,10 +93,17 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   doInstallCheck = true;
-
-  postInstall = ''
-    ln -sf $out/lib/*/libqlcplus* $out/lib
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  # The QApplication needs a platform even to print --version
+  preVersionCheck = ''
+    export QT_QPA_PLATFORM=offscreen
   '';
+  versionCheckKeepEnvironment = [ "QT_QPA_PLATFORM" ];
+
+  passthru.updateScript = nix-update-script {
+    # Tags look like QLC+_5.3.0
+    extraArgs = [ "--version-regex=^QLC\\+_(.*)$" ];
+  };
 
   meta = {
     description = "Free and cross-platform software to control DMX or analog lighting systems like moving heads, dimmers, scanners etc";
@@ -89,5 +113,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
     homepage = "https://www.qlcplus.org/";
+    mainProgram = "qlcplus5";
   };
 }

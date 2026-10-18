@@ -19,6 +19,7 @@
   stdenv,
   tornado,
   trustme,
+  websockets,
   wsproto,
   zstandard,
 }:
@@ -55,9 +56,18 @@ buildPythonPackage (finalAttrs: {
   optional-dependencies = {
     brotli = [ (if isPyPy then brotlicffi else brotli) ];
     qh3 = [ qh3 ];
+    # FIXME package rtls
+    # rtls = lib.optionals (!isPyPy) [ rtls ];
     secure = [ ];
     socks = [ python-socks ];
+    # FIXME package utls
+    # utls = lib.optionals (!isPyPy) [
+    #   brotli
+    #   utls
+    #   zstandard
+    # ];
     ws = [ wsproto ];
+    ws-fast = [ websockets ];
     zstd = lib.optionals (pythonOlder "3.14") [ zstandard ];
   };
 

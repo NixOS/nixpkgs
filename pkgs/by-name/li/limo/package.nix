@@ -34,6 +34,10 @@ stdenv.mkDerivation (finalAttrs: {
     # remove `unrar` as fallback when libarchive fails
     ./remove-unrar.patch
 
+    # https://github.com/limo-app/limo/issues/190
+    # https://github.com/limo-app/limo/pull/191
+    ./libloot-compat.patch
+
     # fix build on gcc16
     ./fix-gcc16.patch
   ];
