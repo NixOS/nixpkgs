@@ -95,5 +95,11 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.sdl ];
     license = lib.licenses.zlib;
     inherit (SDL.meta) platforms;
+    identifiers.cpeParts =
+      let
+        # version shenanigans to strip -unstable suffix which is not supported by CPE
+        versionString = "${lib.versions.majorMinor finalAttrs.version}.${lib.versions.patch finalAttrs.version}";
+      in
+      lib.meta.cpeFullVersionWithVendor "libsdl" versionString;
   };
 })
