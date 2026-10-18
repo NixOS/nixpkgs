@@ -68,7 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
     udev
     wayland
     wayland-protocols
-    wayland-scanner
     wlroots_0_20
   ]
   ++ lib.optionals xwaylandSupport [
