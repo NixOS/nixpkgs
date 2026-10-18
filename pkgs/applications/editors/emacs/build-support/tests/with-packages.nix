@@ -20,7 +20,10 @@ let
           pname = "with-packages";
           src = replaceVarsWith {
             src = ./with-packages.el;
-            replacements = { inherit (builtins) storeDir; };
+            replacements = {
+              inherit (builtins) storeDir;
+              unwrappedEmacs = lib.getExe emacs;
+            };
 
             # generate a file in a store path dir
             #   /nix/store/hash-with-packages.el/with-packages.el
@@ -55,7 +58,6 @@ let
 
       emacs --batch --load=with-packages \
         --eval="(setq with-packages-non-batch-emacs-socket \"$nonBatchEmacsSocket\")" \
-        --eval='(setq with-packages-unwrapped-emacs-program "${lib.getExe emacs}")' \
         --funcall=ert-run-tests-batch-and-exit
     '';
   };
