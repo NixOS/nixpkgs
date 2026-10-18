@@ -11,12 +11,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "publicsuffixlist";
-  version = "1.1.0.20261010";
+  version = "1.1.0.20261017";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-Hr1Mntreimyb0BmVpvnmciCUjcpYebH9SKVly0Kdmus=";
+    hash = "sha256-6x5YlmcbENV7PBTPTki+WpySCHm16RwjSo4VjAcwUEs=";
   };
 
   postPatch = ''
