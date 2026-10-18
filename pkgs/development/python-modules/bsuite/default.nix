@@ -26,7 +26,6 @@
   dm-haiku,
   dm-sonnet,
   fetchPypi,
-  fetchpatch,
   optax,
   pytestCheckHook,
   rlax,
@@ -42,20 +41,6 @@ buildPythonPackage (finalAttrs: {
     inherit (finalAttrs) pname version;
     hash = "sha256-GPHmxJ/0CSKItlfk+YPHeUaTMA+4U81l1Z4Cfe+hikA=";
   };
-
-  patches = [
-    # Convert np.int -> np.int32 since np.int is deprecated, https://github.com/google-deepmind/bsuite/pull/48
-    (fetchpatch {
-      url = "https://github.com/google-deepmind/bsuite/pull/48/commits/f8d81b2f1c27ef2c8c71ae286001ed879ea306ab.patch";
-      hash = "sha256-FXtvVS+U8brulq8Z27+yWIimB+kigGiUOIv1SHb1TA8=";
-    })
-    # Replace imp with importlib, https://github.com/google-deepmind/bsuite/pull/50
-    (fetchpatch {
-      name = "replace-imp.patch";
-      url = "https://github.com/google-deepmind/bsuite/commit/d08b63655c7efa5b5bb0f35e825e17549d23e812.patch";
-      hash = "sha256-V5p/6edNXTpEckuSuxJ/mvfJng5yE/pfeMoYbvlNpEo=";
-    })
-  ];
 
   build-system = [ setuptools ];
 
