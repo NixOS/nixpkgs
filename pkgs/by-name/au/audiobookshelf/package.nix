@@ -46,7 +46,7 @@ buildNpmPackage (finalAttrs: {
   nativeBuildInputs = [ python3 ];
 
   dontNpmBuild = true;
-  npmInstallFlags = [ "--only-production" ];
+  npmInstallFlags = [ "--omit=dev" ];
 
   client = callPackage ./client.nix { inherit (finalAttrs) src version nodejs; };
 
