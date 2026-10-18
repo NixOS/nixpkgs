@@ -82,5 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.zlib;
     teams = [ lib.teams.sdl ];
     platforms = lib.platforms.unix;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "libsdl" finalAttrs.version;
   };
 })
