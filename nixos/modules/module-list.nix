@@ -204,6 +204,7 @@
   ./programs/cpu-energy-meter.nix
   ./programs/criu.nix
   ./programs/dconf.nix
+  ./programs/devenv.nix
   ./programs/digitalbitbox/default.nix
   ./programs/direnv.nix
   ./programs/dmrconfig.nix
@@ -1315,6 +1316,7 @@
   ./services/networking/krill.nix
   ./services/networking/lambdabot.nix
   ./services/networking/legit.nix
+  ./services/networking/libreqos.nix
   ./services/networking/libreswan.nix
   ./services/networking/livekit-ingress.nix
   ./services/networking/livekit.nix
@@ -1566,8 +1568,8 @@
   ./services/security/certmgr.nix
   ./services/security/cfssl.nix
   ./services/security/clamav.nix
+  ./services/security/crowdsec
   ./services/security/crowdsec-firewall-bouncer.nix
-  ./services/security/crowdsec.nix
   ./services/security/e-imzo.nix
   ./services/security/endlessh-go.nix
   ./services/security/endlessh.nix

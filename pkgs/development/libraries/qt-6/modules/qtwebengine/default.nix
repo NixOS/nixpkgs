@@ -121,57 +121,35 @@ qtModule {
     # Override locales install path so they go to QtWebEngine's $out
     ./locales-path.patch
 
+    # Look for things in the right places in our split-prefix config
+    ./split-prefix.patch
+
     # Reproducibility QTBUG-136068
     ./gn-object-sorted.patch
-  ]
-  # Remove once merged with upstream
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    ./clang-base-path-from-cmake-compiler.patch
 
+    # Don't require compiler to identify as AppleClang on Darwin
+    ./darwin-compiler.patch
+
+    # Disable Metal shader precompilation, which requires Apple proprietary tools
+    ./darwin-no-metal.patch
+
+    # Generating debug symbols fails the build because it can't find dsymutil
+    # FIXME: figure out how to fix this properly
+    ./darwin-no-debug-symbols.patch
+
+    # Darwin toolchain fixes
+    # FIXME: do we still need these?
+    ./clang-base-path-from-cmake-compiler.patch
     ./lflags-remove-strip-darwin-isysroot.patch
   ];
 
   postPatch = ''
     # Patch Chromium build tools
-    (
-      cd src/3rdparty/chromium;
-
-      # Manually fix unsupported shebangs
-      substituteInPlace third_party/harfbuzz-ng/src/src/update-unicode-tables.make \
-        --replace "/usr/bin/env -S make -f" "/usr/bin/make -f" || true
-      substituteInPlace third_party/webgpu-cts/src/tools/run_deno \
-        --replace "/usr/bin/env -S deno" "/usr/bin/deno" || true
-      patchShebangs .
-    )
-
-    substituteInPlace cmake/Functions.cmake \
-      --replace "/bin/bash" "${buildPackages.bash}/bin/bash"
-
-    # Patch library paths in sources
-    substituteInPlace src/core/web_engine_library_info.cpp \
-      --replace "QLibraryInfo::path(QLibraryInfo::DataPath)" "\"$out\"" \
-      --replace "QLibraryInfo::path(QLibraryInfo::TranslationsPath)" "\"$out/translations\"" \
-      --replace "QLibraryInfo::path(QLibraryInfo::LibraryExecutablesPath)" "\"$out/libexec\""
-
-    substituteInPlace configure.cmake src/gn/CMakeLists.txt \
-      --replace "AppleClang" "Clang"
-
-    # Disable metal shader compilation, Xcode only
-    substituteInPlace src/3rdparty/chromium/third_party/angle/src/libANGLE/renderer/metal/metal_backend.gni \
-      --replace-fail 'angle_has_build && !is_ios && target_os == host_os' "false"
+    (cd src/3rdparty/chromium; patchShebangs .)
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace cmake/QtToolchainHelpers.cmake \
       --replace-fail "/usr/bin/xcrun" "${xcbuild}/bin/xcrun"
-
-    # xcbuild's xcrun doesn't implement the real (proprietary) Metal shader
-    # compiler, so this check always fails. The one build step that actually
-    # invokes it (ANGLE's internal shader precompilation) is already disabled
-    # below, so it's safe to report the toolchain as present.
-    substituteInPlace cmake/QtConfigureHelpers.cmake \
-      --replace-fail 'message(STATUS "Checking for Metal Toolchain")' 'message(STATUS "Checking for Metal Toolchain")
-    set(TEST_metal_toolchain TRUE PARENT_SCOPE)
-    return()'
   '';
 
   cmakeFlags = [

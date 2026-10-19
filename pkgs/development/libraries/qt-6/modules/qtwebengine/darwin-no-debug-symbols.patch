@@ -1,0 +1,11 @@
+--- a/src/3rdparty/chromium/build/config/apple/symbols.gni
++++ b/src/3rdparty/chromium/build/config/apple/symbols.gni
+@@ -14,7 +14,7 @@ declare_args() {
+   # the //build/toolchain/apple/linker_driver.py. Enabling this will result in
+   # all shared library, loadable module, and executable targets having a dSYM
+   # generated.
+-  enable_dsyms = is_official_build || using_sanitizer
++  enable_dsyms = false
+
+   # Strip symbols from linked targets by default. If this is enabled, the
+   # //build/config/apple:strip_all config will be applied to all linked targets.

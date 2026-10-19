@@ -23,14 +23,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "evosax";
-  version = "0.3.1";
+  version = "0.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RobertTLange";
     repo = "evosax";
     tag = "v.${finalAttrs.version}";
-    hash = "sha256-iuhqlpwU4puAxzepXAixpBrLajkGNgBxXijwoNX36+8=";
+    hash = "sha256-j+pYgbd/60zbom3QlQi4U1VpEI5pn+QqThQfGhHGqQ8=";
   };
 
   build-system = [ setuptools ];
