@@ -11,6 +11,7 @@
   makeWrapper,
   fzf,
   less,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -61,6 +62,13 @@ rustPlatform.buildRustPackage rec {
         --zsh <($out/bin/$bin --completions zsh)
     done
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "mdcat-(.*)"
+    ];
+  };
 
   meta = {
     description = "cat for markdown";
