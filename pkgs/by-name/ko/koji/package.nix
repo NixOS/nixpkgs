@@ -53,6 +53,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellCompletion --cmd koji \
       --bash <($out/bin/koji completions bash) \
       --fish <($out/bin/koji completions fish) \
+      --nushell <($out/bin/koji completions nushell) \
       --zsh <($out/bin/koji completions zsh)
   '';
 
