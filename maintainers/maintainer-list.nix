@@ -31432,6 +31432,11 @@
     githubId = 158211;
     keys = [ { fingerprint = "82CB 91F4 F3E4 04A5 DAB2  78E8 8B99 1293 8FF2 1020"; } ];
   };
+  wangl-cc = {
+    name = "Loong";
+    github = "wangl-cc";
+    githubId = 40141251;
+  };
   wariuccio = {
     name = "Wariuccio";
     github = "wariuccio";
