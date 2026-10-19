@@ -27,7 +27,7 @@ maven.buildMavenPackage (finalAttrs: {
   # (see https://github.com/hneemann/Digital/issues/289#issuecomment-513721481)
   # Also use the v0.31 commit date as a build and output timestamp.
   mvnParameters = "-Pno-git-rev -Dgit.commit.id.describe=v${finalAttrs.version} -Dproject.build.outputTimestamp=2024-09-03T14:02:31+02:00 -DbuildTimestamp=2024-09-03T14:02:31+02:00";
-  mvnHash = "sha256-qFJvpxK6PDmMfeL5fKVHUzK2NRLcQhQ3PJbwv2hYZqY=";
+  mvnHash = "sha256-g6gev7ZVhQSzPgUj496E/QjQnQ3rIcBq4o8a/r5x8FA=";
 
   nativeBuildInputs = [
     copyDesktopItems
