@@ -7761,12 +7761,12 @@ final: prev: {
 
   hunk-nvim = buildVimPlugin {
     pname = "hunk.nvim";
-    version = "1.10.0";
+    version = "1.11.0";
     src = fetchFromGitHub {
       owner = "julienvincent";
       repo = "hunk.nvim";
-      tag = "v1.10.0";
-      hash = "sha256-HcQNn1qsY9seuyLjX1Z9FCSRs3cdoxYDL3lZIOjwwog=";
+      tag = "v1.11.0";
+      hash = "sha256-zbjwCqgokAlYM2zADhotSr/XDpgcF9O/NFeH/bCyxFs=";
     };
     meta.homepage = "https://github.com/julienvincent/hunk.nvim/";
     meta.license = getLicenseFromSpdxId "MIT";
