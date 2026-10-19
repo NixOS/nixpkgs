@@ -483,7 +483,10 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/wandb/wandb";
     changelog = "https://github.com/wandb/wandb/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ samuela ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      samuela
+    ];
     mainProgram = "wandb";
     broken = wandb-symon.meta.broken || wandb-core.meta.broken;
   };
