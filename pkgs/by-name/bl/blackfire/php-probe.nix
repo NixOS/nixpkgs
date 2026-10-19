@@ -27,6 +27,7 @@ let
         "8.3" = "sha256-KMN2yzueRmgPPWx93PONotnEB3r65NDbuzlXg1jwn9E=";
         "8.4" = "sha256-qKcMsfQtPpNjpG+DUA3eAjcqK4i5OFNzuoQ5w5VZWQw=";
         "8.5" = "sha256-tEu8HxV91bDbUpNUKuWLS3viogH5T93TH/i1Z3Ex658=";
+        "8.6" = "sha256-usnJ6SKgyQYY93hz7u2TE/7JlCwp183ORwIyUH4HMb4=";
       };
     };
     "i686-linux" = {
@@ -37,6 +38,7 @@ let
         "8.3" = "sha256-2Ut5zWjSkwJQhR5OmnpFbGwqK3biPjZGuTYZV8tLq3c=";
         "8.4" = "sha256-k42DY8UdVL5XGXBDT3OhbtXMk1L3JK8g1aTICGAKk14=";
         "8.5" = "sha256-Y6l/YI0Hh0wtASj2NVKBGYbGYpTUMc8/mWkmQ7s/avg=";
+        "8.6" = "sha256-+qgUMWXqvzF2mAg48sPt8hsUvQYKtlPwKqazoPwUR3o=";
       };
     };
     "aarch64-linux" = {
@@ -47,6 +49,7 @@ let
         "8.3" = "sha256-Yh3+eWwZL+UeNwgyJ/ubxyERw5fh7sRFRweetRRLrg0=";
         "8.4" = "sha256-0Q9/+Qxi7tU75ME1QnYdR3ZlHg//BehOwCJzscSEGM4=";
         "8.5" = "sha256-IH+CMvxh5thiUh0aGeVI+hKQgCb19EzEOQXSvFc9rVY=";
+        "8.6" = "sha256-l/7hIT8QljaXN/nMrKIqAs70qhR+rwEFk9vFI728xvw=";
       };
     };
     "aarch64-darwin" = {
@@ -57,6 +60,7 @@ let
         "8.3" = "sha256-3s4NeEgYOCZuFVzJ+ZuAR1+tpVdd37++QDLCQVTEQxM=";
         "8.4" = "sha256-L2eYCxMpCATYg6qoR3HOxpKX9pTa78m4Ga9OGOJy5i8=";
         "8.5" = "sha256-i/uvnAd6TUljfFJw5JaMoz8Z1UplCJpDmlZsR9XKxPU=";
+        "8.6" = "sha256-/YayFtWgpZqTonugjB9weueAMU+zsy7EmC/so1pb8Jo=";
       };
     };
   };
