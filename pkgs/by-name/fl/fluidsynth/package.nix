@@ -5,14 +5,18 @@
   _experimental-update-script-combinators,
   alsa-lib,
   cmake,
+  dbus,
+  ladspa-header,
   libjack2,
   libpulseaudio,
   libsndfile,
   nix-update-script,
+  pipewire,
   pkg-config,
   testers,
   validatePkgConfig,
   versionCheckHook,
+  pipewireSupport ? stdenv.hostPlatform.isLinux,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -43,16 +47,20 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    ladspa-header
     libjack2
     libsndfile
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
+    dbus
     libpulseaudio
-  ];
+  ]
+  ++ lib.optional pipewireSupport pipewire;
 
   cmakeFlags = [
     (lib.cmakeBool "enable-framework" false)
+    (lib.cmakeBool "enable-pipewire" pipewireSupport)
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_SIGNALSMITH-LINEAR" finalAttrs.passthru.signalsmith-linear.outPath)
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_SIGNALSMITH-DSP" finalAttrs.passthru.signalsmith-dsp.outPath)
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_SIGNALSMITH-HILBERT" finalAttrs.passthru.signalsmith-hilbert.outPath)
