@@ -8490,12 +8490,12 @@ final: prev: {
 
   kanagawa-paper-nvim = buildVimPlugin {
     pname = "kanagawa-paper.nvim";
-    version = "4.0.0-unstable-2026-05-26";
+    version = "4.1.0";
     src = fetchFromGitHub {
       owner = "thesimonho";
       repo = "kanagawa-paper.nvim";
-      rev = "ecf19801a2673054c19421d82b766f7641688320";
-      hash = "sha256-yzu0EvZseFlLB1Flho6WigMnuLL3inLIflxPU3LUPv0=";
+      tag = "v4.1.0";
+      hash = "sha256-Xvbmnnpns/mkOgjeWHxf7yC8BPKNsdIS0U4+7LbIZf4=";
     };
     meta.homepage = "https://github.com/thesimonho/kanagawa-paper.nvim/";
     meta.license = getLicenseFromSpdxId "MIT";
