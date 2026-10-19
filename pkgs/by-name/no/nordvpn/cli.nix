@@ -5,6 +5,7 @@
   version,
 
   buildGoModule,
+  callPackage,
   copyDesktopItems,
   e2fsprogs,
   fetchFromGitHub,
@@ -16,10 +17,15 @@
   nftables,
   openvpn,
   procps,
+  sqlite,
   systemdMinimal,
   wireguard-tools,
 }:
 let
+  libdrop = callPackage ./libdrop { };
+
+  libtelio = callPackage ./libtelio { };
+
   patchedOpenvpn = openvpn.overrideAttrs (old: {
     # Apply XOR obfuscation patches to disguise OpenVPN traffic,
     # enabling connectivity on networks that block VPN protocols via DPI.
@@ -51,12 +57,20 @@ buildGoModule (finalAttrs: {
 
   pname = "nordvpn-cli";
 
+  patches = [ ./hosts-readonly.patch ];
+
   nativeBuildInputs = [
     copyDesktopItems
     makeWrapper
   ];
 
   vendorHash = "sha256-vqNxPGcxGiEtBOGr+ZJHJNts/N4RMQzAL9DOjk13v/w=";
+
+  buildInputs = [
+    libdrop
+    libtelio
+    sqlite
+  ];
 
   preBuild = ''
     # redirect AppDataPathStatic (/usr/lib/nordvpn) to $out/bin so that
@@ -74,11 +88,19 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-X main.Environment=prod"
     "-X main.Version=${finalAttrs.version}"
+    "-X main.RemotePath=/apps/linux/config"
+  ];
+
+  tags = [
+    "cdnrc"
+    "drop"
+    "telio"
   ];
 
   subPackages = [
     "cmd/cli"
     "cmd/daemon"
+    "cmd/fileshare"
     "cmd/norduser"
   ];
 
@@ -91,25 +113,27 @@ buildGoModule (finalAttrs: {
 
     # skip tests requiring network access, root/CAP_NET_ADMIN,
     # or network state the sandbox doesn't provide
-    # skip libtelio tests as the package lacks meshnet support
-    go test $(go list ./daemon/... | grep -v /daemon/vpn/nordlynx/libtelio) -skip \
-      'Test.*FileList_RealURL|'\
-      'TestAddAllowlistRules|'\
-      'TestAddDevice|'\
-      'TestConnectionInfo_TransferRatesShallBeProvidedOnlyForConnectedState|'\
-      'TestCustomTable|'\
-      'TestDiscoverNameserverIp|'\
-      'TestFwmarkRule|'\
-      'TestH1Transport_RoundTrip|'\
-      'TestMeshnetRuleset|'\
-      'TestMultiFwmarkRule|'\
-      'TestNetlinkManager_SetUnset|'\
-      'TestRouter_Add|'\
-      'TestSetMTU|'\
-      'TestSuppressRule|'\
-      'TestTransports|'\
-      'TestUpWGInterface|'\
+    skip_tests=(
+      'Test.*FileList_RealURL'
+      'TestAddAllowlistRules'
+      'TestAddDevice'
+      'TestConnectionInfo_TransferRatesShallBeProvidedOnlyForConnectedState'
+      'TestCustomTable'
+      'TestDiscoverNameserverIp'
+      'TestFwmarkRule'
+      'TestH1Transport_RoundTrip'
+      'TestMeshnetRuleset'
+      'TestMultiFwmarkRule'
+      'TestNetlinkManager_SetUnset'
+      'TestRouter_Add'
+      'TestSetMTU'
+      'TestSuppressRule'
+      'TestTransports'
+      'TestUpWGInterface'
       'TestVPNRuleset'
+    )
+    skip_pattern=$(printf '%s|' "''${skip_tests[@]}")
+    go test ./daemon/... -skip "''${skip_pattern%|}"
 
     runHook postCheck
   '';
@@ -119,6 +143,7 @@ buildGoModule (finalAttrs: {
     BIN_DIR=$out/bin
     mv $BIN_DIR/cli $BIN_DIR/nordvpn
     mv $BIN_DIR/daemon $BIN_DIR/nordvpnd
+    mv $BIN_DIR/fileshare $BIN_DIR/nordfileshare
     mv $BIN_DIR/norduser $BIN_DIR/norduserd
 
     # nordvpn needs icons for the system tray and notifications
