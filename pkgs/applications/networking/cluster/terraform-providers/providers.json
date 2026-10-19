@@ -63,11 +63,11 @@
     "vendorHash": "sha256-wpPKseArd+TbQq03QZZuUHQ/l9ttYFE5o2X1HNmxaNI="
   },
   "archessmn_powerdns": {
-    "hash": "sha256-1bjQFu3k0ERBga94pQ8HZjbfu3qlxnMQLjSkDU6Vp/I=",
+    "hash": "sha256-gQRB8tnFHhXNId9J8947ffizIWTKEetOnc+QMnjaB48=",
     "homepage": "https://registry.terraform.io/providers/archessmn/powerdns",
     "owner": "archessmn",
     "repo": "terraform-provider-powerdns",
-    "rev": "v1.0.6",
+    "rev": "v1.0.7",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
