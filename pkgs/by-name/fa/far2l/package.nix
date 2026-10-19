@@ -46,7 +46,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "far2l";
-  version = "2.9.1-unstable-2026-10-10";
+  version = "_2.9.1-unstable-2026-10-10";
 
   src = fetchFromGitHub {
     owner = "elfmz";
