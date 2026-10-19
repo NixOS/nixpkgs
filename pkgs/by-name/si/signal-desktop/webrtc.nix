@@ -17,6 +17,7 @@
   apple-sdk,
   xcodebuild,
   llvmPackages,
+  ringrtcSrc,
 }:
 
 let
@@ -120,6 +121,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    # The RingRTC FFI headers live in the ringrtc repo; upstream symlinks them
+    # into the webrtc checkout from ringrtc's bin/env.sh.
+    cp -r ${ringrtcSrc}/src/rust/src/webrtc_include ringrtc/rffi/api
+
     substituteInPlace build/toolchain/linux/BUILD.gn \
       --replace-fail 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
 
