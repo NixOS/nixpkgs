@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
       chmod u+w,+x $TEMP/${installer.name}
       patchelf --interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $TEMP/${installer.name}
     ''))
-    (lib.concatStringsSep "\n")
+    lib.concatLines
   ]
   + (
     let
@@ -75,13 +75,10 @@ stdenv.mkDerivation (finalAttrs: {
       ))
       # See NOTE above `map` that iterates the installers.
       (map (component: "ln -s ${component} $TEMP/${component.name}"))
-      (lib.concatStringsSep "\n")
+      lib.concatLines
     ]
   )
-  # New line preceding the below bash commands is required for the `echo` below
-  # to be in its own line.
   + ''
-
     echo "executing installer..."
     # "Could not load seccomp program: Invalid argument" might occur if unstick
     # itself is compiled for x86_64 instead of the non-x86 host. In that case,
