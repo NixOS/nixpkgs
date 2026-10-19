@@ -1504,10 +1504,10 @@
             },
             "src/electron": {
                 "args": {
-                    "hash": "sha256-tB4xqttVDCRSxP1jnAXCWKWtVSrVXc+ml2FvzdJns0o=",
+                    "hash": "sha256-aEfwRv96R0u1GyUz8Ttfdip90LdWY1OR9zrJv2EDNnI=",
                     "owner": "electron",
                     "repo": "electron",
-                    "tag": "v43.7.11"
+                    "tag": "v43.8.0"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -1849,10 +1849,10 @@
             },
             "src/third_party/electron_node": {
                 "args": {
-                    "hash": "sha256-D0Emw+F+8fz41onhxfiCQuxEQx+4jjsT7Ym2mqrKkRI=",
+                    "hash": "sha256-055FP6A2CjODxhrh2R4csRsiTNOIsxnuC9zWjTP9U34=",
                     "owner": "nodejs",
                     "repo": "node",
-                    "tag": "v24.21.0"
+                    "tag": "v24.22.0"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -1863,15 +1863,6 @@
                     "url": "https://chromium.googlesource.com/external/github.com/google/emoji-segmenter.git"
                 },
                 "fetcher": "fetchFromGitiles"
-            },
-            "src/third_party/engflow-reclient-configs": {
-                "args": {
-                    "hash": "sha256-aZXYPj9KYBiZnljqOLlWJWS396Fg3EhjiQLZmkwCBsY=",
-                    "owner": "EngFlow",
-                    "repo": "reclient-configs",
-                    "rev": "955335c30a752e9ef7bff375baab5e0819b6c00d"
-                },
-                "fetcher": "fetchFromGitHub"
             },
             "src/third_party/expat/src": {
                 "args": {
@@ -2823,7 +2814,7 @@
             }
         },
         "electron_yarn_data": {
-            "hash": "sha256-8r0r7WXrM4HlS2qKMHbyxS+4zet646JKjTEtSyCTqqs=",
+            "hash": "sha256-s6iBBgvQvvPN97/pSoHrZZcAyE4dWOmYtAT5Z5cQ9d8=",
             "missing_hashes": {
                 "@oxfmt/binding-android-arm-eabi@npm:0.42.0": "42c08d87ce491086843070241f8777fa2cb968f4a08f67b3f6c33a8f67e0b3eac50eae146daede743e90e3bc32326951c5188814eea02e9c3e4a9764a4b492ba",
                 "@oxfmt/binding-android-arm64@npm:0.42.0": "73e6609498d05c655c6a435af9f3e4f341137c260c7ae27fbb0377573574ca5200bd9f187aa90d442879733bbd0c4e91ae023c3b4579c9a57413a0b2922c023a",
@@ -2892,8 +2883,8 @@
             }
         },
         "modules": "148",
-        "node": "24.21.0",
-        "version": "43.7.11"
+        "node": "24.22.0",
+        "version": "43.8.0"
     },
     "44": {
         "chrome": "152.0.7977.149",
