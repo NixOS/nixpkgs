@@ -16,7 +16,7 @@ buildOctavePackage rec {
     owner = "gnu-octave";
     repo = "octave-zeromq";
     tag = "release-${version}";
-    sha256 = "sha256-6mDjOYbh5bFagEM+7otiF1I9iOqPklf0y02+vjCLYIs=";
+    hash = "sha256-6mDjOYbh5bFagEM+7otiF1I9iOqPklf0y02+vjCLYIs=";
   };
 
   preAutoreconf = ''

@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lightspark";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "lightspark";
     repo = "lightspark";
     tag = finalAttrs.version;
-    hash = "sha256-2+Kmwj2keCMR7UbKbY6UvrkX4CnW61elres8ltiZuUg=";
+    hash = "sha256-ZY/zrhEf+t5fOp9zXoDryIdTxHxFU53chjNuVrfEvM4=";
   };
 
   postPatch = ''

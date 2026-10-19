@@ -7,11 +7,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "lxgw-wenkai";
-  version = "1.522";
+  version = "1.530";
 
   src = fetchurl {
     url = "https://github.com/lxgw/LxgwWenKai/releases/download/v${version}/lxgw-wenkai-v${version}.tar.gz";
-    hash = "sha256-aBp31dACF146nhrw/G+iIBZMya1sFPHoQqU5h4584aQ=";
+    hash = "sha256-ojw3MPIaP+kYgc0oLrFdzeraF8ZXGNvGmw0mHKfB4QM=";
   };
 
   nativeBuildInputs = [ installFonts ];

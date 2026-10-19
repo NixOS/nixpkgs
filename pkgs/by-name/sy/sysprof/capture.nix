@@ -35,7 +35,6 @@ stdenv.mkDerivation {
   meta = sysprof.meta // {
     description = "Static library for Sysprof capture data generation";
     license = lib.licenses.bsd2Patent;
-    platforms = lib.platforms.all;
     pkgConfigModules = [ "sysprof-capture-4" ];
   };
 }

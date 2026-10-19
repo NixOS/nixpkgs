@@ -8,7 +8,7 @@
   pytest-asyncio,
   pytestCheckHook,
   setuptools,
-  syrupy_6,
+  syrupy,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -39,7 +39,7 @@ buildPythonPackage (finalAttrs: {
     aiointercept
     pytest-asyncio
     pytestCheckHook
-    syrupy_6
+    syrupy
   ];
 
   pythonImportsCheck = [ "aiolibrenms" ];

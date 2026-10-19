@@ -17,7 +17,7 @@ buildOctavePackage rec {
     owner = "gnu-octave";
     repo = "octave-signal";
     tag = version;
-    sha256 = "sha256-0Nq/3TDsJ9b14so99z8Y9864JZThfORn4Bc8rtfMnBk=";
+    hash = "sha256-0Nq/3TDsJ9b14so99z8Y9864JZThfORn4Bc8rtfMnBk=";
   };
 
   requiredOctavePackages = [

@@ -40,6 +40,6 @@ buildPythonPackage rec {
     homepage = "https://pysmb.readthedocs.io/";
     changelog = "https://github.com/miketeo/pysmb/releases/tag/${src.tag}";
     license = lib.licenses.zlib;
-    maintainers = with lib.maintainers; [ kamadorueda ];
+    maintainers = [ ];
   };
 }

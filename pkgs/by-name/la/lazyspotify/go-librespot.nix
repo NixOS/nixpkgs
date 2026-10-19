@@ -2,17 +2,17 @@
   alsa-lib,
   buildGoModule,
   fetchFromGitHub,
-  flac,
-  lib,
-  libogg,
-  libvorbis,
   pkg-config,
   stdenv,
+  flac,
+  lib,
+  libmpg123,
+  libogg,
+  libvorbis,
 }:
-
 buildGoModule (finalAttrs: {
   pname = "lazyspotify-librespot";
-  version = "0.7.1.1";
+  version = "0.8.0";
 
   __structuredAttrs = true;
 
@@ -20,10 +20,10 @@ buildGoModule (finalAttrs: {
     owner = "dubeyKartikay";
     repo = "go-librespot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Hq9Qk8f8oKzpBwsbLNAvPO7qam3bh4L4RPUQC67/NZY=";
+    hash = "sha256-HAuBSgf+15IZJENStS30Pc3BhOWkzBstA5sUNfjIO98=";
   };
 
-  vendorHash = "sha256-5J5i2Wc0zHCdvJ3aUkftXeMKS5X8jWimup0Ir4HLuS8=";
+  vendorHash = "sha256-WLyKs35MxCxs96hG6FTYsLhDKYDmhg6125i22kW+K7M=";
 
   subPackages = [ "cmd/daemon" ];
 
@@ -31,6 +31,7 @@ buildGoModule (finalAttrs: {
 
   buildInputs = [
     flac
+    libmpg123
     libogg
     libvorbis
   ]

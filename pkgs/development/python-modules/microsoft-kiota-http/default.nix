@@ -5,6 +5,7 @@
   flit-core,
   httpx,
   microsoft-kiota-abstractions,
+  mypy,
   opentelemetry-api,
   opentelemetry-sdk,
   pytest-asyncio,
@@ -16,14 +17,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "microsoft-kiota-http";
-  version = "1.14.3";
+  version = "1.14.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "kiota-python";
     tag = "microsoft-kiota-http-v${finalAttrs.version}";
-    hash = "sha256-D1wfzkg4VdqH27fUuOlbl/tGPr18a41feNI0PpX1zMM=";
+    hash = "sha256-8DGTZ/PeUplRJw3rsKpxd6/vl+edv2vb/TOw3lIXrko=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/http/httpx/";
@@ -39,6 +40,7 @@ buildPythonPackage (finalAttrs: {
   ++ httpx.optional-dependencies.http2;
 
   nativeCheckInputs = [
+    mypy
     pytest-asyncio
     pytest-mock
     pytestCheckHook
@@ -47,8 +49,12 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "kiota_http" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "microsoft-kiota-http-v";
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "microsoft-kiota-http-v";
+    };
   };
 
   meta = {

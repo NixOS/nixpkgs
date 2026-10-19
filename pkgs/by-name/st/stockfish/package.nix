@@ -27,6 +27,8 @@ let
       "armv8"
     else if stdenv.hostPlatform.isAarch32 then
       "armv7"
+    else if stdenv.hostPlatform.isRiscV64 then
+      "riscv64"
     else
       "unknown";
 
@@ -124,6 +126,7 @@ stdenv.mkDerivation rec {
       "aarch64-linux"
       "aarch64-darwin"
       "armv7l-linux"
+      "riscv64-linux"
     ];
     license = lib.licenses.gpl3Only;
   };

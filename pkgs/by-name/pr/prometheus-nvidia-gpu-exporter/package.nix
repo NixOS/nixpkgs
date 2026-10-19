@@ -1,21 +1,23 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "prometheus-nvidia-gpu-exporter";
-  version = "1.10.0";
+  version = "1.15.1";
+
+  env.CGO_ENABLED = 0;
 
   src = fetchFromGitHub {
     owner = "utkuozdemir";
     repo = "nvidia_gpu_exporter";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-dE5ERAOocAJnYjWmF057ifPBhDGK41p7cGl+rX2IzRg=";
+    hash = "sha256-75azonvsJ9fZSp9ht8ZUj4XmkmfsSRl2pp0jfBSEFiI=";
   };
 
-  vendorHash = "sha256-6eX+SVm6+/NWuNRD2MkJaDNi9YwJnojx9Df+o1km88I=";
+  vendorHash = "sha256-9CPuhBDi8PnYyFYmW5XbutpRrA7ukPDiXCH4+94b9/o=";
 
   ldflags = [
     "-s"

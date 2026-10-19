@@ -53,6 +53,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/AzureAD/microsoft-authentication-extensions-for-python";
     changelog = "https://github.com/AzureAD/microsoft-authentication-extensions-for-python/releases/tag/${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kamadorueda ];
+    maintainers = [ ];
   };
 }

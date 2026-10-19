@@ -17,23 +17,22 @@
   xcbuild,
   faketty,
   nodejs,
+  withSourceMaps ? false,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "grafana";
-  version = "13.2.3";
+  version = "13.2.4";
 
   subPackages = [
     "pkg/cmd/grafana"
-    "pkg/cmd/grafana-server"
-    "pkg/cmd/grafana-cli"
   ];
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "grafana";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ySpywbu/JzuzvI9iVDXuzBu/nIAICr2e8raOeeie1YE=";
+    hash = "sha256-ahR25KashtGSZsaxUodNGQSR/+M8zcKFZX0J31QqYks=";
   };
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
@@ -49,12 +48,12 @@ buildGoModule (finalAttrs: {
   # Since this is not a dependency attribute the buildPackages has to be specified.
   offlineCache = buildPackages.yarn-berry_4-fetcher.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-rDH/PUHcbPEivSE5BecDaRgW56EPpLPbV1dd7UbgPaA=";
+    hash = "sha256-d5ONMRmO6RDfjqAT/k3k0nNMoJZD6lA9Q5CCJItTFlM=";
   };
 
   disallowedRequisites = [ finalAttrs.offlineCache ];
 
-  vendorHash = "sha256-40tV7fiHUv/uBYOLd5/unDNm354qT4SQYnLQnRStih4=";
+  vendorHash = "sha256-7iJpQsoSA5zNOU5o0c21S48GSo2skEhWjp2YNqVEh04=";
 
   # Grafana seems to just set it to the latest version available
   # nowadays.
@@ -119,7 +118,6 @@ buildGoModule (finalAttrs: {
 
     # Workaround for https://github.com/nrwl/nx/issues/22445
     faketty yarn run build
-    yarn run plugins:build-bundled
   '';
 
   ldflags = [
@@ -141,6 +139,11 @@ buildGoModule (finalAttrs: {
   postInstall = ''
     mkdir -p $out/share/grafana
     cp -r public conf $out/share/grafana/
+    find "$out/share/grafana/public" -type d -name node_modules -prune -exec rm -rf {} +
+    find "$out/share/grafana/public" -type f \( -name "*.ts" -o -name "*.tsx" -o -name "*.snap" \) -delete
+  ''
+  + lib.optionalString (!withSourceMaps) ''
+    find "$out/share/grafana/public" -type f -name "*.js.map" -delete
   '';
 
   postFixup = ''

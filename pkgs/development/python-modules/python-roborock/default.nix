@@ -21,7 +21,7 @@
   pyyaml,
   vacuum-map-parser-roborock,
   click-shell,
-  syrupy,
+  syrupy_5,
   writableTmpDirAsHomeHook,
   zmqtt,
 }:
@@ -69,7 +69,7 @@ buildPythonPackage (finalAttrs: {
     freezegun
     pytest-asyncio
     pytestCheckHook
-    syrupy
+    syrupy_5
     writableTmpDirAsHomeHook
     zmqtt
   ]

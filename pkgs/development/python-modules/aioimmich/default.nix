@@ -9,7 +9,7 @@
   pytest-asyncio,
   pytestCheckHook,
   setuptools,
-  syrupy_6,
+  syrupy,
 }:
 
 buildPythonPackage rec {
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     aiointercept
     pytest-asyncio
     pytestCheckHook
-    syrupy_6
+    syrupy
   ];
 
   meta = {

@@ -9,7 +9,6 @@
   gtk4,
   vte-gtk4,
   json-glib,
-  sassc,
   libadwaita,
   pcre2,
   libxml2,
@@ -18,18 +17,19 @@
   python3,
   desktop-file-utils,
   wrapGAppsHook4,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "blackbox-terminal";
-  version = "0.14.0-unstable-2025-08-29";
+  version = "0.15.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "raggesilver";
     repo = "blackbox";
-    rev = "9290c2feddc4415752afd1b03c82a1d82a6b3392";
-    hash = "sha256-s1e9zS4ijsa3+zxlsdxlqTzR1Rnb4hxjwlqYEhtvy5g=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-LcJKbvEwXv47F1UYF5IF7b5K5o0ols77Q+HY0gQMy2c=";
   };
 
   postPatch = ''
@@ -43,11 +43,11 @@ stdenv.mkDerivation {
     ninja
     pkg-config
     vala
-    sassc
     wrapGAppsHook4
     python3
     desktop-file-utils # For update-desktop-database
   ];
+
   buildInputs = [
     gtk4
     vte-gtk4
@@ -59,9 +59,7 @@ stdenv.mkDerivation {
     libgee
   ];
 
-  mesonFlags = [
-    (lib.mesonBool "blackbox_is_flatpak" false)
-  ];
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Elegant and customizable terminal for GNOME";
@@ -70,7 +68,7 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       chuangzhu
     ];
-    mainProgram = "blackbox";
+    mainProgram = "blackbox-terminal";
     platforms = lib.platforms.linux;
   };
-}
+})

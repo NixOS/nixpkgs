@@ -240,9 +240,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     "test-state-restore-fragmented"
   ];
 
-  passthru = lib.optionalAttrs (!cudaSupport && !rocmSupport && !vulkanSupport) {
-    updateScript = ./update.sh;
-  };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description =
@@ -256,6 +254,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       booxter
       philiptaron
+      recutita
       xddxdd
       yuannan
     ];

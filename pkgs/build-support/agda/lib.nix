@@ -1,4 +1,4 @@
-{ lib }:
+{ lib, Agda }:
 {
   /*
     Returns the Agda interface file to a given Agda file.
@@ -13,9 +13,9 @@
     agdaVersion: agdaFile:
     "_build/"
     + agdaVersion
-    + "/agda/"
+    + "/${if Agda.meta.mainProgram == "mikan" then "mikan" else "agda"}/"
     + lib.head (builtins.match ''(.*\.)l?agda(\.(md|org|rst|tex|typ))?'' agdaFile)
-    + "agdai";
+    + (if Agda.meta.mainProgram == "mikan" then "mki" else "agdai");
 
   /*
     Takes an arbitrary derivation and says whether it is an agda library package

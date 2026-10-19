@@ -48,7 +48,7 @@ let
     if lib.isList value then lib.imap0 (i: f "${id}.${toString i}") value else f id value;
 
   secretFiles = lib.flip lib.pipe [
-    (mapSecret (id: _: "--rawfile ${id} $CREDENTIALS_DIRECTORY/${id}"))
+    (mapSecret (id: _: ''--rawfile ${id} "$CREDENTIALS_DIRECTORY"/${id}''))
     toString
   ];
   secretTemplate = lib.flip lib.pipe [

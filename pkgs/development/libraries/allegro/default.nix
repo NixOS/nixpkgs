@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/liballeg/allegro5/releases/download/${version}/allegro-${version}.tar.gz";
-    sha256 = "1m6lz35nk07dli26kkwz3wa50jsrxs1kb6w1nj14a911l34xn6gc";
+    hash = "sha256-7BnbyaAhJEWCtIGbNYPuWUtQFB+fz2lEpO2Aacv41NQ=";
   };
 
   patches = [

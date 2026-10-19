@@ -60,7 +60,7 @@ let
 in
 buildPythonPackage rec {
   pname = "gftools";
-  version = "0.10.1";
+  version = "0.10.4";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -69,7 +69,7 @@ buildPythonPackage rec {
     owner = "googlefonts";
     repo = "gftools";
     tag = "v${version}";
-    hash = "sha256-e37tuKa/uC6I0KwxSO2xz98pVVY2mLlJe0FsjHqL8xk=";
+    hash = "sha256-vy7OToJcTsTbCqOuaPxxoz0yL8CIMMFJSXLzeKD3ZY8=";
   };
 
   postPatch = ''

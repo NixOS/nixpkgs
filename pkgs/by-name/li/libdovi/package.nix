@@ -11,6 +11,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "libdovi";
   version = "3.3.1";
 
+  __structuredAttrs = true;
+
   src = fetchCrate {
     pname = "dolby_vision";
     inherit (finalAttrs) version;

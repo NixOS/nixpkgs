@@ -42,7 +42,7 @@ buildPythonPackage rec {
     description = "KeepKey Python client";
     mainProgram = "keepkeyctl";
     homepage = "https://github.com/keepkey/python-keepkey";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ np ];
   };
 }

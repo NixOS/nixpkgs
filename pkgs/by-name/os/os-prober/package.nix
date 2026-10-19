@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "installer-team";
     repo = "os-prober";
     rev = finalAttrs.version;
-    sha256 = "sha256-JK1+xzbl1EyHZ4E6pmQ5NDbtivZvFySHX+JkWodxyl4=";
+    hash = "sha256-JK1+xzbl1EyHZ4E6pmQ5NDbtivZvFySHX+JkWodxyl4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

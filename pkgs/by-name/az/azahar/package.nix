@@ -61,7 +61,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "azahar";
-  version = "2126.1.2";
+  version = "2126.2";
 
   src = fetchFromGitHub {
     owner = "azahar-emu";
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
       echo "${finalAttrs.version}" > "$out/GIT-TAG"
       git -C "$out" rev-parse HEAD > "$out/GIT-COMMIT"
     '';
-    hash = "sha256-XAj2T9sPHFzhUpOl9x2fmeEDmrNtMkbyrNfqyi1D/SY=";
+    hash = "sha256-wgF7n2ju8rP5jphHAj+fTLjfdhSz1OVDBHGNKJFlP2E=";
   };
 
   patches = [ ./quartzcore.patch ];

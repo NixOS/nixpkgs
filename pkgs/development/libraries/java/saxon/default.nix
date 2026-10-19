@@ -159,7 +159,7 @@ in
     jar = "saxon9";
     src = fetchurl {
       url = "mirror://sourceforge/saxon/Saxon-B/${version}/saxonb${dashify version}j.zip";
-      sha256 = "1d39jdnwr3v3pzswm81zry6yikqlqy9dp2l2wmpqdiw00r5drg4j";
+      hash = "sha256-krzcSgaAx4Zv5YKK25LHFM/ojc8/oMr1v2OPzG2TabQ=";
     };
     description = "Complete and conformant processor of XSLT 2.0, XQuery 1.0, and XPath 2.0";
   };
@@ -172,7 +172,7 @@ in
     jar = "saxon9he";
     src = fetchurl {
       url = "mirror://sourceforge/saxon/Saxon-HE/${majorMinor version}/SaxonHE${dashify version}J.zip";
-      sha256 = "1inxd7ia7rl9fxfrw8dy9sb7rqv76ipblaki5262688wf2dscs60";
+      hash = "sha256-wGimm3AcISOMKHEqum40Z+N8lk6+IZ5dd4nmo+Jp3cY=";
     };
     description = "Processor for XSLT 3.0, XPath 2.0 and 3.1, and XQuery 3.1";
   };
@@ -183,7 +183,7 @@ in
     jar = "saxon-he-${version}";
     src = fetchurl {
       url = github.downloadUrl version;
-      sha256 = "MGzhUW9ZLVvTSqEdpAZWAiwTYxCZxbn26zESDmIe4Vo=";
+      hash = "sha256-MGzhUW9ZLVvTSqEdpAZWAiwTYxCZxbn26zESDmIe4Vo=";
     };
     updateScript = github.updateScript version;
     description = "Processor for XSLT 3.0, XPath 2.0 and 3.1, and XQuery 3.1";

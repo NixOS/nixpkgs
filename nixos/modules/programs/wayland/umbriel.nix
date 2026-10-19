@@ -18,6 +18,7 @@ in
     lib.mkMerge [
       {
         environment.systemPackages = [ cfg.package ];
+        environment.pathsToLink = [ "/share/umbriel/effects" ];
         services.displayManager.sessionPackages = [ cfg.package ];
         systemd.packages = [ cfg.package ];
 
