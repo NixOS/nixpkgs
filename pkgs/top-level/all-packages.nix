@@ -6453,6 +6453,7 @@ with pkgs;
   reposilitePlugins = recurseIntoAttrs (callPackage ../by-name/re/reposilite/plugins.nix { });
 
   inherit (import ../by-name/ro/rocksdb/versions.nix pkgs)
+    rocksdb_10_10
     rocksdb_9_10
     rocksdb_8_3
     ;
