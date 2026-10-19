@@ -60,6 +60,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       installShellCompletion --cmd uv \
         --bash <(${emulator} $out/bin/uv generate-shell-completion bash) \
         --fish <(${emulator} $out/bin/uv generate-shell-completion fish) \
+        --nushell <(${emulator} $out/bin/uv generate-shell-completion nushell) \
         --zsh <(${emulator} $out/bin/uv generate-shell-completion zsh)
     ''
   );
