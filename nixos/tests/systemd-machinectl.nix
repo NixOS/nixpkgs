@@ -76,7 +76,6 @@ let
   profile-guest-vmspawn = {
     imports = [ ../modules/profiles/qemu-guest.nix ];
 
-    boot.initrd.systemd.enable = true;
     # root is defined by systemd-vmspawn
     boot.initrd.systemd.root = null;
 

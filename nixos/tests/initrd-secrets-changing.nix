@@ -27,7 +27,6 @@ testing.makeTest {
         "/run/test" = secret1InStore;
       };
       boot.initrd.systemd = {
-        enable = true;
         tmpfiles.settings."00-copy-secret" = {
           "/sysroot/secret-from-initramfs".C.argument = "/test";
         };

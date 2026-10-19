@@ -11,7 +11,6 @@
 
       virtualisation.rootDevice = "/dev/vda";
 
-      boot.initrd.systemd.enable = true;
       virtualisation.fileSystems = {
         "/" = {
           device = config.virtualisation.rootDevice;
