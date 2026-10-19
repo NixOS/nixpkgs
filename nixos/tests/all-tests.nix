@@ -1008,6 +1008,10 @@ in
     imports = [ ./login.nix ];
     _module.args.latestKernel = true;
   };
+  latestKernel.systemd-nsresourced-mountfsd = runTest {
+    imports = [ ./systemd-nsresourced-mountfsd.nix ];
+    _module.args.latestKernel = true;
+  };
   lauti = runTest ./lauti.nix;
   lavalink = runTest ./lavalink.nix;
   leaps = runTest ./leaps.nix;
