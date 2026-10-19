@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   pkg-config,
-  rocksdb,
+  rocksdb_10_10,
   boost,
   fuse3,
   lib45d,
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   env.EXTRA_CFLAGS = "-std=c++20 -fno-char8_t";
 
   buildInputs = [
-    rocksdb
+    rocksdb_10_10
     boost
     fuse3
     lib45d
