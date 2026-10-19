@@ -10,6 +10,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "yyjson";
   version = "0.13.0";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "ibireme";
     repo = "yyjson";
