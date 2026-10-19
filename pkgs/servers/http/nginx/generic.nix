@@ -92,6 +92,7 @@ mkDerivation {
   outputs = [
     "out"
     "doc"
+    "dev"
   ];
 
   src =
@@ -311,7 +312,17 @@ mkDerivation {
         printf 'load_module %s;\n' "''${sofiles[@]}" > "$out/etc/nginx/dynamic-modules.conf"
       '';
     in
-    postInstall + dynamicPost;
+    postInstall + dynamicPost + ''
+      mkdir -p $dev/include/nginx $dev/nix-support/
+      find src objs -name '*.h' -not -path 'src/os/win32/*' -print0 | xargs -0 -I {} cp -v {} $dev/include/nginx
+
+      cat >$dev/nix-support/setup-hook <<EOF
+      appendToVar preConfigurePhases nginxCFlags
+      nginxCFlags() {
+        appendToVar NIX_CFLAGS_COMPILE "-I$dev/include/nginx"
+      }
+      EOF
+    '';
 
   passthru = {
     inherit modules dynamicModules flavor;
