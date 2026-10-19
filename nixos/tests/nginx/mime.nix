@@ -1,7 +1,12 @@
-{ lib, pkgs, ... }:
 {
-  name = "nginx-mime";
-  meta.maintainers = with pkgs.lib.maintainers; [ izorkin ];
+  lib,
+  mkPackage ? builtins.getAttr "nginx",
+  name ? "default",
+  ...
+}:
+{
+  name = "nginx-mime-${name}";
+  meta.maintainers = with lib.maintainers; [ izorkin ];
 
   nodes = {
     server =
@@ -9,6 +14,7 @@
       {
         services.nginx = {
           enable = true;
+          package = mkPackage pkgs;
           virtualHosts."localhost" = { };
         };
       };

@@ -1271,10 +1271,6 @@ in
   nghttpx = runTest ./nghttpx.nix;
   nginx = import ./nginx { inherit lib runTest; };
   nginx-http3 = import ./nginx-http3.nix { inherit pkgs runTest; };
-  nginx-mime = runTest ./nginx-mime.nix;
-  nginx-proxyprotocol = runTest ./nginx-proxyprotocol/default.nix;
-  nginx-pubhtml = runTest ./nginx-pubhtml.nix;
-  nginx-sso = runTest ./nginx-sso.nix;
   nginx-variants = import ./nginx-variants.nix { inherit runTest; };
   nifi = runTestOn [ "x86_64-linux" ] ./web-apps/nifi.nix;
   nimdow = runTest ./nimdow.nix;

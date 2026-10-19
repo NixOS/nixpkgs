@@ -1,12 +1,17 @@
-{ ... }:
 {
-  name = "nginx-pubhtml";
+  mkPackage ? builtins.getAttr "nginx",
+  name ? "default",
+  ...
+}:
+{
+  name = "nginx-pubhtml-${name}";
 
   nodes.machine =
     { pkgs, ... }:
     {
       systemd.services.nginx.serviceConfig.ProtectHome = "read-only";
       services.nginx.enable = true;
+      services.nginx.package = mkPackage pkgs;
       services.nginx.virtualHosts.localhost = {
         locations."~ ^/\\~([a-z0-9_]+)(/.*)?$".alias = "/home/$1/public_html$2";
       };
