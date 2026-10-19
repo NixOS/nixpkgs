@@ -273,6 +273,9 @@ buildFHSEnv (finalAttrs: {
                 touch "$out"
               '';
         };
+        standard = {
+          # quartus-prime-standard requires a license to run synthesis so we can't run tests here :(
+        };
       }
       .${variant};
   };
