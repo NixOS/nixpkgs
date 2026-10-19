@@ -43,7 +43,10 @@ stdenv.mkDerivation {
     description = "Driver for the Acer WMI battery health control interface";
     homepage = "https://github.com/frederik-h/acer-wmi-battery";
     license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.linux;
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
     maintainers = with lib.maintainers; [ peterhoeg ];
   };
 }
