@@ -285,6 +285,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "LLVM_BUILD_DOCS" enableManpages)
     (lib.cmakeBool "LLVM_ENABLE_SPHINX" enableManpages)
     (lib.cmakeBool "SPHINX_OUTPUT_MAN" enableManpages)
+    (lib.cmakeBool "SPHINX_OUTPUT_HTML" false)
+    (lib.cmakeBool "SPHINX_WARNINGS_AS_ERRORS" false)
 
     # The buildbot script always enables level-zero no matter what.
     # To allow disabling level-zero, we override its flag here,
