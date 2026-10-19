@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/libwpd/libwpd-${version}.tar.gz";
-    sha256 = "1syli6i5ma10cwzpa61a18pyjmianjwsf6pvmvzsh5md6yk4yx01";
+    hash = "sha256-AXRPpjetFqj/rvsap7m0KlbpLwoqGHU/ZyCoWqKJ1Os=";
   };
 
   patches = [ ./gcc-0.8.patch ];

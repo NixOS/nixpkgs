@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://downloads.xiph.org/releases/speex/${pname}-${version}.tar.gz";
-    sha256 = "sha256-jHdzQ+SmOZVpxyq8OKlbJNtWiCyD29tsZCSl9K61TT0=";
+    hash = "sha256-jHdzQ+SmOZVpxyq8OKlbJNtWiCyD29tsZCSl9K61TT0=";
   };
 
   patches = [ ./build-fix.patch ];

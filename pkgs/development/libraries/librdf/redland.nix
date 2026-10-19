@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.librdf.org/source/redland-${version}.tar.gz";
-    sha256 = "de1847f7b59021c16bdc72abb4d8e2d9187cd6124d69156f3326dd34ee043681";
+    hash = "sha256-3hhH97WQIcFr3HKrtNji2Rh81hJNaRVvMybdNO4ENoE=";
   };
 
   nativeBuildInputs = [

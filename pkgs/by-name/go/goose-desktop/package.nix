@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmWorkspaces = [
     "@aaif/goose-binary-linux-x64"
-    "@aaif/goose-sdk"
+    "@aaif/goose-acp-client"
     "goose-app"
   ];
   # Keep the fixed-output dependency fetch scoped to the only supported desktop platform.
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-FpnWCJsytxJ5w9yqWayU2ZNDCm7RgubU34ouIeNWqfA=";
+    hash = "sha256-zdWZTQ4l0ULsCDBIosAV/pBe5zFTYjLrTcNFq30C3F8=";
   };
 
   strictDeps = true;
@@ -128,9 +128,9 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm755 ${lib.getExe goose-cli} desktop/src/bin/goose
     patchShebangs desktop/node_modules desktop/src/bin
 
-    # @aaif/goose-sdk's package.json points at dist/, which must be built
-    # (schema generation + tsc) before vite can resolve the workspace dep
-    pnpm --dir sdk run build
+    # @aaif/goose-acp-client's package.json points at dist/, which must be
+    # built (schema generation + tsc) before vite can resolve the workspace dep
+    pnpm --dir goose-acp-client run build
 
     node desktop/scripts/prepare-platform-binaries.js
     pnpm --dir desktop run i18n:compile
