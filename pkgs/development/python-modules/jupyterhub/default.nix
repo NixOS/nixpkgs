@@ -53,7 +53,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "jupyterhub";
-  version = "6.0.1";
+  version = "6.1.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -61,12 +61,12 @@ buildPythonPackage (finalAttrs: {
     owner = "jupyterhub";
     repo = "jupyterhub";
     tag = finalAttrs.version;
-    hash = "sha256-/TBlaruXeMbi8fK9mQ0QHeckwt6i1eKNufP4iauXvXM=";
+    hash = "sha256-ffcbBwmK2u0O7UCseoDKMb598KD6edIFwjXnJTku2+4=";
   };
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-BDyS0/mTgavH/6QlqPGkllSki5c2eUwoGbV7CyMKL5U=";
+    hash = "sha256-eGNa8Dri6UhzdRewbud8SOjc7MvmfbW0nUW4CTBGczY=";
   };
 
   postPatch = ''
