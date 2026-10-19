@@ -33,6 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellCompletion --cmd qrtool \
       --bash <($out/bin/qrtool completion bash) \
       --fish <($out/bin/qrtool completion fish) \
+      --nushell <($out/bin/qrtool completion nushell) \
       --zsh <($out/bin/qrtool completion zsh)
   '';
 
