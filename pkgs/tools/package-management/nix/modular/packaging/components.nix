@@ -227,8 +227,6 @@ let
       }
     );
 
-  whenAtLeast = v: thing: if lib.versionAtLeast version v then thing else null;
-
 in
 
 # This becomes the pkgs.nixComponents attribute set
@@ -394,7 +392,7 @@ in
   nix-cmd-c = callPackage ../src/libcmd-c/package.nix { };
 
   nix-cli = callPackage ../src/nix/package.nix { };
-  ${whenAtLeast "2.34pre" "nix-nswrapper"} = callPackage ../src/nswrapper/package.nix { };
+  nix-nswrapper = callPackage ../src/nswrapper/package.nix { };
 
   nix-functional-tests = callPackage ../tests/functional/package.nix { };
 
