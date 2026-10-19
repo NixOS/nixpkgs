@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vpcs";
-  version = "0.8.4";
+  version = "0.8.5";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -16,25 +16,21 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "GNS3";
     repo = "vpcs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sWqQDf3xqrr6k7MFXV/9K9KdsEAvftsDkGlSUhA5CmY=";
+    hash = "sha256-8urJy4eKHF3CSQtZ4bksNHnRx9KNVb1OYYjDNMTf0ZI=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/src";
-
-  buildPhase = ''
-    runHook preBuild
-
-    MKOPT="CC=${stdenv.cc.targetPrefix}cc" ./mk.sh ${stdenv.buildPlatform.linuxArch}
-
-    runHook postBuild
-  '';
-
-  postInstall = ''
-    install -D -m555 vpcs $out/bin/vpcs
-    install -D -m444 ../man/vpcs.1 $out/share/man/man1/vpcs.1
-  '';
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc $(CCOPT)" ];
 
   enableParallelBuilding = true;
+
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm755 src/vpcs -t $out/bin
+    install -Dm644 man/vpcs.1 -t $out/share/man/man1
+
+    runHook postInstall
+  '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "-v";
