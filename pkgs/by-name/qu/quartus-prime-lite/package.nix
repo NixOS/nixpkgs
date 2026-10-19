@@ -10,6 +10,7 @@
   unstick,
   libfaketime,
   pkgsi686Linux,
+  variant ? "lite",
   withQuesta ? true,
   supportedDevices ? [
     "Arria II"
@@ -23,6 +24,7 @@
     inherit
       unstick
       supportedDevices
+      variant
       withQuesta
       ;
   },
@@ -31,7 +33,7 @@
 
 let
   desktopItem = makeDesktopItem {
-    name = "quartus-prime-lite";
+    name = "quartus-prime-${variant}";
     exec = "quartus";
     icon = "quartus";
     desktopName = "Quartus";
@@ -55,7 +57,7 @@ let
 in
 # I think questa_fse/linux/vlm checksums itself, so use FHSUserEnv instead of `patchelf`
 buildFHSEnv (finalAttrs: {
-  pname = "quartus-prime-lite"; # wrapped
+  pname = "quartus-prime-${variant}"; # wrapped
   inherit (unwrapped) version;
 
   targetPkgs =
@@ -141,7 +143,7 @@ buildFHSEnv (finalAttrs: {
       "${unwrapped}"/questa_fse/linux_x86_64/lmutil
     )
 
-    wrapper=$out/bin/quartus-prime-lite
+    wrapper=$out/bin/quartus-prime-${variant}
     progs_wrapped=()
     for prog in ''${progs_to_wrap[@]}; do
         relname="''${prog#"${unwrapped}/"}"
@@ -224,51 +226,55 @@ buildFHSEnv (finalAttrs: {
 
   passthru = {
     inherit unwrapped;
-    tests = {
-      buildSof =
-        runCommand "quartus-prime-lite-test-build-sof"
-          {
-            nativeBuildInputs = [ finalAttrs.finalPackage ];
-            env.NIXPKGS_QUARTUS_REPRODUCIBLE_BUILD = "1";
-          }
-          ''
-            cat >mydesign.vhd <<EOF
-            library ieee;
-            use ieee.std_logic_1164.all;
+    tests =
+      {
+        lite = {
+          buildSof =
+            runCommand "quartus-prime-lite-test-build-sof"
+              {
+                nativeBuildInputs = [ finalAttrs.finalPackage ];
+                env.NIXPKGS_QUARTUS_REPRODUCIBLE_BUILD = "1";
+              }
+              ''
+                cat >mydesign.vhd <<EOF
+                library ieee;
+                use ieee.std_logic_1164.all;
 
-            entity mydesign is
-            port (
-                in_0: in std_logic;
-                in_1: in std_logic;
-                out_1: out std_logic
-            );
-            end mydesign;
+                entity mydesign is
+                port (
+                    in_0: in std_logic;
+                    in_1: in std_logic;
+                    out_1: out std_logic
+                );
+                end mydesign;
 
-            architecture dataflow of mydesign is
-            begin
-                out_1 <= in_0 and in_1;
-            end dataflow;
-            EOF
+                architecture dataflow of mydesign is
+                begin
+                    out_1 <= in_0 and in_1;
+                end dataflow;
+                EOF
 
-            quartus_sh --flow compile mydesign
+                quartus_sh --flow compile mydesign
 
-            if ! [ -f mydesign.sof ]; then
-                echo "error: failed to produce mydesign.sof" >&2
-                exit 1
-            fi
+                if ! [ -f mydesign.sof ]; then
+                    echo "error: failed to produce mydesign.sof" >&2
+                    exit 1
+                fi
 
-            sha1sum mydesign.sof > "$out"
-          '';
-      questaEncryptedModel =
-        runCommand "quartus-prime-lite-test-questa-encrypted-model"
-          {
-            env.NIXPKGS_QUARTUS_REPRODUCIBLE_BUILD = "1";
-          }
-          ''
-            "${finalAttrs.finalPackage}/bin/vlog" "${finalAttrs.passthru.unwrapped}/questa_fse/intel/verilog/src/arriav_atoms_ncrypt.v"
-            touch "$out"
-          '';
-    };
+                sha1sum mydesign.sof > "$out"
+              '';
+          questaEncryptedModel =
+            runCommand "quartus-prime-lite-test-questa-encrypted-model"
+              {
+                env.NIXPKGS_QUARTUS_REPRODUCIBLE_BUILD = "1";
+              }
+              ''
+                "${finalAttrs.finalPackage}/bin/vlog" "${finalAttrs.passthru.unwrapped}/questa_fse/intel/verilog/src/arriav_atoms_ncrypt.v"
+                touch "$out"
+              '';
+        };
+      }
+      .${variant};
   };
 
   inherit (unwrapped) meta;
