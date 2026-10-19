@@ -15782,6 +15782,8 @@ self: super: with self; {
 
   pyoctoprintapi = callPackage ../development/python-modules/pyoctoprintapi { };
 
+  pyodata = callPackage ../development/python-modules/pyodata { };
+
   pyodbc = callPackage ../development/python-modules/pyodbc { };
 
   pyogg = callPackage ../development/python-modules/pyogg { };
