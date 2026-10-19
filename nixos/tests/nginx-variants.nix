@@ -27,7 +27,6 @@ builtins.listToAttrs (
       "angie"
       "nginxStable"
       "nginxMainline"
-      "nginxShibboleth"
       "openresty"
     ]
 )
