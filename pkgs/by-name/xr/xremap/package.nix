@@ -5,11 +5,16 @@
   pkg-config,
   xremap,
 
-  withVariant ? "wlroots",
+  withVariant ? "full",
 }:
 let
   variants = {
+    full = {
+      features = [ "full" ];
+      descriptionSuffix = "full variant";
+    };
     x11 = {
+      suffix = "-x11";
       features = [ "x11" ];
       descriptionSuffix = "X11";
     };
@@ -43,8 +48,13 @@ let
       features = [ "cosmic" ];
       descriptionSuffix = "Cosmic";
     };
+    pantheon = {
+      suffix = "-pantheon";
+      features = [ "pantheon" ];
+      descriptionSuffix = "Pantheon";
+    };
     socket = {
-      suffix = "";
+      suffix = "-socket";
       features = [ "socket" ];
       descriptionSuffix = "Socket client";
     };

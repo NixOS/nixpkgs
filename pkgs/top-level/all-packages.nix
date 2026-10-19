@@ -4394,7 +4394,7 @@ with pkgs;
   # PHP interpreters, packages and extensions.
   #
   # Set default PHP interpreter, extensions and packages
-  php = php84;
+  php = php85;
   phpExtensions = recurseIntoAttrs php.extensions;
   phpPackages = recurseIntoAttrs php.packages;
 
@@ -4535,7 +4535,6 @@ with pkgs;
     })
     mkRubyVersion
     mkRuby
-    ruby_3_3
     ruby_3_4
     ruby_4_0
     ;
@@ -4543,7 +4542,6 @@ with pkgs;
   ruby = ruby_3_4;
   rubyPackages = rubyPackages_3_4;
 
-  rubyPackages_3_3 = recurseIntoAttrs ruby_3_3.gems;
   rubyPackages_3_4 = recurseIntoAttrs ruby_3_4.gems;
   rubyPackages_4_0 = recurseIntoAttrs ruby_4_0.gems;
 

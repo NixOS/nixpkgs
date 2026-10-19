@@ -11,7 +11,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "durdraw";
-  version = "0.30.1";
+  version = "0.31.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
     owner = "durdraw";
     repo = "durdraw";
     tag = version;
-    hash = "sha256-kiSqjULJqpz4mGTXfvM0R4N/YNvnG8OPz83QJMqKSXQ=";
+    hash = "sha256-jbyCmqCIWAxirKciqeHMvVcvJKEcKNHHkHHrcEXak7M=";
   };
 
   build-system = with python3Packages; [ setuptools ];
