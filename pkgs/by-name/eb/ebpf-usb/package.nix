@@ -18,7 +18,9 @@ python3Packages.buildPythonApplication {
   };
 
   makeWrapperArgs = [
-    "--set PYTHONUNBUFFERED 1"
+    "--set"
+    "PYTHONUNBUFFERED"
+    "1"
   ];
 
   pythonPath = [
