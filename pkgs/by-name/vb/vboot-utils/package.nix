@@ -15,12 +15,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vboot-utils";
-  version = "143.16463";
+  version = "157.16852";
 
   src = fetchFromGitiles {
     url = "https://chromium.googlesource.com/chromiumos/platform/vboot_reference";
     rev = "refs/heads/release-R${finalAttrs.passthru.versionFormatted}.B";
-    hash = "sha256-8a49xD+EYXDouFuBmLyAtPxThYET6DtKImBPzXVhpxE=";
+    hash = "sha256-qifGCywhtwmgSh0d7ZL+xJu8WE1BilWlsCuVhX2luV4=";
   };
 
   nativeBuildInputs = [
@@ -42,12 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   postPatch = ''
-    substituteInPlace Makefile \
-      --replace-fail "ar qc" '${stdenv.cc.bintools.targetPrefix}ar qc'
-    # Drop flag unrecognized by GCC 9 (for e.g. aarch64-linux)
-    substituteInPlace Makefile \
-      --replace-fail "-Wno-unknown-warning" ""
-
     patchShebangs scripts
   '';
 
@@ -74,15 +68,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     versionFormatted = lib.concatStringsSep "-" (lib.versions.splitVersion finalAttrs.version);
-    flashromChromeos = flashrom.overrideAttrs (_prev: {
+    flashromChromeos = flashrom.overrideAttrs (prev: {
       src = fetchFromGitiles {
         url = "https://chromium.googlesource.com/chromiumos/third_party/flashrom";
         rev = "refs/heads/release-R${finalAttrs.passthru.versionFormatted}.B-master";
-        hash = "sha256-zOoWpuS/vDLvnRPdA9FNGhNbcwh3PMQwbdfqsyqj858=";
+        hash = "sha256-V4I9NGarq1vUwjeXTbjd8KPqsP0Pp/UnwfFHryHnFA4=";
       };
 
+      outputs = lib.filter (output: output != "doc") prev.outputs;
+
       # requires git
-      mesonFlags = _prev.mesonFlags ++ [ (lib.mesonEnable "documentation" false) ];
+      mesonFlags = prev.mesonFlags ++ [ (lib.mesonEnable "documentation" false) ];
 
       # requires specific hardware
       doCheck = false;
