@@ -171,7 +171,7 @@ stdenv.mkDerivation (
       makeWrapper ${lib.getExe electron} "$out"/bin/t3code-desktop \
         --add-flags "$out"/libexec/t3code/apps/desktop \
         --inherit-argv0 \
-        ${lib.optionalString stdenv.hostPlatform.isLinux ''--set T3CODE_DESKTOP_EXECUTABLE "$out/bin/t3code-desktop" --prefix PATH : "${
+        ${lib.optionalString stdenv.hostPlatform.isLinux ''--prefix PATH : "${
           lib.makeBinPath [
             desktop-file-utils
             xdg-utils
@@ -229,9 +229,9 @@ stdenv.mkDerivation (
         icon = "t3code";
         startupWMClass = "t3code";
         categories = [ "Development" ];
-        # Claimed here because the app's runtime registration is gated on
-        # `app.isPackaged`, which never holds under the Nix Electron
-        # wrapper; without it the Clerk OAuth redirect never reaches the app.
+        # The app's runtime registration is skipped while Electron runs
+        # unpackaged, so advertise the scheme on the packaged entry. Making it
+        # the default handler is user configuration (xdg.mimeApps).
         mimeTypes = [ "x-scheme-handler/t3code" ];
       })
     ];

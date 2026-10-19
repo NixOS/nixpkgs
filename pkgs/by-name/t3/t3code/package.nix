@@ -94,7 +94,10 @@ symlinkJoin {
       done
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
-      wrapProgram "$out/bin/t3code-desktop" --set T3CODE_DESKTOP_EXECUTABLE "$out/bin/t3code-desktop"
+      # Upstream reads this when registering the t3code:// handler (distro
+      # launcher support, pingdotgg/t3code#8668). Point it at the outer wrapper
+      # so a handler-launched instance inherits the runtime PATH.
+      wrapProgram "$out/bin/t3code-desktop" --set T3CODE_DESKTOP_LAUNCHER_PATH "$out/bin/t3code-desktop"
     '';
 
   passthru = {
