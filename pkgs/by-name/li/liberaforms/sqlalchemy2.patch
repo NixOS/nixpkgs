@@ -1,0 +1,96 @@
+--- a/liberaforms/models/user.py
++++ b/liberaforms/models/user.py
+@@ -538,7 +538,7 @@
+         count = select(func.count()). \
+                 select_from(Answer). \
+                 where(Answer.author_id == self.id)
+-        return db.engine.execute(count).scalar()
++        return db.session.scalar(count)
+ 
+     def get_form_app_language(self, label=False, as_dict=False) -> str | dict:
+         language = self.preferences['form-app-language']
+--- a/liberaforms/views/data_display/filters.py
++++ b/liberaforms/views/data_display/filters.py
+@@ -126,11 +126,11 @@
+         self.is_public = select(
+                 Form.id.label('form_id'),
+                 case(
+-                    [(and_(
++                    (and_(
+                         Form.enabled == True,
+                         *Form.is_available__alchemy(Form.id)
+                       ), True
+-                    )],
++                    ),
+                     else_=False
+                 ).label('is_public')
+             ).select_from(FormUser) \
+@@ -162,7 +162,7 @@
+             self.is_author = select(
+                 Form.id.label('form_id'),
+                 case(
+-                    [((Form.author_id == self.user_id), True)],
++                    ((Form.author_id == self.user_id), True),
+                     else_=False
+                 ).label('is_author')
+             ).subquery()
+@@ -242,7 +242,7 @@
+                     where(FormUser.user_id == user_id)
+         else:
+             count = select(func.count()).select_from(Form)
+-        return db.engine.execute(count).scalar()
++        return db.session.scalar(count)
+ 
+     def paginate(self, page: int=0):
+         offset, limit = _get_offset_limit(page, self.get_count(self.user_id))
+@@ -309,7 +309,7 @@
+         self.is_enabled = select(
+             User.id.label('user_id'),
+             case(
+-                [(User.is_enabled__sqlalchemy(), True)],
++                (User.is_enabled__sqlalchemy(), True),
+                 else_=False
+             ).label('is_enabled')
+         ).select_from(User).subquery()
+@@ -383,7 +383,7 @@
+         count = select(func.count()).select_from(User)
+         if current_app.config['TESTING']:
+             count = count.where(not_fixtures())
+-        return db.engine.execute(count).scalar()
++        return db.session.scalar(count)
+ 
+     def paginate(self, page: int=0):
+         offset, limit = _get_offset_limit(page, self.get_count())
+--- a/migrations/versions/5055e28842d0_.py
++++ b/migrations/versions/5055e28842d0_.py
+@@ -137,8 +137,8 @@
+     if inspector.get_unique_constraints("consents"):
+         op.drop_constraint('consents_site_id_key', 'consents', type_='unique')
+ 
+-    consents_table = Table("consents", sa.MetaData(), autoload=True, autoload_with=inspector)
+-    formconsents_table = Table("form_consents", sa.MetaData(), autoload=True, autoload_with=inspector)
++    consents_table = Table("consents", sa.MetaData(), autoload_with=inspector)
++    formconsents_table = Table("form_consents", sa.MetaData(), autoload_with=inspector)
+     site = session.query(Site).first()
+     language = site.language if site else "en"
+     organization = {
+@@ -247,7 +247,7 @@
+     session.commit()
+ 
+     answers = session.query(Answer).with_entities(Answer.id, Answer.form_id, Answer.data)
+-    answers_table = Table("answers", sa.MetaData(), autoload=True, autoload_with=inspector)
++    answers_table = Table("answers", sa.MetaData(), autoload_with=inspector)
+     for answer in answers:
+         if "DPL" in answer.data.keys():
+             answer_consent = session.query(FormConsent) \
+--- a/migrations/versions/6f0e2b9e9db3_.py
++++ b/migrations/versions/6f0e2b9e9db3_.py
+@@ -210,7 +210,7 @@
+         # change contact_info column type
+         contact_info = {"enabled": True, "languages": {site.language: site.contact_info}}
+         inspector = inspect(session.connection())
+-        site_table = Table("site", sa.MetaData(), autoload=True, autoload_with=inspector)
++        site_table = Table("site", sa.MetaData(), autoload_with=inspector)
+         op.execute(site_table.update()
+                              .where(site_table.c.id == site.id)
+                              .values({'contact_info_new': contact_info}))
