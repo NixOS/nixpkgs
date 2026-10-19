@@ -22384,6 +22384,8 @@ self: super: with self; {
     callPackage ../development/python-modules/vacuum-map-parser-roborock
       { };
 
+  vacuum-map-parser-roidmi = callPackage ../development/python-modules/vacuum-map-parser-roidmi { };
+
   vacuum-map-parser-xiaomi = callPackage ../development/python-modules/vacuum-map-parser-xiaomi { };
 
   valhallaapi = callPackage ../development/python-modules/valhallaapi { };
