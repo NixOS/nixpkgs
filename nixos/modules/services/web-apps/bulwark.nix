@@ -419,6 +419,29 @@ in
             description = "Restricted settings. Check the `RESTRICTABLE_SETTINGS` [upstream](https://github.com/bulwarkmail/webmail/blob/1.16.0/app/(main)/admin/_tabs/policy.tsx#L48) for all available restrictions.";
           };
 
+          pushRelays = mkOption {
+            type = listOf (submodule {
+              options = {
+                label = mkOption {
+                  type = str;
+                  description = "Web Push relay name";
+                };
+                url = mkOption {
+                  type = str;
+                  description = "Web Push relay URL";
+                };
+                config = mkOption {
+                  type = submodule {
+                    freeformType = format.type;
+                  };
+                  default = { };
+                  description = "Web Push relay configuration";
+                };
+              };
+            });
+            default = [ ];
+            description = "List of Web Push relays the users can choose from.";
+          };
           pushRelayUrl = mkOption {
             type = str;
             default = "";
@@ -457,6 +480,18 @@ in
                 type = nullOr (enum builtinThemes);
                 description = "Theme applied when users have not chosen one.";
               };
+              defaultColorMode = mkOption {
+                type = nullOr (enum [
+                  "light"
+                  "dark"
+                ]);
+                description = "Color mode applied when users have not chosen one.";
+              };
+              lockColorMode = mkOption {
+                type = bool;
+                default = false;
+                description = "Whether the color mode is locked.";
+              };
             };
 
           forceEnabledPlugins = mkOption {
@@ -470,11 +505,6 @@ in
               );
             '';
             description = "Force-enabled Plugins";
-          };
-          approvedPlugins = mkOption {
-            type = listOf str;
-            default = [ ];
-            description = "Approved Plugins";
           };
           forceEnabledThemes = mkOption {
             type = listOf str;
@@ -555,6 +585,14 @@ in
           !elem cfg.policies.themePolicy.defaultThemeId cfg.policies.themePolicy.disabledBuiltinThemes;
         message = ''
           The default theme specified in <option>services.bulwark.policies.themePolicy.defaultThemeId</option> cannot be disabled via <option>services.bulwark.policies.themePolicy.disabledBuiltinThemes</option>.
+        '';
+      }
+      {
+        assertion =
+          cfg.policies.pushRelayUrl == ""
+          || elem cfg.policies.pushRelayUrl (map (it: it.url) cfg.policies.pushRelays);
+        message = ''
+          The Web Push relay URL specified in <option>services.bulwark.policies.pushRelayUrl</option> must be empty or included in <option>services.bulwark.policies.pushRelays</option>.
         '';
       }
       {
