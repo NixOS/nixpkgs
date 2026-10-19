@@ -48,6 +48,9 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/plotly/choreographer";
     changelog = "https://github.com/plotly/choreographer/blob/${finalAttrs.src.tag}/CHANGELOG.txt";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      sarahec
+    ];
   };
 })
