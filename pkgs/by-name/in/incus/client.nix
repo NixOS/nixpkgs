@@ -9,11 +9,11 @@
   lib,
   buildGoModule,
   installShellFiles,
-  fetchpatch2,
+  fetchpatch,
 }:
 let
   pname = "incus${lib.optionalString lts "-lts"}-client";
-  evaluatedPatches = if lib.isFunction patches then patches fetchpatch2 else patches;
+  evaluatedPatches = if lib.isFunction patches then patches fetchpatch else patches;
 in
 
 buildGoModule {

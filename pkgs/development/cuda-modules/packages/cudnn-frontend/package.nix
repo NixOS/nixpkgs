@@ -139,6 +139,8 @@ backendStdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = gitUpdater {
     inherit (finalAttrs) pname version;
     rev-prefix = "v";
+    # Skip pre-releases (e.g. 1.32.0.dev74371060, 1.31.0-rc.72477416)
+    ignoredVersions = "(\\.dev|-rc)";
   };
 
   meta = {

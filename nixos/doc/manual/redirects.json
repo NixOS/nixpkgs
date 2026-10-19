@@ -280,6 +280,9 @@
   "module-virtualisation-xen-introduction": [
     "index.html#module-virtualisation-xen-introduction"
   ],
+  "sec-crowdsec-reset": [
+    "index.html#sec-crowdsec-reset"
+  ],
   "sec-nixos-test-vms-vs-containers": [
     "index.html#sec-nixos-test-vms-vs-containers"
   ],
