@@ -42,10 +42,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellCompletion --cmd easytier-cli \
       --bash <($out/bin/easytier-cli gen-autocomplete bash) \
       --fish <($out/bin/easytier-cli gen-autocomplete fish) \
+      --nushell <($out/bin/easytier-cli gen-autocomplete nu) \
       --zsh <($out/bin/easytier-cli gen-autocomplete zsh)
     installShellCompletion --cmd easytier-core \
       --bash <($out/bin/easytier-core --gen-autocomplete bash) \
       --fish <($out/bin/easytier-core --gen-autocomplete fish) \
+      --nushell <($out/bin/easytier-core --gen-autocomplete nu) \
       --zsh <($out/bin/easytier-core --gen-autocomplete zsh)
   '';
 
