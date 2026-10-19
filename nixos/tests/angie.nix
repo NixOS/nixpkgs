@@ -5,6 +5,6 @@ let
 in
 recurseIntoAttrs (
   mapAttrs (const (callTest (builtins.getAttr "angie") "angie")) {
-    inherit (tests) basic;
+    inherit (tests) basic http3;
   }
 )

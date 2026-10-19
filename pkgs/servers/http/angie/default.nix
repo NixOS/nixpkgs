@@ -33,7 +33,6 @@ callPackage ../nginx/generic.nix args rec {
 
   passthru.tests = nixosTests.angie // {
     angie-api = nixosTests.angie-api;
-    angie-http3 = nixosTests.nginx-http3.angie;
   };
 
   meta = {

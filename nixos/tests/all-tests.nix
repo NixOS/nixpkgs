@@ -1271,7 +1271,6 @@ in
   nfs4 = handleTest ./nfs { version = 4; };
   nghttpx = runTest ./nghttpx.nix;
   nginx = import ./nginx { inherit lib runTest; };
-  nginx-http3 = import ./nginx-http3.nix { inherit pkgs runTest; };
   nifi = runTestOn [ "x86_64-linux" ] ./web-apps/nifi.nix;
   nimdow = runTest ./nimdow.nix;
   nipap = runTest ./web-apps/nipap.nix;

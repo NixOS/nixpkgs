@@ -323,6 +323,7 @@ mkDerivation {
           etag
           etag-compression
           dynamic-modules
+          http3
           globalredirect
           grpc-error-pages
           lua
@@ -337,9 +338,6 @@ mkDerivation {
           status-page
           tmpdir
           unix-socket
-          ;
-        inherit (nixosTests)
-          nginx-http3
           ;
         acme-integration = nixosTests.acme.nginx;
         acme-integration-without-reload = nixosTests.acme.nginx-without-reload;

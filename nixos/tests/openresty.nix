@@ -5,6 +5,6 @@ let
 in
 recurseIntoAttrs (
   mapAttrs (const (callTest (builtins.getAttr "openresty") "openresty")) {
-    inherit (tests) basic;
+    inherit (tests) basic http3;
   }
 )
