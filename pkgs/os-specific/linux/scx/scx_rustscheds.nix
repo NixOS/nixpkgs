@@ -2,7 +2,7 @@
   lib,
   stdenv,
   rustPlatform,
-  llvmPackages,
+  llvmPackages_22, # scx_mavd fails to build on clang <= 21. FIXME: Remove once llvmPackages defaults to clang >= 22
   pkg-config,
   installShellFiles,
   elfutils,
@@ -17,16 +17,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "scx_rustscheds";
-  version = "1.1.2";
+  version = "1.1.4";
 
   src = fetchFromGitHub {
     owner = "sched-ext";
     repo = "scx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-igrmrfimVOEJnFxMr9ghN6lAHwEBSFLLVrB2MQ72PXI=";
+    hash = "sha256-V+YokID74tDLR1urSeinsX3HePLBP9HFeo/NYMolH1A=";
   };
 
-  cargoHash = "sha256-CTEVdvw6aG/fFas2Fk3x9o4Sp2k3lHO/OLwUM8t9UjE=";
+  cargoHash = "sha256-ZXn8wko5rthNkpu6BaVciKDYb1CXUQvfSmH3iSSjLZ0=";
 
   nativeBuildInputs = [
     pkg-config
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   env = {
-    BPF_CLANG = lib.getExe llvmPackages.clang;
+    BPF_CLANG = lib.getExe llvmPackages_22.clang;
     RUSTFLAGS = lib.concatStringsSep " " [
       "-C relocation-model=pic"
       "-C link-args=-lelf"
@@ -96,18 +96,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.tests.basic = nixosTests.scx;
   passthru.updateScript = nix-update-script { };
   passthru.schedulers = [
+    "scx_arena_libarena_selftests" # tool
     "scx_beerland"
     "scx_bpfland"
     "scx_cake"
     "scx_chaos"
-    "scx_characterize"
+    "scx_characterize" # tool
     "scx_cosmos"
+    "scx_eevdf"
     "scx_flash"
     "scx_flow"
     "scx_forge"
     "scx_lavd"
     "scx_layered"
+    "scx_mavd"
     "scx_mitosis"
+    "scx_mlfq"
+    "scx_nitosis"
     "scx_p2dq"
     "scx_pandemonium"
     "scx_rlfifo"
