@@ -6,7 +6,7 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "exegol";
-  version = "6.0.1";
+  version = "6.0.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "ThePorgs";
     repo = "Exegol";
     tag = finalAttrs.version;
-    hash = "sha256-gfimS0Vmh8GFkW+ZvWMgdS7SbHbJb9K7ZI1aLNZLlj0=";
+    hash = "sha256-wOUvEA7W44ogYlVdCQHK8IVrlAVD1Ypq+UgryHXsuXs=";
   };
 
   build-system = with python3Packages; [ pdm-backend ];
