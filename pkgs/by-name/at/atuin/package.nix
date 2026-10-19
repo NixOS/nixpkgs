@@ -67,6 +67,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellCompletion --cmd atuin \
       --bash <($out/bin/atuin gen-completions -s bash) \
       --fish <($out/bin/atuin gen-completions -s fish) \
+      --nushell <($out/bin/atuin gen-completions -s nushell) \
       --zsh <($out/bin/atuin gen-completions -s zsh)
   '';
 
