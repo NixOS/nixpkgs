@@ -7,6 +7,7 @@
   pkg-config,
   patchelf,
   copyDesktopItems,
+  craft-fonts,
   makeDesktopItem,
   versionCheckHook,
   alsa-lib,
@@ -38,19 +39,24 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deckcraft";
-  version = "0.6.1";
+  version = "0.10.0";
 
   __structuredAttrs = true;
   strictDeps = true;
+
+  env = {
+    CRAFT_FONTS_DIR = "${craft-fonts}";
+    CRAFT_FONTS_REQUIRED = "1";
+  };
 
   src = fetchFromGitHub {
     owner = "storytold";
     repo = "deckcraft";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-c6uNNn58NsSeAoa87AU2bIMhCWmgPk/HoJ11IRhU4HU=";
+    hash = "sha256-q18YQXHmkPaULSMPxu5vY9/F7JThejIhKwpHhme0UCI=";
   };
 
-  cargoHash = "sha256-z6QdxDIyLjr8Es08bpQEUxirK48PqBVIjjKPGHgZFXE=";
+  cargoHash = "sha256-iHkyrHz2VMx0+bpYnve5EtBiuH32VSYHRSvg+ihIdwU=";
 
   cargoBuildFlags = [
     "--package=deckcraft"
@@ -117,12 +123,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Presentation app with PPTX support";
     homepage = "https://github.com/storytold/deckcraft";
-    changelog = "https://github.com/storytold/deckcraft/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.OR [
-      lib.licenses.mit
-      lib.licenses.asl20
+    changelog = "https://github.com/storytold/deckcraft/releases/tag/v${finalAttrs.version}";
+    license =
+      with lib.licenses;
+      AND [
+        (OR [
+          mit
+          asl20
+        ])
+        ofl
+      ];
+    maintainers = with lib.maintainers; [
+      cleboost
+      sophronesis
     ];
-    maintainers = with lib.maintainers; [ sophronesis ];
     mainProgram = "deckcraft";
     platforms = rustc.meta.platforms;
   };
