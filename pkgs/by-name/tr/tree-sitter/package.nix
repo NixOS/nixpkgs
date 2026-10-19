@@ -238,12 +238,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellCompletion --cmd tree-sitter \
       --bash <("$out/bin/tree-sitter" complete --shell bash) \
       --zsh <("$out/bin/tree-sitter" complete --shell zsh) \
+      --nushell <("$out/bin/tree-sitter" complete --shell nushell) \
       --fish <("$out/bin/tree-sitter" complete --shell fish)
   ''
   + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd tree-sitter \
       --bash "${buildPackages.tree-sitter}"/share/bash-completion/completions/*.bash \
       --zsh "${buildPackages.tree-sitter}"/share/zsh/site-functions/* \
+      --nushell "${buildPackages.tree-sitter}"/share/nushell/vendor/autoload/* \
       --fish "${buildPackages.tree-sitter}"/share/fish/*/*
   '';
 
