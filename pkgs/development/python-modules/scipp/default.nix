@@ -40,6 +40,7 @@ buildPythonPackage (finalAttrs: {
   pname = "scipp";
   version = "26.9.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "scipp";
