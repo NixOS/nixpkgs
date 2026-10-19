@@ -42,6 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   postPatch = ''
+    substituteInPlace {firmware,host,tests}/Makefile.inc \
+      --replace-fail "ar qcT" '${stdenv.cc.targetPrefix}ar qcT'
     patchShebangs scripts
   '';
 
