@@ -1538,6 +1538,12 @@ let
                 };
               }
               {
+                name = "tmpdir";
+                enable = cfg.setEnvironment && config.boot.tmp.perUser;
+                control = "required";
+                modulePath = "${pkgs.pam_tmpdir}/lib/security/pam_tmpdir.so";
+              }
+              {
                 name = "unix";
                 control = "required";
                 modulePath = config.security.pam.pam_unixModulePath;
