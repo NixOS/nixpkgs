@@ -29,5 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     # never built on aarch64-linux since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
     mainProgram = "srelay";
+    maintainers = with lib.maintainers; [ enovamaker ];
   };
 })
