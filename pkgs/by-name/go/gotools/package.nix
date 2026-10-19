@@ -31,6 +31,11 @@ buildGoModule (finalAttrs: {
     rm -r gopls
   '';
 
+  # Keep toolchain references, but strip temporary paths from binaries.
+  preBuild = ''
+    export GOFLAGS="$GOFLAGS -trimpath"
+  '';
+
   # Some tests start local HTTP servers which fails on macOS without this.
   __darwinAllowLocalNetworking = true;
 
