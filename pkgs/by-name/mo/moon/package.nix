@@ -53,6 +53,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       installShellCompletion --cmd moon \
         --bash <(${emulator} $out/bin/moon completions --shell bash) \
         --fish <(${emulator} $out/bin/moon completions --shell fish) \
+        --nushell <(${emulator} $out/bin/moon completions --shell nushell) \
         --zsh <(${emulator} $out/bin/moon completions --shell zsh)
     ''
   );
