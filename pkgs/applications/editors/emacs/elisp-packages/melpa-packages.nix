@@ -776,6 +776,8 @@ let
           # https://github.com/gergelypolonkai/alert-termux/issues/2
           alert-termux = addPackageRequires super.alert-termux [ self.alert ];
 
+          all-the-icons = addPackageRequires super.all-the-icons [ pkgs.emacs-all-the-icons-fonts ];
+
           # https://github.com/magnars/angular-snippets.el/issues/7
           angular-snippets = addPackageRequires super.angular-snippets [ self.yasnippet ];
 
