@@ -76,6 +76,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   meta = {
+    broken = lib.versionAtLeast mcp.version "2";
     description = "Module for interacting with PostHog";
     homepage = "https://github.com/PostHog/posthog-python";
     changelog = "https://github.com/PostHog/posthog-python/blob/${finalAttrs.src.tag}/posthog/CHANGELOG.md";
