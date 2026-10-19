@@ -20,6 +20,7 @@
 
   # nativeCheckInputs
   python3,
+  libfaketime,
 
   # nativeInstallCheckInputs
   versionCheckHook,
@@ -105,6 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
   installCheckTarget = "test";
   nativeInstallCheckInputs = [
     python3
+    libfaketime
     versionCheckHook
   ];
 
