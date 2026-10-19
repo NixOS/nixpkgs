@@ -116,7 +116,7 @@ stdenv.mkDerivation {
     mainProgram = "llvm-spirv";
     license = lib.licenses.ncsa;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ gloaming ];
+    maintainers = [ ];
     broken = !(versions ? ${llvmMajor});
   };
 }

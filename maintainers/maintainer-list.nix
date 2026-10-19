@@ -10694,12 +10694,6 @@
     githubId = 1481027;
     keys = [ { fingerprint = "0F11 A989 879E 8BBB FDC1  E236 44EF 5B5E 861C 09A7"; } ];
   };
-  gloaming = {
-    email = "ch9871@gmail.com";
-    github = "gloaming";
-    githubId = 10156748;
-    name = "Craig Hall";
-  };
   globin = {
     email = "mail@glob.in";
     github = "globin";
