@@ -6,7 +6,7 @@
 {
   name = "nginx-etag-compression-${name}";
 
-  nodes.machine =
+  containers.machine =
     { pkgs, lib, ... }:
     {
       services.nginx = {
