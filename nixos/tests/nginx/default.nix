@@ -18,6 +18,7 @@ let
     etag = ./etag.nix;
     etag-compression = ./etag-compression.nix;
     globalredirect = ./globalredirect.nix;
+    http3 = ./http3.nix;
     dynamic-modules = ./dynamic-modules.nix;
     grpc-error-pages = ./grpc-error-pages.nix;
     lua = ./lua.nix;
