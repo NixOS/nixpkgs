@@ -51,6 +51,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       installShellCompletion --cmd ruff \
         --bash <(${emulator} $out/bin/ruff generate-shell-completion bash) \
         --fish <(${emulator} $out/bin/ruff generate-shell-completion fish) \
+        --nushell <(${emulator} $out/bin/ruff generate-shell-completion nushell) \
         --zsh <(${emulator} $out/bin/ruff generate-shell-completion zsh)
     ''
   );
