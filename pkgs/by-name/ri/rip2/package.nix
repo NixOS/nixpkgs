@@ -34,6 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellCompletion --cmd rip \
       --bash <($out/bin/rip completions bash) \
       --fish <($out/bin/rip completions fish) \
+      --nushell <($out/bin/rip completions nushell) \
       --zsh <($out/bin/rip completions zsh)
   '';
 
