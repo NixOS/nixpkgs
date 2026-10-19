@@ -9,6 +9,8 @@ outer@{
   libxml2,
   libxslt,
   nginx-doc,
+  makeScopeWithSplicing',
+  generateSplicesForMkScope,
 
   nixosTests,
   installShellFiles,
@@ -33,6 +35,7 @@ outer@{
   version,
   nginxVersion ? version,
   flavor ? "stable",
+  attrName ? "nginx${lib.toSentenceCase flavor}",
   src ? null, # defaults to upstream nginx ${version}
   hash ? null, # when not specifying src
   configureFlags ? [ ],
@@ -325,6 +328,22 @@ mkDerivation (finalAttrs: {
     '';
 
   passthru = {
+    allDynamicModules = makeScopeWithSplicing' {
+      otherSplices = generateSplicesForMkScope "${attrName}DynamicModules";
+      f =
+        self:
+        let
+          packages = lib.packagesFromDirectoryRecursive {
+            inherit (self) callPackage;
+            directory = ./dynamic-modules;
+          };
+        in
+        packages
+        // {
+          nginx = finalAttrs.finalPackage;
+        };
+    };
+
     inherit modules dynamicModules flavor;
     tests =
       passthru.tests or {

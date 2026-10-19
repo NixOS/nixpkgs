@@ -37,6 +37,21 @@ let
   ) cfg.virtualHosts;
   inherit (config.networking) enableIPv6;
 
+  dynamicModules = cfg.dynamicModules cfg.package.allDynamicModules;
+
+  dynamicModulesImport = pkgs.runCommand "nginx-modules.conf" { } ''
+    shopt -s nullglob
+    ${lib.concatMapStrings (module: ''
+      sofiles=("${module}"/modules/*.so)
+      if (( ''${#sofiles[@]} == 0 )); then
+        echo "nginx: dynamic modules were requested but no .so was produced in ${module}/modules" >&2
+        exit 1
+      fi
+    '') dynamicModules}
+    mkdir -p "$out/etc/nginx"
+    printf 'load_module %s;\n' "''${sofiles[@]}" > "$out/etc/nginx/dynamic-modules.conf"
+  '';
+
   # Mime.types values are taken from brotli sample configuration - https://github.com/google/ngx_brotli
   # and Nginx Server Configs - https://github.com/h5bp/server-configs-nginx
   # "text/html" is implicitly included in {brotli,gzip,zstd}_types
@@ -201,6 +216,10 @@ let
         ${optionalString (
           (cfg.package.dynamicModules or [ ]) != [ ]
         ) "include ${cfg.package}/etc/nginx/dynamic-modules.conf;"}
+
+        ${optionalString (
+          dynamicModules != [ ]
+        ) "include ${dynamicModulesImport}/etc/nginx/dynamic-modules.conf;"}
 
         ${optionalString cfg.enableQuicBPF ''
           quic_bpf on;
@@ -846,6 +865,15 @@ in
         description = ''
           Additional [third-party nginx modules](https://www.nginx.com/resources/wiki/modules/)
           to install. Packaged modules are available in `pkgs.nginxModules`.
+        '';
+      };
+
+      dynamicModules = mkOption {
+        default = [ ];
+        type = types.functionTo (types.listOf types.package);
+        example = literalExpression "ms: [ ms.otel ]";
+        description = ''
+          Function that evaluates to a list of dynamically built modules to add.
         '';
       };
 

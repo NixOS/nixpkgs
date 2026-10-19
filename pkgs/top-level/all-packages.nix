@@ -7280,6 +7280,9 @@ with pkgs;
     ];
   };
 
+  nginxMainlineDynamicModules = nginxMainline.allDynamicModules;
+  nginxStableDynamicModules = nginxStable.allDynamicModules;
+
   mkNginxPlugin = callPackage ../servers/http/nginx/modules/builder.nix { };
   nginxModules = recurseIntoAttrs (
     lib.makeExtensible (
