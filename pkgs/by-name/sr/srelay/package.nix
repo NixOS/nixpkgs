@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://sourceforge/project/socks-relay/socks-relay/srelay-${finalAttrs.version}/srelay-${finalAttrs.version}.tar.gz";
-    sha256 = "1sn6005aqyfvrlkm5445cyyaj6h6wfyskfncfmds55x34hfyxpvl";
+    hash = "sha256-dN/uHSSjl6Jbdcy6qb3jBhqpvGeFkFInzdt5rAoAxuo=";
   };
 
   patches = [
