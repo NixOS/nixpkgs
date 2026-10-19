@@ -11,14 +11,11 @@
 }:
 
 let
-  src = applyPatches {
-    src = fetchFromGitHub {
-      owner = "TheEssem";
-      repo = "mastodon";
-      rev = "a7610aa2b86ffdcabc86008cca4234f135f642bd";
-      hash = "sha256-c786uMkC0fEj3h4FKTGzz+GADUOfWCfTziLOCM0xWSI=";
-    };
-    inherit patches;
+  src = fetchFromGitHub {
+    owner = "TheEssem";
+    repo = "mastodon";
+    rev = "a7610aa2b86ffdcabc86008cca4234f135f642bd";
+    hash = "sha256-c786uMkC0fEj3h4FKTGzz+GADUOfWCfTziLOCM0xWSI=";
   };
 in
 
@@ -26,7 +23,7 @@ in
   pname = "chuckya";
   version = "0-unstable-2026-09-25";
 
-  srcOverride = src;
+  srcOverride = applyPatches { inherit src patches; };
 
   inherit gemset yarnMissingHashes yarnHash;
 }).overrideAttrs
