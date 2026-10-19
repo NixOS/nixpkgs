@@ -1,6 +1,7 @@
 {
   lib,
   pkgs,
+  latestKernel,
   ...
 }:
 
@@ -9,7 +10,10 @@
 
   meta.maintainers = with lib.maintainers; [ raitobezarius ];
 
+  _module.args.latestKernel = lib.mkDefault false;
+
   nodes.machine = { config, ... }: {
+    boot.kernelPackages = lib.mkIf latestKernel pkgs.linuxPackages_latest;
     # Currently, kernel BTF enabled systemd is not the default yet.
     systemd.package = config.boot.kernelPackages.systemd;
     systemd.additionalUpstreamSystemUnits = [
