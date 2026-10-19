@@ -23,7 +23,6 @@
 let
   extensionsNotSupportinPassage = [
     "pass-audit"
-    "pass-checkup"
     "pass-import"
     "pass-tomb"
     "pass-update"
