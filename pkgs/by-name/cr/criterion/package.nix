@@ -41,6 +41,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "criterion";
   version = "2.5.0";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "Snaipe";
     repo = "Criterion";
