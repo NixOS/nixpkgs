@@ -19499,6 +19499,12 @@
     githubId = 149558;
     name = "Merlin Gaillard";
   };
+  mirdukkkkk = {
+    email = "karmulav@gmail.com";
+    github = "mirdukkkkk";
+    githubId = 69540930;
+    name = "mirdukkkkk";
+  };
   mirkolenz = {
     name = "Mirko Lenz";
     email = "mirko@mirkolenz.com";
