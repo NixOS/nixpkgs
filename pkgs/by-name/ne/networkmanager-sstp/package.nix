@@ -3,6 +3,7 @@
   lib,
   autoreconfHook,
   fetchurl,
+  fetchpatch,
   file,
   glib,
   gnome,
@@ -28,6 +29,15 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "sha256-zd+g86cZLyibLhYLal6XzUb9wFu7kHROp0KzRM95Qng=";
   };
+
+  patches = [
+    # CVE-2026-91838: quote the profile values that reach the pppd `pty` shell command
+    # https://gitlab.gnome.org/GNOME/network-manager-sstp/-/merge_requests/60
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/network-manager-sstp/-/commit/4b61bab805b779b68918846fa7b76c6e68737f95.patch";
+      hash = "sha256-CvSAbRXQ8EGf8BTFg2CfJvnYgUoyCFkqYiteG9o7z10=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -78,9 +88,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "NetworkManager's sstp plugin";
     inherit (networkmanager.meta) maintainers teams platforms;
-    knownVulnerabilities = [
-      "CVE-2026-91838"
-    ];
     license = lib.licenses.gpl2Plus;
   };
 }
