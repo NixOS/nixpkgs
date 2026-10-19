@@ -27,6 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellCompletion --cmd kdlfmt \
       --bash <($out/bin/kdlfmt completions bash) \
       --fish <($out/bin/kdlfmt completions fish) \
+      --nushell <($out/bin/kdlfmt completions nushell) \
       --zsh <($out/bin/kdlfmt completions zsh)
   '';
 
