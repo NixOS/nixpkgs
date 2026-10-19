@@ -1,0 +1,106 @@
+--- a/src/nm-sstp-service.c	2023-11-27 17:22:00.000000000 +0000
++++ b/src/nm-sstp-service.c	2026-10-19 09:07:12.718603539 +0100
+@@ -190,6 +190,10 @@
+     if (!gateway || !strlen (gateway))
+         return FALSE;
+ 
++    /* Never let it be taken for an option by sstpc */
++    if (gateway[0] == '-')
++        return FALSE;
++
+     /* Ensure it's a valid DNS name or IP address */
+     p = gateway;
+     while (*p) {
+@@ -474,6 +478,7 @@
+     gs_free char *proxy = NULL;
+     gs_free char *uuid = NULL;
+     gs_free char *pty = NULL;
++    gs_free char *gw_quoted = NULL;
+     gboolean ign_cert = FALSE;
+     gboolean tls_ext = FALSE;
+     gboolean is_pkcs12 = FALSE;
+@@ -507,14 +512,19 @@
+     value = nm_setting_vpn_get_data_item (s_vpn, NM_SSTP_KEY_CA_CERT);
+     if (value && strlen (value)) {
+ 
++        gs_free char *quoted = NULL;
++
+         ca_path = nm_utils_str_utf8safe_unescape_cp (value);
+-        ca_cert = g_strdup_printf ("--ca-cert %s", ca_path);
++        quoted = g_shell_quote (ca_path);
++        ca_cert = g_strdup_printf ("--ca-cert %s", quoted);
+     }
+ 
+     /*  Set the UUID of the connection */
+     value = nm_setting_vpn_get_data_item (s_vpn, NM_SSTP_KEY_UUID);
+     if (value && strlen(value)) {
+-        uuid = g_strdup_printf ("--uuid %s", value);
++        gs_free char *quoted = g_shell_quote (value);
++
++        uuid = g_strdup_printf ("--uuid %s", quoted);
+     }
+ 
+     /* Ignore any certificate warnings */
+@@ -543,23 +553,32 @@
+         proxy_user = nm_setting_vpn_get_data_item (s_vpn, NM_SSTP_KEY_PROXY_USER);
+         proxy_password = nm_setting_vpn_get_secret (s_vpn, NM_SSTP_KEY_PROXY_PASSWORD);
+ 
+-        proxy = g_strdup_printf("--proxy http://%s%s%s%s%s:%ld",
+-                                proxy_user     ?     : "",
+-                                proxy_password ? ":" : "",
+-                                proxy_password ?     : "",
+-                                proxy_user     ? "@" : "",
++        /* Hand the URL (it may carry credentials) to sstpc through the
++         * environment: it is neither parsed by a shell nor shown by ps(1). */
++        proxy = g_strdup_printf("http://%s%s%s%s%s:%ld",
++                                proxy_user                    ? proxy_user : "",
++                                proxy_user && proxy_password  ? ":" : "",
++                                proxy_user && proxy_password  ? proxy_password : "",
++                                proxy_user                    ? "@" : "",
+                                 proxy_server,
+                                 tmp_int);
+     }
+ 
++    /* The child inherits the environment of the service, see nm_sstp_start_pppd_binary() */
++    if (proxy)
++        g_setenv ("http_proxy", proxy, TRUE);
++    else
++        g_unsetenv ("http_proxy");
++
+     /* Add the PTY option */
+     ipparam = g_strdup_printf ("nm-pptp-service-%d", getpid ());    /* Using "pptp" to avoid having /etc/ppp/ip-up.d/0000usepeerdns replace /etc/resolv.conf */
++    gw_quoted = g_shell_quote (gwaddr);
+     pty = g_strdup_printf ("%s %s %s %s --nolaunchpppd %s %s --ipparam %s %s %s",
+-                           sstp_binary, gwaddr,
++                           sstp_binary, gw_quoted,
+                            ign_cert == TRUE ? "--cert-warn" : "",
+                            tls_ext == TRUE ? "--tls-ext" : "",
+                            gl.debug ? "--log-level 5" : "",
+-                           proxy ? proxy : "",
++                           "",
+                            ipparam,
+                            uuid ? uuid : "",
+                            ca_cert ? ca_cert : ""
+@@ -943,17 +962,21 @@
+     }
+ 
+     pppd_argv = construct_pppd_args (plugin, s_vpn, pppd_binary, gwaddr, error);
+-    if (!pppd_argv)
++    if (!pppd_argv) {
++        g_unsetenv ("http_proxy");
+         return FALSE;
++    }
+ 
+     if (gl.debug)
+         g_ptr_array_foreach (pppd_argv, nm_sstp_dump_ptr_array, NULL);
+ 
+     if (!g_spawn_async (NULL, (char **) pppd_argv->pdata, NULL,
+                         G_SPAWN_DO_NOT_REAP_CHILD, NULL, NULL, &pid, error)) {
++        g_unsetenv ("http_proxy");
+         g_ptr_array_free (pppd_argv, TRUE);
+         return FALSE;
+     }
++    g_unsetenv ("http_proxy");
+     g_ptr_array_free (pppd_argv, TRUE);
+ 
+     _LOGI ("pppd started with pid %d", pid);
