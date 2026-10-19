@@ -19,6 +19,9 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-caW4rox/r2eq0HxACaAsuDLAeGIKUiLgKtJol8OXzDE=";
 
+  # httptest: failed to listen on a port
+  __darwinAllowLocalNetworking = true;
+
   passthru.updateScript = writeShellScript "update-goperf" ''
     export UPDATE_NIX_ATTR_PATH=goperf
     ${lib.escapeShellArgs (unstableGitUpdater {
