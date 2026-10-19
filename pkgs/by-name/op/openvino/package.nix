@@ -127,7 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "ENABLE_INTEL_NPU" stdenv.hostPlatform.isx86_64)
     (cmakeBool "ENABLE_JS" false)
     (cmakeBool "ENABLE_LTO" (!stdenv.hostPlatform.isAarch64)) # LTO leaks SVE into generic code on ARM (SIGILL); upstream defaults it off there.
-    (cmakeBool "ENABLE_ONEDNN_FOR_GPU" false)
+    (cmakeBool "ENABLE_ONEDNN_FOR_GPU" true)
     (cmakeBool "ENABLE_OPENCV" true)
     (cmakeBool "ENABLE_OV_JAX_FRONTEND" false) # auto-patchelf could not satisfy dependency libopenvino_jax_frontend.so.2450
     (cmakeBool "ENABLE_PYTHON" true)
