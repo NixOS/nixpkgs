@@ -56,8 +56,10 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin (lib.cmakeBool "enable-framework" false);
 
+  doCheck = true;
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+  checkTarget = "check";
 
   signalsmith = {
     dsp = fetchFromGitHub {
