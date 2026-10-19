@@ -28,5 +28,10 @@
         "version": "7.2.11",
         "hash": "sha256:1976l4zxjp0dqi46ff95ywf6brhg6cv9qgpi2d9w1a43z5ww83zx",
         "lts": false
+    },
+    "7.3": {
+        "version": "7.3",
+        "hash": "sha256:0ls902gz6h1ydcnwx2zzdcglg52f14hmaxk2ncg341hfy4j3qdl7",
+        "lts": false
     }
 }
