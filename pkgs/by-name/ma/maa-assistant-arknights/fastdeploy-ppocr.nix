@@ -21,7 +21,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "MaaXYZ";
     repo = "FastDeploy";
-    # Match MaaDeps v2.14.1, used by MAA 6.20.0.
+    # MAA pins its MaaDeps release here:
+    # https://github.com/MaaAssistantArknights/MaaAssistantArknights/blob/v6.20.0/tools/maadeps-download.py#L13
+    # Match the FastDeploy REF from that MaaDeps release:
+    # https://github.com/MaaAssistantArknights/MaaDeps/blob/v2.14.1/vcpkg-overlay/ports/maa-fastdeploy/portfile.cmake#L4
     rev = "e962983da6daba7d0c12f6bf5f8ff7173be70982";
     hash = "sha256-T20WhXE1toEgeXbMlQn9EnLXoz5vepUca4p7C2tQK44=";
   };
