@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch,
   stdenv,
   cmake,
   ninja,
@@ -26,6 +27,12 @@ stdenv.mkDerivation (finalAttrs: {
   };
   patches = [
     ./non-fatal-unique-app.patch
+
+    # fix cert detection on darwin
+    (fetchpatch {
+      url = "https://github.com/jellyfin/jellyfin-desktop/commit/7f04b8dd646d8b85e59ded399733a980fc8f4a65.patch";
+      hash = "sha256-cbq0m6N5C8/FjzT5ISvH9fIYOCHUf0hnDifR8mTj5fQ=";
+    })
   ];
 
   nativeBuildInputs = [
