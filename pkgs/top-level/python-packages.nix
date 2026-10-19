@@ -7701,6 +7701,8 @@ self: super: with self; {
 
   hickle = callPackage ../development/python-modules/hickle { };
 
+  hicmatrix = callPackage ../development/python-modules/hicmatrix { };
+
   hid = callPackage ../development/python-modules/hid { inherit (pkgs) hidapi; };
 
   hid-parser = callPackage ../development/python-modules/hid-parser { };
