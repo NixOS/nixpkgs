@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,12 +19,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
+  passthru.tests = {
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+  };
+
   meta = {
     description = "Fastest JSON library in C";
     homepage = "https://github.com/ibireme/yyjson";
     changelog = "https://github.com/ibireme/yyjson/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
+    pkgConfigModules = [ "yyjson" ];
     platforms = lib.platforms.all;
   };
 })
