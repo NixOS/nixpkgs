@@ -105,6 +105,9 @@ buildPythonPackage (finalAttrs: {
   ];
   dontUseCmakeConfigure = true;
 
+  pythonRelaxDeps = [
+    "tensordict"
+  ];
   dependencies = [
     cloudpickle
     hoptorch
