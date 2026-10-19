@@ -1276,7 +1276,6 @@ in
   nginx-mime = runTest ./nginx-mime.nix;
   nginx-proxyprotocol = runTest ./nginx-proxyprotocol/default.nix;
   nginx-pubhtml = runTest ./nginx-pubhtml.nix;
-  nginx-redirectcode = runTest ./nginx-redirectcode.nix;
   nginx-sso = runTest ./nginx-sso.nix;
   nginx-status-page = runTest ./nginx-status-page.nix;
   nginx-tmpdir = runTest ./nginx-tmpdir.nix;
