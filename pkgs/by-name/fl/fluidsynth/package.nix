@@ -1,19 +1,24 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchFromGitHub,
-  buildPackages,
-  pkg-config,
-  cmake,
   alsa-lib,
+  cmake,
   libjack2,
-  libsndfile,
   libpulseaudio,
+  libsndfile,
+  pkg-config,
+  testers,
+  validatePkgConfig,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fluidsynth";
   version = "2.6.2";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "FluidSynth";
@@ -30,15 +35,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    buildPackages.stdenv.cc
-    pkg-config
     cmake
+    pkg-config
+    validatePkgConfig
   ];
 
   buildInputs = [
-    stdenv.cc.cc.lib
-    libsndfile
     libjack2
+    libsndfile
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
@@ -46,11 +50,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-Denable-framework=off"
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_SIGNALSMITH-LINEAR" "${finalAttrs.signalsmith.linear}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_SIGNALSMITH-DSP" "${finalAttrs.signalsmith.dsp}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_SIGNALSMITH-HILBERT" "${finalAttrs.signalsmith.hilbert}")
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin (lib.cmakeBool "enable-framework" false);
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   signalsmith = {
     dsp = fetchFromGitHub {
@@ -73,15 +80,30 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  passthru = {
+    tests = {
+      cmake-config = testers.hasCmakeConfigModules {
+        package = finalAttrs.finalPackage;
+        versionCheck = true;
+      };
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+        versionCheck = true;
+      };
+    };
+  };
+
   meta = {
-    changelog = "https://github.com/FluidSynth/fluidsynth/blob/${finalAttrs.src.tag}/doc/wiki/ChangeLog.md";
     description = "Real-time software synthesizer based on the SoundFont 2 specifications";
     homepage = "https://www.fluidsynth.org";
+    changelog = "https://github.com/FluidSynth/fluidsynth/blob/${finalAttrs.src.tag}/doc/wiki/ChangeLog.md";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [
       guylamar2006
     ];
     platforms = lib.platforms.unix;
     mainProgram = "fluidsynth";
+    cmakeConfigModules = [ "FluidSynth" ];
+    pkgConfigModules = [ "fluidsynth" ];
   };
 })
