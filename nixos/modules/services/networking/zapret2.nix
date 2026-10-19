@@ -132,7 +132,7 @@ let
               defaultText = "/var/lib/zapret2/‹name›-hosts.txt";
               description = ''
                 The file where the automatic host list is saved. This path must
-                be writable by the user Zapret2 runs as (by default, it uses a
+                be readable by the user Zapret2 runs as (by default, it uses a
                 dynamic user, so it should generally be in
                 {file}`/var/lib/zapret2`).
               '';
