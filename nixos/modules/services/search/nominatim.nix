@@ -476,6 +476,8 @@ in
             trap 'rm -rf "$STATE_DIRECTORY/wikimedia-importance.sql.gz" "$STATE_DIRECTORY/secondary_importance.sql.gz"' EXIT
 
             echo ">>> downloading wikimedia importance files"
+            # Nominatim Usage Policy requires us to specify a user agent. Otherwise we get 403
+            # SEE: https://operations.osmfoundation.org/policies/nominatim/#requirements
             curl --silent -L -A "Wget/1.21.2" ${cfg.importanceData.url} -o "$STATE_DIRECTORY/wikimedia-importance.sql.gz"
             curl --silent -L -A "Wget/1.21.2" ${cfg.importanceData.secondaryUrl} -o "$STATE_DIRECTORY/secondary_importance.sql.gz"
 
