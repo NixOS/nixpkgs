@@ -13,6 +13,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "boxfort";
   version = "0.1.8";
 
+  __structuredAttrs = true;
+  __strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "Snaipe";
     repo = "BoxFort";
