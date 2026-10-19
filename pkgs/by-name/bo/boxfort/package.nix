@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "boxfort";
-  version = "0.1.5";
+  version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "Snaipe";
     repo = "BoxFort";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-fgX2Ilb01qa9myuz6yiC67WKeai2m/csncS6u5and3o=";
+    hash = "sha256-A79IDBDo/pX03aEaXZbmNW+0k/TTtpT1e6HZsLz8I+E=";
   };
 
   nativeBuildInputs = [
