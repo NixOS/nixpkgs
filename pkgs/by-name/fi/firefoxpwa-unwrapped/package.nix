@@ -8,6 +8,7 @@
   rustPlatform,
 
   firefox-unwrapped,
+  nix-update-script,
   nixosTests,
   openssl,
   pkg-config,
@@ -91,6 +92,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   passthru = {
+    updateScript = nix-update-script { };
     tests.firefoxpwa = nixosTests.firefoxpwa;
     binaryName = "firefoxpwa";
     applicationName = "firefoxpwa";
