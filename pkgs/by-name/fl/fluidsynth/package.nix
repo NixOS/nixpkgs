@@ -5,14 +5,30 @@
   _experimental-update-script-combinators,
   alsa-lib,
   cmake,
+  dbus,
+  ladspa-header,
   libjack2,
   libpulseaudio,
   libsndfile,
+  llvmPackages,
   nix-update-script,
+  pipewire,
   pkg-config,
+  readline,
+  sdl3,
+  systemdLibs,
   testers,
   validatePkgConfig,
   versionCheckHook,
+  alsaSupport ? stdenv.hostPlatform.isLinux,
+  dbusSupport ? stdenv.hostPlatform.isLinux,
+  jackSupport ? true,
+  pipewireSupport ? stdenv.hostPlatform.isLinux,
+  pulseaudioSupport ? stdenv.hostPlatform.isLinux,
+  # GPL, and linked into libfluidsynth rather than just the CLI
+  readlineSupport ? false,
+  sdl3Support ? false,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -43,15 +59,30 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libjack2
+    ladspa-header
     libsndfile
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    alsa-lib
-    libpulseaudio
-  ];
+  ++ lib.optional alsaSupport alsa-lib
+  ++ lib.optional dbusSupport dbus
+  ++ lib.optional jackSupport libjack2
+  ++ lib.optional pipewireSupport pipewire
+  ++ lib.optional pulseaudioSupport libpulseaudio
+  ++ lib.optional readlineSupport readline
+  ++ lib.optional sdl3Support sdl3
+  ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ]
+  ++ lib.optional systemdSupport systemdLibs;
 
   cmakeFlags = [
+    (lib.cmakeBool "enable-alsa" alsaSupport)
+    (lib.cmakeBool "enable-dbus" dbusSupport)
+    (lib.cmakeBool "enable-jack" jackSupport)
+    (lib.cmakeBool "enable-ladspa" true)
+    (lib.cmakeBool "enable-openmp" true)
+    (lib.cmakeBool "enable-pipewire" pipewireSupport)
+    (lib.cmakeBool "enable-pulseaudio" pulseaudioSupport)
+    (lib.cmakeBool "enable-readline" readlineSupport)
+    (lib.cmakeBool "enable-sdl3" sdl3Support)
+    (lib.cmakeBool "enable-systemd" systemdSupport)
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_SIGNALSMITH-LINEAR" finalAttrs.passthru.signalsmith.linear.outPath)
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_SIGNALSMITH-DSP" finalAttrs.passthru.signalsmith.dsp.outPath)
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_SIGNALSMITH-HILBERT" finalAttrs.passthru.signalsmith.hilbert.outPath)
