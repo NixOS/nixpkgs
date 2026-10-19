@@ -9,8 +9,10 @@
   libyaml,
   xz,
   flashrom,
+  nss,
 
   withFlashrom ? true,
+  withNss ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     xz
   ]
+  ++ lib.optional withNss nss
   ++ lib.optional withFlashrom finalAttrs.passthru.flashromChromeos;
 
   enableParallelBuilding = true;
