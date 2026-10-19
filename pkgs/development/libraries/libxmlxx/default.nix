@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/libxml++/${lib.versions.majorMinor version}/libxml++-${version}.tar.xz";
-    sha256 = "1sb3akryklvh2v6m6dihdnbpf1lkx441v972q9hlz1sq6bfspm2a";
+    hash = "sha256-StSr3TJYh09hwuKkHQjpkwZ3l20wNlPNFnDT6fNUY+k=";
   };
 
   configureFlags = [

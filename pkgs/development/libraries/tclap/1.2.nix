@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/tclap/${pname}-${version}.tar.gz";
-    sha256 = "sha256-u2SfdtrjXo0Ny6S1Ks/U4GLXh+aoG0P3pLASdRUxZaY=";
+    hash = "sha256-u2SfdtrjXo0Ny6S1Ks/U4GLXh+aoG0P3pLASdRUxZaY=";
   };
 
   meta = {

@@ -305,7 +305,7 @@ def build_and_activate_system(
     )
 
     if args.store_path:
-        path_to_config = Path(args.store_path)
+        path_to_config = Path(args.store_path).resolve()
         nix.copy_closure(
             path_to_config,
             to_host=target_host,

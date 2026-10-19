@@ -70,14 +70,14 @@ lib.mapAttrs (_: extension: stdenv.mkDerivation (lib.extends common extension)) 
   };
 
   zls_0_16 = finalAttrs: {
-    version = "0.16.0";
+    version = "0.16.1";
 
     src = fetchFromGitHub {
       owner = "zigtools";
       repo = "zls";
       tag = finalAttrs.version;
       fetchSubmodules = true;
-      hash = "sha256-k0xWObsw9K12BKfK+UB5TieWDFEFfBQhN1X1NO35fWk=";
+      hash = "sha256-ey+np/OPOXy2C9aJbNQXdAcpcLHBUfqGMcjzfL0Ni1c=";
     };
 
     deps = callPackage ./deps_0_16.nix { };

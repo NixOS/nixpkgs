@@ -16,6 +16,7 @@
   pyflakes,
   configclass,
   mergedict,
+  doit,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -54,7 +55,8 @@ buildPythonPackage (finalAttrs: {
 
   passthru.tests = {
     # hangs on darwin
-    check = finalAttrs.finalPackage.overridePythonAttrs (_: {
+    # note: overridePythonAttrs is not available in finalAttrs.finalPackage
+    check = doit.overridePythonAttrs (_: {
       doCheck = !stdenv.hostPlatform.isDarwin;
     });
   };

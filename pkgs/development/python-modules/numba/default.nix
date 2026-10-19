@@ -47,13 +47,13 @@ let
     else
       "${lib.getLib cudaPackages.libnvvm}";
 
-  libCudaPath =
-    # Use cuda_compat to provide libcuda.so on pre-Thor Jetsons
+  libCudaDir =
+    # Use cuda_compat to provide libcuda.so from its `compat` directory
     if (cudaPackages.cuda_compat.meta.available or false) then
-      cudaPackages.cuda_compat
+      "${cudaPackages.cuda_compat}/compat"
     # Else, use the host CUDA driver library
     else
-      addDriverRunpath.driverLink;
+      "${addDriverRunpath.driverLink}/lib";
 in
 buildPythonPackage (finalAttrs: {
   version = "0.67.0";
@@ -79,7 +79,7 @@ buildPythonPackage (finalAttrs: {
     # Hardcode the paths of the NVIDIA libraries which numba looks up at runtime, instead of
     # relying on its discovery heuristics (conda environment, `CUDA_HOME`, `/usr/local/cuda`, ...)
     (replaceVars ./nvidia-libs-paths.patch {
-      libcuda = libCudaPath;
+      libcuda = libCudaDir;
       libcudart = lib.getLib cudaPackages.cuda_cudart;
       libcudart_static = lib.getOutput "static" cudaPackages.cuda_cudart;
       libnvrtc = lib.getLib cudaPackages.cuda_nvrtc;

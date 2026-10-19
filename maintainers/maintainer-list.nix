@@ -5531,6 +5531,12 @@
       }
     ];
   };
+  cleboost = {
+    email = "clement.balarot@gmail.com";
+    github = "Cleboost";
+    githubId = 61158869;
+    name = "Clément Balarot";
+  };
   clebs = {
     email = "borja.clemente@gmail.com";
     github = "clebs";
@@ -7382,6 +7388,12 @@
     github = "Dietr1ch";
     githubId = 2096594;
     email = "Dietrich@Daroch.me";
+  };
+  different-error = {
+    name = "Sanfer D'Souza";
+    email = "tundra.louse2584@eagereverest.com";
+    github = "different-error";
+    githubId = 9338001;
   };
   different-name = {
     name = "different-name";
@@ -33079,6 +33091,12 @@
     name = "zinzilulo";
     github = "zinzilulo";
     githubId = 214774502;
+  };
+  zirancumin = {
+    email = "zirancumin@hotmail.com";
+    github = "zirancumin";
+    githubId = 204525452;
+    name = "zirancumin";
   };
   Zirconium419122 = {
     name = "Rasmus Liaskar";
