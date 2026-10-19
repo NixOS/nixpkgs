@@ -1465,6 +1465,8 @@ let
           # empty tools/ncl-mode-keywords.el causing native-compiler-error-empty-byte
           ncl-mode = ignoreCompilationError super.ncl-mode;
 
+          nerd-icons = addPackageRequires super.nerd-icons [ pkgs.nerd-fonts.symbols-only ];
+
           # missing optional dependencies
           netease-cloud-music = addPackageRequires super.netease-cloud-music [ self.async ];
 
