@@ -54,13 +54,13 @@
     "vendorHash": "sha256-GIKSIlWD+TTm0EsUu9ga3emENwGLXMDYqp//BmjNwDA="
   },
   "aminueza_minio": {
-    "hash": "sha256-Qyj7913SxoGFWT+0j34sm99e609BxmvQEifVTVMM1AM=",
+    "hash": "sha256-57IhDRu6YrJgXl2bkCeIeRIs4702wb0z/52eJoTAp70=",
     "homepage": "https://registry.terraform.io/providers/aminueza/minio",
     "owner": "aminueza",
     "repo": "terraform-provider-minio",
-    "rev": "v3.44.0",
+    "rev": "v3.45.0",
     "spdx": "AGPL-3.0",
-    "vendorHash": "sha256-wpPKseArd+TbQq03QZZuUHQ/l9ttYFE5o2X1HNmxaNI="
+    "vendorHash": "sha256-hKSqgc+Gf0vzQuXKlErWVC/EbHatu/9oTW25PnRMyxQ="
   },
   "archessmn_powerdns": {
     "hash": "sha256-1bjQFu3k0ERBga94pQ8HZjbfu3qlxnMQLjSkDU6Vp/I=",
