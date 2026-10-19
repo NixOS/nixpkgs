@@ -24,6 +24,10 @@
 
 assert lib.assertMsg (ompdGdbSupport -> ompdSupport) "OMPD GDB support requires OMPD support!";
 
+let
+  # LLVM 23 removed building openmp from /openmp, new entry is through /runtimes
+  useRuntimesBuild = lib.versionAtLeast release_version "23";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openmp";
   inherit version;
@@ -36,15 +40,31 @@ stdenv.mkDerivation (finalAttrs: {
           strictDeps = true;
           __structuredAttrs = true;
         }
-        ''
-          mkdir -p "$out"
-          cp -r ${monorepoSrc}/cmake "$out"
-          cp -r ${monorepoSrc}/openmp "$out"
-        ''
+        (
+          if useRuntimesBuild then
+            ''
+              mkdir -p "$out/llvm"
+              cp -r ${monorepoSrc}/cmake "$out"
+              cp -r ${monorepoSrc}/runtimes "$out"
+              cp -r ${monorepoSrc}/openmp "$out"
+              cp -r ${monorepoSrc}/llvm/cmake "$out/llvm/"
+              cp -r ${monorepoSrc}/llvm/utils "$out/llvm/"
+
+              # openmp/runtime/unittests unconditionally pulls in gtest from
+              # ../third-party/unittest, so it must be present even with tests off.
+              cp -r ${monorepoSrc}/third-party "$out"
+            ''
+          else
+            ''
+              mkdir -p "$out"
+              cp -r ${monorepoSrc}/cmake "$out"
+              cp -r ${monorepoSrc}/openmp "$out"
+            ''
+        )
     else
       src;
 
-  sourceRoot = "${finalAttrs.src.name}/openmp";
+  sourceRoot = "${finalAttrs.src.name}/${if useRuntimesBuild then "runtimes" else "openmp"}";
 
   outputs = [
     "out"
@@ -88,6 +108,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CLANG_TOOL" "${clang-unwrapped}/bin/clang")
     (lib.cmakeFeature "OPT_TOOL" "${llvm}/bin/opt")
     (lib.cmakeFeature "LINK_TOOL" "${llvm}/bin/llvm-link")
+  ]
+  ++ lib.optionals useRuntimesBuild [
+    (lib.cmakeFeature "LLVM_ENABLE_RUNTIMES" "openmp")
   ]
   ++ devExtraCmakeFlags;
 
