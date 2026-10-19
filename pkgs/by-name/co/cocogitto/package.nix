@@ -32,6 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellCompletion --cmd cog \
       --bash <($out/bin/cog generate-completions bash) \
       --fish <($out/bin/cog generate-completions fish) \
+      --nushell <($out/bin/cog generate-completions nu) \
       --zsh  <($out/bin/cog generate-completions zsh)
   '';
 
