@@ -27,13 +27,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "box2d";
-  version = "2.4.2";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "erincatto";
     repo = "box2d";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yvhpgiZpjTPeSY7Ma1bh4LwIokUUKB10v2WHlamL9D8=";
+    hash = "sha256-q+7YbDq+BUQklfduc7+Nfgy6XeAWouehfm8Ct7e++os=";
   };
 
   nativeBuildInputs = [
