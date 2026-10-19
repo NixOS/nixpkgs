@@ -2,11 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  _experimental-update-script-combinators,
   alsa-lib,
   cmake,
   libjack2,
   libpulseaudio,
   libsndfile,
+  nix-update-script,
   pkg-config,
   testers,
   validatePkgConfig,
@@ -93,6 +95,10 @@ stdenv.mkDerivation (finalAttrs: {
         versionCheck = true;
       };
     };
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script { })
+      ./update-signalsmith.sh
+    ];
   };
 
   meta = {
