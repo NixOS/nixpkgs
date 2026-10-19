@@ -55,6 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
       --argv0 $out/bin/guile-lsp-server
   '';
 
+  guileImportsCheck = [ "lsp-server" ];
+
   meta = {
     homepage = "https://codeberg.org/rgherdt/scheme-lsp-server";
     description = "LSP server for Guile";

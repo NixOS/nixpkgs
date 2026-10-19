@@ -24,6 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
+  guileImportsCheck = [ "quickcheck" ];
+
   meta = {
     homepage = "https://ngyro.com/software/guile-quickcheck.html";
     description = "Guile library providing tools for randomized, property-based testing";

@@ -50,6 +50,9 @@ in
     enableXonshIntegration = lib.mkEnableOption "Xonsh integration" // {
       default = true;
     };
+    enableNushellIntegration = lib.mkEnableOption "Nushell integration" // {
+      default = true;
+    };
 
     interactiveOnly =
       lib.mkEnableOption ''
@@ -187,6 +190,20 @@ in
           $STARSHIP_CONFIG = ('${settingsFile}')
         del _os, _sc
         execx($(${cfg.package}/bin/starship init xonsh))
+    '';
+
+    programs.nushell.interactiveShellInit = lib.mkIf cfg.enableNushellIntegration ''
+      if $env.TERM? != "dumb" {
+        let config = $env.STARSHIP_CONFIG? | default ($env.HOME | path join ".config/starship.toml")
+        if ($config | path type) != "file" {
+          $env.STARSHIP_CONFIG = "${settingsFile}"
+        }
+        use ${
+          pkgs.runCommand "starship-nushell-config.nu" { } ''
+            ${cfg.package}/bin/starship init nu > "$out"
+          ''
+        }
+      }
     '';
   };
 
