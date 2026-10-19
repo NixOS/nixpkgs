@@ -5,7 +5,6 @@
   pnpm_11,
   pnpmConfigHook,
   stdenv,
-  gitMinimal,
   fetchFromGitHub,
   electron,
   makeWrapper,
@@ -64,7 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
     pnpmConfigHook
     pnpm
     makeWrapper
-    gitMinimal
   ];
 
   pnpmDeps = fetchPnpmDeps {
@@ -73,11 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
     fetcherVersion = 4;
     hash = "sha256-SNhu04e7QPIHjYAvh4s/NfpqeVEGHfTpUzqFelf7gPI=";
   };
-
-  patchPhase = ''
-    # binary patch unsupported by patch command, requires git apply
-    git apply ${./0001-fix-null-strings.patch}
-  '';
 
   buildPhase = ''
     runHook preBuild
