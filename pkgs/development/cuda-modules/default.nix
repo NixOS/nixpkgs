@@ -139,6 +139,7 @@ let
           autoAddDriverRunpath
           autoPatchelfHook
           fetchurl
+          patchelf
           srcOnly
           stdenv
           stdenvNoCC
