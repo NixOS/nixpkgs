@@ -31,11 +31,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # error-only, hiding warnings the tests assert on.
   env.RUST_LOG = "info";
 
+  # Run tests serially to reduce contention around their fixed startup deadlines.
+  dontUseCargoParallelTests = true;
+
   postInstall = ''
     install -d $out/libexec/bear/bin $out/libexec/bear/lib
     mv $out/bin/bear-driver $out/libexec/bear/bin/
     mv $out/bin/bear-wrapper $out/libexec/bear/bin/
-    mv $out/lib/libexec.so $out/libexec/bear/lib/
+    mv $out/lib/libexec${stdenv.hostPlatform.extensions.sharedLibrary} $out/libexec/bear/lib/
 
     makeWrapper $out/libexec/bear/bin/bear-driver $out/bin/bear
 
