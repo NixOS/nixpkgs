@@ -60,6 +60,26 @@ Additionally, if you prefer to use the friendly GUI,
 nordvpn-gui
 ```
 
+Meshnet and fileshare are supported:
+
+```bash
+nordvpn set meshnet on
+nordvpn mesh peer list
+```
+
+`nordvpnd` never writes to `/etc/hosts`, which NixOS manages declaratively,
+so peer hostnames (e.g. `some-peer.nord`) do not resolve out of the box.
+Map the peers you need via `networking.hosts`, using the IPs shown by
+`nordvpn mesh peer list`:
+
+```nix
+{
+  networking.hosts = {
+    "100.64.0.2" = [ "some-peer.nord" ];
+  };
+}
+```
+
 Some notes on where the NixOS nordvpn service differs from upstream:
 
 - `nordvpnd` runs as an unprivileged user
@@ -67,5 +87,5 @@ Some notes on where the NixOS nordvpn service differs from upstream:
 - `nordvpnd`'s systemd unit applies additional sandboxing,
 further minimizing its blast radius
 
-**Disclaimer:** NixOS currently does not support meshnet.
-Contributions welcome!
+**Disclaimer:** the closed-source nordwhisper protocol is not supported, as
+it requires NordVPN's proprietary `quench` library.

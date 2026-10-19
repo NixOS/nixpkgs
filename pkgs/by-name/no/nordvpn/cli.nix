@@ -10,12 +10,15 @@
   fetchFromGitHub,
   iproute2,
   lib,
+  libdrop,
+  libtelio,
   libxslt,
   makeDesktopItem,
   makeWrapper,
   nftables,
   openvpn,
   procps,
+  sqlite,
   systemdMinimal,
   wireguard-tools,
 }:
@@ -51,12 +54,33 @@ buildGoModule (finalAttrs: {
 
   pname = "nordvpn-cli";
 
+  # adds a --hosts-readonly flag that makes nordvpn never touch /etc/hosts
+  patches = [ ./hosts-readonly.patch ];
+
   nativeBuildInputs = [
     copyDesktopItems
     makeWrapper
   ];
 
+  buildInputs = [
+    libtelio
+    libdrop
+    sqlite
+  ];
+
   vendorHash = "sha256-vqNxPGcxGiEtBOGr+ZJHJNts/N4RMQzAL9DOjk13v/w=";
+
+  env = {
+    CGO_ENABLED = "1";
+    CGO_LDFLAGS = "-L${libtelio}/lib -ltelio -L${libdrop}/lib -lnorddrop";
+  };
+
+  # `moose` and `quench` are the remaining tags and are proprietary/internal only
+  tags = [
+    "telio"
+    "drop"
+    "cdnrc"
+  ];
 
   preBuild = ''
     # redirect AppDataPathStatic (/usr/lib/nordvpn) to $out/bin so that
@@ -74,42 +98,35 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-X main.Environment=prod"
     "-X main.Version=${finalAttrs.version}"
+    # matches upstream's default from .env.sample
+    "-X main.RemotePath=/apps/linux/config"
   ];
 
   subPackages = [
     "cmd/cli"
     "cmd/daemon"
+    "cmd/fileshare"
     "cmd/norduser"
   ];
 
   checkPhase = ''
     runHook preCheck
 
-    go test ./cli/...
-    go test ./fileshare/...
-    go test ./norduser/...
+    export LD_LIBRARY_PATH=${
+      lib.makeLibraryPath [
+        libtelio
+        libdrop
+      ]
+    }''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
+
+    go test -tags "telio drop cdnrc" ./cli/...
+    go test -tags "telio drop cdnrc" ./fileshare/...
+    go test -tags "telio drop cdnrc" ./norduser/...
 
     # skip tests requiring network access, root/CAP_NET_ADMIN,
     # or network state the sandbox doesn't provide
-    # skip libtelio tests as the package lacks meshnet support
-    go test $(go list ./daemon/... | grep -v /daemon/vpn/nordlynx/libtelio) -skip \
-      'Test.*FileList_RealURL|'\
-      'TestAddAllowlistRules|'\
-      'TestAddDevice|'\
-      'TestConnectionInfo_TransferRatesShallBeProvidedOnlyForConnectedState|'\
-      'TestCustomTable|'\
-      'TestDiscoverNameserverIp|'\
-      'TestFwmarkRule|'\
-      'TestH1Transport_RoundTrip|'\
-      'TestMeshnetRuleset|'\
-      'TestMultiFwmarkRule|'\
-      'TestNetlinkManager_SetUnset|'\
-      'TestRouter_Add|'\
-      'TestSetMTU|'\
-      'TestSuppressRule|'\
-      'TestTransports|'\
-      'TestUpWGInterface|'\
-      'TestVPNRuleset'
+    skipPattern='Test.*FileList_RealURL|TestAddAllowlistRules|TestAddDevice|TestConnectionInfo_TransferRatesShallBeProvidedOnlyForConnectedState|TestCustomTable|TestDiscoverNameserverIp|TestFwmarkRule|TestH1Transport_RoundTrip|TestMeshnetRuleset|TestMultiFwmarkRule|TestNetlinkManager_SetUnset|TestRouter_Add|TestSetMTU|TestSuppressRule|TestTransports|TestUpWGInterface|TestVPNRuleset'
+    go test -tags "telio drop cdnrc" ./daemon/... -skip "$skipPattern"
 
     runHook postCheck
   '';
@@ -119,6 +136,7 @@ buildGoModule (finalAttrs: {
     BIN_DIR=$out/bin
     mv $BIN_DIR/cli $BIN_DIR/nordvpn
     mv $BIN_DIR/daemon $BIN_DIR/nordvpnd
+    mv $BIN_DIR/fileshare $BIN_DIR/nordfileshare
     mv $BIN_DIR/norduser $BIN_DIR/norduserd
 
     # nordvpn needs icons for the system tray and notifications
@@ -131,18 +149,34 @@ buildGoModule (finalAttrs: {
   '';
 
   postFixup = ''
-    wrapProgram $out/bin/nordvpnd --prefix PATH : ${
-      lib.makeBinPath [
-        e2fsprogs
-        iproute2
-        libxslt # xsltproc: used to populate OpenVPN configuration files from templates
-        nftables
-        patchedOpenvpn
-        procps
-        systemdMinimal
-        wireguard-tools
+    # `patchelf --add-rpath` corrupts these Go binaries (DYNAMIC segment ends
+    # up inside a read-only LOAD segment, ld.so segfaults writing DT_DEBUG at
+    # startup) -- use a wrapper's LD_LIBRARY_PATH instead.
+    nordvpnLibraryPath=${
+      lib.makeLibraryPath [
+        libtelio
+        libdrop
       ]
     }
+
+    for f in $out/bin/{nordvpn,norduserd,nordfileshare}; do
+      wrapProgram $f --prefix LD_LIBRARY_PATH : "$nordvpnLibraryPath"
+    done
+
+    wrapProgram $out/bin/nordvpnd \
+      --prefix LD_LIBRARY_PATH : "$nordvpnLibraryPath" \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          e2fsprogs
+          iproute2
+          libxslt # xsltproc: used to populate OpenVPN configuration files from templates
+          nftables
+          patchedOpenvpn
+          procps
+          systemdMinimal
+          wireguard-tools
+        ]
+      }
   '';
 
   desktopItems = [
