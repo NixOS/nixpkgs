@@ -22843,6 +22843,12 @@
     githubId = 12677991;
     name = "Ryota Ikezawa";
   };
+  pavelzw = {
+    name = "Pavel Zwerschke";
+    github = "pavelzw";
+    githubId = 29506042;
+    email = "pavelzw@gmail.com";
+  };
   pawelchcki = {
     email = "pawel.chcki@gmail.com";
     github = "pawelchcki";
