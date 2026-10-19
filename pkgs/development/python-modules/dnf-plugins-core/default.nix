@@ -119,7 +119,7 @@ buildPythonPackage rec {
 
   makeWrapperArgs = [
     "--add-flags"
-    "--setopt=pluginpath=$out/${python.sitePackages}/dnf-plugins"
+    "--setopt=pluginpath=${placeholder "out"}/${python.sitePackages}/dnf-plugins"
   ];
 
   meta = {

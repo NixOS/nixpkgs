@@ -73,22 +73,26 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   dontWrapGApps = true;
 
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   makeWrapperArgs = [
-    "\${gappsWrapperArgs[@]}"
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        file
-        _7zz # 7zz
-        which
-        appimage-run
-        desktop-file-utils # update-desktop-database
-        gtk4.dev # gtk4-launch
-        bintools # readelf
-        libnotify # notify-send
-        dwarfs # dwarfsextract, dwarfsck
-        squashfs-tools # unsquashfs
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      file
+      _7zz # 7zz
+      which
+      appimage-run
+      desktop-file-utils # update-desktop-database
+      gtk4.dev # gtk4-launch
+      bintools # readelf
+      libnotify # notify-send
+      dwarfs # dwarfsextract, dwarfsck
+      squashfs-tools # unsquashfs
+    ])
   ];
 
   meta = {

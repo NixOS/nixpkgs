@@ -32,10 +32,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   dontWrapQtApps = true;
   dontWrapGApps = true;
-  makeWrapperArgs = [
-    "\${qtWrapperArgs[@]}"
-    "\${gappsWrapperArgs[@]}"
-  ];
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   postInstall = ''
     substituteInPlace packaging/buttermanager.desktop \

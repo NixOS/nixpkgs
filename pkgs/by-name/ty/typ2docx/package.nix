@@ -69,11 +69,11 @@ python3Packages.buildPythonApplication rec {
     "PATH"
     ":"
     "${lib.makeBinPath [ pandoc ]}"
-    "--prefix"
-    "PYTHONPATH"
-    ":"
-    "$PYTHONPATH"
   ];
+
+  preFixup = ''
+    makeWrapperArgs+=(--prefix PYTHONPATH : "$PYTHONPATH")
+  '';
 
   passthru.updateScript = ./update.sh;
 

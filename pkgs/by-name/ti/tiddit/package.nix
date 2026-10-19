@@ -39,10 +39,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
       fermi2
       ropebwt2
     ])
-    "--set"
-    "PYTHONPATH"
-    "$PYTHONPATH"
   ];
+
+  preFixup = ''
+    makeWrapperArgs+=(--set PYTHONPATH "$PYTHONPATH")
+  '';
 
   meta = {
     homepage = "https://github.com/SciLifeLab/TIDDIT";
