@@ -27,6 +27,7 @@ rustPlatform.buildRustPackage {
     installShellCompletion --cmd pace \
       --bash <($out/bin/pace setup completions bash) \
       --fish <($out/bin/pace setup completions fish) \
+      --nushell <($out/bin/pace setup completions nushell) \
       --zsh <($out/bin/pace setup completions zsh)
   '';
 
