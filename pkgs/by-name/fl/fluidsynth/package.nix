@@ -113,6 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [
       guylamar2006
+      keenanweaver
     ];
     platforms = lib.platforms.unix;
     mainProgram = "fluidsynth";
