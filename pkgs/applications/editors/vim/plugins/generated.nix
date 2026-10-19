@@ -15121,12 +15121,12 @@ final: prev: {
 
   persisted-nvim = buildVimPlugin {
     pname = "persisted.nvim";
-    version = "3.1.0";
+    version = "3.1.1";
     src = fetchFromGitHub {
       owner = "olimorris";
       repo = "persisted.nvim";
-      tag = "v3.1.0";
-      hash = "sha256-DCO1ztkXaS2QJF/nrUB3DQg838MepjiJ+zGUY7z6VFo=";
+      tag = "v3.1.1";
+      hash = "sha256-60EEsubE0DiRpnoTslpvj4pMKK/TjubLA5UxEytuJUI=";
     };
     meta.homepage = "https://github.com/olimorris/persisted.nvim/";
     meta.license = getLicenseFromSpdxId "MIT";
