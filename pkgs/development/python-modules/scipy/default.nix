@@ -67,6 +67,7 @@ buildPythonPackage (finalAttrs: {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail '"pybind11>=2.13.2,<3.1.0",' '"pybind11",' \
+      --replace-fail "meson-python>=0.15.0,<0.22.0" "meson-python>=0.15.0" \
       --replace-fail "Cython>=3.2.0,<3.3.0" "Cython>=3.2.0"
   ''
   + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
