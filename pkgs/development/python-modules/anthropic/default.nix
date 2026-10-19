@@ -13,6 +13,7 @@
   docstring-parser,
   httpx2,
   jiter,
+  opentelemetry-api,
   pydantic,
   sniffio,
   typing-extensions,
@@ -29,6 +30,7 @@
   http-snapshot,
   inline-snapshot,
   nest-asyncio,
+  opentelemetry-sdk,
   pytest-asyncio,
   pytest-xdist,
   pytestCheckHook,
@@ -38,19 +40,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "anthropic";
-  version = "1.8.0";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anthropics";
     repo = "anthropic-sdk-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SWZ00mY28wgL4lgtfDVMmhZct5f8rbfU2NXepwwEadY=";
+    hash = "sha256-w/hQKC74BvWah8bDRgeNsmipk95p36K3J3fQPe/Jj4E=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail '"hatchling==1.26.3"' '"hatchling>=1.26.3"'
+      --replace-fail 'hatchling==' 'hatchling>='
   '';
 
   build-system = [
@@ -63,6 +65,7 @@ buildPythonPackage (finalAttrs: {
     docstring-parser
     httpx2
     jiter
+    opentelemetry-api
     pydantic
     sniffio
     typing-extensions
@@ -85,6 +88,7 @@ buildPythonPackage (finalAttrs: {
     http-snapshot
     inline-snapshot
     nest-asyncio
+    opentelemetry-sdk
     pytest-asyncio
     pytest-xdist
     pytestCheckHook
