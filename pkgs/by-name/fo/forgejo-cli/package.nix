@@ -54,6 +54,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellCompletion --cmd fj \
       --bash <($out/bin/fj completion bash | grep -v '^Could not find keys file. Creating a new file.$') \
       --fish <($out/bin/fj completion fish | grep -v '^Could not find keys file. Creating a new file.$') \
+      --nushell <($out/bin/fj completion nushell | grep -v '^Could not find keys file. Creating a new file.$') \
       --zsh  <($out/bin/fj completion zsh  | grep -v '^Could not find keys file. Creating a new file.$')
   '';
 
