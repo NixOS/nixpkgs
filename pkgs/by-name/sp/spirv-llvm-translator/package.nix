@@ -27,9 +27,9 @@ let
       hash = "sha256-f/91YTqK3yBr/0oxceVKhJsDHj78T+Zt6Vf6iuiUpg4=";
     };
     "20" = rec {
-      version = "20.1.5";
+      version = "20.1.18";
       rev = "v${version}";
-      hash = "sha256-GdlC/Vl61nTNdua2s+CW2YOvkSKK6MNOvBc/393iths=";
+      hash = "sha256-jVnNi5VOqWx8o6AuMfmenrncKUqvb/ii5xb6AhhQ9lE=";
     };
     "19" = rec {
       version = "19.1.10";
