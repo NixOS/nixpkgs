@@ -101,7 +101,9 @@ stdenv.mkDerivation (finalAttrs: {
     };
     version =
       let
-        tester = callPackage ./tests/001-version.nix { };
+        tester = callPackage ./tests/001-version.nix {
+          criterion = finalAttrs.finalPackage;
+        };
       in
       testers.testVersion {
         package = criterion;
