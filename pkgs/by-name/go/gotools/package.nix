@@ -4,6 +4,7 @@
   fetchFromGitHub,
   makeWrapper,
   go,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
@@ -42,6 +43,8 @@ buildGoModule (finalAttrs: {
     wrapProgram $out/bin/goimports \
       --suffix PATH : ${lib.makeBinPath [ go ]}
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Additional tools for Go development";
