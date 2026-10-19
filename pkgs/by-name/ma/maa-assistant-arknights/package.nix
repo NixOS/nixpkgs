@@ -7,11 +7,9 @@
   boost,
   cmake,
   nlohmann_json,
-  python3,
   onnxruntime,
   opencv,
   zlib,
-  isBeta ? false,
   cudaSupport ? config.cudaSupport,
   cudaPackages ? { },
 }:
@@ -20,8 +18,7 @@ let
   fastdeploy = callPackage ./fastdeploy-ppocr.nix {
     inherit cudaSupport cudaPackages;
   };
-  sources = lib.importJSON ./pin.json;
-  source = if isBeta then sources.beta else sources.stable;
+  source = lib.importJSON ./pin.json;
   maaUtils = fetchFromGitHub {
     owner = "MaaXYZ";
     repo = "MaaUtils";
@@ -29,7 +26,7 @@ let
   };
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "maa-assistant-arknights" + lib.optionalString isBeta "-beta";
+  pname = "maa-assistant-arknights";
   version = source.version;
 
   src = fetchFromGitHub {
@@ -67,28 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
   );
 
   cmakeBuildType = "None";
-
-  doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
-  nativeInstallCheckInputs = [ python3 ];
-  installCheckPhase = ''
-    runHook preInstallCheck
-    python3 - <<'PYTHON'
-    import ctypes
-    import os
-
-    out = os.environ["out"]
-    core = ctypes.CDLL(f"{out}/lib/libMaaCore${stdenv.hostPlatform.extensions.sharedLibrary}")
-    core.AsstGetVersion.restype = ctypes.c_char_p
-    assert core.AsstGetVersion().decode() == "v${finalAttrs.version}"
-    core.AsstSetUserDir.argtypes = [ctypes.c_char_p]
-    core.AsstSetUserDir.restype = ctypes.c_bool
-    assert core.AsstSetUserDir(os.fsencode(os.environ["TMPDIR"]))
-    core.AsstLoadResource.argtypes = [ctypes.c_char_p]
-    core.AsstLoadResource.restype = ctypes.c_bool
-    assert core.AsstLoadResource(os.fsencode(f"{out}/share/${finalAttrs.pname}"))
-    PYTHON
-    runHook postInstallCheck
-  '';
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" true)

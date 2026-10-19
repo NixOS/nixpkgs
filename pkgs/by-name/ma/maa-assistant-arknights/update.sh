@@ -16,16 +16,7 @@ prefetch_source() {
         '{version: $version, hash: $hash, maaUtils: {rev: $rev, hash: $utilsHash}}'
 }
 
-version_stable=$(curl -fsSL "https://api.github.com/repos/$repo/releases/latest" | jq -er .tag_name)
-version_beta=$(curl -fsSL "https://api.github.com/repos/$repo/releases?per_page=1" | jq -er '.[0].tag_name')
-
-stable=$(prefetch_source "$version_stable")
-if [[ "$version_beta" == "$version_stable" ]]; then
-    beta="$stable"
-else
-    beta=$(prefetch_source "$version_beta")
-fi
-
-jq -n --argjson stable "$stable" --argjson beta "$beta" \
-    '{stable: $stable, beta: $beta}' > "$directory/pin.json"
+version=$(curl -fsSL "https://api.github.com/repos/$repo/releases/latest" | jq -er .tag_name)
+pin=$(prefetch_source "$version")
+printf '%s\n' "$pin" > "$directory/pin.json"
 cat "$directory/pin.json"

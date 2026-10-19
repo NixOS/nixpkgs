@@ -1,18 +1,8 @@
 {
-  "stable": {
-    "version": "6.20.0",
-    "hash": "sha256-zZH4c/tuFyK5UsSKkJxbRalYsnjzfYXPzau0FC6RDKk=",
-    "maaUtils": {
-      "rev": "6e9ba33f6ad835418097d9324c01c44a82825a2b",
-      "hash": "sha256-g6FoqD3EBldHwgULILmxxR9rJajBP5fm6YJynUA8TFY="
-    }
-  },
-  "beta": {
-    "version": "6.20.0",
-    "hash": "sha256-zZH4c/tuFyK5UsSKkJxbRalYsnjzfYXPzau0FC6RDKk=",
-    "maaUtils": {
-      "rev": "6e9ba33f6ad835418097d9324c01c44a82825a2b",
-      "hash": "sha256-g6FoqD3EBldHwgULILmxxR9rJajBP5fm6YJynUA8TFY="
-    }
+  "version": "6.20.0",
+  "hash": "sha256-zZH4c/tuFyK5UsSKkJxbRalYsnjzfYXPzau0FC6RDKk=",
+  "maaUtils": {
+    "rev": "6e9ba33f6ad835418097d9324c01c44a82825a2b",
+    "hash": "sha256-g6FoqD3EBldHwgULILmxxR9rJajBP5fm6YJynUA8TFY="
   }
 }
