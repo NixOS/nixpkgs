@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   systemd,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
   fcgi,
   autoreconfHook,
   pkg-config,
@@ -20,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-fallthrough";
-  configureFlags = [
+  configureFlags = lib.optionals systemdSupport [
     "--with-systemd"
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
   ];
@@ -29,8 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
     pkg-config
   ];
-  buildInputs = [
-    systemd
+  buildInputs = lib.optionals systemdSupport [ systemd ] ++ [
     fcgi
   ];
 
