@@ -23,7 +23,7 @@
       services.nginx = {
         enable = true;
         package = mkPackage pkgs;
-        additionalModules = [ pkgs.nginxModules.otel ];
+        dynamicModules = ms: [ ms.otel ];
         commonHttpConfig = ''
           otel_exporter {
             endpoint localhost:4317;
@@ -49,9 +49,6 @@
       machine.wait_for_open_port(4317)
       machine.wait_for_unit("nginx")
       machine.wait_for_open_port(80)
-
-      machine.succeed("test -e ${cfg.package}/modules/ngx_otel_module.so")
-      machine.succeed("grep -F ngx_otel_module.so ${cfg.package}/etc/nginx/dynamic-modules.conf")
 
       response = machine.wait_until_succeeds("curl -fsS http://127.0.0.1/")
       t.assertIn("otel-ok", response)
