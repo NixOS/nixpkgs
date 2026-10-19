@@ -7296,15 +7296,6 @@ with pkgs;
     )
   );
 
-  # We should move to dynamic modules and create a nginxFull package with all modules
-  nginxShibboleth = nginxStable.override {
-    modules = [
-      nginxModules.rtmp
-      nginxModules.moreheaders
-      nginxModules.shibboleth
-    ];
-  };
-
   nsdiff = perlPackages.nsdiff;
 
   opencloud-production = callPackage ../by-name/op/opencloud/production.nix { };
