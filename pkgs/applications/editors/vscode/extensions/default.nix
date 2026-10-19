@@ -499,8 +499,8 @@ let
         mktplcRef = {
           publisher = "ban";
           name = "spellright";
-          version = "3.0.154";
-          hash = "sha256-vGzmzY78FOS8ZsrT1YpTNOUJprW4rZHVuM83cZz6V+Q=";
+          version = "3.0.156";
+          hash = "sha256-UHtSqdQ19RT9deshH7F7lZSAgXse/lBFd3xWWcDuGuY=";
         };
         meta = {
           description = "Visual Studio Code extension for Spellchecker";
