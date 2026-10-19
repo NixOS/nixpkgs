@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "boxfort";
-  version = "0.1.8";
+  version = "0.1.9";
 
   __structuredAttrs = true;
   __strictDeps = true;
@@ -21,14 +21,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Snaipe";
     repo = "BoxFort";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-A79IDBDo/pX03aEaXZbmNW+0k/TTtpT1e6HZsLz8I+E=";
+    hash = "sha256-czuMuB6Un/r+ubcaLg1uioyOGGsN6ooKs8Y44shkks4=";
   };
-
-  postPatch = ''
-    # provide the correct version to the pc file
-    substituteInPlace meson.build \
-      --replace-fail "'0.0.1'," "'${finalAttrs.version}',"
-  '';
 
   nativeBuildInputs = [
     meson
