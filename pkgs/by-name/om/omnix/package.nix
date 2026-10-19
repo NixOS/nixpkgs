@@ -107,6 +107,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellCompletion --cmd om \
       --bash <($out/bin/om completion bash) \
       --fish <($out/bin/om completion fish) \
+      --nushell <($out/bin/om completion nushell) \
       --zsh <($out/bin/om completion zsh)
   '';
 
