@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "teslajsonpy";
-  version = "3.13.2";
+  version = "3.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zabuldon";
     repo = "teslajsonpy";
     tag = "v${version}";
-    hash = "sha256-tlw5m8RsBGwVx3h+JlY9rwINMDR6csAt2XefK6AaQWE=";
+    hash = "sha256-EyyDyRoenKY1ZaPGyQz9WwRYWKRbthrNCdq+ms9LNNU=";
   };
 
   build-system = [ poetry-core ];
