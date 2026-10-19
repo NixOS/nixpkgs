@@ -16,8 +16,8 @@
   liburing,
   enableShared ? !stdenv.hostPlatform.isStatic,
   sse42Support ? stdenv.hostPlatform.sse4_2Support,
-  version ? "10.10.1",
-  hash ? "sha256-gszW+YY8ZZ7cRVCIXuahGopqqswNRnagZLUYYmRxzGY=",
+  version ? "11.8.1",
+  hash ? "sha256-zjOo0H8/qA879Lcw5wHp2BZzOhl+/wYluxKD9RCfQ+0=",
 }:
 
 stdenv.mkDerivation (finalAttrs: {
