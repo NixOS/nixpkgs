@@ -7,6 +7,7 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jfmt";
   version = "1.2.1";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "skilly-lily";
