@@ -7,6 +7,7 @@
   ninja,
   python3Packages,
   gitMinimal,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,6 +23,12 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-A79IDBDo/pX03aEaXZbmNW+0k/TTtpT1e6HZsLz8I+E=";
   };
+
+  postPatch = ''
+    # provide the correct version to the pc file
+    substituteInPlace meson.build \
+      --replace-fail "'0.0.1'," "'${finalAttrs.version}',"
+  '';
 
   nativeBuildInputs = [
     meson
@@ -43,10 +50,17 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
   ];
 
+  passthru.tests = {
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+  };
+
   meta = {
     description = "Convenient & cross-platform sandboxing C library";
     homepage = "https://github.com/Snaipe/BoxFort";
     license = lib.licenses.mit;
+    pkgConfigModules = [ "boxfort" ];
     maintainers = with lib.maintainers; [
       sigmanificient
       thesola10
