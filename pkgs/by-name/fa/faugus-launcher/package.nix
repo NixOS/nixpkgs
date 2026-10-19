@@ -12,6 +12,7 @@
   libgudev,
   libmanette,
   lsfg-vk,
+  lsfgSupport ? false,
   meson,
   ninja,
   nix-update-script,
@@ -65,9 +66,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
       --replace-fail "/usr/bin/python3" "${python3Packages.python.interpreter}"
 
     substituteInPlace faugus/path_manager.py \
-      --replace-fail "PathManager.user_data('faugus-launcher/umu-run')" "'${lib.getExe umu-launcher}'" \
+      --replace-fail "PathManager.user_data('faugus-launcher/umu-run')" "'${lib.getExe umu-launcher}'"
+  ''
+  + lib.optionalString lsfgSupport ''
+    substituteInPlace faugus/path_manager.py \
       --replace-fail "/usr/lib/extensions/vulkan/lsfgvk/lib/liblsfg-vk.so" "${lsfg-vk}/lib/liblsfg-vk.so" \
-      --replace-fail "/usr/lib/liblsfg-vk.so" "${lsfg-vk}/lib/liblsfg-vk.so"
+      --replace-fail "/usr/lib/liblsfg-vk-layer.so" "${lsfg-vk}/lib/liblsfg-vk-layer.so"
   '';
 
   preFixup = ''
