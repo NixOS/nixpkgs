@@ -18,7 +18,7 @@
   rocqPackages,
   version ?
     if lib.versionAtLeast ocaml.version "4.13" then
-      "3.8.0"
+      "3.9.2"
     else if lib.versionAtLeast ocaml.version "4.08" then
       "1.20.0"
     else
