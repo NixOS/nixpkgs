@@ -1,0 +1,83 @@
+diff --git a/internal/autostart/autostart.go b/internal/autostart/autostart.go
+index 5cbb147..a626f1e 100644
+--- a/internal/autostart/autostart.go
++++ b/internal/autostart/autostart.go
+@@ -16,6 +16,9 @@ import (
+ // Arg is what magpie is started with at login: the tray, no window.
+ const Arg = "tray"
+ 
++// nixSelf is the installed program, set at build time.
++var nixSelf string
++
+ // Enabled reports whether magpie opens at login.
+ func Enabled() bool { return enabled() }
+ 
+@@ -42,6 +45,12 @@ func self() (string, error) {
+ 	if p := os.Getenv("APPIMAGE"); p != "" {
+ 		return p, nil
+ 	}
++	if nixSelf != "" {
++		if p, err := filepath.EvalSymlinks(nixSelf); err == nil {
++			return p, nil
++		}
++		return nixSelf, nil
++	}
+ 	exe, err := os.Executable()
+ 	if err != nil {
+ 		return "", err
+diff --git a/internal/gui/instance_unix.go b/internal/gui/instance_unix.go
+index 3aea007..5f4fb7e 100644
+--- a/internal/gui/instance_unix.go
++++ b/internal/gui/instance_unix.go
+@@ -38,7 +38,7 @@ func instanceLock(dir, exe string) string {
+ // app bundle, or Homebrew's.
+ func installedCopy(exe string) bool {
+ 	exe = filepath.ToSlash(exe)
+-	return strings.Contains(exe, ".app/Contents/MacOS/") || strings.Contains(exe, "/Cellar/magpie/")
++	return strings.Contains(exe, ".app/Contents/MacOS/") || strings.Contains(exe, "/Cellar/magpie/") || strings.Contains(exe, "/nix/store/")
+ }
+ 
+ // holdInstance takes the lock at path for this process, or reports that
+diff --git a/internal/gui/scheme_linux.go b/internal/gui/scheme_linux.go
+index 301b093..4e15e31 100644
+--- a/internal/gui/scheme_linux.go
++++ b/internal/gui/scheme_linux.go
+@@ -11,6 +11,7 @@ import (
+ 
+ 	"github.com/yetone/magpie/internal/appdir"
+ 	"github.com/yetone/magpie/internal/proc"
++	"github.com/yetone/magpie/internal/update"
+ )
+ 
+ // desktopIcon is the entry's Icon=magpie, put in the user's icon theme: the
+@@ -36,6 +37,9 @@ func dataHome() string {
+ // installed beside it. An entry that already runs this executable, claims
+ // it and names the window class is left alone.
+ func registerScheme() error {
++	if update.NixBuild != "" {
++		return nil
++	}
+ 	// The package supplies the host entry; this executable is inside the sandbox.
+ 	if os.Getenv("FLATPAK_ID") != "" {
+ 		return nil
+diff --git a/internal/update/update.go b/internal/update/update.go
+index 0d4d64d..bfb1a97 100644
+--- a/internal/update/update.go
++++ b/internal/update/update.go
+@@ -103,10 +103,16 @@ func LatestIn(ctx context.Context, lang string) (*Release, error) {
+ 	return &r, nil
+ }
+ 
++// NixBuild marks a build whose updates belong to the package manager.
++var NixBuild string
++
+ // Released reports whether v is a release version rather than a build from
+ // source ("dev", "0bcb2cc-dirty", git describe's "v0.1.0-3-g0bcb2cc");
+ // only releases update themselves.
+ func Released(v string) bool {
++	if NixBuild != "" {
++		return false
++	}
+ 	s := parse(v)
+ 	return s != nil && !describe.MatchString(s.pre) && !strings.Contains(s.pre, "dirty")
+ }

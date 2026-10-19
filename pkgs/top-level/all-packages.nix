@@ -8763,6 +8763,8 @@ with pkgs;
     shelfMultiBand = callPackage ../applications/audio/magnetophonDSP/shelfMultiBand { };
   };
 
+  magpie-cli = callPackage ../by-name/ma/magpie/package.nix { withGui = false; };
+
   mediaelch-qt5 = callPackage ../by-name/me/mediaelch/package.nix { qtVersion = 5; };
   mediaelch-qt6 = mediaelch;
 
