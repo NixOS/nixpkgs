@@ -1045,6 +1045,7 @@ in
   libinput = runTest ./libinput.nix;
   librechat = runTest ./librechat.nix;
   librenms = runTest ./librenms.nix;
+  libreqos = runTest ./libreqos.nix;
   libresprite = runTest ./libresprite.nix;
   libreswan = runTest ./libreswan.nix;
   libreswan-nat = runTest ./libreswan-nat.nix;
