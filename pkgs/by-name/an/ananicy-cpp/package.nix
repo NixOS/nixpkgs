@@ -10,7 +10,7 @@
   systemd,
   libbpf,
   elfutils,
-  bpftools,
+  bpftool,
   pcre2,
   zlib,
   withBpf ? true,
@@ -44,7 +44,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     pkg-config
   ]
   ++ lib.optionals withBpf [
-    bpftools
+    bpftool
   ];
 
   buildInputs = [

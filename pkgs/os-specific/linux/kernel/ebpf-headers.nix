@@ -1,6 +1,6 @@
 {
   lib,
-  bpftools,
+  bpftool,
   kernel,
   runCommand,
 }:
@@ -9,7 +9,7 @@
 # machine even when the kernel targets another architecture.
 runCommand "linux-${kernel.version}-ebpf-headers"
   {
-    nativeBuildInputs = [ bpftools ];
+    nativeBuildInputs = [ bpftool ];
 
     passthru = {
       inherit kernel;

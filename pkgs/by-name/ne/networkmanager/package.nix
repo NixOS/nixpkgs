@@ -8,7 +8,7 @@
   stdenv,
 
   # build
-  bpftools,
+  bpftool,
   clang,
   elfutils,
   gettext,
@@ -178,7 +178,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    bpftools
+    bpftool
     clang
     elfutils # used to find jansson soname
     gettext

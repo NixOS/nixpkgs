@@ -17,7 +17,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "bpftools";
+  pname = "bpftool";
 
   inherit (linuxHeaders) version src;
 

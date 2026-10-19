@@ -8,7 +8,7 @@
   elfutils,
   zlib,
   libpcap,
-  bpftools,
+  bpftool,
   llvmPackages,
   pkg-config,
   m4,
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     emacs-nox # to generate man pages from .org
   ];
   nativeBuildInputs = [
-    bpftools
+    bpftool
     llvmPackages.llvm
     pkg-config
     m4
