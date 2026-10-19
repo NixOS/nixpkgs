@@ -39,6 +39,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellCompletion --cmd zizmor \
       --bash <("$out/bin/zizmor" --completions bash) \
       --zsh <("$out/bin/zizmor" --completions zsh) \
+      --nushell <("$out/bin/zizmor" --completions nushell) \
       --fish <("$out/bin/zizmor" --completions fish)
   '';
 
