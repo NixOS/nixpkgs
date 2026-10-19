@@ -10,6 +10,10 @@ let
   # By default a StateDirectory is used; anything else needs its own directory and a hole in the unit's mount namespace.
   isDefaultDataDir = cfg.dataDir == "/var/lib/comfyui";
 
+  package = cfg.package.override (oldArgs: {
+    extraPackages = ps: (oldArgs.extraPackages or (_: [ ]) ps) ++ cfg.extraPackages ps;
+  });
+
   modelDrvs = map (m: {
     inherit m;
     drv = pkgs.fetchurl (lib.filterAttrs (n: _: n == "name" || n == "url" || n == "hash") m);
@@ -41,6 +45,14 @@ in
 
           Existing state is not migrated, you need to move it yourself.
         '';
+      };
+
+      finalPackage = lib.mkOption {
+        type = lib.types.package;
+        internal = true;
+        readOnly = true;
+        default = package;
+        description = "The final ComfyUI package which is being used in the service.";
       };
 
       listen = lib.mkOption {
@@ -138,6 +150,21 @@ in
           Files placed manually in the `models` directory are left untouched.
         '';
       };
+
+      extraPackages = lib.mkOption {
+        type = lib.types.functionTo (lib.types.listOf lib.types.package);
+        default = _: [ ];
+        defaultText = lib.literalExpression "ps: with ps; [ ]";
+        example = lib.literalExpression ''
+          ps: with ps; [ comfyui-manager ]
+        '';
+        description = ''
+          List of packages to add to ComfyUI's Python environment.
+
+          A popular example is `python3Packages.comfyui-manager` for installing and
+          managing custom nodes from within ComfyUI.
+        '';
+      };
     };
   };
 
@@ -166,7 +193,7 @@ in
       preStart = ''
         for d in custom_nodes input output models; do
           if [[ ! -d "${cfg.dataDir}/$d" ]]; then
-            cp --no-preserve=all -r ${cfg.package}/share/comfyui/$d "${cfg.dataDir}/"
+            cp --no-preserve=all -r ${cfg.finalPackage}/share/comfyui/$d "${cfg.dataDir}/"
           fi
         done
 
@@ -183,7 +210,7 @@ in
       '';
 
       serviceConfig = {
-        ExecStart = "${lib.getExe cfg.package} ${lib.escapeShellArgs cfg.extraArgs}";
+        ExecStart = "${lib.getExe cfg.finalPackage} ${lib.escapeShellArgs cfg.extraArgs}";
         Group = "comfyui";
         Restart = "always";
         RestartSec = "5sec"; # don't crash loop immediately

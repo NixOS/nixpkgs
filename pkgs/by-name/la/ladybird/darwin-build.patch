@@ -8,13 +8,11 @@ when no certificate file was supplied explicitly.
 
 --- a/Libraries/LibGfx/CMakeLists.txt
 +++ b/Libraries/LibGfx/CMakeLists.txt
-@@ -99,6 +99,7 @@
- endif()
+@@ -105,4 +105,5 @@
 
  if (APPLE)
 +    target_link_libraries(LibGfx PRIVATE "-framework CoreText")
-     target_link_libraries(LibCore PUBLIC "-framework Metal")
-     target_link_libraries(LibCore PUBLIC "-framework Accelerate")
+     target_link_libraries(LibGfx PRIVATE "-framework Metal" "-framework Accelerate")
  endif()
 --- a/Meta/CMake/compile_options.cmake
 +++ b/Meta/CMake/compile_options.cmake
