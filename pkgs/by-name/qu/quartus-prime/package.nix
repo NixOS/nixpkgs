@@ -276,6 +276,10 @@ buildFHSEnv (finalAttrs: {
         standard = {
           # quartus-prime-standard requires a license to run synthesis so we can't run tests here :(
         };
+        pro = {
+          # No encrypted models to test in questa_fse/intel/verilog/src
+          # Hangs on the buildSof test (due to issues with faketime?)
+        };
       }
       .${variant};
   };
