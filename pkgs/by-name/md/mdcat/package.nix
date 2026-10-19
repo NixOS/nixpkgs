@@ -15,13 +15,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdcat";
-  version = "2.18.0";
+  version = "2.19.0";
 
   src = fetchFromGitHub {
     owner = "BIRSAx2";
     repo = "mdcat";
     rev = "mdcat-${version}";
-    hash = "sha256-wCWyOSiKvKEJltswRoZuzo+6Pfs+dS4V7uCCXukB7aE=";
+    hash = "sha256-DJa6NPO8P5AjtVh7AuEZSPFN5pGuis3SIZI7rX00Eik=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  cargoHash = "sha256-ujwqV0LSHxW9lWigHr7B6CeSL3PAVWgc2g4ZggNpHJg=";
+  cargoHash = "sha256-QU8TNWPN29aFGvwd8DXAfdZPub9aczXBRQ+vUcIBGBM=";
 
   nativeCheckInputs = [
     # mdpick test pipes through `less -r`
