@@ -1,0 +1,36 @@
+diff --git a/src/main.cpp b/src/main.cpp
+index 001749c..8a7399a 100644
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -148,16 +148,28 @@ PYBIND11_MODULE(libnixstore_wrapper, m) {
+                 nix::GCOptions::GCAction action,
+                 std::optional<nix::StorePathSet> paths_to_delete
+             ){
+-                nix::GCOptions options;
++                nix::GCOptions options{};
+                 options.action = action;
+                 if (paths_to_delete.has_value()) {
++#if NIX_VERSION_MINOR >= 35
++                    options.pathsToDelete = nix::GCOptions::SpecificPaths{
++                        .paths = std::move(paths_to_delete.value()),
++                        .deleteReferrers = false,
++                    };
++#else
+                     options.pathsToDelete = std::move(paths_to_delete.value());
++#endif
+                 }
+ 
+                 nix::GCResults results;
+ 
+-                // TODO figure out why clang/darwin won't allow casting
+-                // to a nix::GcStore and remove this nasty hack
++                // Work around vtable pinning issue in fixed in nix 2.35 in:
++                // * https://github.com/NixOS/nix/pull/15770
++                // * https://github.com/NixOS/nix/pull/15924
++                // This poses an issue on darwin where typeinfo ends up being copied
++                // into a dylib and pointer equality of typeinfo makes the dynamic_cast
++                // fail. This is not an issue on Linux.
++                // TODO: Get rid of this hack once nix >= 2.35 is used throughout.
+                 try {
+                     dynamic_cast<nix::GcStore&>(store).collectGarbage(options, results);
+                 } catch (const std::bad_cast& e) {

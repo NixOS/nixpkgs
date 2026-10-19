@@ -19,14 +19,19 @@ python3Packages.buildPythonPackage rec {
     hash = "sha256-T/PKn005gkALJP2FfHfWJj5UIRP9IYkvMOT3+kMY3Wo=";
   };
 
+  patches = [
+    # https://github.com/risicle/nix-heuristic-gc/pull/17
+    ./0001-nix-2.35.patch
+  ];
+
   # NIX_SYSTEM suggested at
   # https://github.com/NixOS/nixpkgs/issues/386184#issuecomment-2692433531
-  env.NIX_SYSTEM = nixVersions.nixComponents_2_31.nix-store.stdenv.hostPlatform.system;
+  env.NIX_SYSTEM = nixVersions.nixComponents_2_35.nix-store.stdenv.hostPlatform.system;
 
   buildInputs = [
     boost
-    nixVersions.nixComponents_2_31.nix-store
-    nixVersions.nixComponents_2_31.nix-main
+    nixVersions.nixComponents_2_35.nix-store
+    nixVersions.nixComponents_2_35.nix-main
     python3Packages.pybind11
     python3Packages.setuptools
   ];
