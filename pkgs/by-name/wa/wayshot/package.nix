@@ -63,6 +63,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellCompletion --cmd wayshot \
       --bash <($out/bin/wayshot --completions bash) \
       --fish <($out/bin/wayshot --completions fish) \
+      --nushell <($out/bin/wayshot --completions nushell) \
       --zsh <($out/bin/wayshot --completions zsh)
   '';
 
