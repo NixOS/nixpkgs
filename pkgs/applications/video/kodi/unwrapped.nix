@@ -20,7 +20,7 @@
   avahi,
   lame,
   gettext,
-  pcre-cpp,
+  pcre2,
   yajl,
   fribidi,
   which,
@@ -263,6 +263,15 @@ stdenv.mkDerivation (
         url = "https://github.com/xbmc/xbmc/commit/29492cbd20d4c90a9c00a30ab525d4d0e81a968b.patch";
         hash = "sha256-WNaODPCtRfn30jVU5HbBnAO2Vl/MQp2CYmKOTTyDGZI=";
       })
+
+      # Upstream only support pcre-cpp which is deprecated and to be removed
+      # from nixpkgs. This patch moves all usages to pcre2
+      # See https://github.com/xbmc/xbmc/issues/23184
+      (fetchpatch {
+        name = "kodi-21.3-pcre2.patch";
+        url = "https://gitlab.archlinux.org/archlinux/packaging/packages/kodi/-/raw/9fdc116256e7c610e2045d5bc6fb3c234234a88d/kodi-21.3-pcre2.patch";
+        hash = "sha256-PJXfuZl8f4WfTjtL5CFMDEQuB40tlTWu7LvkBUeX5DE=";
+      })
     ];
 
     # make  derivations declared in the let binding available here, so
@@ -287,7 +296,7 @@ stdenv.mkDerivation (
       boost
       libmicrohttpd
       gettext
-      pcre-cpp
+      pcre2
       yajl
       fribidi
       libva
