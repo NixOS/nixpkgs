@@ -1292,6 +1292,10 @@ mapAliases {
   jpegrescan = throw "'jpegrescan' has been removed due to being archived upstream. Use mozjpeg instead."; # Added 2026-09-18
   jscoverage = throw "jscoverage has been removed, as it was broken"; # Added 2025-08-25
   jsduck = throw "jsduck has been removed, as it was broken and unmaintained upstream."; # Added 2025-12-02
+  julia_111 = throw "'julia_111' has been removed from nixpkgs as it has reached end of life"; # Added 2026-10-19
+  julia_111-bin = throw "'julia_111-bin' has been removed from nixpkgs as it has reached end of life"; # Added 2026-10-19
+  julia_112 = throw "'julia_112' has been removed from nixpkgs as it has reached end of life."; # Added 2026-10-19
+  julia_112-bin = throw "'julia_112-bin' has been removed from nixpkgs as it has reached end of life"; # Added 2026-10-19
   jwm-settings-manager = throw "'jwm-settings-manager' has been removed, as it is unmaintained upstream"; # Added 2026-08-01
   k3s_1_30 = throw "'k3s_1_30' has been removed from nixpkgs as it has reached end of life"; # Added 2025-09-01
   k3s_1_31 = throw "'k3s_1_31' has been removed from nixpkgs as it has reached end of life"; # Added 2025-12-08

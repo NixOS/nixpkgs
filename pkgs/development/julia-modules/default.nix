@@ -233,9 +233,7 @@ let
           "${dependencyUuidToRepoYaml}" \
           "${closureYaml}" \
           "${juliaWrapped}/bin/julia" \
-          "${
-            if lib.versionAtLeast julia.version "1.7" then ./extract_artifacts.jl else ./extract_artifacts_16.jl
-          }" \
+          "${./extract_artifacts.jl}" \
           '${lib.generators.toJSON { } (import ./extra-libs.nix)}' \
           '${lib.generators.toJSON { } (stdenv.hostPlatform.isDarwin)}' \
           "$out"
