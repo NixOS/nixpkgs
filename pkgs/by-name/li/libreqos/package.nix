@@ -8,7 +8,7 @@
   nixosTests,
   # bpf
   llvmPackages,
-  bpftools,
+  bpftool,
   libbpf,
   elfutils,
   zlib,
@@ -116,7 +116,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
 
   nativeBuildInputs = [
-    bpftools
+    bpftool
     esbuild
     llvmPackages.clang-unwrapped
     llvmPackages.llvm
