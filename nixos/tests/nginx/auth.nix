@@ -1,8 +1,12 @@
-{ pkgs, ... }:
 {
-  name = "nginx-auth";
+  mkPackage ? builtins.getAttr "nginx",
+  name ? "default",
+  ...
+}:
+{
+  name = "nginx-auth-${name}";
 
-  nodes = {
+  containers = {
     webserver =
       { pkgs, lib, ... }:
       {
@@ -15,6 +19,7 @@
           in
           {
             enable = true;
+            package = mkPackage pkgs;
 
             virtualHosts.lockedroot = {
               inherit root;

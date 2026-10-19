@@ -1270,16 +1270,11 @@ in
   nfs4 = handleTest ./nfs { version = 4; };
   nghttpx = runTest ./nghttpx.nix;
   nginx = import ./nginx { inherit lib runTest; };
-  nginx-auth = runTest ./nginx-auth.nix;
   nginx-http3 = import ./nginx-http3.nix { inherit pkgs runTest; };
-  nginx-lua = runTest ./nginx-lua.nix;
   nginx-mime = runTest ./nginx-mime.nix;
   nginx-proxyprotocol = runTest ./nginx-proxyprotocol/default.nix;
   nginx-pubhtml = runTest ./nginx-pubhtml.nix;
   nginx-sso = runTest ./nginx-sso.nix;
-  nginx-status-page = runTest ./nginx-status-page.nix;
-  nginx-tmpdir = runTest ./nginx-tmpdir.nix;
-  nginx-unix-socket = runTest ./nginx-unix-socket.nix;
   nginx-variants = import ./nginx-variants.nix { inherit runTest; };
   nifi = runTestOn [ "x86_64-linux" ] ./web-apps/nifi.nix;
   nimdow = runTest ./nimdow.nix;

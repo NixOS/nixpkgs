@@ -1,13 +1,18 @@
-{ pkgs, ... }:
 {
-  name = "nginx-status-page";
-  meta = with pkgs.lib.maintainers; {
+  lib,
+  name ? "default",
+  mkPackage ? builtins.getAttr "nginx",
+  ...
+}:
+{
+  name = "nginx-status-page-${name}";
+  meta = with lib.maintainers; {
     maintainers = [ h7x4 ];
   };
 
   nodes = {
     webserver =
-      { ... }:
+      { pkgs, ... }:
       {
         virtualisation.vlans = [ 1 ];
 
@@ -24,6 +29,7 @@
 
         services.nginx = {
           enable = true;
+          package = mkPackage pkgs;
           statusPage = true;
           virtualHosts."localhost".locations."/index.html".return = "200 'hello world\n'";
         };
@@ -32,7 +38,7 @@
       };
 
     client =
-      { ... }:
+      { pkgs, ... }:
       {
         virtualisation.vlans = [ 1 ];
 
