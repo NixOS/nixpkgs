@@ -55,9 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Silence some warnings during docbuild. Imported from Arch.
     ./patches/sagedoc-silence-formatting-warnings.patch
 
-    # Workaround for https://github.com/cython/cython/pull/6755, adapted from Void. Can be removed after next Cython release.
-    ./patches/workaround-cython-relpaths.patch
-
     # Revert https://github.com/sagemath/sage/pull/40520. It causes
     # "undefined symbol: cblas_ctrmv" errors.
     ./patches/revert-blas-mesonification.patch
