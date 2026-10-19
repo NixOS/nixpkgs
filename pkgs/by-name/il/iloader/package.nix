@@ -118,7 +118,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/nab138/iloader";
     license = lib.licenses.mit;
     mainProgram = "iloader";
-    maintainers = with lib.maintainers; [ ern775 ];
+    maintainers = with lib.maintainers; [
+      ern775
+      mirdukkkkk
+    ];
     platforms = [
       "aarch64-linux"
       "x86_64-linux"
