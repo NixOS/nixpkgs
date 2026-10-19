@@ -107,7 +107,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # replace /proc pentium check with a true statement. this allows usage under emulation.
     substituteInPlace $out/quartus/adm/qenv.sh \
-      --replace-fail 'grep sse /proc/cpuinfo > /dev/null 2>&1' ':'
+      --replace-fail 'grep ${
+        if variant == "pro" then "sse4_2" else "sse"
+      } /proc/cpuinfo > /dev/null 2>&1' ':'
   '';
 
   passthru =
