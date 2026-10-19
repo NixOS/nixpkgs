@@ -2,13 +2,15 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  testers,
-  vpcs,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vpcs";
   version = "0.8.4";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "GNS3";
@@ -34,10 +36,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  passthru.tests.version = testers.testVersion {
-    package = vpcs;
-    command = "vpcs -v";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-v";
+  doInstallCheck = true;
 
   meta = {
     description = "Simple virtual PC simulator";
@@ -46,7 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
       ping/traceroute them, or ping/traceroute the other hosts/routers from the
       VPCS when you study the Cisco routers in the dynamips.
     '';
-    inherit (finalAttrs.src.meta) homepage;
+    homepage = "https://github.com/GNS3/vpcs";
+    changelog = "https://github.com/GNS3/vpcs/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "vpcs";
