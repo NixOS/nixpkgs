@@ -58,9 +58,9 @@ EMACS-PROGRAM specifies the subprocess Emacs to start."
                      "--eval" (format "(prin1 %S)" form))
     (`(,result) (read result))))
 
-(defvar with-packages-unwrapped-emacs-program nil
-  "Absoluate file of an unwrapped Emacs binary.
-Set this variable before running related tests.")
+(defconst with-packages-unwrapped-emacs-program
+  "@unwrappedEmacs@"
+  "Absoluate file of an unwrapped Emacs binary.")
 
 ;;;; Tests that can be run in a batch Emacs
 
@@ -69,7 +69,6 @@ Set this variable before running related tests.")
   (should (package-installed-p 'flx-ido))
   ;; Test 23d4bfb6661ca57a9e331a2cf4184232d38ac38b.
   (ert-info ("unwrapped subprocess Emacs does not have requested packages installed")
-    (should (file-name-absolute-p with-packages-unwrapped-emacs-program))
     (should-not (with-packages-eval-in-sub-emacs '(package-installed-p 'dash)
                                                  with-packages-unwrapped-emacs-program))
     (should-not (with-packages-eval-in-sub-emacs '(package-installed-p 'flx-ido)
@@ -155,7 +154,6 @@ Set this variable before running related tests.")
     (should (equal (file-truename (executable-find "emacs"))
                    (concat invocation-directory invocation-name))))
   (ert-info ("unwrapped subprocess Emacs has correct invocation-name and -directory")
-    (should (file-name-absolute-p with-packages-unwrapped-emacs-program))
     (should
      (equal with-packages-unwrapped-emacs-program
             (with-packages-eval-in-sub-emacs '(concat invocation-directory invocation-name)
@@ -277,6 +275,17 @@ This is a regression test for URL `https://github.com/NixOS/nixpkgs/pull/538964'
               (and (not (file-exists-p eln-dir))
                    (file-exists-p (file-name-parent-directory eln-dir)))))))
 
+(defun with-packages-fonts-of-requested-packages-are-available ()
+  (let ((font "Hack"))
+    (append
+     (let ((graphical-frame (make-frame-on-display (getenv "DISPLAY"))))
+       (unwind-protect
+           (list (display-graphic-p graphical-frame)
+                 (member font (font-family-list graphical-frame)))
+         (delete-frame graphical-frame)))
+     ;; Subprocess does not see wrapper-added fonts.
+     (list (equal 1 (call-process "fc-list" nil nil nil "--quiet" font))))))
+
 (define-with-packages-non-batch-ert-tests
   with-packages-early-default-is-loaded
   with-packages-default-is-loaded
@@ -286,6 +295,13 @@ This is a regression test for URL `https://github.com/NixOS/nixpkgs/pull/538964'
 (define-with-packages-non-batch-ert-test
     with-packages-no-jit-native-comp
   (skip-unless (native-comp-available-p)))
+
+(define-with-packages-non-batch-ert-test
+    with-packages-fonts-of-requested-packages-are-available
+  :expected-result (if (eq system-type 'darwin) :failed :passed)
+  :tags '(:font)
+  ;; Skip if this Emacs cannot create graphical frames.
+  (skip-unless (fboundp 'x-create-frame)))
 
 (provide 'with-packages)
 
