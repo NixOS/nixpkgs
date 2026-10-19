@@ -81,7 +81,7 @@ callPackage ../nginx/generic.nix args rec {
   ];
 
   passthru = {
-    tests = {
+    tests = nixosTests.openresty // {
       inherit (nixosTests) openresty-lua;
       inherit (nixosTests.nginx-variants) openresty;
     };

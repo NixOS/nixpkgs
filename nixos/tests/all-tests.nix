@@ -282,6 +282,7 @@ in
   amd-sev = runTest ./amd-sev.nix;
   amuled = runTest ./amuled.nix;
   android-translation-layer = runTest ./android-translation-layer.nix;
+  angie = import ./angie.nix { inherit lib runTest; };
   angie-api = runTest ./angie-api.nix;
   angrr = runTest ./angrr.nix;
   anki-sync-server = runTest ./anki-sync-server.nix;
@@ -1376,6 +1377,7 @@ in
     _module.args.name = "opencloud-production";
   };
   openldap = runTest ./openldap.nix;
+  openresty = import ./openresty.nix { inherit lib runTest; };
   openresty-lua = runTest ./openresty-lua.nix;
   opensearch = discoverTests (import ./opensearch.nix);
   opensearch-dashboards = handleTest ./opensearch-dashboards.nix { };
