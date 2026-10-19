@@ -62,8 +62,6 @@ let
 
   moduleNames = map (mod: mod.pname) modules;
 
-  dynamicModules = lib.filter (mod: mod.dynamic or false) modules;
-
   mapModules =
     attrPath:
     lib.flip lib.concatMap modules (
@@ -188,7 +186,6 @@ mkDerivation (finalAttrs: {
   ++ lib.optional (
     stdenv.buildPlatform != stdenv.hostPlatform
   ) "--crossbuild=${stdenv.hostPlatform.uname.system}::${stdenv.hostPlatform.uname.processor}"
-  ++ lib.optional (dynamicModules != [ ]) "--modules-path=${placeholder "out"}/modules"
   ++ configureFlags;
 
   env = {
@@ -303,19 +300,7 @@ mkDerivation (finalAttrs: {
   inherit stripDebugList;
 
   postInstall =
-    let
-      dynamicPost = lib.optionalString (dynamicModules != [ ]) ''
-        shopt -s nullglob
-        sofiles=("$out"/modules/*.so)
-        if (( ''${#sofiles[@]} == 0 )); then
-          echo "nginx: dynamic modules were requested but no .so was produced in $out/modules" >&2
-          exit 1
-        fi
-        mkdir -p "$out/etc/nginx"
-        printf 'load_module %s;\n' "''${sofiles[@]}" > "$out/etc/nginx/dynamic-modules.conf"
-      '';
-    in
-    postInstall + dynamicPost + ''
+    postInstall + ''
       mkdir -p $dev/include/nginx $dev/nix-support/
       find src objs -name '*.h' -not -path 'src/os/win32/*' -print0 | xargs -0 -I {} cp -v {} $dev/include/nginx
 
@@ -344,7 +329,7 @@ mkDerivation (finalAttrs: {
         };
     };
 
-    inherit modules dynamicModules flavor;
+    inherit modules flavor;
     tests =
       passthru.tests or {
         inherit (nixosTests.nginx.${flavor})

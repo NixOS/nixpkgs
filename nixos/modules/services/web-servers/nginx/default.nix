@@ -214,10 +214,6 @@ let
 
         # load_module is a main-context directive that must precede events{}/http{}.
         ${optionalString (
-          (cfg.package.dynamicModules or [ ]) != [ ]
-        ) "include ${cfg.package}/etc/nginx/dynamic-modules.conf;"}
-
-        ${optionalString (
           dynamicModules != [ ]
         ) "include ${dynamicModulesImport}/etc/nginx/dynamic-modules.conf;"}
 
