@@ -51,6 +51,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       installShellCompletion --cmd pixi \
         --bash <(${emulator} $out/bin/pixi completion --shell bash) \
         --fish <(${emulator} $out/bin/pixi completion --shell fish) \
+        --nushell <(${emulator} $out/bin/pixi completion --shell nushell) \
         --zsh <(${emulator} $out/bin/pixi completion --shell zsh)
     ''
   );
