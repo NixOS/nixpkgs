@@ -2,7 +2,8 @@
   autoPatchelfHook,
   bun,
   copyDesktopItems,
-  electron_42,
+  darwin,
+  electron_44,
   lib,
   makeBinaryWrapper,
   makeDesktopItem,
@@ -17,7 +18,7 @@
 }:
 
 let
-  electron = electron_42;
+  electron = electron_44;
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencode-desktop";
@@ -36,18 +37,23 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   autoPatchelfIgnoreMissingDeps = [ "libc.musl-*.so.*" ];
 
   postPatch =
-    # The auto-updater would try to download and run an upstream binary that
-    # isn't patched for Nix. Disable it at source.
-    ''
-      substituteInPlace packages/desktop/src/main/constants.ts \
-        --replace-fail 'app.isPackaged && CHANNEL !== "dev"' 'false'
-    ''
-    +
     # Relax Bun version check to be a warning instead of an error
     ''
       substituteInPlace packages/script/src/index.ts \
         --replace-fail 'throw new Error(`This script requires bun@''${expectedBunVersionRange}' \
                        'console.warn(`Warning: This script requires bun@''${expectedBunVersionRange}'
+    ''
+    + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+      substituteInPlace packages/desktop/scripts/utils.ts \
+        --replace-fail 'await $`codesign --force --sign - ''${dest}`' 'true'
+    ''
+    + lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
+      substituteInPlace \
+        packages/desktop/src/main/windows/appearance.ts \
+        packages/desktop/src/main/windows/early.ts \
+        packages/desktop/src/main/service/desktop-cli.ts \
+        packages/desktop/src/main/service/sidecar-probe.ts \
+        --replace-fail "process.resourcesPath" "'$out/opt/opencode-desktop/resources'"
     '';
 
   nativeBuildInputs = [
@@ -59,6 +65,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [
     autoPatchelfHook
     copyDesktopItems
+  ]
+  ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
+    darwin.autoSignDarwinBinariesHook
   ];
 
   buildInputs = lib.optionals stdenvNoCC.hostPlatform.isLinux [
@@ -77,7 +86,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   configurePhase = ''
     runHook preConfigure
 
-    cp -R ${finalAttrs.node_modules}/. .
+    cp -R "$node_modules"/. .
     patchShebangs node_modules
     patchShebangs packages/*/node_modules
 
@@ -99,29 +108,29 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    # Build the opencode node bundle (needed by the desktop sidecar)
-    cd packages/opencode
-    bun --bun ./script/build-node.ts --skip-install
-    cd ../..
-
-    # Prepare desktop app
     cd packages/desktop
 
     # Copy prod icons
-    cp -R icons/prod resources/icons
+    mkdir -p resources/icons
+    cp -R icons/prod/* resources/icons/
+
+    export OPENCODE_CLI_DIST="$TMPDIR/desktop-cli"
+    cli_package=$(bun -e 'import { getCurrentCli } from "./scripts/utils.ts"; console.log(getCurrentCli().package.replace("@opencode/", ""))')
+    mkdir -p "$OPENCODE_CLI_DIST/$cli_package/bin"
+    cp ${lib.getExe opencode} "$OPENCODE_CLI_DIST/$cli_package/bin/opencode"
+    echo '{"version":"${opencode.version}"}' > "$OPENCODE_CLI_DIST/$cli_package/package.json"
 
     # Build with electron-vite
-    node_modules/.bin/electron-vite build
+    bun run build
 
     # Package with electron-builder (unpacked directory mode)
     cp -r "${electron.dist}" $HOME/.electron-dist
     chmod -R u+w $HOME/.electron-dist
 
-    node_modules/.bin/electron-builder --dir \
+    npx electron-builder --dir \
       --config=electron-builder.config.ts \
       --config.electronDist="$HOME/.electron-dist" \
       --config.electronVersion=${electron.version} \
-      --config.asarUnpack='**/*.node' \
       ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin "--config.mac.identity=null"}
 
     cd ../..
@@ -150,7 +159,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       (lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
         mkdir -p $out/Applications $out/bin
         mv packages/desktop/dist/mac-*/OpenCode.app "$out/Applications/OpenCode.app"
-        ln -s "$out/Applications/OpenCode.app/Contents/MacOS/OpenCode" $out/bin/opencode-desktop
+        makeWrapper "$out/Applications/OpenCode.app/Contents/MacOS/OpenCode" $out/bin/opencode-desktop
       '')
       (lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
         mkdir -p $out/opt/opencode-desktop
@@ -184,9 +193,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     description = "AI coding agent desktop client";
     homepage = "https://opencode.ai";
-    inherit (opencode.meta) changelog platforms;
+    inherit (opencode.meta)
+      changelog
+      maintainers
+      platforms
+      ;
     license = lib.licenses.mit;
     mainProgram = "opencode-desktop";
-    maintainers = with lib.maintainers; [ xiaoxiangmoe ];
   };
 })
