@@ -55,13 +55,11 @@ stdenv.mkDerivation {
   inherit (branch) version;
 
   src = fetchFromGitHub {
+    name = "spirv-llvm-translator-${branch.rev}-source";
     owner = "KhronosGroup";
     repo = "SPIRV-LLVM-Translator";
     inherit (branch) rev hash;
   };
-
-  # TODO: Remove.
-  patches = [ ];
 
   nativeBuildInputs = [
     pkg-config
