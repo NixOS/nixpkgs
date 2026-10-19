@@ -341,7 +341,6 @@ mkDerivation {
         inherit (nixosTests)
           nginx-http3
           ;
-        variants = lib.recurseIntoAttrs nixosTests.nginx-variants;
         acme-integration = nixosTests.acme.nginx;
         acme-integration-without-reload = nixosTests.acme.nginx-without-reload;
       };

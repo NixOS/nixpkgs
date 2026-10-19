@@ -83,7 +83,6 @@ callPackage ../nginx/generic.nix args rec {
   passthru = {
     tests = nixosTests.openresty // {
       inherit (nixosTests) openresty-lua;
-      inherit (nixosTests.nginx-variants) openresty;
     };
     updateScript = lib.getExe (writeShellApplication {
       name = "openresty-update";
