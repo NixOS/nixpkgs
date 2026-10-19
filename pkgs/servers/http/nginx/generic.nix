@@ -326,19 +326,20 @@ mkDerivation {
           globalredirect
           grpc-error-pages
           lua
+          mime
           modsecurity
           moreheaders
           njs
           otel
+          proxyprotocol
+          pubhtml
+          sso
           status-page
           tmpdir
           unix-socket
           ;
         inherit (nixosTests)
           nginx-http3
-          nginx-proxyprotocol
-          nginx-pubhtml
-          nginx-sso
           ;
         variants = lib.recurseIntoAttrs nixosTests.nginx-variants;
         acme-integration = nixosTests.acme.nginx;
