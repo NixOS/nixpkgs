@@ -62,12 +62,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     makeBinaryWrapper
     writableTmpDirAsHomeHook
   ]
+  ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
+    darwin.autoSignDarwinBinariesHook
+  ]
   ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [
     autoPatchelfHook
     copyDesktopItems
-  ]
-  ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
-    darwin.autoSignDarwinBinariesHook
   ];
 
   buildInputs = lib.optionals stdenvNoCC.hostPlatform.isLinux [
@@ -195,10 +195,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://opencode.ai";
     inherit (opencode.meta)
       changelog
+      license
       maintainers
       platforms
       ;
-    license = lib.licenses.mit;
     mainProgram = "opencode-desktop";
   };
 })
