@@ -4,7 +4,7 @@
   rustPlatform,
   pkg-config,
   udev,
-  runtimeShell,
+  runtimeShellPackage,
   libnotify,
   nix-update-script,
 }:
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/dispatcher.rs \
-      --replace-fail '"sh"' '"${runtimeShell}"' \
+      --replace-fail '"sh"' '"${lib.getExe' runtimeShellPackage "sh"}"' \
       --replace-fail '"notify-send"' '"${lib.getExe' libnotify "notify-send"}"'
   '';
 
