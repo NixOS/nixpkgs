@@ -76,6 +76,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       installShellCompletion --cmd tinymist \
         --bash <(${emulator} $out/bin/tinymist completion bash) \
         --fish <(${emulator} $out/bin/tinymist completion fish) \
+        --nushell <(${emulator} $out/bin/tinymist completion nushell) \
         --zsh <(${emulator} $out/bin/tinymist completion zsh)
     ''
   );
