@@ -14,6 +14,7 @@ recurseIntoAttrs (
       callTest = path: runTest (import path { inherit mkPackage name lib; });
     in
     mapAttrs (const callTest) {
+      auth = ./auth.nix;
       basic = ./basic.nix;
       compression = ./compression.nix;
       etag = ./etag.nix;
@@ -21,10 +22,14 @@ recurseIntoAttrs (
       globalredirect = ./globalredirect.nix;
       dynamic-modules = ./dynamic-modules.nix;
       grpc-error-pages = ./grpc-error-pages.nix;
+      lua = ./lua.nix;
       modsecurity = ./modsecurity.nix;
       moreheaders = ./moreheaders.nix;
       njs = ./njs.nix;
       otel = ./otel.nix;
+      status-page = ./status-page.nix;
+      tmpdir = ./tmpdir.nix;
+      unix-socket = ./unix-socket.nix;
     }
   ) packages
 )

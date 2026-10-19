@@ -318,26 +318,27 @@ mkDerivation {
     tests =
       passthru.tests or {
         inherit (nixosTests.nginx.${flavor})
+          auth
           basic
           etag
           etag-compression
           dynamic-modules
           globalredirect
           grpc-error-pages
+          lua
           modsecurity
           moreheaders
           njs
           otel
+          status-page
+          tmpdir
+          unix-socket
           ;
         inherit (nixosTests)
-          nginx-auth
           nginx-http3
-          nginx-lua
           nginx-proxyprotocol
           nginx-pubhtml
           nginx-sso
-          nginx-status-page
-          nginx-unix-socket
           ;
         variants = lib.recurseIntoAttrs nixosTests.nginx-variants;
         acme-integration = nixosTests.acme.nginx;
