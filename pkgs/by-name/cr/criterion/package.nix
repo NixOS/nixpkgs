@@ -95,19 +95,25 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  passthru.tests.version =
-    let
-      tester = callPackage ./tests/001-version.nix { };
-    in
-    testers.testVersion {
-      package = criterion;
-      command = "${lib.getExe tester} --version";
-      version = "v${finalAttrs.version}";
+  passthru.tests = {
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
     };
+    version =
+      let
+        tester = callPackage ./tests/001-version.nix { };
+      in
+      testers.testVersion {
+        package = criterion;
+        command = "${lib.getExe tester} --version";
+        version = "v${finalAttrs.version}";
+      };
+  };
 
   meta = {
     description = "Cross-platform C and C++ unit testing framework for the 21th century";
     homepage = "https://github.com/Snaipe/Criterion";
+    pkgConfigModules = [ "criterion" ];
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       thesola10
