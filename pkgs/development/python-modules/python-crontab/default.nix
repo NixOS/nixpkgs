@@ -12,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   version = "3.4.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitLab {
     owner = "doctormo";
     repo = "python-crontab";

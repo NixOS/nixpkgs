@@ -14,7 +14,6 @@ buildPythonPackage (finalAttrs: {
   pname = "lxmf";
   version = "1.2.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchPypi {
     inherit (finalAttrs) version;

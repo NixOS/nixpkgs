@@ -15,8 +15,6 @@ buildPythonPackage (finalAttrs: {
   version = "3.4.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "DinoTools";
     repo = "python-ssdeep";

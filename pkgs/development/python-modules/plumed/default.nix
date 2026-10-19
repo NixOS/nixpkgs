@@ -18,7 +18,6 @@ buildPythonPackage (finalAttrs: {
   pname = "plumed";
   inherit (plumed) version src;
   pyproject = true;
-  __structuredAttrs = true;
 
   sourceRoot = "${finalAttrs.src.name}/python";
 

@@ -12,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.0.3";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "qubvel";
     repo = "ttach";

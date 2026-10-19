@@ -12,7 +12,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pyzhuyin";
   version = "0.0.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rku1999";

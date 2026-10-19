@@ -96,7 +96,6 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   # keeps list elements containing spaces intact, which disabledTests below needs
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "PrefectHQ";

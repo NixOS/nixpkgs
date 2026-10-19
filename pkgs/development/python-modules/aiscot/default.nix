@@ -11,7 +11,6 @@ buildPythonPackage (finalAttrs: {
   pname = "aiscot";
   version = "7.1.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "snstac";

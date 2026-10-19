@@ -14,7 +14,6 @@ buildPythonPackage (finalAttrs: {
   pname = "llm-tools-sqlite";
   version = "0.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "simonw";

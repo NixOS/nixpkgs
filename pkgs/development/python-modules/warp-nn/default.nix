@@ -20,7 +20,6 @@ buildPythonPackage (finalAttrs: {
   pname = "warp-nn";
   version = "0.4.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "NVIDIA";

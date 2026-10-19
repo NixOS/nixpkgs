@@ -25,7 +25,6 @@ buildPythonPackage (finalAttrs: {
   pname = "evosax";
   version = "0.3.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "RobertTLange";

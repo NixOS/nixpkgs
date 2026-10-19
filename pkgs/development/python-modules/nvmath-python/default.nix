@@ -23,7 +23,6 @@ buildPythonPackage.override { stdenv = cudaPackages_13_1.backendStdenv; } (final
   pname = "nvmath-python";
   version = "1.0.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "NVIDIA";

@@ -36,7 +36,6 @@ let
     stdenv.mkDerivation {
       pname = "xdialdr";
       inherit version src;
-      __structuredAttrs = true;
 
       nativeBuildInputs = [ cmake ];
       buildInputs = [ icu ];

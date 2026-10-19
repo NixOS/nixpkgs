@@ -11,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.5";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "temescal";
     inherit (finalAttrs) version;

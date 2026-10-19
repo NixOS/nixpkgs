@@ -23,7 +23,6 @@ buildPythonPackage (finalAttrs: {
   pname = "torchrunx";
   version = "0.4.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "apoorvkh";

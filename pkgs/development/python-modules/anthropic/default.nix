@@ -40,7 +40,6 @@ buildPythonPackage (finalAttrs: {
   pname = "anthropic";
   version = "1.8.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "anthropics";

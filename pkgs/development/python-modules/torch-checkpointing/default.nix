@@ -22,7 +22,6 @@ buildPythonPackage (finalAttrs: {
   pname = "torch-checkpointing";
   version = "0.1.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "meta-pytorch";

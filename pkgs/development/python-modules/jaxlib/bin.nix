@@ -98,8 +98,6 @@ buildPythonPackage {
   inherit version;
   format = "wheel";
 
-  __structuredAttrs = true;
-
   # See https://discourse.nixos.org/t/ofborg-does-not-respect-meta-platforms/27019/6.
   src = (
     srcs."${pythonVersion}-${stdenv.hostPlatform.system}"

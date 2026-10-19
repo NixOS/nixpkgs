@@ -17,8 +17,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.9.1-unstable-2026-04-15";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {

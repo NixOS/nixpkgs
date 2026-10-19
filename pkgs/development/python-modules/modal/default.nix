@@ -43,8 +43,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.5.5";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "modal-labs";
     repo = "modal-client";

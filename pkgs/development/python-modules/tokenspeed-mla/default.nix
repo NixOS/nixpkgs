@@ -16,7 +16,6 @@ buildPythonPackage (finalAttrs: {
   pname = "tokenspeed-mla";
   version = "0.2.10";
   pyproject = true;
-  __structuredAttrs = true;
 
   # No git tags. Using the commits named 'Update tokenspeed-mla to XXX'
   src = fetchFromGitHub {

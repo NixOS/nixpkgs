@@ -30,7 +30,6 @@ buildPythonPackage (finalAttrs: {
   pname = "cvxpy";
   version = "1.9.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "cvxpy";

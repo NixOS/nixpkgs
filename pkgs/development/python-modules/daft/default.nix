@@ -80,7 +80,6 @@ buildPythonPackage (finalAttrs: {
   pname = "daft";
   version = "0.7.25";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Eventual-Inc";

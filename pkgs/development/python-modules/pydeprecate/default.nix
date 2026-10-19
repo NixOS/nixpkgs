@@ -27,7 +27,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pyDeprecate";
   version = "0.9.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Borda";

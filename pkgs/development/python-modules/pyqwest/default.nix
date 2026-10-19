@@ -15,7 +15,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pyqwest";
   version = "0.10.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "curioswitch";

@@ -12,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.4.5";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "laserson";
     repo = "squarify";

@@ -11,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.6.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "setuptools-lint";
     inherit (finalAttrs) version;

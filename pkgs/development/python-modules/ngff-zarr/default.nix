@@ -34,8 +34,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.43.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "fideus-labs";
     repo = "ngff-zarr";

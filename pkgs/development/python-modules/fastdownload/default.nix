@@ -15,7 +15,6 @@ buildPythonPackage (finalAttrs: {
   pname = "fastdownload";
   version = "0.0.7";
   pyproject = true;
-  __structuredAttrs = true;
 
   # No tag for 0.0.7 on GitHub
   src = fetchPypi {

@@ -29,7 +29,6 @@ buildPythonPackage (finalAttrs: {
   pname = "jaxtyping";
   version = "0.3.11";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "patrick-kidger";

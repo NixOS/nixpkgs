@@ -151,7 +151,6 @@ buildPythonPackage (finalAttrs: {
   passthru.tests.smoke =
     runCommandCC "angr-smoke-test"
       {
-        __structuredAttrs = true;
         nativeBuildInputs = [
           (python.withPackages (_: [
             finalAttrs.finalPackage

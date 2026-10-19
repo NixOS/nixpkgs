@@ -23,7 +23,6 @@ buildPythonPackage (finalAttrs: {
   pname = "flash-attn-4";
   version = "4.0.0.beta35";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Dao-AILab";

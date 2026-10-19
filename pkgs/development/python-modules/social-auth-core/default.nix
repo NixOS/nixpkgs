@@ -25,7 +25,6 @@ buildPythonPackage (finalAttrs: {
   pname = "social-auth-core";
   version = "5.2.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "python-social-auth";

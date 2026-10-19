@@ -39,7 +39,6 @@ let
         '';
 
         strictDeps = true;
-        __structuredAttrs = true;
       }
       // attrs
     );

@@ -44,7 +44,6 @@ buildPythonPackage (finalAttrs: {
   pname = "mlx";
   version = "0.32.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ml-explore";

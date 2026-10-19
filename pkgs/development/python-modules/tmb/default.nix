@@ -11,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.1.5";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "alemuro";
     repo = "tmb";

@@ -27,7 +27,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pybedtools";
   version = "0.12.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "daler";

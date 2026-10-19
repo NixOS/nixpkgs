@@ -25,7 +25,6 @@ buildPythonPackage (finalAttrs: {
   pname = "geoarrow-pyarrow";
   version = "0.3.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     repo = "geoarrow-python";

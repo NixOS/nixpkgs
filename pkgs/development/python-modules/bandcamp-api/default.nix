@@ -15,8 +15,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.2.3";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "bandcamp_api";
     inherit (finalAttrs) version;

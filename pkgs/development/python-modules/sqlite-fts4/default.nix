@@ -11,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.0.3";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "sqlite-fts4";

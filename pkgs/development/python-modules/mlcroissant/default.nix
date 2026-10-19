@@ -33,7 +33,6 @@ buildPythonPackage (finalAttrs: {
   pname = "mlcroissant";
   version = "1.1.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mlcommons";

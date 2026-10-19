@@ -12,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.4.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "click-log";
     inherit (finalAttrs) version;

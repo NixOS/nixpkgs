@@ -25,7 +25,6 @@ buildPythonPackage (finalAttrs: {
   pname = "trafilatura";
   version = "2.3.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "adbar";

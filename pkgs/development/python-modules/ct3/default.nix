@@ -10,8 +10,6 @@ buildPythonPackage (finalAttrs: {
   version = "3.4.0.post5";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "CheetahTemplate3";
     repo = "cheetah3";

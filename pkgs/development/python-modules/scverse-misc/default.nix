@@ -31,7 +31,6 @@ buildPythonPackage (finalAttrs: {
   pname = "scverse-misc";
   version = "0.1.7";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "scverse";

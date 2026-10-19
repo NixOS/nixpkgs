@@ -16,8 +16,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.6.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "zaproxy";
     repo = "zap-api-python";

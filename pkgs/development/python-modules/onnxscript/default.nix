@@ -33,7 +33,6 @@ buildPythonPackage (finalAttrs: {
   pname = "onnxscript";
   version = "0.7.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";

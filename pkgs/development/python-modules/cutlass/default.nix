@@ -21,7 +21,6 @@ buildPythonPackage (finalAttrs: {
   pname = "cutlass";
   version = "0.9.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   # No tags on GitHub
   src = fetchPypi {

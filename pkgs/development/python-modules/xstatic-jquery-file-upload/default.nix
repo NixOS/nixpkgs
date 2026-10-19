@@ -11,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   version = "10.32.0.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "XStatic-jQuery-File-Upload";
     inherit (finalAttrs) version;

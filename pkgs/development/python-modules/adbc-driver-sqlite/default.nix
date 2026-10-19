@@ -22,7 +22,6 @@ buildPythonPackage (finalAttrs: {
   pname = "adbc-driver-sqlite";
   version = "1.12.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "adbc_driver_sqlite";

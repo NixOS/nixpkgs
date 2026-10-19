@@ -32,7 +32,6 @@
   (
     finalAttrs: previousAttrs:
     {
-      __structuredAttrs = true;
       inherit allowSubstitutes;
       nativeBuildInputs = [ gfal2-util ];
       outputHashAlgo = null;

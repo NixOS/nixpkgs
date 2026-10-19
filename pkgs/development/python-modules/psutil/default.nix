@@ -20,7 +20,6 @@ buildPythonPackage (finalAttrs: {
   pname = "psutil";
   version = "7.2.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "giampaolo";

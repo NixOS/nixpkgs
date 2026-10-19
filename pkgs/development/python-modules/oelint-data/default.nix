@@ -10,7 +10,6 @@ buildPythonPackage (finalAttrs: {
   pname = "oelint-data";
   version = "1.5.24";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "priv-kweihmann";

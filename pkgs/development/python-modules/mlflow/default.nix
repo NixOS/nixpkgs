@@ -30,7 +30,6 @@ buildPythonPackage (finalAttrs: {
   pname = "mlflow";
   version = "3.17.1";
   format = "wheel";
-  __structuredAttrs = true;
 
   # We build from the PyPI wheel rather than fetchFromGitHub, because the mlflow-server
   # JS UI is absent from GitHub but provided in the wheel.

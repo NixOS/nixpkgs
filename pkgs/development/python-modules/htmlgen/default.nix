@@ -17,7 +17,6 @@ buildPythonPackage (finalAttrs: {
   pname = "htmlgen";
   version = "2.0.0";
 
-  __structuredAttrs = true;
   pyproject = true;
 
   src = fetchFromGitHub {

@@ -28,7 +28,6 @@ buildPythonPackage (finalAttrs: {
   pname = "jupyter-book";
   version = "2.1.7";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jupyter-book";

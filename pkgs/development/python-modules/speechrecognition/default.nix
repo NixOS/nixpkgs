@@ -44,7 +44,6 @@ buildPythonPackage (finalAttrs: {
   pname = "speechrecognition";
   version = "3.17.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Uberi";

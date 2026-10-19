@@ -19,7 +19,6 @@ buildPythonPackage (finalAttrs: {
   pname = "ffpyplayer";
   version = "4.5.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "matham";

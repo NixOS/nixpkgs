@@ -14,7 +14,6 @@ buildPythonPackage (finalAttrs: {
   pname = "django-rest-knox";
   version = "5.1.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jazzband";

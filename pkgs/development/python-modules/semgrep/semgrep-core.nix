@@ -14,7 +14,6 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "semgrep-core";
   inherit (common) version;
 
-  __structuredAttrs = true;
   strictDeps = true;
 
   # fetch pre-built semgrep-core since the ocaml build is complex and relies on
