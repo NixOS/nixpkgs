@@ -107,7 +107,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # replace /proc pentium check with a true statement. this allows usage under emulation.
     substituteInPlace $out/quartus/adm/qenv.sh \
-      --replace-fail 'grep sse /proc/cpuinfo > /dev/null 2>&1' ':'
+      --replace-fail 'grep ${
+        if variant == "pro" then "sse4_2" else "sse"
+      } /proc/cpuinfo > /dev/null 2>&1' ':'
   '';
 
   passthru =
@@ -179,6 +181,41 @@ stdenv.mkDerivation (finalAttrs: {
         };
         installerParts = { };
         mainInstaller = "QuartusSetup-${finalAttrs.version}-linux.run";
+      };
+      pro = {
+        # Quartus Prime Pro doesn't provide device files for Cyclone 10 GX or Arria 10 on x.x.1 releases
+        version' = "26.1.0.110";
+        deviceIds = {
+          "Agilex common files" = "agilex_common";
+          "Agilex 3" = "agilex3";
+          "Agilex 5" = "agilex5";
+          "Agilex 7" = "agilex7";
+          "Arria 10" = "arria10";
+          "Cyclone 10 GX" = "cyclone10gx";
+          "Stratix 10" = "stratix10";
+        };
+        components = {
+          agilex_common = "sha256-iP/AwGnSVpUFk3pqp6r920ldHQnmBaZY5SWf8XpPtAM=";
+          agilex3 = "sha256-XSaV+NbeEYh5CMWnUqvz0cW3PaKhdzXAz8GdoA/cgi4=";
+          agilex5 = "sha256-sceVIybyPDQ/KPyQpefPfD15WzwclnesV7nHPN3MgCc=";
+          agilex7 = "sha256-dUF0qDZefP+ssxs2u0n6pssbKr4CTe4KU4A3Uo3UiB0=";
+          arria10 = "sha256-xvAp5Hrd/zukIyNxviaXHZwLjrF6Q+AIneyzk0xKSng=";
+          cyclone10gx = "sha256-bkwkBButejpJpkXSpwHNxk1ko6iqZDnsDwxb85k8Nfs=";
+          stratix10 = "sha256-uBUKcYcN1FcKrzTumzFnyVZ5pR9jT9Y4a94FXC9TWCA=";
+        };
+        installers = {
+          "QuartusProSetup-${finalAttrs.version}-linux.run" =
+            "sha256-hE8qbaRDCvEDlpbz0Stmn9WBPgPuJr0flN3Inx03RjI=";
+        }
+        // lib.optionalAttrs withQuesta {
+          "QuestaSetup-${finalAttrs.version}-linux.run" =
+            "sha256-79ZqW7CRTWqzm+VqKAJbbzJnBKfRA19uzQRIBj19aoo=";
+        };
+        installerParts = {
+          "QuartusProSetup-part2-${finalAttrs.version}.qdz" =
+            "sha256-fQDStWkoq4+CJsWefckZaofm603w217GefFyELMhUrs=";
+        };
+        mainInstaller = "QuartusProSetup-${finalAttrs.version}-linux.run";
       };
     }
     .${variant}
