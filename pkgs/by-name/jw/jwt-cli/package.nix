@@ -26,6 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellCompletion --cmd jwt \
       --bash <($out/bin/jwt completion bash) \
       --fish <($out/bin/jwt completion fish) \
+      --nushell <($out/bin/jwt completion nushell) \
       --zsh <($out/bin/jwt completion zsh)
   '';
 
