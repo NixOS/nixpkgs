@@ -5336,12 +5336,12 @@ final: prev: {
 
   diffview-plus-nvim = buildVimPlugin {
     pname = "diffview-plus.nvim";
-    version = "0.38";
+    version = "0.39";
     src = fetchFromGitHub {
       owner = "dlyongemallo";
       repo = "diffview-plus.nvim";
-      tag = "v0.38";
-      hash = "sha256-g9pzU0BmW4TapywQj344PzvKWWSiybt1tUZL1oIoTLI=";
+      tag = "v0.39";
+      hash = "sha256-0Zu2HPU9rzsyIOVLPWB9ABmfu5UffYkJtkIQUtBLVOs=";
     };
     meta.homepage = "https://github.com/dlyongemallo/diffview-plus.nvim/";
     meta.license = unfree;
