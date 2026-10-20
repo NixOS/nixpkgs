@@ -48,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [
     "out"
+    "doc"
     "man"
   ];
 
