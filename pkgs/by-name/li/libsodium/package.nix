@@ -11,6 +11,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libsodium";
   version = "1.0.22-unstable-2026-09-28";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "jedisct1";
     repo = "libsodium";
