@@ -3,7 +3,7 @@
   IOString,
   buildPerlModule,
   fetchFromGitHub,
-  fetchurl,
+  fetchCpan,
   kent,
   lib,
   libmysqlclient,
@@ -15,8 +15,10 @@ buildPerlModule rec {
   pname = "Bio-BigFile";
   version = "1.07";
 
-  src = fetchurl {
-    url = "mirror://cpan/authors/id/L/LD/LDS/Bio-BigFile-${version}.tar.gz";
+  src = fetchCpan {
+    pname = "Bio-BigFile";
+    inherit version;
+    author = "LDS";
     hash = "sha256-J3tmzorL3VI5nixaDPTjvVx0wSuUh3zTg9DEyXdA0W0=";
   };
 
