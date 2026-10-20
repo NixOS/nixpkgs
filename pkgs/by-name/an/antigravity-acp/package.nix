@@ -10,16 +10,16 @@
 let
   sources = {
     x86_64-linux = {
-      url = "https://dl.google.com/agy-extensions/releases/linux/agy-acp-server-1.3.0-linux-x86_64.zip";
-      hash = "sha256-n7YJVq8KnXYiCk25HKmsiOKiNyrWj5hatfzqzmuCW5Y=";
+      url = "https://dl.google.com/agy-extensions/releases/linux/agy-acp-server-1.4.1-linux-x86_64.zip";
+      hash = "sha256-LjcBLOsqXH/HMJtuZZYjT7Y37jxipRmfZdTL53eHE4Q=";
     };
     aarch64-linux = {
-      url = "https://dl.google.com/agy-extensions/releases/linux/agy-acp-server-1.3.0-linux-arm64.zip";
-      hash = "sha256-UAsLwPuFjoj030BNTO34C/kpjBeCkeOeOD1sULERy98=";
+      url = "https://dl.google.com/agy-extensions/releases/linux/agy-acp-server-1.4.1-linux-arm64.zip";
+      hash = "sha256-YJM2ocl1RUh+Pd1V29FT3A9A9OZTRIbMHF9MDruFwto=";
     };
     aarch64-darwin = {
-      url = "https://dl.google.com/agy-extensions/releases/macos/agy-acp-server-1.3.0-darwin-arm64.zip";
-      hash = "sha256-fNlwRfe0/oEXWhB83xb5xRSE48eKUWLK5BUzi7aqW4g=";
+      url = "https://dl.google.com/agy-extensions/releases/macos/agy-acp-server-1.4.1-darwin-arm64.zip";
+      hash = "sha256-+b3WgpGueMONIUHmO8hrhObMe59g9xZSxoQ1p5Q96xc=";
     };
   };
 
@@ -29,7 +29,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "antigravity-acp";
-  version = "1.3.0"; # https://github.com/agentclientprotocol/registry/blob/main/antigravity-acp/agent.json
+  version = "1.4.1"; # https://github.com/agentclientprotocol/registry/blob/main/antigravity-acp/agent.json
 
   src = fetchurl {
     inherit (srcInfo) url hash;
