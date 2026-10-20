@@ -1,18 +1,12 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchurl,
   jq,
-  nodejs,
   jitsi-meet,
-  fetchPnpmDeps,
-  pnpm_11,
-  pnpmConfigHook,
-  faketty,
 }:
 
 let
-  pnpm = pnpm_11;
   noPhoningHome = {
     disable_guests = true; # disable automatic guest account registration at matrix.org
   };
@@ -25,48 +19,23 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "element-web";
-  version = "1.12.30";
+  version = "1.12.32";
 
-  src = fetchFromGitHub {
-    owner = "element-hq";
-    repo = "element-web";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-4MdfIEfpWtYHmBGMX7d1S/PgUpHLTLIkVT28/LpeSm0=";
+  src = fetchurl {
+    url = "https://github.com/element-hq/element-web/releases/download/v${finalAttrs.version}/element-v${finalAttrs.version}.tar.gz";
+    hash = "sha256-J1mcooXYXt2EHAS1xmLOTnc/VivJgJC0ueLVjP9rMIw=";
   };
 
-  pnpmDeps = fetchPnpmDeps {
-    pname = "element";
-    inherit (finalAttrs) version src;
-    inherit pnpm;
-    fetcherVersion = 4;
-    hash = "sha256-6Kyv9Hp6p04JVmDfAyMkb0AAbRqswthNvku0S42QzDA=";
-  };
+  sourceRoot = "element-v${finalAttrs.version}";
 
-  nativeBuildInputs = [
-    jq
-    nodejs
-    pnpm
-    pnpmConfigHook
-    faketty
-  ];
+  nativeBuildInputs = [ jq ];
 
-  # faketty is required to work around a bug in nx.
-  # See: https://github.com/nrwl/nx/issues/22445
-  buildPhase = ''
-    runHook preBuild
-
-    cd apps/web
-
-    export VERSION=${finalAttrs.version}
-    faketty pnpm run build
-
-    runHook postBuild
-  '';
+  dontBuild = true;
 
   installPhase = ''
     runHook preInstall
 
-    cp -R webapp $out
+    cp -R . $out
     cp ${jitsi-meet-override}/libs/external_api.min.js $out/jitsi_external_api.min.js
     echo "${finalAttrs.version}" > "$out/version"
     jq -s '.[0] * $conf' "config.sample.json" --argjson "conf" '${builtins.toJSON noPhoningHome}' > "$out/config.json"
