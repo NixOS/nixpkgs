@@ -22,15 +22,20 @@ let
       zraexy
     ];
     mainProgram = "orca-slicer";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 in
-callPackage ./linux.nix {
-  inherit
-    pname
-    version
-    meta
-    withSystemd
-    withNvidiaGLWorkaround
-    ;
-}
+if stdenvNoCC.hostPlatform.isDarwin then
+  callPackage ./darwin.nix { inherit pname version meta; }
+else
+  callPackage ./linux.nix {
+    inherit
+      pname
+      version
+      withSystemd
+      withNvidiaGLWorkaround
+      ;
+    meta = meta // {
+      platforms = lib.platforms.linux;
+    };
+  }
