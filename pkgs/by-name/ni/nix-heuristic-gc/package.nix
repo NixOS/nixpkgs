@@ -10,19 +10,14 @@
 }:
 python3Packages.buildPythonPackage rec {
   pname = "nix-heuristic-gc";
-  version = "0.7.4";
+  version = "0.7.5";
   format = "setuptools";
   src = fetchFromGitHub {
     owner = "risicle";
     repo = "nix-heuristic-gc";
     tag = "v${version}";
-    hash = "sha256-T/PKn005gkALJP2FfHfWJj5UIRP9IYkvMOT3+kMY3Wo=";
+    hash = "sha256-4w3qQIc/sJYAInwisyYVUERJ5o84qPeGQS1XRG6XYhk=";
   };
-
-  patches = [
-    # https://github.com/risicle/nix-heuristic-gc/pull/17
-    ./0001-nix-2.35.patch
-  ];
 
   # NIX_SYSTEM suggested at
   # https://github.com/NixOS/nixpkgs/issues/386184#issuecomment-2692433531
