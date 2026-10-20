@@ -41,6 +41,7 @@ in
       # inputs do not cause us to find the wrong `diff`.
       cmp = "${lib.getBin buildPackages.diffutils}/bin/cmp";
       phpScriptUtils = lib.getExe php-script-utils;
+      caBundle = "${cacert}/etc/ssl/certs/ca-bundle.crt";
     };
   } ./composer-install-hook.sh;
 }
