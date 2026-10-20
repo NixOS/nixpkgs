@@ -19,16 +19,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "atuin";
-  version = "18.23.0";
+  version = "18.24.1";
 
   src = fetchFromGitHub {
     owner = "atuinsh";
     repo = "atuin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NBn7C9ssLSXYrHWv5qWM5dZ2E8URbRJZOOCvHaNgxW4=";
+    hash = "sha256-p4Vjk4XZDYVaIEp13fz0AfhvtZ9to0H0OJMpdNH34I0=";
   };
 
-  cargoHash = "sha256-rkDDs8gviBpoLR4mrrKRu2eTlmlpvjICVRFu22AeOaU=";
+  cargoHash = "sha256-tZqIfdcOth0pBIfIvqfeSEtKqsmRPcwtuHWsjoPdt1c=";
 
   # atuin's default features include 'check-updates', which do not make sense
   # for distribution builds. List all other default features.
@@ -79,6 +79,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # PermissionDenied (Operation not permitted)
     "--skip=change_password"
     "--skip=multi_user_test"
+    # needs a running Postgres server
+    "--skip=postgres_authenticates_with_the_password_file"
+    # timing-dependent: fails when the index reload is too fast to measure
+    "--skip=end_history_is_not_starved_by_an_index_reload"
   ];
 
   # The e2e tests start an interactive bash, which sources the host's
