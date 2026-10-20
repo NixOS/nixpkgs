@@ -574,8 +574,8 @@ in
     buildMypyBoto3Package "glue" "1.43.113"
       "sha256-9TW+VKbyHkJLTIuNuAHPjHFR4pxhQLf+nwA776DsziI=";
   mypy-boto3-grafana =
-    buildMypyBoto3Package "grafana" "1.43.11"
-      "sha256-XJOSLyL1+uEweZ9zER7IhH3DFLaLtpJKvuRIn8Ri+P4=";
+    buildMypyBoto3Package "grafana" "1.43.115"
+      "sha256-n7khY8t0w6f8zs1e2TYOGzi+Xn+l6mqA0LusWljvTDU=";
 
   mypy-boto3-greengrass =
     buildMypyBoto3Package "greengrass" "1.43.0"
