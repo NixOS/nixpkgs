@@ -193,11 +193,12 @@
     "description": "Maintain core platform support and packages for macOS and other Apple platforms",
     "id": 11265438,
     "maintainers": {
-      "emilazy": 18535642
+      "emilazy": 18535642,
+      "reckenrode": 7413633
     },
     "members": {
       "Samasaur1": 30577766,
-      "reckenrode": 7413633,
+      "booxter": 90200,
       "toonn": 1486805
     },
     "name": "darwin-core"
@@ -229,7 +230,6 @@
       "afh": 16507,
       "azuwis": 9315,
       "booxter": 90200,
-      "carlossless": 498906,
       "cideM": 4246921,
       "cidkidnix": 67574902,
       "copumpkin": 2623,
@@ -252,6 +252,7 @@
       "jonhermansen": 660911,
       "juliusrickert": 5007494,
       "jwiegley": 8460,
+      "karstx": 498906,
       "kashw2": 15855440,
       "kevingriffin": 209729,
       "khaneliman": 1778670,
@@ -311,6 +312,7 @@
     },
     "members": {
       "friedow": 17351844,
+      "trespaul": 7453891,
       "wamirez": 24505474
     },
     "name": "Documentation Team"
@@ -425,7 +427,7 @@
       "Mistyttm": 51770769,
       "PaulGrandperrin": 1748936,
       "RoGreat": 64620440,
-      "carlossless": 498906,
+      "karstx": 498906,
       "liamthexpl0rer": 119797945,
       "liberodark": 4238928,
       "qubitnano": 146656568,
