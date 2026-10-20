@@ -6,6 +6,8 @@
   replaceVars,
   openssl,
   python3Packages,
+  pkg-config,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -20,6 +22,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-eY8mgmQB8wXQ7YJbLvdjXEEgGD+/RDywjvehJYf7ckE=";
   };
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    zstd
+  ];
 
   cargoHash = "sha256-DTPlPCumkVI2naYoNdO8T3pQNSawBA0FZ9LxVpqKqN0=";
 
