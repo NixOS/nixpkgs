@@ -11,6 +11,9 @@
     version = "0.9.0";
     url = "github:briot/tree-sitter-ada/0a4c27dc1308a9d2742de22e5fcfc0c137b3d3f3";
     hash = "sha256-K5JJjDQwHuHZ6oQaLwJHYJxmFpR+4ENEeiZO2Q0gsk4=";
+    meta = {
+      license = lib.licenses.mit;
+    };
   };
 
   adl = {
@@ -202,6 +205,9 @@
     version = "0.24.2";
     url = "github:tree-sitter/tree-sitter-c";
     hash = "sha256-Juuf57GQI7OAP6O03KtSzyKJAoXtGKjyYJ+sTM1A4mU=";
+    meta = {
+      license = lib.licenses.mit;
+    };
   };
 
   c-sharp = {
@@ -1922,6 +1928,7 @@
     rev = "640ee15e4a7b0d09a4bc95dcc71336c28d97999b";
     hash = "sha256-rLIyJZEjMRo8am+ivKCwAESvv6jFtTPYJuuebN3T5Es=";
     meta = {
+      license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
         aciceri
       ];
@@ -2021,6 +2028,9 @@
     version = "0.1.0";
     url = "github:nvim-neorg/tree-sitter-norg-meta";
     hash = "sha256-8qSdwHlfnjFuQF4zNdLtU2/tzDRhDZbo9K54Xxgn5+8=";
+    meta = {
+      license = lib.licenses.mit;
+    };
   };
 
   nu = {
@@ -2497,6 +2507,9 @@
     version = "0.23.1";
     url = "github:tree-sitter/tree-sitter-ql-dbscheme";
     hash = "sha256-lXHm+I3zzCUOR/HjnhQM3Ga+yZr2F2WN28SmpT9Q6nE=";
+    meta = {
+      license = lib.licenses.mit;
+    };
   };
 
   qmljs = rec {
@@ -3042,6 +3055,7 @@
     url = "github:xasc/tree-sitter-t32";
     hash = "sha256-tM0xN+boHCJzK16jRZKQYk/KkwEBut7KGZxj8KDHMMg=";
     meta = {
+      license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
         aciceri
       ];
