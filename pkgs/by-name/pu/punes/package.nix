@@ -1,5 +1,5 @@
 {
-  stdenv,
+  gcc15Stdenv,
   lib,
   fetchFromGitHub,
   fetchpatch,
@@ -18,6 +18,9 @@
 }:
 
 let
+  # Linker failure with GCC 16
+  # https://github.com/punesemu/puNES/issues/453
+  stdenv = gcc15Stdenv;
   qtPackages = if withQt6 then qt6Packages else libsForQt5;
 in
 stdenv.mkDerivation (finalAttrs: {
