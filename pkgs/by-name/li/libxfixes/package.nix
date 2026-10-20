@@ -43,6 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Xlib-based library for the XFIXES Extension";
     homepage = "https://gitlab.freedesktop.org/xorg/lib/libxfixes";
