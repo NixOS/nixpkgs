@@ -26,6 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
     util-macros
   ];
 
+  strictDeps = true;
+
   passthru = {
     updateScript = gitUpdater {
       rev-prefix = "font-util-";
