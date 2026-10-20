@@ -67,6 +67,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Lightweight OpenTelemetry viewer for traces, logs, and metrics";
     homepage = "https://github.com/metafab/otel-gui";
     license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ metafab ];
     mainProgram = "otel-gui";
     platforms = [
       "x86_64-linux"
