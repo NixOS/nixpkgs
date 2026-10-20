@@ -145,7 +145,6 @@ self: super: {
         // lib.optionalAttrs (with super'.stdenv.hostPlatform; isx86_64 && isLinux) {
           # causes shadowstack disablement
           pcre = super'.pcre.override { enableJit = false; };
-          pcre-cpp = super'.pcre-cpp.override { enableJit = false; };
         }
       )
     ]

@@ -1,23 +1,28 @@
 {
   src,
   version,
+  routerBasePath,
 
   buildNpmPackage,
   nodejs,
 }:
 buildNpmPackage {
   pname = "audiobookshelf-client";
-  inherit version nodejs;
+  inherit src version nodejs;
 
-  src = "${src}/client";
+  sourceRoot = "${src.name}/client";
 
   npmDepsHash = "sha256-Rvy/bULWyVkGthfpIGkTMO8Lv1miywwea7jLODfm54Y=";
 
-  env = {
-    # don't download the Cypress binary
-    CYPRESS_INSTALL_BINARY = 0;
-    NODE_OPTIONS = "--openssl-legacy-provider";
-  };
+  env.ROUTER_BASE_PATH = routerBasePath;
+
+  npmRebuildFlags = [ "--ignore-scripts" ];
 
   npmBuildScript = "generate";
+
+  installPhase = ''
+    runHook preInstall
+    cp -r dist "$out"
+    runHook postInstall
+  '';
 }
