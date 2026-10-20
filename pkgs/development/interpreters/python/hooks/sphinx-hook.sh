@@ -30,6 +30,7 @@ buildSphinxPhase() {
         exit 1
     fi
 
+    __sphinxBuilders=()
     concatTo __sphinxBuilders sphinxBuilders=html
 
     for __builder in "${__sphinxBuilders[@]}"; do
