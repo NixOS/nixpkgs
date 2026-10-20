@@ -1,182 +1,78 @@
 {
   lib,
   stdenv,
+  dolphin-emu,
   fetchFromGitHub,
-  fetchpatch2,
-  # nativeBuildInputs
-  pkg-config,
-  cmake,
-  qt6,
-
-  # buildInputs
-  curl,
-  enet,
-  ffmpeg,
-  fmt_9,
-  gettext,
-  libGL,
-  libGLU,
-  libsm,
-  libxdmcp,
-  libxext,
-  libxinerama,
-  libxrandr,
-  libxxf86vm,
-  libao,
-  libpthread-stubs,
-  libpulseaudio,
-  libusb1,
-  mbedtls,
-  miniupnpc,
-  openal,
-  portaudio,
-  readline,
-  SDL2,
-  sfml,
-  soundtouch,
-  xz,
-  # linux-only
-  alsa-lib,
-  bluez,
-  libevdev,
-  udev,
-  vulkan-loader,
-  # darwin-only
-  hidapi,
-  libpng,
+  fmt_11,
 
   # passthru
   testers,
   nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
-  pname = "dolphin-emu-primehack";
-  version = "1.0.8";
+# PrimeHack is based on an older Dolphin that fails to build with fmt >= 12.2
+(dolphin-emu.override { fmt = fmt_11; }).overrideAttrs (
+  finalAttrs: prevAttrs: {
+    pname = "dolphin-emu-primehack";
+    version = "1.0.9";
 
-  src = fetchFromGitHub {
-    owner = "shiiion";
-    repo = "dolphin";
-    tag = finalAttrs.version;
-    fetchSubmodules = true;
-    hash = "sha256-/9AabEJ2ZOvHeSGXWRuOucmjleBMRcJfhX+VDeldbgo=";
-  };
+    src = fetchFromGitHub {
+      owner = "shiiion";
+      repo = "dolphin";
+      tag = finalAttrs.version;
+      hash = "sha256-SLTsDHDhBa1d5XOxQRNKBiBpIIntir9D4rhQtQz4w44=";
+      fetchSubmodules = true;
+      leaveDotGit = true;
+      postFetch = ''
+        pushd $out
+        git rev-parse HEAD 2>/dev/null >$out/COMMIT
+        find $out -name .git -print0 | xargs -0 rm -rf
+        popd
+      '';
+    };
 
-  patches = [
-    (fetchpatch2 {
-      url = "https://github.com/dolphin-emu/dolphin/commit/8edef722ce1aae65d5a39faf58753044de48b6e0.patch?full_index=1";
-      hash = "sha256-QEG0p+AzrExWrOxL0qRPa+60GlL0DlLyVBrbG6pGuog=";
-    })
-  ];
+    postInstall =
+      prevAttrs.postInstall
+      + lib.optionalString stdenv.hostPlatform.isLinux ''
+        # Rename everything that would collide with dolphin-emu
+        mv $out/bin/dolphin-emu $out/bin/dolphin-emu-primehack
+        mv $out/bin/dolphin-emu-nogui $out/bin/dolphin-emu-primehack-nogui
+        mv $out/bin/dolphin-tool $out/bin/dolphin-tool-primehack
+        mv $out/share/man/man6/dolphin-emu.6 $out/share/man/man6/dolphin-emu-primehack.6
+        mv $out/share/man/man6/dolphin-emu-nogui.6 $out/share/man/man6/dolphin-emu-primehack-nogui.6
+        mv $out/share/icons/hicolor/256x256/apps/dolphin-emu.png $out/share/icons/hicolor/256x256/apps/dolphin-emu-primehack.png
+        mv $out/share/icons/hicolor/scalable/apps/dolphin-emu.svg $out/share/icons/hicolor/scalable/apps/dolphin-emu-primehack.svg
+        mv $out/share/applications/dolphin-emu.desktop $out/share/applications/dolphin-emu-primehack.desktop
+        substituteInPlace $out/share/applications/dolphin-emu-primehack.desktop \
+          --replace-fail 'dolphin-emu' 'dolphin-emu-primehack' \
+          --replace-fail 'Dolphin Emulator' 'PrimeHack'
+      '';
 
-  nativeBuildInputs = [
-    pkg-config
-    cmake
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    qt6.wrapQtAppsHook
-  ];
-
-  buildInputs = [
-    curl
-    enet
-    ffmpeg
-    fmt_9
-    gettext
-    libGL
-    libGLU
-    libsm
-    libxdmcp
-    libxext
-    libxinerama
-    libxrandr
-    libxxf86vm
-    libao
-    libpthread-stubs
-    libpulseaudio
-    libusb1
-    mbedtls
-    miniupnpc
-    openal
-    portaudio
-    qt6.qtbase
-    qt6.qtsvg
-    readline
-    SDL2
-    sfml
-    soundtouch
-    xz
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    alsa-lib
-    bluez
-    libevdev
-    udev
-    vulkan-loader
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    hidapi
-    libpng
-  ];
-
-  cmakeFlags = [
-    (lib.cmakeBool "USE_SHARED_ENET" true)
-    (lib.cmakeBool "ENABLE_LTO" true)
-    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    (lib.cmakeBool "OSX_USE_DEFAULT_SEARCH_PATH" true)
-  ];
-
-  qtWrapperArgs = lib.optionals stdenv.hostPlatform.isLinux [
-    "--prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib"
-    # https://bugs.dolphin-emu.org/issues/11807
-    # The .desktop file should already set this, but Dolphin may be launched in other ways
-    "--set QT_QPA_PLATFORM xcb"
-  ];
-
-  # - Allow Dolphin to use nix-provided libraries instead of building them
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'DISTRIBUTOR "None"' 'DISTRIBUTOR "NixOS"'
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'if(NOT APPLE)' 'if(true)' \
-      --replace-fail 'if(LIBUSB_FOUND AND NOT APPLE)' 'if(LIBUSB_FOUND)'
-  '';
-
-  doInstallCheck = true;
-
-  postInstall = ''
-    mv $out/bin/dolphin-emu $out/bin/dolphin-emu-primehack
-    mv $out/bin/dolphin-emu-nogui $out/bin/dolphin-emu-primehack-nogui
-    mv $out/share/applications/dolphin-emu.desktop $out/share/applications/dolphin-emu-primehack.desktop
-    mv $out/share/icons/hicolor/256x256/apps/dolphin-emu.png $out/share/icons/hicolor/256x256/apps/dolphin-emu-primehack.png
-    substituteInPlace $out/share/applications/dolphin-emu-primehack.desktop \
-      --replace-fail 'dolphin-emu' 'dolphin-emu-primehack' \
-      --replace-fail 'Dolphin Emulator' 'PrimeHack'
-  ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    install -D $src/Data/51-usb-device.rules $out/etc/udev/rules.d/51-usb-device.rules
-  '';
-
-  passthru = {
-    tests = {
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-        command = "dolphin-emu-primehack-nogui --version";
-        version = "v${finalAttrs.version}";
+    passthru = prevAttrs.passthru // {
+      tests = {
+        # Upstream hardcodes the version to PrimeHack
+        version = testers.testVersion {
+          package = finalAttrs.finalPackage;
+          command = "dolphin-emu-primehack-nogui --version";
+          version = "PrimeHack";
+        };
+      };
+      # Skip pre-release tags
+      updateScript = nix-update-script {
+        extraArgs = [
+          "--version-regex"
+          "^([0-9.]+)$"
+        ];
       };
     };
-    updateScript = nix-update-script { };
-  };
 
-  meta = {
-    homepage = "https://github.com/shiiion/dolphin";
-    description = "Gamecube/Wii/Triforce emulator for x86_64 and ARMv8";
-    license = lib.licenses.gpl2Plus;
-    broken = stdenv.hostPlatform.isDarwin;
-    platforms = lib.platforms.unix;
-  };
-})
+    meta = prevAttrs.meta // {
+      homepage = "https://github.com/shiiion/dolphin";
+      changelog = "https://github.com/shiiion/dolphin/releases/tag/${finalAttrs.version}";
+      description = "Dolphin fork with Metroid Prime Trilogy mouse and keyboard controls";
+      mainProgram = if stdenv.hostPlatform.isDarwin then "Primehack" else "dolphin-emu-primehack";
+      maintainers = with lib.maintainers; [ mistyttm ];
+      teams = with lib.teams; [ gaming ];
+    };
+  }
+)
