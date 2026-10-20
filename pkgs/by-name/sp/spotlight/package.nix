@@ -45,11 +45,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "danny19862025";
     repo = "spotlight";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-hhBwixcjVp4ZP406M/yNh/rybk/fJY2kCF2oONnzvcc=";
+    rev = "8f47baa446b8abfb53e766b7f07bc7b49e7b874c";
+    hash = "sha256-YehaJL9Rb58uEmGaTR8RUo+yrIEdLDVqARJoVVSm328=";
   };
 
-  cargoHash = "sha256-3FB+Wh0VLt3A/9oERH9WHDiv5/TJD/pJsf9uEc6kaXw=";
+  cargoHash = "sha256-BuWTx7ohs8cDYRFMY8yklAPjbE5j20ULbrtTaIz2vxg=";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -137,7 +137,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Keyboard-first native Linux productivity launcher";
     homepage = "https://github.com/danny19862025/spotlight";
-    changelog = "https://github.com/danny19862025/spotlight/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/danny19862025/spotlight/commits/8f47baa446b8abfb53e766b7f07bc7b49e7b874c";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     mainProgram = "spotlight";
