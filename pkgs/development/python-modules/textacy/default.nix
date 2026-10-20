@@ -2,23 +2,30 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   setuptools,
+
+  # dependencies
   cachetools,
   cytoolz,
-  fetchPypi,
   floret,
   jellyfish,
   joblib,
-  matplotlib,
   networkx,
   numpy,
   pyphen,
-  pytestCheckHook,
   requests,
   scikit-learn,
   scipy,
   spacy,
   tqdm,
+
+  # optional-dependencies
+  matplotlib,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -56,18 +63,18 @@ buildPythonPackage (finalAttrs: {
     vis = [ matplotlib ];
   };
 
+  pythonImportsCheck = [ "textacy" ];
+
   nativeCheckInputs = [ pytestCheckHook ];
 
   enabledTestPaths = [
     # Almost all tests have to deal with downloading a dataset, only test pure tests
-    "tests/test_constants.py"
     "tests/preprocessing/test_normalize.py"
-    "tests/similarity/test_edits.py"
-    "tests/preprocessing/test_resources.py"
     "tests/preprocessing/test_replace.py"
+    "tests/preprocessing/test_resources.py"
+    "tests/similarity/test_edits.py"
+    "tests/test_constants.py"
   ];
-
-  pythonImportsCheck = [ "textacy" ];
 
   meta = {
     description = "Higher-level text processing, built on spaCy";
