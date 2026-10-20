@@ -105,12 +105,6 @@ buildRedist (
       ]
       ++ optionals (tensorrtAtLeast "10.13.3") [
         "libcuda.so.1"
-      ]
-      # Some linux-sbsa releases of TensorRT 11 (e.g., 11.3.0, but not 11.1.0) ship libnvdla_compiler.so, which links
-      # against the L4T driver library libnvos.so. No other library in the release has a DT_NEEDED on it, and TensorRT
-      # 10.7 was the last release to support DLA.
-      ++ optionals (hostRedistSystem == "linux-sbsa" && tensorrtAtLeast "11.0.0") [
-        "libnvos.so"
       ];
 
     # Create a symlink for the Onnx header files in include/onnx
@@ -191,8 +185,8 @@ buildRedist (
     '';
 
     # NOTE: Like cuDNN, NVIDIA offers forward compatibility within a major releases of CUDA.
-    # NOTE: The support matrix lists only CUDA 13.4 for the linux-sbsa release of 11.3.0 (built with CUDA 13.4), while
-    # stating that it is compatible with CUDA 13.x; we have tested it with CUDA 13.0 and 13.4.
+    # NOTE: The support matrix lists only CUDA 13.4 Update 1 for the linux-sbsa release of 11.4.0 (built with CUDA 13.4
+    # Update 1), while stating that its packages require CUDA 13.x; we have tested it with CUDA 13.0 and 13.4.
     # NOTE: The support matrix lists only CUDA 13.2 Update 1 for the linux-sbsa and JetPack release of 10.16.1, which
     # supports Jetson Orin (8.7) and Thor (11.0).
     # NOTE: The support matrix lists CUDA 13.3 for the linux-sbsa release of 11.1.0 (built with CUDA 13.3) and CUDA 13.2
