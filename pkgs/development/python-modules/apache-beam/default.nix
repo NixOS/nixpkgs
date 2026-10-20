@@ -245,11 +245,6 @@ buildPythonPackage (finalAttrs: {
     "apache_beam/yaml/yaml_udf_test.py"
     "apache_beam/dataframe/frames_test.py"
 
-    # FIXME Those tests do not terminate due to a grpc error (threading issue)
-    # grpc_status:14, grpc_message:"Cancelling all calls"}"
-    # Upstream issue https://github.com/apache/beam/issues/33851
-    "apache_beam/runners/portability/portable_runner_test.py"
-
     # Pandas 3 behavioral changes in Beam's dataframe module (upstream caps pandas < 2.4):
     # the doctests compare against pandas-version-specific output and the taxiride example
     # relies on DataFrame APIs removed in pandas 3.

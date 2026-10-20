@@ -7,7 +7,6 @@
   fetchFromGitHub,
   iconConvTools,
   copyDesktopItems,
-  makeDesktopItem,
   libx11,
   libice,
   libsm,
@@ -38,7 +37,7 @@
   soundfont-path ? "${soundfont-fluid}/share/soundfonts/FluidR3_GM2-2.sf2",
 }:
 let
-  version = "0.40.2";
+  version = "0.40.3";
   buildType = "Release";
 in
 buildDotnetModule {
@@ -50,7 +49,7 @@ buildDotnetModule {
     owner = "space-wizards";
     repo = "SS14.Launcher";
     tag = "v${version}";
-    hash = "sha256-EjB38B77nrkNkkj2h/wAvLxvozTxLrsL1VB/pXMZwQI=";
+    hash = "sha256-VFwL4OlEvtWDHvNP8meOlCWheK+J6jKyAwZlryMNRqg=";
     fetchSubmodules = true;
   };
 
@@ -117,17 +116,7 @@ buildDotnetModule {
     copyDesktopItems
   ];
 
-  desktopItems = [
-    (makeDesktopItem {
-      name = "SS14.Launcher";
-      exec = "SS14.Launcher";
-      icon = "SS14";
-      desktopName = "Space Station 14 Launcher";
-      comment = "A multiplayer disaster simulator";
-      categories = [ "Game" ];
-      startupWMClass = "SS14.Launcher";
-    })
-  ];
+  desktopItems = [ "PublishFiles/SS14.desktop" ];
 
   postInstall = ''
     mkdir -p $out/lib/SS14.Launcher/loader
@@ -143,5 +132,6 @@ buildDotnetModule {
     maintainers = [ lib.maintainers.coca ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "SS14.Launcher";
+    teams = [ lib.teams.gaming ];
   };
 }
