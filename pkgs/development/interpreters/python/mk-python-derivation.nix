@@ -398,6 +398,10 @@ lib.extendMkDerivation {
       nativeInstallCheckInputs = nativeCheckInputs ++ attrs.nativeInstallCheckInputs or [ ];
       installCheckInputs = checkInputs ++ attrs.installCheckInputs or [ ];
 
+      # If given use the specified checkPhase, otherwise use the setup hook.
+      # Longer-term we should get rid of `checkPhase` and use `installCheckPhase`.
+      ${if attrs ? checkPhase then "installCheckPhase" else null} = attrs.checkPhase;
+
       inherit dontWrapPythonPrograms;
 
       postFixup =
@@ -556,11 +560,6 @@ lib.extendMkDerivation {
           };
         };
       };
-    }
-    // optionalAttrs (attrs ? checkPhase) {
-      # If given use the specified checkPhase, otherwise use the setup hook.
-      # Longer-term we should get rid of `checkPhase` and use `installCheckPhase`.
-      installCheckPhase = attrs.checkPhase;
     };
 
   # This derivation transformation function must be independent to `attrs`
