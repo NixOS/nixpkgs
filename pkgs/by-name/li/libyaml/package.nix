@@ -23,6 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+  strictDeps = true;
+
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://pyyaml.org/";
     description = "YAML 1.1 parser and emitter written in C";
