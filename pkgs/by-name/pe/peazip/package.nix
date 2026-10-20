@@ -34,6 +34,13 @@ stdenv.mkDerivation (finalAttrs: {
   };
   sourceRoot = "${finalAttrs.src.name}/peazip-sources";
 
+  # The upstream Pascal source uses CRLF line endings.
+  prePatch = ''
+    sed -i 's/\r$//' dev/peach.pas
+  '';
+
+  patches = [ ./system-backend-default.patch ];
+
   postPatch = ''
     # set it to use compression programs from $PATH
     substituteInPlace dev/peach.pas --replace-fail "  HSYSBIN       = 0;" "  HSYSBIN       = 2;"
@@ -122,6 +129,52 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   dontWrapQtApps = true;
+
+  passthru.tests.system-backends =
+    runCommand "peazip-system-backends"
+      {
+        nativeBuildInputs = [
+          _7zz
+          zstd
+        ];
+        peazip = finalAttrs.finalPackage;
+      }
+      ''
+        mkdir fixtures
+        echo 'PeaZip system-backend regression' > fixtures/marker.txt
+        (cd fixtures; 7zz a archive.zip marker.txt; 7zz a archive.7z marker.txt)
+        zstd -q -o fixtures/marker.txt.zst fixtures/marker.txt
+
+        unset DISPLAY
+        export QT_QPA_PLATFORM=offscreen
+        for configuration in fresh truncated; do
+          for archive in archive.zip archive.7z marker.txt.zst; do
+            caseDir="$PWD/$configuration-$archive"
+            mkdir -p "$caseDir"
+            cp "fixtures/$archive" "$caseDir/"
+            export XDG_CONFIG_HOME="$caseDir/config"
+            export XDG_CACHE_HOME="$caseDir/cache"
+            export XDG_DATA_HOME="$caseDir/data"
+            export XDG_RUNTIME_DIR="$caseDir/runtime"
+            mkdir -m 700 "$XDG_CONFIG_HOME" "$XDG_CACHE_HOME" "$XDG_DATA_HOME" "$XDG_RUNTIME_DIR"
+            config="$XDG_CONFIG_HOME/peazip/conf.txt"
+            if [ "$configuration" = truncated ]; then
+              mkdir "$XDG_CONFIG_HOME/peazip"
+              sed '/^\[use system 7z\]$/,$d' seed-conf.txt > "$config"
+            fi
+            timeout --kill-after=1 20 "$peazip/bin/peazip" \
+              -ext2newfolder_ "$caseDir/$archive" > "$caseDir/application.log" 2>&1
+            test "$(find "$caseDir" -name marker.txt -type f | wc -l)" = 1
+            cmp fixtures/marker.txt "$(find "$caseDir" -name marker.txt -type f)"
+            if [ ! -f seed-conf.txt ]; then
+              grep -Fx '[use system 7z]' "$config"
+              cp "$config" seed-conf.txt
+            fi
+            echo "$configuration $archive passed"
+          done
+        done
+        touch $out
+      '';
 
   meta = {
     description = "File and archive manager";
