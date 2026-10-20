@@ -1,0 +1,95 @@
+diff --git i/Cargo.toml w/Cargo.toml
+index b144881..1fb28d7 100644
+--- i/Cargo.toml
++++ w/Cargo.toml
+@@ -196,6 +196,7 @@ password-storage = ["upload", "keyring"]
+ rustls = [
+     "dep:rustls",
+     "ureq?/rustls",
++    "ureq?/platform-verifier",
+     "cargo-xwin?/rustls-tls",
+     "dep:rustls-pki-types",
+ ]
+diff --git i/src/upload.rs w/src/upload.rs
+index a432d75..fc52870 100644
+--- i/src/upload.rs
++++ w/src/upload.rs
+@@ -294,12 +294,29 @@ fn resolve_pypi_token_via_oidc(registry_url: &str) -> Result<Option<String>> {
+         // letting the graceful `Ok(None)` fallback below actually run for
+         // registries that don't support OIDC (GitLab, Artifactory, pypiserver,
+         // custom indexes).
+-        let agent: ureq::Agent = ureq::Agent::config_builder()
++        #[allow(unused_mut)]
++        let mut config = ureq::Agent::config_builder()
+             .proxy(ureq::Proxy::try_from_env())
+             .http_status_as_error(false)
+-            .timeout_global(Some(Duration::from_secs(30)))
+-            .build()
+-            .into();
++            .timeout_global(Some(Duration::from_secs(30)));
++        #[cfg(feature = "rustls")]
++        {
++            config = config.tls_config(
++                ureq::tls::TlsConfig::builder()
++                    .root_certs(ureq::tls::RootCerts::PlatformVerifier)
++                    .build(),
++            );
++        }
++        #[cfg(all(feature = "native-tls", not(feature = "rustls")))]
++        {
++            config = config.tls_config(
++                ureq::tls::TlsConfig::builder()
++                    .provider(ureq::tls::TlsProvider::NativeTls)
++                    .root_certs(ureq::tls::RootCerts::PlatformVerifier)
++                    .build(),
++            );
++        }
++        let agent: ureq::Agent = config.build().into();
+ 
+         let mut audience_res = agent.get(audience_url.as_str()).call()?;
+         if audience_res.status() == 404 {
+@@ -422,8 +439,9 @@ fn load_ca_certs(
+ 
+ #[cfg(all(feature = "native-tls", not(feature = "rustls")))]
+ fn http_agent() -> Result<ureq::Agent, UploadError> {
+-    let mut tls_config =
+-        ureq::tls::TlsConfig::builder().provider(ureq::tls::TlsProvider::NativeTls);
++    let mut tls_config = ureq::tls::TlsConfig::builder()
++        .provider(ureq::tls::TlsProvider::NativeTls)
++        .root_certs(ureq::tls::RootCerts::PlatformVerifier);
+ 
+     if let Some(ca_bundle) = tls_ca_bundle() {
+         let certs = load_ca_certs(ca_bundle)?;
+@@ -440,19 +458,20 @@ fn http_agent() -> Result<ureq::Agent, UploadError> {
+ 
+ #[cfg(feature = "rustls")]
+ fn http_agent() -> Result<ureq::Agent, UploadError> {
+-    let mut builder = ureq::Agent::config_builder()
++    let root_certs = match tls_ca_bundle() {
++        Some(ca_bundle) => ureq::tls::RootCerts::new_with_certs(&load_ca_certs(ca_bundle)?),
++        None => ureq::tls::RootCerts::PlatformVerifier,
++    };
++    let tls_config = ureq::tls::TlsConfig::builder()
++        .root_certs(root_certs)
++        .build();
++
++    Ok(ureq::Agent::config_builder()
+         .proxy(ureq::Proxy::try_from_env())
+-        .http_status_as_error(false);
+-
+-    if let Some(ca_bundle) = tls_ca_bundle() {
+-        let certs = load_ca_certs(ca_bundle)?;
+-        let tls_config = ureq::tls::TlsConfig::builder()
+-            .root_certs(ureq::tls::RootCerts::new_with_certs(&certs))
+-            .build();
+-        builder = builder.tls_config(tls_config);
+-    }
+-
+-    Ok(builder.build().into())
++        .http_status_as_error(false)
++        .tls_config(tls_config)
++        .build()
++        .into())
+ }
+ 
+ #[cfg(not(any(feature = "native-tls", feature = "rustls")))]
