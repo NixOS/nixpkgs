@@ -240,6 +240,7 @@ in
         kernelModuleMakeFlags = self.kernel.commonMakeFlags ++ [
           "KBUILD_OUTPUT=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
           "DEPMOD=true"
+          "INSTALL_MOD_STRIP=1"
         ];
         # Obsolete aliases (these packages do not depend on the kernel).
         inherit (pkgs) odp-dpdk pktgen; # added 2018-05
