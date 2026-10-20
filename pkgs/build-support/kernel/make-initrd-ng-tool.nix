@@ -1,6 +1,8 @@
 {
   rustPlatform,
   lib,
+  callPackage,
+  makeInitrdNGTool,
 }:
 
 rustPlatform.buildRustPackage {
@@ -10,7 +12,12 @@ rustPlatform.buildRustPackage {
   src = ./make-initrd-ng;
   cargoLock.lockFile = ./make-initrd-ng/Cargo.lock;
 
-  passthru.updateScript = ./make-initrd-ng/update.sh;
+  passthru = {
+    updateScript = ./make-initrd-ng/update.sh;
+    tests.dlopen-alternatives = callPackage ./make-initrd-ng-test.nix {
+      inherit makeInitrdNGTool;
+    };
+  };
 
   meta = {
     description = "Tool for copying binaries and their dependencies";
