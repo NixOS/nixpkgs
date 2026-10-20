@@ -53,6 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-Detnaviv=disabled"
   ];
 
+  __structuredAttrs = true;
+
   passthru = {
     updateScript = gitUpdater {
       url = "https://gitlab.freedesktop.org/mesa/drm.git";
