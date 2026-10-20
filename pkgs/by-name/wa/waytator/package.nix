@@ -10,10 +10,13 @@
   makeWrapper,
   wl-clipboard,
   fetchFromGitHub,
+  gtk4-layer-shell,
+  wayland-protocols,
+  wayland-scanner,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "waytator";
-  version = "1.2.5";
+  version = "1.4.0";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -22,19 +25,24 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "faetalize";
     repo = "waytator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sv7UwNsW+UTIGLDIz4JwRpPU6t5bolsz/n4bO68dDi0=";
+    hash = "sha256-OnEUDSxKJCZsN0v2BV/QQ8ceI4BSaY9LH+QucziY1EA=";
   };
+
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
     makeWrapper
+    wayland-scanner
   ];
 
   buildInputs = [
     gtk4
     libadwaita
+    gtk4-layer-shell
+    wayland-protocols
   ];
 
   postFixup = ''

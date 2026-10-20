@@ -25,13 +25,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
   makeWrapperArgs = [
     "--prefix"
     "PATH"
-    ": ${
-      lib.makeBinPath [
-        nix-eval-jobs
-        nix-eval-jobs.nix
-        bashInteractive
-      ]
-    }"
+    ":"
+    (lib.makeBinPath [
+      nix-eval-jobs
+      nix-eval-jobs.nix
+      bashInteractive
+    ])
   ];
 
   nativeCheckInputs = with python3Packages; [

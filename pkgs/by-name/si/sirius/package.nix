@@ -22,6 +22,7 @@
   boost,
   eigen,
   libvdwxc,
+  fftwMpi,
   dftd4,
   simple-dftd3,
   mctc-lib,
@@ -53,7 +54,7 @@ assert enablePython -> pythonPackages != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SIRIUS";
-  version = "7.10.0";
+  version = "7.12.0";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -62,8 +63,24 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "electronic-structure";
     repo = "SIRIUS";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cq4ajtAJXfIH1B866FYhgROMSwd7nsbXf/6kbSwJAso=";
+    hash = "sha256-9PlXyJLfunbinsZM6V3PFklqY/JWJkbVD8/vvkIsywA=";
   };
+
+  postPatch = ''
+    # The Python module's CMakeLists.txt forces C++17, but the bundled camp
+    # library in umpire >= 2026.07 uses C++20 concepts. The main library
+    # already uses C++20 (set in the root CMakeLists.txt), so align the
+    # Python module to avoid compilation errors.
+    substituteInPlace python_module/CMakeLists.txt \
+      --replace-fail "set(CMAKE_CXX_STANDARD 17)" "set(CMAKE_CXX_STANDARD 20)"
+
+    # siriusConfig.cmake uses find_library with NO_DEFAULT_PATH to locate
+    # libsirius_cxx, but with split outputs the library lives in $out/lib
+    # while the config is in $dev. Remove NO_DEFAULT_PATH so the library
+    # can be found across outputs.
+    substituteInPlace cmake/siriusConfig.cmake.in \
+      --replace-fail "NO_DEFAULT_PATH" ""
+  '';
 
   outputs = [
     "out"
@@ -95,6 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     eigen
     libvdwxc
+    fftwMpi
     jonquil
     simple-dftd3
     dftd4

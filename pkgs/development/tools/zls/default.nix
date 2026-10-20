@@ -4,6 +4,7 @@
   zig_0_14,
   zig_0_15,
   zig_0_16,
+  zig_0_17,
   fetchFromGitHub,
   callPackage,
 }:
@@ -83,5 +84,21 @@ lib.mapAttrs (_: extension: stdenv.mkDerivation (lib.extends common extension)) 
     deps = callPackage ./deps_0_16.nix { };
 
     nativeBuildInputs = [ zig_0_16 ];
+  };
+
+  zls_0_17 = finalAttrs: {
+    version = "0.17.0";
+
+    src = fetchFromGitHub {
+      owner = "zigtools";
+      repo = "zls";
+      tag = finalAttrs.version;
+      fetchSubmodules = true;
+      hash = "sha256-T9M+HveJagHY6EMvwpwlF9TrxmliefkuZ0NZ5Z1Ar90=";
+    };
+
+    deps = callPackage ./deps_0_17.nix { };
+
+    nativeBuildInputs = [ zig_0_17 ];
   };
 }

@@ -25,14 +25,14 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "zapzap";
-  version = "7.4.5";
+  version = "7.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rafatosta";
     repo = "zapzap";
     tag = finalAttrs.version;
-    hash = "sha256-cJUNOUaS39WKJrlM+jYezTGHw5obGsn6bmpyyqWg5tc=";
+    hash = "sha256-11XHhb7uwygcCIPV1mQydMtj4mXnjtzxxd+JNftHx7w=";
   };
 
   nativeBuildInputs = [

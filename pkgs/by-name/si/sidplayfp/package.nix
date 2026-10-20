@@ -38,13 +38,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sidplayfp";
-  version = "3.2.1";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "libsidplayfp";
     repo = "sidplayfp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RhRckA81VeTPKTk/SiNMcNaE/QwI+QWmz3dILHIqzRE=";
+    hash = "sha256-rQMrKzKMO8ak89HTw2bwPPGINAk7/FBtTA55IC1hhng=";
   };
 
   postPatch = ''
