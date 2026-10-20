@@ -271,8 +271,8 @@ in
       "sha256-wslSfhGAP7FLmfRb+9Ez1eHm2kYScWzbm1DjaH9t5Qk=";
 
   mypy-boto3-codecommit =
-    buildMypyBoto3Package "codecommit" "1.43.71"
-      "sha256-YnE8vRO1bzaGSCHM102N3ChinXrxj2/+vnHqst4pPbo=";
+    buildMypyBoto3Package "codecommit" "1.43.115"
+      "sha256-J5SnZ4HX2yJuKkaZoe2ncULuU9G+GukWhYIzjKjdS9s=";
 
   mypy-boto3-codedeploy =
     buildMypyBoto3Package "codedeploy" "1.43.94"
