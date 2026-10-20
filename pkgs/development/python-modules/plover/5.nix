@@ -26,9 +26,7 @@
   wcwidth,
   wheel,
   python-xlib,
-  qtbase,
-  qtsvg,
-  wrapQtAppsHook,
+  qt6,
   hidapi,
   xkbcommon,
   pyobjc-framework-Quartz,
@@ -123,12 +121,12 @@ buildPythonPackage (finalAttrs: {
     ];
   };
   nativeBuildInputs = [
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qtsvg
+    qt6.qtbase
+    qt6.qtsvg
   ];
 
   nativeCheckInputs = [
