@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "cryptoscan";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "csnp";
     repo = "cryptoscan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-94pVrxjnyZhhYrXFy5XzEpHbo79YIQdLm4T2HsDPJLg=";
+    hash = "sha256-P+SZAlOHDqNrf+d85wc/WBYBxEKg+j+/7H2014h7Aso=";
   };
 
   vendorHash = "sha256-komX1AmHt2NoF1x6xsNa2RFkfVzOXfYEMPhT0zwMxjw=";
