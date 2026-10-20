@@ -39,7 +39,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./version-check-system-roots.patch
   ];
 
-  cargoHash = "sha256-+81FRwTlR5NSJuoaH7KCK6Qy1DiU5/JKNqfaAhZmMes=";
+  cargoPatches = [
+    # webpki-roots 1.0.10 removes emSign ECC Root CA - G3.
+    # rustls-webpki 0.103.16 blocks the revoked eMudhra intermediates.
+    ./bump-webpki.patch
+  ];
+
+  cargoHash = "sha256-FBBC70/tk9/maqUgIg7BSHY2UuxHYD6CRlwW/wRMijk=";
 
   nativeBuildInputs = [
     pkg-config
