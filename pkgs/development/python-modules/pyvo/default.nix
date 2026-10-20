@@ -10,6 +10,7 @@
   requests-mock,
   setuptools,
   setuptools-scm,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -37,6 +38,7 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
     pytest-astropy
     requests-mock
+    writableTmpDirAsHomeHook
   ];
 
   pytestFlags = [
