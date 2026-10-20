@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchurl,
+  cacert,
   nixosTests,
   nextcloud33Packages,
   nextcloud34Packages,
@@ -31,8 +32,13 @@ let
 
       installPhase = ''
         runHook preInstall
+
         mkdir -p $out/
         cp -R . $out/
+
+        rm $out/resources/config/ca-bundle.crt
+        ln -s ${cacert}/etc/ssl/certs/ca-no-trust-rules-bundle.crt $out/resources/config/ca-bundle.crt
+
         runHook postInstall
       '';
 
