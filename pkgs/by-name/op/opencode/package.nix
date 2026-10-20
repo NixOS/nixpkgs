@@ -4,14 +4,15 @@
   bun,
   darwin,
   fetchFromGitHub,
-  makeWrapper,
+  installShellFiles,
+  makeBinaryWrapper,
   models-dev,
   nodejs,
   nix-update-script,
   ripgrep,
   sysctl,
-  installShellFiles,
   versionCheckHook,
+  wayland,
   writableTmpDirAsHomeHook,
 }:
 let
@@ -42,12 +43,11 @@ let
         export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
         bun install \
           --cpu="*" \
+          --filter '!./' \
+          --filter './packages/cli' \
+          --filter './packages/desktop' \
+          --filter './packages/app' \
           --frozen-lockfile \
-          --filter ./ \
-          --filter ./packages/app \
-          --filter ./packages/desktop \
-          --filter ./packages/opencode \
-          --filter ./packages/shared \
           --ignore-scripts \
           --no-progress \
           --os="*"
@@ -77,14 +77,14 @@ let
       # NOTE: Required else we get errors that our fixed-output derivation references store paths
       dontFixup = true;
 
-      outputHash = "sha256-RLHrfyBM6fMglKyEkdkW+Mmfzzr6q/U7R38goaQcIhA=";
+      outputHash = "sha256-rkmJPgpMiWErrK5GXdAz5OgD7FfkkH/fEyhn2QiPhdE=";
       outputHashAlgo = "sha256";
       outputHashMode = "recursive";
     };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "1.19.3";
+  version = "2.0.32";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "anomalyco";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NI994pBur/Lt3wSDamFxE4sb0fKq2+Kue/77i/8BTlo=";
+    hash = "sha256-KATNzF7z3PoUo30KC13Gm8uC6HA2a9bmJCZRfqY5D44=";
   };
 
   postPatch =
@@ -104,54 +104,50 @@ stdenv.mkDerivation (finalAttrs: {
         'throw new Error(`This script requires bun@''${expectedBunVersionRange}' \
         'console.warn(`Warning: This script requires bun@''${expectedBunVersionRange}'
     ''
-    # Skip smoke test
+    # Avoid requiring prettier just to format the schema JSON
     + ''
-      substituteInPlace packages/opencode/script/build.ts \
-        --replace-fail \
-        'if (item.os === process.platform && item.arch === process.arch && !item.abi)' \
-        'if (false)'
-    ''
-    # Bun 1.4.x regressed compiled executable code splitting.
-    + ''
-      substituteInPlace packages/opencode/script/build.ts \
-        --replace-fail 'splitting: true,' 'splitting: false,'
+      substituteInPlace packages/cli/script/schema.ts \
+        --replace-fail 'import { format } from "prettier"' 'const format = (s: string) => JSON.stringify(JSON.parse(s), null, 2)'
     '';
+
+  node_modules = node_modules finalAttrs;
 
   nativeBuildInputs = [
     bun
-    nodejs
     installShellFiles
-    makeWrapper
+    makeBinaryWrapper
+    nodejs
     writableTmpDirAsHomeHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.sigtool
+    darwin.autoSignDarwinBinariesHook
   ];
+
+  env = {
+    MODELS_DEV_API_JSON = "${models-dev}/dist/_api.json";
+    OPENCODE_DISABLE_MODELS_FETCH = true;
+    OPENCODE_VERSION = finalAttrs.version;
+    OPENCODE_CHANNEL = "latest";
+    NODE_OPTIONS = "--max-old-space-size=4096";
+  };
 
   configurePhase = ''
     runHook preConfigure
 
-    cp -R ${finalAttrs.passthru.node_modules}/. .
+    cp -R "$node_modules"/. .
     patchShebangs node_modules
     patchShebangs packages/*/node_modules
 
     runHook postConfigure
   '';
 
-  env.MODELS_DEV_API_JSON = "${models-dev}/dist/_api.json";
-  env.OPENCODE_DISABLE_MODELS_FETCH = true;
-  env.OPENCODE_VERSION = finalAttrs.version;
-  env.OPENCODE_CHANNEL = "prod";
-
   buildPhase = ''
     runHook preBuild
 
-    cd ./packages/opencode
+    cd ./packages/cli
     bun --bun ./script/build.ts --single --skip-install
-    bun --bun ./script/schema.ts config.json tui.json
-    substituteInPlace config.json \
-      --replace-fail "https://models.dev/model-schema.json" \
-                     "file://$out/share/model-schema.json"
+    bun --bun ./script/schema.ts cli.json
+    bun --bun ../schema/script/config-schema.ts config.json
 
     runHook postBuild
   '';
@@ -159,61 +155,34 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 dist/opencode-*/bin/opencode $out/bin/opencode
-    wrapProgram $out/bin/opencode \
-     --suffix PATH : ${lib.makeBinPath [ ripgrep ]} \
-     ${lib.optionalString stdenv.hostPlatform.isDarwin "--prefix PATH : ${lib.makeBinPath [ sysctl ]}"} \
-    --set OPENCODE_DISABLE_AUTOUPDATE true \
-    --run '
-      # NOTE: Once this workaround is removed we should switch back to using
-      # makeBinaryWrapper here.
+    install -Dm755 dist/cli-*/bin/opencode $out/bin/opencode
 
-      # nixpkgs previously built OpenCode with OPENCODE_CHANNEL=stable. "stable"
-      # is no longer an upstream channel, so it caused OpenCode to store its database
-      # as opencode-stable.db. After switching to the upstream production channel,
-      # OpenCode would normally use opencode.db instead, making existing sessions
-      # appear to be lost. Keep using the legacy database until the user migrates
-      # it, unless they explicitly configured OPENCODE_DB or disabled this workaround.
+    wrapArgs=(
+      --set OPENCODE_DISABLE_AUTOUPDATE true
+      --suffix PATH : ${lib.makeBinPath [ ripgrep ]}
+    )
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+      wrapArgs+=(--prefix PATH : ${lib.makeBinPath [ sysctl ]})
+    ''}
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
+      wrapArgs+=(--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ wayland ]})
+    ''}
 
-      data_home="''${XDG_DATA_HOME:-$HOME/.local/share}"
-      legacy="$data_home/opencode/opencode-stable.db"
-      canonical="$data_home/opencode/opencode.db"
+    wrapProgram $out/bin/opencode "''${wrapArgs[@]}"
 
-      if [ -z "''${OPENCODE_DB:-}" ] \
-        && [ -z "''${NIXPKGS_OPENCODE_DISABLE_LEGACY_DB_WORKAROUND:-}" ] \
-        && [ -e "$legacy" ] \
-        && [ ! -e "$canonical" ]; then
-        export OPENCODE_DB="opencode-stable.db"
-
-        # Only show migration guidance when stderr is attached to a terminal.
-        # Non-interactive uses such as `opencode web`, services, or scripts
-        # should continue starting normally with the legacy database selected.
-        if [ -t 2 ]; then
-          echo "Detected legacy nixpkgs OpenCode database at $legacy." >&2
-          echo "Continuing to use it for compatibility." >&2
-          echo "See https://github.com/NixOS/nixpkgs/pull/558549 for migration instructions." >&2
-          echo "Set NIXPKGS_OPENCODE_DISABLE_LEGACY_DB_WORKAROUND=1 to disable this workaround." >&2
-        fi
-      fi
-    '
-
-    install -Dm644 ${models-dev.jsonschema} $out/share/model-schema.json
+    install -Dm644 cli.json $out/share/cli.json
     install -Dm644 config.json $out/share/config.json
-    install -Dm644 tui.json $out/share/tui.json
     install -Dm644 ../web/public/theme.json $out/share/theme.json
 
     runHook postInstall
   '';
 
-  postInstall =
-    lib.optionalString stdenv.hostPlatform.isDarwin ''
-      codesign --force --sign - $out/bin/.opencode-wrapped
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd opencode \
-        --bash <($out/bin/opencode completion) \
-        --zsh <(SHELL=/bin/zsh $out/bin/opencode completion)
-    '';
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd opencode \
+      --bash <($out/bin/opencode --completions bash) \
+      --zsh <($out/bin/opencode --completions zsh) \
+      --fish <($out/bin/opencode --completions fish)
+  '';
 
   dontStrip = true;
 
@@ -230,11 +199,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     jsonschema = {
+      cli = "${finalAttrs.finalPackage}/share/cli.json";
       config = "${finalAttrs.finalPackage}/share/config.json";
       theme = "${finalAttrs.finalPackage}/share/theme.json";
-      tui = "${finalAttrs.finalPackage}/share/tui.json";
     };
-    node_modules = node_modules finalAttrs;
     updateScript = nix-update-script {
       extraArgs = [
         "--subpackage"
@@ -252,6 +220,7 @@ stdenv.mkDerivation (finalAttrs: {
       delafthi
       DuskyElf
       graham33
+      xiaoxiangmoe
     ];
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     platforms = [

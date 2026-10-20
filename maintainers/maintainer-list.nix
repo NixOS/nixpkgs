@@ -18252,6 +18252,12 @@
     githubId = 73405010;
     name = "Mart-Mihkel Aun";
   };
+  MartenBE = {
+    email = "martijn.saelens@protonmail.com";
+    github = "MartenBE";
+    githubId = 1958780;
+    name = "Martijn Saelens";
+  };
   martijnvermaat = {
     email = "martijn@vermaat.name";
     github = "martijnvermaat";
@@ -30465,6 +30471,12 @@
     githubId = 48321566;
     name = "Mira Chacku Purakal";
   };
+  twstagg = {
+    email = "tristinstagg@gmail.com";
+    github = "twstagg";
+    githubId = 2766946;
+    name = "Tristin Stagg";
+  };
   twz123 = {
     name = "Tom Wieczorek";
     email = "tom@bibbu.net";
@@ -31180,6 +31192,14 @@
     githubId = 1771332;
     name = "László Vaskó";
   };
+  VlaDexa = {
+    name = "Vladislav Grechannik";
+    email = "nixpkgs@vladexa.xyz";
+    keys = [ { fingerprint = "1E21 85DA D156 B08C 2740  D301 D58B FE42 A558 7A72"; } ];
+    github = "VlaDexa";
+    githubId = 52157081;
+    matrix = "@vladexa:vladexa.xyz";
+  };
   vlinkz = {
     email = "vmfuentes64@gmail.com";
     github = "vlinkz";
@@ -31454,6 +31474,11 @@
     github = "wanderer";
     githubId = 158211;
     keys = [ { fingerprint = "82CB 91F4 F3E4 04A5 DAB2  78E8 8B99 1293 8FF2 1020"; } ];
+  };
+  wangl-cc = {
+    name = "Loong";
+    github = "wangl-cc";
+    githubId = 40141251;
   };
   wariuccio = {
     name = "Wariuccio";
@@ -32322,6 +32347,12 @@
     github = "xrtxn";
     githubId = 47603387;
     name = "Mihók Martin";
+  };
+  xsteadfastx = {
+    email = "marvin@xsteadfastx.org";
+    github = "xsteadfastx";
+    githubId = 168397;
+    name = "Marvin Preuss";
   };
   xtrayambak = {
     github = "xTrayambak";

@@ -10,14 +10,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "uploadserver";
-  version = "6.0.3";
+  version = "6.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Densaugeo";
     repo = "uploadserver";
     tag = finalAttrs.version;
-    hash = "sha256-aG/s7C55QaAvOMFWrYKlDdjQFWljKBjal2Qe6j1/B/o=";
+    hash = "sha256-ZsjSjB/o2BEoTtmbNb79k5Ed4MFcvvG+SNgvJbDQudg=";
   };
 
   build-system = [ setuptools ];

@@ -43,6 +43,7 @@
   xz,
   yasm,
   glslang,
+  wrapGAppsHook3,
   nixosTests,
   # If open-watcom-bin is not passed, VirtualBox will fall back to use
   # the shipped alternative sources (assembly).
@@ -133,10 +134,14 @@ stdenv.mkDerivation (finalAttrs: {
     yasm
     glslang
   ]
-  ++ optional (!headless) wrapQtAppsHook;
+  ++ optionals (!headless) [
+    wrapQtAppsHook
+    wrapGAppsHook3
+  ];
 
   # Wrap manually because we wrap just a small number of executables.
   dontWrapQtApps = true;
+  dontWrapGApps = true;
 
   buildInputs = [
     acpica-tools
@@ -385,6 +390,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preFixup =
     optionalString (!headless) ''
+      qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
       wrapQtApp $out/bin/VirtualBox
     ''
     # If hardening is disabled, wrap the VirtualBoxVM binary instead of patching

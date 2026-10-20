@@ -9642,12 +9642,13 @@ self: super: with self; {
     )
   ) { };
 
-  libcec = toPythonModule (
-    pkgs.libcec.override {
-      python3 = python;
-      pythonSupport = true;
-    }
-  );
+  libcec =
+    (toPythonModule (
+      pkgs.libcec.override {
+        python3 = python;
+        pythonSupport = true;
+      }
+    )).python;
 
   libcloud = callPackage ../development/python-modules/libcloud { };
 

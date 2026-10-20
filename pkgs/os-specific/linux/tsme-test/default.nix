@@ -44,7 +44,7 @@ stdenv.mkDerivation {
     description = "Kernel driver to test the status of AMD TSME (Transparent Secure Memory Encryption)";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ lyn ];
-    platforms = lib.platforms.linux;
+    platforms = [ "x86_64-linux" ];
     homepage = "https://github.com/AMDESE/mem-encryption-tests";
   };
 }

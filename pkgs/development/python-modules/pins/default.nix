@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "pins";
-  version = "0.9.1";
+  version = "0.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rstudio";
     repo = "pins-python";
     tag = "v${version}";
-    hash = "sha256-fDbgas4RG4cJRqrISWmrMUQUycQindlqF9/jA5R1TF8=";
+    hash = "sha256-0P13Fy+9WvG/rwkT04wpU7P7ahzve4JkutK0y2O6Oak=";
   };
 
   build-system = [
