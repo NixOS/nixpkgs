@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ lib, ... }:
 {
   name = "photoprism";
   meta.maintainers = with lib.maintainers; [ stunkymonkey ];
@@ -9,14 +9,12 @@
       services.photoprism = {
         enable = true;
         port = 8080;
-        originalsPath = "/media/photos/";
+        originalsPath = "/etc/photos/";
         passwordFile = "/etc/photoprism-password";
       };
       environment = {
         etc."photoprism-password".text = "secret";
-        extraInit = ''
-          mkdir -p /media/photos
-        '';
+        etc."photos/something.txt".text = "asdf";
       };
     };
 
