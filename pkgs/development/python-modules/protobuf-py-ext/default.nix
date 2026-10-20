@@ -9,7 +9,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "protobuf-py-ext";
-  version = "0.3.0";
+  version = "0.6.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -18,12 +18,12 @@ buildPythonPackage (finalAttrs: {
   src = fetchPypi {
     pname = "protobuf_py_ext";
     inherit (finalAttrs) version;
-    hash = "sha256-1qNFh+zrXvZ3f7Pe3Bxh8Rktpx1feQSagCitBjE9LYQ=";
+    hash = "sha256-A/Ycz8rVKi14SuybsLYIjg4y8USmw6s97tEvF/Hw0Ls=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-sUW+sCV9abJe7NmTEAT0QUKA4QyN0gwrfN1UR47peHU=";
+    hash = "sha256-mLol3nFEQ+m9qzy95M39CPzmNUIixTGk5wgDjD2JVdg=";
   };
 
   nativeBuildInputs = [
