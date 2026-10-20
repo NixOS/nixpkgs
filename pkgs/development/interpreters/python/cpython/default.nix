@@ -706,6 +706,10 @@ stdenv.mkDerivation (finalAttrs: {
       # Include a sitecustomize.py file
       cp ${../sitecustomize.py} $out/${sitePackages}/sitecustomize.py
     ''
+    + optionalString withOpenssl ''
+      find $out/lib/${libPrefix}/ensurepip -name 'pip-*.whl' \
+        -exec ${pythonOnBuildForHostInterpreter} ${./ensurepip-certifi.py} ${../pip-certifi-override.py} {} +
+    ''
     + optionalString stripBytecode ''
       # Determinism: deterministic bytecode
       # First we delete all old bytecode.
