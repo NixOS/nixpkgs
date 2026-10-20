@@ -36,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "X.Org font package creation/installation utilities";
     homepage = "https://gitlab.freedesktop.org/xorg/font/util";
