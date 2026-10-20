@@ -41,6 +41,9 @@ let
         # the linker will make the stack executable.
         "-DCMAKE_C_FLAGS=-DHAVE_GNU_STACK"
         "-DTLS_DEFAULT_CA_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt"
+        # The default OPENSSLDIR is the relative path "etc/ssl", so libcrypto
+        # would look for its default CA file relative to the current directory.
+        "-DOPENSSLDIR=${placeholder "out"}/etc/ssl"
       ]
       ++ lib.optional buildShared "-DBUILD_SHARED_LIBS=ON";
 
@@ -93,6 +96,10 @@ let
         "nc"
       ];
 
+      postInstall = ''
+        ln -sf ${cacert}/etc/ssl/certs/ca-bundle.crt $out/etc/ssl/cert.pem
+      '';
+
       postFixup = ''
         moveToOutput "bin/nc" "$nc"
         moveToOutput "bin/openssl" "$bin"
@@ -107,6 +114,8 @@ let
         # Check whether the build target actually contains our cacert.
         # A simple binary match for the path is enough.
         grep "${cacert}/etc/ssl/certs/ca-bundle.crt" $out/lib/*libtls*
+        grep "$out/etc/ssl/cert.pem" $out/lib/*libcrypto*
+        [[ "$(readlink $out/etc/ssl/cert.pem)" == "${cacert}/etc/ssl/certs/ca-bundle.crt" ]]
 
         runHook postInstallCheck
       '';
