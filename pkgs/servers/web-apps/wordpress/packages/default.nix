@@ -209,6 +209,12 @@ let
           ln -s ${cacert}/etc/ssl/certs/ca-no-trust-rules-bundle.crt $out/vendor/composer/ca-bundle/res/cacert.pem
         '';
       };
+      wpforms-lite = prev.plugins.wpforms-lite.overrideAttrs {
+        postInstall = ''
+          rm $out/vendor_prefixed/stripe/stripe-php/data/ca-certificates.crt
+          ln -s ${cacert}/etc/ssl/certs/ca-no-trust-rules-bundle.crt $out/vendor_prefixed/stripe/stripe-php/data/ca-certificates.crt
+        '';
+      };
     };
   };
 in
