@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  testers,
   fetchFromGitLab,
   gitUpdater,
 
@@ -35,6 +36,10 @@ stdenv.mkDerivation (finalAttrs: {
     inherit libdvdread;
 
     updateScript = gitUpdater { };
+
+    tests = {
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    };
   };
 
   meta = {
@@ -43,5 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.wmertens ];
     platforms = lib.platforms.unix;
+    pkgConfigModules = [ "dvdnav" ];
   };
 })
