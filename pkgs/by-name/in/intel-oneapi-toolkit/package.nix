@@ -212,7 +212,7 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "intel-oneapi-toolkit";
 
-  version = "2026.0.1.27";
+  version = "2026.2.0.667";
   versionYear = lib.versions.major finalAttrs.version;
   versionMajor = lib.versions.minor finalAttrs.version;
 
@@ -220,8 +220,8 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   src = fetchurl {
-    url = "https://registrationcenter-download.intel.com/akdlm/IRC_NAS/c9c3d3e3-ddb4-490e-bb41-6e9041ba32a7/intel-oneapi-toolkit-2026.0.1.27_offline.sh";
-    hash = "sha256-MCMdAN4BCIkuptUOeFCRtAy4eQuwBryl5PXmRzWjPPo=";
+    url = "https://registrationcenter-download.intel.com/akdlm/IRC_NAS/902d3dfc-ece4-4282-9a4a-48020ca454e6/intel-oneapi-toolkit-2026.2.0.667_offline.sh";
+    hash = "sha256-WbZe6YkOFpMtLOvdWXZrbvlEBDRntO4e9v+iK1bMGJQ=";
   };
 
   nativeBuildInputs = [
