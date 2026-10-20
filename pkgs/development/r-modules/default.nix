@@ -2884,9 +2884,14 @@ let
     });
 
     s2 = old.s2.overrideAttrs (attrs: {
+      env = (attrs.env or { }) // {
+        S2_FORCE_BUNDLED_ABSEIL = "false";
+      };
       preConfigure = ''
         substituteInPlace "configure" \
           --replace-fail "absl_s2" "absl_flags absl_check"
+        substituteInPlace src/Makevars.in \
+          --replace-fail CXX17 CXX20
       '';
     });
 
