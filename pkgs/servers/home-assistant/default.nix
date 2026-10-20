@@ -109,6 +109,22 @@ let
         ];
       });
 
+      # wiz: pywizlight 0.6.4+ made `wizlight.state` a list of PilotParser
+      # objects (multi-zone bulbs); the wiz component still expects a single
+      # PilotParser and every entity setup fails with "'list' object has no
+      # attribute 'get_brightness'". home-assistant pins 0.6.3 and closed
+      # its own bump PRs (home-assistant/core#186933) until dual-zone
+      # support lands. Drop this once the manifest requires >= 0.6.4.
+      pywizlight = super.pywizlight.overridePythonAttrs (oldAttrs: rec {
+        version = "0.6.3";
+        src = fetchFromGitHub {
+          owner = "sbidy";
+          repo = "pywizlight";
+          tag = "v${version}";
+          hash = "sha256-rCoWdqvFLSLNBAHeFJ6f9kZpIg4WyE8VJLpmsYl+gJM=";
+        };
+      });
+
       serialx = super.serialx.overridePythonAttrs (oldAttrs: {
         # many components use the serialx[esphome] implicitly
         dependencies = oldAttrs.dependencies or [ ] ++ oldAttrs.optional-dependencies.esphome;
