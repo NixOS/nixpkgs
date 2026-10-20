@@ -62,6 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
       libx11
     ];
 
+  strictDeps = true;
+
   mesonFlags = [
     "-Degl=${lib.boolToYesNo (x11Support && !stdenv.hostPlatform.isDarwin)}"
     "-Dglx=${lib.boolToYesNo x11Support}"
