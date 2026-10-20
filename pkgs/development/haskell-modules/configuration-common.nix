@@ -980,7 +980,12 @@ with haskellLib;
   hnix-store-core = warnAfterVersion "0.6.1.0" (doJailbreak super.hnix-store-core);
 
   # hnix doesn't support hnix-store-core >= 0.8: https://github.com/haskell-nix/hnix/pull/1112
-  hnix-store-core_0_8_0_0 = doDistribute super.hnix-store-core_0_8_0_0;
+  # Switch hnix-store-core from memory to ram to match crypton >= 1.1
+  hnix-store-core_0_8_0_0 = doDistribute (
+    appendPatches [
+      ./patches/hnix-store-core-crypton-1.1-and-ram.patch
+    ] (super.hnix-store-core_0_8_0_0.override { memory = self.ram; })
+  );
   hnix-store-db = super.hnix-store-db.override { hnix-store-core = self.hnix-store-core_0_8_0_0; };
   hnix-store-json = super.hnix-store-json.override {
     hnix-store-core = self.hnix-store-core_0_8_0_0;
@@ -3630,11 +3635,17 @@ with haskellLib;
     };
   in
   {
-    cachix-api = overrideSrc {
-      inherit version;
-      src = src + "/cachix-api";
-    } super.cachix-api;
+    # Switch cachix-api from memory to ram to match crypton >= 1.1
+    cachix-api = lib.pipe super.cachix-api [
+      (overrideSrc {
+        inherit version;
+        src = src + "/cachix-api";
+      })
+      (drv: drv.override { memory = self.ram; })
+      (appendPatches [ ./patches/cachix-api-crypton-1.1-and-ram.patch ])
+    ];
 
+    # Switch cachix from memory to ram to match crypton >= 1.1
     cachix = lib.pipe super.cachix [
       (overrideSrc {
         inherit version;
@@ -3646,8 +3657,10 @@ with haskellLib;
           nix = self.hercules-ci-cnix-store.nixPackage;
           hnix-store-core = self.hnix-store-core_0_8_0_0;
           hnix-store-nar = self.hnix-store-nar;
+          memory = self.ram;
         }
       )
+      (appendPatches [ ./patches/cachix-crypton-1.1-and-ram.patch ])
     ];
   }
 )
