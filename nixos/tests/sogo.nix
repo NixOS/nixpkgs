@@ -59,5 +59,7 @@
     sogo.wait_for_open_port(20000)
     sogo.wait_for_open_port(80)
     sogo.succeed("curl -sSfL http://sogo/SOGo")
+
+    sogo.succeed("systemctl start sogo-tmpwatch.service")
   '';
 }
