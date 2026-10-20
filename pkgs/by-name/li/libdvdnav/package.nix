@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  gitUpdater,
 
   pkg-config,
   meson,
@@ -30,6 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ libdvdread ];
 
+  passthru = {
+    inherit libdvdread;
+
+    updateScript = gitUpdater { };
+  };
+
   meta = {
     homepage = "http://dvdnav.mplayerhq.hu/";
     description = "Library that implements DVD navigation features such as DVD menus";
@@ -37,6 +44,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ lib.maintainers.wmertens ];
     platforms = lib.platforms.unix;
   };
-
-  passthru = { inherit libdvdread; };
 })
