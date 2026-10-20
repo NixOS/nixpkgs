@@ -6313,17 +6313,6 @@ with pkgs;
     };
   };
 
-  rocksdb_6_23 = rocksdb.overrideAttrs rec {
-    pname = "rocksdb";
-    version = "6.23.3";
-    src = fetchFromGitHub {
-      owner = "meta";
-      repo = pname;
-      rev = "v${version}";
-      hash = "sha256-SsDqhjdCdtIGNlsMj5kfiuS3zSGwcxi4KV71d95h7yk=";
-    };
-  };
-
   SDL = sdl12-compat;
   SDL2 = sdl2-compat;
 
