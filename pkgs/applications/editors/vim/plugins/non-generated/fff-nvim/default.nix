@@ -33,7 +33,7 @@ let
       "zlob"
     ];
 
-    cargoCheckFlags = [
+    cargoTestFlags = [
       "-p"
       "fff-nvim"
       "--features"
