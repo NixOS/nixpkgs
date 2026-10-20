@@ -1,21 +1,33 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
+
   pkg-config,
+  meson,
+  ninja,
   libdvdread,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libdvdnav";
-  version = "6.1.1";
+  version = "7.0.0";
 
-  src = fetchurl {
-    url = "https://get.videolan.org/libdvdnav/${finalAttrs.version}/libdvdnav-${finalAttrs.version}.tar.bz2";
-    sha256 = "sha256-wZGnR1lH0yP/doDPksD7G+gjdwGIXzdlbGTQTpjRjUg=";
+
+  src = fetchFromGitLab {
+    domain = "code.videolan.org";
+    owner = "videolan";
+    repo = "libdvdnav";
+    tag = finalAttrs.version;
+    hash = "sha256-WuHgMsCEdIRJxvueixFQLMV4Q0gwh7p/KNKzHZZpLDM=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+  ];
+
   buildInputs = [ libdvdread ];
 
   meta = {
