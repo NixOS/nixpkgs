@@ -25,7 +25,7 @@ in
 
 buildPythonPackage (finalAttrs: {
   pname = "llvmlite";
-  version = "0.49.0";
+  version = "0.50.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -35,7 +35,7 @@ buildPythonPackage (finalAttrs: {
     owner = "numba";
     repo = "llvmlite";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AUte9llrcPl2z4ipkZ3PGeryDveZ9vj5oaBQtzGaT+w=";
+    hash = "sha256-JNnzfwMtQ2Hqdjs8QOr3KHFVulKCgkg0KHS9kDOvxSs=";
   };
 
   build-system = [
