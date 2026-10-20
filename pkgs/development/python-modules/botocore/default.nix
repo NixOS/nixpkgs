@@ -9,6 +9,7 @@
   setuptools,
 
   # dependencies
+  certifi,
   jmespath,
   python-dateutil,
   urllib3,
@@ -39,6 +40,8 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    # not required upstream, but without it botocore uses the cacert.pem above and ignores NIX_SSL_CERT_FILE
+    certifi
     jmespath
     python-dateutil
     urllib3
