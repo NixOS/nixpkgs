@@ -9,6 +9,7 @@
   themes,
   languages,
   callPackage,
+  cacert,
 }:
 
 let
@@ -200,8 +201,18 @@ let
       )
     ) generatedJson;
 
+  overrides = _final: prev: {
+    plugins = prev.plugins // {
+      hcaptcha-for-forms-and-more = prev.plugins.hcaptcha-for-forms-and-more.overrideAttrs {
+        postInstall = ''
+          rm $out/vendor/composer/ca-bundle/res/cacert.pem
+          ln -s ${cacert}/etc/ssl/certs/ca-no-trust-rules-bundle.crt $out/vendor/composer/ca-bundle/res/cacert.pem
+        '';
+      };
+    };
+  };
 in
 # This creates an extensible scope.
-lib.recursiveUpdate ((lib.makeExtensible (_: (lib.makeScope newScope packages))).extend (
-  selfWP: superWP: { }
-)) (callPackage ./thirdparty.nix { })
+lib.recursiveUpdate ((lib.makeExtensible (_: (lib.makeScope newScope packages))).extend overrides) (
+  callPackage ./thirdparty.nix { }
+)
