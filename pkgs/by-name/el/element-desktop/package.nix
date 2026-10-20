@@ -5,7 +5,7 @@
   makeWrapper,
   makeDesktopItem,
   nodejs,
-  electron_42,
+  electron_44,
   element-web,
   callPackage,
   typescript_7,
@@ -27,18 +27,18 @@
 
 let
   pnpm = pnpm_11;
-  electron = electron_42;
+  electron = electron_44;
   seshat = callPackage ./seshat { };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "element-desktop";
-  version = "1.12.30";
+  version = "1.12.32";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "element-web";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4MdfIEfpWtYHmBGMX7d1S/PgUpHLTLIkVT28/LpeSm0=";
+    hash = "sha256-oO7H5xETETU00+UOwlWD9ntXQ6UjIbXOBkzhCaSnItA=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-6Kyv9Hp6p04JVmDfAyMkb0AAbRqswthNvku0S42QzDA=";
+    hash = "sha256-YEjrZ/tqEUn6oJ1zJyCu8bNGICL6kDIIORJAgtwiQdk=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -104,8 +104,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Not used here because we link element-web in installPhase, but electron-builder throws an error if it is not present
     asar p ${element-web} apps/desktop/webapp.asar
 
-    faketty pnpm -C apps/desktop exec nx build:ts
-    faketty pnpm -C apps/desktop exec nx build:res
+    faketty pnpm -C apps/desktop exec nx build:ts --outputStyle=static
+    faketty pnpm -C apps/desktop exec nx build:res --outputStyle=static
     pnpm -C apps/desktop exec electron-builder --dir -c.electronDist=electron-dist -c.electronVersion=${electron.version} -c.mac.identity=null
 
     cd apps/desktop
