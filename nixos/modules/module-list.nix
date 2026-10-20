@@ -269,6 +269,7 @@
   ./programs/less.nix
   ./programs/liboping.nix
   ./programs/librepods.nix
+  ./programs/linuxcnc.nix
   ./programs/lix.nix
   ./programs/localsend.nix
   ./programs/mdevctl.nix
