@@ -24,14 +24,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "synchronicity";
-  version = "0.12.5";
+  version = "0.12.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "modal-labs";
     repo = "synchronicity";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-npn6SX3NV0Vcq305zyi0jEFGpdyoTESpnDTyuf+WKsQ=";
+    hash = "sha256-dMRGjO1KiZJX5+UmIbP1kBMp/ZpiVxk1dIGaWc7YoWg=";
   };
 
   build-system = [

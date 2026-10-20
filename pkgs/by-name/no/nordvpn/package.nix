@@ -7,7 +7,7 @@
   _experimental-update-script-combinators,
 }:
 let
-  version = "5.4.0";
+  version = "5.4.1";
 
   common = {
     inherit version;
@@ -16,7 +16,7 @@ let
       owner = "NordSecurity";
       repo = "nordvpn-linux";
       tag = version;
-      hash = "sha256-m3evkWYrXtgXJu7dt1mFKPVkcnrn5g3udZWafb4lFcM=";
+      hash = "sha256-sgitiRSkqS+mWA/qqQxA810pTg8LQl+RhB2go0/HBkg=";
     };
 
     # rec so that changelog can reference homepage

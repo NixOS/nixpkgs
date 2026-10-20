@@ -14,7 +14,6 @@ let
     getExe
     listToAttrs
     literalExpression
-    maintainers
     makeBinPath
     mapAttrs'
     mapAttrsToList
@@ -73,9 +72,7 @@ let
   nixosConfig = config;
 in
 {
-  meta.maintainers = with maintainers; [
-    nazarewk
-  ];
+  meta.maintainers = [ ];
   meta.doc = ./netbird.md;
 
   imports = [

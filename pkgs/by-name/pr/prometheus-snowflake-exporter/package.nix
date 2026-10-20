@@ -10,7 +10,7 @@ buildGoModule (finalAttrs: {
   pname = "prometheus-snowflake-exporter";
   # No tagged release upstream (only a moving `latest` tag), so pin the commit and
   # use nixpkgs' unstable versioning. Bump the date + rev on update.
-  version = "latest-unstable-2026-10-07";
+  version = "0-unstable-2026-10-07";
 
   __structuredAttrs = true;
 
@@ -35,7 +35,10 @@ buildGoModule (finalAttrs: {
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch" ];
+    extraArgs = [
+      "--version=branch"
+      "--version-regex=(\\d.*)"
+    ];
   };
 
   meta = {

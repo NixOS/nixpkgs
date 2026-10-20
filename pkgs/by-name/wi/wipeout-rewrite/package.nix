@@ -33,13 +33,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "wipeout-rewrite";
-  version = "0-unstable-2026-08-09";
+  version = "0-unstable-2026-09-27";
 
   src = fetchFromGitHub {
     owner = "phoboslab";
     repo = "wipeout-rewrite";
-    rev = "d48f01c8f00e7f4820a9c2ead0dedd4fb33427d3";
-    hash = "sha256-X14rixCUJCQYxeLRpnSb3xWslwcwxoyLtYu1YH3O7WY=";
+    rev = "b425ecb3b3250e4fdcb4462b72c3fb9679a1eb59";
+    hash = "sha256-blgb50CwrYh7Dcc3THv0lNvsr+LYH38cOVJS/ZjhHRM=";
   };
 
   postPatch =

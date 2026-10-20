@@ -290,10 +290,6 @@ with pkgs;
 
   alacritty-graphics = callPackage ../by-name/al/alacritty/package.nix { withGraphics = true; };
 
-  # addDriverRunpath is the preferred package name, as this enables
-  # many more scenarios than just opengl now.
-  aocd = with python3Packages; toPythonApplication aocd;
-
   cve = with python3Packages; toPythonApplication cvelib;
 
   bloodhound-py = with python3Packages; toPythonApplication bloodhound;
@@ -6302,9 +6298,6 @@ with pkgs;
     openssl_4_0
     ;
 
-  # pcre32 seems unused
-  pcre-cpp = pcre.override { variant = "cpp"; };
-
   inherit
     (callPackage ../development/libraries/physfs {
     })
@@ -6705,7 +6698,7 @@ with pkgs;
     ;
 
   # If this is updated, the default zls version should also be updated to match the default zig version.
-  zig = zig_0_16;
+  zig = zig_0_17;
 
   zigStdenv = if stdenv.cc.isZig then stdenv else lowPrio zig.passthru.stdenv;
 
@@ -6713,10 +6706,11 @@ with pkgs;
     zls_0_14
     zls_0_15
     zls_0_16
+    zls_0_17
     ;
 
   # This should be kept updated to ensure the default zls version matches the default zig version.
-  zls = zls_0_16;
+  zls = zls_0_17;
 
   libzint = zint-qt.override { withGUI = false; };
 

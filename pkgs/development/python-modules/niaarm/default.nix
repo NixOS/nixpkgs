@@ -25,6 +25,7 @@ buildPythonPackage (finalAttrs: {
   # nixpkgs-update: no auto update
   version = "0.13.4";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "firefly-cpp";
