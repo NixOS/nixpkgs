@@ -48,6 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Port of http_parser to llparse";
     homepage = "https://llhttp.org/";
