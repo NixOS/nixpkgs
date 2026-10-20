@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "runoff";
-  version = "3.1.0-unstable-2026-05-01";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
