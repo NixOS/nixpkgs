@@ -22822,6 +22822,8 @@ self: super: with self; {
     wxGTK = pkgs.wxwidgets_3_2.override { withWebKit = true; };
   };
 
+  wxpython_4_3 = callPackage ../development/python-modules/wxpython/4.3.nix { };
+
   wyoming = callPackage ../development/python-modules/wyoming { };
 
   x-transformers = callPackage ../development/python-modules/x-transformers { };
