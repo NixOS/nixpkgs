@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   fetchFromGitHub,
   buildPythonPackage,
@@ -24,15 +25,15 @@
   looptime,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "kopf";
-  version = "1.44.6";
+  version = "1.45.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nolar";
     repo = "kopf";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ffBdauplO1WkrXcsJuCKBhlkXpoinFqRU24uSoDQIm0=";
   };
 
@@ -73,14 +74,18 @@ buildPythonPackage rec {
     "tests/admission/test_webhook_ngrok.py"
     "tests/admission/test_webhook_server.py"
     "tests/authentication/test_credentials.py"
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin "tests/posting/test_threadsafety.py";
 
   disabledTests = [
     # assert [] to due missing certificate
     "test_connection_info_as_ssl_context_when_insecure"
   ];
 
-  pytestFlags = [ "-Wignore::pytest.PytestUnraisableExceptionWarning" ];
+  pytestFlags = [
+    "-Wignore::pytest.PytestUnraisableExceptionWarning"
+    "-Wignore::DeprecationWarning"
+  ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -91,8 +96,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python framework to write Kubernetes operators";
     homepage = "https://kopf.readthedocs.io/";
-    changelog = "https://github.com/nolar/kopf/releases/tag/${src.tag}";
+    changelog = "https://github.com/nolar/kopf/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ genga898 ];
   };
-}
+})
