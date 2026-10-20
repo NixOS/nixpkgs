@@ -7,7 +7,7 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rclip";
-  version = "4.0.1";
+  version = "4.0.4";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -15,8 +15,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "yurijmikhalevich";
     repo = "rclip";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JP3c/OZWXqOi6Y2shBes7A2kh5jcaRS6YSRVkdzMUYY=";
+    hash = "sha256-Z/4E9Li41nJnjtLKI3PO8iZj1y+lQ4dtyBuYiQzA/js=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace-fail "uv_build>=0.11.12,<0.12.0" "uv-build"
+  '';
 
   build-system = with python3Packages; [
     uv-build
