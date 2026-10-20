@@ -2951,10 +2951,10 @@
             },
             "src/electron": {
                 "args": {
-                    "hash": "sha256-9NOKVPH2wXoLKtenCgDFmPx9Gt1ur3xZREx8EQTAO74=",
+                    "hash": "sha256-fBhtdMzhspUyXDxIU9ylkand7skyqi49DgMSLDnxtG4=",
                     "owner": "electron",
                     "repo": "electron",
-                    "tag": "v44.9.0"
+                    "tag": "v44.9.1"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -4364,6 +4364,6 @@
         },
         "modules": "149",
         "node": "24.22.0",
-        "version": "44.9.0"
+        "version": "44.9.1"
     }
 }
