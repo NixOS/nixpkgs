@@ -34,6 +34,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-b62ICCP7Li88obcju4xBNVw7D+6TtRURrOUvzqcjHis=";
   };
 
+  patches = [
+    # `version check` used ureq's default webpki-roots store instead of the system store.
+    ./version-check-system-roots.patch
+  ];
+
   cargoHash = "sha256-+81FRwTlR5NSJuoaH7KCK6Qy1DiU5/JKNqfaAhZmMes=";
 
   nativeBuildInputs = [
