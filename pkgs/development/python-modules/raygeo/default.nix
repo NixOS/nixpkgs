@@ -15,17 +15,17 @@
 
 buildPythonPackage rec {
   pname = "raygeo";
-  version = "1.61.0";
+  version = "1.67.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4oy/gCMPGAAcuJVSQBduagw6AHCRXP/WpuL5UJ0sxpQ=";
+    hash = "sha256-+86l3GLmbHAp0THhkce33+kTUdso6xp8FqTDZ3vxqBU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-OxnLS0MbhfpNNJ6l0XNCdcBLU8S9JmpgYTr9sdzlkHQ=";
+    hash = "sha256-21lko71TEJSXXoDKkq5jzW2TqXrWXkHaGf45FgRJPhc=";
   };
 
   nativeBuildInputs = [
