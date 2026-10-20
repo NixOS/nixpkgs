@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -23,6 +25,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteInPlace src/lib.rs \
       --replace-fail '#![cfg_attr(not(debug_assertions), deny(warnings))]' ""
   '';
+
+  env.ZSTD_SYS_USE_PKG_CONFIG = true;
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ zstd ];
 
   cargoTestFlags = [
     "--package"
