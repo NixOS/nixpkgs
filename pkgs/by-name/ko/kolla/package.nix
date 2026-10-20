@@ -55,6 +55,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     oslotest
     hacking
     bashate
+    ddt
   ];
 
   meta = {
