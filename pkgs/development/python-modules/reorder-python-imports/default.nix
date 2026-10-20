@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "reorder-python-imports";
-  version = "3.18.0";
+  version = "3.19.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "asottile";
     repo = "reorder_python_imports";
     tag = "v${version}";
-    hash = "sha256-ZxO449dJPWozEMEM1BhHJGIAg0Mtr3bfg+3WvAgdoCE=";
+    hash = "sha256-LH4h9c9rF8zShgOJYnWJu4n8Uj70oUDHHtFv9FzV82o=";
   };
 
   build-system = [ setuptools ];
