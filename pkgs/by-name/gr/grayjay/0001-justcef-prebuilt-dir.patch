@@ -1,0 +1,44 @@
+diff --git a/JustCef/JustCef.csproj b/JustCef/JustCef.csproj
+--- a/JustCef/JustCef.csproj
++++ b/JustCef/JustCef.csproj
+@@ -53,27 +53,31 @@
+           BeforeTargets="AssignTargetPaths;GetCopyToOutputDirectoryItems;ComputeFilesToPublish"
+           Condition="'$(DesignTimeBuild)' != 'true'">
+
+-    <Error Condition="'$(JustCefRid)' == ''"
++    <Error Condition="'$(JustCefPrebuiltDir)' == '' and '$(JustCefRid)' == ''"
+            Text="JustCef: Could not infer an effective RID. Set -r or set RuntimeIdentifier." />
+
+-    <Error Condition="'$(JustCefArchiveName)' == ''"
++    <Error Condition="'$(JustCefPrebuiltDir)' == '' and '$(JustCefArchiveName)' == ''"
+            Text="JustCef: No archive mapping for RID '$(JustCefRid)'. Set JustCefArchiveOverride or add a mapping." />
+
+-    <MakeDir Directories="$(JustCefCacheDir);$(JustCefExtractDir)" />
++    <PropertyGroup Condition="'$(JustCefPrebuiltDir)' != ''">
++      <JustCefExtractDir>$(JustCefPrebuiltDir)</JustCefExtractDir>
++    </PropertyGroup>
++
++    <MakeDir Condition="'$(JustCefPrebuiltDir)' == ''" Directories="$(JustCefCacheDir);$(JustCefExtractDir)" />
+
+-    <PropertyGroup>
++    <PropertyGroup Condition="'$(JustCefPrebuiltDir)' == ''">
+       <_JustCefScriptWin>$(MSBuildProjectDirectory)\ensure-justcef-win.ps1</_JustCefScriptWin>
+       <_JustCefScriptLinux>$(MSBuildProjectDirectory)/ensure-justcef-linux.sh</_JustCefScriptLinux>
+       <_JustCefScriptMac>$(MSBuildProjectDirectory)/ensure-justcef-macos.sh</_JustCefScriptMac>
+     </PropertyGroup>
+
+-    <Exec Condition="$([MSBuild]::IsOSPlatform('Windows'))"
++    <Exec Condition="'$(JustCefPrebuiltDir)' == '' and $([MSBuild]::IsOSPlatform('Windows'))"
+           Command='powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(_JustCefScriptWin)&quot; -Url &quot;$(JustCefUrl)&quot; -ZipPath &quot;$(JustCefZipPath)&quot; -ExtractDir &quot;$(JustCefExtractDir)&quot; -Version &quot;$(JustCefVersion)&quot;' />
+
+-    <Exec Condition="$([MSBuild]::IsOSPlatform('Linux'))"
++    <Exec Condition="'$(JustCefPrebuiltDir)' == '' and $([MSBuild]::IsOSPlatform('Linux'))"
+           Command='bash &quot;$(_JustCefScriptLinux)&quot; &quot;$(JustCefUrl)&quot; &quot;$(JustCefZipPath)&quot; &quot;$(JustCefExtractDir)&quot; &quot;$(JustCefVersion)&quot;' />
+
+-    <Exec Condition="$([MSBuild]::IsOSPlatform('OSX'))"
++    <Exec Condition="'$(JustCefPrebuiltDir)' == '' and $([MSBuild]::IsOSPlatform('OSX'))"
+           Command='bash &quot;$(_JustCefScriptMac)&quot; &quot;$(JustCefUrl)&quot; &quot;$(JustCefZipPath)&quot; &quot;$(JustCefExtractDir)&quot; &quot;$(JustCefVersion)&quot;' />
+
+     <ItemGroup>
+--
+2.55.0
