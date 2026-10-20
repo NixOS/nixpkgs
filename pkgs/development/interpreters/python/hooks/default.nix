@@ -485,11 +485,82 @@ in
   ) { };
 
   unittestCheckHook = callPackage (
-    { makePythonHook }:
+    {
+      testers,
+      makePythonHook,
+      khanaa,
+    }:
     makePythonHook {
       name = "unittest-check-hook";
       substitutions = {
         inherit pythonCheckInterpreter;
+      };
+      passthru = {
+        tests =
+          let
+            test-khanaa = khanaa.overrideAttrs (
+              finalAttrs: previousAttrs: {
+                pname = "test-unittestCheckHook-khanaa";
+                doInstallCheck = true;
+                dontCheckPythonMetadata = true;
+              }
+            );
+          in
+          rec {
+            inherit test-khanaa;
+            test-khanaa-dontUseUnittestDiscover-enabledTestPaths = test-khanaa.overrideAttrs {
+              pname = "test-unittestCheckHook-khanaa-dontUseUnittestDiscover-enabledTestPaths";
+              dontUseUnittestDiscover = true;
+              enabledTestPaths = [
+                "tests/test_*n.py"
+                "tests.test_homophone"
+              ];
+            };
+            test-khanaa-dontUseUnittestDiscover-enabledTestPaths-null = testers.testBuildFailure' {
+              drv = test-khanaa-dontUseUnittestDiscover-enabledTestPaths.overrideAttrs {
+                pname = "test-unittestCheckHook-khanaa-dontUseUnittestDiscover-enabledTestPaths-null";
+                enabledTestPaths = null;
+              };
+              expectedBuilderLogEntries = [
+                "non-empty enabledTestPaths"
+              ];
+            };
+            test-khanaa-dontUseUnittestDiscover-enabledTestPaths-unmatched-glob = testers.testBuildFailure' {
+              drv = test-khanaa-dontUseUnittestDiscover-enabledTestPaths.overrideAttrs {
+                pname = "test-unittestCheckHook-khanaa-dontUseUnittestDiscover-enabledTestPaths-unmatched-glob";
+                enabledTestPaths = [
+                  "tests/test_*.py"
+                  # This matches no paths.
+                  "tests/*_test.py"
+                ];
+              };
+              expectedBuilderLogEntries = [
+                "matches no paths"
+              ];
+            };
+            test-khanaa-unittestStartDir = test-khanaa.overrideAttrs {
+              pname = "test-unittestCheckHook-khanaa-unittestStartDir";
+              unittestStartDir = "tests";
+            };
+            test-khanaa-unittestFilePattern = test-khanaa.overrideAttrs {
+              pname = "test-unittestCheckHook-khanaa-unittestFilePattern";
+              unittestFilePattern = "test_*n.py";
+            };
+            test-khanaa-enabledTests = test-khanaa.overrideAttrs {
+              pname = "test-unittestCheckHook-enabledTests";
+              enabledTests = [
+                "test_general"
+                "test_setting_form"
+              ];
+            };
+            test-khanaa-disabledTests = test-khanaa.overrideAttrs {
+              pname = "test-unittestCheckHook-disabledTests";
+              disabledTests = [
+                "test_general"
+                "test_setting_form"
+              ];
+            };
+          };
       };
     } ./unittest-check-hook.sh
   ) { };
