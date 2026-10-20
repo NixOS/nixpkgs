@@ -13,6 +13,7 @@
   meson,
   ninja,
   nixosTests,
+  nix-update-script,
   pango,
   pixman,
   pkg-config,
@@ -93,5 +94,8 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "cagebreak";
   };
 
-  passthru.tests.basic = nixosTests.cagebreak;
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.basic = nixosTests.cagebreak;
+  };
 })
