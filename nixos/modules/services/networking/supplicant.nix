@@ -43,6 +43,18 @@ let
         )
         ++ optional (suppl.bridge != "") (subsystemDevice suppl.bridge);
 
+      fallbackUnits = optionals (iface != "WLAN" && iface != "LAN" && iface != "DBUS") (
+        concatMap (
+          interface:
+          map (fallback: "${serviceName fallback}${utils.escapeSystemdPath interface}.service") (
+            filter (fallback: hasAttr fallback cfg) [
+              "WLAN"
+              "LAN"
+            ]
+          )
+        ) (splitString " " iface)
+      );
+
       ifaceArg = concatStringsSep " -N " (map (i: "-i${i}") (splitString " " iface));
       driverArg = optionalString (suppl.driver != null) "-D${suppl.driver}";
       bridgeArg = optionalString (suppl.bridge != "") "-b${suppl.bridge}";
@@ -67,7 +79,9 @@ let
       wantedBy = optionals (iface != "WLAN" && iface != "LAN") ([ "multi-user.target" ] ++ deps);
       wants = [ "network.target" ];
       bindsTo = deps;
-      after = deps;
+      # Stop the catch-all for each interface before a named supplicant starts.
+      conflicts = fallbackUnits;
+      after = deps ++ fallbackUnits;
       before = [ "network.target" ];
 
       path = [ pkgs.coreutils ];

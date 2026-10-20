@@ -3,6 +3,7 @@ let
   wired = {
     driver = "wired";
     extraConf = "ap_scan=0";
+    userControlled.enable = true;
   };
 in
 {
@@ -11,6 +12,12 @@ in
 
   nodes.machine = {
     networking.supplicant.LAN = wired;
+    # The patched supplicant uses client sockets to check an existing control socket.
+    systemd.tmpfiles.rules = [ "d /run/wpa_supplicant/client 0700 root root -" ];
+    specialisation = {
+      explicit.configuration.networking.supplicant.eth1 = wired;
+      withoutSupplicant.configuration.networking.supplicant = lib.mkForce { };
+    };
   };
 
   nodes.predictable = {
@@ -40,6 +47,34 @@ in
     machine.succeed("systemctl stop supplicant-lan@eth1.service")
     machine.succeed("systemctl restart supplicant-udev-trigger.service")
     # Triggering the uevent does not wait for systemd to queue the start job.
+    machine.wait_until_succeeds("systemctl is-active supplicant-lan@eth1.service")
+    machine.wait_until_succeeds("wpa_cli -s /tmp -p /run/wpa_supplicant -i eth1 ping | grep -Fx PONG")
+
+    # A new explicit assignment must retire the already running catch-all,
+    # even though its template remains configured for the other interfaces.
+    machine.succeed("/run/booted-system/specialisation/explicit/bin/switch-to-configuration test")
+    machine.wait_for_unit("supplicant-eth1.service")
+    machine.wait_until_succeeds("test $(systemctl is-active supplicant-lan@eth1.service) = inactive")
+    machine.wait_until_succeeds("wpa_cli -s /tmp -p /run/wpa_supplicant -i eth1 ping | grep -Fx PONG")
+    machine.succeed("udevadm info --query=property /sys/class/net/eth1 | grep '^SYSTEMD_WANTS=' | grep -F 'supplicant-eth1.service'")
+
+    # Removing the explicit assignment restores the catch-all instance.
+    machine.succeed("/run/booted-system/bin/switch-to-configuration test")
+    machine.wait_until_succeeds("systemctl is-active supplicant-lan@eth1.service")
+    machine.fail("systemctl is-active supplicant-eth1.service")
+    machine.wait_until_succeeds("wpa_cli -s /tmp -p /run/wpa_supplicant -i eth1 ping | grep -Fx PONG")
+
+    # Replaying unchanged rules must keep a still-needed instance running.
+    main_pid = machine.succeed("systemctl show --property=MainPID --value supplicant-lan@eth1.service")
+    machine.succeed("systemctl restart supplicant-udev-trigger.service", "udevadm settle")
+    machine.wait_until_succeeds("systemctl is-active supplicant-lan@eth1.service")
+    assert main_pid == machine.succeed("systemctl show --property=MainPID --value supplicant-lan@eth1.service")
+
+    # Enabling the catch-all after boot must also start it for an active NIC.
+    machine.succeed("/run/booted-system/specialisation/withoutSupplicant/bin/switch-to-configuration test")
+    machine.fail("systemctl is-active supplicant-lan@eth1.service")
+    machine.wait_for_unit("sys-subsystem-net-devices-eth1.device")
+    machine.succeed("/run/booted-system/bin/switch-to-configuration test")
     machine.wait_until_succeeds("systemctl is-active supplicant-lan@eth1.service")
 
     # Renamed wired interfaces must still receive their own instance.
