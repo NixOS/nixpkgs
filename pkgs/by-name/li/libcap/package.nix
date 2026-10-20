@@ -28,6 +28,20 @@
 
 assert usePam -> pam != null;
 
+let
+  # rebuild avoidance, revert on staging
+  overrideGo =
+    go:
+    go.overrideAttrs (
+      finalAttrs: _prevAttrs: {
+        version = "1.26.9";
+        src = fetchurl {
+          url = "https://go.dev/dl/go${finalAttrs.version}.src.tar.gz";
+          hash = "sha256-lzXX3Ntls10/pXfwQGRzfAO4nPGitx5uaf4vPG+f1Mo=";
+        };
+      }
+    );
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcap";
   version = "2.78";
@@ -51,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = lib.optionals withGo [
-    go
+    (overrideGo go)
   ];
 
   buildInputs = lib.optional usePam pam;
@@ -106,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   disallowedReferences = lib.optionals withGo [
-    pkgsBuildHost.go
+    (overrideGo pkgsBuildHost.go)
   ];
 
   passthru.tests = {
