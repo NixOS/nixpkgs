@@ -36,6 +36,10 @@
 
   postPatch ? "patchShebangs .",
 
+  strictDeps ? true,
+
+  __structuredAttrs ? true,
+
   ...
 }@attrs:
 
@@ -44,6 +48,8 @@ lib.throwIf (attrs ? name)
 
   (
     let
+      inherit (lib) warn;
+
       defaultMeta = {
         homepage = "https://metacpan.org/dist/${attrs.pname}";
         inherit (perl.meta) platforms;
@@ -64,6 +70,18 @@ lib.throwIf (attrs ? name)
           nativeBuildInputs =
             nativeBuildInputs
             ++ (if !(stdenv.buildPlatform.canExecute stdenv.hostPlatform) then [ perl.mini ] else [ perl ]);
+
+          __structuredAttrs =
+            if attrs.__structuredAttrs or false then
+              warn "Explicitly setting `__structuredAttrs = true;` for Perl package ${attrs.pname}-${attrs.version} is redundant" __structuredAttrs
+            else
+              __structuredAttrs;
+
+          strictDeps =
+            if attrs.strictDeps or false then
+              warn "Explicitly setting `strictDeps = true;` for Perl package ${attrs.pname}-${attrs.version} is redundant" strictDeps
+            else
+              strictDeps;
 
           inherit
             outputs
