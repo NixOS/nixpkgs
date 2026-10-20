@@ -1,6 +1,7 @@
 {
   cmake,
   fetchFromGitHub,
+  fetchFromGitLab,
   fetchpatch,
   makeWrapper,
   lib,
@@ -27,24 +28,107 @@
 
   # otb modules
   enableFFTW ? false,
-  enableFeatureExtraction ? false,
-  enableHyperspectral ? false,
-  enableLearning ? false,
-  enableMiscellaneous ? false,
+  enableFeatureExtraction ? true,
+  enableHyperspectral ? true,
+  enableLearning ? true,
+  enableMiscellaneous ? true,
   enableOpenMP ? false,
   enablePython ? true,
   extraPythonPackages ? ps: [ ],
   enableRemote ? false,
   enableShark ? true,
-  enableSAR ? false,
-  enableSegmentation ? false,
-  enableStereoProcessing ? false,
+  enableSAR ? true,
+  enableSegmentation ? true,
+  enableStereoProcessing ? true,
   enableThirdParty ? true,
 }:
 let
   inherit (lib) optionals;
   pythonInputs =
     optionals enablePython (with python3.pkgs; [ numpy ]) ++ (extraPythonPackages python3.pkgs);
+
+  fetchOtbModule =
+    {
+      repo,
+      rev,
+      hash,
+    }:
+    fetchFromGitLab {
+      domain = "gitlab.orfeo-toolbox.org";
+      owner = "orfeotoolbox/otb-modules";
+      inherit repo rev hash;
+    };
+  otbModules =
+    optionals enableFeatureExtraction [
+      {
+        name = "FeaturesExtraction";
+        src = fetchOtbModule {
+          repo = "featuresextraction";
+          rev = "c7edb5f77f5da4363c3d947f6f576ea100c2b178";
+          hash = "sha256-4LorhzFm0fvR88/F7E5epYUFkIv9aHfdQSuxfNRWq6I=";
+        };
+      }
+    ]
+    ++ optionals enableLearning [
+      {
+        name = "Learning";
+        src = fetchOtbModule {
+          repo = "learning";
+          rev = "0e05670e5806bcc78e6ea1fc25ce70977506646d";
+          hash = "sha256-AsHBPxIKqMeRgb6uLnr1BFoJVcemoYs/m4h4nkgLURg=";
+        };
+      }
+    ]
+    ++ optionals enableSAR [
+      {
+        name = "SAR";
+        src = fetchOtbModule {
+          repo = "sar";
+          rev = "d278c3cba9475c170012230afecf50d8d086c37f";
+          hash = "sha256-0XL7JJifqk+4Lhk64jBba+ZZ+wdFxN8IdD5aRMGoRhc=";
+        };
+      }
+    ]
+    ++ optionals enableSegmentation [
+      {
+        name = "Segmentation";
+        src = fetchOtbModule {
+          repo = "segmentation";
+          rev = "2e6910f5672a3dd03866d168bf0a72cf89c0ca3e";
+          hash = "sha256-44t2mxfBK15WaCDMDa4ljzS5UyVpSEfbRKFsCdQP97s=";
+        };
+      }
+    ]
+    ++ optionals enableHyperspectral [
+      {
+        name = "Hyperspectral";
+        src = fetchOtbModule {
+          repo = "hyperspectral";
+          rev = "34c6ed806ddb576082694ffc1ba0f9bb16e05f72";
+          hash = "sha256-9Bs6trDTqqjOzdjvP0zOzCiOJjW44wSmHOeveBNa9d0=";
+        };
+      }
+    ]
+    ++ optionals enableStereoProcessing [
+      {
+        name = "StereoProcessing";
+        src = fetchOtbModule {
+          repo = "stereoprocessing";
+          rev = "8ee7dddd729197d52eead0933621cfa1cb9f171f";
+          hash = "sha256-pkwp4zTuB+zg2T8lSIqwgNMydJfIcCRf6pzVpdlDk8o=";
+        };
+      }
+    ]
+    ++ optionals enableMiscellaneous [
+      {
+        name = "Miscellaneous";
+        src = fetchOtbModule {
+          repo = "miscellaneous";
+          rev = "a65337c6b95f12bfe8c87d0ee7f1e2d9d9e0804e";
+          hash = "sha256-8gV03IQKGypJWblKka10duqnWViXoF63394E22otBDE=";
+        };
+      }
+    ];
 
   # ITK configs for OTB requires 5.3.0 and
   # filter out gdcm, libminc from list of ITK deps as it's not needed for OTB
@@ -232,6 +316,8 @@ stdenv.mkDerivation (finalAttrs: {
     ./1-otb-swig-include-itk.diff
     # GDAL >= 3.13 returns CSLConstList from GDALGetMetadata, which no longer converts to char**.
     ./2-otb-gdal-cslconstlist.diff
+    # Use the module sources copied into the tree instead of attempting network access.
+    ./3-use-packaged-modules.diff
   ];
 
   postPatch = ''
@@ -239,7 +325,10 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail \
         ''\'''${ITK_INCLUDE_DIRS}' \
         "${lib.getInclude otb-itk}/include/ITK-${itkMajorMinorVersion}"
-  '';
+  ''
+  + lib.concatMapStringsSep "\n" (
+    module: "cp -r --no-preserve=mode ${module.src} Modules/${module.name}"
+  ) otbModules;
 
   # Some core targets include ITK headers indirectly through otbMacro.h without declaring
   # OTBITK as a module dependency, so its include directory is missing during compilation.
