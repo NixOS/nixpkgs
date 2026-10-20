@@ -41,6 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withIntel libpciaccess
   ++ lib.optional withValgrind valgrind-light;
 
+  strictDeps = true;
+
   mesonFlags = [
     "-Dinstall-test-programs=true"
     "-Dcairo-tests=disabled"
