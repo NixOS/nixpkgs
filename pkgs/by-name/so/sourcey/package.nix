@@ -7,17 +7,17 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "sourcey";
-  version = "3.6.5";
+  version = "3.8.1";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "sourcey";
     repo = "sourcey";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-l1MpeJKGlQfiLCtCNMlG6ZEDYYLTMIy+N9sddDkxKXc=";
+    hash = "sha256-tvjkBJiHbk0zBBsLCXB7mKLy/eeG4V31laLajSTZ5IE=";
   };
 
-  npmDepsHash = "sha256-Wwa7//iSvBmLCogVqk8aAUX9kn9FZsndvX00JBoXI+0=";
+  npmDepsHash = "sha256-gV/XfxuaZ+W7ByQvTwF0+YgoE8942V4X9OcXV5HmOO8=";
 
   npmDepsFetcherVersion = 2;
 
