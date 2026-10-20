@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
 
-  autoPatchelfHook,
   writableTmpDirAsHomeHook,
   copyDesktopItems,
   makeDesktopItem,
@@ -26,7 +25,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    autoPatchelfHook
     writableTmpDirAsHomeHook
     copyDesktopItems
     godot
