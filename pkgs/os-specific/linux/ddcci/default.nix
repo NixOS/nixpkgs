@@ -6,6 +6,10 @@
   kernelModuleMakeFlags,
 }:
 
+let
+  kdir = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+in
+
 stdenv.mkDerivation rec {
   pname = "ddcci-driver";
   version = "0.4.5-unstable-2025-09-27";
@@ -24,11 +28,9 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     substituteInPlace ./ddcci/Makefile \
-      --replace '"$(src)"' '$(PWD)' \
-      --replace depmod \#
+      --replace '"$(src)"' '$(PWD)'
     substituteInPlace ./ddcci-backlight/Makefile \
-      --replace '"$(src)"' '$(PWD)' \
-      --replace depmod \#
+      --replace '"$(src)"' '$(PWD)'
   '';
 
   patches = [
@@ -36,11 +38,26 @@ stdenv.mkDerivation rec {
   ];
 
   makeFlags = kernelModuleMakeFlags ++ [
-    "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "KDIR=${kdir}"
     "KVER=${kernel.modDirVersion}"
-    "KERNEL_MODLIB=$(out)/lib/modules/${kernel.modDirVersion}"
-    "INCLUDEDIR=$(out)/include"
   ];
+
+  # Install through Kbuild's `modules_install` instead of the upstream
+  # `install` targets, which copy the modules by hand and thereby skip the
+  # signing rule that emits the per-module `.ko.cer` certificates
+  # `aggregateModules` merges into `modules.cer`.
+  installPhase = ''
+    runHook preInstall
+
+    for module in ddcci ddcci-backlight; do
+      make -C "${kdir}" M="$PWD/$module" modules_install \
+        INSTALL_MOD_PATH="$out" INSTALL_MOD_DIR=extra DEPMOD=true $makeFlags
+    done
+
+    install -Dm644 include/linux/ddcci.h -t "$out/include/linux"
+
+    runHook postInstall
+  '';
 
   meta = {
     description = "Kernel module driver for DDC/CI monitors";
