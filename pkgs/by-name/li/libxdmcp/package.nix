@@ -39,6 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "X Display Manager Control Protocol library";
     homepage = "https://gitlab.freedesktop.org/xorg/lib/libxdmcp";
