@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage {
   pname = "deploy-rs";
-  version = "0-unstable-2026-10-07";
+  version = "1.0.0-unstable-2026-10-19";
 
   src = fetchFromGitHub {
     owner = "serokell";
     repo = "deploy-rs";
-    rev = "45ba3f8c5cb28396fff71671806e2550b464ac86";
-    hash = "sha256-TQiEqCAQ4bWppfeRGX4O3lwopsgsd2OvcOHTEQRRwEQ=";
+    rev = "1cec0527bd09074bbee6d4461900ce5d58267217";
+    hash = "sha256-eINUtQW48bf9G3EYprthHMll8VDKxaXQP52TZFuwMmE=";
   };
 
-  cargoHash = "sha256-ONGMdmkKGPJ+6KF2hkZQBefkug/C5ZEqPidKR6OkCbU=";
+  cargoHash = "sha256-bgx2aKAYtq/8A2fa8xlhSjh2Jd6Pas5rUF+IiYEoxXQ=";
 
   # Tests use the FSEvents API on macOS, which the darwin sandbox blocks by default
   sandboxProfile = ''
