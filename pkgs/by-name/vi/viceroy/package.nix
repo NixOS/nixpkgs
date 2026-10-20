@@ -19,6 +19,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-dkoKFEeM6DI6Iaypgexa18YjoLySnIX1YfUItySx1Q0=";
 
+  postPatch = ''
+    substituteInPlace src/lib.rs \
+      --replace-fail '#![cfg_attr(not(debug_assertions), deny(warnings))]' ""
+  '';
+
   cargoTestFlags = [
     "--package"
     "viceroy-lib"
