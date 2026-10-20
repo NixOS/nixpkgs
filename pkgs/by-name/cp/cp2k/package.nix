@@ -152,6 +152,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Fix pkg-config path generation
     ./pkgconfig.patch
+
+    # SIRIUS 7.12 removed the call_fftw_fin argument from sirius_finalize()
+    ./sirius-7.12-finalize-api.patch
   ];
 
   nativeBuildInputs = [

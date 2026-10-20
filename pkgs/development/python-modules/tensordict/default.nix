@@ -5,7 +5,6 @@
   fetchFromGitHub,
 
   # build-system
-  pybind11,
   setuptools,
   setuptools-scm,
 
@@ -15,10 +14,7 @@
 
   # dependencies
   cloudpickle,
-  importlib-metadata,
   numpy,
-  orjson,
-  packaging,
   pyvers,
   torch,
 
@@ -29,7 +25,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tensordict";
-  version = "0.14.3";
+  version = "0.15.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -37,16 +33,10 @@ buildPythonPackage (finalAttrs: {
     owner = "pytorch";
     repo = "tensordict";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-j+A4bFjFRFD7QetyCdmrvQA36oVJ3MuaftbTaBFlxSU=";
+    hash = "sha256-zDWQKVhA2xxTmq5gSRLpG+LG4xqYKDF5gMDrwUWybOA=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "pybind11[global]" "pybind11"
-  '';
-
   build-system = [
-    pybind11
     setuptools
     setuptools-scm
   ];
@@ -59,19 +49,16 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     cloudpickle
-    importlib-metadata
     numpy
-    orjson
-    packaging
     pyvers
     torch
   ];
 
   pythonImportsCheck = [ "tensordict" ];
 
-  # We have to delete the source because otherwise it is used instead of the installed package.
+  # Prevent the source files from being imported at test time
   preCheck = ''
-    rm -rf tensordict
+    rm -f tensordict/__init__.py
   '';
 
   nativeCheckInputs = [
@@ -88,10 +75,6 @@ buildPythonPackage (finalAttrs: {
     # TypeError: not all arguments converted during string formatting
     "test_dtensor"
 
-    # FileNotFoundError: [Errno 2] No such file or directory: '/build/source/tensordict/tensorclass.pyi
-    "test_tensorclass_instance_methods"
-    "test_tensorclass_stub_methods"
-
     # hangs forever on some CPUs
     "test_map_iter_interrupt_early"
 
@@ -100,9 +83,13 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # RuntimeError: Failed to initialize cpuinfo!
+    "test_cast_filter_class_default"
+    "test_cast_filter_inheritance"
     "test_cast_to"
     "test_casts"
+    "test_dtype_shorthand_cast_filter"
     "test_td_params_cast"
+    "test_to_dtype_cast_filter"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Hangs due to the use of a pool

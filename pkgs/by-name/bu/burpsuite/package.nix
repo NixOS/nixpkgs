@@ -17,7 +17,7 @@ assert lib.assertMsg (
 
 let
   pname = "burpsuite";
-  version = "2026.9.1";
+  version = "2026.10";
 
   src = fetchurl {
     name = "burpsuite.jar";
@@ -26,7 +26,7 @@ let
       "https://portswigger.net/burp/releases/download?product=desktop&version=${version}&type=Jar"
       "https://web.archive.org/web/https://portswigger.net/burp/releases/download?product=desktop&version=${version}&type=Jar"
     ];
-    hash = "sha256-8FgPLvZuZ5VG9TYyd9jBynLNy7v8PcR5HEbPLAUIEZo=";
+    hash = "sha256-pDpJmu9LRk/Sdp5QNxIWDa2fTr8Mr3FFqZsSqgNQITo=";
   };
 
   description = "Integrated platform for performing security testing of web applications";

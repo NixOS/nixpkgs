@@ -10,6 +10,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libz";
   version = "1.2.8.2025.03.07";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitLab {
     owner = "sortix";
     repo = "libz";
