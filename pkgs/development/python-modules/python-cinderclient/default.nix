@@ -16,7 +16,7 @@
   setuptools,
   simplejson,
   sphinxHook,
-  stestr,
+  stestrCheckHook,
   stevedore,
 }:
 
@@ -56,16 +56,8 @@ buildPythonPackage rec {
     ddt
     oslo-serialization
     requests-mock
-    stestr
+    stestrCheckHook
   ];
-
-  checkPhase = ''
-    runHook preCheck
-
-    stestr run
-
-    runHook postCheck
-  '';
 
   pythonImportsCheck = [ "cinderclient" ];
 

@@ -9,7 +9,7 @@
   pbr,
   requests-mock,
   setuptools,
-  stestr,
+  stestrCheckHook,
   testresources,
   testscenarios,
 }:
@@ -37,16 +37,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     openssl
     requests-mock
-    stestr
+    stestrCheckHook
     testresources
     testscenarios
   ];
-
-  checkPhase = ''
-    runHook preCheck
-    stestr run
-    runHook postCheck
-  '';
 
   pythonImportsCheck = [ "keystoneclient" ];
 

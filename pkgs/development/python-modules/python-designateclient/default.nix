@@ -16,7 +16,7 @@
   setuptools,
   sphinxHook,
   sphinxcontrib-apidoc,
-  stestr,
+  stestrCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -59,14 +59,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     oslotest
     requests-mock
-    stestr
+    stestrCheckHook
   ];
-
-  checkPhase = ''
-    runHook preCheck
-    stestr run
-    runHook postCheck
-  '';
 
   pythonImportsCheck = [ "designateclient" ];
 
