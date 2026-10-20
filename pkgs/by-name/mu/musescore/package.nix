@@ -55,6 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/musescore/MuseScore/commit/f273501e418842351c4bda10cce32b0e329eaff1.patch";
       hash = "sha256-zrZRzeAHSFGtCuw/o4A3b1Blbo3FxKGxw1UDu9IggzY=";
     })
+    # Fixes the build with Qt >= 6.12, see the patch's comment. Not sent or
+    # reported upstream, because upstream doesn't seem to like to handle
+    # Qt-related build issues, see
+    # https://github.com/musescore/MuseScore/pull/34204
+    ./qmlcachegen-unity-build.diff
   ];
 
   cmakeFlags = [
