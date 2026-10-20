@@ -3,13 +3,19 @@
   fetchurl,
   lib,
   cmake,
-  cacert,
   fetchpatch,
   buildShared ? !stdenv.hostPlatform.isStatic,
 }:
 
 let
   ldLibPathEnvName = if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
+
+  # Same paths as openssl's use-etc-ssl-certs patches.
+  hostCaFile =
+    if stdenv.hostPlatform.isDarwin then
+      "/nix/var/nix/profiles/default/etc/ssl/certs/ca-bundle.crt"
+    else
+      "/etc/ssl/certs/ca-certificates.crt";
 
   generic =
     {
@@ -40,7 +46,9 @@ let
         # .note.GNU-stack section, and if that section is missing from any object,
         # the linker will make the stack executable.
         "-DCMAKE_C_FLAGS=-DHAVE_GNU_STACK"
-        "-DTLS_DEFAULT_CA_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt"
+        "-DTLS_DEFAULT_CA_FILE=${hostCaFile}"
+        # The default is the relative path "etc/ssl", resolved against the current directory.
+        "-DOPENSSLDIR=${placeholder "out"}/etc/ssl"
       ]
       ++ lib.optional buildShared "-DBUILD_SHARED_LIBS=ON";
 
@@ -56,6 +64,8 @@ let
 
       postPatch = ''
         patchShebangs tests/
+        substituteInPlace crypto/crypto_local.h \
+          --replace-fail 'OPENSSLDIR "/cert.pem"' '"${hostCaFile}"'
       ''
       + postPatch;
 
@@ -93,6 +103,11 @@ let
         "nc"
       ];
 
+      # Unused vendored CA bundle.
+      postInstall = ''
+        rm $out/etc/ssl/cert.pem
+      '';
+
       postFixup = ''
         moveToOutput "bin/nc" "$nc"
         moveToOutput "bin/openssl" "$bin"
@@ -104,9 +119,9 @@ let
       installCheckPhase = ''
         runHook preInstallCheck
 
-        # Check whether the build target actually contains our cacert.
         # A simple binary match for the path is enough.
-        grep "${cacert}/etc/ssl/certs/ca-bundle.crt" $out/lib/*libtls*
+        grep "${hostCaFile}" $out/lib/*libtls*
+        grep "${hostCaFile}" $out/lib/*libcrypto*
 
         runHook postInstallCheck
       '';
