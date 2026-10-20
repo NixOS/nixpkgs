@@ -466,6 +466,10 @@
                   "file": "hooks/gdk-pixbuf.section.md"
                 },
                 {
+                  "id": "generateshellcompletions",
+                  "file": "hooks/generateShellCompletions.section.md"
+                },
+                {
                   "id": "gnome",
                   "file": "hooks/gnome.section.md"
                 },

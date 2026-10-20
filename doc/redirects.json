@@ -117,6 +117,12 @@
   "ex-first-package-go": [
     "index.html#ex-first-package-go"
   ],
+  "ex-generateshellcompletions-env": [
+    "index.html#ex-generateshellcompletions-env"
+  ],
+  "ex-generateshellcompletions-usage": [
+    "index.html#ex-generateshellcompletions-usage"
+  ],
   "ex-modularServiceCompliance-nixos": [
     "index.html#ex-modularServiceCompliance-nixos"
   ],
@@ -154,6 +160,21 @@
   ],
   "friction-graphics-wayland": [
     "index.html#friction-graphics-wayland"
+  ],
+  "generateshellcompletions": [
+    "index.html#generateshellcompletions"
+  ],
+  "generateshellcompletions-env": [
+    "index.html#generateshellcompletions-env"
+  ],
+  "generateshellcompletions-function": [
+    "index.html#generateshellcompletions-function"
+  ],
+  "generateshellcompletions-reference": [
+    "index.html#generateshellcompletions-reference"
+  ],
+  "generateshellcompletions-usage": [
+    "index.html#generateshellcompletions-usage"
   ],
   "getting-started": [
     "index.html#getting-started"
