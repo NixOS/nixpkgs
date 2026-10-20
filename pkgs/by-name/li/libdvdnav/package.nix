@@ -19,6 +19,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libdvdnav";
   version = "7.0.0";
 
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
