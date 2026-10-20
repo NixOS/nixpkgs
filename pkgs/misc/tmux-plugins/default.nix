@@ -618,7 +618,7 @@ in
 
   online-status = mkTmuxPlugin {
     pluginName = "online-status";
-    version = "1.0.0-unstable-2017-12-14";
+    version = "1.0.0";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-online-status";
