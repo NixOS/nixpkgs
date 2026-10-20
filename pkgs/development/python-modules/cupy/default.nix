@@ -38,8 +38,15 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
   ];
 
   postPatch =
-    # Inject absolute path to nvcc instead of relying on runtime discovery heuristics
+    # Relax cython constraint
     ''
+      substituteInPlace pyproject.toml \
+        --replace-fail \
+          '"Cython>=3.2,<3.3",' \
+          '"Cython>=3.2",'
+    ''
+    # Inject absolute path to nvcc instead of relying on runtime discovery heuristics
+    + ''
       substituteInPlace cupy/_environment.py \
         --replace-fail \
           "nvcc_path = os.environ.get('NVCC', None)" \
