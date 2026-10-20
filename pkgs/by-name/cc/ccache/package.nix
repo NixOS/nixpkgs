@@ -14,6 +14,7 @@
   bashInteractive,
   ctestCheckHook,
   elfutils,
+  versionCheckHook,
   writableTmpDirAsHomeHook,
   xcodebuild,
   doctest,
@@ -92,6 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     bashInteractive
     ctestCheckHook
     elfutils # eu-elfcmp
+    versionCheckHook
     writableTmpDirAsHomeHook
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin xcodebuild;
