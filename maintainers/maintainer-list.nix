@@ -19031,6 +19031,11 @@
     github = "metalmatze";
     githubId = 872251;
   };
+  metafab = {
+    name = "Fabrice Marguerie";
+    github = "metafab";
+    githubId = 2544998;
+  };
   mevatron = {
     email = "mevatron@gmail.com";
     name = "mevatron";
