@@ -45,6 +45,8 @@ in
 
       enable = lib.mkEnableOption "Manticoresearch";
 
+      package = lib.mkPackageOption pkgs "manticoresearch" { };
+
       settings = lib.mkOption {
         default = {
           searchd = {
@@ -90,18 +92,18 @@ in
   config = lib.mkIf cfg.enable {
 
     systemd = {
-      packages = [ pkgs.manticoresearch ];
+      packages = [ cfg.package ];
       services.manticore = {
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
         serviceConfig = {
           ExecStart = [
             ""
-            "${pkgs.manticoresearch}/bin/searchd --config ${configFile}"
+            "${cfg.package}/bin/searchd --config ${configFile}"
           ];
           ExecStop = [
             ""
-            "${pkgs.manticoresearch}/bin/searchd --config ${configFile} --stopwait"
+            "${cfg.package}/bin/searchd --config ${configFile} --stopwait"
           ];
           ExecStartPre = [ "" ];
           DynamicUser = true;
