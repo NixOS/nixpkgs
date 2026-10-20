@@ -16,17 +16,19 @@
   liburing,
   enableShared ? !stdenv.hostPlatform.isStatic,
   sse42Support ? stdenv.hostPlatform.sse4_2Support,
+  version ? "10.10.1",
+  hash ? "sha256-gszW+YY8ZZ7cRVCIXuahGopqqswNRnagZLUYYmRxzGY=",
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocksdb";
-  version = "10.10.1";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "meta";
     repo = "rocksdb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gszW+YY8ZZ7cRVCIXuahGopqqswNRnagZLUYYmRxzGY=";
+    inherit hash;
   };
 
   patches = lib.optional (
