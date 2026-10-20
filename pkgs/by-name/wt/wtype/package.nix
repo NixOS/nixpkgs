@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wtype";
-  version = "0.4";
+  version = "0.5";
 
   src = fetchFromGitHub {
     owner = "atx";
     repo = "wtype";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-TfpzAi0mkXugQn70MISyNFOXIJpDwvgh3enGv0Xq8S4=";
+    hash = "sha256-1Qf35RPfaMusP1WeLcwmvfmnCmaG/WZBoIlOewZakc4=";
   };
 
   strictDeps = true;
