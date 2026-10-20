@@ -468,7 +468,7 @@ lib.extendMkDerivation {
                   posString = lib.optionalString (pos != null) "At ${pos.file}:${toString pos.line}\n";
                 in
                 ''
-                  buildPythonPackage: ${finalAttrs.name}: Overriding argument `disabled` with `<pkg>.overridePythonAttrs` is deprecated.
+                  ${finalAttrs.name}: Overriding argument `disabled` with `<pkg>.overridePythonAttrs` is deprecated.
                     Add/remove `meta.problems.unsupportedPython` instead.
                 ''
                 + posString;
@@ -483,7 +483,7 @@ lib.extendMkDerivation {
                 posString = lib.optionalString (pos != null) " at ${pos.file}:${toString pos.line}";
               in
               ''
-                `buildPythonPackage`/`buildPythonApplication`: Deprecated argument `stdenv` found${posString}
+                ${finalAttrs.name}: Deprecated argument `stdenv` found${posString}
                   Override `stdenv` with `buildPythonPackage.override` or `buildPythonApplication.override` instead.
               '';
           };
