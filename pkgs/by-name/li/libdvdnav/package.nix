@@ -9,6 +9,10 @@
   meson,
   ninja,
   libdvdread,
+
+  # for passthru.tests
+  gst_all_1,
+  vlc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     tests = {
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      inherit (gst_all_1) gst-plugins-bad;
     };
   };
 
