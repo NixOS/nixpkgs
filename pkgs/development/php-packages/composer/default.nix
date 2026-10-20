@@ -5,6 +5,7 @@
   php,
   makeBinaryWrapper,
   _7zz,
+  cacert,
   curl,
   gitMinimal,
   unzip,
@@ -37,6 +38,9 @@ php.buildComposerProject2 (finalAttrs: {
   vendorHash = "sha256-zyHcFkBTCy68hP9yt3clTE5WcOae9VTIPbdgeCArtag=";
 
   postInstall = ''
+    ln -sf ${cacert}/etc/ssl/certs/ca-bundle.crt \
+      $out/share/php/composer/vendor/composer/ca-bundle/res/cacert.pem
+
     wrapProgram $out/bin/composer \
       --prefix PATH : ${
         lib.makeBinPath [
