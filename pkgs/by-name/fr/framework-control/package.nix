@@ -76,7 +76,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       $out/share/icons/hicolor/256x256/apps/framework-control.png
   '';
 
-  passthru.updateScript = nix-update-script { };
+  # Upstream pre-releases use plain version tags; the releases API exposes the prerelease flag.
+  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
 
   meta = {
     description = "Lightweight control surface for Framework laptops";
