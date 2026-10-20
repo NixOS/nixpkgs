@@ -9829,6 +9829,12 @@
     name = "Fausto Núñez Alberro";
     keys = [ { fingerprint = "668E 01D1 B129 3F42 0A0F  933A C880 6451 94A2 D562"; } ];
   };
+  font44 = {
+    email = "hi@ketanvijayvargiya.com";
+    github = "font44";
+    githubId = 7019732;
+    name = "Ketan Vijayvargiya";
+  };
   fooker = {
     email = "fooker@lab.sh";
     github = "fooker";
@@ -14920,6 +14926,11 @@
     githubId = 367259;
     name = "Konstantin Alekseev";
   };
+  Kalitsune = {
+    name = "Kalitsune";
+    github = "Kalitsune";
+    githubId = 74075397;
+  };
   kamadorueda = {
     name = "Kevin Amado";
     email = "kamadorueda@gmail.com";
@@ -15465,6 +15476,12 @@
     github = "kitsunoff";
     githubId = 58953114;
     name = "Maxim Belyy";
+  };
+  kitsunori = {
+    email = "kitsunori@g41.moe";
+    github = "Kihara777";
+    githubId = 24633616;
+    name = "狐莉";
   };
   Kitt3120 = {
     email = "nixpkgs@schweren.dev";

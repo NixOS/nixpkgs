@@ -1242,6 +1242,7 @@ builtins.intersectAttrs super {
         pkgs.git
         pkgs.gnupg
         pkgs.lsof
+        pkgs.magic-wormhole # p2p pairing
         pkgs.openssh
         pkgs.perl
         pkgs.rsync
