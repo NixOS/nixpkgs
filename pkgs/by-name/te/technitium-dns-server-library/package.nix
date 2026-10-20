@@ -14,7 +14,7 @@ buildDotnetModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "TechnitiumSoftware";
     repo = "TechnitiumLibrary";
-    tag = "dns-server-${finalAttrs.version}";
+    tag = "dns-server-v${finalAttrs.version}";
     hash = "sha256-fb5o4AlKFU/oPypD7T3sNoUdY7nHS4skGovDSLNzpI0=";
   };
 
