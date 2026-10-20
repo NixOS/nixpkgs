@@ -1,32 +1,18 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   buildNpmPackage,
   callPackage,
   nodejs_24,
   ffmpeg_8-full,
   nunicode,
-  util-linux,
-  python3,
-  getopt,
+  typescript_5,
+  jq,
   nixosTests,
   nix-update-script,
+  routerBasePath ? "/audiobookshelf",
 }:
 
-let
-  ffmpeg-full = ffmpeg_8-full;
-  nodejs = nodejs_24;
-
-  wrapper = import ./wrapper.nix {
-    inherit
-      stdenv
-      ffmpeg-full
-      nunicode
-      getopt
-      ;
-  };
-in
 buildNpmPackage (finalAttrs: {
   pname = "audiobookshelf";
   version = "2.37.1";
@@ -40,33 +26,60 @@ buildNpmPackage (finalAttrs: {
 
   npmDepsHash = "sha256-xHjZ3E1DGeb5NueP67hEX3vHH0Qlk4LTeZkMEFBhGyE=";
 
-  inherit nodejs;
+  nodejs = nodejs_24;
 
-  buildInputs = [ util-linux ];
-  nativeBuildInputs = [ python3 ];
+  nativeBuildInputs = [
+    typescript_5
+    jq
+  ];
 
-  dontNpmBuild = true;
-  npmInstallFlags = [ "--only-production" ];
+  npmBuildScript = "build:server";
+  npmInstallFlags = [ "--omit=dev" ];
 
-  client = callPackage ./client.nix { inherit (finalAttrs) src version nodejs; };
+  makeWrapperArgs = [
+    "--set"
+    "FFMPEG_PATH"
+    (lib.getExe ffmpeg_8-full)
+    "--set"
+    "FFPROBE_PATH"
+    (lib.getExe' ffmpeg_8-full "ffprobe")
+    "--set"
+    "NODE_ENV"
+    "production"
+    "--set"
+    "NUSQLITE3_PATH"
+    "${nunicode.sqlite}/lib/libnusqlite3"
+    "--set"
+    "ROUTER_BASE_PATH"
+    (lib.escapeShellArg routerBasePath)
+    "--set"
+    "SKIP_BINARIES_CHECK"
+    "1"
+    "--set"
+    "SOURCE"
+    "nixpkgs"
+  ];
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/opt/client
-    cp -r index.js server package* node_modules $out/opt/
-    cp -r ${finalAttrs.client}/lib/node_modules/audiobookshelf-client/dist $out/opt/client/dist
-    mkdir $out/bin
+    packageOut="$out/lib/node_modules/$(jq --raw-output '.name' package.json)"
 
-    echo '${wrapper}' > $out/bin/audiobookshelf
-    echo "  exec ${finalAttrs.nodejs}/bin/node $out/opt/index.js" >> $out/bin/audiobookshelf
+    mkdir -p "$packageOut"/{client,dist-server}
+    cp -r dist-server/{index.js,package.json,server} "$packageOut"/dist-server/
+    cp -r node_modules package.json "$packageOut"/
+    cp -r ${finalAttrs.passthru.client} "$packageOut"/client/dist
 
-    chmod +x $out/bin/audiobookshelf
+    nodejsInstallExecutables
 
     runHook postInstall
   '';
 
   passthru = {
+    client = callPackage ./client.nix {
+      inherit (finalAttrs) src version nodejs;
+      inherit routerBasePath;
+    };
     tests.basic = nixosTests.audiobookshelf;
     updateScript = nix-update-script { extraArgs = [ "--subpackage=client" ]; };
   };
@@ -74,14 +87,19 @@ buildNpmPackage (finalAttrs: {
   meta = {
     homepage = "https://www.audiobookshelf.org/";
     description = "Self-hosted audiobook and podcast server";
-    changelog = "https://github.com/advplyr/audiobookshelf/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.gpl3;
+    changelog = "https://github.com/advplyr/audiobookshelf/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       jvanbruegge
       adamcstephens
       tebriel
+      connor-grady
     ];
     platforms = lib.platforms.linux;
     mainProgram = "audiobookshelf";
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryBytecode
+    ];
   };
 })
