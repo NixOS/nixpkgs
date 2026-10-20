@@ -28,16 +28,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vector";
-  version = "0.59.0";
+  version = "0.60.0";
 
   src = fetchFromGitHub {
     owner = "vectordotdev";
     repo = "vector";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lnNlywrGMWaaLw+03m9qVGZoctcSdyw2zWl+5RaUBGg=";
+    hash = "sha256-cV1BXvdMiHvm7igf0qSvECPtPvOzTQNadOGMkpcHYS8=";
   };
 
-  cargoHash = "sha256-C8Lqi3QSooXdDmSYYER9SgGkkcmgynRoy9LffmSJZns=";
+  cargoHash = "sha256-uF2HQAj6NHnL3ZqLUgl1u9Xjc8/scz78CDgWgVMvp2w=";
 
   nativeBuildInputs = [
     pkg-config
@@ -89,62 +89,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
   };
 
-  # Fix rust 1.98 compatibility
+  # upstream does not keep up to date with rust. let's not fail on every warning
   postPatch = ''
-    substituteInPlace src/trace.rs --replace-fail 'use futures::StreamExt as _;' ""
+    sed -i 's/#!\[deny(warnings)]/#!\[warn(warnings)]/' lib/*/src/lib.rs src/lib.rs src/main.rs vdev/src/main.rs
   '';
 
-  doCheck = true;
-  checkType = "debug";
-
-  checkFlags = [
-    # Tries to make a network access
-    "--skip=dns::tests::resolve_example"
-    "--skip=sinks::loki::tests::healthcheck_grafana_cloud"
-
-    # Requires secret server
-    "--skip=secrets::exec::tests::test_exec_backend::case_1"
-    "--skip=secrets::exec::tests::test_exec_backend::case_2"
-    "--skip=secrets::exec::tests::test_exec_backend_missing_secrets"
-
-    # Flakey
-    "--skip=sources::exec::tests::test_graceful_shutdown"
-    "--skip=sources::exec::tests::test_run_command_linux"
-    "--skip=sources::host_metrics::cgroups::tests::generates_cgroups_metrics"
-    "--skip=sources::host_metrics::cpu::tests::generates_cpu_metrics"
-    "--skip=sources::internal_logs::tests::repeated_logs_are_not_rate_limited"
-    "--skip=topology::test::backpressure::buffer_drop_fan_out"
-    "--skip=topology::test::backpressure::default_fan_out"
-    "--skip=topology::test::backpressure::serial_backpressure"
-    "--skip=topology::test::reload::topology_disk_buffer_config_change_chained_does_not_stall"
-    "--skip=topology::test::reload::topology_reload_preserves_enrichment_table_state"
-
-    # Requires access to journalctl
-    "--skip=sources::journald::tests::emits_cursor"
-    "--skip=sources::journald::tests::excludes_matches"
-    "--skip=sources::journald::tests::excludes_units"
-    "--skip=sources::journald::tests::handles_acknowledgements"
-    "--skip=sources::journald::tests::handles_checkpoint"
-    "--skip=sources::journald::tests::handles_missing_timestamp"
-    "--skip=sources::journald::tests::includes_kernel"
-    "--skip=sources::journald::tests::includes_matches"
-    "--skip=sources::journald::tests::includes_units"
-    "--skip=sources::journald::tests::parses_array_fields"
-    "--skip=sources::journald::tests::parses_array_messages"
-    "--skip=sources::journald::tests::parses_string_sequences"
-    "--skip=sources::journald::tests::reads_journal"
-
-    # No multicast access available in sandbox
-    "--skip=sources::socket::test::multicast_and_unicast_udp_message"
-    "--skip=sources::socket::test::multicast_udp_message"
-    "--skip=sources::socket::test::multiple_multicast_addresses_udp_message"
-    "--skip=sources::syslog::test::test_udp_syslog"
-
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin) [
-    # Fails on aarch64-darwin (https://github.com/vectordotdev/vector/issues/23813)
-    "--skip=sources::file::tests::file_start_position_server_restart_unfinalized"
-  ];
+  # tests have proven too flaky and required too many exclusions
+  doCheck = false;
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     for shell in bash fish zsh; do

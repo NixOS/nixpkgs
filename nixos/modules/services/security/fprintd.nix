@@ -21,6 +21,23 @@ in
 
       enable = lib.mkEnableOption "fprintd daemon and PAM module for fingerprint readers handling";
 
+      enablePam = lib.mkOption {
+        type = lib.types.bool;
+        default = cfg.enable;
+        defaultText = lib.literalExpression "config.services.fprintd.enable";
+        description = ''
+          When enabled, PAM services will be configured to use fprintd for authorization.
+
+          :::{.note}
+          Enabling this option will add fingerprint-based authorization to all
+          PAM services, including those which can authorize users in the background.
+          If this is undesired, you can override this setting on a per-service
+          basis through `config.security.pam.services.<name>.fprintAuth`.
+          See https://github.com/NixOS/nixpkgs/issues/442117
+          :::
+        '';
+      };
+
       package = lib.mkOption {
         type = lib.types.package;
         default = fprintdPkg;
@@ -48,6 +65,13 @@ in
   ###### implementation
 
   config = lib.mkIf cfg.enable {
+
+    assertions = [
+      {
+        assertion = cfg.enablePam -> cfg.enable;
+        message = "fprintd.enablePam depends on fprintd.enable";
+      }
+    ];
 
     services.dbus.packages = [ cfg.package ];
 
