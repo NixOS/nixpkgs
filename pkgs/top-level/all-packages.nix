@@ -6302,9 +6302,6 @@ with pkgs;
     openssl_4_0
     ;
 
-  # pcre32 seems unused
-  pcre-cpp = pcre.override { variant = "cpp"; };
-
   inherit
     (callPackage ../development/libraries/physfs {
     })
