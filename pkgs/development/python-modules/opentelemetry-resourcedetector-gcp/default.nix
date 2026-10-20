@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
+  hatchling,
   opentelemetry-api,
   opentelemetry-sdk,
   requests,
@@ -23,7 +23,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-ELQYAqz4FYOKhcn+Ha4C9dJ+vBdSe3dEERHAEL6tlbw=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
     opentelemetry-api
