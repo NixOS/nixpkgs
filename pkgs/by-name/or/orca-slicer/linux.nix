@@ -1,4 +1,7 @@
 {
+  pname,
+  version,
+  meta,
   clangStdenv,
   lib,
   binutils,
@@ -38,8 +41,8 @@
   wxwidgets_3_3,
   libx11,
   libnoise,
-  withSystemd ? clangStdenv.hostPlatform.isLinux,
-  withNvidiaGLWorkaround ? false,
+  withSystemd,
+  withNvidiaGLWorkaround,
 }:
 let
   wxGTK' =
@@ -61,8 +64,7 @@ in
 # on this particular code base (OOM with 32GB memory and --cores 16 on GCC, succeeds
 # with --cores 32 on clang).
 clangStdenv.mkDerivation (finalAttrs: {
-  pname = "orca-slicer";
-  version = "2.4.2";
+  inherit pname version meta;
 
   src = fetchFromGitHub {
     owner = "OrcaSlicer";
@@ -243,20 +245,4 @@ clangStdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     rm $out/LICENSE.txt
   '';
-
-  meta = {
-    description = "G-code generator for 3D printers (Bambu, Prusa, Voron, VzBot, RatRig, Creality, etc.)";
-    homepage = "https://github.com/OrcaSlicer/OrcaSlicer";
-    changelog = "https://github.com/OrcaSlicer/OrcaSlicer/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [
-      zhaofengli
-      ovlach
-      pinpox
-      liberodark
-      zraexy
-    ];
-    mainProgram = "orca-slicer";
-    platforms = lib.platforms.linux;
-  };
 })
