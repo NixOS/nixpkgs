@@ -8,6 +8,7 @@
   testers,
   static-server,
   replaceVars,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
@@ -56,6 +57,8 @@ buildGoModule (finalAttrs: {
       package = static-server;
     };
   };
+
+  passthru.updateScript = nix-update-script { };
 
   __darwinAllowLocalNetworking = true;
 
