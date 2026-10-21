@@ -54,6 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "OpenGL utility library";
     homepage = "https://cgit.freedesktop.org/mesa/glu/";
