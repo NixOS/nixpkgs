@@ -14,6 +14,7 @@
   vulkan-headers,
   vulkan-loader,
   imgui,
+  nix-update-script,
 
   # NOTE: Not coming from vcpkg
   IMGUI_LINK_GLVND ?
@@ -134,6 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       demo = callPackage ./demo { };
     };
+    updateScript = nix-update-script { };
   };
 
   meta = {
