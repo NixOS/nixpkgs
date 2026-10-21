@@ -89,6 +89,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://pixman.org";
     description = "Low-level library for pixel manipulation";
