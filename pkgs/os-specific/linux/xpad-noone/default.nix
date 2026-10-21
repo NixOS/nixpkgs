@@ -5,6 +5,7 @@
   fetchpatch2,
   kernel,
   kernelModuleMakeFlags,
+  kernelModuleInstallHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,13 +21,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   hardeningDisable = [ "pic" ];
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kernelModuleInstallHook ];
 
   makeFlags = kernelModuleMakeFlags ++ [
     "KERNEL_SRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-    "INSTALL_MOD_PATH=${placeholder "out"}"
-    "INSTALL_MOD_DIR=kernel/drivers/xpad-noone"
   ];
+
+  kernelModuleInstallDir = "kernel/drivers/xpad-noone";
 
   patches = [
     # https://github.com/medusalix/xpad-noone/pull/9
@@ -40,14 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace Makefile --replace-fail "/lib/modules/\$(shell uname -r)/build" "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   '';
-
-  installTargets = [ "modules_install" ];
-
-  installFlags = [
-    "-C"
-    "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-    "M=$(PWD)"
-  ];
 
   strictDeps = true;
   __structuredAttrs = true;
