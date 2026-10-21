@@ -2,6 +2,7 @@
   lib,
   buildBazelPackage,
   fetchFromGitHub,
+  fetchpatch,
   qt6,
   pkg-config,
   protobuf_27,
@@ -77,6 +78,15 @@ buildBazelPackage rec {
   ++ lib.optionals withIbus [
     "unix/ibus:gen_mozc_xml"
     "unix/ibus:ibus_mozc"
+  ];
+
+  patches = [
+    # https://github.com/google/mozc/issues/1594
+    (fetchpatch {
+      name = "mozc-qt6-12-compat.patch";
+      url = "https://github.com/google/mozc/commit/29c082a64b577b661694148760a2ae19817beb57.patch";
+      hash = "sha256-Gft1mnLPSMexDMg/PVhwjUVl9D9g1cVGvVNgFmpK168=";
+    })
   ];
 
   postPatch = ''
