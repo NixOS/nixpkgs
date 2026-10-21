@@ -1,65 +1,128 @@
+diff --git a/src/core/installation.rs b/src/core/installation.rs
+index 9362e89..072a949 100644
+--- a/src/core/installation.rs
++++ b/src/core/installation.rs
+@@ -61,3 +60,0 @@ fn inspect_core(directory: &Path, required: &CoreRequirement) -> CoreAvailabilit
+-    if matches!(std::fs::symlink_metadata(&requested), Err(error) if error.kind() == std::io::ErrorKind::NotFound) {
+-        return CoreAvailability::Missing;
+-    }
+@@ -65 +62 @@ fn inspect_core(directory: &Path, required: &CoreRequirement) -> CoreAvailabilit
+-        let approved = approved_core_copy(directory, &requested)?;
++        let approved = crate::core::runtime_generation::packaged_core(&requested)?;
+diff --git a/src/core/runtime_generation/assets.rs b/src/core/runtime_generation/assets.rs
+index 4b879b4..133340e 100644
+--- a/src/core/runtime_generation/assets.rs
++++ b/src/core/runtime_generation/assets.rs
+@@ -415,7 +415 @@ pub(crate) fn validate_core_path(core_path: &str) -> Result<ResolvedCore, Servic
+-    let executable = approved_core_copy(
+-        &crate::core::paths::service_paths()
+-            .map_err(|error| untrusted(error.to_string()))?
+-            .core_dir(),
+-        // The installer stages symlinked cores under the original name, not the target name.
+-        client_path,
+-    )?;
++    let executable = packaged_core(client_path)?;
+@@ -426,0 +421,15 @@ pub(crate) fn validate_core_path(core_path: &str) -> Result<ResolvedCore, Servic
++/// Resolves the supported core name to the immutable executable selected by the packager.
++pub(crate) fn packaged_core(requested: &Path) -> Result<PathBuf, ServiceError> {
++    // The manager validates the approved executable again before spawning it.
++    if requested == Path::new("@mihomo@") {
++        return canonical_regular_file(requested, "packaged core");
++    }
++    let Some(name) = requested.file_name() else {
++        return Err(untrusted("core path has no file name"));
++    };
++    if name != std::ffi::OsStr::new("verge-mihomo") {
++        return Err(untrusted(format!("unsupported core name {name:?}")));
++    }
++    canonical_regular_file(Path::new("@mihomo@"), "packaged core")
++}
++
+diff --git a/src/core/runtime_generation/mod.rs b/src/core/runtime_generation/mod.rs
+index 1b35df7..445f298 100644
+--- a/src/core/runtime_generation/mod.rs
++++ b/src/core/runtime_generation/mod.rs
+@@ -9 +9 @@ mod staging;
+-pub(crate) use assets::{PreparedRuntime, approved_core_copy, prepare_runtime, validate_core_path};
++pub(crate) use assets::{PreparedRuntime, approved_core_copy, packaged_core, prepare_runtime, validate_core_path};
 diff --git a/src/core/server.rs b/src/core/server.rs
-index 0098b20..db189e2 100644
+index 3b099a1..3f3e2e9 100644
 --- a/src/core/server.rs
 +++ b/src/core/server.rs
-@@ -73,7 +73,7 @@ pub async fn run_ipc_server() -> Result<JoinHandle<Result<()>>> {
-                 tokio::time::sleep(std::time::Duration::from_millis(25)).await;
-             }
-             if socket_ready {
--                fs::set_permissions(paths.ipc_path(), Permissions::from_mode(0o777)).await?;
-+                fs::set_permissions(paths.ipc_path(), Permissions::from_mode(0o660)).await?;
-             } else {
-                 warn!(
-                     "IPC socket {:?} did not appear before permission update timeout",
-@@ -298,19 +298,9 @@ fn ensure_ipc_dir(dir: &std::path::Path) -> std::io::Result<()> {
-         return Err(std::io::Error::last_os_error());
-     }
-
--    let gid = resolve_ipc_dir_gid();
--    // 以 root 运行(生产/launchd)时强制属主为 root:若攻击者预置 `/tmp/verge` 为其拥有的
--    // 真实目录,必须夺回属主,否则其以 owner 身份保留对目录(及内部 socket)的管理权。
--    // 非 root(测试/开发)既无权设 root 属主也无攻击面,跳过 chown,仅设权限位。
--    // chown/chmod 失败即 fatal;`&&`/`||` 短路使 `last_os_error()` 为失败 syscall 的 errno。
--    let chown_ok =
--        unsafe { platform_lib::geteuid() } != 0 || unsafe { platform_lib::fchown(fd, 0, gid) } == 0;
--    let ok = chown_ok && unsafe { platform_lib::fchmod(fd, 0o2770 as platform_lib::mode_t) } == 0;
--    let result = if ok {
--        Ok(())
+@@ -433,2 +433,7 @@ fn ensure_control_runtime_dir(dir: &std::path::Path) -> std::io::Result<()> {
+-    crate::core::unix_security::ensure_service_directory(dir, 0o755)
+-        .map_err(|error| std::io::Error::other(error.to_string()))
++    use std::os::unix::fs::OpenOptionsExt;
++
++    let _directory = std::fs::OpenOptions::new()
++        .read(true)
++        .custom_flags(platform_lib::O_DIRECTORY | platform_lib::O_NOFOLLOW | platform_lib::O_CLOEXEC)
++        .open(dir)?;
++    Ok(())
+@@ -500 +505 @@ fn create_ipc_server() -> Result<IpcHttpServer> {
+-        use platform_lib::{S_IRGRP, S_IROTH, S_IRUSR, S_IWGRP, S_IWOTH, S_IWUSR, mode_t};
++        use platform_lib::{S_IRGRP, S_IRUSR, S_IWGRP, S_IWUSR, mode_t};
+@@ -502 +507 @@ fn create_ipc_server() -> Result<IpcHttpServer> {
+-        let mode: mode_t = platform_lib::mode_t::from(S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
++        let mode: mode_t = platform_lib::mode_t::from(S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP);
+diff --git a/src/core/trusted_core_location.rs b/src/core/trusted_core_location.rs
+index 64b745c..c8c6f88 100644
+--- a/src/core/trusted_core_location.rs
++++ b/src/core/trusted_core_location.rs
+@@ -93 +93,6 @@ fn require_root_owned_chain(canonical: &Path, stop_after: Option<&Path>) -> Resu
+-        if metadata.mode() & 0o022 != 0 {
++        // Nix permits builders to add store entries, but the sticky bit prevents
++        // them from replacing the root-owned entry containing the packaged core.
++        let protected_nix_store = component == Path::new("/nix/store")
++            && metadata.mode() & 0o1000 != 0
++            && metadata.mode() & 0o002 == 0;
++        if metadata.mode() & 0o022 != 0 && !protected_nix_store {
+diff --git a/tests/common/mod.rs b/tests/common/mod.rs
+index 46348ec..60b1dde 100644
+--- a/tests/common/mod.rs
++++ b/tests/common/mod.rs
+@@ -24,0 +25,4 @@ pub async fn start_server() -> Result<tokio::task::JoinHandle<kode_bridge::Resul
++    #[cfg(unix)]
++    if let Some(parent) = std::path::Path::new(clash_verge_service_ipc::IPC_PATH).parent() {
++        std::fs::create_dir_all(parent)?;
++    }
+diff --git a/tests/test_owner_lifecycle.rs b/tests/test_owner_lifecycle.rs
+index ff1646b..624129e 100644
+--- a/tests/test_owner_lifecycle.rs
++++ b/tests/test_owner_lifecycle.rs
+@@ -122,15 +122,7 @@ async fn installation_query_reports_global_occupancy_and_guards_handoff() -> Res
+-    let name = format!("verge-mihomo-alpha{}", std::env::consts::EXE_SUFFIX);
+-    let directory = clash_verge_service_ipc::service_paths()?.core_dir();
+-    std::fs::create_dir_all(&directory)?;
+-    let core = directory.join(&name);
+-    let previous = std::fs::read(&core).ok();
+-    if core.exists() {
+-        std::fs::remove_file(&core)?;
+-    }
+-    let mut requirement = CoreRequirement { name, sha256: None };
+-    assert_eq!(
+-        inspect_installation(&[requirement.clone()]).await?.cores[0].availability,
+-        CoreAvailability::Missing
+-    );
+-    std::fs::write(&core, b"abc")?;
+-    requirement.sha256 = Some("ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad".into());
++    let name = format!("verge-mihomo{}", std::env::consts::EXE_SUFFIX);
++    let mut requirement = CoreRequirement {
++        name,
++        sha256: Some(clash_verge_service_ipc::management::sha256_file(std::path::Path::new(
++            "@mihomo@",
++        ))?),
++    };
+@@ -144,5 +135,0 @@ async fn installation_query_reports_global_occupancy_and_guards_handoff() -> Res
+-    if let Some(previous) = previous {
+-        std::fs::write(&core, previous)?;
 -    } else {
--        Err(std::io::Error::last_os_error())
--    };
-+    // The NixOS module's RuntimeDirectory owns the directory access policy.
-+    // Opening it with O_NOFOLLOW above still validates that it is not a symlink.
-+    let result: std::io::Result<()> = Ok(());
-     unsafe {
-         platform_lib::close(fd);
-     }
-@@ -414,14 +404,9 @@ pub fn spawn_socket_dir_watchdog() {
-                 continue;
-             }
-
--            // 目录已存在：组属可能过期(开机落 staff、之后控制台用户主组不同)，或被替换为
--            // symlink/文件。用 lstat(no-follow)判断，必要时经 ensure_ipc_dir 安全收敛
--            // (issue #7333 开机竞态尾部 + /tmp symlink 防护)。一致则跳过，避免抖动。
--            use std::os::unix::fs::MetadataExt;
--            let needs_fix = match std::fs::symlink_metadata(dir) {
--                Ok(meta) if meta.file_type().is_dir() => meta.gid() != resolve_ipc_dir_gid(),
--                _ => true,
--            };
-+            // RuntimeDirectory owns group and mode; only reject a replaced path.
-+            let needs_fix =
-+                !matches!(std::fs::symlink_metadata(dir), Ok(meta) if meta.file_type().is_dir());
-             if needs_fix && let Err(e) = ensure_ipc_dir(dir) {
-                 warn!("Failed to re-apply ownership on {:?}: {}", dir, e);
-             }
-diff --git a/src/lib.rs b/src/lib.rs
-index a21f89b..81175fc 100644
---- a/src/lib.rs
-+++ b/src/lib.rs
-@@ -24,6 +24,6 @@ pub use client::*;
-
- #[cfg(all(unix, not(feature = "test")))]
--pub static IPC_PATH: &str = "/tmp/verge/clash-verge-service.sock";
-+pub static IPC_PATH: &str = "/run/clash-verge-rev/service.sock";
- #[cfg(all(windows, not(feature = "test")))]
- pub static IPC_PATH: &str = r"\\.\pipe\clash-verge-service";
+-        std::fs::remove_file(&core)?;
+-    }
+diff --git a/tests/test_start_and_parse.rs b/tests/test_start_and_parse.rs
+index 61ac041..b86f827 100644
+--- a/tests/test_start_and_parse.rs
++++ b/tests/test_start_and_parse.rs
+@@ -42 +42 @@ async fn running_server_reports_its_protocol_and_status() -> Result<()> {
+-        assert_eq!(std::fs::metadata(socket)?.permissions().mode() & 0o777, 0o666);
++        assert_eq!(std::fs::metadata(socket)?.permissions().mode() & 0o777, 0o660);
