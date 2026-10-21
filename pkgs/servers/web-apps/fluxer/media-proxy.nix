@@ -65,11 +65,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   postInstall = ''
-    mv $out/bin/fluxer-media-proxy $out/bin/fluxer-media-proxy_unwrapped
-
-    makeWrapper \
-      $out/bin/fluxer-media-proxy_unwrapped \
-      $out/bin/fluxer-media-proxy \
+    wrapProgram $out/bin/fluxer-media-proxy \
       --suffix LD_PRELOAD : ${jemalloc}/lib/libjemalloc.so \
       --set-default MALLOC_CONF "background_thread:true,metadata_thp:auto,dirty_decay_ms:5000,muzzy_decay_ms:5000" \
       --set-default VIPS_CONCURRENCY 1 \
