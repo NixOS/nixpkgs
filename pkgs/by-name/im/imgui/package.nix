@@ -157,6 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit; # vcpkg licensed as MIT too
     maintainers = with lib.maintainers; [
       SomeoneSerge
+      evanwporter
     ];
     platforms = lib.platforms.all;
   };
