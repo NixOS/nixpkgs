@@ -991,6 +991,11 @@ let
     sysfonts = [ pkgs.pkg-config ];
     systemfonts = [ pkgs.pkg-config ];
     talib = [ pkgs.pkg-config ];
+    tantivyr = with pkgs; [
+      cargo
+      rustc
+    ];
+    telegramR = [ pkgs.pkg-config ];
     tergo = with pkgs; [
       cargo
       rustc
@@ -1021,6 +1026,7 @@ let
       cargo
       rustc
     ];
+    uqsa = [ pkgs.pkg-config ];
     uuidx = with pkgs; [
       cargo
       rustc
@@ -1834,6 +1840,7 @@ let
       zlib
       zstd
     ];
+    uqsa = [ pkgs.gsl ];
     vapour = [ pkgs.proj ];
     vcfR = with pkgs; [ zlib ];
     vcfppR = with pkgs; [
