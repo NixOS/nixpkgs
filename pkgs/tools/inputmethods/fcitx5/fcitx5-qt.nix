@@ -32,6 +32,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   __structuredAttrs = true;
   strictDeps = true;
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   cmakeFlags = [
     "-DENABLE_QT4=OFF"
     "-DENABLE_QT5=OFF"
