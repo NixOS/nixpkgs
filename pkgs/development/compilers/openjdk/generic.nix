@@ -124,6 +124,8 @@ let
   jdk-bootstrap' = jdk-bootstrap.override {
     # when building a headless jdk, also bootstrap it with a headless jdk
     gtkSupport = !headless;
+    # its trust store is never used, and regenerating it would rebuild OpenJDK
+    regenerateCacerts = false;
   };
 in
 
