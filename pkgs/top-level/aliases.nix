@@ -604,6 +604,7 @@ mapAliases {
   code-browser-gtk2 = throw "'code-browser-gtk2' has been removed, as it was broken since 22.11"; # Added 2025-08-22
   code-browser-gtk = throw "'code-browser-gtk' has been removed, as it was broken since 22.11"; # Added 2025-08-22
   code-browser-qt = throw "'code-browser-qt' has been removed, as it was broken since 22.11"; # Added 2025-08-22
+  codeberg-cli = throw "'codeberg-cli' has been removed, as it archived upstream. Consider using `forgejo-cli` instead."; # Added 2026-10-21
   codeberg-pages = throw "'codeberg-pages' has been removed as upstream ceased development and is unmaintained"; # Added 2026-10-22
   CoinMP = throw "'CoinMP' has been renamed to/replaced by 'coinmp'"; # Converted to throw 2025-10-27
   collada2gltf = throw "collada2gltf has been removed from Nixpkgs, as it has been unmaintained upstream for 5 years and does not build with supported GCC versions"; # Added 2025-08-08
