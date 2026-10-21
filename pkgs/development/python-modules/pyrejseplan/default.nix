@@ -1,17 +1,16 @@
 {
   lib,
+  aiohttp,
+  build,
   buildPythonPackage,
   fetchFromGitHub,
-  build,
-  setuptools,
-  setuptools-scm,
-  wheel,
-  aiohttp,
   pydantic-xml,
-  requests,
-  urllib3,
   pytest-asyncio,
   pytestCheckHook,
+  requests,
+  setuptools-scm,
+  setuptools,
+  urllib3,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -30,7 +29,6 @@ buildPythonPackage (finalAttrs: {
     build
     setuptools
     setuptools-scm
-    wheel
   ];
 
   env.SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
