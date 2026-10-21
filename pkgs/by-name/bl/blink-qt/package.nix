@@ -1,5 +1,6 @@
 {
   lib,
+  cacert,
   fetchFromGitHub,
   fetchpatch2,
   python3Packages,
@@ -68,6 +69,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  '';
+
+  postFixup = ''
+    rm $out/share/blink/tls/ca.crt
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/share/blink/tls/ca.crt
   '';
 
   pythonImportsCheck = [ "blink" ];
