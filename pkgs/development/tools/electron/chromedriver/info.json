@@ -51,11 +51,11 @@
     },
     "44": {
         "hashes": {
-            "aarch64-darwin": "3b928b2851ad1ee21bf72401b3a161e826389408985c7256324781dad33b54cf",
-            "aarch64-linux": "e4ea521e6bce3ad75b19a34410be77ef6cca64238e95cc33569140f479f19610",
+            "aarch64-darwin": "8777821e0f4d7a39efabfaedd67a2ac6167e9127b5d63ae8b497795716e8891f",
+            "aarch64-linux": "46e021041db497176ab792e4d214c92637ee44086b76e6b453a04fff28feffd5",
             "headers": "0q32b3nnz6m4a58fbgrqb5riqz9kg1d58hkhfhq5nfs2fs2y9x13",
-            "x86_64-linux": "7c5c922b537706112fc12c89eba41212ca59a7b44660102f2819139ed09f1c6e"
+            "x86_64-linux": "3bc92381261d31254d3921a15015bde389ce65c8a1c475d7f2dcad524e13e1b0"
         },
-        "version": "44.9.1"
+        "version": "44.9.3"
     }
 }
