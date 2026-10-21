@@ -64,6 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
   # FreeType requires GNU Make, which is not part of stdenv on FreeBSD.
   ++ lib.optional (!stdenv.hostPlatform.isLinux) gnumake;
 
+  strictDeps = true;
+
   patches = [
     ./enable-table-validation.patch
 
