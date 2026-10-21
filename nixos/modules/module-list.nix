@@ -1586,6 +1586,7 @@
   ./services/security/kanidm.nix
   ./services/security/munge.nix
   ./services/security/nginx-sso.nix
+  ./services/security/oauth2-proxy-multi.nix
   ./services/security/oauth2-proxy-nginx.nix
   ./services/security/oauth2-proxy.nix
   ./services/security/openbao.nix
