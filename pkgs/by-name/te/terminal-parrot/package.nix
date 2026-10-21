@@ -23,7 +23,7 @@ buildGoModule (finalAttrs: {
     description = "Shows colorful, animated party parrot in your terminal";
     homepage = "https://github.com/jmhobbs/terminal-parrot";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.heel ];
+    maintainers = [ ];
     mainProgram = "terminal-parrot";
   };
 })

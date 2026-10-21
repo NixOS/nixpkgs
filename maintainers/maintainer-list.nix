@@ -11461,12 +11461,6 @@
     githubId = 2427959;
     name = "Hector Jusforgues";
   };
-  heel = {
-    email = "parizhskiy@gmail.com";
-    github = "HeeL";
-    githubId = 287769;
-    name = "Sergii Paryzhskyi";
-  };
   hehongbo = {
     name = "Hongbo";
     github = "hehongbo";
