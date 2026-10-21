@@ -17372,12 +17372,6 @@
     name = "Ludovico Piero";
     keys = [ { fingerprint = "72CA 4F61 46C6 0DAB 6193  4D35 3911 DD27 6CFE 779C"; } ];
   };
-  lufia = {
-    email = "lufia@lufia.org";
-    github = "lufia";
-    githubId = 1784379;
-    name = "Kyohei Kadota";
-  };
   Luflosi = {
     name = "Luflosi";
     email = "luflosi@luflosi.de";
