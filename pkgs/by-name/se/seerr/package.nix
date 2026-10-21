@@ -95,6 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       camillemndn
       fallenbagel
+      staticdev
     ];
     platforms = lib.platforms.linux;
     mainProgram = "seerr";
