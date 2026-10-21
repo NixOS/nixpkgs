@@ -1,8 +1,11 @@
 {
   lib,
+  beautifulsoup4,
   buildPythonPackage,
   fetchPypi,
+  lxml,
   nvdlib,
+  openai,
   poetry-core,
   pydantic,
   pythonOlder,
@@ -21,10 +24,18 @@ buildPythonPackage rec {
     hash = "sha256-sx+g3yBJ478C8L2IhO1iYIzubsP6kTA2sCts3nwF23E=";
   };
 
+  pythonRelaxDeps = [
+    "lxml"
+    "openai"
+  ];
+
   build-system = [ poetry-core ];
 
   dependencies = [
+    beautifulsoup4
+    lxml
     nvdlib
+    openai
     pydantic
     typing-extensions
   ];
