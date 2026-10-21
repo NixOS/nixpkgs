@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   kernel,
+  kernelModuleInstallHook,
   kernelModuleMakeFlags,
   nix-update-script,
 }:
@@ -18,18 +19,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-sRvxcdocYKnwMH/qYkKj66uClI1bSmMSxXHrHsc7uco=";
   };
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kernelModuleInstallHook ];
 
   makeFlags = kernelModuleMakeFlags ++ [
     "VERSION=${version}"
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
-  installPhase = ''
-    runHook preInstall
-    install -D qc71_laptop.ko -t $out/lib/modules/${kernel.modDirVersion}/extra
-    runHook postInstall
-  '';
+  kernelModuleInstallDir = "extra";
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version=branch" ];
