@@ -2,8 +2,10 @@
   lib,
   fetchFromGitHub,
   buildNpmPackage,
+  buildPackages,
   callPackage,
   nodejs_24,
+  nodejs-slim_24,
   ffmpeg_8-headless,
   nunicode,
   sqlite,
@@ -34,7 +36,12 @@ buildNpmPackage (finalAttrs: {
     jq
   ];
 
-  buildInputs = [ sqlite ];
+  buildInputs = [
+    nodejs-slim_24
+    sqlite
+  ];
+
+  inherit (buildPackages.npmHooks.override { nodejs = nodejs-slim_24; }) npmInstallHook;
 
   npmInstallFlags = [
     "--omit=dev"
@@ -77,6 +84,8 @@ buildNpmPackage (finalAttrs: {
     shopt -s globstar
     rm node_modules/**/*.{map,ts,mts,cts}
     shopt -u globstar
+
+    patchShebangs --host --update node_modules
   '';
 
   installPhase = ''
@@ -93,6 +102,8 @@ buildNpmPackage (finalAttrs: {
 
     runHook postInstall
   '';
+
+  disallowedReferences = [ finalAttrs.nodejs ];
 
   passthru = {
     client = callPackage ./client.nix {
