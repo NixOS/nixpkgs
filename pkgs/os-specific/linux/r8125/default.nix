@@ -3,6 +3,7 @@
   lib,
   fetchFromGitLab,
   kernel,
+  kernelModuleInstallHook,
   kernelModuleMakeFlags,
 }:
 
@@ -20,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   hardeningDisable = [ "pic" ];
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kernelModuleInstallHook ];
 
   # Allow changing BASEDIR with -C
   postPatch = ''
@@ -29,21 +30,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = kernelModuleMakeFlags ++ [
     "BASEDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}"
-    "INSTALL_MOD_PATH=${placeholder "out"}"
-    "INSTALL_MOD_DIR=kernel/drivers/net/ethernet/realtek"
-    "INSTALL_MOD_STRIP=1"
-    "DEPMOD=true"
   ];
 
   buildFlags = [ "modules" ];
 
-  installTargets = [ "modules_install" ];
-
-  installFlags = [
-    "-C"
-    "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-    "M=$(PWD)/src"
-  ];
+  kernelModuleDirs = [ "src" ];
+  kernelModuleInstallDir = "kernel/drivers/net/ethernet/realtek";
 
   meta = {
     homepage = "https://salsa.debian.org/debian/r8125";
