@@ -4721,7 +4721,8 @@
       ];
     "my_pv" =
       ps: with ps; [
-      ]; # missing inputs: my-pv
+        my-pv
+      ];
     "myneomitis" =
       ps: with ps; [
         pyaxencoapi
@@ -9083,6 +9084,7 @@
     "music_assistant"
     "mutesync"
     "my"
+    "my_pv"
     "myneomitis"
     "myq"
     "mysensors"
