@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   kernel,
+  kernelModuleInstallHook,
   kernelModuleMakeFlags,
 }:
 
@@ -17,16 +18,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-HAzQaMU6j/YFG1o2q88yAg8JSnzOQDykMYwYBx3JeP4=";
   };
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kernelModuleInstallHook ];
 
   hardeningDisable = [ "pic" ];
 
   makeFlags = kernelModuleMakeFlags ++ [
     "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-    "INSTALL_MOD_PATH=${placeholder "out"}"
   ];
-
-  installTargets = [ "modules_install" ];
 
   enableParallelBuilding = true;
 
