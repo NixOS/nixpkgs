@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/ocaml/uchar/releases/download/v${version}/uchar-${version}.tbz";
-    sha256 = "1w2saw7zanf9m9ffvz2lvcxvlm118pws2x1wym526xmydhqpyfa7";
+    hash = "sha256-Rzl/MWy+diNK9Tx0oflFIVS6O9tU/O1cqslZ9Q9XWvA=";
   };
 
   nativeBuildInputs = [
