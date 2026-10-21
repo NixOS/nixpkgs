@@ -25639,12 +25639,6 @@
     githubId = 1728853;
     name = "Adam Washington";
   };
-  rps = {
-    email = "robbpseaton@gmail.com";
-    github = "robertseaton";
-    githubId = 221121;
-    name = "Robert P. Seaton";
-  };
   rraval = {
     email = "ronuk.raval@gmail.com";
     github = "rraval";
