@@ -106,6 +106,104 @@ $ make -C $dev/lib/modules/*/build M=$(pwd)/drivers/net/ethernet/mellanox module
 
 :::
 
+## Out-of-tree kernel modules {#sec-linux-kernel-out-of-tree-modules}
+
+Kernel module packages in `linuxPackages` install their modules through the kernel's own `modules_install`.
+It strips, signs and compresses every module and emits the per-module certificate next to it.
+Manually copying `.ko` files leaves modules unsigned and without a certificate, which breaks machines that aggregate external module certificates.
+
+For module packages whose build system does not install the modules properly, use the `linuxPackages.kernelModuleInstallHook` setup hook.
+It installs the modules from the current build directory into `lib/modules/${kernel.modDirVersion}/updates`:
+
+```nix
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  kernelModuleInstallHook,
+}:
+
+stdenv.mkDerivation {
+  pname = "bbswitch";
+  version = "unstable-2021-11-29";
+
+  src = fetchFromGitHub {
+    owner = "Bumblebee-Project";
+    repo = "bbswitch";
+    rev = "23891174a80ea79c7720bcc7048a5c2bfcde5cd9";
+    hash = "sha256-50v1Jxem5kaI1dHOKmgBbPLxI82QeYxiaRHhrHpWRzU=";
+  };
+
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kernelModuleInstallHook ];
+
+  kernelModuleInstallDir = "misc";
+}
+```
+
+The hook reads these derivation attributes:
+
+- `kernelModuleDirs` (list of strings, default: the build directory itself)
+
+  The kbuild directories (`M=`) to install, relative to the build directory.
+  Set this when the modules are built from a subdirectory, or when a package consists of several modules, e.g. `kernelModuleDirs = [ "ddcci" "ddcci-backlight" ];`.
+
+- `kernelModuleInstallDir` (string, default: `updates`)
+
+  Passed to kbuild as `INSTALL_MOD_DIR`, the directory below `lib/modules/${kernel.modDirVersion}/` into which the modules are installed.
+
+- `kernelModuleSkipMissingDirs` (boolean, default: `false`)
+
+  Skip `kernelModuleDirs` entries that do not exist instead of failing the build.
+  Useful when the set of modules differs between releases of the source.
+
+- `dontInstallKernelModules` (boolean, default: `false`)
+
+  Do not replace the default `installPhase`.
+  Set this when the derivation needs the standard `make install` or its own `installPhase`, and call the `installKernelModules` function manually instead, e.g. from `postInstall`.
+
+:::{.example #ex-out-of-tree-module-multiple-dirs}
+
+# Installing multiple kernel modules from subdirectories
+
+```nix
+stdenv.mkDerivation {
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kernelModuleInstallHook ];
+
+  kernelModuleDirs = [
+    "vmblock-only"
+    "vmmon-only"
+    "vmnet-only"
+  ];
+  kernelModuleInstallDir = "misc";
+  kernelModuleSkipMissingDirs = true;
+}
+```
+
+:::
+
+:::{.example #ex-out-of-tree-module-manual-call}
+
+# Installing a kernel module alongside `make install`
+
+Derivations that keep the standard install phase for their userspace parts call the `installKernelModules` function manually.
+Do not call `installKernelModulesPhase` from a hook such as `postInstall`: it runs the `preInstall` and `postInstall` hooks and would recurse.
+
+```nix
+stdenv.mkDerivation {
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kernelModuleInstallHook ];
+
+  dontInstallKernelModules = true;
+  kernelModuleDirs = [ "build/driver" ];
+
+  postInstall = ''
+    installKernelModules
+  '';
+}
+```
+
+:::
+
 ## Maintainer information {#sec-linux-kernel-maintainer-information}
 
 ### Updating kernels {#sec-linux-updates}
