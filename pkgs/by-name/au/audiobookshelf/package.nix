@@ -36,7 +36,10 @@ buildNpmPackage (finalAttrs: {
 
   buildInputs = [ sqlite ];
 
-  npmInstallFlags = [ "--omit=dev" ];
+  npmInstallFlags = [
+    "--omit=dev"
+    "--omit=optional"
+  ];
   npmRebuildFlags = [ "--sqlite=${lib.getDev sqlite}" ];
   npmBuildScript = "build:server";
 
