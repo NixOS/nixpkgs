@@ -32,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     addDriverRunpath $out/lib/libze_loader.so
+    patchelf --add-rpath $out/lib $out/lib/libze_loader.so
   '';
 
   setupHook = ./setup-hook.sh;
