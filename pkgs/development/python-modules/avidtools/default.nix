@@ -8,7 +8,6 @@
   openai,
   poetry-core,
   pydantic,
-  pythonOlder,
   typing-extensions,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "avidtools";
   version = "0.3.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
 
   src = fetchPypi {
     inherit pname version;
