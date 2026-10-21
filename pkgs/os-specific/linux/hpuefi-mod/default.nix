@@ -2,6 +2,7 @@
   stdenv,
   fetchzip,
   kernel,
+  kernelModuleInstallHook,
   kernelModuleMakeFlags,
   lib,
 }:
@@ -15,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     stripRoot = false;
   };
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kernelModuleInstallHook ];
   strictDeps = true;
 
   makeFlags = kernelModuleMakeFlags ++ [
@@ -23,6 +24,12 @@ stdenv.mkDerivation (finalAttrs: {
     "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "DESTDIR=$(out)"
   ];
+
+  kernelModuleInstallDir = "kernel/drivers/hpuefi";
+
+  postInstall = ''
+    install -D -m 0744 mkdevhpuefi $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/hpuefi/mkdevhpuefi
+  '';
 
   unpackPhase = ''
     tar -xzf "$src/non-rpms/hpuefi-mod-${finalAttrs.version}.tgz"
