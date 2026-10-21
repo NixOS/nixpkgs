@@ -89,6 +89,9 @@ buildPythonPackage (finalAttrs: {
     # https://github.com/google/jaxopt/issues/618
     "test_binary_logit_log_likelihood"
 
+    # AssertionError: Array(False, dtype=bool) is not true (since jax 0.12.0)
+    "test_hager_zhang_linesearch_non_finite1"
+
     # AssertionError (flaky numerical tests)
     "test_Rosenbrock2"
     "test_Rosenbrock5"
