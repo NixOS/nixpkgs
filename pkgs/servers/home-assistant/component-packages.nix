@@ -594,7 +594,8 @@
       ];
     "axle_energy" =
       ps: with ps; [
-      ]; # missing inputs: aioaxlevpp
+        aioaxlevpp
+      ];
     "azure_data_explorer" =
       ps:
       with ps;
@@ -8519,6 +8520,7 @@
     "aws"
     "aws_s3"
     "axis"
+    "axle_energy"
     "azure_data_explorer"
     "azure_devops"
     "azure_event_hub"
