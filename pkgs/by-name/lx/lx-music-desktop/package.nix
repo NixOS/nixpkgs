@@ -10,12 +10,12 @@
   makeWrapper,
   makeDesktopItem,
 
-  electron_42,
+  electron_44,
   commandLineArgs ? "",
 }:
 
 let
-  electron = electron_42;
+  electron = electron_44;
 in
 buildNpmPackage (finalAttrs: {
   pname = "lx-music-desktop";
@@ -51,6 +51,10 @@ buildNpmPackage (finalAttrs: {
   ];
 
   patches = [
+    # the upstream use an EOL electron version
+    ./electron-version.patch
+    # clipboard APIs are async since electron 44
+    ./electron-44-clipboard.patch
     # set electron version and dist dir
     # disable before-pack: it would copy prebuilt libraries
     (replaceVars ./electron-builder.patch {
@@ -63,7 +67,7 @@ buildNpmPackage (finalAttrs: {
     copyDesktopItems
   ];
 
-  npmDepsHash = "sha256-bBgewJxBSzyL1V9U9qm0TbWCZMjheCUK6DvvoE3T67M=";
+  npmDepsHash = "sha256-LF/E7JJZQQzEHTEQeFiYa1eMeV+OrqK+8ktwhTmRY30=";
 
   makeCacheWritable = true;
 
