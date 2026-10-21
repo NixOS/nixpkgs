@@ -4394,7 +4394,6 @@ with pkgs;
 
   # Import PHP interpreters
   inherit (callPackage ./../development/interpreters/php { })
-    php82
     php83
     php84
     php85
@@ -4402,8 +4401,6 @@ with pkgs;
     ;
 
   # PHP Extensions and Packages
-  php82Extensions = recurseIntoAttrs php82.extensions;
-  php82Packages = recurseIntoAttrs php82.packages;
 
   php83Extensions = recurseIntoAttrs php83.extensions;
   php83Packages = recurseIntoAttrs php83.packages;
