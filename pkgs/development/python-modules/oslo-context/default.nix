@@ -3,9 +3,9 @@
   buildPythonPackage,
   fetchPypi,
   oslotest,
-  stestr,
   pbr,
   setuptools,
+  stestrCheckHook,
   typing-extensions,
 }:
 
@@ -35,14 +35,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     oslotest
-    stestr
+    stestrCheckHook
   ];
-
-  checkPhase = ''
-    runHook preCheck
-    stestr run
-    runHook postCheck
-  '';
 
   pythonImportsCheck = [ "oslo_context" ];
 

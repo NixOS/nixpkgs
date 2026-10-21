@@ -160,7 +160,6 @@ let
   # but not yet released. Drop this from each version once its next release,
   # which will include the backport, is packaged:
   #
-  # - 2.31: https://github.com/NixOS/nix/pull/16604
   # - 2.34: https://github.com/NixOS/nix/pull/16607
   # - 2.35: https://github.com/NixOS/nix/pull/16608
   windowsPatches = lib.optionals stdenv.hostPlatform.isWindows [
@@ -175,22 +174,6 @@ lib.makeExtensible (
   self:
   (
     {
-      nixComponents_2_31 =
-        (nixDependencies.callPackage ./modular/packages.nix rec {
-          version = "2.31.6";
-          inherit teams;
-          otherSplices = generateSplicesForNixComponents "nixComponents_2_31";
-          src = fetchFromGitHub {
-            owner = "NixOS";
-            repo = "nix";
-            tag = version;
-            hash = "sha256-yAvNBedw4FB+Z5myhfGsnRT8F1QqeEoXGbm7EmTW/Og=";
-          };
-        }).appendPatches
-          windowsPatches;
-
-      nix_2_31 = addTests "nix_2_31" self.nixComponents_2_31.nix-everything;
-
       nixComponents_2_34 =
         (nixDependencies.callPackage ./modular/packages.nix rec {
           version = "2.34.9";
@@ -228,12 +211,12 @@ lib.makeExtensible (
           src = fetchFromGitHub {
             owner = "NixOS";
             repo = "nix";
-            rev = "a9f38ea0ee89f550616f342386f45e896f4abd18";
-            hash = "sha256-jUzXXzi1x8Ub4kdBCMcrz1LoCuElBq4mFjOw59rFPCE=";
+            rev = "f3f184834895f45030d69f20a311b2eac99ebf1d";
+            hash = "sha256-TyuLrhxjzHjIYWtpBgSHi8wdKw7ciLiyfrdfJe33uEc=";
           };
         in
         (nixDependencies.callPackage ./modular/packages.nix {
-          version = "2.36pre20261013_${lib.substring 0 8 src.rev}";
+          version = "2.36pre20261020_${lib.substring 0 8 src.rev}";
           inherit teams;
           otherSplices = generateSplicesForNixComponents "nixComponents_git";
           src = removeFunctionalTests commonDisabledTests src;
@@ -258,18 +241,20 @@ lib.makeExtensible (
         ) (lib.range 4 23)
       )
       // {
-        nixComponents_2_27 = throw "nixComponents_2_27 has been removed. use nixComponents_2_31.";
-        nixComponents_2_29 = throw "nixComponents_2_29 has been removed. use nixComponents_2_31.";
-        nixComponents_2_30 = throw "nixComponents_2_30 has been removed. use nixComponents_2_31.";
+        nixComponents_2_27 = throw "nixComponents_2_27 has been removed. use nixComponents_2_34.";
+        nixComponents_2_29 = throw "nixComponents_2_29 has been removed. use nixComponents_2_34.";
+        nixComponents_2_30 = throw "nixComponents_2_30 has been removed. use nixComponents_2_34.";
+        nixComponents_2_31 = throw "nixComponents_2_31 has been removed. use nixComponents_2_34.";
         nixComponents_2_32 = throw "nixComponents_2_32 has been removed. use nixComponents_2_34.";
         nixComponents_2_33 = throw "nixComponents_2_33 has been removed. use nixComponents_2_34.";
-        nix_2_24 = throw "nix_2_24 has been removed. use nix_2_31.";
-        nix_2_26 = throw "nix_2_26 has been removed. use nix_2_31.";
-        nix_2_27 = throw "nix_2_27 has been removed. use nix_2_31.";
-        nix_2_25 = throw "nix_2_25 has been removed. use nix_2_31.";
-        nix_2_28 = throw "nix_2_28 has been removed. use nix_2_31.";
-        nix_2_29 = throw "nix_2_29 has been removed. use nix_2_31.";
-        nix_2_30 = throw "nix_2_30 has been removed. use nix_2_31.";
+        nix_2_24 = throw "nix_2_24 has been removed. use nix_2_34.";
+        nix_2_26 = throw "nix_2_26 has been removed. use nix_2_34.";
+        nix_2_27 = throw "nix_2_27 has been removed. use nix_2_34.";
+        nix_2_25 = throw "nix_2_25 has been removed. use nix_2_34.";
+        nix_2_28 = throw "nix_2_28 has been removed. use nix_2_34.";
+        nix_2_29 = throw "nix_2_29 has been removed. use nix_2_34.";
+        nix_2_30 = throw "nix_2_30 has been removed. use nix_2_34.";
+        nix_2_31 = throw "nix_2_31 has been removed. use nix_2_34.";
         nix_2_32 = throw "nix_2_32 has been removed. use nix_2_34.";
         nix_2_33 = throw "nix_2_33 has been removed. use nix_2_34.";
 

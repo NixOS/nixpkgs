@@ -2,6 +2,7 @@
   lib,
   buildGo127Module,
   fetchFromGitHub,
+  nixosTests,
   versionCheckHook,
 }:
 
@@ -29,6 +30,10 @@ buildGo127Module (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/atlantis";
   versionCheckProgramArg = "version";
+
+  passthru.tests = {
+    inherit (nixosTests) atlantis;
+  };
 
   meta = {
     homepage = "https://github.com/runatlantis/atlantis";

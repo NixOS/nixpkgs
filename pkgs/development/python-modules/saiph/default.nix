@@ -17,7 +17,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "saiph";
-  version = "3.0.1";
+  version = "3.0.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -25,7 +25,7 @@ buildPythonPackage (finalAttrs: {
     owner = "octopize";
     repo = "saiph";
     tag = "saiph-v${finalAttrs.version}";
-    hash = "sha256-e41fa0C3ZT8mg+oHLU6VsQKgnCh59uO3bksO46A4t1M=";
+    hash = "sha256-x1S9QLPm0/+oWeYxt4RO9gZzh0qMfzRczTotCd6+07s=";
   };
 
   build-system = [

@@ -20,7 +20,7 @@
   setuptools,
   sphinxcontrib-apidoc,
   sphinxHook,
-  stestr,
+  stestrCheckHook,
   stevedore,
   tempest,
 }:
@@ -78,15 +78,9 @@ buildPythonPackage rec {
     oslotest
     osprofiler
     requests-mock
-    stestr
+    stestrCheckHook
     tempest
   ];
-
-  checkPhase = ''
-    runHook preCheck
-    stestr run
-    runHook postCheck
-  '';
 
   pythonImportsCheck = [ "mistralclient" ];
 
