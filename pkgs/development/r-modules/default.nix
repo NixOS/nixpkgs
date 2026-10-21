@@ -611,6 +611,10 @@ let
       cargo
       rustc
     ];
+    arity = with pkgs; [
+      cargo
+      rustc
+    ];
     arrow =
       with pkgs;
       [
@@ -659,6 +663,14 @@ let
       rustc
     ];
     chebpol = [ pkgs.pkg-config ];
+    churon = with pkgs; [
+      cargo
+      rustc
+    ];
+    cidian = with pkgs; [
+      cargo
+      rustc
+    ];
     ciflyr = with pkgs; [
       cargo
       rustc
@@ -668,6 +680,7 @@ let
     cld3 = [ pkgs.protobuf ];
     clustermq = [ pkgs.pkg-config ];
     coga = [ pkgs.gsl ]; # for gsl-config
+    coinclp = [ pkgs.pkg-config ];
     cpp11bigwig = [ pkgs.curl ]; # for curl-config
     crc32c = [
       pkgs.which
@@ -1412,6 +1425,7 @@ let
     cld3 = [ pkgs.protobuf ];
     clustermq = [ pkgs.zeromq ];
     cmtkr = [ pkgs.zlib ];
+    coinclp = [ pkgs.clp ];
     cpp11bigwig = [ pkgs.zlib ];
     cpp11qpdf = with pkgs; [
       libjpeg
@@ -1432,6 +1446,7 @@ let
       ]
       ++ lib.optional stdenv.hostPlatform.isDarwin pkgs.llvmPackages.openmp
     );
+    datasetjson = [ pkgs.zlib ];
     deepSNV = with pkgs; [
       xz
       bzip2
