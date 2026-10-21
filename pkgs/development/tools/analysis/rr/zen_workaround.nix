@@ -3,6 +3,7 @@
   lib,
   fetchpatch,
   kernel,
+  kernelModuleInstallHook,
   rr,
 }:
 
@@ -26,7 +27,7 @@ stdenv.mkDerivation {
   ];
 
   hardeningDisable = [ "pic" ];
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kernelModuleInstallHook ];
 
   makeFlags = [
     "-C${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
@@ -36,17 +37,7 @@ stdenv.mkDerivation {
   '';
   buildFlags = [ "modules" ];
 
-  installPhase =
-    let
-      modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel"; # TODO: longer path?
-    in
-    ''
-      runHook preInstall
-      mkdir -p "${modDestDir}"
-      cp *.ko "${modDestDir}/"
-      find ${modDestDir} -name '*.ko' -exec xz -f '{}' \;
-      runHook postInstall
-    '';
+  kernelModuleInstallDir = "kernel";
 
   meta = {
     description = "Kernel module supporting the rr debugger on (some) AMD Zen-based CPUs";
