@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Command Line Interactive Controller for Kubernetes";
     homepage = "https://github.com/databricks/click";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.mbode ];
+    maintainers = [ ];
     mainProgram = "click";
   };
 })
