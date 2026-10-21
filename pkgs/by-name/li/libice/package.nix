@@ -44,6 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Inter-Client Exchange Library";
     homepage = "https://gitlab.freedesktop.org/xorg/lib/libice";
