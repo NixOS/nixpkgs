@@ -99,7 +99,7 @@ buildGoModule (finalAttrs: {
   postConfigure = lib.optionalString withNaiveOutbound ''
     pushd vendor/github.com/sagernet/cronet-go
     chmod -R u+w .
-    cp -r ${cronet-go}/ .
+    cp -r ${cronet-go}/. .
     # for !withStaticCronet
     patch -p1 < ${./cronet-go.patch}
     substituteInPlace internal/cronet/loader_unix.go \
