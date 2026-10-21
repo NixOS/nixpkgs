@@ -4,6 +4,7 @@
   airplay-cli,
   python3Packages,
   fetchFromGitHub,
+  fetchpatch,
   ffmpeg_7-headless,
   nixosTests,
   openssl,
@@ -90,6 +91,13 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   };
 
   patches = [
+    # Fix streams tests leaking a raised log level into other tests
+    # https://github.com/music-assistant/server/pull/6344
+    (fetchpatch {
+      url = "https://github.com/music-assistant/server/commit/28a25af1674cb9a72cc9f6a9fb8faf6632857222.patch";
+      hash = "sha256-sOF1RTt8+DJ10+pMYFuwgdq00FQ9XVWSYfX8qexYP48=";
+    })
+
     (replaceVars ./ffmpeg.patch {
       ffmpeg = lib.getExe' ffmpeg_7-headless "ffmpeg";
       ffprobe = lib.getExe' ffmpeg_7-headless "ffprobe";
