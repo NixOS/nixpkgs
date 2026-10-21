@@ -46,6 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
     xorgproto
   ];
 
+  strictDeps = true;
+
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace src/GLX/Makefile.am \
       --replace "-Wl,-Bsymbolic " ""
