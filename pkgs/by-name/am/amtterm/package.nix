@@ -75,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.com/kraxel/amtterm";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ kallisti-dev ];
-    platforms = lib.platforms.linux;
+    # gamt uses GTK's X11 backend; nixpkgs' gtk3 uses Quartz on Darwin.
+    platforms = lib.platforms.linux ++ lib.optionals (!withGamt) lib.platforms.darwin;
   };
 })
