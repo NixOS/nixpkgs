@@ -678,9 +678,17 @@ let
       cargo
       rustc
     ];
+    delta_sharing = with pkgs; [
+      cargo
+      rustc
+    ];
     diseq = [ pkgs.gsl ]; # for gsl-config
     diversitree = [ pkgs.gsl ]; # for gsl-config
     drogonR = [ pkgs.pkg-config ];
+    dwg2geo = with pkgs; [
+      cargo
+      rustc
+    ];
     dynr = [ pkgs.gsl ]; # for gsl-config
     eaf = [ pkgs.gsl ]; # for gsl-config
     econetwork = [ pkgs.gsl ]; # for gsl-config via RcppGSL
@@ -717,12 +725,20 @@ let
     flan = [ pkgs.gsl ]; # for gsl-config
     flint = [ pkgs.pkg-config ];
     flowPeaks = [ pkgs.gsl ]; # for gsl-config
+    foresightr = with pkgs; [
+      cargo
+      rustc
+    ];
     fozziejoin = with pkgs; [
       cargo
       rustc
     ];
     frailtyMMpen = [ pkgs.gsl ]; # for gsl-config
     fraq = [ pkgs.pkg-config ];
+    freestiler = with pkgs; [
+      cargo
+      rustc
+    ];
     fru = with pkgs; [
       cargo
       rustc
@@ -897,6 +913,10 @@ let
     pexm = [ pkgs.jags ];
     phytools = [ pkgs.which ];
     png = [ pkgs.libpng ]; # for libpng-config
+    polyglotSQL = with pkgs; [
+      cargo
+      rustc
+    ];
     protolite = [ pkgs.protobuf ];
     prqlr = with pkgs; [
       cargo
