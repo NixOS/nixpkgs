@@ -5349,12 +5349,6 @@
     githubId = 271099;
     name = "Chris Williams";
   };
-  chrisrosset = {
-    email = "chris@rosset.org.uk";
-    github = "chrisrosset";
-    githubId = 1103294;
-    name = "Christopher Rosset";
-  };
   christo-auer = {
     name = "Christopher Auer";
     github = "christo-auer";
