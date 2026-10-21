@@ -13,6 +13,7 @@
   version,
   srcHash,
   cargoHash,
+  cargoPatches ? [ ],
   knownVulnerabilities ? [ ],
 }:
 let
@@ -20,7 +21,7 @@ let
 in
 rustPackages_1_97.rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pnpm";
-  inherit version cargoHash;
+  inherit version cargoHash cargoPatches;
 
   src = fetchFromGitHub {
     owner = "pnpm";
