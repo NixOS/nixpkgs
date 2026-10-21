@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   kernel,
+  kernelModuleInstallHook,
   kernelModuleMakeFlags,
   nix-update-script,
 }:
@@ -18,18 +19,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-EyBZ1qhg7ebVdkHtQD6iBQpRjPJbJLYxjfECx1EffK0=";
   };
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kernelModuleInstallHook ];
 
   makeFlags = kernelModuleMakeFlags ++ [
     "VERSION=${version}"
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
-  installPhase = ''
-    runHook preInstall
-    install -D hid-ite8291r3.ko -t $out/lib/modules/${kernel.modDirVersion}/extra
-    runHook postInstall
-  '';
+  kernelModuleInstallDir = "extra";
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version=branch" ];
