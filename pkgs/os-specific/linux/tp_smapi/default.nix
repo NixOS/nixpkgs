@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   kernel,
+  kernelModuleInstallHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-use-strscpy-instead-of-strncpy.patch
   ];
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kernelModuleInstallHook ];
 
   hardeningDisable = [ "pic" ];
 
@@ -38,15 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     "HDAPS=1"
   ];
 
-  installPhase = ''
-    runHook preInstall
-
-    install -v -D -m 644 thinkpad_ec.ko "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/firmware/thinkpad_ec.ko"
-    install -v -D -m 644 tp_smapi.ko "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/firmware/tp_smapi.ko"
-    install -v -D -m 644 hdaps.ko "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/firmware/hdapsd.ko"
-
-    runHook postInstall
-  '';
+  kernelModuleInstallDir = "kernel/drivers/firmware";
 
   dontStrip = true;
 
