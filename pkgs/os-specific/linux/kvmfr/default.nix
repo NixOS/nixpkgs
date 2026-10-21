@@ -12,10 +12,12 @@ stdenv.mkDerivation {
 
   src = looking-glass-client.src;
   sourceRoot = "${looking-glass-client.src.name}/module";
+
   hardeningDisable = [
     "pic"
     "format"
   ];
+
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   makeFlags = kernelModuleMakeFlags ++ [
@@ -24,14 +26,22 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
-    install -D kvmfr.ko -t "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/misc/"
+    runHook preInstall
+
+    make -C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build \
+      M=$PWD \
+      INSTALL_MOD_PATH=$out \
+      ${lib.escapeShellArgs kernelModuleMakeFlags} \
+      modules_install
+
+    runHook postInstall
   '';
 
   meta = {
     description = "Optional kernel module for LookingGlass";
     longDescription = ''
-      This kernel module implements a basic interface to the IVSHMEM device for LookingGlass when using LookingGlass in VM->VM mode
-      Additionally, in VM->host mode, it can be used to generate a shared memory device on the host machine that supports dmabuf
+      This kernel module implements a basic interface to the IVSHMEM device for LookingGlass when using LookingGlass in VM->VM mode.
+      Additionally, in VM->host mode, it can be used to generate a shared memory device on the host machine that supports dmabuf.
     '';
     homepage = "https://github.com/gnif/LookingGlass";
     license = lib.licenses.gpl2Plus;
