@@ -56,7 +56,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/Bachmann1234/diff-cover";
     changelog = "https://github.com/Bachmann1234/diff_cover/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dzabraev ];
+    maintainers = [ ];
     mainProgram = "diff-cover";
   };
 }
