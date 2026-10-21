@@ -30,6 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   propagatedBuildInputs = [ libGLX ];
 
+  strictDeps = true;
+
   outputs = [
     "out"
     "dev"
