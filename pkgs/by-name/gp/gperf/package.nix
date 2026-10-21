@@ -13,6 +13,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-/Yfgq6fkOuBUg3r9bNTbA6PyaT3rNhkIXm7Z2NlgStg=";
   };
 
+  strictDeps = true;
+
   enableParallelBuilding = true;
 
   meta = {
