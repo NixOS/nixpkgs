@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sameboy";
-  version = "1.0.2";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "LIJI32";
     repo = "SameBoy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Sk5/Wojl9rFkTuBFSGN/W8oq8OJNrV5W3E8PdsaMll8=";
+    hash = "sha256-sDS8cN4yF1aEKKPxEu+qqu1KIWxfRXvGF/wxtFMGsMo=";
   };
 
   enableParallelBuilding = true;
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    substituteInPlace OpenDialog/gtk.c \
+    substituteInPlace SDL/open_dialog/gtk.c \
       --replace-fail '"libgtk-3.so"' '"${gtk3}/lib/libgtk-3.so"'
   '';
 
