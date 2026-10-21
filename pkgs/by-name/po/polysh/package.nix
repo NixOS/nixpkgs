@@ -5,7 +5,7 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "polysh";
-  version = "1.0.7";
+  version = "1.0.8";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "innogames";
     repo = "polysh";
     tag = "polysh-${finalAttrs.version}";
-    hash = "sha256-wWI/dvwXwvVWia5GAjZfEBo4pbVqxiivaKh5k3qq8CU=";
+    hash = "sha256-NmTjiE1sxqxkgw46GxXlB6tiSX6a9PvQ0WQve3CkJlg=";
   };
 
   build-system = with python3Packages; [
