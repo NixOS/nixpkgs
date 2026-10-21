@@ -1044,12 +1044,17 @@ let
       rustc
     ];
     xml2 = [ pkgs.pkg-config ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.perl ];
+    xmlrectr = [ pkgs.pkg-config ];
     xslt = [ pkgs.pkg-config ];
     yaml12 = with pkgs; [
       cargo
       rustc
     ];
     ymd = with pkgs; [
+      cargo
+      rustc
+    ];
+    zmij = with pkgs; [
       cargo
       rustc
     ];
@@ -1087,6 +1092,7 @@ let
       openbabel
       zlib
     ];
+    DDIwR = [ pkgs.zlib ];
     DEploid = [ pkgs.zlib ];
     DEploid_utils = [ pkgs.zlib ];
     DGP4LCF = [
@@ -1843,6 +1849,7 @@ let
     writexl = with pkgs; [ zlib ];
     xdvir = [ pkgs.freetype ];
     xml2 = [ pkgs.libxml2 ];
+    xmlrectr = [ pkgs.libxml2 ];
     xslt =
       with pkgs;
       [
