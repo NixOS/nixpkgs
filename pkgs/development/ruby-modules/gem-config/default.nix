@@ -59,6 +59,7 @@
   pcre2,
   gecode_3,
   curl,
+  cacert,
   libsodium,
   snappy,
   libossp_uuid,
@@ -141,6 +142,14 @@ in
 {
   ZenTest = attrs: {
     meta.mainProgram = "zentest";
+  };
+
+  algoliasearch = attrs: {
+    postInstall = ''
+      installPath=$(cat $out/nix-support/gem-meta/install-path)
+      rm $installPath/resources/ca-bundle.crt
+      ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $installPath/resources/ca-bundle.crt
+    '';
   };
 
   atk = attrs: {
@@ -292,6 +301,14 @@ in
     postPatch = ''
       substituteInPlace lib/ethon/curls/settings.rb \
         --replace "libcurl" "${curl.out}/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary}"
+    '';
+  };
+
+  excon = attrs: {
+    postInstall = ''
+      installPath=$(cat $out/nix-support/gem-meta/install-path)
+      rm $installPath/data/cacert.pem
+      ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $installPath/data/cacert.pem
     '';
   };
 
@@ -634,6 +651,16 @@ in
     ];
   };
 
+  httpclient = attrs: {
+    postInstall = ''
+      installPath=$(cat $out/nix-support/gem-meta/install-path)
+      for f in cacert.pem cacert1024.pem; do
+        rm $installPath/lib/httpclient/$f
+        ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $installPath/lib/httpclient/$f
+      done
+    '';
+  };
+
   iconv = attrs: {
     buildFlags = lib.optionals stdenv.hostPlatform.isDarwin [
       "--with-iconv-dir=${lib.getLib libiconv}"
@@ -769,6 +796,14 @@ in
       zlib
       openssl
     ];
+  };
+
+  nap = attrs: {
+    postInstall = ''
+      installPath=$(cat $out/nix-support/gem-meta/install-path)
+      rm $installPath/support/cacert.pem
+      ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $installPath/support/cacert.pem
+    '';
   };
 
   ncursesw = attrs: {
