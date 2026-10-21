@@ -150,22 +150,8 @@ let
   useSharedZstd = lib.versionAtLeast version "22.15";
 
   sharedLibDeps = {
-    # TODO: remove this on staging and land with https://github.com/NixOS/nixpkgs/pull/576792
-    brotli =
-      if majorVersion == "24" then
-        brotli
-      else
-        brotli.overrideAttrs (old: {
-          patches = old.patches ++ [
-            # Fix for CVE-2026-111497
-            (fetchurl {
-              url = "https://github.com/google/brotli/commit/0ed4268a4401abcb4472096340477cf4af7d1a2b.patch?full_index=1";
-              hash = "sha256-1vliUJAAIj3vcGKVgim9CEV+XgMuftDR2U+3kLBUsfw=";
-            })
-          ];
-        });
-
     inherit
+      brotli
       libuv
       nghttp2
       nghttp3
