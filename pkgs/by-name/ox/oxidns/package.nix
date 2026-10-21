@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   nix-update-script,
+  nixosTests,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oxidns";
@@ -21,13 +22,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Most tests need the internet
   doCheck = false;
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      oxidns = nixosTests.oxidns;
+    };
+  };
 
   meta = {
     description = "A high-performance, programmable DNS engine in Rust with flexible pipeline-based routing";
     homepage = "https://github.com/svenshi/oxidns";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "oxidns";
   };
 })
