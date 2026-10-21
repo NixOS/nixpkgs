@@ -17,6 +17,11 @@ case "$PACKAGE" in
     SOURCE_ATTR="steelix.unwrapped.src.outPath"
     GRAMMARS_JSON="pkgs/by-name/st/steelix/grammars.json"
     ;;
+  mitos)
+    nix-update mitos-unwrapped
+    SOURCE_ATTR="mitos-unwrapped.src.outPath"
+    GRAMMARS_JSON="pkgs/by-name/mi/mitos/grammars.json"
+    ;;
   *)
     exit 1
     ;;
