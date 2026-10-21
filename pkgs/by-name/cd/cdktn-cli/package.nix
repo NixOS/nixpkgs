@@ -122,7 +122,12 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    pnpm install --force --offline --production --ignore-scripts --shamefully-hoist --filter "cdktn-cli..."
+    CI=true pnpm prune --prod --ignore-scripts
+    # Clean up broken symlinks left behind by `pnpm prune`
+    # https://github.com/pnpm/pnpm/issues/3645
+    find node_modules -xtype l -delete
+    # pnpm install --force --offline --production --ignore-scripts --shamefully-hoist --filter "cdktn-cli..."
+
 
     mkdir -p "$out/lib/cdktn"
     cp -r node_modules packages package.json "$out/lib/cdktn/"
