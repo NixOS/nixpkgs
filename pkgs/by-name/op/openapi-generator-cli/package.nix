@@ -52,7 +52,7 @@ let
       })
     ];
 
-    mvnHash = "sha256-YePEx215CgQZucTzBzqaL6neiyvwowyGojRmWtU+yB0=";
+    mvnHash = "sha256-E9nNtv/g4HI1hAnUbXQYxnYaWsS5jNdrx8Vy7cU6KxE=";
     mvnParameters = "-Duser.home=$TMPDIR";
     doCheck = false;
 

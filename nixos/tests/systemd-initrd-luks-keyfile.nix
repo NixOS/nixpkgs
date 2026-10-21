@@ -25,10 +25,7 @@ in
       boot.loader.systemd-boot.enable = true;
 
       environment.systemPackages = with pkgs; [ cryptsetup ];
-      boot.initrd.systemd = {
-        enable = true;
-        emergencyAccess = true;
-      };
+      boot.initrd.systemd.emergencyAccess = true;
 
       specialisation.boot-luks.configuration = {
         boot.initrd.luks.devices = lib.mkVMOverride {

@@ -7,15 +7,15 @@ rec {
   archives = {
     aarch64-linux = {
       url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-origin_${version}_arm64.deb";
-      sha256 = "89844415a6eeaa68e033ae1d4c7472036dcc537966c3a46a58a9b8a3212e554c";
+      hash = "sha256-iYREFabuqmjgM64dTHRyA23MU3lmw6RqWKm4oyEuVUw=";
     };
     x86_64-linux = {
       url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-origin_${version}_amd64.deb";
-      sha256 = "a20f953d7a12330bf6b7feaff05744cb83fcfd1fdbf7b621e39dec368775b287";
+      hash = "sha256-og+VPXoSMwv2t/6v8FdEy4P8/R/b97Yh453sNod1soc=";
     };
     aarch64-darwin = {
       url = "https://github.com/brave/brave-browser/releases/download/v${version}/Brave-Origin-arm64.dmg";
-      sha256 = "592bb5b360d21c76f749209a3fbc7287fd820fb7954e46c7679cfa2eb0497b2e";
+      hash = "sha256-WSu1s2DSHHb3SSCaP7xyh/2CD7eVTkbHZ5z6LrBJey4=";
     };
   };
 }

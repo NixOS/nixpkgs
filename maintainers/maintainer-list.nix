@@ -4112,6 +4112,11 @@
     githubId = 8405359;
     keys = [ { fingerprint = "8279 6487 A4CA 2A28 E8B3  3CD6 C7F9 9743 6A20 4683"; } ];
   };
+  boogiewoogit = {
+    name = "boogiewoogit";
+    github = "boogiewoogit";
+    githubId = 27273554;
+  };
   booklearner = {
     name = "booklearner";
     email = "booklearner@proton.me";

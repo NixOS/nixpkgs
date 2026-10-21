@@ -33,7 +33,7 @@ maven.buildMavenPackage {
   pname = "forge-mtg";
   inherit version src patches;
 
-  mvnHash = "sha256-LkrZ1Ufem57dfYpBadQxsdb38kLedGYtJAceMi+jt2w=";
+  mvnHash = "sha256-Dek7HJ89eOx7Yu+X76uAddyd2v7Y0Lre767F5gWTuIY=";
 
   doCheck = false; # Needs a running Xorg
 

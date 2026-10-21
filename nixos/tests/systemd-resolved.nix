@@ -98,7 +98,6 @@
 
       testing.initrdBackdoor = true;
       boot.initrd = {
-        systemd.enable = true;
         systemd.initrdBin = [ pkgs.iputils ];
         network.enable = true;
         services.resolved.enable = true;

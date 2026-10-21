@@ -13,7 +13,7 @@ buildDunePackage (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-diet/releases/download/v${finalAttrs.version}/diet-v${finalAttrs.version}.tbz";
-    sha256 = "96acac2e4fdedb5f47dd8ad2562e723d85ab59cd1bd85554df21ec907b071741";
+    hash = "sha256-lqysLk/e219H3YrSVi5yPYWrWc0b2FVU3yHskHsHF0E=";
   };
 
   minimalOCamlVersion = "4.03";

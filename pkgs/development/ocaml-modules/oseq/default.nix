@@ -13,7 +13,7 @@ buildDunePackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "c-cube";
     repo = "oseq";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-fyr/OKlvvHBfovtdubSW4rd4OwQbMLKWXghyU3uBy/k=";
   };
 
