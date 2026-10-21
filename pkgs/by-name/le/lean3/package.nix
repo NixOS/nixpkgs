@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   gmp,
   coreutils,
@@ -10,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   pname = "lean";
-  version = "3.51.0";
+  version = "3.51.1c"; # last version
 
   src = fetchFromGitHub {
     owner = "leanprover-community";
@@ -19,18 +18,9 @@ stdenv.mkDerivation rec {
     # from. this is then used to check whether an olean file should be
     # rebuilt. don't use a tag as rev because this will get replaced into
     # src/githash.h.in in preConfigure.
-    rev = "9fc1dee97a72a3e34d658aefb4b8a95ecd3d477c";
-    hash = "sha256-Vcsph4dTNLafeaTtVwJS8tWoWCgcP6pxF0ssZDE/YfM=";
+    rev = "f91b574c40ad862c5134d48995ad083fe48e4cd4";
+    hash = "sha256-Z2DohYFZF58KVzXlmIoXl6y9jsiRuZaCLOesjpwosz0=";
   };
-
-  patches = [
-    # Fix gcc-13 build failure
-    (fetchpatch {
-      name = "gcc-13.patch";
-      url = "https://github.com/leanprover-community/lean/commit/21d264a66d53b0a910178ae7d9529cb5886a39b6.patch";
-      hash = "sha256-hBm2QNFS1jdoR6LUQHLReKxMKv7kbkrkrTGJ43YnvfA=";
-    })
-  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ gmp ];
@@ -68,8 +58,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    # last successful hydra build on darwin was in 2024
-    broken = stdenv.hostPlatform.isDarwin;
+    broken = true;
     description = "Automatic and interactive theorem prover";
     homepage = "https://leanprover.github.io/";
     changelog = "https://github.com/leanprover-community/lean/blob/v${version}/doc/changes.md";
