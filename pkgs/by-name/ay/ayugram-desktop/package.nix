@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   nix-update-script,
   telegram-desktop,
@@ -21,6 +22,10 @@ telegram-desktop.override {
         hash = "sha256-JlZWJ+fWdJqgDMpPFLfkfFp/O65eQaA8GQD6ZY/SI/k=";
         fetchSubmodules = true;
       };
+
+      # Find the Swift SDK overlays needed by the translation provider.
+      # Remove after next release
+      env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-L/usr/lib/swift";
 
       passthru.updateScript = nix-update-script { };
 
