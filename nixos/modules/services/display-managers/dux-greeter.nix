@@ -18,7 +18,7 @@ let
     escapeShellArgs
     ;
 
-  cfg = config.services.displayManager.dms-greeter;
+  cfg = config.services.displayManager.dux-greeter;
   cfgDms = config.programs.dux-shell;
   cfgAutoLogin = config.services.displayManager.autoLogin;
   sessionData = config.services.displayManager.sessionData;
@@ -109,10 +109,17 @@ let
       [ ];
 in
 {
-  options.services.displayManager.dms-greeter = {
-    enable = mkEnableOption "DankMaterialShell greeter";
+  imports = [
+    (lib.mkRenamedOptionModule
+      [ "services" "displayManager" "dms-greeter" ]
+      [ "services" "displayManager" "dux-greeter" ]
+    )
+  ];
 
-    package = lib.mkPackageOption pkgs "dms-greeter" { };
+  options.services.displayManager.dux-greeter = {
+    enable = mkEnableOption "Dux Shell greeter";
+
+    package = lib.mkPackageOption pkgs "dux-greeter" { };
 
     compositor = {
       name = mkOption {
@@ -251,7 +258,7 @@ in
             [ "programs" ] ++ lib.splitString "." compositorOption ++ [ "enable" ]
           ) false config;
         message = ''
-          DankMaterialShell greeter: The compositor "${cfg.compositor.name}" is not enabled.
+          Dux Shell greeter: The compositor "${cfg.compositor.name}" is not enabled.
 
           Please enable the compositor via:
             programs.${compositorOption}.enable = true;
@@ -350,13 +357,13 @@ in
         chown dms-greeter:dms-greeter * || :
       '';
 
-    services.displayManager.dms-greeter.configFiles = lib.mkIf (
+    services.displayManager.dux-greeter.configFiles = lib.mkIf (
       cfg.configHome != null
     ) configFilesFromHome;
 
     users.groups.dms-greeter = { };
     users.users.dms-greeter = {
-      description = "DankMaterialShell greeter user";
+      description = "Dux Shell greeter user";
       isSystemUser = true;
       home = cacheDir;
       homeMode = "0750";
