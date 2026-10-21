@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   kernel,
+  kernelModuleInstallHook,
   kmod,
   gnugrep,
 }:
@@ -20,7 +21,7 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "pic" ];
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kernelModuleInstallHook ];
 
   enableParallelBuilding = true;
 
@@ -37,9 +38,15 @@ stdenv.mkDerivation {
     done
   '';
 
-  preInstall = ''
-    mkdir -p "$out/lib/modules/${kernel.modDirVersion}/misc"
-  '';
+  # vmblock-only/vmci-only do not exist in all releases.
+  kernelModuleSkipMissingDirs = true;
+  kernelModuleDirs = [
+    "vmblock-only"
+    "vmci-only"
+    "vmmon-only"
+    "vmnet-only"
+  ];
+  kernelModuleInstallDir = "misc";
 
   meta = {
     description = "Kernel modules needed for VMware hypervisor";
