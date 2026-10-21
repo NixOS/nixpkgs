@@ -61,10 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     libmnl
   ];
 
-  postInstall = ''
-    install -Dm555 -t $out/bin ../script/otbr-firewall
-  '';
-
   cmakeFlags = [
     (lib.cmakeBool "BUILD_TESTING" false)
     (lib.cmakeBool "INSTALL_SYSTEMD_UNIT" false)
