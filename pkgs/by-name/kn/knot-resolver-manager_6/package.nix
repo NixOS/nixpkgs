@@ -13,7 +13,7 @@ python3Packages.buildPythonPackage {
   inherit (kresd) version src;
   pyproject = true;
 
-  patches = [
+  patches = (kresd.patches or [ ]) ++ [
     # Rewrap the two supervisor's binaries, so that they obtain access to python modules
     # defined in the manager.  Those are then used as extensions of supervisord.
     # Manager needs this fixed bin/supervisord on its $PATH.
@@ -22,17 +22,12 @@ python3Packages.buildPythonPackage {
 
   # Propagate meson config from the C part to the python part.
   postPatch = ''
-    cp '${kresd.config_py}'/knot_resolver/constants.py ./python/knot_resolver/
-  ''
-  # On non-Linux let's simplify construction of the knot-resolver command line,
-  # as it would break because of nixpkgs-specific wrapping of python packages.
-  + ''
-    substituteInPlace python/knot_resolver/controller/supervisord/config_file.py \
-      --replace-fail 'args = [sys.executable] + sys.argv' 'args = sys.argv'
+    sed "s|^PYBIN_DIR = .*|PYBIN_DIR = Path('$out/bin')|" \
+      < '${kresd.config_py}'/knot_resolver/constants.py \
+      > ./python/knot_resolver/constants.py
   '';
 
   build-system = with python3Packages; [
-    poetry-core
     setuptools
   ];
 
@@ -43,7 +38,6 @@ python3Packages.buildPythonPackage {
     pyyaml
     prometheus-client # optional, for prometheus metrics
     supervisor
-    typing-extensions
     watchdog # optional, watching changes in files (TLS certs, RPZs)
   ];
 
