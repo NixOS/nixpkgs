@@ -33,6 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
     remove-references-to -t ${stdenv.cc.cc} "$(readlink -f $out/lib/libgme.so)"
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://github.com/libgme/game-music-emu/";
     description = "Collection of video game music file emulators";
