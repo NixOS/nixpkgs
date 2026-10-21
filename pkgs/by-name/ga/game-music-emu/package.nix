@@ -27,11 +27,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   # It used to reference it, in the past, but thanks to the postFixup hook, now
   # it doesn't.
-  disallowedReferences = [ stdenv.cc.cc ];
+  outputChecks.out.disallowedReferences = [ stdenv.cc.cc ];
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     remove-references-to -t ${stdenv.cc.cc} "$(readlink -f $out/lib/libgme.so)"
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://github.com/libgme/game-music-emu/";
