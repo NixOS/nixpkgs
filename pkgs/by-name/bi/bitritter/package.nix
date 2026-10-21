@@ -51,6 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
   ];
 
+  mesonBuildType = "release";
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
