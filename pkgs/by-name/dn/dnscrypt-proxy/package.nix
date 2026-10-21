@@ -1,14 +1,14 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   fetchpatch,
   nixosTests,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "dnscrypt-proxy";
-  version = "2.1.18";
+  version = "2.1.19";
 
   vendorHash = null;
 
@@ -18,7 +18,7 @@ buildGoModule (finalAttrs: {
     owner = "DNSCrypt";
     repo = "dnscrypt-proxy";
     rev = finalAttrs.version;
-    hash = "sha256-Ol1S2dNVLvXjRbKFf+rlTHtbvybu8fO6DcMoJIgUArY=";
+    hash = "sha256-HKrsdhB9FSBGXvKQcf7IeI2SBKCUXodcWyteivlySDM=";
   };
 
   patches = [
