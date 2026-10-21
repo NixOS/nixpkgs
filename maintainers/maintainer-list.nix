@@ -20167,12 +20167,6 @@
     githubId = 68467027;
     name = "Mshnwq";
   };
-  msiedlarek = {
-    email = "mikolaj@siedlarek.pl";
-    github = "msiedlarek";
-    githubId = 133448;
-    name = "Mikołaj Siedlarek";
-  };
   msladecek = {
     email = "martin.sladecek+nixpkgs@gmail.com";
     name = "Martin Sladecek";
