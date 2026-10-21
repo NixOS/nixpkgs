@@ -33,9 +33,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
     python3-gnutls
     python3-msrplib
     python3-sipsimple
+    python3-xcaplib
     systemd-python
     wokkel
-    xcaplib
   ];
 
   pythonImportsCheck = [ "sylk" ];

@@ -17407,6 +17407,8 @@ self: super: with self; {
 
   python3-sipsimple = callPackage ../development/python-modules/python3-sipsimple { };
 
+  python3-xcaplib = callPackage ../development/python-modules/python3-xcaplib { };
+
   pythondialog = callPackage ../development/python-modules/pythondialog { };
 
   pythonefl = callPackage ../development/python-modules/python-efl { };
@@ -22853,8 +22855,6 @@ self: super: with self; {
   xattr = callPackage ../development/python-modules/xattr { };
 
   xboxapi = callPackage ../development/python-modules/xboxapi { };
-
-  xcaplib = callPackage ../development/python-modules/xcaplib { };
 
   xcffib = callPackage ../development/python-modules/xcffib { };
 
