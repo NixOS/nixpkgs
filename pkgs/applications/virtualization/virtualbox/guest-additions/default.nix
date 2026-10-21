@@ -2,6 +2,7 @@
   stdenv,
   kernel,
   callPackage,
+  coreutils,
   lib,
   dbus,
   kmod,
@@ -16,6 +17,7 @@
   makeWrapper,
   wayland,
   libx11,
+  kernelModuleMakeFlags,
 }:
 let
   virtualboxVersion = "7.2.22";
@@ -111,7 +113,7 @@ stdenv.mkDerivation {
     # Build kernel modules.
     cd src/vboxguest-${virtualboxVersion}_NixOS
     # Run just make first. If we only did make install, we get symbol warnings during build.
-    make
+    make $makeFlags
     cd ../..
 
     # Change the interpreter for various binaries
@@ -135,6 +137,12 @@ stdenv.mkDerivation {
     runHook postBuild
   '';
 
+  makeFlags = kernelModuleMakeFlags ++ [
+    "INSTALL_MOD_PATH=$(out)"
+    "DEPMOD=${coreutils}/bin/true"
+    "VBOX_ALLOW_MODULE_SIGNING=1"
+  ];
+
   installPhase = ''
     runHook preInstall
 
@@ -142,7 +150,7 @@ stdenv.mkDerivation {
 
     # Install kernel modules.
     cd src/vboxguest-${virtualboxVersion}_NixOS
-    make install INSTALL_MOD_PATH=$out KBUILD_EXTRA_SYMBOLS=$PWD/vboxsf/Module.symvers
+    make $makeFlags install KBUILD_EXTRA_SYMBOLS=$PWD/vboxsf/Module.symvers
     cd ../..
 
     # Install binaries
