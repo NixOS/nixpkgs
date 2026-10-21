@@ -6,6 +6,7 @@
   git,
   kernel ? linuxPackages.kernel,
   kernelModuleMakeFlags,
+  kernelModuleInstallHook,
 }:
 stdenv.mkDerivation {
   pname = "msi-ec-kmods";
@@ -29,12 +30,12 @@ stdenv.mkDerivation {
 
   makeFlags = kernelModuleMakeFlags ++ [
     "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-    "INSTALL_MOD_PATH=$(out)"
   ];
 
-  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ git ];
-
-  installTargets = [ "modules_install" ];
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [
+    git
+    kernelModuleInstallHook
+  ];
 
   enableParallelBuilding = true;
 
