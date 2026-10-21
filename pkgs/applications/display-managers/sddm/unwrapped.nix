@@ -12,6 +12,7 @@
   qtbase,
   qtdeclarative,
   qtquickcontrols2 ? null,
+  systemdSupport ? true,
   systemdLibs,
   xkeyboard-config,
   nixosTests,
@@ -67,6 +68,8 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
     qtdeclarative
     qtquickcontrols2
+  ]
+  ++ lib.optionals systemdSupport [
     systemdLibs
   ];
 
@@ -76,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "BUILD_WITH_QT6" isQt6)
     (lib.cmakeBool "BUILD_MAN_PAGES" true)
+    (lib.cmakeBool "NO_SYSTEMD" (!systemdSupport))
     "-DCONFIG_FILE=/etc/sddm.conf"
     "-DCONFIG_DIR=/etc/sddm.conf.d"
 
@@ -91,10 +95,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     "-DQT_IMPORTS_DIR=${placeholder "out"}/${qtbase.qtQmlPrefix}"
     "-DCMAKE_INSTALL_SYSCONFDIR=${placeholder "out"}/etc"
+    "-DDBUS_CONFIG_DIR=${placeholder "out"}/share/dbus-1/system.d"
+  ]
+  ++ lib.optionals systemdSupport [
     "-DSYSTEMD_SYSTEM_UNIT_DIR=${placeholder "out"}/lib/systemd/system"
     "-DSYSTEMD_SYSUSERS_DIR=${placeholder "out"}/lib/sysusers.d"
     "-DSYSTEMD_TMPFILES_DIR=${placeholder "out"}/lib/tmpfiles.d"
-    "-DDBUS_CONFIG_DIR=${placeholder "out"}/share/dbus-1/system.d"
   ];
 
   postInstall = ''
