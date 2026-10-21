@@ -17,7 +17,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromTangled {
     did = "did:plc:jj6ajj6duxnlthwtnob4qyuv";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QbncR2z9GhxKKbbCf6a5Ph4lLi4OYWjRN49s7+5q7Uc=";
+    hash = "sha256-qsV7AXQHITaWQ3lFGyvdukV8gcVoI4P02QWS4BsZxIQ=";
   };
   sourceRoot = "${finalAttrs.src.name}/frontend";
 

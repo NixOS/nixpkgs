@@ -365,8 +365,8 @@ let
         mktplcRef = {
           publisher = "arktypeio";
           name = "arkdark";
-          version = "6.6.0";
-          hash = "sha256-9QsHaH8mXM7D7QE5+xTFrGyxh6MShPF9Wk0hFHpxk8A=";
+          version = "6.6.1";
+          hash = "sha256-+jTZeGkJkWeOQONXup9Bbfe6FGHQwDD4Cn6POLddUPE=";
         };
         meta = {
           description = "Syntax highlighting and inline errors for ArkType";
@@ -1131,8 +1131,8 @@ let
         mktplcRef = {
           name = "vscode-cue";
           publisher = "cuelangorg";
-          version = "0.0.21";
-          hash = "sha256-aSyTgGZt9AMZopmPLHb3Mc2RxUGZH87eMtOPX8DlgWQ=";
+          version = "0.0.23";
+          hash = "sha256-iu5oHsnTXPa+xzDse2Ei9hVn4THSkiNJvBkGp1vfEwA=";
         };
         meta = {
           description = "The official CUE extension for VS Code, providing syntax highlighting and language server integration (LSP)";

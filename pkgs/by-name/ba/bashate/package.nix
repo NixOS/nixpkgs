@@ -2,7 +2,6 @@
   lib,
   fetchPypi,
   python3Packages,
-  versionCheckHook,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -25,15 +24,9 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = with python3Packages; [
     fixtures
     mock
-    stestr
+    stestrCheckHook
     testtools
   ];
-
-  checkPhase = ''
-    runHook preCheck
-    stestr run
-    runHook postCheck
-  '';
 
   pythonImportsCheck = [ "bashate" ];
 

@@ -8,7 +8,7 @@
   pbr,
   coverage,
   oslotest,
-  stestr,
+  stestrCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -26,24 +26,18 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  nativeCheckInputs = [
-    coverage
-    oslotest
-    stestr
-  ];
-
   dependencies = [
     cryptography
     python-dateutil
   ];
 
-  pythonImportsCheck = [ "pyghmi" ];
+  nativeCheckInputs = [
+    coverage
+    oslotest
+    stestrCheckHook
+  ];
 
-  checkPhase = ''
-    runHook preCheck
-    stestr run
-    runHook postCheck
-  '';
+  pythonImportsCheck = [ "pyghmi" ];
 
   meta = {
     description = "Pure Python (mostly IPMI) server management library";

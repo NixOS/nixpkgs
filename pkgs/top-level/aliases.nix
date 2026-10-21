@@ -1200,6 +1200,7 @@ mapAliases {
   hibernate = throw "hibernate has been removed due to lack of maintenance"; # Added 2025-09-10
   hiddify-app = throw "hiddify-app has been removed, since it is unmaintained"; # Added 2025-08-20
   hifiscan = throw "'hifiscan' has been removed due to being archived upstream."; # Added 2026-08-22
+  highlight-assertions = throw "'highlight-assertions' has been removed due to lack of upstream maintenance."; # Added 2026-10-15
   himitsu-firefox = throw "himitsu-firefox has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-11
   hiPrio = warnAlias "'hiPrio' has been removed from pkgs, use `lib.hiPrio` instead" lib.hiPrio; # Added 2025-10-30
   hiraeth = throw "hiraeth has been removed due to being unmaintained upstream";
@@ -2495,6 +2496,7 @@ mapAliases {
   squirreldisk = throw "'squirreldisk' has been removed as it depended on webkitgtk 4.0"; # Added 2026-06-07
   src = throw "The \"src\" package has been renamed to \"simple-revision-control\". If you encounter this error and did not intend to use that package you may have a falsely constructed overlay."; # Added 2025-11-19
   ssh-ashkpass-fullscreen = throw "'ssh-askpass-fullscreen' has been removed as it depended on the deprecated GTK2 engine."; # Added 2026-08-03
+  ssl-proxy = throw "'ssl-proxy' has been removed as it was unmaintained both upstream and in nixpkgs, pinned to dangerously old version of go crypto."; # Added 2026-10-17
   ssm-agent = throw "'ssm-agent' has been renamed to/replaced by 'amazon-ssm-agent'"; # Converted to throw 2025-10-27
   stacer = throw "'stacer' has been removed because it was abandoned upstream and relied upon vulnerable software"; # Added 2025-11-08
   stalwart = warnAlias "`stalwart` is currently pinned to `0.15.5`. If `0.16.x` is needed, it is available as `stalwart_0_16`. Note: `stalwart_0_16` is not compatible with `services.stalwart` at this time." stalwart_0_15;

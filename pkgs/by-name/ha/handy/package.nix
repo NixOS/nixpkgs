@@ -95,6 +95,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # FoundationModels requires macros that are only shipped with Xcode. The 26.x SDK in Nixpkgs does not have them.
     substituteInPlace src-tauri/build.rs \
       --replace-fail 'has_foundation_models = framework_path.exists()' ' has_foundation_models = false'
+
+    # Disable the in-app updater
+    substituteInPlace src/components/update-checker/UpdateChecker.tsx \
+      --replace-fail 'settings?.update_checks_enabled ?? false' 'false'
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace "$cargoDepsCopy"/*/libappindicator-sys-*/src/lib.rs \

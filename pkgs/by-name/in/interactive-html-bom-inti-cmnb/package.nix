@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   dependencies = [
     python3Packages.jsonschema
-    python3Packages.wxpython
+    python3Packages.wxpython_4_3
     python3Packages.kicad
   ];
 
