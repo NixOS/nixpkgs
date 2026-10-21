@@ -49,6 +49,12 @@ buildGoModule (finalAttrs: {
 
   checkFlags = [ "-skip=^TestReverseProxySNIPlaceHolder$" ];
 
+  # Use only the system CA store. The embedded fallback bundle does not get cacert updates.
+  # goModules does not run postConfigure, so vendorHash stays the same.
+  postConfigure = ''
+    rm cmd/x509rootsfallback.go
+  '';
+
   postInstall = ''
     install -Dm644 ${finalAttrs.passthru.dist}/init/caddy.service ${finalAttrs.passthru.dist}/init/caddy-api.service -t $out/lib/systemd/system
 
