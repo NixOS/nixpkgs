@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Cowsay reimplementation for ponies";
     homepage = "https://github.com/erkin/ponysay";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ bodil ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })
