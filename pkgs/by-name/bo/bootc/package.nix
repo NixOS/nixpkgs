@@ -56,7 +56,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=test_tar_write_tar_layer"
   ];
 
-  cargoBuildFlags = [ "-p bootc" ];
+  cargoBuildFlags = [
+    "-p"
+    "bootc"
+  ];
 
   nativeInstallCheckInputs = [
     versionCheckHook
