@@ -26,6 +26,8 @@ let
     RAILS_LOG_TO_STDOUT = "true";
     REDIS_URL = "redis://${cfg.redis.host}:${toString cfg.redis.port}";
   };
+  # required for the PGP integration
+  path = [ pkgs.gnupg ];
   databaseConfig = settingsFormat.generate "database.yml" cfg.database.settings;
   package = cfg.package.override {
     dataDir = cfg.dataDir;
@@ -326,7 +328,7 @@ in
     };
 
     systemd.services.zammad-web = {
-      inherit environment;
+      inherit environment path;
       serviceConfig = serviceConfig // {
         # loading all the gems takes time
         TimeoutStartSec = 1200;
@@ -402,7 +404,7 @@ in
     ];
 
     systemd.services.zammad-websocket = {
-      inherit serviceConfig environment;
+      inherit serviceConfig environment path;
       after = [ "zammad-web.service" ];
       requires = [ "zammad-web.service" ];
       description = "Zammad websocket";
@@ -411,7 +413,7 @@ in
     };
 
     systemd.services.zammad-worker = {
-      inherit serviceConfig environment;
+      inherit serviceConfig environment path;
       after = [ "zammad-web.service" ];
       requires = [ "zammad-web.service" ];
       description = "Zammad background worker";
