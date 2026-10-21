@@ -43,7 +43,7 @@ in
 buildDotnetModule {
   inherit version buildType;
 
-  pname = "SS14.Launcher";
+  pname = "ss14-launcher";
 
   src = fetchFromGitHub {
     owner = "space-wizards";
@@ -117,6 +117,10 @@ buildDotnetModule {
   ];
 
   desktopItems = [ "PublishFiles/SS14.desktop" ];
+
+  preInstall = ''
+    dotnetInstallPath=$out/lib/SS14.Launcher
+  '';
 
   postInstall = ''
     mkdir -p $out/lib/SS14.Launcher/loader
