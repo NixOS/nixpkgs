@@ -33,7 +33,7 @@ maven.buildMavenPackage {
     (replaceVars ./fix-poms.patch { inherit jdk; })
   ];
 
-  mvnHash = "sha256-p0LSR6I876/JNfrLp19PnLAx00gL4E2mZK+CO8X2IzU=";
+  mvnHash = "sha256-HK0eYYbdaM3ur/oFSaBO9B7+pgcINdkXANwb018gg5M=";
   mvnJdk = jdk;
   mvnParameters = "-DskipTests";
 
