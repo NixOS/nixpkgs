@@ -40,6 +40,9 @@
   libxcomposite,
   libxdamage,
 
+  cacert,
+  jre-generate-cacerts,
+
   coreutils,
   gnugrep,
   gnused,
@@ -192,7 +195,20 @@ let
       (lib.makeLibraryPath finalAttrs.buildInputs)
     ];
 
+    # keytool must already be patched when postFixup regenerates cacerts
+    dontAutoPatchelf = true;
+
     postFixup = ''
+      autoPatchelf -- "$out"
+
+      # regenerate the bundled JRE's CA keystore from cacert, as openjdk does
+      pushd $out/thirdparty/java/lib/security
+      rm cacerts
+      JAVA_TOOL_OPTIONS="-Dkeystore.pkcs12.certProtectionAlgorithm=NONE -Dkeystore.pkcs12.macAlgorithm=NONE" \
+        ${jre-generate-cacerts} $out/thirdparty/java/bin/keytool ${cacert}/etc/ssl/certs/ca-bundle.crt
+      [ -s cacerts ] || { echo "failed to generate cacerts" >&2; exit 1; }
+      popd
+
       for f in scilab scilab-cli scilab-adv-cli scinotes xcos; do
         wrapProgram $out/bin/$f \
           "''${gappsWrapperArgs[@]}" \
