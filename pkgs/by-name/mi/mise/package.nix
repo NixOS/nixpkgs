@@ -36,6 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-gkCta9qiXKUmUnp6FfLStE5IM6ax/nmjMzQ+SDNg77U=";
 
   nativeBuildInputs = [
+    cmake
     installShellFiles
     pkg-config
   ];
@@ -76,7 +77,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeCheckInputs = [
     cacert
-    cmake
     coreutils
     # gix spawns git-upload-pack by name in file:// clone tests.
     git
