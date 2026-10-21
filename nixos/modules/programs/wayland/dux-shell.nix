@@ -18,22 +18,23 @@ let
     filterAttrs
     ;
 
-  cfg = config.programs.dms-shell;
+  cfg = config.programs.dux-shell;
 
   path = [
     "programs"
-    "dms-shell"
+    "dux-shell"
   ];
 
   builtInRemovedMsg = "This is now built-in in DMS and doesn't need additional dependencies.";
 in
 {
   imports = [
+    (lib.mkRenamedOptionModule [ "programs" "dms-shell" ] [ "programs" "dux-shell" ])
     (lib.mkRemovedOptionModule (path ++ [ "enableBrightnessControl" ]) builtInRemovedMsg)
     (lib.mkRemovedOptionModule (path ++ [ "enableColorPicker" ]) builtInRemovedMsg)
     (lib.mkRemovedOptionModule (
       path ++ [ "enableSystemSound" ]
-    ) "qtmultimedia is now included on dms-shell package.")
+    ) "qtmultimedia is now included on dux-shell package.")
     (lib.mkRemovedOptionModule (path ++ [ "enableClipboard" ]) builtInRemovedMsg)
     (lib.mkRemovedOptionModule (path ++ [ "enableSystemMonitoring" ]) builtInRemovedMsg)
     (lib.mkRemovedOptionModule (path ++ [ "enableClipboardPaste" ]) builtInRemovedMsg)
@@ -41,20 +42,20 @@ in
       "Networking backends are detected by DMS at runtime. Configure the desired networking service separately."
     )
     (lib.mkRemovedOptionModule (path ++ [ "enableDynamicTheming" ])
-      "matugen is included in the default DMS environment. Use programs.dms-shell.excludePackages to exclude it."
+      "matugen is included in the default DMS environment. Use programs.dux-shell.excludePackages to exclude it."
     )
     (lib.mkRemovedOptionModule (path ++ [ "enableAudioWavelength" ])
-      "cava is included in the default DMS environment. Use programs.dms-shell.excludePackages to exclude it."
+      "cava is included in the default DMS environment. Use programs.dux-shell.excludePackages to exclude it."
     )
     (lib.mkRemovedOptionModule (
       path ++ [ "enableCalendarEvents" ]
     ) "Install a supported calendar backend separately and select it in DMS settings.")
   ];
 
-  options.programs.dms-shell = {
-    enable = mkEnableOption "DankMaterialShell, a complete desktop shell for Wayland compositors";
+  options.programs.dux-shell = {
+    enable = mkEnableOption "Dux Shell, a complete desktop shell for Wayland compositors";
 
-    package = mkPackageOption pkgs "dms-shell" { };
+    package = mkPackageOption pkgs "dux-shell" { };
 
     excludePackages = mkOption {
       type = types.listOf types.package;
@@ -67,7 +68,7 @@ in
         type = types.bool;
         default = true;
         description = ''
-          Whether to enable DankMaterialShell systemd startup service.
+          Whether to enable Dux Shell systemd startup service.
         '';
       };
 
@@ -75,7 +76,7 @@ in
         type = types.str;
         default = "graphical-session.target";
         description = ''
-          The systemd target that will automatically start the DankMaterialShell service.
+          The systemd target that will automatically start the Dux Shell service.
 
           Common targets include:
           - `graphical-session.target` for most desktop environments
@@ -87,7 +88,7 @@ in
         type = types.bool;
         default = true;
         description = ''
-          Whether to restart the dms.service when the DankMaterialShell package or
+          Whether to restart the dms.service when the Dux Shell package or
           configuration changes. This ensures the latest version is always running
           after a system rebuild.
         '';

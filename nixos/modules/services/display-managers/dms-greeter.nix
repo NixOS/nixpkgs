@@ -19,7 +19,7 @@ let
     ;
 
   cfg = config.services.displayManager.dms-greeter;
-  cfgDms = config.programs.dms-shell;
+  cfgDms = config.programs.dux-shell;
   cfgAutoLogin = config.services.displayManager.autoLogin;
   sessionData = config.services.displayManager.sessionData;
 
@@ -101,9 +101,9 @@ let
   configFilesFromHome =
     if cfg.configHome != null then
       [
-        "${cfg.configHome}/.config/DankMaterialShell/settings.json"
-        "${cfg.configHome}/.local/state/DankMaterialShell/session.json"
-        "${cfg.configHome}/.cache/DankMaterialShell/dms-colors.json"
+        "${cfg.configHome}/.config/dms/settings.json"
+        "${cfg.configHome}/.local/state/dms/session.json"
+        "${cfg.configHome}/.cache/dms/dms-colors.json"
       ]
     else
       [ ];
@@ -171,12 +171,12 @@ in
       default = [ ];
       example = literalExpression ''
         [
-          "/home/user/.config/DankMaterialShell/settings.json"
-          "/home/user/.local/state/DankMaterialShell/session.json"
+          "/home/user/.config/dms/settings.json"
+          "/home/user/.local/state/dms/session.json"
         ]
       '';
       description = ''
-        List of DankMaterialShell configuration files to copy into the greeter
+        List of Dux Shell configuration files to copy into the greeter
         data directory at `/var/lib/dms-greeter`.
 
         This is useful for preserving user preferences like wallpapers, themes,
@@ -194,13 +194,13 @@ in
       default = null;
       example = "/home/alice";
       description = ''
-        Path to a user's home directory from which to copy DankMaterialShell
+        Path to a user's home directory from which to copy Dux Shell
         configuration files.
 
         When set, the following files will be automatically copied to the greeter:
-        - `~/.config/DankMaterialShell/settings.json`
-        - `~/.local/state/DankMaterialShell/session.json`
-        - `~/.cache/DankMaterialShell/dms-colors.json`
+        - `~/.config/dms/settings.json`
+        - `~/.local/state/dms/session.json`
+        - `~/.cache/dms/dms-colors.json`
 
         If your configuration files are in non-standard locations, use the
         {option}`configFiles` option instead.
@@ -212,14 +212,14 @@ in
         type = types.package;
         default = if cfgDms.enable then cfgDms.quickshell.package else pkgs.quickshell;
         defaultText = literalExpression ''
-          if config.programs.dms-shell.enable
-          then config.programs.dms-shell.quickshell.package
+          if config.programs.dux-shell.enable
+          then config.programs.dux-shell.quickshell.package
           else pkgs.quickshell;
         '';
         description = ''
           The Quickshell package to use for the greeter.
 
-          Defaults to the quickshell package from `programs.dms-shell` if it is enabled,
+          Defaults to the quickshell package from `programs.dux-shell` if it is enabled,
           otherwise defaults to `pkgs.quickshell`.
         '';
       };
