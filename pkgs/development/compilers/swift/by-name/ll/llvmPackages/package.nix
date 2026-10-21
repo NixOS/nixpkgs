@@ -62,7 +62,7 @@ let
           llvmPackages = llvmPackages_19;
           patchOverrides = basePatchOverrides;
         };
-        "6.4.0" = {
+        "6.4.1" = {
           swiftLlvmVersion = "21.0.0"; # From https://github.com/swiftlang/swift/blob/swift-$swiftVersion-RELEASE/utils/build_swift/build_swift/defaults.py#L51
           llvmVersion = "21.1.6"; # From https://github.com/swiftlang/llvm-project/blob/swift-$swiftVersion-RELEASE/cmake/Modules/LLVMVersion.cmake
           llvmPackages = llvmPackages_21;
