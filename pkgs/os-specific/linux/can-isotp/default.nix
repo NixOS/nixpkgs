@@ -2,6 +2,7 @@
   lib,
   stdenv,
   kernel,
+  kernelModuleInstallHook,
   kernelModuleMakeFlags,
   fetchFromGitHub,
 }:
@@ -21,13 +22,11 @@ stdenv.mkDerivation {
 
   makeFlags = kernelModuleMakeFlags ++ [
     "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-    "INSTALL_MOD_PATH=${placeholder "out"}"
   ];
 
   buildFlags = [ "modules" ];
-  installTargets = [ "modules_install" ];
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kernelModuleInstallHook ];
 
   meta = {
     broken = kernel.kernelAtLeast "5.16";
