@@ -61,7 +61,7 @@ buildBazelPackage {
     preInstall = ''
       find $bazelOut/external/abseil-cpp* -type f -name BUILD.bazel -exec sed -i -e 's/"layering_check",//g' {} \;
     '';
-    hash = "sha256-Zz/WoHofZA4zVJB6BAxljtJqg6FlvbO7NjQIvP4431Q=";
+    hash = "sha256-G/CNVTyyrlMsJJPb7dWnre13vr2T4br6uN1mPLSzD7w=";
   };
 
   nativeBuildInputs = [
