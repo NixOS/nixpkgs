@@ -1,13 +1,43 @@
 {
-  lib,
-  stdenv,
-  fetchurl,
-  openjdk17,
-  makeWrapper,
-  replaceVars,
+  atk,
+  cairo,
   coreutils,
+  fetchurl,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  lib,
+  libglvnd,
+  libx11,
+  libxtst,
+  libxxf86vm,
+  makeWrapper,
+  ocl-icd,
+  openjdk17,
+  pango,
+  replaceVars,
+  stdenv,
 }:
 
+let
+  # Cytoscape bundles JavaFX (framework/lib/openjfx/linux); its native
+  # libraries are extracted to ~/.openjfx at run time, so they cannot be
+  # patched at build time and must find their dependencies through
+  # LD_LIBRARY_PATH. libOpenCL is needed by the optional GPU (cycl) plugin.
+  runtimeLibs = [
+    atk
+    cairo
+    gdk-pixbuf
+    glib
+    gtk3
+    libglvnd
+    libx11
+    libxtst
+    libxxf86vm
+    ocl-icd
+    pango
+  ];
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cytoscape";
   version = "3.10.5";
@@ -23,10 +53,13 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./gen_vmoptions_to_homedir.patch {
       inherit coreutils;
     })
+    # Same for the karaf instance file, and teach the launcher to actually
+    # read the vmoptions from $HOME/.cytoscape.
+    ./runstate-to-homedir.patch
   ];
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ openjdk17 ];
+  buildInputs = [ openjdk17 ] ++ runtimeLibs;
 
   installPhase = ''
     mkdir -pv $out/{share,bin}
@@ -36,7 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     wrapProgram $out/share/cytoscape.sh \
       --set JAVA_HOME "${openjdk17}" \
-      --set JAVA  "${openjdk17}/bin/java"
+      --set JAVA  "${openjdk17}/bin/java" \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeLibs}"
 
     chmod +x $out/bin/cytoscape
   '';
