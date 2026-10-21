@@ -72,7 +72,10 @@ let
           lgpl3
           mpl11
         ];
-        maintainers = with lib.maintainers; [ renzo ];
+        maintainers = with lib.maintainers; [
+          magicquark
+          renzo
+        ];
         platforms = lib.platforms.all;
       };
       nativeBuildInputs = [
@@ -168,7 +171,10 @@ let
         description = "Hunspell dictionary for ${shortDescription} from Dicollecte";
         homepage = "https://www.dicollecte.org/home.php?prj=fr";
         license = lib.licenses.mpl20;
-        maintainers = with lib.maintainers; [ renzo ];
+        maintainers = with lib.maintainers; [
+          magicquark
+          renzo
+        ];
         platforms = lib.platforms.all;
       };
       nativeBuildInputs = [ unzip ];
@@ -202,7 +208,10 @@ let
         description = "Hunspell dictionary for ${shortDescription} from Wordlist";
         homepage = "http://wordlist.aspell.net/";
         license = lib.licenses.bsd3;
-        maintainers = with lib.maintainers; [ renzo ];
+        maintainers = with lib.maintainers; [
+          magicquark
+          renzo
+        ];
         platforms = lib.platforms.all;
       };
       nativeBuildInputs = [ unzip ];
@@ -233,7 +242,10 @@ let
         description = "Hunspell dictionary for ${shortDescription}";
         homepage = "https://sourceforge.net/projects/linguistico/";
         license = lib.licenses.gpl3;
-        maintainers = with lib.maintainers; [ renzo ];
+        maintainers = with lib.maintainers; [
+          magicquark
+          renzo
+        ];
         platforms = lib.platforms.all;
       };
       nativeBuildInputs = [ unzip ];
