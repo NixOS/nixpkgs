@@ -17,10 +17,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = fluxerHashes.cargo.hash;
 
-  cargoBuildFlags = [
-    "--features"
-    "scylla"
-  ];
+  buildFeatures = [ "scylla" ];
   buildAndTestSubdir = "fluxer_users";
 
   nativeCheckInputs = [
