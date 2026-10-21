@@ -811,6 +811,7 @@ let
       geos # for geos-config
     ];
     magick = [ pkgs.pkg-config ];
+    marcxmlr = [ pkgs.pkg-config ];
     markets = [ pkgs.gsl ]; # for gsl-config
     mashr = [ pkgs.gsl ]; # for gsl-config via RcppGSL
     mcrPioda = [ pkgs.gsl ]; # for gsl-config
@@ -1540,6 +1541,7 @@ let
     lstar = [ pkgs.zlib ];
     lwgeom = [ pkgs.proj ];
     mBvs = [ pkgs.gsl ];
+    mRpostman = [ pkgs.curl ];
     maftools = with pkgs; [
       zlib
       bzip2
@@ -1547,6 +1549,7 @@ let
     ];
     magick = [ pkgs.imagemagick ];
     mappoly = [ pkgs.zlib ];
+    marcxmlr = [ pkgs.libxml2 ];
     markets = [ pkgs.gsl ];
     matchingMarkets = [ pkgs.zlib ];
     methylKit = with pkgs; [
@@ -1556,6 +1559,7 @@ let
     ];
     milorGWAS = [ pkgs.zlib ];
     minimaxALT = [ pkgs.gsl ];
+    misha = [ pkgs.zlib ];
     mitoClone2 = with pkgs; [
       xz
       bzip2
