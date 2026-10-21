@@ -19575,6 +19575,12 @@
     name = "Gabriel Fontes";
     keys = [ { fingerprint = "7088 C742 1873 E0DB 97FF  17C2 245C AB70 B4C2 25E9"; } ];
   };
+  MisterKartoffel = {
+    name = "Felipe Duarte";
+    email = "felipesdrs@hotmail.com";
+    github = "MisterKartoffel";
+    githubId = 176643461;
+  };
   mistydemeo = {
     email = "misty@axo.dev";
     github = "mistydemeo";
