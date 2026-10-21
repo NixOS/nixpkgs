@@ -21,7 +21,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "iotas";
-  version = "2026.7";
+  version = "2026.8";
   pyproject = false;
 
   src = fetchFromGitLab {
@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "World";
     repo = "iotas";
     tag = finalAttrs.version;
-    hash = "sha256-qJI1C5G8DGdIOHXVPiky7JK+Re+0WY18c868LY8/h4k=";
+    hash = "sha256-qzJvo2Qi85thuzs1rbdFwAJ7VvJEN8H0lcFMro/mRI4=";
   };
 
   nativeBuildInputs = [

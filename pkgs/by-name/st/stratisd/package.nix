@@ -127,7 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests = nixosTests.stratis // {
-    inherit (nixosTests.installer-systemd-stage-1) stratisRoot;
+    inherit (nixosTests.installer) stratisRoot;
   };
 
   meta = {
