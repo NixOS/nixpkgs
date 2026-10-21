@@ -1,0 +1,11 @@
+diff --git a/config/imagemagick/policy.xml b/config/imagemagick/policy.xml
+index a29d02c021b..8075d701fee 100644
+--- a/config/imagemagick/policy.xml
++++ b/config/imagemagick/policy.xml
+@@ -41,5 +41,5 @@
+   <!-- HISTOGRAM/INFO: Upload#calculate_dominant_color! -->
+   <policy domain="coder" rights="read|write" pattern="{HISTOGRAM,INFO}"/>
+ 
+-  <policy domain="system" name="symlink" rights="none" pattern="follow"/>
++  <policy domain="system" name="symlink" rights="read|write" pattern="follow"/>
+ </policymap>

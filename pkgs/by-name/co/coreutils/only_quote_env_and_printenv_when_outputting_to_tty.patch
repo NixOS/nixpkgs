@@ -1,0 +1,171 @@
+From 782a1e5bc2090212273bb731dceee2cc2a071e54 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?P=C3=A1draig=20Brady?= <P@draigBrady.com>
+Date: Tue, 15 Sep 2026 20:26:28 +0100
+Subject: [PATCH] env,printenv: only quote when outputting to terminals
+
+To support albeit non-robust but existing use cases like:
+
+  env | grep SPARK_JAVA_OPT_ | sort -t_ -k4 -n |
+   sed 's/[^=]*=\(.*\)/\1/g' > java_opts.txt
+  readarray -t SPARK_EXECUTOR_JAVA_OPTS < java_opts.txt
+  ...
+  CMD=("${JAVA_HOME}/bin/java" "${SPARK_EXECUTOR_JAVA_OPTS[@]}" ...)
+
+* src/env.c (main): Restrict quoting to terminals.
+* src/printenv.c (main): Likewise.
+* tests/env/env.sh: Adjust accordingly.
+* tests/misc/printenv.sh: Likewise.
+* doc/coreutils.texi: Likewise. (Omitted by mdaniels5757 to avoid needing makeinfo.)
+
+Link: https://github.com/coreutils/coreutils/issues/355
+---
+ doc/coreutils.texi     | 16 ++++++----------
+ src/env.c              |  2 +-
+ src/printenv.c         |  2 +-
+ tests/env/env.sh       | 31 +++++++------------------------
+ tests/misc/printenv.sh | 40 ++++------------------------------------
+ 5 files changed, 19 insertions(+), 72 deletions(-)
+
+diff --git a/src/env.c b/src/env.c
+index e646cba96d786a19153aa02c6abbc2c2c7c09fbf..8fff89e72f9ed7d1ab34d0f6dde41a7fd85c1de7 100644
+--- a/src/env.c
++++ b/src/env.c
+@@ -1113,7 +1113,7 @@ main (int argc, char **argv)
+ 
+   /* Get the value from QUOTING_STYLE before unsetting environment
+      variables.  */
+-  if (!opt_nul_terminate_output)
++  if (!opt_nul_terminate_output && isatty (STDOUT_FILENO))
+     {
+       int qs = getenv_quoting_style ();
+       if (qs < 0)
+diff --git a/src/printenv.c b/src/printenv.c
+index dba87f373fb576b04259f0be890540b2ea962247..00ca29f55baf7a7a88eb1e42ec7e1f99c09f0560 100644
+--- a/src/printenv.c
++++ b/src/printenv.c
+@@ -113,7 +113,7 @@ main (int argc, char **argv)
+   bool quote_output = false;
+   idx_t const n_args = argc - optind;
+ 
+-  if (!opt_nul_terminate_output && (n_args <= 0 || isatty (STDOUT_FILENO)))
++  if (!opt_nul_terminate_output && isatty (STDOUT_FILENO))
+     {
+       int qs = getenv_quoting_style ();
+       if (qs < 0)
+diff --git a/tests/env/env.sh b/tests/env/env.sh
+index be822e3460233de584f910fe51cee0a2c3290264..8853e016332615ce413fefc94f66e168396fbc4f 100755
+--- a/tests/env/env.sh
++++ b/tests/env/env.sh
+@@ -91,18 +91,14 @@ EOF
+ compare exp out || fail=1
+ 
+ # env shouldn't care what encoding name or value is
+-cat <<\EOF >exp || framework_failure_
+-NON_UTF8_TEST=''$'\240'
+-EOF
++printf 'NON_UTF8_TEST=\240\n' > exp || framework_failure_
+ env $(printf 'NON_UTF8_TEST=\240') env > all || fail=1
+ grep '^NON_UTF8_TEST' all | LC_ALL=C sort > out || framework_failure_
+ compare exp out || fail=1
+ 
+-cat <<\EOF >exp || framework_failure_
+-'NON_UTF8_TEST'$'\240'=1
+-EOF
++printf 'NON_UTF8_TEST\240=1\n' > exp || framework_failure_
+ env $(printf 'NON_UTF8_TEST\240=1') env > all || fail=1
+-grep "^'NON_UTF8_TEST" all | LC_ALL=C sort > out || framework_failure_
++grep "^NON_UTF8_TEST" all | LC_ALL=C sort > out || framework_failure_
+ compare exp out || fail=1
+ 
+ # PATH modifications affect exec.
+@@ -193,29 +189,16 @@ EOF
+ compare err_exp err || fail=1
+ done
+ 
+-# QUOTING_STYLE affects redirected output.
+-cat <<\EOF >exp-noargs-literal || framework_failure_
+-a b=c d
+-EOF
+-cat <<\EOF >exp-noargs-shell || framework_failure_
+-'a b'='c d'
+-EOF
+-tr "'" '"' <exp-noargs-shell >exp-noargs-c || framework_failure_
+-for qs in literal shell c; do
++# QUOTING_STYLE does not affect redirected output.
++printf '%s\n' 'a b=c d' > exp || framework_failure_
++for qs in literal shell-always invalid; do
+   env -i PATH="$PATH" QUOTING_STYLE=$qs 'a b'='c d' \
+     env >out-t 2>err || fail=1
+   grep -vE '^["'"'"']?'\
+ '(__CF_USER_TEXT_ENCODING|QUOTING_STYLE|(LD_ORIGIN_)?PATH)["'"'"']?=' \
+     out-t >out || framework_failure_
+-  compare exp-noargs-$qs out || fail=1
++  compare exp out || fail=1
+   compare /dev/null err || fail=1
+ done
+ 
+-# Check the behavior with an invalid value for QUOTING_STYLE.
+-printf 'env: ignoring invalid value of environment variable %s\n' \
+-  "QUOTING_STYLE: 'invalid'" >exp || framework_failure_
+-env QUOTING_STYLE=invalid env >out 2>err || fail=1
+-grep '^QUOTING_STYLE=invalid$' out || fail=1
+-compare exp err || fail=1
+-
+ Exit $fail
+diff --git a/tests/misc/printenv.sh b/tests/misc/printenv.sh
+index b8c3696c40f64ebb244dc9ca9a874a0dbb0fc4c2..33ad6cc51fae7574d74a5f19554a1b21e79f4285 100755
+--- a/tests/misc/printenv.sh
++++ b/tests/misc/printenv.sh
+@@ -80,48 +80,16 @@ compare exp out || fail=1
+ returns_ 1 env a=b=c printenv a=b > out || fail=1
+ compare /dev/null out || fail=1
+ 
+-# QUOTING_STYLE affects redirected output.
+-cat <<\EOF >exp-noargs-literal || framework_failure_
+-a b=c d
+-EOF
+-cat <<\EOF >exp-arg-literal || framework_failure_
+-c d
+-EOF
+-cat <<\EOF >exp-args-literal || framework_failure_
+-c d
+-c d
+-EOF
+-cat <<\EOF >exp-noargs-shell || framework_failure_
+-'a b'='c d'
+-EOF
+-cp exp-arg-literal exp-arg-shell &&
+-cp exp-args-literal exp-args-shell || framework_failure_
+-for t in noargs arg args; do
+-  tr "'" '"' <exp-$t-shell >exp-$t-c || framework_failure_
+-done
+-for qs in literal shell c; do
++# QUOTING_STYLE does not affect redirected output.
++printf '%s\n' 'a b=c d' > exp || framework_failure_
++for qs in literal shell-always invalid; do
+   env -i PATH="$PATH" QUOTING_STYLE=$qs 'a b'='c d' \
+     printenv >out-t 2>err || fail=1
+   grep -vE '^["'"'"']?'\
+ '(__CF_USER_TEXT_ENCODING|QUOTING_STYLE|(LD_ORIGIN_)?PATH)["'"'"']?=' \
+     out-t >out || framework_failure_
+-  compare exp-noargs-$qs out || fail=1
+-  compare /dev/null err || fail=1
+-  env -i PATH="$PATH" QUOTING_STYLE=$qs 'a b'='c d' \
+-    printenv 'a b' >out 2>err || fail=1
+-  compare exp-arg-$qs out || fail=1
+-  compare /dev/null err || fail=1
+-  env -i PATH="$PATH" QUOTING_STYLE=$qs 'a b'='c d' \
+-    printenv 'a b' 'a b' >out 2>err || fail=1
+-  compare exp-args-$qs out || fail=1
++  compare exp out || fail=1
+   compare /dev/null err || fail=1
+ done
+ 
+-# Check the behavior with an invalid value for QUOTING_STYLE.
+-printf 'printenv: ignoring invalid value of environment variable %s\n' \
+-  "QUOTING_STYLE: 'invalid'" >exp || framework_failure_
+-env QUOTING_STYLE=invalid printenv >out 2>err || fail=1
+-grep '^QUOTING_STYLE=invalid$' out || fail=1
+-compare exp err || fail=1
+-
+ Exit $fail

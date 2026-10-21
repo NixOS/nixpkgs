@@ -1,0 +1,103 @@
+From fa120ba1a02437c762fc6a37a60728cac380aa41 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Zsolt=20Vad=C3=A1sz?= <zsolt_vadasz@protonmail.com>
+Date: Sun, 11 May 2025 12:34:28 +0000
+Subject: [PATCH] v4l2-tracer: Allow building on systems using musl
+
+Signed-off-by: Zsolt Vadasz <zsolt_vadasz@protonmail.com>
+Message-ID: <4dgJekVdP7lLqOQ6JNW05sRHSkRmLLMMQnEn8NGUHPoHDn4SBkaGlHUW89vkJJu3IeFDAh3p6mlplTJJlWJx8V4rr62-hd83quCJ2sIuqoA=@protonmail.com>
+---
+ utils/v4l2-tracer/retrace.cpp | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+
+diff --git a/utils/v4l2-tracer/retrace.cpp b/utils/v4l2-tracer/retrace.cpp
+index 010936c0..0acce10c 100644
+--- a/utils/v4l2-tracer/retrace.cpp
++++ b/utils/v4l2-tracer/retrace.cpp
+@@ -10,10 +10,14 @@ extern struct retrace_context ctx_retrace;
+ void retrace_mmap(json_object *mmap_obj, bool is_mmap64)
+ {
+ 	json_object *mmap_args_obj;
++#if defined(linux) && defined(__GLIBC__)
+ 	if (is_mmap64)
+ 		json_object_object_get_ex(mmap_obj, "mmap64", &mmap_args_obj);
+ 	else
+ 		json_object_object_get_ex(mmap_obj, "mmap", &mmap_args_obj);
++#else
++	json_object_object_get_ex(mmap_obj, "mmap", &mmap_args_obj);
++#endif
+ 
+ 	json_object *len_obj;
+ 	json_object_object_get_ex(mmap_args_obj, "len", &len_obj);
+@@ -46,16 +50,24 @@ void retrace_mmap(json_object *mmap_obj, bool is_mmap64)
+ 		return;
+ 
+ 	void *buf_address_retrace_pointer = nullptr;
++#if defined(linux) && defined(__GLIBC__)
+ 	if (is_mmap64)
+ 		buf_address_retrace_pointer = mmap64(0, len, prot, flags, fd_retrace, off);
+ 	else
+ 		buf_address_retrace_pointer = mmap(0, len, prot, flags, fd_retrace, off);
++#else
++	buf_address_retrace_pointer = mmap(0, len, prot, flags, fd_retrace, off);
++#endif
+ 
+ 	if (buf_address_retrace_pointer == MAP_FAILED) {
++#if defined(linux) && defined(__GLIBC__)
+ 		if (is_mmap64)
+ 			perror("mmap64");
+ 		else
+ 			perror("mmap");
++#else
++        perror("mmap");
++#endif
+ 		debug_line_info();
+ 		print_context();
+ 		exit(EXIT_FAILURE);
+@@ -116,10 +128,14 @@ void retrace_open(json_object *jobj, bool is_open64)
+ 	int fd_trace = json_object_get_int(fd_trace_obj);
+ 
+ 	json_object *open_args_obj;
++#if defined(linux) && defined(__GLIBC__)
+ 	if (is_open64)
+ 		json_object_object_get_ex(jobj, "open64", &open_args_obj);
+ 	else
+ 		json_object_object_get_ex(jobj, "open", &open_args_obj);
++#else
++	json_object_object_get_ex(jobj, "open", &open_args_obj);
++#endif
+ 
+ 	json_object *path_obj;
+ 	std::string path_trace;
+@@ -148,10 +164,14 @@ void retrace_open(json_object *jobj, bool is_open64)
+ 		mode = s2number(json_object_get_string(mode_obj));
+ 
+ 	int fd_retrace = 0;
++#if defined(linux) && defined(__GLIBC__)
+ 	if (is_open64)
+ 		fd_retrace = open64(path_retrace.c_str(), oflag, mode);
+ 	else
+ 		fd_retrace = open(path_retrace.c_str(), oflag, mode);
++#else
++	fd_retrace = open(path_retrace.c_str(), oflag, mode);
++#endif
+ 
+ 	if (fd_retrace <= 0) {
+ 		line_info("\n\tCan't open: %s", path_retrace.c_str());
+@@ -162,10 +182,14 @@ void retrace_open(json_object *jobj, bool is_open64)
+ 
+ 	if (is_verbose() || errno != 0) {
+ 		fprintf(stderr, "path: %s ", path_retrace.c_str());
++#if defined(linux) && defined(__GLIBC__)
+ 		if (is_open64)
+ 			perror("open64");
+ 		else
+ 			perror("open");
++#else
++		perror("open");
++#endif
+ 		debug_line_info();
+ 		print_context();
+ 	}
+-- 
+2.49.0
+

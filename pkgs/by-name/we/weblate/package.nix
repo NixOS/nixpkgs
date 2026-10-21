@@ -1,0 +1,387 @@
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  gettext,
+  borgbackup,
+  writeText,
+  postgresqlTestHook,
+  postgresql,
+  redisTestHook,
+  fontconfig,
+  nixosTests,
+  fetchpatch,
+
+  # runtime inputs
+  gitSVN,
+  subversion,
+
+  #optional runtime inputs
+  git-review,
+  tesseract,
+  licensee,
+  mercurial,
+  openssh,
+}:
+
+let
+  python = python3.override {
+    self = python;
+    packageOverrides = _final: prev: {
+      django = prev.django_6_0;
+    };
+  };
+  python3Packages = python.pkgs;
+in
+python3Packages.buildPythonApplication (finalAttrs: {
+  pname = "weblate";
+  version = "2026.9.1";
+  pyproject = true;
+  __structuredAttrs = true;
+
+  outputs = [
+    "out"
+    "static"
+  ];
+
+  src = fetchFromGitHub {
+    owner = "WeblateOrg";
+    repo = "weblate";
+    tag = "weblate-${finalAttrs.version}";
+    hash = "sha256-T28Qq4iAjm14Lj2i1+db9mpCw7BOSLNbygrbnuViI3U=";
+  };
+
+  postPatch = ''
+    sed -i 's/"setuptools==.*"/"setuptools"/' pyproject.toml
+
+    substituteInPlace weblate/addons/example_pre.py \
+      --replace-fail "/bin/true" "true"
+
+    substituteInPlace weblate/vcs/git.py \
+      --replace-fail \
+        '_cmd: ClassVar[str] = "git"' \
+        '_cmd: ClassVar[str] = "${lib.getExe gitSVN}"'
+  '';
+
+  patches = [
+    (fetchpatch {
+      name = "typing_improvement"; # a prerequisite for the fix_migration patch
+      url = "https://github.com/WeblateOrg/weblate/commit/df5aa0fd19287feb035eaf02323c72bcce92d1ad.patch";
+      hash = "sha256-oOxCD5/g2XPwXtOKHHiiKV9caITxfoiWTzolwgwZobc=";
+    })
+    (fetchpatch {
+      name = "fix_migration"; # should be included in post-2026.9.1 release
+      url = "https://github.com/WeblateOrg/weblate/commit/7c4235779f89a421c7c6c24ee5bbbaa4f0ab50f1.patch";
+      excludes = [ "docs/changes.rst" ]; # incompatible change
+      hash = "sha256-V8HyeBALZ8HaXHmhC8PK8ktB4osf9za+FH7dFLI3xis=";
+    })
+  ];
+
+  build-system = with python3Packages; [ setuptools ];
+
+  nativeBuildInputs = [ gettext ];
+
+  # Build static files into a separate output
+  postBuild =
+    let
+      staticSettings = writeText "static_settings.py" ''
+        DEBUG = False
+        STATIC_ROOT = os.environ["static"]
+        # So we don't need postgres dependencies
+        DATABASES = {}
+      '';
+      manage = "DJANGO_SETTINGS_MODULE='weblate.settings_static' ${python.pythonOnBuildForHost.interpreter} manage.py";
+    in
+    ''
+      mkdir $static
+      cat weblate/settings_example.py ${staticSettings} > weblate/settings_static.py
+      ${manage} compilemessages
+      ${manage} collectstatic --no-input
+    '';
+
+  # Upstream pins all dependencies, so their version constraints are mostly meaningless,
+  # except for a few packages maintained by themselves.
+  # https://github.com/WeblateOrg/weblate/issues/20003#issuecomment-4691837274
+  pythonRelaxDeps =
+    let
+      # Dependencies owned by Weblate that should always be in the exact version specified
+      coreDeps = [
+        "weblate-fonts"
+        "weblate-schemas"
+        "weblate-language-data"
+        "translation-finder"
+        "translate-toolkit"
+      ];
+    in
+    lib.concatMap (
+      p: if !p ? "pname" || lib.elem p.pname coreDeps then [ ] else [ p.pname ]
+    ) finalAttrs.passthru.dependencies;
+
+  dependencies =
+    with python3Packages;
+    [
+      ahocorasick-rs
+      altcha
+      argon2-cffi-bindings
+      argon2-cffi
+      (toPythonModule (borgbackup.override { python3 = python; }))
+      celery
+      certifi
+      cffi
+      charset-normalizer
+      confusable-homoglyphs
+      crispy-bootstrap5
+      cryptography
+      cssselect
+      cyrtranslit
+      cysignals
+      dateparser
+      diff-match-patch
+      disposable-email-domains
+      django-appconf
+      django-celery-beat
+      django-cors-headers
+      django-crispy-forms
+      django-filter
+      django-otp-webauthn
+      django-otp
+      django-redis
+      django
+      djangorestframework-csv
+      djangorestframework
+      docutils
+      drf-spectacular
+      drf-standardized-errors
+      fedora-messaging
+      filelock
+      gitpython
+      hiredis
+      html2text
+      httpx2
+      idna
+      jsonschema
+      lxml
+      matplotlib
+      mistletoe
+      nh3
+      openpyxl
+      opentelemetry-exporter-otlp-proto-http
+      opentelemetry-instrumentation-celery
+      opentelemetry-instrumentation-django
+      opentelemetry-instrumentation-psycopg
+      opentelemetry-instrumentation-redis
+      opentelemetry-instrumentation-requests
+      opentelemetry-sdk
+      packaging
+      pillow
+      pyaskalono
+      pyasn1
+      pygments
+      pyicumessageformat
+      pyjwt
+      pyopenssl
+      pyparsing
+      python-dateutil
+      qrcode
+      rapidfuzz
+      redis
+      regex
+      requests
+      ruamel-yaml
+      sentry-sdk
+      siphashc
+      social-auth-app-django
+      social-auth-core
+      tesserocr
+      translate-toolkit
+      translation-finder
+      twisted
+      unicode-segmentation-rs
+      unidecode
+      urllib3
+      user-agents
+      webauthn
+      weblate-fonts
+      weblate-language-data
+      weblate-schemas
+    ]
+    ++ django.optional-dependencies.argon2
+    ++ celery.optional-dependencies.redis
+    ++ django-filter.optional-dependencies.drf
+    ++ drf-spectacular.optional-dependencies.sidecar
+    ++ drf-standardized-errors.optional-dependencies.openapi
+    ++ httpx2.optional-dependencies.brotli
+    ++ httpx2.optional-dependencies.socks
+    ++ httpx2.optional-dependencies.zstd
+    ++ translate-toolkit.optional-dependencies.chardet
+    ++ translate-toolkit.optional-dependencies.fluent
+    ++ translate-toolkit.optional-dependencies.ini
+    ++ translate-toolkit.optional-dependencies.markdown
+    ++ translate-toolkit.optional-dependencies.toml
+    ++ translate-toolkit.optional-dependencies.php
+    ++ translate-toolkit.optional-dependencies.rc
+    ++ translate-toolkit.optional-dependencies.subtitles
+    ++ translate-toolkit.optional-dependencies.yaml
+    ++ urllib3.optional-dependencies.brotli
+    ++ urllib3.optional-dependencies.zstd;
+
+  # Commented entries are not packaged yet
+  optional-dependencies = with python3Packages; {
+    amazon = [
+      boto3
+      # django-ses
+    ];
+    asgi = [ granian ];
+    # gelf = [ logging-gelf ];
+    # gerrit = [ git-review ];
+    google = [
+      google-cloud-storage
+      google-cloud-translate
+    ];
+    google-errors = [
+      google-cloud-error-reporting
+    ];
+    ldap = [ django-auth-ldap ];
+    # mercurial = [ mercurial ];
+    postgres = [ psycopg ];
+    rollbar = [ rollbar ];
+    saml = [
+      python3-saml
+      xmlsec
+    ];
+    # saml2idp = [ djangosaml2idp2 ];
+    sphinx = [ sphinx ];
+    # wllegal = [ wllegal ];
+    wsgi = [ granian ];
+    # zxcvbn = [ django-zxcvbn-password-validator ];
+  };
+
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      pytestCheckHook
+      postgresqlTestHook
+      postgresql
+      redisTestHook
+      pytest-cov-stub
+      pytest-django
+      pytest-xdist
+      responses
+      selenium
+      standardwebhooks
+
+      gitSVN
+      subversion
+      gettext
+      fontconfig
+      borgbackup
+
+      #optional
+      git-review
+      tesseract
+      licensee
+      mercurial
+      openssh
+    ]
+    ++ social-auth-core.optional-dependencies.saml
+    ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
+
+  env = {
+    CI_DATABASE = "postgresql";
+    DJANGO_SETTINGS_MODULE = "weblate.settings_test";
+
+    # Only needed to make weblate/settings_test.py happy
+    CI_DB_PORT = "";
+    CI_DB_PASSWORD = "";
+    CI_REDIS_HOST = "";
+    CI_REDIS_PORT = "";
+  };
+
+  # pytest-xdist wants to create an additional database per test group
+  postgresqlTestUserOptions = "LOGIN SUPERUSER";
+
+  postgresqlTestSetupPost = ''
+    export CI_DB_HOST="$PGHOST"
+    export CI_DB_USER="$PGUSER"
+    export CI_DB_NAME="$PGDATABASE"
+
+    echo "CACHES[\"avatar\"][\"LOCATION\"] = \"unix://$NIX_BUILD_TOP/run/redis.sock\"" \
+      >> weblate/settings_test.py
+
+    ${python.pythonOnBuildForHost.interpreter} manage.py migrate --noinput
+    ${python.pythonOnBuildForHost.interpreter} manage.py check
+  '';
+
+  # Add carefully, a test failure could very well mean that a relaxed dependency is out of date.
+  disabledTestPaths = [
+    # Tries to download things from GitHub
+    "weblate/screenshots/tests.py::ViewTest::test_ocr"
+    "weblate/screenshots/tests.py::ViewTest::test_ocr_backend"
+
+    # Probably network access?
+    "weblate/addons/tests.py::SlackWebhooksAddonsTest::test_all_events"
+    "weblate/addons/tests.py::SlackWebhooksAddonsTest::test_announcement"
+    "weblate/addons/tests.py::SlackWebhooksAddonsTest::test_bulk_changes"
+    "weblate/addons/tests.py::SlackWebhooksAddonsTest::test_component_scopes"
+    "weblate/addons/tests.py::SlackWebhooksAddonsTest::test_content_events"
+    "weblate/addons/tests.py::SlackWebhooksAddonsTest::test_invalid_response"
+    "weblate/addons/tests.py::SlackWebhooksAddonsTest::test_project_scopes"
+    "weblate/addons/tests.py::SlackWebhooksAddonsTest::test_site_wide_scope"
+    "weblate/addons/tests.py::SlackWebhooksAddonsTest::test_translation_added"
+    "weblate/addons/tests.py::WebhooksAddonTest::test_all_events"
+    "weblate/addons/tests.py::WebhooksAddonTest::test_announcement"
+    "weblate/addons/tests.py::WebhooksAddonTest::test_bulk_changes"
+    "weblate/addons/tests.py::WebhooksAddonTest::test_category_in_payload"
+    "weblate/addons/tests.py::WebhooksAddonTest::test_component_scopes"
+    "weblate/addons/tests.py::WebhooksAddonTest::test_content_events"
+    "weblate/addons/tests.py::WebhooksAddonTest::test_form"
+    "weblate/addons/tests.py::WebhooksAddonTest::test_invalid_response"
+    "weblate/addons/tests.py::WebhooksAddonTest::test_project_scopes"
+    "weblate/addons/tests.py::WebhooksAddonTest::test_site_wide_scope"
+    "weblate/addons/tests.py::WebhooksAddonTest::test_translation_added"
+    "weblate/addons/tests.py::WebhooksAddonTest::test_webhook_signature"
+    "weblate/addons/tests.py::WebhooksAddonTest::test_webhook_signature_prefix"
+
+    # Tries to resolve DNS
+    "weblate/api/tests.py::ProjectAPITest::test_install_machinery"
+    "weblate/addons/tests.py::WebhooksAddonTest::test_form"
+    "weblate/trans/tests/test_component.py::ComponentValidationTest::test_github_app_clears_locked_push_fields"
+    "weblate/trans/tests/test_create.py::CreateTest::test_create_component_github_app_link_survives_discovery"
+    "weblate/trans/tests/test_create.py::CreateTest::test_create_component_existing_github_app_links_repository"
+    "weblate/vcs/tests/test_github_models.py::TestGitHubInstallationManager::test_github_repository_clone_uses_installation_token"
+    "weblate/trans/tests/test_settings.py::SettingsTest::test_github_app_component_settings_lock_push_settings"
+
+    # Doesn't respect our patched git path
+    "weblate/vcs/tests/test_apps.py::VCSChecksTest::test_builtin_required_commands"
+    "weblate/vcs/tests/test_vcs.py::RepositoryTest::test_popen_retry_does_not_duplicate_command"
+
+    # djangosaml2idp2 is not packaged yet
+    "weblate/utils/tests/test_djangosaml2idp.py"
+
+    # Some issue related to presumably misconfigured data directory. See #565921 for details.
+    "weblate/fonts/tests/test_models.py::FontModelTest::test_cleanup"
+
+    # Don't understand why
+    "weblate/trans/tests/test_alert.py::WebsiteAlertSettingTest::test_website_alerts_enabled"
+  ];
+
+  passthru = {
+    inherit python;
+    tests = {
+      inherit (nixosTests) weblate;
+    };
+  };
+
+  meta = {
+    description = "Web based translation tool with tight version control integration";
+    homepage = "https://weblate.org/";
+    changelog = "https://github.com/WeblateOrg/weblate/releases/tag/${finalAttrs.src.tag}";
+    license = with lib.licenses; [
+      gpl3Plus
+      mit
+    ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ erictapen ];
+    mainProgram = "weblate";
+  };
+})

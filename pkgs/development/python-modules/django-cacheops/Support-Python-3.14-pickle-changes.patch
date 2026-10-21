@@ -1,0 +1,33 @@
+From 938f8ba11c0676a1b9090c1cf788321ec24979e6 Mon Sep 17 00:00:00 2001
+From: Steve Kowalik <steven@wedontsleep.org>
+Date: Fri, 29 May 2026 12:00:23 +1000
+Subject: [PATCH] Support Python 3.14 pickle changes
+
+pickle.dump() and friends in Python 3.14 will now raise PicklingError
+rather than AttributeError when they encounter something that can not be
+pickled, extend test_385 to handle both exceptions.
+---
+ tests/tests.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/tests/tests.py b/tests/tests.py
+index f99f8e26..5ad67a55 100644
+--- a/tests/tests.py
++++ b/tests/tests.py
+@@ -2,6 +2,7 @@
+ from functools import reduce
+ import operator
+ import re
++from pickle import PicklingError
+ import platform
+ import unittest
+ from unittest import mock
+@@ -659,7 +660,7 @@ def test_366(self):
+     def test_385(self):
+         Client.objects.create(name='Client Name')
+ 
+-        with self.assertRaisesRegex(AttributeError, "local object"):
++        with self.assertRaisesRegex((AttributeError, PicklingError), "local object"):
+             Client.objects.filter(name='Client Name').cache().first()
+ 
+         invalidate_model(Client)

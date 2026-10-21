@@ -1,0 +1,21 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 31bee8d5..834ee6f6 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -12,6 +12,8 @@ if (NOT SURGE_COMPILE_BLOCK_SIZE)
+   set(SURGE_COMPILE_BLOCK_SIZE 32)
+ endif()
+ 
++option(SURGE_BUILD_CLAP "Build Surge as a CLAP" ON)
++
+ set(SURGE_JUCE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../libs/JUCE" CACHE STRING "Path to JUCE library source tree")
+ 
+ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+@@ -29,7 +31,6 @@ if(${CMAKE_VERSION} VERSION_LESS 3.21)
+   set(SURGE_BUILD_CLAP FALSE)
+ else()
+   message(STATUS "CMake version ${CMAKE_VERSION} allows CLAP build")
+-  set(SURGE_BUILD_CLAP TRUE)
+ endif()
+ 
+ if(SURGE_BUILD_CLAP)

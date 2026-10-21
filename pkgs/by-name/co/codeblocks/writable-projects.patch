@@ -1,0 +1,18 @@
+diff --git a/src/plugins/scriptedwizard/wiz.cpp b/src/plugins/scriptedwizard/wiz.cpp
+index 0eb4b27..7d469fe 100644
+--- a/src/plugins/scriptedwizard/wiz.cpp
++++ b/src/plugins/scriptedwizard/wiz.cpp
+@@ -785,6 +785,13 @@ void Wiz::CopyFiles(cbProject* theproject, const wxString&  prjdir, const wxStri
+             }
+         }
+         if (do_copy) wxCopyFile(srcfile, dstfile, true);
++        // Noticed! Files in Nix Store are readonly, so make the copied file writable
++        if (do_copy)
++        {
++            struct stat statbuf;
++            if (!::stat(dstfile.mb_str(), &statbuf))
++                ::chmod(dstfile.mb_str(), statbuf.st_mode | 0200);
++        }
+ 
+         // and add it to the project
+         fname.MakeRelativeTo(prjdir);

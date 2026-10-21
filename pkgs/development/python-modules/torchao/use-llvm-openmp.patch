@@ -1,0 +1,17 @@
+diff --git a/torchao/csrc/cpu/shared_kernels/Utils.cmake b/torchao/csrc/cpu/shared_kernels/Utils.cmake
+index 3ff024538..0763cab67 100644
+--- a/torchao/csrc/cpu/shared_kernels/Utils.cmake
++++ b/torchao/csrc/cpu/shared_kernels/Utils.cmake
+@@ -30,10 +30,10 @@ function(target_link_torchao_parallel_backend target_name torchao_parallel_backe
+             if(_TORCH_OMP_RUNTIME)
+                 target_link_libraries(${target_name} PRIVATE "${_TORCH_OMP_RUNTIME}")
+             else()
+-                target_link_libraries(${target_name} PRIVATE ${TORCH_INSTALL_PREFIX}/lib/libomp${CMAKE_SHARED_LIBRARY_SUFFIX})
++                target_link_libraries(${target_name} PRIVATE @openmp@/lib/libomp${CMAKE_SHARED_LIBRARY_SUFFIX})
+             endif()
+         else()
+-            target_link_libraries(${target_name} PRIVATE ${TORCH_INSTALL_PREFIX}/lib/libomp${CMAKE_SHARED_LIBRARY_SUFFIX})
++            target_link_libraries(${target_name} PRIVATE @openmp@/lib/libomp${CMAKE_SHARED_LIBRARY_SUFFIX})
+         endif()
+ 
+     elseif(TORCHAO_PARALLEL_BACKEND_TOUPPER STREQUAL "EXECUTORCH")

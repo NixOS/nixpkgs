@@ -1,0 +1,13 @@
+diff --git a/configure.ac b/configure.ac
+index 66d92954..05e81c52 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -10,6 +10,9 @@ AC_CONFIG_HEADERS([config.h])
+ AM_INIT_AUTOMAKE([foreign subdir-objects 1.11])
+ AM_SILENT_RULES([yes])
+
++AM_GNU_GETTEXT_VERSION([0.25])
++AM_GNU_GETTEXT([external])
++
+ dnl Requires autoconf 2.60
+ AC_USE_SYSTEM_EXTENSIONS

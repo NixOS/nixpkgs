@@ -1,0 +1,44 @@
+diff --git a/tests/unit/serve_test.ts b/tests/unit/serve_test.ts
+index 6373fbb3a..2b43226f6 100644
+--- a/tests/unit/serve_test.ts
++++ b/tests/unit/serve_test.ts
+@@ -4218,7 +4218,7 @@ Deno.test(
+       },
+     );
+     await promise;
+-    const e = await execCode3("/usr/bin/sh", [
++    const e = await execCode3("sh", [
+       "-c",
+       `curl --stderr - -N --compressed --no-progress-meter http://localhost:${servePort}`,
+     ]);
+diff --git a/tests/unit_node/process_test.ts b/tests/unit_node/process_test.ts
+index fe6f43b3e..29916019a 100644
+--- a/tests/unit_node/process_test.ts
++++ b/tests/unit_node/process_test.ts
+@@ -509,7 +509,7 @@ Deno.test({
+     const scriptPath = "./testdata/process_stdin.ts";
+     const filePath = "./testdata/process_stdin_dummy.txt";
+ 
+-    const shell = Deno.build.os === "windows" ? "cmd.exe" : "/bin/sh";
++    const shell = Deno.build.os === "windows" ? "cmd.exe" : "sh";
+     const cmd = `"${Deno.execPath()}" run ${scriptPath} < ${filePath}`;
+     const args = Deno.build.os === "windows" ? ["/d", "/c", cmd] : ["-c", cmd];
+ 
+@@ -569,7 +569,7 @@ Deno.test({
+       listener.close();
+     });
+ 
+-    const shell = "/bin/bash";
++    const shell = "bash";
+     const cmd =
+       `"${Deno.execPath()}" run ${scriptPath} < /dev/tcp/127.0.0.1/9000`;
+     const args = ["-c", cmd];
+@@ -620,7 +620,7 @@ Deno.test({
+     const scriptPath = "./testdata/process_stdin.ts";
+     const directoryPath = "./testdata/";
+ 
+-    const shell = "/bin/bash";
++    const shell = "bash";
+     const cmd = `"${Deno.execPath()}" run ${scriptPath} < ${directoryPath}`;
+     const args = ["-c", cmd];
+ 

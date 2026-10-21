@@ -1,0 +1,18 @@
+diff --git a/src/qasync/__init__.py b/src/qasync/__init__.py
+index d35a5ee..b3554da 100644
+--- a/src/qasync/__init__.py
++++ b/src/qasync/__init__.py
+@@ -430,9 +430,11 @@
+             self.run_forever()
+         finally:
+             future.remove_done_callback(stop)
+-        self.__app.eventDispatcher().processEvents(
+-            AllEvents
+-        )  # run loop one last time to process all the events
++        asyncio.events._set_running_loop(self)
++        try:
++            self.__app.eventDispatcher().processEvents(AllEvents)
++        finally:
++            asyncio.events._set_running_loop(None)
+         if not future.done():
+             raise RuntimeError("Event loop stopped before Future completed.")

@@ -1,0 +1,9 @@
+{
+    "name": "org.keepassxc.keepassxc_browser",
+    "description": "ChiPass integration with native messaging support",
+    "path": "@out@/bin/ChiPass-proxy",
+    "type": "stdio",
+    "allowed_extensions": [
+        "keepassxc-browser@keepassxc.org"
+    ]
+}

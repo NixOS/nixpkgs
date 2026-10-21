@@ -1,0 +1,53 @@
+diff --git a/src/cmd/linuxkit/vendor/github.com/Code-Hex/vz/v3/osversion.go b/src/cmd/linuxkit/vendor/github.com/Code-Hex/vz/v3/osversion.go
+index d72a7856d..b186d3aff 100644
+--- a/src/cmd/linuxkit/vendor/github.com/Code-Hex/vz/v3/osversion.go
++++ b/src/cmd/linuxkit/vendor/github.com/Code-Hex/vz/v3/osversion.go
+@@ -9,6 +9,7 @@ import "C"
+ import (
+ 	"errors"
+ 	"fmt"
++	"os/exec"
+ 	"strconv"
+ 	"strings"
+ 	"sync"
+@@ -48,6 +49,40 @@ func fetchMajorMinorVersion() (float64, error) {
+ 	if err != nil {
+ 		return 0, err
+ 	}
++
++	// For backward compatibility reasons, if code compiled against an SDK
++	// earlier than macOS 11 is run on macOS 11 or later, and then tries to read
++	// value of kern.osproductversion, the OS will return the value "10.16"
++	// instead of the real OS version string.  By contrast, the command `sw_vers
++	// -productVersion` will return the real OS version string unless the
++	// environment variable SYSTEM_VERSION_COMPAT is set to 1 or 2, in which
++	// case it will respectively return "10.16" and "15.7" (the latter is for
++	// some iOS compatibility reason).
++	//
++	// The only (currently) sure way to get the real OS version string
++	// regardless of SYSTEM_VERSION_COMPAT or the SDK compiled against is
++	// apparently to parse
++	// /System/Library/CoreServices/.SystemVersionPlatform.plist if it exists,
++	// and /System/Library/CoreServices/SystemVersion.plist otherwise.  Doing
++	// so, however, requires parsing XML plist files.
++	//
++	// Given what this library does, it doesn't seem likely that there would be
++	// a good reason to run its code with SYSTEM_VERSION_COMPAT set, so using
++	// `sw_vers` should be adequate until a proper parsing of plist files is
++	// added.
++	//
++	// See https://github.com/ziglang/zig/issues/7569,
++	// https://github.com/ziglang/zig/pull/7714 and
++	// https://eclecticlight.co/2020/08/13/macos-version-numbering-isnt-so-simple/
++	// for more information.
++	if osver == "10.16" {
++		out, err := exec.Command("sw_vers", "-productVersion").Output()
++		if err != nil {
++			return 0, err
++		}
++		osver = strings.TrimRight(string(out), "\r\n")
++	}
++
+ 	prefix := "v"
+ 	majorMinor := strings.TrimPrefix(semver.MajorMinor(prefix+osver), prefix)
+ 	version, err := strconv.ParseFloat(majorMinor, 64)

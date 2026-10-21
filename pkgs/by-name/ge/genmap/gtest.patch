@@ -1,0 +1,30 @@
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index 67ec8f9..ed0b2e0 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -2,23 +2,14 @@
+ #  GenMap tests
+ # ===========================================================================
+ 
+-include (ExternalProject)
+-ExternalProject_Add (googletest
+-                     PREFIX "${CMAKE_CURRENT_BINARY_DIR}/googletest"
+-                     GIT_REPOSITORY "https://github.com/google/googletest.git"
+-                     INSTALL_DIR "${CMAKE_CURRENT_BINARY_DIR}"
+-                     CMAKE_ARGS "-DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_BINARY_DIR}"
+-                     GIT_TAG release-1.10.0
+-                     UPDATE_DISCONNECTED YES)
+ 
+ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}") # TODO: --coverage
+ add_executable (genmap_algo_test tests.cpp)
+-add_dependencies (genmap_algo_test googletest)
+ 
+ include_directories (${CMAKE_CURRENT_BINARY_DIR}/include)
+ target_link_libraries (genmap_algo_test ${SEQAN_LIBRARIES})
+-target_link_libraries (genmap_algo_test ${CMAKE_CURRENT_BINARY_DIR}/lib/libgtest.a)
+-target_link_libraries (genmap_algo_test ${CMAKE_CURRENT_BINARY_DIR}/lib/libgtest_main.a)
++target_link_libraries (genmap_algo_test -lgtest)
++target_link_libraries (genmap_algo_test -lgtest_main)
+ target_link_libraries (genmap_algo_test pthread)
+ 
+ add_test(NAME algo_test COMMAND genmap_algo_test)

@@ -1,0 +1,8 @@
+[build-system]
+requires = ["flit_core"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "ast-grep-cli"
+version = "@version@"
+description = "Structural Search and Rewrite code at large scale using precise AST pattern."

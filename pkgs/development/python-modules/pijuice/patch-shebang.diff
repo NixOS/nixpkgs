@@ -1,0 +1,9 @@
+diff --git a/Software/Source/src/pijuice_cli.py b/Software/Source/src/pijuice_cli.py
+index c366fee..37af383 100644
+--- a/Software/Source/src/pijuice_cli.py
++++ b/Software/Source/src/pijuice_cli.py
+@@ -1,3 +1,4 @@
++#!/usr/bin/python3
+ # This python script to be executed as user pijuice by the setuid program pijuice_cli 
+ # Python 3 only
+ #

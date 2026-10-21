@@ -1,0 +1,24 @@
+From 493774eb57f9c424fc8907d137665e687861ad94 Mon Sep 17 00:00:00 2001
+From: Ismael Luceno <ismael@iodev.co.uk>
+Date: Fri, 9 Sep 2022 16:18:18 +0200
+Subject: [PATCH] Fix build against musl libc
+
+Probably MALLOC_UNIXLIKE_OVERLOAD_ENABLED only works with glibc, so use
+__GLIBC__ in addition to __linux__ to define it.
+---
+ src/tbbmalloc_proxy/proxy.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/tbbmalloc_proxy/proxy.h b/src/tbbmalloc_proxy/proxy.h
+index 5f0133f9e0..ba1a07c396 100644
+--- a/src/tbbmalloc_proxy/proxy.h
++++ b/src/tbbmalloc_proxy/proxy.h
+@@ -17,7 +17,7 @@
+ #ifndef _TBB_malloc_proxy_H_
+ #define _TBB_malloc_proxy_H_
+ 
+-#define MALLOC_UNIXLIKE_OVERLOAD_ENABLED __linux__
++#define MALLOC_UNIXLIKE_OVERLOAD_ENABLED (__linux__ && __GLIBC__)
+ #define MALLOC_ZONE_OVERLOAD_ENABLED __APPLE__
+ 
+ // MALLOC_UNIXLIKE_OVERLOAD_ENABLED depends on MALLOC_CHECK_RECURSION stuff

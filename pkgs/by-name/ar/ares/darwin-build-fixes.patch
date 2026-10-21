@@ -1,0 +1,38 @@
+diff --git a/cmake/macos/compilerconfig.cmake b/cmake/macos/compilerconfig.cmake
+index f0c900f28..4da64f0b3 100644
+--- a/cmake/macos/compilerconfig.cmake
++++ b/cmake/macos/compilerconfig.cmake
+@@ -25,7 +25,7 @@ function(check_sdk_requirements)
+   set(ares_macos_minimum_sdk 11.1) # Minimum tested SDK
+   set(ares_macos_minimum_xcode 12.4) # Sync with SDK
+   execute_process(
+-    COMMAND xcrun --sdk macosx --show-sdk-platform-version
++    COMMAND echo @sdkVersion@
+     OUTPUT_VARIABLE ares_macos_current_sdk
+     RESULT_VARIABLE result
+     OUTPUT_STRIP_TRAILING_WHITESPACE
+diff --git a/cmake/macos/helpers.cmake b/cmake/macos/helpers.cmake
+index 3777ac98a..07ff17009 100644
+--- a/cmake/macos/helpers.cmake
++++ b/cmake/macos/helpers.cmake
+@@ -35,7 +35,6 @@ function(ares_configure_executable target)
+       endif()
+     endif()
+ 
+-    _bundle_dependencies(${target})
+ 
+     install(TARGETS ${target} BUNDLE DESTINATION "." COMPONENT Application)
+   endif()
+diff --git a/ruby/cmake/os-macos.cmake b/ruby/cmake/os-macos.cmake
+index 7b594bb4a..18e886fe7 100644
+--- a/ruby/cmake/os-macos.cmake
++++ b/ruby/cmake/os-macos.cmake
+@@ -41,7 +41,7 @@ target_link_libraries(
+ )
+ 
+ if(SDL_FOUND)
+-  target_link_libraries(ruby PRIVATE "$<LINK_LIBRARY:WEAK_FRAMEWORK,SDL::SDL>")
++  target_link_libraries(ruby PRIVATE "$<LINK_LIBRARY:WEAK_LIBRARY,SDL::SDL>")
+ endif()
+ 
+ if(librashader_FOUND)

@@ -1,0 +1,30 @@
+Author: Martin Weinelt <hexa@darmstadt.ccc.de>
+Date:   Sun Jul 5 16:24:28 2026 +0200
+
+    Make compatible with setuptools 82
+    
+    This migrates the version retrieval to the stdlib importlib library.
+
+diff --git a/buienradar/__main__.py b/buienradar/__main__.py
+index b0838c1..b556374 100755
+--- a/buienradar/__main__.py
++++ b/buienradar/__main__.py
+@@ -19,8 +19,8 @@ Usage:
+ """
+ import logging
+ import sys
++from importlib.metadata import version
+ 
+-import pkg_resources
+ from docopt import docopt
+ 
+ from .buienradar import get_data, parse_data
+@@ -30,7 +30,7 @@ from .constants import CONTENT, MESSAGE, RAINCONTENT, SUCCESS
+ def main(argv=sys.argv[1:]):
+     """Parse argument and start main program."""
+     args = docopt(__doc__, argv=argv,
+-                  version=pkg_resources.require('buienradar')[0].version)
++                  version=version('buienradar'))
+ 
+     level = logging.ERROR
+     if args['-v']:

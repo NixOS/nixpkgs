@@ -1,0 +1,11 @@
+--- a/etc/mtree/BSD.include.dist
++++ b/etc/mtree/BSD.include.dist
+@@ -3,7 +3,7 @@
+ # Please see the file src/etc/mtree/README before making changes to this file.
+ #
+ 
+-/set type=dir uname=root gname=wheel mode=0755
++/set type=dir
+ .
+     arpa
+     ..

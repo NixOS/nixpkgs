@@ -1,0 +1,10 @@
+diff --git a/.version b/.version
+new file mode 100644
+index 0000000..abc36c9
+--- /dev/null
++++ b/.version
+@@ -0,0 +1,4 @@
++0.3
++0
++dd27232a4dd08cf6271ecc2a7e96da25f8071ed5
++2022-05-08

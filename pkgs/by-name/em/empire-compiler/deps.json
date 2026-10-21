@@ -1,0 +1,37 @@
+[
+  {
+    "pname": "ILRepack.Lib",
+    "version": "2.0.44",
+    "hash": "sha256-HgS8pt21vlcdvvwzBj+D5LiafXMsayckfczaFX6UP+8="
+  },
+  {
+    "pname": "Microsoft.CodeAnalysis.Analyzers",
+    "version": "3.11.0",
+    "hash": "sha256-hQ2l6E6PO4m7i+ZsfFlEx+93UsLPo4IY3wDkNG11/Sw="
+  },
+  {
+    "pname": "Microsoft.CodeAnalysis.Common",
+    "version": "4.13.0",
+    "hash": "sha256-Bu5ev3JM+fyf9USnLM7AJbd5lFmpVfaxm6EQYoYM9Vc="
+  },
+  {
+    "pname": "Microsoft.CodeAnalysis.CSharp",
+    "version": "4.13.0",
+    "hash": "sha256-jzO7/2j7rPqu4Xtm4lhh2Ijaiw+aUkiR+yYn+a8mg/M="
+  },
+  {
+    "pname": "Newtonsoft.Json",
+    "version": "13.0.3",
+    "hash": "sha256-hy/BieY4qxBWVVsDqqOPaLy1QobiIapkbrESm6v2PHc="
+  },
+  {
+    "pname": "System.CommandLine",
+    "version": "2.0.0",
+    "hash": "sha256-cUJTPCLcnA6959PGdwWw8zsjFxhYGI+SZeIxnMC/Cwc="
+  },
+  {
+    "pname": "YamlDotNet",
+    "version": "16.3.0",
+    "hash": "sha256-4Gi8wSQ8Rsi/3+LyegJr//A83nxn2fN8LN1wvSSp39Q="
+  }
+]
