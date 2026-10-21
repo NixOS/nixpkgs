@@ -17,6 +17,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Perfect hash function generator";
 
