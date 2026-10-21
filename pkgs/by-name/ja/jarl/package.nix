@@ -11,13 +11,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jarl";
-  version = "0.5.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "etiennebacher";
     repo = "jarl";
     tag = finalAttrs.version;
-    hash = "sha256-MFP1xMNnJ9mfHuUu6hqE9B7nRgI2HfXBpblo3sFnAwo=";
+    hash = "sha256-BAhfhoDMDgcRa/ylmsyAnJmDBD0CVOkSzkb6mCUDADY=";
   };
 
   postPatch = ''
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
                    '(?:/nix)?/(?:build)/(?:nix[\-0-9]+/)?'
   '';
 
-  cargoHash = "sha256-Rhv9Wku/bRl28nrXYof+6VAgl2K4ysILRQa1v19r0pU=";
+  cargoHash = "sha256-qhwiwawHaPJCsKMfoJBlKlZ/cunUyymTvFDKwdlv3aM=";
 
   # integrations test require git at build time (jarl >= 0.5.0)
   nativeBuildInputs = [
