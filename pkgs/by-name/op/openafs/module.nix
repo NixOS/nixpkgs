@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   fetchpatch,
+  kernelModuleInstallHook,
   which,
   autoconf,
   automake,
@@ -18,7 +19,6 @@
 let
   inherit (import ./srcs.nix { inherit fetchurl; }) src version;
 
-  modDestDir = "$out/lib/modules/${kernel.modDirVersion}/extra/openafs";
   kernelBuildDir = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
 in
@@ -42,16 +42,16 @@ stdenv.mkDerivation {
     })
   ];
 
-  nativeBuildInputs = [
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [
     autoconf
     automake
     flex
+    kernelModuleInstallHook
     libtool_2
     perl
     which
     bison
-  ]
-  ++ kernel.moduleBuildDependencies;
+  ];
 
   buildInputs = [ libkrb5 ];
 
@@ -80,11 +80,8 @@ stdenv.mkDerivation {
     make V=1 only_libafs
   '';
 
-  installPhase = ''
-    mkdir -p ${modDestDir}
-    cp src/libafs/MODLOAD-*/libafs-${kernel.modDirVersion}.* ${modDestDir}/libafs.ko
-    xz -f ${modDestDir}/libafs.ko
-  '';
+  kernelModuleDirs = [ "src/libafs/MODLOAD-${kernel.modDirVersion}-MP" ];
+  kernelModuleInstallDir = "extra/openafs";
 
   meta = {
     description = "Open AFS client kernel module";
