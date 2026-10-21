@@ -13,13 +13,15 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "otel-gui";
-  version = "3.0.0";
+  version = "3.1.0";
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "metafab";
     repo = "otel-gui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EClh/Vr5myf4SsyXl70bl11rwZXyRRQKUw2XC1ECXE4=";
+    hash = "sha256-nMe2qmy9SxmNZR6LHREOIQc5wjwS6TFKL/a3UBIzDO8=";
   };
 
   nativeBuildInputs = [
@@ -33,14 +35,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname src version;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-rwH9sgRhUJiiHPBFEElRTwB6PkFKMy0sez5baAm1BpE=";
+    hash = "sha256-/XmdWuECHUdhNifnum7P0E4r59tsH4eX+D15meb09AA=";
   };
-
-  postPatch = ''
-    substituteInPlace package.json \
-      --replace-fail '"packageManager": "pnpm@11.13.0"' \
-        '"packageManager": "pnpm@11.27.0"'
-  '';
 
   buildPhase = ''
     runHook preBuild
