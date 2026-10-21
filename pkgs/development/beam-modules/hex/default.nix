@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  cacert,
   fetchFromGitHub,
   writeText,
   elixir,
@@ -26,6 +27,10 @@ let
         rev = "v${version}";
         sha256 = "sha256-lOoD6mzctGk9xHNJiribDMVWQ9xrr2N5eluJalirESk=";
       };
+
+      postPatch = ''
+        cp ${cacert}/etc/ssl/certs/ca-bundle.crt lib/hex/http/ca-bundle.crt
+      '';
 
       setupHook = writeText "setupHook.sh" ''
         addToSearchPath ERL_LIBS "$1/lib/erlang/lib/"
