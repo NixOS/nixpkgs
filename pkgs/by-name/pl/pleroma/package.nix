@@ -6,6 +6,7 @@
   fetchHex,
   file,
   cmake,
+  cacert,
   nixosTests,
   writeText,
   vips,
@@ -66,6 +67,17 @@ beamPackages.mixRelease rec {
           jason
         ];
       };
+      certifi = prev.certifi.overrideAttrs (old: {
+        postInstall = old.postInstall or "" + ''
+          find . -type f -name cacerts.pem -exec ln -sfn '${cacert}/etc/ssl/certs/ca-bundle.crt' {} \;
+        '';
+      });
+      castore = prev.castore.overrideAttrs (old: {
+        postInstall = old.postInstall or "" + ''
+          find . -type f -name cacerts.pem -exec ln -sfn '${cacert}/etc/ssl/certs/ca-bundle.crt' {} \;
+        '';
+      });
+
       # mix2nix does not support git dependencies yet,
       # so we need to add them manually
       captcha = beamPackages.buildMix {
