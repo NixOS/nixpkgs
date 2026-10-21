@@ -12,7 +12,7 @@
 
 buildDunePackage (finalAttrs: {
   pname = "mm";
-  version = "0.8.6";
+  version = "0.8.7";
 
   duneVersion = "3";
 
@@ -22,7 +22,7 @@ buildDunePackage (finalAttrs: {
     owner = "savonet";
     repo = "ocaml-mm";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-ME6Naza7OvZ/63zEjrPeKq5JwMoMfV2fpkCuZdtCZ/c=";
+    sha256 = "sha256-Kz8Steep+c9cr7AzVHee4BW5JjsmWtu4z36JVffJjWM=";
   };
 
   buildInputs = [ dune-configurator ];
