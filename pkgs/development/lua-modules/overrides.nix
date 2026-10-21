@@ -542,15 +542,12 @@ in
     '';
   };
 
-  lua-resty-jwt = prev.lua-resty-jwt.overrideAttrs {
-    src = fetchFromGitHub {
-      owner = "cdbattags";
-      repo = "lua-resty-jwt";
-      rev = "v0.3.2";
-      hash = "sha256-VCi5ge2jAldJQgecFeMZJkq5PqRQdUs+K8NsXWmK7IQ=";
+  lua-resty-jwt = prev.lua-resty-jwt.overrideAttrs (old: {
+    src = old.src.override {
       fetchSubmodules = true;
+      hash = "sha256-71Y88ZvmvysgTmY19eogLO1xNaY0WMjhZ//r18dFPdw=";
     };
-  };
+  });
 
   lua-rtoml = prev.lua-rtoml.overrideAttrs (old: {
     strictDeps = false;
@@ -1143,6 +1140,11 @@ in
   };
 
   rocks-nvim = prev.rocks-nvim.overrideAttrs (oa: {
+    # Inserting keys during pairs() traversal can omit the WARN log level.
+    postPatch = (oa.postPatch or "") + ''
+      substituteInPlace lua/rocks/log.lua \
+        --replace-fail 'pairs(log_levels)' 'pairs(vim.log.levels)'
+    '';
 
     nativeCheckInputs = [
       final.nlua

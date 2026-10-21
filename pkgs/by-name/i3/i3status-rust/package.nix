@@ -15,6 +15,8 @@
   iproute2,
   pandoc,
   pipewire,
+  gitMinimal,
+  cmake,
   withICUCalendar ? false,
   withPipewire ? true,
   withNotmuch ? false,
@@ -22,22 +24,24 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "i3status-rust";
-  version = "0.36.1";
+  version = "0.36.2";
 
   src = fetchFromGitHub {
     owner = "greshake";
     repo = "i3status-rust";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tCMoYbsiVBX7GZZVhzAKuMFS1L7DITQZSUfQ6iQMofg=";
+    hash = "sha256-MdHCf3H4KQFPreaIGDfMByd3u4Tg56rbWd+HhwMhL1o=";
   };
 
-  cargoHash = "sha256-mnLl+JegA96z95VQqZ5d8bGYCf1PG/ip2LVyPm4HjVI=";
+  cargoHash = "sha256-3tS3P4CLoi5fUymYBomz4Ltmw6idzjflhfAIKfXIK8U=";
 
   nativeBuildInputs = [
     pkg-config
     makeWrapper
     installShellFiles
     pandoc
+    gitMinimal
+    cmake
   ]
   ++ (lib.optionals withPipewire [ rustPlatform.bindgenHook ]);
 
@@ -93,6 +97,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "i3status-rs";
     maintainers = with lib.maintainers; [
       backuitist
+      kybe236
     ];
     platforms = lib.platforms.linux;
   };

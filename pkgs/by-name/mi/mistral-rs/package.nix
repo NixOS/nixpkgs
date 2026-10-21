@@ -74,14 +74,14 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mistral-rs";
-  version = "0.9.4";
+  version = "0.9.5";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "EricLBuehler";
     repo = "mistral.rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/40obacG8jIx6BOQ8uUTiT503jRDnHrlrw5PGoEfbEM=";
+    hash = "sha256-3NZGfKyznzb80diu3Va2GwvQKQeQxypJ5JoGyzeA9ak=";
   };
 
   patches = [
@@ -130,7 +130,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
           ""
     '';
 
-  cargoHash = "sha256-56Z1ea/5x8fE055lvi7kfFQTyNTH49+bnotn0XCRwpU=";
+  cargoHash = "sha256-qqFkO5BJ7mhWuLsCDte9BqCVjaqbePp+lY4BqhYYcUQ=";
 
   nativeBuildInputs = [
     pkg-config
@@ -220,10 +220,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Error: failed to read MTP model config: No such file or directory (os error 2)
     "--skip=external_mtp_checkpoint_bytes_are_added_to_the_cache_reservation"
 
-    # assertion `left == right` failed: docs/openapi.json is stale;
-    # regenerate with: cargo test -p mistralrs-server-core regenerate_openapi -- --ignored
-    "--skip=openapi_doc::tests::openapi_matches_committed"
-
     # Max error 0.27852345 is too large
     "--skip=vector_fp8::ops::tests::test_fp8_vector_quant_cpu"
 
@@ -237,10 +233,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=callbacks_outlive_manager_executor_tempdir"
     "--skip=sandboxed_session_can_execute_python"
     "--skip=sandboxed_session_default_policy_can_execute_python"
-
-    # Upstream's v0.9.2 bump updated the version example in the generated CLI reference page
-    # but not in the clap doc comment it is generated from, so this golden test fails at the tag.
-    "--skip=docgen::cli_reference_matches_committed"
 
     # Linux namespace / seccomp tests require capabilities the nix build sandbox blocks
     "--skip=network_none_blocks_socket"
@@ -294,18 +286,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
         [ "x86_64-linux" ]
       else
         lib.platforms.unix;
-    problems =
-      lib.optionalAttrs mklSupport {
-        broken-mkl-support = {
-          kind = "broken";
-          message = "mistral-rs' MKL support is currently broken.";
-        };
-      }
-      // lib.optionalAttrs (cudaSupport && (cudaPackages.cudaAtLeast "13.4")) {
-        unsupported-cuda-toolkit = {
-          kind = "broken";
-          message = "mistral-rs is not compatible with CUDA ${cudaPackages.cudaMajorMinorVersion}.";
-        };
+    problems = lib.optionalAttrs mklSupport {
+      broken-mkl-support = {
+        kind = "broken";
+        message = "mistral-rs' MKL support is currently broken.";
       };
+    };
   };
 })

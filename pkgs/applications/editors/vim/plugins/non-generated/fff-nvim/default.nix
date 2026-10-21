@@ -5,7 +5,7 @@
   nix-update-script,
   openssl,
   perl,
-  zig,
+  zig_0_16,
   gitMinimal,
   pkg-config,
   stdenv,
@@ -45,7 +45,7 @@ let
       perl
       rustPlatform.bindgenHook
       writableTmpDirAsHomeHook
-      zig
+      zig_0_16
     ];
 
     dontUseZigConfigure = true;

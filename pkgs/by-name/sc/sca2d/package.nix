@@ -1,47 +1,35 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitLab,
-  fetchFromGitHub,
 }:
-let
-  python = python3.override {
-    packageOverrides = self: super: {
-      lark010 = super.lark.overridePythonAttrs (old: rec {
-        version = "0.10.0";
-
-        src = fetchFromGitHub {
-          owner = "lark-parser";
-          repo = "lark";
-          tag = version;
-          sha256 = "sha256-ctdPPKPSD4weidyhyj7RCV89baIhmuxucF3/Ojx1Efo=";
-        };
-
-        patches = [ ];
-
-        disabledTestPaths = [ "tests/test_nearley/test_nearley.py" ];
-      });
-    };
-    self = python;
-  };
-in
-python.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "sca2d";
-  version = "0.2.2";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "bath_open_instrumentation_group";
     repo = "sca2d";
     tag = "v${version}";
-    hash = "sha256-p0Bv8jcnjcOLBAXN5A4GspSIEG4G4NPA4o0aEtwe/LU=";
+    hash = "sha256-fXZndNkG8JtPfK1smNoCjUdxLGYMuNpYUoyQOfLelrs=";
   };
 
-  build-system = with python.pkgs; [ setuptools ];
+  build-system = with python3Packages; [ hatchling ];
 
-  dependencies = with python.pkgs; [
-    lark010
+  dependencies = with python3Packages; [
+    lark
     colorama
+    pygments
+    jinja2
+    markdown
+  ];
+
+  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
+
+  disabledTestPaths = [
+    # Requires network access to clone the OpenFlexure Microscope repository
+    "tests/integration_test.py"
   ];
 
   pythonImportsCheck = [ "sca2d" ];

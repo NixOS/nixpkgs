@@ -11,19 +11,19 @@
 
 buildPythonPackage rec {
   pname = "pyperscan";
-  version = "0.3.0";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vlaci";
     repo = "pyperscan";
     rev = "v${version}";
-    hash = "sha256-uGZ0XFxnZHSLEWcwoHVd+xMulDRqEIrQ5Lf7886GdlM=";
+    hash = "sha256-8a7x6eF91grUNyZWBWsz/WL5WVrynElE5zLPHCaTp08=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-9kKHLYD0tXMGJFhsCBgO/NpWB4J5QZh0qKIuI3PFn2c=";
+    hash = "sha256-37EMRHp6X3CqZ/nIewUxWyJCSWXkT1lCyopzCn6M38w=";
   };
 
   nativeBuildInputs = with rustPlatform; [

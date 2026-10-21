@@ -109,7 +109,8 @@ in
 
       services.ntfy-sh.settings = {
         auth-file = lib.mkDefault "/var/lib/ntfy-sh/user.db";
-        listen-http = if cfg.nginx.enable then "[::1]:${cfg.nginx.port}" else lib.mkDefault "[::1]:2586";
+        listen-http =
+          if cfg.nginx.enable then "[::1]:${toString cfg.nginx.port}" else lib.mkDefault "[::1]:2586";
         attachment-cache-dir = lib.mkDefault "/var/lib/ntfy-sh/attachments";
         cache-file = lib.mkDefault "/var/lib/ntfy-sh/cache-file.db";
       };
@@ -147,12 +148,13 @@ in
       };
 
       services.nginx = lib.mkIf cfg.nginx.enable {
-        enable = true;
+        enable = lib.mkDefault true;
+
         virtualHosts."${cfg.nginx.virtualHost}" = {
-          forceSSL = true;
+          forceSSL = lib.mkDefault true;
 
           locations."/" = {
-            proxyPass = "http://[::1]:${cfg.nginx.port}";
+            proxyPass = "http://[::1]:${toString cfg.nginx.port}";
             proxyWebsockets = true;
             extraConfig = ''
               proxy_connect_timeout 3m;

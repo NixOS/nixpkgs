@@ -10,7 +10,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxrender";
-  version = "0.9.12";
+  version = "0.9.13";
 
   outputs = [
     "out"
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://xorg/individual/lib/libXrender-${finalAttrs.version}.tar.xz";
-    hash = "sha256-uDISjaSLOcjWCCJEgXQ0A60Wkb9OVU5L6cF03xcdG5c=";
+    hash = "sha256-P+iMYJ32eC4eevLk3jayVj1wzXD/fcsc2lYa1kkSu2Q=";
   };
 
   strictDeps = true;

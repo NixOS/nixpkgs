@@ -105,6 +105,9 @@ buildPythonPackage (finalAttrs: {
   ];
   dontUseCmakeConfigure = true;
 
+  pythonRelaxDeps = [
+    "tensordict"
+  ];
   dependencies = [
     cloudpickle
     hoptorch
@@ -335,6 +338,9 @@ buildPythonPackage (finalAttrs: {
 
     # AssertionError: Tensor-likes are not equal!
     "test/modules/test_dreamer_components.py::TestDreamerV3Components::test_discrete_actor[cpu-autocast]"
+
+    # AssertionError: Scalars are not close! (regression with tensordict 0.15)
+    "test/objectives/test_dreamer_v3.py::TestDreamerV3::test_dreamer_v3_reinforce_return_normalization"
 
     # OSError: We couldn't connect to 'https://huggingface.co' to load the files,...
     "test/transforms/test_key_transforms.py::TestTokenizer::test_single_string_attention_mask_padding"

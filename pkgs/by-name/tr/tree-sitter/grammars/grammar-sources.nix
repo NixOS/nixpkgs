@@ -720,9 +720,9 @@
   };
 
   erlang = rec {
-    version = "0.1.0";
+    version = "0.21.0";
     url = "github:WhatsApp/tree-sitter-erlang?ref=${version}";
-    hash = "sha256-FH8DNE03k95ZsRwaiXHkaU9/cdWrWALCEdChN5ZPdog=";
+    hash = "sha256-K4ytlHKE5YW8gu1YvXVv9bKrpU6o0I7NNP0kXcV4mSk=";
     meta = {
       license = lib.licenses.asl20;
     };
@@ -2738,9 +2738,9 @@
   };
 
   scala = {
-    version = "0.26.2";
+    version = "0.26.3";
     url = "github:tree-sitter/tree-sitter-scala";
-    hash = "sha256-PRyNcsiGeGfKtHvbLaGtiog/P8QEs117rqoBZZOXbeE=";
+    hash = "sha256-hTcG41bQqTSSsqtvtXW6wJIEFZJE49HYmYNJJw1wrho=";
     meta = {
       license = lib.licenses.mit;
     };
@@ -2923,9 +2923,9 @@
   };
 
   sshclientconfig = rec {
-    version = "2026.10.8";
+    version = "2026.10.15";
     url = "github:metio/tree-sitter-ssh-client-config?ref=${version}";
-    hash = "sha256-PhNHsWjqTmchRH+noVQcwCFNNyA6/RvPiwDDquBuQFo=";
+    hash = "sha256-UZL/JxyxCLCez8A5PPcbA0wNzRENMR4sB1HIxDeO0FY=";
     meta = {
       license = lib.licenses.cc0;
       maintainers = with lib.maintainers; [

@@ -120,6 +120,8 @@ self: super: with self; {
 
   advantage-air = callPackage ../development/python-modules/advantage-air { };
 
+  advent-of-code-data = callPackage ../development/python-modules/advent-of-code-data { };
+
   aeidon = callPackage ../development/python-modules/aeidon { };
 
   aemet-opendata = callPackage ../development/python-modules/aemet-opendata { };
@@ -391,6 +393,8 @@ self: super: with self; {
   aioimmich = callPackage ../development/python-modules/aioimmich { };
 
   aiointercept = callPackage ../development/python-modules/aiointercept { };
+
+  aioipp = callPackage ../development/python-modules/aioipp { };
 
   aioitertools = callPackage ../development/python-modules/aioitertools { };
 
@@ -1192,8 +1196,6 @@ self: super: with self; {
   anytree = callPackage ../development/python-modules/anytree { inherit (pkgs) graphviz; };
 
   anywidget = callPackage ../development/python-modules/anywidget { };
-
-  aocd = callPackage ../development/python-modules/aocd { };
 
   aocd-example-parser = callPackage ../development/python-modules/aocd-example-parser { };
 
@@ -9640,12 +9642,13 @@ self: super: with self; {
     )
   ) { };
 
-  libcec = toPythonModule (
-    pkgs.libcec.override {
-      python3 = python;
-      pythonSupport = true;
-    }
-  );
+  libcec =
+    (toPythonModule (
+      pkgs.libcec.override {
+        python3 = python;
+        pythonSupport = true;
+      }
+    )).python;
 
   libcloud = callPackage ../development/python-modules/libcloud { };
 
@@ -22818,6 +22821,8 @@ self: super: with self; {
   wxpython = callPackage ../development/python-modules/wxpython/4.2.nix {
     wxGTK = pkgs.wxwidgets_3_2.override { withWebKit = true; };
   };
+
+  wxpython_4_3 = callPackage ../development/python-modules/wxpython/4.3.nix { };
 
   wyoming = callPackage ../development/python-modules/wyoming { };
 

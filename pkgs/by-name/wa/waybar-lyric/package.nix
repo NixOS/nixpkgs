@@ -12,13 +12,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "waybar-lyric";
-  version = "0.18.1";
+  version = "0.18.2";
 
   src = fetchFromGitHub {
     owner = "Nadim147c";
     repo = "waybar-lyric";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RSSqVfq4XIwNjLuVSx76qtjpEXzQWfDH5BLxzUiCh3s=";
+    hash = "sha256-1AGa+/asfGwAzcqHD6LvbvM6JDma5aNuuXnL6vYOxsE=";
   };
 
   vendorHash = "sha256-9hXIWrqYExXHfIntXCUbrSkhjmLjM163UOHRq/odaAA=";

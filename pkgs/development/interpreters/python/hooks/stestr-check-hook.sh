@@ -10,7 +10,7 @@ function stestrCheckPhase() {
     local -a patterns=()
 
     # Append regex pattern
-    read -ra patterns <<< "$disabledTestsRegex"
+    concatTo patterns disabledTestsRegex
 
     # Sanitize disabledTests options
     if [[ -n "${disabledTests[*]-}" ]] || [[ -n "${disabledTestsRegex[*]-}" ]]; then
@@ -26,6 +26,7 @@ function stestrCheckPhase() {
         flagsArray+=(--exclude-regex "($(concatStringsSep "|" patterns))")
     fi
 
+    concatTo flagsArray stestrFlags
     echoCmd 'stestr flags' "${flagsArray[@]}"
     @pythonCheckInterpreter@ -m stestr run "${flagsArray[@]}"
 

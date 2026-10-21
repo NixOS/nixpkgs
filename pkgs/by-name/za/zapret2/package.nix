@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p "$ZAPRET_BASE"
-    for spec in "blockcheck2.sh" "blockcheck2.d" "common" "ipset" "lua"; do
+    for spec in "blockcheck2.sh" "blockcheck2.d" "common" "ipset" "lua" "files"; do
       cp -R "$spec" "$ZAPRET_BASE/"
     done
 

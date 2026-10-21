@@ -6,6 +6,7 @@
   fetchFromGitHub,
   fetchpatch,
   replaceVars,
+  pythonOlder,
 
   # build-system
   cuda-bindings,
@@ -20,7 +21,10 @@
   # tests
   cffi,
   cloudpickle,
+  docutils,
+  packaging,
   psutil,
+  pyglet,
   pytestCheckHook,
 
   # passthru
@@ -32,7 +36,7 @@
 }:
 buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs: {
   pname = "cuda-core";
-  version = "1.0.1";
+  version = "1.2.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -47,7 +51,7 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
       sed -i 's/^ref-names: .*$/ref-names: tag: cuda-core-v${finalAttrs.version}/' "$out/.git_archival.txt"
       grep -qx 'ref-names: tag: cuda-core-v${finalAttrs.version}' "$out/.git_archival.txt"
     '';
-    hash = "sha256-SRy/hnOzzb4wUCLOre4k326RNhYI0650XzC8Dc9kf/M=";
+    hash = "sha256-UH5fw08Y6a8uUtAuxxoahyVH6W58xdlWfrSsB4mMvPc=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/cuda_core";
@@ -78,6 +82,24 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
     })
   ];
 
+  postPatch =
+    # Relax cython constraint: https://github.com/NVIDIA/cuda-python/pull/2771
+    ''
+      substituteInPlace pyproject.toml \
+        --replace-fail \
+          '"Cython>=3.2.5,<3.3",' \
+          '"Cython>=3.2.5",'
+    ''
+    # Cython 3.3 warns that some attribute accesses are not usefully protected by critical_section
+    # (only relevant for free-threaded builds), which fails the build with python 3.13.
+    # Fixed by the same upstream PR.
+    + lib.optionalString (pythonOlder "3.14") ''
+      substituteInPlace build_hooks.py \
+        --replace-fail \
+          "_CythonOptions.warning_errors = True" \
+          "_CythonOptions.warning_errors = False"
+    '';
+
   build-system = [
     cuda-bindings
     cuda-pathfinder
@@ -93,6 +115,10 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
   buildInputs = [
     cudaPackages.cuda_nvrtc # nvrtc.h
     cudaPackages.cuda_profiler_api # cudaProfiler.h
+  ]
+  # The RDC test fixtures compile tests/test_binaries/saxpy.cu with nvcc
+  ++ lib.optionals finalAttrs.doInstallCheck [
+    cudaPackages.cuda_cudart # cuda_runtime.h
   ];
 
   preBuild = ''
@@ -112,27 +138,6 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
     ''
       rm -rf cuda/core
     ''
-    # The tests import cuda.bindings._test_helpers, which cuda-bindings releases newer than the one packaged here ship.
-    # Import the copy in this source tree instead.
-    + ''
-      mkdir -p "$TMPDIR/test-helpers"
-      cp -r ../cuda_bindings/cuda/bindings/_test_helpers "$TMPDIR/test-helpers/cuda_bindings_test_helpers"
-      export PYTHONPATH="$TMPDIR/test-helpers''${PYTHONPATH:+:$PYTHONPATH}"
-      substituteInPlace \
-        tests/conftest.py \
-        tests/test_device.py \
-        tests/system/conftest.py \
-        tests/example_tests/test_basic_examples.py \
-        --replace-fail \
-          "cuda.bindings._test_helpers" \
-          "cuda_bindings_test_helpers"
-    ''
-    # A trailing comma in the argument names makes pytest 9 unpack a bare NumPy array sample into several values
-    + ''
-      substituteInPlace tests/test_utils.py \
-        --replace-fail '@pytest.mark.parametrize("in_arr,", _cpu_array_samples())' \
-          '@pytest.mark.parametrize("in_arr", _cpu_array_samples())'
-    ''
     # The checkpoint scenarios run in a child interpreter started with -I, which ignores PYTHONPATH and so can't import
     # pytest
     + ''
@@ -145,8 +150,12 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
   nativeCheckInputs = [
     cffi
     cloudpickle
+    docutils
+    packaging
     psutil
+    pyglet
     pytestCheckHook
+    setuptools
   ];
 
   disabledTests = [
@@ -157,8 +166,12 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
     "test_device_cpu_affinity"
     "test_device_pci_bus_id"
     "test_device_pci_info"
+    "test_system_event_device_resolves_pci_bus_id"
     "test_to_cuda_device"
     "test_to_system_device"
+
+    # cuda.core._utils.cuda_utils.CUDAError: CUDA_ERROR_INVALID_VALUE
+    "test_host_numa_current_location_hint"
 
     # cuda-bindings 13.4 has enum members this release of cuda.core doesn't map yet (BRAND_NVIDIA_NPU,
     # NvlinkVersion.VERSION_6_0, EVENT_REASON_BOARD_LIMIT, ...), and recent drivers report them:
@@ -203,6 +216,7 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
     description = "Pythonic interface to the CUDA runtime";
     homepage = "https://nvidia.github.io/cuda-python/cuda-core/latest";
     downloadPage = "https://github.com/NVIDIA/cuda-python/tree/main/cuda_core";
+    changelog = "https://nvidia.github.io/cuda-python/cuda-core/latest/release/${finalAttrs.version}-notes.html";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       GaetanLepage

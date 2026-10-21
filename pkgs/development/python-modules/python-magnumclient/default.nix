@@ -22,7 +22,7 @@
   requests,
   setuptools,
   sphinxHook,
-  stestr,
+  stestrCheckHook,
   stevedore,
   testtools,
 }:
@@ -74,15 +74,9 @@ buildPythonPackage rec {
     osprofiler
     oslotest
     requests-mock
-    stestr
+    stestrCheckHook
     testtools
   ];
-
-  checkPhase = ''
-    runHook preCheck
-    stestr run
-    runHook postCheck
-  '';
 
   pythonImportsCheck = [ "magnumclient" ];
 

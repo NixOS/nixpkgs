@@ -6,8 +6,8 @@
   },
   {
     "pname": "Microsoft.AspNetCore.Authentication.OpenIdConnect",
-    "version": "10.0.12",
-    "hash": "sha256-W3pYq6kIZR6brxV8cWBsgD+lyzVstN0vQ1579WC6Xd4="
+    "version": "10.0.13",
+    "hash": "sha256-MX4vZb/1twzVhqVItSHEgjiMAtjYXglCYpHM5N1T4nY="
   },
   {
     "pname": "Microsoft.Bcl.Cryptography",
@@ -61,13 +61,13 @@
   },
   {
     "pname": "QRCoder",
-    "version": "1.8.0",
-    "hash": "sha256-UvOeFFxUZ/bddmDs6IamiYGDIfgxybE/CSpPyy5DMxI="
+    "version": "1.8.1",
+    "hash": "sha256-0/5cgMdCtqLvijFzTAZgDi1nSAapfzb0r5ew0ocd4wk="
   },
   {
     "pname": "System.DirectoryServices.Protocols",
-    "version": "10.0.12",
-    "hash": "sha256-tpYNScocWAml3NqO4hHvpJr3ULd2rdHxijTcVDIxiEo="
+    "version": "10.0.13",
+    "hash": "sha256-pHw0BSv7bIy9IS3GHpXdg1pXx1Q6yDDom5TK9QvP/hg="
   },
   {
     "pname": "System.Drawing.Common",
