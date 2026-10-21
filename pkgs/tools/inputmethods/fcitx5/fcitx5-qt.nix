@@ -30,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace \$"{CMAKE_INSTALL_QT${majorVersion}PLUGINDIR}" $out/${qtbase.qtPluginPrefix}
   '';
 
+  __structuredAttrs = true;
   cmakeFlags = [
     "-DENABLE_QT4=OFF"
     "-DENABLE_QT5=OFF"
