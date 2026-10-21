@@ -12,13 +12,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pluto";
-  version = "3.4.5";
+  version = "3.4.6";
   pyproject = true;
 
   src = fetchgit {
     url = "https://forge.frm2.tum.de/review/mlz/pils/pluto";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-+H9ubjLpepCVF/rgSTuZfm1pjWjHUvYBc9mKHgL3I1Y=";
+    hash = "sha256-wZDrgTp3PFbXTbbLMjZeaZeloF3Cni1kcufLiD+VzVk=";
   };
 
   build-system = [
@@ -41,6 +41,12 @@ buildPythonPackage (finalAttrs: {
   nativeBuildInputs = [
     qt5.wrapQtAppsHook
   ];
+
+  postInstall = ''
+    install -Dm644 resources/pluto.desktop -t $out/share/applications
+    install -Dm644 resources/logo.png $out/share/icons/hicolor/128x128/apps/pluto.png
+    install -Dm644 resources/logo-small.png $out/share/icons/hicolor/48x48/apps/pluto.png
+  '';
 
   # wrapQTAppsHook seems to not find the python script.
   # Thus the manual preFixup step
