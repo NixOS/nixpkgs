@@ -227,6 +227,8 @@ in
     enable_linux_installer = false;
     enable_pdf_save_to_drive = false;
     node_openssl_path = "//third_party/boringssl";
+    node_v8_path = "//v8";
+    node_use_v8_platform = false;
   }
   // lib.optionalAttrs (lib.versionOlder info.version "43") {
     enterprise_cloud_content_analysis = false;
