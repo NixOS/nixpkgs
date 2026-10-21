@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://page.mi.fu-berlin.de/cbenzmueller/leo/leo2_v${version}.tgz";
-    sha256 = "sha256:1b2q7vsz6s9ighypsigqjm1mzjiq3xgnz5id5ssb4rh9zm190r82";
+    hash = "sha256-AmWQQv0JZrK0Li2Wb18fOMpfQ5X4RX09fDFp8/U+WKw=";
   };
 
   strictDeps = true;
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       url = "https://github.com/niklasso/minisat/commit/7eb6015313561a2586032574788fcb133eeaa19f.patch";
       stripLen = 1;
       extraPrefix = "lib/";
-      sha256 = "sha256:01ln7hi6nvvkqkhn9hciqizizz5qspvqffgksvgmzn9x7kdd9pnh";
+      hash = "sha256-0N7U2jw92V/f1vM5h/fVuPwff8SRwWThxHNvayI8lgY=";
     })
   ];
 

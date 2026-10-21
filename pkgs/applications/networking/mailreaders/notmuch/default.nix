@@ -138,7 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
     let
       test-database = fetchurl {
         url = "https://notmuchmail.org/releases/test-databases/database-v1.tar.xz";
-        sha256 = "1lk91s00y4qy4pjh8638b5lfkgwyl282g1m27srsf7qfn58y16a2";
+        hash = "sha256-QpngUbEOH6ezPqKGJ5Cgnr/paFloGATlJR4TD4AOadI=";
       };
     in
     ''

@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     owner = "EionRobb";
     repo = "purple-googlechat";
     rev = "56ba7f79883eca67d37629d365776f6c0b40abdc";
-    sha256 = "sha256-iTYVgYI9+6rqqBl5goeEAXpK8FgHDv0MmPsV/82reWA=";
+    hash = "sha256-iTYVgYI9+6rqqBl5goeEAXpK8FgHDv0MmPsV/82reWA=";
   };
 
   nativeBuildInputs = [ protobufc ];

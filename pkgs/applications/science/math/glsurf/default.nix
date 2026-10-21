@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://raffalli.eu/~christophe/glsurf/glsurf-${version}.tar.gz";
-    sha256 = "0w8xxfnw2snflz8wdr2ca9f5g91w5vbyp1hwlx1v7vg83d4bwqs7";
+    hash = "sha256-R2O+SBvo7bNDpxyG69cuPKRXXFJM5MbRp85qwa3rHXE=";
   };
 
   nativeBuildInputs = [

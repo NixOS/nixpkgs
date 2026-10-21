@@ -29,7 +29,7 @@ let
 
     src = fetchurl {
       url = "mirror://sourceforge/project/xineliboutput/xineliboutput/${pname}-${version}/${pname}-${version}.tgz";
-      sha256 = "sha256-GnTaGaIbBufZP2npa9mAbrO1ccMf1RzhbvjrWhKBTjg=";
+      hash = "sha256-GnTaGaIbBufZP2npa9mAbrO1ccMf1RzhbvjrWhKBTjg=";
     };
 
     postPatch = ''

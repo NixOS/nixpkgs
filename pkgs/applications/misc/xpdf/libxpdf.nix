@@ -10,29 +10,29 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://dl.xpdfreader.com/old/xpdf-3.02.tar.gz";
-    sha256 = "000zq4ddbwyxiki4vdwpmxbnw5n9hsg9hvwra2p33hslyib7sfmk";
+    hash = "sha256-szp9VvRUwzGuUJlvmJ6GyRZuV6+Xt03ijN3z1RrBHwA=";
   };
 
   patches = [
     (fetchurl {
       url = "https://dl.xpdfreader.com/old/xpdf-3.02pl1.patch";
-      sha256 = "1wxv9l0d2kkwi961ihpdwi75whdvk7cgqxkbfym8cjj11fq17xjq";
+      hash = "sha256-WPYTsAtBSoaqd2t2/NiZu0FeTuTtwhhMinxO0QBNu/M=";
     })
     (fetchurl {
       url = "https://dl.xpdfreader.com/old/xpdf-3.02pl2.patch";
-      sha256 = "1nfrgsh9xj0vryd8h65myzd94bjz117y89gq0hzji9dqn23xihfi";
+      hash = "sha256-0cHYh7C4pSg/BPgl5E8IXy6S2ve1GIiazxvInqB+2dk=";
     })
     (fetchurl {
       url = "https://dl.xpdfreader.com/old/xpdf-3.02pl3.patch";
-      sha256 = "0jskkv8x6dqr9zj4azaglas8cziwqqrkbbnzrpm2kzrvsbxyhk2r";
+      hash = "sha256-WUzo+9I7/ynqzd+uNTPGPH6GtKJPfUXkTxk309GeU0s=";
     })
     (fetchurl {
       url = "https://dl.xpdfreader.com/old/xpdf-3.02pl4.patch";
-      sha256 = "1c48h7aizx0ngmzlzw0mpja1w8vqyy3pg62hyxp7c60k86al715h";
+      hash = "sha256-sIRDlUETGHZu91CYd4f3eCMelLwV8E9/fRb0H9WBiLA=";
     })
     (fetchurl {
       url = "https://dl.xpdfreader.com/old/xpdf-3.02pl5.patch";
-      sha256 = "1fki66pw56yr6aw38f6amrx7wxwcxbx4704pjqq7pqqr784b7z4j";
+      hash = "sha256-kvyzCDoZ43swlpeAQ/rqjHd+eq7KODS4Mtmbwq8xcbo=";
     })
     ./xpdf-3.02-protection.patch
     ./libxpdf.patch

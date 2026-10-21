@@ -16,20 +16,20 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/sipe/${pname}-${version}.tar.gz";
-    sha256 = "0262sz00iqxylx0xfyr48xikhiqzr8pg7b4b7vwj5iv4qxpxv939";
+    hash = "sha256-aaTdb8dkxyL5Pous8y7KH0c4Y0cke9dBp77jCMDXwgg=";
   };
 
   patches = [
     # add sipe_utils_memdup() function
     (fetchpatch {
       url = "https://repo.or.cz/siplcs.git/patch/567d0ddc0692adfef5f15d0d383825a9b2ea4b49";
-      sha256 = "24L8ZfoOGc3JoTCGxuTNjuHzt5QgFDu1+vSoJpGvde4=";
+      hash = "sha256-24L8ZfoOGc3JoTCGxuTNjuHzt5QgFDu1+vSoJpGvde4=";
     })
     # replace g_memdup() with sipe_utils_memdup()
     # g_memdup is deprecatein newer Glib
     (fetchpatch {
       url = "https://repo.or.cz/siplcs.git/patch/583a734e63833f03d11798b7b0d59a17d08ae60f";
-      sha256 = "Ai6Czpy/FYvBi4GZR7yzch6OcouJgfreI9HcojhGVV4=";
+      hash = "sha256-Ai6Czpy/FYvBi4GZR7yzch6OcouJgfreI9HcojhGVV4=";
     })
     ./0001-fix-libxml-error-signature.patch
   ];
