@@ -6,15 +6,19 @@
   kmod,
   mstflint,
   kernelModuleMakeFlags,
+  kernelModuleInstallHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mstflint_access";
   inherit (mstflint) version src;
 
   sourceRoot = "source/kernel";
 
-  nativeBuildInputs = [ kmod ] ++ kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [
+    kernelModuleInstallHook
+    kmod
+  ];
 
   makeFlags = kernelModuleMakeFlags ++ [
     "KVER=${kernel.modDirVersion}"
@@ -22,15 +26,6 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
-
-  installTargets = [ "modules_install" ];
-  installFlags = [
-    "-C"
-    "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-    "INSTALL_MOD_PATH=${placeholder "out"}"
-    "M=$(PWD)"
-  ]
-  ++ makeFlags;
 
   meta = {
     description = "Kernel module for Nvidia NIC firmware update";
