@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   kernel,
+  kernelModuleInstallHook,
   kernelModuleMakeFlags,
   unstableGitUpdater,
 }:
@@ -17,13 +18,10 @@ kernel.stdenv.mkDerivation {
     hash = "sha256-CZw4OZZVHMnN6eHHwLqbEJKhFd0iNa5bgyYArzLPHuI=";
   };
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kernelModuleInstallHook ];
   makeFlags = kernelModuleMakeFlags ++ [
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
-
-  installFlags = [ "INSTALL_MOD_PATH=${placeholder "out"}" ];
-  installTargets = [ "modules_install" ];
 
   passthru.updateScript = unstableGitUpdater { };
 
