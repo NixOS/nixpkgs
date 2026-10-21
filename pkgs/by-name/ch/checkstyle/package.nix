@@ -23,7 +23,7 @@ maven.buildMavenPackage (finalAttrs: {
     ./drop-nexus-codehaus-snapshot-plugin-repository.patch
   ];
 
-  mvnHash = "sha256-8HMUvqhvI8dl2E4uPj3qmgwnyY5fAMtbTbXm67P1Wpo=";
+  mvnHash = "sha256-BYIFzshUGsQ+GD3EvTc6j9uZQ/8I3cPrlicCVYhSNrs=";
 
   nativeBuildInputs = [
     maven
