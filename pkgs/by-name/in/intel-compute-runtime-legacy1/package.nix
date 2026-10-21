@@ -86,6 +86,10 @@ stdenv.mkDerivation (finalAttrs: {
       ]
     } \
       $out/lib/intel-opencl/libigdrcl.so
+
+    # Level Zero also loads IGC with dlopen, so it is not picked up by the linker.
+    patchelf --add-rpath ${lib.makeLibraryPath [ intel-graphics-compiler ]} \
+      $drivers/lib/libze_intel_gpu.so.1
   '';
 
   passthru.updateScript = gitUpdater {
