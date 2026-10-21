@@ -10,20 +10,26 @@
   gobject-introspection,
   libadwaita,
   desktopToDarwinBundle,
+  symlinkJoin,
+  cairo,
+  gdk-pixbuf,
+  glib,
+  graphene,
+  pango,
 }:
 
 buildGo127Module (finalAttrs: {
   pname = "trayscale";
-  version = "0.19.0";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "DeedleFake";
     repo = "trayscale";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-I/HBbw/sRU8nL0Yp2ZA0QVo/0rvLwhdPeTigWfsusZE=";
+    hash = "sha256-8Wv+jLkGVpPfvEMVBpliOAJNG6/XVX93q3l9qIChVpg=";
   };
 
-  vendorHash = "sha256-sSYyEWSHKhmERmXJFUIRnTxvtwthyUnTl/SUqW0q52w=";
+  vendorHash = "sha256-bxiloB4cJHY45nMYczEToCExj3ZlvDKqA7yYAbgGmi4=";
 
   subPackages = [ "cmd/trayscale" ];
 
@@ -50,13 +56,31 @@ buildGo127Module (finalAttrs: {
   doCheck = false;
 
   postInstall = ''
-    sh ./dist.sh install $out
+    wrapProgram $out/bin/trayscale \
+      --set-default PUREGOTK_LIB_FOLDER ${finalAttrs.passthru.libraryPath}/lib
+
+    sh ./dist.sh install-data $out
     glib-compile-schemas $out/share/glib-2.0/schemas
   '';
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix PATH : "${tailscale}/bin")
   '';
+
+  passthru = {
+    libraryPath = symlinkJoin {
+      name = "trayscale-puregotk-lib";
+      paths = [
+        cairo
+        gdk-pixbuf
+        glib.out
+        graphene
+        gtk4
+        libadwaita
+        pango.out
+      ];
+    };
+  };
 
   meta = {
     changelog = "https://github.com/DeedleFake/trayscale/releases/tag/${finalAttrs.src.rev}";
