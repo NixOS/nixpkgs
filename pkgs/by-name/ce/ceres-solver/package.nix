@@ -131,7 +131,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     homepage = "http://ceres-solver.org";
     downloadPage = "https://github.com/ceres-solver/ceres-solver";
     teams = [ lib.teams.cuda ];
-    maintainers = with lib.maintainers; [ giogadi ];
     platforms = lib.platforms.unix;
   };
 })
