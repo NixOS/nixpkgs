@@ -7,14 +7,16 @@
 }:
 
 buildGoModule (finalAttrs: {
-  pname = "dsearch";
-  version = "1.6.0";
+  pname = "dux-search";
+  version = "2.0.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "AvengeMedia";
-    repo = "danksearch";
+    owner = "duxlabs-dev";
+    repo = "dux-search";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-C9mVxnPCaA6mtz8H5GwMfBjOdhLRmXrpzcDc7z99iOo=";
+    hash = "sha256-GOnNob/tex//NBchfVXAjzk9Gw4K+GxyVmZBZqx0nLA=";
   };
 
   vendorHash = "sha256-MkRBJPsHHgH2z/hTt8Z6SM/+KNQ8PuipBALW8qbJldE=";
@@ -44,8 +46,8 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Fast, configurable filesystem search with fuzzy matching";
-    homepage = "https://github.com/AvengeMedia/danksearch";
-    changelog = "https://github.com/AvengeMedia/danksearch/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/duxlabs-dev/dux-search";
+    changelog = "https://github.com/duxlabs-dev/dux-search/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     teams = [ lib.teams.duxlabs ];
     mainProgram = "dsearch";
