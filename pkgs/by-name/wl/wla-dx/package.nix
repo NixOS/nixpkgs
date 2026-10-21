@@ -2,7 +2,12 @@
   lib,
   stdenv,
   fetchFromGitHub,
+
+  # nativeBuildInputs
   cmake,
+
+  # passthru
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,6 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [ cmake ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     homepage = "https://www.villehelin.com/wla.html";
