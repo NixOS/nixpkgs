@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   installShellFiles,
   makeWrapper,
@@ -13,7 +13,7 @@
   qt6,
 }:
 
-buildGoModule (
+buildGo127Module (
   finalAttrs:
   let
     qmlPkgs = with kdePackages; [
@@ -28,20 +28,22 @@ buildGoModule (
     qtPluginPath = lib.concatStringsSep ":" (map (o: "${o}/${qt6.qtbase.qtPluginPrefix}") qmlPkgs);
   in
   {
-    pname = "dms-shell";
-    version = "1.6.3";
+    pname = "dux-shell";
+    version = "2.0.0";
+
+    __structuredAttrs = true;
 
     src = fetchFromGitHub {
-      owner = "AvengeMedia";
-      repo = "DankMaterialShell";
+      owner = "duxlabs-dev";
+      repo = "dux-shell";
       tag = "v${finalAttrs.version}";
       fetchSubmodules = true;
-      hash = "sha256-WRgr/uTGEQ6YWwFxOHqHU9+5s2ktAyfzrVd2gdTuShs=";
+      hash = "sha256-TLb0rbQlxBJOFTVzp7PMEZiKytWn4UnJE2Gfpa+wrbk=";
     };
 
     sourceRoot = "${finalAttrs.src.name}/core";
 
-    vendorHash = "sha256-ejDi+TzstUtxtWpcl5yYw4UZuTnZraOsIdJuXPKxJ6s=";
+    vendorHash = "sha256-fN7v7DuWaqhtD28cTr0FZUIyW7nUqhQoVuatsL2fuo4=";
 
     tags = [ "withshell" ];
 
@@ -80,10 +82,12 @@ buildGoModule (
     postInstall = ''
       install -D ${finalAttrs.src}/assets/dms-open.desktop \
         $out/share/applications/dms-open.desktop
-      install -D ${finalAttrs.src}/assets/com.danklinux.dms.desktop \
-        $out/share/applications/com.danklinux.dms.desktop
-      install -D ${finalAttrs.src}/assets/com.danklinux.dms.notepad.desktop \
-        $out/share/applications/com.danklinux.dms.notepad.desktop
+      install -D ${finalAttrs.src}/assets/dev.duxlabs.shell.desktop \
+        $out/share/applications/dev.duxlabs.shell.desktop
+      install -D ${finalAttrs.src}/assets/dev.duxlabs.shell.notepad.desktop \
+        $out/share/applications/dev.duxlabs.shell.notepad.desktop
+      install -D ${finalAttrs.src}/assets/dev.duxlabs.shell.svg \
+        $out/share/icons/hicolor/scalable/apps/dev.duxlabs.shell.svg
       install -D ${finalAttrs.src}/core/assets/danklogo.svg \
         $out/share/icons/hicolor/scalable/apps/danklogo.svg
 
@@ -111,9 +115,9 @@ buildGoModule (
     };
 
     meta = {
-      description = "DankMaterialShell - Desktop shell for wayland compositors built with Quickshell & GO";
-      homepage = "https://danklinux.com";
-      changelog = "https://github.com/AvengeMedia/DankMaterialShell/releases/tag/v${finalAttrs.version}";
+      description = "Desktop shell for Wayland compositors built with Quickshell and Go";
+      homepage = "https://duxlabs.dev";
+      changelog = "https://github.com/duxlabs-dev/dux-shell/releases/tag/v${finalAttrs.version}";
       license = lib.licenses.mit;
       teams = [ lib.teams.duxlabs ];
       mainProgram = "dms";
