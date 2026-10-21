@@ -1,6 +1,7 @@
 {
   kernel,
   kernelModuleMakeFlags,
+  kernelModuleInstallHook,
   stdenv,
   basiliskii,
   lib,
@@ -12,22 +13,13 @@ stdenv.mkDerivation (finalAttrs: {
   src = basiliskii.src;
   sourceRoot = "${finalAttrs.src.name}/BasiliskII/src/Unix/Linux/NetDriver";
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kernelModuleInstallHook ];
 
   makeFlags = kernelModuleMakeFlags ++ [
     "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}"
-    "INSTALL_MOD_PATH=${placeholder "out"}"
-    "INSTALL_MOD_DIR=drivers/net"
-    "DEPMOD=true"
   ];
 
-  installTargets = [ "modules_install" ];
-
-  installFlags = [
-    "-C"
-    "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-    "M=$(PWD)"
-  ];
+  kernelModuleInstallDir = "drivers/net";
 
   meta = {
     homepage = "https://github.com/kanjitalk755/macemu";
