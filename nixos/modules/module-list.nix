@@ -1837,6 +1837,7 @@
   ./services/web-apps/photoprism.nix
   ./services/web-apps/photoview.nix
   ./services/web-apps/phylactery.nix
+  ./services/web-apps/picoshare.nix
   ./services/web-apps/pict-rs.nix
   ./services/web-apps/pihole-web.nix
   ./services/web-apps/pixelfed.nix
