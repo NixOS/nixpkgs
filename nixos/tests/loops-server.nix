@@ -15,6 +15,7 @@
     server = {
 
       virtualisation.memorySize = 4096;
+      virtualisation.cores = 4;
 
       environment.systemPackages = [ pkgs.jq ];
 
@@ -34,7 +35,7 @@
           FORCE_HTTPS_URLS = false;
           FORCE_HTTPS = false;
           AWS_DRIVER = "local";
-          APP_URL = "http://server";
+          APP_URL = "http://localhost";
         };
       };
     };
@@ -51,7 +52,7 @@
     server.wait_for_unit("loops-horizon.service")
     server.wait_for_open_port(80)
     server.wait_for_file("/run/phpfpm/loops-server.sock")
-    server.succeed("curl -sSfL http://server/login | grep '<title>Loops</title>'")
+    server.succeed("curl -sSfL http://localhost/login | grep '<title>Loops</title>'")
 
     server.succeed(
         "loops-manage create-admin-account "
@@ -62,7 +63,7 @@
     # grab session + CSRF cookies
     server.succeed(
         "curl -sSf -c /tmp/cookies.txt "
-        "http://server/sanctum/csrf-cookie -o /dev/null"
+        "http://localhost/sanctum/csrf-cookie -o /dev/null"
     )
 
     # Extract XSRF-TOKEN from the cookie jar
@@ -83,7 +84,7 @@
     login_result = server.succeed(
         "curl -sSf "
         "-c /tmp/cookies.txt -b /tmp/cookies.txt "
-        "-X POST http://server/login "
+        "-X POST http://localhost/login "
         "-H 'Content-Type: application/json' "
         "-H 'Accept: application/json' "
         "-H 'X-Requested-With: XMLHttpRequest' "
@@ -98,14 +99,14 @@
         "loops-manage db:seed --class=AdminSettingsSeeder --force"
     )
     server.succeed(
-        "loops-manage tinker --execute=\"App\Models\AdminSetting::where('key', 'federation.enableFederation')->update(['value' => true]);\""
+        "loops-manage tinker --execute=\"App\\Models\\AdminSetting::where('key', 'federation.enableFederation')->update(['value' => true]);\""
     )
     server.succeed(
         "loops-manage optimize:clear"
     )
 
     # Test federation
-    server.wait_until_succeeds("curl -sS -f http://server/nodeinfo/2.0 | jq '.usage.users.total' | grep -q '^1$'")
+    server.wait_until_succeeds("curl -sS -f http://localhost/nodeinfo/2.0 | jq '.usage.users.total' | grep -q '^1$'")
   '';
 
 }
