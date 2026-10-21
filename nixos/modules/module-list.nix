@@ -209,8 +209,8 @@
   ./programs/direnv.nix
   ./programs/dmrconfig.nix
   ./programs/droidcam.nix
-  ./programs/dsearch.nix
   ./programs/dublin-traceroute.nix
+  ./programs/dux-search.nix
   ./programs/ente-auth.nix
   ./programs/environment.nix
   ./programs/envision.nix

@@ -14,13 +14,17 @@ let
     types
     ;
 
-  cfg = config.programs.dsearch;
+  cfg = config.programs.dux-search;
 in
 {
-  options.programs.dsearch = {
-    enable = mkEnableOption "dsearch, a fast filesystem search service with fuzzy matching";
+  imports = [
+    (lib.mkRenamedOptionModule [ "programs" "dsearch" ] [ "programs" "dux-search" ])
+  ];
 
-    package = mkPackageOption pkgs "dsearch" { };
+  options.programs.dux-search = {
+    enable = mkEnableOption "Dux Search, a fast filesystem search service with fuzzy matching";
+
+    package = mkPackageOption pkgs "dux-search" { };
 
     systemd = {
       enable = mkEnableOption "systemd user service for dsearch" // {
