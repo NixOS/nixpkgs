@@ -124,6 +124,8 @@ let
           pname = "ruby";
           inherit version;
 
+          __structuredAttrs = lib.versionAtLeast ver.majMin "4.1";
+
           src = fetchurl {
             url = "https://cache.ruby-lang.org/pub/ruby/${ver.majMin}/ruby-${ver}.tar.gz";
             inherit hash;
@@ -408,6 +410,12 @@ in
     version = rubyVersion "4" "0" "7" "";
     hash = "sha256-kRrOIPkNBoyg5N2m0OTw+B5S5S8t1PQATHIeJTQS6C0=";
     cargoHash = "sha256-z7NwWc4TaR042hNx0xgRkh/BQEpEJtE53cfrN0qNiE0=";
+  };
+
+  ruby_4_1 = generic {
+    version = rubyVersion "4" "1" "0" "preview1";
+    hash = "sha256-+1MLuI6Q3jrpHBMQonrgkOa9mJuHJt5Q7xKokKhbiO8=";
+    cargoHash = "sha256-r1G5JdMJHhDb9U9z4xvWNQAshquRyTMHQhHa/GBo2zg=";
   };
 
 }
