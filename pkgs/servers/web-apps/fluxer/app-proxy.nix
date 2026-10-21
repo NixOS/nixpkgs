@@ -4,7 +4,6 @@
   pnpm_11,
   cacert,
   cargo,
-  rustc,
   clang,
   lld,
   brotli,
@@ -70,11 +69,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pnpmConfigHook
     pkg-config
     cargo
-    rustc
     clang.cc
     lld
     brotli
-    rustPlatform.cargoSetupHook
     wasm-bindgen-cli
   ];
 
