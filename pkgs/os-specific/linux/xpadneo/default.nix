@@ -4,6 +4,7 @@
   fetchFromGitHub,
   kernel,
   kernelModuleMakeFlags,
+  kernelModuleInstallHook,
   nixosTests,
   nix-update-script,
 }:
@@ -23,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     export sourceRoot=$(pwd)/${finalAttrs.src.name}/hid-xpadneo/src
   '';
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kernelModuleInstallHook ];
 
   makeFlags = kernelModuleMakeFlags ++ [
     "-C"
@@ -33,8 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildFlags = [ "modules" ];
-  installFlags = [ "INSTALL_MOD_PATH=${placeholder "out"}" ];
-  installTargets = [ "modules_install" ];
 
   passthru = {
     tests.xpadneo = nixosTests.xpadneo;
