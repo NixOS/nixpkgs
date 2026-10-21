@@ -192,6 +192,12 @@ in
       cd third_party/node
       grep patch update_npm_deps | sh
     )
+
+    gnFlags+=' v8_version_hash_salt_files=["//electron/patches/v8/.patches"'
+    for patch in $(cat electron/patches/v8/.patches); do
+      gnFlags+=",\"//electron/patches/v8/$patch\""
+    done
+    gnFlags+=']'
   ''
   + (base.preConfigure or "");
 
