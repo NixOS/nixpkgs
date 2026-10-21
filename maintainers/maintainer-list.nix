@@ -28058,12 +28058,6 @@
     githubId = 50879;
     name = "Simon Shine";
   };
-  SShrike = {
-    email = "severen@shrike.me";
-    github = "severen";
-    githubId = 4061736;
-    name = "Severen Redwood";
-  };
   ssnoer = {
     email = "ssnoer@proton.me";
     github = "Seba244c";
