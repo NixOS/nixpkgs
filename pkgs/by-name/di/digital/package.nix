@@ -14,6 +14,10 @@ maven.buildMavenPackage (finalAttrs: {
 
   __structuredAttrs = true;
 
+  # Some tests start telnet servers on localhost, which is blocked by the
+  # darwin build sandbox by default.
+  __darwinAllowLocalNetworking = true;
+
   src = fetchFromGitHub {
     owner = "hneemann";
     repo = "Digital";
