@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitea,
   rustPlatform,
   pkg-config,
@@ -52,6 +53,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
     systemd
     hidapi
+    # libgcc_s.so.1
+    (lib.getLib stdenv.cc.cc)
   ];
 
   # autoPatchelfHook doesnt find these automatically using dlopen
