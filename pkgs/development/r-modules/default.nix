@@ -802,6 +802,18 @@ let
     ];
     jSDM = [ pkgs.gsl ]; # for gsl-config
     jack = [ pkgs.pkg-config ];
+    jiebaRS = with pkgs; [
+      cargo
+      rustc
+    ];
+    jsslintr = with pkgs; [
+      cargo
+      rustc
+    ];
+    koopman_dmd = with pkgs; [
+      cargo
+      rustc
+    ];
     kza = [ pkgs.pkg-config ];
     libdeflate = with pkgs; [
       cmake
