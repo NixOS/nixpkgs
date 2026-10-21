@@ -20,13 +20,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "seerr";
-  version = "3.5.0";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "seerr-team";
     repo = "seerr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DBXhU6gzk1wwLT38s9CJsTtwaWE9gLwmSzSIP0p6ZN8=";
+    hash = "sha256-qbKHypQy1laLRqC2BAfM4AAQsxfjY/kXTHTCiF3tDxA=";
   };
 
   pnpmDeps = fetchPnpmDeps {
