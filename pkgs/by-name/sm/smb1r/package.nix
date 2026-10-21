@@ -24,6 +24,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-2js1i2hQRw9ZNkj7587EZzVOt3ylOVW3WOpIEA/72Fk=";
   };
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   nativeBuildInputs = [
     writableTmpDirAsHomeHook
     copyDesktopItems
