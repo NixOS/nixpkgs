@@ -2,6 +2,7 @@
   stdenv,
   fetchFromGitHub,
   kernel,
+  kernelModuleInstallHook,
   kernelModuleMakeFlags,
   lib,
 }:
@@ -25,7 +26,7 @@ stdenv.mkDerivation {
     ./fix-linux-6.12-build.patch
   ];
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kernelModuleInstallHook ];
 
   hardeningDisable = [ "pic" ];
 
@@ -34,9 +35,7 @@ stdenv.mkDerivation {
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
-  installPhase = ''
-    install -D vendor-reset.ko -t "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/misc/"
-  '';
+  kernelModuleInstallDir = "kernel/drivers/misc";
 
   enableParallelBuilding = true;
 
