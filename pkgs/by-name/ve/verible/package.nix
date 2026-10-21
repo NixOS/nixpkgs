@@ -30,6 +30,8 @@ buildBazelPackage {
     # a build string shown in the tools --version output.
     # If env variables not set, it would attempt to extract it from .git/.
     inherit GIT_DATE GIT_VERSION;
+    ${if stdenv.hostPlatform.isDarwin then "NIX_CFLAGS_COMPILE" else null} =
+      "-mmacos-version-min=10.15";
   }
   // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     LIBTOOL = "${cctools}/bin/libtool";
@@ -57,12 +59,15 @@ buildBazelPackage {
   fetchAttrs = {
     preInstall = ''
       rm -rf $bazelOut/external/rules_shell~~sh_configure~local_config_shell
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      find $bazelOut/external/abseil-cpp~ -type f -name BUILD.bazel -exec sed -i -e 's/"layering_check",//g' {} \;
     '';
     hash =
       {
         aarch64-linux = "sha256-KsXrwRIiCft/WaT0uj28gOj5ahhTKxcaiosbY7Mo3JY=";
         x86_64-linux = "sha256-X7/W2iOTXruRO2wx9J5tGYvy2IuZ6mXiRAmUI5Eq9Vc=";
-        aarch64-darwin = "sha256-Zn22un/KaHdTEA/ucaentR7t/krmnZQk3A+jfbPVYnA=";
+        aarch64-darwin = "sha256-XGDsePwK70cdF9tgtykezlJdbGnnwNSbeZlpM67PhPc=";
       }
       .${system} or (throw "No hash for system: ${system}");
   };
