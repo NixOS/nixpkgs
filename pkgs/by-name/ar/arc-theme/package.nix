@@ -12,6 +12,7 @@
   cinnamon,
   gnome-shell,
   nix-update-script,
+  writableTmpDirAsHomeHook,
 }:
 
 stdenv.mkDerivation {
@@ -38,15 +39,11 @@ stdenv.mkDerivation {
     ninja
     python3
     sassc
+    writableTmpDirAsHomeHook
   ];
 
   postPatch = ''
     patchShebangs meson/install-file.py
-  '';
-
-  preBuild = ''
-    # Shut up inkscape's warnings about creating profile directory
-    export HOME="$TMPDIR"
   '';
 
   # Fontconfig error: Cannot load default config file: No such file: (null)
