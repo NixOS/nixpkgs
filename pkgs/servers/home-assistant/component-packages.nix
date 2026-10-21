@@ -7275,7 +7275,8 @@
       ];
     "theben_conexa" =
       ps: with ps; [
-      ]; # missing inputs: theben-conexa-smgw
+        theben-conexa-smgw
+      ];
     "thermador" =
       ps: with ps; [
       ];
@@ -9446,6 +9447,7 @@
     "tesla_wall_connector"
     "tessie"
     "text"
+    "theben_conexa"
     "thermobeacon"
     "thermopro"
     "thethingsnetwork"

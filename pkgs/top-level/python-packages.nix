@@ -20756,6 +20756,8 @@ self: super: with self; {
 
   tftpy = callPackage ../development/python-modules/tftpy { };
 
+  theben-conexa-smgw = callPackage ../development/python-modules/theben-conexa-smgw { };
+
   thefuzz = callPackage ../development/python-modules/thefuzz { };
 
   thelogrus = callPackage ../development/python-modules/thelogrus { };
