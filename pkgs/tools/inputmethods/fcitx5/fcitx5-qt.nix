@@ -31,6 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   __structuredAttrs = true;
+  strictDeps = true;
   cmakeFlags = [
     "-DENABLE_QT4=OFF"
     "-DENABLE_QT5=OFF"
@@ -40,12 +41,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    kdePackages.extra-cmake-modules
     gettext
     wrapQtAppsHook
   ];
 
   buildInputs = [
+    kdePackages.extra-cmake-modules
     qtbase
     qtwayland
     fcitx5
