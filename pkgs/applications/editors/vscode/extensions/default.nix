@@ -5058,6 +5058,11 @@ let
         postInstall = ''
           cd "$out/$installPrefix"
           jq '.contributes.configuration.properties."ltex.java.path".default = "${jdk}"' package.json | sponge package.json
+
+          # drop the bundled JDK (unpatched, stale CA keystore); ltex-ls runs on jdk
+          rm -r lib/ltex-ls-*/jdk-*
+          substituteInPlace lib/ltex-ls-*/bin/ltex-ls lib/ltex-ls-*/bin/ltex-cli \
+            --replace-fail '"$BASEDIR"/jdk-11.0.12+7' '${jdk}'
         '';
 
         meta = {
