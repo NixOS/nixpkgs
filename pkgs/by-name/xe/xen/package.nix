@@ -209,6 +209,40 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://xenbits.xenproject.org/xsa/xsa512-2.patch";
       hash = "sha256-4LgqC1F22kFjiVWgiSb1hZazbBF2Fziiif0Scv+ynho=";
     })
+
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa515.patch";
+      hash = "sha256-p4/eNfnR/KL1QZ+6Ml4eWyMibXr1DEcBzhQ6XrKVVhM=";
+    })
+
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa516.patch";
+      hash = "sha256-k+3i0akBvIDz6EnEaas+tzzVFAD9/SAOpjBFA6WnDcA=";
+    })
+
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa517.patch";
+      hash = "sha256-3IyzQwK3+rM0BulhaAUBQCceLp/AuiXZSKMHaCkeMy8=";
+    })
+
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa518-4.20.patch";
+      hash = "sha256-8rWeuMwn7Nk7Q8yXCRNIp5CJCS/e5kZBpKQkkz6ETwM=";
+    })
+
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa519-4.20-1.patch";
+      hash = "sha256-jA/K+J7tSFDjsYDF3TZQ0AZTYHcRHZkGufpoeuX07Qc=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa519-4.20-2.patch";
+      hash = "sha256-iLZodjt353ZaPjrGvkOhjHtAJXuCAX79SEa3ibwNTpg=";
+    })
+
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa520.patch";
+      hash = "sha256-E2m+OOm7slNFV8t6Yhvbfn7FtBRE63GkCXMImQkDpnc=";
+    })
   ]
   ++ optionals (versionOlder finalAttrs.version "4.21") [
     # Patch `libxl` to search for `qemu-system-i386` properly.
