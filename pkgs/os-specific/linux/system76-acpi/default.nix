@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   kernel,
+  kernelModuleInstallHook,
 }:
 stdenv.mkDerivation (finalAttrs: {
   name = "${finalAttrs.pname}-${finalAttrs.version}-${kernel.version}";
@@ -20,20 +21,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   hardeningDisable = [ "pic" ];
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kernelModuleInstallHook ];
 
   buildFlags = [
     "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
-  installPhase = ''
-    runHook preInstall
+  kernelModuleInstallDir = "misc";
 
-    install -D system76_acpi.ko $out/lib/modules/${kernel.modDirVersion}/misc/system76_acpi.ko
+  postInstall = ''
     mkdir -p $out/lib/udev/hwdb.d
     mv lib/udev/hwdb.d/* $out/lib/udev/hwdb.d
-
-    runHook postInstall
   '';
 
   # GCC 14 makes this an error by default, remove when fixed upstream
