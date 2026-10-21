@@ -189,6 +189,23 @@ stdenv.mkDerivation (finalAttrs: {
     # INCLUDEDIR already fixed in upstream HEAD & significant refactor
     # to config gen so not PRing changes
     ./cmake-include-fixes.patch
+
+    # Patches to fix racey buffer overflow in ~64 or more threads
+    (fetchpatch {
+      name = "centralize-buffer-release-bookkeeping.patch";
+      url = "https://github.com/OpenMathLib/OpenBLAS/commit/95120da710e8ca28d7e6a896fd82cf1cdb0a07ad.patch";
+      hash = "sha256-/6BhcVGDkrBgfwaMsOqvlZ03/cyIBNmGT84KYDLEcKY=";
+    })
+    (fetchpatch {
+      name = "avoid-possible-hang-on-windows-by-introspecting-shutdown-state.patch";
+      url = "https://github.com/OpenMathLib/OpenBLAS/commit/b8d83a72f4e12650e1c790bb43badcfb6e917875.patch";
+      hash = "sha256-vIRI5ByW2IcSrQUiOJVd1Ngwusw9UUh+NLK5e9AVOxE=";
+    })
+    (fetchpatch {
+      name = "fix-the-default-allocator-s-overflow-area.patch";
+      url = "https://github.com/OpenMathLib/OpenBLAS/commit/0c6785998b516b85c0053669cc0c08e9287353fc.patch";
+      hash = "sha256-jfRAn+IdGP5nfPLasYHBDRSu/HG6tKKAcSzb1urjL7Q=";
+    })
   ];
 
   inherit blas64;
