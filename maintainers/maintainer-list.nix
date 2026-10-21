@@ -10100,12 +10100,6 @@
     github = "ftsimas";
     githubId = 47324723;
   };
-  fuerbringer = {
-    email = "severin@fuerbringer.info";
-    github = "fuerbringer";
-    githubId = 10528737;
-    name = "Severin Fürbringer";
-  };
   fufexan = {
     email = "fufexan@protonmail.com";
     github = "fufexan";
