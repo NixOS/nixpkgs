@@ -23,6 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [ zlib ];
 
+  strictDeps = true;
+
   # It used to reference it, in the past, but thanks to the postFixup hook, now
   # it doesn't.
   disallowedReferences = [ stdenv.cc.cc ];
