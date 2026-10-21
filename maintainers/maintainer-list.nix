@@ -10029,12 +10029,6 @@
     githubId = 1010248;
     name = "Frank Lanitz";
   };
-  fro_ozen = {
-    email = "fro_ozen@gmx.de";
-    github = "froozen";
-    githubId = 1943632;
-    name = "fro_ozen";
-  };
   frontear = {
     name = "Ali Rizvi";
     email = "perm-iterate-0b@icloud.com";
