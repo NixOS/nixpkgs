@@ -38,6 +38,8 @@ rec {
     sed -i 's/ada8f059f0fa8a3a82315606318429d3a70200bbb2886d1a1bcaad2856a6303b/70a4a176b6494fce419e590180bc9c631945282ded0ab05bc1591bdd37b65093/g' third_party/rust/glean-core/.cargo-checksum.json
     sed -i 's/1753c69b71ae24a9b339d98e9b71166740a15506cfc46245251eb63c0222568f/af3ae3d026bd2e26fd9cc7c710847ac4f853b0c899412ddc9ee7e0ef1027de87/g' third_party/rust/glean-core/.cargo-checksum.json
 
+    find . -type f -exec sed -i 's/follows_collection_enabled: false/follows_collection_enabled: true/g' {} +
+
     rm toolkit/components/ml/content/backends/OpenAIPipeline.mjs
     rm -rf toolkit/components/ml/vendor/openai
 
