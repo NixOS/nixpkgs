@@ -37,7 +37,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-cV1BXvdMiHvm7igf0qSvECPtPvOzTQNadOGMkpcHYS8=";
   };
 
-  cargoHash = "sha256-uF2HQAj6NHnL3ZqLUgl1u9Xjc8/scz78CDgWgVMvp2w=";
+  cargoPatches = [
+    # Make the postgres and doris sinks (sqlx) use the system CA store
+    # instead of webpki-roots, and bump webpki-roots >= 1.0.10 and
+    # rustls-webpki >= 0.103.16 for the remaining compiled-in copies.
+    # https://github.com/NixOS/nixpkgs/issues/576544
+    ./sqlx-native-roots-and-bump-webpki.patch
+  ];
+
+  patches = [
+    # mongodb uses webpki-roots when no tlsCAFile is given.
+    # Use SSL_CERT_FILE, which vector sets at startup through openssl-probe.
+    ./mongodb-metrics-system-ca.patch
+  ];
+
+  cargoHash = "sha256-aFDO02KB5jqZsDJHrdeLLDDUZxRGEVWwjGo6LUIywiU=";
 
   nativeBuildInputs = [
     pkg-config
