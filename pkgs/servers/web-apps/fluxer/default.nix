@@ -15,16 +15,16 @@ let
   };
 in
 {
-  admin = callPackage ./admin.nix { inherit fluxerHashes; };
-  api = callPackage ./api.nix { inherit fluxerHashes; };
-  app-proxy = callPackage ./app-proxy.nix { inherit fluxerHashes; };
-  gateway = callPackage ./gateway.nix { inherit fluxerHashes; };
-  gifs = callPackage ./gifs.nix { inherit fluxerHashes; };
-  media-proxy = callPackage ./media-proxy.nix { inherit fluxerHashes; };
-  messages = callPackage ./messages.nix { inherit fluxerHashes; };
-  push = callPackage ./push.nix { inherit fluxerHashes; };
-  snowflakes = callPackage ./snowflakes.nix { inherit fluxerHashes; };
-  static = callPackage ./static.nix { inherit fluxerHashes; };
-  unfurl = callPackage ./unfurl.nix { inherit fluxerHashes; };
-  users = callPackage ./users.nix { inherit fluxerHashes; };
+  fluxer-admin = callPackage ./admin.nix { inherit fluxerHashes; };
+  fluxer-api = callPackage ./api.nix { inherit fluxerHashes; };
+  fluxer-app-proxy = callPackage ./app-proxy.nix { inherit fluxerHashes; };
+  fluxer-gateway = callPackage ./gateway.nix { inherit fluxerHashes; };
+  fluxer-gifs = callPackage ./gifs.nix { inherit fluxerHashes; };
+  fluxer-media-proxy = callPackage ./media-proxy.nix { inherit fluxerHashes; };
+  fluxer-messages = callPackage ./messages.nix { inherit fluxerHashes; };
+  fluxer-push = callPackage ./push.nix { inherit fluxerHashes; };
+  fluxer-snowflakes = callPackage ./snowflakes.nix { inherit fluxerHashes; };
+  fluxer-static = callPackage ./static.nix { inherit fluxerHashes; };
+  fluxer-unfurl = callPackage ./unfurl.nix { inherit fluxerHashes; };
+  fluxer-users = callPackage ./users.nix { inherit fluxerHashes; };
 }
