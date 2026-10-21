@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   kernel,
+  kernelModuleInstallHook,
   kernelModuleMakeFlags,
   udevCheckHook,
 }:
@@ -18,13 +19,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-rll9NyWZaHFTUIR/jnzZtO3D0Za/i1O+qT6fyvKcYTc=";
   };
 
-  nativeBuildInputs = [ udevCheckHook ] ++ kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [
+    kernelModuleInstallHook
+    udevCheckHook
+  ];
 
   makeFlags = kernelModuleMakeFlags ++ [
     "KERNELRELEASE=${kernel.modDirVersion}"
     "BUILD_KERNEL_PATH=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-    "INSTALL_MOD_PATH=$(out)/lib/modules/${kernel.modDirVersion}"
   ];
+
+  kernelModuleInstallDir = "kernel/drivers/nfc";
 
   doInstallCheck = true;
 
