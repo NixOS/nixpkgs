@@ -1558,8 +1558,7 @@ class QemuMachine(BaseMachine):
     def switch_root(self) -> None:
         """
         Transition from stage 1 to stage 2. This requires the
-        machine to be configured with `testing.initrdBackdoor = true`
-        and `boot.initrd.systemd.enable = true`.
+        machine to be configured with `testing.initrdBackdoor = true`.
         """
         self.wait_for_unit("initrd.target")
         self.execute(

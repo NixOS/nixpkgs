@@ -1,10 +1,9 @@
-{ pkgs, ... }:
+{ ... }:
 {
   name = "systemd-initrd-simple";
 
   nodes.machine = {
     testing.initrdBackdoor = true;
-    boot.initrd.systemd.enable = true;
     virtualisation.fileSystems."/".autoResize = true;
   };
 
