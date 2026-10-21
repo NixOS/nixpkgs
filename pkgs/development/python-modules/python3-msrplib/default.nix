@@ -7,7 +7,7 @@
 }:
 
 buildPythonPackage {
-  pname = "msrplib";
+  pname = "python3-msrplib";
   version = "0.21.0-unstable-2026-07-09";
   pyproject = true;
 

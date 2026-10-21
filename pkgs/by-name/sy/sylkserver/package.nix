@@ -29,9 +29,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
     klein
     lxml
     lxml-html-clean
-    msrplib
     python3-eventlib
     python3-gnutls
+    python3-msrplib
     python3-sipsimple
     systemd-python
     wokkel

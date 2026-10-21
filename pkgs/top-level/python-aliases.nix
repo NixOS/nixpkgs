@@ -439,6 +439,7 @@ mapAliases {
   mpd2 = warnAlias "'mpd2' has been renamed to 'python-mpd2'" python-mpd2; # Added 2026-06-14
   mpire = throw "'mpire' has been removed because it is unused in Nixpkgs"; # Added 2026-06-22
   msldap-bad = throw "'msldap-bad' has been renamed to/replaced by 'badldap'"; # added 2025-11-06
+  msrplib = warnAlias "'msrplib' has been renamed to/replaced by 'python3-msrplib'" python3-msrplib; # added 2026-10-21
   mullvad-closest = throw "'mullvad-closest' has been removed as it was unmaintained. Consider using 'mullvad-compass' instead."; # Added 2026-01-13
   multi_key_dict = throw "'multi_key_dict' has been renamed to/replaced by 'multi-key-dict'"; # Converted to throw 2025-10-29
   mutag = throw "mutag has been removed because it is unmaintained since 2018"; # added 2025-05-25
