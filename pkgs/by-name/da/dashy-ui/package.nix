@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Config validation needs to happen after yarnConfigHook, since it's what sets the yarn offline cache
   preBuild = lib.optionalString (settings != { }) ''
     echo "Writing settings override..."
-    json2yaml '${builtins.toFile "conf.json" (builtins.toJSON settings)}' user-data/conf.yml
+    json2yaml --width inf '${builtins.toFile "conf.json" (builtins.toJSON settings)}' user-data/conf.yml
     yarn validate-config --offline
   '';
   installPhase = ''
