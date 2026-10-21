@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   kernel,
+  kernelModuleInstallHook,
   kernelModuleMakeFlags,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -20,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     export sourceRoot=$(pwd)/${finalAttrs.src.name}
   '';
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kernelModuleInstallHook ];
 
   makeFlags = kernelModuleMakeFlags ++ [
     "-C"
@@ -31,8 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
   buildFlags = [ "modules" ];
-  installFlags = [ "INSTALL_MOD_PATH=${placeholder "out"}" ];
-  installTargets = [ "modules_install" ];
 
   meta = {
     description = "Linux kernel driver for Xbox One and Xbox Series X|S accessories";
