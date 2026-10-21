@@ -1,0 +1,376 @@
+Support semaphore-compat >= 2.0.1, as shipped with GHC 9.12.4.
+
+Source changes from https://github.com/commercialhaskell/stack/pull/6935
+(head b2873fe6890dc1688cccffd25c4a01509b7bf2e6), c.f.
+https://github.com/commercialhaskell/stack/issues/6934. The PR is not merged
+yet, so its commit URLs are not stable.
+
+---
+
+diff --git a/src/Stack/Build/ExecuteEnv.hs b/src/Stack/Build/ExecuteEnv.hs
+index f231bca66a..16241d3180 100644
+--- a/src/Stack/Build/ExecuteEnv.hs
++++ b/src/Stack/Build/ExecuteEnv.hs
+@@ -72,6 +72,7 @@ import           Stack.Constants
+                    , relDirSetupExeCache, relDirSetupExeSrc, relFileBuildLock
+                    , relFileSetupHs, relFileSetupLhs, relFileSetupLower
+                    , relFileSetupMacrosH, setupGhciShimCode, stackProgName
++                   , osIsWindows
+                    )
+ import           Stack.Constants.Config ( distDirFromDir, distRelativeDir )
+ import           Stack.Package ( buildLogPath )
+@@ -123,7 +124,9 @@ import           System.Environment ( lookupEnv )
+ import           System.FileLock
+                    ( SharedExclusive (..), withFileLock, withTryFileLock )
+ import           System.Semaphore
+-                   ( Semaphore, destroySemaphore, freshSemaphore )
++                   ( ServerSemaphore, destroyServerSemaphore, freshSemaphore
++                   , semaphoreVersion, versionsAreCompatible
++                   )
+ 
+ -- | Type representing environments in which the @Setup.hs@ commands of Cabal
+ -- (the library) can be executed.
+@@ -156,8 +159,9 @@ data ExecuteEnv = ExecuteEnv
+     -- ^ For nicer interleaved output: track the largest package name size
+   , pathEnvVar :: !Text
+     -- ^ Value of the PATH environment variable
+-  , semaphore :: !(Maybe Semaphore)
+-    -- ^ The semaphore that is used for job control, if --semaphore is given
++  , serverSemaphore :: !(Maybe ServerSemaphore)
++    -- ^ The server semaphore that is used for job control, if --semaphore is
++    -- given
+   }
+ 
+ -- | Type representing setup executable circumstances.
+@@ -346,26 +350,51 @@ withExecuteEnv
+       logFiles <- liftIO $ atomically newTChan
+       let totalWanted = length $ filter (.wanted) locals
+       pathEnvVar <- liftIO $ maybe mempty T.pack <$> lookupEnv "PATH"
++      ghcSemaphoreVersion <- view $ compilerPathsL . to (.semaphoreVersion)
+       jobs <- view $ configL . to (.jobs)
+       let semaphoreSupported =
+                (cabalPkgVer >= mkVersion [3, 12, 0, 0])
+-            && (ghcVersion >= mkVersion [9, 8, 1])
++            && maybe
++                 False
++                 (versionsAreCompatible semaphoreVersion)
++                 ghcSemaphoreVersion
+           semaphoreUnsupportedWarning =
+             prettyWarnL
+               [ "The"
+               , style Shell "--semaphore"
+-              , flow "flag was specified, which is supported by GHC 9.8.1 or \
+-                     \later with Cabal 3.12.0.0 (a boot package of GHC 9.10.1) \
+-                     \or later. GHC version"
++              , flow "flag was specified, which is supported by"
++              , ghcSemaphoreSupportMessage
++              , flow "with Cabal 3.12.0.0 (a boot package of GHC 9.10.1) or \
++                     \later. GHC version"
+               , fromString (versionString ghcVersion)
+               , flow "and Cabal version"
+               , fromString (versionString cabalPkgVer)
+               , flow "was found. The flag will be ignored."
+               ]
+-      semaphore <- if not buildOpts.semaphore
++          ghcSemaphoreSupportMessage = if osIsWindows
++            then
++              flow "GHC 9.8.1 or later (on Windows)"
++            else
++              -- Protocol version 1 was problematic on non-musl Linux
++              -- distributions only, because non-musl and musl semaphores are
++              -- incompatible and statically-linked binaries are musl. The GHC
++              -- project has decided that the semaphore-compat-2.0.0 package
++              -- will not be backwards compatible on all operating systems other
++              -- than Windows.
++              fillSep
++                [ flow "GHC if"
++                , style Shell "ghc --info"
++                , flow "reports a semaphore version (on operating systems \
++                       \other than Windows)"
++                ]
++      serverSemaphore <- if not buildOpts.semaphore
+         then pure Nothing
+         else if semaphoreSupported
+-          then Just <$> liftIO (freshSemaphore semaphorePrefix jobs)
++          then do
++            result <- liftIO $ freshSemaphore semaphorePrefix jobs
++            case result of
++              Left err -> throwM err
++              Right serverSemaphore -> pure $ Just serverSemaphore
+           else semaphoreUnsupportedWarning >> pure Nothing
+       inner ExecuteEnv
+         { buildOpts
+@@ -392,9 +421,9 @@ withExecuteEnv
+         , customBuilt
+         , largestPackageName
+         , pathEnvVar
+-        , semaphore
++        , serverSemaphore
+         } `finally` do
+-          liftIO (whenJust semaphore destroySemaphore)
++          liftIO (whenJust serverSemaphore destroyServerSemaphore)
+           dumpLogs logFiles totalWanted
+  where
+   toDumpPackagesByGhcPkgId = Map.fromList . map (\dp -> (dp.ghcPkgId, dp))
+diff --git a/src/Stack/Build/ExecutePackage.hs b/src/Stack/Build/ExecutePackage.hs
+index 36f3207c89..9d561d88b5 100644
+--- a/src/Stack/Build/ExecutePackage.hs
++++ b/src/Stack/Build/ExecutePackage.hs
+@@ -167,7 +167,10 @@ import           System.IO.Error ( isDoesNotExistError )
+ import           System.PosixCompat.Files
+                    ( createLink, getFileStatus, modificationTime )
+ import           System.Random ( randomIO )
+-import           System.Semaphore ( Semaphore (..), SemaphoreName (..) )
++import           System.Semaphore
++                   ( ServerSemaphore, clientSemaphoreName, semaphoreIdentifier
++                   , serverClientSemaphore
++                   )
+ 
+ -- | Generate the t'ConfigCache' value.
+ getConfigCache ::
+@@ -669,7 +672,7 @@ realConfigAndBuild
+       <> display actualCompiler
+       )
+     config <- view configL
+-    extraOpts <- extraBuildOptions wc ee.buildOpts ee.semaphore
++    extraOpts <- extraBuildOptions wc ee.buildOpts ee.serverSemaphore
+     let stripTHLoading
+           | config.hideTHLoading = ExcludeTHLoading
+           | otherwise                  = KeepTHLoading
+@@ -1452,15 +1455,15 @@ extraBuildOptions ::
+      (HasEnvConfig env, HasRunner env)
+   => WhichCompiler
+   -> BuildOpts
+-  -> Maybe Semaphore
++  -> Maybe ServerSemaphore
+   -> RIO env [String]
+-extraBuildOptions wc bopts semaphore = do
++extraBuildOptions wc bopts mServerSemaphore = do
+   colorOpt <- appropriateGhcColorFlag
+   let optsFlag = compilerOptionsCabalFlag wc
+       semaphoreFlag = maybe
+         []
+-        (("--semaphore":) . L.singleton . getSemaphoreName . semaphoreName)
+-        semaphore
++        (("--semaphore":) . L.singleton . semaphoreIdentifier . clientSemaphoreName . serverClientSemaphore)
++        mServerSemaphore
+       baseOpts = maybe "" (" " ++) colorOpt
+   if bopts.testOpts.coverage
+     then do
+diff --git a/src/Stack/Setup.hs b/src/Stack/Setup.hs
+index 54ce267092..6b97231c4c 100644
+--- a/src/Stack/Setup.hs
++++ b/src/Stack/Setup.hs
+@@ -184,6 +184,7 @@ import           System.IO.Error ( isPermissionError )
+ import           System.FilePath ( searchPathSeparator )
+ import qualified System.FilePath as FP
+ import           System.Permissions ( setFileExecutable )
++import           System.Semaphore ( SemaphoreProtocolVersion (..) )
+ import           System.Uname ( getRelease )
+ 
+ -- | Type representing exceptions thrown by functions exported by the
+@@ -233,6 +234,7 @@ data SetupPrettyException
+   | GHCInfoMissingGlobalPackageDB
+   | GHCInfoMissingTargetPlatform
+   | GHCInfoTargetPlatformInvalid !String
++  | GHCInfoSemaphoreVersionUnknown !String
+   | CabalNotFound !(Path Abs File)
+   | GhcBootScriptNotFound
+   | HadrianScriptNotFound
+@@ -468,6 +470,13 @@ instance Pretty SetupPrettyException where
+          [ flow "Invalid target platform in GHC info:"
+          , fromString targetPlatform <> "."
+          ]
++  pretty (GHCInfoSemaphoreVersionUnknown s) =
++    "[S-6307]"
++    <> line
++    <> fillSep
++         [ flow "Unknown semaphore version in GHC info:"
++         , fromString s <> "."
++         ]
+   pretty (CabalNotFound compiler) =
+     "[S-2574]"
+     <> line
+@@ -1527,7 +1536,20 @@ pathsFromCompiler wc build sandboxed compiler =
+       case Map.lookup cabalPackageName globalDump of
+         Nothing -> prettyThrowIO $ CabalNotFound compiler
+         Just dp -> pure $ pkgVersion dp.packageIdent
+-
++    let semaphoreSupported =
++          getGhcVersion compilerVersion >= mkVersion [9, 8, 1]
++        semaphoreVersion = case Map.lookup "Semaphore version" infoMap of
++          Nothing -> if osIsWindows && semaphoreSupported
++            then
++              Just $ SemaphoreProtocolVersion 1
++            else
++              -- If GHC (via ghc --info) does not know what protocol version
++              -- for the semaphore it supports, we can be confident that it does
++              -- not support a protocol version >= 2:
++              Nothing
++          Just "1" -> Just $ SemaphoreProtocolVersion 1
++          Just "2" -> Just $ SemaphoreProtocolVersion 2
++          Just s -> prettyThrowM $ GHCInfoSemaphoreVersionUnknown s
+     pure CompilerPaths
+       { build
+       , arch
+@@ -1540,6 +1562,7 @@ pathsFromCompiler wc build sandboxed compiler =
+       , cabalVersion
+       , globalDB
+       , ghcInfo
++      , semaphoreVersion
+       , globalDump
+       }
+  where
+diff --git a/src/Stack/Storage/User.hs b/src/Stack/Storage/User.hs
+index b5de0ca2a3..852127404e 100644
+--- a/src/Stack/Storage/User.hs
++++ b/src/Stack/Storage/User.hs
+@@ -52,7 +52,10 @@ import qualified RIO.FilePath as FP
+ import           Stack.Prelude
+ import           Stack.Storage.Util
+                    ( handleMigrationException, setUpdateDiff, updateCollection )
+-import           Stack.Types.Cache ( Action (..), PrecompiledCache (..) )
++import           Stack.Types.Cache
++                   ( Action (..), GhcSemaphoreProtocolVersion (..)
++                   , PrecompiledCache (..)
++                   )
+ import           Stack.Types.Compiler ( ActualCompiler, compilerVersionText )
+ import           Stack.Types.CompilerBuild ( CompilerBuild )
+ import           Stack.Types.CompilerPaths
+@@ -70,6 +73,7 @@ data StorageUserException
+   | GlobalPackageCacheFileMetadataMismatch
+   | GlobalDumpParseFailure
+   | CompilerCacheArchitectureInvalid Text
++  | GhcSemaphoreProtocolVersionUnknown
+   deriving Show
+ 
+ instance Exception StorageUserException where
+@@ -88,6 +92,9 @@ instance Exception StorageUserException where
+       , "Invalid arch: "
+       , show compilerCacheArch
+       ]
++  displayException GhcSemaphoreProtocolVersionUnknown =
++    "Error: [S-9841]\n"
++    ++ "GHC semaphore protocol version unknown, ignoring cache."
+ 
+ share [ mkPersist sqlSettings
+       , mkMigrate "migrateAll"
+@@ -141,6 +148,7 @@ CompilerCache
+   globalDb FilePath
+   globalDbCacheSize Int64
+   globalDbCacheModified Int64
++  semaphoreVersion GhcSemaphoreProtocolVersion Maybe
+   info ByteString
+ 
+   -- This is the ugliest part of this table, simply storing a Show/Read version of the
+@@ -366,6 +374,13 @@ loadCompilerPaths compiler build sandboxed = do
+         Nothing -> throwIO $
+           CompilerCacheArchitectureInvalid compilerCache.compilerCacheArch
+         Just arch -> pure arch
++    semaphoreVersion <- maybe
++          (throwIO GhcSemaphoreProtocolVersionUnknown)
++          ( \case
++              Unsupported -> pure Nothing
++              Supported spv -> pure $ Just spv
++          )
++          compilerCache.compilerCacheSemaphoreVersion
+     pure CompilerPaths
+       { compiler
+       , compilerVersion = compilerCache.compilerCacheActualVersion
+@@ -378,6 +393,7 @@ loadCompilerPaths compiler build sandboxed = do
+       , cabalVersion
+       , globalDB
+       , ghcInfo = compilerCache.compilerCacheInfo
++      , semaphoreVersion
+       , globalDump
+       }
+ 
+@@ -405,6 +421,8 @@ saveCompilerPaths cp = withUserStorage $ do
+     , compilerCacheGlobalDbCacheSize = sizeToInt64 $ fileSize globalDbStatus
+     , compilerCacheGlobalDbCacheModified =
+         timeToInt64 $ modificationTime globalDbStatus
++    , compilerCacheSemaphoreVersion = Just $
++        maybe Unsupported Supported cp.semaphoreVersion
+     , compilerCacheInfo = cp.ghcInfo
+     , compilerCacheGlobalDump = tshow cp.globalDump
+     , compilerCacheArch = T.pack $ Distribution.Text.display cp.arch
+diff --git a/src/Stack/Types/Cache.hs b/src/Stack/Types/Cache.hs
+index 79f957371c..21feef52a8 100644
+--- a/src/Stack/Types/Cache.hs
++++ b/src/Stack/Types/Cache.hs
+@@ -16,6 +16,7 @@ module Stack.Types.Cache
+   , PrecompiledCache (..)
+   , ConfigCacheType (..)
+   , Action (..)
++  , GhcSemaphoreProtocolVersion (..)
+   ) where
+ 
+ import           Data.Aeson
+@@ -30,6 +31,7 @@ import           Database.Persist.Sql
+ import           Stack.Prelude
+ import           Stack.Types.ConfigureOpts ( ConfigureOpts )
+ import           Stack.Types.GhcPkgId ( GhcPkgId )
++import           System.Semaphore ( SemaphoreProtocolVersion (..) )
+ 
+ -- | Type representing types of cache in the Stack project SQLite database.
+ data ConfigCacheType
+@@ -93,12 +95,38 @@ data Action
+ 
+ instance PersistField Action where
+   toPersistValue UpgradeCheck = PersistInt64 1
++
+   fromPersistValue (PersistInt64 1) = Right UpgradeCheck
+   fromPersistValue x = Left $ T.pack $ "Invalid Action: " ++ show x
+ 
+ instance PersistFieldSql Action where
+   sqlType _ = SqlInt64
+ 
++-- Type representing GHC-supported semaphore protocol versions.
++data GhcSemaphoreProtocolVersion
++  = Unsupported
++  | Supported SemaphoreProtocolVersion
++  deriving (Eq, Ord, Show)
++
++instance PersistField GhcSemaphoreProtocolVersion where
++  toPersistValue Unsupported =
++    -- We can use 0 as a sentinel because we are confident that valid protocol
++    -- versions will always be >= 1:
++    PersistInt64 0
++  toPersistValue (Supported spv) =
++    PersistInt64 $ fromIntegral $ getSemaphoreProtocolVersion spv
++
++  fromPersistValue v
++    | PersistInt64 x <- v
++    , x == 0 = Right Unsupported
++    | PersistInt64 x <- v
++    , x > 0 = Right $ Supported $ SemaphoreProtocolVersion $ fromIntegral x
++    | otherwise =
++        Left $ T.pack $ "Invalid GhcSemaphoreProtocolVersion: " <> show v
++
++instance PersistFieldSql GhcSemaphoreProtocolVersion where
++  sqlType _ = SqlInt64
++
+ -- | Type synonym representing caches of files and information about them
+ -- sufficient to identify if they have changed subsequently.
+ type FileCache = Map FilePath FileCacheInfo
+diff --git a/src/Stack/Types/CompilerPaths.hs b/src/Stack/Types/CompilerPaths.hs
+index b9a2b331e3..8c9a2c65cd 100644
+--- a/src/Stack/Types/CompilerPaths.hs
++++ b/src/Stack/Types/CompilerPaths.hs
+@@ -24,6 +24,7 @@ import           Stack.Types.Compiler
+                    ( ActualCompiler, WhichCompiler, whichCompiler )
+ import           Stack.Types.CompilerBuild ( CompilerBuild )
+ import           Stack.Types.DumpPackage ( DumpPackage )
++import           System.Semaphore ( SemaphoreProtocolVersion )
+ 
+ -- | Paths on the filesystem for the compiler we're using
+ data CompilerPaths = CompilerPaths
+@@ -50,6 +51,8 @@ data CompilerPaths = CompilerPaths
+     -- ^ Global package database
+   , ghcInfo :: !ByteString
+     -- ^ Output of @ghc --info@
++  , semaphoreVersion :: !(Maybe SemaphoreProtocolVersion)
++    -- ^ The semaphore protocol version supported by the compiler or 'Nothing'.
+   , globalDump :: !(Map PackageName DumpPackage)
+   }
+   deriving Show
