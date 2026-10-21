@@ -14,16 +14,20 @@ let
     types
     ;
 
-  cfg = config.programs.dsearch;
+  cfg = config.programs.dux-search;
 in
 {
-  options.programs.dsearch = {
-    enable = mkEnableOption "dsearch, a fast filesystem search service with fuzzy matching";
+  imports = [
+    (lib.mkRenamedOptionModule [ "programs" "dsearch" ] [ "programs" "dux-search" ])
+  ];
 
-    package = mkPackageOption pkgs "dsearch" { };
+  options.programs.dux-search = {
+    enable = mkEnableOption "Dux Search, a fast filesystem search service with fuzzy matching";
+
+    package = mkPackageOption pkgs "dux-search" { };
 
     systemd = {
-      enable = mkEnableOption "systemd user service for dsearch" // {
+      enable = mkEnableOption "systemd user service for Dux Search" // {
         default = true;
       };
 
@@ -31,9 +35,9 @@ in
         type = types.str;
         default = "default.target";
         description = ''
-          The systemd target that will automatically start the dsearch service.
+          The systemd target that will automatically start the Dux Search service.
 
-          By default, dsearch starts with the user session (`default.target`).
+          By default, Dux Search starts with the user session (`default.target`).
           You can change this to `graphical-session.target` if you only want
           it to run in graphical sessions.
         '';
@@ -49,5 +53,5 @@ in
     systemd.user.services.dsearch.wantedBy = mkIf cfg.systemd.enable [ cfg.systemd.target ];
   };
 
-  meta.teams = [ lib.teams.danklinux ];
+  meta.teams = [ lib.teams.duxlabs ];
 }

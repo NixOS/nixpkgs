@@ -700,6 +700,7 @@ mapAliases {
   cyber = throw "cyber has been removed, as it does not build with supported Zig versions"; # Added 2025-08-09
   daed = throw "daed has been removed, as it has been unmaintained and archived upstream"; # Added 2026-09-24
   dale = throw "dale has been removed, as it does not build with supported LLVM versions"; # Added 2025-08-10
+  dankcalendar = warnAlias "'dankcalendar' has been renamed to 'dux-calendar'" dux-calendar; # Added 2026-10-20
   daq = throw "'daq' has been removed as it is unmaintained and broken. Snort2 has also been removed, which depended on this"; # Added 2025-05-21
   darkly-qt5 = throw "'darkly-qt' has been removed due to outdated KF5 dependencies"; # Added 2026-05-01
   daytona-bin = throw "'daytona-bin' has been removed, as it was unmaintained in nixpkgs"; # Added 2025-07-21
@@ -723,6 +724,7 @@ mapAliases {
   devdocs-desktop = throw "'devdocs-desktop' has been removed as it is unmaintained upstream and vendors insecure dependencies"; # Added 2025-06-11
   devmem2 = throw "'devmem2' has been removed due to being broken and lack of maintenance. Consider using the devmem command from 'busybox' or 'toybox'."; # Added 2026-07-24
   dfilemanager = throw "'dfilemanager' has been dropped as it was unmaintained"; # Added 2025-06-03
+  dgop = warnAlias "'dgop' has been renamed to 'dux-gop'" dux-gop; # Added 2026-10-20
   diopser = throw "'diopser' has been removed because upstream archived the project in May 2022. Use 'nih-plug' instead."; # Added 2026-09-02
   discord-screenaudio = throw "discord-screenaudio has been removed because it was archived upstream. Use vesktop instead."; # added 2025-11-29
   disk-inventory-x = throw "disk-inventory-x has been removed as it only supported x86_64-darwin"; # Added 2026-07-12
@@ -733,6 +735,8 @@ mapAliases {
   dleyna-core = throw "'dleyna-core' has been renamed to/replaced by 'dleyna'"; # Converted to throw 2025-10-27
   dleyna-renderer = throw "'dleyna-renderer' has been renamed to/replaced by 'dleyna'"; # Converted to throw 2025-10-27
   dleyna-server = throw "'dleyna-server' has been renamed to/replaced by 'dleyna'"; # Converted to throw 2025-10-27
+  dms-greeter = warnAlias "'dms-greeter' has been renamed to 'dux-greeter'" dux-greeter; # Added 2026-10-20
+  dms-shell = warnAlias "'dms-shell' has been renamed to 'dux-shell'" dux-shell; # Added 2026-10-20
   dnscrypt-proxy2 = throw "'dnscrypt-proxy2' has been renamed to/replaced by 'dnscrypt-proxy'"; # Converted to throw 2025-10-27
   dnslink-std-go = throw "'dnslink-std-go' has been removed as it is broken, unmaintained, and upstream archived the project in July 2026"; # Added 2026-09-18
   dnsmon-go = throw "'dnsmon-go' has been removed because upstream archived the project in August 2025."; # Added 2026-09-02
@@ -758,6 +762,7 @@ mapAliases {
   dragmap = throw "'dragmap' doesn't build with latest glibc anymore and upstream repo is archived"; # Added 2026-09-03
   drone-runner-exec = throw "'drone-runner-exec' has been removed as it was deprecated and archived upstream."; # Added 2026-07-20
   dsd = throw "dsd has been removed, as it was broken and lack of upstream maintenance"; # Added 2025-08-25
+  dsearch = warnAlias "'dsearch' has been renamed to 'dux-search'" dux-search; # Added 2026-10-20
   dtv-scan-tables_linuxtv = throw "'dtv-scan-tables_linuxtv' has been renamed to/replaced by 'dtv-scan-tables'"; # Converted to throw 2025-10-27
   dtv-scan-tables_tvheadend = throw "'dtv-scan-tables_tvheadend' has been renamed to/replaced by 'dtv-scan-tables'"; # Converted to throw 2025-10-27
   du-dust = throw "'du-dust' has been renamed to/replaced by 'dust'"; # Converted to throw 2025-10-27
