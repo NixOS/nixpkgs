@@ -128,12 +128,15 @@ beamPackages.rebar3Relx {
     '';
 
   postFixup = ''
-    mv $out/bin/fluxer_gateway $out/bin/fluxer_gateway-unwrapped
-    makeWrapper \
-      $out/bin/fluxer_gateway-unwrapped \
-      $out/bin/fluxer_gateway \
+    wrapProgram $out/bin/fluxer_gateway \
       --set-default FLUXER_ERLANG_NODE_NAME fluxer-gateway@127.0.0.1 \
       --run 'export RELX_OUT_FILE_PATH="''${RELX_OUT_FILE_PATH:-$(mktemp -d)}"' \
+      --prefix PATH : "${
+        lib.mkBinPath [
+          coreutils
+          gawk
+        ]
+      }"
 
     install --mode=0755 scripts/docker_entrypoint.sh $out/bin/fluxer_gateway-entrypoint
     substituteInPlace $out/bin/fluxer_gateway-entrypoint \
