@@ -10,7 +10,7 @@ oldVersion="$(nix-instantiate --eval -E "with import $nixpkgs {}; $attr.version 
 latestVersion="$(curl -sS https://download.virtualbox.org/virtualbox/LATEST.TXT)"
 
 function fileShaSum() {
-  echo "$1" | grep -w "$2" | cut -f1 -d' '
+  nix-hash --type sha256 --to-sri $(echo "$1" | grep -w "$2" | cut -f1 -d' ')
 }
 function oldHash() {
   nix-instantiate --eval --strict -A "$1.drvAttrs.outputHash" | tr -d '"'
@@ -36,16 +36,16 @@ if [ ! "$oldVersion" = "$latestVersion" ]; then
 
   sed -e "s/virtualboxVersion = \".*\";/virtualboxVersion = \"$latestVersion\";/g" \
       -e "s/virtualboxSubVersion = \".*\";/virtualboxSubVersion = \"\";/g" \
-      -e "s/virtualboxSha256 = \".*\";/virtualboxSha256 = \"$virtualBoxShaSum\";/g" \
+      -e "s|virtualboxSha256 = \".*\";|virtualboxSha256 = \"$virtualBoxShaSum\";|g" \
       -i "$virtualboxNixFile"
   sed -e 's|value = "'$extpackOldShaSum'"|value = "'$extpackShaSum'"|' \
       -e "s/version = \".*\";/version = \"$latestVersion\";/g" \
       -i $extpackNixFile
-  sed -e "s/sha256 = \".*\";/sha256 = \"$guestAdditionsIsoShaSum\";/g" \
+  sed -e "s|hash = \".*\";|hash = \"$guestAdditionsIsoShaSum\";|g" \
       -i "$guestAdditionsIsoNixFile"
   sed -e "s/virtualboxVersion = \".*\";/virtualboxVersion = \"$latestVersion\";/g" \
       -e "s/virtualboxSubVersion = \".*\";/virtualboxSubVersion = \"\";/g" \
-      -e "s/virtualboxSha256 = \".*\";/virtualboxSha256 = \"$virtualBoxShaSum\";/g" \
+      -e "s|virtualboxSha256 = \".*\";|virtualboxSha256 = \"$virtualBoxShaSum\";|g" \
       -i "$virtualboxGuestAdditionsNixFile"
 
   git add "$virtualboxNixFile" "$extpackNixFile" "$guestAdditionsIsoNixFile" "$virtualboxGuestAdditionsNixFile"
