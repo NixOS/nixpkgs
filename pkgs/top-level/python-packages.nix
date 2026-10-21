@@ -2499,6 +2499,8 @@ self: super: with self; {
 
   bitvector-for-humans = callPackage ../development/python-modules/bitvector-for-humans { };
 
+  bitvis-protobuf = callPackage ../development/python-modules/bitvis-protobuf { };
+
   bizkaibus = callPackage ../development/python-modules/bizkaibus { };
 
   bk7231tools = callPackage ../development/python-modules/bk7231tools { };
