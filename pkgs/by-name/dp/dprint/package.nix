@@ -4,6 +4,7 @@
   fetchFromGitHub,
   rustPlatform,
   buildPackages,
+  makeBinaryWrapper,
   installShellFiles,
   pkg-config,
   zstd,
@@ -30,6 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-Dha+M4WbGPx3WXSD9LLIjgL6HAxRFklafSgb9m7Fbow=";
 
   nativeBuildInputs = [
+    makeBinaryWrapper
     installShellFiles
     pkg-config
   ];
@@ -71,8 +73,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
         else
           lib.getExe buildPackages.dprint;
     in
+    # dprint only supports a runtime switch (DPRINT_TLS_CA_STORE) to prefer system certs.
+    # Avoid the upstream default `mozilla,system` to reduce risks like https://github.com/NixOS/nixpkgs/issues/576485
     ''
       rm "$out/bin/test-process-plugin"
+      wrapProgram "$out/bin/dprint" \
+        --set-default DPRINT_TLS_CA_STORE system
       export DPRINT_CACHE_DIR="$(mktemp -d)"
       installShellCompletion --cmd dprint \
         --bash <(${dprint} completions bash) \
