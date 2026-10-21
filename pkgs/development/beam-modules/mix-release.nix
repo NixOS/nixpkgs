@@ -17,6 +17,7 @@
   gnugrep,
   gawk,
   mixBuildDirHook,
+  cacert,
 }@inputs:
 
 {
@@ -165,6 +166,10 @@ stdenv.mkDerivation (
         # writable, thus a copy to the $TEMPDIR is inevitable here.
         export MIX_DEPS_PATH="$TEMPDIR/deps"
         cp --no-preserve=mode -R "${mixFodDeps}" "$MIX_DEPS_PATH"
+
+        if [ -f "$MIX_DEPS_PATH/castore/priv/cacerts.pem" ]; then
+          cp "${cacert}/etc/ssl/certs/ca-bundle.crt" "$MIX_DEPS_PATH/castore/priv/cacerts.pem"
+        fi
       ''}
     ''
     + (attrs.postUnpack or "");
