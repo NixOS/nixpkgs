@@ -5,24 +5,33 @@
   buildGo127Module,
   makeWrapper,
   nix-update-script,
-  v2ray-rules-dat,
+  xray-rules-dat,
   assets ? [
-    v2ray-rules-dat
+    xray-rules-dat
   ],
 }:
 
 buildGo127Module (finalAttrs: {
   pname = "xray";
-  version = "26.9.9";
+  version = "26.10.31";
 
   src = fetchFromGitHub {
     owner = "XTLS";
     repo = "Xray-core";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-GqPEAgWM9Wx19uxMj0LGeOyHreLbU0IMSmalwLe/SIc=";
+    hash = "sha256-wTKW8XUP/HXWI7e4jbBw3aGSPpPX7KjkxFwLMb9vxSA=";
   };
 
-  vendorHash = "sha256-6Qa05hFdvfLlH8WQd426IU7MScmeevIgrgP5037pNek=";
+  vendorHash = "sha256-+beH/Cfu3YLo6CmP/vFo0ULQ89NzZ8MFPfTYs+V/Sow=";
+
+  patches = [
+    ./use-system-certs.patch
+  ];
+
+  postPatch = ''
+    sed -i '/golang\.org\/x\/crypto\/x509roots\/fallback/d' go.mod
+    sed -i '/golang\.org\/x\/crypto\/x509roots\/fallback/d' go.sum
+  '';
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -41,14 +50,14 @@ buildGo127Module (finalAttrs: {
   '';
 
   assetsDrv = symlinkJoin {
-    name = "v2ray-assets";
+    name = "xray-assets";
     paths = assets;
   };
 
   postFixup = ''
     wrapProgram $out/bin/xray \
-      --set-default V2RAY_LOCATION_ASSET $assetsDrv/share/v2ray \
-      --set-default XRAY_LOCATION_ASSET $assetsDrv/share/v2ray
+      --set-default V2RAY_LOCATION_ASSET $assetsDrv/share/xray \
+      --set-default XRAY_LOCATION_ASSET $assetsDrv/share/xray
   '';
 
   passthru = {
