@@ -1,26 +1,26 @@
 {
   lib,
   stdenvNoCC,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   installShellFiles,
   nix-update-script,
 }:
-buildGoModule (finalAttrs: {
-  pname = "dms-greeter";
-  version = "1.6.2";
+buildGo127Module (finalAttrs: {
+  pname = "dux-greeter";
+  version = "2.0.0";
 
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "AvengeMedia";
-    repo = "dank-greeter";
+    owner = "duxlabs-dev";
+    repo = "dux-greeter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kON8+yjGeCwjvULWNoaHlPmC5OglqL+IejtVlzsvqv4=";
+    hash = "sha256-iUEGxdMLPMrS9sHP0LEWRc5DzyUGZquP+Ds0Eyc1Ibc=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-Ort6y6BTKfuMRjDpTjY5tnCE5VAS4CItwo1U5dAvHpw=";
+  vendorHash = "sha256-gtzhwzCoIwIeRFO4k6EKSThkLrzG0LECkQVuMVQNn88=";
 
   modRoot = "core";
   subPackages = [ "cmd/dms-greeter" ];
@@ -52,8 +52,9 @@ buildGoModule (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Greetd-based greeter for the Dank Material Linux suite";
-    homepage = "https://github.com/AvengeMedia/dank-greeter";
+    description = "Greetd-based greeter from Dux Labs";
+    homepage = "https://github.com/duxlabs-dev/dux-greeter";
+    changelog = "https://github.com/duxlabs-dev/dux-greeter/releases/tag/v${finalAttrs.version}";
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ johnrtitor ];
