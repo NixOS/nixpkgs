@@ -5,20 +5,21 @@
   pkg-config,
   rustPlatform,
   versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "versatiles";
-  version = "5.1.0";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "versatiles-org";
     repo = "versatiles-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-M7HGsrmE6sg4wTjl97+7lRE8/jf45svfvdSc1WMC1yI=";
+    hash = "sha256-4PgwyLIQteBgt2PAG1Aav5CZxtTHc2Y/qM95cWd9YvA=";
   };
 
-  cargoHash = "sha256-gwY8cgc+conuYElgSlGj7Rcdi8MBWcVPuzlSOPT5ByI=";
+  cargoHash = "sha256-VsinNDQguSnJVO7NkaKQiXFhSVX4qenuP8gv5rlQ4GY=";
 
   nativeBuildInputs = [
     pkg-config
@@ -57,6 +58,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Toolbox for converting, checking and serving map tiles in various formats";
