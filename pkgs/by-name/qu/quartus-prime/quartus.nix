@@ -3,6 +3,7 @@
   lib,
   unstick,
   unzip,
+  pkgsCross,
   fetchurl,
   variant ? "lite",
   withQuesta ? true,
@@ -86,18 +87,28 @@ stdenv.mkDerivation (finalAttrs: {
   )
   + ''
     echo "executing installer..."
-    # "Could not load seccomp program: Invalid argument" might occur if unstick
-    # itself is compiled for x86_64 instead of the non-x86 host. In that case,
-    # override the input.
-    unstick $TEMP/${finalAttrs.finalPackage.passthru.mainInstaller} \
-      --disable-components ${
-        lib.concatStringsSep "," (
-          disabledComponents
-          ++ lib.optional (!withQuesta) "questa_fse"
-          ++ lib.attrValues (lib.removeAttrs finalAttrs.finalPackage.passthru.deviceIds supportedDevices)
-        )
-      } \
-      --mode unattended --installdir $out --accept_eula 1
+    # seccomp bpf syscall is unsupported by qemu-user/rosetta-linux,
+    # so try an aarch64 native version if the x86_64 version fails;
+    # this is impure but morally okay because the output is
+    # identical. aarch64 unstick is included even on regular x86_64
+    # to ensure the output hash of quartus is consistent
+    set +e
+    for unstick in unstick ${pkgsCross.aarch64-multiplatform.pkgsStatic.unstick}/bin/unstick; do
+      $unstick $TEMP/${finalAttrs.finalPackage.passthru.mainInstaller} \
+        --disable-components ${
+          lib.concatStringsSep "," (
+            disabledComponents
+            ++ lib.optional (!withQuesta) "questa_fse"
+            ++ lib.attrValues (lib.removeAttrs finalAttrs.finalPackage.passthru.deviceIds supportedDevices)
+          )
+        } \
+        --mode unattended --installdir $out --accept_eula 1 && break
+    done
+    if [ $? -ne 0 ]; then
+      echo "could not execute unstick; supported native host systems are x86_64 and aarch64"
+      exit 1
+    fi
+    set -e
 
     echo "installer log:"
     cat "$out/logs/quartus-${finalAttrs.version}-linux-install.log"
