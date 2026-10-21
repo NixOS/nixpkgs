@@ -1,8 +1,9 @@
 import argparse
 import logging
 import sys
+from collections.abc import Sequence
 from subprocess import CalledProcessError, run
-from typing import Final, assert_never
+from typing import Any, Final, NoReturn, assert_never, override
 
 from . import nix, services
 from .constants import EXECUTABLE, WITH_SHELL_FILES
@@ -13,6 +14,23 @@ from .utils import LogFormatter
 
 logger: Final = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
+
+
+class ShowHelp(argparse.Action):
+    @override
+    def __call__(
+        self,
+        parser: argparse.ArgumentParser,
+        namespace: argparse.Namespace,
+        values: str | Sequence[Any] | None,
+        option_string: str | None = None,
+    ) -> NoReturn:
+        if WITH_SHELL_FILES:
+            result = run(["man", "8", EXECUTABLE], check=False)
+            parser.exit(result.returncode)
+
+        parser.print_help()
+        parser.exit()
 
 
 def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentParser]]:
@@ -91,7 +109,13 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
         add_help=False,
         allow_abbrev=False,
     )
-    main_parser.add_argument("--help", "-h", action="store_true", help="Show manpage")
+    main_parser.add_argument(
+        "--help",
+        "-h",
+        action=ShowHelp,
+        nargs=0,
+        help="Show manpage",
+    )
     main_parser.add_argument(
         "--debug", action="store_true", help="Enable debug logging"
     )
@@ -136,16 +160,6 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
     )
     main_parser.add_argument(
         "--specialisation", "-c", help="Activates given specialisation"
-    )
-    main_parser.add_argument(
-        "--rollback",
-        action="store_true",
-        help="Roll back to the previous configuration",
-    )
-    main_parser.add_argument(
-        "--store-path",
-        metavar="PATH",
-        help="Use a pre-built NixOS system store path instead of building",
     )
     main_parser.add_argument(
         "--upgrade",
@@ -218,7 +232,19 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
         help="prints out the diff between the current system "
         "and the newly built one using nix store diff-closures",
     )
-    main_parser.add_argument("action", choices=Action.values(), nargs="?")
+    main_parser.add_argument("action", choices=Action.values())
+
+    source_flags = main_parser.add_mutually_exclusive_group()
+    source_flags.add_argument(
+        "--rollback",
+        action="store_true",
+        help="Roll back to the previous configuration",
+    )
+    source_flags.add_argument(
+        "--store-path",
+        metavar="PATH",
+        help="Use a pre-built NixOS system store path instead of building",
+    )
 
     return main_parser, sub_parsers
 
@@ -239,19 +265,6 @@ def parse_args(
             for group, parser in sub_parsers.items()
         }
     )
-
-    if args.help:
-        if WITH_SHELL_FILES:
-            r = run(["man", "8", EXECUTABLE], check=False)
-            parser.exit(r.returncode)
-        else:
-            parser.print_help()
-            parser.exit()
-
-    if args.action is None:
-        parser.error(
-            f"No valid subcommands. Type {parser.prog} --help for more information"
-        )
 
     def parser_warn(msg: str) -> None:
         print(f"{parser.prog}: warning: {msg}", file=sys.stderr)
@@ -333,13 +346,11 @@ def parse_args(
     if args.flake and (args.file or args.attr):
         parser.error("--flake cannot be used with --file or --attr")
 
-    if (args.file or args.attr) and args.flake is None:
-        # Disable flake auto-detection when --file or --attr is used
+    if (args.file or args.attr or args.store_path) and args.flake is None:
+        # Disable flake auto-detection when --file, --attr or --store-path is used
         args.flake = False
 
     if args.store_path:
-        if args.rollback:
-            parser.error("--store-path and --rollback are mutually exclusive")
         if args.flake or args.file or args.attr:
             parser.error("--store-path cannot be used with --flake, --file, or --attr")
         if args.action not in (
@@ -349,9 +360,6 @@ def parse_args(
             Action.DRY_ACTIVATE.value,
         ):
             parser.error(f"--store-path cannot be used with '{args.action}'")
-        if args.flake is None:
-            # Disable flake auto-detection since we're using a pre-built store path
-            args.flake = False
 
     return args, grouped_nix_args
 
