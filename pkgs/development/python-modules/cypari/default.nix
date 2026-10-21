@@ -31,7 +31,7 @@
   ),
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cypari";
   version = "2.5.6";
   pyproject = true;
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "3-manifolds";
     repo = "CyPari";
-    tag = "${version}_as_released";
+    tag = "${finalAttrs.version}_as_released";
     hash = "sha256-pzxnrWkoPW7fpxLbUQ+drIrdrjqaAiNnDfe9ky2IxaA=";
   };
 
@@ -84,11 +84,11 @@ buildPythonPackage rec {
   meta = {
     description = "Sage's PARI extension, modified to stand alone";
     homepage = "https://github.com/3-manifolds/CyPari";
-    changelog = "https://github.com/3-manifolds/CyPari/releases/tag/${src.tag}";
+    changelog = "https://github.com/3-manifolds/CyPari/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       noiioiu
       alejo7797
     ];
   };
-}
+})
