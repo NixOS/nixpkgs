@@ -8,6 +8,10 @@ mixFodDepsPostUnpack() {
     # writable, thus a copy to the $TEMPDIR is inevitable here.
     export MIX_DEPS_PATH="$TEMPDIR/deps"
     cp --no-preserve=mode -R "${mixFodDeps}" "$MIX_DEPS_PATH"
+
+    if [ -f "$MIX_DEPS_PATH/castore/priv/cacerts.pem" ]; then
+      cp @caBundle@ "$MIX_DEPS_PATH/castore/priv/cacerts.pem"
+    fi
   fi
 
   echo "Finished mixFodDepsPostUnpack"
