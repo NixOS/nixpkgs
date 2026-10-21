@@ -52,6 +52,9 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace $f --replace "${buildPackages.perl}" "${perlPackages.perl}"
     done
   '';
+
+  __structuredAttrs = true;
+
   meta = {
     description = "Translation helper tool";
     homepage = "https://launchpad.net/intltool/";
