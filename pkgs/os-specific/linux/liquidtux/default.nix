@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   kernel,
+  kernelModuleInstallHook,
   kernelModuleMakeFlags,
   python3,
 }:
@@ -22,6 +23,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies ++ [
+    kernelModuleInstallHook
     python3
   ];
 
@@ -29,12 +31,8 @@ stdenv.mkDerivation rec {
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
-  installPhase = ''
-    runHook preInstall
-    cd drivers/hwmon
-    install nzxt-grid3.ko nzxt-kraken2.ko nzxt-kraken3.ko nzxt-smart2.ko -Dm444 -t ${placeholder "out"}/lib/modules/${kernel.modDirVersion}/kernel/drivers/hwmon
-    runHook postInstall
-  '';
+  kernelModuleDirs = [ "drivers/hwmon" ];
+  kernelModuleInstallDir = "kernel/drivers/hwmon";
 
   meta = {
     description = "Linux kernel hwmon drivers for AIO liquid coolers and other devices";
