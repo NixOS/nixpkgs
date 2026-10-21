@@ -2,18 +2,26 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gtk3,
-  rgbds,
   SDL2,
-  wrapGAppsHook3,
-  glib,
   gdk-pixbuf,
+  glib,
+  gtk3,
+  libGL,
+  libpng,
+  nix-update-script,
+  perl,
   pkg-config,
+  rgbds,
+  versionCheckHook,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sameboy";
   version = "1.0.5";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "LIJI32";
@@ -22,31 +30,36 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Yz/rNoviuM8uFI53TABf+RqGk0M47GMN9MkhIpwajE8=";
   };
 
-  enableParallelBuilding = true;
-  # glib and wrapGAppsHook3 are needed to make the Open ROM menu work.
+  postPatch = ''
+    substituteInPlace SDL/open_dialog/gtk.c \
+      --replace-fail '"libgtk-3.so"' '"${lib.getLib gtk3}/lib/libgtk-3.so"'
+  '';
+
   nativeBuildInputs = [
-    pkg-config
-    gdk-pixbuf
-    rgbds
     glib
+    pkg-config
+    rgbds
     wrapGAppsHook3
   ];
-  buildInputs = [ SDL2 ];
+
+  buildInputs = [
+    SDL2
+    libGL
+    libpng
+    gdk-pixbuf
+    glib
+  ];
 
   makeFlags = [
     "CONF=release"
     "FREEDESKTOP=true"
-    "PREFIX=$(out)"
+    "PREFIX=${placeholder "out"}"
+    "DESTDIR=/"
   ];
 
-  patches = [
-    ./xdg-install-patch.diff
-  ];
-
-  postPatch = ''
-    substituteInPlace SDL/open_dialog/gtk.c \
-      --replace-fail '"libgtk-3.so"' '"${gtk3}/lib/libgtk-3.so"'
-  '';
+  doCheck = true;
+  nativeCheckInputs = [ perl ];
+  postCheck = "sh .github/actions/sanity_tests.sh";
 
   postInstall = ''
     substituteInPlace $out/share/thumbnailers/sameboy.thumbnailer \
@@ -54,10 +67,22 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "Exec=sameboy-thumbnailer" "Exec=$out/bin/sameboy-thumbnailer"
   '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  checkTarget = "tester";
+  enableParallelBuilding = true;
+
+  passthru.updateScript = nix-update-script {
+    # Skip the -libretro and -appstore tags
+    extraArgs = [
+      "--version-regex"
+      "^v([0-9.]+)$"
+    ];
+  };
+
   meta = {
-    homepage = "https://sameboy.github.io";
     description = "Game Boy, Game Boy Color, and Super Game Boy emulator";
-    mainProgram = "sameboy";
     longDescription = ''
       SameBoy is a user friendly Game Boy, Game Boy Color and Super
       Game Boy emulator for macOS, Windows and Unix-like platforms.
@@ -67,8 +92,11 @@ stdenv.mkDerivation (finalAttrs: {
       capabilities, SameBoy has all the features one would expect from
       an emulator – from save states to scaling filters.
     '';
+    homepage = "https://sameboy.github.io";
+    changelog = "https://github.com/LIJI32/SameBoy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ NieDzejkob ];
     platforms = lib.platforms.linux;
+    mainProgram = "sameboy";
   };
 })
