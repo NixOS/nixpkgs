@@ -8,16 +8,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "n8n-nodes-carbonejs";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "jreyesr";
     repo = "n8n-nodes-carbonejs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QWErVquOEYCkoHIF6XSaDGzDbbkaNNoE70H/UvdZh6E=";
+    hash = lib.fakeHash;
   };
 
-  npmDepsHash = "sha256-h780VxvDMUC5tv3JhDxYOZGJ+j40BAhmo4pRczlByKs=";
+  npmDepsHash = lib.fakeHash;
 
   passthru.updateScript = nix-update-script { };
 
