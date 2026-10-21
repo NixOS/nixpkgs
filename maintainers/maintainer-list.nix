@@ -15041,6 +15041,12 @@
     github = "katrinafyi";
     githubId = 39479354;
   };
+  kawayww = {
+    email = "kawayww@gmail.com";
+    github = "kawayww";
+    githubId = 213631983;
+    name = "kawayww";
+  };
   kaweees = {
     github = "kaweees";
     githubId = 49963287;

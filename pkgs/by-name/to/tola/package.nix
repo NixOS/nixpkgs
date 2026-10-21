@@ -38,6 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/tola-rs/tola-ssg";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      kawayww
       matthiasbeyer
     ];
   };
