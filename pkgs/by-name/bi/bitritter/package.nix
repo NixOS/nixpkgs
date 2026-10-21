@@ -16,7 +16,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "bitritter";
-  version = "2026-10";
+  version = "2026-10-pre";
 
   __structuredAttrs = true;
 
@@ -24,12 +24,12 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Chfkch";
     repo = "bitritter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-V3ZpYEAlj+fWbRenNZPyUeLsRCJ0kGp5c05RPmzgz0g=";
+    hash = "sha256-oGckLZxCtUWW+o6QKoQUrzb1C0LJny91M0vlz6PaajY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-HhvErKWQUQD7Y5skokTBsZVoXqRuoOCiDfJ5SY+trTE=";
+    hash = "sha256-tzR9auHlW42a7L8fd7tbx2wiulRu9qN8sgUwuYBhXuk=";
   };
 
   strictDeps = true;
