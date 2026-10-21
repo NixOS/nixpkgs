@@ -5,6 +5,7 @@
   fetchpatch,
   gettext,
   perlPackages,
+  bashNonInteractive,
   buildPackages,
 }:
 
@@ -33,6 +34,9 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     XMLParser
   ];
+
+  buildInputs = lib.optional (lib.meta.availableOn stdenv.hostPlatform bashNonInteractive) bashNonInteractive;
+
   propagatedBuildInputs = [
     gettext
   ]
@@ -40,6 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     XMLParser
   ]);
+
+  strictDeps = true;
 
   postInstall = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     for f in $out/bin/*; do
