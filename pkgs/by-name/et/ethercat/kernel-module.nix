@@ -3,6 +3,7 @@ ethercat:
   lib,
   stdenv,
   kernelModuleMakeFlags,
+  kernelModuleInstallHook,
   kernel,
 }:
 let
@@ -28,7 +29,8 @@ stdenv.mkDerivation {
 
   inherit (ethercat) src;
 
-  nativeBuildInputs = kernel.moduleBuildDependencies ++ ethercat.nativeBuildInputs;
+  nativeBuildInputs =
+    kernel.moduleBuildDependencies ++ ethercat.nativeBuildInputs ++ [ kernelModuleInstallHook ];
 
   configureFlags = [
     "--with-linux-dir=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
@@ -48,13 +50,9 @@ stdenv.mkDerivation {
     "--enable-igc=yes"
   ];
 
-  makeFlags = kernelModuleMakeFlags ++ [
-    "INSTALL_MOD_PATH=${placeholder "out"}"
-  ];
+  makeFlags = kernelModuleMakeFlags;
 
   buildFlags = [ "modules" ];
-
-  installTargets = [ "modules_install" ];
 
   meta = {
     description = ethercat.meta.description + " - kernel modules";
