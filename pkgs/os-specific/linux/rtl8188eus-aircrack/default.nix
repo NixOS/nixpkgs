@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   kernel,
+  kernelModuleInstallHook,
   bc,
 }:
 
@@ -28,11 +29,12 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ bc ] ++ kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [
+    bc
+    kernelModuleInstallHook
+  ];
 
-  preInstall = ''
-    mkdir -p "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
-  '';
+  kernelModuleInstallDir = "kernel/net/wireless";
 
   meta = {
     description = "RealTek RTL8188eus WiFi driver with monitor mode & frame injection support";
