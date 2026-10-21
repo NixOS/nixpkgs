@@ -3,6 +3,7 @@
   stdenv,
   python3Packages,
   fetchFromGitHub,
+  installShellFiles,
   versionCheckHook,
   nix-update-script,
 }:
@@ -28,21 +29,21 @@ python3Packages.buildPythonApplication (finalAttrs: {
   dependencies =
     with python3Packages;
     [
-    aiosql
-    aiosqlite
-    ollama
-    packaging
-    pillow
+      aiosql
+      aiosqlite
+      ollama
+      packaging
+      pillow
       pydantic
       pydantic-ai-harness
       pydantic-ai-slim
-    python-dotenv
+      python-dotenv
       python-multipart
-    textual
-    textual-image
+      textual
+      textual-image
       textual-speedups
-    textualeffects
-    typer
+      textualeffects
+      typer
     ]
     ++ pydantic-ai-slim.optional-dependencies.anthropic
     ++ pydantic-ai-slim.optional-dependencies.bedrock
@@ -65,6 +66,21 @@ python3Packages.buildPythonApplication (finalAttrs: {
   nativeCheckInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     versionCheckHook
   ];
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  preBuild = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd oterm \
+      --bash <(_OTERM_COMPLETE=source_bash $out/bin/oterm) \
+      --fish <(_OTERM_COMPLETE=source_fish $out/bin/oterm) \
+      --zsh  <(_OTERM_COMPLETE=source_zsh  $out/bin/oterm)
+  '';
 
   passthru.updateScript = nix-update-script { };
 
