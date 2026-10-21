@@ -11,13 +11,13 @@
 
 buildGoModule rec {
   pname = "docker-credential-helpers";
-  version = "0.9.9";
+  version = "0.9.12";
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = "docker-credential-helpers";
     tag = "v${version}";
-    hash = "sha256-qrcAMuQxAZE+F5xyTbaUFo4qVDqV/WMS9cO+Vsn7zU8=";
+    hash = "sha256-s0tsJz0hTO+uqNEVp4Itr7THWrBK/6swn1I5GQskp+Q=";
   };
 
   vendorHash = null;
