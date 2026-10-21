@@ -19,7 +19,7 @@
   setuptools,
   sphinxcontrib-apidoc,
   sphinxHook,
-  stestr,
+  stestrCheckHook,
   stevedore,
 }:
 
@@ -60,18 +60,12 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    stestr
+    stestrCheckHook
     requests-mock
     oslotest
   ];
 
   env.PBR_VERSION = version;
-
-  checkPhase = ''
-    runHook preCheck
-    stestr run
-    runHook postCheck
-  '';
 
   pythonImportsCheck = [ "ironicclient" ];
 

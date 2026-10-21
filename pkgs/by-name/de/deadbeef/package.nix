@@ -162,6 +162,7 @@ clangStdenv.mkDerivation (finalAttrs: {
       "x86_64-linux"
       "i686-linux"
       "riscv64-linux"
+      "aarch64-linux"
     ];
     maintainers = [ ];
   };

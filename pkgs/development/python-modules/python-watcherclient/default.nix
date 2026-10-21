@@ -13,7 +13,7 @@
   setuptools,
   sphinxcontrib-apidoc,
   sphinxHook,
-  stestr,
+  stestrCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -52,13 +52,7 @@ buildPythonPackage rec {
     oslo-utils
   ];
 
-  nativeCheckInputs = [ stestr ];
-
-  checkPhase = ''
-    runHook preCheck
-    stestr run
-    runHook postCheck
-  '';
+  nativeCheckInputs = [ stestrCheckHook ];
 
   pythonImportsCheck = [ "watcherclient" ];
 

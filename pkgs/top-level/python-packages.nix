@@ -394,6 +394,8 @@ self: super: with self; {
 
   aiointercept = callPackage ../development/python-modules/aiointercept { };
 
+  aioipp = callPackage ../development/python-modules/aioipp { };
+
   aioitertools = callPackage ../development/python-modules/aioitertools { };
 
   aiojellyfin = callPackage ../development/python-modules/aiojellyfin { };
@@ -22819,6 +22821,8 @@ self: super: with self; {
   wxpython = callPackage ../development/python-modules/wxpython/4.2.nix {
     wxGTK = pkgs.wxwidgets_3_2.override { withWebKit = true; };
   };
+
+  wxpython_4_3 = callPackage ../development/python-modules/wxpython/4.3.nix { };
 
   wyoming = callPackage ../development/python-modules/wyoming { };
 
