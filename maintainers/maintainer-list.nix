@@ -18761,12 +18761,6 @@
     githubId = 11701776;
     name = "Michael Barney";
   };
-  mbe = {
-    email = "brandonedens@gmail.com";
-    github = "brandonedens";
-    githubId = 396449;
-    name = "Brandon Edens";
-  };
   mbinns = {
     email = "mack@yourdata.rip";
     github = "mbinns";
