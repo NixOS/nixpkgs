@@ -100,6 +100,11 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   postPatch = lib.optionalString withGtk ''
+    # Give jma SYSTEM_ZIP so it includes the system minizip headers.
+    substituteInPlace gtk/CMakeLists.txt \
+      --replace-fail 'target_include_directories(jma PRIVATE' 'target_compile_definitions(jma PRIVATE ''${DEFINES})
+    target_include_directories(jma PRIVATE'
+
     # Please remove after snes9x > 1.63.  Fixed by upstream:
     # https://github.com/snes9xgit/snes9x/commit/a4b4b98fffbde417ad550480021db89f18f11a5d.patch
     substituteInPlace external/SPIRV-Cross/CMakeLists.txt \
