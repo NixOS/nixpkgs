@@ -17,10 +17,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = fluxerHashes.cargo.hash;
 
-  cargoBuildFlags = [
-    "--features"
-    "scylla"
-  ];
+  buildFeatures = [ "scylla" ];
   buildAndTestSubdir = "fluxer_messages";
   checkType = "debug"; # because of fluxer_svc/src/transport.rs:533:20
 
