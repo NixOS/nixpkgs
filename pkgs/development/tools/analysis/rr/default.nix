@@ -3,7 +3,6 @@
   gccMultiStdenv,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   bash,
   capnproto,
   cmake,
@@ -22,23 +21,15 @@ let
   stdenv' = if stdenv.hostPlatform.isx86_64 then gccMultiStdenv else stdenv;
 in
 stdenv'.mkDerivation (finalAttrs: {
-  version = "5.9.0";
+  version = "5.10.0";
   pname = "rr";
 
   src = fetchFromGitHub {
     owner = "rr-debugger";
     repo = "rr";
     rev = finalAttrs.version;
-    hash = "sha256-o+HXrgGXdsvjlNh70qsXRtp2yXOiZIT30ejfs1KEaqE=";
+    hash = "sha256-57g50US4WUvpPTKOllzfntHvScUmU5m/lbYqn9j80qY=";
   };
-
-  patches = [
-    # fix build w/ glibc-2.42
-    (fetchpatch {
-      url = "https://github.com/rr-debugger/rr/commit/6251648873b9e1ed23536beebbaa5d6fead3d5be.patch";
-      hash = "sha256-k+jeGUJyybYq3GF2zIhpDF8NT66Buq6nztUbh28qVD8=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace src/Command.cc --replace '_BSD_SOURCE' '_DEFAULT_SOURCE'
