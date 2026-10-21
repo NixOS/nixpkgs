@@ -125,6 +125,15 @@ let
         meta.downloadPage = "https://github.com/Azure/azure-cli/blob/azure-cli-${version}/src/azure-cli-telemetry/";
       };
 
+      invoke = super.invoke.overridePythonAttrs (attrs: rec {
+        version = "2.2.1";
+        src = fetchPypi {
+          inherit (attrs) pname;
+          inherit version;
+          hash = "sha256-UVv0m0pIkyt5sCRZA0jaIvOcSULf+ZGtH7i4uuob5wc=";
+        };
+      });
+
       # Error loading command module 'batch': No module named 'azure.batch._model_base'
       azure-batch = super.azure-batch.overridePythonAttrs (attrs: rec {
         version = "15.0.0b1";
