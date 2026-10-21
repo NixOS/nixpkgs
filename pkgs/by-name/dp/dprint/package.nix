@@ -59,13 +59,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   checkFlags = [
-    # Require creating directory and network access
-    "--skip=plugins::cache_fs_locks::test"
-    "--skip=utils::lax_single_process_fs_flag::test"
     # Require cargo is running
     "--skip=utils::process::test"
-    # Requires deno for the testing, and making unstable results on darwin
-    "--skip=utils::url::test::unsafe_ignore_cert"
   ];
 
   postInstall =
