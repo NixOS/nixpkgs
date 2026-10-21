@@ -28586,12 +28586,6 @@
     githubId = 850665;
     name = "Shaw Vrana";
   };
-  svsdep = {
-    email = "svsdep@gmail.com";
-    github = "svsdep";
-    githubId = 36695359;
-    name = "Vasyl Solovei";
-  };
   swaggeroo = {
     email = "swaggerooo@pm.me";
     github = "swaggeroo";
