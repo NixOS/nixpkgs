@@ -107,6 +107,12 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     sed -i '/iconutil/d' UI/CMakeLists.txt
 
+
+    # https://github.com/LadybirdBrowser/ladybird/pull/12751
+    # New Rust releases can deprecate APIs used by this snapshot.
+    substituteInPlace Meta/CMake/rust_crate.cmake \
+      --replace-fail 'set(RUSTC_TARGET_FLAGS -Dwarnings ' 'set(RUSTC_TARGET_FLAGS '
+
     # Upstream suffixes its reduced FFmpeg build to coexist with system FFmpeg.
     # Use nixpkgs' FFmpeg, which already provides the additional decoders.
     substituteInPlace Meta/CMake/check_for_dependencies.cmake \
