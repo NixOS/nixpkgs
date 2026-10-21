@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-UlI+6OMUj5F6uVAw+Mg2wOZrjfdRq73d1qufaXVI/go";
   };
 
+  strictDeps = true;
+
   dontBuild = true;
 
   installPhase = ''
