@@ -896,6 +896,7 @@ let
     resultant = [ pkgs.pkg-config ];
     rgdal = [ pkgs.gdal ]; # for gdal-config
     rgeos = [ pkgs.geos ]; # for geos-config
+    rgph = [ pkgs.jdk ]; # remove after https://github.com/tdaverse/rgph/issues/3 is addressed and a new version is released
     ridge = [ pkgs.gsl ]; # for gsl-config
     rip_opencv = [ pkgs.pkg-config ];
     rjags = [ pkgs.pkg-config ];
@@ -1611,6 +1612,7 @@ let
     protolite = [ pkgs.protobuf ];
     psbcGroup = [ pkgs.gsl ];
     qckitfastq = [ pkgs.zlib ];
+    qio = [ pkgs.zlib ];
     qpdf = with pkgs; [
       libjpeg
       zlib
@@ -1688,6 +1690,7 @@ let
       sqlite
     ];
     rmatio = [ pkgs.zlib ];
+    rmoriebricklayer = [ pkgs.curl ];
     rmumps = with pkgs; [ zlib ];
     rrd = [ pkgs.rrdtool ];
     rsbml = [ pkgs.libsbml ];
