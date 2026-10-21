@@ -114,7 +114,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nwjs";
-  version = "0.117.0";
+  version = "0.119.0";
 
   src =
     let
@@ -183,19 +183,19 @@ stdenv.mkDerivation (finalAttrs: {
       {
         normal-arm64 = fetchurl {
           url = mkUrl "normal" "arm64";
-          hash = "sha256-fYzBiRradqodDhIeI3rXYnGC/W/VrpKsLiuvtwiWL5w=";
+          hash = "sha256-h/fvo2OcptCLcC3uQOZqW9N7EtVqQ/90HvVlHsFDBpA=";
         };
         normal-x64 = fetchurl {
           url = mkUrl "normal" "x64";
-          hash = "sha256-KIHtHzqQMdWNj6DwcU0L2se0XVK97Alc1yqk8x4I3r8=";
+          hash = "sha256-WXL8p2jEYDyL406iebK/LckkgcwGkwtBVf0R5oXqafo=";
         };
         sdk-arm64 = fetchurl {
           url = mkUrl "sdk" "arm64";
-          hash = "sha256-2BHtclshr1mEovMTbyW0g0BNPgpsO2PcGSlpHxncvKQ=";
+          hash = "sha256-4dUEGO5scBB1V9WU4fWCZbT4pAStQcFJdKE0kkEKkCM=";
         };
         sdk-x64 = fetchurl {
           url = mkUrl "sdk" "x64";
-          hash = "sha256-ZkQ7WgnrtDpW8xHpX8F4wBhTUG17cgM2BeqmsaFwTuw=";
+          hash = "sha256-/CnSNfg3XqGIiVoRbxIuNAFXAejPkbaB9kjq1NTGXFI=";
         };
       };
 

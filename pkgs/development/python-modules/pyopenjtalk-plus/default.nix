@@ -5,6 +5,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchgit,
+  fetchpatch,
   cmake,
   cython,
   numpy,
@@ -42,6 +43,12 @@ buildPythonPackage (finalAttrs: {
   patches = [
     (replaceVars ./tsqyomi_model_dir.patch {
       model_dir = finalAttrs.tsqyomiModelDir;
+    })
+    (fetchpatch {
+      name = "fix-cython-3.3.0.patch";
+      url = "https://github.com/tsukumijima/pyopenjtalk-plus/commit/90b644f9e9d397882e6eafe4dcd1843a4fde6a63.patch";
+      includes = [ "tests/test_frontend.py" ];
+      hash = "sha256-Jb7T/bRUHxqwBLwV6xYC/teaFHm5GmqJxA7sCX+oiNI=";
     })
   ];
 

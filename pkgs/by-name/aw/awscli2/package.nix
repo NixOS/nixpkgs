@@ -87,6 +87,7 @@ py.pkgs.buildPythonApplication rec {
     sed -i '/pip>=/d' requirements/bootstrap.txt
 
     ln -sf ${cacert}/etc/ssl/certs/ca-no-trust-rules-bundle.crt awscli/botocore/cacert.pem
+    cat ${./system-ca-bundle.py} >> awscli/botocore/httpsession.py
   '';
 
   nativeBuildInputs = [
