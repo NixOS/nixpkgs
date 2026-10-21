@@ -41,10 +41,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     mainProgram = "gpbs";
     homepage = "https://gnustep.github.io/";
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [
-      ashalkhakov
-      dblsaiko
-    ];
+    maintainers = with lib.maintainers; [ dblsaiko ];
     platforms = lib.platforms.linux;
   };
 })
