@@ -15,7 +15,7 @@ NixOS tests also use this function when preparing the VM. The `cptofs` method is
 ## Features {#sec-make-disk-image-features}
 
 For reference, read the function signature source code for documentation on arguments: <https://github.com/NixOS/nixpkgs/blob/master/nixos/lib/make-disk-image.nix>.
-Features are separated in various sections depending on if you opt for a Nix-store only image or a full NixOS image.
+Some features apply only to a Nix-store only image, others only to a full NixOS image.
 
 ### Common {#sec-make-disk-image-features-common}
 

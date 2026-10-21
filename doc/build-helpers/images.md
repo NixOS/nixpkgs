@@ -1,3 +1,3 @@
 # Images {#chap-images}
 
-This chapter describes tools for creating various types of images.
+Nixpkgs provides build helpers for creating various types of images.

@@ -1,6 +1,6 @@
 # Overlays {#chap-overlays}
 
-This chapter describes how to extend and change Nixpkgs using overlays.  Overlays are used to add layers in the fixed-point used by Nixpkgs to compose the set of all packages.
+Overlays extend and change Nixpkgs by adding layers in the fixed-point used by Nixpkgs to compose the set of all packages.
 
 Nixpkgs can be configured with a list of overlays, which are applied in order. This means that the order of the overlays can be significant if multiple layers override the same package.
 
