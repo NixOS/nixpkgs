@@ -44,7 +44,7 @@ maven.buildMavenPackage rec {
     hash = "sha256-c8rQ53YROPx+YZo/YdaKs/51ZZQpwwbSLk/bMGY0m2c=";
   };
 
-  mvnHash = "sha256-Z+Y97yd9TQMuTyqtWOOZZ52rgp4KomID/ns0gGG5rvg=";
+  mvnHash = "sha256-MsgggsSjsy1fTW15guL4E0g7Au15WCJqmv1f/UXdSCo=";
 
   mvnFetchExtraArgs.preBuild = ''
     mvn -nsu "${timestampParameter}" --projects org.nzbhydra:github-release-plugin "-Dmaven.repo.local=$out/.m2" clean install
