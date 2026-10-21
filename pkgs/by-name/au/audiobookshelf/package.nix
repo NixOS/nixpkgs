@@ -69,9 +69,14 @@ buildNpmPackage (finalAttrs: {
 
   preInstall = ''
     rm -r \
+      node_modules/{.bin,@types} \
       node_modules/sqlite3/{binding.gyp,deps,src} \
       node_modules/sqlite3/build/{Makefile,binding.Makefile,config.gypi,node_sqlite3.target.mk} \
       node_modules/sqlite3/build/Release/{.deps,obj.target}
+
+    shopt -s globstar
+    rm node_modules/**/*.{map,ts,mts,cts}
+    shopt -u globstar
   '';
 
   installPhase = ''
