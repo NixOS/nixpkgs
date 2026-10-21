@@ -6,14 +6,15 @@
   gdk-pixbuf,
   glib,
   gtk3,
+  jdk17,
   lib,
   libglvnd,
   libx11,
   libxtst,
   libxxf86vm,
   makeWrapper,
+  nix-update-script,
   ocl-icd,
-  openjdk17,
   pango,
   replaceVars,
   stdenv,
@@ -44,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/cytoscape/cytoscape/releases/download/${finalAttrs.version}/cytoscape-unix-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-g5ViPcLhbyGQB1SIJZRwsniKO7+I3ieiYK00O44eo5s=";
+    hash = "sha256-g5ViPcLhbyGQB1SIJZRwsniKO7+I3ieiYK00O44eo5s=";
   };
 
   patches = [
@@ -58,25 +59,33 @@ stdenv.mkDerivation (finalAttrs: {
     ./runstate-to-homedir.patch
   ];
 
+  strictDeps = true;
+
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ openjdk17 ] ++ runtimeLibs;
+  buildInputs = [ jdk17 ] ++ runtimeLibs;
 
   installPhase = ''
-    mkdir -pv $out/{share,bin}
-    cp -Rv * $out/share/
+    runHook preInstall
+
+    mkdir -p $out/{share,bin}
+    cp -R * $out/share/
 
     ln -s $out/share/cytoscape.sh $out/bin/cytoscape
 
     wrapProgram $out/share/cytoscape.sh \
-      --set JAVA_HOME "${openjdk17}" \
-      --set JAVA  "${openjdk17}/bin/java" \
+      --set JAVA_HOME "${jdk17}" \
+      --set JAVA  "${jdk17}/bin/java" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeLibs}"
 
     chmod +x $out/bin/cytoscape
+
+    runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
-    homepage = "http://www.cytoscape.org";
+    homepage = "https://cytoscape.org";
     description = "General platform for complex network analysis and visualization";
     mainProgram = "cytoscape";
     license = lib.licenses.lgpl21;
