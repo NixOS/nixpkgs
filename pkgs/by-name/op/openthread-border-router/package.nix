@@ -15,28 +15,26 @@
   libnftnl,
   libmnl,
 }:
-let
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "openthread-border-router";
   version = "2026.09.0";
 
   src = fetchFromGitHub {
     owner = "openthread";
     repo = "ot-br-posix";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-b/RuAy/A1e5kWJ2x4+/sZ7VDGW1StiXMF/g6kXHSoWQ=";
     fetchSubmodules = true;
   };
 
   frontendModules = buildNpmPackage {
-    pname = "${pname}-frontend";
-    inherit version;
-    src = "${src}/src/web/web-service/frontend";
+    pname = "${finalAttrs.pname}-frontend";
+    inherit (finalAttrs) version;
+    src = "${finalAttrs.src}/src/web/web-service/frontend";
     npmDepsHash = "sha256-8KenFVtfxC0jkfZHHuYeV2Dj2kmzHUQTeACvRtOyZLA=";
     dontNpmBuild = true;
   };
-in
-stdenv.mkDerivation {
-  inherit pname version src;
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -49,7 +47,7 @@ stdenv.mkDerivation {
 
   # Adding npmConfigHook and manually passing fetchNpmDeps was resulting in ENOTCACHED errors
   postConfigure = ''
-    ln -sf ${frontendModules}/lib/node_modules/otbr-web/node_modules ./src/web/web-service/frontend/
+    ln -sf ${finalAttrs.frontendModules}/lib/node_modules/otbr-web/node_modules ./src/web/web-service/frontend/
   '';
 
   buildInputs = [
@@ -83,7 +81,7 @@ stdenv.mkDerivation {
     (lib.cmakeBool "OTBR_TREL" true)
     (lib.cmakeBool "OTBR_NFTABLES" true)
 
-    (lib.cmakeFeature "OTBR_VERSION" version)
+    (lib.cmakeFeature "OTBR_VERSION" finalAttrs.version)
     # otbr-agent aborts on startup with "Vendor name must be set." unless a vendor
     # and product name are baked in at build time.
     (lib.cmakeFeature "OTBR_VENDOR_NAME" "NixOS")
@@ -111,4 +109,4 @@ stdenv.mkDerivation {
     mainProgram = "ot-ctl";
     platforms = lib.platforms.linux;
   };
-}
+})
