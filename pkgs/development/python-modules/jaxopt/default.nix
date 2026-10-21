@@ -25,6 +25,7 @@ buildPythonPackage (finalAttrs: {
   pname = "jaxopt";
   version = "0.8.5";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "google";
