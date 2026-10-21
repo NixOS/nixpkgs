@@ -9,9 +9,6 @@
   nix-update-script,
 }:
 
-let
-  moduleDir = "lib/modules/${kernel.modDirVersion}/kernel/drivers/hid";
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hid-fanatecff";
   version = "0.2.3";
@@ -26,12 +23,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   postPatch = ''
-    mkdir -p $out/{lib/udev/rules.d,${moduleDir}}
-
-    sed -i '/depmod/d' Makefile
-    substituteInPlace Makefile \
-      --replace-fail '/etc/udev/rules.d' "$out/lib/udev/rules.d"
-
     substituteInPlace fanatec.rules \
       --replace-fail '/usr/bin/evdev-joystick' '${lib.getExe' linuxConsoleTools "evdev-joystick"}' \
       --replace-fail '/bin/sh' '${lib.getExe bashNonInteractive}'
@@ -40,8 +31,23 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = kernelModuleMakeFlags ++ [
     "KVERSION=${kernel.modDirVersion}"
     "KERNEL_SRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-    "MODULEDIR=$(out)/${moduleDir}"
+    "INSTALL_MOD_PATH=${placeholder "out"}"
+    "INSTALL_MOD_DIR=kernel/drivers/hid"
+    "INSTALL_MOD_STRIP=1"
+    "DEPMOD=true"
   ];
+
+  installTargets = [ "modules_install" ];
+
+  installFlags = [
+    "-C"
+    "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "M=$(PWD)"
+  ];
+
+  postInstall = ''
+    install -Dm444 fanatec.rules $out/lib/udev/rules.d/99-fanatec.rules
+  '';
 
   passthru.updateScript = nix-update-script { };
 
