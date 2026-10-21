@@ -15,7 +15,7 @@ maven.buildMavenPackage (finalAttrs: {
     hash = "sha256-X6yi96Fqs72lcZrXsF5FclobUkTzlIOJSvd+V+6+1iY=";
   };
 
-  mvnHash = "sha256-j+Ts9FQHv6Fo9x7Gd1BB682yMDjR2F/4oCok5xh4cR8=";
+  mvnHash = "sha256-mcJYjlysePwlZz30H8mgspKrsaU2PkzOvahczbn6Bns=";
 
   # skip the spotless git check and sandbox-incompatible unit tests
   mvnParameters = "-DskipTests -Dspotless.check.skip=true";
