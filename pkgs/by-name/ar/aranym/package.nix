@@ -3,6 +3,7 @@
   SDL2,
   autoreconfHook,
   fetchFromGitHub,
+  fetchpatch,
   libGLU,
   libx11,
   pkg-config,
