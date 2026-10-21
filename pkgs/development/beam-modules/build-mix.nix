@@ -8,6 +8,7 @@
   mixCompileHook,
   mixAppConfigPatchHook,
 
+  cacert,
   lib,
   stdenv,
   writeText,
@@ -86,5 +87,10 @@ lib.extendMkDerivation {
       passthru = (args.passthru or { }) // {
         inherit beamDeps;
       };
+    }
+    // lib.optionalAttrs (args.name == "castore") {
+      postPatch = (args.postPatch or "") + ''
+        cp ${cacert}/etc/ssl/certs/ca-bundle.crt priv/cacerts.pem
+      '';
     };
 }
