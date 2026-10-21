@@ -19,6 +19,9 @@ buildNpmPackage (finalAttrs: {
 
   postPatch = ''
     yq -i '.compilerOptions.types = ["node"]' tsconfig.json
+    # Remove this since it fails during `npmInstallHook` otherwise
+    substituteInPlace src/sequentialthinking/package.json \
+      --replace-fail "prepare" "dont-prepare"
   '';
 
   nativeBuildInputs = [
@@ -26,7 +29,6 @@ buildNpmPackage (finalAttrs: {
     typescript_7
   ];
 
-  dontNpmPrune = true;
   npmWorkspace = "src/sequentialthinking";
   npmDepsHash = "sha256-psy1XH4DuZu2+tkHpe/bQw3R7uNr8nF5u/AFKoxJeTg=";
 
