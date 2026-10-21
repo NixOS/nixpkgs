@@ -1108,12 +1108,6 @@
     githubId = 5836586;
     name = "Artjom Vejsel";
   };
-  akc = {
-    email = "akc@akc.is";
-    github = "akc";
-    githubId = 1318982;
-    name = "Anders Claesson";
-  };
   akechishiro = {
     email = "akechishiro-aur+nixpkgs@lahfa.xyz";
     github = "AkechiShiro";
