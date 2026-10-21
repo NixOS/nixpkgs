@@ -698,6 +698,7 @@ mapAliases {
   cyber = throw "cyber has been removed, as it does not build with supported Zig versions"; # Added 2025-08-09
   daed = throw "daed has been removed, as it has been unmaintained and archived upstream"; # Added 2026-09-24
   dale = throw "dale has been removed, as it does not build with supported LLVM versions"; # Added 2025-08-10
+  dankcalendar = warnAlias "'dankcalendar' has been renamed to 'dux-calendar'" dux-calendar; # Added 2026-10-21
   daq = throw "'daq' has been removed as it is unmaintained and broken. Snort2 has also been removed, which depended on this"; # Added 2025-05-21
   darkly-qt5 = throw "'darkly-qt' has been removed due to outdated KF5 dependencies"; # Added 2026-05-01
   daytona-bin = throw "'daytona-bin' has been removed, as it was unmaintained in nixpkgs"; # Added 2025-07-21
