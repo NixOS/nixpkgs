@@ -71,13 +71,15 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/lib/fluxer-api
     cp -r fluxer_api/dist/* $out/lib/fluxer-api/
 
-    makeWrapper ${lib.getExe nodejs} $out/bin/fluxer-api \
-      --add-flags "$out/lib/fluxer-api/AppEntrypoint.js" \
-      --set "NODE_PATH" $out/lib/node_modules
+    cat >$out/bin/fluxer-api <<EOF
+    NODE_PATH="$out/lib/node_modules"
+    ${lib.getExe nodejs} "$out/lib/fluxer-api/AppEntrypoint.js"
+    EOF
 
-    makeWrapper ${lib.getExe nodejs} $out/bin/fluxer-api-worker \
-      --add-flags "$out/lib/fluxer-api/WorkerEntrypoint.js" \
-      --set "NODE_PATH" $out/lib/node_modules
+    cat >$out/bin/fluxer-api-worker <<EOF
+    NODE_PATH="$out/lib/node_modules"
+    ${lib.getExe nodejs} "$out/lib/fluxer-api/WorkerEntrypoint.js"
+    EOF
 
     runHook postInstall
   '';
