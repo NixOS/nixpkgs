@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   aiohttp,
   yarl,
@@ -14,8 +13,6 @@ buildPythonPackage (finalAttrs: {
   pname = "energyflip-api-client";
   version = "0.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "DieEneSchrodinger";
