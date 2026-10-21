@@ -214,6 +214,7 @@ in
           THREAD_IF = cfg.interfaceName;
         };
         serviceConfig = {
+          Type = "notify";
           Group = "otbr";
           ExecStart = lib.concatStringsSep " " (
             lib.concatLists [
