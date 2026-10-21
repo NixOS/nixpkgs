@@ -57,7 +57,7 @@ buildGoModule (finalAttrs: {
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ johnrtitor ];
-    teams = [ lib.teams.danklinux ];
+    teams = [ lib.teams.duxlabs ];
     mainProgram = "dms-greeter";
   };
 })

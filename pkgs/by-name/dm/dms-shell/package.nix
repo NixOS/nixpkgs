@@ -115,7 +115,7 @@ buildGoModule (
       homepage = "https://danklinux.com";
       changelog = "https://github.com/AvengeMedia/DankMaterialShell/releases/tag/v${finalAttrs.version}";
       license = lib.licenses.mit;
-      teams = [ lib.teams.danklinux ];
+      teams = [ lib.teams.duxlabs ];
       mainProgram = "dms";
       platforms = lib.platforms.linux;
     };

@@ -168,5 +168,5 @@ in
     hardware.graphics.enable = lib.mkDefault true;
   };
 
-  meta.teams = [ lib.teams.danklinux ];
+  meta.teams = [ lib.teams.duxlabs ];
 }

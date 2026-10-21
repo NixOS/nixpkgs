@@ -71,7 +71,7 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/AvengeMedia/dankcalendar/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.th1nkk1d ];
-    teams = [ lib.teams.danklinux ];
+    teams = [ lib.teams.duxlabs ];
     mainProgram = "dcal";
     platforms = lib.platforms.linux;
   };
