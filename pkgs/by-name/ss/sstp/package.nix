@@ -9,15 +9,15 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sstp-client";
-  version = "unstable-2023-03-25";
+  version = "1.0.20";
 
   src = fetchFromGitLab {
     owner = "sstp-project";
     repo = "sstp-client";
-    rev = "3f7835df9ac5e84729903ca536cf65e4a7b04c6c";
-    hash = "sha256-8VF5thSABqf5SXEDCa+0dyDt7kVrQcs6deWLlYWM8dg=";
+    tag = finalAttrs.version;
+    hash = "sha256-6rylWUmZrQbDPPLvOth7rR0v6hu64Ia1crZhO/GcAoY=";
   };
 
   postPatch = ''
@@ -50,4 +50,4 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Plus;
     mainProgram = "sstpc";
   };
-}
+})
