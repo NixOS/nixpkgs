@@ -28261,12 +28261,6 @@
     github = "stephsi";
     githubId = 3120909;
   };
-  sterfield = {
-    email = "sterfield@gmail.com";
-    github = "sterfield";
-    githubId = 5747061;
-    name = "Guillaume Loetscher";
-  };
   sternenseemann = {
     email = "sternenseemann@systemli.org";
     github = "sternenseemann";
