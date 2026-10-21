@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitLab,
   kernel,
-  kernelModuleMakeFlags,
+  kernelModuleInstallHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,35 +24,20 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "pic" ];
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kernelModuleInstallHook ];
 
   patches = [
     ./0001-Use-sysfs_emit-and-field-width-specifier.patch
   ];
 
-  makeFlags = kernelModuleMakeFlags ++ [
-    "KERNELRELEASE=${kernel.modDirVersion}"
+  makeFlags = [
+    "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
-  installFlags = [
-    "INSTALL_MOD_PATH=${placeholder "out"}"
+  kernelModuleDirs = [
+    "ddcci"
+    "ddcci-backlight"
   ];
-
-  buildPhase = ''
-    runHook preBuild
-    make modules -C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build M=$(pwd)/ddcci "''${makeFlags[@]}"
-    make modules -C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build M=$(pwd)/ddcci-backlight "''${makeFlags[@]}"
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-    make modules_install -C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build M=$(pwd)/ddcci \
-      "''${makeFlags[@]}" "''${installFlags[@]}"
-    make modules_install -C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build M=$(pwd)/ddcci-backlight \
-      "''${makeFlags[@]}" "''${installFlags[@]}"
-    runHook postInstall
-  '';
 
   meta = {
     description = "Kernel module driver for DDC/CI monitors";
