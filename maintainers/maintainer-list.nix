@@ -4015,12 +4015,6 @@
     name = "Ben Lorenz";
     email = "bnlrnz@gmail.com";
   };
-  bobakker = {
-    email = "bobakk3r@gmail.com";
-    github = "bobakker";
-    githubId = 10221570;
-    name = "Bo Bakker";
-  };
   bobberb = {
     email = "bobberb@half-done.org";
     github = "bobberb";

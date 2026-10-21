@@ -47,6 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/TheHPXProject/hpx";
     license = lib.licenses.boost;
     platforms = [ "x86_64-linux" ]; # lib.platforms.linux;
-    maintainers = with lib.maintainers; [ bobakker ];
+    maintainers = [ ];
   };
 })
