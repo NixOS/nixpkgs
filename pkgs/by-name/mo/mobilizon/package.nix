@@ -8,6 +8,7 @@
   applyPatches,
   git,
   cmake,
+  cacert,
   nixosTests,
   nixfmt,
   mobilizon-frontend ? callPackage ./frontend.nix { },
@@ -58,6 +59,16 @@ beamPackages.mixRelease rec {
           };
           postInstall = ''
             cp $src/priv/cldr/locales/* $out/lib/erlang/lib/ex_cldr-${old.version}/priv/cldr/locales/
+          '';
+        });
+        certifi = prev.certifi.overrideAttrs (old: {
+          postInstall = old.postInstall or "" + ''
+            find . -type f -name cacerts.pem -exec ln -sfn '${cacert}/etc/ssl/certs/ca-bundle.crt' {} \;
+          '';
+        });
+        castore = prev.castore.overrideAttrs (old: {
+          postInstall = old.postInstall or "" + ''
+            find . -type f -name cacerts.pem -exec ln -sfn '${cacert}/etc/ssl/certs/ca-bundle.crt' {} \;
           '';
         });
 
