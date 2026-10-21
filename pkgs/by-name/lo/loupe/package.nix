@@ -11,7 +11,6 @@
   rustc,
   wrapGAppsHook4,
   gtk4,
-  lcms2,
   libadwaita,
   libgweather,
   libseccomp,
@@ -25,16 +24,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "loupe";
-  version = "50.0";
+  version = "51.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/loupe/${lib.versions.major finalAttrs.version}/loupe-${finalAttrs.version}.tar.xz";
-    hash = "sha256-euT7rl4ZMWqmQMVvgNxaeRRIpi3Y8P8G4ppYutgTqZQ=";
+    hash = "sha256-E/qZkFZe+ReQL3d8/OCRq2CtuKEUqfbMonTfxcCq5mE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-I4z5qjX10AUuwk+JdX/1ZU0uCAVPQj8HkEc+n9aMczE=";
+    hash = "sha256-rq89XiQdOTVLTxrt8PhDC8LdXCaELIDHiwJu+teu6bY=";
   };
 
   postPatch = ''
@@ -60,7 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
     libglycin.setupHook
     glycin-loaders
     gtk4
-    lcms2
     libadwaita
     libgweather
     libseccomp
