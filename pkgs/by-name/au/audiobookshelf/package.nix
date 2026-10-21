@@ -6,6 +6,7 @@
   nodejs_24,
   ffmpeg_8-headless,
   nunicode,
+  sqlite,
   typescript_5,
   jq,
   nixosTests,
@@ -33,8 +34,11 @@ buildNpmPackage (finalAttrs: {
     jq
   ];
 
-  npmBuildScript = "build:server";
+  buildInputs = [ sqlite ];
+
   npmInstallFlags = [ "--omit=dev" ];
+  npmRebuildFlags = [ "--sqlite=${lib.getDev sqlite}" ];
+  npmBuildScript = "build:server";
 
   makeWrapperArgs = [
     "--set"
