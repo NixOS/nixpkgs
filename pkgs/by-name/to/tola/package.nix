@@ -34,9 +34,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doCheck = false;
 
   meta = {
-    description = "A static site generator for typst-based blog, written in Rust";
-    homepage = "https://github.com/tola-rs/tola-ssg";
+    description = "Typst-based static site generator";
+    homepage = "https://tola.build";
     license = lib.licenses.mit;
+    mainProgram = "tola";
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [
       kawayww
       matthiasbeyer
