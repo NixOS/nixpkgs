@@ -126,7 +126,7 @@ in
     }
   );
 
-  config = callPackage ./config.nix { };
+  config = callPackage ./config { };
 
   top-level = callPackage ./top-level { };
 
