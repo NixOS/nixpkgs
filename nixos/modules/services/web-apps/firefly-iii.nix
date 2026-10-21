@@ -294,9 +294,9 @@ in
     services.phpfpm.pools.firefly-iii = {
       inherit user group;
       phpPackage = cfg.package.phpPackage;
-      phpOptions = ''
-        log_errors = on
-      '';
+      phpOptions = {
+        log_errors = "on";
+      };
       settings = {
         "listen.mode" = lib.mkDefault "0660";
         "listen.owner" = lib.mkDefault (if cfg.enableNginx then config.services.nginx.user else user);

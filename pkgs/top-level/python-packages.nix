@@ -10667,7 +10667,7 @@ self: super: with self; {
 
   mcp-types = callPackage ../development/python-modules/mcp-types { };
 
-  mcp_2 = callPackage ../development/python-modules/mcp/2.nix { };
+  mcp_1 = callPackage ../development/python-modules/mcp/1.nix { };
 
   mcpadapt = callPackage ../development/python-modules/mcpadapt { };
 

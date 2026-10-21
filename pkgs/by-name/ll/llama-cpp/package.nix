@@ -10,12 +10,17 @@
   stdenv,
 
   config,
-  cudaSupport ? config.cudaSupport,
+  # The SYCL build uses the oneAPI stdenv, which a CUDA build would replace.
+  cudaSupport ? config.cudaSupport && !syclSupport,
   cudaPackages ? { },
 
   rocmSupport ? config.rocmSupport,
   rocmPackages ? { },
   rocmGpuTargets ? rocmPackages.clr.localGpuTargets or rocmPackages.clr.gpuTargets,
+
+  syclSupport ? false,
+  intel-oneapi-toolkit,
+  level-zero,
 
   cpuArchDynamicDispatch ? true,
 
@@ -27,6 +32,7 @@
     metalSupport
     openclSupport
     rocmSupport
+    syclSupport
     vulkanSupport
   ],
   blas,
@@ -57,7 +63,14 @@ let
   # It's necessary to consistently use backendStdenv when building with CUDA support,
   # otherwise we get libstdc++ errors downstream.
   # cuda imposes an upper bound on the gcc version
-  effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+  effectiveStdenv =
+    if cudaSupport then
+      cudaPackages.backendStdenv
+    # The SYCL backend needs the oneAPI DPC++ compiler.
+    else if syclSupport then
+      intel-oneapi-toolkit.stdenv
+    else
+      stdenv;
   inherit (lib)
     cmakeBool
     cmakeFeature
@@ -142,9 +155,20 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     optionals cudaSupport cudaBuildInputs
     ++ optionals openclSupport [ clblast ]
     ++ optionals rocmSupport rocmBuildInputs
+    ++ optionals syclSupport [
+      intel-oneapi-toolkit
+      level-zero
+    ]
     ++ optionals blasSupport [ blas ]
     ++ optionals vulkanSupport vulkanBuildInputs
     ++ [ openssl ];
+
+  # Fortify adds __memcpy_chk references to the SYCL device code, which the GPU
+  # driver cannot resolve when it compiles the kernels at runtime.
+  hardeningDisable = optionals syclSupport [
+    "fortify"
+    "fortify3"
+  ];
 
   npmRoot = "tools/ui";
   npmDepsHash = "sha256-a17M+L3nLdRnN6WMB6imPFmwqG2g8uv+gwN0XTAUrf8=";
@@ -178,6 +202,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (cmakeBool "GGML_HIP" rocmSupport)
     (cmakeBool "GGML_METAL" metalSupport)
     (cmakeBool "GGML_RPC" rpcSupport)
+    (cmakeBool "GGML_SYCL" syclSupport)
     (cmakeBool "GGML_VULKAN" vulkanSupport)
     (cmakeFeature "LLAMA_BUILD_NUMBER" buildNumber)
     (cmakeFeature "LLAMA_BUILD_COMMIT" buildCommit)
@@ -227,9 +252,14 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (python3.withPackages (ps: [ ps.jinja2 ]))
   ];
 
-  preCheck = optionalString metalSupport ''
-    export GGML_METAL_DEVICES=0
-  '';
+  preCheck =
+    optionalString metalSupport ''
+      export GGML_METAL_DEVICES=0
+    ''
+    # The SYCL backend exits on this check when there is no device.
+    + optionalString syclSupport ''
+      export GGML_SYCL_USE_ASYNC_MEM_OP=0
+    '';
 
   disabledTests = [
     # Network needed.
@@ -247,9 +277,18 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       "Inference of Meta's LLaMA model (and others) in pure C/C++"
       + optionalString cudaSupport ", with CUDA support"
       + optionalString rocmSupport ", with ROCm support"
+      + optionalString syclSupport ", with SYCL support"
       + optionalString vulkanSupport ", with Vulkan support";
     homepage = "https://github.com/ggml-org/llama.cpp";
-    license = lib.licenses.mit;
+    license =
+      if syclSupport then
+        # Parts of the SYCL backend come from LLVM.
+        lib.licenses.AND [
+          lib.licenses.mit
+          (lib.licenses.WITH lib.licenses.asl20 lib.licenses.llvm-exception)
+        ]
+      else
+        lib.licenses.mit;
     mainProgram = "llama";
     maintainers = with lib.maintainers; [
       booxter
@@ -259,8 +298,15 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       yuannan
     ];
     teams = [ lib.teams.cuda ];
-    platforms = lib.platforms.unix;
+    platforms =
+      if syclSupport then
+        lib.intersectLists lib.platforms.unix intel-oneapi-toolkit.meta.platforms
+      else
+        lib.platforms.unix;
     badPlatforms = optionals (cudaSupport || openclSupport) lib.platforms.darwin;
-    broken = metalSupport && !effectiveStdenv.hostPlatform.isDarwin;
+    broken =
+      metalSupport && !effectiveStdenv.hostPlatform.isDarwin
+      # ggml-sycl needs icpx as the C++ compiler, which the CUDA stdenv replaces.
+      || cudaSupport && syclSupport;
   };
 })
