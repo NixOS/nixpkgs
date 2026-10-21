@@ -2,8 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  asciidoc,
   autoreconfHook,
+  docbook_xml_dtd_45,
+  docbook_xsl,
   libpng,
+  libxml2,
+  libxslt,
   nix-update-script,
   pkg-config,
   versionCheckHook,
@@ -24,12 +29,23 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    # a2x, for the man page
+    asciidoc
+    docbook_xml_dtd_45
+    docbook_xsl
+    libxml2
+    libxslt
+
     autoreconfHook
     pkg-config
   ];
 
   buildInputs = [
     libpng
+  ];
+
+  configureFlags = [
+    (lib.enableFeature true "man")
   ];
 
   doInstallCheck = true;
