@@ -4,7 +4,7 @@
   buildNpmPackage,
   callPackage,
   nodejs_24,
-  ffmpeg_8-full,
+  ffmpeg_8-headless,
   nunicode,
   typescript_5,
   jq,
@@ -39,10 +39,10 @@ buildNpmPackage (finalAttrs: {
   makeWrapperArgs = [
     "--set"
     "FFMPEG_PATH"
-    (lib.getExe ffmpeg_8-full)
+    (lib.getExe ffmpeg_8-headless)
     "--set"
     "FFPROBE_PATH"
-    (lib.getExe' ffmpeg_8-full "ffprobe")
+    (lib.getExe' ffmpeg_8-headless "ffprobe")
     "--set"
     "NODE_ENV"
     "production"
