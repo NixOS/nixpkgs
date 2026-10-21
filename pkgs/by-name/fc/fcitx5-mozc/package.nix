@@ -59,7 +59,7 @@ let
       buildInputs
       bazelArgs
       ;
-    hash = "sha256-1Z5lNVNgXRagNCIrTclnXILk/x554/xTZ/AAadNBKJI=";
+    hash = "sha256-POfx1mq/WL903N03XOHxWlJM/aN+IQWu8Uhgp2VBetI=";
   };
 in
 stdenv.mkDerivation {
