@@ -59,6 +59,11 @@ buildPythonPackage (finalAttrs: {
       --replace-fail '__version__ = "5.3.3"' '__version__ = "${finalAttrs.version}"'
   '';
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=int-conversion"
+    "-Wno-error=implicit-function-declaration"
+  ];
+
   nativeBuildInputs = [
     pkg-config
   ];
