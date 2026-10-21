@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl jq php82.packages.composer nix-update coreutils
+#!nix-shell -i bash -p curl jq php85.packages.composer nix-update coreutils
 
 set -eou pipefail
 

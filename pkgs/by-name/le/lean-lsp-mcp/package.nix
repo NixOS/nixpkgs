@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   dependencies = with python3Packages; [
     leanclient
-    mcp_2
+    mcp
     orjson
     certifi
   ];

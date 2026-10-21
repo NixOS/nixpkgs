@@ -75,7 +75,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           fi
 
           for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
-            update-source-version "php82Extensions.tideways" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
+            update-source-version "php85Extensions.tideways" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
           done
         '';
       }

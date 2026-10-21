@@ -19,14 +19,14 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "smoked-salmon";
-  version = "0.19.0";
+  version = "0.20.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "smokin-salmon";
     repo = "smoked-salmon";
     tag = finalAttrs.version;
-    hash = "sha256-qm+AJXHWXuz89dhMtpt24BdnlFfajMQBIXZvyFif2Vs=";
+    hash = "sha256-Qe9h15FHAp8h6HBvTg5YZKtANsdL/be+Gt2BXiVyGmc=";
   };
 
   # Upstream tends to use very narrow version constraints

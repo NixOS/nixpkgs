@@ -73,6 +73,8 @@ let
         };
       });
 
+      mcp = self.mcp_1;
+
       notifications-android-tv = super.notifications-android-tv.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.5";
         format = "setuptools";
