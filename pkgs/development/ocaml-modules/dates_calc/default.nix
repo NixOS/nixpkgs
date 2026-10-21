@@ -17,7 +17,7 @@ buildDunePackage (finalAttrs: {
     owner = "catalalang";
     repo = "dates-calc";
     rev = finalAttrs.version;
-    sha256 = "sha256-B4li8vIK6AnPXJ1QSJ8rtr+JOcy4+h5sc1SH97U+Vgw=";
+    hash = "sha256-B4li8vIK6AnPXJ1QSJ8rtr+JOcy4+h5sc1SH97U+Vgw=";
   };
 
   doCheck = true;

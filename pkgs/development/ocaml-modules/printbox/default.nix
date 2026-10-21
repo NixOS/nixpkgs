@@ -16,8 +16,8 @@ buildDunePackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "c-cube";
     repo = "printbox";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-PQbr2sjASoWz0OHAMV6buAJERpnUJxVpLAigIVnADIc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-PQbr2sjASoWz0OHAMV6buAJERpnUJxVpLAigIVnADIc=";
   };
 
   nativeCheckInputs = [ mdx.bin ];

@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ lib, ... }:
 {
   name = "systemd-initrd-luks-tpm2";
 
@@ -20,9 +20,6 @@
       boot.initrd.availableKernelModules = [ "tpm_tis" ];
 
       environment.systemPackages = with pkgs; [ cryptsetup ];
-      boot.initrd.systemd = {
-        enable = true;
-      };
 
       specialisation.boot-luks.configuration = {
         boot.initrd.luks.devices = lib.mkVMOverride {
