@@ -7,20 +7,20 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stardust-xr-flatland";
-  version = "0.51.1";
+  version = "0.52.0";
 
   src = fetchFromGitHub {
     owner = "stardustxr";
     repo = "flatland";
     tag = finalAttrs.version;
-    hash = "sha256-Gp2r6PJiyNb+augDwS/vGPJfwb5U6pVYgSyhS9QlggY=";
+    hash = "sha256-vr0rAHyykVmKg6a7D2PGaQAu8FmgI2lgpmaFEwpvpxg=";
   };
 
   patches = [ ./fix-reify-test-signature.patch ];
 
   env.STARDUST_RES_PREFIXES = "${finalAttrs.src}/res";
 
-  cargoHash = "sha256-2LT/Szwzs83Poe7BojmUFh9yyUEhSgHmBR5QaO/BE4g=";
+  cargoHash = "sha256-iNvDxgRjvyql76064MQtTDxXiG6rlqBpCVkQB2nqUQU=";
 
   __structuredAttrs = true;
 
