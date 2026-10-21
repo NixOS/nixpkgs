@@ -3,6 +3,7 @@
   stdenv,
   kernel,
   kernelModuleMakeFlags,
+  kernelModuleInstallHook,
   looking-glass-client,
 }:
 
@@ -16,22 +17,14 @@ stdenv.mkDerivation {
     "pic"
     "format"
   ];
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kernelModuleInstallHook ];
 
   makeFlags = kernelModuleMakeFlags ++ [
     "KVER=${kernel.modDirVersion}"
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-    "INSTALL_MOD_PATH=${placeholder "out"}"
-    "INSTALL_MOD_DIR=kernel/drivers/misc"
   ];
 
-  installFlags = [
-    "-C"
-    "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-    "M=$(PWD)"
-  ];
-
-  installTargets = [ "modules_install" ];
+  kernelModuleInstallDir = "kernel/drivers/misc";
 
   meta = {
     description = "Optional kernel module for LookingGlass";
