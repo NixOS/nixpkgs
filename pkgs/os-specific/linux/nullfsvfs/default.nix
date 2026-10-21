@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   kernel,
+  kernelModuleInstallHook,
   kernelModuleMakeFlags,
 }:
 stdenv.mkDerivation rec {
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kernelModuleInstallHook ];
 
   makeFlags = kernelModuleMakeFlags ++ [
     "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
@@ -31,12 +32,7 @@ stdenv.mkDerivation rec {
       --replace-fail "/lib/modules/\$(shell uname -r)/build" "\$(KSRC)"
   '';
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p "$out/lib/modules/${kernel.modDirVersion}/kernel/fs/nullfsvfs/"
-    install -p -m 644 nullfsvfs.ko $out/lib/modules/${kernel.modDirVersion}/kernel/fs/nullfsvfs/
-    runHook postInstall
-  '';
+  kernelModuleInstallDir = "kernel/fs/nullfsvfs";
 
   meta = {
     description = "Virtual black hole file system that behaves like /dev/null";
