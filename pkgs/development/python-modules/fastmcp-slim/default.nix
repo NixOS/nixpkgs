@@ -20,7 +20,7 @@
   httpx,
   jsonref,
   jsonschema-path,
-  mcp,
+  mcp_1,
   openai,
   openapi-pydantic,
   opentelemetry-api,
@@ -45,7 +45,9 @@
 
   # tests
   anyio,
-}:
+}: let
+  mcp = mcp_1;
+in
 
 buildPythonPackage (finalAttrs: {
   pname = "fastmcp-slim";
