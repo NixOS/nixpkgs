@@ -14,6 +14,7 @@
   libxkbcommon,
   libxrandr,
   nix-update-script,
+  nixosTests,
   pkg-config,
   rustPlatform,
   seatd,
@@ -100,6 +101,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     providedSessions = [ "driftwm" ];
+    tests = { inherit (nixosTests) driftwm; };
     updateScript = nix-update-script { };
   };
 
