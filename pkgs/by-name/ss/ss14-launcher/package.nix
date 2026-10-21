@@ -53,7 +53,7 @@ buildDotnetModule {
     fetchSubmodules = true;
   };
 
-  _structuredAttrs = true;
+  __structuredAttrs = true;
   strictDeps = true;
 
   nugetDeps = ./deps.json;
@@ -106,10 +106,11 @@ buildDotnetModule {
   ++ lib.optional pipewireSupport pipewire
   ++ lib.optional pulseaudioSupport libpulseaudio;
 
-  # ${soundfont-path} is escaped here:
-  # https://github.com/NixOS/nixpkgs/blob/d29975d32b1dc7fe91d5cb275d20f8f8aba399ad/pkgs/build-support/setup-hooks/make-wrapper.sh#L126C35-L126C45
-  # via https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html under ${parameter@operator}
-  makeWrapperArgs = [ "--set ROBUST_SOUNDFONT_OVERRIDE ${soundfont-path}" ];
+  makeWrapperArgs = [
+    "--set"
+    "ROBUST_SOUNDFONT_OVERRIDE"
+    soundfont-path
+  ];
 
   nativeBuildInputs = [
     iconConvTools
