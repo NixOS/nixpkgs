@@ -5033,6 +5033,12 @@
     githubId = 543423;
     name = "Alex Wied";
   };
+  cereal = {
+    email = "cereal.aur@proton.me";
+    github = "cerealdevv";
+    githubId = 289090259;
+    name = "lina";
+  };
   ceridwen15 = {
     email = "me@cdwn.gay";
     github = "NonsensicalNickname";
