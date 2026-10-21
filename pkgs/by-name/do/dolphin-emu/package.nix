@@ -154,6 +154,8 @@ stdenv.mkDerivation (
     variantInfo = variantTable.${dolphinVariant} finalAttrs;
   in
   {
+    __structuredAttrs = true;
+
     inherit (variantInfo)
       pname
       version
@@ -271,7 +273,10 @@ stdenv.mkDerivation (
     dontWrapGApps = true;
 
     qtWrapperArgs = lib.optionals stdenv.hostPlatform.isLinux [
-      "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}"
+      "--prefix"
+      "LD_LIBRARY_PATH"
+      ":"
+      (lib.makeLibraryPath [ vulkan-loader ])
     ];
 
     preFixup = ''
