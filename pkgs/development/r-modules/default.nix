@@ -911,6 +911,10 @@ let
       cargo
       rustc
     ];
+    rpic = with pkgs; [
+      cargo
+      rustc
+    ];
     rrd = [ pkgs.pkg-config ];
     rsamplr = with pkgs; [
       cargo
@@ -943,6 +947,10 @@ let
       rustc
     ];
     sbrl = [ pkgs.gsl ]; # for gsl-config
+    scanr = with pkgs; [
+      cargo
+      rustc
+    ];
     sceua = with pkgs; [
       cargo
       rustc
@@ -952,6 +960,7 @@ let
       which
     ];
     scorematchingad = [ pkgs.cmake ];
+    sezgi = [ pkgs.cargo ];
     sf = with pkgs; [
       pkg-config
       gdal # for gdal-config
