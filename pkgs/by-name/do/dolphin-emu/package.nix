@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
 
   # nativeBuildInputs
   cmake,
@@ -18,7 +19,6 @@
   enet,
   ffmpeg,
   fmt,
-  fmt_11,
   glslang,
   gtest,
   hidapi,
@@ -78,6 +78,8 @@ let
         '';
       };
 
+      patches = [ ];
+
       versionTestAttrs = {
         command = "${lib.getExe xvfb-run} dolphin-emu --version";
         version = finalAttrs.version;
@@ -113,6 +115,14 @@ let
         '';
       };
 
+      patches = [
+        (fetchpatch {
+          name = "fmt12.patch"; # https://github.com/dolphin-emu/dolphin/pull/14694
+          url = "https://github.com/dolphin-emu/dolphin/commit/8328469f5e48ba455d97ad15ebb9289170a662aa.patch";
+          hash = "sha256-Ua5UVOczVtovhJ2g9UdSq93jXEeP968wlaXBWaYwi/s=";
+        })
+      ];
+
       versionTestAttrs = {
         command = "dolphin-emu-primehack-nogui --version";
         version = "PrimeHack";
@@ -142,6 +152,7 @@ stdenv.mkDerivation (
       version
       src
       meta
+      patches
       ;
 
     postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin) ''
@@ -167,7 +178,7 @@ stdenv.mkDerivation (
       curl
       enet
       ffmpeg
-      (if isPrimehack then fmt_11 else fmt)
+      fmt
       glslang
       gtest
       hidapi
