@@ -20,6 +20,23 @@ buildGoModule (finalAttrs: {
     hash = "sha256-gXl4fW7iwWylxFBdipU2fKM4yYtfPjI/Hv/19XxkuXA=";
   };
 
+  # Remove distrusted CA certificates from the embedded root stores.
+  # TODO: Remove once upstream updates its bundled CA certificates.
+  postPatch = ''
+    for cert in \
+      "AAA Certificate Services" \
+      "emSign ECC Root CA - G3" \
+      "emSign Root CA - C1" \
+      "emSign ECC Root CA - C3"; do
+      grep -Eq "^[[:space:]]*// $cert$" common/certificate/mozilla.go
+    done
+    grep -Fq '// CN=emSign ECC Root CA - G3;' common/certificate/chrome.go
+
+    sed -i -E \
+      '/^[[:space:]]*\/\/ (CN=)?(AAA Certificate Services|emSign ECC Root CA - G3|emSign Root CA - C1|emSign ECC Root CA - C3)(;|$)/,/^-----END CERTIFICATE-----/d' \
+      common/certificate/{mozilla,chrome}.go
+  '';
+
   vendorHash = "sha256-nNFqDOvM8bwCRNG399dU24XO+mmal+YAE7EoPghUaZo=";
 
   tags = [
