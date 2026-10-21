@@ -242,6 +242,9 @@ in
           "DEPMOD=true"
           "INSTALL_MOD_STRIP=1"
         ];
+        kernelModuleInstallHook = callPackage ../os-specific/linux/kernel/module-install-hook.nix {
+          inherit kernel kernelModuleMakeFlags;
+        };
         # Obsolete aliases (these packages do not depend on the kernel).
         inherit (pkgs) odp-dpdk pktgen; # added 2018-05
         inherit (pkgs) bcc bpftrace; # added 2021-12
