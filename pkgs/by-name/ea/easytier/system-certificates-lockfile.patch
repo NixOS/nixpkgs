@@ -1,0 +1,11 @@
+diff --git a/Cargo.lock b/Cargo.lock
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -2705,6 +2705,7 @@ dependencies = [
+  "ring",
+  "rustls",
++ "rustls-platform-verifier",
+  "serde",
+  "serde_json",
+  "sha2 0.11.0",
+  "smoltcp",

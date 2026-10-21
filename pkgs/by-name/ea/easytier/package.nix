@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-t/a4V1pMoqr9fVfMGHJUfJPk8VD+mbOxB2Cvb2lsX9Q=";
   };
 
-  cargoHash = "sha256-/dVCPkDGgvDEUnCb1EfH2Y0Yn48h4mYuUben0GNwvoo=";
+  cargoHash = "sha256-OFZzj01FnVQ7MLOGEj0Nbin5De5Tm1cmV4wBEeOdEQg=";
 
   patches = [
     # TODO: remove after next release
@@ -41,7 +41,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Building easytier-web next to the CLI enables two rustls backends, which
     # makes HTTPS peer discovery panic; backport of EasyTier/EasyTier#2648.
     ./0002-rustls-select-ring-provider-explicitly.patch
+    # NOTE: Remove with system-certificates-lockfile.patch.
+    (fetchpatch2 {
+      name = "system-certificates.patch";
+      url = "https://github.com/EasyTier/EasyTier/commit/82dd835c268f6c21405325cdf041e11682e975d0.patch?full_index=1";
+      excludes = [ "Cargo.lock" ];
+      hash = "sha256-xKpUY3KQTpYlk50ydZnRt/i5aaPNqW+BQtwDMlh1d6c=";
+    })
   ];
+
+  cargoPatches = [ ./system-certificates-lockfile.patch ];
 
   nativeBuildInputs = [
     protobuf
@@ -51,7 +60,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildNoDefaultFeatures = stdenv.hostPlatform.isMips;
-  buildFeatures = lib.optional stdenv.hostPlatform.isMips "mips" ++ lib.optional withQuic "quic";
+  buildFeatures = [
+    "system-certificates"
+  ]
+  ++ lib.optional stdenv.hostPlatform.isMips "mips"
+  ++ lib.optional withQuic "quic";
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd easytier-cli \
