@@ -30,7 +30,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pocket-tts";
-  version = "4.0.0";
+  version = "4.0.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -38,7 +38,7 @@ buildPythonPackage (finalAttrs: {
     owner = "kyutai-labs";
     repo = "pocket-tts";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Qob5nhbwvepGijEJeS5k2z8t4sMFNz4qufyMhNkii1Q=";
+    hash = "sha256-wSYp4wcqMYkqpWjN/X7gePlPWf63VSAsAAF4LOckDTw=";
   };
 
   build-system = [

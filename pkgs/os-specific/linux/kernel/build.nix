@@ -165,8 +165,8 @@ lib.makeOverridable (
         substitutions = { inherit configfile modDirVersion; };
         propagatedNativeBuildInputs = [ xz ];
       } ./setup-module-compression.sh)
+      zstd
     ]
-    ++ optional (lib.versionAtLeast version "5.13") zstd
     ++ optionals withRust [
       rustc-unwrapped
       rust-bindgen-unwrapped
@@ -220,20 +220,9 @@ lib.makeOverridable (
       # kernelPatches can contain config changes and no actual patch
       lib.filter (p: p != null) (map (p: p.patch) kernelPatches)
       # Required for deterministic builds along with some postPatch magic.
-      ++ optional (lib.versionOlder version "5.19") ./randstruct-provide-seed.patch
-      ++ optional (lib.versionAtLeast version "5.19") ./randstruct-provide-seed-5.19.patch
-      # Linux 5.12 marked certain PowerPC-only symbols as GPL, which breaks
-      # OpenZFS; this was fixed in Linux 5.19 so we backport the fix
-      # https://github.com/openzfs/zfs/pull/13367
-      ++
-        optional
-          (
-            lib.versionAtLeast version "5.12" && lib.versionOlder version "5.19" && stdenv.hostPlatform.isPower
-          )
-          (fetchpatch {
-            url = "https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/patch/?id=d9e5c3e9e75162f845880535957b7fd0b4637d23";
-            hash = "sha256-bBOyJcP6jUvozFJU0SPTOf3cmnTQ6ZZ4PlHjiniHXLU=";
-          });
+      ++ [
+        ./randstruct-provide-seed-5.19.patch
+      ];
 
     buildFlags = [
       target
@@ -322,8 +311,6 @@ lib.makeOverridable (
       python3Minimal
       kmod
       hexdump
-    ]
-    ++ optionals (lib.versionAtLeast version "5.2") [
       cpio
       pahole
       zlib
@@ -630,12 +617,8 @@ lib.makeOverridable (
       ];
       platforms = platforms.linux;
       badPlatforms =
-        lib.optionals (lib.versionOlder version "4.15") [
-          "riscv32-linux"
-          "riscv64-linux"
-        ]
         # Generic scripts/install.sh is only available on LoongArch64 since 6.16.
-        ++ lib.optional (lib.versionOlder version "6.16") "loongarch64-linux";
+        lib.optional (lib.versionOlder version "6.16") "loongarch64-linux";
       timeout = 14400; # 4 hours
       identifiers.cpeParts = {
         part = "o";
