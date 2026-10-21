@@ -5180,8 +5180,8 @@ let
         mktplcRef = {
           name = "vscode-gradle";
           publisher = "vscjava";
-          version = "3.18.0";
-          hash = "sha256-ybMejIJER9HHVh1z+tazgvQ0UIa8eKoJBb7JOLU1Kpw=";
+          version = "3.18.1";
+          hash = "sha256-S7uURc3q5atehOi2M6BDgf5olOiG5sAnxToQCb3WtO0=";
         };
 
         meta = {
