@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/cli";
 
-  cargoHash = "sha256-Q0sUI1uQ0zmra9s6u1lRFgDNaF9w+6Es2fQffMvh6+A=";
+  cargoHash = "sha256-idzEyxElozYDcAqrvY/AqCBMMTz/a1DN21SyTyHDqTc=";
 
   buildFeatures = [ "nix" ] ++ lib.optional withEval "eval";
 
@@ -41,8 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ZSTD_SYS_USE_PKG_CONFIG = true;
   };
 
-  # The builder's stdout is a terminal, so plain output gets colored.
-  checkFlags = [ "--skip=output::tests::a_piped_run_stays_plain" ];
+  __darwinAllowLocalNetworking = true;
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd gradient \
