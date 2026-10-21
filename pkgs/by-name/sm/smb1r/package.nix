@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/JHDev2006/Super-Mario-Bros.-Remastered-Public";
     downloadPage = "https://github.com/JHDev2006/Super-Mario-Bros.-Remastered-Public/releases";
     license = lib.licenses.gpl3Only;
-    sourceProvenance = lib.sourceTypes.fromSource;
+    sourceProvenance = [ lib.sourceTypes.fromSource ];
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ AugustDeer ];
   };
