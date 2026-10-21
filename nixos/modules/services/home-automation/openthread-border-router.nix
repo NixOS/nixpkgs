@@ -208,8 +208,14 @@ in
       otbr-agent = {
         description = "OpenThread Border Router Agent";
         wantedBy = [ "multi-user.target" ];
-        requires = [ "network-online.target" ];
-        after = [ "network-online.target" ];
+        requires = [
+          "network-online.target"
+          "dbus.socket"
+        ];
+        after = [
+          "network-online.target"
+          "dbus.socket"
+        ];
         environment = {
           THREAD_IF = cfg.interfaceName;
         };
