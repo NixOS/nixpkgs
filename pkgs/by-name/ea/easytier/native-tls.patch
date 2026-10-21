@@ -1,0 +1,42 @@
+diff --git a/easytier/Cargo.toml b/easytier/Cargo.toml
+--- a/easytier/Cargo.toml
++++ b/easytier/Cargo.toml
+@@ -96,7 +96,7 @@ rcgen = { version = "0.12.1", optional = true }
+ 
+ # for websocket
+ tokio-websockets = { version = "0.13.2", optional = true, features = [
+-    "rustls-webpki-roots",
++    "rustls-native-roots",
+     "client",
+     "server",
+     "fastrand",
+@@ -253,7 +253,7 @@ prost-reflect = { version = "0.14.5", default-features = false, features = [
+ 
+ # for http connector
+ http_req = { git = "https://github.com/EasyTier/http_req.git", default-features = false, features = [
+-    "rust-tls",
++    "native-tls",
+ ] }
+ 
+ # for dns connector
+diff --git a/easytier-web/Cargo.toml b/easytier-web/Cargo.toml
+--- a/easytier-web/Cargo.toml
++++ b/easytier-web/Cargo.toml
+@@ -33,7 +33,7 @@ tower-http = { version = "0.6", features = ["cors", "compression-full"] }
+ sqlx = { version = "0.8", features = ["sqlite"] }
+ sea-orm = { version = "1.1", features = [
+     "sqlx-sqlite",
+-    "runtime-tokio-rustls",
++    "runtime-tokio-native-tls",
+     "macros",
+ ] }
+ sea-orm-migration = { version = "1.1" }
+@@ -77,7 +77,7 @@ uuid = { version = "1.5.0", features = [
+ 
+ chrono = { version = "0.4.37", features = ["serde"] }
+ openidconnect = { version = "4.0", default-features = false, features = ["accept-rfc3339-timestamps", "reqwest"] }
+-reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
++reqwest = { version = "0.12", default-features = false, features = ["json", "native-tls"] }
+ subtle = "2.6"
+ 
+ mimalloc = { version = "*" }

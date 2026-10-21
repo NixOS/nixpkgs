@@ -4,6 +4,8 @@
   fetchFromGitHub,
   rustPlatform,
   protobuf,
+  pkg-config,
+  openssl,
   nixosTests,
   nix-update-script,
   installShellFiles,
@@ -28,12 +30,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-c+rOjokrL0U63s1CMfy6KlGI7VoSmtxuQjBNDAagSdg=";
 
+  cargoPatches = [
+    # TODO: Drop this patch and the openssl dependency when updating to v2.7.0.
+    # Use the fix from https://github.com/EasyTier/EasyTier/pull/2748 instead.
+    ./native-tls.patch
+  ];
+
   nativeBuildInputs = [
     protobuf
+    pkg-config
     rustPlatform.bindgenHook
     installShellFiles
     mold
   ];
+
+  buildInputs = [ openssl ];
 
   buildNoDefaultFeatures = stdenv.hostPlatform.isMips;
   buildFeatures = lib.optional stdenv.hostPlatform.isMips "mips" ++ lib.optional withQuic "quic";
