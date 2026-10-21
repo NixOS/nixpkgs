@@ -43,6 +43,6 @@ index 8b49dac324..13e24c9f5c 100644
 +    patch_strip = 1,
 +)
 +
- bazel_dep(name = "apple_support", version = "1.24.5")
- 
+ bazel_dep(name = "apple_support", version = "2.5.2")
+
  # The starlark rules in @rules_cc are hidden behind macros but docgen needs to
