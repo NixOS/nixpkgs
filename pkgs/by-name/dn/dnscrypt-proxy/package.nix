@@ -42,6 +42,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://dnscrypt.info/";
     maintainers = with lib.maintainers; [
       atemu
+      magicquark
       waynr
     ];
     mainProgram = "dnscrypt-proxy";
