@@ -772,18 +772,34 @@ let
       pkgs.which
       pkgs.cmake
     ];
+    hobbs = with pkgs; [
+      cargo
+      rustc
+    ];
     httpuv = [ pkgs.pkg-config ];
     hypergeo2 = [ pkgs.pkg-config ];
     iBMQ = [ pkgs.gsl ]; # for gsl-config
+    icebergr = with pkgs; [
+      cargo
+      rustc
+    ];
     image_textlinedetector = [ pkgs.pkg-config ];
     imager = [ pkgs.pkg-config ];
     immunoClust = [ pkgs.gsl ]; # for gsl-config
     interpolation = [ pkgs.pkg-config ];
+    ipf = with pkgs; [
+      cargo
+      rustc
+    ];
     iscream = with pkgs; [
       pkg-config
       which
     ];
     island = [ pkgs.gsl ]; # for gsl-config
+    isodistrreg = with pkgs; [
+      cargo
+      rustc
+    ];
     jSDM = [ pkgs.gsl ]; # for gsl-config
     jack = [ pkgs.pkg-config ];
     kza = [ pkgs.pkg-config ];
