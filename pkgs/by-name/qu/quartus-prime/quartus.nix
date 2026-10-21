@@ -4,6 +4,7 @@
   unstick,
   unzip,
   pkgsCross,
+  radare2,
   fetchurl,
   variant ? "lite",
   withQuesta ? true,
@@ -33,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     # they are failed to be extracted because the installer tries to run its
     # own `unzip` utility.
     unzip
+    radare2
   ];
 
   buildCommand = ''
@@ -109,6 +111,11 @@ stdenv.mkDerivation (finalAttrs: {
       exit 1
     fi
     set -e
+
+    # vendored library contains undocumented x87 instruction FFREEP
+    # that rosetta-linux does not support; patch it out with the
+    # semantically equivalent instruction FSTP
+    r2 -q -w -c 'aaaa; wx ddd @@=`/aF ffreep~[0]`' $out/quartus/linux64/libccl_sqlite3.so
 
     echo "installer log:"
     cat "$out/logs/quartus-${finalAttrs.version}-linux-install.log"
