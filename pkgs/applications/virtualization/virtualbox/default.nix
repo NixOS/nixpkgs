@@ -77,9 +77,9 @@ let
   virtualboxSubVersion = "";
   virtualboxSha256 = "440a2b3eeb46e7e992961b70ef24f43e95b3c99fa2ab30aac20b963ef9e91ad7";
 
-  kvmPatchVboxVersion = "7.2.20";
-  kvmPatchVersion = "20260930";
-  kvmPatchHash = "sha256-gqfAsW2AQFXC0MAss0NfucKYAbpxvT9eYdStYAunwbk=";
+  kvmPatchVboxVersion = "7.2.22";
+  kvmPatchVersion = "20261021";
+  kvmPatchHash = "sha256-7dlaAQxomhKGYdPQbE33e8AQs8w4LtmXPgCa+dxJiXk=";
 
   # The KVM build is not compatible to VirtualBox's kernel modules. So don't export
   # modsrc at all.
