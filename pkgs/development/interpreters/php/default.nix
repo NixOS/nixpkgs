@@ -13,11 +13,17 @@ let
       version,
       hash ? null,
       phpSrc ? null,
+      knownVulnerabilities ? [ ],
     }:
     let
       base = callPackage ./generic.nix {
         stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
-        inherit version hash phpSrc;
+        inherit
+          version
+          hash
+          phpSrc
+          knownVulnerabilities
+          ;
       };
     in
     base.withExtensions (
@@ -88,5 +94,9 @@ in
       url = "https://downloads.php.net/~svpernova09/php-${version}.tar.xz";
       hash = "sha256-Ex+Hoga92QwXjY5E6AJDrgwzPEzuhTH2PRyqms3YaWo=";
     };
+    knownVulnerabilities = [
+      "CVE-2026-109619"
+      "CVE-2026-109618"
+    ];
   };
 }
