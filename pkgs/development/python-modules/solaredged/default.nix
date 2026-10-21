@@ -8,7 +8,6 @@
   pyprojectVersionPatchHook,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   rich,
   syrupy,
   textual,
@@ -20,8 +19,6 @@ buildPythonPackage (finalAttrs: {
   pname = "solaredged";
   version = "0.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "frenck";
