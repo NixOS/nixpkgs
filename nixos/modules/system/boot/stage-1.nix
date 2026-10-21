@@ -11,11 +11,29 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
-
+  inherit (lib)
+    all
+    any
+    attrValues
+    concatMap
+    concatMapStringsSep
+    concatStringsSep
+    filter
+    filterAttrs
+    forEach
+    getBin
+    hasPrefix
+    hasSuffix
+    literalExpression
+    literalMD
+    mapAttrsToList
+    mkIf
+    mkMerge
+    mkOption
+    optionalString
+    types
+    ;
   udev = config.systemd.package;
 
   kernel-name = config.boot.kernelPackages.kernel.name or "kernel";

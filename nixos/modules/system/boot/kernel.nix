@@ -4,10 +4,20 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
+  inherit (lib)
+    concatStringsSep
+    literalExpression
+    mkDefault
+    mkEnableOption
+    mkIf
+    mkMerge
+    mkOption
+    mkRemovedOptionModule
+    optionals
+    optionalString
+    types
+    ;
 
   inherit (config.boot) kernelPatches;
   inherit (config.boot.kernel) features randstructSeed;

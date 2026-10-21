@@ -4,11 +4,13 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
-
+  inherit (lib)
+    literalExpression
+    mkIf
+    mkOption
+    types
+    ;
   cfg = config.boot.initrd.network.openvpn;
 
 in
