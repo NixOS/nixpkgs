@@ -11,7 +11,7 @@
   makeWrapper,
   pango,
   pkg-config,
-  python3,
+  python3Packages,
   scons,
   util-linux,
   wrapGAppsHook3,
@@ -38,16 +38,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    python3.pkgs.sphinx
+    python3Packages.sphinx
     scons
   ]
   ++ lib.optionals withGui [
     makeWrapper
     wrapGAppsHook3
     gobject-introspection
-    python3.pkgs.build
-    python3.pkgs.installer
-    python3.pkgs.setuptools
+    python3Packages.build
+    python3Packages.installer
+    python3Packages.setuptools
   ];
 
   buildInputs = [
@@ -59,10 +59,9 @@ stdenv.mkDerivation (finalAttrs: {
     cairo
     gtksourceview4
     pango
-    python3
-    python3.pkgs.pygobject3
-    python3.pkgs.colorlog
-    python3.pkgs.parsedatetime
+    python3Packages.pygobject3
+    python3Packages.colorlog
+    python3Packages.parsedatetime
   ]
   ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
     elfutils
@@ -80,10 +79,10 @@ stdenv.mkDerivation (finalAttrs: {
     gappsWrapperArgs+=(
       --prefix PATH : "$out/bin"
       --prefix PYTHONPATH : "$(toPythonPath $out)"
-      --prefix PYTHONPATH : "$(toPythonPath ${python3.pkgs.pygobject3})"
-      --prefix PYTHONPATH : "$(toPythonPath ${python3.pkgs.pycairo})"
-      --prefix PYTHONPATH : "$(toPythonPath ${python3.pkgs.colorlog})"
-      --prefix PYTHONPATH : "$(toPythonPath ${python3.pkgs.parsedatetime})"
+      --prefix PYTHONPATH : "$(toPythonPath ${python3Packages.pygobject3})"
+      --prefix PYTHONPATH : "$(toPythonPath ${python3Packages.pycairo})"
+      --prefix PYTHONPATH : "$(toPythonPath ${python3Packages.colorlog})"
+      --prefix PYTHONPATH : "$(toPythonPath ${python3Packages.parsedatetime})"
     )
   '';
 
