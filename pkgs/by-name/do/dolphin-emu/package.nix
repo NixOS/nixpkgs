@@ -155,9 +155,16 @@ stdenv.mkDerivation (
       patches
       ;
 
-    postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+    postPatch = ''
+      # use PlistBuddy from PATH
       substituteInPlace CMake/DolphinInjectVersionInfo.cmake \
         --replace-fail "/usr/libexec/PlistBuddy" "PlistBuddy"
+    ''
+    + lib.optionalString isPrimehack ''
+      # the NSView type from AppKit is not being found
+      substituteInPlace Source/Core/InputCommon/ControllerInterface/Quartz/QuartzKeyboardAndMouse.h --replace-fail \
+        '#include <QuartzCore/QuartzCore.h>' \
+        $'#include <QuartzCore/QuartzCore.h>\n#include <AppKit/AppKit.h>'
     '';
 
     strictDeps = true;
