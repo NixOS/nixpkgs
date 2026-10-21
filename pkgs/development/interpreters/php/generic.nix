@@ -431,6 +431,10 @@ let
             license = lib.licenses.php301;
             mainProgram = "php";
             teams = [ lib.teams.php ];
+            knownVulnerabilities = [
+              "CVE-2026-109618"
+              "CVE-2026-109619"
+            ];
             platforms = lib.platforms.all;
             outputsToInstall = [
               "out"

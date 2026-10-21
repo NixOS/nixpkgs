@@ -208,6 +208,7 @@ lib.makeScope pkgs.newScope (
               homepage
               license
               platforms
+              knownVulnerabilities
               ;
           }
           // args.meta or { };
