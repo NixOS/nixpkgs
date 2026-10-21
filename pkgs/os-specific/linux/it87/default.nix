@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   kernel,
+  kernelModuleInstallHook,
   kernelModuleMakeFlags,
 }:
 
@@ -22,7 +23,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "pic" ];
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies ++ [ kernelModuleInstallHook ];
 
   preConfigure = ''
     sed -i 's|depmod|#depmod|' Makefile
@@ -31,8 +32,9 @@ stdenv.mkDerivation rec {
   makeFlags = kernelModuleMakeFlags ++ [
     "TARGET=${kernel.modDirVersion}"
     "KERNEL_MODULES=${kernel.dev}/lib/modules/${kernel.modDirVersion}"
-    "MODDESTDIR=$(out)/lib/modules/${kernel.modDirVersion}/kernel/drivers/hwmon"
   ];
+
+  kernelModuleInstallDir = "kernel/drivers/hwmon";
 
   meta = {
     description = "Patched module for IT87xx superio chip sensors support";
