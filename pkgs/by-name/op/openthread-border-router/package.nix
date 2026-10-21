@@ -14,6 +14,7 @@
   buildNpmPackage,
   libnftnl,
   libmnl,
+  readline,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -59,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.getBin bashNonInteractive)
     libnftnl
     libmnl
+    readline
   ];
 
   cmakeFlags = [
@@ -76,6 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "OTBR_DBUS" true)
     (lib.cmakeBool "OTBR_TREL" true)
     (lib.cmakeBool "OTBR_NFTABLES" true)
+    (lib.cmakeFeature "OT_READLINE" "readline")
 
     (lib.cmakeFeature "OTBR_VERSION" finalAttrs.version)
     # otbr-agent aborts on startup with "Vendor name must be set." unless a vendor
