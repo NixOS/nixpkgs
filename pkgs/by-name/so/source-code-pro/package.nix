@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = {
     description = "Monospaced font family for user interface and coding environments";
-    maintainers = with lib.maintainers; [ relrod ];
+    maintainers = [ ];
     platforms = with lib.platforms; all;
     homepage = "https://adobe-fonts.github.io/source-code-pro/";
     license = lib.licenses.ofl;
