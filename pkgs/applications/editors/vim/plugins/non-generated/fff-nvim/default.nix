@@ -13,18 +13,18 @@
   writableTmpDirAsHomeHook,
 }:
 let
-  version = "0.10.3";
+  version = "0.11.0";
   src = fetchFromGitHub {
     owner = "dmtrKovalenko";
     repo = "fff";
     tag = "v${version}";
-    hash = "sha256-pE4DsaCvlvgTKJtyV8uGhAQvbJpxpgXlIkoVh8I15qw=";
+    hash = "sha256-GSjvvdLkuezFUrHqiSeePa64VRb3tabOKZNqEE5XSAw=";
   };
   fff-nvim-lib = rustPlatform.buildRustPackage {
     pname = "fff-nvim-lib";
     inherit version src;
 
-    cargoHash = "sha256-iRQa3K5/E520hbq6yO+RRG8pjJBTamj/nm13XCHNOZs=";
+    cargoHash = "sha256-VKI7MnqCGis78qmYuBkViT96ZhG4Wy9vARdnmGV048A=";
 
     cargoBuildFlags = [
       "-p"
@@ -33,7 +33,7 @@ let
       "zlob"
     ];
 
-    cargoCheckFlags = [
+    cargoTestFlags = [
       "-p"
       "fff-nvim"
       "--features"
