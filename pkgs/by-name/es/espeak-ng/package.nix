@@ -141,7 +141,11 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/espeak-ng/espeak-ng";
     changelog = "https://github.com/espeak-ng/espeak-ng/blob/${src.rev}/ChangeLog.md";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ aske ];
+    maintainers = with lib.maintainers; [
+      aske
+      C4N-4
+      iedame
+    ];
     platforms = lib.platforms.all;
     mainProgram = "espeak-ng";
   };
