@@ -14,11 +14,12 @@
   cacert,
   wrapGAppsHook3,
   autoPatchelfHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fluux-messenger";
-  version = "0.17.4";
+  version = "0.18.1";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
@@ -26,17 +27,26 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "processone";
     repo = "fluux-messenger";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HHXdWdKXf0qLKNJQEA1oPPpv4kxpfNuPH2uXEMo3DHg=";
+    hash = "sha256-3hOe7pEs9QMuAX4K3SGrDRFIjpWK4PEsR3KuQVbGr9Y=";
   };
 
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src;
-    hash = "sha256-Gy1zXHsclHo0FNfZh8v0GLfSKel4boSAKBKIYxGfSW0=";
+    hash = "sha256-mKGzLzgMtdY09x/pHBd1R1HZbUccofl1Ho0xE1hYuMw=";
   };
 
   cargoRoot = "apps/fluux/src-tauri";
-  cargoHash = "sha256-/Gx4fu9fBL8IEZqMP+ePpv5hvTwLrl2Nywf76g0d/Fw=";
+
+  # The swift-rs pin is a macOS-only workaround that Cargo.lock lists as
+  # [[patch.unused]]; fetchCargoVendor does not vendor it, so the offline
+  # build would try to fetch it.
+  postPatch = ''
+    substituteInPlace ${finalAttrs.cargoRoot}/Cargo.toml \
+      --replace-fail 'swift-rs = { git = ' '# swift-rs = { git = '
+  '';
+
+  cargoHash = "sha256-BEhToIykuf4ZMHlYETzZ3hdaVcjbp25FLSflLawcj6s=";
 
   nativeBuildInputs = [
     cargo-tauri.hook
@@ -45,18 +55,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    (wrapGAppsHook3.override { isGraphical = true; })
+    wrapGAppsHook3
     autoPatchelfHook
   ];
 
-  buildInputs = [
-    cacert
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     webkitgtk_4_1
     libayatana-appindicator
     libxscrnsaver
   ];
+
+  nativeCheckInputs = [ cacert ];
 
   # libayatana-appindicator is not in the RUNPATH by default
   runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [ libayatana-appindicator ];
@@ -68,6 +77,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # tauriInstallHook only works when we are in cargoRoot
   preInstall = "pushd $buildAndTestSubdir";
   postInstall = "popd";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "XMPP client for communities and organizations";
