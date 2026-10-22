@@ -1,18 +1,18 @@
 {
   lib,
-  stdenvNoCC,
+  stdenv,
   fetchFromGitHub,
-  zig_0_14,
+  zig_0_17,
   nix-update-script,
 }:
 
 let
-  zig = zig_0_14;
+  zig = zig_0_17;
 in
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "anyzig";
-  version = "2026_03_26";
+  version = "2026_10_20";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -21,20 +21,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "marler8997";
     repo = "anyzig";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MQWFKVXsJdv/kV9Kn0GexiSLNDJdd9IGN9rQa2lhF6k=";
+    hash = "sha256-pQbMU7fR5bVT4Tgxq6kR0/uRgW0EpSkyWyZVTUXsHgM=";
   };
-
-  postPatch = ''
-    substituteInPlace build.zig.zon --replace-fail \
-      '12201a08d7eff7619c8eb8284691a3ff959861b4bdd87216f180ed136672fb4ea26f' \
-      'zipcmdline-0.0.0-AAAAAKBaAAAaCNfv92GcjrgoRpGj_5WYYbS92HIW8YDt'
-  '';
 
   nativeBuildInputs = [ zig ];
 
   zigDeps = zig.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-BeCa4IrFbb/bsz+ZuhKRUb9wV8a+JV/11FOBt8JJOKA=";
+    hash = "sha256-UHKvzdYb7akR87WucYdCa/hlfo+KQxV8BSug7BbIkHk=";
   };
 
   postConfigure = ''
