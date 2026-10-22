@@ -17,16 +17,22 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "easytier";
-  version = "2.6.4";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "EasyTier";
     repo = "EasyTier";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lwqpOVKFm85AiBb7NWLAkjSrWSe5pzF0AuEmmDo+v0k=";
+    hash = "sha256-t/a4V1pMoqr9fVfMGHJUfJPk8VD+mbOxB2Cvb2lsX9Q=";
   };
 
-  cargoHash = "sha256-c+rOjokrL0U63s1CMfy6KlGI7VoSmtxuQjBNDAagSdg=";
+  cargoHash = "sha256-/dVCPkDGgvDEUnCb1EfH2Y0Yn48h4mYuUben0GNwvoo=";
+
+  patches = [
+    # `dep:` in easytier-core drops the implicit `smoltcp` feature that
+    # cargo-auditable expects; see rust-secure-code/cargo-auditable#124.
+    ./0001-restore-implicit-smoltcp-feature.patch
+  ];
 
   nativeBuildInputs = [
     protobuf
