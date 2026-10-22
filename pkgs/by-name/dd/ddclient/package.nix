@@ -56,6 +56,8 @@ perlPackages.buildPerlPackage rec {
   # TODO: run upstream tests
   doCheck = false;
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Client for updating dynamic DNS service entries";
     homepage = "https://ddclient.net/";
