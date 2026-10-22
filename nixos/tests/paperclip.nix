@@ -121,7 +121,12 @@ let
                 if not (root / "stop-blocked").exists() and runs[run_id]["status"] == "running":
                     runs[run_id]["status"] = "cancelled"
                     runs[run_id]["stops"] += 1
-                self.send_json(200, {"run_id": run_id, "status": runs[run_id]["status"]})
+                status = runs[run_id]["status"]
+                self.send_json(200, {
+                    "run_id": run_id, "status": status, "stop_requested": True,
+                    "lineage_settled": status != "running",
+                    "lineage": [{"run_id": run_id, "status": status}],
+                })
             else:
                 self.send_json(404, {"error": "missing"})
 
@@ -135,10 +140,18 @@ let
                 self.send_json(200, {"status": "ok"})
                 return
             if self.path == "/v1/capabilities":
-                self.send_json(200, {"features": {"runs_execution_context": {
-                    "version": 1, "mode": "precondition", "backends": ["local"],
-                    "lifetimes": ["wait_for_jobs"], "stop_admission": True,
-                }}})
+                self.send_json(200, {"features": {
+                    "runs_execution_context": {
+                        "version": 1, "mode": "precondition", "backends": ["local"],
+                        "lifetimes": ["wait_for_jobs"], "stop_admission": True,
+                    },
+                    # Fixture runs are single-member lineages; admissions are
+                    # bound to their idempotency key and Stop can be admitted.
+                    "runs_recovery": {
+                        "version": 1, "durable_lineage_stop": True,
+                        "admission_binding": 1, "ordinary_stop_admission": True,
+                    },
+                }})
                 return
             run_id = self.path.split("/")[3] if self.path.startswith("/v1/runs/") else ""
             run = runs.get(run_id)
