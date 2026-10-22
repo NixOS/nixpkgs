@@ -11,7 +11,7 @@
 
 buildGoModule rec {
   pname = "vale";
-  version = "3.17.1";
+  version = "3.25.0";
 
   subPackages = [ "cmd/vale" ];
 
@@ -19,10 +19,13 @@ buildGoModule rec {
     owner = "vale-cli";
     repo = "vale";
     tag = "v${version}";
-    hash = "sha256-KSfbqQRv7sLmTHXuyGiG2mUV3g1JByOy3al5wP4JJVg=";
+    hash = "sha256-Ko+7JkwtnHmNdaeAq0LOjJMrUptbvOzDtGHET9xYSvE=";
   };
 
-  vendorHash = "sha256-K7cdb+Qgs6zml+q0PMqsFBK4SDLV2s0Kda8XmV3nZ50=";
+  vendorHash = "sha256-cuSjULIbb7JtP0CkX4eFm9RChi3nQW46k5Ik9DyGYKk=";
+
+  # https://github.com/vale-cli/vale/issues/1153
+  proxyVendor = true;
 
   ldflags = [
     "-s"
