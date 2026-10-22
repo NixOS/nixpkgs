@@ -39,6 +39,11 @@ stdenv.mkDerivation rec {
 
   glibc = stdenv.cc.libc.out;
 
+  # fpc only uses clang to assemble and link, so every cc-wrapper flag is reported as unused
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_CFLAGS_COMPILE = "-Wno-unused-command-line-argument";
+  };
+
   # Patch paths for linux systems. Other platforms will need their own patches.
   patches = [
     ./mark-paths.patch # mark paths for later substitution in postPatch
@@ -95,15 +100,9 @@ stdenv.mkDerivation rec {
     $out/lib/fpc/*/samplecfg $out/lib/fpc/${version} $out/etc
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    for cfg in $out/lib/fpc/etc/fpc.cfg $out/etc/fpc.cfg; do
-      # Replace the Command Line Tools SDK path with the Nix SDK.
-      # Remove the Command Line Tools binary search path (-FD) to use PATH.
-      # Remove the Xcode binary search path (-FD) to use PATH.
-      substituteInPlace "$cfg" \
-        --replace-fail "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk" "$SDKROOT" \
-        --replace-fail "-FD/Library/Developer/CommandLineTools/usr/bin" "" \
-        --replace-fail "-FD/Applications/Xcode.app/Contents/Developer/usr/bin" ""
-    done
+    # Remove the Xcode binary search path.
+    substituteInPlace "$out/etc/fpc.cfg" \
+      --replace-fail "-FD/Applications/Xcode.app/Contents/Developer/usr/bin" ""
   '';
 
   passthru = {
