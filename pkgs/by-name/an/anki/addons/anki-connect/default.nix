@@ -6,12 +6,12 @@
 }:
 anki-utils.buildAnkiAddon (finalAttrs: {
   pname = "anki-connect";
-  version = "25.11.9.0";
+  version = "26.10.14.0";
   src = fetchFromSourcehut {
     owner = "~foosoft";
     repo = "anki-connect";
     tag = finalAttrs.version;
-    hash = "sha256-cnAH4qIuxSJIM7vmSDU+eppnRi6Out9oSWHBHKCGLZI=";
+    hash = "sha256-SJfZRM0suDli2BIwcN71Xb1yCbrqeDHOrSVOVYM+C2g=";
   };
   sourceRoot = "${finalAttrs.src.name}/plugin";
   passthru.updateScript = gitUpdater { };
