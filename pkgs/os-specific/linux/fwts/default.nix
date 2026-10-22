@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwts";
-  version = "26.07.00";
+  version = "26.09.00";
 
   src = fetchFromGitHub {
     owner = "fwts";
     repo = "fwts";
     rev = "V${finalAttrs.version}";
-    hash = "sha256-82rk3yOvQCBfq833xiD82QParDJi8voszMGp47UR0qk=";
+    hash = "sha256-TD4MygsyS0GJcsl1+nrLaSKSqMGm8YfbT83INfUdGYM=";
   };
 
   nativeBuildInputs = [
