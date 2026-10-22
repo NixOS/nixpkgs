@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustup-toolchain-install-master";
-  version = "1.12.1";
+  version = "1.12.2";
 
   src = fetchFromGitHub {
     owner = "kennytm";
     repo = "rustup-toolchain-install-master";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oLd0NsnxXA1hupSkQAwI/lFXTktbQP5XsfkFX68+jAU=";
+    hash = "sha256-azZR+Sha/fScJbOlUwkkaugWtx91XH/ftpg3aQJiRY4=";
   };
 
-  cargoHash = "sha256-GLNBAhwi/veUS4W6nwcCOcefVbADv962U4OqyujrT5Y=";
+  cargoHash = "sha256-y0r23gf/Skwhkzunjf17m0gFHhdDOQSODNOHTWTVvxs=";
 
   patches = lib.optional stdenv.hostPlatform.isLinux (
     replaceVars ./0001-dynamically-patchelf-binaries.patch {
