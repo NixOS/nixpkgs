@@ -5,7 +5,7 @@
   rocmUpdateScript,
   cmake,
   rocm-cmake,
-  rocm-smi,
+  amdsmi,
   clr,
   openmp,
   gtest,
@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocwmma";
-  version = "7.2.4";
+  version = "10.1";
 
   outputs = [
     "out"
@@ -37,18 +37,14 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-libraries";
-    tag = "rocm-${finalAttrs.version}";
+    tag = "therock-${finalAttrs.version}";
     sparseCheckout = [
       "projects/rocwmma"
       "shared"
     ];
-    hash = "sha256-eoF8a7zknpgvDOSDzolOrdtszUJ5tC7Ur2sRShiQEO0=";
+    hash = "sha256-RvhZH4VVJLpj9ThF3MuvUPsAC7Y4BBTdIAReq7NyX3A=";
   };
   sourceRoot = "${finalAttrs.src.name}/projects/rocwmma";
-
-  patches = lib.optionals (buildTests || buildBenchmarks) [
-    ./0000-dont-fetch-googletest.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -60,7 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
     openmp
   ]
   ++ lib.optionals (buildTests || buildBenchmarks) [
-    rocm-smi
+    # rocWMMA's benchmark tests do find_package(amd_smi)
+    amdsmi
     gtest
     rocblas
   ];
@@ -73,6 +70,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_BINDIR=bin"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
+  ]
+  ++ lib.optionals (buildTests || buildBenchmarks) [
+    # Use nixpkgs gtest instead of the upstream FetchContent googletest download
+    "-DROCWMMA_USE_SYSTEM_GOOGLETEST=ON"
   ]
   ++ lib.optionals (gpuTargets != [ ]) [
     "-DGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
