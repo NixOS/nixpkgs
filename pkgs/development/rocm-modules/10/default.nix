@@ -144,6 +144,8 @@ let
 
       hipblas-common = self.callPackage ./hipblas-common { };
 
+      hipblas = self.callPackage ./hipblas { };
+
       hipblaslt = self.callPackage ./hipblaslt { };
 
       half = self.callPackage ./half { };
