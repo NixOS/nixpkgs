@@ -115,7 +115,10 @@ rec {
     dontWrapQtApps = true;
 
     makeWrapperArgs = [
-      "--suffix PATH : ${lib.makeBinPath [ xdg-utils ]}"
+      "--suffix"
+      "PATH"
+      ":"
+      (lib.makeBinPath [ xdg-utils ])
     ];
 
     postInstall = ''
