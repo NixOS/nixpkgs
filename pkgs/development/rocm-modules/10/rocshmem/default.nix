@@ -17,14 +17,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocshmem${clr.gpuArchSuffix}";
-  version = "7.2.4";
+  version = "10.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
-    repo = "rocSHMEM";
-    tag = "rocm-${finalAttrs.version}";
-    hash = "sha256-7TiUABwCVPvosoLdR8zN+QGiX+OD7iD+HKMLnGMmRYA=";
+    # rocSHMEM lives in the rocm-systems monorepo since ROCm 10
+    repo = "rocm-systems";
+    tag = "therock-${finalAttrs.version}";
+    sparseCheckout = [
+      "projects/rocshmem"
+      "shared"
+    ];
+    hash = "sha256-uVUHYyJbaE5vauN1mczLf7rYNxRSD93eJDIDbzbYzHs=";
   };
+  sourceRoot = "${finalAttrs.src.name}/projects/rocshmem";
 
   nativeBuildInputs = [
     cmake
@@ -38,6 +44,15 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals useMpi [
     mpi
   ];
+
+  # The device bitcode command does not see the HSA headers the host target gets.
+  postPatch = ''
+    substituteInPlace cmake/DeviceBitcode.cmake \
+      --replace-fail \
+        '-Xclang -mcode-object-version=none' \
+        '-Xclang -mcode-object-version=none
+    -I${rocm-runtime}/include'
+  '';
 
   cmakeFlags = [
     (lib.cmakeBool "CMAKE_POSITION_INDEPENDENT_CODE" true)

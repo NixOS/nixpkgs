@@ -107,6 +107,8 @@ let
 
       rccl = self.callPackage ./rccl { };
 
+      rocshmem = self.callPackage ./rocshmem { };
+
       half = self.callPackage ./half { };
 
       # Even if config.rocmSupport is false we need rocmSupport true
