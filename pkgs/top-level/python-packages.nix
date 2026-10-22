@@ -21027,6 +21027,8 @@ self: super: with self; {
 
   torch-tb-profiler = callPackage ../development/python-modules/torch-tb-profiler/default.nix { };
 
+  torch-tensorrt = callPackage ../development/python-modules/torch-tensorrt { };
+
   torchWithCuda = self.torch.override {
     triton = self.triton-cuda;
     cudaSupport = true;
