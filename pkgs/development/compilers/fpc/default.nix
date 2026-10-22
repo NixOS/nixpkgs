@@ -93,6 +93,17 @@ stdenv.mkDerivation rec {
     # to resolve the location of /etc
     mkdir -p $out/etc
     $out/lib/fpc/*/samplecfg $out/lib/fpc/${version} $out/etc
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    for cfg in $out/lib/fpc/etc/fpc.cfg $out/etc/fpc.cfg; do
+      # Replace the Command Line Tools SDK path with the Nix SDK.
+      # Remove the Command Line Tools binary search path (-FD) to use PATH.
+      # Remove the Xcode binary search path (-FD) to use PATH.
+      substituteInPlace "$cfg" \
+        --replace-fail "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk" "$SDKROOT" \
+        --replace-fail "-FD/Library/Developer/CommandLineTools/usr/bin" "" \
+        --replace-fail "-FD/Applications/Xcode.app/Contents/Developer/usr/bin" ""
+    done
   '';
 
   passthru = {
