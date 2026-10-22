@@ -1941,6 +1941,8 @@ mapAliases {
   nixStable = throw "'nixStable' has been renamed to/replaced by 'nixVersions.stable'"; # Converted to throw 2025-10-27
   nm-tray = throw "'nm-tray' has been removed, as it only works with Plasma 5"; # Added 2025-08-30
   nmapsi4 = throw "'nmapsi4' has been removed as it depended on qt5 webengine, which is EOL"; # Added 2026-04-25
+  noctalia-qs = throw "'noctalia-qs' has been removed because it is no longer maintained, consider using 'noctalia' (v5) instead"; # Added 2026-10-22
+  noctalia-shell = throw "'noctalia-shell' has been removed because it is no longer maintained, consider using 'noctalia' (v5) instead"; # Added 2026-10-22
   node2nix = throw "node2nix has been removed because it was only used to maintain the now-removed nodePackages set. Use the newer builders in nixpkgs instead, such as buildNpmPackage"; # Added 2026-03-03
   nodejs-slim_20 = nodejs_20;
   nodejs-slim_25 = nodejs_25;
