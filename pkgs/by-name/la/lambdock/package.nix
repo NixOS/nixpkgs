@@ -11,6 +11,8 @@
   xvfb-run,
   dbus,
   fontconfig,
+  hicolor-icon-theme,
+  adwaita-icon-theme,
   gtk4,
   gtk4-layer-shell,
   guile,
@@ -21,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lambdock";
-  version = "0.6.7";
+  version = "0.7.5";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -30,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jjba23";
     repo = "lambdock";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0Ca2twkV6lKdqlw5jp8/bzE5lBoGhR8zaECRRg2wWrY=";
+    hash = "sha256-C+t8rbv/2sfAyO0cLWi+ydWBNZhilFPERkZhwoe0mUo=";
   };
 
   nativeBuildInputs = [
@@ -57,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
     xvfb-run
     dbus
     fontconfig
+    hicolor-icon-theme
+    adwaita-icon-theme
   ];
 
   checkPhase = ''
@@ -66,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     export HOME=$TMPDIR
     export XDG_RUNTIME_DIR=$TMPDIR
     export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf
+    export XDG_DATA_DIRS=${hicolor-icon-theme}/share:${adwaita-icon-theme}/share
 
     # Disable accessibility bus queries and force GTK to use X11 under Xvfb
     export GTK_A11Y=none
