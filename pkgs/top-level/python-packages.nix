@@ -13991,6 +13991,8 @@ self: super: with self; {
 
   polygon3 = callPackage ../development/python-modules/polygon3 { };
 
+  polygraphy = callPackage ../development/python-modules/polygraphy { };
+
   polyline = callPackage ../development/python-modules/polyline { };
 
   polyswarm-api = callPackage ../development/python-modules/polyswarm-api { };
