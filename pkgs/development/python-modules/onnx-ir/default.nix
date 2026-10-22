@@ -11,10 +11,9 @@
   ml-dtypes,
   numpy,
   onnx,
+  packaging,
   sympy,
   typing-extensions,
-
-  fetchpatch,
 
   # tests
   onnxruntime,
@@ -27,7 +26,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "onnx-ir";
-  version = "0.2.1";
+  version = "1.1.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -35,19 +34,8 @@ buildPythonPackage (finalAttrs: {
     owner = "onnx";
     repo = "ir-py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vdo8BiE7m9Qr3JktgcPGDZfykjcf/VYY39tfhtzOrpA=";
+    hash = "sha256-nsObjSOql27xzyyXupL7SCa6fjUQuPjGbBzKJRO+nTQ=";
   };
-
-  patches = [
-    # safetensors 0.8.0 changed `serialize_file` to require `TensorSpec` objects instead of plain
-    # dicts, breaking `save_safetensors`
-    # https://github.com/onnx/ir-py/pull/439
-    (fetchpatch {
-      name = "fix-safetensor-0.8.0-compat";
-      url = "https://github.com/onnx/ir-py/commit/c4780478d251f839ec1bacbea72d0a0948553285.patch";
-      hash = "sha256-99MeGU1B/534shCq9/TgrAPWscp+braXVcjAtnWQ3uY=";
-    })
-  ];
 
   build-system = [
     setuptools
@@ -57,6 +45,7 @@ buildPythonPackage (finalAttrs: {
     ml-dtypes
     numpy
     onnx
+    packaging
     sympy
     typing-extensions
   ];
