@@ -103,6 +103,8 @@ let
 
       rocr-debug-agent = self.callPackage ./rocr-debug-agent { };
 
+      rocprim = self.callPackage ./rocprim { };
+
       mscclpp = self.callPackage ../mscclpp { };
 
       rccl = self.callPackage ./rccl { };
