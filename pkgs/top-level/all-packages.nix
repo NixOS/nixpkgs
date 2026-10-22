@@ -4597,7 +4597,6 @@ with pkgs;
   antlr = antlr4;
 
   inherit (callPackages ../servers/apache-kafka { })
-    apacheKafka_4_1
     apacheKafka_4_2
     apacheKafka_4_3
     apacheKafka_4_4
