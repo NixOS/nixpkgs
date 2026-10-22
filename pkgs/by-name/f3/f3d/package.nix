@@ -2,19 +2,19 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  assimp,
+  autoPatchelfHook,
   cmake,
-  help2man,
+  fontconfig,
   gzip,
+  help2man,
   libxcb,
   libxt,
-  openusd,
   onetbb,
-  vtk,
-  autoPatchelfHook,
-  python3Packages,
   opencascade-occt,
-  assimp,
-  fontconfig,
+  openusd,
+  python3Packages,
+  vtk,
   withManual ? !stdenv.hostPlatform.isDarwin,
   withPythonBinding ? false,
   withUsd ? openusd.meta.available,
@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals withManual [
     # manpage
-    help2man
     gzip
+    help2man
   ]
   ++ lib.optionals stdenv.hostPlatform.isElf [
     # https://github.com/f3d-app/f3d/pull/1217
@@ -48,11 +48,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    vtk
-    opencascade-occt
     assimp
     fontconfig
     libxcb
+    opencascade-occt
+    vtk
   ]
   ++ lib.optionals withPythonBinding [
     python3Packages.python
@@ -61,8 +61,8 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals withUsd [
     libxt
-    openusd
     onetbb
+    openusd
   ];
 
   cmakeFlags = [
