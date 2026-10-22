@@ -4,6 +4,7 @@
   callPackage,
   newScope,
   boost179,
+  opencv,
   python3Packages,
   openmpi,
   stdenv,
@@ -184,6 +185,27 @@ let
       migraphx = self.callPackage ./migraphx { stdenv = origStdenv; };
 
       rpp = self.callPackage ./rpp { };
+
+      rpp-hip = self.rpp.override { useCPU = false; };
+
+      rpp-cpu = self.rpp.override { useCPU = true; };
+
+      mivisionx = self.callPackage ../mivisionx {
+        stdenv = origStdenv;
+        opencv = opencv.override { enablePython = true; };
+      };
+
+      mivisionx-hip = self.mivisionx.override {
+        rpp = self.rpp-hip;
+        useOpenCL = false;
+        useCPU = false;
+      };
+
+      mivisionx-cpu = self.mivisionx.override {
+        rpp = self.rpp-cpu;
+        useOpenCL = false;
+        useCPU = true;
+      };
 
       # Even if config.rocmSupport is false we need rocmSupport true
       # version of ucc/ucx in openmpi in this package set
