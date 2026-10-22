@@ -19,14 +19,20 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "rpp-${if useCPU then "cpu" else "hip"}";
 
-  version = "7.2.4";
+  version = "10.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
-    repo = "rpp";
-    tag = "rocm-${finalAttrs.version}";
-    hash = "sha256-6e4JHKFC2dvtSGo9xbQKzIdUwlHB09pr5C/5xHwP3l4=";
+    # rpp lives in the rocm-libraries monorepo since ROCm 10
+    repo = "rocm-libraries";
+    tag = "therock-${finalAttrs.version}";
+    sparseCheckout = [
+      "projects/rpp"
+      "shared"
+    ];
+    hash = "sha256-ZD3gzZhb1n5hSJ6nnYVksuoYEEy+wzaLbh02tMdv8dQ=";
   };
+  sourceRoot = "${finalAttrs.src.name}/projects/rpp";
 
   nativeBuildInputs = [
     cmake
@@ -55,11 +61,24 @@ stdenv.mkDerivation (finalAttrs: {
     "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
   ];
 
-  postPatch = lib.optionalString (!useCPU) ''
-    # Bad path
-    substituteInPlace CMakeLists.txt \
-      --replace "COMPILER_FOR_HIP \''${ROCM_PATH}/llvm/bin/clang++" "COMPILER_FOR_HIP ${clr}/bin/hipcc"
-  '';
+  # -fopenmp adds the toolchain include dir, which holds glibc's headers, as a
+  # plain -I; keep it a system dir so mm_malloc.h compiles with glibc >= 2.44.
+  env = lib.optionalAttrs useCPU {
+    CXXFLAGS = "-isystem ${stdenv.cc}/include";
+  };
+
+  postPatch =
+    # api/rppdefs.h includes <half.hpp>, so half must be a PUBLIC dependency.
+    ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail 'set_target_properties(''${PROJECT_NAME} PROPERTIES POSITION_INDEPENDENT_CODE ON)' \
+          $'target_link_libraries(''${PROJECT_NAME} PUBLIC HALF::half)\nset_target_properties(''${PROJECT_NAME} PROPERTIES POSITION_INDEPENDENT_CODE ON)'
+    ''
+    + lib.optionalString (!useCPU) ''
+      # Bad path
+      substituteInPlace CMakeLists.txt \
+        --replace "COMPILER_FOR_HIP \''${ROCM_PATH}/llvm/bin/clang++" "COMPILER_FOR_HIP ${clr}/bin/hipcc"
+    '';
 
   postBuild = lib.optionalString buildDocs ''
     python3 -m sphinx -T -E -b html -d _build/doctrees -D language=en ../docs _build/html
