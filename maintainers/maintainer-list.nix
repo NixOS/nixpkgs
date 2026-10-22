@@ -20727,6 +20727,11 @@
     githubId = 56316606;
     name = "Amneesh Singh";
   };
+  naturalspottingsmite = {
+    name = "NaturalSpottingSmite";
+    github = "NaturalSpottingSmite";
+    githubId = 239067163;
+  };
   naufik = {
     email = "naufal@naufik.net";
     github = "naufik";
