@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "okteto";
-  version = "3.24.0";
+  version = "3.24.1";
 
   src = fetchFromGitHub {
     owner = "okteto";
     repo = "okteto";
     tag = finalAttrs.version;
-    hash = "sha256-20//Aw7SZqy0R5+TpS+sNga6oM25dzs5WUAlLSlcaTQ=";
+    hash = "sha256-X8l6t5gJ5iKMXJv3Ve6fz2oRxZ+gHMH1rTyfAGqvjH4=";
   };
 
-  vendorHash = "sha256-bsK2hPpO82VHDmEx3PH64W1tBSi4eakC5BHB1yTYw14=";
+  vendorHash = "sha256-2OlA6KGLsWGpaSkCUjrdyo67sGGAoIF3aLcSjkZvXdU=";
 
   postPatch = ''
     # Disable some tests that need file system & network access.
