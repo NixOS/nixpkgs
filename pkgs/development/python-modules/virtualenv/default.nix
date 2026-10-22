@@ -12,6 +12,7 @@
   pytest-freezer,
   pytest-mock,
   pytestCheckHook,
+  python,
   python-discovery,
   time-machine,
 }:
@@ -27,6 +28,18 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-8LOmA1Mhfqbl3hsGZa8tQutjfjEVeDlpOKyVut5rDVI=";
   };
+
+  # Make the pip seeded into each venv prefer the system CA bundle over its vendored certifi.
+  # virtualenv checks each bundled wheel against BUNDLE_SHA256, so update the hash too.
+  postPatch = ''
+    for whl in src/virtualenv/seed/wheels/embed/pip-*.whl; do
+      old=$(sha256sum "$whl" | cut -d' ' -f1)
+      ${python.pythonOnBuildForHost.interpreter} ${../../interpreters/python/cpython/ensurepip-certifi.py} \
+        ${../../interpreters/python/pip-certifi-override.py} "$whl"
+      substituteInPlace src/virtualenv/seed/wheels/embed/__init__.py \
+        --replace-fail "$old" "$(sha256sum "$whl" | cut -d' ' -f1)"
+    done
+  '';
 
   build-system = [
     hatch-vcs
