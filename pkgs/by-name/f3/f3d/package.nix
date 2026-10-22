@@ -2,10 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   help2man,
   gzip,
+  libxcb,
   libxt,
   openusd,
   onetbb,
@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation rec {
   pname = "f3d";
-  version = "3.5.0";
+  version = "4.0.0";
 
   outputs = [ "out" ] ++ lib.optionals withManual [ "man" ];
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     owner = "f3d-app";
     repo = "f3d";
     tag = "v${version}";
-    hash = "sha256-j8OSG3MNWAlCIZcjhWCMeskbcv+4pTn4ktRZXKYmBkc=";
+    hash = "sha256-C58+KnwfWBv+2m6b1f0Sg47kId6OKczRVW3FRUWZlEE=";
     fetchLFS = true;
   };
 
@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
     opencascade-occt
     assimp
     fontconfig
+    libxcb
   ]
   ++ lib.optionals withPythonBinding [
     python3Packages.python
