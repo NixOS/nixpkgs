@@ -2,6 +2,8 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  pkg-config,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,6 +26,10 @@ rustPlatform.buildRustPackage rec {
   ];
 
   cargoHash = "sha256-D7lki2/xWcNStcHIS8q1fTkW+37Q+m/yetn05DwA2C8=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ zstd ];
 
   # TODO: enable tests
   # The test suite depends on a number of browsers and network requests,
