@@ -10,20 +10,7 @@
   ...
 }:
 let
-  fluxerHashes = {
-    rev = "fc8b6e4abff1efb4d4c00816de781ec1c758e754";
-    version = "0-unstable-2026-10-24";
-    hash = "sha256-gHD9y3LXcR1TfFREwsBKQa1zufYn3RuyaH+48Z8WUiw=";
-    cargo = {
-      hash = "sha256-mC7Y84XD1GkEPvrQi2sTit3HMRObsDIryfSPmwhf69A=";
-      libFluxcore = "sha256-n9hA0WaUyYpXV9ply8QwUgq4NvmBERIebrfzz2lCd/A=";
-      libFluxwebp = "sha256-zz5JD3jiNCx8FOReZmCm4O2F20s7UbMsfZIM2sIcSS0=";
-      libGuildMemberListNif = "sha256-lECOMdkbdWAeL829MrWPWGQI44P+4VMnLIp9Jd+xJJo=";
-      libPushMarkdownPlaintext = "sha256-9HDcMd1qfIOJPIw6D9bLR4rSfbz8Zv/wz9zQe3PoZjM=";
-    };
-    pnpm = "sha256-UGGXPujQHtN5xgKxYvYH0NZnB0ozbp0GeVcYf3Aqucw=";
-    rebar = "sha256-rGSvSCUjH+BedJga2Kq2B7diDT5M68l2xmp9hbDD5xI=";
-  };
+  fluxerHashes = lib.importJSON ./pin.json;
   copyCargoDeps =
     deps:
     ''cp -r --no-clobber --no-preserve=mode "${deps}/source-registry-0/." "$out/source-registry-0/"'';
