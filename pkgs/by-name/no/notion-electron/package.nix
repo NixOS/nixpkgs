@@ -4,7 +4,7 @@
   buildNpmPackage,
   makeWrapper,
   desktop-file-utils,
-  electron_42,
+  electron_44,
   nix-update-script,
 }:
 
@@ -48,7 +48,7 @@ buildNpmPackage (finalAttrs: {
       $out/share/applications/notion-electron.desktop
 
     # Disable update functionality as it will be handled via nixpkgs
-    makeWrapper ${electron_42}/bin/electron $out/bin/notion-electron \
+    makeWrapper ${electron_44}/bin/electron $out/bin/notion-electron \
               --add-flags '--disable-update-functionality' \
               --add-flags $out/lib/node_modules/notion-electron
   '';
