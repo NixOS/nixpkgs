@@ -111,6 +111,8 @@ let
 
       hiprand = self.callPackage ./hiprand { };
 
+      rocfft = self.callPackage ./rocfft { };
+
       mscclpp = self.callPackage ../mscclpp { };
 
       rccl = self.callPackage ./rccl { };
