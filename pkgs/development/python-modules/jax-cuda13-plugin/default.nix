@@ -19,17 +19,17 @@ let
     x86_64-linux = {
       name = "manylinux_2_27_x86_64";
       hashes = {
-        cp312 = "sha256-P63JugkUdj9V7/b9OKlqP0IRu2arx045cy71Wgg/mlw=";
-        cp313 = "sha256-nVgTuHFZBTtcZjxuSrpFoUUk9b5a7Ahl9YYK/IxwkOQ=";
-        cp314 = "sha256-CN5QpSp4tIJBCkdzHKJWUGH+ThL3DzYpPKYyNgGFqGs=";
+        cp312 = "sha256-YCj68XnnqnzGQQDtPHx7GxE0b1qgXV6eM+j+YMUon6E=";
+        cp313 = "sha256-SBcsMa7srjEhwFYbVNm4otDHVUk1l5jc7/PluevPdN8=";
+        cp314 = "sha256-FrfbYs0i21END/Uv268dOxSQic/2oZPRldkinY6xQ3k=";
       };
     };
     aarch64-linux = {
       name = "manylinux_2_27_aarch64";
       hashes = {
-        cp312 = "sha256-88FVeXNEF6v8izQJpSMnNcG2aJl/3Eolb5sECa6iOVc=";
-        cp313 = "sha256-p7poqpgWTqg/SSmKtO7N+DeKMfQDdSMOTqnJHwp1En8=";
-        cp314 = "sha256-/Q4hsNvYkMX5bVR4ZmRHOwAsXgIxB1E7Fh9Oi+CcnUQ=";
+        cp312 = "sha256-CH8TMc1asn3NQwO61xKe+vfx3u2DDVZLjQXX7+yUbWE=";
+        cp313 = "sha256-hGeGn/1kvpd7DzwiuY/B+NYBl3Z8ZI9qLHv7/1ZIlK4=";
+        cp314 = "sha256-in5K+eDFVwsue9VCOva2hm26pxndlR0kF7lIBvfJFCs=";
       };
     };
   };

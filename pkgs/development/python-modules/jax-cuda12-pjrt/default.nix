@@ -17,11 +17,11 @@ let
   platforms = {
     x86_64-linux = {
       name = "manylinux_2_27_x86_64";
-      hash = "sha256-jjL7niUJa//ooWU6oeSy1arjgj8kCGkrU4NHJ+9gDNw=";
+      hash = "sha256-XsKOBhmNCUAxw3WQtOp1OujN5IeatLYLr0Dw3/tnMoY=";
     };
     aarch64-linux = {
       name = "manylinux_2_27_aarch64";
-      hash = "sha256-20afsx+TzZtKwW9n3Twp3MVrJmhStdVMJ9Em4B0wgtw=";
+      hash = "sha256-5qpsWMVCDBvaItsxovbFwdCmbLcB7rcx/q5E/vGXcXw=";
     };
   };
   currentPlatform = platforms.${stdenv.hostPlatform.system};
