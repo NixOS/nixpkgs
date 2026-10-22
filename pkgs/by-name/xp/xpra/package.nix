@@ -189,6 +189,8 @@ effectiveBuildPythonApplication (finalAttrs: {
     systemdLibs
   ]
   ++ lib.optionals withNvenc [
+    # nvcc needs cuda_runtime.h to build xpra's CUDA kernels.
+    cudaPackages.cuda_cudart
     nvencHeaders
     nvjpegHeaders
   ];
