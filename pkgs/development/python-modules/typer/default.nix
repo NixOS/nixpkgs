@@ -65,10 +65,17 @@ buildPythonPackage rec {
     procps
   ];
 
-  preCheck = ''
+  preCheck =
     # Fix "No module named 'tests'" error in tests/test_types_file.py::test_binary_stderr
-    export PYTHONPATH="$PWD:$PYTHONPATH"
-  '';
+    ''
+      export PYTHONPATH="$PWD:$PYTHONPATH"
+    ''
+    # Match upstream's scripts/test.sh. Otherwise rich wraps output at 80 columns, and
+    # test_file_error fails with 11 or more xdist workers (popen-gw10 and up), whose longer tmp_path
+    # gets split mid-name.
+    + ''
+      export TERMINAL_WIDTH=3000
+    '';
 
   pythonImportsCheck = [ "typer" ];
 
