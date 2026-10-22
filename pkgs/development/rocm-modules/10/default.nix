@@ -43,6 +43,10 @@ let
 
       rocm-device-libs = self.callPackage ./rocm-device-libs { };
 
+      rocm-runtime = self.callPackage ./rocm-runtime {
+        stdenv = origStdenv;
+      };
+
       rocm-docs-core = python3Packages.callPackage ../rocm-docs-core { };
 
       hipcc = self.callPackage ../hipcc { stdenv = origStdenv; };
