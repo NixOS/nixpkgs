@@ -51,6 +51,10 @@ in
   # form, then linked at the root according to `target`.
   contents,
 
+  # Attribute set of { "/path" = "target"; } symlinks to create as is,
+  # e.g. relative symlinks that do not point into the nix store.
+  symlinks ? { },
+
   # List of uncompressed cpio files to prepend to the initramfs. This
   # can be used to add files in specified paths without them becoming
   # symlinks to store paths.
@@ -74,6 +78,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     name
     extension
     prepend
+    symlinks
     ;
 
   compress = "${_compressorExecutable} ${lib.escapeShellArgs _compressorArgsReal}";
@@ -88,6 +93,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mkdir -p ./root/{run,tmp,var/empty}
     ln -s ../run ./root/var/run
     make-initrd-ng <(echo "$contentsJSON") ./root
+    for link in "''${!symlinks[@]}"; do
+      mkdir -p "./root/$(dirname "$link")"
+      ln -s --no-target-directory "''${symlinks[$link]}" "./root/$link"
+    done
     mkdir "$out"
     (cd root && find . -exec touch -h -d '@1' '{}' +)
     for PREP in ''${prepend[@]}; do

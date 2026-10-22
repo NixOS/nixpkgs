@@ -475,13 +475,13 @@ in
     boot.initrd.systemd.contents = {
       "/etc/udev/rules.d".source = udevRulesFor {
         name = "initrd-udev-rules";
-        initrdBin = lib.removeSuffix "/bin" config.boot.initrd.systemd.contents."/bin".source;
+        initrdBin = lib.removeSuffix "/bin" config.boot.initrd.systemd.contents."/usr/bin".source;
         udevPackages = config.boot.initrd.services.udev.packages;
-        udevPath = lib.removeSuffix "/bin" config.boot.initrd.systemd.contents."/bin".source;
+        udevPath = lib.removeSuffix "/bin" config.boot.initrd.systemd.contents."/usr/bin".source;
         udev = config.boot.initrd.systemd.package;
         systemd = config.boot.initrd.systemd.package;
         binPackages = config.boot.initrd.services.udev.binPackages ++ [
-          config.boot.initrd.systemd.contents."/bin".source
+          config.boot.initrd.systemd.contents."/usr/bin".source
         ];
       };
     };
