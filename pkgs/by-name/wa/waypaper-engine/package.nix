@@ -5,7 +5,6 @@
   pnpm_11,
   pnpmConfigHook,
   stdenv,
-  gitMinimal,
   fetchFromGitHub,
   electron,
   makeWrapper,
@@ -17,13 +16,13 @@
 let
   pnpm = pnpm_11;
 
-  version = "3.1.1";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "0bCdian";
     repo = "Waypaper-Engine";
     tag = "v${version}";
-    hash = "sha256-MnxxHJ6ff13N2ABqr/29uTxBbgmm1hySROVCwXEYCc0=";
+    hash = "sha256-lSdp8qILZRYzIKNpavRY/tueIIYoCET9Z3PzljEyy1o=";
   };
 
   backend = buildGoModule (finalAttrs: {
@@ -42,7 +41,7 @@ let
     buildInputs = [ wayland ];
 
     proxyVendor = true;
-    vendorHash = "sha256-yKXPQ3Q/dyn/ZHQX/lDRjkYiF+6/lUkDioqnzPlYtN0=";
+    vendorHash = "sha256-ApcqVHydoIa0c0cFzru0eakJ6jt3wXVKQ8u/9BVUMq8=";
 
     subPackages = [ "cmd/daemon" ];
 
@@ -64,20 +63,14 @@ stdenv.mkDerivation (finalAttrs: {
     pnpmConfigHook
     pnpm
     makeWrapper
-    gitMinimal
   ];
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-8x0qzKW2iGTKIF2VI9KGEgFeSPtnOjURZHtN/azbfSw=";
+    hash = "sha256-SNhu04e7QPIHjYAvh4s/NfpqeVEGHfTpUzqFelf7gPI=";
   };
-
-  patchPhase = ''
-    # binary patch unsupported by patch command, requires git apply
-    git apply ${./0001-fix-null-strings.patch}
-  '';
 
   buildPhase = ''
     runHook preBuild
