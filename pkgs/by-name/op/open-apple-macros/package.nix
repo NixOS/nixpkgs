@@ -35,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     ''
       declare -a supportedPlugins=(
         FoundationModels
+        Previews
         SwiftUI
       )
 
