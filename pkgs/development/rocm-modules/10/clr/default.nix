@@ -70,7 +70,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "clr";
-  version = "7.2.4";
+  version = "10.1";
 
   outputs = [
     "out"
@@ -83,12 +83,12 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-systems";
-    tag = "rocm-${finalAttrs.version}";
+    tag = "therock-${finalAttrs.version}";
     sparseCheckout = [
       "projects/clr"
       "shared"
     ];
-    hash = "sha256-//cQBKlSB9uSP4fBgJpI1FxnqlzyQN913CHVGa2tqv8=";
+    hash = "sha256-uK/JD5p72os15+n6Jw6aU0xELphBHdYnVu7NmXC3BA4=";
   };
   sourceRoot = "${finalAttrs.src.name}/projects/clr";
 
@@ -211,6 +211,11 @@ stdenv.mkDerivation (finalAttrs: {
     # Just link rocminfo, it's easier
     ln -s ${rocminfo}/bin/* $out/bin
     ln -s ${rocm-core}/include/* $out/include/
+
+    # Installed by opencl/CMakeLists.txt; the ICD file would collide with $icd's.
+    # https://github.com/ROCm/rocm-systems/blob/therock-10.1/projects/clr/opencl/CMakeLists.txt#L124-L143
+    rm $out/etc/OpenCL/vendors/amdocl64.icd $out/etc/ld.so.conf.d/10-rocm-opencl.conf
+    rmdir $out/etc/OpenCL/vendors $out/etc/OpenCL $out/etc/ld.so.conf.d $out/etc
 
     # Replace rocm-opencl-icd functionality
     mkdir -p $icd/etc/OpenCL/vendors

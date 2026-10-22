@@ -65,6 +65,9 @@ let
       hip-common = self.callPackage ./hip-common { };
 
       hipcc = self.callPackage ../hipcc { stdenv = origStdenv; };
+
+      # Replaces hip, opencl-runtime, and rocclr
+      clr = self.callPackage ./clr { };
       rocprofiler-register = self.callPackage ./rocprofiler-register {
         inherit (llvm) clang;
       };
@@ -72,5 +75,38 @@ let
       roctracer = self.callPackage ./roctracer { };
     }
   );
+  scopeForArches =
+    arches:
+    outer.overrideScope (
+      _final: prev: {
+        clr = prev.clr.override {
+          localGpuTargets = arches;
+        };
+      }
+    );
 in
 outer
+// lib.genAttrs outer.clr.gpuTargets (arch: scopeForArches [ arch ])
+// {
+  gfx9 = scopeForArches [
+    "gfx906"
+    "gfx908"
+    "gfx90a"
+    "gfx942"
+  ];
+  gfx10 = scopeForArches [
+    "gfx1010"
+    "gfx1030"
+  ];
+  gfx11 = scopeForArches [
+    "gfx1100"
+    "gfx1101"
+    "gfx1102"
+    "gfx1150"
+    "gfx1151"
+  ];
+  gfx12 = scopeForArches [
+    "gfx1200"
+    "gfx1201"
+  ];
+}
