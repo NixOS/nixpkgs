@@ -11,5 +11,10 @@
         print(output)
         assert "Tainted" not in output
         assert "unmerged-usr" not in output
+
+    with subtest("activation migrates a /bin directory to a symlink"):
+        machine.succeed("rm /bin && mkdir /bin && ln -s /usr/bin/sh /bin/sh")
+        machine.succeed("/run/current-system/activate")
+        machine.succeed("test \"$(readlink /bin)\" = usr/bin")
   '';
 }

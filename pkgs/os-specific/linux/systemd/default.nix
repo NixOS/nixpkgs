@@ -245,7 +245,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-Don-t-try-to-unmount-nix-or-nix-store.patch
     ./0002-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
     ./0003-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
-    ./0004-core-don-t-taint-on-unmerged-usr.patch
   ];
 
   postPatch = ''
