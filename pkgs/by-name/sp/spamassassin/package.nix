@@ -67,6 +67,8 @@ perlPackages.buildPerlPackage rec {
       openssl
     ];
 
+  strictDeps = true;
+
   makeFlags = [
     "PERL_BIN=${perlPackages.perl}/bin/perl"
     "ENABLE_SSL=yes"
