@@ -35,6 +35,7 @@
   jinja2,
   jsonschema,
   langfuse,
+  litellm-proxy-extras,
   llm-sandbox,
   mcp,
   openai,
@@ -150,7 +151,7 @@ buildPythonPackage (finalAttrs: {
       httpx2
       inquirerpy
       # FIXME package litellm-enterprise
-      # FIXME package litellm-proxy-extras
+      litellm-proxy-extras
       mcp
       orjson
       polars
