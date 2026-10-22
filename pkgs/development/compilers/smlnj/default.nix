@@ -7,16 +7,21 @@
   automake,
   autoconf,
   cmake,
+  coreutils,
+  gnugrep,
+  gnused,
+  gawk,
   versionCheckHook,
+  bashInteractive,
 }:
 let
-  version = "2026.2";
+  version = "2026.3";
   src = fetchFromGitHub {
     owner = "smlnj";
     repo = "smlnj";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-1oiDdiGZvg8Dlz3InFLjOilvBTShuTFHz91Xmc1onMA=";
+    hash = "sha256-DnKvuo+35P8npuc9hwN+eBWsOBVfTxL4mk4mzcYwBtk=";
   };
 
   llvm = callPackage ./llvm.nix { inherit src version; };
@@ -25,12 +30,12 @@ let
     if stdenv.hostPlatform.isUnix && stdenv.hostPlatform.isx86_64 then
       fetchurl {
         url = "https://smlnj.cs.uchicago.edu/dist/working/${version}/boot.amd64-unix.tgz";
-        hash = "sha256-ug2Busk6aYeqEGh923ZG8c3xw1Cjmct2Fxv7K44cjOs=";
+        hash = "sha256-TaW+EBUPZJx5fI/rZD/RD251bS2mWd++r24SwAARopQ=";
       }
     else if stdenv.hostPlatform.isUnix && stdenv.hostPlatform.isAarch64 then
       fetchurl {
         url = "https://smlnj.cs.uchicago.edu/dist/working/${version}/boot.arm64-unix.tgz";
-        hash = "sha256-UQ8GxaabgJ3QoH6hlnWCNSsxyR73H2VdKsbsgt376k0=";
+        hash = "sha256-54JTOkRyD3qojwH5L1hxiC/ECmzVA9OHAvb6ABZjW7o=";
       }
     else
       throw "Unsupported host platform: ${stdenv.hostPlatform.config}";
@@ -51,6 +56,11 @@ stdenv.mkDerivation {
 
   dontUseCmakeConfigure = true;
 
+  postPatch = ''
+    substituteInPlace config/_ml-build \
+      --replace-fail '#!@SHELL@' '#!${lib.getExe bashInteractive}'
+  '';
+
   buildPhase = ''
     runHook preBuild
 
@@ -63,9 +73,23 @@ stdenv.mkDerivation {
 
     ./build.sh -install $out
 
-    rm $out/bin/llvm-config $out/lib/libCFGCodeGen.a
+    rm $out/bin/llvm-config $out/lib/libCFGCodeGen.a $out/bin/heap2exec
 
     runHook postBuild
+  '';
+
+  postInstall = ''
+    substituteInPlace $out/bin/.run-sml \
+      --replace-fail basename ${lib.getExe' coreutils "basename"} \
+      --replace-fail grep ${lib.getExe gnugrep} \
+      --replace-fail sed ${lib.getExe gnused}
+    substituteInPlace $out/bin/ml-build \
+      --replace-fail basename ${lib.getExe' coreutils "basename"} \
+      --replace-fail cat ${lib.getExe' coreutils "cat"}
+    substituteInPlace $out/bin/ml-makedepend \
+      --replace-fail rm ${lib.getExe' coreutils "rm"} \
+      --replace-fail cat ${lib.getExe' coreutils "cat"} \
+      --replace-fail awk ${lib.getExe gawk}
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
