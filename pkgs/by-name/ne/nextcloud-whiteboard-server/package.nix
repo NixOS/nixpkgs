@@ -2,11 +2,11 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  stdenv,
   makeWrapper,
   nodejs,
   npm-lockfile-fix,
   nix-update-script,
+  fetchNextcloudApp,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "nextcloud-whiteboard-server";
@@ -34,7 +34,22 @@ buildNpmPackage (finalAttrs: {
       --add-flags "$out/lib/node_modules/whiteboard/websocket_server/main.js"
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.app = fetchNextcloudApp {
+    appName = "whiteboard";
+    appVersion = finalAttrs.version;
+    hash = "sha256-4JWPiSvy8Xmv7mhepHD4EwzgoAk6kiIaiLpKntLSheM=";
+    license = "agpl3Plus";
+    homepage = "https://github.com/nextcloud/whiteboard";
+    url = "https://github.com/nextcloud-releases/whiteboard/releases/download/v${finalAttrs.version}/whiteboard-v${finalAttrs.version}.tar.gz";
+    description = "Whiteboard app";
+  };
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--custom-dep"
+      "app"
+    ];
+  };
 
   meta = {
     description = "Backend server for the Nextcloud Whiteboard app";
