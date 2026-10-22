@@ -136,7 +136,10 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-linux"
       "x86_64-linux"
     ];
-    maintainers = [ lib.maintainers.connorbaker ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      connorbaker
+    ];
     teams = [ lib.teams.cuda ];
   };
 })
