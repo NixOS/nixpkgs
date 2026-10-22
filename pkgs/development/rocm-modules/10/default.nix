@@ -140,6 +140,8 @@ let
       rocblas_base = self.callPackage ./rocblas/base.nix { };
       rocblas = self.callPackage ./rocblas { };
 
+      rocsolver = self.callPackage ./rocsolver { };
+
       hipblas-common = self.callPackage ./hipblas-common { };
 
       hipblaslt = self.callPackage ./hipblaslt { };
