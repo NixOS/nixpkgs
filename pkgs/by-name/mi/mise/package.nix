@@ -19,6 +19,7 @@
   testers,
   runCommand,
   jq,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -35,6 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-gkCta9qiXKUmUnp6FfLStE5IM6ax/nmjMzQ+SDNg77U=";
 
   nativeBuildInputs = [
+    cmake
     installShellFiles
     pkg-config
   ];
@@ -75,12 +77,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeCheckInputs = [
     cacert
-    cmake
     coreutils
     # gix spawns git-upload-pack by name in file:// clone tests.
     git
     python3
     rustPlatform.bindgenHook
+    writableTmpDirAsHomeHook
   ];
 
   env = {
@@ -144,11 +146,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip"
     "system_install::tests::archive_boundary"
   ];
-
-  # mise-util's own tests keep their caches under the real $HOME
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   # every test process resets the same fixed $HOME/cwd
   dontUseCargoParallelTests = true;

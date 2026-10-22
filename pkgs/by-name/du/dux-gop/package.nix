@@ -1,23 +1,25 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   installShellFiles,
   nix-update-script,
 }:
 
-buildGoModule (finalAttrs: {
-  pname = "dgop";
-  version = "1.6.2";
+buildGo127Module (finalAttrs: {
+  pname = "dux-gop";
+  version = "2.0.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "AvengeMedia";
-    repo = "dgop";
+    owner = "duxlabs-dev";
+    repo = "dux-gop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0zWMFcxLZEVPzCRe5yDgPlPHBNgw3MMq78MAUvGNu/4=";
+    hash = "sha256-GTDomQTBU132DVjqX/o3cZBo9ylUWLvUJ74PSlahgTo=";
   };
 
-  vendorHash = "sha256-agVGh6togqHNCU7/3xDnmfF6bNlm2TAnXw5JhhUivgs=";
+  vendorHash = "sha256-bVrNwxylrKkmDWdrw+G/yi3DgVdRZtOVn53HfmpXjJk=";
 
   ldflags = [
     "-w"
@@ -40,10 +42,10 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "API & CLI for System & Process Monitoring";
-    homepage = "https://github.com/AvengeMedia/dgop";
-    changelog = "https://github.com/AvengeMedia/dgop/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/duxlabs-dev/dux-gop";
+    changelog = "https://github.com/duxlabs-dev/dux-gop/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    teams = [ lib.teams.danklinux ];
+    teams = [ lib.teams.duxlabs ];
     mainProgram = "dgop";
     platforms = lib.platforms.unix;
   };

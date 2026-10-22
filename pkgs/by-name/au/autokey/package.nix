@@ -12,6 +12,7 @@
   xwd,
   zenity,
   wmctrl,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -53,16 +54,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pyhamcrest
     pytestCheckHook
     pytest-cov-stub
+    writableTmpDirAsHomeHook
   ];
 
   disabledTestPaths = [
     # Runs `git describe` during test collection.
     "tests/test_common.py"
   ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
 
   dependencies = with python3Packages; [
     dbus-python

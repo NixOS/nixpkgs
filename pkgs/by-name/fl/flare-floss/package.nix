@@ -2,6 +2,7 @@
   lib,
   python3,
   fetchFromGitHub,
+  writableTmpDirAsHomeHook,
 }:
 
 python3.pkgs.buildPythonPackage rec {
@@ -50,15 +51,12 @@ python3.pkgs.buildPythonPackage rec {
     pytest-sugar
     pytestCheckHook
     pyyaml
+    writableTmpDirAsHomeHook
   ];
 
   postInstall = ''
     mkdir -p $out/share/flare-floss/
     cp -r floss/sigs $out/share/flare-floss/
-  '';
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
   '';
 
   meta = {

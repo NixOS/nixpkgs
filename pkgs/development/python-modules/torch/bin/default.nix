@@ -38,7 +38,7 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "2.13.0";
+  version = "2.14.1";
   cuda-bindings' = cuda-bindings.override { inherit cudaPackages; };
 in
 buildPythonPackage {
