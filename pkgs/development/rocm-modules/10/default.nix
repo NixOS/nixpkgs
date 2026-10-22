@@ -104,6 +104,8 @@ let
 
       mscclpp = self.callPackage ../mscclpp { };
 
+      rccl = self.callPackage ./rccl { };
+
       half = self.callPackage ./half { };
 
       # Even if config.rocmSupport is false we need rocmSupport true
