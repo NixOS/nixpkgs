@@ -66,7 +66,6 @@ let
 in
 rec {
   # Remember to import all these in all-packages.nix
-  gnome48Extensions = mapUuidNames (produceExtensionsList "48");
   gnome49Extensions = mapUuidNames (produceExtensionsList "49");
   gnome50Extensions = mapUuidNames (produceExtensionsList "50");
   gnome51Extensions = mapUuidNames (produceExtensionsList "51");
