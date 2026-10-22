@@ -19,7 +19,13 @@
     "MAX II/V"
     "MAX 10 FPGA"
   ],
-  unwrapped ? callPackage ./quartus.nix { inherit unstick supportedDevices withQuesta; },
+  unwrapped ? callPackage ./quartus.nix {
+    inherit
+      unstick
+      supportedDevices
+      withQuesta
+      ;
+  },
   extraProfile ? "",
 }:
 
