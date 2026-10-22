@@ -131,6 +131,9 @@ let
                 return
             if not self.authorized():
                 return
+            if self.path == "/health":
+                self.send_json(200, {"status": "ok"})
+                return
             if self.path == "/v1/capabilities":
                 self.send_json(200, {"features": {"runs_execution_context": {
                     "version": 1, "mode": "precondition", "backends": ["local"],
@@ -246,15 +249,21 @@ in
                 name = "Remote worker";
                 adapterType = "hermes_gateway";
                 adapterConfig = {
-                  apiBaseUrl = "http://worker:8642";
+                  apiBaseUrl = "http://127.0.0.1:8642";
                   paperclipApiUrl = "http://controller:3115";
-                  dangerouslyAllowInsecureRemoteHttp = true;
                   waitForJobs = true;
                 };
               };
               credentials.apiKey = "gateway";
             };
           };
+        };
+        # Hire verification refuses remote plain HTTP even with the escape hatch.
+        # Reach the separate worker VM through a loopback forward instead.
+        systemd.services.hermes-gateway-forward = {
+          wantedBy = [ "multi-user.target" ];
+          before = [ "paperclip-control.service" ];
+          serviceConfig.ExecStart = "${pkgs.socat}/bin/socat TCP-LISTEN:8642,bind=127.0.0.1,fork,reuseaddr TCP:worker:8642";
         };
         systemd.services.paperclip-control.serviceConfig.Restart = lib.mkForce "no";
         # Startup recovery and explicit Stop own this deterministic journey.
