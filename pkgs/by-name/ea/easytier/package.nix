@@ -38,6 +38,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       url = "https://github.com/EasyTier/EasyTier/commit/3a0acccf46eff19c88d372a4b06749eccc9fa708.patch?full_index=1";
       hash = "sha256-tV7TtBF8WPmVnVYp7KiaS8Ek48Y/6BmRSICF38Q2ESc=";
     })
+    # Building easytier-web next to the CLI enables two rustls backends, which
+    # makes HTTPS peer discovery panic; backport of EasyTier/EasyTier#2648.
+    ./0002-rustls-select-ring-provider-explicitly.patch
   ];
 
   nativeBuildInputs = [
