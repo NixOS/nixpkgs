@@ -47,6 +47,8 @@ let
         stdenv = origStdenv;
       };
 
+      rocm-comgr = self.callPackage ./rocm-comgr { };
+
       rocm-docs-core = python3Packages.callPackage ../rocm-docs-core { };
 
       hipcc = self.callPackage ../hipcc { stdenv = origStdenv; };
