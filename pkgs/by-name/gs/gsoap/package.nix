@@ -18,11 +18,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gsoap";
-  version = "2.8.144";
+  version = "2.8.145";
 
   src = fetchurl {
     url = "mirror://sourceforge/gsoap2/gsoap_${finalAttrs.version}.zip";
-    hash = "sha256-uYGBj7vUv59vT+rAMTaAD24Wp9C3UVkk/3omYcom5YE=";
+    hash = "sha256-F2dn4kQ/NYYEgQggnZQkpxsK57omWGVYeKtRPt7B7t4=";
   };
 
   buildInputs = [
