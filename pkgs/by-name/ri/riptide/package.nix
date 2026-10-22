@@ -13,12 +13,11 @@
   libGL,
   vulkan-loader,
   versionCheckHook,
-  nix-update-script,
 }:
 
 let
   # The CEF build for the pinned cef crate (154.5.0+154.0.34 is CEF 154.0.34).
-  # On a CEF upgrade, take these from https://cef-builds.spotifycdn.com/index.json.
+  # update.sh sets these from the release's Cargo.lock and https://cef-builds.spotifycdn.com/index.json.
   cefVersion = "154.0.34";
   cefGitRevision = "14c5a08";
   cefChromiumVersion = "154.0.8037.98";
@@ -137,9 +136,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  # nix-update bumps the version and hashes; a CEF upgrade in Cargo.lock also
-  # needs the cef* values above.
-  passthru.updateScript = nix-update-script { };
+  # Bumps the version and hashes, and the cef* values above when CEF changes.
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Keyboard-driven web browser with vim-like bindings, built on CEF";
