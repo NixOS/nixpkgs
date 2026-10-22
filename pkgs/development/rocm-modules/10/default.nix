@@ -1,8 +1,10 @@
 {
   lib,
+  config,
   callPackage,
   newScope,
   python3Packages,
+  openmpi,
   stdenv,
 }:
 
@@ -13,6 +15,7 @@ let
       inherit (self) llvm;
       origStdenv = stdenv;
       pyPackages = python3Packages;
+      openmpi-orig = openmpi;
       rocmClangStdenv = llvm.rocmClangStdenv;
     in
     {
@@ -72,11 +75,37 @@ let
       hipify = self.callPackage ./hipify {
         stdenv = origStdenv;
       };
+
+      # hsakmt was merged into rocm-runtime
+      hsakmt = self.rocm-runtime;
       rocprofiler-register = self.callPackage ./rocprofiler-register {
         inherit (llvm) clang;
       };
 
       roctracer = self.callPackage ./roctracer { };
+
+      half = self.callPackage ./half { };
+
+      # Even if config.rocmSupport is false we need rocmSupport true
+      # version of ucc/ucx in openmpi in this package set
+      openmpi = openmpi-orig.override (
+        prev:
+        let
+          ucx = prev.ucx.override {
+            enableCuda = false;
+            enableRocm = true;
+            rocmPackages = self;
+          };
+        in
+        {
+          inherit ucx;
+          ucc = prev.ucc.override {
+            enableCuda = false;
+            inherit ucx;
+          };
+        }
+      );
+      mpi = self.openmpi;
     }
   );
   scopeForArches =
