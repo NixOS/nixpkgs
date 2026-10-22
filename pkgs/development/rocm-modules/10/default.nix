@@ -125,6 +125,8 @@ let
 
       hipblas-common = self.callPackage ./hipblas-common { };
 
+      hipblaslt = self.callPackage ./hipblaslt { };
+
       half = self.callPackage ./half { };
 
       # Even if config.rocmSupport is false we need rocmSupport true

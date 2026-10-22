@@ -1,18 +1,16 @@
-diff --git a/Tensile/Source/lib/source/msgpack/MessagePack.cpp b/Tensile/Source/lib/source/msgpack/MessagePack.cpp
-index de97929c..dbc397e0 100644
 --- a/tensilelite/src/msgpack/MessagePack.cpp
 +++ b/tensilelite/src/msgpack/MessagePack.cpp
-@@ -28,6 +28,8 @@
+@@ -27,6 +27,8 @@
+ #include <Tensile/msgpack/MessagePack.hpp>
  
  #include <Tensile/msgpack/Loading.hpp>
- 
-+#include <zstd.h>
 +
- #include <fstream>
++#include <zstd.h>
  
- namespace Tensile
-@@ -86,6 +88,34 @@ namespace Tensile
-                 return nullptr;
+ #include <charconv>
+ #include <cstdlib>
+@@ -245,6 +247,34 @@
+                 return false;
              }
  
 +            // Check if the file is zstd compressed
@@ -46,11 +44,11 @@ index de97929c..dbc397e0 100644
              msgpack::unpacker unp;
              bool              finished_parsing;
              constexpr size_t  buffer_size = 1 << 19;
-@@ -109,6 +139,7 @@ namespace Tensile
+@@ -278,6 +308,7 @@
  
-                 return nullptr;
+                 return false;
              }
 +            }
          }
-         catch(std::runtime_error const& exc)
+         catch(std::exception const& exc)
          {

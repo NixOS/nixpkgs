@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   rocm-cmake,
-  rocm-smi,
+  amdsmi,
   pkg-config,
   clr,
   gfortran,
@@ -56,6 +56,8 @@ let
     ps.packaging
     ps.nanobind
     ps.msgpack
+    # tensilelite imports joblib (Parallel.py) and lists it in requirements.txt.
+    ps.joblib
   ]);
   # workaround: build for one working target if no targets are supported
   # a few CXX files are still build for the device
@@ -70,13 +72,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipblaslt${clr.gpuArchSuffix}";
-  version = "7.2.4";
+  version = "10.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-libraries";
-    tag = "rocm-${finalAttrs.version}";
-    hash = "sha256-+xMmPKb32NP9U35dHCXfXWwa6exfiL5TezfXERVDfe4=";
+    tag = "therock-${finalAttrs.version}";
+    hash = "sha256-FOwC+eG8dYgiktogDrUZhtKbKl9iNFvnGXSt0Uj02lQ=";
     sparseCheckout = [
       "projects/hipblaslt"
       "shared"
@@ -95,6 +97,9 @@ stdenv.mkDerivation (finalAttrs: {
   env.TENSILE_GEN_ASSEMBLY_TOOLCHAIN = lib.getExe' clr "amdclang++";
   env.LD_PRELOAD = "${jemalloc}/lib/libjemalloc.so";
   env.MALLOC_CONF = "background_thread:true,metadata_thp:auto,dirty_decay_ms:10000,muzzy_decay_ms:10000";
+  # tensilelite caches helper-kernel code objects in $HOME/.tensile, which is
+  # unwritable in the sandbox, and a cache across builds is useless under Nix.
+  env.TENSILE_DISABLE_HELPER_CACHE = "1";
   requiredSystemFeatures = [ "big-parallel" ];
 
   __structuredAttrs = true;
@@ -117,13 +122,10 @@ stdenv.mkDerivation (finalAttrs: {
     # parallel-jobs for these invocations
     # https://github.com/ROCm/rocm-libraries/issues/1242
     ./parallel-buildSourceCodeObjectFile.diff
+    ./tensile-memory.patch
     # Support loading zstd compressed .dat files, required to keep output under
     # hydra size limit
     ./messagepack-compression-support.patch
-    # [hipblaslt] Refactor Parallel.py to drop joblib, massively reduce peak disk space usage
-    # https://github.com/ROCm/rocm-libraries/pull/2073
-    ./TensileCreateLibrary-refactor.patch
-    ./Tensile-interning.patch
   ];
 
   preConfigure = ''
@@ -131,11 +133,15 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postPatch = ''
-    # git isn't needed and we have no .git
-    substituteInPlace cmake/dependencies.cmake \
+    # origami needs Git only for a rocm-cmake FetchContent fallback we never take.
+    substituteInPlace ../../shared/origami/cmake/dependencies.cmake \
       --replace-fail "find_package(Git REQUIRED)" ""
-    substituteInPlace CMakeLists.txt \
-      --replace-fail " LANGUAGES CXX" " LANGUAGES CXX C ASM"
+
+
+
+    # For messagepack-compression-support.patch; amdclang ignores NIX_LDFLAGS.
+    echo 'target_link_libraries(tensilelite-host PRIVATE ${lib.getLib zstd}/lib/libzstd.so)' \
+      >> tensilelite/src/msgpack/CMakeLists.txt
   '';
 
   doCheck = false;
@@ -149,7 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
     gfortran
     pkg-config
     ninja
-    rocm-smi
+    amdsmi
     zstd
   ];
 
@@ -159,7 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
     rocm-cmake
     hipblas-common
     amd-blis
-    rocm-smi
+    amdsmi
     openmp
     libffi
     ncurses
@@ -195,6 +201,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBLIS_INCLUDE_DIR=${amd-blis}/include/blis/"
     "-DBLA_PREFER_PKGCONFIG=ON"
     "-DFETCHCONTENT_SOURCE_DIR_NANOBIND=${python3Packages.nanobind.src}"
+    # Tensile codegen writes into a CONFIGURE_DEPENDS glob; the mid-build re-run
+    # of cmake >= 4.4 then loses nanobind_add_module.
+    (lib.cmakeBool "CMAKE_SUPPRESS_REGENERATION" true)
     # Manually define CMAKE_INSTALL_<DIR>
     # See: https://github.com/NixOS/nixpkgs/pull/197838
     "-DCMAKE_INSTALL_BINDIR=bin"
@@ -214,7 +223,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Move binaries to appropriate outputs and delete leftover /bin
     + ''
       mkdir -p $benchmark/bin
-      mv $out/bin/hipblaslt-{api-overhead,bench*} $out/bin/*.yaml $out/bin/*.py $benchmark/bin
       ${lib.optionalString buildTests ''
         mkdir -p $test/bin
         mv $out/bin/hipblas-test $test/bin
@@ -223,6 +231,8 @@ stdenv.mkDerivation (finalAttrs: {
         mkdir -p $sample/bin
         mv $out/bin/example-* $sample/bin
       ''}
+      # Everything else in bin/ is a benchmark tool.
+      mv $out/bin/* $benchmark/bin
       rmdir $out/bin
     '';
 

@@ -1,0 +1,92 @@
+Subject: [PATCH] Limit Tensile workers and retain only kernel metadata
+
+Adapt the memory protections from the ROCm 7 Tensile patches to the new
+pipeline. Honor build-system worker limits, intern immutable YAML strings,
+and release generated assembly after it has been written and assembled.
+Keep SizeMapping objects separate: passPostKernelInfoToLibrary mutates them.
+
+--- a/tensilelite/Tensile/Common/Parallel.py
++++ b/tensilelite/Tensile/Common/Parallel.py
+@@ -25,6 +25,7 @@
+ import concurrent.futures
+ import itertools
+ import os
++import re
+ import sys
+ import time
+ 
+@@ -46,19 +47,24 @@
+ 
+     if not enable:
+         return 1
+-    else:
+-        if os.name == "nt":
+-            # Windows supports at most 61 workers because the scheduler uses
+-            # WaitForMultipleObjects directly, which has the limit (the limit
+-            # is actually 64, but some handles are needed for accounting).
+-            cpu_count = min(os.cpu_count(), 61)
+-        else:
+-            cpu_count = len(os.sched_getaffinity(0))
+-        cpuThreads = globalParameters["CpuThreads"]
+-        if cpuThreads == -1:
+-            return cpu_count
+-
+-        return min(cpu_count, cpuThreads)
++    cpu_count = os.cpu_count() if os.name == "nt" else len(os.sched_getaffinity(0))
++    if os.name == "nt":
++        cpu_count = min(cpu_count, 61)
++    limits = [cpu_count]
++    configured = globalParameters["CpuThreads"]
++    if configured > 0:
++        limits.append(configured)
++    for name in ("CMAKE_BUILD_PARALLEL_LEVEL", "NIX_BUILD_CORES"):
++        try:
++            limit = int(os.environ.get(name, ""))
++        except ValueError:
++            continue
++        if limit > 0:
++            limits.append(limit)
++    match = re.search(r"(?:^|\s)-j\s*(\d+)(?:\s|$)", os.environ.get("MAKEFLAGS", ""))
++    if match and int(match[1]) > 0:
++        limits.append(int(match[1]))
++    return max(1, min(limits))
+ 
+ 
+ def pcallWithGlobalParamsMultiArg(f, args, newGlobalParameters):
+--- a/tensilelite/Tensile/CustomYamlLoader.py
++++ b/tensilelite/Tensile/CustomYamlLoader.py
+@@ -1,6 +1,7 @@
+ # Copyright © Advanced Micro Devices, Inc., or its affiliates.
+ # SPDX-License-Identifier: MIT
+ 
++import sys
+ import yaml
+ from pathlib import Path
+ from typing import List
+@@ -73,7 +74,7 @@
+     elif is_float(value_lower):
+         return float(value_lower)
+ 
+-    return value
++    return sys.intern(value)
+ 
+ def load_yaml_stream(yaml_path: Path, loader_type: yaml.Loader):
+     with open(yaml_path, 'r') as f:
+--- a/tensilelite/Tensile/TensileCreateLibrary/Run.py
++++ b/tensilelite/Tensile/TensileCreateLibrary/Run.py
+@@ -672,8 +672,13 @@
+         def composed_function(kernel):
+             processed_kernel = unaryProcessKernelSource(kernel)
+             written_kernel = unaryWriteAssembly(processed_kernel)
+-            assembled_kernel = assemble(written_kernel)
+-            return processed_kernel
++            assemble(written_kernel)
++            return KernelMinResult(
++                processed_kernel.err,
++                processed_kernel.cuoccupancy,
++                processed_kernel.pgr,
++                processed_kernel.mathclk,
++            )
+         return composed_function
+ 
+     results = ParallelMap2(
