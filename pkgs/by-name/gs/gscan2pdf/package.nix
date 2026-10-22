@@ -145,6 +145,8 @@ perlPackages.buildPerlPackage rec {
       make test
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     description = "GUI to produce PDFs or DjVus from scanned documents";
     homepage = "https://gscan2pdf.sourceforge.net/";
