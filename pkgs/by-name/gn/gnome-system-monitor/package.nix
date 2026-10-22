@@ -19,7 +19,7 @@
   librsvg,
   gdk-pixbuf,
   libgtop,
-  systemd,
+  systemdLibs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     adwaita-icon-theme
     librsvg
     gsettings-desktop-schemas
-    systemd
+    systemdLibs
   ];
 
   mesonFlags = [

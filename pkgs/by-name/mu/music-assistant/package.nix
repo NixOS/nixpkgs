@@ -18,6 +18,9 @@ let
       # TODO: package properly when no longer using a fork
       aiolibdatachannel = final.callPackage ./aiolibdatachannel.nix { };
 
+      # mcp v2 breaks fastmcp-slim
+      mcp = final.mcp_1;
+
       music-assistant-frontend = final.callPackage ./frontend.nix { };
 
       music-assistant-models = prev.music-assistant-models.overridePythonAttrs (oldAttrs: {

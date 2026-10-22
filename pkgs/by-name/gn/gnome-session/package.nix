@@ -19,7 +19,7 @@
   docbook_xml_dtd_45,
   libxslt,
   gettext,
-  systemd,
+  systemdLibs,
   gnome-session-ctl,
   wrapGAppsNoGuiHook,
 }:
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     gnome-desktop
     gnome-settings-daemon
     gsettings-desktop-schemas
-    systemd
+    systemdLibs
   ];
 
   postPatch = ''

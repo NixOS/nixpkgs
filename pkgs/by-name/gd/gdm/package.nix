@@ -14,7 +14,7 @@
   libx11,
   libxau,
   gnome,
-  systemd,
+  systemdLibs,
   dconf,
   pam,
   libgudev,
@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     pam
     plymouth
     polkit
-    systemd
+    systemdLibs
   ];
 
   patches = [

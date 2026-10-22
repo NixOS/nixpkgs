@@ -22,7 +22,7 @@
   polkit,
   gsettings-desktop-schemas,
   geoclue2,
-  systemd,
+  systemdLibs,
   libgudev,
   libwacom,
   libxslt,
@@ -38,7 +38,7 @@
   gcr_4,
   gnome-session-ctl,
   udevCheckHook,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     gcr_4
   ]
   ++ lib.optionals withSystemd [
-    systemd
+    systemdLibs
   ];
 
   mesonFlags = [

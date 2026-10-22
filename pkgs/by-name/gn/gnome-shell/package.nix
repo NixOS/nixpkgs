@@ -44,7 +44,7 @@
   gtk4,
   libadwaita,
   sassc,
-  systemd,
+  systemdLibs,
   pipewire,
   libgudev,
   gst_all_1,
@@ -123,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    systemd
+    systemdLibs
     gsettings-desktop-schemas
     glib
     gcr_4
