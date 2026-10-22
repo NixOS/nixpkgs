@@ -4,6 +4,7 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
+  aws-lc,
   zstd,
   nix-update-script,
 }:
@@ -27,7 +28,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ zstd ];
+  buildInputs = [
+    aws-lc
+    zstd
+  ];
 
   cargoBuildFlags = [
     "-p"
