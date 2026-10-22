@@ -5,6 +5,7 @@
   jq,
   fetchYarnDeps,
 
+  yarn,
   yarnConfigHook,
   yarnBuildHook,
   npmHooks,
@@ -47,9 +48,15 @@ stdenv.mkDerivation (finalAttrs: {
     yarnBuildHook
     npmHooks.npmInstallHook
     nodejs
+    yarn
   ];
 
   yarnBuildScript = "build:server";
+
+  # Prune deps before install to save space
+  preInstall = ''
+    yarn install --offline --frozen-lockfile --force --production=true --ignore-scripts
+  '';
   dontNpmPrune = true;
 
   meta = {
