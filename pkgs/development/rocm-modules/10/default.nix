@@ -121,6 +121,8 @@ let
 
       hipcub = self.callPackage ./hipcub { };
 
+      hipfft = self.callPackage ./hipfft { };
+
       half = self.callPackage ./half { };
 
       # Even if config.rocmSupport is false we need rocmSupport true
