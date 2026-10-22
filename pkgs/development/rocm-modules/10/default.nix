@@ -2,6 +2,7 @@
   lib,
   callPackage,
   newScope,
+  python3Packages,
   stdenv,
 }:
 
@@ -10,6 +11,7 @@ let
     self:
     let
       inherit (self) llvm;
+      origStdenv = stdenv;
       rocmClangStdenv = llvm.rocmClangStdenv;
     in
     {
@@ -36,6 +38,10 @@ let
       inherit (self.llvm) rocm-toolchain clang openmp;
 
       rocm-device-libs = self.callPackage ./rocm-device-libs { };
+
+      rocm-docs-core = python3Packages.callPackage ../rocm-docs-core { };
+
+      hipcc = self.callPackage ../hipcc { stdenv = origStdenv; };
     }
   );
 in
