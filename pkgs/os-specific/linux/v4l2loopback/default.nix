@@ -2,8 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  kernel,
-  kernelModuleMakeFlags,
+  kernelModuleHook,
   nix-update-script,
 }:
 
@@ -13,7 +12,6 @@ stdenv.mkDerivation rec {
 
   __structuredAttrs = true;
   strictDeps = true;
-  enableParallelBuilding = true;
 
   src = fetchFromGitHub {
     owner = "umlaeute";
@@ -27,36 +25,20 @@ stdenv.mkDerivation rec {
     "pic"
   ];
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = [ kernelModuleHook ];
 
   outputs = [
     "out"
     "bin"
   ];
 
-  makeFlags = kernelModuleMakeFlags ++ [
-    "KERNELRELEASE=${kernel.modDirVersion}"
-  ];
-
-  installFlags = [
-    "DEPMOD=true"
-    "INSTALL_MOD_PATH=${placeholder "out"}"
-  ];
-
-  buildPhase = ''
-    runHook preBuild
-    make -C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build M=$(pwd) "''${makeFlags[@]}"
-    # Don't use makeFlags for this
+  # Don't use makeFlags for this
+  postBuild = ''
     make utils
-    runHook postBuild
   '';
 
-  installPhase = ''
-    runHook preInstall
-    make -C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build M=$(pwd) modules_install \
-      "''${makeFlags[@]}" "''${installFlags[@]}"
+  postInstall = ''
     make install-utils PREFIX=$bin
-    runHook postInstall
   '';
 
   passthru.updateScript = nix-update-script { };
