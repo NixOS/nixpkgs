@@ -41,15 +41,17 @@ buildPerlPackage {
 
   nativeBuildInputs = [
     git
+    go
   ];
 
   buildInputs = [
     DBDmysql
-    go
     DBI
     IOSocketSSL
     TermReadKey
   ];
+
+  strictDeps = true;
 
   postPatch = ''
     cp -r --reflink=auto ${goDeps} vendor
