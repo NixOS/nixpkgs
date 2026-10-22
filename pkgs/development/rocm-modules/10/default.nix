@@ -158,6 +158,15 @@ let
 
       hipsparselt = self.callPackage ./hipsparselt { };
 
+      # hipTensor - Only supports GFX9
+
+      composable_kernel_base = self.callPackage ./composable_kernel/base.nix { };
+      composable_kernel = self.callPackage ./composable_kernel { };
+
+      ck4inductor = pyPackages.callPackage ./composable_kernel/ck4inductor.nix {
+        inherit (self) composable_kernel rocm-toolchain;
+      };
+
       half = self.callPackage ./half { };
 
       # Even if config.rocmSupport is false we need rocmSupport true

@@ -1,8 +1,7 @@
 diff --git a/library/src/tensor_operation_instance/gpu/CMakeLists.txt b/library/src/tensor_operation_instance/gpu/CMakeLists.txt
-index 172f6681b8..d3ddbb2f15 100644
---- a/library/src/tensor_operation_instance/gpu/CMakeLists.txt
-+++ b/library/src/tensor_operation_instance/gpu/CMakeLists.txt
-@@ -154,9 +154,15 @@ function(add_instance_library INSTANCE_NAME)
+--- a/library/src/tensor_operation_instance/gpu/CMakeLists.txt	2026-10-08 00:34:05.472466099 -0700
++++ b/library/src/tensor_operation_instance/gpu/CMakeLists.txt	2026-10-08 00:34:05.502420794 -0700
+@@ -182,9 +182,15 @@
                  list(FILTER INST_TARGETS INCLUDE REGEX "gfx12")
              endif()
              set(offload_targets)
@@ -18,6 +17,6 @@ index 172f6681b8..d3ddbb2f15 100644
 +                    string(APPEND offload_targets "--offload-arch=${target} ")
 +                endforeach()
 +            endif()
-             set_source_files_properties(${source} PROPERTIES COMPILE_FLAGS ${offload_targets})
+             set_source_files_properties(${source} PROPERTIES COMPILE_FLAGS "${offload_targets}")
              list(APPEND INST_OBJ ${source})
          endforeach()
