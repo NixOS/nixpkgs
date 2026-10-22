@@ -59,6 +59,7 @@
   pcre2,
   gecode_3,
   curl,
+  cacert,
   libsodium,
   snappy,
   libossp_uuid,
@@ -198,6 +199,14 @@ in
       libpthread-stubs
       libxdmcp
     ];
+  };
+
+  certified = attrs: {
+    postInstall = ''
+      installPath=$(cat $out/nix-support/gem-meta/install-path)
+      rm $installPath/certs/ca-bundle.crt
+      ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $installPath/certs/ca-bundle.crt
+    '';
   };
 
   charlock_holmes = attrs: {
