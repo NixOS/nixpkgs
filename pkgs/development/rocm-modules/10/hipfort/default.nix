@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipfort";
-  version = "7.2.4";
+  version = "10.1.0";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "hipfort";
     tag = "rocm-${finalAttrs.version}";
-    hash = "sha256-XaB4jauCN41tgD1YHHA2td/yckwfMBemBe/iL0SCxQo=";
+    hash = "sha256-/Q/wVXkJJjDSsqVRSdtMPyOw72SRDawxnyv4BY0be8g=";
   };
 
   __structuredAttrs = true;
@@ -42,20 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
   ];
 
-  postPatch = ''
-    patchShebangs bin
-
-    substituteInPlace bin/hipfc bin/mymcpu \
-      --replace-fail "/bin/cat" "cat"
-
-    substituteInPlace bin/CMakeLists.txt \
-      --replace-fail "/bin/mkdir" "mkdir" \
-      --replace-fail "/bin/cp" "cp" \
-      --replace-fail "/bin/sed" "sed" \
-      --replace-fail "/bin/chmod" "chmod" \
-      --replace-fail "/bin/ln" "ln"
-  '';
-
   passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
@@ -63,7 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ROCm/hipfort";
     changelog = "https://github.com/ROCm/hipfort/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit; # mitx11
-    mainProgram = "hipfc";
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };
