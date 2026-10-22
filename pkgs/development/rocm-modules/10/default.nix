@@ -2,6 +2,7 @@
   lib,
   callPackage,
   newScope,
+  stdenv,
 }:
 
 let
@@ -9,8 +10,11 @@ let
     self:
     let
       inherit (self) llvm;
+      rocmClangStdenv = llvm.rocmClangStdenv;
     in
     {
+      inherit rocmClangStdenv;
+      stdenv = rocmClangStdenv;
 
       rocmUpdateScript = self.callPackage ../update.nix {
         maxMajor = 10;
@@ -29,6 +33,9 @@ let
           inherit (self) rocm-device-libs;
         }
       );
+      inherit (self.llvm) rocm-toolchain clang openmp;
+
+      rocm-device-libs = self.callPackage ./rocm-device-libs { };
     }
   );
 in
