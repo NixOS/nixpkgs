@@ -32,6 +32,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # `dep:` in easytier-core drops the implicit `smoltcp` feature that
     # cargo-auditable expects; see rust-secure-code/cargo-auditable#124.
     ./0001-restore-implicit-smoltcp-feature.patch
+    # Building easytier-web next to the CLI enables two rustls backends, which
+    # makes HTTPS peer discovery panic; backport of EasyTier/EasyTier#2648.
+    ./0002-rustls-select-ring-provider-explicitly.patch
   ];
 
   nativeBuildInputs = [
