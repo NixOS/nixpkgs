@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
   gitMinimal,
   installShellFiles,
@@ -11,18 +11,18 @@
   ghq,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo126Module (finalAttrs: {
   pname = "ghq";
-  version = "1.10.1";
+  version = "1.11.2";
 
   src = fetchFromGitHub {
     owner = "x-motemen";
     repo = "ghq";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-SmcgBwd5k/lAv9bwYRpkIM0fil2ajSlT8zznP7bgpDk=";
+    sha256 = "sha256-Ro/PbI9UZ0l0OsfIQOlmX8GZBWBvAeKDgHpz8DrsQPM=";
   };
 
-  vendorHash = "sha256-8aC1J/mM7ZTEQBdZwstvHxMKDPqgzjzYztC7shuwu/Q=";
+  vendorHash = "sha256-YToIkJozCyI1k5xqs4w6brVERJ2edR2PRob2tXWb9Ms=";
 
   nativeCheckInputs = [
     gitMinimal
@@ -34,6 +34,9 @@ buildGoModule (finalAttrs: {
   ];
 
   nativeBuildInputs = [ installShellFiles ];
+
+  # Disable on Darwin: test probes ~/.config/git/config, which sandbox denies
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion \
@@ -52,7 +55,10 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Remote repository management made easy";
     homepage = "https://github.com/x-motemen/ghq";
-    maintainers = with lib.maintainers; [ sigma ];
+    maintainers = with lib.maintainers; [
+      sigma
+      shunueda
+    ];
     license = lib.licenses.mit;
     mainProgram = "ghq";
   };
