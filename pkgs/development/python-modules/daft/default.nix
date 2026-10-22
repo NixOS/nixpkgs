@@ -360,6 +360,8 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "daft" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Distributed dataframes for multimodal data";
     homepage = "https://github.com/Eventual-Inc/Daft";
