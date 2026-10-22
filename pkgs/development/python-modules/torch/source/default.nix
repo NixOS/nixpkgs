@@ -62,6 +62,7 @@
   openssl,
   numactl,
   llvmPackages,
+  libdrm,
 
   # dependencies
   filelock,
@@ -692,6 +693,7 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   ++ lib.optionals rocmSupport [
     rocmtoolkit_joined
     rocmPackages.clr # Added separately so setup hook applies
+    libdrm
   ];
 
   dependencies = [
@@ -719,7 +721,13 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   ];
 
   propagatedCxxBuildInputs =
-    [ ] ++ lib.optionals MPISupport [ mpi ] ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
+    [ ]
+    ++ lib.optionals MPISupport [ mpi ]
+    ++ lib.optionals rocmSupport [
+      rocmtoolkit_joined
+      # cxxdev records plain store paths, so name the output with libdrm.pc
+      (lib.getDev libdrm)
+    ];
 
   # Tests take a long time and may be flaky, so just sanity-check imports
   doCheck = false;
