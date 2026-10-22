@@ -10,7 +10,7 @@
   pkgs,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyorc";
   version = "0.12.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "noirello";
     repo = "pyorc";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-3vplqS05MEjCoSxVanqa3lBk6N11jZEkccTDbIZZ8aY=";
   };
 
@@ -64,10 +64,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/noirello/pyorc/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/noirello/pyorc/blob/${finalAttrs.src.rev}/CHANGELOG.rst";
     description = "Python module for Apache ORC file format";
     homepage = "https://github.com/noirello/pyorc";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})
