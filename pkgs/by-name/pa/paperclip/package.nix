@@ -54,9 +54,11 @@ let
     inherit version;
     strictDeps = true;
     __structuredAttrs = true;
-    src = "${src}/packages/paperclip-runner";
-    cargoRoot = "runner";
-    buildAndTestSubdir = "runner";
+    # Runner tests read repository-root fixtures through CARGO_MANIFEST_DIR,
+    # so keep the whole source tree rather than the package subdirectory.
+    inherit src;
+    cargoRoot = "packages/paperclip-runner/runner";
+    buildAndTestSubdir = "packages/paperclip-runner/runner";
     # Keep the exact lockfile from the pinned source in nixpkgs: reading a
     # fetched derivation at evaluation time fails with IFD disabled in CI.
     cargoLock.lockFile = ./Cargo.lock;
@@ -70,12 +72,12 @@ let
       which
     ];
     postPatch = ''
-      substituteInPlace runner/crates/runner-core/tests/process_supervisor.rs \
+      substituteInPlace packages/paperclip-runner/runner/crates/runner-core/tests/process_supervisor.rs \
         --replace-fail '"/usr/bin/which"' '"${which}/bin/which"'
       # This process-exit probe clears PATH before spawning kill.
-      substituteInPlace runner/crates/runner-core/tests/native_provider_backend.rs \
+      substituteInPlace packages/paperclip-runner/runner/crates/runner-core/tests/native_provider_backend.rs \
         --replace-fail 'Command::new("kill")' 'Command::new("${procps}/bin/kill")'
-      substituteInPlace runner/crates/runner-core/src/process_supervisor.rs \
+      substituteInPlace packages/paperclip-runner/runner/crates/runner-core/src/process_supervisor.rs \
         --replace-fail 'Command::new("kill")' 'Command::new("${procps}/bin/kill")'
     '';
   };
