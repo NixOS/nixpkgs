@@ -3771,6 +3771,8 @@ self: super: with self; {
 
   cppheaderparser = callPackage ../development/python-modules/cppheaderparser { };
 
+  cppimport = callPackage ../development/python-modules/cppimport { };
+
   cppy = callPackage ../development/python-modules/cppy { };
 
   cpufeature = callPackage ../development/python-modules/cpufeature { };
