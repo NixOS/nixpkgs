@@ -50,7 +50,9 @@ perlPackages.buildPerlPackage rec {
 
   propagatedBuildInputs = [ openssl ];
 
-  nativeCheckInputs = with perlPackages; [ TestDeep ];
+  nativeCheckInputs = [ openssl ] ++ (with perlPackages; [ TestDeep ]);
+
+  strictDeps = true;
 
   postPatch = ''
     patchShebangs script/convos
