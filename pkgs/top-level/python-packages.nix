@@ -9133,6 +9133,8 @@ self: super: with self; {
 
   kaa-metadata = callPackage ../development/python-modules/kaa-metadata { };
 
+  kaco-modbus = callPackage ../development/python-modules/kaco-modbus { };
+
   kafka-python = callPackage ../development/python-modules/kafka-python { };
 
   kaggle = callPackage ../development/python-modules/kaggle { };
