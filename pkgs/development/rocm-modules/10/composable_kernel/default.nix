@@ -7,6 +7,88 @@
 let
   inherit (composable_kernel_base) miOpenReqLibsOnly;
   parts = {
+    # Compile convolution OBJECT targets in groups; the final build archives them.
+    grouped_conv_bwd = {
+      targets = [
+        "device_grouped_conv1d_bwd_weight_gnwc_instance"
+        "device_grouped_conv1d_bwd_weight_nwgc_instance"
+        "device_grouped_conv2d_bwd_data_nhwgc_instance"
+        "device_grouped_conv2d_bwd_data_gnhwc_instance"
+        "device_grouped_conv2d_bwd_data_ngchw_instance"
+        "device_grouped_conv2d_bwd_weight_nhwgc_instance"
+        "device_grouped_conv2d_bwd_weight_gnhwc_instance"
+        "device_grouped_conv2d_bwd_weight_ngchw_instance"
+      ];
+    };
+    grouped_conv_fwd = {
+      targets = [
+        "device_grouped_conv1d_fwd_gnwc_instance"
+        "device_grouped_conv2d_fwd_nhwgc_instance"
+        "device_grouped_conv2d_fwd_gnhwc_instance"
+        "device_grouped_conv2d_fwd_ngchw_instance"
+        "device_grouped_conv2d_fwd_bias_bnorm_clamp_nhwgc_instance"
+        "device_grouped_conv2d_fwd_bias_clamp_nhwgc_instance"
+        "device_grouped_conv2d_fwd_clamp_nhwgc_instance"
+        "device_grouped_conv2d_fwd_dynamic_op_nhwgc_instance"
+      ];
+    };
+    grouped_conv_bwd_3d1 = {
+      targets = [
+        "device_grouped_conv3d_bwd_data_ndhwgc_instance"
+        "device_grouped_conv3d_bwd_data_gndhwc_instance"
+        "device_grouped_conv3d_bwd_data_ngcdhw_instance"
+        "device_grouped_conv3d_bwd_data_bilinear_ndhwgc_instance"
+        "device_grouped_conv3d_bwd_data_scale_ndhwgc_instance"
+      ];
+    };
+    grouped_conv_bwd_3d2 = {
+      targets = [
+        "device_grouped_conv3d_bwd_weight_ndhwgc_instance"
+        "device_grouped_conv3d_bwd_weight_gndhwc_instance"
+        "device_grouped_conv3d_bwd_weight_ngcdhw_instance"
+        "device_grouped_conv3d_bwd_weight_bilinear_ndhwgc_instance"
+        "device_grouped_conv3d_bwd_weight_scale_ndhwgc_instance"
+      ];
+    };
+    grouped_conv_fwd_3d1 = {
+      targets = [
+        "device_grouped_conv3d_fwd_ndhwgc_instance"
+        "device_grouped_conv3d_fwd_gndhwc_instance"
+        "device_grouped_conv3d_fwd_ngcdhw_instance"
+        "device_grouped_conv3d_fwd_clamp_ndhwgc_instance"
+        "device_grouped_conv3d_fwd_bias_bnorm_clamp_ndhwgc_instance"
+        "device_grouped_conv3d_fwd_bias_bnorm_clamp_nhwgc_instance"
+        "device_grouped_conv3d_fwd_bias_clamp_ndhwgc_instance"
+        "device_grouped_conv3d_fwd_bilinear_ndhwgc_instance"
+        "device_grouped_conv3d_fwd_convinvscale_ndhwgc_instance"
+        "device_grouped_conv3d_fwd_convscale_ndhwgc_instance"
+        "device_grouped_conv3d_fwd_convscale_add_ndhwgc_instance"
+      ];
+    };
+    grouped_conv_fwd_3d2 = {
+      targets = [
+        "device_grouped_conv3d_fwd_convscale_relu_ndhwgc_instance"
+        "device_grouped_conv3d_fwd_dynamic_op_ndhwgc_instance"
+        "device_grouped_conv3d_fwd_scale_ndhwgc_instance"
+        "device_grouped_conv3d_fwd_scaleadd_ab_ndhwgc_instance"
+        "device_grouped_conv3d_fwd_scaleadd_scaleadd_relu_ndhwgc_instance"
+      ];
+    };
+    grouped_conv_fwd_nd = {
+      targets = [
+        "device_grouped_convnd_bwd_weight_instance"
+      ];
+    };
+    conv_other = {
+      targets = [
+        "device_conv1d_bwd_data_instance"
+        "device_conv2d_bwd_data_instance"
+        "device_conv2d_fwd_instance"
+        "device_conv2d_fwd_bias_relu_instance"
+        "device_conv2d_fwd_bias_relu_add_instance"
+        "device_conv3d_bwd_data_instance"
+      ];
+    };
     _mha = {
       enabled = !miOpenReqLibsOnly;
       # mha takes ~3hrs on 64 cores on an EPYC milan system at ~2.5GHz
@@ -41,63 +123,6 @@ let
       onlyFor = [
         "gfx942"
         "gfx950"
-      ];
-    };
-    grouped_conv_bwd = {
-      targets = [
-        "device_grouped_conv1d_bwd_weight_instance"
-        "device_grouped_conv2d_bwd_data_instance"
-        "device_grouped_conv2d_bwd_weight_instance"
-      ];
-    };
-    grouped_conv_fwd = {
-      targets = [
-        "device_grouped_conv1d_fwd_instance"
-        "device_grouped_conv2d_fwd_instance"
-        "device_grouped_conv2d_fwd_bias_bnorm_clamp_instance"
-        "device_grouped_conv2d_fwd_bias_clamp_instance"
-        "device_grouped_conv2d_fwd_clamp_instance"
-        "device_grouped_conv2d_fwd_dynamic_op_instance"
-      ];
-    };
-    grouped_conv_bwd_3d1 = {
-      targets = [
-        "device_grouped_conv3d_bwd_data_instance"
-        "device_grouped_conv3d_bwd_data_bilinear_instance"
-        "device_grouped_conv3d_bwd_data_scale_instance"
-      ];
-    };
-    grouped_conv_bwd_3d2 = {
-      targets = [
-        "device_grouped_conv3d_bwd_weight_instance"
-        "device_grouped_conv3d_bwd_weight_bilinear_instance"
-        "device_grouped_conv3d_bwd_weight_scale_instance"
-      ];
-    };
-    grouped_conv_fwd_3d1 = {
-      targets = [
-        "device_grouped_conv3d_fwd_instance"
-        "device_grouped_conv3d_fwd_clamp_instance"
-        "device_grouped_conv3d_fwd_bias_bnorm_clamp_instance"
-        "device_grouped_conv3d_fwd_bias_clamp_instance"
-        "device_grouped_conv3d_fwd_bilinear_instance"
-        "device_grouped_conv3d_fwd_convinvscale_instance"
-        "device_grouped_conv3d_fwd_convscale_instance"
-        "device_grouped_conv3d_fwd_convscale_add_instance"
-      ];
-    };
-    grouped_conv_fwd_3d2 = {
-      targets = [
-        "device_grouped_conv3d_fwd_convscale_relu_instance"
-        "device_grouped_conv3d_fwd_dynamic_op_instance"
-        "device_grouped_conv3d_fwd_scale_instance"
-        "device_grouped_conv3d_fwd_scaleadd_ab_instance"
-        "device_grouped_conv3d_fwd_scaleadd_scaleadd_relu_instance"
-      ];
-    };
-    grouped_conv_fwd_nd = {
-      targets = [
-        "device_grouped_convnd_bwd_weight_instance"
       ];
     };
     batched_gemm1 = {
@@ -136,7 +161,6 @@ let
       enabled = !miOpenReqLibsOnly;
       targets = [
         "device_gemm_universal_reduce_instance"
-        "device_gemm_universal_streamk_instance"
       ];
     };
     gemm_other1 = {
@@ -164,17 +188,6 @@ let
         "device_gemm_multiply_add_instance"
         "device_gemm_reduce_instance"
         "device_gemm_splitk_instance"
-        "device_gemm_streamk_instance"
-      ];
-    };
-    conv = {
-      targets = [
-        "device_conv1d_bwd_data_instance"
-        "device_conv2d_bwd_data_instance"
-        "device_conv2d_fwd_instance"
-        "device_conv2d_fwd_bias_relu_instance"
-        "device_conv2d_fwd_bias_relu_add_instance"
-        "device_conv3d_bwd_data_instance"
       ];
     };
     pool = {
@@ -185,11 +198,6 @@ let
         "device_pool2d_fwd_instance"
         "device_pool3d_fwd_instance"
         "device_max_pool_bwd_instance"
-      ];
-    };
-    other0 = {
-      targets = [
-        "device_quantization_instance"
       ];
     };
     other1 = {
@@ -243,7 +251,24 @@ let
         makeTargets = targets;
         preBuild = ''
           echo "Building ${part}"
-          makeFlagsArray+=($makeTargets)
+          # Build the targets this configuration generates; fail on names the CK
+          # source no longer defines, so they are not compiled unsplit later.
+          partTargets=()
+          for target in $makeTargets; do
+            if grep -q "^$target:" Makefile; then
+              partTargets+=("$target")
+            elif grep -rqsE "add_instance_library\($target([[:space:])]|$)" ../library/src/tensor_operation_instance; then
+              echo "CK part ${part}: $target not configured, skipping"
+            else
+              echo "CK part ${part}: $target is not defined in the CK source" >&2
+              exit 1
+            fi
+          done
+          if (( ''${#partTargets[@]} == 0 )); then
+            mkdir -p "$out"
+            exit 0
+          fi
+          makeFlagsArray+=("''${partTargets[@]}")
           substituteInPlace $(find ./ -name "Makefile" -type f) \
             --replace-fail '.NOTPARALLEL:' '.UNUSED_NOTPARALLEL:'
         '';
@@ -254,7 +279,14 @@ let
         # Nix/nixpkgs doesn't really have any infra to tell it that this build is unusually memory hungry
         # So, bodge. Otherwise you end up having to build all of ROCm with a low core limit when
         # it's only this package that has trouble.
-        preConfigure = old.preConfigure or "" + ''
+        preConfigure = (old.preConfigure or "") + ''
+          # clang 24 passes NIX_LDFLAGS' self-rpath into the compressed .hip_fatbin,
+          # where it cannot be scrubbed; the parts only emit objects.
+          for _v in NIX_LDFLAGS ''${!NIX_LDFLAGS_*}; do
+            printf -v "$_v" '%s' "$(sed "s| *-rpath $out/lib||g" <<< "''${!_v-}")"
+            export "$_v"
+          done
+
           MEM_GB_TOTAL=$(awk '/MemTotal/ { printf "%d \n", $2/1024/1024 }' /proc/meminfo)
           MEM_GB_AVAILABLE=$(awk '/MemAvailable/ { printf "%d \n", $2/1024/1024 }' /proc/meminfo)
           APPX_GB=$((MEM_GB_AVAILABLE > MEM_GB_TOTAL ? MEM_GB_TOTAL : MEM_GB_AVAILABLE))
