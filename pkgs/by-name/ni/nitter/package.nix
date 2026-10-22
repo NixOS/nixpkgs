@@ -3,6 +3,7 @@
   buildNimPackage,
   fetchFromGitHub,
   nixosTests,
+  pcre2,
   replaceVars,
   unstableGitUpdater,
 }:
@@ -26,6 +27,9 @@ buildNimPackage (
         inherit (finalAttrs) version;
         inherit (finalAttrs.src) rev;
         url = builtins.replaceStrings [ "archive" ".tar.gz" ] [ "commit" "" ] finalAttrs.src.url;
+      })
+      (replaceVars ./nitter-pcre2.patch {
+        pcre2Lib = "${lib.getLib pcre2}/lib";
       })
     ];
 
