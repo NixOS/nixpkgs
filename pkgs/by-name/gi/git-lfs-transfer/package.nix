@@ -6,16 +6,16 @@
 }:
 buildGoModule {
   pname = "git-lfs-transfer";
-  version = "0.1.0-unstable-2024-10-07";
+  version = "0.1.0-unstable-2026-08-12";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "git-lfs-transfer";
-    rev = "422d24414fe4b803849b3f6fe7c4d8ab1b40803b";
-    hash = "sha256-YsplPW3i4W1RfkWQI1eGXFXb3JofQwKe+9LbjxeL1cM=";
+    rev = "971c0284dc33b1ed3f7ed9dde5d4fc0cee62db6b";
+    hash = "sha256-RBkz9JdxQ93pfge/9gWniin3PRuajHnOK864v1wedBM=";
   };
 
-  vendorHash = "sha256-1cGlhLdnU6yTqzcB3J1cq3gawncbtdgkb3LFh2ZmXbM=";
+  vendorHash = "sha256-JoRI7kQWZZ3gJDm1eVYKhe0SKoBMcx5lGymeYAc243g=";
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
