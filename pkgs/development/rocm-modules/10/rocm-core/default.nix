@@ -14,20 +14,22 @@
 # only the last usage makes sense in nixpkgs
 let
   padIfSingle = s: if lib.stringLength s == 1 then "0${s}" else s;
+  # TheRock tags are two-component (therock-10.1); ROCm reports X.Y.Z.
+  rocmVersion = version: lib.versions.pad 3 version;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-core";
-  version = "7.2.4";
+  version = "10.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-systems";
-    tag = "rocm-${finalAttrs.version}";
+    tag = "therock-${finalAttrs.version}";
     sparseCheckout = [
       "projects/rocm-core"
       "shared"
     ];
-    hash = "sha256-Y3WuDwruD5zKN2epwfUCZAGq5vgxCT27awJN8JxmOsY=";
+    hash = "sha256-3bEmFF4jivCslDINOTA5nIu1/nreGWZuIMYMxaUgd18=";
   };
   sourceRoot = "${finalAttrs.src.name}/projects/rocm-core";
 
@@ -37,13 +39,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
   env = {
-    ROCM_LIBPATCH_VERSION = "${lib.versions.major finalAttrs.version}${padIfSingle (lib.versions.minor finalAttrs.version)}${padIfSingle (lib.versions.patch finalAttrs.version)}";
+    ROCM_LIBPATCH_VERSION = "${lib.versions.major (rocmVersion finalAttrs.version)}${padIfSingle (lib.versions.minor (rocmVersion finalAttrs.version))}${padIfSingle (lib.versions.patch (rocmVersion finalAttrs.version))}";
     BUILD_ID = "nixpkgs-${finalAttrs.env.ROCM_LIBPATCH_VERSION}";
     ROCM_BUILD_ID = "${finalAttrs.env.BUILD_ID}";
   };
   cmakeFlags = [
     "-DROCM_LIBPATCH_VERSION=${finalAttrs.env.ROCM_LIBPATCH_VERSION}"
-    "-DROCM_VERSION=${finalAttrs.version}"
+    "-DROCM_VERSION=${rocmVersion finalAttrs.version}"
     "-DBUILD_ID=${finalAttrs.env.BUILD_ID}"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_LIBEXECDIR=libexec"
@@ -52,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   setupHook = writeText "setupHook.sh" ''
-    export ROCM_VERSION="${finalAttrs.version}"
+    export ROCM_VERSION="${rocmVersion finalAttrs.version}"
     export ROCM_LIBPATCH_VERSION="${finalAttrs.env.ROCM_LIBPATCH_VERSION}"
     export ROCM_BUILD_ID="${finalAttrs.env.ROCM_BUILD_ID}"
   '';
