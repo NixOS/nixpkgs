@@ -1215,13 +1215,6 @@ in
     '';
   };
 
-  std-_debug = prev.std-_debug.overrideAttrs {
-    # run make to generate lib/std/_debug/version.lua
-    preConfigure = ''
-      make all
-    '';
-  };
-
   std-normalize = prev.std-normalize.overrideAttrs {
     # run make to generate lib/std/_debug/version.lua
     preConfigure = ''
