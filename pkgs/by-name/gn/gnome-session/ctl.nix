@@ -6,7 +6,7 @@
   ninja,
   pkg-config,
   glib,
-  systemd,
+  systemdLibs,
   wrapGAppsHook3,
 }:
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib
-    systemd
+    systemdLibs
   ];
 
   meta = {
