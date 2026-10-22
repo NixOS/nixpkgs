@@ -1,0 +1,5 @@
+--- a/.taskfiles/desktop.yml
++++ b/.taskfiles/desktop.yml
+@@ -147,0 +148,2 @@
++    status:
++      - test -f frontend/editor/src-tauri/libs/stirling-pdf-*.jar
