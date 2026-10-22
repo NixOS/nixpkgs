@@ -7,7 +7,7 @@ current_version=$(nix-instantiate --eval -E "with import ./. {}; cef-binary.vers
 
 ROOT="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 
-version_json=$(curl --silent https://cef-builds.spotifycdn.com/index.json | jq '[.linux64.versions[] | select (.channel == "stable")][0]')
+version_json=$(curl --silent https://cef-builds.spotifycdn.com/index.json | jq '[.linux64.versions[] | select (.channel == "stable")] | max_by(.cef_version | split("+")[0] | split(".")[:3] | map(tonumber))')
 cef_version=$(echo "$version_json" | jq -r '.cef_version' | cut -d'+' -f1)
 git_revision=$(echo "$version_json" | jq -r '.cef_version' | cut -d'+' -f2 | cut -c 2-)
 chromium_version=$(echo "$version_json" | jq -r '.chromium_version')
