@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "embreex";
-  version = "4.4.0";
+  version = "4.4.0.post1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "trimesh";
     repo = "embreex";
     tag = version;
-    hash = "sha256-mUPc9CMHsFYb1ELBmj+XXCjYEIW1iV8ZaRCQ40tYS8w=";
+    hash = "sha256-9dq09EdJN5XKy1BdNSGk0ofDfmyqt50mo5i6mtwQtrE=";
   };
 
   build-system = [
