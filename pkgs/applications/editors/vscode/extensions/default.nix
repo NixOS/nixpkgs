@@ -431,8 +431,8 @@ let
         mktplcRef = {
           name = "vscode-neovim";
           publisher = "asvetliakov";
-          version = "1.20.0";
-          hash = "sha256-+A1G+3Qe2yzDslgX3ap3N03woHrqAp5Q5uj1nqVGE7k=";
+          version = "1.20.1";
+          hash = "sha256-IH4arT6N9JV93AGhZsnfC65CK4tpDsvaqE2iQr/nGwQ=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/asvetliakov.vscode-neovim/changelog";
