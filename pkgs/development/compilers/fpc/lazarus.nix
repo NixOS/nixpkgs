@@ -40,9 +40,54 @@ let
     )
   );
 
-  LCL_PLATFORM = if withQt then "qt${qtVersion}" else "gtk3";
+  LCL_PLATFORM =
+    if withQt then
+      "qt${qtVersion}"
+    else if stdenv.hostPlatform.isDarwin then
+      "cocoa"
+    else
+      "gtk3";
 
   qtVersion = lib.versions.major qtbase.version;
+  linuxBuildInputs = [
+    # GTK is required on Linux even when building the Qt variant.
+    gtk3
+    glib
+    libxi
+    xorgproto
+    libx11
+    libxext
+    pango
+    atk
+    gdk-pixbuf
+    harfbuzz
+  ];
+
+  linkerFlags =
+    if stdenv.hostPlatform.isDarwin then
+      [ "-syslibroot $SDKROOT" ] ++ lib.optional withQt "-F${lib.getLib libqtpas}/lib"
+    else
+      [
+        "-L${lib.getLib stdenv.cc.cc}/lib"
+        "-lX11"
+        "-lXext"
+        "-lXi"
+        "-latk-1.0"
+        "-lc"
+        "-lcairo"
+        "-lgcc_s"
+        "-lgdk-3"
+        "-lgdk_pixbuf-2.0"
+        "-lglib-2.0"
+        "-lgtk-3"
+        "-lpango-1.0"
+        "-lharfbuzz"
+        "-lharfbuzz-gobject"
+      ]
+      ++ lib.optionals withQt [
+        "-L${lib.getLib libqtpas}/lib"
+        "-lQt${qtVersion}Pas"
+      ];
 in
 stdenv.mkDerivation rec {
   pname = "lazarus-${LCL_PLATFORM}";
@@ -58,20 +103,10 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    # we need gtk unconditionally as that is the default target when building applications with lazarus
     fpc
-    gtk3
-    glib
-    libxi
-    xorgproto
-    libx11
-    libxext
-    pango
-    atk
     stdenv.cc
-    gdk-pixbuf
-    harfbuzz
   ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux linuxBuildInputs
   ++ lib.optionals withQt [
     libqtpas
     qtbase
@@ -95,34 +130,10 @@ stdenv.mkDerivation rec {
     "bigide"
   ];
 
-  env = {
-    inherit LCL_PLATFORM;
-    NIX_LDFLAGS = toString (
-      [
-        "-L${lib.getLib stdenv.cc.cc}/lib"
-        "-lX11"
-        "-lXext"
-        "-lXi"
-        "-latk-1.0"
-        "-lc"
-        "-lcairo"
-        "-lgcc_s"
-        "-lgdk-3"
-        "-lgdk_pixbuf-2.0"
-        "-lglib-2.0"
-        "-lgtk-3"
-        "-lpango-1.0"
-        "-lharfbuzz"
-        "-lharfbuzz-gobject"
-      ]
-      ++ lib.optionals withQt [
-        "-L${lib.getLib libqtpas}/lib"
-        "-lQt${qtVersion}Pas"
-      ]
-    );
-  };
+  env = { inherit LCL_PLATFORM; };
 
   preBuild = ''
+    export NIX_LDFLAGS="${toString linkerFlags}"
     mkdir -p $out/share "$out/lazarus"
     tar xf ${fpc.src} --strip-components=1 -C $out/share -m
     substituteInPlace ide/packages/ideconfig/include/unix/lazbaseconf.inc \
@@ -139,12 +150,14 @@ stdenv.mkDerivation rec {
         --prefix NIX_LDFLAGS_${binutils.suffixSalt} ' ' "${ldFlags}" \
         --prefix LCL_PLATFORM ' ' "$LCL_PLATFORM" \
         --prefix PATH ':' "${
-          lib.makeBinPath [
-            fpc
-            gdb
-            gnumake
-            binutils
-          ]
+          lib.makeBinPath (
+            [
+              fpc
+              gnumake
+              binutils
+            ]
+            ++ lib.optional stdenv.hostPlatform.isLinux gdb
+          )
         }"
     '';
 
@@ -153,6 +166,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.lazarus.freepascal.org";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ raskin ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ [ "aarch64-darwin" ];
   };
 }
