@@ -1,8 +1,170 @@
+diff --git a/frigate/api/classification.py b/frigate/api/classification.py
+index 6caa745..8b7483a 100644
+--- a/frigate/api/classification.py
++++ b/frigate/api/classification.py
+@@ -1269,7 +1269,7 @@ async def generate_state_examples(request: Request, body: GenerateStateExamplesB
+         if camera_name in request.app.frigate_config.cameras
+     }
+ 
+-    collect_state_classification_examples(model_name, cameras_normalized)
++    collect_state_classification_examples(model_name, cameras_normalized, request.app.frigate_config.ffmpeg)
+ 
+     return JSONResponse(
+         content={"success": True, "message": "Example generation completed"},
+diff --git a/frigate/api/media.py b/frigate/api/media.py
+index d6e2a7f..4fdc8da 100644
+--- a/frigate/api/media.py
++++ b/frigate/api/media.py
+@@ -564,6 +564,7 @@ async def recording_clip(
+     description="Returns an HLS playlist for the specified timestamp-range on the specified camera. Append /master.m3u8 or /index.m3u8 for HLS playback.",
+ )
+ async def vod_ts(
++    request: Request,
+     camera_name: str,
+     start_ts: float,
+     end_ts: float,
+@@ -631,7 +632,7 @@ async def vod_ts(
+         # segment. Snap clipFrom back to the preceding keyframe so the
+         # segment always starts with a decodable frame.
+         if "clipFrom" in clip:
+-            keyframe_ms = get_keyframe_before(recording.path, clip["clipFrom"])
++            keyframe_ms = get_keyframe_before(request.app.frigate_config.ffmpeg.ffprobe_path, recording.path, clip["clipFrom"])
+             if keyframe_ms is not None:
+                 gained = clip["clipFrom"] - keyframe_ms
+                 clip["clipFrom"] = keyframe_ms
+@@ -705,10 +706,10 @@ async def vod_ts(
+     dependencies=[Depends(require_camera_access)],
+     description="Returns an HLS playlist for the specified date-time on the specified camera. Append /master.m3u8 or /index.m3u8 for HLS playback.",
+ )
+-async def vod_hour_no_timezone(year_month: str, day: int, hour: int, camera_name: str):
++async def vod_hour_no_timezone(request: Request, year_month: str, day: int, hour: int, camera_name: str):
+     """VOD for specific hour. Uses the default timezone (UTC)."""
+     return await vod_hour(
+-        year_month, day, hour, camera_name, get_localzone_name().replace("/", ",")
++        request, year_month, day, hour, camera_name, get_localzone_name().replace("/", ",")
+     )
+ 
+ 
+@@ -718,7 +719,7 @@ async def vod_hour_no_timezone(year_month: str, day: int, hour: int, camera_name
+     description="Returns an HLS playlist for the specified date-time (with timezone) on the specified camera. Append /master.m3u8 or /index.m3u8 for HLS playback.",
+ )
+ async def vod_hour(
+-    year_month: str, day: int, hour: int, camera_name: str, tz_name: str
++    request: Request, year_month: str, day: int, hour: int, camera_name: str, tz_name: str
+ ):
+     parts = year_month.split("-")
+     start_date = (
+@@ -729,7 +730,7 @@ async def vod_hour(
+     start_ts = start_date.timestamp()
+     end_ts = end_date.timestamp()
+ 
+-    return await vod_ts(camera_name, start_ts, end_ts)
++    return await vod_ts(request, camera_name, start_ts, end_ts)
+ 
+ 
+ @router.get(
+@@ -761,7 +762,7 @@ async def vod_event(
+         if event.end_time is None
+         else (event.end_time + padding)
+     )
+-    vod_response = await vod_ts(event.camera, event.start_time - padding, end_ts)
++    vod_response = await vod_ts(request, event.camera, event.start_time - padding, end_ts)
+ 
+     # If the recordings are not found and the event started more than 5 minutes ago, set has_clip to false
+     if (
+@@ -781,11 +782,12 @@ async def vod_event(
+     description="Returns an HLS playlist for a timestamp range with HLS discontinuity enabled. Append /master.m3u8 or /index.m3u8 for HLS playback.",
+ )
+ async def vod_clip(
++    request: Request,
+     camera_name: str,
+     start_ts: float,
+     end_ts: float,
+ ):
+-    return await vod_ts(camera_name, start_ts, end_ts, force_discontinuity=True)
++    return await vod_ts(request, camera_name, start_ts, end_ts, force_discontinuity=True)
+ 
+ 
+ @router.get(
+diff --git a/frigate/record/export.py b/frigate/record/export.py
+index 00addda..795043a 100644
+--- a/frigate/record/export.py
++++ b/frigate/record/export.py
+@@ -623,7 +623,7 @@ class RecordingExporter(threading.Thread):
+ 
+             diff = max(0.0, float(self.start_time) - float(preview.start_time))
+             ffmpeg_cmd = [
+-                "/usr/lib/ffmpeg/8.0/bin/ffmpeg",  # hardcode path for exports thumbnail due to missing libwebp support
++                self.config.ffmpeg.ffmpeg_path,
+                 "-hide_banner",
+                 "-loglevel",
+                 "warning",
+diff --git a/frigate/util/classification.py b/frigate/util/classification.py
+index a9345bb..0bdff6a 100644
+--- a/frigate/util/classification.py
++++ b/frigate/util/classification.py
+@@ -353,7 +353,7 @@ def kickoff_model_training(
+ 
+ @staticmethod
+ def collect_state_classification_examples(
+-    model_name: str, cameras: dict[str, tuple[float, float, float, float]]
++    model_name: str, cameras: dict[str, tuple[float, float, float, float]], ffmpeg: FfmpegConfig
+ ) -> None:
+     """
+     Collect representative state classification examples from review items.
+@@ -394,7 +394,7 @@ def collect_state_classification_examples(
+ 
+     # Step 3: Extract keyframes from recordings with crops applied
+     keyframes = _extract_keyframes(
+-        "/usr/lib/ffmpeg/8.0/bin/ffmpeg", timestamps, temp_dir, cameras
++        ffmpeg, timestamps, temp_dir, cameras
+     )
+ 
+     # Step 4: Select 24 most visually distinct images (they're already cropped)
+@@ -509,7 +509,7 @@ def _select_balanced_timestamps(
+ 
+ 
+ def _extract_keyframes(
+-    ffmpeg_path: str,
++    ffmpeg: FfmpegConfig,
+     timestamps: list[dict],
+     output_dir: str,
+     camera_crops: dict[str, tuple[float, float, float, float]],
+@@ -522,7 +522,7 @@ def _extract_keyframes(
+     processing each timestamp serially.
+ 
+     Args:
+-        ffmpeg_path: Path to ffmpeg binary
++        ffmpeg: FFmpeg configuration used to extract frames
+         timestamps: List of timestamp dicts from _select_balanced_timestamps
+         output_dir: Directory to save extracted frames
+         camera_crops: Dict mapping camera names to normalized crop coordinates [x1, y1, x2, y2] (0-1)
+@@ -566,9 +566,8 @@ def _extract_keyframes(
+         relative_time = timestamp - recording.start_time
+ 
+         try:
+-            config = FfmpegConfig(path="/usr/lib/ffmpeg/8.0")
+             image_data = get_image_from_recording(
+-                config,
++                ffmpeg,
+                 recording.path,
+                 relative_time,
+                 codec="mjpeg",
 diff --git a/frigate/util/config.py b/frigate/util/config.py
-index 3e093a978..c9a5d7462 100644
+index 3c7f0ca..86d4d03 100644
 --- a/frigate/util/config.py
 +++ b/frigate/util/config.py
-@@ -32,17 +32,7 @@ def resolve_ffmpeg_path(path: str, binary: str = "ffmpeg") -> str:
+@@ -10,9 +10,7 @@ from ruamel.yaml import YAML
+ 
+ from frigate.const import (
+     CONFIG_DIR,
+-    DEFAULT_FFMPEG_VERSION,
+     EXPORT_DIR,
+-    INCLUDED_FFMPEG_VERSIONS,
+     REDACTED_CREDENTIAL_SENTINEL,
+ )
+ from frigate.util.builtin import deep_merge
+@@ -32,16 +30,7 @@ def resolve_ffmpeg_path(path: str, binary: str = "ffmpeg") -> str:
      bundled version so existing configs keep working across an upgrade or a
      revert. Custom install paths (anything absolute) are used as-is.
      """
@@ -16,8 +178,50 @@ index 3e093a978..c9a5d7462 100644
 -        return f"{path}/bin/{binary}"
 -
 -    return f"/usr/lib/ffmpeg/{version}/bin/{binary}"
--
 +    return os.path.join(path, "bin", binary)
  
+ 
  def redact_credential(obj: dict[str, Any], key: str) -> None:
-     """Replace obj[key] with the redaction sentinel if a value is saved, else drop.
+diff --git a/frigate/util/media.py b/frigate/util/media.py
+index e4e84e9..1bf6780 100644
+--- a/frigate/util/media.py
++++ b/frigate/util/media.py
+@@ -13,7 +13,6 @@ from peewee import DatabaseError, chunked
+ 
+ from frigate.const import (
+     CLIPS_DIR,
+-    DEFAULT_FFMPEG_VERSION,
+     EXPORT_DIR,
+     RECORD_DIR,
+     THUMB_DIR,
+@@ -33,12 +32,6 @@ logger = logging.getLogger(__name__)
+ # Safety threshold - abort if more than 50% of files would be deleted
+ SAFETY_THRESHOLD = 0.5
+ 
+-FFPROBE_PATH = (
+-    f"/usr/lib/ffmpeg/{DEFAULT_FFMPEG_VERSION}/bin/ffprobe"
+-    if DEFAULT_FFMPEG_VERSION
+-    else "ffprobe"
+-)
+-
+ 
+ @dataclass
+ class SyncResult:
+@@ -879,7 +872,7 @@ def sync_all_media(
+     return results
+ 
+ 
+-def get_keyframe_before(path: str, offset_ms: int) -> int | None:
++def get_keyframe_before(ffprobe_path: str, path: str, offset_ms: int) -> int | None:
+     """Get the timestamp (ms) of the last keyframe at or before offset_ms.
+ 
+     Uses ffprobe packet index to read keyframe positions from the mp4 file.
+@@ -888,7 +881,7 @@ def get_keyframe_before(path: str, offset_ms: int) -> int | None:
+     try:
+         result = sp.run(
+             [
+-                FFPROBE_PATH,
++                ffprobe_path,
+                 "-select_streams",
+                 "v:0",
+                 "-show_entries",
