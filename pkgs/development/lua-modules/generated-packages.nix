@@ -6148,27 +6148,23 @@ final: prev: {
       buildLuarocksPackage,
       fetchurl,
       fetchzip,
-      ldoc,
       luaAtLeast,
       luaOlder,
-      std-_debug,
     }:
     buildLuarocksPackage {
       pname = "std.normalize";
-      version = "2.0.4-1";
+      version = "3-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/std.normalize-2.0.4-1.rockspec";
-          sha256 = "0w53z4430hd722jbdr1p93k8fllqlrbvmyvp7w034l7ziqv3zbdj";
+          url = "mirror://luarocks/std.normalize-3-1.rockspec";
+          sha256 = "0b1f570ccidj85c2xp1zzkr5s808ff68absp2f95az25bzzaignc";
         }).outPath;
       src = fetchzip {
-        url = "http://github.com/lua-stdlib/normalize/archive/v2.0.4.zip";
-        sha256 = "0my9q65a4pgmjd88b8ljc53x0wp1aq19b19inahk304q6ay92whq";
+        url = "https://github.com/lua-stdlib/normalize/archive/v3.zip";
+        sha256 = "0iqmbkk5180pdn6d4j3lnv6iljlfv2ddkiwv7549n7pbmfx8ixs4";
       };
 
       disabled = luaOlder "5.1" || luaAtLeast "5.6";
-      nativeBuildInputs = [ ldoc ];
-      propagatedBuildInputs = [ std-_debug ];
 
       meta = {
         homepage = "https://lua-stdlib.github.io/normalize";
