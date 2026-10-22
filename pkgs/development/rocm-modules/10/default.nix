@@ -142,6 +142,8 @@ let
 
       rocsolver = self.callPackage ./rocsolver { };
 
+      rocalution = self.callPackage ./rocalution { };
+
       hipsolver = self.callPackage ./hipsolver { };
 
       hipblas-common = self.callPackage ./hipblas-common { };
