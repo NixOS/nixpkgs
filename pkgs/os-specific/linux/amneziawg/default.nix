@@ -33,7 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   installFlags = [
-    "DEPMOD=true"
     "INSTALL_MOD_PATH=${placeholder "out"}"
   ];
 
