@@ -105,6 +105,8 @@ let
 
       rocprim = self.callPackage ./rocprim { };
 
+      rocsparse = self.callPackage ./rocsparse { };
+
       rocthrust = self.callPackage ./rocthrust { };
 
       rocrand = self.callPackage ./rocrand { };
