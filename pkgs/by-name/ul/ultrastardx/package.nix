@@ -85,8 +85,8 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     make macos-app
     mkdir -p "$out/Applications" "$out/bin"
-    cp -R UltraStarDeluxe.app "$out/Applications/"
-    ln -s "$out/Applications/UltraStarDeluxe.app/Contents/MacOS/ultrastardx" \
+    cp -R "UltraStar Deluxe.app" "$out/Applications/"
+    ln -s "$out/Applications/UltraStar Deluxe.app/Contents/MacOS/ultrastardx" \
           "$out/bin/ultrastardx"
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''

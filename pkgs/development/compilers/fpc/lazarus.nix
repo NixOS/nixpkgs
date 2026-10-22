@@ -133,6 +133,7 @@ stdenv.mkDerivation rec {
   env = { inherit LCL_PLATFORM; };
 
   preBuild = ''
+    # Set this here rather than in `env` so the shell expands `$SDKROOT` on Darwin.
     export NIX_LDFLAGS="${toString linkerFlags}"
     mkdir -p $out/share "$out/lazarus"
     tar xf ${fpc.src} --strip-components=1 -C $out/share -m
