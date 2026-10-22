@@ -16,7 +16,10 @@ perlPackages.buildPerlPackage rec {
     hash = "sha256-An0wQu+UC2dZDlmJ6W8irh5nunRIlcXdPbVpwFE3Alw=";
   };
 
-  buildInputs = with perlPackages; [
+  buildInputs = [
+    rsync
+  ]
+  ++ (with perlPackages; [
     FileShareDirInstall
     ParallelForkManager
     StringEscape
@@ -26,10 +29,7 @@ perlPackages.buildPerlPackage rec {
     TestUseAllModules
     TestException
     SubOverride
-
-    rsync
-    which
-  ];
+  ]);
 
   # These are part of a greater effort to add better support upstream:
   # https://github.com/RexOps/Rex/compare/master...nixos
@@ -82,6 +82,12 @@ perlPackages.buildPerlPackage rec {
     XMLSimple
     YAML
   ];
+
+  nativeCheckInputs = [
+    which
+  ];
+
+  strictDeps = true;
 
   outputs = [ "out" ];
 
