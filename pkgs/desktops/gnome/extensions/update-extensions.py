@@ -23,7 +23,6 @@ from typing import Any
 # We don't want all those deprecated legacy extensions
 # Group extensions by GNOME "major" version for compatibility reasons
 supported_versions = {
-    "48": "48",
     "49": "49",
     "50": "50",
     "51": "51",
