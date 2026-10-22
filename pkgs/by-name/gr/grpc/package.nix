@@ -51,6 +51,11 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -101,6 +106,13 @@ stdenv.mkDerivation (finalAttrs: {
   # basel BUILD file on case-insensitive filesystems.
   preConfigure = ''
     rm -vf BUILD
+  '';
+
+  postInstall = ''
+    substituteInPlace \
+      $out/lib/cmake/grpc/gRPCTargets-release.cmake \
+      $out/lib/cmake/grpc/gRPCPluginTargets-release.cmake \
+      --replace-fail "\''${_IMPORT_PREFIX}" "$out"
   '';
 
   # When natively compiling, grpc_cpp_plugin is executed from the build directory,
