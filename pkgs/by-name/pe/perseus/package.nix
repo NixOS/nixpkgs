@@ -10,11 +10,14 @@ stdenv.mkDerivation {
   version = "4-beta";
   nativeBuildInputs = [ unzip ];
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   hardeningDisable = [ "stackprotector" ];
 
   src = fetchurl {
     url = "https://people.maths.ox.ac.uk/nanda/source/perseus_4_beta.zip";
-    sha256 = "sha256-cnkJEIC4tu+Ni7z0cKdjmLdS8QLe8iKpdA8uha2MeSU=";
+    hash = "sha256-cnkJEIC4tu+Ni7z0cKdjmLdS8QLe8iKpdA8uha2MeSU=";
   };
 
   sourceRoot = ".";
