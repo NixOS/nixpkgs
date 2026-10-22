@@ -66,6 +66,8 @@ buildRedist (finalAttrs: {
     unset -v path
   ''
   # Patch the `cuda` package config files so they reference stubs
+  # NOTE: Before CUDA 13.4, libdir pointed at lib and Libs used -L${libdir}, though libcuda.so is only in lib/stubs.
+  # CUDA 13.4 changed Libs to -L${libdir}/stubs. Since libdir is set to the stubs directory here, drop the extra /stubs.
   # TODO: Will this always pull in the stubs output and cause its setup hook to be executed?
   + ''
     local path=""
@@ -74,8 +76,13 @@ buildRedist (finalAttrs: {
       sed -i \
         -e "s|^cudaroot\s*=.*\$||" \
         -e "s|^libdir\s*=.*/lib\$|libdir=''${!outputStubs:?}/lib/stubs|" \
+        -e "s|-L\''${libdir}/stubs\b|-L\''${libdir}|" \
         -e "s|^Libs\s*:\(.*\)\$|Libs: \1 -Wl,-rpath,${driverRunpath}|" \
         "$path"
+      if ! grep -qF -e '-L''${libdir} -lcuda' "$path"; then
+        nixErrorLog "$path does not link libcuda from libdir"
+        exit 1
+      fi
     done < <(find -iname 'cuda-*.pc' -print0)
     unset -v path
   '';
