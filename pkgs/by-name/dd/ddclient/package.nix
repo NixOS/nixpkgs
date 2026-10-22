@@ -27,12 +27,16 @@ perlPackages.buildPerlPackage rec {
     touch Makefile.PL
   '';
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [
+    autoreconfHook
+    curl
+  ];
 
   buildInputs = [
-    curl
     myPerl
   ];
+
+  strictDeps = true;
 
   # Prevent ddclient from picking up build time perl which is implicitly added
   # by buildPerlPackage.
