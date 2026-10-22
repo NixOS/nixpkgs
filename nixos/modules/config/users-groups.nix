@@ -904,7 +904,10 @@ in
 
       systemd.services.linger-users = lib.mkIf cfg.manageLingering {
         wantedBy = [ "multi-user.target" ];
-        after = [ "systemd-logind.service" ];
+        after = [
+          "systemd-logind.service"
+          "systemd-sysusers.service"
+        ];
         requires = [ "systemd-logind.service" ];
 
         script =
