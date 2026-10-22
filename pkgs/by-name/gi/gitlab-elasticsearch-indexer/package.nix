@@ -11,14 +11,14 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "gitlab-elasticsearch-indexer";
-  version = "5.14.14";
+  version = "5.14.17";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-elasticsearch-indexer";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-rN+K/7sCV0S3Wd9ZhC/lG6inZUyqIWHCyD26/uc2XYM=";
+    hash = "sha256-nCaDje8hxitswoTwl4oeQmH/c8TiSCfgJMXRj6NpsxQ=";
   };
 
   # A dependency rather than an actual package to build.
