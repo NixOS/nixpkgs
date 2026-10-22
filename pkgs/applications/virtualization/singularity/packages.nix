@@ -9,14 +9,14 @@ let
     callPackage
       (import ./generic.nix rec {
         pname = "apptainer";
-        version = "1.5.4";
+        version = "1.5.5";
         projectName = "apptainer";
 
         src = fetchFromGitHub {
           owner = "apptainer";
           repo = "apptainer";
           tag = "v${version}";
-          hash = "sha256-ru0dAuR6Q6NoYnLtEGm9/SiXPk6u1Lw3dcckkuqB7Cs=";
+          hash = "sha256-oV1LzCBYbMFbKGhli6eCbpMoyB1KeccnaEi+xHJ431g=";
         };
 
         # Override vendorHash with overrideAttrs.
