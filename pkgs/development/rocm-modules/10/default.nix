@@ -46,6 +46,9 @@ let
       rocm-docs-core = python3Packages.callPackage ../rocm-docs-core { };
 
       hipcc = self.callPackage ../hipcc { stdenv = origStdenv; };
+      rocprofiler-register = self.callPackage ./rocprofiler-register {
+        inherit (llvm) clang;
+      };
     }
   );
 in
