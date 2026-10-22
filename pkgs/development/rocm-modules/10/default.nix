@@ -56,6 +56,10 @@ let
         inherit (self) rocmUpdateScript;
       };
 
+      rocm-smi = pyPackages.callPackage ./rocm-smi {
+        inherit (self) rocmUpdateScript;
+      };
+
       rocm-docs-core = python3Packages.callPackage ../rocm-docs-core { };
 
       hipcc = self.callPackage ../hipcc { stdenv = origStdenv; };
