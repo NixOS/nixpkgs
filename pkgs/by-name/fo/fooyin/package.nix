@@ -24,13 +24,18 @@
   SDL2,
   icu,
   zlib,
+  jack2,
+  flac,
+  mpg123,
+  opusfile,
+  libvorbis,
   # Select bundled plugins to build. Leave empty for the default set, use none for no plugins, or use a semicolon/comma-separated list of plugin names to include or -name entries to exclude
   pluginSelection ? "",
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fooyin";
-  version = "0.13.1";
+  version = "0.14.0";
 
   __structuredAttrs = true;
 
@@ -38,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fooyin";
     repo = "fooyin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HinvM2lB8CQhYNJjXt5ZVR2cw2hfVpKbtKG0BzmirCs=";
+    hash = "sha256-z1EtohIftZ7GN+uu28QrD2Ya8lfzE1TtreWh6dfEoI0=";
   };
 
   buildInputs = [
@@ -55,11 +60,16 @@ stdenv.mkDerivation (finalAttrs: {
     libarchive
     # output plugins
     alsa-lib
+    jack2
     pipewire
     libpulseaudio
     SDL2
     # input plugins
     libsndfile
+    flac
+    mpg123
+    opusfile
+    libvorbis
     libopenmpt
     game-music-emu
     libebur128
