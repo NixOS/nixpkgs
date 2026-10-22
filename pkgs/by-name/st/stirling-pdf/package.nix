@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     "stirling-pdf"
     + lib.optionalString isDesktopVariant "-desktop"
     + lib.optionalString (!isDesktopVariant && !withAdditionalFeatures) "-free";
-  version = "3.1.0";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "Stirling-Tools";
@@ -78,9 +78,9 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash =
       if withAdditionalFeatures || isDesktopVariant then
-        "sha256-u6/OpRTym9SHZZVi4I/aKoH9hq8YEGbg4rz0/bxmLuo="
+        "sha256-RrN/Ao/HaUzKYuW6YwWYwx1vqyT/jL0UKLcre8wvBbs="
       else
-        "sha256-GKky6Z/cu7NLuEk/f963zg1U5QwzxbqPEXzSdLmvqhA=";
+        "sha256-8dQxQrWUXNIqwPqQp1uwL/Iu+3AEJ0tDayhV/zo+hl0=";
     # The public cache must not distribute directories under the upstream
     # User License when building the MIT-only server.
     postFetch = lib.optionalString (!withAdditionalFeatures && !isDesktopVariant) ''
