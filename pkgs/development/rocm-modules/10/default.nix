@@ -123,6 +123,8 @@ let
 
       hipcub = self.callPackage ./hipcub { };
 
+      hipsparse = self.callPackage ./hipsparse { };
+
       hipfft = self.callPackage ./hipfft { };
 
       tensile = pyPackages.callPackage ./tensile {
