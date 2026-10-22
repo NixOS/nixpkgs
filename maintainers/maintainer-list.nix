@@ -16720,9 +16720,9 @@
   };
   liamthexpl0rer = {
     name = "Liam";
+    email = "liamthexpl0rer@l14mx.de";
     matrix = "@liamthexpl0rer:l14mx.de";
     keys = [
-      { fingerprint = "3C0A 0FC8 E406 E602 50F3  FCFD 7633 7F2C A1CB 537D"; }
       { fingerprint = "CC53 895B 3CC7 7B29 AA46  55EF 6DF0 2F41 092A 9B30"; }
     ];
     github = "liamthexpl0rer";
@@ -19575,6 +19575,12 @@
     name = "Gabriel Fontes";
     keys = [ { fingerprint = "7088 C742 1873 E0DB 97FF  17C2 245C AB70 B4C2 25E9"; } ];
   };
+  MisterKartoffel = {
+    name = "Felipe Duarte";
+    email = "felipesdrs@hotmail.com";
+    github = "MisterKartoffel";
+    githubId = 176643461;
+  };
   mistydemeo = {
     email = "misty@axo.dev";
     github = "mistydemeo";
@@ -20659,13 +20665,6 @@
     githubId = 474937;
     name = "Chris Roberts";
   };
-  nasirhm = {
-    email = "nasirhussainm14@gmail.com";
-    github = "nasirhm";
-    githubId = 35005234;
-    name = "Nasir Hussain";
-    keys = [ { fingerprint = "7A10 AB8E 0BEC 566B 090C  9BE3 D812 6E55 9CE7 C35D"; } ];
-  };
   nat-418 = {
     github = "nat-418";
     githubId = 93013864;
@@ -21636,6 +21635,14 @@
     email = "coltharpnicholas@gmail.com";
     github = "nosewings";
     githubId = 24929858;
+  };
+  not-a-cowfr = {
+    name = "Andrew Gielow";
+    email = "agielow@proton.me";
+    matrix = "@not_a_cow:matrix.org";
+    github = "not-a-cowfr";
+    githubId = 104355555;
+    keys = [ { fingerprint = "F12A 919F F114 4D6B 8DB1  C1F9 9904 0443 A109 A94F"; } ];
   };
   not-my-segfault = {
     email = "michal@tar.black";
@@ -32074,12 +32081,6 @@
     email = "wrvsrx@outlook.com";
     github = "wrvsrx";
     githubId = 42770726;
-  };
-  wscott = {
-    email = "wsc9tt@gmail.com";
-    github = "wscott";
-    githubId = 31487;
-    name = "Wayne Scott";
   };
   wucke13 = {
     email = "wucke13@gmail.com";

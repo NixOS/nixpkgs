@@ -70,10 +70,15 @@ buildPythonPackage (finalAttrs: {
     "pyro.optim"
   ];
 
-  # Added for the tests/distributions/test_spanning_tree.py
-  preCheck = ''
-    export TORCH_EXTENSIONS_DIR=$(mktemp -d)
-  '';
+  preCheck =
+    # Added for the tests/distributions/test_spanning_tree.py
+    ''
+      export TORCH_EXTENSIONS_DIR=$(mktemp -d)
+    ''
+    # Avoid a race between xdist workers when tests/perf/test_benchmark.py creates it at import
+    + ''
+      mkdir -p .benchmarks
+    '';
 
   nativeCheckInputs = [
     graphviz
@@ -83,7 +88,14 @@ buildPythonPackage (finalAttrs: {
     scipy
   ];
 
-  pytestFlags = [ "--stage=unit" ];
+  pytestFlags = [
+    "--stage=unit"
+
+    # FutureWarning: `torch.jit.{trace,trace_method,save,load}` is not supported in Python 3.14+
+    # Upstream only ignores the "is deprecated" variant of these warnings.
+    # Note: `-W` messages are matched literally as a prefix, not as regexes.
+    "-Wignore:`torch.jit.:FutureWarning"
+  ];
 
   disabledTests = [
     "test_stable_with_log_prob_param_fit"

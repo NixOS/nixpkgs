@@ -431,8 +431,8 @@ let
         mktplcRef = {
           name = "vscode-neovim";
           publisher = "asvetliakov";
-          version = "1.20.0";
-          hash = "sha256-+A1G+3Qe2yzDslgX3ap3N03woHrqAp5Q5uj1nqVGE7k=";
+          version = "1.20.1";
+          hash = "sha256-IH4arT6N9JV93AGhZsnfC65CK4tpDsvaqE2iQr/nGwQ=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/asvetliakov.vscode-neovim/changelog";
@@ -2049,8 +2049,8 @@ let
         mktplcRef = {
           name = "gitlab-workflow";
           publisher = "gitlab";
-          version = "7.2.0";
-          hash = "sha256-kIse70FkeQKYuwZuUSQJUaujQIt/Azynp0kyd3J+4eQ=";
+          version = "7.2.5";
+          hash = "sha256-qcA9he4jxa8fTFJtGSvdIdq2j9G9zI0ps4zAwcH1ju0=";
         };
         meta = {
           description = "GitLab extension for Visual Studio Code";
@@ -3967,8 +3967,8 @@ let
         mktplcRef = {
           publisher = "redhat";
           name = "java";
-          version = "1.56.0";
-          hash = "sha256-PGqCHXYS64efpAKAtsWFNC7sgtaxs+jc/k0DleBiQ0M=";
+          version = "1.58.0";
+          hash = "sha256-0BGO8WfVmDQ4CLzPPqVOJI0qGrKX3ALgCybn6+ydDMQ=";
         };
         buildInputs = [ jdk ];
         meta = {
@@ -4330,8 +4330,8 @@ let
         mktplcRef = {
           publisher = "shopify";
           name = "ruby-lsp";
-          version = "0.10.6";
-          hash = "sha256-5yEfTSgcSv9SQILOu7hyfNcK+m5IBHKpLDjXXwOZb/I=";
+          version = "0.10.8";
+          hash = "sha256-dEfBaXvAxI9JdAMBdZRZ1Fk/QjaSZPTs/okE8FGcQNU=";
         };
         meta = {
           description = "VS Code plugin for connecting with the Ruby LSP";
@@ -5180,8 +5180,8 @@ let
         mktplcRef = {
           name = "vscode-gradle";
           publisher = "vscjava";
-          version = "3.18.0";
-          hash = "sha256-ybMejIJER9HHVh1z+tazgvQ0UIa8eKoJBb7JOLU1Kpw=";
+          version = "3.18.1";
+          hash = "sha256-S7uURc3q5atehOi2M6BDgf5olOiG5sAnxToQCb3WtO0=";
         };
 
         meta = {
