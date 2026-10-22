@@ -2,6 +2,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   lib,
+  unstableGitUpdater,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -23,6 +24,10 @@ stdenvNoCC.mkDerivation {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = unstableGitUpdater {
+    hardcodeZeroVersion = true;
+  };
 
   meta = {
     description = "Fcitx5 themes based on Rosé Pine";
