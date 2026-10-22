@@ -47,6 +47,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=token_renewal"
   ];
 
+  # Integration tests start a mock OAuth server on localhost.
+  __darwinAllowLocalNetworking = true;
+
   passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=pizauth-(.*)" ]; };
 
   meta = {
