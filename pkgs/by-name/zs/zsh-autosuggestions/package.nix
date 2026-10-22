@@ -33,6 +33,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/zsh-users/zsh-autosuggestions";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.loskutov ];
+    maintainers = [
+      lib.maintainers.loskutov
+      lib.maintainers.starryreverie
+    ];
   };
 })
