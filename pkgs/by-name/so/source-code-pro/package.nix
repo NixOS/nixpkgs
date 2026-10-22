@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -14,13 +15,9 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-+BnfmD+AjObSoVxPvFAqbnMD2j5qf2YmbXGQtXoaiy0=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm644 OTF/*.otf -t $out/share/fonts/opentype
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [
+    installFonts
+  ];
 
   meta = {
     description = "Monospaced font family for user interface and coding environments";
