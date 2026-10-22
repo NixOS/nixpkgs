@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmake,
   kernel,
+  kernelModuleMakeFlags ? [ ],
   installShellFiles,
   pkg-config,
   luajit,
@@ -133,8 +134,8 @@ stdenv.mkDerivation {
     "-DVALIJSON_INCLUDE=${valijson}/include"
     "-DUTHASH_INCLUDE=${uthash}/include"
     (lib.cmakeBool "USE_BUNDLED_FALCOSECURITY_LIBS" true)
-  ]
-  ++ lib.optional (kernel == null) "-DBUILD_DRIVER=OFF";
+    (lib.cmakeBool "BUILD_DRIVER" false)
+  ];
 
   env.NIX_CFLAGS_COMPILE =
     # fix compiler warnings been treated as errors
@@ -161,22 +162,10 @@ stdenv.mkDerivation {
       rmdir $out/etc
     ''
     + lib.optionalString (kernel != null) ''
-      make install_driver
-      kernel_dev=${kernel.dev}
-      kernel_dev=''${kernel_dev#${builtins.storeDir}/}
-      kernel_dev=''${kernel_dev%%-linux*dev*}
-      if test -f "$out/lib/modules/${kernel.modDirVersion}/extra/scap.ko"; then
-          sed -i "s#$kernel_dev#................................#g" $out/lib/modules/${kernel.modDirVersion}/extra/scap.ko
-      else
-          for i in $out/lib/modules/${kernel.modDirVersion}/{extra,updates}/scap.ko.xz; do
-            if test -f "$i"; then
-              xz -d $i
-              sed -i "s#$kernel_dev#................................#g" ''${i%.xz}
-              xz -9 ''${i%.xz}
-            fi
-          done
-      fi
+      make install_driver ${lib.escapeShellArgs kernelModuleMakeFlags}
     '';
+
+  disallowedReferences = lib.optional (kernel != null) kernel.dev;
 
   meta = {
     description = "Tracepoint-based system tracing tool for Linux (with clients for other OSes)";
