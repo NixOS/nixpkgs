@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   guileImportsCheck = [ "gnutls" ];
 
   meta = {
-    homepage = "https://gitlab.com/gnutls/guile/";
+    homepage = "https://codeberg.org/guile-gnutls/guile-gnutls";
     description = "Guile bindings for GnuTLS library";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
