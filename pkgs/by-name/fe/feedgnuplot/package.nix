@@ -9,6 +9,7 @@
   perlPackages,
   stdenv,
   installShellFiles,
+  versionCheckHook,
 }:
 
 let
@@ -65,6 +66,9 @@ perlPackages.buildPerlPackage rec {
     installShellCompletion --bash --name feedgnuplot.bash completions/bash/feedgnuplot
     installShellCompletion --zsh completions/zsh/_feedgnuplot
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
     description = "General purpose pipe-oriented plotting tool";
