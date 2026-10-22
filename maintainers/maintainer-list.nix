@@ -32075,12 +32075,6 @@
     github = "wrvsrx";
     githubId = 42770726;
   };
-  wscott = {
-    email = "wsc9tt@gmail.com";
-    github = "wscott";
-    githubId = 31487;
-    name = "Wayne Scott";
-  };
   wucke13 = {
     email = "wucke13@gmail.com";
     github = "wucke13";
