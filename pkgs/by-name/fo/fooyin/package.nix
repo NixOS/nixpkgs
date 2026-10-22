@@ -42,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
+    # list from fooyin's BUILD.md
     kdePackages.qcoro
     kdePackages.qtbase
     kdePackages.qtsvg
@@ -51,22 +52,22 @@ stdenv.mkDerivation (finalAttrs: {
     icu
     kdsingleapplication
     zlib
+    libarchive
     # output plugins
     alsa-lib
     pipewire
+    libpulseaudio
     SDL2
     # input plugins
-    libebur128
     libsndfile
-    libarchive
     libopenmpt
     game-music-emu
-    soundtouch
-    soxr
-    libpulseaudio
-    libprojectm
+    libebur128
     libcdio
     libcdio-paranoia
+    soundtouch
+    soxr
+    libprojectm
   ];
 
   nativeBuildInputs = [
