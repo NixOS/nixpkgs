@@ -22,13 +22,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     extraArgs = [ "--version=skip" ];
   };
 
+  patches = nushell.patches or [ ];
+
   meta = {
     description = "Git status plugin for Nushell";
     mainProgram = "nu_plugin_gstat";
     homepage = "https://github.com/nushell/nushell/tree/${finalAttrs.version}/crates/nu_plugin_gstat";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      mrkkrp
-    ];
+    maintainers = with lib.maintainers; [ mrkkrp ];
   };
 })
