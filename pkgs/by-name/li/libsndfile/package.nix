@@ -83,6 +83,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ];
 
+  strictDeps = true;
+
   enableParallelBuilding = true;
 
   outputs = [
@@ -130,6 +132,8 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (gst_all_1) gst-plugins-bad;
     lame = (lame.override { sndfileFileIOSupport = true; });
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "C library for reading and writing files containing sampled sound";
