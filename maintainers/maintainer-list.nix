@@ -27263,11 +27263,11 @@
   };
   sigmasquadron = {
     name = "Fernando Rodrigues";
-    email = "alpha@sigmasquadron.net";
+    email = "nix@sigmasquadron.net";
     matrix = "@sigmasquadron:matrix.org";
     github = "SigmaSquadron";
     githubId = 174749595;
-    keys = [ { fingerprint = "E3CD E225 47C6 2DB6 6CCD  BC06 CC3A E2EA 0000 0000"; } ];
+    keys = [ { fingerprint = "A1F6 E1AF 865D 0A38 6C45  7338 BFD3 7847 56C0 01C3"; } ];
   };
   sigmike = {
     email = "mike+nixpkgs@lepton.fr";
