@@ -71,6 +71,8 @@ perlPackages.buildPerlPackage {
       cp -f $src/new-cope $out/libexec/cope
     '';
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Colourful wrapper for terminal programs";
     homepage = "https://github.com/deftdawg/cope";
