@@ -41,6 +41,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-0tL2tqHYBQMGL9k+NqTUxieWuDP3YB6X9DcXYnlGWWg=";
   };
 
+  patches = [
+    # Without a GPU, logging a CUDA error dereferences uninitialized strings and crashes instead of
+    # falling back to the CPU.
+    # https://github.com/cdcseacave/openMVS/pull/1316
+    ./report-cuda-error-uninit.patch
+  ];
+
   postPatch = ''
     substituteInPlace CMakeLists.txt --replace-fail \
       'FIND_PACKAGE(Boost REQUIRED COMPONENTS iostreams program_options system serialization OPTIONAL_COMPONENTS ''${Boost_EXTRA_COMPONENTS})' \
