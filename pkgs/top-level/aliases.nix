@@ -602,6 +602,7 @@ mapAliases {
   code-browser-gtk2 = throw "'code-browser-gtk2' has been removed, as it was broken since 22.11"; # Added 2025-08-22
   code-browser-gtk = throw "'code-browser-gtk' has been removed, as it was broken since 22.11"; # Added 2025-08-22
   code-browser-qt = throw "'code-browser-qt' has been removed, as it was broken since 22.11"; # Added 2025-08-22
+  codeberg-pages = throw "'codeberg-pages' has been removed as upstream ceased development and is unmaintained"; # Added 2026-10-22
   CoinMP = throw "'CoinMP' has been renamed to/replaced by 'coinmp'"; # Converted to throw 2025-10-27
   collada2gltf = throw "collada2gltf has been removed from Nixpkgs, as it has been unmaintained upstream for 5 years and does not build with supported GCC versions"; # Added 2025-08-08
   colloid-kde = throw "'colloid-kde' has been removed, as it is only compatible with Plasma 5, which is EOL"; # Added 2025-08-20
@@ -1020,6 +1021,7 @@ mapAliases {
   geos_3_9 = throw "geos_3_9 has been removed from nixpkgs. Please use a more recent 'geos' instead."; # Added 2025-09-21
   gepetto-viewer = throw "'gepetto-viewer' has been removed, as authors and most users moved to viser"; # Added 2026-03-24
   gepetto-viewer-corba = throw "'gepetto-viewer-corba' has been removed, as authors and most users moved to viser"; # Added 2026-03-24
+  gershwin-system = throw "'gershwin-system' has been removed. There are no further plans to port Gershwin desktop into nixpkgs until the Gershwin ecosystem matures."; # Added 2026-10-14
   gexiv2 = throw "'gexiv2' attribute has been removed from nixpkgs. Use a 'gexiv2_*' attribute with an explicit ABI version instead."; # Added 2026-09-04
   gfie = throw "'gfie' has been removed as it depended on EOL qt5 webengine"; # Added 2026-04-17
   gfn-electron = throw "gfn-electron has been removed from Nixpkgs as it's abandoned upstream"; # Added 2025-11-05
@@ -2225,7 +2227,6 @@ mapAliases {
   proxysql = throw "'proxysql' has been removed because it was unmaintained within nixpkgs"; # Added 2026-09-08
   pscid = throw "'pscid' has been removed because it was unmaintained upstream"; # Added 2025-12-12
   psi = throw "'psi' has been removed as it depended on EOL qt5 webengine. Consider moving to psi-plus, a somewhat more maintained fork."; # Added 2026-04-15
-  publii = throw "'publii' has been removed due to lack of maintence in nixpkgs and using an EOL Electron"; # Added 2026-09-17
   pulp = throw "'pulp' has been removed because it was unmaintained upstream"; # Added 2025-12-12
   pulseaudio-dlna = throw "'pulseaudio-dlna' has been removed because its upstream fork is inactive and Debian removed it as RC-buggy; use 'pa-dlna' instead."; # Added 2026-09-02
   puppet = warnAlias "'puppet' has been replaced by 'openvox'" openvox; # Added 2026-07-07

@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lg-rs232-tv";
-  version = "1.3.0";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "lg-rs232-tv";
     tag = finalAttrs.version;
-    hash = "sha256-dnXu5UVqUlKMQTBOsFDa/9Jco2OR07UDR1yhWKftQ4o=";
+    hash = "sha256-nvNEMrcg7qa5WDy90O7I2utsOOffx77sGR6scHKg8WY=";
   };
 
   postPatch = ''
