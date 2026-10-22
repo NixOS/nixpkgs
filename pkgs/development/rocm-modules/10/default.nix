@@ -3,6 +3,7 @@
   config,
   callPackage,
   newScope,
+  boost179,
   python3Packages,
   openmpi,
   stdenv,
@@ -173,6 +174,12 @@ let
       };
 
       half = self.callPackage ./half { };
+
+      miopen = self.callPackage ./miopen {
+        boost = boost179.override { enableStatic = true; };
+      };
+
+      miopen-hip = self.miopen;
 
       # Even if config.rocmSupport is false we need rocmSupport true
       # version of ucc/ucx in openmpi in this package set
