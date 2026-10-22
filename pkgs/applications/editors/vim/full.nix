@@ -34,7 +34,7 @@
 
   features ? "huge", # One of tiny, small, normal, big or huge
   wrapPythonDrv ? false,
-  guiSupport ? config.vim.gui or (if stdenv.hostPlatform.isDarwin then "gtk2" else "gtk3"),
+  guiSupport ? config.vim.gui or "gtk3",
   waylandSupport ? !stdenv.hostPlatform.isDarwin,
   luaSupport ? config.vim.lua or true,
   perlSupport ? config.vim.perl or false, # Perl interpreter
@@ -171,7 +171,7 @@ stdenv.mkDerivation {
   ++ lib.optional wrapPythonDrv makeWrapper
   ++ lib.optional nlsSupport gettext
   ++ lib.optional perlSupport perl
-  ++ lib.optional (guiSupport == "gtk3") wrapGAppsHook3
+  ++ lib.optional (guiSupport == "gtk3") (wrapGAppsHook3.override { gtk3 = gtk3-x11; })
   ++ lib.optional waylandSupport wayland-scanner;
 
   buildInputs = [

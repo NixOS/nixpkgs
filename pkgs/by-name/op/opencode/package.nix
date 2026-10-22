@@ -43,7 +43,7 @@ let
         export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
         bun install \
           --cpu="*" \
-          --filter '!./' \
+          --filter './' \
           --filter './packages/cli' \
           --filter './packages/desktop' \
           --filter './packages/app' \
@@ -77,8 +77,7 @@ let
       # NOTE: Required else we get errors that our fixed-output derivation references store paths
       dontFixup = true;
 
-      outputHash = "sha256-yUwO2MSg09KcnnoJ0YJ4/qBNPx0nQ2Z8ST+xlOoFIio=";
-      outputHashAlgo = "sha256";
+      outputHash = "sha256-Z+0RJzeJHSfEeDFs0kF8CCr2/Xoi2mWrRH40zgKXLww=";
       outputHashMode = "recursive";
     };
 in

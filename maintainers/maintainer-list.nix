@@ -8504,12 +8504,6 @@
     githubId = 48104179;
     name = "Elliott Villars";
   };
-  ellis = {
-    email = "nixos@ellisw.net";
-    github = "ellis";
-    githubId = 97852;
-    name = "Ellis Whitehead";
-  };
   elnudev = {
     email = "elnu@elnu.com";
     github = "ElnuDev";
@@ -17740,6 +17734,12 @@
     github = "sphaugh";
     githubId = 36235154;
     name = "Sean Haugh";
+  };
+  maartenbehn = {
+    email = "nixpkgs@stroby.org";
+    github = "MaartenBehn";
+    githubId = 46872913;
+    name = "Maarten Behn";
   };
   mabster314 = {
     name = "Max Haland";

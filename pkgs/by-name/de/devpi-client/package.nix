@@ -6,6 +6,7 @@
   python3,
   fetchFromGitHub,
   nix-update-script,
+  writableTmpDirAsHomeHook,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
@@ -43,6 +44,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   nativeCheckInputs = [
     devpi-server
     git
+    writableTmpDirAsHomeHook
   ]
   ++ (with python3.pkgs; [
     mercurial
@@ -55,10 +57,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     webtest
     wheel
   ]);
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
 
   pytestFlags = [
     # --fast skips tests which try to start a devpi-server improperly

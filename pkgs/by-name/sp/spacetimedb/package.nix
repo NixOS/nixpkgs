@@ -12,6 +12,7 @@
     inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
   },
   nix-update-script,
+  writableTmpDirAsHomeHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "spacetimedb";
@@ -38,10 +39,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFlags = [ "-p spacetimedb-standalone -p spacetimedb-cli" ];
 
-  preCheck = ''
-    # server tests require home dir
-    export HOME=$(mktemp -d)
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   checkFlags = [
     # require wasm32-unknown-unknown target

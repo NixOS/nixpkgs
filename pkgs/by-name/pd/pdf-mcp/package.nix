@@ -3,6 +3,7 @@
   fetchFromGitHub,
   python3Packages,
   tesseract,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -51,16 +52,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   nativeCheckInputs = [
     tesseract
+    writableTmpDirAsHomeHook
   ]
   ++ (with python3Packages; [
     pytestCheckHook
     pytest-asyncio
     pillow
   ]);
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   # needs LLM API
   disabledTestPaths = [

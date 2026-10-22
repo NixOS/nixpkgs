@@ -69,6 +69,12 @@ stdenv.mkDerivation (finalAttrs: {
   env.OPENSSL_NO_VENDOR = "1";
 
   postPatch = ''
+    # Use the system CA certificates instead of the bundled Mozilla roots.
+    substituteInPlace crates/http/src/lib.rs \
+      --replace-fail \
+        'reqwest::Client::builder().tls_certs_only(ROOTS.iter().cloned())' \
+        'reqwest::Client::builder()'
+
     jq \
       '.plugins.updater.endpoints = [ ]
       | .bundle.createUpdaterArtifacts = false' \

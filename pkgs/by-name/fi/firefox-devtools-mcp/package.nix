@@ -9,7 +9,7 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "firefox-devtools-mcp";
-  version = "0.9.9";
+  version = "0.10.6";
 
   __structuredAttrs = true;
 
@@ -17,18 +17,10 @@ buildNpmPackage (finalAttrs: {
     owner = "mozilla";
     repo = "firefox-devtools-mcp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Bz6LkiUbgu81OnPv6xegmo7EYVgGJdlbB5HZsW4QO/Q=";
+    hash = "sha256-Z3cxGgJia1QrYewLGjmVR1f6daZNI+K4qGFg3vYIN6M=";
   };
 
-  npmDepsHash = "sha256-JnAivSiThEm+EPm6gY08zQfD/aaF2sLfz6YSfsle9uE=";
-
-  # 0.9.9 ships a stale hardcoded server version (0.7.1) in constants.ts; upstream switched to
-  # build-time injection right after release (Bug 2050918), so this substitution should be dropped
-  # once that fix lands in a tagged release.
-  postPatch = ''
-    substituteInPlace src/config/constants.ts \
-      --replace-fail "'0.7.1'" "'${finalAttrs.version}'"
-  '';
+  npmDepsHash = "sha256-x6MnmMZPDQtBC2p7oL5p9yWlI9CkvvzoPB323OMCzv0=";
 
   nativeBuildInputs = [ makeWrapper ];
 
