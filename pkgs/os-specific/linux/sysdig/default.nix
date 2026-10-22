@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmake,
   kernel,
+  kernelModuleInstallHook ? null,
   installShellFiles,
   pkg-config,
   luajit,
@@ -67,7 +68,8 @@ stdenv.mkDerivation {
     perl
     installShellFiles
     pkg-config
-  ];
+  ]
+  ++ lib.optionals (kernel != null) [ kernelModuleInstallHook ];
   buildInputs = [
     luajit
     ncurses
@@ -152,6 +154,10 @@ stdenv.mkDerivation {
     export KERNELDIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   '';
 
+  postBuild = lib.optionalString (kernel != null) ''
+    cmake --build . --target driver
+  '';
+
   postInstall =
     lib.optionalString stdenv.hostPlatform.isLinux ''
       # Fix the bash completion location
@@ -161,22 +167,11 @@ stdenv.mkDerivation {
       rmdir $out/etc
     ''
     + lib.optionalString (kernel != null) ''
-      make install_driver
-      kernel_dev=${kernel.dev}
-      kernel_dev=''${kernel_dev#${builtins.storeDir}/}
-      kernel_dev=''${kernel_dev%%-linux*dev*}
-      if test -f "$out/lib/modules/${kernel.modDirVersion}/extra/scap.ko"; then
-          sed -i "s#$kernel_dev#................................#g" $out/lib/modules/${kernel.modDirVersion}/extra/scap.ko
-      else
-          for i in $out/lib/modules/${kernel.modDirVersion}/{extra,updates}/scap.ko.xz; do
-            if test -f "$i"; then
-              xz -d $i
-              sed -i "s#$kernel_dev#................................#g" ''${i%.xz}
-              xz -9 ''${i%.xz}
-            fi
-          done
-      fi
+      installKernelModules
     '';
+
+  dontInstallKernelModules = true;
+  kernelModuleDirs = [ "driver/src" ];
 
   meta = {
     description = "Tracepoint-based system tracing tool for Linux (with clients for other OSes)";
