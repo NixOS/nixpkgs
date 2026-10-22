@@ -9,17 +9,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "aqlprofile";
-  version = "7.2.4";
+  version = "10.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-systems";
-    tag = "rocm-${finalAttrs.version}";
+    tag = "therock-${finalAttrs.version}";
     sparseCheckout = [
       "projects/aqlprofile"
       "shared"
     ];
-    hash = "sha256-74HjB5Ughu17rSRx9mfCCsPJI4TVyXnT4aU7vIbm7ak=";
+    hash = "sha256-7yeEJoyShSCwy1MTCeArYBabh5qTVm5uZL8N74rvxPA=";
   };
   sourceRoot = "${finalAttrs.src.name}/projects/aqlprofile";
 
