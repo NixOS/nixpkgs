@@ -63,6 +63,8 @@ let
         inherit (self) rocmUpdateScript;
       };
 
+      aqlprofile = self.callPackage ./aqlprofile { };
+
       rocm-docs-core = python3Packages.callPackage ../rocm-docs-core { };
 
       hip-common = self.callPackage ./hip-common { };
