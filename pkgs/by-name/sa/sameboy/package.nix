@@ -28,20 +28,28 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
   strictDeps = true;
 
-  postPatch = ''
+  postPatch = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     substituteInPlace SDL/open_dialog/gtk.c \
       --replace-fail '"libgtk-3.so"' '"${lib.getLib gtk3}/lib/libgtk-3.so"'
   '';
 
   nativeBuildInputs = [
+    rgbds
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     glib
     pkg-config
-    rgbds
     wrapGAppsHook3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # The Makefile doesn't use pkg-config on macOS; it asks sdl2-config instead.
+    SDL2
   ];
 
   buildInputs = [
     SDL2
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libGL
     libpng
     gdk-pixbuf
@@ -50,12 +58,33 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "CONF=release"
+    # Also sets DATA_DIR, where Sameboy finds shaders/palettes/boot roms
     "FREEDESKTOP=true"
     "PREFIX=${placeholder "out"}"
     "DESTDIR=/"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # The Makefile looks for the SDK through xcodebuild or the Command Line Tools.
+    "SYSROOT=$(SDKROOT)"
+    # Leave stripping and ad-hoc signing to stdenv.
+    "STRIP=true"
+    "CODESIGN=true"
   ];
 
-  postInstall = ''
+  # The default macOS target is the Xcode-only Cocoa app, and the install
+  # target needs the Linux-only thumbnailer, so build the SDL frontend only.
+  buildFlags = lib.optionals stdenv.hostPlatform.isDarwin [ "sdl" ];
+
+  installPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    runHook preInstall
+
+    install -Dm755 build/bin/SDL/sameboy $out/bin/sameboy
+    (cd build/bin/SDL && find . ! -name sameboy -type f -exec install -Dm644 {} $out/share/sameboy/{} \;)
+
+    runHook postInstall
+  '';
+
+  postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     substituteInPlace $out/share/thumbnailers/sameboy.thumbnailer \
       --replace-fail "TryExec=sameboy-thumbnailer" "TryExec=$out/bin/sameboy-thumbnailer" \
       --replace-fail "Exec=sameboy-thumbnailer" "Exec=$out/bin/sameboy-thumbnailer"
@@ -86,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/LIJI32/SameBoy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ NieDzejkob ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     mainProgram = "sameboy";
   };
 })
