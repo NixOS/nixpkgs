@@ -1,0 +1,7 @@
+--- a/.taskfiles/desktop.yml
++++ b/.taskfiles/desktop.yml
+@@ -125,2 +125,4 @@
+       - node frontend/scripts/stage-backend-jar.mjs app/core/build/libs frontend/src-tauri/libs
++    status:
++      - test -f frontend/src-tauri/libs/stirling-pdf-*.jar
+   jlink:runtime:
