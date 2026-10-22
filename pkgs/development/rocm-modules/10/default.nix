@@ -65,6 +65,8 @@ let
 
       aqlprofile = self.callPackage ./aqlprofile { };
 
+      rdc = self.callPackage ./rdc { };
+
       rocm-docs-core = python3Packages.callPackage ../rocm-docs-core { };
 
       hip-common = self.callPackage ./hip-common { };
