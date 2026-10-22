@@ -78,6 +78,8 @@ let
         '';
       };
 
+      darwinAppName = "Dolphin";
+
       patches = [ ];
 
       versionTestAttrs = {
@@ -121,7 +123,12 @@ let
           url = "https://github.com/dolphin-emu/dolphin/commit/8328469f5e48ba455d97ad15ebb9289170a662aa.patch";
           hash = "sha256-Ua5UVOczVtovhJ2g9UdSq93jXEeP968wlaXBWaYwi/s=";
         })
+
+        # Rename everything that would collide with dolphin-emu
+        ./primehack-rename-files.patch
       ];
+
+      darwinAppName = "PrimeHack";
 
       versionTestAttrs = {
         command = "dolphin-emu-primehack-nogui --version";
@@ -132,7 +139,7 @@ let
         homepage = "https://github.com/shiiion/dolphin";
         changelog = "https://github.com/shiiion/dolphin/releases/tag/${finalAttrs.version}";
         description = "Dolphin fork with Metroid Prime Trilogy mouse and keyboard controls";
-        mainProgram = if stdenv.hostPlatform.isDarwin then "Dolphin" else "dolphin-emu-primehack";
+        mainProgram = if stdenv.hostPlatform.isDarwin then "PrimeHack" else "dolphin-emu-primehack";
         maintainers = with lib.maintainers; [ mistyttm ];
         teams = with lib.teams; [ gaming ];
       };
@@ -253,25 +260,12 @@ stdenv.mkDerivation (
       lib.optionalString stdenv.hostPlatform.isLinux ''
         install -Dm644 $src/Data/51-usb-device.rules $out/etc/udev/rules.d/51-usb-device.rules
       ''
-      + lib.optionalString (isPrimehack && stdenv.hostPlatform.isLinux) ''
-        # Rename everything that would collide with dolphin-emu
-        mv $out/bin/dolphin-emu $out/bin/dolphin-emu-primehack
-        mv $out/bin/dolphin-emu-nogui $out/bin/dolphin-emu-primehack-nogui
-        mv $out/bin/dolphin-tool $out/bin/dolphin-tool-primehack
-        mv $out/share/man/man6/dolphin-emu.6 $out/share/man/man6/dolphin-emu-primehack.6
-        mv $out/share/man/man6/dolphin-emu-nogui.6 $out/share/man/man6/dolphin-emu-primehack-nogui.6
-        mv $out/share/icons/hicolor/256x256/apps/dolphin-emu.png $out/share/icons/hicolor/256x256/apps/dolphin-emu-primehack.png
-        mv $out/share/icons/hicolor/scalable/apps/dolphin-emu.svg $out/share/icons/hicolor/scalable/apps/dolphin-emu-primehack.svg
-        mv $out/share/applications/dolphin-emu.desktop $out/share/applications/dolphin-emu-primehack.desktop
-        substituteInPlace $out/share/applications/dolphin-emu-primehack.desktop \
-          --replace-fail 'dolphin-emu' 'dolphin-emu-primehack' \
-          --replace-fail 'Dolphin Emulator' 'PrimeHack'
-      ''
       + lib.optionalString stdenv.hostPlatform.isDarwin ''
         # Only gets installed automatically if the standalone executable is used
+        appName=${variantInfo.darwinAppName}
         mkdir -p $out/Applications
-        cp -r ./Binaries/Dolphin.app $out/Applications
-        ln -s $out/Applications/Dolphin.app/Contents/MacOS/Dolphin $out/bin
+        cp -r ./Binaries/$appName.app $out/Applications
+        ln -s $out/Applications/$appName.app/Contents/MacOS/$appName $out/bin/$appName
       '';
 
     dontWrapGApps = true;
