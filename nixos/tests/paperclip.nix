@@ -13,6 +13,7 @@ let
     paperclipConfigSchema.parse(JSON.parse(readFileSync(process.argv[2], "utf8")));
   '';
   fakeGateway = pkgs.writeText "paperclip-fake-hermes.py" ''
+    import hashlib
     import json
     import re
     import threading
@@ -26,6 +27,23 @@ let
     admissions = {}
     payloads = {}
     admission_lock = threading.Lock()
+
+    def sha256(text):
+        return hashlib.sha256(text.encode()).hexdigest()
+
+    def stop_receipt(key, raw, run_id):
+        # Lineage-aware Stop proves the admission it fenced: key, exact body
+        # and root run. Fixture runs are single-member lineages.
+        status = runs[run_id]["status"]
+        return {
+            "run_id": run_id, "status": status, "stop_requested": True,
+            "lineage_settled": status != "running",
+            "lineage": [{"run_id": run_id, "status": status}],
+            "admission": {
+                "version": 1, "key_sha256": sha256(key.strip()),
+                "body_sha256": sha256(raw), "root_run_id": run_id,
+            },
+        }
 
     def call_controller(base, company_id, token):
         callback = urllib.request.Request(
@@ -68,7 +86,8 @@ let
                 if not key:
                     self.send_json(400, {"error": "idempotency key required"})
                     return
-                request = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
+                raw = self.rfile.read(int(self.headers["Content-Length"])).decode()
+                request = json.loads(raw)
                 context = request.get("execution_context", {})
                 if (context.get("version") != 1 or context.get("backend") != "local"
                         or context.get("lifetime") != "wait_for_jobs"
@@ -84,7 +103,10 @@ let
                         if runs[run_id]["status"] == "running":
                             runs[run_id]["status"] = "cancelled"
                             runs[run_id]["stops"] += 1
-                    self.send_json(200, {"run_id": run_id, "status": runs[run_id]["status"]})
+                    if self.path == "/v1/runs/stop":
+                        self.send_json(200, stop_receipt(key, raw, run_id))
+                    else:
+                        self.send_json(200, {"run_id": run_id, "status": runs[run_id]["status"]})
                     return
                 if self.path == "/v1/runs/stop":
                     # Fence missing admission without starting any provider work.
@@ -92,7 +114,7 @@ let
                     admissions[key] = run_id
                     payloads[key] = request
                     runs[run_id] = {"status": "cancelled", "stops": 0}
-                    self.send_json(200, {"run_id": run_id, "status": "cancelled"})
+                    self.send_json(200, stop_receipt(key, raw, run_id))
                     return
             if self.path == "/v1/runs":
                 text = request.get("input", "")
@@ -429,7 +451,9 @@ in
         print(json.dumps(owned_lease()))
     controller.succeed(f"curl -fsS -b /run/board-cookies {board_url}/api/heartbeat-runs/{successor_id} | jq -e '.status == \"queued\"'")
     worker.succeed("curl -fsS http://localhost:8642/__fixture/status | jq -e '.runs[\"fixture-6\"].status == \"running\" and (.runs | length) == 6'")
-    controller.succeed(f"curl -fsS -b /run/board-cookies -H 'Content-Type: application/json' -H 'Origin: {board_url}' --data '{{}}' {board_url}/api/heartbeat-runs/{crash_id}/cancel | jq -e '.status == \"running\" and .errorCode == \"adapter_execution_settlement_pending\"'")
+    controller.succeed(f"curl -fsS -b /run/board-cookies -H 'Content-Type: application/json' -H 'Origin: {board_url}' --data '{{}}' {board_url}/api/heartbeat-runs/{crash_id}/cancel > /run/crash-cancel.json")
+    print(controller.succeed("jq '{status, errorCode, error}' /run/crash-cancel.json"))
+    controller.succeed("jq -e '.status == \"running\" and .errorCode == \"adapter_execution_settlement_pending\"' /run/crash-cancel.json")
     controller.succeed(f"curl -fsS -b /run/board-cookies {board_url}/api/heartbeat-runs/{crash_id} | jq -e '.status == \"running\"'")
     assert owned_lease() == crash_lease
     controller.succeed("systemctl stop paperclip-control.service")
