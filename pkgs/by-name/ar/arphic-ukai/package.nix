@@ -1,42 +1,34 @@
 {
   lib,
   stdenvNoCC,
-  fetchurl,
-  mkfontdir,
-  mkfontscale,
+  fetchzip,
+  installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "arphic-ukai";
   version = "0.2.20080216.2";
 
-  src = fetchurl {
-    url = "mirror://ubuntu/pool/main/f/fonts-arphic-ukai/fonts-arphic-ukai_${version}.orig.tar.bz2";
-    hash = "sha256-tJaNc1GfT4dH6FVI+4XSG2Zdob8bqQCnxJmXbmqK49I=";
+  src = fetchzip {
+    url = "mirror://ubuntu/pool/main/f/fonts-arphic-ukai/fonts-arphic-ukai_${finalAttrs.version}.orig.tar.bz2";
+    hash = "sha256-GS1ek0rmxykTfNZR3muieS5e4O7nWnwnhb7KJZ/8YT8=";
   };
 
   nativeBuildInputs = [
-    mkfontscale
-    mkfontdir
+    installFonts
   ];
 
-  installPhase = ''
-    runHook preInstall
-
-    install -D -v ukai.ttc $out/share/fonts/truetype/arphic-ukai.ttc
-    cd $out/share/fonts
-    mkfontdir
-    mkfontscale
-
-    runHook postInstall
-  '';
+  strictDeps = true;
+  __structuredAttrs = true;
 
   meta = {
     description = "CJK Unicode font Kai style";
     homepage = "https://www.freedesktop.org/wiki/Software/CJKUnifonts/";
-
     license = lib.licenses.arphicpl;
-    maintainers = [ lib.maintainers.changlinli ];
+    maintainers = with lib.maintainers; [
+      changlinli
+      ccicnce113424
+    ];
     platforms = lib.platforms.all;
   };
-}
+})
