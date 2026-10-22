@@ -1,0 +1,149 @@
+Update nvCOMP to 6.0 for CUDA 12.9 and 13.4 builds
+
+From https://github.com/NVIDIA/DALI/pull/6530 (commit ad607fa44f20392718258fc2a6a28ecf1b79590b),
+without the changes to docker/.
+
+--- a/cmake/Dependencies.common.cmake
++++ b/cmake/Dependencies.common.cmake
+@@ -167,7 +167,7 @@
+     list(APPEND DALI_LIBS ${nvcomp_LIBS})
+   else()
+     message(STATUS "Found nvCOMP: ${nvcomp_INCLUDE_DIR}.")
+-    set(DALI_INSTALL_REQUIRES_NVCOMP "\'nvidia-libnvcomp-cu${CUDA_VERSION_MAJOR} == 5.3.0.16\',")
++    set(DALI_INSTALL_REQUIRES_NVCOMP "\'nvidia-libnvcomp-cu${CUDA_VERSION_MAJOR} == 6.0.0.12\',")
+     message(STATUS "Adding nvComp requirement as: ${DALI_INSTALL_REQUIRES_NVCOMP}")
+   endif()
+ endif()
+--- a/dali/core/dynlink_nvcomp.cc
++++ b/dali/core/dynlink_nvcomp.cc
+@@ -1,4 +1,4 @@
+-// Copyright (c) 2025, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
++// Copyright (c) 2025-2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+ //
+ // Licensed under the Apache License, Version 2.0 (the "License");
+ // you may not use this file except in compliance with the License.
+@@ -24,7 +24,7 @@
+ typedef void* NVCOMP;
+ 
+ static const char __nvCompfileLibName[] = "libnvcomp.so";
+-static const char __nvCompfileLibName1[] = "libnvcomp.so.5";
++static const char __nvCompfileLibName1[] = "libnvcomp.so.6";
+ 
+ NVCOMP loadNvCompFileLibrary() {
+   NVCOMP ret = nullptr;
+--- a/dali/operators/decoder/inflate/inflate_gpu.cc
++++ b/dali/operators/decoder/inflate/inflate_gpu.cc
+@@ -12,6 +12,7 @@
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+ 
++#include <cstdint>
+ #include <memory>
+ #include <string>
+ #include <vector>
+@@ -54,6 +55,22 @@
+     auto stream = ws.stream();
+ 
+     kernels::DynamicScratchpad scratchpad(stream);
++    // Chunks can start at arbitrary byte offsets in DALI tensors. nvCOMP 6 requires
++    // aligned input and output buffers, so stage only the chunks that need it.
++    constexpr size_t alignment = nvcompLZ4RequiredDecompressionAlignment;
++    const auto &in_chunk_sizes = params_.GetInChunkSizes();
++    auto original_output_ptrs = inflated_ptrs_;
++    for (size_t i = 0; i < total_chunks_num; i++) {
++      if (reinterpret_cast<uintptr_t>(input_ptrs_[i]) % alignment != 0) {
++        auto *aligned_input = scratchpad.AllocateGPU<uint8_t>(in_chunk_sizes[i], alignment);
++        CUDA_CALL(cudaMemcpyAsync(aligned_input, input_ptrs_[i], in_chunk_sizes[i],
++                                  cudaMemcpyDeviceToDevice, stream));
++        input_ptrs_[i] = aligned_input;
++      }
++      if (reinterpret_cast<uintptr_t>(inflated_ptrs_[i]) % alignment != 0) {
++        inflated_ptrs_[i] = scratchpad.AllocateGPU<uint8_t>(inflated_sizes_[i], alignment);
++      }
++    }
+     size_t *actual_out_sizes = scratchpad.AllocateGPU<size_t>(total_chunks_num);
+ 
+     auto [in_sizes, in, out_sizes, out] = scratchpad.ToContiguousGPU(
+@@ -86,14 +103,14 @@
+     }
+ 
+     size_t tempSize;
+-    CUDA_CALL(nvcompBatchedLZ4DecompressGetTempSizeAsync(
++    CUDA_CALL(nvcompBatchedLZ4DecompressGetTempSize(
+         total_chunks_num,
+         params_.GetMaxOutChunkVol() * element_type_.size(),
+         {},
+         &tempSize,
+-        params_.GetMaxOutVol() * element_type_.size()));
++        params_.GetMaxOutVol() * element_type_.size(), stream));
+ 
+-    void *temp = scratchpad.AllocateGPU<uint8_t>(tempSize);
++    void *temp = scratchpad.AllocateGPU<uint8_t>(tempSize, alignment);
+     nvcompStatus_t *device_statuses = scratchpad.AllocateGPU<nvcompStatus_t>(total_chunks_num);
+     CUDA_CALL(nvcompBatchedLZ4DecompressAsync(in, in_sizes, out_sizes, actual_out_sizes,
+                                                total_chunks_num, temp, tempSize, out, {},
+@@ -104,6 +121,12 @@
+     // Here, we take care of the opposite case, when the allocations are bigger than really
+     // necessary and thus may contain some uninitialized memory.
+     FillTheTails(output.type(), total_chunks_num, out, actual_out_sizes, out_sizes, stream);
++    for (size_t i = 0; i < total_chunks_num; i++) {
++      if (inflated_ptrs_[i] != original_output_ptrs[i]) {
++        CUDA_CALL(cudaMemcpyAsync(original_output_ptrs[i], inflated_ptrs_[i], inflated_sizes_[i],
++                                  cudaMemcpyDeviceToDevice, stream));
++      }
++    }
+   }
+ 
+  protected:
+--- a/dali/test/python/operator_1/test_inflate.py
++++ b/dali/test/python/operator_1/test_inflate.py
+@@ -167,6 +167,38 @@
+     check_batch(inflated, [sample], batch_size=1)
+ 
+ 
++@has_operator("decoders.inflate")
++@restrict_platform(min_compute_cap=6.0)
++@params(
++    *[
++        (dtype, offset, oversized)
++        for dtype in [np.uint8, np.uint16]
++        for offset in range(4)
++        for oversized in [False, True]
++    ]
++)
++def test_unaligned_chunks(dtype, offset, oversized):
++    sample = np.arange(15, dtype=dtype).reshape(3, 5)
++    chunks = [sample_to_lz4(frame) for frame in sample]
++    sizes = np.array([len(chunk) for chunk in chunks], dtype=np.int32)
++    offsets = np.array(offset + np.cumsum([0] + list(sizes[:-1])), dtype=np.int32)
++    compressed = np.concatenate([np.zeros(offset, dtype=np.uint8), *chunks])
++
++    @pipeline_def(batch_size=1, num_threads=4, device_id=0)
++    def pipeline():
++        data = fn.external_source(source=lambda: compressed, batch=False)
++        return fn.decoders.inflate(
++            data.gpu(),
++            shape=[7 if oversized else 5],
++            dtype=np_type_to_dali(dtype),
++            chunk_offsets=offsets,
++            chunk_sizes=sizes,
++        )
++
++    (inflated,) = pipeline().run()
++    check_batch(inflated, [sample], batch_size=1, oversized_shape=oversized)
++
++
+ def _test_scalar_shape(dtype, shape, layout):
+     def sample_source(sample_info):
+         sample_size = np.prod(shape)
+--- a/internal_tools/stub_generator/nvcomp.json
++++ b/internal_tools/stub_generator/nvcomp.json
+@@ -6,7 +6,7 @@
+    "calling_conv":"",
+    "not_found_error":"nvcompErrorNotSupported",
+    "functions": {
+-      "nvcompBatchedLZ4DecompressGetTempSizeAsync": {},
++      "nvcompBatchedLZ4DecompressGetTempSize": {},
+       "nvcompBatchedLZ4DecompressAsync": {},
+       "nvcompBatchedLZ4GetDecompressSizeAsync": {},
+       "nvcompGetStatusString": {
