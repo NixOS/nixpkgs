@@ -45,6 +45,18 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://w1.fi/security/2026-1/0004-AP-MLD-Verify-AP-MLD-link-ID-validity-before-updatin.patch";
       hash = "sha256-Kw1xJUpVrZofPlHRzjNm/sVqkEyww342nL1g/BncX1U=";
     })
+
+    # CVE-2025-24912: https://jvn.jp/en/jp/JVN19358384/
+    (fetchpatch {
+      name = "CVE-2025-24912-1.patch";
+      url = "https://w1.fi/cgit/hostap/patch/?id=726432d7622cc0088ac353d073b59628b590ea44";
+      hash = "sha256-C1V+WiUnmQwAZcJdbZluOejv3fSu7wmS24OeBjply/o=";
+    })
+    (fetchpatch {
+      name = "CVE-2025-24912-2.patch";
+      url = "https://w1.fi/cgit/hostap/patch/?id=339a334551ca911187cc870f4f97ef08e11db109";
+      hash = "sha256-8NtSLj5ASnNZ9A2MdiSYoa1Fv+t/vmTX1JinfA/bI9Y=";
+    })
   ];
 
   outputs = [

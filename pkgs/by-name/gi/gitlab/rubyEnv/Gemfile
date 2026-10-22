@@ -263,7 +263,7 @@ gem 'gitlab-active-context', path: 'gems/gitlab-active-context', require: 'activ
 
 # Markdown and HTML processing
 gem 'html-pipeline', '~> 2.14.3', feature_category: :markdown
-gem 'gitlab-markup', '~> 2.1.0', require: 'github/markup', feature_category: :markdown
+gem 'gitlab-markup', '~> 2.2.0', require: 'github/markup', feature_category: :markdown
 gem 'commonmarker', '~> 0.23.10', feature_category: :markdown
 gem 'kramdown', '~> 2.5.0', feature_category: :markdown
 gem 'RedCloth', '~> 4.3.3', feature_category: :markdown
@@ -520,7 +520,7 @@ group :development do
   gem 'rubocop', feature_category: :tooling, require: false
   gem 'debug', '~> 1.11.0', feature_category: :shared # rubocop:todo Gemfile/MissingFeatureCategory -- https://gitlab.com/gitlab-org/gitlab/-/issues/581839
 
-  gem 'solargraph', '~> 0.58.0', require: false, feature_category: :shared # rubocop:todo Gemfile/MissingFeatureCategory -- https://gitlab.com/gitlab-org/gitlab/-/issues/581839
+  gem 'solargraph', '~> 0.60.0', require: false, feature_category: :shared # rubocop:todo Gemfile/MissingFeatureCategory -- https://gitlab.com/gitlab-org/gitlab/-/issues/581839
   gem 'solargraph-rspec', '~> 0.6.0', require: false, feature_category: :shared # rubocop:todo Gemfile/MissingFeatureCategory -- https://gitlab.com/gitlab-org/gitlab/-/issues/581839
 
   gem 'letter_opener_web', '~> 3.0.0', feature_category: :shared # rubocop:todo Gemfile/MissingFeatureCategory -- https://gitlab.com/gitlab-org/gitlab/-/issues/581839
