@@ -132,6 +132,13 @@ buildPythonPackage (finalAttrs: {
   ++ lib.optionals (stdenv.hostPlatform.isi686) [
     "test_dump_option"
     "test_type1mm_inputs"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian) [
+    # https://github.com/adobe-type-tools/afdko/issues/1855
+    # Might happen on other big-endian archs as well, but this is the only one that I can confirm it on.
+    "test_parameter_offset_overflow_bug1017"
+    "test_spec[/build/source/tests/addfeatures_data/input/spec/9e-15.bad.fea]"
+    "test_feature_tags_bug691[GSUB]"
   ];
 
   passthru.tests = {
