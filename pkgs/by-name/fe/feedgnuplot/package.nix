@@ -45,6 +45,8 @@ perlPackages.buildPerlPackage rec {
     StringShellQuote
   ]);
 
+  strictDeps = true;
+
   # Fontconfig error: Cannot load default config file
   env.FONTCONFIG_FILE = fontsConf;
 
@@ -57,7 +59,7 @@ perlPackages.buildPerlPackage rec {
 
   postInstall = ''
     wrapProgram $out/bin/feedgnuplot \
-        --prefix "PATH" ":" "$PATH" \
+        --prefix "PATH" ":" "$HOST_PATH" \
         --prefix "PERL5LIB" ":" "$PERL5LIB"
 
     installShellCompletion --bash --name feedgnuplot.bash completions/bash/feedgnuplot
