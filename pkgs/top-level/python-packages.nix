@@ -13967,6 +13967,8 @@ self: super: with self; {
 
   polyfactory = callPackage ../development/python-modules/polyfactory { };
 
+  polygraphy = callPackage ../development/python-modules/polygraphy { };
+
   polygon3 = callPackage ../development/python-modules/polygon3 { };
 
   polyline = callPackage ../development/python-modules/polyline { };

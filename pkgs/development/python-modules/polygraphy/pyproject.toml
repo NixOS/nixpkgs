@@ -1,0 +1,30 @@
+# Reconstructed from the metadata of the polygraphy wheel on PyPI: the TensorRT 11.3 OSS release removed setup.py from
+# tools/Polygraphy without adding the pyproject.toml the published wheels are built from.
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "polygraphy"
+dynamic = ["version"]
+description = "Polygraphy: A Deep Learning Inference Prototyping and Debugging Toolkit"
+readme = "README.md"
+license = { text = "Apache 2.0" }
+authors = [{ name = "NVIDIA", email = "svc_tensorrt@nvidia.com" }]
+requires-python = ">=3.8"
+classifiers = [
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+]
+
+[project.urls]
+Homepage = "https://github.com/NVIDIA/TensorRT/tree/main/tools/Polygraphy"
+
+[project.scripts]
+polygraphy = "polygraphy.tools:main"
+
+[tool.setuptools.dynamic]
+version = { attr = "polygraphy.__version__" }
+
+[tool.setuptools.packages.find]
+include = ["polygraphy*"]
