@@ -1,22 +1,23 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
 }:
 
 # To make use of this derivation, use the `programs.zsh.autosuggestions.enable` option
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "zsh-autosuggestions";
   version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "zsh-users";
     repo = "zsh-autosuggestions";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-vpTyYq9ZgfgdDsWzjxVAE7FZH4MALMNZIFyEOBLm5Qo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vpTyYq9ZgfgdDsWzjxVAE7FZH4MALMNZIFyEOBLm5Qo=";
   };
 
+  __structuredAttrs = true;
   strictDeps = true;
 
   installPhase = ''
