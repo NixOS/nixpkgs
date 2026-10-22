@@ -80,7 +80,7 @@ let
               unpackPhase
               nativeBuildInputs
               ;
-            hash = "sha256-ICMSzy8go3psdHklhX4n4fqgEESht/d+D05L8CKuKAc=";
+            hash = "sha256-rsSoo7T8Vn5ecOAe7M8WzALjZPA6gStJj96cUOARnR8=";
           };
 
           dontBuild = false;
@@ -122,7 +122,7 @@ let
             unpackPhase
             nativeBuildInputs
             ;
-          hash = "sha256-Pl2jkn4qj+v9edjrrq2TqvUhKjnBJ5qatNKTqRzLLII=";
+          hash = "sha256-IBhBTKYLMSURUTCDAxdIB2fX7O8rjWgEQTlOOKvP6pQ=";
         };
 
         dontBuild = false;
@@ -166,7 +166,7 @@ let
               cargo fetch
             '';
 
-            hash = "sha256-AbGa+nUf5aEmHTbAYIyPv3+E0ldeybODZsZ4EqG6eBI=";
+            hash = "sha256-UzkRSxL+W+nhIHafqxgpUxv++4HSgLo1I42l+Ijv3Pk=";
           };
 
         postPatch = ''
