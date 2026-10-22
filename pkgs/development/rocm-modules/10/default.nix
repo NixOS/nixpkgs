@@ -90,6 +90,8 @@ let
 
       roctracer = self.callPackage ./roctracer { };
 
+      rocgdb = self.callPackage ./rocgdb { };
+
       rocdbgapi = self.callPackage ./rocdbgapi { };
 
       mscclpp = self.callPackage ../mscclpp { };
