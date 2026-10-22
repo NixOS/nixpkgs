@@ -3,6 +3,8 @@
   stdenv,
   cmake,
   ninja,
+  pkg-config,
+  libdrm,
   fetchFromGitHub,
   python3,
   opencv,
@@ -81,6 +83,10 @@ stdenv'.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals rocmSupport [
     rocmPackages.clr
+    # ROCm 10's rocm_smi-config.cmake does find_dependency(PkgConfig) (rocm-smi-lib
+    # now requires libdrm_amdgpu.pc), pulled in transitively via find_package(Torch)
+    # -> Caffe2 LoadHIP -> rocm_smi, so pkg-config must be on the host path.
+    pkg-config
   ]
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
@@ -106,8 +112,10 @@ stdenv'.mkDerivation (finalAttrs: {
     rocmPackages.hipblaslt
     rocmPackages.rocblas
     rocmPackages.rocsolver
-    rocmPackages.rocsolver
     rocmPackages.miopen
+    # rocm_smi-config.cmake (pulled via find_package(Torch)->Caffe2 LoadHIP) runs
+    # pkg_check_modules(libdrm) in ROCm 10, so libdrm.pc must be on PKG_CONFIG_PATH.
+    libdrm
   ]
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_cudart

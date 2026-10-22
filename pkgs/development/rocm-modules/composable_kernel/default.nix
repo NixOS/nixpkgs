@@ -7,6 +7,16 @@
 let
   inherit (composable_kernel_base) miOpenReqLibsOnly;
   parts = {
+    # In ROCm 10 CK's per-op conv instance libraries are OBJECT libraries aggregated
+    # into a single STATIC target `device_conv_operations`
+    # (library/src/tensor_operation_instance/gpu/CMakeLists.txt). Under
+    # MIOPEN_REQ_LIBS_ONLY (our default) that umbrella is the only conv target built
+    # (device_other/gemm/mha/contraction are gated NOT MIOPEN_REQ_LIBS_ONLY).
+    conv_ops = {
+      targets = [
+        "device_conv_operations"
+      ];
+    };
     _mha = {
       enabled = !miOpenReqLibsOnly;
       # mha takes ~3hrs on 64 cores on an EPYC milan system at ~2.5GHz
@@ -41,63 +51,6 @@ let
       onlyFor = [
         "gfx942"
         "gfx950"
-      ];
-    };
-    grouped_conv_bwd = {
-      targets = [
-        "device_grouped_conv1d_bwd_weight_instance"
-        "device_grouped_conv2d_bwd_data_instance"
-        "device_grouped_conv2d_bwd_weight_instance"
-      ];
-    };
-    grouped_conv_fwd = {
-      targets = [
-        "device_grouped_conv1d_fwd_instance"
-        "device_grouped_conv2d_fwd_instance"
-        "device_grouped_conv2d_fwd_bias_bnorm_clamp_instance"
-        "device_grouped_conv2d_fwd_bias_clamp_instance"
-        "device_grouped_conv2d_fwd_clamp_instance"
-        "device_grouped_conv2d_fwd_dynamic_op_instance"
-      ];
-    };
-    grouped_conv_bwd_3d1 = {
-      targets = [
-        "device_grouped_conv3d_bwd_data_instance"
-        "device_grouped_conv3d_bwd_data_bilinear_instance"
-        "device_grouped_conv3d_bwd_data_scale_instance"
-      ];
-    };
-    grouped_conv_bwd_3d2 = {
-      targets = [
-        "device_grouped_conv3d_bwd_weight_instance"
-        "device_grouped_conv3d_bwd_weight_bilinear_instance"
-        "device_grouped_conv3d_bwd_weight_scale_instance"
-      ];
-    };
-    grouped_conv_fwd_3d1 = {
-      targets = [
-        "device_grouped_conv3d_fwd_instance"
-        "device_grouped_conv3d_fwd_clamp_instance"
-        "device_grouped_conv3d_fwd_bias_bnorm_clamp_instance"
-        "device_grouped_conv3d_fwd_bias_clamp_instance"
-        "device_grouped_conv3d_fwd_bilinear_instance"
-        "device_grouped_conv3d_fwd_convinvscale_instance"
-        "device_grouped_conv3d_fwd_convscale_instance"
-        "device_grouped_conv3d_fwd_convscale_add_instance"
-      ];
-    };
-    grouped_conv_fwd_3d2 = {
-      targets = [
-        "device_grouped_conv3d_fwd_convscale_relu_instance"
-        "device_grouped_conv3d_fwd_dynamic_op_instance"
-        "device_grouped_conv3d_fwd_scale_instance"
-        "device_grouped_conv3d_fwd_scaleadd_ab_instance"
-        "device_grouped_conv3d_fwd_scaleadd_scaleadd_relu_instance"
-      ];
-    };
-    grouped_conv_fwd_nd = {
-      targets = [
-        "device_grouped_convnd_bwd_weight_instance"
       ];
     };
     batched_gemm1 = {
@@ -167,16 +120,6 @@ let
         "device_gemm_streamk_instance"
       ];
     };
-    conv = {
-      targets = [
-        "device_conv1d_bwd_data_instance"
-        "device_conv2d_bwd_data_instance"
-        "device_conv2d_fwd_instance"
-        "device_conv2d_fwd_bias_relu_instance"
-        "device_conv2d_fwd_bias_relu_add_instance"
-        "device_conv3d_bwd_data_instance"
-      ];
-    };
     pool = {
       enabled = !miOpenReqLibsOnly;
       targets = [
@@ -185,11 +128,6 @@ let
         "device_pool2d_fwd_instance"
         "device_pool3d_fwd_instance"
         "device_max_pool_bwd_instance"
-      ];
-    };
-    other0 = {
-      targets = [
-        "device_quantization_instance"
       ];
     };
     other1 = {
@@ -255,6 +193,23 @@ let
         # So, bodge. Otherwise you end up having to build all of ROCm with a low core limit when
         # it's only this package that has trouble.
         preConfigure = old.preConfigure or "" + ''
+          # Drop the cc-wrapper's "-rpath $out/lib" self-reference
+          # from NIX_LDFLAGS for the split "parts" builds. clang-24 forwards
+          # NIX_LDFLAGS to the HIP *device* linker, so every instance's device code
+          # object is stamped with DT_RUNPATH=$out/lib. That RUNPATH gets baked into
+          # the --offload-compress'd .hip_fatbin (a CCOB integrity-checked blob, so it
+          # cannot be scrubbed post-hoc with remove-references-to without corrupting
+          # the device code), and because these .o are copied from the part's store
+          # output into the final CK derivation it becomes a disallowed cross-reference
+          # (disallowedReferences fails). The parts only emit relocatable .o, so the
+          # self-rpath is useless here; removing it leaves nothing to leak while
+          # keeping offload compression. Scrub the plain var and any role-suffixed
+          # copies the bintools wrapper may already hold.
+          for _v in NIX_LDFLAGS ''${!NIX_LDFLAGS_*}; do
+            printf -v "$_v" '%s' "$(sed "s| *-rpath $out/lib||g" <<< "''${!_v-}")"
+            export "$_v"
+          done
+
           MEM_GB_TOTAL=$(awk '/MemTotal/ { printf "%d \n", $2/1024/1024 }' /proc/meminfo)
           MEM_GB_AVAILABLE=$(awk '/MemAvailable/ { printf "%d \n", $2/1024/1024 }' /proc/meminfo)
           APPX_GB=$((MEM_GB_AVAILABLE > MEM_GB_TOTAL ? MEM_GB_TOTAL : MEM_GB_AVAILABLE))

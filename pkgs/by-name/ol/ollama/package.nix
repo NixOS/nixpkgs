@@ -261,11 +261,27 @@ goBuild (finalAttrs: {
       # (cuda_v12 / cuda_v13 / rocm_v7_1 / rocm_v7_2 / vulkan / cuda_jetpack*).
       rocmMajorVersion = lib.versions.major rocmPackages.clr.version;
       rocmMinorVersion = lib.versions.minor rocmPackages.clr.version;
+      # cmake/local.cmake only defines ROCm backend labels rocm_v7_1 (Windows)
+      # and rocm_v7_2 (Linux); the two "currently share build settings" and the
+      # label is an upstream *interface tag*, deliberately decoupled from the
+      # actual ROCm toolchain version (which comes from rocmPackages via
+      # buildInputs + AMDGPU_TARGETS). Our rocmPackages is now ROCm 10, so the
+      # derived rocm_v10_0 would hit `Unknown ROCm backend` (no such preset).
+      # Map any ROCm >= 8 to the Linux rocm_v7_2 build path — the GGML_HIP
+      # runner it produces is version-agnostic and links our ROCm 10 libs.
+      # TODO: file an upstream ollama PR adding an explicit rocm_v10_0
+      # preset (llama/server/CMakePresets.json) + local.cmake branch, then drop
+      # this remap.
+      rocmLinuxBackend =
+        if lib.versionAtLeast rocmMajorVersion "8" then
+          "rocm_v7_2"
+        else
+          "rocm_v${rocmMajorVersion}_${rocmMinorVersion}";
       llamaBackend =
         if enableCuda then
           "cuda_v${cudaMajorVersion}"
         else if enableRocm then
-          "rocm_v${rocmMajorVersion}_${rocmMinorVersion}"
+          rocmLinuxBackend
         else if enableVulkan then
           "vulkan"
         else

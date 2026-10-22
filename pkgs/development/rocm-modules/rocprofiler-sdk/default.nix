@@ -27,7 +27,6 @@
   fmt,
   glog,
   gtest,
-  fetchpatch,
   yaml-cpp,
   elfio,
   nlohmann_json,
@@ -46,7 +45,7 @@
 # rocprofiler-sdk is the home of rocprofv3
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocprofiler-sdk";
-  version = "7.2.4";
+  version = "10.1";
 
   outputs = [
     "out"
@@ -56,8 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-systems";
-    tag = "rocm-${finalAttrs.version}";
-    hash = "sha256-7XCxu917Mgp3SQAKlTWj3ympgwOYW3aJFcOv/GhPk1c=";
+    tag = "therock-${finalAttrs.version}";
+    hash = "sha256-UmYHC+87XIW+Z4WVd7k0MQ9baTvFlq/SgCt9Foy1mPI=";
     fetchSubmodules = true;
     sparseCheckout = [
       "projects/rocprofiler-sdk"
@@ -82,6 +81,9 @@ stdenv.mkDerivation (finalAttrs: {
     rocm-runtime
     rocprofiler-register
     aqlprofile
+    # rocprofiler-sdk-tool does find_package(rocprof-trace-decoder REQUIRED) at
+    # configure time for the ATT quick-scan feature.
+    rocprof-trace-decoder
     rocm-comgr
     libdrm
     elfutils
@@ -102,41 +104,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    (fetchpatch {
-      # Fix missing amd_comgr linkage in pc-sampling integration test
-      url = "https://github.com/ROCm/rocm-systems/commit/94a4595a5d02bc066f7a32e1b2134a99a5231213.patch";
-      hash = "sha256-86Fx0bKL0pvXTwVN8QJL+yzCbMYkmMaKzcU4PYcW6ig=";
-      relative = "projects/rocprofiler-sdk";
-    })
-  ]
-  ++ [
-    # Just the missing CPackComponent reference sourced from this commit:
-    # https://github.com/ROCm/rocm-systems/commit/86ee7b2eb2273adaf1181ef9a6b2091465c6f0c7
-    ./0001-fix-missing-CPackComponent-cmake-include.patch
-  ]
-  ++ [
-    # Can be removed when a release contains the changes found in this pr:
-    # https://github.com/ROCm/rocm-systems/pull/4721
-    ./0002-allow-using-system-yaml-dependency.patch
-    ./0003-allow-using-system-elfio-dependency.patch
-    ./0004-allow-using-system-otf2-dependency.patch
-    ./0005-allow-using-system-json-dependency.patch
-    ./0006-fix-amd-comgr-resolution.patch
-  ]
-  ++ [
-    # Sourced from several commits that address issues with fmt, dropping conflicting changes no longer needed to build
-    # https://github.com/ROCm/rocm-systems/commit/36d9d33d90879bfbd406498011070ebd929a56b1
-    # https://github.com/ROCm/rocm-systems/commit/e2f588592ecfb0653ed5b3078753186325adf70a
-    # https://github.com/ROCm/rocm-systems/commit/86ee7b2eb2273adaf1181ef9a6b2091465c6f0c7 (just the fmt changes)
-    ./0007-fix-missing-includes-and-api-changes-with-fmt-v12.2..patch
-  ]
-  ++ [
-    # One new import failure added to source commit:
-    # https://github.com/ROCm/rocm-systems/pull/4721/changes/f7f24a54cbe55425fbefc87c7a3d0f4c85224948
-    # which is also part of https://github.com/ROCm/rocm-systems/pull/4721
-    ./0008-fix-compilation-errors-from-missing-includes.patch
-  ]
-  ++ [
     # Prevent a segfault on `import torch` (and other consumers that link
     # librocprofiler-sdk for tracing) when OpenMP auto-discovers our
     # ompt_start_tool before glog is initialized. Upstream incidentally fixes
@@ -147,19 +114,31 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    # NixOS' ROCm distribution does not support libomptarget yet
-    substituteInPlace samples/CMakeLists.txt \
-      --replace-fail 'add_subdirectory(openmp_target)' '# add_subdirectory(openmp_target)'
-    substituteInPlace tests/CMakeLists.txt \
-      --replace-fail 'add_subdirectory(openmp-tools)' '# add_subdirectory(openmp-tools)'
-    substituteInPlace tests/bin/CMakeLists.txt \
-      --replace-fail 'add_subdirectory(openmp)' '# add_subdirectory(openmp)'
+        # NixOS' ROCm distribution does not support libomptarget yet
+        substituteInPlace samples/CMakeLists.txt \
+          --replace-fail 'add_subdirectory(openmp_target)' '# add_subdirectory(openmp_target)'
+        substituteInPlace tests/CMakeLists.txt \
+          --replace-fail 'add_subdirectory(openmp-tools)' '# add_subdirectory(openmp-tools)'
+        substituteInPlace tests/bin/CMakeLists.txt \
+          --replace-fail 'add_subdirectory(openmp)' '# add_subdirectory(openmp)'
 
-    # This requires building perfetto's trace-processor-shell via a weird external script
-    substituteInPlace tests/CMakeLists.txt \
-      --replace-fail 'add_subdirectory(pytest-packages)' ""
+        # This requires building perfetto's trace-processor-shell via a weird external script
+        substituteInPlace tests/CMakeLists.txt \
+          --replace-fail 'add_subdirectory(pytest-packages)' ""
 
-    patchShebangs source/libexec/rocprofiler-sdk/rocprofiler-sdk-launch-compiler/rocprofiler-sdk-launch-compiler.sh
+        # The sources have bare system includes (`<sqlite3.h>` in the output/sql +
+        # python-binding sources, `<libdrm/amdgpu*.h>` in the vendored aqlprofile)
+        # that assume a distro-style /usr/include. nixpkgs keeps those headers in the
+        # packages' dev outputs, and the rocm-toolchain clang used here
+        # (-DCMAKE_CXX_COMPILER=clang++, unwrapped) ignores NIX_CFLAGS_COMPILE, so add
+        # them as a real CMake -isystem at the top of the tree. (A global
+        # -DCMAKE_CXX_FLAGS instead would clobber abseil's C++-standard detection.)
+        substituteInPlace CMakeLists.txt \
+          --replace-fail 'add_subdirectory(external)' \
+            'include_directories(SYSTEM ${lib.getDev sqlite}/include ${lib.getDev libdrm}/include)
+    add_subdirectory(external)'
+
+        patchShebangs source/libexec/rocprofiler-sdk/rocprofiler-sdk-launch-compiler/rocprofiler-sdk-launch-compiler.sh
   '';
 
   cmakeFlags = [
@@ -191,9 +170,6 @@ stdenv.mkDerivation (finalAttrs: {
     # rocprofiler-sdk normally doesn't depend on which GPU is in the system, only when
     # building tests or samples.
     (lib.cmakeFeature "GPU_TARGETS" (lib.concatStringsSep ";" gpuTargets))
-  ];
-  cxxCMakeFlags = [
-    "-Wno-unused-variable"
   ];
 
   doCheck = false; # Requires GPU

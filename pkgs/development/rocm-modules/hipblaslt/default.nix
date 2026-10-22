@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   rocm-cmake,
-  rocm-smi,
+  amdsmi,
   pkg-config,
   clr,
   gfortran,
@@ -56,6 +56,8 @@ let
     ps.packaging
     ps.nanobind
     ps.msgpack
+    # tensilelite imports joblib (Parallel.py) and lists it in requirements.txt.
+    ps.joblib
   ]);
   # workaround: build for one working target if no targets are supported
   # a few CXX files are still build for the device
@@ -70,13 +72,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipblaslt${clr.gpuArchSuffix}";
-  version = "7.2.4";
+  version = "10.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-libraries";
-    tag = "rocm-${finalAttrs.version}";
-    hash = "sha256-+xMmPKb32NP9U35dHCXfXWwa6exfiL5TezfXERVDfe4=";
+    tag = "therock-${finalAttrs.version}";
+    hash = "sha256-FOwC+eG8dYgiktogDrUZhtKbKl9iNFvnGXSt0Uj02lQ=";
     sparseCheckout = [
       "projects/hipblaslt"
       "shared"
@@ -95,6 +97,11 @@ stdenv.mkDerivation (finalAttrs: {
   env.TENSILE_GEN_ASSEMBLY_TOOLCHAIN = lib.getExe' clr "amdclang++";
   env.LD_PRELOAD = "${jemalloc}/lib/libjemalloc.so";
   env.MALLOC_CONF = "background_thread:true,metadata_thp:auto,dirty_decay_ms:10000,muzzy_decay_ms:10000";
+  # tensilelite has a helper-kernel .hsaco cache (HelperKernelCache) that defaults to $HOME/.tensile/helper_cache. $HOME is /homeless-shelter
+  # (unwritable) in the Nix sandbox, so the code-object compile phase crashes with
+  # PermissionError on mkdir. Cross-invocation caching is useless under Nix anyway
+  # (each build compiles every kernel once), so disable it via the upstream switch.
+  env.TENSILE_DISABLE_HELPER_CACHE = "1";
   requiredSystemFeatures = [ "big-parallel" ];
 
   __structuredAttrs = true;
@@ -120,22 +127,44 @@ stdenv.mkDerivation (finalAttrs: {
     # Support loading zstd compressed .dat files, required to keep output under
     # hydra size limit
     ./messagepack-compression-support.patch
-    # [hipblaslt] Refactor Parallel.py to drop joblib, massively reduce peak disk space usage
-    # https://github.com/ROCm/rocm-libraries/pull/2073
-    ./TensileCreateLibrary-refactor.patch
-    ./Tensile-interning.patch
   ];
 
   preConfigure = ''
     find . -name '*.yaml.zst' -path '*/Tensile/Logic/*' -exec zstd -d --rm {} \;
   '';
 
+  # Belt-and-suspenders for the $HOME=/homeless-shelter problem above: point $HOME
+  # at a writable dir so any *other* tensilelite step that writes under $HOME during
+  # the (~7h) code-object compile phase doesn't fail after the fact. Cheap insurance
+  # given how long a full-matrix rebuild takes to reach that phase.
+  preBuild = ''
+    export HOME=$TMPDIR
+  '';
+
   postPatch = ''
-    # git isn't needed and we have no .git
-    substituteInPlace cmake/dependencies.cmake \
+    # The shared dep `origami` (pulled via add_subdirectory) requires Git only to
+    # guard a FetchContent fallback that downloads rocm-cmake, which we never hit
+    # (ROCmCMakeBuildTools is provided + -DROCM_FOUND=ON), so drop the hard requirement.
+    substituteInPlace ../../shared/origami/cmake/dependencies.cmake \
       --replace-fail "find_package(Git REQUIRED)" ""
-    substituteInPlace CMakeLists.txt \
-      --replace-fail " LANGUAGES CXX" " LANGUAGES CXX C ASM"
+
+    # The new shared dep `stinkytofu` unconditionally `include(ClangTidy)` +
+    # `add_clang_tidy_custom_target()` from the monorepo's top-level cmake/modules
+    # (not in our sparse checkout of projects/hipblaslt+shared). It's a dev-lint
+    # target only (ENABLE_CLANG_TIDY defaults OFF), so drop both calls. (The
+    # sibling default_amdclang.cmake includes are guarded to standalone builds,
+    # which we are not, so they never fire here.)
+    substituteInPlace ../../shared/stinkytofu/CMakeLists.txt \
+      --replace-fail 'include(ClangTidy)' "" \
+      --replace-fail 'add_clang_tidy_custom_target()' ""
+
+    # messagepack-compression-support.patch calls ZSTD_* in MessagePack.cpp
+    # (compiled into the tensilelite-host static lib). The amdclang toolchain
+    # ignores NIX_LDFLAGS (same reason cFlags passes -I for zstd/blis by hand),
+    # so link libzstd explicitly here; PRIVATE on a static lib propagates the
+    # requirement to every consumer (hipblaslt-bench, libhipblaslt.so, tests).
+    echo 'target_link_libraries(tensilelite-host PRIVATE ${lib.getLib zstd}/lib/libzstd.so)' \
+      >> tensilelite/src/msgpack/CMakeLists.txt
   '';
 
   doCheck = false;
@@ -149,7 +178,7 @@ stdenv.mkDerivation (finalAttrs: {
     gfortran
     pkg-config
     ninja
-    rocm-smi
+    amdsmi
     zstd
   ];
 
@@ -159,7 +188,7 @@ stdenv.mkDerivation (finalAttrs: {
     rocm-cmake
     hipblas-common
     amd-blis
-    rocm-smi
+    amdsmi
     openmp
     libffi
     ncurses
@@ -195,6 +224,14 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBLIS_INCLUDE_DIR=${amd-blis}/include/blis/"
     "-DBLA_PREFER_PKGCONFIG=ON"
     "-DFETCHCONTENT_SOURCE_DIR_NANOBIND=${python3Packages.nanobind.src}"
+    # cmake >= 4.4 re-runs cmake mid-build (`--regenerate-during-build`) when Tensile codegen writes into a
+    # CONFIGURE_DEPENDS-globbed path. On that reconfigure rocisa's FetchContent
+    # nanobind is already populated, so FetchContent_MakeAvailable no longer
+    # re-runs add_subdirectory and `nanobind_add_module`
+    # (tensilelite/rocisa/CMakeLists.txt:109) is left undefined -> configure dies.
+    # The target graph does not change mid-build, so suppress the spurious
+    # regeneration rule (Ninja generator honours this).
+    (lib.cmakeBool "CMAKE_SUPPRESS_REGENERATION" true)
     # Manually define CMAKE_INSTALL_<DIR>
     # See: https://github.com/NixOS/nixpkgs/pull/197838
     "-DCMAKE_INSTALL_BINDIR=bin"
@@ -214,7 +251,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Move binaries to appropriate outputs and delete leftover /bin
     + ''
       mkdir -p $benchmark/bin
-      mv $out/bin/hipblaslt-{api-overhead,bench*} $out/bin/*.yaml $out/bin/*.py $benchmark/bin
       ${lib.optionalString buildTests ''
         mkdir -p $test/bin
         mv $out/bin/hipblas-test $test/bin
@@ -223,6 +259,11 @@ stdenv.mkDerivation (finalAttrs: {
         mkdir -p $sample/bin
         mv $out/bin/example-* $sample/bin
       ''}
+      # $out is the library output and keeps no bin/. Everything installed there is
+      # a client/benchmark tool + its yaml/py support (hipblaslt-cotenant{,-kernel},
+      # hipblaslt-perf, bench, api-overhead, ...), so after routing any test/sample binaries above, move the rest to
+      # $benchmark wholesale rather than an explicit list that breaks on new tools.
+      mv $out/bin/* $benchmark/bin
       rmdir $out/bin
     '';
 

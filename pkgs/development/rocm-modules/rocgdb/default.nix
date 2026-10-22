@@ -23,13 +23,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocgdb";
-  version = "7.2.4";
+  version = "10.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "ROCgdb";
-    tag = "rocm-${finalAttrs.version}";
-    hash = "sha256-oml/HLExnnjh7+axeWPZRWecpwK2BnzVOaGvXYhrxKs=";
+    # ROCgdb switched to the two-component therock-X.Y tag scheme in 10.0.
+    tag = "therock-${finalAttrs.version}";
+    hash = "sha256-BenTuntdO+NUgzty0en2b7uaIvugISNU4rqxRG/Ka1w=";
   };
 
   nativeBuildInputs = [

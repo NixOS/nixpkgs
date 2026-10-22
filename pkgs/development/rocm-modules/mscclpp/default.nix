@@ -8,6 +8,7 @@
 }:
 stdenv.mkDerivation {
   pname = "mscclpp";
+  # microsoft/mscclpp is versioned independently of ROCm; pinned by commit.
   version = "unstable-2024-12-13";
   src = fetchFromGitHub {
     owner = "microsoft";
