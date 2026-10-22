@@ -339,7 +339,14 @@ in
     def invoke():
         controller.succeed(f"curl -fsS -b /run/board-cookies -H 'Content-Type: application/json' -H 'Origin: {board_url}' --data '{{}}' {board_url}/api/agents/{agent_id}/heartbeat/invoke > /run/invoked.json")
         run_id = json.loads(controller.succeed("cat /run/invoked.json"))["id"]
-        controller.wait_until_succeeds(f"curl -fsS -b /run/board-cookies {board_url}/api/heartbeat-runs/{run_id} | jq -e '.status == \"succeeded\"'", timeout=120)
+        try:
+            controller.wait_until_succeeds(f"curl -fsS -b /run/board-cookies {board_url}/api/heartbeat-runs/{run_id} | jq -e '.status == \"succeeded\"'", timeout=120)
+        except Exception:
+            # Name the stuck state rather than only the timeout.
+            print(controller.execute(f"curl -sS -b /run/board-cookies {board_url}/api/heartbeat-runs/{run_id} | jq '{{status, error, errorCode, failureCode, invocationSource}}'")[1])
+            print(controller.execute(f"curl -sS -b /run/board-cookies {board_url}/api/agents/{agent_id} | jq '{{status, lifecycleState, lifecycleHolds, pauseReason}}'")[1])
+            print(worker.execute("curl -sS http://localhost:8642/__fixture/status")[1])
+            raise
         return run_id
 
     invoke()
