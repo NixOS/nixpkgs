@@ -205,6 +205,10 @@ with haskellLib;
             substituteInPlace stack.cabal \
               --replace-fail 'semaphore-compat >=1.0.0 && <2' 'semaphore-compat >=2.0.1' \
               --replace-fail 'semaphore-compat >=1.0.0 && < 2' 'semaphore-compat >=2.0.1'
+
+            # https://github.com/commercialhaskell/stack/pull/6939/changes
+            substituteInPlace stack.cabal \
+              --replace-fail 'memory >=0.18.0' 'ram >= 0.21 && < 0.23'
           '';
         }) super.stack
       );
