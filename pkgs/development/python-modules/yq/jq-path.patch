@@ -1,0 +1,26 @@
+diff --git a/test/test.py b/test/test.py
+index db674a4..b6c797e 100755
+--- a/test/test.py
++++ b/test/test.py
+@@ -130,7 +130,7 @@ class TestYq(unittest.TestCase):
+                 tf2.seek(0)
+                 self.assertEqual(self.run_yq("", ["-y", arg, tf.name, self.fd_path(tf2)]), "1\n...\n")
+ 
+-    @unittest.skipIf(subprocess.check_output(["jq", "--version"]) < b"jq-1.6", "Test options introduced in jq 1.6")
++    @unittest.skipIf(subprocess.check_output(["@jq@", "--version"]) < b"jq-1.6", "Test options introduced in jq 1.6")
+     def test_jq16_arg_passthrough(self):
+         self.assertEqual(
+             self.run_yq("{}", ["--indentless", "-y", ".a=$ARGS.positional", "--args", "a", "b"]), "a:\n- a\n- b\n"
+diff --git a/yq/__init__.py b/yq/__init__.py
+index 0ccb8e8..8342ff0 100644
+--- a/yq/__init__.py
++++ b/yq/__init__.py
+@@ -206,7 +206,7 @@ def yq(
+         # Notes: universal_newlines is just a way to induce subprocess to make stdin a text buffer and encode it for us;
+         # close_fds must be false for command substitution to work (yq . t.yml --slurpfile t <(yq . t.yml))
+         jq = subprocess.Popen(
+-            ["jq"] + list(jq_args),
++            ["@jq@"] + list(jq_args),
+             stdin=subprocess.PIPE,
+             stdout=subprocess.PIPE if converting_output else None,
+             close_fds=False,

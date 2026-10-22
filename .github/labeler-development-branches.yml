@@ -1,0 +1,23 @@
+# This file is used by .github/workflows/bot.yml
+# This version is only run for Pull Requests from development branches like staging-next, haskell-updates or python-updates.
+
+"4.workflow: package set update":
+  - any:
+      - head-branch:
+          - '-updates$'
+
+"4.workflow: staging":
+  - any:
+      - head-branch:
+          - '^staging-next$'
+          - '^staging-next-'
+
+"6.topic: haskell":
+  - any:
+      - head-branch:
+          - '^haskell-updates$'
+
+"6.topic: python":
+  - any:
+      - head-branch:
+          - '^python-updates$'

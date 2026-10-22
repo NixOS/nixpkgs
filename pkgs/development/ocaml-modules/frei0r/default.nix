@@ -1,0 +1,31 @@
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  dune-configurator,
+  pkg-config,
+  frei0r,
+}:
+
+buildDunePackage (finalAttrs: {
+  pname = "frei0r";
+  version = "0.1.3";
+
+  src = fetchFromGitHub {
+    owner = "savonet";
+    repo = "ocaml-frei0r";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-h0GlsSGJX30C7S+Hu4tiyZ5z+/XPesY5aQ6ib5vY1Yk=";
+  };
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ dune-configurator ];
+  propagatedBuildInputs = [ frei0r ];
+
+  meta = {
+    homepage = "https://github.com/savonet/ocaml-frei0r";
+    description = "Bindings for the frei0r API which provides video effects";
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ dandellion ];
+  };
+})

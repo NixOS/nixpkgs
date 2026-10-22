@@ -1,0 +1,33 @@
+{
+  lib,
+  fetchPypi,
+  fetchpatch,
+  buildPythonPackage,
+}:
+
+buildPythonPackage rec {
+  pname = "rocket-errbot";
+  version = "1.2.5";
+  format = "setuptools";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-qn2cX8ki1RuklSUd6OuAn+vd85Yq0vVbLz7TLTEPPqA=";
+  };
+
+  # remove with 1.2.6
+  patches = [
+    (fetchpatch {
+      # https://github.com/errbotio/rocket/pull/1
+      name = "errbotio-rocket-pull-1.patch";
+      url = "https://github.com/errbotio/rocket/compare/f1a52fe17164f83bccce5e6a1935fc5071c2265f...d69adcd49de5d78bd80f952a2ee31e6a0bac4e3d.patch";
+      hash = "sha256-LnLb5wbOK5i8TymMCVdiJlAxCaEMcrw2OsugVbZHxug=";
+    })
+  ];
+
+  meta = {
+    homepage = "https://github.com/errbotio/rocket";
+    description = "Modern, multi-threaded and extensible web server";
+    license = lib.licenses.mit;
+  };
+}

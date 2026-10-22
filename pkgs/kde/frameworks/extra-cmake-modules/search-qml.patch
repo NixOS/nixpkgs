@@ -1,0 +1,15 @@
+diff --git a/modules/ECMFindQmlModule.cmake.in b/modules/ECMFindQmlModule.cmake.in
+index 7db160c1..03fa6916 100644
+--- a/modules/ECMFindQmlModule.cmake.in
++++ b/modules/ECMFindQmlModule.cmake.in
+@@ -15,8 +15,8 @@ if (QT_MAJOR_VERSION EQUAL "6")
+     include(${ECM_MODULE_DIR}/ECMQmlModule.cmake)
+     # Get the qmldir file
+     _ecm_qmlmodule_uri_to_path(MODULEDIR "@MODULE_NAME@" "@VERSION@")
+-    set(KDE_QMLDIR "${KDE_INSTALL_FULL_QMLDIR}/${MODULEDIR}")
+-    find_file(QMLDIR_FILE qmldir ${KDE_QMLDIR} NO_CACHE)
++    find_file(QMLDIR_FILE qmldir PATHS ENV NIXPKGS_QML_SEARCH_PATHS PATH_SUFFIXES ${MODULEDIR} NO_CACHE NO_DEFAULT_PATHS)
++    cmake_path(GET QMLDIR_FILE PARENT_PATH KDE_QMLDIR)
+     if (NOT QMLDIR_FILE) # Check the install destination, the QT_PLUGIN_PATH might not be set up correctly at this point
+         # Check the Qt installation
+         ecm_query_qt(qt_qml_dir QT_INSTALL_QML)

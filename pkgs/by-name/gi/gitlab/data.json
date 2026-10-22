@@ -1,0 +1,17 @@
+{
+  "version": "19.4.3",
+  "repo_hash": "sha256-+9H0RcmtxbRt7Tgp1LrkJYwvjvb6N5UrYH1J0RMlSQ0=",
+  "yarn_hash": "sha256-xhaSqD18YeIMr1wkzvLqQSsJ2F+1yb2H4jU9erkocFQ=",
+  "frontend_islands_yarn_hash": "sha256-EvGQin+5DqqIgM36jlVkVI49WcJzVvceYnkSS9ybfcY=",
+  "owner": "gitlab-org",
+  "repo": "gitlab",
+  "rev": "v19.4.3-ee",
+  "passthru": {
+    "GITALY_SERVER_VERSION": "19.4.3",
+    "GITLAB_KAS_VERSION": "19.4.3",
+    "GITLAB_PAGES_VERSION": "19.4.3",
+    "GITLAB_SHELL_VERSION": "14.57.3",
+    "GITLAB_ELASTICSEARCH_INDEXER_VERSION": "5.14.14",
+    "GITLAB_WORKHORSE_VERSION": "19.4.3"
+  }
+}

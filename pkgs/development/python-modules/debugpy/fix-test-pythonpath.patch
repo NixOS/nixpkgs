@@ -1,0 +1,12 @@
+diff --git a/tests/debug/session.py b/tests/debug/session.py
+index d0921956..459c89c0 100644
+--- a/tests/debug/session.py
++++ b/tests/debug/session.py
+@@ -704,6 +704,7 @@ class Session(object):
+         if "PYTHONPATH" in self.config.env:
+             # If specified, launcher will use it in lieu of PYTHONPATH it inherited
+             # from the adapter when spawning debuggee, so we need to adjust again.
++            self.config.env.prepend_to("PYTHONPATH", os.environ["PYTHONPATH"])
+             self.config.env.prepend_to("PYTHONPATH", DEBUGGEE_PYTHONPATH.strpath)
+ 
+         # Adapter is going to start listening for server and spawn the launcher at

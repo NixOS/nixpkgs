@@ -1,0 +1,12 @@
+diff --git a/src/Behavior/Behavior.vala b/src/Behavior/Behavior.vala
+index a1929fe4..2f332694 100644
+--- a/src/Behavior/Behavior.vala
++++ b/src/Behavior/Behavior.vala
+@@ -227,7 +227,6 @@ public class Keyboard.Behaviour.Page : Gtk.Box {
+         blink_grid.attach (scale_blink_time, 1, 2);
+ 
+         var box = new Gtk.Box (VERTICAL, 18);
+-        box.append (onscreen_keyboard_grid);
+         box.append (blink_grid);
+         box.append (repeat_grid);
+         box.append (stickykeys_grid);

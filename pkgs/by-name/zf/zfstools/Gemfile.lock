@@ -1,0 +1,14 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    getoptlong (0.2.1)
+
+PLATFORMS
+  ruby
+  x86_64-linux
+
+DEPENDENCIES
+  getoptlong
+
+BUNDLED WITH
+   2.6.9

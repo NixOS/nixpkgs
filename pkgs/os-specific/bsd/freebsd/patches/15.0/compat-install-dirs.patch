@@ -1,0 +1,48 @@
+diff --git a/tools/build/Makefile b/tools/build/Makefile
+--- a/tools/build/Makefile
++++ b/tools/build/Makefile
+@@ -492,15 +492,15 @@
+ # and cross-tools stages. We do this here using mkdir since mtree may not exist
+ # yet (this happens if we are crossbuilding from Linux/Mac).
+ INSTALLDIR_LIST= \
+-	bin \
+-	lib/geom \
+-	usr/include/casper \
+-	usr/include/openssl \
+-	usr/include/private/ucl \
+-	usr/include/private/zstd \
+-	usr/lib \
+-	usr/libdata/pkgconfig \
+-	usr/libexec
++	${BINDIR} \
++	${LIBDIR}/geom \
++	${INCLUDEDIR}/casper \
++	${INCLUDEDIR}/openssl \
++	${INCLUDEDIR}/private/ucl \
++	${INCLUDEDIR}/private/zstd \
++	${LIBDIR} \
++	${LIBDIR}/libdata/pkgconfig \
++	${LIBEXECDIR}
+ 
+ installdirs:
+ 	mkdir -p ${INSTALLDIR_LIST:S,^,${DESTDIR}/,}
+@@ -511,16 +511,9 @@
+ # tools but adding the symlinks is easier and means all tools are also
+ # in the directory that they are installed to normally.
+ 
+-.for _dir in sbin usr/sbin usr/bin
+-# delete existing directories from before r340157
+-	@if [ -e ${DESTDIR}/${_dir} ] && [ ! -L ${DESTDIR}/${_dir} ]; then \
+-	    echo "removing old non-symlink ${DESTDIR}/${_dir}"; \
+-	    rm -rf "${DESTDIR}/${_dir}"; \
+-	fi
+-.endfor
+-	ln -sfn bin ${DESTDIR}/sbin
+-	ln -sfn ../bin ${DESTDIR}/usr/bin
+-	ln -sfn ../bin ${DESTDIR}/usr/sbin
++	ln -sfn bin ${DESTDIR}/${SBINDIR}
++	ln -sfn ../bin ${DESTDIR}/${BINDIR}
++	ln -sfn ../bin ${DESTDIR}/${SBINDIR}
+ .for _group in ${INCSGROUPS:NINCS}
+ 	mkdir -p "${DESTDIR}/${${_group}DIR}"
+ .endfor

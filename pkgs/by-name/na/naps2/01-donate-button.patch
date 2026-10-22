@@ -1,0 +1,14 @@
+diff --git a/NAPS2.Lib/EtoForms/Ui/AboutForm.cs b/NAPS2.Lib/EtoForms/Ui/AboutForm.cs
+--- a/NAPS2.Lib/EtoForms/Ui/AboutForm.cs
++++ b/NAPS2.Lib/EtoForms/Ui/AboutForm.cs
+@@ -26,8 +26,8 @@ public class AboutForm : EtoDialogBase
+         _donateButton = C.Button(UiStrings.Donate, () => ProcessHelper.OpenUrl(DONATE_URL));
+         _donateButton.BackgroundColor = Color.FromRgb(0xfeda96);
+         _donateButton.TextColor = Color.FromRgb(0x1b464e);
+-        _donateButton.Font = new Font(_donateButton.Font.Family, _donateButton.Font.Size * 11 / 10,
+-            FontStyle.Italic | FontStyle.Bold);
++        try { _donateButton.Font = new Font(_donateButton.Font.Family, _donateButton.Font.Size * 11 / 10,
++            FontStyle.Italic | FontStyle.Bold); } catch {};
+         EtoPlatform.Current.ConfigureDonateButton(_donateButton);
+ 
+         _enableDebugLogging.Checked = config.Get(c => c.EnableDebugLogging);

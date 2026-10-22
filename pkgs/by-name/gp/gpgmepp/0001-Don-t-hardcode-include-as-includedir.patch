@@ -1,0 +1,39 @@
+From b56db4b30ec696b018c04400440d0252af13990a Mon Sep 17 00:00:00 2001
+From: Marcin Serwin <marcin@serwin.dev>
+Date: Mon, 22 Dec 2025 16:44:46 +0100
+Subject: [PATCH] Don't hardcode 'include' as includedir
+
+The headers are installed into the location pointed by
+CMAKE_INSTALL_INCLUDEDIR so if it's different than the default 'include'
+then the header path in the exported CMake targets is incorrect.
+
+Signed-off-by: Marcin Serwin <marcin@serwin.dev>
+---
+ src/CMakeLists.txt | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 7be46cb..97d21b1 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -128,7 +128,7 @@ if(ENABLE_SHARED)
+ 
+     target_include_directories(Gpgmepp
+         PRIVATE ${LibGpgError_INCLUDE_DIRS}
+-        INTERFACE $<INSTALL_INTERFACE:include>
++        INTERFACE $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+     )
+ 
+     target_link_libraries(Gpgmepp Gpgme::Gpgme)
+@@ -144,7 +144,7 @@ if(ENABLE_STATIC)
+ 
+     target_include_directories(GpgmeppStatic
+         PRIVATE ${LibGpgError_INCLUDE_DIRS}
+-        INTERFACE $<INSTALL_INTERFACE:include>
++        INTERFACE $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+     )
+ 
+     target_link_libraries(GpgmeppStatic Gpgme::Gpgme)
+-- 
+2.51.2
+

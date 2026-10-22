@@ -1,0 +1,23 @@
+From 41197bc85d6b95de3345f5a09d321469c2bba58e Mon Sep 17 00:00:00 2001
+From: Jordan Moore <lockbox@struct.foo>
+Date: Mon, 2 Jun 2025 16:36:27 -0400
+Subject: [PATCH] fix: cstdint explicitly included when used
+
+* fixes error in gcc15 where this header is no longer
+  implicitly included
+---
+ llvm/include/llvm/ADT/STLExtras.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/llvm/include/llvm/ADT/STLExtras.h b/llvm/include/llvm/ADT/STLExtras.h
+index 3346de9382c42274fc9e5fb4ba6334852c7c06fc..a2adf8533e23c782147d34ca97c222b32adcc61d 100644
+--- a/llvm/include/llvm/ADT/STLExtras.h
++++ b/llvm/include/llvm/ADT/STLExtras.h
+@@ -21,6 +21,7 @@
+ #include <algorithm> // for std::all_of
+ #include <cassert>
+ #include <cstddef> // for std::size_t
++#include <cstdint>
+ #include <cstdlib> // for qsort
+ #include <functional>
+ #include <iterator>

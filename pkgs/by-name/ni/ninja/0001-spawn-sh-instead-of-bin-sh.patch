@@ -1,0 +1,27 @@
+From cf438f7a3ab2e70b06ec12653d1111e35084733f Mon Sep 17 00:00:00 2001
+From: Max <max@privatevoid.net>
+Date: Fri, 8 Aug 2025 18:20:48 +0200
+Subject: [PATCH] spawn sh instead of /bin/sh
+
+---
+ src/subprocess-posix.cc | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/subprocess-posix.cc b/src/subprocess-posix.cc
+index 0e62b3b..c1c31aa 100644
+--- a/src/subprocess-posix.cc
++++ b/src/subprocess-posix.cc
+@@ -129,8 +129,8 @@ bool Subprocess::Start(SubprocessSet* set, const string& command) {
+   if (err != 0)
+     Fatal("posix_spawnattr_setflags: %s", strerror(err));
+ 
+-  const char* spawned_args[] = { "/bin/sh", "-c", command.c_str(), NULL };
+-  err = posix_spawn(&pid_, "/bin/sh", &action, &attr,
++  const char* spawned_args[] = { "sh", "-c", command.c_str(), NULL };
++  err = posix_spawnp(&pid_, "sh", &action, &attr,
+         const_cast<char**>(spawned_args), environ);
+   if (err != 0)
+     Fatal("posix_spawn: %s", strerror(err));
+-- 
+2.50.1
+

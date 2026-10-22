@@ -1,0 +1,21 @@
+commit beaea6f66e4f53d617418a4c155b9a14e2c9327e
+Author: Alex Tunstall <alex@tunstall.xyz>
+Date:   Fri Mar 20 06:52:08 2026 +0000
+
+    Add -lm to default link flags
+    
+    MicroHs should always link with -lm because its RTS requires it.
+
+diff --git a/src/MicroHs/Flags.hs b/src/MicroHs/Flags.hs
+index e20797c6..df89730e 100644
+--- a/src/MicroHs/Flags.hs
++++ b/src/MicroHs/Flags.hs
+@@ -54,7 +54,7 @@ defaultFlags dir = Flags {
+   doCPP      = False,
+   cppArgs    = [],
+   cArgs      = [],
+-  lArgs      = [],
++  lArgs      = ["-lm"],
+   compress   = False,
+   base64     = False,
+   buildPkg   = Nothing,

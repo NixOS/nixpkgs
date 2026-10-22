@@ -1,0 +1,34 @@
+diff --git a/src/levelblit.c b/src/levelblit.c
+index 5a04a8e..f530aa8 100644
+--- a/src/levelblit.c
++++ b/src/levelblit.c
+@@ -2575,7 +2575,7 @@ void SpecialTile(int x, int y)
+ 			break;
+ 		case 42:
+ 			if (rooms[player_room].room_type == 5) {
+-				if (CanGetArtifact(rooms[player_room].room_param)) {
++				if (CanGetArtifact()) {
+ 					
+ 				} else {
+ 					sprintf(message, _("The artifact is tainted with shadow. You must slay more of the shadow first.") );
+diff --git a/src/save.h b/src/save.h
+index dd67443..bcf0471 100644
+--- a/src/save.h
++++ b/src/save.h
+@@ -24,7 +24,7 @@
+ #ifndef SAVE_H
+ #define SAVE_H
+ 
+-void DoSaveGame();
++void DoSaveGame(char *);
+ 
+ void FWInt(int val);
+ void FWChar(unsigned char i);
+@@ -39,6 +39,6 @@ void SaveGame(char *);
+ void LoadGame(char *);
+ void CloseFile();
+ 
+-int IsSaveFile();
++int IsSaveFile(char *);
+ 
+ #endif

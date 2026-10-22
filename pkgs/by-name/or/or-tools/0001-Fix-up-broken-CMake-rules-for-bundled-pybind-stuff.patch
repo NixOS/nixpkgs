@@ -1,0 +1,26 @@
+From 46e7d2cccd029a2c4215ce9b0c3bf72b2f2dd398 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Stefan=20Br=C3=BCns?= <stefan.bruens@rwth-aachen.de>
+Date: Thu, 2 Jan 2025 16:32:05 +0100
+Subject: [PATCH] Fix up broken CMake rules for bundled pybind stuff
+
+Unfortunately, upstream only uses and tests the bundled code, and the
+unbundled cases are bitrotting.
+---
+ cmake/system_deps.cmake    | 1 +
+ 1 files changed, 1 insertion(+)
+
+diff --git a/cmake/system_deps.cmake b/cmake/system_deps.cmake
+index d9ae923..0c176a8 100644
+--- a/cmake/system_deps.cmake
++++ b/cmake/system_deps.cmake
+@@ -94,6 +94,7 @@ endif()
+ 
+ # Check language Dependencies
+ if(BUILD_PYTHON)
++  find_package(Python REQUIRED Interpreter Development.Module)
+   if(NOT BUILD_pybind11 AND NOT TARGET pybind11::pybind11_headers)
+     find_package(pybind11 REQUIRED)
+   endif()
+-- 
+2.47.1
+

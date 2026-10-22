@@ -1,0 +1,19 @@
+diff --git a/jerry-core/ecma/builtin-objects/ecma-builtin-helpers-date.c b/jerry-core/ecma/builtin-objects/ecma-builtin-helpers-date.c
+index 280a94c..b147679 100644
+--- a/jerry-core/ecma/builtin-objects/ecma-builtin-helpers-date.c
++++ b/jerry-core/ecma/builtin-objects/ecma-builtin-helpers-date.c
+@@ -36,12 +36,12 @@
+ /**
+  * Day names
+  */
+-const char day_names_p[7][3] = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
++const char day_names_p[7][3] __attribute__((nonstring)) = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
+ 
+ /**
+  * Month names
+  */
+-const char month_names_p[12][3] = {
++const char month_names_p[12][3] __attribute__((nonstring)) = {
+   "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+ };
+ 

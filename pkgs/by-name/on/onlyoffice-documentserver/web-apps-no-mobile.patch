@@ -1,0 +1,13 @@
+diff --git a/build/Gruntfile.js b/build/Gruntfile.js
+index 044fa02213..d4fac2ff01 100644
+--- a/Gruntfile.js
++++ b/Gruntfile.js
+@@ -830,7 +830,7 @@ module.exports = function(grunt) {
+                                                             'replace:writeVersion', 'replace:prepareHelp', 'clean:postbuild']);
+ 
+     grunt.registerTask('deploy-app-mobile',             ['mobile-app-init', 'clean:deploy', /*'cssmin',*/ /*'copy:template-backup',*/
+-                                                            'htmlmin', /*'requirejs',*/ 'exec:webpack_install', 'exec:webpack_app_build', /*'copy:template-restore',*/
++                                                            'htmlmin', /*'requirejs',*/ /*'exec:webpack_install', 'exec:webpack_app_build',*/ /*'copy:template-restore',*/
+                                                             /*'clean:template-backup',*/ 'copy:localization', 'copy:index-page',
+                                                             'copy:images-app', 'copy:webpack-dist', 'concat', 'json-minify'/*,*/
+                                                             /*'replace:writeVersion', 'replace:fixResourceUrl'*/]);

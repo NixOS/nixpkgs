@@ -1,0 +1,27 @@
+diff --git a/mobsf/MobSF/init.py b/mobsf/MobSF/init.py
+index 6ed1897..79cfd06 100644
+--- a/mobsf/MobSF/init.py
++++ b/mobsf/MobSF/init.py
+@@ -58,6 +58,12 @@ def first_run(secret_file, base_dir, mobsf_home):
+     return secret_key
+ 
+ 
++def make_writable(path):
++    """Restore permissions lost by copying from a read-only prefix."""
++    for entry in (path, *path.rglob('*')):
++        entry.chmod(0o755 if entry.is_dir() else 0o644)
++
++
+ def create_user_conf(mobsf_home, base_dir):
+     try:
+         config_path = mobsf_home / 'config.py'
+@@ -151,7 +157,9 @@ def get_mobsf_home(use_home, base_dir):
+         if use_home:
+             src = Path(base_dir) / 'signatures'
+             try:
++                make_writable(sig_dir)
+                 shutil.copytree(src, sig_dir, dirs_exist_ok=True)
++                make_writable(sig_dir)
+             except Exception:
+                 pass
+         return mobsf_home.as_posix()

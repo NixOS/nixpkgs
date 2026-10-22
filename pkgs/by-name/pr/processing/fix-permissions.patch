@@ -1,0 +1,24 @@
+diff --git a/app/build.gradle.kts b/app/build.gradle.kts
+index 88a0b63..a0f50bc 100644
+--- a/app/build.gradle.kts
++++ b/app/build.gradle.kts
+@@ -341,6 +341,7 @@ tasks.register<Copy>("includeJdk") {
+     from(Jvm.current().javaHome.absolutePath)
+     destinationDir = composeResources("jdk").get().asFile
+
++    dirPermissions { unix("rwx------") };
+     fileTree(destinationDir).files.forEach { file ->
+         file.setWritable(true, false)
+         file.setReadable(true, false)
+diff --git a/java/build.gradle.kts b/java/build.gradle.kts
+index fc7151189..6dd8409fa 100644
+--- a/java/build.gradle.kts
++++ b/java/build.gradle.kts
+@@ -80,6 +80,7 @@ legacyLibraries.forEach { library ->
+         include("*.properties")
+         include("library/**/*")
+         include("examples/**/*")
++        dirPermissions { unix("rwx------") };
+         into( javaMode("/libraries/$library"))
+     }
+     bundle.configure {

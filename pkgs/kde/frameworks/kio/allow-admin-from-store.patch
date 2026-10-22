@@ -1,0 +1,20 @@
+diff --git a/src/core/worker.cpp b/src/core/worker.cpp
+index da423731c..443c8db19 100644
+--- a/src/core/worker.cpp
++++ b/src/core/worker.cpp
+@@ -343,13 +343,13 @@ Worker *Worker::createWorker(const QString &protocol, const QUrl &url, int &erro
+         return nullptr;
+     }
+ 
+-    if (protocol == QLatin1String("admin") && !lib_path.startsWith(QLatin1String{KDE_INSTALL_FULL_KIO_PLUGINDIR})) {
++    if (protocol == QLatin1String("admin") && !lib_path.startsWith(QLatin1String("/nix/store"))) {
+         error_text = i18nc("@info %2 and %3 are paths",
+                            "The KIO worker for protocol “%1” in %2 was not loaded because all KIO workers which are located outside of %3 and ask for elevated "
+                            "privileges are considered insecure.",
+                            protocol,
+                            lib_path,
+-                           QLatin1String{KDE_INSTALL_FULL_KIO_PLUGINDIR});
++                           QLatin1String("/nix/store"));
+         error = KIO::ERR_CANNOT_CREATE_WORKER;
+         return nullptr;
+     }

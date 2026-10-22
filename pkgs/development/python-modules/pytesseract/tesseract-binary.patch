@@ -1,0 +1,13 @@
+diff --git a/pytesseract/pytesseract.py b/pytesseract/pytesseract.py
+index 132f59b..f161e5c 100755
+--- a/pytesseract/pytesseract.py
++++ b/pytesseract/pytesseract.py
+@@ -23,7 +23,7 @@ except ImportError:
+     import Image
+ 
+ 
+-tesseract_cmd = 'tesseract'
++tesseract_cmd = '@drv@/bin/tesseract'
+ 
+ numpy_installed = find_loader('numpy') is not None
+ if numpy_installed:
