@@ -8,6 +8,7 @@
   python3Packages,
   openmpi,
   stdenv,
+  pkgs,
 }:
 
 let
@@ -78,6 +79,8 @@ let
       # Replaces hip, opencl-runtime, and rocclr
       clr = self.callPackage ./clr { };
 
+      aotriton = self.callPackage ../aotriton { stdenv = origStdenv; };
+
       hipify = self.callPackage ./hipify {
         stdenv = origStdenv;
       };
@@ -130,6 +133,8 @@ let
       hipfort = self.callPackage ./hipfort { };
 
       hipfft = self.callPackage ./hipfft { };
+
+      hiprt = self.callPackage ../hiprt { };
 
       tensile = pyPackages.callPackage ./tensile {
         inherit (self)
@@ -227,6 +232,91 @@ let
         }
       );
       mpi = self.openmpi;
+
+      meta = {
+        # eval all pkgsRocm release attrs with
+        # nix-eval-jobs --force-recurse pkgs/top-level/release.nix -I . --select "p: p.pkgsRocm" --no-instantiate
+        release-packagePlatforms =
+          let
+            platforms = [
+              "x86_64-linux"
+            ];
+            attrPaths = (builtins.fromJSON (builtins.readFile ../release-attrPaths.json)).attrPaths;
+          in
+          lib.foldl' (
+            acc: path:
+            if lib.hasAttrByPath (lib.splitString "." path) pkgs then
+              lib.recursiveUpdate acc (lib.setAttrByPath (lib.splitString "." path) platforms)
+            else
+              acc
+          ) { } attrPaths;
+      };
+
+      rocm-tests = self.callPackage ../rocm-tests {
+        rocmPackages = self;
+      };
+    }
+    // lib.optionalAttrs config.allowAliases {
+      rocmlir = throw ''
+        'rocmlir' (ROCm/rocMLIR) has no ROCm 10 release. MIGraphX uses
+        'rocmlir-triton', the fork it pins.
+      ''; # Added 2026-10-17
+      rocmlir-rock = throw "'rocmlir-rock' has been replaced by 'rocmlir-triton'"; # Added 2026-10-17
+
+      rocm-bandwidth-test = throw ''
+        'rocm-bandwidth-test' has been removed as it is no longer maintained upstream.
+      ''; # Added 2026-10-14
+
+      rpp-opencl = throw ''
+        'rpp-opencl' has been removed as it has been broken for a year and has no consuming packages.
+        Use 'rpp' or 'rpp-cpu' instead.
+      ''; # Added 2026-03-08
+
+      rocmPath = throw ''
+        'rocm-path' has been removed. If a ROCM_PATH value is required in nixpkgs please
+        construct one with the minimal set of required deps.
+        For convenience use outside of nixpkgs consider one of the entries in
+        'rocmPackages.meta'.
+      ''; # Added 2025-09-30
+
+      rocm-merged-llvm = throw ''
+        'rocm-merged-llvm' has been removed.
+        For 'libllvm' or 'libclang' use 'rocmPackages.llvm.libllvm/clang'.
+        For a ROCm compiler toolchain use 'rocmPackages.rocm-toolchain'.
+        If a package uses '$<TARGET_FILE:clang>' in CMake from 'libclang'
+        it may be necessary to convince it to use 'rocm-toolchain' instead.
+        'rocm-merged-llvm' avoided this at the cost of significantly bloating closure
+        size.
+      ''; # Added 2025-09-30
+
+      hsa-amd-aqlprofile-bin = lib.warn ''
+        'hsa-amd-aqlprofile-bin' has been replaced by 'aqlprofile'.
+      '' self.aqlprofile; # Added 2025-08-27
+
+      triton = throw ''
+        'rocmPackages.triton' has been removed. Please use python3Packages.triton
+      ''; # Added 2025-08-24
+
+      rocm-thunk = throw ''
+        'rocm-thunk' has been removed. It's now part of the ROCm runtime.
+      ''; # Added 2025-3-16
+
+      clang-ocl = throw ''
+        'clang-ocl' has been deprecated upstream. Use ROCm's clang directly.
+      ''; # Added 2025-3-16
+
+      miopengemm = throw ''
+        'miopengemm' has been deprecated.
+      ''; # Added 2024-3-3
+
+      miopen-opencl = throw ''
+        'miopen-opencl' has been deprecated.
+      ''; # Added 2024-3-3
+
+      mivisionx-opencl = throw ''
+        'mivisionx-opencl' has been deprecated.
+        Other versions of mivisionx are still available.
+      ''; # Added 2024-3-24
     }
   );
   scopeForArches =
