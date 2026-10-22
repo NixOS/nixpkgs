@@ -130,6 +130,12 @@ let
           ;
       };
 
+      # rocblas_base is the raw per-arch builder (marked broken, like
+      # composable_kernel_base); rocblas (default.nix) assembles the per-arch
+      # Tensile shards into one joined output (see rocblas/default.nix).
+      rocblas_base = self.callPackage ./rocblas/base.nix { };
+      rocblas = self.callPackage ./rocblas { };
+
       hipblas-common = self.callPackage ./hipblas-common { };
 
       hipblaslt = self.callPackage ./hipblaslt { };
