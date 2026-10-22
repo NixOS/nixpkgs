@@ -15,6 +15,10 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "ena";
   name = "${finalAttrs.pname}-${finalAttrs.version}-${kernel.version}";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+  enableParallelBuilding = true;
+
   src = fetchFromGitHub {
     owner = "amzn";
     repo = "amzn-drivers";
@@ -34,13 +38,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
-  makeFlags = kernelModuleMakeFlags;
 
   env.KERNEL_BUILD_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
   postPatch = ''
     substituteInPlace kernel/linux/ena/configure.sh --replace-fail '^HOSTCC' '^CC'
   '';
+
   configurePhase = ''
     runHook preConfigure
     cd kernel/linux/ena
@@ -48,13 +52,14 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postConfigure
   '';
 
+  installFlags = kernelModuleMakeFlags ++ [
+    "INSTALL_MOD_PATH=${placeholder "out"}"
+  ];
+
   installPhase = ''
     runHook preInstall
-    $STRIP -S ena.ko
-    dest=$out/lib/modules/${kernel.modDirVersion}/misc
-    mkdir -p $dest
-    cp ena.ko $dest/
-    xz $dest/ena.ko
+    make -C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build M=$(pwd) modules_install \
+      "''${makeFlags[@]}" "''${installFlags[@]}"
     runHook postInstall
   '';
 
