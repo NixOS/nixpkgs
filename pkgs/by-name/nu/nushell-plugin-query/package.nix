@@ -21,6 +21,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildAndTestSubdir = "crates/nu_plugin_query";
 
+  patches = nushell.patches or [ ];
+
   passthru.updateScript = nix-update-script {
     # Skip the version check and only check the hash because we inherit version from nushell.
     extraArgs = [ "--version=skip" ];
@@ -31,8 +33,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "nu_plugin_query";
     homepage = "https://github.com/nushell/nushell/tree/${finalAttrs.version}/crates/nu_plugin_query";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      happysalada
-    ];
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 })

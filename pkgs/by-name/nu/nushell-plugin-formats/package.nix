@@ -20,13 +20,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     extraArgs = [ "--version=skip" ];
   };
 
+  patches = nushell.patches or [ ];
+
   meta = {
     description = "Formats plugin for Nushell";
     mainProgram = "nu_plugin_formats";
     homepage = "https://github.com/nushell/nushell/tree/${finalAttrs.version}/crates/nu_plugin_formats";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      viraptor
-    ];
+    maintainers = with lib.maintainers; [ viraptor ];
   };
 })
