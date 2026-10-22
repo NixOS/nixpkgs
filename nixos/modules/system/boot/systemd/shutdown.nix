@@ -9,7 +9,9 @@ let
 
   cfg = config.systemd.shutdownRamfs;
 
-  ramfsContents = pkgs.writeText "shutdown-ramfs-contents.json" (builtins.toJSON cfg.storePaths);
+  ramfsContents = pkgs.writeText "shutdown-ramfs-contents.json" (
+    builtins.toJSON { contents = cfg.storePaths; }
+  );
 
 in
 {
