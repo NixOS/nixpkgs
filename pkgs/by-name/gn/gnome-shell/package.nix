@@ -47,7 +47,7 @@
   gtk4,
   libadwaita,
   sassc,
-  systemd,
+  systemdLibs,
   pipewire,
   gst_all_1,
   adwaita-icon-theme,
@@ -130,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    systemd
+    systemdLibs
     gsettings-desktop-schemas
     gnome-keyring
     glib
