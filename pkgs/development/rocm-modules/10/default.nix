@@ -80,6 +80,10 @@ let
 
       # hsakmt was merged into rocm-runtime
       hsakmt = self.rocm-runtime;
+
+      rocprofiler = self.callPackage ./rocprofiler {
+        inherit (llvm) clang;
+      };
       rocprofiler-register = self.callPackage ./rocprofiler-register {
         inherit (llvm) clang;
       };
