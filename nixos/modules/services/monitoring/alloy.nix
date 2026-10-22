@@ -6,6 +6,46 @@
 }:
 let
   cfg = config.services.alloy;
+
+  # Alloy only reads the top level of its config directory.
+  etcFiles = lib.filterAttrs (
+    n: v:
+    v.enable
+    && lib.hasPrefix "alloy/" n
+    && lib.hasSuffix ".alloy" n
+    && !lib.hasInfix "/" (lib.removePrefix "alloy/" n)
+  ) config.environment.etc;
+
+  etcConfigDir = pkgs.linkFarm "alloy-config" (
+    lib.mapAttrsToList (n: v: {
+      name = lib.removePrefix "alloy/" n;
+      path = v.source;
+    }) etcFiles
+  );
+
+  configPathString = toString cfg.configPath;
+
+  # What the check can see at build time. Anything outside the store
+  # other than the default /etc/alloy is skipped.
+  checkSource =
+    if configPathString == "/etc/alloy" then
+      etcConfigDir
+    else if
+      builtins.isPath cfg.configPath || lib.hasPrefix "${builtins.storeDir}/" configPathString
+    then
+      cfg.configPath
+    else
+      null;
+
+  checkedConfig =
+    pkgs.runCommand "alloy-config-checked"
+      {
+        nativeBuildInputs = [ cfg.package ];
+      }
+      ''
+        alloy validate ${checkSource}
+        touch $out
+      '';
 in
 {
   meta = {
@@ -48,6 +88,24 @@ in
       '';
     };
 
+    checkConfig = lib.mkOption {
+      type = lib.types.bool;
+      default = pkgs.stdenv.buildPlatform.canExecute pkgs.stdenv.hostPlatform;
+      defaultText = lib.literalExpression "pkgs.stdenv.buildPlatform.canExecute pkgs.stdenv.hostPlatform";
+      description = ''
+        Check the configuration with {command}`alloy validate` when
+        building the system. This catches syntax errors, unknown
+        components and component names declared more than once across
+        files, which would otherwise only show up as a failed reload at
+        runtime.
+
+        Covers the `alloy/*.alloy` files in {option}`environment.etc`
+        when {option}`configPath` is `/etc/alloy`, and a
+        {option}`configPath` in the Nix store. Other paths are not
+        checked.
+      '';
+    };
+
     environmentFile = lib.mkOption {
       type = with lib.types; nullOr path;
       default = null;
@@ -73,6 +131,8 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    system.checks = lib.optional (cfg.checkConfig && checkSource != null) checkedConfig;
+
     systemd.services.alloy = {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
