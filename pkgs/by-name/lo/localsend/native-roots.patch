@@ -1,0 +1,51 @@
+--- a/packages/core/Cargo.toml
++++ b/packages/core/Cargo.toml
+@@ -32,7 +32,7 @@
+ tokio = { version = "1.53.1", features = ["full"] }
+ tokio-rustls = { version = "0.26.4", default-features = false, features = ["ring", "tls12"], optional = true }
+ tokio-stream = "0.1.19"
+-tokio-tungstenite = { version = "0.30.0", features = ["rustls-tls-webpki-roots"], optional = true }
++tokio-tungstenite = { version = "0.30.0", features = ["rustls-tls-native-roots"], optional = true }
+ tokio-util = { version = "0.7.19", features = ["rt"], optional = true }
+ tracing = "0.1.44"
+ tracing-subscriber = { version = "0.3.23" }
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -4243,11 +4243,11 @@
+  "futures-util",
+  "log",
+  "rustls",
++ "rustls-native-certs",
+  "rustls-pki-types",
+  "tokio",
+  "tokio-rustls",
+  "tungstenite 0.30.0",
+- "webpki-roots 0.26.11",
+ ]
+ 
+ [[package]]
+@@ -4730,24 +4730,6 @@
+ dependencies = [
+  "rustls-pki-types",
+ ]
+-
+-[[package]]
+-name = "webpki-roots"
+-version = "0.26.11"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "521bc38abb08001b01866da9f51eb7c5d647a19260e00054a8c7fd5f9e57f7a9"
+-dependencies = [
+- "webpki-roots 1.0.9",
+-]
+-
+-[[package]]
+-name = "webpki-roots"
+-version = "1.0.9"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "7dcd9d09a39985f5344844e66b0c530a33843579125f23e21e9f0f220850f22a"
+-dependencies = [
+- "rustls-pki-types",
+-]
+ 
+ [[package]]
+ name = "webrtc"

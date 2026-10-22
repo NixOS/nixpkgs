@@ -35,6 +35,11 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
   ];
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.11.0,<0.12.0" "uv_build>=0.11.0"
+  '';
+
   pythonImportsCheck = [ "requests_hardened" ];
 
   meta = {

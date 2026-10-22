@@ -8,30 +8,29 @@ let
     ;
   inherit (lib)
     all
-    attrValues
-    functionArgs
-    isFunction
-    mirrorFunctionArgs
-    isAttrs
-    setFunctionArgs
-    optionalAttrs
     attrNames
-    filter
-    elemAt
+    attrValues
     concatStringsSep
-    sortOn
-    take
-    length
+    deepSeq
+    elemAt
+    extends
+    filter
+    flatten
+    functionArgs
     head
-    pipe
+    id
+    isAttrs
     isDerivation
+    isFunction
+    length
     listToAttrs
     mapAttrs
+    mirrorFunctionArgs
+    optionalAttrs
+    pipe
     seq
-    flatten
-    deepSeq
-    extends
-    id
+    sortOn
+    take
     ;
   inherit (lib.strings) levenshtein levenshteinAtMost;
 
@@ -152,8 +151,12 @@ rec {
   makeOverridable =
     f:
     let
+      fArgs = functionArgs f;
       # Creates a functor with the same arguments as f
-      mirrorArgs = mirrorFunctionArgs f;
+      mirrorArgs = g: {
+        __functor = self: g;
+        __functionArgs = fArgs;
+      };
 
       f' =
         origArgs:
@@ -163,13 +166,13 @@ rec {
           # Re-call the function but with different arguments
           overrideArgs = mirrorArgs (
             /**
-                    Change the arguments with which a certain function is called.
+              Change the arguments with which a certain function is called.
 
               In some cases, you may find a list of possible attributes to pass in this function's `__functionArgs` attribute, but it will not be complete for an original function like `args@{foo, ...}: ...`, which accepts arbitrary attributes.
 
               This function was provided by `lib.makeOverridable`.
             */
-            newArgs: makeOverridable f (origArgs // (if isFunction newArgs then newArgs origArgs else newArgs))
+            newArgs: f' (origArgs // (if isFunction newArgs then newArgs origArgs else newArgs))
           );
         in
         if isAttrs result then
@@ -193,8 +196,9 @@ rec {
           }
         else if isFunction result then
           # Transform the result into a functor while propagating its arguments
-          setFunctionArgs result (functionArgs result)
-          // {
+          {
+            __functor = self: result;
+            __functionArgs = functionArgs result;
             override = overrideArgs;
           }
         else
@@ -207,12 +211,12 @@ rec {
     if isAttrs f then
       # Preserve additional attributes for f
       f
-      // (mirrorArgs f')
-      # Decorate f.override if presented
       // {
+        __functor = self: f';
+        __functionArgs = fArgs;
+        # Decorate f.override if presented
         ${if f ? override then "override" else null} = fdrv: makeOverridable (f.override fdrv);
       }
-
     else
       mirrorArgs f';
 

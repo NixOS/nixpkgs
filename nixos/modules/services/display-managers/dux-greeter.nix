@@ -18,8 +18,8 @@ let
     escapeShellArgs
     ;
 
-  cfg = config.services.displayManager.dms-greeter;
-  cfgDms = config.programs.dms-shell;
+  cfg = config.services.displayManager.dux-greeter;
+  cfgShell = config.programs.dux-shell;
   cfgAutoLogin = config.services.displayManager.autoLogin;
   sessionData = config.services.displayManager.sessionData;
 
@@ -101,18 +101,30 @@ let
   configFilesFromHome =
     if cfg.configHome != null then
       [
+        # Old directories kept for compability with DMS < 2.0.0
         "${cfg.configHome}/.config/DankMaterialShell/settings.json"
         "${cfg.configHome}/.local/state/DankMaterialShell/session.json"
         "${cfg.configHome}/.cache/DankMaterialShell/dms-colors.json"
+
+        "${cfg.configHome}/.config/dms/settings.json"
+        "${cfg.configHome}/.local/state/dms/session.json"
+        "${cfg.configHome}/.cache/dms/dms-colors.json"
       ]
     else
       [ ];
 in
 {
-  options.services.displayManager.dms-greeter = {
-    enable = mkEnableOption "DankMaterialShell greeter";
+  imports = [
+    (lib.mkRenamedOptionModule
+      [ "services" "displayManager" "dms-greeter" ]
+      [ "services" "displayManager" "dux-greeter" ]
+    )
+  ];
 
-    package = lib.mkPackageOption pkgs "dms-greeter" { };
+  options.services.displayManager.dux-greeter = {
+    enable = mkEnableOption "Dux Greeter";
+
+    package = lib.mkPackageOption pkgs "dux-greeter" { };
 
     compositor = {
       name = mkOption {
@@ -171,12 +183,12 @@ in
       default = [ ];
       example = literalExpression ''
         [
-          "/home/user/.config/DankMaterialShell/settings.json"
-          "/home/user/.local/state/DankMaterialShell/session.json"
+          "/home/user/.config/dms/settings.json"
+          "/home/user/.local/state/dms/session.json"
         ]
       '';
       description = ''
-        List of DankMaterialShell configuration files to copy into the greeter
+        List of Dux Shell configuration files to copy into the greeter
         data directory at `/var/lib/dms-greeter`.
 
         This is useful for preserving user preferences like wallpapers, themes,
@@ -194,13 +206,16 @@ in
       default = null;
       example = "/home/alice";
       description = ''
-        Path to a user's home directory from which to copy DankMaterialShell
+        Path to a user's home directory from which to copy Dux Shell
         configuration files.
 
         When set, the following files will be automatically copied to the greeter:
-        - `~/.config/DankMaterialShell/settings.json`
-        - `~/.local/state/DankMaterialShell/session.json`
-        - `~/.cache/DankMaterialShell/dms-colors.json`
+        - `~/.config/dms/settings.json`
+        - `~/.local/state/dms/session.json`
+        - `~/.cache/dms/dms-colors.json`
+
+        Legacy files from the deprecated `DankMaterialShell` directories are
+        also copied, with files from the current `dms` directories taking precedence.
 
         If your configuration files are in non-standard locations, use the
         {option}`configFiles` option instead.
@@ -210,30 +225,30 @@ in
     quickshell = {
       package = mkOption {
         type = types.package;
-        default = if cfgDms.enable then cfgDms.quickshell.package else pkgs.quickshell;
+        default = if cfgShell.enable then cfgShell.quickshell.package else pkgs.quickshell;
         defaultText = literalExpression ''
-          if config.programs.dms-shell.enable
-          then config.programs.dms-shell.quickshell.package
+          if config.programs.dux-shell.enable
+          then config.programs.dux-shell.quickshell.package
           else pkgs.quickshell;
         '';
         description = ''
           The Quickshell package to use for the greeter.
 
-          Defaults to the quickshell package from `programs.dms-shell` if it is enabled,
+          Defaults to the quickshell package from `programs.dux-shell` if it is enabled,
           otherwise defaults to `pkgs.quickshell`.
         '';
       };
     };
 
     logs = {
-      save = mkEnableOption "saving logs from the DMS greeter to a file";
+      save = mkEnableOption "saving logs from Dux Greeter to a file";
 
       path = mkOption {
         type = types.path;
         default = "/tmp/dms-greeter.log";
         example = "/var/log/dms-greeter.log";
         description = ''
-          File path where DMS greeter logs will be saved.
+          File path where Dux Greeter logs will be saved.
 
           This is useful for debugging greeter issues. Logs will include
           output from both the greeter and the compositor.
@@ -251,7 +266,7 @@ in
             [ "programs" ] ++ lib.splitString "." compositorOption ++ [ "enable" ]
           ) false config;
         message = ''
-          DankMaterialShell greeter: The compositor "${cfg.compositor.name}" is not enabled.
+          Dux Greeter: The compositor "${cfg.compositor.name}" is not enabled.
 
           Please enable the compositor via:
             programs.${compositorOption}.enable = true;
@@ -350,13 +365,13 @@ in
         chown dms-greeter:dms-greeter * || :
       '';
 
-    services.displayManager.dms-greeter.configFiles = lib.mkIf (
+    services.displayManager.dux-greeter.configFiles = lib.mkIf (
       cfg.configHome != null
     ) configFilesFromHome;
 
     users.groups.dms-greeter = { };
     users.users.dms-greeter = {
-      description = "DankMaterialShell greeter user";
+      description = "Dux Greeter user";
       isSystemUser = true;
       home = cacheDir;
       homeMode = "0750";
@@ -371,5 +386,5 @@ in
     services.libinput.enable = mkDefault true;
   };
 
-  meta.teams = [ lib.teams.danklinux ];
+  meta.teams = [ lib.teams.duxlabs ];
 }

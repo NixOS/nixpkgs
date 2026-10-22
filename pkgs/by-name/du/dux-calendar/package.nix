@@ -1,29 +1,29 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   installShellFiles,
   nix-update-script,
   stdenv,
 }:
 
-buildGoModule (finalAttrs: {
-  pname = "dankcalendar";
-  version = "1.6.1";
+buildGo127Module (finalAttrs: {
+  pname = "dux-calendar";
+  version = "2.0.0";
 
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "AvengeMedia";
-    repo = "dankcalendar";
+    owner = "duxlabs-dev";
+    repo = "dux-calendar";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Gaa6FkFLuX4g2oivHypbs6f8zf9wRWny5sAIndNDj7A=";
+    hash = "sha256-a+9wcGGdyTfffUXO/bHfxll8uQfTQ97LeNZuz9kXFNk=";
   };
 
   modRoot = "core";
 
-  vendorHash = "sha256-sCGKtWWOzARUz+whX6tDfWTYb8jIGO3o4fhndMGCm9c=";
+  vendorHash = "sha256-fsrxRMdOG+XfAHBnnhtOsP/8tRl7vyHhT9mPUiozqQ8=";
 
   subPackages = [ "cmd/dcal" ];
 
@@ -44,10 +44,10 @@ buildGoModule (finalAttrs: {
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
-    install -Dm644 $src/assets/com.danklinux.dankcalendar.desktop \
-      $out/share/applications/com.danklinux.dankcalendar.desktop
-    install -Dm644 $src/assets/com.danklinux.dankcalendar.svg \
-      $out/share/icons/hicolor/scalable/apps/com.danklinux.dankcalendar.svg
+    install -Dm644 $src/assets/dev.duxlabs.calendar.desktop \
+      $out/share/applications/dev.duxlabs.calendar.desktop
+    install -Dm644 $src/assets/dev.duxlabs.calendar.svg \
+      $out/share/icons/hicolor/scalable/apps/dev.duxlabs.calendar.svg
 
     install -Dm644 $src/assets/systemd/dcal.service \
       $out/lib/systemd/user/dcal.service
@@ -66,12 +66,12 @@ buildGoModule (finalAttrs: {
   };
 
   meta = {
-    description = "Local, Google, Microsoft, and CalDAV calendars for the dank desktop";
-    homepage = "https://github.com/AvengeMedia/dankcalendar";
-    changelog = "https://github.com/AvengeMedia/dankcalendar/releases/tag/v${finalAttrs.version}";
+    description = "Local, Google, Microsoft, and CalDAV calendars from Dux Labs";
+    homepage = "https://github.com/duxlabs-dev/dux-calendar";
+    changelog = "https://github.com/duxlabs-dev/dux-calendar/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.th1nkk1d ];
-    teams = [ lib.teams.danklinux ];
+    teams = [ lib.teams.duxlabs ];
     mainProgram = "dcal";
     platforms = lib.platforms.linux;
   };

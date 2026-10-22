@@ -5,7 +5,6 @@
   dotnetCorePackages,
   fetchFromGitHub,
   fetchNpmDeps,
-  mono,
   nodejs_24,
   slskd,
   testers,
@@ -33,8 +32,6 @@ buildDotnetModule rec {
     npmHooks.npmConfigHook
   ];
 
-  runtimeDeps = [ mono ];
-
   npmRoot = "src/web";
   npmDeps = fetchNpmDeps {
     name = "${pname}-${version}-npm-deps";
@@ -43,8 +40,9 @@ buildDotnetModule rec {
     hash = "sha256-LtzJQ2x3VBdiAwYl8canAhRNmNk9SPP9LKFkYSDy9bM=";
   };
 
-  projectFile = "slskd.sln";
+  projectFile = "src/slskd/slskd.csproj";
   nugetDeps = ./deps.json;
+  executables = [ "slskd" ];
 
   dotnet-sdk = dotnetCorePackages.sdk_10_0;
   dotnet-runtime = dotnetCorePackages.aspnetcore_10_0;

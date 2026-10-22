@@ -18,48 +18,49 @@ let
     filterAttrs
     ;
 
-  cfg = config.programs.dms-shell;
+  cfg = config.programs.dux-shell;
 
   path = [
     "programs"
-    "dms-shell"
+    "dux-shell"
   ];
 
-  builtInRemovedMsg = "This is now built-in in DMS and doesn't need additional dependencies.";
+  builtInRemovedMsg = "This is now built-in in Dux Shell and doesn't need additional dependencies.";
 in
 {
   imports = [
+    (lib.mkRenamedOptionModule [ "programs" "dms-shell" ] [ "programs" "dux-shell" ])
     (lib.mkRemovedOptionModule (path ++ [ "enableBrightnessControl" ]) builtInRemovedMsg)
     (lib.mkRemovedOptionModule (path ++ [ "enableColorPicker" ]) builtInRemovedMsg)
     (lib.mkRemovedOptionModule (
       path ++ [ "enableSystemSound" ]
-    ) "qtmultimedia is now included on dms-shell package.")
+    ) "qtmultimedia is now included in the dux-shell package.")
     (lib.mkRemovedOptionModule (path ++ [ "enableClipboard" ]) builtInRemovedMsg)
     (lib.mkRemovedOptionModule (path ++ [ "enableSystemMonitoring" ]) builtInRemovedMsg)
     (lib.mkRemovedOptionModule (path ++ [ "enableClipboardPaste" ]) builtInRemovedMsg)
     (lib.mkRemovedOptionModule (path ++ [ "enableVPN" ])
-      "Networking backends are detected by DMS at runtime. Configure the desired networking service separately."
+      "Networking backends are detected by Dux Shell at runtime. Configure the desired networking service separately."
     )
     (lib.mkRemovedOptionModule (path ++ [ "enableDynamicTheming" ])
-      "matugen is included in the default DMS environment. Use programs.dms-shell.excludePackages to exclude it."
+      "matugen is included in the default Dux Shell environment. Use programs.dux-shell.excludePackages to exclude it."
     )
     (lib.mkRemovedOptionModule (path ++ [ "enableAudioWavelength" ])
-      "cava is included in the default DMS environment. Use programs.dms-shell.excludePackages to exclude it."
+      "cava is included in the default Dux Shell environment. Use programs.dux-shell.excludePackages to exclude it."
     )
     (lib.mkRemovedOptionModule (
       path ++ [ "enableCalendarEvents" ]
-    ) "Install a supported calendar backend separately and select it in DMS settings.")
+    ) "Install a supported calendar backend separately and select it in Dux Shell settings.")
   ];
 
-  options.programs.dms-shell = {
-    enable = mkEnableOption "DankMaterialShell, a complete desktop shell for Wayland compositors";
+  options.programs.dux-shell = {
+    enable = mkEnableOption "Dux Shell, a complete desktop shell for Wayland compositors";
 
-    package = mkPackageOption pkgs "dms-shell" { };
+    package = mkPackageOption pkgs "dux-shell" { };
 
     excludePackages = mkOption {
       type = types.listOf types.package;
       default = [ ];
-      description = "Which packages DMS should exclude from its default environment.";
+      description = "Which packages Dux Shell should exclude from its default environment.";
     };
 
     systemd = {
@@ -67,7 +68,7 @@ in
         type = types.bool;
         default = true;
         description = ''
-          Whether to enable DankMaterialShell systemd startup service.
+          Whether to enable the Dux Shell systemd startup service.
         '';
       };
 
@@ -75,7 +76,7 @@ in
         type = types.str;
         default = "graphical-session.target";
         description = ''
-          The systemd target that will automatically start the DankMaterialShell service.
+          The systemd target that will automatically start the Dux Shell service.
 
           Common targets include:
           - `graphical-session.target` for most desktop environments
@@ -87,7 +88,7 @@ in
         type = types.bool;
         default = true;
         description = ''
-          Whether to restart the dms.service when the DankMaterialShell package or
+          Whether to restart the dms.service when the Dux Shell package or
           configuration changes. This ensures the latest version is always running
           after a system rebuild.
         '';
@@ -115,7 +116,7 @@ in
         }
       );
       default = { };
-      description = "DMS Plugins to install and enable";
+      description = "Dux Shell plugins to install and enable";
       example = lib.literalExpression ''
         {
           DockerManager = {
@@ -168,5 +169,5 @@ in
     hardware.graphics.enable = lib.mkDefault true;
   };
 
-  meta.teams = [ lib.teams.danklinux ];
+  meta.teams = [ lib.teams.duxlabs ];
 }

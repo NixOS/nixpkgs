@@ -44,11 +44,12 @@
     # .*-32: 32-bit executables can't be properly patched by patchelf
     # IMB-.*: all fail with a weird "bad file descriptor" error
     # fi_info, fi_pingpong: exits with 1 even if ran with `--help`
+    # fi_strerror: rejects `--help` and `-help`, only accepts an error code
     # gdb-oneapi: Python not initialized
     # hydra_bstrap_proxy, hydra_nameserver, hydra_pmi_proxy: doesn't respect --help
     # mpirun: can't find mpiexec.hydra for some reason
     # sycl-ls, sycl-trace: doesn't respect --help
-    regex_skip="(.*-32)|(IMB-.*)|fi_info|fi_pingpong|gdb-oneapi|hydra_bstrap_proxy|hydra_nameserver|hydra_pmi_proxy|mpirun|sycl-ls|sycl-trace"
+    regex_skip="(.*-32)|(IMB-.*)|fi_info|fi_pingpong|fi_strerror|gdb-oneapi|hydra_bstrap_proxy|hydra_nameserver|hydra_pmi_proxy|mpirun|sycl-ls|sycl-trace"
     export I_MPI_ROOT="${kit}/mpi/latest"
     export PATH="${kit}/bin:$PATH"
     for bin in "${kit}"/bin/*; do
