@@ -14,6 +14,7 @@
   unstableGitUpdater,
   versionCheckHook,
   zlib,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -144,14 +145,13 @@ stdenv.mkDerivation (finalAttrs: {
       throw "unsupported system";
 
   doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
   versionCheckProgram = "${placeholder "out"}/bin/openjkded";
   versionCheckProgramArg = "+quit";
   versionCheckKeepEnvironment = [ "HOME" ];
-
-  preVersionCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     for app in openjk openjk_sp openjo_sp; do

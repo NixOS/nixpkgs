@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmake,
   gnum4,
+  writableTmpDirAsHomeHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,11 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     gnum4
+    writableTmpDirAsHomeHook
   ];
-
-  preConfigure = ''
-    export HOME=$(mktemp -d)
-  '';
 
   cmakeFlags = [
     (lib.cmakeBool "GRAPHBLAS_USE_JIT" (

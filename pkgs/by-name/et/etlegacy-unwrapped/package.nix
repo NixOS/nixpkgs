@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  writeScriptBin,
   fetchFromGitHub,
   cjson,
   cmake,
@@ -22,12 +21,6 @@
   versionCheckHook,
 }:
 let
-  version = "2.86.1";
-  fakeGit = writeScriptBin "git" ''
-    if [ "$1" = "describe" ]; then
-      echo "${version}"
-    fi
-  '';
   binarySuffix =
     if stdenv.hostPlatform.isx86_64 then
       "x86_64"
@@ -38,9 +31,9 @@ let
     else
       throw "Unsupported architecture: ${stdenv.hostPlatform.system}";
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "etlegacy-unwrapped";
-  inherit version;
+  version = "2.86.2";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -48,14 +41,18 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "etlegacy";
     repo = "etlegacy";
-    tag = "v${version}";
-    hash = "sha256-5jFThKkyaUl8+1Z5sUZ6MdEpfyWQ5hLzjl5SDnjeyB4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4EvO73Ob+viDAkmXmnuaGJBCSzTD3xrPZae3fA4oxfo=";
   };
 
   nativeBuildInputs = [
     cmake
-    fakeGit
   ];
+
+  env = {
+    CI_ETL_TAG = finalAttrs.version;
+    CI_ETL_DESCRIBE = finalAttrs.version;
+  };
 
   buildInputs = [
     cjson
@@ -126,4 +123,4 @@ stdenv.mkDerivation {
     mainProgram = "etl." + binarySuffix;
     platforms = lib.platforms.linux;
   };
-}
+})

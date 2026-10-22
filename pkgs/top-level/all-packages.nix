@@ -1752,8 +1752,8 @@ with pkgs;
 
     m17n = callPackage ../tools/inputmethods/ibus-engines/ibus-m17n { };
 
-    mozc = mozc.override { withIbus = true; };
-    mozc-ut = mozc-ut.override { withIbus = true; };
+    mozc = ibus-mozc;
+    mozc-ut = ibus-mozc.override { mozc = mozc-ut; };
 
     pinyin = callPackage ../tools/inputmethods/ibus-engines/ibus-pinyin { };
 
@@ -4155,12 +4155,14 @@ with pkgs;
       zulu17 = callPackage ../development/compilers/zulu/17.nix { };
       zulu21 = callPackage ../development/compilers/zulu/21.nix { };
       zulu25 = callPackage ../development/compilers/zulu/25.nix { };
+      zulu27 = callPackage ../development/compilers/zulu/27.nix { };
     })
     zulu8
     zulu11
     zulu17
     zulu21
     zulu25
+    zulu27
     ;
   zulu = zulu21;
 
@@ -4392,7 +4394,6 @@ with pkgs;
 
   # Import PHP interpreters
   inherit (callPackage ./../development/interpreters/php { })
-    php82
     php83
     php84
     php85
@@ -4400,8 +4401,6 @@ with pkgs;
     ;
 
   # PHP Extensions and Packages
-  php82Extensions = recurseIntoAttrs php82.extensions;
-  php82Packages = recurseIntoAttrs php82.packages;
 
   php83Extensions = recurseIntoAttrs php83.extensions;
   php83Packages = recurseIntoAttrs php83.packages;

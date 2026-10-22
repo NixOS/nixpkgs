@@ -3,6 +3,7 @@
   fetchFromGitHub,
   installShellFiles,
   lib,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -24,9 +25,7 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "." ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   ldflags = [
     "-X main.version=${finalAttrs.version}"

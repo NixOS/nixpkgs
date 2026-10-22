@@ -3,6 +3,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -23,8 +24,7 @@ buildGoModule (finalAttrs: {
     "-w"
   ];
 
-  # Fix tests by preventing them from writing to /homeless-shelter.
-  preCheck = "export HOME=$(mktemp -d)";
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   # tests fail on linux for some reason
   doCheck = stdenv.hostPlatform.isDarwin;

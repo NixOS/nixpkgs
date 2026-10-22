@@ -2,6 +2,7 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  writableTmpDirAsHomeHook,
 }:
 let
   version = "2.1.0";
@@ -35,12 +36,8 @@ python3Packages.buildPythonApplication {
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     pytest-mock
+    writableTmpDirAsHomeHook
   ];
-
-  # tests create the mktxp config under $HOME
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   pythonImportsCheck = [ "mktxp" ];
 

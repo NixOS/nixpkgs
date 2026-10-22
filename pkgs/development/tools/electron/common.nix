@@ -192,6 +192,12 @@ in
       cd third_party/node
       grep patch update_npm_deps | sh
     )
+
+    gnFlags+=' v8_version_hash_salt_files=["//electron/patches/v8/.patches"'
+    for patch in $(cat electron/patches/v8/.patches); do
+      gnFlags+=",\"//electron/patches/v8/$patch\""
+    done
+    gnFlags+=']'
   ''
   + (base.preConfigure or "");
 
@@ -227,6 +233,8 @@ in
     enable_linux_installer = false;
     enable_pdf_save_to_drive = false;
     node_openssl_path = "//third_party/boringssl";
+    node_v8_path = "//v8";
+    node_use_v8_platform = false;
   }
   // lib.optionalAttrs (lib.versionOlder info.version "43") {
     enterprise_cloud_content_analysis = false;

@@ -14,6 +14,7 @@
   tinyxml-2,
   versionCheckHook,
   zlib,
+  writableTmpDirAsHomeHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -47,10 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  preVersionCheck = ''
-    export HOME=$TMPDIR
-  '';
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
   versionCheckKeepEnvironment = [ "HOME" ];
 
   passthru.updateScript = nix-update-script { };

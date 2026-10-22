@@ -407,6 +407,7 @@ mapAliases {
   bcompare4 = throw "'bcompare4' has been removed due to outdated KF5 dependencies"; # Added 2025-05-01
   bctoolbox = throw "'bctoolbox' has been moved to 'linphonePackages.bctoolbox'"; # Added 2025-09-20
   bcunit = throw "'bcunit' has been moved to 'linphonePackages.bcunit'"; # Added 2025-09-20
+  bearssl = throw "'bearssl' has been removed, as it is unmaintained"; # Added 2026-10-17
   beets-unstable = throw "beets-unstable has been removed in favor of beets since upstream is releasing versions frequently nowadays"; # Added 2025-10-16
   beetsPackages = throw "beetsPackages were replaced with python3.pkgs.beets- prefixed attributes, and top-level beets* attributes"; # Added 2025-10-16
   belcard = throw "'belcard' has been moved to 'linphonePackages.belcard'"; # Added 2025-09-20
@@ -485,6 +486,7 @@ mapAliases {
   cargonode = throw "'cargonode' has been removed due to lack of upstream maintenance"; # Added 2025-06-18
   carp = throw "'carp' has been removed due to being broken for more than a year; see RFC 180"; # Added 2026-02-05
   cask = throw "'cask' has been renamed to/replaced by 'emacs.pkgs.cask'"; # Converted to throw 2025-10-27
+  castopod = throw "'castopod' has been removed due to lack of in-tree maintenance"; # Added 2026-10-18
   catalyst-browser = throw "'catalyst-browser' has been removed due to a lack of maintenance and not satisfying our security criteria for browsers."; # Added 2025-06-25
   cataract = throw "'cataract' has been removed due to a lack of maintenance"; # Added 2025-08-25
   cataract-unstable = throw "'cataract-unstable' has been removed due to a lack of maintenance"; # Added 2025-08-25
@@ -698,6 +700,7 @@ mapAliases {
   cyber = throw "cyber has been removed, as it does not build with supported Zig versions"; # Added 2025-08-09
   daed = throw "daed has been removed, as it has been unmaintained and archived upstream"; # Added 2026-09-24
   dale = throw "dale has been removed, as it does not build with supported LLVM versions"; # Added 2025-08-10
+  dankcalendar = warnAlias "'dankcalendar' has been renamed to 'dux-calendar'" dux-calendar; # Added 2026-10-20
   daq = throw "'daq' has been removed as it is unmaintained and broken. Snort2 has also been removed, which depended on this"; # Added 2025-05-21
   darkly-qt5 = throw "'darkly-qt' has been removed due to outdated KF5 dependencies"; # Added 2026-05-01
   daytona-bin = throw "'daytona-bin' has been removed, as it was unmaintained in nixpkgs"; # Added 2025-07-21
@@ -721,6 +724,7 @@ mapAliases {
   devdocs-desktop = throw "'devdocs-desktop' has been removed as it is unmaintained upstream and vendors insecure dependencies"; # Added 2025-06-11
   devmem2 = throw "'devmem2' has been removed due to being broken and lack of maintenance. Consider using the devmem command from 'busybox' or 'toybox'."; # Added 2026-07-24
   dfilemanager = throw "'dfilemanager' has been dropped as it was unmaintained"; # Added 2025-06-03
+  dgop = warnAlias "'dgop' has been renamed to 'dux-gop'" dux-gop; # Added 2026-10-20
   diopser = throw "'diopser' has been removed because upstream archived the project in May 2022. Use 'nih-plug' instead."; # Added 2026-09-02
   discord-screenaudio = throw "discord-screenaudio has been removed because it was archived upstream. Use vesktop instead."; # added 2025-11-29
   disk-inventory-x = throw "disk-inventory-x has been removed as it only supported x86_64-darwin"; # Added 2026-07-12
@@ -731,6 +735,8 @@ mapAliases {
   dleyna-core = throw "'dleyna-core' has been renamed to/replaced by 'dleyna'"; # Converted to throw 2025-10-27
   dleyna-renderer = throw "'dleyna-renderer' has been renamed to/replaced by 'dleyna'"; # Converted to throw 2025-10-27
   dleyna-server = throw "'dleyna-server' has been renamed to/replaced by 'dleyna'"; # Converted to throw 2025-10-27
+  dms-greeter = warnAlias "'dms-greeter' has been renamed to 'dux-greeter'" dux-greeter; # Added 2026-10-20
+  dms-shell = warnAlias "'dms-shell' has been renamed to 'dux-shell'" dux-shell; # Added 2026-10-20
   dnscrypt-proxy2 = throw "'dnscrypt-proxy2' has been renamed to/replaced by 'dnscrypt-proxy'"; # Converted to throw 2025-10-27
   dnslink-std-go = throw "'dnslink-std-go' has been removed as it is broken, unmaintained, and upstream archived the project in July 2026"; # Added 2026-09-18
   dnsmon-go = throw "'dnsmon-go' has been removed because upstream archived the project in August 2025."; # Added 2026-09-02
@@ -756,6 +762,7 @@ mapAliases {
   dragmap = throw "'dragmap' doesn't build with latest glibc anymore and upstream repo is archived"; # Added 2026-09-03
   drone-runner-exec = throw "'drone-runner-exec' has been removed as it was deprecated and archived upstream."; # Added 2026-07-20
   dsd = throw "dsd has been removed, as it was broken and lack of upstream maintenance"; # Added 2025-08-25
+  dsearch = warnAlias "'dsearch' has been renamed to 'dux-search'" dux-search; # Added 2026-10-20
   dtv-scan-tables_linuxtv = throw "'dtv-scan-tables_linuxtv' has been renamed to/replaced by 'dtv-scan-tables'"; # Converted to throw 2025-10-27
   dtv-scan-tables_tvheadend = throw "'dtv-scan-tables_tvheadend' has been renamed to/replaced by 'dtv-scan-tables'"; # Converted to throw 2025-10-27
   du-dust = throw "'du-dust' has been renamed to/replaced by 'dust'"; # Converted to throw 2025-10-27
@@ -1292,6 +1299,7 @@ mapAliases {
   jitsi = throw "'jitsi' has been removed as it relies on gtk2 libraries"; # Added 2026-07-24
   jmtpfs = throw "'jmtpfs' has been removed, as it is unmaintained"; # Added 2026-06-06
   joplin = joplin-cli; # Added 2025-11-03
+  jp-zip-codes = throw "'jp-zip-codes' has been removed as there are no more packages that depend on it"; # Added 2026-06-14
   jpegrescan = throw "'jpegrescan' has been removed due to being archived upstream. Use mozjpeg instead."; # Added 2026-09-18
   jscoverage = throw "jscoverage has been removed, as it was broken"; # Added 2025-08-25
   jsduck = throw "jsduck has been removed, as it was broken and unmaintained upstream."; # Added 2025-12-02
@@ -2104,6 +2112,9 @@ mapAliases {
   php81 = throw "php81 is EOL"; # Added 2025-10-04
   php81Extensions = throw "php81 is EOL"; # Added 2025-10-04
   php81Packages = throw "php81 is EOL"; # Added 2025-10-04
+  php82 = throw "php82 is EOL"; # Added 2026-10-18
+  php82Extensions = throw "php82 is EOL"; # Added 2026-10-18
+  php82Packages = throw "php82 is EOL"; # Added 2026-10-18
   pianotrans = throw "'pianotrans' has been removed because its dependency 'piano-transcription-inference' was unmaintained"; # Added 2026-08-13
   picom-next = throw "'picom-next' has been renamed to/replaced by 'picom'"; # Converted to throw 2025-10-27
   pidgin-carbons = throw "'pidgin-carbons' has been renamed to/replaced by 'pidginPackages.pidgin-carbons'"; # Converted to throw 2025-10-27
@@ -2330,6 +2341,7 @@ mapAliases {
   rke2_1_33 = throw "'rke2_1_33' has been removed from nixpkgs as it has reached end of life"; # Added 2026-09-02
   rl_json = throw "'rl_json' has been renamed to/replaced by 'tclPackages.rl_json'"; # Converted to throw 2025-10-27
   roam-research = throw "'roam-research' has been removed from nixpkgs due to lack of maintenance"; # Added 2026-08-14
+  robo = throw "'robo' was removed due to lack of in-tree maintenance"; # Added 2026-10-18
   rockbox_utility = throw "'rockbox_utility' has been renamed to/replaced by 'rockbox-utility'"; # Converted to throw 2025-10-27
   rockcraft = throw "rockcraft was removed in Sep 25 following removal of LXD from nixpkgs"; # Added 2025-09-18
   rofi-emoji-wayland = throw "'rofi-emoji-wayland' has been merged into `rofi-emoji as 'rofi-wayland' has been merged into 'rofi'"; # Added 2025-09-06
@@ -2473,6 +2485,7 @@ mapAliases {
   sourcehut = throw "'sourcehut.*' has been removed due to being broken and unmaintained"; # Added 2025-06-15
   SP800-90B_EntropyAssessment = throw "'SP800-90B_EntropyAssessment' has been renamed to/replaced by 'sp800-90b-entropyassessment'"; # Converted to throw 2025-10-27
   space-orbit = throw "'space-orbit' has been removed because it is unmaintained; Debian upstream stopped tracking it in 2011."; # Added 2025-06-08
+  space-station-14-launcher = warnAlias "'space-station-14-launcher' has been renamed to 'ss14-launcher'" ss14-launcher; # Added 2026-10-21
   spacefm = throw "spacefm was dropped since it was unmaintained upstream."; # Added 2026-01-24
   spacevim = throw "'spacevim' has been removed due to being archived upstream."; # Added 2026-02-10
   SPAdes = throw "'SPAdes' has been renamed to/replaced by 'spades'"; # Converted to throw 2025-10-27
@@ -2683,6 +2696,7 @@ mapAliases {
   tvbrowser-bin = throw "'tvbrowser-bin' has been renamed to/replaced by 'tvbrowser'"; # Converted to throw 2025-10-27
   twitterBootstrap = warnAlias "'twitterBootstrap' has been renamed to 'twitter-bootstrap'"; # Added 2026-02-12
   typescript-go = throw "'typescript-go' has been renamed to/replaced by 'typescript'"; # Added 2026-09-08
+  typewriter = throw "'typewriter' has been removed because upstream has stopped maintaining it, the developer recommends using 'typesetter'";
   typodermic-free-fonts = throw "'typodermic-free-fonts' has been removed as it is unmaintained in nixpkgs, and the src is prone to breakage."; # Added 2026-05-07
   typodermic-public-domain = throw "'typodermic-public-domain' has been removed as it is unmaintained in nixpkgs, and the src is prone to breakage."; # Added 2026-05-07
   typst-fmt = throw "'typst-fmt' has been renamed to/replaced by 'typstfmt'"; # Converted to throw 2025-10-27
@@ -2699,6 +2713,7 @@ mapAliases {
   unicorn-angr = throw "'unicorn-angr' has been removed as angr now uses upstream unicorn"; # Added 2026-08-20
   unifi-poller = throw "'unifi-poller' has been renamed to/replaced by 'unpoller'"; # Converted to throw 2025-10-27
   unifiedpush-common-proxies = warnAlias "'unifiedpush-common-proxies' has been renamed to 'common-proxies'" common-proxies; # Added 2026-09-27
+  unit = throw "'unit' is archived"; # Added 2026-10-18
   unixODBC = warnAlias "'unixODBC' has been renamed to 'unixodbc'" unixodbc; # Added 2026-02-12
   unixODBCDrivers = warnAlias "'unixODBCDrivers' has been renamed to 'unixodbcDrivers'" unixodbcDrivers; # Added 2026-02-12
   unrar_6 = throw "'unrar_6' has been renamed to/replaced by 'unrar'"; # Added 2026-03-11

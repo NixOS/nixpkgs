@@ -240,6 +240,8 @@ self: super: with self; {
 
   aioautomower = callPackage ../development/python-modules/aioautomower { };
 
+  aioaxlevpp = callPackage ../development/python-modules/aioaxlevpp { };
+
   aioazuredevops = callPackage ../development/python-modules/aioazuredevops { };
 
   aiobafi6 = callPackage ../development/python-modules/aiobafi6 { };
@@ -478,6 +480,8 @@ self: super: with self; {
 
   aiopnsense = callPackage ../development/python-modules/aiopnsense { };
 
+  aiopowerwall = callPackage ../development/python-modules/aiopowerwall { };
+
   aioprocessing = callPackage ../development/python-modules/aioprocessing { };
 
   aioprometheus = callPackage ../development/python-modules/aioprometheus { };
@@ -596,6 +600,8 @@ self: super: with self; {
 
   aiothreads = callPackage ../development/python-modules/aiothreads { };
 
+  aiothreema = callPackage ../development/python-modules/aiothreema { };
+
   aiotools = callPackage ../development/python-modules/aiotools { };
 
   aiotractive = callPackage ../development/python-modules/aiotractive { };
@@ -609,6 +615,8 @@ self: super: with self; {
   aiovban = callPackage ../development/python-modules/aiovban { };
 
   aiovban-pyaudio = callPackage ../development/python-modules/aiovban-pyaudio { };
+
+  aiovitesy = callPackage ../development/python-modules/aiovitesy { };
 
   aiovlc = callPackage ../development/python-modules/aiovlc { };
 
@@ -2492,6 +2500,8 @@ self: super: with self; {
   bitvavo-aio = callPackage ../development/python-modules/bitvavo-aio { };
 
   bitvector-for-humans = callPackage ../development/python-modules/bitvector-for-humans { };
+
+  bitvis-protobuf = callPackage ../development/python-modules/bitvis-protobuf { };
 
   bizkaibus = callPackage ../development/python-modules/bizkaibus { };
 
@@ -5578,6 +5588,8 @@ self: super: with self; {
   encutils = callPackage ../development/python-modules/encutils { };
 
   energieleser = callPackage ../development/python-modules/energieleser { };
+
+  energyflip-api-client = callPackage ../development/python-modules/energyflip-api-client { };
 
   energyflip-client = callPackage ../development/python-modules/energyflip-client { };
 
@@ -10665,7 +10677,7 @@ self: super: with self; {
 
   mcp-types = callPackage ../development/python-modules/mcp-types { };
 
-  mcp_2 = callPackage ../development/python-modules/mcp/2.nix { };
+  mcp_1 = callPackage ../development/python-modules/mcp/1.nix { };
 
   mcpadapt = callPackage ../development/python-modules/mcpadapt { };
 
@@ -11488,6 +11500,8 @@ self: super: with self; {
   mwxml = callPackage ../development/python-modules/mwxml { };
 
   mxnet = callPackage ../development/python-modules/mxnet { };
+
+  my-pv = callPackage ../development/python-modules/my-pv { };
 
   myfitnesspal = callPackage ../development/python-modules/myfitnesspal { };
 
@@ -16114,6 +16128,8 @@ self: super: with self; {
 
   pyregrws = callPackage ../development/python-modules/pyregrws { };
 
+  pyrejseplan = callPackage ../development/python-modules/pyrejseplan { };
+
   pyrender = callPackage ../development/python-modules/pyrender {
     inherit (pkgs) mesa;
   };
@@ -17703,6 +17719,8 @@ self: super: with self; {
   pyzipper = callPackage ../development/python-modules/pyzipper { };
 
   pyzmq = callPackage ../development/python-modules/pyzmq { };
+
+  pyzonneplan = callPackage ../development/python-modules/pyzonneplan { };
 
   pyzotero = callPackage ../development/python-modules/pyzotero { };
 
@@ -19505,6 +19523,8 @@ self: super: with self; {
 
   solaredge-web = callPackage ../development/python-modules/solaredge-web { };
 
+  solaredged = callPackage ../development/python-modules/solaredged { };
+
   solarlog-cli = callPackage ../development/python-modules/solarlog-cli { };
 
   solarman-opendata = callPackage ../development/python-modules/solarman-opendata { };
@@ -20749,6 +20769,8 @@ self: super: with self; {
   tflearn = callPackage ../development/python-modules/tflearn { };
 
   tftpy = callPackage ../development/python-modules/tftpy { };
+
+  theben-conexa-smgw = callPackage ../development/python-modules/theben-conexa-smgw { };
 
   thefuzz = callPackage ../development/python-modules/thefuzz { };
 

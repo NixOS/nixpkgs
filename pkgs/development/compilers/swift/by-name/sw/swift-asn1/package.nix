@@ -11,7 +11,7 @@
 # Swift-ASN1 is a dependency of SwiftPM. It must be built with CMake to avoid dependency cycles.
 stdenv.mkDerivation (finalAttrs: {
   pname = "swift-asn1";
-  version = "1.7.1";
+  version = "1.7.3";
 
   outputs = [
     "out"
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "apple";
     repo = "swift-asn1";
     tag = finalAttrs.version;
-    hash = "sha256-hikWOlKKW0VplBuDgrt/Xyao3gsDS5IkxsMfbITHT2I=";
+    hash = "sha256-Y4MWePdGwLH8wVs9oFnwUUD7YU+WhOnT2rLyxgENIT8=";
   };
 
   postPatch = ''

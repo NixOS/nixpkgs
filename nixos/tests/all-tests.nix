@@ -398,7 +398,6 @@ in
     imports = [ ./cassandra.nix ];
     _module.args.getPackage = pkgs: pkgs.cassandra;
   };
-  castopod = runTest ./castopod.nix;
   centrifugo = runTest ./centrifugo.nix;
   ceph-multi-node-bluestore = runTestOn [ "aarch64-linux" "x86_64-linux" ] (
     import ./ceph-multi-node-bluestore.nix { }
@@ -1956,7 +1955,6 @@ in
   unbound = runTest ./unbound.nix;
   unifi = runTest ./unifi.nix;
   unit-perl = runTest ./web-servers/unit-perl.nix;
-  unit-php = runTest ./web-servers/unit-php.nix;
   unpackerr = runTest ./unpackerr.nix;
   upnp.iptables = handleTest ./upnp.nix { useNftables = false; };
   upnp.nftables = handleTest ./upnp.nix { useNftables = true; };
@@ -2017,6 +2015,7 @@ in
   vsftpd = runTest ./vsftpd.nix;
   waagent = runTest ./waagent.nix;
   wakapi = runTest ./wakapi.nix;
+  wanderer = runTest ./wanderer.nix;
   warpgate = runTest ./warpgate.nix;
   warzone2100 = runTest ./warzone2100.nix;
   wastebin = runTest ./wastebin.nix;
