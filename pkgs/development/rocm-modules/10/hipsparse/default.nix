@@ -5,6 +5,7 @@
   rocmUpdateScript,
   cmake,
   rocm-cmake,
+  python3,
   rocsparse,
   clr,
   gfortran,
@@ -19,7 +20,7 @@
 # This can also use cuSPARSE as a backend instead of rocSPARSE
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipsparse";
-  version = "7.2.4";
+  version = "10.1";
 
   outputs = [
     "out"
@@ -34,18 +35,20 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-libraries";
-    tag = "rocm-${finalAttrs.version}";
+    tag = "therock-${finalAttrs.version}";
     sparseCheckout = [
       "projects/hipsparse"
       "shared"
     ];
-    hash = "sha256-E1chG+giFtf02fjutoV4yM2XvrQKjgXRSvxs0NBBkvI=";
+    hash = "sha256-kvDzX1SnvumRgj+Va+zFPbU93dZttIE/ovL4BPG2Xi0=";
   };
   sourceRoot = "${finalAttrs.src.name}/projects/hipsparse";
 
   nativeBuildInputs = [
     cmake
     rocm-cmake
+    # CMakeLists.txt does find_package(Python3 REQUIRED)
+    python3
     clr
     gfortran
   ];
