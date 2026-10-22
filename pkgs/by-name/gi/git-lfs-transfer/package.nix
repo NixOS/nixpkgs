@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
 }:
 buildGoModule {
   pname = "git-lfs-transfer";
@@ -15,6 +16,15 @@ buildGoModule {
   };
 
   vendorHash = "sha256-1cGlhLdnU6yTqzcB3J1cq3gawncbtdgkb3LFh2ZmXbM=";
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "v([0-9.]*(?:-unstable-[0-9-]*))"
+      "--version"
+      "branch"
+    ];
+  };
 
   meta = {
     description = "Server-side implementation of the Git LFS pure-SSH protocol";
