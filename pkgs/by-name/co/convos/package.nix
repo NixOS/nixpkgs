@@ -16,8 +16,8 @@ perlPackages.buildPerlPackage rec {
   src = fetchFromGitHub {
     owner = "convos-chat";
     repo = "convos";
-    rev = "v${version}";
-    sha256 = "sha256-dBvXo8y4OMKcb0imgnnzoklnPN3YePHDvy5rIBOkTfs=";
+    tag = "v${version}";
+    hash = "sha256-dBvXo8y4OMKcb0imgnnzoklnPN3YePHDvy5rIBOkTfs=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -115,6 +115,8 @@ perlPackages.buildPerlPackage rec {
   '';
 
   passthru.tests = nixosTests.convos;
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://convos.chat";
