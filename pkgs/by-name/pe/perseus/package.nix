@@ -25,12 +25,16 @@ stdenv.mkDerivation {
 
   env.NIX_CFLAGS_COMPILE = toString [ "-std=c++14" ];
   buildPhase = ''
+    runHook preBuild
     g++ Pers.cpp -O3 -fpermissive -o perseus
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     cp perseus $out/bin
+    runHook postInstall
   '';
 
   meta = {
