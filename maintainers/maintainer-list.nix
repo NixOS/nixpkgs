@@ -20665,13 +20665,6 @@
     githubId = 474937;
     name = "Chris Roberts";
   };
-  nasirhm = {
-    email = "nasirhussainm14@gmail.com";
-    github = "nasirhm";
-    githubId = 35005234;
-    name = "Nasir Hussain";
-    keys = [ { fingerprint = "7A10 AB8E 0BEC 566B 090C  9BE3 D812 6E55 9CE7 C35D"; } ];
-  };
   nat-418 = {
     github = "nat-418";
     githubId = 93013864;
