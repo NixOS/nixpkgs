@@ -89,14 +89,10 @@ in
     hash = "sha256-/7YO3EN87WO1E35JhNs3moERxQBJxxFRDYuVgnfvwag=";
   };
   php86 = mkPhp rec {
-    version = "8.6.0RC3";
+    version = "8.6.0RC4";
     phpSrc = fetchurl {
-      url = "https://downloads.php.net/~svpernova09/php-${version}.tar.xz";
-      hash = "sha256-Ex+Hoga92QwXjY5E6AJDrgwzPEzuhTH2PRyqms3YaWo=";
+      url = "https://downloads.php.net/~mbeccati/php-${version}.tar.xz";
+      hash = "sha256-k/II2prgWb9oY7Dh0QHmxkdaew8Ky/bAhJUKtSL1FNg=";
     };
-    knownVulnerabilities = [
-      "CVE-2026-109619"
-      "CVE-2026-109618"
-    ];
   };
 }

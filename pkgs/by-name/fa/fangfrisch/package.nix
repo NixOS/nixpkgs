@@ -8,7 +8,7 @@
   supportSocks ? true,
 }:
 let
-  version = "1.9.2";
+  version = "1.9.3";
 in
 python3.pkgs.buildPythonApplication {
   pname = "fangfrisch";
@@ -19,13 +19,15 @@ python3.pkgs.buildPythonApplication {
     owner = "rseichter";
     repo = "fangfrisch";
     tag = version;
-    hash = "sha256-8upIh9Z+ismvuKcuEe+gJ4W9NLw/Wq15zjFpy8X9yVo=";
+    hash = "sha256-I80ih8vCZVEWJW3wOdHgVCvYg2+Qj/uMhOk5roofv/4=";
   };
 
   nativeBuildInputs = [
     python3.pkgs.setuptools
     python3.pkgs.wheel
   ];
+
+  nativeCheckInputs = [ python3.pkgs.pytestCheckHook ];
 
   propagatedBuildInputs =
     with python3.pkgs;

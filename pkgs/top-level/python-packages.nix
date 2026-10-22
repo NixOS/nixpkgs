@@ -16937,7 +16937,7 @@ self: super: with self; {
 
   python-coinmarketcap = callPackage ../development/python-modules/python-coinmarketcap { };
 
-  python-constraint = callPackage ../development/python-modules/python-constraint { };
+  python-constraint2 = callPackage ../development/python-modules/python-constraint2 { };
 
   python-creole = callPackage ../development/python-modules/python-creole { };
 
@@ -17779,6 +17779,8 @@ self: super: with self; {
   qiskit = callPackage ../development/python-modules/qiskit { };
 
   qiskit-aer = callPackage ../development/python-modules/qiskit-aer { };
+
+  qiskit-algorithms = callPackage ../development/python-modules/qiskit-algorithms { };
 
   qiskit-finance = callPackage ../development/python-modules/qiskit-finance { };
 
