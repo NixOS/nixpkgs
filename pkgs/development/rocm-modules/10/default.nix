@@ -148,6 +148,11 @@ let
 
       rocalution = self.callPackage ./rocalution { };
 
+      # ROCm/rocMLIR has no ROCm 10 release; MIGraphX 10.1 pins this fork.
+      rocmlir-triton = self.callPackage ./rocmlir-triton {
+        buildRockCompiler = true;
+      };
+
       hipsolver = self.callPackage ./hipsolver { };
 
       hipblas-common = self.callPackage ./hipblas-common { };
