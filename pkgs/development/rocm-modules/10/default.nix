@@ -94,6 +94,8 @@ let
 
       rocdbgapi = self.callPackage ./rocdbgapi { };
 
+      rocr-debug-agent = self.callPackage ./rocr-debug-agent { };
+
       mscclpp = self.callPackage ../mscclpp { };
 
       half = self.callPackage ./half { };
