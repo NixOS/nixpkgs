@@ -39,6 +39,8 @@ let
 
       rocm-core = self.callPackage ./rocm-core { stdenv = origStdenv; };
 
+      rocm-cmake = self.callPackage ./rocm-cmake { stdenv = origStdenv; };
+
       rocm-device-libs = self.callPackage ./rocm-device-libs { };
 
       rocm-docs-core = python3Packages.callPackage ../rocm-docs-core { };
