@@ -41,7 +41,7 @@ jobs:
             system: aarch64-linux
             builds: [shell, manual-nixos, manual-nixpkgs]
             desc: shell, docs
-          - runner: macos-14
+          - runner: macos-15
             system: aarch64-darwin
             builds: [shell]
             desc: shell
