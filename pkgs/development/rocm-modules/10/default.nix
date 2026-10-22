@@ -123,6 +123,13 @@ let
 
       hipfft = self.callPackage ./hipfft { };
 
+      tensile = pyPackages.callPackage ./tensile {
+        inherit (self)
+          rocmUpdateScript
+          clr
+          ;
+      };
+
       hipblas-common = self.callPackage ./hipblas-common { };
 
       hipblaslt = self.callPackage ./hipblaslt { };
