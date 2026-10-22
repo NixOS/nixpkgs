@@ -125,6 +125,8 @@ let
 
       hipsparse = self.callPackage ./hipsparse { };
 
+      hipfort = self.callPackage ./hipfort { };
+
       hipfft = self.callPackage ./hipfft { };
 
       tensile = pyPackages.callPackage ./tensile {
