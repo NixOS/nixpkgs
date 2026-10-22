@@ -63,6 +63,7 @@
   libbacktrace,
   systemdLibs,
   xdg-dbus-proxy,
+  vulkan-volk,
   replaceVars,
   glib,
   unifdef,
@@ -197,6 +198,8 @@ clangStdenv.mkDerivation (finalAttrs: {
     librice
     # For ENABLE_WEBXR
     openxr-loader
+    # For USE_VULKAN
+    vulkan-volk
   ]
   ++ lib.optionals withLibsecret [
     libsecret

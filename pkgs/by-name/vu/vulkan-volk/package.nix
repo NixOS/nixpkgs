@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ vulkan-headers ];
+  propagatedBuildInputs = [ vulkan-headers ];
 
   cmakeFlags = [ "-DVOLK_INSTALL=1" ];
 
