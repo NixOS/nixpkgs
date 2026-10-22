@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "jirutka";
     repo = "swaylock-effects";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-cuFM+cbUmGfI1EZu7zOsQUj4rA4Uc4nUXcvIfttf9zE=";
   };
 
@@ -30,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i "s/version: '1\.3',/version: '${finalAttrs.version}',/" meson.build
   '';
 
+  __structuredAttrs = true;
   strictDeps = true;
   depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [
