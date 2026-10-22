@@ -488,6 +488,10 @@ let
     DirichletMultinomial = [ pkgs.gsl ]; # for gsl-config
     GLAD = [ pkgs.gsl ]; # for gsl-config
     GPBayes = [ pkgs.gsl ]; # for gsl-config
+    ICESat2VegR = with pkgs; [
+      gdal # for gdal-config
+      pkg-config
+    ];
     JMcmprsk = [ pkgs.gsl ]; # for gsl-config
     KSgeneral = with pkgs; [ pkg-config ];
     LCMCR = [ pkgs.gsl ]; # for gsl-config
@@ -1195,6 +1199,10 @@ let
       bzip2
     ];
     GRAB = [ pkgs.zlib ];
+    GeneralizedUmatrixGPU = with pkgs; [
+      ocl-icd
+      opencl-headers
+    ];
     GeneralizedWendland = [ pkgs.gsl ];
     GeoFIS = with pkgs; [
       mpfr
@@ -1206,6 +1214,10 @@ let
     HiCParser = [ pkgs.zlib ];
     HiCseg = [ pkgs.gsl ];
     HiSpaR = [ pkgs.armadillo ];
+    ICESat2VegR = with pkgs; [
+      gdal
+      proj
+    ];
     KFKSDS = [ pkgs.gsl ];
     KSgeneral = [ pkgs.fftw ];
     LOMAR = [ pkgs.gmp ];
@@ -1647,6 +1659,7 @@ let
     ncdfFlow = [ pkgs.zlib ];
     ndjson = [ pkgs.zlib ];
     neojags = [ pkgs.jags ];
+    neuroim2 = [ pkgs.zlib ];
     nloptr = [ pkgs.nlopt ];
     npRmpi = [ pkgs.mpi ];
     odbc = [ pkgs.unixodbc ];
