@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   php,
   brotli,
@@ -28,15 +28,15 @@ let
   phpConfig = "${phpUnwrapped.dev}/bin/php-config";
   pieBuild = stdenv.hostPlatform.isMusl;
 in
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "frankenphp";
-  version = "1.12.7";
+  version = "1.13.2";
 
   src = fetchFromGitHub {
     owner = "php";
     repo = "frankenphp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UDxtI/+QSBRLZouHD3Lxdg4GFpU8tqybyPMvWpP/FA0=";
+    hash = "sha256-f9kDrUmlNXntEZepM7bCjeOpM9yW7yGu5c3Vu6W+SsY=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/caddy";
@@ -44,7 +44,7 @@ buildGoModule (finalAttrs: {
   # frankenphp requires C code that would be removed with `go mod tidy`
   # https://github.com/golang/go/issues/26366
   proxyVendor = true;
-  vendorHash = "sha256-RXD7mJIV7cgo1YG8ECepuWtvIiOHbcZ1by/noaQZVFI=";
+  vendorHash = "sha256-ELSec+c6jITKWazfPNHdGExnXcupvSEwx/X2Tx7GQIU=";
 
   buildInputs = [
     phpUnwrapped
