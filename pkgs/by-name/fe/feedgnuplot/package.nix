@@ -25,8 +25,8 @@ perlPackages.buildPerlPackage rec {
   src = fetchFromGitHub {
     owner = "dkogan";
     repo = "feedgnuplot";
-    rev = "v${version}";
-    sha256 = "sha256-r5rszxr65lSozkUNaqfBn4I4XjLtvQ6T/BG366JXLRM=";
+    tag = "v${version}";
+    hash = "sha256-r5rszxr65lSozkUNaqfBn4I4XjLtvQ6T/BG366JXLRM=";
   };
 
   outputs = [ "out" ];
@@ -69,6 +69,8 @@ perlPackages.buildPerlPackage rec {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+
+  __structuredAttrs = true;
 
   meta = {
     description = "General purpose pipe-oriented plotting tool";
