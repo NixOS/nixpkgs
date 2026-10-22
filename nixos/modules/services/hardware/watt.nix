@@ -11,8 +11,9 @@ let
     mkEnableOption
     mkPackageOption
     getExe
+    concatStringsSep
     ;
-  inherit (lib.types) submodule;
+  inherit (lib.types) listOf str submodule;
 
   cfg = config.services.watt;
 
@@ -38,6 +39,16 @@ in
       type = submodule { freeformType = format.type; };
       description = "Configuration for Watt. Options at https://github.com/notaShelf/watt";
     };
+
+    extraFlags = mkOption {
+      type = listOf str;
+      default = [ ];
+      example = [ "-q" ];
+      description = ''
+        Extra flags passed to the Watt command in the service definition.
+      '';
+    };
+
   };
 
   config = mkIf cfg.enable {
@@ -59,7 +70,7 @@ in
       conflicts = map (service: "${service}.service") conflictingServices;
       serviceConfig = {
         WorkingDirectory = "";
-        ExecStart = getExe cfg.package;
+        ExecStart = "${getExe cfg.package} ${concatStringsSep " " cfg.extraFlags}";
         Restart = "on-failure";
 
         RuntimeDirectory = "watt";
