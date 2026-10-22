@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocalution";
-  version = "7.2.4";
+  version = "10.1";
 
   outputs = [
     "out"
@@ -39,10 +39,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "ROCm";
-    repo = "rocALUTION";
-    tag = "rocm-${finalAttrs.version}";
-    hash = "sha256-yPM26e8tGNpPScIriAPRb+6OZfdpX4PgE0E9bmc3FkU=";
+    # rocALUTION moved into the rocm-libraries monorepo during the TheRock 7.x series
+    repo = "rocm-libraries";
+    tag = "therock-${finalAttrs.version}";
+    sparseCheckout = [
+      "projects/rocalution"
+      "shared"
+    ];
+    hash = "sha256-peElY9WF9GbITUkeUwW0Ys8UYrUeXQ3Go7uWYGvMZBY=";
   };
+  sourceRoot = "${finalAttrs.src.name}/projects/rocalution";
 
   nativeBuildInputs = [
     cmake
