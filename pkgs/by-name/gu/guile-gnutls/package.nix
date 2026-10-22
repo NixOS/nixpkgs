@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "guile-gnutls";
-  version = "5.0.2";
+  version = "5.0.3";
 
   src = fetchurl {
     url = "mirror://gnu/gnutls/guile-gnutls-${finalAttrs.version}.tar.gz";
-    hash = "sha256-droqD0ft3n/S9YP8EWLtHOgzm9r36dnMOTh/zJX7k1s=";
+    hash = "sha256-Iwrk+J3/rG1X//YYQQYRgg4VUJB67vYGWxIf5kEKe2s=";
   };
 
   strictDeps = true;
