@@ -17,7 +17,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-e9YBeYMC9tfxZoXZi/QBW3FO5V6BAe7RSvVWs7rv0PI=";
   };
 
-  cargoHash = "sha256-9cDVbDCb8vY6KxreyiMX3gp13bXZpxTQOwYbk6TEVpc=";
+  cargoPatches = [
+    # rustls-webpki 0.103.8 -> 0.103.16
+    # webpki-roots 1.0.4 -> 1.0.10
+    ./update-webpki.patch
+  ];
+
+  cargoHash = "sha256-6keatpdXyRql9wvYep7eBHzMJZlkoDbGakoBV52gRAE=";
 
   preConfigure = ''
     substituteInPlace lib/systemd/user/pizauth.service \
