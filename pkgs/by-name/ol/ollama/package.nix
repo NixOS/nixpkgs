@@ -259,13 +259,12 @@ goBuild (finalAttrs: {
       # ship without `libggml-cuda.so` and fall back to CPU at runtime.
       # The accepted values map to cmake/local.cmake's elseif chain
       # (cuda_v12 / cuda_v13 / rocm_v7_1 / rocm_v7_2 / vulkan / cuda_jetpack*).
-      rocmMajorVersion = lib.versions.major rocmPackages.clr.version;
-      rocmMinorVersion = lib.versions.minor rocmPackages.clr.version;
       llamaBackend =
         if enableCuda then
           "cuda_v${cudaMajorVersion}"
         else if enableRocm then
-          "rocm_v${rocmMajorVersion}_${rocmMinorVersion}"
+          # TODO: switch to a ROCm 10 backend once ollama has one.
+          "rocm_v7_2"
         else if enableVulkan then
           "vulkan"
         else
