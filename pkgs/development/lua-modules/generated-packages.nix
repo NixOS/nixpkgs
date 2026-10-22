@@ -4954,8 +4954,8 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "leafo";
         repo = "moonscript";
-        rev = "26d68f20f4a7f0091ca7f62de9f09b939d8a0787";
-        hash = "sha256-ONpL+F+iwR1bxfoekX//Kq8oIegBs/Q1yisv4C/NsUU=";
+        rev = "abc95ab98f87dba1e875397edf32e246582ae353";
+        hash = "sha256-/YXSp2G/uZloA+lIa9rDPHaC54Qc5kNQAflahcXhD7w=";
       };
 
       disabled = luaOlder "5.1";
@@ -4966,7 +4966,7 @@ final: prev: {
       ];
 
       meta = {
-        homepage = "http://moonscript.org";
+        homepage = "https://moonscript.org";
         maintainers = with lib.maintainers; [ arobyn ];
         license = lib.licenses.mit;
         description = "A programmer friendly language that compiles to Lua";
