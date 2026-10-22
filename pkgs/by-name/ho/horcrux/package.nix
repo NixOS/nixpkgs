@@ -22,6 +22,9 @@ buildGoModule {
     homepage = "https://github.com/jesseduffield/horcrux";
     license = lib.licenses.mit;
     mainProgram = "horcrux";
-    maintainers = with lib.maintainers; [ mh ];
+    maintainers = with lib.maintainers; [
+      mh
+      coolcuber
+    ];
   };
 }
