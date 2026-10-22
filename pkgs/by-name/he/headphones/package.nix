@@ -1,5 +1,6 @@
 {
   lib,
+  cacert,
   fetchFromGitHub,
   python3,
   makeWrapper,
@@ -33,6 +34,11 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     makeWrapper $out/opt/headphones/Headphones.py $out/bin/headphones
 
     runHook postInstall
+  '';
+
+  postFixup = ''
+    rm $out/opt/headphones/lib/certifi/cacert.pem
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/opt/headphones/lib/certifi/cacert.pem
   '';
 
   meta = {
