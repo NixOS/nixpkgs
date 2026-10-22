@@ -123,16 +123,16 @@ let
   rootReferences = referencesOf drv;
   relevantReplacements = filter (
     { oldDependency, newDependency }:
-    if toString oldDependency == toString newDependency then
-      warn "replaceDependencies: attempting to replace dependency ${oldDependency} of ${drv} with itself"
-        # Attempting to replace a dependency by itself is completely useless, and would only lead to infinite recursion.
-        # Hence it must not be attempted to apply this replacement in any case.
-        false
-    else if !hasAttr (realisation oldDependency) rootReferences then
+    if !hasAttr (realisation oldDependency) rootReferences then
       warn "replaceDependencies: ${drv} does not depend on ${oldDependency}, so it will not be replaced"
         # Strictly speaking, another replacement could introduce the dependency.
         # However, handling this corner case would add significant complexity.
         # So we just leave it to the user to apply the replacement at the correct place, but show a warning to let them know.
+        false
+    else if toString oldDependency == toString newDependency then
+      warn "replaceDependencies: attempting to replace dependency ${oldDependency} of ${drv} with itself"
+        # Attempting to replace a dependency by itself is completely useless, and would only lead to infinite recursion.
+        # Hence it must not be attempted to apply this replacement in any case.
         false
     else
       true

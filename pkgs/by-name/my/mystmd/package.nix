@@ -90,6 +90,8 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
+    chmod -R +w ./node_modules
+    bun prune --production
     mkdir -p $out/lib
     cp -r node_modules $out/lib/
     cp -r packages $out/lib/
