@@ -23,13 +23,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sphinx-toolbox";
-  version = "4.3.0";
+  version = "4.3.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "sphinx_toolbox";
-    hash = "sha256-B+wmF2dE7jq+PB60QHQZ6BRo9FNvMy3K/E4yQLDW+uI=";
+    hash = "sha256-BcX9Ot1+YO8GJuUq1XQ51pW96JUYqFy1qIvY+scb4os=";
   };
 
   pythonRelaxDeps = [
