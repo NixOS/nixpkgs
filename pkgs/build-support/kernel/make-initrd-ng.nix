@@ -51,6 +51,10 @@ in
   # form, then linked at the root according to `target`.
   contents,
 
+  # Attribute set of { "/path" = "target"; } symlinks to create as is,
+  # e.g. relative symlinks that do not point into the nix store.
+  symlinks ? { },
+
   # List of uncompressed cpio files to prepend to the initramfs. This
   # can be used to add files in specified paths without them becoming
   # symlinks to store paths.
@@ -77,7 +81,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ;
 
   compress = "${_compressorExecutable} ${lib.escapeShellArgs _compressorArgsReal}";
-  contentsJSON = builtins.toJSON contents;
+  contentsJSON = builtins.toJSON { inherit contents symlinks; };
 
   nativeBuildInputs = [
     makeInitrdNGTool
