@@ -8,6 +8,9 @@ buildGoModule {
   pname = "horcrux";
   version = "0.3-unstable-2023-09-19";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "jesseduffield";
     repo = "horcrux";
