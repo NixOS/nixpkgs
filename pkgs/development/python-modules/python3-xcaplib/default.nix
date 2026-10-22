@@ -10,7 +10,7 @@
 }:
 
 buildPythonPackage {
-  pname = "xcaplib";
+  pname = "python3-xcaplib";
   # latest commit is needed for python 3.13 compat.
   version = "2.0.2-unstable-2026-07-09";
   pyproject = true;
