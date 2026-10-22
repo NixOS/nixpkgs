@@ -4,7 +4,6 @@
   fetchFromGitHub,
   nix-update-script,
   testers,
-  toolhive,
 }:
 
 buildGoModule (finalAttrs: {
@@ -20,6 +19,12 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-OU9Oyo54RIFGakO0sTcm+oPrg/80jXdz2DxFWhcYq88=";
 
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/stacklok/toolhive/pkg/versions.Version=v${finalAttrs.version}"
+  ];
+
   # Build only the main CLI and operator binaries
   subPackages = [
     "cmd/thv"
@@ -32,9 +37,9 @@ buildGoModule (finalAttrs: {
     updateScript = nix-update-script { };
     tests = {
       version = testers.testVersion {
-        package = toolhive;
+        package = finalAttrs.finalPackage;
         command = "thv version";
-        version = "ToolHive build-unknown";
+        version = "ToolHive v${finalAttrs.version}";
       };
     };
   };
