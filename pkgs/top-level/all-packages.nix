@@ -1817,8 +1817,7 @@ with pkgs;
     dubCheckHook
     ;
 
-  rocmPackages = recurseIntoAttrs (callPackage ../development/rocm-modules { });
-  # Kept out of Hydra until the default ROCm scope switches.
+  rocmPackages = recurseIntoAttrs rocmPackages_10;
   rocmPackages_10 = callPackage ../development/rocm-modules/10 { };
 
   tsm-client-withGui = callPackage ../by-name/ts/tsm-client/package.nix { enableGui = true; };
