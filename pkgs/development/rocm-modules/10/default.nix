@@ -68,6 +68,10 @@ let
 
       # Replaces hip, opencl-runtime, and rocclr
       clr = self.callPackage ./clr { };
+
+      hipify = self.callPackage ./hipify {
+        stdenv = origStdenv;
+      };
       rocprofiler-register = self.callPackage ./rocprofiler-register {
         inherit (llvm) clang;
       };
