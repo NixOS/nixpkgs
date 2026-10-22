@@ -887,7 +887,8 @@
       ];
     "broadlink" =
       ps: with ps; [
-      ]; # missing inputs: broadlink-async
+        broadlink-async
+      ];
     "brother" =
       ps: with ps; [
         brother
@@ -8555,6 +8556,7 @@
     "brands"
     "braviatv"
     "bring"
+    "broadlink"
     "brother"
     "brottsplatskartan"
     "brunt"
