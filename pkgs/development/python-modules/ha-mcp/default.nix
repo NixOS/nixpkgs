@@ -26,7 +26,8 @@ buildPythonPackage (finalAttrs: {
     owner = "homeassistant-ai";
     repo = "ha-mcp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dS3Opv4DNl9a3FSnWk49pe+Ft05l0RoSoet9/gpYIAA=";
+    fetchSubmodules = true;
+    hash = "sha256-Ime1/iHhFLwMUg3IzWliMGxchwDAFmDt51zJdCnjxfM=";
   };
 
   build-system = [

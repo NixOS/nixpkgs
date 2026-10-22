@@ -208,12 +208,15 @@ let
 
   _crubit =
     {
-      "154" = {
-        rev = "69b85cba43f85a6439dc0be86a6fe424bb07a100";
-        hash = "sha256-hSN4ZW3LsN3cerv3h3whAYLDZuoE6YaLuR9WY48P3E0=";
-        cargoHash = "sha256-xJWYE0gfEkf0WvrkaDkXiOYwvrlQGqa7QxkosXKH6UQ=";
-      };
       "155" = {
+        # version string wrong on purpose because of a previous typo
+        version = "0-unstable-2026-09-11";
+        rev = "a355b02da81bc9f350925c73ec0322ce4d5140f1";
+        hash = "sha256-Z2wsYe2Tln+CeAV9naC1QRnmvrz3HZXF06cNIp1RqU4=";
+        cargoHash = "sha256-5EB6yTk+eGffjUK/TXf6ZxCU0p05Dh1nL8q3Nl6TiiY=";
+      };
+      "156" = {
+        version = "0-unstable-2026-09-09";
         rev = "a355b02da81bc9f350925c73ec0322ce4d5140f1";
         hash = "sha256-Z2wsYe2Tln+CeAV9naC1QRnmvrz3HZXF06cNIp1RqU4=";
         cargoHash = "sha256-5EB6yTk+eGffjUK/TXf6ZxCU0p05Dh1nL8q3Nl6TiiY=";
@@ -223,15 +226,14 @@ let
 
   crubit = rustPlatform.buildRustPackage (finalAttrs: {
     pname = "crubit";
-    version = "0-unstable-2026-09-11";
+
+    inherit (_crubit) version cargoHash;
 
     src = fetchFromGitiles {
       url = "https://chromium.googlesource.com/external/github.com/google/crubit.git";
       # https://chromium.googlesource.com/chromium/src/+/154.0.8037.57/tools/rust/update_rust.py#48
       inherit (_crubit) rev hash;
     };
-
-    inherit (_crubit) cargoHash;
 
     patches = [
       (fetchpatch {
@@ -284,7 +286,11 @@ let
         sourceRoot
         ;
       nativeBuildInputs = [ zstd ];
-      hash = "sha256-RO1fJ4Qgt5CxcEwtZT+7SZx7XqiaAmURK3DdEnzIP2k=";
+      hash =
+        if chromiumVersionAtLeast "156" then
+          "sha256-hb/HSco4PeudjnZFGb2+IHw4rQ7ShI42XWqKOwdgrb4="
+        else
+          "sha256-RO1fJ4Qgt5CxcEwtZT+7SZx7XqiaAmURK3DdEnzIP2k=";
     };
 
     nativeBuildInputs = [
@@ -303,11 +309,11 @@ let
   # https://chromium.googlesource.com/devtools/devtools-frontend/+/66df492aaa0129d090937e933dd44c5389ab24d2/package.json#57
   _esbuild =
     {
-      "154" = {
-        version = "0.25.1";
-        hash = "sha256-vrhtdrvrcC3dQoJM6hWq6wrGJLSiVww/CNPlL1N5kQ8=";
-      };
       "155" = {
+        version = "0.28.2";
+        hash = "sha256-I1u+9U5Oj/KzxSjCxwyitwSuDKimatkbC3R2OtaUsfM=";
+      };
+      "156" = {
         version = "0.28.2";
         hash = "sha256-I1u+9U5Oj/KzxSjCxwyitwSuDKimatkbC3R2OtaUsfM=";
       };
@@ -404,12 +410,12 @@ let
   );
 
   bidi = fetchzip {
-    # https://chromium.googlesource.com/chromium/src/+/155.0.8059.39/third_party/chromium-bidi/DEPS#64
+    # https://chromium.googlesource.com/chromium/src/+/156.0.8078.47/third_party/chromium-bidi/DEPS#64
     # FIXME: We cannot use fetchNpmDeps here because the package-lock.json uses airlock-proxy.uplink.goog:999 a bunch of times
-    url = "https://commondatastorage.googleapis.com/chromium-nodejs/chromium-bidi/e7aab7e5ac29d62f5c023d7e8ba5eedc09a11945a88b0e174fc42f64c0820071";
+    url = "https://commondatastorage.googleapis.com/chromium-nodejs/chromium-bidi/028c7baf9de02f6ae103b1911ab13d1aeb48f0ddd8fa702f9c150cdaf8cb5f5b";
     extension = "tar.gz";
     stripRoot = false;
-    hash = "sha256-Td9MpgNDdHTlqvmlu7v2JwkhCbN9NvSlzcbnHSSjieA=";
+    hash = "sha256-7QePRM3DcHkGKalADPYBiLDljJoWK5sEzgn+k9SqfHU=";
   };
 
   base = rec {

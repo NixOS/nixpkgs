@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     "WITH_ALLCOMP=yes"
   ];
   passthru = {
-    withExtensions = pass.withExtensions.override {
+    withExtensions = (pass.override { dmenuSupport = false; }).withExtensions.override {
       pass = passage;
       brokenExtensions = extensionsNotSupportinPassage;
     };

@@ -164,7 +164,12 @@ stdenv.mkDerivation (finalAttrs: {
       wrapArgs+=(--prefix PATH : ${lib.makeBinPath [ sysctl ]})
     ''}
     ${lib.optionalString stdenv.hostPlatform.isLinux ''
-      wrapArgs+=(--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ wayland ]})
+      wrapArgs+=(--prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          stdenv.cc.cc
+          wayland
+        ]
+      })
     ''}
 
     wrapProgram $out/bin/opencode "''${wrapArgs[@]}"
