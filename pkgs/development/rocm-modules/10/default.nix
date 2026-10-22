@@ -82,7 +82,11 @@ let
         inherit (llvm) clang;
       };
 
+      rocprof-compute-viewer = self.callPackage ../rocprof-compute-viewer { };
+
       roctracer = self.callPackage ./roctracer { };
+
+      mscclpp = self.callPackage ../mscclpp { };
 
       half = self.callPackage ./half { };
 
