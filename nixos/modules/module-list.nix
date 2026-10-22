@@ -87,6 +87,7 @@
   ./hardware/keyboard/zsa.nix
   ./hardware/kryoflux.nix
   ./hardware/ksm.nix
+  ./hardware/led-matrix-monitoring.nix
   ./hardware/ledger.nix
   ./hardware/libftdi.nix
   ./hardware/libjaylink.nix
