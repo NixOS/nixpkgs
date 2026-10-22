@@ -105,6 +105,8 @@ let
 
       rocprim = self.callPackage ./rocprim { };
 
+      rocthrust = self.callPackage ./rocthrust { };
+
       mscclpp = self.callPackage ../mscclpp { };
 
       rccl = self.callPackage ./rccl { };
