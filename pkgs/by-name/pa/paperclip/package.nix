@@ -28,13 +28,13 @@
   wget,
 }:
 let
-  version = "0.3.1-unstable-2026-10-03";
+  version = "0.3.1-unstable-2026-10-22";
   # Draft packaging source. Replace with a paperclipai release before merging.
   src = fetchFromGitHub {
     owner = "caniko";
     repo = "paperclip";
-    rev = "da988533a14575d9c7404f410ac8b56fa6319293";
-    hash = "sha256-nZ+kMLduRy7KghrgszgL+Exy8GtMBRcPQKg3QZ+4bEU=";
+    rev = "d45237efab0e25515ab961f3abf88d4e83902a6b";
+    hash = "sha256-HZ9AJolMyEz/lIVC3Z7u8JIICb81fWAM5VbnM0Dk9kQ=";
   };
   runtimePath = lib.makeBinPath [
     coreutils
@@ -122,7 +122,7 @@ let
         ;
       pnpm = pnpm_10;
       fetcherVersion = 4;
-      hash = "sha256-e2PGbttFzg89GKuJOdO0F+VcVu6wYFevs1UI/E8M+2g=";
+      hash = "sha256-EOatKwvaIULHkXpD06myC1ZyX1xTQd7gC0W7G4KKWoE=";
     };
     buildPhase = ''
       runHook preBuild
