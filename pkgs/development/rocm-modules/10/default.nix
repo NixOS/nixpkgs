@@ -12,6 +12,7 @@ let
     let
       inherit (self) llvm;
       origStdenv = stdenv;
+      pyPackages = python3Packages;
       rocmClangStdenv = llvm.rocmClangStdenv;
     in
     {
@@ -50,6 +51,10 @@ let
       rocm-comgr = self.callPackage ./rocm-comgr { };
 
       rocminfo = self.callPackage ./rocminfo { stdenv = origStdenv; };
+
+      amdsmi = pyPackages.callPackage ./amdsmi {
+        inherit (self) rocmUpdateScript;
+      };
 
       rocm-docs-core = python3Packages.callPackage ../rocm-docs-core { };
 
