@@ -10,7 +10,6 @@
   cmake,
   rocm-cmake,
   rocblas,
-  rocmlir,
   rocrand,
   rocm-runtime,
   hipblas-common,
@@ -31,9 +30,11 @@
   doxygen,
   sphinx,
   zlib,
+  zstd,
   gtest,
   rocm-comgr,
   roctracer,
+  python3,
   python3Packages,
   gpuTargets ? clr.localGpuTargets or clr.gpuTargets,
   buildDocs ? false, # Needs internet because of rocm-docs-core
@@ -43,8 +44,9 @@
 
 let
   # FIXME: cmake files need patched to include this properly
-  cFlags = "-Wno-documentation-pedantic --offload-compress -I${hipblas-common}/include -I${hipblas}/include -I${roctracer}/include -I${nlohmann_json}/include -I${sqlite.dev}/include -I${rocrand}/include";
-  version = "7.2.4";
+  # nlohmann_json 3.12 headers warn under MIOpen's -Werror.
+  cFlags = "-Wno-documentation-pedantic -Wno-covered-switch-default --offload-compress -I${hipblas-common}/include -I${hipblas}/include -I${roctracer}/include -isystem ${nlohmann_json}/include -I${sqlite.dev}/include -I${rocrand}/include";
+  version = "10.1";
 
   # Targets outside this list will get
   # error: use of undeclared identifier 'CK_BUFFER_RESOURCE_3RD_DWORD'
@@ -124,37 +126,24 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-libraries";
-    tag = "rocm-${finalAttrs.version}";
+    tag = "therock-${finalAttrs.version}";
     sparseCheckout = [
       "projects/miopen"
       "shared"
     ];
     fetchSubmodules = true;
-    hash = "sha256-plZpBTbEBVMa5CasjfbUsu45xP/BYstrEpWKK2H7QQ4=";
+    hash = "sha256-pIo0QeVJ64Abte5u319kd2O6gjHIOtMkBo3h4thpzDo=";
   };
   sourceRoot = "${finalAttrs.src.name}/projects/miopen";
 
   env.CFLAGS = cFlags;
   env.CXXFLAGS = cFlags;
 
-  # Find zstd and add to target. Mainly for torch.
   patches = [
     ./skip-preexisting-dbs.patch
-    (fetchpatch {
-      url = "https://github.com/ROCm/MIOpen/commit/e608b4325646afeabb5e52846997b926d2019d19.patch";
-      hash = "sha256-oxa3qlIC2bzbwGxrQOZXoY/S7CpLsMrnWRB7Og0tk0M=";
-    })
-    (fetchpatch {
-      url = "https://github.com/ROCm/MIOpen/commit/3413d2daaeb44b7d6eadcc03033a5954a118491e.patch";
-      hash = "sha256-ST4snUcTmmSI1Ogx815KEX9GdMnmubsavDzXCGJkiKs=";
-    })
-    (fetchpatch {
-      # [miopen] Extend HIP ISA compatibility
-      name = "Extend-MIOpen-ISA-compatibility.patch";
-      url = "https://github.com/GZGavinZhao/rocm-libraries/commit/02f0fedffdc197f146dd45f41e10990a00cde3ee.patch";
-      hash = "sha256-My32iZw75rvB4fyvUJJ2kw2bU9/39awGteFGjzijixw=";
-      relative = "projects/miopen";
-    })
+    # Extend MIOpen's HIP ISA compatibility check (e.g. gfx906 code objects on
+    # gfx90c-class devices). Rebased from GZGavinZhao/MIOpen 02f0fedf.
+    ./extend-miopen-isa-compatibility.patch
   ];
 
   outputs = [
@@ -174,6 +163,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     cmake
     rocm-cmake
+    # cmake/CopyExternalHeader.cmake does find_package(Python3 REQUIRED)
+    python3
     clr
   ];
 
@@ -181,11 +172,11 @@ stdenv.mkDerivation (finalAttrs: {
     hipblas
     hipblas-common
     rocblas
-    rocmlir
     half
     boost
     sqlite
     bzip2
+    zstd
     nlohmann_json
     frugally-deep
     roctracer
@@ -210,6 +201,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
+    # The standalone build FetchContents its dependencies.
+    (lib.cmakeBool "MIOPEN_STANDALONE_BUILD" false)
     "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" supportedTargets}"
     "-DGPU_TARGETS=${lib.concatStringsSep ";" supportedTargets}"
     "-DGPU_ARCHS=${lib.concatStringsSep ";" supportedTargets}"
@@ -228,6 +221,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "MIOPEN_USE_COMPOSABLEKERNEL" withComposableKernel)
     (lib.cmakeBool "MIOPEN_USE_HIPRTC" true)
     (lib.cmakeBool "MIOPEN_USE_COMGR" true)
+    # hipconv's cdna4 kernels fail with clang 24 ("reference to __host__ variable in __device__ function").
+    (lib.cmakeBool "MIOPEN_USE_HIPCONV" false)
     "-DCMAKE_HIP_COMPILER_ROCM_ROOT=${clr}"
     # Manually define CMAKE_INSTALL_<DIR>
     # See: https://github.com/NixOS/nixpkgs/pull/197838
@@ -242,6 +237,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    # Keep the rocmClangStdenv compiler instead of MIOpen's ClangToolChain.cmake.
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'if(NOT CMAKE_TOOLCHAIN_FILE AND NOT DEFINED ENV{CMAKE_TOOLCHAIN_FILE})' 'if(FALSE)'
+
+    # ROCm 10 clang and C++20 add warnings throughout; drop -Werror like composable_kernel.
+    substituteInPlace cmake/EnableCompilerWarnings.cmake \
+      --replace-fail '    -Werror' '    -Wno-error'
+
     substituteInPlace cmake/ClangTidy.cmake \
       --replace-fail 'macro(enable_clang_tidy)' 'macro(enable_clang_tidy)
       endmacro()
@@ -249,10 +252,13 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'function(clang_tidy_check TARGET)' 'function(clang_tidy_check TARGET)
       return()'
 
-    patchShebangs test src/composable_kernel fin utils install_deps.cmake
+    patchShebangs test fin utils install_deps.cmake
 
+    # Runtime hiprtc compilation finds ROCm headers only through ROCM_PATH; default it.
     substituteInPlace src/comgr.cpp \
-      --replace-fail '"/opt/rocm"' '"${hiprtcCompileRocmPath}"'
+      --replace-fail 'auto rocm_path = env::value(ROCM_PATH);' 'auto rocm_path = env::value(ROCM_PATH);
+        if(rocm_path.empty())
+            rocm_path = "${hiprtcCompileRocmPath}";'
   ''
   + linkKDBsTo "src/kernels"
   + ''
