@@ -492,6 +492,7 @@ let
       gdal # for gdal-config
       pkg-config
     ];
+    IntegMultiReg = [ pkgs.gsl ]; # for gsl-config
     JMcmprsk = [ pkgs.gsl ]; # for gsl-config
     KSgeneral = with pkgs; [ pkg-config ];
     LCMCR = [ pkgs.gsl ]; # for gsl-config
@@ -538,16 +539,7 @@ let
       pkgs.which
       pkgs.hostname
     ];
-    Rhpc = with pkgs; [
-      mpi
-      # deps for `R CMD config --ldflags`
-      bzip2
-      icu
-      libdeflate
-      xz
-      zlib
-      zstd
-    ];
+    Rhpc = [ pkgs.mpi ];
     Rigraphlib = [ pkgs.cmake ];
     Rlibeemd = [ pkgs.gsl ]; # for gsl-config
     RmecabKo = [ pkgs.mecab ]; # for mecab-config
@@ -573,6 +565,10 @@ let
     ];
     V8 = [ pkgs.pkg-config ];
     VBLPCM = [ pkgs.gsl ]; # for gsl-config
+    WebGestaltR = with pkgs; [
+      cargo
+      rustc
+    ];
     XBRL = [ pkgs.libxml2 ]; # for xml2-config
     XML = with pkgs; [
       pkg-config
@@ -1307,6 +1303,15 @@ let
     Rhdf5lib = with pkgs; [
       curl
       zlib
+    ];
+    Rhpc = with pkgs; [
+      # deps for `R CMD config --ldflags`
+      bzip2
+      icu
+      libdeflate
+      xz
+      zlib
+      zstd
     ];
     Rhtslib = with pkgs; [
       bzip2
