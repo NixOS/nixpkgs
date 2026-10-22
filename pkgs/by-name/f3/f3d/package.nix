@@ -86,11 +86,9 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    for thumbnailer in $out/share/thumbnailers/f3d-plugin-*.thumbnailer; do
-      substituteInPlace $thumbnailer \
-        --replace-fail "TryExec=f3d" "TryExec=$out/bin/f3d" \
-        --replace-fail "Exec=f3d" "Exec=$out/bin/f3d"
-    done
+    substituteInPlace $out/share/thumbnailers/f3d-plugin-*.thumbnailer \
+      --replace-fail "TryExec=f3d" "TryExec=$out/bin/f3d" \
+      --replace-fail "Exec=f3d" "Exec=$out/bin/f3d"
   '';
 
   meta = {
