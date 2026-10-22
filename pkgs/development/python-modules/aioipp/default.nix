@@ -18,7 +18,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aioipp";
-  version = "0.20.0";
+  version = "0.21.0";
   pyproject = true;
 
   disabled = pythonOlder "3.14";
@@ -27,7 +27,7 @@ buildPythonPackage (finalAttrs: {
     owner = "brianegge";
     repo = "aioipp";
     tag = finalAttrs.version;
-    hash = "sha256-ircGvIr4GXGdCc1EL5EZQde+/MGf+8gggEm4lmuyfOo=";
+    hash = "sha256-v/99CJiQhzUQhwcwBN/SfqL1VDdkJqjEX+j8fzx0EmE=";
   };
 
   nativeBuildInputs = [ pyprojectVersionPatchHook ];
