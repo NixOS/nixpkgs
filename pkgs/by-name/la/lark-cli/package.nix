@@ -6,7 +6,9 @@
   python3,
   runCommand,
   testers,
-  nix-update-script,
+  writeShellApplication,
+  common-updater-scripts,
+  nix-update,
 }:
 
 buildGoModule (finalAttrs: {
@@ -80,12 +82,21 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     inherit (finalAttrs) metaData;
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--custom-dep"
-        "metaDataRelease"
+    updateScript = lib.getExe (writeShellApplication {
+      name = "update-lark-cli";
+      runtimeInputs = [
+        common-updater-scripts
+        nix-update
       ];
-    };
+      text = ''
+        nix-update --src-only lark-cli "$@"
+        # goModules runs postPatch, so update the registry archive before
+        # computing vendorHash. nix-update processes custom deps too late.
+        update-source-version lark-cli --source-key=metaDataRelease \
+          --ignore-same-version --ignore-same-hash
+        nix-update --version=skip lark-cli
+      '';
+    });
   };
 
   passthru.tests.version = testers.testVersion {
