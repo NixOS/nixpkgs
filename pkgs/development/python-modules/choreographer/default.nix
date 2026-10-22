@@ -24,6 +24,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-CGIH3tkRX9wheZeUXA+eW4yS8Lmee6W/R0pfJySpKHQ=";
   };
 
+  patches = [
+    # Inject browser path from nix
+    ./inject-browser.patch
+  ];
+
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail ', "setuptools-git-versioning"' "" \

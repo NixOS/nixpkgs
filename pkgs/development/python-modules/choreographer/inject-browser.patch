@@ -1,0 +1,10 @@
+diff --git a/src/choreographer/utils/_which.py b/src/choreographer/utils/_which.py
+index 269baa8..8e3e4ae 100644
+--- a/src/choreographer/utils/_which.py
++++ b/src/choreographer/utils/_which.py
+@@ -96,4 +96,4 @@ def get_browser_path(*args: Any, **kwargs: Any) -> str | None:  # noqa: D417, do
+         which accepts a ``skip_local`` argument.
+ 
+     """
+-    return os.environ.get("BROWSER_PATH", browser_which(*args, **kwargs))
++    return os.environ.get("BROWSER_PATH", "@NIX_BROWSER_PATH@")
