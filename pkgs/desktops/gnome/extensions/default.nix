@@ -72,7 +72,7 @@ rec {
   gnome51Extensions = mapUuidNames (produceExtensionsList "51");
 
   # Keep the last three versions in here
-  gnomeExtensions = lib.trivial.pipe (gnome48Extensions // gnome49Extensions // gnome50Extensions) [
+  gnomeExtensions = lib.trivial.pipe (gnome49Extensions // gnome50Extensions // gnome51Extensions) [
     # Apply some custom patches for automatically packaged extensions
     (callPackage ./extensionOverrides.nix { })
     # Add all manually packaged extensions
@@ -102,6 +102,10 @@ rec {
         tilingnome = throw "'gnomeExtensions.tilingnome' has been removed due to lack of upstream maintenance";
         topicons-plus = throw "'gnomeExtensions.topicons-plus' has been removed due to lack of upstream maintenance";
         window-corner-preview = throw "'gnomeExtensions.window-corner-preview' has been removed due to lack of upstream maintenance";
+        lock-keys = throw "'gnomeExtensions.lock-keys' has been removed due to lack of upstream maintenance";
+        system-monitor-3 = throw "'gnomeExtensions.system-monitor-3' has been removed due to lack of upstream maintenance";
+        system-monitor-5 = throw "'gnomeExtensions.system-monitor-5' has been removed due to lack of upstream maintenance";
+        tailscale-qs-2 = throw "'gnomeExtensions.tailscale-qs-2' has been removed due to lack of upstream maintenance";
       }
     )
     # Export buildShellExtension function
