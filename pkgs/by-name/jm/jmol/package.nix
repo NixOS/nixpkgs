@@ -4,32 +4,10 @@
   fetchurl,
   unzip,
   makeDesktopItem,
+  copyDesktopItems,
   jre8,
 }:
 
-let
-  desktopItem = makeDesktopItem {
-    name = "jmol";
-    exec = "jmol";
-    desktopName = "JMol";
-    genericName = "Molecular Modeler";
-    mimeTypes = [
-      "chemical/x-pdb"
-      "chemical/x-mdl-molfile"
-      "chemical/x-mol2"
-      "chemical/seq-aa-fasta"
-      "chemical/seq-na-fasta"
-      "chemical/x-xyz"
-      "chemical/x-mdl-sdf"
-    ];
-    categories = [
-      "Graphics"
-      "Education"
-      "Science"
-      "Chemistry"
-    ];
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   version = "16.4.21";
   pname = "jmol";
@@ -43,18 +21,47 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-eZuRhI8r2I1kud6EG9aakWiFI6R40VDTfdQ7z/n5sJ8=";
     };
 
+  nativeBuildInputs = [ copyDesktopItems ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "jmol";
+      exec = "jmol";
+      desktopName = "JMol";
+      genericName = "Molecular Modeler";
+      mimeTypes = [
+        "chemical/x-pdb"
+        "chemical/x-mdl-molfile"
+        "chemical/x-mol2"
+        "chemical/seq-aa-fasta"
+        "chemical/seq-na-fasta"
+        "chemical/x-xyz"
+        "chemical/x-mdl-sdf"
+      ];
+      categories = [
+        "Graphics"
+        "Education"
+        "Science"
+        "Chemistry"
+      ];
+    })
+  ];
+
   patchPhase = ''
     sed -i -e "4s:.*:command=${jre8}/bin/java:" -e "10s:.*:jarpath=$out/share/jmol/Jmol.jar:" -e "11,21d" jmol
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/share/jmol" "$out/bin"
 
     ${unzip}/bin/unzip jsmol.zip -d "$out/share/"
 
     cp *.jar jmol.sh "$out/share/jmol"
-    cp -r ${desktopItem}/share/applications $out/share
     cp jmol $out/bin
+
+    runHook postInstall
   '';
 
   enableParallelBuilding = true;

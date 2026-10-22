@@ -9,11 +9,12 @@
   libglvnd,
   libpulseaudio,
   makeDesktopItem,
+  copyDesktopItems,
   makeWrapper,
   openldap,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "outfox";
   version = "0.5.0-pre043";
 
@@ -33,6 +34,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoPatchelfHook
     makeWrapper
+    copyDesktopItems
   ];
 
   buildInputs = [
@@ -44,24 +46,27 @@ stdenv.mkDerivation rec {
     openldap
   ];
 
-  desktop = makeDesktopItem {
-    name = "project-outfox";
-    desktopName = "Project OutFox";
-    genericName = "Rhythm game engine";
-    exec = "OutFox";
-    tryExec = "OutFox";
-    categories = [ "Game" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "project-outfox";
+      desktopName = "Project OutFox";
+      genericName = "Rhythm game engine";
+      exec = "OutFox";
+      tryExec = "OutFox";
+      categories = [ "Game" ];
+    })
+  ];
 
   patchPhase = ''
     find ./Appearance -type f -executable -exec chmod -x {} \;
   '';
 
   installPhase = ''
-    mkdir -p $out/bin $out/share/OutFox $out/share/applications
+    runHook preInstall
+    mkdir -p $out/bin $out/share/OutFox
     cp -r ./. $out/share/OutFox
-    ln -s ${desktop}/share/applications/project-outfox.desktop $out/share/applications/project-outfox.desktop
     makeWrapper $out/share/OutFox/OutFox $out/bin/OutFox --argv0
+    runHook postInstall
   '';
 
   meta = {

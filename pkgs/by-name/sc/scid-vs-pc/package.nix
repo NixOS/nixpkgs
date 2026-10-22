@@ -9,6 +9,7 @@
   makeWrapper,
   which,
   makeDesktopItem,
+  copyDesktopItems,
 }:
 
 tcl.mkTclDerivation (finalAttrs: {
@@ -28,6 +29,7 @@ tcl.mkTclDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     which
+    copyDesktopItems
   ];
   buildInputs = [
     bashNonInteractive
@@ -46,24 +48,23 @@ tcl.mkTclDerivation (finalAttrs: {
   ];
 
   postInstall = ''
-    mkdir -p $out/share/applications
-    cp $desktopItem/share/applications/* $out/share/applications/
-
     install -D icons/scid.png "$out"/share/icons/hicolor/128x128/apps/scid.png
   '';
 
-  desktopItem = makeDesktopItem {
-    name = "scid-vs-pc";
-    desktopName = "Scid vs. PC";
-    genericName = "Chess Database";
-    comment = finalAttrs.meta.description;
-    icon = "scid";
-    exec = "scid";
-    categories = [
-      "Game"
-      "BoardGame"
-    ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "scid-vs-pc";
+      desktopName = "Scid vs. PC";
+      genericName = "Chess Database";
+      comment = finalAttrs.meta.description;
+      icon = "scid";
+      exec = "scid";
+      categories = [
+        "Game"
+        "BoardGame"
+      ];
+    })
+  ];
 
   meta = {
     description = "Chess database with play and training functionality";
