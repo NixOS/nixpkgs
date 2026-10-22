@@ -13,7 +13,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "clickhouse-sqlalchemy";
-  version = "0.3.2-unstable-2025-11-24";
+  version = "0.3.2";
   pyproject = true;
   __structuredAttrs = true;
 
