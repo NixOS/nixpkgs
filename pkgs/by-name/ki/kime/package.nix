@@ -53,7 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Qt5 input context discovery fix from upstream #785, merged after the 3.2.0 release.
     (fetchpatch {
-      url = "https://github.com/Riey/kime/commit/bf443176f2eb49899daf819618c0be322cba3d55.patch";
+      url = "https://github.com/Riey/kime/commit/8369b5faf78a49f3c1d0d0da0f43b5777fbda17d.patch";
+      excludes = [ "docs/CHANGELOG.md" ];
       hash = "sha256-PTomeZnWegDtbyZGVxGHtdK+jp9fB7zp1Du9EdOsHuM=";
     })
   ];
