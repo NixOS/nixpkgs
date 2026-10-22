@@ -1750,6 +1750,8 @@ self: super: with self; {
 
   azure-ai-agents = callPackage ../development/python-modules/azure-ai-agents { };
 
+  azure-ai-contentsafety = callPackage ../development/python-modules/azure-ai-contentsafety { };
+
   azure-ai-documentintelligence =
     callPackage ../development/python-modules/azure-ai-documentintelligence
       { };
@@ -10048,6 +10050,8 @@ self: super: with self; {
 
   litellm = callPackage ../development/python-modules/litellm { };
 
+  litellm-proxy-extras = callPackage ../development/python-modules/litellm-proxy-extras { };
+
   litemapy = callPackage ../development/python-modules/litemapy { };
 
   litestar = callPackage ../development/python-modules/litestar { };
@@ -10235,6 +10239,8 @@ self: super: with self; {
   llm-pdf-to-images = callPackage ../development/python-modules/llm-pdf-to-images { };
 
   llm-perplexity = callPackage ../development/python-modules/llm-perplexity { };
+
+  llm-sandbox = callPackage ../development/python-modules/llm-sandbox { };
 
   llm-sentence-transformers = callPackage ../development/python-modules/llm-sentence-transformers { };
 
