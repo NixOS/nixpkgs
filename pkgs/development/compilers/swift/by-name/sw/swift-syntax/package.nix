@@ -30,6 +30,11 @@ let
     "SwiftSyntaxMacros"
   ]
   ++ lib.optionals (lib.versionAtLeast swift_release "6.3") [ "SwiftRefactor" ];
+
+  swift' = swift.override {
+    enableRepl = false;
+    enableSourceKitLSP = false;
+  };
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -59,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = lib.optionals (!useToolchainLibraries) [
     cmake
     ninja
-    swift
+    swift'
   ];
 
   dontConfigure = useToolchainLibraries;

@@ -58,7 +58,7 @@ let
 
     installPhase = ''
       runHook preInstall
-      install -Dm755 .build/${stdenv.hostPlatform.darwinArch}-apple-macosx/release/dockutil -t $out/bin
+      install -Dm755 $(swiftpmBinPath)/dockutil -t $out/bin
       runHook postInstall
     '';
   });

@@ -9,7 +9,9 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "anki-mac-helper";
-  inherit (anki) version src;
+  version = "0.1.1";
+
+  inherit (anki) src;
   pyproject = true;
 
   sourceRoot = "${finalAttrs.src.name}/qt/mac";
@@ -21,7 +23,7 @@ buildPythonPackage (finalAttrs: {
   # but targets the platform directly instead of universal binary + lipo.
   preBuild = ''
     swiftc \
-      -target ${stdenv.hostPlatform.darwinArch}-apple-macos11 \
+      -target ${stdenv.hostPlatform.swift.triple} \
       -emit-library \
       -module-name ankihelper \
       -O \

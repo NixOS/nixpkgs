@@ -3,7 +3,9 @@
   fetchFromGitHub,
   lib,
   installShellFiles,
+  libgit2,
   openssl,
+  zstd,
   pkg-config,
   stdenv,
   swift,
@@ -29,10 +31,27 @@ rustPlatform.buildRustPackage (finalAttrs: {
     (replaceVars ./fix-swift-lib-path.patch { swiftLib = lib.getLib swift; })
   ];
 
-  cargoHash = "sha256-CwULTOZN2TTpB8heLuegID38ub6J3XoiY7l7UW1VcGo=";
+  postPatch =
+    # Swift propagates the 27.0 SDK, which requires a newer deployment target.
+    # SwiftPM uses Swift Build, which uses a different folder hierarchy for its build artifacts and naming convention
+    # for compiled object files.
+    ''
+      substituteInPlace apple-catalog-parsing/build.rs \
+        --replace-fail 'apple-macosx10.12' 'apple-macosx${stdenv.hostPlatform.darwinMinVersion}' \
+        --replace-fail 'swift-scratch/release' 'swift-scratch/out' \
+        --replace-fail 'AssetCatalogParser.build' 'Intermediates.noindex/AssetCatalogParser.build/Release/AssetCatalogParser-t.build/Objects-normal/${stdenv.hostPlatform.swift.arch}' \
+        --replace-fail 'ObjcSupport.build' 'Intermediates.noindex/AssetCatalogParser.build/Release/ObjcSupport-t.build/Objects-normal/${stdenv.hostPlatform.swift.arch}' \
+        --replace-fail '.m.o' '.o' \
+        --replace-fail '.swift.o' '.o'
+    ''
+    # The version of libgit2-sys used by sentry-cli doesn’t support the version of libgit2 packaged in Nixpkgs,
+    # but it works, so use it anyway. This can be dropped once sentry-cli updates its dependencies.
+    + ''
+      substituteInPlace ../sentry-*-vendor/source-registry-0/libgit2-sys-*/build.rs \
+        --replace-fail '"1.7.2".."1.8.0"' '"1.7.2"..="${lib.getVersion libgit2}"'
+    '';
 
-  # Needed to get openssl-sys to use pkgconfig.
-  env.OPENSSL_NO_VENDOR = 1;
+  cargoHash = "sha256-CwULTOZN2TTpB8heLuegID38ub6J3XoiY7l7UW1VcGo=";
 
   # By default including `swiftpm` in `nativeBuildInputs` will take over `buildPhase`
   dontUseSwiftpmBuild = true;
@@ -50,7 +69,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     swiftpm
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    libgit2
+    openssl
+    zstd
+  ];
 
   nativeCheckInputs = [ gitMinimal ];
 

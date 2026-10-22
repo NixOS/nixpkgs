@@ -246,6 +246,46 @@ To disable the SwiftPM install phase, include the following in your derivation:
 { dontUseSwiftpmInstall = true; }
 ```
 
+## Swift Macros {#ssec-swift-macros}
+
+Nixpkgs includes the stdlib macros (ObservationMacros and SwiftMacros) and FoundationMacros in the toolchain.
+Packages that need macros for Apple frameworks on Darwin have two options:
+- `open-apple-macros` provides open-source implementations of FoundationModelsMacros and SwiftUIMacros; or
+- `darwin.xcode-macros` provides macro libraries from Xcode not otherwise included in the toolchain, but they are unfree.
+
+Add the appropriate package to `depsBuildBuild` (because they are compiler plugins that run on the build platform).
+If you need to manually specify the path for a package because it or its build system invokes `swiftc` directly:
+
+### `open-apple-macros` {#ssec-swift-macros-open-apple-macros}
+```nix
+{
+  buildPhase = ''
+    runHook preBuild
+    swiftc \
+      -external-plugin-path ${open-apple-macros}/lib/swift/host/plugins#${open-apple-macros}/libexec/swift/plugins/OpenAppleMacrosServer \
+      -disable-sandbox \
+      *.swift \
+      -o the_binary
+    runHook postBuild
+  '';
+}
+```
+
+### `darwin.xcode-macros` {#ssec-swift-macros-xcode-macros}
+```nix
+{
+  # For `darwin.xcode-macros`
+  buildPhase = ''
+    runHook preBuild
+    swiftc \
+      -plugin-path ${darwin.xcode-macros}/lib/swift/host/plugins \
+      *.swift \
+      -o the_binary
+    runHook postBuild
+  '';
+}
+```
+
 ## Hooks {#ssec-swift-hooks}
 
 Swift provides the following hooks to automate builds and unpack dependencies:

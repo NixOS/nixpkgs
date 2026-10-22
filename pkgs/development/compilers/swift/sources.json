@@ -1,76 +1,78 @@
 {
+  "indexstore-db": {
+    "hash": "sha256-okJrYhn2LmRNV+Wn/QM1W6yxbt/s1X7L2kmUccxD74o="
+  },
   "llvm-project": {
-    "hash": "sha256-b+0G3b5f/i+4SgLV0nsZte5pc/tHd9fVIOPAxWInQXs="
+    "hash": "sha256-EzSgVCdEYtrrC9fjqUVu4ALp8FmtwgLfLzL/pMQKb/4="
   },
   "sourcekit-lsp": {
-    "hash": "sha256-vjVcsxFCg1s8L96HSllgGGVpOQeHAWfVnLmUcP05F/o=",
-    "swiftpmDeps": {
-      "hash": "sha256-tH0dajTSHa7/wwJFA8CVsuB/9Lhojsb4fmx+reIpR88="
-    }
+    "hash": "sha256-/uAkOzNRRFkUC+qYntBytcEcWWBEpH5hsko0LR3Skhs="
   },
   "swift": {
-    "hash": "sha256-7/jT/U0sOsr4iWnCluyUWjnD/XH5CnPyAG9EQ+Nq+tI="
+    "hash": "sha256-X3jFUJiASISZmqVR1aiHF0nDL15fiIupsIUMjOTtBCM="
   },
   "swift-build": {
-    "hash": "sha256-UW6OD3WyAuN1/vkzlANfWr9lJ2x9mLFgdYC8pwbVqjE="
+    "hash": "sha256-LWsynfSRHsDD7YLUyRJwbSejHYQZsAi6h3b8eB6DRYw="
   },
   "swift-corelibs-foundation": {
-    "hash": "sha256-Dm/oYkNRevXBBP1+xOgZm3/QjRLQBjk58mXt9N/sPAY="
+    "hash": "sha256-6CfeV+h9/o/o5rQIirbO4FvvD5qvr/b/BhCeN2OITGk="
   },
   "swift-corelibs-libdispatch": {
-    "hash": "sha256-7UxacHkvbyt51I1WT2wWR1GDrHdknlnYWF9yF8GusQc="
+    "hash": "sha256-PMm98aW2yJsUDysZ0CJFRyZ8/UZ5uJ14UytQ9KNBUeE="
   },
   "swift-corelibs-xctest": {
-    "hash": "sha256-68OKhvLKwXPZNvuFkcZsqyeVE4YlLXp5+sHfns3EGKM="
+    "hash": "sha256-eRBwBuC9Wyfib7n+t+hIhbOXmoc4TrdLXsdKC/1XC24="
   },
   "swift-docc": {
-    "hash": "sha256-wRHy4yeq+LAUU7dDPc3kUT1BP9ZONl1qmfrYffuR5tQ=",
+    "hash": "sha256-WtoAQHb+vT6QzsoYFnaotZxCQrgAteyfHsUWFi9nNXg=",
     "swiftpmDeps": {
-      "hash": "sha256-DxF71QOqtWv9slEiE2u8dy7tT7wWl0bbkWkNVCFbUk8="
+      "hash": "sha256-6cGV6UdJ/uqJjCutg+YIqT3uMpcsLgLvYPVFCoK1L0E="
     }
   },
   "swift-docc-render": {
-    "hash": "sha256-pF+sot+YDT/AjeMrNmdG3/T5VlhPewDcpG6B+Q9dLRk=",
+    "hash": "sha256-QMCtOWour2tfPIujtIZ/da/JS61U1tl4nR3KR6jm7M4=",
     "npmDeps": {
-      "hash": "sha256-10RbVbf8lA4Glqw9NZGRCFmpE660UfbTBllIKJYQ+U8="
+      "hash": "sha256-DDBIWmxzsDm5pShHNIC9rC0ThN3CU1cabZIdiKI46Yo="
     },
-    "rev": "2d3a3b924f889fa3d5ea7d8eb8b0daad211acc21"
+    "rev": "5a0395a50f0bd8b7df71a10f2558c1689809b8e9"
   },
   "swift-driver": {
-    "hash": "sha256-XilPErlnLI7JOnEQM3zEieyo+0/7q2hYfHfnDBtP7qE="
+    "hash": "sha256-xqzjR+YdhbB8wN6OfzMPDh0lXj//dVd811gBJ3EwNL0="
   },
   "swift-experimental-string-processing": {
-    "hash": "sha256-ENnaw/1UN9PnVLTZujtpfGs5d1e3Z+5Z6EjiwM/8alU="
+    "hash": "sha256-PG9BZPzK13jw8XeVbcgzxYTlc9UJhKheXPDRm8NheEM="
   },
   "swift-format": {
-    "hash": "sha256-YkOsFWaQJU786L9OB/n9jOL5G303cz0q62dw3yFWkA0=",
+    "hash": "sha256-cn7YyQHXsphl1M4kv0mo0F/G9pH8BVBMPtZWPkqIGTk=",
     "swiftpmDeps": {
-      "hash": "sha256-7Og56LggJPO8G7GVNCBhbLg/8iv+aR5L0Zi9bSELSM8="
+      "hash": "sha256-p4YCMFzNL43AE36YJyRVwrx6z06HCUH0BRQ4dJsneic="
     }
   },
   "swift-foundation": {
-    "hash": "sha256-sXlA1n7SmgneUxsS7+/xNwbIOyGvLmofNXxrIG1Pq9w="
+    "hash": "sha256-0l1v6XrXw6kVFeKVWWAMNEvSJDFrkmAgmTmSZb3MQYw="
   },
   "swift-foundation-icu": {
     "hash": "sha256-+Syca40t4KYTs6Y0qgfntziUebEmHdq1tNNbLau4bwc="
   },
   "swift-llbuild": {
-    "hash": "sha256-w+pZRXiGSHsxK+ewMdfX49rAJYfZ9wOql/vUGLXpJvo="
+    "hash": "sha256-w4P8eMRe+9pMuRQURmku7Z6MrPlLSDqMXuvVkUJHfiw="
+  },
+  "swift-lmdb": {
+    "hash": "sha256-gTCzlvrrQhTsl9FI04nU9vkv7ZB2kEGz487r+r+0w40="
   },
   "swift-package-manager": {
-    "hash": "sha256-34mm8hYEvYuvmtkEBQDzluJSHsiwzmGWuO3ZgWnFjzg="
+    "hash": "sha256-Gu5NFuowFzdZuj/qraR3RjBFCsrvDWjGoiSNYHJTY5g="
   },
   "swift-syntax": {
-    "hash": "sha256-zr+2MlGncEu1bEQwUUxlySDx4XOyK+LnX1SRbtm9ERc="
+    "hash": "sha256-qRs7x0c8RSIC7yXjUDnF6HaEhkWsXPeAoLa9Tc538cI="
   },
   "swift-testing": {
-    "hash": "sha256-lXeFJcKRzoRpUYLrQT+5MITb36hSH/dXjBm4w0RispI="
+    "hash": "sha256-xxXEcYf89+gbO1IQgaqQCXZ5he9apihTRe/PMaaDI7g="
   },
   "swift-tools-protocols": {
-    "hash": "sha256-q/S95ozgWkzYm3awDmAC5Obnur4OQp8aO2gstrwCOnE=",
-    "version": "0.0.9"
+    "hash": "sha256-qhBb54P5aJ/BB1dEQcy78crxV/jGld25jNsusq3pVMw="
   },
   "swift-tools-support-core": {
-    "hash": "sha256-LAboqDVEoz2Sgp3BIrasS2DVmiug89yAioJ/mFIVIjA="
+    "hash": "sha256-7gZxQOlklLEVjyxsPp543gajJm/I9F7AxbLYzbJJMQo="
   }
 }

@@ -1,0 +1,27 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Fri, 9 Oct 2026 16:15:54 -0400
+Subject: [PATCH 2/2] add-missing-libraries
+
+---
+ Sources/BuildServerIntegration/CMakeLists.txt | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/Sources/BuildServerIntegration/CMakeLists.txt b/Sources/BuildServerIntegration/CMakeLists.txt
+index b3ab347d..4cac13f1 100644
+--- a/Sources/BuildServerIntegration/CMakeLists.txt
++++ b/Sources/BuildServerIntegration/CMakeLists.txt
+@@ -29,6 +29,10 @@ target_link_libraries(BuildServerIntegration PUBLIC
+   SwiftToolsProtocols::LanguageServerProtocol
+   SwiftToolsProtocols::LanguageServerProtocolTransport
+   SwiftToolsProtocols::SKLogging
++  SwiftCollections::DequeModule
++  SwiftCollections::OrderedCollections
++  llbuild
++  llbuildSwift
+   SKOptions
+   LanguageServerProtocolExtensions
+   SourceKitD
+-- 
+2.54.0
+

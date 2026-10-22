@@ -1,19 +1,58 @@
 {
   lib,
+  cmake,
   fetchFromGitHub,
-  fetchSwiftPMDeps,
-  llvmPackages,
-  ncurses,
-  pkg-config,
-  replaceVars,
-  sqlite,
+  indexstore-db,
+  ninja,
   stdenv,
   swift,
+  swift-argument-parser,
+  swift-asn1,
+  swift-collections,
+  swift-corelibs-foundation,
   swift-corelibs-libdispatch,
+  swift-crypto,
+  swift-foundation,
+  swift-foundation-icu,
+  swift-llbuild,
+  swift-lmdb,
+  swift-syntax,
+  swift-tools-protocols,
+  swift-tools-support-core,
   swiftpm,
+  versionCheckHook,
   swift_release,
   swift_sources,
 }:
+
+let
+  rpaths = [
+    indexstore-db
+    swift-argument-parser
+    swift-asn1
+    swift-collections
+    swift-crypto
+    swift-llbuild
+    swift-lmdb
+    swift-syntax-no-toolchain
+    swift-tools-protocols
+    swift-tools-support-core
+    swiftpm
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    swift-corelibs-foundation
+    swift-corelibs-libdispatch
+    swift-foundation
+    swift-foundation-icu
+  ];
+
+  swift-syntax-no-toolchain = swift-syntax.override { useToolchainLibraries = false; };
+
+  swift' = swift.override {
+    enableRepl = false;
+    enableSourceKitLSP = false;
+  };
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sourcekit-lsp";
@@ -30,58 +69,76 @@ stdenv.mkDerivation (finalAttrs: {
     # We can’t use the XCTest framework on Darwin and have to use swift-corelibs-xctest. Patch the `PerfTestCase`
     # base class to build with it on Darwin.
     ./patches/0001-Fix-for-using-swift-corelibs-xctest-on-Darwin.patch
-    # SourceKit-LSP tries to load IndexStore from the toolchain, but we want to load it from the store directly instead.
-    (replaceVars ./patches/0002-Load-IndexStore-from-the-store.patch {
-      libclang = lib.getLib llvmPackages.libclang;
-    })
+    # A couple of required libraries are missing from the `CMakeLists.txt` files.
+    ./patches/0002-add-missing-libraries.patch
   ];
 
-  # The SwiftPM patches can’t be included in the swiftpmDeps FOD because they reference store paths.
-  swiftpmPatches = swiftpm.patches;
+  postPatch =
+    # Make the build complain loudly when a dependency is not available.
+    ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail QUIET REQUIRED
 
-  postPatch = ''
-    packagesPath=$(readlink -f Packages)
-
-    rm Packages
-    cp -r "$packagesPath" Packages
-    chmod -R u+w Packages/swift-package-manager
-
-    for p in "''${swiftpmPatches[@]}"; do
-      # Don’t apply the backdeploy patch because it creates a link to the Swift toolchain,
-      # which bloats up the SourceKit-LSP closure quite significantly.
-      if ! [[ $p =~ fix-backdeploy-rpath\.patch ]]; then
-        echo "applying patch $p"
-        patch -d Packages/swift-package-manager -p1 < "$p"
-      fi
-    done
-  '';
-
-  swiftpmDeps = fetchSwiftPMDeps {
-    inherit (finalAttrs) pname version src;
-    inherit (swift_sources.sourcekit-lsp.swiftpmDeps) hash;
-
-    # Upstream doesn’t provide `Package.resolved`.
-    postPatch = ''
-      ln -s ${./Package.resolved} Package.resolved
+      # Except for dispatch and Foundation, which are part of the SDK on Darwin.
+      substituteInPlace CMakeLists.txt \
+        --replace-fail 'dispatch REQUIRED' 'dispatch QUIET' \
+        --replace-fail 'Foundation REQUIRED' 'Foundation QUIET'
     '';
-  };
 
   strictDeps = true;
 
+  preConfigure = ''
+    appendToVar cmakeFlags -DCMAKE_Swift_COMPILER_TARGET=${stdenv.hostPlatform.swift.triple}
+    appendToVar cmakeFlags -DCMAKE_Swift_FLAGS=-module-cache-path\ "$NIX_BUILD_TOP/module-cache"
+  '';
+
   nativeBuildInputs = [
-    pkg-config
-    swift
-    swiftpm
+    cmake
+    ninja
+    swift'
   ];
 
   buildInputs = [
-    ncurses
-    sqlite
+    indexstore-db
+    swift-argument-parser
+    swift-asn1
+    swift-collections
+    swift-crypto
+    swift-llbuild
+    swift-lmdb
+    swift-syntax-no-toolchain
+    swift-tools-protocols
+    swift-tools-support-core
+    swiftpm
   ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ swift-corelibs-libdispatch ];
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    swift-corelibs-foundation
+    swift-corelibs-libdispatch
+    swift-foundation
+    swift-foundation-icu
+  ];
 
   # Tests crash with `*** bit out of range 0 - FD_SETSIZE on fd_set ***: terminated`
   doCheck = false; # !stdenv.hostPlatform.isDarwin;
+
+  postInstall =
+    # Add missing rpaths.
+    lib.optionalString stdenv.hostPlatform.isElf ''
+      for output in "''${outputs[@]}"; do
+        while IFS= read -d "" f; do
+          if isELF "$f"; then
+            patchelf --add-rpath ${lib.escapeShellArg (lib.makeLibraryPath rpaths)} "$f"
+          fi
+        done < <(find "$output" -type f -print0)
+      done
+    '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  versionCheckProgramArg = "--help";
+  preVersionCheck = "version='OVERVIEW: Language Server Protocol implementation'";
+
+  doInstallCheck = true;
 
   __structuredAttrs = true;
 
