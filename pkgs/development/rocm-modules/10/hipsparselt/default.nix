@@ -43,19 +43,23 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipsparselt${clr.gpuArchSuffix}";
-  version = "7.2.4";
+  version = "10.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-libraries";
-    tag = "rocm-${finalAttrs.version}";
-    hash = "sha256-Al/0yZPn/wqtBFQU1FcGoSquDMObk6HQ3D5sSh5biHg=";
+    tag = "therock-${finalAttrs.version}";
+    hash = "sha256-pJvsJv007YCXR4YiOq3qFWlcDFoGxwKovNSk0Mjxnes=";
     sparseCheckout = [
       "projects/hipsparselt"
       "projects/hipblaslt/tensilelite"
       "projects/hipblaslt/cmake"
       "projects/hipblaslt/device-library"
+      # hipBLASLt's CMakeLists, configured for rocisa, needs hipblaslt-version.h.in.
+      "projects/hipblaslt/library/include"
       "shared/origami"
+      # rocisa (tensilelite/rocisa/CMakeLists.txt) add_subdirectory's stinkytofu
+      "shared/stinkytofu"
     ];
   };
   sourceRoot = "${finalAttrs.src.name}/projects/hipsparselt";
@@ -64,6 +68,9 @@ stdenv.mkDerivation (finalAttrs: {
   env.ROCM_PATH = "${clr}";
   env.TENSILE_ROCM_ASSEMBLER_PATH = lib.getExe' clr "amdclang++";
   env.TENSILE_GEN_ASSEMBLY_TOOLCHAIN = lib.getExe' clr "amdclang++";
+  # The tensilelite helper cache defaults to the unwritable $HOME/.tensile.
+  env.TENSILE_DISABLE_HELPER_CACHE = "1";
+
   requiredSystemFeatures = [ "big-parallel" ];
 
   __structuredAttrs = true;

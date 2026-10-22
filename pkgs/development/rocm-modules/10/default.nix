@@ -156,6 +156,8 @@ let
 
       hipblaslt = self.callPackage ./hipblaslt { };
 
+      hipsparselt = self.callPackage ./hipsparselt { };
+
       half = self.callPackage ./half { };
 
       # Even if config.rocmSupport is false we need rocmSupport true
