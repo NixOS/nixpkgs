@@ -27,7 +27,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/jeffreytse/zsh-vi-mode";
     license = lib.licenses.mit;
     description = "Better and friendly vi(vim) mode plugin for ZSH";
-    maintainers = with lib.maintainers; [ kyleondy ];
+    maintainers = with lib.maintainers; [
+      kyleondy
+      starryreverie
+    ];
     platforms = lib.platforms.all;
   };
 })
