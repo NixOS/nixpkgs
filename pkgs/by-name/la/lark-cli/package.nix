@@ -13,7 +13,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "lark-cli";
-  version = "1.0.88";
+  version = "1.0.98";
 
   __structuredAttrs = true;
 
@@ -21,10 +21,10 @@ buildGoModule (finalAttrs: {
     owner = "larksuite";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MRaFOq+0+ieNPG23ncYot/kp5hyWER7bX95I+trLHbw=";
+    hash = "sha256-EjahQyEig/3ATH/DqbSsATq5wylYUxYdOHV2GsNdMcI=";
   };
 
-  vendorHash = "sha256-WClES7ilNmQ0018Qf13tNHouE/SIwh99MaewZ7VGQ2E=";
+  vendorHash = "sha256-5ecTHuvSeSUVVC3hI/nzZsRFjl7ppgTY3NHuHB4pojA=";
 
   subPackages = [ "." ];
 
@@ -52,7 +52,7 @@ buildGoModule (finalAttrs: {
   metaDataRelease = fetchurl {
     name = "lark-cli-${finalAttrs.version}-linux-amd64.tar.gz";
     url = "https://github.com/larksuite/cli/releases/download/v${finalAttrs.version}/lark-cli-${finalAttrs.version}-linux-amd64.tar.gz";
-    hash = "sha256-SX3iCTms3SquTImP6noMpx1aRZ7VQyAudiqLyzIo7/4=";
+    hash = "sha256-ShLct6CqslmG2LzQRstFsIJ4UxqarDoStTzz2Uc4/oA=";
   };
 
   metaData =
