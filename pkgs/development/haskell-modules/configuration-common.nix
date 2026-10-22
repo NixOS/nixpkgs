@@ -200,6 +200,11 @@ with haskellLib;
           prePatch = ''
             ${drv.prePatch or ""}
             find doc src -type f -exec sed -i -e 's/\r$//' '{}' '+'
+
+            # part of semaphore-compat 2.0 support
+            substituteInPlace stack.cabal \
+              --replace-fail 'semaphore-compat >=1.0.0 && <2' 'semaphore-compat >=2.0.1' \
+              --replace-fail 'semaphore-compat >=1.0.0 && < 2' 'semaphore-compat >=2.0.1'
           '';
         }) super.stack
       );
