@@ -798,8 +798,8 @@ in
       "sha256-LKXGGLE2ONJ1vthSqCnz8TGiFcQNm7SaGel51JOXkTk=";
 
   mypy-boto3-lightsail =
-    buildMypyBoto3Package "lightsail" "1.43.93"
-      "sha256-EeYwjSIO/WRcIWT19zYaidpICK1x3kOguH8xb5RiwrU=";
+    buildMypyBoto3Package "lightsail" "1.43.117"
+      "sha256-ERBof5VP8T8vJJAWlv1I2EEbdBgQMcF5nXSwlwuKTe0=";
 
   mypy-boto3-location =
     buildMypyBoto3Package "location" "1.43.0"
