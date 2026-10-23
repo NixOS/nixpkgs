@@ -5,6 +5,7 @@
   lib,
   makeSetupHook,
   rust,
+  rust-bindgen,
   stdenv,
   pkgsHostTarget,
   pkgsTargetTarget,
@@ -132,9 +133,7 @@
     substitutions = {
       libclang = (lib.getLib clang.cc);
       inherit clang;
-      targetFlag = lib.optionalString (
-        !lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform
-      ) "--target=${stdenv.targetPlatform.config}";
+      inherit (rust-bindgen.passthru) targetFlags;
     };
     meta.license = lib.licenses.mit;
   } ./rust-bindgen-hook.sh;
