@@ -21,14 +21,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "authlib";
-  version = "1.8.0";
+  version = "1.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "authlib";
     repo = "authlib";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/RfE5RKzQnZRe+V3ZTBu+890tV1Ybcd8SnazKMG0jQc=";
+    hash = "sha256-8n08XIR8+okoF6AEEMxYrKnfbXJCCNuRvfPR/RisRls=";
   };
 
   build-system = [ setuptools ];
