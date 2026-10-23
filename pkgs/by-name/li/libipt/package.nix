@@ -20,6 +20,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
   buildInputs = lib.optional stdenv.hostPlatform.isFreeBSD freebsd.libstdthreads;
 
+  strictDeps = true;
+
   env = lib.optionalAttrs stdenv.hostPlatform.isFreeBSD {
     NIX_LDFLAGS = "-lstdthreads";
   };
