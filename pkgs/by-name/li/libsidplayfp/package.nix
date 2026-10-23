@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   makeFontsConf,
   gitUpdater,
   testers,
@@ -37,6 +38,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
   __structuredAttrs = true;
+
+  patches = [
+    (fetchpatch {
+      name = "0001-libsidplayfp-CVE-2026-111148.patch";
+      url = "https://github.com/libsidplayfp/libsidplayfp/commit/20413d5df77bf74bbeed50b10fce19826c9d4b00.patch";
+      # Was fixed after v5 SID support was added, which can have a non-zero trailer length. For SIDs before that, always zero.
+      postFetch = ''
+        substituteInPlace $out \
+          --replace-fail '(m_fileOffset + m_trailerLen)' 'm_fileOffset'
+      '';
+      hash = "sha256-dJ3Umk1Lvrd97Ra+iak7ReRZSdRHO4iGC69B8J50IMc=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs .
