@@ -7,16 +7,17 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pure-eval";
-  version = "0.2.3";
+  version = "0.2.4";
   format = "setuptools";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "alexmojaki";
     repo = "pure_eval";
-    rev = "v${version}";
-    hash = "sha256-gdP8/MkzTyjkZaWUG5PoaOtBqzbCXYNYBX2XBLWLh18=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-F2IalcLbIXBSTd0YE7jIJFwXr5ViPQd16FyzrPLD04o=";
   };
 
   build-system = [ setuptools-scm ];
@@ -33,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
