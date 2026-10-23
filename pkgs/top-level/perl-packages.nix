@@ -33517,6 +33517,11 @@ with self;
       url = "mirror://cpan/authors/id/F/FE/FERREIRA/Term-Size-Perl-0.031.tar.gz";
       hash = "sha256-rppnRssbMF3cj42MpGh4VSucESNiiXHhOidRg4IvIJ4=";
     };
+    # Make build reproducible https://rt.cpan.org/Public/Bug/Display.html?id=127333
+    postPatch = ''
+      substituteInPlace inc/Probe.pm \
+        --replace-fail 'localtime' 'gmtime($ENV{SOURCE_DATE_EPOCH})'
+    '';
     meta = {
       description = "Perl extension for retrieving terminal size (Perl version)";
       license = with lib.licenses; [
