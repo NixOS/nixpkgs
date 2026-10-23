@@ -287,6 +287,8 @@ in
   anki-sync-server = runTest ./anki-sync-server.nix;
   anubis = runTest ./anubis.nix;
   anuko-time-tracker = runTest ./anuko-time-tracker.nix;
+  any2nix-api = runTest ./any2nix-api.nix;
+  any2nix-website = runTest ./any2nix-website.nix;
   apcupsd = runTest ./apcupsd.nix;
   apfs = runTest ./apfs.nix;
   apparmor = runTest ./apparmor;
