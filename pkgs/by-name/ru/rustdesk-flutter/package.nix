@@ -32,6 +32,9 @@
   addDriverRunpath,
   perl,
   openssl,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
 }:
 let
   flutterRustBridge = rustPlatform.buildRustPackage rec {
@@ -141,6 +144,11 @@ flutter329.buildFlutterApplication rec {
     pam
     xdotool
     openssl
+    # Needed for Wayland keyboard-shortcuts-inhibit (flutter/linux/CMakeLists.txt).
+    # CMake locates wayland-scanner via pkg-config and runs it by absolute path.
+    wayland
+    wayland-protocols
+    wayland-scanner
   ];
 
   prePatch = ''
