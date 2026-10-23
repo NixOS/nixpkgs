@@ -6,14 +6,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flask-swagger-ui";
   version = "5.32.14";
   pyproject = true;
 
   src = fetchPypi {
     pname = "flask_swagger_ui";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-p3lUxjMu7Q+SaCt71+90n2MSf3NlqEqaimh+JvzEOg4=";
   };
 
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ vanschelven ];
   };
-}
+})
