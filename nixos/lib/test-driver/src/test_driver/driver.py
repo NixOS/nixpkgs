@@ -30,6 +30,7 @@ from test_driver.machine import (
     QemuMachine,
     retry,
 )
+from test_driver.machine.nspawn_display import NspawnVncConfiguration
 from test_driver.polling_condition import PollingCondition
 from test_driver.vlan import VLan
 
@@ -37,6 +38,7 @@ from test_driver.vlan import VLan
 class NodeConfiguration(BaseModel):
     name: str
     start_script: Path
+    vnc: NspawnVncConfiguration | None = None
 
 
 class DriverConfiguration(BaseModel):
@@ -158,6 +160,7 @@ class Driver:
         logger: AbstractLogger,
         keep_machine_state: bool = False,
         debug: DebugAbstract = DebugNop(),
+        interactive: bool = False,
     ):
         self.config = config
         self.tests = config.test_script.read_text()
@@ -166,6 +169,7 @@ class Driver:
         self.debug = debug
         self.polling_conditions = []
         self.keep_machine_state = keep_machine_state
+        self.interactive = interactive
 
     def __enter__(self) -> "Driver":
         self.race_timer = threading.Timer(
@@ -214,6 +218,7 @@ class Driver:
             NspawnMachine(
                 name=name,
                 start_command=container_config.start_script.as_posix(),
+                vnc=container_config.vnc if self.interactive else None,
                 tmp_dir=tmp_dir,
                 logger=self.logger,
                 keep_machine_state=self.keep_machine_state,

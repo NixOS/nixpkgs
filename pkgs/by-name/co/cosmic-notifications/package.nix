@@ -12,17 +12,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-notifications";
-  version = "1.10.0";
+  version = "1.11.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-notifications";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-TFj4/wbKVt/TJ3S6y/3WsSMpYXn2K827Let3Co6MwF8=";
+    hash = "sha256-oANIdTa8omyh39X43nya5zE1S4InhJ65OiVlUSiYQEs=";
   };
 
-  cargoHash = "sha256-DxZ00FFzjoGrx+fx2y0kSTnkAVQtLkbI67WBKxxuh5A=";
+  cargoHash = "sha256-ifuvX0qP54B8alr7BBox7VL97VaJdOgJ7mgr9xvlImU=";
 
   separateDebugInfo = true;
   __structuredAttrs = true;
