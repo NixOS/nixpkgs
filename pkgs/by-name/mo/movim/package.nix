@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   writeShellScript,
-  dash,
+  makeBinaryWrapper,
   gitMinimal,
   php,
   phpCfg ? null,
@@ -84,10 +84,12 @@ php.buildComposerProject2 (finalAttrs: {
     }
   );
 
-  nativeBuildInputs =
-    lib.optional minify.script.enable esbuild
-    ++ lib.optional minify.style.enable lightningcss
-    ++ lib.optional minify.svg.enable scour;
+  nativeBuildInputs = [
+    makeBinaryWrapper
+  ]
+  ++ lib.optional minify.script.enable esbuild
+  ++ lib.optional minify.style.enable lightningcss
+  ++ lib.optional minify.svg.enable scour;
 
   # Composer ≥2.8 defaults preferred-install to
   # dist only (not auto), which prevents fallback
@@ -172,11 +174,8 @@ php.buildComposerProject2 (finalAttrs: {
 
   postInstall = ''
     mkdir -p $out/bin
-    cat << EOF > $out/bin/movim
-    #!${lib.getExe dash}
-    ${lib.getExe finalAttrs.php} $out/share/php/movim/daemon.php "\$@"
-    EOF
-    chmod +x $out/bin/movim
+    makeBinaryWrapper "${lib.getExe finalAttrs.php}" "$out/bin/movim" \
+      --add-flag "$out/share/php/movim/daemon.php"
 
     mkdir -p \
       $out/share/bash-completion/completion \
