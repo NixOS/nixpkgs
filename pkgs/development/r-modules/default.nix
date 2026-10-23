@@ -897,6 +897,10 @@ let
     ];
     odbc = [ pkgs.pkg-config ];
     opencv = [ pkgs.pkg-config ];
+    openfhe_R = with pkgs; [
+      cmake
+      which
+    ];
     openssl = [ pkgs.pkg-config ];
     orbweaver = with pkgs; [
       cargo
