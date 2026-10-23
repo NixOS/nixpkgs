@@ -1,0 +1,28 @@
+diff --git a/pydub/utils.py b/pydub/utils.py
+index 740c500..e741100 100644
+--- a/pydub/utils.py
++++ b/pydub/utils.py
+@@ -164,5 +164,5 @@ def get_encoder_name():
+     if which("avconv"):
+         return "avconv"
+-    elif which("ffmpeg"):
+-        return "ffmpeg"
++    elif which("@ffmpeg@"):
++        return "@ffmpeg@"
+     else:
+@@ -178,5 +178,5 @@ def get_player_name():
+     if which("avplay"):
+         return "avplay"
+-    elif which("ffplay"):
+-        return "ffplay"
++    elif which("@ffplay@"):
++        return "@ffplay@"
+     else:
+@@ -192,5 +192,5 @@ def get_prober_name():
+     if which("avprobe"):
+         return "avprobe"
+-    elif which("ffprobe"):
+-        return "ffprobe"
++    elif which("@ffprobe@"):
++        return "@ffprobe@"
+     else:

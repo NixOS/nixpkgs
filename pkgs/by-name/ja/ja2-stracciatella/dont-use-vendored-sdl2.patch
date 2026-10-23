@@ -1,0 +1,17 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e4e5547af..a3017d197 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -428,12 +425,6 @@ if (MINGW)
+     install(SCRIPT "${CMAKE_CURRENT_BINARY_DIR}/install-dlls-mingw.cmake")
+ endif()
+ 
+-if(APPLE)
+-    file(GLOB APPLE_DIST_FILES "${CMAKE_CURRENT_SOURCE_DIR}/assets/distr-files-mac/*.txt")
+-    install(FILES ${APPLE_DIST_FILES} DESTINATION .)
+-    install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/lib-SDL2-2.0.20-macos/SDL2.framework DESTINATION .)
+-endif()
+-
+ ## Build AppImage
+ 
+ add_custom_target(package-appimage

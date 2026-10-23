@@ -1,0 +1,27 @@
+--- a/gtk/deprecated/gtkrc.c	2016-04-02 18:43:08.401663112 +0900
++++ b/gtk/deprecated/gtkrc.c	2016-04-02 18:29:19.927608592 +0900
+@@ -774,5 +774,23 @@
+   if (var)
+     result = g_strdup (var);
+ 
++  // check NIX_PROFILES paths.
++  const gchar *nixProfilesEnv = g_getenv ("NIX_PROFILES");
++  gchar *cachePath;
++  guint i;
++
++  if(nixProfilesEnv && !result){
++    gchar **paths = g_strsplit(nixProfilesEnv, " ", -1);
++    for (i = 0; paths[i] != NULL; i++){
++      cachePath = g_build_filename(paths[i], "etc", "gtk-3.0", "immodules.cache", NULL);
++      if( g_file_test( cachePath, G_FILE_TEST_EXISTS) ){
++        if(result) g_free(result);
++        result = g_strdup(cachePath);
++      }
++      g_free(cachePath);
++    }
++    g_strfreev(paths);
++  }
++
+   if (!result)
+     {
+ 

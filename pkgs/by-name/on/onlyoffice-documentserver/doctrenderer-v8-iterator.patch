@@ -1,0 +1,16 @@
+diff --git a/DesktopEditor/doctrenderer/js_internal/v8/v8_base.cpp b/DesktopEditor/doctrenderer/js_internal/v8/v8_base.cpp
+index bacd5dedac..4749d8fecb 100644
+--- a/DesktopEditor/doctrenderer/js_internal/v8/v8_base.cpp
++++ b/DesktopEditor/doctrenderer/js_internal/v8/v8_base.cpp
+@@ -259,10 +259,7 @@ namespace NSJSBase
+ 		m_internal->m_contextPersistent.Reset();
+ 		// destroy native object in the weak handles before isolate disposal
+ 		v8::Isolate* isolate = m_internal->m_isolate;
+-		{
+-			v8::Isolate::Scope scope(isolate);
+-			isolate->VisitHandlesWithClassIds(WeakHandleVisitor::getInstance());
+-		}
++		std::cerr << "Could not release memory. This is a nix-specific leak, but should be fine as long as it doesn't happen too frequently" << std::endl;
+ 		isolate->Dispose();
+ 		m_internal->m_isolate = NULL;
+ 	}

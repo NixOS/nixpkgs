@@ -1,0 +1,39 @@
+From eb21fd64a19a0e10c4c3826fc71610fd5850fa2f Mon Sep 17 00:00:00 2001
+From: Christoph Neidahl <christoph.neidahl@gmail.com>
+Date: Sun, 13 Sep 2020 23:18:51 +0200
+Subject: [PATCH 1/2] Drop baked-in build date for r13y
+
+---
+ src/ct2util.d | 2 +-
+ src/ui/ui.d   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/ct2util.d b/src/ct2util.d
+index 523cadc..e462b09 100644
+--- a/src/ct2util.d
++++ b/src/ct2util.d
+@@ -105,7 +105,7 @@ int main(string[] args) {
+ 	speeds.length = 32;
+ 	masks.length = 32;
+ 	void printheader() {
+-		enum hdr = "CheeseCutter 2 utilities" ~ com.util.versionInfo;
++		enum hdr = "CheeseCutter 2 utilities";
+ 		writefln(hdr);
+ 		writefln("\nUsage: \t%s <command> <options> <infile> <-o outfile>",args[0]);
+ 		writefln("\t%s import <infile> <infile2> <-o outfile>",args[0]);
+diff --git a/src/ui/ui.d b/src/ui/ui.d
+index e418dda..21af408 100644
+--- a/src/ui/ui.d
++++ b/src/ui/ui.d
+@@ -231,7 +231,7 @@ class Infobar : Window {
+ 	  
+ 		screen.clrtoeol(0, headerColor);
+ 
+-		enum hdr = "CheeseCutter 2.9" ~ com.util.versionInfo;
++		enum hdr = "CheeseCutter 2.9";
+ 		screen.cprint(4, 0, 1, headerColor, hdr);
+ 		screen.cprint(screen.width - 14, 0, 1, headerColor, "F12 = Help");
+ 		int c1 = audio.player.isPlaying ? 13 : 12;
+-- 
+2.25.4
+

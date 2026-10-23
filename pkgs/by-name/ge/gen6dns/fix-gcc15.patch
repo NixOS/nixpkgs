@@ -1,0 +1,24 @@
+diff --git a/parse.c b/parse.c
+index d4bb28b..90a307d 100644
+--- a/parse.c
++++ b/parse.c
+@@ -43,7 +43,7 @@ static	int	parsehostline (const char *line, host_t *h, ip6_t *hid, ip6_t *sid, c
+ static	int	parseextralines (FILE *fp, int *lnrp, char *extra_rr, size_t len);
+ static	void	dumphostline (FILE *fp, const host_t *host, const ip6_t *hid, const ip6_t *sid, const char *scope);
+ 
+-int	parsefile (const char *fname, FILE *outfp, int (*genfunc)())
++int	parsefile (const char *fname, FILE *outfp, int (*genfunc)(int type, const ip6_t *prfx, const scope_t *scope, const host_t *host, const ip6_t *hid, ip6_t *sid, const char *extra_rr))
+ {
+ 	char	extra_rr[MAXEXTRARR+1];
+ 	char	line[MAXLINE+1];
+diff --git a/parse.h b/parse.h
+index 10e7997..fbb452d 100644
+--- a/parse.h
++++ b/parse.h
+@@ -7,5 +7,5 @@
+ # define	MAXLINE		511
+ # define	MAXEXTRARR	(3*MAXLINE)
+ 
+-extern	int	parsefile (const char *fname, FILE *outfp, int (*genfunc)());
++extern	int	parsefile (const char *fname, FILE *outfp, int (*genfunc)(int type, const ip6_t *prfx, const scope_t *scope, const host_t *host, const ip6_t *hid, ip6_t *sid, const char *extra_rr));
+ #endif

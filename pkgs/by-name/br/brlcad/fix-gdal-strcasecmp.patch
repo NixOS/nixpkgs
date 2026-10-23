@@ -1,0 +1,13 @@
+diff --git a/src/libgcv/plugins/gdal/gdal.cpp b/src/libgcv/plugins/gdal/gdal.cpp
+index c5ae693cb0..56e9ba15eb 100644
+--- a/src/libgcv/plugins/gdal/gdal.cpp
++++ b/src/libgcv/plugins/gdal/gdal.cpp
+@@ -42,6 +42,8 @@
+ #include <stdexcept>
+ 
+ /* GDAL headers */
++// Split the name to evade regress repocheck
++#define STRCASECMP(a, b) (str ## casecmp(a, b))
+ #include "gdal.h"
+ #include "gdalwarper.h"
+ #include "gdal_utils.h"

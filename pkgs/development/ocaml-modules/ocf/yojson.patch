@@ -1,0 +1,60 @@
+From caf5430f30830a2222bd7d0e6c5cea7b632e4a6a Mon Sep 17 00:00:00 2001
+From: Zoggy <zoggy@bat8.org>
+Date: Wed, 22 Oct 2025 11:41:52 +0200
+Subject: [PATCH] support Yojson >= 3.0: do not use `Tuple any more, use `List
+ instead
+
+---
+ Changes    |  3 +++
+ lib/ocf.ml | 14 +++++---------
+ 2 files changed, 8 insertions(+), 9 deletions(-)
+
+diff --git a/lib/ocf.ml b/lib/ocf.ml
+index 3169d13..3ac98a4 100644
+--- a/lib/ocf.ml
++++ b/lib/ocf.ml
+@@ -130,8 +130,7 @@ module Wrapper =
+     let list w =
+       let to_j ?with_doc l = `List (List.map (w.to_json ?with_doc) l) in
+       let from_j ?def = function
+-      | `List l
+-      | `Tuple l -> List.map (w.from_json ?def: None) l
++      | `List l -> List.map (w.from_json ?def: None) l
+       | `Null -> []
+       | json -> invalid_value json
+       in
+@@ -150,27 +149,24 @@ module Wrapper =
+
+     let pair w1 w2 =
+       let to_j ?with_doc (v1, v2) =
+-        `Tuple [w1.to_json ?with_doc v1 ; w2.to_json ?with_doc v2]
++        `List [w1.to_json ?with_doc v1 ; w2.to_json ?with_doc v2]
+       in
+       let from_j ?def = function
+-        `List [v1 ; v2]
+-      | `Tuple [v1 ; v2] -> (w1.from_json v1, w2.from_json v2)
++      | `List [v1 ; v2] -> (w1.from_json v1, w2.from_json v2)
+       | json -> invalid_value json
+       in
+       make to_j from_j
+
+     let triple w1 w2 w3 =
+       let to_j ?with_doc (v1, v2, v3) =
+-        `Tuple [
++        `List [
+           w1.to_json ?with_doc v1 ;
+           w2.to_json ?with_doc v2 ;
+           w3.to_json ?with_doc v3 ;
+         ]
+       in
+       let from_j ?def = function
+-        `List [v1 ; v2 ; v3]
+-      | `Tuple [v1 ; v2 ; v3] ->
+-          (w1.from_json v1, w2.from_json v2, w3.from_json v3)
++        `List [v1 ; v2 ; v3] -> (w1.from_json v1, w2.from_json v2, w3.from_json v3)
+       | json -> invalid_value json
+       in
+       make to_j from_j
+--
+GitLab
+

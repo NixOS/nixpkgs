@@ -1,0 +1,14 @@
+diff --git a/src/application.js b/src/application.js
+index 6a29764..a14cd1a 100644
+--- a/src/application.js
++++ b/src/application.js
+@@ -222,9 +222,6 @@ class Application extends Adw.Application {
+     }
+ 
+     vfunc_dbus_register(conn, _path) {
+-        if (!Utils.isFlatpakSandbox())
+-            return true;
+-
+         GLib.setenv('IDLE_PERSIST', '1', false);
+         this._ensureService(conn,
+             Tp.ACCOUNT_MANAGER_BUS_NAME,

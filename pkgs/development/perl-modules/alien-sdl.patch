@@ -1,0 +1,30 @@
+diff --git a/inc/My/Builder/Unix.pm b/inc/My/Builder/Unix.pm
+index 15291d5..5c5ab24 100644
+--- a/inc/My/Builder/Unix.pm
++++ b/inc/My/Builder/Unix.pm
+@@ -48,7 +48,7 @@ sub get_additional_libs {
+ 
+ sub can_build_binaries_from_sources {
+   my $self = shift;
+-  return 1; # yes we can
++  return 0; # no we can't
+ }
+ 
+ sub build_binaries {
+diff --git a/t/004_get_header_version.t b/t/004_get_header_version.t
+index d4146ff..27f53ea 100644
+--- a/t/004_get_header_version.t
++++ b/t/004_get_header_version.t
+@@ -1,8 +1,11 @@
+ # t/004_config.t
+ 
+-use Test::More tests => 1;
++use Test::More;
+ use Alien::SDL;
+ 
++Test::More::plan( skip_all => 'NixOS doesn\'t have SDL headers in this location' );
++
++
+ like( Alien::SDL->get_header_version('SDL_version.h'), qr/([0-9]+\.)*[0-9]+/, "Testing SDL_version.h" );
+ #like( Alien::SDL->get_header_version('SDL_net.h'), qr/([0-9]+\.)*[0-9]+/, "Testing SDL_net.h" );
+ #like( Alien::SDL->get_header_version('SDL_image.h'), qr/([0-9]+\.)*[0-9]+/, "Testing SDL_image.h" );

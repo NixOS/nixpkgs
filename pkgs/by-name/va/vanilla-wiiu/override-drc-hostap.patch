@@ -1,0 +1,9 @@
+diff --git a/pipe/linux/CMakeLists.txt b/pipe/linux/CMakeLists.txt
+--- a/pipe/linux/CMakeLists.txt
++++ b/pipe/linux/CMakeLists.txt
+@@ -124,4 +124,3 @@
+     DOWNLOAD_COMMAND
+         ${CMAKE_COMMAND} -E remove_directory "${HOSTAP_DIR}" &&
+-        ${CMAKE_COMMAND} -E env --unset=GIT_DIR ${GIT_EXECUTABLE} clone https://github.com/vanilla-wiiu/drc-hostap.git "${HOSTAP_DIR}" &&
+-        ${CMAKE_COMMAND} -E env --unset=GIT_DIR ${GIT_EXECUTABLE} -C "${HOSTAP_DIR}" checkout a2f705daa143791180754100194c91714f7e8801
++        ${CMAKE_COMMAND} -E copy_directory @hostap@ "${HOSTAP_DIR}"
