@@ -148,6 +148,7 @@ let
               "nvcc-outputs"
               "nvcc-roles"
               "nvcc-runtime"
+              "nvlink-notes"
               "redist-outputs"
               "redist-variants"
             ] (name: cuda.tests.${name})
