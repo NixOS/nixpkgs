@@ -15566,8 +15566,10 @@ with self;
     };
 
     # XXX: It'd be nicer if `GraphViz.pm' could record the path to graphviz.
-    buildInputs = [
+    nativeBuildInputs = [
       pkgs.graphviz
+    ];
+    buildInputs = [
       TestPod
       Moo
       IPCRun3
@@ -15583,10 +15585,13 @@ with self;
       XMLXPath
       DataSectionSimple
     ];
+    strictDeps = true;
 
     # needed for fontconfig tests
     env.HOME = "/build";
     env.FONTCONFIG_PATH = "${lib.getOutput "out" pkgs.fontconfig}/etc/fonts";
+
+    __structuredAttrs = true;
 
     meta = {
       description = "Perl interface to the GraphViz graphing tool";
