@@ -20904,11 +20904,16 @@ with self;
 
   MathBaseConvert = buildPerlPackage {
     pname = "Math-Base-Convert";
-    version = "0.11";
+    version = "0.13";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MIKER/Math-Base-Convert-0.11.tar.gz";
-      hash = "sha256-jAlxNV8kyTt553rVSkVwCQoaWY/Lm4b1wX66QvOLQOA=";
+      url = "mirror://cpan/authors/id/M/MI/MIKER/Math-Base-Convert-0.13.tar.gz";
+      hash = "sha256-KJwMM7yYhts9ws+UnY4Ksk42xnuegzNVlB1wqvNRntI=";
     };
+    # Fix reproducibility, based on https://rt.cpan.org/Public/Bug/Display.html?id=119885
+    postPatch = ''
+      substituteInPlace bitmaps \
+        --replace-fail 'localtime()' 'gmtime($ENV{SOURCE_DATE_EPOCH})'
+    '';
     meta = {
       description = "Very fast base to base conversion";
       license = with lib.licenses; [
