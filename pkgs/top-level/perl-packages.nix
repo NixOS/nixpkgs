@@ -15707,18 +15707,23 @@ with self;
       Gtk3
     ];
     nativeCheckInputs = [
+      Gtk3
       TestDifferences
       TestDeep
       ImageMagick
       TryTiny
       TestMockObject
       CarpAlways
+    ];
+    checkInputs = [
       pkgs.librsvg
     ];
+    strictDeps = true;
     checkPhase = ''
       ${pkgs.xvfb-run}/bin/xvfb-run -s '-screen 0 800x600x24' \
         make test
     '';
+    __structuredAttrs = true;
     meta = {
       description = "Image viewer widget for Gtk3";
       homepage = "https://github.com/carygravel/gtk3-imageview";
