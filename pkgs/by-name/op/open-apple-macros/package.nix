@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   fetchSwiftPMDeps,
+  jq,
   stdenv,
   swift,
   swiftpm,
@@ -26,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    jq
     swift
     swiftpm
   ];
@@ -33,18 +35,17 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall =
     # Put the plugin server at the expected location.
     ''
-      declare -a supportedPlugins=(
-        FoundationModels
-        SwiftUI
-      )
+      # Install the plugin manifest included in upstream's release tarballs
+      make build-info
+      install -Dm644 tmp/info/info.json "$out/share/open-apple-macros/info.json"
 
       mkdir -p "$out/libexec/swift"
       mv "$out/bin" "$out/libexec/swift/plugins"
 
       # Use stub libraries so that users need only specify the plugin path and plugin server.
       mkdir -p "$out/lib/swift/host/plugins"
-      for plugin in "''${supportedPlugins[@]}"; do
-        touch "$out/lib/swift/host/plugins/lib''${plugin}Macros${stdenv.hostPlatform.extensions.sharedLibrary}"
+      for plugin in $(jq -r '.plugins[]' tmp/info/info.json); do
+        touch "$out/lib/swift/host/plugins/lib''${plugin}${stdenv.hostPlatform.extensions.sharedLibrary}"
       done
     '';
 
