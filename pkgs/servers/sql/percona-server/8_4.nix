@@ -51,11 +51,11 @@ assert !(withJemalloc && withTcmalloc);
 let
   # baseline, used for building both client and server
   common = finalAttrs: {
-    version = "8.4.10-10";
+    version = "8.4.11-11";
 
     src = fetchurl {
       url = "https://downloads.percona.com/downloads/Percona-Server-${lib.versions.majorMinor finalAttrs.version}/Percona-Server-${finalAttrs.version}/source/tarball/percona-server-${finalAttrs.version}.tar.gz";
-      hash = "sha256-IjHeflYc3AMd6hNXDEYegXm14wjyt9hX3gIVtOQzauU=";
+      hash = "sha256-L7kOI1wlGD1zyXLLpIGjLqLZDO/KBmn+B4be/CrN+hg=";
     };
 
     nativeBuildInputs = [
