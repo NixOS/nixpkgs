@@ -1,5 +1,6 @@
 {
   stdenv,
+  lib,
   kernel,
   kernelModuleMakeFlags,
   libajantv2,
@@ -8,6 +9,8 @@ stdenv.mkDerivation (finalAttrs: {
   name = "${finalAttrs.pname}-${finalAttrs.version}-${kernel.version}";
   pname = "ajantv2-module";
   version = libajantv2.version;
+
+  __structuredAttrs = true;
 
   inherit (libajantv2) src;
   sourceRoot = "${libajantv2.src.name}/driver/linux";
@@ -21,7 +24,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = kernelModuleMakeFlags;
+  makeFlags = kernelModuleMakeFlags ++ [
+    "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+  ];
 
   preBuild = ''
     chmod -R +w ../../
@@ -29,13 +34,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  buildFlags = [
-    "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+  kmods = [
+    "ajantv2"
+    "ajardma"
   ];
 
+  postBuild = ''
+    for kmod in "''${kmods[@]}"; do
+      echo "compressing $kmod" >&2
+      xz -k ''${kmod}.ko
+    done
+  '';
+
   installPhase = ''
-    install -D ajantv2.ko $out/lib/modules/${kernel.modDirVersion}/misc/ajantv2.ko
-    install -D ajardma.ko $out/lib/modules/${kernel.modDirVersion}/misc/ajardma.ko
+    for kmod in "''${kmods[@]}"; do
+      install ''${kmod}.ko.xz $out/lib/modules/${kernel.modDirVersion}/misc/''${kmod}.ko.xz
+    done
   '';
 
   meta = {
