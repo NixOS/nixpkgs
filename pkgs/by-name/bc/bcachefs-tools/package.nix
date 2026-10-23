@@ -139,7 +139,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     tests = {
       smoke-test = nixosTests.bcachefs;
-      inherit (nixosTests.installer) bcachefsSimple bcachefsEncrypted bcachefsMulti;
+      inherit (nixosTests.installer)
+        bcachefsSimple
+        bcachefsEncrypted
+        bcachefsMulti
+        bcachefsEncryptedLatestKernel
+        bcachefsEncryptedRcKernel
+        ;
     };
 
     updateScript = nix-update-script { };
