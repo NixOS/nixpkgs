@@ -74,7 +74,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "PubGrub-based dependency resolver for Python packages";
     homepage = "https://github.com/notatallshaw/nab";
-    changelog = "https://github.com/notatallshaw/nab/releases/tag/v${finalAttrs.src.tag}";
+    changelog = "https://github.com/notatallshaw/nab/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mdaniels5757 ];
     mainProgram = "nab";
