@@ -17376,18 +17376,24 @@ with self;
     };
     buildInputs = [
       pkgs.freetype
-      pkgs.fontconfig
       pkgs.libjpeg
       pkgs.libpng
     ];
+    nativeCheckInputs = [
+      pkgs.fontconfig
+    ];
+    strictDeps = true;
     makeMakerFlags = [
-      "--incpath ${pkgs.libjpeg.dev}/include"
-      "--libpath ${pkgs.libjpeg.out}/lib"
+      "--incpath"
+      "${pkgs.libjpeg.dev}/include"
+      "--libpath"
+      "${pkgs.libjpeg.out}/lib"
       "--incpath"
       "${pkgs.libpng.dev}/include"
       "--libpath"
       "${pkgs.libpng.out}/lib"
     ];
+    __structuredAttrs = true;
     meta = {
       changelog = "https://metacpan.org/release/TONYC/Imager-${version}/source/Changes";
       description = "Perl extension for Generating 24 bit Images";
