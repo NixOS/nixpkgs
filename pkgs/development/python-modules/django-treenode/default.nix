@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "django-treenode";
-  version = "0.24.0";
+  version = "0.25.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fabiocaccamo";
     repo = "django-treenode";
     tag = version;
-    hash = "sha256-ZdoFUYgPbfS7ORqd1kVh+XpJetZZ4alEkaVu5jqw5II=";
+    hash = "sha256-MsMNKptwxBNHgW+0juIkJCD8qdXvXzorwL/DnL+FqgQ=";
   };
 
   build-system = [

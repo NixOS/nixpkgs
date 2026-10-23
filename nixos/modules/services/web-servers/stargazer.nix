@@ -271,7 +271,7 @@ in
           "~CAP_SYS_BOOT"
           "~CAP_NET_ADMIN"
         ]
-        ++ lib.lists.optional (!cfg.allowCgiUser) [
+        ++ lib.lists.optionals (!cfg.allowCgiUser) [
           "~CAP_SETGID"
           "~CAP_SETUID"
         ];
@@ -279,7 +279,7 @@ in
         SystemCallFilter = [
           "~@cpu-emulation @debug @keyring @mount @obsolete"
         ]
-        ++ lib.lists.optional (!cfg.allowCgiUser) [ "@privileged @setuid" ];
+        ++ lib.lists.optionals (!cfg.allowCgiUser) [ "@privileged @setuid" ];
       };
     };
 

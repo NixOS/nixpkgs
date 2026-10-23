@@ -2,32 +2,35 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytestCheckHook,
-  pyserial-asyncio-fast,
   setuptools,
   zigpy,
 }:
 
 buildPythonPackage rec {
   pname = "zigpy-xbee";
-  version = "0.21.1";
+  version = "0.22.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy-xbee";
     tag = version;
-    hash = "sha256-ALwhl9WUDkv0POufF/G/rZrn+ITbMdh6y86lShy6ZTg=";
+    hash = "sha256-ni+YY8MGPik8/qxAKlY1loAbRBFcdOch1qT4xvN1Kyc=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail ', "setuptools-git-versioning<2"' "" \
-      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail ', "setuptools-git-versioning<2"' ""
   '';
 
   build-system = [ setuptools ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   dependencies = [
     zigpy
@@ -36,11 +39,14 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
-    pyserial-asyncio-fast
   ];
 
   disabledTests = [
     "test_connect" # Attempts to test ioctl
+    # TypeError: Coordinator <MagicMock id='140737275870048'> is not a Zigbee device
+    "test_rx"
+    "test_rx_nwk_0000"
+    "test_rx_device_annce"
   ];
 
   meta = {

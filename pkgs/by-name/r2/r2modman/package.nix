@@ -5,36 +5,39 @@
   dart-sass,
   electron,
   fetchFromGitHub,
+  fetchPnpmDeps,
   makeDesktopItem,
   makeWrapper,
+  nix-update-script,
   nodejs,
-  yarn-berry,
+  pnpm_11,
+  pnpmConfigHook,
 }:
+let
+  pnpm = pnpm_11;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "r2modman";
-  version = "3.2.17";
+  version = "3.2.20";
 
   src = fetchFromGitHub {
     owner = "ebkr";
     repo = "r2modmanPlus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DXGgTezCcMl37Vu7R+2dwWJmuqsXXtlWRYMX9gqm7+w=";
+    hash = "sha256-7zigBXnHiUYL9matqT6da5c+cXwQH8CdqpSrsrOURYE=";
   };
 
-  missingHashes = ./missing-hashes.json;
-  offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src patches missingHashes;
-    hash = "sha256-RAQgaxcQl15JqZsLA9ISfOiGgob4yYuc4bhjZFzW8xk=";
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-xfafdQkOTLHUPeFxKn3fujZrEmK+AJ2TN85eHAvilj8=";
   };
 
   patches = [
     # Make it possible to launch Steam games from r2modman.
     ./steam-launch-fix.patch
-
-    # Remove after upstream updates to Yarn 4.14
-    # https://github.com/ebkr/r2modmanPlus/blob/develop/package.json#L118
-    ./yarn-4.14-support.patch
 
     # Fix copying of wrapper files to game directory
     ./wrapper-fix.patch
@@ -47,14 +50,12 @@ stdenv.mkDerivation (finalAttrs: {
     dart-sass
     makeWrapper
     nodejs
-    yarn-berry
-    yarn-berry.yarnBerryConfigHook
+    pnpm
+    pnpmConfigHook
   ];
 
-  env = {
-    # Required, as the build process won't have network access. Uses the wrapped electron binary instead.
-    ELECTRON_SKIP_BINARY_DOWNLOAD = true;
-  };
+  # Required, as the build process won't have network access. Uses the wrapped electron binary instead.
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = true;
 
   postPatch = ''
     # Hide update banner
@@ -64,10 +65,13 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
+    substituteInPlace node_modules/.pnpm/sass-embedded@*/node_modules/sass-embedded/dist/lib/src/compiler-path.js \
       --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${lib.getExe dart-sass}"];'
 
-    yarn quasar build --mode electron --skip-pkg
+    pnpm quasar build --mode electron --skip-pkg
+
+    # Remove unecessary devDependencies only required at build time.
+    pnpm prune --prod
 
     runHook postBuild
   '';
@@ -113,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/ebkr/r2modmanPlus/releases/tag/v${finalAttrs.version}";

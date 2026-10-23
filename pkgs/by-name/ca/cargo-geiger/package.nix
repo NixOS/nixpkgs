@@ -11,6 +11,7 @@
   # testing
   testers,
   cargo-geiger,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -46,9 +47,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # curl-sys wants to run curl-config on darwin
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ curl.dev ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   # skip tests with networking or other failures
   checkFlags = [

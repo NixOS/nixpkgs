@@ -3,7 +3,6 @@
   stdenv,
   fetchurl,
   gtk3,
-  gtk2,
   gdk-pixbuf,
   dbus-glib,
   libx11,
@@ -26,7 +25,7 @@
 
 stdenv.mkDerivation rec {
   pname = "seamonkey";
-  version = "2.53.23";
+  version = "2.53.24";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -34,7 +33,7 @@ stdenv.mkDerivation rec {
   # Upstream requires highly deprecated build tools to compile from source
   src = fetchurl {
     url = "https://archive.seamonkey-project.org/releases/${version}/linux-x86_64/en-US/seamonkey-${version}.en-US.linux-x86_64.tar.bz2";
-    sha256 = "1si5vqprq7hgm366db76yziqxcqdvxj675kgxb6lp2ppprl8rlkw";
+    sha256 = "sha256-Y/vh0PXKNbsijkfrWGqBxXh96/vCeiQhKeqeEzQp2Cw=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +43,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gtk2
     gtk3
     gdk-pixbuf
     dbus-glib

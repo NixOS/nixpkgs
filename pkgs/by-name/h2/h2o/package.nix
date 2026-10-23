@@ -20,18 +20,20 @@
   ruby,
   withUring ? stdenv.hostPlatform.isLinux,
   liburing,
+  withZstandard ? true,
+  zstd,
   nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "h2o";
-  version = "2.3.0-rolling-2026-06-25";
+  version = "2.3.0-rolling-2026-10-21";
 
   src = fetchFromGitHub {
     owner = "h2o";
     repo = "h2o";
-    rev = "58a9a054300a09235df52954101a49573762e0fc";
-    hash = "sha256-TofY3JzWM4XNiMqna5KnmtBJETndJ/YY0sFY/0X99GA=";
+    rev = "cee2cca61640b50ba67cbdf8ada930d436cc86cc";
+    hash = "sha256-6lRKcvB0WsZX30t/bjpG97g1u4GsbJ37RwTEbgAl6Cc=";
   };
 
   outputs = [
@@ -53,7 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
     bison
     ruby
   ]
-  ++ lib.optional withUring liburing;
+  ++ lib.optional withUring liburing
+  ++ lib.optional withZstandard zstd;
 
   buildInputs = [
     brotli
@@ -64,11 +67,13 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     wslay
   ]
-  ++ lib.optional withBrotli brotli;
+  ++ lib.optional withBrotli brotli
+  ++ lib.optional withZstandard zstd;
 
   cmakeFlags = [
-    "-DWITH_BROTLI=${if withBrotli then "ON" else "OFF"}"
-    "-DWITH_MRUBY=${if withMruby then "ON" else "OFF"}"
+    (lib.cmakeBool "WITH_BROTLI" withBrotli)
+    (lib.cmakeBool "WITH_MRUBY" withMruby)
+    (lib.cmakeBool "WITH_ZSTD" withZstandard)
   ];
 
   postInstall = ''

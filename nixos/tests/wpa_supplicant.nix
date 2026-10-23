@@ -66,6 +66,7 @@ let
                 ssid = "nixos-test-mixed";
                 authentication = {
                   mode = "wpa3-sae-transition";
+                  transitionDisable = true;
                   saeAddToMacAllow = true;
                   saePasswordsFile = pkgs.writeText "password" naughtyPassphrase;
                   wpaPasswordFile = pkgs.writeText "password" naughtyPassphrase;
@@ -76,6 +77,7 @@ let
                 ssid = "nixos-test-mixed";
                 authentication = {
                   mode = "wpa3-sae-transition";
+                  transitionDisable = true;
                   saeAddToMacAllow = true;
                   saePasswordsFile = pkgs.writeText "password" naughtyPassphrase;
                   wpaPasswordFile = pkgs.writeText "password" naughtyPassphrase;
@@ -84,6 +86,9 @@ let
               };
               wlan0-3 = {
                 ssid = "nixos-test-wpa2";
+                # Decouple the BSS interface name from the attribute name,
+                # as multi-link setups do with a shared name like mld0.
+                interfaceName = "wlan0-legacy";
                 authentication = {
                   mode = "wpa2-sha256";
                   wpaPassword = naughtyPassphrase;
@@ -138,6 +143,13 @@ let
         # save hostapd config file for manual inspection
         machine.wait_for_unit("hostapd.service")
         machine.copy_from_machine("/run/hostapd/wlan0.hostapd.conf")
+
+        with subtest("Secondary BSS uses its configured interfaceName"):
+            machine.succeed("grep -qx 'interface=wlan0' /run/hostapd/wlan0.hostapd.conf")
+            machine.succeed("grep -qx 'bss=wlan0-legacy' /run/hostapd/wlan0.hostapd.conf")
+            machine.fail("grep -qx 'bss=wlan0-3' /run/hostapd/wlan0.hostapd.conf")
+            machine.succeed("test -d /sys/class/net/wlan0-legacy")
+            machine.fail("test -d /sys/class/net/wlan0-3")
 
         ${extraTestScript}
       '';
@@ -327,7 +339,16 @@ in
     };
   };
 
-  # Test connecting to a mixed SAE/WPA2 hotspot using WPA2
+  # Test connecting to a mixed SAE/WPA2 hotspot using legacy WPA2-PSK
+  mixedUsingWpa2Psk = runConnectionTest "mixed-using-wpa2-psk" {
+    fallbackToWPA2 = true;
+    networks.nixos-test-mixed = {
+      pskRaw = "ext:psk_nixos_test";
+      authProtocols = [ "WPA-PSK" ];
+    };
+  };
+
+  # Test connecting to a mixed SAE/WPA2 hotspot using WPA2-PSK-SHA256
   mixedUsingWpa2 = runConnectionTest "mixed-using-wpa2" {
     fallbackToWPA2 = true;
     networks.nixos-test-mixed = {

@@ -14,7 +14,6 @@ let
     getExe
     listToAttrs
     literalExpression
-    maintainers
     makeBinPath
     mapAttrs'
     mapAttrsToList
@@ -73,9 +72,7 @@ let
   nixosConfig = config;
 in
 {
-  meta.maintainers = with maintainers; [
-    nazarewk
-  ];
+  meta.maintainers = [ ];
   meta.doc = ./netbird.md;
 
   imports = [
@@ -339,9 +336,9 @@ in
                         mkdir -p "$out/share/applications"
                         substitute ${cfg.ui.package}/share/applications/netbird.desktop \
                             "$out/share/applications/${mkBin "netbird"}.desktop" \
-                          --replace-fail 'Name=Netbird' "Name=NetBird @ ${client.service.name}" \
+                          --replace-fail 'Name=NetBird' "Name=NetBird @ ${client.service.name}" \
                           --replace-fail 'Icon=netbird' "Icon=${cfg.ui.package}/share/icons/hicolor/256x256/apps/netbird.png" \
-                          --replace-fail 'Exec=netbird-ui' "Exec=${mkBin "netbird-ui"}"
+                          --replace-fail 'netbird-ui' "${mkBin "netbird-ui"}"
                       '')
                     ];
                   };

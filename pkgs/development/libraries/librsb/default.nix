@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-GMb8RD+hz9KoEQ99S4jVu8tJO56Fs6YgFLi7V6hI4E8=";
+    hash = "sha256-GMb8RD+hz9KoEQ99S4jVu8tJO56Fs6YgFLi7V6hI4E8=";
   };
 
   # The default configure flags are still present when building
@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
       Contains libraries and header files for developing applications that
       want to make use of librsb.
     '';
-    license = with lib.licenses; [ lgpl3Plus ];
+    license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ ravenjoad ];
     platforms = lib.platforms.all;
     # linking errors such as 'undefined reference to `gzungetc'

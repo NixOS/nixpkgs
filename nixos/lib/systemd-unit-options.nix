@@ -379,7 +379,7 @@ rec {
           default = true;
           type = types.bool;
           description = ''
-            Whether to append a minimal default {env}`PATH` environment variable to the service, containing common system utilities.
+            Whether to append {option}`systemd.defaultPath` to the service's {env}`PATH` environment variable.
           '';
         };
 
@@ -625,7 +625,7 @@ rec {
 
       listenStreams = mkOption {
         default = [ ];
-        type = types.listOf types.str;
+        type = types.listOf (types.coercedTo types.port toString types.str);
         example = [
           "0.0.0.0:993"
           "/run/my-socket"

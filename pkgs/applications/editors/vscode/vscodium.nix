@@ -15,11 +15,10 @@ let
   plat =
     {
       x86_64-linux = "linux-x64";
-      x86_64-darwin = "darwin-x64";
       aarch64-linux = "linux-arm64";
       aarch64-darwin = "darwin-arm64";
-      armv7l-linux = "linux-armhf";
       loongarch64-linux = "linux-loong64";
+      riscv64-linux = "linux-riscv64";
     }
     .${system} or throwSystem;
 
@@ -27,12 +26,11 @@ let
 
   hash =
     {
-      x86_64-linux = "sha256-LJsGc11MH6zlcJNfSWjTWPn2Jp9dkjeBPQuCXH1woUM=";
-      x86_64-darwin = "sha256-bC7AfH2eKmmsWIOHifNGKD/kVQCYyuMfU3SUil0DXkM=";
-      aarch64-linux = "sha256-mT5dvw8GOZ0GnZaKRS/TAzQDEEYDOgcj6w6lNLy5kQ0=";
-      aarch64-darwin = "sha256-c8K17XKpRG1ji2mUfoyg2+cRF+qc1KVMYVkaQoUIz7Y=";
-      armv7l-linux = "sha256-91ZHhEUDVoDiRBLwMHVLhzKmb9gWcPBUsVRZVLhCA4M=";
-      loongarch64-linux = "sha256-7iUdsIyJkIi40Xn+/PWdCVgahQxbZtiMw0QLMisN+sg=";
+      x86_64-linux = "sha256-YSI7dPnkCDQRcxHsQXfLOG0JuEwark+eZ0yWWAVpzvM=";
+      aarch64-linux = "sha256-pXvg1Sit99ZQgxjjfb2YLWlb+RUB4yTDfpfhHVs3WBE=";
+      aarch64-darwin = "sha256-OguhoTttdD95/8IL69ei74urK0DlS8yA+uEj2p7VUuA=";
+      loongarch64-linux = "sha256-udOyUGFJWI4JHiMhdifLbJ6riYY84MRaxFEv1C+IxzU=";
+      riscv64-linux = "sha256-9gtdz2kuA7DXw69bDXjcZIhpJrckCysrVmBaRIR60ww=";
     }
     .${system} or throwSystem;
 
@@ -43,8 +41,8 @@ buildVscode rec {
 
   # Please backport all compatible updates to the stable release.
   # This is important for the extension ecosystem.
-  version = "1.121.03429";
-  vscodeVersion = "1.121.0";
+  version = "1.140.06880";
+  vscodeVersion = "1.140.0";
   pname = "vscodium";
 
   executableName = "codium";
@@ -86,13 +84,13 @@ buildVscode rec {
       bobby285271
     ];
     mainProgram = "codium";
+    mainDarwinApp = "VSCodium.app";
     platforms = [
       "x86_64-linux"
-      "x86_64-darwin"
       "aarch64-linux"
       "aarch64-darwin"
-      "armv7l-linux"
       "loongarch64-linux"
+      "riscv64-linux"
     ];
     # requires libc.so.6 and other glibc specifics
     broken = stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isGnu;

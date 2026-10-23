@@ -3,9 +3,10 @@
   stdenv,
   fetchFromGitHub,
   kernel,
+  kernelModuleMakeFlags,
 }:
 let
-  version = "0.1.7-unstable-2026-04-25";
+  version = "0.1.7-unstable-2026-08-15";
 
   ## Upstream has not been merging PRs.
   ## Nixpkgs maintainers are providing a
@@ -14,8 +15,8 @@ let
   src = fetchFromGitHub {
     owner = "amkillam";
     repo = "ryzen_smu";
-    rev = "0bb95d961664c7a0ac180f849fa16fe7da71922d";
-    hash = "sha256-cv0WMvUqrl5C7b5cdQJ4JXDGEzMhwUuNLsYEYobElu4=";
+    rev = "d2983668300dd2a598e5a7dc40e71ce0678cc270";
+    hash = "sha256-OmEoycRO3hGkqueLa0i6AzmwMEbdkkPrwJkMyYxOTek=";
   };
 
   monitor-cpu = stdenv.mkDerivation {
@@ -44,20 +45,26 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = [
+  makeFlags = kernelModuleMakeFlags ++ [
     "TARGET=${kernel.modDirVersion}"
     "KERNEL_BUILD=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "CC=${stdenv.cc.targetPrefix}cc"
+    "INSTALL_MOD_PATH=${placeholder "out"}"
+    "INSTALL_MOD_DIR=kernel/drivers/ryzen_smu"
+    "DEPMOD=true"
   ];
 
-  installPhase = ''
-    runHook preInstall
-
-    install ryzen_smu.ko -Dm444 -t $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/ryzen_smu
+  postInstall = ''
     install ${monitor-cpu}/bin/monitor_cpu -Dm755 -t $out/bin
-
-    runHook postInstall
   '';
+
+  installTargets = [ "modules_install" ];
+
+  installFlags = [
+    "-C"
+    "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "M=$(PWD)"
+  ];
 
   meta = {
     description = "Linux kernel driver that exposes access to the SMU (System Management Unit) for certain AMD Ryzen Processors";

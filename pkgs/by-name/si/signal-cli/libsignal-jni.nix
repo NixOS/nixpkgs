@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "libsignal-jni";
-  version = "0.94.4";
+  version = "0.103.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "libsignal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Uh/j8cXUWgWgSo9UBfYOFuC8i+2YdMwGHcXf55PkGgU=";
+    hash = "sha256-0I0xo8nKs53b69vARtbb/7VRJFXrJqwsfZl9P+1N9LM=";
   };
 
-  cargoHash = "sha256-st6zTKvxSsyMce22E8nFsJMGjQkk9sEAzSCmyZP8x20=";
+  cargoHash = "sha256-LvRGjukdpkHFBXLqlnDTi0+pVOVgg3bpFDLVFjzRGlE=";
 
   nativeBuildInputs = [
     cmake
@@ -34,16 +34,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gitMinimal # needed by boring-sys build script
   ];
 
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+  env = {
+    LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
-  # bindgen needs to find C headers (stdlib.h etc.)
-  # On Linux, libc headers are in a separate .dev output; on Darwin they
-  # come from the SDK and libclang already knows where to find them.
-  BINDGEN_EXTRA_CLANG_ARGS =
-    if stdenv.hostPlatform.isDarwin then
-      "-isystem ${llvmPackages.libclang.lib}/lib/clang/${lib.versions.major llvmPackages.libclang.version}/include"
-    else
-      "-isystem ${stdenv.cc.libc.dev}/include -isystem ${llvmPackages.libclang.lib}/lib/clang/${lib.versions.major llvmPackages.libclang.version}/include";
+    # bindgen needs to find C headers (stdlib.h etc.)
+    # On Linux, libc headers are in a separate .dev output; on Darwin they
+    # come from the SDK and libclang already knows where to find them.
+    BINDGEN_EXTRA_CLANG_ARGS =
+      if stdenv.hostPlatform.isDarwin then
+        "-isystem ${llvmPackages.libclang.lib}/lib/clang/${lib.versions.major llvmPackages.libclang.version}/include"
+      else
+        "-isystem ${stdenv.cc.libc.dev}/include -isystem ${llvmPackages.libclang.lib}/lib/clang/${lib.versions.major llvmPackages.libclang.version}/include";
+
+    RUSTFLAGS = "--cfg aes_armv8 --cfg tokio_unstable";
+    BORING_BSSL_SOURCE_EXTERNAL = "0";
+  };
 
   buildAndTestSubdir = "rust/bridge/jni";
 
@@ -51,12 +56,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "-p"
     "libsignal-jni"
   ];
-
-  RUSTFLAGS = "--cfg aes_armv8 --cfg tokio_unstable";
-
-  env = {
-    BORING_BSSL_SOURCE_EXTERNAL = "0";
-  };
 
   installPhase = ''
     runHook preInstall

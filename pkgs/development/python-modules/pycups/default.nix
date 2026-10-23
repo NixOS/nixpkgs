@@ -28,6 +28,6 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Python bindings for libcups";
     homepage = "http://cyberelk.net/tim/software/pycups/";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = lib.licenses.gpl2Plus;
   };
 })

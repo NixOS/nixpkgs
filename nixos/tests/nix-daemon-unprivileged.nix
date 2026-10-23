@@ -19,6 +19,7 @@
         "auto-allocate-uids"
       ];
     };
+    nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
 
     # Easiest way to get a file onto the machine
     environment.etc."test.nix".text = ''

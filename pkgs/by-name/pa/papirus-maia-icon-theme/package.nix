@@ -4,7 +4,6 @@
   fetchFromGitHub,
   cmake,
   gtk3,
-  gnome-icon-theme,
   papirus-icon-theme,
   hicolor-icon-theme,
   kdePackages,
@@ -28,7 +27,6 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [
     kdePackages.breeze-icons
-    gnome-icon-theme
     papirus-icon-theme
     hicolor-icon-theme
   ];
@@ -50,7 +48,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Manjaro variation of Papirus icon theme";
     homepage = "https://github.com/Ste74/papirus-maia-icon-theme";
-    license = lib.licenses.lgpl3;
+    license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ romildo ];
   };

@@ -6,10 +6,12 @@
   cmake,
   git,
   openssl,
+  cacert,
   tailwindcss_4,
   dioxus-cli,
   yt-dlp,
   fetchFromGitHub,
+  fetchurl,
   libopus,
   # Linux only
   wrapGAppsHook3,
@@ -24,20 +26,40 @@
   libayatana-appindicator,
 }:
 
+let
+  rustyV8Version = "130.0.7";
+  rustyV8Target = stdenv.hostPlatform.rust.rustcTarget;
+  rustyV8Hashes = {
+    "aarch64-apple-darwin" = "sha256-9tvQD08OdW6GoNnx/3vgS27D9Aj9YdQdNJ9SgNvwAOo=";
+    "aarch64-unknown-linux-gnu" = "sha256-vu/ns1q+53FZ98tVCWZmsHYwwRBH1fOnTdBlhjcpkVo=";
+    "x86_64-unknown-linux-gnu" = "sha256-pkdsuU6bAkcIHEZUJOt5PXdzK424CEgTLXjLtQ80t10=";
+  };
+  librustyV8 = fetchurl {
+    url = "https://github.com/denoland/rusty_v8/releases/download/v${rustyV8Version}/librusty_v8_release_${rustyV8Target}.a.gz";
+    hash =
+      rustyV8Hashes.${rustyV8Target}
+        or (throw "no prebuilt librusty_v8 hash for target ${rustyV8Target}");
+  };
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "kopuz";
-  version = "0.8.2";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "Kopuz-org";
     repo = "kopuz";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-d6wSefvx2KT1EyhLq2pn9MSDtW+AvDj7WVz27MJeTmg=";
+    hash = "sha256-sqfI4v3J6GAMTQaB+UhnLlwpfBKFJq2JUl7fZMt1yxE=";
   };
 
-  cargoHash = "sha256-fr65eE8wFWtW/PT5ZACGMcNCo/QNo9xf39LVBQMGLVk=";
+  cargoHash = "sha256-lu1PaWf02D0dK+IV+fIzIKNr8ORfkSHFnRhnPdXaueI=";
+
+  env = {
+    RUSTY_V8_ARCHIVE = librustyV8;
+    SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  };
 
   nativeBuildInputs = [
     pkg-config

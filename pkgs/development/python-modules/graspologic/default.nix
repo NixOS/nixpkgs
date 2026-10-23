@@ -86,7 +86,9 @@ buildPythonPackage rec {
     umap-learn
   ];
 
-  env.NUMBA_CACHE_DIR = "$TMPDIR";
+  preInstallCheck = ''
+    export NUMBA_CACHE_DIR=$(mktemp -d)
+  '';
 
   nativeCheckInputs = [
     pytestCheckHook

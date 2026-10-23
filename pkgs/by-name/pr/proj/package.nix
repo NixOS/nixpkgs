@@ -13,22 +13,34 @@
   nlohmann_json,
   python3,
   cacert,
+  writableTmpDirAsHomeHook,
+  fetchpatch2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "proj";
-  version = "9.8.1";
+  version = "9.9.0";
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "PROJ";
     tag = finalAttrs.version;
-    hash = "sha256-sOAxWihgU1TAMWcju5LN4cPenHHoGgd4oYJ4HA3F/Ks=";
+    hash = "sha256-3WJCqH+8MCs/UOmnCqIehLEnkoLCBRCReO05UP2A02A=";
   };
 
   patches = [
     # https://github.com/OSGeo/PROJ/pull/3252
     ./only-add-curl-for-static-builds.patch
+
+    # Unbreak mapnik
+    (fetchpatch2 {
+      name = "fix_issue_with_target_compile_features.patch";
+      # https://github.com/OSGeo/PROJ/pull/4863
+      url = "https://github.com/OSGeo/PROJ/commit/7ea0fd3ba479845464b34ccf5265b8e6d055cde5.patch?full_index=1";
+      hash = "sha256-IIe0T1/8Jv7tvhUupFn46PaFi7zggAT79EC55cmxHSs=";
+    })
   ];
 
   outputs = [
@@ -50,6 +62,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     cacert
+    sqlite
+    writableTmpDirAsHomeHook
+  ];
+  checkInputs = [
     gtest
   ];
 
@@ -57,13 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DUSE_EXTERNAL_GTEST=ON"
     "-DRUN_NETWORK_DEPENDENT_TESTS=OFF"
     "-DNLOHMANN_JSON_ORIGIN=external"
-    "-DEXE_SQLITE3=${buildPackages.sqlite}/bin/sqlite3"
-  ];
-
-  env.CXXFLAGS = toString [
-    # GCC 13: error: 'int64_t' in namespace 'std' does not name a type
-    "-include"
-    "cstdint"
+    "-DEXE_SQLITE3=${lib.getExe buildPackages.sqlite}"
   ];
 
   preCheck =
@@ -71,7 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
       libPathEnvVar = if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
     in
     ''
-      export HOME=$TMPDIR
       export TMP=$TMPDIR
       export ${libPathEnvVar}=$PWD/lib
     '';

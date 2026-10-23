@@ -73,17 +73,13 @@ mkMesonDerivation (finalAttrs: {
       echo $PWD | grep tests/functional
     '';
 
-  # Test contains invocation of `script` broken by util-linux regression:
-  # https://github.com/util-linux/util-linux/commit/70507ab9eaed10b8dd77b77d4ea25c11ee726bed
-  preCheck =
-    assert util-linux.version == "2.42";
-    ''
-      echo "exit 77" > ../json.sh
-    '';
-
   mesonCheckFlags = [
     "--print-errorlogs"
   ];
+
+  mesonFlags = lib.optional (lib.versionAtLeast (lib.versions.majorMinor version) "2.35") (
+    lib.mesonBool "plugin-c-api" nix-cli.exportsPluginCApi
+  );
 
   doCheck = true;
 

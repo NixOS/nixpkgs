@@ -1,25 +1,38 @@
 diff --git a/transformer_engine/common/__init__.py b/transformer_engine/common/__init__.py
-index 40933f17..e59f43bb 100644
+index e47a6f11..7245456e 100644
 --- a/transformer_engine/common/__init__.py
 +++ b/transformer_engine/common/__init__.py
-@@ -239,64 +239,7 @@ def _get_sys_extension() -> str:
- def _nvidia_cudart_include_dir() -> str:
+@@ -253,77 +253,7 @@ def _cuda_runtime_major(cuda_runtime: ctypes.CDLL) -> Optional[int]:
+ def _nvidia_cudart_include_dir(cuda_major_version: int) -> str:
      """Returns the include directory for cuda_runtime.h if exists in python environment."""
  
+-    # This is primarily here to support editable installs. cuda_runtime.cpp handles the
+-    # resolution for install via wheel or when using the shared library ABI directly.
+-
 -    try:
 -        import nvidia
 -    except ModuleNotFoundError:
 -        return ""
 -
--    # Installing some nvidia-* packages, like nvshmem, create nvidia name, so "import nvidia"
--    # above doesn't throw. However, they don't set "__file__" attribute.
+-    # NVIDIA packages may use either a regular package or a namespace package spread
+-    # across multiple package roots.
 -    if nvidia.__file__ is not None:
--        nvidia_root = Path(nvidia.__file__).parent
+-        nvidia_roots = (Path(nvidia.__file__).parent,)
 -    else:
--        nvidia_root = Path(nvidia.__path__[0])  # namespace package
+-        nvidia_roots = tuple(Path(path) for path in nvidia.__path__)
 -
--    include_dir = nvidia_root / "cuda_runtime"
--    return str(include_dir) if include_dir.exists() else ""
+-    layouts = [f"cu{cuda_major_version}"]
+-    if cuda_major_version == 12:
+-        layouts.append("cuda_runtime")
+-
+-    for layout in layouts:
+-        for nvidia_root in nvidia_roots:
+-            cuda_root = nvidia_root / layout
+-            if (cuda_root / "cuda_runtime.h").is_file() or (
+-                cuda_root / "include" / "cuda_runtime.h"
+-            ).is_file():
+-                return str(cuda_root)
+-    return ""
 -
 -
 -@functools.lru_cache(maxsize=None)
@@ -68,7 +81,7 @@ index 40933f17..e59f43bb 100644
  
  
  @functools.lru_cache(maxsize=None)
-@@ -366,18 +309,9 @@ if "NVTE_PROJECT_BUILDING" not in os.environ or bool(int(os.getenv("NVTE_RELEASE
+@@ -393,18 +323,9 @@ if "NVTE_PROJECT_BUILDING" not in os.environ or bool(int(os.getenv("NVTE_RELEASE
      # `_load_cuda_library` is used for packages that must be loaded
      # during runtime. Both system and pypi packages are searched
      # and an error is thrown if not found.

@@ -13,7 +13,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ouman-eh-800-api";
-  version = "0.5.0";
+  version = "1.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -22,12 +22,12 @@ buildPythonPackage (finalAttrs: {
     owner = "Markus98";
     repo = "ouman-eh-800-api";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1CEn44Uw+OH4DXcATt6qvsi3Ce4ghorWyS7lBhO2lH4=";
+    hash = "sha256-NJvUNEhMreUNbeLhaYwSaAzCR9Ryj3vrZc838nRZoCs=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.9.21,<0.10.0" "uv_build"
+      --replace-fail "uv_build>=0.10.9,<0.11.0" "uv_build"
   '';
 
   build-system = [ uv-build ];

@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "kubelogin";
-  version = "1.36.2";
+  version = "1.36.4";
 
   src = fetchFromGitHub {
     owner = "int128";
     repo = "kubelogin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VzUnjqa3XnKSqcwd2jVwbQwGmyO5+YBwPIIxN0wj81A=";
+    hash = "sha256-z0tHU+ZBxaE6VkACvYeQwkQ5CC2C4w+A41Xl24HLE8E=";
   };
 
   subPackages = [ "." ];
@@ -24,7 +24,7 @@ buildGoModule (finalAttrs: {
     "-X main.version=v${finalAttrs.version}"
   ];
 
-  vendorHash = "sha256-/30B7krXl0HYm+nUqGtbhNb4L8utdorjZNGkfMCYs3k=";
+  vendorHash = "sha256-LDAzmzcTcxCANgMLqQaDeJiGy+U93xhCIBiEs0mJ9aQ=";
 
   # test all packages
   preCheck = ''

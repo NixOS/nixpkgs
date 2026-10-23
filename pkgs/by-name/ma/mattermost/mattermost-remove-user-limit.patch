@@ -1,8 +1,19 @@
 diff --git a/server/channels/app/limits.go b/server/channels/app/limits.go
-index 4c88c1f049..fb7d84ef05 100644
+index 45448e4b2b..6125c02baf 100644
 --- a/server/channels/app/limits.go
 +++ b/server/channels/app/limits.go
-@@ -18,23 +18,8 @@ func (a *App) GetServerLimits() (*model.ServerLimits, *model.AppError) {
+@@ -10,8 +10,8 @@ import (
+ )
+ 
+ const (
+-	maxUsersLimit     = 200
+-	maxUsersHardLimit = 250
++	maxUsersLimit     = 10000000
++	maxUsersHardLimit = 10000000
+ )
+ 
+ // GetServerLimits returns the server's seat/post-history limits. The license-derived
+@@ -25,23 +25,8 @@ func (a *App) GetServerLimits(includeUserCounts bool) (*model.ServerLimits, *mod
  	limits := &model.ServerLimits{}
  	license := a.License()
  
@@ -28,11 +39,11 @@ index 4c88c1f049..fb7d84ef05 100644
  
  	// Check if license has post history limits and get the calculated timestamp
  	if license != nil && license.Limits != nil && license.Limits.PostHistory > 0 {
-@@ -99,14 +84,5 @@ func (a *App) GetPostHistoryLimit() int64 {
+@@ -112,14 +97,5 @@ func (a *App) GetPostHistoryLimit() int64 {
  }
  
  func (a *App) isAtUserLimit() (bool, *model.AppError) {
--	userLimits, appErr := a.GetServerLimits()
+-	userLimits, appErr := a.GetServerLimits(true)
 -	if appErr != nil {
 -		return false, appErr
 -	}

@@ -15,6 +15,9 @@ let
       "macosx"
     else if stdenv.hostPlatform.system == "aarch64-linux" then
       "linux-arm"
+    # iozone has no riscv64 so use linux
+    else if stdenv.hostPlatform.system == "riscv64-linux" then
+      "linux"
     else
       throw "Platform ${stdenv.hostPlatform.system} not yet supported.";
 in
@@ -69,8 +72,8 @@ stdenv.mkDerivation rec {
     platforms = [
       "i686-linux"
       "x86_64-linux"
-      "x86_64-darwin"
       "aarch64-linux"
+      "riscv64-linux"
     ];
     maintainers = with lib.maintainers; [
       Baughn

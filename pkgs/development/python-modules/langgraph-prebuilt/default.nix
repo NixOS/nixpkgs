@@ -97,6 +97,7 @@ buildPythonPackage (finalAttrs: {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "prebuilt==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 

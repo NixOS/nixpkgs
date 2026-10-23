@@ -13,6 +13,7 @@ import os
 import re
 import shutil
 import subprocess
+import sys
 import tempfile
 import textwrap
 from dataclasses import dataclass
@@ -72,6 +73,7 @@ LICENSE_NORMALIZATION = {
     "Apache 2.0": "lib.licenses.asl20",
     "Apache-2.0": "lib.licenses.asl20",
     "Apache License Version 2": "lib.licenses.asl20",
+    "BSD": "lib.licenses.free",  # Too unspecific
     "BSD-2-Clause": "lib.licenses.bsd2",
     "BSD-3-Clause": "lib.licenses.bsd3",
     "GPL-2+": "lib.licenses.gpl2Plus",
@@ -82,16 +84,24 @@ LICENSE_NORMALIZATION = {
     "GPL-3.0": "lib.licenses.gpl3Only",
     "GPL-3.0-only": "lib.licenses.gpl3Only",
     "GPL-3.0-or-later": "lib.licenses.gpl3Plus",
+    "GPLv3+ and other free licenses": "lib.licenses.AND [ lib.licenses.gpl3Plus lib.licenses.free ]",
     "ISC": "lib.licenses.isc",
+    "LGPL": "lib.licenses.free",  # Too unspecific
     "LGPL-2.0": "lib.licenses.lgpl2Only",
+    "LGPL-2.0-only": "lib.licenses.lgpl2Only",
     "LGPL-2.1": "lib.licenses.lgpl21Only",
     "LGPL-3.0": "lib.licenses.lgpl3Only",
     "MIT": "lib.licenses.mit",
     "MIT <http://opensource.org/licenses/MIT>": "lib.licenses.mit",
+    "MIT/X11": "lib.licenses.AND [ lib.licenses.mit lib.licenses.x11 ]",
+    "MIT/X license": "lib.licenses.AND [ lib.licenses.mit lib.licenses.x11 ]",
+    "MIT/ICU": "lib.licenses.AND [ lib.licenses.mit lib.licenses.unicode-30 ]",
     "MPL-2.0": "lib.licenses.mpl20",
     "Unlicense": "lib.licenses.unlicense",
     "2-clause BSD": "lib.licenses.bsd2",
     "Two-clause BSD": "lib.licenses.bsd2",
+    "Public domain": "lib.licenses.publicDomain",
+    "UNKNOWN": "lib.licenses.unfree",
 }
 
 LICENSE_FULL_NAME_RE = re.compile(r'(?P<indent>\s*)license\.fullName = "(?P<license>[^"]+)";')
@@ -119,6 +129,12 @@ class LuaPlugin:
     @property
     def normalized_name(self) -> str:
         return self.name.replace(".", "-")
+
+
+class LuaUpdateError(RuntimeError):
+    def __init__(self, failures: list[tuple[str, str]]):
+        super().__init__(f"Failed to update Lua packages: {', '.join(name for name, _ in failures)}")
+        self.failures = failures
 
 
 def extract_version(nix_expr: str) -> str | None:
@@ -174,6 +190,13 @@ class LuaEditor(nixpkgs_plugin_update.Editor):
         parser.set_defaults(proc=1, update_only=None)
         return parser
 
+    def configure_add_parser(self, parser):
+        parser.add_argument(
+            "--maintainers",
+            default="",
+            help="Space-separated nixpkgs maintainer names to add to each package",
+        )
+
     def get_current_plugins(self, _config: FetchConfig, _nixpkgs: str):
         return []
 
@@ -202,17 +225,14 @@ class LuaEditor(nixpkgs_plugin_update.Editor):
         specs = sorted(specs, key=lambda v: v.name.lower())
 
         if args.update_only:
-            specs = [
-                p
-                for p in specs
-                if p.normalized_name in args.update_only or p.name in args.update_only
-            ]
+            specs = [p for p in specs if p.normalized_name in args.update_only or p.name in args.update_only]
 
         if not specs:
             log.error("No matching Lua packages to update")
             return
 
         assert self.nixpkgs_repo is not None
+        failures: list[tuple[str, str]] = []
         for spec in specs:
             update = self.get_update(
                 str(args.input_file),
@@ -220,7 +240,11 @@ class LuaEditor(nixpkgs_plugin_update.Editor):
                 fetch_config,
                 to_update=[spec.name],
             )
-            _redirects, updated_plugins = update()
+            try:
+                _redirects, updated_plugins = update()
+            except LuaUpdateError as e:
+                failures.extend(e.failures)
+                continue
 
             for name, old_ver, new_ver in updated_plugins:
                 if old_ver == "init":
@@ -230,8 +254,11 @@ class LuaEditor(nixpkgs_plugin_update.Editor):
 
                 commit_files(self.nixpkgs_repo, msg, [args.outfile])
 
+        if failures:
+            raise LuaUpdateError(failures)
+
     def generate_nix(self, results: list[tuple[LuaPlugin, str]], outfilename: str):
-        with tempfile.NamedTemporaryFile("w+") as f:
+        with tempfile.NamedTemporaryFile("w+", suffix=".nix") as f:
             f.write(HEADER)
             header2 = textwrap.dedent(
                 """
@@ -248,18 +275,19 @@ class LuaEditor(nixpkgs_plugin_update.Editor):
             )
             f.write(header2)
             for plugin, nix_expr in results:
+                # Preserved packages also need canonical license metadata.
+                nix_expr = normalize_license_metadata(nix_expr)
                 f.write(f"  {plugin.normalized_name} = {nix_expr}")
             f.write(FOOTER)
             f.flush()
+
+            subprocess.run(["nixfmt", f.name], check=True)
 
             # if everything went fine, move the generated file to its destination
             # using copy since move doesn't work across disks
             shutil.copy(f.name, outfilename)
 
         print(f"updated {outfilename}")
-
-        # Format the generated file with nixfmt
-        subprocess.run(["nixfmt", outfilename], check=True)
 
     @property
     def attr_path(self):
@@ -332,7 +360,7 @@ class LuaEditor(nixpkgs_plugin_update.Editor):
                 "server": "",
                 "version": "",
                 "luaversion": "",
-                "maintainers": "",
+                "maintainers": args.maintainers,
             }
             existing_entries.append(new_entry)
 
@@ -382,11 +410,8 @@ class LuaEditor(nixpkgs_plugin_update.Editor):
                     r = extract_rev(expr)
                     old_versions[name] = f"{v}-{r}" if r else v
 
-            try:
-                pool = Pool(processes=config.proc)
+            with Pool(processes=config.proc) as pool:
                 results = pool.map(generate_pkg_nix, specs_to_process)
-            finally:
-                pass
 
             results_map = {}
             for plug, nix_expr, error in results:
@@ -426,9 +451,7 @@ class LuaEditor(nixpkgs_plugin_update.Editor):
             self.generate_nix(successful_results, output_file)
 
             if errors:
-                log.error("The following plugins failed to update:")
-                for plug, error in errors:
-                    log.error("%s: %s", plug.name, error)
+                raise LuaUpdateError([(plug.name, error) for plug, error in errors])
 
             redirects: Redirects = {}
             return redirects, updated_plugins
@@ -511,13 +534,21 @@ def generate_pkg_nix(plug: LuaPlugin):
                 cmd.append(f"--lua-dir={lua_dir}")
 
         output = run_luarocks(cmd)
+        subprocess.run(
+            ["nixfmt", "-"],
+            input=output,
+            text=True,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.PIPE,
+            check=True,
+        )
         ## FIXME: luarocks nix command output isn't formatted properly
         output = normalize_license_metadata(output)
         output = "callPackage(\n" + output.strip() + ") {};\n\n"
         return (plug, output, None)
     except subprocess.CalledProcessError as e:
         log.error("Failed to generate nix expression for %s: %s", plug.name, e)
-        return (plug, None, str(e))
+        return (plug, None, e.stderr or str(e))
 
 
 def main():
@@ -529,7 +560,13 @@ def main():
         default_out=Path(GENERATED_NIXFILE),
     )
 
-    editor.run()
+    try:
+        editor.run()
+    except LuaUpdateError as e:
+        log.error("%d Lua package(s) failed to update:", len(e.failures))
+        for name, error in e.failures:
+            log.error("%s: %s", name, error)
+        sys.exit(1)
 
 
 if __name__ == "__main__":

@@ -7,6 +7,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   numpy,
+  pytest-doctestplus,
   pytestCheckHook,
   scipy,
   setuptools-scm,
@@ -43,7 +44,10 @@ buildPythonPackage (finalAttrs: {
     scipy
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-doctestplus
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "gwcs" ];
 

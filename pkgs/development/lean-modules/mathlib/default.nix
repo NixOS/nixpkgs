@@ -21,13 +21,13 @@ let
   mathlib__archive = buildLakePackage (finalAttrs: {
     pname = "lean4-mathlib";
     # nixpkgs-update: no auto update
-    version = "4.30.0";
+    version = "4.35.0";
 
     src = fetchFromGitHub {
       owner = "leanprover-community";
       repo = "mathlib4";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-RxOxdUiVUAxUbfVhxlkjmPX1V64EtmIIn1eW75TiJWA=";
+      hash = "sha256-XEUgaImb2x71pRXOEAWHITT1MieA79uaIezyPAm3LOA=";
     };
 
     leanPackageName = "mathlib";
@@ -72,11 +72,11 @@ in
 runCommand mathlib__archive.name
   {
     nativeBuildInputs = [ leangz-raw ];
+    inherit (mathlib__archive) pname version;
     passthru = {
       inherit mathlib__archive;
       inherit (mathlib__archive)
         src
-        version
         lakePackageName
         lean4
         allLeanDeps

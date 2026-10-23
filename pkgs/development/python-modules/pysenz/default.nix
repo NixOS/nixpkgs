@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pysenz";
-  version = "1.0.2";
+  version = "1.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nordicopen";
     repo = "pysenz";
     tag = "v${version}";
-    hash = "sha256-gS9dsGQ8waOlUbHWHiJbQrvh4RdFb4SNEH4J4TbT2x8=";
+    hash = "sha256-jUOIapzoDjfX6nVX4Dcc356uRnQNEu2OQIcm4D3ceh8=";
   };
 
   build-system = [ setuptools ];

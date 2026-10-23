@@ -98,7 +98,8 @@ stdenv.mkDerivation rec {
     homepage = "https://www.nomachine.com/";
     mainProgram = "nxplayer";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = {
+    license = lib.licenses.mkLicense {
+      shortName = "noMachine";
       fullName = "NoMachine End User License Agreement, version 9";
       url = "https://www.nomachine.com/licensing/nomachine-end-user-license-agreement";
       free = false;

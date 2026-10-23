@@ -11,6 +11,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "thin-provisioning-tools";
   version = "1.3.2";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "jthornber";
     repo = "thin-provisioning-tools";
@@ -18,7 +20,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-hRGelBHFbyWHwV3fRecGXIEhoDzVQ+Rdj/VHGxcDH1k=";
   };
 
-  strictDeps = true;
   depsBuildBuild = [
     pkg-config
     lvm2

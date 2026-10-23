@@ -99,8 +99,8 @@ let
           old.passthru or { }
           // (
             let
-              inherit (vmr) targetRid updateScript;
-              otherRids = lib.remove targetRid (
+              inherit (vmr) hostRid updateScript;
+              otherRids = lib.remove hostRid (
                 map (system: dotnetCorePackages.systemToDotnetRid system) vmr.meta.platforms
               );
 
@@ -195,7 +195,7 @@ let
 
                 combined=$(nix-build ${toString ./combine-deps.nix} \
                   --arg list "[ ''${depsFiles[*]} ]" \
-                  --argstr baseRid ${targetRid} \
+                  --argstr baseRid ${hostRid} \
                   --arg otherRids '${lib.generators.toPretty { multiline = false; } otherRids}')
 
                 jq . "$combined" > deps.json

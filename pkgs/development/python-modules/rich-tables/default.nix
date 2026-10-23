@@ -26,14 +26,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "rich-tables";
-  version = "0.9.0";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snejus";
     repo = "rich-tables";
     tag = finalAttrs.version;
-    hash = "sha256-6sXWrFP8TDBcFaGCymsZfHL8bfsRbj63VZCeY1H6h/Y=";
+    hash = "sha256-LtmGvV3idKgQZcVGtRcwDmG5k7v+dTE1A07hmmrZSu0=";
   };
 
   build-system = [

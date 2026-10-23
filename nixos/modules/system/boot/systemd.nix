@@ -259,7 +259,23 @@ in
 
   options.systemd = {
 
-    package = mkPackageOption pkgs "systemd" { };
+    package = mkPackageOption pkgs "systemd" { } // {
+      # HORRIBLE HACK
+      # Put back the patch that completely broke most networkd setups.
+      # This needs to be reverted and either reinstated in the package
+      # proper, or fixed within the networkd NixOS module, but right now
+      # we just need things to stop being on fire. -K900
+      #
+      # DO NOT remove this without verifying at least
+      # nixosTests.predictable-interface-names.predictableNetworkdSystemdStage1
+      apply =
+        pkg:
+        pkg.overrideAttrs (prevAttrs: {
+          patches = prevAttrs.patches or [ ] ++ [
+            ./systemd-search-path.patch
+          ];
+        });
+    };
 
     enableStrictShellChecks = mkEnableOption "" // {
       description = ''
@@ -422,6 +438,17 @@ in
       description = ''
         Target that should be started when Ctrl-Alt-Delete is pressed;
         see {manpage}`systemd.special(7)`.
+      '';
+    };
+
+    defaultPath = mkOption {
+      type = types.listOf types.package;
+      default = [ ];
+      description = ''
+        Packages appended to the {env}`PATH` environment variable of all
+        system and user services.
+
+        Individual services can opt out by setting `enableDefaultPath = false`.
       '';
     };
 
@@ -733,6 +760,15 @@ in
       // listToAttrs (map (withName mountToUnit) cfg.mounts)
       // listToAttrs (map (withName automountToUnit) cfg.automounts);
 
+    # Default path for systemd services. Should be quite minimal.
+    systemd.defaultPath = [
+      pkgs.coreutils
+      pkgs.findutils
+      pkgs.gnugrep
+      pkgs.gnused
+      cfg.package
+    ];
+
     # Environment of PID 1
     systemd.managerEnvironment = {
       # Doesn't contain systemd itself - everything works so it seems to use the compiled-in value for its tools
@@ -820,6 +856,10 @@ in
     systemd.services.systemd-random-seed.restartIfChanged = false;
     systemd.services.systemd-remount-fs.restartIfChanged = false;
     systemd.services.systemd-update-utmp.restartIfChanged = false;
+    # `systemd-bless-boot good` fails once the current boot has been blessed.
+    systemd.services.systemd-bless-boot = lib.mkIf cfg.package.withBootloader {
+      restartIfChanged = false;
+    };
     systemd.targets.local-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.targets.remote-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.services.systemd-importd = lib.mkIf cfg.package.withImportd {

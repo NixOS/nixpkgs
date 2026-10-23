@@ -8,32 +8,33 @@
   rustPlatform,
 
   firefox-unwrapped,
+  nix-update-script,
   nixosTests,
   openssl,
   pkg-config,
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "firefoxpwa-unwrapped";
-  version = "2.18.2";
+  version = "2.20.1";
 
   src = fetchFromGitHub {
     owner = "filips123";
     repo = "PWAsForFirefox";
-    rev = "v${version}";
-    hash = "sha256-eNJKR6dmG4dDKwvWjC0Nbzk5ixNJtnRXjWJgxc9W5i8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-kOtdGRW2DN0qQLrtvbsywBdGlM/1cboQGu2NM7cO8E8=";
   };
 
-  sourceRoot = "${src.name}/native";
+  sourceRoot = "${finalAttrs.src.name}/native";
   buildFeatures = [ "immutable-runtime" ];
 
-  cargoHash = "sha256-w3poeQsJf6s8uqqZtigJNHqnO0fpD7T4zyY3WzdE6Bo=";
+  cargoHash = "sha256-Uxi/ujhtRK8TbRZTj7cQB9P7hD5Qao7K2rqeNXWLhXQ=";
 
   preConfigure = ''
-    sed -i 's;version = "0.0.0";version = "${version}";' Cargo.toml
-    sed -zi 's;name = "firefoxpwa"\nversion = "0.0.0";name = "firefoxpwa"\nversion = "${version}";' Cargo.lock
-    sed -i $'s;DISTRIBUTION_VERSION = \'0.0.0\';DISTRIBUTION_VERSION = \'${version}\';' userchrome/profile/chrome/pwa/chrome.sys.mjs
+    sed -i 's;version = "0.0.0";version = "${finalAttrs.version}";' Cargo.toml
+    sed -zi 's;name = "firefoxpwa"\nversion = "0.0.0";name = "firefoxpwa"\nversion = "${finalAttrs.version}";' Cargo.lock
+    sed -i $'s;DISTRIBUTION_VERSION = \'0.0.0\';DISTRIBUTION_VERSION = \'${finalAttrs.version}\';' userchrome/profile/chrome/pwa/chrome.sys.mjs
   '';
 
   nativeBuildInputs = [
@@ -91,10 +92,22 @@ rustPlatform.buildRustPackage rec {
   '';
 
   passthru = {
+    updateScript = nix-update-script { };
     tests.firefoxpwa = nixosTests.firefoxpwa;
     binaryName = "firefoxpwa";
     applicationName = "firefoxpwa";
     inherit (firefoxRuntime) gtk3;
+    # Inherit all variables that related for wrapping, since this derivation is
+    # wrapped similarly to `firefoxRuntime`, and these passthru variables are
+    # read when `wrapFirefox` wraps this derivation too.
+    inherit (firefoxRuntime)
+      withALSA
+      withFFmpeg
+      withGSSAPI
+      withJACK
+      withPipewire
+      withSndio
+      ;
   };
 
   meta = {
@@ -126,7 +139,7 @@ rustPlatform.buildRustPackage rec {
       possible for the extension to detect and use it.
     '';
     homepage = "https://pwasforfirefox.filips.si/";
-    changelog = "https://github.com/filips123/PWAsForFirefox/releases/tag/v${version}";
+    changelog = "https://github.com/filips123/PWAsForFirefox/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mpl20;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
@@ -135,4 +148,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "firefoxpwa";
   };
-}
+})

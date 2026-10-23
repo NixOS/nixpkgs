@@ -135,7 +135,17 @@ in
               public_key = os.path.join(key_dir, "id_ed25519.pub")
 
               # Generate key pair using host SSH tools
-              ret = os.system(f"${hostPkgs.openssh}/bin/ssh-keygen -t ed25519 -f {private_key} -N \"\"")
+              ret = subprocess.run(
+                  [
+                      "${hostPkgs.openssh}/bin/ssh-keygen",
+                      "-t",
+                      "ed25519",
+                      "-f",
+                      private_key,
+                      "-N",
+                      ""
+                  ]
+              ).returncode
               if ret != 0:
                   raise Exception("Failed to generate SSH key pair")
 

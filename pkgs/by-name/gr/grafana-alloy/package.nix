@@ -5,7 +5,7 @@
   fetchNpmDeps,
   buildGoModule,
   buildNpmPackage,
-  systemd,
+  systemdLibs,
   installShellFiles,
   versionCheckHook,
   nixosTests,
@@ -15,23 +15,23 @@
 }:
 
 let
-  beylaVersion = "v3.9.5";
+  beylaVersion = "v3.9.8";
 in
 
 buildGoModule (finalAttrs: {
   pname = "grafana-alloy";
-  version = "1.16.0";
+  version = "1.17.1";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "alloy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-q5R2noxBZ3OPyZqmB+bx3iJKWFxC2WIprcgh9RwjLzk=";
+    hash = "sha256-4HjOerOe+v8GkKgID/oBm5Rt7nQiHjucAQkSYGY5zZs=";
   };
 
   npmDeps = fetchNpmDeps {
     src = "${finalAttrs.src}/internal/web/ui";
-    hash = "sha256-vResNUT4auDsK9ngnJYfMUUOYr/ikPhrvakqCjGq2Q8=";
+    hash = "sha256-eGyKXsZzyDovsMY2U1uAOn22nyRTYGJT+kEh61857Ls=";
   };
 
   frontend = buildNpmPackage {
@@ -55,6 +55,10 @@ buildGoModule (finalAttrs: {
   patchPhase = ''
     cp -av ${finalAttrs.frontend}/share internal/web/ui/dist
 
+    # Use only the system CA store. The embedded fallback bundle does not get cacert updates.
+    substituteInPlace flowcmd/flowcmd.go \
+      --replace-fail '_ "golang.org/x/crypto/x509roots/fallback"' ""
+
     goSumBeylaVersion="$(grep beyla go.sum | head -1 | cut -d ' ' -f2)"
     if [[ "$goSumBeylaVersion" != "${beylaVersion}" ]];then
       echo "beyla version in go.sum ($goSumBeylaVersion) doesn't match the one set in the expression (${beylaVersion}), needs updating."
@@ -65,7 +69,7 @@ buildGoModule (finalAttrs: {
   modRoot = "collector";
 
   proxyVendor = true;
-  vendorHash = "sha256-uTIdurwLfxh27fb1CPCHbHmENk3S6VYNBaGT/5yh3Sc=";
+  vendorHash = "sha256-C6qVdSfTwmjseCjXKn5f9Q9mn3EBg31CQlLk5QY4YRY=";
 
   subPackages = [ "." ];
 
@@ -96,7 +100,7 @@ buildGoModule (finalAttrs: {
     // lib.optionalAttrs (stdenv.hostPlatform.isLinux) {
       # Uses go-systemd, which uses libsystemd headers.
       # https://github.com/coreos/go-systemd/issues/351
-      NIX_CFLAGS_COMPILE = "-I${lib.getDev systemd}/include";
+      NIX_CFLAGS_COMPILE = "-I${lib.getDev systemdLibs}/include";
     };
 
   nativeBuildInputs = [
@@ -123,7 +127,7 @@ buildGoModule (finalAttrs: {
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf \
       --set-rpath "${
-        lib.makeLibraryPath [ (lib.getLib systemd) ]
+        lib.makeLibraryPath [ (lib.getLib systemdLibs) ]
       }:$(patchelf --print-rpath $out/bin/alloy)" \
       $out/bin/alloy
   '';

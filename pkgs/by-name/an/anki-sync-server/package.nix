@@ -4,6 +4,8 @@
   anki,
 
   openssl,
+  sqlite,
+  zstd,
   pkg-config,
   buildPackages,
 }:
@@ -35,6 +37,8 @@ rustPlatform.buildRustPackage {
 
   buildInputs = [
     openssl
+    sqlite
+    zstd
   ];
 
   env.PROTOC = lib.getExe buildPackages.protobuf;
@@ -44,7 +48,7 @@ rustPlatform.buildRustPackage {
   meta = {
     description = "Standalone official anki sync server";
     homepage = "https://apps.ankiweb.net";
-    license = with lib.licenses; [ agpl3Plus ];
+    license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ martinetd ];
     mainProgram = "anki-sync-server";
   };

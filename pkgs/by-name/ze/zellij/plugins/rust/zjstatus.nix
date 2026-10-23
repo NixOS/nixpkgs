@@ -7,16 +7,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zjstatus";
-  version = "0.23.0";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "dj95";
     repo = "zjstatus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sjMs63OaRhwCrl46v1A+K2EJdqnw63Pc7BMnHqiU790=";
+    hash = "sha256-Tn4PWTssBWTi76OaBl8bCjmMuAZAuS13zjHDJdAm3cA=";
   };
 
-  cargoHash = "sha256-jg7EpcA3o/Qdb1eIspZQI3TX3+7gc3YX+FB4l4FZX44=";
+  cargoHash = "sha256-oQ0GzTHpmrG/+Uyw11Uztbz+k3PwnWwECaNa+YSwQaw=";
 
   cargoBuildFlags = [ "--bin=${_binaryName}" ];
 

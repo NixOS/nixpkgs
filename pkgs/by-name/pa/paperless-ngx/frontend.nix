@@ -7,13 +7,13 @@
   nodejs,
   node-gyp,
   pkg-config,
-  python3,
   pango,
   giflib,
   xcbuild,
   src,
   version,
   meta,
+  buildPackages,
 }:
 let
   pnpm = pnpm_10;
@@ -27,8 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit pnpm;
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 3;
-    hash = "sha256-HO+IDNB3NXWgvV0cvZ5zx46JuXv6Tgroz+YfVump5MA=";
+    fetcherVersion = 4;
+    hash = "sha256-rUmXx0AbhSXZGIH5uMoidShhT1OjV6pThDvP6spmHYQ=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     pnpmConfigHook
     pnpm
-    python3
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     xcbuild
@@ -56,9 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    pushd node_modules/canvas
-    node-gyp rebuild
-    popd
+    substituteInPlace node_modules/.pnpm/sass-embedded@*/node_modules/sass-embedded/dist/lib/src/compiler-path.js \
+      --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${lib.getExe buildPackages.dart-sass}"];'
 
     # cat forcefully disables angular cli's spinner which doesn't work with nix' tty which is 0x0
     pnpm run build --configuration production | cat

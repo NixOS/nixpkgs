@@ -3,13 +3,12 @@
   fetchFromGitHub,
   gitUpdater,
   lib,
-  peakrdl,
   setuptools,
   setuptools-scm,
   systemrdl-compiler,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "peakrdl-ipxact";
   version = "3.5.0";
 
@@ -18,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SystemRDL";
     repo = "PeakRDL-ipxact";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-GFHgIyK82dt+/t0XbDdk61q0DXUOabxtjlhZhgacUVA=";
   };
 
@@ -27,10 +26,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  dependencies = [
-    peakrdl
-    systemrdl-compiler
-  ];
+  dependencies = [ systemrdl-compiler ];
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
@@ -40,4 +36,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3;
     maintainers = [ lib.maintainers.jmbaur ];
   };
-}
+})

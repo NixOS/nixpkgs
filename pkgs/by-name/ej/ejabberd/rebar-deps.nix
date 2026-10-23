@@ -24,11 +24,11 @@ let
     };
     xmpp = builder {
       name = "xmpp";
-      version = "1.13.3";
+      version = "1.13.5";
       src = fetchHex {
         pkg = "xmpp";
-        version = "1.13.3";
-        sha256 = "sha256-BWSKpNvM/uYqqnlLKSowWEY50DyR9cCGa+jDQ0tqb0g=";
+        version = "1.13.5";
+        sha256 = "sha256-qpYyd7qpa3dZ4JUt2TfxC8LUT+EEPKAz3oATFMr6vF0=";
       };
       beamDeps = [
         ezlib
@@ -41,11 +41,11 @@ let
     };
     stun = builder {
       name = "stun";
-      version = "1.2.22";
+      version = "1.2.23";
       src = fetchHex {
         pkg = "stun";
-        version = "1.2.22";
-        sha256 = "sha256-NAi0sR1SN6CI9TsmCgaUDDCxb0pICUiS1qkgThZDGIo=";
+        version = "1.2.23";
+        sha256 = "sha256-2KGp8/ZUvFEwRoQDtmyqXcJJ6oWEiB3FQELrwib84kk=";
       };
       beamDeps = [
         fast_tls
@@ -188,11 +188,11 @@ let
     };
     fast_xml = builder {
       name = "fast_xml";
-      version = "1.1.60";
+      version = "1.1.61";
       src = fetchHex {
         pkg = "fast_xml";
-        version = "1.1.60";
-        sha256 = "sha256-z54nSd1HIEcCy3oEq1BFZC+gCW/fyc/y6cptPyq9N8U=";
+        version = "1.1.61";
+        sha256 = "sha256-C9GFUP0dJRYFlkJNnAHAM6znSVviWZZ5ELxTNiIrVJk=";
       };
       beamDeps = [ p1_utils ];
     };
@@ -218,11 +218,11 @@ let
     };
     esip = builder {
       name = "esip";
-      version = "1.0.60";
+      version = "1.0.61";
       src = fetchHex {
         pkg = "esip";
-        version = "1.0.60";
-        sha256 = "sha256-BgTL1LvI2hWSwAgwz+MGIM5PZlurEZnRSjtF+v0DFE8=";
+        version = "1.0.61";
+        sha256 = "sha256-9SBZWihyCUNDYQGL9DBED6FAMY0o2aC7JVol2NJr87k=";
       };
       beamDeps = [
         fast_tls

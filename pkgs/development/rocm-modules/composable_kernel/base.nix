@@ -34,7 +34,9 @@
     ]
   ),
 }:
-
+let
+  projectRoot = "projects/composablekernel";
+in
 stdenv.mkDerivation (finalAttrs: {
   preBuild = ''
     echo "This derivation isn't intended to be built directly and only exists to be overridden and built in chunks";
@@ -42,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   pname = "composable_kernel_base";
-  version = "7.2.3";
+  version = "7.2.4";
 
   outputs = [
     "out"
@@ -57,14 +59,14 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-libraries";
-    rev = "rocm-${finalAttrs.version}";
+    tag = "rocm-${finalAttrs.version}";
     sparseCheckout = [
-      "projects/composablekernel"
+      projectRoot
       "shared"
     ];
     hash = "sha256-Zs6wwPmys1kUlgDD4XzKKw273nH/Ur3HtuYxJjvjDs0=";
   };
-  sourceRoot = "${finalAttrs.src.name}/projects/composablekernel";
+  sourceRoot = "${finalAttrs.src.name}/${projectRoot}";
 
   nativeBuildInputs = [
     # Deliberately not using ninja
@@ -179,6 +181,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit gpuTargets miOpenReqLibsOnly;
+    composable_kernel_src = "${finalAttrs.src}/${projectRoot}";
+
     updateScript = rocmUpdateScript { inherit finalAttrs; };
     anyGfx9Target = lib.lists.any (lib.strings.hasPrefix "gfx9") gpuTargets;
     anyMfmaTarget =
@@ -193,7 +197,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Performance portable programming model for machine learning tensor operators";
     homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/composablekernel";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
     broken = true; # this base package shouldn't be built directly

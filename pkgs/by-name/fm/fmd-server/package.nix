@@ -5,7 +5,7 @@
   fetchPnpmDeps,
   nix-update-script,
   nodejs,
-  pnpm_10,
+  pnpm_11,
   pnpmConfigHook,
   stdenv,
   versionCheckHook,
@@ -17,23 +17,23 @@ buildGoModule (
   in
   {
     pname = "fmd-server";
-    version = "0.15.0";
+    version = "0.17.0";
     src = fetchFromGitLab {
       owner = "fmd-foss";
       repo = "fmd-server";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-EzhXrB15lRtDnFicdH7fjpcm1BYoAb1SBeylGSub69s=";
+      hash = "sha256-drZQj5tp0cHvrc+T1ESBHNNt0VoHhS9O93LIwjw2eCc=";
     };
 
     pnpmDeps = fetchPnpmDeps {
       inherit (ui) pname src;
-      inherit pnpm_10;
+      pnpm = pnpm_11;
       sourceRoot = "${finalAttrs.src.name}/${ui.pnpmRoot}";
-      fetcherVersion = 3;
-      hash = "sha256-vKSKPwOkb7TwDUlkl8lUvO6tLKp2NyBQ0BGxThUN2P8=";
+      fetcherVersion = 4;
+      hash = "sha256-L6O1xsRw3ZwWg+83hC5n3a83RzSh9u0289gUHzfubJE=";
     };
 
-    vendorHash = "sha256-cFIg9mOSQbrYHW4kg4aTeTaF+gy1jNpAlg8qepb81Jc=";
+    vendorHash = "sha256-fTteh+h4PqiISrqSjEK59jBog+tOu7Yzql8nYRK7q74=";
 
     preBuild = ''
       cp -r ${ui}/${ui.distRoot} web/
@@ -55,7 +55,7 @@ buildGoModule (
       nativeBuildInputs = [
         nodejs
         pnpmConfigHook
-        pnpm_10
+        pnpm_11
       ];
 
       buildPhase = ''
@@ -86,6 +86,7 @@ buildGoModule (
       maintainers = with lib.maintainers; [
         j0hax
         jthulhu
+        kybe236
       ];
       teams = [ lib.teams.ngi ];
       mainProgram = "fmd-server";

@@ -7,7 +7,7 @@
   ninja,
   python3,
   nix-update-script,
-  abseil-cpp,
+  abseil-cpp_202601,
   curl,
   gtest,
   nlohmann_json,
@@ -20,15 +20,23 @@
   zlib,
 }:
 
+let
+  # abseil-cpp should be pinned to the branch used by upstream:
+  # https://github.com/shaka-project/shaka-packager/tree/main/packager/third_party/abseil-cpp
+  abseil-cpp' = abseil-cpp_202601;
+  protobuf' = protobuf.override {
+    abseil-cpp = abseil-cpp';
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "shaka-packager";
-  version = "3.7.2";
+  version = "3.9.3";
 
   src = fetchFromGitHub {
     owner = "shaka-project";
     repo = "shaka-packager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-E493sleVbsuytneK51lxuQnaEzvAEJwAXYmsxcaOXSs=";
+    hash = "sha256-jQ+xY4j/k3ucmKnRxvj0R5h+lWux1/AyZwKe1+XQXvk=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
       # pssh_box.py.
       ps.protobuf
     ]))
-    abseil-cpp
+    abseil-cpp'
     curl
     gtest
     nlohmann_json
@@ -52,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     libwebm
     mbedtls
     mimalloc
-    protobuf
+    protobuf'
     zlib
   ];
 

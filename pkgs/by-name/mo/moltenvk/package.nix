@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "MoltenVK";
-  version = "1.4.1";
+  version = "1.4.2";
 
   strictDeps = true;
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "KhronosGroup";
     repo = "MoltenVK";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-7S10p/XrQ/oMXuCnOU6gqnWMGMfP5vhimec1ThxmuIE=";
+    hash = "sha256-iyYxuWZZfk2W3DW9OX3m77RLk0e8GTTpEV3Th7mIrXY=";
   };
 
   postPatch = ''
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     while IFS= read -d "" proj; do
       echo "Updating deployment target to ${stdenv.hostPlatform.darwinMinVersion}: $proj"
       substituteInPlace "$proj" \
-        --replace-fail 'MACOSX_DEPLOYMENT_TARGET = 11.0' "MACOSX_DEPLOYMENT_TARGET = $MACOSX_DEPLOYMENT_TARGET"
+        --replace-fail 'MACOSX_DEPLOYMENT_TARGET = 12.0' "MACOSX_DEPLOYMENT_TARGET = $MACOSX_DEPLOYMENT_TARGET"
     done < <(grep -Z -rl --include=project.pbxproj MACOSX_DEPLOYMENT_TARGET)
 
     # Move `mvkGitRevDerived.h` to a stable location

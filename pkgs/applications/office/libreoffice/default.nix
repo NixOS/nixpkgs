@@ -150,8 +150,8 @@
   withHelp ? true,
   withJava ? true,
   kdeIntegration ? false,
-  variant ? "fresh",
-  debugLogging ? variant == "still",
+  variant ? "stable",
+  debugLogging ? variant == "stable",
   qt6,
   kdePackages,
   symlinkJoin,
@@ -178,8 +178,7 @@
 }:
 
 assert builtins.elem variant [
-  "fresh"
-  "still"
+  "stable"
   "collabora"
   "collabora-coda"
 ];
@@ -287,26 +286,6 @@ let
     ];
   };
 
-  # required for libreoffice-still version 25.8.5.2
-  liborcus_0_20 = liborcus.overrideAttrs {
-    version = "0.20.1";
-
-    src = fetchFromGitLab {
-      owner = "orcus";
-      repo = "orcus";
-      rev = "0.20.1";
-      hash = "sha256-+YTK0EPgGHN4yKurJjuWWrAHzgtbc1dOvtppcvuRei4=";
-    };
-
-    buildInputs = [
-      boost188
-      libixion
-      mdds
-      python3
-      zlib
-    ];
-  };
-
   importVariant = f: import (./. + "/src-${variant}/${f}");
   # Update these files with:
   # nix-shell maintainers/scripts/update.nix --argstr package libreoffice-$VARIANT.unwrapped
@@ -395,9 +374,41 @@ stdenv.mkDerivation (finalAttrs: {
     # FIXME: get rid of this ASAP
     ./skip-broken-tests.patch
     (./skip-broken-tests- + variant + ".patch")
-
+  ]
+  ++ lib.optionals (variant == "stable") [
     # Don't detect Qt paths from qmake, so our patched-in onese are used
     ./dont-detect-qt-paths-from-qmake.patch
+  ]
+  ++ lib.optionals (variant != "stable") [
+    # Don't detect Qt paths from qmake, so our patched-in onese are used / old version
+    ./dont-detect-qt-paths-from-qmake-pre-26.8.patch
+    # Fix build with Poppler 26.01
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/25.8.7-2/fix_build_with_poppler_26.01.0.patch";
+      hash = "sha256-5JTTvJFIV5MG0Gz7y46wAr3q9tWdSVoZ9TJQlMJVqBc=";
+    })
+
+    # Fix build with Poppler 26.02
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/25.8.7-2/fix_build_with_poppler_26.02.0.patch";
+      hash = "sha256-IInhSoqTemDITB+AtkvVa9eGbodTbUGSpMMpC9N/mmg=";
+    })
+
+    # Fix build with Poppler 26.04
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/25.8.7-2/fix_build_with_poppler_26.04.0.patch";
+      hash = "sha256-I9owj/NTCTi6ISszuasH410NLlhunPn/Ig22tenu8tw=";
+    })
+    # Fix build with Poppler 26.05
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/25.8.7-2/fix_build_with_poppler_26.05.0.patch";
+      hash = "sha256-7wdiciTf/LrTk0MibBBYGliWRCvK1rtTGESgH7db1I4=";
+    })
+    # Fix build with Poppler 26.06
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/25.8.7-3/fix_build_with_poppler_26.06.0.patch";
+      hash = "sha256-j66IsrzaqQ55MRVzhlw25guuoDtxx1D4XeJsBhgWP2c=";
+    })
   ]
   ++ lib.optionals (variant != "collabora" && variant != "collabora-coda") [
     # Revert part of https://github.com/LibreOffice/core/commit/6f60670877208612b5ea320b3677480ef6508abb that broke zlib linking
@@ -418,6 +429,49 @@ stdenv.mkDerivation (finalAttrs: {
     })
 
     ./fix-unpack-collabora.patch
+
+    # Add missing climits includes
+    (fetchpatch2 {
+      url = "https://github.com/LibreOffice/core/commit/6ebc3c540f2aa13363e3dcb32a44bfa2c7f66a9f.patch";
+      hash = "sha256-5GCosJryorH1P1Z2Zjey7oEC3seLHN5kH/ar4U7E74E=";
+    })
+    (fetchpatch2 {
+      url = "https://github.com/LibreOffice/core/commit/0084c2b22ce26084df5a379135ba8ac174585ac0.patch";
+      hash = "sha256-zssmbzfaZX2sBdHbzm+aIC8ncidp3eupQoUloeGdPcQ=";
+    })
+    (fetchpatch2 {
+      url = "https://github.com/LibreOffice/core/commit/19c32b44fead600118377417012b111a4f238766.patch";
+      hash = "sha256-jO7oFEfoL7V1dj67vwDAEp2BwjQvfva4zV8sVAAc+2g=";
+    })
+
+    # Add missing limits.h include
+    (fetchpatch2 {
+      url = "https://github.com/LibreOffice/core/commit/a6325b777b7bb9e1c760a4f1a02d48ba0889a7b1.patch";
+      hash = "sha256-QECBAdJ+4Q8c2kbdadNxzgDEebLvPy9cvRb34O7m5bA=";
+    })
+
+    # Add missing cstdint includes
+    (fetchpatch2 {
+      url = "https://github.com/LibreOffice/core/commit/47cabcb187dfbccb36ee02513998fbfcee509d5e.patch";
+      hash = "sha256-q883AMTtLzXwbwNRytCk6qiFA1snzba4JUsr7IaUEvI=";
+    })
+    (fetchpatch2 {
+      url = "https://github.com/LibreOffice/core/commit/0fede06b020fa0327877f4a8722290d48a742a2c.patch";
+      hash = "sha256-8w89mtZuFvpZU0GVZoWPZVBM+UlgnbTYxoDJ8Ss64Bo=";
+    })
+    (fetchpatch2 {
+      url = "https://github.com/LibreOffice/core/commit/aa9a194a99cec1dbcee9226b703fdcf9b62962d7.patch";
+      hash = "sha256-Eztv186ke97u0ucdd3jQmJaxtrxnsiWWE/qVOBc2uGc=";
+    })
+
+    # Add missing stdint.h include
+    (fetchpatch2 {
+      url = "https://github.com/LibreOffice/core/commit/d0265596672d78ad6f3980ff6fb900535aefd11f.patch";
+      hash = "sha256-tp7MW+8ExivGKKWjLy60lxWNf2hXF+jCD0pajo+YbVo=";
+    })
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "26.8" && lib.versionOlder version "26.8.999") [
+    ./26.8-add-dir-prereq.patch
   ];
 
   postPatch = ''
@@ -480,7 +534,6 @@ stdenv.mkDerivation (finalAttrs: {
       abseil-cpp
       bluez5
       boost
-      box2d_2
       cairo
       clucene-core_2
       cppunit
@@ -565,6 +618,8 @@ stdenv.mkDerivation (finalAttrs: {
       xmlsec
       zlib
       frozen-containers
+      md4c
+      fast-float
     ]
     ++ optionals kdeIntegration [
       qt6.qtbase
@@ -575,18 +630,12 @@ stdenv.mkDerivation (finalAttrs: {
       jre'
     ]
     ++ optionals (variant == "collabora" || variant == "collabora-coda") [
-      fast-float
       liborcus_0_19
       mdds_2_1
-      md4c
+      box2d_2
     ]
-    ++ optionals (variant == "still") [
-      liborcus_0_20
-    ]
-    ++ optionals (variant == "fresh") [
-      fast-float
+    ++ optionals (variant == "stable") [
       liborcus
-      md4c
     ];
 
   preConfigure = ''
@@ -700,6 +749,9 @@ stdenv.mkDerivation (finalAttrs: {
     "--without-system-zxcvbn"
 
     "--without-system-java-websocket"
+
+    # searches via pkg-config, upstream box2d has no mention of .pc files
+    "--without-system-box2d"
   ]
   ++ optionals kdeIntegration [
     "--enable-kf6"
@@ -783,6 +835,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit srcs;
+    inherit withJava;
     jdk = if withJava then jre' else null;
     python = python3; # for unoconv
     updateScript = [

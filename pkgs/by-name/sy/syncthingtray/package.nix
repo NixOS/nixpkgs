@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   kdePackages,
   cpp-utilities,
   boost,
@@ -27,15 +28,23 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.1.2";
+  version = "2.1.7";
   pname = "syncthingtray";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "syncthingtray";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-VU47ncrgY00LJTrM4GKMDbhtFtBrcTwakhNCbcucoFo=";
+    hash = "sha256-7yKK27EIzCwuKMPUmv9ekVSrexvKgFQOA3LlrP/9+w4=";
   };
+
+  patches = [
+    # https://github.com/Martchus/syncthingtray/issues/463
+    (fetchpatch {
+      url = "https://github.com/Martchus/syncthingtray/commit/cf2aa323f935041a55a8852a19a63968c832f517.patch";
+      hash = "sha256-nE7+RB0Wk6NirljqaCSNPXBxmAvPLMBOzyT+Rl7OkBw=";
+    })
+  ];
 
   buildInputs = [
     kdePackages.qtbase
@@ -85,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeFeature "QT_PACKAGE_PREFIX" "Qt${lib.versions.major kdePackages.qtbase.version}")
     (lib.cmakeFeature "KF_PACKAGE_PREFIX" "KF${lib.versions.major kdePackages.qtbase.version}")
-    (lib.cmakeBool "BUILD_TESTING" (finalAttrs.doCheck or false))
+    (lib.cmakeBool "BUILD_TESTING" (finalAttrs.finalPackage.doCheck or false))
     # See https://github.com/Martchus/syncthingtray/issues/208
     (lib.cmakeBool "EXCLUDE_TESTS_FROM_ALL" false)
     (lib.cmakeFeature "AUTOSTART_EXEC_PATH" autostartExecPath)

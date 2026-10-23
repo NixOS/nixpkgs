@@ -38,7 +38,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "K9s like CLI for AWS and GCP";
     homepage = "https://github.com/one2nc/cloudlens";
-    license = lib.licenses.apsl20;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ByteSudoer ];
     mainProgram = "cloudlens";
   };

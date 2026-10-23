@@ -189,11 +189,26 @@ in
       { nodes, ... }:
       let
         bundle = mkBundle masDomain;
+
+        extraConfig = pkgs.writeText "masExtraConfig.yml" (
+          builtins.toJSON {
+            secrets = {
+              encryption_file = "/var/lib/matrix-authentication-service/encryption";
+              keys = [
+                {
+                  kid = "rsa-4096";
+                  key_file = "/var/lib/matrix-authentication-service/key_rsa_4096";
+                }
+              ];
+            };
+          }
+        );
       in
       {
         services.matrix-authentication-service = {
           enable = true;
           createDatabase = true;
+          extraConfigFiles = [ (toString extraConfig) ];
           settings = {
             http = {
               public_base = "https://${masDomain}:8080/";
@@ -223,27 +238,20 @@ in
               secret_file = "/var/lib/matrix-authentication-service/matrix_secret";
             };
             database.uri = "postgresql:///matrix-authentication-service?host=/run/postgresql&user=matrix-authentication-service";
-            secrets = {
-              encryption_file = "/var/lib/matrix-authentication-service/encryption";
-              keys = [
-                {
-                  kid = "rsa-4096";
-                  key_file = "/var/lib/matrix-authentication-service/key_rsa_4096";
-                }
-              ];
-            };
+            # secrets is defined in extraConfigFiles
             policy.data.client_registration.allow_insecure_uris = true;
             upstream_oauth2.providers = [
               {
                 id = masULID;
                 client_id = oidcClientID;
-                client_secret = oidcClientSecret;
+                client_secret_file = "\${CREDENTIALS_DIRECTORY}/oidc_client_secret";
                 issuer = "https://${dexDomain}:5556";
                 scope = "openid email profile";
                 token_endpoint_auth_method = "client_secret_post";
               }
             ];
           };
+          credentials.oidc_client_secret = "${pkgs.writeText "oidc-client-secret" oidcClientSecret}";
         };
         services.postgresql.authentication = pkgs.lib.mkOverride 10 ''
           local all all trust

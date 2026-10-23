@@ -4,13 +4,19 @@
   fetchFromGitHub,
   runCommand,
 }:
-assert version == "2.12.0";
+assert version == "2.14.1";
 rec {
   src_aiter = fetchFromGitHub {
     owner = "ROCm";
     repo = "aiter";
-    rev = "9a469a608b2c10b7157df573a38d31e5bf4038b4";
-    hash = "sha256-kaX3uAkgE99puYu+ODdKjvsN+LLl1Jt95vtd5Xh0Mg8=";
+    rev = "971d98b8ed4003639486134a435df7e2ef9c0475";
+    hash = "sha256-NlztOGwk2YfZvnu23PkYJ/DuaAZrvpq5yBelobPHyGY=";
+  };
+  src_aiter_flash-attention = fetchFromGitHub {
+    owner = "ROCm";
+    repo = "aiter";
+    rev = "9bab8388c35936814a659b4ebd245c491e1b940a";
+    hash = "sha256-Nt82KUco/7LvS0YywTsmhMR2TE1O/ATH1PNwMmE7sCE=";
   };
   src_asmjit = fetchFromGitHub {
     owner = "asmjit";
@@ -30,12 +36,6 @@ rec {
     rev = "5b7683f49e1e9223cf9927b24f6fd3d6bd82e3f8";
     hash = "sha256-iFRgjLkftuszAqBnmS9GXU8BwYnabmwMAQyw19sfjb4=";
   };
-  src_civetweb = fetchFromGitHub {
-    owner = "civetweb";
-    repo = "civetweb";
-    rev = "d7ba35bbb649209c66e582d5a0244ba988a15159";
-    hash = "sha256-eXb5f2jhtfxDORG+JniSy17kzB7A4vM0UnUQAfKTquU=";
-  };
   src_clang-cindex-python3 = fetchFromGitHub {
     owner = "wjakob";
     repo = "clang-cindex-python3";
@@ -45,14 +45,14 @@ rec {
   src_composable_kernel = fetchFromGitHub {
     owner = "ROCm";
     repo = "composable_kernel";
-    rev = "f1746955fdaf80a3414de814bf32437686dac347";
-    hash = "sha256-B/xNuBPUdjL1b+0IzRnaSXT2FKUo5cYwYcKqfKqJ8Eg=";
+    rev = "5a74dec07a894484b9489d0c0e00cd3b52652d18";
+    hash = "sha256-FxJwzbZRzxRLftNXrsCKP8qodBfkuQ+pAEd5sY6i21M=";
   };
   src_composable_kernel_aiter = fetchFromGitHub {
     owner = "ROCm";
     repo = "composable_kernel";
-    rev = "fcc9372c009c8e0a23fece77b582da83b04a654f";
-    hash = "sha256-Xwj48Ftwqlea5ZIP7q7cRh2U2tlHTd1cdW4TYf5J0Dg=";
+    rev = "af7118e342580ecd3f71edce7b1d0ba465012ecf";
+    hash = "sha256-AIHeRdJeOWctHwqmiOGHQC3NA7Rj7EUH/ykWnt7vhkM=";
   };
   src_composable_kernel_fbgemm_MSLK = fetchFromGitHub {
     owner = "ROCm";
@@ -63,26 +63,20 @@ rec {
   src_composable_kernel_flash-attention = fetchFromGitHub {
     owner = "ROCm";
     repo = "composable_kernel";
-    rev = "13f6d635653bd5ffbfcac8577f1ef09590c23d78";
-    hash = "sha256-nS1Apx4kLTIz7U2/X1BVQHiBwa5j59VboaibOhH9ADM=";
+    rev = "c56c6750d0fc54ed771d532cc92c316423449614";
+    hash = "sha256-MIhOwoTeIWGiWvHROWY4W9vqbvmHkSlaRlw3/aXtkm0=";
   };
   src_cpp-httplib = fetchFromGitHub {
     owner = "yhirose";
     repo = "cpp-httplib";
-    rev = "4d7c9a788de136071ccf0dd4e96239151e2adadb";
-    hash = "sha256-VXEhoxoQjGEuA2g/y6fDTA4LrPd4SggrS3aOjznDSvc=";
-  };
-  src_cpr = fetchFromGitHub {
-    owner = "libcpr";
-    repo = "cpr";
-    rev = "871ed52d350214a034f6ef8a3b8f51c5ce1bd400";
-    hash = "sha256-TxoDCIa7pS+nfI8hNiGIRQKpYNrKSd1yCXPfVXPcRW8=";
+    rev = "62d899feac3cf9215a55f2b43da250fdd98d2156";
+    hash = "sha256-4Y3BSo4LvCBwO6tsCYUlmFt/HrieS1p1MViN0Ac+Isk=";
   };
   src_cpuinfo = fetchFromGitHub {
     owner = "pytorch";
     repo = "cpuinfo";
-    rev = "f858c30bcb16f8effd5ff46996f0514539e17abc";
-    hash = "sha256-9eXqsdgGl4oZEC8uJgiyqrvD3HVyUuNcSkJ8VTmZBj8=";
+    rev = "bc3c01e230c6974283e4b89421cfb0e232435589";
+    hash = "sha256-nm1ifv/ASJwCWoz+9HeuCi+bcCNTh/swvkxJolItgyU=";
   };
   src_cpuinfo_fbgemm = fetchFromGitHub {
     owner = "pytorch";
@@ -93,20 +87,20 @@ rec {
   src_cudnn-frontend = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cudnn-frontend";
-    rev = "a91f0e04dcea10515f0f776fc5a89535e316a9c8";
-    hash = "sha256-OOKdkjsVnWgrtcI7IMPSRi2YxtqF2YNV4Fd2rD9I1K8=";
+    rev = "35fd7b0d0e1d4952b904c79341c5e84e3af0a328";
+    hash = "sha256-p2mJfcnnQzG7DZvo9NxpYQfI98IMSPF853P4AiwskNU=";
   };
   src_cutlass = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cutlass";
-    rev = "da5e086dab31d63815acafdac9a9c5893b1c69e2";
-    hash = "sha256-0q9Ad0Z6E/rO2PdM4uQc8H0E0qs9uKc3reHepiHhjEc=";
+    rev = "e05f953a5b3d38adc240df2ff928e0421c2abba3";
+    hash = "sha256-Eru8FdTUwuc4xXD9Pu8r0nRP9eK2MTIHHs9eNEiKQ0g=";
   };
-  src_cutlass_fbgemm = fetchFromGitHub {
+  src_cutlass_fbgemm_MSLK = fetchFromGitHub {
     owner = "jwfromm";
     repo = "cutlass";
-    rev = "a54461186bc30c39bf89bc433f89198892ad9e5f";
-    hash = "sha256-me+IKK79OJz4tCioc1GxJxp620KFL4yYk5r85XHj3zQ=";
+    rev = "571edeb2d0ac872a8392fc49285b156b07884b4e";
+    hash = "sha256-EnEtWPJqJBLGOk93HdUL45NFqIVG5qetJX6vnc7K6pE=";
   };
   src_cutlass_flash-attention = fetchFromGitHub {
     owner = "NVIDIA";
@@ -114,29 +108,11 @@ rec {
     rev = "7127592069c2fe01b041e174ba4345ef9b279671";
     hash = "sha256-/fEfuriQbrjjLP+yRjeo88SgW3IurdlU+6rR9+w5woQ=";
   };
-  src_cutlass_MSLK = fetchFromGitHub {
-    owner = "jwfromm";
-    repo = "cutlass";
-    rev = "571edeb2d0ac872a8392fc49285b156b07884b4e";
-    hash = "sha256-EnEtWPJqJBLGOk93HdUL45NFqIVG5qetJX6vnc7K6pE=";
-  };
-  src_DCGM = fetchFromGitHub {
-    owner = "NVIDIA";
-    repo = "DCGM";
-    rev = "ffde4e54bc7249a6039a5e6b45b395141e1217f9";
-    hash = "sha256-jlnq25byEep7wRF3luOIGaiaYjqSVaTBx02N6gE/ox8=";
-  };
-  src_dynolog = fetchFromGitHub {
-    owner = "facebookincubator";
-    repo = "dynolog";
-    rev = "d2ffe0a4e3acace628db49974246b66fc3e85fb1";
-    hash = "sha256-AebAZeDE9mXvg1XsgDm/4DIAMDIkbd+HGgcTmxV+HX0=";
-  };
   src_fbgemm = fetchFromGitHub {
     owner = "pytorch";
     repo = "fbgemm";
-    rev = "c246916f9e3804eacc3c95058e51cce02ae00fff";
-    hash = "sha256-jNc9Z3fe4pUTP5FY3sV1WINoEEd8te6tTyjNsFWZFxY=";
+    rev = "bf6dce360a4fe133bc779e2fd036277678509f95";
+    hash = "sha256-LYSuJxw13ks2T4eEp0Z9vBqxiaMBSEro2WL84iEEdzc=";
   };
   src_fbjni = fetchFromGitHub {
     owner = "facebookincubator";
@@ -147,8 +123,8 @@ rec {
   src_flash-attention = fetchFromGitHub {
     owner = "Dao-AILab";
     repo = "flash-attention";
-    rev = "fec3a6a18460c1b40f097208d4c16fe8964a679d";
-    hash = "sha256-7yEFNM2lslkBA/9slblAbiK1PHKqKmo1MCFJYz2BOLk=";
+    rev = "14c377950125c70b7a9dabf9c561fca53715ac7d";
+    hash = "sha256-rh3F0DyVNCJhOoYejRZ/i1wwGZRqr7xsxQpqUpJFYGM=";
   };
   src_flatbuffers = fetchFromGitHub {
     owner = "google";
@@ -159,14 +135,8 @@ rec {
   src_fmt = fetchFromGitHub {
     owner = "fmtlib";
     repo = "fmt";
-    rev = "407c905e45ad75fc29bf0f9bb7c5c2fd3475976f";
-    hash = "sha256-ZmI1Dv0ZabPlxa02OpERI47jp7zFfjpeWCy1WyuPYZ0=";
-  };
-  src_fmt_dynolog = fetchFromGitHub {
-    owner = "fmtlib";
-    repo = "fmt";
-    rev = "cd4af11efc9c622896a3e4cb599fa28668ca3d05";
-    hash = "sha256-Ks3UG3V0Pz6qkKYFhy71ZYlZ9CPijO6GBrfMqX5zAp8=";
+    rev = "c0330b746600bfd91dbacb88837da5a16f947ba5";
+    hash = "sha256-JLaVWsY7APKCVMTErKrVQmAVrlkUZF6eAbrYh6ESgYM=";
   };
   src_fmt_kineto = fetchFromGitHub {
     owner = "fmtlib";
@@ -192,41 +162,17 @@ rec {
     rev = "3fb5c176c17c765a3492cd2f0321b0dab712f350";
     hash = "sha256-G3PAf9j7Tb4dUoaV9Tmxkkfu3v+w0uFbZ+MWS68tlRw=";
   };
-  src_gflags = fetchFromGitHub {
-    owner = "gflags";
-    repo = "gflags";
-    rev = "e171aa2d15ed9eb17054558e0b3a6a413bb01067";
-    hash = "sha256-4NLd/p72H7ZiFCCVjTfM/rDvZ8CVPMxYpnJ2O1od8ZA=";
-  };
-  src_gflags_gflags = fetchFromGitHub {
-    owner = "gflags";
-    repo = "gflags";
-    rev = "8411df715cf522606e3b1aca386ddfc0b63d34b4";
-    hash = "sha256-Bb4g64u5a0QRWwDl1ryNXmht6NKFWPW9bAF07yYRJ6I=";
-  };
-  src_glog = fetchFromGitHub {
-    owner = "google";
-    repo = "glog";
-    rev = "b33e3bad4c46c8a6345525fd822af355e5ef9446";
-    hash = "sha256-xqRp9vaauBkKz2CXbh/Z4TWqhaUtqfbsSlbYZR/kW9s=";
-  };
   src_gloo = fetchFromGitHub {
     owner = "pytorch";
     repo = "gloo";
-    rev = "3135b0b41b67dde590eef0938a0bf3d6238df5f7";
-    hash = "sha256-lCKZyH8p54UaSDGRTxM6ZMorc+japeJulv7FQn0GnHc=";
+    rev = "74cc005ae13f69c11d8a41e50b42025b6730e796";
+    hash = "sha256-iznrjPgp/0Qu5Lvx+l7G7aL9q01nAValoCp6fkAl6cM=";
   };
   src_googletest = fetchFromGitHub {
     owner = "google";
     repo = "googletest";
     rev = "52eb8108c5bdec04579160ae17225d66034bd723";
     hash = "sha256-HIHMxAUR4bjmFLoltJeIAVSulVQ6kVuIT2Ku+lwAx/4=";
-  };
-  src_googletest_prometheus-cpp = fetchFromGitHub {
-    owner = "google";
-    repo = "googletest";
-    rev = "e2239ee6043f73722e7aa812a459f54a28552929";
-    hash = "sha256-SjlJxushfry13RGA7BCjYC9oZqV4z6x8dOiHfl/wpF0=";
   };
   src_googletest_protobuf = fetchFromGitHub {
     owner = "google";
@@ -249,7 +195,7 @@ rec {
   src_ideep = fetchFromGitHub {
     owner = "intel";
     repo = "ideep";
-    rev = "e539e0f9774e2018f0d56fe865da66581f692e3d";
+    rev = "e087b6e4b32a7ba684db82231d1558123968ac1d";
     hash = "sha256-AVSsugGYiQ4QOWMVaHj1hzlPTZmg65yrGMmrWytvUuM=";
   };
   src_ittapi = fetchFromGitHub {
@@ -264,23 +210,11 @@ rec {
     rev = "55f93686c01528224f448c19128836e7df245f72";
     hash = "sha256-cECvDOLxgX7Q9R3IE86Hj9JJUxraDQvhoyPDF03B2CY=";
   };
-  src_json_dynolog = fetchFromGitHub {
-    owner = "nlohmann";
-    repo = "json";
-    rev = "4f8fba14066156b73f1189a2b8bd568bde5284c5";
-    hash = "sha256-DTsZrdB9GcaNkx7ZKxcgCA3A9ShM5icSF0xyGguJNbk=";
-  };
-  src_json_fbgemm = fetchFromGitHub {
-    owner = "nlohmann";
-    repo = "json";
-    rev = "9cca280a4d0ccf0c08f47a99aa71d1b0e52f8d03";
-    hash = "sha256-7F0Jon+1oWL7uqet5i1IgHX0fUw/+z0QwEcA3zs5xHg=";
-  };
   src_kineto = fetchFromGitHub {
     owner = "pytorch";
     repo = "kineto";
-    rev = "b2103f78d13fde4937af010c0ef8e24313568bc5";
-    hash = "sha256-Ix5zulGaUPbLeVrrTm/EzcVWT4TkDYcBsQADAl4N7TA=";
+    rev = "15f4784a3471d4db8b31720d528f2f57cd2b1f40";
+    hash = "sha256-N9iSLrz+u0trNEQYGuzKZVUK7YUHww7onS0hvw1nhYk=";
   };
   src_kleidiai = fetchFromGitHub {
     owner = "ARM-software";
@@ -303,14 +237,14 @@ rec {
   src_mimalloc = fetchFromGitHub {
     owner = "microsoft";
     repo = "mimalloc";
-    rev = "048d969a1c5ee2fb89c226298f41ea38445546ef";
-    hash = "sha256-ZxIkzMIqwYZpiqbPAHDrO26xaiaF77Dlosbw43VkOpc=";
+    rev = "30ac9d56b8b9ea57ae84bc8ef17ef39000da08fe";
+    hash = "sha256-4YDw1YB17Psc6tRhNXV15DdPWjfBUX+D1Qc+6uAQQTg=";
   };
   src_mkl-dnn = fetchFromGitHub {
     owner = "intel";
     repo = "mkl-dnn";
-    rev = "03c022d3ffdcee958cfacbe720048e725fdf644c";
-    hash = "sha256-xJTllrKs6mPNM85ZqyHTHWKpVOtOghmg4ZRFAvQZ4WU=";
+    rev = "80afa71049cd69a3df32adcccb623b12cd7baa22";
+    hash = "sha256-t5+DF4/qgEYQpTY8Qox0BTfpykfs5kFqYy6HrEJaVu0=";
   };
   src_MSLK = fetchFromGitHub {
     owner = "meta-pytorch";
@@ -327,8 +261,8 @@ rec {
   src_NVTX = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "NVTX";
-    rev = "3ebbc93ded7285963bff932c678fa367eb393ba6";
-    hash = "sha256-F1TD1lK0sE6UWMhelF1q147T5Jk3xFUHwsmKoE+WnXY=";
+    rev = "7d113f290f89eeeae9c957011c497101f3948d9e";
+    hash = "sha256-hXcH/Iosm0YRPFEaLPnZaJCsXE57gh7Obz0zmyWzeXY=";
   };
   src_onnx = fetchFromGitHub {
     owner = "onnx";
@@ -342,29 +276,17 @@ rec {
     rev = "f45429b087dd7d5bc78bb40dc7cf06425c252d67";
     hash = "sha256-eyhfnOOZPtsJwjkF6ybv3F77fyjaV6wzgu+LxadZVw0=";
   };
-  src_pfs = fetchFromGitHub {
-    owner = "dtrugman";
-    repo = "pfs";
-    rev = "f68a2fa8ea36c783bdd760371411fcb495aa3150";
-    hash = "sha256-VB7/7hi4vZKgpjpgir+CyWIMwoNLHGRIXPJvVOn8Pq4=";
-  };
   src_pocketfft = fetchFromGitHub {
     owner = "mreineck";
     repo = "pocketfft";
     rev = "0fa0ef591e38c2758e3184c6c23e497b9f732ffa";
     hash = "sha256-Fu786IHiU6Bl66gZ/UJmqOROjlya3viLyzOxwdZVi9c=";
   };
-  src_prometheus-cpp = fetchFromGitHub {
-    owner = "jupp0r";
-    repo = "prometheus-cpp";
-    rev = "b1234816facfdda29845c46696a02998a4af115a";
-    hash = "sha256-Dj+adszXnWHOcZJ/QTOX214N86pjy71tLuPU6bHcMPg=";
-  };
   src_protobuf = fetchFromGitHub {
     owner = "protocolbuffers";
     repo = "protobuf";
-    rev = "d1eca4e4b421cd2997495c4b4e65cea6be4e9b8a";
-    hash = "sha256-InCW/Sb4E7dQeg3VHgpCtm91qqfh0Qpmu4ZzKffacOQ=";
+    rev = "f0dc78d7e6e331b8c6bb2d5283e06aa26883ca7c";
+    hash = "sha256-VZQEFHq17UsTH5CZZOcJBKiScGV2xPJ/e6gkkVliRCU=";
   };
   src_psimd = fetchFromGitHub {
     owner = "Maratyszcza";
@@ -373,16 +295,16 @@ rec {
     hash = "sha256-lV+VZi2b4SQlRYrhKx9Dxc6HlDEFz3newvcBjTekupo=";
   };
   src_pthreadpool = fetchFromGitHub {
-    owner = "Maratyszcza";
+    owner = "google";
     repo = "pthreadpool";
-    rev = "4fe0e1e183925bf8cfa6aae24237e724a96479b8";
-    hash = "sha256-R4YmNzWEELSkAws/ejmNVxqXDTJwcqjLU/o/HvgRn2E=";
+    rev = "a56dcd79c699366e7ac6466792c3025883ff7704";
+    hash = "sha256-WfyuPfII4eSmLskZV0TAcu4K6OyW38TjkDHm+VUx5eY=";
   };
   src_pybind11 = fetchFromGitHub {
     owner = "pybind";
     repo = "pybind11";
-    rev = "f5fbe867d2d26e4a0a9177a51f6e568868ad3dc8";
-    hash = "sha256-ZiwNGsE1FOkhnWv/1ib1akhQ4FZvrXRCDnnBZoPp6r4=";
+    rev = "97bf890db679505a14dfe547a5e77bb2bd05dc90";
+    hash = "sha256-rzpe7CrgIa5Df2OrB/9mxIJd3X5DA7FX0C+w7TcmAoQ=";
   };
   src_pybind11_onnx = fetchFromGitHub {
     owner = "pybind";
@@ -399,8 +321,8 @@ rec {
   src_pytorch = fetchFromGitHub {
     owner = "pytorch";
     repo = "pytorch";
-    rev = "v2.12.0";
-    hash = "sha256-IyQs9CQbbpZYpd+8YhIj/ULjsIWu6gjkGrGSeMWqKvw=";
+    rev = "v2.14.1";
+    hash = "sha256-L2ymNrYzddaj3/VteuABtqfs27fJi+a/uSecj7PHDSg=";
   };
   src_sleef = fetchFromGitHub {
     owner = "shibatch";
@@ -431,46 +353,26 @@ rec {
     chmod u+w $out/3rdparty/composable_kernel
     cp -r ${src_composable_kernel_aiter_recursive}/* $out/3rdparty/composable_kernel
   '';
+  src_aiter_flash-attention_recursive = runCommand "aiter_flash-attention" { } ''
+    cp -r ${src_aiter_flash-attention} $out
+    chmod u+w $out/3rdparty/composable_kernel
+    cp -r ${src_composable_kernel_aiter_recursive}/* $out/3rdparty/composable_kernel
+  '';
   src_asmjit_recursive = src_asmjit;
   src_benchmark_recursive = src_benchmark;
   src_benchmark_protobuf_recursive = src_benchmark_protobuf;
-  src_civetweb_recursive = src_civetweb;
   src_clang-cindex-python3_recursive = src_clang-cindex-python3;
   src_composable_kernel_recursive = src_composable_kernel;
   src_composable_kernel_aiter_recursive = src_composable_kernel_aiter;
   src_composable_kernel_fbgemm_MSLK_recursive = src_composable_kernel_fbgemm_MSLK;
   src_composable_kernel_flash-attention_recursive = src_composable_kernel_flash-attention;
   src_cpp-httplib_recursive = src_cpp-httplib;
-  src_cpr_recursive = src_cpr;
   src_cpuinfo_recursive = src_cpuinfo;
   src_cpuinfo_fbgemm_recursive = src_cpuinfo_fbgemm;
   src_cudnn-frontend_recursive = src_cudnn-frontend;
   src_cutlass_recursive = src_cutlass;
-  src_cutlass_fbgemm_recursive = src_cutlass_fbgemm;
+  src_cutlass_fbgemm_MSLK_recursive = src_cutlass_fbgemm_MSLK;
   src_cutlass_flash-attention_recursive = src_cutlass_flash-attention;
-  src_cutlass_MSLK_recursive = src_cutlass_MSLK;
-  src_DCGM_recursive = src_DCGM;
-  src_dynolog_recursive = runCommand "dynolog" { } ''
-    cp -r ${src_dynolog} $out
-    chmod u+w $out/third_party/cpr
-    cp -r ${src_cpr_recursive}/* $out/third_party/cpr
-    chmod u+w $out/third_party/DCGM
-    cp -r ${src_DCGM_recursive}/* $out/third_party/DCGM
-    chmod u+w $out/third_party/fmt
-    cp -r ${src_fmt_dynolog_recursive}/* $out/third_party/fmt
-    chmod u+w $out/third_party/gflags
-    cp -r ${src_gflags_recursive}/* $out/third_party/gflags
-    chmod u+w $out/third_party/glog
-    cp -r ${src_glog_recursive}/* $out/third_party/glog
-    chmod u+w $out/third_party/googletest
-    cp -r ${src_googletest_recursive}/* $out/third_party/googletest
-    chmod u+w $out/third_party/json
-    cp -r ${src_json_dynolog_recursive}/* $out/third_party/json
-    chmod u+w $out/third_party/pfs
-    cp -r ${src_pfs_recursive}/* $out/third_party/pfs
-    chmod u+w $out/third_party/prometheus-cpp
-    cp -r ${src_prometheus-cpp_recursive}/* $out/third_party/prometheus-cpp
-  '';
   src_fbgemm_recursive = runCommand "fbgemm" { } ''
     cp -r ${src_fbgemm} $out
     chmod u+w $out/external/asmjit
@@ -480,13 +382,13 @@ rec {
     chmod u+w $out/external/cpuinfo
     cp -r ${src_cpuinfo_fbgemm_recursive}/* $out/external/cpuinfo
     chmod u+w $out/external/cutlass
-    cp -r ${src_cutlass_fbgemm_recursive}/* $out/external/cutlass
+    cp -r ${src_cutlass_fbgemm_MSLK_recursive}/* $out/external/cutlass
     chmod u+w $out/external/googletest
     cp -r ${src_googletest_recursive}/* $out/external/googletest
     chmod u+w $out/external/hipify_torch
     cp -r ${src_hipify_torch_recursive}/* $out/external/hipify_torch
     chmod u+w $out/external/json
-    cp -r ${src_json_fbgemm_recursive}/* $out/external/json
+    cp -r ${src_json_recursive}/* $out/external/json
   '';
   src_fbjni_recursive = src_fbjni;
   src_flash-attention_recursive = runCommand "flash-attention" { } ''
@@ -495,24 +397,17 @@ rec {
     cp -r ${src_composable_kernel_flash-attention_recursive}/* $out/csrc/composable_kernel
     chmod u+w $out/csrc/cutlass
     cp -r ${src_cutlass_flash-attention_recursive}/* $out/csrc/cutlass
+    chmod u+w $out/third_party/aiter
+    cp -r ${src_aiter_flash-attention_recursive}/* $out/third_party/aiter
   '';
   src_flatbuffers_recursive = src_flatbuffers;
   src_fmt_recursive = src_fmt;
-  src_fmt_dynolog_recursive = src_fmt_dynolog;
   src_fmt_kineto_recursive = src_fmt_kineto;
   src_FP16_recursive = src_FP16;
   src_FXdiv_recursive = src_FXdiv;
   src_gemmlowp_recursive = src_gemmlowp;
-  src_gflags_recursive = runCommand "gflags" { } ''
-    cp -r ${src_gflags} $out
-    chmod u+w $out/doc
-    cp -r ${src_gflags_gflags_recursive}/* $out/doc
-  '';
-  src_gflags_gflags_recursive = src_gflags_gflags;
-  src_glog_recursive = src_glog;
   src_gloo_recursive = src_gloo;
   src_googletest_recursive = src_googletest;
-  src_googletest_prometheus-cpp_recursive = src_googletest_prometheus-cpp;
   src_googletest_protobuf_recursive = src_googletest_protobuf;
   src_googletest_tensorpipe_recursive = src_googletest_tensorpipe;
   src_hipify_torch_recursive = src_hipify_torch;
@@ -523,16 +418,14 @@ rec {
   '';
   src_ittapi_recursive = src_ittapi;
   src_json_recursive = src_json;
-  src_json_dynolog_recursive = src_json_dynolog;
-  src_json_fbgemm_recursive = src_json_fbgemm;
   src_kineto_recursive = runCommand "kineto" { } ''
     cp -r ${src_kineto} $out
-    chmod u+w $out/libkineto/third_party/dynolog
-    cp -r ${src_dynolog_recursive}/* $out/libkineto/third_party/dynolog
     chmod u+w $out/libkineto/third_party/fmt
     cp -r ${src_fmt_kineto_recursive}/* $out/libkineto/third_party/fmt
     chmod u+w $out/libkineto/third_party/googletest
     cp -r ${src_googletest_recursive}/* $out/libkineto/third_party/googletest
+    chmod u+w $out/libkineto/third_party/json
+    cp -r ${src_json_recursive}/* $out/libkineto/third_party/json
   '';
   src_kleidiai_recursive = src_kleidiai;
   src_libnop_recursive = src_libnop;
@@ -544,7 +437,7 @@ rec {
     chmod u+w $out/external/composable_kernel
     cp -r ${src_composable_kernel_fbgemm_MSLK_recursive}/* $out/external/composable_kernel
     chmod u+w $out/external/cutlass
-    cp -r ${src_cutlass_MSLK_recursive}/* $out/external/cutlass
+    cp -r ${src_cutlass_fbgemm_MSLK_recursive}/* $out/external/cutlass
     chmod u+w $out/external/googletest
     cp -r ${src_googletest_recursive}/* $out/external/googletest
     chmod u+w $out/external/hipify_torch
@@ -558,15 +451,7 @@ rec {
     cp -r ${src_pybind11_onnx_recursive}/* $out/third_party/pybind11
   '';
   src_PeachPy_recursive = src_PeachPy;
-  src_pfs_recursive = src_pfs;
   src_pocketfft_recursive = src_pocketfft;
-  src_prometheus-cpp_recursive = runCommand "prometheus-cpp" { } ''
-    cp -r ${src_prometheus-cpp} $out
-    chmod u+w $out/3rdparty/civetweb
-    cp -r ${src_civetweb_recursive}/* $out/3rdparty/civetweb
-    chmod u+w $out/3rdparty/googletest
-    cp -r ${src_googletest_prometheus-cpp_recursive}/* $out/3rdparty/googletest
-  '';
   src_protobuf_recursive = runCommand "protobuf" { } ''
     cp -r ${src_protobuf} $out
     chmod u+w $out/third_party/benchmark

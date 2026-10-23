@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   fetchFromGitHub,
   cmake,
   pkg-config,
@@ -19,6 +18,7 @@
   fmt,
   qtbase,
   luaSupport ? true,
+  nlohmann_json,
 }:
 
 let
@@ -36,13 +36,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-chinese-addons";
-  version = "5.1.12";
+  version = "5.1.14";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-bAx5m+tU8hT1WdaLChpQV3J0l+QJzDLzMEPTgjEGCuw=";
+    hash = "sha256-EtAoUoZQqxb049oD7r/UgdpJdS/kenMn3t1SHv+YIkg=";
   };
 
   nativeBuildInputs = [
@@ -68,6 +68,7 @@ stdenv.mkDerivation rec {
     qtwebengine
     fmt
     qtbase
+    nlohmann_json
   ]
   ++ lib.optional luaSupport fcitx5-lua;
 
@@ -77,10 +78,12 @@ stdenv.mkDerivation rec {
     description = "Addons related to Chinese, including IME previous bundled inside fcitx4";
     mainProgram = "scel2org5";
     homepage = "https://github.com/fcitx/fcitx5-chinese-addons";
-    license = with lib.licenses; [
-      gpl2Plus
-      lgpl21Plus
-    ];
+    license =
+      with lib.licenses;
+      AND [
+        lgpl21Plus
+        unicode-dfs-2016
+      ];
     maintainers = with lib.maintainers; [ poscat ];
     platforms = lib.platforms.linux;
   };

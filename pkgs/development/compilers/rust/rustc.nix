@@ -20,6 +20,7 @@
   rustc,
   rustfmt,
   pkg-config,
+  bashNonInteractive,
   openssl,
   xz,
   zlib,
@@ -402,6 +403,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    bashNonInteractive
     openssl
     rust-jemalloc-sys
   ]
@@ -410,6 +412,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ optional (!withBundledLLVM) llvmShared.lib
   ++ optional (useLLVM && !withBundledLLVM) llvmPackages.libunwind;
+
+  strictDeps = true;
 
   outputs = [
     "out"
@@ -447,6 +451,12 @@ stdenv.mkDerivation (finalAttrs: {
   setupHooks = ./setup-hook.sh;
 
   requiredSystemFeatures = [ "big-parallel" ];
+
+  # Make sure our bootstrap packages don't end up in our runtime closure
+  disallowedReferences = [
+    cargo
+    rustc
+  ];
 
   passthru = {
     llvm = llvmShared;

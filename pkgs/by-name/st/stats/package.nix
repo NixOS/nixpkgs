@@ -1,9 +1,10 @@
 {
   lib,
-  swiftPackages,
   fetchFromGitHub,
   leveldb,
   perl,
+  stdenv,
+  swift,
   actool,
   makeWrapper,
   rcodesign,
@@ -11,8 +12,6 @@
 }:
 
 let
-  inherit (swiftPackages) stdenv swift;
-
   frameworks = [
     "Kit"
     "CPU"
@@ -46,6 +45,8 @@ let
     toPlist {
       CFBundleDevelopmentRegion = "en";
       CFBundleExecutable = "Stats";
+      CFBundleIconFile = "AppIcon";
+      CFBundleIconName = "AppIcon";
       CFBundleIdentifier = "eu.exelban.Stats";
       CFBundleInfoDictionaryVersion = "6.0";
       CFBundleName = "Stats";
@@ -68,7 +69,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "stats";
-  version = "3.0.3";
+  version = "3.0.17";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -77,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "exelban";
     repo = "Stats";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HYuS0mFzzln+EjYUmQgjCPFsF4aGP+4QWalDL0vt3OA=";
+    hash = "sha256-PpifztjKCuRQ6uvsvf78hh04yyRhDvjPAw+Bjug0mLg=";
   };
 
   nativeBuildInputs = [
@@ -317,6 +318,7 @@ stdenv.mkDerivation (finalAttrs: {
       --platform macosx \
       --minimum-deployment-target 14.0 \
       --app-icon AppIcon \
+      --output-partial-info-plist /dev/null \
       "Stats/Supporting Files/Assets.xcassets"
 
     # Copy localization files
@@ -348,8 +350,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/exelban/stats";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      FlameFlag
+      _4evy
       emilytrau
+      kinnrai
     ];
     platforms = lib.platforms.darwin;
   };

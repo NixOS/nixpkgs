@@ -39,5 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ tbutter ];
     platforms = lib.platforms.unix;
     homepage = "https://www.ircd-hybrid.org/";
+    license = lib.licenses.gpl2Plus;
   };
 })

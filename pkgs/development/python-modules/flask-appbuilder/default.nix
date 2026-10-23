@@ -26,13 +26,13 @@
 
 buildPythonPackage rec {
   pname = "flask-appbuilder";
-  version = "5.0.2";
+  version = "5.2.2";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "Flask-AppBuilder";
     inherit version;
-    hash = "sha256-9Xe5gqGuQLwhMjjO25PDnGfPIZmqHgBuCH6hs1B9VFA=";
+    hash = "sha256-BSdiM5S0C4Wf9HBW42IaYe76qhbM8YjycsZClDB1h8o=";
   };
 
   propagatedBuildInputs = [

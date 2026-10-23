@@ -15,7 +15,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchPypi {
     pname = "pyyaml_env_tag";
     inherit (finalAttrs) version;
-    sha256 = "sha256-LrOLdaLSHuBHXW2X7BnGMoen4UAjHkIUlp0OrJI81/8=";
+    hash = "sha256-LrOLdaLSHuBHXW2X7BnGMoen4UAjHkIUlp0OrJI81/8=";
   };
 
   build-system = [ setuptools ];
@@ -29,7 +29,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Custom YAML tag for referencing environment variables";
     homepage = "https://github.com/waylan/pyyaml-env-tag";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

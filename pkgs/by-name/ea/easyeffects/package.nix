@@ -15,7 +15,7 @@
   libbs2b,
   libebur128,
   libmysofa,
-  libsigcxx30,
+  libsigcxx_3_0,
   libsndfile,
   lilv,
   lsp-plugins,
@@ -61,13 +61,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "easyeffects";
-  version = "8.2.5";
+  version = "8.3.0";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VyfLoQPBZAXurS1/HxTLNioo/OT1LsQLZZXu9kDeP5Y=";
+    hash = "sha256-8SAmWeLK4eAtjoNzrlK+8qvshCY/T96KNk+oHBYdv9Q=";
   };
 
   nativeBuildInputs = [
@@ -100,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     libbs2b
     libebur128
     libmysofa
-    libsigcxx30
+    libsigcxx_3_0
     libsndfile
     lilv
     lv2

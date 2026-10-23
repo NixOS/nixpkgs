@@ -31,8 +31,8 @@ buildNpmPackage (finalAttrs: {
     cp ${./package-lock.json} package-lock.json
   '';
 
-  npmDepsHash = "sha256-pg+USHnvcxaXG/floNItLXNFJOPvuDltQCcN1qT/nng=";
-  npmDepsFetcherVersion = 3;
+  npmDepsHash = "sha256-JxyG7qMJS7zchxLIxYCmsFajUVW4fONnqgeq2iKlt4A=";
+  npmDepsFetcherVersion = 2;
 
   nativeBuildInputs = [ bun ];
 

@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "oralb-ble";
-  version = "1.1.0";
+  version = "1.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "oralb-ble";
     tag = "v${version}";
-    hash = "sha256-XAfeJLM4Uw/sEbDhXcNuyHV/m4k9DlIwFt+gP8DsgJ4=";
+    hash = "sha256-7ywhivpCnrcQAafsda64n47zdp4VZYiEttJBZEDBZ/Y=";
   };
 
   build-system = [ poetry-core ];

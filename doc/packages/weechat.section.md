@@ -86,8 +86,7 @@ weechat.override {
     { availablePlugins, ... }:
     {
       scripts = with pkgs.weechatScripts; [
-        weechat-xmpp
-        weechat-matrix-bridge
+        weechat-matrix
         wee-slack
       ];
       init = ''

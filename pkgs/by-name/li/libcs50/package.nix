@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcs50";
-  version = "11.0.3";
+  version = "11.0.4";
 
   src = fetchFromGitHub {
     owner = "cs50";
     repo = "libcs50";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-G6QayPGR4lkeFuUYsFszekLAzzpA3hhIRmqt/OB0cdY=";
+    hash = "sha256-guITfJoNEiQAjfKiDKltWoP8VcLsyeEuzU4odhpwyUI=";
   };
 
   installPhase = ''

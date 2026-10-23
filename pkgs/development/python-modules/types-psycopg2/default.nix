@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "types-psycopg2";
-  version = "2.9.21.20251012";
+  version = "2.9.21.20260724";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_psycopg2";
     inherit version;
-    hash = "sha256-TNr9OJJ9oM/eSYBPOauFr9nG6cSSgA5C8fDBobAxKTU=";
+    hash = "sha256-2zEDHDfegjorIceHy4SDIXT92iqZqLGvZIIG8ZzDL4w=";
   };
 
   build-system = [ setuptools ];

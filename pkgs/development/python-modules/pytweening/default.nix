@@ -2,21 +2,33 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
+  unittestCheckHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytweening";
   version = "1.2.0";
-  format = "setuptools";
+
+  __structuredAttrs = true;
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-JDMYt3NmmAZsXzYuxcK2Q07PQpfDyOfKqKv+avTKxxs=";
   };
 
+  build-system = [ setuptools ];
+
   pythonImportsCheck = [ "pytweening" ];
-  checkPhase = ''
-    python -m unittest tests.basicTests
-  '';
+
+  unittestFlags = [
+    "-s"
+    "tests"
+    "-p"
+    "basicTests.py"
+  ];
+
+  nativeCheckInputs = [ unittestCheckHook ];
 
   meta = {
     description = "Set of tweening / easing functions implemented in Python";
@@ -24,4 +36,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

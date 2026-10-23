@@ -1,0 +1,12 @@
+diff --git a/src/arcade/eng/common/cross/toolchain.cmake b/src/arcade/eng/common/cross/toolchain.cmake
+index 70b71395e3b..2290d95090d 100644
+--- a/src/arcade/eng/common/cross/toolchain.cmake
++++ b/src/arcade/eng/common/cross/toolchain.cmake
+@@ -250,6 +250,7 @@ else()
+ endif()
+ 
+ # Specify link flags
++locate_toolchain_exec(ld CMAKE_LINKER)
+ 
+ function(add_toolchain_linker_flag Flag)
+   set(Config "${ARGV1}")

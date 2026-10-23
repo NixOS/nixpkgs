@@ -5,17 +5,22 @@
   python3Packages,
   nixosTests,
   fetchurl,
-  ffmpeg-headless,
 }:
 let
   pname = "open-webui";
-  version = "0.10.2";
+  version = "0.12.3";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-tJ9b5up5FoX5TrmpwMWevyA/o3Ai/lKsHu+nahc2Ttc=";
+    hash = "sha256-UQhaXOJhgP8icVLX0Uctloq6mSMzy7pQhcIZTV162vk=";
+  };
+
+  # we need datasets_3 for SpeechT5 embeddings
+  datasets = python3Packages.datasets_3;
+  colbert-ai = python3Packages.colbert-ai.override {
+    inherit datasets;
   };
 
   frontend = buildNpmPackage rec {
@@ -24,13 +29,13 @@ let
 
     # the backend for run-on-client-browser python execution
     # must match the version that is locked in package-lock.json
-    pyodideVersion = "0.28.3";
+    pyodideVersion = "314.0.3";
     pyodide = fetchurl {
-      hash = "sha256-fcqubT8VmGoJ8PnmxHE6DA8kv/DJDHToWoFyPxvGCUA=";
+      hash = "sha256-oCgELZDbqedP377PNuqn1X6IvwrWGNnFBZ6xBAqnYSo=";
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-yw/1n1jBCUtt8wUqJmIkB3W53wsXTKuAFG/EMwcTpx8=";
+    npmDepsHash = "sha256-AhZ6y7BExh7+CpCEo0gDeeu0eJ78SXzYG7HkqkCb0+s=";
 
     npmFlags = [ "--force" ];
 
@@ -40,10 +45,6 @@ let
       substituteInPlace package.json \
         --replace-fail "npm run pyodide:fetch && vite build" "vite build"
     '';
-
-    propagatedBuildInputs = [
-      ffmpeg-headless
-    ];
 
     env.CYPRESS_INSTALL_BINARY = "0"; # disallow cypress from downloading binaries in sandbox
     env.ONNXRUNTIME_NODE_INSTALL_CUDA = "skip";
@@ -84,6 +85,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     [
       accelerate
       aiocache
+      aiodns
       aiofiles
       aiohttp
       aiosqlite
@@ -106,7 +108,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       chardet
       chromadb
       cryptography
-      datasets_3
+      datasets
       ddgs
       docx2txt
       einops
@@ -120,15 +122,19 @@ python3Packages.buildPythonApplication (finalAttrs: {
       google-auth-oauthlib
       google-cloud-storage
       google-genai
+      google-re2
       googleapis-common-protos
+      hiredis
       httpx
       itsdangerous
+      joserfc
       langchain
       langchain-classic
       langchain-community
       langchain-text-splitters
       ldap3
       loguru
+      lxml
       markdown
       mcp
       msoffcrypto-tool
@@ -136,6 +142,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
       onnxruntime
       openai
       opencv-python-headless
+      openpyxl
+      opensearch-py
       opentelemetry-api
       opentelemetry-exporter-otlp
       opentelemetry-instrumentation
@@ -147,22 +155,23 @@ python3Packages.buildPythonApplication (finalAttrs: {
       opentelemetry-instrumentation-requests
       opentelemetry-instrumentation-sqlalchemy
       opentelemetry-sdk
-      openpyxl
-      opensearch-py
+      orjson
       pandas
       pillow
       psutil
       psycopg
       pyarrow
       pycrdt
+      pydantic
       pydub
       pyjwt
       pymdown-extensions
       pymysql
+      pyotp
       pypandoc
       pypdf
+      python-docx
       python-dotenv
-      python-jose
       python-mimeparse
       python-multipart
       python-pptx
@@ -170,9 +179,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
       pytube
       pytz
       pyxlsb
+      qrcode
       rank-bm25
-      rapidocr-onnxruntime
+      rapidocr
       redis
+      regex
       requests
       restrictedpython
       sentence-transformers
@@ -188,6 +199,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
       xlrd
       youtube-transcript-api
     ]
+    ++ (with httpx.optional-dependencies; brotli ++ cli ++ http2 ++ socks ++ zstd)
+    ++ uvicorn.optional-dependencies.standard
     ++ psycopg.optional-dependencies.c
     ++ pyjwt.optional-dependencies.crypto
     ++ sqlalchemy.optional-dependencies.asyncio
@@ -211,10 +224,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
       azure-search-documents
       colbert-ai
       elasticsearch
-      gcp-storage-emulator
-      moto
       oracledb
-      pinecone-client
+      pinecone
       playwright
       pymilvus
       pymongo
@@ -223,13 +234,16 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ]
     ++ finalAttrs.passthru.optional-dependencies.mariadb
     ++ finalAttrs.passthru.optional-dependencies.postgres
-    ++ finalAttrs.passthru.optional-dependencies.unstructured
-    ++ moto.optional-dependencies.s3;
+    ++ finalAttrs.passthru.optional-dependencies.unstructured;
   };
 
   pythonImportsCheck = [ "open_webui" ];
 
-  makeWrapperArgs = [ "--set FRONTEND_BUILD_DIR ${frontend}/share/open-webui" ];
+  makeWrapperArgs = [
+    "--set"
+    "FRONTEND_BUILD_DIR"
+    "${frontend}/share/open-webui"
+  ];
 
   passthru = {
     tests = {
@@ -246,7 +260,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # License history is complex: originally MIT, then a potentially problematic
     # relicensing to a modified BSD-3 clause occurred around v0.5.5/v0.6.6.
     # Due to these concerns and non-standard terms, it's treated as custom non-free.
-    license = {
+    license = lib.licenses.mkLicense {
+      shortName = "openWebUI";
       fullName = "Open WebUI License";
       url = "https://github.com/open-webui/open-webui/blob/0cef844168e97b70de2abee4c076cc30ffec6193/LICENSE";
       # Marked non-free due to concerns over the MIT -> modified BSD-3 relicensing process,

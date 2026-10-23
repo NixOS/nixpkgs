@@ -10,6 +10,7 @@
   # Configuration Options
 
   version,
+  withPluginCAPI,
 }:
 
 mkMesonLibrary (finalAttrs: {
@@ -21,16 +22,13 @@ mkMesonLibrary (finalAttrs: {
   propagatedBuildInputs = [
     nix-expr-c
     nix-store-c
-  ]
-  ++ lib.optionals (lib.versionAtLeast version "2.29pre") [
     nix-fetchers-c
-  ]
-  ++ [
     nix-flake
   ];
 
-  mesonFlags = [
-  ];
+  mesonFlags = lib.optional (lib.versionAtLeast (lib.versions.majorMinor version) "2.35") (
+    lib.mesonBool "plugin-c-api" withPluginCAPI
+  );
 
   meta = {
     platforms = lib.platforms.unix ++ lib.platforms.windows;

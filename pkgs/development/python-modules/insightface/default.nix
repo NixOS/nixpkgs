@@ -1,36 +1,47 @@
 {
   lib,
-  albumentations,
   buildPythonPackage,
-  cython,
   fetchPypi,
-  insightface,
-  matplotlib,
+
+  # build-system
+  cython,
+  setuptools,
+
+  # dependencies
   mxnet,
   numpy,
   onnx,
   onnxruntime,
   opencv-python,
+  requests,
+  scikit-image,
+  scipy,
+  tqdm,
+
+  # optional-dependencies
+  # gui:
   pillow,
   pyside6,
   reportlab,
-  requests,
-  setuptools,
-  scipy,
-  scikit-image,
   scikit-learn,
+  # face3d
+  albumentationsx,
+  matplotlib,
+
+  insightface,
   testers,
-  tqdm,
   stdenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "insightface";
   version = "1.0.1";
   pyproject = true;
+  __structuredAttrs = true;
 
+  # No tags on GitHub
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-J68kiRu7pHDLNXOzZqD8yomJ/IUDyfjygejLpv1xYHU=";
   };
 
@@ -59,16 +70,21 @@ buildPythonPackage rec {
       scikit-learn
     ];
     face3d = [
-      albumentations
+      albumentationsx
       matplotlib
     ];
   };
 
-  # aarch64-linux tries to get cpu information from /sys, which isn't available
-  # inside the nix build sandbox.
-  dontUsePythonImportsCheck = stdenv.buildPlatform.system == "aarch64-linux";
+  pythonImportsCheck = [
+    "insightface"
+    "insightface.app"
+    "insightface.data"
+  ];
 
-  passthru.tests = lib.optionalAttrs (stdenv.buildPlatform.system != "aarch64-linux") {
+  # No tests in the Pypi archive
+  doCheck = false;
+
+  passthru.tests = {
     version = testers.testVersion {
       package = insightface;
       command = "insightface-cli --help";
@@ -78,14 +94,6 @@ buildPythonPackage rec {
     };
   };
 
-  pythonImportsCheck = [
-    "insightface"
-    "insightface.app"
-    "insightface.data"
-  ];
-
-  doCheck = false; # Upstream has no tests
-
   meta = {
     description = "State-of-the-art 2D and 3D Face Analysis Project";
     mainProgram = "insightface-cli";
@@ -93,4 +101,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ oddlama ];
   };
-}
+})

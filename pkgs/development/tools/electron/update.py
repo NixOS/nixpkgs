@@ -118,11 +118,9 @@ def get_chromium_gn_source(chromium_tag: str) -> dict:
 def get_electron_yarn_data(electron_tag: str) -> dict:
     print(f"yarn-berry-fetcher prefetch", file=sys.stderr)
     with tempfile.TemporaryDirectory() as tmp_dir:
-        print(f"Patching yarn.lock for yarn 4.14 support", file=sys.stderr)
         yarn_lock_file=get_electron_file(electron_tag, "yarn.lock")
-        patched_yarn_lock_file=yarn_lock_file.replace('version: 8', 'version: 9', count=1)
         with open(tmp_dir + "/yarn.lock", "w") as f:
-            f.write(patched_yarn_lock_file)
+            f.write(yarn_lock_file)
         missing_hashes_str = (
             subprocess.check_output(
                 ["yarn-berry-fetcher", "missing-hashes", tmp_dir + "/yarn.lock"]
@@ -259,7 +257,7 @@ def update(version: str, commit: bool, force: bool) -> None:
 @click.option("-c", "--commit", is_flag=True, default=False, help="Commit the result")
 @click.option("-f", "--force", is_flag=True, default=False, help="Skip up-to-date version check")
 def update_all(commit: bool, force: bool) -> None:
-    """Update all eletron-source releases at once
+    """Update all electron-source releases at once
 
     Args:
         commit: Whether to commit the result

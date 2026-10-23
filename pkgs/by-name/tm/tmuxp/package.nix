@@ -7,12 +7,12 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "tmuxp";
-  version = "1.71.0";
+  version = "1.74.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-+Nsr4gNem/gB6ZMre53rfuM8Kwkiu86aGJmrxiFRorY=";
+    hash = "sha256-ngSA6gEpmWAmNYh+BGHTlcLYqm42qFtabR1l3NbHgJw=";
   };
 
   build-system = with python3Packages; [
@@ -21,6 +21,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   nativeBuildInputs = [ installShellFiles ];
+
+  pythonRelaxDeps = [ "libtmux" ];
 
   dependencies = with python3Packages; [
     colorama
@@ -34,6 +36,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   postInstall = ''
     installShellCompletion --cmd tmuxp \
       --bash <(shtab --shell=bash -u tmuxp.cli.create_parser) \
+      --fish <(shtab --shell=fish -u tmuxp.cli.create_parser) \
       --zsh <(shtab --shell=zsh -u tmuxp.cli.create_parser)
   '';
 

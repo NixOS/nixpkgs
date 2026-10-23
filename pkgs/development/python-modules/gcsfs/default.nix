@@ -4,7 +4,8 @@
   fetchFromGitHub,
 
   # build-system
-  setuptools,
+  hatchling,
+  hatch-vcs,
 
   # dependencies
   aiohttp,
@@ -23,7 +24,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "gcsfs";
-  version = "2026.3.0";
+  version = "2026.8.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -31,11 +32,12 @@ buildPythonPackage (finalAttrs: {
     owner = "fsspec";
     repo = "gcsfs";
     tag = finalAttrs.version;
-    hash = "sha256-RLh3xFW/0qX5labJeUDsRRmQtnTdkvBS+gzJUJ1IP7k=";
+    hash = "sha256-IAXUqYeQu+Z2Z2OumIpYmYOFomsN0Ojx8YpGKE+7i1U=";
   };
 
   build-system = [
-    setuptools
+    hatchling
+    hatch-vcs
   ];
 
   dependencies = [

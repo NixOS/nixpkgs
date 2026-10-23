@@ -19,7 +19,6 @@ let
   mvnDepsHashes = {
     "x86_64-linux" = "sha256-ZlGOxVXU63AKzfWeOLGPa2l8v+Rv8Bzr4H/Er62cxk8=";
     "aarch64-linux" = "sha256-CrOYBEnp8cVpdF2PrpGQjmdYH8ZKupm9Jf1LVyNoObk=";
-    "x86_64-darwin" = "sha256-D1QkCTYep9RbNUaZPrnbgkR94cvQkX3xxxUxwyLIqx8=";
     "aarch64-darwin" = "sha256-zvvko6wSJoc2cgMLl7XVmypq0vVTirrIpJiEdypPlrU=";
   };
 
@@ -56,6 +55,9 @@ maven.buildMavenPackage rec {
       url = "https://github.com/apache/tika/commit/bfee6d5569fe9197c4ea947a96e212825184ca33.patch";
       hash = "sha256-LHM2SafZ85f53mWWSbA4ZQ/QSiDeiwNnzAbLGqGQqPM=";
     })
+    # maven >= 3.10 rejects the duplicate org.apache.zookeeper:zookeeper
+    # dependencyManagement entry in tika-parent as a model validation error
+    ./remove-duplicate-zookeeper-dependency.patch
   ];
 
   buildOffline = true;

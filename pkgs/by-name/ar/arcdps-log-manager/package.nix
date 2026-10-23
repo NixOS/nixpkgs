@@ -13,13 +13,13 @@
 }:
 buildDotnetModule (finalAttrs: {
   pname = "arcdps-log-manager";
-  version = "1.16";
+  version = "1.17.1";
 
   src = fetchFromGitHub {
     owner = "gw2scratch";
     repo = "evtc";
     tag = "manager-v${finalAttrs.version}";
-    hash = "sha256-AiIWYb3hwkE20NdmAHlSt55QJ/d3NnQt3ZeX1COUG7k=";
+    hash = "sha256-ZCQr/98KsCI/X9SIbXw4rupNhccOaLMLut07N7bvmwo=";
   };
 
   nugetDeps = ./deps.json;

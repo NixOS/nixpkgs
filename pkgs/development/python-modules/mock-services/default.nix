@@ -7,29 +7,32 @@
   funcsigs,
   requests-mock,
   pytestCheckHook,
+  setuptools_80,
 }:
 
 buildPythonPackage rec {
   pname = "mock-services";
   version = "0.3.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "peopledoc";
     repo = "mock-services";
     rev = version;
-    sha256 = "1rqyyfwngi1xsd9a81irjxacinkj1zf6nqfvfxhi55ky34x5phf9";
+    hash = "sha256-ycFbOhl+lhJhd9tha9wPctrIVJc5BqRS0z3EZ7nzHuc=";
   };
 
   patches = [
     # Fix issues due to internal API breaking in latest versions of requests-mock
     (fetchpatch {
       url = "https://github.com/peopledoc/mock-services/commit/88d3a0c9ef4dd7d5e011068ed2fdbbecc4a1a03a.patch";
-      sha256 = "0a4pwxr33kr525sp8q4mb4cr3n2b51mj2a3052lhg6brdbi4gnms";
+      hash = "sha256-utpH4mp5mQepKGAoIWsoS9iRGVmVYHR1ESXPMXLnlyg=";
     })
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools_80 ];
+
+  dependencies = [
     attrs
     funcsigs
     requests-mock

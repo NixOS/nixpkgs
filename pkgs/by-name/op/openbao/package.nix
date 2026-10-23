@@ -1,45 +1,43 @@
 {
   lib,
   fetchFromGitHub,
-  buildGoModule,
+  buildGo127Module,
   installShellFiles,
   versionCheckHook,
   nix-update-script,
   nixosTests,
   callPackage,
-  stdenvNoCC,
   withUi ? true,
-  withHsm ? stdenvNoCC.hostPlatform.isLinux,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "openbao";
-  version = "2.5.5";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "openbao";
     repo = "openbao";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-75Rm9EGkvUKJ05d55bboPAE+Nm/GLLgH1TqDrExkJO0=";
+    hash = "sha256-SPmFX4gApN49399Yi8r+1TEJS8i9GD2KGy621axRNPk=";
   };
 
-  vendorHash = "sha256-3d3g6f0O7X+aedYCfLbqLNuITKNQuxZkApWTTKSk7lA=";
+  vendorHash = "sha256-cm5NiwDX8TgH77vDLea37eRJi5CAIVQGspy65uCq24U=";
 
   proxyVendor = true;
 
   subPackages = [ "." ];
 
-  tags = lib.optional withHsm "hsm" ++ lib.optional withUi "ui";
+  tags = lib.optional withUi "ui";
 
   ldflags = [
     "-s"
-    "-X github.com/openbao/openbao/version.GitCommit=${finalAttrs.src.rev}"
-    "-X github.com/openbao/openbao/version.fullVersion=${finalAttrs.version}"
-    "-X github.com/openbao/openbao/version.buildDate=1970-01-01T00:00:00Z"
+    "-X github.com/openbao/openbao/v2/internal/version.GitCommit=${finalAttrs.src.rev}"
+    "-X github.com/openbao/openbao/v2/internal/version.fullVersion=${finalAttrs.version}"
+    "-X github.com/openbao/openbao/v2/internal/version.CommitDate=1970-01-01T00:00:00Z"
   ];
 
   postConfigure = lib.optionalString withUi ''
-    cp -r --no-preserve=mode ${finalAttrs.passthru.ui} http/web_ui
+    cp -r --no-preserve=mode ${finalAttrs.passthru.ui} internal/http/web_ui
   '';
 
   nativeBuildInputs = [
@@ -61,7 +59,7 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     ui = callPackage ./ui.nix { };
-    tests = { inherit (nixosTests) openbao; };
+    tests = { inherit (nixosTests) openbao openbao-agent; };
     updateScript = nix-update-script {
       extraArgs = [
         "--subpackage"

@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "momonga";
-  version = "0.6.0";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nbtk";
     repo = "momonga";
     tag = "v${version}";
-    hash = "sha256-EJatEOpXJoRHEYs2ve90APOe17tBUZRWBygjIWWFW+c=";
+    hash = "sha256-3Ngm30Bo6hKeLLAOMyYxcgfiwOIessi5S0BB92Ye/rM=";
   };
 
   build-system = [ setuptools ];

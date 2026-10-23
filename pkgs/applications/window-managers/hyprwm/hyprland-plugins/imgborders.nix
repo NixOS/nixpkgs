@@ -5,31 +5,22 @@
   cmake,
   nix-update-script,
 }:
-mkHyprlandPlugin (finalAttrs: {
+mkHyprlandPlugin {
   pluginName = "imgborders";
-  version = "1.0.1";
+  version = "2.0.0-unstable-2026-08-16";
 
   src = fetchFromCodeberg {
     owner = "zacoons";
     repo = "imgborders";
-    tag = finalAttrs.version;
-    hash = "sha256-fCzz4gh8pd7J6KQJB/avYcS0Z7NYpxjznPMtOwypPSQ=";
+    rev = "08be22236144d3c91607bcfa955ed0d457f4f50b";
+    hash = "sha256-O+896T2qrisxiWTotB5HlzKw8XEJqPDTgSUHAAVUD18=";
   };
 
   nativeBuildInputs = [
     cmake
   ];
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/lib
-    mv imgborders.so $out/lib/libimgborders.so
-
-    runHook postInstall
-  '';
-
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     homepage = "https://codeberg.org/zacoons/imgborders";
@@ -39,4 +30,4 @@ mkHyprlandPlugin (finalAttrs: {
       mrdev023
     ];
   };
-})
+}

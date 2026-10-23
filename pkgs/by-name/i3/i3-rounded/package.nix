@@ -2,21 +2,24 @@
   fetchFromGitHub,
   lib,
   i3,
-  pcre,
+  pcre2,
 }:
 
+let
+  version = "4.21.1";
+in
 i3.overrideAttrs (oldAttrs: {
   pname = "i3-rounded";
-  version = "4.21.1";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "LinoBigatti";
     repo = "i3-rounded";
-    rev = "524c9f7b50f8c540b2ae3480b242c30d8775f98e";
-    hash = "sha256-lceeP+WZtBLNSDqcNn18MROLtBwj+nXufDs55IMO9Xg=";
+    rev = "v${version}";
+    hash = "sha256-KMpejS89Hg6Mrm94HTNA9mV/6Leu1yo2W1CsD6vGDRo=";
   };
 
-  buildInputs = oldAttrs.buildInputs ++ [ pcre ];
+  buildInputs = oldAttrs.buildInputs ++ [ pcre2 ];
 
   # Some tests are failing.
   doCheck = false;

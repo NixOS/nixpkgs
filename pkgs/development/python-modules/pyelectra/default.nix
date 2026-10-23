@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pyelectra";
-  version = "1.2.4";
+  version = "1.2.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jafar-atili";
     repo = "pyelectra";
     tag = version;
-    hash = "sha256-3g+6AXbHMStk77k+1Qh5kgDswUZ8I627YiA/PguUGBg=";
+    hash = "sha256-6Vv1Pd228qsutqY1ncrrwICEZTOe+75mDOAnLC9o65g=";
   };
 
   build-system = [ setuptools ];

@@ -16,12 +16,14 @@
   # tests
   pytest-cov-stub,
   pytestCheckHook,
+  pyyaml,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "torch-audiomentations";
   version = "0.12.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "asteroid-team";
@@ -45,6 +47,7 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     pytest-cov-stub
     pytestCheckHook
+    pyyaml
   ];
 
   pythonImportsCheck = [ "torch_audiomentations" ];

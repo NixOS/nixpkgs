@@ -3,6 +3,7 @@
   python3Packages,
   fetchFromGitHub,
   gitUpdater,
+  nixosTests,
 
   # buildInputs
   buildbox,
@@ -14,8 +15,6 @@
   installShellFiles,
 
   # tests
-  addBinToPathHook,
-  gitMinimal,
   versionCheckHook,
 
   # Optional features
@@ -24,14 +23,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "buildstream";
-  version = "2.7.0";
+  version = "2.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "buildstream";
     tag = finalAttrs.version;
-    hash = "sha256-eHZmimuwOo3ZHZw5QF94B6wkso1+QbZIcgpDgsw1hiM=";
+    hash = "sha256-i46AdbGk/xGZeyh6bxQd1J3L3EH/oIcjX9cJSDscfH0=";
   };
 
   build-system = with python3Packages; [
@@ -72,43 +71,16 @@ python3Packages.buildPythonApplication (finalAttrs: {
     patch
   ];
 
+  # /dev/fuse is not available inside the Nix build sandbox, so buildbox-casd's
+  # default FUSE-based staging strategy cannot work here, and the shebang used
+  # by tests/internals/cascache.py's dummy buildbox-casd scripts
+  # (`/usr/bin/env sh`) doesn't exist there either. The pytest suite is run as
+  # a NixOS VM test instead, where both of those are available; see
+  # `passthru.tests.pytest`.
   pythonImportsCheck = [ "buildstream" ];
 
   nativeCheckInputs = [
-    addBinToPathHook
-    buildbox
-    gitMinimal
-    python3Packages.pexpect
-    python3Packages.pyftpdlib
-    python3Packages.pytest-datafiles
-    python3Packages.pytest-env
-    python3Packages.pytest-timeout
-    python3Packages.pytest-xdist
-    python3Packages.pytestCheckHook
     versionCheckHook
-  ];
-
-  disabledTests = [
-    # Error loading project: project.conf [line 37 column 2]: Failed to load source-mirror plugin 'mirror': No package metadata was found for sample-plugins
-    "test_source_mirror_plugin"
-
-    # AssertionError: assert '1a5528cad211...0bbe5ee314c14' == '2ccfee62a657...52dbc47203a88'
-    "test_fixed_cas_import"
-    "test_random_cas_import"
-
-    # Runtime error: The FUSE stager child process unexpectedly died with exit code 2
-    "test_patch_sources_cached_1"
-    "test_patch_sources_cached_2"
-    "test_source_cache_key"
-    "test_custom_transform_source"
-
-    # Blob not found in the local CAS
-    "test_source_pull_partial_fallback_fetch"
-  ];
-
-  disabledTestPaths = [
-    # FileNotFoundError: [Errno 2] No such file or directory: '/build/source/tmp/popen-gw1/test_report_when_cascache_exit0/buildbox-casd'
-    "tests/internals/cascache.py"
   ];
 
   postInstall = ''
@@ -119,11 +91,16 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   versionCheckProgram = "${placeholder "out"}/bin/bst";
 
-  passthru.updateScript = gitUpdater {
-    ignoredVersions = "dev";
+  passthru = {
+    updateScript = gitUpdater {
+      ignoredVersions = "dev";
+    };
+
+    tests.pytest = nixosTests.buildstream;
   };
 
   meta = {
+    changelog = "https://github.com/apache/buildstream/blob/${finalAttrs.src.tag}/NEWS";
     description = "Powerful software integration tool";
     downloadPage = "https://buildstream.build/install.html";
     homepage = "https://buildstream.build";

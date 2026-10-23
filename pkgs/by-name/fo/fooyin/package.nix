@@ -1,58 +1,54 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchFromGitHub,
-  fetchpatch,
-  cmake,
-  pkg-config,
+  SDL2,
   alsa-lib,
+  cmake,
   ffmpeg,
+  flac,
+  game-music-emu,
+  gtest,
+  icu,
+  jack2,
   kdePackages,
   kdsingleapplication,
-  pipewire,
-  taglib,
-  libebur128,
-  libvgm,
-  libsndfile,
   libarchive,
+  libcdio,
+  libcdio-paranoia,
+  libebur128,
   libopenmpt,
-  game-music-emu,
-  SDL2,
-  icu,
+  libprojectm,
+  libpulseaudio,
+  libsndfile,
+  libvorbis,
+  mpg123,
+  nix-update-script,
+  opusfile,
+  pipewire,
+  pkg-config,
+  soundtouch,
+  soxr,
+  taglib,
+  versionCheckHook,
+  zlib,
+  # Select bundled plugins to build. Leave empty for the default set, use none for no plugins, or use a semicolon/comma-separated list of plugin names to include or -name entries to exclude
+  pluginSelection ? "",
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fooyin";
-  version = "0.9.2";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
-    owner = "ludouzi";
+    owner = "fooyin";
     repo = "fooyin";
-    tag = "v" + finalAttrs.version;
-    hash = "sha256-sQ1zsQ/6OHGPkofiKhusCrpW2XnO+PpMvH1M2OG5Huw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-z1EtohIftZ7GN+uu28QrD2Ya8lfzE1TtreWh6dfEoI0=";
   };
 
-  buildInputs = [
-    kdePackages.qcoro
-    kdePackages.qtbase
-    kdePackages.qtsvg
-    kdePackages.qtwayland
-    taglib
-    ffmpeg
-    icu
-    kdsingleapplication
-    # output plugins
-    alsa-lib
-    pipewire
-    SDL2
-    # input plugins
-    libebur128
-    libvgm
-    libsndfile
-    libarchive
-    libopenmpt
-    game-music-emu
-  ];
+  __structuredAttrs = true;
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
@@ -61,38 +57,70 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages.wrapQtAppsHook
   ];
 
+  buildInputs = [
+    # list from fooyin's BUILD.md
+    kdePackages.qcoro
+    kdePackages.qtbase
+    kdePackages.qtsvg
+    kdePackages.qtwayland
+    taglib
+    ffmpeg
+    icu
+    kdsingleapplication
+    zlib
+    libarchive
+    # output plugins
+    alsa-lib
+    jack2
+    pipewire
+    libpulseaudio
+    SDL2
+    # input plugins
+    libsndfile
+    flac
+    mpg123
+    opusfile
+    libvorbis
+    libopenmpt
+    game-music-emu
+    libebur128
+    libcdio
+    libcdio-paranoia
+    soundtouch
+    soxr
+    libprojectm
+  ];
+
   cmakeFlags = [
     (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
     # we need INSTALL_FHS to be true as the various artifacts are otherwise just dumped in the root
     # of $out and the fixupPhase cleans things up anyway
     (lib.cmakeBool "INSTALL_FHS" true)
+    (lib.cmakeFeature "PLUGIN_SELECTION" pluginSelection)
   ];
 
   env.LANG = "C.UTF-8";
 
-  # Remove after next release
-  patches = [
-    (fetchpatch {
-      name = "add-missing-header.patch";
-      url = "https://github.com/fooyin/fooyin/commit/7b171c0da2b9289468696424fe51f76e1c365bb5.patch";
-      hash = "sha256-Uvggz2F6DuWYAg20qi8uHkshzCnTLrchambQ/yDyIfA=";
-    })
-  ];
+  doCheck = true;
+  checkInputs = [ gtest ];
 
-  # Fix compatibility with Qt 6.10.1 - should be fixed in next release
-  postPatch = ''
-    substituteInPlace src/utils/starrating.cpp \
-      --replace-fail '.arg(alignment);' '.arg(alignment.toInt());'
-  '';
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Customisable music player";
     homepage = "https://www.fooyin.org/";
-    changelog = "https://github.com/fooyin/fooyin/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    downloadPage = "https://github.com/fooyin/fooyin";
-    mainProgram = "fooyin";
+    changelog = "https://github.com/fooyin/fooyin/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ peterhoeg ];
+    maintainers = with lib.maintainers; [
+      peterhoeg
+      alden
+      keenanweaver
+    ];
     platforms = lib.platforms.linux;
+    mainProgram = "fooyin";
+    downloadPage = "https://github.com/fooyin/fooyin";
   };
 })

@@ -21,16 +21,22 @@
   griffe,
   mcp,
   google-auth,
+  msgpack,
   requests,
+  websockets,
+  zstandard,
+  opentelemetry-exporter-otlp-proto-http,
 
   # tests
+  opentelemetry-instrumentation-httpx,
   opentelemetry-sdk,
+  pytest-asyncio,
   pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "mistralai";
-  version = "2.4.4";
+  version = "2.10.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -38,7 +44,7 @@ buildPythonPackage (finalAttrs: {
     owner = "mistralai";
     repo = "client-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-e2G/bqU45hCfcPEhj4zf5X7EKjs/zWhxCkn9J0u4F7U=";
+    hash = "sha256-T3B2fzhL63ttPWAJ3+/3B/+g1Qqk7bGKGY+ZnC/OChg=";
   };
 
   preBuild = ''
@@ -73,20 +79,38 @@ buildPythonPackage (finalAttrs: {
       google-auth
       requests
     ];
+    realtime = [
+      websockets
+    ];
+    telemetry = [
+      opentelemetry-sdk
+      opentelemetry-exporter-otlp-proto-http
+    ];
+    workflow_payload_compression = [
+      msgpack
+      zstandard
+    ];
   };
 
   pythonImportsCheck = [ "mistralai" ];
 
   nativeCheckInputs = [
-    opentelemetry-sdk
+    opentelemetry-instrumentation-httpx
+    pytest-asyncio
     pytestCheckHook
   ]
   ++ finalAttrs.passthru.optional-dependencies.agents
-  ++ finalAttrs.passthru.optional-dependencies.gcp;
+  ++ finalAttrs.passthru.optional-dependencies.gcp
+  ++ finalAttrs.passthru.optional-dependencies.realtime
+  ++ finalAttrs.passthru.optional-dependencies.telemetry
+  ++ finalAttrs.passthru.optional-dependencies.workflow_payload_compression;
 
-  disabledTests = [
-    # AssertionError: <Response [200 OK]> is not an instance of <class 'mistralai.extra.observability.otel.TracedResponse'>
-    "TestOtelTracing"
+  disabledTestPaths = [
+    # Local test servers cannot bind in the Nix sandbox.
+    "src/mistralai/extra/tests/test_otel_tracing.py::TestOtelTracing::test_app_otel_does_not_enable_mistral_span_without_mistral_telemetry"
+    "src/mistralai/extra/tests/test_otel_tracing.py::TestOtelTracing::test_concurrent_async_httpx_auto_instrumented_spans_are_genai_children"
+    "src/mistralai/extra/tests/test_otel_tracing.py::TestOtelTracing::test_httpx_auto_instrumented_span_is_child_of_genai_span"
+    "src/mistralai/extra/tests/test_otel_tracing.py::TestPerInstanceTracerProvider::test_get_telemetry_tracer_dedicated_provider_captures_app_spans"
   ];
 
   meta = {

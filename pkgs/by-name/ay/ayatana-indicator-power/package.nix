@@ -16,7 +16,7 @@
   lomiri-qt6,
   pkg-config,
   python3,
-  systemd,
+  systemdLibs,
   wrapGAppsHook3,
 }:
 
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     libayatana-common
     libnotify
     librda
-    systemd
+    systemdLibs
   ]
   ++ (with lomiri-qt6; [
     cmake-extras

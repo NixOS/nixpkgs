@@ -8,6 +8,7 @@
   runCommand,
   makeWrapper,
   writeText,
+  linkFarm,
   ghcWithPackages,
   nixosTests,
 }:
@@ -29,22 +30,45 @@ let
     optionalString
     ;
 
+  isMikan = Agda.meta.mainProgram == "mikan";
+
   mkLibraryFile =
     pkgs:
     let
       pkgs' = if isList pkgs then pkgs else pkgs self;
     in
-    writeText "libraries" ''
-      ${(concatMapStringsSep "\n" (p: "${p}/${p.libraryFile}") pkgs')}
-    '';
+    writeText "libraries" (concatMapStrings (p: "${p}/${p.libraryFile}\n") pkgs');
+
+  mkDefaultsFile =
+    pkgs:
+    let
+      pkgs' = if isList pkgs then pkgs else pkgs self;
+    in
+    writeText "defaults" (concatMapStrings (p: "${p.libraryName}\n") pkgs');
+
+  mkAgdaDir =
+    pkgs:
+    linkFarm "agda-dir" [
+      {
+        name = "libraries";
+        path = mkLibraryFile pkgs;
+      }
+      {
+        name = "defaults";
+        path = mkDefaultsFile pkgs;
+      }
+    ];
 
   withPackages' =
     {
       pkgs,
       ghc ? ghcWithPackages (p: with p; [ ieee754 ]),
+      extraFlags ? [ ],
     }:
     let
       libraryFile = mkLibraryFile pkgs;
+      defaultsFile = mkDefaultsFile pkgs;
+      agdaDir = mkAgdaDir pkgs;
       pname = "${Agda.meta.mainProgram}WithPackages";
       version = Agda.version;
     in
@@ -57,6 +81,8 @@ let
           inherit
             withPackages
             libraryFile
+            defaultsFile
+            agdaDir
             ;
           tests = {
             inherit (nixosTests) agda;
@@ -69,8 +95,9 @@ let
       ''
         mkdir -p $out/bin
         makeWrapper ${lib.getExe Agda} $out/bin/${Agda.meta.mainProgram} \
-          ${lib.optionalString (ghc != null) ''--add-flags "--with-compiler=${ghc}/bin/ghc"''} \
-          --add-flags "--library-file=${libraryFile}"
+          ${lib.optionalString (ghc != null && !isMikan) ''--add-flags "--with-compiler=${ghc}/bin/ghc"''} \
+          --set-default AGDA_DIR ${agdaDir} \
+          --add-flags ${lib.escapeShellArg (lib.escapeShellArgs extraFlags)}
         if [ -e ${lib.getExe' Agda "agda-mode"} ]; then
           ln -s ${lib.getExe' Agda "agda-mode"} $out/bin/agda-mode
         fi
@@ -82,6 +109,7 @@ let
     "agda"
     "agda-lib"
     "agdai"
+    "mki"
     "lagda"
     "lagda.md"
     "lagda.org"

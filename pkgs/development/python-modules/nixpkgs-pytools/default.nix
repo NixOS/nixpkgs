@@ -7,17 +7,19 @@
   rope,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nixpkgs-pytools";
   version = "1.3.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "11skcbi1lf9qcv9j5ikifb4pakhbbygqpcmv3390j7gxsa85cn19";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-KVhWkNL9HQnSGLuyi59fC051yXJxxiLTZjg5GuJiU4c=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     jinja2
     setuptools
     rope
@@ -32,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

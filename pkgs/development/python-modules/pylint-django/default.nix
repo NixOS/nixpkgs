@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pylint-django";
-  version = "2.7.0";
+  version = "2.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "pylint-django";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-f0L/wYedLHtyi3/vro4n29oAY+axnQ5sBv545zD/Gvc=";
+    hash = "sha256-W3BPCK6fj4poZ1EaBUGyVyfRo/0sZa+2ktk96Ic6+q0=";
   };
 
   build-system = [ poetry-core ];
@@ -45,6 +45,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/PyCQA/pylint-django";
     changelog = "https://github.com/pylint-dev/pylint-django/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ kamadorueda ];
+    maintainers = [ ];
   };
 })

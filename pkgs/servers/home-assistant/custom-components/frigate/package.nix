@@ -19,13 +19,13 @@
 buildHomeAssistantComponent rec {
   owner = "blakeblackshear";
   domain = "frigate";
-  version = "5.15.4";
+  version = "5.15.6";
 
   src = fetchFromGitHub {
     owner = "blakeblackshear";
     repo = "frigate-hass-integration";
     tag = "v${version}";
-    hash = "sha256-xckHpwKujlWJ0M/fDlCU96WocMIlMk37+TwmY8iEnNo=";
+    hash = "sha256-xh8+X4C6QCb2Y4fbo60xCX3QuXEktbopB2DbOTfzAhA=";
   };
 
   patches = [
@@ -35,8 +35,6 @@ buildHomeAssistantComponent rec {
     ./llmcontext-user-prompt.patch
     # https://github.com/blakeblackshear/frigate-hass-integration/pull/1096
     ./async-publish-compat.patch
-    # https://github.com/blakeblackshear/frigate-hass-integration/pull/1095
-    ./remove-advanced-options-gate.patch
   ];
 
   dependencies = [
@@ -61,6 +59,17 @@ buildHomeAssistantComponent rec {
     "test_frigate_camera_setup_birdseye"
     "test_frigate_camera_setup_webrtc"
     "test_frigate_camera_setup_birdseye_webrtc"
+    "test_binary_sensor_device_info"
+    # https://github.com/blakeblackshear/frigate-hass-integration/issues/1121
+    "test_camera_device_info"
+    "test_get_frigate_via_device_legacy"
+    "test_entry_remove_old_devices"
+    "test_profile_select_option"
+    "test_profile_select_device_info"
+    "test_per_camerazone_device_info"
+    "test_per_camerazone_device_info"
+    "test_per_entry_device_info"
+    "test_switch_device_info"
   ];
 
   disabledTestPaths = [

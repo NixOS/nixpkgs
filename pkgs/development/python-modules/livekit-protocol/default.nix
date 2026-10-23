@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "livekit-protocol";
-  version = "1.1.2";
+  version = "1.1.17";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "livekit";
     repo = "python-sdks";
     tag = "protocol-v${version}";
-    hash = "sha256-/QXjIz3q5dF6Y1CkyCP+3hWoXMGs7+eUgtehBJBF7LY=";
+    hash = "sha256-XTBQi1ckwHw7bpd2jQWqwhDXO0iHQRirc2GjfDtYILA=";
   };
 
   pypaBuildFlags = [ "livekit-protocol" ];
@@ -33,7 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "livekit" ];
 
-  passthru.updateScript = gitUpdater { rev-prefix = "protocol-v"; };
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater { rev-prefix = "protocol-v"; };
+  };
 
   meta = {
     description = "LiveKit real-time and server SDKs for Python";

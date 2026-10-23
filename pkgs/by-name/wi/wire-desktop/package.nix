@@ -8,6 +8,7 @@
   yarn-berry_3,
   makeWrapper,
   makeDesktopItem,
+  copyDesktopItems,
   darwin,
   zip,
   jq,
@@ -27,17 +28,16 @@ let
         hash = "sha256-pNu+/JKvaKSqHxNeDL8RcDy+FiY3aynQH06t05qgXrA=";
       };
     };
-    x86_64-darwin = rec {
-      version = "3.40.5442";
+    aarch64-darwin = rec {
+      version = "3.42.5489";
       src = fetchFromGitHub {
         owner = "wireapp";
         repo = "wire-desktop";
         tag = "macos/${version}";
-        hash = "sha256-pNu+/JKvaKSqHxNeDL8RcDy+FiY3aynQH06t05qgXrA=";
+        hash = "sha256-v80sdksor6V0OVXlBTeMf9Jz8lhQy+UdyTxxupuafeo=";
       };
     };
     aarch64-linux = x86_64-linux;
-    aarch64-darwin = x86_64-darwin;
   };
   web-config = fetchFromGitHub {
     owner = "wireapp";
@@ -58,7 +58,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "wire-desktop";
-  inherit (sources.${stdenv.system}) version src;
+  inherit (sources.${stdenv.system} or sources.x86_64-linux) version src;
 
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
@@ -71,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     yarn-berry.yarnBerryConfigHook
     yarn-berry
     makeWrapper
+    copyDesktopItems
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     jq
@@ -153,21 +154,23 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  desktopItem = makeDesktopItem {
-    categories = [
-      "Network"
-      "InstantMessaging"
-      "Chat"
-      "VideoConference"
-    ];
-    comment = "Secure messenger for everyone";
-    desktopName = "Wire";
-    exec = "wire-desktop %U";
-    genericName = "Secure messenger";
-    icon = "wire-desktop";
-    name = "wire-desktop";
-    startupWMClass = "Wire";
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      categories = [
+        "Network"
+        "InstantMessaging"
+        "Chat"
+        "VideoConference"
+      ];
+      comment = "Secure messenger for everyone";
+      desktopName = "Wire";
+      exec = "wire-desktop %U";
+      genericName = "Secure messenger";
+      icon = "wire-desktop";
+      name = "wire-desktop";
+      startupWMClass = "Wire";
+    })
+  ];
 
   meta = {
     description = "Modern, secure messenger for everyone";
@@ -193,7 +196,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };

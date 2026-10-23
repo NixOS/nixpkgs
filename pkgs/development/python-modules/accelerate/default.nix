@@ -5,9 +5,6 @@
   fetchFromGitHub,
   pythonAtLeast,
 
-  # buildInputs
-  llvmPackages,
-
   # build-system
   setuptools,
 
@@ -28,23 +25,22 @@
   torchvision,
   transformers,
   config,
-  cudatoolkit,
+  cudaPackages,
   writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "accelerate";
-  version = "1.13.0";
+  version = "1.14.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "accelerate";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IfKePiU38fUd5HefaS7J1s8Mb6hVmldINemxAJY+83o=";
+    hash = "sha256-dvixYS/j+ZiTpRjuo5q3jY6x9MrWWnpMJz3fuJoAYh0=";
   };
-
-  buildInputs = [ llvmPackages.openmp ];
 
   build-system = [ setuptools ];
 
@@ -69,7 +65,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   preCheck = lib.optionalString config.cudaSupport ''
-    export TRITON_PTXAS_PATH="${lib.getExe' cudatoolkit "ptxas"}"
+    export TRITON_PTXAS_PATH="${lib.getExe' cudaPackages.cuda_nvcc "ptxas"}"
   '';
   enabledTestPaths = [ "tests" ];
   disabledTests = [
@@ -95,6 +91,9 @@ buildPythonPackage (finalAttrs: {
 
     # set the environment variable, CC, which conflicts with standard environment
     "test_patch_environment_key_exists"
+
+    # RuntimeError: Cannot access accelerator device when none is available.
+    "test_get_balanced_memory_no_split_module_classes_set"
   ]
   ++ lib.optionals ((pythonAtLeast "3.13") || (torch.rocmSupport or false)) [
     # RuntimeError: Dynamo is not supported on Python 3.13+
@@ -187,7 +186,7 @@ buildPythonPackage (finalAttrs: {
     "CheckpointTest"
   ];
 
-  disabledTestPaths = lib.optionals (!(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64)) [
+  disabledTestPaths = [
     # numerous instances of torch.multiprocessing.spawn.ProcessRaisedException:
     "tests/test_cpu.py"
     "tests/test_grad_sync.py"

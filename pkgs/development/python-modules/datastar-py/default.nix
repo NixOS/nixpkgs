@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "datastar-py";
-  version = "1.0.2";
+  version = "1.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "starfederation";
     repo = "datastar-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-epshwHwpRnrgOQ6/jiy6Iyv4y1fa5ZipgiFShKEOxtA=";
+    hash = "sha256-af6B1/1eBC0L20YJ6PkKBCg8dM+60+gRmvL+FH52u1U=";
   };
 
   build-system = [ hatchling ];

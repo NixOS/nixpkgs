@@ -25,10 +25,13 @@
   opentelemetry-instrumentation-fastapi,
   opentelemetry-instrumentation-flask,
   opentelemetry-instrumentation-httpx,
+  opentelemetry-instrumentation-psycopg,
   opentelemetry-instrumentation-psycopg2,
   opentelemetry-instrumentation-redis,
   opentelemetry-instrumentation-requests,
   opentelemetry-instrumentation-sqlalchemy,
+  opentelemetry-instrumentation-sqlite3,
+  opentelemetry-instrumentation-system-metrics,
   opentelemetry-instrumentation-wsgi,
   packaging,
 
@@ -40,12 +43,12 @@
   dirty-equals,
   google-genai,
   inline-snapshot,
+  litellm,
   logfire-api,
   loguru,
   mysql-connector-python,
   openai-agents,
   pandas,
-  psycopg,
   pymongo,
   pymysql,
   pytest-django,
@@ -61,14 +64,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "logfire";
-  version = "4.6.0";
+  version = "4.41.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "logfire";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dAkT3xh0RsGTnW7Mqml2wV16VHJGUUkjjxiFLg9bUKc=";
+    hash = "sha256-0k0xfsnNwtdmI8Pfh6kBhTwG8J31ybsd7mN9vjsIwk4=";
   };
 
   build-system = [ hatchling ];
@@ -106,7 +110,7 @@ buildPythonPackage (finalAttrs: {
     # litellm = [ opentelemetry-instrumentation-litellm ];
     # mysql = [ opentelemetry-instrumentation-mysql ];
     psycopg = [
-      # opentelemetry-instrumentation-psycopg
+      opentelemetry-instrumentation-psycopg
       packaging
     ];
     psycopg2 = [
@@ -117,9 +121,9 @@ buildPythonPackage (finalAttrs: {
     redis = [ opentelemetry-instrumentation-redis ];
     requests = [ opentelemetry-instrumentation-requests ];
     sqlalchemy = [ opentelemetry-instrumentation-sqlalchemy ];
-    # sqlite3 = [ opentelemetry-instrumentation-sqlite3 ];
+    sqlite3 = [ opentelemetry-instrumentation-sqlite3 ];
     # starlette = [ opentelemetry-instrumentation-starlette ];
-    # system-metrics = [ opentelemetry-instrumentation-system-metrics ];
+    system-metrics = [ opentelemetry-instrumentation-system-metrics ];
     wsgi = [ opentelemetry-instrumentation-wsgi ];
   };
 
@@ -136,12 +140,12 @@ buildPythonPackage (finalAttrs: {
     dirty-equals
     google-genai
     inline-snapshot
+    litellm
     logfire-api
     loguru
     mysql-connector-python
     openai-agents
     pandas
-    psycopg
     pymongo
     pymysql
     pytest-django
@@ -163,15 +167,8 @@ buildPythonPackage (finalAttrs: {
     "tests/otel_integrations/test_aws_lambda.py"
     "tests/otel_integrations/test_google_genai.py"
     "tests/otel_integrations/test_mysql.py"
-    "tests/otel_integrations/test_psycopg.py"
     "tests/otel_integrations/test_pymongo.py"
-    "tests/otel_integrations/test_sqlalchemy.py"
-    "tests/otel_integrations/test_sqlite3.py"
     "tests/otel_integrations/test_starlette.py"
-    "tests/otel_integrations/test_system_metrics.py"
-
-    # No module named 'litellm'
-    "tests/otel_integrations/test_litellm.py::test_litellm_instrumentation"
 
     # No module named 'pydantic_ai'
     "tests/otel_integrations/test_pydantic_ai.py"

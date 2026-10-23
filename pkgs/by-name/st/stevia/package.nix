@@ -20,7 +20,7 @@
   json-glib,
   libhandy,
   libxkbcommon,
-  systemd,
+  systemdLibs,
   nix-update-script,
   dconf,
 }:
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     json-glib
     libhandy
     libxkbcommon
-    systemd
+    systemdLibs
     dconf
   ];
 
@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "User friendly on screen keyboard for Phosh";
     homepage = "https://gitlab.gnome.org/World/Phosh/stevia";
     changelog = "https://gitlab.gnome.org/World/Phosh/stevia/-/releases/v${finalAttrs.version}";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       ungeskriptet

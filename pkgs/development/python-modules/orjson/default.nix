@@ -29,24 +29,24 @@
 
 buildPythonPackage rec {
   pname = "orjson";
-  version = "3.11.7";
+  version = "3.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ijl";
     repo = "orjson";
     tag = version;
-    hash = "sha256-4a8vNQEe1P1t2BcqSL+d+GLHi1lhUtbA7p5/vj/J0Lc=";
+    hash = "sha256-pmp8j6035L46ejDOkz9aQnMdX48MFFmNHM3k5TW6kqM=";
   };
 
   patches = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    # fix architecture checks in build.rs to fix build for riscv
+    # fix architecture checks in build.rs to fix build for non x86_64
     ./cross-arch-compat.patch
   ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-eB7jVTsvBSUjtaKsbRnRtYSd+SqnCaoDyG76iExmSHc=";
+    hash = "sha256-h0zx3D4gVvPhHX4ziXUL4eKJEKlYOAj+9wiRbV2yuRw=";
   };
 
   nativeBuildInputs = [

@@ -91,5 +91,7 @@ buildPythonPackage (finalAttrs: {
       thomasdesr
       dotlambda
     ];
+    # https://github.com/pyupio/safety/pull/865
+    broken = lib.versionAtLeast typer.version "0.27";
   };
 })

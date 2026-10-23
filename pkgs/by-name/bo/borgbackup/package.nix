@@ -22,14 +22,14 @@ let
 in
 python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "borgbackup";
-  version = "1.4.4";
+  version = "1.4.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "borgbackup";
     repo = "borg";
     tag = finalAttrs.version;
-    hash = "sha256-pMZr9cVr84b948b5Iuevpy6AtMeYo/Ma8uFLuagAYy4=";
+    hash = "sha256-jkFF+nNZL8lEXgworFLNoEKTr2LgCat1fOFlTh7AWs4=";
   };
 
   postPatch = ''
@@ -55,8 +55,11 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   sphinxBuilders = [
-    "singlehtml"
-    "man"
+    # HACK: sphinxBuilders is currently broken with __structuredAttrs = true,
+    # and ignores all but the first array item. for now, pass them as a single
+    # space-separated entry. fixed on staging, but requires a mass-rebuild.
+    # TODO: revert to [ "singlehtml" "man" ] on staging.
+    "singlehtml man"
   ];
 
   buildInputs = [
@@ -81,7 +84,10 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     ];
 
   makeWrapperArgs = [
-    ''--prefix PATH ':' "${openssh}/bin"''
+    "--prefix"
+    "PATH"
+    ":"
+    "${openssh}/bin"
   ];
 
   preInstallSphinx = ''
@@ -103,7 +109,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     py
     pytest-benchmark
     pytest-xdist
-    pytestCheckHook
+    pytest9_0CheckHook
     versionCheckHook
   ];
 

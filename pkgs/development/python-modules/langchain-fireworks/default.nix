@@ -11,7 +11,7 @@
   fireworks-ai,
   langchain-core,
   openai,
-  pydantic,
+  requests,
 
   # tests
   langchain-tests,
@@ -24,16 +24,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain-fireworks";
-  version = "1.4.3";
+  version = "1.6.1";
   pyproject = true;
   __structuredAttrs = true;
-  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-fireworks==${finalAttrs.version}";
-    hash = "sha256-Z8KwSMq4kVCUVD9Cs8PU6ZRcC9ZG52dbeQrpYInt9L0=";
+    hash = "sha256-tJduBjY+JcG9bhZYsOi7+2TdR4DTi/ZCTIaNZ87R8JM=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/partners/fireworks";
@@ -45,7 +44,7 @@ buildPythonPackage (finalAttrs: {
     fireworks-ai
     langchain-core
     openai
-    pydantic
+    requests
   ];
 
   pythonRelaxDeps = [
@@ -73,6 +72,7 @@ buildPythonPackage (finalAttrs: {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "langchain-fireworks==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 

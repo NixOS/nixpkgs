@@ -201,7 +201,7 @@ in
               # Setup session
               name = "unix";
               control = "required";
-              modulePath = "${config.security.pam.package}/lib/security/pam_unix.so";
+              modulePath = config.security.pam.pam_unixModulePath;
             }
             {
               name = "systemd";

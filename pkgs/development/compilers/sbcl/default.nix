@@ -7,7 +7,9 @@
   coreutils,
   fetchurl,
   ps,
+  sbclPackages, # for passthru.tests
   strace,
+  stumpwm, # for passthru.tests
   texinfo,
   which,
   writableTmpDirAsHomeHook,
@@ -26,12 +28,10 @@ let
   versionMap = {
     # Necessary for Nyxt
     "2.4.6".sha256 = "sha256-pImQeELa4JoXJtYphb96VmcKrqLz7KH7cCO8pnw/MJE=";
-    # Necessary for stumpwm
-    "2.4.10".sha256 = "sha256-zus5a2nSkT7uBIQcKva+ylw0LOFGTD/j5FPy3hDF4vg=";
     # By unofficial and very loose convention we keep the latest version of
     # SBCL, and the previous one in case someone quickly needs to roll back.
-    "2.6.3".sha256 = "sha256-50MvtkKVLdJaX8DFbSGPPQqlls5C0z76gwkbyn1pmIo=";
-    "2.6.4".sha256 = "sha256-O6U+ZUtg/rfE9QRmGZ1tUmDyZhxxG6ItS3cLZVQA1Xs=";
+    "2.6.7".sha256 = "sha256-Hr3DXJ3I4nG4zRrESWXgC/JV+cAiFlD8t38Ps0wtOt4=";
+    "2.6.8".sha256 = "sha256-rVEm39+6XbJ+53vMJYkwIP5SLQt2U9RbTEeVrePdwj0=";
   };
   # Collection of pre-built SBCL binaries for platforms that need them for
   # bootstrapping. Ideally these are to be avoided.  If ECL (or any other
@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     texinfo
   ]
-  ++ lib.optionals finalAttrs.doCheck (
+  ++ lib.optionals finalAttrs.finalPackage.doCheck (
     [
       which
       writableTmpDirAsHomeHook
@@ -173,16 +173,24 @@ stdenv.mkDerivation (finalAttrs: {
         ./patches/dynamic-space-size-envvar-2.6.3-feature.patch
         ./patches/dynamic-space-size-envvar-2.6.3-tests.patch
       ]
-    else if lib.versionOlder "2.5.2" finalAttrs.version then
-      [
-        ./patches/dynamic-space-size-envvar-2.5.3-feature.patch
-        ./patches/dynamic-space-size-envvar-2.5.3-tests.patch
-      ]
     else
       [
         ./patches/dynamic-space-size-envvar-2.5.2-feature.patch
         ./patches/dynamic-space-size-envvar-2.5.2-tests.patch
       ];
+
+  postPatch =
+    # On SBCL < 2.5.0, `elf-sans-immobile.test.sh` triggers a bug in ZFS and
+    # causes the build to hang indefinitely. See:
+    # https://github.com/NixOS/nixpkgs/issues/544703#issuecomment-5141409041
+    # https://github.com/openzfs/zfs/issues/18135#issuecomment-5141375047
+    # To unbreak Hydra, skip the test.
+    if lib.versionOlder finalAttrs.version "2.5.0" then
+      ''
+        rm tests/elf-sans-immobile.test.sh
+      ''
+    else
+      null;
 
   sbclPatchPhase =
     lib.optionalString (finalAttrs.disabledTestFiles != [ ]) ''
@@ -308,6 +316,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
+  passthru.tests = {
+    inherit stumpwm;
+    inherit (sbclPackages) iolib;
+  };
+
   meta = {
     # Broken since 2025-09-05 https://hydra.nixos.org/job/nixpkgs/staging-next/sbcl.x86_64-darwin
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
@@ -319,7 +332,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.attrNames bootstrapBinaries ++ [
       # These aren’t bootstrapped using the binary distribution but compiled
       # using a separate (lisp) host
-      "x86_64-darwin"
       "x86_64-linux"
       "aarch64-darwin"
       "aarch64-linux"

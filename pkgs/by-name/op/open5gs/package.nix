@@ -26,7 +26,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "open5gs";
-  version = "2.7.7";
+  version = "2.8.0";
 
   diameter = fetchFromGitHub {
     owner = "open5gs";
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "open5gs";
     repo = "open5gs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZK4q6m/9v+us+6dWpi0k188KfFu1b6G9pGE4VGAe4+4=";
+    hash = "sha256-e8iCcgJRJFEdVN3TeNwFFbBkShZebxKqvsCpBv/WLVk=";
   };
 
   nativeBuildInputs = [

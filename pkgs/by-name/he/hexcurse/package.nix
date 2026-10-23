@@ -21,6 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=stringop-overflow"
     "-Wno-error=stringop-truncation"
+    "-Wno-error=discarded-qualifiers"
   ];
   patches = [
     # gcc7 compat

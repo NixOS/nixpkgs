@@ -59,7 +59,7 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "kanalizer" ];
 
   meta = {
-    description = "Library that guesses the Japanese pronounciation of English words";
+    description = "Library that guesses the Japanese pronunciation of English words";
     homepage = "https://github.com/VOICEVOX/kanalizer";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tomasajt ];

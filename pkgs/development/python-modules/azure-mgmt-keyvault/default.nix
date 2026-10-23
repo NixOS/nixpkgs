@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-keyvault";
-  version = "14.0.1";
+  version = "14.1.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_keyvault";
     inherit version;
-    hash = "sha256-0UGoCErkx8W9HK/spJqPP768WNxbxSkPMi6nPYswfvc=";
+    hash = "sha256-0n1BLm17W3a/x6gme449MIUsfG3FYGCex9k9SBa9Kfw=";
   };
 
   build-system = [ setuptools ];

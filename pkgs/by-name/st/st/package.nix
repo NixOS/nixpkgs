@@ -37,9 +37,15 @@ stdenv.mkDerivation (finalAttrs: {
   configFile = lib.optionalString (conf != null) (writeText "config.def.h" conf);
 
   postPatch =
-    lib.optionalString (conf != null) "cp ${finalAttrs.configFile} config.def.h"
+    lib.optionalString (conf != null) ''
+      cp ${finalAttrs.configFile} config.def.h
+    ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace config.mk --replace "-lrt" ""
+    ''
+    + ''
+      substituteInPlace config.mk \
+        --replace-fail "-lX11 -lutil -lXft" '-lutil `$(PKG_CONFIG) --libs x11 xft`'
     '';
 
   strictDeps = true;

@@ -63,6 +63,13 @@ rec {
 
   # CI jobs
   lib-tests = import ../lib/tests/release.nix { inherit pkgs; };
+  # The lib tests may assert on specific error messages which are
+  # implementation-defined. Run them under Lix too so that nixpkgs do not
+  # couple its tests too hard to specific wordings.
+  lib-tests-lix = import ../lib/tests/release.nix {
+    inherit pkgs;
+    nixVersions = [ pkgs.lix ];
+  };
   manual-nixos = (import ../nixos/release.nix { }).manual.${system} or null;
   manual-nixpkgs = (import ../doc { pkgs = docPkgs; });
   nixpkgs-vet = pkgs.callPackage ./nixpkgs-vet.nix {
@@ -70,7 +77,7 @@ rec {
   };
   parse = pkgs.lib.recurseIntoAttrs {
     nix_latest = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.latest; };
-    nix_2_28 = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.nix_2_28; };
+    stable = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.stable; };
     lix = pkgs.callPackage ./parse.nix { nix = pkgs.lix; };
     lix_latest = pkgs.callPackage ./parse.nix { nix = pkgs.lixPackageSets.latest.lix; };
   };

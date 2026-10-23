@@ -26,6 +26,6 @@ buildGoModule {
     homepage = "https://github.com/tomdoherty/cidrgrep";
     mainProgram = "cidrgrep";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ das_j ];
+    maintainers = [ ];
   };
 }

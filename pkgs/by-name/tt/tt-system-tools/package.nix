@@ -43,8 +43,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "System tools for Tenstorrent cards";
     homepage = "https://github.com/tenstorrent/tt-system-tools";
     changelog = "https://github.com/tenstorrent/tt-system-tools/blob/${finalAttrs.src.tag}/debian/changelog";
+    teams = [ lib.teams.tenstorrent ];
     maintainers = with lib.maintainers; [ RossComputerGuy ];
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
   };
 })

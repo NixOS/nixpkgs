@@ -12,13 +12,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "openlist";
-  version = "4.2.2";
+  version = "4.2.7";
 
   src = fetchFromGitHub {
     owner = "OpenListTeam";
     repo = "OpenList";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MxoF+hpzn/44knjVeaINo4/1T4ia7HG8mm+tbvJEsfQ=";
+    hash = "sha256-4MNrUiMzf+2I2AG752Is7ffh63vaiA3AKQhSwugKMgg=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -34,7 +34,7 @@ buildGoModule (finalAttrs: {
   frontend = callPackage ./frontend.nix { };
 
   proxyVendor = true;
-  vendorHash = "sha256-ScPfry0PtSlABdyG+7egMAndG7D3iz1+ceAAhLQPtkM=";
+  vendorHash = "sha256-SbM8FHcZbqmoDcXd71GzhCxqjIofetrbH9+wQlrXs70=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -50,7 +50,7 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-X \"github.com/OpenListTeam/OpenList/v4/internal/conf.GitAuthor=The OpenList Projects Contributors <noreply@openlist.team>\""
+    "-X \"github.com/OpenListTeam/OpenList/v4/internal/conf.GitAuthor=The OpenList Projects Contributors <noreply@oplist.org>\""
     "-X github.com/OpenListTeam/OpenList/v4/internal/conf.Version=${finalAttrs.version}"
     "-X github.com/OpenListTeam/OpenList/v4/internal/conf.WebVersion=${finalAttrs.frontend.version}"
   ];

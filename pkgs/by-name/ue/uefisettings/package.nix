@@ -7,18 +7,18 @@
 
 rustPlatform.buildRustPackage {
   pname = "uefisettings";
-  version = "0-unstable-2025-07-29";
+  version = "0-unstable-2026-10-13";
 
   src = fetchFromGitHub {
     owner = "linuxboot";
     repo = "uefisettings";
-    rev = "149bc92970949d44be641ae1e3e942220d7390e7";
-    hash = "sha256-n6RWqNKkfighoGpQkCWB7TEQ0lLo6cwGUBLN7lv3TrA=";
+    rev = "a568f5420894ec4884ffce84d8e377aaf83f0639";
+    hash = "sha256-boRqHFU/UpNdFgHIoRTIlx79rMapZ8RGcuqGFNysXKI=";
   };
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch=main" ]; };
 
-  cargoHash = "sha256-CQn5esC31hCwEqZYX8OKeyJrwIKuo7x3aAZExBEcdB4=";
+  cargoHash = "sha256-6aCCOyHuyp/cZXOZZnmDTcw+rB8bfcUNg/uhjEWfFPM=";
 
   checkFlags = [
     # Expects filesystem access to /proc and rootfs
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage {
   meta = {
     description = "CLI tool to read/get/extract and write/change/modify BIOS/UEFI settings";
     homepage = "https://github.com/linuxboot/uefisettings";
-    license = with lib.licenses; [ bsd3 ];
+    license = lib.licenses.bsd3;
     mainProgram = "uefisettings";
     maintainers = with lib.maintainers; [ surfaceflinger ];
     platforms = lib.platforms.linux;

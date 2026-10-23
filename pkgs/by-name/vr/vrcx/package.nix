@@ -2,7 +2,7 @@
   lib,
   stdenv,
   nodejs_24,
-  electron_40,
+  electron_42,
   makeWrapper,
   fetchFromGitHub,
   buildNpmPackage,
@@ -13,24 +13,24 @@
 }:
 let
   node = nodejs_24;
-  electron = electron_40;
-  dotnet = dotnetCorePackages.dotnet_9;
+  electron = electron_42;
+  dotnet = dotnetCorePackages.dotnet_10;
 in
 buildNpmPackage (finalAttrs: {
   pname = "vrcx";
-  version = "2026.05.03";
+  version = "2026.09.16";
 
   src = fetchFromGitHub {
     repo = "VRCX";
     owner = "vrcx-team";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TIRX1DllUaq73Aue5/2mg98luBnDoptiiMDQcZ9aBTM=";
+    hash = "sha256-CNO3Ur8xp77QN+HCexCpGX+QdAKM76YOSWOG3ZHT1g0=";
   };
 
   nodejs = node;
   makeCacheWritable = true;
   npmFlags = [ "--ignore-scripts" ];
-  npmDepsHash = "sha256-hOfbDvBJgoPQ6QxnZ77kpeSHDXH9dSnidmrx9Mp9q08=";
+  npmDepsHash = "sha256-fFuqtISueODEFzuqWWL3aG4DWbrq2G4dHsXi3RWByjY=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -38,7 +38,9 @@ buildNpmPackage (finalAttrs: {
   ];
 
   postPatch = ''
-    # V2026.05.03 seems to have an out of date lockfile
+    # VRCX's upstream lockfile lacks `integirty` and `resolved` fields
+    # annoying but can be trivially fixed by cloning the vrcx repo locally then
+    # regenerating the lockfile with `nix run nixpkgs#npm-lockfile-fix -- package-lock.json`
     cp ${./package-lock.json} package-lock.json
   '';
 
@@ -46,11 +48,13 @@ buildNpmPackage (finalAttrs: {
     runHook preBuild
 
     env PLATFORM=linux npm exec vite build src
-    node ./src-electron/patch-package-version.js
-    npm exec electron-builder -- --dir \
+    node ./build-scripts/patch-package-version.js
+    npm exec electron-builder -- \
+      --config electron-builder.config.js \
+      --dir \
       -c.electronDist=${electron.dist} \
       -c.electronVersion=${electron.version}
-    node ./src-electron/patch-node-api-dotnet.js
+    node ./build-scripts/patch-node-api-dotnet.js
 
     runHook postBuild
   '';

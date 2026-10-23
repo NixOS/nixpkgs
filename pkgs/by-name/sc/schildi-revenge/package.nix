@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gradle,
+  gradle_9,
   nix-update-script,
   libGL,
   jdk21,
@@ -14,44 +14,45 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "schildi-revenge";
-  version = "26.06.06";
+  version = "26.10.10";
 
   src = fetchFromGitHub {
     owner = "SchildiChat";
     repo = "schildi-revenge";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bj2pSS+kUAs800c/OyK4fIrckB/hAWV3Iypwei8P/W4=";
+    hash = "sha256-2JgS5iLAUSXBnal3HoGzuydSlCFkgNg0f1RnctiDALU=";
     fetchSubmodules = true;
   };
 
   cargoRoot = "matrix-rust-sdk";
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src cargoRoot;
-    hash = "sha256-ZUMX6Y2kT0CEUFVcn8fAlxoCnQT5ipAi5YqZ3Geet4A=";
+    hash = "sha256-6v5VqUwiIfkGhByoZN9hVm4zANAgTWHpPBdVHGFmGNc=";
   };
 
   nativeBuildInputs = [
     jdk21
-    gradle
+    gradle_9
     git
     cargo
     rustc
     rustPlatform.cargoSetupHook
   ];
 
+  # Workaround for a Vergen related build failure
+  env = {
+    VERGEN_GIT_SHA = "0000000000000000000000000000000000000000";
+  };
+
   gradleBuildTask = "createReleaseDistributable";
 
   gradleUpdateScript = ''
     runHook preBuild
 
-    gradle composeApp:dependencies composeApp:checkRuntime --write-verification-metadata sha256
-    ##### Fallback
-    ## If the update script starts missing dependencies after an update this should still work.
-    ## Unfortunately it also unnecessarily builds the entire rust crate
-    #gradle createReleaseDistributable --write-verification-metadata sha256
+    gradle createReleaseDistributable composeApp:kspCommonMainKotlinMetadata --write-verification-metadata sha256
   '';
 
-  mitmCache = gradle.fetchDeps {
+  mitmCache = gradle_9.fetchDeps {
     pkg = finalAttrs.finalPackage;
     data = ./deps.json;
   };

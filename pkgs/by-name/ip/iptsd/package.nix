@@ -6,7 +6,7 @@
   meson,
   ninja,
   pkg-config,
-  cairomm,
+  cairomm_1_0,
   cli11,
   eigen,
   hidrd,
@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "iptsd";
-  version = "3.1.0";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "linux-surface";
     repo = "iptsd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2yYO1xb576IHaJquTrQtmAjJITGdW06I3eHD+HR88xI=";
+    hash = "sha256-NoqHESTMXyIC9K2ZLzau8ZTdGxPW6Jsh0Y/9bQzcqtI=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   dontUseCmakeConfigure = true;
 
   buildInputs = [
-    cairomm
+    cairomm_1_0
     cli11
     eigen
     hidrd

@@ -46,45 +46,23 @@
   "test_force_window_opengl_render_with_format"
   "test_get_frame_with_preview_disabled"
   "test_get_frame_with_preview_enabled"
+  "test_file_output_disables_window"
+  "test_live_preview_opengl_render_with_image_sequence"
+  "test_get_frame_with_live_preview_disabled"
+  "test_get_frame_with_live_preview_enabled"
+  "test_render_without_frame_output_skips_gpu_readback"
+  "test_move_camera_interpolates_and_preserves_omitted_settings"
+  "test_set_camera_orientation"
+  "test_set_camera_orientation_zoom_is_absolute"
+  "test_png_sequence_images_are_zero_padded"
+  "test_images_are_created_when_png_sequence_format_set"
+  "test_default_video_output_with_non_static_scene"
+  "test_opengl_png_sequence_images_are_zero_padded"
+  "test_images_are_created_when_png_sequence_format_set_for_opengl"
+  "test_explicit_video_output_for_static_scene_fails"
 
   # reason for failure: tests try to reach network
   "test_logging_to_file"
-  "test_plugin_function_like"
-  "test_plugin_no_all"
-  "test_plugin_with_all"
-
-  # failing with:
-  # E           AssertionError:
-  # E           Not equal to tolerance rtol=1e-07, atol=1.01
-  # E           Frame no -1. You can use --show_diff to visually show the difference.
-  # E           Mismatched elements: 18525 / 1639680 (1.13%)
-  # E           Max absolute difference: 255
-  # E           Max relative difference: 255.
-  "test_Text2Color"
-  "test_PointCloudDot"
-  "test_Torus"
-
-  # test_ImplicitFunction[/test_implicit_graph] failing with:
-  # E           AssertionError:
-  # E           Not equal to tolerance rtol=1e-07, atol=1.01
-  # E           Frame no -1. You can use --show_diff to visually show the difference.
-  # E           Mismatched elements: 1185[/633] / 1639680[/1639680] (0.0723[/0.0386]%)
-  # E           Max absolute difference: 125[/121]
-  # E           Max relative difference: 6.5[/1]
-  #
-  # These started failing after relaxing the “watchdog” and “isosurfaces” dependencies,
-  # likely due to a tolerance difference.  They should, however, start working again when [1] is
-  # included in a Manim release.
-  # [1]: https://github.com/ManimCommunity/manim/pull/3376
-  "test_ImplicitFunction"
-  "test_implicit_graph"
-
-  # failing with:
-  # TypeError: __init__() got an unexpected keyword argument 'msg' - maybe you meant pytest.mark.skipif?
-  "test_force_window_opengl_render_with_movies"
-
-  # mismatching expectation on the new commandline
-  "test_manim_new_command"
 
   # This tests checks if the manim executable is a python script. In our case it is not.
   # It is a wrapper shell script instead.
@@ -102,4 +80,5 @@
   # E
   # E         ...Full output truncated (9 lines hidden), use '-vv' to show
   "test_manim_cfg_subcommand"
+
 ]

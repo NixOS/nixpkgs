@@ -5,35 +5,35 @@
   jinja2,
   mock,
   packaging,
-  ply,
   pytestCheckHook,
   setuptools,
-  six,
+  setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "stone";
-  version = "3.3.9";
+  version = "3.5.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dropbox";
     repo = "stone";
-    tag = "v${version}";
-    hash = "sha256-3tUV2JrE3S2Tj/9aHvzfBTkIWUmWzkWNsVLr5yWRE/Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Cq3RjyXazsWMrQV1p6Rmx5k7ioC7yxrDm8LYwXarhLc=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "'pytest-runner == 5.3.2'," ""
+    substituteInPlace pyproject.toml \
+      --replace-fail '"setuptools>=84.0.0", "setuptools-scm>=10.2.1,<11"' '"setuptools", "setuptools-scm"'
   '';
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     jinja2
-    ply
-    six
     packaging
   ];
 
@@ -47,9 +47,9 @@ buildPythonPackage rec {
   meta = {
     description = "Official API Spec Language for Dropbox API V2";
     homepage = "https://github.com/dropbox/stone";
-    changelog = "https://github.com/dropbox/stone/releases/tag/${src.tag}";
+    changelog = "https://github.com/dropbox/stone/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "stone";
   };
-}
+})

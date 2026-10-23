@@ -151,13 +151,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "inspircd";
-  version = "4.11.0";
+  version = "4.12.1";
 
   src = fetchFromGitHub {
     owner = "inspircd";
     repo = "inspircd";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-YrPKjc5fWR4VyA+ahWwjSQvZXNfWP0++XujOsUQwTB0=";
+    sha256 = "sha256-crIxqqBMwu+lYnftlOdZ/jNvOh0vS7Zr0YDMAR8wlfs=";
   };
 
   outputs = [
@@ -229,6 +229,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Modular C++ IRC server";
     license = [
       lib.licenses.gpl2Only

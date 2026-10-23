@@ -22,7 +22,6 @@
   pytest-xdist,
   pytestCheckHook,
   writableTmpDirAsHomeHook,
-  llvmPackages,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -42,6 +41,13 @@ buildPythonPackage (finalAttrs: {
     setuptools
     setuptools-scm
   ];
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # NotImplementedError: The operator 'torchmdnet::warp_neighbor_brute_fwd' is not currently implemented for the MPS device.
+    # As a temporary fix, you can set the environment variable `PYTORCH_ENABLE_MPS_FALLBACK=1` to use the CPU as a fallback for this op.
+    # WARNING: this will be slower than running natively on MPS.
+    PYTORCH_ENABLE_MPS_FALLBACK = true;
+  };
 
   pythonRemoveDeps = [
     # Not a runtime dependency
@@ -64,12 +70,6 @@ buildPythonPackage (finalAttrs: {
     pytest-xdist
     pytestCheckHook
     writableTmpDirAsHomeHook
-  ];
-
-  checkInputs = lib.optionals stdenv.cc.isClang [
-    # torch._inductor.exc.InductorError: CppCompileError: C++ compile error
-    # fatal error: 'omp.h' file not found
-    llvmPackages.openmp
   ];
 
   disabledTests = [

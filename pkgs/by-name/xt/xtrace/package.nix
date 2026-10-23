@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "debian";
     repo = "xtrace";
     rev = "xtrace-${finalAttrs.version}";
-    sha256 = "1yff6x847nksciail9jly41mv70sl8sadh0m5d847ypbjmxcwjpq";
+    hash = "sha256-+ErOepXr+kNQKxXApjSiGpxdA/FUJhpVZHraQ1A3zvk=";
   };
 
   nativeBuildInputs = [

@@ -3,32 +3,38 @@
   fetchFromGitHub,
   buildPythonPackage,
   setuptools,
+  pytest-cov-stub,
   pytestCheckHook,
+  typing-extensions,
 }:
-buildPythonPackage rec {
+
+buildPythonPackage (finalAttrs: {
   pname = "parse";
-  version = "1.20.2";
+  version = "1.22.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "r1chardj0n3s";
     repo = "parse";
-    tag = version;
-    hash = "sha256-i/H3E/Z8vqt2jLS8BaVHJuD2Fbi7TP7EeOjXAJ16bWg=";
+    tag = finalAttrs.version;
+    hash = "sha256-fV05sCgaLl4m1wMkKRUQGhKws+cuUZtpNRICa5Pqbxo=";
   };
 
-  postPatch = ''
-    rm .pytest.ini
-  '';
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [ setuptools ];
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+    typing-extensions
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  pythonImportsCheck = [ "parse" ];
 
   meta = {
-    homepage = "https://github.com/r1chardj0n3s/parse";
     description = "parse() is the opposite of format()";
+    homepage = "https://github.com/r1chardj0n3s/parse";
+    changelog = "https://github.com/r1chardj0n3s/parse/releases/tag/v${finalAttrs.src.tag}";
     license = lib.licenses.bsdOriginal;
     maintainers = with lib.maintainers; [ alunduil ];
   };
-}
+})

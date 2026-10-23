@@ -11,7 +11,7 @@ build-idris-package {
     owner = "berewt";
     repo = "UnionType";
     rev = "f7693036237585fe324a815a96ad101d9659c689";
-    sha256 = "1ky0h03kja2y1fjg18j46akw03wi5ng80pghh2j3ib6hxlg1rbs7";
+    hash = "sha256-R68cHu3QrDikgPBdgJ4tkQ/ApzJEovCkC14oOQeAwM8=";
   };
 
   meta = {

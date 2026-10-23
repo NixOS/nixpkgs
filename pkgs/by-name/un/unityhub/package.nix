@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "unityhub";
-  version = "3.19.1";
+  version = "3.19.5";
 
   src = fetchurl {
     url = "https://hub-dist.unity3d.com/artifactory/hub-debian-prod-local/pool/main/u/unity/unityhub_amd64/UnityHubSetup-${version}-amd64.deb";
-    hash = "sha256-PoWjyHBDsJPrGUBuTB2yXdLPu2gxrGn68flpy7fxC7Q=";
+    hash = "sha256-WltXrcnOIJMcQVTFf/3tCPP/onQyhv3xTJ563WshJUA=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
         libxrandr
         xdg-utils
         p7zip
+        unzip
 
         # GTK filepicker
         gsettings-desktop-schemas

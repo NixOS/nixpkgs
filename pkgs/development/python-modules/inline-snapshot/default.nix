@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "inline-snapshot";
-  version = "0.32.5";
+  version = "0.34.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "15r10nk";
     repo = "inline-snapshot";
     tag = version;
-    hash = "sha256-xnooMIm0UiNOWrZ4JZwbpFzliGsTF7b1DAXi1fxMb30=";
+    hash = "sha256-4Uvc925/6RxJRHjP3SZaB7T+gqky5KlL9agHy/14Jd0=";
   };
 
   build-system = [ hatchling ];
@@ -65,6 +65,8 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Tests don't play nice with pytest-xdist
     "tests/test_typing.py"
+    # Sensitive to formatter versions
+    "tests/test_docs.py"
   ];
 
   meta = {

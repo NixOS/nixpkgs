@@ -3,16 +3,15 @@
   buildFishPlugin,
   fetchFromGitHub,
 }:
-
-buildFishPlugin rec {
+buildFishPlugin (finalAttrs: {
   pname = "sponge";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "meaningful-ooo";
     repo = "sponge";
-    rev = version;
-    sha256 = "sha256-MdcZUDRtNJdiyo2l9o5ma7nAX84xEJbGFhAVhK+Zm1w=";
+    tag = finalAttrs.version;
+    hash = "sha256-MdcZUDRtNJdiyo2l9o5ma7nAX84xEJbGFhAVhK+Zm1w=";
   };
 
   meta = {
@@ -21,4 +20,4 @@ buildFishPlugin rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ quantenzitrone ];
   };
-}
+})

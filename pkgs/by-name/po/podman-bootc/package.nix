@@ -66,8 +66,6 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/bootc-dev/podman-bootc/releases/tag/${finalAttrs.src.tag}";
     maintainers = with lib.maintainers; [ evan-goode ];
     license = lib.licenses.asl20;
-    # x86_64-darwin does not seem to be supported at this time:
-    # https://github.com/containers/podman-bootc/issues/46
     platforms = [
       "aarch64-linux"
       "aarch64-darwin"

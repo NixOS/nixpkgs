@@ -3,7 +3,7 @@
   lib,
   fetchFromGitHub,
   parted,
-  systemd,
+  systemdLibs,
   argp-standalone,
 }:
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [
-      systemd
+      systemdLibs
       parted
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ argp-standalone ];

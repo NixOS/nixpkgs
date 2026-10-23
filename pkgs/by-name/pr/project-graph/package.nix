@@ -19,6 +19,7 @@
   libGL,
   gst_all_1,
   qt6,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -58,10 +59,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     fi
   '';
 
-  preConfigure = ''
-    export HOME="$TMPDIR"
-  '';
-
   preBuild = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags Qt6WebEngineWidgets)"
     pnpm run build
@@ -75,6 +72,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
     jq
     wrapGAppsHook4
+    writableTmpDirAsHomeHook
   ];
 
   dontWrapQtApps = true;

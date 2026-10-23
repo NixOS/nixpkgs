@@ -6,16 +6,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zenoh-plugin-dds";
-  version = "1.9.0"; # nixpkgs-update: no auto update
+  version = "1.10.1"; # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "eclipse-zenoh";
     repo = "zenoh-plugin-dds";
     tag = finalAttrs.version;
-    hash = "sha256-MOZmyZGaMJieWISZnnSTU+3+ER4FcGhg3YCTlmuWmuE=";
+    hash = "sha256-2o34hiVOBr6GHrhzoWRucs+Kkt4gYqrh6XJ3fBz+hFM=";
   };
 
-  cargoHash = "sha256-O7OrgEPPkWMYCtmtdgYIcE8YUa+YpHWttwW0Gu5BLJA=";
+  cargoHash = "sha256-dtCcXH5pl+JCN/6c2wb2608WhZJmYSTEHetWPp4WGcQ=";
 
   nativeBuildInputs = [
     cmake

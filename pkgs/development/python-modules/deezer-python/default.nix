@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "deezer-python";
-  version = "7.3.0";
+  version = "7.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "browniebroke";
     repo = "deezer-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pCrPlEbt5Mx8qGjewR5+Z/W7rFEehqd7QRrtvPGyKJk=";
+    hash = "sha256-i9zq96imTNWF43DQoTkXCgNusfdVDNOKEN5ELS6R5YU=";
   };
 
   build-system = [ setuptools ];

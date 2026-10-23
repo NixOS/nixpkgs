@@ -2,13 +2,13 @@
   buildPythonPackage,
   lib,
   fetchPypi,
-  setuptools,
+  setuptools_80,
   xstatic-jquery,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "xstatic-jquery-ui";
-  version = "1.13.0.1";
+  version = "1.13.0.2";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -16,10 +16,10 @@ buildPythonPackage (finalAttrs: {
   src = fetchPypi {
     pname = "XStatic-jquery-ui";
     inherit (finalAttrs) version;
-    hash = "sha256-Npfl8O81W49KHHJCIVkmg8LbAxk1y7V7RiJO70dL0pQ=";
+    hash = "sha256-EbKqfqoa1pxuWUyuEagXqPoXHOyc64KuLKS6fpPVrkM=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ setuptools_80 ];
 
   # no tests implemented
   doCheck = false;

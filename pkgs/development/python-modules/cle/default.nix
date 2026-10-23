@@ -1,85 +1,98 @@
 {
   lib,
   archinfo,
+  arpy,
   buildPythonPackage,
   cart,
-  cffi,
   fetchFromGitHub,
+  minidump,
   pefile,
   pyelftools,
   pytestCheckHook,
   pyvex,
+  pyxbe,
+  pyxdia,
+  pythonOlder,
   setuptools,
   sortedcontainers,
-  nix-update-script,
+  uefi-firmware,
+  writableTmpDirAsHomeHook,
 }:
 
-let
-  # The binaries are following the argr projects release cycle
-  version = "9.2.154";
-
-  # Binary files from https://github.com/angr/binaries (only used for testing and only here)
-  binaries = fetchFromGitHub {
-    owner = "angr";
-    repo = "binaries";
-    tag = "v${version}";
-    hash = "sha256-XXJBySIT3ylK1nd3suP2bq4bVSVah/1XhOmkEONbCoY=";
-  };
-in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cle";
-  inherit version;
+  # Keep angr-management, angr, archinfo, cle, and pyvex in sync.
+  # nixpkgs-update: no auto update
+  version = "10.0.4";
   pyproject = true;
+
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "angr";
     repo = "cle";
-    tag = "v${version}";
-    hash = "sha256-rWbZzm5hWi/C+te8zeQChxqYHO0S795tJ6Znocq9TTs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-SjPIjxB7JdWn734FaeRw3ytv8Qc86DD0t7wuWiUxnQ8=";
   };
+
+  pythonRelaxDeps = [ "arpy" ];
+
+  # pyxdia bundles Microsoft's unfree DIA runtime, so keep PDB support opt-in.
+  pythonRemoveDeps = [ "pyxdia" ];
 
   build-system = [ setuptools ];
 
   dependencies = [
     archinfo
+    arpy
     cart
-    cffi
+    minidump
     pefile
     pyelftools
     pyvex
+    pyxbe
     sortedcontainers
+    uefi-firmware
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  optional-dependencies.pdb = [ pyxdia ];
 
-  # Place test binaries in the right location (location is hard-coded in the tests)
-  preCheck = ''
-    export HOME=$TMPDIR
-    cp -r ${binaries} $HOME/binaries
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
+  preCheck =
+    let
+      binaries = fetchFromGitHub {
+        owner = "angr";
+        repo = "binaries";
+        tag = "v${finalAttrs.version}";
+        hash = "sha256-EfmNEokXDCbiBpxQLhM1XG2hI/+n+QIFS3eNlEMdbe4=";
+      };
+    in
+    ''
+      ln -s ${binaries} ../binaries
+    '';
 
   disabledTests = [
-    # PPC tests seems to fails
-    "test_ppc_rel24_relocation"
-    "test_ppc_addr16_ha_relocation"
-    "test_ppc_addr16_lo_relocation"
-    "test_plt_full_relro"
-    # Test fails
-    "test_tls_pe_incorrect_tls_data_start"
-    "test_x86"
-    "test_x86_64"
-    # The required parts is not present on Nix
-    "test_remote_file_map"
+    # Require the optional unfree pyxdia dependency.
+    "test_debug_symbol_paths_flat_layout"
+    "test_debug_symbol_paths_multiple_paths"
+    "test_debug_symbol_paths_nonexistent_path"
+    "test_debug_symbol_paths_symbol_store_layout"
+    "test_pdb"
   ];
 
   pythonImportsCheck = [ "cle" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python loader for many binary formats";
     homepage = "https://github.com/angr/cle";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ fab ];
+    maintainers = with lib.maintainers; [
+      connornelson
+      fab
+    ];
   };
-}
+})

@@ -61,8 +61,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Build all binaries (e.g. the cli `slicer`) -- not just the default `mslicer` GUI application:
   cargoBuildFlags = [ "--workspace" ];
 
-  strictDeps = true;
-
   passthru.updateScript = nix-update-script { };
 
   meta = {

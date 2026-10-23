@@ -13,19 +13,23 @@
   libcap,
   lsof,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "explain";
   version = "1.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libexplain/libexplain-${version}.tar.gz";
+    url = "mirror://sourceforge/libexplain/libexplain-${finalAttrs.version}.tar.gz";
     hash = "sha256-KIY7ZezMdJNOI3ysQTZMs8GALDbJ4jGO0EF0YP7oP4A=";
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
+  enableParallelBuilding = true;
 
   patches =
     let
       debian-src = "https://sources.debian.org/data/main";
-      debian-ver = "${version}.D001-17";
+      debian-ver = "${finalAttrs.version}.D001-17";
       debian-patch =
         fname: hash:
         fetchpatch {
@@ -80,4 +84,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ McSinyx ];
     platforms = lib.platforms.unix;
   };
-}
+})

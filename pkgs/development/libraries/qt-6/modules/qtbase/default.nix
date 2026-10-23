@@ -239,17 +239,14 @@ stdenv.mkDerivation {
     ./use-cmake-from-path.patch
 
     # macdeployqt fixes
-    # get qmlimportscanner location from environment variable
-    ./find-qmlimportscanner.patch
-    # pass QML2_IMPORT_PATH from environment to qmlimportscanner
-    ./qmlimportscanner-import-path.patch
-    # don't pass qtbase's QML directory to qmlimportscanner if it's empty
-    ./skip-missing-qml-directory.patch
+    # FIXME: these should probably be a wrapper
+    ./macdeployqt-fixes.patch
 
-    # another crash fix
+    # backport touchpad scrolling fix
+    # FIXME: remove in 6.12.1
     (fetchpatch {
-      url = "https://github.com/qt/qtbase/commit/515cbbacfba9f4259c9c3b0714a31222c2b4c879.diff";
-      hash = "sha256-93tzp4O7dZxRZv7ilN/gbQSVmaeOGmxpYgM7aomN0n8=";
+      url = "https://github.com/qt/qtbase/commit/ddf0f49dc949beab8485b3bfb8e88616e4bd8076.diff";
+      hash = "sha256-fWTHLU0IQxOknxPitqhHN8VVVPz/tLQlGzF2t7rYdFc=";
     })
   ];
 
@@ -269,6 +266,13 @@ stdenv.mkDerivation {
         --replace-quiet /usr/bin/xcode-select '${lib.getExe' xcbuild "xcode-select"}' \
         --replace-quiet /usr/libexec/PlistBuddy '${lib.getExe' xcbuild "PlistBuddy"}'
     done
+
+    # Unlike Apple's PlistBuddy, xcbuild's only accepts capitalized commands,
+    # so the usage-description probe in permissions.prf always fails and the
+    # darwin permission plugins (Bluetooth, camera, ...) are silently never
+    # linked into qmake-built apps.
+    substituteInPlace mkspecs/features/permissions.prf \
+      --replace-fail "-c 'print " "-c 'Print "
 
     substituteInPlace mkspecs/common/macx.conf \
       --replace-fail 'CONFIG += ' 'CONFIG += no_default_rpath '
@@ -327,7 +331,12 @@ stdenv.mkDerivation {
   postFixup = ''
     moveToOutput      "mkspecs/modules" "$dev"
     fixQtModulePaths  "$dev/mkspecs/modules"
-    fixQtBuiltinPaths "$out" '*.pr?'
+    # fixQtBuiltinPaths reads qtPluginPrefix/qtQmlPrefix from the environment,
+    # but the setup hook only exports them for downstream packages; without
+    # them e.g. $$[QT_INSTALL_PLUGINS] in qt.prf is rewritten to "$out/"
+    # instead of "$out/${qtPluginPrefix}", breaking static plugin linking.
+    qtPluginPrefix=${qtPluginPrefix} qtQmlPrefix=${qtQmlPrefix} \
+      fixQtBuiltinPaths "$out" '*.pr?'
 
     # @out@ would be automagically replaced inside makeSetupHook by the output of that derivation,
     # but we need it to be the output of this derivation.

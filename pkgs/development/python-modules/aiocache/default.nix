@@ -77,6 +77,9 @@ buildPythonPackage rec {
 
     # TypeError: object MagicMock can't be used in 'await' expression
     "tests/ut/backends/test_redis.py::TestRedisBackend::test_close"
+
+    # flaky, see https://github.com/aio-libs/aiocache/issues/587
+    "tests/acceptance/test_lock.py::TestRedLock::test_locking_dogpile"
   ];
 
   __darwinAllowLocalNetworking = true;

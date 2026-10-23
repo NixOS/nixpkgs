@@ -1,4 +1,5 @@
 {
+  lib,
   callPackage,
   nix-gitignore,
   python3Packages,
@@ -34,4 +35,6 @@ pythonPackages.buildPythonApplication {
   passthru = {
     dev-shell = callPackage ./dev-shell.nix { };
   };
+
+  meta.license = lib.licenses.mit;
 }

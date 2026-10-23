@@ -1,65 +1,136 @@
 {
-  buildNpmPackage,
-  bun,
-  concurrently,
-  fetchFromGitLab,
   lib,
+  stdenvNoCC,
+  bun,
+  fetchFromGitLab,
+  makeBinaryWrapper,
+  nix-update-script,
   nodejs_22,
-  patch-package,
-  stdenv,
-  versionCheckHook,
   ripgrep,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
-buildNpmPackage (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gitlab-duo";
-  version = "8.89.0";
+  version = "9.6.0";
 
-  # DOCS https://gitlab.com/gitlab-org/editor-extensions/gitlab-lsp#node-version
-  nodejs = nodejs_22;
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitLab {
     group = "gitlab-org";
     owner = "editor-extensions";
     repo = "gitlab-lsp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AiC0xxk8d/2rvRGm31vWqRuJ7nzMrITTGabv7v1LpOA=";
+    hash = "sha256-RhBR/Jpf/utucPvPbjSK7b9Homgqtdu7P1ANFzLJF1I=";
   };
 
-  patches = [
-    # HACK https://github.com/NixOS/nixpkgs/issues/408720
-    # Fix packages locked but without hash, or even missing
-    ./missing-hashes.patch
-  ];
+  # Upstream migrated from npm to bun (bun.lock) in v8.90.0. Vendor the fully
+  # resolved node_modules via a fixed-output derivation running `bun install`.
+  node_modules = stdenvNoCC.mkDerivation {
+    pname = "${finalAttrs.pname}-node_modules";
+    inherit (finalAttrs) version src;
 
-  npmFlags = [ "--install-links" ];
-  npmDepsHash = "sha256-U/dwfYZqy/1CM+Emz1w44mAzY24Z8vKWBXSzSqeVmnY=";
-  npmRebuildFlags = [ "--ignore-scripts" ];
-  npmBuildScript = "build:binary";
-  npmWorkspace = "@gitlab/duo-cli";
+    impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
+      "GIT_PROXY_COMMAND"
+      "SOCKS_SERVER"
+    ];
+
+    nativeBuildInputs = [
+      bun
+      writableTmpDirAsHomeHook
+    ];
+
+    dontConfigure = true;
+
+    buildPhase = ''
+      runHook preBuild
+
+      export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
+      bun install \
+        --cpu="*" \
+        --os="*" \
+        --frozen-lockfile \
+        --ignore-scripts \
+        --no-progress
+
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out
+      find . -type d -name node_modules -exec cp -R --parents {} $out \;
+
+      runHook postInstall
+    '';
+
+    # Required: keeping store paths out of the FOD output keeps the hash stable.
+    dontFixup = true;
+
+    outputHash = "sha256-a+E4ApBwIjesq6a1KkFfsTUpdQIPy6f3Nbqi4S0/FeA=";
+    outputHashAlgo = "sha256";
+    outputHashMode = "recursive";
+  };
+
   nativeBuildInputs = [
     bun
-    concurrently
-    patch-package
+    nodejs_22
+    makeBinaryWrapper
+    writableTmpDirAsHomeHook
   ];
 
-  env.ELECTRON_SKIP_BINARY_DOWNLOAD = "true";
-  env.PUPPETEER_SKIP_DOWNLOAD = "true";
-  env.TARGET = "${stdenv.targetPlatform.node.platform}-${stdenv.targetPlatform.node.arch}";
-  env.SUPPORTED_TARGETS = "bun-${stdenv.targetPlatform.node.platform}-${stdenv.targetPlatform.node.arch}";
-  env.SKIP_RIPGREP_BUNDLE = 1;
+  # Workspace packages export built `dist/` under the default condition and their
+  # TypeScript sources under `_ts-source`. Upstream's release build relies on a
+  # turbo remote cache to supply every dependency's `dist/`; offline we instead
+  # bundle straight from source by resolving the `_ts-source` condition.
+  configurePhase = ''
+    runHook preConfigure
 
-  postConfigure = ''
-    patchShebangs --build ./packages/cli/scripts
-    npmBuildScript=build:bundle runHook npmBuildHook
+    cp -R ${finalAttrs.node_modules}/. .
+    patchShebangs node_modules
+    patchShebangs packages/*/node_modules
+
+    runHook postConfigure
   '';
+
+  buildPhase = ''
+    runHook preBuild
+
+    # Use --target=bun instead of a platform-specific target (e.g.
+    # bun-linux-x64-baseline) to avoid bun downloading that platform's runtime
+    # from npm, which is blocked by the Nix sandbox. --target=bun uses the
+    # running bun binary itself as the standalone-executable template, which is
+    # already patchelfd for NixOS.
+    bun build packages/cli/src/index.tsx \
+      --compile \
+      --target=bun \
+      --minify \
+      --conditions _ts-source \
+      --define 'BUNDLER_INJECTED_GITLAB_LANGUAGE_SERVER_VERSION="${finalAttrs.version}"' \
+      --define 'BUNDLER_INJECTED_ENVIRONMENT="production"' \
+      --define 'BUNDLER_INJECTED_DISTRIBUTION="binary"' \
+      --no-compile-autoload-dotenv \
+      --no-compile-autoload-bunfig \
+      --compile-exec-argv=--use-system-ca \
+      --sourcemap=inline \
+      --outfile packages/cli/bin/duo
+
+    runHook postBuild
+  '';
+
+  # bun build --compile appends the JS bundle to the bun binary; strip would
+  # discard it and break the resulting executable.
+  dontStrip = true;
 
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 packages/cli/bin/duo-$TARGET $out/bin/duo
+    install -Dm755 packages/cli/bin/duo $out/bin/duo
 
     wrapProgram $out/bin/duo \
-      --prefix PATH : ${lib.getExe ripgrep}
+      --prefix PATH : ${lib.makeBinPath [ ripgrep ]}
 
     runHook postInstall
   '';
@@ -68,7 +139,12 @@ buildNpmPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--subpackage"
+      "node_modules"
+    ];
+  };
 
   meta = {
     changelog = "https://gitlab.com/gitlab-org/editor-extensions/gitlab-lsp/-/blob/main/CHANGELOG.md";
@@ -78,5 +154,12 @@ buildNpmPackage (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "duo";
     maintainers = with lib.maintainers; [ afontaine ];
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+      "aarch64-darwin"
+      "x86_64-darwin"
+    ];
   };
 })

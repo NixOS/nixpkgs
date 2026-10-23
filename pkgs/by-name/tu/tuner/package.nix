@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.0.0";
 
   src = fetchFromGitHub {
-    owner = "louis77";
+    owner = "tuner-labs";
     repo = "tuner";
     tag = "v${finalAttrs.version}";
     hash = "sha256-i6I5NSwiS8FJuZaHbrXvUcumo9RZvEVPcfKOkHUXiLo=";
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    homepage = "https://github.com/louis77/tuner";
+    homepage = "https://github.com/tuner-labs/tuner";
     description = "App to discover and play internet radio stations";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;

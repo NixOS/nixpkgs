@@ -473,6 +473,13 @@ lib.makeScope pkgs.newScope (
             {
               name = "filter";
               buildInputs = [ pcre2 ];
+              postConfigure = ''
+                substituteInPlace \
+                  tests/oom_filter_input.phpt \
+                  tests/oom_filter_input_array.phpt \
+                  tests/oom_filter_default_encoded.phpt \
+                  --replace-fail "'-n'," "'-n', '-d', 'extension=$PWD/modules/filter.so',"
+              '';
             }
             {
               name = "ftp";
@@ -559,7 +566,7 @@ lib.makeScope pkgs.newScope (
               # The configure script doesn't correctly add library link
               # flags, so we add them to the variable used by the Makefile
               # when linking.
-              MYSQLND_SHARED_LIBADD = "-lz -lssl -lcrypto";
+              env.MYSQLND_SHARED_LIBADD = "-lz -lssl -lcrypto";
               # The configure script builds a config.h which is never
               # included. Let's include it in the main header file
               # included by all .c-files.
@@ -795,6 +802,8 @@ lib.makeScope pkgs.newScope (
               configureFlags = [
                 "--with-zlib"
               ];
+              # Tests launch the builtin webserver.
+              __darwinAllowLocalNetworking = true;
             }
           ]
           ++ lib.optionals (lib.versionOlder php.version "8.3") [

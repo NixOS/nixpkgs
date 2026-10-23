@@ -148,11 +148,15 @@ in
   fetchDebianPatch = recurseIntoAttrs (callPackages ../build-support/fetchdebianpatch/tests.nix { });
   fetchzip = recurseIntoAttrs (callPackages ../build-support/fetchzip/tests.nix { });
   fetchgit = recurseIntoAttrs (callPackages ../build-support/fetchgit/tests.nix { });
+  fetchRepoProject = recurseIntoAttrs (callPackages ../build-support/fetchrepoproject/tests.nix { });
   fetchNextcloudApp = recurseIntoAttrs (
     callPackages ../build-support/fetchnextcloudapp/tests.nix { }
   );
   fetchFromBitbucket = recurseIntoAttrs (callPackages ../build-support/fetchbitbucket/tests.nix { });
   fetchFromGitHub = recurseIntoAttrs (callPackages ../build-support/fetchgithub/tests.nix { });
+  fetchFromHuggingFace = recurseIntoAttrs (
+    callPackages ../build-support/fetchhuggingface/tests.nix { }
+  );
   fetchFirefoxAddon = recurseIntoAttrs (
     callPackages ../build-support/fetchfirefoxaddon/tests.nix { }
   );
@@ -244,6 +248,8 @@ in
 
   auto-patchelf-hook-preserve-origin = callPackage ./auto-patchelf-hook-preserve-origin { };
 
+  auto-patchelf-hook-relativize-rpath = callPackage ./auto-patchelf-hook-relativize-rpath { };
+
   # Accumulate all passthru.tests from arrayUtilities into a single attribute set.
   arrayUtilities = recurseIntoAttrs (
     concatMapAttrs (
@@ -253,6 +259,16 @@ in
       }
     ) pkgs.arrayUtilities
   );
+
+  # Accumulate all passthru.tests from qt5 into a single attribute set.
+  qt5 = recurseIntoAttrs {
+    wrapQtAppsHook = recurseIntoAttrs pkgs.qt5.wrapQtAppsHook.passthru.tests;
+  };
+
+  # Accumulate all passthru.tests from qt6 into a single attribute set.
+  qt6 = recurseIntoAttrs {
+    wrapQtAppsHook = recurseIntoAttrs pkgs.qt6.wrapQtAppsHook.passthru.tests;
+  };
 
   srcOnly = callPackage ../build-support/src-only/tests.nix { };
 
@@ -271,4 +287,6 @@ in
   );
 
   home-assistant-components = recurseIntoAttrs pkgs.home-assistant.tests.components;
+
+  openscad = recurseIntoAttrs (callPackage ../build-support/openscad/tests { });
 }

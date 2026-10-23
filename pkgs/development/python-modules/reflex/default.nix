@@ -24,11 +24,17 @@
   wrapt,
 
   # sub package dependencies
-  pydantic,
+  aiohttp,
   griffelib,
   mistletoe,
+  opentelemetry-api,
+  opentelemetry-instrumentation,
+  opentelemetry-instrumentation-asgi,
   pyyaml,
+  tomli,
+  towncrier,
   typing-inspection,
+  tzdata,
   email-validator,
   ruff-format,
 
@@ -36,6 +42,8 @@
   attrs,
   typer,
   numpy,
+  openai,
+  opentelemetry-sdk,
   pandas,
   pillow,
   playwright,
@@ -47,8 +55,10 @@
   ruff,
   starlette-admin,
   uvicorn,
+  gitMinimal,
   versionCheckHook,
   writableTmpDirAsHomeHook,
+  nodejs-slim,
 }:
 
 let
@@ -74,12 +84,20 @@ let
       pyproject = true;
       sourceRoot = workspace.sourceRoot or "${src.name}/packages/${pname}";
 
+      postPatch = lib.optionalString (pname == "reflex-release") ''
+        substituteInPlace pyproject.toml \
+          --replace-fail '"hatchling == 1.31.0"' '"hatchling"' \
+          --replace-fail '"uv-dynamic-versioning == 0.14.0"' '"uv-dynamic-versioning"'
+      '';
+
       build-system = [
         hatchling
         uv-dynamic-versioning
         ruff
       ]
       ++ lib.optional (pname != "hatch-reflex-pyi") subPkgs.hatch-reflex-pyi;
+
+      pythonRelaxDeps = [ "rich" ];
 
       preBuild = ''
         # for .ruff_cache and whatnot, written by hatch-reflex-pyi
@@ -98,20 +116,39 @@ in
 
 buildPythonPackage (finalAttrs: {
   pname = "reflex";
-  version = "0.9.4";
+  version = "0.9.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "reflex-dev";
     repo = "reflex";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CTW8p8cPSZnTMgXk9F6oHvbfIiTtgKZVvRygUZbccJw=";
+    hash = "sha256-rGwDSaYtkMZH+pxTT8Tee0OqMxAUlJ5Zii7OddeB2J4=";
   };
 
   build-system = [
     hatchling
     uv-dynamic-versioning
   ];
+
+  pythonRelaxDeps = [
+    # pinned to satisfy pyright
+    # https://github.com/reflex-dev/reflex/commit/67489196035bacb2e4bb2fe6ae165088bc6db988
+    "wrapt"
+    # preemptive upper bound, doesn't seem breaking
+    "redis"
+    "rich"
+  ];
+  # pythonRelaxDeps is not sufficient
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail \
+        '"redis >=6.4,<8.0"' \
+        '"redis >=6.4,<9.0"' \
+      --replace-fail \
+        '"wrapt >=1.17.0,<2.4"' \
+        '"wrapt >=1.17.0"'
+  '';
 
   nativeBuildInputs = [
     ruff
@@ -126,6 +163,7 @@ buildPythonPackage (finalAttrs: {
       requests
       granian
       httpx
+      openai
       packaging
       psutil
       python-multipart
@@ -154,22 +192,33 @@ buildPythonPackage (finalAttrs: {
     ]
     ++ granian.optional-dependencies.reload;
 
-  nativeCheckInputs = [
-    attrs
-    typer
-    numpy
-    pandas
-    pillow
-    playwright
-    pytest-asyncio
-    pytest-mock
-    pytestCheckHook
-    python-dotenv
-    starlette-admin
-    uvicorn
-    versionCheckHook
-    writableTmpDirAsHomeHook
-  ];
+  nativeCheckInputs =
+    let
+      inherit (finalAttrs.passthru) subPkgs;
+    in
+    [
+      attrs
+      typer
+      nodejs-slim
+      numpy
+      pandas
+      pillow
+      playwright
+      opentelemetry-sdk
+      pytest-asyncio
+      pytest-mock
+      pytestCheckHook
+      python-dotenv
+      pyyaml
+      starlette-admin
+      uvicorn
+      versionCheckHook
+      gitMinimal
+      writableTmpDirAsHomeHook
+      subPkgs.reflex-build-sdk
+      subPkgs.reflex-otel
+      subPkgs.reflex-release
+    ];
   versionCheckProgramArg = "--version";
 
   disabledTests = [
@@ -197,6 +246,7 @@ buildPythonPackage (finalAttrs: {
     # circular imports (reflex-docgen)
     "test_compiling_docs_does_not_evaluate_upload"
     "test_enterprise_parent_breadcrumb_uses_overview_route"
+    "test_page_names_the_module_the_class_is_defined_in"
   ];
 
   disabledTestPaths = [
@@ -205,16 +255,37 @@ buildPythonPackage (finalAttrs: {
 
     # unable to import agent_files (should be in docs/app/agent_files/)
     "docs/app/tests/test_agent_files.py"
+    "docs/app/tests/test_rendered_markdown.py"
 
     # circular imports (reflex-docgen)
     "tests/units/docgen/test_class_and_component.py"
     "tests/units/docgen/test_markdown.py"
     "tests/units/docgen/test_reflex_transformer.py"
+    "docs/app/tests/test_api_reference_layout.py"
+    "docs/app/tests/test_breadcrumbs.py"
+    "docs/app/tests/test_changelogs.py"
+    "docs/app/tests/test_doc_description.py"
     "docs/app/tests/test_doc_links.py"
     "docs/app/tests/test_docgen_double_eval.py"
+    "docs/app/tests/test_docpage_pager.py"
+    "docs/app/tests/test_docs_landing_links.py"
+    "docs/app/tests/test_docs_navbar.py"
+    "docs/app/tests/test_frontmatter_meta.py"
+    "docs/app/tests/test_overview_pages.py"
+    "docs/app/tests/test_redirects.py"
+    "docs/app/tests/test_sidebar.py"
+    "docs/app/tests/test_site_quality.py"
+
+    # circular imports (reflex-integrations-docs)
+    "docs/app/tests/test_integrations.py"
+
+    # circular imports (reflex-components-internal)
+    "tests/units/reflex_components_internal/"
 
     # circular imports (reflex-site-shared)
+    "docs/app/tests/test_config.py"
     "docs/app/tests/test_routes.py"
+    "tests/units/reflex_site_shared/"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -272,9 +343,13 @@ buildPythonPackage (finalAttrs: {
         reflex-base.dependencies = [
           packaging
           platformdirs
-          pydantic
           rich
           typing-extensions
+        ];
+        reflex-build-sdk.dependencies = [
+          aiohttp
+          httpx
+          platformdirs
         ];
         reflex-components-code.dependencies = [
           subPkgs.reflex-base
@@ -362,6 +437,9 @@ buildPythonPackage (finalAttrs: {
         ];
         reflex-components-recharts.dependencies = [
           subPkgs.reflex-base
+          subPkgs.reflex-components-core
+          subPkgs.reflex-components-lucide
+          subPkgs.reflex-components-sonner
           ruff
         ];
         reflex-components-sonner.dependencies = [
@@ -383,6 +461,18 @@ buildPythonPackage (finalAttrs: {
           platformdirs
           rich
         ];
+        reflex-otel.dependencies = [
+          opentelemetry-api
+          opentelemetry-instrumentation
+          opentelemetry-instrumentation-asgi
+          subPkgs.reflex-base
+        ];
+        reflex-release.dependencies = [
+          packaging
+          tomli
+          towncrier
+          tzdata
+        ];
         reflex-site-shared.dependencies = [
           email-validator
           httpx
@@ -402,6 +492,7 @@ buildPythonPackage (finalAttrs: {
           subPkgs.reflex-components-react-player
           subPkgs.reflex-components-recharts
           subPkgs.reflex-components-sonner
+          subPkgs.reflex-docgen
           subPkgs.reflex-hosting-cli
           subPkgs.reflex-integrations-docs
           ruff
@@ -420,10 +511,12 @@ buildPythonPackage (finalAttrs: {
     );
 
     tests = {
+      # overridePythonAttrs does not exist for finalAttrs.finalPackage
       reflex-no-checks = finalAttrs.finalPackage.overrideAttrs (old: {
-        pname = "${old.pname}-sans-checks-phase";
+        pname = "${old.pname}-sans-check-phase";
         doCheck = false;
-        nativeCheckInputs = [ ];
+        doInstallCheck = false;
+        dontCheckPythonMetadata = true;
       });
     }
     // finalAttrs.passthru.subPkgs;

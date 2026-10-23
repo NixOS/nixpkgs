@@ -1,26 +1,28 @@
 {
   buildPgrxExtension,
-  cargo-pgrx_0_18_0,
+  cargo-pgrx_0_19_0,
   fetchFromGitHub,
   fetchurl,
   lib,
   nix-update-script,
+  openblas,
   pkg-config,
   postgresql,
+  stdenv,
 }:
 
 buildPgrxExtension (finalAttrs: {
   pname = "pg_search";
-  version = "0.24.1";
+  version = "0.25.10";
 
   src = fetchFromGitHub {
     owner = "paradedb";
     repo = "paradedb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-N1CjmumBRmvTSMGrTA/gVDIpEBscrFzAHcdCj/OoIbg=";
+    hash = "sha256-uBOAHkyCfK8/wTHJaYepnExtp18oxFywuCmS2UiPkVU=";
   };
 
-  cargoHash = "sha256-+pAuGubZefpAWPGT2xRtGO8DKX/LXvF2qeMcROYun4k=";
+  cargoHash = "sha256-c51OzNMeOpVObDbMCSKotzWajUA/teQBtGCavwCIFCQ=";
 
   inherit postgresql;
 
@@ -74,7 +76,7 @@ buildPgrxExtension (finalAttrs: {
   # To determinate which version of cargo-pgrx to use, consult the project's main Cargo.toml:
   # https://github.com/paradedb/paradedb/tree/${version}/Cargo.toml
   # In that file, check the version of pgrx and pgrx-tests under workspace.dependencies
-  cargo-pgrx = cargo-pgrx_0_18_0;
+  cargo-pgrx = cargo-pgrx_0_19_0;
 
   cargoPgrxFlags = [
     "--package"
@@ -84,6 +86,8 @@ buildPgrxExtension (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
   ];
+
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ openblas ];
 
   # pgrx tests try to install the extension into postgresql nix store
   doCheck = false;

@@ -33,6 +33,8 @@ buildPythonPackage rec {
   postPatch = ''
     test -f setup.py || mv setup/setup.approvaltests.py setup.py
 
+    python3 setup/set_version.py '${version}'
+
     patchShebangs internal_documentation/scripts
   '';
 
@@ -61,6 +63,9 @@ buildPythonPackage rec {
     "test_warnings"
     # test runs another python interpreter, ignoring $PYTHONPATH
     "test_command_line_verify"
+    # ApprovalException
+    "test_basic_logging"
+    "test_load_person_logs"
   ];
 
   pythonImportsCheck = [

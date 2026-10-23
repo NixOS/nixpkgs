@@ -91,6 +91,9 @@ let
 
               click_when_unobstructed((By.XPATH, "//a[contains(., 'Skip to web app')]"))
 
+              # Skip the tour on first login
+              click_when_unobstructed((By.XPATH, "//button[contains(., 'Skip')]"))
+
               click_when_unobstructed((By.XPATH, "//button[contains(., 'New item')]"))
 
               driver.find_element(By.XPATH, '//input[@formcontrolname="name"]').send_keys(

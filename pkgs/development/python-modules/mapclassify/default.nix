@@ -16,19 +16,23 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "mapclassify";
-  version = "2.10.0";
+  version = "2.10.0-unstable-2026-07-20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pysal";
     repo = "mapclassify";
-    tag = "v${version}";
-    hash = "sha256-OQpDrxa0zRPDAdyS6KP5enb/JZwbYoXTV8kUijV3tNM=";
+    rev = "e8d0550986742de3a4aca6e4e590dfc48d384f0f";
+    # tag = "v${version}";
+    hash = "sha256-UIPMOdDh4sfcFzDqWE70krMywPgXEUOqvPXU73wJQuM=";
   };
 
   build-system = [ setuptools-scm ];
+
+  # Temporary workaround, supply a PEP 440 compliant version
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = "2.10.0.dev20260720";
 
   propagatedBuildInputs = [
     networkx
@@ -91,7 +95,7 @@ buildPythonPackage rec {
   meta = {
     description = "Classification Schemes for Choropleth Maps";
     homepage = "https://pysal.org/mapclassify/";
-    changelog = "https://github.com/pysal/mapclassify/releases/tag/${src.tag}";
+    #changelog = "https://github.com/pysal/mapclassify/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.geospatial ];
   };

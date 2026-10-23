@@ -1,39 +1,46 @@
 {
   lib,
   buildPythonPackage,
-  cacert,
-  entrypoints,
   fetchFromGitHub,
-  freezegun,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
+  click,
+  entrypoints,
   funcy,
-  gitSetupHook,
   pydantic,
   pydantic-settings,
-  pytest-cov-stub,
-  pytest-mock,
-  pytest-test-utils,
-  pytestCheckHook,
   rich,
   ruamel-yaml,
   scmrepo,
   semver,
-  setuptools-scm,
-  setuptools,
   tabulate,
   typer,
+
+  # tests
+  cacert,
+  freezegun,
+  gitSetupHook,
+  pytest-cov-stub,
+  pytest-mock,
+  pytest-test-utils,
+  pytestCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "gto";
-  version = "1.9.0";
+  version = "1.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "gto";
     tag = finalAttrs.version;
-    hash = "sha256-LXYpOnk9W/ellG70qZLihmvk4kvVcwZfE5buPNU2qzQ=";
+    hash = "sha256-pzXU7H4ysu0IBHEtSduA7ogNqmRVWagTI5E4P0z/Wio=";
   };
 
   build-system = [
@@ -42,6 +49,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
+    click
     entrypoints
     funcy
     pydantic

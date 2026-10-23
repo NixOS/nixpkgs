@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mapserver";
-  version = "8.6.4";
+  version = "8.6.6";
 
   src = fetchFromGitHub {
     owner = "MapServer";
     repo = "MapServer";
     rev = "rel-${lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
-    hash = "sha256-kqCP0QZ8gNqS54B8nL8M9Wr9WyMQnORCs42O1eiMtRw=";
+    hash = "sha256-Mur8yflPhegMxuq10yygT/a0TfFjdV20D4UM4m8Ffpk=";
   };
 
   nativeBuildInputs = [

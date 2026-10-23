@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-hakari";
-  version = "0.9.38";
+  version = "0.9.39";
 
   src = fetchFromGitHub {
     owner = "guppy-rs";
     repo = "guppy";
     tag = "cargo-hakari-${finalAttrs.version}";
-    hash = "sha256-joTDNEIlNDtRBFV6QL2yqM3VWbZ05nF235U3F8lekeE=";
+    hash = "sha256-ZOUmwfmgMxhzjY6IdCAs1DVOIvIvMPI5OFJ6rEmWbV4=";
   };
 
-  cargoHash = "sha256-JmRq6Hoss99tOymMQvrBZevrf56+nSS70AZb2XeqZSc=";
+  cargoHash = "sha256-0O6e+3ziHh0FUOFAghkz1T6caOAZp6kZoG6AIIuJq2c=";
 
   cargoBuildFlags = [
     "-p"

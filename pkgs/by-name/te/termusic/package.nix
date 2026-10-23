@@ -31,7 +31,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   useNextest = true;
 
-  buildFeatures = [ "rusty-libopus" ];
+  buildFeatures = [
+    "rusty-libopus"
+    "all-backends"
+    "cover"
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -56,7 +60,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Terminal Music Player TUI written in Rust";
     homepage = "https://github.com/tramhao/termusic";
-    license = with lib.licenses; [ gpl3Only ];
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       devhell
       theeasternfurry

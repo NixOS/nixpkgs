@@ -23,25 +23,13 @@ let
       [ ];
 in
 buildNodejs {
-  version = "26.4.0";
-  sha256 = "9eceb3621024069d91035b5471d2ebe86aa04d22dbeba72a782eaf36ff9183ac";
+  version = "26.12.1";
+  sha256 = "053e3b296859b6d8d93f99ef97fa9cec1c4ee171c72968100c649978c1dbd38c";
   patches =
-    (
-      if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
-        [
-          (fetchpatch2 {
-            url = "https://github.com/nodejs/node/commit/b087e922bde7bfd0cb4b7340bb473ddbbb84ee85.patch?full_index=1";
-            hash = "sha256-338rkBx2OAKyaelFj6jePU+shl+KTAl29a8KBItbDqc=";
-          })
-        ]
-      else
-        [
-          (fetchpatch2 {
-            url = "https://raw.githubusercontent.com/buildroot/buildroot/2f0c31bffdb59fb224387e35134a6d5e09a81d57/package/nodejs/nodejs-src/0003-include-obj-name-in-shared-intermediate.patch";
-            hash = "sha256-3g4aS+NmmUYNOYRNc6UMJKYoaTlpP5Knt9UHegx+o0Y=";
-          })
-        ]
-    )
+    (lib.optional (!(stdenv.hostPlatform.emulatorAvailable buildPackages)) (fetchpatch2 {
+      url = "https://raw.githubusercontent.com/buildroot/buildroot/2f0c31bffdb59fb224387e35134a6d5e09a81d57/package/nodejs/nodejs-src/0003-include-obj-name-in-shared-intermediate.patch";
+      hash = "sha256-3g4aS+NmmUYNOYRNc6UMJKYoaTlpP5Knt9UHegx+o0Y=";
+    }))
     ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isFreeBSD) [
       # This patch is concerning.
       # https://github.com/nodejs/node/issues/54576
@@ -60,7 +48,11 @@ buildNodejs {
       ./bin-sh-node-run-v22.patch
       ./use-nix-codesign.patch
 
-      ./fix-temporal-integration-with-shared-icu.patch
+      # TODO: remove once support for libuv 1.53+ has landed upstream
+      ./fix-libuv-1.53-support.patch
+
+      # TODO: remove once https://github.com/nodejs/node/pull/66735 in included in a release
+      ./gtest-integration-fix.patch
     ]
     ++ gypPatches;
 }

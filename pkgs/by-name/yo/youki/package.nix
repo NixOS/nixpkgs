@@ -7,19 +7,19 @@
   getconf,
   dbus,
   libseccomp,
-  systemd,
+  systemdLibs,
   stdenv,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "youki";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
-    owner = "containers";
+    owner = "youki-dev";
     repo = "youki";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-O5tk/W2Bybq+6aY7FX/AcJtBKWEYI2Ywk7vYLqvuFos=";
+    hash = "sha256-EiBQDMiqqDrJ+FpMbdNZW1DtKxTpVMSfibQlHXs+iLM=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     dbus
     libseccomp
-    systemd
+    systemdLibs
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "youki"
   ];
 
-  cargoHash = "sha256-QOugjSoJVqeiRfpzyuD6nFsBUdlfJLvbXavXFyiHWSo=";
+  cargoHash = "sha256-v4yyEhJ5Gm0Z9Zs8CQiU+EKgRujeCqKfxt2C4OPdF5M=";
 
   meta = {
     description = "Container runtime written in Rust";

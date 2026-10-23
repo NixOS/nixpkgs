@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gitfetch";
-  version = "1.3.3";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Matars";
     repo = "gitfetch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dVJdc0iqcl/+s3v+ui6XtKRlOuYoFVYWlG0GtTZLr5o=";
+    hash = "sha256-WiMLpdj9p4fGxdMUlsNnGv0METgrCtpaCvTVm2474oE=";
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -27,11 +27,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        gh
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    "${lib.makeBinPath [
+      gh
+    ]}"
   ];
 
   passthru.updateScript = nix-update-script { };
@@ -39,6 +40,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Neofetch-style CLI tool for git provider statistics";
     homepage = "https://github.com/Matars/gitfetch";
+    changelog = "https://github.com/Matars/gitfetch/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "gitfetch";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.all;

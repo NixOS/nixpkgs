@@ -37,6 +37,8 @@ in
           {
             nixpkgs.pkgs = customPkgs;
             system.extraDependencies = [ pkgs.hello ];
+
+            nix.enable = false; # disabled by default on the test's host. See all-tests.nix / tag(no-nix-by-default)
           };
       };
     };

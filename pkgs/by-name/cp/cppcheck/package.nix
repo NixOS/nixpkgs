@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cppcheck";
-  version = "2.21.1";
+  version = "2.22.0";
 
   outputs = [
     "out"
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "cppcheck-opensource";
     repo = "cppcheck";
     tag = finalAttrs.version;
-    hash = "sha256-kpolGzSk+1lY8EXFciAimhUlv7we3bMbu2/Y0DlO4YU=";
+    hash = "sha256-HbrNBDxo3/b4h6BeBD9gohI4PB4xeosy9Y0Y3uB4J2g=";
   };
 
   nativeBuildInputs = [

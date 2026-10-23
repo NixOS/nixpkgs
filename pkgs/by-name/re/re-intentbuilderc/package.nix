@@ -20,8 +20,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     mainProgram = "intentbuilderc";
     description = "Open reimplementation of Apple's intentbuilderc";
-    homepage = "https://codeberg.com/viraptor/re-intentbuilderc";
-    license = with lib.licenses; [ mit ];
+    homepage = "https://codeberg.org/viraptor/re-intentbuilderc";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ viraptor ];
     platforms = lib.platforms.unix;
   };

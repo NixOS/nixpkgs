@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "interval-tree";
-  version = "3.1.1";
+  version = "3.1.4";
 
   src = fetchFromGitHub {
     owner = "5cript";
     repo = "interval-tree";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bSZ56EzzNy6gHgs8OptT/iBlf56RJz+09BE4WGGJpog=";
+    hash = "sha256-IOIp60mu1QXoizhFHsLIqTDBphPy0MwzqhkyWhxpz5g=";
   };
 
   # interval-tree is a header only library

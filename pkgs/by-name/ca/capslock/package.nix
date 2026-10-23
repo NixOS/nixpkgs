@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "capslock";
-  version = "0.3.2";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "capslock";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-IqPzXs8d22tVwYot98i48MLDXZERk0nt1Wh8CnCDeKQ=";
+    hash = "sha256-wkM7FTDO0PtMcijGF2umDF1nO2Clgo9hSaE+e2q7PDw=";
   };
 
-  vendorHash = "sha256-k4YQaoLIw1jFl4PJUm0b16ORw/OyhmA/5uKfP0S12GU=";
+  vendorHash = "sha256-cGQ8C8Fudto/IwYIZVcIUoVtN58M+RpD0K2Bd4cshZc=";
 
   subPackages = [ "cmd/capslock" ];
 
@@ -31,6 +31,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/google/capslock";
     license = lib.licenses.bsd3;
     mainProgram = "capslock";
-    maintainers = with lib.maintainers; [ katexochen ];
+    maintainers = with lib.maintainers; [ sotormd ];
   };
 })

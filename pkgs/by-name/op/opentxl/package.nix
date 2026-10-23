@@ -4,6 +4,7 @@
   makeWrapper,
   opentxl-unwrapped,
   targetPackages,
+  withCompiler ? true,
 }:
 let
   inherit (targetPackages.stdenv.cc) targetPrefix;
@@ -29,19 +30,21 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin
 
     # Wrap compiler
-    makeWrapper ${opentxl-unwrapped}/bin/txlc \
-      $out/bin/${targetPrefix}txlc \
-      --set TXLLIB ${opentxl-unwrapped}/lib \
-      --set BUILD_TXLLIB ${opentxl-unwrapped}/lib \
-      --set TARGET_TXLLIB ${targetOpentxl}/lib \
-      --set CC ${targetPackages.stdenv.cc}/bin/${targetPrefix}cc \
-      --set OS ${opentxl-unwrapped.osOption stdenv.targetPlatform}
-    ${
-      # For convenience, if there is a target prefix, create a symlink named txlc
-      lib.optionalString (targetPrefix != "") ''
-        ln -s $out/bin/${targetPrefix}txlc $out/bin/txlc
-      ''
-    }
+    ${lib.optionalString withCompiler ''
+      makeWrapper ${opentxl-unwrapped}/bin/txlc \
+        $out/bin/${targetPrefix}txlc \
+        --set TXLLIB ${opentxl-unwrapped}/lib \
+        --set BUILD_TXLLIB ${opentxl-unwrapped}/lib \
+        --set TARGET_TXLLIB ${targetOpentxl}/lib \
+        --set CC ${targetPackages.stdenv.cc}/bin/${targetPrefix}cc \
+        --set OS ${opentxl-unwrapped.osOption stdenv.targetPlatform}
+      ${
+        # For convenience, if there is a target prefix, create a symlink named txlc
+        lib.optionalString (targetPrefix != "") ''
+          ln -s $out/bin/${targetPrefix}txlc $out/bin/txlc
+        ''
+      }
+    ''}
 
     # Wrap other scripts
     for name in txl2c txlp; do

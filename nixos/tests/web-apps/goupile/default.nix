@@ -100,7 +100,6 @@ in
     in
     # py
     ''
-      import os
       start_all()
 
       machine.wait_for_unit("goupile.service")
@@ -113,8 +112,7 @@ in
       try:
           machine.succeed("run-goupile-test")
       finally:
-          out_dir = os.environ.get("out", os.getcwd())
-          machine.copy_from_vm("/tmp/videos", out_dir)
+          machine.copy_from_machine("/tmp/videos")
     '';
 
   # Debug interactively with:

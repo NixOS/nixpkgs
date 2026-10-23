@@ -20,6 +20,7 @@
   libGLU,
   curl,
   v4l-utils,
+  testers,
   cudaSupport ? config.cudaSupport,
   cudaPackages ? { },
   enablePython ? false,
@@ -28,17 +29,19 @@
   enableGUI ? false,
 }:
 
-assert cudaSupport -> (cudaPackages ? cudatoolkit && cudaPackages.cudatoolkit != null);
 assert enablePython -> pythonPackages != null;
 assert enableGUI -> enableExamples;
 
 let
-  stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+  effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
 in
 
-stdenv'.mkDerivation rec {
+effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "librealsense";
   version = "2.57.7";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   outputs = [
     "out"
@@ -46,10 +49,10 @@ stdenv'.mkDerivation rec {
   ];
 
   src = fetchFromGitHub {
-    owner = "IntelRealSense";
+    owner = "realsenseai";
     repo = "librealsense";
-    rev = "v${version}";
-    sha256 = "sha256-d/FkvnUa7CqW25ZG8PY9+cd7uRL4zC1Md/JT8B/qAKU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-d/FkvnUa7CqW25ZG8PY9+cd7uRL4zC1Md/JT8B/qAKU=";
   };
 
   buildInputs = [
@@ -57,7 +60,10 @@ stdenv'.mkDerivation rec {
     gcc.cc.lib
     nlohmann_json
   ]
-  ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
+    cudaPackages.cuda_nvcc
+  ]
   ++ lib.optionals enablePython (
     with pythonPackages;
     [
@@ -101,16 +107,17 @@ stdenv'.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DBUILD_EXAMPLES=${lib.boolToString enableExamples}"
-    "-DBUILD_GRAPHICAL_EXAMPLES=${lib.boolToString enableGUI}"
-    "-DBUILD_GLSL_EXTENSIONS=${lib.boolToString enableGUI}"
-    "-DCHECK_FOR_UPDATES=OFF" # activated by BUILD_GRAPHICAL_EXAMPLES, will make it download and compile libcurl
+    (lib.cmakeBool "BUILD_EXAMPLES" enableExamples)
+    (lib.cmakeBool "BUILD_GRAPHICAL_EXAMPLES" enableGUI)
+    (lib.cmakeBool "BUILD_GLSL_EXTENSIONS" enableGUI)
+    # activated by BUILD_GRAPHICAL_EXAMPLES, will make it download and compile libcurl
+    (lib.cmakeBool "CHECK_FOR_UPDATES" false)
   ]
   ++ lib.optionals enablePython [
-    "-DBUILD_PYTHON_BINDINGS:bool=true"
-    "-DXXNIX_PYTHON_SITEPACKAGES=${placeholder "out"}/${pythonPackages.python.sitePackages}"
+    (lib.cmakeBool "BUILD_PYTHON_BINDINGS" true)
+    (lib.cmakeFeature "XXNIX_PYTHON_SITEPACKAGES" "${placeholder "out"}/${pythonPackages.python.sitePackages}")
   ]
-  ++ lib.optional cudaSupport "-DBUILD_WITH_CUDA:bool=true";
+  ++ lib.optionals cudaSupport [ (lib.cmakeBool "BUILD_WITH_CUDA" true) ];
 
   # ensure python package contains its __init__.py. for some reason the install
   # script does not do this, and it's questionable if intel knows it should be
@@ -182,15 +189,25 @@ stdenv'.mkDerivation rec {
     cp ../wrappers/python/pyrealsense2/__init__.py $out/${pythonPackages.python.sitePackages}/pyrealsense2
   '';
 
+  passthru.tests = {
+    pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
+    cmake-config = testers.hasCmakeConfigModules {
+      moduleNames = [ "realsense2" ];
+      package = finalAttrs.finalPackage;
+    };
+  };
+
   meta = {
     description = "Cross-platform library for Intel® RealSense™ depth cameras (D400 series and the SR300)";
-    homepage = "https://github.com/IntelRealSense/librealsense";
+    homepage = "https://github.com/realsenseai/librealsense";
+    changelog = "https://github.com/realsenseai/librealsense/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       brian-dawn
       pbsds
     ];
+    pkgConfigModules = [ "realsense2" ];
     platforms = lib.platforms.unix;
     mainProgram = if enableGUI then "realsense-viewer" else "rs-enumerate-devices";
   };
-}
+})

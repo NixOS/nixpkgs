@@ -1,21 +1,36 @@
 {
+  lib,
   rustPlatform,
   fetchFromGitHub,
-  lib,
+  pkg-config,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "viceroy";
-  version = "0.19.0";
+  version = "0.21.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "fastly";
     repo = "viceroy";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-LBjsA6theYcK29vB7v2WsGFSenH2wsyCNiJMdCUxo7c=";
+    hash = "sha256-vwoJ7PixrO68vUSo+u10wFdeD0TU2cISNWcNJ4qLTB8=";
   };
 
-  cargoHash = "sha256-gDozV3CSqzMiha1gITxntBf+YiZzveIKJcTFxNdqSfw=";
+  cargoHash = "sha256-dkoKFEeM6DI6Iaypgexa18YjoLySnIX1YfUItySx1Q0=";
+
+  postPatch = ''
+    substituteInPlace src/lib.rs \
+      --replace-fail '#![cfg_attr(not(debug_assertions), deny(warnings))]' ""
+  '';
+
+  env.ZSTD_SYS_USE_PKG_CONFIG = true;
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ zstd ];
 
   cargoTestFlags = [
     "--package"
@@ -29,6 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       ereslibre
+      stepbrobd
     ];
     platforms = lib.platforms.unix;
   };

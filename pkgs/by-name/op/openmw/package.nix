@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitLab,
   fetchpatch,
+  nix-update-script,
 
   SDL2,
   boost,
@@ -11,7 +12,7 @@
   collada-dom,
   ffmpeg,
   libxt,
-  lua,
+  lua5_2_compat,
   luajit,
   lz4,
   mygui,
@@ -26,6 +27,7 @@
   GLPreference ? "GLVND",
 }:
 let
+  lua = lua5_2_compat;
   inherit (stdenv.hostPlatform) isDarwin isLinux isAarch64;
   isAarch64Linux = isLinux && isAarch64;
 in
@@ -35,7 +37,7 @@ assert lib.assertOneOf "GLPreference" GLPreference [
 ];
 stdenv.mkDerivation (finalAttrs: {
   pname = "openmw";
-  version = "0.50.0";
+  version = "0.51.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -82,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "OpenMW";
     repo = "openmw";
     tag = "openmw-${finalAttrs.version}";
-    hash = "sha256-mPwNyKKqPSZJtcIyx3IhLe3iHOpx6p4+l1wJZqyDMqg=";
+    hash = "sha256-D+2nEQRkAjmDvRoas9bYPmdygQYT3MAv46n73OonE0o=";
   };
 
   postPatch = ''
@@ -132,6 +134,15 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "OPENMW_USE_SYSTEM_RECASTNAVIGATION" true)
     (lib.cmakeBool "OPENMW_OSX_DEPLOYMENT" isDarwin)
   ];
+
+  env.LANG = "C.UTF-8";
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "openmw-(.*)"
+    ];
+  };
 
   meta = {
     description = "Unofficial open source engine reimplementation of the game Morrowind";

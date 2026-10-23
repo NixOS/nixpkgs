@@ -7,6 +7,7 @@
   expat,
   flex,
   libevent,
+  bashNonInteractive,
   libsodium,
   protobufc,
   hiredis,
@@ -28,9 +29,11 @@
   # For the daemon use-case, that needs to notify systemd, use `unbound-with-systemd`.
   #
   withSystemd ? false,
-  systemd ? null,
+  systemdLibs ? null,
   # optionally support DNS-over-HTTPS as a server
   withDoH ? false,
+  # optionally support DNS-over-QUIC as a server
+  withDoQ ? false,
   withECS ? false,
   withDNSCrypt ? false,
   withDNSTAP ? false,
@@ -38,7 +41,7 @@
   withRedis ? false,
   # Avoid .lib depending on lib.getLib openssl
   # The build gets a little hacky, so in some cases we disable this approach.
-  withSlimLib ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl && !withDNSTAP,
+  withSlimLib ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl && !withDNSTAP && !withDoQ,
   # enable support for python plugins in unbound: note this is distinct from pyunbound
   # see https://unbound.docs.nlnetlabs.nl/en/latest/developer/python-modules.html
   withPythonModule ? false,
@@ -47,6 +50,7 @@
   withLto ? !stdenv.hostPlatform.isStatic && !stdenv.hostPlatform.isMinGW,
   withMakeWrapper ? !stdenv.hostPlatform.isMinGW,
   libnghttp2,
+  ngtcp2,
 
   # for passthru.updateScript
   nix-update-script,
@@ -55,15 +59,18 @@
   versionCheckHook,
 }:
 
+assert lib.assertMsg (
+  !withDoQ || lib.versionAtLeast openssl.version "3.5.0"
+) "unbound: withDoQ requires OpenSSL with QUIC support (OpenSSL >= 3.5)";
 stdenv.mkDerivation (finalAttrs: {
   pname = "unbound";
-  version = "1.25.1";
+  version = "1.26.1";
 
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = "unbound";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-1PXnxCPxoB5IrVBQIsrxiWAq+IoH7Ma9T1TTJsoTJc4=";
+    hash = "sha256-gf4vASdB6XzSGhJ2GKbUhgs0wpR32Du2ARx4bBQ+vJA=";
   };
 
   outputs = [
@@ -80,17 +87,25 @@ stdenv.mkDerivation (finalAttrs: {
       flex
       bison
     ]
-    ++ lib.optionals withPythonModule [ swig ];
+    ++ lib.optionals withPythonModule [
+      python
+      swig
+    ];
 
   buildInputs = [
     openssl
     nettle
     expat
     libevent
+    bashNonInteractive
   ]
-  ++ lib.optionals withSystemd [ systemd ]
+  ++ lib.optionals withSystemd [ systemdLibs ]
+  ++ lib.optionals withDNSTAP [ protobufc ]
   ++ lib.optionals withDoH [ libnghttp2 ]
+  ++ lib.optionals withDoQ [ ngtcp2 ]
   ++ lib.optionals withPythonModule [ python ];
+
+  strictDeps = true;
 
   enableParallelBuilding = true;
 
@@ -119,6 +134,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals withDoH [
     "--with-libnghttp2=${libnghttp2.dev}"
+  ]
+  ++ lib.optionals withDoQ [
+    "--with-libngtcp2=${ngtcp2.dev}"
   ]
   ++ lib.optionals withECS [
     "--enable-subnet"
@@ -222,6 +240,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Validating, recursive, and caching DNS resolver";
     license = lib.licenses.bsd3;
@@ -230,5 +250,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ Scrumplex ];
     mainProgram = "unbound";
     platforms = with lib.platforms; unix ++ windows;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "nlnetlabs" finalAttrs.version;
   };
 })

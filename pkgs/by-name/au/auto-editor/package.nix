@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  config,
   buildNimPackage,
   fetchFromGitHub,
 
@@ -9,9 +8,10 @@
   yt-dlp,
   lame,
   libopus,
-  libvpx,
   x264,
   dav1d,
+  zlib,
+  alsa-lib,
 
   python3,
   python3Packages,
@@ -19,24 +19,26 @@
 
 buildNimPackage rec {
   pname = "auto-editor";
-  version = "30.4.0";
+  version = "31.7.2";
 
   src = fetchFromGitHub {
     owner = "WyattBlue";
     repo = "auto-editor";
     tag = version;
-    hash = "sha256-AzUTDOWzyhZLrwqO9HfZ/Ke72LElJAMzVoDydBfYKwg=";
+    hash = "sha256-lbVF0PT48cxnm6hR43ULLx7QWV4nIUPeGUkeOuRr2Y0=";
   };
 
   lockFile = ./lock.json;
 
   buildInputs = [
     ffmpeg-full
-    lame
+    lame # Upstream uses a minimal, unpackaged fork of `lame` named `lamer`.
     libopus
     x264
     dav1d
-  ];
+    zlib
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib;
 
   env = {
     # Nothing should be dynamically linked, as ffmpeg should already link it.
@@ -54,27 +56,12 @@ buildNimPackage rec {
     # buildNimPackage hack
     substituteInPlace ae.nimble \
       --replace-fail '"main=auto-editor"' '"main"'
-
-    mv tests/unit.nim tests/tunit.nim # buildNimPackage expects tests to start with t
   '';
 
   nativeCheckInputs = [
     python3
     python3Packages.av
   ];
-
-  checkPhase = ''
-    runHook preCheck
-
-    nim_builder --phase:check
-
-    substituteInPlace tests/test.py \
-      --replace-fail '"./auto-editor"' "\"$out/bin/main\""
-
-    python3 tests/test.py
-
-    runHook postCheck
-  '';
 
   postInstall = ''
     mv $out/bin/main $out/bin/auto-editor

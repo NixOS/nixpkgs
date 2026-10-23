@@ -6,7 +6,7 @@
   cmake,
   flex,
   bison,
-  systemd,
+  systemdLibs,
   boost,
   libedit,
   openssl,
@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     libedit
     openssl
-    systemd
+    systemdLibs
   ]
   ++ lib.optional withOtel protobuf
   ++ lib.optional withPostgresql libpq;
@@ -143,9 +143,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.icinga.com";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
-      das_j
-      helsinki-Jo
-    ];
+    maintainers = with lib.maintainers; [ helsinki-Jo ];
   };
 })

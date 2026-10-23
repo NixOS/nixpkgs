@@ -30,7 +30,6 @@ buildPythonPackage rec {
     badPlatforms = [
       # Unsupported and crashing on import in dlsym with symbol not found
       "aarch64-darwin"
-      "x86_64-darwin"
     ];
     description = "Module for inotify";
     homepage = "https://github.com/absperf/asyncinotify/";

@@ -132,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
       Taler includes code examples to help Merchants integrate Taler as a
       payment system.
     '';
-    homepage = "https://taler.net/";
+    homepage = "https://www.taler.net/en/";
     changelog = "https://git-www.taler.net/exchange.git/tree/ChangeLog?h=v${finalAttrs.version}";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ astro ];

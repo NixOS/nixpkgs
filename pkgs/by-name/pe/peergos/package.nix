@@ -41,13 +41,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "peergos";
-  version = "1.29.0";
+  version = "1.38.0";
 
   src = fetchFromGitHub {
     owner = "Peergos";
     repo = "web-ui";
     rev = "v${version}";
-    hash = "sha256-WaTWz55pEfE/ncJnyc8FjkxJhsBYBXt7cFjBz8v0hw8=";
+    hash = "sha256-F/Wqkna6T/L6PMwYlfGEovWUC35CyGAYK/NgG+8aNdw=";
     fetchSubmodules = true;
   };
 

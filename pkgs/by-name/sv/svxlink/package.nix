@@ -11,7 +11,7 @@
   gsm,
   libgcrypt,
   libgpiod_1,
-  libsigcxx,
+  libsigcxx_2_0,
   popt,
   qt5,
   rtl-sdr,
@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "svxlink";
-  version = "25.05.1";
+  version = "26.05.2";
 
   src = fetchFromGitHub {
     owner = "sm0svx";
     repo = "svxlink";
     tag = finalAttrs.version;
-    hash = "sha256-OyAR/6heGX6J53p6x+ZPXY6nzSv22umMTg0ISlWcjp8=";
+    hash = "sha256-I0mTCoXDcOUL6+dgqyHIXs2WlGkZp+JV8IytL+e1Ocg=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     libgcrypt
     libgpiod_1
     libopus
-    libsigcxx
+    libsigcxx_2_0
     popt
     qt5.qtbase
     rtl-sdr
@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
       GUI, Qtel - The Qt EchoLink client
     '';
     homepage = "https://www.svxlink.org/";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ zaninime ];
     platforms = lib.platforms.linux;
   };

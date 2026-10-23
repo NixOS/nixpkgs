@@ -3,26 +3,25 @@
   bcrypt,
   buildPythonPackage,
   cryptography,
-  fetchPypi,
-  gssapi,
+  fetchFromGitHub,
   icecream,
   invoke,
-  mock,
-  pyasn1,
   pynacl,
   pytest-relaxed,
   pytestCheckHook,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "paramiko";
-  version = "4.0.0";
+  version = "5.0.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-aiXwezgMycmojSuSCtNxZ6xGZ/jZiGzOvY+Q9lS11p8=";
+  src = fetchFromGitHub {
+    owner = "paramiko";
+    repo = "paramiko";
+    tag = finalAttrs.version;
+    hash = "sha256-zzbM2oGaZ5jkIN7LyDGuMAKSpSmUwpBbup6MBVdTaXA=";
   };
 
   build-system = [ setuptools ];
@@ -34,21 +33,11 @@ buildPythonPackage rec {
     pynacl
   ];
 
-  optional-dependencies = {
-    gssapi = [
-      pyasn1
-      gssapi
-    ];
-    ed25519 = [ ];
-  };
-
   nativeCheckInputs = [
     icecream
-    mock
     pytestCheckHook
     pytest-relaxed
-  ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ];
 
   pythonImportsCheck = [ "paramiko" ];
 
@@ -56,7 +45,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/paramiko/paramiko/";
-    changelog = "https://github.com/paramiko/paramiko/blob/${version}/sites/www/changelog.rst";
+    changelog = "https://github.com/paramiko/paramiko/blob/${finalAttrs.src.tag}/sites/www/changelog.rst";
     description = "Native Python SSHv2 protocol library";
     license = lib.licenses.lgpl21Plus;
     longDescription = ''
@@ -66,4 +55,4 @@ buildPythonPackage rec {
       supported. SFTP client and server mode are both supported too.
     '';
   };
-}
+})

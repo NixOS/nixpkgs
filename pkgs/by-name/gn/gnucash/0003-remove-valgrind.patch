@@ -27,8 +27,9 @@ index 95ff42cd8f..1c1944a811 100644
  
  set_local_dist(gnucash_DIST_local CMakeLists.txt environment.in generate-gnc-script
      gnucash.cpp gnucash-commands.cpp gnucash-cli.cpp gnucash-core-app.cpp
--    gnucash-locale-macos.mm gnucash-locale-windows.c gnucash.rc.in gnucash-valgrind.in
-+    gnucash-locale-macos.mm gnucash-locale-windows.c gnucash.rc.in
+     gnucash-locale-macos.mm gnucash-locale-windows.c gnucash.rc.in
+-    gnucash-valgrind.in gnucash-manifest.rc gnucash-utf8.manifest
++    gnucash-manifest.rc gnucash-utf8.manifest
      ${gnucash_GRESOURCES}
      ${gnucash_noinst_HEADERS} ${gnucash_EXTRA_DIST})
  

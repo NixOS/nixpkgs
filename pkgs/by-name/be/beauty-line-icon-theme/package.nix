@@ -3,7 +3,6 @@
   stdenvNoCC,
   fetchFromGitLab,
   gtk3,
-  gnome-icon-theme,
   hicolor-icon-theme,
   mint-x-icons,
   pantheon,
@@ -30,7 +29,6 @@ stdenvNoCC.mkDerivation {
   # ubuntu-mono is also required but missing in ubuntu-themes (please add it if it is packaged at some point)
   propagatedBuildInputs = [
     kdePackages.breeze-icons
-    gnome-icon-theme
     hicolor-icon-theme
     mint-x-icons
     pantheon.elementary-icon-theme

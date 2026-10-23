@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "1.2.0-23522718";
+  version = "1.3.3-24926468";
   urlVersion = lib.replaceStrings [ "." ] [ "-" ] version;
 
 in
@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation {
 
   src = fetchzip {
     url = "https://necesse.pwn.sh/server/necesse-server-linux64-${urlVersion}.zip";
-    hash = "sha256-PIguTYULddLKj6PpoSvX3gNSvqrS7oRTOPuwoA0/XOc=";
+    hash = "sha256-aql6KgkuA8lwCkt4DOgekvNyBMtP885SnOH8VK979vc=";
   };
 
   # removing packaged jre since we use our own

@@ -1,102 +1,105 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
-  runCommand,
   buildNpmPackage,
-  nodejs_22,
-  ffmpeg-full,
+  callPackage,
+  nodejs_24,
+  ffmpeg_8-full,
   nunicode,
-  util-linux,
-  python3,
-  getopt,
+  typescript_5,
+  jq,
   nixosTests,
+  nix-update-script,
+  routerBasePath ? "/audiobookshelf",
 }:
 
-let
-  source = {
-    version = "2.35.1";
-    hash = "sha256-31cKSjSTJyUetjCSOCDY2wnTFV+Z52LcvGrh7Emc0cM=";
-    npmDepsHash = "sha256-wmbzbMQHrbHcL9JSpPXpc+vjjj5LTNN8e6Ug3ZRQ7mo=";
-    clientNpmDepsHash = "sha256-wJdCvUVLZzCY3iW/Q7QVuRu96s49TehnuQNqbImbe0g=";
-  };
+buildNpmPackage (finalAttrs: {
+  pname = "audiobookshelf";
+  version = "2.37.1";
 
   src = fetchFromGitHub {
     owner = "advplyr";
     repo = "audiobookshelf";
-    tag = "v${source.version}";
-    inherit (source) hash;
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rTn64PrGPSKwDbsQmzvdSRa7UQEV1f2xXaYGtcVfrpk=";
   };
 
-  client = buildNpmPackage {
-    pname = "audiobookshelf-client";
-    inherit (source) version;
+  npmDepsHash = "sha256-xHjZ3E1DGeb5NueP67hEX3vHH0Qlk4LTeZkMEFBhGyE=";
 
-    nodejs = nodejs_22;
+  nodejs = nodejs_24;
 
-    src = runCommand "cp-source" { } ''
-      cp -r ${src}/client $out
-    '';
+  nativeBuildInputs = [
+    typescript_5
+    jq
+  ];
 
-    # don't download the Cypress binary
-    CYPRESS_INSTALL_BINARY = 0;
-    NODE_OPTIONS = "--openssl-legacy-provider";
+  npmBuildScript = "build:server";
+  npmInstallFlags = [ "--omit=dev" ];
 
-    npmBuildScript = "generate";
-    npmDepsHash = source.clientNpmDepsHash;
-  };
-
-  wrapper = import ./wrapper.nix {
-    inherit
-      stdenv
-      ffmpeg-full
-      nunicode
-      getopt
-      ;
-  };
-
-in
-buildNpmPackage {
-  pname = "audiobookshelf";
-
-  inherit src;
-  inherit (source) npmDepsHash version;
-  nodejs = nodejs_22;
-
-  buildInputs = [ util-linux ];
-  nativeBuildInputs = [ python3 ];
-
-  dontNpmBuild = true;
-  npmInstallFlags = [ "--only-production" ];
+  makeWrapperArgs = [
+    "--set"
+    "FFMPEG_PATH"
+    (lib.getExe ffmpeg_8-full)
+    "--set"
+    "FFPROBE_PATH"
+    (lib.getExe' ffmpeg_8-full "ffprobe")
+    "--set"
+    "NODE_ENV"
+    "production"
+    "--set"
+    "NUSQLITE3_PATH"
+    "${nunicode.sqlite}/lib/libnusqlite3"
+    "--set"
+    "ROUTER_BASE_PATH"
+    (lib.escapeShellArg routerBasePath)
+    "--set"
+    "SKIP_BINARIES_CHECK"
+    "1"
+    "--set"
+    "SOURCE"
+    "nixpkgs"
+  ];
 
   installPhase = ''
-    mkdir -p $out/opt/client
-    cp -r index.js server package* node_modules $out/opt/
-    cp -r ${client}/lib/node_modules/audiobookshelf-client/dist $out/opt/client/dist
-    mkdir $out/bin
+    runHook preInstall
 
-    echo '${wrapper}' > $out/bin/audiobookshelf
-    echo "  exec ${nodejs_22}/bin/node $out/opt/index.js" >> $out/bin/audiobookshelf
+    packageOut="$out/lib/node_modules/$(jq --raw-output '.name' package.json)"
 
-    chmod +x $out/bin/audiobookshelf
+    mkdir -p "$packageOut"/{client,dist-server}
+    cp -r dist-server/{index.js,package.json,server} "$packageOut"/dist-server/
+    cp -r node_modules package.json "$packageOut"/
+    cp -r ${finalAttrs.passthru.client} "$packageOut"/client/dist
+
+    nodejsInstallExecutables
+
+    runHook postInstall
   '';
 
   passthru = {
+    client = callPackage ./client.nix {
+      inherit (finalAttrs) src version nodejs;
+      inherit routerBasePath;
+    };
     tests.basic = nixosTests.audiobookshelf;
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { extraArgs = [ "--subpackage=client" ]; };
   };
 
   meta = {
     homepage = "https://www.audiobookshelf.org/";
     description = "Self-hosted audiobook and podcast server";
-    changelog = "https://github.com/advplyr/audiobookshelf/releases/tag/v${source.version}";
-    license = lib.licenses.gpl3;
+    changelog = "https://github.com/advplyr/audiobookshelf/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       jvanbruegge
       adamcstephens
       tebriel
+      connor-grady
     ];
     platforms = lib.platforms.linux;
     mainProgram = "audiobookshelf";
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryBytecode
+    ];
   };
-}
+})

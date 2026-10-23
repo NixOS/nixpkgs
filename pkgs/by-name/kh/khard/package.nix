@@ -3,28 +3,20 @@
   stdenv,
   python3,
   fetchFromGitHub,
-  fetchpatch,
   versionCheckHook,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "khard";
-  version = "0.20.1";
+  version = "0.22.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lucc";
     repo = "khard";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5ZKLOwoAzY36htMzMLpdwn1Xo34rGe56+TFuHRfFB9Q=";
+    hash = "sha256-fBfnKxluEYzlqwoXZ+hClLtayfjTzATkqc/1JN7nwIo=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/lucc/khard/commit/4e07412b8870f210409077a925d74ae47152a80c.patch";
-      hash = "sha256-tApB1xYLBHV/XQ73ITJjKxCjOz6DNPDsKXn8f7KQZRc=";
-    })
-  ];
 
   build-system = with python3.pkgs; [
     setuptools

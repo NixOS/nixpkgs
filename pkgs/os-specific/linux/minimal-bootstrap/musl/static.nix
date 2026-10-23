@@ -13,6 +13,7 @@
   gnutar,
   gzip,
   linux-headers,
+  libgcc,
 }:
 let
   inherit (import ./common.nix { inherit lib; }) pname meta;
@@ -22,6 +23,10 @@ let
     url = "https://musl.libc.org/releases/musl-${version}.tar.gz";
     hash = "sha256-1YX9O2E8ZhUfwySejtRPdwIMtebB5jWmFtP5+CRgUSo=";
   };
+
+  binutilsTargetPrefix = lib.optionalString (
+    hostPlatform.config != buildPlatform.config
+  ) "${hostPlatform.config}-";
 in
 bash.runCommand "${pname}-${version}"
   {
@@ -77,23 +82,23 @@ bash.runCommand "${pname}-${version}"
       src/misc/wordexp.c
 
     # Configure
+    export CC="${binutilsTargetPrefix}gcc -B${libgcc}/lib/gcc/${hostPlatform.config}/${libgcc.version} -Wl,-rpath,${libgcc}/lib/gcc/${hostPlatform.config}/${libgcc.version}"
     bash ./configure \
       --prefix=$out \
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
-      --syslibdir=$out/lib \
-      --enable-wrapper
+      --syslibdir=$out/lib
 
     # Build
     make -j $NIX_BUILD_CORES
 
     # Install
     make -j $NIX_BUILD_CORES install
-    sed -i 's|/bin/sh|${lib.getExe bash}|' $out/bin/*
+    mkdir -p $out/bin
     ln -s ../lib/libc.so $out/bin/ldd
     ln -s $(ls -d ${linux-headers}/include/* | grep -v scsi\$) $out/include/
 
     # Strip
     # Ignore failures, because strip may fail on non-elf files.
-    find $out/{bin,lib} -type f -exec strip --strip-debug {} + || true
+    find $out/{bin,lib} -type f -exec ${binutilsTargetPrefix}strip --strip-debug {} + || true
   ''

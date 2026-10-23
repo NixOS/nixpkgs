@@ -13,7 +13,6 @@ let
     {
       "x86_64-linux" = "linux-x86-64";
       "aarch64-linux" = "linux-aarch64";
-      "x86_64-darwin" = "darwin-x86-64";
       "aarch64-darwin" = "darwin-aarch64";
     }
     .${stdenv.system} or null;
@@ -41,7 +40,7 @@ maven.buildMavenPackage rec {
       --replace-fail "/opt/juggling-lab/lib/Juggling_Lab.png" "jugglinglab"
   '';
 
-  mvnHash = "sha256-1Uzo9nRw+YR/sd7CC9MTPe/lttkRX6BtmcsHaagP1Do=";
+  mvnHash = "sha256-2F9FMCLHhBOvF4V3EYk0F1eFEPFgtQ/tgViqJ54DRgI=";
 
   # fix jar timestamps for reproducibility
   mvnParameters = "-Dproject.build.outputTimestamp=1980-01-01T00:00:02Z";

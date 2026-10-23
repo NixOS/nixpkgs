@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "prst";
-  version = "13.3";
+  version = "14.0";
 
   src = fetchFromGitHub {
     owner = "patnashev";
     repo = "prst";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-J+45JwkA/z3HmzO9J6RVVXutUAVSzOXDMkyUR3zSh9E=";
+    hash = "sha256-41yUbSpUwV2jh8jSZjGb8X9YNc+UaS3jRaKtbaEVamA=";
     fetchSubmodules = true;
   };
 
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
       This utility is best used for systematic searches of large prime numbers, either by public distributed projects or by private individuals.
       It can handle numbers of many popular forms like Proth numbers, Thabit numbers, generalized Fermat numbers, factorials, primorials and arbitrary numbers.
       Mersenne numbers are better handled by GIMPS.
-      It is assumed that input candiates are previously sieved by a sieving utility best suited for the specific form of numbers.
+      It is assumed that input candidates are previously sieved by a sieving utility best suited for the specific form of numbers.
     '';
     homepage = "https://github.com/patnashev/prst";
     maintainers = with lib.maintainers; [ dstremur ];

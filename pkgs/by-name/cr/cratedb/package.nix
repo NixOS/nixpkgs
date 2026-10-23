@@ -33,7 +33,7 @@ maven.buildMavenPackage {
     (replaceVars ./fix-poms.patch { inherit jdk; })
   ];
 
-  mvnHash = "sha256-p0LSR6I876/JNfrLp19PnLAx00gL4E2mZK+CO8X2IzU=";
+  mvnHash = "sha256-HK0eYYbdaM3ur/oFSaBO9B7+pgcINdkXANwb018gg5M=";
   mvnJdk = jdk;
   mvnParameters = "-DskipTests";
 
@@ -72,7 +72,7 @@ maven.buildMavenPackage {
     '';
     homepage = "https://cratedb.com/database";
     changelog = "https://cratedb.com/docs/crate/reference/en/latest/appendices/release-notes/${version}.html";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     platforms = with lib.platforms; unix ++ windows;
     # FIXME: Somehow dependencies are platform-dependent. Somehow.
     broken = stdenvNoCC.hostPlatform.system != "x86_64-linux";

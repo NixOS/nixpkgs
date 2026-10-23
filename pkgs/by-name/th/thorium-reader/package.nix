@@ -14,17 +14,34 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "thorium-reader";
-  version = "3.3.0";
+  version = "3.4.0";
   nodejs = nodejs_24;
-  npmDepsHash = "sha256-UR2MSqmdJ79Fz7qjQRkCAwx2jdMn8KLWPzNSnnsb5Ak=";
+  npmDepsHash = "sha256-IwdU77fRJJ7Ch5rWop3lFpf14XHklFDa8w6YJCFtJRU=";
   makeCacheWritable = true;
 
   src = fetchFromGitHub {
     owner = "edrlab";
     repo = "thorium-reader";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2d5M9C/cLK2A8O3Ls0xEkT6H8tucVR7eivPi+82V7Zg=";
+    hash = "sha256-h285GM7DKKD34Wjw6E+zSSIGkUH/UOesLrYD2EdQ7+U=";
   };
+
+  # The upstream `build` script re-runs `npm i` inside `dist/` to populate
+  # `dist/node_modules` with the runtime subset declared in `src/package.json`.
+  # This is bad (not reproducible), so we strip that segment from the `build`
+  # script. This ends up not being an issue, since our build/install process
+  # copies relevant dependencies anyways.
+  patches = [ ./remove-dist-npm-install.patch ];
+
+  postBuild = ''
+    # copy node modules manually
+    cp -r node_modules dist/node_modules
+
+    # remove unnecessary npm deps
+    pushd dist
+    npm prune --production --ignore-scripts --offline --no-audit --no-fund
+    popd
+  '';
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
   # makeBinaryWrapper is required on Darwin since MacOS is confuses itself

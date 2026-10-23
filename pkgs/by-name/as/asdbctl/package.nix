@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
 
   meta = {
-    description = "Apple Studio Display brightness controll";
+    description = "Apple Studio Display brightness control";
     mainProgram = "asdbctl";
     homepage = "https://github.com/juliuszint/asdbctl";
     changelog = "https://github.com/juliuszint/asdbctl/releases/tag/${finalAttrs.version}";

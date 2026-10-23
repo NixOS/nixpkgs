@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-randomly";
-  version = "4.0.1";
+  version = "4.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "pytest-randomly";
     owner = "pytest-dev";
     tag = version;
-    hash = "sha256-UQ1G9o4dsVEEo4y2u1TYYurJPfih7QlbilkwPqi39H0=";
+    hash = "sha256-+T0iWmfC3+8k6bWme3SQtqaWM+++sFeSotJ+3vyevvI=";
   };
 
   build-system = [ setuptools ];

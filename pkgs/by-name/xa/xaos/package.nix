@@ -11,7 +11,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "xaos";
-  version = "4.3.5";
+  version = "4.3.8";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -20,13 +20,15 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "xaos-project";
     repo = "XaoS";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-dGfmX55bm2BCFl7mRit88ULAcJ0VP15yVGI7nhRH0Ig=";
+    hash = "sha256-FNeeU1ffNYBwUxtAmvtJWZwXK6mMGFz/Dq2+JdrVHTI=";
   };
 
   nativeBuildInputs = [
     qt6.qmake
     qt6.qttools
     qt6.wrapQtAppsHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     copyDesktopItems
   ];
 
@@ -52,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
         "QMAKE_APPLE_DEVICE_ARCHS = ${if stdenv.hostPlatform.isAarch64 then "arm64" else "x86_64"}"
   '';
 
-  desktopItems = [ "xdg/xaos.desktop" ];
+  desktopItems = [ "xdg/io.github.xaos_project.XaoS.desktop" ];
 
   postInstall = ''
     mkdir -p "${datapath}"

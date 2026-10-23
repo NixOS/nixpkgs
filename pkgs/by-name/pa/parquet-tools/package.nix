@@ -5,7 +5,7 @@
   addBinToPathHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "parquet-tools";
   version = "0.2.16";
 
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ktrueda";
     repo = "parquet-tools";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-mV66R5ejfzH1IasmoyAWAH5vzrnLVVhOqKBMfWKIVY0=";
   };
 
@@ -24,24 +24,17 @@ python3Packages.buildPythonApplication rec {
     ./moto5.patch
   ];
 
-  postPatch = ''
-    substituteInPlace tests/test_inspect.py \
-      --replace "parquet-cpp-arrow version 5.0.0" "parquet-cpp-arrow version ${python3Packages.pyarrow.version}" \
-      --replace "serialized_size: 2222" "serialized_size: 2221" \
-      --replace "format_version: 1.0" "format_version: 2.6"
-  '';
-
   pythonRelaxDeps = [
-    "halo"
+    "pandas"
     "tabulate"
     "thrift"
   ];
 
-  nativeBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
     poetry-core
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     boto3
     colorama
     halo
@@ -74,9 +67,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "CLI tool for parquet files";
     homepage = "https://github.com/ktrueda/parquet-tools";
-    changelog = "https://github.com/ktrueda/parquet-tools/releases/tag/${version}";
+    changelog = "https://github.com/ktrueda/parquet-tools/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cpcloud ];
     mainProgram = "parquet-tools";
   };
-}
+})

@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -25,15 +26,15 @@
   pytest-benchmark,
   pytest-mock,
   pytestCheckHook,
-  tensorflow-probability,
   writableTmpDirAsHomeHook,
 
+  # passthru
   nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pytensor";
-  version = "3.0.7";
+  version = "3.3.4";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -44,7 +45,7 @@ buildPythonPackage (finalAttrs: {
     postFetch = ''
       sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${finalAttrs.src.tag})"/' $out/pytensor/_version.py
     '';
-    hash = "sha256-/ECRFuRSTXZtBD8EUY3dg0Z4SxLG1+7DzHSWFSAnsoU=";
+    hash = "sha256-b2CYHqjWtbugKotEfSjnU21m+P8RhoH+nelbc0whfqI=";
   };
 
   build-system = [
@@ -65,6 +66,9 @@ buildPythonPackage (finalAttrs: {
     setuptools
   ];
 
+  # `tensorflow-probability` is deliberately omitted: it only unlocks a handful of jax tests but
+  # drags in `tensorflow-bin`/`tf2onnx`, which fail to evaluate on Python 3.14 and on Darwin.
+  # Most of them are guarded upstream by `TFP_INSTALLED`, the rest are listed in `disabledTests`.
   nativeCheckInputs = [
     jax
     jaxlib
@@ -72,7 +76,6 @@ buildPythonPackage (finalAttrs: {
     pytest-benchmark
     pytest-mock
     pytestCheckHook
-    tensorflow-probability
     writableTmpDirAsHomeHook
   ];
 
@@ -85,7 +88,27 @@ buildPythonPackage (finalAttrs: {
     rm -rf pytensor
   '';
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTests = [
+    # AssertionError: Not equal to tolerance rtol=0.0001, atol=0
+    "test_Searchsorted"
+
+    # `det` of a singular matrix: jax returns -1.3e-116 where numpy returns 0.0
+    "test_jax_basic"
+
+    # NotImplementedError: No JAX implementation for Op {betaincinv,gammainccinv,gammaincinv}.
+    # These need `tensorflow-probability` but, unlike the other tfp tests, are not guarded
+    # upstream by `TFP_INSTALLED`.
+    "test_betaincinv"
+    "test_gammainccinv"
+    "test_gammaincinv"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # These hardcode `getrefcount(x) == 3`, but CPython 3.14 passes locals to calls as borrowed
+    # references, so the count is one lower.
+    "test_sparse_creation_refcount"
+    "test_sparse_passthrough_refcount"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Numerical assertion error
     # tests.unittest_tools.WrongValue: WrongValue
     "test_op_sd"
@@ -93,6 +116,10 @@ buildPythonPackage (finalAttrs: {
 
     # AssertionError: equal_computations failed
     "test_infer_shape_db_handles_xtensor_lowering"
+
+    # With fastmath=False, the LLVM IR still contains a `fcmp reassoc` instruction
+    # AssertionError: assert True == False
+    "test_config_options_fastmath_vectorized"
 
     # pytensor.link.c.exceptions.CompileError: Compilation failed (return status=1)
     "OpFromGraph"
@@ -165,13 +192,6 @@ buildPythonPackage (finalAttrs: {
     # Don't run the most compute-intense tests
     "tests/scan/"
     "tests/tensor/"
-
-    # The IndexedElemwise fusion is intentionally disabled on the 3.0.x line
-    # (it can trigger a RecursionError, see the comment in
-    # pytensor/tensor/rewriting/indexed_elemwise.py), but these tests still
-    # assert that the fusion produces an IndexedElemwise node. Upstream test bug.
-    "tests/link/numba/test_indexed_elemwise.py"
-    "tests/benchmarks/test_gather_fusion.py"
   ];
 
   passthru.updateScript = nix-update-script {

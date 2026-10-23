@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libsodium";
-  version = "1.0.22-unstable-2026-04-09";
+  version = "1.0.22-unstable-2026-09-28";
 
   src = fetchFromGitHub {
     owner = "jedisct1";
     repo = "libsodium";
-    rev = "77e1ce5d6dee871c49ef211222ba18ef0c486bda";
-    hash = "sha256-k8u7iNqvjLA0PptbneDyE8zCtutJlV2LirrRb41tmBY=";
+    rev = "9dcaa81943641565585482c20f2a211200aa1d89";
+    hash = "sha256-QQlxeUgQDdFweGqsUOso+II64zMfjmmB2sUuF3Vu53o=";
   };
 
   outputs = [

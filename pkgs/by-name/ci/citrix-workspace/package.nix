@@ -18,19 +18,15 @@
   gdk-pixbuf,
   glib,
   glib-networking,
-  gnome2,
   gst_all_1,
-  gtk2,
-  gtk2-x11,
   gtk3,
-  gtk_engines,
   harfbuzzFull,
   heimdal,
   hyphen,
   krb5,
   lcms2,
   libGL,
-  libappindicator-gtk3,
+  libappindicator,
   libcanberra-gtk3,
   libcap,
   libcxx,
@@ -41,7 +37,6 @@
   libjson,
   libmanette,
   libnotify,
-  libpng12,
   libpulseaudio,
   libredirect,
   libseccomp,
@@ -60,7 +55,7 @@
   sane-backends,
   speex,
   symlinkJoin,
-  systemd,
+  systemdLibs,
   tzdata,
   which,
   woff2,
@@ -77,7 +72,6 @@
   xprop,
   xdpyinfo,
   libxcb,
-  x264,
   zlib,
 
   extraCerts ? [ ],
@@ -91,7 +85,6 @@ let
     gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-ugly
-    gst_all_1.gst-vaapi
   ];
 
   gstPluginPath = lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" gstPackages;
@@ -116,21 +109,21 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "citrix-workspace";
-  version = "26.04.0.105";
+  version = "26.08.0.153";
 
   src = requireFile rec {
-    name = "linuxx64-${version}.tar.gz";
-    sha256 = "1kl6b1ldjd9gb6cmvhxf6ggvc3amq1kz0qwjlb1fp6dxx0pivwm8";
+    name = "linuxx64-${finalAttrs.version}.tar.gz";
+    sha256 = "17f0nlg18bz2b6qq86i04igm551b54nym41zi13m81906fzgi4h7";
 
     message = ''
       In order to use Citrix Workspace, you need to comply with the Citrix EULA and download
       the 64-bit binaries, .tar.gz from:
 
-      https://www.citrix.com/downloads/workspace-app/betas-and-tech-previews/workspace-app-tp-gcc11-for-linux.html
+      https://www.citrix.com/downloads/workspace-app/betas-and-tech-previews/workspace-app-tp-for-linux.html
 
-      (if you do not find version ${version} there, try at
+      (if you do not find version ${finalAttrs.version} there, try at
       https://www.citrix.com/downloads/workspace-app/)
 
       Once you have downloaded the file, please use the following command and re-run the
@@ -146,7 +139,7 @@ stdenv.mkDerivation rec {
   __structuredAttrs = true;
   sourceRoot = ".";
   preferLocalBuild = true;
-  passthru.icaroot = "${placeholder "out"}/opt/citrix-icaclient";
+  passthru.icaroot = "${finalAttrs.finalPackage}/opt/citrix-icaclient";
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -169,11 +162,7 @@ stdenv.mkDerivation rec {
     fuse3'
     gdk-pixbuf
     glib-networking
-    gnome2.gtkglext
-    gtk2
-    gtk2-x11
     gtk3
-    gtk_engines
     harfbuzzFull
     heimdal
     hyphen
@@ -189,7 +178,6 @@ stdenv.mkDerivation rec {
     libjson
     libmanette
     libnotify
-    libpng12
     libpulseaudio
     libseccomp
     libsecret
@@ -206,14 +194,13 @@ stdenv.mkDerivation rec {
     sane-backends
     speex
     stdenv.cc.cc
-    (lib.getLib systemd)
+    (lib.getLib systemdLibs)
     woff2
     webkitgtk_4_1
     libxscrnsaver
     libxaw
     libxmu
     libxtst
-    x264
     zlib
   ]
   ++ gstPackages;
@@ -221,7 +208,7 @@ stdenv.mkDerivation rec {
   runtimeDependencies = [
     glib
     glib-networking
-    libappindicator-gtk3
+    libappindicator
     libGL
     pcsclite
 
@@ -243,11 +230,22 @@ stdenv.mkDerivation rec {
       isSelfservice = program: (builtins.match "selfservice(.*)" program) != null;
       isWfica = program: (builtins.match "wfica(.*)" program) != null;
 
+      # These helpers read ICAROOT without accepting the generic -icaroot flag.
+      isEnvOnly =
+        program:
+        builtins.elem program [
+          "util/logmgr"
+          "util/nfcui"
+          "util/sendfeedback"
+          "util/setlog"
+          "util/storebrowse"
+        ];
+
       icaFlag =
         program:
         if isSelfservice program then
           "--icaroot"
-        else if isWfica program then
+        else if isWfica program || isEnvOnly program then
           null
         else
           "-icaroot";
@@ -265,6 +263,15 @@ stdenv.mkDerivation rec {
           ]
         );
 
+      runtimeSetup = ''
+        export NIX_REDIRECTS="/usr/share/zoneinfo=${tzdata}/share/zoneinfo:/etc/zoneinfo=${tzdata}/share/zoneinfo:/etc/timezone=$ICAROOT/timezone"
+
+        # Citrix invokes the FHS helper path; NixOS supplies the privileged wrapper here.
+        if [ -x /run/wrappers/bin/fusermount3 ]; then
+          NIX_REDIRECTS="$NIX_REDIRECTS:/usr/bin/fusermount3=/run/wrappers/bin/fusermount3"
+        fi
+      '';
+
       # Only the ICA engine needs the top-level client directory on the library
       # path. Leaving it enabled for UI helpers exposes Citrix's session-only
       # libproxy.so to the embedded web stack, which then fails to resolve CGP
@@ -276,15 +283,24 @@ stdenv.mkDerivation rec {
           ++ [
             ''--set ICAROOT "$ICAInstDir"''
             ''--prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules"''
-            ''--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "${gstPluginPath}"''
+            ''--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$ICAInstDir/gst-plugins:${gstPluginPath}"''
             ''--prefix LD_LIBRARY_PATH : "${ldLibraryPath program}"''
             ''--set LD_PRELOAD "${libredirect}/lib/libredirect.so ${lib.getLib pcsclite}/lib/libpcsclite.so"''
-            ''--set NIX_REDIRECTS "/usr/share/zoneinfo=${tzdata}/share/zoneinfo:/etc/zoneinfo=${tzdata}/share/zoneinfo:/etc/timezone=$ICAInstDir/timezone"''
+            "--run ${lib.escapeShellArg runtimeSetup}"
+          ]
+          ++ lib.optionals (isWfica program) [
+            # wfica is an X11 client (it runs under XWayland). On a Wayland
+            # session Mesa's EGL loader otherwise auto-selects the Wayland
+            # platform for wfica's startup OpenGL probe and segfaults in
+            # wl_proxy_create_wrapper; pin the client to X11 (user-overridable).
+            # See https://github.com/NixOS/nixpkgs/issues/540102
+            "--set-default GDK_BACKEND x11"
+            "--set-default EGL_PLATFORM x11"
           ]
         );
 
       wrap = program: ''
-        wrapProgram $out/opt/citrix-icaclient/${program} \
+        wrapProgramShell $out/opt/citrix-icaclient/${program} \
           ${wrapperArgs program}
       '';
 
@@ -294,7 +310,7 @@ stdenv.mkDerivation rec {
       '';
 
       makeBinWrapper = program: wrapperName: ''
-        makeWrapper $out/opt/citrix-icaclient/${program} $out/bin/${wrapperName} \
+        makeShellWrapper $out/opt/citrix-icaclient/${program} $out/bin/${wrapperName} \
           ${wrapperArgs program}
       '';
 
@@ -311,6 +327,7 @@ stdenv.mkDerivation rec {
         "util/conncenter"
         "util/ctx_rehash"
         "util/ctxwebhelper"
+        "util/storebrowse"
       ];
     in
     ''
@@ -336,19 +353,29 @@ stdenv.mkDerivation rec {
       # the tarball still contains the legacy WebKitGTK 4.0 bundle.
       rm -rf "$ICAInstDir/Webkit2gtk4.0"
 
-      if [ -f "$ICAInstDir/util/setlog" ]; then
-        chmod +x "$ICAInstDir/util/setlog"
-        ln -sf "$ICAInstDir/util/setlog" "$out/bin/citrix-setlog"
-      fi
+      # hinst installs this user unit outside the package for non-root installs.
+      mkdir -p $out/lib/systemd/user
+      sed \
+        -e '/^#/d' \
+        -e "s,###ICAROOT###,$ICAInstDir,g" \
+        -e 's,###USER###,default,' \
+        linuxx64/linuxx64.cor/ctxcwalogd.service > $out/lib/systemd/user/ctxcwalogd.service
+
+      # FHS launcher hinst generates even for non-root installs; it hardcodes
+      # store paths without any of the wrapper environment.
+      rm -f "$ICAInstDir/wfica.sh"
+      chmod +x "$ICAInstDir/util/setlog"
       ${mkWrappers wrapLink toWrap}
       ${makeBinWrapper "wfica" "wfica"}
+      ${makeBinWrapper "util/setlog" "citrix-setlog"}
       ${mkWrappers wrap [
         "PrimaryAuthManager"
         "ServiceRecord"
         "AuthManagerDaemon"
+        "util/logmgr"
+        "util/nfcui"
+        "util/sendfeedback"
       ]}
-
-      ln -sf $ICAInstDir/util/storebrowse $out/bin/storebrowse
 
       # As explained in https://wiki.archlinux.org/index.php/Citrix#Security_Certificates
       echo "Expanding certificates..."
@@ -363,9 +390,16 @@ stdenv.mkDerivation rec {
       rm $ICAInstDir/util/{gst_aud_{play,read},gst_*0.10,libgstflatstm0.10.so} || true
       ln -sf $ICAInstDir/util/gst_play1.0 $ICAInstDir/util/gst_play
       ln -sf $ICAInstDir/util/gst_read1.0 $ICAInstDir/util/gst_read
+
+      # hinst links this plugin into FHS directories; expose it through the wrapper instead.
+      mkdir -p "$ICAInstDir/gst-plugins"
+      ln -s "$ICAInstDir/util/libgstflatstm1.0.so" \
+        "$ICAInstDir/gst-plugins/libgstflatstm.so"
+
       # `hinst` disables multimedia when it cannot link into FHS plugin
       # directories. In Nix we provide the plugin path via wrappers instead.
       sed -i 's/^MultiMedia=Off$/MultiMedia=On/' "$ICAInstDir/config/module.ini"
+      grep -Fxq 'MultiMedia=On' "$ICAInstDir/config/module.ini"
 
       echo "We arbitrarily set the timezone to UTC. No known consequences at this point."
       echo UTC > "$ICAInstDir/timezone"
@@ -405,7 +439,12 @@ stdenv.mkDerivation rec {
       done
 
       echo "Copy .desktop files."
-      cp $out/opt/citrix-icaclient/desktop/* $out/share/applications/
+      cp $out/opt/citrix-icaclient/desktop/*.desktop $out/share/applications/
+
+      install -Dm444 "$ICAInstDir/desktop/Citrix-mime_types.xml" \
+        $out/share/mime/packages/Citrix-mime_types.xml
+      install -Dm444 "$ICAInstDir/icons/000_Receiver_64.png" \
+        $out/share/icons/hicolor/64x64/apps/Citrix-Receiver.png
 
       runHook postInstall
     '';
@@ -429,6 +468,6 @@ stdenv.mkDerivation rec {
       khaneliman
       flacks
     ];
-    homepage = "https://www.citrix.com/downloads/workspace-app/betas-and-tech-previews/workspace-app-tp-gcc11-for-linux.html";
+    homepage = "https://www.citrix.com/downloads/workspace-app/betas-and-tech-previews/workspace-app-tp-for-linux.html";
   };
-}
+})

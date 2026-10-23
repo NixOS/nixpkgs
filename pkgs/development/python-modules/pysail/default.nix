@@ -1,11 +1,10 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
   rustPlatform,
-  nix-update-script,
   testers,
   pysail,
+  sail,
 
   protoc,
   protobuf,
@@ -13,20 +12,8 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pysail";
-  version = "0.6.4";
+  inherit (sail) version src cargoDeps; # nixpkgs-update: no auto update
   pyproject = true;
-
-  src = fetchFromGitHub {
-    owner = "lakehq";
-    repo = "sail";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-EX8cDed32uF7NSreViKBn7RQeWIG7C7sI6O0c+hVf4M=";
-  };
-
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) pname src version;
-    hash = "sha256-ouNXKPpwKTLfI+Gcp393r7oHZAjUFQL9225+AuFzdoo=";
-  };
 
   # The `generate-import-lib` PyO3 feature only matters when building Windows
   # import libraries; on other platforms it just pulls in the `python3-dll-a`
@@ -55,11 +42,8 @@ buildPythonPackage (finalAttrs: {
   # heavyweight optional dependencies (pyspark-client, duckdb, ...).
   doCheck = false;
 
-  passthru = {
-    updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = pysail;
-    };
+  passthru.tests.version = testers.testVersion {
+    package = pysail;
   };
 
   meta = {

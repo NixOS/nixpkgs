@@ -3,20 +3,28 @@
   fetchFromGitHub,
   lib,
   pytestCheckHook,
+  pyprojectVersionPatchHook,
   setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "infrared-protocols";
-  version = "5.8.1";
+  version = "10.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "infrared-protocols";
     tag = finalAttrs.version;
-    hash = "sha256-CSVnH+U/dqp5vjA4eWEJEFT0LZgaAG3OC1rcgyKIcJE=";
+    hash = "sha256-WYSITY08808zxMmO6FWuWSxtyQ0V+eISbLfyd5D7UjE=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=78.1.1,<83.0" setuptools
+  '';
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   build-system = [ setuptools ];
 

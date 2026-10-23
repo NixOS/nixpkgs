@@ -39,10 +39,6 @@ stdenv.mkDerivation rec {
           url = url + "linux-arm64.tar.gz";
           sha256 = "1ws5h337xq0l06zrs9010h6wj2hq5cqk5ikp9arq7hj7lxf43vn5";
         };
-        "x86_64-darwin" = fetchurl {
-          url = url + "macos.tar.gz";
-          sha256 = "178ix54k2yragcgn0j8z1cfa78s1qbh1bsx3v9jnngby8igr6yn3";
-        };
         "aarch64-darwin" = fetchurl {
           url = url + "macos-arm64.tar.gz";
           sha256 = "0bi231z1yhb7kjfn228wjkj6rv9lgpagz9f4djr2wy3kqgck4xg0";
@@ -90,7 +86,6 @@ stdenv.mkDerivation rec {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     mainProgram = "purs";

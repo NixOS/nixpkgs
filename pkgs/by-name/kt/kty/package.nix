@@ -41,5 +41,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
     platforms = lib.platforms.unix;
     mainProgram = "kty";
+    license = lib.licenses.asl20;
   };
 })

@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   nixosTests,
   stdenv,
@@ -8,9 +8,9 @@
   telegraf,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "telegraf";
-  version = "1.39.1";
+  version = "1.40.2";
 
   subPackages = [ "cmd/telegraf" ];
 
@@ -18,10 +18,10 @@ buildGoModule (finalAttrs: {
     owner = "influxdata";
     repo = "telegraf";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-B9Xy02oYSYcU0IBOZes9tof/04TLvLybOU/nLLaFORk=";
+    hash = "sha256-6i9F5r5KT8JAhTw8GaTa4y6BMEb8majl+5SUhCBQuYA=";
   };
 
-  vendorHash = "sha256-9o0Tt6OZnoNO8iSLYmn1SMkQmZzC19uNmfHSkEqWzmA=";
+  vendorHash = "sha256-u1HxOgMJYgPXtJe9wM8OyYS3Yrd/G0y2XPoKcg7kQXE=";
   proxyVendor = true;
 
   ldflags = [
@@ -30,7 +30,7 @@ buildGoModule (finalAttrs: {
     "-X=github.com/influxdata/telegraf/internal.Commit=${finalAttrs.src.rev}"
     "-X=github.com/influxdata/telegraf/internal.Version=${finalAttrs.version}"
   ]
-  # Binary is too large for the default GOT PLT displacments on 32-bit ARM;
+  # Binary is too large for the default GOT PLT displacements on 32-bit ARM;
   # need to use larger encoding otherwise linking fails with:
   # BFD (GNU Binutils) 2.46 assertion fail /build/binutils-with-gold-2.46/bfd/elf32-arm.c:9783
   ++ lib.optionals stdenv.hostPlatform.isAarch32 [

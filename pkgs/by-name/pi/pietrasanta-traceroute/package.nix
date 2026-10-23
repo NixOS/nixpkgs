@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "catchpoint";
-    repo = "Networking.traceroute";
+    repo = "Pietrasanta-traceroute";
     rev = "e4a5cf94dccd646e03b9b75a762e9b014e3a3128";
     hash = "sha256-5FbuITewgSh6UFUU1vttkokk8uZ2IrzkDwsCuWJPKlM=";
   };
@@ -31,8 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
       - Similar QUIC-based traceroute.
       - Enhanced ToS (DSCP/ECN) field report.
     '';
-    homepage = "https://github.com/catchpoint/Networking.traceroute/";
-    changelog = "https://github.com/catchpoint/Networking.traceroute/blob/${finalAttrs.src.rev}/ChangeLog";
+    homepage = "https://github.com/catchpoint/Pietrasanta-traceroute/";
+    changelog = "https://github.com/catchpoint/Pietrasanta-traceroute/blob/${finalAttrs.src.rev}/ChangeLog";
     license = with lib.licenses; [
       gpl2Only
       lgpl21Only

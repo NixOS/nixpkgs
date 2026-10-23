@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libmowgli";
-  version = "2.1.3-unstable-2024-04-01";
+  version = "2.1.3-unstable-2026-08-12";
 
   src = fetchFromGitHub {
     owner = "atheme";
     repo = "libmowgli-2";
-    rev = "878f7e931b55d36e2e1b27807f7a620cbb0577d8";
-    hash = "sha256-Ik0GDsC0vEFNW/s10u+kNubqVh95ZqXb2I5W9iyU1z4=";
+    rev = "35d10d758d5aec35c9265640969e5d1dd32f975b";
+    hash = "sha256-6jGGUhwFN9zb+oAuVBzW6GbeNn3iaNm3QxfTsUvBM2w=";
   };
 
   passthru.updateScript = nix-update-script {

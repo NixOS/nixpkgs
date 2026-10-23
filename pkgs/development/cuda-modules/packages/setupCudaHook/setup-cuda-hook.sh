@@ -55,6 +55,11 @@ setupCUDAToolkit_ROOT() {
     fi
   done
 
+  local nvccExe
+  if nvccExe="$(type -P nvcc)"; then
+    addToSearchPathWithCustomDelimiter ";" CUDAToolkit_ROOT "${nvccExe%/bin/nvcc}"
+  fi
+
   # Use array form so semicolon-separated lists are passed safely.
   if [[ -n ${CUDAToolkit_INCLUDE_DIR-} ]]; then
     cmakeFlagsArray+=("-DCUDAToolkit_INCLUDE_DIR=${CUDAToolkit_INCLUDE_DIR}")

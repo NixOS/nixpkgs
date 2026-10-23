@@ -2,7 +2,6 @@
   lib,
   fetchPypi,
   python3Packages,
-  versionCheckHook,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -25,15 +24,9 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = with python3Packages; [
     fixtures
     mock
-    stestr
+    stestrCheckHook
     testtools
   ];
-
-  checkPhase = ''
-    runHook preCheck
-    stestr run
-    runHook postCheck
-  '';
 
   pythonImportsCheck = [ "bashate" ];
 
@@ -41,7 +34,7 @@ python3Packages.buildPythonApplication rec {
     description = "Style enforcement for bash programs";
     mainProgram = "bashate";
     homepage = "https://opendev.org/openstack/bashate";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     teams = [ lib.teams.openstack ];
   };

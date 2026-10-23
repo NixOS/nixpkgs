@@ -131,6 +131,8 @@ stdenv.mkDerivation (finalAttrs: {
   # documentation makefile uses "out" for different purposes, hence we explicitly set it to an empty string
   makeFlags = [ "out=" ];
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Music typesetting system";
     homepage = "https://lilypond.org/";

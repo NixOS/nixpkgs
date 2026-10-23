@@ -4,7 +4,7 @@
   fetchFromGitHub,
   makeWrapper,
   openjdk,
-  gradle_8,
+  gradle_9,
   wget,
   which,
   gnused,
@@ -15,19 +15,27 @@
   nixosTests,
 }:
 let
-  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
-  gradle = gradle_8;
+  gradle = gradle_9;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nextflow";
-  version = "25.10.2";
+  version = "26.10.0";
+
+  __structuredAttrs = true;
+
+  # Suggested as an improvement, but currently breaks nix-build -A nextflow.tests
+  # strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "nextflow-io";
     repo = "nextflow";
-    rev = "c03082c9b816774c799660d22c2b56d72218fddc";
-    hash = "sha256-k8B393GOsU1gs+ZS5x3VZUmz+n8lH8/cmXkpzU301lY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-llpZJ2XsSuGjEeVW0M/dZBqGkEI4tQT0wDAJWwJrfss=";
   };
+
+  buildInputs = [
+    bash
+  ];
 
   nativeBuildInputs = [
     makeWrapper
@@ -54,6 +62,10 @@ stdenv.mkDerivation (finalAttrs: {
                 launcher = launcher.replaceFirst(\"/nix/store/.*/bin/bash\", \"/bin/bash\")" \
       --replace-fail "binding.trace_cmd = getTraceCommand(interpreter)" \
         "binding.trace_cmd = containerBuilder != null ? getTraceCommand(interpreter).replaceFirst(\"/nix/store/.*/bin/bash\", \"/bin/bash\") : getTraceCommand(interpreter)"
+
+    # Also need to prevent foojay from trying to download OpenJDK:
+    substituteInPlace settings.gradle \
+      --replace-fail 'id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"' ""
   '';
 
   mitmCache = gradle.fetchDeps {
@@ -67,8 +79,15 @@ stdenv.mkDerivation (finalAttrs: {
   # one.
   # See https://github.com/NixOS/nixpkgs/pull/339197#discussion_r1747749061
   gradleUpdateTask = "pack";
-  # The installer attempts to copy a final JAR to $HOME/.nextflow/...
-  gradleFlags = [ "-Duser.home=\$TMPDIR" ];
+
+  gradleFlags = [
+    # The installer attempts to copy a final JAR to $HOME/.nextflow/...
+    "-Duser.home=\$TMPDIR"
+
+    # nf-* dependencies will fail to compile unless they can find OpenJDK:
+    "-Dorg.gradle.java.home=${openjdk}"
+  ];
+
   preBuild = ''
     # See Makefile (`make pack`)
     export BUILD_PACK=1
@@ -124,6 +143,8 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       Etjean
       mulatta
+      David-Moody
+      pjones
     ];
     mainProgram = "nextflow";
     platforms = lib.platforms.unix;

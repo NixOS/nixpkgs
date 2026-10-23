@@ -2,21 +2,27 @@
   fetchFromCodeberg,
   installShellFiles,
   lib,
+  libgit2,
   openssl,
   pkg-config,
   rustPlatform,
   stdenv,
+  versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codeberg-cli";
   version = "0.5.5";
 
+  __structuredAttrs = true;
+
   src = fetchFromCodeberg {
     owner = "Aviac";
     repo = "codeberg-cli";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-yjWAL4Tu9nuQsy8fDhga5lsxYwooE0fW70zfp7Dqq3Y=";
   };
+
+  env.LIBGIT2_NO_VENDOR = 1;
 
   cargoHash = "sha256-AD4VLGsxkfl1UwJmZhR183Gk7ltjEyH9tlt+iKNs5J0=";
   nativeBuildInputs = [
@@ -24,7 +30,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellFiles
   ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    libgit2
+    openssl
+  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd berg \
@@ -33,10 +42,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --zsh <($out/bin/berg completion zsh)
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   meta = {
     description = "CLI Tool for Codeberg similar to gh and glab";
     homepage = "https://codeberg.org/Aviac/codeberg-cli";
-    license = with lib.licenses; [ agpl3Plus ];
+    license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ robwalt ];
     mainProgram = "berg";
   };

@@ -92,11 +92,11 @@ rec {
     : 2\. Function argument
   */
   mkValueStringDefault =
-    { }:
-    v:
     let
       err = t: v: abort ("generators.mkValueStringDefault: " + "${t} not supported: ${toPretty { } v}");
     in
+    { }:
+    v:
     if isInt v then
       toString v
     # convert derivations to store paths
@@ -164,8 +164,11 @@ rec {
     {
       mkValueString ? mkValueStringDefault { },
     }:
-    sep: k: v:
-    "${escape [ sep ] k}${sep}${mkValueString v}";
+    sep:
+    let
+      escapeSeparator = escape [ sep ];
+    in
+    k: v: "${escapeSeparator k}${sep}${mkValueString v}";
 
   ## -- FILE FORMAT GENERATORS --
 
@@ -244,26 +247,31 @@ rec {
     :::
   */
   toINI =
-    {
-      mkSectionName ? (name: escape [ "[" "]" ] name),
-      mkKeyValue ? mkKeyValueDefault { } "=",
-      listsAsDuplicateKeys ? false,
-    }:
-    attrsOfAttrs:
     let
       # map function to string for each key val
       mapAttrsToStringsSep =
         sep: mapFn: attrs:
         concatStringsSep sep (mapAttrsToList mapFn attrs);
+    in
+    {
+      mkSectionName ? escape [
+        "["
+        "]"
+      ],
+      mkKeyValue ? mkKeyValueDefault { } "=",
+      listsAsDuplicateKeys ? false,
+    }:
+    let
+      toKeyValue' = toKeyValue { inherit mkKeyValue listsAsDuplicateKeys; };
       mkSection =
         sectName: sectValues:
         ''
           [${mkSectionName sectName}]
         ''
-        + toKeyValue { inherit mkKeyValue listsAsDuplicateKeys; } sectValues;
+        + toKeyValue' sectValues;
     in
     # map input to ini sections
-    mapAttrsToStringsSep "\n" mkSection attrsOfAttrs;
+    mapAttrsToStringsSep "\n" mkSection;
 
   /**
     Generate an INI-style config file from an attrset
@@ -328,21 +336,22 @@ rec {
   */
   toINIWithGlobalSection =
     {
-      mkSectionName ? (name: escape [ "[" "]" ] name),
+      mkSectionName ? escape [
+        "["
+        "]"
+      ],
       mkKeyValue ? mkKeyValueDefault { } "=",
       listsAsDuplicateKeys ? false,
     }:
+    let
+      toKeyValue' = toKeyValue { inherit mkKeyValue listsAsDuplicateKeys; };
+      toINI' = toINI { inherit mkSectionName mkKeyValue listsAsDuplicateKeys; };
+    in
     {
       globalSection,
       sections ? { },
     }:
-    (
-      if globalSection == { } then
-        ""
-      else
-        (toKeyValue { inherit mkKeyValue listsAsDuplicateKeys; } globalSection) + "\n"
-    )
-    + (toINI { inherit mkSectionName mkKeyValue listsAsDuplicateKeys; } sections);
+    (if globalSection == { } then "" else (toKeyValue' globalSection) + "\n") + (toINI' sections);
 
   /**
     Generate a git-config file from an attrset.
@@ -476,11 +485,6 @@ rec {
     : The value to be evaluated recursively
   */
   withRecursion =
-    {
-      depthLimit,
-      throwOnDepthLimit ? true,
-    }:
-    assert isInt depthLimit;
     let
       specialAttrs = [
         "__functor"
@@ -489,6 +493,13 @@ rec {
         "__pretty"
       ];
       stepIntoAttr = evalNext: name: if elem name specialAttrs then id else evalNext;
+    in
+    {
+      depthLimit,
+      throwOnDepthLimit ? true,
+    }:
+    assert isInt depthLimit;
+    let
       transform =
         depth:
         if depthLimit != null && depth > depthLimit then
@@ -537,6 +548,14 @@ rec {
     : The value to be pretty printed
   */
   toPretty =
+    let
+      escapeSingleline = escape [
+        "\\"
+        "\""
+        "\${"
+      ];
+      escapeMultiline = replaceStrings [ "\${" "''" ] [ "''\${" "'''" ];
+    in
     {
       allowPrettyValues ? false,
       multiline ? true,
@@ -559,12 +578,6 @@ rec {
         else if isString v then
           let
             lines = filter (v: !isList v) (split "\n" v);
-            escapeSingleline = escape [
-              "\\"
-              "\""
-              "\${"
-            ];
-            escapeMultiline = replaceStrings [ "\${" "''" ] [ "''\${" "'''" ];
             singlelineResult = "\"" + concatStringsSep "\\n" (map escapeSingleline lines) + "\"";
             multilineResult =
               let
@@ -742,11 +755,11 @@ rec {
     : The value to be converted to Dhall
   */
   toDhall =
-    { }@args:
-    v:
     let
       concatItems = concatStringsSep ", ";
     in
+    { }@args:
+    v:
     if isAttrs v then
       "{ ${concatItems (mapAttrsToList (key: value: "${key} = ${toDhall args value}") v)} }"
     else if isList v then
@@ -831,6 +844,7 @@ rec {
     }@args:
     v:
     let
+      recurse = toLua innerArgs;
       innerIndent = "${indent}  ";
       introSpace = if multiline then "\n${innerIndent}" else " ";
       outroSpace = if multiline then "\n${indent}" else " ";
@@ -848,7 +862,7 @@ rec {
 
       generatedBindings =
         assert badVarNames == [ ] || throw "Bad Lua var names: ${toPretty { } badVarNames}";
-        concatStrings (mapAttrsToList (key: value: "${indent}${key} = ${toLua innerArgs value}\n") v);
+        concatStrings (mapAttrsToList (key: value: "${indent}${key} = ${recurse value}\n") v);
 
       # https://en.wikibooks.org/wiki/Lua_Programming/variable#Variable_names
       matchVarName = match "[[:alpha:]_][[:alnum:]_]*(\\.[[:alpha:]_][[:alnum:]_]*)*";
@@ -863,12 +877,7 @@ rec {
     else if isPath v || isDerivation v then
       toJSON "${v}"
     else if isList v then
-      (
-        if v == [ ] then
-          "{}"
-        else
-          "{${introSpace}${concatItems (map (value: "${toLua innerArgs value}") v)}${outroSpace}}"
-      )
+      (if v == [ ] then "{}" else "{${introSpace}${concatItems (map recurse v)}${outroSpace}}")
     else if isAttrs v then
       (
         if isLuaInline v then
@@ -877,7 +886,7 @@ rec {
           "{}"
         else
           "{${introSpace}${
-            concatItems (mapAttrsToList (key: value: "[${toJSON key}] = ${toLua innerArgs value}") v)
+            concatItems (mapAttrsToList (key: value: "[${toJSON key}] = ${recurse value}") v)
           }${outroSpace}}"
       )
     else

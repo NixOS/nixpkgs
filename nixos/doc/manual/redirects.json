@@ -1,4 +1,19 @@
 {
+  "module-services-netbird-relay": [
+    "index.html#module-services-netbird-relay"
+  ],
+  "module-services-netbird-relay-quickstart": [
+    "index.html#module-services-netbird-relay-quickstart"
+  ],
+  "module-services-netbird-relay-tls": [
+    "index.html#module-services-netbird-relay-tls"
+  ],
+  "module-services-portmaster": [
+    "index.html#module-services-portmaster"
+  ],
+  "module-services-portmaster-declarative-configuration": [
+    "index.html#module-services-portmaster-declarative-configuration"
+  ],
   "module-hardware-facter": [
     "index.html#module-hardware-facter"
   ],
@@ -62,8 +77,38 @@
   "module-boot-plymouth-tpm2-totp-quick-start-enable": [
     "index.html#module-boot-plymouth-tpm2-totp-quick-start-enable"
   ],
+  "module-services-cliproxyapi": [
+    "index.html#module-services-cliproxyapi"
+  ],
+  "module-services-cliproxyapi-authentication": [
+    "index.html#module-services-cliproxyapi-authentication"
+  ],
+  "module-services-cliproxyapi-authentication-cli": [
+    "index.html#module-services-cliproxyapi-authentication-cli"
+  ],
+  "module-services-cliproxyapi-authentication-management-api": [
+    "index.html#module-services-cliproxyapi-authentication-management-api"
+  ],
   "module-services-keycloak-unix-socket": [
     "index.html#module-services-keycloak-unix-socket"
+  ],
+  "module-services-lxmd": [
+    "index.html#module-services-lxmd"
+  ],
+  "module-services-lxmd-communication-backbone": [
+    "index.html#module-services-lxmd-communication-backbone"
+  ],
+  "module-services-lxmd-communication-rpc": [
+    "index.html#module-services-lxmd-communication-rpc"
+  ],
+  "module-services-lxmd-communication-with-rnsd": [
+    "index.html#module-services-lxmd-communication-with-rnsd"
+  ],
+  "module-services-lxmd-health-check": [
+    "index.html#module-services-lxmd-health-check"
+  ],
+  "module-services-lxmd-quickstart": [
+    "index.html#module-services-lxmd-quickstart"
   ],
   "module-services-mautrix-discord": [
     "index.html#module-services-mautrix-discord"
@@ -101,8 +146,35 @@
   "module-services-mautrix-discord-troubleshooting": [
     "index.html#module-services-mautrix-discord-troubleshooting"
   ],
+  "module-services-navidrome": [
+    "index.html#module-services-navidrome"
+  ],
+  "module-services-navidrome-basic-usage": [
+    "index.html#module-services-navidrome-basic-usage"
+  ],
+  "module-services-navidrome-configuration-options": [
+    "index.html#module-services-navidrome-configuration-options"
+  ],
+  "module-services-navidrome-plugins": [
+    "index.html#module-services-navidrome-plugins"
+  ],
+  "module-services-navidrome-secrets": [
+    "index.html#module-services-navidrome-secrets"
+  ],
   "module-services-onedrive": [
     "index.html#module-services-onedrive"
+  ],
+  "module-services-rnsd": [
+    "index.html#module-services-rnsd"
+  ],
+  "module-services-rnsd-hardware-access": [
+    "index.html#module-services-rnsd-hardware-access"
+  ],
+  "module-services-rnsd-health-check": [
+    "index.html#module-services-rnsd-health-check"
+  ],
+  "module-services-rnsd-quickstart": [
+    "index.html#module-services-rnsd-quickstart"
   ],
   "module-services-tandoor-recipes-migrating-media-option-move": [
     "index.html#module-services-tandoor-recipes-migrating-media-option-move",
@@ -178,6 +250,24 @@
   "module-services-tdarr-server-only": [
     "index.html#module-services-tdarr-server-only"
   ],
+  "module-services-zapret2": [
+    "index.html#module-services-zapret2"
+  ],
+  "module-services-zapret2-configuration": [
+    "index.html#module-services-zapret2-configuration"
+  ],
+  "module-services-zapret2-configuration-firewall": [
+    "index.html#module-services-zapret2-configuration-firewall"
+  ],
+  "module-services-zapret2-configuration-lua-files": [
+    "index.html#module-services-zapret2-configuration-lua-files"
+  ],
+  "module-services-zapret2-configuration-profiles": [
+    "index.html#module-services-zapret2-configuration-profiles"
+  ],
+  "module-services-zapret2-quick-start": [
+    "index.html#module-services-zapret2-quick-start"
+  ],
   "module-virtualisation-xen": [
     "index.html#module-virtualisation-xen"
   ],
@@ -190,14 +280,17 @@
   "module-virtualisation-xen-introduction": [
     "index.html#module-virtualisation-xen-introduction"
   ],
-  "sec-boot-problems-scripted-stage-1": [
-    "index.html#sec-boot-problems-scripted-stage-1"
+  "sec-crowdsec-reset": [
+    "index.html#sec-crowdsec-reset"
   ],
   "sec-nixos-test-vms-vs-containers": [
     "index.html#sec-nixos-test-vms-vs-containers"
   ],
   "sec-override-nixos-test": [
     "index.html#sec-override-nixos-test"
+  ],
+  "sec-state-revision": [
+    "index.html#sec-state-revision"
   ],
   "sec-wireless-declarative": [
     "index.html#sec-wireless-declarative"
@@ -240,6 +333,9 @@
   ],
   "ssec-testing-user-units": [
     "index.html#ssec-testing-user-units"
+  ],
+  "stage-1-26.05": [
+    "release-notes.html#stage-1-26.05"
   ],
   "test-opt-containerDefaults": [
     "index.html#test-opt-containerDefaults"
@@ -336,6 +432,9 @@
   ],
   "module-services-crab-hole-upstream-options": [
     "index.html#module-services-crab-hole-upstream-options"
+  ],
+  "module-services-firefox-syncserver-database": [
+    "index.html#module-services-firefox-syncserver-database"
   ],
   "module-services-firefox-syncserver-clients": [
     "index.html#module-services-firefox-syncserver-clients"
@@ -611,13 +710,18 @@
     "index.html#sec-luks-file-systems"
   ],
   "sec-luks-file-systems-fido2": [
-    "index.html#sec-luks-file-systems-fido2"
-  ],
-  "sec-luks-file-systems-fido2-legacy": [
+    "index.html#sec-luks-file-systems-fido2",
+    "index.html#sec-luks-file-systems-fido2-systemd",
     "index.html#sec-luks-file-systems-fido2-legacy"
   ],
-  "sec-luks-file-systems-fido2-systemd": [
-    "index.html#sec-luks-file-systems-fido2-systemd"
+  "sec-nfs-file-systems": [
+    "index.html#sec-nfs-file-systems"
+  ],
+  "sec-nfs-automount": [
+    "index.html#sec-nfs-automount"
+  ],
+  "sec-nfs-adhoc": [
+    "index.html#sec-nfs-adhoc"
   ],
   "sec-sshfs-file-systems": [
     "index.html#sec-sshfs-file-systems"
@@ -997,12 +1101,6 @@
   "module-services-jitsi-configuration": [
     "index.html#module-services-jitsi-configuration"
   ],
-  "module-services-honk": [
-    "index.html#module-services-honk"
-  ],
-  "module-services-honk-basic-usage": [
-    "index.html#module-services-honk-basic-usage"
-  ],
   "module-services-hatsu": [
     "index.html#module-services-hatsu"
   ],
@@ -1080,12 +1178,6 @@
   ],
   "module-services-draupnir-setup-ems": [
     "index.html#module-services-draupnir-setup-ems"
-  ],
-  "module-services-castopod": [
-    "index.html#module-services-castopod"
-  ],
-  "module-services-castopod-quickstart": [
-    "index.html#module-services-castopod-quickstart"
   ],
   "module-services-c2fmzq": [
     "index.html#module-services-c2fmzq"
@@ -1370,6 +1462,24 @@
   "modules-services-certspotter-hooks": [
     "index.html#modules-services-certspotter-hooks"
   ],
+  "module-services-wanderer": [
+    "index.html#module-services-wanderer"
+  ],
+  "module-services-wanderer-basic-usage": [
+    "index.html#module-services-wanderer-basic-usage"
+  ],
+  "module-services-wanderer-superuser": [
+    "index.html#module-services-wanderer-superuser"
+  ],
+  "module-services-wanderer-secrets": [
+    "index.html#module-services-wanderer-secrets"
+  ],
+  "module-services-wanderer-plugins": [
+    "index.html#module-services-wanderer-plugins"
+  ],
+  "module-services-wanderer-external-meilisearch": [
+    "index.html#module-services-wanderer-external-meilisearch"
+  ],
   "module-services-weechat": [
     "index.html#module-services-weechat"
   ],
@@ -1412,11 +1522,11 @@
   "module-services-gitlab-maintenance-rake": [
     "index.html#module-services-gitlab-maintenance-rake"
   ],
+  "module-services-gitlab-registry-database-migration": [
+    "index.html#module-services-gitlab-registry-database-migration"
+  ],
   "module-services-gitlab-runner": [
     "index.html#module-services-gitlab-runner"
-  ],
-  "ex-gitlab-runner-podman": [
-    "index.html#ex-gitlab-runner-podman"
   ],
   "module-forgejo": [
     "index.html#module-forgejo"
@@ -1891,6 +2001,9 @@
   "sec-kubernetes": [
     "index.html#sec-kubernetes"
   ],
+  "module-services-nordvpn": [
+    "index.html#module-services-nordvpn"
+  ],
   "ch-running": [
     "index.html#ch-running"
   ],
@@ -1973,7 +2086,8 @@
     "index.html#ch-troubleshooting"
   ],
   "sec-boot-problems": [
-    "index.html#sec-boot-problems"
+    "index.html#sec-boot-problems",
+    "index.html#sec-boot-problems-scripted-stage-1"
   ],
   "sec-maintenance-mode": [
     "index.html#sec-maintenance-mode"
@@ -2294,6 +2408,9 @@
   "test-opt-meta.hydraPlatforms": [
     "index.html#test-opt-meta.hydraPlatforms"
   ],
+  "test-opt-meta.teams": [
+    "index.html#test-opt-meta.teams"
+  ],
   "test-opt-meta.timeout": [
     "index.html#test-opt-meta.timeout"
   ],
@@ -2341,6 +2458,9 @@
   ],
   "sec-running-nixos-tests-interactively": [
     "index.html#sec-running-nixos-tests-interactively"
+  ],
+  "sec-nixos-test-interactive-graphical": [
+    "index.html#sec-nixos-test-interactive-graphical"
   ],
   "sec-nixos-test-shell-access": [
     "index.html#sec-nixos-test-shell-access"
@@ -2847,5 +2967,31 @@
   ],
   "sec-release-13.10": [
     "release-notes.html#sec-release-13.10"
+  ],
+  "ch-services": [
+    "index.html#ch-services"
+  ],
+  "ch-reference": [
+    "index.html#ch-reference"
+  ],
+  "sec-release-26.05-incompatibilities-services-honk-removed": [
+    "release-notes.html#sec-release-26.05-incompatibilities-services-honk-removed",
+    "index.html#module-services-honk",
+    "index.html#module-services-honk-basic-usage"
+  ],
+  "module-garm": [
+    "index.html#module-garm"
+  ],
+  "module-garm-secrets": [
+    "index.html#module-garm-secrets"
+  ],
+  "module-garm-providers": [
+    "index.html#module-garm-providers"
+  ],
+  "module-garm-reachability": [
+    "index.html#module-garm-reachability"
+  ],
+  "module-garm-setup": [
+    "index.html#module-garm-setup"
   ]
 }

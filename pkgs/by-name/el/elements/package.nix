@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = if withGui then "elements" else "elementsd";
-  version = "23.3.3";
+  version = "23.3.4";
 
   src = fetchFromGitHub {
     owner = "ElementsProject";
     repo = "elements";
     rev = "elements-${finalAttrs.version}";
-    sha256 = "sha256-u0/IVOr6ivN7SrM44NPNqs0yPBDqElD79pKcn+384B4=";
+    sha256 = "sha256-LGVjwt3jJsegBKj59AlihqL2F3t35vIrrdiopgJveJU=";
   };
 
   nativeBuildInputs = [
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-boost-libdir=${boost.out}/lib"
     "--disable-bench"
   ]
-  ++ lib.optionals (!finalAttrs.doCheck) [
+  ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
     "--disable-tests"
     "--disable-gui-tests"
   ]

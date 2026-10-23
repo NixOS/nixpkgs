@@ -75,7 +75,10 @@ lib.checkListOfEnum "${pname}: theme accent" validAccents accents lib.checkListO
       hash = "sha256-q5/VcFsm3vNEw55zq/vcM11eo456SYE5TQA3g2VQjGc=";
     };
 
-    patches = [ ./fix-inconsistent-theme-name.patch ];
+    patches = [
+      ./fix-inconsistent-theme-name.patch
+      ./python-3.14.patch # Fix build with python 3.14+
+    ];
 
     nativeBuildInputs = [
       gtk3

@@ -129,13 +129,24 @@ in
     };
 
     clusterDns = mkOption {
-      description = "Use alternative DNS.";
+      description = ''
+        List of DNS resolvers (IP addresses) used inside containers.
+
+        Defaulted to {option}`services.kubernetes.addons.dns.clusterIp`
+        when {option}`services.kubernetes.addons.dns.enable` is `true`.
+
+        Refer to the list of configuration attributes for [KubeletConfiguration](https://kubernetes.io/docs/reference/config-api/kubelet-config.v1beta1/#kubelet-config-k8s-io-v1beta1-KubeletConfiguration).
+      '';
       default = [ "10.1.0.1" ];
       type = listOf str;
     };
 
     clusterDomain = mkOption {
-      description = "Use alternative domain.";
+      description = ''
+        Search DNS domain used inside containers.
+
+        Refer to the list of configuration attributes for [KubeletConfiguration](https://kubernetes.io/docs/reference/config-api/kubelet-config.v1beta1/#kubelet-config-k8s-io-v1beta1-KubeletConfiguration).
+      '';
       default = config.services.kubernetes.addons.dns.clusterDomain;
       defaultText = literalExpression "config.${options.services.kubernetes.addons.dns.clusterDomain}";
       type = str;

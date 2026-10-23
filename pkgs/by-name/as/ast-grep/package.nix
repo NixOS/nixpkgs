@@ -11,13 +11,15 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ast-grep";
-  version = "0.44.0";
+  version = "0.51.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ast-grep";
     repo = "ast-grep";
     tag = finalAttrs.version;
-    hash = "sha256-KTVyG2z2Vx4mLmkiwou4X04Z6qzpQxmwRCtcmG4euVA=";
+    hash = "sha256-Rij1sHo0Z8dl4a2fyQO05ct242fi3wfWyXEpmL6B40o=";
   };
 
   # error: linker `aarch64-linux-gnu-gcc` not found
@@ -25,14 +27,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rm .cargo/config.toml
   '';
 
-  cargoHash = "sha256-slFovLzLaK6DlTF/LKI74PUWXi9xkpy9hC9WWGmypcM=";
+  cargoHash = "sha256-FRhFfzhf3ycs+3cBBRVE1eMoTu6+Q7kIGR+Dz7JHPzQ=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   cargoBuildFlags = [
-    "--package ast-grep --bin ast-grep"
+    "--package"
+    "ast-grep"
+    "--bin"
+    "ast-grep"
   ]
-  ++ lib.optionals enableLegacySg [ "--package ast-grep --bin sg" ];
+  ++ lib.optionals enableLegacySg [
+    "--package"
+    "ast-grep"
+    "--bin"
+    "sg"
+  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ast-grep \
@@ -46,6 +56,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
         --zsh <($out/bin/sg completions zsh)
     ''}
   '';
+
+  # segfaults due to upstream tree-sitter bug
+  checkFlags = [
+    "--skip=haskell::test_haskell_replace"
+  ];
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -62,7 +77,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       xiaoxiangmoe
-      astratagem
+      montchr
       lord-valen
       cafkafk
     ];

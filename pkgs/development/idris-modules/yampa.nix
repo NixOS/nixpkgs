@@ -15,7 +15,7 @@ build-idris-package {
     owner = "BartAdv";
     repo = "idris-yampa";
     rev = "2120dffb3ea0de906ba2b40080956c900457cf33";
-    sha256 = "0zp495zpbvsagdzrmg9iig652zbm34qc0gdr81x0viblwqxhicx6";
+    hash = "sha256-prMIO+Z0xQ16QLk9wDAZdX1RzIsxvZp/e0rvdX9J5H4=";
   };
 
   meta = {

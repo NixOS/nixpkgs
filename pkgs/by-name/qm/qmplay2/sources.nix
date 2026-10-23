@@ -5,13 +5,13 @@
     let
       self = {
         pname = "qmplay2";
-        version = "25.09.11";
+        version = "26.06.27";
 
         src = fetchFromGitHub {
           owner = "zaps166";
           repo = "QMPlay2";
           tag = self.version;
-          hash = "sha256-1F6VOTMJZ64PlIVSWoYzNz4LVmn5pEcUq+IfstYDwYo=";
+          hash = "sha256-8PY6s74unLgwDFlyiHHCWrsatdI05obbREOICZoI+lU=";
         };
       };
     in
@@ -21,13 +21,13 @@
     let
       self = {
         pname = "vulkan-headers";
-        version = "1.4.317";
+        version = "1.4.350";
 
         src = fetchFromGitHub {
           owner = "KhronosGroup";
           repo = "Vulkan-Headers";
           tag = "v${self.version}";
-          hash = "sha256-ezNthwKsnXehQfrQh0zTk6Zrz3JgdqjYu68abYUWIik=";
+          hash = "sha256-RcUVurC+Rc0MyWpQLaLVmdn7FZO1GWWzTZZAOwvKwb4=";
         };
       };
     in
@@ -35,13 +35,13 @@
 
   qmvk = {
     pname = "qmvk";
-    version = "0-unstable-2025-09-02";
+    version = "0-unstable-2026-06-21";
 
     src = fetchFromGitHub {
       owner = "zaps166";
       repo = "QmVk";
-      rev = "0225dc851afaf39be2b92f91d4316e866f4b6133";
-      hash = "sha256-W2102+X+gE/9ghdAwWBeWYmSkSdp6lLPx4IKaQpLANI=";
+      rev = "26ef419a3b91bc11856c714b3b932c62db098bf9";
+      hash = "sha256-EaOGXYjon1brDQx+l7C2jvUkYgkW+D1qP52JPiMr3H0=";
     };
   };
 }

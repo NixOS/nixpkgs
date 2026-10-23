@@ -13,12 +13,12 @@
   # buildInputs
   alsa-lib,
   alsa-plugins,
-  ffmpeg,
+  # MuseScore Studio v4.7.x does not support FFmpeg v9. Support for it is coming in v5.
+  ffmpeg_8,
   flac,
   freetype,
   qt6,
   lame,
-  libjack2,
   libogg,
   libopus,
   libopusenc,
@@ -26,6 +26,7 @@
   libsndfile,
   libvorbis,
   mnxdom,
+  pipewire,
   portaudio,
   portmidi,
   pugixml,
@@ -35,34 +36,31 @@
   nixosTests,
 }:
 
-let
-  qt6' = qt6.overrideScope (
-    self: super: {
-      # Fix for: https://github.com/NixOS/nixpkgs/issues/526825
-      # reported upstream at: https://github.com/musescore/MuseScore/issues/33015
-      qtdeclarative = super.qtdeclarative.overrideAttrs (
-        new: old: {
-          patches = old.patches ++ [
-            (fetchpatch {
-              url = "https://github.com/qt/qtdeclarative/commit/9d4d376726a6ce15c429128dc65b927e411e40da.patch";
-              hash = "sha256-XhfliF5wZuN4/E55f8hfipIRjxBe9V7vL1cgn5p4xqA=";
-            })
-          ];
-        }
-      );
-    }
-  );
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "musescore";
-  version = "4.7.3";
+  version = "4.7.5";
 
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wWqFJkXLRi3JtnEW3STTG/jBBIQK1dIYPZdKCiBn0m0=";
+    hash = "sha256-WzVsItF4cyhd99Ax0BWkiX3JoxPY9+xpag7fu8yORD0=";
   };
+
+  patches = [
+    # Fix for https://github.com/musescore/MuseScore/issues/34091 also reported
+    # downstream at: https://github.com/NixOS/nixpkgs/issues/540783. PR not
+    # accepted upstream, see: https://github.com/musescore/MuseScore/pull/34204
+    (fetchpatch {
+      url = "https://github.com/musescore/MuseScore/commit/f273501e418842351c4bda10cce32b0e329eaff1.patch";
+      hash = "sha256-zrZRzeAHSFGtCuw/o4A3b1Blbo3FxKGxw1UDu9IggzY=";
+    })
+    # Fixes the build with Qt >= 6.12, see the patch's comment. Not sent or
+    # reported upstream, because upstream doesn't seem to like to handle
+    # Qt-related build issues, see
+    # https://github.com/musescore/MuseScore/pull/34204
+    ./qmlcachegen-unity-build.diff
+  ];
 
   cmakeFlags = [
     (lib.cmakeFeature "MUSE_APP_BUILD_MODE" "release")
@@ -72,6 +70,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "MUSE_MODULE_DIAGNOSTICS_CRASHPAD_CLIENT" false)
     # Don't build unit tests unless we are going to run them.
     (lib.cmakeBool "MUSE_ENABLE_UNIT_TESTS" finalAttrs.finalPackage.doCheck)
+    # Upstream defaults this to OFF outside their CI builds
+    (lib.cmakeBool "MUSE_MODULE_AUDIO_PIPEWIRE" stdenv.hostPlatform.isLinux)
   ]
   # Use our versions of system libraries, see:
   # https://github.com/musescore/MuseScore/issues/11572
@@ -91,20 +91,19 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "MUE_BUILD_MACOS_INTEGRATION" false)
   ];
 
-  qtWrapperArgs = [
-    # MuseScore JACK backend loads libjack at runtime.
-    "--prefix ${lib.optionalString stdenv.hostPlatform.isDarwin "DY"}LD_LIBRARY_PATH : ${
-      lib.makeLibraryPath [ libjack2 ]
-    }"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux) [
-    "--set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib"
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    # There are some issues with using the wayland backend, see:
-    # https://musescore.org/en/node/321936
-    "--set-default QT_QPA_PLATFORM xcb"
-  ];
+  qtWrapperArgs =
+    lib.optionals (stdenv.hostPlatform.isLinux) [
+      "--set"
+      "ALSA_PLUGIN_DIR"
+      "${alsa-plugins}/lib/alsa-lib"
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      # There are some issues with using the wayland backend, see:
+      # https://musescore.org/en/node/321936
+      "--set-default"
+      "QT_QPA_PLATFORM"
+      "xcb"
+    ];
 
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
@@ -114,8 +113,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    qt6'.qttools
-    qt6'.wrapQtAppsHook
+    qt6.qttools
+    qt6.wrapQtAppsHook
     ninja
     pkg-config
   ]
@@ -128,14 +127,13 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     flac
     freetype
-    qt6'.qt5compat
-    qt6'.qtbase
-    qt6'.qtdeclarative
-    qt6'.qtnetworkauth
-    qt6'.qtscxml
-    qt6'.qtsvg
+    qt6.qt5compat
+    qt6.qtbase
+    qt6.qtdeclarative
+    qt6.qtnetworkauth
+    qt6.qtscxml
+    qt6.qtsvg
     lame
-    libjack2
     libogg
     libopus
     libopusenc
@@ -150,7 +148,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
-    qt6'.qtwayland
+    pipewire
+    qt6.qtwayland
   ];
 
   # Put the default, `$prefix/lib` directory to look for ffmpeg shared objects,
@@ -158,8 +157,8 @@ stdenv.mkDerivation (finalAttrs: {
   # the /usr/lib/x86_64-linux-gnu location for any Linux (e.g aarch64 too).
   preConfigure = ''
     substituteInPlace src/framework/media/internal/ffmpegutils.cpp \
-      --replace-fail "/usr/lib/x86_64-linux-gnu" "${lib.getLib ffmpeg}/lib" \
-      --replace-fail "/opt/homebrew/lib" "${lib.getLib ffmpeg}/lib" \
+      --replace-fail "/usr/lib/x86_64-linux-gnu" "${lib.getLib ffmpeg_8}/lib" \
+      --replace-fail "/opt/homebrew/lib" "${lib.getLib ffmpeg_8}/lib" \
   '';
 
   strictDeps = true;

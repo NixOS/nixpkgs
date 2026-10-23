@@ -21,14 +21,14 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nominatim";
-  version = "5.3.2";
+  version = "5.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "osm-search";
     repo = "Nominatim";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jP/OkEuFdVdvA8Uztv/49FXm9dsExVDjw2l2gyMOSsg=";
+    hash = "sha256-FYMI/vRWhN5Dl8UfP5mmBLdVUDDd7uTuoJAvPHBLiw8=";
   };
 
   postPatch = ''

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "FiniteSingularity";
     repo = "obs-stroke-glow-shadow";
     rev = version;
-    sha256 = "sha256-+2hb4u+6UG7IV9pAvPjp4wvDYhYnxe98U5QQjUcdD/k=";
+    hash = "sha256-+2hb4u+6UG7IV9pAvPjp4wvDYhYnxe98U5QQjUcdD/k=";
   };
 
   nativeBuildInputs = [ cmake ];

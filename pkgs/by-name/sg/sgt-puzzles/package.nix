@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sgt-puzzles";
-  version = "20260523.7ad37c6";
+  version = "20260923.616da16";
 
   src = fetchurl {
     url = "https://www.chiark.greenend.org.uk/~sgtatham/puzzles/puzzles-${finalAttrs.version}.tar.gz";
-    hash = "sha256-Pcl8wCXrnjQ68jMpZMhWcvKiHanqk1efMbzGbjOHupc=";
+    hash = "sha256-zEGcgGC04ivjmKoD4wZR+84Ubu5RBkXDA/tvXxt3t44=";
   };
 
   sgt-puzzles-menu = fetchurl {
@@ -79,11 +79,11 @@ stdenv.mkDerivation (finalAttrs: {
     tests.sgt-puzzles = nixosTests.sgt-puzzles;
     updateScript = writeScript "update-sgt-puzzles" ''
       #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl pcre common-updater-scripts
+      #!nix-shell -i bash -p curl pcre2 common-updater-scripts
 
       set -eu -o pipefail
 
-      version="$(curl -sI 'https://www.chiark.greenend.org.uk/~sgtatham/puzzles/puzzles.tar.gz' | grep -Fi Location: | pcregrep -o1 'puzzles-([0-9a-f.]*).tar.gz')"
+      version="$(curl -sI 'https://www.chiark.greenend.org.uk/~sgtatham/puzzles/puzzles.tar.gz' | grep -Fi Location: | pcre2grep -o1 'puzzles-([0-9a-f.]*).tar.gz')"
       update-source-version sgt-puzzles "$version"
     '';
   };

@@ -3,9 +3,9 @@
   stdenv,
   fetchFromGitHub,
   makeBinaryWrapper,
-  electron_41,
-  nodejs-slim_24,
-  pnpm_10,
+  electron_43,
+  nodejs-slim_26,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   darwin,
@@ -17,20 +17,21 @@
   gnugrep,
   podman,
   krunkit,
+  extraPackages ? [ ],
 }:
 
 let
-  nodejs-slim = nodejs-slim_24;
-  pnpm = pnpm_10.override { inherit nodejs-slim; };
-  electron = electron_41;
+  nodejs-slim = nodejs-slim_26;
+  pnpm = pnpm_11.override { inherit nodejs-slim; };
+  electron = electron_43;
   appName = "Podman Desktop";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "podman-desktop";
-  version = "1.27.2";
+  version = "1.29.3";
 
   passthru.updateScript = _experimental-update-script-combinators.sequence [
-    (nix-update-script { })
+    (nix-update-script { extraArgs = [ "--use-github-releases" ]; })
     (lib.getExe (writeShellApplication {
       name = "podman-desktop-dependencies-updater";
       runtimeInputs = [
@@ -67,14 +68,14 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "podman-desktop";
     repo = "podman-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HcT33KjWnoY/pGuolt0BZurxdaWgUTF0tuACE9flfCM=";
+    hash = "sha256-7fyRrO4qd4sxsVtVuACZUgOzDVC5vGYQi39a+gTCPsM=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
-    fetcherVersion = 3;
-    hash = "sha256-FD5lXAgA6uJLRLbaiZDbmow6BEiF6DWCzryAzyMGKe8=";
+    fetcherVersion = 4;
+    hash = "sha256-W5Hl/6sMfpHsf6OZ+u9nP0FN1U0Mv3c30j5cABWBS9A=";
   };
 
   patches = [
@@ -122,7 +123,9 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase =
     let
       prefixPackages = lib.makeBinPath (
-        [ podman ] ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform krunkit) krunkit
+        [ podman ]
+        ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform krunkit) krunkit
+        ++ extraPackages
       );
       commonWrapperArgs = "--prefix PATH : ${prefixPackages}";
     in
@@ -138,8 +141,6 @@ stdenv.mkDerivation (finalAttrs: {
         wrapProgram "$out/Applications/${appName}.app/Contents/MacOS/${appName}" \
           ${commonWrapperArgs}
       ''
-      # Enforce X11 to avoid the Wayland dashboard issue.
-      # Revisit this once issue https://github.com/podman-desktop/podman-desktop/issues/14388 is resolved.
       + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
         mkdir -p "$out/share/lib/podman-desktop"
         cp -r dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/podman-desktop"
@@ -155,7 +156,7 @@ stdenv.mkDerivation (finalAttrs: {
 
         makeWrapper '${electron}/bin/electron' "$out/bin/podman-desktop" \
           --add-flags "$out/share/lib/podman-desktop/resources/app.asar" \
-          --set XDG_SESSION_TYPE 'x11' \
+          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
           ${commonWrapperArgs} \
           --inherit-argv0
       ''

@@ -6,11 +6,12 @@
   fetchPypi,
   requests,
   setuptools,
+  websocket-client,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "darabonba-core";
-  version = "1.0.7";
+  version = "1.0.9";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -18,7 +19,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchPypi {
     pname = "darabonba_core";
     inherit (finalAttrs) version;
-    hash = "sha256-wt4u4mBoK0wIyexneT3maivfMWNjuRZfFSuayqFrTcM=";
+    hash = "sha256-ECbJZbTCtI+JmV6trXq3gKA5WYEsj43kZw60TEjlsXk=";
   };
 
   build-system = [ setuptools ];
@@ -27,6 +28,7 @@ buildPythonPackage (finalAttrs: {
     aiohttp
     alibabacloud-tea
     requests
+    websocket-client
   ];
 
   pythonImportsCheck = [ "Tea" ];

@@ -3,12 +3,12 @@
   nodejs,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_11,
+  pnpm_12,
   fetchFromGitHub,
 }:
 
 let
-  pnpm = pnpm_11;
+  pnpm = pnpm_12;
 
   inherit (import ./sources.nix { inherit fetchFromGitHub; })
     pname
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
       sourceRoot
       ;
     inherit pnpm; # This may be different than pkgs.pnpm
-    fetcherVersion = 3;
+    fetcherVersion = 4;
     hash = pnpmDepsHash;
   };
 

@@ -4,9 +4,11 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  makeWrapper,
   testers,
   nix-update-script,
   k9s,
+  kubectl,
   writableTmpDirAsHomeHook,
 }:
 
@@ -48,7 +50,10 @@ buildGoModule (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
   postInstall = ''
     # k9s requires a writeable log directory
     # Otherwise an error message is printed
@@ -59,6 +64,13 @@ buildGoModule (finalAttrs: {
       --bash <($out/bin/k9s completion bash) \
       --fish <($out/bin/k9s completion fish) \
       --zsh <($out/bin/k9s completion zsh)
+
+    wrapProgram $out/bin/k9s \
+      --suffix PATH : "${
+        lib.makeBinPath [
+          kubectl
+        ]
+      }"
 
     mkdir -p $out/share/k9s/skins
     cp -r $src/skins/* $out/share/k9s/skins/

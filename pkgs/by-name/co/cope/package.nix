@@ -14,6 +14,12 @@ perlPackages.buildPerlPackage {
     rev = "6d0322a8493361ad32e454b97998df715dbe7b97";
     hash = "sha256-VQveV7avM/4nbLroyujJaSoVAP3pXhwrzqzI3eMzxVo=";
   };
+
+  postPatch = ''
+    substituteInPlace lib/App/Cope.pm \
+      --replace-warn "feature->import( ':5.10' );" "require feature; feature->import( ':5.10' );"
+  '';
+
   nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = with perlPackages; [
@@ -67,6 +73,5 @@ perlPackages.buildPerlPackage {
       gpl1Plus
     ];
     maintainers = with lib.maintainers; [ deftdawg ];
-    broken = true; # requires old Perl we don't ship anymore
   };
 }

@@ -5,21 +5,28 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-yate";
-  version = "0.5.0";
-  format = "setuptools";
+  version = "0.5.1";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "eventphone";
     repo = "python-yate";
-    tag = "v${version}";
-    hash = "sha256-/tlDme4RmO9XH5PNTvK2yVzbF+iDNeCY21nArq6NU+g=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-j+n3DwzCs4G6Ee9opnRopqTx528Uwcw+OIF8MFY8+5Q=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     aiohttp
     async-timeout
   ];
@@ -32,8 +39,8 @@ buildPythonPackage rec {
     description = "Python library for the yate telephony engine";
     mainProgram = "yate_callgen";
     homepage = "https://github.com/eventphone/python-yate";
-    changelog = "https://github.com/eventphone/python-yate/releases/tag/${src.tag}";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://github.com/eventphone/python-yate/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ clerie ];
   };
-}
+})

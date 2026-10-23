@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "yalexs-ble";
-  version = "3.3.1";
+  version = "7.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Yale-Libs";
     repo = "yalexs-ble";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TztulpCpTQefyFURZCjDVAVYTQCEs0KIcFGQGDjj02o=";
+    hash = "sha256-4Aroqyg/2OcfJu8iI8UAVcoBIGDljW6/Obv9r9SrdFY=";
   };
 
   build-system = [ poetry-core ];
@@ -47,7 +47,7 @@ buildPythonPackage (finalAttrs: {
     description = "Library for Yale BLE devices";
     homepage = "https://github.com/Yale-Libs/yalexs-ble";
     changelog = "https://github.com/Yale-Libs/yalexs-ble/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

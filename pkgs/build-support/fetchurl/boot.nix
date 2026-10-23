@@ -1,11 +1,16 @@
 let
-  mirrors = import ./mirrors.nix;
   inherit (builtins)
     elemAt
     head
     isString
+    mapAttrs
     match
     ;
+
+  # Handle mirror:// URIs. Since <nix/fetchurl.nix> currently
+  # supports only one URI, use the first listed mirror.
+  matchMirror = match "mirror://([a-z]+)/(.*)";
+  mirrors = mapAttrs (_: head) (import ./mirrors.nix);
 in
 
 {
@@ -47,11 +52,9 @@ import <nix/fetchurl.nix> {
     ;
 
   url =
-    # Handle mirror:// URIs. Since <nix/fetchurl.nix> currently
-    # supports only one URI, use the first listed mirror.
     let
       url_ = handleUrl url;
-      m = match "mirror://([a-z]+)/(.*)" url_;
+      m = matchMirror url_;
     in
-    if m == null then url_ else head (mirrors.${head m}) + (elemAt m 1);
+    if m == null then url_ else mirrors.${head m} + (elemAt m 1);
 }

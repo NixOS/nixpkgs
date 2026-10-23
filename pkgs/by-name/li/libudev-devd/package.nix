@@ -10,7 +10,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "libudev-devd";
+  pname = "libudev-devd";
   version = "0.6.0";
 
   src = fetchFromGitHub {

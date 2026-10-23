@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "gh-review-conductor";
-  version = "1.3.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "gh-tui-tools";
     repo = "gh-review-conductor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gNQmO+Sa9n+hfy5CBSPqSXhHTzZz8D1sLrNqs+z9Rx4=";
+    hash = "sha256-B6wjZoBGltfb/qsApzoPPFG1w1f7AyuCAvQVSVtkX4M=";
   };
 
   vendorHash = "sha256-xAOTSdyNRZDKDPnCrvaepBOTDrnHLEA53K5TBxkqbDM=";

@@ -6,8 +6,11 @@
 
 lib.lowPrio (
   lammps.override {
-    extraBuildInputs = [
+    extraNativeBuildInputs = [
       mpi
     ];
+    extraCmakeFlags = {
+      BUILD_MPI = "ON";
+    };
   }
 )

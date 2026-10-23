@@ -7,7 +7,6 @@
   lib,
   libpulseaudio,
   ninja,
-  pcre,
   pkg-config,
   taglib,
   zlib,
@@ -24,13 +23,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sayonara";
-  version = "1.11.0-stable1";
+  version = "1.12.0-stable1";
 
   src = fetchFromGitLab {
     owner = "luciocarreras";
     repo = "sayonara-player";
     tag = finalAttrs.version;
-    hash = "sha256-MvL5czJkvHNQkuoPtGq+q7fkJIX75IXmQCWmpgisqNI=";
+    hash = "sha256-XDCmqoJAlKqtia/RRplbekUaTEzD+Jn/1Z5yOPgra0c=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libpulseaudio
-    pcre
     libsForQt5.qtbase
     taglib
     zlib

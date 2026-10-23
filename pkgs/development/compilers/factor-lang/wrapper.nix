@@ -13,8 +13,8 @@
   freealut,
   gdk-pixbuf,
   glib,
-  gnome2,
   gtk2-x11,
+  gtkglext,
   libGL,
   libGLU,
   librsvg,
@@ -47,9 +47,7 @@ let
     versionOlder
     versionAtLeast
     ;
-  # missing from lib/strings
-  escapeNixString = s: lib.escape [ "$" ] (builtins.toJSON s);
-  toFactorArgs = x: lib.concatStringsSep " " (map escapeNixString x);
+  toFactorArgs = x: lib.concatStringsSep " " (map lib.strings.escapeNixString x);
   defaultLibs = optionals enableDefaults [
     libogg
     libvorbis
@@ -70,8 +68,8 @@ let
       freealut
       gdk-pixbuf
       glib
-      gnome2.gtkglext
       gtk2-x11
+      gtkglext
       libGL
       libGLU
       pango

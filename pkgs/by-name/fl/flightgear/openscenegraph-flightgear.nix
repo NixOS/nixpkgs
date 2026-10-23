@@ -9,7 +9,6 @@
   fetchurl,
   glib,
   libxml2,
-  pcre,
   zlib,
   libjpeg,
   giflib,
@@ -53,7 +52,6 @@ stdenv.mkDerivation {
     ++ [
       glib
       libxml2
-      pcre
       zlib
       libjpeg
       giflib

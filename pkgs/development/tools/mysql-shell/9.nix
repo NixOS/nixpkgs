@@ -29,6 +29,7 @@
   cyrus_sasl,
   openldap,
   antlr,
+  fetchpatch,
 }:
 
 let
@@ -38,8 +39,8 @@ let
     pyyaml
   ];
 
-  mysqlShellVersion = "9.7.0";
-  mysqlServerVersion = "9.7.0";
+  mysqlShellVersion = "9.7.1";
+  mysqlServerVersion = "9.7.1";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql-shell";
@@ -48,11 +49,11 @@ stdenv.mkDerivation (finalAttrs: {
   srcs = [
     (fetchurl {
       url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor mysqlServerVersion}/mysql-${mysqlServerVersion}.tar.gz";
-      hash = "sha256-dLV0urxWsOy2MqvTWdITxnlOz0Qq5Ekov8WB+z1iMG0=";
+      hash = "sha256-2r/yYwIr5qCRUcIYEjIoc0N+DXeuyMTMc4GILD6hrq4=";
     })
     (fetchurl {
       url = "https://dev.mysql.com/get/Downloads/MySQL-Shell/mysql-shell-${finalAttrs.version}-src.tar.gz";
-      hash = "sha256-s/omxSFTC/n3B8OtYddDqXzCd4GE4b5O8NUKbLdvwRI=";
+      hash = "sha256-7bRgb3CBu3oQiZm5xe6U6DvX5xd9iWqqeNPDwI+BYRQ=";
     })
   ];
 
@@ -66,6 +67,12 @@ stdenv.mkDerivation (finalAttrs: {
     # No openssl bundling on macOS. It's not working.
     # See https://github.com/mysql/mysql-shell/blob/5b84e0be59fc0e027ef3f4920df15f7be97624c1/cmake/ssl.cmake#L53
     ./no-openssl-bundling.patch
+
+    # fix build w/ glibc-2.44
+    (fetchpatch {
+      url = "https://github.com/mysql/mysql-shell/commit/4ce8746d8a7eecf9ae66d4d500c84d57cc4fbdbb.patch";
+      hash = "sha256-LUGC7gnNQ3zhmWUm2xogsOAmx8QSngQBHVJMWHFtWz0=";
+    })
   ];
 
   postPatch = ''

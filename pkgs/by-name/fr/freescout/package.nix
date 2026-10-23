@@ -7,13 +7,13 @@
 stdenv.mkDerivation (finalAttrs: {
   preferLocalBuild = true;
   pname = "freescout";
-  version = "1.8.226";
+  version = "1.8.241";
 
   src = fetchFromGitHub {
     owner = "freescout-help-desk";
     repo = "freescout";
     tag = finalAttrs.version;
-    hash = "sha256-9fojG6S6yb2+W94cHrLuYIRjRL8JWspsj4bNE4QKSuk=";
+    hash = "sha256-iHg9KSSksV4+ZbCn+aC0ubNDt91CbuZDK3K5Bf7qIi4=";
   };
 
   patches = [
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests = lib.attrValues nixosTests.freescout;
+  passthru.tests = nixosTests.freescout;
 
   # Because freescout is searching for some folders only relative to it's own source location, we need to have the symlinks to the actual locations in here
   dontCheckForBrokenSymlinks = true;

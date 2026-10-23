@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   gitUpdater,
   unstableGitUpdater,
   cctools,
@@ -40,12 +39,12 @@
 
 let
   stable = rec {
-    version = "26.02.0";
+    version = "26.07.0";
     src = fetchFromGitHub {
       owner = "gpac";
       repo = "gpac";
       rev = "v${version}";
-      hash = "sha256-UtL+KG3dsp6dD7cfTK7e17ngt/RHKJL0s5IopTM3VOk=";
+      hash = "sha256-L4GKXCFsKVxWXZJJeiAegXJySoS9+/V+/cuzEJEse+I=";
     };
     updateScript = gitUpdater {
       rev-prefix = "v";
@@ -53,12 +52,12 @@ let
     };
   };
   unstable = {
-    version = "26.02.0-unstable-2026-04-29";
+    version = "26.07.0-unstable-2026-08-04";
     src = fetchFromGitHub {
       owner = "gpac";
       repo = "gpac";
-      rev = "525bf1af642c30af04e4df5345e6d798c0a4d8a1";
-      hash = "sha256-G/4gefsS2hUKo8VEt80YZOaGJSjrzXFrdHO/u33BiDw=";
+      rev = "014bb6de5136e9466f6339486901db4d46570784";
+      hash = "sha256-Uj3+CH2xkw504A2LUmruQ5vdQXhGqKY7Lx1Yp5263J0=";
     };
     updateScript = unstableGitUpdater {
       tagFormat = "v*";
@@ -109,14 +108,6 @@ stdenv.mkDerivation (finalAttrs: {
     pulseaudio
     SDL2
     curl
-  ];
-
-  patches = lib.optionals (releaseChannel == "stable") [
-    (fetchpatch2 {
-      # CVE-2026-7135 fix
-      url = "https://github.com/gpac/gpac/commit/cf6ac48c972eaaee2af270adc3f36615325deb3e.patch?full_index=1";
-      hash = "sha256-JaJiQAQvzdB74ag2/aZTiQa2NqlgqgMYS1tsk/R+wiI=";
-    })
   ];
 
   enableParallelBuilding = true;

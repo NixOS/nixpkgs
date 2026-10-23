@@ -27,16 +27,16 @@
   sqlmodel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pgvector";
-  version = "0.4.2";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pgvector";
     repo = "pgvector-python";
-    tag = "v${version}";
-    hash = "sha256-jzUZK3zQxqajVqGbaQzLPzvK/k3Wck9jX95kkBH2IlY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-PseAIFks2f3VPn0oag599tI+cyQOdO3HlmTSNDXfoX4=";
   };
 
   build-system = [ setuptools ];
@@ -83,8 +83,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pgvector support for Python";
     homepage = "https://github.com/pgvector/pgvector-python";
-    changelog = "https://github.com/pgvector/pgvector-python/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/pgvector/pgvector-python/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };
-}
+})

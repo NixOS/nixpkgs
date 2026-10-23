@@ -6,6 +6,7 @@
 }:
 let
   cfg = config.security.account-utils;
+  format = pkgs.formats.ini { };
 in
 {
   options.security.account-utils = {
@@ -25,6 +26,16 @@ in
         :::
       '';
     };
+    pwaccessd.settings = lib.mkOption {
+      description = ''
+        Options for pwaccessd.
+        See {manpage}`pwaccessd.conf(5)` for available options.
+      '';
+      type = lib.types.submodule {
+        freeformType = format.type;
+      };
+      default = { };
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -40,10 +51,15 @@ in
       sockets.pwupdd.wantedBy = lib.optional config.users.mutableUsers "sockets.target"; # immutable users do not need password updating
       sockets.newidmapd.wantedBy = [ "sockets.target" ];
       services."pwupdd@".environment.PWUPDD_OPTS = lib.escapeShellArgs cfg.extraArgs;
-      services."pwaccessd".environment.PWACCESSD_OPTS = lib.escapeShellArgs cfg.extraArgs;
+      services."pwaccessd".environment = {
+        LD_LIBRARY_PATH = config.system.nssModules.path;
+        PWACCESSD_OPTS = lib.escapeShellArgs cfg.extraArgs;
+      };
     };
 
     environment.systemPackages = [ cfg.package ];
+    environment.etc."account-utils/pwaccessd.conf".source =
+      format.generate "pwaccessd.conf" cfg.pwaccessd.settings;
 
     security.pam.services = {
       pwupd-passwd = { };

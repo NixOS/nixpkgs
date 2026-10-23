@@ -3,7 +3,7 @@
   bootstrapStdenv,
   buildPackages,
   fetchpatch2,
-  icu76, # The ICU version should correspond to the same one used by Apple’s ICU package
+  icu78, # The ICU version should correspond to the same one used by Apple’s ICU package
   mkAppleDerivation,
   python3,
   stdenvNoCC,
@@ -40,8 +40,10 @@ let
 
     patches = [
       # Skip MessageFormatTest test, which is known to crash sometimes and should be suppressed if it does.
-      ./patches/suppress-icu-check-crash.patch
+      ./patches/0001-suppress-icu-check-crash.patch
     ];
+
+    patchFlags = [ "-p4" ];
 
     preConfigure = ''
       sed -i -e "s|/bin/sh|${stdenv.shell}|" configure
@@ -83,9 +85,9 @@ let
 
     meta = {
       description = "Unicode and globalization support library with Apple customizations";
-      license = [ lib.licenses.icu ];
+      license = lib.licenses.icu;
       teams = [ lib.teams.darwin ];
-      platforms = lib.platforms.darwin;
+      platforms = lib.platforms.darwin ++ lib.platforms.linux;
       pkgConfigModules = [
         "icu-i18n"
         "icu-io"
@@ -102,48 +104,38 @@ let
     ++ lib.optional withStatic "static";
     outputBin = "dev";
 
-    postPatch =
-      lib.optionalString self.finalPackage.doCheck (
-        ''
-          # Skip test for missing encodingSamples data.
-          substituteInPlace test/cintltst/ucsdetst.c \
-            --replace-fail "&TestMailFilterCSS" "NULL"
+    postPatch = lib.optionalString self.finalPackage.doCheck ''
+      # Skip test for missing encodingSamples data.
+      substituteInPlace test/cintltst/ucsdetst.c \
+        --replace-fail "&TestMailFilterCSS" "NULL"
 
-          # Disable failing tests
-          substituteInPlace test/cintltst/cloctst.c \
-            --replace-fail 'TESTCASE(TestCanonicalForm);' ""
+      # Disable failing tests
+      substituteInPlace test/cintltst/cloctst.c \
+        --replace-fail 'TESTCASE(TestCanonicalForm);' ""
 
-          substituteInPlace test/intltest/rbbitst.cpp \
-            --replace-fail 'TESTCASE_AUTO(TestExternalBreakEngineWithFakeYue);' ""
+      substituteInPlace test/intltest/rbbitst.cpp \
+        --replace-fail 'TESTCASE_AUTO(TestExternalBreakEngineWithFakeYue);' ""
 
-          # Add missing test data. It’s not included in the source release.
-          chmod u+w "$NIX_BUILD_TOP/source/icu"
-          tar -C "$NIX_BUILD_TOP/source" -axf ${lib.escapeShellArg icu76.src} icu/testdata
-        ''
-        + lib.optionalString stdenv.hostPlatform.isx86_64 ''
-          # These tests fail under Rosetta 2 with a floating-point exception.
-          substituteInPlace test/intltest/caltest.cpp \
-            --replace-fail 'TESTCASE_AUTO(Test22633RollTwiceGetTimeOverflow);' "" \
-            --replace-fail 'TESTCASE_AUTO(Test22750Roll);' ""
-        ''
-      )
-      + ''
-        # Otherwise `make install` is broken.
-        substituteInPlace Makefile.in \
-          --replace-fail '$(top_srcdir)/../LICENSE' "$NIX_BUILD_TOP/source/icu/LICENSE"
-        substituteInPlace config/dist-data.sh \
-          --replace-fail "\''${top_srcdir}/../LICENSE" "$NIX_BUILD_TOP/source/icu/LICENSE"
+      # Add missing test data. It’s not included in the source release.
+      chmod u+w "$NIX_BUILD_TOP/source/icu"
+      tar -C "$NIX_BUILD_TOP/source" -axf ${lib.escapeShellArg icu78.src} icu/testdata
 
-        # Make sure this ICU build puts C++ symbols in a distinct namespace to avoid symbol clashes with other ICU
-        # implementations (including both the system ICU and builds of the upstream ICU).
-        # This breaks binary compatibility for the C++ API, but it’s not ABI stable anyway. Without doing this,
-        # `dotnet` crashes on macOS 26.4 when linked against `libicucore.A.dylib` from Nixpkgs.
-        substituteInPlace common/unicode/uvernum.h \
-          --replace-fail 'U_ICU_VERSION_SUFFIX ' 'U_ICU_VERSION_SUFFIX _nix'
-        # Only enable symbol renaming for C++ symbols. C symbols need to remain unversioned for compatibility.
-        substituteInPlace common/unicode/uversion.h \
-          --replace-fail U_DISABLE_RENAMING 0
-      '';
+      # Otherwise `make install` is broken.
+      substituteInPlace Makefile.in \
+        --replace-fail '$(top_srcdir)/../LICENSE' "$NIX_BUILD_TOP/source/icu/LICENSE"
+      substituteInPlace config/dist-data.sh \
+        --replace-fail "\''${top_srcdir}/../LICENSE" "$NIX_BUILD_TOP/source/icu/LICENSE"
+
+      # Make sure this ICU build puts C++ symbols in a distinct namespace to avoid symbol clashes with other ICU
+      # implementations (including both the system ICU and builds of the upstream ICU).
+      # This breaks binary compatibility for the C++ API, but it’s not ABI stable anyway. Without doing this,
+      # `dotnet` crashes on macOS 26.4 when linked against `libicucore.A.dylib` from Nixpkgs.
+      substituteInPlace common/unicode/uvernum.h \
+        --replace-fail 'U_ICU_VERSION_SUFFIX ' 'U_ICU_VERSION_SUFFIX _nix'
+      # Only enable symbol renaming for C++ symbols. C symbols need to remain unversioned for compatibility.
+      substituteInPlace common/unicode/uversion.h \
+        --replace-fail U_DISABLE_RENAMING 0
+    '';
 
     # remove dependency on bootstrap-tools in early stdenv build
     postInstall =
@@ -177,8 +169,7 @@ let
           substituteInPlace "$dev/bin/icu-config" \
             ${lib.concatMapStringsSep " " (r: "--replace-fail '${r.from}' '${r.to}'") replacements}
         ''
-        # Create library with everything reexported to provide the same ABI as the system ICU.
-        + lib.optionalString stdenv.hostPlatform.isDarwin (
+        + (
           if stdenv.hostPlatform.isStatic then
             ''
               ${stdenv.cc.targetPrefix}ar qL "$out/lib/libicucore.a" \
@@ -188,20 +179,33 @@ let
                 "$out/lib/libicuio.a"
             ''
           else
-            ''
-              icuVersion=$(basename "$out/share/icu/"*)
-              ${stdenv.cc.targetPrefix}clang -dynamiclib \
-                -L "$out/lib" \
-                -Wl,-reexport-licuuc \
-                -Wl,-reexport-licudata \
-                -Wl,-reexport-licui18n \
-                -Wl,-reexport-licuio \
-                -compatibility_version 1 \
-                -current_version "$icuVersion" \
-                -install_name "$out/lib/libicucore.A.dylib" \
-                -o "$out/lib/libicucore.A.dylib"
-              ln -s libicucore.A.dylib "$out/lib/libicucore.dylib"
-            ''
+            (
+              lib.optionalString stdenv.hostPlatform.isDarwin ''
+                icuVersion=$(basename "$out/share/icu/"*)
+                ${stdenv.cc.targetPrefix}clang -dynamiclib \
+                  -L "$out/lib" \
+                  -Wl,-reexport-licuuc \
+                  -Wl,-reexport-licudata \
+                  -Wl,-reexport-licui18n \
+                  -Wl,-reexport-licuio \
+                  -compatibility_version 1 \
+                  -current_version "$icuVersion" \
+                  -install_name "$out/lib/libicucore.A.dylib" \
+                  -o "$out/lib/libicucore.A.dylib"
+                ln -s libicucore.A.dylib "$out/lib/libicucore.dylib"
+              ''
+              + lib.optionalString stdenv.hostPlatform.isLinux ''
+                ${stdenv.cc.targetPrefix}cc -shared \
+                  -L "$out/lib" \
+                  -Wl,--no-as-needed \
+                  -licuuc \
+                  -licudata \
+                  -licui18n \
+                  -licuio \
+                  -o "$out/lib/libicucore.so.A"
+                ln -s libicucore.so.A "$out/lib/libicucore.so"
+              ''
+            )
         )
       );
 
@@ -214,7 +218,7 @@ let
     # Some tests use `log(name)`, which clang identifies as potentially insecure.
     checkFlags = [
       "CFLAGS+=-Wno-format-security"
-      "CXXFLAGS+=-Wno-format-security"
+      "CXXFLAGS+=-Wno-format-security -std=c++17"
     ];
     checkTarget = "check";
   };

@@ -19,7 +19,7 @@
   util-linux,
   libselinux,
   libsepol,
-  lua5,
+  lua5_2_compat,
   docutils,
   libxcb,
   libx11,
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     udev
     pcre2
     util-linux
-    lua5
+    lua5_2_compat
     docutils
   ];
 

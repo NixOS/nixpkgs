@@ -4,8 +4,6 @@
   fetchFromGitHub,
   gnome-shell,
   sassc,
-  gnome-themes-extra,
-  gtk-engine-murrine,
   unstableGitUpdater,
   colorVariants ? [ ],
   sizeVariants ? [ ],
@@ -80,13 +78,10 @@ lib.checkListOfEnum "${pname}: colorVariants" colorVariantList colorVariants lib
       hash = "sha256-7H2n9wTaW8Db1RejWK071ITV1j5KIuzfql0Tx9WT6zM=";
     };
 
-    propagatedUserEnvPkgs = [ gtk-engine-murrine ];
-
     nativeBuildInputs = [
       gnome-shell
       sassc
     ];
-    buildInputs = [ gnome-themes-extra ];
 
     dontBuild = true;
 
@@ -94,6 +89,12 @@ lib.checkListOfEnum "${pname}: colorVariants" colorVariantList colorVariants lib
 
     postPatch = ''
       patchShebangs themes/install.sh
+      sed -i \
+        -e '/gtkrc\.sh/d' \
+        -e '/# GTK2 Themes/d' \
+        -e '/"''${THEME_DIR}\/gtk-2.0/d' \
+        -e '/make_gtkrc /d' \
+        themes/install.sh
     '';
 
     installPhase = ''
@@ -120,7 +121,8 @@ lib.checkListOfEnum "${pname}: colorVariants" colorVariantList colorVariants lib
       license = lib.licenses.gpl3Plus;
       maintainers = with lib.maintainers; [
         garaiza-93
+        d3vil0p3r
       ];
-      platforms = lib.platforms.unix;
+      platforms = lib.platforms.linux;
     };
   }

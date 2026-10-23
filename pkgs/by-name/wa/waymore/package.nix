@@ -4,6 +4,7 @@
   python3Packages,
   waymore,
   testers,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -18,9 +19,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-niV9aqBlSz9bkMF9uI34bmlm7Mqg3cDZGjjrtGN01Xk=";
   };
 
-  preBuild = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeBuildInputs = [ writableTmpDirAsHomeHook ];
 
   build-system = with python3Packages; [
     setuptools

@@ -104,6 +104,7 @@ let
 in
 {
   name = "${rancherPackage.name}-auto-deploy";
+  interactive.sshBackdoor.enable = true;
 
   nodes.machine =
     { pkgs, ... }:
@@ -198,6 +199,14 @@ in
                 kind = "Namespace";
                 metadata.name = "test";
               }
+              # extraDeploy item from a YAML file
+              (builtins.toFile "${rancherDistro}-test-chart-extra.yaml" ''
+                apiVersion: v1
+                kind: ConfigMap
+                metadata:
+                  name: extra-from-file
+                  namespace: test
+              '')
             ];
             extraFieldDefinitions = {
               spec = {
@@ -255,6 +264,7 @@ in
         machine.wait_until_succeeds("kubectl wait --for=condition=complete job/chart-hello")
         machine.wait_until_succeeds("kubectl wait --for=condition=complete job/chart-values-file")
         machine.wait_until_succeeds("kubectl -n test wait --for=condition=complete job/chart-advanced")
+        machine.succeed("kubectl -n test get configmap extra-from-file")
 
       with subtest("Output of manifest test job"):
         hello_output = machine.succeed("kubectl logs -l batch.kubernetes.io/job-name=manifest-hello")

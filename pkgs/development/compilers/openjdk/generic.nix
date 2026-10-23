@@ -69,7 +69,6 @@
 
   enableGtk ? true,
   gtk3,
-  gtk2,
   glib,
 
   temurin-bin-8,
@@ -87,6 +86,9 @@
     }
     .${featureVersion},
 }:
+
+assert lib.assertMsg (enableGtk -> lib.versionAtLeast featureVersion "11")
+  "GTK support in OpenJDK requires version 11.x or newer, because earlier versions would depend on GTK 2.";
 
 let
   sourceFile = ./. + "/${featureVersion}/source.json";
@@ -227,12 +229,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!headless && enableGtk) [
     (
-      if atLeast17 then
-        ./17/patches/swing-use-gtk-jdk13.patch
-      else if atLeast11 then
-        ./11/patches/swing-use-gtk-jdk10.patch
-      else
-        ./8/patches/swing-use-gtk-jdk8.patch
+      if atLeast17 then ./17/patches/swing-use-gtk-jdk13.patch else ./11/patches/swing-use-gtk-jdk10.patch
     )
   ]
   ++ lib.optionals (featureVersion == "11") [
@@ -300,7 +297,7 @@ stdenv.mkDerivation (finalAttrs: {
     lcms2
   ]
   ++ lib.optionals (!headless && enableGtk) [
-    (if atLeast11 then gtk3 else gtk2)
+    gtk3
     glib
   ];
 
@@ -401,6 +398,18 @@ stdenv.mkDerivation (finalAttrs: {
     # Set number of jobs to use when building.
     ''
       configureFlags+=("--with-jobs=''${NIX_BUILD_CORES}")
+    ''
+    # Build lib/security/cacerts from cacert instead of the bundled CA list.
+    # It goes into the java.base jmod, so jlink images also get it.
+    # Like upstream, write a PKCS12 store without a password: the JDK opens
+    # cacerts without one, and cannot read password-protected certificates.
+    + lib.optionalString atLeast11 ''
+      mkdir "$NIX_BUILD_TOP/cacerts-gen"
+      pushd "$NIX_BUILD_TOP/cacerts-gen"
+      JAVA_TOOL_OPTIONS="-Dkeystore.pkcs12.certProtectionAlgorithm=NONE -Dkeystore.pkcs12.macAlgorithm=NONE" \
+        ${jre-generate-cacerts} ${jdk-bootstrap'.home}/bin/keytool ${cacert}/etc/ssl/certs/ca-bundle.crt
+      popd
+      configureFlags+=("--with-cacerts-file=$NIX_BUILD_TOP/cacerts-gen/cacerts")
     '';
 
   env = {
@@ -602,7 +611,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit jdk-bootstrap;
     inherit (source) updateScript;
   }
-  // (if atLeast11 then { inherit gtk3; } else { inherit gtk2; })
+  // lib.optionalAttrs atLeast11 { inherit gtk3; }
   // lib.optionalAttrs (!atLeast23) {
     inherit architecture;
   };

@@ -3,8 +3,9 @@
   rustPlatform,
   fetchFromGitHub,
   makeWrapper,
+  copyDesktopItems,
   makeDesktopItem,
-  SDL2,
+  alsa-lib,
   pkg-config,
   libxrandr,
   libxi,
@@ -13,42 +14,49 @@
   wayland,
   libxkbcommon,
   libGL,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "snowemu";
-  version = "1.3.0";
+  version = "1.5.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "twvd";
     repo = "snow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/arxD1bShXqsC2If2v7ARBsjdlnhlg0wK6MLX0q4xiI=";
+    hash = "sha256-BA4uCuluSfIGXwBxE2X6Gke0ITsYEPzKoFDwx6jRYsk=";
     fetchSubmodules = true;
   };
-  cargoHash = "sha256-7cyhpiT6RL+5x+xslQzhA5W71rcZ9TJPmfUHKl7TC/M=";
+  cargoHash = "sha256-C7rCx0g77R+1f0la+j3pVW0bShGPdJD3btAIYg3yzMw=";
 
   nativeBuildInputs = [
     pkg-config
     makeWrapper
+    copyDesktopItems
   ];
 
-  buildInputs = [
-    SDL2.dev
-    libx11
-    libxcursor
-    libxrandr
-    libxi
-  ];
+  buildInputs = [ alsa-lib ];
 
   postInstall = ''
-    mv $out/bin/snow_frontend_egui $out/bin/snowemu
-
     install -Dm644 assets/snow_icon.png $out/share/icons/snowemu.png
+
+    substituteInPlace assets/dev.thomasw.snow.metainfo.xml \
+      --replace-fail "snow.desktop" "snowemu.desktop" \
+      --replace-fail "/usr/share/icons/hicolor/1024x1024/apps/snow_icon.png" \
+        "$out/share/icons/snowemu.png"
+    install -Dm644 assets/dev.thomasw.snow.metainfo.xml \
+      $out/share/metainfo/dev.thomasw.snow.metainfo.xml
 
     wrapProgram $out/bin/snowemu \
       --prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [
+          libx11
+          libxcursor
+          libxrandr
+          libxi
           wayland
           libxkbcommon
           libGL
@@ -56,18 +64,28 @@ rustPlatform.buildRustPackage (finalAttrs: {
       }
   '';
 
-  desktopItems = makeDesktopItem {
-    name = "snowemu";
-    exec = "snowemu";
-    icon = "snowemu";
-    desktopName = "Snow Emulator";
-    comment = finalAttrs.meta.description;
-    genericName = "Vintage Macintosh emulator";
-    categories = [
-      "Game"
-      "Emulator"
-    ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "snowemu";
+      exec = "snowemu";
+      icon = "snowemu";
+      desktopName = "Snow Emulator";
+      comment = finalAttrs.meta.description;
+      genericName = "Vintage Macintosh emulator";
+      categories = [
+        "Game"
+        "Emulator"
+      ];
+      keywords = [
+        "macintosh"
+        "emulator"
+        "vintage"
+        "68k"
+      ];
+    })
+  ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Early Macintosh emulator";

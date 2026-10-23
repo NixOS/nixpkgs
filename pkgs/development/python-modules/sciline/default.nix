@@ -24,7 +24,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sciline";
-  version = "25.11.1";
+  version = "26.9.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -32,7 +32,7 @@ buildPythonPackage (finalAttrs: {
     owner = "scipp";
     repo = "sciline";
     tag = finalAttrs.version;
-    hash = "sha256-BTdvPAeI7SWV8gNfXVC63YKghZOfJ9eFousOqycpTAw=";
+    hash = "sha256-jXMe1MVPxur5c79MIZB8gyKM471GVyuiCFsxOWB1qzo=";
   };
 
   build-system = [

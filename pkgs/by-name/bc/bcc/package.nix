@@ -5,7 +5,6 @@
   cmake,
   elfutils,
   fetchFromGitHub,
-  fetchpatch,
   flex,
   iperf,
   lib,
@@ -17,20 +16,21 @@
   nixosTests,
   python3Packages,
   readline,
+  removeReferencesTo,
   replaceVars,
   zip,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "bcc";
-  version = "0.36.1";
+  version = "0.37.0";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "iovisor";
     repo = "bcc";
     tag = "v${version}";
-    hash = "sha256-+XBFENCAKP8Z+5dviBervDXHOM2qY3lfDFsDKVjzMbM=";
+    hash = "sha256-OfQWqZ7yyN+rs6PJP5QUIn07QdxOiBoUEetGQPp6KJo=";
   };
 
   patches = [
@@ -44,12 +44,6 @@ python3Packages.buildPythonApplication rec {
     (replaceVars ./absolute-ausyscall.patch {
       ausyscall = lib.getExe' audit "ausyscall";
     })
-
-    (fetchpatch {
-      # https://github.com/iovisor/bcc/issues/5501
-      url = "https://github.com/iovisor/bcc/commit/c3f35ecca18b1ce926bd272f60f6d4465656a80b.patch";
-      hash = "sha256-Fr5SqDUpQzZj8yPST0V1QExNMCSoRbOXG5ZaChDXTZQ=";
-    })
   ];
 
   build-system = [ python3Packages.setuptools ];
@@ -62,6 +56,7 @@ python3Packages.buildPythonApplication rec {
     flex
     llvmPackages.llvm
     makeWrapper
+    removeReferencesTo
     zip
   ];
 
@@ -119,7 +114,16 @@ python3Packages.buildPythonApplication rec {
 
   postFixup = ''
     wrapPythonProgramsIn "$out/share/bcc/tools" "$out ''${pythonPath[*]}"
+  ''
+  # Remove string refs to LLVM static libs that are unused at runtime and bloat closure by 2G
+  + ''
+    remove-references-to -t ${lib.getLib llvmPackages.llvm} -t ${lib.getLib llvmPackages.libclang} $out/lib/libbcc.so.*
   '';
+
+  disallowedReferences = [
+    (lib.getLib llvmPackages.llvm)
+    (lib.getLib llvmPackages.libclang)
+  ];
 
   outputs = [
     "out"

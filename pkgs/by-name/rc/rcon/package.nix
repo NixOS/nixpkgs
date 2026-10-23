@@ -7,7 +7,6 @@
   glib,
   libbsd,
   check,
-  pcre,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,7 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     libbsd
     check
-    pcre
   ];
 
   postPatch = ''

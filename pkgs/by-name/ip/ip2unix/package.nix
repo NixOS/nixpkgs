@@ -2,13 +2,12 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   meson,
   ninja,
   pkg-config,
   yaml-cpp,
-  systemd,
-  python3Packages,
+  systemdLibs,
+  python313Packages,
   asciidoc,
   libxslt,
   docbook_xml_dtd_45,
@@ -39,9 +38,9 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xsl
     libxml2.bin
     docbook5
-    python3Packages.pytest
-    python3Packages.pytest-timeout
-    systemd
+    python313Packages.pytest
+    python313Packages.pytest-timeout
+    systemdLibs
   ]
   ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
 

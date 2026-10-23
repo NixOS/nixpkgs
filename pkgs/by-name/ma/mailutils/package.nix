@@ -75,6 +75,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./fix-build-mb-len-max.patch
+    # Fix linking loadable modules with Libtool 2.6.2
+    # https://savannah.gnu.org/bugs/?68588
+    ./fix-linking-with-libtool-2.6.2.patch
     ./path-to-cat.patch
     # Fix cross-compilation
     # https://lists.gnu.org/archive/html/bug-mailutils/2020-11/msg00038.html
@@ -120,7 +123,8 @@ stdenv.mkDerivation (finalAttrs: {
     mkpasswd
   ];
 
-  doCheck = !stdenv.hostPlatform.isDarwin; # ERROR: All 46 tests were run, 46 failed unexpectedly.
+  # On Hydra the *-linux tests are very flaky.  Maybe they're sensitive to load.
+  doCheck = stdenv.hostPlatform.isDarwin;
 
   meta = {
     description = "Rich and powerful protocol-independent mail framework";

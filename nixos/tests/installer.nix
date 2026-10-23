@@ -2,7 +2,6 @@
   system ? builtins.currentSystem,
   config ? { },
   pkgs ? import ../.. { inherit system config; },
-  systemdStage1,
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -41,9 +40,7 @@ let
         documentation.enable = false;
 
         # To ensure that we can rebuild the grub configuration on the nixos-rebuild
-        system.extraDependencies = with pkgs; [ stdenvNoCC ];
-
-        boot.initrd.systemd.enable = ${boolToString systemdStage1};
+        system.extraDependencies = with pkgs; [ stdenvNoCC hello ];
 
         ${optionalString (bootLoader == "grub") ''
           boot.loader.grub.extraConfig = "serial; terminal_output serial";
@@ -278,14 +275,14 @@ let
           target.succeed("nix-store --verify --check-contents >&2")
 
       with subtest("Check whether the channel works"):
-          target.succeed("nix-env -iA nixos.procps >&2")
-          assert ".nix-profile" in target.succeed("type -tP ps | tee /dev/stderr")
+          target.succeed("nix-env -iA nixos.hello >&2")
+          assert ".nix-profile" in target.succeed("type -tP hello | tee /dev/stderr")
 
       with subtest(
           "Check that the daemon works, and that non-root users can run builds "
           "(this will build a new profile generation through the daemon)"
       ):
-          target.succeed("su alice -l -c 'nix-env -iA nixos.procps' >&2")
+          target.succeed("su alice -l -c 'nix-env -iA nixos.hello' >&2")
 
       with subtest("Configure system with writable Nix store on next boot"):
           # we're not using copy_from_host here because the installer image
@@ -677,7 +674,6 @@ let
         # non-EFI tests can only run on x86
         platforms = mkIf (!isEfi) [
           "x86_64-linux"
-          "x86_64-darwin"
           "i686-linux"
         ];
         inherit broken;
@@ -685,6 +681,9 @@ let
       nodes =
         let
           commonConfig = {
+            # disabled by default. See all-tests.nix / tag(no-nix-by-default)
+            nix.enable = true;
+
             # builds stuff in the VM, needs more juice
             virtualisation.diskSize = 12 * 1024;
             virtualisation.cores = 8;
@@ -711,14 +710,9 @@ let
                 ../modules/profiles/installation-device.nix
                 ../modules/profiles/base.nix
                 extraInstallerConfig
-                ./common/auto-format-root-device.nix
               ];
 
-              # In systemdStage1, also automatically format the device backing the
-              # root filesystem.
-              virtualisation.fileSystems."/".autoFormat = systemdStage1;
-
-              boot.initrd.systemd.enable = systemdStage1;
+              virtualisation.fileSystems."/".autoFormat = true;
 
               # Use a small /dev/vdb as the root disk for the
               # installer. This ensures the target disk (/dev/vda) is
@@ -745,9 +739,11 @@ let
                   desktop-file-utils
                   docbook5
                   docbook_xsl_ns
+                  hello
                   kbd.dev
                   kmod.dev
                   libarchive.dev
+                  libcap-text-verifier
                   libxml2.bin
                   libxslt.bin
                   nixos-artwork.wallpapers.simple-dark-gray-bottom
@@ -771,11 +767,13 @@ let
                   # Only the out output is included here, which is what is
                   # required to build the NixOS udev rules
                   # See the comment in services/hardware/udev.nix
-                  systemdMinimal.out
+                  systemd.out
 
                   # add curl so that rather than seeing the test attempt to download
                   # curl's tarball, we see what it's trying to download
                   curl
+
+                  config.system.nixos-init.package
                 ]
                 ++ optionals (bootLoader == "grub") (
                   let
@@ -793,9 +791,7 @@ let
                 ++ optionals (bootLoader == "systemd-boot") [
                   pkgs.zstd.bin
                   pkgs.mypy
-                ]
-                ++ optionals clevisTest [ pkgs.klibc ]
-                ++ optional systemdStage1 config.system.nixos-init.package;
+                ];
 
               nix.settings = {
                 substituters = mkForce [ ];
@@ -871,23 +867,10 @@ let
             "mount LABEL=boot /mnt/boot",
         )
       '';
-      # The serial console is much more reliable than OCR, but
-      # scripted stage 1 doesn't forward logs / password prompts to
-      # it. (TODO: The test framework should use 'console=ttyS0'
-      # anyway, but currently it uses 'console=tty0' for the sake of
-      # the interactive driver)
-      enableOCR = !systemdStage1;
-      postBootCommands =
-        if systemdStage1 then
-          ''
-            target.wait_for_console_text("passphrase for")
-            target.send_console("supersecret\n")
-          ''
-        else
-          ''
-            target.wait_for_text("[Pp]assphrase for")
-            target.send_chars("supersecret\n")
-          '';
+      postBootCommands = ''
+        target.wait_for_console_text("passphrase for")
+        target.send_console("supersecret\n")
+      '';
     };
 
   # The (almost) simplest partitioning scheme: a swap partition and
@@ -1053,16 +1036,7 @@ let
         boot.initrd.clevis.devices."crypt-root".secretFile = "/etc/nixos/clevis-secret.jwe";
       '';
       postBootCommands = optionalString fallback ''
-        ${
-          if systemdStage1 then
-            ''
-              target.wait_for_text("Please enter")
-            ''
-          else
-            ''
-              target.wait_for_text("Passphrase for")
-            ''
-        }
+        target.wait_for_text("Please enter")
         target.send_chars("password\n")
       '';
     };
@@ -1164,20 +1138,68 @@ let
             networking.hostId = "00000000";
           '';
         postBootCommands = optionalString fallback ''
-          ${
-            if systemdStage1 then
-              ''
-                target.wait_for_text("Enter key for rpool${optionalString (!parentDataset) "/root"}")
-              ''
-            else
-              ''
-                target.wait_for_text("Key load error")
-              ''
-          }
+          target.wait_for_text("Enter key for rpool${optionalString (!parentDataset) "/root"}")
           target.send_chars("password\n")
         '';
       };
 
+  # To test bcachefsEncrypted against multiple kernels
+  mkBcachefsEncryptedTest =
+    {
+      nameSuffix ? "",
+      # Name of a pkgs.linuxPackages* attribute, e.g. "linuxPackages_latest".
+      kernelAttribute ? null,
+    }:
+    makeInstallerTest "bcachefs-encrypted${nameSuffix}" {
+      extraInstallerConfig = {
+        boot = {
+          supportedFilesystems = [ "bcachefs" ];
+        }
+        // optionalAttrs (kernelAttribute != null) {
+          kernelPackages = pkgs.${kernelAttribute};
+        };
+
+        # disable zfs so we can support latest kernel if needed
+        imports = [ no-zfs-module ];
+
+        environment.systemPackages = with pkgs; [ keyutils ];
+      };
+
+      extraConfig = ''
+        boot.kernelParams = lib.mkAfter [ "console=tty0" ];
+      ''
+      + optionalString (kernelAttribute != null) ''
+        boot.kernelPackages = pkgs.${kernelAttribute};
+      '';
+
+      enableOCR = true;
+      postBootCommands = ''
+        # Enter it wrong once
+        target.wait_for_text("enter passphrase for ")
+        target.send_chars("wrong\n")
+        # Then enter it right.
+        target.wait_for_text("enter passphrase for ")
+        target.send_chars("password\n")
+      '';
+
+      createPartitions = ''
+        installer.succeed(
+          "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
+          + " mkpart primary ext2 1M 100MB"          # /boot
+          + " mkpart primary linux-swap 100M 1024M"  # swap
+          + " mkpart primary 1024M -1s",             # /
+          "udevadm settle",
+          "mkswap /dev/vda2 -L swap",
+          "swapon -L swap",
+          "echo password | mkfs.bcachefs -L root --encrypted /dev/vda3",
+          "echo password | bcachefs unlock -k session /dev/vda3",
+          "echo password | mount -t bcachefs /dev/vda3 /mnt",
+          "mkfs.ext3 -L boot /dev/vda1",
+          "mkdir -p /mnt/boot",
+          "mount /dev/vda1 /mnt/boot",
+        )
+      '';
+    };
 in
 {
 
@@ -1410,7 +1432,7 @@ in
           "mount LABEL=boot /mnt/boot",
       )
     '';
-    extraConfig = optionalString systemdStage1 ''
+    extraConfig = ''
       boot.initrd.services.lvm.enable = true;
     '';
   };
@@ -1459,7 +1481,7 @@ in
         encrypted.enable = true;
         encrypted.blkDev = "/dev/vda3";
         encrypted.label = "crypt";
-        encrypted.keyFile = "/${if systemdStage1 then "sysroot" else "mnt-root"}/keyfile";
+        encrypted.keyFile = "/sysroot/keyfile";
       };
     '';
   };
@@ -1467,7 +1489,6 @@ in
   # Full disk encryption (root, kernel and initrd encrypted) using GRUB, GPT/UEFI,
   # LVM-on-LUKS and a keyfile in initrd.secrets to enter the passphrase once
   fullDiskEncryption = makeInstallerTest "fullDiskEncryption" {
-    broken = true;
     createPartitions = ''
       installer.succeed(
           "flock /dev/vda parted --script /dev/vda -- mklabel gpt"
@@ -1508,6 +1529,53 @@ in
     '';
     enableOCR = true;
     postBootCommands = ''
+      target.wait_for_text("Enter passphrase for")
+      # GRUB's EFI keyboard input appears to drop characters when typed at the
+      # default speed (producing an "Invalid passphrase" error), so type slowly.
+      target.send_chars("supersecret\n", 0.2)
+    '';
+  };
+
+  # Root, kernel and initrd encrypted using GRUB cryptodisk, MBR/legacy BIOS,
+  # plain LUKS and a keyfile in initrd.secrets to enter the passphrase once
+  grubCryptodiskLegacyBios = makeInstallerTest "grubCryptodiskLegacyBios" {
+    meta.maintainers = [ maintainers.tomfitzhenry ];
+    createPartitions = ''
+      installer.succeed(
+          "flock /dev/vda parted --script /dev/vda -- mklabel msdos mkpart primary ext4 1MiB -1GiB mkpart primary linux-swap -1GiB 100%",
+          "udevadm settle",
+          "echo -n supersecret | cryptsetup luksFormat -q --pbkdf-force-iterations 1000 --type luks1 /dev/vda1 -",
+          "echo -n supersecret | cryptsetup luksOpen /dev/vda1 cryptroot",
+          "mkfs.ext4 -L nixos /dev/mapper/cryptroot",
+          "mkswap -L swap /dev/vda2",
+          "swapon -L swap",
+          "mount LABEL=nixos /mnt",
+          "mkdir -p /mnt/etc/nixos",
+          # Add a keyfile so stage 1 can unlock the root device without a second,
+          # interactive prompt. This keeps the test independent of the stage 1
+          # implementation, which matters because the scripted and systemd
+          # initrds word their passphrase prompts differently. Only GRUB (which
+          # is stage 1 independent) then prompts interactively.
+          "dd if=/dev/urandom of=/mnt/etc/nixos/luks.key bs=256 count=1",
+          "echo -n supersecret | cryptsetup luksAddKey -q --pbkdf-force-iterations 1000 --key-file - /dev/vda1 /mnt/etc/nixos/luks.key",
+      )
+    '';
+    bootLoader = "grub";
+    # GRUB draws its cryptodisk passphrase prompt on the console terminal
+    # without a trailing newline, so the line-based wait_for_console_text can
+    # never observe it. Use OCR (wait_for_text) to read it off the screen.
+    enableOCR = true;
+    extraConfig = ''
+      boot.loader.grub.enableCryptodisk = true;
+      boot.initrd.secrets."/luks.key" = "/etc/nixos/luks.key";
+      boot.initrd.luks.devices.cryptroot = {
+        device = lib.mkForce "/dev/vda1";
+        keyFile = "/luks.key";
+      };
+    '';
+    postBootCommands = ''
+      # GRUB has to unlock the disk to read /boot before it can boot the kernel;
+      # stage 1 then unlocks the root device with the embedded keyfile.
       target.wait_for_text("Enter passphrase for")
       target.send_chars("supersecret\n")
     '';
@@ -1597,47 +1665,16 @@ in
     '';
   };
 
-  bcachefsEncrypted = makeInstallerTest "bcachefs-encrypted" {
-    extraInstallerConfig = {
-      boot.supportedFilesystems = [ "bcachefs" ];
+  bcachefsEncrypted = mkBcachefsEncryptedTest { };
 
-      # disable zfs so we can support latest kernel if needed
-      imports = [ no-zfs-module ];
+  bcachefsEncryptedLatestKernel = mkBcachefsEncryptedTest {
+    nameSuffix = "-latest-kernel";
+    kernelAttribute = "linuxPackages_latest";
+  };
 
-      environment.systemPackages = with pkgs; [ keyutils ];
-    };
-
-    extraConfig = ''
-      boot.kernelParams = lib.mkAfter [ "console=tty0" ];
-    '';
-
-    enableOCR = true;
-    postBootCommands = ''
-      # Enter it wrong once
-      target.wait_for_text("enter passphrase for ")
-      target.send_chars("wrong\n")
-      # Then enter it right.
-      target.wait_for_text("enter passphrase for ")
-      target.send_chars("password\n")
-    '';
-
-    createPartitions = ''
-      installer.succeed(
-        "flock /dev/vda parted --script /dev/vda -- mklabel msdos"
-        + " mkpart primary ext2 1M 100MB"          # /boot
-        + " mkpart primary linux-swap 100M 1024M"  # swap
-        + " mkpart primary 1024M -1s",             # /
-        "udevadm settle",
-        "mkswap /dev/vda2 -L swap",
-        "swapon -L swap",
-        "echo password | mkfs.bcachefs -L root --encrypted /dev/vda3",
-        "echo password | bcachefs unlock -k session /dev/vda3",
-        "echo password | mount -t bcachefs /dev/vda3 /mnt",
-        "mkfs.ext3 -L boot /dev/vda1",
-        "mkdir -p /mnt/boot",
-        "mount /dev/vda1 /mnt/boot",
-      )
-    '';
+  bcachefsEncryptedRcKernel = mkBcachefsEncryptedTest {
+    nameSuffix = "-rc-kernel";
+    kernelAttribute = "linuxPackages_testing";
   };
 
   bcachefsMulti = makeInstallerTest "bcachefs-multi" {
@@ -1789,8 +1826,6 @@ in
       )
     '';
   };
-}
-// {
   clevisBcachefs = mkClevisBcachefsTest { };
   clevisBcachefsFallback = mkClevisBcachefsTest { fallback = true; };
   clevisLuks = mkClevisLuksTest { };
@@ -1802,8 +1837,6 @@ in
     parentDataset = true;
     fallback = true;
   };
-}
-// optionalAttrs systemdStage1 {
   clevisLuksAskpass = mkClevisLuksAskpassTest { };
   clevisLuksAskpassFallback = mkClevisLuksAskpassTest { fallback = true; };
 
@@ -1811,7 +1844,7 @@ in
     createPartitions = ''
       installer.succeed(
         "sgdisk --zap-all /dev/vda",
-        "sgdisk --new=1:0:+100M --typecode=0:ef00 /dev/vda", # /boot
+        "sgdisk --new=1:0:+200M --typecode=0:ef00 /dev/vda", # /boot
         "sgdisk --new=2:0:+1G --typecode=0:8200 /dev/vda", # swap
         "sgdisk --new=3:0:+5G --typecode=0:8300 /dev/vda", # /
         "udevadm settle",

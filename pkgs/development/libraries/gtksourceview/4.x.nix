@@ -28,6 +28,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "gtksourceview";
   version = "4.8.4";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   outputs = [
     "out"
     "dev"
@@ -39,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     fetchurl {
       url = "mirror://gnome/sources/gtksourceview/${lib.versions.majorMinor version}/gtksourceview-${version}.tar.xz";
-      sha256 = "fsnRj7KD0fhKOj7/O3pysJoQycAGWXs/uru1lYQgqH0=";
+      hash = "sha256-fsnRj7KD0fhKOj7/O3pysJoQycAGWXs/uru1lYQgqH0=";
     };
 
   patches = [
@@ -70,6 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     gobject-introspection
     vala
+    libxml2 # xmllint
   ];
 
   buildInputs = [
@@ -100,9 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "if generate_vapi" "if false"
   '';
 
-  # Broken by PCRE 2 bump in GLib.
-  # https://gitlab.gnome.org/GNOME/gtksourceview/-/issues/283
-  doCheck = false;
+  doCheck = stdenv.hostPlatform.isLinux;
 
   checkPhase = ''
     runHook preCheck
@@ -110,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
     XDG_DATA_DIRS="$XDG_DATA_DIRS:${shared-mime-info}/share" \
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
       --config-file=${dbus}/share/dbus-1/session.conf \
-      meson test --no-rebuild --print-errorlogs
+      meson test --no-rebuild --print-errorlogs --timeout-multiplier=0
 
     runHook postCheck
   '';

@@ -13,6 +13,7 @@
   gitMinimal,
   cacert,
   jq,
+  writableTmpDirAsHomeHook,
   writeText,
   stdenvNoCC,
 }:
@@ -43,6 +44,8 @@ lib.extendMkDerivation {
   extendDrvArgs =
     finalAttrs:
     {
+      pname,
+      version,
       nativeBuildInputs ? [ ],
       passthru ? { },
 
@@ -66,12 +69,6 @@ lib.extendMkDerivation {
       ...
     }@args:
     let
-      lakeDeps' = args.lakeDeps or null;
-      lakeHash = args.lakeHash or null;
-      leanDeps = args.leanDeps or [ ];
-      overrideLakeDepsAttrs = args.overrideLakeDepsAttrs or (_: _: { });
-      buildTargets = args.buildTargets or [ ];
-      isLibrary = args.isLibrary or true;
       leanPackageName = args.leanPackageName or finalAttrs.pname;
 
       allLeanDeps = lib.unique (
@@ -79,14 +76,13 @@ lib.extendMkDerivation {
       );
 
       computedLakeDeps =
-        if lakeDeps' != null then
-          lakeDeps'
+        if lakeDeps != null then
+          lakeDeps
         else if lakeHash == null then
           null
         else
           (fetchLakeDeps {
-            name = finalAttrs.name or "${finalAttrs.pname}-${finalAttrs.version}";
-            inherit (finalAttrs) src;
+            inherit (finalAttrs) src pname version;
             hash = lakeHash;
             sourceRoot = finalAttrs.sourceRoot or "";
             patches = finalAttrs.patches or [ ];
@@ -118,48 +114,58 @@ lib.extendMkDerivation {
         lean4
         gitMinimal
         jq
+        writableTmpDirAsHomeHook
       ];
 
       propagatedBuildInputs = lib.optionals isLibrary leanDeps;
       buildInputs = lib.optionals (!isLibrary) leanDeps;
 
       configurePhase =
-        args.configurePhase or ''
-          runHook preConfigure
-
-          export HOME="$TMPDIR"
-
+        args.configurePhase or (
+          ''
+            runHook preConfigure
+          ''
           # Disable cloud caching and Reservoir lookups.
-          export LAKE_NO_CACHE=1
-          export RESERVOIR_API_URL=""
-          export LEAN_CC="${stdenv.cc}/bin/cc"
+          + ''
+            export LAKE_NO_CACHE=1
+            export RESERVOIR_API_URL=""
+            export LEAN_CC="${stdenv.cc}/bin/cc"
+          ''
+          # `lake` has no `-j`: it schedules build jobs on Lean's task manager, which otherwise
+          # sizes itself from `hardware_concurrency()` and ignores the builder's core budget.
+          + ''
+            export LEAN_NUM_THREADS="$NIX_BUILD_CORES"
 
-          if [ -n "''${LEAN_PATH:-}" ]; then
-            echo "buildLakePackage: LEAN_PATH=$LEAN_PATH"
-          fi
+            if [ -n "''${LEAN_PATH:-}" ]; then
+              echo "buildLakePackage: LEAN_PATH=$LEAN_PATH"
+            fi
 
-          ${lib.optionalString (computedLakeDeps != null) ''
-            mkdir -p .lake/packages
-            for dep in ${computedLakeDeps}/*; do
-              depName="$(basename "$dep")"
-              cp -r "$dep" ".lake/packages/$depName"
-              chmod -R u+w ".lake/packages/$depName"
-            done
+            ${lib.optionalString (computedLakeDeps != null) (
+              ''
+                mkdir -p .lake/packages
+                for dep in ${computedLakeDeps}/*; do
+                  depName="$(basename "$dep")"
+                  cp -r "$dep" ".lake/packages/$depName"
+                  chmod -R u+w ".lake/packages/$depName"
+                done
+              ''
+              # FOD deps use package-overrides.json (the on-disk mechanism).
+              # Nix-managed deps use --packages (the CLI mechanism, takes precedence).
+              + ''
+                jq -n --argjson pkgs "$(
+                  for dep in .lake/packages/*/; do
+                    [ -d "$dep" ] || continue
+                    depName="$(basename "$dep")"
+                    jq -n --arg name "$depName" --arg dir ".lake/packages/$depName" \
+                      '{type: "path", name: $name, inherited: false, dir: $dir}'
+                  done | jq -s '.'
+                )" '{schemaVersion: "1.2.0", packages: $pkgs}' > .lake/package-overrides.json
+              ''
+            )}
 
-            # FOD deps use package-overrides.json (the on-disk mechanism).
-            # Nix-managed deps use --packages (the CLI mechanism, takes precedence).
-            jq -n --argjson pkgs "$(
-              for dep in .lake/packages/*/; do
-                [ -d "$dep" ] || continue
-                depName="$(basename "$dep")"
-                jq -n --arg name "$depName" --arg dir ".lake/packages/$depName" \
-                  '{type: "path", name: $name, inherited: false, dir: $dir}'
-              done | jq -s '.'
-            )" '{schemaVersion: "1.2.0", packages: $pkgs}' > .lake/package-overrides.json
-          ''}
-
-          runHook postConfigure
-        '';
+            runHook postConfigure
+          ''
+        );
 
       buildPhase =
         args.buildPhase or ''
@@ -233,6 +239,8 @@ lib.extendMkDerivation {
       };
 
       meta = meta // {
+        # Note: This conflates the platforms that the Lean compiler can run on (a package build system) and the platforms the Lean compiler
+        # can target (build host)
         platforms = meta.platforms or lean4.meta.platforms;
       };
     };

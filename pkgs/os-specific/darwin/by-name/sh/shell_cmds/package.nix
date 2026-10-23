@@ -24,7 +24,7 @@ mkAppleDerivation {
     "man"
   ];
 
-  xcodeHash = "sha256-fY8k7qzqqiv/KvGIB4a82qbNsm23QPnGOadrZmNoi54=";
+  xcodeHash = "sha256-sbgPFMMXgUp+F1IRLiaFto+PsfMHBd23KQ1sQK7tP7A=";
 
   postPatch = ''
     # Fix `mktemp` templates
@@ -63,9 +63,16 @@ mkAppleDerivation {
 
   meta = {
     description = "Darwin shell commands and the Almquist shell";
-    license = [
-      lib.licenses.bsd2
-      lib.licenses.bsd3
-    ];
+    license =
+      with lib.licenses;
+      AND [
+        apple-psl20
+        bsd2
+        bsd2WithViews
+        bsd3
+        bsdOriginal
+        bsdOriginalUC
+        publicDomain
+      ];
   };
 }

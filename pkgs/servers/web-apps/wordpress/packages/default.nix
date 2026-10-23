@@ -9,6 +9,7 @@
   themes,
   languages,
   callPackage,
+  cacert,
 }:
 
 let
@@ -116,7 +117,7 @@ let
         }
       ) { };
 
-      # Filter out all characters that might occur in a version string but that that are not allowed
+      # Filter out all characters that might occur in a version string but that are not allowed
       # in store paths.
       filterWPString =
         builtins.replaceStrings
@@ -200,8 +201,24 @@ let
       )
     ) generatedJson;
 
+  overrides = _final: prev: {
+    plugins = prev.plugins // {
+      hcaptcha-for-forms-and-more = prev.plugins.hcaptcha-for-forms-and-more.overrideAttrs {
+        postInstall = ''
+          rm $out/vendor/composer/ca-bundle/res/cacert.pem
+          ln -s ${cacert}/etc/ssl/certs/ca-no-trust-rules-bundle.crt $out/vendor/composer/ca-bundle/res/cacert.pem
+        '';
+      };
+      wpforms-lite = prev.plugins.wpforms-lite.overrideAttrs {
+        postInstall = ''
+          rm $out/vendor_prefixed/stripe/stripe-php/data/ca-certificates.crt
+          ln -s ${cacert}/etc/ssl/certs/ca-no-trust-rules-bundle.crt $out/vendor_prefixed/stripe/stripe-php/data/ca-certificates.crt
+        '';
+      };
+    };
+  };
 in
 # This creates an extensible scope.
-lib.recursiveUpdate ((lib.makeExtensible (_: (lib.makeScope newScope packages))).extend (
-  selfWP: superWP: { }
-)) (callPackage ./thirdparty.nix { })
+lib.recursiveUpdate ((lib.makeExtensible (_: (lib.makeScope newScope packages))).extend overrides) (
+  callPackage ./thirdparty.nix { }
+)

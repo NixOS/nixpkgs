@@ -22,12 +22,12 @@
   libcloudproviders,
   libgit2-glib,
   wrapGAppsHook3,
-  systemd,
+  systemdLibs,
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-files";
-  version = "7.3.1";
+  version = "7.3.3";
 
   outputs = [
     "out"
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = "files";
     rev = version;
-    hash = "sha256-53JzGLlRIeRVq54/YbZd24M8DiS2LuTvgC3/0pRrja4=";
+    hash = "sha256-Na5aiIgdAogSRwysz4v6U47tphVYVWleJ6OokXT+HMw=";
   };
 
   nativeBuildInputs = [
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     pango
     poppler_gi
     sqlite
-    systemd
+    systemdLibs
     zeitgeist
   ];
 

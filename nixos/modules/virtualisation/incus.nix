@@ -61,7 +61,7 @@ let
       rsync
       skopeo
       squashfs-tools-ng
-      squashfsTools
+      squashfs-tools
       sshfs
       swtpm
       systemd
@@ -93,6 +93,9 @@ let
     ]
     ++ lib.optionals nvidiaEnabled [
       libnvidia-container
+    ]
+    ++ lib.optionals cfg.storage.truenas.enable [
+      truenas-incus-ctl
     ];
 
   # https://github.com/lxc/incus/blob/cff35a29ee3d7a2af1f937cbb6cf23776941854b/internal/server/instance/drivers/driver_qemu.go#L123
@@ -284,6 +287,8 @@ in
         '';
       };
 
+      storage.truenas.enable = lib.mkEnableOption "TrueNAS storage driver support";
+
       ui = {
         enable = lib.mkEnableOption "Incus Web UI";
 
@@ -313,6 +318,10 @@ in
             && config.virtualisation.incus.enable
           );
         message = "Incus on NixOS is unsupported using iptables. Set `networking.nftables.enable = true;`";
+      }
+      {
+        assertion = cfg.storage.truenas.enable -> config.services.openiscsi.enable;
+        messages = "`virtualisation.incus.storage.truenas.enable` requires `services.openiscsi.enable`";
       }
     ];
 
@@ -346,6 +355,9 @@ in
 
       # gui console support
       pkgs.spice-gtk
+    ]
+    ++ lib.optionals cfg.storage.truenas.enable [
+      pkgs.truenas-incus-ctl
     ];
 
     # Note: the following options are also declared in virtualisation.lxc, but
@@ -384,21 +396,24 @@ in
           abi <abi/4.0>,
           include <tunables/global>
 
-          include "/var/lib/incus/security/apparmor/profiles"
+          include if exists "/var/lib/incus/security/apparmor/profiles"
         '';
       };
       includes."abstractions/base" = ''
         # Allow incusd's various AA profiles to load dynamic libraries from Nix store
         # https://discuss.linuxcontainers.org/t/creating-new-containers-vms-blocked-by-apparmor-on-nixos/21908/6
-        mr /nix/store/*/lib/*.so*,
+        mr /nix/store/*/lib/**.so*,
         r ${pkgs.stdenv.cc.libc}/lib/gconv/gconv-modules,
         r ${pkgs.stdenv.cc.libc}/lib/gconv/gconv-modules.d/,
         r ${pkgs.stdenv.cc.libc}/lib/gconv/gconv-modules.d/gconv-modules-extra.conf,
 
+        r /nix/store/*-etc-os-release,
+
         # Support use of VM instance
         mrix ${pkgs.qemu_kvm}/bin/*,
-        k ${OVMF2MB.fd}/FV/*.fd,
-        k ${pkgs.OVMFFull.fd}/FV/*.fd,
+        r ${pkgs.qemu_kvm}/share/qemu/**,
+        rk ${OVMF2MB.fd}/FV/*.fd,
+        rk ${pkgs.OVMFFull.fd}/FV/*.fd,
       ''
       + lib.optionalString pkgs.stdenv.hostPlatform.isx86_64 ''
         k ${pkgs.seabios-qemu}/share/seabios/bios.bin,
@@ -433,6 +448,8 @@ in
         "network-online.target"
       ]
       ++ lib.optionals (cfg.useACMEHost != null) [ "acme-${cfg.useACMEHost}.service" ];
+
+      stopIfChanged = lib.mkIf cfg.softDaemonRestart false;
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/incusd --group incus-admin";
@@ -492,6 +509,7 @@ in
 
       # restarting this service will affect instances
       restartIfChanged = false;
+      stopIfChanged = false;
 
       serviceConfig = {
         ExecStart = "${incus-startup} start";

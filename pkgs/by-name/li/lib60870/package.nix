@@ -9,20 +9,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lib60870";
-  version = "2.3.6";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "mz-automation";
     repo = "lib60870";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-9VqLl1pDmi8TauBA8uCyymzsYd3w4b5AKtqH7XW80N4=";
+    hash = "sha256-WXEe+G7ib9XNAZSsNl/RZcFHXpIbCMKNfPLnxZzz09E=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/lib60870-C";
 
   postPatch = ''
+    # Keep system mbedTLS support enabled without vendored mbedTLS sources.
     substituteInPlace CMakeLists.txt \
-      --replace-fail "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
+      --replace-fail "if(MBEDTLS_DIR)" "if(MBEDTLS_DIR OR WITH_MBEDTLS3)"
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace src/CMakeLists.txt \

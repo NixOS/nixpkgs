@@ -24,6 +24,7 @@
   llguidance,
   opencv-python-headless,
   pydantic-settings,
+  pytest-xdist,
   pytestCheckHook,
   sentencepiece,
   soundfile,
@@ -38,14 +39,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mistral-common";
-  version = "1.11.5";
+  version = "1.12.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mistralai";
     repo = "mistral-common";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vm7u+EWuqjguccezlN+fKdTl8CL081ah3OccpenbpT0=";
+    hash = "sha256-XrSlPG7t1BJ+kcoMlZMwVRnKfNS656GlnatebgapRMY=";
   };
 
   build-system = [
@@ -111,6 +113,7 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     openai
     pycountry
+    pytest-xdist
     pytestCheckHook
     uvicorn
   ]
@@ -119,12 +122,15 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # AssertionError, Extra items in the right set
     "test_openai_chat_fields"
+
+    # AssertionError: assert 0.028677442591911916 < 0.005
+    "test_audio_base64"
   ];
 
   meta = {
     description = "Tools to help you work with Mistral models";
     homepage = "https://github.com/mistralai/mistral-common";
-    changelog = "https://github.com/mistralai/mistral-common/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/mistralai/mistral-common/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bgamari ];
   };

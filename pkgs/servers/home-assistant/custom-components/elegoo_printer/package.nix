@@ -11,6 +11,7 @@
   websockets,
 
   # tests
+  pytest-asyncio,
   pytestCheckHook,
   aiohttp,
   home-assistant,
@@ -19,13 +20,13 @@
 buildHomeAssistantComponent rec {
   owner = "danielcherubini";
   domain = "elegoo_printer";
-  version = "2.9.0";
+  version = "2.13.1";
 
   src = fetchFromGitHub {
     owner = "danielcherubini";
     repo = "elegoo-homeassistant";
     tag = "v${version}";
-    hash = "sha256-lKRi90H48w9jndljoSyaHY4cVh4/qEkGGOkEs5GVk1o=";
+    hash = "sha256-L3oFUCqxkygiwTTeHR9MMneA5q4+YFHBoNAxqbqp/Sk=";
   };
 
   dependencies = [
@@ -37,9 +38,15 @@ buildHomeAssistantComponent rec {
   ];
 
   nativeCheckInputs = [
+    pytest-asyncio
     pytestCheckHook
     aiohttp
     home-assistant
+  ];
+
+  disabledTestPaths = [
+    # https://github.com/danielcherubini/elegoo-homeassistant/issues/419
+    "custom_components/elegoo_printer/tests/test_coordinator.py"
   ];
 
   meta = {

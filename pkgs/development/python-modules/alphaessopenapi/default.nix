@@ -7,7 +7,7 @@
   voluptuous,
 }:
 buildPythonPackage rec {
-  pname = "alphaess";
+  pname = "alphaessopenapi";
   version = "0.0.19";
   pyproject = true;
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "CharlesGillanders";
     repo = "alphaess-openAPI";
     tag = version;
-    sha256 = "sha256-wdwA1MIQrkZCT4zIf8WXyq0+F+peC/auVtjDJ8ZZyxE=";
+    hash = "sha256-wdwA1MIQrkZCT4zIf8WXyq0+F+peC/auVtjDJ8ZZyxE=";
   };
 
   build-system = [ setuptools ];

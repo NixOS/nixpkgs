@@ -7,40 +7,18 @@
 }:
 let
   inherit (stdenvNoCC.hostPlatform) system;
-  version = "2.2.1-20628";
-  sourceData = {
-    aarch64-darwin = {
-      arch = "arm64";
-      hash = "sha256-W8FxnDyYfExgxlvp/dZbRzCZDhaX7Byxwz5rujG/krU=";
-    };
-    x86_64-darwin = {
-      arch = "amd64";
-      hash = "sha256-8woVgREEpJT+IGaVsash/PruEuye+8uhKaADTrtoMZs=";
-    };
-  };
-  sources = lib.mapAttrs (
-    system:
-    { arch, hash }:
-    fetchurl {
-      url = "https://cdn-updates.orbstack.dev/${arch}/OrbStack_v${
-        lib.replaceString "-" "_" version
-      }_${arch}.dmg";
-      inherit hash;
-    }
-  ) sourceData;
+  version = "2.2.4-21120";
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "orbstack";
   inherit version;
 
-  src = finalAttrs.passthru.sources.${system} or (throw "unsupported system ${system}");
-
-  # -snld prevents "ERROR: Dangerous symbolic link path was ignored"
-  # -xr'!*:com.apple.*' prevents macOS extended attributes (e.g. macl or
-  # quarantine) being turned into real files when extracting an APFS .dmg
-  # (e.g. Info.plist:com.apple.macl or Info.plist:com.apple.quarantine).
-  # These bogus files corrupt the .app bundle and prevent it from launching.
-  unpackCmd = "7zz x -snld -xr'!*:com.apple.*' $curSrc";
+  src = fetchurl {
+    url = "https://cdn-updates.orbstack.dev/arm64/OrbStack_v${
+      lib.replaceString "-" "_" version
+    }_arm64.dmg";
+    hash = "sha256-8MaY5wnJn7Puh/ksOgRFxrj1oQ1qDt1PTUYZJdGUuGo=";
+  };
 
   nativeBuildInputs = [
     _7zz
@@ -70,7 +48,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    inherit sources;
     updateScript = ./update.sh;
   };
 

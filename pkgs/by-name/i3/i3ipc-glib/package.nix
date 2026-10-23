@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.0.1";
 
   src = fetchFromGitHub {
-    owner = "acrisci";
+    owner = "altdesktop";
     repo = "i3ipc-glib";
     tag = "v${finalAttrs.version}";
     hash = "sha256-F9Tiwc/gB7BFWr/qerS4n/+k/nUvJsH7Bp2zb1fe3wU=";
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "C interface library to i3wm";
-    homepage = "https://github.com/acrisci/i3ipc-glib";
+    homepage = "https://github.com/altdesktop/i3ipc-glib";
     maintainers = with lib.maintainers; [ teto ];
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;

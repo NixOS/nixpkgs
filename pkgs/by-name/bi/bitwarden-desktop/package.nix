@@ -5,14 +5,14 @@
   copyDesktopItems,
   dart-sass,
   darwin,
-  electron_39,
+  electron_43,
   fetchFromGitHub,
   gnome-keyring,
   jq,
   makeDesktopItem,
   makeWrapper,
   nix-update-script,
-  nodejs_22,
+  nodejs_24,
   pkg-config,
   rustc,
   rustPlatform,
@@ -22,21 +22,20 @@
 
 let
   icon = "bitwarden";
-  electron = electron_39;
+  electron = electron_43;
 in
 buildNpmPackage (finalAttrs: {
   pname = "bitwarden-desktop";
-  version = "2026.6.0";
+  version = "2026.9.1";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     tag = "desktop-v${finalAttrs.version}";
-    hash = "sha256-JIIis3wW0cU33ovRQfJi3HlB2YdLZ5IPvueq1dGFbas=";
+    hash = "sha256-Ag3hTOvIRf9CwfzTvhICKV9ols+yd16rvSqC66QRbOs=";
   };
 
   patches = [
-    ./electron-builder-package-lock.patch
     ./dont-auto-setup-biometrics.patch
 
     # ensures `app.getPath("exe")` returns our wrapper, not ${electron}/bin/electron
@@ -64,7 +63,7 @@ buildNpmPackage (finalAttrs: {
     rm -r apps/cli
   '';
 
-  nodejs = nodejs_22;
+  nodejs = nodejs_24;
 
   makeCacheWritable = true;
   npmFlags = [
@@ -73,8 +72,8 @@ buildNpmPackage (finalAttrs: {
   ];
 
   npmWorkspace = "apps/desktop";
-  npmDepsFetcherVersion = 3;
-  npmDepsHash = "sha256-mvFLZwWwIv4PbUwfTWvwZ9JyRoHJSwAA0cT4RXD0/YU=";
+  npmDepsFetcherVersion = 2;
+  npmDepsHash = "sha256-JI5U4Q7zrF7UZXxVtsaJRJK6QAuLQuievd0z1/3GJfE=";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs)
@@ -84,7 +83,7 @@ buildNpmPackage (finalAttrs: {
       cargoRoot
       patches
       ;
-    hash = "sha256-xyK3+z2yfCG9K5XAB6LNEeyqMRknONi6ZfY/3oko7Z8=";
+    hash = "sha256-m0b8HxCAh/Xk0rsQXtmJRX0Lq6tiu2SZTxHDTXgy/uA=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
@@ -197,7 +196,7 @@ buildNpmPackage (finalAttrs: {
     # Extract the polkit policy file from the multiline string in the source code.
     # This may break in the future but its better than copy-pasting it manually.
     mkdir -p $out/share/polkit-1/actions/
-    pushd apps/desktop/src/key-management/biometrics
+    pushd apps/desktop/src/key-management/biometrics/native-v2
     awk '/const polkitPolicy = `/{gsub(/^.*`/, ""); print; str=1; next} str{if (/`;/) str=0; gsub(/`;/, ""); print}' os-biometrics-linux.service.ts > $out/share/polkit-1/actions/com.bitwarden.Bitwarden.policy
     popd
 
@@ -246,7 +245,6 @@ buildNpmPackage (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     mainProgram = "bitwarden";

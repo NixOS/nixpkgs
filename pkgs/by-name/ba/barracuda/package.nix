@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "Zaneham";
-    repo = "BarraCUDA";
+    repo = "Booth";
     tag = "v${finalAttrs.version}";
     hash = "sha256-WQGnW7fpTIJuUkf9OYWPPWbE4VMhfff32bKGR9e01oQ=";
   };
@@ -36,8 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Multi architecture, multi language compiler with the intended goal of allowing for cross platform development on GPU's and CPU's";
-    homepage = "https://github.com/Zaneham/BarraCUDA";
-    changelog = "https://github.com/Zaneham/BarraCUDA/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/Zaneham/Booth";
+    changelog = "https://github.com/Zaneham/Booth/releases/tag/${finalAttrs.src.tag}";
     maintainers = with lib.maintainers; [ dstremur ];
     license = lib.licenses.asl20;
     platforms = [ "x86_64-linux" ];

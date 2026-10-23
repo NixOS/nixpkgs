@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mapbox-gl-qml";
-  version = "3.0.0";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "rinigus";
     repo = "mapbox-gl-qml";
     tag = finalAttrs.version;
-    hash = "sha256-csk3Uo+AdP1R/T/9gWyWmYFIKuen2jy8wYN3GJznyRE=";
+    hash = "sha256-HE36UJgdXZalPpEXShus+C3jSFQr/WmmKZdK65CH1zY=";
   };
 
   nativeBuildInputs = [

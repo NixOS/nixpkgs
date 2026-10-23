@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "finalfusion";
     repo = "finalfusion-python";
     rev = version;
-    sha256 = "0pwzflamxqvpl1wcz0zbhhd6aa4xn18rmza6rggaic3ckidhyrh4";
+    hash = "sha256-BGYPW5xssKjey0b9mlGwnShlGoTrg894oHfjXhV1n18=";
   };
 
   nativeBuildInputs = [ cython ];

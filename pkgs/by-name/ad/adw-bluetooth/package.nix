@@ -7,7 +7,7 @@
   ninja,
   pkg-config,
   blueprint-compiler,
-  typescript,
+  typescript_5,
   desktop-file-utils,
   wrapGAppsHook4,
   gjs,
@@ -15,13 +15,13 @@
 }:
 
 let
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "ezratweaver";
     repo = "adw-bluetooth";
     tag = version;
-    hash = "sha256-h3cHtecwBsx3j33qXVn/zaq4FZext71P7flzunCHqHg=";
+    hash = "sha256-UQg2pEmRfTOt6QKdiL1Z86SeGYJ/zZ4XM09l7F/4+UU=";
   };
 
   daemon = buildGoModule {
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     blueprint-compiler
-    typescript
+    typescript_5
     desktop-file-utils
     wrapGAppsHook4
   ];

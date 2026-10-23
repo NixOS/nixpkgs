@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "total-connect-client";
-  version = "2025.12.2";
+  version = "2026.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "craigjmidwinter";
     repo = "total-connect-client";
     tag = version;
-    hash = "sha256-ofbGW5OCKAFW+BXYvegHmFrnJKmRx/Ez86Na00bp9cw=";
+    hash = "sha256-MUJEpkbgsAVND13wL0/kOGZ+HfsWby4qSRNIIDCCFN8=";
   };
 
   build-system = [ setuptools ];

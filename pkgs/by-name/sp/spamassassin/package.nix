@@ -74,6 +74,8 @@ perlPackages.buildPerlPackage rec {
 
   makeMakerFlags = [ "SYSCONFDIR=/etc LOCALSTATEDIR=/var/lib/spamassassin" ];
 
+  __darwinAllowLocalNetworking = true;
+
   checkInputs =
     (with perlPackages; [
       TextDiff # t/strip2.t

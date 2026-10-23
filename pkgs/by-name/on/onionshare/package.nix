@@ -18,14 +18,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "onionshare-cli";
-  version = "2.6.4";
+  version = "2.6.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "onionshare";
     repo = "onionshare";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VkfS9coUIejRAcu+/e6jjh+eknd56fA3NpFwikd5n9c=";
+    hash = "sha256-RAUTBUU29wON2RLVL7fa2iofMamjXjP2BONP9Bd9ZN0=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/cli";

@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
       aanderse
       McSinyx
     ];
-    license = [ lib.licenses.gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
   };
 })

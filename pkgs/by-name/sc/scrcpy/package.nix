@@ -11,20 +11,21 @@
 
   android-tools,
   ffmpeg,
+  libdrm,
   libusb1,
   sdl3,
 }:
 
 let
-  version = "4.0";
+  version = "5.0.1";
   prebuilt_server = fetchurl {
     name = "scrcpy-server";
     inherit version;
     url = "https://github.com/Genymobile/scrcpy/releases/download/v${version}/scrcpy-server-v${version}";
-    hash = "sha256-hJJL1WSh62CJyHLHUh+WgFiXf5H1/wJRSox0r/MhDzo=";
+    hash = "sha256-dk6295gR1SEf6d80ESCIK6mZTHphuJfXvz+2YuU7xTY=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "scrcpy";
   inherit version;
 
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
     owner = "Genymobile";
     repo = "scrcpy";
     tag = "v${version}";
-    hash = "sha256-o8jZXVwNub8KU7k2BjC9jvpX4Y7bKFySBUYw/dVHck0=";
+    hash = "sha256-zms3jDqo8CgIyaAglw13dAF0OP7mCP18Z2nIWyq0Thg=";
   };
 
   nativeBuildInputs = [
@@ -45,8 +46,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     ffmpeg
-    sdl3
     libusb1
+    sdl3
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libdrm
   ];
 
   # Manually install the server jar to prevent Meson from "fixing" it

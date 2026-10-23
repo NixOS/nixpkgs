@@ -1,6 +1,6 @@
 {
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   pkg-config,
   lib,
   zlib,
@@ -12,30 +12,44 @@
   libwebp,
   libiconv,
   makeWrapper,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pstoedit";
-  version = "4.02";
+  version = "4.3";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/pstoedit/pstoedit-${finalAttrs.version}.tar.gz";
-    hash = "sha256-VYi0MtLGsq2YKLRJFepYE/+aOjMSpB+g3kw43ayd9y8=";
+  src = fetchFromGitHub {
+    owner = "woglu";
+    repo = "pstoedit";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wodTvVbsouSjH5JDJ2ELlq5p7HRfNwN457gb6tRAkBg=";
   };
-
-  postPatch = ''
-    # don't use gnu-isms like link.h on macos
-    substituteInPlace src/pstoedit.cpp --replace-fail '#ifndef _MSC_VER' '#if !defined(_MSC_VER) && !defined(__APPLE__)'
-  '';
 
   outputs = [
     "out"
     "dev"
   ];
+
   nativeBuildInputs = [
     makeWrapper
     pkg-config
+    autoreconfHook
   ];
+
+  env.LANG = "C";
+
+  # https://github.com/woglu/pstoedit/issues/7
+  preConfigure = ''
+    touch doc/pstoedit.1 doc/pstoedit.pdf doc/pstoedit.htm
+  '';
+
+  # https://github.com/woglu/pstoedit/blob/v4.3/.github/workflows/c-cpp.yml#L21
+  appendConfigureFlags = [
+    "--disable-check_for_gs"
+    "--enable-docs=no"
+  ];
+
   buildInputs = [
     zlib
     ghostscript
@@ -50,13 +64,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = ''
+    make clean
+    sh rm_generated.sh
     wrapProgram $out/bin/pstoedit \
       --prefix PATH : ${lib.makeBinPath [ ghostscript ]}
   '';
 
   meta = {
     description = "Translates PostScript and PDF graphics into other vector formats";
-    homepage = "https://sourceforge.net/projects/pstoedit/";
+    homepage = "https://github.com/woglu/pstoedit";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.unix;

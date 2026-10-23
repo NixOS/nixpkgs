@@ -55,12 +55,13 @@
   pytest-astropy,
   pytest-mock,
   pytestCheckHook,
+  responses,
   writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "sunpy";
-  version = "7.1.2";
+  version = "8.0.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -68,7 +69,7 @@ buildPythonPackage (finalAttrs: {
     owner = "sunpy";
     repo = "sunpy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-saq3vYJMKogXSBxKn/tqlSnE96K10EM27femC+Qx0Gw=";
+    hash = "sha256-VR0FvIkskjL1rvc0xOp+DSS+ocTJAAk4NYkO8+kpqmA=";
   };
 
   build-system = [
@@ -157,6 +158,7 @@ buildPythonPackage (finalAttrs: {
     pytest-astropy
     pytest-mock
     pytestCheckHook
+    responses
     writableTmpDirAsHomeHook
   ]
   ++ finalAttrs.passthru.optional-dependencies.all;
@@ -202,7 +204,9 @@ buildPythonPackage (finalAttrs: {
     "sunpy/net/jsoc/tests/test_jsoc.py"
     "sunpy/physics/differential_rotation.py"
     "sunpy/physics/tests/test_differential_rotation.py"
+    "sunpy/net/soar/tests/test_sunpy_soar.py"
     "sunpy/visualization"
+
     # Requires cdflib
     "sunpy/io/tests/test_cdf.py"
     "sunpy/timeseries"

@@ -120,7 +120,9 @@ let
           lib.maintainers.osnyx
         ];
         platforms = lib.platforms.unix;
-        broken = stdenv.hostPlatform.isDarwin && version == "8.0.1"; # https://github.com/NixOS/nixpkgs/issues/495368
+        # last successful hydra build on darwin was in 2025
+        # see https://github.com/NixOS/nixpkgs/issues/495368
+        broken = stdenv.hostPlatform.isDarwin;
       };
     };
 in

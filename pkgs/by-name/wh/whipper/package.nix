@@ -66,7 +66,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     ruamel-yaml
     discid
     pillow
-    setuptools
+    setuptools_80
   ];
 
   buildInputs = [
@@ -81,14 +81,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       pytestCheckHook
     ]
     ++ bins;
-
-  makeWrapperArgs = [
-    "--prefix"
-    "PATH"
-    ":"
-    (lib.makeBinPath bins)
-    "\${gappsWrapperArgs[@]}"
-  ];
 
   dontWrapGApps = true;
 
@@ -110,6 +102,13 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   postInstall = ''
     installManPage man/*.1
+  '';
+
+  preFixup = ''
+    makeWrapperArgs+=(
+      "--prefix" "PATH" ":" "${lib.makeBinPath bins}"
+      "''${gappsWrapperArgs[@]}"
+    )
   '';
 
   passthru.tests.version = testers.testVersion {

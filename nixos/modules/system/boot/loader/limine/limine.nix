@@ -11,7 +11,7 @@ let
     builtins.toJSON {
       inherit (config.system.nixos) distroName;
       nixPath = config.nix.package;
-      efiBootMgrPath = pkgs.efibootmgr;
+      efiBootMgrPath = if cfg.efiSupport then pkgs.efibootmgr else null;
       liminePath = cfg.package;
       efiMountPoint = efi.efiSysMountPoint;
       fileSystems = config.fileSystems;
@@ -259,8 +259,8 @@ in
 
     style = {
       wallpapers = lib.mkOption {
-        default = [ ];
-        example = lib.literalExpression "[ pkgs.nixos-artwork.wallpapers.simple-dark-gray-bootloader.gnomeFilePath ]";
+        default = [ defaultWallpaper ];
+        defaultText = lib.literalExpression "[ pkgs.nixos-artwork.wallpapers.simple-dark-gray-bootloader.gnomeFilePath ]";
         type = lib.types.listOf lib.types.path;
         description = ''
           A list of wallpapers.
@@ -281,7 +281,8 @@ in
       };
 
       backdrop = lib.mkOption {
-        default = null;
+        default = if (cfg.style.wallpapers == [ defaultWallpaper ]) then "2F302F" else null;
+        defaultText = lib.literalMD "`2F302F` for the default wallpaper, `null` otherwise.";
         example = "7EBAE4";
         type = lib.types.nullOr lib.types.str;
         description = ''
@@ -360,7 +361,7 @@ in
           default = null;
           type = lib.types.nullOr lib.types.str;
           description = ''
-            A ; seperated array of 8 colors in the format RRGGBB:
+            A semicolon-separated array of 8 colors in the format RRGGBB:
             black, red, green, brown, blue, magenta, cyan, and gray.
           '';
         };
@@ -369,7 +370,7 @@ in
           default = null;
           type = lib.types.nullOr lib.types.str;
           description = ''
-            A ; seperated array of 8 colors in the format RRGGBB:
+            A semicolon-separated array of 8 colors in the format RRGGBB:
             dark gray, bright red, bright green, yellow, bright blue, bright magenta, bright cyan, and white.
           '';
         };
@@ -426,13 +427,6 @@ in
   };
 
   config = lib.mkMerge [
-    {
-      boot.loader.limine.style.wallpapers = lib.mkDefault [ defaultWallpaper ];
-    }
-    (lib.mkIf (cfg.style.wallpapers == [ defaultWallpaper ]) {
-      boot.loader.limine.style.backdrop = lib.mkDefault "2F302F";
-      boot.loader.limine.style.wallpaperStyle = lib.mkDefault "stretched";
-    })
     (lib.mkIf cfg.enable {
       assertions = [
         {
@@ -506,21 +500,18 @@ in
 
     # Fwupd binary needs to be signed in secure boot mode
     (lib.mkIf (cfg.enable && cfg.secureBoot.enable && config.services.fwupd.enable) {
-      systemd.services.fwupd = {
-        environment.FWUPD_EFIAPPDIR = "/run/fwupd-efi";
-      };
-
       systemd.services.fwupd-efi = {
         description = "Sign fwupd EFI app for secure boot";
         wantedBy = [ "fwupd.service" ];
         partOf = [ "fwupd.service" ];
         before = [ "fwupd.service" ];
+        # /run/fwupd-efi is populated by the fwupd module.
+        after = [ "systemd-tmpfiles-setup.service" ];
 
         unitConfig.ConditionPathIsDirectory = "/var/lib/sbctl";
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
-          RuntimeDirectory = "fwupd-efi";
         };
 
         script = ''

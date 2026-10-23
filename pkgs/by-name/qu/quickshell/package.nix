@@ -25,7 +25,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "quickshell";
-  version = "0.3.0";
+  version = "0.3.2";
 
   # github mirror: https://github.com/quickshell-mirror/quickshell
   src = fetchFromGitea {
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "quickshell";
     repo = "quickshell";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gU+VGpwGJ2vvg0mtYqVvj5u+2LteuHlpokH6JSAtueY=";
+    hash = "sha256-lPbqsyAD5ZoGFMZ1eqAlTULfeP5Nwhy+XvOowF7BE+E=";
   };
 
   nativeBuildInputs = [
@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://quickshell.org";
-    description = "Flexbile QtQuick based desktop shell toolkit";
+    description = "Flexible QtQuick based desktop shell toolkit";
     license = lib.licenses.lgpl3Only;
     platforms = lib.platforms.linux;
     mainProgram = "quickshell";

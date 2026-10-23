@@ -11,7 +11,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "kensanata";
-    repo = "mastodon-backup";
+    repo = "mastodon-archive";
     rev = "v${finalAttrs.version}";
     hash = "sha256-yz17ddcA0U9fq1aDlPmD3OkNL6Epzdp9C7L+31yNLBc=";
   };

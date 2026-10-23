@@ -11,12 +11,12 @@ buildPythonPackage (finalAttrs: {
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    sha256 = "45a3be037c7ba8b64bbfc48f3586402cc17de55bb9d7357ef2bc99954a18da3f";
+    hash = "sha256-RaO+A3x7qLZLv8SPNYZALMF95Vu51zV+8ryZlUoY2j8=";
   };
 
   meta = {
     description = "Module for editing JPEG EXIF data";
-    homepage = "http://www.benno.id.au/code/pexif/";
+    homepage = "https://github.com/bennoleslie/pexif";
     license = lib.licenses.mit;
   };
 })

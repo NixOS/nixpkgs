@@ -35,6 +35,12 @@ buildPythonPackage (finalAttrs: {
       url = "https://gitlab.com/mailman/hyperkitty/-/commit/e815be11752ac6a3e839b155f0c43808619c56b0.patch";
       hash = "sha256-fsJyNsh3l5iR9WgsiEsHlptkN+nlWoop0m2STyucDEc=";
     })
+    # Fix test with mistune >= 3.3
+    (fetchpatch {
+      url = "https://gitlab.com/mailman/hyperkitty/-/commit/7e8aa0150d8dcaef66039db3a0205dfd4160a265.patch";
+      excludes = [ "pyproject.toml" ];
+      hash = "sha256-BpjnLugUU0nyn3XN0zZ0eEeK0sFd64GOUaQsen6fFyw=";
+    })
   ];
 
   prePatch = ''

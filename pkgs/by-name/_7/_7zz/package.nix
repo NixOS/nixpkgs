@@ -1,7 +1,9 @@
 {
   stdenv,
   lib,
-  fetchzip,
+  fetchFromGitHub,
+  _experimental-update-script-combinators,
+  nix-update-script,
 
   # Free MASM-compatible assembler
   asmc-linux,
@@ -20,6 +22,7 @@
 
   # For tests
   testers,
+  fetchurl,
 }:
 
 let
@@ -43,17 +46,17 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "7zz";
-  version = "26.01";
+  version = "26.04";
 
-  src = fetchzip {
-    url = "https://7-zip.org/a/7z${lib.replaceStrings [ "." ] [ "" ] finalAttrs.version}-src.tar.xz";
+  src = fetchFromGitHub {
+    owner = "ip7z";
+    repo = "7zip";
+    tag = finalAttrs.version;
     hash =
-      {
-        free = "sha256-52+Gg66MOFmwYUVB0OO4PAtZJtQOkoVpxV7F9xBGy58=";
-        unfree = "sha256-w0fk8EDusUYiOfrmIiUq+xevlwfQxMhjdPzfkHkOkR8=";
-      }
-      .${if enableUnfree then "unfree" else "free"};
-    stripRoot = false;
+      if enableUnfree then
+        "sha256-JLLbkrptKzC4UuEaA0X9rXBFPH5v4n6a2jSF2E3yEv8="
+      else
+        "sha256-DDe8nMgzzciZ+SroHYqaEtOXg/MoT3RYnXvN1YC1Znc=";
     # remove the unRAR related code from the src drv
     # > the license requires that you agree to these use restrictions,
     # > or you must remove the software (source and binary) from your hard disks
@@ -69,7 +72,14 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals stdenv.hostPlatform.isDarwin [
+    [
+      # GCC 16 fails due to what is ostensibly an out-of-bounds read, but it is
+      # introduced by GCC's own optimizations; building with -O0 or -fno-inline
+      # does not trigger a failure. Possibly related GCC bug:
+      # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=122197
+      "-Wno-error=array-bounds"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "-Wno-deprecated-copy-dtor"
     ]
     ++ lib.optionals stdenv.hostPlatform.isMinGW [
@@ -120,6 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "doc"
+    "lib"
   ];
 
   setupHook = ./setup-hook.sh;
@@ -128,26 +139,117 @@ stdenv.mkDerivation (finalAttrs: {
 
   preBuild = "cd CPP/7zip/Bundles/Alone2";
 
+  postBuild = ''
+    make $makeFlags -j $NIX_BUILD_CORES -C ../Format7zF -f ${makefile}
+  '';
+
   installPhase = ''
     runHook preInstall
 
     install -Dm555 -t $out/bin b/*/7zz${stdenv.hostPlatform.extensions.executable}
     install -Dm444 -t $out/share/doc/7zz ../../../../DOC/*.txt
 
+    mkdir -p $lib/lib
+    install -Dm555 -t $lib/lib ../Format7zF/b/*/7z.*
+
     runHook postInstall
   '';
 
   passthru = {
-    updateScript = ./update.sh;
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      command = "7zz --help";
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script {
+        attrPath = "_7zz";
+        extraArgs = [ "--use-github-releases" ];
+      })
+      (nix-update-script {
+        attrPath = "_7zz-rar";
+        extraArgs = [ "--version=skip" ];
+      })
+    ];
+    tests = {
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        command = "7zz --help";
+      };
+      # So dmg can be tested on Linux without
+      # macos toolchains
+      undmg = stdenv.mkDerivation {
+        pname = "test-undmg";
+        version = "none";
+
+        src = fetchurl {
+          url = "https://caido.download/releases/v0.57.0/caido-desktop-v0.57.0-mac-aarch64.dmg";
+          hash = "sha256-GmpMnaGR7gYz1RvSO5xj9AA3xU1mn2IBInakmVkuG7A=";
+        };
+
+        nativeBuildInputs = [
+          finalAttrs.finalPackage
+        ];
+
+        buildPhase = ''
+          if [[ ! -e Contents ]]; then
+            # Should exist
+            ls
+            exit 1
+          fi
+        '';
+        installPhase = "touch $out";
+      };
+
+      unzip = stdenv.mkDerivation {
+        pname = "test-unzip";
+        version = "none";
+
+        src = fetchurl {
+          url = "mirror://sourceforge/libjson/libjson_7.6.1.zip";
+          hash = "sha256-ByZ6OVEDjuLgLSbMQb+OJ1Zow491EkDT543JeRguc3Y=";
+        };
+
+        nativeBuildInputs = [
+          finalAttrs.finalPackage
+        ];
+
+        buildPhase = ''
+          if [[ ! -e libjson.h ]]; then
+            # Should exist
+            ls
+            exit 1
+          fi
+        '';
+        installPhase = "touch $out";
+      };
+
+      # We do not want to decompress tarballs since
+      # it will just leave an uncompressed tarball in the source dir.
+      tarballs = stdenv.mkDerivation {
+        pname = "test-tarball";
+        version = "none";
+
+        src = fetchurl {
+          url = "https://github.com/ip7z/7zip/archive/refs/tags/26.04.tar.gz";
+          hash = "sha256-SP3G3+h57i24Z7sH8ZxKlAa/6gHVH0h4W2x6E3iB4lw=";
+        };
+
+        nativeBuildInputs = [
+          finalAttrs.finalPackage
+        ];
+
+        buildPhase = ''
+          if [[ ! -e README.md ]]; then
+            # Should exist
+            ls
+            exit 1
+          fi
+        '';
+        installPhase = "touch $out";
+      };
     };
   };
 
   meta = {
     description = "Command line version of the 7-Zip archiver utility";
     homepage = "https://7-zip.org";
+    changelog = "https://7-zip.org/history.txt";
     license =
       with lib.licenses;
       # 7zip code is largely lgpl2Plus
@@ -167,5 +269,11 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = with lib.platforms; unix ++ windows;
     mainProgram = "7zz";
+    identifiers.cpeParts = {
+      vendor = "7-zip";
+      product = "7-zip";
+      inherit (finalAttrs) version;
+      update = "*";
+    };
   };
 })

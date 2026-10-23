@@ -1,25 +1,36 @@
 {
   lib,
-  llvmPackages_18,
   fetchFromGitHub,
+  fetchurl,
   makeBinaryWrapper,
   which,
+  cmake,
   nix-update-script,
+  llvmPackages,
+  enableBox2d ? true,
 }:
 
 let
-  llvmPackages = llvmPackages_18;
   inherit (llvmPackages) stdenv;
+  box2dVersion = "3.1.1";
+  box2dTarball =
+    if enableBox2d then
+      fetchurl {
+        url = "https://github.com/erincatto/box2d/archive/refs/tags/v${box2dVersion}.tar.gz";
+        hash = "sha256-+275FLUPQxLX2SGmAOq8EjGLs8VaC4wLkGCPpEiO8uQ=";
+      }
+    else
+      null;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "odin";
-  version = "dev-2026-05";
+  version = "dev-2026-10";
 
   src = fetchFromGitHub {
     owner = "odin-lang";
     repo = "Odin";
     tag = finalAttrs.version;
-    hash = "sha256-fgN6Lz1CnUPXrmnQr+sPEfwSF/7y0+eZBX6TKFcFA50=";
+    hash = "sha256-Y8Em52W3ntWXgnRiRAyhWv5Y6+3b/4bj2+TTIvtniYU=";
   };
 
   patches = [
@@ -29,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     # available on Nix based systems. Instead, use the "system" Raylib version,
     # which can be provided by a pure Nix expression, for example in a shell.
     ./system-raylib.patch
+    ./box2d-no-network.patch
   ];
 
   postPatch = ''
@@ -39,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/build_settings.cpp \
       --replace-fail "arm64-apple-macosx" "arm64-apple-darwin"
 
-    rm -r vendor/raylib/{linux,macos,macos-arm64,wasm,windows}
+    rm -r vendor/raylib/{linux,macos,wasm,windows}
 
     patchShebangs --build build_odin.sh
   '';
@@ -53,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeBinaryWrapper
     which
+    cmake
   ];
 
   installPhase = ''
@@ -78,9 +91,16 @@ stdenv.mkDerivation (finalAttrs: {
       } \
       --set-default ODIN_ROOT $out/share
 
-    make -C "$out/share/vendor/cgltf/src/"
-    make -C "$out/share/vendor/stb/src/"
-    make -C "$out/share/vendor/miniaudio/src/"
+    patchShebangs $out/share/vendor/
+
+    $out/share/vendor/cgltf/src/build_cgltf.sh
+    $out/share/vendor/stb/src/build_stb.sh
+    $out/share/vendor/miniaudio/src/build_miniaudio.sh
+    $out/share/vendor/kb_text_shape/src/build_unix.sh
+
+    if [ "${lib.boolToString enableBox2d}" = "true" ]; then
+      BOX2D_TARBALL=${box2dTarball} BOX2D_VERSION=${box2dVersion} $out/share/vendor/box2d/build_box2d.sh
+    fi
 
     runHook postInstall
   '';
@@ -92,12 +112,12 @@ stdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://github.com/odin-lang/Odin";
     homepage = "https://odin-lang.org/";
     changelog = "https://github.com/odin-lang/Odin/releases/tag/${finalAttrs.version}";
-    license = lib.licenses.bsd3;
+    license = lib.licenses.zlib;
     mainProgram = "odin";
     maintainers = with lib.maintainers; [
       astavie
       atomicptr
-      diniamo
+      yvnth
     ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isMusl;

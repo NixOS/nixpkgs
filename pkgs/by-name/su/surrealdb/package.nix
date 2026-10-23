@@ -18,7 +18,7 @@ assert lib.assertMsg (builtins.elem backend [
 ]) "surrealdb: backend must be one of [ \"rocksdb\" \"surrealkv\" ]";
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = if hasRocksDB then "surrealdb" else "surrealdb-surrealkv";
-  version = "2.6.1";
+  version = "3.0.0";
 
   __structuredAttrs = true;
 
@@ -26,15 +26,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "surrealdb";
     repo = "surrealdb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Dd6tabpSTh7IN9PLE4Zt/s1G7mNUwYfy+nEZpPTy8a8=";
+    hash = "sha256-KDVc5BTkJ5OwxANeXOBnerJihnKU6y72Dw8h1ARcj3U=";
   };
 
-  cargoHash = "sha256-lebSQPGnxW+3a7vWw3R7QYtHx04/DsRK/n8c/UT3FZo=";
+  cargoHash = "sha256-yemnwhcC5CsQgO29Qiau39QAVbGnrNsOG1dNen987HM=";
 
   # Upstream hard-codes `aarch64-linux-gnu-gcc` in `.cargo/config.toml`.
   # Remove it so Cargo uses nixpkgs' wrapped C toolchain instead.
   postPatch = ''
     rm .cargo/config.toml
+    sed -i '1i #![recursion_limit = "256"]' surrealdb/server/src/lib.rs
   '';
 
   buildNoDefaultFeatures = true;
@@ -44,10 +45,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "http"
     "scripting"
     "storage-mem"
-    "storage-surrealcs"
-    # Keep this enabled for the default RocksDB build to preserve upstream's
-    # default storage feature set. It can be dropped if `pkgs.surrealdb` is
-    # intentionally slimmed to RocksDB-only in a later change.
     "storage-surrealkv"
   ]
   ++ lib.optional hasRocksDB "storage-rocksdb";
@@ -94,6 +91,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "surreal";
     license = lib.licenses.bsl11;
     maintainers = with lib.maintainers; [
+      aln730
       sikmir
       happysalada
       siriobalmelli

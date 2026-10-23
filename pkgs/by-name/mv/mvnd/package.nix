@@ -15,7 +15,6 @@ let
   platformMap = {
     aarch64-darwin = "darwin-aarch64";
     aarch64-linux = "linux-aarch64";
-    x86_64-darwin = "darwin-amd64";
     x86_64-linux = "linux-amd64";
   };
 in
@@ -32,7 +31,7 @@ maven.buildMavenPackage (finalAttrs: {
 
   # need graalvm at build-time for the `native-image` tool
   mvnJdk = graalvmPackages.graalvm-ce;
-  mvnHash = "sha256-dgKQj6xa10MkFmxUckwW5FqKS3Tf95aP/RmKXSRqtCg=";
+  mvnHash = "sha256-HjpNumhGLz83YIzpjkodgtj74FkqLSEPZJ/4qCaMkgw=";
 
   nativeBuildInputs = [
     graalvmPackages.graalvm-ce

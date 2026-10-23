@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tinyxxd";
-  version = "1.3.15";
+  version = "1.3.17";
 
   src = fetchFromGitHub {
     repo = "tinyxxd";
     owner = "xyproto";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-JLu3x54/kpKhvfTeWovxmV+/bEB4MqaNlFPrHnM/+ko=";
+    hash = "sha256-m6YQTaEhaPzV6iAMYir/PbMGiMzCBW0helOLZL0bjqQ=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -33,8 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/xyproto/tinyxxd";
     description = "Drop-in replacement and standalone version of the hex dump utility that comes with ViM";
-    license = [
-      lib.licenses.mit # or
+    license = lib.licenses.OR [
+      lib.licenses.x11
       lib.licenses.gpl2Only
     ];
     mainProgram = "tinyxxd";

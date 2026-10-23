@@ -6,6 +6,7 @@
   cctools,
   go-toml,
   ttfautohint-nox,
+  nodejs_latest,
   # Custom font set options.
   # See https://typeof.net/Iosevka/customizer
   # Can be a raw TOML string, or a Nix attrset.
@@ -58,16 +59,17 @@ assert (extraParameters != null) -> set != null;
 
 buildNpmPackage rec {
   pname = "Iosevka${toString set}";
-  version = "34.7.0";
+  version = "34.9.0";
 
   src = fetchFromGitHub {
     owner = "be5invis";
     repo = "iosevka";
     tag = "v${version}";
-    hash = "sha256-OwCtp/WufMCzuaPTDCr2siorUC52zgM2e80DyshzsZw=";
+    hash = "sha256-JJBsmUtWv8n4IO2AleO/Z1CI2Vbpc1JcwfwJMEUzkLU=";
   };
 
-  npmDepsHash = "sha256-tlBxO9K0itXO6Mac4jcygZ6+9kj1gTdmu+rtbL2qdcE=";
+  npmDepsHash = "sha256-KtmL12yQUwCUCjNL6MhClbjuB4oXvYSCqBqau1CO+ss=";
+  nodejs = nodejs_latest;
 
   nativeBuildInputs = [
     go-toml

@@ -1,6 +1,7 @@
 {
   lib,
   callPackage,
+  fetchurl,
   stdenv,
   llvmPackages,
   pcre2,
@@ -8,14 +9,21 @@
 
 let
   mkPhp =
-    { version, hash }:
+    {
+      version,
+      hash ? null,
+      phpSrc ? null,
+      knownVulnerabilities ? [ ],
+    }:
     let
       base = callPackage ./generic.nix {
         stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
-        pcre2 = pcre2.override {
-          withJitSealloc = false; # See https://bugs.php.net/bug.php?id=78927 and https://bugs.php.net/bug.php?id=78630
-        };
-        inherit version hash;
+        inherit
+          version
+          hash
+          phpSrc
+          knownVulnerabilities
+          ;
       };
     in
     base.withExtensions (
@@ -68,20 +76,23 @@ let
     );
 in
 {
-  php82 = mkPhp {
-    version = "8.2.31";
-    hash = "sha256-lIGD+gTPJhybk2PAL0KJd7nd+MC/3/jo4fuoFu1XCAM=";
-  };
   php83 = mkPhp {
-    version = "8.3.31";
-    hash = "sha256-5phrH9N+slQCEn/kpyeKPgO3+QJbt6S9KSonG9+TD7k=";
+    version = "8.3.36";
+    hash = "sha256-RvS0XjaI7SsYGQFae1MsFbUcwFW907E/0A3f7r7tzV8=";
   };
   php84 = mkPhp {
-    version = "8.4.22";
-    hash = "sha256-Sxbn4sOEziXgfSjrlJhVxLT+DRt7nsnI7r0F0M+pxTI=";
+    version = "8.4.27";
+    hash = "sha256-slMKh3xyL0sIyeF0owywi6wrfhkD7m6eMV8KqfX4LCQ=";
   };
   php85 = mkPhp {
-    version = "8.5.7";
-    hash = "sha256-Tvk1X3hNSzIBUes/McWUHA2ilwJe7bl/KDiyznPdWb8=";
+    version = "8.5.12";
+    hash = "sha256-/7YO3EN87WO1E35JhNs3moERxQBJxxFRDYuVgnfvwag=";
+  };
+  php86 = mkPhp rec {
+    version = "8.6.0RC4";
+    phpSrc = fetchurl {
+      url = "https://downloads.php.net/~mbeccati/php-${version}.tar.xz";
+      hash = "sha256-k/II2prgWb9oY7Dh0QHmxkdaew8Ky/bAhJUKtSL1FNg=";
+    };
   };
 }

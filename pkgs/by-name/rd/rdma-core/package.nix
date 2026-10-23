@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchurl,
   gitUpdater,
   cmake,
   pkg-config,
@@ -13,34 +12,41 @@
   udevCheckHook,
   python3,
   perl,
+  withManPages ? !stdenv.hostPlatform.isi686,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rdma-core";
-  version = "63.0";
+  version = "65.0";
 
   src = fetchFromGitHub {
     owner = "linux-rdma";
     repo = "rdma-core";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-YW6BJS6acj9S8wFXUhC1vrJSm9YowGGuwWEBzQRVyPM=";
+    hash = "sha256-cAaWVE6/JU8ezjx+XrxNI6Su6VKxb2Jxl29sxU/yepI=";
   };
 
+  __structuredAttrs = true;
   strictDeps = true;
 
   outputs = [
     "out"
-    "man"
     "dev"
+    "scripts"
+  ]
+  ++ lib.optionals withManPages [
+    "man"
   ];
 
   nativeBuildInputs = [
     cmake
-    docutils
-    pandoc
     pkg-config
     python3
     udevCheckHook
+  ]
+  ++ lib.optionals withManPages [
+    docutils
+    pandoc
   ];
 
   buildInputs = [
@@ -49,20 +55,13 @@ stdenv.mkDerivation (finalAttrs: {
     udev
   ];
 
-  patches = [
-    (fetchurl {
-      # remove when rdma-core 64.0 is released
-      # https://github.com/linux-rdma/rdma-core/pull/1737
-      name = "cmake-allow-overriding-sysusers.d-install-directory";
-      url = "https://github.com/linux-rdma/rdma-core/commit/8b186b5d932701e94bbced83d2f3899ee53f041a.patch?full_index=1";
-      hash = "sha256-Rjknu7mmJL2Sx+Ypq9SRXU4LUiHERs9j5/qMIZaiRTI=";
-    })
-  ];
-
   cmakeFlags = [
     "-DCMAKE_INSTALL_RUNDIR=/run"
     "-DCMAKE_INSTALL_SHAREDSTATEDIR=/var/lib"
     "-DSYSUSERS_DIR=${placeholder "out"}/lib/sysusers.d"
+  ]
+  ++ lib.optionals (!withManPages) [
+    "-DNO_MAN_PAGES=1"
   ];
 
   postPatch = ''
@@ -72,15 +71,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     # cmake script is buggy, move file manually
-    mkdir -p $out/${perl.libPrefix}
-    mv $out/share/perl5/* $out/${perl.libPrefix}
+    mkdir -p $scripts/${perl.libPrefix}
+    mv $out/share/perl5/* $scripts/${perl.libPrefix}
   '';
 
   postFixup = ''
-    for pls in $out/bin/{ibfindnodesusing.pl,ibidsverify.pl}; do
+    for pls in ibfindnodesusing.pl ibidsverify.pl check_lft_balance.pl; do
       echo "wrapping $pls"
-      substituteInPlace $pls --replace \
-        "${perl}/bin/perl" "${perl}/bin/perl -I $out/${perl.libPrefix}"
+      substituteInPlace $out/bin/$pls \
+        --replace-fail "${perl}/bin/perl" "${perl}/bin/perl -I $scripts/${perl.libPrefix}"
+      moveToOutput bin/$pls "$scripts"
     done
   '';
 
@@ -89,6 +89,10 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
   };
+
+  outputChecks.out.disallowedRequisites = [
+    perl
+  ];
 
   meta = {
     description = "RDMA Core Userspace Libraries and Daemons";

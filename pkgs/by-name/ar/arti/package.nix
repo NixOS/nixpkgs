@@ -3,7 +3,6 @@
   stdenv,
   rustPlatform,
   fetchFromGitLab,
-  fetchpatch,
   pkg-config,
   sqlite,
   openssl,
@@ -14,7 +13,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "arti";
-  version = "2.4.0";
+  version = "2.7.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.torproject.org";
@@ -22,33 +21,25 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "core";
     repo = "arti";
     tag = "arti-v${finalAttrs.version}";
-    hash = "sha256-YLOdrHstmN2pLl75uclkbpN5h3iBs3xpraZ8XN6R/+Q=";
+    hash = "sha256-28s2BnesadPGm1gQDxzIqSgGaUd8ZgoTpKK3WXBRU9Q=";
   };
-
-  patches = [
-    # Fixes a panic that could allow malicious directory caches to crash
-    # clients.
-    # https://gitlab.torproject.org/tpo/core/arti/-/merge_requests/4062
-    (fetchpatch {
-      name = "TROVE-2026-024.patch";
-      url = "https://gitlab.torproject.org/tpo/core/arti/-/commit/f69be8c70561629e63004788f0aa4bf898025f93.patch";
-      hash = "sha256-P0sXTKOBW7ulqQZwmTVJfrpLksLyaonuDpxGF2keDqE=";
-    })
-  ];
 
   # Working around a bug in cargo that appears with cargo-auditable, see
   # https://github.com/rust-secure-code/cargo-auditable/issues/124.
   postPatch = ''
     substituteInPlace crates/arti/Cargo.toml \
-      --replace-fail '"tor-rpcbase"' '"dep:tor-rpcbase"'
+      --replace-fail '"http"' '"dep:http"' \
+      --replace-fail '"tokio-util"' '"dep:tokio-util"' \
+      --replace-fail '"opentelemetry-appender-tracing",' ""
   '';
 
   buildAndTestSubdir = "crates/arti";
-  cargoHash = "sha256-7X3JJbt0/jxaMvBR3XQvguR7tqd96kiqX66G2byvPjM=";
+  cargoHash = "sha256-g+t5X1t0koUzqoHpY8+lncqRobdDuZggXtD3HRk9ryE=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
   buildInputs = [ sqlite ] ++ lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
+
   # `full` includes all stable and non-conflicting feature flags. the primary
   # downsides are increased binary size and memory usage for building, but
   # those are acceptable for nixpkgs

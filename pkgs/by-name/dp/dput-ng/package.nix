@@ -5,7 +5,7 @@
   nix-update-script,
 }:
 let
-  version = "1.44";
+  version = "1.46";
 in
 python3.pkgs.buildPythonApplication {
   pname = "dput-ng";
@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication {
     owner = "debian";
     repo = "dput-ng";
     tag = "debian/${version}";
-    hash = "sha256-3MdxyTRnoK5SUJzY5DTzfOiurcbtxujhiNpMABNLxgY=";
+    hash = "sha256-7A9crJpdQKj8TlSfIQ41PxtR6hcIdGo2sIaQnXGiXvg=";
   };
 
   postPatch = ''
@@ -64,7 +64,7 @@ python3.pkgs.buildPythonApplication {
   meta = {
     description = "Next-generation Debian package upload tool";
     homepage = "https://dput.readthedocs.io/en/latest/";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ pluiedev ];
     mainProgram = "dput";

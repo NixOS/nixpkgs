@@ -13,22 +13,18 @@ vscode-utils.buildVscodeMarketplaceExtension (finalAttrs: {
   passthru.platformTable = {
     "x86_64-linux" = {
       arch = "linux-x64";
-      hash = "sha256-Oz4Buraof4yXIxGeKXIsDkvEQQ0Gzf/b5mdses1nHlo=";
-    };
-    "x86_64-darwin" = {
-      arch = "darwin-x64";
-      hash = "sha256-Iqe4KZXQHenKAypXK/qzG2BCXbk2cZ0i/0xhWhlfQxo=";
+      hash = "sha256-zaMrQ0/w/gz3WW8/tVPBCPNAUookGs5yHLWjR3drZNE=";
     };
     "aarch64-darwin" = {
       arch = "darwin-arm64";
-      hash = "sha256-vMDB5zmdBNt3R5AkeuCYhxzW/rSGwM+wtU5K4v3ZU/U=";
+      hash = "sha256-fyfFyiuYwbtqChzTlfZ8E72ikQWOrlTAo7m9l9U/Eb8=";
     };
   };
 
   mktplcRef = {
     name = "sourcery";
     publisher = "sourcery";
-    version = "1.43.0";
+    version = "1.44.0";
   }
   // finalAttrs.passthru.platformTable.${system} or (throw "Unsupported platform ${system}");
 

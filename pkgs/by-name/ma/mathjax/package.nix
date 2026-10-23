@@ -5,13 +5,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "mathjax";
-  version = "4.1.2";
+  version = "4.1.3";
 
   src = fetchFromGitHub {
     owner = "mathjax";
     repo = "mathjax";
     tag = finalAttrs.version;
-    hash = "sha256-x4aRA1EDBpx/PmWF8YmWs1Le7yX/hJo0Egrhc/nrWsE=";
+    hash = "sha256-Vl4gh2GRnlLkTV1o41WV6WBccjr+bnbq6JPcHGwfKXQ=";
   };
 
   installPhase = ''

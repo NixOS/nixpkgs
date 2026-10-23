@@ -1,10 +1,10 @@
 {
   lib,
-  gcc15Stdenv,
+  gcc16Stdenv,
   stdenvAdapters,
   fetchFromGitHub,
   pkg-config,
-  makeWrapper,
+  makeBinaryWrapper,
   cmake,
   aquamarine,
   binutils,
@@ -14,6 +14,7 @@
   glslang,
   hyprcursor,
   hyprgraphics,
+  hyprland-protocols,
   hyprland-qtutils,
   hyprlang,
   hyprutils,
@@ -22,6 +23,7 @@
   lcms2,
   libGL,
   libdrm,
+  libei,
   libexecinfo,
   libgbm,
   libinput,
@@ -34,8 +36,10 @@
   pkgconf,
   python3,
   re2,
-  systemd,
+  readline,
+  systemdLibs,
   tomlplusplus,
+  udis86,
   uwsm,
   wayland,
   wayland-protocols,
@@ -48,9 +52,11 @@
   xwayland,
   debug ? false,
   enableXWayland ? true,
-  withSystemd ? lib.meta.availableOn gcc15Stdenv.hostPlatform systemd,
+  withSystemd ? lib.meta.availableOn gcc16Stdenv.hostPlatform systemdLibs,
+  withUWSM ? withSystemd,
   wrapRuntimeDeps ? true,
 }:
+assert withUWSM -> withSystemd;
 let
   inherit (builtins)
     foldl'
@@ -75,25 +81,29 @@ let
   # which would be controlled by the `debug` flag
   # Condition on darwin to avoid breaking eval for darwin in CI,
   # even though darwin is not supported anyway.
-  adapters = lib.optionals (!gcc15Stdenv.targetPlatform.isDarwin) [
+  adapters = lib.optionals (!gcc16Stdenv.targetPlatform.isDarwin) [
     stdenvAdapters.useMoldLinker
   ];
 
-  customStdenv = foldl' (acc: adapter: adapter acc) gcc15Stdenv adapters;
+  customStdenv = foldl' (acc: adapter: adapter acc) gcc16Stdenv adapters;
 in
 customStdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + optionalString debug "-debug";
-  version = "0.55.4";
+  version = "0.56.2";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland";
-    fetchSubmodules = true;
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IuT0HnOr/0rAw+GXr+OwWx89FjA4Og1FqP7vywEwRJM=";
+    hash = "sha256-IptZjFf/bE9lv8SQLef4Wmn3KOs3BwchYr6aFcCJ9NI=";
   };
 
   postPatch = ''
+    # Relax glaze dependency
+    # FIXME: this shouldn't be needed once the upstream code will adopt it
+    substituteInPlace CMakeLists.txt start/CMakeLists.txt hyprpm/CMakeLists.txt \
+      --replace-fail "glaze 7...<8" "glaze"
+
     # Fix hardcoded paths to /usr installation
     substituteInPlace src/render/types.hpp \
       --replace-fail /usr $out
@@ -103,6 +113,8 @@ customStdenv.mkDerivation (finalAttrs: {
       --replace-fail  "@PREFIX@/" ""
     substituteInPlace example/hyprland.desktop.in \
       --replace-fail  "@PREFIX@/" ""
+  ''
+  + lib.optionalString withUWSM ''
     substituteInPlace systemd/hyprland-uwsm.desktop \
       --replace-fail "Exec=uwsm " "Exec=${lib.getExe uwsm} " \
       --replace-fail "TryExec=uwsm" "TryExec=${lib.getExe uwsm}"
@@ -129,11 +141,10 @@ customStdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     hyprwayland-scanner
     hyprwire
-    makeWrapper
+    makeBinaryWrapper
     cmake
     pkg-config
     wayland-scanner
-    # for udis86
     python3
   ];
 
@@ -151,11 +162,13 @@ customStdenv.mkDerivation (finalAttrs: {
       glslang
       hyprcursor.dev
       hyprgraphics
+      hyprland-protocols
       hyprlang
       hyprutils
       lcms2
       libGL
       libdrm
+      libei
       libgbm
       libinput
       libuuid
@@ -166,7 +179,9 @@ customStdenv.mkDerivation (finalAttrs: {
       pango
       pciutils
       re2
+      readline
       tomlplusplus
+      udis86
       wayland
       wayland-protocols
     ]
@@ -179,7 +194,7 @@ customStdenv.mkDerivation (finalAttrs: {
       libxdmcp
       xwayland
     ])
-    (optionals withSystemd [ systemd ])
+    (optionals withSystemd [ systemdLibs ])
   ];
 
   cmakeBuildType = if debug then "Debug" else "RelWithDebInfo";
@@ -193,7 +208,7 @@ customStdenv.mkDerivation (finalAttrs: {
     "NO_XWAYLAND" = !enableXWayland;
     "NO_SYSTEMD" = !withSystemd;
     "CMAKE_DISABLE_PRECOMPILE_HEADERS" = true;
-    "NO_UWSM" = !withSystemd;
+    "NO_UWSM" = !withUWSM;
     "TRACY_ENABLE" = false;
   };
 
@@ -212,7 +227,7 @@ customStdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    providedSessions = [ "hyprland" ] ++ optionals withSystemd [ "hyprland-uwsm" ];
+    providedSessions = [ "hyprland" ] ++ optionals withUWSM [ "hyprland-uwsm" ];
     updateScript = ./update.sh;
   };
 

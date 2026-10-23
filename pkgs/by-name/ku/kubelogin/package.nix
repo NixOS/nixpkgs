@@ -10,20 +10,23 @@
 
 buildGoModule (finalAttrs: {
   pname = "kubelogin";
-  version = "0.2.14";
+  version = "0.2.21";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "kubelogin";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-s9W5wvA4L0Qbn5vimLU03oqx10XqCybE3YvC9gV3y7A=";
+    hash = "sha256-sZMFx8rv3SFEqfETtLm6WCVeGN4ia41egJwXLC8e/fI=";
   };
 
   patches = [
     ./disable-nix-incompatible-test.patch
   ];
 
-  vendorHash = "sha256-CWgvbN8NnroSVqfKF8UG6kXqVWrQ0TmKwri1f218K+M=";
+  vendorHash = "sha256-S5seDNIrtjt+MOJ2C8tVCEWy7FpDP8qjb9MTFMrkEJ0=";
+
+  # hack/changelog-generator is a separate Go module since 0.2.15
+  subPackages = [ "." ];
 
   ldflags = [
     "-X main.gitTag=v${finalAttrs.version}"

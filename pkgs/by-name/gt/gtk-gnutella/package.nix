@@ -7,17 +7,15 @@
   gettext,
   pkg-config,
   glib,
-  gtk2,
   libxml2,
   libbfd,
   zlib,
   gnutls,
-  enableGui ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk-gnutella";
-  version = "1.3.1";
+  version = "1.3.2";
   strictDeps = true;
   __structuredAttrs = true;
 
@@ -25,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "gtk-gnutella";
     repo = "gtk-gnutella";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xVVmPcXIc5RN1j9PYqHaqllKp+8UQ8S2LU0z23QngFs=";
+    hash = "sha256-b+3dN6YsToObe74tob/S4dbUqFQ8y8M08QYz3tVtAco=";
   };
 
   nativeBuildInputs = [
@@ -40,16 +38,11 @@ stdenv.mkDerivation (finalAttrs: {
     libbfd
     libxml2
     zlib
-  ]
-  ++ lib.optionals enableGui [
-    gtk2
   ];
 
   configureScript = "./build.sh";
   configureFlags = [
     "--configure-only"
-  ]
-  ++ lib.optionals (!enableGui) [
     "--topless"
   ];
 

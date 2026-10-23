@@ -9,14 +9,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "lenovo-legion-app";
-  version = "0.0.20-unstable-2026-05-12";
+  version = "0.1.2-unstable-2026-10-12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "johnfanv2";
     repo = "LenovoLegionLinux";
-    rev = "7c19579d13ce686cf1e237699b9a78e80d03c977";
-    hash = "sha256-gTlUrbNKCUQ+g70StlqspDn90wKW2scssKPZqaegzTY=";
+    rev = "6cf67c3d9db5b9d00c47485bad6c005657df4c1e";
+    hash = "sha256-Bk+3beM2jTwv9uNABAzFmbQrAhkxwNL/VYh8jtMnnbA=";
   };
 
   sourceRoot = "${src.name}/python/legion_linux";

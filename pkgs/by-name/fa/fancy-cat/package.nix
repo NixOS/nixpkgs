@@ -12,26 +12,25 @@
   mupdf,
   openjpeg,
   stdenv,
-  zig_0_14,
+  zig_0_15,
+  pkg-config,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fancy-cat";
-  version = "0.4.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "freref";
     repo = "fancy-cat";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-Wasxhsv4QhGscOEsGirabsq92963S8v1vOBWvAFuRoM=";
+    tag = "v0.6.0";
+    hash = "sha256-dyMcPIg1Wy9aOudDCVuDUqr8XkrO1kVtOEPBErosGwA=";
+    fetchSubmodules = true;
   };
 
-  patches = [ ./0001-changes.patch ];
-
   nativeBuildInputs = [
-    zig_0_14
+    pkg-config
+    zig_0_15
   ];
-
-  zigBuildFlags = [ "--release=fast" ];
 
   buildInputs = [
     mupdf
@@ -45,17 +44,21 @@ stdenv.mkDerivation (finalAttrs: {
     libz
   ];
 
-  postConfigure = ''
-    ln -s ${callPackage ./build.zig.zon.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
-  '';
+  dontSetZigDefaultFlags = true;
+
+  deps = callPackage ./deps.nix { };
+
+  zigBuildFlags = [
+    "--system"
+    "${finalAttrs.deps}"
+  ];
 
   meta = {
-    broken = true; # build phase wants to fetch from github
     description = "PDF viewer for terminals using the Kitty image protocol";
     homepage = "https://github.com/freref/fancy-cat";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ ciflire ];
     mainProgram = "fancy-cat";
-    inherit (zig_0_14.meta) platforms;
+    inherit (zig_0_15.meta) platforms;
   };
 })

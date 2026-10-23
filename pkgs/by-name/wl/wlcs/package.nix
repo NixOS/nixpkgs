@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.8.1";
 
   src = fetchFromGitHub {
-    owner = "MirServer";
+    owner = "canonical";
     repo = "wlcs";
     tag = "v${finalAttrs.version}";
     hash = "sha256-W4/a7neFcaqdPIAWDk5TcIuIWZ76rC7xCk3beJVqE/E=";
@@ -38,8 +38,11 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-scanner # needed by cmake
   ];
 
-  # GCC14-exclusive maybe-uninitialized error at higher optimisation levels that looks weird
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=maybe-uninitialized";
+  env.NIX_CFLAGS_COMPILE =
+    # https://github.com/canonical/wlcs/issues/462
+    "-Wno-error=deprecated-declarations "
+    # GCC14-exclusive maybe-uninitialized error at higher optimisation levels that looks weird
+    + lib.optionalString stdenv.cc.isGNU " -Wno-error=maybe-uninitialized";
 
   passthru = {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
@@ -65,8 +68,8 @@ stdenv.mkDerivation (finalAttrs: {
       standard debugging tools can follow control flow from the test client to the
       compositor and back again.
     '';
-    homepage = "https://github.com/MirServer/wlcs";
-    changelog = "https://github.com/MirServer/wlcs/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/canonical/wlcs";
+    changelog = "https://github.com/canonical/wlcs/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ OPNA2608 ];
     platforms = lib.platforms.linux;

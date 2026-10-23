@@ -2,10 +2,7 @@
   lib,
   aiohttp,
   buildPythonPackage,
-  click,
   fetchFromGitHub,
-  prompt-toolkit,
-  pygments,
   pymodbus-repl,
   pyserial,
   pytest-asyncio,
@@ -16,19 +13,18 @@
   setuptools,
   sqlalchemy,
   twisted,
-  typer,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pymodbus";
-  version = "3.12.1";
+  version = "3.16.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymodbus-dev";
     repo = "pymodbus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ISfAqZu6BSuXoISo8me7Z7BjvoEj6c2KgvuScjEiqd4=";
+    hash = "sha256-Mo3DvhDm+gvtylB1073PqxD8Trfb7AeHR0lXz8ap2FE=";
   };
 
   __darwinAllowLocalNetworking = true;

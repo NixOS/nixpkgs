@@ -20,9 +20,17 @@
   snakemake,
 }:
 
+# xrootd only exports "/tmp" by default, but pytest's tmp_path is under
+# $TMPDIR, so stat and directory-listing requests on test files would be
+# rejected with "[3010] ... is disallowed" unless we export more.
+let
+  serverConfig = pkgs.writers.writeText "xrootd-test-server.cfg" ''
+    all.export /
+  '';
+in
 buildPythonPackage (finalAttrs: {
   pname = "snakemake-storage-plugin-xrootd";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -30,14 +38,14 @@ buildPythonPackage (finalAttrs: {
     owner = "snakemake";
     repo = "snakemake-storage-plugin-xrootd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vL9JD9h0ywsKpUPoXhgg6b+vwi7kxK8CF3L6HnAEidE=";
+    hash = "sha256-r4FCGSMJD/PijfExaV1Ps4NaxWMsvlqyBYCt73ENiJQ=";
   };
 
   postPatch = ''
     substituteInPlace tests/tests.py \
       --replace-fail \
         'subprocess.Popen(["xrootd",' \
-        'subprocess.Popen(["${lib.getExe pkgs.xrootd}",'
+        'subprocess.Popen(["${lib.getExe pkgs.xrootd}", "-c", "${serverConfig}",'
   '';
 
   build-system = [
@@ -54,7 +62,9 @@ buildPythonPackage (finalAttrs: {
 
   # When doCheck is disabled, nnativeCheckInputs are not available and the package fails to import:
   #   ModuleNotFoundError: No module named 'snakemake'
-  pythonImportsCheck = lib.optionals finalAttrs.doCheck [ "snakemake_storage_plugin_xrootd" ];
+  pythonImportsCheck = lib.optionals finalAttrs.finalPackage.doCheck [
+    "snakemake_storage_plugin_xrootd"
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

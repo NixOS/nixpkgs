@@ -4,33 +4,32 @@
   buildNpmPackage,
   fetchFromGitHub,
   makeWrapper,
-  electron_40,
+  # Both upstream stable and latest releases often stay on EOL Electron.
+  electron,
+  cacert,
   makeDesktopItem,
   copyDesktopItems,
   commandLineArgs ? [ ],
   nix-update-script,
   _experimental-update-script-combinators,
   writeShellApplication,
-  nix,
+  curl,
+  common-updater-scripts,
   jq,
-  gnugrep,
 }:
 
-let
-  electron = electron_40;
-in
 buildNpmPackage (finalAttrs: {
   pname = "shogihome";
-  version = "1.27.3";
+  version = "1.29.1";
 
   src = fetchFromGitHub {
     owner = "sunfish-shogi";
     repo = "shogihome";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-25Iu/bKUCotJdQESxPPOiYehwn+D3RYnZiJfMWJ4cn0=";
+    hash = "sha256-F13rgUdquKJHz41Gz2ou8cAk3FmZF/FjA19DKtkJr2E=";
   };
 
-  npmDepsHash = "sha256-gWI21dPha7yX367r50U3C9wpX5/6oBzHGJNtFmG/GQ8=";
+  npmDepsHash = "sha256-9pitop6ZGw4JlN/iUfQ7xqY7jN5PyffTSH2Tc/coi+c=";
 
   postPatch = ''
     substituteInPlace package.json \
@@ -50,6 +49,11 @@ buildNpmPackage (finalAttrs: {
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     npm_config_build_from_source = "true";
+
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # Prevent "unable to get local issuer certificate" error
+    NODE_EXTRA_CA_CERTS = "${cacert}/etc/ssl/certs/ca-bundle.crt";
   };
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
@@ -124,28 +128,28 @@ buildNpmPackage (finalAttrs: {
 
   passthru = {
     updateScript = _experimental-update-script-combinators.sequence [
-      (nix-update-script {
-        extraArgs = [
-          "--version-regex=^v([\\d\\.]+)$"
-        ];
-      })
       (lib.getExe (writeShellApplication {
-        name = "${finalAttrs.pname}-electron-updater";
+        name = "${finalAttrs.pname}-version-updater";
+
         runtimeInputs = [
-          nix
+          curl
           jq
-          gnugrep
+          common-updater-scripts
         ];
-        runtimeEnv = {
-          PNAME = finalAttrs.pname;
-          PKG_FILE = toString ./package.nix;
-        };
+
+        # Use release.json as the primary source rather than git tags or GitHub releases:
+        # https://github.com/sunfish-shogi/shogihome/issues/1704#issuecomment-5105936699
         text = ''
-          new_src="$(nix-build --attr "pkgs.$PNAME.src" --no-out-link)"
-          new_electron_major="$(jq '.devDependencies.electron' "$new_src/package.json" | grep --perl-regexp --only-matching '\d+' | head -n 1)"
-          sed -i -E "s/electron_[0-9]+/electron_$new_electron_major/g" "$PKG_FILE"
+          version="$(curl -s 'https://sunfish-shogi.github.io/shogihome/release.json' | jq -r '.latest.version')"
+          update-source-version '${finalAttrs.pname}' "$version"
         '';
       }))
+      # Update src.hash and npmDepsHash
+      (nix-update-script {
+        extraArgs = [
+          "--version=skip"
+        ];
+      })
     ];
   };
 

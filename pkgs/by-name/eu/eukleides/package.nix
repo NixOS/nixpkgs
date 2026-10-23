@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./use-CC.patch
     # allow PostScript transparency in epstopdf call
     ./gs-allowpstransparency.patch
-    # fix curly brace escaping in eukleides.texi for newer texinfo compatiblity
+    # fix curly brace escaping in eukleides.texi for newer texinfo compatibility
     ./texinfo-escape.patch
     (fetchpatch2 {
       url = "https://salsa.debian.org/georgesk/eukleides/-/raw/debian/1.5.4-6/debian/patches/fixes-for-gcc15.patch";

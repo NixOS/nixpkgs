@@ -5,7 +5,7 @@
   copyDesktopItems,
   makeDesktopItem,
   libxkbcommon,
-  makeWrapper,
+  makeBinaryWrapper,
   nix-update-script,
   openssl,
   pkg-config,
@@ -21,20 +21,20 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "halloy";
-  version = "2026.7.2";
+  version = "2026.9";
 
   src = fetchFromGitHub {
     owner = "squidowl";
     repo = "halloy";
     tag = finalAttrs.version;
-    hash = "sha256-+qFHwlwRxVN4W9DG+gY5N6um+JARD+3EiLlsD7R9Tpc=";
+    hash = "sha256-rIrmhrnM4UWZeDZVOyDu13WiTROcQWsDBztqeQzRbuQ=";
   };
 
-  cargoHash = "sha256-/nFtOJXpusIlc7orGv013qzad8fdfQr32c8DAlccHIA=";
+  cargoHash = "sha256-pyRh6zSle4ZCGUsf2R7YIhcBOT53WKBFA0JHWGA3Z5s=";
 
   nativeBuildInputs = [
     copyDesktopItems
-    makeWrapper
+    makeBinaryWrapper
     pkg-config
   ];
 
@@ -101,11 +101,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mkdir -p "$APP_DIR/MacOS"
     cp -r ${finalAttrs.src}/assets/macos/Halloy.app/Contents/* "$APP_DIR"
 
-    substituteInPlace "$APP_DIR/Info.plist" \
+    substitute \
+      "${finalAttrs.src}/assets/macos/Info.plist.in" \
+      "$APP_DIR/Info.plist" \
       --replace-fail "{{ VERSION }}" "${finalAttrs.version}" \
       --replace-fail "{{ BUILD }}" "${finalAttrs.version}-nixpkgs"
 
-    makeWrapper "$out/bin/halloy" "$APP_DIR/MacOS/halloy"
+    makeBinaryWrapper "$out/bin/halloy" "$APP_DIR/MacOS/halloy"
   '';
 
   passthru.updateScript = nix-update-script { };

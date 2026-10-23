@@ -15,13 +15,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "tsx";
-  version = "4.22.4";
+  version = "4.23.12";
 
   src = fetchFromGitHub {
     owner = "privatenumber";
     repo = "tsx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hiUy3VQXHvzuCr+WjaRV/pUcnz3bq29lmpofqKZ/sv8=";
+    hash = "sha256-hHiJaLyCJwxSV1fc9Zpn/JHmvRS2fhT1XmL+B94+axw=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     pnpm = pnpm';
     fetcherVersion = 3;
-    hash = "sha256-A0KaFJNBJaMDTG9g8dj3/qZPkqg5hnRgjP0lfTg/CQY=";
+    hash = "sha256-KysktlAKCChQW0CwI8qsVJu2rEmMwF+eVNvxuzAYLis=";
   };
 
   nativeBuildInputs = [
@@ -106,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "TypeScript Execute (tsx): The easiest way to run TypeScript in Node.js";
-    homepage = "https://tsx.is";
+    homepage = "https://tsx.hirok.io/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       sdedovic

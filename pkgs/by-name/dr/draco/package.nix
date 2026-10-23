@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   # ld: unknown option: --start-group
-  postPatch = lib.optional stdenv.hostPlatform.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace cmake/draco_targets.cmake \
       --replace-fail "^Clang" "^AppleClang"
   '';

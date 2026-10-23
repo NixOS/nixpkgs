@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   setuptools,
@@ -17,42 +18,46 @@
 
   # tests
   flax,
+  hypothesis,
   jax,
+  mujoco,
   optax,
   pettingzoo,
   pygame,
   pymunk,
+  pytest-xdist,
   pytestCheckHook,
+  warp-lang,
+  warp-nn,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "skrl";
-  version = "1.4.3";
+  version = "2.1.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Toni-SM";
     repo = "skrl";
     tag = finalAttrs.version;
-    hash = "sha256-5lkoYAmMIWqK3+E3WxXMWS9zal2DhZkfl30EkrHKpdI=";
+    hash = "sha256-pntQ/7kefi7LLLG1DTKY9Zjlzb0UXiduQCzlX5PkZds=";
   };
 
-  # Fix Jax 0.10.0 compatibility
-  # TypeError: clip() got an unexpected keyword argument 'a_min'
-  postPatch = ''
-    substituteInPlace skrl/models/jax/gaussian.py \
-      --replace-fail \
-        "jnp.clip(log_std, a_min=log_std_min, a_max=log_std_max)" \
-        "jnp.clip(log_std, min=log_std_min, max=log_std_max)" \
-      --replace-fail \
-        "jnp.clip(actions, a_min=clip_actions_min, a_max=clip_actions_max)" \
-        "jnp.clip(actions, min=clip_actions_min, max=clip_actions_max)"
-
-    substituteInPlace skrl/models/jax/deterministic.py \
-      --replace-fail \
-        "jnp.clip(actions, a_min=self._d_clip_actions_min, a_max=self._d_clip_actions_max)" \
-        "jnp.clip(actions, min=self._d_clip_actions_min, max=self._d_clip_actions_max)"
-  '';
+  patches = [
+    # Fix compatibility with warp-nn 0.4.0 (`training` became a read-only property)
+    # https://github.com/Toni-SM/skrl/pull/462
+    (fetchpatch {
+      name = "fix-warp-implementation-bugs.patch";
+      url = "https://github.com/Toni-SM/skrl/commit/2ec6ee1620b51b997bbf5273899223c6d9626d58.patch";
+      includes = [
+        "pyproject.toml"
+        "skrl/*"
+      ];
+      hash = "sha256-LzCrz7rSwyx62WlIzgDO0tKrzb3Dc1UpRCyf1NQh9g4=";
+    })
+  ];
 
   build-system = [ setuptools ];
 
@@ -70,21 +75,39 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     flax
+    hypothesis
     jax
+    mujoco
     optax
     pettingzoo
     pygame
     pymunk
+    pytest-xdist
     pytestCheckHook
+    warp-lang
+    warp-nn
+    writableTmpDirAsHomeHook
   ];
 
   disabledTests = [
+    # Flaky when using pytest-xdist
+    "test_agent"
+
     # TypeError: The array passed to from_dlpack must have __dlpack__ and __dlpack_device__ methods
     "test_env"
     "test_multi_agent_env"
 
     # OverflowError
     "test_key"
+
+    # Require GPU access
+    "test_device[cuda]"
+    "test_parse_device[cuda]"
+  ];
+
+  disabledTestPaths = [
+    # TypeError: Can't instantiate abstract class Memory without an implementation for abstract method 'sample'
+    "tests/memories/torch/test_base.py"
   ];
 
   meta = {

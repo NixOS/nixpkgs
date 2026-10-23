@@ -2,6 +2,9 @@
   "chap-build-helpers-finalAttrs": [
     "index.html#chap-build-helpers-finalAttrs"
   ],
+  "chap-first-package": [
+    "index.html#chap-first-package"
+  ],
   "chap-release-notes": [
     "release-notes.html#chap-release-notes"
   ],
@@ -102,8 +105,17 @@
   "cuda-writing-tests": [
     "index.html#cuda-writing-tests"
   ],
+  "dev-environments": [
+    "index.html#dev-environments"
+  ],
   "ex-build-helpers-extendMkDerivation": [
     "index.html#ex-build-helpers-extendMkDerivation"
+  ],
+  "ex-build-helpers-extendMkDerivation-transformDrv-wrapper": [
+    "index.html#ex-build-helpers-extendMkDerivation-transformDrv-wrapper"
+  ],
+  "ex-first-package-go": [
+    "index.html#ex-first-package-go"
   ],
   "ex-modularServiceCompliance-nixos": [
     "index.html#ex-modularServiceCompliance-nixos"
@@ -116,9 +128,6 @@
   "ex-pkgs-replace-vars-with": [
     "index.html#ex-pkgs-replace-vars-with"
   ],
-  "ex-pnpm-build-hook": [
-    "index.html#ex-pnpm-build-hook"
-  ],
   "ex-shfmt": [
     "index.html#ex-shfmt"
   ],
@@ -128,8 +137,17 @@
   "ex-testEqualArrayOrMap-test-function-add-cowbell": [
     "index.html#ex-testEqualArrayOrMap-test-function-add-cowbell"
   ],
+  "ex-trivial-builder-finalAttrs": [
+    "index.html#ex-trivial-builder-finalAttrs"
+  ],
   "ex-writeShellApplication": [
     "index.html#ex-writeShellApplication"
+  ],
+  "fetchfromtangled": [
+    "index.html#fetchfromtangled"
+  ],
+  "first-package-go": [
+    "index.html#first-package-go"
   ],
   "friction-graphics": [
     "index.html#friction-graphics"
@@ -137,11 +155,29 @@
   "friction-graphics-wayland": [
     "index.html#friction-graphics-wayland"
   ],
+  "getting-started": [
+    "index.html#getting-started"
+  ],
   "ghc-deprecation-policy": [
     "index.html#ghc-deprecation-policy"
   ],
+  "guileImportsCheckHook": [
+    "index.html#guileImportsCheckHook"
+  ],
+  "how-channels-work": [
+    "index.html#how-channels-work"
+  ],
   "inkscape-plugins": [
     "index.html#inkscape-plugins"
+  ],
+  "installAgentSkills": [
+    "index.html#installAgentSkills"
+  ],
+  "installAgentSkills-installSkill": [
+    "index.html#installAgentSkills-installSkill"
+  ],
+  "installAgentSkills-installSkill-exampleusage": [
+    "index.html#installAgentSkills-installSkill-exampleusage"
   ],
   "installfonts": [
     "index.html#installfonts"
@@ -193,6 +229,21 @@
   ],
   "julec-hook-variables": [
     "index.html#julec-hook-variables"
+  ],
+  "juce-projucer-hook": [
+    "index.html#juce-projucer-hook"
+  ],
+  "juce-projucer-hook-example": [
+    "index.html#juce-projucer-hook-example"
+  ],
+  "juce-projucer-hook-variables": [
+    "index.html#juce-projucer-hook-variables"
+  ],
+  "juce-dontuseprojucerconfigure": [
+    "index.html#juce-dontuseprojucerconfigure"
+  ],
+  "juce-dontuseprojucerinstall": [
+    "index.html#juce-dontuseprojucerinstall"
   ],
   "libcxxhardeningextensive": [
     "index.html#libcxxhardeningextensive"
@@ -355,37 +406,8 @@
   "pkgs.treefmt.withConfig": [
     "index.html#pkgs.treefmt.withConfig"
   ],
-  "pnpm-build-hook": [
-    "index.html#pnpm-build-hook"
-  ],
-  "pnpm-build-hook-build-flags": [
-    "index.html#pnpm-build-hook-build-flags"
-  ],
-  "pnpm-build-hook-code-snippet": [
-    "index.html#pnpm-build-hook-code-snippet"
-  ],
-  "pnpm-build-hook-dont": [
-    "index.html#pnpm-build-hook-dont"
-  ],
-  "pnpm-build-hook-exclusive-variables": [
-    "index.html#pnpm-build-hook-exclusive-variables"
-  ],
-  "pnpm-build-hook-flags": [
-    "index.html#pnpm-build-hook-flags"
-  ],
-  "pnpm-build-hook-script": [
-    "index.html#pnpm-build-hook-script"
-  ],
-  "pnpm-build-hook-variables": [
-    "index.html#pnpm-build-hook-variables"
-  ],
-  "pnpm-build-hook-honored-variables": [
-    "index.html#pnpm-build-hook-honored-variables"
-  ],
   "preface": [
-    "index.html#preface"
-  ],
-  "overview-of-nixpkgs": [
+    "index.html#preface",
     "index.html#overview-of-nixpkgs"
   ],
   "part-using": [
@@ -424,8 +446,14 @@
   "sec-building-packages-with-llvm-using-clang-stdenv": [
     "index.html#sec-building-packages-with-llvm-using-clang-stdenv"
   ],
+  "sec-chicken-package-sets": [
+    "index.html#sec-chicken-package-sets"
+  ],
   "sec-darwin-availability-checks": [
     "index.html#sec-darwin-availability-checks"
+  ],
+  "sec-darwin-builder-vz": [
+    "index.html#sec-darwin-builder-vz"
   ],
   "sec-darwin-libcxx-deployment-targets": [
     "index.html#sec-darwin-libcxx-deployment-targets"
@@ -758,6 +786,27 @@
   "sec-functions-library-derivations": [
     "index.html#sec-functions-library-derivations"
   ],
+  "sec-functions-library-types": [
+    "index.html#sec-functions-library-types"
+  ],
+  "ex-submodule-direct": [
+    "index.html#ex-submodule-direct"
+  ],
+  "ex-submodule-reference": [
+    "index.html#ex-submodule-reference"
+  ],
+  "ex-submodule-listof-declaration": [
+    "index.html#ex-submodule-listof-declaration"
+  ],
+  "ex-submodule-listof-definition": [
+    "index.html#ex-submodule-listof-definition"
+  ],
+  "ex-submodule-attrsof-declaration": [
+    "index.html#ex-submodule-attrsof-declaration"
+  ],
+  "ex-submodule-attrsof-definition": [
+    "index.html#ex-submodule-attrsof-definition"
+  ],
   "sec-generators": [
     "index.html#sec-generators"
   ],
@@ -959,6 +1008,9 @@
   "treefmt": [
     "index.html#treefmt"
   ],
+  "trivial-builder-finalAttrs": [
+    "index.html#trivial-builder-finalAttrs"
+  ],
   "typst": [
     "index.html#typst",
     "doc/languages-frameworks/typst.section.md#typst"
@@ -1117,6 +1169,9 @@
   ],
   "x86_64-darwin-26.05": [
     "release-notes.html#x86_64-darwin-26.05"
+  ],
+  "x86_64-darwin-26.11": [
+    "release-notes.html#x86_64-darwin-26.11"
   ],
   "zip-files": [
     "index.html#zip-files"
@@ -1650,6 +1705,9 @@
   "var-meta-mainProgram": [
     "index.html#var-meta-mainProgram"
   ],
+  "var-meta-mainDarwinApp": [
+    "index.html#var-meta-mainDarwinApp"
+  ],
   "var-meta-priority": [
     "index.html#var-meta-priority"
   ],
@@ -1920,6 +1978,9 @@
   "sec-darwin-troubleshooting-xcodebuild-absolute-paths": [
     "index.html#sec-darwin-troubleshooting-xcodebuild-absolute-paths"
   ],
+  "sec-darwin-missing-macros": [
+    "index.html#sec-darwin-missing-macros"
+  ],
   "sec-darwin-troubleshooting-libiconv": [
     "index.html#sec-darwin-troubleshooting-libiconv"
   ],
@@ -2045,6 +2106,12 @@
   ],
   "fetchfromgithub": [
     "index.html#fetchfromgithub"
+  ],
+  "fetchfromhuggingface": [
+    "index.html#fetchfromhuggingface"
+  ],
+  "ex-fetchfromhuggingface": [
+    "index.html#ex-fetchfromhuggingface"
   ],
   "fetchfromgitlab": [
     "index.html#fetchfromgitlab"
@@ -2208,6 +2275,12 @@
   ],
   "ex-hascmakeconfigmodules": [
     "index.html#ex-hascmakeconfigmodules"
+  ],
+  "ex-hascmakeconfigmodules-defaultvalues": [
+    "index.html#ex-hascmakeconfigmodules-defaultvalues"
+  ],
+  "ex-hascmakeconfigmodules-explicitmodules": [
+    "index.html#ex-hascmakeconfigmodules-explicitmodules"
   ],
   "tester-lycheeLinkCheck": [
     "index.html#tester-lycheeLinkCheck"
@@ -2415,6 +2488,18 @@
   ],
   "sec-checkpoint-build-example": [
     "index.html#sec-checkpoint-build-example"
+  ],
+  "sec-redisTestHook": [
+    "index.html#sec-redisTestHook"
+  ],
+  "sec-redisTestHook-variables": [
+    "index.html#sec-redisTestHook-variables"
+  ],
+  "sec-memcachedTestHook": [
+    "index.html#sec-memcachedTestHook"
+  ],
+  "sec-memcachedTestHook-variables": [
+    "index.html#sec-memcachedTestHook-variables"
   ],
   "chap-images": [
     "index.html#chap-images"
@@ -2767,9 +2852,6 @@
   "glycin-dont-wrap": [
     "index.html#glycin-dont-wrap"
   ],
-  "ghc": [
-    "index.html#ghc"
-  ],
   "gnome-platform": [
     "index.html#gnome-platform"
   ],
@@ -2902,8 +2984,15 @@
   "meson-honored-variables": [
     "index.html#meson-honored-variables"
   ],
+  "meson-disabled-tests": [
+    "index.html#meson-disabled-tests"
+  ],
   "setup-hook-mpi-check": [
     "index.html#setup-hook-mpi-check"
+  ],
+  "setup-hook-check-phase-thread-limit": [
+    "index.html#setup-hook-check-phase-thread-limit",
+    "index.html#setup-hook-omp-check"
   ],
   "ninja": [
     "index.html#ninja"
@@ -3613,7 +3702,8 @@
     "index.html#hareHook-cross-compilation"
   ],
   "haskell": [
-    "index.html#haskell"
+    "index.html#haskell",
+    "index.html#ghc"
   ],
   "haskell-available-packages": [
     "index.html#haskell-available-packages"
@@ -3742,15 +3832,9 @@
     "index.html#language-javascript"
   ],
   "javascript-introduction": [
-    "index.html#javascript-introduction"
-  ],
-  "javascript-finding-examples": [
-    "index.html#javascript-finding-examples"
-  ],
-  "javascript-finding-examples-github": [
-    "index.html#javascript-finding-examples-github"
-  ],
-  "javascript-finding-examples-gitlab": [
+    "index.html#javascript-introduction",
+    "index.html#javascript-finding-examples",
+    "index.html#javascript-finding-examples-github",
     "index.html#javascript-finding-examples-gitlab"
   ],
   "javascript-tools-overview": [
@@ -3805,7 +3889,23 @@
     "index.html#javascript-corepack"
   ],
   "javascript-pnpm": [
-    "index.html#javascript-pnpm"
+    "index.html#javascript-pnpm",
+    "index.html#ex-pnpm-build-hook"
+  ],
+  "javascript-pnpm-pnpmBuildHook": [
+    "index.html#javascript-pnpm-pnpmBuildHook",
+    "index.html#pnpm-build-hook",
+    "index.html#pnpm-build-hook-build-flags",
+    "index.html#pnpm-build-hook-code-snippet",
+    "index.html#pnpm-build-hook-dont",
+    "index.html#pnpm-build-hook-exclusive-variables",
+    "index.html#pnpm-build-hook-flags",
+    "index.html#pnpm-build-hook-script",
+    "index.html#pnpm-build-hook-variables",
+    "index.html#pnpm-build-hook-honored-variables"
+  ],
+  "javascript-pnpm-pnpmConfigHook": [
+    "index.html#javascript-pnpm-pnpmConfigHook"
   ],
   "javascript-pnpm-sourceRoot": [
     "index.html#javascript-pnpm-sourceRoot"
@@ -3830,6 +3930,9 @@
   ],
   "javascript-yarn-v3-v4": [
     "index.html#javascript-yarn-v3-v4"
+  ],
+  "javascript-fetchyarndeps": [
+    "index.html#javascript-fetchyarndeps"
   ],
   "javascript-yarnconfighook": [
     "index.html#javascript-yarnconfighook"
@@ -4266,6 +4369,9 @@
   "using-unittestcheckhook": [
     "index.html#using-unittestcheckhook"
   ],
+  "using-stestrcheckhook": [
+    "index.html#using-stestrcheckhook"
+  ],
   "using-sphinxhook": [
     "index.html#using-sphinxhook"
   ],
@@ -4515,20 +4621,38 @@
   "ssec-swift-packaging-with-swiftpm": [
     "index.html#ssec-swift-packaging-with-swiftpm"
   ],
+  "ssec-swift-packaging-with-fetch-swiftpm-deps": [
+    "index.html#ssec-swift-packaging-with-fetch-swiftpm-deps"
+  ],
+  "ssec-swift-packaging-with-swiftpm2nix": [
+    "index.html#ssec-swift-packaging-with-swiftpm2nix"
+  ],
+  "ssec-swiftpm-prefetch-dependencies": [
+    "index.html#ssec-swiftpm-prefetch-dependencies"
+  ],
+  "ssec-swiftpm-patching-dependencies": [
+    "index.html#ssec-swiftpm-patching-dependencies"
+  ],
   "ssec-swiftpm-custom-build-flags": [
     "index.html#ssec-swiftpm-custom-build-flags"
   ],
   "ssec-swiftpm-running-tests": [
     "index.html#ssec-swiftpm-running-tests"
   ],
-  "ssec-swiftpm-patching-dependencies": [
-    "index.html#ssec-swiftpm-patching-dependencies"
+  "ssec-swiftpm-install-phase": [
+    "index.html#ssec-swiftpm-install-phase"
+  ],
+  "ssec-swift-hooks": [
+    "index.html#ssec-swift-hooks"
   ],
   "ssec-swift-considerations-for-custom-build-tools": [
     "index.html#ssec-swift-considerations-for-custom-build-tools"
   ],
   "ssec-swift-linking-the-standard-library": [
     "index.html#ssec-swift-linking-the-standard-library"
+  ],
+  "ssec-swift-platform-properties": [
+    "index.html#ssec-swift-platform-properties"
   ],
   "sec-language-tcl": [
     "index.html#sec-language-tcl"

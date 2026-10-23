@@ -21,7 +21,7 @@
   jsonschema,
   magicgui,
   napari-console,
-  napari-npe2,
+  npe2,
   napari-svg,
   pandas,
   pillow,
@@ -58,14 +58,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "napari";
-  version = "0.7.0";
+  version = "0.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "napari";
     repo = "napari";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fDt9n4+yQcA03IO7sMhcpiP3TfOWfyvbCjY7ImEj+Qg=";
+    hash = "sha256-BRRJHVcCqxlOPN4kA5B0X9SOY4SiKgnBb7ov1m6aiZY=";
   };
 
   postPatch = ''
@@ -95,7 +95,7 @@ buildPythonPackage (finalAttrs: {
     jsonschema
     magicgui
     napari-console
-    napari-npe2
+    npe2
     napari-svg
     pandas
     pillow

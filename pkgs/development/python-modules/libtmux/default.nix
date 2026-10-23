@@ -14,17 +14,22 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "libtmux";
-  version = "0.59.0";
+  version = "0.62.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tmux-python";
     repo = "libtmux";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RsK3nVGpgNX05tCc5kK5GFLUS5vVoe8NRKgg7Y/DzwM=";
+    hash = "sha256-JeYQjmyLTLUbDwO6zm2UQfftAubsgrQ9qXrRyaBAsyQ=";
   };
 
-  patches = [ ./0001-fix-test_control_mode_stdout_preserves_non_ascii_out.patch ];
+  patches = [
+    ./0001-fix-test_control_mode_stdout_preserves_non_ascii_out.patch
+    ./0002-Hooks-fix-Decode-tmux-3.8-events.patch
+    ./0003-Popup-test-Attach-a-terminal-client.patch
+    ./0004-Docs-fix-Explain-floating-pane-borders.patch
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -46,6 +51,8 @@ buildPythonPackage (finalAttrs: {
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [ "tests/test/test_retry.py" ];
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # basename for sleep is coreutils, not sleep
+    "test_break_pane_no_name_uses_natural_name"
     # Fail with: 'no server running on /tmp/tmux-1000/libtmux_test8sorutj1'.
     "test_new_session_width_height"
     # AssertionError: assert '' == '$'

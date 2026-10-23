@@ -2,14 +2,11 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  cmake,
-  doxygen,
   boost,
   eigen,
   jrl-cmakemodules,
   assimp,
   octomap,
-  pkg-config,
   qhull,
   zlib,
 }:
@@ -27,15 +24,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    cmake
-    doxygen
-    pkg-config
+  nativeBuildInputs = jrl-cmakemodules.docsNativeBuildInputs;
+
+  buildInputs = [
+    jrl-cmakemodules
   ];
 
   propagatedBuildInputs = [
     assimp
-    jrl-cmakemodules
     octomap
     qhull
     zlib
@@ -43,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     eigen
   ];
 
-  cmakeFlags = [
+  cmakeFlags = jrl-cmakemodules.docsCmakeFlags ++ [
     (lib.cmakeBool "COAL_BACKWARD_COMPATIBILITY_WITH_HPP_FCL" true)
     (lib.cmakeBool "COAL_HAS_QHULL" true)
     (lib.cmakeBool "INSTALL_DOCUMENTATION" true)

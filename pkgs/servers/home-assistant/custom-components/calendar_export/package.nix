@@ -5,16 +5,16 @@
   icalendar,
 }:
 
-buildHomeAssistantComponent {
+buildHomeAssistantComponent (finalAttrs: {
   owner = "JosephAbbey";
   domain = "calendar_export";
-  version = "0.1.0-unstable-2025-12-13";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "JosephAbbey";
     repo = "ha_calendar_export";
-    rev = "abe73d46a42aaec11aca19fed7913ceb525ca784";
-    hash = "sha256-x1UXjpFXKU06FDPLbpPx39nwr1o3ZuluWuSNKomS8SU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7cz9G6/oVRTMA4UhEftC1NEvHhEjHwv1drIu6lkmCOs=";
   };
 
   dependencies = [ icalendar ];
@@ -22,9 +22,10 @@ buildHomeAssistantComponent {
   ignoreVersionRequirement = [ "icalendar" ];
 
   meta = {
+    changelog = "https://github.com/josephabbey/ha_calendar_export/releases/tag/${finalAttrs.src.tag}";
     description = "Export calendar events in the iCalendar format";
     homepage = "https://github.com/JosephAbbey/ha_calendar_export";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

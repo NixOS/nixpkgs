@@ -1,16 +1,6 @@
 {
-  useNixpkgsEngine ? false,
   version,
   engineVersion,
-  engineHashes ? { },
-  engineUrl ? "https://github.com/flutter/flutter.git@${engineVersion}",
-  enginePatches ? [ ],
-  engineRuntimeModes ? [
-    "release"
-    "debug"
-  ],
-  engineSwiftShaderHash,
-  engineSwiftShaderRev,
   patches,
   channel,
   dart,
@@ -28,27 +18,11 @@
   writableTmpDirAsHomeHook,
   installShellFiles,
   flutterTools ? null,
+  aapt,
 }@args:
 
 let
-  engine =
-    if args.useNixpkgsEngine or false then
-      callPackage ./engine/default.nix {
-        inherit (args) dart;
-        dartSdkVersion = args.dart.version;
-        flutterVersion = version;
-        swiftshaderRev = engineSwiftShaderRev;
-        swiftshaderHash = engineSwiftShaderHash;
-        version = engineVersion;
-        hashes = engineHashes;
-        url = engineUrl;
-        patches = enginePatches;
-        runtimeModes = engineRuntimeModes;
-      }
-    else
-      null;
-
-  dart = if args.useNixpkgsEngine or false then engine.dart else args.dart;
+  dart = args.dart;
 
   flutterTools =
     args.flutterTools or (callPackage ./flutter-tools.nix {
@@ -103,7 +77,6 @@ let
       GIT_AUTHOR_EMAIL= GIT_COMMITTER_EMAIL= \
       GIT_AUTHOR_DATE='1/1/1970 00:00:00 +0000' GIT_COMMITTER_DATE='1/1/1970 00:00:00 +0000' \
         git commit --allow-empty --message="Initial commit"
-      (. '${../../../build-support/fetchgit/deterministic-git}'; make_deterministic_repo .)
     ''
     + ''
       mkdir --parents bin/cache
@@ -157,6 +130,7 @@ let
       makeShellWrapper "$out/bin/dart" "$out/bin/flutter" \
         --set-default FLUTTER_ROOT "$out" \
         --set FLUTTER_ALREADY_LOCKED true \
+        ${lib.optionalString aapt.meta.available "--set NIX_AAPT2_BINARY_PATH ${lib.getExe aapt}"} \
         --add-flags "--disable-dart-dev --packages='${flutterTools.pubcache}/package_config.json' \$NIX_FLUTTER_TOOLS_VM_OPTIONS $out/bin/cache/flutter_tools.snapshot"
 
       runHook postInstall
@@ -164,6 +138,9 @@ let
 
     postInstall = ''
       $out/bin/flutter bash-completion "$TMPDIR/flutter.bash"
+      # Remove timestamps in generated completion file to ensure a
+      # deterministic build.
+      sed -ri '/^## Generated .*Z$/d' "$TMPDIR/flutter.bash"
       installShellCompletion --bash "$TMPDIR/flutter.bash"
       installShellCompletion --zsh "$TMPDIR/flutter.bash"
     '';
@@ -197,15 +174,9 @@ let
       # When other derivations wrap this one, any unmodified files
       # found here should be included as-is, for tooling compatibility.
       sdk = unwrapped;
-    }
-    // lib.optionalAttrs (engine != null) {
-      inherit engine;
     };
 
     meta = {
-      # TODO: investigate why nixpkgs engine fails for versions >= 3.34
-      broken =
-        ((lib.versionOlder version "3.32") || lib.versionAtLeast version "3.34") && useNixpkgsEngine;
       description = "Makes it easy and fast to build beautiful apps for mobile and beyond";
       longDescription = ''
         Flutter is Google's SDK for crafting beautiful,
@@ -213,13 +184,10 @@ let
       '';
       homepage = "https://flutter.dev";
       license = lib.licenses.bsd3;
-      sourceProvenance =
-        with lib.sourceTypes;
-        if useNixpkgsEngine then [ fromSource ] else [ binaryNativeCode ];
+      sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
       platforms = [
         "x86_64-linux"
         "aarch64-linux"
-        "x86_64-darwin"
         "aarch64-darwin"
       ];
       mainProgram = "flutter";

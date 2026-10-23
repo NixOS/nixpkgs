@@ -1,0 +1,44 @@
+diff --git a/src/st/st-icon-theme.c b/src/st/st-icon-theme.c
+--- a/src/st/st-icon-theme.c
++++ b/src/st/st-icon-theme.c
+@@ -220,6 +220,8 @@ typedef struct
+ {
+   char *dir;
+   time_t mtime;
++  dev_t device;
++  ino_t inode;
+   StIconCache *cache;
+   gboolean exists;
+ } IconThemeDirMtime;
+@@ -792,6 +794,8 @@ insert_theme (StIconTheme *icon_theme,
+       dir_mtime->dir = path;
+       if (g_stat (path, &stat_buf) == 0 && S_ISDIR (stat_buf.st_mode)) {
+         dir_mtime->mtime = stat_buf.st_mtime;
++        dir_mtime->device = stat_buf.st_dev;
++        dir_mtime->inode = stat_buf.st_ino;
+         dir_mtime->exists = TRUE;
+       } else {
+         dir_mtime->mtime = 0;
+@@ -1029,6 +1033,8 @@ load_themes (StIconTheme *icon_theme)
+       if (g_stat (dir, &stat_buf) != 0 || !S_ISDIR (stat_buf.st_mode))
+         continue;
+       dir_mtime->mtime = stat_buf.st_mtime;
++      dir_mtime->device = stat_buf.st_dev;
++      dir_mtime->inode = stat_buf.st_ino;
+       dir_mtime->exists = TRUE;
+ 
+       dir_mtime->cache = st_icon_cache_new_for_path (dir);
+@@ -2120,10 +2126,12 @@ rescan_themes (StIconTheme *icon_theme)
+-      /* dir mtime didn't change */
++      /* dir identity and mtime didn't change. */
+       if (stat_res == 0 && dir_mtime->exists &&
+           S_ISDIR (stat_buf.st_mode) &&
++          dir_mtime->device == stat_buf.st_dev &&
++          dir_mtime->inode == stat_buf.st_ino &&
+           dir_mtime->mtime == stat_buf.st_mtime)
+         continue;
+       /* didn't exist before, and still doesn't */
+       if (!dir_mtime->exists &&
+           (stat_res != 0 || !S_ISDIR (stat_buf.st_mode)))
+         continue;
+ 

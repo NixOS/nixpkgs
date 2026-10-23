@@ -7,7 +7,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mona-sans";
-  version = "2.0.23";
+  version = "2.0.27";
 
   outputs = [
     "out"
@@ -15,10 +15,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    rev = finalAttrs.version;
     owner = "github";
     repo = "mona-sans";
-    sha256 = "sha256-VBbn59v1EqP2cEDqna5vSz/uSgFHmF97bsAHyOBbRt0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-P5Dy38iS0Cly+Rcjg3EQSZozvdfsXwa6yz+IdgrSq4M=";
   };
 
   nativeBuildInputs = [ installFonts ];

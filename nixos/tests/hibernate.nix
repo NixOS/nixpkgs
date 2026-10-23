@@ -4,7 +4,6 @@
   system ? builtins.currentSystem,
   config ? { },
   pkgs ? import ../.. { inherit system config; },
-  systemdStage1,
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -21,15 +20,13 @@ makeTest {
         ...
       }:
       {
-        imports = [
-          ./common/auto-format-root-device.nix
-        ];
-
         powerManagement.powerDownCommands = "systemctl --no-block stop backdoor.service";
         powerManagement.resumeCommands = "systemctl --no-block restart backdoor.service";
 
         virtualisation.emptyDiskImages = [ (2 * config.virtualisation.memorySize) ];
+        # virtiofs doesn't support hibernation
         virtualisation.useNixStoreImage = true;
+        virtualisation.sharedDirectories = lib.mkForce { };
 
         swapDevices = lib.mkOverride 0 [
           {
@@ -37,7 +34,6 @@ makeTest {
             options = [ "x-systemd.makefs" ];
           }
         ];
-        boot.initrd.systemd.enable = systemdStage1;
         virtualisation.useEFIBoot = true;
       };
   };

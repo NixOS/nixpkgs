@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "nats-top";
-  version = "0.6.4";
+  version = "0.6.5";
 
   src = fetchFromGitHub {
     owner = "nats-io";
     repo = "nats-top";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yewSURZ5uFfDiSRjLmv8QU7XxTVsnZK2RvsPQ/ZEkRw=";
+    hash = "sha256-VzHPetIgPR/+1O29q1+70xry3Z6elv2CinzEn6zd9uQ=";
   };
 
-  vendorHash = "sha256-BY2WPwU6my1cqddgZvZl36KXKCpMo5RLT4bhk/b+xCM=";
+  vendorHash = "sha256-Ewq0LUSJdbaSRKD6D28XQHLoY012o9vfhup5PQ6MFts=";
 
   ldflags = [
     "-s"
@@ -36,7 +36,7 @@ buildGoModule (finalAttrs: {
     description = "top-like tool for monitoring NATS servers";
     homepage = "https://github.com/nats-io/nats-top";
     changelog = "https://github.com/nats-io/nats-top/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "nats-top";
   };

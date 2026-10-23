@@ -9,9 +9,11 @@
   ceres-solver,
   cmake,
   config,
+  cudaArches ? cudaPackages.flags.realArches,
   cudaPackages,
   cudaSupport ? config.cudaSupport,
   dbus,
+  draco,
   embree,
   fetchFromGitHub,
   fetchzip,
@@ -49,6 +51,7 @@
   makeWrapper,
   manifold,
   mesa,
+  meshoptimizer,
   nix-update-script,
   onetbb,
   openal,
@@ -83,6 +86,12 @@
   waylandSupport ? stdenv.hostPlatform.isLinux,
   zlib,
   zstd,
+  level-zero,
+  intel-compute-runtime,
+  intel-llvm,
+  intel-graphics-compiler,
+  oneapiSupport ? false,
+  opencl-headers,
 }:
 
 let
@@ -116,12 +125,15 @@ in
 
 stdenv'.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "5.1.2";
+  version = "5.2.2";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchzip {
     name = "source";
     url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
-    hash = "sha256-FnReSNsP8U1/4jSgZN3cMQV2qkP7OZPh0f/9JA1lAxs=";
+    hash = "sha256-r4XT6ZoVwMXieauP5jOC0DdfNOilTmkGu8JPMAFjuDs=";
   };
 
   patches = [
@@ -129,36 +141,37 @@ stdenv'.mkDerivation (finalAttrs: {
     # ceres-solver dependency propagates eigen 3 and appears to be incompatible
     # with more recent versions.
     ./eigen-3-compat.patch
-    # Required due to `-Werror=format-security` in nixpkgs
-    # https://projects.blender.org/blender/blender/commit/470127ede2448de50a6936b8484b3c382c76d596
-    ./fix-quite-clog-warning.patch
-  ]
-  # Minimal backport of hiprt 3.x support from https://projects.blender.org/blender/blender/pulls/144889
-  ++ lib.optionals rocmSupport [
-    ./hiprt-3-compat.patch
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     ./darwin.patch
   ];
 
-  postPatch =
-    (lib.optionalString stdenv.hostPlatform.isDarwin ''
-      : > build_files/cmake/platform/platform_apple_xcode.cmake
-      substituteInPlace source/creator/CMakeLists.txt \
-        --replace-fail '${"$"}{LIBDIR}/python' \
-                  '${python3}' \
-        --replace-fail '${"$"}{LIBDIR}/materialx/' '${python3Packages.materialx}/'
-      substituteInPlace build_files/cmake/platform/platform_apple.cmake \
-        --replace-fail '${"$"}{LIBDIR}/brotli/lib/libbrotlicommon-static.a' \
-                  '${lib.getLib brotli}/lib/libbrotlicommon.dylib' \
-        --replace-fail '${"$"}{LIBDIR}/brotli/lib/libbrotlidec-static.a' \
-                  '${lib.getLib brotli}/lib/libbrotlidec.dylib'
-    '')
-    + (lib.optionalString rocmSupport ''
-      substituteInPlace extern/hipew/src/hipew.c --replace-fail '"/opt/rocm/hip/lib/libamdhip64.so.${lib.versions.major rocmPackages.clr.version}"' '"${rocmPackages.clr}/lib/libamdhip64.so"'
-      substituteInPlace extern/hipew/src/hipew.c --replace-fail '"opt/rocm/hip/bin"' '"${rocmPackages.clr}/bin"'
-      substituteInPlace extern/hipew/src/hiprtew.cc --replace-fail '"/opt/rocm/lib/libhiprt64.so"' '"${rocmPackages.hiprt}/lib/libhiprt64.so"'
-    '');
+  postPatch = ''
+    substituteInPlace intern/ghost/intern/GHOST_SystemPathsUnix.cc \
+      --replace-fail \
+        'static const char *static_libs_path = PREFIX "/" BLENDER_INSTALL_LIBDIR;' \
+        'static const char *static_libs_path = BLENDER_INSTALL_LIBDIR;'
+  ''
+  + (lib.optionalString stdenv.hostPlatform.isDarwin ''
+    : > build_files/cmake/platform/platform_apple_xcode.cmake
+    substituteInPlace source/creator/CMakeLists.txt \
+      --replace-fail '${"$"}{LIBDIR}/python' \
+                '${python3}' \
+      --replace-fail '${"$"}{LIBDIR}/materialx/' '${python3Packages.materialx}/'
+    substituteInPlace build_files/cmake/platform/platform_apple.cmake \
+      --replace-fail '${"$"}{LIBDIR}/brotli/lib/libbrotlicommon-static.a' \
+                '${lib.getLib brotli}/lib/libbrotlicommon.dylib' \
+      --replace-fail '${"$"}{LIBDIR}/brotli/lib/libbrotlidec-static.a' \
+                '${lib.getLib brotli}/lib/libbrotlidec.dylib'
+  '')
+  + (lib.optionalString rocmSupport ''
+    substituteInPlace extern/hipew/src/hipew.c --replace-fail '"/opt/rocm/hip/lib/libamdhip64.so.${lib.versions.major rocmPackages.clr.version}"' '"${rocmPackages.clr}/lib/libamdhip64.so"'
+    substituteInPlace extern/hipew/src/hipew.c --replace-fail '"opt/rocm/hip/bin"' '"${rocmPackages.clr}/bin"'
+  '')
+  + (lib.optionalString oneapiSupport ''
+    substituteInPlace intern/cycles/kernel/device/oneapi/CMakeLists.txt \
+      --replace-fail ''\'''${cycles_kernel_runtime_lib_target_path}' '"''${CMAKE_INSTALL_LIBDIR}"'
+  '');
 
   env.NIX_CFLAGS_COMPILE = "-I${python3}/include/${python3.libPrefix}";
 
@@ -177,7 +190,8 @@ stdenv'.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_CPU_CHECK" false)
     (lib.cmakeBool "WITH_CYCLES_CUDA_BINARIES" cudaSupport)
     (lib.cmakeBool "WITH_CYCLES_DEVICE_HIP" rocmSupport)
-    (lib.cmakeBool "WITH_CYCLES_DEVICE_ONEAPI" false)
+    (lib.cmakeBool "WITH_CYCLES_DEVICE_ONEAPI" oneapiSupport)
+    (lib.cmakeBool "WITH_CYCLES_ONEAPI_BINARIES" oneapiSupport)
     (lib.cmakeBool "WITH_CYCLES_DEVICE_OPTIX" cudaSupport)
     (lib.cmakeBool "WITH_CYCLES_EMBREE" embreeSupport)
     (lib.cmakeBool "WITH_CYCLES_OSL" true)
@@ -201,12 +215,19 @@ stdenv'.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "ALEMBIC_LIBRARY" "${lib.getLib alembic}/lib/libAlembic${stdenv.hostPlatform.extensions.sharedLibrary}")
   ]
   ++ lib.optionals cudaSupport [
+    (lib.cmakeFeature "CYCLES_CUDA_BINARIES_ARCH" (lib.concatStringsSep ";" cudaArches))
     (lib.cmakeFeature "OPTIX_ROOT_DIR" "${optix}")
     (lib.cmakeBool "WITH_CYCLES_CUDA_BINARIES" true)
   ]
+  ++ lib.optionals oneapiSupport [
+    (lib.cmakeFeature "SYCL_ROOT_DIR" "${intel-llvm}")
+    (lib.cmakeFeature "LEVEL_ZERO_ROOT_DIR" "${level-zero}")
+    (lib.cmakeFeature "OCLOC_INSTALL_DIR" "${intel-compute-runtime}")
+    (lib.cmakeFeature "IGC_INSTALL_DIR" "${intel-graphics-compiler}")
+    (lib.cmakeFeature "SYCL_CPP_FLAGS" "--verbose")
+  ]
   ++ lib.optionals rocmSupport [
-    (lib.cmakeFeature "HIPRT_INCLUDE_DIR" "${rocmPackages.hiprt}/include")
-    (lib.cmakeBool "WITH_CYCLES_DEVICE_HIPRT" true)
+    (lib.cmakeBool "WITH_CYCLES_DEVICE_HIPRT" false)
     (lib.cmakeBool "WITH_CYCLES_HIP_BINARIES" true)
   ]
   ++ lib.optionals waylandSupport [
@@ -236,23 +257,22 @@ stdenv'.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    llvmPackages.llvm.dev
     makeWrapper
+    pkg-config
     python3Packages.wrapPython
+    python3
   ]
+  ++ lib.optional oneapiSupport addDriverRunpath
   ++ lib.optionals cudaSupport [
     addDriverRunpath
     cudaPackages.cuda_nvcc
-  ]
-  ++ lib.optionals waylandSupport [
-    pkg-config
-    wayland-scanner
   ];
 
   buildInputs = [
     alembic
     boost
     ceres-solver
+    draco
     ffmpeg_7
     fftw
     fftwFloat
@@ -270,6 +290,7 @@ stdenv'.mkDerivation (finalAttrs: {
     libtiff
     libwebp
     manifold
+    meshoptimizer
     opencolorio
     openexr
     openimageio
@@ -281,13 +302,18 @@ stdenv'.mkDerivation (finalAttrs: {
     openxr-loader
     potrace
     pugixml
-    python3
     python3Packages.materialx
     python3Packages.openshadinglanguage
     rubberband
     zlib
     zstd
   ]
+  ++ lib.optionals oneapiSupport [
+    intel-compute-runtime
+    intel-llvm
+    opencl-headers
+  ]
+  ++ lib.optional (!oneapiSupport) llvmPackages.llvm
   ++ lib.optional embreeSupport embree
   ++ lib.optional rocmSupport rocmPackages.clr
   ++ lib.optional openImageDenoiseSupport (openimagedenoise.override { inherit cudaSupport; })
@@ -323,6 +349,7 @@ stdenv'.mkDerivation (finalAttrs: {
     libxkbcommon
     wayland
     wayland-protocols
+    wayland-scanner
   ]
   ++ lib.optional jackaudioSupport libjack2
   ++ lib.optional spaceNavSupport libspnav
@@ -337,6 +364,7 @@ stdenv'.mkDerivation (finalAttrs: {
       ps = python3Packages;
     in
     [
+      ps.cattrs
       ps.materialx
       ps.numpy
       ps.openshadinglanguage
@@ -367,10 +395,10 @@ stdenv'.mkDerivation (finalAttrs: {
         --add-flags '--python-use-system-env'
     '';
 
-  # Set RUNPATH so that libcuda and libnvrtc in /run/opengl-driver(-32)/lib can be
+  # Set RUNPATH so that libs in /run/opengl-driver(-32)/lib can be
   # found. See the explanation in libglvnd.
   postFixup =
-    lib.optionalString cudaSupport ''
+    lib.optionalString (cudaSupport || oneapiSupport) ''
       for program in $out/bin/blender $out/bin/.blender-wrapped; do
         addDriverRunpath "$program"
       done
@@ -453,7 +481,6 @@ stdenv'.mkDerivation (finalAttrs: {
     platforms = [
       "aarch64-darwin"
       "aarch64-linux"
-      "x86_64-darwin"
       "x86_64-linux"
     ];
     maintainers = with lib.maintainers; [

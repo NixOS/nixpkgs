@@ -3,17 +3,18 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "oauth2l";
-  version = "1.3.3";
+  version = "1.3.6";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "oauth2l";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-jD8VFyAq6qcQhgvMmJj3D1xWGUvq3tMISbztLf1a72I=";
+    hash = "sha256-d7TqolbWVoOw8caTyyPTW0S5AbC6YayDh/2LsjhB+SI=";
   };
 
   vendorHash = null;
@@ -23,8 +24,7 @@ buildGoModule (finalAttrs: {
     "-w"
   ];
 
-  # Fix tests by preventing them from writing to /homeless-shelter.
-  preCheck = "export HOME=$(mktemp -d)";
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   # tests fail on linux for some reason
   doCheck = stdenv.hostPlatform.isDarwin;

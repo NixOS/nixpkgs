@@ -20,8 +20,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
-  patchPhase = ''
-    substituteInPlace hwdata.py --replace "/usr/share/hwdata" "${pkgs.hwdata}/share/hwdata"
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "2.4.3" "2.4.3-1"
+    substituteInPlace hwdata.py \
+      --replace-fail "/usr/share/hwdata" "${pkgs.hwdata}/share/hwdata"
   '';
 
   pythonImportsCheck = [ "hwdata" ];

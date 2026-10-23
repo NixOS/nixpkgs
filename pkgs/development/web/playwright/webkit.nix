@@ -11,6 +11,7 @@
   brotli,
   at-spi2-atk,
   cairo,
+  enchant_2,
   flite,
   fontconfig,
   freetype,
@@ -31,6 +32,7 @@
   libgcrypt,
   libgpg-error,
   libjpeg8,
+  libmanette,
   libopus,
   libpng,
   libsoup_3,
@@ -79,6 +81,13 @@ let
         hash = "sha256-I3PGgh0XqRkCFz7lUZ3Q4eU0+0GwaQcVb6t4Pru1kKo=";
         fetchSubmodules = true;
       };
+
+      # override split output shenanigans from the main package
+      outputs = [
+        "out"
+        "dev"
+      ];
+
       patches = [
         # Add missing <atomic> content to fix gcc compilation for RISCV architecture
         # https://github.com/libjxl/libjxl/pull/2211
@@ -121,8 +130,8 @@ let
       inherit (download) url stripRoot;
       hash =
         {
-          x86_64-linux = "sha256-hefWMElsTGTkPvSnovwR8P0kunnPLUGDR5Hvoa31SMM=";
-          aarch64-linux = "sha256-4leXyoebeqWPHxO9D2MomnVqza/9IEcJEuiRCf3/eUc=";
+          x86_64-linux = "sha256-vqPJo+bzhXd0Q/to1l5/3d/xd4k+59h9tGZ+GQvWUP4=";
+          aarch64-linux = "sha256-uhjq+K0R7IRsG6imuaNOq5ubnGh0Y2C3SOoYA54nnUE=";
         }
         .${system} or throwSystem;
     };
@@ -135,6 +144,7 @@ let
     buildInputs = [
       at-spi2-atk
       cairo
+      enchant_2
       flite
       fontconfig.lib
       freetype
@@ -158,6 +168,7 @@ let
       libgcrypt
       libgpg-error
       libjpeg8
+      libmanette
       libopus
       libpng
       libsoup_3
@@ -195,8 +206,7 @@ let
     inherit (download) url stripRoot;
     hash =
       {
-        x86_64-darwin = "sha256-D9iZitRG3lPWQ/Zu/HAjx2gEehr/xr0d+j2jo7yjnoQ=";
-        aarch64-darwin = "sha256-383PHqwW+QoXL4qxXEE3ytbQVQ4rg2YDK+B+XvIfBmY=";
+        aarch64-darwin = "sha256-4Y1ojbFTuNZhwx8a8JXkEv6+vejvoATQrhL/wPGJdNI=";
       }
       .${system} or throwSystem;
   };
@@ -204,7 +214,6 @@ in
 {
   x86_64-linux = webkit-linux;
   aarch64-linux = webkit-linux;
-  x86_64-darwin = webkit-darwin;
   aarch64-darwin = webkit-darwin;
 }
 .${system} or throwSystem

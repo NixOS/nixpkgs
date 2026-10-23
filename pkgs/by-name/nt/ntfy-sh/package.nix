@@ -18,7 +18,7 @@ buildGoModule (
     ui = buildNpmPackage {
       inherit (finalAttrs) src version;
       pname = "ntfy-sh-ui";
-      npmDepsHash = "sha256-d+/p9ytSqZyYDBBFgnK7skM17GJbHesJsVk4sZxTcBA=";
+      npmDepsHash = "sha256-qX3q7zPTcfyPfXCLILGGghbVp/CU7/eVYWvRYCewVGs=";
 
       prePatch = ''
         cd web/
@@ -38,16 +38,16 @@ buildGoModule (
   in
   {
     pname = "ntfy-sh";
-    version = "2.25.0";
+    version = "2.31.0";
 
     src = fetchFromGitHub {
       owner = "binwiederhier";
       repo = "ntfy";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-R0trtATgI+AWXlN2UWEeChMhgX9pLdcNuRLkF4P4opM=";
+      hash = "sha256-U2yjUtwQdnr531oH2rPblEc7IJsc58kqs2TVIkB/v/w=";
     };
 
-    vendorHash = "sha256-sfMKr5IprwjVo7GwIYojcaixlRlkHOhoqec2PcK8UUU=";
+    vendorHash = "sha256-/F/rRKyg0rZUGNlAzefLjEcO47rCif4ZW51lBbFbjA8=";
 
     doCheck = false;
 

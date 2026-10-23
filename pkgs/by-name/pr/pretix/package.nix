@@ -17,22 +17,10 @@ let
   python = python3.override {
     self = python;
     packageOverrides = self: super: {
+      chardet = super.chardet_5;
       django = super.django_5;
-
-      django-oauth-toolkit = super.django-oauth-toolkit.overridePythonAttrs (oldAttrs: rec {
-        version = "2.3.0";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          tag = "v${version}";
-          hash = "sha256-oGg5MD9p4PSUVkt5pGLwjAF4SHHf4Aqr+/3FsuFaybY=";
-        };
-        disabledTests = [
-          # error message mismatch
-          "test_validation_failed_message"
-          # fails dns resolution
-          "test_response_when_auth_server_response_return_404"
-        ];
-      });
+      djangorestframework = super.djangorestframework_3_17;
+      django-oauth-toolkit = super.django-oauth-toolkit_2;
 
       stripe = super.stripe.overridePythonAttrs rec {
         version = "7.9.0";
@@ -54,20 +42,24 @@ let
 in
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "pretix";
-  version = "2026.6.0";
+  version = "2026.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yKJGJziMpOB8ttz0n4USay03wJTId77bYT7id4OgoIE=";
+    hash = "sha256-6/9Q8IxLdKb7p3LJUe+blLhETE0tI7zLUFdgrphieGo=";
   };
 
   patches = [
     # Discover pretix.plugin entrypoints during build and add them into
     # INSTALLED_APPS, so that their static files are collected.
     ./plugin-build.patch
+
+    # [2026.7.0] Inherit PYTHONPATH in test that tries starting Pretix with a
+    # naked interpreter.
+    ./test_startup_pythonpath.patch
   ];
 
   postPatch = ''
@@ -87,7 +79,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-DJCvNcgDIY71Q9qg4Ng7SAM9i9wHhHOdJonpt5t/Xx8=";
+    hash = "sha256-iHtQrZLqjz9RbcIAhFrY+mrIe5pqzE9vCOH0u7cC4MU=";
   };
 
   nativeBuildInputs = [
@@ -134,6 +126,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       django-oauth-toolkit
       django-otp
       django-phonenumber-field
+      django-querytagger
       django-redis
       django-scopes
       django-statici18n
@@ -202,11 +195,13 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "cryptography"
     "django-bootstrap3"
     "django-compressor"
+    "django-countries"
     "django-filter"
     "django-formset-js-improved"
     "django-i18nfield"
     "django-localflavor"
     "django-phonenumber-field"
+    "django-scopes"
     "dnspython"
     "drf_ujson2"
     "importlib_metadata"
@@ -251,6 +246,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     with pythonPackages;
     [
       libredirect.hook
+      pypdfium2
       pytestCheckHook
       pytest-xdist
       pytest-mock

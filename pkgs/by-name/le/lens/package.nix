@@ -8,20 +8,16 @@
 let
 
   pname = "lens-desktop";
-  version = "2024.11.261604";
+  version = "2026.10.121159";
 
   sources = {
     x86_64-linux = {
       url = "https://api.k8slens.dev/binaries/Lens-${version}-latest.x86_64.AppImage";
-      hash = "sha256-AbuEU5gOckVU+eDIFnomc7ryLq68ihuk3c0XosoJp74=";
-    };
-    x86_64-darwin = {
-      url = "https://api.k8slens.dev/binaries/Lens-${version}-latest.dmg";
-      hash = "sha256-MQQRGTCe+LEHXJi6zjnpENbtlWNP+XVH9rWXRMk+26w=";
+      hash = "sha512-gfyeMP0Zzum+XvvmRpE3SLCp4LJp65YmTdSJRauY9g8aWG7R/3LGH/3a1CmfEgz86GksZzADIY6EuQZctzG9Yw==";
     };
     aarch64-darwin = {
       url = "https://api.k8slens.dev/binaries/Lens-${version}-latest-arm64.dmg";
-      hash = "sha256-aakJCLnQBAnUdrrniTcahS+q3/kP09mlaPTV8FW5afI=";
+      hash = "sha512-ZO0CX1QVQ9jtLQtFbQ6qU8fa+eLSCUdWDgK3B8cqr2R5a9QeczJ0Cm/rc5a3RFbkd1EVdAXw/6gP6aN68+xWoA==";
     };
   };
 
@@ -35,11 +31,14 @@ let
     license = lib.licenses.lens;
     maintainers = with lib.maintainers; [
       dbirks
+      qweered
       RossComputerGuy
       starkca90
     ];
     platforms = builtins.attrNames sources;
   };
+
+  updateScript = ./update.sh;
 
 in
 if stdenv.hostPlatform.isDarwin then
@@ -49,6 +48,7 @@ if stdenv.hostPlatform.isDarwin then
       version
       src
       meta
+      updateScript
       ;
   }
 else
@@ -58,5 +58,6 @@ else
       version
       src
       meta
+      updateScript
       ;
   }

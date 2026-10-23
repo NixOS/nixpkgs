@@ -375,12 +375,18 @@ let
         };
 
         fprintAuth = lib.mkOption {
-          default = config.services.fprintd.enable;
-          defaultText = lib.literalExpression "config.services.fprintd.enable";
+          default = config.services.fprintd.enablePam;
+          defaultText = lib.literalExpression "config.services.fprintd.enablePam";
           type = lib.types.bool;
           description = ''
             If set, fingerprint reader will be used (if exists and
             your fingerprints are enrolled).
+
+            ::: {.note}
+            This setting should only be enabled for clients that can ensure
+            user attention, such as lockscreens.
+            See https://github.com/NixOS/nixpkgs/issues/442117
+            :::
           '';
         };
 
@@ -678,6 +684,26 @@ let
           '';
         };
 
+        oo7 = {
+          enable = lib.mkEnableOption ''
+            automatically unlock the user's default Session Keyring using pam_oo7.
+            If the user's login password does not match their keyring password,
+            oo7 will prompt separately after login.
+          '';
+        };
+
+        rosec = {
+          enable = lib.mkOption {
+            default = false;
+            type = lib.types.bool;
+            description = ''
+              If enabled, pam_rosec will attempt to automatically unlock the
+              user's rosec vault upon login. If the user login password does not
+              match their vault password, rosec will prompt separately after login.
+            '';
+          };
+        };
+
         enableUMask = lib.mkOption {
           default = config.security.pam.enableUMask;
           defaultText = lib.literalExpression "config.security.pam.enableUMask";
@@ -896,9 +922,11 @@ let
 
         text =
           let
+            hasSpaceInfix = lib.hasInfix " ";
+            escapeEndingBrackets = lib.replaceStrings [ "]" ] [ "\\]" ];
             # Formats a string for use in `module-arguments`. See `man pam.conf`.
             formatModuleArgument =
-              token: if lib.hasInfix " " token then "[${lib.replaceStrings [ "]" ] [ "\\]" ] token}]" else token;
+              token: if hasSpaceInfix token then "[${escapeEndingBrackets token}]" else token;
 
             formatRules =
               type:
@@ -1198,6 +1226,8 @@ let
                       || cfg.pamMount
                       || cfg.kwallet.enable
                       || cfg.enableGnomeKeyring
+                      || cfg.oo7.enable
+                      || cfg.rosec.enable
                       || config.services.intune.enable
                       || cfg.googleAuthenticator.enable
                       || cfg.gnupg.enable
@@ -1228,7 +1258,7 @@ let
                       name = "fscrypt";
                       enable = config.security.pam.enableFscrypt;
                       control = "optional";
-                      modulePath = "${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so";
+                      modulePath = "${pkgs.fscrypt}/lib/security/pam_fscrypt.so";
                     }
                     {
                       name = "zfs_key";
@@ -1260,6 +1290,18 @@ let
                       enable = cfg.enableGnomeKeyring;
                       control = "optional";
                       modulePath = "${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so";
+                    }
+                    {
+                      name = "oo7";
+                      enable = cfg.oo7.enable;
+                      control = "optional";
+                      modulePath = "${pkgs.oo7-pam}/lib/security/pam_oo7.so";
+                    }
+                    {
+                      name = "rosec";
+                      enable = cfg.rosec.enable;
+                      control = "optional";
+                      modulePath = "${pkgs.rosec}/lib/security/pam_rosec.so";
                     }
                     {
                       name = "intune";
@@ -1407,14 +1449,13 @@ let
                 modulePath = config.security.pam.pam_unixModulePath;
                 settings = {
                   nullok = true;
-                  yescrypt = lib.mkIf config.security.pam.enableLegacySettings true;
                 };
               }
               {
                 name = "fscrypt";
                 enable = config.security.pam.enableFscrypt;
                 control = "optional";
-                modulePath = "${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so";
+                modulePath = "${pkgs.fscrypt}/lib/security/pam_fscrypt.so";
               }
               {
                 name = "zfs_key";
@@ -1476,6 +1517,18 @@ let
                 settings = {
                   use_authtok = true;
                 };
+              }
+              {
+                name = "oo7";
+                enable = cfg.oo7.enable;
+                control = "optional";
+                modulePath = "${pkgs.oo7-pam}/lib/security/pam_oo7.so";
+              }
+              {
+                name = "rosec";
+                enable = cfg.rosec.enable;
+                control = "optional";
+                modulePath = "${pkgs.rosec}/lib/security/pam_rosec.so";
               }
             ];
 
@@ -1563,7 +1616,7 @@ let
                 name = "fscrypt";
                 enable = config.security.pam.enableFscrypt;
                 control = "optional";
-                modulePath = "${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so";
+                modulePath = "${pkgs.fscrypt}/lib/security/pam_fscrypt.so";
               }
               {
                 name = "zfs_key-skip-systemd";
@@ -1696,6 +1749,21 @@ let
                 };
               }
               {
+                name = "oo7";
+                enable = cfg.oo7.enable;
+                control = "optional";
+                modulePath = "${pkgs.oo7-pam}/lib/security/pam_oo7.so";
+                settings = {
+                  auto_start = true;
+                };
+              }
+              {
+                name = "rosec";
+                enable = cfg.rosec.enable;
+                control = "optional";
+                modulePath = "${pkgs.rosec}/lib/security/pam_rosec.so";
+              }
+              {
                 name = "gnupg";
                 enable = cfg.gnupg.enable;
                 control = "optional";
@@ -1801,11 +1869,6 @@ let
       pkgs.writeText "motd" config.users.motd
     else
       config.users.motdFile;
-
-  makePAMService = name: service: {
-    name = "pam.d/${name}";
-    value.source = pkgs.writeText "${name}.pam" service.text;
-  };
 
   optionalSudoConfigForSSHAgentAuth =
     lib.optionalString (config.security.pam.sshAgentAuth.enable || config.security.pam.rssh.enable)
@@ -2606,7 +2669,7 @@ in
       ++ lib.optionals config.security.pam.enableOTPW [ pkgs.otpw ]
       ++ lib.optionals config.security.pam.oath.enable [ pkgs.oath-toolkit ]
       ++ lib.optionals config.security.pam.p11.enable [ pkgs.pam_p11 ]
-      ++ lib.optionals config.security.pam.enableFscrypt [ pkgs.fscrypt-experimental ]
+      ++ lib.optionals config.security.pam.enableFscrypt [ pkgs.fscrypt ]
       ++ lib.optionals config.security.pam.u2f.enable [ pkgs.pam_u2f ];
 
     security.wrappers = {
@@ -2618,7 +2681,26 @@ in
       };
     };
 
-    environment.etc = lib.mapAttrs' makePAMService enabledServices;
+    environment.etc =
+      let
+        # Write all pam config in a single derivation for performance
+        pamd =
+          pkgs.runCommand "pam.d"
+            {
+              __structuredAttrs = true;
+              services = lib.mapAttrs (_: svc: svc.text) enabledServices;
+            }
+            ''
+              mkdir $out
+              for i in "''${!services[@]}"; do
+                printf '%s' "''${services[$i]}" > "$out/$i"
+              done
+            '';
+      in
+      lib.mapAttrs' (name: service: {
+        name = "pam.d/${name}";
+        value.source = "${pamd}/${name}";
+      }) enabledServices;
 
     systemd =
       lib.mkIf (lib.any (service: service.lastlog.enable) (lib.attrValues config.security.pam.services))

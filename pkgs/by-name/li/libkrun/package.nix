@@ -35,13 +35,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libkrun" + lib.optionalString (variant != null) "-${variant}";
-  version = "1.19.0";
+  version = "1.19.5";
 
   src = fetchFromGitHub {
     owner = "libkrun";
     repo = "libkrun";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-g4u34sGdgv6mRRry9b5TAXSx+pmVwCNSD3YNtr6qRxo=";
+    hash = "sha256-VUV9zlegS4IIJI0fbzkxc6Lz5jvr3S3n4nEnVgF3YMQ=";
   };
 
   outputs = [
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-rxdaqEKDDMxFwRuX6kLhqGyFXJTz+Bx4mJJhYL5nPgU=";
+    hash = "sha256-lLdeTZbDQEp+e2urEmsVOzQG0KTNicv/31DFhYeFxFo=";
   };
 
   # Make sure libkrunfw can be found by dlopen()
@@ -69,6 +69,13 @@ stdenv.mkDerivation (finalAttrs: {
     cargo
     pkg-config
     rustc
+  ];
+
+  patches = lib.optionals stdenv.hostPlatform.isRiscV64 [
+    # https://github.com/libkrun/libkrun/commit/d4bb6e0
+    # Fix riscv64 non-TEE memory region setup
+    # Remove in next release (Not included in 1.19.4)
+    ./riscv64-non-tee-memory.patch
   ];
 
   buildInputs = [

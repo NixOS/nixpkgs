@@ -32,24 +32,25 @@ let
 in
 (python3Packages.buildPythonApplication rec {
   pname = "input-remapper";
-  version = "2.2.0";
-  format = "setuptools";
+  version = "2.2.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sezanzeb";
     repo = "input-remapper";
     tag = version;
-    hash = "sha256-MZO40Y8ym/lwHB8PETdtByAJb/UMMM6pRAAgAYao8UI=";
+    hash = "sha256-CFg/AvmZseU1f9bWI4CtYp9blvAhCgGzVWE8csVDbyE=";
   };
 
   postPatch = ''
     # fix FHS paths
-    substituteInPlace inputremapper/configs/data.py \
-      --replace-fail "/usr/share"  "$out/usr/share"
+    substituteInPlace inputremapper/installation_info.py \
+      --replace-fail 'DATA_DIR = "/usr/share/input-remapper"' \
+        "DATA_DIR = \"$out/usr/share/input-remapper\""
   ''
   + lib.optionalString withDebugLogLevel ''
     # if debugging
-    substituteInPlace inputremapper/logger.py \
+    substituteInPlace inputremapper/logging/logger.py \
       --replace-fail "logger.setLevel(logging.INFO)"  "logger.setLevel(logging.DEBUG)"
   '';
 
@@ -63,15 +64,17 @@ in
   ]
   ++ maybeXmodmap;
 
+  build-system = with python3Packages; [ setuptools ];
+
   dependencies = with python3Packages; [
-    setuptools # needs pkg_resources
-    pygobject3
+    dasbus
     evdev
-    pkgconfig
-    pydantic
-    pydbus
     gtksourceview4
+    packaging
     psutil
+    pycairo
+    pydantic
+    pygobject3
   ];
 
   # buildPythonApplication maps nativeCheckInputs to nativeInstallCheckInputs.
@@ -98,6 +101,7 @@ in
 
     install -m644 -D -t $out/share/applications/ data/*.desktop
     install -m644 -D -t $out/share/polkit-1/actions/ data/input-remapper.policy
+    install -m644 -D data/69-input-remapper-forwarded.rules $out/etc/udev/rules.d/69-input-remapper-forwarded.rules
     install -m644 -D data/99-input-remapper.rules $out/etc/udev/rules.d/99-input-remapper.rules
     install -m644 -D data/input-remapper.service $out/lib/systemd/system/input-remapper.service
     install -m644 -D data/input-remapper.policy $out/share/polkit-1/actions/input-remapper.policy
@@ -179,7 +183,8 @@ in
       # discussion
       postPatch = prev.postPatch or "" + ''
         # set revision for --version output
-        echo "COMMIT_HASH = '${final.src.rev}'" > inputremapper/commit_hash.py
+        substituteInPlace inputremapper/installation_info.py \
+          --replace-fail 'COMMIT_HASH = "unknown"' 'COMMIT_HASH = "${final.src.rev}"'
       '';
     }
   )

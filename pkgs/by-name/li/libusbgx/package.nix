@@ -8,7 +8,7 @@
 }:
 stdenv.mkDerivation {
   pname = "libusbgx";
-  version = "unstable-2021-10-31";
+  version = "0-unstable-2021-10-31";
   src = fetchFromGitHub {
     owner = "linux-usb-gadgets";
     repo = "libusbgx";

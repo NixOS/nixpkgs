@@ -18,12 +18,12 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-RgRmbQVZK/4U37CO8AjNQOqR/SXvL1TQU03LX7LnqPY=";
 
-  buildFeatures = lib.optional withCitation [ "citation" ];
+  buildFeatures = lib.optionals withCitation [ "citation" ];
 
   meta = {
     description = "Language server to enable word completion and snippets for Helix editor";
     homepage = "https://github.com/estin/simple-completion-language-server";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = [ lib.maintainers.kpbaks ];
     mainProgram = "simple-completion-language-server";
     platforms = lib.platforms.all;

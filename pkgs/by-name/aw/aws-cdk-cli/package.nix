@@ -10,7 +10,6 @@
   python3,
   unzip,
   testers,
-  nix-update-script,
 }:
 
 let
@@ -18,19 +17,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "aws-cdk-cli";
-  version = "2.1128.1";
+  version = "2.1142.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cdk-cli";
     tag = "cdk@v${finalAttrs.version}";
-    hash = "sha256-F5dlS2xIwVxpgc6v+bP+vI0lP+nttvKamzWz4UEphzc=";
+    hash = "sha256-6CYUcMXwP2yNsIix+2ECTX1k9nMZ3R3JeIsIjTNoYvk=";
   };
 
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-ykFox4QTo0f0urzh1e/65Jh0H3x0wOngmEzWFekCma8=";
+    hash = "sha256-lTT7hO0dZxrUlmah7d9UQEIAt/STLoH0xZ3oxx2Vh5I=";
   };
 
   nativeBuildInputs = [
@@ -51,7 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     NX_VERBOSE_LOGGING = "true";
     # Needed to properly embed version info
     CODEBUILD_RESOLVED_SOURCE_VERSION = finalAttrs.version;
-    YARN_LOCKFILE_VERSION_OVERRIDE = "8";
   };
 
   # Regular "build" is very heavy and does things we don't need.
@@ -65,13 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
     in
     ''
       echo '${cliVersionJson}' > packages/@aws-cdk/cloud-assembly-schema/cli-version.json
-      cat >> .yarnrc.yml <<'EOF'
-      approvedGitRepositories:
-        - "**"
-      enableScripts: true
-      enableNetwork: false
-      enableHardenedMode: false
-      EOF
     '';
 
   preBuild = ''
@@ -129,12 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--version-regex"
-        "cdk@v(.*)"
-      ];
-    };
+    updateScript = ./update.sh;
   };
 
   meta = {

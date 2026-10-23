@@ -1,23 +1,28 @@
 {
   lib,
   python3,
-  fetchPypi,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "alerta-server";
-  version = "9.0.1";
-  format = "setuptools";
+  version = "9.1.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-v4+0l5Sx9RTxmNFnKCoKrWFl1xu1JIRZ/kiI6zi/y0I=";
+  src = fetchFromGitHub {
+    owner = "alerta";
+    repo = "alerta";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-w+DSMWrutn/8WOwIYtxFrIZ7VN5/w6jPPYhKMr+/rb4=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = [ python3.pkgs.setuptools_80 ];
+
+  dependencies = with python3.pkgs; [
     bcrypt
     blinker
     cryptography
+    defusedxml
     flask
     flask-compress
     flask-cors
@@ -33,6 +38,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     requests-hawk
     sentry-sdk
     setuptools
+    strenum
   ];
 
   # We can't run the tests from Nix, because they rely on the presence of a working MongoDB server
@@ -44,9 +50,10 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   meta = {
     homepage = "https://alerta.io";
-    description = "Alerta Monitoring System server";
+    description = "Monitoring System server";
     mainProgram = "alertad";
+    changelog = "https://github.com/alerta/alerta/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ eljamm ];
   };
 })

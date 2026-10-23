@@ -15,6 +15,8 @@
   setuptools-scm,
 
   # dependencies
+  aiodns,
+  aiohttp,
   alembic,
   certipy,
   idna,
@@ -51,7 +53,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "jupyterhub";
-  version = "5.5.0";
+  version = "6.1.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -59,12 +61,12 @@ buildPythonPackage (finalAttrs: {
     owner = "jupyterhub";
     repo = "jupyterhub";
     tag = finalAttrs.version;
-    hash = "sha256-BDU0RP6NRRnSZelRadhvSm2mfsuewyMwpcRlDBPDC0E=";
+    hash = "sha256-ffcbBwmK2u0O7UCseoDKMb598KD6edIFwjXnJTku2+4=";
   };
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-64FRdLHBpnywpCLjsMoXmWp/tK00+QwNIR9yAoQFIbg=";
+    hash = "sha256-eGNa8Dri6UhzdRewbud8SOjc7MvmfbW0nUW4CTBGczY=";
   };
 
   postPatch = ''
@@ -90,6 +92,8 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
+    aiodns
+    aiohttp
     alembic
     certipy
     idna
@@ -141,11 +145,17 @@ buildPythonPackage (finalAttrs: {
     "test_valid_events"
     "test_invalid_events"
     "test_user_group_roles"
+    "test_unix_socket_proxy"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Server connection times out under load on Darwin
     "test_server_token_role"
     "test_share_flow_full"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # flaky: subprocess times out under load
+    "test_show_config"
+    "test_raise_error_on_missing_specified_config"
   ];
 
   disabledTestPaths = [
@@ -180,5 +190,7 @@ buildPythonPackage (finalAttrs: {
       # E   OSError: dlopen(/nix/store/43zml0mlr17r5jsagxr00xxx91hz9lky-openpam-20170430/lib/libpam.so, 6): image not found
       # lib.systems.inspect.patterns.isDarwin
     ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "jupyter" finalAttrs.version;
+    mainProgram = "jupyterhub";
   };
 })

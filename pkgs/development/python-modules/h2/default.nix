@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "h2";
-  version = "4.3.0";
+  version = "4.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-hyper";
     repo = "h2";
     tag = "v${version}";
-    hash = "sha256-04we2xeh5LtLA4La9WPfXQVczDIz7NpL/6y9TmIELgM=";
+    hash = "sha256-ezyvCgsMYfu4s9BH6K60sFflyw29NEN3rSlxAkDOdvs=";
   };
 
   build-system = [ setuptools ];

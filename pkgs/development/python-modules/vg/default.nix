@@ -38,7 +38,7 @@ buildPythonPackage rec {
     description = "Linear algebra for humans: a very good vector-geometry and linear-algebra toolbelt";
     homepage = "https://github.com/lace/vg";
     changelog = "https://github.com/lace/vg/blob/${version}/CHANGELOG.md";
-    license = [ lib.licenses.bsd2 ];
+    license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ clerie ];
   };
 }

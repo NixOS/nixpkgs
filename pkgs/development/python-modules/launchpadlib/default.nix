@@ -5,7 +5,7 @@
   httplib2,
   lazr-restfulclient,
   lazr-uri,
-  setuptools,
+  setuptools_80,
   six,
   testresources,
   pytestCheckHook,
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-tMJYkLt1BQ1UwIEj0nMxVreKWaJVX1Rh9psORM2RJC8=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ setuptools_80 ];
 
   dependencies = [
     httplib2

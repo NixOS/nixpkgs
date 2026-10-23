@@ -74,6 +74,8 @@ buildPythonPackage rec {
     "test/integration/test_quickstart_templates.py::TestQuickStartTemplates::test_templates"
     "test/integration/test_quickstart_templates_non_strict.py::TestQuickStartTemplates::test_module_integration"
     "test/integration/test_quickstart_templates_non_strict.py::TestQuickStartTemplates::test_templates"
+    "test/integration/test_good_templates.py::TestQuickStartTemplates::test_module_integration"
+    "test/integration/test_good_templates.py::TestQuickStartTemplates::test_templates"
   ];
 
   pythonImportsCheck = [ "cfnlint" ];

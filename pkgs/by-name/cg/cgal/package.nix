@@ -11,12 +11,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cgal";
-  version = "6.1.1";
+  version = "6.2.1";
 
   src = fetchurl {
     url = "https://github.com/CGAL/cgal/releases/download/v${finalAttrs.version}/CGAL-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-UlBpNfcOJH7Sd348ZfIOhveSCMKi0OGArnR12vEclu8=";
+    sha256 = "sha256-tr53xgdlqEVjNd6ZHur2/+xVJWmE5Knsxql8N7v+hb8=";
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   patches = [ ./cgal_path.patch ];
 
@@ -54,7 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
       raskin
-      drew-dirac
       ylannl
     ];
   };

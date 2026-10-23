@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d7a8544927ac18215ba5317edd8f640a5f1f0593921bcf3ce862178312c8c9a4";
+    hash = "sha256-16hUSSesGCFbpTF+3Y9kCl8fBZOSG8886GIXgxLIyaQ=";
   };
   # attempts to run mysql
   doCheck = false;

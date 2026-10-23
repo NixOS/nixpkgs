@@ -6,9 +6,10 @@
   colorama,
   fetchFromGitHub,
   packaging,
-  python,
+  pyprojectVersionPatchHook,
   pytest-xdist,
   pytestCheckHook,
+  python,
   requirements-parser,
   rustc,
   rustPlatform,
@@ -38,6 +39,8 @@ buildPythonPackage (finalAttrs: {
     rustPlatform.maturinBuildHook
     rustc
   ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     click

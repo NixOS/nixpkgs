@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  cython,
+  cython_3_2,
   setuptools,
   regex,
   pytestCheckHook,
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   '';
 
   build-system = [
-    cython
+    cython_3_2
     setuptools
   ];
 

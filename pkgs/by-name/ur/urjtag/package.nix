@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    homepage = "http://urjtag.org/";
+    homepage = "https://sourceforge.net/projects/urjtag/";
     description = "Universal JTAG library, server and tools";
     license = with lib.licenses; [
       gpl2Plus

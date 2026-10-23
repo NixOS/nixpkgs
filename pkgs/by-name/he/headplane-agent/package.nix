@@ -1,22 +1,15 @@
 {
-  buildGoModule,
-  fetchFromGitHub,
+  buildGo127Module,
+  headplane,
   lib,
 }:
-buildGoModule (finalAttrs: {
+buildGo127Module {
   pname = "headplane-agent";
   __structuredAttrs = true;
-  # Note, if you are upgrading this, you should upgrade headplane at the same time
-  version = "0.6.3";
+  inherit (headplane) version src;
 
-  src = fetchFromGitHub {
-    owner = "tale";
-    repo = "headplane";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-zvJUTKRIlHyPMq80teVXBSb7K9Zz44Kuuj2PPi6qIOw=";
-  };
+  vendorHash = headplane.goVendorHash;
 
-  vendorHash = "sha256-MvrqKMD+A+qBZmzQv+T9920U5uJop+pjfJpZdm2ZqEA=";
   subPackages = [ "cmd/hp_agent" ];
 
   ldflags = [
@@ -36,4 +29,4 @@ buildGoModule (finalAttrs: {
     mainProgram = "hp_agent";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-})
+}

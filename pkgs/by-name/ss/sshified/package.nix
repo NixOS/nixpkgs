@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "sshified";
-  version = "1.2.6";
+  version = "1.2.8";
 
   src = fetchFromGitHub {
     owner = "hoffie";
     repo = "sshified";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YY9ZFIH4ST9xQRD7IkjC9rm+QTlfde5+2qR/reH9oHU=";
+    hash = "sha256-4xPeUdmwTzhNmBjmmhyZKp2p2RNdTNJRnJ19/A7xHPM=";
   };
 
   vendorHash = null;

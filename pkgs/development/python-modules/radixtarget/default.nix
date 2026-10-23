@@ -1,37 +1,61 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  cargo,
+  fetchPypi,
+  nix-update-script,
   poetry-core,
-  poetry-dynamic-versioning,
+  pytestCheckHook,
+  rustc,
+  rustPlatform,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "radixtarget";
-  version = "3.0.0";
+  version = "4.2.0";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "blacklanternsecurity";
-    repo = "radixtarget";
-    rev = "v${version}";
-    hash = "sha256-C7QmiAc8SO7ddfseoGDYkmrkLoxmAGww9MPhBX94ucg=";
+  __structuredAttrs = true;
+
+  src = fetchPypi {
+    inherit (finalAttrs) pname version;
+    hash = "sha256-xroXgy7e7XXWPOYFMnt5ou2bJKSl6unBsUGa29v6+Dk=";
+  };
+
+  postUnpack = ''
+    rm -f "$sourceRoot/dist/"*.whl
+  '';
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-opo/P7oHKcKFWjXuXIhjUoz60IQ0iqlUtqptOJXWrk4=";
   };
 
   build-system = [
+    cargo
     poetry-core
-    poetry-dynamic-versioning
+    rustPlatform.cargoSetupHook
+    rustPlatform.maturinBuildHook
+    rustc
   ];
 
-  # Module has no tests
-  doCheck = false;
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  preCheck = ''
+    cp -r radixtarget/test ./
+    rm -rf radixtarget
+  '';
+
+  pytestFlags = [ "test" ];
 
   pythonImportsCheck = [ "radixtarget" ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
-    description = "Radix implementation designed for lookups of IP addresses/networks and DNS hostnames";
-    homepage = "https://github.com/blacklanternsecurity/radixtarget";
+    description = "Fast radix tree for IP addresses and DNS names";
+    homepage = "https://pypi.org/project/radixtarget";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

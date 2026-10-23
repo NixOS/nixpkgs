@@ -11,11 +11,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "gprojector";
-  version = "3.1.0";
+  version = "3.4.8";
 
   src = fetchzip {
     url = "https://www.giss.nasa.gov/tools/gprojector/download/G.ProjectorJ-${version}.tgz";
-    sha256 = "sha256-cMmjyitetXxQzfSBh5ry5tIsLWOnBaaYOD1eQg1IX+w=";
+    hash = "sha256-56CWuPp9Nu63yGn13AAZrvwE1xvKDZ7Idjbn2hbk0sI=";
   };
 
   desktopItems = [
@@ -43,7 +43,10 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
     mkdir -p $out/share
     cp -r $src/jars $out/share/java
-    makeWrapper ${jre}/bin/java $out/bin/gprojector --add-flags "-jar $out/share/java/G.Projector.jar" --add-flags "${extraJavaArgs}"
+    makeWrapper ${jre}/bin/java $out/bin/gprojector \
+      --add-flags "-jar $out/share/java/G.Projector.jar" \
+      --add-flags "${extraJavaArgs}" \
+      --set GTK_THEME 'Adwaita'
     runHook postInstall
   '';
 

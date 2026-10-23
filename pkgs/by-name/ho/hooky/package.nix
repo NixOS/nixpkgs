@@ -11,13 +11,13 @@ in
 
 haskellPackages.mkDerivation {
   pname = "hooky";
-  version = "1.0.4";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "brandonchinn178";
     repo = "hooky";
-    rev = "281ec8b52f92bdbdad567d673cd5bb581dc6991b";
-    hash = "sha256-Salq9DuFc+V88tRhLN62GGKIhCCSznUsnr3TD5ivN/I=";
+    rev = "24359d44a05b9c0f3615f40b13456157112de33c";
+    hash = "sha256-zPS0z3tyxCm4vlXNrkScysfyMaj67RaKhoi7x00uGis=";
   };
 
   isLibrary = true;
@@ -28,9 +28,13 @@ haskellPackages.mkDerivation {
     bytestring
     concurrent-output
     containers
+    deepseq
     directory
+    file-io
     filepath
+    Glob
     kdl-hs
+    os-string
     process
     scientific
     text
@@ -41,6 +45,7 @@ haskellPackages.mkDerivation {
     base
     containers
     directory
+    file-io
     filepath
     optparse-applicative
     process

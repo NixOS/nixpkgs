@@ -9,6 +9,7 @@
   huggingface-hub,
   networkx,
   numpy,
+  orjson,
   peft,
   platformdirs,
   protobuf,
@@ -21,14 +22,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "stanza";
-  version = "1.13.0";
+  version = "1.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stanfordnlp";
     repo = "stanza";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+quLNaxaGCUpsg3PH11nEMeKjIoHsKaBqK4FdIHlaMM=";
+    hash = "sha256-MmkAlXVfU7o6rXspQtnCQ2FAYgHAue7/JGSRh6CYl7Y=";
   };
 
   build-system = [ setuptools ];
@@ -38,6 +39,7 @@ buildPythonPackage (finalAttrs: {
     huggingface-hub
     networkx
     numpy
+    orjson
     peft
     platformdirs
     protobuf
@@ -63,7 +65,7 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/stanfordnlp/stanza/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      riotbib
+      lennartmueh
       Stebalien
     ];
   };

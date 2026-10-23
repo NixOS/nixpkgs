@@ -6,16 +6,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "proxy";
-  version = "1.0.0";
+  version = "1.0.4";
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "proxy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CAT05X9z8VBoDyZhVdMCUgpMtUe4wJvvROQc/sYHROs=";
+    hash = "sha256-Skd0r+gcoraNlijXJ5WXONkmlWb0TZq7/7vfQcKumOY=";
   };
   __structuredAttrs = true;
   __darwinAllowLocalNetworking = true;
-  cargoHash = "sha256-JXKqLM9rosaeCQP+UnY49FI6dpTEfd//jUhTEHoeKqU=";
+  cargoHash = "sha256-GO0WsEwfeISbIlbywdV0Y6ThqDQjRHL2uv0zfVlvi5g=";
   # `Result::unwrap()` on an `Err` value: Tls("platform verifier: unexpected error: No CA certificates were loaded from the system")
   nativeCheckInputs = [
     cacert
@@ -37,12 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/stalwartlabs/proxy/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.OR [
       lib.licenses.agpl3Only
-      {
-        fullName = "Stalwart Enterprise License 2.0 (SELv2) Agreement";
-        url = "https://github.com/stalwartlabs/proxy/blob/main/LICENSES/LicenseRef-SEL.txt";
-        free = false;
-        redistributable = false;
-      }
+      lib.licenses.stalwart
     ];
     mainProgram = "proxy";
     maintainers = with lib.maintainers; [

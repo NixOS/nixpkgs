@@ -3,9 +3,10 @@
   rustPlatform,
   fetchFromGitHub,
   versionCheckHook,
-  gitUpdater,
+  nix-update-script,
 
   # nativeBuildInputs
+  installShellFiles,
   pkg-config,
   wrapGAppsHook4,
 
@@ -26,29 +27,30 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stremio-linux-shell";
-  version = "1.0.2";
+  version = "1.2.2";
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Stremio";
     repo = "stremio-linux-shell";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NbzUAv/L8xzdepqn677nlROumjlliZIHzPXIToHHeTU=";
+    hash = "sha256-QQ+aAJWvU6yGfGQX9eP4vlRo+CMewiWrEfFo14SHiFQ=";
   };
 
-  cargoHash = "sha256-yafkD7D0E+lbFV7MlLwQM4iWC8Glo/Tn2F+TFff6GoM=";
+  cargoHash = "sha256-Xx2oIM9Ytlclury1wAULUbZFnJ6BC12nKU9I3HdeaEQ=";
+
+  patches = [
+    ./out-path.patch
+  ];
 
   postPatch = ''
-    substituteInPlace data/com.stremio.Stremio.service \
-      --replace-fail "Exec=/app/bin/stremio" "Exec=$out/bin/stremio"
-
-    substituteInPlace data/stremio.sh \
-      --replace-fail "/app/libexec/stremio/stremio" "$out/libexec/stremio/stremio"
+    substituteInPlace data/com.stremio.Stremio.service data/stremio.sh build.rs \
+      --subst-var out
   '';
 
   nativeBuildInputs = [
+    installShellFiles
     pkg-config
     wrapGAppsHook4
   ];
@@ -67,9 +69,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     install -Dm644 data/icons/com.stremio.Stremio.svg $out/share/icons/hicolor/scalable/apps/com.stremio.Stremio.svg
     install -Dm644 data/com.stremio.Stremio.desktop $out/share/applications/com.stremio.Stremio.desktop
+    install -Dm644 data/com.stremio.Stremio.metainfo.xml $out/share/metainfo/com.stremio.Stremio.metainfo.xml
     install -Dm644 data/com.stremio.Stremio.service $out/share/dbus-1/services/com.stremio.Stremio.service
     install -Dm644 data/server.js $out/libexec/stremio/server.js
     install -Dm755 data/stremio.sh $out/bin/stremio
+    install -Dm644 LICENSE $out/share/licenses/stremio/LICENSE
+
+    installManPage data/stremio.1
 
     mv $out/bin/stremio-linux-shell $out/libexec/stremio/stremio
   '';
@@ -84,7 +90,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ addDriverRunpath.driverLink ]}" \
       --prefix PATH : "${lib.makeBinPath [ nodejs ]}" \
       --prefix ANV_DEBUG : "video-decode,video-encode" \
-      --prefix LC_NUMERIC : "C" \
       --prefix SERVER_PATH : "$out/libexec/stremio/server.js"
   '';
 
@@ -93,7 +98,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
-    updateScript = gitUpdater { rev-prefix = "v"; };
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex=^v([0-9.]+)$" ];
+    };
   };
 
   meta = {
@@ -111,7 +118,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       fromSource
       obfuscatedCode # server.js
     ];
-    maintainers = with lib.maintainers; [ thunze ];
+    maintainers = with lib.maintainers; [
+      thunze
+      fazzi
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "stremio";
   };

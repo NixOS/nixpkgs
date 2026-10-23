@@ -15,6 +15,7 @@
   swift,
   apple-sdk_26,
   symlinkJoin,
+  nix-update-script,
 
   # Linux-only
   webkitgtk_4_1,
@@ -28,6 +29,7 @@
   gtk-layer-shell,
   vulkan-loader,
   vulkan-headers,
+  spirv-headers,
   shaderc,
   gst_all_1,
   glib-networking,
@@ -54,7 +56,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "handy";
-  version = "0.8.3";
+  version = "0.9.8";
 
   __structuredAttrs = true;
 
@@ -62,11 +64,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "cjpais";
     repo = "Handy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sCCtp6UAxmCAcYeOM9+RW2czATh4Geqf1H8wXNMniYc=";
+    hash = "sha256-3j73ss9pwkcK4MfeNY/9PFp//Cbc0OSICDdlmHprSso=";
   };
 
   cargoRoot = "src-tauri";
-  cargoHash = "sha256-mvOThNqfE24iMkVBM2zYexJkQxpMMgE4PPNXKy39hSg=";
+  cargoHash = "sha256-I9OLUF96PgqdcYlycBICfl43rENkiyzZDLmtmnNX87A=";
 
   nativeInstallInputs = [ jq ];
 
@@ -90,6 +92,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Strip cbindgen build steps
     find "$cargoDepsCopy" -path "*/ferrous-opencc-*/build.rs" \
       -exec sed -i -e '/cbindgen::Builder::new/{:l;/write_to_file/!{N;bl};d}' {} +
+
+    # FoundationModels requires macros that are only shipped with Xcode. The 26.x SDK in Nixpkgs does not have them.
+    substituteInPlace src-tauri/build.rs \
+      --replace-fail 'has_foundation_models = framework_path.exists()' ' has_foundation_models = false'
+
+    # Disable the in-app updater
+    substituteInPlace src/components/update-checker/UpdateChecker.tsx \
+      --replace-fail 'settings?.update_checks_enabled ?? false' 'false'
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace "$cargoDepsCopy"/*/libappindicator-sys-*/src/lib.rs \
@@ -109,6 +119,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     wrapGAppsHook4
     shaderc
+    spirv-headers
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     makeBinaryWrapper
@@ -151,15 +162,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
     );
   }
   // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = "-lclang_rt.osx"; # Make sure `__isPlatformVersionAtLeast` is available for runtime version checks.
     SWIFTC = lib.getExe' swift "swiftc"; # Explicit so the Handy build system can avoid xcrun
   };
 
-  preBuild = ''
-    cp -R ${finalAttrs.passthru.frontendDeps}/node_modules .
-    chmod -R u+w node_modules
-    patchShebangs node_modules
-    bun run build
-  '';
+  preBuild =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      # Linux enables transcribe-cpp's ggml Vulkan backend, whose CMake build
+      # needs SPIRV-Headers' package config and headers.
+      export CMAKE_PREFIX_PATH="${spirv-headers}''${CMAKE_PREFIX_PATH:+:''${CMAKE_PREFIX_PATH}}"
+      export NIX_CFLAGS_COMPILE="-isystem ${spirv-headers}/include ''${NIX_CFLAGS_COMPILE:-}"
+    ''
+    + ''
+      cp -R ${finalAttrs.passthru.frontendDeps}/node_modules .
+      chmod -R u+w node_modules
+      patchShebangs node_modules
+      bun run build
+    '';
 
   # If removed, the binary is produced, but not the app bundle for any platform.
   installPhase = ''
@@ -191,6 +210,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "$out/Applications/Handy.app/Contents/MacOS/handy"
   '';
 
+  # HTTP tests bind local TCP listeners, which the Darwin sandbox blocks by default.
+  __darwinAllowLocalNetworking = true;
+
   preCheck = ''
     cd ${finalAttrs.cargoRoot}
   ''
@@ -208,8 +230,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # The hook and deps fetcher in https://github.com/NixOS/nixpkgs/pull/376299 should simplify this dramatically.
     frontendDeps = stdenv.mkDerivation {
       pname = "handy-frontend-deps";
-      version = "0.8.3";
-      inherit (finalAttrs) src;
+      inherit (finalAttrs) src version;
 
       nativeBuildInputs = [
         bun
@@ -238,9 +259,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
       outputHash =
         {
-          "x86_64-linux" = "sha256-tJ6LK99dELOiR0BcsTRTt/vLyNamntujLxhBy5Xl/lc=";
-          "aarch64-linux" = "sha256-S+dX6ZVgv9dexxIHoa5PxP7e0nxf/d7cKUGty5eEi8A=";
-          "aarch64-darwin" = "sha256-DQbogNBQ9izK5GPmoOudqiB2lJvct1vZI2U5lp3WFy8=";
+          "x86_64-linux" = "sha256-sBrQToz8+tRTAQNZkSE0Ke5mZ0Sfagl8+IE/4VL990E=";
+          "aarch64-linux" = "sha256-Yp1OtXeY4abE4qFdG8K30D2M0fdbRmeQMzk0Y6BrZuw=";
+          "aarch64-darwin" = "sha256-AIxRev4JwrjRJQBnlknOH1QtZarjM9m9ICjB8bNL7Wk=";
         }
         .${stdenv.hostPlatform.system};
 
@@ -252,6 +273,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
       paths = [
         "${pipewire}/lib/alsa-lib"
         "${alsa-plugins}/lib/alsa-lib"
+      ];
+    };
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "frontendDeps"
       ];
     };
   };
@@ -268,8 +296,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/cjpais/Handy/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "handy";
-    maintainers = with lib.maintainers; [ philocalyst ];
+    maintainers = with lib.maintainers; [
+      faukah
+      philocalyst
+    ];
     platforms = with lib.platforms; linux ++ darwin;
-    badPlatforms = [ "x86_64-darwin" ]; # We weren't able to get hashes here
   };
 })

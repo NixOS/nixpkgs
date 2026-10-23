@@ -30,7 +30,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lance-namespace";
-  version = "0.8.6";
+  version = "0.13.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -38,7 +38,7 @@ buildPythonPackage (finalAttrs: {
     owner = "lancedb";
     repo = "lance-namespace";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QYzVsarjTg2arNNuCFbVgtA7rfLTm6AJD3liNr3QuSU=";
+    hash = "sha256-Wnm9zQCVnlRECxiLZYjX46/+2rU8tpC/s/NKyoS5rO0=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python/lance_namespace";
@@ -72,7 +72,7 @@ buildPythonPackage (finalAttrs: {
     pylance
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues finalAttrs.optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   # Tests require pylance, which is a circular dependency
   doCheck = false;

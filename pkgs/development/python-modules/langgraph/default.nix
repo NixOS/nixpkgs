@@ -41,7 +41,7 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "langgraph";
-  version = "1.2.6";
+  version = "1.2.11";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -49,7 +49,7 @@ buildPythonPackage (finalAttrs: {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = finalAttrs.version;
-    hash = "sha256-xYW+wPvkzWsCB4RES2athDjz/ymZq4tI65fWFIXAnn4=";
+    hash = "sha256-5CUQh9KNYQ0HBIuREOP0MxZgn5Z1MxMuqB9Be4e6AJo=";
   };
 
   postgresqlTestSetupPost = ''
@@ -138,8 +138,7 @@ buildPythonPackage (finalAttrs: {
     "tests/test_subgraph_persistence_async.py"
     "tests/test_time_travel.py"
     "tests/test_time_travel_async.py"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+
     # Race condition
     "tests/test_retry.py::test_error_handler_resumes_after_crash_multiple_nodes"
   ];

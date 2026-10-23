@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "loguru-logging-intercept";
-  version = "0.1.5";
+  version = "0.1.7";
   pyproject = true;
 
   # no tags on git
   src = fetchPypi {
     pname = "loguru_logging_intercept";
     inherit (finalAttrs) version;
-    hash = "sha256-WBA4vxMQ+7Bs2kivvTc+crvAHVHE3wWPSQgat6fF+YQ=";
+    hash = "sha256-5QnIqK1qf0Es6tmw9qsqP1jgtO8PE330IUiJtl3TTu4=";
   };
 
   build-system = [ setuptools ];

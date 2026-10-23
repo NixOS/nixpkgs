@@ -16,13 +16,13 @@ let
 in
 stdenvNoCC.mkDerivation {
   pname = "sddm-astronaut";
-  version = "0-unstable-2026-06-17";
+  version = "0-unstable-2026-09-18";
 
   src = fetchFromGitHub {
     owner = "Keyitdev";
     repo = "sddm-astronaut-theme";
-    rev = "cd46736b4135a71700d2225d60eb8e85917585eb";
-    hash = "sha256-5ys3pP5GgkrIua/4II8KiQbWCwK8PZK6Sj3lCMe9q1c=";
+    rev = "abb3163c724935af888ba5ea9ac0c4f22afd8048";
+    hash = "sha256-BujSjoQlMH6PZIfn3Ox7hp6JFb2aRGtALOnpAGqqyNE=";
   };
 
   dontWrapQtApps = true;

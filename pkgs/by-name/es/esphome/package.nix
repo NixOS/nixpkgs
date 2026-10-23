@@ -1,14 +1,16 @@
 {
   lib,
   stdenv,
-  callPackage,
   python3Packages,
   fetchFromGitHub,
   installShellFiles,
   platformio,
+  platformio-core,
   esptool,
   git,
   versionCheckHook,
+  addBinToPathHook,
+  writableTmpDirAsHomeHook,
   nixosTests,
 }:
 
@@ -16,31 +18,20 @@ let
   python = python3Packages.python.override {
     self = python;
     packageOverrides = self: super: {
-      esphome-dashboard = self.callPackage ./dashboard.nix { };
-
-      paho-mqtt = super.paho-mqtt.overridePythonAttrs (oldAttrs: rec {
-        version = "1.6.1";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          tag = "v${version}";
-          hash = "sha256-9nH6xROVpmI+iTKXfwv2Ar1PAmWbEunI3HO0pZyK6Rg=";
-        };
-        build-system = with self; [ setuptools ];
-        doCheck = false;
-      });
+      paho-mqtt = self.paho-mqtt_1;
     };
   };
 in
 python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "esphome";
-  version = "2026.6.2";
+  version = "2026.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "esphome";
     tag = finalAttrs.version;
-    hash = "sha256-h7aMPSXmIUutCGMoZlE3Z1wX2xNxdmZsHfBllcFHBHc=";
+    hash = "sha256-EqjmwBppfxh5+2edF94ZzptQveVekehZ6dBDj96Ddeg=";
   };
 
   patches = [
@@ -72,8 +63,8 @@ python.pkgs.buildPythonApplication (finalAttrs: {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==82.0.1" "setuptools" \
-      --replace-fail "wheel>=0.43,<0.48" "wheel"
+      --replace-fail "setuptools==84.0.0" "setuptools" \
+      --replace-fail "wheel>=0.43,<0.49" "wheel"
   '';
 
   # Remove esptool and platformio from requirements
@@ -83,18 +74,18 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     aioesphomeapi
     argcomplete
     bleak
-    cairosvg
     click
     colorama
     cryptography
-    esphome-dashboard
     esphome-glyphsets
+    filelock
     freetype-py
-    icmplib
     jinja2
+    ninja
     paho-mqtt
     pillow
-    platformio
+    platformdirs
+    (toPythonModule (platformio-core.override { python3 = python; }))
     puremagic
     py7zr
     pyparsing
@@ -103,8 +94,8 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     requests
     resvg-py
     ruamel-yaml
+    ruamel-yaml-clib
     smpclient
-    tornado
     tzdata
     tzlocal
     voluptuous
@@ -115,20 +106,35 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     # platformio is used in esphome/platformio_api.py
     # esptool is used in esphome/__main__.py
     # git is used in esphome/git.py
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        platformio
-        esptool
-        git
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      platformio
+      esptool
+      git
+    ])
+
     # The dashboard requires esphome to be importable
     # dependencies are added to show better error messages
-    "--prefix PYTHONPATH : $out/${python.sitePackages}:${python.pkgs.makePythonPath finalAttrs.passthru.dependencies}"
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ stdenv.cc.cc ]}"
-    "--set ESPHOME_USE_SUBPROCESS ''"
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    "$out/${python.sitePackages}:${python.pkgs.makePythonPath finalAttrs.passthru.dependencies}"
+
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    (lib.makeLibraryPath [ stdenv.cc.cc ])
+
+    "--set"
+    "ESPHOME_USE_SUBPROCESS"
+    "''"
+
     # https://github.com/NixOS/nixpkgs/issues/362193
-    "--set PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION 'python'"
+    "--set"
+    "PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION"
+    "'python'"
   ];
 
   # Needed for tests
@@ -137,16 +143,20 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   nativeCheckInputs =
     with python.pkgs;
     [
+      (python3Packages.toPythonModule esptool)
       hypothesis
       mock
       pytest-asyncio
       pytest-cov-stub
       pytest-mock
       pytestCheckHook
+      ruff
     ]
     ++ [
       git
       versionCheckHook
+      addBinToPathHook
+      writableTmpDirAsHomeHook
     ];
 
   disabledTestPaths = [
@@ -157,10 +167,6 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     "tests/unit_tests/test_writer.py"
     "tests/unit_tests/test_espidf_component.py"
   ];
-
-  preCheck = ''
-    export PATH=$PATH:$out/bin
-  '';
 
   postInstall =
     let
@@ -173,14 +179,14 @@ python.pkgs.buildPythonApplication (finalAttrs: {
         --fish <(${argcomplete} --shell fish esphome)
     '';
 
-  doInstallCheck = true;
-
   disabledTests = [
     # tries to import platformio, which is wrapped in an fhsenv
     "test_clean_build"
     "test_clean_build_empty_cache_dir"
     "test_clean_all"
     "test_clean_all_partial_exists"
+    "test_get_platformio_config_returns_project_config"
+    "test_resolve_registry_version_raises_without_pkg_file"
     # tries to use esptool, which is wrapped in an fhsenv
     "test_upload_using_esptool_passes_crystal_callback"
     "test_upload_using_esptool_path_conversion"
@@ -195,11 +201,14 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     "test_run_platformio_cli_strips_win_long_path_prefix"
     "test_run_platformio_cli_does_not_set_pythonexepath_without_strip"
     "test_patch_file_downloader_recovers_against_real_server"
+    # 20261010: tests fail due to `AttributeError: 'NoneType' object has no attribute 'items'`
+    #  attempts to download a remote asset from github
+    "test_dynamic_widget_creates_correctly"
+    "test_dynamic_widget_type_use_define_is_registered"
+    "test_dynamic_widget_style_use_defines_are_registered"
   ];
 
   passthru = {
-    dashboard = python.pkgs.esphome-dashboard;
-    updateScript = callPackage ./update.nix { };
     tests = { inherit (nixosTests) esphome; };
   };
 
@@ -212,10 +221,10 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       gpl3Only # The python codebase and all other parts of this codebase
     ];
     maintainers = with lib.maintainers; [
-      hexa
       picnoir
       thanegill
       karlbeecken
+      tmarkus
     ];
     mainProgram = "esphome";
   };

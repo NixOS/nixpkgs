@@ -16,12 +16,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "limnoria";
-  version = "2026.3.21";
+  version = "2026.5.8";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-hg4NYKyUMu4jDv9i3gdejbz0w/v0ptswzO7TUSXP3+4=";
+    hash = "sha256-rJzXMC98+SNQlNnkdMK/YL7jln0UYL57rmzHQetUrvk=";
   };
 
   postPatch = ''
@@ -58,7 +58,6 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Modified version of Supybot, an IRC bot";
     homepage = "https://github.com/ProgVal/Limnoria";
-    changelog = "https://github.com/progval/Limnoria/releases/tag/master-${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };

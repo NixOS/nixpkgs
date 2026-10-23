@@ -24,7 +24,21 @@ in
 
     settings = lib.mkOption {
       description = ''
-        Configuration for TabbyAPI. https://github.com/theroyallab/tabbyAPI/wiki/02.-Server-options
+        Configuration for TabbyAPI.
+        See https://github.com/theroyallab/tabbyAPI/wiki/02.-Server-options and https://github.com/theroyallab/tabbyAPI/blob/main/config_sample.yml
+      '';
+      example = lib.literalExpression ''
+        {
+          model = {
+            model_name = "Qwen3_5-9B";
+            max_seq_len = 32768;
+            cache_mode = "8,8";
+            tensor_parallel = true;
+            gpu_split = [ 16 24 ];
+          };
+          draft_model.draft_mode = "ngram";
+          memory.sysmem_kv_cache = 4096;
+        }
       '';
       type = lib.types.submodule {
         freeformType = yamlFormat.type;
@@ -34,39 +48,32 @@ in
             host = lib.mkOption {
               type = lib.types.str;
               default = "127.0.0.1";
-              description = "The IP to host on. Use 0.0.0.0 to expose on all adapters.";
+              description = ''
+                The IP to host on.
+                Use 0.0.0.0 to expose on all network adapters.
+              '';
+              example = "0.0.0.0";
             };
 
             port = lib.mkOption {
               type = lib.types.port;
               default = 5000;
-              description = "The port to host on.";
+              description = ''
+                The port to host on.
+              '';
+              example = 8080;
             };
 
             disable_auth = lib.mkOption {
               type = lib.types.bool;
               default = false;
-              description = "Disable HTTP token authentication. WARNING: Vulnerable if exposed.";
-            };
-
-            api_servers = lib.mkOption {
-              type = lib.types.listOf lib.types.str;
-              default = [ "OAI" ];
-              description = "Select API servers to enable. Options: OAI, Kobold.";
-            };
-          };
-
-          logging = {
-            log_prompt = lib.mkOption {
-              type = lib.types.bool;
-              default = false;
-              description = "Enable prompt logging.";
-            };
-
-            log_requests = lib.mkOption {
-              type = lib.types.bool;
-              default = false;
-              description = "Enable request logging. Only use for debug.";
+              description = ''
+                Disable HTTP token authentication with requests.
+                WARNING: This will make your instance vulnerable!
+                Only turn this on if nothing but trusted local clients can reach the API.
+                Note that web pages open in a browser on this machine also count as local
+                callers; restrict `network.allowed_origins` if you disable auth.
+              '';
             };
           };
 
@@ -74,7 +81,10 @@ in
             model_dir = lib.mkOption {
               type = lib.types.str;
               default = "models";
-              description = "Directory to look for models. Relative to the state directory.";
+              description = ''
+                Directory to look for models.
+                Relative to the state directory.
+              '';
               example = lib.literalExpression ''
                 (pkgs.linkFarm "models" {
                   qwen-8b = pkgs.fetchgit {
@@ -83,63 +93,72 @@ in
                     fetchLFS = true;
                     hash = "sha256-n+9Mt7EZ3XHM0w8oGUZr4EBz91EFyp1VBpvl9Php/QM=";
                   };
-
-                  # Example for patching Qwen 3.5's template to work with OpenWebUI's thinking feature
-                  Qwen3_5-9B = pkgs.applyPatches {
-                    src = pkgs.fetchgit {
-                      url = "https://huggingface.co/turboderp/Qwen3.5-9B-exl3";
-                      rev = "6f8763307a3130ae989269fbc79a8c8e9db5ee42"; # 5.0bpw
-                      fetchLFS = true;
-                      hash = "sha256-Y7Uw/MChXU0Iu9hb3dv+cTtNBwhPbd/I/gYDUjM1j8g=";
-                    };
-                    patches = [ ./qwen-thinking.patch ];
-                  };
-                  # diff --git a/chat_template.jinja b/chat_template.jinja
-                  # index a585dec..68f1b6f 100644
-                  # --- a/chat_template.jinja
-                  # +++ b/chat_template.jinja
-                  # @@ -148,7 +148,5 @@
-                  #     {{- '<|im_start|>assistant\n' }}
-                  #     {%- if enable_thinking is defined and enable_thinking is false %}
-                  #         {{- '<think>\n\n</think>\n\n' }}
-                  # -    {%- else %}
-                  # -        {{- '<think>\n' }}
-                  #     {%- endif %}
-                  # {%- endif %}
-                  # \ No newline at end of file
-                }).outPath;
               '';
             };
 
             model_name = lib.mkOption {
               type = lib.types.nullOr lib.types.str;
               default = null;
-              description = "The initial model to load on startup. Must exist in model_dir.";
+              description = ''
+                An initial model to load.
+                Make sure the model is located in the model directory!
+                REQUIRED: This must be filled out to load a model on startup.
+              '';
               example = "Qwen3_5-9B";
             };
 
             max_seq_len = lib.mkOption {
               type = lib.types.nullOr lib.types.int;
               default = null;
-              description = "Max sequence length. Set null to use model defaults.";
+              description = ''
+                Max sequence length (default: 4096).
+                Set to -1 to fetch from the model's config.json
+              '';
+              example = 32768;
             };
 
             cache_mode = lib.mkOption {
               type = lib.types.str;
               default = "FP16";
-              description = "Cache mode for VRAM savings. ExLlamaV2: FP16, Q8, Q6, Q4. ExLlamaV3: specific pair string (e.g., '8,8').";
+              description = ''
+                Enable different cache modes for VRAM savings.
+                Specify the pair k_bits,v_bits where k_bits and v_bits are integers from 2-8.
+                The legacy values 'FP16', 'Q8', 'Q6', 'Q4' are also accepted.
+              '';
+              example = "8,8";
+            };
+          };
+
+          draft_model = {
+            draft_model_dir = lib.mkOption {
+              type = lib.types.str;
+              default = "models";
+              description = ''
+                Directory to look for draft models
+                Relative to the state directory.
+              '';
+              example = "drafts";
             };
 
-            gpu_split_auto = lib.mkOption {
-              type = lib.types.bool;
-              default = true;
-              description = "Automatically allocate resources to GPUs.";
+            draft_model_name = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
+              default = null;
+              description = ''
+                An initial draft model to load.
+                Ensure the model is in the model directory.
+              '';
+              example = "Qwen3-0.6B-exl3";
             };
+          };
 
-            dummy_model_names = lib.mkOption {
-              type = lib.types.listOf lib.types.str;
-              default = [ "gpt-3.5-turbo" ];
-              description = "List of fake model names sent via the /v1/models endpoint.";
+          lora = {
+            lora_dir = lib.mkOption {
+              type = lib.types.str;
+              default = "loras";
+              description = ''
+                Directory to look for LoRAs.
+                Relative to the state directory.
+              '';
             };
           };
         };
@@ -150,11 +169,20 @@ in
   config = lib.mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.package.passthru.cudaSupport;
+        assertion = cfg.package.passthru.cudaSupport || cfg.package.passthru.rocmSupport;
         message = ''
-          TabbyAPI requires CUDA support to function. The configured package does not have CUDA enabled.
+          TabbyAPI requires CUDA or ROCm support to function.
           Consider setting:
             services.tabbyapi.package = pkgs.pkgsCuda.tabbyapi;
+            services.tabbyapi.package = pkgs.pkgsRocm.tabbyapi;
+        '';
+      }
+      {
+        assertion = !(cfg.settings.model ? force_enable_thinking);
+        message = ''
+          services.tabbyapi.settings.model.force_enable_thinking is deprecated upstream.
+          Use template_vars_force instead:
+            services.tabbyapi.settings.model.template_vars_force.enable_thinking = true;
         '';
       }
     ];
@@ -173,6 +201,10 @@ in
         XDG_CACHE_HOME = "/var/lib/tabbyapi/.cache";
         TRITON_CACHE_DIR = "/tmp/triton";
       };
+
+      preStart = ''
+        ln -sfn ${cfg.package}/share/tabbyapi/sampler_overrides sampler_overrides
+      '';
 
       serviceConfig = {
         ExecStart = "${lib.getExe cfg.package} --config=${configFile}";

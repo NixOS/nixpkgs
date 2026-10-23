@@ -7,6 +7,7 @@
   hatchling,
   lib,
   lxml,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
@@ -26,6 +27,10 @@ buildPythonPackage rec {
     hash = "sha256-W3TdumweNyGz2qDFgSGu+ZPnEpLvWQQ216jER6e4k18=";
   };
 
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
+
   build-system = [ hatchling ];
 
   dependencies = [
@@ -43,6 +48,11 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # TypeError: 'async for' requires an object...
+    "test_upload_iter"
   ];
 
   meta = {

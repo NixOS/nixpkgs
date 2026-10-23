@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation {
   pname = "jack-passthrough";
-  version = "0-unstable-2021-9-25";
+  version = "0-unstable-2021-09-25";
 
   # https://github.com/guysherman/jack-passthrough
   src = fetchFromGitHub {
@@ -50,7 +50,7 @@ stdenv.mkDerivation {
       PowerUser64
       l1npengtul
     ];
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux;
     mainProgram = "jack-passthru";
   };
 }

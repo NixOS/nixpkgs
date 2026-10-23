@@ -12,9 +12,9 @@
   libuv,
   libwebsockets,
   openssl,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
   sqlite,
-  systemd,
+  systemdLibs,
   uthash,
   nixosTests,
 }:
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
     uthash
   ]
-  ++ lib.optional withSystemd systemd;
+  ++ lib.optional withSystemd systemdLibs;
 
   propagatedBuildInputs = [ cjson ];
 
@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_BUNDLED_DEPS" false)
     (lib.cmakeBool "WITH_WEBSOCKETS" true)
     (lib.cmakeBool "WITH_SYSTEMD" withSystemd)
-    (lib.cmakeBool "WITH_TESTS" finalAttrs.doCheck)
+    (lib.cmakeBool "WITH_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   postFixup = ''

@@ -73,9 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
   checkInputs = [ python3 ];
   checkTarget = [ "test-serial" ];
-  preCheck = ''
-    export OMP_NUM_THREADS=4
-  '';
 
   enableParallelBuilding = true;
 

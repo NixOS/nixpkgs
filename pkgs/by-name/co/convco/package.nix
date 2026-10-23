@@ -6,21 +6,26 @@
   cmake,
   libiconv,
   openssl,
+  gitMinimal,
   pkg-config,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "convco";
-  version = "0.6.3";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "convco";
     repo = "convco";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-fJrP4XtlUX0RvH8T76YxqUCM/R+QvUpsaumn3Z1SOh0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vzxIZdXmWASnafaeXt/QBgg9WXyMFwPclFeD+4oF4V0=";
   };
 
-  cargoHash = "sha256-ySTXy8Jqw/EZl/olbWjMaDD8dryUFyWFvyapfvglFHI=";
+  cargoHash = "sha256-f/jfriJeBgR3OkWj5S/NkTc/bhGjqU/yQHUfddUo2yQ=";
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
@@ -34,6 +39,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libiconv
   ];
 
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+    gitMinimal
+  ];
+
   checkFlags = [
     # disable test requiring networking
     "--skip=git::tests::test_find_last_unordered_prerelease"
@@ -41,11 +51,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=git::tests::test_find_matching_prerelease_without_matching_release"
   ];
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   meta = {
     description = "Conventional commit cli";
     mainProgram = "convco";
     homepage = "https://github.com/convco/convco";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       hoverbear
       cafkafk

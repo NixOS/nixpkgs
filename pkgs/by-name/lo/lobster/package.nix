@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lobster";
-  version = "2026.4";
+  version = "2026.8";
 
   src = fetchFromGitHub {
     owner = "aardappel";
     repo = "lobster";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kqKOf0zrHyqRTs+57owHR5sORZgNIgGghtjUtSaFjZw=";
+    hash = "sha256-OC4LF0z84GzUT92G8dGyxgKJwWeV03XbZcepFhbwZII=";
   };
 
   nativeBuildInputs = [
@@ -60,7 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.can-run-hello-world = callPackage ./test-can-run-hello-world.nix { };
 
   meta = {
-    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://strlen.com/lobster/";
     description = "Lobster programming language";
     mainProgram = "lobster";

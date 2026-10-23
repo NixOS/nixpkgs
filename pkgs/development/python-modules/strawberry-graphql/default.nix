@@ -23,6 +23,7 @@
   pydantic,
   pygments,
   pyinstrument,
+  pyprojectVersionPatchHook,
   pytest-aiohttp,
   pytest-asyncio,
   pytest-django,
@@ -61,6 +62,8 @@ buildPythonPackage (finalAttrs: {
     substituteInPlace pyproject.toml \
       --replace-fail "--emoji" ""
   '';
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   build-system = [ uv-build ];
 

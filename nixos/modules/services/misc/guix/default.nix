@@ -277,28 +277,31 @@ in
         # Guix uses Avahi (through guile-avahi) both for the auto-discovering and
         # advertising substitute servers in the local network.
         services.avahi.enable = lib.mkDefault true;
-        services.avahi.publish.enable = lib.mkDefault true;
-        services.avahi.publish.userServices = lib.mkDefault true;
+        services.avahi.settings.publish = {
+          disable-publishing = lib.mkDefault false;
+          disable-user-service-publishing = lib.mkDefault false;
+          publish-addresses = lib.mkDefault true;
+        };
 
         # It's similar to Nix daemon so there's no question whether or not this
         # should be sandboxed.
         systemd.services.guix-daemon = {
           environment = serviceEnv // config.networking.proxy.envVars;
-          script = ''
-            exec ${lib.getExe' package "guix-daemon"} \
-              --build-users-group=${cfg.group} \
-              ${
-                lib.optionalString (
-                  cfg.substituters.urls != [ ]
-                ) "--substitute-urls='${lib.concatStringsSep " " cfg.substituters.urls}'"
-              } \
-              ${lib.escapeShellArgs cfg.extraArgs}
-          '';
           serviceConfig = {
             OOMPolicy = "continue";
             RemainAfterExit = "yes";
             Restart = "always";
             TasksMax = 8192;
+            ExecStart = ''
+              ${lib.getExe' package "guix-daemon"} \
+                --build-users-group=${cfg.group} \
+                ${
+                  lib.optionalString (
+                    cfg.substituters.urls != [ ]
+                  ) "--substitute-urls='${lib.concatStringsSep " " cfg.substituters.urls}'"
+                } \
+                ${lib.escapeShellArgs cfg.extraArgs}
+            '';
           };
           unitConfig.RequiresMountsFor = [
             cfg.storeDir
@@ -407,15 +410,16 @@ in
                 ${lib.getExe' package "guix"} archive --generate-key;
               }
           '';
-          script = ''
-            exec ${lib.getExe' package "guix"} publish \
-              --user=${cfg.publish.user} --port=${toString cfg.publish.port} \
-              ${lib.escapeShellArgs cfg.publish.extraArgs}
-          '';
 
           serviceConfig = {
             Restart = "always";
             RestartSec = 10;
+
+            ExecStart = ''
+              ${lib.getExe' package "guix"} publish \
+                --user=${cfg.publish.user} --port=${toString cfg.publish.port} \
+                ${lib.escapeShellArgs cfg.publish.extraArgs}
+            '';
 
             ProtectClock = true;
             ProtectHostname = true;
@@ -463,11 +467,11 @@ in
         systemd.services.guix-gc = {
           description = "Guix garbage collection";
           startAt = cfg.gc.dates;
-          script = ''
-            exec ${lib.getExe' package "guix"} gc ${lib.escapeShellArgs cfg.gc.extraArgs}
-          '';
           serviceConfig = {
             Type = "oneshot";
+
+            ExecStart = "${lib.getExe' package "guix"} gc ${lib.escapeShellArgs cfg.gc.extraArgs}";
+
             PrivateDevices = true;
             PrivateNetwork = true;
             ProtectControlGroups = true;

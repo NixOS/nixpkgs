@@ -34,6 +34,8 @@ let
     else
       # FIXME fetching HEAD if no rev or tag is provided is problematic at best
       "HEAD";
+
+  hasColonInfix = lib.hasInfix ":";
 in
 
 lib.makeOverridable (
@@ -133,7 +135,7 @@ lib.makeOverridable (
         */
 
         let
-          finalHashHasColon = lib.hasInfix ":" finalAttrs.hash;
+          finalHashHasColon = hasColonInfix finalAttrs.hash;
           finalHashColonMatch = lib.match "([^:]+)[:](.*)" finalAttrs.hash;
         in
 
@@ -152,6 +154,8 @@ lib.makeOverridable (
           ]
           ++ lib.optionals fetchLFS [ git-lfs ]
           ++ nativeBuildInputs;
+
+          strictDeps = true;
 
           hash =
             if outputHashAlgo == null || outputHash == "" || lib.hasPrefix outputHashAlgo outputHash then
@@ -265,7 +269,7 @@ lib.makeOverridable (
             // meta.identifiers or { };
           };
 
-          env = {
+          env = derivationArgs.env or { } // {
             NIX_PREFETCH_GIT_CHECKOUT_HOOK = finalAttrs.postCheckout;
           };
 

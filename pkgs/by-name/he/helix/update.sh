@@ -4,21 +4,35 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PACKAGE="${1:-helix}"
 
-echo "Updating helix source to the latest stable..."
-nix-update helix-unwrapped
+case "$PACKAGE" in
+  helix)
+    nix-update helix-unwrapped
+    SOURCE_ATTR="helix-unwrapped.src.outPath"
+    GRAMMARS_JSON="pkgs/by-name/he/helix/grammars.json"
+    ;;
+  steelix)
+    nix-update steelix.unwrapped --version=branch=steel-event-system
+    SOURCE_ATTR="steelix.unwrapped.src.outPath"
+    GRAMMARS_JSON="pkgs/by-name/st/steelix/grammars.json"
+    ;;
+  *)
+    exit 1
+    ;;
+esac
 
-echo "Fetching updated helixSource..."
-HELIX_SRC=$(nix-instantiate --eval -A "helix-unwrapped.src.outPath" --raw)
+echo "Fetching updated $PACKAGE source..."
+HELIX_SRC=$(nix-instantiate --eval -A "$SOURCE_ATTR" --raw)
 
 echo "Generating grammars.json..."
 "$SCRIPT_DIR/generate_grammars.py" \
   "$HELIX_SRC/languages.toml" \
-  -o "$SCRIPT_DIR/grammars.json"
+  -o "$GRAMMARS_JSON"
 
 if [ $? -ne 0 ]; then
   echo "Error: Failed to generate grammars.json" >&2
   exit 1
 fi
 
-echo "Done! Updated grammars.json"
+echo "Done! Updated $GRAMMARS_JSON"

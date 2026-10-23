@@ -30,6 +30,12 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/rhboot/pesign/commit/1f9e2fa0b4d872fdd01ca3ba81b04dfb1211a187.patch?full_index=1";
       hash = "sha256-viVM4Z0jAEAWC3EdJVHcWe21aQskH5XE85lOd6Xd/qU=";
     })
+
+    # fix build w/ glibc-2.44
+    (fetchpatch2 {
+      url = "https://github.com/rhboot/pesign/commit/419d63a8b6434f94b57730bb8a58a32a0bb199aa.patch?full_index=1";
+      hash = "sha256-/o0QknZ1IDFwmsQAt1IENx7tr8WRNJS3wl84cHzprzA=";
+    })
   ];
 
   # nss-util is missing because it is already contained in nss

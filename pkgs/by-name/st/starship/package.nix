@@ -13,13 +13,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "starship";
-  version = "1.26.0";
+  version = "1.27.0";
 
   src = fetchFromGitHub {
     owner = "starship";
     repo = "starship";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pStNE8SMMVavL3ld6RO+5QQRJPXpqlU3asccS2tUoMQ=";
+    hash = "sha256-Aq79POUoeKnG/gNG3rpmayhER61kiUCE8gsHGbvT66w=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -31,9 +31,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env.TZDIR = "${tzdata}/share/zoneinfo";
 
   postInstall = ''
+    integrationdir=$out/share/starship/shell-integration
+    mkdir -p "$integrationdir"
+    for shell in bash zsh fish nu; do
+      install -m644 "src/init/starship.$shell" "$integrationdir/starship.$shell.in"
+    done
+
     presetdir=$out/share/starship/presets/
     mkdir -p $presetdir
     cp docs/public/presets/toml/*.toml $presetdir
+    install -Dm644 .github/config-schema.json $out/share/starship/config-schema.json
   ''
   + lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
     let
@@ -43,19 +50,26 @@ rustPlatform.buildRustPackage (finalAttrs: {
       installShellCompletion --cmd starship \
         --bash <(${emulator} $out/bin/starship completions bash) \
         --fish <(${emulator} $out/bin/starship completions fish) \
+        --nushell <(${emulator} $out/bin/starship completions nushell) \
         --zsh <(${emulator} $out/bin/starship completions zsh)
     ''
   );
 
-  cargoHash = "sha256-IO/H75FKU3/2oAJ8AKerGujMDfun8w4fV7gETMxWOt0=";
+  cargoHash = "sha256-m5UbV/9SpTpBga+PDaqwWi9k9W5BUZ+rz+t5dliJyjM=";
 
   nativeCheckInputs = [
     gitMinimal
     writableTmpDirAsHomeHook
   ];
 
-  passthru.tests = {
-    inherit (nixosTests) starship;
+  passthru = {
+    shellIntegration = "${finalAttrs.finalPackage}/share/starship/shell-integration";
+    jsonschema = {
+      config = "${finalAttrs.finalPackage}/share/starship/config-schema.json";
+    };
+    tests = {
+      inherit (nixosTests) starship;
+    };
   };
 
   meta = {
@@ -65,7 +79,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/starship/starship/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [
-      danth
       Frostman
       da157
       sigmasquadron

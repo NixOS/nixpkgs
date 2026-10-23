@@ -93,10 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
         suffix = "linux-x86_64.deb";
         hash = "sha256-FEb5mPmGOAMw4nnFJ0kC+ymg4zBdUXWjvIO0sGOS6M0=";
       };
-      "x86_64-darwin" = fetchArtifact {
-        suffix = "macos-universal.dmg";
-        hash = "sha256-J2J9/UQZAECvGmumqGzcRFA5kpakOmFpQKlK5oesCRM=";
-      };
       "aarch64-darwin" = fetchArtifact {
         suffix = "macos-universal.dmg";
         hash = "sha256-J2J9/UQZAECvGmumqGzcRFA5kpakOmFpQKlK5oesCRM=";

@@ -11,14 +11,13 @@
   os-service-types,
   oslo-config,
   oslo-utils,
-  pbr,
   pycodestyle,
   pyyaml,
   requests,
   requests-kerberos,
   requests-mock,
   setuptools,
-  stestr,
+  stestrCheckHook,
   stevedore,
   testresources,
   testtools,
@@ -27,12 +26,12 @@
 
 buildPythonPackage rec {
   pname = "keystoneauth1";
-  version = "5.14.0";
+  version = "5.18.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-e5QghNPbJ90oXBMlPN/uELBb4ENtscAeFdx0SQIZen8=";
+    hash = "sha256-iXD50QPzNcORUTZtcMAB0buZsA1zhF8D1Hgl6Nw1/3g=";
   };
 
   build-system = [ setuptools ];
@@ -40,7 +39,6 @@ buildPythonPackage rec {
   dependencies = [
     iso8601
     os-service-types
-    pbr
     requests
     stevedore
     typing-extensions
@@ -65,18 +63,11 @@ buildPythonPackage rec {
     oslo-utils
     pycodestyle
     requests-mock
-    stestr
+    stestrCheckHook
     testresources
     testtools
   ]
   ++ lib.concatAttrValues optional-dependencies;
-
-  # test_keystoneauth_betamax_fixture is incompatible with urllib3 2.0.0
-  # https://bugs.launchpad.net/keystoneauth/+bug/2020112
-  checkPhase = ''
-    stestr run \
-      -E "keystoneauth1.tests.unit.test_betamax_fixture.TestBetamaxFixture.test_keystoneauth_betamax_fixture"
-  '';
 
   pythonImportsCheck = [ "keystoneauth1" ];
 

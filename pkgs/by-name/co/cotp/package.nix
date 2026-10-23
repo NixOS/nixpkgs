@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cotp";
-  version = "1.9.10";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "replydev";
     repo = "cotp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-yVzVo4l2bMZXrWlDfJXSgHUmic7Fe0Og+I5ROv3iQCQ=";
+    hash = "sha256-Wtrf2u5OG8PvpKkoVCIr7c/BeDjQGTcyATKEmxIdyCg=";
   };
 
-  cargoHash = "sha256-M0lI/DAMUVRMNbvoLc2w7PtU0rjjXiMYZM6vzfdEi0s=";
+  cargoHash = "sha256-CePwZjXhdDN5HASP2q68cG4J5iKEzk3zPQuop8jMls8=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libxcb ];
 

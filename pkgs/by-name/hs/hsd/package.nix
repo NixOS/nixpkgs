@@ -35,6 +35,8 @@ buildNpmPackage rec {
   dontNpmBuild = true;
 
   meta = {
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
     changelog = "https://github.com/handshake-org/hsd/blob/${src.rev}/CHANGELOG.md";
     description = "Implementation of the Handshake protocol";
     homepage = "https://github.com/handshake-org/hsd";

@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bpfmon";
-  version = "2.53";
+  version = "2.60";
 
   src = fetchFromGitHub {
     owner = "bbonev";
     repo = "bpfmon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+W+3RLvgXXtUImzLkJr9mSWExvAUgjMp+lR9sg14VaY=";
+    hash = "sha256-VJmDFLffD/uPZnXQGNnQg0+NkvqbnVulpg2ve4VVhpc=";
   };
 
   buildInputs = [

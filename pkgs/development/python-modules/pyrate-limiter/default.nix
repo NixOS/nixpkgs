@@ -14,22 +14,23 @@
   redis,
 
   # test
+  aiohttp,
   pytestCheckHook,
   pytest-asyncio,
   pytest-xdist,
   redisTestHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyrate-limiter";
-  version = "4.1.0";
+  version = "4.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vutran1710";
     repo = "PyrateLimiter";
-    tag = "v${version}";
-    hash = "sha256-2gWbabdRqwWiC4xbMx/VGBwwMcygVMKJswXgd4Ia+xE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UUNXb4lCcZZ+BPO1t8rStuDTj69dnIMMv6wdlNH+gcI=";
   };
 
   build-system = [
@@ -55,6 +56,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    aiohttp
     filelock
     pytestCheckHook
     pytest-asyncio
@@ -63,18 +65,17 @@ buildPythonPackage rec {
     redisTestHook
   ];
 
+  # Timing-sensitive, fails under load
+  # https://github.com/vutran1710/PyrateLimiter/issues/245
+  disabledTests = [ "test_limiter_01" ];
+
   disabledTestPaths = [
     # Slow: > 1.5 seconds/test run standalone on a fast machine
     # (Apple M3 Max with highest performance settings and 36GB RAM)
     # and/or hang under load
-    # https://github.com/vutran1710/PyrateLimiter/issues/245
     # https://github.com/vutran1710/PyrateLimiter/issues/247
     "tests/test_bucket_all.py"
-    "tests/test_bucket_factory.py"
-    "tests/test_limiter.py"
-    "tests/test_multiprocessing.py"
     "tests/test_postgres_concurrent.py"
-    "tests/test_multi_bucket.py"
   ];
 
   # For redisTestHook
@@ -82,11 +83,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyrate_limiter" ];
 
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
+
   meta = {
     description = "Python Rate-Limiter using Leaky-Bucket Algorimth Family";
     homepage = "https://github.com/vutran1710/PyrateLimiter";
-    changelog = "https://github.com/vutran1710/PyrateLimiter/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/vutran1710/PyrateLimiter/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

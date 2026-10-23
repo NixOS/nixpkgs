@@ -1,8 +1,7 @@
 diff --git a/tools/build/Makefile b/tools/build/Makefile
-index 948a5f9dfdb..592af84eeae 100644
 --- a/tools/build/Makefile
 +++ b/tools/build/Makefile
-@@ -327,15 +327,15 @@ host-symlinks:
+@@ -492,15 +492,15 @@
  # and cross-tools stages. We do this here using mkdir since mtree may not exist
  # yet (this happens if we are crossbuilding from Linux/Mac).
  INSTALLDIR_LIST= \
@@ -27,10 +26,17 @@ index 948a5f9dfdb..592af84eeae 100644
  
  installdirs:
  	mkdir -p ${INSTALLDIR_LIST:S,^,${DESTDIR}/,}
-@@ -352,9 +352,9 @@ installdirs:
- 	    rm -rf "${DESTDIR}/${_dir}"; \
- 	fi
- .endfor
+@@ -511,16 +511,9 @@
+ # tools but adding the symlinks is easier and means all tools are also
+ # in the directory that they are installed to normally.
+ 
+-.for _dir in sbin usr/sbin usr/bin
+-# delete existing directories from before r340157
+-	@if [ -e ${DESTDIR}/${_dir} ] && [ ! -L ${DESTDIR}/${_dir} ]; then \
+-	    echo "removing old non-symlink ${DESTDIR}/${_dir}"; \
+-	    rm -rf "${DESTDIR}/${_dir}"; \
+-	fi
+-.endfor
 -	ln -sfn bin ${DESTDIR}/sbin
 -	ln -sfn ../bin ${DESTDIR}/usr/bin
 -	ln -sfn ../bin ${DESTDIR}/usr/sbin

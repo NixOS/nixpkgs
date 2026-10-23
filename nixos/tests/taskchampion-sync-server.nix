@@ -2,7 +2,7 @@
 {
   name = "taskchampion-sync-server";
 
-  nodes = {
+  containers = {
     server = {
       services.taskchampion-sync-server.enable = true;
       services.taskchampion-sync-server.host = "0.0.0.0";
@@ -15,9 +15,9 @@
       };
   };
   testScript =
-    { nodes, ... }:
+    { containers, ... }:
     let
-      cfg = nodes.server.services.taskchampion-sync-server;
+      cfg = containers.server.services.taskchampion-sync-server;
       port = toString cfg.port;
       # Generated with uuidgen
       uuid = "bf01376e-04a4-435a-9263-608567531af3";
@@ -42,6 +42,13 @@
 
       # Useful for debugging
       client.copy_from_machine("/root/.task", "client")
-      server.copy_from_machine("${cfg.dataDir}", "server")
+      server.copy_from_machine(
+          # Ever since DynamicUser defaults to true[1], dataDir is a symlink
+          # into /var/lib/private, and symlink resolving is needed.
+          #
+          # [1]: https://github.com/NixOS/nixpkgs/commit/95fc26d18a19207b20acfee182db120efc36d1d3
+          server.succeed("readlink -f ${cfg.dataDir}").strip(),
+          "server",
+      )
     '';
 }

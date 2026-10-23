@@ -33,7 +33,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "erlang-language-platform";
-  version = "2026-01-15";
+  version = "2026-08-10";
 
   src = fetchurl {
     url = "https://github.com/WhatsApp/erlang-language-platform/releases/download/${version}/${release_name}.tar.gz";
@@ -65,7 +65,6 @@ stdenv.mkDerivation rec {
       "aarch64-linux"
       "x86_64-linux"
       "aarch64-darwin"
-      "x86_64-darwin"
     ];
     maintainers = with lib.maintainers; [ offsetcyan ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];

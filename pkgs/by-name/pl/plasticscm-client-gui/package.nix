@@ -36,7 +36,7 @@ buildFHSEnv {
       libgcc
       krb5.lib
       lttng-ust.out
-      openssl_3.out
+      openssl_3_5.out
       icu76
       plasticscm-theme
 

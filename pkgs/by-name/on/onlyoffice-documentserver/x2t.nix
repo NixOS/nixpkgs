@@ -3,7 +3,6 @@
   automake,
   boost,
   buildNpmPackage,
-  closurecompiler,
   fetchFromGitHub,
   glibc,
   harfbuzz,
@@ -12,11 +11,9 @@
   optipng,
   x265,
   libde265,
-  icu78,
-  jdk,
+  icu,
   lib,
-  nodejs_22,
-  nodejs-slim_22,
+  nodejs-slim,
   openssl,
   pkg-config,
   python3,
@@ -30,9 +27,6 @@
 }:
 
 let
-  # default at the time of writing is still 76,
-  # but libv8 from nodejs_22 needs 78
-  icu = icu78;
   openssl' = openssl.override {
     enableMD2 = true;
     static = true;
@@ -82,8 +76,8 @@ let
   hyphen-src = fetchFromGitHub {
     owner = "hunspell";
     repo = "hyphen";
-    rev = "73dd2967c8e1e4f6d7334ee9e539a323d6e66cbd";
-    hash = "sha256-WIHpSkOwHkhMvEKxOlgf6gsPs9T3xkzguD8ONXARf1U=";
+    rev = "482d218738a5affdea467883eb01d5518312ae80";
+    hash = "sha256-8Wse68aMIv3IZ1SchsMLe0d7kHCBZdA5tvwZYcYLNjw=";
   };
   # see DocumentServer/core/Common/3dParty/md/fetch.py
   md4c-src = fetchFromGitHub {
@@ -132,15 +126,18 @@ let
   dontStrip = false;
 
   # x2t is not 'directly' versioned, so we version it after the version
-  # of documentserver it's pulled into as a submodule
-  version = "9.3.1";
-  core-rev = "7043b3609328e917a4791aec8f3e8fca3225120f";
+  # of documentserver it's pulled into as a submodule. Use the 3-segment
+  # version here, since that's how it's (currently) used in URLs
+  version = "10.0.0";
+  # core in DocumentServer 10.0.0 corresponds to
+  # v9.4.1.22 with b6d6d0f14c55f91c4274fb1057f190c3e2a92f0a
+  core-rev = "3250a848ee4ef20c2fb8c38dc86350ec579124b8";
   core = fetchFromGitHub {
     owner = "ONLYOFFICE";
     repo = "core";
     # rev that the 'core' submodule in documentserver points at
     rev = core-rev;
-    hash = "sha256-tCYc5R0dlEBoEaUo3DY6GCDJjoBZIaz8Syik0Z30s/s=";
+    hash = "sha256-rJYCcU9SEaKd1dfASAKJIlZfLHyjSoCpVQdz6UQHuW8=";
   };
   # mini implementation of https://github.com/kentcdodds/cross-env
   # because that was not trivial to package and we don't need most
@@ -161,16 +158,16 @@ let
 
     subprocess.run(cmd, env=env)
   '';
-  # rev that the 'web-apps' submodule in documentserver points at
-  web-apps-rev = "1c8ca9987876bada73c0bde21367da09c0e1ed83";
-  web-apps-hash = "sha256-1OniYHaf5kMVYJbEThkeuWfJPxaJoaYqiHaBTi/euAc=";
+  # tag that the 'web-apps' submodule in documentserver points at
+  web-apps-rev = "f4f1c88937717f9b41e2f8a864b8aeffa21e3a2a";
+  web-apps-hash = "sha256-cgjKj5FpgMCGbwdJlTU+uLkAuWx6D8Jtz3aZU/y0g6c=";
   web-apps-mobile = buildNpmPackage (finalAttrs: {
     name = "web-apps-mobile";
 
     src = fetchFromGitHub {
       owner = "ONLYOFFICE";
       repo = "web-apps";
-      rev = web-apps-rev;
+      tag = web-apps-rev;
       hash = web-apps-hash;
     };
 
@@ -227,9 +224,6 @@ let
   web-apps = buildNpmPackage (finalAttrs: {
     name = "onlyoffice-core-web-apps";
 
-    # workaround for https://github.com/NixOS/nixpkgs/issues/477803
-    nodejs = nodejs_22;
-
     src = fetchFromGitHub {
       owner = "ONLYOFFICE";
       repo = "web-apps";
@@ -246,7 +240,7 @@ let
       ./web-apps-no-mobile.patch
     ];
 
-    npmDepsHash = "sha256-Uen7gl6w/0A4MDk+7j+exkdwfCYqMSPJidad8AM60eQ=";
+    npmDepsHash = "sha256-n+qrL5yseBLKtszhoxNSeqsoGtxnhXJox/r+WRpy5ZY=";
 
     nativeBuildInputs = [
       autoconf
@@ -266,7 +260,7 @@ let
 
       echo "Merging and checking translation files"
       cd ../translation
-      chmod u+rwx ../apps/*/main/locale/*
+      chmod u+rwx ../apps/*/*/locale/*
       ${python3}/bin/python3 merge_and_check.py
       cd -
     '';
@@ -300,37 +294,30 @@ let
       runHook postInstall
     '';
   });
-  sdkjs = buildNpmPackage (finalAttrs: {
+  sdkjs = stdenv.mkDerivation (finalAttrs: {
     name = "onlyoffice-core-sdkjs";
     src = fetchFromGitHub {
       owner = "ONLYOFFICE";
       repo = "sdkjs";
       # rev that the 'sdkjs' submodule in documentserver points at
-      rev = "aa78926242b3da023255d9c7e9180e5a3294167b";
-      hash = "sha256-wZh4TH7+f1dr8sx2C3k3U8zRWLBxmKx8MocLBbPdhJA=";
+      rev = "3e19b57c8dfd43d876e4a9c1023d555632b61505";
+      hash = "sha256-8FplfddjD9BGrKa59bei+G0P2W4tWCTWF56HxRRIXeg=";
     };
     sourceRoot = "${finalAttrs.src.name}/build";
 
-    postPatch = ''
-      cp npm-shrinkwrap.json package-lock.json
-    '';
-
-    npmDepsHash = "sha256-C+qp5d4wYmlrEGjIeBsjRhpivy6wKBppJWbcj1z9fbM=";
-
-    dontNpmBuild = true;
-
     nativeBuildInputs = [
-      grunt-cli
-      jdk
+      python3
     ];
 
-    postBuild = ''
-      chmod u+w ..
+    buildPhase = ''
+      runHook preBuild
 
-      # the one from node_modules seems a weird hybrid between dynamic and static linking
-      cp ${closurecompiler}/bin/closure-compiler node_modules/google-closure-compiler-linux/compiler
+      chmod -R u+w ..
+      mkdir ../deploy
 
-      grunt
+      python3 build.py
+
+      runHook postBuild
     '';
 
     installPhase = ''
@@ -345,7 +332,7 @@ let
   dictionaries = fetchFromGitHub {
     owner = "ONLYOFFICE";
     repo = "dictionaries";
-    rev = "d3223bbb777883db66ac3cd249f71c6ebdc992c7";
+    rev = "v9.3.0.36";
     hash = "sha256-7hvztNYnYjyOl3ynGP0vqtx9jLPp09XVDNIow1RYuWM=";
   };
   buildCoreComponent =
@@ -735,8 +722,6 @@ let
       qmakeFlags
       ++ icuQmakeFlags
       ++ [
-        # c++1z for nodejs-slim_22.libv8 (20 seems to produce errors around 'is_void_v' there)
-        # c++ 20 for nodejs_23.libv8
         "CONFIG+=c++2a"
         # v8_base.h will set nMaxVirtualMemory to 4000000000/5000000000
         # which is not page-aligned, so disable memory limitation for now
@@ -746,6 +731,13 @@ let
       ];
     preConfigure = ''
       cd $BUILDRT
+
+      # We need to build statically to be able to piggy-back
+      # on nodejs's v8
+      substituteInPlace \
+        DesktopEditor/doctrenderer/doctrenderer.pri \
+        --replace-fail "CONFIG += shared" "CONFIG += staticlib" \
+        --replace-fail "CONFIG += plugin" ""
 
       substituteInPlace \
         DesktopEditor/doctrenderer/nativecontrol.h \
@@ -764,15 +756,25 @@ let
       done
 
       echo "== v8 =="
+      substituteInPlace \
+        DesktopEditor/doctrenderer/js_internal/v8/v8_base.h \
+        --replace-fail "args.Holder" "args.This"
+      substituteInPlace \
+        DesktopEditor/doctrenderer/js_internal/v8/v8_base.cpp \
+        --replace-fail "args.Holder" "args.This"
+
       mkdir -p Common/3dParty/v8_89/v8/out.gn/linux_64
-      # using nodejs_22 here is a workaround for https://github.com/NixOS/nixpkgs/issues/477805
-      ln -s ${nodejs-slim_22.libv8}/lib Common/3dParty/v8_89/v8/out.gn/linux_64/obj
-      tar xf ${nodejs-slim_22.libv8.src} --one-top-level=/tmp/xxxxx
+      ln -s ${nodejs-slim.libv8}/lib Common/3dParty/v8_89/v8/out.gn/linux_64/obj
+      tar xf ${nodejs-slim.libv8.src} --one-top-level=/tmp/xxxxx
       for i in /tmp/xxxxx/*/deps/v8/*; do
         cp -r $i Common/3dParty/v8_89/v8/
       done
 
       cd $BUILDRT/DesktopEditor/doctrenderer
+    '';
+    installPhase = ''
+      mkdir -p $out/lib
+      cp ../../build/lib/*/*.a $out/lib
     '';
     passthru.tests = lib.attrsets.genAttrs [ "embed/external" "embed/internal" "js_internal" "json" ] (
       test:
@@ -888,9 +890,24 @@ let
       xpsfile
       djvufile
     ];
-    qmakeFlags = qmakeFlags ++ icuQmakeFlags;
+    qmakeFlags =
+      qmakeFlags
+      ++ icuQmakeFlags
+      ++ [
+        "QMAKE_LFLAGS+=-licui18n"
+      ];
     preConfigure = ''
       source ${fixIcu}
+
+      # We need to build statically to be able to piggy-back
+      # on nodejs's v8
+      substituteInPlace \
+        $BUILDRT/DesktopEditor/doctrenderer/doctrenderer.pri \
+        --replace-fail "CONFIG += shared" "CONFIG += staticlib" \
+        --replace-fail "CONFIG += plugin" ""
+
+      echo "LIBS += -L${openssl'.out}/lib -lcrypto" >> $BUILDRT/DesktopEditor/allthemesgen/allthemesgen.pro
+      echo "LIBS += -L${nodejs-slim.libv8}/lib -lv8 -pthread" >> $BUILDRT/DesktopEditor/allthemesgen/allthemesgen.pro
     '';
     dontStrip = true;
     installPhase = ''
@@ -905,7 +922,7 @@ let
   core-fonts = fetchFromGitHub {
     owner = "ONLYOFFICE";
     repo = "core-fonts";
-    rev = "7030c6681fb5bbed560675cb42422f91df15d5c9";
+    tag = "v9.3.0.36";
     hash = "sha256-yNUDyIJ09Ejbyt/kMrOpDbT15QTDOe7GTQChRU5+QY4=";
   };
   allfonts = runCommand "allfonts" { } ''
@@ -959,9 +976,25 @@ buildCoreComponent "X2tConverter/build/Qt" {
     starmath
     ooxmlsignature
   ];
-  qmakeFlags = qmakeFlags ++ icuQmakeFlags ++ [ "X2tConverter.pro" ];
+  qmakeFlags =
+    qmakeFlags
+    ++ icuQmakeFlags
+    ++ [
+      "QMAKE_LFLAGS+=-licui18n"
+      "X2tConverter.pro"
+    ];
   preConfigure = ''
     source ${fixIcu}
+
+    # We need to build statically to be able to piggy-back
+    # on nodejs's v8
+    substituteInPlace \
+      $BUILDRT/DesktopEditor/doctrenderer/doctrenderer.pri \
+      --replace-fail "CONFIG += shared" "CONFIG += staticlib" \
+      --replace-fail "CONFIG += plugin" ""
+
+    echo "LIBS += -L${nodejs-slim.libv8}/lib -lv8 -pthread" >> $BUILDRT/X2tConverter/build/Qt/X2tConverter.pro
+    echo "LIBS += -L${openssl'.out}/lib -lcrypto" >> $BUILDRT/X2tConverter/build/Qt/X2tConverter.pro
 
     # (not as patch because of line endings)
     sed -i '47 a #include <limits>' $BUILDRT/Common/OfficeFileFormatChecker2.cpp

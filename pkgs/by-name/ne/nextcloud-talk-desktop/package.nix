@@ -24,19 +24,20 @@
   gtk3,
   libGL,
   libglvnd,
-  systemd,
+  systemdLibs,
   patchelf,
   undmg,
   makeWrapper,
   libpulseaudio,
+  pipewire,
 }:
 let
   pname = "nextcloud-talk-desktop";
-  version = "2.1.1"; # Ensure both hashes (Linux and Darwin) are updated!
+  version = "2.3.3"; # Ensure both hashes (Linux and Darwin) are updated!
 
   hashes = {
-    linux = "sha256-s6+p21KLoDvcQz0EgV7WYIwYc9JolZpqkxZ8iIol8Yg=";
-    darwin = "sha256-rp6+bYb3Y8yEXYUY+cuDo7Lw6cq/EUnPjLIqscKeULc=";
+    linux = "sha256-grBgBV1kcovdEKzNOOMlqC9DKmxXDI1HiZiBwJLdTe0=";
+    darwin = "sha256-IPN8LBmfeY4SlXodYc8YzNEM9x3DXlnGhTlV2iNEdtQ=";
   };
 
   # Only x86_64-linux is supported with Darwin support being universal
@@ -62,7 +63,7 @@ let
   meta = {
     description = "Nextcloud Talk Desktop Client";
     homepage = "https://github.com/nextcloud/talk-desktop";
-    changelog = "https://github.com/nextcloud/talk-desktop/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/nextcloud/talk-desktop/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ kashw2 ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
@@ -109,10 +110,13 @@ let
     runtimeDependencies = [
       # Required to launch the application and proceed past the zygote_linux fork() process
       # Fixes `Zygote could not fork`
-      systemd
+      systemdLibs
 
       # Fixes input/output audio device selection
       libpulseaudio
+
+      # Electron dynamically loads PipeWire for Wayland screen sharing.
+      pipewire
     ];
 
     desktopItems = [

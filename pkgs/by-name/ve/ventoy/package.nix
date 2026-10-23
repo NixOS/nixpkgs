@@ -59,11 +59,11 @@ stdenv.mkDerivation (finalAttrs: {
     "ventoy"
     + optionalString (defaultGuiType == "gtk3") "-gtk3"
     + optionalString (defaultGuiType == "qt5") "-qt5";
-  version = "1.1.12";
+  version = "1.1.18";
 
   src = fetchurl {
     url = "https://github.com/ventoy/Ventoy/releases/download/v${finalAttrs.version}/ventoy-${finalAttrs.version}-linux.tar.gz";
-    hash = "sha256-BGILVGvMXu61lxdnWVs3E+495xWAqCRJBTxTp8sy/Nk=";
+    hash = "sha256-2G/53mPZTIuPH2sU0jxVr0uI6CB78ok4kIkqapexrVQ=";
   };
 
   patches = [

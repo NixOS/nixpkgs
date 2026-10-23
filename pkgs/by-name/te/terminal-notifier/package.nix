@@ -1,52 +1,56 @@
 {
-  apple-sdk,
   fetchFromGitHub,
   ibtool,
   lib,
   makeBinaryWrapper,
   stdenv,
   xcbuildHook,
+  rcodesign,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "terminal-notifier";
-  version = "2.0.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "julienXX";
     repo = "terminal-notifier";
     tag = finalAttrs.version;
-    hash = "sha256-Hd9cI3R2nQK2deBb5CBYz4DTHAEcO4vzqtA5qZwa1Ao=";
+    hash = "sha256-VnXGC8Yq7WoLPPMyn0MdwJ+evCk3lDoSznDF+MJI2lM=";
   };
+
+  __structuredAttrs = true;
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     ibtool
     makeBinaryWrapper
     xcbuildHook
-  ];
-
-  buildInputs = [
-    apple-sdk
+    rcodesign
   ];
 
   xcbuildFlags = [
     "-target"
     "terminal-notifier"
-    "-configuration"
-    "Release"
   ];
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{Applications,bin}
+    mkdir -p $out/Applications
     cp -r Products/Release/terminal-notifier.app $out/Applications/
+
     makeWrapper \
       $out/Applications/terminal-notifier.app/Contents/MacOS/terminal-notifier \
-      $out/bin/terminal-notifier \
-      --chdir $out/Applications/terminal-notifier.app
+      $out/bin/terminal-notifier
 
     runHook postInstall
+  '';
+
+  # Notifications require that the app bundle be codesigned (beyond the linker-signing that happens automatically for the executable)
+  postFixup = ''
+    rcodesign sign "$out/Applications/terminal-notifier.app"
   '';
 
   meta = {

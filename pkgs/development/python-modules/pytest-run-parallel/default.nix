@@ -21,14 +21,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pytest-run-parallel";
-  version = "0.8.2";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Quansight-Labs";
     repo = "pytest-run-parallel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/EoIemQvQFgo9Ic+ZcQJk7fC8S+OHOHaHODrsivarhY=";
+    hash = "sha256-jUnMwKvHNM5/vwImkEa+Pbp/U3LcyYRYCabU4VbUOzU=";
   };
 
   build-system = [ setuptools ];

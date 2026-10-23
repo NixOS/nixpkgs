@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "filezilla";
-  version = "3.70.5";
+  version = "3.71.1";
 
   src = fetchurl {
     # Upstream download link was made unstable on purpose
     # See https://trac.filezilla-project.org/ticket/13186
     url = "https://sources.archlinux.org/other/filezilla/filezilla-${finalAttrs.version}.tar.xz";
-    hash = "sha256-d8FsJfsdlNUSlLAe/SDT5cwRmESFfktDmCrKa4mO5dY=";
+    hash = "sha256-Pfm5s+Wyw33G2ey4g1VKuhQKAuxHw9a1IzO/FzOvTaQ=";
   };
 
   configureFlags = [

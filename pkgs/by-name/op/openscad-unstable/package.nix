@@ -57,13 +57,13 @@ let
 in
 clangStdenv.mkDerivation rec {
   pname = "openscad-unstable";
-  unstable_date = "2026-02-25";
+  unstable_date = "2026-07-20";
   version = "2021.01-unstable-${unstable_date}";
   src = fetchFromGitHub {
     owner = "openscad";
     repo = "openscad";
-    rev = "ae3a780de777bcb96d41631818551650bc79650d";
-    hash = "sha256-jCiCB3tbM0dyIC2gvQarzwjfYI9mnREkMI+0R3EaGPM=";
+    rev = "e4fdec49730103274a4e21c2390b9a12882f01aa";
+    hash = "sha256-9bPz6iVbUHeFp2uQiVVFYze24IN4skesP45TBBbr8Vk=";
     fetchSubmodules = true; # Only really need sanitizers-cmake and MCAD and manifold
   };
 
@@ -125,7 +125,6 @@ clangStdenv.mkDerivation rec {
     "-DOPENSCAD_VERSION='${builtins.replaceStrings [ "-" ] [ "." ] unstable_date}-unstable'"
     "-DCMAKE_UNITY_BUILD=OFF" # broken compile with unity
     # IPO
-    "-DCMAKE_EXE_LINKER_FLAGS=-fuse-ld=lld"
     "-DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON"
 
     # The sources enable this for only apple. We turn it off globally anyway to stay

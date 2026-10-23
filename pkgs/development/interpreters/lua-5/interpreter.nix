@@ -55,8 +55,10 @@ stdenv.mkDerivation (
         " -DLUA_COMPAT_ALL"
       else if (lib.versionOlder self.luaversion "5.4") then
         " -DLUA_COMPAT_5_1 -DLUA_COMPAT_5_2"
+      else if (lib.versionOlder self.luaversion "5.5") then
+        " -DLUA_COMPAT_5_3"
       else
-        " -DLUA_COMPAT_5_3";
+        " -DLUA_COMPAT_MATHLIB";
   in
 
   {
@@ -81,6 +83,8 @@ stdenv.mkDerivation (
 
     nativeBuildInputs = [ makeWrapper ];
     buildInputs = [ readline ];
+
+    strictDeps = true;
 
     inherit patches;
 
@@ -216,6 +220,8 @@ stdenv.mkDerivation (
           override pkgsTargetTarget.${luaAttr}
         );
       };
+
+    __structuredAttrs = true;
 
     meta = {
       homepage = "https://www.lua.org";

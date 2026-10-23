@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "wtf-peewee";
-  version = "3.1.0";
+  version = "3.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "coleifer";
     repo = "wtf-peewee";
     tag = finalAttrs.version;
-    hash = "sha256-9gVvcPFVA3051Y0sn0mLq1ejKqcGlKZVbIaQ/uH5f4Y=";
+    hash = "sha256-G/yhQ+/xKdK15YU3Ms5E2FLUk6ncJYd0Ys54R61jBtc=";
   };
 
   build-system = [ setuptools ];

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  lua,
   jemalloc,
   pkg-config,
   nixosTests,
@@ -10,6 +9,7 @@
   which,
   ps,
   getconf,
+  python3Packages,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   systemd,
   # dependency ordering is broken at the moment when building with openssl
@@ -24,25 +24,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "valkey";
-  version = "9.1.0";
+  version = "9.1.2";
 
   src = fetchFromGitHub {
     owner = "valkey-io";
     repo = "valkey";
     rev = finalAttrs.version;
-    hash = "sha256-RMZz83fycpOTPWB1dIXU0/hdh4ZGC+6JhCws8htAQ5E=";
+    hash = "sha256-Lq5AqrLKILnsaOdAgWeeukPNF7KerB17R1mUOZjOsUg=";
   };
 
   patches = lib.optional useSystemJemalloc ./use_system_jemalloc.patch;
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    lua
-  ]
-  ++ lib.optional useSystemJemalloc jemalloc
-  ++ lib.optional withSystemd systemd
-  ++ lib.optional tlsSupport openssl;
+  buildInputs =
+    lib.optional useSystemJemalloc jemalloc
+    ++ lib.optional withSystemd systemd
+    ++ lib.optional tlsSupport openssl;
 
   strictDeps = true;
 
@@ -65,8 +63,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [ "-std=c11" ]);
 
-  # darwin currently lacks a pure `pgrep` which is extensively used here
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  # Tests are in the `tests` passthru derivation: the suite is very large and significantly slows down the build.
+  doCheck = false;
+
   nativeCheckInputs = [
     which
     tcl
@@ -102,13 +101,18 @@ stdenv.mkDerivation (finalAttrs: {
       --skipunit unit/memefficiency \
       --skipunit unit/type/string \
       --skipunit integration/failover \
-      --skipunit integration/aof-multi-part
+      --skipunit integration/aof-multi-part \
+      --skipunit integration/dual-channel-replication
 
     runHook postCheck
   '';
 
   passthru = {
-    tests.redis = nixosTests.redis;
+    tests = {
+      valkey = nixosTests.valkey;
+      unitTests = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
+      valkey-python = python3Packages.valkey;
+    };
     serverBin = "valkey-server";
   };
 

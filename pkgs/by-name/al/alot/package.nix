@@ -12,7 +12,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "alot";
-  version = "0.11";
+  version = "0.12";
   pyproject = true;
 
   outputs = [
@@ -25,8 +25,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   src = fetchFromGitHub {
     owner = "pazz";
     repo = "alot";
-    tag = finalAttrs.version;
-    hash = "sha256-mXaRzl7260uxio/BQ36BCBxgKhl1r0Rc6PwFZA8qNqc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-x2o/VfIeDIWsv0JS0FBWVHEjNaktx1/MjhDnqQSe/IY=";
   };
 
   postPatch = ''
@@ -58,31 +58,29 @@ python3Packages.buildPythonApplication (finalAttrs: {
     gnupg
     notmuch
     procps
-  ]
-  ++ (with python3Packages; [
-    pytestCheckHook
-    mock
-  ]);
-
-  postBuild = lib.optionalString withManpage [
-    "make -C docs man"
+    python3Packages.pytestCheckHook
   ];
 
-  disabledTests = [
-    # Some twisted tests need internet access
-    "test_env_set"
-    "test_no_spawn_no_stdin_attached"
-    # DatabaseLockedError
-    "test_save_named_query"
-  ];
+  postBuild =
+    let
+      docPythonPath = python3Packages.makePythonPath (
+        with python3Packages;
+        [
+          notmuch2
+          standard-mailcap
+        ]
+      );
+    in
+    lib.optionalString withManpage ''
+      PYTHONPATH="$PWD:${docPythonPath}" make -C docs man
+    '';
 
   postInstall =
     let
       completionPython = python3.withPackages (ps: [ ps.configobj ]);
     in
     lib.optionalString withManpage ''
-      mkdir -p $out/man
-      cp -r docs/build/man $out/man
+      install -Dm644 docs/build/man/alot.1 -t $man/share/man/man1
     ''
     + ''
       mkdir -p $out/share/{applications,alot}

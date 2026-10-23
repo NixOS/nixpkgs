@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ant";
-  version = "1.10.17";
+  version = "1.10.18";
 
   nativeBuildInputs = [ makeWrapper ];
 
   src = fetchurl {
     url = "mirror://apache/ant/binaries/apache-ant-${finalAttrs.version}-bin.tar.bz2";
-    hash = "sha256-UhD8nXfpa/X0Y5KH8pgm2oXlSlQuCkCUY7FkK8PKruc=";
+    hash = "sha256-vBK+cMtcGwdMHnPYKj89pV88ZbigxzQqbrbR0CQmUoA=";
   };
 
   installPhase = ''

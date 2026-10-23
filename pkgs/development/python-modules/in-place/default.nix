@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "in-place";
-  version = "1.0.1";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jwodder";
     repo = "inplace";
     tag = "v${version}";
-    hash = "sha256-PyOSuHHtftEPwL3mTwWYStZNXYX3EhptKfTu0PJjOZ8=";
+    hash = "sha256-oko4yDqkxVWGri315HenqfLjoUqmauO1bSaDh8cBK4s=";
   };
 
   build-system = [ hatchling ];

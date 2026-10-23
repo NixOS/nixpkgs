@@ -2,35 +2,34 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-timeout,
   pytestCheckHook,
-  pythonOlder,
   serialx,
   uv-build,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "denon-rs232";
-  version = "4.2.0";
+  version = "4.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "denon-rs232";
     tag = finalAttrs.version;
-    hash = "sha256-1GVpF4aOQ8Zzu/abghRF8WJXF+9DP+1suA0F3hy8NSo=";
+    hash = "sha256-PIYzoMa2FQhdZGLGc955RN5/Gd0Vk7K+UzUoc0Wv/uM=";
   };
-
-  build-system = [ uv-build ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"' \
       --replace-fail '"uv_build>=0.8.4,<0.9.0"' '"uv_build>=0.8.4"'
   '';
+
+  build-system = [ uv-build ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [ serialx ];
 

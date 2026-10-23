@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "lzfse";
-  version = "0.4.2";
+  version = "0.4.2.post1";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     repo = "lzfse";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-ER+Hr/WrGCB0uYwsSgB4U8sCPeZ4JlOHoeb5YEGUFFM=";
+    hash = "sha256-gJKO7Qtt/PhaIaSgrGYwXrOd4AjR89gi3cIV/95a4D8=";
   };
 
   build-system = [ setuptools ];

@@ -11,11 +11,17 @@ let
   inherit (lib) maintainers teams;
   inherit (lib.attrsets)
     attrByPath
-    attrsToList
     concatMapAttrs
     filterAttrs
+    mapAttrs'
+    nameValuePair
     ;
-  inherit (lib.lists) flatten optional optionals;
+  inherit (lib.lists)
+    elem
+    flatten
+    optional
+    optionals
+    ;
   inherit (lib.modules) mkIf mkRemovedOptionModule;
   inherit (lib.options)
     literalExpression
@@ -23,7 +29,7 @@ let
     mkOption
     mkPackageOption
     ;
-  inherit (lib.strings) concatMapStringsSep hasPrefix optionalString;
+  inherit (lib.strings) hasPrefix optionalString;
   inherit (lib.types)
     attrsOf
     bool
@@ -32,20 +38,11 @@ let
     ;
 
   json = pkgs.formats.json { };
-  mapToFiles =
-    location: config:
-    concatMapAttrs (name: value: {
-      "share/pipewire/${location}.conf.d/${name}.conf" = json.generate "${name}" value;
-    }) config;
-  extraConfigPkgFromFiles =
-    locations: filesSet:
-    pkgs.runCommand "pipewire-extra-config" { } ''
-      mkdir -p ${concatMapStringsSep " " (l: "$out/share/pipewire/${l}.conf.d") locations}
-      ${concatMapStringsSep ";" ({ name, value }: "ln -s ${value} $out/${name}") (attrsToList filesSet)}
-    '';
   cfg = config.services.pipewire;
   enable32BitAlsaPlugins =
     cfg.alsa.support32Bit && pkgs.stdenv.hostPlatform.isx86_64 && pkgs.pkgsi686Linux.pipewire != null;
+
+  inPipewireDirectory = hasPrefix "pipewire/";
 
   # The package doesn't output to $out/lib/pipewire directly so that the
   # overlays can use the outputs to replace the originals in FHS environments.
@@ -58,11 +55,24 @@ let
 
   configPackages = cfg.configPackages;
 
-  extraConfigPkg = extraConfigPkgFromFiles [ "pipewire" "client" "jack" "pipewire-pulse" ] (
-    mapToFiles "pipewire" cfg.extraConfig.pipewire
-    // mapToFiles "client" cfg.extraConfig.client
-    // mapToFiles "jack" cfg.extraConfig.jack
-    // mapToFiles "pipewire-pulse" cfg.extraConfig.pipewire-pulse
+  extraConfigPkg = pkgs.linkFarm "pipewire-extra-config" (
+    concatMapAttrs
+      (
+        location: config:
+        mapAttrs' (
+          name: value:
+          nameValuePair "share/pipewire/${location}.conf.d/${name}.conf" (json.generate name value)
+        ) config
+      )
+      # cfg.extraConfig contains deprecated options, i.e. client-rt
+      {
+        inherit (cfg.extraConfig)
+          pipewire
+          client
+          jack
+          pipewire-pulse
+          ;
+      }
   );
 
   configs = pkgs.buildEnv {
@@ -276,27 +286,28 @@ in
         default = [ ];
         example = literalExpression ''
           [
-                    (pkgs.writeTextDir "share/pipewire/pipewire.conf.d/10-loopback.conf" '''
-                      context.modules = [
-                      {   name = libpipewire-module-loopback
-                          args = {
-                            node.description = "Scarlett Focusrite Line 1"
-                            capture.props = {
-                                audio.position = [ FL ]
-                                stream.dont-remix = true
-                                node.target = "alsa_input.usb-Focusrite_Scarlett_Solo_USB_Y7ZD17C24495BC-00.analog-stereo"
-                                node.passive = true
-                            }
-                            playback.props = {
-                                node.name = "SF_mono_in_1"
-                                media.class = "Audio/Source"
-                                audio.position = [ MONO ]
-                            }
-                          }
-                      }
-                      ]
-                    ''')
-                  ]'';
+            (pkgs.writeTextDir "share/pipewire/pipewire.conf.d/10-loopback.conf" '''
+              context.modules = [
+              {   name = libpipewire-module-loopback
+                  args = {
+                    node.description = "Scarlett Focusrite Line 1"
+                    capture.props = {
+                        audio.position = [ FL ]
+                        stream.dont-remix = true
+                        node.target = "alsa_input.usb-Focusrite_Scarlett_Solo_USB_Y7ZD17C24495BC-00.analog-stereo"
+                        node.passive = true
+                    }
+                    playback.props = {
+                        node.name = "SF_mono_in_1"
+                        media.class = "Audio/Source"
+                        audio.position = [ MONO ]
+                    }
+                  }
+              }
+              ]
+            ''')
+          ]
+        '';
         description = ''
           List of packages that provide PipeWire configuration, in the form of
           `share/pipewire/*/*.conf` files.
@@ -375,7 +386,7 @@ in
         assertion =
           length (
             attrNames (
-              filterAttrs (name: value: hasPrefix "pipewire/" name || name == "pipewire") config.environment.etc
+              filterAttrs (name: value: inPipewireDirectory name || name == "pipewire") config.environment.etc
             )
           ) == 1;
         message = "Using `environment.etc.\"pipewire<...>\"` directly is no longer supported. Use `services.pipewire.extraConfig` or `services.pipewire.configPackages` instead.";

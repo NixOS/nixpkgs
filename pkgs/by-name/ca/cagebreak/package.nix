@@ -13,28 +13,29 @@
   meson,
   ninja,
   nixosTests,
+  nix-update-script,
   pango,
   pixman,
   pkg-config,
   scdoc,
-  systemd,
+  systemdLibs,
   wayland,
   wayland-protocols,
   wayland-scanner,
   withXwayland ? true,
   xwayland,
-  wlroots_0_19,
+  wlroots_0_20,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cagebreak";
-  version = "3.1.0";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "project-repo";
     repo = "cagebreak";
     tag = finalAttrs.version;
-    hash = "sha256-ADRtfzmn8DmDNbiJO3WbhQZiriJoUAG2TxPmx+RwPXE=";
+    hash = "sha256-MnavSWvYuiyQP+sIFnlU4647oemqe0bTiJF5W0vRq/U=";
   };
 
   nativeBuildInputs = [
@@ -56,10 +57,10 @@ stdenv.mkDerivation (finalAttrs: {
     libxcb-wm
     pango
     pixman
-    systemd
+    systemdLibs
     wayland
     wayland-protocols
-    wlroots_0_19
+    wlroots_0_20
   ];
 
   mesonFlags = [
@@ -93,5 +94,8 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "cagebreak";
   };
 
-  passthru.tests.basic = nixosTests.cagebreak;
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.basic = nixosTests.cagebreak;
+  };
 })

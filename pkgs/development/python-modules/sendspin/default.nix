@@ -8,6 +8,7 @@
   numpy,
   pulsectl-asyncio,
   pychromecast,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytestCheckHook,
   qrcode,
@@ -15,24 +16,24 @@
   rich,
   setuptools,
   sounddevice,
+  textual-image,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "sendspin";
-  version = "7.4.0";
+  version = "7.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Sendspin";
     repo = "sendspin-cli";
     tag = finalAttrs.version;
-    hash = "sha256-B375jsOik0IdLtozH3t3hZKqoO+dtqkzX2bk5YuoO9Y=";
+    hash = "sha256-unNlx0A5Jh3mkPp4G86DY41UExA5IEwMM8E0/jfaBkY=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
-  '';
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [ setuptools ];
 
@@ -46,6 +47,7 @@ buildPythonPackage (finalAttrs: {
     readchar
     rich
     sounddevice
+    textual-image
   ]
   ++ aiosendspin.optional-dependencies.server;
 

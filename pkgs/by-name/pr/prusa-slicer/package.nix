@@ -36,8 +36,8 @@
   catch2_3,
   webkitgtk_4_1,
   ctestCheckHook,
-  withSystemd ? lib.meta.availableOn clangStdenv.hostPlatform systemd,
-  systemd,
+  withSystemd ? lib.meta.availableOn clangStdenv.hostPlatform systemdLibs,
+  systemdLibs,
   udevCheckHook,
   z3,
   nix-update-script,
@@ -80,6 +80,9 @@ clangStdenv.mkDerivation (finalAttrs: {
     ./allow_wayland.patch
     # Pick https://github.com/prusa3d/PrusaSlicer/pull/14207 to remove unused and insecure ilmbase dependency
     ./no-ilmbase.patch
+    # catch2 3.15 support
+    # https://github.com/prusa3d/PrusaSlicer/pull/15462
+    ./catch2_3_15.patch
   ];
 
   # (not applicable to super-slicer fork)
@@ -152,7 +155,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     nlohmann_json
   ]
   ++ lib.optionals withSystemd [
-    systemd
+    systemdLibs
   ];
 
   strictDeps = true;
@@ -206,7 +209,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     "-DSLIC3R_FHS=1"
     "-DSLIC3R_GTK=3"
     "-DCMAKE_CXX_FLAGS=-DBOOST_LOG_DYN_LINK"
-    # there is many different min versions set accross different
+    # there is many different min versions set across different
     # Find*.cmake files, substituting them all is not viable
     "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
   ];

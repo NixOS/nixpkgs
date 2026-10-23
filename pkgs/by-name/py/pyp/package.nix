@@ -43,8 +43,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   meta = {
     homepage = "https://github.com/hauntsaninja/pyp";
     description = "Easily run Python at the shell";
-    changelog = "https://github.com/hauntsaninja/pyp/blob/${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://github.com/hauntsaninja/pyp/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.mit;
     mainProgram = "pyp";
     maintainers = with lib.maintainers; [
       rmcgibbo

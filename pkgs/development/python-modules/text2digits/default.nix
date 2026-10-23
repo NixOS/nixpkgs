@@ -1,25 +1,23 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  pypaInstallHook,
-  setuptoolsBuildHook,
+  fetchFromGitHub,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "text2digits";
-  version = "0.1.0";
-  pyproject = false;
+  version = "0.1.2";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-oB2NyNVxediIulid9A4Ccw878t2JKrIsN1OOR5lyi7I=";
+  src = fetchFromGitHub {
+    owner = "ShailChoksi";
+    repo = "text2digits";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-OswtDg8ZVKJe0SaSo+4CUZdGh8fbFsr+tDntj2FLq/k=";
   };
 
-  nativeBuildInputs = [
-    pypaInstallHook
-    setuptoolsBuildHook
-  ];
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "text2digits" ];
 
@@ -29,4 +27,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ getchoo ];
   };
-}
+})

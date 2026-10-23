@@ -15,10 +15,6 @@ let
       true
       false
     ];
-    systemdStage1 = [
-      true
-      false
-    ];
   };
 in
 pkgs.lib.listToAttrs (
@@ -26,27 +22,29 @@ pkgs.lib.listToAttrs (
     {
       predictable,
       withNetworkd,
-      systemdStage1,
     }:
     {
       name =
         pkgs.lib.optionalString (!predictable) "un"
         + "predictable"
-        + pkgs.lib.optionalString withNetworkd "Networkd"
-        + pkgs.lib.optionalString systemdStage1 "SystemdStage1";
+        + pkgs.lib.optionalString withNetworkd "Networkd";
       value = makeTest {
         name =
           pkgs.lib.optionalString (!predictable) "un"
           + "predictableInterfaceNames"
-          + pkgs.lib.optionalString withNetworkd "-with-networkd"
-          + pkgs.lib.optionalString systemdStage1 "-systemd-stage-1";
+          + pkgs.lib.optionalString withNetworkd "-with-networkd";
         meta = { };
 
         nodes.machine =
-          { pkgs, lib, ... }:
+          {
+            config,
+            pkgs,
+            lib,
+            ...
+          }:
           let
             script = ''
-              ${lib.getExe' pkgs.systemd "udevadm"} settle --timeout=180
+              ${lib.getExe' config.boot.initrd.systemd.package "udevadm"} settle --timeout=180
               ip link
               if ${lib.optionalString predictable "!"} ip link show eth0; then
                 echo Success
@@ -61,23 +59,17 @@ pkgs.lib.listToAttrs (
             networking.dhcpcd.enable = !withNetworkd;
             networking.useDHCP = !withNetworkd;
 
-            # Check if predictable interface names are working in stage-1
-            boot.initrd.postDeviceCommands = lib.mkIf (!systemdStage1) script;
-
-            boot.initrd.systemd = lib.mkMerge [
-              { enable = systemdStage1; }
-              (lib.mkIf systemdStage1 {
-                initrdBin = [ pkgs.iproute2 ];
-                services.systemd-udev-settle.wantedBy = [ "initrd.target" ];
-                services.check-interfaces = {
-                  requiredBy = [ "initrd.target" ];
-                  after = [ "systemd-udev-settle.service" ];
-                  serviceConfig.Type = "oneshot";
-                  path = [ pkgs.iproute2 ];
-                  inherit script;
-                };
-              })
-            ];
+            boot.initrd.systemd = {
+              initrdBin = [ pkgs.iproute2 ];
+              services.systemd-udev-settle.wantedBy = [ "initrd.target" ];
+              services.check-interfaces = {
+                requiredBy = [ "initrd.target" ];
+                after = [ "systemd-udev-settle.service" ];
+                serviceConfig.Type = "oneshot";
+                path = [ pkgs.iproute2 ];
+                inherit script;
+              };
+            };
           };
 
         testScript = ''

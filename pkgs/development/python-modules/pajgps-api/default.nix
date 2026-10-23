@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pajgps-api";
-  version = "0.3.1";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "skipperro";
     repo = "pajgps-api";
     tag = finalAttrs.version;
-    hash = "sha256-OJbWF5KcqyRud0Sfx7rME+mXIjiZQD9UxD3vpeV6RWY=";
+    hash = "sha256-aYi+VuU7wcQRepDY+bNRUT6EIDMh/zrAfdUC6xanirM=";
   };
 
   build-system = [ hatchling ];

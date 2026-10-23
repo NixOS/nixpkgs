@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  postPatch = lib.optionals (lib.versionAtLeast qtlocation.version "6.10") ''
+  postPatch = lib.optionalString (lib.versionAtLeast qtlocation.version "6.10") ''
     # fix build with Qt 6.10
     # included in https://github.com/maplibre/maplibre-native-qt/pull/216
     substituteInPlace CMakeLists.txt \
@@ -41,9 +41,15 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
-  env.CXXFLAGS = toString [
-    "-DQT_NO_USE_NODISCARD_FILE_OPEN"
-  ];
+  env.CXXFLAGS = toString (
+    [
+      "-DQT_NO_USE_NODISCARD_FILE_OPEN"
+    ]
+    # vendored maplibre-native builds with -Werror and trips GCC 16's -Wsfinae-incomplete
+    ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "16") [
+      "-Wno-error=sfinae-incomplete"
+    ]
+  );
 
   buildInputs = [
     qtlocation

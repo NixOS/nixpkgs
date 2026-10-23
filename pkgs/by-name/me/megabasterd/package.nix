@@ -5,28 +5,25 @@
   makeWrapper,
   maven,
 }:
-let
-  version = "8.57";
-in
-maven.buildMavenPackage {
+maven.buildMavenPackage (finalAttrs: {
   pname = "megabasterd";
-  inherit version;
+  version = "8.61";
 
   src = fetchFromGitHub {
     owner = "tonikelope";
     repo = "megabasterd";
-    tag = "v${version}";
-    hash = "sha256-6PKBzQA3lBa9/7J8bymGmnW3OPsRV4GgZ7dc7H6fOuE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-H3nW+phtT30nhKIBxlS3CAqVxFIWcBvStbNlnobWEiQ=";
   };
 
-  mvnHash = "sha256-DVfPmW0ep6y/GxnwNKXxo68W5idcTkoNqUEKm7ouTEY=";
+  mvnHash = "sha256-0AJhv+Mr1gflxDXyCDShMhGL7xuMs5V+QLUgc3wbM8o=";
 
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     runHook preInstall
 
-    jar_filename=MegaBasterd-${version}-jar-with-dependencies.jar
+    jar_filename=MegaBasterd-${finalAttrs.version}-jar-with-dependencies.jar
 
     mkdir -p $out/bin $out/share/megabasterd
     install -Dm644 target/$jar_filename $out/share/megabasterd
@@ -45,4 +42,4 @@ maven.buildMavenPackage {
     maintainers = with lib.maintainers; [ theobori ];
     mainProgram = "megabasterd";
   };
-}
+})

@@ -50,9 +50,9 @@
 }@args:
 
 let
-  version = "2.42";
-  patchSuffix = "-67";
-  sha256 = "sha256-0XdeMuRijmTvkw9DW2e7Y691may2viszW58Z8WUJ8X8=";
+  version = "2.44";
+  patchSuffix = "-57";
+  sha256 = "sha256-N/YA8r7zxegwAUcFlWiyouQKetbMxlzpQlVtSUKcxmc=";
 in
 
 assert withLinuxHeaders -> linuxHeaders != null;
@@ -69,17 +69,17 @@ stdenv.mkDerivation (
       /*
         No tarballs for stable upstream branch, only https://sourceware.org/git/glibc.git and using git would complicate bootstrapping.
          $ git fetch --all -p && git checkout origin/release/2.42/master && git describe
-         glibc-2.42-67-g4ebd33dd77
-         $ git show --minimal --reverse glibc-2.42.. ':!ADVISORIES' > 2.42-master.patch
+         glibc-2.44-57-g34106fee69
+         $ git show --minimal --reverse glibc-2.44.. ':!ADVISORIES' > 2.44-master.patch
 
         To compare the archive contents zdiff can be used.
-         $ diff -u 2.42-master.patch ../nixpkgs/pkgs/development/libraries/glibc/2.42-master.patch
+         $ diff -u 2.44-master.patch ../nixpkgs/pkgs/development/libraries/glibc/2.44-master.patch
 
         Please note that each commit has changes to the file ADVISORIES excluded since
         that conflicts with the directory advisories/ making cross-builds from
         hosts with case-insensitive file-systems impossible.
       */
-      ./2.42-master.patch
+      ./2.44-master.patch
 
       # Allow NixOS and Nix to handle the locale-archive.
       ./nix-locale-archive.patch
@@ -209,7 +209,12 @@ stdenv.mkDerivation (
 
     makeFlags =
       (args.makeFlags or [ ])
-      ++ [ "OBJCOPY=${stdenv.cc.targetPrefix}objcopy" ]
+      ++ [
+        "OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
+        # zonedir does nothing on NixOS but is important for non-NixOS.
+        # See https://github.com/NixOS/nixpkgs/pull/491193
+        "zonedir=/usr/share/zoneinfo"
+      ]
       ++ lib.optionals (stdenv.cc.libc != null) [
         "BUILD_LDFLAGS=-Wl,-rpath,${stdenv.cc.libc}/lib"
         "OBJDUMP=${stdenv.cc.bintools.bintools}/bin/objdump"
@@ -264,6 +269,13 @@ stdenv.mkDerivation (
     passthru = {
       inherit version;
       minorRelease = version;
+
+      # glibc's threads are POSIX threads.
+      #
+      # See the comment on `threadModel` in
+      # pkgs/development/compilers/gcc/ng/common/libgcc/default.nix for further
+      # details.
+      threadModel = "posix";
     };
   }
 
@@ -332,6 +344,8 @@ stdenv.mkDerivation (
       preBuild = lib.optionalString withGd "unset NIX_DONT_SET_RPATH";
 
       doCheck = false; # fails
+
+      __structuredAttrs = true;
 
       meta =
 

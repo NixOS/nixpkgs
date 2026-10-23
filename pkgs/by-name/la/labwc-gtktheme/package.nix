@@ -33,8 +33,6 @@ python3Packages.buildPythonApplication {
     pygobject3
   ];
 
-  strictDeps = true;
-
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin

@@ -32,19 +32,13 @@ stdenv.mkDerivation (finalAttrs: {
   inherit (bluez-headers) version src;
 
   patches = [
-    # https://github.com/bluez/bluez/issues/1896
-    # Remove the following 2 in the next release
-    (fetchpatch2 {
-      name = "fix-btctl-noninteractive-regression";
-      url = "https://git.kernel.org/pub/scm/bluetooth/bluez.git/patch/?id=b33e923b55e4d0e9d78a83cfcb541fd1f687ef54";
-      hash = "sha256-q7eN4ktw7DtdwMHHi7GU7fbvHAdMttKF1kDSWzZqa6A=";
-    })
-    (fetchpatch2 {
-      name = "fix-btctl-noninteractive-regression-2";
-      url = "https://git.kernel.org/pub/scm/bluetooth/bluez.git/patch/?id=21e13976f2e375d701b8b7032ba5c1b2e56c305f";
-      hash = "sha256-JrdmYiC+U0KeMP8oVg12Z8CvkMEKWBVgiiUACx0E7dY=";
-    })
     ./lreadline.patch
+    # https://github.com/bluez/bluez/issues/2282
+    (fetchpatch2 {
+      name = "fix-uuid-discovery-segfault";
+      url = "https://git.kernel.org/pub/scm/bluetooth/bluez.git/patch/?id=82af2beafc39510e2c4a439bf44faea711d6503f";
+      hash = "sha256-Zf5J4USdfwKe7DVfivyj2q15LPy2GkUqVUq2tE1bG6M=";
+    })
   ];
 
   buildInputs = [

@@ -7,24 +7,20 @@
 }:
 python3Packages.buildPythonApplication {
   pname = "tabbyapi";
-  version = "0-unstable-2026-06-27";
+  version = "0-unstable-2026-10-11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "theroyallab";
     repo = "tabbyAPI";
-    rev = "3cf468c28362c28be1c8fc731ce1ccaf7b2206d0";
-    hash = "sha256-s97YFyij2/oYlClmV2laDrCkkoK4uVZgRsn5WwftLag=";
+    rev = "2636ef602b55b5343cf3740dd55a77f21e0a8003";
+    hash = "sha256-oQnM8aYLbqwdjJOQ2l3R8iyrv5tCZrMNRjy6rwQYQTI=";
   };
 
   build-system = with python3Packages; [
     packaging
     setuptools
     wheel
-  ];
-
-  nativeBuildInputs = with python3Packages; [
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [
@@ -44,8 +40,7 @@ python3Packages.buildPythonApplication {
       sse-starlette
       packaging
       tokenizers
-      formatron
-      kbnf
+      numpy
       aiofiles
       aiohttp
       async-lru
@@ -54,10 +49,8 @@ python3Packages.buildPythonApplication {
       httptools
       pillow
       requests
-      numpy
       setuptools
 
-      exllamav2
       exllamav3
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -69,17 +62,6 @@ python3Packages.buildPythonApplication {
   '';
 
   optional-dependencies = with python3Packages; {
-    amd = [
-      pytorch-triton-rocm
-      torch
-    ];
-    cu118 = [
-      torch
-    ];
-    cu121 = [
-      flash-attn
-      torch
-    ];
     dev = [
       ruff
     ];
@@ -92,6 +74,10 @@ python3Packages.buildPythonApplication {
   postInstall = ''
     cp *.py $out/${python3Packages.python.sitePackages}/
     cp -r {common,endpoints,backends,templates} $out/${python3Packages.python.sitePackages}/
+
+    # They are wanted during runtime
+    mkdir -p $out/share/tabbyapi
+    cp -r sampler_overrides $out/share/tabbyapi/
   '';
 
   postFixup = ''
@@ -101,8 +87,8 @@ python3Packages.buildPythonApplication {
   '';
 
   passthru = {
-    cudaSupport = python3Packages.torch.cudaSupport;
-    updateScript = nix-update-script { };
+    inherit (python3Packages.torch) cudaSupport rocmSupport;
+    updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
   };
 
   meta = {

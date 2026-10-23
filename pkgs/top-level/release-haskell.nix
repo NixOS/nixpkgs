@@ -185,17 +185,6 @@ let
 
   recursiveUpdateMany = builtins.foldl' lib.recursiveUpdate { };
 
-  # Remove multiple elements from a list at once.
-  #
-  # removeMany
-  #   :: [a]  -- list of elements to remove
-  #   -> [a]  -- list of elements from which to remove
-  #   -> [a]
-  #
-  # > removeMany ["aarch64-linux" "x86_64-darwin"] ["aarch64-linux" "x86_64-darwin" "x86_64-linux"]
-  # ["x86_64-linux"]
-  removeMany = itemsToRemove: list: lib.foldr lib.remove list itemsToRemove;
-
   # Recursively remove platforms from the values in an attribute set.
   #
   # removePlatforms
@@ -204,11 +193,11 @@ let
   #   -> AttrSet
   #
   # > attrSet = {
-  #     foo = ["aarch64-linux" "x86_64-darwin" "x86_64-linux"];
+  #     foo = ["aarch64-linux" "aarch64-darwin" "x86_64-linux"];
   #     bar.baz = ["aarch64-linux" "x86_64-linux"];
-  #     bar.quux = ["aarch64-linux" "x86_64-darwin"];
+  #     bar.quux = ["aarch64-linux" "aarch64-darwin"];
   #   }
-  # > removePlatforms ["aarch64-linux" "x86_64-darwin"] attrSet
+  # > removePlatforms ["aarch64-linux" "aarch64-darwin"] attrSet
   # {
   #   foo = ["x86_64-linux"];
   #   bar = {
@@ -219,7 +208,7 @@ let
   removePlatforms =
     platformsToRemove: packageSet:
     lib.mapAttrsRecursive (
-      _: val: if lib.isList val then removeMany platformsToRemove val else val
+      _: val: if lib.isList val then lib.subtractLists platformsToRemove val else val
     ) packageSet;
 
   jobs = recursiveUpdateMany [
@@ -373,7 +362,6 @@ let
             "aarch64-linux"
 
             # musl only supports linux, not darwin.
-            "x86_64-darwin"
             "aarch64-darwin"
           ]
           {
@@ -401,7 +389,6 @@ let
             "aarch64-linux" # times out on Hydra
 
             # Static doesn't work on darwin
-            "x86_64-darwin"
             "aarch64-darwin"
           ]
           {
@@ -500,7 +487,6 @@ let
               # Testing cross from x86_64-linux
               "aarch64-darwin"
               "aarch64-linux"
-              "x86_64-darwin"
             ]
             {
               haskellPackages = {

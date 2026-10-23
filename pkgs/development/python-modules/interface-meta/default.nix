@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "matthewwardrop";
     repo = "interface_meta";
     rev = "v${version}";
-    sha256 = "0rzh11wnab33b11391vc2ynf8ncxn22b12wn46lmgkrc5mqza8hd";
+    hash = "sha256-DSL1cS0sz1epIZaLsISwnVnkrBdshzRCWGMsZXkI8Gc=";
   };
 
   patches = [ ./0001-fix-version.patch ];

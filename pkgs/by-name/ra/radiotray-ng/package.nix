@@ -12,10 +12,10 @@
   libbsd,
   # GUI/Desktop
   dbus,
-  glibmm,
+  glibmm_2_4,
   gsettings-desktop-schemas,
   hicolor-icon-theme,
-  libappindicator-gtk3,
+  libappindicator,
   libnotify,
   libxdg_basedir,
   wxwidgets_3_2,
@@ -71,10 +71,10 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     jsoncpp
     libbsd
-    glibmm
+    glibmm_2_4
     hicolor-icon-theme
     gsettings-desktop-schemas
-    libappindicator-gtk3
+    libappindicator
     libnotify
     libxdg_basedir
     lsb-release
@@ -107,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   cmakeFlags = [
-    (lib.cmakeBool "BUILD_TESTS" finalAttrs.doCheck)
+    (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   # 'wxFont::wxFont(int, int, int, int, bool, const wxString&, wxFontEncoding)' is deprecated

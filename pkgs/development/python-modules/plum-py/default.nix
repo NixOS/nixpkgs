@@ -4,18 +4,23 @@
   buildPythonPackage,
   fetchFromGitLab,
   pytestCheckHook,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "plum-py";
-  version = "0.8.6";
+  version = "0.8.7";
   format = "setuptools";
+
+  # This package never built with Python 3.14.
+  # Some tests are failing due to diverging generated Python code.
+  disabled = pythonAtLeast "3.14";
 
   src = fetchFromGitLab {
     owner = "dangass";
     repo = "plum";
     tag = version;
-    hash = "sha256-gZSRqijKdjqOZe1+4aeycpCPsh6HC5sRbyVjgK+g4wM=";
+    hash = "sha256-q9UNRZYBLBm0mf/r3cktGnGG9LzmTDrSVgXDgGDBMok=";
   };
 
   postPatch = ''

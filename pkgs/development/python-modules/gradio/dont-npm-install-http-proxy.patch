@@ -1,0 +1,44 @@
+--- a/js/app/after_build.js	2026-05-28 14:03:04.411110834 +0000
++++ b/js/app/after_build.js	2026-05-28 14:03:32.000852551 +0000
+@@ -1,7 +1,7 @@
+-import { writeFileSync, copyFileSync } from "fs";
++import { writeFileSync, copyFileSync, cpSync, mkdirSync, readFileSync } from "fs";
+ import { resolve, dirname } from "path";
+ import { fileURLToPath } from "url";
+-import { execSync } from "child_process";
++import { createRequire } from "module";
+ 
+ const __filename = fileURLToPath(import.meta.url);
+ const __dirname = dirname(__filename);
+@@ -20,8 +20,29 @@
+ 	)
+ );
+ 
+-// Install http-proxy in the build output so it's available at runtime
+-execSync("npm install --production", { cwd: out_path, stdio: "inherit" });
++// Vendor http-proxy and its production dependency closure into the build
++// output so it's available at runtime. Upstream runs `npm install --production`
++// here, but the packages are already present in the workspace, so we copy them
++// instead of hitting the network.
++const out_node_modules = resolve(out_path, "node_modules");
++mkdirSync(out_node_modules, { recursive: true });
++
++const copied = new Set();
++function vendor(name, parentRequire) {
++	if (copied.has(name)) return;
++	copied.add(name);
++	const pkgJsonPath = parentRequire.resolve(`${name}/package.json`);
++	cpSync(dirname(pkgJsonPath), resolve(out_node_modules, name), {
++		recursive: true,
++		dereference: true
++	});
++	const pkgJson = JSON.parse(readFileSync(pkgJsonPath, "utf8"));
++	const ownRequire = createRequire(pkgJsonPath);
++	for (const dep of Object.keys(pkgJson.dependencies || {})) {
++		vendor(dep, ownRequire);
++	}
++}
++vendor("http-proxy", createRequire(import.meta.url));
+ 
+ // Replace the adapter-generated index.js with our custom proxy entry point
+ copyFileSync(

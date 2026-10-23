@@ -3,7 +3,6 @@
   buildNimPackage,
   fetchFromGitHub,
   termbox,
-  pcre,
 }:
 
 buildNimPackage (finalAttrs: {

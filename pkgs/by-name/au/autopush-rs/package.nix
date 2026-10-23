@@ -47,10 +47,9 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "autopush";
-  version = "1.81.3";
+  version = "1.83.1";
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   outputs = [
     "out"
@@ -61,10 +60,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "mozilla-services";
     repo = "autopush-rs";
     tag = finalAttrs.version;
-    hash = "sha256-DP02mcEMoQoJqi5rw5eSuep0i7zeJ0LLYsakikt9hho=";
+    hash = "sha256-T1FLDDAIU+YEdDRY11XzUvxKQS3ETqufDC7B4U5vyFk=";
   };
 
-  cargoHash = "sha256-LqmuUtFF30TO6iw7LPFB7yJGrzrhh7R0OKCWMhe/OjU=";
+  patches = [ ./0001-delete-acked-messages.patch ]; # See https://github.com/mozilla-services/autopush-rs/pull/1234
+
+  cargoHash = "sha256-a413jA5s6EcjwF6Jxf8Mnqxv4ULVwXRzpUTnLv2CkCg=";
 
   nativeBuildInputs = [
     pkg-config
@@ -106,13 +107,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
       imports = [
         (lib.modules.importApply ./service-autoconnect.nix { inherit pkgs; })
       ];
-      package = finalAttrs.finalPackage.out;
+      autoconnect.package = finalAttrs.finalPackage;
     };
     services.autoendpoint = {
       imports = [
         (lib.modules.importApply ./service-autoendpoint.nix { inherit pkgs; })
       ];
-      package = finalAttrs.finalPackage.out;
+      autoendpoint.package = finalAttrs.finalPackage;
     };
 
     updateScript = nix-update-script { };

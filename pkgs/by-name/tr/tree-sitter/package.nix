@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  config,
   newScope,
   fetchFromGitHub,
   fetchFromGitLab,
@@ -75,26 +76,19 @@ let
   */
   builtGrammars = lib.mapAttrs (_: lib.makeOverridable buildGrammar) grammars;
 
-  /**
-    # Extensible package set for tree-sitter grammars.
-    # Provides .override and .extend for customization.
-    # Note: Use builtGrammars (not this) when iterating over grammars,
-    # as this includes package set functions alongside derivations
-  */
-  grammarsScope = lib.makeScope newScope (self: builtGrammars);
+  hasTreeSitterPrefix = lib.hasPrefix "tree-sitter-";
+  grammarAliases = import ./grammars/aliases.nix { inherit lib; };
 
-  # Usage:
-  # pkgs.tree-sitter.withPlugins (p: [ p.tree-sitter-c p.tree-sitter-java ... ])
-  #
-  # or for all grammars:
-  # pkgs.tree-sitter.withPlugins (_: pkgs.tree-sitter.allGrammars)
-  # which is equivalent to
-  # pkgs.tree-sitter.withPlugins (p: builtins.attrValues p)
-  withPlugins =
-    grammarFn:
-    let
-      grammars = grammarFn builtGrammars;
-    in
+  grammarDerivationsFrom = lib.filterAttrs (
+    name: value: hasTreeSitterPrefix name && lib.isDerivation value
+  );
+
+  removeTreesitterPrefix = lib.strings.removePrefix "tree-sitter-";
+  removeGrammarSuffix = lib.strings.removeSuffix "-grammar";
+  replaceHyphens = lib.strings.replaceStrings [ "-" ] [ "_" ];
+
+  mkGrammarLinkFarm =
+    grammars:
     linkFarm "grammars" (
       map (
         drv:
@@ -102,34 +96,56 @@ let
           name = lib.strings.getName drv;
         in
         {
-          name =
-            (lib.strings.replaceStrings [ "-" ] [ "_" ] (
-              lib.strings.removePrefix "tree-sitter-" (lib.strings.removeSuffix "-grammar" name)
-            ))
-            + ".so";
+          name = (replaceHyphens (removeTreesitterPrefix (removeGrammarSuffix name))) + ".so";
           path = "${drv}/parser";
         }
       ) grammars
     );
 
-  allGrammars = lib.filter (p: !(p.meta.broken or false)) (lib.attrValues builtGrammars);
+  /**
+    Extensible package set of compiled tree-sitter grammars.
+
+    Exposed as `pkgs.tree-sitter-grammars` and `pkgs.tree-sitter.grammarsScope`.
+    Customize with `.overrideScope`; overrides propagate to every consumer that
+    reads the scope, including the grammar-only views below (which the
+    `pkgs.tree-sitter` passthru re-exports so there is a single source of truth):
+
+      `.derivations`  attrset of every grammar derivation
+      `.allGrammars`  list of non-broken grammar derivations
+      `.withPlugins`  build a grammar link farm
+
+    The scope also carries package-set helpers (`callPackage`, `overrideScope`,
+    …) alongside the grammars, so prefer one of the views above when iterating.
+  */
+  grammarsScope = lib.makeScope newScope (
+    self:
+    builtGrammars
+    // lib.optionalAttrs config.allowAliases (grammarAliases self builtGrammars)
+    // {
+      derivations = grammarDerivationsFrom self;
+      allGrammars = lib.filter (p: !(p.meta.broken or false)) (
+        lib.attrValues (grammarDerivationsFrom self)
+      );
+      withPlugins = grammarFn: mkGrammarLinkFarm (grammarFn (grammarDerivationsFrom self));
+    }
+  );
 
   isWasi = stdenv.hostPlatform.isWasi;
 
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tree-sitter";
-  version = "0.26.8";
+  version = "0.26.11";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "tree-sitter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fcFEfoALrbpBD6rWogxJ7FNVlvDQgswoX9ylRgko+8Q=";
+    hash = "sha256-YXnmVM90sEH8kqgqCygpeCAyvggMIsv+oXi0SJOvMRM=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-9FeWnWWPUWmMF15Psmul8GxGv2JceHWc2WZPmOr81gw=";
+  cargoHash = "sha256-kHDjPRhBUYlxLWYSv6cn6U1QDIWwCgHeIz2A5yCi1yo=";
 
   cargoBuildFeatures = lib.optionals wasmSupport [ "wasm" ];
 
@@ -167,7 +183,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postPatch =
     lib.optionalString webUISupport ''
-      substituteInPlace cli/loader/src/lib.rs \
+      substituteInPlace crates/xtask/src/build_wasm.rs \
           --replace-fail 'let emcc_name = if cfg!(windows) { "emcc.bat" } else { "emcc" };' 'let emcc_name = "${lib.getExe' emscripten "emcc"}";'
     ''
     # when building on static platforms:
@@ -177,6 +193,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
       substituteInPlace ./Makefile \
           --replace-fail 'all: libtree-sitter.a libtree-sitter.$(SOEXT) tree-sitter.pc' 'all: libtree-sitter.a tree-sitter.pc'
       sed -i '/^install:/,/^[^[:space:]]/ { /$(SOEXT/d; }' ./Makefile
+    ''
+    # rquickjs-sys passes the raw rust target to clang, which does not know riscv64gc
+    + lib.optionalString stdenv.hostPlatform.isRiscV64 ''
+      substituteInPlace $cargoDepsCopy/source-*/rquickjs-sys-*/build.rs \
+        --replace-fail \
+          'let mut cflags = vec![format!("--target={}", target)];' \
+          'let mut cflags = vec![format!("--target={}", target.replace("riscv64gc", "riscv64"))];'
     '';
 
   # The Makefile install can't enable the wasm feature.
@@ -237,13 +260,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     inherit
-      grammars
       buildGrammar
       builtGrammars
+      grammars
       grammarsScope
-      withPlugins
-      allGrammars
       ;
+
+    # Keep legacy `pkgs.tree-sitter` views wired to the overridable scope.
+    inherit (grammarsScope) allGrammars withPlugins;
 
     updateScript = nix-update-script { };
 

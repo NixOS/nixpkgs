@@ -19,6 +19,7 @@
   pydantic,
   setuptools,
   tomli-w,
+  typing-extensions,
   useful-types,
   xlrd,
   xmltodict,
@@ -26,17 +27,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-benedict";
-  version = "0.37.0";
+  version = "0.40.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fabiocaccamo";
     repo = "python-benedict";
     tag = finalAttrs.version;
-    hash = "sha256-iYCc8e7+7OXpHW2gGxR6ckiTi/Wi5ByqcOFx9e2Eme0=";
+    hash = "sha256-O0pfDytFNv1C9Km7vqNEgIHML3/s1GC7YnwjgCl5VG8=";
   };
 
-  pythonRelaxDeps = [ "boto3" ];
+  pythonRelaxDeps = [
+    "boto3"
+    "typing_extensions"
+  ];
 
   build-system = [ setuptools ];
 
@@ -45,6 +49,7 @@ buildPythonPackage (finalAttrs: {
     python-slugify
     requests
     useful-types
+    typing-extensions
   ];
 
   optional-dependencies = {

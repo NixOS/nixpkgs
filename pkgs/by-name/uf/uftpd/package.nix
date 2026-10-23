@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uftpd";
-  version = "2.16";
+  version = "2.17";
 
   src = fetchFromGitHub {
     owner = "troglobit";
     repo = "uftpd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Fk/YwTqtFSnR6EeObAcZdUume2xK0wd6EOPSJpOwMTg=";
+    hash = "sha256-cTWE4+lao+GF1X2raT9wxBMAcJPfGy75SPQDMu34QGw=";
   };
 
   nativeBuildInputs = [

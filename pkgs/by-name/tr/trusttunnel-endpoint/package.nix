@@ -10,17 +10,25 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "trusttunnel-endpoint";
-  version = "1.0.41";
+  version = "1.1.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "TrustTunnel";
     repo = "TrustTunnel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZFlHX17n0GQ+HVbJD9NQ5Jeg93G9A7dkjSkRD84ZNFQ=";
+    hash = "sha256-4cItVXJNGSFihHXWMpLKx/qJABwLZCvlJYGw2nM9SHY=";
   };
 
-  cargoHash = "sha256-2ivFP6JjFFlScO6jcaHOTzcmntKlmOmJQE0q/81NOxc=";
+  cargoPatches = [
+    # Bump boring to v5 (and by necessity, quiche to 0.30) for compatibility
+    # with recent boringssl versions, which have removed curves that were
+    # considered insufficiently secure.
+    # Upstream PR: https://github.com/TrustTunnel/TrustTunnel/pull/155
+    ./boring-v5.patch
+  ];
+
+  cargoHash = "sha256-wZbyro1ozP+h/o8MocgI8FxeJHfEzessWfNObfc4CEg=";
 
   postPatch = ''
     substituteInPlace $cargoDepsCopy/*/boring-sys-*/build/main.rs $cargoDepsCopy/*/quiche-*/src/build.rs \

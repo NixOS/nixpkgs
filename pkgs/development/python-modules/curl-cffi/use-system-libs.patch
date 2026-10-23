@@ -1,6 +1,6 @@
 --- a/scripts/build.py
 +++ b/scripts/build.py
-@@ -122,27 +122,8 @@ def get_curl_libraries():
+@@ -182,32 +182,9 @@ def get_curl_libraries():
  ffibuilder = FFI()
  system = platform.system()
  root_dir = Path(__file__).parent.parent
@@ -15,24 +15,31 @@
 -            f"-Wl,-force_load,{static_libs[0]}",
 -            "-lc++",
 -        ]
--    elif system in ("Linux", "Android"):
--        cxx_lib = "-lc++" if is_android else "-lstdc++"
+-    elif is_android:
 -        extra_link_args = [
 -            "-Wl,--whole-archive",
 -            static_libs[0],
 -            "-Wl,--no-whole-archive",
--            cxx_lib,
+-            "-lc++",
 -        ]
--
+-    elif system == "Linux":
+-        extra_link_args = [
+-            "-Wl,--whole-archive",
+-            static_libs[0],
+-            "-Wl,--no-whole-archive",
+-        ]
+ 
 -libraries = get_curl_libraries()
 +libraries = ["curl-impersonate"]
  
  ffibuilder.set_source(
      "curl_cffi._wrapper",
-@@ -160,7 +132,7 @@ ffibuilder.set_source(
-     """,
-     library_dirs=[str(libdir)],
+@@ -218,7 +195,7 @@ ffibuilder.set_source(
+     runtime_library_dirs=(
+         [str(libdir)] if is_dynamic and arch["system"] != "Windows" else []
+     ),
 -    libraries=get_curl_libraries(),
 +    libraries=libraries,
      extra_objects=[],  # linked via extra_link_args
      source_extension=".c",
+     include_dirs=[

@@ -2,11 +2,13 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
 
   # build-system
   flit-core,
   installShellFiles,
+  stdenv,
+  buildPackages,
+  python,
 
   # docs
   sphinx,
@@ -29,16 +31,19 @@
 }:
 
 let
+
+  sphinxSupported = !sphinx.disabled;
+
   self = buildPythonPackage rec {
     pname = "pip";
-    version = "25.3";
+    version = "26.1.2";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "pypa";
       repo = "pip";
       tag = version;
-      hash = "sha256-aHV4j9OMLD6I6Fe6A04bE7xk6eS5CxeUEw4Psqj7xz0=";
+      hash = "sha256-E53TU7LzGz+gpW1TCQUkSRMUif8mq702EgXdAVxtrGw=";
     };
 
     postPatch = ''
@@ -51,9 +56,8 @@ let
       flit-core
       installShellFiles
     ]
-    ++ lib.optionals (pythonAtLeast "3.11") [
+    ++ lib.optionals sphinxSupported [
       # docs
-      # (sphinx requires Python 3.11)
       sphinx
       sphinx-issues
     ];
@@ -61,13 +65,13 @@ let
     outputs = [
       "out"
     ]
-    ++ lib.optionals (pythonAtLeast "3.11") [
+    ++ lib.optionals sphinxSupported [
       "man"
     ];
 
     # pip uses a custom sphinx extension and unusual conf.py location, mimic the internal build rather than attempting
     # to fit sphinxHook see https://github.com/pypa/pip/blob/0778c1c153da7da457b56df55fb77cbba08dfb0c/noxfile.py#L129-L148
-    postBuild = lib.optionalString (pythonAtLeast "3.11") ''
+    postBuild = lib.optionalString sphinxSupported ''
       cd docs
 
       # remove references to sphinx extentions only required for html doc generation
@@ -102,14 +106,19 @@ let
       werkzeug
     ];
 
-    postInstall = ''
-      installManPage docs/build/man/*
-
-      installShellCompletion --cmd pip \
-        --bash <($out/bin/pip completion --bash --no-cache-dir) \
-        --fish <($out/bin/pip completion --fish --no-cache-dir) \
-        --zsh <($out/bin/pip completion --zsh --no-cache-dir)
-    '';
+    postInstall =
+      let
+        emulator = stdenv.hostPlatform.emulator buildPackages;
+      in
+      ''
+        installManPage docs/build/man/*
+      ''
+      + lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
+        installShellCompletion --cmd pip \
+          --bash <(${emulator} ${python.interpreter} $out/bin/pip completion --bash --no-cache-dir) \
+          --fish <(${emulator} ${python.interpreter} $out/bin/pip completion --fish --no-cache-dir) \
+          --zsh <(${emulator} ${python.interpreter} $out/bin/pip completion --zsh --no-cache-dir)
+      '';
 
     passthru.tests = {
       inherit pip-tools;
@@ -119,7 +128,7 @@ let
     meta = {
       mainProgram = "pip";
       description = "PyPA recommended tool for installing Python packages";
-      license = with lib.licenses; [ mit ];
+      license = lib.licenses.mit;
       homepage = "https://pip.pypa.io/";
       changelog = "https://pip.pypa.io/en/stable/news/#v${lib.replaceStrings [ "." ] [ "-" ] version}";
     };

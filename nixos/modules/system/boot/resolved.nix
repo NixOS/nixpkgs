@@ -46,9 +46,9 @@ let
         concatStringsSep " " value
       else
         value
-    ) settings;
+    ) (lib.filterAttrs (key: value: value != null) settings);
 
-  resolvedConf = settingsToSections (transformSettings cfg.settings);
+  resolvedConf = settingsToSections { Resolve = transformSettings cfg.settings.Resolve; };
 in
 {
   imports = [
@@ -236,13 +236,6 @@ in
     })
 
     (mkIf config.boot.initrd.services.resolved.enable {
-
-      assertions = [
-        {
-          assertion = config.boot.initrd.systemd.enable;
-          message = "'boot.initrd.services.resolved.enable' can only be enabled with systemd stage 1.";
-        }
-      ];
 
       boot.initrd.systemd = {
         contents = {

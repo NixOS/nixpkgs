@@ -78,6 +78,8 @@ let
     # Allow very slow start
     DefaultTimeoutStartSec = 300;
     DefaultDeviceTimeoutSec = 300;
+    # Don't enforce a minimum uptime before shutting down.
+    MinimumUptimeSec = 0;
   };
 
 in
@@ -103,12 +105,6 @@ in
   config = {
 
     assertions = [
-      {
-        assertion = cfg.initrdBackdoor -> config.boot.initrd.systemd.enable;
-        message = ''
-          `testing.initrdBackdoor` requires `boot.initrd.systemd.enable` to be enabled.
-        '';
-      }
       {
         assertion = config.boot.isContainer -> !cfg.backdoor;
         message = ''
@@ -194,7 +190,7 @@ in
     # that do not specify any nodes, or an empty attr set as nodes) will not
     # have the QEMU module loaded and thuse these options can't and should not
     # be set.
-    virtualisation = lib.optionalAttrs (options ? virtualisation.qemu) {
+    virtualisation = lib.optionalAttrs (options ? virtualisation.qemu.package) {
       qemu = {
         # NOTE: optionalAttrs
         #       test-instrumentation.nix appears to be used without qemu-vm.nix, so
@@ -228,14 +224,23 @@ in
     ];
 
     # `xwininfo' is used by the test driver to query open windows.
-    environment.systemPackages = [ pkgs.xwininfo ];
+    environment.systemPackages = [
+      pkgs.xwininfo
+    ]
+    ++ lib.optionals config.boot.isNspawnContainer [
+      # Unlike a QEMU machine, an nspawn container has no monitor that can
+      # capture its display or inject keyboard input, so the test driver uses
+      # `xwd' and `xdotool' inside the container instead.
+      pkgs.xdotool
+      pkgs.xwd
+    ];
 
     # Log everything to the serial console.
-    services.journald.extraConfig = ''
-      ForwardToConsole=yes
-      TTYPath=/dev/${qemu-common.qemuSerialDevice}
-      MaxLevelConsole=debug
-    '';
+    services.journald.settings.Journal = {
+      ForwardToConsole = true;
+      TTYPath = "/dev/${qemu-common.qemuSerialDevice}";
+      MaxLevelConsole = "debug";
+    };
 
     systemd.settings.Manager = managerSettings;
     systemd.user.settings.Manager = {

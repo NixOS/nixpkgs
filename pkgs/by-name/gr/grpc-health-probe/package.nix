@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "grpc-health-probe";
-  version = "0.4.52";
+  version = "0.4.59";
 
   src = fetchFromGitHub {
     owner = "grpc-ecosystem";
     repo = "grpc-health-probe";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-NbC2W76p9Ph6ZdCRCylMqqPzNO7/jq1WbCW+ly/jKAM=";
+    hash = "sha256-m/v8aYchGabl69+RJhpSNl5sJdvGqCrlLn6+/1fb7xA=";
   };
 
   tags = [
@@ -25,7 +25,7 @@ buildGoModule (finalAttrs: {
     "-X main.versionTag=${finalAttrs.version}"
   ];
 
-  vendorHash = "sha256-KZNoXWay/fegj6q075s40VvqtbA0ADrPKJ3VkQ/6os0=";
+  vendorHash = "sha256-c46rSZDEv+uvaq2vaiyB3sfevyp3mDTQTEceFWcMeJI=";
 
   nativeInstallCheckInputs = [
     versionCheckHook

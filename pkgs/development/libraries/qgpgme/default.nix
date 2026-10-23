@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qgpgme";
-  version = "2.0.0";
+  version = "2.2.0";
 
   src = fetchurl {
     url = "mirror://gnupg/qgpgme/qgpgme-${finalAttrs.version}.tar.xz";
-    hash = "sha256-FWRbJHXMphGOsu0zGzqNlELJ1AGcOEa6P20lMhtKYa0=";
+    hash = "sha256-PGKQ/1v+q5gbtIspUXA3YfHb6mQMtje+s1YNX++w4LM=";
   };
 
   patches = [
@@ -28,6 +28,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_WITH_QT5" (lib.versions.major qtbase.version == "5"))
+    (lib.cmakeBool "BUILD_WITH_QT6" (lib.versions.major qtbase.version == "6"))
   ];
 
   buildInputs = [

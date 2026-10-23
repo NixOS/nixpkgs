@@ -117,10 +117,10 @@ buildNpmPackage (finalAttrs: {
 
   meta = {
     description = "Free, open-source alternative to Screen Studio (sort of)";
-    homepage = "https://openscreen.vercel.app";
+    homepage = "https://github.com/siddharthvaddem/openscreen";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      Renna42
+      etiennelescot
     ];
     mainProgram = "openscreen";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

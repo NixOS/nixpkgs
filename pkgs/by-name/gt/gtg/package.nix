@@ -16,17 +16,18 @@
   libsecret,
   gobject-introspection,
   xvfb-run,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gtg";
-  version = "0.6";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "getting-things-gnome";
     repo = "gtg";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-O8qBD92P2g8QrBdMXa6j0Ozk+W80Ny5yk0KNTy7ekfE=";
+    sha256 = "sha256-Qojw9mJlPU234ijsCN92Gu/j2CyMVDvFFwzbYSYvMdU=";
   };
 
   patches = [
@@ -44,6 +45,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     gettext
     wrapGAppsHook3
     gobject-introspection
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
@@ -70,10 +72,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     xvfb-run
     pytest
   ];
-
-  preBuild = ''
-    export HOME="$TMP"
-  '';
 
   pyproject = false;
 

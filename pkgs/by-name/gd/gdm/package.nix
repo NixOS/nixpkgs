@@ -15,7 +15,7 @@
   libxdmcp,
   libxcb,
   gnome,
-  systemd,
+  systemdLibs,
   dconf,
   gtk3,
   pam,
@@ -44,7 +44,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdm";
-  version = "50.1";
+  version = "50.2";
 
   outputs = [
     "out"
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gdm/${lib.versions.major finalAttrs.version}/gdm-${finalAttrs.version}.tar.xz";
-    hash = "sha256-dwFZNzUSGSQQ9BK10MRnjsFXPxrks5yB/nWGH+iJAXQ=";
+    hash = "sha256-ikZ55Hzd/osKG9nTg2BC3raPs+Gw5+Yt/QYx3FtvxUE=";
   };
 
   mesonFlags = [
@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     pam
     plymouth
     polkit
-    systemd
+    systemdLibs
   ];
 
   patches = [

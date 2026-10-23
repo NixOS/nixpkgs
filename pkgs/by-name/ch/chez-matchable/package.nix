@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = false;
 
   meta = {
-    description = "Library for ChezScheme providing the portable hygenic pattern matcher by Alex Shinn";
+    description = "Library for ChezScheme providing the portable hygienic pattern matcher by Alex Shinn";
     homepage = "https://github.com/fedeinthemix/chez-matchable/";
     maintainers = [ lib.maintainers.jitwit ];
     license = lib.licenses.publicDomain;

@@ -15,9 +15,19 @@ stdenv.mkDerivation rec {
     hash = "sha256-sQ2lee2gxyrl455tumMJ4EbKc8mYEDXl18Wik6daf5Q=";
   };
 
-  buildInputs = [ net-snmp ];
+  buildInputs = [
+    net-snmp
+  ];
 
-  configureFlags = [ "--libexecdir=${placeholder "out"}/bin" ];
+  configureFlags = [
+    "CFLAGS=-std=gnu17"
+    "--libexecdir=${placeholder "out"}/bin"
+  ];
+
+  postConfigure = ''
+    substituteInPlace Makefile \
+      --replace-fail "-Werror=declaration-after-statement" ""
+  '';
 
   enableParallelBuilding = true;
 
@@ -37,7 +47,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/NETWAYS/check_interfaces/releases/tag/v${version}";
     description = "Icinga check plugin for network hardware interfaces";
     homepage = "https://github.com/NETWAYS/check_interfaces/";
-    license = with lib.licenses; [ gpl2Only ];
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ jwillikers ];
     mainProgram = "check_interfaces";

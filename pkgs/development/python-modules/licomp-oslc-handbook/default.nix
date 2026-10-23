@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -24,12 +25,13 @@ buildPythonPackage (finalAttrs: {
     owner = "hesa";
     repo = "licomp-oslc-handbook";
     tag = finalAttrs.version;
-    hash = "sha256-cE3X7oT5Xg1W9lAMLJCYE6qRqrrXpVGLfBp18ynUYLE=";
-    postFetch = ''
-      # conflicts with `licenses` on Darwin, thus producing a different source
-      # hash.
-      mv $out/LICENSES $out/LICENSES_
-    '';
+    hash =
+      # Darwin's case-insensitive filesystem produces a different source hash,
+      # given a conflict with `licenses` and `LICENSES`
+      if stdenv.hostPlatform.isDarwin then
+        "sha256-Y01AHnaXWIwqWVS1/QTrGrOqy0ejYC1wwJZ+q2+y0yc="
+      else
+        "sha256-cgvwFwKlClEPfj9DWvxdBFpnYpdhdXBPsM+qPXxb+SE=";
   };
 
   build-system = [
@@ -50,7 +52,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   meta = {
-    description = "Licomp implementaiton of OSLC-handbook";
+    description = "Licomp implementation of OSLC-handbook";
     homepage = "https://github.com/hesa/licomp-oslc-handbook";
     changelog = "https://github.com/hesa/licomp-oslc-handbook/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [
@@ -60,8 +62,5 @@ buildPythonPackage (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [ eljamm ];
     teams = with lib.teams; [ ngi ];
-    # TODO: remove when this is resolved:
-    # https://github.com/hesa/licomp-oslc-handbook/issues/4
-    badPlatforms = lib.platforms.darwin;
   };
 })

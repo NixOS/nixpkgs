@@ -4,6 +4,11 @@
   fetchFromGitHub,
   fetchpatch,
   cmake,
+  # sets OPENBLAS_NUM_THREADS and OMP_NUM_THREADS for packages
+  # invoking openblas during checkPhase/installCheckPhase to
+  # avoid overloading builders with excessive parallelism
+  # See also: https://github.com/OpenMathLib/OpenBLAS/blob/e7b45174355edec1f04de1cabcf5ca6a98ea7fbc/USAGE.md#how-can-i-use-openblas-in-multi-threaded-applications
+  checkPhaseThreadLimitHook,
   # Most packages depending on openblas expect integer width to match
   # pointer width, but some expect to use 32-bit integers always
   # (for compatibility with reference BLAS).
@@ -39,6 +44,7 @@
   R,
   openmp ? null,
   testers,
+  pkgsCross,
 }:
 
 let
@@ -76,7 +82,9 @@ let
     aarch64-linux = {
       BINARY = 64;
       TARGET = setTarget "ARMV8";
-      DYNAMIC_ARCH = setDynamicArch true;
+      # DYNAMIC_ARCH includes ARMV9SME which references sgemm_kernel_sve_v2x4.S,
+      # a file missing when cross-compiling.
+      DYNAMIC_ARCH = setDynamicArch (stdenv.buildPlatform.canExecute stdenv.hostPlatform);
       USE_OPENMP = true;
     };
 
@@ -85,15 +93,6 @@ let
       TARGET = setTarget "P2";
       DYNAMIC_ARCH = setDynamicArch true;
       USE_OPENMP = true;
-    };
-
-    x86_64-darwin = {
-      BINARY = 64;
-      TARGET = setTarget "ATHLON";
-      DYNAMIC_ARCH = setDynamicArch true;
-      NO_AVX512 = !enableAVX512;
-      USE_OPENMP = false;
-      MACOSX_DEPLOYMENT_TARGET = "10.7";
     };
 
     x86_64-linux = {
@@ -232,6 +231,10 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
+  propagatedNativeBuildInputs = [
+    checkPhaseThreadLimitHook
+  ];
+
   buildInputs = lib.optional (stdenv.cc.isClang && config.USE_OPENMP) openmp;
 
   depsBuildBuild = [
@@ -332,6 +335,7 @@ stdenv.mkDerivation (finalAttrs: {
       package = finalAttrs.finalPackage;
       moduleNames = [ "OpenBLAS" ];
     };
+    aarch64-multiplatform = pkgsCross.aarch64-multiplatform.openblas;
   };
 
   meta = {

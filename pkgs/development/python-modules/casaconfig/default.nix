@@ -20,6 +20,10 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [ certifi ];
 
+  pythonImportsCheck = [ "casaconfig" ];
+
+  doCheck = false; # test requires network
+
   meta = {
     description = "Reference data and converters for CASA operation";
     homepage = "https://casa.nrao.edu/";

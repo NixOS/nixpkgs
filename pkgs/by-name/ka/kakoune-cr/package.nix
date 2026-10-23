@@ -1,6 +1,6 @@
 {
   lib,
-  crystal,
+  crystal_1_20,
   fetchFromGitHub,
   fetchurl,
   jq,
@@ -12,7 +12,7 @@ let
     hash = "sha256-JxhIEmjiGrisaarA1sX1AfzNjHNIm9xjyPs/nG1uL/U=";
   };
 in
-crystal.buildCrystalPackage rec {
+crystal_1_20.buildCrystalPackage rec {
   pname = "kakoune.cr";
   version = "0-unstable-2021-11-12";
 

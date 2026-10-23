@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   atk,
-  glibmm,
+  glibmm_2_4,
   pkg-config,
   gnome,
   meson,
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [
     atk
-    glibmm
+    glibmm_2_4
   ];
 
   nativeBuildInputs = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "C++ wrappers for ATK accessibility toolkit";
     license = lib.licenses.lgpl21Plus;
-    homepage = "https://gtkmm.org";
+    homepage = "https://gitlab.gnome.org/GNOME/atkmm";
     platforms = lib.platforms.unix;
   };
 })

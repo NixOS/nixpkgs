@@ -2,7 +2,7 @@
   lib,
   stdenv,
 
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   versionCheckHook,
 
@@ -12,25 +12,30 @@
 
   nixosTests,
   nix-update-script,
+
+  withUI ? true,
 }:
 
 let
   canExecute = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 in
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "llama-swap";
-  version = "224";
+  version = "262";
 
   outputs = [
     "out"
+    "kubeswap"
     "wol" # wake on lan proxy
+    "vllm_wrapper" # helper for using `vllm` with `--enable-sleep-mode`
+    "utils"
   ];
 
   src = fetchFromGitHub {
     owner = "mostlygeek";
     repo = "llama-swap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IblAaM9FBdI2Y9rg36SWpclQ0jV6Y93RC+N+cXWEO94=";
+    hash = "sha256-DAYaR+N7alGbdLsGlaiDlsHiqxOMg65069i/vHOkLKk=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -43,7 +48,10 @@ buildGoModule (finalAttrs: {
     '';
   };
 
-  vendorHash = "sha256-b+RreafBMCWT/jbWTlXaiDRzA4DRe76WaCEbrfRxV/4=";
+  vendorHash = "sha256-yelob7FlaGymASUP0DAUkALQm5vnXZnN5ThbnSkH2Ak=";
+
+  # Upstream only embeds the UI when this build tag is set.
+  tags = lib.optionals withUI [ "embed_ui" ];
 
   passthru.ui = callPackage ./ui.nix { llama-swap = finalAttrs.finalPackage; };
 
@@ -62,7 +70,9 @@ buildGoModule (finalAttrs: {
 
   postPatch = ''
     substituteInPlace internal/process/process_command_forking_test.go \
-      --replace "#!/bin/bash" "#!${lib.getExe bash}"
+      --replace-fail "#!/bin/bash" "#!${lib.getExe bash}"
+    substituteInPlace cmd/vllm-wrapper/main_test.go \
+      --replace-fail "#!/bin/bash" "#!${lib.getExe bash}"
   '';
 
   preBuild = ''
@@ -70,8 +80,10 @@ buildGoModule (finalAttrs: {
     ldflags+=" -X main.commit=$(cat COMMIT)"
     ldflags+=" -X main.date=$(cat SOURCE_DATE_EPOCH)"
 
-    # copy for go:embed in internal/server/ui_embed.go
-    cp -r ${finalAttrs.passthru.ui}/ui_dist internal/server/
+    ${lib.optionalString withUI ''
+      # copy for go:embed in internal/server/ui_embed.go
+      cp -r ${finalAttrs.passthru.ui}/ui_dist internal/server/
+    ''}
   '';
 
   excludedPackages = [
@@ -79,8 +91,10 @@ buildGoModule (finalAttrs: {
     "misc/process-cmd-test"
     # benchmark/regression testing tool
     "misc/benchmark-chatcompletion"
+    # testing tool for the performance monitoring code
+    "cmd/monitor-test"
   ]
-  ++ lib.optionals (!canExecute) [
+  ++ lib.optionals finalAttrs.doCheck [
     # some tests expect to execute `simple-something`; if it can't be executed
     # it's unneeded
     "misc/simple-responder"
@@ -88,7 +102,7 @@ buildGoModule (finalAttrs: {
 
   checkFlags =
     let
-      skippedTests = lib.optionals (stdenv.hostPlatform.isDarwin) [
+      skippedTests = lib.optionals stdenv.hostPlatform.isDarwin [
         # Fail only on *-darwin intermittently
         # https://github.com/mostlygeek/llama-swap/issues/320
         "TestProcess_AutomaticallyStartsUpstream"
@@ -117,26 +131,58 @@ buildGoModule (finalAttrs: {
     mkdir build
     ln -s "$GOPATH/bin/simple-responder" "./build/simple-responder_''${GOOS}_''${GOARCH}"
   '';
+  # doesn't need to be cleaned up outside of the check path as we don't build it
+  # due to `excludedPackages`
   postCheck = ''
     rm "$GOPATH/bin/simple-responder"
   '';
 
-  postInstall = ''
+  # project regularly adds small utility binaries
+  # this `installPhase` means we need to sort them
+  # into outputs or skip building them
+  installPhase = ''
+    runHook preInstall
+
     install -Dm444 -t "$out/share/llama-swap" config.example.yaml
+
+    mkdir -p "$out/bin"
+    mv "$GOPATH/bin/llama-swap" "$out/bin/"
+
+    mkdir -p "$kubeswap/bin"
+    mv "$GOPATH/bin/kubeswap" "$kubeswap/bin/"
+
     mkdir -p "$wol/bin"
-    mv "$out/bin/wol-proxy" "$wol/bin/"
+    mv "$GOPATH/bin/wol-proxy" "$wol/bin/"
+
+    mkdir -p "$vllm_wrapper/bin"
+    mv "$GOPATH/bin/vllm-wrapper" "$vllm_wrapper/bin/"
+
+    mkdir -p "$utils/bin"
+    mv "$GOPATH/bin/"{fake-model,test-concurrency} "$utils/bin/"
+
+    # log if we don't handle a new executable
+    EXECUTABLES=$(find "$GOPATH/bin" -maxdepth 1 -type f -executable -print -quit)
+    if [ -n "$EXECUTABLES" ]; then
+      echo "Error: Directory '$GOPATH/bin' still contains executables." >&2
+      echo "  $EXECUTABLES" >&2
+      exit 1
+    fi
+
+    runHook postInstall
   '';
 
   doInstallCheck = true;
   versionCheckProgramArg = "-version";
 
-  passthru.tests.nixos = nixosTests.llama-swap;
+  passthru.tests.nixos = if withUI then nixosTests.llama-swap.full else nixosTests.llama-swap.minimal;
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--subpackage"
       "ui"
     ];
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://github.com/mostlygeek/llama-swap";

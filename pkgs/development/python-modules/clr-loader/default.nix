@@ -14,11 +14,11 @@
 
 let
   pname = "clr-loader";
-  version = "0.2.10";
+  version = "0.3.1";
   src = fetchPypi {
     pname = "clr_loader";
     inherit version;
-    hash = "sha256-gfEUr7xQBbr8Xv5a8TQdQA4iE34nWwQqiXnz/rn8lEY=";
+    hash = "sha256-Lgc+mq9J0a4vVuy6J5h61ftovkvNndNKW+2PDk4Sg2Y=";
   };
   # This stops msbuild from picking up $version from the environment
   postPatch = ''

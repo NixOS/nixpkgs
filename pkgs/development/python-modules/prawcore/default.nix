@@ -39,6 +39,11 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # fixture out of date
+    "test_request__session_timeout_default"
+  ];
+
   disabledTestPaths = [
     # tests requiring network
     "tests/integration"

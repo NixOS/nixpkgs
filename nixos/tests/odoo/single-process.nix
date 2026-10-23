@@ -4,7 +4,7 @@
   ...
 }:
 {
-  name = "odoo-single-process";
+  name = "odoo-single-process-${package.version}";
   meta.maintainers = with lib.maintainers; [
     mkg20001
     xanderio

@@ -4,6 +4,7 @@
   callPackage,
   fetchFromGitHub,
   lib,
+  nix-update-script,
   qemu_kvm,
   stdenv,
   virtiofsd,
@@ -11,9 +12,13 @@
 }:
 
 let
-  version = "3.29.0";
+  version = "3.32.0";
 
-  kata-images = callPackage ./kata-images.nix { inherit version; };
+  kata-images-all = callPackage ./kata-images.nix { inherit version; };
+
+  kata-images =
+    kata-images-all.${stdenv.hostPlatform.system}
+      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   qemuSystemBinary =
     {
@@ -34,14 +39,12 @@ buildGoModule rec {
     owner = "kata-containers";
     repo = "kata-containers";
     rev = version;
-    hash = "sha256-AjGqKJVrcfHLY0NosBWFOgKC3eiU9hsFXQsU+LM8XME=";
+    hash = "sha256-dnbzjYDKeAp0wFQcO5VK71vkf7ubVK5Lh9R9jjuro28=";
   };
 
   sourceRoot = "${src.name}/src/runtime";
 
-  vendorHash = null;
-
-  dontConfigure = true;
+  vendorHash = "sha256-HAWobIcqwHL7jgawpOk1ZNx6vG8NApF5Nn60eZ9Fc1c=";
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
@@ -76,6 +79,14 @@ buildGoModule rec {
 
   passthru = {
     inherit kata-images;
+    kata-images-aarch64-linux = kata-images-all.aarch64-linux;
+    kata-images-x86_64-linux = kata-images-all.x86_64-linux;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage=kata-images-aarch64-linux"
+        "--subpackage=kata-images-x86_64-linux"
+      ];
+    };
   };
 
   meta = {

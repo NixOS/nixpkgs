@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -36,14 +35,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "plopp";
-  version = "26.6.0";
+  version = "26.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scipp";
     repo = "plopp";
     tag = finalAttrs.version;
-    hash = "sha256-hM8Y5kusKUu54SYPjPwZ7YnxXFzX/IM28GFWcfkdnsA=";
+    hash = "sha256-CCFlumMJeU296+V2UCPAnZSoEQnmx7fjICznaiyfKnY=";
   };
 
   build-system = [
@@ -72,12 +71,6 @@ buildPythonPackage (finalAttrs: {
     scipp
     scipy
     xarray
-  ];
-
-  disabledTests = lib.optionals (pythonAtLeast "3.14") [
-    # https://github.com/scipp/plopp/issues/508
-    "test_move_cut"
-    "test_value_cuts"
   ];
 
   env = {

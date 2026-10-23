@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   # build-system
   setuptools,
@@ -29,7 +28,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "funsor";
-  version = "0.4.7";
+  version = "0.4.8";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -37,16 +36,24 @@ buildPythonPackage (finalAttrs: {
     owner = "pyro-ppl";
     repo = "funsor";
     tag = finalAttrs.version;
-    hash = "sha256-0STJv1OOliJaHdmYUXdnOnocH3hVXceH/Uw5nILvT+U=";
+    hash = "sha256-iTkDd6vz4wesY3jABSMxLtTKioP98DhGB0plLL+vhNY=";
   };
 
   patches = [
-    # Compatibility with torch >= 2.5 (arg_constraints is now a property)
-    (fetchpatch {
-      url = "https://github.com/pyro-ppl/funsor/commit/c5e2a48d73cad4e98058147af4090171272a44e5.patch";
-      hash = "sha256-sTR+hbJtS0Th5sIqlvB2bReEC0wnEbnB7gAiZKiqjAQ=";
-    })
+    # Compatibility with torch >= 2.5, where `Uniform.arg_constraints` is a property.
+    # Remaining part of the pending upstream PR https://github.com/pyro-ppl/funsor/pull/610
+    # (the `Uniform` parameter registration was already merged as part of
+    # https://github.com/pyro-ppl/funsor/pull/614).
+    ./torch-arg-constraints-property.patch
   ];
+
+  # `torch.cholesky` and `Tensor.cholesky` were removed in torch 2.14
+  postPatch = ''
+    substituteInPlace test/pyro/test_convert.py test/pyro/test_hmm.py \
+      --replace-fail "torch.cholesky(cov)" "torch.linalg.cholesky(cov)"
+    substituteInPlace test/test_gaussian.py \
+      --replace-fail "u = x.cholesky()" "u = torch.linalg.cholesky(x)"
+  '';
 
   build-system = [ setuptools ];
 
@@ -76,6 +83,11 @@ buildPythonPackage (finalAttrs: {
   preCheck = ''
     export FUNSOR_BACKEND=torch
   '';
+
+  pytestFlags = [
+    # FutureWarning: `torch.jit.trace` is not supported in Python 3.14+ and may break.
+    "-Wignore:`torch.jit.:FutureWarning"
+  ];
 
   pythonImportsCheck = [ "funsor" ];
 

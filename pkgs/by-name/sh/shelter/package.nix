@@ -10,12 +10,12 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "shelter";
-  version = "0-unstable-2026-06-05";
+  version = "0-unstable-2026-09-16";
   src = fetchFromGitHub {
     owner = "uwu";
     repo = "shelter";
-    rev = "4c08e2e8ad5d7e8fe741be3c9e2151ec25d20d8d";
-    hash = "sha256-8poWWDuCOrgJYjwRfOPIXTdyVlau5SxG9FxjcN8o/wo=";
+    rev = "0397ffe539fce088f8cab25cc086055d4a5feb71";
+    hash = "sha256-Qagye5ksJyvoOIpoozfWmHTO8Or2F7KWOyXQgbK2vVY=";
   };
 
   nativeBuildInputs = [

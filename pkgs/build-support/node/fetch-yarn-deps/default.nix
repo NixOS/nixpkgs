@@ -104,6 +104,7 @@ in
           src ? null,
           hash ? "",
           sha256 ? "",
+          mirrorUrl ? null,
           ...
         }@args:
         let
@@ -136,6 +137,8 @@ in
               cacert
             ];
 
+            impureEnvVars = lib.fetchers.proxyImpureEnvVars;
+
             env = {
               GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
               NODE_EXTRA_CA_CERTS = "${cacert}/etc/ssl/certs/ca-bundle.crt";
@@ -146,7 +149,9 @@ in
 
               yarnLock=''${yarnLock:=$PWD/yarn.lock}
               mkdir -p $out
-              (cd $out; prefetch-yarn-deps --verbose --builder $yarnLock)
+              (cd $out; prefetch-yarn-deps --verbose --builder $yarnLock ${
+                lib.optionalString (mirrorUrl != null) "--mirrorUrl ${lib.escapeShellArg mirrorUrl}"
+              })
 
               runHook postBuild
             '';
@@ -159,6 +164,7 @@ in
               "name"
               "hash"
               "sha256"
+              "mirrorUrl"
             ]
             ++ (lib.optional (src == null) "src")
           ))

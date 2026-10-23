@@ -3,15 +3,15 @@
   buildFishPlugin,
   fetchFromGitHub,
 }:
-buildFishPlugin rec {
+buildFishPlugin (finalAttrs: {
   pname = "fifc";
-  version = "0.1.1";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "gazorby";
     repo = "fifc";
-    rev = "v${version}";
-    hash = "sha256-p5E4Mx6j8hcM1bDbeftikyhfHxQ+qPDanuM1wNqGm6E=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-huBcOdjiRztGyqcMX4vnrr8lLjtWBcCYvBLXr1JNNQs=";
   };
 
   meta = {
@@ -20,4 +20,4 @@ buildFishPlugin rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hmajid2301 ];
   };
-}
+})

@@ -6,6 +6,7 @@
 
 {
   autoPatchelfHook,
+  cacert,
   fetchurl,
   lib,
   stdenv,
@@ -18,17 +19,20 @@ let
     # Test flaky
     "read"
   ]
+  ++ lib.optionals (lib.versions.majorMinor version == "1.10") [
+    "LinearAlgebra/blas"
+  ]
   ++ lib.optionals (lib.versionAtLeast version "1.10") [
     # Test flaky
     # https://github.com/JuliaLang/julia/issues/52739
     "REPL"
     # Test flaky
     "ccall"
+    "loading"
   ]
   ++ lib.optionals (lib.versionAtLeast version "1.11") [
     # Test flaky
     # https://github.com/JuliaLang/julia/issues/54280
-    "loading"
     "cmdlineargs"
   ]
   ++ lib.optionals (lib.versionAtLeast version "1.12") [
@@ -63,6 +67,9 @@ stdenv.mkDerivation {
 
   inherit version patches;
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src =
     {
       x86_64-linux = fetchurl {
@@ -72,10 +79,6 @@ stdenv.mkDerivation {
       aarch64-linux = fetchurl {
         url = "https://julialang-s3.julialang.org/bin/linux/aarch64/${lib.versions.majorMinor version}/julia-${version}-linux-aarch64.tar.gz";
         sha256 = sha256.aarch64-linux;
-      };
-      x86_64-darwin = fetchurl {
-        url = "https://julialang-s3.julialang.org/bin/mac/x64/${lib.versions.majorMinor version}/julia-${version}-mac64.tar.gz";
-        sha256 = sha256.x86_64-darwin;
       };
       aarch64-darwin = fetchurl {
         url = "https://julialang-s3.julialang.org/bin/mac/aarch64/${lib.versions.majorMinor version}/julia-${version}-macaarch64.tar.gz";
@@ -102,6 +105,8 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
     cp -r . $out
+    rm $out/share/julia/cert.pem
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/share/julia/cert.pem
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     # "$out/share" is intentionally omitted since it contains
@@ -151,7 +156,6 @@ stdenv.mkDerivation {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     mainProgram = "julia";

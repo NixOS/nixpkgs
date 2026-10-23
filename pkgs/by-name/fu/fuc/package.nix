@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fuc";
-  version = "3.1.7";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "SUPERCILEX";
     repo = "fuc";
     tag = finalAttrs.version;
-    hash = "sha256-LtS2+iqu4+z6K/PZeggLdo4S/F+5AtV5j9Q6hDAcEiQ=";
+    hash = "sha256-jn553QosWi7avgSjT72lL8auVVd/n4+5MDCJAquflgs=";
   };
 
-  cargoHash = "sha256-SSJg/Ns64+NgqrB4mJ5/xa40tZfGZ2VGdvNP7SSKv0E=";
+  cargoHash = "sha256-kxaB3R9V8JG2EdLfGFrP12wt9TZco7QfpfNbLQZDq30=";
 
   env.RUSTC_BOOTSTRAP = 1;
 

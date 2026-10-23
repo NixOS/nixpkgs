@@ -7,7 +7,7 @@
   python3,
   perlPackages,
   haskellPackages,
-  luaPackages,
+  lua55Packages,
   ocamlPackages,
   testers,
 }:
@@ -18,18 +18,18 @@
 # files.
 
 let
-  version = "2.8.1";
-  tag = "R_${lib.replaceStrings [ "." ] [ "_" ] version}";
+  tagFor = version: "R_${lib.replaceStrings [ "." ] [ "_" ] version}";
 in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "expat";
-  inherit version;
+  version = "2.9.0";
 
   src = fetchurl {
     url =
       with finalAttrs;
-      "https://github.com/libexpat/libexpat/releases/download/${tag}/${pname}-${version}.tar.xz";
-    hash = "sha256-ELGV7ngWCpCDiBgKj+NgPU6aEvR1X79fOBayOp11DaA=";
+      "https://github.com/libexpat/libexpat/releases/download/${tagFor version}/${pname}-${version}.tar.xz";
+    hash = "sha256-HmNxhizDGZmzaMO4m0mZTwZ34bq18bK4WuN0H12AMFE=";
   };
 
   strictDeps = true;
@@ -65,15 +65,17 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (python3.pkgs) xmltodict;
     inherit (haskellPackages) hexpat;
     inherit (perlPackages) XMLSAXExpat XMLParser;
-    inherit (luaPackages) luaexpat;
+    inherit (lua55Packages) luaexpat;
     inherit (ocamlPackages) ocaml_expat;
     pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
-    changelog = "https://github.com/libexpat/libexpat/blob/${tag}/expat/Changes";
+    changelog = "https://github.com/libexpat/libexpat/blob/${tagFor finalAttrs.version}/expat/Changes";
     homepage = "https://libexpat.github.io/";
     description = "Stream-oriented XML parser library written in C";
     mainProgram = "xmlwf";

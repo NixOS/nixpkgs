@@ -11,7 +11,7 @@
   pytest-cov-stub,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "doubleratchet";
   version = "1.3.0";
   pyproject = true;
@@ -19,11 +19,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Syndace";
     repo = "python-doubleratchet";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-iw0JIegwEiBpA/9blGKb0Oh1K3j74A3ZomtMRKgJL0E=";
   };
-
-  strictDeps = true;
 
   build-system = [
     setuptools
@@ -46,9 +44,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python implementation of the Double Ratchet algorithm";
     homepage = "https://github.com/Syndace/python-doubleratchet";
-    changelog = "https://github.com/Syndace/python-doubleratchet/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/Syndace/python-doubleratchet/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     teams = with lib.teams; [ ngi ];
     maintainers = with lib.maintainers; [ axler1 ];
   };
-}
+})

@@ -26,6 +26,7 @@ recurseIntoAttrs {
   overriding = callPackage ../test-overriding.nix { };
   inherit references;
   requireFile = callPackage ./requireFile.nix { };
+  runCommand = callPackage ./runCommand.nix { };
   writeCBin = callPackage ./writeCBin.nix { };
   writeClosure-union = callPackage ./writeClosure-union.nix {
     inherit (references) samples;

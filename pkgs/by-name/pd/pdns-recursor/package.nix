@@ -7,7 +7,6 @@
   nixosTests,
   openssl,
   systemd,
-  lua,
   luajit,
   protobuf,
   libsodium,
@@ -21,17 +20,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdns-recursor";
-  version = "5.4.3";
+  version = "5.4.6";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/pdns-recursor-${finalAttrs.version}.tar.xz";
-    hash = "sha256-opICnFQ6xFOMpXYouBQsntypsoOjqAyzk+2UfgWE8A8=";
+    hash = "sha256-DUyf6+b5TaCu1+Bex7ZUkE+9YindU79ge2P6cHuSNoo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src;
+    inherit (finalAttrs) pname version src;
     sourceRoot = "pdns-recursor-${finalAttrs.version}/rec-rust-lib/rust";
-    hash = "sha256-eAiXdsHWZca0wx5FONGfa7JDcpDHyCABJOUROhwAsZo=";
+    hash = "sha256-uHcUCVtlVFAgi/rPD1lYlN81p7gcIXvHutKXYMVddv4=";
   };
 
   cargoRoot = "rec-rust-lib/rust";
@@ -48,7 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     openssl
     systemd
-    lua
     luajit
     libsodium
     curl

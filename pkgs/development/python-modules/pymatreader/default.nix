@@ -8,18 +8,19 @@
   scipy,
   xmltodict,
   pytestCheckHook,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "pymatreader";
-  version = "1.0.0";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "obob";
     repo = "pymatreader";
     tag = "v${version}";
-    hash = "sha256-cDEGEvBSj3gmjA+8aXULwuBVk09BLQbA91CNAxgtiLA=";
+    hash = "sha256-UQI8bktmS+GycjbY1OHtS4OHT+Q3JyP8xvTbYIJJzC0=";
   };
 
   postPatch = ''
@@ -40,6 +41,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pymatreader" ];
+
+  # avoid autoupdates for *.dev* tags
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^([\\d.]+)$" ];
+  };
 
   meta = {
     description = "Python package to read all kinds and all versions of Matlab mat files";

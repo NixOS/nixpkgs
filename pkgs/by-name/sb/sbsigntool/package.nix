@@ -61,13 +61,17 @@ stdenv.mkDerivation (finalAttrs: {
     automake --add-missing -Wno-portability
   '';
 
+  # GCC 16's unused variable analysis is more advanced, leading to a build
+  # failure since sbsigntool builds with -Wno-error.
+  configureFlags = [ "CFLAGS=-Wno-error=unused-but-set-variable" ];
+
   makeFlags = [
     "AR=${stdenv.cc.targetPrefix}ar"
   ];
 
   meta = {
     description = "Tools for maintaining UEFI signature databases";
-    homepage = "http://jk.ozlabs.org/docs/sbkeysync-maintaing-uefi-key-databases";
+    homepage = "https://git.kernel.org/pub/scm/linux/kernel/git/jejb/sbsigntools.git";
     maintainers = with lib.maintainers; [
       hmenke
       raitobezarius
@@ -75,6 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
+      "loongarch64-linux"
+      "riscv64-linux"
     ]; # Broken on i686
     license = lib.licenses.gpl3;
   };

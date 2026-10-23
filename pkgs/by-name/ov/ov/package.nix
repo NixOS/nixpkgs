@@ -6,26 +6,27 @@
   installShellFiles,
   pandoc,
   makeWrapper,
-  testers,
-  ov,
+  nix-update-script,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "ov";
-  version = "0.51.1";
+  version = "0.55.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "noborus";
     repo = "ov";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Wt7XF1/l5WwdlrnFLyJPYoXyaWhE+uF1RAN68iol3qM=";
+    hash = "sha256-zYxgXVUHLBY1VBh1JNyeIhkU444UFak77+rEZ1TTSGI=";
   };
 
-  vendorHash = "sha256-rfUE38Wfo29s9GRsg/F/FCIto9yikE4b9QwLxYjvSg8=";
+  vendorHash = "sha256-KFx2ZCh0DT5a5cp/CG3dnPwTLQgl5we43usyVdf/ihU=";
 
   ldflags = [
     "-s"
-    "-w"
     "-X=main.Version=v${finalAttrs.version}"
     "-X=main.Revision=${finalAttrs.src.rev}"
   ];
@@ -61,11 +62,13 @@ buildGoModule (finalAttrs: {
       cp $src/ov.yaml $doc/share/$name/sample-config.yaml
     '';
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = ov;
-      version = "v${finalAttrs.version}";
-    };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
   };
 
   meta = {
@@ -73,7 +76,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://noborus.github.io/ov";
     changelog = "https://github.com/noborus/ov/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ Holiu618 ];
     mainProgram = "ov";
   };
 })

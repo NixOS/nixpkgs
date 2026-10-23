@@ -190,11 +190,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       "aarch64-linux"
       "x86_64-linux"
       "aarch64-darwin"
-      "x86_64-darwin"
     ];
-    badPlatforms = [
-      # Broken due to Bun requiring AVX when run via Rosetta 2 on Apple Silicon.
-      "x86_64-darwin"
-    ];
+    # Has been broken on all platforms for over a month: https://github.com/NixOS/nixpkgs/issues/542516. Maintainer is irresponsive, mark broken to prevent blocking upstream updates.
+    broken = true;
   };
 })

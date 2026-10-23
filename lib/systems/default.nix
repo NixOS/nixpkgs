@@ -151,7 +151,21 @@ let
           );
 
         # Derived meta-data
-        useLLVM = final.isFreeBSD || final.isOpenBSD;
+        useLLVM =
+          final.isFreeBSD
+          || final.isOpenBSD
+          || final.isUefi
+          || final.isMsvc
+          ||
+            # because GCC does not support this platform yet
+            (with final; isWindows && isAarch64);
+
+        # Use the split GCC package set (`gccNGPackages`) instead of the
+        # monolithic `gcc`.
+        #
+        # NetBSD is here to dogfood it: it is low tier and has to use GCC
+        # rather than LLVM.
+        useGccNG = final.isCygwin || final.isNetBSD;
 
         libc =
           if final.isDarwin then
@@ -170,13 +184,13 @@ let
             "relibc"
           else if final.isMusl then
             "musl"
+          else if final.isPicolibc then
+            "picolibc"
           else if final.isUClibc then
             "uclibc"
           else if final.isAndroid then
             "bionic"
-          else if
-            final.isLinux # default
-          then
+          else if final.isLinux then
             "glibc"
           else if final.isFreeBSD then
             "fblibc"
@@ -187,6 +201,8 @@ let
           else if final.isAvr then
             "avrlibc"
           else if final.isGhcjs then
+            null
+          else if final.isUefi then
             null
           else if final.isNone then
             "newlib"
@@ -245,7 +261,7 @@ let
               netbsd = "NetBSD";
               freebsd = "FreeBSD";
               openbsd = "OpenBSD";
-              wasi = "Wasi";
+              wasip1 = "WasiP1";
               redox = "Redox";
               genode = "Genode";
             }
@@ -470,6 +486,8 @@ let
                   rust.platform.os or "none"
                 else if final.isDarwin then
                   "macos"
+                else if final.isWasi then
+                  "wasi"
                 else if final.isWasm && !final.isWasi then
                   "unknown" # Needed for {wasm32,wasm64}-unknown-unknown.
                 else
@@ -520,19 +538,19 @@ let
                 .${cpu.name} or cpu.name;
               vendor_ = final.rust.platform.vendor;
               abi_ =
-                # We're very explicit about the POWER ELF ABI w/ glibc in our parsing, while Rust is not.
-                # TODO: Somehow ensure that Rust actually *uses* the correct ABI, and not just a libc-based default.
-                if (lib.strings.hasPrefix "powerpc" cpu.name) && (lib.strings.hasPrefix "gnuabielfv" abi.name) then
-                  "gnu"
+                # Rustc uses different triplets for ELFv1 & ELFv2 w/ glibc.
+                # (we reject just "gnu" due to ambiguity, musl is ELFv2-only)
+                if (cpu.name == "powerpc64" && kernel.name == "linux") then
+                  {
+                    "gnuabielfv1" = "gnu";
+                    "gnuabielfv2" = "gnuelfv2";
+                  }
+                  .${abi.name} or abi.name
                 else
                   abi.name;
 
               inferred =
-                if final.isWasi then
-                  # Rust uses `wasm32-wasip?` rather than `wasm32-unknown-wasi`.
-                  # We cannot know which subversion does the user want, and
-                  # currently use WASI 0.1 as default for compatibility. Custom
-                  # users can set `rust.rustcTargetSpec` to override it.
+                if final.isWasiP1 then
                   "${cpu_}-wasip1"
                 else
                   "${cpu_}-${vendor_}-${kernel.name}${optionalString (abi.name != "unknown") "-${abi_}"}";
@@ -585,6 +603,7 @@ let
               "i686" = "386";
               "loongarch64" = "loong64";
               "mips" = "mips";
+              "mips64" = "mips64";
               "mips64el" = "mips64le";
               "mipsel" = "mipsle";
               "powerpc64" = "ppc64";
@@ -595,7 +614,7 @@ let
               "wasm32" = "wasm";
             }
             .${final.parsed.cpu.name} or null;
-          GOOS = if final.isWasi then "wasip1" else final.parsed.kernel.name;
+          GOOS = if final.isWasiP1 then "wasip1" else final.parsed.kernel.name;
 
           # See https://go.dev/wiki/GoArm
           GOARM = toString (lib.intersectLists [ (final.parsed.cpu.version or "") ] [ "5" "6" "7" ]);
@@ -702,6 +721,26 @@ let
               "iOS"
             else
               null;
+        };
+        swift = {
+          arch = final.uname.processor;
+          platform =
+            if final.isMacOS then
+              "macosx"
+            else if final.isiOS then
+              "iphoneos"
+            else if final.isLinux then
+              "linux"
+            else if final.isWindows then
+              "windows"
+            else
+              null;
+          triple =
+            if final.isDarwin then
+              # FIXME: Can this be done a better way?
+              "${final.swift.arch}-${final.parsed.vendor.name}-${final.swift.platform}${final.darwinMinVersion}"
+            else
+              final.config;
         };
       };
     in

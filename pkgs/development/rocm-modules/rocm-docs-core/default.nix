@@ -30,7 +30,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-docs-core";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dVX+e0nk9/GT0idXNvLwCuN8Fh/r0dWIvqToU9cxKxs=";
   };
 

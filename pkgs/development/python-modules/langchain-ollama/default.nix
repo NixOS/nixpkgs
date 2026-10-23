@@ -26,7 +26,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.1.0";
   pyproject = true;
   __structuredAttrs = true;
-  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
@@ -69,6 +68,7 @@ buildPythonPackage (finalAttrs: {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "langchain-ollama==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 

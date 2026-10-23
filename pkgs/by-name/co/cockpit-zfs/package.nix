@@ -1,7 +1,6 @@
 {
   acl,
   bash,
-  buildPackages,
   cockpit,
   coreutils,
   fetchFromGitHub,
@@ -22,7 +21,7 @@
   smartmontools,
   stdenv,
   su,
-  systemd,
+  systemdLibs,
   util-linux,
   yarn-berry,
   zfs,
@@ -30,28 +29,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cockpit-zfs";
-  version = "1.2.27-3";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "45Drives";
     repo = "cockpit-zfs";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-7hx9FJxFN7xsozMvAb0fdRTX2hAcxtJc5wdgrs2PGJc=";
+    hash = "sha256-AeHawdStX+A+/8z4IWaf1w5irNZDIWs52y1nsEF+fHg=";
   };
-
-  patches = [
-    # Remove after upstream updates to Yarn 4.14
-    # https://github.com/45Drives/cockpit-zfs/blob/main/package.json#L13
-    ./yarn-4.14-support.patch
-  ];
 
   missingHashes = ./missing-hashes.json;
 
   # Use buildPackages for cross-compilation support
-  offlineCache = buildPackages.yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-Tdxe5bXN9psSrnUXL1f+1nh4WPzuvOI7j0I+VPU2/1s=";
+  offlineCache = yarn-berry.fetchYarnBerryDeps {
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-nm3iHf9Rm5JFKzH0HAvglkQPFIV6Fl1e9WvNdqevTug=";
   };
 
   nativeBuildInputs = [
@@ -59,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
     jq
     yarn-berry
-    buildPackages.yarn-berry.yarnBerryConfigHook
+    yarn-berry.yarnBerryConfigHook
   ];
 
   disallowedRequisites = [ finalAttrs.offlineCache ];
@@ -82,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     shadow
     smartmontools
     su
-    systemd
+    systemdLibs
     util-linux
     zfs
     cockpit.passthru.python3Packages.pyudev

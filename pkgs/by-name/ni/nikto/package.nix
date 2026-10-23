@@ -7,18 +7,15 @@
   installShellFiles,
 }:
 
-let
-  version = "2.6.0";
-in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nikto";
-  inherit version;
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "sullo";
     repo = "nikto";
-    rev = version;
-    sha256 = "sha256-iHOdMlfcKhvQCsCjWge6K+0h8kkgXa0Uii9o3YRQP5w=";
+    tag = finalAttrs.version;
+    hash = "sha256-jMbVJ35f1uPNQ7xmBnOhBMmh+u4Ewpd5GJFMg8ZKIxw=";
   };
 
   # Nikto searches its configuration file based on its current path
@@ -55,7 +52,7 @@ stdenv.mkDerivation rec {
     install -Dm 755 "program/nikto.pl" "$out/bin/nikto"
     install -Dm 644 program/nikto.conf.default "$out/etc/nikto.conf"
     installManPage documentation/nikto.1
-    install -Dm 644 README.md "$out/share/doc/${pname}/README"
+    install -Dm 644 README.md "$out/share/doc/${finalAttrs.pname}/README"
     runHook postInstall
   '';
 
@@ -66,11 +63,11 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Web server scanner";
-    mainProgram = "nikto";
-    license = lib.licenses.gpl2Plus;
     homepage = "https://cirt.net/Nikto2";
-    changelog = "https://github.com/sullo/nikto/releases/tag/${version}";
+    changelog = "https://github.com/sullo/nikto/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ tbutter ];
+    mainProgram = "nikto";
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -808,7 +808,7 @@ rec {
   hasPrefix =
     pref:
     let
-      lenPrefix = stringLength pref;
+      getGivenPrefix = substring 0 (stringLength pref);
     in
     if isPath pref then
       # Before 23.05, paths would be copied to the store before converting them
@@ -817,7 +817,7 @@ rec {
         lib.strings.hasPrefix: The first argument (${toString pref}) is a path value, but only strings are supported.
             You might want to use `lib.path.hasPrefix` instead, which correctly supports paths.''
     else
-      str: substring 0 lenPrefix str == pref;
+      str: getGivenPrefix str == pref;
 
   /**
     Determine whether a string has given suffix.
@@ -905,7 +905,7 @@ rec {
   hasInfix =
     infix:
     let
-      escapedInfix = escapeRegex infix;
+      matchGivenInfix = builtins.match ".*${escapeRegex infix}.*";
     in
     if isPath infix then
       # Before 23.05, paths would be copied to the store before converting them
@@ -915,7 +915,7 @@ rec {
             There is almost certainly a bug in the calling code, since this function always returns `false` in such a case.
             This function also copies the path to the Nix store, which may not be what you want.''
     else
-      content: builtins.match ".*${escapedInfix}.*" "${content}" != null;
+      content: matchGivenInfix "${content}" != null;
 
   /**
     Convert a string `s` to a list of characters (i.e. singleton strings).
@@ -1190,7 +1190,9 @@ rec {
 
   /**
     Quote `string` to be used safely within the Bourne shell if it has any
-    special characters.
+    special characters. Prior to escaping, if `string` is a path literal, copy
+    it into the store; otherwise, coerce `string` to a string via `toString` if
+    it is not one.
 
     # Inputs
 
@@ -1200,7 +1202,7 @@ rec {
     # Type
 
     ```
-    escapeShellArg :: String -> String
+    escapeShellArg :: a -> String
     ```
 
     # Examples
@@ -1217,7 +1219,14 @@ rec {
   escapeShellArg =
     arg:
     let
-      string = toString arg;
+      string =
+        # Even a store path can need escaping; as an extreme example, though
+        # it is deeply unwise, a store path prefix can contain any non-null
+        # character.
+        # If a path has a store path prefix but is not itself a store path, we
+        # still want to copy it into a fresh store object, so as not to take a
+        # dependency on the entire original source.
+        if isPath arg && !isStorePath arg then "${arg}" else toString arg;
     in
     if match "[[:alnum:],._+:@%/-]+" string == null then
       "'${replaceString "'" "'\\''" string}'"
@@ -1563,7 +1572,8 @@ rec {
   toUpper = replaceStrings lowerChars upperChars;
 
   /**
-    Converts the first character of a string `s` to upper-case.
+    Converts the first character of a string `s` to upper-case and leaves the
+    remainder lower-case.
 
     # Inputs
 
@@ -1581,8 +1591,8 @@ rec {
     ## `lib.strings.toSentenceCase` usage example
 
     ```nix
-    toSentenceCase "home"
-    => "Home"
+    toSentenceCase "welcome Home"
+    => "Welcome home"
     ```
 
     :::
@@ -2871,7 +2881,11 @@ rec {
 
     :::
   */
-  fileContents = file: removeSuffix "\n" (readFile file);
+  fileContents =
+    let
+      removeNewlineSuffix = removeSuffix "\n";
+    in
+    file: removeNewlineSuffix (readFile file);
 
   /**
     Creates a valid derivation name from a potentially invalid one.

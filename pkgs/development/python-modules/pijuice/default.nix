@@ -17,13 +17,13 @@ buildPythonPackage rec {
     # Latest commit that fixes using the library against python 3.9 by renaming
     # isAlive() to is_alive(). The former function was removed in python 3.9.
     tag = "V${version}";
-    sha256 = "sha256-tPYuI+VzbxmTeY/L3s0oDoydRDXJ6t76KmLUyJzxUvU=";
+    hash = "sha256-tPYuI+VzbxmTeY/L3s0oDoydRDXJ6t76KmLUyJzxUvU=";
   };
 
   patches = [
     # The pijuice_cli.cli file doesn't have a shebang as the first line of the
     # script. Without it, the pythonWrapPrograms hook will not wrap the program.
-    # Add a python shebang here so that the the hook is triggered.
+    # Add a python shebang here so that the hook is triggered.
     ./patch-shebang.diff
   ];
 

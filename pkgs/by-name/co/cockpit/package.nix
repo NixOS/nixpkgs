@@ -34,9 +34,10 @@
   pam,
   pkg-config,
   polkit,
-  python312Packages,
+  python3Packages,
+  removeReferencesTo,
   sscg,
-  systemd,
+  systemdLibs,
   udev,
   util-linux,
   xmlto,
@@ -44,22 +45,15 @@
   withBranding ? true,
   nixos-icons,
 }:
-
-let
-  # Pinned to 3.12 due to cockpit-zfs dependency py-libzfs not being compatible
-  # with 3.13+
-  python3Packages = python312Packages;
-in
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "cockpit";
-  version = "364";
+  version = "369";
 
   src = fetchFromGitHub {
     owner = "cockpit-project";
     repo = "cockpit";
     tag = finalAttrs.version;
-    hash = "sha256-TAX0N6ZQWGr17GpyJS23Q5ES3USU2hxSiI867n6G17I=";
+    hash = "sha256-r0nDLUJzGwf8oObCHfC9xGlYwq0mbKuPlPtCTWDP+LE=";
     fetchSubmodules = true;
   };
 
@@ -78,7 +72,8 @@ stdenv.mkDerivation (finalAttrs: {
     pam
     pkg-config
     python3Packages.setuptools
-    systemd
+    removeReferencesTo
+    systemdLibs
     xmlto
   ];
 
@@ -229,7 +224,7 @@ stdenv.mkDerivation (finalAttrs: {
 
 
     substituteInPlace $out/${python3Packages.python.sitePackages}/cockpit/_vendor/systemd_ctypes/libsystemd.py \
-      --replace-warn libsystemd.so.0 ${systemd}/lib/libsystemd.so.0
+      --replace-warn libsystemd.so.0 ${systemdLibs}/lib/libsystemd.so.0
 
     substituteInPlace $out/share/polkit-1/actions/org.cockpit-project.cockpit-bridge.policy \
       --replace-fail /usr $out
@@ -250,8 +245,33 @@ stdenv.mkDerivation (finalAttrs: {
       popd
     ''}
 
+    remove-references-to \
+      -t ${stdenv.cc.cc} \
+      -t ${lib.getDev stdenv.cc.libc} \
+      -t ${lib.getDev glib} \
+      -t ${lib.getDev json-glib} \
+      -t ${lib.getDev systemdLibs} \
+      -t ${lib.getDev gnutls} \
+      -t ${lib.getDev krb5} \
+      "$out/lib/security/pam_ssh_add.so" \
+      "$out/libexec/cockpit-certificate-ensure" \
+      "$out/libexec/cockpit-session" \
+      "$out/libexec/cockpit-tls" \
+      "$out/libexec/cockpit-ws" \
+      "$out/libexec/cockpit-wsinstance-factory"
+
     runHook postFixup
   '';
+
+  disallowedRequisites = [
+    stdenv.cc.cc
+    (lib.getDev stdenv.cc.libc)
+    (lib.getDev glib)
+    (lib.getDev json-glib)
+    (lib.getDev systemdLibs)
+    (lib.getDev gnutls)
+    (lib.getDev krb5)
+  ];
 
   nativeCheckInputs = [ python3Packages.pytestCheckHook ];
 

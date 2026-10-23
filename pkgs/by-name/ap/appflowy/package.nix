@@ -24,16 +24,15 @@
 
 let
   dist =
-    rec {
+    {
       x86_64-linux = {
         urlSuffix = "linux-x86_64.tar.gz";
         hash = "sha256-A8JUYzEMQH1sEKYrKZ84QZAgYbz0OvpHa3t9RIUVE9c=";
       };
-      x86_64-darwin = {
+      aarch64-darwin = {
         urlSuffix = "macos-universal.zip";
         hash = "sha256-LSNvFL1ud/FkzNSGk17ZqN2debnqsjlVDHd4NBjTds0=";
       };
-      aarch64-darwin = x86_64-darwin;
     }
     ."${stdenvNoCC.hostPlatform.system}"
       or (throw "appflowy: No source for system: ${stdenvNoCC.hostPlatform.system}");

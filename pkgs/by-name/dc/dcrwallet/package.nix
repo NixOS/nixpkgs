@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "dcrwallet";
-  version = "2.1.5";
+  version = "2.1.7";
 
   src = fetchFromGitHub {
     owner = "decred";
     repo = "dcrwallet";
     rev = "release-v${finalAttrs.version}";
-    hash = "sha256-1PCxS67hXmwUD08OGyt6szVSgQ5M9e0j8ivNxmitfR8=";
+    hash = "sha256-VDj2H+5jsNza09eXcJTtgdgni4JUK64Y/e8xNSbd3Ro=";
   };
 
-  vendorHash = "sha256-5rI6z7fC7jKPxovWp7nlZrR25NuUEz5obCn2HA6Crpk=";
+  vendorHash = "sha256-5bn55tQpkNTShxMddaojlBYQ2s9uLbgLmrHl7gpMdB0=";
 
   subPackages = [ "." ];
 
@@ -29,7 +29,7 @@ buildGoModule (finalAttrs: {
   meta = {
     homepage = "https://decred.org";
     description = "Secure Decred wallet daemon written in Go (golang)";
-    license = with lib.licenses; [ isc ];
+    license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ juaningan ];
     mainProgram = "dcrwallet";
   };

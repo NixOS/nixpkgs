@@ -36,6 +36,8 @@ let
         # The dependency target "qmldoc" of target "doc" does not exist.
         withDocumentation = !useQt6;
       };
+      lomiri-notifications = callPackage ./qml/lomiri-notifications { };
+      lomiri-push-qml = callPackage ./qml/lomiri-push-qml { };
       lomiri-ui-extras = callPackage ./qml/lomiri-ui-extras { };
       lomiri-ui-toolkit = callPackage ./qml/lomiri-ui-toolkit { };
       qqc2-suru-style = callPackage ./qml/qqc2-suru-style { };
@@ -57,6 +59,12 @@ let
     }
     // lib.optionalAttrs useQt6 {
       #### Core Apps
+      # Yoinked from the real lomiri package, referenced by other packages
+      lomiri.passthru.shellPlugindirSuffix =
+        assert lib.asserts.assertMsg (lib.strings.hasPrefix "lib/" qt6Packages.qtbase.qtQmlPrefix)
+          "Assumption that qtbase.qtQmlPrefix (${qt6Packages.qtbase.qtQmlPrefix}) starts with 'lib/' no longer holds, lomiri & its dependencies needs to be adjusted!";
+        lib.strings.removePrefix "lib/" qt6Packages.qtbase.qtQmlPrefix;
+
       morph-browser = callPackage ./applications/morph-browser {
         # get_target_property() called with non-existent target "Qt6::qdoc".
         withDocumentation = !useQt6;
@@ -89,8 +97,6 @@ let
       u1db-qt = callPackage ./development/u1db-qt { };
 
       #### QML / QML-related
-      lomiri-notifications = callPackage ./qml/lomiri-notifications { };
-      lomiri-push-qml = callPackage ./qml/lomiri-push-qml { };
       lomiri-settings-components = callPackage ./qml/lomiri-settings-components { };
 
       #### Services

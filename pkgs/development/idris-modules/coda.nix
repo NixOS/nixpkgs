@@ -13,7 +13,7 @@ build-idris-package {
     owner = "ostera";
     repo = "idris-coda";
     rev = "0d8b29b7b73aa1ea80bf216e5e6dea5e81156e32";
-    sha256 = "07wps3pyp4ph0vj3640x561gkjkbcdq1if9h6sjjb30924sbdxfg";
+    hash = "sha256-z/W2NBEJjCWlNjC5GHBja8r5gikdEDPkBvCS6+/Qlx8=";
   };
 
   meta = {

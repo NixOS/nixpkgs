@@ -39,16 +39,12 @@ let
     i686-linux = "linux-i686";
     x86_64-linux = "linux-x86_64";
     aarch64-linux = "linux-aarch64";
-    # bundles are universal and can be re-used for both darwin architectures
     aarch64-darwin = "mac";
-    x86_64-darwin = "mac";
   };
 
   arch = mozillaPlatforms.${stdenv.hostPlatform.system};
 
-  isPrefixOf = prefix: string: builtins.substring 0 (builtins.stringLength prefix) string == prefix;
-
-  sourceMatches = locale: source: (isPrefixOf source.locale locale) && source.arch == arch;
+  sourceMatches = locale: source: (lib.hasPrefix source.locale locale) && source.arch == arch;
 
   policies = {
     DisableAppUpdate = true;
@@ -132,8 +128,8 @@ stdenv.mkDerivation {
   passthru = {
     inherit applicationName binaryName;
     libName = "firefox-bin-${version}";
-    ffmpegSupport = true;
-    gssSupport = true;
+    withFFmpeg = true;
+    withGSSAPI = true;
     gtk3 = gtk3;
 
     # update with:
@@ -158,7 +154,7 @@ stdenv.mkDerivation {
     changelog = "https://www.firefox.com/en-US/firefox/${version}/releasenotes/";
     description = "Mozilla Firefox, free web browser (binary package)";
     homepage = "https://www.mozilla.org/firefox/";
-    license = {
+    license = lib.licenses.mkLicense {
       shortName = "firefox";
       fullName = "Firefox Terms of Use";
       url = "https://www.mozilla.org/about/legal/terms/firefox/";

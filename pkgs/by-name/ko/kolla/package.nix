@@ -51,18 +51,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   nativeCheckInputs = with python3Packages; [
     testtools
-    stestr
+    stestrCheckHook
     oslotest
     hacking
     bashate
+    ddt
   ];
-
-  # Tests output a few exceptions but still succeed
-  checkPhase = ''
-    runHook preCheck
-    stestr run -e <(echo "test_load_ok")
-    runHook postCheck
-  '';
 
   meta = {
     description = "Provides production-ready containers and deployment tools for operating OpenStack clouds";

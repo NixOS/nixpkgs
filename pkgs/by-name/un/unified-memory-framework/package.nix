@@ -24,7 +24,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "unified-memory-framework";
-  version = "1.1.0";
+  version = "1.2.0";
 
   nativeBuildInputs = [
     cmake
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_cudart
   ]
-  ++ lib.optionals finalAttrs.doCheck [
+  ++ lib.optionals finalAttrs.finalPackage.doCheck [
     numactl
     gtest
     gbenchmark
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "oneapi-src";
     repo = "unified-memory-framework";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1Z65rNsUNeaeSJmxwpEHPbiU4KEDvyrWL9LyAWFsR1c=";
+    hash = "sha256-HC4ZtW9rcoY9krWJnhdD/vwborBVKjbaZKyS/5MmRjw=";
   };
 
   strictDeps = true;
@@ -106,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     (lib.cmakeBool "UMF_BUILD_LIBUMF_POOL_JEMALLOC" useJemalloc)
 
-    (lib.cmakeBool "UMF_BUILD_TESTS" finalAttrs.doCheck)
+    (lib.cmakeBool "UMF_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
     # We won't be able to run these inside the sandbox, so no use in building them
     (lib.cmakeBool "UMF_BUILD_GPU_TESTS" false)
     (lib.cmakeBool "UMF_BUILD_BENCHMARKS" false)

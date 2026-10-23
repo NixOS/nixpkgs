@@ -1,7 +1,8 @@
 {
   lib,
-  fetchpatch2,
   immich,
+  ocl-icd,
+  openvino,
   python3,
   nixosTests,
   stdenv,
@@ -11,57 +12,49 @@ let
     self = python;
   };
 in
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "immich-machine-learning";
   inherit (immich) version;
   src = "${immich.src}/machine-learning";
   pyproject = true;
 
-  patches = [
-    (fetchpatch2 {
-      name = "fix_tests_with_openvino_ep.patch";
-      relative = "machine-learning";
-      url = "https://github.com/immich-app/immich/commit/7f611d90317d75ac3d75adf428f367376171e106.patch?full_index=1";
-      hash = "sha256-dntL5AZS3VIp7++yUec4HWIdtwltrnIePNFPJaiZdy4=";
-    })
-  ];
+  __structuredAttrs = true;
+
+  postPatch = ''
+    substituteInPlace immich_ml/sessions/ort.py \
+      --replace-fail 'Path(ort.__file__).parent / "capi" / "libopenvino_c.so"' '"${lib.getLib openvino}/lib/libopenvino_c.so"' \
+      --replace-fail '"libOpenCL.so.1"' '"${lib.getLib ocl-icd}/lib/libOpenCL.so.1"'
+  '';
 
   pythonRelaxDeps = [
-    "huggingface-hub"
-    "insightface"
-    "numpy"
-    "pillow"
-    "pydantic-settings"
-  ];
-
-  pythonRemoveDeps = [
-    "setuptools"
+    "onnx"
   ];
 
   build-system = with python.pkgs; [
     hatchling
-    cython
   ];
 
   dependencies =
     with python.pkgs;
     [
-      insightface
-      opencv-python-headless
-      pillow
-      fastapi
-      uvicorn
-      pydantic
-      pydantic-settings
       aiocache
-      rich
-      ftfy
-      python-multipart
-      orjson
+      fastapi
       gunicorn
       huggingface-hub
+      numpy
+      onnx
+      opencv-python-headless
+      orjson
+      pillow
+      pydantic
+      pydantic-settings
+      python-multipart
+      rich
       tokenizers
+      uvicorn
       rapidocr
+
+      finalAttrs.passthru.immich-model
     ]
     ++ uvicorn.optional-dependencies.standard;
 
@@ -83,7 +76,7 @@ python.pkgs.buildPythonApplication rec {
     cp -r ann $out/${python.sitePackages}/
 
     makeWrapper ${lib.getExe python.pkgs.gunicorn} "''${!outputBin}"/bin/machine-learning \
-      --prefix PYTHONPATH : "$out/${python.sitePackages}:${python.pkgs.makePythonPath dependencies}" \
+      --prefix PYTHONPATH : "$out/${python.sitePackages}:${python.pkgs.makePythonPath finalAttrs.passthru.dependencies}" \
       --set-default MACHINE_LEARNING_WORKERS 1 \
       --set-default MACHINE_LEARNING_WORKER_TIMEOUT 120 \
       --set-default MACHINE_LEARNING_CACHE_FOLDER /var/cache/immich \
@@ -96,8 +89,11 @@ python.pkgs.buildPythonApplication rec {
         --log-config-json $out/share/immich/log_conf.json"
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) immich;
+  passthru = {
+    tests = {
+      inherit (nixosTests) immich;
+    };
+    immich-model = python.pkgs.callPackage ./immich-model.nix { };
   };
 
   meta = {
@@ -106,4 +102,4 @@ python.pkgs.buildPythonApplication rec {
     mainProgram = "machine-learning";
     inherit (immich.meta) license maintainers platforms;
   };
-}
+})

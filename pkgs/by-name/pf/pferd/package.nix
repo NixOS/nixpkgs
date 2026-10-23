@@ -5,14 +5,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pferd";
-  version = "3.9.2";
+  version = "3.9.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Garmelon";
     repo = "PFERD";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-q1IyuANj47M3KR8qQXASf3WOpFgjNGD/gFZn1l6grTk=";
+    sha256 = "sha256-nkMo3RuzqJ1ukArzB4BBjTsTAsLbxZQvhHpHiyJkves=";
   };
 
   nativeBuildInputs = with python3Packages; [

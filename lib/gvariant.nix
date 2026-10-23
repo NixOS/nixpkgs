@@ -14,6 +14,7 @@
 
 let
   inherit (lib)
+    catAttrs
     concatMapStringsSep
     concatStrings
     escape
@@ -409,7 +410,7 @@ rec {
     elems:
     let
       gvarElems = map mkValue elems;
-      tupleType = type.tupleOf (map (e: e.type) gvarElems);
+      tupleType = type.tupleOf (catAttrs "type" gvarElems);
     in
     mkPrimitive tupleType gvarElems
     // {

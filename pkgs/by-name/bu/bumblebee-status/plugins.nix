@@ -118,7 +118,7 @@ in
   };
   # NOTE: Yes, there is also a plugin named `layout-xkbswitch` with a dash.
   layout_xkbswitch.propagatedBuildInputs = [ pkgs.xkb-switch ];
-  libvirtvms.propagatedBuildInputs = [ py.libvirt ];
+  libvirtvms.propagatedBuildInputs = [ py.libvirt-python ];
   load.propagatedBuildInputs = [ pkgs.gnome-system-monitor ];
   memory.propagatedBuildInputs = [ pkgs.gnome-system-monitor ];
   messagereceiver = { };
@@ -207,5 +207,5 @@ in
   # i3 is optional
   xrandr.propagatedBuildInputs = [ pkgs.xrandr ];
   yubikey.propagatedBuildInputs = [ pkgs.yubico ];
-  zpool = { };
+  zpool.propagatedBuildInputs = [ py.packaging ];
 }

@@ -28,10 +28,7 @@ buildPythonPackage rec {
     description = "Module for the analysis of Python import statements";
     homepage = "https://github.com/mgedmin/findimports";
     changelog = "https://github.com/mgedmin/findimports/blob/${src.tag}/CHANGES.rst";
-    license = with lib.licenses; [
-      gpl2Only # or
-      gpl3Only
-    ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "findimports";
   };

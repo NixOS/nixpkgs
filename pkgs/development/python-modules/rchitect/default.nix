@@ -13,17 +13,19 @@
   six,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rchitect";
-  version = "0.4.10";
+  version = "0.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "randy3k";
     repo = "rchitect";
-    tag = "v${version}";
-    hash = "sha256-CTXvca687RL1aFxf7jptcNIKPUcugzFdVTSyApcaWS4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/p77OoEJWc7aME7itWkwZAHJW7sNEB1iAUwvbCis//U=";
   };
+
+  __structuredAttrs = true;
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -58,8 +60,8 @@ buildPythonPackage rec {
   meta = {
     description = "Interoperate R with Python";
     homepage = "https://github.com/randy3k/rchitect";
-    changelog = "https://github.com/randy3k/rchitect/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/randy3k/rchitect/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ savyajha ];
   };
-}
+})

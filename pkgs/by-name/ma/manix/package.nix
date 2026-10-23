@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  installShellFiles,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -16,6 +18,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-FTrKdOuXTOqr7on4RzYl/UxgUJqh+Rk3KJXqsW0fuo0=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  # --generate and --print-man still require the positional QUERY argument
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd manix \
+      --bash <($out/bin/manix --generate bash "") \
+      --fish <($out/bin/manix --generate fish "") \
+      --zsh <($out/bin/manix --generate zsh "")
+    $out/bin/manix --print-man "" > manix.1
+    installManPage manix.1
+  '';
 
   meta = {
     description = "Fast CLI documentation searcher for Nix";

@@ -10,17 +10,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "netwatch-tui";
-  version = "0.25.8";
+  version = "0.30.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "matthart1983";
     repo = "netwatch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vKAadOd5H0nsHbYMFSfEBOwxjZn5Df0Zm8Jicz0hpgg=";
+    hash = "sha256-pzkg7ME7qtAddeV9OIPwrbPqvQPOad11ryMui5Ma1xU=";
   };
 
-  cargoHash = "sha256-mpVa+iSDzPyWW3Q78ZroLW2BzO0suXG7Q6nJjjIgHqk=";
+  cargoHash = "sha256-Kj4sE9zuZIhorNwQcqmAcLGZuonzq8cfYyo91HWD/Tw=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -35,8 +35,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Real-time network diagnostics in your terminal.";
-    homepage = "https://github.com/matthart1983/netwatch";
-    changelog = "https://github.com/matthart1983/netwatch/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://www.netwatchlabs.com/labs/netwatch";
+    changelog = "https://github.com/matthart1983/netwatch/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     mainProgram = "netwatch";
     maintainers = with lib.maintainers; [ tomasrivera ];

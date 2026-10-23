@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   meson,
   libtsm,
   systemdLibs,
@@ -21,10 +22,10 @@
   libxslt,
   libgbm,
   seatd,
+  dbus,
   ninja,
   check,
   bash,
-  gawk,
   inotify-tools,
   buildPackages,
   nix-update-script,
@@ -32,13 +33,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "kmscon";
-  version = "10.0.0";
+  version = "10.0.4";
 
   src = fetchFromGitHub {
     owner = "kmscon";
     repo = "kmscon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-M3830e1GzzLT2fhheWwNRkURzYkHv4k8uEMoCqKkjJY=";
+    hash = "sha256-F4XI924K4YxREEjqP0XLeFcvaW/9v5Iyuy9n75c9Osc=";
   };
 
   strictDeps = true;
@@ -61,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     systemdLibs
     libgbm
     seatd
+    dbus
     check
     # Needed for autoPatchShebangs when strictDeps = true
     bash
@@ -75,12 +77,23 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xml_dtd_42
     python3
     ncurses
+    zlib
   ];
 
   outputs = [
     "out"
     "man"
   ];
+
+  # remove when next release is out
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/kmscon/kmscon/commit/153db63d679df719a99dd36505f9c2f55d9c59f6.patch?full_index=1";
+      hash = "sha256-aAH+drUZnj1wrKcdsphqacmqRRnZAKEwCNLwA2vSTmg=";
+    })
+  ];
+
+  mesonFlags = [ (lib.mesonEnable "libseat" true) ];
 
   env = {
     PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
@@ -92,8 +105,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postFixup = ''
-    substituteInPlace $out/bin/kmscon \
-      --replace-fail "awk" "${lib.getExe gawk}"
     substituteInPlace $out/bin/kmscon-launch-gui \
       --replace-fail "inotifywait" "${lib.getExe' inotify-tools "inotifywait"}"
   '';
@@ -108,7 +119,11 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "kmscon";
     homepage = "https://www.freedesktop.org/wiki/Software/kmscon/";
     changelog = "https://github.com/kmscon/kmscon/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.mit;
+    license = with lib.licenses; [
+      mit
+      lgpl21Plus
+      ofl
+    ];
     maintainers = with lib.maintainers; [ ccicnce113424 ];
     platforms = lib.platforms.linux;
   };

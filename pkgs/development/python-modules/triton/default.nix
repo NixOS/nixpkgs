@@ -25,6 +25,7 @@
   gtest,
   libxml2,
   ncurses,
+  nlohmann_json,
   pybind11,
   zlib,
 
@@ -47,7 +48,7 @@ let
 in
 buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
   pname = "triton";
-  version = "3.7.0";
+  version = "3.8.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -56,7 +57,7 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
     owner = "triton-lang";
     repo = "triton";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FxbBY1lPq7765MqAPR7UljzPsmjOhKKbYExlKgeudew=";
+    hash = "sha256-ynBRAtCxAkEmV470rxZ7h6I1MBMEDd5OImH4ZhBAj3Y=";
   };
 
   patches = [
@@ -90,10 +91,18 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
     # Avoid downloading dependencies remove any downloads
     + ''
       substituteInPlace setup.py \
-        --replace-fail "[get_json_package_info()]" "[]" \
-        --replace-fail "[get_llvm_package_info()]" "[]" \
-        --replace-fail 'yield ("triton.profiler", "third_party/proton/proton")' 'pass' \
-        --replace-fail "curr_version.group(1) != version" "False"
+        --replace-fail 'yield ("triton.profiler", "third_party/proton/proton")' 'pass'
+    ''
+    # `is_git_repo` shells out to `git`, which is absent from the sandbox, and only
+    # handles `CalledProcessError`. Upstream already tolerates a missing `git` at the
+    # call site: https://github.com/triton-lang/triton/blob/v3.8.0/setup.py#L84
+    + ''
+      substituteInPlace setup.py \
+        --replace-fail \
+          'except subprocess.CalledProcessError:
+              return False' \
+          'except (subprocess.CalledProcessError, FileNotFoundError):
+              return False'
     ''
     # Don't fetch googletest
     + ''
@@ -138,6 +147,7 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeFeature "LLVM_SYSPATH" "${llvm}")
+    (lib.cmakeFeature "JSON_SYSPATH" "${nlohmann_json}")
 
     # `find_package` is called with `NO_DEFAULT_PATH`
     # https://cmake.org/cmake/help/latest/command/find_package.html
@@ -218,6 +228,7 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
   ];
 
   passthru = {
+    inherit cudaPackages;
     gpuCheck = effectiveStdenv.mkDerivation {
       pname = "triton-pytest";
       inherit (triton) version src;
@@ -226,6 +237,7 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
 
       nativeBuildInputs = [
         (python.withPackages (ps: [
+          ps.expecttest
           ps.scipy
           ps.torchWithCuda
           ps.triton-cuda
@@ -259,6 +271,10 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
         # However, this is not the case here, as triton is built with TRITON_OFFLINE_BUILD=1
         # and TRITON_PTXAS_PATH=<path_to_nix_store_ptxas>
         "test_nvidia_tool"
+
+        # Assertion `ctaLayout.getNumOutDims() == rank' failed in
+        # TritonGPUAccelerateMatmul on Blackwell (compute capability 12.0).
+        "test_batched_mxfp"
       ]
       ++ lib.optionals (pythonAtLeast "3.14") [
         # triton.compiler.errors.CompilationError
@@ -276,6 +292,11 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
         "test_temp_var_in_loop"
         "test_tensor_descriptor_rank_reducing_matmul"
         "test_tensor_descriptor_reshape_matmul"
+
+        # Python 3.14 adds an internal __annotate__ function which Triton 3.7
+        # incorrectly includes in the aggregate dependency hash.
+        "test_bound_unused_result"
+        "test_aggregate_with_tuple"
       ];
 
       disabledTestPaths = [
@@ -399,7 +420,7 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
     description = "Language and compiler for writing highly efficient custom Deep-Learning primitives";
     homepage = "https://github.com/triton-lang/triton";
     changelog = "https://github.com/triton-lang/triton/releases/tag/${finalAttrs.src.tag}";
-    platforms = lib.platforms.linux;
+    platforms = lib.intersectLists lib.platforms.linux llvm.meta.platforms;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       GaetanLepage

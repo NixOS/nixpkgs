@@ -110,6 +110,13 @@
             };
           };
         };
+
+        services.prometheus.exporters.kea = {
+          enable = true;
+          controlSocketPaths = [
+            config.services.kea.dhcp4.settings.control-socket.socket-name
+          ];
+        };
       };
 
     nameserver =
@@ -217,5 +224,9 @@
 
       with subtest("DDNS"):
           nameserver.wait_until_succeeds("kdig +short client.lan.nixos.test @10.0.0.2 | grep -q 10.0.0.3")
+
+      with subtest("Prometheus Exporter"):
+        router.log(router.execute("curl 127.0.0.1:9547")[1])
+        router.succeed("curl --silent 127.0.0.1:9547 | grep -qE '^kea_dhcp4_addresses_assigned_total.*1.0$'")
     '';
 }

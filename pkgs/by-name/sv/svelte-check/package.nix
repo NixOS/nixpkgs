@@ -14,13 +14,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "svelte-check";
-  version = "4.3.1";
+  version = "4.7.7";
 
   src = fetchFromGitHub {
     owner = "sveltejs";
     repo = "language-tools";
-    tag = "svelte-check-${finalAttrs.version}";
-    hash = "sha256-+KDl7tTyXo6QMQpMGA4hSChDaPrfqfVKJXGunTlo9Rg=";
+    tag = "svelte-check@${finalAttrs.version}";
+    hash = "sha256-AJZj3dDvDG2PvT8YFRS0lEbnXckdZ1XX22j1phSc2Ig=";
   };
 
   pnpmWorkspaces = [ "svelte-check..." ];
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-43AIkVzpcq/Y+QO2k7pkr6CN340idXJEpie0gVdxra8=";
+    hash = "sha256-OdPwM+IL2h90BIJdyBzpXx+Z9NT+zKfZoFYOrTsiaP0=";
   };
 
   nativeBuildInputs = [
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     extraArgs = [
       "--use-github-releases"
       "--version-regex"
-      "svelte-check-(.*)"
+      "svelte-check@(.*)"
     ];
   };
 
@@ -82,6 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/sveltejs/language-tools";
     license = lib.licenses.mit;
     mainProgram = "svelte-check";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ dfjay ];
   };
 })

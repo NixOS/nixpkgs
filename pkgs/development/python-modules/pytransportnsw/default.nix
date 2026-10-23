@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyTransportNSW";
     inherit version;
-    sha256 = "00jklgjirmc58hiaqqc2n2rgixvx91bgrd6lv6hv28k51kid10f3";
+    hash = "sha256-w4HQ4gxlIrGh2dS0/FZIfff4srCCYawiRIXVHOWjUwI=";
   };
 
   propagatedBuildInputs = [ requests ];
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to access Transport NSW information";
     homepage = "https://github.com/Dav0815/TransportNSW";
-    license = with lib.licenses; [ gpl3Only ];
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

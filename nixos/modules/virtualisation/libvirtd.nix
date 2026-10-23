@@ -570,9 +570,11 @@ in
       enableStrictShellChecks = true;
     };
 
-    systemd.services.virtchd = {
-      path = [ pkgs.cloud-hypervisor ];
-    };
+    systemd.services.virtchd =
+      lib.mkIf (lib.meta.availableOn pkgs.stdenv.hostPlatform pkgs.cloud-hypervisor)
+        {
+          path = [ pkgs.cloud-hypervisor ];
+        };
 
     systemd.services.libvirt-guests = {
       wantedBy = [ "multi-user.target" ];

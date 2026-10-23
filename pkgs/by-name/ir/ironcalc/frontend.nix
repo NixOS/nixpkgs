@@ -10,7 +10,7 @@
   wasm-bindgen-cli_0_2_108,
   wasm-pack,
   nodejs,
-  typescript,
+  typescript_7,
   lld,
   writableTmpDirAsHomeHook,
 
@@ -38,7 +38,7 @@ let
       wasm-bindgen-cli_0_2_108
       wasm-pack
       nodejs
-      typescript
+      typescript_7
       lld
       writableTmpDirAsHomeHook
     ];
@@ -90,7 +90,6 @@ let
     '';
 
     __structuredAttrs = true;
-    strictDeps = true;
 
     meta = ironcalc.meta // {
       description = "Ironcalc wasm bindings";

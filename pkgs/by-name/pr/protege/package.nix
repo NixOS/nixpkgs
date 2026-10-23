@@ -21,7 +21,7 @@ maven.buildMavenPackage rec {
   };
 
   mvnJdk = jdk11;
-  mvnHash = "sha256-xC/zLPPLbQ8tZIkCZHOfY6FEaWXFF5ZC1LX4ovaSSqg=";
+  mvnHash = "sha256-/M8hWBDjtHkCetFB3ZuJrU23OOUsHi+MdqGRdwk4uRs=";
 
   patches = [
     # Pin built-in Maven plugins to avoid checksum variations on Maven updates
@@ -81,7 +81,7 @@ maven.buildMavenPackage rec {
       connections to description logic reasoners.
     '';
     maintainers = with lib.maintainers; [ nessdoor ];
-    license = with lib.licenses; [ bsd2 ];
+    license = lib.licenses.bsd2;
     # TODO Protege is able to run on Darwin as well, but I (@nessdoor) had no
     #      way of testing it nor any experience in packaging Darwin apps, so I
     #      will leave the task to someone who has the right tools and knowledge.

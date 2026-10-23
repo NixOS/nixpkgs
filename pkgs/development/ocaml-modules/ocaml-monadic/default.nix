@@ -15,7 +15,7 @@ buildDunePackage (finalAttrs: {
     owner = "zepalmer";
     repo = "ocaml-monadic";
     rev = finalAttrs.version;
-    sha256 = "1ynv3yhdqmkhkgnz6c5kv6ryjcc934sdvw9rhh8rjg2dlzlffgbw";
+    hash = "sha256-fD3n6KdNPJkRhDnx3TQZiTHps9mzMPPtm3BW3KAf2/o=";
   };
 
   buildInputs = [ ppxlib ];

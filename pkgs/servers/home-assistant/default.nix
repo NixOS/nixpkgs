@@ -2,6 +2,7 @@
   stdenv,
   lib,
   callPackage,
+  coreutils,
   fetchFromGitHub,
   fetchPypi,
   python314Packages,
@@ -43,30 +44,7 @@ let
         postPatch = null;
       };
 
-      aioskybell = super.aioskybell.overridePythonAttrs (oldAttrs: rec {
-        version = "22.7.0";
-        src = fetchFromGitHub {
-          owner = "tkdrob";
-          repo = "aioskybell";
-          tag = version;
-          hash = "sha256-aBT1fDFtq1vasTvCnAXKV2vmZ6LBLZqRCiepv1HDJ+Q=";
-        };
-      });
-
-      aiowatttime = super.aiowatttime.overridePythonAttrs (oldAttrs: rec {
-        version = "0.1.1";
-        src = fetchFromGitHub {
-          owner = "bachya";
-          repo = "aiowatttime";
-          tag = version;
-          hash = "sha256-tWnxGLJT+CRFvkhxFamHxnLXBvoR8tfOvzH1o1i5JJg=";
-        };
-        postPatch = ''
-          substituteInPlace pyproject.toml --replace-fail \
-            '"setuptools >= 35.0.2", "wheel >= 0.29.0", "poetry>=0.12"' \
-            '"poetry-core"'
-        '';
-      });
+      anthropic = self.anthropic_0;
 
       astral = super.astral.overridePythonAttrs (oldAttrs: rec {
         pname = "astral";
@@ -85,21 +63,6 @@ let
         ];
       });
 
-      caldav = self.caldav_2;
-
-      gspread = super.gspread.overridePythonAttrs (oldAttrs: rec {
-        version = "5.12.4";
-        src = fetchFromGitHub {
-          owner = "burnash";
-          repo = "gspread";
-          tag = "v${version}";
-          hash = "sha256-i+QbnF0Y/kUMvt91Wzb8wseO/1rZn9xzeA5BWg1haks=";
-        };
-        dependencies = with self; [
-          requests
-        ];
-      });
-
       livisi = super.livisi.overridePythonAttrs (oldAttrs: rec {
         version = "0.0.25";
         src = fetchFromGitHub {
@@ -109,6 +72,8 @@ let
           hash = "sha256-kEkbuZmYzxhrbTdo7eZJYu2N2uJtfspgqepplXvSXFg=";
         };
       });
+
+      mcp = self.mcp_1;
 
       notifications-android-tv = super.notifications-android-tv.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.5";
@@ -133,61 +98,6 @@ let
         doCheck = false; # no tests
       });
 
-      openhomedevice = super.openhomedevice.overridePythonAttrs (oldAttrs: rec {
-        version = "2.2";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          tag = version;
-          hash = "sha256-GGp7nKFH01m1KW6yMkKlAdd26bDi8JDWva6OQ0CWMIw=";
-        };
-      });
-
-      plexapi = super.plexapi.overrideAttrs (oldAttrs: rec {
-        version = "4.15.16";
-        src = fetchFromGitHub {
-          owner = "pkkid";
-          repo = "python-plexapi";
-          tag = version;
-          hash = "sha256-NwGGNN6LC3gvE8zoVL5meNWMbqZjJ+6PcU2ebJTfJmU=";
-        };
-      });
-
-      # Pinned due to API changes in 0.1.0
-      poolsense = super.poolsense.overridePythonAttrs (oldAttrs: rec {
-        version = "0.0.8";
-        src = fetchPypi {
-          pname = "poolsense";
-          inherit version;
-          hash = "sha256-17MHrYRmqkH+1QLtgq2d6zaRtqvb9ju9dvPt9gB2xCc=";
-        };
-      });
-
-      py-madvr2 = super.py-madvr2.overridePythonAttrs (oldAttrs: rec {
-        version = "1.6.40";
-        src = fetchFromGitHub {
-          owner = "iloveicedgreentea";
-          repo = "py-madvr";
-          tag = "v${version}";
-          hash = "sha256-0IX57Sa/oXGiViD39FVBRa2jxuKuZ3UNsOTHwuBdmWs=";
-        };
-        pythonImportsCheck = [ "madvr" ];
-        disabledTests = oldAttrs.disabledTests ++ [
-          "test_async_add_tasks"
-          "test_send_heartbeat"
-        ];
-      });
-
-      # Pinned due to API changes >0.3.5.3
-      pyatag = super.pyatag.overridePythonAttrs (oldAttrs: rec {
-        version = "0.3.5.3";
-        src = fetchFromGitHub {
-          owner = "MatsNl";
-          repo = "pyatag";
-          rev = version;
-          sha256 = "00ly4injmgrj34p0lyx7cz2crgnfcijmzc0540gf7hpwha0marf6";
-        };
-      });
-
       pyflume = super.pyflume.overridePythonAttrs (oldAttrs: rec {
         version = "0.6.5";
         src = fetchFromGitHub {
@@ -201,30 +111,6 @@ let
         ];
       });
 
-      pysnooz = super.pysnooz.overridePythonAttrs (oldAttrs: rec {
-        version = "0.8.6";
-        src = fetchFromGitHub {
-          owner = "AustinBrunkhorst";
-          repo = "pysnooz";
-          tag = "v${version}";
-          hash = "sha256-hJwIObiuFEAVhgZXYB9VCeAlewBBnk0oMkP83MUCpyU=";
-        };
-        patches = [ ];
-        doCheck = false;
-      });
-
-      pytradfri = super.pytradfri.overridePythonAttrs (oldAttrs: rec {
-        version = "9.0.1";
-        src = fetchFromGitHub {
-          owner = "home-assistant-libs";
-          repo = "pytradfri";
-          tag = version;
-          hash = "sha256-xOdTzG0bF5p1QpkXv2btwrVugQRjSwdAj8bXcC0IoQg=";
-        };
-        patches = [ ];
-        doCheck = false;
-      });
-
       serialx = super.serialx.overridePythonAttrs (oldAttrs: {
         # many components use the serialx[esphome] implicitly
         dependencies = oldAttrs.dependencies or [ ] ++ oldAttrs.optional-dependencies.esphome;
@@ -235,6 +121,7 @@ let
       });
 
       # internal python packages only consumed by home-assistant itself
+      gazetteer-matcher = self.callPackage ./python-modules/gazetteer-matcher { };
       hass-web-proxy-lib = self.callPackage ./python-modules/hass-web-proxy-lib { };
       home-assistant-frontend = self.callPackage ./frontend.nix { };
       home-assistant-intents = self.callPackage ./intents.nix { };
@@ -265,7 +152,7 @@ let
   extraBuildInputs = extraPackages python3Packages;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2026.6.4";
+  hassVersion = "2026.10.2";
 
 in
 python3Packages.buildPythonApplication rec {
@@ -286,13 +173,13 @@ python3Packages.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-NeqJT2CW8A0VfUJ2yrR+KGmmQMK8q0Wdag43rUBBoWU=";
+    hash = "sha256-SIodDoo79MrCJPr+9fqXvs7Xbhz7Ei4AUonp9oECGng=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-7Y26vN0oskJBgijtm9RZcvHw/xBEH3IsI8hezgsOVr0=";
+    hash = "sha256-isFwBI1EwsmZPC+hrA7puokpEqrHTGVROe9a97DCFrs=";
   };
 
   build-system = with python3Packages; [
@@ -325,15 +212,16 @@ python3Packages.buildPythonApplication rec {
       ffmpeg = "${lib.getExe ffmpeg-headless}";
     })
 
-    # https://github.com/home-assistant/core/pull/172893
-    ./patches/pyjwt-2.13-compat.patch
+    (replaceVars ./patches/coreutils-path.patch {
+      echo = lib.getExe' coreutils "echo";
+    })
   ];
 
   postPatch = ''
     substituteInPlace tests/test_core_config.py --replace-fail '"/usr"' "\"$NIX_BUILD_TOP/media\""
 
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==78.1.1" setuptools
+      --replace-fail "setuptools==84.0.0" setuptools
   '';
 
   pythonRemoveDeps = [
@@ -366,9 +254,10 @@ python3Packages.buildPythonApplication rec {
     cronsim
     cryptography
     fnv-hash-fast
+    gazetteer-matcher
     ha-ffmpeg
-    hass-nabucasa
     hassil
+    hass-nabucasa
     home-assistant-bluetooth
     home-assistant-intents
     httpx
@@ -380,6 +269,7 @@ python3Packages.buildPythonApplication rec {
     orjson
     packaging
     pillow
+    probatio
     propcache
     psutil-home-assistant
     pyjwt
@@ -398,9 +288,6 @@ python3Packages.buildPythonApplication rec {
     typing-extensions
     ulid-transform
     urllib3
-    voluptuous
-    voluptuous-openapi
-    voluptuous-serialize
     webrtc-models
     yarl
     zeroconf
@@ -409,7 +296,10 @@ python3Packages.buildPythonApplication rec {
     pyqrcode
   ];
 
-  makeWrapperArgs = lib.optional skipPip "--add-flags --skip-pip";
+  makeWrapperArgs = lib.optionals skipPip [
+    "--add-flags"
+    "--skip-pip"
+  ];
 
   # upstream only tests on Linux, so do we.
   doCheck = stdenv.hostPlatform.isLinux;
@@ -443,6 +333,10 @@ python3Packages.buildPythonApplication rec {
       colorlog
       # Used in tests/helpers/test_httpx_client.py
       h2
+      # Used in tests/mypy_plugins/test_enum_identity_compare.py
+      mypy
+      # Used in tests/scripts/check_requirements/test_gate.py
+      pygithub
     ])
     ++ lib.concatMap (component: getPackages component python3Packages) [
       # some components are needed even if tests in tests/components are disabled
@@ -477,13 +371,8 @@ python3Packages.buildPythonApplication rec {
     "tests/util/test_package.py::test_check_package_fragment"
     # flaky
     "tests/test_bootstrap.py::test_setup_hass_takes_longer_than_log_slow_startup"
-    "tests/test_test_fixtures.py::test_evict_faked_translations"
-    "tests/helpers/test_backup.py::test_async_get_manager"
-    "tests/helpers/test_trigger.py::test_platform_multiple_triggers[sync_action]"
-    # various failing after python-updates
-    "tests/helpers/test_entity_platform.py::test_platform_warn_slow_setup" # ValueError: not enough values to unpack (expected 2, got 0)
-    "tests/helpers/test_entity_component.py::test_set_scan_interval_via_config" # assert 10 == 30.0
-    "tests/helpers/test_entity_component.py::test_set_entity_namespace_via_config" # AssertionError: assert [] == ['test_domain...named_device']
+    # [2026.9.4] orjson error message mismatch
+    "tests/helpers/test_storage.py::test_loading_corrupt_core_file"
   ];
 
   preCheck = ''

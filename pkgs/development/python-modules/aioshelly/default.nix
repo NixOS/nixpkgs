@@ -8,6 +8,7 @@
   fetchFromGitHub,
   habluetooth,
   orjson,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytestCheckHook,
   setuptools,
@@ -17,17 +18,21 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aioshelly";
-  version = "13.26.1";
+  version = "13.35.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "aioshelly";
     tag = finalAttrs.version;
-    hash = "sha256-mOqHHgyx1Eevhr8BHkfFQa7g6x7vt9KJe4E72fr9HPg=";
+    hash = "sha256-MBoRglq1Osz9you7pfeHNbYP1MLO6D2luiShc5dQhsI=";
   };
 
   build-system = [ setuptools ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   dependencies = [
     aiohttp

@@ -24,7 +24,7 @@ stdenv.mkDerivation (
 
     src = fetchurl {
       url = "https://sourceware.org/pub/bzip2/bzip2-${version}.tar.gz";
-      sha256 = "sha256-q1oDF27hBtPw+pDjgdpHjdrkBZGBU8yiSOaCzQxKImk=";
+      hash = "sha256-q1oDF27hBtPw+pDjgdpHjdrkBZGBU8yiSOaCzQxKImk=";
     };
 
     patchFlags = [ "-p0" ];
@@ -73,6 +73,8 @@ stdenv.mkDerivation (
     '';
 
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+    __structuredAttrs = true;
 
     meta = {
       description = "High-quality data compression program";

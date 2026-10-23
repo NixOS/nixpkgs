@@ -28,7 +28,6 @@
   gst_all_1,
   libgudev,
   umockdev,
-  zynaddsubfx,
   replaceVars,
   enableGeoLocation ? true,
   enableSystemd ? true,
@@ -40,13 +39,20 @@ let
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "libglnx";
-    rev = "ccea836b799256420788c463a638ded0636b1632";
-    hash = "sha256-H8Bg9QCSkt/aBOaHLyHYC2ei6OU7UpcLq8zLurkYOuA=";
+    rev = "ff64d52116ae74f0d25e24f089db28921ea171ff";
+    hash = "sha256-U6+vIU/wxnGGg07FJElQijbV0+jUswdG/lfzhw4wQy0=";
+  };
+  gvdbSrc = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = "gvdb";
+    rev = "c6f2359cc1d00f16e0a0e2527fa0bc1882b8b5ab";
+    hash = "sha256-FQPctq+fj6du0sBawaJxtO0PRO0KIHHhdA2jh24Yacw=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal";
-  version = "1.20.4";
+  version = "1.22.1";
 
   outputs = [
     "out"
@@ -58,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "flatpak";
     repo = "xdg-desktop-portal";
     tag = finalAttrs.version;
-    hash = "sha256-wLQgJsVicOb8G7M5Qwd+t90UgNYTD04bZ5Ki85Alr1w=";
+    hash = "sha256-GYPc5gFw3vMiDbrw5h6xeU7wupfyWeWq/Vl+vVrX8h0=";
   };
 
   patches = [
@@ -75,14 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Allow installing installed tests to a separate output.
     ./installed-tests-path.patch
-
-    # Look for portal definitions under path from `NIX_XDG_DESKTOP_PORTAL_DIR` environment variable.
-    # While upstream has `XDG_DESKTOP_PORTAL_DIR`, it is meant for tests and actually blocks
-    # any configs from being loaded from anywhere else.
-    ./nix-pkgdatadir-env.patch
-
-    # test tries to read /proc/cmdline, which is not intended to be accessible in the sandbox
-    ./trash-test.patch
   ];
 
   nativeBuildInputs = [
@@ -134,6 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
       ps.dbus-python
     ]))
     umockdev
+    bubblewrap
   ];
 
   checkInputs = [ umockdev ];
@@ -157,8 +156,9 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   postPatch = ''
-    mkdir -p subprojects/libglnx
+    mkdir -p subprojects/{libglnx,gvdb}
     cp -r ${libglnxSrc}/* subprojects/libglnx/
+    cp -r ${gvdbSrc}/* subprojects/gvdb/
 
     # until/unless bubblewrap ships a pkg-config file, meson has no way to find it when cross-compiling.
     substituteInPlace meson.build \

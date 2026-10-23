@@ -16,7 +16,7 @@
 }:
 
 let
-  sha256 = "6d6ca2b383bcc81af1217c696eb77864a2b6db7428f4b5bde5b5913ce705eec5";
+  hash = "sha256-L9AF5gOmvbN+Ur1k0oIjJJT15RZvWA7mhDgveVowu7E=";
 
   ldpath = lib.makeLibraryPath [
     fontconfig
@@ -30,7 +30,7 @@ let
     zlib
   ];
 
-  version = "7.5.0";
+  version = "7.5.2";
 
 in
 stdenv.mkDerivation {
@@ -38,9 +38,9 @@ stdenv.mkDerivation {
   inherit version;
 
   src = fetchurl {
-    name = "SpiderOakONE-${version}-slack_tar_x64.tgz";
-    url = "https://spideroak-releases.s3.us-east-2.amazonaws.com/SpiderOakONE-${version}-slack_tar_x64.tgz";
-    inherit sha256;
+    name = "SpiderOakONE-${version}-x86_64-1.tgz";
+    url = "https://spideroak-releases.s3.us-east-2.amazonaws.com/SpiderOakONE-${version}-x86_64-1.tgz";
+    inherit hash;
   };
 
   sourceRoot = ".";
@@ -48,6 +48,8 @@ stdenv.mkDerivation {
   unpackCmd = "tar -xzf $curSrc";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir "$out"
     cp -r "./"* "$out"
     mkdir "$out/bin"
@@ -66,6 +68,8 @@ stdenv.mkDerivation {
       --set SpiderOak_EXEC_SCRIPT $out/bin/spideroak
 
     sed -i 's/^Exec=.*/Exec=spideroak/' $out/share/applications/SpiderOakONE.desktop
+
+    runHook postInstall
   '';
 
   nativeBuildInputs = [
@@ -75,10 +79,11 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "https://spideroak.com";
-    description = "Secure online backup and sychronization";
+    description = "Secure online backup and synchronization";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     platforms = lib.platforms.linux;
     mainProgram = "spideroak";
+    maintainers = [ ];
   };
 }

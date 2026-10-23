@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jsoncpp";
-  version = "1.9.7";
+  version = "1.9.8";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -24,8 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "open-source-parsers";
     repo = "jsoncpp";
-    rev = finalAttrs.version;
-    sha256 = "sha256-rf8d2UNTVEZhuiyChK2XnUbfGDvsfXnKADhaSp8qBwQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-5cH9G4/TVCM5HX6QSk3P4m5+cwuK4x8hP9FohBcmjik=";
   };
 
   /*
@@ -60,9 +60,10 @@ stdenv.mkDerivation (finalAttrs: {
   ) "-DJSONCPP_WITH_TESTS=OFF";
 
   meta = {
+    changelog = "https://github.com/open-source-parsers/jsoncpp/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/open-source-parsers/jsoncpp";
     description = "C++ library for interacting with JSON";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ hythera ];
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
   };

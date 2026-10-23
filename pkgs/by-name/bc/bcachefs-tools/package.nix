@@ -19,6 +19,8 @@
   cargo,
   rustc,
   rustPlatform,
+  rust-bindgen,
+  jq,
   makeWrapper,
   nix-update-script,
   versionCheckHook,
@@ -30,18 +32,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bcachefs-tools";
-  version = "1.38.6";
+  version = "1.39.7";
 
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs-tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VNY9kURuXky504utCZ0Ye76mDG2TFAdzrgYI2iup/PI=";
+    hash = "sha256-H8uzTohV30NU1wYhr/WXN76g1zDqGEzRE5QZcmcM7Jc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-rajYbfE98j/YqniUoV66LHh22PwEc6sWWJ/7bgGgGtA=";
+    hash = "sha256-4ZStyYaT+6Suup1ue2wFFCTAlnsnEO9WaUJHe47BKXY=";
   };
 
   postPatch = ''
@@ -58,6 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
     rustc
     rustPlatform.cargoSetupHook
     rustPlatform.bindgenHook
+    rust-bindgen
+    jq
     makeWrapper
     installShellFiles
   ];
@@ -99,6 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
     "CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_LINKER" = "${stdenv.cc.targetPrefix}cc";
+    PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMGENERATORDIR = "${placeholder "out"}/lib/systemd/system-generators";
   };
 
   # FIXME: Try enabling this once the default linux kernel is at least 6.7
@@ -134,7 +139,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     tests = {
       smoke-test = nixosTests.bcachefs;
-      inherit (nixosTests.installer) bcachefsSimple bcachefsEncrypted bcachefsMulti;
+      inherit (nixosTests.installer)
+        bcachefsSimple
+        bcachefsEncrypted
+        bcachefsMulti
+        bcachefsEncryptedLatestKernel
+        bcachefsEncryptedRcKernel
+        ;
     };
 
     updateScript = nix-update-script { };
@@ -151,6 +162,5 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.linux;
     mainProgram = "bcachefs";
-    broken = stdenv.hostPlatform.isi686; # error: stack smashing detected
   };
 })

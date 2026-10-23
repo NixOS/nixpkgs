@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-6QH4buWvfvbtovLCb0vSz+g4DYHxeLfjYH27zc7pcjk=";
+    hash = "sha256-6QH4buWvfvbtovLCb0vSz+g4DYHxeLfjYH27zc7pcjk=";
   };
 
   propagatedBuildInputs = [ six ];
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python implementation of mongodb queries";
     homepage = "https://github.com/kapouille/mongoquery";
-    license = with lib.licenses; [ unlicense ];
+    license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ misuzu ];
   };
 }

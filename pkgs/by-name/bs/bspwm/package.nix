@@ -7,6 +7,7 @@
   libxcb-util,
   libxcb-keysyms,
   libxcb-wm,
+  versionCheckHook,
   nixosTests,
 }:
 
@@ -33,6 +34,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   passthru.tests = {
     inherit (nixosTests) startx;

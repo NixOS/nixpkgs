@@ -16,14 +16,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "tartube";
-  version = "2.5.164";
+  version = "2.5.231";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "axcore";
     repo = "tartube";
     tag = "v${version}";
-    sha256 = "sha256-PPvbdxxGUYUKL+5exO5+iO5ObJgjzFejZIIDA17hvYo=";
+    sha256 = "sha256-eeVzDvQn4uBD1lceEHq1fTEDS8cVi92z/ECY8OG4SbI=";
   };
 
   nativeBuildInputs = [
@@ -72,7 +72,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "GUI front-end for youtube-dl";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ mkg20001 ];
     homepage = "https://tartube.sourceforge.io/";

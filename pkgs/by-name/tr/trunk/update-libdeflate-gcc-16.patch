@@ -1,0 +1,27 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index a0a353e..048f992 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -1960,18 +1960,18 @@ checksum = "c19937216e9d3aa9956d9bb8dfc0b0c8beb6058fc4f7a4dc4d850edf86a237d6"
+ 
+ [[package]]
+ name = "libdeflate-sys"
+-version = "1.23.1"
++version = "1.25.2"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "38b72ad3fbf5ac78f2df7b36075e48adf2459b57c150b9e63937d0204d0f9cd7"
++checksum = "72753e0008ea87963d2f0770042d0df7abe51fafbb8dcaf618ac440f2f1fec0a"
+ dependencies = [
+  "cc",
+ ]
+ 
+ [[package]]
+ name = "libdeflater"
+-version = "1.23.1"
++version = "1.25.2"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "013344b17f9dceddff4872559ae19378bd8ee0479eccdd266d2dd2e894b4792f"
++checksum = "d1ee41cf6fb1bb6030dfb59ffb7bc01ab26aade44142084c87f0fc7a1658fe71"
+ dependencies = [
+  "libdeflate-sys",
+ ]

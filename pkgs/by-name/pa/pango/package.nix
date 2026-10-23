@@ -129,7 +129,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.pango.org/";
     license = lib.licenses.lgpl2Plus;
 
-    maintainers = with lib.maintainers; [ raskin ];
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
 
@@ -139,6 +138,8 @@ stdenv.mkDerivation (finalAttrs: {
       "pangofc"
       "pangoft2"
       "pangoot"
+    ]
+    ++ lib.optionals x11Support [
       "pangoxft"
     ];
   };

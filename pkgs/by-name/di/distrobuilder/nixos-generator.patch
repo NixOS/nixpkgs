@@ -1,7 +1,7 @@
-diff --git i/distrobuilder/lxc.generator w/distrobuilder/lxc.generator
-index f7692af..f617b89 100644
---- i/distrobuilder/lxc.generator
-+++ w/distrobuilder/lxc.generator
+diff --git a/distrobuilder/lxc.generator b/distrobuilder/lxc.generator
+index fc41e6b..a80b181 100644
+--- a/distrobuilder/lxc.generator
++++ b/distrobuilder/lxc.generator
 @@ -16,16 +16,6 @@ is_lxc_privileged_container() {
  	grep -qw 4294967295$ /proc/self/uid_map
  }
@@ -79,7 +79,7 @@ index f7692af..f617b89 100644
  
  	mkdir -p /run/systemd/system/systemd-udev-trigger.service.d
  	cat <<-EOF > /run/systemd/system/systemd-udev-trigger.service.d/zzz-lxc-override.conf
-@@ -143,52 +89,40 @@ fix_systemd_udev_trigger() {
+@@ -143,20 +89,6 @@ fix_systemd_udev_trigger() {
  		EOF
  }
  
@@ -97,20 +97,21 @@ index f7692af..f617b89 100644
 -		EOF
 -}
 -
- ## Main logic
- # Exit immediately if not an Incus/LXC container
+ fix_dbus_apparmor() {
+ 	dropin="/etc/dbus-1/system.d/zzz-lxc-disable-apparmor.conf"
+ 
+@@ -189,33 +121,30 @@ fix_dbus_apparmor() {
  is_lxc_container || exit 0
  
  # Determine systemd version
 -SYSTEMD=""
 -for path in /usr/lib/systemd/systemd /lib/systemd/systemd; do
 -	[ -x "${path}" ] || continue
-+SYSTEMD="$(/run/current-system/sw/lib/systemd/systemd --version | head -n1 | cut -d' ' -f2 | cut -d'~' -f1)"
- 
+-
 -	SYSTEMD="$("${path}" --version | head -n1 | cut -d' ' -f2 | cut -d'~' -f1)"
 -	break
 -done
- 
+-
 -# Apply systemd overrides
 -if [ "${SYSTEMD}" -ge 244 ]; then
 -	fix_systemd_override_unit system/service
@@ -120,32 +121,31 @@ index f7692af..f617b89 100644
 -		fix_systemd_override_unit "${service_file}"
 -	done
 -fi
- 
+-
 -# Workarounds for unprivileged containers.
 -if ! is_lxc_privileged_container; then
 -	fix_ro_paths systemd-networkd.service
 -	fix_ro_paths systemd-resolved.service
-+
++SYSTEMD="$(/run/current-system/sw/lib/systemd/systemd --version | head -n1 | cut -d' ' -f2 | cut -d'~' -f1)"
 +# Overriding some systemd features is only needed if security.nesting=false
 +# in which case, /dev/.lxc will be missing
 +# Adding this conditional back for NixOS as we do not have the reported
 +# problems, and the overrides could reduce potential service hardening
 +if [ ! -d /dev/.lxc ]; then
-+  # Apply systemd overrides
-+  if [ "${SYSTEMD}" -ge 244 ]; then
-+    fix_systemd_override_unit system/service
-+  else
-+    # Setup per-unit overrides
-+    find /lib/systemd /etc/systemd /run/systemd /usr/lib/systemd -name "*.service" -type f | sed 's#/\(lib\|etc\|run\|usr/lib\)/systemd/##g'| while read -r service_file; do
-+      fix_systemd_override_unit "${service_file}"
-+    done
-+  fi
-+
-+  # Workarounds for unprivileged containers.
-+  if ! is_lxc_privileged_container; then
-+    fix_ro_paths systemd-networkd.service
-+    fix_ro_paths systemd-resolved.service
-+  fi
++	# Apply systemd overrides
++	if [ "${SYSTEMD}" -ge 244 ]; then
++		fix_systemd_override_unit system/service
++	else
++		# Setup per-unit overrides
++		find /lib/systemd /etc/systemd /run/systemd /usr/lib/systemd -name "*.service" -type f | sed 's#/\(lib\|etc\|run\|usr/lib\)/systemd/##g'| while read -r service_file; do
++			fix_systemd_override_unit "${service_file}"
++		done
++	fi
++	# Workarounds for unprivileged containers.
++	if ! is_lxc_privileged_container; then
++	  fix_ro_paths systemd-networkd.service
++	  fix_ro_paths systemd-resolved.service
++	fi
  fi
  
  # Ignore failures on some units.
@@ -154,7 +154,7 @@ index f7692af..f617b89 100644
  
  # Fix issues with /run not being writable.
  fix_ro_run systemd-nsresourced.service
-@@ -221,11 +155,6 @@ if [ -d /etc/udev ]; then
+@@ -255,11 +184,6 @@ if [ -d /etc/udev ]; then
  		EOF
  fi
  
@@ -166,7 +166,7 @@ index f7692af..f617b89 100644
  # Allow masking units created by the lxc system-generator.
  for d in /etc/systemd/system /usr/lib/systemd/system /lib/systemd/system; do
  	if ! [ -d "${d}" ]; then
-@@ -247,7 +176,7 @@ if [ "${SYSTEMD}" -ge 258 ]; then
+@@ -281,7 +205,7 @@ if [ "${SYSTEMD}" -ge 258 ]; then
  	cat <<-EOF > /run/systemd/system/console-getty.service.d/override.conf
  		[Service]
  		ExecStart=

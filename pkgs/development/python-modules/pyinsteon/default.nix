@@ -16,20 +16,15 @@
 
 buildPythonPackage rec {
   pname = "pyinsteon";
-  version = "1.6.4";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyinsteon";
     repo = "pyinsteon";
     tag = version;
-    hash = "sha256-iC0qeiTHtrdzQtJ3R01nJDCfdBKBg0jw1v49ZII24/4=";
+    hash = "sha256-jzFZpoKd4QAnLZ2p/oy0qZvQtI/2D+rkfoVOWGDo0Fg=";
   };
-
-  patches = [
-    # https://github.com/pyinsteon/pyinsteon/pull/440
-    ./python-3.14.diff
-  ];
 
   build-system = [ setuptools ];
 
@@ -59,7 +54,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/pyinsteon/pyinsteon";
     changelog = "https://github.com/pyinsteon/pyinsteon/releases/tag/${version}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "insteon_tools";
   };

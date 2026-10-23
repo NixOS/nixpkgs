@@ -19,7 +19,7 @@
   fakeroot,
   libadwaita,
   libxml2,
-  systemd,
+  systemdLibs,
   unzip,
   vte-gtk4,
   nix-update-script,
@@ -30,7 +30,7 @@ let
   version = "0.2.9";
 
   src = fetchFromGitHub {
-    owner = "ayasa520";
+    owner = "waydroid-helper";
     repo = "waydroid-helper";
     tag = "v${version}";
     hash = "sha256-6mVb4GPD2NCsvyaqQAOFox0rNIlyOttiaZKbHBS40Rg=";
@@ -83,7 +83,7 @@ python3Packages.buildPythonApplication {
     dbus
     libadwaita
     libxml2
-    systemd
+    systemdLibs
     vte-gtk4
   ];
 
@@ -98,22 +98,22 @@ python3Packages.buildPythonApplication {
     pywayland
   ];
 
-  strictDeps = true;
-
   dontWrapGApps = true;
 
-  makeWrapperArgs = [
-    "\${gappsWrapperArgs[@]}"
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        android-tools
-        bindfs
-        e2fsprogs
-        fakeroot
-        unzip
-      ]
-    }"
-  ];
+  preFixup = ''
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
+      "--prefix" "PATH" ":" "${
+        lib.makeBinPath [
+          android-tools
+          bindfs
+          e2fsprogs
+          fakeroot
+          unzip
+        ]
+      }"
+    )
+  '';
 
   postInstallCheck = ''
     mesonCheckPhase
@@ -122,10 +122,10 @@ python3Packages.buildPythonApplication {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/ayasa520/waydroid-helper/releases/tag/${src.tag}";
+    changelog = "https://github.com/waydroid-helper/waydroid-helper/releases/tag/${src.tag}";
     description = "User-friendly way to configure Waydroid and install extensions, including Magisk and ARM translation";
-    homepage = "https://github.com/ayasa520/waydroid-helper";
-    license = with lib.licenses; [ gpl3Plus ];
+    homepage = "https://github.com/waydroid-helper/waydroid-helper";
+    license = lib.licenses.gpl3Plus;
     mainProgram = "waydroid-helper";
     maintainers = [ ];
     platforms = lib.platforms.linux;

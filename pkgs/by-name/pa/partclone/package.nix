@@ -3,36 +3,62 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
+  docbook_xml_dtd_45,
+  docbook_xsl,
+  libtool,
+  libxslt,
   pkg-config,
+  liburcu,
   libuuid,
   e2fsprogs,
   nilfs-utils,
   ntfs3g,
   openssl,
+  xxhash,
+  zlib,
+  zstd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "partclone";
-  version = "0.3.38";
+  version = "0.3.50";
 
   src = fetchFromGitHub {
     owner = "Thomas-Tsai";
     repo = "partclone";
     rev = finalAttrs.version;
-    sha256 = "sha256-lWnGi8giz7vzdBnuth55h0VMuNyCQaCclRqPJdm0I14=";
+    hash = "sha256-k63VP/F8mGdE17CWMBTuJeJ9W2MdPLcG4bxsWm08VcA=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
+    docbook_xml_dtd_45
+    docbook_xsl
+    libtool
+    libxslt
     pkg-config
   ];
+
+  postPatch = ''
+    substituteInPlace docs/Makefile.am \
+      --replace-fail 'http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl' \
+                     '${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl'
+    substituteInPlace docs/*.xml \
+      --replace-fail 'http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd' \
+                     '${docbook_xml_dtd_45}/xml/dtd/docbook/docbookx.dtd'
+  '';
+
   buildInputs = [
     e2fsprogs
+    liburcu
     libuuid
     stdenv.cc.libc
     nilfs-utils
     ntfs3g
     openssl
+    xxhash
+    zlib
+    zstd
     (lib.getOutput "static" stdenv.cc.libc)
   ];
 
@@ -61,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://partclone.org";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ daimond113 ];
     platforms = lib.platforms.linux;
   };
 })

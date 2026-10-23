@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   gfortran,
   buildType ? "meson",
   cmake,
@@ -16,7 +17,7 @@
   multicharge,
 }:
 
-assert !blas.isILP64 && !lapack.isILP64;
+assert blas.isILP64 == lapack.isILP64;
 assert (
   builtins.elem buildType [
     "meson"
@@ -40,6 +41,14 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Fix pkg-config, meson and cmake paths for include and lib dirs
     ./build-paths.patch
+
+    # This was not declared as part of the public API, which led to linking
+    # failures with gfortran 16.
+    (fetchpatch {
+      name = "add-get_numerical_hessian_api-to-public-api.patch";
+      url = "https://github.com/dftd4/dftd4/commit/f84dc4033d9ce036e74e709b9cf42c72249f4f52.patch";
+      hash = "sha256-mdKWIKz8A92lI0sMl5rXwhzKd2UDej0yPYiKllH1Asc=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -64,8 +73,22 @@ stdenv.mkDerivation (finalAttrs: {
     multicharge
   ];
 
+  mesonFlags = [
+    "-Dilp64=${if blas.isILP64 then "true" else "false"}"
+  ]
+  ++ lib.optionals blas.isILP64 [
+    "-Dlapack=custom"
+    "-Dcustom_libraries=blas,lapack"
+  ];
+
   cmakeFlags = [
     (lib.strings.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "WITH_ILP64" blas.isILP64)
+  ]
+  ++ lib.optionals blas.isILP64 [
+    "-DBLAS_LIBRARIES=${lib.getLib blas}/lib/libblas${
+      if stdenv.hostPlatform.isStatic then ".a" else stdenv.hostPlatform.extensions.sharedLibrary
+    }"
   ];
 
   outputs = [
@@ -81,19 +104,12 @@ stdenv.mkDerivation (finalAttrs: {
       app/tester.py
   '';
 
-  preCheck = ''
-    export OMP_NUM_THREADS=2
-  '';
-
   meta = {
     description = "Generally Applicable Atomic-Charge Dependent London Dispersion Correction";
     changelog = "https://github.com/dftd4/dftd4/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "dftd4";
-    license = with lib.licenses; [
-      lgpl3Plus
-      gpl3Plus
-    ];
-    homepage = "https://github.com/grimme-lab/dftd4";
+    license = lib.licenses.lgpl3Plus;
+    homepage = "https://github.com/dftd4/dftd4";
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.sheepforce ];
   };

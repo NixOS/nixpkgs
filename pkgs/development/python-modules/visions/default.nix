@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "visions";
-  version = "0.8.1";
+  version = "0.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dylan-profiler";
     repo = "visions";
     tag = "v${version}";
-    hash = "sha256-MHseb1XJ0t7jQ45VXKQclYPgddrzmJAC7cde8qqYhNQ=";
+    hash = "sha256-GcudMUF1N2W4OV9SYRiG7XN1RXJj/5zHPng3cRk+FnA=";
   };
 
   nativeBuildInputs = [ setuptools ];

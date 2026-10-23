@@ -5,6 +5,8 @@
   fetchFromGitHub,
   autoPatchelfHook,
   alsa-lib,
+  cacert,
+  glib-networking,
   gst_all_1,
   libayatana-appindicator,
   mimalloc,
@@ -18,13 +20,13 @@
 }:
 
 let
-  version = "2.1.7";
+  version = "2.2.6";
 
   src = fetchFromGitHub {
     owner = "Predidit";
     repo = "Kazumi";
     tag = version;
-    hash = "sha256-+xt5Cd9GF13LY/MoL3R104npoBcTv000VPXvI3yYycU=";
+    hash = "sha256-a2N9ucF+KNHmQ7hnL9GPOLYM4S9DEFlQ0I9mzLM5eEU=";
   };
 in
 flutter.buildFlutterApplication {
@@ -87,28 +89,43 @@ flutter.buildFlutterApplication {
 
   buildInputs = [
     alsa-lib
+    cacert
+    glib-networking
     gst_all_1.gst-libav
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
-    gst_all_1.gst-vaapi
     gst_all_1.gstreamer
     libayatana-appindicator
     mpv-unwrapped
     webkitgtk_4_1
   ];
 
-  # patch onReorderItem to onReorder for nixpkgs Flutter compatibility
   postPatch = ''
-    substituteInPlace \
-      lib/pages/plugin_editor/plugin_view_page.dart \
+    # Fix compatibility issues with Flutter 3.24+ breaking API changes
+    substituteInPlace lib/pages/plugin_editor/plugin_view_page.dart \
       --replace-fail "onReorderItem:" "onReorder:"
+
+    substituteInPlace lib/bean/dialog/material_bottom_sheet.dart \
+      --replace-fail 'TabBarScrollController' 'ScrollController' \
+      --replace-fail 'scrollController: _scrollController,' ""
+
+    # Disable Bangumi proxy by default
+    substituteInPlace lib/services/storage/settings_keys.dart \
+      --replace-fail $'_SettingBoxKey.enableBangumiProxy,\n    true,' $'_SettingBoxKey.enableBangumiProxy,\n    false,'
   '';
 
   postInstall = ''
     ln -snf ${mpv-unwrapped}/lib/libmpv.so.2 $out/app/$pname/lib/libmpv.so.2
     install -Dm 0644 assets/linux/io.github.Predidit.Kazumi.desktop -t $out/share/applications/
     install -Dm 0644 assets/images/logo/logo_linux.png $out/share/icons/hicolor/512x512/apps/io.github.Predidit.Kazumi.png
+  '';
+
+  # Ensure HTTPS certificate bundle is available to fix TLS verification
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --set SSL_CERT_FILE "${cacert}/etc/ssl/certs/ca-bundle.crt"
+    )
   '';
 
   passthru = {

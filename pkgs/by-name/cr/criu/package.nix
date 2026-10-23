@@ -45,6 +45,12 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/checkpoint-restore/criu/commit/3f3acc3200a23140abaa32a2017ae159d3c2d02c.patch?full_index=1";
       hash = "sha256-J8n4TjqjzJLLULnpJdR/6YWa/8moFQMn+wNo4a0otgE=";
     })
+
+    # fix build w/ glibc-2.44
+    (fetchpatch2 {
+      url = "https://github.com/checkpoint-restore/criu/commit/a810faba33f43d61372741ed196eafd485546f83.patch?full_index=1";
+      hash = "sha256-UHSSC3qI6dvtUAiXNnKXTtuXZYGE0SXpUnQ917SXFaU=";
+    })
   ];
 
   enableParallelBuilding = true;
@@ -107,6 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
         "s390" = "s390";
         "mips" = "mips";
         "loongarch" = "loongarch64";
+        "riscv" = "riscv64";
       };
     in
     [
@@ -159,6 +166,7 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-linux"
       "armv7l-linux"
       "loongarch64-linux"
+      "riscv64-linux"
     ];
     maintainers = [ lib.maintainers.thoughtpolice ];
   };

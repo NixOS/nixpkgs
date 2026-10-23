@@ -8,12 +8,12 @@
   fetchFromGitHub,
 }:
 let
-  version = "0.0.9";
+  version = "0.1.1";
   src = fetchFromGitHub {
     owner = "clabby";
     repo = "difftastic.nvim";
-    rev = "6041ef0244b3fecf3b7f07de9af8cfbf8dbc4945";
-    hash = "sha256-23NGKhytF3OsLJgdrC51IH/sIGoqe/yBfmPsZKHOMSk=";
+    tag = "v${version}";
+    hash = "sha256-x5rm54LdloowVFPtNGs/N6dAqcVe3tHH7eJjPvxdqzk=";
   };
 
   difftastic-nvim-lib = rustPlatform.buildRustPackage {

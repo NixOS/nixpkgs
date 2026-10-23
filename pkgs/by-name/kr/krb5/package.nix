@@ -44,6 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    # https://github.com/krb5/krb5/pull/1505
+    ./CVE-2026-11850.patch
     # https://github.com/krb5/krb5/pull/1506
     ./CVE-2026-40355-and-CVE-2026-40356.patch
   ]
@@ -73,7 +75,9 @@ stdenv.mkDerivation (finalAttrs: {
     #     void foo();
     #
     # declaration.
-    NIX_CFLAGS_COMPILE = "-std=gnu17" + lib.optionalString stdenv.hostPlatform.isStatic " -fcommon";
+    NIX_CFLAGS_COMPILE =
+      "-std=gnu17 -Wno-error=discarded-qualifiers"
+      + lib.optionalString stdenv.hostPlatform.isStatic " -fcommon";
   };
 
   configureFlags = [

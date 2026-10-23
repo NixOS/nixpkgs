@@ -4,9 +4,9 @@
   nodejs,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_11,
+  pnpm_12,
   fetchFromGitHub,
-  buildGo126Module,
+  buildGo127Module,
   installShellFiles,
   callPackage,
   nixosTests,
@@ -15,16 +15,14 @@
       nodejs
       fetchPnpmDeps
       pnpmConfigHook
-      pnpm_11
+      pnpm_12
       fetchFromGitHub
       ;
   },
 }:
 
 let
-  pnpm = pnpm_11;
-
-  buildGoModule = buildGo126Module;
+  buildGoModule = buildGo127Module;
 
   inherit (import ./sources.nix { inherit fetchFromGitHub; })
     pname

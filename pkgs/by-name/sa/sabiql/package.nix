@@ -6,6 +6,7 @@
   rustc,
   graphviz,
   postgresql,
+  sqlite,
   xdg-utils,
   makeBinaryWrapper,
   nix-update-script,
@@ -13,16 +14,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sabiql";
-  version = "1.13.0";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "riii111";
     repo = "sabiql";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-HDaiCLu1L2aQ+9swQWWPzb9MWqI44ECf71KyhI43emk=";
+    hash = "sha256-Jn96Wbrju1NXu9DN0e6GVgS2p4v1F/mXO03Ug2TOVuw=";
   };
 
-  cargoHash = "sha256-5o68x2pOe4ArDzPJmGI9ooqRgs8rEReSFnpT8TKItl4=";
+  cargoHash = "sha256-CFrITQthY+PI08lA0ivFP8JcT4Y0HsotOsJmIwQVI90=";
 
   # Upstream use latest rust version need to patch use nixpkgs version
   postPatch = ''
@@ -33,11 +34,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     makeBinaryWrapper
   ];
 
+  nativeCheckInputs = [
+    sqlite
+  ];
+
   postInstall =
     let
       runtimePathDeps = [
         graphviz
         postgresql
+        sqlite
       ]
       ++ lib.optionals stdenv.hostPlatform.isLinux [ xdg-utils ];
     in

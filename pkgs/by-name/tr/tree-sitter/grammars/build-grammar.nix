@@ -27,6 +27,8 @@ stdenv.mkDerivation (
 
     inherit version src;
 
+    __structuredAttrs = true;
+
     nativeBuildInputs = [
       jq
     ]
@@ -35,21 +37,28 @@ stdenv.mkDerivation (
       tree-sitter
     ];
 
-    CFLAGS = [
-      "-Isrc"
-      # Match upstream `tree-sitter build --wasm`
-      (if isWasi then "-Os" else "-O2")
-    ]
-    ++ lib.optionals isWasi [
-      "-fvisibility=hidden"
-    ];
-    CXXFLAGS = [
-      "-Isrc"
-      (if isWasi then "-Os" else "-O2")
-    ]
-    ++ lib.optionals isWasi [
-      "-fvisibility=hidden"
-    ];
+    env = args.env or { } // {
+      CFLAGS = toString (
+        [
+          "-Isrc"
+          # Match upstream `tree-sitter build --wasm`
+          (if isWasi then "-Os" else "-O2")
+        ]
+        ++ lib.optionals isWasi [
+          "-fvisibility=hidden"
+        ]
+      );
+      CXXFLAGS = toString (
+        [
+          "-Isrc"
+          (if isWasi then "-Os" else "-O2")
+        ]
+        ++ lib.optionals isWasi [
+          "-fvisibility=hidden"
+        ]
+      );
+      inherit language;
+    };
 
     stripDebugList = [ "parser" ];
 
@@ -168,5 +177,7 @@ stdenv.mkDerivation (
     "generate"
     "excludeBrokenTreeSitterJson"
     "meta"
+    "language"
+    "env"
   ]
 )

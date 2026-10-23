@@ -43,7 +43,12 @@ buildPythonPackage (finalAttrs: {
   doCheck = false;
 
   # This enables accessing modules stored in cwd
-  makeWrapperArgs = [ "--prefix PYTHONPATH . :" ];
+  makeWrapperArgs = [
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    "."
+  ];
 
   meta = {
     description = "Python package that helps you build complex pipelines of batch jobs";
@@ -53,6 +58,6 @@ buildPythonPackage (finalAttrs: {
     '';
     homepage = "https://github.com/spotify/luigi";
     changelog = "https://github.com/spotify/luigi/releases/tag/${finalAttrs.version}";
-    license = [ lib.licenses.asl20 ];
+    license = lib.licenses.asl20;
   };
 })

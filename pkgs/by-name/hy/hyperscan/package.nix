@@ -16,6 +16,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "hyperscan";
   version = "5.4.2";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "intel";
     repo = "hyperscan";
@@ -75,6 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
   # hyperscan CMake is completely broken for chimera builds when pcre is compiled
   # the only option to make it build - building from source
   # In case pcre is built from source, chimera build is turned on by default
+  # NOTE: chimera requires PCRE1 (>= 8.41), it is not compatible with pcre2.
   preConfigure = lib.optionalString withStatic (
     ''
       mkdir -p pcre
@@ -111,6 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
+    broken = stdenv.hostPlatform.isStatic; # A minimum of SSSE3 compiler support is required
     description = "High-performance multiple regex matching library";
     longDescription = ''
       Hyperscan is a high-performance multiple regex matching library.
@@ -129,7 +134,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ avnik ];
     platforms = [
       "x86_64-linux"
-      "x86_64-darwin"
     ];
     license = lib.licenses.bsd3;
   };

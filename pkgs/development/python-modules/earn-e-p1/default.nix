@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "earn-e-p1";
-  version = "0.1.0";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Miggets7";
     repo = "earn-e-p1";
     tag = finalAttrs.version;
-    hash = "sha256-a76+slVhZj6AQIDCcaEym3G6DjIsQQLfi13wIsYGkjA=";
+    hash = "sha256-n5ICM2sCcpjgv/sgUeA8W1YGpEgBQzSKeFwGo4abQAg=";
   };
 
   build-system = [ hatchling ];

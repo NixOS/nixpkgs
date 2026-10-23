@@ -2,22 +2,25 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  buildGoModule,
-  nodejs_22,
-  pnpm_8,
+  buildGo127Module,
+  nodejs-slim_24,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   testers,
+  nix-update-script,
+  nixosTests,
 }:
 
 let
-  version = "1.15.0";
+  pnpm = pnpm_10.override { nodejs-slim = nodejs-slim_24; };
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "umputun";
     repo = "remark42";
     tag = "v${version}";
-    hash = "sha256-yd/qTRSZj0nZpgK77xP+XHyHcVXlNpyMzdfj6EbVcXQ=";
+    hash = "sha256-pFLZMUZQVE+8kNLTGRQEXro3ElnXBX51eT4LAnWyN/I=";
   };
 
   remark42-web = stdenv.mkDerivation (finalAttrs: {
@@ -26,43 +29,47 @@ let
 
     strictDeps = true;
 
-    pnpmRoot = "frontend";
+    sourceRoot = "${finalAttrs.src.name}/frontend/apps/remark42";
 
     nativeBuildInputs = [
-      nodejs_22
-      pnpm_8
+      nodejs-slim_24
+      pnpm
       pnpmConfigHook
     ];
 
     pnpmDeps = fetchPnpmDeps {
-      inherit (finalAttrs) pname version src;
-      sourceRoot = "${finalAttrs.src.name}/frontend";
-      pnpm = pnpm_8;
-      fetcherVersion = 3;
-      hash = "sha256-E2tUZXhcufuztXS+Z//uZk9omvaPrevNbGqVd41Lwhw=";
+      inherit (finalAttrs)
+        pname
+        version
+        src
+        sourceRoot
+        ;
+      inherit pnpm;
+      fetcherVersion = 4;
+      hash = "sha256-OemJpM50bh/qolGOKyqKjoc5cn/re4LFa8ll4Hhihlo=";
     };
 
     buildPhase = ''
       runHook preBuild
-      pushd "$pnpmRoot"
-      pnpm --filter ./apps/remark42 --fail-if-no-match run build
-      popd
+
+      pnpm run build
+
       runHook postBuild
     '';
 
     installPhase = ''
       runHook preInstall
+
       mkdir -p $out/web
-      cp -r "$pnpmRoot/apps/remark42/public/." $out/web/
+      cp -r "public/." $out/web/
+
       runHook postInstall
     '';
   });
 in
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "remark42";
   inherit version src;
-
-  strictDeps = true;
 
   modRoot = "backend";
 
@@ -89,10 +96,19 @@ buildGoModule (finalAttrs: {
     mv "$out/bin/app" "$out/bin/remark42"
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    command = "remark42 --help";
-    version = "v${finalAttrs.version}";
+  __darwinAllowLocalNetworking = true;
+
+  passthru = {
+    inherit remark42-web;
+    updateScript = nix-update-script { extraArgs = [ "--subpackage=remark42-web" ]; };
+    tests = {
+      inherit (nixosTests) remark42;
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        command = "remark42 --help";
+        version = "v${finalAttrs.version}";
+      };
+    };
   };
 
   meta = {

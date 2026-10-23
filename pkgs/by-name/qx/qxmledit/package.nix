@@ -32,7 +32,11 @@ stdenv.mkDerivation (finalAttrs: {
     libGLU
   ];
 
-  qmakeFlags = [ "CONFIG+=release" ];
+  qmakeFlags = [
+    "CONFIG+=release"
+    "CONFIG+=c++17"
+    "QMAKE_CXXFLAGS+=-Wno-unused-but-set-variable"
+  ];
 
   preConfigure = ''
     export QXMLEDIT_INST_DATA_DIR="$out/share/data"

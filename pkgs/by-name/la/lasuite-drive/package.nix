@@ -7,13 +7,13 @@
   nixosTests,
 }:
 let
-  version = "0.18.0";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "drive";
     tag = "v${version}";
-    hash = "sha256-JoOHbwZR4salfLB9Gg7kfRMDcDA/Srn8qwUqLAZtsz8=";
+    hash = "sha256-y9lvGYTIxpuTA0mFDl616JxX+RF5+5Ea8k/NWlLjrZk=";
   };
 
   meta = {
@@ -29,7 +29,12 @@ let
 
   python = python3.override {
     self = python;
-    packageOverrides = (self: super: { django = super.django_5; });
+    packageOverrides = (
+      self: super: {
+        django = self.django_5;
+        mcp = self.mcp_1;
+      }
+    );
   };
 
 in
@@ -41,7 +46,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/src/backend";
 
   patches = [
-    # Support configuration throught environment variables for SECURE_*
+    # Support configuration through environment variables for SECURE_*
     ./secure_settings.patch
     # Fix some build fields on pyproject
     ./pyproject_build.patch
@@ -94,6 +99,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       sentry-sdk
       url-normalize
       whitenoise
+      zipstream-ng
     ]
     ++ celery.optional-dependencies.redis
     ++ django-storages.optional-dependencies.s3;

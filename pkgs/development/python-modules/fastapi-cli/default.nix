@@ -15,14 +15,14 @@
 let
   self = buildPythonPackage rec {
     pname = "fastapi-cli";
-    version = "0.0.20";
+    version = "0.0.32";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "fastapi";
       repo = "fastapi-cli";
       tag = version;
-      hash = "sha256-RTxu6WmKmGMVsQ2izd8j8P+gGbXV91gVjb95JC52e8Q=";
+      hash = "sha256-SHhCjpah0VWpPPEu2mjVx0lCjuZM00KQFgEpiRtOH2E=";
     };
 
     build-system = [ pdm-backend ];
@@ -36,6 +36,11 @@ let
 
     optional-dependencies = {
       standard = [
+        uvicorn
+        # FIXME package fastapi-cloud-cli
+      ]
+      ++ uvicorn.optional-dependencies.standard;
+      standard-no-fastapi-cloud-cli = [
         uvicorn
       ]
       ++ uvicorn.optional-dependencies.standard;

@@ -18,14 +18,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cobang";
-  version = "2.5.2";
+  version = "2.8.0";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "hongquan";
     repo = "CoBang";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-q28pSvEqWy56qNh7aE05PB6l3Hpu7eazz52REmQDYhY=";
+    hash = "sha256-NU7APm3N3vkUHvsjLnjdn25yf2sslEvB+XzPxhYedQY=";
   };
 
   nativeBuildInputs = [
@@ -57,7 +57,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     gst-python
     pillow
     pygobject3
-    python-zbar
+    zbar
     qrcode
     typing-extensions
   ];

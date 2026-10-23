@@ -71,6 +71,7 @@ in
         ];
       };
 
+      boot.kernelPackages = pkgs.linuxPackages_latest;
       networking.jool.enable = true;
       networking.jool.siit.default.global.pool6 = "fd::/96";
     };
@@ -191,6 +192,7 @@ in
         ];
       };
 
+      boot.kernelPackages = pkgs.linuxPackages_latest;
       networking.jool.enable = true;
       networking.jool.nat64.default = {
         bib = [
@@ -206,17 +208,17 @@ in
           {
             protocol = "TCP";
             prefix = "203.0.113.1/32";
-            "port range" = "40001-65535";
+            "port range" = "20000-29999";
           }
           {
             protocol = "UDP";
             prefix = "203.0.113.1/32";
-            "port range" = "40001-65535";
+            "port range" = "20000-29999";
           }
           {
             protocol = "ICMP";
             prefix = "203.0.113.1/32";
-            "port range" = "40001-65535";
+            "port range" = "20000-29999";
           }
           # Ports for static BIB entries
           {

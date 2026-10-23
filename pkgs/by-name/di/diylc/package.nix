@@ -5,17 +5,17 @@
   copyDesktopItems,
   makeDesktopItem,
   unzip,
-  jdk17,
+  jdk21,
   makeBinaryWrapper,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "diylc";
-  version = "5.11.0";
+  version = "6.2.0";
 
   src = fetchurl {
     url = "https://github.com/bancika/diy-layout-creator/releases/download/v${finalAttrs.version}/diylc-${finalAttrs.version}-universal.zip";
-    hash = "sha256-peSxUdlqcS0gvlSzf6OgC0vJ6FIounauY0TaMjDX0ZI=";
+    hash = "sha256-ZHGsxQJ6NE8YmQyGnHavhxzgp/6J3z/0XY0Duch9boU=";
   };
 
   nativeBuildInputs = [
@@ -51,8 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm755 run.sh $out/app/diylc/run.sh
     patchShebangs $out/app/diylc/run.sh
     substituteInPlace $out/app/diylc/run.sh \
-      --replace-fail '$(which java)' "${jdk17}/bin/java" \
-      --replace-fail "exec java" "exec ${jdk17}/bin/java"
+      --replace-fail '$(which java)' "${jdk21}/bin/java" \
+      --replace-fail "exec java" "exec ${jdk21}/bin/java"
     mkdir $out/bin
     makeWrapper $out/app/diylc/run.sh $out/bin/diylc
 

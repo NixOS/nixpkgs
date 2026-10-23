@@ -67,6 +67,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     homepage = "https://element-hq.github.io/dendrite";
+    mainProgram = "dendrite";
     description = "Second-generation Matrix homeserver written in Go";
     changelog = "https://github.com/element-hq/dendrite/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Plus;

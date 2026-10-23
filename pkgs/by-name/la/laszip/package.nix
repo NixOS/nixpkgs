@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Turn quickly bulky LAS files into compact LAZ files without information loss";
     homepage = "https://laszip.org";
     changelog = "https://github.com/LASzip/LASzip/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.lgpl2;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hythera ];
     platforms = lib.platforms.unix;
   };

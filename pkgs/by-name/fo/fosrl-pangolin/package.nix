@@ -9,6 +9,8 @@
   edition ? "oss",
   environmentVariables ? { },
   nixosTests,
+  nodejs_22,
+  nix-update-script,
 }:
 
 assert lib.assertOneOf "databaseType" databaseType [
@@ -35,7 +37,7 @@ in
 
 buildNpmPackage (finalAttrs: {
   pname = "pangolin";
-  version = "1.19.4";
+  version = "1.24.0";
 
   __structuredAttrs = true;
   enableParallelBuilding = true;
@@ -44,11 +46,13 @@ buildNpmPackage (finalAttrs: {
     owner = "fosrl";
     repo = "pangolin";
     tag = finalAttrs.version;
-    hash = "sha256-Joo7N92ZbKybD15ojIIoEtjLjzcho5PqAzuGlj17zag=";
+    hash = "sha256-EYyqT7yDz1KpkCyb1niOZcSNxkRMJ6LXjuAcXPhemgM=";
   };
 
+  nodejs = nodejs_22;
   npmDepsFetcherVersion = 2;
-  npmDepsHash = "sha256-XOuP3WgV9Xt2uRhHVmnjjf46RV+Pv1pl8a71yTizn10=";
+  npmDepsHash = "sha256-nWlIy+1m6IJuGaXV3U1ampTL9Xvxj7jONuJ0ecGAU3g=";
+  npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs = [
     esbuild
@@ -62,11 +66,11 @@ buildNpmPackage (finalAttrs: {
 
   # upstream inconsistently updates this
   # so leaving this here in case it's needed
-  postPatch = ''
-    substituteInPlace server/lib/consts.ts --replace-fail \
-      'export const APP_VERSION = "${lib.versions.majorMinor finalAttrs.version + ".0"}";' \
-      'export const APP_VERSION = "${finalAttrs.version}";'
-  '';
+  # postPatch = ''
+  #   substituteInPlace server/lib/consts.ts --replace-fail \
+  #     'export const APP_VERSION = "${lib.versions.majorMinor finalAttrs.version + ".0"}";' \
+  #     'export const APP_VERSION = "${finalAttrs.version}";'
+  # '';
 
   preBuild = ''
     npm run set:${db false}
@@ -167,6 +171,7 @@ buildNpmPackage (finalAttrs: {
   passthru = {
     inherit databaseType;
     tests = { inherit (nixosTests) pangolin; };
+    updateScript = nix-update-script { };
   };
 
   meta = {

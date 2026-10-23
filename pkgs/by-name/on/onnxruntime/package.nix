@@ -25,7 +25,8 @@
   pythonSupport ? (stdenv.buildPlatform.canExecute stdenv.hostPlatform),
   cudaSupport ? config.cudaSupport,
   ncclSupport ? cudaSupport && cudaPackages.nccl.meta.available,
-  openvinoSupport ? stdenv.isLinux,
+  tensorrtSupport ? cudaSupport && cudaPackages.tensorrt.meta.available,
+  openvinoSupport ? stdenv.hostPlatform.isLinux,
   rocmSupport ? config.rocmSupport,
   coremlSupport ? stdenv.hostPlatform.isDarwin,
   withFullProtobuf ? false,
@@ -112,20 +113,17 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "onnxruntime";
-  version = "1.26.0";
+  version = "1.27.1";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "onnxruntime";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-+9M4mEPLLJ5N+JomoXIKcUBV85lr6lFJjJQ3qsMRrQY=";
+    hash = "sha256-i2u/JnfbJ/srsZY3ATb2YsBBXEhTGhatsr3+9eHVV3M=";
   };
 
   patches = [
-    # Skip execinfo include on musl
-    # https://github.com/microsoft/onnxruntime/pull/25726
-    ./musl-execinfo.patch
     # Add missing include which is only needed on musl (is implied in other includes on glibc)
     # https://github.com/microsoft/onnxruntime/pull/26969
     ./musl-cstdint.patch
@@ -135,11 +133,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     # Patch adapted from https://gitlab.alpinelinux.org/alpine/aports/-/raw/462dfe0eb4b66948fe48de44545cc22bb64fdf9f/community/onnxruntime/0001-Remove-MATH_NO_EXCEPT-macro.patch
     ./remove-MATH_NO_EXCEPT-macro.patch
   ]
-  # Include additional target_link_libraries needed for cudnn-frontend >= 2.19
-  # See: https://github.com/microsoft/onnxruntime/pull/28849
-  # These changes are included in 548ab6e and fc7a9f0 upstream
   ++ lib.optionals cudaSupport [
-    ./nvrtc-link.patch
+    # Drop the orphaned ShardedMoE CUDA contrib op, whose ft_moe backend was removed upstream
+    # Fix submitted upstream: https://github.com/microsoft/onnxruntime/pull/31139
+    ./drop-orphaned-sharded-moe.patch
   ];
 
   postPatch = ''
@@ -223,6 +220,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       cuda_cudart
     ]
     ++ lib.optionals ncclSupport [ nccl ]
+    ++ lib.optionals tensorrtSupport [ tensorrt ]
   )
   ++ lib.optionals rocmSupport [
     rocmPackages.clr
@@ -295,13 +293,19 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     # fails to find protoc on darwin, so specify it
     (lib.cmakeFeature "ONNX_CUSTOM_PROTOC_EXECUTABLE" (lib.getExe buildPackages.protobuf))
     (lib.cmakeBool "onnxruntime_BUILD_SHARED_LIB" true)
-    (lib.cmakeBool "onnxruntime_BUILD_UNIT_TESTS" finalAttrs.doCheck)
+    (lib.cmakeBool "onnxruntime_BUILD_UNIT_TESTS" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "onnxruntime_USE_FULL_PROTOBUF" withFullProtobuf)
     (lib.cmakeBool "onnxruntime_USE_CUDA" cudaSupport)
     (lib.cmakeBool "onnxruntime_USE_NCCL" ncclSupport)
     (lib.cmakeBool "onnxruntime_USE_MIGRAPHX" rocmSupport)
     (lib.cmakeBool "onnxruntime_USE_COREML" coremlSupport)
     (lib.cmakeBool "onnxruntime_ENABLE_LTO" (!cudaSupport || cudaPackages.cudaOlder "12.8"))
+    # GCC 16 implemented P0952R2, which changes the output of libstdc++'s
+    # std::generate_canonical. Some of onnxruntime('s tests) rely on this old
+    # behavior, so we restore the old behavior with the provided macro. Based
+    # on a fix suggested by upstream at
+    # https://github.com/microsoft/onnxruntime/pull/31346#issuecomment-5688923246
+    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-D_GLIBCXX_USE_OLD_GENERATE_CANONICAL")
   ]
   ++ lib.optionals openvinoSupport [
     (lib.cmakeBool "onnxruntime_USE_OPENVINO" true)
@@ -328,6 +332,11 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "onnxruntime_CUDNN_HOME" "${cudaPackages.cudnn}")
     (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaArchitecturesString)
     (lib.cmakeFeature "onnxruntime_NVCC_THREADS" "1")
+  ]
+  ++ lib.optionals tensorrtSupport [
+    (lib.cmakeBool "onnxruntime_USE_TENSORRT" true)
+    (lib.cmakeBool "onnxruntime_USE_TENSORRT_BUILTIN_PARSER" true)
+    (lib.cmakeFeature "onnxruntime_TENSORRT_HOME" "") # Only used as a find hint
   ]
   ++ lib.optionals rocmSupport [
     (lib.cmakeFeature "CMAKE_HIP_ARCHITECTURES" (

@@ -4,9 +4,11 @@
   fetchFromGitea,
   fetchpatch2,
   installShellFiles,
-  openssl,
+  libsodium,
   pkg-config,
   protobuf,
+  sqlite,
+  zstd,
   cacert,
   nix-update-script,
   nixosTests,
@@ -30,7 +32,7 @@ let
         domain = "git.deuxfleurs.fr";
         owner = "Deuxfleurs";
         repo = "garage";
-        rev = "v${version}";
+        tag = "v${version}";
         inherit hash;
       };
 
@@ -43,19 +45,26 @@ let
       ];
 
       buildInputs = [
-        openssl
+        libsodium
+        sqlite
+        zstd
       ];
 
       checkInputs = [
         cacert
       ];
 
-      env.OPENSSL_NO_VENDOR = true;
+      env = {
+        SODIUM_USE_PKG_CONFIG = true;
+        LIBSQLITE3_SYS_USE_PKG_CONFIG = true;
+        ZSTD_SYS_USE_PKG_CONFIG = true;
+      };
 
-      # See https://git.deuxfleurs.fr/Deuxfleurs/garage/src/tag/v2.3.0/nix/compile.nix#L71-L78
+      # See https://git.deuxfleurs.fr/Deuxfleurs/garage/src/tag/v2.4.1/nix/compile.nix#L71-L78
       # on version changes for checking if changes are required here
+      buildNoDefaultFeatures = true;
       buildFeatures = [
-        "bundled-libs"
+        "system-libs"
         "consul-discovery"
         "fjall"
         "journald"
@@ -94,10 +103,10 @@ let
         homepage = "https://garagehq.deuxfleurs.fr";
         license = lib.licenses.agpl3Only;
         maintainers = with lib.maintainers; [
-          adamcstephens
           nickcao
           _0x4A6F
           teutat3s
+          herbetom
         ];
         knownVulnerabilities = (lib.optional eol "Garage version ${version} is EOL");
         inherit broken;
@@ -113,16 +122,9 @@ rec {
   };
 
   garage_2 = generic {
-    version = "2.3.0";
-    hash = "sha256-CqHcaVGgXL/jjqq7XN+kzEp6xoNgwBfGpMKYbTd78Ys=";
-    cargoHash = "sha256-ANh97G/2/KtCMN4gldteq6ROduk1AQJkI5zS9n97OJY=";
-    cargoPatches = [
-      (fetchpatch2 {
-        # fix: prevent depending on aws-lc via reqwest
-        url = "https://git.deuxfleurs.fr/Deuxfleurs/garage/commit/7c18abb664d891cdb696b478058b7506e3d53f44.patch";
-        hash = "sha256-f/+vDOC+kcmJVLtx1Y6OepoJBZhX30DULwSLnyQN5aI=";
-      })
-    ];
+    version = "2.4.1";
+    hash = "sha256-+3w4R0IGxc7GCVW3t7Izt6Y5PVUjxHsdLrr74ckR9Mg=";
+    cargoHash = "sha256-G928EsavtEgxugLzpBGSbo2RMHLzu9PZf9r3GqU5J3E=";
   };
 
   garage = garage_1;

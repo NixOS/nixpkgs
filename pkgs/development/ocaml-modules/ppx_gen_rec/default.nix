@@ -11,7 +11,7 @@ buildDunePackage (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/flowtype/ocaml-ppx_gen_rec/releases/download/v${finalAttrs.version}/ppx_gen_rec-v${finalAttrs.version}.tbz";
-    sha256 = "sha256-/mMj5UT22KQGVy1sjgEoOgPzyCYyeDPtWJYNDvQ9nlk=";
+    hash = "sha256-/mMj5UT22KQGVy1sjgEoOgPzyCYyeDPtWJYNDvQ9nlk=";
   };
 
   minimalOCamlVersion = "4.07";

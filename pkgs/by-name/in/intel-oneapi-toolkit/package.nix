@@ -13,7 +13,7 @@
   writableTmpDirAsHomeHook,
   writeShellApplication,
   curl,
-  htmlq,
+  jq,
   common-updater-scripts,
   zlib,
   rdma-core,
@@ -50,7 +50,9 @@
   libuuid,
   sqlite,
   libffi,
+  openssl,
   bash,
+  ocl-icd,
   # The list of components to install;
   # Either [ "all" ], [ "default" ], or a custom list of components.
   # If you want to install all default components plus an extra one, pass [ "default" <your extra components here> ]
@@ -70,7 +72,7 @@ let
       name = "update-intel-oneapi";
       runtimeInputs = [
         curl
-        htmlq
+        jq
         common-updater-scripts
       ];
       text = ''
@@ -81,27 +83,57 @@ let
 
         echo 'Figuring out the download URL' >&2
 
-        # Intel helpfully gives us a wget command to run so that we can download the toolkit installer, as part of their product page.
-        # This variable will contain that command (wget https://...), we will extract the URL from it.
-        wget_command="$(curl "$download_page" \
-          | htmlq 'code' --text \
-          | grep "wget.*$pname.*sh")"
+        # NOTE: Do NOT scrape the `wget ...` command that Intel renders on the
+        # product page. Intel updates that snippet by hand and occasionally forgets
+        # to (e.g. 2026.0.1 shipped while the snippet still pointed at 2026.0.0.198).
+        # Instead we drive the same API the page's own JavaScript uses to populate the version/checksum panel:
+        #
+        #   1. The product page references a per-product config JSON under
+        #      .../uswd-json-files/oneapi-toolkit/toolkit-<ver>.json
+        #   2. That config carries Intel's internal IRC component UUID for the
+        #      toolkit (irc.unbundledComponents."oneapi-toolkit"[0]).
+        #   3. /libs/apps/intel/idz/productsinfo?downloadId=<uuid> returns the live
+        #      file list, each entry with the real url + checksums + version.
+        #      We then pick the Linux offline installer (.sh) from that list.
 
-        # _offline is optional: Intel sometimes only links the online installer, which shares the same UUID and version.
-        regex="wget (https://registrationcenter-download[.]intel[.]com/akdlm/IRC_NAS/([0-9a-z-]+)/$pname.([0-9]+)[.]([0-9]+)[.]([0-9]+)[.]([0-9]+)(_offline)?[.]sh)"
-        if [[ "$wget_command" =~ $regex ]]; then
-            uuid="''${BASH_REMATCH[2]}"
-            versionYear="''${BASH_REMATCH[3]}"
-            versionMajor="''${BASH_REMATCH[4]}"
-            versionMinor="''${BASH_REMATCH[5]}"
-            versionRel="''${BASH_REMATCH[6]}"
-        else
-            echo "'$wget_command' does not match the expected format $regex" >&2
+        # 1. Discover the config JSON the page links to
+        config_path="$(curl -fsS "$download_page" \
+          | grep -oE '/content/dam/[^"]*uswd-json-files/oneapi-toolkit/[^"]+[.]json' \
+          | head -n1)"
+        if [[ -z "$config_path" ]]; then
+            echo "Could not find the toolkit config JSON on $download_page" >&2
             exit 1
         fi
 
-        # Always reconstruct to point at the offline installer
-        url="https://registrationcenter-download.intel.com/akdlm/IRC_NAS/$uuid/$pname-$versionYear.$versionMajor.$versionMinor.''${versionRel}_offline.sh"
+        # 2. Extract the IRC component UUID
+        component_id="$(curl -fsS "https://www.intel.com$config_path" \
+          | jq -r '.irc.unbundledComponents."oneapi-toolkit"[0]')"
+        if [[ -z "$component_id" || "$component_id" == "null" ]]; then
+            echo "Could not extract the IRC component UUID from $config_path" >&2
+            exit 1
+        fi
+
+        # 3. Resolve the component to its live file list and pick the Linux
+        # offline installer
+        # NOTE: Intel's field name really is misspelled "downlaodFileName"
+        file_entry="$(curl -fsS "https://www.intel.com/libs/apps/intel/idz/productsinfo?downloadId=$component_id" \
+          | jq -r '[.. | objects | select(.downlaodFileName? != null)
+                    | select(.operatingSystem == "linux")
+                    | select(.downlaodFileName | test("_offline[.]sh$"))][0]')"
+        url="$(echo "$file_entry" | jq -r '.url')"
+        filename="$(echo "$file_entry" | jq -r '.downlaodFileName')"
+        if [[ -z "$url" || "$url" == "null" ]]; then
+            echo "Could not find a Linux offline (.sh) installer for component $component_id" >&2
+            exit 1
+        fi
+
+        regex="$pname-([0-9]+[.][0-9]+[.][0-9]+[.][0-9]+)_offline[.]sh"
+        if [[ "$filename" =~ $regex ]]; then
+            version="''${BASH_REMATCH[1]}"
+        else
+            echo "'$filename' does not match the expected format $regex" >&2
+            exit 1
+        fi
 
         if grep -qF "url = \"$url\"" "$file"; then
             echo "The URL is the same ($url), skipping update" >&2
@@ -111,10 +143,7 @@ let
         echo "The new download URL is $url, prefetching it to store" >&2
         hash="$(nix hash convert --hash-algo sha256 "$(nix-prefetch-url --quiet "$url")")"
 
-        sed -i "s|versionYear = \".*\";|versionYear = \"$versionYear\";|" "$file"
-        sed -i "s|versionMajor = \".*\";|versionMajor = \"$versionMajor\";|" "$file"
-        sed -i "s|versionMinor = \".*\";|versionMinor = \"$versionMinor\";|" "$file"
-        sed -i "s|versionRel = \".*\";|versionRel = \"$versionRel\";|" "$file"
+        sed -i "s|^  version = \".*\";|  version = \"$version\";|" "$file"
         sed -i "s|url = \".*\";|url = \"$url\";|" "$file"
         sed -i "s|hash = \".*\";|hash = \"$hash\";|" "$file"
       '';
@@ -183,19 +212,16 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "intel-oneapi-toolkit";
 
-  versionYear = "2026";
-  versionMajor = "0";
-  versionMinor = "0";
-  versionRel = "198";
-
-  version = "${finalAttrs.versionYear}.${finalAttrs.versionMajor}.${finalAttrs.versionMinor}.${finalAttrs.versionRel}";
+  version = "2026.2.0.667";
+  versionYear = lib.versions.major finalAttrs.version;
+  versionMajor = lib.versions.minor finalAttrs.version;
 
   strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchurl {
-    url = "https://registrationcenter-download.intel.com/akdlm/IRC_NAS/71180075-e4e3-4c6f-bbbb-19017ed0cf7d/intel-oneapi-toolkit-2026.0.0.198_offline.sh";
-    hash = "sha256-FVpSiWvSQjndxzP0h+zLKvXK2ZV+7R4r/mDOFFNpTls=";
+    url = "https://registrationcenter-download.intel.com/akdlm/IRC_NAS/902d3dfc-ece4-4282-9a4a-48020ca454e6/intel-oneapi-toolkit-2026.2.0.667_offline.sh";
+    hash = "sha256-WbZe6YkOFpMtLOvdWXZrbvlEBDRntO4e9v+iK1bMGJQ=";
   };
 
   nativeBuildInputs = [
@@ -210,6 +236,10 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     # Required for patchShebangs to discover the correct interpreter
     bash
+    # libstdc++/libgcc_s for non-vtune components (vtune uses its bundled copies)
+    (lib.getLib stdenv.cc.cc)
+    # libcrypto.so.3 for ippcp's crypto_mb
+    openssl
   ]
   ++ lib.concatMap (
     comp:
@@ -255,9 +285,31 @@ stdenv.mkDerivation (finalAttrs: {
     rm -rf "$out"/logs
     rm -rf "$out"/.toolkit_linking_tool
 
+    # The bundled OpenCL loader reads /etc/OpenCL/vendors; point it to ocl-icd,
+    # which reads /run/opengl-driver/etc/OpenCL/vendors where NixOS puts the
+    # drivers. Keep the file names: libomptarget dlopens libOpenCL.so.
+    for f in "$out"/compiler/*/lib/libOpenCL.so*; do
+      [[ ! -e $f ]] || ln -sf "${lib.getLib ocl-icd}/lib/''${f##*/}" "$f"
+    done
+
     ln -s "$out/$versionYear.$versionMajor"/{lib,etc,bin,share,opt,include} "$out"
 
     runHook postInstall
+  '';
+
+  # Patch vtune separately: autoPatchelf prefers libraries in the patched paths,
+  # so other components would pick up vtune's old bundled libstdc++.
+  dontAutoPatchelf = true;
+  postFixup = ''
+    others=()
+    for dir in "$out"/*; do
+      [[ -L $dir || $dir == "$out/vtune" ]] || others+=("$dir")
+    done
+    autoPatchelf -- "''${others[@]}"
+    if [[ -d $out/vtune ]]; then
+      addAutoPatchelfSearchPath "''${others[@]}"
+      autoPatchelf -- "$out/vtune"
+    fi
   '';
 
   autoPatchelfIgnoreMissingDeps = [
@@ -295,6 +347,8 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [
       balsoft
+      kilyanni
+      recutita
     ];
     platforms = [ "x86_64-linux" ];
   };

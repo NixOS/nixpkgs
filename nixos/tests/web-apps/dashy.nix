@@ -18,7 +18,7 @@ let
     ];
   };
 
-  customSettingsYaml = (pkgs.formats.yaml_1_1 { }).generate "custom-conf.yaml" customSettings;
+  customSettingsYaml = (pkgs.formats.yaml_1_2 { }).generate "custom-conf.yaml" customSettings;
 in
 {
   name = "dashy";

@@ -49,7 +49,7 @@ let
     "aarch64" = "arm64";
   };
   cpuName = stdenv.hostPlatform.parsed.cpu.name;
-  gnArch = platformMap."${cpuName}" or (throw "unsupported arch ${cpuName}");
+  gnArch = platformMap."${cpuName}" or "unsupported";
   gnOs =
     if stdenv.hostPlatform.isLinux then
       "linux"
@@ -139,6 +139,10 @@ stdenv.mkDerivation {
       --replace-fail "rtc_static_library" "rtc_shared_library" \
       --replace-fail "complete_static_lib = true" ""
 
+    # Remove the libcxx hardening config to avoid clashes with nixpkgs' own compiler wrapper,
+    # which already defines the hardening macros.
+    sed -i '/config("libcxx_hardening") {/,/^}/c\config("libcxx_hardening") {}' build/config/compiler/BUILD.gn
+
     substituteInPlace webrtc.gni \
       --replace-fail "!build_with_chromium && is_component_build" "false"
 
@@ -179,6 +183,11 @@ stdenv.mkDerivation {
     chmod +x build/toolchain/apple/linker_driver.py
     patchShebangs build/toolchain/apple/linker_driver.py
     substituteInPlace build/toolchain/apple/toolchain.gni --replace-fail "/bin/cp -Rc" "cp -a"
+
+    # nixpkgs calls the target "darwin" instead of "macos", and passing a different target
+    # results in warnings by the nixpkgs compiler wrapper
+    substituteInPlace build/config/mac/BUILD.gn \
+      --replace-fail '$clang_arch-apple-macos' '$clang_arch-apple-darwin'
   '';
 
   outputs = [
@@ -343,6 +352,8 @@ stdenv.mkDerivation {
       WeetHet
       niklaskorz
     ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = lib.intersectLists (lib.platforms.linux ++ lib.platforms.darwin) (
+      lib.platforms.x86 ++ lib.platforms.aarch64 ++ lib.platforms.arm
+    );
   };
 }

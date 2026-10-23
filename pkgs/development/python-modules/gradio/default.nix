@@ -21,14 +21,13 @@
   pnpmConfigHook,
 
   # dependencies
-  aiofiles,
   anyio,
   audioop-lts,
   brotli,
   fastapi,
-  ffmpy,
   gradio-client,
   groovy,
+  hf-gradio,
   httpx,
   huggingface-hub,
   jinja2,
@@ -50,6 +49,7 @@
   typer,
   typing-extensions,
   uvicorn,
+  urllib3,
 
   # oauth
   authlib,
@@ -82,29 +82,36 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "gradio";
-  version = "6.9.0";
+  version = "6.29.0"; # please always backport gradio changes
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "gradio-app";
     repo = "gradio";
     tag = "gradio@${finalAttrs.version}";
-    hash = "sha256-iGaUiJto/tquCSa6D/wbkNyVtK/2kZB/hz62STfwLOY=";
+    hash = "sha256-OgYUbXEDSFvREb/kpHYnucKUvvw9mBBAqDgHcn717t4=";
   };
 
   patches = [
-    ./fix-transformers-pipelines-imports.patch
+    # Upstream's after_build.js runs `npm install --production` to vendor http-proxy into the server
+    # build output, which fails offline.
+    # Copy it (and its dependency closure) from the already-fetched pnpm workspace.
+    ./dont-npm-install-http-proxy.patch
   ];
 
   pnpmDeps = fetchPnpmDeps {
-    inherit (finalAttrs)
-      pname
-      version
-      src
-      ;
+    pname = "gradio"; # to avoid a "sans-reverse-dependencies" duplicate
+    inherit (finalAttrs) version src;
     inherit pnpm;
-    fetcherVersion = 3;
-    hash = "sha256-pZCYtWFNlrcRFomx6HbO0zySOyifO3n/ffzx59pS/A8=";
+    fetcherVersion = 4;
+    hash = "sha256-JL0tYymcQt6hSeoCe8fHzTCMW461+sWa48elhPOm2Co=";
+  };
+
+  env = {
+    # test/test_utils.py
+    # @settings(derandomize=os.getenv("CI") is not None)
+    CI = "true";
   };
 
   nativeBuildInputs = [
@@ -121,19 +128,13 @@ buildPythonPackage (finalAttrs: {
     hatch-fancy-pypi-readme
   ];
 
-  pythonRelaxDeps = [
-    "aiofiles"
-    "tomlkit"
-  ];
-
   dependencies = [
-    aiofiles
     anyio
     brotli
     fastapi
-    ffmpy
     gradio-client
     groovy
+    hf-gradio
     httpx
     huggingface-hub
     jinja2
@@ -155,6 +156,7 @@ buildPythonPackage (finalAttrs: {
     typer
     typing-extensions
     uvicorn
+    urllib3
   ]
   ++ lib.optionals (pythonAtLeast "3.13") [
     audioop-lts
@@ -194,6 +196,10 @@ buildPythonPackage (finalAttrs: {
   ++ finalAttrs.passthru.optional-dependencies.oauth
   ++ pydantic.optional-dependencies.email;
 
+  pythonRelaxDeps = [
+    "tomlkit" # pre-emptive upper bound
+  ];
+
   preBuild = ''
     pnpm build
     pnpm package
@@ -220,6 +226,11 @@ buildPythonPackage (finalAttrs: {
 
     # requires network, via subprocess.run
     "test_endpoint_status"
+
+    # caused by our xfail hook, it assumes no pytest fixtures are present
+    "test_there_is_no_client_push_route"
+    "test_a_hub_failure_does_not_fail_the_prediction"
+    "test_client_cannot_choose_record_metadata"
 
     # Flaky, tries to pin dependency behaviour. Sensitive to dep versions
     # These error only affect downstream use of the check dependencies.
@@ -276,8 +287,14 @@ buildPythonPackage (finalAttrs: {
     "test_component_example_values"
     "test_public_request_pass"
     "test_theme_builder_launches"
+
+    # md5 hash mismatch
+    "test_convert_audio_remuxes_already_playable_codec"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # it caught our xfail exception, expecting a different exception
+    "test_sleep_"
+
     # flaky on darwin (depend on port availability)
     "test_all_status_messages"
     "test_analytics_summary"
@@ -397,17 +414,29 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "gradio" ];
 
+  __darwinAllowLocalNetworking = true;
+
   # Cyclic dependencies are fun!
-  # This is gradio without gradio-client and gradio-pdf
+  # This is gradio without gradio-client and hf-gradio
   passthru = {
     sans-reverse-dependencies =
       (gradio.override {
         gradio-client = null;
         gradio-pdf = null;
+        # gradio imports hf_gradio at module load (gradio/routes.py), so we must keep it for the
+        # import to succeed.
+        # hf-gradio depends on gradio-client, whose test suite pulls in
+        # gradio.sans-reverse-dependencies, which would create a build cycle.
+        # Break it by giving hf-gradio a checkless gradio-client.
+        hf-gradio = hf-gradio.override {
+          gradio-client = gradio-client.sans-reverse-dependencies;
+        };
       }).overridePythonAttrs
         (old: {
           pname = old.pname + "-sans-reverse-dependencies";
           pythonRemoveDeps = (old.pythonRemoveDeps or [ ]) ++ [ "gradio-client" ];
+          # we aggressively remove all checkPhase related attrs
+          # to save on rebuilds during bumps
           doInstallCheck = false;
           doCheck = false;
           postPatch = "";
@@ -416,6 +445,7 @@ buildPythonPackage (finalAttrs: {
           disabledTestPaths = [ ];
           disabledTestMarks = [ ];
           pytestFlags = [ ];
+          preBuild = ":"; # skip pnpm build, for speed
           postInstall = ''
             shopt -s globstar
             for f in $out/**/*.py; do
@@ -425,6 +455,7 @@ buildPythonPackage (finalAttrs: {
           '';
           pythonImportsCheck = null;
           dontCheckRuntimeDeps = true;
+          dontCheckPythonMetadata = true; # broken due to changed pname
         });
 
     # We can't use gitUpdater, because we need to update the pnpm hash.
@@ -452,6 +483,7 @@ buildPythonPackage (finalAttrs: {
   };
 
   meta = {
+    broken = lib.versionAtLeast mcp.version "2"; # https://github.com/gradio-app/gradio/pull/13921
     homepage = "https://www.gradio.app/";
     changelog = "https://github.com/gradio-app/gradio/releases/tag/${finalAttrs.src.tag}";
     description = "Python library for easily interacting with trained machine learning models";

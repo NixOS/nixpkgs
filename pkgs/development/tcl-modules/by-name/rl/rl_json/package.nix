@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rl_json";
-  version = "0.17.6";
+  version = "0.17.8";
 
   src = fetchFromGitHub {
     owner = "RubyLane";
     repo = "rl_json";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-18WMNHzGn0Hio07zuuaINN85b82pNEIgeLjsRy9jQEs=";
+    hash = "sha256-VN/hLjSVe1e7utIKsNZ0yG2ffW063UOIyezd7DKQ3Go=";
     fetchSubmodules = true;
   };
 
@@ -27,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoreconfHook
     tcl.tclPackageHook
+    tcl.tclRequiresCheckHook
     pandoc
   ];
 
@@ -38,6 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+
+  tclRequiresCheck = [ "rl_json" ];
 
   meta = {
     homepage = "https://github.com/RubyLane/rl_json";

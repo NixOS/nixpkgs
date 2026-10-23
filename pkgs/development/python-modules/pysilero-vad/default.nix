@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pysilero-vad";
-  version = "3.3.1";
+  version = "3.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "pysilero-vad";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gQDZuu8hN0s+yfkp22w39/Aje5/6qdX0W95FPu6obw0=";
+    hash = "sha256-hpo+o645odIsWPyoqf1E94xvz5a/1yH8WAxSdL4QZeo=";
   };
 
   build-system = [
@@ -48,7 +48,6 @@ buildPythonPackage (finalAttrs: {
   '';
 
   meta = {
-    broken = stdenv.hostPlatform.isDarwin; # ld: unknown option: --disable-new-dtags
     description = "Pre-packaged voice activity detector using silero-vad";
     homepage = "https://github.com/rhasspy/pysilero-vad";
     changelog = "https://github.com/rhasspy/pysilero-vad/blob/${finalAttrs.src.tag}/CHANGELOG.md";

@@ -7,15 +7,15 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "scx-loader";
-  version = "1.1.1";
+  version = "1.1.3";
 
-  cargoHash = "sha256-uX2lCVDa8eAKWi/bj94+JQHoOLll0OjKRHT0EPZELNc=";
+  cargoHash = "sha256-N2bJBIqledSGxFmJQCBRIH6ZK0aGumGbL7kfrzgl7HI=";
 
   src = fetchFromGitHub {
     owner = "sched-ext";
     repo = "scx-loader";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5OvdtW/Li+ubHDBSKe2ssE9ZyNSCcxNFSJffzxQ9WMk=";
+    hash = "sha256-NbTakrEdk3pundjk554QrUpKTXxQl6I8Y/IgmxjGKuw=";
   };
 
   __structuredAttrs = true;

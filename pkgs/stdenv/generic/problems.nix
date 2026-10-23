@@ -525,9 +525,13 @@ rec {
       processProblems pname problemsToHandle;
 
   completeMetaProblems =
-    config: attrs:
+    config:
+    let
+      automaticProblems = genAutomaticProblems config;
+    in
+    attrs:
     mapAttrs (name: problem: { kind = name; } // problem) (
-      (attrs.meta.problems or { }) // genAutomaticProblems config attrs
+      (attrs.meta.problems or { }) // automaticProblems attrs
     );
 
   processProblems =

@@ -17,6 +17,7 @@ buildPythonPackage rec {
   pname = "fabric";
   version = "3.2.3";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "fabric";
@@ -75,5 +76,7 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = [ ];
     mainProgram = "fab";
+    # https://github.com/fabric/fabric/issues/2376
+    broken = lib.versionAtLeast invoke.version "3";
   };
 }

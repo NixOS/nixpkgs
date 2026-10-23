@@ -1,15 +1,18 @@
 {
+  lib,
   rustPlatform,
   testers,
   hwdata,
   pkg-config,
   libdrm,
+  libglvnd,
+  vulkan-loader,
   coolercontrol,
   runtimeShell,
   addDriverRunpath,
   python3Packages,
   liquidctl,
-  protobuf,
+  which,
 }:
 
 {
@@ -23,23 +26,19 @@ rustPlatform.buildRustPackage {
   inherit version src;
   sourceRoot = "${src.name}/coolercontrold";
 
-  cargoHash = "sha256-DE1m/odw90epyR8U9H1pxyJXariIHLXwk+mVYi8cu5A=";
+  cargoHash = "sha256-tbGNVyYrTRmxOqVM7mjNgwZXXcUY205mKuFjrptr+m4=";
 
   buildInputs = [
     hwdata
     libdrm
+    libglvnd
+    vulkan-loader
   ];
 
   nativeBuildInputs = [
     pkg-config
-    protobuf
     addDriverRunpath
     python3Packages.wrapPython
-  ];
-
-  checkFlags = [
-    # This test has a build-machine dependency and will be removed from the normal test suite in the next release
-    "--skip=repositories::hwmon::hwmon_repo::coalescer_tests::fast_device_no_added_latency"
   ];
 
   pythonPath = [ liquidctl ];
@@ -63,8 +62,21 @@ rustPlatform.buildRustPackage {
   postFixup = ''
     addDriverRunpath "$out/bin/coolercontrold"
 
+    patchelf --add-rpath ${
+      lib.strings.makeLibraryPath [
+        # could instead patch out dynamic_loading for libdrm_amdgpu_sys in daemon/Cargo.toml,
+        # but we have to add other libraries to the search path anyway
+        libdrm
+
+        # Finding GPUs for stress-testing
+        libglvnd
+        vulkan-loader
+      ]
+    } $out/bin/coolercontrold
+
     buildPythonPath "''${pythonPath[*]}"
     wrapProgram "$out/bin/coolercontrold" \
+      --prefix PATH : ${lib.makeBinPath [ which ]} \
       --prefix PATH : $program_PATH \
       --prefix PYTHONPATH : $program_PYTHONPATH
   '';

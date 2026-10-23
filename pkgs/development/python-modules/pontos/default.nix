@@ -4,10 +4,11 @@
   colorful,
   fetchFromGitHub,
   git,
+  hatchling,
   httpx,
+  httpx2,
   lxml,
   packaging,
-  poetry-core,
   pytestCheckHook,
   python-dateutil,
   semver,
@@ -16,23 +17,24 @@
   tomlkit,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pontos";
-  version = "26.5.0";
+  version = "26.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "pontos";
-    tag = "v${version}";
-    hash = "sha256-P18RqOSY2g6R5m79nJbfoP9w1RhYiQ2HPWZrhwIHknI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gUBnk7Fbt7SECR8Oypsoa3ubLspGUtI2NlfaB4PryOA=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     colorful
     httpx
+    httpx2
     lxml
     packaging
     python-dateutil
@@ -75,8 +77,8 @@ buildPythonPackage rec {
   meta = {
     description = "Collection of Python utilities, tools, classes and functions";
     homepage = "https://github.com/greenbone/pontos";
-    changelog = "https://github.com/greenbone/pontos/releases/tag/${src.tag}";
-    license = with lib.licenses; [ gpl3Plus ];
+    changelog = "https://github.com/greenbone/pontos/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

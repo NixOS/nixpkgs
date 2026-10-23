@@ -69,19 +69,18 @@ in
   config = lib.mkIf (cfg.enable) {
     environment.systemPackages = [ cfg.package ];
     # we also want these mounts in virtual machines.
-    fileSystems = if config.virtualisation ? qemu then lib.mkVMOverride mounts else mounts;
+    fileSystems = if config.virtualisation.qemu ? package then lib.mkVMOverride mounts else mounts;
 
     # We no longer need those when using envfs
     system.activationScripts.usrbinenv = lib.mkForce "";
     system.activationScripts.binsh = lib.mkForce "";
 
-    # Disabling the activation scripts above prevents the creation of 2
-    # directories, which would normally be created just before switch-root at
-    # stage1. This causes problems when systemd is used in the initrd.
-    #
-    # This only affects fresh installations or systems using impermanence/tmpfs
-    # root, where these directories don't persist from a previous activation.
-    boot.initrd.systemd.tmpfiles.settings = lib.mkIf config.boot.initrd.systemd.enable {
+    # Disabling the activation scripts above prevents the creation of
+    # 2 directories, which would normally be created just before
+    # switch-root at stage1. This only affects fresh installations or
+    # systems using impermanence/tmpfs root, where these directories
+    # don't persist from a previous activation.
+    boot.initrd.systemd.tmpfiles.settings = {
       "50-envfs" = {
         # During switch-root, systemd's base_filesystem_create_fd() creates an
         # empty /usr. Later at stage2, systemd initialize_runtime() checks

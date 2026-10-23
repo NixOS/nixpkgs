@@ -1,7 +1,7 @@
 {
   lib,
   copyPkgconfigItems,
-  fetchFromRepoOrCz,
+  fetchgit,
   makePkgconfigItem,
   apple-sdk,
   perl,
@@ -11,7 +11,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "tcc";
-  version = "0.9.27-unstable-2025-01-06";
+  version = "0.9.27-unstable-2026-09-22";
 
   outputs = [
     "dev"
@@ -22,10 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
   ];
 
-  src = fetchFromRepoOrCz {
-    repo = "tinycc";
-    rev = "f6385c05308f715bdd2c06336801193a21d69b50";
-    hash = "sha256-tO3N+NplYy8QUOC2N3x0CO5Ui75j9bQzLSZQF1HQyhY=";
+  src = fetchgit {
+    url = "git://repo.or.cz/tinycc.git";
+    rev = "3dc99dbc82f8e07308c5d398136803e62f9676df";
+    hash = "sha256-qYsGgihowp2C6WFzbQuXEWgJG6evtu/10p5IH/ozIKY=";
   };
 
   nativeBuildInputs = [
@@ -107,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck =
     !stdenv.hostPlatform.isStatic
     && stdenv.buildPlatform.canExecute stdenv.hostPlatform
-    && !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64);
+    && !stdenv.hostPlatform.isDarwin;
 
   postPatch = ''
     patchShebangs texi2pod.pl
@@ -129,13 +129,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   installCheckTarget = "test";
-
-  # https://www.mail-archive.com/tinycc-devel@nongnu.org/msg10142.html
-  preInstallCheck =
-    lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64)
-      ''
-        rm tests/tests2/{108,114}*
-      '';
 
   meta = {
     homepage = "https://repo.or.cz/tinycc.git";
@@ -161,7 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       With libtcc, you can use TCC as a backend for dynamic code generation.
     '';
-    license = with lib.licenses; [ lgpl21Only ];
+    license = lib.licenses.lgpl21Only;
     mainProgram = "tcc";
     maintainers = with lib.maintainers; [
       onemoresuza

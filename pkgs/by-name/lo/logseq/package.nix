@@ -244,6 +244,9 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r static/node_modules resources/node_modules
   '';
 
+  # electron-forge's console output is squeezed into one narrow column if unset
+  env.CI = "1";
+
   yarnBuildScript = "release-electron";
 
   installPhase = ''
@@ -260,7 +263,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     makeWrapper ${lib.getExe electron} $out/bin/logseq \
         --add-flags $out/share/logseq/resources/app \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
         --set-default LOCAL_GIT_DIRECTORY ${git} \
         --inherit-argv0
   ''

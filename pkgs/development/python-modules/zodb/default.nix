@@ -38,6 +38,9 @@ buildPythonPackage (finalAttrs: {
   postPatch = ''
     # remove broken test
     rm -vf src/ZODB/tests/testdocumentation.py
+    # remove setuptools version check
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools >= 78.1.1,< 81" "setuptools"
   ''
   + lib.optionalString (pythonAtLeast "3.14") ''
     # remove broken under python 3.14

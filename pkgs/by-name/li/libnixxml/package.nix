@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation {
   pname = "libnixxml";
-  version = "unstable-2020-06-25";
+  version = "0-unstable-2020-06-25";
 
   src = fetchFromGitHub {
     owner = "svanderburg";

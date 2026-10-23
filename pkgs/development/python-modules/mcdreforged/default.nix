@@ -12,23 +12,25 @@
   pathspec,
   prompt-toolkit,
   psutil,
+  pydantic,
   requests,
   resolvelib,
   ruamel-yaml,
   setuptools,
   typing-extensions,
+  wcwidth,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "mcdreforged";
-  version = "2.15.7";
+  version = "2.16.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MCDReforged";
     repo = "MCDReforged";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-e1JrDh8Zio+TCVCVvH8tBE/tY5ja3Nr3dCQRJwRqYh4=";
+    hash = "sha256-DwTAP7KfZECCmMrUxIBaPItdixqd+0bFJnpKYHeeDEI=";
   };
 
   build-system = [ setuptools ];
@@ -41,10 +43,12 @@ buildPythonPackage (finalAttrs: {
     pathspec
     prompt-toolkit
     psutil
+    pydantic
     requests
     resolvelib
     ruamel-yaml
     typing-extensions
+    wcwidth
   ];
 
   nativeCheckInputs = [

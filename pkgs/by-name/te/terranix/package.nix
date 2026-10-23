@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.9.0";
 
   src = fetchFromGitHub {
-    owner = "mrVanDalo";
+    owner = "terranix";
     repo = "terranix";
     rev = finalAttrs.version;
     sha256 = "sha256-Jh0Zk+g0pEbNopADEtqvrnhrl83rlNFHpn3Zhz4s+VM=";

@@ -9,19 +9,20 @@
   makeWrapper,
   darwin,
   nodejs,
-  electron,
+  electron_44,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "drawio";
-  version = "30.2.6";
+  version = "32.4.1";
 
   src = fetchFromGitHub {
     owner = "jgraph";
     repo = "drawio-desktop";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-hn+Lrsn+aNZqVFcyLinuJjUiQgai0o4F5d5cT9CvtLA=";
+    hash = "sha256-S1wR33ljKeUAZJro7Gw5mGJj/S4KB/W/EchAWTvTiIw=";
   };
 
   # `@electron/fuses` tries to run `codesign` and fails. Disable and use autoSignDarwinBinariesHook instead
@@ -32,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = fetchNpmDeps {
     src = finalAttrs.src;
-    hash = "sha256-PnYUy0Arxo5uTYyYfUEkbd4u7oIOHkEc0/ufp0umBhE=";
+    hash = "sha256-SodJ9f9q+/KFiWJE2Hcpq807kcbbpFnoLVJE67kvDuA=";
   };
 
   nativeBuildInputs = [
@@ -65,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preBuild
 
     electron_dist="$(mktemp -d)"
-    cp -r ${electron.dist}/. "$electron_dist"
+    cp -r ${electron_44.dist}/. "$electron_dist"
     chmod -R u+w "$electron_dist"
 
     sed -i "/afterSign/d" electron-builder-linux-mac.json
@@ -74,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
       --dir \
       --config electron-builder-linux-mac.json \
       -c.electronDist="$electron_dist" \
-      -c.electronVersion=${electron.version} \
+      -c.electronVersion=${electron_44.version} \
       -c.mac.identity=null
 
     runHook postBuild
@@ -97,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -Dm644 build/icon.svg "$out/share/icons/hicolor/scalable/apps/drawio.svg"
 
-    makeWrapper '${electron}/bin/electron' "$out/bin/drawio" \
+    makeWrapper '${electron_44}/bin/electron' "$out/bin/drawio" \
       --add-flags "$out/share/lib/drawio/resources/app.asar" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --inherit-argv0
@@ -123,10 +124,12 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Desktop version of draw.io for creating diagrams";
     homepage = "https://about.draw.io/";
-    license = lib.licenses.asl20;
+    license = lib.licenses.gpl3Only;
     changelog = "https://github.com/jgraph/drawio-desktop/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ darkonion0 ];
     platforms = lib.platforms.darwin ++ lib.platforms.linux;

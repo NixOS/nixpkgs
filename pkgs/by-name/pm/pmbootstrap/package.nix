@@ -15,14 +15,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pmbootstrap";
-  version = "3.10.3";
+  version = "3.12.1";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "postmarketOS";
     repo = "pmbootstrap";
     tag = version;
-    hash = "sha256-Zl7Ti0HwMQSjMeW4GjdEKIRoCNjV15Qiv8bzhktNoyQ=";
+    hash = "sha256-1esDcRY9CbdvgvAyy/X4HI2F4GG0P/ddbhuNtC3etcM=";
     domain = "gitlab.postmarketos.org";
   };
 
@@ -63,14 +63,15 @@ python3Packages.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        git
-        openssl
-        multipath-tools
-        util-linux
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      git
+      openssl
+      multipath-tools
+      util-linux
+    ])
   ];
 
   passthru.updateScript = gitUpdater { };

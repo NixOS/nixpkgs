@@ -63,6 +63,9 @@ let
         # Needed with GCC 12 but breaks on darwin (with clang) or older gcc
         "-Wno-error=maybe-uninitialized"
       ]
+      ++ [
+        "-Wno-error=discarded-qualifiers"
+      ]
     );
 
     meta = {

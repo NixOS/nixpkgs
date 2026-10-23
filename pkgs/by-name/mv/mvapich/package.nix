@@ -10,15 +10,24 @@
   perl,
   gfortran,
   slurm,
+  testers,
   openssh,
   hwloc,
   zlib,
   makeWrapper,
   python3,
+  config,
+  autoAddDriverRunpath,
   # InfiniBand dependencies
   ucx,
   # OmniPath dependencies
   libfabric,
+  # CUDA support
+  cudaSupport ? config.cudaSupport,
+  cudaPackages,
+  # ROCm support
+  rocmSupport ? config.rocmSupport,
+  rocmPackages,
   # Compile with slurm as a process manager
   useSlurm ? false,
   # Network backend for MVAPICH2
@@ -29,14 +38,18 @@ assert builtins.elem network [
   "ucx"
   "ofi"
 ];
+assert cudaSupport -> !rocmSupport;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mvapich";
   version = "4.1";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchurl {
     url = "https://mvapich.cse.ohio-state.edu/download/mvapich/mv2/mvapich-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-JaU9NyW2aeLGSBWPt8n8WxOIlT86L5SXSFhsRH0OQ+4=";
+    hash = "sha256-JaU9NyW2aeLGSBWPt8n8WxOIlT86L5SXSFhsRH0OQ+4=";
   };
 
   outputs = [
@@ -50,8 +63,13 @@ stdenv.mkDerivation (finalAttrs: {
     bison
     makeWrapper
     gfortran
+    perl
     python3
     removeReferencesTo
+  ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
+    autoAddDriverRunpath
   ];
 
   buildInputs = [
@@ -68,7 +86,20 @@ stdenv.mkDerivation (finalAttrs: {
     rdma-core
     libfabric
   ]
-  ++ lib.optional useSlurm slurm;
+  ++ lib.optionals useSlurm [ slurm ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
+    cudaPackages.cuda_nvcc
+  ]
+  ++ lib.optionals rocmSupport (
+    with rocmPackages;
+    [
+      rocm-core
+      rocm-runtime
+      rocm-device-libs
+      clr
+    ]
+  );
 
   configureFlags = [
     "--with-pm=hydra"
@@ -83,9 +114,20 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (network == "ofi") [
     "--with-device=ch4:ofi"
+  ]
+  ++ lib.optionals cudaSupport [
+    "--with-cuda=${lib.getBin cudaPackages.cuda_nvcc}"
+    "--with-cuda-include=${lib.getDev cudaPackages.cuda_cudart}/include"
+    "--with-cuda-lib=${lib.getLib cudaPackages.cuda_cudart}/lib"
+  ]
+  ++ lib.optionals rocmSupport [
+    "--with-hip=${rocmPackages.clr}"
   ];
 
-  doCheck = false; # requries bindir/bin/mpicc before install is run
+  # Fake libcuda.so (the real one is deployed impurely)
+  env.LDFLAGS = lib.optionalString cudaSupport "-L${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs";
+
+  doCheck = false; # requires bindir/bin/mpicc before install is run
 
   postInstall = ''
     for e in mpif77 mpif90 mpifort mpichversion mpic++ mpicxx mpicc mpivars; do
@@ -116,10 +158,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  passthru = {
+    inherit cudaSupport rocmSupport;
+    tests = {
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
+    };
+  };
+
   meta = {
     description = "MPI-3.1 implementation optimized for Infiband and OmniPath transport";
     homepage = "https://mvapich.cse.ohio-state.edu";
     license = lib.licenses.bsd3;
+    pkgConfigModules = [ "mvapich" ];
     maintainers = [ lib.maintainers.markuskowa ];
     platforms = lib.platforms.linux;
   };

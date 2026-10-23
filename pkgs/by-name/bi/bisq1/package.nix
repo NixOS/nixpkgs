@@ -36,7 +36,10 @@
 }:
 
 let
-  version = "1.10.2";
+  # This is separated into its own file so it's easier for `update.sh`.
+  sources = import ./sources.nix;
+
+  version = sources.version;
 
   # JDK 21 is the toolchain required by docs/build.md. enableJavaFX is not
   # strictly required (Bisq bundles its own JavaFX jars), but mirrors the
@@ -86,17 +89,17 @@ let
   publicKey = {
     "E222AA02" = fetchurl {
       url = "https://github.com/bisq-network/bisq/releases/download/v${version}/E222AA02.asc";
-      hash = "sha256-Ue/UmS6F440/ybEEIAR+pdPEIksAt6QSMN6G5TZVWzc=";
+      hash = sources."key-E222AA02-hash";
     };
 
     "4A133008" = fetchurl {
       url = "https://github.com/bisq-network/bisq/releases/download/v${version}/4A133008.asc";
-      hash = "sha256-UijG3DkJNNTakVJd2wl30mDepa27n6R/Xxfl4sjt0sk=";
+      hash = sources."key-4A133008-hash";
     };
 
     "387C8307" = fetchurl {
       url = "https://github.com/bisq-network/bisq/releases/download/v${version}/387C8307.asc";
-      hash = "sha256-PrRYZLT0xv82dUscOBgQGKNf6zwzWUDhriAffZbNpmI=";
+      hash = sources."key-387C8307-hash";
     };
   };
 
@@ -133,7 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/bisq-network/bisq/releases/download/v${version}/Bisq-64bit-${version}.deb";
-    hash = "sha256-e7rPUhA6KF3Tz3zlYqEfM9G0owe9hAUFDifKseRvb6A=";
+    hash = sources."deb-hash";
 
     # Verify the upstream Debian package's detached PGP signature prior to use.
     # This ensures that a successful build of this Nix package requires the
@@ -158,7 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   signature = fetchurl {
     url = "https://github.com/bisq-network/bisq/releases/download/v${version}/Bisq-64bit-${version}.deb.asc";
-    hash = "sha256-kBRaOXuP22DvXMkJ1XQatwvTmu/Ds8FvmUgYnRT7Vg0=";
+    hash = sources."sig-hash";
   };
 
   nativeBuildInputs = [
@@ -240,6 +243,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Decentralized bitcoin exchange network (Bisq 1)";

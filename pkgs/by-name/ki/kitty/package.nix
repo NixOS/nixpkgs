@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  replaceVars,
   python3Packages,
   libunistring,
   harfbuzz,
@@ -45,26 +46,27 @@
   makeBinaryWrapper,
   darwin,
   cairo,
+  shader-slang,
 }:
 
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.47.4";
+  version = "0.49.2";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     tag = "v${version}";
-    hash = "sha256-UDuWbWg7HiyJ4q/fVLLD+ZFmK74H2A2HRRwPoyGyGtU=";
+    hash = "sha256-FstfBzwdh1z7Qy9zWDY7L7mpd5bxnypgqEzqeLe16fY=";
   };
 
   goModules =
     (buildGo126Module {
       pname = "kitty-go-modules";
       inherit src version;
-      vendorHash = "sha256-o9S5KFT+9DRQ+OcZ5Wh8ZwtWE/19DYR810zCk+yUIr4=";
+      vendorHash = "sha256-iSPPwwu9jllnIxkQeOlJFdDL4xLUGRP2RMW9DPRY6FQ=";
     }).goModules;
 
   buildInputs = [
@@ -107,11 +109,13 @@ buildPythonApplication rec {
     sphinx
     furo
     sphinx-copybutton
+    sphinx-design
     sphinxext-opengraph
     sphinx-inline-tabs
     go_1_26
     fontconfig
     makeBinaryWrapper
+    shader-slang
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     imagemagick
@@ -142,7 +146,19 @@ buildPythonApplication rec {
     # OSError: master_fd is in error condition
     ./disable-test_ssh_bootstrap_with_different_launchers.patch
 
+    (replaceVars ./libxkbcommon-runtime-path.patch {
+      libxkbcommon = "${lib.getLib libxkbcommon}/lib/libxkbcommon.so.0";
+    })
   ];
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace glfw/x11_init.c \
+      --replace-fail 'libXi.so.6'       '${lib.getLib libxi}/lib/libXi.so.6' \
+      --replace-fail 'libXrandr.so.2'   '${lib.getLib libxrandr}/lib/libXrandr.so.2' \
+      --replace-fail 'libXcursor.so.1'  '${lib.getLib libxcursor}/lib/libXcursor.so.1' \
+      --replace-fail 'libXinerama.so.1' '${lib.getLib libxinerama}/lib/libXinerama.so.1' \
+      --replace-fail 'libXext.so.6'     '${lib.getLib libxext}/lib/libXext.so.6'
+  '';
 
   hardeningDisable = [
     # causes redefinition of _FORTIFY_SOURCE
@@ -244,6 +260,9 @@ buildPythonApplication rec {
     + ''
       # These depend on files that are not available in the sandbox
       rm tools/utils/machine_id/api_test.go
+
+      # These depend on cgroups and other resources that don't work as the tests expect in the sandbox
+      rm kitty_tests/child.py
     '';
 
   checkPhase = ''
@@ -287,6 +306,7 @@ buildPythonApplication rec {
       lib.makeBinPath [
         imagemagick
         ncurses.dev
+        shader-slang
       ]
     }"
 

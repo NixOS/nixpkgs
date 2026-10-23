@@ -47,7 +47,7 @@
   svt-av1,
   shaderc,
   vulkan-loader,
-  libappindicator,
+  qt6,
   libnotify,
   pipewire,
   miniupnpc,
@@ -69,12 +69,11 @@ let
   # a fixed-output derivation and point cmake at it via FFMPEG_PREPARED_BINARIES.
   # The tag must match the commit of the third-party/build-deps submodule pinned
   # in the Sunshine release.
-  buildDepsTag = "v2026.516.30821";
+  buildDepsTag = "v2026.910.121303";
   ffmpegArch =
     {
       x86_64-linux = "Linux-x86_64";
       aarch64-linux = "Linux-aarch64";
-      x86_64-darwin = "Darwin-x86_64";
       aarch64-darwin = "Darwin-arm64";
     }
     .${stdenv.hostPlatform.system}
@@ -87,10 +86,9 @@ let
     # unlike the empty-hash trick).
     hash =
       {
-        x86_64-linux = "sha256-VT+4qP2FaizCoIBBbBkzbYw4YOvGhuBUoZxWL0IYVZo=";
-        aarch64-linux = "sha256-X5v/GsJy8G3/LHW/8s0VAS0Vegr7JhZSqYotXL/s81o=";
-        x86_64-darwin = "sha256-rrOGahWwJikRfUn27Q4jVra2Q/MMSNitu0wS2UGKGWk=";
-        aarch64-darwin = "sha256-xkfwLJgb7uz1H7mJrQFW79w2T/T/Zv7biXlvXz5UvXc=";
+        x86_64-linux = "sha256-1S57XfkJa+qEYQLmifWyT9ul0SASFhSk1lkk2timnOY=";
+        aarch64-linux = "sha256-1HnlNem4AbcJkhZA8x5hC1/4cCqL8bJDjXNkHCI5IYw=";
+        aarch64-darwin = "sha256-jtBnSo0rn0VCnbfB90by1iBE4zvmtE86Wz2x+PolGmw=";
       }
       .${stdenv.hostPlatform.system};
   };
@@ -98,26 +96,23 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "sunshine";
-  version = "2026.516.143833";
+  version = "2026.914.233613";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "LizardByte";
     repo = "Sunshine";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3yuhOyW1Rqz4ddZ40z2ZzpAReZQFva0SL595XrnFB60=";
+    hash = "sha256-HqbswLvX/UiY3nOwxSesBMqnFAF0zKP1ueE6PwDtTNs=";
     fetchSubmodules = true;
   };
 
-  # build webui
   ui = buildNpmPackage {
     inherit (finalAttrs) src version;
     pname = "sunshine-ui";
-    npmDepsHash = "sha256-YnNnuAdj/S5LGNytqIsmCApIec8DTWKF6VIJ7AXUctU=";
-
-    # use generated package-lock.json as upstream does not provide one
-    postPatch = ''
-      cp ${./package-lock.json} ./package-lock.json
-    '';
+    npmDepsHash = "sha256-/uY+zvYxQG0Yb8kygwF48YfS+Km0bcQBW4poaqkeJXs=";
 
     installPhase = ''
       runHook preInstall
@@ -156,6 +151,11 @@ stdenv'.mkDerivation (finalAttrs: {
 
     substituteInPlace packaging/linux/app-dev.lizardbyte.app.Sunshine.service.in \
       --replace-fail '/bin/sleep' '${lib.getExe' coreutils "sleep"}'
+  ''
+  # std::jthread works without -fexperimental-library, which fails to link libc++experimental
+  + lib.optionalString isDarwin ''
+    substituteInPlace cmake/compile_definitions/common.cmake \
+      --replace-fail 'if(APPLE OR CMAKE_SYSTEM_NAME STREQUAL "FreeBSD")' 'if(CMAKE_SYSTEM_NAME STREQUAL "FreeBSD")'
   '';
 
   nativeBuildInputs = [
@@ -168,6 +168,7 @@ stdenv'.mkDerivation (finalAttrs: {
       ps.setuptools
     ]))
     makeWrapper
+    qt6.wrapQtAppsHook
   ]
   ++ lib.optionals isLinux [
     wayland-scanner
@@ -188,6 +189,8 @@ stdenv'.mkDerivation (finalAttrs: {
     nlohmann_json
     openssl
     libopus
+    qt6.qtbase
+    qt6.qtsvg
   ]
   ++ lib.optionals isLinux [
     avahi
@@ -222,11 +225,9 @@ stdenv'.mkDerivation (finalAttrs: {
     svt-av1
     vulkan-loader
     pipewire
-    libappindicator
     libnotify
   ]
   ++ lib.optionals cudaSupport [
-    cudaPackages.cudatoolkit
     cudaPackages.cuda_cudart
   ]
   ++ lib.optionals isDarwin [
@@ -277,9 +278,9 @@ stdenv'.mkDerivation (finalAttrs: {
 
   env = {
     # needed to trigger CMake version configuration
-    BUILD_VERSION = "${finalAttrs.version}";
+    BUILD_VERSION = finalAttrs.version;
     BRANCH = "master";
-    COMMIT = "";
+    COMMIT = finalAttrs.src.rev;
   };
 
   # copy webui where it can be picked up by build
@@ -300,10 +301,12 @@ stdenv'.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  # allow Sunshine to find libvulkan
-  postFixup = lib.optionalString cudaSupport ''
+  dontWrapQtApps = true;
+
+  postFixup = ''
     wrapProgram $out/bin/sunshine \
-      --set LD_LIBRARY_PATH ${lib.makeLibraryPath [ vulkan-loader ]}
+      "''${qtWrapperArgs[@]}" \
+      ${lib.optionalString cudaSupport "--set LD_LIBRARY_PATH ${lib.makeLibraryPath [ vulkan-loader ]}"}
   '';
 
   doInstallCheck = isLinux;
@@ -311,9 +314,7 @@ stdenv'.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = lib.optionals isLinux [ udevCheckHook ];
 
   passthru = {
-    tests = lib.optionalAttrs isLinux {
-      sunshine = nixosTests.sunshine;
-    };
+    tests = { inherit (nixosTests) sunshine; };
     updateScript = ./updater.sh;
   };
 
@@ -326,6 +327,10 @@ stdenv'.mkDerivation (finalAttrs: {
       devusb
       anish
     ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
   };
 })

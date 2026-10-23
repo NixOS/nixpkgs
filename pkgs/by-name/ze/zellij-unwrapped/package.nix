@@ -3,26 +3,28 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-  mandown,
   installShellFiles,
   pkg-config,
   curl,
+  libssh2,
   openssl,
+  sqlite,
   writableTmpDirAsHomeHook,
   versionCheckHook,
   nix-update-script,
+  withWebServer ? true,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zellij-unwrapped";
-  version = "0.44.3";
+  version = "0.45.1";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "zellij-org";
     repo = "zellij";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-r8GAOiau4CZPVotFmsBQJOvEu+t0Bu9UCYAOs18i3Kg=";
+    hash = "sha256-pp++8CTIM4PuAYOjM7GnzU4TXTaw8XuDMow5k/7KQgY=";
   };
 
   # Remove the `vendored_curl` feature in order to link against the libcurl from nixpkgs instead of
@@ -30,14 +32,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postPatch = ''
     substituteInPlace Cargo.toml \
       --replace-fail ', "vendored_curl"' ""
+  ''
+  + lib.optionalString (!withWebServer) ''
+    substituteInPlace Cargo.toml \
+      --replace-fail ', "web_server_capability"' ""
   '';
 
-  cargoHash = "sha256-966FpfSsF9I10SrYe3+YNsfM2kLLv+gd0/Aw8vLp4Lk=";
+  cargoHash = "sha256-rCK7FyAUIjUq6dxEw9YBaGm29xYvlYjX0b1xHU03XVU=";
 
+  env.LIBSSH2_SYS_USE_PKG_CONFIG = 1;
   env.OPENSSL_NO_VENDOR = 1;
 
   nativeBuildInputs = [
-    mandown
     installShellFiles
     pkg-config
     (lib.getDev curl)
@@ -45,7 +51,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     curl
+    libssh2
     openssl
+    sqlite
   ];
 
   nativeCheckInputs = [
@@ -66,11 +74,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  postInstall = ''
-    mandown docs/MANPAGE.md > zellij.1
-    installManPage zellij.1
-  ''
-  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd zellij \
       --bash <($out/bin/zellij setup --generate-completion bash) \
       --fish <($out/bin/zellij setup --generate-completion fish) \
@@ -83,7 +87,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Terminal workspace with batteries included";
     homepage = "https://zellij.dev/";
     changelog = "https://github.com/zellij-org/zellij/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       therealansh
       _0x4A6F

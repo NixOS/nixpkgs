@@ -8,26 +8,34 @@
   stdenv,
   wrapGAppsHook3,
   libjack2,
-  iconConvTools,
+  fetchpatch2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "praat";
-  version = "6.4.65";
+  version = "7.0.01";
 
   src = fetchFromGitHub {
     owner = "praat";
     repo = "praat.github.io";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-v4cAFLSJllrNgTm6ewR40HYvdi8a1bZcEBz/BTdFsxA=";
+    hash = "sha256-LDE3xmZVjO/AuInLpH853tMit39MRKjtrtWLBNNm7qQ=";
   };
+
+  # quick fix for now, better fix coming soon
+  patches = [
+    (fetchpatch2 {
+      name = "CVE-2026-110698.patch";
+      url = "https://github.com/praat/praat.github.io/commit/a910d21a2705ef4cd16d91f29cdc8da1ab1a7221.patch?full_index=1";
+      hash = "sha256-JWpjTq2nJnlutD6pmb0OD38CslkUB7Wxm6NcJyZWwXE=";
+    })
+  ];
 
   strictDeps = true;
 
   nativeBuildInputs = [
     pkg-config
     wrapGAppsHook3
-    iconConvTools
   ];
 
   buildInputs = [
@@ -41,26 +49,14 @@ stdenv.mkDerivation (finalAttrs: {
     "AR=${stdenv.cc.targetPrefix}ar"
   ];
 
-  configurePhase = ''
-    runHook preConfigure
-
-    cp makefiles/makefile.defs.linux.pulse-gcc makefile.defs
-
-    runHook postConfigure
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    install -Dt $out/bin praat
-    install -Dm444 main/praat.desktop -t $out/share/applications
-    icoFileToHiColorTheme main/praat.ico praat $out
-    install -Dm444 main/praat-480.svg $out/share/icons/hicolor/scalable/apps/praat.svg
-
-    runHook postInstall
-  '';
+  buildFlags = [ "PRAAT_AUDIO=pulse" ];
+  installFlags = [ "PREFIX=${placeholder "out"}" ];
 
   enableParallelBuilding = true;
+
+  postInstall = ''
+    mv $out/share/applications/org.praat.Praat.desktop $out/share/applications/praat.desktop
+  '';
 
   meta = {
     description = "Doing phonetics by computer";

@@ -20,8 +20,6 @@ buildPythonPackage (finalAttrs: {
 
   pyproject = true;
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
-
   build-system = [
     setuptools
     setuptools-scm

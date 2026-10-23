@@ -10,11 +10,12 @@
   poetry-core,
   pyopenssl,
   pyperclip,
+  pyprojectVersionPatchHook,
   pytest-mock,
   pytestCheckHook,
   questionary,
-  requests,
   requests-mock,
+  requests,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -23,7 +24,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "mBouamama";
+    owner = "tyki6";
     repo = "MyJWT";
     tag = finalAttrs.version;
     hash = "sha256-jqBnxo7Omn5gLMCQ7SNbjo54nyFK7pn94796z2Qc9lg=";
@@ -31,11 +32,14 @@ buildPythonPackage (finalAttrs: {
 
   pythonRelaxDeps = [
     "cryptography"
+    "exrex"
     "pyopenssl"
     "questionary"
   ];
 
   build-system = [ poetry-core ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     click
@@ -58,7 +62,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "CLI tool for testing vulnerabilities of JSON Web Tokens (JWT)";
-    homepage = "https://github.com/mBouamama/MyJWT";
+    homepage = "https://github.com/tyki6/MyJWT";
     changelog = "https://github.com/tyki6/MyJWT/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
