@@ -10,13 +10,13 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-nextest";
-  version = "0.9.148";
+  version = "0.9.149";
 
   src = fetchFromGitHub {
     owner = "nextest-rs";
     repo = "nextest";
     tag = "cargo-nextest-${finalAttrs.version}";
-    hash = "sha256-JcDSd3VswTuAhmHibwFJjJMSEbSReQ/SONrEcyEGYD4=";
+    hash = "sha256-63Ub21JqjnKAhpIXpVUvM6sVa+xGaB15N+3NjrA+vzc=";
   };
 
   # FIXME: we don't support dtrace probe generation on macOS until we have a dtrace build: https://github.com/NixOS/nixpkgs/pull/392918
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./no-dtrace-macos.patch
   ];
 
-  cargoHash = "sha256-MW2cM2XjfAquhdeDNwvizk6owl1sVwK5mfCiSpjJN6E=";
+  cargoHash = "sha256-Qss1AxTNR68C0F/OT8qLHhKdxwzr+b/TeIIQQRfHdfQ=";
 
   nativeBuildInputs = [ pkg-config ];
 
