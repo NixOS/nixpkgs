@@ -5,6 +5,7 @@
   rustPlatform,
   buildPackages,
   makeBinaryWrapper,
+  fetchpatch2,
   installShellFiles,
   pkg-config,
   zstd,
@@ -28,7 +29,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-MEcz5dmCp7pzxJOlU/2+1+60KB2XkFN7dtBMZaEpvVk=";
   };
 
-  cargoHash = "sha256-Dha+M4WbGPx3WXSD9LLIjgL6HAxRFklafSgb9m7Fbow=";
+  cargoPatches = [
+    # Because of a rustc version mismatch between dprint-0.64.1 and release-26.05, we can only cherry-pick the webpki-roots update to fix #576544
+    (fetchpatch2 {
+      url = "https://github.com/dprint/dprint/commit/9c6121aa33ef760ef92f10d31a32cfe878932f5d.patch?full_index=1";
+      hash = "sha256-mYzJj+BlCOwuDMGmj5bio0UrrUH86tS6/3Pfn7EgUNk=";
+    })
+  ];
+
+  cargoHash = "sha256-9Wl2tjExyxjDpwcDhr5SOrn2+7n4jKqwsNirKYA1Z/g=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
