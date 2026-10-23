@@ -52,7 +52,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       cryptography
       dnspython
       jsonrpclib-pelix
-      matplotlib
       pbkdf2
       protobuf
       pysocks
@@ -76,6 +75,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       bitbox02
     ]
     ++ lib.optionals enableQt [
+      matplotlib
       pyqt6
       qdarkstyle
     ];
@@ -93,7 +93,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     python3.pkgs.pyqt6
   ];
   disabledTestPaths = lib.optionals (!enableQt) [
-    "tests/test_qml_types.py"
+    "tests/qml"
   ];
 
   postPatch =
