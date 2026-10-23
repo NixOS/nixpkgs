@@ -6,7 +6,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "govee-local-api";
   version = "3.1.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Galorhallen";
     repo = "govee-local-api";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-0MrT99GbtBrYkKxathl51YvaKnyflNQgwnp8JP1zrRc=";
   };
 
@@ -33,8 +33,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library to communicate with Govee local API";
     homepage = "https://github.com/Galorhallen/govee-local-api";
-    changelog = "https://github.com/Galorhallen/govee-local-api/releases/tag/${src.tag}";
+    changelog = "https://github.com/Galorhallen/govee-local-api/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
