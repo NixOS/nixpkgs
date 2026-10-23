@@ -56,6 +56,9 @@ buildGo127Module (finalAttrs: {
     homepage = "https://github.com/shopware/shopware-cli";
     changelog = "https://github.com/shopware/shopware-cli/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ shyim ];
+    maintainers = with lib.maintainers; [
+      shyim
+      maltejanz
+    ];
   };
 })
