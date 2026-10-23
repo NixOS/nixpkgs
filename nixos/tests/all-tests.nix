@@ -1910,6 +1910,7 @@ in
   tinydns = runTest ./tinydns.nix;
   tinyproxy = runTest ./tinyproxy.nix;
   tinywl = runTest ./tinywl.nix;
+  tlog = runTest ./tlog.nix;
   tlshd = runTest ./tlshd.nix;
   tlsrouter = runTest ./tlsrouter.nix;
   tlsrpt = runTest ./tlsrpt.nix;
