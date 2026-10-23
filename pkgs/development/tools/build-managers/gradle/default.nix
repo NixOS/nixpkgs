@@ -4,7 +4,6 @@
   fetchFromGitHub,
   gradle-native-platform ? null,
   jdk11,
-  jdk17,
   jdk21,
   jdk25,
   nix-update-script,
