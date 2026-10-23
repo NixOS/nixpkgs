@@ -3,6 +3,7 @@
   lib,
   fetchurl,
   autoPatchelfHook,
+  cacert,
   libxcrypt-legacy,
   makeBinaryWrapper,
   pgsql-tools,
@@ -68,6 +69,11 @@ stdenv.mkDerivation (finalAttrs: {
       --chdir $out/lib/pgsql-tools
 
     runHook postInstall
+  '';
+
+  preFixup = ''
+    rm $out/lib/pgsql-tools/_internal/certifi/cacert.pem
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/lib/pgsql-tools/_internal/certifi/cacert.pem
   '';
 
   doInstallCheck = true;
