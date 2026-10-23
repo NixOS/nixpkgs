@@ -14028,12 +14028,12 @@ final: prev: {
 
   nvim-tree-lua = buildVimPlugin {
     pname = "nvim-tree.lua";
-    version = "1.18.0";
+    version = "1.19.0";
     src = fetchFromGitHub {
       owner = "nvim-tree";
       repo = "nvim-tree.lua";
-      tag = "v1.18.0";
-      hash = "sha256-QPPtshLL7sfb3wUxr/kusA3nAEfoxgiOxayUFptGUI0=";
+      tag = "v1.19.0";
+      hash = "sha256-GmB4Du5i1GY71eawiiX2TX15AGhciPal6903Vw7yMDQ=";
     };
     meta.homepage = "https://github.com/nvim-tree/nvim-tree.lua/";
     meta.license = unfree;
