@@ -32776,12 +32776,6 @@
     githubId = 255085068;
     name = "Yureka (WDZ)";
   };
-  yuriaisaka = {
-    email = "yuri.aisaka+nix@gmail.com";
-    github = "yuriaisaka";
-    githubId = 687198;
-    name = "Yuri Aisaka";
-  };
   yurkobb = {
     name = "Yury Bulka";
     email = "setthemfree@privacyrequired.com";
