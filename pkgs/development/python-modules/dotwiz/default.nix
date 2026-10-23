@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "dotwiz";
-  version = "0.4.0";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rnag";
     repo = "dotwiz";
     tag = "v${version}";
-    hash = "sha256-ABmkwpJ40JceNJieW5bhg0gqWNrR6Wxj84nLCjKU11A=";
+    hash = "sha256-xeSACgyo670GJ40uOKFc9GnDZ1YY2wnBJAR16n1dr5E=";
   };
 
   build-system = [ setuptools ];
