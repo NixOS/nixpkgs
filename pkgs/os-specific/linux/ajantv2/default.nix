@@ -5,7 +5,7 @@
   libajantv2,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  name = "${finalAttrs.version}-${finalAttrs.version}-${kernel.version}";
+  name = "${finalAttrs.pname}-${finalAttrs.version}-${kernel.version}";
   pname = "ajantv2-module";
   version = libajantv2.version;
 
