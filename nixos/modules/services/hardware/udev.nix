@@ -87,7 +87,7 @@ let
             --replace-quiet /usr/bin/cat ${pkgs.coreutils}/bin/cat \
             --replace-quiet /usr/bin/basename ${pkgs.coreutils}/bin/basename 2>/dev/null
         ${lib.optionalString (initrdBin != null) ''
-          substituteInPlace $i --replace-quiet '/run/current-system/systemd' "${lib.removeSuffix "/bin" initrdBin}"
+          substituteInPlace $i --replace-quiet '/run/current-system/systemd' "${initrdBin}"
         ''}
         done
 
@@ -475,9 +475,9 @@ in
     boot.initrd.systemd.contents = {
       "/etc/udev/rules.d".source = udevRulesFor {
         name = "initrd-udev-rules";
-        initrdBin = config.boot.initrd.systemd.contents."/bin".source;
+        initrdBin = lib.removeSuffix "/bin" config.boot.initrd.systemd.contents."/bin".source;
         udevPackages = config.boot.initrd.services.udev.packages;
-        udevPath = config.boot.initrd.systemd.contents."/bin".source;
+        udevPath = lib.removeSuffix "/bin" config.boot.initrd.systemd.contents."/bin".source;
         udev = config.boot.initrd.systemd.package;
         systemd = config.boot.initrd.systemd.package;
         binPackages = config.boot.initrd.services.udev.binPackages ++ [

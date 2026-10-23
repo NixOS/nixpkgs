@@ -6,7 +6,7 @@
     maintainers = with lib.maintainers; [ schnusch ];
   };
 
-  nodes.machine =
+  containers.machine =
     { pkgs, ... }:
     {
       imports = [ ./common/x11.nix ];
