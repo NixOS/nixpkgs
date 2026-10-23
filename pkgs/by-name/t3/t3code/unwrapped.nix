@@ -106,8 +106,8 @@ stdenv.mkDerivation (
         pnpmWorkspaces
         ;
 
-      fetcherVersion = 4;
-      hash = "sha256-ghijoQR/74bSYiR8roQ3JV3sCT4WLHiuU+uY8j+1j5k=";
+      fetcherVersion = 5;
+      hash = "sha256-SvNUylZW3EgFF44kRZY8YEAMPidP8/OhrSvX3aYNcfA=";
     };
 
     preBuild = ''
