@@ -10,19 +10,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "model-bakery";
-  version = "1.24.0";
+  version = "1.24.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "model-bakers";
     repo = "model_bakery";
     tag = finalAttrs.version;
-    hash = "sha256-B8f5AznoMGrJou+hvpY1CMhlIbnNbqlK811QnX2Kg9M=";
+    hash = "sha256-fuT9OGdgpIPtqVhx5aMqapEGWL357O4ufIS9ciuKYJE=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.9.26,<0.12.0" "uv_build"
+      --replace-fail "uv_build>=0.9.26,<0.13.0" "uv_build"
   '';
 
   build-system = [ uv-build ];
