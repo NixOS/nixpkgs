@@ -11,16 +11,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "utpm";
-  version = "0.3.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "typst-community";
     repo = "utpm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MGvPj+qF05zc2rPf1LxWVIpkZGOoDj09UfCZbQ/lBOM=";
+    hash = "sha256-zCULbcQi62uMDN39wk98R1qlgBSeAHgIML39S+HeVbY=";
   };
 
-  cargoHash = "sha256-eWEriaKakEIORrQgcD5hrvSVfGRS2kU8GKNAOTIFCo0=";
+  cargoHash = "sha256-Le0rVPHgtEbB3UjqUXn3NWthI2cVGH28qZSJz0o6Vlg=";
 
   env.OPENSSL_NO_VENDOR = 1;
 
