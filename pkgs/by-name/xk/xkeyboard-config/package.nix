@@ -60,6 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Provides a consistent, well-structured, database of keyboard configuration data";
     homepage = "https://gitlab.freedesktop.org/xkeyboard-config/xkeyboard-config";
