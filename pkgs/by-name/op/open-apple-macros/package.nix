@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "open-apple-macros";
-  version = "1.3.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "xtool-org";
     repo = "OpenAppleMacros";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qZQ3SH97bS/diA2gHOuVBlLgpNAeDW1IwebJLl2nN3M=";
+    hash = "sha256-dfBuRYhfGhQw49OTSC5r3fGM+kdp37+fVfH1kkaDzfg=";
   };
 
   strictDeps = true;
