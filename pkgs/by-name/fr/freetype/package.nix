@@ -64,6 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
   # FreeType requires GNU Make, which is not part of stdenv on FreeBSD.
   ++ lib.optional (!stdenv.hostPlatform.isLinux) gnumake;
 
+  strictDeps = true;
+
   patches = [
     ./enable-table-validation.patch
 
@@ -174,6 +176,8 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (qt5) qtbase;
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Font rendering engine";
