@@ -25,7 +25,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "lepture";
+    owner = "authlib";
     repo = "authlib";
     tag = "v${finalAttrs.version}";
     hash = "sha256-/RfE5RKzQnZRe+V3ZTBu+890tV1Ybcd8SnazKMG0jQc=";
@@ -88,8 +88,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Library for building OAuth and OpenID Connect servers";
-    homepage = "https://github.com/lepture/authlib";
-    changelog = "https://github.com/lepture/authlib/blob/${finalAttrs.src.tag}/docs/upgrades/changelog.rst";
+    homepage = "https://github.com/authlib/authlib";
+    changelog = "https://github.com/authlib/authlib/blob/${finalAttrs.src.tag}/docs/upgrades/changelog.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ flokli ];
   };
