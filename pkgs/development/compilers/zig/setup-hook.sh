@@ -4,18 +4,20 @@
 readonly zigDefaultCpuFlag=@zig_default_cpu_flag@
 readonly zigDefaultOptimizeFlag=@zig_default_optimize_flag@
 
+function zigConfigureHook {
+  ZIG_GLOBAL_CACHE_DIR=$(mktemp -d)
+  export ZIG_GLOBAL_CACHE_DIR
+}
+
 function zigConfigurePhase {
   runHook preConfigure
 
-  ZIG_GLOBAL_CACHE_DIR=$(mktemp -d)
-  export ZIG_GLOBAL_CACHE_DIR
+  zigConfigureHook
 
   runHook postConfigure
 }
 
-function zigBuildPhase {
-  runHook preBuild
-
+function zigBuildHook {
   local buildCores=1
 
   # Parallel building is enabled by default.
@@ -36,13 +38,17 @@ function zigBuildPhase {
 
   echoCmd 'zig build flags' "${flagsArray[@]}"
   TERM=dumb zig build "${flagsArray[@]}" --verbose
+}
+
+function zigBuildPhase {
+  runHook preBuild
+
+  zigBuildHook
 
   runHook postBuild
 }
 
-function zigCheckPhase {
-  runHook preCheck
-
+function zigCheckHook {
   local buildCores=1
 
   # Parallel building is enabled by default.
@@ -63,13 +69,17 @@ function zigCheckPhase {
 
   echoCmd 'zig check flags' "${flagsArray[@]}"
   TERM=dumb zig build test "${flagsArray[@]}" --verbose
+}
+
+function zigCheckPhase {
+  runHook preCheck
+
+  zigCheckHook
 
   runHook postCheck
 }
 
-function zigInstallPhase {
-  runHook preInstall
-
+function zigInstallHook {
   local buildCores=1
 
   # Parallel building is enabled by default.
@@ -98,21 +108,44 @@ function zigInstallPhase {
   echoCmd 'zig install flags' "${flagsArray[@]}"
   TERM=dumb zig build install "${flagsArray[@]}" --verbose
 
+}
+
+function zigInstallPhase {
+  runHook preInstall
+
+  zigInstallHook
+
   runHook postInstall
 }
 
-if [ -z "${dontUseZigConfigure-}" ] && [ -z "${configurePhase-}" ]; then
-  configurePhase=zigConfigurePhase
+if [ -z "${dontUseZigConfigure-}" ]; then
+    if [ -z "${configurePhase-}" ]; then
+        configurePhase=zigConfigurePhase
+    else
+        preConfigureHooks+=(zigConfigureHook)
+    fi
 fi
 
-if [ -z "${dontUseZigBuild-}" ] && [ -z "${buildPhase-}" ]; then
-  buildPhase=zigBuildPhase
+if [ -z "${dontUseZigBuild-}" ]; then
+    if [ -z "${buildPhase-}" ]; then
+        buildPhase=zigBuildPhase
+    else
+        preBuildHooks+=(zigBuildHook)
+    fi
 fi
 
-if [ -z "${dontUseZigCheck-}" ] && [ -z "${checkPhase-}" ]; then
-  checkPhase=zigCheckPhase
+if [ -z "${dontUseZigCheck-}" ]; then
+    if [ -z "${checkPhase-}" ]; then
+        checkPhase=zigCheckPhase
+    else
+        preCheckHooks+=(zigCheckHook)
+    fi
 fi
 
-if [ -z "${dontUseZigInstall-}" ] && [ -z "${installPhase-}" ]; then
-  installPhase=zigInstallPhase
+if [ -z "${dontUseZigInstall-}" ]; then
+    if [ -z "${installPhase-}" ]; then
+        installPhase=zigInstallPhase
+    else
+        preInstallHooks+=(zigInstallHook)
+    fi
 fi
