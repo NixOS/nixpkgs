@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  stdenv,
 
   # build-system
   distutils,
@@ -31,6 +32,12 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-EvLH8Yyx2iEde4OFk9MkzPtPr/n7NnGxAb8xJTo8Tn8=";
   };
 
+  patches = [
+    # 20261023: can remove patch once it's upstreamed
+    #   https://github.com/python-ldap/python-ldap/issues/687#issuecomment-6360014514
+    ./001-test-simple-bind-fileno-invalid.patch
+  ];
+
   build-system = [
     distutils
     setuptools
@@ -58,11 +65,6 @@ buildPythonPackage (finalAttrs: {
     export SLAPD="${openldap}/libexec/slapd"
     export SCHEMA="${openldap}/etc/schema"
   '';
-
-  disabledTests = [
-    # https://github.com/python-ldap/python-ldap/issues/501
-    "test_tls_ext_noca"
-  ];
 
   __darwinAllowLocalNetworking = true;
 
