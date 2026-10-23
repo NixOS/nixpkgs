@@ -26,8 +26,8 @@ let
     benchmark = fetchFromGitHub {
       owner = "google";
       repo = "benchmark";
-      rev = "834a61fc65e8b7885fcf177f1230ae4b897118fa";
-      hash = "sha256-V5pVCG5QdFlgBIVKMv4jyTTB22BWfTHD3HolVPDFpgQ=";
+      rev = "a6b4a9f00b36c19af9997d68a1cf6e0b5b3d032c";
+      hash = "sha256-yJzrkJxJUtCXmBJK474mu4MHJTT6ZnNnBRNwuCkRHEo=";
     };
     ccd = fetchFromGitHub {
       owner = "danfis";
@@ -90,7 +90,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mujoco";
-  version = "3.16.0";
+  version = "3.17.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "google-deepmind";
     repo = "mujoco";
     tag = finalAttrs.version;
-    hash = "sha256-pL4wtmbsRuOWsS1vfThThxvIU8EFtYU9ITaMSrSjA3I=";
+    hash = "sha256-sa8mqUk28IMwjXZSc1xGBWxutnf/q/Yf12TwpqBJyE4=";
   };
 
   patches = [
