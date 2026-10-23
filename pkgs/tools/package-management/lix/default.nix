@@ -184,6 +184,7 @@ lib.makeExtensible (
       lix-args = (import ./2.96.nix { inherit fetchFromGitea rustPlatform nix-update-script; }) // {
         patches = [
           ./lix-rs-tests-whole-archive.patch
+          ./darwin-libcxx-nodiscard.patch
         ];
       };
     };
@@ -194,6 +195,7 @@ lib.makeExtensible (
       lix-args = (import ./2.95.nix { inherit fetchFromGitea rustPlatform nix-update-script; }) // {
         patches = [
           lixFunctional2TimeoutPatch
+          ./darwin-libcxx-nodiscard.patch
         ];
       };
     };
@@ -204,6 +206,7 @@ lib.makeExtensible (
       lix-args = (import ./git.nix { inherit fetchFromGitea rustPlatform; }) // {
         patches = [
           ./lix-rs-tests-whole-archive.patch
+          ./darwin-libcxx-nodiscard.patch
         ];
       };
     };
