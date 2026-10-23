@@ -47,6 +47,13 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/sddm/sddm/commit/228778c2b4b7e26db1e1d69fe484ed75c5791c3a.patch";
       hash = "sha256-Okt9LeZBhTDhP7NKBexWAZhkK6N6j9dFkAEgpidSnzE=";
     })
+
+    (fetchpatch {
+      name = "fix-display-wayland.patch";
+      url = "https://github.com/sddm/sddm/commit/da0b64d8e2378c4bce16cbea6cac2ffc89ad1a4a.patch";
+      hash = "sha256-APLtRhnOwsbuhaXBm/JTpYyRnsIRExHjuyeJrNZhNoU=";
+    })
+
   ];
 
   postPatch = ''
