@@ -1498,7 +1498,7 @@ class QemuMachine(BaseMachine):
             would block forever if QEMU exits before connecting.
             """
             assert self.process
-            while True:
+            for _ in range(60):
                 readable, _, _ = select.select([sock], [], [], 1.0)
                 if readable:
                     conn, _ = sock.accept()
@@ -1509,8 +1509,11 @@ class QemuMachine(BaseMachine):
                     if self.process.stdout:
                         output = self.process.stdout.read().decode(errors="ignore")
                     raise MachineError(
-                        f"QEMU process exited with code {rc} before connecting to {name} socket.\n{output}"
+                        f"{self.name}: QEMU process exited with code {rc} before connecting to {name} socket.\n{output}"
                     )
+            raise MachineError(
+                f"{self.name}: Timed out waiting for QEMU connection on {name} socket"
+            )
 
         self.monitor = accept_or_fail(monitor_socket, "monitor")
         self.shell = accept_or_fail(shell_socket, "shell")
