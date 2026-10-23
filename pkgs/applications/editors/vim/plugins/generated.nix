@@ -9664,12 +9664,12 @@ final: prev: {
 
   maple-nvim = buildVimPlugin {
     pname = "maple.nvim";
-    version = "0.2.0";
+    version = "1.0.0";
     src = fetchFromGitHub {
       owner = "forest-nvim";
       repo = "maple.nvim";
-      tag = "v0.2.0";
-      hash = "sha256-iejN+W0pWyjaS0q+EJKnbvMiIiYHrJ2K1Jl6mLjcWQM=";
+      tag = "v1.0.0";
+      hash = "sha256-4VV70HWGBuaWxdKc1cMpcCNgzOh8TOV0Fb5KpqZe1hA=";
     };
     meta.homepage = "https://github.com/forest-nvim/maple.nvim/";
     meta.license = unfree;
