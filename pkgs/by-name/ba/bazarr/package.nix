@@ -1,5 +1,6 @@
 {
   buildNpmPackage,
+  cacert,
   dart-sass,
   fetchFromGitHub,
   ffmpeg,
@@ -64,6 +65,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
       --set PYTHONNOUSERSITE true
 
     runHook postInstall
+  '';
+
+  postFixup = ''
+    rm $out/lib/bazarr/libs/certifi/cacert.pem
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/lib/bazarr/libs/certifi/cacert.pem
   '';
 
   passthru = {
