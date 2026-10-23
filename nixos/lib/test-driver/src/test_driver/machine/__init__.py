@@ -742,7 +742,7 @@ class BaseMachine(ABC):
                 )
                 if ret.returncode != 0:
                     raise MachineError(
-                        f"Cannot convert screenshot (pnmtopng returned code {ret.returncode})"
+                        f"{self.name}: Cannot convert screenshot (pnmtopng returned code {ret.returncode})"
                     )
 
     def get_screen_text_variants(self) -> list[str]:
@@ -1802,7 +1802,7 @@ class NspawnMachine(BaseMachine):
                 ret = subprocess.run(["xwdtopnm", xwd_path], stdout=ppm)
             if ret.returncode != 0:
                 raise MachineError(
-                    f"Cannot convert screenshot (xwdtopnm returned code {ret.returncode})"
+                    f"{self.name}: Cannot convert screenshot (xwdtopnm returned code {ret.returncode})"
                 )
             yield ppm_path
 
@@ -1901,7 +1901,9 @@ class NspawnMachine(BaseMachine):
         # Poll the socket until we have the container leader PID
         while True:
             if self.process.poll() is not None:
-                raise MachineError("systemd-nspawn process exited unexpectedly")
+                raise MachineError(
+                    f"{self.name}: systemd-nspawn process exited unexpectedly"
+                )
 
             with self._notify_lock:
                 is_ready = self._notify_ready
