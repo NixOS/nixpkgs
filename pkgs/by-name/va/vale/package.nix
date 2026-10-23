@@ -10,7 +10,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "vale";
-  version = "3.17.1";
+  version = "3.25.1";
 
   subPackages = [ "cmd/vale" ];
 
@@ -18,10 +18,13 @@ buildGoModule (finalAttrs: {
     owner = "vale-cli";
     repo = "vale";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KSfbqQRv7sLmTHXuyGiG2mUV3g1JByOy3al5wP4JJVg=";
+    hash = "sha256-Ko+7JkwtnHmNdaeAq0LOjJMrUptbvOzDtGHET9xYSvE=";
   };
 
-  vendorHash = "sha256-K7cdb+Qgs6zml+q0PMqsFBK4SDLV2s0Kda8XmV3nZ50=";
+  # go mod vendor prunes go-tree-sitter/php/tree_sitter/ because it is
+  # headers-only. see https://github.com/golang/go/issues/26366
+  proxyVendor = true;
+  vendorHash = "sha256-cuSjULIbb7JtP0CkX4eFm9RChi3nQW46k5Ik9DyGYKk=";
 
   ldflags = [
     "-s"
@@ -58,7 +61,7 @@ buildGoModule (finalAttrs: {
       ```
     '';
     homepage = "https://vale.sh/";
-    changelog = "https://github.com/vale-cli/vale/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/vale-cli/vale/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "vale";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pbsds ];
