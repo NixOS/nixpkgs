@@ -18874,14 +18874,18 @@ with self;
     outputs = [ "out" ];
     # Keep generated XS code stable across rebuilds.
     env.PERL_HASH_SEED = "0";
-    buildInputs = [
+    nativeBuildInputs = [
       pkgs.apacheHttpd
+    ];
+    buildInputs = [
       pkgs.apr
       pkgs.aprutil
+      pkgs.bashNonInteractive
       ApacheTest
       ExtUtilsXSBuilder
     ];
     propagatedBuildInputs = [ (pkgs.apacheHttpdPackages.mod_perl.override { inherit perl; }) ];
+    strictDeps = true;
     # Avoid libtool misdetecting gcc as the linker.
     configureFlags = [ "LD=ld" ];
     makeMakerFlags = [
@@ -18927,6 +18931,7 @@ with self;
     doCheck = false; # test would need to start apache httpd
     # Apache::Test resolves localhost while generating glue/perl (Makefile.PL / t/TEST).
     __darwinAllowLocalNetworking = true;
+    __structuredAttrs = true;
     meta = {
       description = "Wrapper for libapreq2's module/handle API";
       license = lib.licenses.asl20;
