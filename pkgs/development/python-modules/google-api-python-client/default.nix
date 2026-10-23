@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-api-python-client";
-  version = "2.199.0";
+  version = "2.201.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-api-python-client";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-v8KwafznY36bfx0FsJrzvaC9pvARfJHHvjJ/Qebt0uc=";
+    hash = "sha256-ymzuPB8LnJcQ9uTrv/3v/QAzRlFTuc96ITh8UY4TONc=";
     # Remove mixed-case files that cause hash differences between platforms
     postFetch = ''
       rm -rf $out/docs/
