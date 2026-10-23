@@ -1415,12 +1415,12 @@ final: prev: {
 
   auto-save-nvim = buildVimPlugin {
     pname = "auto-save.nvim";
-    version = "1.2.0";
+    version = "1.2.1";
     src = fetchFromGitHub {
       owner = "okuuva";
       repo = "auto-save.nvim";
-      tag = "v1.2.0";
-      hash = "sha256-udN8ETRYKmVEeu+/2J6yZHnnBWtnLV7yKiOY0AvS8rg=";
+      tag = "v1.2.1";
+      hash = "sha256-qXAZPLNdU41WiJHQRuYt1Wrsp6vBAu/mVloURz4y+Jc=";
     };
     meta.homepage = "https://github.com/okuuva/auto-save.nvim/";
     meta.license = getLicenseFromSpdxId "GPL-3.0-only";
