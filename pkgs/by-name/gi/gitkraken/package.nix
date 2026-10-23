@@ -83,7 +83,6 @@ let
     maintainers = with lib.maintainers; [
       nicolas-goudry
       Rishik-Y
-      TurnrDev
     ];
     mainProgram = "gitkraken";
   };
