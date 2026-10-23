@@ -2524,8 +2524,6 @@ with pkgs;
     withKerberos = true;
   };
 
-  sshd-openpgp-auth = callPackage ../by-name/ss/ssh-openpgp-auth/daemon.nix { };
-
   openvpn = callPackage ../tools/networking/openvpn { };
 
   openvpn-auth-ldap = callPackage ../tools/networking/openvpn/openvpn-auth-ldap.nix {
