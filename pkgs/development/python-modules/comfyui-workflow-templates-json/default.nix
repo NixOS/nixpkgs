@@ -8,7 +8,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "comfyui-workflow-templates-json";
-  version = "0.1.104";
+  version = "0.1.120";
   pyproject = true;
 
   # nixpkgs-update: no auto update
@@ -16,7 +16,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchPypi {
     pname = "comfyui_workflow_templates_json";
     inherit (finalAttrs) version;
-    hash = "sha256-ngwBRPbqkOcpKei5mQyHlLUeqB3kn/MfVsPfGvW4CGc=";
+    hash = "sha256-5jcxFKM5hvYoMsKPWYt+MDrumcsEz8VQBjrhumHlWPo=";
   };
 
   build-system = [ setuptools ];
