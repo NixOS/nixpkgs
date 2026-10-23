@@ -8,6 +8,7 @@
   pkg-config,
   wrapGAppsHook3,
   unzip,
+  cacert,
   curl,
   glib,
   gtk3,
@@ -119,6 +120,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/share/icons/hicolor/128x128/apps
     unzip -j $out/Resources/Icons.zip '*Sync.png' -d $out/share/icons/hicolor/128x128/apps
+
+    rm $out/Resources/cacert.pem
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/Resources/cacert.pem
 
     runHook postInstall
   '';
