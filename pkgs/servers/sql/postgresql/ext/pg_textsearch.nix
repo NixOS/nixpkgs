@@ -47,6 +47,6 @@ postgresqlBuildExtension (finalAttrs: {
     license = lib.licenses.postgresql;
     platforms = postgresql.meta.platforms;
     maintainers = with lib.maintainers; [ dbe ];
-    broken = lib.versionOlder postgresql.version "17";
+    broken = lib.versionOlder postgresql.version "17" || lib.versionAtLeast postgresql.version "19";
   };
 })
