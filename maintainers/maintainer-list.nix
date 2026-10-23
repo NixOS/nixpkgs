@@ -15448,6 +15448,12 @@
     githubId = 12160;
     name = "Kirill Radzikhovskyy";
   };
+  kiriwalawren = {
+    email = "kiri@walawren.com";
+    github = "kiriwalawren";
+    githubId = 6665964;
+    name = "Kiri Dillman";
+  };
   kiryuulight = {
     github = "KiryuuLight";
     githubId = 70501251;
