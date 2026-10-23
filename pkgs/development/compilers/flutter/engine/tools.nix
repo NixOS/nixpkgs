@@ -9,8 +9,8 @@
   runCommand,
   darwin,
   writeShellScriptBin,
-  depot_toolsCommit ? "580b4ff3f5cd0dcaa2eacda28cefe0f45320e8f7",
-  depot_toolsHash ? "sha256-k+XQSYJQYc9vAUjwrRxaAlX/sK74W45m5byS31hSpwc=",
+  depot_toolsCommit ? "4be4e4628e093c4ad50210db5dcfa05a88280bda",
+  depot_toolsHash ? "sha256-OcqlbkciC0J8ShQqI5lMK/TeqNr9AkCjjckfmfIBvWA=",
   cipdCommit ? "7120a6a515089a3ff5d1f61ff4ee17750dc038af",
   cipdHashes ? {
     "linux-386" = "sha256-CshLfw49uglvWNwWE4K7ucBUF+IZlXDaIQsTXtFEJ8U=";

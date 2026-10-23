@@ -25,7 +25,7 @@
 }:
 
 let
-  version = "3.13.0";
+  version = "3.13.7";
 
   tools = callPackage ../../flutter/engine/tools.nix { inherit (stdenv) hostPlatform buildPlatform; };
 
@@ -76,7 +76,7 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-kw6bygtcy+yAPLX61CYzcA9l0GRZaI70hB5oY0xJEjU=";
+    outputHash = "sha256-KGTRx3z3FLivb+GdKHhlHJiA62jho2bBT0kJBOk3aA8=";
 
     buildCommand = ''
       mkdir source
