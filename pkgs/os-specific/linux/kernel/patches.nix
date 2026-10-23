@@ -32,4 +32,20 @@
     name = "c23-compat-libbpf";
     patch = ./C23-compat-6.1.patch;
   };
+
+  # https://lore.kernel.org/netdev/20261022104217.1852191-1-pointerliu@126.com/ (Cc stable, not yet in a release)
+  skb_zerocopy_shared_frag = {
+    name = "skb-zerocopy-shared-frag";
+    patch = fetchpatch {
+      name = "net-skbuff-propagate-shared-frag-marker-in-skb_zerocopy.patch";
+      url = "https://lore.kernel.org/netdev/20261022104217.1852191-1-pointerliu@126.com/raw";
+      hash = "sha256-0fTpxTOPLIQfivQqogjuhZGwo9lPMQ/vhDwTwxGsUwU=";
+    };
+  };
+
+  # Same fix, context adjusted for kernels before 7.3 (no from->unreadable check after the frag loop)
+  skb_zerocopy_shared_frag_pre_7_3 = {
+    name = "skb-zerocopy-shared-frag-pre-7.3";
+    patch = ./skb-zerocopy-shared-frag-pre-7.3.patch;
+  };
 }
