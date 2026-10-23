@@ -1318,8 +1318,8 @@ in
       "sha256-rMrmybKplGKYPFr1cIQaHRs/bwcKFYlFWCQRe7PxXOk=";
 
   mypy-boto3-stepfunctions =
-    buildMypyBoto3Package "stepfunctions" "1.43.88"
-      "sha256-CfFmSJQ5iH8LIwDpEBzUacftP5N8cyE7M/YNxcp6SrA=";
+    buildMypyBoto3Package "stepfunctions" "1.43.117"
+      "sha256-fa/CdgVHXGbbq1CM7l+EXP61MbvxQ8RMCL3fLFVyzWA=";
 
   mypy-boto3-storagegateway =
     buildMypyBoto3Package "storagegateway" "1.43.0"
