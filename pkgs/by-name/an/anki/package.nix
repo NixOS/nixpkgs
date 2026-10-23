@@ -3,7 +3,6 @@
   stdenv,
 
   writableTmpDirAsHomeHook,
-  cargo,
   fetchFromGitHub,
   installShellFiles,
   lame,
@@ -18,7 +17,7 @@
   python3Packages,
   qt6,
   rsync,
-  rustPlatform,
+  rustPackages_1_97,
   uv,
   writeShellScriptBin,
   yarn,
@@ -35,6 +34,8 @@
 
 let
   yarn-berry = yarn-berry_4;
+  # Upstream requires Rust 1.97
+  inherit (rustPackages_1_97) cargo rustc rustPlatform;
 
   pname = "anki";
   version = "26.09.3";
@@ -171,6 +172,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   nativeBuildInputs = [
     uv
     cargo
+    rustc
     installShellFiles
     jq
     ninja
