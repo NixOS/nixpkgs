@@ -5,12 +5,12 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.5";
+  version = "1.6.0";
   pname = "commons-fileupload";
 
   src = fetchurl {
     url = "mirror://apache/commons/fileupload/binaries/commons-fileupload-${finalAttrs.version}-bin.tar.gz";
-    sha256 = "sha256-r7EGiih4qOCbjaL7Wg+plbe0m3CuFWXs/RmbfGLmj1g=";
+    sha256 = "sha256-e9xL9cZgke+9a6eicknAe80ngv/mOnsi4Jm9uq8jmZU=";
   };
   installPhase = ''
     tar xf ${finalAttrs.src}
