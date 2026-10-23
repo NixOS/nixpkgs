@@ -21,6 +21,7 @@
   unzip,
   versionCheckHook,
   xz,
+  xtoolBuildHook,
   zip,
   zlib,
 }:
@@ -118,6 +119,43 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     sdk = callPackage ./sdk.nix { xtool = finalAttrs.finalPackage; };
+
+    tests =
+      let
+        # builds one of upstream's examples the way their Examples/test.sh does
+        buildExample =
+          name: dir: extraAttrs:
+          stdenv.mkDerivation (
+            {
+              name = "xtool-${name}";
+              inherit (finalAttrs) src;
+              sourceRoot = "${finalAttrs.src.name}/Examples/${dir}";
+
+              nativeBuildInputs = [
+                (xtoolBuildHook.override { xtool = finalAttrs.finalPackage; })
+                swiftpm
+              ];
+
+              xtoolBuildFlags = [
+                "--triple"
+                "arm64-apple-ios-simulator"
+              ];
+            }
+            // extraAttrs
+          );
+      in
+      {
+        demo-simple = buildExample "demo-simple" "DemoSimple" { };
+
+        demo-tca = buildExample "demo-tca" "DemoTCA" {
+          swiftpmDeps = fetchSwiftPMDeps {
+            name = "xtool-demo-tca";
+            inherit (finalAttrs) src;
+            sourceRoot = "${finalAttrs.src.name}/Examples/DemoTCA";
+            hash = "sha256-q86v9UoEqD5afZN9tS/zfgjheS1t0/p5GhZradwcKMk=";
+          };
+        };
+      };
   };
 
   meta = {
