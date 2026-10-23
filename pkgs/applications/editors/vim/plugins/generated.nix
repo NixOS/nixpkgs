@@ -8489,16 +8489,16 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
-  kanagawa-paper-nvim = buildVimPlugin {
-    pname = "kanagawa-paper.nvim";
+  kanagawa-paper = buildVimPlugin {
+    pname = "kanagawa-paper";
     version = "4.1.0";
     src = fetchFromGitHub {
       owner = "thesimonho";
-      repo = "kanagawa-paper.nvim";
+      repo = "kanagawa-paper";
       tag = "v4.1.0";
       hash = "sha256-Xvbmnnpns/mkOgjeWHxf7yC8BPKNsdIS0U4+7LbIZf4=";
     };
-    meta.homepage = "https://github.com/thesimonho/kanagawa-paper.nvim/";
+    meta.homepage = "https://github.com/thesimonho/kanagawa-paper/";
     meta.license = getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
