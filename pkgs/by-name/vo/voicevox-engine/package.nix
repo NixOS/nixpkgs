@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   python3Packages,
   voicevox-core,
@@ -7,14 +8,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "voicevox-engine";
-  version = "0.25.2";
+  version = "0.26.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "VOICEVOX";
     repo = "voicevox_engine";
     tag = finalAttrs.version;
-    hash = "sha256-A+ym/ZfHUHqXSGOiIndUeozrK64uJILCmRUm+qSsSNE=";
+    hash = "sha256-Paj6zx9/rkxZjrkc8jg0Fhuqe/nF+CADORU/udSxIj0=";
   };
 
   patches = [
@@ -26,36 +27,32 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hatchling
   ];
 
-  dependencies = [
-    finalAttrs.passthru.pyopenjtalk
-  ]
-  ++ (with python3Packages; [
-    fastapi
-    jinja2
-    kanalizer
-    numpy
-    platformdirs
-    psutil
-    pydantic
-    python-multipart
-    pyworld
-    pyyaml
-    semver
-    setuptools
-    soundfile
-    soxr
-    starlette
-    uvicorn
-  ]);
+  dependencies =
+    with python3Packages;
+    [
+      fastapi
+      jinja2
+      kanalizer
+      numpy
+      platformdirs
+      pydantic
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ pyhwloc ]
+    ++ [
+      finalAttrs.passthru.pyopenjtalk
+      python-multipart
+      pyworld
+      pyyaml
+      semver
+      setuptools
+      soundfile
+      soxr
+      starlette
+      uvicorn
+    ];
 
-  pythonRemoveDeps = [
-    # upstream wants fastapi-slim, but we provide fastapi instead
-    "fastapi-slim"
-  ];
-
-  pythonRelaxDeps = [
-    "psutil" # at the time of writing, psutil has not reached version 7.1.1
-  ];
+  # upstream has started pinning exact versions
+  pythonRelaxDeps = true;
 
   preConfigure = ''
     # copy demo metadata to temporary directory
@@ -95,12 +92,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     syrupy
-    httpx
-  ];
-
-  disabledTests = [
-    # test expects an exact response, but OpenAPI is returning something a tiny bit different
-    "test_OpenAPIの形が変わっていないことを確認"
+    httpx2
   ];
 
   passthru = {
@@ -109,7 +101,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       owner = "VOICEVOX";
       repo = "voicevox_resource";
       tag = finalAttrs.version;
-      hash = "sha256-Byv9ASl1qCeGWJiBtpGoPFgpbwtSdn48XvzIDS0SHN4=";
+      hash = "sha256-1uw55PpYlM+srzc46Jfq8DPHTbbIv+HxX0LxQEMfRDY=";
     };
 
     pyopenjtalk = python3Packages.callPackage ./pyopenjtalk.nix { };
