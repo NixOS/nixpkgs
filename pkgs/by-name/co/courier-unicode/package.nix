@@ -28,5 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Courier Unicode Library is used by most other Courier packages";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

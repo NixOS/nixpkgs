@@ -74,5 +74,6 @@ stdenv'.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.all;
     mainProgram = "shiboken6";
+    hasNoMaintainersButDependents = true;
   };
 })

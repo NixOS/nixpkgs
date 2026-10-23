@@ -44,5 +44,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/erdewit/nest_asyncio/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsdOriginal;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

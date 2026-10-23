@@ -81,5 +81,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/tskit-dev/msprime/blob/${version}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

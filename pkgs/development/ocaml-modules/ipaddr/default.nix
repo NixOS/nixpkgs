@@ -33,5 +33,6 @@ buildDunePackage {
     maintainers = with lib.maintainers; [
       ericbmerritt
     ];
+    hasNoMaintainersButDependents = false;
   };
 }

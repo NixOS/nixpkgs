@@ -54,5 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.free;
     maintainers = [ ];
     mainProgram = "snd";
+    hasNoMaintainersButDependents = true;
   };
 })

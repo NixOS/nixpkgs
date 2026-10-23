@@ -64,5 +64,6 @@ buildPythonPackage (finalAttrs: {
     platforms = lib.platforms.unix;
     maintainers = [ ];
     mainProgram = "hyperopt-mongo-worker";
+    hasNoMaintainersButDependents = true;
   };
 })

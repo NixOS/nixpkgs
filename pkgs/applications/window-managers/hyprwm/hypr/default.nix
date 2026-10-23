@@ -83,5 +83,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     inherit (libx11.meta) platforms;
     mainProgram = "Hypr";
+    hasNoMaintainersButDependents = true;
   };
 })

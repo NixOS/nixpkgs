@@ -160,5 +160,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Some of the dependencies fail to build on {cyg,dar}win.
     platforms = lib.platforms.gnu ++ lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

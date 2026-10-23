@@ -80,5 +80,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.RossSmyth ];
     mainProgram = "qmk";
+    hasNoMaintainersButDependents = true;
   };
 })

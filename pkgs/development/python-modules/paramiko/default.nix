@@ -54,5 +54,6 @@ buildPythonPackage (finalAttrs: {
       between python scripts. All major ciphers and hash methods are
       supported. SFTP client and server mode are both supported too.
     '';
+    hasNoMaintainersButDependents = true;
   };
 })

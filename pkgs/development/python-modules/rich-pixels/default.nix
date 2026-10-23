@@ -43,5 +43,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/darrenburns/rich-pixels/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

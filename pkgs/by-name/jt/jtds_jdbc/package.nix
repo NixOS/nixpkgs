@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     homepage = "https://jtds.sourceforge.net/";
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

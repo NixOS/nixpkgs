@@ -65,5 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://javacc.github.io/javacc";
     license = lib.licenses.bsd2;
     mainProgram = "javacc";
+    hasNoMaintainersButDependents = true;
   };
 })

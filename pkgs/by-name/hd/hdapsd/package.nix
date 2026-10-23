@@ -30,5 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/linux-thinkpad/hdapsd";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

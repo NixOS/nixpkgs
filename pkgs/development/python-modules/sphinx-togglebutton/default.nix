@@ -36,5 +36,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/executablebooks/sphinx-togglebutton";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -78,5 +78,6 @@ buildPythonPackage rec {
     mainProgram = "fab";
     # https://github.com/fabric/fabric/issues/2376
     broken = lib.versionAtLeast invoke.version "3";
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -35,5 +35,6 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/oauth2-client/";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

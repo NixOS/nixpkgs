@@ -37,5 +37,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.iodbc.org";
     platforms = lib.platforms.unix;
     license = lib.licenses.bsd3;
+    hasNoMaintainersButDependents = true;
   };
 })

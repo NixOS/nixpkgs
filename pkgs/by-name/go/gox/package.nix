@@ -34,5 +34,6 @@ buildGoModule (finalAttrs: {
     mainProgram = "gox";
     license = lib.licenses.mpl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -140,5 +140,6 @@ stdenv.mkDerivation (finalAttrs: {
         "kid3-cli";
     maintainers = with lib.maintainers; [ tallesCoelho ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

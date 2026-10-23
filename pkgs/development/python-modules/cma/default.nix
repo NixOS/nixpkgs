@@ -53,5 +53,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/CMA-ES/pycma/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

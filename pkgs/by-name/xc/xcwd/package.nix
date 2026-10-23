@@ -33,5 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xcwd";
     maintainers = [ ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

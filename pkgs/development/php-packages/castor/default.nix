@@ -54,5 +54,6 @@ php.buildComposerProject2 (finalAttrs: {
     maintainers = [ ];
     mainProgram = "castor";
     broken = lib.versionOlder php.version "8.4";
+    hasNoMaintainersButDependents = true;
   };
 })

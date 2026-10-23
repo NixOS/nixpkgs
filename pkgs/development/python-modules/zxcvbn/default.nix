@@ -33,5 +33,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/dwolfhub/zxcvbn-python";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

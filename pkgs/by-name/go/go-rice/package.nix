@@ -28,5 +28,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.bsd2;
     maintainers = [ ];
     mainProgram = "rice";
+    hasNoMaintainersButDependents = true;
   };
 })

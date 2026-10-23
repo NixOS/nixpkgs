@@ -32,5 +32,6 @@ python3.pkgs.buildPythonApplication {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "see";
+    hasNoMaintainersButDependents = true;
   };
 }

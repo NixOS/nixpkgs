@@ -53,5 +53,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/CleanCut/green/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

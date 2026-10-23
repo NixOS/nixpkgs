@@ -28,5 +28,6 @@ buildDunePackage {
     homepage = "https://reason-native.com/docs/pastel/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

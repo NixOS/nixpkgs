@@ -72,5 +72,6 @@ buildGoModule (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "snippetexpanderd";
+    hasNoMaintainersButDependents = true;
   };
 })

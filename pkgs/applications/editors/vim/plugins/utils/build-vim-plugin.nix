@@ -23,9 +23,11 @@
       ...
     }@attrs:
     let
+      pos = builtins.unsafeGetAttrPos "src" attrs;
       drv = stdenv.mkDerivation (
         attrs
         // {
+          inherit pos;
           __structuredAttrs = true;
           inherit
             unpackPhase
@@ -50,7 +52,11 @@
           meta = {
             platforms = lib.platforms.all;
           }
-          // meta;
+          // meta
+          // lib.optionalAttrs (pos.file == toString ../generated.nix) {
+            # Because generated
+            requiresMaintainers = false;
+          };
         }
       );
     in

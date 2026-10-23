@@ -225,5 +225,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://docs.sunpy.org/en/stable/whatsnew/changelog.html";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

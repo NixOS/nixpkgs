@@ -44,5 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.unix;
     badPlatforms = lib.platforms.darwin; # fails to build since v1.9.15
+    hasNoMaintainersButDependents = true;
   };
 })

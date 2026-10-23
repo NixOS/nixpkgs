@@ -21,5 +21,6 @@ buildPythonPackage (finalAttrs: {
     description = "Isolated import of Python modules";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

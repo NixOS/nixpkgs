@@ -103,5 +103,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/GPGTools/pinentry";
     platforms = lib.platforms.darwin;
     mainProgram = "pinentry-mac";
+    hasNoMaintainersButDependents = true;
   };
 }

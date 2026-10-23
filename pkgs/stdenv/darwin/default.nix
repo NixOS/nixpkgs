@@ -445,6 +445,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
                   "zerocallusedregs"
                 ];
               };
+              meta.hasNoMaintainersButDependents = true;
             };
             libllvm = self.stdenv.mkDerivation {
               name = "bootstrap-stage0-llvm";

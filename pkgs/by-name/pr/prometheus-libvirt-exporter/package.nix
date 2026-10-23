@@ -31,5 +31,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "libvirt-exporter";
+    hasNoMaintainersButDependents = true;
   };
 })

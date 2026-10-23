@@ -61,5 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     mainProgram = "ffmpegthumbnailer";
+    hasNoMaintainersButDependents = true;
   };
 })

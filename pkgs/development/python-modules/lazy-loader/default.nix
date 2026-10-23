@@ -30,5 +30,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/scientific-python/lazy_loader/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -58,5 +58,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/romis2012/python-socks/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

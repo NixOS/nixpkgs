@@ -32,5 +32,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/minrk/wurlitzer/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

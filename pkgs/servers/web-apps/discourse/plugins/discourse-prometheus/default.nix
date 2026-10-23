@@ -25,5 +25,6 @@ mkDiscoursePlugin {
     homepage = "https://github.com/discourse/discourse-prometheus";
     license = lib.licenses.mit;
     description = "Official Discourse Plugin for Prometheus Monitoring";
+    hasNoMaintainersButDependents = true;
   };
 }

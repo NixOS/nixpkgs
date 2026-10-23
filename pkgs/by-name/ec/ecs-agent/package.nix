@@ -34,5 +34,6 @@ buildGoModule (finalAttrs: {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ RumBugen ];
     mainProgram = "agent";
+    hasNoMaintainersButDependents = true;
   };
 })

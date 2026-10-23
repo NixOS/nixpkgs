@@ -42,5 +42,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/sphinx-contrib/httpdomain/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd0;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -57,5 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     mainProgram = "zoom";
     broken = true;
+    hasNoMaintainersButDependents = true;
   };
 })

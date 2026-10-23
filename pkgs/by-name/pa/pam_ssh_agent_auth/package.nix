@@ -107,5 +107,6 @@ stdenv.mkDerivation rec {
         bsd2 # pam_ssh_agent_auth
         publicDomain # ed25519-donna
       ];
+    hasNoMaintainersButDependents = true;
   };
 }

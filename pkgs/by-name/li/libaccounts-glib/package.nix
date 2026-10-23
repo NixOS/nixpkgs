@@ -85,5 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.com/accounts-sso/libaccounts-glib";
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl21;
+    hasNoMaintainersButDependents = true;
   };
 })

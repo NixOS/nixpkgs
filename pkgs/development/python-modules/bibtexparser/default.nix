@@ -41,5 +41,6 @@ buildPythonPackage (finalAttrs: {
       lgpl3Only # or
       bsd3
     ];
+    hasNoMaintainersButDependents = true;
   };
 })

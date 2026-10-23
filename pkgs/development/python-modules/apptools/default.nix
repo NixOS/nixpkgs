@@ -57,5 +57,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/enthought/apptools/releases/tag/${src.tag}";
     license = lib.licenses.bsdOriginal;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

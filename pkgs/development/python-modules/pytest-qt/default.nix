@@ -42,5 +42,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pytest-dev/pytest-qt";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

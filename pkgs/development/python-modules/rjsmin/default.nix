@@ -25,5 +25,6 @@ buildPythonPackage rec {
     homepage = "http://opensource.perlig.de/rjsmin/";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

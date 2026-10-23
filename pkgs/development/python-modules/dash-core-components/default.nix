@@ -28,5 +28,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://dash.plot.ly/dash-core-components";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

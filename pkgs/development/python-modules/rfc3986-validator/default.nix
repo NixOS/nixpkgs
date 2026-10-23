@@ -34,5 +34,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/naimetti/rfc3986-validator";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -41,5 +41,6 @@ buildDunePackage (finalAttrs: {
     description = "Debug adapter protocol";
     homepage = "https://github.com/hackwaly/ocaml-dap";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 })

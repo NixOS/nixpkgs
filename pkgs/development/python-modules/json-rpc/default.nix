@@ -22,5 +22,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pavlov99/json-rpc";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

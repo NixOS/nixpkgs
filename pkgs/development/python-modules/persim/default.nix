@@ -57,5 +57,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/scikit-tda/persim/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

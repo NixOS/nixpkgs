@@ -36,5 +36,6 @@ stdenv.mkDerivation {
     # It's a source code reference implementation with patents and licenses on
     # some countries, not redistributable.
     license = lib.licenses.unfree;
+    hasNoMaintainersButDependents = true;
   };
 }

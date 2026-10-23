@@ -51,5 +51,6 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/knative/client/releases/tag/knative-v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

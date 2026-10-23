@@ -33,5 +33,6 @@ buildPythonPackage (finalAttrs: {
     description = "Useful extra bits for Python - things that should be in the standard library";
     homepage = "https://github.com/testing-cabal/extras";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 })

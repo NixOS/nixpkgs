@@ -25,5 +25,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/shibukawa/imagesize_py/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

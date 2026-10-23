@@ -34,6 +34,7 @@ let
           )
         }
     '';
+    hasNoMaintainersButDependents = true;
   };
 
   raw-pkg = haskell.packages.ghc912.callPackage ./generated-package.nix { };

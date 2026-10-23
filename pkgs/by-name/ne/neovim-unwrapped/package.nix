@@ -133,6 +133,7 @@ stdenv.mkDerivation (
             version = "neovim-${finalAttrs.version}";
             language = grammar.language or language;
             location = grammar.location or null;
+            meta.hasNoMaintainersButDependents = true;
           }
         )
         (

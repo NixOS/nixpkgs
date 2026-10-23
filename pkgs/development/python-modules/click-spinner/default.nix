@@ -34,5 +34,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/click-contrib/click-spinner/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

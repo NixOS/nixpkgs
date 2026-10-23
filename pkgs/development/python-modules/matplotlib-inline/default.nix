@@ -43,5 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ipython/matplotlib-inline";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

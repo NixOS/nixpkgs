@@ -50,5 +50,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://crates.io/crates/dolby_vision";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -30,5 +30,6 @@ buildPythonPackage (finalAttrs: {
     description = "Python library to create SVG drawings";
     homepage = "https://github.com/mozman/svgwrite";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 })

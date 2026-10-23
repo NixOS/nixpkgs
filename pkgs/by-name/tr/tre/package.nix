@@ -47,5 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd2;
     mainProgram = "agrep";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

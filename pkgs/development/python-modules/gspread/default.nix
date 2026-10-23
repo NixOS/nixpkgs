@@ -43,5 +43,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/burnash/gspread/blob/${src.tag}/HISTORY.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

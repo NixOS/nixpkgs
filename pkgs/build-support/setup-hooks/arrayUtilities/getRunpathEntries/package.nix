@@ -15,5 +15,6 @@ makeSetupHook {
   meta = {
     description = "Appends runpath entries of a file to an array";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 } ./getRunpathEntries.bash

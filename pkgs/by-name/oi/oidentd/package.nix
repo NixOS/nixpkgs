@@ -25,5 +25,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://oidentd.janikrabe.com/";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

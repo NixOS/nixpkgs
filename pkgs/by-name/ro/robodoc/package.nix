@@ -60,5 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.all;
     mainProgram = "robodoc";
+    hasNoMaintainersButDependents = true;
   };
 })

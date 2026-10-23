@@ -39,5 +39,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/avian2/unidecode/blob/unidecode-${version}/ChangeLog";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

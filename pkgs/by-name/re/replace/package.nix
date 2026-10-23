@@ -39,5 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "replace-literal";
     platforms = lib.platforms.unix;
     license = lib.licenses.unfree;
+    hasNoMaintainersButDependents = true;
   };
 })

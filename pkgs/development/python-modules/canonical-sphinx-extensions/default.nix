@@ -40,5 +40,6 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/canonical-sphinx-extensions";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

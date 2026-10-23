@@ -34,5 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     mainProgram = "iprange";
+    hasNoMaintainersButDependents = true;
   };
 })

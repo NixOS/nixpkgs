@@ -24,5 +24,6 @@ buildPythonPackage rec {
     description = "Drop-in replacement for argparse";
     homepage = "https://github.com/bw2/ConfigArgParse";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -67,5 +67,6 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
     broken = withGui; # https://github.com/vivisect/vivisect/issues/683
+    hasNoMaintainersButDependents = true;
   };
 }

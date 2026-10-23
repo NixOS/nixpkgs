@@ -82,5 +82,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;
     teams = with lib.teams; [ ngi ];
+    hasNoMaintainersButDependents = true;
   };
 }

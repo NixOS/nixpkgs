@@ -27,5 +27,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/jd-boyd/sexpdata/releases/tag/v${version}";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -53,5 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     pkgConfigModules = [ "applewm" ];
     platforms = lib.platforms.darwin;
+    hasNoMaintainersButDependents = true;
   };
 })

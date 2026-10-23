@@ -24,5 +24,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Diaoul/enzyme";
     license = lib.licenses.mit;
     description = "Python video metadata parser";
+    hasNoMaintainersButDependents = true;
   };
 }

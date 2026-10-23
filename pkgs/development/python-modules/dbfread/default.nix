@@ -26,5 +26,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://dbfread.readthedocs.org/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -114,5 +114,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "dtc";
+    hasNoMaintainersButDependents = true;
   };
 })

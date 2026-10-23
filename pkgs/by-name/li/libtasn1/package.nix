@@ -56,5 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.all;
     changelog = "https://gitlab.com/gnutls/libtasn1/-/blob/v${finalAttrs.version}/NEWS.md";
+    hasNoMaintainersButDependents = true;
   };
 })

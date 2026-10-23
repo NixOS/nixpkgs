@@ -43,5 +43,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/cpburnz/python-pathspec/blob/v${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.mpl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

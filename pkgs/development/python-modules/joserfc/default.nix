@@ -55,5 +55,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/authlib/joserfc/blob/${finalAttrs.src.tag}/docs/changelog.rst";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

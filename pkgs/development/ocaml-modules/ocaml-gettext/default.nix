@@ -54,5 +54,6 @@ buildDunePackage (finalAttrs: {
     license = lib.licenses.lgpl21;
     maintainers = [ ];
     mainProgram = "ocaml-gettext";
+    hasNoMaintainersButDependents = true;
   };
 })

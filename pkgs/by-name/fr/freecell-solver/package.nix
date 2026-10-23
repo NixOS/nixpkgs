@@ -110,5 +110,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "fc-solve";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -30,5 +30,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/gaogaotiantian/objprint/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

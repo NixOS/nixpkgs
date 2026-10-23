@@ -103,5 +103,6 @@ buildPythonPackage (finalAttrs: {
       mit
       asl20
     ];
+    hasNoMaintainersButDependents = true;
   };
 })

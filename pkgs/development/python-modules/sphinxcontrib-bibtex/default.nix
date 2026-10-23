@@ -50,5 +50,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/mcmtroffaes/sphinxcontrib-bibtex/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

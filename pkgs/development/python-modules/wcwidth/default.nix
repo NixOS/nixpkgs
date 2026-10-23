@@ -51,5 +51,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/jquast/wcwidth/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

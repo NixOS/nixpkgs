@@ -37,5 +37,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/latchset/jwcrypto/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

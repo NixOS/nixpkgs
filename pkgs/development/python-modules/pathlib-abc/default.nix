@@ -30,5 +30,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/barneygale/pathlib-abc/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.psfl;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

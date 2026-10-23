@@ -31,5 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ drupol ];
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

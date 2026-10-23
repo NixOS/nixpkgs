@@ -48,5 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ethereum/eth-rlp";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

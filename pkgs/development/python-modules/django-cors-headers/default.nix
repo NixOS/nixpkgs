@@ -41,5 +41,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/adamchainz/django-cors-headers/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

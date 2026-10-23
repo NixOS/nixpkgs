@@ -36,5 +36,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/rustedpy/result/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -64,5 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
       The open-source project that reimplements the esteemed Winamp Milkdrop by Geiss in a more modern, cross-platform reusable library.
       Read an audio input and produces mesmerizing visuals, detecting tempo, and rendering advanced equations into a limitless array of user-contributed visualizations.
     '';
+    hasNoMaintainersButDependents = true;
   };
 })

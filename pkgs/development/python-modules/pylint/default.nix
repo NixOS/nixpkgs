@@ -117,5 +117,6 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     mainProgram = "pylint";
+    hasNoMaintainersButDependents = true;
   };
 })

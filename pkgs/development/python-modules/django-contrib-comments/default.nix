@@ -38,5 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/django/django-contrib-comments";
     description = "Code formerly known as django.contrib.comments";
     license = lib.licenses.bsd3;
+    hasNoMaintainersButDependents = true;
   };
 }

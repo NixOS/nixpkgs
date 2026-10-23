@@ -72,5 +72,6 @@ stdenv.mkDerivation (finalAttrs: {
       license
       maintainers
       ;
+    hasNoMaintainersButDependents = true;
   };
 })

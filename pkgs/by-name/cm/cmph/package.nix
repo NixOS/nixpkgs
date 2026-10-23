@@ -23,5 +23,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "cmph";
     maintainers = [ ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    hasNoMaintainersButDependents = true;
   };
 })

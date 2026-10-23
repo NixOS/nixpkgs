@@ -60,5 +60,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/pnuckowski/aioresponses/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

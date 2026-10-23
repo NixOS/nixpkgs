@@ -38,5 +38,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/usnistgov/DataModelDict/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

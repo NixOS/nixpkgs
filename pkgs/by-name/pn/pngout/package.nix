@@ -71,5 +71,6 @@ stdenv.mkDerivation {
     homepage = "http://advsys.net/ken/utils.htm";
     platforms = lib.attrNames platforms;
     mainProgram = "pngout";
+    hasNoMaintainersButDependents = true;
   };
 }

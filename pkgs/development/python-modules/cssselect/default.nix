@@ -32,5 +32,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/scrapy/cssselect/blob/v${finalAttrs.version}/CHANGES";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

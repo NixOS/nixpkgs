@@ -41,5 +41,6 @@ buildPythonPackage rec {
     changelog = "https://bitbucket.org/pybtex-devs/pybtex/src/master/CHANGES";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -21,5 +21,6 @@ vimUtils.buildVimPlugin {
       platforms
       ;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

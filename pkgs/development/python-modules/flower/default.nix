@@ -53,5 +53,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/mher/flower";
     license = lib.licenses.bsdOriginal;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -41,5 +41,6 @@ stdenv.mkDerivation {
     homepage = "https://lifelines.github.io/lifelines/";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 }

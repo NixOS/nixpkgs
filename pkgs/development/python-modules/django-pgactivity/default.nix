@@ -34,5 +34,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/AmbitionEng/django-pgactivity/blob/${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -48,5 +48,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/chardet/chardet";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

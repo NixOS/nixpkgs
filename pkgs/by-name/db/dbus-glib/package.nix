@@ -65,5 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "dbus-binding-tool";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -84,5 +84,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/PyO3/setuptools-rust/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

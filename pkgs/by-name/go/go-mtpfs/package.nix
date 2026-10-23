@@ -41,5 +41,6 @@ buildGoModule (finalAttrs: {
     maintainers = [ ];
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "go-mtpfs";
+    hasNoMaintainersButDependents = true;
   };
 })

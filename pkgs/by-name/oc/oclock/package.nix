@@ -55,5 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "oclock";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

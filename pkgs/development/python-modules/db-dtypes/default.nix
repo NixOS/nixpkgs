@@ -62,5 +62,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/googleapis/google-cloud-python/blob/${finalAttrs.src.tag}/packages/db-dtypes/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

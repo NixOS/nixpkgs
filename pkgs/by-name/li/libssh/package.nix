@@ -74,5 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://libssh.org";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

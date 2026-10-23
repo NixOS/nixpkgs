@@ -89,5 +89,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://www.holoviews.org/";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

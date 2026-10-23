@@ -85,5 +85,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/ml-explore/mlx-lm";
     changelog = "https://github.com/ml-explore/mlx-lm/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 })

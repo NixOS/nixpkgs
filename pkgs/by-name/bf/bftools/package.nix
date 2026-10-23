@@ -45,5 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     homepage = "https://www.openmicroscopy.org/bio-formats/";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -61,6 +61,7 @@ let
       homepage = "https://github.com/jaraco/backports.tarfile";
       license = lib.licenses.mit;
       maintainers = [ ];
+      hasNoMaintainersButDependents = true;
     };
   };
 in

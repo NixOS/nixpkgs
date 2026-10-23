@@ -44,5 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-hyper/brotlipy/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

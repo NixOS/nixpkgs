@@ -82,6 +82,7 @@ let
       description = "NVIDIA NV-CONTROL X extension";
       # https://github.com/NVIDIA/nvidia-settings/commit/edcf9edad9f52f9b10e63d4480bbe88b22dde884
       license = lib.licenses.mit;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -197,5 +198,6 @@ stdenv.mkDerivation {
     # nvml.h is licensed as part of the cuda developer license.
     license = lib.licenses.unfreeRedistributable;
     mainProgram = "nvidia-settings";
+    hasNoMaintainersButDependents = true;
   };
 }

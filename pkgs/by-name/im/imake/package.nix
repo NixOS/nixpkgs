@@ -85,5 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "imake";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

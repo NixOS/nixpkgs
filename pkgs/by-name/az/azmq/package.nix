@@ -45,5 +45,6 @@ stdenv.mkDerivation {
     description = "C++ language binding library integrating ZeroMQ with Boost Asio";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

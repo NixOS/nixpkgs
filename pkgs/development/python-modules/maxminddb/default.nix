@@ -40,5 +40,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/maxmind/MaxMind-DB-Reader-python/blob/v${finalAttrs.version}/HISTORY.rst";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

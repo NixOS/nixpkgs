@@ -29,5 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://suso.suso.org/xulu/Num-utils";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -205,6 +205,7 @@ else
             ;
           bintools = bootstrapTools;
           runtimeShell = "${bootstrapTools}/bin/bash";
+          meta.hasNoMaintainersButDependents = true;
         };
         coreutils = bootstrapTools;
         gnugrep = bootstrapTools;

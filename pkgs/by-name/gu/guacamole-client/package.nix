@@ -37,5 +37,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     sourceProvenance = [
       lib.sourceTypes.binaryBytecode
     ];
+    hasNoMaintainersButDependents = true;
   };
 })

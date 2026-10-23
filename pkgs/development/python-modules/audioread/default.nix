@@ -37,5 +37,6 @@ buildPythonPackage (finalAttrs: {
     description = "Cross-platform audio decoding";
     homepage = "https://github.com/sampsyo/audioread";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 })

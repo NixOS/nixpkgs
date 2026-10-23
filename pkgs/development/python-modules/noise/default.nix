@@ -27,5 +27,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/caseman/noise";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -184,5 +184,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     maintainers = [ ];
     pkgConfigModules = [ "ostree-1" ];
+    hasNoMaintainersButDependents = true;
   };
 })

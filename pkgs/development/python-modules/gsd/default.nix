@@ -47,5 +47,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/glotzerlab/gsd/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

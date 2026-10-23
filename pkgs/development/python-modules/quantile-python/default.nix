@@ -24,5 +24,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/matttproud/python_quantile_estimation";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

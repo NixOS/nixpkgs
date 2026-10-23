@@ -54,5 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xmessage";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

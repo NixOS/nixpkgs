@@ -43,5 +43,6 @@ buildPythonPackage rec {
     homepage = "https://django-ninja.dev";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

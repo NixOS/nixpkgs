@@ -245,5 +245,6 @@ buildPythonPackage (finalAttrs: {
     maintainers = [ ];
     # unsupported combination
     broken = stdenv.hostPlatform.isDarwin && cudaSupport || !(packages ? ${key});
+    hasNoMaintainersButDependents = true;
   };
 })

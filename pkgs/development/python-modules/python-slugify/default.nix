@@ -41,5 +41,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/un33k/python-slugify/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

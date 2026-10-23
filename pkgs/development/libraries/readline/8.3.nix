@@ -125,5 +125,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     platforms = lib.platforms.unix ++ lib.platforms.windows;
     branch = "8.3";
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -50,4 +50,5 @@ mkDerivation {
   ];
   description = "iserv allows GHC to delegate Template Haskell computations";
   license = lib.licenses.bsd3;
+  hasNoMaintainersButDependents = true;
 }

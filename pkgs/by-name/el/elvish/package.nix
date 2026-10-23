@@ -46,5 +46,6 @@ buildGoModule (finalAttrs: {
     '';
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

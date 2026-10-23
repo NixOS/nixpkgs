@@ -43,5 +43,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/protocolbuffers/protobuf/releases/v${version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

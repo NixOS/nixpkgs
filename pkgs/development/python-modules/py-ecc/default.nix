@@ -57,5 +57,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ethereum/py_ecc";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

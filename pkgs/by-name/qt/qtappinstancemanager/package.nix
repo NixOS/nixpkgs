@@ -40,5 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     mainProgram = "qtappinstancemanager";
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

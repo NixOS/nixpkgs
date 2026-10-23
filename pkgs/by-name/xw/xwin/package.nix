@@ -54,5 +54,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     maintainers = [ lib.maintainers.eveeifyeve ];
     platforms = with lib.platforms; linux ++ darwin ++ windows;
+    hasNoMaintainersButDependents = true;
   };
 })

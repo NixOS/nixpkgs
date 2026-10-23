@@ -48,5 +48,6 @@ buildPythonPackage rec {
     homepage = "https://webob.org/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

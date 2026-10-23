@@ -34,5 +34,6 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
     mainProgram = "update-validation-files";
+    hasNoMaintainersButDependents = true;
   };
 }

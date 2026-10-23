@@ -30,5 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "th_gen_idx.pl";
     license = lib.licenses.bsd3;
     inherit (hunspell.meta) platforms;
+    hasNoMaintainersButDependents = true;
   };
 })

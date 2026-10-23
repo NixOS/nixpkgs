@@ -40,5 +40,6 @@ stdenv.mkDerivation rec {
     description = "Multitran lib: main engine to query translations";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 }

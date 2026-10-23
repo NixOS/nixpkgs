@@ -45,5 +45,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/sphinx-toolbox/dict2css/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

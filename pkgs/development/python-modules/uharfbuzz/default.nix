@@ -38,5 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/harfbuzz/uharfbuzz";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

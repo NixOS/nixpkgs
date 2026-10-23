@@ -19,6 +19,7 @@ buildDunePackage {
   doCheck = true;
 
   meta = ipaddr.meta // {
+    hasNoMaintainersButDependents = false;
     description = "Library for manipulation of IP address representations using Cstructs";
   };
 }

@@ -62,5 +62,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/tammoippen/plotille";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

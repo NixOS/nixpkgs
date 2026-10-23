@@ -29,5 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/asweigart/pyrect";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

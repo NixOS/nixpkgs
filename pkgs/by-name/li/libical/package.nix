@@ -127,5 +127,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/libical/libical/raw/v${finalAttrs.version}/ReleaseNotes.txt";
     license = lib.licenses.mpl20;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

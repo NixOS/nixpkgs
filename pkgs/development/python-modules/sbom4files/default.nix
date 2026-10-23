@@ -39,5 +39,6 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     mainProgram = "sbom4files";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

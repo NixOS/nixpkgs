@@ -43,5 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/chakki-works/seqeval";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

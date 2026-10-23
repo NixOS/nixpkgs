@@ -57,5 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "katriawm";
     maintainers = [ ];
     inherit (libx11.meta) platforms;
+    hasNoMaintainersButDependents = true;
   };
 })

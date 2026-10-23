@@ -28,5 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.all;
     mainProgram = "jpegoptim";
+    hasNoMaintainersButDependents = true;
   };
 })

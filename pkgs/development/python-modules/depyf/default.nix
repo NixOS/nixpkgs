@@ -81,5 +81,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/thuml/depyf";
     changelog = "https://github.com/thuml/depyf/releases/tag/v${version}";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

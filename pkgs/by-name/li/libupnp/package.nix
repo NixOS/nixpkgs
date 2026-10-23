@@ -53,5 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     homepage = "https://pupnp.github.io/pupnp/";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

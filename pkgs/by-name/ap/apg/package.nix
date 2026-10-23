@@ -68,5 +68,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/wilx/apg";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -32,5 +32,6 @@ buildPythonPackage (finalAttrs: {
     description = "Library for developers to extract data from Microsoft Excel (tm) spreadsheet files";
     mainProgram = "runxlrd.py";
     license = lib.licenses.bsd0;
+    hasNoMaintainersButDependents = true;
   };
 })

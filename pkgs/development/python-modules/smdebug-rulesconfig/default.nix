@@ -23,5 +23,6 @@ buildPythonPackage rec {
     description = "These builtin rules are available in Amazon SageMaker";
     homepage = "https://github.com/awslabs/sagemaker-debugger-rulesconfig";
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 }

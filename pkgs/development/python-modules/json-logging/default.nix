@@ -67,5 +67,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/bobbui/json-logging-python/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

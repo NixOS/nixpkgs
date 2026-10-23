@@ -40,5 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/couchbase/libcouchbase";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

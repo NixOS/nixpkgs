@@ -212,6 +212,7 @@ rec {
       sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
       license = lib.licenses.bsd3;
       platforms = lib.platforms.all;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -298,6 +299,7 @@ rec {
       sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
       license = lib.licenses.lgpl21;
       platforms = lib.platforms.all;
+      hasNoMaintainersButDependents = true;
     };
 
   };
@@ -322,6 +324,7 @@ rec {
       sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
       license = lib.licenses.epl10;
       platforms = lib.platforms.all;
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -422,6 +425,7 @@ rec {
       sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
       license = lib.licenses.epl10;
       platforms = lib.platforms.all;
+      hasNoMaintainersButDependents = true;
     };
   };
 

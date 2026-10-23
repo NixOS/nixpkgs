@@ -79,5 +79,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://tevent.samba.org/";
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

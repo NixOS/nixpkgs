@@ -30,5 +30,6 @@ buildPythonPackage rec {
     description = "Handles the authorization flow to obtain tokens from Plex.tv via external redirection";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

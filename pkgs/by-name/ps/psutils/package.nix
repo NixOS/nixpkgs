@@ -36,5 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://knackered.knackered.org/angus/psutils/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

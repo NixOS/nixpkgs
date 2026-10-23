@@ -41,5 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "taglib-extras-config";
     platforms = lib.platforms.unix;
     license = lib.licenses.lgpl2;
+    hasNoMaintainersButDependents = true;
   };
 })

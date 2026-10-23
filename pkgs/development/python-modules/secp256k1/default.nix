@@ -47,5 +47,6 @@ buildPythonPackage rec {
     description = "Python FFI bindings for secp256k1";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

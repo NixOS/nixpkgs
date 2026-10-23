@@ -104,5 +104,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     platforms = lib.platforms.linux;
     mainProgram = "syncserver";
+    hasNoMaintainersButDependents = true;
   };
 })

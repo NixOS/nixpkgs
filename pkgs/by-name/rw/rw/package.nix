@@ -27,5 +27,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.isc;
     maintainers = [ ];
     mainProgram = "rw";
+    hasNoMaintainersButDependents = true;
   };
 })

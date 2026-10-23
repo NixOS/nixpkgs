@@ -56,5 +56,6 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ ];
     mainProgram = "bore";
     broken = stdenv.hostPlatform.isDarwin; # bindgen fails on: "in6_addr_union_(...)" is not a valid Ident
+    hasNoMaintainersButDependents = true;
   };
 }

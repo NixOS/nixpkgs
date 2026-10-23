@@ -45,5 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/Etaash-mathamsetty/heroic-epic-integration/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -51,5 +51,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/spesmilo/electrum-ecc";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -59,5 +59,6 @@ buildGoModule (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "snippetexpander";
+    hasNoMaintainersButDependents = true;
   };
 })

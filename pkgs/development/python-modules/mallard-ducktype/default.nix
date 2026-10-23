@@ -34,5 +34,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/projectmallard/mallard-ducktype";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

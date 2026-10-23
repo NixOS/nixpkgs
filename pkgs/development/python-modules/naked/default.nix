@@ -110,5 +110,6 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/chrissimpkins/naked/tags";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

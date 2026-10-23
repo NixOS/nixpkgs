@@ -72,5 +72,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://aa-project.sourceforge.net/aalib/";
     platforms = lib.platforms.unix;
     license = lib.licenses.lgpl2;
+    hasNoMaintainersButDependents = true;
   };
 })

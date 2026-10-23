@@ -109,5 +109,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     # This library is not needed on GNU platforms.
     hydraPlatforms = with lib.platforms; cygwin ++ darwin ++ freebsd;
+    hasNoMaintainersButDependents = true;
   };
 })

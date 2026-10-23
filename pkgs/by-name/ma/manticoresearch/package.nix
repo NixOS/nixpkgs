@@ -35,6 +35,7 @@ let
       homepage = "https://github.com/manticoresoftware/uni-algo";
       license = lib.licenses.mit;
       platforms = lib.platforms.all;
+      hasNoMaintainersButDependents = true;
     };
   });
   cctz = stdenv.mkDerivation {
@@ -58,6 +59,7 @@ let
       homepage = "https://github.com/manticoresoftware/cctz";
       license = lib.licenses.asl20;
       platforms = lib.platforms.all;
+      hasNoMaintainersButDependents = true;
     };
   };
   xxhash = stdenv.mkDerivation {
@@ -79,6 +81,7 @@ let
         gpl2
       ];
       platforms = lib.platforms.all;
+      hasNoMaintainersButDependents = true;
     };
   };
 in

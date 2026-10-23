@@ -26,5 +26,6 @@ stdenvNoCC.mkDerivation rec {
     '';
     license = lib.licenses.gpl2;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 }

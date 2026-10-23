@@ -36,5 +36,6 @@ stdenv.mkDerivation {
     license = lib.licenses.zlib;
     platforms = lib.platforms.linux;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -34,5 +34,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "ghr";
+    hasNoMaintainersButDependents = true;
   };
 })

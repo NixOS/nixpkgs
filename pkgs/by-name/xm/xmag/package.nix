@@ -58,5 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xmag";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

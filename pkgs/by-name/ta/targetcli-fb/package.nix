@@ -49,5 +49,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "targetcli";
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -50,5 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.hpndSellVariant;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

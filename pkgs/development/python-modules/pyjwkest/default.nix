@@ -44,5 +44,6 @@ buildPythonPackage rec {
     description = "Implementation of JWT, JWS, JWE and JWK";
     homepage = "https://github.com/IdentityPython/pyjwkest";
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 }

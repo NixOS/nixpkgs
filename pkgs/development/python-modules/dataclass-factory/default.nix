@@ -42,5 +42,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/reagento/dataclass-factory/releases/tag/${src.rev}";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -49,5 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     mainProgram = "xls2csv";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

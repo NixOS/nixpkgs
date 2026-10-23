@@ -43,5 +43,6 @@ stdenv.mkDerivation {
     license = lib.licenses.wtfpl;
     maintainers = [ ];
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 }

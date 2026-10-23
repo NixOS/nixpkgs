@@ -103,6 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.fftw.org/";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
     pkgConfigModules = [
       {
         "single" = "fftw3f";

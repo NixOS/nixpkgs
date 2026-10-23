@@ -37,5 +37,6 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     mainProgram = "sbom2dot";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

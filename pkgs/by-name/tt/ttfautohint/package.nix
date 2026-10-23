@@ -61,5 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus; # or the FreeType License (BSD + advertising clause)
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

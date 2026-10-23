@@ -51,5 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
         gpl3Only
       ];
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -21,5 +21,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "log4cpp-config";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

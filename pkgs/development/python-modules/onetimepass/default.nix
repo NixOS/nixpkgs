@@ -36,5 +36,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/tadeck/onetimepass";
     changelog = "https://github.com/tadeck/onetimepass/releases/tag/v${version}";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

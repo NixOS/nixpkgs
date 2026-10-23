@@ -76,5 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

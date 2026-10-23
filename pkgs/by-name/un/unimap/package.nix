@@ -55,5 +55,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       sheeeng
     ];
     mainProgram = "unimap";
+    hasNoMaintainersButDependents = true;
   };
 })

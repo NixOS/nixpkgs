@@ -103,5 +103,6 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     changelog = "https://github.com/blueman-project/blueman/releases/tag/${version}";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

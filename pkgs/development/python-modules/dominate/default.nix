@@ -34,5 +34,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/Knio/dominate/releases/tag/${version}";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

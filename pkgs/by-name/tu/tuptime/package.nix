@@ -57,5 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     maintainers = [ ];
     mainProgram = "tuptime";
+    hasNoMaintainersButDependents = true;
   };
 })

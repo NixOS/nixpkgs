@@ -49,5 +49,6 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
     mainProgram = "flux_led";
+    hasNoMaintainersButDependents = true;
   };
 }

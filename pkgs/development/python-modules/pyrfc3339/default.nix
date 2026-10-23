@@ -46,5 +46,6 @@ buildPythonPackage rec {
     description = "Generate and parse RFC 3339 timestamps";
     homepage = "https://github.com/kurtraschke/pyRFC3339";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

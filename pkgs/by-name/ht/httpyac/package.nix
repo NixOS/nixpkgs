@@ -35,5 +35,6 @@ buildNpmPackage rec {
     mainProgram = "httpyac";
     maintainers = [ ];
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 }

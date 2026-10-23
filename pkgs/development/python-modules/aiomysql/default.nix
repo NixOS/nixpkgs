@@ -49,5 +49,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/aio-libs/aiomysql/blob/${finalAttrs.src.rev}/CHANGES.txt";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

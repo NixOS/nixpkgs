@@ -56,5 +56,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/pallets-eco/flask-caching/blob/v${version}/CHANGES.rst";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

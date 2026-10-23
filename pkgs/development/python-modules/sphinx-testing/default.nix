@@ -39,5 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sphinx-doc/sphinx-testing";
     license = lib.licenses.bsd2;
     description = "Testing utility classes and functions for Sphinx extensions";
+    hasNoMaintainersButDependents = true;
   };
 }

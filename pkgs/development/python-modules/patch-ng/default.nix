@@ -27,5 +27,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/conan-io/python-patch-ng/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

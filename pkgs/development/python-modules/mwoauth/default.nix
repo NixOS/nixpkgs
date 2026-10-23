@@ -37,5 +37,6 @@ buildPythonPackage rec {
     description = "Python library to perform OAuth handshakes with a MediaWiki installation";
     homepage = "https://github.com/mediawiki-utilities/python-mwoauth";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

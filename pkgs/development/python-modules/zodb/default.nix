@@ -79,5 +79,6 @@ buildPythonPackage (finalAttrs: {
     downloadPage = "https://github.com/zopefoundation/ZODB";
     license = lib.licenses.zpl21;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

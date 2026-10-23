@@ -106,5 +106,6 @@ stdenv.mkDerivation (finalAttrs: {
       "xkbcommon-x11"
       "xkbregistry"
     ];
+    hasNoMaintainersButDependents = true;
   };
 })
