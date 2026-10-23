@@ -143,7 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     ${lib.optionalString (
       stdenv.targetPlatform.libc == "musl" && stdenv.targetPlatform.isx86_32
-    ) "install -D libssp_nonshared.a $out/lib/libssp_nonshared.a"}
+    ) "install -D libssp_nonshared.a $dev/lib/libssp_nonshared.a"}
 
     # Create 'ldd' symlink, builtin
     ln -s $out/lib/libc.so $bin/bin/ldd
@@ -155,6 +155,8 @@ stdenv.mkDerivation (finalAttrs: {
     moveToOutput lib/musl-gcc.specs $dev
     substituteInPlace $dev/bin/musl-gcc \
       --replace $out/lib/musl-gcc.specs $dev/lib/musl-gcc.specs
+    substituteInPlace $dev/lib/musl-gcc.specs \
+      --replace-fail "-L$out/lib" "-L$out/lib -L$dev/lib"
 
     # provide 'iconv' utility, using just-built headers, libc/ldso
     $CC ${iconv_c} -o $bin/bin/iconv \
@@ -163,6 +165,9 @@ stdenv.mkDerivation (finalAttrs: {
       -lc \
       -B $out/lib \
       -Wl,-dynamic-linker=$(ls $out/lib/ld-*)
+
+    # Static archives are only needed at build time
+    moveToOutput "lib/*.a" "$dev"
   ''
   + lib.optionalString (arch != null) ''
     # Create 'libc.musl-$arch' symlink
@@ -183,6 +188,9 @@ stdenv.mkDerivation (finalAttrs: {
     # pkgs/development/compilers/gcc/ng/common/libgcc/default.nix for further
     # details.
     threadModel = "posix";
+
+    # For the bintools wrapper
+    staticLibsInDev = true;
   };
 
   strictDeps = true;
