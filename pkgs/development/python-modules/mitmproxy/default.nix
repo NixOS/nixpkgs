@@ -39,14 +39,14 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "12.2.3";
+  version = "12.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy";
     tag = "v${version}";
-    hash = "sha256-YgM8GjWmWKxOZcahR3+9XO2Xyfu9v8rNgxKn/2oL35Y=";
+    hash = "sha256-jaXvXM87H3p4OIxAX5DlQzMjNmL8Jd/hpqOhQFp/4Hk=";
   };
 
   # pins many dependencies way to strict
