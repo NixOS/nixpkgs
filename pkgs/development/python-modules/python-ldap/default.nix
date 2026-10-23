@@ -73,7 +73,12 @@ buildPythonPackage (finalAttrs: {
     downloadPage = "https://github.com/python-ldap/python-ldap";
     homepage = "https://www.python-ldap.org/";
     changelog = "https://github.com/python-ldap/python-ldap/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.psfl;
-    maintainers = [ ];
+    license = lib.licenses.AND [
+      lib.licenses.psfl
+      lib.licenses.mit # for contributions after 2021-07-01 and specific contributors
+    ];
+    maintainers = with lib.maintainers; [
+      debtquity
+    ];
   };
 })
