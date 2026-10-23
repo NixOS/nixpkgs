@@ -38740,7 +38740,9 @@ with self;
       url = "mirror://cpan/authors/id/S/SJ/SJZASADA/XML-CanonicalizeXML-0.10.tar.gz";
       hash = "sha256-5yhGSIDLtMHz/XceCQOoUmzWV7OUuzchYDUkXPHihu4=";
     };
-    buildInputs = [ pkgs.libxml2 ];
+    nativeBuildInputs = [ pkgs.libxml2 ];
+    strictDeps = true;
+    __structuredAttrs = true;
     meta = {
       description = "Perl extension for inclusive (1.0 and 1.1) and exclusive canonicalization of XML using libxml2";
       license = with lib.licenses; [
