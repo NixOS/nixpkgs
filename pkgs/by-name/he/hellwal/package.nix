@@ -31,7 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ danihek ];
+    maintainers = with lib.maintainers; [
+      danihek
+      evanwporter
+    ];
     mainProgram = "hellwal";
   };
 })
