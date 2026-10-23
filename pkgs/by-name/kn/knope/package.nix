@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "knope";
-  version = "0.23.1";
+  version = "0.23.2";
 
   src = fetchFromGitHub {
     owner = "knope-dev";
     repo = "knope";
     tag = "knope/v${finalAttrs.version}";
-    hash = "sha256-nxWk95WxpUjTZiGczY75eaTeRnr8MmPeThzzb38wgNI=";
+    hash = "sha256-p23cTJkMBTnOftbgucAfHOnWjI+FhxWGDJqrR/3CcSY=";
   };
 
-  cargoHash = "sha256-TgPs05Wgb1bODhc1+XDupLzs31T3Oeg6IC7ipmYgipI=";
+  cargoHash = "sha256-y2Z3HVrz0aWphozTNmbzGztK8NpkeDHjN+I4q9cKHOc=";
 
   nativeBuildInputs = [ pkg-config ];
 
