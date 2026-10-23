@@ -7,7 +7,7 @@
   replaceVars,
   pandoc,
   nodejs,
-  pnpm_11,
+  pnpm_12,
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpmBuildHook,
@@ -26,9 +26,10 @@
 let
   inherit (stdenv.hostPlatform) isLinux isDarwin system;
 
-  # Upstream pins pnpm@12 in app/package.json. fetchPnpmDeps cannot fetch pnpm 12's virtual
-  # store until fetcherVersion 5 lands (NixOS/nixpkgs#565315), so this builds with pnpm 11.
-  pnpm = pnpm_11;
+  # Upstream pins pnpm@12 in app/package.json. pnpm 12 materializes its global virtual
+  # store under v11/links, where package JSONC files (tsconfig.json) break fetchPnpmDeps'
+  # jq normalization on aarch64-darwin; fetcherVersion 5 stops archiving that tree.
+  pnpm = pnpm_12;
 
   # Upstream's app/package.json pins Electron 44; nixpkgs' default electron (43)
   # is known to break pasting, so follow upstream's major version.
@@ -196,8 +197,8 @@ stdenv.mkDerivation (finalAttrs: {
       sourceRoot
       ;
     inherit pnpm;
-    fetcherVersion = 4;
-    hash = "sha256-e+qyTEL2jfgJENleWC3Zk7C98rRFjUE9rdZGjWmaOpU=";
+    fetcherVersion = 5;
+    hash = "sha256-d4gxx9HebTdRBWuHBl8+lTzXTzjwl8G1R5UAndskPZ4=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/app";
