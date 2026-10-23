@@ -5,7 +5,7 @@
   versionCheckHook,
   jre_headless,
   nodejs,
-  tree-sitter,
+  buildPackages,
   umple,
   withUmple ? true,
 }:
@@ -34,7 +34,7 @@ buildNpmPackage (finalAttrs: {
 
   nativeBuildInputs = [
     nodejs
-    (tree-sitter.override { wasmSupport = true; })
+    (buildPackages.tree-sitter.override { wasmSupport = true; })
   ];
 
   dontNpmBuild = true;
