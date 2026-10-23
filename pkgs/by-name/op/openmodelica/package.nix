@@ -63,9 +63,9 @@ stdenv.mkDerivation (
   in
   {
     pname = "openmodelica";
-    version = "1.27.0";
+    version = "1.27.1";
     srcRev = "v${finalAttrs.version}";
-    srcHash = "sha256-fq7+9iBAz7JrvXTMaj1pxPal5haLgka62uocLsBhwnE=";
+    srcHash = "sha256-Ri3bPXCTuIzo9yoN29pR8QPcvnGJpDLmsWbI4z3LIbI=";
 
     src = fetchFromGitHub {
       owner = "OpenModelica";
