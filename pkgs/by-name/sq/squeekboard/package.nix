@@ -35,6 +35,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-UsUr4UnYNo2ybEdNyOD/IiafEZ1YJFwRQ3CVy76X2H0=";
   };
 
+  patches = [
+    # Match libc's close() signature, rejected by rustc's invalid_runtime_symbol_definitions lint since 1.98
+    ./fix-close-signature.patch
+  ];
+
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
     hash = "sha256-3K1heokPYxYbiAGha9TrrjQXguzGv/djIB4eWa8dVjg=";
