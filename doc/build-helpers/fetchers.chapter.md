@@ -1080,3 +1080,71 @@ fetchItchIo {
   upload = "13371354";
 }
 ```
+
+## `fetchCpan` {#fetchcpan}
+
+Used to fetch Perl distributions from [CPAN](https://www.cpan.org/) (the Comprehensive Perl Archive Network).
+The fetcher constructs the canonical CPAN mirror URL automatically from `pname`, `version`, and `author`,
+and sets `meta.identifiers.purlParts` for the [CPAN PURL type](https://github.com/package-url/purl-spec),
+producing identifiers of the form `pkg:cpan/AUTHOR/Dist-Name@version`.
+
+Required arguments:
+
+*`pname`* (String)
+
+: The distribution name as it appears in the tarball filename, e.g. `"Algorithm-C3"`.
+
+*`version`* (String)
+
+: The distribution version, e.g. `"0.11"`.
+
+*`author`* (String)
+
+: The CPAN author ID (uppercase), e.g. `"HAARG"`.
+  Can be found in the distribution's URL on [MetaCPAN](https://metacpan.org/).
+
+*`hash`* (String)
+
+: SRI hash of the downloaded tarball.
+
+Optional arguments:
+
+*`extension`* (String; default: `"tar.gz"`)
+
+: Filename extension of the distribution tarball.
+  Use `"tgz"` for distributions that ship a `.tgz` archive.
+
+*`tarballVersion`* (String; default: `version`)
+
+: Version string as it appears in the tarball filename.
+  Use this when the tarball uses a different version format than the `version` attribute,
+  e.g. `tarballVersion = "v${version}"` when the tarball is named `Dist-v1.2.0.tar.gz`.
+
+:::{.example #ex-fetchcpan}
+# Fetching a CPAN distribution
+
+```nix
+{ fetchCpan }:
+fetchCpan {
+  pname = "Algorithm-C3";
+  version = "0.11";
+  author = "HAARG";
+  hash = "sha256-qvSEZ3Zd7qbkgFS8fUPkbk1Ay82hZVLGKdN74Jgokwk=";
+}
+```
+:::
+
+:::{.example #ex-fetchcpan-tarball-version}
+# Fetching a CPAN distribution with a `v`-prefixed tarball name
+
+```nix
+{ fetchCpan }:
+fetchCpan {
+  pname = "ack";
+  version = "3.10.0";
+  tarballVersion = "v${version}";
+  author = "PETDANCE";
+  hash = "sha256-Zeg8+zinH8pyXpoUqCAe6HHmKfxrECMeEwPdNQG6Vjo=";
+}
+```
+:::

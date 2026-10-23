@@ -431,6 +431,8 @@ with pkgs;
 
   fetchbzr = callPackage ../build-support/fetchbzr { };
 
+  fetchCpan = callPackage ../build-support/fetchcpan { };
+
   fetchcvs =
     if
       stdenv.buildPlatform != stdenv.hostPlatform

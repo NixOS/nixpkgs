@@ -441,9 +441,17 @@ print <<EOF;
   ${\(is_reserved($attr_name) ? "\"$attr_name\"" : $attr_name)} = $build_fun {
     pname = "$pkg_name";
     version = "$pkg_version";
-    src = fetchurl {
-      url = "mirror://cpan/${\$module->path}/${\$module->package}";
-      hash = "$sri_hash";
+    src = fetchCpan {
+      pname = "$pkg_name";
+      version = "$pkg_version";
+      author = "${\(($module->path =~ m{/([^/]+)$})[0])}";
+${\do {
+  # Detect if tarball uses a v-prefix not present in pkg_version
+  my $pkg = $module->package;          # e.g. "Dist-v1.2.0.tar.gz"
+  $pkg =~ s/\.[^.]+$//;               # strip extension(s)
+  $pkg =~ s/^.*?-//;                  # strip "Dist-" prefix, leaving version part
+  $pkg eq "v$pkg_version" ? "      tarballVersion = \"v\${version}\";\n" : ""
+}}      hash = "$sri_hash";
     };
 EOF
 print <<EOF if scalar @build_deps > 0;

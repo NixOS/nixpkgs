@@ -2,7 +2,7 @@
   lib,
   brotli,
   buildPerlPackage,
-  fetchurl,
+  fetchCpan,
   perlPackages,
   pkg-config,
 }:
@@ -11,8 +11,10 @@ buildPerlPackage {
   pname = "IO-Compress-Brotli";
   version = "0.019";
 
-  src = fetchurl {
-    url = "mirror://cpan/authors/id/T/TI/TIMLEGGE/IO-Compress-Brotli-0.019.tar.gz";
+  src = fetchCpan {
+    pname = "IO-Compress-Brotli";
+    version = "0.019";
+    author = "TIMLEGGE";
     hash = "sha256-N/QN187kSs6iby92Onc+YdTsIjMF3e7KRhJEPL8oj78=";
   };
 
