@@ -1,12 +1,19 @@
 diff --git a/Makefile b/Makefile
-index 75a6bc1..6021d42 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -30,7 +30,6 @@ all:
- 
+@@ -21,12 +21,11 @@
+ KDIR := /lib/modules/$(shell uname -r)/build
+
+ all:
+-	make -C $(KDIR) M=$(PWD) $(MAKEFLAGS) modules
++	$(MAKE) -C $(KDIR) M=$(PWD) modules
+
  install: all
- 	make -C $(KDIR) M=$(PWD) $(MAKEFLAGS) modules_install
+-	make -C $(KDIR) M=$(PWD) $(MAKEFLAGS) modules_install
 -	cp -r usr /
- 
++	$(MAKE) -C $(KDIR) M=$(PWD) modules_install
+
  clean:
- 	make -C $(KDIR) M=$(PWD) $(MAKEFLAGS) clean
+-	make -C $(KDIR) M=$(PWD) $(MAKEFLAGS) clean
++	$(MAKE) -C $(KDIR) M=$(PWD) clean
+ rm -rf build/
