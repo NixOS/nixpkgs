@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   checkFlags = [ "--skip=dataframe::command::core::to_repr::test::test_examples" ];
 
-  patches = nushell.patches or [ ] ++ [ ../plugin-engine-default-features.patch ];
+  patches = nushell.patches or [ ];
 
   passthru.updateScript = nix-update-script {
     # Skip the version check and only check the hash because we inherit version from nushell.

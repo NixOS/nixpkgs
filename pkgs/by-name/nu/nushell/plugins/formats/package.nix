@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     extraArgs = [ "--version=skip" ];
   };
 
-  patches = nushell.patches or [ ] ++ [ ../plugin-engine-default-features.patch ];
+  patches = nushell.patches or [ ];
 
   meta = {
     description = "Formats plugin for Nushell";
