@@ -1,7 +1,9 @@
 {
   lib,
   fetchFromGitHub,
-  writeShellScript,
+  writers,
+  dash,
+  shellcheck-minimal,
   makeBinaryWrapper,
   gitMinimal,
   php,
@@ -42,6 +44,21 @@ let
     else
       { }
   );
+
+  writeDash =
+    name: text:
+    writers.writeDash name {
+      check =
+        /* sh */ ''
+          target="$out"
+          ${lib.getExe dash} -n "$target"
+        ''
+        + lib.optionalString shellcheck-minimal.compiler.bootstrapAvailable /* sh */ ''
+          ${lib.getExe shellcheck-minimal} --norc --shell=dash --severity=info \
+             --exclude=SC1090,SC1091,SC2016,SC2034,SC2154,SC2164 "$target"
+        ''
+        + ":";
+    } text;
 in
 php.buildComposerProject2 (finalAttrs: {
   pname = "movim";
@@ -135,42 +152,40 @@ php.buildComposerProject2 (finalAttrs: {
   '';
 
   preBuild =
-    lib.optionalString minify.script.enable
-      # sh
-      ''
-        find ./public -type f -iname "*.js" -print0 \
-          | xargs -0 -n 1 -P $NIX_BUILD_CORES ${writeShellScript "movim_script_minify" ''
-            file="$1"
-            tmp="$(mktemp)"
-            esbuild $file --minify --target=${lib.escapeShellArg minify.script.target} --outfile=$tmp
-            [ "$(stat -c %s $tmp)" -lt "$(stat -c %s $file)" ] && mv $tmp $file
-          ''}
-      ''
-    +
-      lib.optionalString minify.style.enable
-        # sh
-        ''
-          find ./public -type f -iname "*.css" -print0 \
-            | xargs -0 -n 1 -P $NIX_BUILD_CORES ${writeShellScript "movim_style_minify" ''
-              export BROWSERLIST="${lib.escapeShellArg minify.style.browserslist}"
-              file="$1"
-              tmp="$(mktemp)"
-              lightningcss $file --minify --browserslist --output-file=$tmp
-              [ "$(stat -c %s $tmp)" -lt "$(stat -c %s $file)" ] && mv $tmp $file
-            ''}
-        ''
-    +
-      lib.optionalString minify.svg.enable
-        # sh
-        ''
-          find ./public -type f -iname "*.svg" -a -not -path "*/emojis/*" -print0 \
-            | xargs -0 -n 1 -P $NIX_BUILD_CORES ${writeShellScript "movim_svg_minify" ''
-              file="$1"
-              tmp="$(mktemp)"
-              scour -i $file -o $tmp --disable-style-to-xml --enable-comment-stripping --enable-viewboxing --indent=tab
-              [ "$(stat -c %s $tmp)" -lt "$(stat -c %s $file)" ] && mv $tmp $file
-            ''}
-        '';
+    lib.optionalString minify.script.enable /* bash */ ''
+      find ./public -type f -iname "*.js" -print0 \
+        | xargs -0 -n 1 -P "$NIX_BUILD_CORES" ${writeDash "movim_script_minify" ''
+          file="$1"
+          tmp="$(mktemp)"
+          esbuild "$file" --minify --target=${lib.escapeShellArg minify.script.target} --outfile="$tmp"
+          if [ "$(stat -c %s "$tmp")" -lt "$(stat -c %s "$file")" ]; then
+            mv "$tmp" "$file"
+          fi
+        ''}
+    ''
+    + lib.optionalString minify.style.enable /* bash */ ''
+      find ./public -type f -iname "*.css" -print0 \
+        | xargs -0 -n 1 -P "$NIX_BUILD_CORES" ${writeDash "movim_style_minify" ''
+          export BROWSERLIST="${lib.escapeShellArg minify.style.browserslist}"
+          file="$1"
+          tmp="$(mktemp)"
+          lightningcss "$file" --minify --browserslist --output-file="$tmp"
+          if [ "$(stat -c %s "$tmp")" -lt "$(stat -c %s "$file")" ]; then
+            mv "$tmp" "$file"
+          fi
+        ''}
+    ''
+    + lib.optionalString minify.svg.enable /* bash */ ''
+      find ./public -type f -iname "*.svg" -a -not -path "*/emojis/*" -print0 \
+        | xargs -0 -n 1 -P "$NIX_BUILD_CORES" ${writeDash "movim_svg_minify" ''
+          file="$1"
+          tmp="$(mktemp)"
+          scour -i "$file" -o "$tmp" --disable-style-to-xml --enable-comment-stripping --enable-viewboxing --indent=tab
+          if [ "$(stat -c %s "$tmp")" -lt "$(stat -c %s "$file")" ]; then
+            mv "$tmp" "$file"
+          fi
+        ''}
+    '';
 
   postInstall = ''
     mkdir -p $out/bin
