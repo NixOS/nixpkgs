@@ -1472,6 +1472,9 @@ let
         # Set system time from RTC on startup and resume
         RTC_HCTOSYS = option yes;
 
+        # Emulate RTC update interrupts for RTCs without alarm/update interrupts
+        RTC_INTF_DEV_UIE_EMUL = option yes;
+
         # Expose watchdog information in sysfs
         WATCHDOG_SYSFS = yes;
 
