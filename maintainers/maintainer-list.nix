@@ -14551,6 +14551,11 @@
     githubId = 5802758;
     name = "Joshua Trees";
   };
+  jtrv = {
+    github = "jtrv";
+    githubId = 46337843;
+    name = "jtrv";
+  };
   jtszalay = {
     email = "jamestszalay@gmail.com";
     github = "jtszalay";
