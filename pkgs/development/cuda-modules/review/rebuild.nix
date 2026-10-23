@@ -2,7 +2,7 @@
 {
   source ? ../../../..,
   cross ? true,
-  release ? "13_3",
+  release ? "13_4",
   enableCudaDriverCompat ? false,
   cudaCapabilities ? if cross then [ "12.1a" ] else [ "8.9" ],
 }:
@@ -52,6 +52,29 @@ let
         nvshmem
         ;
       saxpy = cuda.saxpy;
+      # Torch's unpack and patch phases alone: every patch and postPatch must
+      # apply, without building Torch.
+      torchPatches = torch.overrideAttrs (old: {
+        pname = "${old.pname}-patches";
+        # postPatch reads only cuda_cudart's pkg-config file.
+        nativeBuildInputs = lib.filter (
+          input: lib.getName input == "pkg-config-wrapper"
+        ) old.nativeBuildInputs;
+        buildInputs = [ cuda.cuda_cudart ];
+        propagatedBuildInputs = [ ];
+        propagatedNativeBuildInputs = [ ];
+        phases = [
+          "unpackPhase"
+          "patchPhase"
+          "markPhase"
+        ];
+        markPhase = ''
+          for output in $(getAllOutputNames); do
+            mkdir -p "''${!output}"
+            echo "${old.pname} ${old.version} patched" > "''${!output}/patched"
+          done
+        '';
+      });
       runtimeTools = {
         torch = describe torch;
         runtime = describe runtime;
@@ -160,7 +183,7 @@ let
           scope-graphs = pkgs.tests.top-level.cudaPackageGraphs;
         };
     };
-  releases = lib.genAttrs [ "12_9" "13_3" ] selectRelease;
+  releases = lib.genAttrs [ "12_9" "13_4" ] selectRelease;
 in
 selectRelease release
 // {
