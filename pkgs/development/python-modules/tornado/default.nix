@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
@@ -36,6 +37,11 @@ buildPythonPackage (finalAttrs: {
 
   # To allow tests to pass on slower/high-load machines
   env.ASYNC_TEST_TIMEOUT = 30;
+
+  # Skip test does not pass: gen.with_timeout(0.2s) against a full gc.collect(2)
+  disabledTests = lib.optionals stdenv.hostPlatform.isRiscV64 [
+    "test_gc"
+  ];
 
   disabledTestPaths = [
     # additional tests that have extra dependencies, run slowly, or produce more output than a simple pass/fail
