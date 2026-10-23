@@ -38753,10 +38753,10 @@ with self;
 
   Xapian = buildPerlModule rec {
     pname = "Xapian";
-    version = "1.4.27";
+    version = "1.4.31";
     src = fetchurl {
       url = "https://oligarchy.co.uk/xapian/${version}/xapian-bindings-${version}.tar.xz";
-      sha256 = "1fhq6rydjymmyn79cdza0j4rmlizrrwmf5mx276rlmwyh085wfxs";
+      hash = "sha256-o4zHukGIzAvSfcc2nwOQZ3IEcIehxU8bkzVdXpEDwwQ=";
     };
     nativeBuildInputs = [ pkgs.xapian ];
     strictDeps = true;
