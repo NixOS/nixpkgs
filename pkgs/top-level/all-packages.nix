@@ -2550,8 +2550,6 @@ with pkgs;
 
   ssh-copy-id = callPackage ../tools/networking/openssh/copyid.nix { };
 
-  sshd-openpgp-auth = callPackage ../by-name/ss/ssh-openpgp-auth/daemon.nix { };
-
   openvpn = callPackage ../tools/networking/openvpn { };
 
   openvpn_learnaddress = callPackage ../tools/networking/openvpn/openvpn_learnaddress.nix { };
