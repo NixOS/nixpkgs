@@ -49,6 +49,7 @@ in
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
             kernelPatches.libbpf_C23_compat
+            kernelPatches.skb_zerocopy_shared_frag_pre_7_3
           ];
         };
 
@@ -57,6 +58,7 @@ in
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
+            kernelPatches.skb_zerocopy_shared_frag_pre_7_3
           ];
         };
 
@@ -65,6 +67,7 @@ in
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
+            kernelPatches.skb_zerocopy_shared_frag_pre_7_3
           ];
         };
 
@@ -73,6 +76,7 @@ in
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
+            kernelPatches.skb_zerocopy_shared_frag_pre_7_3
           ];
         };
 
@@ -81,6 +85,7 @@ in
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
+            kernelPatches.skb_zerocopy_shared_frag_pre_7_3
           ];
         };
 
@@ -89,6 +94,7 @@ in
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
+            kernelPatches.skb_zerocopy_shared_frag
           ];
         };
 
@@ -115,6 +121,7 @@ in
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
+            kernelPatches.skb_zerocopy_shared_frag_pre_7_3
           ];
         };
 
@@ -126,6 +133,7 @@ in
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
+            kernelPatches.skb_zerocopy_shared_frag_pre_7_3
           ];
         };
         linux_xanmod_stable = xanmodKernels {
@@ -133,6 +141,7 @@ in
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
+            kernelPatches.skb_zerocopy_shared_frag_pre_7_3
           ];
         };
         linux_xanmod_latest = xanmodKernels {
@@ -140,6 +149,7 @@ in
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
+            kernelPatches.skb_zerocopy_shared_frag_pre_7_3
           ];
         };
       }

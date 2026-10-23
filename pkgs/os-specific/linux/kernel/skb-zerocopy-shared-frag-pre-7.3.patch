@@ -1,0 +1,12 @@
+diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+--- a/net/core/skbuff.c
++++ b/net/core/skbuff.c
+@@ -3883,6 +3883,8 @@ skb_zerocopy(struct sk_buff *to, struct sk_buff *from, int len, int hlen)
+ 	}
+ 	skb_shinfo(to)->nr_frags = j;
+ 
++	skb_shinfo(to)->flags |= skb_shinfo(from)->flags & SKBFL_SHARED_FRAG;
++
+ 	return 0;
+ }
+ EXPORT_SYMBOL_GPL(skb_zerocopy);

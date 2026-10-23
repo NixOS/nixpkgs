@@ -32,4 +32,16 @@
     name = "c23-compat-libbpf";
     patch = ./C23-compat-6.1.patch;
   };
+
+  # https://lore.kernel.org/netdev/20261022104217.1852191-1-pointerliu@126.com/ (Cc stable, not yet in a release)
+  skb_zerocopy_shared_frag = {
+    name = "skb-zerocopy-shared-frag";
+    patch = ./skb-zerocopy-shared-frag.patch;
+  };
+
+  # Same fix, diff context adjusted for pre-7.3 codebase
+  skb_zerocopy_shared_frag_pre_7_3 = {
+    name = "skb-zerocopy-shared-frag-pre-7.3";
+    patch = ./skb-zerocopy-shared-frag-pre-7.3.patch;
+  };
 }
