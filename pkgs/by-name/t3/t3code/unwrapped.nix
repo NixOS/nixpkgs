@@ -238,6 +238,7 @@ stdenv.mkDerivation (
       changelog = "https://github.com/pingdotgg/t3code/releases/tag/${finalAttrs.src.tag}";
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
+        _0x4bs3nt
         iamanaws
         qweered
       ];
