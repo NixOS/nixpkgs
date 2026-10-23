@@ -24,10 +24,10 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "jibri";
-  version = "8.0-205-g206e038";
+  version = "8.0-235-g87bcd3c";
   src = fetchurl {
     url = "https://download.jitsi.org/stable/jibri_${finalAttrs.version}-1_all.deb";
-    hash = "sha256-DJyBNjCgesg0P1SSU8mi3vVN9TK5sU/eLS1PLzEsIRE=";
+    hash = "sha256-4OAe3Sfi7gXNqAY5GgyHDeA0BJeaTtYfOTiAeGnyhrU=";
   };
 
   dontBuild = true;
