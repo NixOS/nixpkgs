@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dislocker";
-  version = "0.7.3-unstable-2026-08-31";
+  version = "0.7.4-unstable-2026-10-21";
 
   src = fetchFromGitHub {
     owner = "Aorimn";
     repo = "dislocker";
-    rev = "0706462db88efe8df88150e4c3e4332b808f4581";
-    hash = "sha256-lH2BdMcseZDw5gtzY5V0Gyy4MS0I8Vlyb0uZkkZdcbM=";
+    rev = "21ef6e58deb400502121e80fc0dfc7d9974e364f";
+    hash = "sha256-+T+B8pJDvL8sa2zCVl43RMw7M3i2mRD8+vFbEILL0Io=";
   };
 
   nativeBuildInputs = [
