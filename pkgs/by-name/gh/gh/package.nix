@@ -14,7 +14,7 @@
 
 buildGo127Module (finalAttrs: {
   pname = "gh";
-  version = "2.103.1";
+  version = "2.103.2";
 
   __structuredAttrs = true;
   separateDebugInfo = true;
@@ -23,7 +23,7 @@ buildGo127Module (finalAttrs: {
     owner = "cli";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pM7qOjN6wZaj17/C9uY8oiEM1zKaesMDL9AsBwvUcgo=";
+    hash = "sha256-g79A0s6PZdALB9aWVZV12Om/2uKVE1Zac2aFkqwa7MQ=";
 
     postCheckout = ''
       git -C "$out" log -1 --pretty=%ct > $out/SOURCE_DATE_EPOCH
