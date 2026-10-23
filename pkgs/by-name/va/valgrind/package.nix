@@ -108,6 +108,8 @@ stdenv.mkDerivation rec {
     '';
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://valgrind.org/";
     description = "Debugging and profiling tool suite";
