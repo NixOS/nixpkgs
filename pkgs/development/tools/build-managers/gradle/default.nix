@@ -397,8 +397,8 @@ rec {
   # https://docs.gradle.org/current/userguide/compatibility.html
 
   gradle_9 = mkGradle {
-    version = "9.8.0";
-    hash = "sha256-uv1c6c+uoPvM/chDmhrEL71M2cidyamIIo2KJjmljmw=";
+    version = "9.8.2";
+    hash = "sha256-Ib1dot5JtkKQQHfzjA79x3eOkrPtCIk5LcphuX44lgc=";
     defaultJava = jdk25;
     updateScriptMajorVersion = "9";
     extraNativePlatformJars =
