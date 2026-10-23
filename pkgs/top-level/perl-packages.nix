@@ -22827,7 +22827,9 @@ with self;
       url = "mirror://cpan/authors/id/T/TH/THW/Module-Versions-0.02.zip";
       hash = "sha256-DTimWxenrFGI1zh8/+f6oSY4Rw3JNxYevz2kh7fR+Dw=";
     };
-    buildInputs = [ pkgs.unzip ];
+    nativeBuildInputs = [ pkgs.unzip ];
+    strictDeps = true;
+    __structuredAttrs = true;
     meta = {
       description = "Handle versions of loaded modules with flexible result interface";
       license = with lib.licenses; [
