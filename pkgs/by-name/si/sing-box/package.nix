@@ -31,6 +31,23 @@ buildGoModule (finalAttrs: {
     hash = "sha256-Cy95gViVKmMYSXTKDbOxCOna7nBJ2b7/b8min1hZ2mM=";
   };
 
+  # Remove distrusted CA certificates from the embedded root stores.
+  # TODO: Remove once upstream updates its bundled CA certificates.
+  postPatch = ''
+    for cert in \
+      "AAA Certificate Services" \
+      "emSign ECC Root CA - G3" \
+      "emSign Root CA - C1" \
+      "emSign ECC Root CA - C3"; do
+      grep -Fxq "// $cert" common/certificate/mozilla.go
+    done
+    grep -Fq '// CN=emSign ECC Root CA - G3;' common/certificate/chrome.go
+
+    sed -i -E \
+      '/^\/\/ (CN=)?(AAA Certificate Services|emSign ECC Root CA - G3|emSign Root CA - C1|emSign ECC Root CA - C3)(;|$)/,/^-----END CERTIFICATE-----$/d' \
+      common/certificate/{mozilla,chrome}.go
+  '';
+
   vendorHash = "sha256-wWe4aUpiCD+wgsj7YPJYVER7PxfgUbVTAhjarEzLtTc=";
 
   tags = [
@@ -82,7 +99,7 @@ buildGoModule (finalAttrs: {
   postConfigure = lib.optionalString withNaiveOutbound ''
     pushd vendor/github.com/sagernet/cronet-go
     chmod -R u+w .
-    cp -r ${cronet-go}/ .
+    cp -r ${cronet-go}/. .
     # for !withStaticCronet
     patch -p1 < ${./cronet-go.patch}
     substituteInPlace internal/cronet/loader_unix.go \
