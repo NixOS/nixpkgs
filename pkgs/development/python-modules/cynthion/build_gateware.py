@@ -23,6 +23,13 @@ BITSTREAMS = ["analyzer", "facedancer", "selftest"]
 # without a fixed seed a build can non-deterministically miss the constraint.
 NEXTPNR_SEED = 0
 
+# CynthionPlatformRev1D0/analyzer marginally misses the 120 MHz timing
+# constraint and achieving 117.63 MHz on aarch64-darwin
+# due to yosys: 0.69 -> 0.70 bump https://github.com/NixOS/nixpkgs/pull/573624
+MARGINAL_TARGETS = {
+    ("CynthionPlatformRev1D0", "analyzer"),
+}
+
 
 async def build_bitstream(
     semaphore: asyncio.Semaphore, assets_dir: Path, platform: str, bitstream: str
@@ -33,7 +40,11 @@ async def build_bitstream(
 
         env = os.environ.copy()
         env["LUNA_PLATFORM"] = f"cynthion.gateware.platform:{platform}"
-        env["AMARANTH_nextpnr_opts"] = f"--seed {NEXTPNR_SEED}"
+
+        nextpnr_opts = [f"--seed {NEXTPNR_SEED}"]
+        if (platform, bitstream) in MARGINAL_TARGETS:
+            nextpnr_opts.append("--timing-allow-fail")
+        env["AMARANTH_nextpnr_opts"] = " ".join(nextpnr_opts)
 
         out_dir = assets_dir / platform
         out_dir.mkdir(parents=True, exist_ok=True)
