@@ -30,6 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   propagatedBuildInputs = [ libGLX ];
 
+  strictDeps = true;
+
   outputs = [
     "out"
     "dev"
@@ -51,6 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
       rev-prefix = "glu-";
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "OpenGL utility library";
