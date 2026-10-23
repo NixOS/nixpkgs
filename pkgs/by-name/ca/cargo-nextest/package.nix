@@ -37,6 +37,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "-p"
     "cargo-nextest"
   ];
+  # Upstream recommends this feature set for distributor builds:
+  # https://github.com/nextest-rs/nextest/blob/cargo-nextest-0.9.149/cargo-nextest/Cargo.toml#L63-L65
+  buildNoDefaultFeatures = true;
+  buildFeatures = [ "default-no-update" ];
+
   cargoTestFlags = [
     "-p"
     "cargo-nextest"
