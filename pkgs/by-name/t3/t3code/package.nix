@@ -4,6 +4,7 @@
   cloudflared,
   symlinkJoin,
   makeBinaryWrapper,
+  nixosTests,
   enableAzureDevOps ? false,
   azure-cli,
   azure-cli-extensions,
@@ -99,6 +100,7 @@ symlinkJoin {
   passthru = {
     unwrapped = t3code-unwrapped;
     resourceMonitor = t3code-resource-monitor;
+    tests.nixos = nixosTests.t3code;
   }
   // t3code-unwrapped.passthru;
 
