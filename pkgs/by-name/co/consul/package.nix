@@ -9,7 +9,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "consul";
-  version = "2.0.4";
+  version = "2.1.0";
 
   # Note: Currently only release tags are supported, because they have the Consul UI
   # vendored. See
@@ -23,7 +23,7 @@ buildGoModule (finalAttrs: {
     owner = "hashicorp";
     repo = "consul";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vjGlxmruHuIfBjmw/KHOm6xoKMAsZ+fVpfx+93nFJc8=";
+    hash = "sha256-fXkp9/EyZ/SqyUnxXZw/zwf9MO0dmO0Mpbmrygnw3oQ=";
   };
 
   # This corresponds to paths with package main - normally unneeded but consul
@@ -33,15 +33,9 @@ buildGoModule (finalAttrs: {
     "connect/certgen"
   ];
 
-  vendorHash = "sha256-rUYjQqEoZ4RzhJIGYot7LXbwLFmfWEie8F7F6Oczh4Q=";
+  vendorHash = "sha256-KPZzFrI9mhe152et9/VGamUCNMbpVlNF2c5VaPQWwz4=";
 
   doCheck = false;
-
-  ldflags = [
-    "-X github.com/hashicorp/consul/version.GitDescribe=${finalAttrs.src.tag}"
-    "-X github.com/hashicorp/consul/version.Version=${finalAttrs.version}"
-    "-X github.com/hashicorp/consul/version.VersionPrerelease="
-  ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
