@@ -36,12 +36,5 @@ in
     xdg.portal.extraPortals = [ pkgs.gnome-keyring ];
 
     security.pam.services.login.enableGnomeKeyring = true;
-
-    security.wrappers.gnome-keyring-daemon = {
-      owner = "root";
-      group = "root";
-      capabilities = "cap_ipc_lock=ep";
-      source = "${pkgs.gnome-keyring}/bin/gnome-keyring-daemon";
-    };
   };
 }
