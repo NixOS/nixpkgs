@@ -2,6 +2,7 @@
   lib,
   stdenv,
   assimp,
+  cacert,
   copyDesktopItems,
   desktopToDarwinBundle,
   fetchFromGitHub,
@@ -226,6 +227,12 @@ stdenv.mkDerivation (finalAttrs: {
     ''}
 
     runHook postInstall
+  '';
+
+  postInstall = lib.optionalString (finalAttrs.passthru.distributedRenpy != null) ''
+    chmod u+w $out/share/renpy/lib/python3.12/certifi
+    rm $out/share/renpy/lib/python3.12/certifi/cacert.pem
+    ln -s ${cacert}/etc/ssl/certs/ca-bundle.crt $out/share/renpy/lib/python3.12/certifi/cacert.pem
   '';
 
   desktopItems = lib.optional (!minimal) (makeDesktopItem {
