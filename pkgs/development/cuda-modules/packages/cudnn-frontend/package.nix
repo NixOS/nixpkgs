@@ -8,6 +8,7 @@
   cudaNamePrefix,
   cudnn,
   fetchFromGitHub,
+  fetchpatch,
   gitUpdater,
   lib,
   libcublas,
@@ -43,6 +44,21 @@ backendStdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-/KMprsFaxKdNRJ9APbb+NH7bL1izSayO6l9BVRxOCRE=";
   };
+
+  # Since 1.31.0, plans recorded into CUDA graphs are released through get_cuda_symbol(), whose
+  # handle map is a function-local static. Static caches destroyed after it at exit, such as
+  # TransformerEngine's fused-attention graph cache, then read the freed map and can crash.
+  # https://github.com/NVIDIA/cudnn-frontend/issues/1486
+  patches =
+    lib.throwIf (finalAttrs.version != "1.31.0")
+      "cudaPackages.cudnn-frontend: check whether ${finalAttrs.version} contains https://github.com/NVIDIA/cudnn-frontend/commit/473a2c8f767a4681915c7dc16b874f1877534413; if it does, remove the patch, otherwise update this check"
+      [
+        (fetchpatch {
+          name = "keep-cuda-library-handle-map-alive.patch";
+          url = "https://github.com/NVIDIA/cudnn-frontend/commit/473a2c8f767a4681915c7dc16b874f1877534413.patch";
+          hash = "sha256-H/o5okuA4rCQYZJop7H4NZUHisXw3PboIJ6VWeqL9uc=";
+        })
+      ];
 
   # nlohmann_json should be the only vendored dependency.
   postPatch = ''
