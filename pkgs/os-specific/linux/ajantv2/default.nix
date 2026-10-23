@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  buildPackages,
   kernel,
   kernelModuleMakeFlags,
   libajantv2,
@@ -34,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  env.KMODIGEST = lib.getExe buildPackages.kmodigest;
   kmods = [
     "ajantv2"
     "ajardma"
@@ -41,6 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   postBuild = ''
     for kmod in "''${kmods[@]}"; do
+      # ajantv2 uses its own build system and not the proper out-of-tree kernel bits
+      # so we have to do this ourselves. Very dull.
+      echo "kmodigest-ing $kmod" >&2
+      $KMODIGEST ''${kmod}.ko
       echo "compressing $kmod" >&2
       xz -k ''${kmod}.ko
     done
@@ -48,6 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     for kmod in "''${kmods[@]}"; do
+      install -D ''${kmod}.ko.cer $out/lib/modules/${kernel.modDirVersion}/misc/''${kmod}.ko.cer
       install ''${kmod}.ko.xz $out/lib/modules/${kernel.modDirVersion}/misc/''${kmod}.ko.xz
     done
   '';
