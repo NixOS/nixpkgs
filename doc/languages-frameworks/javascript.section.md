@@ -8,7 +8,7 @@ Package JavaScript applications with the tools below.
 
 - **npm**: [`buildNpmPackage`](#javascript-buildNpmPackage), [`prefetch-npm-deps` (CLI)](#javascript-buildNpmPackage-prefetch-npm-deps), [`fetchNpmDeps`](#javascript-buildNpmPackage-fetchNpmDeps), [`importNpmLock`](#javascript-buildNpmPackage-importNpmLock)
 - [**corepack**](#javascript-corepack)
-- **pnpm**: [`fetchPnpmDeps`](#javascript-pnpm), [`pnpmConfigHook`](#javascript-pnpm-pnpmConfigHook), [`pnpmBuildHook`](#javascript-pnpm-pnpmBuildHook)
+- **pnpm**: [`fetchPnpmDeps`](#javascript-pnpm), ['fetchPnpmCache'](#javascript-pnpm-fetchPnpmCache) [`pnpmConfigHook`](#javascript-pnpm-pnpmConfigHook), [`pnpmBuildHook`](#javascript-pnpm-pnpmBuildHook)
 - [**Yarn v1**](#javascript-yarn-v1): [`fetchYarnDeps`](#javascript-fetchyarndeps), [`yarnConfigHook`](#javascript-yarnconfighook), [`yarnBuildHook`](#javascript-yarnbuildhook), [`yarnInstallHook`](#javascript-yarninstallhook)
 - [**Yarn Berry (v3/v4)**](#javascript-yarn-v3-v4): [`fetchYarnBerryDeps`](#javascript-fetchYarnBerryDeps), [`yarnBerryConfigHook`](#javascript-yarnBerryConfigHook)
 
@@ -292,9 +292,13 @@ This package puts the corepack wrappers for pnpm and yarn in your PATH, and they
 
 ### pnpm {#javascript-pnpm}
 
-pnpm is available as the top-level package `pnpm`. Additionally, there are variants pinned to certain major versions, like `pnpm_9`, `pnpm_10`, `pnpm_10_29_2` and `pnpm_11`, which support different sets of lock file versions.
+pnpm is available as the top-level package `pnpm`. Additionally, there are variants pinned to certain major versions, like `pnpm_8`, `pnpm_9`, `pnpm_10`, `pnpm_10_29_2` and `pnpm_11`, which support different sets of lock file versions.
 
-When packaging an application that includes a `pnpm-lock.yaml`, you need to fetch the pnpm store for that project using a fixed-output-derivation. The function `fetchPnpmDeps` can create this pnpm store derivation. In conjunction, the setup hook [`pnpmConfigHook`](#javascript-pnpm-pnpmConfigHook) prepares the build environment to install the pre-fetched dependencies store. The example below uses the fetcher and setup hook for a package that has `package.json` and `pnpm-lock.yaml`:
+When packaging an application that includes a `pnpm-lock.yaml`, you need to fetch its locked dependencies using a fixed-output-derivation. Currently, nixpkgs ships two fetchers to build these.
+
+#### fetchPnpmDeps {#javascript-fetchPnpmDeps}
+
+`fetchPnpmDeps` is the more established fetcher in nixpkgs. It uses pnpm itself and creates a fixed-up copy of a reproducible pnpm store. In conjunction, the setup hook `pnpmConfigHook` will prepare the build environment to install the pre-fetched dependencies store. Here is an example for a package that contains `package.json` and a `pnpm-lock.yaml` files using the fetcher and setup hook above:
 
 ```nix
 {
@@ -310,7 +314,7 @@ let
   # The latest major version is always available under `pkgs.pnpm`
   # Optionally override pnpm to use a custom nodejs version
   # Make sure that the same nodejs version is referenced in nativeBuildInputs
-  # pnpm = pnpm_11.override { nodejs = nodejs_24; };
+  # pnpm = pnpm_11.override { nodejs-slim = nodejs-slim_24; };
   pnpm = pnpm_11;
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -341,7 +345,7 @@ The example also uses [`pnpmBuildHook`](#javascript-pnpm-pnpmBuildHook), which r
 
 In case you are patching `package.json` or `pnpm-lock.yaml`, make sure to pass `finalAttrs.patches` to the `fetchPnpmDeps` function as well (i.e., `inherit (finalAttrs) patches`).
 
-#### pnpmConfigHook {#javascript-pnpm-pnpmConfigHook}
+##### pnpmConfigHook {#javascript-pnpm-pnpmConfigHook}
 
 `pnpmConfigHook` supports adding additional `pnpm install` flags via `pnpmInstallFlags` which can be set to a Nix string array:
 
@@ -359,34 +363,7 @@ In case you are patching `package.json` or `pnpm-lock.yaml`, make sure to pass `
 
 If needed, set `dontPnpmConfigure = true;` to fully disable `pnpmConfigHook` without removing it from inputs manually.
 
-#### pnpmBuildHook {#javascript-pnpm-pnpmBuildHook}
-
-The `pnpmBuildHook` in overrides the default build phase with `pnpm run <build-script>`.
-
-```nix
-{
-  nativeBuildInputs = [
-    pnpmBuildHook
-  ];
-
-  pnpmBuildScript = "build-ui";
-  pnpmBuildFlags = [
-    "--mode"
-    "production"
-  ];
-}
-```
-
-Available options:
-
-- `pnpmBuildScript`: select which script from `package.json` to run. Defaults to `build`.
-- `pnpmBuildFlags`: array of flags to pass to the build script.
-- `pnpmFlags`: currently the same as `pnpmBuildFlags`, but might be used by other hooks in the future.
-- `dontPnpmBuild`: disable this hook from running automatically. The hook can still be invoked manually.
-
-Both [`pnpmRoot`](#javascript-pnpm-sourceRoot) and [`pnpmWorkspaces`](#javascript-pnpm-workspaces) are honored by this hook.
-
-#### Dealing with `sourceRoot` {#javascript-pnpm-sourceRoot}
+##### Dealing with `sourceRoot` {#javascript-pnpm-sourceRoot}
 
 If the pnpm project is in a subdirectory, you can define `sourceRoot` or `setSourceRoot` for `fetchPnpmDeps`.
 If `sourceRoot` is different between the parent derivation and `fetchPnpmDeps`, you have to set `pnpmRoot` to effectively be the same location as it is in `fetchPnpmDeps`.
@@ -415,7 +392,7 @@ Assuming the directory structure below, you can define `sourceRoot` and `pnpmRoo
 }
 ```
 
-#### pnpm workspaces {#javascript-pnpm-workspaces}
+##### pnpm workspaces {#javascript-pnpm-workspaces}
 
 For a pnpm workspace, set `pnpmWorkspaces = [ "<workspace project name 1>" "<workspace project name 2>" ]` in your `fetchPnpmDeps` call. pnpm then installs only the dependencies for those workspace packages.
 
@@ -449,7 +426,7 @@ For these projects, build with `pnpm --filter=<pnpm workspace name> build`, beca
 }
 ```
 
-#### Additional pnpm commands and settings {#javascript-pnpm-extraCommands}
+##### Additional pnpm commands and settings {#javascript-pnpm-extraCommands}
 
 If you require setting an additional pnpm configuration setting (such as `dedupe-peer-dependents` or similar),
 set `prePnpmInstall` to the right commands to run. For example:
@@ -468,7 +445,7 @@ set `prePnpmInstall` to the right commands to run. For example:
 
 In this example, `prePnpmInstall` runs in both `pnpmConfigHook` and the `fetchPnpmDeps` builder.
 
-#### pnpm `fetcherVersion` {#javascript-pnpm-fetcherVersion}
+##### pnpm `fetcherVersion` {#javascript-pnpm-fetcherVersion}
 
 This is the version of the output of `fetchPnpmDeps`. Use `5` for new packages:
 
@@ -488,7 +465,7 @@ When upgrading to a newer `fetcherVersion`, you need to regenerate the hash.
 This variable ensures that we can make changes to the output of `fetchPnpmDeps` without breaking existing hashes.
 Changes can include workarounds or bug fixes to existing pnpm issues.
 
-##### Version history {#javascript-pnpm-fetcherVersion-versionHistory}
+###### Version history {#javascript-pnpm-fetcherVersion-versionHistory}
 
 Version 3 is the minimum supported value. Versions 1 and 2 were removed in the 26.11 release; packages that still use them fail to evaluate and must migrate to `fetcherVersion = 3` (or later) and regenerate their hashes.
 
@@ -497,6 +474,134 @@ Version 3 is the minimum supported value. Versions 1 and 2 were removed in the 2
 - 3: [Build a reproducible tarball](https://github.com/NixOS/nixpkgs/pull/469950)
 - 4: [Dump SQLite database to an SQL file](https://github.com/NixOS/nixpkgs/pull/522703)
 - 5: [Keep virtual store materializations out of the archived store](https://github.com/NixOS/nixpkgs/pull/565315)
+
+#### fetchPnpmCache {#javascript-pnpm-fetchPnpmCache}
+
+
+`fetchPnpmCache` parses lock files to generate offline copies of the used package registries and serves them to pnpm during `configurePhase` using `mitm-cache`. Unlike `fetchPnpmDeps` it does not rely on pnpm beyond parsing the actual lock file. This makes this implementation less complex and easier to maintain long term, assuming the lockfile format doesn't change too much.
+
+Here is an example:
+
+```nix
+{
+  fetchPnpmCache,
+  nodejs,
+  pnpm_11,
+  pnpmCacheConfigHook,
+  stdenv,
+}:
+let
+  # It is recommended to pin pnpm to a major version, due to regular breaking changes in the store format
+  # The latest major version is always available under `pkgs.pnpm`
+  # Optionally override pnpm to use a custom nodejs version
+  # Make sure that the same nodejs version is referenced in nativeBuildInputs
+  # pnpm = pnpm_11.override { nodejs-slim = nodejs-slim_24; };
+  pnpm = pnpm_11;
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "foo";
+  version = "0-unstable-1980-01-01";
+
+  src = {
+    #...
+  };
+
+  nativeBuildInputs = [
+    nodejs # in case scripts are run outside of a pnpm call
+    pnpmCacheConfigHook
+    pnpm # At least required by pnpmConfigHook, if not other (custom) phases
+  ];
+
+  mitmCache = fetchPnpmCache {
+    # You may also pass patches, postPatch and more!
+    inherit (finalAttrs) pname src;
+    hash = "...";
+  };
+
+  # Required by pnpmCacheConfigHook
+  __structuredAttrs = true;
+})
+```
+
+##### Specifying pnpm workspace path using `pnpmRoot` {#javascript-pnpm-fetchPnpmCache-sourceRoot}
+
+If the pnpm workspace is in a subdirectory, you can just pass `pnpmRoot` to `fetchPnpmDeps` as well as the parent derivation.
+
+Assuming the following directory structure, we can define `pnpmRoot` as follows:
+
+```
+.
+├── frontend
+│   ├── ...
+│   ├── package.json
+│   └── pnpm-lock.yaml
+└── ...
+```
+
+```nix
+{
+  # ...
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pnpmRoot;
+  };
+
+  # by default the working directory is the extracted source
+  pnpmRoot = "frontend";
+}
+```
+
+##### Arguments and config for pnpm install {#javascript-pnpm-fetchPnpmCache-install-config}
+
+If you need to change config options or pass arguments to `pnpm install`, you can set `prePnpmInstall` and `pnpmInstallFlags` respectively. Since pnpm 11, you may need to specify some configuration options using environment variables prefixed with `pnpm_config_`.
+
+For example:
+
+```nix
+{
+  nativeBuildInputs = [
+    # ...
+    pnpmCacheConfigHook
+  ];
+
+  prePnpmInstall = ''
+    pnpm config set dedupe-peer-dependents false
+  '';
+
+  pnpmInstallFlags = [
+    # Only install certain workspace package
+    "--filter=@my-workspace/package"
+  ];
+
+  env.pnpm_config_strict_peer_dependencies = "true";
+}
+```
+
+#### pnpmBuildHook {#javascript-pnpm-pnpmBuildHook}
+
+The `pnpmBuildHook` in overrides the default build phase with `pnpm run <build-script>`.
+
+```nix
+{
+  nativeBuildInputs = [
+    pnpmBuildHook
+  ];
+
+  pnpmBuildScript = "build-ui";
+  pnpmBuildFlags = [
+    "--mode"
+    "production"
+  ];
+}
+```
+
+Available options:
+
+- `pnpmBuildScript`: select which script from `package.json` to run. Defaults to `build`.
+- `pnpmBuildFlags`: array of flags to pass to the build script.
+- `pnpmFlags`: currently the same as `pnpmBuildFlags`, but might be used by other hooks in the future.
+- `dontPnpmBuild`: disable this hook from running automatically. The hook can still be invoked manually.
+
+Both [`pnpmRoot`](#javascript-pnpm-sourceRoot) and [`pnpmWorkspaces`](#javascript-pnpm-workspaces) are honored by this hook.
 
 ### Yarn {#javascript-yarn}
 
