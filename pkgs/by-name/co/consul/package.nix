@@ -4,9 +4,10 @@
   fetchFromGitHub,
   nixosTests,
   nix-update-script,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "consul";
   version = "2.0.4";
 
@@ -21,7 +22,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "consul";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vjGlxmruHuIfBjmw/KHOm6xoKMAsZ+fVpfx+93nFJc8=";
   };
 
@@ -37,10 +38,13 @@ buildGoModule rec {
   doCheck = false;
 
   ldflags = [
-    "-X github.com/hashicorp/consul/version.GitDescribe=v${version}"
-    "-X github.com/hashicorp/consul/version.Version=${version}"
+    "-X github.com/hashicorp/consul/version.GitDescribe=${finalAttrs.src.tag}"
+    "-X github.com/hashicorp/consul/version.Version=${finalAttrs.version}"
     "-X github.com/hashicorp/consul/version.VersionPrerelease="
   ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru = {
     tests = {
@@ -52,7 +56,7 @@ buildGoModule rec {
 
   meta = {
     description = "Tool for service discovery, monitoring and configuration";
-    changelog = "https://github.com/hashicorp/consul/releases/tag/v${version}";
+    changelog = "https://github.com/hashicorp/consul/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://www.consul.io/";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     license = lib.licenses.bsl11;
@@ -63,4 +67,4 @@ buildGoModule rec {
     ];
     mainProgram = "consul";
   };
-}
+})
