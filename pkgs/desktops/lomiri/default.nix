@@ -59,6 +59,12 @@ let
     }
     // lib.optionalAttrs useQt6 {
       #### Core Apps
+      # Yoinked from the real lomiri package, referenced by other packages
+      lomiri.passthru.shellPlugindirSuffix =
+        assert lib.asserts.assertMsg (lib.strings.hasPrefix "lib/" qt6Packages.qtbase.qtQmlPrefix)
+          "Assumption that qtbase.qtQmlPrefix (${qt6Packages.qtbase.qtQmlPrefix}) starts with 'lib/' no longer holds, lomiri & its dependencies needs to be adjusted!";
+        lib.strings.removePrefix "lib/" qt6Packages.qtbase.qtQmlPrefix;
+
       morph-browser = callPackage ./applications/morph-browser {
         # get_target_property() called with non-existent target "Qt6::qdoc".
         withDocumentation = !useQt6;
