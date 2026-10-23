@@ -11896,6 +11896,18 @@ self: super: with self; {
 
   myuplink = callPackage ../development/python-modules/myuplink { };
 
+  nab = callPackage ../development/python-modules/nab { };
+
+  nab-index = callPackage ../development/python-modules/nab-index { };
+
+  nab-markersets = callPackage ../development/python-modules/nab-markersets { };
+
+  nab-project = callPackage ../development/python-modules/nab-project { };
+
+  nab-provider = callPackage ../development/python-modules/nab-provider { };
+
+  nab-resolver = callPackage ../development/python-modules/nab-resolver { };
+
   nad-receiver = callPackage ../development/python-modules/nad-receiver { };
 
   nagiosplugin = callPackage ../development/python-modules/nagiosplugin { };
