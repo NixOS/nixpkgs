@@ -12,8 +12,8 @@
   perl,
 
   # static libraries
-  pkgsStatic,
-  gmpStatic ? pkgsStatic.gmp,
+  gmp,
+  gmpStatic ? gmp.override { withStatic = true; },
   pari,
   pariStatic_2_15 ? pari.overrideAttrs (
     finalAttrs: oldAttrs: {
