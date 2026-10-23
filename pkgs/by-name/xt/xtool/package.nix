@@ -22,6 +22,7 @@
   unzip,
   versionCheckHook,
   xz,
+  xtoolBuildHook,
   zip,
   zlib,
 }:
@@ -144,6 +145,54 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     sdk = callPackage ./sdk.nix { xtool = finalAttrs.finalPackage; };
+
+    tests =
+      let
+        # builds one of upstream's examples the way their Examples/test.sh does
+        buildExample =
+          name: dir: extraAttrs:
+          stdenv.mkDerivation (
+            {
+              name = "xtool-${name}";
+              inherit (finalAttrs) src;
+              sourceRoot = "${finalAttrs.src.name}/Examples/${dir}";
+
+              nativeBuildInputs = [
+                (xtoolBuildHook.override { xtool = finalAttrs.finalPackage; })
+                swiftpm
+              ];
+
+              xtoolBuildFlags = [
+                "--triple"
+                "arm64-apple-ios-simulator"
+              ];
+            }
+            // extraAttrs
+          );
+      in
+      {
+        demo-simple = buildExample "demo-simple" "DemoSimple" { };
+
+        demo-tca = buildExample "demo-tca" "DemoTCA" rec {
+          patches = [
+            # TODO: https://github.com/xtool-org/xtool/pull/391
+            (fetchpatch {
+              name = "demotca-force-opencombine.patch";
+              url = "https://github.com/xtool-org/xtool/commit/ebe7fce7573b7873bf49e3be00716f5250e6d662.patch";
+              relative = "Examples/DemoTCA";
+              hash = "sha256-CVvJf7VjAoXjgZ58ooMJQsoZ6n0/L2wJ57eFCuol2xM=";
+            })
+          ];
+
+          swiftpmDeps = fetchSwiftPMDeps {
+            name = "xtool-demo-tca";
+            inherit (finalAttrs) src;
+            inherit patches;
+            sourceRoot = "${finalAttrs.src.name}/Examples/DemoTCA";
+            hash = "sha256-q86v9UoEqD5afZN9tS/zfgjheS1t0/p5GhZradwcKMk=";
+          };
+        };
+      };
   };
 
   meta = {
