@@ -215,6 +215,22 @@ in
         inherit callPackage;
         kernel = kernel_;
 
+        kernelModuleHook = buildPackages.makeSetupHook {
+          name = "kernel-module-hook-${kernel.modDirVersion}";
+          # Splicing for this with something like
+          # makeScopeWithSplicing' is hard because packagesFor is
+          # supposed to take an arbitrary kernel build, so we don't
+          # really have an attribute to point
+          # generateSplicesForMkScope at. Really this is indicative of
+          # the broader design problem with makeScopeWithSplicing'
+          propagatedBuildInputs = map (p: p.__spliced.buildHost or p) kernel.moduleBuildDependencies;
+          substitutions = {
+            kernel_dev = kernel.dev;
+            inherit (kernel) modDirVersion;
+            kernelModuleMakeFlags = lib.escapeShellArgs kernelModuleMakeFlags;
+          };
+        } ./kernel-module-hook.sh;
+
         # vmlinux.h derived from this kernel's BTF, for BPF consumers such as
         # systemd's nsresourced/mountfsd.
         # This derivation requires CONFIG_DEBUG_INFO_BTF-built kernel (this is

@@ -5,7 +5,7 @@
   fetchpatch2,
   gitUpdater,
   kernel,
-  kernelModuleMakeFlags,
+  kernelModuleHook,
 }:
 let
   rev-prefix = "ena_linux_";
@@ -17,7 +17,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   __structuredAttrs = true;
   strictDeps = true;
-  enableParallelBuilding = true;
 
   src = fetchFromGitHub {
     owner = "amzn";
@@ -37,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = [ kernelModuleHook ];
 
   env.KERNEL_BUILD_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
@@ -45,22 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace kernel/linux/ena/configure.sh --replace-fail '^HOSTCC' '^CC'
   '';
 
-  configurePhase = ''
-    runHook preConfigure
-    cd kernel/linux/ena
-    export ENA_PHC_INCLUDE=1
-    runHook postConfigure
-  '';
+  kbuildDirectories = [ "kernel/linux/ena" ];
 
-  installFlags = kernelModuleMakeFlags ++ [
-    "INSTALL_MOD_PATH=${placeholder "out"}"
-  ];
-
-  installPhase = ''
-    runHook preInstall
-    make -C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build M=$(pwd) modules_install \
-      "''${makeFlags[@]}" "''${installFlags[@]}"
-    runHook postInstall
+  preBuild = ''
+    make -C kernel/linux/ena config.h
   '';
 
   passthru.updateScript = gitUpdater {
