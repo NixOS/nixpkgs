@@ -37,6 +37,10 @@ buildPgrxExtension (finalAttrs: {
   };
 
   meta = {
+    # Upstream does not support PostgreSQL 19 yet
+    broken = lib.warnIf (
+      finalAttrs.version != "0.2.3"
+    ) "Is postgresql19Packages.pgx_ulid still broken?" (lib.versionAtLeast postgresql.version "19");
     description = "ULID Postgres extension written in Rust";
     homepage = "https://github.com/pksunkara/pgx_ulid";
     changelog = "https://github.com/pksunkara/pgx_ulid/blob/v${finalAttrs.version}/CHANGELOG.md";
