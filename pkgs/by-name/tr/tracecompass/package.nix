@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: rec {
           zlib
         ]
       } \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
+      --prefix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}" \
       --set-default GDK_BACKEND x11 \
       --run 'if [[ " $* " != *" -configuration "* ]]; then
          set -- -configuration "$HOME/.tracecompass/${version}/configuration" "$@"
@@ -128,6 +128,14 @@ stdenv.mkDerivation (finalAttrs: rec {
         export HOME=$(mktemp -d)
         export XDG_CACHE_HOME="$HOME/.cache"
         export XDG_CONFIG_HOME="$HOME/.config"
+
+        # Exercise the launcher's environment through the GSettings lookup
+        # used by GTK's file chooser during trace import.
+        sed '$c exec ${glib.bin}/bin/gsettings list-schemas' \
+          ${lib.getExe finalAttrs.finalPackage} > "$HOME/schema-check"
+        chmod +x "$HOME/schema-check"
+        "$HOME/schema-check" | grep -qx org.gtk.Settings.FileChooser
+        "$HOME/schema-check" | grep -qx org.gnome.desktop.interface
 
         workspace="$HOME/workspace"
         mkdir -p "$workspace"
