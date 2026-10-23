@@ -1,0 +1,47 @@
+From 46dfb68bae2ad5386763a08bd5c4a8ccde5fcf09 Mon Sep 17 00:00:00 2001
+From: Skye Soss <skye@soss.website>
+Date: Mon, 26 Oct 2026 11:28:19 -0500
+Subject: [PATCH] [SYCL] Fix ambiguous ipc put() calls with GCC 16 in C++20
+ mode
+
+With GCC 16 and -std=c++20, ipc_event.hpp and ipc_physical_memory.hpp
+fail to compile:
+
+  error: call of overloaded 'put(ipc::handle&, sycl::_V1::context&)' is ambiguous
+
+The friend declarations in ipc::handle make memory::put,
+physical_memory::put and event::put all visible through ADL. Qualify
+the calls, like ipc::memory::put already does.
+
+Assisted-By: LLM
+---
+ sycl/include/sycl/ext/oneapi/experimental/ipc_event.hpp         | 2 +-
+ .../sycl/ext/oneapi/experimental/ipc_physical_memory.hpp        | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/sycl/include/sycl/ext/oneapi/experimental/ipc_event.hpp b/sycl/include/sycl/ext/oneapi/experimental/ipc_event.hpp
+index f84867fe7aea5..9e2181373e637 100644
+--- a/sycl/include/sycl/ext/oneapi/experimental/ipc_event.hpp
++++ b/sycl/include/sycl/ext/oneapi/experimental/ipc_event.hpp
+@@ -44,7 +44,7 @@ namespace ext::oneapi::experimental::ipc::event {
+ inline void put(handle &IpcHandle) {
+   sycl::device Dev;
+   sycl::context Ctx = Dev.get_platform().khr_get_default_context();
+-  return put(IpcHandle, Ctx);
++  return ipc::event::put(IpcHandle, Ctx);
+ }
+ 
+ inline sycl::event open(const ipc::handle_data_t &HandleData,
+diff --git a/sycl/include/sycl/ext/oneapi/experimental/ipc_physical_memory.hpp b/sycl/include/sycl/ext/oneapi/experimental/ipc_physical_memory.hpp
+index 9c2576231641d..b1c2269f096d2 100644
+--- a/sycl/include/sycl/ext/oneapi/experimental/ipc_physical_memory.hpp
++++ b/sycl/include/sycl/ext/oneapi/experimental/ipc_physical_memory.hpp
+@@ -43,7 +43,7 @@ __SYCL_EXPORT void put(handle &ipc_handle, const sycl::context &ctx);
+ inline void put(handle &ipc_handle) {
+   sycl::device Dev;
+   sycl::context Ctx = Dev.get_platform().khr_get_default_context();
+-  return put(ipc_handle, Ctx);
++  return ipc::physical_memory::put(ipc_handle, Ctx);
+ }
+ 
+ inline physical_mem open(const ipc::handle_data_t &HandleData,
