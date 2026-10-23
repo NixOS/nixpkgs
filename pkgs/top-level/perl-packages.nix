@@ -27078,6 +27078,11 @@ with self;
       url = "mirror://cpan/authors/id/J/JM/JMGDOC/OpenOffice-OODoc-2.125.tar.gz";
       hash = "sha256-wRRIlwaTxCqLnpPaSMrJE1Fs4zqdRKZGhAD3rYeR2rY=";
     };
+    # Make the build reproducible
+    postPatch = ''
+      substituteInPlace Makefile.PL \
+        --replace-fail 'localtime()' 'gmtime($ENV{SOURCE_DATE_EPOCH})'
+    '';
     propagatedBuildInputs = [
       ArchiveZip
       XMLTwig
