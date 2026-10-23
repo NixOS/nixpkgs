@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "xtool-org";
     repo = "OpenAppleMacros";
-    tag = "v1.3.0";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-qZQ3SH97bS/diA2gHOuVBlLgpNAeDW1IwebJLl2nN3M=";
   };
 
@@ -52,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/xtool-org/OpenAppleMacros";
+    changelog = "https://github.com/xtool-org/OpenAppleMacros/releases/tag/${finalAttrs.src.tag}";
     description = "Open source reimplementation of Xcode-only Swift macros";
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
     license = lib.licenses.mit;
