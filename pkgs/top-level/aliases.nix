@@ -2643,6 +2643,7 @@ mapAliases {
   terraform_plugins_test = throw "'terraform_plugins_test' has been renamed to/replaced by 'terraform.tests.terraform_plugins_test'"; # Added 2026-08-29
   testVersion = throw "'testVersion' has been renamed to/replaced by 'testers.testVersion'"; # Converted to throw 2025-10-27
   tet = throw "'tet' has been removed for lack of maintenance"; # Added 2025-10-12
+  tetex = warnAlias "'tetex' has been removed as it was unmaintained upstream since 2006. Consider updating to a more maintained TeX implementation." texliveTeTeX; # Added 2026-10-23
   tewi-font = throw "'tewi-font' has been removed because it was removed from upstream"; # Added 2025-12-18
   texinfo4 = throw "'texinfo4' has been removed in favor of the latest version"; # Added 2025-06-08
   texinfo6 = throw "'texinfo6' has been removed in favor of the latest version"; # Added 2025-12-17
