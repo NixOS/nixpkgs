@@ -3,7 +3,6 @@
   options,
   lib,
   pkgs,
-  utils,
   jdk25_headless,
   ...
 }:
@@ -31,7 +30,15 @@ let
 in
 {
   options = {
-    services.unifi.enable = lib.mkEnableOption "UniFi controller service";
+    services.unifi.enable = lib.mkEnableOption ''
+      The UniFi controller service.
+
+      **Deprecated:** upstream has ended support for the standalone UniFi
+      Network Application, 10.6 being the final release. The only supported
+      way to run the controller is the Debian-based UniFi OS, which can be
+      self-hosted via an OCI container. See
+      <https://github.com/NixOS/nixpkgs/issues/570927>.
+    '';
 
     services.unifi.jrePackage = lib.mkOption {
       type = lib.types.package;
