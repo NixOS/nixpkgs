@@ -159,7 +159,10 @@ buildPythonPackage rec {
     homepage = "https://mitmproxy.org/";
     changelog = "https://github.com/mitmproxy/mitmproxy/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    maintainers = with lib.maintainers; [
+      SuperSandro2000
+      Misaka13514
+    ];
     mainProgram = "mitmproxy";
   };
 }
