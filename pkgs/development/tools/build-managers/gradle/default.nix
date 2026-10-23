@@ -405,8 +405,8 @@ rec {
       if stdenv.hostPlatform.isRiscV64 then gradle-native-platform-m29 else null;
   };
   gradle_8 = mkGradle {
-    version = "8.14.4";
-    hash = "sha256-8XcSmKcPbbWina9iN4xOGKF/wzybprFDYuDN9AYQOA0=";
+    version = "8.14.6";
+    hash = "sha256-eYjtBxsqB5AOLscV/KFcarcrzm20M68wH6f6fpQHvSQ=";
     defaultJava = jdk21;
     updateScriptMajorVersion = "8";
     extraNativePlatformJars = if stdenv.hostPlatform.isRiscV64 then gradle-native-platform else null;
