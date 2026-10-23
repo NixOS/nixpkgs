@@ -143,6 +143,16 @@ cargoUseSystemLibs() {
   export JEMALLOC_OVERRIDE="${JEMALLOC_OVERRIDE:-"$sentinel_dir/lib/libjemalloc"}"
 }
 
+# Cargo defaults to one job per host CPU. Limit builds that invoke Cargo
+# directly (e.g. through Meson or Make) to NIX_BUILD_CORES, like cargoBuildHook.
+# This runs in a phase because stdenv normalizes NIX_BUILD_CORES after
+# sourcing setup hooks.
+cargoSetupBuildJobs() {
+  export CARGO_BUILD_JOBS="${CARGO_BUILD_JOBS:-$NIX_BUILD_CORES}"
+}
+
+postUnpackHooks+=(cargoSetupBuildJobs)
+
 if [[ -z "${dontCargoUseSystemLibs-}" ]]; then
   preConfigureHooks+=(cargoUseSystemLibs)
 fi
