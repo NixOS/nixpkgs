@@ -56,8 +56,8 @@
   },
   {
     "pname": "Dapper",
-    "version": "2.1.86",
-    "hash": "sha256-YKmosU8PHZPq0brGsX7iMFskpD0G+lz0jQtWNxdeRhY="
+    "version": "2.1.89",
+    "hash": "sha256-NJlK2Rg5N0+KH3mKTHngFsylHqJd42csa5HtEXZjI+8="
   },
   {
     "pname": "Destructurama.Attributed",
@@ -81,8 +81,8 @@
   },
   {
     "pname": "Elastic.Clients.Elasticsearch",
-    "version": "9.5.2",
-    "hash": "sha256-/4ERADoshw2N2/i7mefTyGVOHOAxE7efVXZ3JRdiFfs="
+    "version": "9.5.3",
+    "hash": "sha256-O7j8WUF8atcU68qfN4hFu0febeJk/SeMcPQJrWxIeys="
   },
   {
     "pname": "Elastic.Esql",
@@ -91,8 +91,8 @@
   },
   {
     "pname": "Elastic.Transport",
-    "version": "0.17.1",
-    "hash": "sha256-iH1S2VUAR7Qh3WCbvYKK5mcy/2H4tTlVa5KhC6oT9K8="
+    "version": "1.1.0",
+    "hash": "sha256-2MqpHzRgFIrOUrhKRbhFGBXRcWZibWob5Gxmu1HZAA4="
   },
   {
     "pname": "ExtendedNumerics.BigDecimal",
@@ -176,8 +176,8 @@
   },
   {
     "pname": "Jint",
-    "version": "4.16.2",
-    "hash": "sha256-Rsmd+qW6qT0EGMfulpAj7G5ZEKplzaxGV9TYmG6dtZI="
+    "version": "4.17.0",
+    "hash": "sha256-MzDTp8f5ZAYB4NuJ9+CebzXYN7HInAbEz2/R3FYsvlk="
   },
   {
     "pname": "Json.More.Net",
@@ -241,8 +241,8 @@
   },
   {
     "pname": "Markdig",
-    "version": "1.3.2",
-    "hash": "sha256-rlIUsV0QBtkdXHsWvJAREQr5XYNQWOGKMOgOKMJ48Zo="
+    "version": "1.4.0",
+    "hash": "sha256-vdhDU6P0mfmJ8xEbM6zuvZQ0+KBpyos9oqBl8iMOe68="
   },
   {
     "pname": "MedallionTopologicalSort",
@@ -716,8 +716,8 @@
   },
   {
     "pname": "MudBlazor",
-    "version": "9.10.0",
-    "hash": "sha256-/zpCbc51mnG3UftMNx1DCnEdAkT7zYIdiXo8sSJThl8="
+    "version": "9.11.0",
+    "hash": "sha256-5HKsnwwFrdN5awcSfUh0ktADAXxXoIz/70sGTP8875E="
   },
   {
     "pname": "MySqlConnector",
@@ -791,8 +791,8 @@
   },
   {
     "pname": "Newtonsoft.Json.Schema",
-    "version": "4.0.1",
-    "hash": "sha256-EHBcN4hM9fg34BbHrY8o+mqYh9FYPDb5K6CnEkpUflo="
+    "version": "4.0.2",
+    "hash": "sha256-zKUKBDhECdRro0GgmaGZyMiblRziyCUl+a7BOq046J0="
   },
   {
     "pname": "Parlot",
@@ -806,38 +806,38 @@
   },
   {
     "pname": "ReactiveUI.Disposables",
-    "version": "7.1.1",
-    "hash": "sha256-B3gsxbOzBMtknxfelPhzJBZegwze8UPAcX9TbnxwcS8="
+    "version": "8.2.0",
+    "hash": "sha256-olmyT323D8ofetv+hEQsbWpZFR9cyYxD4QsCnqNmtmI="
   },
   {
     "pname": "ReactiveUI.Primitives",
-    "version": "7.1.1",
-    "hash": "sha256-2JHADwbOzCJJTGxm4uCdPxM/Rljy9+rfHyiNB3oVQEE="
+    "version": "8.2.0",
+    "hash": "sha256-pUsxPdceRbO6kme3SUQ+uyIsEsDg+QPFhtJQcU67U+s="
   },
   {
     "pname": "ReactiveUI.Primitives.Core",
-    "version": "7.1.1",
-    "hash": "sha256-hjqQbFoDWk/2petfTFC5e5CE/eVQh1anQJpaIVypFF0="
+    "version": "8.2.0",
+    "hash": "sha256-rT0VOhio4/as2z0hmbnbdno/oTrPLsyAOaOWxI90eQ0="
   },
   {
     "pname": "Refit",
-    "version": "15.2.0",
-    "hash": "sha256-WqldGF055IRY14g2/PGcpVI+2vvLAVS+lnUdVL/eUrs="
+    "version": "16.3.0",
+    "hash": "sha256-uCSkU7K38PQQxTOEnK6kDj7b8MtC37NKpK2WrNN4zb8="
   },
   {
     "pname": "Refit.HttpClientFactory",
-    "version": "15.2.0",
-    "hash": "sha256-zRt4RMLkcQ71So2Ty0J+/Fru5owMlaa9mb6axnjyuGk="
+    "version": "16.3.0",
+    "hash": "sha256-2iXEElQsYwTu92dRXUhzYBGbhMg09x/9TC2cuhmHwZ8="
   },
   {
     "pname": "Refit.Newtonsoft.Json",
-    "version": "15.2.0",
-    "hash": "sha256-35XeoCoQ7h4MG7I+EY7aJvcCen8/+U6Yidao5foKlRo="
+    "version": "16.3.0",
+    "hash": "sha256-goa8q0iUfjBuZbvbtAtMYzx7dB8SK7XQskYPzdFsSOo="
   },
   {
     "pname": "Refit.Xml",
-    "version": "15.2.0",
-    "hash": "sha256-0078wBZMm19Fu6znPBb/w2UJjij5GUVJbL9GamRhGJU="
+    "version": "16.3.0",
+    "hash": "sha256-TtskpG8J/a+mwxn+WNrNVXCe/brcC4r6lj2076Nc/Q8="
   },
   {
     "pname": "RichTextKit.Stbear",
@@ -846,13 +846,13 @@
   },
   {
     "pname": "Scalar.AspNetCore",
-    "version": "2.17.3",
-    "hash": "sha256-PBBhutn8yypFOCBUqH+Yawv/T3tftwF3aMigWe9NjDM="
+    "version": "2.17.14",
+    "hash": "sha256-AOtKz3UOvg9yVVLOZoZmU/zWm19Eu7DExPvuoCN5aSI="
   },
   {
     "pname": "Scriban.Signed",
-    "version": "7.4.0",
-    "hash": "sha256-I58gKe6MH5SnhYWpYVZHOshxhU2tPhxrHuOGRn6/Qpg="
+    "version": "7.5.0",
+    "hash": "sha256-nIukBHRZhlV4JylamnQMoXZu6Pl8z2PIakb9SFMGjVw="
   },
   {
     "pname": "Serilog",
@@ -920,11 +920,6 @@
     "hash": "sha256-LxZYUoUPkCjIIVarJilnXnqQiMrFNJtoRilmzTNtUjo="
   },
   {
-    "pname": "SixLabors.ImageSharp",
-    "version": "3.1.12",
-    "hash": "sha256-FR8v74w4P/1AZdW5ARW0y8zgDqLtvhxQmL1CKv68xR0="
-  },
-  {
     "pname": "SkiaSharp",
     "version": "2.88.0",
     "hash": "sha256-0YpAxE+MyEydxBSmI9zqqqSII2Qvp2gz9pVUcf1/DnM="
@@ -936,8 +931,8 @@
   },
   {
     "pname": "SkiaSharp",
-    "version": "4.152.0",
-    "hash": "sha256-7L1SyZOycaDXgNLrrjdQ3egtuhJlZOHLiqb8dZDtN5o="
+    "version": "4.153.1",
+    "hash": "sha256-nPD6aBIj1JVr+9N5lcnqqNJZk1rj0ZX6xoH/mk6cSBY="
   },
   {
     "pname": "SkiaSharp.HarfBuzz",
@@ -951,18 +946,18 @@
   },
   {
     "pname": "SkiaSharp.NativeAssets.Linux.NoDependencies",
-    "version": "4.152.0",
-    "hash": "sha256-xKHGZUSpzoqHWsdeCLqK2iuJ4M+5Vay//X0MQOCJcgE="
+    "version": "4.153.1",
+    "hash": "sha256-FnhXLdXRSIw/OYkkYL7BbCsJQkifOlFJq/vLrj2lNDE="
   },
   {
     "pname": "SkiaSharp.NativeAssets.macOS",
-    "version": "4.152.0",
-    "hash": "sha256-rYjYaFJyzh1MOm5UOAqUEFPvVPcPglaH8zuu/ja9tOE="
+    "version": "4.153.1",
+    "hash": "sha256-2olnSU6xHYgUlND9JWKJMXTpIFbUHCLJB7KjbK8QMsk="
   },
   {
     "pname": "SkiaSharp.NativeAssets.Win32",
-    "version": "4.152.0",
-    "hash": "sha256-d+lBv3Om6i3xS0kPaPGxp8ldcwhfQdM+At5aZdzyczI="
+    "version": "4.153.1",
+    "hash": "sha256-wnsEM40eTUAMIN5TQ1YxC5lx4SPggccyr5flb1Vy4a4="
   },
   {
     "pname": "SQLite",
@@ -1081,18 +1076,18 @@
   },
   {
     "pname": "Testably.Abstractions",
-    "version": "10.3.0",
-    "hash": "sha256-XnyIf1QZnlf7uBBAQZvxsP+ieSmSvehKr2sYUGYmvYI="
+    "version": "10.4.0",
+    "hash": "sha256-qLPZADsOH6zlCC0fbCdYyINVMPCfkU/JCz/MeyRI9Fs="
   },
   {
     "pname": "Testably.Abstractions.FileSystem.Interface",
-    "version": "10.3.0",
-    "hash": "sha256-uSzMsiXAKZK6NbwXa59zIbCkfI9qwuWsrm5yoLrheKU="
+    "version": "10.4.0",
+    "hash": "sha256-J5HDHSte+wKZIrVFfP71rjLsN8+jWJCmShX/S2kMiPI="
   },
   {
     "pname": "Testably.Abstractions.Interface",
-    "version": "10.3.0",
-    "hash": "sha256-8fLBbOXbvf5BuOeKdoe9dMxT+llxbEJNdr08p4r6tNc="
+    "version": "10.4.0",
+    "hash": "sha256-xxDNZQ/2ZfnmZpopoPN1ytgHvf1eLH9Y39yHbdZll6w="
   },
   {
     "pname": "TimeSpanParserUtil",
@@ -1111,8 +1106,8 @@
   },
   {
     "pname": "WebMarkupMin.Core",
-    "version": "2.21.0",
-    "hash": "sha256-k51tTFcdL9Bwsg3gA51ZswGxDtdBFb22BAj9wbyZu1E="
+    "version": "2.22.5",
+    "hash": "sha256-q77hyQkcY8r9eefX0sJfk80BaFCd7c+wf4xaKBvZd8k="
   },
   {
     "pname": "Winista.MimeDetect",
