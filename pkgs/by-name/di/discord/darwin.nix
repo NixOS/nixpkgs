@@ -141,7 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
     # wrap executable to $out/bin
     mkdir -p $out/bin
     makeWrapper "$out/Applications/${desktopName}.app/Contents/MacOS/${binaryName}" "$out/bin/${binaryName}" \
-      ${lib.strings.optionalString disableUpdates "--run ${lib.getExe finalAttrs.disableBreakingUpdates}"} \
+      ${lib.strings.optionalString disableUpdates "--run \"${lib.getExe finalAttrs.disableBreakingUpdates} &\""} \
       --run "${finalAttrs.stageModules} \"$out/share/${pname}/modules\" \"$out/share/${pname}/deltas.json\"" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
 

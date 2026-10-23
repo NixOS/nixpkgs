@@ -16,6 +16,7 @@ import json
 import os
 import sys
 from pathlib import Path
+from http.server import HTTPServer, SimpleHTTPRequestHandler
 
 config_home = os.environ.get("DISCORD_USER_DATA_DIR")
 if config_home is None:
@@ -44,22 +45,39 @@ if os.path.exists(settings_path):
 else:
     settings = {}
 
-# The module directory is pinned in the Nix store and cannot accept updates
-required_settings = {"SKIP_HOST_UPDATE": True, "SKIP_MODULE_UPDATE": True}
+class ManifestRequestHandler(SimpleHTTPRequestHandler):
+    def __init__(self, request, client_address, server):
+        super().__init__(request, client_address, server, directory="@serveDir@")
 
-missing_settings = {
-    key: value for key, value in required_settings.items() if settings.get(key) != value
-}
+try:
+    if sys.platform == "darwin":
+        httpd = HTTPServer(('localhost', 0), ManifestRequestHandler)
+        required_settings = {"NEW_UPDATE_ENDPOINT": f"http://localhost:{httpd.server_port}"}
+    else:
+        # The module directory is pinned in the Nix store and cannot accept updates
+        required_settings = {"SKIP_HOST_UPDATE": True, "SKIP_MODULE_UPDATE": True}
 
-if missing_settings:
-    settings.update(missing_settings)
+    missing_settings = {
+        key: value for key, value in required_settings.items() if settings.get(key) != value
+    }
 
-    os.makedirs(os.path.dirname(settings_path), exist_ok=True)
+    if missing_settings:
+        settings.update(missing_settings)
 
-    with settings_path_temp.open("w", encoding="utf-8") as settings_file_temp:
-        json.dump(settings, settings_file_temp, indent=2)
+        os.makedirs(os.path.dirname(settings_path), exist_ok=True)
 
-    settings_path_temp.rename(settings_path)
-    print("[Nix] Disabled updates")
-else:
-    print("[Nix] Disabling updates already done")
+        with settings_path_temp.open("w", encoding="utf-8") as settings_file_temp:
+            json.dump(settings, settings_file_temp, indent=2)
+
+        settings_path_temp.rename(settings_path)
+        print("[Nix] Disabled updates")
+    else:
+        print("[Nix] Disabling updates already done")
+
+    if sys.platform == "darwin":
+        print(f"[Nix] Awaiting latest manifest request at http://localhost:{httpd.server_port}")
+        httpd.handle_request()
+        print("[Nix] Served latest manifest request")
+finally:
+    if sys.platform == "darwin":
+        httpd.server_close()

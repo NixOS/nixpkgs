@@ -113,8 +113,46 @@ let
   );
 
   disableBreakingUpdates =
+    let
+      manifest = { url, hash }: {
+        full = {
+          inherit url;
+          host_version = hostVersion.version;
+          package_sha256 = builtins.convertHash {
+            inherit hash;
+            toHashFormat = "base16";
+          };
+        };
+        deltas = [ ];
+      };
+
+      moduleManifest =
+        _:
+        {
+          url,
+          hash,
+          version,
+        }:
+        lib.recursiveUpdate (manifest { inherit url hash; }) { full.module_version = version; };
+
+      serveDir = runCommand "discord-pinned-update" { } ''
+        mkdir -p "$out/distributions/app/manifests"
+        echo ${
+          lib.escapeShellArg (
+            builtins.toJSON (
+              manifest source.distro
+              // {
+                modules = builtins.mapAttrs moduleManifest source.modules;
+                required_modules = builtins.attrNames source.modules;
+              }
+            )
+          )
+        } > "$out/distributions/app/manifests/latest"
+      '';
+    in
     runCommand "disable-breaking-updates.py"
       {
+        inherit serveDir;
         pythonInterpreter = python3.interpreter;
         configDirName = lib.toLower binaryName;
         meta.mainProgram = "disable-breaking-updates.py";
