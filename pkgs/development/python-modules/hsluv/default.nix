@@ -6,7 +6,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hsluv";
   version = "5.0.5";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hsluv";
     repo = "hsluv-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-M2oELRuDwsFgmywtTLiTaL86ANh4gn9W7hwjDlgiMRo=";
   };
 
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python implementation of HSLuv";
     homepage = "https://github.com/hsluv/hsluv-python";
-    changelog = "https://github.com/hsluv/hsluv-python/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/hsluv/hsluv-python/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
