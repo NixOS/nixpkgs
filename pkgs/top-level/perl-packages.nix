@@ -22876,10 +22876,12 @@ with self;
     };
 
     makeMakerFlags = [ "MP_AP_DESTDIR=$out" ];
-    buildInputs = [ pkgs.apacheHttpd ];
+    nativeBuildInputs = [ pkgs.apacheHttpd ];
+    strictDeps = true;
     doCheck = false; # would try to start Apache HTTP server
     passthru.tests = nixosTests.mod_perl;
     __darwinAllowLocalNetworking = true;
+    __structuredAttrs = true;
     meta = {
       description = "Embed a Perl interpreter in the Apache/2.x HTTP server";
       license = lib.licenses.asl20;
