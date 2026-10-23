@@ -38586,15 +38586,20 @@ with self;
       url = "mirror://cpan/authors/id/M/MB/MBARBON/Wx-GLCanvas-0.09.tar.gz";
       hash = "sha256-atLCn/Bv+Apci0udHWvwrtV0iegxvlnJRJT09ojcj+A=";
     };
+    nativeBuildInputs = [
+      Wx
+    ];
     propagatedBuildInputs = [
       pkgs.libGLU
       Wx
     ];
+    strictDeps = true;
     # Build system attempts to compile c++ files with clang.
     preConfigure = ''
       export CC=$CXX
     '';
     doCheck = false;
+    __structuredAttrs = true;
     meta = {
       description = "wxPerl demo helper for Wx::GLCanvas";
       license = with lib.licenses; [
