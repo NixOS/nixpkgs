@@ -772,7 +772,7 @@ in
     services.kanidm = {
       unix.settings.version = "2";
       server.settings.version = "2";
-      server.settings.migration_path = entryManagementDir;
+      server.settings.migration_path = "${entryManagementDir}";
     };
 
     assertions =

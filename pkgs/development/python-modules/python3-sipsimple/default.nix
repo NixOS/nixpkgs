@@ -3,9 +3,9 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchurl,
-  fetchpatch,
   nix-update-script,
-  cython,
+  fetchpatch2,
+  cython_3_2,
   setuptools,
   alsa-lib,
   ffmpeg_7,
@@ -32,22 +32,22 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "python3-sipsimple";
-  version = "5.3.3.2";
+  version = "5.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AGProjects";
     repo = "python3-sipsimple";
-    tag = "${finalAttrs.version}-mac";
-    hash = "sha256-kDXVzLmgfXxm8phKrV7DvPuZ9O2iNFo1s6Lc0jcc/dM=";
+    tag = "release-${finalAttrs.version}";
+    hash = "sha256-VNlIrij9MVVIYClt20+jBjGNSAWcUP87NgEJOGM+/Xo=";
   };
 
-  patches = [
-    # Remove when version > 5.3.3.2-mac
-    (fetchpatch {
-      name = "0001-python3-sipsimple-port-to-cython-3.patch";
-      url = "https://github.com/AGProjects/python3-sipsimple/commit/ccbbbb0225b2417bdf6ae07da96bffe367e242be.patch";
-      hash = "sha256-MBiM9/yS5yX9QoZT7p76PI2rbBr22fZw6TAT4tw9iZk=";
+  # TODO: remove on next release
+  patches = lib.optionals (lib.compareVersions finalAttrs.version "5.6.3" == -1) [
+    (fetchpatch2 {
+      name = "make-build-work-without-G729-headers.patch";
+      url = "https://github.com/AGProjects/python3-sipsimple/commit/99ffc170136b92c2b6989f1f33ae6b15dc1d44a3.patch?full_index=1";
+      hash = "sha256-emfRPQO+g5W6gsrnBNsAQNhCx0Xbep+eFjl1bcAQ9XM=";
     })
   ];
 
@@ -55,16 +55,23 @@ buildPythonPackage (finalAttrs: {
     substituteInPlace get_dependencies.sh \
       --replace-fail 'sudo apt' 'echo Skipping sudo apt'
 
-    substituteInPlace sipsimple/__info__.py \
-      --replace-fail '__version__ = "5.3.3"' '__version__ = "${finalAttrs.version}"'
+    sed -i \
+      's/__version__ = ".*"/__version__ = "${finalAttrs.version}"/' \
+      sipsimple/__info__.py
   '';
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=implicit-function-declaration"
+    "-Wno-error=incompatible-pointer-types"
+    "-Wno-error=int-conversion"
+  ];
 
   nativeBuildInputs = [
     pkg-config
   ];
 
   build-system = [
-    cython
+    cython_3_2
     setuptools
   ];
 
@@ -111,29 +118,20 @@ buildPythonPackage (finalAttrs: {
   passthru = {
     updateScript = nix-update-script {
       extraArgs = [
-        "--version-regex"
-        "^(.*)-mac$"
+        "--version=branch"
+        # "--version-regex"
+        # "^release-(.*)$"
       ];
     };
     extDeps = {
       pjsip = rec {
         # Hardcoded in get_dependencies.sh, checked at buildtime
         # need tarball specifically for buildscript to detect it
-        version = "2.10";
+        version = "2.17";
         src = fetchurl {
           url = "https://github.com/pjsip/pjproject/archive/${version}.tar.gz";
-          hash = "sha256-k2pMW5hgG1IyVGOjl93xGrQQbGp7BPjcfN03fvu1l94=";
+          hash = "sha256-Bl/gbAZ4jZfDX1Y3ltWfAM5S/pVYpS17SQoEKpZvrM4=";
         };
-        patches = [
-          # Backported https://github.com/pjsip/pjproject/commit/4a8d180529d6ffb0760838b1f8cadc4cb5f7ac03
-          ./pjsip-0001-NEON.patch
-
-          # Backported https://github.com/pjsip/pjproject/commit/f56fd48e23982c47f38574a3fd93ebf248ef3762
-          ./pjsip-0002-RISC-V.patch
-
-          # Backported https://github.com/pjsip/pjproject/commit/f94b18ef6e0c0b5d34eb274f85ac0a3b2cf9107a
-          ./pjsip-0003-LoongArch64.patch
-        ];
       };
       zrtpcpp = rec {
         # Hardcoded in get_dependencies.sh, NOT checked at buildtime
@@ -156,6 +154,7 @@ buildPythonPackage (finalAttrs: {
     description = "SIP SIMPLE SDK written in Python";
     homepage = "https://sipsimpleclient.org/";
     downloadPage = "https://github.com/AGProjects/python3-sipsimple";
+    changelog = "https://github.com/AGProjects/python3-sipsimple/blob/${finalAttrs.src.rev}/debian/changelog";
     license = lib.licenses.gpl3Plus;
     teams = [ lib.teams.ngi ];
     maintainers = [ lib.maintainers.ethancedwards8 ];

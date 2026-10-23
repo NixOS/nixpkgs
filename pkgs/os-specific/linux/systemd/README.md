@@ -56,9 +56,7 @@ diff --git i/pkgs/top-level/all-packages.nix w/pkgs/top-level/all-packages.nix
 index 0e2defb6566c..c60c1f201828 100644
 --- i/pkgs/top-level/all-packages.nix
 +++ w/pkgs/top-level/all-packages.nix
-@@ -8538,6 +8538,10 @@ with pkgs;
-
-   libsysprof-capture = callPackage ../by-name/sy/sysprof/capture.nix { };
+@@ -8538,4 +8538,8 @@ with pkgs;
 
 +  systemdTest = callPackage ../../../systemd-changes/pkgs/os-specific/linux/systemd {
 +    # break some cyclic dependencies

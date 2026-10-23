@@ -3257,7 +3257,8 @@
       ];
     "indi_allsky" =
       ps: with ps; [
-      ]; # missing inputs: aioindiallsky
+        aioindiallsky
+      ];
     "indianamichiganpower" =
       ps: with ps; [
       ];
@@ -3544,11 +3545,12 @@
       ps:
       with ps;
       [
+        kaco-modbus
         modbus-connection
         pymodbus
         tmodbus
       ]
-      ++ modbus-connection.optional-dependencies.tmodbus; # missing inputs: kaco-modbus
+      ++ modbus-connection.optional-dependencies.tmodbus;
     "kaiser_nienhaus" =
       ps: with ps; [
       ];
@@ -8901,6 +8903,7 @@
     "improv_ble"
     "incomfort"
     "indevolt"
+    "indi_allsky"
     "inels"
     "influxdb"
     "infrared"
@@ -8943,6 +8946,7 @@
     "juicenet"
     "justnimbus"
     "jvc_projector"
+    "kaco_modbus"
     "kaleidescape"
     "karakeep"
     "keenetic_ndms2"

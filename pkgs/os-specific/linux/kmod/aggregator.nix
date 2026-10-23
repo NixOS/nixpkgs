@@ -11,6 +11,11 @@ buildEnv {
 
   paths = modules;
 
+  pathsToLink = [
+    "/lib/modules"
+    "/etc/depmod.d"
+  ];
+
   postBuild = ''
     source ${stdenvNoCC}/setup
 

@@ -30,6 +30,7 @@ in
           p:
           wayland-lib.genFinalPackage p {
             enableXWayland = cfg.xwayland.enable;
+            withUWSM = cfg.withUWSM;
           };
       };
 

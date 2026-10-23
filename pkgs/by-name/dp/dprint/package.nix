@@ -14,7 +14,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dprint";
-  version = "0.61.1";
+  version = "0.64.1";
   __structuredAttrs = true;
 
   # Prefer repository rather than crate here
@@ -24,10 +24,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "dprint";
     repo = "dprint";
     tag = finalAttrs.version;
-    hash = "sha256-MEcz5dmCp7pzxJOlU/2+1+60KB2XkFN7dtBMZaEpvVk=";
+    hash = "sha256-LO6l6oJ1mU0oo5kDIJlOk9QEH5i2vyAdkaAkol2NITk=";
   };
 
-  cargoHash = "sha256-Dha+M4WbGPx3WXSD9LLIjgL6HAxRFklafSgb9m7Fbow=";
+  cargoHash = "sha256-oz7Y31PncII6J/XoKHwmvhvvX5F7lBHRBpwxfV9zI6g=";
 
   nativeBuildInputs = [
     installShellFiles

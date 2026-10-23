@@ -61,5 +61,9 @@ stdenv.mkDerivation (finalAttrs: {
       panicgh
     ];
     platforms = lib.platforms.linux;
+
+    # Build failure in old version of vendored sqlite3
+    # https://github.com/eProsima/Fast-DDS/issues/6570
+    broken = stdenv.hostPlatform.isAarch64;
   };
 })

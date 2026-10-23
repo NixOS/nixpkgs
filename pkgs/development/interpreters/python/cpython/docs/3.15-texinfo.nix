@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation {
   pname = "python315-docs-texinfo";
-  version = "3.15.0";
+  version = "3.15.1";
 
   src = fetchurl {
-    url = "https://www.python.org/ftp/python/doc/3.15.0/python-3.15.0-docs-texinfo.tar.bz2";
-    sha256 = "sha256-i29rSfsJphTqhk1c4gNg75mYhyZOoUgCJ46KOMS8m3U=";
+    url = "https://www.python.org/ftp/python/doc/3.15.1/python-3.15.1-docs-texinfo.tar.bz2";
+    sha256 = "sha256-88SjySgcXxo1eDBbZtzmkZLXf6fVGCL6eRqQaHm+sNQ=";
   };
   installPhase = ''
     mkdir -p $out/share/info

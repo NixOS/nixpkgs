@@ -38,6 +38,18 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-vS0ZxLPKcjRzu5QaFApOVYNO5LBNQjop8wzmdEVdMC8=";
   };
 
+  # jax>=0.12 no longer supports 2D vectors in jnp.cross
+  # ValueError: Dimension must be 3 for cross product
+  postPatch = ''
+    substituteInPlace waymax/metrics/roadgraph.py \
+      --replace-fail \
+        "jnp.cross(points_to_edge, nearest_vector_xys)" \
+        "(points_to_edge[..., 0] * nearest_vector_xys[..., 1] - points_to_edge[..., 1] * nearest_vector_xys[..., 0])" \
+      --replace-fail \
+        "jnp.cross(points_to_edge, prior_vector_xys)" \
+        "(points_to_edge[..., 0] * prior_vector_xys[..., 1] - points_to_edge[..., 1] * prior_vector_xys[..., 0])"
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [
