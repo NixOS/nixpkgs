@@ -26,6 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
     NIX_LDFLAGS = "-lstdthreads";
   };
 
+  __structuredAttrs = true;
+
   meta = {
     changelog = "https://github.com/intel/libipt/releases/tag/v${finalAttrs.version}";
     description = "Intel Processor Trace decoder library";
