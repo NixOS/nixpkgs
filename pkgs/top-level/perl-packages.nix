@@ -38758,7 +38758,8 @@ with self;
       url = "https://oligarchy.co.uk/xapian/${version}/xapian-bindings-${version}.tar.xz";
       sha256 = "1fhq6rydjymmyn79cdza0j4rmlizrrwmf5mx276rlmwyh085wfxs";
     };
-    buildInputs = [ pkgs.xapian ];
+    nativeBuildInputs = [ pkgs.xapian ];
+    strictDeps = true;
     preConfigure = ''
       # FIXME: doesn't work for cross
       export PERL_LIB="$out/lib/perl5/site_perl/${perl.version}"
@@ -38773,6 +38774,7 @@ with self;
     checkPhase = null;
     checkTarget = "check";
     installPhase = null;
+    __structuredAttrs = true;
     meta = {
       description = "Bindings allowing Xapian to be used from Perl";
       homepage = "https://xapian.org";
