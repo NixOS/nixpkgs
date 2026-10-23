@@ -30,5 +30,7 @@ buildPythonPackage (finalAttrs: {
     mainProgram = "asn1ate";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+    # builds fine but fails to parse most ASN.1 files at runtime
+    broken = true;
   };
 })
