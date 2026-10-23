@@ -2,8 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchPypi,
-  fetchpatch,
+  fetchFromGitHub,
 
   # build-system, dependencies
   meson,
@@ -18,15 +17,17 @@
   pytest-mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "meson-python";
   version = "0.22.1";
   pyproject = true;
+  __structuredAttrs = true;
 
-  src = fetchPypi {
-    inherit version;
-    pname = "meson_python";
-    hash = "sha256-UsiGKLDlZxWS3CMGYT+19vNhX9JN7wWbmJTxQ7f5oTk=";
+  src = fetchFromGitHub {
+    owner = "mesonbuild";
+    repo = "meson-python";
+    tag = finalAttrs.version;
+    hash = "sha256-m3CRK1CGuH62/jRCXqUEHSTs1RuogXWnWjutjmz5uF8=";
   };
 
   build-system = [
@@ -64,11 +65,11 @@ buildPythonPackage rec {
   setupHooks = [ ./add-build-flags.sh ];
 
   meta = {
-    changelog = "https://github.com/mesonbuild/meson-python/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/mesonbuild/meson-python/blob/${finalAttrs.version}/CHANGELOG.rst";
     description = "Meson Python build backend (PEP 517)";
     homepage = "https://github.com/mesonbuild/meson-python";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];
     teams = [ lib.teams.python ];
   };
-}
+})
