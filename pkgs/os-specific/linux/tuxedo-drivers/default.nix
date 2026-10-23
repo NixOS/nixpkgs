@@ -69,7 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
       aprl
       blanky0230
       keksgesicht
-      xaverdh
       XBagon
       wetisobe
     ];
