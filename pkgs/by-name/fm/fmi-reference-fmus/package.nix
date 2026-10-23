@@ -15,12 +15,12 @@ assert lib.asserts.assertMsg (
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "reference-fmus";
-  version = "0.0.41";
+  version = "0.0.42";
   src = fetchFromGitHub {
     owner = "modelica";
     repo = "reference-fmus";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-RI57hQqoWtOwUEDfEzPk8sZZ2imiDhbKZj4FHdvOvNY=";
+    hash = "sha256-lJODxTu346n4/BE1EYJr4vzCnAcqpEZlfHA2LZb/Lm8=";
   };
 
   nativeBuildInputs = [ cmake ];
