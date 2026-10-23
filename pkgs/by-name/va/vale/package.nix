@@ -5,11 +5,10 @@
   makeBinaryWrapper,
   symlinkJoin,
   versionCheckHook,
-  vale,
   valeStyles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "vale";
   version = "3.17.1";
 
@@ -18,7 +17,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "vale-cli";
     repo = "vale";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-KSfbqQRv7sLmTHXuyGiG2mUV3g1JByOy3al5wP4JJVg=";
   };
 
@@ -26,7 +25,7 @@ buildGoModule rec {
 
   ldflags = [
     "-s"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   # Tests require network access
@@ -38,16 +37,14 @@ buildGoModule rec {
   passthru.withStyles =
     selector:
     symlinkJoin {
-      name = "vale-with-styles-${vale.version}";
-      paths = [ vale ] ++ selector valeStyles;
+      name = "vale-with-styles-${finalAttrs.version}";
+      paths = [ finalAttrs.finalPackage ] ++ selector valeStyles;
       nativeBuildInputs = [ makeBinaryWrapper ];
       postBuild = ''
         wrapProgram "$out/bin/vale" \
           --set VALE_STYLES_PATH "$out/share/vale/styles/"
       '';
-      meta = {
-        inherit (vale.meta) mainProgram;
-      };
+      meta.mainProgram = finalAttrs.meta.mainProgram;
     };
 
   meta = {
@@ -61,9 +58,9 @@ buildGoModule rec {
       ```
     '';
     homepage = "https://vale.sh/";
-    changelog = "https://github.com/vale-cli/vale/releases/tag/v${version}";
+    changelog = "https://github.com/vale-cli/vale/releases/tag/v${finalAttrs.version}";
     mainProgram = "vale";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pbsds ];
   };
-}
+})
