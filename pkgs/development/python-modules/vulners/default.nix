@@ -24,7 +24,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "vulners";
-  version = "4.3.0";
+  version = "4.4.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -33,7 +33,7 @@ buildPythonPackage (finalAttrs: {
     owner = "vulnersCom";
     repo = "api";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SoU1I+3ERHCKrsb4ej+X5JIoaoWtGyJCXw1rnQ6MeNk=";
+    hash = "sha256-yI8CvSRpxX2O1BWe1rV340xmR8Bmd6Wue2dLj6JaQOA=";
   };
 
   postPatch = ''
