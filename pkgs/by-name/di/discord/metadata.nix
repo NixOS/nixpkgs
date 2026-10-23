@@ -93,10 +93,20 @@ lib.genAttrs [ "discord" "discord-ptb" "discord-canary" "discord-development" ] 
     args = (variants.${stdenv.hostPlatform.system} or variants.default).${pname};
     platformName = if stdenv.hostPlatform.isDarwin then "osx" else "linux";
     source = sources."${platformName}-${args.branch}";
+
+    hostVersion = {
+      host = {
+        name = "app";
+        release_channel = args.branch;
+        platform = platformName;
+        arch = if stdenv.hostPlatform.isAarch64 then "arm64" else "x86_64";
+      };
+      version = map lib.toInt (lib.splitString "." source.version);
+    };
   in
   args
   // {
-    inherit source;
+    inherit source hostVersion;
     meta = meta // {
       mainProgram = args.binaryName;
     };
