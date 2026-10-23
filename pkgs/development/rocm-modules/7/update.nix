@@ -53,11 +53,11 @@ let
     >&2 echo parsed version "$version_arr" from "$version"
 
     if (( ''${version_arr[0]} > 7 )); then
-      echo "'rocmPackages.${pname}' is already at its maximum allowed version.''\nAny further upgrades should go into 'rocmPackages_X.${pname}'." >&2
+      echo "'rocmPackages_7.${pname}' is already at its maximum allowed version.''\nAny further upgrades should go into 'rocmPackages_X.${pname}'." >&2
       exit 1
     fi
 
-    update-source-version rocmPackages.${pname} "$version" --ignore-same-hash
+    update-source-version rocmPackages_7.${pname} "$version" --ignore-same-hash
   '';
 in
 [ updateScript ]

@@ -1,0 +1,23 @@
+diff --git a/lib/Driver/ToolChains/Linux.cpp b/lib/Driver/ToolChains/Linux.cpp
+index 57368104c914..71c57f72078e 100644
+--- a/lib/Driver/ToolChains/Linux.cpp
++++ b/lib/Driver/ToolChains/Linux.cpp
+@@ -640,6 +640,7 @@ void Linux::AddClangSystemIncludeArgs(const ArgList &DriverArgs,
+     return;
+ 
+   // LOCAL_INCLUDE_DIR
++  if (!SysRoot.empty())
+   addSystemInclude(DriverArgs, CC1Args, concat(SysRoot, "/usr/local/include"));
+   // TOOL_INCLUDE_DIR
+   AddMultilibIncludeArgs(DriverArgs, CC1Args);
+@@ -672,8 +673,10 @@ void Linux::AddClangSystemIncludeArgs(const ArgList &DriverArgs,
+   // Add an include of '/include' directly. This isn't provided by default by
+   // system GCCs, but is often used with cross-compiling GCCs, and harmless to
+   // add even when Clang is acting as-if it were a system compiler.
++  if (!SysRoot.empty())
+   addExternCSystemInclude(DriverArgs, CC1Args, concat(SysRoot, "/include"));
+ 
++  if (!SysRoot.empty())
+   addExternCSystemInclude(DriverArgs, CC1Args, concat(SysRoot, "/usr/include"));
+ 
+   if (!DriverArgs.hasArg(options::OPT_nobuiltininc) && getTriple().isMusl())
