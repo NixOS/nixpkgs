@@ -2,10 +2,13 @@
   lib,
   fetchFromGitHub,
   buildNpmPackage,
+  buildPackages,
   callPackage,
   nodejs_24,
-  ffmpeg_8-full,
+  nodejs-slim_24,
+  ffmpeg_8-headless,
   nunicode,
+  sqlite,
   typescript_5,
   jq,
   nixosTests,
@@ -33,16 +36,27 @@ buildNpmPackage (finalAttrs: {
     jq
   ];
 
+  buildInputs = [
+    nodejs-slim_24
+    sqlite
+  ];
+
+  inherit (buildPackages.npmHooks.override { nodejs = nodejs-slim_24; }) npmInstallHook;
+
+  npmInstallFlags = [
+    "--omit=dev"
+    "--omit=optional"
+  ];
+  npmRebuildFlags = [ "--sqlite=${lib.getDev sqlite}" ];
   npmBuildScript = "build:server";
-  npmInstallFlags = [ "--omit=dev" ];
 
   makeWrapperArgs = [
     "--set"
     "FFMPEG_PATH"
-    (lib.getExe ffmpeg_8-full)
+    (lib.getExe ffmpeg_8-headless)
     "--set"
     "FFPROBE_PATH"
-    (lib.getExe' ffmpeg_8-full "ffprobe")
+    (lib.getExe' ffmpeg_8-headless "ffprobe")
     "--set"
     "NODE_ENV"
     "production"
@@ -60,6 +74,20 @@ buildNpmPackage (finalAttrs: {
     "nixpkgs"
   ];
 
+  preInstall = ''
+    rm -r \
+      node_modules/{.bin,@types} \
+      node_modules/sqlite3/{binding.gyp,deps,src} \
+      node_modules/sqlite3/build/{Makefile,binding.Makefile,config.gypi,node_sqlite3.target.mk} \
+      node_modules/sqlite3/build/Release/{.deps,obj.target}
+
+    shopt -s globstar
+    rm node_modules/**/*.{map,ts,mts,cts}
+    shopt -u globstar
+
+    patchShebangs --host --update node_modules
+  '';
+
   installPhase = ''
     runHook preInstall
 
@@ -74,6 +102,8 @@ buildNpmPackage (finalAttrs: {
 
     runHook postInstall
   '';
+
+  disallowedReferences = [ finalAttrs.nodejs ];
 
   passthru = {
     client = callPackage ./client.nix {
