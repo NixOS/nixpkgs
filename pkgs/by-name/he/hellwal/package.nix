@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   makeWrapper,
+  nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hellwal";
@@ -19,6 +20,9 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/share/docs/hellwal
     cp -r templates themes $out/share/docs/hellwal
   '';
+  passthru = {
+    updateScript = nix-update-script { };
+  };
   meta = {
     homepage = "https://github.com/danihek/hellwal";
     description = "Fast, extensible color palette generator";
