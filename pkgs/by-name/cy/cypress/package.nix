@@ -19,15 +19,15 @@ let
   availableBinaries = {
     x86_64-linux = {
       platform = "linux-x64";
-      hash = "sha256-dChV9fpt5LGvc/C///EhfZtX5fi5XI/6tLlZ2bBpFdw=";
+      hash = "sha256-Dngj14heqL5h9RVIW7L1Js6FVWCSqt25RTDoB7MPhs0=";
     };
     aarch64-linux = {
       platform = "linux-arm64";
-      hash = "sha256-X8IZMCP/15mEEkCeOoxd/bGOVTQQniS5WjM28CwsES4=";
+      hash = "sha256-MYcp9VpiFDYvb86aGjPmAvij+Vtu8epBvJk4U6Z+tnM=";
     };
     aarch64-darwin = {
       platform = "darwin-arm64";
-      hash = "sha256-hi3Za1TflGJbT5bDTka66qROKSalq1FpLm2KHbxeXLc=";
+      hash = "sha256-CjfdDau1dN27MuBzshFMThIfEMqgRIYrQ8BaLFnidKc=";
     };
   };
   inherit (stdenv.hostPlatform) system;
@@ -37,7 +37,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cypress";
-  version = "16.1.0";
+  version = "16.2.0";
 
   src = fetchzip {
     url = "https://cdn.cypress.io/desktop/${finalAttrs.version}/${platform}/cypress.zip";
