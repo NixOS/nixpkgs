@@ -8,18 +8,15 @@
   flask,
   httpx2,
   joserfc,
-  mock,
   django,
   anyio,
   pytest-django,
   pytest-asyncio,
   pycryptodomex,
   pytestCheckHook,
-  python-multipart,
   requests,
   setuptools,
   starlette,
-  werkzeug,
 }:
 
 buildPythonPackage (finalAttrs: {
