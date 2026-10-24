@@ -22,8 +22,15 @@ let
     hash = "sha256-Jw9GXD0RFFPkqhJuNZaooxIHVDt1ti0a4g863jIwtkY=";
   };
 
+  cargoPatches = [
+    # TODO: remove once upstream updates webpki
+    #  rustls-webpki 0.103.15 -> 0.103.16
+    #  webpki-root 1.0.9 -> 1.0.10
+    ./update-webpki.patch
+  ];
+
   pnpm-hash = "sha256-YoBmnZyDw245D4xI3emfScE4tbaaG5GYi+DYPM8kXfQ=";
-  vendor-hash = "sha256-EHsGCrphP6SRQ04Q0sIh8CmzMwbvqDQeiL44ItBGIaM=";
+  vendor-hash = "sha256-ANS0FA/RYtBY1tBivQOTENFH6uSwX6lKKLWr89Fo1nE=";
 
   service = callPackage ./service.nix {
     inherit
@@ -36,6 +43,7 @@ let
       pname
       version
       src
+      cargoPatches
       pnpm-hash
       vendor-hash
       meta
