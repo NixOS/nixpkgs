@@ -28371,10 +28371,10 @@ with self;
 
   PerlLanguageServer = buildPerlPackage {
     pname = "Perl-LanguageServer";
-    version = "2.6.1";
+    version = "2.6.2";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GR/GRICHTER/Perl-LanguageServer-2.6.1.tar.gz";
-      hash = "sha256-IDM0uwsEXMeHAu9DA0CdCB87aN3XRoNEdGOIJ8NMsZg=";
+      url = "mirror://cpan/authors/id/G/GR/GRICHTER/Perl-LanguageServer-2.6.2.tar.gz";
+      hash = "sha256-bQk3kK/nBOvdjH4SnI8GA1LvgULb2884cnZnCzWAvWo=";
     };
     propagatedBuildInputs = [
       AnyEvent
