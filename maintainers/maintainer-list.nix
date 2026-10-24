@@ -31284,6 +31284,13 @@
     githubId = 209139160;
     name = "VnPower";
   };
+  vo1dsh4d0w = {
+    email = "filipmyslinski2006@gmail.com";
+    github = "Vo1dSh4d0w";
+    githubId = 97691234;
+    name = "Filip Myslinski";
+    keys = [ { fingerprint = "B597 ADEF D7C5 86E2 8B2C  B32B 4A9B F48F F826 4B8D"; } ];
+  };
   vog = {
     email = "v@njh.eu";
     github = "vog";
