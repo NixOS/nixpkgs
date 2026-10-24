@@ -104,22 +104,26 @@ addEntry() {
     echo "  INITRD ../nixos/$(basename $initrd)"
     echo "  APPEND init=$path/init $extraParams"
 
-    if [ -n "$noDeviceTree" ]; then
-        return
+    if [ -z "$noDeviceTree" ] ; then
+        if [ -d "$dtbDir" ]; then
+            # if a dtbName was specified explicitly, use that, else use FDTDIR
+            if [ -n "$dtbName" ]; then
+                echo "  FDT ../nixos/$(basename $dtbs)/${dtbName}"
+            else
+                echo "  FDTDIR ../nixos/$(basename $dtbs)"
+            fi
+        else
+            if [ -n "$dtbName" ]; then
+                echo "Explicitly requested dtbName $dtbName, but there's no FDTDIR - bailing out." >&2
+                exit 1
+            fi
+        fi
     fi
 
-    if [ -d "$dtbDir" ]; then
-        # if a dtbName was specified explicitly, use that, else use FDTDIR
-        if [ -n "$dtbName" ]; then
-            echo "  FDT ../nixos/$(basename $dtbs)/${dtbName}"
-        else
-            echo "  FDTDIR ../nixos/$(basename $dtbs)"
-        fi
-    else
-        if [ -n "$dtbName" ]; then
-            echo "Explicitly requested dtbName $dtbName, but there's no FDTDIR - bailing out." >&2
-            exit 1
-        fi
+    if [ -d $path/specialisation ]; then
+        for link in $((ls -d $path/specialisation/* ) | sort -n); do
+            addEntry $link "$tag-$(basename $link)"
+        done
     fi
 }
 
