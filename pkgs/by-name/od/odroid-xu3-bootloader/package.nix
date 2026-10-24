@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  pkgsCross,
   coreutils,
   ubootOdroidXU3,
   runtimeShell,
@@ -21,7 +22,12 @@ stdenv.mkDerivation {
   buildCommand = ''
     install -Dm644 -t $out/lib/sd_fuse-xu3 $src/sd_fuse/hardkernel_1mb_uboot/{bl2,tzsw}.*
     install -Dm644 -t $out/lib/sd_fuse-xu3 $src/sd_fuse/hardkernel/bl1.*
-    ln -sf ${ubootOdroidXU3}/u-boot-dtb.bin $out/lib/sd_fuse-xu3/u-boot-dtb.bin
+    ln -sf ${
+      if stdenv.targetPlatform.system == "armv7l-linux" then
+        ubootOdroidXU3
+      else
+        pkgsCross.armv7l-hf-multiplatform.ubootOdroidXU3
+    }/u-boot-dtb.bin $out/lib/sd_fuse-xu3/u-boot-dtb.bin
 
     install -Dm755 $src/sd_fuse/hardkernel_1mb_uboot/sd_fusing.1M.sh $out/bin/sd_fuse-xu3
     sed -i \
