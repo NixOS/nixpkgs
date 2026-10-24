@@ -3,6 +3,7 @@
   SDL2,
   autoreconfHook,
   fetchFromGitHub,
+  fetchpatch,
   libGLU,
   libx11,
   pkg-config,
@@ -19,6 +20,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "ARANYM_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     hash = "sha256-dtcLIA1oC6sPOeGTRmXhMEbuLan9/JWTbQvO5lp3gKo=";
   };
+
+  patches = [
+   (fetchpatch {
+      name = "fix-menu-flicker";
+      url = "https://github.com/aranym/aranym/commit/dbead3155c4ca9f26898b597438a6b2497c99136.patch";
+      hash = "sha256-hC8WjQs/NCA1L25ERub6+MmfkOOuYA6aNufskhPXUrc=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
