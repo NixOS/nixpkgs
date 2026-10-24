@@ -3,6 +3,7 @@
   stdenv,
   llvmPackages,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   pkg-config,
   boxed-cpp,
@@ -29,14 +30,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "contour";
-  version = "0.7.0.8982";
+  version = "0.8.0.9335";
 
   src = fetchFromGitHub {
     owner = "contour-terminal";
     repo = "contour";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sY3qNaYsoYY6Ox5W7F2WHFHId89WbeGJ4fWs2PFQmNk=";
+    hash = "sha256-WIBAIzHskEoxijHIIGm+NQ0jfvbnwyES1tiTfnetTxs=";
   };
+
+  patches = [
+    # fix undefined references to YAMLConfigReader::loadFromEntry<Enum> at link time when gcc inlines them
+    (fetchpatch2 {
+      name = "config-define-config-enum-reader-in-header.patch";
+      url = "https://github.com/contour-terminal/contour/commit/e63db64edeb8f922bbf50d03c5ea7556407b80ac.patch";
+      hash = "sha256-fZVHUnb9azQRoQKyZ4HumSPMlSdIkw3zB8X6lVpe3EQ=";
+    })
+  ];
 
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     NIX_LDFLAGS = "-L${lib.getLib llvmPackages.libcxx}/lib";
@@ -48,11 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DCONTOUR_MACOS_DEPLOY=OFF"
-  ];
-
-  patches = lib.optionals stdenv.hostPlatform.isDarwin [
-    ./link-qtquick.patch
-    ./macos-deploy-toggle.patch
   ];
 
   outputs = [
