@@ -13,7 +13,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "addonforge";
-  version = "0.3.0-b17";
+  version = "0.3.0-b18";
 
   __structuredAttrs = true;
 
@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "Topher121";
     repo = "AddonForge";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fSIluQj9RkXOhAyBj60E9Ns+tfe1J9nH5klfrLcbjKM=";
+    hash = "sha256-hAod8pVCJP/ytMm4oRj6srwb6xjGO4ceJgZvjMOmFcM=";
   };
 
   cargoHash = "sha256-CXtRuzhtnZcDTnkQB+onwm30gQRzTxVQGRp36l78iWc=";
