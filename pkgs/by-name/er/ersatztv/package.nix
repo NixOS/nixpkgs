@@ -9,13 +9,13 @@
 
 buildDotnetModule rec {
   pname = "ersatztv";
-  version = "26.11.1";
+  version = "26.11.3";
 
   src = fetchFromGitHub {
     owner = "ErsatzTV";
     repo = "legacy";
     rev = "v${version}";
-    sha256 = "sha256-Yh+mtQ1jhRX6FPYRgqqGzUeo9RSW3P/RNSMU612SyG4=";
+    sha256 = "sha256-q2eZn6TPCt/F4QV3Yde7Fy4J62CQjJam1LaEZvIrNtc=";
   };
   postPatch = ''
     # Remove config of development tools that don't end up in
