@@ -21009,6 +21009,13 @@
     githubId = 34162313;
     name = "Jason Wing";
   };
+  netflate = {
+    email = "netflate@gmail.com";
+    github = "Netflate";
+    githubId = 143764463;
+    name = "Netflate";
+    matrix = "@netflate:matrix.org";
+  };
   netfox = {
     name = "netfox";
     email = "say-hi@netfox.rip";
