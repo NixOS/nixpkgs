@@ -682,7 +682,6 @@ in
   meta = {
     maintainers = with lib.maintainers; [
       nh2
-      benaryorg
     ];
   };
 
