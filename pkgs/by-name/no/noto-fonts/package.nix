@@ -77,6 +77,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
             install -m444 -Dt $out_font fonts/"$variant"/unhinted/ttf/*.ttf
           fi
         done
+        # Install only the fontconfig rules matching the requested font variants
         ${lib.concatMapStringsSep "\n" (
           variant:
           let
