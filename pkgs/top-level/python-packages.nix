@@ -18772,6 +18772,8 @@ self: super: with self; {
 
   schwifty = callPackage ../development/python-modules/schwifty { };
 
+  schwimmbad = callPackage ../development/python-modules/schwimmbad { };
+
   scienceplots = callPackage ../development/python-modules/scienceplots { };
 
   sciform = callPackage ../development/python-modules/sciform { };
