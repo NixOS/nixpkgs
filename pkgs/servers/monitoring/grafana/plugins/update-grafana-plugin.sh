@@ -35,8 +35,11 @@ update() {
     update-source-version $system "grafanaPlugins.${plugin_name}" "$latest_version" "$hash"
 }
 
-if echo "$api_response" | jq -e '.packages | select(length == 1) | .any' > /dev/null; then
-    # the package only contains an "any" package, so there should be only one zipHash.
+src_url="$(nix-instantiate --eval -A "grafanaPlugins.${plugin_name}.src.url")"
+readonly src_url
+
+if [[ "$src_url" != *"?os="* ]]; then
+    # the package has a single zipHash, which must be the hash of the "any" package.
     update "any"
 else
     update "linux-amd64" "x86_64-linux"
