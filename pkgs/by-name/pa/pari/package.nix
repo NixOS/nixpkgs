@@ -15,7 +15,7 @@ assert withThread -> libpthread-stubs != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pari";
-  version = "2.17.3";
+  version = "2.17.4";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
       # old versions are at the url below
       "https://pari.math.u-bordeaux.fr/pub/pari/OLD/${lib.versions.majorMinor finalAttrs.version}/pari-${finalAttrs.version}.tar.gz"
     ];
-    hash = "sha256-jZxPzVhMRo0n4PI8NoNlhyhEUglMSxxATCDEuBBGLcs=";
+    hash = "sha256-AmUdmcORAH04Sz+tvCCrxpFrdwNvnklsmenOhojKS1M=";
   };
 
   buildInputs = [
