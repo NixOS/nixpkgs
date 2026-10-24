@@ -18409,12 +18409,15 @@ with self;
 
     buildInputs = [ FileWhich ];
     propagatedBuildInputs = [ Inline ];
+    strictDeps = true;
 
     # TODO: upgrade https://github.com/NixOS/nixpkgs/pull/89731
     makeMakerFlags = [ "J2SDK=${pkgs.jdk8}" ];
 
     # FIXME: Apparently tests want to access the network.
     doCheck = false;
+
+    __structuredAttrs = true;
 
     meta = {
       description = "Write Perl classes in Java";
