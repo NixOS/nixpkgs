@@ -1,0 +1,2738 @@
+From 9d4d6869d038e654ff712d14af4987aca3c8a99b Mon Sep 17 00:00:00 2001
+From: comonad <comonad@a-stable.com>
+Date: Wed, 1 Apr 2026 14:17:56 +0800
+Subject: [PATCH 6/6] rust: squash let-chain compatibility fixes
+
+---
+ cmd/tikv-ctl/src/executor.rs                  |  14 +-
+ components/encryption/src/manager/mod.rs      |  37 +++---
+ components/engine_rocks/src/misc.rs           |  17 +--
+ components/engine_rocks/src/raft_engine.rs    |  12 +-
+ components/engine_rocks/src/rocks_metrics.rs  |  14 +-
+ components/engine_rocks/src/util.rs           |  38 +++---
+ .../src/observer/load_eviction.rs             |  18 +--
+ components/in_memory_engine/src/background.rs |  80 ++++++------
+ .../in_memory_engine/src/region_manager.rs    |  50 +++----
+ .../in_memory_engine/src/region_stats.rs      |  12 +-
+ .../in_memory_engine/src/write_batch.rs       |   8 +-
+ components/raftstore-v2/src/batch/store.rs    |  22 ++--
+ components/raftstore-v2/src/fsm/store.rs      |  48 +++----
+ .../operation/command/admin/compact_log.rs    |  63 +++++----
+ .../operation/command/admin/merge/commit.rs   |  58 ++++++---
+ .../src/operation/command/admin/merge/mod.rs  |  21 +--
+ .../operation/command/admin/merge/prepare.rs  | 123 +++++++++---------
+ .../operation/command/admin/merge/rollback.rs |  16 +--
+ .../src/operation/command/admin/mod.rs        |  25 ++--
+ .../raftstore-v2/src/operation/command/mod.rs |  60 ++++-----
+ .../src/operation/command/write/ingest.rs     |  33 ++---
+ components/raftstore-v2/src/operation/life.rs |   8 +-
+ components/raftstore-v2/src/operation/misc.rs |  11 +-
+ .../src/operation/query/capture.rs            |  12 +-
+ .../src/operation/ready/apply_trace.rs        |  14 +-
+ .../raftstore-v2/src/operation/ready/mod.rs   |  51 ++++----
+ .../src/operation/ready/snapshot.rs           |  34 ++---
+ .../src/operation/unsafe_recovery/create.rs   |  18 +--
+ .../src/operation/unsafe_recovery/demote.rs   |  50 +++----
+ .../src/operation/unsafe_recovery/destroy.rs  |  18 +--
+ .../operation/unsafe_recovery/force_leader.rs |  14 +-
+ .../src/operation/unsafe_recovery/report.rs   |  18 +--
+ components/raftstore-v2/src/worker/tablet.rs  |   6 +-
+ .../raftstore/src/coprocessor/config.rs       |  22 ++--
+ .../src/coprocessor/region_info_accessor.rs   |  20 +--
+ .../raftstore/src/store/async_io/write.rs     |   9 +-
+ components/raftstore/src/store/fsm/peer.rs    | 109 ++++++++--------
+ components/raftstore/src/store/util.rs        |  16 +--
+ .../raftstore/src/store/worker/split_check.rs |  27 ++--
+ .../src/store/worker/split_controller.rs      |  42 +++---
+ .../resource_control/src/resource_limiter.rs  |   8 +-
+ components/server/src/signal_handler.rs       |  16 +--
+ .../src/codec/mysql/decimal.rs                |  30 ++---
+ .../src/codec/mysql/enums.rs                  |   6 -
+ .../src/codec/mysql/json/serde.rs             |   6 -
+ .../src/codec/mysql/vector.rs                 |   6 -
+ components/tikv_util/src/worker/pool.rs       |  22 ++--
+ src/config/mod.rs                             |  68 +++++-----
+ src/coprocessor/endpoint.rs                   |  21 +--
+ src/server/debug.rs                           |  16 +--
+ src/server/debug2.rs                          |  16 +--
+ src/server/engine_factory.rs                  |  16 ++-
+ src/server/lock_manager/waiter_manager.rs     |  14 +-
+ src/server/raftkv/raft_extension.rs           |   8 +-
+ src/server/raftkv2/mod.rs                     |   8 +-
+ src/server/raftkv2/raft_extension.rs          |   8 +-
+ src/server/service/kv.rs                      |   8 +-
+ src/server/tablet_snap.rs                     |  69 +++++-----
+ src/storage/mod.rs                            |  10 +-
+ src/storage/txn/actions/prewrite.rs           |  92 ++++++-------
+ .../singleton_flow_controller.rs              |   8 +-
+ 61 files changed, 874 insertions(+), 850 deletions(-)
+
+diff --git a/cmd/tikv-ctl/src/executor.rs b/cmd/tikv-ctl/src/executor.rs
+index 0269cbf48..c0c9a57f2 100644
+--- a/cmd/tikv-ctl/src/executor.rs
++++ b/cmd/tikv-ctl/src/executor.rs
+@@ -67,13 +67,13 @@ fn get_engine_type(dir: &str) -> EngineType {
+     let mut engine1 = false;
+     let mut engine2 = false;
+     while let Some(Ok(e)) = entries.next() {
+-        if let Ok(ty) = e.file_type()
+-            && ty.is_dir()
+-        {
+-            if e.file_name() == "tablets" {
+-                engine2 = true;
+-            } else if e.file_name() == "db" {
+-                engine1 = true;
++        if let Ok(ty) = e.file_type() {
++            if ty.is_dir() {
++                if e.file_name() == "tablets" {
++                    engine2 = true;
++                } else if e.file_name() == "db" {
++                    engine1 = true;
++                }
+             }
+         }
+     }
+diff --git a/components/encryption/src/manager/mod.rs b/components/encryption/src/manager/mod.rs
+index 9250ed071..fcc442544 100644
+--- a/components/encryption/src/manager/mod.rs
++++ b/components/encryption/src/manager/mod.rs
+@@ -1094,25 +1094,26 @@ impl<'a> DataKeyImporter<'a> {
+         // If the duration is longer than the window, we cannot delete keys because they
+         // may already be referenced by other files.
+         // System time can drift, use 1s as safety padding.
+-        if !self.key_additions.is_empty()
+-            && let Ok(duration) = self.start_time.elapsed()
+-            && duration.as_secs() < Self::EXPECTED_TIME_WINDOW_SECS - 1
+-        {
+-            for key_id in self.key_additions.drain(..) {
+-                let mut key_dict = self.manager.dicts.key_dict.lock().unwrap();
+-                info!("rollback one imported data key"; "key_id" => key_id);
+-                key_dict.keys.remove(&key_id);
++        if !self.key_additions.is_empty() {
++            if let Ok(duration) = self.start_time.elapsed() {
++                if duration.as_secs() < Self::EXPECTED_TIME_WINDOW_SECS - 1 {
++                    for key_id in self.key_additions.drain(..) {
++                        let mut key_dict = self.manager.dicts.key_dict.lock().unwrap();
++                        info!("rollback one imported data key"; "key_id" => key_id);
++                        key_dict.keys.remove(&key_id);
++                    }
++                    let (tx, rx) = std::sync::mpsc::channel();
++                    self.manager
++                        .rotate_tx
++                        .send(RotateTask::Save(tx))
++                        .map_err(|_| {
++                            Error::Other(box_err!("Failed to request background key dict rotation"))
++                        })?;
++                    rx.recv().map_err(|_| {
++                        Error::Other(box_err!("Failed to wait for background key dict rotation"))
++                    })?;
++                }
+             }
+-            let (tx, rx) = std::sync::mpsc::channel();
+-            self.manager
+-                .rotate_tx
+-                .send(RotateTask::Save(tx))
+-                .map_err(|_| {
+-                    Error::Other(box_err!("Failed to request background key dict rotation"))
+-                })?;
+-            rx.recv().map_err(|_| {
+-                Error::Other(box_err!("Failed to wait for background key dict rotation"))
+-            })?;
+         }
+         Ok(())
+     }
+diff --git a/components/engine_rocks/src/misc.rs b/components/engine_rocks/src/misc.rs
+index 9c0b70a97..1ca825a3d 100644
+--- a/components/engine_rocks/src/misc.rs
++++ b/components/engine_rocks/src/misc.rs
+@@ -216,15 +216,16 @@ impl MiscExt for RocksEngine {
+                     .map(|(_, time)| (handle, time))
+             })
+             .min_by(|(_, a), (_, b)| a.cmp(b))
+-            && age_threshold.map_or(true, |threshold| time <= threshold)
+         {
+-            let mut fopts = FlushOptions::default();
+-            fopts.set_wait(wait);
+-            fopts.set_allow_write_stall(true);
+-            fopts.set_check_if_compaction_disabled(true);
+-            fopts.set_expected_oldest_key_time(time);
+-            self.as_inner().flush_cf(handle, &fopts).map_err(r2e)?;
+-            return Ok(true);
++            if age_threshold.map_or(true, |threshold| time <= threshold) {
++                let mut fopts = FlushOptions::default();
++                fopts.set_wait(wait);
++                fopts.set_allow_write_stall(true);
++                fopts.set_check_if_compaction_disabled(true);
++                fopts.set_expected_oldest_key_time(time);
++                self.as_inner().flush_cf(handle, &fopts).map_err(r2e)?;
++                return Ok(true);
++            }
+         }
+         Ok(false)
+     }
+diff --git a/components/engine_rocks/src/raft_engine.rs b/components/engine_rocks/src/raft_engine.rs
+index df0988f4c..8cd34fdc7 100644
+--- a/components/engine_rocks/src/raft_engine.rs
++++ b/components/engine_rocks/src/raft_engine.rs
+@@ -354,12 +354,12 @@ impl RaftLogBatch for RocksWriteBatchVec {
+         entries: Vec<Entry>,
+     ) -> Result<()> {
+         let overwrite_to = overwrite_to.unwrap_or(0);
+-        if let Some(last) = entries.last()
+-            && last.get_index() + 1 < overwrite_to
+-        {
+-            for index in last.get_index() + 1..overwrite_to {
+-                let key = keys::raft_log_key(raft_group_id, index);
+-                self.delete(&key).unwrap();
++        if let Some(last) = entries.last() {
++            if last.get_index() + 1 < overwrite_to {
++                for index in last.get_index() + 1..overwrite_to {
++                    let key = keys::raft_log_key(raft_group_id, index);
++                    self.delete(&key).unwrap();
++                }
+             }
+         }
+         if let Some(max_size) = entries.iter().map(|e| e.compute_size()).max() {
+diff --git a/components/engine_rocks/src/rocks_metrics.rs b/components/engine_rocks/src/rocks_metrics.rs
+index 55895ee4f..39bdffe49 100644
+--- a/components/engine_rocks/src/rocks_metrics.rs
++++ b/components/engine_rocks/src/rocks_metrics.rs
+@@ -1107,13 +1107,13 @@ impl StatisticsReporter<RocksEngine> for RocksStatisticsReporter {
+                     STORE_ENGINE_NUM_FILES_AT_LEVEL_VEC
+                         .with_label_values(&[&self.name, cf, &level.to_string()])
+                         .set(num_files as i64);
+-                    if num_files > 0
+-                        && let Some(ratio) = level_stats.weighted_compression_ratio
+-                    {
+-                        let normalized_compression_ratio = ratio / num_files as f64;
+-                        STORE_ENGINE_COMPRESSION_RATIO_VEC
+-                            .with_label_values(&[&self.name, cf, &level.to_string()])
+-                            .set(normalized_compression_ratio);
++                    if num_files > 0 {
++                        if let Some(ratio) = level_stats.weighted_compression_ratio {
++                            let normalized_compression_ratio = ratio / num_files as f64;
++                            STORE_ENGINE_COMPRESSION_RATIO_VEC
++                                .with_label_values(&[&self.name, cf, &level.to_string()])
++                                .set(normalized_compression_ratio);
++                        }
+                     }
+                 }
+                 if let Some(v) = level_stats.num_blob_files {
+diff --git a/components/engine_rocks/src/util.rs b/components/engine_rocks/src/util.rs
+index b600e6781..d2018dcf7 100644
+--- a/components/engine_rocks/src/util.rs
++++ b/components/engine_rocks/src/util.rs
+@@ -411,20 +411,20 @@ impl<A: CompactionFilterFactory, B: CompactionFilterFactory> CompactionFilterFac
+         let mut outer_filter = None;
+         let mut inner_filter = None;
+         let mut full_name = String::new();
+-        if self.outer_should_filter[i]
+-            && let Some((name, filter)) = self.outer.create_compaction_filter(context)
+-        {
+-            outer_filter = Some(filter);
+-            full_name = name.into_string().unwrap();
++        if self.outer_should_filter[i] {
++            if let Some((name, filter)) = self.outer.create_compaction_filter(context) {
++                outer_filter = Some(filter);
++                full_name = name.into_string().unwrap();
++            }
+         }
+-        if self.inner_should_filter[i]
+-            && let Some((name, filter)) = self.inner.create_compaction_filter(context)
+-        {
+-            inner_filter = Some(filter);
+-            if !full_name.is_empty() {
+-                full_name += ".";
++        if self.inner_should_filter[i] {
++            if let Some((name, filter)) = self.inner.create_compaction_filter(context) {
++                inner_filter = Some(filter);
++                if !full_name.is_empty() {
++                    full_name += ".";
++                }
++                full_name += name.to_str().unwrap();
+             }
+-            full_name += name.to_str().unwrap();
+         }
+         if outer_filter.is_none() && inner_filter.is_none() {
+             None
+@@ -456,12 +456,14 @@ impl<A: CompactionFilter, B: CompactionFilter> CompactionFilter for StackingComp
+         value: &[u8],
+         value_type: CompactionFilterValueType,
+     ) -> CompactionFilterDecision {
+-        if let Some(outer) = self.outer.as_mut()
+-            && let r = outer.unsafe_filter(level, key, value, value_type)
+-            && !matches!(r, CompactionFilterDecision::Keep)
+-        {
+-            r
+-        } else if let Some(inner) = self.inner.as_mut() {
++        if let Some(outer) = self.outer.as_mut() {
++            let r = outer.unsafe_filter(level, key, value, value_type);
++            if !matches!(r, CompactionFilterDecision::Keep) {
++                return r;
++            }
++        }
++
++        if let Some(inner) = self.inner.as_mut() {
+             inner.unsafe_filter(level, key, value, value_type)
+         } else {
+             CompactionFilterDecision::Keep
+diff --git a/components/hybrid_engine/src/observer/load_eviction.rs b/components/hybrid_engine/src/observer/load_eviction.rs
+index cba8029e3..3368959f5 100644
+--- a/components/hybrid_engine/src/observer/load_eviction.rs
++++ b/components/hybrid_engine/src/observer/load_eviction.rs
+@@ -371,15 +371,15 @@ impl RoleObserver for LoadEvictionObserver {
+                 "region" => ?cache_region,
+             );
+             self.try_load_region(cache_region);
+-        } else if let StateRole::Follower = change.state
+-            && change.initialized
+-        {
+-            let cache_region = CacheRegion::from_region(ctx.region());
+-            debug!(
+-                "ime try to evict region due to became follower";
+-                "region" => ?cache_region,
+-            );
+-            self.evict_region(cache_region, EvictReason::BecomeFollower);
++        } else if let StateRole::Follower = change.state {
++            if change.initialized {
++                let cache_region = CacheRegion::from_region(ctx.region());
++                debug!(
++                    "ime try to evict region due to became follower";
++                    "region" => ?cache_region,
++                );
++                self.evict_region(cache_region, EvictReason::BecomeFollower);
++            }
+         }
+     }
+ }
+diff --git a/components/in_memory_engine/src/background.rs b/components/in_memory_engine/src/background.rs
+index 4a30c6ca4..1be11d7a5 100644
+--- a/components/in_memory_engine/src/background.rs
++++ b/components/in_memory_engine/src/background.rs
+@@ -1295,47 +1295,47 @@ impl Runnable for BackgroundRunner {
+                 self.cross_check_worker = Some(cross_check_worker);
+             }
+             BackgroundTask::CheckLoadPendingRegions(s) => {
+-                if let Some(router) = &self.raft_casual_router
+-                    && let Some(e) = &self.rocks_engine
+-                {
+-                    let pending_regions: Vec<_> = self
+-                        .core
+-                        .engine
+-                        .region_manager()
+-                        .regions_map()
+-                        .read()
+-                        .regions()
+-                        .values()
+-                        .filter_map(|meta| {
+-                            if meta.get_state() == RegionState::Pending {
+-                                Some(meta.get_region().id)
+-                            } else {
+-                                None
+-                            }
+-                        })
+-                        .collect();
+-
+-                    for region_id in pending_regions {
+-                        let scheduler = s.clone();
+-                        let rocks_engine = e.clone();
+-                        let ime_engine = self.core.engine.clone();
+-                        if let Err(e) = router.send(
+-                            region_id,
+-                            CasualMessage::InMemoryEngineLoadRegion {
++                if let Some(router) = &self.raft_casual_router {
++                    if let Some(e) = &self.rocks_engine {
++                        let pending_regions: Vec<_> = self
++                            .core
++                            .engine
++                            .region_manager()
++                            .regions_map()
++                            .read()
++                            .regions()
++                            .values()
++                            .filter_map(|meta| {
++                                if meta.get_state() == RegionState::Pending {
++                                    Some(meta.get_region().id)
++                                } else {
++                                    None
++                                }
++                            })
++                            .collect();
++
++                        for region_id in pending_regions {
++                            let scheduler = s.clone();
++                            let rocks_engine = e.clone();
++                            let ime_engine = self.core.engine.clone();
++                            if let Err(e) = router.send(
+                                 region_id,
+-                                trigger_load_cb: Box::new(move |r| {
+-                                    let cache_region = CacheRegion::from_region(r);
+-                                    _ = ime_engine.prepare_for_apply(
+-                                        &cache_region,
+-                                        Some(&rocks_engine),
+-                                        &scheduler,
+-                                        false,
+-                                        r.is_in_flashback,
+-                                    );
+-                                }),
+-                            },
+-                        ) {
+-                            warn!("ime send load pending cache region msg failed"; "err" => ?e);
++                                CasualMessage::InMemoryEngineLoadRegion {
++                                    region_id,
++                                    trigger_load_cb: Box::new(move |r| {
++                                        let cache_region = CacheRegion::from_region(r);
++                                        _ = ime_engine.prepare_for_apply(
++                                            &cache_region,
++                                            Some(&rocks_engine),
++                                            &scheduler,
++                                            false,
++                                            r.is_in_flashback,
++                                        );
++                                    }),
++                                },
++                            ) {
++                                warn!("ime send load pending cache region msg failed"; "err" => ?e);
++                            }
+                         }
+                     }
+                 }
+diff --git a/components/in_memory_engine/src/region_manager.rs b/components/in_memory_engine/src/region_manager.rs
+index 338f6f56a..28c4fa140 100644
+--- a/components/in_memory_engine/src/region_manager.rs
++++ b/components/in_memory_engine/src/region_manager.rs
+@@ -438,11 +438,11 @@ impl RegionMetaMap {
+ 
+     fn on_all_overlapped_regions(&self, region: &CacheRegion, mut f: impl FnMut(&CacheRegionMeta)) {
+         // fast path: region epoch match
+-        if let Some(region_meta) = self.region_meta(region.id)
+-            && region_meta.region.epoch_version == region.epoch_version
+-        {
+-            f(region_meta);
+-            return;
++        if let Some(region_meta) = self.region_meta(region.id) {
++            if region_meta.region.epoch_version == region.epoch_version {
++                f(region_meta);
++                return;
++            }
+         }
+         // epoch not match, need to iter all overlapped regions.
+         self.iter_overlapped_regions(region, |meta| {
+@@ -731,27 +731,27 @@ impl RegionManager {
+     ) -> Vec<CacheRegion> {
+         let regions_map = self.regions_map.read();
+         // fast path: in most case, region is not changed.
+-        if let Some(region_meta) = regions_map.region_meta(snapshot_meta.region.id)
+-            && region_meta.region.epoch_version == snapshot_meta.region.epoch_version
+-        {
+-            // epoch not changed
+-            let mut snapshot_list = region_meta.region_snapshot_list.lock().unwrap();
+-            snapshot_list.remove_snapshot(snapshot_meta.snapshot_ts);
+-            if Self::region_ready_to_evict(
+-                region_meta,
+-                &snapshot_list,
+-                &self.historical_regions.lock().unwrap(),
+-            ) {
+-                drop(snapshot_list);
+-                drop(regions_map);
+-                let mut regions_map = self.regions_map.write();
+-                let region_meta = regions_map
+-                    .mut_region_meta(snapshot_meta.region.id)
+-                    .unwrap();
+-                region_meta.set_state(RegionState::Evicting);
+-                return vec![region_meta.region.clone()];
++        if let Some(region_meta) = regions_map.region_meta(snapshot_meta.region.id) {
++            if region_meta.region.epoch_version == snapshot_meta.region.epoch_version {
++                // epoch not changed
++                let mut snapshot_list = region_meta.region_snapshot_list.lock().unwrap();
++                snapshot_list.remove_snapshot(snapshot_meta.snapshot_ts);
++                if Self::region_ready_to_evict(
++                    region_meta,
++                    &snapshot_list,
++                    &self.historical_regions.lock().unwrap(),
++                ) {
++                    drop(snapshot_list);
++                    drop(regions_map);
++                    let mut regions_map = self.regions_map.write();
++                    let region_meta = regions_map
++                        .mut_region_meta(snapshot_meta.region.id)
++                        .unwrap();
++                    region_meta.set_state(RegionState::Evicting);
++                    return vec![region_meta.region.clone()];
++                }
++                return vec![];
+             }
+-            return vec![];
+         }
+ 
+         // slow path: region not found or epoch version changes, must fell in the
+diff --git a/components/in_memory_engine/src/region_stats.rs b/components/in_memory_engine/src/region_stats.rs
+index 634d5d2bb..d0b2b4955 100644
+--- a/components/in_memory_engine/src/region_stats.rs
++++ b/components/in_memory_engine/src/region_stats.rs
+@@ -441,12 +441,12 @@ fn sort_cached_region_stats(
+         let mut cop_requests_avg = stat.query_stats.coprocessor as usize;
+         let mut cop_requests_count = 0;
+         let cop_requests = stat.query_stats.coprocessor as usize;
+-        if let Some(cached_region) = cached_regions.get(&region.id)
+-            && let Ok(mut avg) = cached_region.lock()
+-        {
+-            avg.observe(cop_requests as f64);
+-            cop_requests_avg = avg.get_avg().ceil() as usize;
+-            cop_requests_count = avg.get_count();
++        if let Some(cached_region) = cached_regions.get(&region.id) {
++            if let Ok(mut avg) = cached_region.lock() {
++                avg.observe(cop_requests as f64);
++                cop_requests_avg = avg.get_avg().ceil() as usize;
++                cop_requests_count = avg.get_count();
++            }
+         }
+         crss.push(CachedRegionStat {
+             iterated_count: stat.cop_detail.iterated_count(),
+diff --git a/components/in_memory_engine/src/write_batch.rs b/components/in_memory_engine/src/write_batch.rs
+index f2e4b6aee..6a290c267 100644
+--- a/components/in_memory_engine/src/write_batch.rs
++++ b/components/in_memory_engine/src/write_batch.rs
+@@ -128,10 +128,10 @@ impl RegionCacheWriteBatch {
+     pub fn prepare_for_region(&mut self, region: &metapb::Region) {
+         // If the region is already prepared for write, we do not need to prepare it
+         // again. See comments for the `prepared_regions` field for more details.
+-        if let Some(current_region) = &self.current_region
+-            && current_region.id == region.id
+-        {
+-            return;
++        if let Some(current_region) = &self.current_region {
++            if current_region.id == region.id {
++                return;
++            }
+         }
+         let time = Instant::now();
+         // verify that the region is not prepared before
+diff --git a/components/raftstore-v2/src/batch/store.rs b/components/raftstore-v2/src/batch/store.rs
+index d2fdcc31e..f31b87ffe 100644
+--- a/components/raftstore-v2/src/batch/store.rs
++++ b/components/raftstore-v2/src/batch/store.rs
+@@ -769,18 +769,18 @@ impl<EK: KvEngine, ER: RaftEngine> StoreSystem<EK, ER> {
+                         if to_flush == 0 {
+                             break;
+                         }
+-                        if let Some(mut t) = registry.get(r)
+-                            && let Some(t) = t.latest()
+-                        {
+-                            match t.flush_oldest_cf(true, Some(threshold)) {
+-                                Err(e) => warn!(logger, "failed to flush oldest cf"; "err" => %e),
+-                                Ok(true) => {
+-                                    to_flush -= 1;
+-                                    let time =
+-                                        std::time::Instant::now() + limiter.consume_duration(1);
+-                                    let _ = GLOBAL_TIMER_HANDLE.delay(time).compat().await;
++                        if let Some(mut t) = registry.get(r) {
++                            if let Some(t) = t.latest() {
++                                match t.flush_oldest_cf(true, Some(threshold)) {
++                                    Err(e) => warn!(logger, "failed to flush oldest cf"; "err" => %e),
++                                    Ok(true) => {
++                                        to_flush -= 1;
++                                        let time =
++                                            std::time::Instant::now() + limiter.consume_duration(1);
++                                        let _ = GLOBAL_TIMER_HANDLE.delay(time).compat().await;
++                                    }
++                                    _ => (),
+                                 }
+-                                _ => (),
+                             }
+                         }
+                     }
+diff --git a/components/raftstore-v2/src/fsm/store.rs b/components/raftstore-v2/src/fsm/store.rs
+index ccf3eb518..b1b5edc8d 100644
+--- a/components/raftstore-v2/src/fsm/store.rs
++++ b/components/raftstore-v2/src/fsm/store.rs
+@@ -63,30 +63,30 @@ impl<EK> StoreMeta<EK> {
+             .regions
+             .insert(region_id, (region.clone(), initialized));
+         // `prev` only makes sense when it's initialized.
+-        if let Some((prev, prev_init)) = prev
+-            && prev_init
+-        {
+-            assert!(initialized, "{} region corrupted", SlogFormat(logger));
+-            if prev.get_region_epoch().get_version() != version {
+-                let prev_id = self.region_ranges.remove(&(
+-                    data_end_key(prev.get_end_key()),
+-                    prev.get_region_epoch().get_version(),
+-                ));
+-                assert_eq!(
+-                    prev_id,
+-                    Some(region_id),
+-                    "{} region corrupted",
+-                    SlogFormat(logger)
+-                );
+-            } else {
+-                assert!(
+-                    self.region_ranges
+-                        .get(&(data_end_key(prev.get_end_key()), version))
+-                        .is_some(),
+-                    "{} region corrupted",
+-                    SlogFormat(logger)
+-                );
+-                return;
++        if let Some((prev, prev_init)) = prev {
++            if prev_init {
++                assert!(initialized, "{} region corrupted", SlogFormat(logger));
++                if prev.get_region_epoch().get_version() != version {
++                    let prev_id = self.region_ranges.remove(&(
++                        data_end_key(prev.get_end_key()),
++                        prev.get_region_epoch().get_version(),
++                    ));
++                    assert_eq!(
++                        prev_id,
++                        Some(region_id),
++                        "{} region corrupted",
++                        SlogFormat(logger)
++                    );
++                } else {
++                    assert!(
++                        self.region_ranges
++                            .get(&(data_end_key(prev.get_end_key()), version))
++                            .is_some(),
++                        "{} region corrupted",
++                        SlogFormat(logger)
++                    );
++                    return;
++                }
+             }
+         }
+         if initialized {
+diff --git a/components/raftstore-v2/src/operation/command/admin/compact_log.rs b/components/raftstore-v2/src/operation/command/admin/compact_log.rs
+index 4eff2e132..735c99883 100644
+--- a/components/raftstore-v2/src/operation/command/admin/compact_log.rs
++++ b/components/raftstore-v2/src/operation/command/admin/compact_log.rs
+@@ -468,16 +468,16 @@ impl<EK: KvEngine, ER: RaftEngine> Peer<EK, ER> {
+         mut res: CompactLogResult,
+     ) {
+         let first_index = self.entry_storage().first_index();
+-        if let Some(i) = self.merge_context().and_then(|c| c.max_compact_log_index())
+-            && res.compact_index > i
+-        {
+-            info!(
+-                self.logger,
+-                "in merging mode, adjust compact index";
+-                "old_index" => res.compact_index,
+-                "new_index" => i,
+-            );
+-            res.compact_index = i;
++        if let Some(i) = self.merge_context().and_then(|c| c.max_compact_log_index()) {
++            if res.compact_index > i {
++                info!(
++                    self.logger,
++                    "in merging mode, adjust compact index";
++                    "old_index" => res.compact_index,
++                    "new_index" => i,
++                );
++                res.compact_index = i;
++            }
+         }
+         if res.compact_index <= first_index {
+             debug!(
+@@ -529,19 +529,19 @@ impl<EK: KvEngine, ER: RaftEngine> Peer<EK, ER> {
+ 
+         // All logs < persisted_apply will be deleted.
+         let prev_first_index = first_index;
+-        if prev_first_index < self.storage().apply_trace().persisted_apply_index()
+-            && let Some(index) = self.compact_log_index()
+-        {
+-            // Raft Engine doesn't care about first index.
+-            if let Err(e) =
+-                store_ctx
+-                    .engine
+-                    .gc(self.region_id(), 0, index, self.state_changes_mut())
+-            {
+-                error!(self.logger, "failed to compact raft logs"; "err" => ?e);
++        if prev_first_index < self.storage().apply_trace().persisted_apply_index() {
++            if let Some(index) = self.compact_log_index() {
++                // Raft Engine doesn't care about first index.
++                if let Err(e) =
++                    store_ctx
++                        .engine
++                        .gc(self.region_id(), 0, index, self.state_changes_mut())
++                {
++                    error!(self.logger, "failed to compact raft logs"; "err" => ?e);
++                }
++                self.compact_log_context_mut().set_last_compacted_idx(index);
++                // Extra write set right above.
+             }
+-            self.compact_log_context_mut().set_last_compacted_idx(index);
+-            // Extra write set right above.
+         }
+ 
+         let context = self.compact_log_context_mut();
+@@ -574,16 +574,15 @@ impl<EK: KvEngine, ER: RaftEngine> Peer<EK, ER> {
+                 error!(self.logger, "failed to delete raft states"; "err" => ?e);
+             }
+             // If it's snapshot, logs are gc already.
+-            if !task.has_snapshot
+-                && old_persisted < self.entry_storage().truncated_index() + 1
+-                && let Some(index) = self.compact_log_index()
+-            {
+-                let batch = task
+-                    .extra_write
+-                    .ensure_v2(|| self.entry_storage().raft_engine().log_batch(0));
+-                // Raft Engine doesn't care about first index.
+-                if let Err(e) = store_ctx.engine.gc(self.region_id(), 0, index, batch) {
+-                    error!(self.logger, "failed to compact raft logs"; "err" => ?e);
++            if !task.has_snapshot && old_persisted < self.entry_storage().truncated_index() + 1 {
++                if let Some(index) = self.compact_log_index() {
++                    let batch = task
++                        .extra_write
++                        .ensure_v2(|| self.entry_storage().raft_engine().log_batch(0));
++                    // Raft Engine doesn't care about first index.
++                    if let Err(e) = store_ctx.engine.gc(self.region_id(), 0, index, batch) {
++                        error!(self.logger, "failed to compact raft logs"; "err" => ?e);
++                    }
+                 }
+             }
+             if self.remove_tombstone_tablets(new_persisted) {
+diff --git a/components/raftstore-v2/src/operation/command/admin/merge/commit.rs b/components/raftstore-v2/src/operation/command/admin/merge/commit.rs
+index 166d3a98d..49be9274f 100644
+--- a/components/raftstore-v2/src/operation/command/admin/merge/commit.rs
++++ b/components/raftstore-v2/src/operation/command/admin/merge/commit.rs
+@@ -343,20 +343,22 @@ impl<EK: KvEngine, ER: RaftEngine> Peer<EK, ER> {
+         assert!(!self.storage().has_dirty_data());
+         let (ch, res) = CmdResChannel::pair();
+         self.on_admin_command(store_ctx, req, ch);
+-        if let Some(res) = res.take_result()
+-            && res.get_header().has_error()
+-        {
+-            error!(
+-                self.logger,
+-                "failed to propose commit merge";
+-                "source" => source_id,
+-                "res" => ?res,
+-            );
+-            fail::fail_point!(
+-                "on_propose_commit_merge_fail_store_1",
+-                store_ctx.store_id == 1,
+-                |_| {}
+-            );
++        if let Some(res) = res.take_result() {
++            if res.get_header().has_error() {
++                error!(
++                    self.logger,
++                    "failed to propose commit merge";
++                    "source" => source_id,
++                    "res" => ?res,
++                );
++                fail::fail_point!(
++                    "on_propose_commit_merge_fail_store_1",
++                    store_ctx.store_id == 1,
++                    |_| {}
++                );
++            } else {
++                fail::fail_point!("on_propose_commit_merge_success");
++            }
+         } else {
+             fail::fail_point!("on_propose_commit_merge_success");
+         }
+@@ -612,11 +614,29 @@ impl<EK: KvEngine, ER: RaftEngine> Peer<EK, ER> {
+                 "current" => ?cul.merge,
+             );
+         }
+-        if let Some(state) = self.applied_merge_state()
+-            && state.get_commit() == commit_of_merge(&catch_up_logs.merge)
+-        {
+-            assert_eq!(state.get_target().get_id(), catch_up_logs.target_region_id);
+-            self.finish_catch_up_logs(store_ctx, catch_up_logs);
++        if let Some(state) = self.applied_merge_state() {
++            if state.get_commit() == commit_of_merge(&catch_up_logs.merge) {
++                assert_eq!(state.get_target().get_id(), catch_up_logs.target_region_id);
++                self.finish_catch_up_logs(store_ctx, catch_up_logs);
++            } else {
++                // Directly append these logs to raft log and then commit them.
++                match self.maybe_append_merge_entries(&catch_up_logs.merge) {
++                    Some(last_index) => {
++                        info!(
++                            self.logger,
++                            "append and commit entries to source region";
++                            "last_index" => last_index,
++                        );
++                        self.set_has_ready();
++                    }
++                    None => {
++                        info!(self.logger, "no need to catch up logs");
++                    }
++                }
++                catch_up_logs.merge.clear_entries();
++                self.merge_context_mut().prepare_status =
++                    Some(PrepareStatus::CatchUpLogs(catch_up_logs));
++            }
+         } else {
+             // Directly append these logs to raft log and then commit them.
+             match self.maybe_append_merge_entries(&catch_up_logs.merge) {
+diff --git a/components/raftstore-v2/src/operation/command/admin/merge/mod.rs b/components/raftstore-v2/src/operation/command/admin/merge/mod.rs
+index 94adc1e1c..000baa0ca 100644
+--- a/components/raftstore-v2/src/operation/command/admin/merge/mod.rs
++++ b/components/raftstore-v2/src/operation/command/admin/merge/mod.rs
+@@ -54,11 +54,11 @@ impl MergeContext {
+ 
+     #[inline]
+     pub fn maybe_take_pending_prepare(&mut self, applied: u64) -> Option<RaftCmdRequest> {
+-        if let Some(PrepareStatus::WaitForFence { fence, req, .. }) = self.prepare_status.as_mut()
+-            && applied >= *fence
+-        {
+-            // The status will be updated during processing the proposal.
+-            return req.take();
++        if let Some(PrepareStatus::WaitForFence { fence, req, .. }) = self.prepare_status.as_mut() {
++            if applied >= *fence {
++                // The status will be updated during processing the proposal.
++                return req.take();
++            }
+         }
+         None
+     }
+@@ -88,13 +88,14 @@ impl<EK: KvEngine, ER: RaftEngine> Peer<EK, ER> {
+         if let Some(MergeContext {
+             prepare_status: Some(status),
+         }) = self.merge_context()
+-            && matches!(
++        {
++            if matches!(
+                 status,
+                 PrepareStatus::WaitForTrimStatus { .. } | PrepareStatus::WaitForFence { .. }
+-            )
+-        {
+-            self.take_merge_context();
+-            self.proposal_control_mut().set_pending_prepare_merge(false);
++            ) {
++                self.take_merge_context();
++                self.proposal_control_mut().set_pending_prepare_merge(false);
++            }
+         }
+     }
+ 
+diff --git a/components/raftstore-v2/src/operation/command/admin/merge/prepare.rs b/components/raftstore-v2/src/operation/command/admin/merge/prepare.rs
+index 0aa44ea45..cf3646b96 100644
+--- a/components/raftstore-v2/src/operation/command/admin/merge/prepare.rs
++++ b/components/raftstore-v2/src/operation/command/admin/merge/prepare.rs
+@@ -415,69 +415,71 @@ impl<EK: KvEngine, ER: RaftEngine> Peer<EK, ER> {
+         resp: &ExtraMessage,
+     ) {
+         let region_id = self.region_id();
+-        if self.merge_context().is_some()
+-            && let Some(PrepareStatus::WaitForTrimStatus {
++        if self.merge_context().is_some() {
++            if let Some(PrepareStatus::WaitForTrimStatus {
+                 pending_peers, req, ..
+             }) = self.merge_context_mut().prepare_status.as_mut()
+-            && req.is_some()
+-        {
+-            assert!(resp.has_availability_context());
+-            let from_region = resp.get_availability_context().get_from_region_id();
+-            let from_epoch = resp.get_availability_context().get_from_region_epoch();
+-            let trimmed = resp.get_availability_context().get_trimmed();
+-            if let Some(epoch) = pending_peers.get(&from_peer)
+-                && util::is_region_epoch_equal(from_epoch, epoch)
+             {
+-                if !trimmed {
+-                    info!(
+-                        self.logger,
+-                        "cancel merge because source peer is not trimmed";
+-                        "region_id" => from_region,
+-                        "peer_id" => from_peer,
+-                    );
+-                    self.take_merge_context();
+-                    return;
+-                } else {
+-                    pending_peers.remove(&from_peer);
+-                }
+-            }
+-            if pending_peers.is_empty() {
+-                let mailbox = match store_ctx.router.mailbox(region_id) {
+-                    Some(mailbox) => mailbox,
+-                    None => {
+-                        assert!(
+-                            store_ctx.router.is_shutdown(),
+-                            "{} router should have been closed",
+-                            SlogFormat(&self.logger)
+-                        );
+-                        return;
++                if req.is_some() {
++                    assert!(resp.has_availability_context());
++                    let from_region = resp.get_availability_context().get_from_region_id();
++                    let from_epoch = resp.get_availability_context().get_from_region_epoch();
++                    let trimmed = resp.get_availability_context().get_trimmed();
++                    if let Some(epoch) = pending_peers.get(&from_peer) {
++                        if util::is_region_epoch_equal(from_epoch, epoch) {
++                            if !trimmed {
++                                info!(
++                                    self.logger,
++                                    "cancel merge because source peer is not trimmed";
++                                    "region_id" => from_region,
++                                    "peer_id" => from_peer,
++                                );
++                                self.take_merge_context();
++                                return;
++                            } else {
++                                pending_peers.remove(&from_peer);
++                            }
++                        }
+                     }
+-                };
+-                let mut req = req.take().unwrap();
+-                req.mut_header()
+-                    .set_flags(WriteBatchFlags::PRE_FLUSH_FINISHED.bits());
+-                let logger = self.logger.clone();
+-                let on_flush_finish = move || {
+-                    let (ch, _) = CmdResChannel::pair();
+-                    if let Err(e) =
+-                        mailbox.force_send(PeerMsg::AdminCommand(RaftRequest::new(req, ch)))
+-                    {
+-                        error!(
+-                            logger,
+-                            "send PrepareMerge request failed after pre-flush finished";
+-                            "err" => ?e,
++                    if pending_peers.is_empty() {
++                        let mailbox = match store_ctx.router.mailbox(region_id) {
++                            Some(mailbox) => mailbox,
++                            None => {
++                                assert!(
++                                    store_ctx.router.is_shutdown(),
++                                    "{} router should have been closed",
++                                    SlogFormat(&self.logger)
++                                );
++                                return;
++                            }
++                        };
++                        let mut req = req.take().unwrap();
++                        req.mut_header()
++                            .set_flags(WriteBatchFlags::PRE_FLUSH_FINISHED.bits());
++                        let logger = self.logger.clone();
++                        let on_flush_finish = move || {
++                            let (ch, _) = CmdResChannel::pair();
++                            if let Err(e) =
++                                mailbox.force_send(PeerMsg::AdminCommand(RaftRequest::new(req, ch)))
++                            {
++                                error!(
++                                    logger,
++                                    "send PrepareMerge request failed after pre-flush finished";
++                                    "err" => ?e,
++                                );
++                                // We rely on `maybe_clean_up_stale_merge_context` to
++                                // clean this up.
++                            }
++                        };
++                        self.start_pre_flush(
++                            store_ctx,
++                            "prepare_merge",
++                            false,
++                            &self.region().clone(),
++                            Box::new(on_flush_finish),
+                         );
+-                        // We rely on `maybe_clean_up_stale_merge_context` to
+-                        // clean this up.
+                     }
+-                };
+-                self.start_pre_flush(
+-                    store_ctx,
+-                    "prepare_merge",
+-                    false,
+-                    &self.region().clone(),
+-                    Box::new(on_flush_finish),
+-                );
++                }
+             }
+         }
+     }
+@@ -608,10 +610,11 @@ impl<EK: KvEngine, ER: RaftEngine> Peer<EK, ER> {
+             .merge_context()
+             .as_ref()
+             .and_then(|c| c.prepare_status.as_ref())
+-            && start_time.saturating_elapsed() > TRIM_CHECK_TIMEOUT
+         {
+-            info!(self.logger, "cancel merge because trim check timed out");
+-            self.take_merge_context();
++            if start_time.saturating_elapsed() > TRIM_CHECK_TIMEOUT {
++                info!(self.logger, "cancel merge because trim check timed out");
++                self.take_merge_context();
++            }
+         }
+     }
+ 
+diff --git a/components/raftstore-v2/src/operation/command/admin/merge/rollback.rs b/components/raftstore-v2/src/operation/command/admin/merge/rollback.rs
+index adc49a928..35a2f7a40 100644
+--- a/components/raftstore-v2/src/operation/command/admin/merge/rollback.rs
++++ b/components/raftstore-v2/src/operation/command/admin/merge/rollback.rs
+@@ -58,14 +58,14 @@ impl<EK: KvEngine, ER: RaftEngine> Peer<EK, ER> {
+         request.set_admin_request(admin);
+         let (ch, res) = CmdResChannel::pair();
+         self.on_admin_command(store_ctx, request, ch);
+-        if let Some(res) = res.take_result()
+-            && res.get_header().has_error()
+-        {
+-            error!(
+-                self.logger,
+-                "failed to propose rollback merge";
+-                "res" => ?res,
+-            );
++        if let Some(res) = res.take_result() {
++            if res.get_header().has_error() {
++                error!(
++                    self.logger,
++                    "failed to propose rollback merge";
++                    "res" => ?res,
++                );
++            }
+         }
+     }
+ }
+diff --git a/components/raftstore-v2/src/operation/command/admin/mod.rs b/components/raftstore-v2/src/operation/command/admin/mod.rs
+index db8360861..b775ab9aa 100644
+--- a/components/raftstore-v2/src/operation/command/admin/mod.rs
++++ b/components/raftstore-v2/src/operation/command/admin/mod.rs
+@@ -108,14 +108,15 @@ impl<EK: KvEngine, ER: RaftEngine> Peer<EK, ER> {
+ 
+         // Check whether the admin request can be proposed when disk full.
+         let can_skip_check = is_transfer_leader || pre_transfer_leader || is_conf_change;
+-        if !can_skip_check
+-            && let Err(e) =
++        if !can_skip_check {
++            if let Err(e) =
+                 self.check_proposal_with_disk_full_opt(ctx, DiskFullOpt::AllowedOnAlmostFull)
+-        {
+-            let resp = cmd_resp::new_error(e);
+-            ch.report_error(resp);
+-            self.post_propose_fail(cmd_type);
+-            return;
++            {
++                let resp = cmd_resp::new_error(e);
++                ch.report_error(resp);
++                self.post_propose_fail(cmd_type);
++                return;
++            }
+         }
+ 
+         // The admin request is rejected because it may need to update epoch checker
+@@ -136,11 +137,11 @@ impl<EK: KvEngine, ER: RaftEngine> Peer<EK, ER> {
+         }
+         // Do not check conflict for transfer leader, otherwise we may not
+         // transfer leadership out of busy nodes in time.
+-        if !is_transfer_leader
+-            && let Some(conflict) = self.proposal_control_mut().check_conflict(Some(cmd_type))
+-        {
+-            conflict.delay_channel(ch);
+-            return;
++        if !is_transfer_leader {
++            if let Some(conflict) = self.proposal_control_mut().check_conflict(Some(cmd_type)) {
++                conflict.delay_channel(ch);
++                return;
++            }
+         }
+         if self.proposal_control().has_pending_prepare_merge()
+             && cmd_type != AdminCmdType::PrepareMerge
+diff --git a/components/raftstore-v2/src/operation/command/mod.rs b/components/raftstore-v2/src/operation/command/mod.rs
+index 8c372fdb2..3f0e758de 100644
+--- a/components/raftstore-v2/src/operation/command/mod.rs
++++ b/components/raftstore-v2/src/operation/command/mod.rs
+@@ -343,12 +343,12 @@ impl<EK: KvEngine, ER: RaftEngine> Peer<EK, ER> {
+         if !queue.is_empty() {
+             for e in committed_entries {
+                 let mut proposal = queue.find_proposal(e.term, e.index, current_term);
+-                if let Some(p) = &mut proposal
+-                    && p.must_pass_epoch_check
+-                {
+-                    // In this case the apply can be guaranteed to be successful. Invoke the
+-                    // on_committed callback if necessary.
+-                    p.cb.notify_committed();
++                if let Some(p) = &mut proposal {
++                    if p.must_pass_epoch_check {
++                        // In this case the apply can be guaranteed to be successful. Invoke the
++                        // on_committed callback if necessary.
++                        p.cb.notify_committed();
++                    }
+                 }
+                 entry_and_proposals.push((e, proposal.map_or_else(Vec::new, |p| p.cb)));
+             }
+@@ -851,31 +851,31 @@ impl<EK: KvEngine, R: ApplyResReporter> Apply<EK, R> {
+         }
+         control.need_flush = false;
+         let flush_state = self.flush_state().clone();
+-        if let Some(wb) = &self.write_batch
+-            && !wb.is_empty()
+-        {
+-            self.perf_context().start_observe();
+-            let mut write_opt = WriteOptions::default();
+-            write_opt.set_disable_wal(true);
+-            let wb = self.write_batch.as_mut().unwrap();
+-            if let Err(e) = wb.write_callback_opt(&write_opt, |_| {
+-                flush_state.set_applied_index(index);
+-            }) {
+-                slog_panic!(self.logger, "failed to write data"; "error" => ?e);
+-            }
+-            self.metrics.written_bytes += wb.data_size() as u64;
+-            self.metrics.written_keys += wb.count() as u64;
+-            if wb.data_size() <= APPLY_WB_SHRINK_SIZE {
+-                wb.clear();
+-            } else {
+-                self.write_batch.take();
++        if let Some(wb) = &self.write_batch {
++            if !wb.is_empty() {
++                self.perf_context().start_observe();
++                let mut write_opt = WriteOptions::default();
++                write_opt.set_disable_wal(true);
++                let wb = self.write_batch.as_mut().unwrap();
++                if let Err(e) = wb.write_callback_opt(&write_opt, |_| {
++                    flush_state.set_applied_index(index);
++                }) {
++                    slog_panic!(self.logger, "failed to write data"; "error" => ?e);
++                }
++                self.metrics.written_bytes += wb.data_size() as u64;
++                self.metrics.written_keys += wb.count() as u64;
++                if wb.data_size() <= APPLY_WB_SHRINK_SIZE {
++                    wb.clear();
++                } else {
++                    self.write_batch.take();
++                }
++                let tokens: Vec<_> = self
++                    .callbacks_mut()
++                    .iter()
++                    .flat_map(|(v, _)| v.write_trackers().flat_map(|t| t.as_tracker_token()))
++                    .collect();
++                self.perf_context().report_metrics(&tokens);
+             }
+-            let tokens: Vec<_> = self
+-                .callbacks_mut()
+-                .iter()
+-                .flat_map(|(v, _)| v.write_trackers().flat_map(|t| t.as_tracker_token()))
+-                .collect();
+-            self.perf_context().report_metrics(&tokens);
+         }
+         let mut apply_res = ApplyRes::default();
+         apply_res.applied_index = index;
+diff --git a/components/raftstore-v2/src/operation/command/write/ingest.rs b/components/raftstore-v2/src/operation/command/write/ingest.rs
+index 48f15b361..7e2a31b62 100644
+--- a/components/raftstore-v2/src/operation/command/write/ingest.rs
++++ b/components/raftstore-v2/src/operation/command/write/ingest.rs
+@@ -65,24 +65,25 @@ impl Store {
+             if let Err(TrySendError::Disconnected(msg)) = ctx
+                 .router
+                 .send(region_id, PeerMsg::CleanupImportSst(ssts.into()))
+-                && !ctx.router.is_shutdown()
+             {
+-                let PeerMsg::CleanupImportSst(ssts) = msg else {
+-                    unreachable!()
+-                };
+-                let mut ssts = ssts.into_vec();
+-                ssts.retain(|sst| {
+-                    for range in &ranges {
+-                        if range_overlaps(range, sst.get_range()) {
+-                            return false;
++                if !ctx.router.is_shutdown() {
++                    let PeerMsg::CleanupImportSst(ssts) = msg else {
++                        unreachable!()
++                    };
++                    let mut ssts = ssts.into_vec();
++                    ssts.retain(|sst| {
++                        for range in &ranges {
++                            if range_overlaps(range, sst.get_range()) {
++                                return false;
++                            }
+                         }
+-                    }
+-                    true
+-                });
+-                let _ = ctx
+-                    .schedulers
+-                    .tablet
+-                    .schedule(tablet::Task::CleanupImportSst(ssts.into()));
++                        true
++                    });
++                    let _ = ctx
++                        .schedulers
++                        .tablet
++                        .schedule(tablet::Task::CleanupImportSst(ssts.into()));
++                }
+             }
+         }
+ 
+diff --git a/components/raftstore-v2/src/operation/life.rs b/components/raftstore-v2/src/operation/life.rs
+index 6dd0589b2..f71fa7b8c 100644
+--- a/components/raftstore-v2/src/operation/life.rs
++++ b/components/raftstore-v2/src/operation/life.rs
+@@ -241,10 +241,10 @@ fn check_if_to_peer_destroyed<ER: RaftEngine>(
+     if util::is_epoch_stale(msg.get_region_epoch(), local_epoch) {
+         return Ok(true);
+     }
+-    if let Some(local_peer) = find_peer(local_state.get_region(), store_id)
+-        && to_peer.id <= local_peer.get_id()
+-    {
+-        return Ok(true);
++    if let Some(local_peer) = find_peer(local_state.get_region(), store_id) {
++        if to_peer.id <= local_peer.get_id() {
++            return Ok(true);
++        }
+     }
+     // If the peer is destroyed by conf change, all above checks will pass.
+     if local_state
+diff --git a/components/raftstore-v2/src/operation/misc.rs b/components/raftstore-v2/src/operation/misc.rs
+index 7f94f9894..aeaaf4a86 100644
+--- a/components/raftstore-v2/src/operation/misc.rs
++++ b/components/raftstore-v2/src/operation/misc.rs
+@@ -41,12 +41,13 @@ impl Store {
+         for (region_id, keys) in region_keys {
+             if let Err(TrySendError::Disconnected(msg)) =
+                 ctx.router.send(region_id, PeerMsg::SnapGc(keys.into()))
+-                && !ctx.router.is_shutdown()
+             {
+-                let PeerMsg::SnapGc(keys) = msg else {
+-                    unreachable!()
+-                };
+-                let _ = ctx.schedulers.tablet.schedule(tablet::Task::SnapGc(keys));
++                if !ctx.router.is_shutdown() {
++                    let PeerMsg::SnapGc(keys) = msg else {
++                        unreachable!()
++                    };
++                    let _ = ctx.schedulers.tablet.schedule(tablet::Task::SnapGc(keys));
++                }
+             }
+         }
+         Ok(())
+diff --git a/components/raftstore-v2/src/operation/query/capture.rs b/components/raftstore-v2/src/operation/query/capture.rs
+index 4b6a8c24f..4bdedc881 100644
+--- a/components/raftstore-v2/src/operation/query/capture.rs
++++ b/components/raftstore-v2/src/operation/query/capture.rs
+@@ -56,12 +56,12 @@ impl<'a, EK: KvEngine, ER: RaftEngine, T: raftstore::store::Transport>
+         let id = self.fsm.peer().region_id();
+         let term = self.fsm.peer().term();
+         let (ch, _) = QueryResChannel::with_callback(Box::new(move |res| {
+-            if let QueryResult::Response(resp) = res
+-                && resp.get_header().has_error()
+-            {
+-                // Return error
+-                capture_change.snap_cb.report_error(resp.clone());
+-                return;
++            if let QueryResult::Response(resp) = res {
++                if resp.get_header().has_error() {
++                    // Return error
++                    capture_change.snap_cb.report_error(resp.clone());
++                    return;
++                }
+             }
+             if let Some(scheduler) = apply_scheduler {
+                 scheduler.send(ApplyTask::CaptureApply(capture_change))
+diff --git a/components/raftstore-v2/src/operation/ready/apply_trace.rs b/components/raftstore-v2/src/operation/ready/apply_trace.rs
+index 53756465c..823da185f 100644
+--- a/components/raftstore-v2/src/operation/ready/apply_trace.rs
++++ b/components/raftstore-v2/src/operation/ready/apply_trace.rs
+@@ -287,15 +287,13 @@ impl ApplyTrace {
+                 }
+             })
+             .max();
+-        if let Some(m) = last_modified
+-            && m >= self.admin.flushed + 4096000
+-            && m >= self.last_flush_trigger + 4096000
+-        {
+-            self.last_flush_trigger = m;
+-            true
+-        } else {
+-            false
++        if let Some(m) = last_modified {
++            if m >= self.admin.flushed + 4096000 && m >= self.last_flush_trigger + 4096000 {
++                self.last_flush_trigger = m;
++                return true;
++            }
+         }
++        false
+     }
+ 
+     // All events before `mem_index` must be consumed before calling this function.
+diff --git a/components/raftstore-v2/src/operation/ready/mod.rs b/components/raftstore-v2/src/operation/ready/mod.rs
+index 3603f0307..8619c5452 100644
+--- a/components/raftstore-v2/src/operation/ready/mod.rs
++++ b/components/raftstore-v2/src/operation/ready/mod.rs
+@@ -637,32 +637,33 @@ impl<EK: KvEngine, ER: RaftEngine> Peer<EK, ER> {
+         msg: RaftMessage,
+     ) {
+         let message = msg.get_message();
+-        if message.get_msg_type() == MessageType::MsgAppend
+-            && let Some(fe) = message.get_entries().first()
+-            && let Some(le) = message.get_entries().last()
+-        {
+-            let last = (le.get_term(), le.get_index());
+-            let first = (fe.get_term(), fe.get_index());
+-            let now = Instant::now();
+-            let queue = self.proposals_mut().queue_mut();
+-            // Proposals are batched up, so it will liely hit after one or two steps.
+-            for p in queue.iter_mut().rev() {
+-                if p.sent {
+-                    break;
+-                }
+-                let cur = (p.term, p.index);
+-                if cur > last {
+-                    continue;
+-                }
+-                if cur < first {
+-                    break;
+-                }
+-                for tracker in p.cb.write_trackers() {
+-                    tracker.observe(now, &ctx.raft_metrics.wf_send_proposal, |t| {
+-                        &mut t.metrics.wf_send_proposal_nanos
+-                    });
++        if message.get_msg_type() == MessageType::MsgAppend {
++            if let Some(fe) = message.get_entries().first() {
++                if let Some(le) = message.get_entries().last() {
++                    let last = (le.get_term(), le.get_index());
++                    let first = (fe.get_term(), fe.get_index());
++                    let now = Instant::now();
++                    let queue = self.proposals_mut().queue_mut();
++                    // Proposals are batched up, so it will liely hit after one or two steps.
++                    for p in queue.iter_mut().rev() {
++                        if p.sent {
++                            break;
++                        }
++                        let cur = (p.term, p.index);
++                        if cur > last {
++                            continue;
++                        }
++                        if cur < first {
++                            break;
++                        }
++                        for tracker in p.cb.write_trackers() {
++                            tracker.observe(now, &ctx.raft_metrics.wf_send_proposal, |t| {
++                                &mut t.metrics.wf_send_proposal_nanos
++                            });
++                        }
++                        p.sent = true;
++                    }
+                 }
+-                p.sent = true;
+             }
+         }
+         if message.get_msg_type() == MessageType::MsgTimeoutNow {
+diff --git a/components/raftstore-v2/src/operation/ready/snapshot.rs b/components/raftstore-v2/src/operation/ready/snapshot.rs
+index b6a02d70e..805b90b7f 100644
+--- a/components/raftstore-v2/src/operation/ready/snapshot.rs
++++ b/components/raftstore-v2/src/operation/ready/snapshot.rs
+@@ -546,16 +546,16 @@ impl<EK: KvEngine, ER: RaftEngine> Storage<EK, ER> {
+     pub fn cancel_generating_snap(&self, to_peer: Option<u64>) {
+         if let Some(id) = to_peer {
+             let mut states = self.snap_states.borrow_mut();
+-            if let Some(state) = states.get(&id)
+-                && matches!(*state, SnapState::Generating { .. })
+-            {
+-                info!(
+-                    self.logger(),
+-                    "snapshot is canceled";
+-                    "to_peer" => to_peer,
+-                );
+-                self.cancel_snap_task(to_peer);
+-                states.remove(&id);
++            if let Some(state) = states.get(&id) {
++                if matches!(*state, SnapState::Generating { .. }) {
++                    info!(
++                        self.logger(),
++                        "snapshot is canceled";
++                        "to_peer" => to_peer,
++                    );
++                    self.cancel_snap_task(to_peer);
++                    states.remove(&id);
++                }
+             }
+         } else {
+             self.cancel_snap_task(to_peer);
+@@ -612,13 +612,13 @@ impl<EK: KvEngine, ER: RaftEngine> Storage<EK, ER> {
+             // Set commit index for learner snapshots. It's needed to address
+             // compatibility issues between v1 and v2 snapshots.
+             // See https://github.com/pingcap/tiflash/issues/7568#issuecomment-1576382311
+-            if let Some(p) = find_peer_by_id(self.region(), to_peer_id)
+-                && p.get_role() == PeerRole::Learner
+-            {
+-                let mut snapshot_data = RaftSnapshotData::default();
+-                if snapshot_data.merge_from_bytes(snapshot.get_data()).is_ok() {
+-                    snapshot_data.mut_meta().set_commit_index_hint(commit_index);
+-                    snapshot.set_data(snapshot_data.write_to_bytes().unwrap().into());
++            if let Some(p) = find_peer_by_id(self.region(), to_peer_id) {
++                if p.get_role() == PeerRole::Learner {
++                    let mut snapshot_data = RaftSnapshotData::default();
++                    if snapshot_data.merge_from_bytes(snapshot.get_data()).is_ok() {
++                        snapshot_data.mut_meta().set_commit_index_hint(commit_index);
++                        snapshot.set_data(snapshot_data.write_to_bytes().unwrap().into());
++                    }
+                 }
+             }
+             *state = SnapState::Generated(Box::new(snapshot));
+diff --git a/components/raftstore-v2/src/operation/unsafe_recovery/create.rs b/components/raftstore-v2/src/operation/unsafe_recovery/create.rs
+index c96f3dc55..7290f4e91 100644
+--- a/components/raftstore-v2/src/operation/unsafe_recovery/create.rs
++++ b/components/raftstore-v2/src/operation/unsafe_recovery/create.rs
+@@ -110,15 +110,15 @@ impl Store {
+ 
+ impl<EK: KvEngine, ER: RaftEngine> Peer<EK, ER> {
+     pub fn on_unsafe_recovery_wait_initialized(&mut self, syncer: UnsafeRecoveryExecutePlanSyncer) {
+-        if let Some(state) = self.unsafe_recovery_state()
+-            && !state.is_abort()
+-        {
+-            warn!(self.logger,
+-                "Unsafe recovery, can't wait initialize, another plan is executing in progress";
+-                "state" => ?state,
+-            );
+-            syncer.abort();
+-            return;
++        if let Some(state) = self.unsafe_recovery_state() {
++            if !state.is_abort() {
++                warn!(self.logger,
++                    "Unsafe recovery, can't wait initialize, another plan is executing in progress";
++                    "state" => ?state,
++                );
++                syncer.abort();
++                return;
++            }
+         }
+ 
+         *self.unsafe_recovery_state_mut() = Some(UnsafeRecoveryState::WaitInitialize(syncer));
+diff --git a/components/raftstore-v2/src/operation/unsafe_recovery/demote.rs b/components/raftstore-v2/src/operation/unsafe_recovery/demote.rs
+index 0eb722a94..12f33c159 100644
+--- a/components/raftstore-v2/src/operation/unsafe_recovery/demote.rs
++++ b/components/raftstore-v2/src/operation/unsafe_recovery/demote.rs
+@@ -40,14 +40,14 @@ impl<EK: KvEngine, ER: RaftEngine> Peer<EK, ER> {
+             let exit_joint = exit_joint_request(self.region(), self.peer());
+             let (ch, sub) = CmdResChannel::pair();
+             self.on_admin_command(ctx, exit_joint, ch);
+-            if let Some(resp) = sub.try_result()
+-                && resp.get_header().has_error()
+-            {
+-                error!(self.logger,
+-                    "Unsafe recovery, fail to exit residual joint state";
+-                    "err" => ?resp.get_header().get_error(),
+-                );
+-                return;
++            if let Some(resp) = sub.try_result() {
++                if resp.get_header().has_error() {
++                    error!(self.logger,
++                        "Unsafe recovery, fail to exit residual joint state";
++                        "err" => ?resp.get_header().get_error(),
++                    );
++                    return;
++                }
+             }
+             *self.unsafe_recovery_state_mut() = Some(UnsafeRecoveryState::DemoteFailedVoters {
+                 syncer,
+@@ -72,15 +72,15 @@ impl<EK: KvEngine, ER: RaftEngine> Peer<EK, ER> {
+                 "req" => ?req);
+             let (ch, sub) = CmdResChannel::pair();
+             self.on_admin_command(ctx, req, ch);
+-            if let Some(resp) = sub.try_result()
+-                && resp.get_header().has_error()
+-            {
+-                error!(self.logger,
+-                    "Unsafe recovery, fail to finish demotion";
+-                    "err" => ?resp.get_header().get_error(),
+-                );
+-                *self.unsafe_recovery_state_mut() = Some(UnsafeRecoveryState::Failed);
+-                return;
++            if let Some(resp) = sub.try_result() {
++                if resp.get_header().has_error() {
++                    error!(self.logger,
++                        "Unsafe recovery, fail to finish demotion";
++                        "err" => ?resp.get_header().get_error(),
++                    );
++                    *self.unsafe_recovery_state_mut() = Some(UnsafeRecoveryState::Failed);
++                    return;
++                }
+             }
+             *self.unsafe_recovery_state_mut() = Some(UnsafeRecoveryState::DemoteFailedVoters {
+                 syncer,
+@@ -132,14 +132,14 @@ impl<EK: KvEngine, ER: RaftEngine> Peer<EK, ER> {
+                     let exit_joint = exit_joint_request(self.region(), self.peer());
+                     let (ch, sub) = CmdResChannel::pair();
+                     self.on_admin_command(ctx, exit_joint, ch);
+-                    if let Some(resp) = sub.try_result()
+-                        && resp.get_header().has_error()
+-                    {
+-                        error!(self.logger,
+-                            "Unsafe recovery, fail to exit joint state";
+-                            "err" => ?resp.get_header().get_error(),
+-                        );
+-                        *self.unsafe_recovery_state_mut() = Some(UnsafeRecoveryState::Failed);
++                    if let Some(resp) = sub.try_result() {
++                        if resp.get_header().has_error() {
++                            error!(self.logger,
++                                "Unsafe recovery, fail to exit joint state";
++                                "err" => ?resp.get_header().get_error(),
++                            );
++                            *self.unsafe_recovery_state_mut() = Some(UnsafeRecoveryState::Failed);
++                        }
+                     }
+                 } else {
+                     error!(self.logger,
+diff --git a/components/raftstore-v2/src/operation/unsafe_recovery/destroy.rs b/components/raftstore-v2/src/operation/unsafe_recovery/destroy.rs
+index 28e7927f4..d62a043a5 100644
+--- a/components/raftstore-v2/src/operation/unsafe_recovery/destroy.rs
++++ b/components/raftstore-v2/src/operation/unsafe_recovery/destroy.rs
+@@ -8,15 +8,15 @@ use crate::raft::Peer;
+ 
+ impl<EK: KvEngine, ER: RaftEngine> Peer<EK, ER> {
+     pub fn on_unsafe_recovery_destroy_peer(&mut self, syncer: UnsafeRecoveryExecutePlanSyncer) {
+-        if let Some(state) = self.unsafe_recovery_state()
+-            && !state.is_abort()
+-        {
+-            warn!(self.logger,
+-                "Unsafe recovery, can't destroy, another plan is executing in progress";
+-                "state" => ?state,
+-            );
+-            syncer.abort();
+-            return;
++        if let Some(state) = self.unsafe_recovery_state() {
++            if !state.is_abort() {
++                warn!(self.logger,
++                    "Unsafe recovery, can't destroy, another plan is executing in progress";
++                    "state" => ?state,
++                );
++                syncer.abort();
++                return;
++            }
+         }
+         // Syncer will be dropped after peer finishing destroy process.
+         *self.unsafe_recovery_state_mut() = Some(UnsafeRecoveryState::Destroy(syncer));
+diff --git a/components/raftstore-v2/src/operation/unsafe_recovery/force_leader.rs b/components/raftstore-v2/src/operation/unsafe_recovery/force_leader.rs
+index b80cc645b..809cd2181 100644
+--- a/components/raftstore-v2/src/operation/unsafe_recovery/force_leader.rs
++++ b/components/raftstore-v2/src/operation/unsafe_recovery/force_leader.rs
+@@ -191,13 +191,13 @@ impl<EK: KvEngine, ER: RaftEngine> Peer<EK, ER> {
+             return;
+         }
+ 
+-        if let Some(UnsafeRecoveryState::Failed) = self.unsafe_recovery_state()
+-            && !force
+-        {
+-            // Skip force leader if the plan failed, so wait for the next retry of plan with
+-            // force leader state holding
+-            info!(self.logger, "skip exiting force leader state");
+-            return;
++        if let Some(UnsafeRecoveryState::Failed) = self.unsafe_recovery_state() {
++            if !force {
++                // Skip force leader if the plan failed, so wait for the next retry of plan with
++                // force leader state holding
++                info!(self.logger, "skip exiting force leader state");
++                return;
++            }
+         }
+ 
+         info!(self.logger, "exit force leader state");
+diff --git a/components/raftstore-v2/src/operation/unsafe_recovery/report.rs b/components/raftstore-v2/src/operation/unsafe_recovery/report.rs
+index db78c61a0..33fe65642 100644
+--- a/components/raftstore-v2/src/operation/unsafe_recovery/report.rs
++++ b/components/raftstore-v2/src/operation/unsafe_recovery/report.rs
+@@ -27,15 +27,15 @@ impl Store {
+ 
+ impl<EK: KvEngine, ER: RaftEngine> Peer<EK, ER> {
+     pub fn on_unsafe_recovery_wait_apply(&mut self, syncer: UnsafeRecoveryWaitApplySyncer) {
+-        if let Some(state) = self.unsafe_recovery_state()
+-            && !state.is_abort()
+-        {
+-            warn!(self.logger,
+-                "Unsafe recovery, can't wait apply, another plan is executing in progress";
+-                "state" => ?state,
+-            );
+-            syncer.abort();
+-            return;
++        if let Some(state) = self.unsafe_recovery_state() {
++            if !state.is_abort() {
++                warn!(self.logger,
++                    "Unsafe recovery, can't wait apply, another plan is executing in progress";
++                    "state" => ?state,
++                );
++                syncer.abort();
++                return;
++            }
+         }
+         let target_index = if self.has_force_leader() {
+             // For regions that lose quorum (or regions have force leader), whatever has
+diff --git a/components/raftstore-v2/src/worker/tablet.rs b/components/raftstore-v2/src/worker/tablet.rs
+index 88bbe5f4e..37b6f2ccf 100644
+--- a/components/raftstore-v2/src/worker/tablet.rs
++++ b/components/raftstore-v2/src/worker/tablet.rs
+@@ -658,8 +658,10 @@ where
+     fn on_timeout(&mut self) {
+         self.pending_destroy_tasks.retain_mut(|(path, cb)| {
+             let r = Self::process_destroy_task(&self.logger, &self.tablet_registry, path);
+-            if r && let Some(cb) = cb.take() {
+-                cb();
++            if r {
++                if let Some(cb) = cb.take() {
++                    cb();
++                }
+             }
+             !r
+         });
+diff --git a/components/raftstore/src/coprocessor/config.rs b/components/raftstore/src/coprocessor/config.rs
+index f0e8f796d..fd947f5fb 100644
+--- a/components/raftstore/src/coprocessor/config.rs
++++ b/components/raftstore/src/coprocessor/config.rs
+@@ -203,16 +203,18 @@ impl Config {
+         let res = self.validate_bucket_size();
+         // If it's OK to enable bucket, we will prefer to enable it if useful for
+         // raftstore-v2.
+-        if let Ok(()) = res
+-            && self.enable_region_bucket.is_none()
+-            && raft_kv_v2
+-        {
+-            let useful = self.region_split_size() >= self.region_bucket_size * 2;
+-            self.enable_region_bucket = Some(useful);
+-        } else if let Err(e) = res
+-            && self.enable_region_bucket()
+-        {
+-            return Err(e);
++        match res {
++            Ok(()) => {
++                if self.enable_region_bucket.is_none() && raft_kv_v2 {
++                    let useful = self.region_split_size() >= self.region_bucket_size * 2;
++                    self.enable_region_bucket = Some(useful);
++                }
++            }
++            Err(e) => {
++                if self.enable_region_bucket() {
++                    return Err(e);
++                }
++            }
+         }
+         Ok(())
+     }
+diff --git a/components/raftstore/src/coprocessor/region_info_accessor.rs b/components/raftstore/src/coprocessor/region_info_accessor.rs
+index 86a383483..523dad8f0 100644
+--- a/components/raftstore/src/coprocessor/region_info_accessor.rs
++++ b/components/raftstore/src/coprocessor/region_info_accessor.rs
+@@ -737,11 +737,11 @@ impl RegionCollector {
+                 // epoch is properly set and an Update message was sent.
+                 return;
+             }
+-            if let RaftStoreEvent::RoleChange { initialized, .. } = &event
+-                && !initialized
+-            {
+-                // Ignore uninitialized peers.
+-                return;
++            if let RaftStoreEvent::RoleChange { initialized, .. } = &event {
++                if !initialized {
++                    // Ignore uninitialized peers.
++                    return;
++                }
+             }
+             if !self.check_region_range(region, true) {
+                 debug!(
+@@ -982,11 +982,11 @@ impl RegionInfoProvider for RegionInfoAccessor {
+         self.seek_region(
+             key,
+             Box::new(move |iter| {
+-                if let Some(info) = iter.next()
+-                    && info.region.get_start_key() <= key_in_vec.as_slice()
+-                {
+-                    if let Err(e) = tx.send(info.region.clone()) {
+-                        warn!("failed to send find_region_by_key result: {:?}", e);
++                if let Some(info) = iter.next() {
++                    if info.region.get_start_key() <= key_in_vec.as_slice() {
++                        if let Err(e) = tx.send(info.region.clone()) {
++                            warn!("failed to send find_region_by_key result: {:?}", e);
++                        }
+                     }
+                 }
+             }),
+diff --git a/components/raftstore/src/store/async_io/write.rs b/components/raftstore/src/store/async_io/write.rs
+index 7f32b1aaf..6abf8829b 100644
+--- a/components/raftstore/src/store/async_io/write.rs
++++ b/components/raftstore/src/store/async_io/write.rs
+@@ -565,13 +565,14 @@ where
+             )
+             .unwrap();
+ 
+-        if let Some(raft_state) = task.raft_state.take()
+-            && self
++        if let Some(raft_state) = task.raft_state.take() {
++            if self
+                 .raft_states
+                 .insert(task.region_id, raft_state)
+                 .is_none()
+-        {
+-            self.state_size += std::mem::size_of::<RaftLocalState>();
++            {
++                self.state_size += std::mem::size_of::<RaftLocalState>();
++            }
+         }
+         self.extra_batch_write.merge(&mut task.extra_write);
+ 
+diff --git a/components/raftstore/src/store/fsm/peer.rs b/components/raftstore/src/store/fsm/peer.rs
+index 564e4ba3a..e3284ff1b 100644
+--- a/components/raftstore/src/store/fsm/peer.rs
++++ b/components/raftstore/src/store/fsm/peer.rs
+@@ -790,20 +790,21 @@ where
+         } else {
+             if self.fsm.batch_req_builder.has_proposed_cb
+                 && self.fsm.batch_req_builder.propose_checked.is_none()
+-                && let Some(cmd) = self.fsm.batch_req_builder.request.take()
+             {
+-                // We are delaying these requests to next loop. Try to fulfill their
+-                // proposed callback early.
+-                self.fsm.batch_req_builder.propose_checked = Some(false);
+-                if let Ok(None) = self.pre_propose_raft_command(&cmd) {
+-                    if self.fsm.peer.will_likely_propose(&cmd) {
+-                        self.fsm.batch_req_builder.propose_checked = Some(true);
+-                        for cb in &mut self.fsm.batch_req_builder.callbacks {
+-                            cb.invoke_proposed();
++                if let Some(cmd) = self.fsm.batch_req_builder.request.take() {
++                    // We are delaying these requests to next loop. Try to fulfill their
++                    // proposed callback early.
++                    self.fsm.batch_req_builder.propose_checked = Some(false);
++                    if let Ok(None) = self.pre_propose_raft_command(&cmd) {
++                        if self.fsm.peer.will_likely_propose(&cmd) {
++                            self.fsm.batch_req_builder.propose_checked = Some(true);
++                            for cb in &mut self.fsm.batch_req_builder.callbacks {
++                                cb.invoke_proposed();
++                            }
+                         }
+                     }
++                    self.fsm.batch_req_builder.request = Some(cmd);
+                 }
+-                self.fsm.batch_req_builder.request = Some(cmd);
+             }
+             if self.fsm.batch_req_builder.request.is_some() {
+                 self.ctx.raft_metrics.ready.propose_delay.inc();
+@@ -843,17 +844,17 @@ where
+         syncer: UnsafeRecoveryExecutePlanSyncer,
+         failed_voters: Vec<metapb::Peer>,
+     ) {
+-        if let Some(state) = &self.fsm.peer.unsafe_recovery_state
+-            && !state.is_abort()
+-        {
+-            warn!(
+-                "Unsafe recovery, demote failed voters has already been initiated";
+-                "region_id" => self.region().get_id(),
+-                "peer_id" => self.fsm.peer.peer.get_id(),
+-                "state" => ?state,
+-            );
+-            syncer.abort();
+-            return;
++        if let Some(state) = &self.fsm.peer.unsafe_recovery_state {
++            if !state.is_abort() {
++                warn!(
++                    "Unsafe recovery, demote failed voters has already been initiated";
++                    "region_id" => self.region().get_id(),
++                    "peer_id" => self.fsm.peer.peer.get_id(),
++                    "state" => ?state,
++                );
++                syncer.abort();
++                return;
++            }
+         }
+ 
+         if !self.fsm.peer.is_in_force_leader() {
+@@ -951,17 +952,17 @@ where
+     }
+ 
+     fn on_unsafe_recovery_destroy(&mut self, syncer: UnsafeRecoveryExecutePlanSyncer) {
+-        if let Some(state) = &self.fsm.peer.unsafe_recovery_state
+-            && !state.is_abort()
+-        {
+-            warn!(
+-                "Unsafe recovery, can't destroy, another plan is executing in progress";
+-                "region_id" => self.region_id(),
+-                "peer_id" => self.fsm.peer_id(),
+-                "state" => ?state,
+-            );
+-            syncer.abort();
+-            return;
++        if let Some(state) = &self.fsm.peer.unsafe_recovery_state {
++            if !state.is_abort() {
++                warn!(
++                    "Unsafe recovery, can't destroy, another plan is executing in progress";
++                    "region_id" => self.region_id(),
++                    "peer_id" => self.fsm.peer_id(),
++                    "state" => ?state,
++                );
++                syncer.abort();
++                return;
++            }
+         }
+         self.fsm.peer.unsafe_recovery_state = Some(UnsafeRecoveryState::Destroy(syncer));
+         self.handle_destroy_peer(DestroyPeerJob {
+@@ -972,17 +973,17 @@ where
+     }
+ 
+     fn on_unsafe_recovery_wait_apply(&mut self, syncer: UnsafeRecoveryWaitApplySyncer) {
+-        if let Some(state) = &self.fsm.peer.unsafe_recovery_state
+-            && !state.is_abort()
+-        {
+-            warn!(
+-                "Unsafe recovery, can't wait apply, another plan is executing in progress";
+-                "region_id" => self.region_id(),
+-                "peer_id" => self.fsm.peer_id(),
+-                "state" => ?state,
+-            );
+-            syncer.abort();
+-            return;
++        if let Some(state) = &self.fsm.peer.unsafe_recovery_state {
++            if !state.is_abort() {
++                warn!(
++                    "Unsafe recovery, can't wait apply, another plan is executing in progress";
++                    "region_id" => self.region_id(),
++                    "peer_id" => self.fsm.peer_id(),
++                    "state" => ?state,
++                );
++                syncer.abort();
++                return;
++            }
+         }
+         let target_index = if self.fsm.peer.force_leader.is_some() {
+             // For regions that lose quorum (or regions have force leader), whatever has
+@@ -1888,17 +1889,17 @@ where
+         if self.fsm.peer.force_leader.is_none() {
+             return;
+         }
+-        if let Some(UnsafeRecoveryState::Failed) = self.fsm.peer.unsafe_recovery_state
+-            && !force
+-        {
+-            // Skip force leader if the plan failed, so wait for the next retry of plan with
+-            // force leader state holding
+-            info!(
+-                "skip exiting force leader state";
+-                "region_id" => self.fsm.region_id(),
+-                "peer_id" => self.fsm.peer_id(),
+-            );
+-            return;
++        if let Some(UnsafeRecoveryState::Failed) = self.fsm.peer.unsafe_recovery_state {
++            if !force {
++                // Skip force leader if the plan failed, so wait for the next retry of plan with
++                // force leader state holding
++                info!(
++                    "skip exiting force leader state";
++                    "region_id" => self.fsm.region_id(),
++                    "peer_id" => self.fsm.peer_id(),
++                );
++                return;
++            }
+         }
+ 
+         info!(
+diff --git a/components/raftstore/src/store/util.rs b/components/raftstore/src/store/util.rs
+index 10ac229fa..c7267cf99 100644
+--- a/components/raftstore/src/store/util.rs
++++ b/components/raftstore/src/store/util.rs
+@@ -363,10 +363,10 @@ pub fn check_flashback_state(
+     skip_not_prepared: bool,
+ ) -> Result<()> {
+     // The admin flashback cmd could be proposed/applied under any state.
+-    if let Some(ty) = admin_type
+-        && (ty == AdminCmdType::PrepareFlashback || ty == AdminCmdType::FinishFlashback)
+-    {
+-        return Ok(());
++    if let Some(ty) = admin_type {
++        if ty == AdminCmdType::PrepareFlashback || ty == AdminCmdType::FinishFlashback {
++            return Ok(());
++        }
+     }
+     // TODO: only use `flashback_start_ts` to check flashback state.
+     let is_in_flashback = is_in_flashback || flashback_start_ts > 0;
+@@ -1405,10 +1405,10 @@ impl RegionReadProgress {
+     }
+ 
+     pub fn notify_advance_resolved_ts(&self) {
+-        if let Ok(core) = self.core.try_lock()
+-            && let Some(advance_notify) = &core.advance_notify
+-        {
+-            advance_notify.notify_waiters();
++        if let Ok(core) = self.core.try_lock() {
++            if let Some(advance_notify) = &core.advance_notify {
++                advance_notify.notify_waiters();
++            }
+         }
+     }
+ 
+diff --git a/components/raftstore/src/store/worker/split_check.rs b/components/raftstore/src/store/worker/split_check.rs
+index f8757cf50..3e5eb3740 100644
+--- a/components/raftstore/src/store/worker/split_check.rs
++++ b/components/raftstore/src/store/worker/split_check.rs
+@@ -253,17 +253,22 @@ impl BucketStatsInfo {
+         // The bucket ranges is none when the region buckets is also none.
+         // So this condition indicates that the region buckets needs to refresh not
+         // renew.
+-        if let Some(bucket_ranges) = bucket_ranges
+-            && self.bucket_stat.is_some()
+-        {
+-            assert_eq!(buckets.len(), bucket_ranges.len());
+-            change_bucket_version = self.update_buckets(
+-                cfg,
+-                next_bucket_version,
+-                buckets,
+-                region_epoch,
+-                &bucket_ranges,
+-            );
++        if let Some(bucket_ranges) = bucket_ranges {
++            if self.bucket_stat.is_some() {
++                assert_eq!(buckets.len(), bucket_ranges.len());
++                change_bucket_version = self.update_buckets(
++                    cfg,
++                    next_bucket_version,
++                    buckets,
++                    region_epoch,
++                    &bucket_ranges,
++                );
++            } else {
++                change_bucket_version = true;
++                // when the region buckets is none, the exclusive buckets includes all the
++                // bucket keys.
++                self.init_buckets(cfg, next_bucket_version, buckets, region_epoch, region);
++            }
+         } else {
+             change_bucket_version = true;
+             // when the region buckets is none, the exclusive buckets includes all the
+diff --git a/components/raftstore/src/store/worker/split_controller.rs b/components/raftstore/src/store/worker/split_controller.rs
+index 4edd63e7f..438f41767 100644
+--- a/components/raftstore/src/store/worker/split_controller.rs
++++ b/components/raftstore/src/store/worker/split_controller.rs
+@@ -461,27 +461,27 @@ impl ReadStats {
+         region_info.cop_detail.add(write_cf_cop_detail);
+         // the bucket of the follower only have the version info and not needs to be
+         // recorded the hot bucket.
+-        if let Some(buckets) = buckets
+-            && !buckets.sizes.is_empty()
+-        {
+-            let bucket_stat = self
+-                .region_buckets
+-                .entry(region_id)
+-                .and_modify(|current| {
+-                    if current.meta < *buckets {
+-                        let mut new = BucketStat::from_meta(buckets.clone());
+-                        std::mem::swap(current, &mut new);
+-                        current.merge(&new);
+-                    }
+-                })
+-                .or_insert_with(|| BucketStat::from_meta(buckets.clone()));
+-            let mut delta = metapb::BucketStats::default();
+-            delta.set_read_bytes(vec![(write.read_bytes + data.read_bytes) as u64]);
+-            delta.set_read_keys(vec![(write.read_keys + data.read_keys) as u64]);
+-            bucket_stat.add_flows(
+-                &[start.unwrap_or_default(), end.unwrap_or_default()],
+-                &delta,
+-            );
++        if let Some(buckets) = buckets {
++            if !buckets.sizes.is_empty() {
++                let bucket_stat = self
++                    .region_buckets
++                    .entry(region_id)
++                    .and_modify(|current| {
++                        if current.meta < *buckets {
++                            let mut new = BucketStat::from_meta(buckets.clone());
++                            std::mem::swap(current, &mut new);
++                            current.merge(&new);
++                        }
++                    })
++                    .or_insert_with(|| BucketStat::from_meta(buckets.clone()));
++                let mut delta = metapb::BucketStats::default();
++                delta.set_read_bytes(vec![(write.read_bytes + data.read_bytes) as u64]);
++                delta.set_read_keys(vec![(write.read_keys + data.read_keys) as u64]);
++                bucket_stat.add_flows(
++                    &[start.unwrap_or_default(), end.unwrap_or_default()],
++                    &delta,
++                );
++            }
+         }
+     }
+ 
+diff --git a/components/resource_control/src/resource_limiter.rs b/components/resource_control/src/resource_limiter.rs
+index 85102ea5a..b88487666 100644
+--- a/components/resource_control/src/resource_limiter.rs
++++ b/components/resource_control/src/resource_limiter.rs
+@@ -91,10 +91,10 @@ impl ResourceLimiter {
+             self.limiters[ResourceType::Cpu as usize].consume(cpu_time.as_micros() as u64, wait);
+         let io_dur = self.limiters[ResourceType::Io as usize].consume_io(io_bytes, wait);
+         let wait_dur = cpu_dur.max(io_dur);
+-        if !wait_dur.is_zero()
+-            && let Some(h) = &self.wait_histogram
+-        {
+-            h.observe(wait_dur.as_secs_f64());
++        if !wait_dur.is_zero() {
++            if let Some(h) = &self.wait_histogram {
++                h.observe(wait_dur.as_secs_f64());
++            }
+         }
+         wait_dur
+     }
+diff --git a/components/server/src/signal_handler.rs b/components/server/src/signal_handler.rs
+index 9141608f0..6e881c748 100644
+--- a/components/server/src/signal_handler.rs
++++ b/components/server/src/signal_handler.rs
+@@ -71,16 +71,16 @@ mod imp {
+                     info!("{}", metrics::dump(false));
+                     if let Some(ref engines) = engines {
+                         info!("{:?}", MiscExt::dump_stats(&engines.kv));
+-                        if let Some(s) = kv_statistics.as_ref()
+-                            && let Some(s) = s.to_string()
+-                        {
+-                            info!("{:?}", s);
++                        if let Some(s) = kv_statistics.as_ref() {
++                            if let Some(s) = s.to_string() {
++                                info!("{:?}", s);
++                            }
+                         }
+                         info!("{:?}", RaftEngine::dump_stats(&engines.raft));
+-                        if let Some(s) = raft_statistics.as_ref()
+-                            && let Some(s) = s.to_string()
+-                        {
+-                            info!("{:?}", s);
++                        if let Some(s) = raft_statistics.as_ref() {
++                            if let Some(s) = s.to_string() {
++                                info!("{:?}", s);
++                            }
+                         }
+                     }
+                 }
+diff --git a/components/tidb_query_datatype/src/codec/mysql/decimal.rs b/components/tidb_query_datatype/src/codec/mysql/decimal.rs
+index 8d3e291fa..7b39ce202 100644
+--- a/components/tidb_query_datatype/src/codec/mysql/decimal.rs
++++ b/components/tidb_query_datatype/src/codec/mysql/decimal.rs
+@@ -1919,10 +1919,15 @@ impl FromStr for Decimal {
+     }
+ }
+ 
+-impl ToString for Decimal {
+-    fn to_string(&self) -> String {
+-        let (mut buf, word_start_idx, int_len, int_cnt, frac_cnt) = self.prepare_buf();
+-        if self.negative {
++impl Display for Decimal {
++    fn fmt(&self, fmt: &mut Formatter<'_>) -> fmt::Result {
++        let mut dec = *self;
++        dec = dec
++            .round(self.result_frac_cnt as i8, RoundMode::HalfEven)
++            .unwrap();
++
++        let (mut buf, word_start_idx, int_len, int_cnt, frac_cnt) = dec.prepare_buf();
++        if dec.negative {
+             buf.push(b'-');
+         }
+         let padding = int_len - cmp::max(int_cnt, 1);
+@@ -1934,7 +1939,7 @@ impl ToString for Decimal {
+             buf.resize(idx, 0);
+             while idx > base_idx {
+                 widx -= 1;
+-                let mut x = self.word_buf[widx];
++                let mut x = dec.word_buf[widx];
+                 for _ in 0..cmp::min((idx - base_idx) as u8, DIGITS_PER_WORD) {
+                     idx -= 1;
+                     buf[idx] = b'0' + (x % 10) as u8;
+@@ -1949,7 +1954,7 @@ impl ToString for Decimal {
+             let mut widx = word_start_idx + word_cnt!(int_cnt) as usize;
+             let exp_idx = buf.len() + frac_cnt as usize;
+             while buf.len() < exp_idx {
+-                let mut x = self.word_buf[widx];
++                let mut x = dec.word_buf[widx];
+                 for _ in 0..cmp::min((exp_idx - buf.len()) as u8, DIGITS_PER_WORD) {
+                     buf.push((x / DIG_MASK) as u8 + b'0');
+                     x = (x % DIG_MASK) * 10;
+@@ -1960,17 +1965,8 @@ impl ToString for Decimal {
+                 buf.push(b'0');
+             }
+         }
+-        unsafe { String::from_utf8_unchecked(buf) }
+-    }
+-}
+-
+-impl Display for Decimal {
+-    fn fmt(&self, fmt: &mut Formatter<'_>) -> fmt::Result {
+-        let mut dec = *self;
+-        dec = dec
+-            .round(self.result_frac_cnt as i8, RoundMode::HalfEven)
+-            .unwrap();
+-        fmt.write_str(&dec.to_string())
++        let s = unsafe { String::from_utf8_unchecked(buf) };
++        fmt.write_str(&s)
+     }
+ }
+ 
+diff --git a/components/tidb_query_datatype/src/codec/mysql/enums.rs b/components/tidb_query_datatype/src/codec/mysql/enums.rs
+index 6c39d7f8a..f85271d41 100644
+--- a/components/tidb_query_datatype/src/codec/mysql/enums.rs
++++ b/components/tidb_query_datatype/src/codec/mysql/enums.rs
+@@ -185,12 +185,6 @@ impl<'a> ToInt for EnumRef<'a> {
+     }
+ }
+ 
+-impl<'a> ToString for EnumRef<'a> {
+-    fn to_string(&self) -> String {
+-        String::from_utf8_lossy(self.name).to_string()
+-    }
+-}
+-
+ pub trait EnumEncoder: NumberEncoder {
+     #[inline]
+     fn write_enum_uint(&mut self, data: EnumRef<'_>) -> Result<()> {
+diff --git a/components/tidb_query_datatype/src/codec/mysql/json/serde.rs b/components/tidb_query_datatype/src/codec/mysql/json/serde.rs
+index 598e27347..706a7eb05 100644
+--- a/components/tidb_query_datatype/src/codec/mysql/json/serde.rs
++++ b/components/tidb_query_datatype/src/codec/mysql/json/serde.rs
+@@ -144,12 +144,6 @@ impl<'a> Serialize for JsonRef<'a> {
+     }
+ }
+ 
+-impl ToString for Json {
+-    fn to_string(&self) -> String {
+-        self.as_ref().to_string()
+-    }
+-}
+-
+ impl FromStr for Json {
+     type Err = Error;
+     fn from_str(s: &str) -> Result<Self, Self::Err> {
+diff --git a/components/tidb_query_datatype/src/codec/mysql/vector.rs b/components/tidb_query_datatype/src/codec/mysql/vector.rs
+index 039638be7..44d04d157 100644
+--- a/components/tidb_query_datatype/src/codec/mysql/vector.rs
++++ b/components/tidb_query_datatype/src/codec/mysql/vector.rs
+@@ -317,12 +317,6 @@ impl std::fmt::Debug for VectorFloat32Ref<'_> {
+     }
+ }
+ 
+-impl ToString for VectorFloat32Ref<'_> {
+-    fn to_string(&self) -> String {
+-        format!("{}", self)
+-    }
+-}
+-
+ #[cfg(test)]
+ mod tests {
+     use super::*;
+diff --git a/components/tikv_util/src/worker/pool.rs b/components/tikv_util/src/worker/pool.rs
+index 72cab2ff0..761140fe9 100644
+--- a/components/tikv_util/src/worker/pool.rs
++++ b/components/tikv_util/src/worker/pool.rs
+@@ -413,10 +413,12 @@ impl Worker {
+             .compat();
+         let stop = self.stop.clone();
+         let _ = self.pool.spawn(async move {
+-            while !stop.load(Ordering::Relaxed)
+-                && let Some(Ok(_)) = interval.next().await
+-            {
+-                func();
++            while !stop.load(Ordering::Relaxed) {
++                if let Some(Ok(_)) = interval.next().await {
++                    func();
++                } else {
++                    break;
++                }
+             }
+         });
+     }
+@@ -431,11 +433,13 @@ impl Worker {
+             .compat();
+         let stop = self.stop.clone();
+         let _ = self.pool.spawn(async move {
+-            while !stop.load(Ordering::Relaxed)
+-                && let Some(Ok(_)) = interval.next().await
+-            {
+-                let fut = func();
+-                fut.await;
++            while !stop.load(Ordering::Relaxed) {
++                if let Some(Ok(_)) = interval.next().await {
++                    let fut = func();
++                    fut.await;
++                } else {
++                    break;
++                }
+             }
+         });
+     }
+diff --git a/src/config/mod.rs b/src/config/mod.rs
+index c1a4cf6b6..c387acbd3 100644
+--- a/src/config/mod.rs
++++ b/src/config/mod.rs
+@@ -1563,26 +1563,26 @@ impl DbConfig {
+         force_partition_range_mgr: ForcePartitionRangeManager,
+     ) -> CfResources {
+         let mut compaction_thread_limiters = HashMap::new();
+-        if let Some(n) = self.defaultcf.max_compactions
+-            && n > 0
+-        {
+-            compaction_thread_limiters
+-                .insert(CF_DEFAULT, ConcurrentTaskLimiter::new(CF_DEFAULT, n));
++        if let Some(n) = self.defaultcf.max_compactions {
++            if n > 0 {
++                compaction_thread_limiters
++                    .insert(CF_DEFAULT, ConcurrentTaskLimiter::new(CF_DEFAULT, n));
++            }
+         }
+-        if let Some(n) = self.writecf.max_compactions
+-            && n > 0
+-        {
+-            compaction_thread_limiters.insert(CF_WRITE, ConcurrentTaskLimiter::new(CF_WRITE, n));
++        if let Some(n) = self.writecf.max_compactions {
++            if n > 0 {
++                compaction_thread_limiters.insert(CF_WRITE, ConcurrentTaskLimiter::new(CF_WRITE, n));
++            }
+         }
+-        if let Some(n) = self.lockcf.max_compactions
+-            && n > 0
+-        {
+-            compaction_thread_limiters.insert(CF_LOCK, ConcurrentTaskLimiter::new(CF_LOCK, n));
++        if let Some(n) = self.lockcf.max_compactions {
++            if n > 0 {
++                compaction_thread_limiters.insert(CF_LOCK, ConcurrentTaskLimiter::new(CF_LOCK, n));
++            }
+         }
+-        if let Some(n) = self.raftcf.max_compactions
+-            && n > 0
+-        {
+-            compaction_thread_limiters.insert(CF_RAFT, ConcurrentTaskLimiter::new(CF_RAFT, n));
++        if let Some(n) = self.raftcf.max_compactions {
++            if n > 0 {
++                compaction_thread_limiters.insert(CF_RAFT, ConcurrentTaskLimiter::new(CF_RAFT, n));
++            }
+         }
+         let mut write_buffer_managers = HashMap::default();
+         self.lockcf.write_buffer_limit.map(|limit| {
+@@ -1771,12 +1771,9 @@ impl Default for RaftDefaultCfConfig {
+ 
+ impl RaftDefaultCfConfig {
+     pub fn build_opt(&self, cache: &Cache) -> RocksCfOptions {
+-        let limiter = if let Some(n) = self.max_compactions
+-            && n > 0
+-        {
+-            Some(ConcurrentTaskLimiter::new(CF_DEFAULT, n))
+-        } else {
+-            None
++        let limiter = match self.max_compactions {
++            Some(n) if n > 0 => Some(ConcurrentTaskLimiter::new(CF_DEFAULT, n)),
++            _ => None,
+         };
+         let no_region_info_accessor: Option<&RegionInfoAccessor> = None;
+         let mut cf_opts = build_cf_opt!(
+@@ -4293,18 +4290,19 @@ impl TikvConfig {
+         // When shared block cache is enabled, if its capacity is set, it overrides
+         // individual block cache sizes. Otherwise use the sum of block cache
+         // size of all column families as the shared cache size.
+-        if let Some(a) = self.rocksdb.defaultcf.block_cache_size
+-            && let Some(b) = self.rocksdb.writecf.block_cache_size
+-            && let Some(c) = self.rocksdb.lockcf.block_cache_size
+-        {
+-            let d = self
+-                .raftdb
+-                .defaultcf
+-                .block_cache_size
+-                .map(|s| s.0)
+-                .unwrap_or_default();
+-            let sum = a.0 + b.0 + c.0 + d;
+-            self.storage.block_cache.capacity = Some(ReadableSize(sum));
++        if let Some(a) = self.rocksdb.defaultcf.block_cache_size {
++            if let Some(b) = self.rocksdb.writecf.block_cache_size {
++                if let Some(c) = self.rocksdb.lockcf.block_cache_size {
++                    let d = self
++                        .raftdb
++                        .defaultcf
++                        .block_cache_size
++                        .map(|s| s.0)
++                        .unwrap_or_default();
++                    let sum = a.0 + b.0 + c.0 + d;
++                    self.storage.block_cache.capacity = Some(ReadableSize(sum));
++                }
++            }
+         }
+         if self.backup.sst_max_size.0 < default_coprocessor.region_max_size().0 / 10 {
+             warn!(
+diff --git a/src/coprocessor/endpoint.rs b/src/coprocessor/endpoint.rs
+index c2b8fccfb..77b050635 100644
+--- a/src/coprocessor/endpoint.rs
++++ b/src/coprocessor/endpoint.rs
+@@ -451,16 +451,17 @@ impl<E: Engine> Endpoint<E> {
+ 
+         // Check if the buckets version is latest.
+         // skip if request don't carry this bucket version.
+-        if let Some(ref buckets) = latest_buckets
+-            && buckets.version > tracker.req_ctx.context.buckets_version
+-            && tracker.req_ctx.context.buckets_version != 0
+-        {
+-            let mut bucket_not_match = errorpb::BucketVersionNotMatch::default();
+-            bucket_not_match.set_version(buckets.version);
+-            bucket_not_match.set_keys(buckets.keys.clone().into());
+-            let mut err = errorpb::Error::default();
+-            err.set_bucket_version_not_match(bucket_not_match);
+-            return Err(Error::Region(err));
++        if let Some(ref buckets) = latest_buckets {
++            if buckets.version > tracker.req_ctx.context.buckets_version
++                && tracker.req_ctx.context.buckets_version != 0
++            {
++                let mut bucket_not_match = errorpb::BucketVersionNotMatch::default();
++                bucket_not_match.set_version(buckets.version);
++                bucket_not_match.set_keys(buckets.keys.clone().into());
++                let mut err = errorpb::Error::default();
++                err.set_bucket_version_not_match(bucket_not_match);
++                return Err(Error::Region(err));
++            }
+         }
+         // When snapshot is retrieved, deadline may exceed.
+         tracker.on_snapshot_finished();
+diff --git a/src/server/debug.rs b/src/server/debug.rs
+index 2ded76a46..b79263d59 100644
+--- a/src/server/debug.rs
++++ b/src/server/debug.rs
+@@ -963,20 +963,20 @@ where
+ 
+     fn dump_kv_stats(&self) -> Result<String> {
+         let mut kv_str = box_try!(MiscExt::dump_stats(&self.engines.kv));
+-        if let Some(s) = self.kv_statistics.as_ref()
+-            && let Some(s) = s.to_string()
+-        {
+-            kv_str.push_str(&s);
++        if let Some(s) = self.kv_statistics.as_ref() {
++            if let Some(s) = s.to_string() {
++                kv_str.push_str(&s);
++            }
+         }
+         Ok(kv_str)
+     }
+ 
+     fn dump_raft_stats(&self) -> Result<String> {
+         let mut raft_str = box_try!(RaftEngine::dump_stats(&self.engines.raft));
+-        if let Some(s) = self.raft_statistics.as_ref()
+-            && let Some(s) = s.to_string()
+-        {
+-            raft_str.push_str(&s);
++        if let Some(s) = self.raft_statistics.as_ref() {
++            if let Some(s) = s.to_string() {
++                raft_str.push_str(&s);
++            }
+         }
+         Ok(raft_str)
+     }
+diff --git a/src/server/debug2.rs b/src/server/debug2.rs
+index 8545239bd..5f844ac8c 100644
+--- a/src/server/debug2.rs
++++ b/src/server/debug2.rs
+@@ -812,20 +812,20 @@ impl<ER: RaftEngine> Debugger for DebuggerImplV2<ER> {
+             }
+             true
+         });
+-        if let Some(s) = self.kv_statistics.as_ref()
+-            && let Some(s) = s.to_string()
+-        {
+-            kv_str.push_str(&s);
++        if let Some(s) = self.kv_statistics.as_ref() {
++            if let Some(s) = s.to_string() {
++                kv_str.push_str(&s);
++            }
+         }
+         Ok(kv_str)
+     }
+ 
+     fn dump_raft_stats(&self) -> Result<String> {
+         let mut raft_str = box_try!(RaftEngine::dump_stats(&self.raft_engine));
+-        if let Some(s) = self.raft_statistics.as_ref()
+-            && let Some(s) = s.to_string()
+-        {
+-            raft_str.push_str(&s);
++        if let Some(s) = self.raft_statistics.as_ref() {
++            if let Some(s) = s.to_string() {
++                raft_str.push_str(&s);
++            }
+         }
+         Ok(raft_str)
+     }
+diff --git a/src/server/engine_factory.rs b/src/server/engine_factory.rs
+index 0a07028ab..2b9d839fa 100644
+--- a/src/server/engine_factory.rs
++++ b/src/server/engine_factory.rs
+@@ -213,12 +213,16 @@ impl TabletFactory<RocksEngine> for KvEngineFactory {
+         if let Some(listener) = &self.inner.flow_listener {
+             db_opts.add_event_listener(listener.clone_with(ctx.id));
+         }
+-        if let Some(storage) = &self.inner.state_storage
+-            && let Some(flush_state) = ctx.flush_state
+-        {
+-            let listener =
+-                PersistenceListener::new(ctx.id, ctx.suffix.unwrap(), flush_state, storage.clone());
+-            db_opts.add_event_listener(RocksPersistenceListener::new(listener));
++        if let Some(storage) = &self.inner.state_storage {
++            if let Some(flush_state) = ctx.flush_state {
++                let listener = PersistenceListener::new(
++                    ctx.id,
++                    ctx.suffix.unwrap(),
++                    flush_state,
++                    storage.clone(),
++                );
++                db_opts.add_event_listener(RocksPersistenceListener::new(listener));
++            }
+         }
+         let kv_engine =
+             engine_rocks::util::new_engine_opt(path.to_str().unwrap(), db_opts, cf_opts);
+diff --git a/src/server/lock_manager/waiter_manager.rs b/src/server/lock_manager/waiter_manager.rs
+index f1b3c9b3d..4148f3eab 100644
+--- a/src/server/lock_manager/waiter_manager.rs
++++ b/src/server/lock_manager/waiter_manager.rs
+@@ -554,13 +554,13 @@ impl WaiterManager {
+                 continue;
+             }
+ 
+-            if let Some((previous_wait_info, diag_ctx)) = previous_wait_info
+-                && previous_wait_info.allow_lock_with_conflict
+-            {
+-                self.detector_scheduler
+-                    .clean_up_wait_for(event.start_ts, previous_wait_info);
+-                self.detector_scheduler
+-                    .detect(event.start_ts, event.wait_info, diag_ctx);
++            if let Some((previous_wait_info, diag_ctx)) = previous_wait_info {
++                if previous_wait_info.allow_lock_with_conflict {
++                    self.detector_scheduler
++                        .clean_up_wait_for(event.start_ts, previous_wait_info);
++                    self.detector_scheduler
++                        .detect(event.start_ts, event.wait_info, diag_ctx);
++                }
+             }
+         }
+     }
+diff --git a/src/server/raftkv/raft_extension.rs b/src/server/raftkv/raft_extension.rs
+index d4b1a1e8e..3cf24d0a8 100644
+--- a/src/server/raftkv/raft_extension.rs
++++ b/src/server/raftkv/raft_extension.rs
+@@ -64,10 +64,10 @@ where
+         let region_id = msg.get_region_id();
+         let msg_ty = msg.get_message().get_msg_type();
+         // Channel full and region not found are ignored unless it's a key message.
+-        if let Err(e) = self.router.send_raft_msg(msg)
+-            && key_message
+-        {
+-            error!("failed to send raft message"; "region_id" => region_id, "msg_ty" => ?msg_ty, "err" => ?e);
++        if let Err(e) = self.router.send_raft_msg(msg) {
++            if key_message {
++                error!("failed to send raft message"; "region_id" => region_id, "msg_ty" => ?msg_ty, "err" => ?e);
++            }
+         }
+     }
+ 
+diff --git a/src/server/raftkv2/mod.rs b/src/server/raftkv2/mod.rs
+index 872519471..d1115b82c 100644
+--- a/src/server/raftkv2/mod.rs
++++ b/src/server/raftkv2/mod.rs
+@@ -168,7 +168,7 @@ impl<EK: KvEngine, ER: RaftEngine> tikv_kv::Engine for RaftKv2<EK, ER> {
+         Ok(())
+     }
+ 
+-    type SnapshotRes = impl Future<Output = tikv_kv::Result<Self::Snap>> + Send + 'static;
++    type SnapshotRes = BoxFuture<'static, tikv_kv::Result<Self::Snap>>;
+     fn async_snapshot(&mut self, mut ctx: tikv_kv::SnapContext<'_>) -> Self::SnapshotRes {
+         let mut req = Request::default();
+         req.set_cmd_type(CmdType::Snap);
+@@ -214,7 +214,7 @@ impl<EK: KvEngine, ER: RaftEngine> tikv_kv::Engine for RaftKv2<EK, ER> {
+             Some(self.router.snapshot(cmd))
+         };
+ 
+-        async move {
++        Box::pin(async move {
+             res?;
+             let res = f.unwrap().await;
+             match res {
+@@ -272,11 +272,11 @@ impl<EK: KvEngine, ER: RaftEngine> tikv_kv::Engine for RaftKv2<EK, ER> {
+                     }
+                 }
+             }
+-        }
++        })
+     }
+ 
+     type IMSnap = Self::Snap;
+-    type IMSnapshotRes = Self::SnapshotRes;
++    type IMSnapshotRes = BoxFuture<'static, tikv_kv::Result<Self::IMSnap>>;
+     fn async_in_memory_snapshot(&mut self, ctx: tikv_kv::SnapContext<'_>) -> Self::IMSnapshotRes {
+         self.async_snapshot(ctx)
+     }
+diff --git a/src/server/raftkv2/raft_extension.rs b/src/server/raftkv2/raft_extension.rs
+index b2b6ce4db..fe4500465 100644
+--- a/src/server/raftkv2/raft_extension.rs
++++ b/src/server/raftkv2/raft_extension.rs
+@@ -24,10 +24,10 @@ impl<EK: KvEngine, ER: RaftEngine> tikv_kv::RaftExtension for Extension<EK, ER>
+         let region_id = msg.get_region_id();
+         let msg_ty = msg.get_message().get_msg_type();
+         // Channel full and region not found are ignored unless it's a key message.
+-        if let Err(e) = self.router.send_raft_message(Box::new(msg))
+-            && key_message
+-        {
+-            error!("failed to send raft message"; "region_id" => region_id, "msg_ty" => ?msg_ty, "err" => ?e);
++        if let Err(e) = self.router.send_raft_message(Box::new(msg)) {
++            if key_message {
++                error!("failed to send raft message"; "region_id" => region_id, "msg_ty" => ?msg_ty, "err" => ?e);
++            }
+         }
+     }
+ 
+diff --git a/src/server/service/kv.rs b/src/server/service/kv.rs
+index 41cdabe8d..827faf97a 100644
+--- a/src/server/service/kv.rs
++++ b/src/server/service/kv.rs
+@@ -2665,10 +2665,10 @@ impl HealthFeedbackAttacher {
+ 
+         let now = Instant::now_coarse();
+ 
+-        if let Some(last_feedback_time) = self.last_feedback_time
+-            && now - last_feedback_time < feedback_interval
+-        {
+-            return;
++        if let Some(last_feedback_time) = self.last_feedback_time {
++            if now - last_feedback_time < feedback_interval {
++                return;
++            }
+         }
+ 
+         self.attach(resp, now);
+diff --git a/src/server/tablet_snap.rs b/src/server/tablet_snap.rs
+index 60d1fa821..cd8fd7e03 100644
+--- a/src/server/tablet_snap.rs
++++ b/src/server/tablet_snap.rs
+@@ -154,18 +154,17 @@ pub trait SnapCacheBuilder: Send + Sync {
+ 
+ impl<EK: KvEngine> SnapCacheBuilder for TabletRegistry<EK> {
+     fn build(&self, region_id: u64, path: &Path) -> Result<()> {
+-        if let Some(mut c) = self.get(region_id)
+-            && let Some(db) = c.latest()
+-        {
+-            let mut checkpointer = db.new_checkpointer()?;
+-            // Avoid flush.
+-            checkpointer.create_at(path, None, u64::MAX)?;
+-            Ok(())
+-        } else {
+-            Err(Error::Other(
+-                format!("region {} not found", region_id).into(),
+-            ))
++        if let Some(mut c) = self.get(region_id) {
++            if let Some(db) = c.latest() {
++                let mut checkpointer = db.new_checkpointer()?;
++                // Avoid flush.
++                checkpointer.create_at(path, None, u64::MAX)?;
++                return Ok(());
++            }
+         }
++        Err(Error::Other(
++            format!("region {} not found", region_id).into(),
++        ))
+     }
+ }
+ 
+@@ -330,17 +329,17 @@ async fn cleanup_cache(
+         };
+         let mut buffer = Vec::with_capacity(PREVIEW_CHUNK_LEN);
+         for meta in preview.take_metas().into_vec() {
+-            if is_sst(&meta.file_name)
+-                && let Some(p) = exists.remove(&meta.file_name)
+-            {
+-                if is_sst_match_preview(&meta, &p, &mut buffer, limiter, key_manager).await? {
+-                    reused += meta.file_size;
+-                    continue;
+-                }
+-                // We should not write to the file directly as it's hard linked.
+-                fs::remove_file(&p)?;
+-                if let Some(m) = key_manager {
+-                    m.delete_file(p.to_str().unwrap(), None)?;
++            if is_sst(&meta.file_name) {
++                if let Some(p) = exists.remove(&meta.file_name) {
++                    if is_sst_match_preview(&meta, &p, &mut buffer, limiter, key_manager).await? {
++                        reused += meta.file_size;
++                        continue;
++                    }
++                    // We should not write to the file directly as it's hard linked.
++                    fs::remove_file(&p)?;
++                    if let Some(m) = key_manager {
++                        m.delete_file(p.to_str().unwrap(), None)?;
++                    }
+                 }
+             }
+             missing.push(meta.file_name);
+@@ -703,11 +702,11 @@ async fn send_missing(
+         digest.write(chunk.file_name.as_bytes());
+         chunk.file_size = file_size;
+         total_sent += file_size;
+-        if let Some(m) = key_manager
+-            && let Some((iv, key)) = m.get_file_internal(file_path.to_str().unwrap())?
+-        {
+-            chunk.iv = iv;
+-            chunk.set_key(key);
++        if let Some(m) = key_manager {
++            if let Some((iv, key)) = m.get_file_internal(file_path.to_str().unwrap())? {
++                chunk.iv = iv;
++                chunk.set_key(key);
++            }
+         }
+         if file_size == 0 {
+             let mut req = TabletSnapshotRequest::default();
+@@ -1032,14 +1031,14 @@ pub fn copy_tablet_snapshot(
+     for path in files {
+         let recv = recv_path.join(path.file_name().unwrap());
+         std::fs::copy(&path, &recv)?;
+-        if let Some(m) = sender_snap_mgr.key_manager()
+-            && let Some((iv, key)) = m.get_file_internal(path.to_str().unwrap())?
+-        {
+-            key_importer
+-                .as_mut()
+-                .unwrap()
+-                .add(recv.to_str().unwrap(), iv, key)
+-                .unwrap();
++        if let Some(m) = sender_snap_mgr.key_manager() {
++            if let Some((iv, key)) = m.get_file_internal(path.to_str().unwrap())? {
++                key_importer
++                    .as_mut()
++                    .unwrap()
++                    .add(recv.to_str().unwrap(), iv, key)
++                    .unwrap();
++            }
+         }
+     }
+     if let Some(i) = key_importer {
+diff --git a/src/storage/mod.rs b/src/storage/mod.rs
+index 97772bf6f..4283f1138 100644
+--- a/src/storage/mod.rs
++++ b/src/storage/mod.rs
+@@ -80,7 +80,7 @@ use concurrency_manager::{ConcurrencyManager, KeyHandleGuard};
+ use engine_traits::{
+     raw_ttl::ttl_to_expire_ts, CfName, CF_DEFAULT, CF_LOCK, CF_WRITE, DATA_CFS, DATA_CFS_LEN,
+ };
+-use futures::{future::Either, prelude::*};
++use futures::{future::{self, Either}, prelude::*};
+ use kvproto::{
+     kvrpcpb,
+     kvrpcpb::{
+@@ -3480,18 +3480,18 @@ impl<E: Engine> Engine for TxnTestEngine<E> {
+         self.engine.modify_on_kv_engine(region_modifies)
+     }
+ 
+-    type SnapshotRes = impl Future<Output = tikv_kv::Result<Self::Snap>> + Send;
++    type SnapshotRes = future::BoxFuture<'static, tikv_kv::Result<Self::Snap>>;
+     fn async_snapshot(&mut self, ctx: SnapContext<'_>) -> Self::SnapshotRes {
+         let txn_ext = self.txn_ext.clone();
+         let f = self.engine.async_snapshot(ctx);
+-        async move {
++        Box::pin(async move {
+             let snapshot = f.await?;
+             Ok(TxnTestSnapshot { snapshot, txn_ext })
+-        }
++        })
+     }
+ 
+     type IMSnap = Self::Snap;
+-    type IMSnapshotRes = Self::SnapshotRes;
++    type IMSnapshotRes = future::BoxFuture<'static, tikv_kv::Result<Self::IMSnap>>;
+     fn async_in_memory_snapshot(&mut self, ctx: SnapContext<'_>) -> Self::IMSnapshotRes {
+         self.async_snapshot(ctx)
+     }
+diff --git a/src/storage/txn/actions/prewrite.rs b/src/storage/txn/actions/prewrite.rs
+index b618f6389..627275d1f 100644
+--- a/src/storage/txn/actions/prewrite.rs
++++ b/src/storage/txn/actions/prewrite.rs
+@@ -396,53 +396,53 @@ impl<'a> PrewriteMutation<'a> {
+                 .into());
+             }
+ 
+-            if let Some(ts) = expected_for_update_ts
+-                && lock.for_update_ts != ts
+-            {
+-                // The constraint on for_update_ts of the pessimistic lock is violated.
+-                // Consider the following case:
+-                //
+-                // 1. A pessimistic lock of transaction `T1` succeeded with`WakeUpModeForceLock`
+-                //    enabled, then it returns to the client and the client continues its
+-                //    execution.
+-                // 2. The lock is lost for some reason such as pipelined locking or in-memory
+-                //    pessimistic lock.
+-                // 3. Another transaction `T2` writes the key and committed.
+-                // 4. The key then receives a stale pessimistic lock request of `T1` that has
+-                //    been received in step 1 (maybe because of retrying due to network issue in
+-                //    step 1). Since it allows locking with conflict, though there's a newer
+-                //    version that's later than the request's `for_update_ts`, the request can
+-                //    still acquire the lock. However no one will check the response, which
+-                //    tells the latest commit_ts it met.
+-                // 5. The transaction `T1` commits. When it prewrites it checks if each key is
+-                //    pessimistic-locked.
+-                //
+-                // Transaction `T1` won't notice anything wrong without this check since it
+-                // does have a pessimistic lock of the same transaction. However, actually
+-                // one of the key is locked in a larger version than that the client would
+-                // expect. As a result, the conflict between transaction `T1` and `T2` is
+-                // missed.
+-                // To avoid this problem, we check the for_update_ts written on the
+-                // pessimistic locks that's acquired in force-locking mode. If it doesn't match
+-                // the one known by the client, the lock that we expected to have will be
+-                // regarded as missing.
+-                //
+-                // It's actually theoretically safe to allow `lock.for_update_ts` <
+-                // `expected_for_update_ts`, but the possibility to encounter this case is very
+-                // low. For simplicity, we don't consider that case and only allow
+-                // `lock.for_update_ts` to exactly match that we expect.
+-                warn!("pessimistic lock have different for_update_ts than expected. the expected lock must have been lost";
+-                    "key" => %self.key,
+-                    "start_ts" => self.txn_props.start_ts,
+-                    "expected_for_update_ts" => ts,
+-                    "lock" => ?lock);
+-
+-                return Err(ErrorInner::PessimisticLockNotFound {
+-                    start_ts: self.txn_props.start_ts,
+-                    key: self.key.to_raw()?,
+-                    reason: PessimisticLockNotFoundReason::LockForUpdateTsMismatch,
++            if let Some(ts) = expected_for_update_ts {
++                if lock.for_update_ts != ts {
++                    // The constraint on for_update_ts of the pessimistic lock is violated.
++                    // Consider the following case:
++                    //
++                    // 1. A pessimistic lock of transaction `T1` succeeded with`WakeUpModeForceLock`
++                    //    enabled, then it returns to the client and the client continues its
++                    //    execution.
++                    // 2. The lock is lost for some reason such as pipelined locking or in-memory
++                    //    pessimistic lock.
++                    // 3. Another transaction `T2` writes the key and committed.
++                    // 4. The key then receives a stale pessimistic lock request of `T1` that has
++                    //    been received in step 1 (maybe because of retrying due to network issue in
++                    //    step 1). Since it allows locking with conflict, though there's a newer
++                    //    version that's later than the request's `for_update_ts`, the request can
++                    //    still acquire the lock. However no one will check the response, which
++                    //    tells the latest commit_ts it met.
++                    // 5. The transaction `T1` commits. When it prewrites it checks if each key is
++                    //    pessimistic-locked.
++                    //
++                    // Transaction `T1` won't notice anything wrong without this check since it
++                    // does have a pessimistic lock of the same transaction. However, actually
++                    // one of the key is locked in a larger version than that the client would
++                    // expect. As a result, the conflict between transaction `T1` and `T2` is
++                    // missed.
++                    // To avoid this problem, we check the for_update_ts written on the
++                    // pessimistic locks that's acquired in force-locking mode. If it doesn't match
++                    // the one known by the client, the lock that we expected to have will be
++                    // regarded as missing.
++                    //
++                    // It's actually theoretically safe to allow `lock.for_update_ts` <
++                    // `expected_for_update_ts`, but the possibility to encounter this case is very
++                    // low. For simplicity, we don't consider that case and only allow
++                    // `lock.for_update_ts` to exactly match that we expect.
++                    warn!("pessimistic lock have different for_update_ts than expected. the expected lock must have been lost";
++                        "key" => %self.key,
++                        "start_ts" => self.txn_props.start_ts,
++                        "expected_for_update_ts" => ts,
++                        "lock" => ?lock);
++
++                    return Err(ErrorInner::PessimisticLockNotFound {
++                        start_ts: self.txn_props.start_ts,
++                        key: self.key.to_raw()?,
++                        reason: PessimisticLockNotFoundReason::LockForUpdateTsMismatch,
++                    }
++                    .into());
+                 }
+-                .into());
+             }
+ 
+             // The lock is pessimistic and owned by this txn, go through to overwrite it.
+diff --git a/src/storage/txn/flow_controller/singleton_flow_controller.rs b/src/storage/txn/flow_controller/singleton_flow_controller.rs
+index 0bbb48123..b98480425 100644
+--- a/src/storage/txn/flow_controller/singleton_flow_controller.rs
++++ b/src/storage/txn/flow_controller/singleton_flow_controller.rs
+@@ -631,10 +631,10 @@ impl<E: FlowControlFactorStore + Send + 'static> FlowChecker<E> {
+             };
+ 
+             for checker in self.cf_checkers.values() {
+-                if let Some(long_term_pending_bytes) = checker.long_term_pending_bytes.as_ref()
+-                    && num < long_term_pending_bytes.get_recent()
+-                {
+-                    return;
++                if let Some(long_term_pending_bytes) = checker.long_term_pending_bytes.as_ref() {
++                    if num < long_term_pending_bytes.get_recent() {
++                        return;
++                    }
+                 }
+             }
+ 
+-- 
+2.53.0
+
