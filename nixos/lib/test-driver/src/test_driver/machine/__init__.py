@@ -5,7 +5,7 @@ import os
 import platform
 import queue
 import re
-import select
+import selectors
 import shlex
 import shutil
 import socket
@@ -742,7 +742,7 @@ class BaseMachine(ABC):
                 )
                 if ret.returncode != 0:
                     raise MachineError(
-                        f"Cannot convert screenshot (pnmtopng returned code {ret.returncode})"
+                        f"{self.name}: Cannot convert screenshot (pnmtopng returned code {ret.returncode})"
                     )
 
     def get_screen_text_variants(self) -> list[str]:
@@ -1335,16 +1335,6 @@ class QemuMachine(BaseMachine):
         Wait for a connection to the guest root shell
         """
 
-        def shell_ready(timeout: dt.timedelta) -> bool:
-            """We sent some data from the backdoor service running on the guest
-            to indicate that the backdoor shell is ready.
-            As soon as we read some data from the socket here, we assume that
-            our root shell is operational.
-            """
-            assert self.shell
-            (ready, _, _) = select.select([self.shell], [], [], timeout.total_seconds())
-            return bool(ready)
-
         if self.connected:
             return
 
@@ -1354,9 +1344,15 @@ class QemuMachine(BaseMachine):
             assert self.shell
 
             tic = time.time()
+            sel = selectors.DefaultSelector()
+            sel.register(self.shell, selectors.EVENT_READ)
 
             for _ in range(10):
-                if shell_ready(timeout=dt.timedelta(seconds=30)):
+                # We sent some data from the backdoor service running on the guest
+                # to indicate that the backdoor shell is ready.
+                # As soon as we read some data from the socket here, we assume that
+                # our root shell is operational.
+                if sel.select(timeout=30):
                     break
                 self.log("Guest root shell did not produce any data yet...")
                 self.log(
@@ -1477,6 +1473,7 @@ class QemuMachine(BaseMachine):
             s = socket.socket(family=socket.AF_UNIX, type=socket.SOCK_STREAM)
             s.bind(str(path))
             s.listen(1)
+            s.setblocking(False)
             return s
 
         monitor_socket = create_socket(clear(self.monitor_path))
@@ -1498,8 +1495,10 @@ class QemuMachine(BaseMachine):
             would block forever if QEMU exits before connecting.
             """
             assert self.process
-            while True:
-                readable, _, _ = select.select([sock], [], [], 1.0)
+            sel = selectors.DefaultSelector()
+            sel.register(sock, selectors.EVENT_READ)
+            for _ in range(60):
+                readable = sel.select(1)
                 if readable:
                     conn, _ = sock.accept()
                     return conn
@@ -1509,8 +1508,11 @@ class QemuMachine(BaseMachine):
                     if self.process.stdout:
                         output = self.process.stdout.read().decode(errors="ignore")
                     raise MachineError(
-                        f"QEMU process exited with code {rc} before connecting to {name} socket.\n{output}"
+                        f"{self.name}: QEMU process exited with code {rc} before connecting to {name} socket.\n{output}"
                     )
+            raise MachineError(
+                f"{self.name}: Timed out waiting for QEMU connection on {name} socket"
+            )
 
         self.monitor = accept_or_fail(monitor_socket, "monitor")
         self.shell = accept_or_fail(shell_socket, "shell")
@@ -1799,7 +1801,7 @@ class NspawnMachine(BaseMachine):
                 ret = subprocess.run(["xwdtopnm", xwd_path], stdout=ppm)
             if ret.returncode != 0:
                 raise MachineError(
-                    f"Cannot convert screenshot (xwdtopnm returned code {ret.returncode})"
+                    f"{self.name}: Cannot convert screenshot (xwdtopnm returned code {ret.returncode})"
                 )
             yield ppm_path
 
@@ -1898,7 +1900,9 @@ class NspawnMachine(BaseMachine):
         # Poll the socket until we have the container leader PID
         while True:
             if self.process.poll() is not None:
-                raise MachineError("systemd-nspawn process exited unexpectedly")
+                raise MachineError(
+                    f"{self.name}: systemd-nspawn process exited unexpectedly"
+                )
 
             with self._notify_lock:
                 is_ready = self._notify_ready
