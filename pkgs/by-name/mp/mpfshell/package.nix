@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonPackage {
   pname = "mpfshell";
-  version = "0.9.3-unstable-2025-01-09";
+  version = "0.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
