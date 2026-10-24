@@ -1,0 +1,38 @@
+Use the shader libraries supplied by the packaging environment.
+Upstream status: packaging-specific; not submitted upstream.
+
+--- a/cmake/bgfx/CMakeLists.txt
++++ b/cmake/bgfx/CMakeLists.txt
+@@ -21,9 +21,7 @@
+ 	include(geometryv.cmake)
+ endif()
+ if(BGFX_BUILD_TOOLS_SHADER)
+-	include(3rdparty/spirv-opt.cmake)
+-	include(3rdparty/spirv-cross.cmake)
+-	include(3rdparty/glslang.cmake)
++	include(system-shader-libraries.cmake)
+ 	include(3rdparty/webgpu.cmake)
+ 	include(3rdparty/tint.cmake)
+ 	include(shaderc.cmake)
+--- a/bgfx/tools/geometryc/geometryc.cpp
++++ b/bgfx/tools/geometryc/geometryc.cpp
+@@ -14,7 +14,7 @@
+ #include <tinystl/vector.h>
+ namespace stl = tinystl;
+ 
+-#include <meshoptimizer/src/meshoptimizer.h>
++#include <meshoptimizer.h>
+ 
+ #define CGLTF_VALIDATE_ENABLE_ASSERTS BX_CONFIG_DEBUG
+ #define CGLTF_IMPLEMENTATION
+--- a/cmake/bgfx/geometryc.cmake
++++ b/cmake/bgfx/geometryc.cmake
+@@ -19,7 +19,7 @@
+ )
+ add_executable(geometryc ${GEOMETRYC_SOURCES})
+ 
+-target_include_directories(geometryc PRIVATE ${MESHOPTIMIZER_INCLUDE_DIR})
++target_include_directories(geometryc PRIVATE ${MESHOPTIMIZER_INCLUDE_DIR} ${BGFX_DIR}/3rdparty)
+ target_link_libraries(geometryc PRIVATE bx bgfx-vertexlayout ${MESHOPTIMIZER_LIBRARIES})
+ target_compile_definitions(geometryc PRIVATE "-D_CRT_SECURE_NO_WARNINGS")
+ set_target_properties(
