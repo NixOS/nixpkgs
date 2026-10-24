@@ -116,6 +116,19 @@ let
     '';
   };
 
+  # Runs every GPU-host suite with logs collected under the argument directory.
+  # Not used when !cudaSupport: pjrtTester "cuda" references the GPU plugin.
+  gpuCheckTester = pkgs.writeShellApplication {
+    name = "xla-gpu";
+    runtimeInputs = [ pkgs.coreutils ];
+    text = ''
+      logs=''${1:-$(mktemp -d -t xla-gpu.XXXXXXXX)}
+      ${lib.getExe (pjrtTester "cuda")} "$logs/pjrt"
+      ${lib.getExe ncclTester} "$logs/nccl"
+      ${lib.getExe hloTester} "$logs/hlo"
+    '';
+  };
+
   runtimeClosure = pkgs.closureInfo { rootPaths = [ xla ]; };
   installConfig = pkgs.writeText "xla-install-check.json" (
     builtins.toJSON {
@@ -196,6 +209,7 @@ in
       nccl = ncclTester;
       hlo = hloTester;
       install = installTester;
+      gpu = gpuCheckTester;
     };
   };
 
@@ -212,6 +226,12 @@ in
       pjrt = check "pjrt-cuda" (pjrtTester "cuda") [ "cuda" ];
       nccl = check "nccl-cuda" ncclTester [ "cuda" ];
       hlo = check "hlo-cuda" hloTester [ "cuda" ];
+      # Conventional gpuCheck name for GPU-test discovery, which matches
+      # tests.<name>.gpuCheck attrs with requiredSystemFeatures and ignores
+      # everything else (e.g. the NixOS-CUDA Hydra gpu-checks jobset). Runs all
+      # GPU-host suites in one derivation; pjrt, nccl, and hlo remain available
+      # separately for targeted runs and finer failure isolation.
+      gpuCheck = check "gpu-check" gpuCheckTester [ "cuda" ];
       install = check "install-cuda" installTester [ ];
       configure = pkgs.callPackage ./cuda-configure.nix { inherit xla cudaPackages; };
       configureOverride =
