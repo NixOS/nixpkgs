@@ -32,11 +32,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pyudev
     seaborn
     tabulate
-  ];
-
-  # Not available in nixpkgs as of 2025-11-15.
-  pythonRemoveDeps = [
-    "cysystemd"
+    cysystemd
   ];
 
   makeWrapperArgs = [
