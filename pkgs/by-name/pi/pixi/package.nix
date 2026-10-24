@@ -5,6 +5,7 @@
   fetchFromGitHub,
   pkg-config,
   installShellFiles,
+  makeBinaryWrapper,
   libgit2,
   openssl,
   buildPackages,
@@ -28,6 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     installShellFiles
+    makeBinaryWrapper
   ];
 
   buildInputs = [
@@ -54,6 +56,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
         --zsh <(${emulator} $out/bin/pixi completion --shell zsh)
     ''
   );
+
+  postFixup = ''
+    wrapProgram $out/bin/pixi --set-default PIXI_TLS_ROOT_CERTS system
+  '';
 
   nativeInstallCheckInputs = [
     versionCheckHook
