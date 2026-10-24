@@ -24,13 +24,17 @@ import ../make-test-python.nix (
 
     nodes = {
       rootful =
-        { pkgs, ... }:
+        { pkgs, config, ... }:
         {
           virtualisation.podman.enable = true;
 
           # hack to ensure that podman built with and without zfs in extraPackages is cached
           boot.supportedFilesystems = [ "zfs" ];
           networking.hostId = "00000000";
+
+          environment.systemPackages = [
+            config.boot.kernelPackages.psc
+          ];
         };
       rootful_norunc =
         { pkgs, ... }:
@@ -118,6 +122,27 @@ import ../make-test-python.nix (
           rootful.succeed("podman ps | grep sleeping")
           rootful.succeed("podman stop sleeping")
           rootful.succeed("podman rm sleeping")
+
+      with subtest("psc can see Podman containers"):
+          rootful.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
+          rootful.succeed(
+              "podman run -d --name=psc-test -v /nix/store:/nix/store -v /run/current-system/sw/bin:/bin scratchimg /bin/sleep 60"
+          )
+          rootful.succeed("podman ps | grep psc-test")
+
+          # psc -o containers should show Podman container info
+          output = rootful.succeed("psc -o containers --no-color")
+          print("=== psc -o containers with Podman ===")
+          print(output)
+          assert "sleep" in output, "psc should show the sleep process"
+
+          # Filter for processes in containers
+          output = rootful.succeed("psc 'container.id != \"\"' -o containers --no-color")
+          print("=== psc container filter ===")
+          print(output)
+
+          rootful.succeed("podman stop psc-test")
+          rootful.succeed("podman rm psc-test")
 
       # now without installed runc
       with subtest("Run runc-less container as root with runc"):
