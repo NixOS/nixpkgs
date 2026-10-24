@@ -38572,6 +38572,23 @@ with self;
         url = "https://sources.debian.org/data/main/libw/libwx-perl/1%3A0.9932-8/debian/patches/wxWidgets_3.2_port.patch";
         hash = "sha256-y9LMpcbm7p8+LZ2Hw3PA2jc7bHAFEu0QRa170XuseKw=";
       })
+      # Four patches to fix reproducibility
+      (fetchpatch {
+        url = "https://sources.debian.org/data/main/libw/libwx-perl/1%3A0.9932-11/debian/patches/0001-Sort-output-of-dumped-dictionaries-for-reproducible-.patch";
+        hash = "sha256-PfYH2C7gscLLj1IYdMSf4x6KsD7Qd1NpeLJnmUbHGiI=";
+      })
+      (fetchpatch {
+        url = "https://sources.debian.org/data/main/libw/libwx-perl/1%3A0.9932-11/debian/patches/0002-Provide-overload-methods-to-XSpp-in-sorted-order.patch";
+        hash = "sha256-/5MVOiWUqKFO+Da3gT8nsAPLe3GwnG222kXygV08KH4=";
+      })
+      (fetchpatch {
+        url = "https://sources.debian.org/data/main/libw/libwx-perl/1%3A0.9932-11/debian/patches/0003-Define-overload-constants-in-sorted-order.patch";
+        hash = "sha256-1qmli/1DgKYt1cSAYzP08MrYviWmmCNN/daATuk70Ow=";
+      })
+      (fetchpatch {
+        url = "https://sources.debian.org/data/main/libw/libwx-perl/1%3A0.9932-11/debian/patches/0004-Define-enum-values-in-sorted-order.patch";
+        hash = "sha256-hKg4mC+rnJBUDRAYqdGuLwUwcQP7qtHbX6pcTN6bTBc=";
+      })
     ];
     # DND.c:453:15: error: incompatible integer to pointer conversion assigning to 'NativeFormat' (aka 'const __CFString *') from 'wxDataFormatId'
     postPatch = ''
