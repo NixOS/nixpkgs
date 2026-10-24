@@ -10,8 +10,6 @@
   buildPackages,
   nix-update-script,
   versionCheckHook,
-  mkdocs,
-  python3,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -33,9 +31,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     installShellFiles
-    mkdocs
+    buildPackages.mkdocs
   ]
-  ++ (with python3.pkgs; [
+  # Via buildPackages: nested python3.pkgs.* access is not spliced, so these
+  # would otherwise be built for the host platform, breaking pkgsStatic.
+  ++ (with buildPackages.python3.pkgs; [
     mdx-breakless-lists
     mdx-truly-sane-lists
     mike
