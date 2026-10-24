@@ -9,11 +9,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "cato-client";
-  version = "5.7.0.5525";
+  version = "5.8.1.7658";
 
   src = fetchurl {
     url = "https://clients.catonetworks.com/linux/${version}/cato-client-install.deb";
-    sha256 = "sha256-UDIDddVk7UXiOoZGTz1757x66DmOSOGqMielSQ5W5z0=";
+    sha256 = "sha256-arlNbxXIPhoJTz/Xlj9UFQCRQgB6j8RKnXzKCoH+1JI=";
   };
 
   passthru.updateScript = writeScript "update-cato-client" ''
