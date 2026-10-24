@@ -12,7 +12,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "stackit-objectstorage";
-  version = "1.6.0";
+  version = "1.7.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchPypi {
     pname = "stackit_objectstorage";
     inherit (finalAttrs) version;
-    hash = "sha256-vCpHhlhF6F2JoFgLG6Nar48pKAGNes1WVPCexzv1jio=";
+    hash = "sha256-rSOBst/5Ivs+0e4z+IBKhoIf57xXbMSDkpmz7Hh5cxE=";
   };
 
   build-system = [ hatchling ];
