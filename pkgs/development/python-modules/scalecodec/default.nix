@@ -11,7 +11,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "scalecodec";
-  version = "1.2.12";
+  version = "2.0.0a2";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
     owner = "JAMdotTech";
     repo = "py-scale-codec";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-e6SDVivkVZjL84kcvkPs+5S2iD79+p+dGjhUWuS50Fc=";
+    hash = "sha256-rCt8QiBVXoQYAXw3ZxJhzaYQCTzrAR3lOtpmONaOfNA=";
   };
 
   build-system = [ setuptools ];
