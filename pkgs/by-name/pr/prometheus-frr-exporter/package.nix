@@ -5,17 +5,17 @@
 }:
 
 let
-  version = "1.10.0";
+  version = "1.12.0";
   src = fetchFromGitHub {
     owner = "tynany";
     repo = "frr_exporter";
     rev = "v${version}";
-    hash = "sha256-Q8OrFmj54Tvn283ZbFc+R/g3cJw5ypAvV+Qbf/6BsmM=";
+    hash = "sha256-FOFg5+Z6GTwVcoQhJclkhgScZDdoA7jIs005qhHN3Wc=";
   };
 in
 buildGoModule {
   pname = "prometheus-frr-exporter";
-  vendorHash = "sha256-Z4miOR9gmZlYR/VAbMY6SLZJrzBEpuJbnrIJ3ObaZ/Y=";
+  vendorHash = "sha256-u+hiwMVS+BHCiTVFQDbJzmsgSmY+RyInP6hPSiqKBpo=";
   inherit src version;
 
   ldflags = [
