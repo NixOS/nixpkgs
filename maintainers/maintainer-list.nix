@@ -2521,6 +2521,12 @@
     githubId = 1291396;
     name = "Arnar Ingason";
   };
+  arne-zillhardt = {
+    email = "arne@zillhardt.com";
+    github = "Arne-Zillhardt";
+    githubId = 94059017;
+    name = "Arne Zillhardt";
+  };
   arnoutkroeze = {
     email = "nixpkgs@arnoutkroeze.nl";
     github = "ArnoutKroeze";
