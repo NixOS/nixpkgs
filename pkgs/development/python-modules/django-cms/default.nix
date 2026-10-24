@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "django-cms";
-  version = "5.0.6";
+  version = "4.1.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-cms";
     repo = "django-cms";
     tag = version;
-    hash = "sha256-pYxIW/GGBIKzsQs2QJiRkScDPzSf3YXC+HkDsfAgg/w=";
+    hash = "sha256-Bs7VqqUuwirPRafYHXaRWfyTaX1uSomvWy8RTH37qjw=";
   };
 
   build-system = [ setuptools ];
