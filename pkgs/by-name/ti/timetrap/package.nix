@@ -1,7 +1,6 @@
 {
   stdenv,
   lib,
-  ruby_3_4,
   bundlerEnv,
   bundlerApp,
   bundlerUpdateScript,
@@ -11,7 +10,7 @@
 let
   pname = "timetrap";
 
-  ttBundlerApp = (bundlerApp.override { ruby = ruby_3_4; }) {
+  ttBundlerApp = bundlerApp {
     inherit pname;
     gemdir = ./.;
     exes = [
@@ -22,7 +21,7 @@ let
     passthru.updateScript = bundlerUpdateScript "timetrap";
   };
 
-  ttGem = (bundlerEnv.override { ruby = ruby_3_4; }) {
+  ttGem = bundlerEnv {
     inherit pname;
     gemdir = ./.;
   };
