@@ -9,7 +9,7 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "readability-cli";
-  version = "2.4.5-unstable-2026-01-07";
+  version = "2.4.5";
 
   src = fetchFromGitLab {
     owner = "gardenappl";
