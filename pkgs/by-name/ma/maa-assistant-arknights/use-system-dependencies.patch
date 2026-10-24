@@ -1,0 +1,71 @@
+--- a/src/MaaUtils/MaaUtils.cmake
++++ b/src/MaaUtils/MaaUtils.cmake
+@@ -15,8 +15,6 @@
+ set(MAAUTILS_DIR ${CMAKE_CURRENT_LIST_DIR})
+ 
+ list(APPEND CMAKE_MODULE_PATH "${MAAUTILS_DIR}/cmake/modules")
+-set(MAADEPS_DIR ${MAAUTILS_DIR}/MaaDeps)
+-include(${MAADEPS_DIR}/maadeps.cmake)
+ 
+ # Basic compile and link configuration
+ include(${MAAUTILS_DIR}/cmake/config.cmake)
+@@ -24,7 +22,7 @@
+ include(${MAAUTILS_DIR}/cmake/version.cmake)
+ 
+ find_package(OpenCV REQUIRED COMPONENTS core imgproc imgcodecs)
+-find_package(Boost REQUIRED CONFIG COMPONENTS system regex)
++find_package(Boost REQUIRED CONFIG COMPONENTS regex)
+ find_package(ZLIB REQUIRED)
+ find_package(fastdeploy_ppocr REQUIRED)
+ find_package(ONNXRuntime REQUIRED)
+--- a/src/MaaUtils/cmake/utils.cmake
++++ b/src/MaaUtils/cmake/utils.cmake
+@@ -40,7 +40,3 @@
+     set(CMAKE_OSX_DEPLOYMENT_TARGET 13.3) # for to_chars
+     get_osx_architecture()
+ endif(APPLE)
+-
+-if(NOT DEFINED MAADEPS_TRIPLET)
+-    detect_maadeps_triplet(MAADEPS_TRIPLET)
+-endif()
+--- a/src/MaaUtils/source/CMakeLists.txt
++++ b/src/MaaUtils/source/CMakeLists.txt
+@@ -3,7 +3,7 @@
+ 
+ add_library(MaaUtils SHARED ${maa_utils_src} ${maa_utils_header})
+ target_include_directories(MaaUtils PRIVATE ${MAAUTILS_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR})
+-target_link_libraries(MaaUtils PUBLIC Boost::regex PRIVATE Boost::system ${OpenCV_LIBS})
++target_link_libraries(MaaUtils PUBLIC Boost::regex PRIVATE Boost::headers ${OpenCV_LIBS})
+ 
+ if(WIN32)
+     target_link_libraries(MaaUtils PRIVATE d3d12 dxgi Cfgmgr32)
+--- a/src/MaaCore/CMakeLists.txt
++++ b/src/MaaCore/CMakeLists.txt
+@@ -1,3 +1,5 @@
++find_package(OpenCV REQUIRED COMPONENTS core imgproc imgcodecs features2d calib3d videoio OPTIONAL_COMPONENTS xfeatures2d)
++
+ file(GLOB_RECURSE maa_src *.h *.hpp *.cpp)
+ 
+ # Exclude the platform-specific OCR implementation that is not needed on this target
+@@ -40,11 +42,11 @@
+         HeaderOnlyLibraries MaaUtils ${OpenCV_LIBS}
+         ncnn
+         polyclipping::polyclipping
+-        ONNXRuntime::ONNXRuntime ZLIB::ZLIB Boost::system)
++        ONNXRuntime::ONNXRuntime ZLIB::ZLIB Boost::headers)
+     set_property(TARGET MaaCore PROPERTY NO_SYSTEM_FROM_IMPORTED TRUE)
+     target_compile_options(MaaCore PRIVATE -Wno-c11-extensions)
+ else()
+-    target_link_libraries(MaaCore HeaderOnlyLibraries MaaUtils ${OpenCV_LIBS} fastdeploy_ppocr ONNXRuntime::ONNXRuntime ZLIB::ZLIB Boost::system)
++    target_link_libraries(MaaCore HeaderOnlyLibraries MaaUtils ${OpenCV_LIBS} fastdeploy_ppocr ONNXRuntime::ONNXRuntime ZLIB::ZLIB Boost::headers)
+ endif()
+ 
+ if(WIN32)
+@@ -133,7 +135,6 @@
+     set_target_properties(MaaCore PROPERTIES INSTALL_RPATH "$ORIGIN/")
+ endif()
+ 
+-maadeps_install(.)
+ install(TARGETS MaaUtils ${MaaCore_install_flatten_args})
+ install(TARGETS MaaCore ${MaaCore_install_flatten_args})
+ 
