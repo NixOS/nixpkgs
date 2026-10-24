@@ -1,0 +1,14 @@
+# `dep:` in easytier-core drops the implicit `smoltcp` feature that
+# cargo-auditable expects; see rust-secure-code/cargo-auditable#124.
+
+diff --git a/easytier-core/Cargo.toml b/easytier-core/Cargo.toml
+--- a/easytier-core/Cargo.toml
++++ b/easytier-core/Cargo.toml
+@@ -127,6 +127,7 @@ management-rpc = ["easytier-proto/api"]
+ proxy-cidr-monitor = []
+ rich-config-errors = ["dep:ariadne"]
+ tcp-hole-punch = []
++smoltcp = ["dep:smoltcp"]
+ proxy-packet = [
+     "wrapped-transport",
+     "dep:smoltcp",
