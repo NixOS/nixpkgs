@@ -9,8 +9,17 @@
 }:
 let
   clang = rust-bindgen-unwrapped.clang;
-  targetFlag =
-    if (!lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform) then
+  targetFlags =
+    if clang.clangCompatibleConfig != stdenv.targetPlatform.config then
+      toString (
+        [
+          "--target=${clang.clangCompatibleConfig}"
+        ]
+        ++ lib.optionals (clang.explicitAbiValue != "") [
+          "-mabi=${clang.explicitAbiValue}"
+        ]
+      )
+    else if (!lib.systems.equals stdenv.targetPlatform stdenv.hostPlatform) then
       "--target=${stdenv.targetPlatform.config}"
     else
       "";
@@ -26,25 +35,28 @@ let
             specified in the buildInputs of your derivation.
           '';
         };
-        passthru.tests = {
-          simple-c = runCommandCC "simple-c-bindgen-tests" { } ''
-            echo '#include <stdlib.h>' > a.c
-            ${self}/bin/bindgen a.c --allowlist-function atoi | tee output
-            grep atoi output
-            touch $out
-          '';
-          simple-cpp = runCommandCC "simple-cpp-bindgen-tests" { } ''
-            echo '#include <cmath>' > a.cpp
-            ${self}/bin/bindgen a.cpp --allowlist-function erf -- -xc++ | tee output
-            grep erf output
-            touch $out
-          '';
-          with-lib = runCommandCC "zlib-bindgen-tests" { buildInputs = [ zlib ]; } ''
-            echo '#include <zlib.h>' > a.c
-            ${self}/bin/bindgen a.c --allowlist-function compress | tee output
-            grep compress output
-            touch $out
-          '';
+        passthru = {
+          inherit targetFlags;
+          tests = {
+            simple-c = runCommandCC "simple-c-bindgen-tests" { } ''
+              echo '#include <stdlib.h>' > a.c
+              ${self}/bin/bindgen a.c --allowlist-function atoi | tee output
+              grep atoi output
+              touch $out
+            '';
+            simple-cpp = runCommandCC "simple-cpp-bindgen-tests" { } ''
+              echo '#include <cmath>' > a.cpp
+              ${self}/bin/bindgen a.cpp --allowlist-function erf -- -xc++ | tee output
+              grep erf output
+              touch $out
+            '';
+            with-lib = runCommandCC "zlib-bindgen-tests" { buildInputs = [ zlib ]; } ''
+              echo '#include <zlib.h>' > a.c
+              ${self}/bin/bindgen a.c --allowlist-function compress | tee output
+              grep compress output
+              touch $out
+            '';
+          };
         };
       }
       # if you modify the logic to find the right clang flags, also modify rustPlatform.bindgenHook
@@ -56,7 +68,7 @@ let
           --replace-fail "@bash@" "${bash}" \
           --replace-fail "@cxxincludes@" "$cxxincludes" \
           --replace-fail "@cincludes@" "$cincludes" \
-          --replace-fail "@targetFlag@" "${targetFlag}" \
+          --replace-fail "@targetFlags@" "${targetFlags}" \
           --replace-fail "@unwrapped@" "${rust-bindgen-unwrapped}"
         chmod +x $out/bin/bindgen
       '';
