@@ -27992,10 +27992,10 @@ with self;
 
   PDL = buildPerlPackage {
     pname = "PDL";
-    version = "2.100";
+    version = "2.106";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETJ/PDL-2.100.tar.gz";
-      hash = "sha256-iqpu35AlWj0LTQBH1icOESS/HhrNJBSATocxC2s5vkA=";
+      url = "mirror://cpan/authors/id/E/ET/ETJ/PDL-2.106.tar.gz";
+      hash = "sha256-9QDnQNMn4iGYWsNfOPXh5Cvy46aQwO2SesntF9nYJBs=";
     };
 
     # FIXME: Why are these libraries in `nativeBuildInputs`?
