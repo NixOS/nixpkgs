@@ -1,19 +1,19 @@
-diff --git a/DiscordChatExporter.Gui/Services/SettingsService.cs b/DiscordChatExporter.Gui/Services/SettingsService.cs
-index 4f69969..2716225 100644
---- a/DiscordChatExporter.Gui/Services/SettingsService.cs
-+++ b/DiscordChatExporter.Gui/Services/SettingsService.cs
-@@ -14,7 +14,13 @@ namespace DiscordChatExporter.Gui.Services;
- [INotifyPropertyChanged]
- public partial class SettingsService()
-     : SettingsBase(
--        Path.Combine(AppContext.BaseDirectory, "Settings.dat"),
-+        Path.Combine(
-+            System.IO.Path.Combine(
-+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-+                "discordchatexporter"
-+            ),
-+            "Settings.dat"
-+        ),
-         SerializerContext.Default
-     )
- {
+diff --git a/DiscordChatExporter.Gui/StartOptions.cs b/DiscordChatExporter.Gui/StartOptions.cs
+index d17752a..8df18c8 100644
+--- a/DiscordChatExporter.Gui/StartOptions.cs
++++ b/DiscordChatExporter.Gui/StartOptions.cs
+@@ -21,7 +21,13 @@ public partial class StartOptions
+                     ? Path.EndsInDirectorySeparator(path) || Directory.Exists(path)
+                         ? Path.Combine(path, "Settings.dat")
+                         : path
+-                    : Path.Combine(AppContext.BaseDirectory, "Settings.dat"),
++                    : Path.Combine(
++                        System.IO.Path.Combine(
++                            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
++                            "discordchatexporter"
++                        ),
++                        "Settings.dat"
++                    ),
+             IsAutoUpdateAllowed = !(
+                 Environment.GetEnvironmentVariable("DISCORDCHATEXPORTER_ALLOW_AUTO_UPDATE")
+                     is { } env
