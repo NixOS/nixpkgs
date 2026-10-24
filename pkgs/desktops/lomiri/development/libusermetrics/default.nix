@@ -17,7 +17,6 @@
   libapparmor,
   libqtdbustest,
   pkg-config,
-  qdjango,
   qtbase,
   qtdeclarative,
   qtxmlpatterns,
@@ -84,7 +83,6 @@ stdenv.mkDerivation (finalAttrs: {
     gsettings-qt
     json-glib
     libapparmor
-    qdjango
     qtxmlpatterns
     ubports-click
 
