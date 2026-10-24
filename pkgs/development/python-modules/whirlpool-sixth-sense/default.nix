@@ -18,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "whirlpool-sixth-sense";
-  version = "2.1.0";
+  version = "2.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "abmantis";
     repo = "whirlpool-sixth-sense";
     tag = finalAttrs.version;
-    hash = "sha256-D7rI4FEBXhx4czY/JTgjga1lW1WLSCV9d+5N2js2t3E=";
+    hash = "sha256-s3chUYo3rMWLnDYioI3kPrd5GLERtnMihfWh6eqgI0Q=";
   };
 
   build-system = [ setuptools ];
