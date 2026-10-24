@@ -1,8 +1,8 @@
 diff --git a/common/LsHw.cpp b/common/LsHw.cpp
-index 8d0f35cd89..12fe26957f 100644
+index f657505..0375b46 100644
 --- a/common/LsHw.cpp
 +++ b/common/LsHw.cpp
-@@ -145,7 +145,7 @@
+@@ -141,7 +141,7 @@ std::optional<std::string> LsHw::Exec() const
  {
      static std::string const cmd = "lshw -json";
      std::string cmdOutput;
@@ -11,18 +11,58 @@ index 8d0f35cd89..12fe26957f 100644
  
      dcgmReturn_t result = DCGM_ST_OK;
      for (auto const &prefix : cmdPathPrefix)
-@@ -162,4 +162,4 @@
+diff --git a/common/tests/DcgmUtilitiesTests.cpp b/common/tests/DcgmUtilitiesTests.cpp
+index c1e2d9e..d86e9c8 100644
+--- a/common/tests/DcgmUtilitiesTests.cpp
++++ b/common/tests/DcgmUtilitiesTests.cpp
+@@ -273,7 +273,7 @@ TEST_CASE("Utils: RunCmdAndGetOutputWithTimeout")
+         std::string output;
+ 
+         auto result
+-            = DcgmNs::Utils::RunCmdAndGetOutputWithTimeout("/bin/echo dcgm", output, std::chrono::seconds { 1 });
++            = DcgmNs::Utils::RunCmdAndGetOutputWithTimeout("@coreutils@/bin/echo dcgm", output, std::chrono::seconds { 1 });
+ 
+         REQUIRE(result == DCGM_ST_OK);
+         REQUIRE(output == "dcgm\n");
+@@ -283,7 +283,7 @@ TEST_CASE("Utils: RunCmdAndGetOutputWithTimeout")
+     {
+         std::string output;
+ 
+-        auto result = DcgmNs::Utils::RunCmdAndGetOutputWithTimeout("/bin/false", output, std::chrono::seconds { 1 });
++        auto result = DcgmNs::Utils::RunCmdAndGetOutputWithTimeout("@coreutils@/bin/false", output, std::chrono::seconds { 1 });
+ 
+         REQUIRE(result == DCGM_ST_INIT_ERROR);
+     }
+@@ -293,7 +293,7 @@ TEST_CASE("Utils: RunCmdAndGetOutputWithTimeout")
+         std::string output;
+ 
+         auto result
+-            = DcgmNs::Utils::RunCmdAndGetOutputWithTimeout("/bin/sleep 1", output, std::chrono::milliseconds { 1 });
++            = DcgmNs::Utils::RunCmdAndGetOutputWithTimeout("@coreutils@/bin/sleep 1", output, std::chrono::milliseconds { 1 });
+ 
+         REQUIRE(result == DCGM_ST_TIMEOUT);
+     }
+@@ -306,13 +306,13 @@ TEST_CASE("Utils: RunCmdHelper wrappers")
+ 
+     SECTION("GIVEN helper wrapper WHEN command succeeds without timeout THEN output is returned")
+     {
+-        REQUIRE(helper.RunCmdAndGetOutput("/bin/echo wrapper", output) == DCGM_ST_OK);
++        REQUIRE(helper.RunCmdAndGetOutput("@coreutils@/bin/echo wrapper", output) == DCGM_ST_OK);
+         CHECK(output == "wrapper\n");
      }
  
-     return cmdOutput;
--}
-\ No newline at end of file
-+}
+     SECTION("GIVEN helper wrapper WHEN command succeeds with timeout THEN output is returned")
+     {
+-        REQUIRE(helper.RunCmdAndGetOutputWithTimeout("/bin/echo timed", output, std::chrono::seconds { 1 })
++        REQUIRE(helper.RunCmdAndGetOutputWithTimeout("@coreutils@/bin/echo timed", output, std::chrono::seconds { 1 })
+                 == DCGM_ST_OK);
+         CHECK(output == "timed\n");
+     }
 diff --git a/common/tests/LsHwTests.cpp b/common/tests/LsHwTests.cpp
-index edb65e599e..5950fb8d9e 100644
+index 9e083e3..1e7d04a 100644
 --- a/common/tests/LsHwTests.cpp
 +++ b/common/tests/LsHwTests.cpp
-@@ -609,7 +609,7 @@
+@@ -626,7 +626,7 @@ TEST_CASE("LsHw::GetCpuSerials")
          std::unique_ptr<MockRunningUserChecker> checker = std::make_unique<MockRunningUserChecker>();
          checker->MockIsRoot(true);
          std::unique_ptr<MockRunCmdHelper> runCmdHelper = std::make_unique<MockRunCmdHelper>();
@@ -31,7 +71,7 @@ index edb65e599e..5950fb8d9e 100644
  
          LsHw lshw;
          lshw.SetChecker(std::move(checker));
-@@ -626,7 +626,7 @@
+@@ -643,7 +643,7 @@ TEST_CASE("LsHw::GetCpuSerials")
          std::unique_ptr<MockRunningUserChecker> checker = std::make_unique<MockRunningUserChecker>();
          checker->MockIsRoot(true);
          std::unique_ptr<MockRunCmdHelper> runCmdHelper = std::make_unique<MockRunCmdHelper>();
@@ -40,7 +80,7 @@ index edb65e599e..5950fb8d9e 100644
  
          LsHw lshw;
          lshw.SetChecker(std::move(checker));
-@@ -642,7 +642,7 @@
+@@ -659,7 +659,7 @@ TEST_CASE("LsHw::GetCpuSerials")
          std::unique_ptr<MockRunningUserChecker> checker = std::make_unique<MockRunningUserChecker>();
          checker->MockIsRoot(true);
          std::unique_ptr<MockRunCmdHelper> runCmdHelper = std::make_unique<MockRunCmdHelper>();
@@ -49,7 +89,7 @@ index edb65e599e..5950fb8d9e 100644
  
          LsHw lshw;
          lshw.SetChecker(std::move(checker));
-@@ -658,7 +658,7 @@
+@@ -675,7 +675,7 @@ TEST_CASE("LsHw::GetCpuSerials")
          std::unique_ptr<MockRunningUserChecker> checker = std::make_unique<MockRunningUserChecker>();
          checker->MockIsRoot(true);
          std::unique_ptr<MockRunCmdHelper> runCmdHelper = std::make_unique<MockRunCmdHelper>();
@@ -58,7 +98,16 @@ index edb65e599e..5950fb8d9e 100644
  
          LsHw lshw;
          lshw.SetChecker(std::move(checker));
-@@ -673,7 +673,7 @@
+@@ -691,7 +691,7 @@ TEST_CASE("LsHw::GetCpuSerials")
+         std::unique_ptr<MockRunningUserChecker> checker = std::make_unique<MockRunningUserChecker>();
+         checker->MockIsRoot(true);
+         std::unique_ptr<MockRunCmdHelper> runCmdHelper = std::make_unique<MockRunCmdHelper>();
+-        runCmdHelper->MockCmdOutput("/usr/bin/lshw -json", DCGM_ST_OK, lshwSingleNonNvidiaCpuAbridgedValidJson);
++        runCmdHelper->MockCmdOutput("@lshw@/bin/lshw -json", DCGM_ST_OK, lshwSingleNonNvidiaCpuAbridgedValidJson);
+ 
+         LsHw lshw;
+         lshw.SetEnvConfig(std::move(envConfig));
+@@ -708,7 +708,7 @@ TEST_CASE("LsHw::GetCpuSerials")
          std::unique_ptr<MockRunningUserChecker> checker = std::make_unique<MockRunningUserChecker>();
          checker->MockIsRoot(true);
          std::unique_ptr<MockRunCmdHelper> runCmdHelper = std::make_unique<MockRunCmdHelper>();
@@ -67,7 +116,7 @@ index edb65e599e..5950fb8d9e 100644
  
          LsHw lshw;
          lshw.SetChecker(std::move(checker));
-@@ -687,7 +687,7 @@
+@@ -722,7 +722,7 @@ TEST_CASE("LsHw::GetCpuSerials")
          std::unique_ptr<MockRunningUserChecker> checker = std::make_unique<MockRunningUserChecker>();
          checker->MockIsRoot(true);
          std::unique_ptr<MockRunCmdHelper> runCmdHelper = std::make_unique<MockRunCmdHelper>();
@@ -76,7 +125,7 @@ index edb65e599e..5950fb8d9e 100644
  
          LsHw lshw;
          lshw.SetChecker(std::move(checker));
-@@ -702,7 +702,7 @@
+@@ -737,7 +737,7 @@ TEST_CASE("LsHw::GetCpuSerials")
          std::unique_ptr<MockRunningUserChecker> checker = std::make_unique<MockRunningUserChecker>();
          checker->MockIsRoot(true);
          std::unique_ptr<MockRunCmdHelper> runCmdHelper = std::make_unique<MockRunCmdHelper>();
@@ -85,7 +134,7 @@ index edb65e599e..5950fb8d9e 100644
  
          LsHw lshw;
          lshw.SetChecker(std::move(checker));
-@@ -716,6 +716,7 @@
+@@ -751,6 +751,7 @@ TEST_CASE("LsHw::Exec")
  {
      SECTION("Will try /usr/sbin/")
      {
@@ -93,18 +142,11 @@ index edb65e599e..5950fb8d9e 100644
          std::unique_ptr<MockRunningUserChecker> checker = std::make_unique<MockRunningUserChecker>();
          checker->MockIsRoot(true);
          std::unique_ptr<MockRunCmdHelper> runCmdHelper = std::make_unique<MockRunCmdHelper>();
-@@ -730,4 +731,4 @@
-         REQUIRE(cpuSerials.value()[0] == "0x000000017820B1C80400000015FF81C0");
-         REQUIRE(cpuSerials.value()[1] == "0x000000017820B1C8040000000A0200C0");
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/modules/diag/DcgmDiagManager.cpp b/modules/diag/DcgmDiagManager.cpp
-index d0a75dcede..ccd4347719 100644
+index 6da4a90..f860a5d 100644
 --- a/modules/diag/DcgmDiagManager.cpp
 +++ b/modules/diag/DcgmDiagManager.cpp
-@@ -253,7 +253,7 @@
+@@ -286,7 +286,7 @@ std::string DcgmDiagManager::GetNvvsBinPath()
      int result;
  
      // Default NVVS binary path
@@ -114,26 +156,24 @@ index d0a75dcede..ccd4347719 100644
      // Check for NVVS binary path enviroment variable
      value = std::getenv("NVVS_BIN_PATH");
 diff --git a/modules/mndiag/dcgm_mndiag_structs.hpp b/modules/mndiag/dcgm_mndiag_structs.hpp
-index 40e61a8fd0..7e43ce8bed 100644
+index 42e36a2..380fd1f 100644
 --- a/modules/mndiag/dcgm_mndiag_structs.hpp
 +++ b/modules/mndiag/dcgm_mndiag_structs.hpp
-@@ -33,8 +33,8 @@
+@@ -35,7 +35,7 @@ constexpr std::string_view ENV_SUPPORTED_SKUS    = "DCGM_MNDIAG_SUPPORTED_SKUS";
  constexpr std::string_view ENV_ALLOW_RUN_AS_ROOT = "DCGM_MPIRUN_ALLOW_RUN_AS_ROOT";
  
- // Default paths
--constexpr std::string_view DEFAULT_MPIRUN_PATH     = "/usr/bin/mpirun";
--constexpr std::string_view DEFAULT_MNUBERGEMM_PATH = "/usr/libexec/datacenter-gpu-manager-4/plugins/cuda12/mnubergemm";
-+constexpr std::string_view DEFAULT_MPIRUN_PATH     = "@mpi@/bin/mpirun";
-+constexpr std::string_view DEFAULT_MNUBERGEMM_PATH = "@dcgm_out@/libexec/datacenter-gpu-manager-4/plugins/cuda12/mnubergemm";
- } //namespace MnDiagConstants
+ //! Default paths
+-constexpr std::string_view DEFAULT_MPIRUN_PATH             = "/usr/bin/mpirun";
++constexpr std::string_view DEFAULT_MPIRUN_PATH             = "@mpi@/bin/mpirun";
+ constexpr std::array<std::string_view, 3> TRUSTED_IP_PATHS = { "/sbin/ip", "/usr/sbin/ip", "/bin/ip" };
  
- // Message types
+ //! Default CUDA versions
 diff --git a/modules/mndiag/tests/MnDiagManagerTests.cpp b/modules/mndiag/tests/MnDiagManagerTests.cpp
-index 40dbda3b72..5ec8dafa1c 100644
+index ed7eda9..6d11d2e 100644
 --- a/modules/mndiag/tests/MnDiagManagerTests.cpp
 +++ b/modules/mndiag/tests/MnDiagManagerTests.cpp
-@@ -2228,7 +2228,7 @@
-         mockStateMachine->SetMnubergemmPathCallback([&capturedPath](std::string const &path) { capturedPath = path; });
+@@ -2537,7 +2537,7 @@ TEST_CASE_METHOD(MnDiagManagerTests, "RunHeadNode Tests [mndiag]")
+             [&capturedStateMachinePath](std::string const &path) { capturedStateMachinePath = path; });
  
          // Set env to custom path
 -        std::string customPath = "/bin/true";
@@ -141,7 +181,7 @@ index 40dbda3b72..5ec8dafa1c 100644
          setenv(MnDiagConstants::ENV_MNUBERGEMM_PATH.data(), customPath.c_str(), 1);
  
          auto mockCoreProxy = std::make_unique<MockDcgmCoreProxy>();
-@@ -3112,7 +3112,7 @@
+@@ -3641,7 +3641,7 @@ TEST_CASE_METHOD(MnDiagManagerTests, "BroadcastRunParametersToRemoteNodes [mndia
      {
          // Save current environment state
          auto savedPath         = saveEnvVar(MnDiagConstants::ENV_MNUBERGEMM_PATH.data());
@@ -150,20 +190,24 @@ index 40dbda3b72..5ec8dafa1c 100644
          setenv(MnDiagConstants::ENV_MNUBERGEMM_PATH.data(), customPath.c_str(), 1);
  
          // Setup mock DCGM API with callback to inspect request
-@@ -3251,7 +3251,7 @@
-         auto savedPath = saveEnvVar(MnDiagConstants::ENV_MNUBERGEMM_PATH.data());
- 
-         // Use a known executable that exists
+diff --git a/modules/mndiag/tests/MnDiagMpiMnubergemmRunnerTests.cpp b/modules/mndiag/tests/MnDiagMpiMnubergemmRunnerTests.cpp
+index 5db3d31..b3809d7 100644
+--- a/modules/mndiag/tests/MnDiagMpiMnubergemmRunnerTests.cpp
++++ b/modules/mndiag/tests/MnDiagMpiMnubergemmRunnerTests.cpp
+@@ -1935,7 +1935,7 @@ TEST_CASE("MnDiagMpiMnubergemmRunner ResolveTestBinaryPath [mndiag]")
+     SECTION("Should use custom path when environment variable points to valid executable")
+     {
+         auto savedPath         = saveEnvVar(MnDiagConstants::ENV_MNUBERGEMM_PATH.data());
 -        std::string customPath = "/bin/true";
 +        std::string customPath = "@coreutils@/bin/true";
          setenv(MnDiagConstants::ENV_MNUBERGEMM_PATH.data(), customPath.c_str(), 1);
  
-         // Call the method and verify path
+         auto mockCoreProxy = std::make_unique<MockDcgmCoreProxy>();
 diff --git a/modules/mndiag/tests/MnDiagProcessUtilsTests.cpp b/modules/mndiag/tests/MnDiagProcessUtilsTests.cpp
-index 633e327c42..168ed91db2 100644
+index 914ee72..4991c0e 100644
 --- a/modules/mndiag/tests/MnDiagProcessUtilsTests.cpp
 +++ b/modules/mndiag/tests/MnDiagProcessUtilsTests.cpp
-@@ -71,7 +71,7 @@
+@@ -71,7 +71,7 @@ SCENARIO("Testing process management utilities")
      {
          // Start a long-running process
          DcgmNs::Common::Subprocess::ChildProcessBuilder builder;
@@ -172,18 +216,11 @@ index 633e327c42..168ed91db2 100644
  
          IoContext ioContext {};
          auto process = std::make_unique<DcgmNs::Common::Subprocess::ChildProcess>(builder.Build(ioContext));
-@@ -155,4 +155,4 @@
- 
-         REQUIRE(result.empty());
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/modules/mndiag/tests/MpiRunnerTests.cpp b/modules/mndiag/tests/MpiRunnerTests.cpp
-index 526c80fd47..1e8596d3b7 100755
+index a4a601a..0c4d1ec 100644
 --- a/modules/mndiag/tests/MpiRunnerTests.cpp
 +++ b/modules/mndiag/tests/MpiRunnerTests.cpp
-@@ -60,7 +60,7 @@
+@@ -66,7 +66,7 @@ public:
  
      std::string GetMpiBinPath() const override
      {
@@ -192,7 +229,7 @@ index 526c80fd47..1e8596d3b7 100755
      }
  
  private:
-@@ -138,9 +138,9 @@
+@@ -144,9 +144,9 @@ TEST_CASE("MpiRunner process lifecycle with Wait")
          runner.ConstructMpiCommand(&config);
  
          // Verify command construction
@@ -204,18 +241,11 @@ index 526c80fd47..1e8596d3b7 100755
          REQUIRE(fullCommand.find("sleep 1") != std::string::npos);
          REQUIRE(fullCommand.find("Output from sleep process") != std::string::npos);
  
-@@ -244,4 +244,4 @@
-         // Test with invalid parameter (null pointer)
-         REQUIRE(runner.PopulateResponse(nullptr, nodeInfoMap_t()) == DCGM_ST_BADPARAM);
-     }
--}
-\ No newline at end of file
-+}
 diff --git a/modules/sysmon/DcgmCpuTopology.cpp b/modules/sysmon/DcgmCpuTopology.cpp
-index 786d3877fc..ccbeccc81d 100644
+index 786d387..ccbeccc 100644
 --- a/modules/sysmon/DcgmCpuTopology.cpp
 +++ b/modules/sysmon/DcgmCpuTopology.cpp
-@@ -136,7 +136,7 @@
+@@ -136,7 +136,7 @@ dcgmReturn_t DcgmCpuTopology::GetLscpuData()
  {
      static std::string cmd = "lscpu --json";
      std::string cmdOutput;
@@ -224,29 +254,14 @@ index 786d3877fc..ccbeccc81d 100644
  
      dcgmReturn_t result = DCGM_ST_OK;
      for (auto const &prefix : cmdPathPrefix)
-diff --git a/nvvs/plugin_src/nvbandwidth/NVBandwidthPlugin.cpp b/nvvs/plugin_src/nvbandwidth/NVBandwidthPlugin.cpp
-index 261bba4490..4d439ad452 100644
---- a/nvvs/plugin_src/nvbandwidth/NVBandwidthPlugin.cpp
-+++ b/nvvs/plugin_src/nvbandwidth/NVBandwidthPlugin.cpp
-@@ -238,7 +238,7 @@
-     std::vector<std::string> const search_paths
-         = { GetCurrentModuleLocation(),
-             fmt::format("./apps/nvvs/plugins/cuda{}", m_cudaDriverMajorVersion),
--            fmt::format("/usr/libexec/datacenter-gpu-manager-4/plugins/cuda{}", m_cudaDriverMajorVersion),
-+            fmt::format("@dcgm_out@/libexec/datacenter-gpu-manager-4/plugins/cuda{}", m_cudaDriverMajorVersion),
-             GetNvvsBinCheckPath(m_cudaDriverMajorVersion) };
-     std::stringstream path_buf;
- 
-diff --git a/testing/TestDiagManager.cpp b/testing/TestDiagManager.cpp
-index 8087123a49..a6333b3a3d 100644
---- a/testing/TestDiagManager.cpp
-+++ b/testing/TestDiagManager.cpp
-@@ -236,7 +236,7 @@
-     if (nvvsPathEnv)
-         nvvsBinPath = std::string(nvvsPathEnv) + "/nvvs";
-     else
--        nvvsBinPath = "/usr/libexec/datacenter-gpu-manager-4/nvvs";
-+        nvvsBinPath = "@dcgm_out@/libexec/datacenter-gpu-manager-4/nvvs";
- 
-     std::string diagResponseVersionArg = fmt::format("--response-version {}", dcgmDiagResponse_version12);
-     expected.push_back(nvvsBinPath + " --channel-fd 3 " + diagResponseVersionArg
+diff --git a/nvvs/plugin_src/common/PluginCommon.cpp b/nvvs/plugin_src/common/PluginCommon.cpp
+index 7492155..ec3d3bb 100644
+--- a/nvvs/plugin_src/common/PluginCommon.cpp
++++ b/nvvs/plugin_src/common/PluginCommon.cpp
+@@ -202,5 +202,5 @@ std::vector<std::string> GetDefaultSearchPaths(unsigned int cudaDriverMajorVersi
+              GetNvvsBinPath(cudaDriverMajorVersion, updatedPath),
+              fmt::format("./apps/nvvs/plugins/cuda{}{}", cudaDriverMajorVersion, updatedPath),
+              fmt::format(
+-                 "/usr/libexec/datacenter-gpu-manager-4/plugins/cuda{}{}", cudaDriverMajorVersion, updatedPath) };
++                 "@dcgm_out@/libexec/datacenter-gpu-manager-4/plugins/cuda{}{}", cudaDriverMajorVersion, updatedPath) };
+ }
