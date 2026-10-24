@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "mariadb";
-  version = "1.1.14";
+  version = "1.1.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mariadb-corporation";
     repo = "mariadb-connector-python";
     tag = "v${version}";
-    hash = "sha256-BPyEBQ5M/kqTKpZX/incgTX/+E1dMZW98GuywsBeCJw=";
+    hash = "sha256-iFYffZdOaydFeWsHktc8PVr1njxT504ToL2SVCWgPGU=";
   };
 
   build-system = [ setuptools ];
