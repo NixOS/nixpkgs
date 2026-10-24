@@ -23867,6 +23867,12 @@
     github = "ProducerMatt";
     githubId = 58014742;
   };
+  profidev = {
+    email = "mail@profidev.io";
+    github = "Profiidev";
+    githubId = 92174452;
+    name = "Profidev";
+  };
   Profpatsch = {
     email = "mail@profpatsch.de";
     github = "Profpatsch";
