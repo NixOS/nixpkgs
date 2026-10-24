@@ -87,8 +87,8 @@ let
 in
 with pkgs;
 {
-  kafka_4_1 = makeKafkaTest "kafka_4_1" { kafkaPackage = apacheKafka_4_1; };
   kafka_4_2 = makeKafkaTest "kafka_4_2" { kafkaPackage = apacheKafka_4_2; };
   kafka_4_3 = makeKafkaTest "kafka_4_3" { kafkaPackage = apacheKafka_4_3; };
+  kafka_4_4 = makeKafkaTest "kafka_4_4" { kafkaPackage = apacheKafka_4_4; };
   kafka = makeKafkaTest "kafka" { kafkaPackage = apacheKafka; };
 }
