@@ -1959,11 +1959,16 @@ with self;
       hash = "sha256-LcCSjvsTtfMF3zRSCI5j+StnrOqH+9RwMI9GD3kSboQ=";
     };
     propagatedBuildInputs = [ pkgs.libkrb5 ];
+    nativeBuildInputs = [
+      PkgConfig
+      pkgs.libkrb5
+    ];
     buildInputs = [
       DevelChecklib
       FileWhich
-      PkgConfig
     ];
+    strictDeps = true;
+    __structuredAttrs = true;
     meta = {
       description = "XS bindings for Kerberos 5";
       license = with lib.licenses; [
