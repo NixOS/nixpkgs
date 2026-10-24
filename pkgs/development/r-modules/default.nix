@@ -853,6 +853,10 @@ let
       cargo
       rustc
     ];
+    libopenexr = with pkgs; [
+      cmake
+      pkg-config
+    ];
     llmjson = with pkgs; [
       cargo
       rustc
