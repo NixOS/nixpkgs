@@ -47,12 +47,12 @@ let
   cargoExtraDeps = [
     (rustPlatform.fetchCargoVendor {
       inherit src;
-      hash = fluxerHashes.cargo.lib.guildMemberListNif;
+      hash = fluxerHashes.cargo.libGuildMemberListNif;
       sourceRoot = "${src.name}/fluxer_gateway/native/guild_member_list_oset_nif";
     })
     (rustPlatform.fetchCargoVendor {
       inherit src;
-      hash = fluxerHashes.cargo.lib.pushMarkdownPlaintext;
+      hash = fluxerHashes.cargo.libPushMarkdownPlaintext;
       sourceRoot = "${src.name}/fluxer_gateway/native/push_markdown_plaintext_nif";
     })
   ];
@@ -132,7 +132,7 @@ beamPackages.rebar3Relx {
       --set-default FLUXER_ERLANG_NODE_NAME fluxer-gateway@127.0.0.1 \
       --run 'export RELX_OUT_FILE_PATH="''${RELX_OUT_FILE_PATH:-$(mktemp -d)}"' \
       --prefix PATH : "${
-        lib.mkBinPath [
+        lib.makeBinPath [
           coreutils
           gawk
         ]
