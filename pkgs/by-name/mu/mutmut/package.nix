@@ -9,6 +9,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   version = "3.2.0";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     repo = "mutmut";
     owner = "boxed";
