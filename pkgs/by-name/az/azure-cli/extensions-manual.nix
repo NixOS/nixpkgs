@@ -315,6 +315,7 @@
     propagatedBuildInputs = with python3Packages; [
       websocket-client
     ];
+    pythonRelaxDeps = [ "websocket-client" ];
     meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 
