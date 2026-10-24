@@ -1298,6 +1298,13 @@ let
       hdf5
     ];
     RcppZiggurat = [ pkgs.gsl ];
+    Rduckhts = with pkgs; [
+      bzip2
+      curl
+      openssl
+      xz
+      zlib
+    ];
     Rfastp = with pkgs; [
       xz
       bzip2
