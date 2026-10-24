@@ -12,7 +12,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aetcd";
   version = "1.0.0";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "martyanov";
     repo = "aetcd";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-wGs1YG/7gCVMd6iS2RLoMBVJ93aO3dAG1x6/rrhK+C0=";
   };
 
@@ -59,8 +59,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python asyncio-based client for etcd";
     homepage = "https://github.com/martyanov/aetcd";
-    changelog = "https://github.com/martyanov/aetcd/blob/${src.tag}/docs/changelog.rst";
+    changelog = "https://github.com/martyanov/aetcd/blob/${finalAttrs.src.tag}/docs/changelog.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
