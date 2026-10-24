@@ -27,6 +27,8 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [ "svglib" ];
+
   dependencies = [
     django
     django-polymorphic
