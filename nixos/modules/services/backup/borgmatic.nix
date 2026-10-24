@@ -174,8 +174,8 @@ in
         ) cfg.configurations;
       borgmaticCheck =
         name: f:
-        pkgs.runCommandCC "${name} validation" { } ''
-          ${pkgs.borgmatic}/bin/borgmatic -c ${f.source} config validate
+        pkgs.runCommand "${name} validation" { } ''
+          ${lib.getExe pkgs.borgmatic} -c ${f.source} config validate
           touch $out
         '';
     in
