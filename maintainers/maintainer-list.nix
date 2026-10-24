@@ -30378,6 +30378,12 @@
     githubId = 1759360;
     name = "Thea Heinen";
   };
+  tsirysndr = {
+    email = "tsiry.sndr@rocksky.app";
+    github = "tsirysndr";
+    githubId = 15877106;
+    name = "Tsiry Sandratraina";
+  };
   tsowell = {
     email = "tom@ldtlb.com";
     github = "tsowell";
