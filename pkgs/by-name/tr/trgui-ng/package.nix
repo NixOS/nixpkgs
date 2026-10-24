@@ -76,6 +76,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     cargo-tauri.hook
     pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # coreaudio-sys runs bindgen, which needs libclang
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [

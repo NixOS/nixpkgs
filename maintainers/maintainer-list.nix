@@ -16330,6 +16330,12 @@
     github = "langsjo";
     githubId = 104687438;
   };
+  lanovets = {
+    name = "lanovets";
+    email = "freelanovets@proton.me";
+    github = "lanovets";
+    githubId = 179950869;
+  };
   larry0x = {
     name = "Larry Engineer";
     email = "nixpkgs@larry.engineer";
@@ -16923,6 +16929,12 @@
     github = "listx";
     githubId = 725613;
     name = "Linus Arver";
+  };
+  linusemr618 = {
+    email = "emmerichlinus@gmail.com";
+    github = "linusemr618";
+    githubId = 96724651;
+    name = "Linus Emmerich";
   };
   linuxissuper = {
     email = "m+nix@linuxistcool.de";

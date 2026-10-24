@@ -8,7 +8,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain-protocol";
-  version = "0.0.19";
+  version = "0.0.20";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -17,7 +17,7 @@ buildPythonPackage (finalAttrs: {
     owner = "langchain-ai";
     repo = "agent-protocol";
     tag = "langchain-protocol==${finalAttrs.version}";
-    hash = "sha256-RiTuadwE3IMhlsFzEZkVlIKMU8/c9uTTDWrXpptriGI=";
+    hash = "sha256-7NGpgDIgD2nOqCQHvYTZYwfJWrlIev8p18KZdg1qTkM=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/streaming/py";
