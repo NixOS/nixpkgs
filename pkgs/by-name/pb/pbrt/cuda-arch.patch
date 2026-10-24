@@ -1,0 +1,18 @@
+diff --git a/src/pbrt/wavefront/workqueue.h b/src/pbrt/wavefront/workqueue.h
+index 2f0827e..6e6c769 100644
+--- a/src/pbrt/wavefront/workqueue.h
++++ b/src/pbrt/wavefront/workqueue.h
+@@ -20,11 +20,11 @@
+ #ifdef __CUDACC__
+ 
+ #ifdef PBRT_IS_WINDOWS
+-#if (__CUDA_ARCH__ < 700)
++#if defined(__CUDA_ARCH__) && (__CUDA_ARCH__ < 700)
+ #define PBRT_USE_LEGACY_CUDA_ATOMICS
+ #endif
+ #else
+-#if (__CUDA_ARCH__ < 600)
++#if defined(__CUDA_ARCH__) && (__CUDA_ARCH__ < 600)
+ #define PBRT_USE_LEGACY_CUDA_ATOMICS
+ #endif
+ #endif  // PBRT_IS_WINDOWS
