@@ -23,13 +23,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "sonobus";
-  version = "1.7.2";
+  version = "android_1.7.4";
 
   src = fetchFromGitHub {
     owner = "sonosaurus";
     repo = "sonobus";
     tag = finalAttrs.version;
-    hash = "sha256-NOdmHFKrV7lb8XbeG5GdLKYZ0c/vcz3fcqYj9JvE+/Q=";
+    hash = "sha256-O7CfHjd7F+Zhbfz2nZoFWYQLH3ICJgUywszApU0hvXg=";
     fetchSubmodules = true;
   };
 
