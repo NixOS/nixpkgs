@@ -1,0 +1,19 @@
+--- a/src/vkeyboard.rs
++++ b/src/vkeyboard.rs
+@@ -39,14 +39,14 @@
+     impl Drop for KeyMap {
+         fn drop(&mut self) {
+             unsafe {
+-                close(self.fd as u32);
++                close(self.fd as i32);
+             }
+         }
+     }
+ 
+     extern "C" {
+         // From libc, to let KeyMap get deallocated.
+-        fn close(fd: u32);
++        fn close(fd: i32) -> i32;
+ 
+         pub fn eek_virtual_keyboard_v1_key(
+             virtual_keyboard: ZwpVirtualKeyboardV1,
