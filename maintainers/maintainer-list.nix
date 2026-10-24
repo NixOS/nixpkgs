@@ -9070,12 +9070,6 @@
     githubId = 599997;
     name = "evax";
   };
-  evck = {
-    email = "eric@evenchick.com";
-    github = "ericevenchick";
-    githubId = 195032;
-    name = "Eric Evenchick";
-  };
   eveeifyeve = {
     name = "Eveeifyeve";
     github = "eveeifyeve";
