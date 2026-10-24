@@ -12,7 +12,7 @@
   stdenv,
   nix-update-script,
   nixosTests,
-  rocksdb,
+  rocksdb_10_10,
   callPackage,
   withFoundationdb ? false,
   stalwartEnterprise ? false,
@@ -83,8 +83,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     OPENSSL_DIR = lib.getDev openssl;
     OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";
     ZSTD_SYS_USE_PKG_CONFIG = true;
-    ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
-    ROCKSDB_LIB_DIR = "${rocksdb}/lib";
+    ROCKSDB_INCLUDE_DIR = "${rocksdb_10_10}/include";
+    ROCKSDB_LIB_DIR = "${rocksdb_10_10}/lib";
   }
   //
     lib.optionalAttrs
@@ -194,7 +194,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __darwinAllowLocalNetworking = true;
 
   passthru = {
-    inherit rocksdb; # make used rocksdb version available (e.g., for backup scripts)
+    inherit rocksdb_10_10; # make used rocksdb version available (e.g., for backup scripts)
     webadmin = buildPackages.callPackage ./webadmin.nix { };
     spam-filter = callPackage ./spam-filter.nix { };
     updateScript = nix-update-script { };

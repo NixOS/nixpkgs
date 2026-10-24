@@ -16,17 +16,22 @@
   liburing,
   enableShared ? !stdenv.hostPlatform.isStatic,
   sse42Support ? stdenv.hostPlatform.sse4_2Support,
+  version ? "11.8.1",
+  hash ? "sha256-zjOo0H8/qA879Lcw5wHp2BZzOhl+/wYluxKD9RCfQ+0=",
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocksdb";
-  version = "10.10.1";
+  inherit version;
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "rocksdb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gszW+YY8ZZ7cRVCIXuahGopqqswNRnagZLUYYmRxzGY=";
+    inherit hash;
   };
 
   patches = lib.optional (
@@ -73,9 +78,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-DWITH_GFLAGS=0"
     "-DUSE_RTTI=1"
     "-DROCKSDB_INSTALL_ON_WINDOWS=YES" # harmless elsewhere
-    (lib.optional sse42Support "-DFORCE_SSE42=1")
     "-DFAIL_ON_WARNINGS=NO"
   ]
+  ++ lib.optional sse42Support "-DFORCE_SSE42=1"
   ++ lib.optional (!enableShared) "-DROCKSDB_BUILD_SHARED=0";
 
   # otherwise "cc1: error: -Wformat-security ignored without -Wformat [-Werror=format-security]"
