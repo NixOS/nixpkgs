@@ -34,21 +34,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "haproxy";
-  version = "3.3.11";
+  version = "3.3.17";
 
   src = fetchurl {
     url = "https://www.haproxy.org/download/${lib.versions.majorMinor finalAttrs.version}/src/haproxy-${finalAttrs.version}.tar.gz";
-    hash = "sha256-ywGFCNBymseyaGlEqKk37a3bB0ThDNEFfdZQFQzcKD4=";
+    hash = "sha256-zyIeGOHS2BVcQEhbQ4mvTHvN/HdNgG3POR+dJH5MG2M=";
   };
-
-  patches = [
-    # Remove once the packaged release fixes CVE-2026-90678.
-    (fetchpatch {
-      name = "CVE-2026-90678.patch";
-      url = "https://github.com/haproxy/haproxy/commit/81482d95aa6dfbd3f6eadd2f3650f256dc0b4e03.patch";
-      hash = "sha256-jmupw5lPzWqutD4RpAECetFNLzXvejWS4PCoMW+ZPtM=";
-    })
-  ];
 
   buildInputs = [
     sslPkg
