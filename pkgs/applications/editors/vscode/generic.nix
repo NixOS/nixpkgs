@@ -418,6 +418,11 @@ stdenv.mkDerivation (
           packed="resources/app/node_modules.asar"
           unpacked="resources/app/node_modules"
           asar extract "$packed" "$unpacked"
+          # ASAR extraction does not preserve executable permissions for unpacked files.
+          if [ -d "$packed.unpacked" ]; then
+            cp -a "$packed.unpacked/." "$unpacked/"
+          fi
+
           substituteInPlace $unpacked/@vscode/sudo-prompt/index.js \
             --replace-fail "/usr/bin/pkexec" "/run/wrappers/bin/pkexec" \
             --replace-fail "/bin/bash" "${bash}/bin/bash"
