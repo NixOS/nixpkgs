@@ -14,7 +14,7 @@
   enableCuda ? config.cudaSupport,
   enableFortran ? builtins.elem stdenv.hostPlatform.system gfortran.meta.platforms,
   enableOpenMP ? true,
-  enablePython ? true,
+  enablePython ? stdenv.buildPlatform == stdenv.hostPlatform,
   enableUtilities ? true,
   versionCheckHook,
 }@inputs:
