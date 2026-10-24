@@ -1191,6 +1191,12 @@ self: super: with self; {
     inherit (pkgs) antlr4;
   };
 
+  antlr4-python3-runtime_4_9 =
+    callPackage ../development/python-modules/antlr4-python3-runtime/4_9.nix
+      {
+        antlr4 = pkgs.antlr4_9;
+      };
+
   anyascii = callPackage ../development/python-modules/anyascii { };
 
   anybadge = callPackage ../development/python-modules/anybadge { };
@@ -3060,6 +3066,8 @@ self: super: with self; {
 
   cffsubr = callPackage ../development/python-modules/cffsubr { };
 
+  cfgraph = callPackage ../development/python-modules/cfgraph { };
+
   cfgv = callPackage ../development/python-modules/cfgv { };
 
   cflib = callPackage ../development/python-modules/cflib { };
@@ -3103,6 +3111,8 @@ self: super: with self; {
   chardet = callPackage ../development/python-modules/chardet { };
 
   chardet_5 = callPackage ../development/python-modules/chardet/5.nix { };
+
+  chardet_7_4 = callPackage ../development/python-modules/chardet/7_4.nix { };
 
   charset-normalizer = callPackage ../development/python-modules/charset-normalizer { };
 
@@ -3928,6 +3938,8 @@ self: super: with self; {
   curated-tokenizers = callPackage ../development/python-modules/curated-tokenizers { };
 
   curated-transformers = callPackage ../development/python-modules/curated-transformers { };
+
+  curies = callPackage ../development/python-modules/curies { };
 
   curio = callPackage ../development/python-modules/curio { };
 
@@ -7637,6 +7649,8 @@ self: super: with self; {
 
   haystack-ai = callPackage ../development/python-modules/haystack-ai { };
 
+  hbreader = callPackage ../development/python-modules/hbreader { };
+
   hcloud = callPackage ../development/python-modules/hcloud { };
 
   hcs-utils = callPackage ../development/python-modules/hcs-utils { };
@@ -8900,6 +8914,8 @@ self: super: with self; {
 
   json-flatten = callPackage ../development/python-modules/json-flatten { };
 
+  json-flattener = callPackage ../development/python-modules/json-flattener { };
+
   json-handler-registry = callPackage ../development/python-modules/json-handler-registry { };
 
   json-home-client = callPackage ../development/python-modules/json-home-client { };
@@ -8933,6 +8949,10 @@ self: super: with self; {
   jsonalias = callPackage ../development/python-modules/jsonalias { };
 
   jsonargparse = callPackage ../development/python-modules/jsonargparse { };
+
+  jsonasobj = callPackage ../development/python-modules/jsonasobj { };
+
+  jsonasobj2 = callPackage ../development/python-modules/jsonasobj2 { };
 
   jsonconversion = callPackage ../development/python-modules/jsonconversion { };
 
@@ -13803,6 +13823,8 @@ self: super: with self; {
 
   platformdirs = callPackage ../development/python-modules/platformdirs { };
 
+  platformdirs_4_12_2 = callPackage ../development/python-modules/platformdirs/4_12_2.nix { };
+
   playsound = callPackage ../development/python-modules/playsound { };
 
   playwright = callPackage ../development/python-modules/playwright { };
@@ -14074,7 +14096,11 @@ self: super: with self; {
 
   prefect = callPackage ../development/python-modules/prefect { };
 
+  prefixcommons = callPackage ../development/python-modules/prefixcommons { };
+
   prefixed = callPackage ../development/python-modules/prefixed { };
+
+  prefixmaps = callPackage ../development/python-modules/prefixmaps { };
 
   preggy = callPackage ../development/python-modules/preggy { };
 
@@ -14869,6 +14895,8 @@ self: super: with self; {
 
   pydantic-core = callPackage ../development/python-modules/pydantic-core { };
 
+  pydantic-core_2_46_5 = callPackage ../development/python-modules/pydantic-core/2_46_5.nix { };
+
   pydantic-extra-types = callPackage ../development/python-modules/pydantic-extra-types { };
 
   pydantic-graph = callPackage ../development/python-modules/pydantic-graph { };
@@ -14879,11 +14907,17 @@ self: super: with self; {
 
   pydantic-settings = callPackage ../development/python-modules/pydantic-settings { };
 
+  pydantic-settings_2_15_0 =
+    callPackage ../development/python-modules/pydantic-settings/2_15_0.nix
+      { };
+
   pydantic-xml = callPackage ../development/python-modules/pydantic-xml { };
 
   pydantic-zarr = callPackage ../development/python-modules/pydantic-zarr { };
 
   pydantic_1 = callPackage ../development/python-modules/pydantic/1.nix { };
+
+  pydantic_2_13_5 = callPackage ../development/python-modules/pydantic/2_13_5.nix { };
 
   pydash = callPackage ../development/python-modules/pydash { };
 
@@ -15374,6 +15408,8 @@ self: super: with self; {
   pyjnius = callPackage ../development/python-modules/pyjnius { };
 
   pyjpegls = callPackage ../development/python-modules/pyjpegls { };
+
+  pyjsg = callPackage ../development/python-modules/pyjsg { };
 
   pyjson5 = callPackage ../development/python-modules/pyjson5 { };
 
@@ -15905,6 +15941,8 @@ self: super: with self; {
 
   pyoxigraph = callPackage ../development/python-modules/pyoxigraph { };
 
+  pyoxigraph_0_5_11 = callPackage ../development/python-modules/pyoxigraph/0_5_11.nix { };
+
   pyoxipng = callPackage ../development/python-modules/pyoxipng { };
 
   pypager = callPackage ../development/python-modules/pypager { };
@@ -16318,6 +16356,10 @@ self: super: with self; {
 
   pyshark = callPackage ../development/python-modules/pyshark { };
 
+  pyshex = callPackage ../development/python-modules/pyshex { };
+
+  pyshexc = callPackage ../development/python-modules/pyshexc { };
+
   pyshp = callPackage ../development/python-modules/pyshp { };
 
   pysiaalarm = callPackage ../development/python-modules/pysiaalarm { };
@@ -16513,6 +16555,8 @@ self: super: with self; {
   pystiebeleltron = callPackage ../development/python-modules/pystiebeleltron { };
 
   pystitch = callPackage ../development/python-modules/pystitch { };
+
+  pystow = callPackage ../development/python-modules/pystow { };
 
   pystray = callPackage ../development/python-modules/pystray { };
 
@@ -16732,6 +16776,8 @@ self: super: with self; {
   pytest-localserver = callPackage ../development/python-modules/pytest-localserver { };
 
   pytest-logdog = callPackage ../development/python-modules/pytest-logdog { };
+
+  pytest-logging = callPackage ../development/python-modules/pytest-logging { };
 
   pytest-lsp = callPackage ../development/python-modules/pytest-lsp { };
 
@@ -18012,6 +18058,10 @@ self: super: with self; {
 
   rdflib = callPackage ../development/python-modules/rdflib { };
 
+  rdflib-jsonld = callPackage ../development/python-modules/rdflib-jsonld { };
+
+  rdflib-shim = callPackage ../development/python-modules/rdflib-shim { };
+
   rdkit = callPackage ../development/python-modules/rdkit {
     boost = pkgs.boost.override {
       enablePython = true;
@@ -19113,6 +19163,8 @@ self: super: with self; {
     };
   };
 
+  shexjsg = callPackage ../development/python-modules/shexjsg { };
+
   shiboken2 = toPythonModule (
     callPackage ../development/python-modules/shiboken2 { inherit (pkgs) cmake llvmPackages qt5; }
   );
@@ -19645,6 +19697,8 @@ self: super: with self; {
 
   sparklines = callPackage ../development/python-modules/sparklines { };
 
+  sparqlslurper = callPackage ../development/python-modules/sparqlslurper { };
+
   sparqlwrapper = callPackage ../development/python-modules/sparqlwrapper { };
 
   sparse = callPackage ../development/python-modules/sparse { };
@@ -19964,6 +20018,8 @@ self: super: with self; {
   sqlalchemy-utils = callPackage ../development/python-modules/sqlalchemy-utils { };
 
   sqlalchemy_1_4 = callPackage ../development/python-modules/sqlalchemy/1_4.nix { };
+
+  sqlalchemy_2_0_54 = callPackage ../development/python-modules/sqlalchemy/2_0_54.nix { };
 
   sqlcipher3 = callPackage ../development/python-modules/sqlcipher3 { };
 
