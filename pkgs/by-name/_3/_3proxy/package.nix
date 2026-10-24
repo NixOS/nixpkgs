@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "3proxy";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "3proxy";
     repo = "3proxy";
     tag = finalAttrs.version;
-    sha256 = "sha256-hLxafFU6nJ3I3NT3R24LPD7PBmQ1IZEbrVqvfmMZHIM=";
+    sha256 = "sha256-W3mg478jwqeTaMZiLoG0RZtp0xDSpIK7j/q37AyWFKw=";
   };
 
   buildInputs = [
