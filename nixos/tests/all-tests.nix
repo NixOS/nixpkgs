@@ -523,6 +523,7 @@ in
   };
   cri-o = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./cri-o.nix;
   croc = runTest ./croc.nix;
+  cron = runTest ./cron.nix;
   cross-seed = runTest ./cross-seed.nix;
   crowdsec = import ./crowdsec/default.nix { inherit runTest; };
   cryptpad = runTest ./cryptpad.nix;
@@ -636,6 +637,7 @@ in
   fanout = runTest ./fanout.nix;
   fastnetmon-advanced = runTest ./fastnetmon-advanced.nix;
   fcitx5 = runTest ./fcitx5;
+  fcron = runTest ./fcron.nix;
   fedimintd = runTest ./fedimintd.nix;
   feishin = handleTest ./feishin { };
   ferm = runTest ./ferm.nix;
