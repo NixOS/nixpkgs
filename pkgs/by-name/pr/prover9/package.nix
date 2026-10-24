@@ -1,45 +1,60 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   versionCheckHook,
+  cctools,
+  coreutils,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "prover9";
-  version = "2009-11A";
+  version = "2026-3K";
 
-  src = fetchurl {
-    url = "https://www.cs.unm.edu/~mccune/mace4/download/LADR-2009-11A.tar.gz";
-    hash = "sha256-wyvtWAcADAtxYcJ25Q2coK8MskjfLBr/svb8AkcbUdA=";
+  src = fetchFromGitHub {
+    owner = "AlgorithmicTruth";
+    repo = "Prover9";
+    tag = "LADR-${finalAttrs.version}";
+    hash = "sha256-1qK0GXF/KFzjt9+/T7+IWyi2QEjNjt5JZ3nvRdTKnYc=";
   };
 
-  hardeningDisable = [ "format" ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools.libtool
+  ];
+
+  makeFlags = [
+    "CC=${lib.getExe stdenv.cc}"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "PLATFORM_FLAGS="
+  ];
+
+  env.NIX_CFLAGS_COMPILE = toString (
+    [
+      "-Wno-error=implicit-int"
+      "-Wno-error=implicit-function-declaration"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "-Wno-error=incompatible-library-redeclaration"
+      "-Wno-error=return-type"
+    ]
+  );
 
   postPatch = ''
-    RM=$(type -tp rm)
-    MV=$(type -tp mv)
-    CP=$(type -tp cp)
     for f in Makefile */Makefile; do
-      substituteInPlace $f --replace-quiet "/bin/rm" "$RM" \
-        --replace-quiet "/bin/mv" "$MV" \
-        --replace-quiet "/bin/cp" "$CP";
+      substituteInPlace $f \
+        --replace-quiet "/bin/rm" ${lib.getExe' coreutils "rm"} \
+        --replace-quiet "/bin/mv" ${lib.getExe' coreutils "mv"} \
+        --replace-quiet "/bin/cp" ${lib.getExe' coreutils "cp"}
     done
   '';
 
   buildFlags = [ "all" ];
 
-  # Fails the build on clang-16 and gcc-14.
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int";
-
   doCheck = true;
   checkPhase = ''
     runHook preCheck
-
-    make test1
-    make test2
-    make test3
-
+    make test1 test2 test3
     runHook postCheck
   '';
 
@@ -47,28 +62,21 @@ stdenv.mkDerivation {
     runHook preInstall
     mkdir -p $out/bin
     for f in mace4 prover9 fof-prover9 autosketches4 newauto newsax ladr_to_tptp tptp_to_ladr; do
-      install -Dm555 bin/$f $out/bin/$f;
+      install -Dm555 bin/$f $out/bin/$f
     done
     install -Dm644 -t $out/share/man/man1 manpages/*.1
     runHook postInstall
   '';
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
   meta = {
-    homepage = "https://www.cs.unm.edu/~mccune/mace4/";
+    homepage = "https://prover9.org/";
     license = lib.licenses.gpl2Only;
     description = "Automated theorem prover for first-order and equational logic";
-    longDescription = ''
-      Prover9 is a resolution/paramodulation automated theorem prover
-      for first-order and equational logic. Prover9 is a successor of
-      the Otter Prover. This is the LADR command-line version.
-    '';
     mainProgram = "prover9";
-    platforms = lib.platforms.linux;
-    maintainers = [ ];
+    platforms = lib.platforms.unix;
+    maintainers = [ "manmatteo" ];
   };
-}
+})
