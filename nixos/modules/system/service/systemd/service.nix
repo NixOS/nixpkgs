@@ -56,6 +56,7 @@ in
   imports = [
     (lib.mkAliasOptionModule [ "systemd" "service" ] [ "systemd" "services" "" ])
     (lib.mkAliasOptionModule [ "systemd" "socket" ] [ "systemd" "sockets" "" ])
+    (lib.mkAliasOptionModule [ "systemd" "timer" ] [ "systemd" "timers" "" ])
   ];
   options = {
     systemd.lib = mkOption {
@@ -177,6 +178,15 @@ in
         Declares systemd socket units. Names will be prefixed by the service name / path.
 
         See {option}`systemd.services`.
+      '';
+      type = types.lazyAttrsOf types.deferredModule;
+      default = { };
+    };
+    systemd.timers = mkOption {
+      description = ''
+        Declares systemd timer units. Names will be prefixed by the service name / path.
+
+        See {option}`systemd.timers`.
       '';
       type = types.lazyAttrsOf types.deferredModule;
       default = { };
