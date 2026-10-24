@@ -349,8 +349,9 @@ in
               # specifically the dummy hostname which is overridden by the host query parameter
               then
                 "postgres://${user}@localhost/${db.name}?host=/run/postgresql"
+              # Doctrine DBAL expects `unix_socket`, not `socket`.
               else if mysqlLocal then
-                "mysql://${user}@localhost/${db.name}?socket=/run/mysqld/mysqld.sock"
+                "mysql://${user}@localhost/${db.name}?unix_socket=/run/mysqld/mysqld.sock"
               else
                 null;
           }
