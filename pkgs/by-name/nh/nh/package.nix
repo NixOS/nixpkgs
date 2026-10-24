@@ -38,8 +38,6 @@ symlinkJoin {
       maintainers
       ;
 
-    # To prevent builds on hydra
-    hydraPlatforms = [ ];
     # prefer wrapper over the package
     priority = (unwrapped.meta.priority or lib.meta.defaultPriority) - 1;
   };
