@@ -19,6 +19,8 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "." ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Reverse/bind shell generator";
     homepage = "https://github.com/redcode-labs/GoSH";
