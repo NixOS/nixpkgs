@@ -5,16 +5,16 @@
   vapoursynth,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vapoursynth-znedi3";
-  version = "unstable-2023-07-09";
+  version = "3.3";
 
   src = fetchFromGitHub {
     fetchSubmodules = true;
     owner = "sekrit-twc";
     repo = "znedi3";
-    rev = "68dc130bc37615fd912d1dc1068261f00f54b146";
-    hash = "sha256-QC+hMMfp6XwW4PqsN6sip1Y7ttiYn/xuxq/pUg/trog=";
+    tag = "r${finalAttrs.version}";
+    hash = "sha256-47QqqNkN1FuEaOrhhOOPFUGeXh2GJ3Vj35K271CFyoA=";
   };
 
   buildInputs = [ vapoursynth ];
@@ -52,4 +52,4 @@ stdenv.mkDerivation {
     ];
     maintainers = with lib.maintainers; [ snaki ];
   };
-}
+})
