@@ -64,6 +64,151 @@ in
       default = { };
       visible = "shallow";
     };
+
+    enable = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to enable this service.
+        When disabled, the service manager generates no configuration for the
+        service at all. This is a Nix-level switch, not a "present but stopped"
+        state: a disabled service does not show up in the generated
+        configuration of any service manager.
+      '';
+    };
+
+    dependencies = mkOption {
+      type = types.submodule {
+        options = {
+          after = mkOption {
+            type = types.listOf types.str;
+            default = [ ];
+            example = [ "database" ];
+            description = ''
+              Services that must have finished starting before this service starts.
+              The names refer to sibling services at the same level of the
+              service tree. Each service manager maps them to its own
+              dependency and ordering mechanism.
+            '';
+          };
+
+          before = mkOption {
+            type = types.listOf types.str;
+            default = [ ];
+            example = [ "web-server" ];
+            description = ''
+              Services that must start after this service has finished starting.
+              The names refer to sibling services at the same level of the
+              service tree.
+            '';
+          };
+
+          requires = mkOption {
+            type = types.listOf types.str;
+            default = [ ];
+            example = [ "filesystems" ];
+            description = ''
+              Services that must be running for this service to run. If a
+              required service fails, this service is stopped as well.
+              The names refer to sibling services at the same level of the
+              service tree.
+            '';
+          };
+
+          wants = mkOption {
+            type = types.listOf types.str;
+            default = [ ];
+            example = [ "logging" ];
+            description = ''
+              Services that are started together with this service, but whose
+              failure does not affect this service.
+              The names refer to sibling services at the same level of the
+              service tree.
+            '';
+          };
+        };
+      };
+      default = { };
+      description = ''
+        Dependency and ordering relations to sibling services.
+        This is the init-system-independent way to express which services a
+        service needs, so that service managers that build a dependency graph
+        (e.g. dinit or runit) can start dependencies before the service itself.
+      '';
+    };
+
+    runtime = mkOption {
+      type = types.submodule {
+        options = {
+          user = mkOption {
+            type = types.str;
+            default = "root";
+            description = "User to run the service process as.";
+          };
+
+          group = mkOption {
+            type = types.str;
+            default = config.runtime.user;
+            description = "Group to run the service process as. Defaults to the runtime user.";
+          };
+
+          workingDirectory = mkOption {
+            type = types.nullOr pathOrStr;
+            default = null;
+            description = ''
+              Working directory for the service process. When null, the
+              service manager's default (usually `/`) is used.
+            '';
+          };
+        };
+      };
+      default = { };
+      description = "Runtime context (user, group, working directory) of the service process.";
+    };
+
+    environment = mkOption {
+      type = types.attrsOf types.str;
+      default = { };
+      example = {
+        FOO = "bar";
+      };
+      description = ''
+        Environment variables set for the service process.
+        Each service manager maps these to its own mechanism (e.g. systemd
+        `Environment=`, an exported variable in a run script).
+      '';
+    };
+
+    restart = mkOption {
+      type = types.submodule {
+        options = {
+          policy = mkOption {
+            type = types.enum [
+              "always"
+              "on-failure"
+              "never"
+            ];
+            default = "always";
+            description = ''
+              When to (re)start the service process.
+
+              - `always`: restart whenever the process exits, regardless of exit status.
+              - `on-failure`: restart only when the process exits unsuccessfully.
+              - `never`: do not restart the process.
+            '';
+          };
+
+          delay = mkOption {
+            type = types.ints.unsigned;
+            default = 5;
+            description = "Delay in seconds between restart attempts.";
+          };
+        };
+      };
+      default = { };
+      description = "Restart policy for the service process.";
+    };
+
     process = {
       argv = mkOption {
         type = types.listOf pathOrStr;
@@ -188,6 +333,58 @@ in
           Command used for reloading in the underlying service manager to reload.
         '';
       };
+
+      type = mkOption {
+        type = types.enum [
+          "simple"
+          "oneshot"
+          "forking"
+          "notify"
+        ];
+        default = "simple";
+        description = ''
+          Lifecycle type of the service process.
+
+          - `simple`: a long-running foreground process. The service is
+            considered started as soon as the process is spawned.
+          - `oneshot`: a process that runs to completion. The service is
+            considered started when the process has exited successfully.
+          - `forking`: the process forks and the parent exits. The service
+            manager must track the daemonized child.
+          - `notify`: the process signals readiness itself, via a service
+            manager notification protocol (see `notificationProtocol`).
+        '';
+      };
+
+      stopSignal = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "HUP";
+        description = ''
+          Signal used to stop the service process. When null, the service
+          manager's default stop signal is used.
+        '';
+      };
+
+      startTimeout = mkOption {
+        type = types.nullOr types.ints.unsigned;
+        default = null;
+        example = 30;
+        description = ''
+          Maximum time in seconds the service is allowed to take to start.
+          When null, the service manager's default is used.
+        '';
+      };
+
+      stopTimeout = mkOption {
+        type = types.nullOr types.ints.unsigned;
+        default = null;
+        example = 30;
+        description = ''
+          Maximum time in seconds the service is allowed to take to stop.
+          When null, the service manager's default is used.
+        '';
+      };
     };
 
     notificationProtocol = mkOption {
@@ -215,6 +412,18 @@ in
             && options.process.reloadCommand.highestPrio <= lib.modules.defaultOverridePriority
           );
         message = "reloadSignal conflicts with reloadCommand. Please either use reloadSignal or reloadCommand.";
+      }
+      {
+        assertion =
+          !(
+            config.process.type == "notify"
+            && !config.notificationProtocol.systemd
+            && !config.notificationProtocol.s6
+          );
+        message = ''
+          process.type = "notify" requires a notification protocol.
+          Enable notificationProtocol.systemd or notificationProtocol.s6.
+        '';
       }
     ];
 
