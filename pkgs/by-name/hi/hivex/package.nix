@@ -5,6 +5,7 @@
   pkg-config,
   autoreconfHook,
   makeWrapper,
+  bash,
   perlPackages,
   ocamlPackages,
   libxml2,
@@ -39,6 +40,7 @@ stdenv.mkDerivation rec {
     findlib
   ]);
   buildInputs = [
+    bash
     libxml2
   ]
   ++ (with perlPackages; [
@@ -50,12 +52,25 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postInstall = ''
+    wrapProgram $out/bin/hivexget \
+        --prefix "PATH" : "$out/bin"
+
     wrapProgram $out/bin/hivexregedit \
         --set PERL5LIB "$out/${perlPackages.perl.libPrefix}" \
         --prefix "PATH" : "$out/bin"
 
     wrapProgram $out/bin/hivexml \
         --prefix "PATH" : "$out/bin"
+  '';
+
+  doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    test "$(PATH=/nonexistent "$out/bin/hivexget" images/special '\abcd_äöüß' 'abcd_äöüß')" = 0
+
+    runHook postInstallCheck
   '';
 
   meta = {
