@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   buildPythonPackage,
+  pyprojectVersionPatchHook,
 
   # build-system
   poetry-core,
@@ -45,6 +46,8 @@ buildPythonPackage rec {
   };
 
   build-system = [ poetry-core ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     asgiref
