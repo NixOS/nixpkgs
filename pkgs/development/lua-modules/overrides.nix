@@ -1215,20 +1215,6 @@ in
     '';
   };
 
-  std-_debug = prev.std-_debug.overrideAttrs {
-    # run make to generate lib/std/_debug/version.lua
-    preConfigure = ''
-      make all
-    '';
-  };
-
-  std-normalize = prev.std-normalize.overrideAttrs {
-    # run make to generate lib/std/_debug/version.lua
-    preConfigure = ''
-      make all
-    '';
-  };
-
   teal-language-server = prev.teal-language-server.overrideAttrs (old: {
     # Relax lockfile-pinned deps (e.g. luafilesystem 1.8.0-1) so nixpkgs
     # packaged versions can satisfy dependencies.
