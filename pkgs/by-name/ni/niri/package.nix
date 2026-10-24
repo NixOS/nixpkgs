@@ -66,7 +66,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     wayland # For libwayland-client
   ]
   ++ lib.optional (withDbus || withScreencastSupport || withSystemd) dbus
-  ++ lib.optional withScreencastSupport pipewire
+  ++ lib.optional withScreencastSupport pipewire.dev
   ++ lib.optional withSystemd systemdLibs # Includes libudev
   ++ lib.optional (!withSystemd) eudev; # Use an alternative libudev implementation when building w/o systemd
 
