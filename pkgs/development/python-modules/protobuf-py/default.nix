@@ -14,7 +14,7 @@ buildPythonPackage (finalAttrs: {
   pname = "protobuf-py";
   # connectrpc requires this exact version and e2b requires <0.2; bump all three
   # together.
-  version = "0.3.0";
+  version = "0.2.0";
   pyproject = true;
 
   # No tag on GitHub for this release: bufbuild/protobuf-py's only tag is v0.2.0,
@@ -22,16 +22,12 @@ buildPythonPackage (finalAttrs: {
   src = fetchPypi {
     pname = "protobuf_py";
     inherit (finalAttrs) version;
-    hash = "sha256-P9GHOAqFuYUOxUizJOsab146cNYtSD73PE7WLgeRwmw=";
+    hash = "sha256-LOxHwEYvjQv8Ghy76c92bsZcqVEwcA8K/rli6dfTRU8=";
   };
 
-  build-system = [
-    uv-build
-  ];
+  build-system = [ uv-build ];
 
-  dependencies = [
-    protobuf-py-ext
-  ];
+  dependencies = [ protobuf-py-ext ];
 
   pythonImportsCheck = [ "protobuf" ];
 
@@ -44,6 +40,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Idiomatic Protocol Buffers for Python";
     homepage = "https://github.com/bufbuild/protobuf-py";
+    changelog = "https://github.com/bufbuild/protobuf-py/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ mishushakov ];
   };
