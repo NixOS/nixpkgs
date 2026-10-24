@@ -112,17 +112,6 @@ buildRedist (
       "libnvidia-ml.so.1"
     ];
 
-    brokenAssertions = [
-      {
-        message = "Qt 5 is required and available";
-        assertion = lib.versionOlder finalAttrs.version "2022.2.0" -> qt5 != null;
-      }
-      {
-        message = "Qt 6 is required and available";
-        assertion = lib.versionAtLeast finalAttrs.version "2022.2.0" -> qt6 != null;
-      }
-    ];
-
     meta = {
       description = "Interactive profiler for CUDA and NVIDIA OptiX";
       longDescription = ''
@@ -135,6 +124,20 @@ buildRedist (
       changelog = "https://docs.nvidia.com/nsight-compute/ReleaseNotes";
 
       mainProgram = "ncu";
+
+      problems =
+        lib.optionalAttrs (lib.versionOlder finalAttrs.version "2022.2.0" && qt5 == null) {
+          qt5Missing = {
+            kind = "broken";
+            message = "Qt 5 is required but unavailable.";
+          };
+        }
+        // lib.optionalAttrs (lib.versionAtLeast finalAttrs.version "2022.2.0" && qt6 == null) {
+          qt6Missing = {
+            kind = "broken";
+            message = "Qt 6 is required but unavailable.";
+          };
+        };
     };
   }
 )

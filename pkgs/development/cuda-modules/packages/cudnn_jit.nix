@@ -32,15 +32,6 @@ buildRedist (finalAttrs: {
     "${lib.getLib cuda_nvrtc}/lib" # libnvrtc.so.%d
   ];
 
-  platformAssertions = [
-    {
-      message =
-        "cuDNN JIT (found ${finalAttrs.version})"
-        + " supports CUDA compute capabilities 8.0 and newer (found ${builtins.toJSON backendStdenv.cudaCapabilities})";
-      assertion = lib.all (lib.flip lib.versionAtLeast "8.0") backendStdenv.cudaCapabilities;
-    }
-  ];
-
   # Runs the cuDNN frontend samples JIT supports, excluding those relying on precompiled engines.
   passthru.gpuCheck =
     runCommand "${finalAttrs.finalPackage.name}-gpu-check"
@@ -55,7 +46,7 @@ buildRedist (finalAttrs: {
         ];
         requiredSystemFeatures = [ "cuda" ];
         meta = {
-          inherit (finalAttrs.finalPackage.meta) badPlatforms platforms teams;
+          inherit (finalAttrs.finalPackage.meta) platforms problems teams;
         };
       }
       ''
@@ -76,5 +67,15 @@ buildRedist (finalAttrs: {
     homepage = "https://docs.nvidia.com/deeplearning/cudnn/latest/developer/graph-api.html#cudnn-jit";
     changelog = "https://docs.nvidia.com/deeplearning/cudnn/backend/latest/release-notes.html";
     license = lib.licenses.nvidiaCudnn;
+    problems =
+      lib.optionalAttrs (!lib.all (lib.flip lib.versionAtLeast "8.0") backendStdenv.cudaCapabilities)
+        {
+          capabilityBelow80 = {
+            kind = "unsupported";
+            message =
+              "cuDNN JIT (found ${finalAttrs.version})"
+              + " requires CUDA compute capabilities 8.0 and newer (found ${builtins.toJSON backendStdenv.cudaCapabilities}).";
+          };
+        };
   };
 })

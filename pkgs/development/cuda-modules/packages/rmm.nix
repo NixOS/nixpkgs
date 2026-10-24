@@ -1,5 +1,4 @@
 {
-  _cuda,
   addDriverRunpath,
   backendStdenv,
   cmake,
@@ -100,12 +99,6 @@ backendStdenv.mkDerivation (finalAttrs: {
       ];
       doCheck = true;
     };
-    platformAssertions = [
-      {
-        message = "RAPIDS 26.08 requires CCCL 3.4.3, first shipped with CUDA 13.4 (found ${cudaMajorMinorVersion})";
-        assertion = cudaAtLeast "13.4";
-      }
-    ];
   };
 
   meta = {
@@ -117,7 +110,12 @@ backendStdenv.mkDerivation (finalAttrs: {
       "aarch64-linux"
       "x86_64-linux"
     ];
-    badPlatforms = _cuda.lib._mkMetaBadPlatforms finalAttrs;
+    problems = lib.optionalAttrs (!(cudaAtLeast "13.4")) {
+      cudaTooOld = {
+        kind = "unsupported";
+        message = "RAPIDS 26.08 requires CCCL 3.4.3, first shipped with CUDA 13.4 (found ${cudaMajorMinorVersion}).";
+      };
+    };
     maintainers = with lib.maintainers; [ ethancedwards8 ];
     teams = [ lib.teams.cuda ];
   };
