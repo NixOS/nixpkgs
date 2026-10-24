@@ -41,13 +41,13 @@
 }:
 
 let
-  thirdparty_version = "2.2.4";
+  thirdparty_version = "2.2.5";
   fxload = libusb1.override { withExamples = true; };
   src-3rdparty = fetchFromGitHub {
     owner = "indilib";
     repo = "indi-3rdparty";
     rev = "v${thirdparty_version}";
-    hash = "sha256-knmu+ARLvbEQqRfwXYogYkfD8j5QCKy4V8YMIeEjMbU=";
+    hash = "sha256-q7S+PIiU2Pil+qCD/Wuz6DR+mEIN4b99vxq2ZclX15o=";
   };
 
   buildIndi3rdParty =
