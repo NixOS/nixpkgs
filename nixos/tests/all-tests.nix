@@ -1394,6 +1394,7 @@ in
     _module.args.opencloudPackage = pkgs.opencloud-production;
     _module.args.name = "opencloud-production";
   };
+  openfga = runTest ./openfga.nix;
   openldap = runTest ./openldap.nix;
   openresty-lua = runTest ./openresty-lua.nix;
   opensearch = discoverTests (import ./opensearch.nix);

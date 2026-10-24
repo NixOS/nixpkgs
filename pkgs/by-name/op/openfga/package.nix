@@ -1,8 +1,12 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  nix-update-script,
+  nixosTests,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -12,11 +16,13 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "openfga";
     repo = "openfga";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-FyaufC0W9OW5d3zRcLWVjRICmo8bF7rjQNYrVWoFE64=";
   };
 
   vendorHash = "sha256-s1+6wdM5GQl0QcXQx0z3FUS0dx7ELHdUl86jpddiD3o=";
+
+  __structuredAttrs = true;
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -32,23 +38,64 @@ buildGoModule (finalAttrs: {
       "-X ${buildInfoPkg}.Date=19700101"
     ];
 
-  # Tests depend on docker
-  doCheck = false;
+  # tests that start mysql and postgres containers through docker
+  excludedPackages = [
+    "pkg/storage/mysql"
+    "pkg/storage/postgres"
+  ];
 
-  postInstall = ''
-    completions_dir=$TMPDIR/openfga_completions
-    mkdir $completions_dir
-    $out/bin/openfga completion bash > $completions_dir/openfga.bash
-    $out/bin/openfga completion zsh > $completions_dir/_openfga.zsh
-    $out/bin/openfga completion fish > $completions_dir/openfga.fish
-    installShellCompletion $completions_dir/*
+  checkFlags =
+    let
+      skippedTests = [
+        "TestCheckMySQL"
+        "TestCheckPostgres"
+        "TestContainerLifecycle_PullAndExec"
+        "TestExecCommand_Fail"
+        "TestListObjectsMySQL"
+        "TestListObjectsPostgres"
+        "TestListUsersMySQL"
+        "TestListUsersPostgres"
+        "TestMatrixMysql"
+        "TestMatrixPostgres"
+        "TestMigrateCommandRollbacks"
+        "TestPullImage"
+        "TestReleasesConnections"
+        "TestServerMetricsReporting"
+        "TestServerNotReadyDueToDatastoreRevision"
+        "TestServerWithMySQLDatastore"
+        "TestServerWithMySQLDatastoreAndExplicitCredentials"
+        "TestServerWithPostgresDatastore"
+        "TestServerWithPostgresDatastoreAndExplicitCredentials"
+        "TestValidationResult"
+      ];
+    in
+    [ "-skip=^(${lib.concatStringsSep "|" skippedTests})$" ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd openfga \
+      --bash <($out/bin/openfga completion bash) \
+      --fish <($out/bin/openfga completion fish) \
+      --zsh <($out/bin/openfga completion zsh)
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+
+  passthru = {
+    tests = { inherit (nixosTests) openfga; };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "High performance and flexible authorization/permission engine built for developers and inspired by Google Zanzibar";
+    changelog = "https://github.com/openfga/openfga/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://openfga.dev/";
     license = lib.licenses.asl20;
     mainProgram = "openfga";
-    maintainers = with lib.maintainers; [ jlesquembre ];
+    maintainers = with lib.maintainers; [
+      jlesquembre
+      anish
+    ];
   };
 })
