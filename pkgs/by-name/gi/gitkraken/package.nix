@@ -66,6 +66,11 @@ let
       hash = "sha256-cwywSlQuDrD6XT6hGESk3PHvu1iiFXtNH5byKeSz3Ds=";
     };
 
+    aarch64-linux = fetchzip {
+      url = "https://api.gitkraken.dev/releases/production/linux/arm64/${version}/gitkraken-aarch64.tar.gz";
+      hash = "sha256-RQaksfx2umaso50Q59pap5gmY6C2qODEGoU8QeVipL0=";
+    };
+
     aarch64-darwin = fetchzip {
       url = "https://api.gitkraken.dev/releases/production/darwin/arm64/${version}/GitKraken-v${version}.zip";
       hash = "sha256-85/4Tp2VVfxoq9QjW8uXLuOIkAA9MtWh0IRcy/IcKdg=";
@@ -202,9 +207,10 @@ let
 
       # SSL and permissions fix for bundled nodegit
       pushd $out/share/${pname}/resources/app.asar.unpacked/node_modules/@axosoft/nodegit/build/Release
-      mv nodegit-x64-ubuntu-20.node nodegit-x64-ubuntu-20-ssl-1.1.1.node
-      mv nodegit-x64-ubuntu-20-ssl-static.node nodegit-x64-ubuntu-20.node
-      chmod 755 nodegit-x64-ubuntu-20.node
+      arch="${if stdenv.hostPlatform.isAarch64 then "arm64" else "x64"}"
+      mv nodegit-$arch-ubuntu-20.node nodegit-$arch-ubuntu-20-ssl-1.1.1.node
+      mv nodegit-$arch-ubuntu-20-ssl-static.node nodegit-$arch-ubuntu-20.node
+      chmod 755 nodegit-$arch-ubuntu-20.node
       popd
 
       # Devendor bundled git
