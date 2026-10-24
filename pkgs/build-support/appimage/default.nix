@@ -222,7 +222,6 @@ rec {
         SDL2_mixer
         libcaca
         libcanberra
-        libgcrypt
         libvpx
         librsvg
         libxft
@@ -231,7 +230,6 @@ rec {
 
         harfbuzz
         e2fsprogs
-        libgpg-error
         keyutils.lib
         libjack2
         fribidi

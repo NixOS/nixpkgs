@@ -229,16 +229,24 @@ let
   moduleDeps = with customRPackages; {
     jaspAcceptanceSampling = [
       abtest
+      AcceptanceSampling
       BayesFactor
       conting
       ggplot2
       jaspBase
       jaspGraphs
       plyr
+      Rcpp
+      RcppParallel
+      rlang
+      rstan
+      rstantools
       stringr
       vcd
       vcdExtra
-      AcceptanceSampling
+      BH
+      RcppEigen
+      StanHeaders
     ];
     jaspAnova = [
       afex
@@ -312,6 +320,14 @@ let
       circular
       ggplot2
     ];
+    jaspClassicalTests = [
+      DescTools
+      jaspBase
+      jaspFrequencies
+      jaspRegression
+      jaspGraphs
+      jaspTTests
+    ];
     jaspCochrane = [
       jaspBase
       jaspGraphs
@@ -373,6 +389,7 @@ let
       jaspGraphs
       jaspSem
       lavaan
+      poLCA
       psych
       qgraph
       reshape2
@@ -484,6 +501,7 @@ let
       metaBMA
       metafor
       metaSEM
+      lme4
       psych
       purrr
       rstan
@@ -496,10 +514,14 @@ let
       metamisc
       ggmcmc
       pema
+      robvis
       clubSandwich
       CompQuadForm
       sp
+      BiasedUrn
       dfoptim
+      minqa
+      nloptr
       nleqslv
       patchwork
     ];
@@ -537,10 +559,13 @@ let
       stringr
     ];
     jaspPower = [
+      bfpwr
+      ggplot2
+      gsDesign
       pwr
+      viridis
       jaspBase
       jaspGraphs
-      viridis
     ];
     jaspPredictiveAnalytics = [
       jaspBase
@@ -642,6 +667,20 @@ let
       MASS
       psych
       mirt
+    ];
+    jaspRobust = [
+      boot
+      car
+      ggplot2
+      jaspBase
+      jaspDescriptives
+      jaspGraphs
+      jaspTTests
+      lmtest
+      MASS
+      matrixStats
+      statmod
+      WRS2
     ];
     jaspRobustTTests = [
       RoBTT

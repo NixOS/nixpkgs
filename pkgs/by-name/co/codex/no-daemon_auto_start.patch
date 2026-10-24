@@ -1,6 +1,6 @@
 --- a/features/src/lib.rs
 +++ b/features/src/lib.rs
-@@ -941,7 +941,7 @@
+@@ -1055,7 +1055,7 @@
          id: Feature::DaemonAutoStart,
          key: "daemon_auto_start",
          stage: Stage::Stable,
@@ -8,4 +8,4 @@
 +        default_enabled: false,
      },
      FeatureSpec {
-         id: Feature::TranscriptV2,
+         id: Feature::AppServerWebSocketCompression,
