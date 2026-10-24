@@ -11,7 +11,12 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nu_plugin_query";
-  inherit (nushell) version src cargoHash;
+  inherit (nushell)
+    version
+    src
+    cargoPatches
+    cargoHash
+    ;
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
   buildInputs = [
@@ -20,8 +25,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildAndTestSubdir = "crates/nu_plugin_query";
-
-  patches = nushell.patches or [ ];
 
   passthru.updateScript = nix-update-script {
     # Skip the version check and only check the hash because we inherit version from nushell.

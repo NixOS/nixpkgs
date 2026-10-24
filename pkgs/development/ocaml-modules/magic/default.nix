@@ -8,14 +8,14 @@
   file,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "magic";
   version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "Chris00";
     repo = "ocaml-magic";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rsBMx68UDqmVVsyeZCxIS97A/0JCBM/JOgh60ly1uSs=";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
   };
-}
+})
