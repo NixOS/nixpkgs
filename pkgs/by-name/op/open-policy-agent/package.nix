@@ -141,6 +141,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       lewo
       jk
+      gid-commit
     ];
   };
 })
