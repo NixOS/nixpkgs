@@ -57,6 +57,8 @@ buildGoModule {
     maintainers = with lib.maintainers; [
       adrielvelazquez
       faukah
+      lucasmrod
+      nulmete
     ];
     platforms = lib.platforms.linux;
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
