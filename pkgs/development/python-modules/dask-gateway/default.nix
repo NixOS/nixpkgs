@@ -11,14 +11,14 @@
 buildPythonPackage rec {
   pname = "dask-gateway";
   # update dask-gateway lock step with dask-gateway-server
-  version = "2025.4.0";
+  version = "2026.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask-gateway";
     tag = version;
-    hash = "sha256-Ezt5QkA21SDfuCMm+XY8d+xso8SDb4lmK/yd89Guu0Y=";
+    hash = "sha256-rSwGLJD5pGoYl4IIzBJ/hNxM+obE23VrYnrlQO1IBgw=";
   };
 
   sourceRoot = "${src.name}/dask-gateway";
