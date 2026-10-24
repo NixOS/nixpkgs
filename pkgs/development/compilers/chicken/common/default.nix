@@ -56,6 +56,7 @@ lib.makeScope newScope (self: {
           version,
           synopsis,
           dependencies,
+          testDependencies,
           license,
           ...
         }:
@@ -63,6 +64,7 @@ lib.makeScope newScope (self: {
           inherit pname version;
           src = self.fetchegg (eggData // { inherit pname; });
           buildInputs = map (x: eggself.${x}) (lib.subtractLists invalidDependencies dependencies);
+          checkInputs = map (x: eggself.${x}) (lib.subtractLists invalidDependencies testDependencies);
           meta.homepage = "https://wiki.call-cc.org/eggref/${majorVersion}/${pname}";
           meta.description = synopsis;
           meta.license =
