@@ -71,6 +71,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "peblar" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Python client for Peblar EV chargers";
     homepage = "https://github.com/frenck/python-peblar";
