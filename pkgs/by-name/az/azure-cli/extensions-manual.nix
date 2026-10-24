@@ -270,6 +270,7 @@
       pycryptodome
       pyyaml
     ];
+    pythonRelaxDeps = [ "pycryptodome" ];
     meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 
