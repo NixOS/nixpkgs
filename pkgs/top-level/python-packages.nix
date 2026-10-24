@@ -2786,6 +2786,8 @@ self: super: with self; {
 
   buildcatrust = callPackage ../development/python-modules/buildcatrust { };
 
+  buildgrid-metering-client = callPackage ../development/python-modules/buildgrid-metering-client { };
+
   buildstream-plugins = callPackage ../development/python-modules/buildstream-plugins { };
 
   buildstream-plugins-community =
