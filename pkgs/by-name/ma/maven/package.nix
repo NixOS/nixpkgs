@@ -59,6 +59,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         );
     in
     {
+      jdk = jdk_headless;
+
       buildMaven = callPackage ./build-maven.nix {
         maven = finalAttrs.finalPackage;
       };
