@@ -14108,6 +14108,8 @@ self: super: with self; {
 
   print-color = callPackage ../development/python-modules/print-color { };
 
+  primme = callPackage ../development/python-modules/primme { };
+
   priority = callPackage ../development/python-modules/priority { };
 
   prisma = callPackage ../development/python-modules/prisma { };
