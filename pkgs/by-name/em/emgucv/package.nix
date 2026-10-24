@@ -29,13 +29,13 @@ let
   opencv = fetchFromGitHub {
     owner = "emgucv";
     repo = "opencv";
-    rev = "156f87e379445f631f646ebb26b566114fa5074c";
-    hash = "sha256-JftBAzHsnk3U+6PZhk0/Q+5E8KHLNaYx69R+SE+Lr8U=";
+    rev = "2b862f17fc625948d75840300a3837c4d0defa7a";
+    hash = "sha256-/kJUplXlrVK0Vl/nWD6+lzrKxHC90FLI26RwXSIfPUk=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "emgucv";
-  version = "4.13.0";
+  version = "5.0.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "emgucv";
     repo = "emgucv";
     tag = finalAttrs.version;
-    hash = "sha256-SDI+QWAK4bNtto4WkC7ii48MW9qlhJUdlfR50hhuk5Y=";
+    hash = "sha256-Obhp4cMkgCBKKdU6e1Q3bxBn/MUaVSqhRfeNGEvzxq8=";
   };
 
   postUnpack = ''
@@ -64,6 +64,24 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace cmake/modules/CheckPlatform.cmake \
       --replace-fail "IF (UNIX AND NOT APPLE)" \
         "IF (FALSE)"
+
+    # OpenCV 5 dropped the legacy per-module umbrella headers.  EmguCV 5.0
+    # still includes a few of their old paths in the native wrapper and its
+    # smoke test.
+    find Emgu.CV.Extern tests -type f -exec sed -i \
+      -e 's#opencv2/core/core.hpp#opencv2/core.hpp#g' \
+      -e 's#opencv2/imgproc/imgproc.hpp#opencv2/imgproc.hpp#g' \
+      -e 's#opencv2/objdetect/objdetect.hpp#opencv2/objdetect.hpp#g' \
+      -e 's#opencv2/features2d/features2d.hpp#opencv2/features2d.hpp#g' \
+      -e 's#opencv2/highgui/highgui.hpp#opencv2/highgui.hpp#g' \
+      -e 's#opencv2/photo/photo.hpp#opencv2/photo.hpp#g' \
+      -e 's#opencv2/video/video.hpp#opencv2/video.hpp#g' \
+      -e 's#opencv2/ml/ml.hpp#opencv2/ml.hpp#g' \
+      -e 's#opencv2/calib3d/calib3d.hpp#opencv2/calib3d.hpp#g' \
+      -e 's#opencv2/imgcodecs/imgcodecs.hpp#opencv2/imgcodecs.hpp#g' \
+      -e 's#opencv2/videoio/videoio.hpp#opencv2/videoio.hpp#g' \
+      -e 's#opencv2/dnn/dnn.hpp#opencv2/dnn.hpp#g' \
+      {} +
   '';
 
   nativeBuildInputs = [
@@ -95,9 +113,14 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "EMGU_CV_EXAMPLE_BUILD" false)
 
     # mini profile
+    # OpenCV 5's imgproc module requires geometry and flann.  These are part
+    # of upstream's mini profile and provide the basic image operations the
+    # wrapper exposes.
+    (lib.cmakeBool "BUILD_opencv_flann" true)
+    (lib.cmakeBool "BUILD_opencv_geometry" true)
+    (lib.cmakeBool "BUILD_opencv_imgproc" true)
     (lib.cmakeBool "BUILD_opencv_dnn" false)
     (lib.cmakeBool "BUILD_opencv_features2d" false)
-    (lib.cmakeBool "BUILD_opencv_flann" false)
     (lib.cmakeBool "BUILD_opencv_gapi" false)
     (lib.cmakeBool "BUILD_opencv_ml" false)
     (lib.cmakeBool "BUILD_opencv_photo" false)
