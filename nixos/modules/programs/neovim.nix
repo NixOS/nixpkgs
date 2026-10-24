@@ -7,6 +7,10 @@
 
 let
   cfg = config.programs.neovim;
+  runtimeFiles = pkgs.generatedFiles {
+    namePrefix = "nvim-runtime";
+    relativeTo = "{file}`/etc/xdg/nvim`";
+  };
 in
 {
   options.programs.neovim = {
@@ -110,50 +114,7 @@ in
         Set of files that have to be linked in {file}`runtime`.
       '';
 
-      type =
-        with lib.types;
-        attrsOf (
-          submodule (
-            { name, config, ... }:
-            {
-              options = {
-
-                enable = lib.mkOption {
-                  type = lib.types.bool;
-                  default = true;
-                  description = ''
-                    Whether this runtime directory should be generated.  This
-                    option allows specific runtime files to be disabled.
-                  '';
-                };
-
-                target = lib.mkOption {
-                  type = lib.types.str;
-                  description = ''
-                    Name of symlink.  Defaults to the attribute
-                    name.
-                  '';
-                };
-
-                text = lib.mkOption {
-                  default = null;
-                  type = lib.types.nullOr lib.types.lines;
-                  description = "Text of the file.";
-                };
-
-                source = lib.mkOption {
-                  default = null;
-                  type = lib.types.nullOr lib.types.path;
-                  description = "Path of the source file.";
-                };
-
-              };
-
-              config.target = lib.mkDefault name;
-            }
-          )
-        );
-
+      type = lib.types.attrsOf runtimeFiles.type;
     };
   };
 
@@ -167,19 +128,13 @@ in
     # from other packages will be used by neovim.
     environment.pathsToLink = [ "/share/nvim" ];
 
-    environment.etc = builtins.listToAttrs (
-      builtins.attrValues (
-        builtins.mapAttrs (name: value: {
-          name = "xdg/nvim/${name}";
-          value = removeAttrs (
-            value
-            // {
-              target = "xdg/nvim/${value.target}";
-            }
-          ) (lib.optionals (isNull value.source) [ "source" ]);
-        }) cfg.runtime
-      )
-    );
+    environment.etc = lib.mapAttrs' (name: value: {
+      name = "xdg/nvim/${name}";
+      value = {
+        inherit (value) enable source;
+        target = "xdg/nvim/${value.target}";
+      };
+    }) cfg.runtime;
 
     programs.neovim.finalPackage = pkgs.wrapNeovim cfg.package {
       inherit (cfg)

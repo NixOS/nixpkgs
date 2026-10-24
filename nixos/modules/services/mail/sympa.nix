@@ -84,6 +84,10 @@ let
     [% list.name %][% return_path_suffix %]@[% list.domain %] sympabounce:[% list.name %]@[% list.domain %]
   '';
 
+  settingsFiles = pkgs.generatedFiles {
+    namePrefix = "sympa";
+    relativeTo = "{file}`${dataDir}`";
+  };
   enabledFiles = lib.filterAttrs (n: v: v.enable) cfg.settingsFile;
 in
 {
@@ -327,33 +331,7 @@ in
     };
 
     settingsFile = lib.mkOption {
-      type = attrsOf (
-        submodule (
-          { name, config, ... }:
-          {
-            options = {
-              enable = lib.mkOption {
-                type = bool;
-                default = true;
-                description = "Whether this file should be generated. This option allows specific files to be disabled.";
-              };
-              text = lib.mkOption {
-                default = null;
-                type = nullOr lines;
-                description = "Text of the file.";
-              };
-              source = lib.mkOption {
-                type = path;
-                description = "Path of the source file.";
-              };
-            };
-
-            config.source = lib.mkIf (config.text != null) (
-              lib.mkDefault (pkgs.writeText "sympa-${baseNameOf name}" config.text)
-            );
-          }
-        )
-      );
+      type = attrsOf settingsFiles.type;
       default = { };
       example = lib.literalExpression ''
         {
@@ -473,11 +451,11 @@ in
     #))
     ++ (lib.concatLists (
       lib.flip lib.mapAttrsToList enabledFiles (
-        k: v: [
+        _k: v: [
           # sympa doesn't handle symlinks well (e.g. fails to create locks)
           # force-copy instead
-          "R ${dataDir}/${k}              -    -       -        - -"
-          "C ${dataDir}/${k}              0700 ${user}  ${group} - ${v.source}"
+          "R ${dataDir}/${v.target}              -    -       -        - -"
+          "C ${dataDir}/${v.target}              0700 ${user}  ${group} - ${v.source}"
         ]
       )
     ));

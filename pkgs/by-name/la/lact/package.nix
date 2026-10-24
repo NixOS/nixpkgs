@@ -22,6 +22,7 @@
   hwdata,
   fuse3,
   autoAddDriverRunpath,
+  configFiles,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -132,6 +133,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     }
   '';
 
+  passthru.configFiles = configFiles (import ./config-files.nix);
   passthru.updateScript = nix-update-script { };
   passthru.tests = {
     inherit (nixosTests) lact;

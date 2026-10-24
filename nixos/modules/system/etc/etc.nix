@@ -7,6 +7,78 @@
 }:
 let
 
+  etcFiles = pkgs.generatedFiles {
+    namePrefix = "etc";
+    relativeTo = "{file}`/etc`";
+    extraModules = [
+      (
+        { config, ... }:
+        {
+          options = {
+
+            mode = lib.mkOption {
+              type = lib.types.str;
+              default = "symlink";
+              example = "0600";
+              description = ''
+                If set to something other than `symlink`,
+                the file is copied instead of symlinked, with the given
+                file mode.
+              '';
+            };
+
+            uid = lib.mkOption {
+              default = 0;
+              type = lib.types.int;
+              description = ''
+                UID of created file. Only takes effect when the file is
+                copied (that is, the mode is not 'symlink').
+              '';
+            };
+
+            gid = lib.mkOption {
+              default = 0;
+              type = lib.types.int;
+              description = ''
+                GID of created file. Only takes effect when the file is
+                copied (that is, the mode is not `symlink`).
+              '';
+            };
+
+            user = lib.mkOption {
+              default = "+${toString config.uid}";
+              type = lib.types.str;
+              description = ''
+                User name of file owner. Only takes effect when the file is copied (that is, the
+                mode is not `symlink`).
+
+                When `services.userborn.enable`, this option has no effect.
+                You have to assign a `uid` instead. Otherwise this option
+                takes precedence over `uid`.
+              '';
+            };
+
+            group = lib.mkOption {
+              default = "+${toString config.gid}";
+              type = lib.types.str;
+              description = ''
+                Group name of file owner.
+
+                Only takes effect when the file is copied (that is, the
+                mode is not `symlink`).
+
+                When `services.userborn.enable`, this option has no effect.
+                You have to assign a `gid` instead. Otherwise this option
+                takes precedence over `gid`.
+              '';
+            };
+
+          };
+        }
+      )
+    ];
+  };
+
   etc' = lib.filter (f: f.enable) (lib.attrValues config.environment.etc);
 
   etc =
@@ -133,120 +205,7 @@ in
         Set of files that have to be linked in {file}`/etc`.
       '';
 
-      type =
-        with lib.types;
-        attrsOf (
-          submodule (
-            {
-              name,
-              config,
-              options,
-              ...
-            }:
-            {
-              options = {
-
-                enable = lib.mkOption {
-                  type = lib.types.bool;
-                  default = true;
-                  description = ''
-                    Whether this `/etc` file should be generated.  This
-                    option allows specific `/etc` files to be disabled.
-                  '';
-                };
-
-                target = lib.mkOption {
-                  type = lib.types.str;
-                  description = ''
-                    Name of symlink (relative to
-                    {file}`/etc`).  Defaults to the attribute
-                    name.
-                  '';
-                };
-
-                text = lib.mkOption {
-                  default = null;
-                  type = lib.types.nullOr lib.types.lines;
-                  description = "Text content of the file.";
-                };
-
-                source = lib.mkOption {
-                  type = lib.types.path;
-                  description = "Path of the source file.";
-                };
-
-                mode = lib.mkOption {
-                  type = lib.types.str;
-                  default = "symlink";
-                  example = "0600";
-                  description = ''
-                    If set to something other than `symlink`,
-                    the file is copied instead of symlinked, with the given
-                    file mode.
-                  '';
-                };
-
-                uid = lib.mkOption {
-                  default = 0;
-                  type = lib.types.int;
-                  description = ''
-                    UID of created file. Only takes effect when the file is
-                    copied (that is, the mode is not 'symlink').
-                  '';
-                };
-
-                gid = lib.mkOption {
-                  default = 0;
-                  type = lib.types.int;
-                  description = ''
-                    GID of created file. Only takes effect when the file is
-                    copied (that is, the mode is not `symlink`).
-                  '';
-                };
-
-                user = lib.mkOption {
-                  default = "+${toString config.uid}";
-                  type = lib.types.str;
-                  description = ''
-                    User name of file owner. Only takes effect when the file is copied (that is, the
-                    mode is not `symlink`).
-
-                    When `services.userborn.enable`, this option has no effect.
-                    You have to assign a `uid` instead. Otherwise this option
-                    takes precedence over `uid`.
-                  '';
-                };
-
-                group = lib.mkOption {
-                  default = "+${toString config.gid}";
-                  type = lib.types.str;
-                  description = ''
-                    Group name of file owner.
-
-                    Only takes effect when the file is copied (that is, the
-                    mode is not `symlink`).
-
-                    When `services.userborn.enable`, this option has no effect.
-                    You have to assign a `gid` instead. Otherwise this option
-                    takes precedence over `gid`.
-                  '';
-                };
-
-              };
-
-              config = {
-                target = lib.mkDefault name;
-                source = lib.mkIf (config.text != null) (
-                  let
-                    name' = "etc-" + lib.replaceStrings [ "/" ] [ "-" ] name;
-                  in
-                  lib.mkDerivedConfig options.text (pkgs.writeText name')
-                );
-              };
-
-            }
-          )
-        );
+      type = lib.types.attrsOf etcFiles.type;
 
     };
 

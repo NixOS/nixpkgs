@@ -6,45 +6,41 @@
 }:
 let
   cfg = config.services.lact;
-  configFormat = pkgs.formats.yaml { };
-  configFile = configFormat.generate "lact-config.yaml" cfg.settings;
+  configFile = cfg.portable.files."config.yaml";
 in
 {
   meta.maintainers = [ lib.maintainers.johnrtitor ];
 
-  options.services.lact = {
-    enable = lib.mkEnableOption null // {
-      description = ''
-        Whether to enable LACT, a tool for monitoring, configuring and overclocking GPUs.
+  options.services.lact = lib.mkOption {
+    default = { };
+    description = ''
+      LACT, a tool for monitoring, configuring and overclocking GPUs.
+    '';
 
-        ::: {.note}
-        If you are on an AMD GPU, it is recommended to enable overdrive mode by using
-        `hardware.amdgpu.overdrive.enable = true;` in your configuration.
-        See [LACT wiki](https://github.com/ilya-zlobintsev/LACT/wiki/Overclocking-(AMD)) for more information.
-        :::
-      '';
-    };
+    # The options that map the settings to the configuration file are next to
+    # the package, so that a system that does not use NixOS can use them too.
+    # The import by path does not evaluate the package, see `pkgs.configFiles`.
+    type = lib.types.submoduleWith {
+      modules = [
+        (pkgs.configFiles (import ../../../../pkgs/by-name/la/lact/config-files.nix)).module
+        {
+          options = {
+            enable = lib.mkEnableOption null // {
+              description = ''
+                Whether to enable LACT, a tool for monitoring, configuring and overclocking GPUs.
 
-    package = lib.mkPackageOption pkgs "lact" { };
+                ::: {.note}
+                If you are on an AMD GPU, it is recommended to enable overdrive mode by using
+                `hardware.amdgpu.overdrive.enable = true;` in your configuration.
+                See [LACT wiki](https://github.com/ilya-zlobintsev/LACT/wiki/Overclocking-(AMD)) for more information.
+                :::
+              '';
+            };
 
-    settings = lib.mkOption {
-      default = { };
-      type = lib.types.submodule {
-        freeformType = configFormat.type;
-      };
-
-      description = ''
-        Settings for LACT.
-
-        The easiest method of acquiring the settings is to delete
-        {file}`/etc/lact/config.yaml`, enter your settings and look
-        at the file.
-
-        ::: {.note}
-        When `settings` is populated, the config file will be a symbolic link
-        and thus LACT daemon will not be able to modify it through the GUI.
-        :::
-      '';
+            package = lib.mkPackageOption pkgs "lact" { };
+          };
+        }
+      ];
     };
   };
 
@@ -52,16 +48,19 @@ in
     environment.systemPackages = [ cfg.package ];
     systemd.packages = [ cfg.package ];
 
-    environment.etc."lact/config.yaml" = lib.mkIf (cfg.settings != { }) {
-      source = configFile;
-    };
+    environment.etc = lib.mapAttrs' (
+      _name: file:
+      lib.nameValuePair "lact/${file.target}" {
+        inherit (file) enable source;
+      }
+    ) cfg.portable.files;
 
     systemd.services.lactd = {
       description = "LACT GPU Control Daemon";
       wantedBy = [ "multi-user.target" ];
 
       # Restart when the config file changes.
-      restartTriggers = lib.mkIf (cfg.settings != { }) [ configFile ];
+      restartTriggers = lib.mkIf configFile.enable [ configFile.source ];
     };
   };
 }
