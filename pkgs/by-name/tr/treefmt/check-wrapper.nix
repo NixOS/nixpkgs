@@ -1,7 +1,7 @@
 {
   lib,
   gitMinimal,
-  runCommandLocal,
+  runCommand,
   gitSetupHook,
   stdenvNoCC,
   wrapper,
@@ -12,9 +12,10 @@
   Input argument is the path to the project tree.
 */
 project:
-runCommandLocal "${lib.getName wrapper}-check"
+runCommand "${lib.getName wrapper}-check"
   {
     __structuredAttrs = true;
+    preferLocalBuild = true;
     strictDeps = true;
     nativeBuildInputs = [
       gitMinimal
