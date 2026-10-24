@@ -28819,10 +28819,10 @@ with self;
 
   PlackMiddlewareReverseProxy = buildPerlPackage {
     pname = "Plack-Middleware-ReverseProxy";
-    version = "0.16";
+    version = "0.17";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-Middleware-ReverseProxy-0.16.tar.gz";
-      hash = "sha256-h0kx030HZnug0PN5A7lFEQcfQZH+tz+kV2XaK4wVoSg=";
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-Middleware-ReverseProxy-0.17.tar.gz";
+      hash = "sha256-+b3ZxAzAt57Fg4gZJQMkCakmzCdHy+0Jsv8iHDy2QlQ=";
     };
     propagatedBuildInputs = [ Plack ];
     meta = {
