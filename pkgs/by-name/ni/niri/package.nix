@@ -133,7 +133,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Scrollable-tiling Wayland compositor";
     homepage = "https://github.com/niri-wm/niri";
-    changelog = "https://github.com/niri-wm/niri/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/niri-wm/niri/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       sodiboo
