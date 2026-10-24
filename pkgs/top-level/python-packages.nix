@@ -22394,6 +22394,8 @@ self: super: with self; {
 
   vacuum-map-parser-xiaomi = callPackage ../development/python-modules/vacuum-map-parser-xiaomi { };
 
+  valetudo-map-parser = callPackage ../development/python-modules/valetudo-map-parser { };
+
   valhallaapi = callPackage ../development/python-modules/valhallaapi { };
 
   validate-email = callPackage ../development/python-modules/validate-email { };
