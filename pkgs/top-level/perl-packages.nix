@@ -13133,10 +13133,10 @@ with self;
 
   ExtUtilsTypemapsDefault = buildPerlModule {
     pname = "ExtUtils-Typemaps-Default";
-    version = "1.05";
+    version = "1.07";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SM/SMUELLER/ExtUtils-Typemaps-Default-1.05.tar.gz";
-      hash = "sha256-Pfr1g36/3AB4lb/KhMPC521Ymn0zZADo37MkPYGCFd4=";
+      url = "mirror://cpan/authors/id/S/SM/SMUELLER/ExtUtils-Typemaps-Default-1.07.tar.gz";
+      hash = "sha256-Jorqub3wmXxDYRUZjkrb2wqCzF+uw1xinkrW20jtjXg=";
     };
     meta = {
       description = "Set of useful typemaps";
