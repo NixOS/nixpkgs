@@ -131,7 +131,7 @@ in
       after = [ "NetworkManager.service" ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ nmFileSecretAgentConfigFile ];
-      script = "${lib.getExe cfg.ensureProfiles.secrets.package} --conf ${nmFileSecretAgentConfigFile}";
+      serviceConfig.ExecStart = "${lib.getExe cfg.ensureProfiles.secrets.package} --conf ${nmFileSecretAgentConfigFile}";
     };
   };
 }
