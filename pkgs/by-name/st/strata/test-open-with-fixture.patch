@@ -1,0 +1,17 @@
+--- a/src/ui/window/tests/keyboard_dispatch/file_verbs.rs
++++ b/src/ui/window/tests/keyboard_dispatch/file_verbs.rs
+@@ -1222,6 +1222,14 @@
+         || {
+             let output = gtk::glib::user_data_dir().join("received");
+             recorder_app("strata-gone", "Gone Editor", "text/plain;", &output);
++            // Keep a compatible application after uninstalling the history entry.
++            // An empty application list intentionally produces no chooser dialog.
++            recorder_app(
++                "strata-still-installed",
++                "Installed Editor",
++                "text/plain;",
++                &gtk::glib::user_data_dir().join("still-installed-received"),
++            );
+             let fixture = KeyboardFixture::new();
+             let directory = fixture._directory.path().to_path_buf();
+             let browser = fixture.view.browser();
