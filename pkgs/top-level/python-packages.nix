@@ -17047,6 +17047,8 @@ self: super: with self; {
 
   python-ffmpeg = callPackage ../development/python-modules/python-ffmpeg { };
 
+  python-flint = callPackage ../development/python-modules/python-flint { };
+
   python-flirt = callPackage ../development/python-modules/python-flirt { };
 
   python-fontconfig = callPackage ../development/python-modules/python-fontconfig { };
