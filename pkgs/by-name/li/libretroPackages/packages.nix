@@ -96,6 +96,8 @@ lib.makeScope newScope (self: {
 
   jaxe = self.callPackage ./cores/jaxe.nix { };
 
+  jollycv = self.callPackage ./cores/jollycv.nix { };
+
   mame = self.callPackage ./cores/mame.nix { };
 
   mame2000 = self.callPackage ./cores/mame2000.nix { };
