@@ -310,10 +310,6 @@ let
             baseMsg =
               let
                 optText = showOption (prefix ++ firstDef.prefix);
-                defText =
-                  addErrorContext
-                    "while evaluating the error message for definitions for `${optText}', which is an option that does not exist"
-                    (addErrorContext "while evaluating a definition from `${firstDef.file}'" (showDefs [ firstDef ]));
 
                 # absInvalidOptionParent is absolute; other variables are relative to the submodule prefix
                 absInvalidOptionParent = init (prefix ++ firstDef.prefix);
@@ -348,7 +344,7 @@ let
                       )
                     } or `${showOption (absInvalidOptionParent ++ [ (last suggestions) ])}'?";
               in
-              "The option `${optText}' does not exist. Definition values:${defText}${suggestion}";
+              "The option `${optText}' does not exist. Defined in `${firstDef.file}'.${suggestion}";
           in
           if
             attrNames options == [ "_module" ]
