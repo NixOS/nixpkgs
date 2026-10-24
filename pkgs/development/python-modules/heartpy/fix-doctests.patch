@@ -1,0 +1,209 @@
+diff --git a/heartpy/analysis.py b/heartpy/analysis.py
+index 070d9fe..d746fee 100644
+--- a/heartpy/analysis.py
++++ b/heartpy/analysis.py
+@@ -466,7 +466,7 @@ def calc_fd_measures(method='welch', welch_wsize=240, square_spectrum=False, mea
+     >>> wd['RR_list_cor'] = []
+     >>> wd, m = calc_fd_measures(working_data = wd)
+     >>> np.isnan(m['lf/hf'])
+-    True
++    np.True_
+ 
+     If there are rr-intervals but not enough to reliably compute frequency measures, a
+     warning is raised:
+@@ -574,9 +574,9 @@ def calc_fd_measures(method='welch', welch_wsize=240, square_spectrum=False, mea
+ 
+         # compute absolute power band measures (units of ms^2)
+         df = frq[1] - frq[0]
+-        measures['vlf'] = np.trapz(abs(psd[(frq >= 0.0033) & (frq < 0.04)]), dx=df)
+-        measures['lf'] = np.trapz(abs(psd[(frq >= 0.04) & (frq < 0.15)]), dx=df)
+-        measures['hf'] = np.trapz(abs(psd[(frq >= 0.15) & (frq < 0.4)]), dx=df)
++        measures['vlf'] = np.trapezoid(abs(psd[(frq >= 0.0033) & (frq < 0.04)]), dx=df)
++        measures['lf'] = np.trapezoid(abs(psd[(frq >= 0.04) & (frq < 0.15)]), dx=df)
++        measures['hf'] = np.trapezoid(abs(psd[(frq >= 0.15) & (frq < 0.4)]), dx=df)
+         measures['lf/hf'] = measures['lf'] / measures['hf']
+ 
+         measures['p_total'] = measures['vlf'] + measures['lf'] + measures['hf']
+@@ -672,7 +672,7 @@ def calc_breathing(rrlist, method='welch', filter_breathing=True,
+ 
+     >>> m, wd = calc_breathing(wd['RR_list_cor'], measures = m, working_data = wd)
+     >>> round(m['breathingrate'], 3)
+-    0.171
++    np.float64(0.171)
+ 
+     There we have it, .17Hz, or about one breathing cycle in 6.25 seconds.
+     '''
+diff --git a/heartpy/datautils.py b/heartpy/datautils.py
+index 4629a57..2a336ce 100644
+--- a/heartpy/datautils.py
++++ b/heartpy/datautils.py
+@@ -62,7 +62,7 @@ def get_data(filename, delim=',', column_name='None', encoding=None,
+     So, assuming your file lives at 'filepath', you open it as such:
+ 
+     >>> get_data(filepath)
+-    array([530., 518., 506., ..., 492., 493., 494.])
++    array([530., 518., 506., ..., 492., 493., 494.], shape=(2483,))
+ 
+     Files with multiple columns can be opened by specifying the 'column_name' where
+     the data resides:
+@@ -73,7 +73,7 @@ def get_data(filename, delim=',', column_name='None', encoding=None,
+ 
+     >>> get_data(filepath, column_name='timer')
+     array([0.00000000e+00, 8.54790319e+00, 1.70958064e+01, ...,
+-           1.28192904e+05, 1.28201452e+05, 1.28210000e+05])
++           1.28192904e+05, 1.28201452e+05, 1.28210000e+05], shape=(15000,))
+ 
+     You can open matlab files in much the same way by specifying the column
+     where the data lives:
+@@ -84,14 +84,14 @@ def get_data(filename, delim=',', column_name='None', encoding=None,
+     Open matlab file by specifying the column name as well:
+ 
+     >>> get_data(filepath, column_name='hr')
+-    array([515., 514., 514., ..., 492., 494., 496.])
++    array([515., 514., 514., ..., 492., 494., 496.], shape=(15000,))
+ 
+     You can any csv formatted text file no matter the extension if you
+     set ignore_extension to True:
+ 
+     >>> filepath = resource_filename(__name__, 'data/data.log')
+     >>> get_data(filepath, ignore_extension = True)
+-    array([530., 518., 506., ..., 492., 493., 494.])
++    array([530., 518., 506., ..., 492., 493., 494.], shape=(2483,))
+ 
+     You can specify column names in the same way when using ignore_extension
+ 
+@@ -165,7 +165,7 @@ def get_samplerate_mstimer(timerdata):
+     Let's also round to three decimals
+ 
+     >>> round(get_samplerate_mstimer(timer), 3)
+-    116.996
++    np.float64(116.996)
+ 
+     of course if another time unit is used, converting it to ms-based
+     should be trivial.
+@@ -199,7 +199,7 @@ def get_samplerate_datetime(datetimedata, timeformat='%H:%M:%S.%f'):
+     We load the data like before
+ 
+     >>> data, timer = load_exampledata(example = 2)
+-    >>> timer[0]
++    >>> str(timer[0])
+     '2016-11-24 13:58:58.081000'
+ 
+     Note that we need to specify the timeformat used so that datetime understands
+@@ -273,7 +273,7 @@ def outliers_iqr_method(hrvalues):
+     --------
+     >>> x = [2, 4, 3, 4, 6, 7, 35, 2, 3, 4]
+     >>> outliers_iqr_method(x)
+-    ([2, 4, 3, 4, 6, 7, 4.0, 2, 3, 4], [6])
++    ([2, 4, 3, 4, 6, 7, np.float64(4.0), 2, 3, 4], [6])
+     '''
+     med = np.median(hrvalues)
+     q1, q3 = np.percentile(hrvalues, [25, 75])
+@@ -312,7 +312,7 @@ def outliers_modified_z(hrvalues):
+     --------
+     >>> x = [2, 4, 3, 4, 6, 7, 35, 2, 3, 4]
+     >>> outliers_modified_z(x)
+-    ([2, 4, 3, 4, 6, 7, 4.0, 2, 3, 4], [6])
++    ([np.int64(2), np.int64(4), np.int64(3), np.int64(4), np.int64(6), np.int64(7), np.float64(4.0), np.int64(2), np.int64(3), np.int64(4)], [6])
+     '''
+     hrvalues = np.array(hrvalues)
+     threshold = 3.5
+@@ -350,7 +350,7 @@ def MAD(data):
+     --------
+     >>> x = [2, 4, 3, 4, 6, 7, 35, 2, 3, 4]
+     >>> MAD(x)
+-    1.5
++    np.float64(1.5)
+     '''
+     med = np.median(data)
+     return np.median(np.abs(data - med))
+@@ -394,7 +394,7 @@ def load_exampledata(example=0):
+ 
+     >>> data, timer = load_exampledata(1)
+     >>> [round(x, 2) for x in timer[0:5]]
+-    [0.0, 8.55, 17.1, 25.64, 34.19]
++    [np.float64(0.0), np.float64(8.55), np.float64(17.1), np.float64(25.64), np.float64(34.19)]
+     '''
+ 
+     from importlib.resources import files
+diff --git a/heartpy/heartpy.py b/heartpy/heartpy.py
+index 8ac28a4..c2c2969 100644
+--- a/heartpy/heartpy.py
++++ b/heartpy/heartpy.py
+@@ -416,7 +416,7 @@ def process_segmentwise(hrdata, sample_rate, segment_width=120, segment_overlap=
+     measures (m) dict now contains a list of that measure for each segment.
+ 
+     >>> [round(x, 1) for x in m['bpm']]
+-    [100.0, 96.8, 97.2, 97.9, 96.7, 96.8, 96.8, 95.0, 92.9, 96.7, 99.2]
++    [np.float64(100.0), np.float64(96.8), np.float64(97.2), np.float64(97.9), np.float64(96.7), np.float64(96.8), np.float64(96.8), np.float64(95.0), np.float64(92.9), np.float64(96.7), np.float64(99.2)]
+ 
+     Specifying mode = 'fast' will run peak detection once and use detections
+     to compute measures over each segment. Useful for speed ups, but typically
+@@ -469,8 +469,8 @@ use either \'iqr\' or \'z-score\''
+         for i, ii in slice_indices:
+             #pks = [x for x in peaklist if i <= x < ii]
+             pks = peaklist[np.where((peaklist >= i) & (peaklist < ii))]
+-            pks_b = working_data['binary_peaklist'][int(np.where(peaklist == pks[0])[0]):
+-                                                    int(np.where(peaklist == pks[-1])[-1]) + 1]
++            pks_b = working_data['binary_peaklist'][int(np.where(peaklist == pks[0])[0][0]):
++                                                    int(np.where(peaklist == pks[-1])[-1][-1]) + 1]
+             rr_list = (np.diff(pks) / sample_rate) * 1000.0
+             rr_list, rr_diff, rr_sqdiff = calc_rr_segment(rr_list, pks_b)
+             _, tmp = calc_ts_measures(rr_list, rr_diff, rr_sqdiff)
+@@ -708,3 +708,4 @@ def run_tests(verbose=0):
+         print('all tests passed, ready to go!')
+     else:
+         print('some tests failed...')
++        sys.exit(1)
+diff --git a/heartpy/peakdetection.py b/heartpy/peakdetection.py
+index ee18940..b6f0f10 100644
+--- a/heartpy/peakdetection.py
++++ b/heartpy/peakdetection.py
+@@ -174,7 +174,7 @@ def detect_peaks(hrdata, rol_mean, ma_perc, sample_rate, update_dict=True, worki
+     at the first five peak positions:
+ 
+     >>> wd['peaklist'][0:5]
+-    array([ 63, 165, 264, 360, 460], dtype=int64)
++    array([ 63, 165, 264, 360, 460])
+     '''
+     rmean = np.array(rol_mean)
+ 
+@@ -272,7 +272,7 @@ def fit_peaks(hrdata, rol_mean, sample_rate, bpmmin=40, bpmmax=180, working_data
+     To illustrate, these are the first five detected peaks:
+ 
+     >>> wd['peaklist'][0:5]
+-    array([ 63, 165, 264, 360, 460], dtype=int64)
++    array([ 63, 165, 264, 360, 460])
+ 
+     and the corresponding peak-peak intervals:
+ 
+@@ -470,7 +470,7 @@ def interpolate_peaks(data, peaks, sample_rate, desired_sample_rate=1000.0, work
+     >>> data, _ = hp.load_exampledata(0)
+     >>> wd, m = hp.process(data, 100.0)
+     >>> wd['peaklist'][0:5]
+-    array([ 63, 165, 264, 360, 460], dtype=int64)
++    array([ 63, 165, 264, 360, 460])
+ 
+     Now, the resolution is at max 10ms as that's the distance between data points.
+     We can use the high precision mode for example to approximate a more precise
+diff --git a/heartpy/preprocessing.py b/heartpy/preprocessing.py
+index a2e513b..412fb3f 100644
+--- a/heartpy/preprocessing.py
++++ b/heartpy/preprocessing.py
+@@ -160,8 +160,7 @@ def mark_clipping(data, threshold=1020):
+ 
+     >>> x = data[2000:3000]
+     >>> mark_clipping(x, threshold=970)
+-    [(369, 375), (426, 437), (486, 493), (544, 552), (604, 610), (663, 665), \
+-(721, 722), (776, 781), (831, 836), (883, 891), (995, 999)]
++    [(np.int64(369), np.int64(375)), (np.int64(426), np.int64(437)), (np.int64(486), np.int64(493)), (np.int64(544), np.int64(552)), (np.int64(604), np.int64(610)), (np.int64(663), np.int64(665)), (np.int64(721), np.int64(722)), (np.int64(776), np.int64(781)), (np.int64(831), np.int64(836)), (np.int64(883), np.int64(891)), (np.int64(995), np.int64(999))]
+     '''
+ 
+     clip_binary = np.where(data > threshold)
+@@ -488,4 +487,4 @@ def denoise_convolutions(data, sample_rate, templates):
+             convolved = np.convolve(data, templates[i], mode='same')
+             convolutions.append(convolved)
+                          
+-    return np.asarray(convolutions)
+\ No newline at end of file
++    return np.asarray(convolutions)
