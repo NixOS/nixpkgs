@@ -20,11 +20,11 @@ let
     versionSuffix = "test";
     label = "test";
   };
-in
-lib.optionalAttrs (stdenv.hostPlatform.isLinux) (
-  lib.recurseIntoAttrs {
-    nixos-test =
-      (pkgs.nixos {
+
+  minimalSystem =
+    module:
+    pkgs.nixos [
+      {
         system.nixos = dummyVersioning;
         boot.loader.grub.enable = false;
         fileSystems."/" = {
@@ -32,6 +32,34 @@ lib.optionalAttrs (stdenv.hostPlatform.isLinux) (
           fsType = "none";
         };
         system.stateVersion = lib.trivial.release;
-      }).toplevel;
+      }
+      module
+    ];
+in
+lib.optionalAttrs (stdenv.hostPlatform.isLinux) (
+  lib.recurseIntoAttrs {
+    nixos-test = (minimalSystem { }).toplevel;
+
+    # Cheap attributes of the toplevel derivation, such as its name (which
+    # `nix flake show` evaluates), must be accessible without checking
+    # assertions, since those force large parts of the configuration and can
+    # instantiate thousands of derivations. The assertions must still be
+    # checked when the derivation itself is instantiated.
+    nixos-toplevel-assertions-are-lazy =
+      let
+        toplevel =
+          (minimalSystem {
+            assertions = [
+              {
+                assertion = false;
+                message = "failed assertions must not block evaluation of the system name";
+              }
+            ];
+          }).toplevel;
+      in
+      assert (builtins.tryEval toplevel.name).success;
+      assert lib.hasPrefix "nixos-system-" toplevel.name;
+      assert !(builtins.tryEval toplevel.drvPath).success;
+      pkgs.emptyFile;
   }
 )
