@@ -3,7 +3,6 @@
   stdenv,
   fetchurl,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   pkg-config,
   unzip,
@@ -105,7 +104,7 @@ let
     ;
   inherit (lib.trivial) flip;
 
-  version = "4.13.0";
+  version = "4.14.0";
 
   # It's necessary to consistently use backendStdenv when building with CUDA
   # support, otherwise we get libstdc++ errors downstream
@@ -116,50 +115,66 @@ let
     owner = "opencv";
     repo = "opencv";
     tag = version;
-    hash = "sha256-h9gpSf+xf/OafQSCYq3JYBt/ShnxafSG7WbxesTjM/A=";
+    hash = "sha256-vVTVL04Vhh4Kxtdjg1MWjbVYSaQP0zUy8ct9p3P94eo=";
   };
 
   contribSrc = fetchFromGitHub {
     owner = "opencv";
     repo = "opencv_contrib";
     tag = version;
-    hash = "sha256-8YRCq1H9afb1a0pVevH0x61SMW4dTpLAno/P9A6bOIg=";
+    hash = "sha256-XJgxlnIpc6vV9F671u/Cwl0pPwQtP6rVqjoISG/wPfY=";
   };
 
   testDataSrc = fetchFromGitHub {
     owner = "opencv";
     repo = "opencv_extra";
     tag = version;
-    hash = "sha256-r73Hphh5ZuKt3IoQMzbtL1AxeVZd2OSpvZ8x8v6Bd0k=";
+    hash = "sha256-fOkaEKbrlxlPM7Y+07d/VUGnFLoqNZ24u4NuxP9CBBI=";
   };
 
   # Contrib must be built in order to enable Tesseract support:
   buildContrib = enableContrib || enableTesseract || enableOvis;
 
   # See opencv/3rdparty/ippicv/ippicv.cmake
-  ippicv = {
-    src =
-      fetchFromGitHub {
-        owner = "opencv";
-        repo = "opencv_3rdparty";
-        rev = "c934a2a15a6df020446ac3dfa07e3acf72b63a8f";
-        hash = "sha256-L1n1pq7SiPLOMTCEpju4kXPHxhH9La8AvmwZrYU9iEQ=";
-      }
-      + "/ippicv";
-    files =
-      let
-        name = platform: "ippicv_2021.10.0_${platform}_20230919_general.tgz";
-      in
-      if effectiveStdenv.hostPlatform.system == "x86_64-linux" then
-        { ${name "lnx_intel64"} = ""; }
-      else if effectiveStdenv.hostPlatform.system == "i686-linux" then
-        { ${name "lnx_ia32"} = ""; }
-      else if effectiveStdenv.hostPlatform.system == "x86_64-darwin" then
-        { ${name "mac_intel64"} = ""; }
-      else
-        throw "ICV is not available for this platform (or not yet supported by this package)";
-    dst = ".cache/ippicv";
-  };
+  ippicv =
+    let
+      package =
+        {
+          x86_64-linux = {
+            rev = "8338862a733cb3980d8b51d8e14917fe0e695f71";
+            hash = "sha256-2ctRKaSNtVqFEonx9qWg5ZV0X3qFj6Qr4MC0pGgbXi4=";
+            name = "ippicv_2026.0.0_lnx_intel64_20260630_general.tgz";
+            md5 = "a77e60db544e07a126ae98f5ffe83be1";
+          };
+          i686-linux = {
+            rev = "7f55c0c26be418d494615afca15218566775c725";
+            hash = "sha256-XbmS+FXUL8MAG7kawbDkb2XHG9R0DpPhiYhq/18eTnY=";
+            name = "ippicv_2021.12.0_lnx_ia32_20240425_general.tgz";
+            md5 = "85ffa2b9ed7802b93c23fa27b0097d36";
+          };
+          x86_64-darwin = {
+            rev = "0cc4aa06bf2bef4b05d237c69a5a96b9cd0cb85a";
+            hash = "sha256-/kHivOgCkY9YdcRRaVgytXal3ChE9xFfGAB0CfFO5ec=";
+            name = "ippicv_2021.9.1_mac_intel64_20230919_general.tgz";
+            md5 = "14f01c5a4780bfae9dde9b0aaf5e56fc";
+          };
+        }
+        .${effectiveStdenv.hostPlatform.system}
+          or (throw "ICV is not available for this platform (or not yet supported by this package)");
+    in
+    {
+      src =
+        fetchFromGitHub {
+          owner = "opencv";
+          repo = "opencv_3rdparty";
+          inherit (package) rev hash;
+        }
+        + "/ippicv";
+      files = {
+        ${package.name} = package.md5;
+      };
+      dst = ".cache/ippicv";
+    };
 
   # See opencv_contrib/modules/xfeatures2d/cmake/download_vgg.cmake
   vgg = {
@@ -302,31 +317,9 @@ effectiveStdenv.mkDerivation {
     ./cmake-don-t-use-OpenCVFindOpenEXR.patch
     ./0001-cmake-OpenCVUtils.cmake-invalidate-Nix-store-paths-b.patch
   ]
-  ++ optionals enableCuda (
-    [
-      ./cuda_opt_flow.patch
-    ]
-    ++ optionals (lib.versionOlder version "4.14.0") [
-      # Backport https://github.com/opencv/opencv_contrib/pull/4130
-      (fetchpatch {
-        name = "videostab-add-missing-include-to-fix-build-failure";
-        url = "https://github.com/opencv/opencv_contrib/commit/054007b78c8288ef2fd040e77dc0cf2e45f70c15.patch";
-        stripLen = 2;
-        extraPrefix = "opencv_contrib/";
-        hash = "sha256-vDW6kfDmwPB/tTurkDXuvViXrzXYV4njjDN6kLoIvJ4=";
-      })
-    ]
-    ++ optionals (cudaPackages.cudaAtLeast "13.2") [
-      # Backport https://github.com/opencv/opencv_contrib/pull/4097
-      (fetchpatch {
-        name = "fix-cuda-13-2-compat";
-        url = "https://github.com/opencv/opencv_contrib/commit/f2854f4f5e7b67d4e073ea002ae0174d437e2962.patch";
-        stripLen = 2;
-        extraPrefix = "opencv_contrib/";
-        hash = "sha256-nJqPT3gvqTTKFDR9uTFR/7gummlpz1Dw+UQ4EWPfqOA=";
-      })
-    ]
-  );
+  ++ optionals enableCuda [
+    ./cuda_opt_flow.patch
+  ];
 
   postPatch =
     # This prevents cmake from using libraries in impure paths (which
