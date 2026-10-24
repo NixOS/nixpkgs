@@ -11,6 +11,10 @@
   cryptodev,
   withZlib ? false,
   zlib,
+  # use the FIPS 140-3 validated provider from OpenSSL 3.1.2 (3.x only)
+  enableFIPS ? false,
+  # build and activate fips.so from this package's own source (not FIPS 140-3 certified)
+  buildFIPSFromSrc ? false,
   enableSSL2 ? false,
   enableSSL3 ? false,
   enableMD2 ? false,
@@ -253,7 +257,10 @@ let
       ]
       # tests are not being installed, it makes no sense
       # to build them if check is disabled, e.g. on cross.
-      ++ lib.optional (!finalAttrs.finalPackage.doCheck) "disable-tests";
+      ++ lib.optional (!finalAttrs.finalPackage.doCheck) "disable-tests"
+      ++ lib.optional (enableFIPS && buildFIPSFromSrc) "enable-fips";
+
+      installTargets = "install" + lib.optionalString (enableFIPS && buildFIPSFromSrc) " install_fips";
 
       makeFlags = [
         "MANDIR=$(man)/share/man"
@@ -269,6 +276,29 @@ let
       doCheck = true;
       preCheck = ''
         patchShebangs util
+      '';
+
+      doInstallCheck = enableFIPS;
+      installCheckPhase = lib.optionalString enableFIPS ''
+        runHook preInstallCheck
+
+        export OPENSSL_CONF=$etc/etc/ssl/openssl.cnf
+        export OPENSSL_MODULES=$out/lib/ossl-modules
+
+        # the fips provider should be present if installed correctly
+        $bin/bin/openssl list -providers \
+         | grep -qi 'fips' \
+         || { echo "FIPS provider did not load" >&2; exit 1; }
+
+        echo 'openssl-fips-smoke-test' | $bin/bin/openssl sha256 > /dev/null
+
+        # algorithms like MD5 should be rejected under FIPS mode
+        if echo 'md5-smoke-test' | $bin/bin/openssl md5 2>/dev/null; then
+          echo "FIPS provider should have rejected MD5" >&2
+          exit 1
+        fi
+
+        runHook postInstallCheck
       '';
 
       __darwinAllowLocalNetworking = true;
@@ -321,7 +351,17 @@ let
         + lib.optionalString (conf != null) ''
           cat ${conf} > $etc/etc/ssl/openssl.cnf
         ''
-
+        + lib.optionalString (enableFIPS && !buildFIPSFromSrc) ''
+          # Copy the FIPS 140-3 validated provider from OpenSSL 3.1.2
+          cp ${fipsProvider}/lib/ossl-modules/fips.so $out/lib/ossl-modules/
+        ''
+        + lib.optionalString enableFIPS ''
+          sed -E \
+               -e "s|^# \.include fipsmodule\.cnf|.include $etc/etc/ssl/fipsmodule.cnf|" \
+               -e "s|^# fips =|fips =|" \
+               -e "/^fips =/a base = base_sec\n[base_sec]\nactivate = 1\n" \
+               < $etc/etc/ssl/openssl.cnf.dist > $etc/etc/ssl/openssl.cnf
+        ''
         # Replace the config's default provider section with the providers we wish
         # to automatically load
         + lib.optionalString autoloadProviders ''
@@ -375,6 +415,11 @@ let
           # cleanup cmake helpers for now (for OpenSSL >= 3.3), only rely on pkg-config.
           # pkg-config gets its paths fixed correctly
           rm -rf $dev/lib/cmake
+        ''
+        + lib.optionalString enableFIPS ''
+          OPENSSL_CONF=/dev/null $bin/bin/openssl fipsinstall \
+            -out $etc/etc/ssl/fipsmodule.cnf \
+            -module $out/lib/ossl-modules/fips.so
         '';
 
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
@@ -401,6 +446,40 @@ let
       }
       // extraMeta;
     });
+
+  # FIPS 140-3 validated provider built from OpenSSL 3.1.2.
+  # OpenSSL policy: a provider built from a validated 3.x release can be used with any other 3.x release.
+  # We build this once and copy fips.so into whichever package has enableFIPS = true (3.x only).
+  fipsProvider =
+    (common {
+      version = "3.1.2";
+      hash = "sha256-oM5puLl+pqNblodSNapFO5Zro8uory3iNlfYtnZ9ZTk=";
+      patches = [
+        ./3.5/nix-ssl-cert-file.patch
+        ./3.5/openssl-disable-kernel-detection.patch
+        (
+          if stdenv.hostPlatform.isDarwin then
+            ./3.5/use-etc-ssl-certs-darwin.patch
+          else
+            ./3.1/use-etc-ssl-certs.patch
+        )
+      ];
+    }).overrideAttrs
+      (o: {
+        # enable-fips is required to build the fips provider module
+        configureFlags = o.configureFlags ++ [ "enable-fips" ];
+        # only install fips.so — skip the full library, binaries, headers, and man pages
+        installTargets = "install_fips";
+        # install_fips only writes lib/ossl-modules/fips.so, so only the default output is needed
+        outputs = [ "out" ];
+        # skip the test suite, we only need the provider module, not a verified OpenSSL 3.1.2 install
+        doCheck = false;
+        doInstallCheck = false;
+        # common's postInstall moves bin/include/etc between outputs — those dirs don't exist after install_fips which only writes lib/ossl-modules/fips.so
+        postInstall = "";
+        # common's postFixup checks for perl references in $out/$etc, with only fips.so present those paths are incomplete and the check would fail
+        postFixup = "";
+      });
 
 in
 {
