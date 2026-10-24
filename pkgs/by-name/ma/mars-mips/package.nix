@@ -13,12 +13,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mars-mips";
-  version = "4.5";
+  version = "4.5.1";
 
   src = fetchurl {
-    url = "https://courses.missouristate.edu/KenVollmar/MARS/MARS_${
-      lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
-    }_Aug2014/Mars${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}.jar";
+    url = "https://github.com/dpetersanderson/MARS/releases/download/v.${finalAttrs.version}/Mars${
+      lib.replaceStrings [ "." ] [ "_" ] (builtins.substring 0 3 finalAttrs.version)
+    }.jar";
     hash = "sha256-rDQLZ2uitiJGud935i+BrURHvP0ymrU5cWvNCZULcJY=";
   };
 
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "IDE for programming in MIPS assembly language intended for educational-level use";
     mainProgram = "Mars";
-    homepage = "https://courses.missouristate.edu/KenVollmar/MARS/";
+    homepage = "https://dpetersanderson.github.io/";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ emilytrau ];
