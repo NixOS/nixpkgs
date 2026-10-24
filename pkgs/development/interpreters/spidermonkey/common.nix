@@ -52,6 +52,9 @@ stdenv.mkDerivation (finalAttrs: {
     # use pkg-config for all systems
     ./always-check-for-pkg-config-128.patch
     ./allow-system-s-nspr-and-icu-on-bootstrapped-sysroot-128.patch
+
+    # Add support for --rust-{host,target}-triplet
+    ./add-rust-triplet-options.patch
   ]
   ++ lib.optionals (stdenv.hostPlatform.system == "i686-linux") [
     # Fixes i686 build, https://bugzilla.mozilla.org/show_bug.cgi?id=1729459
@@ -129,8 +132,11 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-tests"
     # Spidermonkey seems to use different host/build terminology for cross
     # compilation here.
+    # Rust also uses slightly different triplets in some cases.
     "--host=${stdenv.buildPlatform.config}"
     "--target=${stdenv.hostPlatform.config}"
+    "--rust-host-triplet=${stdenv.buildPlatform.rust.rustcTarget}"
+    "--rust-target-triplet=${stdenv.hostPlatform.rust.rustcTarget}"
   ];
 
   # mkDerivation by default appends --build/--host to configureFlags when cross compiling
