@@ -23527,6 +23527,11 @@
     github = "plebhash";
     githubId = 147345153;
   };
+  plrigaux = {
+    name = "Pierre-Luc Rigaux";
+    github = "plrigaux";
+    githubId = 491172;
+  };
   pluiedev = {
     email = "hi@pluie.me";
     github = "pluiedev";
