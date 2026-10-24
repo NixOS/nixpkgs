@@ -7,13 +7,13 @@
 
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mopidy-jellyfin";
-  version = "1.0.6";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "mopidy_jellyfin";
-    hash = "sha256-IKCPypMuluR0+mMALp8lB1oB1pSw4rN4rOl/eKn+Qvo=";
+    hash = "sha256-2UH5wwUlt2N6WC3GYptVGs33gyJCWdPKjOiGaeBTuCA=";
   };
 
   build-system = [ pythonPackages.setuptools ];
