@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "torchprofile";
-  version = "0.0.4";
+  version = "0.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zhijian-liu";
     repo = "torchprofile";
     tag = "v${version}";
-    hash = "sha256-ynRrGHzroyv8T8fggJAag7u6XBOx+uN49HSIe46Bcek=";
+    hash = "sha256-t8ICoA6jiU3u9TywMjZeFZdMnbWEel4LoPWhun0kHI0=";
   };
 
   build-system = [
