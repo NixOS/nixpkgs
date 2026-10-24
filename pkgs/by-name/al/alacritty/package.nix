@@ -28,24 +28,34 @@
 
   nix-update-script,
   withGraphics ? false,
+  x11Support ? true,
+  waylandSupport ? true,
   versionCheckHook,
 }:
+assert lib.assertMsg (x11Support || waylandSupport)
+  "Disabling both x11 and wayland support will result in both features being compiled, but not able to be used";
 let
   rpathLibs = [
     expat
     fontconfig
     freetype
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libGL
-    libx11
-    libxcursor
-    libxi
-    libxxf86vm
-    libxcb
-    libxkbcommon
-    wayland
-  ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux (
+    [
+      libGL
+      libxkbcommon
+    ]
+    ++ lib.optionals x11Support [
+      libx11
+      libxcursor
+      libxi
+      libxxf86vm
+      libxcb
+    ]
+    ++ lib.optionals waylandSupport [
+      wayland
+    ]
+  );
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "alacritty${lib.optionalString withGraphics "-graphics"}";
@@ -86,6 +96,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = rpathLibs;
+
+  buildFeatures = (lib.optional waylandSupport "wayland") ++ (lib.optional x11Support "x11");
 
   outputs = [
     "out"
