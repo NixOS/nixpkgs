@@ -25188,6 +25188,12 @@
     githubId = 42619;
     name = "Wei-Ming Yang";
   };
+  rickprice = {
+    email = "fprice@pricemail.ca";
+    github = "rickprice";
+    githubId = 1013454;
+    name = "Frederick Price";
+  };
   rickvanprim = {
     email = "me@rickvanprim.com";
     github = "rickvanprim";
