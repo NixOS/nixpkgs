@@ -15539,8 +15539,10 @@ with self;
     };
 
     # XXX: It'd be nicer it `GraphViz.pm' could record the path to graphviz.
-    buildInputs = [
+    nativeBuildInputs = [
       pkgs.graphviz
+    ];
+    buildInputs = [
       TestPod
     ];
     propagatedBuildInputs = [
@@ -15551,6 +15553,8 @@ with self;
       XMLXPath
     ];
 
+    strictDeps = true;
+    __structuredAttrs = true;
     meta = {
       description = "Perl interface to the GraphViz graphing tool";
       license = lib.licenses.artistic2;

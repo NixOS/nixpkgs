@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "wanderer";
-  version = "0.21.0";
+  version = "0.21.1";
 
   src = fetchFromGitHub {
     owner = "open-wanderer";
     repo = "wanderer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FaHWJwHpITt1AWVMykZNtPHXdmwpBVrkzzEBNQcwZRg=";
+    hash = "sha256-SFHSRDvGxNlnBLSNsHY3B83eQKuffIhTvvwUCYjsBiE=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/db";

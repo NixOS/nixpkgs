@@ -32,6 +32,11 @@ let
         "githubkit-schemas"
       ];
 
+      postPatch = ''
+        substituteInPlace pyproject.toml \
+          --replace-fail "uv_build >=0.8.3, <0.12.0" "uv_build"
+      '';
+
       build-system = [ uv-build ];
     };
 
@@ -81,6 +86,11 @@ buildPythonPackage (finalAttrs: {
     };
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build >=0.8.3, <0.12.0" "uv_build"
+  '';
+
   build-system = [ uv-build ];
 
   dependencies = [
@@ -96,11 +106,11 @@ buildPythonPackage (finalAttrs: {
   ++ lib.attrValues finalAttrs.passthru.schemas;
 
   optional-dependencies = {
-    all = [ pyjwt ];
-    jwt = [ pyjwt ];
-    auth-app = [ pyjwt ];
+    all = [ pyjwt ] ++ pyjwt.optional-dependencies.crypto;
+    jwt = [ pyjwt ] ++ pyjwt.optional-dependencies.crypto;
+    auth-app = [ pyjwt ] ++ pyjwt.optional-dependencies.crypto;
     auth-oauth-device = [ ];
-    auth = [ pyjwt ];
+    auth = [ pyjwt ] ++ pyjwt.optional-dependencies.crypto;
   };
 
   nativeCheckInputs = [

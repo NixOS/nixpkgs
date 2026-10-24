@@ -2876,15 +2876,6 @@ with pkgs;
 
   unzipNLS = lowPrio (unzip.override { enableNLS = true; });
 
-  inherit (callPackages ../servers/varnish { })
-    varnish80
-    ;
-  inherit (callPackages ../servers/varnish/packages.nix { })
-    varnish80Packages
-    ;
-  varnishPackages = varnish80Packages;
-  varnish = varnishPackages.varnish;
-
   inherit (callPackages ../servers/vinyl-cache { })
     vinyl-cache_9
     ;
@@ -10011,11 +10002,11 @@ with pkgs;
   # Exceptions are versions that we need to keep to allow upgrades from older NixOS releases
   inherit (callPackage ../applications/networking/cluster/kops { })
     mkKops
-    kops_1_31
-    kops_1_32
-    kops_1_33
+    kops_1_34
+    kops_1_35
+    kops_1_36
     ;
-  kops = kops_1_33;
+  kops = kops_1_36;
 
   lilypond-unstable-with-fonts = lilypond-with-fonts.override {
     lilypond = lilypond-unstable;
