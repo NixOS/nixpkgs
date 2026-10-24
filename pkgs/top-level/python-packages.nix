@@ -9593,6 +9593,8 @@ self: super: with self; {
 
   lektricowifi = callPackage ../development/python-modules/lektricowifi { };
 
+  lenstronomy = callPackage ../development/python-modules/lenstronomy { };
+
   lerobot = callPackage ../development/python-modules/lerobot { };
 
   letpot = callPackage ../development/python-modules/letpot { };

@@ -1,0 +1,61 @@
+diff --git a/lenstronomy/LensModel/lens_model_extensions.py b/lenstronomy/LensModel/lens_model_extensions.py
+index ff8d213f..301a1758 100644
+--- a/lenstronomy/LensModel/lens_model_extensions.py
++++ b/lenstronomy/LensModel/lens_model_extensions.py
+@@ -116,13 +116,14 @@ class LensModelExtensions(object):
+ 
+                 rotation_angle = np.arctan(v[1] / v[0]) - np.pi / 2
+                 grid_x, grid_y = util.rotate(grid_x_0, grid_y_0, rotation_angle)
+-
++                x_ = np.array(grid_x, dtype=float)
+                 if axis_ratio == 0:
+                     sort = np.argsort(_w)
+                     q = _w[sort[0]] / _w[sort[1]]
+-                    grid_r = np.hypot(grid_x, grid_y / q).ravel()
++                    y_ = np.array(grid_y / q, dtype=float)
+                 else:
+-                    grid_r = np.hypot(grid_x, grid_y / axis_ratio).ravel()
++                    y_ = np.array(grid_y / axis_ratio, dtype=float)
++                grid_r = np.hypot(x_, y_).ravel()
+ 
+             flux_array = np.zeros_like(grid_x_0)
+             step = step_size * grid_radius_arcsec
+@@ -531,24 +532,33 @@ class LensModelExtensions(object):
+         :param kwargs_lens: lens model keyword arguments
+         :return: radial stretch, tangential stretch
+         """
++
+         f_xx, f_xy, f_yx, f_yy = self._lensModel.hessian(x, y, kwargs_lens, diff=diff)
+         if isinstance(x, int) or isinstance(x, float):
+             A = np.array([[1 - f_xx, f_xy], [f_yx, 1 - f_yy]])
+             w, v = np.linalg.eig(A)
+-            v11, v12, v21, v22 = v[0, 0], v[0, 1], v[1, 0], v[1, 1]
+-            w1, w2 = w[0], w[1]
++            v11, v12, v21, v22 = (
++                np.real(v[0, 0]),
++                np.real(v[0, 1]),
++                np.real(v[1, 0]),
++                np.real(v[1, 1]),
++            )
++            w1, w2 = np.real(w[0]), np.real(w[1])
+         else:
++            len_x = len(np.atleast_1d(x))
+             w1, w2, v11, v12, v21, v22 = (
+-                np.empty(len(x), dtype=float),
+-                np.empty(len(x), dtype=float),
++                np.empty(len_x, dtype=float),
++                np.empty(len_x, dtype=float),
+                 np.empty_like(x),
+                 np.empty_like(x),
+                 np.empty_like(x),
+                 np.empty_like(x),
+             )
+-            for i in range(len(x)):
++            for i in range(len_x):
+                 A = np.array([[1 - f_xx[i], f_xy[i]], [f_yx[i], 1 - f_yy[i]]])
+                 w, v = np.linalg.eig(A)
++                w = np.real(w)
++                v = np.real(v)
+                 w1[i], w2[i] = w[0], w[1]
+                 v11[i], v12[i], v21[i], v22[i] = v[0, 0], v[0, 1], v[1, 0], v[1, 1]
+         return w1, w2, v11, v12, v21, v22
