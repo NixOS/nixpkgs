@@ -28765,12 +28765,6 @@
     githubId = 7301807;
     name = "Simon Žlender";
   };
-  sztupi = {
-    email = "attila.sztupak@gmail.com";
-    github = "sztupi";
-    githubId = 143103;
-    name = "Attila Sztupak";
-  };
   t-monaghan = {
     email = "tomaghan@gmail.com";
     github = "t-monaghan";
